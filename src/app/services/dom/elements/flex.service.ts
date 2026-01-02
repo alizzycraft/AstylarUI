@@ -104,10 +104,12 @@ export class FlexService {
 
     // Get child items with their styles and dimensions - using FlexLayoutService
     const childItems: FlexItem[] = children.map(child => {
-      const style = styles.find(s => s.selector === `#${child.id}`);
+      // Use findStyleForElement to properly resolve styles including type defaults, classes, and IDs
+      const style = render.actions.style.findStyleForElement(child, styles, dom.context.elementStyles);
       const margin = this.parseMargin(style?.margin);
-      console.log(`[FLEX] Child ${child.id} height property: "${style?.height}"`);
-      console.log(`[FLEX] Child ${child.id} width property: "${style?.width}"`);
+      console.log(`[FLEX] Child ${child.id || child.type} margin: top=${margin.top}, right=${margin.right}, bottom=${margin.bottom}, left=${margin.left}`);
+      console.log(`[FLEX] Child ${child.id || child.type} height property: "${style?.height}"`);
+      console.log(`[FLEX] Child ${child.id || child.type} width property: "${style?.width}"`);
 
       // Get explicit width and height from style - proper sizing logic
       let width = 0;

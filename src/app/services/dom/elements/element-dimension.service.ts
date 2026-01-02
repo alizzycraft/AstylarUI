@@ -72,7 +72,10 @@ export class ElementDimensionService {
                     const widthPercent = parseFloat(style.width);
                     width = (contentWidth * widthPercent) / 100;
                 } else if (style.width === 'auto') {
-                    if (element.type === 'button' || element.type === 'input') {
+                    // Calculate intrinsic width based on text content
+                    if (element.textContent && element.textContent.trim() !== '') {
+                        width = this.calculateIntrinsicWidth(render, element, style, styles);
+                    } else if (element.type === 'button' || element.type === 'input') {
                         width = this.calculateIntrinsicWidth(render, element, style, styles);
                     } else {
                         width = contentWidth; // Default fallback for auto width
@@ -80,6 +83,9 @@ export class ElementDimensionService {
                 } else {
                     width = parseFloat(style.width);
                 }
+            } else if (element.textContent && element.textContent.trim() !== '') {
+                // If width is undefined but element has text content, calculate intrinsic width
+                width = this.calculateIntrinsicWidth(render, element, style, styles);
             } else if (element.type === 'button' || element.type === 'input') {
                 // If width is undefined, buttons/inputs should use intrinsic width
                 width = this.calculateIntrinsicWidth(render, element, style, styles);
@@ -219,7 +225,7 @@ export class ElementDimensionService {
     }
 
     /**
-     * Calculate intrinsic width for elements like buttons and inputs
+     * Calculate intrinsic width for elements with text content
      */
     private calculateIntrinsicWidth(render: BabylonRender, element: DOMElement, style: StyleRule | undefined, styles: StyleRule[]): number {
         const textStyle = this.getInheritedTextStyle(element, styles);
@@ -231,6 +237,9 @@ export class ElementDimensionService {
             textToMeasure = element.value || element.textContent || 'Button';
         } else if (element.type === 'input') {
             textToMeasure = element.value || element.placeholder || '';
+        } else if (element.textContent) {
+            // For all other elements, use textContent
+            textToMeasure = element.textContent;
         }
 
         // Measure text dimensions
@@ -249,6 +258,11 @@ export class ElementDimensionService {
         // Apply minimum width for text inputs
         if (element.type === 'input') {
             finalWidth = Math.max(finalWidth, 170);
+        }
+
+        // Apply a reasonable minimum width for other elements to prevent too-small boxes
+        if (element.type !== 'input' && element.type !== 'button') {
+            finalWidth = Math.max(finalWidth, 40); // Minimum 40px for inline elements
         }
 
         console.log(`[DIMENSION-INTRINSIC] ${element.type}#${element.id}: text="${textToMeasure}", measured=${measuredWidth}px, padding=${totalPadding}px, final=${finalWidth}px`);
