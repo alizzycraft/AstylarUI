@@ -248,19 +248,21 @@ export class ElementCreationService {
             this.interactionService.setupMouseEvents(dom, render, mesh, element.id);
         }
 
-        // Store element reference
-        if (element.id) {
-            dom.context.elements.set(element.id, mesh);
-            dom.context.hoverStates.set(element.id, false);
-            dom.context.elementTypes.set(element.id, element.type);
+        // Store element reference - use meshId so all elements are tracked
+        dom.context.elements.set(meshId, mesh);
+        dom.context.elementTypes.set(meshId, element.type);
 
-            // Store dimensions
-            const pixelPadding = dimensions.padding;
-            dom.context.elementDimensions.set(element.id, {
-                width: dimensions.width,
-                height: dimensions.height,
-                padding: pixelPadding
-            });
+        // Store dimensions for all elements (needed for child layout calculations)
+        const pixelPadding = dimensions.padding;
+        dom.context.elementDimensions.set(meshId, {
+            width: dimensions.width,
+            height: dimensions.height,
+            padding: pixelPadding
+        });
+
+        // Store hover state and handle text content only for elements with IDs
+        if (element.id) {
+            dom.context.hoverStates.set(element.id, false);
 
             // Handle text content if present
             if (element.textContent && element.textContent.trim() !== '') {
@@ -294,8 +296,8 @@ export class ElementCreationService {
         const isListContainer = parentElement?.type === 'ul' || parentElement?.type === 'ol';
 
         // Check if parent is a flex container
-        const isFlex = parentElement && dom.actions.isFlexContainer(render, parentElement, styles);
-        console.log(`[ElementCreation] isFlexContainer(${parentElement?.id}): ${isFlex}, isListContainer: ${isListContainer}`);
+        const isFlex = parentElement && dom.actions.isFlexContainer(render, parentElement, styles, dom);
+        console.log(`[ElementCreation] isFlexContainer(${parentElement?.id || parentElement?.type}): ${isFlex}, isListContainer: ${isListContainer}`);
 
         if (parentElement?.type === 'table') {
             console.log(`[ElementCreation] Processing table children for ${parentElement.id}`);
@@ -320,8 +322,9 @@ export class ElementCreationService {
                 let paddingTop = 0;
 
                 // Try to get dimensions from context first (more accurate for layout)
-                if (parentElement && parentElement.id && dom.context.elementDimensions.has(parentElement.id)) {
-                    const dims = dom.context.elementDimensions.get(parentElement.id)!;
+                // Use parent mesh name since all elements are now stored by mesh ID
+                if (dom.context.elementDimensions.has(parent.name)) {
+                    const dims = dom.context.elementDimensions.get(parent.name)!;
                     parentHeight = dims.height;
                     parentWidth = dims.width;
                     paddingTop = dims.padding.top;
@@ -355,14 +358,14 @@ export class ElementCreationService {
                     const childMesh = this.createElement(dom, render, child, parent, styles);
 
                     // Check if this element has explicit positioning (top/left values)
-                    const elementStyleData = child.id ? dom.context.elementStyles.get(child.id) : undefined;
-                    const childStyleData = elementStyleData?.normal || ({} as any);
-                    const hasExplicitPositioning = childStyleData.top !== undefined || childStyleData.left !== undefined;
+                    // Use the resolved style from findStyleForElement to handle class-based styles
+                    const resolvedStyle = render.actions.style.findStyleForElement(child, styles, dom.context.elementStyles);
+                    const hasExplicitPositioning = resolvedStyle?.top !== undefined || resolvedStyle?.left !== undefined;
 
                     if (hasExplicitPositioning) {
                         // Element has explicit positioning - it's already positioned correctly by createElement
                         // Skip stacking logic for absolutely positioned elements
-                        console.log(`[ElementCreation] Skipping stacking for absolutely positioned element: ${child.id}`);
+                        console.log(`[ElementCreation] Skipping stacking for absolutely positioned element: ${child.id || child.type}`);
                         
                         // Recursively process grandchildren
                         if (child.children && child.children.length > 0) {
@@ -373,8 +376,9 @@ export class ElementCreationService {
 
                     // 3. Measure Child
                     let childHeight = 0;
-                    if (child.id && dom.context.elementDimensions.has(child.id)) {
-                        childHeight = dom.context.elementDimensions.get(child.id)!.height;
+                    // Use child mesh name since all elements are now stored by mesh ID
+                    if (dom.context.elementDimensions.has(childMesh.name)) {
+                        childHeight = dom.context.elementDimensions.get(childMesh.name)!.height;
                     } else {
                         // Fallback measure
                         const bounds = childMesh.getBoundingInfo().boundingBox;
@@ -385,8 +389,8 @@ export class ElementCreationService {
                     // Child Center Y = CursorY - (ChildHeight / 2)
 
                     // Parse Margins from Style
-                    const elementStyle = child.id ? dom.context.elementStyles.get(child.id) : undefined;
-                    const childStyle = elementStyle?.normal || ({} as any);
+                    // Use resolved style to handle class-based styles
+                    const childResolvedStyle = render.actions.style.findStyleForElement(child, styles, dom.context.elementStyles);
                     const parseMargin = (val: any) => {
                         if (typeof val === 'number') return val;
                         if (typeof val === 'string' && val && val.endsWith('px')) return parseFloat(val);
@@ -395,9 +399,8 @@ export class ElementCreationService {
                     };
 
                     // Handle margin shorthand or specific properties
-                    // Safe access with any cast or optional chaining
-                    const marginTop = parseMargin(childStyle.marginTop) || parseMargin(childStyle.margin?.split(' ')[0]) || 0;
-                    const marginBottom = parseMargin(childStyle.marginBottom) || parseMargin(childStyle.margin?.split(' ')[2] || childStyle.margin?.split(' ')[0]) || 0;
+                    const marginTop = parseMargin(childResolvedStyle?.marginTop) || parseMargin(childResolvedStyle?.margin?.split(' ')[0]) || 0;
+                    const marginBottom = parseMargin(childResolvedStyle?.marginBottom) || parseMargin(childResolvedStyle?.margin?.split(' ')[2] || childResolvedStyle?.margin?.split(' ')[0]) || 0;
 
                     // Move cursor down by margin top
                     cursorY -= marginTop;

@@ -38,8 +38,10 @@ export class ElementDimensionService {
         margin: { top: number; right: number; bottom: number; left: number };
     } {
         // Get parent dimensions from elementDimensions (in pixels)
+        // Use parent.name since all elements are now stored by their mesh ID
         const parentDims = dom.context.elementDimensions.get(parent.name);
         if (!parentDims) {
+            console.error(`[ElementDimension] Parent dimensions not found for ${parent.name}. Available keys:`, Array.from(dom.context.elementDimensions.keys()));
             throw new Error(`Parent dimensions not found for ${parent.name}`);
         }
 

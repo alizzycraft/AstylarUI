@@ -236,7 +236,8 @@ export class BabylonDOMService {
       // Get merged style for text properties (including inheritance)
       const textStyle = this.getInheritedTextStyle(element, styles);
 
-      const storedDims = dom.context.elementDimensions.get(element.id);
+      // Use mesh name to look up dimensions (all elements stored by mesh ID now)
+      const storedDims = dom.context.elementDimensions.get(mesh.name);
 
       // Fallback to parent mesh bounding box if we don't have stored dimensions yet
       let fallbackDims: { width: number; height: number; padding: { top: number; right: number; bottom: number; left: number } } | undefined;

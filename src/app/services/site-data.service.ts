@@ -5578,7 +5578,7 @@ export class SiteDataService {
     // HTML KITCHEN SINK TEST SITE
     'html-kitchen-sink': {
       meta: {
-        description: 'HTML kitchen sink test site showcasing various HTML text formatting and semantic tags including bold, italic, underline, code, and other inline elements'
+        description: 'HTML kitchen sink test site showcasing various HTML text formatting and semantic tags'
       },
       styles: [
         {
@@ -5589,7 +5589,7 @@ export class SiteDataService {
         // Main container
         {
           selector: '#main-container',
-          top: '5%',
+          top: '15%',
           left: '5%',
           width: '90%',
           height: '90%',
@@ -5603,7 +5603,7 @@ export class SiteDataService {
 
         // Section containers
         {
-          selector: '#text-formatting-section',
+          selector: '.section',
           background: '#3a4a5c',
           borderRadius: '6px',
           padding: '15px',
@@ -5612,40 +5612,9 @@ export class SiteDataService {
           gap: '10px'
         },
 
+        // Section headers
         {
-          selector: '#semantic-section',
-          background: '#3a4a5c',
-          borderRadius: '6px',
-          padding: '15px',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '10px'
-        },
-
-        {
-          selector: '#code-section',
-          background: '#3a4a5c',
-          borderRadius: '6px',
-          padding: '15px',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '10px'
-        },
-
-        {
-          selector: '#interactive-section',
-          background: '#3a4a5c',
-          borderRadius: '6px',
-          padding: '15px',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '10px'
-        },
-
-        // Section headers (using div containers)
-        {
-          selector: '#text-formatting-header',
-          background: '#e74c3c',
+          selector: '.section-header',
           color: '#ffffff',
           padding: '8px 12px',
           borderRadius: '4px',
@@ -5653,33 +5622,26 @@ export class SiteDataService {
         },
 
         {
-          selector: '#semantic-header',
-          background: '#27ae60',
-          color: '#ffffff',
-          padding: '8px 12px',
-          borderRadius: '4px',
-          height: '30px'
+          selector: '#text-header',
+          background: '#e74c3c'
         },
 
         {
           selector: '#code-header',
-          background: '#3498db',
-          color: '#ffffff',
-          padding: '8px 12px',
-          borderRadius: '4px',
-          height: '30px'
+          background: '#3498db'
+        },
+
+        {
+          selector: '#semantic-header',
+          background: '#27ae60'
         },
 
         {
           selector: '#interactive-header',
-          background: '#9b59b6',
-          color: '#ffffff',
-          padding: '8px 12px',
-          borderRadius: '4px',
-          height: '30px'
+          background: '#9b59b6'
         },
 
-        // Row containers for organizing elements
+        // Row containers
         {
           selector: '.element-row',
           display: 'flex',
@@ -5688,127 +5650,33 @@ export class SiteDataService {
           flexWrap: 'wrap'
         },
 
-        // Basic styling for test elements (minimal as requested)
+        // Element styling - minimal overrides, rely on defaults
         {
-          selector: '#test-b, #test-strong, #test-i, #test-em, #test-u, #test-small, #test-sub, #test-sup',
-          background: '#ecf0f1',
-          padding: '4px 8px',
-          borderRadius: '3px',
-          height: '25px'
+          selector: '.test-element',
+          borderRadius: '4px'
         },
 
         {
-          selector: '#test-code, #test-kbd, #test-samp, #test-var',
+          selector: '.text-element',
+          background: '#ecf0f1'
+        },
+
+        {
+          selector: '.code-element',
           background: '#2c3e50',
-          color: '#ecf0f1',
-          padding: '4px 8px',
-          borderRadius: '3px',
-          height: '25px'
+          color: '#ecf0f1'
         },
 
         {
-          selector: '#test-pre',
-          background: '#2c3e50',
-          color: '#ecf0f1',
-          padding: '10px',
-          borderRadius: '3px',
-          width: '300px',
-          height: '60px'
-        },
-
-        {
-          selector: '#test-blockquote',
-          background: '#bdc3c7',
-          padding: '10px',
-          borderRadius: '3px',
-          borderWidth: '4px',
-          borderColor: '#3498db',
-          borderStyle: 'solid',
-          width: '250px',
-          height: '40px'
-        },
-
-        {
-          selector: '#test-label, #test-figcaption, #test-caption, #test-legend, #test-summary',
-          background: '#f39c12',
-          color: '#ffffff',
-          padding: '4px 8px',
-          borderRadius: '3px',
-          height: '25px'
-        },
-
-        {
-          selector: '#test-cite, #test-abbr, #test-dfn',
+          selector: '.semantic-element',
           background: '#e67e22',
-          color: '#ffffff',
-          padding: '4px 8px',
-          borderRadius: '3px',
-          height: '25px'
+          color: '#ffffff'
         },
 
         {
-          selector: '#test-mark',
-          background: '#f1c40f',
-          color: '#2c3e50',
-          padding: '4px 8px',
-          borderRadius: '3px',
-          height: '25px'
-        },
-
-        {
-          selector: '#test-q',
-          background: '#1abc9c',
-          color: '#ffffff',
-          padding: '4px 8px',
-          borderRadius: '3px',
-          height: '25px'
-        },
-
-        {
-          selector: '#test-del, #test-s, #test-strike',
-          background: '#e74c3c',
-          color: '#ffffff',
-          padding: '4px 8px',
-          borderRadius: '3px',
-          height: '25px'
-        },
-
-        {
-          selector: '#test-ins',
-          background: '#27ae60',
-          color: '#ffffff',
-          padding: '4px 8px',
-          borderRadius: '3px',
-          height: '25px'
-        },
-
-        {
-          selector: '#test-address',
-          background: '#95a5a6',
-          color: '#ffffff',
-          padding: '8px',
-          borderRadius: '3px',
-          width: '200px',
-          height: '40px'
-        },
-
-        {
-          selector: '#test-dt, #test-dd',
-          background: '#34495e',
-          color: '#ecf0f1',
-          padding: '4px 8px',
-          borderRadius: '3px',
-          height: '25px'
-        },
-
-        {
-          selector: '#test-details',
-          background: '#7f8c8d',
-          color: '#ffffff',
-          padding: '8px',
-          borderRadius: '3px',
-          width: '200px',
-          height: '40px'
+          selector: '.interactive-element',
+          background: '#f39c12',
+          color: '#ffffff'
         }
       ],
       root: {
@@ -5820,42 +5688,34 @@ export class SiteDataService {
               // Text Formatting Section
               {
                 type: 'div',
-                id: 'text-formatting-section',
+                id: 'text-section',
+                class: 'section',
                 children: [
                   {
                     type: 'div',
-                    id: 'text-formatting-header'
+                    id: 'text-header',
+                    class: 'section-header',
+                    textContent: 'Text Formatting'
                   },
                   {
                     type: 'div',
                     class: 'element-row',
                     children: [
-                      { type: 'b', id: 'test-b' },
-                      { type: 'strong', id: 'test-strong' },
-                      { type: 'i', id: 'test-i' },
-                      { type: 'em', id: 'test-em' },
-                      { type: 'u', id: 'test-u' }
+                      { type: 'b', id: 'test-b', class: 'test-element text-element', textContent: 'Bold' },
+                      { type: 'strong', id: 'test-strong', class: 'test-element text-element', textContent: 'Strong' },
+                      { type: 'i', id: 'test-i', class: 'test-element text-element', textContent: 'Italic' },
+                      { type: 'em', id: 'test-em', class: 'test-element text-element', textContent: 'Emphasis' },
+                      { type: 'u', id: 'test-u', class: 'test-element text-element', textContent: 'Underline' }
                     ]
                   },
                   {
                     type: 'div',
                     class: 'element-row',
                     children: [
-                      { type: 'small', id: 'test-small' },
-                      { type: 'sub', id: 'test-sub' },
-                      { type: 'sup', id: 'test-sup' },
-                      { type: 'mark', id: 'test-mark' },
-                      { type: 'q', id: 'test-q' }
-                    ]
-                  },
-                  {
-                    type: 'div',
-                    class: 'element-row',
-                    children: [
-                      { type: 'del', id: 'test-del' },
-                      { type: 'ins', id: 'test-ins' },
-                      { type: 's', id: 'test-s' },
-                      { type: 'strike', id: 'test-strike' }
+                      { type: 'small', id: 'test-small', class: 'test-element text-element', textContent: 'Small' },
+                      { type: 'mark', id: 'test-mark', class: 'test-element', textContent: 'Marked' },
+                      { type: 'del', id: 'test-del', class: 'test-element text-element', textContent: 'Deleted' },
+                      { type: 'ins', id: 'test-ins', class: 'test-element', textContent: 'Inserted' }
                     ]
                   }
                 ]
@@ -5865,27 +5725,22 @@ export class SiteDataService {
               {
                 type: 'div',
                 id: 'code-section',
+                class: 'section',
                 children: [
                   {
                     type: 'div',
-                    id: 'code-header'
+                    id: 'code-header',
+                    class: 'section-header',
+                    textContent: 'Code & Preformatted'
                   },
                   {
                     type: 'div',
                     class: 'element-row',
                     children: [
-                      { type: 'code', id: 'test-code' },
-                      { type: 'kbd', id: 'test-kbd' },
-                      { type: 'samp', id: 'test-samp' },
-                      { type: 'var', id: 'test-var' }
-                    ]
-                  },
-                  {
-                    type: 'div',
-                    class: 'element-row',
-                    children: [
-                      { type: 'pre', id: 'test-pre' },
-                      { type: 'blockquote', id: 'test-blockquote' }
+                      { type: 'code', id: 'test-code', class: 'test-element code-element', textContent: 'code()' },
+                      { type: 'kbd', id: 'test-kbd', class: 'test-element code-element', textContent: 'Ctrl+C' },
+                      { type: 'samp', id: 'test-samp', class: 'test-element code-element', textContent: 'Output' },
+                      { type: 'var', id: 'test-var', class: 'test-element code-element', textContent: 'variable' }
                     ]
                   }
                 ]
@@ -5895,27 +5750,21 @@ export class SiteDataService {
               {
                 type: 'div',
                 id: 'semantic-section',
+                class: 'section',
                 children: [
                   {
                     type: 'div',
-                    id: 'semantic-header'
+                    id: 'semantic-header',
+                    class: 'section-header',
+                    textContent: 'Semantic Elements'
                   },
                   {
                     type: 'div',
                     class: 'element-row',
                     children: [
-                      { type: 'cite', id: 'test-cite' },
-                      { type: 'abbr', id: 'test-abbr' },
-                      { type: 'dfn', id: 'test-dfn' },
-                      { type: 'address', id: 'test-address' }
-                    ]
-                  },
-                  {
-                    type: 'div',
-                    class: 'element-row',
-                    children: [
-                      { type: 'dt', id: 'test-dt' },
-                      { type: 'dd', id: 'test-dd' }
+                      { type: 'cite', id: 'test-cite', class: 'test-element semantic-element', textContent: 'Citation' },
+                      { type: 'abbr', id: 'test-abbr', class: 'test-element semantic-element', textContent: 'HTML' },
+                      { type: 'dfn', id: 'test-dfn', class: 'test-element semantic-element', textContent: 'Definition' }
                     ]
                   }
                 ]
@@ -5925,27 +5774,21 @@ export class SiteDataService {
               {
                 type: 'div',
                 id: 'interactive-section',
+                class: 'section',
                 children: [
                   {
                     type: 'div',
-                    id: 'interactive-header'
+                    id: 'interactive-header',
+                    class: 'section-header',
+                    textContent: 'Interactive & Labels'
                   },
                   {
                     type: 'div',
                     class: 'element-row',
                     children: [
-                      { type: 'label', id: 'test-label' },
-                      { type: 'figcaption', id: 'test-figcaption' },
-                      { type: 'caption', id: 'test-caption' }
-                    ]
-                  },
-                  {
-                    type: 'div',
-                    class: 'element-row',
-                    children: [
-                      { type: 'legend', id: 'test-legend' },
-                      { type: 'summary', id: 'test-summary' },
-                      { type: 'details', id: 'test-details' }
+                      { type: 'label', id: 'test-label', class: 'test-element interactive-element', textContent: 'Label' },
+                      { type: 'legend', id: 'test-legend', class: 'test-element interactive-element', textContent: 'Legend' },
+                      { type: 'summary', id: 'test-summary', class: 'test-element interactive-element', textContent: 'Summary' }
                     ]
                   }
                 ]

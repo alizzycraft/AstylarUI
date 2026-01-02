@@ -36,9 +36,9 @@ const defaults: { [key: string]: Partial<StyleRule> } = {
     nav: { display: 'block' },
     main: { display: 'block' },
     aside: { display: 'block' },
-    address: { display: 'block', fontStyle: 'italic' },
+    address: { display: 'block', fontStyle: 'italic', padding: '4px' },
     figure: { display: 'block', margin: '1em 40px' },
-    figcaption: { display: 'block' },
+    figcaption: { display: 'block', padding: '2px 4px', height: '20px' },
     hgroup: { display: 'block' },
 
     // === TYPOGRAPHY & TEXT ===
@@ -50,29 +50,29 @@ const defaults: { [key: string]: Partial<StyleRule> } = {
     h6: { fontSize: '10.72px', fontWeight: 'bold', display: 'block', margin: '2.33em 0' },
     p: { display: 'block', margin: '1em 0' },
     span: { display: 'inline' },
-    b: { fontWeight: 'bold' },
-    strong: { fontWeight: 'bold' },
-    i: { fontStyle: 'italic' },
-    em: { fontStyle: 'italic' },
-    cite: { fontStyle: 'italic' },
-    var: { fontStyle: 'italic' },
-    dfn: { fontStyle: 'italic' },
-    u: { textDecoration: 'underline' },
-    ins: { textDecoration: 'underline' },
-    s: { textDecoration: 'line-through' },
-    strike: { textDecoration: 'line-through' },
-    del: { textDecoration: 'line-through' },
-    code: { fontFamily: 'monospace' },
-    kbd: { fontFamily: 'monospace' },
-    samp: { fontFamily: 'monospace' },
-    pre: { display: 'block', fontFamily: 'monospace', whiteSpace: 'pre', margin: '1em 0' },
-    small: { fontSize: '0.83em' },
-    sub: { verticalAlign: 'sub', fontSize: '0.83em' },
-    sup: { verticalAlign: 'super', fontSize: '0.83em' },
-    blockquote: { display: 'block', margin: '1em 40px', fontStyle: 'italic' },
-    q: { display: 'inline' }, // quotes handled by renderer if possible
-    abbr: { textDecoration: 'underline dotted' },
-    mark: { background: 'yellow', color: 'black' },
+    b: { fontWeight: 'bold', display: 'inline-block', padding: '2px 4px', height: '20px' },
+    strong: { fontWeight: 'bold', display: 'inline-block', padding: '2px 4px', height: '20px' },
+    i: { fontStyle: 'italic', display: 'inline-block', padding: '2px 4px', height: '20px' },
+    em: { fontStyle: 'italic', display: 'inline-block', padding: '2px 4px', height: '20px' },
+    cite: { fontStyle: 'italic', display: 'inline-block', padding: '2px 4px', height: '20px' },
+    var: { fontStyle: 'italic', display: 'inline-block', padding: '2px 4px', height: '20px', fontFamily: 'monospace' },
+    dfn: { fontStyle: 'italic', display: 'inline-block', padding: '2px 4px', height: '20px' },
+    u: { textDecoration: 'underline', display: 'inline-block', padding: '2px 4px', height: '20px' },
+    ins: { textDecoration: 'underline', display: 'inline-block', padding: '2px 4px', height: '20px' },
+    s: { textDecoration: 'line-through', display: 'inline-block', padding: '2px 4px', height: '20px' },
+    strike: { textDecoration: 'line-through', display: 'inline-block', padding: '2px 4px', height: '20px' },
+    del: { textDecoration: 'line-through', display: 'inline-block', padding: '2px 4px', height: '20px' },
+    code: { fontFamily: 'monospace', display: 'inline-block', padding: '2px 4px', height: '20px' },
+    kbd: { fontFamily: 'monospace', display: 'inline-block', padding: '2px 4px', height: '20px' },
+    samp: { fontFamily: 'monospace', display: 'inline-block', padding: '2px 4px', height: '20px' },
+    pre: { display: 'block', fontFamily: 'monospace', whiteSpace: 'pre', margin: '1em 0', padding: '8px' },
+    small: { fontSize: '0.83em', display: 'inline-block', padding: '2px 4px', height: '20px' },
+    sub: { verticalAlign: 'sub', fontSize: '0.83em', display: 'inline-block', padding: '2px 4px', height: '20px' },
+    sup: { verticalAlign: 'super', fontSize: '0.83em', display: 'inline-block', padding: '2px 4px', height: '20px' },
+    blockquote: { display: 'block', margin: '1em 40px', fontStyle: 'italic', padding: '8px' },
+    q: { display: 'inline-block', padding: '2px 4px', height: '20px' }, // quotes handled by renderer if possible
+    abbr: { textDecoration: 'underline dotted', display: 'inline-block', padding: '2px 4px', height: '20px' },
+    mark: { background: 'yellow', color: 'black', display: 'inline-block', padding: '2px 4px', height: '20px' },
     br: {},
     wbr: {},
 
@@ -93,8 +93,8 @@ const defaults: { [key: string]: Partial<StyleRule> } = {
     },
     li: { display: 'list-item' },
     dl: { display: 'block', marginTop: '1em', marginBottom: '1em' },
-    dt: { display: 'block', fontWeight: 'bold' },
-    dd: { display: 'block', marginLeft: '40px' },
+    dt: { display: 'block', fontWeight: 'bold', padding: '2px 4px', height: '20px' },
+    dd: { display: 'block', marginLeft: '40px', padding: '2px 4px', height: '20px' },
     menu: { display: 'block', listStyleType: 'disc', marginTop: '1em', marginBottom: '1em' },
 
     // === TABLES ===
@@ -117,13 +117,13 @@ const defaults: { [key: string]: Partial<StyleRule> } = {
         borderStyle: 'solid',
         borderColor: '#bbb',
     },
-    caption: { display: 'table-caption', background: '#f9e6ff', textAlign: 'center' },
+    caption: { display: 'table-caption', background: '#f9e6ff', textAlign: 'center', padding: '4px', height: '24px' },
     col: { display: 'table-column' },
     colgroup: { display: 'table-column-group' },
 
     // === FORMS ===
     form: { display: 'block' },
-    label: { cursor: 'pointer', display: 'inline-block' },
+    label: { cursor: 'pointer', display: 'inline-block', padding: '2px 4px', height: '20px' },
     fieldset: {
         display: 'block',
         margin: '0 2px',
@@ -132,7 +132,7 @@ const defaults: { [key: string]: Partial<StyleRule> } = {
         borderStyle: 'groove',
         borderColor: '#e5e7eb'
     },
-    legend: { display: 'block', padding: '0 2px', fontWeight: 'bold' },
+    legend: { display: 'block', padding: '2px 4px', fontWeight: 'bold', height: '20px' },
     datalist: { display: 'none' },
     output: { display: 'inline' },
     optgroup: { display: 'block' },
@@ -263,8 +263,8 @@ const defaults: { [key: string]: Partial<StyleRule> } = {
     },
 
     // === INTERACTIVE ===
-    details: { display: 'block' },
-    summary: { display: 'list-item', cursor: 'pointer' },
+    details: { display: 'block', padding: '4px' },
+    summary: { display: 'list-item', cursor: 'pointer', padding: '2px 4px', height: '20px' },
     dialog: { display: 'none' }
 };
 

@@ -18,9 +18,13 @@ export class FlexService {
     private textRenderingService: TextRenderingService,
     private textStyleParser: TextStyleParserService
   ) { }
-  public isFlexContainer(render: BabylonRender, parentElement: DOMElement, styles: StyleRule[]): boolean {
-    const style = render.actions.style.findStyleForElement(parentElement, styles);
-    return style?.display === 'flex';
+  public isFlexContainer(render: BabylonRender, parentElement: DOMElement, styles: StyleRule[], dom?: BabylonDOM): boolean {
+    // Use elementStyles map if dom context is available for better performance
+    const elementStyles = dom?.context?.elementStyles;
+    const style = render.actions.style.findStyleForElement(parentElement, styles, elementStyles);
+    const isFlex = style?.display === 'flex';
+    console.log(`[FlexService] isFlexContainer check for ${parentElement.id || parentElement.type}: display=${style?.display}, isFlex=${isFlex}`);
+    return isFlex;
   }
 
   public processFlexChildren(
@@ -38,10 +42,13 @@ export class FlexService {
     // Get parent style and dimensions
     const parentStyle = render.actions.style.findStyleForElement(parentElement, styles);
     if (!parentStyle) throw new Error('FlexService: parent style not found');
-    if (!parentElement.id) throw new Error('FlexService: parentElement.id is undefined');
 
-    const parentDimensions = dom.context.elementDimensions.get(parentElement.id);
-    if (!parentDimensions) throw new Error('FlexService: parent dimensions not found');
+    // Use parent mesh name to look up dimensions (all elements stored by mesh ID now)
+    const parentDimensions = dom.context.elementDimensions.get(parent.name);
+    if (!parentDimensions) {
+        console.error(`[FlexService] Parent dimensions not found for ${parent.name}. Available keys:`, Array.from(dom.context.elementDimensions.keys()));
+        throw new Error(`FlexService: parent dimensions not found for ${parent.name}`);
+    }
     // Get container dimensions (in pixels)
     const containerWidth = parentDimensions.width;
     const containerHeight = parentDimensions.height;
