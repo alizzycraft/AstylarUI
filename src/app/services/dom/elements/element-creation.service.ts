@@ -354,6 +354,23 @@ export class ElementCreationService {
                     console.log(`[ElementCreation] Creating child ${child.type}#${child.id}`);
                     const childMesh = this.createElement(dom, render, child, parent, styles);
 
+                    // Check if this element has explicit positioning (top/left values)
+                    const elementStyleData = child.id ? dom.context.elementStyles.get(child.id) : undefined;
+                    const childStyleData = elementStyleData?.normal || ({} as any);
+                    const hasExplicitPositioning = childStyleData.top !== undefined || childStyleData.left !== undefined;
+
+                    if (hasExplicitPositioning) {
+                        // Element has explicit positioning - it's already positioned correctly by createElement
+                        // Skip stacking logic for absolutely positioned elements
+                        console.log(`[ElementCreation] Skipping stacking for absolutely positioned element: ${child.id}`);
+                        
+                        // Recursively process grandchildren
+                        if (child.children && child.children.length > 0) {
+                            this.processChildren(dom, render, child.children, childMesh, styles, child);
+                        }
+                        continue;
+                    }
+
                     // 3. Measure Child
                     let childHeight = 0;
                     if (child.id && dom.context.elementDimensions.has(child.id)) {
