@@ -5573,6 +5573,387 @@ export class SiteDataService {
           }
         ]
       }
+    },
+
+    // HTML KITCHEN SINK TEST SITE
+    'html-kitchen-sink': {
+      meta: {
+        description: 'HTML kitchen sink test site showcasing various HTML text formatting and semantic tags including bold, italic, underline, code, and other inline elements'
+      },
+      styles: [
+        {
+          selector: 'root',
+          background: '#2c3e50'
+        },
+
+        // Main container
+        {
+          selector: '#main-container',
+          top: '5%',
+          left: '5%',
+          width: '90%',
+          height: '90%',
+          background: '#34495e',
+          borderRadius: '8px',
+          padding: '20px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '15px'
+        },
+
+        // Section containers
+        {
+          selector: '#text-formatting-section',
+          background: '#3a4a5c',
+          borderRadius: '6px',
+          padding: '15px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '10px'
+        },
+
+        {
+          selector: '#semantic-section',
+          background: '#3a4a5c',
+          borderRadius: '6px',
+          padding: '15px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '10px'
+        },
+
+        {
+          selector: '#code-section',
+          background: '#3a4a5c',
+          borderRadius: '6px',
+          padding: '15px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '10px'
+        },
+
+        {
+          selector: '#interactive-section',
+          background: '#3a4a5c',
+          borderRadius: '6px',
+          padding: '15px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '10px'
+        },
+
+        // Section headers (using div containers)
+        {
+          selector: '#text-formatting-header',
+          background: '#e74c3c',
+          color: '#ffffff',
+          padding: '8px 12px',
+          borderRadius: '4px',
+          height: '30px'
+        },
+
+        {
+          selector: '#semantic-header',
+          background: '#27ae60',
+          color: '#ffffff',
+          padding: '8px 12px',
+          borderRadius: '4px',
+          height: '30px'
+        },
+
+        {
+          selector: '#code-header',
+          background: '#3498db',
+          color: '#ffffff',
+          padding: '8px 12px',
+          borderRadius: '4px',
+          height: '30px'
+        },
+
+        {
+          selector: '#interactive-header',
+          background: '#9b59b6',
+          color: '#ffffff',
+          padding: '8px 12px',
+          borderRadius: '4px',
+          height: '30px'
+        },
+
+        // Row containers for organizing elements
+        {
+          selector: '.element-row',
+          display: 'flex',
+          flexDirection: 'row',
+          gap: '10px',
+          flexWrap: 'wrap'
+        },
+
+        // Basic styling for test elements (minimal as requested)
+        {
+          selector: '#test-b, #test-strong, #test-i, #test-em, #test-u, #test-small, #test-sub, #test-sup',
+          background: '#ecf0f1',
+          padding: '4px 8px',
+          borderRadius: '3px',
+          height: '25px'
+        },
+
+        {
+          selector: '#test-code, #test-kbd, #test-samp, #test-var',
+          background: '#2c3e50',
+          color: '#ecf0f1',
+          padding: '4px 8px',
+          borderRadius: '3px',
+          height: '25px'
+        },
+
+        {
+          selector: '#test-pre',
+          background: '#2c3e50',
+          color: '#ecf0f1',
+          padding: '10px',
+          borderRadius: '3px',
+          width: '300px',
+          height: '60px'
+        },
+
+        {
+          selector: '#test-blockquote',
+          background: '#bdc3c7',
+          padding: '10px',
+          borderRadius: '3px',
+          borderWidth: '4px',
+          borderColor: '#3498db',
+          borderStyle: 'solid',
+          width: '250px',
+          height: '40px'
+        },
+
+        {
+          selector: '#test-label, #test-figcaption, #test-caption, #test-legend, #test-summary',
+          background: '#f39c12',
+          color: '#ffffff',
+          padding: '4px 8px',
+          borderRadius: '3px',
+          height: '25px'
+        },
+
+        {
+          selector: '#test-cite, #test-abbr, #test-dfn',
+          background: '#e67e22',
+          color: '#ffffff',
+          padding: '4px 8px',
+          borderRadius: '3px',
+          height: '25px'
+        },
+
+        {
+          selector: '#test-mark',
+          background: '#f1c40f',
+          color: '#2c3e50',
+          padding: '4px 8px',
+          borderRadius: '3px',
+          height: '25px'
+        },
+
+        {
+          selector: '#test-q',
+          background: '#1abc9c',
+          color: '#ffffff',
+          padding: '4px 8px',
+          borderRadius: '3px',
+          height: '25px'
+        },
+
+        {
+          selector: '#test-del, #test-s, #test-strike',
+          background: '#e74c3c',
+          color: '#ffffff',
+          padding: '4px 8px',
+          borderRadius: '3px',
+          height: '25px'
+        },
+
+        {
+          selector: '#test-ins',
+          background: '#27ae60',
+          color: '#ffffff',
+          padding: '4px 8px',
+          borderRadius: '3px',
+          height: '25px'
+        },
+
+        {
+          selector: '#test-address',
+          background: '#95a5a6',
+          color: '#ffffff',
+          padding: '8px',
+          borderRadius: '3px',
+          width: '200px',
+          height: '40px'
+        },
+
+        {
+          selector: '#test-dt, #test-dd',
+          background: '#34495e',
+          color: '#ecf0f1',
+          padding: '4px 8px',
+          borderRadius: '3px',
+          height: '25px'
+        },
+
+        {
+          selector: '#test-details',
+          background: '#7f8c8d',
+          color: '#ffffff',
+          padding: '8px',
+          borderRadius: '3px',
+          width: '200px',
+          height: '40px'
+        }
+      ],
+      root: {
+        children: [
+          {
+            type: 'div',
+            id: 'main-container',
+            children: [
+              // Text Formatting Section
+              {
+                type: 'div',
+                id: 'text-formatting-section',
+                children: [
+                  {
+                    type: 'div',
+                    id: 'text-formatting-header'
+                  },
+                  {
+                    type: 'div',
+                    class: 'element-row',
+                    children: [
+                      { type: 'b', id: 'test-b' },
+                      { type: 'strong', id: 'test-strong' },
+                      { type: 'i', id: 'test-i' },
+                      { type: 'em', id: 'test-em' },
+                      { type: 'u', id: 'test-u' }
+                    ]
+                  },
+                  {
+                    type: 'div',
+                    class: 'element-row',
+                    children: [
+                      { type: 'small', id: 'test-small' },
+                      { type: 'sub', id: 'test-sub' },
+                      { type: 'sup', id: 'test-sup' },
+                      { type: 'mark', id: 'test-mark' },
+                      { type: 'q', id: 'test-q' }
+                    ]
+                  },
+                  {
+                    type: 'div',
+                    class: 'element-row',
+                    children: [
+                      { type: 'del', id: 'test-del' },
+                      { type: 'ins', id: 'test-ins' },
+                      { type: 's', id: 'test-s' },
+                      { type: 'strike', id: 'test-strike' }
+                    ]
+                  }
+                ]
+              },
+
+              // Code Section
+              {
+                type: 'div',
+                id: 'code-section',
+                children: [
+                  {
+                    type: 'div',
+                    id: 'code-header'
+                  },
+                  {
+                    type: 'div',
+                    class: 'element-row',
+                    children: [
+                      { type: 'code', id: 'test-code' },
+                      { type: 'kbd', id: 'test-kbd' },
+                      { type: 'samp', id: 'test-samp' },
+                      { type: 'var', id: 'test-var' }
+                    ]
+                  },
+                  {
+                    type: 'div',
+                    class: 'element-row',
+                    children: [
+                      { type: 'pre', id: 'test-pre' },
+                      { type: 'blockquote', id: 'test-blockquote' }
+                    ]
+                  }
+                ]
+              },
+
+              // Semantic Section
+              {
+                type: 'div',
+                id: 'semantic-section',
+                children: [
+                  {
+                    type: 'div',
+                    id: 'semantic-header'
+                  },
+                  {
+                    type: 'div',
+                    class: 'element-row',
+                    children: [
+                      { type: 'cite', id: 'test-cite' },
+                      { type: 'abbr', id: 'test-abbr' },
+                      { type: 'dfn', id: 'test-dfn' },
+                      { type: 'address', id: 'test-address' }
+                    ]
+                  },
+                  {
+                    type: 'div',
+                    class: 'element-row',
+                    children: [
+                      { type: 'dt', id: 'test-dt' },
+                      { type: 'dd', id: 'test-dd' }
+                    ]
+                  }
+                ]
+              },
+
+              // Interactive Section
+              {
+                type: 'div',
+                id: 'interactive-section',
+                children: [
+                  {
+                    type: 'div',
+                    id: 'interactive-header'
+                  },
+                  {
+                    type: 'div',
+                    class: 'element-row',
+                    children: [
+                      { type: 'label', id: 'test-label' },
+                      { type: 'figcaption', id: 'test-figcaption' },
+                      { type: 'caption', id: 'test-caption' }
+                    ]
+                  },
+                  {
+                    type: 'div',
+                    class: 'element-row',
+                    children: [
+                      { type: 'legend', id: 'test-legend' },
+                      { type: 'summary', id: 'test-summary' },
+                      { type: 'details', id: 'test-details' }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
     }
   };
 
