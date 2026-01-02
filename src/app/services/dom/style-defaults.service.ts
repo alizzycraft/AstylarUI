@@ -36,9 +36,9 @@ const defaults: { [key: string]: Partial<StyleRule> } = {
     nav: { display: 'block' },
     main: { display: 'block' },
     aside: { display: 'block' },
-    address: { display: 'block', fontStyle: 'italic', padding: '4px', width: 'auto' },
+    address: { display: 'block', fontStyle: 'italic', padding: '4px 8px', margin: '8px 0' },
     figure: { display: 'block', margin: '1em 40px' },
-    figcaption: { display: 'block', padding: '4px 8px', height: '24px', width: 'auto' },
+    figcaption: { display: 'block', padding: '4px 8px', margin: '8px 0' },
     hgroup: { display: 'block' },
 
     // === TYPOGRAPHY & TEXT ===
@@ -50,29 +50,29 @@ const defaults: { [key: string]: Partial<StyleRule> } = {
     h6: { fontSize: '10.72px', fontWeight: 'bold', display: 'block', margin: '2.33em 0' },
     p: { display: 'block', margin: '1em 0' },
     span: { display: 'inline' },
-    b: { fontWeight: 'bold', display: 'inline-block', padding: '4px 8px', height: '24px', width: 'auto', margin: '4px' },
-    strong: { fontWeight: 'bold', display: 'inline-block', padding: '4px 8px', height: '24px', width: 'auto', margin: '4px' },
-    i: { fontStyle: 'italic', display: 'inline-block', padding: '4px 8px', height: '24px', width: 'auto', margin: '4px' },
-    em: { fontStyle: 'italic', display: 'inline-block', padding: '4px 8px', height: '24px', width: 'auto', margin: '4px' },
-    cite: { fontStyle: 'italic', display: 'inline-block', padding: '4px 8px', height: '24px', width: 'auto', margin: '4px' },
-    var: { fontStyle: 'italic', display: 'inline-block', padding: '4px 8px', height: '24px', width: 'auto', margin: '4px', fontFamily: 'monospace' },
-    dfn: { fontStyle: 'italic', display: 'inline-block', padding: '4px 8px', height: '24px', width: 'auto', margin: '4px' },
-    u: { textDecoration: 'underline', display: 'inline-block', padding: '4px 8px', height: '24px', width: 'auto', margin: '4px' },
-    ins: { textDecoration: 'underline', display: 'inline-block', padding: '4px 8px', height: '24px', width: 'auto', margin: '4px' },
-    s: { textDecoration: 'line-through', display: 'inline-block', padding: '4px 8px', height: '24px', width: 'auto', margin: '4px' },
-    strike: { textDecoration: 'line-through', display: 'inline-block', padding: '4px 8px', height: '24px', width: 'auto', margin: '4px' },
-    del: { textDecoration: 'line-through', display: 'inline-block', padding: '4px 8px', height: '24px', width: 'auto', margin: '4px' },
-    code: { fontFamily: 'monospace', display: 'inline-block', padding: '4px 8px', height: '24px', width: 'auto', margin: '4px' },
-    kbd: { fontFamily: 'monospace', display: 'inline-block', padding: '4px 8px', height: '24px', width: 'auto', margin: '4px' },
-    samp: { fontFamily: 'monospace', display: 'inline-block', padding: '4px 8px', height: '24px', width: 'auto', margin: '4px' },
+    b: { fontWeight: 'bold', display: 'inline-block', padding: '4px 8px', margin: '8px 0' },
+    strong: { fontWeight: 'bold', display: 'inline-block', padding: '4px 8px', margin: '8px 0' },
+    i: { fontStyle: 'italic', display: 'inline-block', padding: '4px 8px', margin: '8px 0' },
+    em: { fontStyle: 'italic', display: 'inline-block', padding: '4px 8px', margin: '8px 0' },
+    cite: { fontStyle: 'italic', display: 'inline-block', padding: '4px 8px', margin: '8px 0' },
+    var: { fontStyle: 'italic', display: 'inline-block', padding: '4px 8px', fontFamily: 'monospace', margin: '8px 0' },
+    dfn: { fontStyle: 'italic', display: 'inline-block', padding: '4px 8px', margin: '8px 0' },
+    u: { textDecoration: 'underline', display: 'inline-block', padding: '4px 8px', margin: '8px 0' },
+    ins: { textDecoration: 'underline', display: 'inline-block', padding: '4px 8px', margin: '8px 0' },
+    s: { textDecoration: 'line-through', display: 'inline-block', padding: '4px 8px', margin: '8px 0' },
+    strike: { textDecoration: 'line-through', display: 'inline-block', padding: '4px 8px', margin: '8px 0' },
+    del: { textDecoration: 'line-through', display: 'inline-block', padding: '4px 8px', margin: '8px 0' },
+    code: { fontFamily: 'monospace', display: 'inline-block', padding: '4px 8px', margin: '8px 0' },
+    kbd: { fontFamily: 'monospace', display: 'inline-block', padding: '4px 8px', margin: '8px 0' },
+    samp: { fontFamily: 'monospace', display: 'inline-block', padding: '4px 8px', margin: '8px 0' },
     pre: { display: 'block', fontFamily: 'monospace', whiteSpace: 'pre', margin: '1em 0', padding: '8px', width: 'auto' },
-    small: { fontSize: '0.83em', display: 'inline-block', padding: '4px 8px', height: '24px', width: 'auto', margin: '4px' },
-    sub: { verticalAlign: 'sub', fontSize: '0.83em', display: 'inline-block', padding: '4px 8px', height: '24px', width: 'auto', margin: '4px' },
-    sup: { verticalAlign: 'super', fontSize: '0.83em', display: 'inline-block', padding: '4px 8px', height: '24px', width: 'auto', margin: '4px' },
+    small: { fontSize: '0.83em', display: 'inline-block', padding: '4px 8px', margin: '8px 0' },
+    sub: { verticalAlign: 'sub', fontSize: '0.83em', display: 'inline-block', padding: '4px 8px', margin: '8px 0' },
+    sup: { verticalAlign: 'super', fontSize: '0.83em', display: 'inline-block', padding: '4px 8px', margin: '8px 0' },
     blockquote: { display: 'block', margin: '1em 40px', fontStyle: 'italic', padding: '8px', width: 'auto' },
-    q: { display: 'inline-block', padding: '4px 8px', height: '24px', width: 'auto', margin: '4px' },
-    abbr: { textDecoration: 'underline dotted', display: 'inline-block', padding: '4px 8px', height: '24px', width: 'auto', margin: '4px' },
-    mark: { background: 'yellow', color: 'black', display: 'inline-block', padding: '4px 8px', height: '24px', width: 'auto', margin: '4px' },
+    q: { display: 'inline-block', padding: '4px 8px', margin: '8px 0' },
+    abbr: { textDecoration: 'underline dotted', display: 'inline-block', padding: '4px 8px', margin: '8px 0' },
+    mark: { background: 'yellow', color: 'black', display: 'inline-block', padding: '4px 8px', margin: '8px 0' },
     br: {},
     wbr: {},
 
@@ -93,8 +93,8 @@ const defaults: { [key: string]: Partial<StyleRule> } = {
     },
     li: { display: 'list-item' },
     dl: { display: 'block', marginTop: '1em', marginBottom: '1em' },
-    dt: { display: 'block', fontWeight: 'bold', padding: '4px 8px', height: '24px', width: 'auto' },
-    dd: { display: 'block', marginLeft: '40px', padding: '4px 8px', height: '24px', width: 'auto' },
+    dt: { display: 'block', fontWeight: 'bold', padding: '4px 8px', margin: '8px 0' },
+    dd: { display: 'block', marginLeft: '40px', padding: '4px 8px', margin: '8px 0' },
     menu: { display: 'block', listStyleType: 'disc', marginTop: '1em', marginBottom: '1em' },
 
     // === TABLES ===
@@ -123,7 +123,7 @@ const defaults: { [key: string]: Partial<StyleRule> } = {
 
     // === FORMS ===
     form: { display: 'block' },
-    label: { cursor: 'pointer', display: 'inline-block', padding: '4px 8px', height: '24px', width: 'auto' },
+    label: { cursor: 'pointer', display: 'inline-block', padding: '4px 8px', margin: '8px 0' },
     fieldset: {
         display: 'block',
         margin: '0 2px',
@@ -132,7 +132,7 @@ const defaults: { [key: string]: Partial<StyleRule> } = {
         borderStyle: 'groove',
         borderColor: '#e5e7eb'
     },
-    legend: { display: 'block', padding: '4px 8px', fontWeight: 'bold', height: '24px', width: 'auto' },
+    legend: { display: 'block', padding: '4px 8px', fontWeight: 'bold', margin: '8px 0' },
     datalist: { display: 'none' },
     output: { display: 'inline' },
     optgroup: { display: 'block' },
@@ -264,7 +264,7 @@ const defaults: { [key: string]: Partial<StyleRule> } = {
 
     // === INTERACTIVE ===
     details: { display: 'block', padding: '4px', width: 'auto' },
-    summary: { display: 'list-item', cursor: 'pointer', padding: '4px 8px', height: '24px', width: 'auto' },
+    summary: { display: 'list-item', cursor: 'pointer', padding: '4px 8px', margin: '8px 0' },
     dialog: { display: 'none' }
 };
 
