@@ -5616,6 +5616,9 @@ export class SiteDataService {
         {
           selector: '.section-header',
           color: '#ffffff',
+          display: 'flex',
+          alignItems: 'center',
+          fontWeight: '600',
           padding: '8px 12px',
           borderRadius: '4px',
           height: '30px'
@@ -5653,7 +5656,13 @@ export class SiteDataService {
         // Element styling - minimal overrides, rely on defaults
         {
           selector: '.test-element',
-          borderRadius: '4px'
+          padding: '12px 16px',
+          display: 'inline-flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          minWidth: '120px',
+          minHeight: '48px',
+          fontSize: '16px'
         },
 
         {

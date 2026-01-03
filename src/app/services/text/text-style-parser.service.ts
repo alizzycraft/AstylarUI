@@ -34,7 +34,7 @@ export class TextStyleParserService {
     color: '#000000',
     textAlign: 'left',
     verticalAlign: 'baseline',
-    lineHeight: 1.2,
+    lineHeight: 1.4,
     letterSpacing: 0,
     wordSpacing: 0,
     whiteSpace: 'normal',
@@ -370,7 +370,7 @@ export class TextStyleParserService {
 
     // Handle 'normal' keyword
     if (cleanedHeight === 'normal') {
-      return 1.2; // Default normal line height
+      return this.DEFAULT_TEXT_STYLE.lineHeight; // Align with default CSS normal behavior approximation
     }
 
     // Handle numeric values (unitless multiplier)
@@ -396,8 +396,8 @@ export class TextStyleParserService {
       }
     }
 
-    console.warn(`Invalid line-height value: "${lineHeight}". Using default 1.2.`);
-    return 1.2;
+    console.warn(`Invalid line-height value: "${lineHeight}". Using default ${this.DEFAULT_TEXT_STYLE.lineHeight}.`);
+    return this.DEFAULT_TEXT_STYLE.lineHeight;
   }
 
   /**
