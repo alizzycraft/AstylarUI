@@ -50,29 +50,32 @@ const defaults: { [key: string]: Partial<StyleRule> } = {
     h6: { fontSize: '10.72px', fontWeight: 'bold', display: 'block', margin: '2.33em 0' },
     p: { display: 'block', margin: '1em 0' },
     span: { display: 'inline' },
-    b: { fontWeight: 'bold', display: 'inline-block', padding: '4px 8px', margin: '8px 0' },
-    strong: { fontWeight: 'bold', display: 'inline-block', padding: '4px 8px', margin: '8px 0' },
-    i: { fontStyle: 'italic', display: 'inline-block', padding: '4px 8px', margin: '8px 0' },
-    em: { fontStyle: 'italic', display: 'inline-block', padding: '4px 8px', margin: '8px 0' },
-    cite: { fontStyle: 'italic', display: 'inline-block', padding: '4px 8px', margin: '8px 0' },
-    var: { fontStyle: 'italic', display: 'inline-block', padding: '4px 8px', fontFamily: 'monospace', margin: '8px 0' },
-    dfn: { fontStyle: 'italic', display: 'inline-block', padding: '4px 8px', margin: '8px 0' },
-    u: { textDecoration: 'underline', display: 'inline-block', padding: '4px 8px', margin: '8px 0' },
-    ins: { textDecoration: 'underline', display: 'inline-block', padding: '4px 8px', margin: '8px 0' },
-    s: { textDecoration: 'line-through', display: 'inline-block', padding: '4px 8px', margin: '8px 0' },
-    strike: { textDecoration: 'line-through', display: 'inline-block', padding: '4px 8px', margin: '8px 0' },
-    del: { textDecoration: 'line-through', display: 'inline-block', padding: '4px 8px', margin: '8px 0' },
-    code: { fontFamily: 'monospace', display: 'inline-block', padding: '4px 8px', margin: '8px 0' },
-    kbd: { fontFamily: 'monospace', display: 'inline-block', padding: '4px 8px', margin: '8px 0' },
-    samp: { fontFamily: 'monospace', display: 'inline-block', padding: '4px 8px', margin: '8px 0' },
+    b: { fontWeight: 'bold', display: 'inline' },
+    strong: { fontWeight: 'bold', display: 'inline' },
+    i: { fontStyle: 'italic', display: 'inline' },
+    em: { fontStyle: 'italic', display: 'inline' },
+    cite: { fontStyle: 'italic', display: 'inline' },
+    var: { fontStyle: 'italic', display: 'inline', fontFamily: 'monospace' },
+    dfn: { fontStyle: 'italic', display: 'inline' },
+    u: { textDecoration: 'underline', display: 'inline' },
+    ins: { textDecoration: 'underline', display: 'inline' },
+    s: { textDecoration: 'line-through', display: 'inline' },
+    strike: { textDecoration: 'line-through', display: 'inline' },
+    del: { textDecoration: 'line-through', display: 'inline' },
+    code: { fontFamily: 'monospace', display: 'inline' },
+    kbd: { fontFamily: 'monospace', display: 'inline' },
+    samp: { fontFamily: 'monospace', display: 'inline' },
+
     pre: { display: 'block', fontFamily: 'monospace', whiteSpace: 'pre', margin: '1em 0', padding: '8px', width: 'auto' },
-    small: { fontSize: '0.83em', display: 'inline-block', padding: '4px 8px', margin: '8px 0' },
-    sub: { verticalAlign: 'sub', fontSize: '0.83em', display: 'inline-block', padding: '4px 8px', margin: '8px 0' },
-    sup: { verticalAlign: 'super', fontSize: '0.83em', display: 'inline-block', padding: '4px 8px', margin: '8px 0' },
+    small: { fontSize: '0.83em', display: 'inline' },
+    sub: { verticalAlign: 'sub', fontSize: '0.83em', display: 'inline' },
+    sup: { verticalAlign: 'super', fontSize: '0.83em', display: 'inline' },
+
     blockquote: { display: 'block', margin: '1em 40px', fontStyle: 'italic', padding: '8px', width: 'auto' },
-    q: { display: 'inline-block', padding: '4px 8px', margin: '8px 0' },
-    abbr: { textDecoration: 'underline dotted', display: 'inline-block', padding: '4px 8px', margin: '8px 0' },
-    mark: { background: 'yellow', color: 'black', display: 'inline-block', padding: '4px 8px', margin: '8px 0' },
+    q: { display: 'inline' },
+    abbr: { textDecoration: 'underline dotted', display: 'inline' },
+    mark: { background: 'yellow', color: 'black', display: 'inline' },
+
     br: {},
     wbr: {},
 
@@ -123,7 +126,7 @@ const defaults: { [key: string]: Partial<StyleRule> } = {
 
     // === FORMS ===
     form: { display: 'block' },
-    label: { cursor: 'pointer', display: 'inline-block', padding: '4px 8px', margin: '8px 0' },
+    label: { cursor: 'pointer', display: 'inline' },
     fieldset: {
         display: 'block',
         margin: '0 2px',
@@ -132,7 +135,7 @@ const defaults: { [key: string]: Partial<StyleRule> } = {
         borderStyle: 'groove',
         borderColor: '#e5e7eb'
     },
-    legend: { display: 'block', padding: '4px 8px', fontWeight: 'bold', margin: '8px 0' },
+    legend: { display: 'block', padding: '0 2px', fontWeight: 'bold', margin: '0' },
     datalist: { display: 'none' },
     output: { display: 'inline' },
     optgroup: { display: 'block' },
@@ -146,8 +149,8 @@ const defaults: { [key: string]: Partial<StyleRule> } = {
         background: '#ffffff',
         borderRadius: '4px',
         borderWidth: '1px',
-        borderColor: '#bdc3c7',
         borderStyle: 'solid',
+        borderColor: '#bdc3c7',
         padding: '8px',
         width: 'auto',
         height: '40px',
@@ -173,8 +176,8 @@ const defaults: { [key: string]: Partial<StyleRule> } = {
         background: '#ffffff',
         borderRadius: '4px',
         borderWidth: '1px',
-        borderColor: '#bdc3c7',
         borderStyle: 'solid',
+        borderColor: '#bdc3c7',
         padding: '8px',
         height: '40px'
     },
@@ -185,8 +188,8 @@ const defaults: { [key: string]: Partial<StyleRule> } = {
         background: '#ffffff',
         borderRadius: '4px',
         borderWidth: '1px',
-        borderColor: '#bdc3c7',
         borderStyle: 'solid',
+        borderColor: '#bdc3c7',
         padding: '8px',
         cursor: 'text'
     },
@@ -264,7 +267,7 @@ const defaults: { [key: string]: Partial<StyleRule> } = {
 
     // === INTERACTIVE ===
     details: { display: 'block', padding: '4px', width: 'auto' },
-    summary: { display: 'list-item', cursor: 'pointer', padding: '4px 8px', margin: '8px 0' },
+    summary: { display: 'block', cursor: 'pointer', padding: '0.2em 0', margin: '0' },
     dialog: { display: 'none' }
 };
 
