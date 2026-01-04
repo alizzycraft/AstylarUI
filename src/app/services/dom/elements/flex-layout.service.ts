@@ -116,7 +116,12 @@ export class FlexLayoutService {
     }
     
 
-    
+    result.forEach(line => {
+      const identifier = this.describeLine(line);
+      const size = `${line.crossSize}px`;
+      console.log(`[FLEX-LINE] final ${identifier} crossSize=${size}`);
+    });
+
     return result;
   }
 
@@ -264,6 +269,18 @@ export class FlexLayoutService {
     });
   }
 
+  private describeLine(line: FlexLine): string {
+    const items = line.items.map(item => this.describeItem(item)).join(', ');
+    return `line[crossSize=${line.crossSize}px, mainSize=${line.mainSize}px, items=[${items}]]`;
+  }
+
+  private describeItem(item: FlexItem | (FlexItem & { calculatedFlexBasis?: number })): string {
+    const { element } = item;
+    const idPart = element.id ? `#${element.id}` : '';
+    const classPart = element.class ? `.${element.class.replace(/\s+/g, '.')}` : '';
+    return `${element.type}${idPart}${classPart}`;
+  }
+
   /**
    * Calculate flex item sizes using flex-basis, flex-grow, and flex-shrink
    * Implements the complete flex sizing algorithm
@@ -287,7 +304,16 @@ export class FlexLayoutService {
       ...item,
       calculatedFlexBasis: this.calculateFlexBasis(item, container, isRow)
     }));
-    
+
+    itemsWithBasis.forEach(item => {
+      const identifier = this.describeItem(item);
+      const marginSize = isRow
+        ? `${item.margin.left}+${item.margin.right}`
+        : `${item.margin.top}+${item.margin.bottom}`;
+      console.log(
+        `[FLEX-ITEM] basis ${identifier} flexBasisProp=${item.flexBasis} -> calculated=${item.calculatedFlexBasis}px | baseSize=${item.baseWidth}x${item.baseHeight} | margin(${isRow ? 'inline' : 'block'})=${marginSize}`
+      );
+    });
 
     // Step 2: Calculate total used space and remaining space (all in pixels)
     const totalBasisSize = itemsWithBasis.reduce((sum, item) => {
@@ -298,8 +324,8 @@ export class FlexLayoutService {
     }, 0);
 
     const remainingSpace = gapAdjustedAvailableSpace - totalBasisSize;
-    
 
+    console.log(`[FLEX-ITEM] totalBasisSize=${totalBasisSize}px, remainingSpace=${remainingSpace}px (isRow=${isRow})`);
 
     // Step 3: Apply flex-grow or flex-shrink based on available space
     let result: FlexItem[];
@@ -316,6 +342,12 @@ export class FlexLayoutService {
       }));
     }
     
+    result.forEach(item => {
+      const identifier = this.describeItem(item);
+      const size = isRow ? `${item.width}px` : `${item.height}px`;
+      console.log(`[FLEX-ITEM] final ${identifier} mainSize=${size} (${isRow ? 'width' : 'height'})`);
+    });
+
     return result;
   }
 
@@ -388,7 +420,7 @@ export class FlexLayoutService {
    */
   private applyFlexGrow(items: Array<FlexItem & { calculatedFlexBasis: number }>, extraSpace: number, isRow: boolean): FlexItem[] {
     const totalFlexGrow = items.reduce((sum, item) => sum + item.flexGrow, 0);
-    
+
     if (totalFlexGrow === 0) {
       // No flex-grow, items keep their flex-basis size (in pixels)
       return items.map(item => ({
@@ -401,6 +433,8 @@ export class FlexLayoutService {
       const growRatio = item.flexGrow / totalFlexGrow;
       const additionalSize = extraSpace * growRatio;
       const newSize = item.calculatedFlexBasis + additionalSize;
+      const identifier = this.describeItem(item);
+      console.log(`[FLEX-GROW] ${identifier} flexGrow=${item.flexGrow} ratio=${growRatio.toFixed(3)} additional=${additionalSize}px -> newSize=${newSize}px`);
       
       return {
         ...item,
@@ -467,6 +501,8 @@ export class FlexLayoutService {
       // Distribute available space proportionally
       const sizeRatio = relativeSize / totalRelativeUnits;
       const newSize = spaceForShrinkingItems * sizeRatio;
+      const identifier = this.describeItem(item);
+      console.log(`[FLEX-SHRINK] ${identifier} flexShrink=${flexShrinkValue} relative=${relativeSize.toFixed(3)} sizeRatio=${sizeRatio.toFixed(3)} -> newSize=${newSize}px`);
       
       return {
         ...item,

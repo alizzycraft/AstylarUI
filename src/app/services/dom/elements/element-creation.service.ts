@@ -297,7 +297,8 @@ export class ElementCreationService {
 
         // Check if parent is a flex container
         const isFlex = parentElement && dom.actions.isFlexContainer(render, parentElement, styles, dom);
-        console.log(`[ElementCreation] isFlexContainer(${parentElement?.id || parentElement?.type}): ${isFlex}, isListContainer: ${isListContainer}`);
+        const useInlineFlow = parentElement ? this.shouldUseInlineFlow(render, parentElement, children, styles) : false;
+        console.log(`[ElementCreation] isFlexContainer(${parentElement?.id || parentElement?.type}): ${isFlex}, isListContainer: ${isListContainer}, inlineFlow: ${useInlineFlow}`);
 
         if (parentElement?.type === 'table') {
             console.log(`[ElementCreation] Processing table children for ${parentElement.id}`);
@@ -308,129 +309,319 @@ export class ElementCreationService {
         } else if (isFlex && parentElement) {
             console.log(`[ElementCreation] Processing flex children for ${parentElement.id}`);
             dom.actions.processFlexChildren(dom, render, children, parent, styles, parentElement);
+        } else if (useInlineFlow && parentElement) {
+            console.log(`[ElementCreation] Processing inline flow children for ${parentElement.id ?? parentElement.type}`);
+            this.layoutInlineChildren(dom, render, children, parent, styles, parentElement);
         } else {
-            console.log(`[ElementCreation] Processing standard children for ${parentElement?.id}`);
-            console.log(`[ElementCreation] Children array check: isArray=${Array.isArray(children)}, length=${children.length}`);
+            this.layoutBlockChildren(dom, render, children, parent, styles, parentElement);
+        }
+    }
 
-            // Standard flow for non-flex containers (Vertical Stacking)
-            try {
-                console.log(`[ElementCreation] Starting standard layout loop. Children: ${children.length}`);
+    private shouldUseInlineFlow(
+        render: BabylonRender,
+        parentElement: DOMElement,
+        children: DOMElement[],
+        styles: StyleRule[]
+    ): boolean {
+        if (!children || children.length === 0) {
+            return false;
+        }
 
-                // 1. Get Parent Dimensions
-                let parentHeight = 0;
-                let parentWidth = 0; // Needed for future alignment fixes
-                let paddingTop = 0;
+        const parentStyle = render.actions.style.findStyleForElement(parentElement, styles, undefined);
+        const defaultParentDisplay = this.styleDefaults.getElementTypeDefaults(parentElement.type)?.display ?? 'block';
+        const parentDisplay = (parentStyle?.display ?? defaultParentDisplay ?? 'block').toString().toLowerCase();
 
-                // Try to get dimensions from context first (more accurate for layout)
-                // Use parent mesh name since all elements are now stored by mesh ID
-                if (dom.context.elementDimensions.has(parent.name)) {
-                    const dims = dom.context.elementDimensions.get(parent.name)!;
-                    parentHeight = dims.height;
-                    parentWidth = dims.width;
-                    paddingTop = dims.padding.top;
-                } else {
-                    // Fallback to mesh bounds
-                    const scale = render.actions.camera.getPixelToWorldScale();
-                    const bounds = parent.getBoundingInfo().boundingBox;
-                    parentHeight = (bounds.maximum.y - bounds.minimum.y) / scale;
-                    parentWidth = (bounds.maximum.x - bounds.minimum.x) / scale;
-                    // Default padding if not known
-                    paddingTop = 0;
+        // If parent is explicitly flex or block-level formatting context that shouldn't be treated as inline flow, bail
+        if (parentDisplay.includes('flex') && !parentDisplay.startsWith('inline')) {
+            return false;
+        }
+
+        let inlineChildren = 0;
+        let nonInlineChildren = 0;
+
+        for (const child of children) {
+            if (!child) {
+                continue;
+            }
+            const childStyle = render.actions.style.findStyleForElement(child, styles, undefined);
+            const defaultDisplay = this.styleDefaults.getElementTypeDefaults(child.type)?.display ?? 'block';
+            const display = (childStyle?.display ?? defaultDisplay ?? 'block').toString().toLowerCase();
+
+            if (display.startsWith('inline')) {
+                inlineChildren++;
+            } else if (display === 'none') {
+                continue;
+            } else {
+                nonInlineChildren++;
+            }
+        }
+
+        return inlineChildren > 0 && nonInlineChildren === 0;
+    }
+
+    private layoutInlineChildren(
+        dom: BabylonDOM,
+        render: BabylonRender,
+        children: DOMElement[],
+        parent: Mesh,
+        styles: StyleRule[],
+        parentElement: DOMElement
+    ): void {
+        const parentDims = dom.context.elementDimensions.get(parent.name);
+        if (!parentDims) {
+            console.warn(`[InlineLayout] Missing parent dimensions for ${parent.name}, falling back to standard flow.`);
+            this.layoutBlockChildren(dom, render, children, parent, styles, parentElement);
+            return;
+        }
+
+        const padding = parentDims.padding;
+        const scaleFactor = render.actions.camera.getPixelToWorldScale();
+
+        const contentWidth = parentDims.width - padding.left - padding.right;
+        const contentLeft = -(parentDims.width / 2) + padding.left;
+        const contentRight = contentLeft + contentWidth;
+        const lineStartY = (parentDims.height / 2) - padding.top;
+
+        let cursorX = contentLeft;
+        let currentLineTop = lineStartY;
+        let currentLineHeight = 0;
+        let lineHasContent = false;
+
+        for (let index = 0; index < children.length; index++) {
+            const child = children[index];
+            if (!child) {
+                continue;
+            }
+
+            console.log(`[InlineLayout] Creating inline child ${child.id ?? child.type} at index ${index}`);
+            const childMesh = this.createElement(dom, render, child, parent, styles);
+
+            const childStyle = render.actions.style.findStyleForElement(child, styles, dom.context.elementStyles);
+            const hasExplicitPositioning = childStyle?.top !== undefined || childStyle?.left !== undefined;
+            if (hasExplicitPositioning) {
+                console.log(`[InlineLayout] Child ${child.id ?? child.type} has explicit positioning. Skipping inline positioning.`);
+                if (child.children?.length) {
+                    this.processChildren(dom, render, child.children, childMesh, styles, child);
+                }
+                continue;
+            }
+
+            const defaultDisplay = this.styleDefaults.getElementTypeDefaults(child.type)?.display ?? 'inline';
+            const display = (childStyle?.display ?? defaultDisplay ?? 'inline').toString().toLowerCase();
+            if (!display.startsWith('inline')) {
+                console.log(`[InlineLayout] Encountered non-inline child ${child.id ?? child.type} (display=${display}). Falling back to block layout.`);
+                dom.context.elements.delete(childMesh.name);
+                childMesh.dispose();
+                const remainingChildren = children.slice(index);
+                this.layoutBlockChildren(dom, render, remainingChildren, parent, styles, parentElement);
+                return;
+            }
+
+            const childDims = dom.context.elementDimensions.get(childMesh.name);
+            let childWidth = childDims?.width ?? 0;
+            let childHeight = childDims?.height ?? 0;
+
+            if (!childDims) {
+                const bounds = childMesh.getBoundingInfo().boundingBox;
+                childWidth = (bounds.maximum.x - bounds.minimum.x) / scaleFactor;
+                childHeight = (bounds.maximum.y - bounds.minimum.y) / scaleFactor;
+            }
+
+            const marginBox = this.parseMarginBox(childStyle);
+
+            const requiredWidth = marginBox.left + childWidth + marginBox.right;
+            if (lineHasContent && cursorX + requiredWidth > contentRight) {
+                console.log(`[InlineLayout] Wrapping to new line before placing ${child.id ?? child.type}`);
+                cursorX = contentLeft;
+                currentLineTop -= currentLineHeight;
+                currentLineHeight = 0;
+                lineHasContent = false;
+            }
+
+            cursorX += marginBox.left;
+            const childCenterX = cursorX + (childWidth / 2);
+            const childCenterY = currentLineTop - marginBox.top - (childHeight / 2);
+
+            render.actions.mesh.positionMesh(
+                childMesh,
+                childCenterX * scaleFactor,
+                childCenterY * scaleFactor,
+                childMesh.position.z
+            );
+
+            cursorX = cursorX + childWidth + marginBox.right;
+            currentLineHeight = Math.max(currentLineHeight, marginBox.top + childHeight + marginBox.bottom);
+            lineHasContent = true;
+
+            if (child.children && child.children.length > 0) {
+                this.processChildren(dom, render, child.children, childMesh, styles, child);
+            }
+        }
+    }
+
+    private layoutBlockChildren(
+        dom: BabylonDOM,
+        render: BabylonRender,
+        children: DOMElement[],
+        parent: Mesh,
+        styles: StyleRule[],
+        parentElement?: DOMElement
+    ): void {
+        console.log(`[ElementCreation] Processing standard children for ${parentElement?.id}`);
+        console.log(`[ElementCreation] Children array check: isArray=${Array.isArray(children)}, length=${children.length}`);
+
+        try {
+            console.log(`[ElementCreation] Starting standard layout loop. Children: ${children.length}`);
+
+            let parentHeight = 0;
+            let parentWidth = 0;
+            let paddingTop = 0;
+
+            if (dom.context.elementDimensions.has(parent.name)) {
+                const dims = dom.context.elementDimensions.get(parent.name)!;
+                parentHeight = dims.height;
+                parentWidth = dims.width;
+                paddingTop = dims.padding.top;
+            } else {
+                const scale = render.actions.camera.getPixelToWorldScale();
+                const bounds = parent.getBoundingInfo().boundingBox;
+                parentHeight = (bounds.maximum.y - bounds.minimum.y) / scale;
+                parentWidth = (bounds.maximum.x - bounds.minimum.x) / scale;
+                paddingTop = 0;
+            }
+
+            let cursorY = (parentHeight / 2) - paddingTop;
+            const scaleFactor = render.actions.camera.getPixelToWorldScale();
+
+            for (let i = 0; i < children.length; i++) {
+                const child = children[i];
+                console.log(`[ElementCreation] Loop index ${i}: child=${child ? child.id : 'undefined'}`);
+
+                if (!child) {
+                    continue;
                 }
 
-                // 2. Initialize Cursor (Y position)
-                // Babylon Y is Up. Top of container is +Height/2.
-                // We start at Top - Padding.
-                let cursorY = (parentHeight / 2) - paddingTop;
+                console.log(`[ElementCreation] Creating child ${child.type}#${child.id}`);
+                const childMesh = this.createElement(dom, render, child, parent, styles);
 
-                // Scale factor for converting logical pixels to world units
-                const scaleFactor = render.actions.camera.getPixelToWorldScale();
+                const resolvedStyle = render.actions.style.findStyleForElement(child, styles, dom.context.elementStyles);
+                const hasExplicitPositioning = resolvedStyle?.top !== undefined || resolvedStyle?.left !== undefined;
 
-                for (let i = 0; i < children.length; i++) {
-                    const child = children[i];
-                    console.log(`[ElementCreation] Loop index ${i}: child=${child ? child.id : 'undefined'}`);
+                if (hasExplicitPositioning) {
+                    console.log(`[ElementCreation] Skipping stacking for absolutely positioned element: ${child.id || child.type}`);
 
-                    if (!child) {
-                        continue;
-                    }
-
-                    console.log(`[ElementCreation] Creating child ${child.type}#${child.id}`);
-                    const childMesh = this.createElement(dom, render, child, parent, styles);
-
-                    // Check if this element has explicit positioning (top/left values)
-                    // Use the resolved style from findStyleForElement to handle class-based styles
-                    const resolvedStyle = render.actions.style.findStyleForElement(child, styles, dom.context.elementStyles);
-                    const hasExplicitPositioning = resolvedStyle?.top !== undefined || resolvedStyle?.left !== undefined;
-
-                    if (hasExplicitPositioning) {
-                        // Element has explicit positioning - it's already positioned correctly by createElement
-                        // Skip stacking logic for absolutely positioned elements
-                        console.log(`[ElementCreation] Skipping stacking for absolutely positioned element: ${child.id || child.type}`);
-                        
-                        // Recursively process grandchildren
-                        if (child.children && child.children.length > 0) {
-                            this.processChildren(dom, render, child.children, childMesh, styles, child);
-                        }
-                        continue;
-                    }
-
-                    // 3. Measure Child
-                    let childHeight = 0;
-                    // Use child mesh name since all elements are now stored by mesh ID
-                    if (dom.context.elementDimensions.has(childMesh.name)) {
-                        childHeight = dom.context.elementDimensions.get(childMesh.name)!.height;
-                    } else {
-                        // Fallback measure
-                        const bounds = childMesh.getBoundingInfo().boundingBox;
-                        childHeight = (bounds.maximum.y - bounds.minimum.y) / scaleFactor;
-                    }
-
-                    // 4. Calculate Position for Vertical Stacking
-                    // Child Center Y = CursorY - (ChildHeight / 2)
-
-                    // Parse Margins from Style
-                    // Use resolved style to handle class-based styles
-                    const childResolvedStyle = render.actions.style.findStyleForElement(child, styles, dom.context.elementStyles);
-                    const parseMargin = (val: any) => {
-                        if (typeof val === 'number') return val;
-                        if (typeof val === 'string' && val && val.endsWith('px')) return parseFloat(val);
-                        if (typeof val === 'string' && val && val.endsWith('em')) return parseFloat(val) * 16;
-                        return 0; // Default to 0 instead of 10 if not specified
-                    };
-
-                    // Handle margin shorthand or specific properties
-                    const marginTop = parseMargin(childResolvedStyle?.marginTop) || parseMargin(childResolvedStyle?.margin?.split(' ')[0]) || 0;
-                    const marginBottom = parseMargin(childResolvedStyle?.marginBottom) || parseMargin(childResolvedStyle?.margin?.split(' ')[2] || childResolvedStyle?.margin?.split(' ')[0]) || 0;
-
-                    // Move cursor down by margin top
-                    cursorY -= marginTop;
-
-                    const childCenterY = cursorY - (childHeight / 2);
-
-                    // Apply Position
-                    render.actions.mesh.positionMesh(
-                        childMesh,
-                        childMesh.position.x,
-                        childCenterY * scaleFactor,
-                        childMesh.position.z
-                    );
-
-                    console.log(`[Layout] Stacked ${child.id} at Y=${childCenterY} (Height: ${childHeight}, Margins: ${marginTop}/${marginBottom})`);
-
-                    // 5. Update Cursor
-                    // Move cursor to bottom of this child
-                    cursorY -= childHeight;
-                    cursorY -= marginBottom;
-
-                    // Recursively process grandchildren
                     if (child.children && child.children.length > 0) {
                         this.processChildren(dom, render, child.children, childMesh, styles, child);
                     }
+                    continue;
                 }
-                console.log(`[ElementCreation] Finished processing children for ${parentElement?.id}`);
-            } catch (error) {
-                console.error(`[ElementCreation] Error in children loop for ${parentElement?.id}:`, error);
+
+                let childHeight = 0;
+                if (dom.context.elementDimensions.has(childMesh.name)) {
+                    childHeight = dom.context.elementDimensions.get(childMesh.name)!.height;
+                } else {
+                    const bounds = childMesh.getBoundingInfo().boundingBox;
+                    childHeight = (bounds.maximum.y - bounds.minimum.y) / scaleFactor;
+                }
+
+                const childResolvedStyle = render.actions.style.findStyleForElement(child, styles, dom.context.elementStyles);
+                const marginBox = this.parseMarginBox(childResolvedStyle);
+                const marginTop = marginBox.top;
+                const marginBottom = marginBox.bottom;
+
+                cursorY -= marginTop;
+
+                const childCenterY = cursorY - (childHeight / 2);
+
+                render.actions.mesh.positionMesh(
+                    childMesh,
+                    childMesh.position.x,
+                    childCenterY * scaleFactor,
+                    childMesh.position.z
+                );
+
+                console.log(`[Layout] Stacked ${child.id} at Y=${childCenterY} (Height: ${childHeight}, Margins: ${marginTop}/${marginBottom})`);
+
+                cursorY -= childHeight;
+                cursorY -= marginBottom;
+
+                if (child.children && child.children.length > 0) {
+                    this.processChildren(dom, render, child.children, childMesh, styles, child);
+                }
+            }
+            console.log(`[ElementCreation] Finished processing children for ${parentElement?.id}`);
+        } catch (error) {
+            console.error(`[ElementCreation] Error in children loop for ${parentElement?.id}:`, error);
+        }
+    }
+
+    private parseMarginBox(style: StyleRule | undefined): { top: number; right: number; bottom: number; left: number } {
+        const margin = { top: 0, right: 0, bottom: 0, left: 0 };
+
+        const parsedMargin = (style?.margin || '').toString().trim();
+        if (parsedMargin) {
+            const parts = parsedMargin.split(/\s+/);
+            const [m1, m2, m3, m4] = parts;
+            switch (parts.length) {
+                case 1:
+                    margin.top = margin.right = margin.bottom = margin.left = this.parseLengthValue(m1);
+                    break;
+                case 2:
+                    margin.top = margin.bottom = this.parseLengthValue(m1);
+                    margin.right = margin.left = this.parseLengthValue(m2);
+                    break;
+                case 3:
+                    margin.top = this.parseLengthValue(m1);
+                    margin.right = margin.left = this.parseLengthValue(m2);
+                    margin.bottom = this.parseLengthValue(m3);
+                    break;
+                case 4:
+                default:
+                    margin.top = this.parseLengthValue(m1);
+                    margin.right = this.parseLengthValue(m2);
+                    margin.bottom = this.parseLengthValue(m3);
+                    margin.left = this.parseLengthValue(m4);
+                    break;
             }
         }
+
+        if (style?.marginTop !== undefined) {
+            margin.top = this.parseLengthValue(style.marginTop);
+        }
+        if (style?.marginRight !== undefined) {
+            margin.right = this.parseLengthValue(style.marginRight);
+        }
+        if (style?.marginBottom !== undefined) {
+            margin.bottom = this.parseLengthValue(style.marginBottom);
+        }
+        if (style?.marginLeft !== undefined) {
+            margin.left = this.parseLengthValue(style.marginLeft);
+        }
+
+        return margin;
+    }
+
+    private parseLengthValue(value: string | number | undefined): number {
+        if (value === undefined || value === null) {
+            return 0;
+        }
+        if (typeof value === 'number') {
+            return value;
+        }
+
+        const trimmed = value.trim();
+        if (trimmed.endsWith('px')) {
+            return parseFloat(trimmed);
+        }
+        if (trimmed.endsWith('em')) {
+            return parseFloat(trimmed) * 16;
+        }
+        if (trimmed.endsWith('%')) {
+            // Percentages for inline margin are relative to parent's width; we can't easily evaluate here so default to 0
+            return 0;
+        }
+
+        const parsed = parseFloat(trimmed);
+        return Number.isNaN(parsed) ? 0 : parsed;
     }
 }

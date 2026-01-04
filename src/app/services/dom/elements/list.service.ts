@@ -193,13 +193,15 @@ export class ListService {
     const indicatorColor = listType === 'ul' ? '#3498db' : '#e74c3c'; // Blue for bullets, red for numbers
     console.log(`🎨 Applying ${listType} indicator color: ${indicatorColor}`);
     const parsedColor = render.actions.style.parseBackgroundColor(indicatorColor);
-    console.log(`🎨 Parsed color:`, parsedColor, `(r=${parsedColor?.color.r}, g=${parsedColor?.color.g}, b=${parsedColor?.color.b})`);
+    const indicatorColor3 = parsedColor && parsedColor.type === 'color' ? parsedColor.color : new Color3(0, 0, 0);
+    const indicatorAlpha = parsedColor && parsedColor.type === 'color' && parsedColor.alpha !== undefined ? parsedColor.alpha : 1.0;
+    console.log(`🎨 Parsed color:`, parsedColor, `(r=${indicatorColor3.r}, g=${indicatorColor3.g}, b=${indicatorColor3.b})`);
 
     const indicatorMaterial = render.actions.mesh.createMaterial(
       `${listItemMesh.name}-indicator-material-${Date.now()}`, // Add timestamp to avoid caching
-      parsedColor?.color || new Color3(0, 0, 0),
+      indicatorColor3,
       undefined,
-      parsedColor?.alpha !== undefined ? parsedColor.alpha : 1.0
+      indicatorAlpha
     );
     indicatorMesh.material = indicatorMaterial;
 

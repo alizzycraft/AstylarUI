@@ -7,6 +7,13 @@ import { Mesh } from '@babylonjs/core';
 import { TextRenderingService } from '../../text/text-rendering.service';
 import { TextStyleParserService } from '../../text/text-style-parser.service';
 
+interface IntrinsicTextMetrics {
+    text: string;
+    width: number;
+    height: number;
+    lineHeight: number;
+}
+
 /**
  * Service responsible for calculating element dimensions and positioning
  */
@@ -53,9 +60,28 @@ export class ElementDimensionService {
         const contentWidth = parentWidth - parentPadding.left - parentPadding.right;
         const contentHeight = parentHeight - parentPadding.top - parentPadding.bottom;
 
+        const debugKey = `${element.type}${element.id ? `#${element.id}` : ''}${element.class ? `.${element.class.replace(/\s+/g, '.')}` : ''}`;
+
         // Parse padding and margin
         const padding = this.parsePadding(render, style, undefined);
         const margin = this.parseMargin(style);
+
+        const horizontalPadding = padding.left + padding.right;
+        const verticalPadding = padding.top + padding.bottom;
+
+        const defaultStyle = render.actions.style.getElementTypeDefaults(element.type) || {};
+        const rawDisplay = style?.display ?? defaultStyle.display ?? 'block';
+        const display = typeof rawDisplay === 'string' ? rawDisplay.toLowerCase() : 'block';
+        const isInlineLevel = display.startsWith('inline');
+
+        const textMetrics = this.measureTextContent(element, style, styles);
+        if (textMetrics) {
+            console.log(`[DIMENSION] ${debugKey} intrinsicText width=${textMetrics.width.toFixed(2)} height=${textMetrics.height.toFixed(2)} lineHeight=${textMetrics.lineHeight.toFixed(2)}`);
+        }
+
+        const hasTextContent = !!textMetrics;
+
+        console.log(`[DIMENSION] ${debugKey} parentContent=${contentWidth}x${contentHeight} padding=${this.formatBox(padding)} margin=${this.formatBox(margin)} display=${display}`);
 
         // Default dimensions - use content area, not full parent dimensions
         let width = contentWidth;
@@ -63,51 +89,108 @@ export class ElementDimensionService {
         let x = 0;
         let y = 0;
 
-        if (style) {
-            // Calculate width - percentages are relative to parent's content width
-            if (style.width) {
-                if (typeof style.width === 'string' && style.width.endsWith('px')) {
-                    width = parseFloat(style.width);
-                } else if (typeof style.width === 'string' && style.width.endsWith('%')) {
-                    const widthPercent = parseFloat(style.width);
-                    width = (contentWidth * widthPercent) / 100;
-                } else if (style.width === 'auto') {
-                    // Calculate intrinsic width based on text content
-                    if (element.textContent && element.textContent.trim() !== '') {
-                        width = this.calculateIntrinsicWidth(render, element, style, styles);
-                    } else if (element.type === 'button' || element.type === 'input') {
-                        width = this.calculateIntrinsicWidth(render, element, style, styles);
-                    } else {
-                        width = contentWidth; // Default fallback for auto width
+        let widthSource = 'parent-content';
+        let heightSource = 'parent-content';
+
+        const widthValue = style?.width;
+        if (widthValue !== undefined) {
+            if (typeof widthValue === 'string') {
+                if (widthValue === 'auto') {
+                    if (isInlineLevel || hasTextContent || element.type === 'button' || element.type === 'input') {
+                        width = this.calculateIntrinsicWidth(element, style, textMetrics, padding);
+                        widthSource = 'width:auto-intrinsic';
                     }
+                } else if (widthValue.endsWith('px')) {
+                    width = parseFloat(widthValue);
+                    widthSource = `width:${widthValue}`;
+                } else if (widthValue.endsWith('%')) {
+                    const widthPercent = parseFloat(widthValue);
+                    width = (contentWidth * widthPercent) / 100;
+                    widthSource = `width:${widthValue}`;
                 } else {
-                    width = parseFloat(style.width);
+                    const parsedWidth = parseFloat(widthValue);
+                    if (!Number.isNaN(parsedWidth)) {
+                        width = parsedWidth;
+                        widthSource = `width:${widthValue}`;
+                    }
                 }
-            } else if (element.textContent && element.textContent.trim() !== '') {
-                // If width is undefined but element has text content, calculate intrinsic width
-                width = this.calculateIntrinsicWidth(render, element, style, styles);
-            } else if (element.type === 'button' || element.type === 'input') {
-                // If width is undefined, buttons/inputs should use intrinsic width
-                width = this.calculateIntrinsicWidth(render, element, style, styles);
+            } else if (typeof widthValue === 'number' && !Number.isNaN(widthValue)) {
+                width = widthValue;
+                widthSource = `width:${widthValue}`;
             }
+        } else if (isInlineLevel || hasTextContent || element.type === 'button' || element.type === 'input') {
+            width = this.calculateIntrinsicWidth(element, style, textMetrics, padding);
+            widthSource = isInlineLevel ? 'inline-intrinsic' : 'text-intrinsic';
+        }
 
-            // Calculate height - percentages are relative to parent's content height
-            if (style.height) {
-                if (typeof style.height === 'string' && style.height.endsWith('px')) {
-                    height = parseFloat(style.height);
-                } else if (typeof style.height === 'string' && style.height.endsWith('%')) {
-                    const heightPercent = parseFloat(style.height);
+        if (textMetrics && widthSource.includes('intrinsic')) {
+            console.log(`[DIMENSION-INTRINSIC] ${debugKey} text="${textMetrics.text.trim()}" measuredWidth=${textMetrics.width.toFixed(2)} paddingH=${horizontalPadding} finalWidth=${width.toFixed(2)} source=${widthSource}`);
+        }
+
+        // Calculate height - percentages are relative to parent's content height
+        const heightValue = style?.height;
+        if (heightValue !== undefined) {
+            if (typeof heightValue === 'string') {
+                if (heightValue === 'auto') {
+                    if (isInlineLevel) {
+                        const intrinsicHeight = this.calculateIntrinsicHeight(element, textMetrics, padding);
+                        if (intrinsicHeight !== null) {
+                            height = intrinsicHeight;
+                            heightSource = 'height:auto-intrinsic';
+                        }
+                    }
+                } else if (heightValue.endsWith('px')) {
+                    height = parseFloat(heightValue);
+                    heightSource = `height:${heightValue}`;
+                } else if (heightValue.endsWith('%')) {
+                    const heightPercent = parseFloat(heightValue);
                     height = (contentHeight * heightPercent) / 100;
+                    heightSource = `height:${heightValue}`;
                 } else {
-                    height = parseFloat(style.height);
+                    const parsedHeight = parseFloat(heightValue);
+                    if (!Number.isNaN(parsedHeight)) {
+                        height = parsedHeight;
+                        heightSource = `height:${heightValue}`;
+                    }
                 }
+            } else if (typeof heightValue === 'number' && !Number.isNaN(heightValue)) {
+                height = heightValue;
+                heightSource = `height:${heightValue}`;
             }
+        } else if (isInlineLevel) {
+            const intrinsicHeight = this.calculateIntrinsicHeight(element, textMetrics, padding);
+            if (intrinsicHeight !== null) {
+                height = intrinsicHeight;
+                heightSource = 'inline-intrinsic';
+            }
+        }
 
-            // Calculate position - CSS uses top-left origin, BabylonJS uses center origin
-            // Position is calculated relative to the content area, then offset by padding
+        if (textMetrics && heightSource.includes('intrinsic')) {
+            console.log(`[DIMENSION-INTRINSIC] ${debugKey} text="${textMetrics.text.trim()}" measuredHeight=${textMetrics.height.toFixed(2)} paddingV=${verticalPadding} finalHeight=${height.toFixed(2)} source=${heightSource}`);
+        }
+
+        const minWidth = style?.minWidth ? this.parseLength(`${style.minWidth}`, contentWidth) : undefined;
+        const minHeight = style?.minHeight ? this.parseLength(`${style.minHeight}`, contentHeight) : undefined;
+        if (minWidth !== undefined && !Number.isNaN(minWidth)) {
+            const originalWidth = width;
+            width = Math.max(width, minWidth);
+            if (width !== originalWidth) {
+                console.log(`[DIMENSION] ${debugKey} applied minWidth=${minWidth}, adjusted width ${originalWidth}→${width}`);
+                widthSource += '+minWidth';
+            }
+        }
+        if (minHeight !== undefined && !Number.isNaN(minHeight)) {
+            const originalHeight = height;
+            height = Math.max(height, minHeight);
+            if (height !== originalHeight) {
+                console.log(`[DIMENSION] ${debugKey} applied minHeight=${minHeight}, adjusted height ${originalHeight}→${height}`);
+                heightSource += '+minHeight';
+            }
+        }
+
+        if (style) {
             if (style.left !== undefined) {
                 if (typeof style.left === 'string' && style.left.endsWith('px')) {
-                    // Position within content area, then offset by left padding
                     x = -(parentWidth / 2) + parentPadding.left + parseFloat(style.left) + (width / 2);
                     console.log(`[ElementDimension] Calculated X (px): ${x} (parentW=${parentWidth}, contentW=${contentWidth}, paddingLeft=${parentPadding.left}, left=${style.left}, width=${width})`);
                 } else if (typeof style.left === 'string' && style.left.endsWith('%')) {
@@ -116,31 +199,33 @@ export class ElementDimensionService {
                     x = -(parentWidth / 2) + parentPadding.left + leftPixels + (width / 2);
                     console.log(`[ElementDimension] Calculated X (%): ${x} (parentW=${parentWidth}, contentW=${contentWidth}, paddingLeft=${parentPadding.left}, left=${style.left}, leftPx=${leftPixels}, width=${width})`);
                 } else {
-                    x = -(parentWidth / 2) + parentPadding.left + parseFloat(style.left) + (width / 2);
+                    x = -(parentWidth / 2) + parentPadding.left + parseFloat(`${style.left}`) + (width / 2);
                     console.log(`[ElementDimension] Calculated X (val): ${x} (parentW=${parentWidth}, contentW=${contentWidth}, paddingLeft=${parentPadding.left}, left=${style.left}, width=${width})`);
                 }
             } else {
-                // No left specified, center horizontally within content area
                 x = -(parentWidth / 2) + parentPadding.left + (contentWidth / 2);
                 console.log(`[ElementDimension] No left style for ${style.selector}, x centered in content area: ${x}`);
             }
 
             if (style.top !== undefined) {
                 if (typeof style.top === 'string' && style.top.endsWith('px')) {
-                    // Position within content area, then offset by top padding
                     y = (parentHeight / 2) - parentPadding.top - parseFloat(style.top) - (height / 2);
                 } else if (typeof style.top === 'string' && style.top.endsWith('%')) {
                     const topPercent = parseFloat(style.top);
                     const topPixels = (contentHeight * topPercent) / 100;
                     y = (parentHeight / 2) - parentPadding.top - topPixels - (height / 2);
                 } else {
-                    y = (parentHeight / 2) - parentPadding.top - parseFloat(style.top) - (height / 2);
+                    y = (parentHeight / 2) - parentPadding.top - parseFloat(`${style.top}`) - (height / 2);
                 }
             } else {
-                // No top specified, center vertically within content area
                 y = (parentHeight / 2) - parentPadding.top - (contentHeight / 2);
             }
         }
+
+        console.log(`[DIMENSION] ${debugKey} widthResolved=${width} [source=${widthSource}]`);
+        console.log(`[DIMENSION] ${debugKey} heightResolved=${height} [source=${heightSource}]`);
+
+        console.log(`[DIMENSION] ${debugKey} final width=${width} height=${height} position=(${x}, ${y})`);
 
         return { width, height, x, y, padding, margin };
     }
@@ -154,7 +239,7 @@ export class ElementDimensionService {
         parentDimensions: { width: number; height: number } | undefined
     ): { top: number; right: number; bottom: number; left: number } {
         if (!style?.padding) {
-            return { top: 0, right: 0, bottom: 0, left: 0 };
+            return this.zeroBox();
         }
 
         // Parse padding shorthand (supports: "10px", "10px 20px", "10px 20px 30px", "10px 20px 30px 40px")
@@ -185,7 +270,7 @@ export class ElementDimensionService {
      */
     parseMargin(style: StyleRule | undefined): { top: number; right: number; bottom: number; left: number } {
         if (!style?.margin) {
-            return { top: 0, right: 0, bottom: 0, left: 0 };
+            return this.zeroBox();
         }
 
         // Similar logic to parsePadding
@@ -224,50 +309,101 @@ export class ElementDimensionService {
         return parseFloat(value) || 0;
     }
 
+    private zeroBox() {
+        return { top: 0, right: 0, bottom: 0, left: 0 };
+    }
+
+    private formatBox(box: { top: number; right: number; bottom: number; left: number }): string {
+        return `top:${box.top},right:${box.right},bottom:${box.bottom},left:${box.left}`;
+    }
+
     /**
      * Calculate intrinsic width for elements with text content
      */
-    private calculateIntrinsicWidth(render: BabylonRender, element: DOMElement, style: StyleRule | undefined, styles: StyleRule[]): number {
-        const textStyle = this.getInheritedTextStyle(element, styles);
-        const textStyleProperties = this.textStyleParser.parseTextProperties(textStyle);
+    private calculateIntrinsicWidth(
+        element: DOMElement,
+        style: StyleRule | undefined,
+        textMetrics: IntrinsicTextMetrics | null,
+        padding: { top: number; right: number; bottom: number; left: number }
+    ): number {
+        const totalPadding = (padding.left || 0) + (padding.right || 0);
 
-        // Determine the relevant text for measurement
+        let measuredWidth = textMetrics?.width ?? 0;
+
+        if (!textMetrics && element.type === 'input') {
+            // Ensure inputs still have a reasonable default width when no content is present
+            measuredWidth = Math.max(measuredWidth, 170 - totalPadding);
+        }
+
+        let finalWidth = measuredWidth + totalPadding;
+
+        if (element.type === 'input') {
+            finalWidth = Math.max(finalWidth, 170);
+        }
+
+        if (element.type !== 'input' && element.type !== 'button') {
+            finalWidth = Math.max(finalWidth, 40);
+        }
+
+        return finalWidth;
+    }
+
+    private calculateIntrinsicHeight(
+        element: DOMElement,
+        textMetrics: IntrinsicTextMetrics | null,
+        padding: { top: number; right: number; bottom: number; left: number }
+    ): number | null {
+        const totalPadding = (padding.top || 0) + (padding.bottom || 0);
+
+        if (!textMetrics) {
+            if (element.type === 'input' || element.type === 'button') {
+                return Math.max(totalPadding, 40);
+            }
+            return totalPadding > 0 ? totalPadding : null;
+        }
+
+        let finalHeight = textMetrics.height + totalPadding;
+
+        if (element.type === 'input' || element.type === 'button') {
+            finalHeight = Math.max(finalHeight, 40);
+        }
+
+        return finalHeight;
+    }
+
+    private measureTextContent(
+        element: DOMElement,
+        style: StyleRule | undefined,
+        styles: StyleRule[]
+    ): IntrinsicTextMetrics | null {
         let textToMeasure = '';
+
         if (element.type === 'button') {
             textToMeasure = element.value || element.textContent || 'Button';
         } else if (element.type === 'input') {
             textToMeasure = element.value || element.placeholder || '';
         } else if (element.textContent) {
-            // For all other elements, use textContent
             textToMeasure = element.textContent;
         }
 
-        // Measure text dimensions
-        let measuredWidth = 0;
-        if (textToMeasure) {
-            const dimensions = this.textRenderingService.calculateTextDimensions(textToMeasure, textStyleProperties);
-            measuredWidth = dimensions.width;
+        if (!textToMeasure || textToMeasure.trim() === '') {
+            return null;
         }
 
-        // Parse padding
-        const padding = this.parsePadding(render, style, undefined);
-        const totalPadding = padding.left + padding.right;
+        const textStyle = this.getInheritedTextStyle(element, styles);
+        const effectiveStyle = style ? { ...textStyle, ...style } : textStyle;
+        const textStyleProperties = this.textStyleParser.parseTextProperties(effectiveStyle);
+        const dimensions = this.textRenderingService.calculateTextDimensions(textToMeasure, textStyleProperties);
 
-        let finalWidth = measuredWidth + totalPadding;
+        const measuredLineHeight = dimensions.lineHeight ?? (textStyleProperties.fontSize * textStyleProperties.lineHeight);
+        const measuredHeight = Math.max(dimensions.height, measuredLineHeight);
 
-        // Apply minimum width for text inputs
-        if (element.type === 'input') {
-            finalWidth = Math.max(finalWidth, 170);
-        }
-
-        // Apply a reasonable minimum width for other elements to prevent too-small boxes
-        if (element.type !== 'input' && element.type !== 'button') {
-            finalWidth = Math.max(finalWidth, 40); // Minimum 40px for inline elements
-        }
-
-        console.log(`[DIMENSION-INTRINSIC] ${element.type}#${element.id}: text="${textToMeasure}", measured=${measuredWidth}px, padding=${totalPadding}px, final=${finalWidth}px`);
-
-        return finalWidth;
+        return {
+            text: textToMeasure,
+            width: dimensions.width,
+            height: measuredHeight,
+            lineHeight: measuredLineHeight
+        };
     }
 
     /**

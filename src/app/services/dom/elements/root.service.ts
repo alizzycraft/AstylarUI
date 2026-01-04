@@ -38,8 +38,24 @@ export class RootService {
     if (rootStyle?.background) {
       const backgroundData = render.actions.style.parseBackgroundColor(rootStyle.background);
       const opacity = render.actions.style.parseOpacity(rootStyle.opacity);
-      const finalOpacity = backgroundData?.alpha !== undefined ? backgroundData.alpha : opacity;
-      material = render.actions.mesh.createMaterial('root-body-material', backgroundData?.color || new Color3(0.2, 0.2, 0.3), undefined, finalOpacity);
+
+      if (backgroundData?.type === 'gradient') {
+        material = render.actions.mesh.createGradientMaterial(
+          'root-body-material-gradient',
+          backgroundData.gradient,
+          opacity,
+          cssWidth,
+          cssHeight
+        );
+      } else {
+        const finalOpacity = backgroundData?.alpha !== undefined ? backgroundData.alpha : opacity;
+        material = render.actions.mesh.createMaterial(
+          'root-body-material',
+          backgroundData?.color || new Color3(0.2, 0.2, 0.3),
+          undefined,
+          finalOpacity
+        );
+      }
     } else {
       material = render.actions.mesh.createMaterial('root-body-material', new Color3(0.8, 0.1, 0.1));
       console.log('No root background style found, using test red color');

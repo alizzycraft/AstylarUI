@@ -3,7 +3,7 @@ import { StyleRule } from '../../types/style-rule';
 import { BabylonDOM } from './interfaces/dom.types';
 import { Color3 } from '@babylonjs/core';
 import { DOMElement } from '../../types/dom-element';
-import { BabylonRender } from './interfaces/render.types';
+import { BabylonRender, ParsedBackground, LinearGradientDefinition, GradientStop } from './interfaces/render.types';
 import { StyleDefaultsService } from './style-defaults.service';
 
 @Injectable({
@@ -298,67 +298,99 @@ export class StyleService {
             ...typeDefaults
         };
 
-        // If we don't have the map, fall back to the slow array search (though we should always have the map now)
+        const debugSegments: string[] = [];
+
         const getStyle = (selector: string): StyleRule | undefined => {
             if (elementStylesOverride) {
-                return elementStylesOverride.get(selector)?.normal;
+                const override = elementStylesOverride.get(selector)?.normal;
+                if (override) {
+                    return override;
+                }
             }
-            // Fallback to searching the raw array if no map provided
-            return styles.find(s => {
-                const parts = s.selector.split(',').map(p => p.trim());
-                return parts.includes(selector);
-            });
+
+            const exact = styles.find(s => s.selector === selector);
+            if (exact) {
+                return exact;
+            }
+
+            if (selector.startsWith('#')) {
+                const bareId = selector.substring(1);
+                return styles.find(s => s.selector === bareId || s.selector === `#${bareId}`);
+            }
+
+            if (selector.startsWith('.')) {
+                const bareClass = selector.substring(1);
+                return styles.find(s => s.selector === `.${bareClass}` || s.selector === bareClass);
+            }
+
+            return undefined;
         };
 
-        // 1. Apply Type-based styles (e.g., "div")
         const typeStyle = getStyle(element.type);
         if (typeStyle) {
             mergedStyle = { ...mergedStyle, ...typeStyle };
+            debugSegments.push(`type(${element.type})`);
         }
 
-        // 2. Apply Class-based styles (e.g., ".my-class")
         if (element.class) {
-            const classNames = element.class.split(' ').filter(c => c.trim());
+            const classNames = element.class.split(' ').filter(Boolean);
             classNames.forEach(className => {
-                // Try both ".class" and "class" keys
                 const classStyle = getStyle(`.${className}`) || getStyle(className);
                 if (classStyle) {
                     mergedStyle = { ...mergedStyle, ...classStyle };
+                    debugSegments.push(`class(${className})`);
                 }
             });
         }
 
-        // 3. Apply ID-based styles (e.g., "#my-id")
         if (element.id) {
             const idStyle = getStyle(`#${element.id}`) || getStyle(element.id);
             if (idStyle) {
                 mergedStyle = { ...mergedStyle, ...idStyle };
+                debugSegments.push(`id(${element.id})`);
             }
         }
+
+        this.logStyleResolution(element, mergedStyle, debugSegments);
 
         return mergedStyle;
     }
 
+    private logStyleResolution(element: DOMElement, style: StyleRule, segments: string[]): void {
+        const path = segments.length ? segments.join(' -> ') : 'defaults';
+        const identifier = element.id ? `#${element.id}` : element.type;
+
+        const keyProps: Array<keyof StyleRule> = [
+            'display',
+            'flexDirection',
+            'justifyContent',
+            'alignItems',
+            'minWidth',
+            'minHeight',
+            'padding',
+            'margin'
+        ];
+
+        const propSummary = keyProps
+            .map(prop => `${prop}=${style[prop] ?? '∅'}`)
+            .join(', ');
+
+        console.log(`[STYLE-RESOLVE] ${identifier} via ${path} | ${propSummary}`);
+    }
+
     /**
-     * Determines if an element matches a CSS selector
-     * @param element The DOM element to test
-     * @param selector The CSS selector to match against
-     * @returns True if the element matches the selector, false otherwise
+     * Determines if the provided element matches a CSS-like selector. Limited support (ID, class, type).
      */
     public matchesSelector(element: DOMElement, selector: string): boolean {
-        // Handle ID selectors (#id)
         if (selector.startsWith('#')) {
             const selectorId = selector.substring(1);
             const result = element.id === selectorId;
-            // The following console.log was part of the original code, but the diff attempted to insert
-            // unrelated code here. Reverting to original logic for matchesSelector.
             if (element.id && (element.id.includes('complete') || element.id.includes('th-') || element.id.includes('td-'))) {
                 console.log(`[SELECTOR-MATCH] ID "${selector}" vs element "${element.id}": ${result}`);
             }
             return result;
         }
 
-        // Handle class selectors (.class)
         if (selector.startsWith('.')) {
             const selectorClass = selector.substring(1);
             const elementClasses = element.class ? element.class.split(' ') : [];
@@ -369,21 +401,17 @@ export class StyleService {
             return result;
         }
 
-        // Handle element type selectors (div, span, etc.)
         if (!selector.includes('.') && !selector.includes('#')) {
-            const result = element.type === selector;
-            return result;
+            return element.type === selector;
         }
 
-        // Handle child selectors (parent > child)
         if (selector.includes('>')) {
-            // This would require parent context, which we don't have in this simple implementation
             return false;
         }
 
-        // Default: no match
         return false;
     }
+
     public findStyleBySelector(selector: string, styles: StyleRule[]): StyleRule | undefined {
         // Try exact match first
         let style = styles.find(s => s.selector === selector);
@@ -403,14 +431,28 @@ export class StyleService {
         return undefined;
     }
 
-    public parseBackgroundColor(background?: string): { color: Color3, alpha?: number } | null {
+    public parseBackgroundColor(background?: string): ParsedBackground | null {
         if (!background) {
             console.log('🎨 COLOR DEBUG: No background color provided, using default');
-            return { color: new Color3(0.2, 0.2, 0.3) }; // Default color
+            return {
+                type: 'color',
+                color: new Color3(0.2, 0.2, 0.3)
+            };
         }
 
         console.log(`🎨 COLOR DEBUG: Parsing background color: "${background}"`);
-        const colorLower = background.toLowerCase();
+        const trimmedBackground = background.trim();
+        const colorLower = trimmedBackground.toLowerCase();
+
+        const gradient = this.tryParseLinearGradient(trimmedBackground);
+        if (gradient) {
+            console.log('🎨 COLOR DEBUG: Successfully parsed linear-gradient background');
+            return {
+                type: 'gradient',
+                gradient,
+                alpha: gradient.stops.some(stop => stop.alpha < 1) ? undefined : undefined
+            };
+        }
 
         // Handle transparent backgrounds
         if (colorLower === 'transparent') {
@@ -423,7 +465,10 @@ export class StyleService {
             console.log(`🎨 COLOR DEBUG: Parsing hex color: ${background}`);
             const result = this.parseHexColor(colorLower);
             console.log(`🎨 COLOR DEBUG: Hex color result: RGB(${result.r.toFixed(3)}, ${result.g.toFixed(3)}, ${result.b.toFixed(3)})`);
-            return { color: result };
+            return {
+                type: 'color',
+                color: result
+            };
         }
 
         // Handle named colors - expanded list
@@ -602,7 +647,10 @@ export class StyleService {
             console.log(`🎨 COLOR DEBUG: Found named color: ${colorLower}`);
             const result = namedColors[colorLower];
             console.log(`🎨 COLOR DEBUG: Named color result: RGB(${result.r.toFixed(3)}, ${result.g.toFixed(3)}, ${result.b.toFixed(3)})`);
-            return { color: result };
+            return {
+                type: 'color',
+                color: result
+            };
         }
 
         // Handle rgb() and rgba() formats
@@ -610,15 +658,258 @@ export class StyleService {
             console.log(`🎨 COLOR DEBUG: Parsing RGB(A) color: ${background}`);
             const result = this.parseRgbColor(colorLower);
             console.log(`🎨 COLOR DEBUG: RGB(A) color result: RGB(${result.color.r.toFixed(3)}, ${result.color.g.toFixed(3)}, ${result.color.b.toFixed(3)}), A=${result.alpha}`);
-            return result;
+            return {
+                type: 'color',
+                color: result.color,
+                alpha: result.alpha
+            };
         }
 
         // Fallback to default
         console.log(`🎨 COLOR DEBUG: Unknown color format: ${background}, using default`);
-        return { color: new Color3(0.2, 0.2, 0.3) };
+        return {
+            type: 'color',
+            color: new Color3(0.2, 0.2, 0.3)
+        };
     }
 
-    private parseRgbColor(rgb: string): { color: Color3, alpha?: number } {
+    private tryParseLinearGradient(background: string): LinearGradientDefinition | null {
+        const gradientMatch = background.match(/^linear-gradient\((.*)\)$/i);
+        if (!gradientMatch) {
+            return null;
+        }
+
+        const inner = gradientMatch[1].trim();
+        if (!inner) {
+            return null;
+        }
+
+        const segments: string[] = [];
+        let current = '';
+        let depth = 0;
+
+        for (let i = 0; i < inner.length; i++) {
+            const char = inner[i];
+            if (char === '(') {
+                depth++;
+                current += char;
+                continue;
+            }
+            if (char === ')') {
+                depth--;
+                current += char;
+                continue;
+            }
+            if (char === ',' && depth === 0) {
+                segments.push(current.trim());
+                current = '';
+                continue;
+            }
+            current += char;
+        }
+
+        if (current.trim().length > 0) {
+            segments.push(current.trim());
+        }
+
+        if (segments.length < 2) {
+            console.warn(`🎨 COLOR DEBUG: linear-gradient requires at least two color stops: ${background}`);
+            return null;
+        }
+
+        let angle = 180; // default CSS angle (to bottom)
+        let startIndex = 0;
+        const possibleDirection = segments[0].toLowerCase();
+        if (this.isAngleSegment(possibleDirection) || this.isDirectionKeyword(possibleDirection)) {
+            angle = this.parseGradientAngle(possibleDirection);
+            startIndex = 1;
+        }
+
+        const stops: GradientStop[] = [];
+        for (let i = startIndex; i < segments.length; i++) {
+            const stop = this.parseGradientStop(segments[i]);
+            if (stop) {
+                stops.push(stop);
+            }
+        }
+
+        if (stops.length < 2) {
+            console.warn(`🎨 COLOR DEBUG: Failed to parse enough gradient stops from: ${background}`);
+            return null;
+        }
+
+        this.normaliseGradientStops(stops);
+
+        return {
+            type: 'linear',
+            angle,
+            stops
+        };
+    }
+
+    private isAngleSegment(segment: string): boolean {
+        return /(deg|rad|turn|grad)$/i.test(segment.trim());
+    }
+
+    private isDirectionKeyword(segment: string): boolean {
+        return segment.startsWith('to ');
+    }
+
+    private parseGradientAngle(segment: string): number {
+        const lower = segment.toLowerCase().trim();
+
+        if (lower.startsWith('to ')) {
+            const parts = lower.replace('to ', '').trim().split(/\s+/);
+            let angle = 0; // to right
+            const hasLeft = parts.includes('left');
+            const hasRight = parts.includes('right');
+            const hasTop = parts.includes('top');
+            const hasBottom = parts.includes('bottom');
+
+            if (hasTop && hasRight) {
+                angle = 315;
+            } else if (hasTop && hasLeft) {
+                angle = 225;
+            } else if (hasBottom && hasRight) {
+                angle = 45;
+            } else if (hasBottom && hasLeft) {
+                angle = 135;
+            } else if (hasTop) {
+                angle = 270;
+            } else if (hasBottom) {
+                angle = 90;
+            } else if (hasLeft) {
+                angle = 180;
+            } else {
+                angle = 0;
+            }
+
+            return angle;
+        }
+
+        if (lower.endsWith('deg')) {
+            return parseFloat(lower.replace('deg', ''));
+        }
+
+        if (lower.endsWith('rad')) {
+            const radians = parseFloat(lower.replace('rad', ''));
+            return radians * (180 / Math.PI);
+        }
+
+        if (lower.endsWith('turn')) {
+            return parseFloat(lower.replace('turn', '')) * 360;
+        }
+
+        if (lower.endsWith('grad')) {
+            return parseFloat(lower.replace('grad', '')) * 0.9;
+        }
+
+        const numeric = parseFloat(lower);
+        if (!Number.isNaN(numeric)) {
+            return numeric;
+        }
+
+        return 180;
+    }
+
+    private parseGradientStop(stop: string): GradientStop | null {
+        const parts = stop.split(/\s+/).filter(Boolean);
+        if (!parts.length) {
+            return null;
+        }
+
+        const colorValue = parts.shift()!;
+        const parsedColor = this.parseBackgroundColor(colorValue);
+        if (!parsedColor || parsedColor.type !== 'color') {
+            console.warn(`🎨 COLOR DEBUG: Gradient stop color could not be parsed: ${stop}`);
+            return null;
+        }
+
+        let offset: number | undefined;
+        let absolutePixelOffset: number | undefined;
+        let alpha = parsedColor.alpha ?? 1;
+
+        if (parts.length) {
+            const offsetToken = parts.shift()!;
+            if (offsetToken.endsWith('%')) {
+                offset = Math.min(Math.max(parseFloat(offsetToken) / 100, 0), 1);
+            } else if (offsetToken.endsWith('px')) {
+                absolutePixelOffset = parseFloat(offsetToken);
+            } else {
+                const numeric = parseFloat(offsetToken);
+                if (!Number.isNaN(numeric)) {
+                    offset = numeric > 1 ? numeric / 100 : numeric;
+                }
+            }
+        }
+
+        return {
+            color: parsedColor.color,
+            offset: offset ?? Number.NaN,
+            alpha
+        };
+    }
+
+    private normaliseGradientStops(stops: GradientStop[]): void {
+        // If no offsets defined, distribute evenly
+        const hasAnyDefinedOffset = stops.some(stop => !Number.isNaN(stop.offset));
+        if (!hasAnyDefinedOffset) {
+            const step = stops.length > 1 ? 1 / (stops.length - 1) : 0;
+            stops.forEach((stop, index) => {
+                stop.offset = step * index;
+            });
+            return;
+        }
+
+        // Ensure first and last offsets defined
+        if (Number.isNaN(stops[0].offset)) {
+            stops[0].offset = 0;
+        }
+        if (Number.isNaN(stops[stops.length - 1].offset)) {
+            stops[stops.length - 1].offset = 1;
+        }
+
+        let lastDefinedIndex = 0;
+        for (let i = 1; i < stops.length; i++) {
+            if (Number.isNaN(stops[i].offset)) {
+                continue;
+            }
+
+            const gap = i - lastDefinedIndex;
+            if (gap > 1) {
+                const startOffset = stops[lastDefinedIndex].offset;
+                const endOffset = stops[i].offset;
+                const increment = (endOffset - startOffset) / gap;
+                for (let j = 1; j < gap; j++) {
+                    stops[lastDefinedIndex + j].offset = startOffset + increment * j;
+                }
+            }
+
+            lastDefinedIndex = i;
+        }
+
+        // Fill any remaining NaNs with previous offset
+        for (let i = 1; i < stops.length; i++) {
+            if (Number.isNaN(stops[i].offset)) {
+                stops[i].offset = stops[i - 1].offset;
+            }
+        }
+
+        // Clamp to [0,1]
+        stops.forEach(stop => {
+            if (stop.offset > 1) {
+                stop.offset = 1;
+            }
+            if (stop.offset < 0) {
+                stop.offset = 0;
+            }
+        });
+
+        // Sort stops by offset to ensure correct order
+        stops.sort((a, b) => a.offset - b.offset);
+    }
+
+    private parseRgbColor(rgb: string): { color: Color3; alpha?: number } {
         // Extract the RGB values from the string - handle both comma and space separators
         // and handle the / alpha separator in CSS4 format
         const cleaned = rgb.replace(/rgba?\(|\)/g, '').replace(/\//g, ',');

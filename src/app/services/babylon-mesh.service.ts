@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Scene, MeshBuilder, StandardMaterial, Color3, Vector3, Vector2, Mesh, Material, VertexData, PolygonMeshBuilder, DynamicTexture, ShaderMaterial, Effect, Texture } from '@babylonjs/core';
+import { GradientStop, LinearGradientDefinition } from './dom/interfaces/render.types';
+
 import { BabylonCameraService } from './babylon-camera.service';
 import { CoordinateTransformService } from './coordinate-transform.service';
 import roundPolygon, { getSegments } from 'round-polygon';
@@ -1076,7 +1078,7 @@ export class BabylonMeshService {
     return shaderMaterial;
   }
 
-  createGradientMaterial(name: string, gradientData: any, opacity: number = 1.0, width: number, height: number): StandardMaterial {
+  createGradientMaterial(name: string, gradientData: LinearGradientDefinition, opacity: number = 1.0, width: number, height: number): StandardMaterial {
     if (!this.scene) {
       throw new Error('Mesh service not initialized');
     }
@@ -1088,13 +1090,9 @@ export class BabylonMeshService {
     const texture = new DynamicTexture(`${name}-gradient-texture`, { width: textureSize, height: textureSize }, this.scene);
 
     // Get the texture context to draw the gradient
-    const context = texture.getContext();
+    const context = texture.getContext() as CanvasRenderingContext2D;
 
-    if (gradientData.type === 'linear') {
-      this.drawLinearGradient(context, textureSize, gradientData.gradient);
-    } else if (gradientData.type === 'radial') {
-      this.drawRadialGradient(context, textureSize, gradientData.gradient);
-    }
+    this.drawLinearGradient(context, textureSize, gradientData);
 
     // Update the texture
     texture.update();
@@ -1115,75 +1113,34 @@ export class BabylonMeshService {
       material.transparencyMode = Material.MATERIAL_OPAQUE;
     }
 
-    console.log(`🎨 Created gradient material: ${name} (${gradientData.type}) opacity=${opacity}`);
+    console.log(`🎨 Created gradient material: ${name} (linear) opacity=${opacity}`);
 
     return material;
   }
 
-  private drawLinearGradient(context: any, size: number, gradientData: any): void {
-    // Parse direction
-    let angle = 0; // Default: top to bottom
-    const direction = gradientData.direction.toLowerCase();
+  private drawLinearGradient(context: CanvasRenderingContext2D, size: number, gradientData: LinearGradientDefinition): void {
+    const angleRadians = (gradientData.angle % 360) * (Math.PI / 180);
 
-    if (direction.includes('deg')) {
-      angle = parseFloat(direction.replace('deg', '')) * Math.PI / 180;
-    } else if (direction === 'to right') {
-      angle = Math.PI / 2;
-    } else if (direction === 'to left') {
-      angle = -Math.PI / 2;
-    } else if (direction === 'to bottom') {
-      angle = 0;
-    } else if (direction === 'to top') {
-      angle = Math.PI;
-    }
-
-    // Calculate gradient start and end points
+    const diagonal = Math.sqrt(2) * (size / 2);
     const centerX = size / 2;
     const centerY = size / 2;
-    const radius = size / 2;
 
-    const x1 = centerX - radius * Math.sin(angle);
-    const y1 = centerY - radius * Math.cos(angle);
-    const x2 = centerX + radius * Math.sin(angle);
-    const y2 = centerY + radius * Math.cos(angle);
+    const x1 = centerX - diagonal * Math.cos(angleRadians);
+    const y1 = centerY - diagonal * Math.sin(angleRadians);
+    const x2 = centerX + diagonal * Math.cos(angleRadians);
+    const y2 = centerY + diagonal * Math.sin(angleRadians);
 
-    // Create gradient
     const gradient = context.createLinearGradient(x1, y1, x2, y2);
 
-    // Add color stops
-    const colors = gradientData.colors;
-    for (let i = 0; i < colors.length; i++) {
-      const stop = i / (colors.length - 1);
-      gradient.addColorStop(stop, colors[i]);
-    }
+    gradientData.stops.forEach((stop: GradientStop) => {
+      const colorString = `rgba(${Math.round(stop.color.r * 255)}, ${Math.round(stop.color.g * 255)}, ${Math.round(stop.color.b * 255)}, ${stop.alpha})`;
+      gradient.addColorStop(stop.offset, colorString);
+    });
 
-    // Fill the canvas
     context.fillStyle = gradient;
     context.fillRect(0, 0, size, size);
 
-    console.log(`🎨 Drew linear gradient: ${direction}, colors: [${colors.join(', ')}]`);
-  }
-
-  private drawRadialGradient(context: any, size: number, gradientData: any): void {
-    const centerX = size / 2;
-    const centerY = size / 2;
-    const radius = size / 2;
-
-    // Create radial gradient
-    const gradient = context.createRadialGradient(centerX, centerY, 0, centerX, centerY, radius);
-
-    // Add color stops
-    const colors = gradientData.colors;
-    for (let i = 0; i < colors.length; i++) {
-      const stop = i / (colors.length - 1);
-      gradient.addColorStop(stop, colors[i]);
-    }
-
-    // Fill the canvas
-    context.fillStyle = gradient;
-    context.fillRect(0, 0, size, size);
-
-    console.log(`🎨 Drew radial gradient: ${gradientData.shape}, colors: [${colors.join(', ')}]`);
+    console.log(`🎨 Drew linear gradient angle=${gradientData.angle} stops=${gradientData.stops.length}`);
   }
 
   createShadow(name: string, width: number, height: number, offsetX: number, offsetY: number, blur: number, color: string, polygonType: string = 'rectangle', borderRadius: number = 0): Mesh {

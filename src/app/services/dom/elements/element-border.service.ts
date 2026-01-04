@@ -45,7 +45,7 @@ export class ElementBorderService {
         let color = new Color3(0, 0, 0);
         if (style.borderColor) {
             const colorData = render.actions.style.parseBackgroundColor(style.borderColor);
-            if (colorData) {
+            if (colorData?.type === 'color') {
                 color = colorData.color;
             }
         }

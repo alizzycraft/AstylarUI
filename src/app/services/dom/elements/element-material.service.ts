@@ -28,22 +28,39 @@ export class ElementMaterialService {
         // Get opacity
         const opacity = render.actions.style.parseOpacity(style?.opacity);
 
-        // Get background color data (includes color and optional alpha)
-        let backgroundData;
+        // Get background data (color or gradient + opacity)
+        let backgroundData = undefined;
         if (style?.background) {
             backgroundData = render.actions.style.parseBackgroundColor(style.background);
         }
 
         // Create and apply material
         if (backgroundData) {
-            const finalOpacity = backgroundData.alpha !== undefined ? backgroundData.alpha : opacity;
-            const material = render.actions.mesh.createMaterial(
-                `${element.id || mesh.name}-material`,
-                backgroundData.color,
-                undefined,
-                finalOpacity
-            );
-            mesh.material = material;
+            if (backgroundData.type === 'gradient') {
+                const gradient = backgroundData.gradient;
+                const parentDims = dom.context.elementDimensions.get(mesh.name);
+                const width = parentDims?.width ?? 0;
+                const height = parentDims?.height ?? 0;
+                const finalOpacity = backgroundData.alpha !== undefined ? backgroundData.alpha : opacity;
+
+                const material = render.actions.mesh.createGradientMaterial(
+                    `${element.id || mesh.name}-gradient-material`,
+                    gradient,
+                    finalOpacity,
+                    width,
+                    height
+                );
+                mesh.material = material;
+            } else {
+                const finalOpacity = backgroundData.alpha !== undefined ? backgroundData.alpha : opacity;
+                const material = render.actions.mesh.createMaterial(
+                    `${element.id || mesh.name}-material`,
+                    backgroundData.color,
+                    undefined,
+                    finalOpacity
+                );
+                mesh.material = material;
+            }
         } else if (style?.background === 'transparent') {
             // Explicitly handle transparent background
             const material = render.actions.mesh.createMaterial(

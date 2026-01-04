@@ -156,8 +156,8 @@ export class ElementInteractionService {
                 console.log(`[BORDER DEBUG] ${elementId} - hoverMergedStyle.borderStyle RAW: "${hoverMergedStyle?.borderStyle}"`);
 
                 const borderWidth = this.parseBorderWidth(render, hoverMergedStyle?.borderWidth);
-                const colorData = render.actions.style.parseBackgroundColor(hoverMergedStyle?.borderColor);
-                const borderColor = colorData?.color;
+                const colorData = render.actions.style.parseBackgroundColor(hoverMergedStyle?.borderColor ?? '#000000');
+                const borderColor = colorData?.type === 'color' ? colorData.color : undefined;
 
                 console.log(`[BORDER DEBUG] ${elementId} hover - PARSED borderWidth: ${borderWidth} (world units)`);
                 console.log(`[BORDER DEBUG] ${elementId} hover - PARSED borderColor: ${JSON.stringify(colorData)}`);
@@ -208,7 +208,7 @@ export class ElementInteractionService {
                         materialName,
                         borderColor,
                         undefined,
-                        colorData?.alpha !== undefined ? colorData.alpha : borderOpacity
+                        colorData && colorData.type === 'color' && colorData.alpha !== undefined ? colorData.alpha : borderOpacity
                     );
                 }
 
@@ -413,8 +413,8 @@ export class ElementInteractionService {
 
                 // Create new border meshes for normal
                 const borderWidth = this.parseBorderWidth(render, mergedStyle.borderWidth);
-                const colorData = render.actions.style.parseBackgroundColor(mergedStyle.borderColor);
-                const borderColor = colorData?.color;
+                const colorData = render.actions.style.parseBackgroundColor(mergedStyle.borderColor ?? '#000000');
+                const borderColor = colorData?.type === 'color' ? colorData.color : undefined;
                 console.log(`[BORDER DEBUG] ${elementId} normal - borderWidth: ${borderWidth}, borderColor: ${JSON.stringify(colorData)}, borderStyle: ${mergedStyle?.borderStyle}`);
 
                 // Use polygon border for proper rounded corner support
@@ -458,7 +458,7 @@ export class ElementInteractionService {
                         `${elementId}-border-material`,
                         borderColor,
                         undefined,
-                        colorData?.alpha !== undefined ? colorData.alpha : borderOpacity
+                        colorData && colorData.type === 'color' && colorData.alpha !== undefined ? colorData.alpha : borderOpacity
                     );
                 }
 
@@ -649,22 +649,31 @@ export class ElementInteractionService {
         // Get opacity
         const opacity = render.actions.style.parseOpacity(style?.opacity);
 
-        // Get background color
-        let backgroundData;
         if (style?.background) {
-            backgroundData = render.actions.style.parseBackgroundColor(style.background);
-        }
+            const backgroundData = render.actions.style.parseBackgroundColor(style.background);
 
-        // Create and apply material
-        if (backgroundData) {
-            const finalOpacity = backgroundData.alpha !== undefined ? backgroundData.alpha : opacity;
-            const material = render.actions.mesh.createMaterial(
-                `${element.id || mesh.name}-material`,
-                backgroundData.color,
-                undefined,
-                finalOpacity
-            );
-            mesh.material = material;
+            if (backgroundData?.type === 'gradient') {
+                const dims = dom.context.elementDimensions.get(mesh.name);
+                const width = dims?.width ?? 0;
+                const height = dims?.height ?? 0;
+                const material = render.actions.mesh.createGradientMaterial(
+                    `${element.id || mesh.name}-hover-gradient`,
+                    backgroundData.gradient,
+                    opacity,
+                    width,
+                    height
+                );
+                mesh.material = material;
+            } else if (backgroundData?.type === 'color') {
+                const finalOpacity = backgroundData.alpha !== undefined ? backgroundData.alpha : opacity;
+                const material = render.actions.mesh.createMaterial(
+                    `${element.id || mesh.name}-material`,
+                    backgroundData.color,
+                    undefined,
+                    finalOpacity
+                );
+                mesh.material = material;
+            }
         }
     }
 
