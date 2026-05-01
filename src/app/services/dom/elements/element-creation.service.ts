@@ -86,9 +86,10 @@ export class ElementCreationService {
         const meshId = element.id || dom.actions.generateElementId(parent?.name || 'root', element.type, 0, element.class);
 
         // Calculate dimensions
+        const calculatedDimensions = this.dimensionService.calculateDimensions(dom, render, element, style, parent, styles);
         const dimensions = flexSize
-            ? { ...this.dimensionService.calculateDimensions(dom, render, element, style, parent, styles), width: flexSize.width, height: flexSize.height }
-            : this.dimensionService.calculateDimensions(dom, render, element, style, parent, styles);
+            ? { ...calculatedDimensions, width: flexSize.width, height: flexSize.height }
+            : calculatedDimensions;
 
         // Parse border radius and scale
         const borderRadiusPixels = this.borderService.parseBorderRadius(style?.borderRadius);
@@ -376,16 +377,33 @@ export class ElementCreationService {
 
         const padding = parentDims.padding;
         const scaleFactor = render.actions.camera.getPixelToWorldScale();
+        const parentStyle = render.actions.style.findStyleForElement(parentElement, styles, dom.context.elementStyles) || {
+            selector: parentElement.id ? `#${parentElement.id}` : parentElement.type,
+            ...this.styleDefaults.getElementTypeDefaults(parentElement.type)
+        };
+        const hasExplicitHeight = !!(parentStyle?.height && parentStyle.height !== 'auto');
+        const parentBorder = this.borderService.parseBorderProperties(render, parentStyle);
 
-        const contentWidth = parentDims.width - padding.left - padding.right;
-        const contentLeft = -(parentDims.width / 2) + padding.left;
-        const contentRight = contentLeft + contentWidth;
-        const lineStartY = (parentDims.height / 2) - padding.top;
+        const contentWidth = Math.max(0, parentDims.width - padding.left - padding.right);
+        const contentLeftX = padding.left;
+        const contentRightX = contentLeftX + contentWidth;
 
-        let cursorX = contentLeft;
-        let currentLineTop = lineStartY;
+        type InlinePlacement = {
+            mesh: Mesh;
+            child: DOMElement;
+            width: number;
+            height: number;
+            margin: { top: number; right: number; bottom: number; left: number };
+            x: number;
+            y: number;
+        };
+
+        const placements: InlinePlacement[] = [];
+
+        let cursorX = contentLeftX;
+        let cursorY = padding.top;
         let currentLineHeight = 0;
-        let lineHasContent = false;
+        let hasContent = false;
 
         for (let index = 0; index < children.length; index++) {
             const child = children[index];
@@ -430,17 +448,73 @@ export class ElementCreationService {
             const marginBox = this.parseMarginBox(childStyle);
 
             const requiredWidth = marginBox.left + childWidth + marginBox.right;
-            if (lineHasContent && cursorX + requiredWidth > contentRight) {
+            if (hasContent && cursorX + requiredWidth > contentRightX + 0.1) {
                 console.log(`[InlineLayout] Wrapping to new line before placing ${child.id ?? child.type}`);
-                cursorX = contentLeft;
-                currentLineTop -= currentLineHeight;
+                cursorX = contentLeftX;
+                cursorY += currentLineHeight;
                 currentLineHeight = 0;
-                lineHasContent = false;
+                hasContent = false;
             }
 
-            cursorX += marginBox.left;
-            const childCenterX = cursorX + (childWidth / 2);
-            const childCenterY = currentLineTop - marginBox.top - (childHeight / 2);
+            const placementX = cursorX + marginBox.left;
+            const placementY = cursorY + marginBox.top;
+
+            placements.push({
+                mesh: childMesh,
+                child,
+                width: childWidth,
+                height: childHeight,
+                margin: marginBox,
+                x: placementX,
+                y: placementY
+            });
+
+            cursorX = placementX + childWidth + marginBox.right;
+            currentLineHeight = Math.max(currentLineHeight, marginBox.top + childHeight + marginBox.bottom);
+            hasContent = true;
+        }
+
+        const contentBottom = hasContent ? cursorY + currentLineHeight : padding.top;
+        const computedHeightPx = Math.max(padding.top + padding.bottom, contentBottom + padding.bottom);
+        const oldHeightPx = parentDims.height;
+
+        if (!hasExplicitHeight && Math.abs(computedHeightPx - oldHeightPx) > 0.1) {
+            const borderRadiusPx = this.borderService.parseBorderRadius(parentStyle?.borderRadius);
+            const borderRadiusWorld = borderRadiusPx * scaleFactor;
+            const worldWidth = parentDims.width * scaleFactor;
+            const worldHeight = computedHeightPx * scaleFactor;
+
+            try {
+                render.actions.mesh.updateMeshWithBorderRadius(
+                    parent,
+                    'rectangle',
+                    worldWidth,
+                    worldHeight,
+                    borderRadiusWorld,
+                    parentBorder.width
+                );
+            } catch (error) {
+                console.error(`[InlineLayout] Failed to update parent mesh geometry for ${parentElement.id}:`, error);
+            }
+
+            const heightDeltaPx = oldHeightPx - computedHeightPx;
+            if (Math.abs(heightDeltaPx) > 0.1) {
+                const deltaWorld = (heightDeltaPx / 2) * scaleFactor;
+                parent.position.y += deltaWorld;
+            }
+
+            parentDims.height = computedHeightPx;
+            dom.context.elementDimensions.set(parent.name, { ...parentDims, height: computedHeightPx });
+        }
+
+        const finalParentHeight = dom.context.elementDimensions.get(parent.name)?.height ?? parentDims.height;
+        const halfParentWidth = parentDims.width / 2;
+        const halfParentHeight = finalParentHeight / 2;
+
+        placements.forEach(placement => {
+            const { mesh: childMesh, width, height, x, y, margin, child } = placement;
+            const childCenterX = -halfParentWidth + x + (width / 2);
+            const childCenterY = halfParentHeight - y - (height / 2);
 
             render.actions.mesh.positionMesh(
                 childMesh,
@@ -449,14 +523,10 @@ export class ElementCreationService {
                 childMesh.position.z
             );
 
-            cursorX = cursorX + childWidth + marginBox.right;
-            currentLineHeight = Math.max(currentLineHeight, marginBox.top + childHeight + marginBox.bottom);
-            lineHasContent = true;
-
             if (child.children && child.children.length > 0) {
                 this.processChildren(dom, render, child.children, childMesh, styles, child);
             }
-        }
+        });
     }
 
     private layoutBlockChildren(

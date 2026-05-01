@@ -122,11 +122,11 @@ export class ElementInteractionService {
                 // Update the main mesh's bounding info to ensure proper rendering
                 mainMesh.refreshBoundingInfo();
 
-                const singleBorderMesh = dom.context.elements.get(`${elementId}-border_polygon_border_frame`);
+                const singleBorderMesh = dom.context.elements.get(`${elementId}-border_border_frame`);
                 if (singleBorderMesh) {
                     singleBorderMesh.dispose();
-                    dom.context.elements.delete(`${elementId}-border_polygon_border_frame`);
-                    console.log(`[ELEMENT HOVER DEBUG] Disposed old single border mesh for hover: ${elementId}-border_polygon_border_frame`);
+                    dom.context.elements.delete(`${elementId}-border_border_frame`);
+                    console.log(`[ELEMENT HOVER DEBUG] Disposed old single border mesh for hover: ${elementId}-border_border_frame`);
                 }
 
                 // Remove up to 4 rectangular border meshes
@@ -250,8 +250,8 @@ export class ElementInteractionService {
                     // Store border meshes with their actual names
                     if (borderMeshes.length === 1) {
                         // Single polygon border - store with actual mesh name
-                        dom.context.elements.set(`${elementId}-border_polygon_border_frame`, borderMesh);
-                        console.log(`[ELEMENT HOVER DEBUG] Created hover border mesh: ${elementId}-border_polygon_border_frame`);
+                        dom.context.elements.set(`${elementId}-border_border_frame`, borderMesh);
+                        console.log(`[ELEMENT HOVER DEBUG] Created hover border mesh: ${elementId}-border_border_frame`);
                     } else {
                         // Multiple rectangular borders
                         dom.context.elements.set(`${elementId}-border-${index}`, borderMesh);
@@ -278,7 +278,7 @@ export class ElementInteractionService {
 
                 // For borders, we want them to inherit position but not scaling
                 // Handle single polygon border
-                const singleBorderMesh = dom.context.elements.get(`${elementId}_polygon_border_frame`);
+                const singleBorderMesh = dom.context.elements.get(`${elementId}-border_border_frame`);
                 if (singleBorderMesh) {
                     // Apply only translation and rotation, not scaling
                     const borderTransform = { ...transform };
@@ -383,11 +383,11 @@ export class ElementInteractionService {
 
                 // Remove old border meshes
                 // Handle both single polygon border and 4 rectangular borders
-                const singleBorderMesh = dom.context.elements.get(`${elementId}-border_polygon_border_frame`);
+                const singleBorderMesh = dom.context.elements.get(`${elementId}-border_border_frame`);
                 if (singleBorderMesh) {
                     singleBorderMesh.dispose();
-                    dom.context.elements.delete(`${elementId}-border_polygon_border_frame`);
-                    console.log(`[ELEMENT HOVER DEBUG] Disposed old single border mesh for normal: ${elementId}-border_polygon_border_frame`);
+                    dom.context.elements.delete(`${elementId}-border_border_frame`);
+                    console.log(`[ELEMENT HOVER DEBUG] Disposed old single border mesh for normal: ${elementId}-border_border_frame`);
                 }
 
                 // Remove up to 4 rectangular border meshes
@@ -493,8 +493,8 @@ export class ElementInteractionService {
                     // Store border meshes with their actual names
                     if (borderMeshes.length === 1) {
                         // Single polygon border - store with actual mesh name
-                        dom.context.elements.set(`${elementId}-border_polygon_border_frame`, borderMesh);
-                        console.log(`[ELEMENT HOVER DEBUG] Created normal border mesh: ${elementId}-border_polygon_border_frame`);
+                        dom.context.elements.set(`${elementId}-border_border_frame`, borderMesh);
+                        console.log(`[ELEMENT HOVER DEBUG] Created normal border mesh: ${elementId}-border_border_frame`);
                     } else {
                         // Multiple rectangular borders
                         dom.context.elements.set(`${elementId}-border-${index}`, borderMesh);
@@ -520,7 +520,7 @@ export class ElementInteractionService {
                 this.applyTransformsSmooth(mainMesh, transform, 150); // 150ms smooth animation
                 // Also apply to all border meshes and parent them to the main mesh
                 // Handle single polygon border
-                const singleBorderMesh = dom.context.elements.get(`${elementId}_polygon_border_frame`);
+                const singleBorderMesh = dom.context.elements.get(`${elementId}-border_border_frame`);
                 if (singleBorderMesh) {
                     this.applyTransformsSmooth(singleBorderMesh, transform, 150);
                     // Parent border mesh to main mesh for transform inheritance
@@ -565,7 +565,7 @@ export class ElementInteractionService {
                 this.applyTransformsSmooth(mainMesh, resetTransform, 150);
 
                 // Handle single polygon border
-                const singleBorderMesh = dom.context.elements.get(`${elementId}_polygon_border_frame`);
+                const singleBorderMesh = dom.context.elements.get(`${elementId}-border_border_frame`);
                 if (singleBorderMesh) {
                     this.applyTransformsSmooth(singleBorderMesh, resetTransform, 150);
                 }

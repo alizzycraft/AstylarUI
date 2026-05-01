@@ -74,7 +74,7 @@ export class ElementDimensionService {
         const display = typeof rawDisplay === 'string' ? rawDisplay.toLowerCase() : 'block';
         const isInlineLevel = display.startsWith('inline');
 
-        const textMetrics = this.measureTextContent(element, style, styles);
+        const textMetrics = this.measureTextContent(dom, render, element, style, styles);
         if (textMetrics) {
             console.log(`[DIMENSION] ${debugKey} intrinsicText width=${textMetrics.width.toFixed(2)} height=${textMetrics.height.toFixed(2)} lineHeight=${textMetrics.lineHeight.toFixed(2)}`);
         }
@@ -372,6 +372,8 @@ export class ElementDimensionService {
     }
 
     private measureTextContent(
+        dom: BabylonDOM,
+        render: BabylonRender,
         element: DOMElement,
         style: StyleRule | undefined,
         styles: StyleRule[]
@@ -390,8 +392,11 @@ export class ElementDimensionService {
             return null;
         }
 
+        const cascadedStyle = render.actions.style.findStyleForElement(element, styles, dom.context.elementStyles);
         const textStyle = this.getInheritedTextStyle(element, styles);
-        const effectiveStyle = style ? { ...textStyle, ...style } : textStyle;
+        const effectiveStyle = cascadedStyle
+            ? { ...textStyle, ...cascadedStyle, ...style }
+            : (style ? { ...textStyle, ...style } : textStyle);
         const textStyleProperties = this.textStyleParser.parseTextProperties(effectiveStyle);
         const dimensions = this.textRenderingService.calculateTextDimensions(textToMeasure, textStyleProperties);
 

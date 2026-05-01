@@ -3522,6 +3522,262 @@ export class SiteDataService {
       }
     },
 
+    'debug-inline-flex': {
+      meta: {
+        description: 'Focused inline-flex debug scene capturing spacing, padding, and intrinsic sizing interactions for instrumentation'
+      },
+      styles: [
+        {
+          selector: 'root',
+          background: '#0f172a'
+        },
+        {
+          selector: '#inline-stage',
+          top: '18%',
+          left: '14%',
+          width: '72%',
+          background: '#1e293b',
+          padding: '24px 28px',
+          borderRadius: '18px',
+          borderWidth: '2px',
+          borderColor: '#334155',
+          borderStyle: 'solid',
+          boxShadow: '0 18px 45px rgba(15, 23, 42, 0.45)'
+        },
+        {
+          selector: '.inline-label',
+          display: 'inline',
+          color: '#94a3b8',
+          fontFamily: '"Source Sans 3", sans-serif',
+          fontSize: '18px',
+          letterSpacing: '0.04em'
+        },
+        {
+          selector: '.inline-token',
+          display: 'inline-flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '12px 20px',
+          margin: '10px 8px 0 8px',
+          minWidth: '160px',
+          minHeight: '48px',
+          borderRadius: '999px',
+          fontFamily: '"Source Sans 3", sans-serif',
+          fontSize: '16px',
+          fontWeight: '600',
+          lineHeight: '1.1',
+          background: 'linear-gradient(135deg, #38bdf8, #2563eb)',
+          color: '#0f172a',
+          boxShadow: '0 6px 18px rgba(37, 99, 235, 0.35)'
+        },
+        {
+          selector: '#token-secondary',
+          background: 'linear-gradient(135deg, #c084fc, #7c3aed)'
+        },
+        {
+          selector: '#token-stretch',
+          minWidth: '220px',
+          minHeight: '64px',
+          padding: '18px 28px',
+          background: 'linear-gradient(135deg, #34d399, #059669)'
+        },
+        {
+          selector: '.compact-token',
+          minWidth: '120px',
+          minHeight: '40px',
+          padding: '10px 16px',
+          fontSize: '14px',
+          background: 'linear-gradient(135deg, #fbbf24, #f97316)'
+        }
+      ],
+      root: {
+        children: [
+          {
+            type: 'div',
+            id: 'inline-stage',
+            children: [
+              {
+                type: 'span',
+                id: 'inline-prefix',
+                class: 'inline-label',
+                textContent: 'Inline-flex badges:'
+              },
+              {
+                type: 'span',
+                id: 'token-primary',
+                class: 'inline-token',
+                textContent: 'Primary Badge'
+              },
+              {
+                type: 'span',
+                id: 'token-secondary',
+                class: 'inline-token',
+                textContent: 'Secondary Badge'
+              },
+              {
+                type: 'span',
+                id: 'token-stretch',
+                class: 'inline-token',
+                textContent: 'Min Constraints'
+              },
+              {
+                type: 'span',
+                id: 'token-compact',
+                class: 'inline-token compact-token',
+                textContent: 'Compact Token'
+              }
+            ]
+          }
+        ]
+      }
+    },
+
+    'debug-header-alignment': {
+      meta: {
+        description: 'Header alignment debug scene contrasting fixed-height headers and chip layouts for renderer instrumentation'
+      },
+      styles: [
+        {
+          selector: 'root',
+          background: '#0b1120'
+        },
+        {
+          selector: '#header-stage',
+          top: '16%',
+          left: '12%',
+          width: '76%',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '28px'
+        },
+        {
+          selector: '.debug-header',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          height: '96px',
+          padding: '0 32px',
+          borderRadius: '18px',
+          background: 'linear-gradient(135deg, #1e3a8a, #0f172a)',
+          borderWidth: '1px',
+          borderColor: '#1d4ed8',
+          borderStyle: 'solid',
+          boxShadow: '0 20px 55px rgba(30, 58, 138, 0.45)'
+        },
+        {
+          selector: '#sticky-header',
+          height: '120px',
+          alignItems: 'flex-end',
+          background: 'linear-gradient(135deg, #0f172a, #312e81)'
+        },
+        {
+          selector: '.header-title',
+          color: '#e0f2fe',
+          fontFamily: '"Source Sans 3", sans-serif',
+          fontSize: '30px',
+          fontWeight: '700',
+          letterSpacing: '0.05em'
+        },
+        {
+          selector: '.header-meta',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '14px'
+        },
+        {
+          selector: '.header-chip',
+          display: 'inline-flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          minWidth: '128px',
+          height: '44px',
+          padding: '0 18px',
+          borderRadius: '999px',
+          fontFamily: '"Source Sans 3", sans-serif',
+          fontSize: '15px',
+          fontWeight: '600',
+          letterSpacing: '0.04em',
+          background: '#2563eb',
+          color: '#f8fafc',
+          boxShadow: '0 8px 22px rgba(37, 99, 235, 0.4)'
+        },
+        {
+          selector: '.header-chip--muted',
+          background: '#475569',
+          color: '#e2e8f0',
+          boxShadow: '0 4px 16px rgba(71, 85, 105, 0.45)'
+        }
+      ],
+      root: {
+        children: [
+          {
+            type: 'div',
+            id: 'header-stage',
+            children: [
+              {
+                type: 'header',
+                id: 'primary-header',
+                class: 'debug-header',
+                children: [
+                  {
+                    type: 'div',
+                    id: 'primary-title',
+                    class: 'header-title',
+                    textContent: 'Renderer Diagnostics'
+                  },
+                  {
+                    type: 'div',
+                    id: 'primary-meta',
+                    class: 'header-meta',
+                    children: [
+                      {
+                        type: 'span',
+                        id: 'meta-chip-live',
+                        class: 'header-chip',
+                        textContent: 'Live Feed'
+                      },
+                      {
+                        type: 'span',
+                        id: 'meta-chip-version',
+                        class: 'header-chip',
+                        textContent: 'v1.2.0'
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                type: 'header',
+                id: 'sticky-header',
+                class: 'debug-header',
+                children: [
+                  {
+                    type: 'div',
+                    id: 'sticky-title',
+                    class: 'header-title',
+                    textContent: 'Alignment Check'
+                  },
+                  {
+                    type: 'div',
+                    id: 'sticky-meta',
+                    class: 'header-meta',
+                    children: [
+                      {
+                        type: 'span',
+                        id: 'sticky-chip-min',
+                        class: 'header-chip header-chip--muted',
+                        textContent: 'Min-Height 120px'
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+
     'flex-test': {
       meta: {
         description: 'Comprehensive flex test site with multiple containers showing space-between, center, and column layouts with rounded borders, gaps, and various flex-basis values'

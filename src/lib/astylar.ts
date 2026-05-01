@@ -98,6 +98,7 @@ export class Astylar {
                     positionBorderFrames: this.babylonMeshService.positionBorderFrames.bind(this.babylonMeshService),
                     updatePolygon: this.babylonMeshService.updatePolygon.bind(this.babylonMeshService),
                     generatePolygonVertexData: this.babylonMeshService.createPolygonVertexData.bind(this.babylonMeshService),
+                    updateMeshWithBorderRadius: this.babylonMeshService.updateMeshWithBorderRadius.bind(this.babylonMeshService),
                     updateMeshBorderRadius: this.babylonMeshService.updateMeshBorderRadius.bind(this.babylonMeshService),
                     createMeshWithBorderRadius: this.babylonMeshService.createMeshWithBorderRadius.bind(this.babylonMeshService),
                     createBorderMesh: this.babylonMeshService.createBorderMesh.bind(this.babylonMeshService),

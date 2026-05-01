@@ -29,6 +29,7 @@ export interface MeshActions {
     parentMesh: (child: Mesh, parent: Mesh) => void;
     generatePolygonVertexData: (polygonType: string, width: number, height: number, borderRadius: number) => any;
     updatePolygon: (mesh: Mesh, polygonType: string, width: number, height: number, borderRadius: number) => void;
+    updateMeshWithBorderRadius: (mesh: Mesh | string, polygonType: string, width: number, height: number, borderRadius: number, borderWidth?: number) => void;
     updateMeshBorderRadius: (mesh: Mesh, width: number, height: number, borderRadius: number) => void;
     createMeshWithBorderRadius: (originalMesh: Mesh, width: number, height: number, borderRadius: number) => Mesh;
     createBorderMesh: (name: string, elementWidth: number, elementHeight: number, borderWidth: number, borderRadius?: number) => Mesh[];
