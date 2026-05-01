@@ -118,21 +118,14 @@ export class Astylar {
           createPolygonBorder: this.babylonMeshService.createPolygonBorder.bind(
             this.babylonMeshService,
           ),
-          positionMesh: this.babylonMeshService.positionMesh.bind(
+          positionTextMesh: this.babylonMeshService.positionTextMesh.bind(
             this.babylonMeshService,
           ),
-          parentMesh: this.babylonMeshService.parentMesh.bind(
+          parentTextMesh: this.babylonMeshService.parentTextMesh.bind(
             this.babylonMeshService,
           ),
           positionBorderFrames:
             this.babylonMeshService.positionBorderFrames.bind(
-              this.babylonMeshService,
-            ),
-          updatePolygon: this.babylonMeshService.updatePolygon.bind(
-            this.babylonMeshService,
-          ),
-          generatePolygonVertexData:
-            this.babylonMeshService.createPolygonVertexData.bind(
               this.babylonMeshService,
             ),
           updateMeshWithBorderRadius:
@@ -150,6 +143,27 @@ export class Astylar {
           createBorderMesh: this.babylonMeshService.createBorderMesh.bind(
             this.babylonMeshService,
           ),
+          createTextMesh: this.babylonMeshService.createTextMesh.bind(
+            this.babylonMeshService,
+          ),
+          createTextMaterial: this.babylonMeshService.createTextMaterial.bind(
+            this.babylonMeshService,
+          ),
+          updateTextMesh: this.babylonMeshService.updateTextMesh.bind(
+            this.babylonMeshService,
+          ),
+          updateTextMeshMaterial:
+            this.babylonMeshService.updateTextMeshMaterial.bind(
+              this.babylonMeshService,
+            ),
+          createPolygonVertexData:
+            this.babylonMeshService.createPolygonVertexData.bind(
+              this.babylonMeshService,
+            ),
+          generatePolygonVertexData:
+            this.babylonMeshService.createPolygonVertexData.bind(
+              this.babylonMeshService,
+            ),
         },
         style: {
           findStyleBySelector: this.styleService.findStyleBySelector.bind(
