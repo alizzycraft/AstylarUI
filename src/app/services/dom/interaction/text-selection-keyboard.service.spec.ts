@@ -1,4 +1,5 @@
 import { DOCUMENT } from '@angular/common';
+import { provideZonelessChangeDetection } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { TextSelectionKeyboardService } from './text-selection-keyboard.service';
 import { TextSelectionStore } from '../../../store/text-selection.store';
@@ -18,6 +19,7 @@ describe('TextSelectionKeyboardService', () => {
 
     TestBed.configureTestingModule({
       providers: [
+        provideZonelessChangeDetection(),
         { provide: DOCUMENT, useValue: documentStub as unknown as Document },
         { provide: TextSelectionStore, useClass: MockTextSelectionStore },
         { provide: TextSelectionControllerService, useClass: MockTextSelectionControllerService },

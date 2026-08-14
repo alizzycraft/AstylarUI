@@ -96,6 +96,9 @@ You can also use the `<astylar-render>` component directly in your templates:
 
 ## Developing AstylarUI
 
+The current implementation status, document map, and recommended next work are
+tracked in [docs/project-status.md](docs/project-status.md).
+
 ### Setup
 ```bash
 npm install

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<!-- Active browser reference for the matching `debug-inline-flex` Astylar fixture. -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Debug Inline Flex Fixture</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        color-scheme: dark;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: #0f172a;
+        font-family: 'Source Sans 3', sans-serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      #inline-stage {
+        position: relative;
+        top: 0;
+        left: 0;
+        width: 72vw;
+        max-width: 960px;
+        background: #1e293b;
+        padding: 24px 28px;
+        border-radius: 18px;
+        border: 2px solid #334155;
+        box-shadow: 0 18px 45px rgba(15, 23, 42, 0.45);
+        display: inline-block;
+      }
+
+      .inline-label {
+        display: inline;
+        color: #94a3b8;
+        font-size: 18px;
+        letter-spacing: 0.04em;
+        margin-right: 12px;
+      }
+
+      .inline-token {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 12px 20px;
+        margin: 10px 8px 0 8px;
+        min-width: 160px;
+        min-height: 48px;
+        border-radius: 999px;
+        font-size: 16px;
+        font-weight: 600;
+        line-height: 1.1;
+        background: linear-gradient(135deg, #38bdf8, #2563eb);
+        color: #0f172a;
+        box-shadow: 0 6px 18px rgba(37, 99, 235, 0.35);
+        text-align: center;
+      }
+
+      #token-secondary {
+        background: linear-gradient(135deg, #c084fc, #7c3aed);
+        color: #0f172a;
+      }
+
+      #token-stretch {
+        min-width: 220px;
+        min-height: 64px;
+        padding: 18px 28px;
+        background: linear-gradient(135deg, #34d399, #059669);
+        color: #0f172a;
+      }
+
+      .compact-token {
+        min-width: 120px;
+        min-height: 40px;
+        padding: 10px 16px;
+        font-size: 14px;
+        background: linear-gradient(135deg, #fbbf24, #f97316);
+        color: #0f172a;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="inline-stage">
+      <span id="inline-prefix" class="inline-label">Inline-flex badges:</span>
+      <span id="token-primary" class="inline-token">Primary Badge</span>
+      <span id="token-secondary" class="inline-token">Secondary Badge</span>
+      <span id="token-stretch" class="inline-token">Min Constraints</span>
+      <span id="token-compact" class="inline-token compact-token">Compact Token</span>
+    </div>
+  </body>
+</html>

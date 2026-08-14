@@ -1,4 +1,5 @@
 import { DOCUMENT } from '@angular/common';
+import { provideZonelessChangeDetection } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { TextSelectionClipboardService } from './text-selection-clipboard.service';
 import { TextSelectionStore } from '../../../store/text-selection.store';
@@ -13,6 +14,7 @@ describe('TextSelectionClipboardService', () => {
 
     TestBed.configureTestingModule({
       providers: [
+        provideZonelessChangeDetection(),
         TextSelectionClipboardService,
         { provide: DOCUMENT, useValue: documentStub as unknown as Document },
         { provide: TextSelectionStore, useClass: MockTextSelectionStore }

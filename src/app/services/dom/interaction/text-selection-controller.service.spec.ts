@@ -26,7 +26,7 @@ describe('TextSelectionControllerService', () => {
 
   it('updates selection range as pointer moves', () => {
     service.beginSelection(entry, { x: 0, y: 5 });
-    const state = service.updateSelection(entry, { x: 45, y: 5 });
+    const state = service.updateSelection(entry, { x: 44, y: 5 });
 
     expectState(state, {
       elementId: 'element-1',
@@ -40,7 +40,7 @@ describe('TextSelectionControllerService', () => {
 
   it('finalizes selection and preserves range state', () => {
     service.beginSelection(entry, { x: 0, y: 5 });
-    service.updateSelection(entry, { x: 45, y: 5 });
+    service.updateSelection(entry, { x: 44, y: 5 });
     const state = service.finalizeSelection();
 
     expectState(state, {
@@ -73,7 +73,7 @@ describe('TextSelectionControllerService', () => {
 
   it('clears selection', () => {
     service.beginSelection(entry, { x: 0, y: 5 });
-    service.updateSelection(entry, { x: 45, y: 5 });
+    service.updateSelection(entry, { x: 44, y: 5 });
     const state = service.clearSelection();
 
     expectState(state, {

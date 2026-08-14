@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<!-- Active browser reference for the matching `debug-header-alignment` Astylar fixture. -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Debug Header Alignment Fixture</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        color-scheme: dark;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: #0b1120;
+        font-family: 'Source Sans 3', sans-serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      #header-stage {
+        width: 76vw;
+        max-width: 1040px;
+        display: flex;
+        flex-direction: column;
+        gap: 28px;
+      }
+
+      .debug-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 96px;
+        padding: 0 32px;
+        border-radius: 18px;
+        background: linear-gradient(135deg, #1e3a8a, #0f172a);
+        border: 1px solid #1d4ed8;
+        box-shadow: 0 20px 55px rgba(30, 58, 138, 0.45);
+      }
+
+      #sticky-header {
+        height: 120px;
+        align-items: flex-end;
+        background: linear-gradient(135deg, #0f172a, #312e81);
+      }
+
+      .header-title {
+        color: #e0f2fe;
+        font-size: 30px;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+      }
+
+      .header-meta {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+
+      .header-chip {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 128px;
+        height: 44px;
+        padding: 0 18px;
+        border-radius: 999px;
+        font-size: 15px;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        background: #2563eb;
+        color: #f8fafc;
+        box-shadow: 0 8px 22px rgba(37, 99, 235, 0.4);
+      }
+
+      .header-chip--muted {
+        background: #475569;
+        color: #e2e8f0;
+        box-shadow: 0 4px 16px rgba(71, 85, 105, 0.45);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="header-stage">
+      <header id="primary-header" class="debug-header">
+        <div id="primary-title" class="header-title">Renderer Diagnostics</div>
+        <div id="primary-meta" class="header-meta">
+          <span id="meta-chip-live" class="header-chip">Live Feed</span>
+          <span id="meta-chip-version" class="header-chip">v1.2.0</span>
+        </div>
+      </header>
+
+      <header id="sticky-header" class="debug-header">
+        <div id="sticky-title" class="header-title">Alignment Check</div>
+        <div id="sticky-meta" class="header-meta">
+          <span id="sticky-chip-min" class="header-chip header-chip--muted">Min-Height 120px</span>
+        </div>
+      </header>
+    </div>
+  </body>
+</html>
