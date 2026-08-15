@@ -55,6 +55,12 @@ export class ElementDimensionService {
         const parentWidth = parentDims.width;
         const parentHeight = parentDims.height;
         const parentPadding = parentDims.padding;
+        const parentStyle = dom.context.elementStyles.get(parent.name)?.normal;
+        const parentBorderWidth = parentStyle?.borderWidth
+            ? Math.max(0, parseFloat(parentStyle.borderWidth) || 0)
+            : 0;
+        const usesPositionedContainingBlock =
+            style?.position === 'absolute' || style?.position === 'fixed';
 
         // Calculate the parent's content area (excluding padding)
         const contentWidth = parentWidth - parentPadding.left - parentPadding.right;
@@ -114,7 +120,10 @@ export class ElementDimensionService {
                     widthSource = `width:${widthValue}`;
                 } else if (widthValue.endsWith('%')) {
                     const widthPercent = parseFloat(widthValue);
-                    width = (contentWidth * widthPercent) / 100;
+                    const widthReference = usesPositionedContainingBlock
+                        ? parentWidth - parentBorderWidth * 2
+                        : contentWidth;
+                    width = (widthReference * widthPercent) / 100;
                     widthSource = `width:${widthValue}`;
                 } else {
                     const parsedWidth = parseFloat(widthValue);
@@ -153,7 +162,10 @@ export class ElementDimensionService {
                     heightSource = `height:${heightValue}`;
                 } else if (heightValue.endsWith('%')) {
                     const heightPercent = parseFloat(heightValue);
-                    height = (contentHeight * heightPercent) / 100;
+                    const heightReference = usesPositionedContainingBlock
+                        ? parentHeight - parentBorderWidth * 2
+                        : contentHeight;
+                    height = (heightReference * heightPercent) / 100;
                     heightSource = `height:${heightValue}`;
                 } else {
                     const parsedHeight = parseFloat(heightValue);
@@ -212,17 +224,26 @@ export class ElementDimensionService {
         }
 
         if (style) {
+            const horizontalOriginInset = usesPositionedContainingBlock
+                ? parentBorderWidth
+                : parentPadding.left;
+            const verticalOriginInset = usesPositionedContainingBlock
+                ? parentBorderWidth
+                : parentPadding.top;
+            const positionedReferenceWidth = parentWidth - parentBorderWidth * 2;
+            const positionedReferenceHeight = parentHeight - parentBorderWidth * 2;
+
             if (style.left !== undefined) {
                 if (typeof style.left === 'string' && style.left.endsWith('px')) {
-                    x = -(parentWidth / 2) + parentPadding.left + parseFloat(style.left) + (width / 2);
+                    x = -(parentWidth / 2) + horizontalOriginInset + parseFloat(style.left) + (width / 2);
                     console.log(`[ElementDimension] Calculated X (px): ${x} (parentW=${parentWidth}, contentW=${contentWidth}, paddingLeft=${parentPadding.left}, left=${style.left}, width=${width})`);
                 } else if (typeof style.left === 'string' && style.left.endsWith('%')) {
                     const leftPercent = parseFloat(style.left);
-                    const leftPixels = (contentWidth * leftPercent) / 100;
-                    x = -(parentWidth / 2) + parentPadding.left + leftPixels + (width / 2);
+                    const leftPixels = ((usesPositionedContainingBlock ? positionedReferenceWidth : contentWidth) * leftPercent) / 100;
+                    x = -(parentWidth / 2) + horizontalOriginInset + leftPixels + (width / 2);
                     console.log(`[ElementDimension] Calculated X (%): ${x} (parentW=${parentWidth}, contentW=${contentWidth}, paddingLeft=${parentPadding.left}, left=${style.left}, leftPx=${leftPixels}, width=${width})`);
                 } else {
-                    x = -(parentWidth / 2) + parentPadding.left + parseFloat(`${style.left}`) + (width / 2);
+                    x = -(parentWidth / 2) + horizontalOriginInset + parseFloat(`${style.left}`) + (width / 2);
                     console.log(`[ElementDimension] Calculated X (val): ${x} (parentW=${parentWidth}, contentW=${contentWidth}, paddingLeft=${parentPadding.left}, left=${style.left}, width=${width})`);
                 }
             } else {
@@ -232,13 +253,13 @@ export class ElementDimensionService {
 
             if (style.top !== undefined) {
                 if (typeof style.top === 'string' && style.top.endsWith('px')) {
-                    y = (parentHeight / 2) - parentPadding.top - parseFloat(style.top) - (height / 2);
+                    y = (parentHeight / 2) - verticalOriginInset - parseFloat(style.top) - (height / 2);
                 } else if (typeof style.top === 'string' && style.top.endsWith('%')) {
                     const topPercent = parseFloat(style.top);
-                    const topPixels = (contentHeight * topPercent) / 100;
-                    y = (parentHeight / 2) - parentPadding.top - topPixels - (height / 2);
+                    const topPixels = ((usesPositionedContainingBlock ? positionedReferenceHeight : contentHeight) * topPercent) / 100;
+                    y = (parentHeight / 2) - verticalOriginInset - topPixels - (height / 2);
                 } else {
-                    y = (parentHeight / 2) - parentPadding.top - parseFloat(`${style.top}`) - (height / 2);
+                    y = (parentHeight / 2) - verticalOriginInset - parseFloat(`${style.top}`) - (height / 2);
                 }
             } else {
                 y = (parentHeight / 2) - parentPadding.top - (contentHeight / 2);

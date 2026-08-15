@@ -59,4 +59,32 @@ describe('ElementDimensionService', () => {
     expect(result.x).toBe(-156);
     expect(result.y).toBe(136);
   });
+
+  it('positions an absolute child from its parent padding-box edge', () => {
+    const service = new ElementDimensionService({} as never, {} as never);
+    const parent = { name: 'parent' } as Mesh;
+    const dom = {
+      context: {
+        elementDimensions: new Map([
+          ['parent', { width: 420, height: 300, padding: { top: 28, right: 28, bottom: 28, left: 28 } }],
+        ]),
+        elementStyles: new Map([
+          ['parent', { normal: { selector: '#parent', padding: '24px', borderWidth: '4px' } }],
+        ]),
+      },
+    } as unknown as BabylonDOM;
+    const render = {
+      actions: { style: { getElementTypeDefaults: () => ({ display: 'block' }) } },
+    } as unknown as BabylonRender;
+    const element = { id: 'child', type: 'div' } as DOMElement;
+    const style: StyleRule = {
+      selector: '#child', position: 'absolute', left: '36px', top: '42px',
+      width: '180px', height: '90px', boxSizing: 'border-box'
+    };
+
+    const result = service.calculateDimensions(dom, render, element, style, parent, [style]);
+
+    expect(result.x).toBe(-80);
+    expect(result.y).toBe(59);
+  });
 });

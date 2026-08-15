@@ -120,7 +120,12 @@ export class ParityReferenceComponent {
       )
     };
 
-    const lineRects = this.getTextLineRects(element);
+    const directTextNodes = this.getDirectTextNodes(element);
+    const lineRects = this.getTextLineRects(directTextNodes);
+    const textContent = directTextNodes
+      .map((node) => node.textContent?.trim() ?? '')
+      .filter(Boolean)
+      .join(' ');
 
     return {
       id: element.id,
@@ -144,24 +149,27 @@ export class ParityReferenceComponent {
         whiteSpace: computed.whiteSpace,
         opacity: computed.opacity
       },
-      text: {
-        content: element.textContent?.trim() ?? '',
-        lineCount: lineRects.length
-      }
+      text: textContent ? { content: textContent, lineCount: lineRects.length } : undefined
     };
   }
 
-  private getTextLineRects(element: HTMLElement): DOMRect[] {
-    if (!element.textContent?.trim()) {
-      return [];
-    }
-
-    const range = this.document.createRange();
-    range.selectNodeContents(element);
-    const rects = Array.from(range.getClientRects()).filter(
-      (rect) => rect.width > 0 && rect.height > 0
+  private getDirectTextNodes(element: HTMLElement): Text[] {
+    return Array.from(element.childNodes).filter(
+      (node): node is Text =>
+        node.nodeType === Node.TEXT_NODE && !!node.textContent?.trim()
     );
-    range.detach();
+  }
+
+  private getTextLineRects(textNodes: Text[]): DOMRect[] {
+    const rects = textNodes.flatMap((textNode) => {
+      const range = this.document.createRange();
+      range.selectNodeContents(textNode);
+      const nodeRects = Array.from(range.getClientRects()).filter(
+        (rect) => rect.width > 0 && rect.height > 0
+      );
+      range.detach();
+      return nodeRects;
+    });
 
     const lineTops: number[] = [];
     for (const rect of rects) {
@@ -191,4 +199,3 @@ export class ParityReferenceComponent {
     window.__ASTYLAR_PARITY_REPORT__ = report;
   }
 }
-

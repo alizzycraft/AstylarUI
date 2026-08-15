@@ -4,5 +4,23 @@
     "title": "Basic content-box geometry",
     "category": "box-model-units",
     "expectedBehavior": "An absolutely positioned content-box includes padding and border outside its declared width and height."
+  },
+  {
+    "id": "border-box-basic",
+    "title": "Explicit border-box geometry",
+    "category": "box-model-units",
+    "expectedBehavior": "Padding and border remain inside an explicitly declared border-box size."
+  },
+  {
+    "id": "percentage-sizing",
+    "title": "Viewport-root percentage sizing",
+    "category": "box-model-units",
+    "expectedBehavior": "Percentage offsets and dimensions resolve against the root containing block."
+  },
+  {
+    "id": "nested-positioning",
+    "title": "Nested absolute positioning",
+    "category": "positioning-stacking",
+    "expectedBehavior": "An absolute child uses the padding box of its positioned parent as its containing block."
   }
 ]
