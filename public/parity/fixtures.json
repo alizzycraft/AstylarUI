@@ -34,5 +34,17 @@
     "title": "Inherited text properties",
     "category": "cascade-defaults",
     "expectedBehavior": "A child inherits color and typography from its parent when it has no declaration of its own."
+  },
+  {
+    "id": "block-flow",
+    "title": "Normal block sibling flow",
+    "category": "block-inline",
+    "expectedBehavior": "Block children start at the content edge and stack vertically in source order."
+  },
+  {
+    "id": "inline-block-flow",
+    "title": "Inline-block run and display none",
+    "category": "block-inline",
+    "expectedBehavior": "Inline-block siblings share a line and display:none contributes neither rendering nor layout space."
   }
 ]

@@ -121,16 +121,27 @@ export class ParityAstylarComponent {
         if (hasAllElements && renderedFrames >= 2) {
           scene.onAfterRenderObservable.remove(observer);
           canvas.dataset['parityReady'] = 'true';
-          this.publishReport(this.createReport(scene, fixtureId, fixture.measurementIds));
+          this.publishReport(
+            this.createReport(
+              scene,
+              fixtureId,
+              fixture.measurementIds,
+              fixture.expectedAbsentIds ?? []
+            )
+          );
           return;
         }
 
         if (renderedFrames > 300) {
           scene.onAfterRenderObservable.remove(observer);
           this.publishReport(
-            this.createReport(scene, fixtureId, fixture.measurementIds, [
-              'Timed out waiting for all Astylar elements to render'
-            ])
+            this.createReport(
+              scene,
+              fixtureId,
+              fixture.measurementIds,
+              fixture.expectedAbsentIds ?? [],
+              ['Timed out waiting for all Astylar elements to render']
+            )
           );
         }
       });
@@ -141,10 +152,17 @@ export class ParityAstylarComponent {
     scene: Scene,
     fixtureId: string,
     measurementIds: string[],
+    expectedAbsentIds: string[],
     initialErrors: string[] = []
   ): ParityRuntimeReport {
     const elements: Record<string, ParityElementMeasurement> = {};
     const errors = [...initialErrors];
+
+    for (const id of expectedAbsentIds) {
+      if (this.elementManager.elementsMap.has(id)) {
+        errors.push(`Unexpected Astylar mesh for display:none element: ${id}`);
+      }
+    }
 
     for (const id of measurementIds) {
       const mesh = this.elementManager.elementsMap.get(id);
@@ -280,4 +298,3 @@ export class ParityAstylarComponent {
     window.__ASTYLAR_PARITY_REPORT__ = report;
   }
 }
-

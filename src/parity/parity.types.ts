@@ -22,6 +22,7 @@ export interface ParityFixture {
   category: ParityCategory;
   expectedBehavior: string;
   measurementIds: string[];
+  expectedAbsentIds?: string[];
   reference: {
     html: string;
     css: string;
@@ -64,4 +65,3 @@ declare global {
     __ASTYLAR_PARITY_REPORT__?: ParityRuntimeReport;
   }
 }
-

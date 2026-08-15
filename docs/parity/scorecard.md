@@ -7,29 +7,29 @@ Last updated: 2026-08-15
 | Category | Fixtures | Required direction |
 | --- | ---: | --- |
 | Cascade and default styles | 2 | Selectors, specificity, inheritance, inline styles, UA-like defaults |
-| Block and inline flow | 0 | Block, inline, inline-block, none, inline-flex |
+| Block and inline flow | 2 | Block, inline, inline-block, none, inline-flex |
 | Box model and sizing units | 3 | Width/height, min/max, padding, margin, borders, px/%/viewport/font units |
 | Typography and multiline text | 0 | Fonts, line height, wrapping, whitespace, alignment, overflow |
 | Flexbox | 0 | Direction, wrap, basis, grow/shrink, gap, order, alignment |
 | Positioning and stacking | 1 | Static, relative, absolute, fixed, containing blocks, z-order |
 | Lists, tables, and images | 0 | Representative structural and replaced content |
 | Forms and interactive states | 0 | Basic visible controls, focus, checked/disabled states |
-| **Total** | **6 / 40** | Balanced coverage required before completion |
+| **Total** | **8 / 40** | Balanced coverage required before completion |
 
 ## Current Baseline
 
 | Metric | Current result | Core Web Parity v1 threshold |
 | --- | ---: | ---: |
-| Fixtures | 6 | At least 40 |
-| Median SSIM | 0.9992 | At least 0.98 |
-| Minimum fixture SSIM | 0.9978 | At least 0.95 |
+| Fixtures | 8 | At least 40 |
+| Median SSIM | 0.9984 | At least 0.98 |
+| Minimum fixture SSIM | 0.9955 | At least 0.95 |
 | Geometry edges within 2px | 100% | At least 95% |
 | Maximum edge error | 0.006px | At most 5px or documented |
 | Text content and line counts | Pass | Exact |
 | Runtime errors | 0 | 0 |
 
 All current fixtures pass every per-fixture quality threshold. The suite does
-not meet the completion gate because coverage is still 6 of 40 fixtures.
+not meet the completion gate because coverage is still 8 of 40 fixtures.
 
 ## Decisions
 
@@ -59,6 +59,11 @@ not meet the completion gate because coverage is still 6 of 40 fixtures.
 11. Inline JSON `style` declarations are the highest supported author priority.
     Inherited text properties use an internal weak ancestry registry so rendering
     never inserts circular parent references into serializable `SiteData`.
+12. Normal-flow block children begin at the parent's content edge and stack in
+    source order. Elements with `display: none` are excluded before mesh creation
+    and contribute no block or inline layout space.
+13. Fixtures may declare `expectedAbsentIds`; reference mode verifies a zero-size
+    native `display: none` box and Astylar mode verifies that no mesh exists.
 
 ## Iteration History
 
@@ -67,6 +72,7 @@ not meet the completion gate because coverage is still 6 of 40 fixtures.
 | Harness foundation | 1 fixture; SSIM 0.1031; 50% edges within 2px; max error 360px | 1 fixture; SSIM 0.9984; 100% edges; max error 0.003px | Mirrored camera X coordinates, content-box sizing, and black/back-culled unlit materials |
 | Positioned containing blocks | 4 fixtures; nested child max error 24px; text mismatch | 4 fixtures; median SSIM 0.9992; 100% edges; exact text | Absolute children incorrectly started at the content edge instead of the padding-box edge; reference double-counted descendant text |
 | Cascade and inheritance | 4 fixtures; no cascade coverage | 6 fixtures; median SSIM 0.9992; minimum 0.9978; 100% edges; exact text | Resolver used class attribute order, ignored inline styles and compound specificity, and did not inherit parent typography |
+| Block and inline flow | 8-fixture attempt; minimum SSIM 0.9498; 80% edges within 2px; max error 172px | 8 fixtures; median SSIM 0.9984; minimum 0.9955; 100% edges; max error 0.006px; exact text | Block children retained centered X positions; `display: none` children entered layout and prevented inline placements from being applied |
 
 ## Known Intentional Deviations
 
@@ -74,6 +80,6 @@ None accepted yet.
 
 ## Recommended Next Target
 
-Add block/inline flow fixtures for sibling stacking, inline runs, inline-block,
-and `display: none`. This is the next foundation needed before typography and
-default heading/paragraph margins can be measured reliably.
+Add typography and multiline fixtures for wrapping, explicit line height,
+whitespace handling, and text alignment. These behaviors now have stable block
+and inline placement beneath them.

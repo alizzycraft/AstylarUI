@@ -24,6 +24,7 @@ Set `ASTYLAR_PARITY_BASE_URL` to measure an already-running server. Set
 Each fixture lives under `src/parity/fixtures/` and contains:
 
 - stable ID, category, expected behavior, and measurement element IDs;
+- optional expected-absent IDs for behavior such as `display: none`;
 - native HTML and CSS reference content;
 - equivalent Astylar `SiteData` using the same content and style values.
 
@@ -44,4 +45,3 @@ logic or mask meaningful screenshot regions.
 
 Generated screenshots and reports are intentionally untracked. Accepted metrics,
 decisions, and remaining discrepancies are maintained in `scorecard.md`.
-

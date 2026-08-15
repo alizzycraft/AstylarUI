@@ -76,6 +76,18 @@ export class ParityReferenceComponent {
       elements[id] = this.measureElement(element, viewport);
     }
 
+    for (const id of fixture.expectedAbsentIds ?? []) {
+      const element = viewport.querySelector<HTMLElement>(`#${CSS.escape(id)}`);
+      if (!element) {
+        errors.push(`Missing expected hidden reference element: ${id}`);
+        continue;
+      }
+      const rect = element.getBoundingClientRect();
+      if (getComputedStyle(element).display !== 'none' || rect.width !== 0 || rect.height !== 0) {
+        errors.push(`Reference element expected display:none: ${id}`);
+      }
+    }
+
     viewport.dataset['parityReady'] = 'true';
     this.publishReport({
       ready: true,

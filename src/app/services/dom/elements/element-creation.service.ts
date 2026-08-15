@@ -599,16 +599,23 @@ export class ElementCreationService {
         continue;
       }
 
-      console.log(
-        `[InlineLayout] Creating inline child ${child.id ?? child.type} at index ${index}`,
-      );
-      const childMesh = this.createElement(dom, render, child, parent, styles);
-
       const childStyle = render.actions.style.findStyleForElement(
         child,
         styles,
         dom.context.elementStyles,
       );
+      if (childStyle?.display?.toLowerCase() === 'none') {
+        console.log(
+          `[InlineLayout] Skipping display:none child ${child.id ?? child.type}`,
+        );
+        continue;
+      }
+
+      console.log(
+        `[InlineLayout] Creating inline child ${child.id ?? child.type} at index ${index}`,
+      );
+      const childMesh = this.createElement(dom, render, child, parent, styles);
+
       const hasExplicitPositioning =
         childStyle?.top !== undefined || childStyle?.left !== undefined;
       if (hasExplicitPositioning) {
@@ -796,18 +803,21 @@ export class ElementCreationService {
       let parentHeight = 0;
       let parentWidth = 0;
       let paddingTop = 0;
+      let paddingLeft = 0;
 
       if (dom.context.elementDimensions.has(parent.name)) {
         const dims = dom.context.elementDimensions.get(parent.name)!;
         parentHeight = dims.height;
         parentWidth = dims.width;
         paddingTop = dims.padding.top;
+        paddingLeft = dims.padding.left;
       } else {
         const scale = render.actions.camera.getPixelToWorldScale();
         const bounds = parent.getBoundingInfo().boundingBox;
         parentHeight = (bounds.maximum.y - bounds.minimum.y) / scale;
         parentWidth = (bounds.maximum.x - bounds.minimum.x) / scale;
         paddingTop = 0;
+        paddingLeft = 0;
       }
 
       let cursorY = parentHeight / 2 - paddingTop;
@@ -823,6 +833,18 @@ export class ElementCreationService {
           continue;
         }
 
+        const resolvedStyle = render.actions.style.findStyleForElement(
+          child,
+          styles,
+          dom.context.elementStyles,
+        );
+        if (resolvedStyle?.display?.toLowerCase() === 'none') {
+          console.log(
+            `[BlockLayout] Skipping display:none child ${child.id ?? child.type}`,
+          );
+          continue;
+        }
+
         console.log(
           `[ElementCreation] Creating child ${child.type}#${child.id}`,
         );
@@ -834,11 +856,6 @@ export class ElementCreationService {
           styles,
         );
 
-        const resolvedStyle = render.actions.style.findStyleForElement(
-          child,
-          styles,
-          dom.context.elementStyles,
-        );
         const hasExplicitPositioning =
           resolvedStyle?.top !== undefined || resolvedStyle?.left !== undefined;
 
@@ -860,13 +877,17 @@ export class ElementCreationService {
           continue;
         }
 
+        let childWidth = 0;
         let childHeight = 0;
         if (dom.context.elementDimensions.has(childMesh.name)) {
-          childHeight = dom.context.elementDimensions.get(
+          const childDimensions = dom.context.elementDimensions.get(
             childMesh.name,
-          )!.height;
+          )!;
+          childWidth = childDimensions.width;
+          childHeight = childDimensions.height;
         } else {
           const bounds = childMesh.getBoundingInfo().boundingBox;
+          childWidth = (bounds.maximum.x - bounds.minimum.x) / scaleFactor;
           childHeight = (bounds.maximum.y - bounds.minimum.y) / scaleFactor;
         }
 
@@ -878,6 +899,8 @@ export class ElementCreationService {
         const marginBox = this.parseMarginBox(childResolvedStyle);
         const marginTop = marginBox.top;
         const marginBottom = marginBox.bottom;
+        const childCenterX =
+          -parentWidth / 2 + paddingLeft + marginBox.left + childWidth / 2;
 
         cursorY -= marginTop;
 
@@ -885,7 +908,7 @@ export class ElementCreationService {
 
         render.actions.mesh.positionTextMesh(
           childMesh,
-          childMesh.position.x,
+          childCenterX * scaleFactor,
           childCenterY * scaleFactor,
           childMesh.position.z,
         );
