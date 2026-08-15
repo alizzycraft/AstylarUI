@@ -223,4 +223,40 @@ describe('ElementDimensionService', () => {
     expect(result.x).toBe(-200);
     expect(result.y).toBe(168);
   });
+
+  it('resolves em and rem dimensions and offsets from their font bases', () => {
+    const service = new ElementDimensionService({} as never, {} as never, new DOMAncestryService());
+    const parent = { name: 'root-body' } as Mesh;
+    const dom = {
+      context: {
+        elementDimensions: new Map([
+          ['root-body', { width: 800, height: 600, padding: { top: 0, right: 0, bottom: 0, left: 0 } }],
+        ]),
+        elementStyles: new Map(),
+      },
+    } as unknown as BabylonDOM;
+    const render = {
+      actions: { style: { getElementTypeDefaults: () => ({ display: 'block' }) } },
+    } as unknown as BabylonRender;
+    const emStyle: StyleRule = {
+      selector: '#em-box', position: 'absolute', fontSize: '20px',
+      left: '2em', top: '1.5em', width: '12em', height: '5em',
+    };
+    const remStyle: StyleRule = {
+      selector: '#rem-box', position: 'absolute', fontSize: '24px',
+      left: '26rem', top: '12rem', width: '14rem', height: '5rem',
+    };
+
+    const em = service.calculateDimensions(dom, render, { id: 'em-box', type: 'div' }, emStyle, parent, [emStyle]);
+    const rem = service.calculateDimensions(dom, render, { id: 'rem-box', type: 'div' }, remStyle, parent, [remStyle]);
+
+    expect(em.width).toBe(240);
+    expect(em.height).toBe(100);
+    expect(em.x).toBe(-240);
+    expect(em.y).toBe(220);
+    expect(rem.width).toBe(224);
+    expect(rem.height).toBe(80);
+    expect(rem.x).toBe(128);
+    expect(rem.y).toBe(68);
+  });
 });

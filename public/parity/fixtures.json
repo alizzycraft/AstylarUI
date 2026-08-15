@@ -232,5 +232,11 @@
     "title": "Single-line text overflow ellipsis",
     "category": "typography",
     "expectedBehavior": "No-wrap text that exceeds a fixed content box is clipped and replaced by an ellipsis at the same glyph boundary as the browser."
+  },
+  {
+    "id": "font-relative-units",
+    "title": "Font-relative sizing and offsets",
+    "category": "box-model-units",
+    "expectedBehavior": "Em lengths use the element font size while rem lengths use the 16px parity root for dimensions and positioned offsets."
   }
 ]

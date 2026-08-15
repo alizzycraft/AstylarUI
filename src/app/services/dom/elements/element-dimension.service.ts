@@ -69,6 +69,7 @@ export class ElementDimensionService {
         const parentWidth = parentDims.width;
         const parentHeight = parentDims.height;
         const viewportDims = dom.context.elementDimensions.get('root-body') ?? parentDims;
+        const elementFontSize = Math.max(0, parseFloat(`${style?.fontSize ?? '16px'}`) || 16);
         const parentPadding = parentDims.padding;
         const parentStyle = dom.context.elementStyles.get(parent.name)?.normal;
         const parentBorderWidth = parentStyle?.borderWidth
@@ -130,6 +131,12 @@ export class ElementDimensionService {
                         width = this.calculateIntrinsicWidth(element, style, textMetrics, padding);
                         widthSource = 'width:auto-intrinsic';
                     }
+                } else if (widthValue.endsWith('rem')) {
+                    width = parseFloat(widthValue) * 16;
+                    widthSource = `width:${widthValue}`;
+                } else if (widthValue.endsWith('em')) {
+                    width = parseFloat(widthValue) * elementFontSize;
+                    widthSource = `width:${widthValue}`;
                 } else if (widthValue.endsWith('vw')) {
                     width = (viewportDims.width * parseFloat(widthValue)) / 100;
                     widthSource = `width:${widthValue}`;
@@ -178,6 +185,12 @@ export class ElementDimensionService {
                             heightSource = 'height:auto-intrinsic';
                         }
                     }
+                } else if (heightValue.endsWith('rem')) {
+                    height = parseFloat(heightValue) * 16;
+                    heightSource = `height:${heightValue}`;
+                } else if (heightValue.endsWith('em')) {
+                    height = parseFloat(heightValue) * elementFontSize;
+                    heightSource = `height:${heightValue}`;
                 } else if (heightValue.endsWith('vw')) {
                     height = (viewportDims.width * parseFloat(heightValue)) / 100;
                     heightSource = `height:${heightValue}`;
@@ -287,7 +300,13 @@ export class ElementDimensionService {
             const positionedReferenceHeight = parentHeight - parentBorderWidth * 2;
 
             if (style.left !== undefined) {
-                if (typeof style.left === 'string' && style.left.endsWith('vw')) {
+                if (typeof style.left === 'string' && style.left.endsWith('rem')) {
+                    const leftPixels = parseFloat(style.left) * 16;
+                    x = -(parentWidth / 2) + horizontalOriginInset + leftPixels + (width / 2);
+                } else if (typeof style.left === 'string' && style.left.endsWith('em')) {
+                    const leftPixels = parseFloat(style.left) * elementFontSize;
+                    x = -(parentWidth / 2) + horizontalOriginInset + leftPixels + (width / 2);
+                } else if (typeof style.left === 'string' && style.left.endsWith('vw')) {
                     const leftPixels = (viewportDims.width * parseFloat(style.left)) / 100;
                     x = -(parentWidth / 2) + horizontalOriginInset + leftPixels + (width / 2);
                 } else if (typeof style.left === 'string' && style.left.endsWith('vh')) {
@@ -311,7 +330,13 @@ export class ElementDimensionService {
             }
 
             if (style.top !== undefined) {
-                if (typeof style.top === 'string' && style.top.endsWith('vw')) {
+                if (typeof style.top === 'string' && style.top.endsWith('rem')) {
+                    const topPixels = parseFloat(style.top) * 16;
+                    y = (parentHeight / 2) - verticalOriginInset - topPixels - (height / 2);
+                } else if (typeof style.top === 'string' && style.top.endsWith('em')) {
+                    const topPixels = parseFloat(style.top) * elementFontSize;
+                    y = (parentHeight / 2) - verticalOriginInset - topPixels - (height / 2);
+                } else if (typeof style.top === 'string' && style.top.endsWith('vw')) {
                     const topPixels = (viewportDims.width * parseFloat(style.top)) / 100;
                     y = (parentHeight / 2) - verticalOriginInset - topPixels - (height / 2);
                 } else if (typeof style.top === 'string' && style.top.endsWith('vh')) {
