@@ -244,5 +244,11 @@
     "title": "Scoped descendant selectors",
     "category": "selectors-cascade",
     "expectedBehavior": "Descendant selectors match through multiple ancestors, remain scoped to the matching subtree, and combine the specificity of every compound."
+  },
+  {
+    "id": "child-combinator",
+    "title": "Direct-child combinator scoping",
+    "category": "selectors-cascade",
+    "expectedBehavior": "A child combinator matches only an immediate child, not an otherwise identical element nested more deeply."
   }
 ]

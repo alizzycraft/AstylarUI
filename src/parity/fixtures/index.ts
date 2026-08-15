@@ -39,6 +39,7 @@ import { flexOrderSelfFixture } from './flex-order-self.fixture';
 import { textOverflowEllipsisFixture } from './text-overflow-ellipsis.fixture';
 import { fontRelativeUnitsFixture } from './font-relative-units.fixture';
 import { descendantSelectorFixture } from './descendant-selector.fixture';
+import { childCombinatorFixture } from './child-combinator.fixture';
 import { ParityFixture } from '../parity.types';
 
 const fixtures: readonly ParityFixture[] = [
@@ -82,7 +83,8 @@ const fixtures: readonly ParityFixture[] = [
   flexOrderSelfFixture,
   textOverflowEllipsisFixture,
   fontRelativeUnitsFixture,
-  descendantSelectorFixture
+  descendantSelectorFixture,
+  childCombinatorFixture
 ];
 
 const fixturesById = new Map(fixtures.map((fixture) => [fixture.id, fixture]));

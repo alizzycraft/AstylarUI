@@ -352,20 +352,28 @@ export class StyleService {
 
     private getMatchingSpecificity(element: DOMElement, selector: string): number | null {
         const normalizedSelector = selector.trim();
-        if (!normalizedSelector || normalizedSelector.includes(':') || /[>+~]/.test(normalizedSelector)) {
+        if (!normalizedSelector || normalizedSelector.includes(':') || /[+~]/.test(normalizedSelector)) {
             return null;
         }
 
-        const compounds = normalizedSelector.split(/\s+/);
+        const parsedSelector = this.parseRelationalSelector(normalizedSelector);
+        if (!parsedSelector) return null;
+
+        const { compounds, combinators } = parsedSelector;
         let matchedElement: DOMElement | undefined = element;
         let specificity = this.getCompoundSpecificity(matchedElement, compounds[compounds.length - 1]);
         if (specificity === null) return null;
 
         for (let index = compounds.length - 2; index >= 0; index--) {
+            const combinator = combinators[index];
             let ancestor = this.ancestry.getParent(matchedElement);
             let ancestorSpecificity: number | null = null;
 
-            while (ancestor) {
+            if (combinator === 'child') {
+                if (ancestor) {
+                    ancestorSpecificity = this.getCompoundSpecificity(ancestor, compounds[index]);
+                }
+            } else while (ancestor) {
                 ancestorSpecificity = this.getCompoundSpecificity(ancestor, compounds[index]);
                 if (ancestorSpecificity !== null) break;
                 ancestor = this.ancestry.getParent(ancestor);
@@ -377,6 +385,23 @@ export class StyleService {
         }
 
         return specificity;
+    }
+
+    private parseRelationalSelector(selector: string): {
+        compounds: string[];
+        combinators: Array<'descendant' | 'child'>;
+    } | null {
+        const normalized = selector.replace(/\s*>\s*/g, '>');
+        const compounds = normalized.split(/>|\s+/);
+        const combinators = Array.from(normalized.matchAll(/>|\s+/g), match =>
+            match[0] === '>' ? 'child' as const : 'descendant' as const,
+        );
+
+        if (compounds.some(compound => !compound) || combinators.length !== compounds.length - 1) {
+            return null;
+        }
+
+        return { compounds, combinators };
     }
 
     private getCompoundSpecificity(element: DOMElement, selector: string): number | null {

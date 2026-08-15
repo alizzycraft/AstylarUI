@@ -89,4 +89,24 @@ describe('StyleService cascade', () => {
     expect(service.matchesSelector(target, '.selector-card .badge')).toBeTrue();
     expect(service.matchesSelector(outside, '.selector-card .badge')).toBeFalse();
   });
+
+  it('matches child combinators only against the immediate parent', () => {
+    const card: DOMElement = { type: 'section', class: 'child-card' };
+    const direct: DOMElement = { type: 'div', class: 'status-chip' };
+    const wrapper: DOMElement = { type: 'div', class: 'wrapper' };
+    const nested: DOMElement = { type: 'div', class: 'status-chip' };
+    ancestry.setParent(direct, card);
+    ancestry.setParent(wrapper, card);
+    ancestry.setParent(nested, wrapper);
+
+    const styles: StyleRule[] = [
+      { selector: '.status-chip', background: '#fee2e2' },
+      { selector: '.child-card > .status-chip', background: '#dbeafe' },
+    ];
+
+    expect(service.findStyleForElement(direct, styles)?.background).toBe('#dbeafe');
+    expect(service.findStyleForElement(nested, styles)?.background).toBe('#fee2e2');
+    expect(service.matchesSelector(direct, '.child-card>.status-chip')).toBeTrue();
+    expect(service.matchesSelector(nested, '.child-card > .status-chip')).toBeFalse();
+  });
 });
