@@ -107,6 +107,33 @@ describe('MultiLineTextRendererService', () => {
     expect(positionedLines[2].y).toBe(64); // fontSize + 2 * (fontSize * lineHeight)
   });
 
+  it('should truncate overflowing nowrap text with a single ellipsis glyph', () => {
+    const style: TextStyleProperties = {
+      fontFamily: 'Arial',
+      fontSize: 18,
+      fontWeight: 'normal',
+      fontStyle: 'normal',
+      color: '#000000',
+      textAlign: 'left',
+      verticalAlign: 'baseline',
+      lineHeight: 1.4,
+      letterSpacing: 0,
+      wordSpacing: 0,
+      whiteSpace: 'nowrap',
+      wordWrap: 'normal',
+      textOverflow: 'ellipsis',
+      textDecoration: 'none',
+      textTransform: 'none'
+    };
+
+    const lines = service.wrapText('A deliberately long navigation label', 150, style);
+    const visible = service.handleTextOverflow(lines, 150, 28, style);
+
+    expect(visible.length).toBe(1);
+    expect(visible[0].text.endsWith('\u2026')).toBeTrue();
+    expect(visible[0].width).toBeLessThanOrEqual(150);
+  });
+
   it('should handle white-space processing correctly', () => {
     const normalText = service.handleWhiteSpace('  Multiple   spaces  \n  and  newlines  ', 'normal');
     expect(normalText).toBe('Multiple spaces and newlines');

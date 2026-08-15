@@ -331,21 +331,33 @@ export class BabylonDOMRendererService {
         `[TEXT DEBUG] ${element.id}: available content box ${availableWidthPx ?? -1}x${availableHeightPx ?? -1}px (padding L:${paddingPx.left}, R:${paddingPx.right}, T:${paddingPx.top}, B:${paddingPx.bottom})`,
       );
 
+      const textStyleProperties = this.textRenderingService[
+        "parseElementTextStyle"
+      ](element, textStyle);
+      const renderedText =
+        textStyleProperties.textOverflow === "ellipsis" &&
+        availableWidthPx !== undefined &&
+        availableHeightPx !== undefined
+          ? this.textRenderingService.resolveOverflowText(
+              element.textContent,
+              textStyleProperties,
+              availableWidthPx,
+              availableHeightPx,
+            )
+          : element.textContent;
+
       // Render text to texture using available width for wrapping
       const textTexture = this.textRenderingService.renderTextToTexture(
         element,
-        element.textContent,
+        renderedText,
         textStyle,
         availableWidthPx,
       );
 
       // Measure text dimensions (CSS px)
-      const textStyleProperties = this.textRenderingService[
-        "parseElementTextStyle"
-      ](element, textStyle);
       const measuredDimensions =
         this.textRenderingService.calculateTextDimensions(
-          element.textContent,
+          renderedText,
           textStyleProperties,
           availableWidthPx,
         );

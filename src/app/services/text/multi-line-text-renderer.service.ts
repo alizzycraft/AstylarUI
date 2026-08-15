@@ -507,7 +507,7 @@ export class MultiLineTextRendererService {
 
     this.applyTextStylingToContext(ctx, style);
     
-    const ellipsis = '…';
+    const ellipsis = '\u2026';
     const ellipsisWidth = ctx.measureText(ellipsis).width;
     const availableWidth = maxWidth - ellipsisWidth;
 

@@ -70,6 +70,18 @@ export class TextRenderingService implements TextCacheManager {
     };
   }
 
+  resolveOverflowText(
+    text: string,
+    style: TextStyleProperties,
+    maxWidth: number,
+    maxHeight: number
+  ): string {
+    return this.textCanvasRenderer
+      .handleTextOverflow(text, style, maxWidth, maxHeight)
+      .map(line => line.text)
+      .join('\n');
+  }
+
   private convertCssMetricsToWorld(cssMetrics: TextLayoutMetrics, scale: number): TextLayoutWorldMetrics {
     const toWorld = (value: number) => value * scale;
 

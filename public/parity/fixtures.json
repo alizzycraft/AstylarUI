@@ -226,5 +226,11 @@
     "title": "Flex order and individual alignment",
     "category": "flexbox",
     "expectedBehavior": "Flex items paint in ascending order while align-self overrides the container cross-axis alignment for individual items."
+  },
+  {
+    "id": "text-overflow-ellipsis",
+    "title": "Single-line text overflow ellipsis",
+    "category": "typography",
+    "expectedBehavior": "No-wrap text that exceeds a fixed content box is clipped and replaced by an ellipsis at the same glyph boundary as the browser."
   }
 ]
