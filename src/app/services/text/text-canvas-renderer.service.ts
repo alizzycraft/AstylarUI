@@ -143,8 +143,6 @@ export class TextCanvasRendererService {
       linesWithPositions.push({ text: '', width: 0, y: style.fontSize });
     }
 
-    const letterSpacing = style.letterSpacing ?? 0;
-    const wordSpacing = style.wordSpacing ?? 0;
     const approxAscent = style.fontSize * 0.8;
     const approxDescent = style.fontSize * 0.2;
 
@@ -185,10 +183,6 @@ export class TextCanvasRendererService {
         // This effectively "assigns" the kerning adjustment to the character itself
         const charWidth = currentEndX - previousCharEndX;
 
-        // Since fillText ignores manual letterSpacing/wordSpacing on the canvas unless manually handled,
-        // and we are rendering full lines, we should NOT add extra spacing here to match the render.
-        const advanceSpacing = 0;
-
         // For height metrics, we still might want individual character metrics if possible,
         // but usually line metrics are sufficient. Let's try to get specific char metrics if needed
         // but usually using the line's max or the char's own measureText for height is okay.
@@ -207,14 +201,11 @@ export class TextCanvasRendererService {
           column: charIndex,
           x: previousCharEndX, // Start at previous end
           width: charWidth,
-          advance: charWidth + advanceSpacing,
+          advance: charWidth,
           isLineBreak: false
         });
 
-        previousCharEndX = currentEndX + advanceSpacing;
-
-        // Note: cursorX isn't strictly needed variable since we track previousCharEndX, 
-        // but we can keep it for parity if we want to track total width with manual spacing
+        previousCharEndX = currentEndX;
         cursorX = previousCharEndX;
 
         globalIndex += 1;
@@ -423,6 +414,8 @@ export class TextCanvasRendererService {
     ctx.fillStyle = style.color;
     ctx.textAlign = this.mapTextAlign(style.textAlign);
     ctx.textBaseline = this.mapVerticalAlign(style.verticalAlign);
+    ctx.letterSpacing = `${style.letterSpacing ?? 0}px`;
+    ctx.wordSpacing = `${style.wordSpacing ?? 0}px`;
 
     // Note: Text antialiasing is handled automatically by the browser
   }

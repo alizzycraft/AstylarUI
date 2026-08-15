@@ -181,6 +181,8 @@ export class MultiLineTextRendererService {
     ctx.font = `${style.fontStyle} ${style.fontWeight} ${style.fontSize}px ${style.fontFamily}`;
     ctx.textAlign = 'left'; // Always use left for measurement
     ctx.textBaseline = 'alphabetic';
+    ctx.letterSpacing = `${style.letterSpacing ?? 0}px`;
+    ctx.wordSpacing = `${style.wordSpacing ?? 0}px`;
   }
 
   /**

@@ -154,5 +154,11 @@
     "title": "Minimum and maximum size constraints",
     "category": "box-model-units",
     "expectedBehavior": "Minimum constraints expand undersized boxes and maximum constraints shrink oversized boxes on both axes."
+  },
+  {
+    "id": "text-spacing",
+    "title": "Letter and word spacing",
+    "category": "typography",
+    "expectedBehavior": "Letter-spacing and word-spacing affect both painted glyph positions and the intrinsic width of an auto-sized inline box."
   }
 ]

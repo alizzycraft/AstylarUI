@@ -24,6 +24,7 @@ import { styledTextInputFixture } from './styled-text-input.fixture';
 import { checkboxStatesFixture } from './checkbox-states.fixture';
 import { zIndexOverlapFixture } from './z-index-overlap.fixture';
 import { minMaxConstraintsFixture } from './min-max-constraints.fixture';
+import { textSpacingFixture } from './text-spacing.fixture';
 import { ParityFixture } from '../parity.types';
 
 const fixtures: readonly ParityFixture[] = [
@@ -52,7 +53,8 @@ const fixtures: readonly ParityFixture[] = [
   styledTextInputFixture,
   checkboxStatesFixture,
   zIndexOverlapFixture,
-  minMaxConstraintsFixture
+  minMaxConstraintsFixture,
+  textSpacingFixture
 ];
 
 const fixturesById = new Map(fixtures.map((fixture) => [fixture.id, fixture]));
