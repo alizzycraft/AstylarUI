@@ -43,5 +43,6 @@ logic or mask meaningful screenshot regions.
 - Browser page exceptions, missing meshes, timeouts, and non-finite geometry fail
   the parity run.
 
-Generated screenshots and reports are intentionally untracked. Accepted metrics,
-decisions, and remaining discrepancies are maintained in `scorecard.md`.
+Generated screenshots and reports are intentionally untracked. Accepted Phase 1
+metrics are maintained in `scorecard.md`; active Application Web Parity v2
+progress is maintained in `scorecard-v2.md`.
