@@ -325,5 +325,11 @@
     "title": "Composed settings form",
     "category": "composed-application",
     "expectedBehavior": "A settings panel composes labels, text and select controls, checked and disabled states, and right-aligned actions without renderer-specific layout adjustments."
+  },
+  {
+    "id": "composed-modal",
+    "title": "Composed modal and backdrop",
+    "category": "composed-application",
+    "expectedBehavior": "A fixed backdrop and modal paint above an application surface in z-index order while nested modal typography and actions retain their flex geometry."
   }
 ]

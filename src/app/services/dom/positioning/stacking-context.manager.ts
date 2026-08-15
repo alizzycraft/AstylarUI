@@ -10,6 +10,7 @@ import { DOMAncestryService } from '../dom-ancestry.service';
   providedIn: 'root'
 })
 export class StackingContextManager implements IStackingContextManager {
+  private readonly rootContextStep = 0.25;
   private stackingContexts: Map<string, StackingContext> = new Map();
   private rootStackingContext: StackingContext | null = null;
   private resolvedStyles = new WeakMap<DOMElement, Partial<StyleRule>>();
@@ -222,8 +223,10 @@ export class StackingContextManager implements IStackingContextManager {
   }
 
   private rootContextDepth(zIndex: number): number {
-    const normalizedZIndex = Math.atan(zIndex) * (20 / Math.PI);
-    return 0.01 + normalizedZIndex * 0.1;
+    // Root contexts need enough physical separation to contain their local
+    // descendant paint bands. Compressing large adjacent z-index values with
+    // atan made values such as 20 and 21 effectively coplanar at the camera.
+    return 0.01 + zIndex * this.rootContextStep;
   }
 
   private findNearestStackingAncestor(element: DOMElement | undefined): DOMElement | undefined {

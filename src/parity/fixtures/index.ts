@@ -52,6 +52,7 @@ import { gridExplicitTracksFixture } from './grid-explicit-tracks.fixture';
 import { composedDashboardFixture } from './composed-dashboard.fixture';
 import { composedResponsiveGalleryFixture } from './composed-responsive-gallery.fixture';
 import { composedSettingsFormFixture } from './composed-settings-form.fixture';
+import { composedModalFixture } from './composed-modal.fixture';
 import { ParityFixture } from '../parity.types';
 
 const fixtures: readonly ParityFixture[] = [
@@ -108,7 +109,8 @@ const fixtures: readonly ParityFixture[] = [
   gridExplicitTracksFixture,
   composedDashboardFixture,
   composedResponsiveGalleryFixture,
-  composedSettingsFormFixture
+  composedSettingsFormFixture,
+  composedModalFixture
 ];
 
 const fixturesById = new Map(fixtures.map((fixture) => [fixture.id, fixture]));

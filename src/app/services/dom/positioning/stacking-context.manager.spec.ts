@@ -31,4 +31,19 @@ describe('StackingContextManager', () => {
     expect(lowerDepth + childLocalDepth).toBeLessThan(upperDepth);
     expect(lowerDepth + childLocalDepth).toBeGreaterThan(lowerDepth);
   });
+
+  it('reserves a stable paint band between adjacent root stacking contexts', () => {
+    const manager = new StackingContextManager();
+    const backdrop = { type: 'div' as const, id: 'backdrop' };
+    const dialog = { type: 'section' as const, id: 'dialog' };
+
+    const backdropDepth = manager.calculateZPosition(backdrop, {
+      selector: '#backdrop', position: 'fixed', zIndex: '20', opacity: '0.6',
+    });
+    const dialogDepth = manager.calculateZPosition(dialog, {
+      selector: '#dialog', position: 'fixed', zIndex: '21',
+    });
+
+    expect(dialogDepth - backdropDepth).toBeGreaterThan(0.2);
+  });
 });
