@@ -11,6 +11,11 @@ const BASE_URL = process.env['ASTYLAR_PARITY_BASE_URL'] ?? 'http://127.0.0.1:430
 const ARTIFACTS_DIR = path.join(ROOT, 'artifacts', 'parity');
 const enforceThresholds = process.argv.includes('--enforce');
 const shouldStartServer = !process.env['ASTYLAR_PARITY_BASE_URL'];
+const viewportProfiles = {
+  desktop: { id: 'desktop', width: 800, height: 600, deviceScaleFactor: 1 },
+  tablet: { id: 'tablet', width: 640, height: 720, deviceScaleFactor: 1 },
+  mobile: { id: 'mobile', width: 390, height: 844, deviceScaleFactor: 1 }
+};
 
 const thresholds = {
   edgeTolerancePx: 2,
@@ -44,16 +49,28 @@ try {
     headless: true
   });
 
-  const context = await browser.newContext({
-    viewport: { width: 800, height: 600 },
-    deviceScaleFactor: 1,
-    colorScheme: 'light',
-    reducedMotion: 'reduce'
-  });
+  const contexts = new Map();
   const results = [];
 
   for (const fixture of fixtures) {
-    results.push(await measureFixture(context, fixture));
+    const viewportIds = fixture.viewportIds ?? ['desktop'];
+    for (const viewportId of viewportIds) {
+      const viewport = viewportProfiles[viewportId];
+      if (!viewport) {
+        throw new Error(`Unknown viewport profile "${viewportId}" for fixture "${fixture.id}"`);
+      }
+      let context = contexts.get(viewportId);
+      if (!context) {
+        context = await browser.newContext({
+          viewport: { width: viewport.width, height: viewport.height },
+          deviceScaleFactor: viewport.deviceScaleFactor,
+          colorScheme: 'light',
+          reducedMotion: 'reduce'
+        });
+        contexts.set(viewportId, context);
+      }
+      results.push(await measureFixture(context, fixture, viewport));
+    }
   }
 
   const summary = summarize(results);
@@ -137,19 +154,22 @@ async function waitForServer(url) {
   throw new Error(`Timed out waiting for ${url}: ${String(lastError)}`);
 }
 
-async function measureFixture(context, fixture) {
-  const fixtureDir = path.join(ARTIFACTS_DIR, fixture.id);
+async function measureFixture(context, fixture, viewport) {
+  const fixtureDir = viewport.id === 'desktop'
+    ? path.join(ARTIFACTS_DIR, fixture.id)
+    : path.join(ARTIFACTS_DIR, fixture.id, viewport.id);
   await mkdir(fixtureDir, { recursive: true });
+  const viewportQuery = `?viewport=${encodeURIComponent(viewport.id)}`;
 
   const reference = await captureMode(
     context,
-    `${BASE_URL}/parity/reference/${encodeURIComponent(fixture.id)}`,
+    `${BASE_URL}/parity/reference/${encodeURIComponent(fixture.id)}${viewportQuery}`,
     '#parity-reference-viewport',
     path.join(fixtureDir, 'reference.png')
   );
   const astylar = await captureMode(
     context,
-    `${BASE_URL}/parity/astylar/${encodeURIComponent(fixture.id)}`,
+    `${BASE_URL}/parity/astylar/${encodeURIComponent(fixture.id)}${viewportQuery}`,
     '#parity-astylar-canvas',
     path.join(fixtureDir, 'astylar.png')
   );
@@ -167,6 +187,7 @@ async function measureFixture(context, fixture) {
 
   return {
     id: fixture.id,
+    viewport,
     title: fixture.title,
     category: fixture.category,
     expectedBehavior: fixture.expectedBehavior,
@@ -330,7 +351,9 @@ function summarize(results) {
   );
 
   return {
-    fixtureCount: results.length,
+    fixtureCount: new Set(results.map((result) => result.id)).size,
+    renderCount: results.length,
+    viewportCount: new Set(results.map((result) => result.viewport.id)).size,
     medianSsim,
     minimumSsim: similarities[0] ?? 0,
     edgesWithinTolerance,
@@ -351,6 +374,8 @@ function summarize(results) {
 
 function printSummary(report) {
   console.log(`Parity fixtures: ${report.summary.fixtureCount}`);
+  console.log(`Parity renders: ${report.summary.renderCount}`);
+  console.log(`Viewport profiles exercised: ${report.summary.viewportCount}`);
   console.log(`Median SSIM: ${report.summary.medianSsim.toFixed(4)}`);
   console.log(`Minimum SSIM: ${report.summary.minimumSsim.toFixed(4)}`);
   console.log(
@@ -363,7 +388,7 @@ function printSummary(report) {
 
   for (const fixture of report.fixtures) {
     console.log(
-      `${fixture.id}: SSIM=${fixture.screenshotSimilarity.toFixed(4)}, maxEdge=${fixture.geometry.maximumEdgeError ?? 'n/a'}px, errors=${fixture.runtimeErrors.length}`
+      `${fixture.id}@${fixture.viewport.id}: SSIM=${fixture.screenshotSimilarity.toFixed(4)}, maxEdge=${fixture.geometry.maximumEdgeError ?? 'n/a'}px, errors=${fixture.runtimeErrors.length}`
     );
   }
 }

@@ -9,7 +9,7 @@ import {
 import { ActivatedRoute } from '@angular/router';
 import { getParityFixture } from './fixtures';
 import {
-  PARITY_VIEWPORT,
+  getParityViewport,
   ParityElementMeasurement,
   ParityRect,
   ParityRuntimeReport
@@ -17,18 +17,15 @@ import {
 
 @Component({
   selector: 'app-parity-reference',
-  template: `<div #viewport id="parity-reference-viewport"></div>`,
+  template: `<div #viewport id="parity-reference-viewport" [style.width.px]="parityViewport.width" [style.height.px]="parityViewport.height"></div>`,
+  host: {
+    '[style.width.px]': 'parityViewport.width',
+    '[style.height.px]': 'parityViewport.height',
+  },
   styles: `
     :host {
       display: block;
-      width: 800px;
-      height: 600px;
       overflow: hidden;
-    }
-
-    #parity-reference-viewport {
-      width: 800px;
-      height: 600px;
     }
   `
 })
@@ -36,6 +33,9 @@ export class ParityReferenceComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly document = inject(DOCUMENT);
   private readonly viewport = viewChild.required<ElementRef<HTMLDivElement>>('viewport');
+  protected readonly parityViewport = getParityViewport(
+    this.route.snapshot.queryParamMap.get('viewport')
+  );
 
   constructor() {
     afterNextRender(() => void this.initialize());
@@ -50,7 +50,7 @@ export class ParityReferenceComponent {
         ready: true,
         fixtureId,
         mode: 'reference',
-        viewport: PARITY_VIEWPORT,
+        viewport: this.parityViewport,
         elements: {},
         errors: [`Unknown parity fixture: ${fixtureId}`]
       });
@@ -93,7 +93,7 @@ export class ParityReferenceComponent {
       ready: true,
       fixtureId,
       mode: 'reference',
-      viewport: PARITY_VIEWPORT,
+      viewport: this.parityViewport,
       elements,
       errors
     });

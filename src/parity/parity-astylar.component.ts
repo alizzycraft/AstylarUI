@@ -21,7 +21,7 @@ import { Astylar } from '../lib';
 import { BabylonElementManagerService } from '../app/services/dom/element-manager.service';
 import { getParityFixture } from './fixtures';
 import {
-  PARITY_VIEWPORT,
+  getParityViewport,
   ParityElementMeasurement,
   ParityRect,
   ParityRuntimeReport
@@ -33,24 +33,26 @@ import {
     <canvas
       #canvas
       id="parity-astylar-canvas"
-      width="800"
-      height="600"
+      [attr.width]="parityViewport.width"
+      [attr.height]="parityViewport.height"
+      [style.width.px]="parityViewport.width"
+      [style.height.px]="parityViewport.height"
       aria-label="Astylar parity render"
     ></canvas>
   `,
+  host: {
+    '[style.width.px]': 'parityViewport.width',
+    '[style.height.px]': 'parityViewport.height',
+  },
   styles: `
     :host {
       display: block;
-      width: 800px;
-      height: 600px;
       overflow: hidden;
       background: #000;
     }
 
     canvas {
       display: block;
-      width: 800px;
-      height: 600px;
       outline: none;
       touch-action: none;
     }
@@ -63,6 +65,9 @@ export class ParityAstylarComponent {
   private readonly zone = inject(NgZone);
   private readonly destroyRef = inject(DestroyRef);
   private readonly canvas = viewChild.required<ElementRef<HTMLCanvasElement>>('canvas');
+  protected readonly parityViewport = getParityViewport(
+    this.route.snapshot.queryParamMap.get('viewport')
+  );
 
   private scene?: Scene;
 
@@ -86,7 +91,7 @@ export class ParityAstylarComponent {
         ready: true,
         fixtureId,
         mode: 'astylar',
-        viewport: PARITY_VIEWPORT,
+        viewport: this.parityViewport,
         elements: {},
         errors: [`Unknown parity fixture: ${fixtureId}`]
       });
@@ -232,7 +237,7 @@ export class ParityAstylarComponent {
       ready: true,
       fixtureId,
       mode: 'astylar',
-      viewport: PARITY_VIEWPORT,
+      viewport: this.parityViewport,
       elements,
       errors
     };
@@ -258,8 +263,8 @@ export class ParityAstylarComponent {
         Vector3.Project(point, Matrix.IdentityReadOnly, scene.getTransformMatrix(), viewport)
       );
 
-    const renderToCssX = engine.getRenderWidth() / PARITY_VIEWPORT.width;
-    const renderToCssY = engine.getRenderHeight() / PARITY_VIEWPORT.height;
+    const renderToCssX = engine.getRenderWidth() / this.parityViewport.width;
+    const renderToCssY = engine.getRenderHeight() / this.parityViewport.height;
     const left = Math.min(...projected.map((point) => point.x)) / renderToCssX;
     const right = Math.max(...projected.map((point) => point.x)) / renderToCssX;
     const top = Math.min(...projected.map((point) => point.y)) / renderToCssY;

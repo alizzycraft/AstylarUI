@@ -16,6 +16,11 @@ and writes current artifacts to `artifacts/parity/`. Use `npm run parity:check`
 to enforce the final Core Web Parity v1 thresholds; that command is expected to
 remain red until the full 40-fixture goal is complete.
 
+Fixtures default to the deterministic `desktop` profile (`800x600`). A fixture
+can set `viewportIds` to any combination of `desktop` (`800x600`), `tablet`
+(`640x720`), and `mobile` (`390x844`); each selected profile is measured as a
+separate render case while the fixture is counted once.
+
 Set `ASTYLAR_PARITY_BASE_URL` to measure an already-running server. Set
 `ASTYLAR_PARITY_BROWSER_CHANNEL` if the local Chromium channel is not `chrome`.
 

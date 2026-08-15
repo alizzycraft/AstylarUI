@@ -1,10 +1,23 @@
 import { SiteData } from '../app/types/site-data';
 
-export const PARITY_VIEWPORT = {
-  width: 800,
-  height: 600,
-  deviceScaleFactor: 1
-} as const;
+export interface ParityViewport {
+  id: 'desktop' | 'tablet' | 'mobile';
+  width: number;
+  height: number;
+  deviceScaleFactor: number;
+}
+
+export const PARITY_VIEWPORTS: Record<ParityViewport['id'], ParityViewport> = {
+  desktop: { id: 'desktop', width: 800, height: 600, deviceScaleFactor: 1 },
+  tablet: { id: 'tablet', width: 640, height: 720, deviceScaleFactor: 1 },
+  mobile: { id: 'mobile', width: 390, height: 844, deviceScaleFactor: 1 },
+};
+
+export const PARITY_VIEWPORT = PARITY_VIEWPORTS.desktop;
+
+export function getParityViewport(id: string | null | undefined): ParityViewport {
+  return PARITY_VIEWPORTS[id as ParityViewport['id']] ?? PARITY_VIEWPORT;
+}
 
 export type ParityCategory =
   | 'cascade-defaults'
@@ -29,6 +42,7 @@ export interface ParityFixture {
   category: ParityCategory;
   expectedBehavior: string;
   measurementIds: string[];
+  viewportIds?: ParityViewport['id'][];
   expectedAbsentIds?: string[];
   reference: {
     html: string;
@@ -62,7 +76,7 @@ export interface ParityRuntimeReport {
   ready: boolean;
   fixtureId: string;
   mode: 'reference' | 'astylar';
-  viewport: typeof PARITY_VIEWPORT;
+  viewport: ParityViewport;
   elements: Record<string, ParityElementMeasurement>;
   errors: string[];
 }

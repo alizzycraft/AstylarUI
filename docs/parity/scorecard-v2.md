@@ -11,7 +11,7 @@ This scorecard tracks the second parity phase: making ordinary application-orien
 | Total parity fixtures | 45 | 65 | Open |
 | New Phase 2 fixtures | 5 | 25 | Open |
 | Composed application/component fixtures | 0 | 10 | Open |
-| Deterministic viewport sizes | 1 (`800x600`) | 3 | Open |
+| Deterministic viewport sizes | 3 available; 1 exercised | 3 exercised | In progress |
 | Median SSIM | 0.9953 | >= 0.98 | Passing baseline |
 | Minimum fixture SSIM | 0.9805 | >= 0.95 | Passing baseline |
 | Edges within 2 px | 100% | >= 95% | Passing baseline |
@@ -63,6 +63,7 @@ The committed 40-fixture Phase 1 suite was rerun before Phase 2 work began. It p
 | Adjacent sibling | Immediate sibling retained base colors; SSIM `0.9924` | Resolved the previous sibling from authored parent child order | Fixture SSIM `0.9930`; visual output aligned; 100% edges within 2 px; exact text; 55 tests and both builds pass | `fix: support adjacent sibling selectors` |
 | General sibling | Both later siblings retained base colors; SSIM `0.9865` | Searched authored preceding siblings in right-to-left selector order | Fixture SSIM `0.9868`; visual output aligned; 100% edges within 2 px; exact text; 56 tests and both builds pass | `fix: support general sibling selectors` |
 | Structural pseudo-classes | First and last items retained neutral colors; SSIM `0.9916` | Matched first/last authored siblings with class-level pseudo specificity | Fixture SSIM `0.9940`; visual output aligned; 100% edges within 2 px; exact text; 57 tests and both builds pass | `fix: support structural pseudo selectors` |
+| Multi-viewport harness | One hard-coded `800x600` browser context and component surface | Added named desktop, tablet, and mobile profiles with per-fixture selection and render-case accounting | All 45 existing fixtures remain green at desktop; profile and render counts are reported | `test: add deterministic viewport profiles` |
 
 ## Remaining work
 
@@ -76,4 +77,4 @@ The committed 40-fixture Phase 1 suite was rerun before Phase 2 work began. It p
 
 ## Next target
 
-Generalize the parity harness from one hard-coded viewport to three deterministic viewport profiles, retaining Phase 1 at `800x600` while enabling explicit responsive fixture coverage.
+Add the first three-profile responsive fixture using viewport-relative dimensions, proving the browser and Astylar receive the same selected dimensions before media-query support is introduced.
