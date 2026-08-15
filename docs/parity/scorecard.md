@@ -10,18 +10,18 @@ Last updated: 2026-08-15
 | Block and inline flow | 3 | Block, inline, inline-block, none, inline-flex |
 | Box model and sizing units | 4 | Width/height, min/max, padding, margin, borders, px/%/viewport/font units |
 | Typography and multiline text | 3 | Fonts, line height, wrapping, whitespace, alignment, overflow |
-| Flexbox | 3 | Direction, wrap, basis, grow/shrink, gap, order, alignment |
+| Flexbox | 4 | Direction, wrap, basis, grow/shrink, gap, order, alignment |
 | Positioning and stacking | 2 | Static, relative, absolute, fixed, containing blocks, z-order |
 | Lists, tables, and images | 7 | Representative structural and replaced content |
 | Forms and interactive states | 3 | Basic visible controls, focus, checked/disabled states |
-| **Total** | **28 / 40** | Balanced coverage required before completion |
+| **Total** | **29 / 40** | Balanced coverage required before completion |
 
 ## Current Baseline
 
 | Metric | Current result | Core Web Parity v1 threshold |
 | --- | ---: | ---: |
-| Fixtures | 28 | At least 40 |
-| Median SSIM | 0.9964 | At least 0.98 |
+| Fixtures | 29 | At least 40 |
+| Median SSIM | 0.9956 | At least 0.98 |
 | Minimum fixture SSIM | 0.9805 | At least 0.95 |
 | Geometry edges within 2px | 100% | At least 95% |
 | Maximum edge error | 0.203px | At most 5px or documented |
@@ -29,7 +29,7 @@ Last updated: 2026-08-15
 | Runtime errors | 0 | 0 |
 
 All current fixtures pass every per-fixture quality threshold. The suite does
-not meet the completion gate because coverage is still 28 of 40 fixtures.
+not meet the completion gate because coverage is still 29 of 40 fixtures.
 
 ## Decisions
 
@@ -107,6 +107,9 @@ not meet the completion gate because coverage is still 28 of 40 fixtures.
 28. `inline-flex` participates in its parent's inline formatting context while
     using the same internal flex layout algorithm as a block-level `flex`
     container. Reference fixtures omit whitespace text nodes absent from JSON DOM.
+29. Wrapped row flex layout is covered with explicit basis, independent row and
+    column gaps, and `align-content: space-between`; the existing multi-line flex
+    algorithm matches the browser for this representative case.
 
 ## Iteration History
 
@@ -128,6 +131,7 @@ not meet the completion gate because coverage is still 28 of 40 fixtures.
 | Minimum and maximum constraints | 26-fixture attempt; 99.2% edges within 2px; max error 110.002px; constraint fixture SSIM 0.9668 | 26 fixtures; median SSIM 0.9964; minimum 0.9805; 100% edges; max error 0.203px; exact text; constraint fixture 1.0000 SSIM | Dimension resolution applied minimum constraints but ignored `max-width` and `max-height` entirely |
 | Letter and word spacing | 27-fixture attempt; 99.6% edges within 2px; max error 46.005px; spacing fixture SSIM 0.9891 | 27 fixtures; median SSIM 0.9964; minimum 0.9805; 100% edges; max error 0.203px; exact text; spacing fixture 0.9971 SSIM | Text spacing was parsed but omitted from every canvas measurement and paint context, leaving auto width and glyph positions unspaced |
 | Inline flex outer and inner flow | 28-fixture attempt; 93.7% edges within 2px; max error 100.008px; inline-flex fixture SSIM 0.9637 | 28 fixtures; median SSIM 0.9964; minimum 0.9805; 100% edges; max error 0.203px; exact text; inline-flex fixture 0.9856 SSIM | The outer inline layout recognized `inline-flex`, but the flex-container predicate did not, so each container's children were block-stacked instead of flex-laid out |
+| Wrapped flex lines | No deterministic flex-wrap comparison | 29 fixtures; median SSIM 0.9956; minimum 0.9805; 100% edges; max error 0.203px; exact text; wrap fixture 0.9836 SSIM and 0.005px max edge error | Added positive coverage confirming that line formation, flex basis, axis-specific gaps, and `align-content: space-between` already agree with Chromium |
 
 ## Known Intentional Deviations
 
@@ -137,6 +141,6 @@ block geometry by at most 0.203px; exact font-engine-specific leading is out of 
 
 ## Recommended Next Target
 
-Add flex wrapping and negative/auto stacking cases, then broaden forms and
-typography states. These remain the least represented foundational behaviors
-after explicit inline-flex coverage.
+Add negative/auto stacking cases, then broaden forms and typography states.
+These remain the least represented foundational behaviors after explicit flex
+wrapping coverage.
