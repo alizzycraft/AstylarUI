@@ -76,5 +76,11 @@
     "title": "Flex growth with gap",
     "category": "flexbox",
     "expectedBehavior": "Flex growth distributes content-box free space by grow factor after reserving the main-axis gap exactly once."
+  },
+  {
+    "id": "semantic-default-flow",
+    "title": "Heading and paragraph browser defaults",
+    "category": "cascade-defaults",
+    "expectedBehavior": "Unstyled headings and paragraphs use centralized browser-like typography, auto block sizing, and vertical margins."
   }
 ]

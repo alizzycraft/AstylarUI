@@ -138,7 +138,7 @@ export class ElementDimensionService {
                 width = widthValue;
                 widthSource = `width:${widthValue}`;
             }
-        } else if (isInlineLevel || hasTextContent || element.type === 'button' || element.type === 'input') {
+        } else if (isInlineLevel || element.type === 'button' || element.type === 'input') {
             width = this.calculateIntrinsicWidth(element, style, textMetrics, padding);
             widthSource = isInlineLevel ? 'inline-intrinsic' : 'text-intrinsic';
         }
@@ -180,11 +180,13 @@ export class ElementDimensionService {
                 height = heightValue;
                 heightSource = `height:${heightValue}`;
             }
-        } else if (isInlineLevel) {
+        } else if (isInlineLevel || hasTextContent) {
             const intrinsicHeight = this.calculateIntrinsicHeight(element, textMetrics, padding);
             if (intrinsicHeight !== null) {
                 height = intrinsicHeight;
-                heightSource = 'inline-intrinsic';
+                heightSource = isInlineLevel
+                    ? 'inline-intrinsic'
+                    : 'block-text-intrinsic';
             }
         }
 
@@ -472,7 +474,7 @@ export class ElementDimensionService {
             fontSize: '16px',
             fontWeight: 'normal',
             fontStyle: 'normal',
-            lineHeight: '1.2',
+            lineHeight: 'normal',
             color: '#000000',
             textAlign: 'left',
             whiteSpace: 'normal'

@@ -6,7 +6,7 @@ Last updated: 2026-08-15
 
 | Category | Fixtures | Required direction |
 | --- | ---: | --- |
-| Cascade and default styles | 2 | Selectors, specificity, inheritance, inline styles, UA-like defaults |
+| Cascade and default styles | 3 | Selectors, specificity, inheritance, inline styles, UA-like defaults |
 | Block and inline flow | 2 | Block, inline, inline-block, none, inline-flex |
 | Box model and sizing units | 3 | Width/height, min/max, padding, margin, borders, px/%/viewport/font units |
 | Typography and multiline text | 2 | Fonts, line height, wrapping, whitespace, alignment, overflow |
@@ -14,22 +14,22 @@ Last updated: 2026-08-15
 | Positioning and stacking | 1 | Static, relative, absolute, fixed, containing blocks, z-order |
 | Lists, tables, and images | 0 | Representative structural and replaced content |
 | Forms and interactive states | 0 | Basic visible controls, focus, checked/disabled states |
-| **Total** | **13 / 40** | Balanced coverage required before completion |
+| **Total** | **14 / 40** | Balanced coverage required before completion |
 
 ## Current Baseline
 
 | Metric | Current result | Core Web Parity v1 threshold |
 | --- | ---: | ---: |
-| Fixtures | 13 | At least 40 |
-| Median SSIM | 0.9978 | At least 0.98 |
-| Minimum fixture SSIM | 0.9833 | At least 0.95 |
+| Fixtures | 14 | At least 40 |
+| Median SSIM | 0.9953 | At least 0.98 |
+| Minimum fixture SSIM | 0.9805 | At least 0.95 |
 | Geometry edges within 2px | 100% | At least 95% |
-| Maximum edge error | 0.009px | At most 5px or documented |
+| Maximum edge error | 0.203px | At most 5px or documented |
 | Text content and line counts | Pass | Exact |
 | Runtime errors | 0 | 0 |
 
 All current fixtures pass every per-fixture quality threshold. The suite does
-not meet the completion gate because coverage is still 13 of 40 fixtures.
+not meet the completion gate because coverage is still 14 of 40 fixtures.
 
 ## Decisions
 
@@ -70,6 +70,10 @@ not meet the completion gate because coverage is still 13 of 40 fixtures.
     reparsing padding, so border widths participate in the flex containing block.
 16. Main-axis gap is `column-gap` for rows and `row-gap` for columns. It is
     reserved exactly once before justification and flex growth distribution.
+17. Auto-sized blocks with direct text fill the containing content width and use
+    intrinsic line-box height. Adjacent normal-flow vertical margins collapse.
+18. `em` margins resolve from the element font size; `rem` margins use the 16px
+    Core Web Parity root baseline.
 
 ## Iteration History
 
@@ -81,13 +85,16 @@ not meet the completion gate because coverage is still 13 of 40 fixtures.
 | Block and inline flow | 8-fixture attempt; minimum SSIM 0.9498; 80% edges within 2px; max error 172px | 8 fixtures; median SSIM 0.9984; minimum 0.9955; 100% edges; max error 0.006px; exact text | Block children retained centered X positions; `display: none` children entered layout and prevented inline placements from being applied |
 | Multiline typography | 10-fixture attempt; new fixtures SSIM 0.9716 and 0.9821 | 10 fixtures; median SSIM 0.9983; minimum 0.9862; 100% edges; exact text | Pixel line height was divided by a fixed 16px default rather than the resolved 18px or 20px element font size |
 | Flex axes and gaps | 12-fixture attempt; 91.3% edges within 2px; max error 18.007px; column fixture SSIM 0.9609 | 13 fixtures; median SSIM 0.9978; minimum 0.9833; 100% edges; max error 0.009px; exact text | Flex layout ignored border insets, always used column gap on the main axis, and could reserve gap twice during growth |
+| Semantic block defaults | 14-fixture attempt; 94.8% edges within 2px; max error 431.571px; semantic fixture SSIM 0.9619 | 14 fixtures; median SSIM 0.9953; minimum 0.9805; 100% edges; max error 0.203px; exact text | Text-bearing blocks shrink-wrapped width, inherited parent height, used fixed-size `em` margins, and summed adjacent margins; text bounds also ignored resolved line height |
 
 ## Known Intentional Deviations
 
-None accepted yet.
+CSS `line-height: normal` is currently approximated as `1.15` times the resolved
+font size. For the deterministic Arial semantic fixture this differs from Chromium
+block geometry by at most 0.203px; exact font-engine-specific leading is out of v1.
 
 ## Recommended Next Target
 
-Add semantic-content fixtures for headings and paragraphs with centralized
-browser-like defaults, then representative lists. This begins filling the two
-remaining zero-coverage categories while exercising normal-flow default margins.
+Add representative unordered and ordered list fixtures. Lists remain a zero-
+coverage category and the existing implementation uses automatic equal-height
+items and decorative markers that need measurement against native list layout.

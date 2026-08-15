@@ -455,7 +455,7 @@ export class TextRenderingService implements TextCacheManager {
       color: '#000000',
       textAlign: 'left',
       verticalAlign: 'baseline',
-      lineHeight: 1.2,
+      lineHeight: 1.15,
       letterSpacing: 0,
       wordSpacing: 0,
       whiteSpace: 'normal',

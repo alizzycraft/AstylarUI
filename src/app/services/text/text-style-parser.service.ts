@@ -34,7 +34,7 @@ export class TextStyleParserService {
     color: '#000000',
     textAlign: 'left',
     verticalAlign: 'baseline',
-    lineHeight: 1.4,
+    lineHeight: 1.15,
     letterSpacing: 0,
     wordSpacing: 0,
     whiteSpace: 'normal',

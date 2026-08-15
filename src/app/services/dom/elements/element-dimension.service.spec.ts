@@ -8,6 +8,63 @@ import { ElementDimensionService } from './element-dimension.service';
 import { DOMAncestryService } from '../dom-ancestry.service';
 
 describe('ElementDimensionService', () => {
+  it('fills block width and uses intrinsic text height for auto dimensions', () => {
+    const textRendering = {
+      calculateTextDimensions: () => ({
+        width: 240,
+        height: 37,
+        lineHeight: 37,
+      }),
+    };
+    const textStyleParser = {
+      parseTextProperties: () => ({ fontSize: 32, lineHeight: 1.2 }),
+    };
+    const service = new ElementDimensionService(
+      textRendering as never,
+      textStyleParser as never,
+      new DOMAncestryService(),
+    );
+    const parent = { name: 'semantic-card' } as Mesh;
+    const style: StyleRule = {
+      selector: 'h1',
+      display: 'block',
+      fontSize: '32px',
+      lineHeight: 'normal',
+    };
+    const dom = {
+      context: {
+        elementDimensions: new Map([
+          ['semantic-card', {
+            width: 520,
+            height: 300,
+            padding: { top: 27, right: 27, bottom: 27, left: 27 },
+          }],
+        ]),
+        elementStyles: new Map(),
+      },
+    } as unknown as BabylonDOM;
+    const render = {
+      actions: {
+        style: {
+          getElementTypeDefaults: () => ({ display: 'block' }),
+          findStyleForElement: () => style,
+        },
+      },
+    } as unknown as BabylonRender;
+
+    const result = service.calculateDimensions(
+      dom,
+      render,
+      { id: 'heading', type: 'h1', textContent: 'Default heading' },
+      style,
+      parent,
+      [],
+    );
+
+    expect(result.width).toBe(466);
+    expect(result.height).toBe(37);
+  });
+
   it('adds padding and borders outside explicit content-box dimensions', () => {
     const service = new ElementDimensionService({} as never, {} as never, new DOMAncestryService());
     const parent = { name: 'root-body' } as Mesh;

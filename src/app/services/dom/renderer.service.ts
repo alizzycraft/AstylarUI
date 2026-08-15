@@ -635,7 +635,7 @@ export class BabylonDOMRendererService {
       fontStyle: "normal",
       color: "#000000",
       textAlign: "left",
-      lineHeight: "1.2",
+      lineHeight: "normal",
       letterSpacing: "0px",
       wordSpacing: "0px",
       textDecoration: "none",

@@ -821,6 +821,7 @@ export class ElementCreationService {
       }
 
       let cursorY = parentHeight / 2 - paddingTop;
+      let previousMarginBottom = 0;
       const scaleFactor = render.actions.camera.getPixelToWorldScale();
 
       for (let i = 0; i < children.length; i++) {
@@ -902,7 +903,10 @@ export class ElementCreationService {
         const childCenterX =
           -parentWidth / 2 + paddingLeft + marginBox.left + childWidth / 2;
 
-        cursorY -= marginTop;
+        cursorY -= this.collapseVerticalMargins(
+          previousMarginBottom,
+          marginTop,
+        );
 
         const childCenterY = cursorY - childHeight / 2;
 
@@ -918,7 +922,7 @@ export class ElementCreationService {
         );
 
         cursorY -= childHeight;
-        cursorY -= marginBottom;
+        previousMarginBottom = marginBottom;
 
         if (child.children && child.children.length > 0) {
           this.processChildren(
@@ -949,6 +953,7 @@ export class ElementCreationService {
     left: number;
   } {
     const margin = { top: 0, right: 0, bottom: 0, left: 0 };
+    const fontSize = this.parseFontSize(style?.fontSize);
 
     const parsedMargin = (style?.margin || "").toString().trim();
     if (parsedMargin) {
@@ -960,44 +965,65 @@ export class ElementCreationService {
             margin.right =
             margin.bottom =
             margin.left =
-              this.parseLengthValue(m1);
+              this.parseLengthValue(m1, fontSize);
           break;
         case 2:
-          margin.top = margin.bottom = this.parseLengthValue(m1);
-          margin.right = margin.left = this.parseLengthValue(m2);
+          margin.top = margin.bottom = this.parseLengthValue(m1, fontSize);
+          margin.right = margin.left = this.parseLengthValue(m2, fontSize);
           break;
         case 3:
-          margin.top = this.parseLengthValue(m1);
-          margin.right = margin.left = this.parseLengthValue(m2);
-          margin.bottom = this.parseLengthValue(m3);
+          margin.top = this.parseLengthValue(m1, fontSize);
+          margin.right = margin.left = this.parseLengthValue(m2, fontSize);
+          margin.bottom = this.parseLengthValue(m3, fontSize);
           break;
         case 4:
         default:
-          margin.top = this.parseLengthValue(m1);
-          margin.right = this.parseLengthValue(m2);
-          margin.bottom = this.parseLengthValue(m3);
-          margin.left = this.parseLengthValue(m4);
+          margin.top = this.parseLengthValue(m1, fontSize);
+          margin.right = this.parseLengthValue(m2, fontSize);
+          margin.bottom = this.parseLengthValue(m3, fontSize);
+          margin.left = this.parseLengthValue(m4, fontSize);
           break;
       }
     }
 
     if (style?.marginTop !== undefined) {
-      margin.top = this.parseLengthValue(style.marginTop);
+      margin.top = this.parseLengthValue(style.marginTop, fontSize);
     }
     if (style?.marginRight !== undefined) {
-      margin.right = this.parseLengthValue(style.marginRight);
+      margin.right = this.parseLengthValue(style.marginRight, fontSize);
     }
     if (style?.marginBottom !== undefined) {
-      margin.bottom = this.parseLengthValue(style.marginBottom);
+      margin.bottom = this.parseLengthValue(style.marginBottom, fontSize);
     }
     if (style?.marginLeft !== undefined) {
-      margin.left = this.parseLengthValue(style.marginLeft);
+      margin.left = this.parseLengthValue(style.marginLeft, fontSize);
     }
 
     return margin;
   }
 
-  private parseLengthValue(value: string | number | undefined): number {
+  private collapseVerticalMargins(previous: number, current: number): number {
+    if (previous >= 0 && current >= 0) {
+      return Math.max(previous, current);
+    }
+    if (previous <= 0 && current <= 0) {
+      return Math.min(previous, current);
+    }
+    return previous + current;
+  }
+
+  private parseFontSize(value: string | number | undefined): number {
+    if (typeof value === "number") {
+      return value;
+    }
+    const parsed = Number.parseFloat(value ?? "");
+    return Number.isFinite(parsed) ? parsed : 16;
+  }
+
+  private parseLengthValue(
+    value: string | number | undefined,
+    fontSize = 16,
+  ): number {
     if (value === undefined || value === null) {
       return 0;
     }
@@ -1009,8 +1035,11 @@ export class ElementCreationService {
     if (trimmed.endsWith("px")) {
       return parseFloat(trimmed);
     }
-    if (trimmed.endsWith("em")) {
+    if (trimmed.endsWith("rem")) {
       return parseFloat(trimmed) * 16;
+    }
+    if (trimmed.endsWith("em")) {
+      return parseFloat(trimmed) * fontSize;
     }
     if (trimmed.endsWith("%")) {
       // Percentages for inline margin are relative to parent's width; we can't easily evaluate here so default to 0
