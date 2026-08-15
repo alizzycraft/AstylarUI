@@ -352,7 +352,7 @@ export class StyleService {
 
     private getMatchingSpecificity(element: DOMElement, selector: string): number | null {
         const normalizedSelector = selector.trim();
-        if (!normalizedSelector || normalizedSelector.includes(':') || normalizedSelector.includes('~')) {
+        if (!normalizedSelector || normalizedSelector.includes(':')) {
             return null;
         }
 
@@ -379,6 +379,15 @@ export class StyleService {
                 if (relatedElement) {
                     relatedSpecificity = this.getCompoundSpecificity(relatedElement, compounds[index]);
                 }
+            } else if (combinator === 'general-sibling') {
+                for (const sibling of this.getPreviousSiblings(matchedElement)) {
+                    const siblingSpecificity = this.getCompoundSpecificity(sibling, compounds[index]);
+                    if (siblingSpecificity !== null) {
+                        relatedElement = sibling;
+                        relatedSpecificity = siblingSpecificity;
+                        break;
+                    }
+                }
             } else {
                 relatedElement = this.ancestry.getParent(matchedElement);
                 while (relatedElement) {
@@ -398,13 +407,14 @@ export class StyleService {
 
     private parseRelationalSelector(selector: string): {
         compounds: string[];
-        combinators: Array<'descendant' | 'child' | 'adjacent'>;
+        combinators: Array<'descendant' | 'child' | 'adjacent' | 'general-sibling'>;
     } | null {
-        const normalized = selector.replace(/\s*([>+])\s*/g, '$1');
-        const compounds = normalized.split(/[>+]|\s+/);
-        const combinators = Array.from(normalized.matchAll(/[>+]|\s+/g), match => {
+        const normalized = selector.replace(/\s*([>+~])\s*/g, '$1');
+        const compounds = normalized.split(/[>+~]|\s+/);
+        const combinators = Array.from(normalized.matchAll(/[>+~]|\s+/g), match => {
             if (match[0] === '>') return 'child' as const;
             if (match[0] === '+') return 'adjacent' as const;
+            if (match[0] === '~') return 'general-sibling' as const;
             return 'descendant' as const;
         });
 
@@ -421,6 +431,14 @@ export class StyleService {
 
         const index = siblings.indexOf(element);
         return index > 0 ? siblings[index - 1] : undefined;
+    }
+
+    private getPreviousSiblings(element: DOMElement): DOMElement[] {
+        const siblings = this.ancestry.getParent(element)?.children;
+        if (!siblings) return [];
+
+        const index = siblings.indexOf(element);
+        return index > 0 ? siblings.slice(0, index).reverse() : [];
     }
 
     private getCompoundSpecificity(element: DOMElement, selector: string): number | null {

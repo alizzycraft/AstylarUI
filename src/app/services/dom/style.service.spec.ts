@@ -129,4 +129,24 @@ describe('StyleService cascade', () => {
     expect(service.matchesSelector(adjacent, '.lead+.sibling-item')).toBeTrue();
     expect(service.matchesSelector(later, '.lead + .sibling-item')).toBeFalse();
   });
+
+  it('matches general sibling combinators against any preceding sibling', () => {
+    const before: DOMElement = { type: 'div', class: 'general-item' };
+    const lead: DOMElement = { type: 'div', class: 'general-lead' };
+    const first: DOMElement = { type: 'div', class: 'general-item' };
+    const second: DOMElement = { type: 'div', class: 'general-item' };
+    const panel: DOMElement = { type: 'section', children: [before, lead, first, second] };
+    for (const child of panel.children ?? []) ancestry.setParent(child, panel);
+
+    const styles: StyleRule[] = [
+      { selector: '.general-item', background: '#fee2e2' },
+      { selector: '.general-lead ~ .general-item', background: '#ede9fe' },
+    ];
+
+    expect(service.findStyleForElement(before, styles)?.background).toBe('#fee2e2');
+    expect(service.findStyleForElement(first, styles)?.background).toBe('#ede9fe');
+    expect(service.findStyleForElement(second, styles)?.background).toBe('#ede9fe');
+    expect(service.matchesSelector(second, '.general-lead~.general-item')).toBeTrue();
+    expect(service.matchesSelector(before, '.general-lead ~ .general-item')).toBeFalse();
+  });
 });

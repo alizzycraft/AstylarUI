@@ -41,6 +41,7 @@ import { fontRelativeUnitsFixture } from './font-relative-units.fixture';
 import { descendantSelectorFixture } from './descendant-selector.fixture';
 import { childCombinatorFixture } from './child-combinator.fixture';
 import { adjacentSiblingFixture } from './adjacent-sibling.fixture';
+import { generalSiblingFixture } from './general-sibling.fixture';
 import { ParityFixture } from '../parity.types';
 
 const fixtures: readonly ParityFixture[] = [
@@ -86,7 +87,8 @@ const fixtures: readonly ParityFixture[] = [
   fontRelativeUnitsFixture,
   descendantSelectorFixture,
   childCombinatorFixture,
-  adjacentSiblingFixture
+  adjacentSiblingFixture,
+  generalSiblingFixture
 ];
 
 const fixturesById = new Map(fixtures.map((fixture) => [fixture.id, fixture]));

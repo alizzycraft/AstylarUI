@@ -256,5 +256,11 @@
     "title": "Adjacent-sibling combinator scoping",
     "category": "selectors-cascade",
     "expectedBehavior": "An adjacent-sibling combinator matches only the first matching element immediately following the left-hand sibling."
+  },
+  {
+    "id": "general-sibling",
+    "title": "General-sibling combinator scoping",
+    "category": "selectors-cascade",
+    "expectedBehavior": "A general-sibling combinator matches every qualifying later sibling while excluding matching elements before the anchor."
   }
 ]
