@@ -13,15 +13,15 @@ Last updated: 2026-08-15
 | Flexbox | 3 | Direction, wrap, basis, grow/shrink, gap, order, alignment |
 | Positioning and stacking | 1 | Static, relative, absolute, fixed, containing blocks, z-order |
 | Lists, tables, and images | 7 | Representative structural and replaced content |
-| Forms and interactive states | 0 | Basic visible controls, focus, checked/disabled states |
-| **Total** | **21 / 40** | Balanced coverage required before completion |
+| Forms and interactive states | 2 | Basic visible controls, focus, checked/disabled states |
+| **Total** | **23 / 40** | Balanced coverage required before completion |
 
 ## Current Baseline
 
 | Metric | Current result | Core Web Parity v1 threshold |
 | --- | ---: | ---: |
-| Fixtures | 21 | At least 40 |
-| Median SSIM | 0.9946 | At least 0.98 |
+| Fixtures | 23 | At least 40 |
+| Median SSIM | 0.9953 | At least 0.98 |
 | Minimum fixture SSIM | 0.9805 | At least 0.95 |
 | Geometry edges within 2px | 100% | At least 95% |
 | Maximum edge error | 0.203px | At most 5px or documented |
@@ -29,7 +29,7 @@ Last updated: 2026-08-15
 | Runtime errors | 0 | 0 |
 
 All current fixtures pass every per-fixture quality threshold. The suite does
-not meet the completion gate because coverage is still 21 of 40 fixtures.
+not meet the completion gate because coverage is still 23 of 40 fixtures.
 
 ## Decisions
 
@@ -86,6 +86,10 @@ not meet the completion gate because coverage is still 21 of 40 fixtures.
     aspect-ratio math and mirrored U coordinates compensate for the render axis.
 22. Inline formatting contexts with only positioned children do not collapse or
     move their parent while attempting content-driven auto-height calculation.
+23. Single-line text controls position and clip text against the declared CSS
+    padding edge plus border, including asymmetric horizontal padding. Native
+    browser control chrome remains outside the comparison; fixtures remove it
+    and declare every visible style explicitly.
 
 ## Iteration History
 
@@ -102,6 +106,8 @@ not meet the completion gate because coverage is still 21 of 40 fixtures.
 | Fixed table tracks | 18-fixture attempt; 98.1% edges within 2px; max error 59.998px | 18 fixtures; median SSIM 0.9941; minimum 0.9805; 100% edges; max error 0.203px; exact text | The table renderer parsed `<col>` definitions for column count but discarded their declared widths and redistributed every track equally |
 | Intrinsic images and object fit | 21-fixture attempt; 97.3% edges within 2px; max error 300.004px; minimum SSIM 0.1172 | 21 fixtures; median SSIM 0.9946; minimum 0.9805; 100% edges; max error 0.203px; exact text; image fixtures 0.9997–1.0000 SSIM | Images stretched one lit texture across the element, ignored natural size and object fit, rendered mirrored pixels, and exposed an inline auto-height bug that moved parents containing only positioned children |
 
+| Styled buttons and text inputs | 23-fixture attempt; text input SSIM 0.9948 with value painted at a hard-coded 1.5px inset | 23 fixtures; median SSIM 0.9953; minimum 0.9805; 100% edges; max error 0.203px; exact text; both new controls at 0.9999-1.0000 SSIM | Text inputs ignored declared horizontal padding and border when positioning and clipping their value; control fixtures now explicitly remove native chrome |
+
 ## Known Intentional Deviations
 
 CSS `line-height: normal` is currently approximated as `1.15` times the resolved
@@ -110,6 +116,6 @@ block geometry by at most 0.203px; exact font-engine-specific leading is out of 
 
 ## Recommended Next Target
 
-Add deterministic basic form-control fixtures. Forms and visible interactive
-states remain the only zero-coverage category, and their specialized Babylon
-managers have not yet been measured against equivalent browser controls.
+Extend deterministic form coverage to checked and disabled states, then add a
+second positioning/stacking fixture. Those categories are the least represented
+after basic button and populated text-input parity.

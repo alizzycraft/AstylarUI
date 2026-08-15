@@ -124,5 +124,17 @@
     "title": "Image object-fit cover",
     "category": "lists-tables-images",
     "expectedBehavior": "Cover fills the image box while preserving aspect ratio and cropping equally from the long axis."
+  },
+  {
+    "id": "styled-button",
+    "title": "Explicitly styled button",
+    "category": "forms-interactive",
+    "expectedBehavior": "An explicitly styled button uses the declared border box, background, border, radius, and centered label without relying on native browser chrome."
+  },
+  {
+    "id": "styled-text-input",
+    "title": "Explicitly styled text input",
+    "category": "forms-interactive",
+    "expectedBehavior": "An explicitly styled text input uses the declared border box and renders its value with browser-like content insets."
   }
 ]

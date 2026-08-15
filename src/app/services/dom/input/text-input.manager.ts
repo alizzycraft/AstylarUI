@@ -338,8 +338,8 @@ export class TextInputManager {
             // Align text mesh based on textAlign style
             const textAlign = (textStyle.textAlign || 'left').toLowerCase();
             const inputWidth = textInput.mesh.getBoundingInfo().boundingBox.extendSize.x * 2;
-            const padding = 1.5 * scale; // Standard padding in world units
-            const availableWidth = inputWidth - (padding * 2);
+            const insets = this.getHorizontalContentInsets(textStyle, scale);
+            const availableWidth = Math.max(0, inputWidth - insets.left - insets.right);
 
             // Handle clipping if text exceeds available width
             if (textureWidth > availableWidth) {
@@ -362,7 +362,7 @@ export class TextInputManager {
                 clippedTextMesh.rotation.z = Math.PI;
 
                 textInput.textMesh = clippedTextMesh;
-                clippedTextMesh.position.x = (inputWidth / 2) - (availableWidth / 2) - padding;
+                clippedTextMesh.position.x = (insets.right - insets.left) / 2;
 
                 // Sync scroll and UVs
                 this.syncScroll(textInput, render);
@@ -370,11 +370,11 @@ export class TextInputManager {
                 // No clipping needed
                 textInput.scrollOffset = 0;
                 if (textAlign === 'right') {
-                    textMesh.position.x = -(inputWidth / 2) + (textureWidth / 2) + padding;
+                    textMesh.position.x = -(inputWidth / 2) + (textureWidth / 2) + insets.right;
                 } else if (textAlign === 'center' || textAlign === 'middle') {
-                    textMesh.position.x = 0;
+                    textMesh.position.x = (insets.right - insets.left) / 2;
                 } else {
-                    textMesh.position.x = (inputWidth / 2) - (textureWidth / 2) - padding;
+                    textMesh.position.x = (inputWidth / 2) - (textureWidth / 2) - insets.left;
                 }
                 textInput.textMesh = textMesh;
 
@@ -438,8 +438,8 @@ export class TextInputManager {
 
         const inputWidth = textInput.mesh.getBoundingInfo().boundingBox.extendSize.x * 2;
         const scale = render.actions.camera.getPixelToWorldScale();
-        const padding = 1.5 * scale;
-        const availableWidth = inputWidth - (padding * 2);
+        const insets = this.getHorizontalContentInsets(textInput.style, scale);
+        const availableWidth = Math.max(0, inputWidth - insets.left - insets.right);
         const vw = availableWidth / scale; // Visible width in CSS pixels
 
         // Get actual texture width from stored metrics
@@ -846,6 +846,40 @@ export class TextInputManager {
         if (!value) return undefined;
         const num = parseFloat(value);
         return isNaN(num) ? undefined : num;
+    }
+
+    /**
+     * Resolve the CSS content edges used by single-line controls. Babylon's
+     * local X axis is mirrored by the parity camera, so callers use these
+     * physical insets when positioning text from the projected left/right.
+     */
+    private getHorizontalContentInsets(
+        style: StyleRule,
+        scale: number
+    ): { left: number; right: number } {
+        const padding = this.parseBoxShorthand(style.padding);
+        const border = Math.max(0, this.parseSize(style.borderWidth) || 0);
+        const left = Math.max(0, this.parseSize(style.paddingLeft) ?? padding.left);
+        const right = Math.max(0, this.parseSize(style.paddingRight) ?? padding.right);
+
+        return {
+            left: (border + left) * scale,
+            right: (border + right) * scale
+        };
+    }
+
+    private parseBoxShorthand(value: string | undefined): { left: number; right: number } {
+        const values = value
+            ?.trim()
+            .split(/\s+/)
+            .map((part) => Math.max(0, this.parseSize(part) || 0)) ?? [];
+
+        if (values.length === 0) return { left: 0, right: 0 };
+        if (values.length === 1) return { left: values[0], right: values[0] };
+        if (values.length === 2 || values.length === 3) {
+            return { left: values[1], right: values[1] };
+        }
+        return { left: values[3], right: values[1] };
     }
 
     /**
