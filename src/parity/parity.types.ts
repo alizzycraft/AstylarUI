@@ -14,7 +14,14 @@ export type ParityCategory =
   | 'flexbox'
   | 'positioning-stacking'
   | 'lists-tables-images'
-  | 'forms-interactive';
+  | 'forms-interactive'
+  | 'selectors-cascade'
+  | 'grid'
+  | 'responsive'
+  | 'overflow-scrolling'
+  | 'controls-states'
+  | 'layering-overlays'
+  | 'composed-application';
 
 export interface ParityFixture {
   id: string;

@@ -238,5 +238,11 @@
     "title": "Font-relative sizing and offsets",
     "category": "box-model-units",
     "expectedBehavior": "Em lengths use the element font size while rem lengths use the 16px parity root for dimensions and positioned offsets."
+  },
+  {
+    "id": "descendant-selector",
+    "title": "Scoped descendant selectors",
+    "category": "selectors-cascade",
+    "expectedBehavior": "Descendant selectors match through multiple ancestors, remain scoped to the matching subtree, and combine the specificity of every compound."
   }
 ]

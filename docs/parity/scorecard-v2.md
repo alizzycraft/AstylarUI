@@ -8,8 +8,8 @@ This scorecard tracks the second parity phase: making ordinary application-orien
 
 | Gate | Current | Target | Status |
 | --- | ---: | ---: | --- |
-| Total parity fixtures | 40 | 65 | Open |
-| New Phase 2 fixtures | 0 | 25 | Open |
+| Total parity fixtures | 41 | 65 | Open |
+| New Phase 2 fixtures | 1 | 25 | Open |
 | Composed application/component fixtures | 0 | 10 | Open |
 | Deterministic viewport sizes | 1 (`800x600`) | 3 | Open |
 | Median SSIM | 0.9953 | >= 0.98 | Passing baseline |
@@ -25,7 +25,7 @@ This scorecard tracks the second parity phase: making ordinary application-orien
 
 | Phase 2 category | Fixtures | Representative coverage | Status |
 | --- | ---: | --- | --- |
-| Selectors and cascade | 0 | — | Open |
+| Selectors and cascade | 1 | Descendant matching, subtree scoping, combined specificity | In progress |
 | CSS Grid | 0 | — | Open |
 | Responsive behavior | 0 | — | Open |
 | Overflow and scrolling | 0 | — | Open |
@@ -57,7 +57,8 @@ The committed 40-fixture Phase 1 suite was rerun before Phase 2 work began. It p
 
 | Item | Before | General fix | Verification | Commit |
 | --- | --- | --- | --- | --- |
-| Phase 2 foundation | Phase 1 complete; no v2 scorecard | Added gates, category accounting, baseline, and decision log | Phase 1 parity suite green | Pending |
+| Phase 2 foundation | Phase 1 complete; no v2 scorecard | Added gates, category accounting, baseline, and decision log | Phase 1 parity suite green | `3fc1e3d` |
+| Descendant selectors | Nested target used base class colors; SSIM `0.9744` | Ancestry-aware multi-compound matching and summed specificity | Fixture SSIM `0.9971`; 100% edges within 2 px; exact text; 53 tests and both builds pass | `fix: support descendant selectors` |
 
 ## Remaining work
 
@@ -65,9 +66,10 @@ The committed 40-fixture Phase 1 suite was rerun before Phase 2 work began. It p
 - Establish three deterministic viewport sizes and responsive assertions.
 - Cover all seven categories with enough focused cases to expose interactions and regressions.
 - Add deterministic interaction checks for applicable transitions, focus, scrolling, and pointer targeting.
+- Investigate missing border paint on a third-level nested element during the layering/paint phase; it was isolated from the selector fixture after visual inspection.
 - Keep quality, text, clipping, paint-order, runtime, test, and build gates enforcing.
 - Finish with three consecutive clean enforcing passes.
 
 ## Next target
 
-Add a focused descendant-selector fixture, capture the failing baseline, implement ancestry-aware matching with correct specificity, and run the complete verification loop.
+Add a focused child-combinator fixture that distinguishes direct children from deeper descendants, then extend the same selector matcher without weakening descendant behavior.

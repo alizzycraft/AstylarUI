@@ -5,12 +5,16 @@ import { Color3 } from '@babylonjs/core';
 import { DOMElement } from '../../types/dom-element';
 import { BabylonRender, ParsedBackground, LinearGradientDefinition, GradientStop } from './interfaces/render.types';
 import { StyleDefaultsService } from './style-defaults.service';
+import { DOMAncestryService } from './dom-ancestry.service';
 
 @Injectable({
     providedIn: 'root'
 })
 export class StyleService {
-    constructor(private styleDefaults: StyleDefaultsService) { }
+    constructor(
+        private styleDefaults: StyleDefaultsService,
+        private ancestry: DOMAncestryService,
+    ) { }
 
     /**
      * Parses the align-content property for flex containers
@@ -347,13 +351,36 @@ export class StyleService {
     }
 
     private getMatchingSpecificity(element: DOMElement, selector: string): number | null {
-        if (!selector || selector.includes(':') || /[>+~\s]/.test(selector)) {
+        const normalizedSelector = selector.trim();
+        if (!normalizedSelector || normalizedSelector.includes(':') || /[>+~]/.test(normalizedSelector)) {
             return null;
         }
 
-        if (selector === '*') {
-            return 0;
+        const compounds = normalizedSelector.split(/\s+/);
+        let matchedElement: DOMElement | undefined = element;
+        let specificity = this.getCompoundSpecificity(matchedElement, compounds[compounds.length - 1]);
+        if (specificity === null) return null;
+
+        for (let index = compounds.length - 2; index >= 0; index--) {
+            let ancestor = this.ancestry.getParent(matchedElement);
+            let ancestorSpecificity: number | null = null;
+
+            while (ancestor) {
+                ancestorSpecificity = this.getCompoundSpecificity(ancestor, compounds[index]);
+                if (ancestorSpecificity !== null) break;
+                ancestor = this.ancestry.getParent(ancestor);
+            }
+
+            if (!ancestor || ancestorSpecificity === null) return null;
+            specificity += ancestorSpecificity;
+            matchedElement = ancestor;
         }
+
+        return specificity;
+    }
+
+    private getCompoundSpecificity(element: DOMElement, selector: string): number | null {
+        if (selector === '*') return 0;
 
         const tokens = Array.from(selector.matchAll(/([.#]?)([\w-]+)/g));
         if (!tokens.length || tokens.map(token => token[0]).join('') !== selector) {
@@ -416,38 +443,7 @@ export class StyleService {
      * Determines if the provided element matches a CSS-like selector. Limited support (ID, class, type).
      */
     public matchesSelector(element: DOMElement, selector: string): boolean {
-        if (selector === '*') {
-            return true;
-        }
-
-        if (selector.startsWith('#')) {
-            const selectorId = selector.substring(1);
-            const result = element.id === selectorId;
-            if (element.id && (element.id.includes('complete') || element.id.includes('th-') || element.id.includes('td-'))) {
-                console.log(`[SELECTOR-MATCH] ID "${selector}" vs element "${element.id}": ${result}`);
-            }
-            return result;
-        }
-
-        if (selector.startsWith('.')) {
-            const selectorClass = selector.substring(1);
-            const elementClasses = element.class ? element.class.split(' ') : [];
-            const result = elementClasses.includes(selectorClass);
-            if (element.class && (element.class.includes('complete') || element.class.includes('spanning'))) {
-                console.log(`[SELECTOR-MATCH] Class "${selector}" vs element classes "${element.class}": ${result} (classes: [${elementClasses.join(', ')}])`);
-            }
-            return result;
-        }
-
-        if (!selector.includes('.') && !selector.includes('#')) {
-            return element.type === selector;
-        }
-
-        if (selector.includes('>')) {
-            return false;
-        }
-
-        return false;
+        return this.getMatchingSpecificity(element, selector) !== null;
     }
 
     public findStyleBySelector(selector: string, styles: StyleRule[]): StyleRule | undefined {

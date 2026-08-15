@@ -2,12 +2,15 @@ import { DOMElement } from '../../types/dom-element';
 import { StyleRule } from '../../types/style-rule';
 import { StyleDefaultsService } from './style-defaults.service';
 import { StyleService } from './style.service';
+import { DOMAncestryService } from './dom-ancestry.service';
 
 describe('StyleService cascade', () => {
   let service: StyleService;
+  let ancestry: DOMAncestryService;
 
   beforeEach(() => {
-    service = new StyleService(new StyleDefaultsService());
+    ancestry = new DOMAncestryService();
+    service = new StyleService(new StyleDefaultsService(), ancestry);
   });
 
   it('resolves specificity before source order', () => {
@@ -63,5 +66,27 @@ describe('StyleService cascade', () => {
     ]);
 
     expect(service.findStyleForElement(element, styles, context)?.background).toBe('#f97316');
+  });
+
+  it('matches scoped descendant selectors through multiple ancestors', () => {
+    const card: DOMElement = { type: 'section', class: 'selector-card' };
+    const content: DOMElement = { type: 'div', class: 'selector-content' };
+    const target: DOMElement = { type: 'div', class: 'badge' };
+    const outside: DOMElement = { type: 'div', class: 'badge' };
+    ancestry.setParent(content, card);
+    ancestry.setParent(target, content);
+
+    const styles: StyleRule[] = [
+      { selector: '.selector-card .badge', background: '#dcfce7' },
+      { selector: '.badge', background: '#fee2e2' },
+      { selector: '.selector-card .selector-content div.badge', color: '#14532d' },
+    ];
+
+    expect(service.findStyleForElement(target, styles)?.background).toBe('#dcfce7');
+    expect(service.findStyleForElement(target, styles)?.color).toBe('#14532d');
+    expect(service.findStyleForElement(outside, styles)?.background).toBe('#fee2e2');
+    expect(service.findStyleForElement(outside, styles)?.color).toBeUndefined();
+    expect(service.matchesSelector(target, '.selector-card .badge')).toBeTrue();
+    expect(service.matchesSelector(outside, '.selector-card .badge')).toBeFalse();
   });
 });
