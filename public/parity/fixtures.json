@@ -82,5 +82,17 @@
     "title": "Heading and paragraph browser defaults",
     "category": "cascade-defaults",
     "expectedBehavior": "Unstyled headings and paragraphs use centralized browser-like typography, auto block sizing, and vertical margins."
+  },
+  {
+    "id": "unordered-list-layout",
+    "title": "Unordered list flow and markers",
+    "category": "lists-tables-images",
+    "expectedBehavior": "List items stack at intrinsic line-box height inside the list content box and render outside disc markers."
+  },
+  {
+    "id": "ordered-list-layout",
+    "title": "Ordered list flow and markers",
+    "category": "lists-tables-images",
+    "expectedBehavior": "Ordered list items stack at intrinsic line-box height and render sequential decimal markers outside the content box."
   }
 ]

@@ -21,7 +21,6 @@ export const globalDefaultStyle: Partial<StyleRule> = {
   background: "transparent",
   boxShadow: undefined,
   opacity: "1.0",
-  lineHeight: "normal",
   flexDirection: "row",
   flexWrap: "nowrap",
   justifyContent: "flex-start",

@@ -12,6 +12,8 @@ import { flexRowAlignmentFixture } from './flex-row-alignment.fixture';
 import { flexColumnAlignmentFixture } from './flex-column-alignment.fixture';
 import { flexGrowGapFixture } from './flex-grow-gap.fixture';
 import { semanticDefaultFlowFixture } from './semantic-default-flow.fixture';
+import { unorderedListLayoutFixture } from './unordered-list-layout.fixture';
+import { orderedListLayoutFixture } from './ordered-list-layout.fixture';
 import { ParityFixture } from '../parity.types';
 
 const fixtures: readonly ParityFixture[] = [
@@ -28,7 +30,9 @@ const fixtures: readonly ParityFixture[] = [
   flexRowAlignmentFixture,
   flexColumnAlignmentFixture,
   flexGrowGapFixture,
-  semanticDefaultFlowFixture
+  semanticDefaultFlowFixture,
+  unorderedListLayoutFixture,
+  orderedListLayoutFixture
 ];
 
 const fixturesById = new Map(fixtures.map((fixture) => [fixture.id, fixture]));

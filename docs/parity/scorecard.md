@@ -12,16 +12,16 @@ Last updated: 2026-08-15
 | Typography and multiline text | 2 | Fonts, line height, wrapping, whitespace, alignment, overflow |
 | Flexbox | 3 | Direction, wrap, basis, grow/shrink, gap, order, alignment |
 | Positioning and stacking | 1 | Static, relative, absolute, fixed, containing blocks, z-order |
-| Lists, tables, and images | 0 | Representative structural and replaced content |
+| Lists, tables, and images | 2 | Representative structural and replaced content |
 | Forms and interactive states | 0 | Basic visible controls, focus, checked/disabled states |
-| **Total** | **14 / 40** | Balanced coverage required before completion |
+| **Total** | **16 / 40** | Balanced coverage required before completion |
 
 ## Current Baseline
 
 | Metric | Current result | Core Web Parity v1 threshold |
 | --- | ---: | ---: |
-| Fixtures | 14 | At least 40 |
-| Median SSIM | 0.9953 | At least 0.98 |
+| Fixtures | 16 | At least 40 |
+| Median SSIM | 0.9946 | At least 0.98 |
 | Minimum fixture SSIM | 0.9805 | At least 0.95 |
 | Geometry edges within 2px | 100% | At least 95% |
 | Maximum edge error | 0.203px | At most 5px or documented |
@@ -29,7 +29,7 @@ Last updated: 2026-08-15
 | Runtime errors | 0 | 0 |
 
 All current fixtures pass every per-fixture quality threshold. The suite does
-not meet the completion gate because coverage is still 14 of 40 fixtures.
+not meet the completion gate because coverage is still 16 of 40 fixtures.
 
 ## Decisions
 
@@ -74,6 +74,10 @@ not meet the completion gate because coverage is still 14 of 40 fixtures.
     intrinsic line-box height. Adjacent normal-flow vertical margins collapse.
 18. `em` margins resolve from the element font size; `rem` margins use the 16px
     Core Web Parity root baseline.
+19. List items use the list content box and their intrinsic line-box heights.
+    Markers are painted outside the item box, with discs for unordered lists and
+    rendered sequential decimal text for ordered lists. Inherited `line-height`
+    is not shadowed by a synthetic per-element global default.
 
 ## Iteration History
 
@@ -86,6 +90,7 @@ not meet the completion gate because coverage is still 14 of 40 fixtures.
 | Multiline typography | 10-fixture attempt; new fixtures SSIM 0.9716 and 0.9821 | 10 fixtures; median SSIM 0.9983; minimum 0.9862; 100% edges; exact text | Pixel line height was divided by a fixed 16px default rather than the resolved 18px or 20px element font size |
 | Flex axes and gaps | 12-fixture attempt; 91.3% edges within 2px; max error 18.007px; column fixture SSIM 0.9609 | 13 fixtures; median SSIM 0.9978; minimum 0.9833; 100% edges; max error 0.009px; exact text | Flex layout ignored border insets, always used column gap on the main axis, and could reserve gap twice during growth |
 | Semantic block defaults | 14-fixture attempt; 94.8% edges within 2px; max error 431.571px; semantic fixture SSIM 0.9619 | 14 fixtures; median SSIM 0.9953; minimum 0.9805; 100% edges; max error 0.203px; exact text | Text-bearing blocks shrink-wrapped width, inherited parent height, used fixed-size `em` margins, and summed adjacent margins; text bounds also ignored resolved line height |
+| List flow and markers | 16-fixture attempt; 85.1% edges within 2px; max error 80.002px; minimum SSIM 0.9361 | 16 fixtures; median SSIM 0.9946; minimum 0.9805; 100% edges; max error 0.203px; exact text | Lists added a second indentation, narrowed items, divided container height equally, inserted fixed spacing, and used colored geometric placeholders for ordered markers |
 
 ## Known Intentional Deviations
 
@@ -95,6 +100,7 @@ block geometry by at most 0.203px; exact font-engine-specific leading is out of 
 
 ## Recommended Next Target
 
-Add representative unordered and ordered list fixtures. Lists remain a zero-
-coverage category and the existing implementation uses automatic equal-height
-items and decorative markers that need measurement against native list layout.
+Add a deterministic table fixture covering row and cell geometry. Tables share
+the structural-content category with the now-covered unordered and ordered list
+paths, and the current table renderer has not yet been measured against native
+table layout.
