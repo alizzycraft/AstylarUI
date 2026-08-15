@@ -8,6 +8,9 @@ import { blockFlowFixture } from './block-flow.fixture';
 import { inlineBlockFlowFixture } from './inline-block-flow.fixture';
 import { multilineWrappingFixture } from './multiline-wrapping.fixture';
 import { preLineAlignmentFixture } from './pre-line-alignment.fixture';
+import { flexRowAlignmentFixture } from './flex-row-alignment.fixture';
+import { flexColumnAlignmentFixture } from './flex-column-alignment.fixture';
+import { flexGrowGapFixture } from './flex-grow-gap.fixture';
 import { ParityFixture } from '../parity.types';
 
 const fixtures: readonly ParityFixture[] = [
@@ -20,7 +23,10 @@ const fixtures: readonly ParityFixture[] = [
   blockFlowFixture,
   inlineBlockFlowFixture,
   multilineWrappingFixture,
-  preLineAlignmentFixture
+  preLineAlignmentFixture,
+  flexRowAlignmentFixture,
+  flexColumnAlignmentFixture,
+  flexGrowGapFixture
 ];
 
 const fixturesById = new Map(fixtures.map((fixture) => [fixture.id, fixture]));

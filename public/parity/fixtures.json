@@ -58,5 +58,23 @@
     "title": "Preserved lines and centered text",
     "category": "typography",
     "expectedBehavior": "Pre-line preserves explicit line breaks, collapses spaces, and centers each rendered line."
+  },
+  {
+    "id": "flex-row-alignment",
+    "title": "Flex row gap and centered alignment",
+    "category": "flexbox",
+    "expectedBehavior": "A flex row centers its item group on the main axis, centers unequal item heights on the cross axis, and applies column gap once."
+  },
+  {
+    "id": "flex-column-alignment",
+    "title": "Flex column gap and end alignment",
+    "category": "flexbox",
+    "expectedBehavior": "A flex column packs items at the main-axis end, aligns unequal widths at the cross-axis end, and applies row gap once."
+  },
+  {
+    "id": "flex-grow-gap",
+    "title": "Flex growth with gap",
+    "category": "flexbox",
+    "expectedBehavior": "Flex growth distributes content-box free space by grow factor after reserving the main-axis gap exactly once."
   }
 ]

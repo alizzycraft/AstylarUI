@@ -70,9 +70,10 @@ export class FlexService {
     }));
     console.log(`[FLEX] Viewport: ${viewportWidth}x${viewportHeight}, DPR: ${devicePixelRatio}, Scale: ${scaleFactor}`);
     console.log(`[FLEX] Container ${parentElement.id} dimensions: ${containerWidth}px × ${containerHeight}px`);
-    // Parse container padding (in pixels)
-    const padding = this.parsePadding(parentStyle?.padding);
-    console.log('[FLEX] Container padding (pixels):', padding);
+    // Element dimensions retain the complete inset from the border box to the
+    // content box (border + padding), which is the flex container's layout area.
+    const padding = parentDimensions.padding;
+    console.log('[FLEX] Container content inset (pixels):', padding);
     // Get flex properties
     const flexDirection = parentStyle.flexDirection || 'row';
     const justifyContent = parentStyle.justifyContent || 'flex-start';
@@ -429,17 +430,18 @@ export class FlexService {
       // Use the crossOffset calculated by alignContent instead of our own counter
       const crossOffset = line.crossOffset !== undefined ? line.crossOffset : 0;
 
-      // Calculate gap-adjusted available main space for this line
-      // Account for column-gap spacing between items in the same line
-      const columnGapSpacing = line.items.length > 1 ? flexContainer.columnGap * (line.items.length - 1) : 0;
-      const gapAdjustedAvailableMainSpace = baseAvailableMainSpace - columnGapSpacing;
+      const mainAxisGap = isRow
+        ? flexContainer.columnGap
+        : flexContainer.rowGap;
+      const mainAxisGapSpacing =
+        line.items.length > 1 ? mainAxisGap * (line.items.length - 1) : 0;
 
-      console.log(`[FLEX-GAP] Line ${lineIndex} main-axis gap adjustment: baseAvailableMainSpace=${baseAvailableMainSpace}px, columnGapSpacing=${columnGapSpacing}px, adjustedAvailableMainSpace=${gapAdjustedAvailableMainSpace}px`);
+      console.log(`[FLEX-GAP] Line ${lineIndex} main-axis spacing: baseAvailableMainSpace=${baseAvailableMainSpace}px, gapSpacing=${mainAxisGapSpacing}px`);
       console.log(`[FLEX] Positioning line ${lineIndex}: crossOffset=${crossOffset}px, crossSize=${line.crossSize}px`);
 
       const lineLayout = this.positionItemsInLine(
         line.items,
-        gapAdjustedAvailableMainSpace,
+        baseAvailableMainSpace,
         line.crossSize,
         crossOffset,
         containerWidth,
@@ -763,7 +765,15 @@ export class FlexService {
       }
     }, 0);
 
-    const remainingSpace = Math.max(0, availableMainSpace - totalSize);
+    const mainAxisGap = isRow
+      ? gapProperties.columnGap
+      : gapProperties.rowGap;
+    const totalGapSpacing =
+      sizedItems.length > 1 ? mainAxisGap * (sizedItems.length - 1) : 0;
+    const remainingSpace = Math.max(
+      0,
+      availableMainSpace - totalSize - totalGapSpacing,
+    );
 
     // Calculate spacing for justify-content
     let spacing = 0;
