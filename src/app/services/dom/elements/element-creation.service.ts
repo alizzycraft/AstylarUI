@@ -74,12 +74,6 @@ export class ElementCreationService {
       ? dom.context.elementStyles.get(element.id)
       : undefined;
 
-    // Apply manual overrides from context if available (highest priority)
-    // This ensures TableService's auto-positioned styles are respected
-    if (elementStyles?.normal) {
-      style = { ...style, ...elementStyles.normal };
-    }
-
     // Inline declarations are the highest author-origin specificity and must
     // remain above renderer context and stylesheet declarations.
     if (element.style) {

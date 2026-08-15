@@ -288,6 +288,9 @@ export class ButtonManager {
             labelPlane.parent = button.mesh;
             labelPlane.position.z = -0.15; // Slightly in front
             labelPlane.isPickable = false;
+            if (labelPlane.material) {
+                labelPlane.material.alpha = render.actions.style.parseOpacity(style.opacity);
+            }
 
             return labelPlane;
         } catch (error) {

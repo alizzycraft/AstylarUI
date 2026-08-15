@@ -282,5 +282,11 @@
     "category": "responsive",
     "expectedBehavior": "Width media conditions participate in source order and select desktop, tablet, and mobile style variants at their matching breakpoints.",
     "viewportIds": ["desktop", "tablet", "mobile"]
+  },
+  {
+    "id": "control-state-selectors",
+    "title": "Semantic control state selectors",
+    "category": "controls-states",
+    "expectedBehavior": "Enabled, disabled, and checked pseudo-classes match semantic control state and participate in the normal cascade."
   }
 ]

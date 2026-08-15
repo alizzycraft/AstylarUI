@@ -8,11 +8,11 @@ This scorecard tracks the second parity phase: making ordinary application-orien
 
 | Gate | Current | Target | Status |
 | --- | ---: | ---: | --- |
-| Total parity fixtures | 47 | 65 | Open |
-| New Phase 2 fixtures | 7 | 25 | Open |
+| Total parity fixtures | 48 | 65 | Open |
+| New Phase 2 fixtures | 8 | 25 | Open |
 | Composed application/component fixtures | 0 | 10 | Open |
 | Deterministic viewport sizes | 3 exercised | 3 exercised | Passing |
-| Median SSIM | 0.9953 | >= 0.98 | Passing baseline |
+| Median SSIM | 0.9964 | >= 0.98 | Passing |
 | Minimum fixture SSIM | 0.9805 | >= 0.95 | Passing baseline |
 | Edges within 2 px | 100% | >= 95% | Passing baseline |
 | Maximum edge delta | 0.2030 px | <= 5 px | Passing baseline |
@@ -29,7 +29,7 @@ This scorecard tracks the second parity phase: making ordinary application-orien
 | CSS Grid | 0 | — | Open |
 | Responsive behavior | 2 | Viewport-relative geometry and width media conditions across three profiles | In progress |
 | Overflow and scrolling | 0 | — | Open |
-| Controls and states | 0 | — | Open |
+| Controls and states | 1 | Enabled, disabled, and checked selector states with element opacity | In progress |
 | Layering and overlays | 0 | — | Open |
 | Composed applications | 0 | — | Open |
 
@@ -52,6 +52,7 @@ The committed 40-fixture Phase 1 suite was rerun before Phase 2 work began. It p
 - The repository's Angular 20 and Babylon.js 8.15 runtime are authoritative for this phase.
 - Resolve relational selectors through `DOMAncestryService`; do not add parent pointers to the JSON DOM schema.
 - Start with descendant selectors because application CSS depends on them and the current resolver explicitly rejects whitespace combinators.
+- Keep parsed author-style caches distinct from renderer-authored context overrides so cached declarations cannot bypass the normal cascade.
 
 ## Iteration history
 
@@ -66,6 +67,7 @@ The committed 40-fixture Phase 1 suite was rerun before Phase 2 work began. It p
 | Multi-viewport harness | One hard-coded `800x600` browser context and component surface | Added named desktop, tablet, and mobile profiles with per-fixture selection and render-case accounting | All 45 existing fixtures remain green at desktop; profile and render counts are reported | `test: add deterministic viewport profiles` |
 | Responsive viewport units | Viewport profiles were available but not exercised; scaled borders also lowered tablet/mobile SSIM below `0.95` | Added a three-profile fixture; isolated it to responsive geometry and logged scale-dependent border paint separately | Desktop `0.9979`, tablet `0.9990`, mobile `0.9968`; maximum edge error `0.027px`; exact text; 57 tests and both builds pass | `test: cover responsive viewport geometry` |
 | Responsive media conditions | Every JSON variant applied: desktop was `160px` too wide and tablet `64px` too wide | Added optional min/max width/height media bounds, evaluated in both cascade resolution and renderer context parsing | Desktop `0.9983`, tablet `0.9973`, mobile `0.9972`; max edge error `0.012px`; exact text; 58 tests and both builds pass | `fix: support responsive media conditions` |
+| Control state selectors | Controls retained base colors despite semantic flags; visual inspection also found element opacity omitted from button text | Added `:enabled`, `:disabled`, and `:checked` matching with pseudo specificity; prevented parsed author caches from overriding cascade winners; propagated opacity to button labels | Fixture SSIM `0.9979`; 100% edges within 2 px; exact text; 60 tests and both builds pass | `fix: support control state selectors` |
 
 ## Remaining work
 
@@ -79,4 +81,4 @@ The committed 40-fixture Phase 1 suite was rerun before Phase 2 work began. It p
 
 ## Next target
 
-Add control-state pseudo selectors (`:disabled`, `:enabled`, and `:checked`) with a focused forms fixture and state-specific cascade assertions.
+Add a focused `overflow: hidden` clipping fixture, establish the visual baseline, and implement ancestor clipping without fixture-specific geometry.

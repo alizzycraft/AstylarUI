@@ -45,6 +45,7 @@ import { generalSiblingFixture } from './general-sibling.fixture';
 import { structuralPseudoFixture } from './structural-pseudo.fixture';
 import { responsiveViewportUnitsFixture } from './responsive-viewport-units.fixture';
 import { responsiveMediaFixture } from './responsive-media.fixture';
+import { controlStateSelectorsFixture } from './control-state-selectors.fixture';
 import { ParityFixture } from '../parity.types';
 
 const fixtures: readonly ParityFixture[] = [
@@ -94,7 +95,8 @@ const fixtures: readonly ParityFixture[] = [
   generalSiblingFixture,
   structuralPseudoFixture,
   responsiveViewportUnitsFixture,
-  responsiveMediaFixture
+  responsiveMediaFixture,
+  controlStateSelectorsFixture
 ];
 
 const fixturesById = new Map(fixtures.map((fixture) => [fixture.id, fixture]));

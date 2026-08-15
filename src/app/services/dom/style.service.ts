@@ -12,6 +12,8 @@ import { ViewportService } from './positioning/viewport.service';
     providedIn: 'root'
 })
 export class StyleService {
+    private readonly parsedAuthorStyles = new WeakSet<StyleRule>();
+
     constructor(
         private styleDefaults: StyleDefaultsService,
         private ancestry: DOMAncestryService,
@@ -295,6 +297,9 @@ export class StyleService {
                 }
             });
         });
+        for (const entry of dom.context.elementStyles.values()) {
+            this.parsedAuthorStyles.add(entry.normal);
+        }
         console.log(`[STYLE-PARSE] Completed parsing. Total stored style keys: ${dom.context.elementStyles.size}`);
     }
 
@@ -341,7 +346,7 @@ export class StyleService {
         // layout adjustments), so they sit above stylesheet rules but below inline style.
         if (element.id) {
             const contextOverride = elementStylesOverride?.get(element.id)?.normal;
-            if (contextOverride) {
+            if (contextOverride && !this.parsedAuthorStyles.has(contextOverride)) {
                 mergedStyle = { ...mergedStyle, ...contextOverride };
             }
         }
@@ -473,11 +478,12 @@ export class StyleService {
     }
 
     private getCompoundSpecificity(element: DOMElement, selector: string): number | null {
-        const pseudos = Array.from(selector.matchAll(/:(first-child|last-child)/g), match => match[1]);
-        const baseSelector = selector.replace(/:(first-child|last-child)/g, '');
+        const pseudoPattern = /:(first-child|last-child|disabled|enabled|checked)/g;
+        const pseudos = Array.from(selector.matchAll(pseudoPattern), match => match[1]);
+        const baseSelector = selector.replace(pseudoPattern, '');
         if (baseSelector.includes(':')) return null;
 
-        if (pseudos.length) {
+        if (pseudos.includes('first-child') || pseudos.includes('last-child')) {
             const siblings = this.ancestry.getParent(element)?.children;
             if (!siblings) return null;
             const index = siblings.indexOf(element);
@@ -485,6 +491,11 @@ export class StyleService {
             if (pseudos.includes('first-child') && index !== 0) return null;
             if (pseudos.includes('last-child') && index !== siblings.length - 1) return null;
         }
+
+        const disableable = ['button', 'input', 'select', 'textarea', 'option', 'optgroup', 'fieldset'].includes(element.type);
+        if (pseudos.includes('disabled') && (!disableable || !element.disabled)) return null;
+        if (pseudos.includes('enabled') && (!disableable || element.disabled === true)) return null;
+        if (pseudos.includes('checked') && element.checked !== true && element.selected !== true) return null;
 
         const pseudoSpecificity = pseudos.length * 10;
         if (!baseSelector || baseSelector === '*') return pseudoSpecificity;

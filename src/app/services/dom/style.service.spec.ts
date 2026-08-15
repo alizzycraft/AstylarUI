@@ -189,4 +189,37 @@ describe('StyleService cascade', () => {
     viewport.updateViewport({ width: 390 });
     expect(service.findStyleForElement(element, styles)?.width).toBe('80vw');
   });
+
+  it('matches enabled, disabled, and checked semantic control states', () => {
+    const enabled: DOMElement = { type: 'input', inputType: 'button', class: 'state-button' };
+    const disabled: DOMElement = { type: 'input', inputType: 'button', class: 'state-button', disabled: true };
+    const checked: DOMElement = { type: 'input', inputType: 'checkbox', checked: true };
+    const styles: StyleRule[] = [
+      { selector: '.state-button', background: '#fee2e2' },
+      { selector: '.state-button:enabled', background: '#dbeafe' },
+      { selector: '.state-button:disabled', background: '#e2e8f0' },
+      { selector: 'input:checked', background: '#22c55e' },
+    ];
+
+    expect(service.findStyleForElement(enabled, styles)?.background).toBe('#dbeafe');
+    expect(service.findStyleForElement(disabled, styles)?.background).toBe('#e2e8f0');
+    expect(service.findStyleForElement(checked, styles)?.background).toBe('#22c55e');
+    expect(service.matchesSelector(enabled, ':enabled')).toBeTrue();
+    expect(service.matchesSelector(enabled, ':disabled')).toBeFalse();
+    expect(service.matchesSelector(checked, ':checked')).toBeTrue();
+  });
+
+  it('does not let the parsed author-style cache override stateful cascade winners', () => {
+    const checked: DOMElement = { type: 'input', id: 'state-checked', inputType: 'checkbox', checked: true };
+    const styles: StyleRule[] = [
+      { selector: '#state-checked', background: '#fee2e2' },
+      { selector: '#state-checked:checked', background: '#22c55e' },
+    ];
+    const elementStyles = new Map<string, { normal: StyleRule; hover?: StyleRule }>();
+    const dom = { context: { elementStyles } } as any;
+
+    service.parseStyles(dom, {} as any, styles);
+
+    expect(service.findStyleForElement(checked, styles, elementStyles)?.background).toBe('#22c55e');
+  });
 });
