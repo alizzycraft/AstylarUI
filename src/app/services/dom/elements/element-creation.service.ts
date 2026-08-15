@@ -13,6 +13,7 @@ import { ElementDimensionService } from "./element-dimension.service";
 import { ElementBorderService } from "./element-border.service";
 import { ElementStyleParserService } from "./element-style-parser.service";
 import { ElementInteractionService } from "./element-interaction.service";
+import { DOMAncestryService } from "../dom-ancestry.service";
 
 /**
  * Service responsible for creating DOM elements as Babylon.js meshes
@@ -31,6 +32,7 @@ export class ElementCreationService {
     private borderService: ElementBorderService,
     private styleParser: ElementStyleParserService,
     private interactionService: ElementInteractionService,
+    private ancestry: DOMAncestryService,
   ) {}
 
   /**
@@ -74,6 +76,12 @@ export class ElementCreationService {
     // This ensures TableService's auto-positioned styles are respected
     if (elementStyles?.normal) {
       style = { ...style, ...elementStyles.normal };
+    }
+
+    // Inline declarations are the highest author-origin specificity and must
+    // remain above renderer context and stylesheet declarations.
+    if (element.style) {
+      style = { ...style, ...element.style };
     }
 
     const isHovered = element.id
@@ -376,6 +384,10 @@ export class ElementCreationService {
     console.log(
       `[ElementCreation] processChildren: processing ${children.length} children for ${parentElement?.id || "unknown"}`,
     );
+
+    for (const child of children) {
+      this.ancestry.setParent(child, parentElement);
+    }
 
     // Check if parent is a list container
     const isListContainer =

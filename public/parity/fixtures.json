@@ -22,5 +22,17 @@
     "title": "Nested absolute positioning",
     "category": "positioning-stacking",
     "expectedBehavior": "An absolute child uses the padding box of its positioned parent as its containing block."
+  },
+  {
+    "id": "cascade-specificity",
+    "title": "Cascade specificity and source order",
+    "category": "cascade-defaults",
+    "expectedBehavior": "Type, class, ID, source order, compound selectors, and inline styles follow the CSS cascade."
+  },
+  {
+    "id": "text-inheritance",
+    "title": "Inherited text properties",
+    "category": "cascade-defaults",
+    "expectedBehavior": "A child inherits color and typography from its parent when it has no declaration of its own."
   }
 ]

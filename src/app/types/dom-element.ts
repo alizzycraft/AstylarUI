@@ -1,3 +1,5 @@
+import type { StyleRule } from './style-rule';
+
 // Table and anchor element types (clarified for type safety)
 export type DOMElementType =
   | 'div' | 'section' | 'article' | 'header' | 'footer' | 'nav' | 'main' | 'aside' | 'address' | 'figure' | 'figcaption' | 'hgroup'
@@ -14,7 +16,7 @@ export type DOMElementType =
 export interface DOMElement {
   id?: string;
   type: DOMElementType;
-  style?: any;
+  style?: Partial<Omit<StyleRule, 'selector'>>;
   children?: DOMElement[];
   textContent?: string;
   class?: string;

@@ -298,62 +298,92 @@ export class StyleService {
             ...typeDefaults
         };
 
+        const winners = new Map<keyof StyleRule, { specificity: number; sourceOrder: number; value: unknown }>();
         const debugSegments: string[] = [];
 
-        const getStyle = (selector: string): StyleRule | undefined => {
-            if (elementStylesOverride) {
-                const override = elementStylesOverride.get(selector)?.normal;
-                if (override) {
-                    return override;
+        styles.forEach((rule, sourceOrder) => {
+            rule.selector.split(',').map(selector => selector.trim()).forEach(selector => {
+                const specificity = this.getMatchingSpecificity(element, selector);
+                if (specificity === null) {
+                    return;
                 }
-            }
 
-            const exact = styles.find(s => s.selector === selector);
-            if (exact) {
-                return exact;
-            }
-
-            if (selector.startsWith('#')) {
-                const bareId = selector.substring(1);
-                return styles.find(s => s.selector === bareId || s.selector === `#${bareId}`);
-            }
-
-            if (selector.startsWith('.')) {
-                const bareClass = selector.substring(1);
-                return styles.find(s => s.selector === `.${bareClass}` || s.selector === bareClass);
-            }
-
-            return undefined;
-        };
-
-        const typeStyle = getStyle(element.type);
-        if (typeStyle) {
-            mergedStyle = { ...mergedStyle, ...typeStyle };
-            debugSegments.push(`type(${element.type})`);
-        }
-
-        if (element.class) {
-            const classNames = element.class.split(' ').filter(Boolean);
-            classNames.forEach(className => {
-                const classStyle = getStyle(`.${className}`) || getStyle(className);
-                if (classStyle) {
-                    mergedStyle = { ...mergedStyle, ...classStyle };
-                    debugSegments.push(`class(${className})`);
+                debugSegments.push(`${selector}[${specificity}]`);
+                for (const [property, value] of Object.entries(rule)) {
+                    if (property === 'selector' || value === undefined) {
+                        continue;
+                    }
+                    const key = property as keyof StyleRule;
+                    const current = winners.get(key);
+                    if (!current || specificity > current.specificity ||
+                        (specificity === current.specificity && sourceOrder >= current.sourceOrder)) {
+                        winners.set(key, { specificity, sourceOrder, value });
+                    }
                 }
             });
+        });
+
+        for (const [property, winner] of winners) {
+            (mergedStyle as unknown as Record<string, unknown>)[property] = winner.value;
         }
 
+        // Context overrides are renderer-authored declarations (for example table
+        // layout adjustments), so they sit above stylesheet rules but below inline style.
         if (element.id) {
-            const idStyle = getStyle(`#${element.id}`) || getStyle(element.id);
-            if (idStyle) {
-                mergedStyle = { ...mergedStyle, ...idStyle };
-                debugSegments.push(`id(${element.id})`);
+            const contextOverride = elementStylesOverride?.get(element.id)?.normal;
+            if (contextOverride) {
+                mergedStyle = { ...mergedStyle, ...contextOverride };
             }
+        }
+
+        if (element.style) {
+            mergedStyle = { ...mergedStyle, ...element.style };
+            debugSegments.push('inline');
         }
 
         this.logStyleResolution(element, mergedStyle, debugSegments);
 
         return mergedStyle;
+    }
+
+    private getMatchingSpecificity(element: DOMElement, selector: string): number | null {
+        if (!selector || selector.includes(':') || /[>+~\s]/.test(selector)) {
+            return null;
+        }
+
+        const tokens = Array.from(selector.matchAll(/([.#]?)([\w-]+)/g));
+        if (!tokens.length || tokens.map(token => token[0]).join('') !== selector) {
+            return null;
+        }
+
+        const classes = new Set((element.class ?? '').split(/\s+/).filter(Boolean));
+        let ids = 0;
+        let classCount = 0;
+        let typeCount = 0;
+
+        for (const token of tokens) {
+            const prefix = token[1];
+            const value = token[2];
+            if (prefix === '#') {
+                if (element.id !== value) return null;
+                ids += 1;
+            } else if (prefix === '.') {
+                if (!classes.has(value)) return null;
+                classCount += 1;
+            } else if (value === element.type) {
+                typeCount += 1;
+            } else if (element.id === value) {
+                // Preserve Astylar's historical bare-ID selector support.
+                ids += 1;
+            } else if (classes.has(value)) {
+                // Preserve Astylar's historical bare-class selector support.
+                classCount += 1;
+            } else {
+                return null;
+            }
+        }
+
+        return ids * 100 + classCount * 10 + typeCount;
     }
 
     private logStyleResolution(element: DOMElement, style: StyleRule, segments: string[]): void {
@@ -958,4 +988,4 @@ export class StyleService {
     public getElementTypeDefaults(elementType: string): Partial<StyleRule> {
         return this.styleDefaults.getElementTypeDefaults(elementType);
     }
-} 
+}

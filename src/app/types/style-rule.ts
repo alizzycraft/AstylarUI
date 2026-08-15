@@ -45,6 +45,7 @@ export interface StyleRule {
 
   // Transform
   transform?: string;
+  perspective?: string;
 
   // List
   listStyleType?: string;

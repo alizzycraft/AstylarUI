@@ -5,10 +5,11 @@ import { StyleRule } from '../../../types/style-rule';
 import { BabylonDOM } from '../interfaces/dom.types';
 import { BabylonRender } from '../interfaces/render.types';
 import { ElementDimensionService } from './element-dimension.service';
+import { DOMAncestryService } from '../dom-ancestry.service';
 
 describe('ElementDimensionService', () => {
   it('adds padding and borders outside explicit content-box dimensions', () => {
-    const service = new ElementDimensionService({} as never, {} as never);
+    const service = new ElementDimensionService({} as never, {} as never, new DOMAncestryService());
     const parent = { name: 'root-body' } as Mesh;
     const dom = {
       context: {
@@ -61,7 +62,7 @@ describe('ElementDimensionService', () => {
   });
 
   it('positions an absolute child from its parent padding-box edge', () => {
-    const service = new ElementDimensionService({} as never, {} as never);
+    const service = new ElementDimensionService({} as never, {} as never, new DOMAncestryService());
     const parent = { name: 'parent' } as Mesh;
     const dom = {
       context: {

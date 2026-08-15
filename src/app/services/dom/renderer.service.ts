@@ -22,6 +22,7 @@ import { TextHighlightMeshFactory } from "./interaction/text-highlight-mesh.fact
 import { BabylonMeshService } from "../babylon-mesh.service";
 import { BabylonElementManagerService } from "./element-manager.service";
 import { BabylonInteractionService } from "./interaction.service";
+import { DOMAncestryService } from "./dom-ancestry.service";
 
 @Injectable({
   providedIn: "root",
@@ -47,6 +48,7 @@ export class BabylonDOMRendererService {
     private babylonMeshService: BabylonMeshService,
     private elementManager: BabylonElementManagerService,
     private interactionService: BabylonInteractionService,
+    private ancestry: DOMAncestryService,
   ) {}
 
   public get dom(): BabylonDOM {
@@ -136,6 +138,7 @@ export class BabylonDOMRendererService {
     // Clear existing elements and state
     this.elementManager.clearAll();
     this.interactionService.clearAllInteractions();
+    this.ancestry.clear();
 
     // Parse and organize styles
     console.log("📝 Parsing styles...");
@@ -624,20 +627,8 @@ export class BabylonDOMRendererService {
     element: DOMElement,
     styles: StyleRule[],
   ): StyleRule {
-    // Start with global defaults
-    let inheritedStyle: StyleRule = {
+    const fallbackTextStyles: StyleRule = {
       selector: element.id ? `#${element.id}` : element.type,
-      ...this.styleDefaults.getGlobalDefaultStyle(),
-    };
-
-    // Apply element type defaults (this now handles h1-h6, a, semantic tags etc.)
-    const typeDefaults = this.styleDefaults.getElementTypeDefaults(
-      element.type,
-    );
-    inheritedStyle = { ...inheritedStyle, ...typeDefaults };
-
-    // Explicitly ensure text properties are present if not set by defaults
-    const fallbackTextStyles: Partial<StyleRule> = {
       fontFamily: "Arial, sans-serif",
       fontSize: "16px",
       fontWeight: "normal",
@@ -650,32 +641,32 @@ export class BabylonDOMRendererService {
       textDecoration: "none",
       textTransform: "none",
     };
+    const parent = this.ancestry.getParent(element);
+    const inheritedStyle = parent
+      ? this.pickInheritedTextProperties(
+          this.getInheritedTextStyle(parent, styles),
+        )
+      : {};
+    const ownStyle = this.styleService.findStyleForElement(
+      element,
+      styles,
+      this.elementManager.elementStylesMap,
+    );
 
-    // Merge fallbacks only for missing properties
-    inheritedStyle = { ...fallbackTextStyles, ...inheritedStyle };
+    return { ...fallbackTextStyles, ...inheritedStyle, ...ownStyle };
+  }
 
-    // Apply class styles
-    if (element.class) {
-      const classNames = element.class.split(" ").filter((c) => c.trim());
-      for (const className of classNames) {
-        const classStyle = styles.find(
-          (s) => s.selector === `.${className}` || s.selector === className,
-        );
-        if (classStyle) {
-          inheritedStyle = { ...inheritedStyle, ...classStyle };
-        }
-      }
-    }
-
-    // Apply ID styles (highest priority)
-    if (element.id) {
-      const idStyle = styles.find((s) => s.selector === `#${element.id}`);
-      if (idStyle) {
-        inheritedStyle = { ...inheritedStyle, ...idStyle };
-      }
-    }
-
-    return inheritedStyle;
+  private pickInheritedTextProperties(style: StyleRule): Partial<StyleRule> {
+    const properties: Array<keyof StyleRule> = [
+      'color', 'fontFamily', 'fontSize', 'fontWeight', 'fontStyle', 'lineHeight',
+      'letterSpacing', 'wordSpacing', 'textAlign', 'whiteSpace', 'wordWrap',
+      'textTransform', 'cursor'
+    ];
+    return Object.fromEntries(
+      properties
+        .filter((property) => style[property] !== undefined)
+        .map((property) => [property, style[property]]),
+    ) as Partial<StyleRule>;
   }
 
   /**

@@ -6,6 +6,7 @@ import { DOMElement } from '../../../types/dom-element';
 import { Mesh } from '@babylonjs/core';
 import { TextRenderingService } from '../../text/text-rendering.service';
 import { TextStyleParserService } from '../../text/text-style-parser.service';
+import { DOMAncestryService } from '../dom-ancestry.service';
 
 interface IntrinsicTextMetrics {
     text: string;
@@ -23,7 +24,8 @@ interface IntrinsicTextMetrics {
 export class ElementDimensionService {
     constructor(
         private textRenderingService: TextRenderingService,
-        private textStyleParser: TextStyleParserService
+        private textStyleParser: TextStyleParserService,
+        private ancestry: DOMAncestryService
     ) { }
 
     /**
@@ -437,7 +439,7 @@ export class ElementDimensionService {
         }
 
         const cascadedStyle = render.actions.style.findStyleForElement(element, styles, dom.context.elementStyles);
-        const textStyle = this.getInheritedTextStyle(element, styles);
+        const textStyle = this.getInheritedTextStyle(element, styles, dom, render);
         const effectiveStyle = cascadedStyle
             ? { ...textStyle, ...cascadedStyle, ...style }
             : (style ? { ...textStyle, ...style } : textStyle);
@@ -458,39 +460,47 @@ export class ElementDimensionService {
     /**
      * Helper to get inherited text style
      */
-    private getInheritedTextStyle(element: DOMElement, styles: StyleRule[]): StyleRule {
-        let inheritedStyle: StyleRule = {
+    private getInheritedTextStyle(
+        element: DOMElement,
+        styles: StyleRule[],
+        dom: BabylonDOM,
+        render: BabylonRender
+    ): StyleRule {
+        const fallback: StyleRule = {
             selector: element.id ? `#${element.id}` : element.type,
             fontFamily: 'Arial, sans-serif',
             fontSize: '16px',
             fontWeight: 'normal',
-            color: '#000000'
+            fontStyle: 'normal',
+            lineHeight: '1.2',
+            color: '#000000',
+            textAlign: 'left',
+            whiteSpace: 'normal'
         };
+        const parent = this.ancestry.getParent(element);
+        const inherited = parent
+            ? this.pickInheritedTextProperties(
+                this.getInheritedTextStyle(parent, styles, dom, render)
+              )
+            : {};
+        const own = render.actions.style.findStyleForElement(
+            element,
+            styles,
+            dom.context.elementStyles
+        );
+        return { ...fallback, ...inherited, ...own };
+    }
 
-        // Apply element type defaults (simplified)
-        if (element.type === 'button') {
-            inheritedStyle.fontWeight = 'bold';
-        }
-
-        // Apply class styles
-        if (element.class) {
-            const classNames = element.class.split(' ').filter(c => c.trim());
-            for (const className of classNames) {
-                const classStyle = styles.find(s => s.selector === `.${className}` || s.selector === className);
-                if (classStyle) {
-                    inheritedStyle = { ...inheritedStyle, ...classStyle };
-                }
-            }
-        }
-
-        // Apply ID styles
-        if (element.id) {
-            const idStyle = styles.find(s => s.selector === `#${element.id}`);
-            if (idStyle) {
-                inheritedStyle = { ...inheritedStyle, ...idStyle };
-            }
-        }
-
-        return inheritedStyle;
+    private pickInheritedTextProperties(style: StyleRule): Partial<StyleRule> {
+        const properties: Array<keyof StyleRule> = [
+            'color', 'fontFamily', 'fontSize', 'fontWeight', 'fontStyle', 'lineHeight',
+            'letterSpacing', 'wordSpacing', 'textAlign', 'whiteSpace', 'wordWrap',
+            'textTransform', 'cursor'
+        ];
+        return Object.fromEntries(
+            properties
+                .filter(property => style[property] !== undefined)
+                .map(property => [property, style[property]])
+        ) as Partial<StyleRule>;
     }
 }
