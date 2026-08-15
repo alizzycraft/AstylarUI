@@ -214,5 +214,11 @@
     "title": "Styled semantic textarea control",
     "category": "forms-interactive",
     "expectedBehavior": "A textarea is recognized from its semantic type and renders authored line breaks from the declared content inset."
+  },
+  {
+    "id": "relative-block-flow",
+    "title": "Relative offsets preserve block flow",
+    "category": "block-inline",
+    "expectedBehavior": "A relatively positioned block is offset from its normal position while retaining its original space in sibling flow."
   }
 ]

@@ -34,6 +34,7 @@ import { universalSelectorFixture } from './universal-selector.fixture';
 import { fixedPositioningFixture } from './fixed-positioning.fixture';
 import { viewportUnitsFixture } from './viewport-units.fixture';
 import { styledTextareaFixture } from './styled-textarea.fixture';
+import { relativeBlockFlowFixture } from './relative-block-flow.fixture';
 import { ParityFixture } from '../parity.types';
 
 const fixtures: readonly ParityFixture[] = [
@@ -72,7 +73,8 @@ const fixtures: readonly ParityFixture[] = [
   universalSelectorFixture,
   fixedPositioningFixture,
   viewportUnitsFixture,
-  styledTextareaFixture
+  styledTextareaFixture,
+  relativeBlockFlowFixture
 ];
 
 const fixturesById = new Map(fixtures.map((fixture) => [fixture.id, fixture]));

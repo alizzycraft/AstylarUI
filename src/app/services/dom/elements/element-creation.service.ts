@@ -956,12 +956,12 @@ export class ElementCreationService {
           styles,
         );
 
-        const hasExplicitPositioning =
-          resolvedStyle?.top !== undefined || resolvedStyle?.left !== undefined;
+        const isRemovedFromFlow =
+          resolvedStyle?.position === "absolute" || resolvedStyle?.position === "fixed";
 
-        if (hasExplicitPositioning) {
+        if (isRemovedFromFlow) {
           console.log(
-            `[ElementCreation] Skipping stacking for absolutely positioned element: ${child.id || child.type}`,
+            `[ElementCreation] Skipping stacking for out-of-flow element: ${child.id || child.type}`,
           );
 
           if (child.children && child.children.length > 0) {
@@ -999,7 +999,7 @@ export class ElementCreationService {
         const marginBox = this.parseMarginBox(childResolvedStyle);
         const marginTop = marginBox.top;
         const marginBottom = marginBox.bottom;
-        const childCenterX =
+        let childCenterX =
           -parentWidth / 2 + paddingLeft + marginBox.left + childWidth / 2;
 
         cursorY -= this.collapseVerticalMargins(
@@ -1007,7 +1007,21 @@ export class ElementCreationService {
           marginTop,
         );
 
-        const childCenterY = cursorY - childHeight / 2;
+        let childCenterY = cursorY - childHeight / 2;
+
+        if (resolvedStyle?.position === "relative") {
+          const fontSize = this.parseFontSize(resolvedStyle.fontSize);
+          if (resolvedStyle.left !== undefined) {
+            childCenterX += this.parseLengthValue(resolvedStyle.left, fontSize);
+          } else if (resolvedStyle.right !== undefined) {
+            childCenterX -= this.parseLengthValue(resolvedStyle.right, fontSize);
+          }
+          if (resolvedStyle.top !== undefined) {
+            childCenterY -= this.parseLengthValue(resolvedStyle.top, fontSize);
+          } else if (resolvedStyle.bottom !== undefined) {
+            childCenterY += this.parseLengthValue(resolvedStyle.bottom, fontSize);
+          }
+        }
 
         render.actions.mesh.positionTextMesh(
           childMesh,

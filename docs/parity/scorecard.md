@@ -7,21 +7,21 @@ Last updated: 2026-08-15
 | Category | Fixtures | Required direction |
 | --- | ---: | --- |
 | Cascade and default styles | 4 | Selectors, specificity, inheritance, inline styles, UA-like defaults |
-| Block and inline flow | 3 | Block, inline, inline-block, none, inline-flex |
+| Block and inline flow | 4 | Block, inline, inline-block, none, inline-flex |
 | Box model and sizing units | 5 | Width/height, min/max, padding, margin, borders, px/%/viewport/font units |
 | Typography and multiline text | 4 | Fonts, line height, wrapping, whitespace, alignment, overflow |
 | Flexbox | 4 | Direction, wrap, basis, grow/shrink, gap, order, alignment |
 | Positioning and stacking | 4 | Static, relative, absolute, fixed, containing blocks, z-order |
 | Lists, tables, and images | 7 | Representative structural and replaced content |
 | Forms and interactive states | 5 | Basic visible controls, focus, checked/disabled states |
-| **Total** | **36 / 40** | Balanced coverage required before completion |
+| **Total** | **37 / 40** | Balanced coverage required before completion |
 
 ## Current Baseline
 
 | Metric | Current result | Core Web Parity v1 threshold |
 | --- | ---: | ---: |
-| Fixtures | 36 | At least 40 |
-| Median SSIM | 0.9956 | At least 0.98 |
+| Fixtures | 37 | At least 40 |
+| Median SSIM | 0.9953 | At least 0.98 |
 | Minimum fixture SSIM | 0.9805 | At least 0.95 |
 | Geometry edges within 2px | 100% | At least 95% |
 | Maximum edge error | 0.203px | At most 5px or documented |
@@ -29,7 +29,7 @@ Last updated: 2026-08-15
 | Runtime errors | 0 | 0 |
 
 All current fixtures pass every per-fixture quality threshold. The suite does
-not meet the completion gate because coverage is still 36 of 40 fixtures.
+not meet the completion gate because coverage is still 37 of 40 fixtures.
 
 ## Decisions
 
@@ -132,6 +132,9 @@ not meet the completion gate because coverage is still 36 of 40 fixtures.
     preserve authored whitespace, normalize pixel line height, and top-align the
     texture at the declared padding and border inset. The harness reads control
     values and their separately stored layout metrics for exact text checks.
+37. Relatively positioned blocks participate in normal sibling flow before
+    `left`/`right` and `top`/`bottom` offsets are applied to their painted mesh;
+    only absolute and fixed boxes are removed from block stacking.
 
 ## Iteration History
 
@@ -161,6 +164,7 @@ not meet the completion gate because coverage is still 36 of 40 fixtures.
 | Fixed viewport positioning | 34-fixture attempt; fixed descendant SSIM 0.9438 with 264.002px maximum edge error | 34 fixtures; median SSIM 0.9956; minimum 0.9805; 100% edges; max error 0.203px; exact text; fixed fixture 0.9997 SSIM | Fixed elements used their authored parent's dimensions and mesh transform, making them behave like absolute descendants instead of viewport-positioned boxes |
 | Viewport sizing units | 35-fixture attempt; viewport-unit fixture SSIM 0.9670 with 280.003px maximum edge error | 35 fixtures; median SSIM 0.9956; minimum 0.9805; 100% edges; max error 0.203px; exact text; viewport-unit fixture 1.0000 SSIM | Dimension and offset parsing treated the numeric prefix of `vw`/`vh` values as pixels instead of resolving it against the root viewport |
 | Styled semantic textarea | 36-fixture attempt; textarea flattened authored line breaks, vertically centered text, and failed exact control-text measurement at 0.9851 SSIM | 36 fixtures; median SSIM 0.9956; minimum 0.9805; 100% edges; max error 0.203px; exact text; textarea fixture 0.9929 SSIM | Text controls hard-coded normal whitespace and single-line layout; textarea values and metrics also lived outside the harness's ordinary text-node registries |
+| Relative block flow | 37-fixture attempt; shifted block vacated normal flow, moving its next sibling by 52.004px and scoring 0.9417 SSIM | 37 fixtures; median SSIM 0.9953; minimum 0.9805; 100% edges; max error 0.203px; exact text; relative fixture 0.9934 SSIM | Block layout treated the presence of any offset as absolute positioning instead of placing relative boxes normally and offsetting only their painted position |
 
 ## Known Intentional Deviations
 
@@ -170,5 +174,4 @@ block geometry by at most 0.203px; exact font-engine-specific leading is out of 
 
 ## Recommended Next Target
 
-Broaden block flow, flex ordering, and typography coverage, then cover
-font-relative sizing units.
+Cover flex ordering, typography overflow, and font-relative sizing units.
