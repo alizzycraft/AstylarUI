@@ -1,5 +1,10 @@
 export interface StyleRule {
   selector: string;
+  // Optional media bounds for conditionally applying this JSON style rule.
+  mediaMinWidth?: string;
+  mediaMaxWidth?: string;
+  mediaMinHeight?: string;
+  mediaMaxHeight?: string;
   // Positioning
   position?: 'static' | 'relative' | 'absolute' | 'fixed';
   top?: string;

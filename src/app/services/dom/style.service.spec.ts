@@ -3,14 +3,18 @@ import { StyleRule } from '../../types/style-rule';
 import { StyleDefaultsService } from './style-defaults.service';
 import { StyleService } from './style.service';
 import { DOMAncestryService } from './dom-ancestry.service';
+import { ViewportService } from './positioning/viewport.service';
 
 describe('StyleService cascade', () => {
   let service: StyleService;
   let ancestry: DOMAncestryService;
+  let viewport: ViewportService;
 
   beforeEach(() => {
     ancestry = new DOMAncestryService();
-    service = new StyleService(new StyleDefaultsService(), ancestry);
+    viewport = new ViewportService();
+    viewport.updateViewport({ width: 800, height: 600 });
+    service = new StyleService(new StyleDefaultsService(), ancestry, viewport);
   });
 
   it('resolves specificity before source order', () => {
@@ -169,5 +173,20 @@ describe('StyleService cascade', () => {
     expect(service.matchesSelector(first, ':first-child')).toBeTrue();
     expect(service.matchesSelector(last, ':last-child')).toBeTrue();
     expect(service.matchesSelector(middle, ':first-child')).toBeFalse();
+  });
+
+  it('applies media-bounded rules against the current viewport', () => {
+    const element: DOMElement = { type: 'div', id: 'media-card' };
+    const styles: StyleRule[] = [
+      { selector: '#media-card', width: '60vw', background: '#dbeafe' },
+      { selector: '#media-card', mediaMaxWidth: '700px', width: '70vw', background: '#ede9fe' },
+      { selector: '#media-card', mediaMaxWidth: '31.25rem', width: '80vw', background: '#dcfce7' },
+    ];
+
+    expect(service.findStyleForElement(element, styles)?.width).toBe('60vw');
+    viewport.updateViewport({ width: 640 });
+    expect(service.findStyleForElement(element, styles)?.width).toBe('70vw');
+    viewport.updateViewport({ width: 390 });
+    expect(service.findStyleForElement(element, styles)?.width).toBe('80vw');
   });
 });

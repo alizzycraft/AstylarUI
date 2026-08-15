@@ -6,6 +6,7 @@ import { DOMElement } from '../../types/dom-element';
 import { BabylonRender, ParsedBackground, LinearGradientDefinition, GradientStop } from './interfaces/render.types';
 import { StyleDefaultsService } from './style-defaults.service';
 import { DOMAncestryService } from './dom-ancestry.service';
+import { ViewportService } from './positioning/viewport.service';
 
 @Injectable({
     providedIn: 'root'
@@ -14,6 +15,7 @@ export class StyleService {
     constructor(
         private styleDefaults: StyleDefaultsService,
         private ancestry: DOMAncestryService,
+        private viewportService: ViewportService,
     ) { }
 
     /**
@@ -246,6 +248,8 @@ export class StyleService {
     public parseStyles(dom: BabylonDOM, render: BabylonRender, styles: StyleRule[]): void {
         console.log(`[STYLE-PARSE] Starting to parse ${styles.length} styles`);
         styles.forEach((style, index) => {
+            if (!this.matchesMediaConditions(style)) return;
+
             const selectors = style.selector.split(',').map(s => s.trim());
 
             selectors.forEach(selector => {
@@ -306,6 +310,8 @@ export class StyleService {
         const debugSegments: string[] = [];
 
         styles.forEach((rule, sourceOrder) => {
+            if (!this.matchesMediaConditions(rule)) return;
+
             rule.selector.split(',').map(selector => selector.trim()).forEach(selector => {
                 const specificity = this.getMatchingSpecificity(element, selector);
                 if (specificity === null) {
@@ -314,7 +320,7 @@ export class StyleService {
 
                 debugSegments.push(`${selector}[${specificity}]`);
                 for (const [property, value] of Object.entries(rule)) {
-                    if (property === 'selector' || value === undefined) {
+                    if (property === 'selector' || property.startsWith('media') || value === undefined) {
                         continue;
                     }
                     const key = property as keyof StyleRule;
@@ -348,6 +354,31 @@ export class StyleService {
         this.logStyleResolution(element, mergedStyle, debugSegments);
 
         return mergedStyle;
+    }
+
+    private matchesMediaConditions(rule: StyleRule): boolean {
+        const { width, height } = this.viewportService.getViewportDimensions();
+        const conditions: Array<[string | undefined, number, 'min' | 'max']> = [
+            [rule.mediaMinWidth, width, 'min'],
+            [rule.mediaMaxWidth, width, 'max'],
+            [rule.mediaMinHeight, height, 'min'],
+            [rule.mediaMaxHeight, height, 'max'],
+        ];
+
+        return conditions.every(([value, actual, bound]) => {
+            if (value === undefined) return true;
+            const threshold = this.parseMediaLength(value);
+            if (threshold === null) return false;
+            return bound === 'min' ? actual >= threshold : actual <= threshold;
+        });
+    }
+
+    private parseMediaLength(value: string): number | null {
+        const normalized = value.trim().toLowerCase();
+        const match = normalized.match(/^(-?(?:\d+\.?\d*|\.\d+))(px|em|rem)?$/);
+        if (!match) return null;
+        const amount = Number.parseFloat(match[1]);
+        return match[2] === 'em' || match[2] === 'rem' ? amount * 16 : amount;
     }
 
     private getMatchingSpecificity(element: DOMElement, selector: string): number | null {

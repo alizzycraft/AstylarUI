@@ -8,8 +8,8 @@ This scorecard tracks the second parity phase: making ordinary application-orien
 
 | Gate | Current | Target | Status |
 | --- | ---: | ---: | --- |
-| Total parity fixtures | 46 | 65 | Open |
-| New Phase 2 fixtures | 6 | 25 | Open |
+| Total parity fixtures | 47 | 65 | Open |
+| New Phase 2 fixtures | 7 | 25 | Open |
 | Composed application/component fixtures | 0 | 10 | Open |
 | Deterministic viewport sizes | 3 exercised | 3 exercised | Passing |
 | Median SSIM | 0.9953 | >= 0.98 | Passing baseline |
@@ -27,7 +27,7 @@ This scorecard tracks the second parity phase: making ordinary application-orien
 | --- | ---: | --- | --- |
 | Selectors and cascade | 5 | Relationship combinators plus first/last structural pseudo-classes | In progress |
 | CSS Grid | 0 | — | Open |
-| Responsive behavior | 1 | Viewport-relative geometry across desktop, tablet, and mobile | In progress |
+| Responsive behavior | 2 | Viewport-relative geometry and width media conditions across three profiles | In progress |
 | Overflow and scrolling | 0 | — | Open |
 | Controls and states | 0 | — | Open |
 | Layering and overlays | 0 | — | Open |
@@ -65,6 +65,7 @@ The committed 40-fixture Phase 1 suite was rerun before Phase 2 work began. It p
 | Structural pseudo-classes | First and last items retained neutral colors; SSIM `0.9916` | Matched first/last authored siblings with class-level pseudo specificity | Fixture SSIM `0.9940`; visual output aligned; 100% edges within 2 px; exact text; 57 tests and both builds pass | `fix: support structural pseudo selectors` |
 | Multi-viewport harness | One hard-coded `800x600` browser context and component surface | Added named desktop, tablet, and mobile profiles with per-fixture selection and render-case accounting | All 45 existing fixtures remain green at desktop; profile and render counts are reported | `test: add deterministic viewport profiles` |
 | Responsive viewport units | Viewport profiles were available but not exercised; scaled borders also lowered tablet/mobile SSIM below `0.95` | Added a three-profile fixture; isolated it to responsive geometry and logged scale-dependent border paint separately | Desktop `0.9979`, tablet `0.9990`, mobile `0.9968`; maximum edge error `0.027px`; exact text; 57 tests and both builds pass | `test: cover responsive viewport geometry` |
+| Responsive media conditions | Every JSON variant applied: desktop was `160px` too wide and tablet `64px` too wide | Added optional min/max width/height media bounds, evaluated in both cascade resolution and renderer context parsing | Desktop `0.9983`, tablet `0.9973`, mobile `0.9972`; max edge error `0.012px`; exact text; 58 tests and both builds pass | `fix: support responsive media conditions` |
 
 ## Remaining work
 
@@ -78,4 +79,4 @@ The committed 40-fixture Phase 1 suite was rerun before Phase 2 work began. It p
 
 ## Next target
 
-Add explicit media-condition fields to JSON style rules and a three-profile fixture that matches browser `@media` cascade changes at desktop, tablet, and mobile widths.
+Add control-state pseudo selectors (`:disabled`, `:enabled`, and `:checked`) with a focused forms fixture and state-specific cascade assertions.
