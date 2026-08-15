@@ -175,7 +175,11 @@ export class ParityAstylarComponent {
       const borderBox = this.projectMeshRect(mesh, scene);
       const dimensions = this.elementManager.elementDimensionsMap.get(id);
       const style = this.elementManager.elementStylesMap.get(id)?.normal;
-      const metrics = this.elementManager.textMetricsMap.get(id)?.css;
+      const elementType = this.elementManager.elementTypesMap.get(id);
+      const inputElement = this.elementManager.inputElementsMap.get(id);
+      const metrics = this.elementManager.textMetricsMap.get(id)?.css
+        ?? (elementType === 'textarea' ? inputElement?.textLayoutMetrics : undefined);
+      const textContent = elementType === 'textarea' ? `${inputElement?.value ?? ''}` : metrics?.text;
       const material = mesh.material instanceof StandardMaterial ? mesh.material : undefined;
 
       if (!this.isFiniteRect(borderBox)) {
@@ -216,9 +220,9 @@ export class ParityAstylarComponent {
         },
         text: metrics
           ? {
-              content: metrics.text,
+              content: textContent,
               lineCount: metrics.lines.length,
-              lines: metrics.lines.map((line) => line.text)
+              lines: metrics.lines.map((line: { text: string }) => line.text)
             }
           : undefined
       };

@@ -134,10 +134,14 @@ export class ParityReferenceComponent {
 
     const directTextNodes = this.getDirectTextNodes(element);
     const lineRects = this.getTextLineRects(directTextNodes);
-    const textContent = directTextNodes
+    const textareaValue = element instanceof HTMLTextAreaElement ? element.value : undefined;
+    const textContent = textareaValue ?? directTextNodes
       .map((node) => node.textContent?.trim() ?? '')
       .filter(Boolean)
       .join(' ');
+    const lineCount = textareaValue !== undefined
+      ? textareaValue.split(/\r?\n/).length
+      : lineRects.length;
 
     return {
       id: element.id,
@@ -162,7 +166,7 @@ export class ParityReferenceComponent {
         opacity: computed.opacity,
         zIndex: computed.zIndex
       },
-      text: textContent ? { content: textContent, lineCount: lineRects.length } : undefined
+      text: textContent ? { content: textContent, lineCount } : undefined
     };
   }
 

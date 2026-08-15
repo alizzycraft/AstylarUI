@@ -208,5 +208,11 @@
     "title": "Viewport-relative sizing and offsets",
     "category": "box-model-units",
     "expectedBehavior": "Viewport width and height units resolve against the rendered viewport for dimensions and positioned offsets."
+  },
+  {
+    "id": "styled-textarea",
+    "title": "Styled semantic textarea control",
+    "category": "forms-interactive",
+    "expectedBehavior": "A textarea is recognized from its semantic type and renders authored line breaks from the declared content inset."
   }
 ]

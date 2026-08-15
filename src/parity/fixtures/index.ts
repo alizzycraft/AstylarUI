@@ -33,6 +33,7 @@ import { textTransformAlignmentFixture } from './text-transform-alignment.fixtur
 import { universalSelectorFixture } from './universal-selector.fixture';
 import { fixedPositioningFixture } from './fixed-positioning.fixture';
 import { viewportUnitsFixture } from './viewport-units.fixture';
+import { styledTextareaFixture } from './styled-textarea.fixture';
 import { ParityFixture } from '../parity.types';
 
 const fixtures: readonly ParityFixture[] = [
@@ -70,7 +71,8 @@ const fixtures: readonly ParityFixture[] = [
   textTransformAlignmentFixture,
   universalSelectorFixture,
   fixedPositioningFixture,
-  viewportUnitsFixture
+  viewportUnitsFixture,
+  styledTextareaFixture
 ];
 
 const fixturesById = new Map(fixtures.map((fixture) => [fixture.id, fixture]));

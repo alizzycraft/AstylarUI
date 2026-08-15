@@ -282,6 +282,11 @@ export class TextInputManager {
             // Use the same service method as text rendering to ensure consistency
             const textStyleProps = this.parseTextStyle(textStyle);
             const pixelScale = render.actions.camera.getPixelToWorldScale();
+            const isTextarea = textInput.type === InputType.Textarea;
+            const inputWidth = textInput.mesh.getBoundingInfo().boundingBox.extendSize.x * 2;
+            const contentInsets = this.getHorizontalContentInsets(textStyle, pixelScale);
+            const availableWidth = Math.max(0, inputWidth - contentInsets.left - contentInsets.right);
+            const maxTextWidth = isTextarea ? availableWidth / pixelScale : undefined;
             console.log('[TextInputManager] Calculating layout metrics for text:', textToRender);
             console.log('[TextInputManager] Text style props:', textStyleProps);
 
@@ -289,7 +294,8 @@ export class TextInputManager {
             const storedLayoutMetrics = this.textRenderingService.createStoredLayoutMetrics(
                 textToRender,
                 textStyleProps,
-                pixelScale
+                pixelScale,
+                maxTextWidth
             );
 
             // Extract CSS metrics for cursor positioning (these are in CSS pixels)
@@ -300,7 +306,8 @@ export class TextInputManager {
             const texture = this.textRenderingService.renderTextToTexture(
                 textInput.element,
                 textToRender,
-                textStyle
+                textStyle,
+                maxTextWidth
             );
 
             // Get texture dimensions
@@ -309,11 +316,10 @@ export class TextInputManager {
             const textureHeightPx = textureSize.height;
 
             // Convert to world units using camera's pixel-to-world scale
-            const scale = render.actions.camera.getPixelToWorldScale();
             const devicePixelRatio = window.devicePixelRatio || 1;
             // Normalize by DPR to ensure we use logical CSS pixels for world sizing
-            const textureWidth = (textureWidthPx / devicePixelRatio) * scale;
-            const textureHeight = (textureHeightPx / devicePixelRatio) * scale;
+            const textureWidth = (textureWidthPx / devicePixelRatio) * pixelScale;
+            const textureHeight = (textureHeightPx / devicePixelRatio) * pixelScale;
 
             // Create text mesh using BabylonMeshService
             const textMesh = this.babylonMeshService.createTextMesh(
@@ -337,9 +343,7 @@ export class TextInputManager {
 
             // Align text mesh based on textAlign style
             const textAlign = (textStyle.textAlign || 'left').toLowerCase();
-            const inputWidth = textInput.mesh.getBoundingInfo().boundingBox.extendSize.x * 2;
-            const insets = this.getHorizontalContentInsets(textStyle, scale);
-            const availableWidth = Math.max(0, inputWidth - insets.left - insets.right);
+            const insets = contentInsets;
 
             // Handle clipping if text exceeds available width
             if (textureWidth > availableWidth) {
@@ -388,6 +392,12 @@ export class TextInputManager {
                         (mat.emissiveTexture as BABYLON.Texture).uOffset = 0.0;
                     }
                 }
+            }
+
+            if (isTextarea && textInput.textMesh) {
+                const inputHeight = textInput.mesh.getBoundingInfo().boundingBox.extendSize.y * 2;
+                const verticalInsets = this.getVerticalContentInsets(textStyle, pixelScale);
+                textInput.textMesh.position.y = inputHeight / 2 - verticalInsets.top - textureHeight / 2;
             }
 
             // Register with text interaction registry for drag selection
@@ -872,6 +882,28 @@ export class TextInputManager {
         };
     }
 
+    private getVerticalContentInsets(
+        style: StyleRule,
+        scale: number
+    ): { top: number; bottom: number } {
+        const values = style.padding
+            ?.trim()
+            .split(/\s+/)
+            .map((part) => Math.max(0, this.parseSize(part) || 0)) ?? [];
+        const border = Math.max(0, this.parseSize(style.borderWidth) || 0);
+        const shorthandTop = values[0] ?? 0;
+        const shorthandBottom = values.length === 3 || values.length === 4
+            ? values[2]
+            : shorthandTop;
+        const top = Math.max(0, this.parseSize(style.paddingTop) ?? shorthandTop);
+        const bottom = Math.max(0, this.parseSize(style.paddingBottom) ?? shorthandBottom);
+
+        return {
+            top: (border + top) * scale,
+            bottom: (border + bottom) * scale
+        };
+    }
+
     private parseBoxShorthand(value: string | undefined): { left: number; right: number } {
         const values = value
             ?.trim()
@@ -890,6 +922,16 @@ export class TextInputManager {
      * Converts StyleRule to TextStyleProperties
      */
     private parseTextStyle(style: StyleRule): TextStyleProperties {
+        const fontSize = this.parseSize(style.fontSize) || 16;
+        const parsedLineHeight = parseFloat(style.lineHeight as string);
+        const lineHeight = style.lineHeight?.endsWith('px')
+            ? parsedLineHeight / fontSize
+            : parsedLineHeight || 1.2;
+        const supportedWhiteSpace = ['normal', 'nowrap', 'pre', 'pre-wrap', 'pre-line'];
+        const whiteSpace = supportedWhiteSpace.includes(style.whiteSpace || '')
+            ? style.whiteSpace as TextStyleProperties['whiteSpace']
+            : 'normal';
+
         // Helper function to safely cast font weight
         const parseFontWeight = (weight: string | undefined): TextStyleProperties['fontWeight'] => {
             if (!weight) return 'normal';
@@ -918,16 +960,16 @@ export class TextInputManager {
 
         return {
             fontFamily: style.fontFamily || 'Arial',
-            fontSize: this.parseSize(style.fontSize) || 16,
+            fontSize,
             fontWeight: parseFontWeight(style.fontWeight),
             fontStyle: parseFontStyle(style.fontStyle),
             color: style.color || '#000000',
             textAlign: (style.textAlign as any) || 'left',
             verticalAlign: 'baseline',
-            lineHeight: parseFloat(style.lineHeight as string) || 1.2,
+            lineHeight,
             letterSpacing: this.parseSize(style.letterSpacing) || 0,
             wordSpacing: this.parseSize(style.wordSpacing) || 0,
-            whiteSpace: 'normal',
+            whiteSpace,
             wordWrap: 'normal',
             textOverflow: 'clip',
             textDecoration: parseTextDecoration(style.textDecoration),
