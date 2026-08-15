@@ -10,17 +10,17 @@ Last updated: 2026-08-15
 | Block and inline flow | 4 | Block, inline, inline-block, none, inline-flex |
 | Box model and sizing units | 5 | Width/height, min/max, padding, margin, borders, px/%/viewport/font units |
 | Typography and multiline text | 4 | Fonts, line height, wrapping, whitespace, alignment, overflow |
-| Flexbox | 4 | Direction, wrap, basis, grow/shrink, gap, order, alignment |
+| Flexbox | 5 | Direction, wrap, basis, grow/shrink, gap, order, alignment |
 | Positioning and stacking | 4 | Static, relative, absolute, fixed, containing blocks, z-order |
 | Lists, tables, and images | 7 | Representative structural and replaced content |
 | Forms and interactive states | 5 | Basic visible controls, focus, checked/disabled states |
-| **Total** | **37 / 40** | Balanced coverage required before completion |
+| **Total** | **38 / 40** | Balanced coverage required before completion |
 
 ## Current Baseline
 
 | Metric | Current result | Core Web Parity v1 threshold |
 | --- | ---: | ---: |
-| Fixtures | 37 | At least 40 |
+| Fixtures | 38 | At least 40 |
 | Median SSIM | 0.9953 | At least 0.98 |
 | Minimum fixture SSIM | 0.9805 | At least 0.95 |
 | Geometry edges within 2px | 100% | At least 95% |
@@ -29,7 +29,7 @@ Last updated: 2026-08-15
 | Runtime errors | 0 | 0 |
 
 All current fixtures pass every per-fixture quality threshold. The suite does
-not meet the completion gate because coverage is still 37 of 40 fixtures.
+not meet the completion gate because coverage is still 38 of 40 fixtures.
 
 ## Decisions
 
@@ -135,6 +135,9 @@ not meet the completion gate because coverage is still 37 of 40 fixtures.
 37. Relatively positioned blocks participate in normal sibling flow before
     `left`/`right` and `top`/`bottom` offsets are applied to their painted mesh;
     only absolute and fixed boxes are removed from block stacking.
+38. Flex item ordering is stable across equal values and individual `align-self`
+    values override the container's cross-axis alignment; representative negative,
+    zero, and positive orders already agree with Chromium.
 
 ## Iteration History
 
@@ -165,6 +168,7 @@ not meet the completion gate because coverage is still 37 of 40 fixtures.
 | Viewport sizing units | 35-fixture attempt; viewport-unit fixture SSIM 0.9670 with 280.003px maximum edge error | 35 fixtures; median SSIM 0.9956; minimum 0.9805; 100% edges; max error 0.203px; exact text; viewport-unit fixture 1.0000 SSIM | Dimension and offset parsing treated the numeric prefix of `vw`/`vh` values as pixels instead of resolving it against the root viewport |
 | Styled semantic textarea | 36-fixture attempt; textarea flattened authored line breaks, vertically centered text, and failed exact control-text measurement at 0.9851 SSIM | 36 fixtures; median SSIM 0.9956; minimum 0.9805; 100% edges; max error 0.203px; exact text; textarea fixture 0.9929 SSIM | Text controls hard-coded normal whitespace and single-line layout; textarea values and metrics also lived outside the harness's ordinary text-node registries |
 | Relative block flow | 37-fixture attempt; shifted block vacated normal flow, moving its next sibling by 52.004px and scoring 0.9417 SSIM | 37 fixtures; median SSIM 0.9953; minimum 0.9805; 100% edges; max error 0.203px; exact text; relative fixture 0.9934 SSIM | Block layout treated the presence of any offset as absolute positioning instead of placing relative boxes normally and offsetting only their painted position |
+| Flex order and align-self | No deterministic item-order plus individual cross-axis alignment comparison | 38 fixtures; median SSIM 0.9953; minimum 0.9805; 100% edges; max error 0.203px; exact text; flex fixture 0.9867 SSIM and 0.006px max edge error | Added positive coverage confirming stable order sorting and per-item start, center, and end alignment already agree with Chromium |
 
 ## Known Intentional Deviations
 
@@ -174,4 +178,4 @@ block geometry by at most 0.203px; exact font-engine-specific leading is out of 
 
 ## Recommended Next Target
 
-Cover flex ordering, typography overflow, and font-relative sizing units.
+Cover typography overflow and font-relative sizing units.

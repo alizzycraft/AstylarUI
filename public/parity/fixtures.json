@@ -220,5 +220,11 @@
     "title": "Relative offsets preserve block flow",
     "category": "block-inline",
     "expectedBehavior": "A relatively positioned block is offset from its normal position while retaining its original space in sibling flow."
+  },
+  {
+    "id": "flex-order-self",
+    "title": "Flex order and individual alignment",
+    "category": "flexbox",
+    "expectedBehavior": "Flex items paint in ascending order while align-self overrides the container cross-axis alignment for individual items."
   }
 ]

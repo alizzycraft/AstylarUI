@@ -35,6 +35,7 @@ import { fixedPositioningFixture } from './fixed-positioning.fixture';
 import { viewportUnitsFixture } from './viewport-units.fixture';
 import { styledTextareaFixture } from './styled-textarea.fixture';
 import { relativeBlockFlowFixture } from './relative-block-flow.fixture';
+import { flexOrderSelfFixture } from './flex-order-self.fixture';
 import { ParityFixture } from '../parity.types';
 
 const fixtures: readonly ParityFixture[] = [
@@ -74,7 +75,8 @@ const fixtures: readonly ParityFixture[] = [
   fixedPositioningFixture,
   viewportUnitsFixture,
   styledTextareaFixture,
-  relativeBlockFlowFixture
+  relativeBlockFlowFixture,
+  flexOrderSelfFixture
 ];
 
 const fixturesById = new Map(fixtures.map((fixture) => [fixture.id, fixture]));
