@@ -178,5 +178,11 @@
     "title": "Negative and auto stacking inside a context",
     "category": "positioning-stacking",
     "expectedBehavior": "A negative z-index child paints above its stacking-context parent background but below a later auto-z sibling."
+  },
+  {
+    "id": "styled-select",
+    "title": "Styled semantic select control",
+    "category": "forms-interactive",
+    "expectedBehavior": "A select element is recognized from its semantic type and paints its selected option at the declared content inset."
   }
 ]

@@ -545,6 +545,10 @@ export class TextInputManager {
      * Determines the input type from element
      */
     private determineInputType(element: DOMElement): InputType {
+        if (element.type === 'textarea') {
+            return InputType.Textarea;
+        }
+
         const inputType = element.inputType?.toLowerCase();
 
         switch (inputType) {

@@ -361,11 +361,10 @@ export class SelectManager {
             displayPlane.position.z = 0.05;
             displayPlane.isPickable = false;
 
-            // Align text to left edge - match text-input positioning logic
+            // Align text to the CSS content edge.
             const selectWidth = selectElement.mesh.getBoundingInfo().boundingBox.extendSize.x * 2;
-            const padding = 1.5; // Match text-input padding
-            // Use same formula as text-input for consistency
-            displayPlane.position.x = (selectWidth / 2) - (textureWidth / 2) - padding;
+            const insets = this.getHorizontalContentInsets(style, scale);
+            displayPlane.position.x = (selectWidth / 2) - (textureWidth / 2) - insets.left;
 
             return displayPlane;
 
@@ -432,11 +431,10 @@ export class SelectManager {
             displayPlane.position.z = 0.05;
             displayPlane.isPickable = false;
 
-            // Align text to left edge - match text-input positioning logic
+            // Align text to the CSS content edge.
             const selectWidth = selectElement.mesh.getBoundingInfo().boundingBox.extendSize.x * 2;
-            const padding = 1.5; // Match text-input padding
-            // Use same formula as text-input for consistency
-            displayPlane.position.x = (selectWidth / 2) - (textureWidth / 2) - padding;
+            const insets = this.getHorizontalContentInsets(style, scale);
+            displayPlane.position.x = (selectWidth / 2) - (textureWidth / 2) - insets.left;
 
             return displayPlane;
 
@@ -450,6 +448,34 @@ export class SelectManager {
         }
     }
 
+    private getHorizontalContentInsets(
+        style: StyleRule,
+        scale: number
+    ): { left: number; right: number } {
+        const padding = this.parseHorizontalBoxShorthand(style.padding);
+        const border = Math.max(0, this.parseSize(style.borderWidth) || 0);
+        const left = Math.max(0, this.parseSize(style.paddingLeft) ?? padding.left);
+        const right = Math.max(0, this.parseSize(style.paddingRight) ?? padding.right);
+
+        return {
+            left: (border + left) * scale,
+            right: (border + right) * scale
+        };
+    }
+
+    private parseHorizontalBoxShorthand(value: string | undefined): { left: number; right: number } {
+        const values = value
+            ?.trim()
+            .split(/\s+/)
+            .map((part) => Math.max(0, this.parseSize(part) || 0)) ?? [];
+
+        if (values.length === 0) return { left: 0, right: 0 };
+        if (values.length === 1) return { left: values[0], right: values[0] };
+        if (values.length === 2 || values.length === 3) {
+            return { left: values[1], right: values[1] };
+        }
+        return { left: values[3], right: values[1] };
+    }
 
     /**
      * Creates the dropdown background mesh

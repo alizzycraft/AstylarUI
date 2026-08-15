@@ -251,6 +251,14 @@ export class InputElementService {
             return InputType.Button;
         }
 
+        if (element.type === 'select') {
+            return InputType.Select;
+        }
+
+        if (element.type === 'textarea') {
+            return InputType.Textarea;
+        }
+
         return null;
     }
 
