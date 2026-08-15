@@ -16,6 +16,10 @@ import { StyleDefaultsService } from "../style-defaults.service";
 import { DOMElement } from "../../../types/dom-element";
 import { StyleRule } from "../../../types/style-rule";
 import { TransformData } from "../../../types/transform-data";
+import {
+  ELEMENT_BORDER_Z_OFFSET,
+  SELECT_BORDER_Z_OFFSET,
+} from "../render-depth.constants";
 
 /**
  * Service responsible for element interaction (mouse events, hover, etc.)
@@ -648,7 +652,9 @@ export class ElementInteractionService {
             borderMeshes,
             0, // Center X (local)
             0, // Center Y (local)
-            0.05, // Z position (local offset) - increased to ensure visibility
+            element.type === "select"
+              ? SELECT_BORDER_Z_OFFSET
+              : ELEMENT_BORDER_Z_OFFSET,
             worldWidth,
             worldHeight,
             borderWidth,

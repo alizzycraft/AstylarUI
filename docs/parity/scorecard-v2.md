@@ -8,12 +8,12 @@ This scorecard tracks the second parity phase: making ordinary application-orien
 
 | Gate | Current | Target | Status |
 | --- | ---: | ---: | --- |
-| Total parity fixtures | 53 | 65 | Open |
-| New Phase 2 fixtures | 13 | 25 | Open |
-| Composed application/component fixtures | 2 | 10 | Open |
+| Total parity fixtures | 54 | 65 | Open |
+| New Phase 2 fixtures | 14 | 25 | Open |
+| Composed application/component fixtures | 3 | 10 | Open |
 | Deterministic viewport sizes | 3 exercised | 3 exercised | Passing |
-| Median SSIM | 0.9973 | >= 0.98 | Passing |
-| Minimum fixture SSIM | 0.9804 | >= 0.95 | Passing |
+| Median SSIM | 0.9969 | >= 0.98 | Passing |
+| Minimum fixture SSIM | 0.9626 | >= 0.95 | Passing |
 | Edges within 2 px | 100% | >= 95% | Passing baseline |
 | Maximum edge delta | 0.2048 px | <= 5 px | Passing |
 | Visible text and line counts | Exact | Exact | Passing baseline |
@@ -31,7 +31,7 @@ This scorecard tracks the second parity phase: making ordinary application-orien
 | Overflow and scrolling | 1 | Hidden overflow clipping for positioned descendants | In progress |
 | Controls and states | 1 | Enabled, disabled, and checked selector states with element opacity | In progress |
 | Layering and overlays | 1 | Nested parent stacking contexts and bounded child z-index | In progress |
-| Composed applications | 2 | Dashboard shell plus a three-breakpoint responsive card gallery | In progress |
+| Composed applications | 3 | Dashboard shell, three-breakpoint responsive card gallery, and settings form | In progress |
 
 ## Baseline
 
@@ -58,6 +58,7 @@ The committed 40-fixture Phase 1 suite was rerun before Phase 2 work began. It p
 - Start Grid with explicit px/percentage/fr tracks and DOM-order auto-placement; expand syntax only through representative fixtures.
 - Use composed fixtures to expose integration defects after focused primitives pass; the first dashboard case identified button-label alignment that isolated geometry tests missed.
 - Keep flex/Grid content planes far enough from parent surfaces to remain deterministic at every camera scale; `0.1` world units is the current verified minimum.
+- Keep ordinary element borders at their proven `0.05` local depth while select borders use `0.06`; selected-value content remains at `0.04` so nested selects paint deterministically without crossing general stacking bands.
 
 ## Iteration history
 
@@ -78,6 +79,7 @@ The committed 40-fixture Phase 1 suite was rerun before Phase 2 work began. It p
 | Explicit Grid tracks | Grid children fell through block layout, producing SSIM `0.8822` and a `600px` maximum edge error | Added explicit fixed/percentage/fr track resolution, row/column gaps, stretch sizing, and DOM-order auto-placement | Fixture SSIM `1.0000`; max edge error `0.010px`; exact text; 65 tests and both builds pass | `feat: add explicit grid track layout` |
 | Composed dashboard shell | Nested flex/Grid geometry passed immediately at SSIM `0.9838`, but visual inspection showed button labels centered despite authored left alignment | Positioned input-button label meshes from text alignment and CSS horizontal padding | Fixture SSIM `0.9877`; max edge error `0.025px`; exact text; 65 tests and both builds pass | `test: add composed dashboard parity` |
 | Responsive card gallery | Desktop/mobile passed, but tablet lost a header and card paint despite exact geometry, dropping SSIM to `0.8488` | Increased flex/Grid child-plane separation to a camera-stable depth while preserving sibling order | Desktop `0.9973`, tablet `0.9978`, mobile `0.9960`; max edge error `0.106px`; exact text; 65 tests and both builds pass | `test: add responsive gallery parity` |
+| Composed settings form | Nested Grid/control geometry and text were exact, but the final select border was depth-unstable; baseline SSIM `0.9285` | Established explicit local control-content/select-border depth layers while retaining the proven general border offset; reused verified heading metrics | Fixture SSIM `0.9626`; suite median `0.9969`; 100% edges within 2px; exact text; 66 tests and both builds pass | `test: add composed settings form parity` |
 
 ## Remaining work
 
@@ -85,10 +87,10 @@ The committed 40-fixture Phase 1 suite was rerun before Phase 2 work began. It p
 - Establish three deterministic viewport sizes and responsive assertions.
 - Cover all seven categories with enough focused cases to expose interactions and regressions.
 - Add deterministic interaction checks for applicable transitions, focus, scrolling, and pointer targeting.
-- Investigate missing border paint on third-level nested and non-desktop scaled elements during the layering/paint phase; these were isolated from focused selector/responsive fixtures after visual inspection.
+- Continue exercising nested and scaled border paint in composed layering and responsive fixtures; select-specific depth precision is now covered by the settings form.
 - Keep quality, text, clipping, paint-order, runtime, test, and build gates enforcing.
 - Finish with three consecutive clean enforcing passes.
 
 ## Next target
 
-Add a composed settings form covering labels, text fields, select, checkbox state, disabled controls, and action alignment.
+Add a composed modal and backdrop covering fixed positioning, nested stacking, action controls, and visible paint order.

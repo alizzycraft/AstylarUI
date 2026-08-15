@@ -51,6 +51,7 @@ import { nestedStackingContextFixture } from './nested-stacking-context.fixture'
 import { gridExplicitTracksFixture } from './grid-explicit-tracks.fixture';
 import { composedDashboardFixture } from './composed-dashboard.fixture';
 import { composedResponsiveGalleryFixture } from './composed-responsive-gallery.fixture';
+import { composedSettingsFormFixture } from './composed-settings-form.fixture';
 import { ParityFixture } from '../parity.types';
 
 const fixtures: readonly ParityFixture[] = [
@@ -106,7 +107,8 @@ const fixtures: readonly ParityFixture[] = [
   nestedStackingContextFixture,
   gridExplicitTracksFixture,
   composedDashboardFixture,
-  composedResponsiveGalleryFixture
+  composedResponsiveGalleryFixture,
+  composedSettingsFormFixture
 ];
 
 const fixturesById = new Map(fixtures.map((fixture) => [fixture.id, fixture]));

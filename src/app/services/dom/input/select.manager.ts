@@ -6,6 +6,7 @@ import { SelectElement, SelectOption, InputType, ValidationState } from '../../.
 import { StyleRule } from '../../../types/style-rule';
 import { TextRenderingService } from '../../text/text-rendering.service';
 import { BabylonMeshService } from '../../babylon-mesh.service';
+import { CONTROL_CONTENT_Z_OFFSET } from '../render-depth.constants';
 
 /**
  * Service responsible for managing select dropdown elements
@@ -358,7 +359,7 @@ export class SelectManager {
             displayPlane.rotation.z = Math.PI;
 
             // Ensure display text sits IN FRONT of the Select Mesh (Positive Z, assuming Front is Positive)
-            displayPlane.position.z = 0.05;
+            displayPlane.position.z = CONTROL_CONTENT_Z_OFFSET;
             displayPlane.isPickable = false;
 
             // Align text to the CSS content edge.
@@ -428,7 +429,7 @@ export class SelectManager {
 
             displayPlane.parent = selectElement.mesh;
             // Ensure display text sits IN FRONT of the Select Mesh (Positive Z, assuming Front is Positive)
-            displayPlane.position.z = 0.05;
+            displayPlane.position.z = CONTROL_CONTENT_Z_OFFSET;
             displayPlane.isPickable = false;
 
             // Align text to the CSS content edge.

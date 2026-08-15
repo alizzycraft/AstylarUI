@@ -319,5 +319,11 @@
     "category": "composed-application",
     "expectedBehavior": "One gallery DOM adapts from three columns to two and then one while its flex shell and explicit row tracks follow each deterministic viewport.",
     "viewportIds": ["desktop", "tablet", "mobile"]
+  },
+  {
+    "id": "composed-settings-form",
+    "title": "Composed settings form",
+    "category": "composed-application",
+    "expectedBehavior": "A settings panel composes labels, text and select controls, checked and disabled states, and right-aligned actions without renderer-specific layout adjustments."
   }
 ]

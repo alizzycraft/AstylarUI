@@ -17,6 +17,10 @@ import { DOMAncestryService } from "../dom-ancestry.service";
 import { ImageLayoutService } from "./image-layout.service";
 import { OverflowClipService } from "./overflow-clip.service";
 import { GridService } from "./grid.service";
+import {
+  ELEMENT_BORDER_Z_OFFSET,
+  SELECT_BORDER_Z_OFFSET,
+} from "../render-depth.constants";
 
 /**
  * Service responsible for creating DOM elements as Babylon.js meshes
@@ -364,7 +368,9 @@ export class ElementCreationService {
             borderMeshes,
             0, // x relative to main mesh
             0, // y relative to main mesh
-            0.05, // positive offset so borders appear in front
+            element.type === "select"
+              ? SELECT_BORDER_Z_OFFSET
+              : ELEMENT_BORDER_Z_OFFSET,
             worldWidth,
             worldHeight,
             borderProps.width,
