@@ -70,7 +70,7 @@ export class GridService {
         {
           x: contentLeft + xOffset + width / 2,
           y: contentTop - yOffset - height / 2,
-          z: 0.01 + index * 0.01,
+          z: 0.1 + index * 0.01,
         },
         { width, height },
       );

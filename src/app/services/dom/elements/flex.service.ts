@@ -1003,7 +1003,7 @@ export class FlexService {
       }
 
       layout.push({
-        position: { x, y, z: 0.01 + (index * 0.01) },
+        position: { x, y, z: 0.1 + (index * 0.01) },
         size: { width: item.width, height: item.height }
       });
     });

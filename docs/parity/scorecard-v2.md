@@ -8,9 +8,9 @@ This scorecard tracks the second parity phase: making ordinary application-orien
 
 | Gate | Current | Target | Status |
 | --- | ---: | ---: | --- |
-| Total parity fixtures | 52 | 65 | Open |
-| New Phase 2 fixtures | 12 | 25 | Open |
-| Composed application/component fixtures | 1 | 10 | Open |
+| Total parity fixtures | 53 | 65 | Open |
+| New Phase 2 fixtures | 13 | 25 | Open |
+| Composed application/component fixtures | 2 | 10 | Open |
 | Deterministic viewport sizes | 3 exercised | 3 exercised | Passing |
 | Median SSIM | 0.9973 | >= 0.98 | Passing |
 | Minimum fixture SSIM | 0.9804 | >= 0.95 | Passing |
@@ -31,7 +31,7 @@ This scorecard tracks the second parity phase: making ordinary application-orien
 | Overflow and scrolling | 1 | Hidden overflow clipping for positioned descendants | In progress |
 | Controls and states | 1 | Enabled, disabled, and checked selector states with element opacity | In progress |
 | Layering and overlays | 1 | Nested parent stacking contexts and bounded child z-index | In progress |
-| Composed applications | 1 | Dashboard shell combining nested flex, Grid, typography, and controls | In progress |
+| Composed applications | 2 | Dashboard shell plus a three-breakpoint responsive card gallery | In progress |
 
 ## Baseline
 
@@ -57,6 +57,7 @@ The committed 40-fixture Phase 1 suite was rerun before Phase 2 work began. It p
 - Use one hierarchy-aware physical-depth model for CSS stacking; do not duplicate z-index through Babylon material polygon offsets.
 - Start Grid with explicit px/percentage/fr tracks and DOM-order auto-placement; expand syntax only through representative fixtures.
 - Use composed fixtures to expose integration defects after focused primitives pass; the first dashboard case identified button-label alignment that isolated geometry tests missed.
+- Keep flex/Grid content planes far enough from parent surfaces to remain deterministic at every camera scale; `0.1` world units is the current verified minimum.
 
 ## Iteration history
 
@@ -76,6 +77,7 @@ The committed 40-fixture Phase 1 suite was rerun before Phase 2 work began. It p
 | Nested stacking contexts | A child at `z-index: 100` escaped its parent at `z-index: 1` and covered a sibling context at `z-index: 2`; baseline SSIM `0.9924` | Added ancestry-aware context depth bands and removed duplicate material polygon offsets | Fixture SSIM `1.0000`; median suite SSIM `0.9973`; 100% edges within 2 px; 63 tests and both builds pass | `fix: contain nested stacking contexts` |
 | Explicit Grid tracks | Grid children fell through block layout, producing SSIM `0.8822` and a `600px` maximum edge error | Added explicit fixed/percentage/fr track resolution, row/column gaps, stretch sizing, and DOM-order auto-placement | Fixture SSIM `1.0000`; max edge error `0.010px`; exact text; 65 tests and both builds pass | `feat: add explicit grid track layout` |
 | Composed dashboard shell | Nested flex/Grid geometry passed immediately at SSIM `0.9838`, but visual inspection showed button labels centered despite authored left alignment | Positioned input-button label meshes from text alignment and CSS horizontal padding | Fixture SSIM `0.9877`; max edge error `0.025px`; exact text; 65 tests and both builds pass | `test: add composed dashboard parity` |
+| Responsive card gallery | Desktop/mobile passed, but tablet lost a header and card paint despite exact geometry, dropping SSIM to `0.8488` | Increased flex/Grid child-plane separation to a camera-stable depth while preserving sibling order | Desktop `0.9973`, tablet `0.9978`, mobile `0.9960`; max edge error `0.106px`; exact text; 65 tests and both builds pass | `test: add responsive gallery parity` |
 
 ## Remaining work
 
@@ -89,4 +91,4 @@ The committed 40-fixture Phase 1 suite was rerun before Phase 2 work began. It p
 
 ## Next target
 
-Add a responsive composed card gallery across desktop, tablet, and mobile profiles, using media-conditioned track templates and viewport-relative shell sizing.
+Add a composed settings form covering labels, text fields, select, checkbox state, disabled controls, and action alignment.
