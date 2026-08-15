@@ -268,5 +268,12 @@
     "title": "First and last child pseudo-classes",
     "category": "selectors-cascade",
     "expectedBehavior": "The first-child and last-child pseudo-classes match authored sibling order and contribute class-level specificity."
+  },
+  {
+    "id": "responsive-viewport-units",
+    "title": "Viewport-relative responsive geometry",
+    "category": "responsive",
+    "expectedBehavior": "Viewport-relative offsets and dimensions recompute against desktop, tablet, and mobile viewport profiles.",
+    "viewportIds": ["desktop", "tablet", "mobile"]
   }
 ]

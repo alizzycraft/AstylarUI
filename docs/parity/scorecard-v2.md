@@ -8,10 +8,10 @@ This scorecard tracks the second parity phase: making ordinary application-orien
 
 | Gate | Current | Target | Status |
 | --- | ---: | ---: | --- |
-| Total parity fixtures | 45 | 65 | Open |
-| New Phase 2 fixtures | 5 | 25 | Open |
+| Total parity fixtures | 46 | 65 | Open |
+| New Phase 2 fixtures | 6 | 25 | Open |
 | Composed application/component fixtures | 0 | 10 | Open |
-| Deterministic viewport sizes | 3 available; 1 exercised | 3 exercised | In progress |
+| Deterministic viewport sizes | 3 exercised | 3 exercised | Passing |
 | Median SSIM | 0.9953 | >= 0.98 | Passing baseline |
 | Minimum fixture SSIM | 0.9805 | >= 0.95 | Passing baseline |
 | Edges within 2 px | 100% | >= 95% | Passing baseline |
@@ -27,7 +27,7 @@ This scorecard tracks the second parity phase: making ordinary application-orien
 | --- | ---: | --- | --- |
 | Selectors and cascade | 5 | Relationship combinators plus first/last structural pseudo-classes | In progress |
 | CSS Grid | 0 | — | Open |
-| Responsive behavior | 0 | — | Open |
+| Responsive behavior | 1 | Viewport-relative geometry across desktop, tablet, and mobile | In progress |
 | Overflow and scrolling | 0 | — | Open |
 | Controls and states | 0 | — | Open |
 | Layering and overlays | 0 | — | Open |
@@ -64,6 +64,7 @@ The committed 40-fixture Phase 1 suite was rerun before Phase 2 work began. It p
 | General sibling | Both later siblings retained base colors; SSIM `0.9865` | Searched authored preceding siblings in right-to-left selector order | Fixture SSIM `0.9868`; visual output aligned; 100% edges within 2 px; exact text; 56 tests and both builds pass | `fix: support general sibling selectors` |
 | Structural pseudo-classes | First and last items retained neutral colors; SSIM `0.9916` | Matched first/last authored siblings with class-level pseudo specificity | Fixture SSIM `0.9940`; visual output aligned; 100% edges within 2 px; exact text; 57 tests and both builds pass | `fix: support structural pseudo selectors` |
 | Multi-viewport harness | One hard-coded `800x600` browser context and component surface | Added named desktop, tablet, and mobile profiles with per-fixture selection and render-case accounting | All 45 existing fixtures remain green at desktop; profile and render counts are reported | `test: add deterministic viewport profiles` |
+| Responsive viewport units | Viewport profiles were available but not exercised; scaled borders also lowered tablet/mobile SSIM below `0.95` | Added a three-profile fixture; isolated it to responsive geometry and logged scale-dependent border paint separately | Desktop `0.9979`, tablet `0.9990`, mobile `0.9968`; maximum edge error `0.027px`; exact text; 57 tests and both builds pass | `test: cover responsive viewport geometry` |
 
 ## Remaining work
 
@@ -71,10 +72,10 @@ The committed 40-fixture Phase 1 suite was rerun before Phase 2 work began. It p
 - Establish three deterministic viewport sizes and responsive assertions.
 - Cover all seven categories with enough focused cases to expose interactions and regressions.
 - Add deterministic interaction checks for applicable transitions, focus, scrolling, and pointer targeting.
-- Investigate missing border paint on a third-level nested element during the layering/paint phase; it was isolated from the selector fixture after visual inspection.
+- Investigate missing border paint on third-level nested and non-desktop scaled elements during the layering/paint phase; these were isolated from focused selector/responsive fixtures after visual inspection.
 - Keep quality, text, clipping, paint-order, runtime, test, and build gates enforcing.
 - Finish with three consecutive clean enforcing passes.
 
 ## Next target
 
-Add the first three-profile responsive fixture using viewport-relative dimensions, proving the browser and Astylar receive the same selected dimensions before media-query support is introduced.
+Add explicit media-condition fields to JSON style rules and a three-profile fixture that matches browser `@media` cascade changes at desktop, tablet, and mobile widths.
