@@ -49,6 +49,7 @@ import { controlStateSelectorsFixture } from './control-state-selectors.fixture'
 import { overflowHiddenFixture } from './overflow-hidden.fixture';
 import { nestedStackingContextFixture } from './nested-stacking-context.fixture';
 import { gridExplicitTracksFixture } from './grid-explicit-tracks.fixture';
+import { composedDashboardFixture } from './composed-dashboard.fixture';
 import { ParityFixture } from '../parity.types';
 
 const fixtures: readonly ParityFixture[] = [
@@ -102,7 +103,8 @@ const fixtures: readonly ParityFixture[] = [
   controlStateSelectorsFixture,
   overflowHiddenFixture,
   nestedStackingContextFixture,
-  gridExplicitTracksFixture
+  gridExplicitTracksFixture,
+  composedDashboardFixture
 ];
 
 const fixturesById = new Map(fixtures.map((fixture) => [fixture.id, fixture]));

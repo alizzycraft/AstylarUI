@@ -288,6 +288,13 @@ export class ButtonManager {
             labelPlane.parent = button.mesh;
             labelPlane.position.z = -0.15; // Slightly in front
             labelPlane.isPickable = false;
+            const textAlign = style.textAlign?.toLowerCase();
+            const buttonWidth = button.mesh.getBoundingInfo().boundingBox.extendSize.x * 2;
+            if (textAlign === 'left' || textAlign === 'start') {
+                labelPlane.position.x = buttonWidth / 2 - this.parsePaddingSide(style, 'left') * scale - textureWidth / 2;
+            } else if (textAlign === 'right' || textAlign === 'end') {
+                labelPlane.position.x = -buttonWidth / 2 + this.parsePaddingSide(style, 'right') * scale + textureWidth / 2;
+            }
             if (labelPlane.material) {
                 labelPlane.material.alpha = render.actions.style.parseOpacity(style.opacity);
             }
@@ -328,6 +335,16 @@ export class ButtonManager {
         if (!value) return undefined;
         const num = parseFloat(value);
         return isNaN(num) ? undefined : num;
+    }
+
+    private parsePaddingSide(style: StyleRule, side: 'left' | 'right'): number {
+        const explicit = side === 'left' ? style.paddingLeft : style.paddingRight;
+        if (explicit !== undefined) return Number.parseFloat(explicit) || 0;
+        const parts = style.padding?.trim().split(/\s+/).map(value => Number.parseFloat(value) || 0) ?? [];
+        if (parts.length === 1) return parts[0];
+        if (parts.length === 2 || parts.length === 3) return parts[1];
+        if (parts.length >= 4) return side === 'right' ? parts[1] : parts[3];
+        return 0;
     }
 
     /**

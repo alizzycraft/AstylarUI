@@ -306,5 +306,11 @@
     "title": "Explicit grid tracks with gaps",
     "category": "grid",
     "expectedBehavior": "Grid children auto-place in row order, stretch into explicit px/fr columns and rows, and preserve independent row and column gaps."
+  },
+  {
+    "id": "composed-dashboard",
+    "title": "Composed dashboard shell",
+    "category": "composed-application",
+    "expectedBehavior": "A nested flex dashboard with sidebar controls, header typography and search, and a gapped card grid preserves browser geometry and paint."
   }
 ]
