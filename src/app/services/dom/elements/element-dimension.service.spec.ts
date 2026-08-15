@@ -8,6 +8,18 @@ import { ElementDimensionService } from './element-dimension.service';
 import { DOMAncestryService } from '../dom-ancestry.service';
 
 describe('ElementDimensionService', () => {
+  it('uses the viewport root as the layout parent for fixed elements', () => {
+    const service = new ElementDimensionService({} as never, {} as never, new DOMAncestryService());
+    const root = { name: 'root-body' } as Mesh;
+    const nestedParent = { name: 'nested-parent' } as Mesh;
+    const dom = {
+      context: { elements: new Map([['root-body', root]]) },
+    } as unknown as BabylonDOM;
+
+    expect(service.resolveLayoutParent(dom, { selector: '#fixed', position: 'fixed' }, nestedParent)).toBe(root);
+    expect(service.resolveLayoutParent(dom, { selector: '#absolute', position: 'absolute' }, nestedParent)).toBe(nestedParent);
+  });
+
   it('fills block width and uses intrinsic text height for auto dimensions', () => {
     const textRendering = {
       calculateTextDimensions: () => ({

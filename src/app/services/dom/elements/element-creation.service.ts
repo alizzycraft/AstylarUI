@@ -117,13 +117,15 @@ export class ElementCreationService {
         element.class,
       );
 
+    const layoutParent = this.dimensionService.resolveLayoutParent(dom, style, parent);
+
     // Calculate dimensions
     const calculatedDimensions = this.dimensionService.calculateDimensions(
       dom,
       render,
       element,
       style,
-      parent,
+      layoutParent,
       styles,
     );
     const dimensions = flexSize
@@ -321,7 +323,7 @@ export class ElementCreationService {
 
     // Position and parent the mesh
     render.actions.mesh.positionTextMesh(mesh, worldX, worldY, zPosition);
-    render.actions.mesh.parentTextMesh(mesh, parent);
+    render.actions.mesh.parentTextMesh(mesh, layoutParent);
     console.log(`[ElementCreation] Positioned mesh ${meshId}`);
 
     // Create borders if border width is defined

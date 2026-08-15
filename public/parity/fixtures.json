@@ -196,5 +196,11 @@
     "title": "Universal selector cascade",
     "category": "cascade-defaults",
     "expectedBehavior": "The universal selector applies with zero specificity and remains overridden property-by-property by type and class rules."
+  },
+  {
+    "id": "fixed-positioning",
+    "title": "Fixed positioning against the viewport",
+    "category": "positioning-stacking",
+    "expectedBehavior": "A fixed descendant is removed from normal flow and resolves its offsets against the viewport rather than its positioned ancestor."
   }
 ]

@@ -29,6 +29,18 @@ export class ElementDimensionService {
     ) { }
 
     /**
+     * Fixed-positioned elements use the viewport root as their containing block
+     * and must not inherit a positioned ancestor's mesh transform.
+     */
+    resolveLayoutParent(dom: BabylonDOM, style: StyleRule | undefined, parent: Mesh): Mesh {
+        if (style?.position !== 'fixed') {
+            return parent;
+        }
+
+        return dom.context.elements.get('root-body') ?? parent;
+    }
+
+    /**
      * Calculate dimensions for an element based on its style and parent
      */
     calculateDimensions(
