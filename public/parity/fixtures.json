@@ -202,5 +202,11 @@
     "title": "Fixed positioning against the viewport",
     "category": "positioning-stacking",
     "expectedBehavior": "A fixed descendant is removed from normal flow and resolves its offsets against the viewport rather than its positioned ancestor."
+  },
+  {
+    "id": "viewport-units",
+    "title": "Viewport-relative sizing and offsets",
+    "category": "box-model-units",
+    "expectedBehavior": "Viewport width and height units resolve against the rendered viewport for dimensions and positioned offsets."
   }
 ]

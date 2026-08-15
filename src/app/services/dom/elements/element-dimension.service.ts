@@ -68,6 +68,7 @@ export class ElementDimensionService {
 
         const parentWidth = parentDims.width;
         const parentHeight = parentDims.height;
+        const viewportDims = dom.context.elementDimensions.get('root-body') ?? parentDims;
         const parentPadding = parentDims.padding;
         const parentStyle = dom.context.elementStyles.get(parent.name)?.normal;
         const parentBorderWidth = parentStyle?.borderWidth
@@ -129,6 +130,12 @@ export class ElementDimensionService {
                         width = this.calculateIntrinsicWidth(element, style, textMetrics, padding);
                         widthSource = 'width:auto-intrinsic';
                     }
+                } else if (widthValue.endsWith('vw')) {
+                    width = (viewportDims.width * parseFloat(widthValue)) / 100;
+                    widthSource = `width:${widthValue}`;
+                } else if (widthValue.endsWith('vh')) {
+                    width = (viewportDims.height * parseFloat(widthValue)) / 100;
+                    widthSource = `width:${widthValue}`;
                 } else if (widthValue.endsWith('px')) {
                     width = parseFloat(widthValue);
                     widthSource = `width:${widthValue}`;
@@ -171,6 +178,12 @@ export class ElementDimensionService {
                             heightSource = 'height:auto-intrinsic';
                         }
                     }
+                } else if (heightValue.endsWith('vw')) {
+                    height = (viewportDims.width * parseFloat(heightValue)) / 100;
+                    heightSource = `height:${heightValue}`;
+                } else if (heightValue.endsWith('vh')) {
+                    height = (viewportDims.height * parseFloat(heightValue)) / 100;
+                    heightSource = `height:${heightValue}`;
                 } else if (heightValue.endsWith('px')) {
                     height = parseFloat(heightValue);
                     heightSource = `height:${heightValue}`;
@@ -274,7 +287,13 @@ export class ElementDimensionService {
             const positionedReferenceHeight = parentHeight - parentBorderWidth * 2;
 
             if (style.left !== undefined) {
-                if (typeof style.left === 'string' && style.left.endsWith('px')) {
+                if (typeof style.left === 'string' && style.left.endsWith('vw')) {
+                    const leftPixels = (viewportDims.width * parseFloat(style.left)) / 100;
+                    x = -(parentWidth / 2) + horizontalOriginInset + leftPixels + (width / 2);
+                } else if (typeof style.left === 'string' && style.left.endsWith('vh')) {
+                    const leftPixels = (viewportDims.height * parseFloat(style.left)) / 100;
+                    x = -(parentWidth / 2) + horizontalOriginInset + leftPixels + (width / 2);
+                } else if (typeof style.left === 'string' && style.left.endsWith('px')) {
                     x = -(parentWidth / 2) + horizontalOriginInset + parseFloat(style.left) + (width / 2);
                     console.log(`[ElementDimension] Calculated X (px): ${x} (parentW=${parentWidth}, contentW=${contentWidth}, paddingLeft=${parentPadding.left}, left=${style.left}, width=${width})`);
                 } else if (typeof style.left === 'string' && style.left.endsWith('%')) {
@@ -292,7 +311,13 @@ export class ElementDimensionService {
             }
 
             if (style.top !== undefined) {
-                if (typeof style.top === 'string' && style.top.endsWith('px')) {
+                if (typeof style.top === 'string' && style.top.endsWith('vw')) {
+                    const topPixels = (viewportDims.width * parseFloat(style.top)) / 100;
+                    y = (parentHeight / 2) - verticalOriginInset - topPixels - (height / 2);
+                } else if (typeof style.top === 'string' && style.top.endsWith('vh')) {
+                    const topPixels = (viewportDims.height * parseFloat(style.top)) / 100;
+                    y = (parentHeight / 2) - verticalOriginInset - topPixels - (height / 2);
+                } else if (typeof style.top === 'string' && style.top.endsWith('px')) {
                     y = (parentHeight / 2) - verticalOriginInset - parseFloat(style.top) - (height / 2);
                 } else if (typeof style.top === 'string' && style.top.endsWith('%')) {
                     const topPercent = parseFloat(style.top);

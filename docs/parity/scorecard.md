@@ -8,19 +8,19 @@ Last updated: 2026-08-15
 | --- | ---: | --- |
 | Cascade and default styles | 4 | Selectors, specificity, inheritance, inline styles, UA-like defaults |
 | Block and inline flow | 3 | Block, inline, inline-block, none, inline-flex |
-| Box model and sizing units | 4 | Width/height, min/max, padding, margin, borders, px/%/viewport/font units |
+| Box model and sizing units | 5 | Width/height, min/max, padding, margin, borders, px/%/viewport/font units |
 | Typography and multiline text | 4 | Fonts, line height, wrapping, whitespace, alignment, overflow |
 | Flexbox | 4 | Direction, wrap, basis, grow/shrink, gap, order, alignment |
 | Positioning and stacking | 4 | Static, relative, absolute, fixed, containing blocks, z-order |
 | Lists, tables, and images | 7 | Representative structural and replaced content |
 | Forms and interactive states | 4 | Basic visible controls, focus, checked/disabled states |
-| **Total** | **34 / 40** | Balanced coverage required before completion |
+| **Total** | **35 / 40** | Balanced coverage required before completion |
 
 ## Current Baseline
 
 | Metric | Current result | Core Web Parity v1 threshold |
 | --- | ---: | ---: |
-| Fixtures | 34 | At least 40 |
+| Fixtures | 35 | At least 40 |
 | Median SSIM | 0.9956 | At least 0.98 |
 | Minimum fixture SSIM | 0.9805 | At least 0.95 |
 | Geometry edges within 2px | 100% | At least 95% |
@@ -29,7 +29,7 @@ Last updated: 2026-08-15
 | Runtime errors | 0 | 0 |
 
 All current fixtures pass every per-fixture quality threshold. The suite does
-not meet the completion gate because coverage is still 34 of 40 fixtures.
+not meet the completion gate because coverage is still 35 of 40 fixtures.
 
 ## Decisions
 
@@ -125,6 +125,9 @@ not meet the completion gate because coverage is still 34 of 40 fixtures.
 34. Fixed-positioned elements resolve dimensions and offsets against the root
     viewport and are parented to its mesh, preventing ancestor transforms from
     moving them while their own normal descendants remain attached.
+35. `vw` and `vh` lengths resolve from the root viewport on either axis for
+    explicit dimensions and positioned `left`/`top` offsets, rather than falling
+    through to a raw numeric pixel interpretation.
 
 ## Iteration History
 
@@ -152,6 +155,7 @@ not meet the completion gate because coverage is still 34 of 40 fixtures.
 | Text transform and alignment | No deterministic transform-plus-alignment comparison | 32 fixtures; median SSIM 0.9956; minimum 0.9805; 100% edges; max error 0.203px; exact text; transform fixture 0.9926 SSIM and 0.003px max edge error | Added positive coverage confirming uppercase transformation, bold glyph measurement, and right content-edge alignment already agree with Chromium |
 | Universal selector cascade | 33-fixture attempt; universal declarations were absent and the new fixture scored 0.8939 SSIM | 33 fixtures; median SSIM 0.9953; minimum 0.9805; 100% edges; max error 0.203px; exact text; universal fixture 0.9903 SSIM | The selector parser rejected `*`; it now matches all elements at specificity zero while higher-specificity rules override individual properties |
 | Fixed viewport positioning | 34-fixture attempt; fixed descendant SSIM 0.9438 with 264.002px maximum edge error | 34 fixtures; median SSIM 0.9956; minimum 0.9805; 100% edges; max error 0.203px; exact text; fixed fixture 0.9997 SSIM | Fixed elements used their authored parent's dimensions and mesh transform, making them behave like absolute descendants instead of viewport-positioned boxes |
+| Viewport sizing units | 35-fixture attempt; viewport-unit fixture SSIM 0.9670 with 280.003px maximum edge error | 35 fixtures; median SSIM 0.9956; minimum 0.9805; 100% edges; max error 0.203px; exact text; viewport-unit fixture 1.0000 SSIM | Dimension and offset parsing treated the numeric prefix of `vw`/`vh` values as pixels instead of resolving it against the root viewport |
 
 ## Known Intentional Deviations
 
@@ -161,5 +165,5 @@ block geometry by at most 0.203px; exact font-engine-specific leading is out of 
 
 ## Recommended Next Target
 
-Cover additional sizing units, then broaden block flow and remaining forms
-coverage. These are the least represented foundational behaviors.
+Broaden block flow and remaining forms coverage, then cover font-relative sizing
+units. These are the least represented foundational behaviors.

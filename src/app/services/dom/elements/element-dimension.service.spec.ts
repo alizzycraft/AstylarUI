@@ -189,4 +189,38 @@ describe('ElementDimensionService', () => {
     expect(result.width).toBe(150);
     expect(result.height).toBe(80);
   });
+
+  it('resolves viewport units for dimensions and offsets', () => {
+    const service = new ElementDimensionService({} as never, {} as never, new DOMAncestryService());
+    const parent = { name: 'root-body' } as Mesh;
+    const dom = {
+      context: {
+        elementDimensions: new Map([
+          ['root-body', { width: 800, height: 600, padding: { top: 0, right: 0, bottom: 0, left: 0 } }],
+        ]),
+        elementStyles: new Map(),
+      },
+    } as unknown as BabylonDOM;
+    const render = {
+      actions: { style: { getElementTypeDefaults: () => ({ display: 'block' }) } },
+    } as unknown as BabylonRender;
+    const style: StyleRule = {
+      selector: '#viewport-box', position: 'absolute', boxSizing: 'border-box',
+      left: '10vw', top: '12vh', width: '30vw', height: '20vh',
+    };
+
+    const result = service.calculateDimensions(
+      dom,
+      render,
+      { id: 'viewport-box', type: 'div' },
+      style,
+      parent,
+      [style],
+    );
+
+    expect(result.width).toBe(240);
+    expect(result.height).toBe(120);
+    expect(result.x).toBe(-200);
+    expect(result.y).toBe(168);
+  });
 });
