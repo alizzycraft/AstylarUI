@@ -65,6 +65,15 @@ export class ElementDimensionService {
         // Parse padding and margin
         const padding = this.parsePadding(render, style, undefined);
         const margin = this.parseMargin(style);
+        const borderWidth = style?.borderWidth
+            ? Math.max(0, parseFloat(style.borderWidth) || 0)
+            : 0;
+        const layoutInsets = {
+            top: padding.top + borderWidth,
+            right: padding.right + borderWidth,
+            bottom: padding.bottom + borderWidth,
+            left: padding.left + borderWidth,
+        };
 
         const horizontalPadding = padding.left + padding.right;
         const verticalPadding = padding.top + padding.bottom;
@@ -188,6 +197,20 @@ export class ElementDimensionService {
             }
         }
 
+        // Astylar historically interpreted declared dimensions as border-box sizes.
+        // Preserve that behavior by default, while matching CSS when content-box is
+        // requested explicitly: padding and borders then sit outside width/height.
+        if (style?.boxSizing === 'content-box') {
+            if (widthValue !== undefined && widthValue !== 'auto') {
+                width += horizontalPadding + borderWidth * 2;
+                widthSource += '+content-box';
+            }
+            if (heightValue !== undefined && heightValue !== 'auto') {
+                height += verticalPadding + borderWidth * 2;
+                heightSource += '+content-box';
+            }
+        }
+
         if (style) {
             if (style.left !== undefined) {
                 if (typeof style.left === 'string' && style.left.endsWith('px')) {
@@ -227,7 +250,7 @@ export class ElementDimensionService {
 
         console.log(`[DIMENSION] ${debugKey} final width=${width} height=${height} position=(${x}, ${y})`);
 
-        return { width, height, x, y, padding, margin };
+        return { width, height, x, y, padding: layoutInsets, margin };
     }
 
     /**

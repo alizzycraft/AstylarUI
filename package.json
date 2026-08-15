@@ -23,6 +23,8 @@
     "build:lib": "if exist dist\\lib rmdir /s /q dist\\lib && tsc -p tsconfig.lib.json",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
+    "parity": "node tests/parity/run-parity.mjs",
+    "parity:check": "node tests/parity/run-parity.mjs --enforce",
     "serve:ssr:astylarui": "node dist/astylarui/server/server.mjs",
     "prepublishOnly": "npm run build:lib",
     "build:gh-pages": "ng build --base-href /AstylarUI/ --configuration production",
@@ -83,6 +85,9 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
+    "playwright-core": "^1.62.1",
+    "pngjs": "^7.0.0",
+    "ssim.js": "^3.5.0",
     "ts-node": "^10.9.2",
     "typescript": "~5.8.2"
   }

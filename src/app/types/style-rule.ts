@@ -8,6 +8,7 @@ export interface StyleRule {
   bottom?: string;
   width?: string;
   height?: string;
+  boxSizing?: 'content-box' | 'border-box';
   minWidth?: string;
   maxWidth?: string;
   minHeight?: string;

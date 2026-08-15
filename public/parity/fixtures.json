@@ -1,0 +1,8 @@
+[
+  {
+    "id": "box-model-basic",
+    "title": "Basic content-box geometry",
+    "category": "box-model-units",
+    "expectedBehavior": "An absolutely positioned content-box includes padding and border outside its declared width and height."
+  }
+]

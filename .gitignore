@@ -2,6 +2,7 @@
 
 # Compiled output
 /dist
+/artifacts/parity
 /tmp
 /out-tsc
 /bazel-out

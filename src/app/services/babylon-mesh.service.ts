@@ -1303,9 +1303,14 @@ export class BabylonMeshService {
 
     const material = new StandardMaterial(name, this.scene);
     material.diffuseColor = color;
+    // CSS colors are presentation colors, not surfaces affected by scene light.
+    // StandardMaterial renders black with lighting disabled unless the color is
+    // also emitted, so keep the unlit output faithful to the requested color.
+    material.emissiveColor = color;
     material.specularColor = new Color3(0, 0, 0);
     material.alpha = alpha;
     material.disableLighting = true;
+    material.backFaceCulling = false;
 
     console.log(`🎨 Created material: ${name} with color`, color);
     return material;
@@ -1490,9 +1495,13 @@ export class BabylonMeshService {
    * @param z - Z coordinate in world space
    */
   positionTextMesh(textMesh: Mesh, x: number, y: number, z: number): void {
-    textMesh.position.x = x;
-    textMesh.position.y = y;
-    textMesh.position.z = z;
+    const renderPosition = this.coordinateTransform.transformToRenderCoordinates(
+      x,
+      y,
+      z,
+    );
+
+    textMesh.position.copyFrom(renderPosition);
     console.log(
       `📍 Positioned text mesh: ${textMesh.name} at (${x.toFixed(3)}, ${y.toFixed(3)}, ${z.toFixed(3)})`,
     );
