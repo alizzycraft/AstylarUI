@@ -9,18 +9,18 @@ Last updated: 2026-08-15
 | Cascade and default styles | 3 | Selectors, specificity, inheritance, inline styles, UA-like defaults |
 | Block and inline flow | 3 | Block, inline, inline-block, none, inline-flex |
 | Box model and sizing units | 4 | Width/height, min/max, padding, margin, borders, px/%/viewport/font units |
-| Typography and multiline text | 3 | Fonts, line height, wrapping, whitespace, alignment, overflow |
+| Typography and multiline text | 4 | Fonts, line height, wrapping, whitespace, alignment, overflow |
 | Flexbox | 4 | Direction, wrap, basis, grow/shrink, gap, order, alignment |
 | Positioning and stacking | 3 | Static, relative, absolute, fixed, containing blocks, z-order |
 | Lists, tables, and images | 7 | Representative structural and replaced content |
 | Forms and interactive states | 4 | Basic visible controls, focus, checked/disabled states |
-| **Total** | **31 / 40** | Balanced coverage required before completion |
+| **Total** | **32 / 40** | Balanced coverage required before completion |
 
 ## Current Baseline
 
 | Metric | Current result | Core Web Parity v1 threshold |
 | --- | ---: | ---: |
-| Fixtures | 31 | At least 40 |
+| Fixtures | 32 | At least 40 |
 | Median SSIM | 0.9956 | At least 0.98 |
 | Minimum fixture SSIM | 0.9805 | At least 0.95 |
 | Geometry edges within 2px | 100% | At least 95% |
@@ -29,7 +29,7 @@ Last updated: 2026-08-15
 | Runtime errors | 0 | 0 |
 
 All current fixtures pass every per-fixture quality threshold. The suite does
-not meet the completion gate because coverage is still 31 of 40 fixtures.
+not meet the completion gate because coverage is still 32 of 40 fixtures.
 
 ## Decisions
 
@@ -116,6 +116,9 @@ not meet the completion gate because coverage is still 31 of 40 fixtures.
 31. Semantic `select` and `textarea` element types dispatch to their control
     managers without requiring a redundant `inputType`. Closed select labels use
     the declared horizontal padding plus border as their content inset.
+32. Uppercase text transformation and right alignment are covered together in a
+    fixed content box, confirming that transformed glyph measurement and paint
+    use the same right content edge as Chromium.
 
 ## Iteration History
 
@@ -140,6 +143,7 @@ not meet the completion gate because coverage is still 31 of 40 fixtures.
 | Wrapped flex lines | No deterministic flex-wrap comparison | 29 fixtures; median SSIM 0.9956; minimum 0.9805; 100% edges; max error 0.203px; exact text; wrap fixture 0.9836 SSIM and 0.005px max edge error | Added positive coverage confirming that line formation, flex basis, axis-specific gaps, and `align-content: space-between` already agree with Chromium |
 | Negative and auto stacking | No negative-versus-auto stacking comparison | 30 fixtures; median SSIM 0.9956; minimum 0.9805; 100% edges; max error 0.203px; exact text; stacking fixture 0.9880 SSIM and 0.098px max edge error | Added positive coverage confirming parent-background, negative child, and auto sibling paint order within a positioned stacking context |
 | Styled semantic select | 31-fixture attempt; select geometry matched but the selected label was absent; fixture SSIM 0.9948 | 31 fixtures; median SSIM 0.9956; minimum 0.9805; 100% edges; max error 0.203px; exact text; select fixture 0.9999 SSIM | Semantic `select` was not dispatched to its manager without redundant `inputType`; once visible, its label used a hard-coded inset instead of declared border and padding |
+| Text transform and alignment | No deterministic transform-plus-alignment comparison | 32 fixtures; median SSIM 0.9956; minimum 0.9805; 100% edges; max error 0.203px; exact text; transform fixture 0.9926 SSIM and 0.003px max edge error | Added positive coverage confirming uppercase transformation, bold glyph measurement, and right content-edge alignment already agree with Chromium |
 
 ## Known Intentional Deviations
 
@@ -149,6 +153,6 @@ block geometry by at most 0.203px; exact font-engine-specific leading is out of 
 
 ## Recommended Next Target
 
-Broaden typography and cascade states, then cover fixed positioning and
-additional sizing units. These are the least represented foundational behaviors
-after semantic select coverage.
+Broaden cascade states, then cover fixed positioning and additional sizing units.
+These are the least represented foundational behaviors after transform and
+alignment coverage.

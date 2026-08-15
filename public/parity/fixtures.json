@@ -184,5 +184,11 @@
     "title": "Styled semantic select control",
     "category": "forms-interactive",
     "expectedBehavior": "A select element is recognized from its semantic type and paints its selected option at the declared content inset."
+  },
+  {
+    "id": "text-transform-alignment",
+    "title": "Text transform and right alignment",
+    "category": "typography",
+    "expectedBehavior": "Text transformation affects measured and painted glyphs while right alignment uses the content box edge."
   }
 ]
