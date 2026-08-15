@@ -16,6 +16,9 @@ import { unorderedListLayoutFixture } from './unordered-list-layout.fixture';
 import { orderedListLayoutFixture } from './ordered-list-layout.fixture';
 import { tableFixedLayoutFixture } from './table-fixed-layout.fixture';
 import { tableColumnWidthsFixture } from './table-column-widths.fixture';
+import { imageIntrinsicSizeFixture } from './image-intrinsic-size.fixture';
+import { imageObjectFitContainFixture } from './image-object-fit-contain.fixture';
+import { imageObjectFitCoverFixture } from './image-object-fit-cover.fixture';
 import { ParityFixture } from '../parity.types';
 
 const fixtures: readonly ParityFixture[] = [
@@ -36,7 +39,10 @@ const fixtures: readonly ParityFixture[] = [
   unorderedListLayoutFixture,
   orderedListLayoutFixture,
   tableFixedLayoutFixture,
-  tableColumnWidthsFixture
+  tableColumnWidthsFixture,
+  imageIntrinsicSizeFixture,
+  imageObjectFitContainFixture,
+  imageObjectFitCoverFixture
 ];
 
 const fixturesById = new Map(fixtures.map((fixture) => [fixture.id, fixture]));

@@ -12,16 +12,16 @@ Last updated: 2026-08-15
 | Typography and multiline text | 2 | Fonts, line height, wrapping, whitespace, alignment, overflow |
 | Flexbox | 3 | Direction, wrap, basis, grow/shrink, gap, order, alignment |
 | Positioning and stacking | 1 | Static, relative, absolute, fixed, containing blocks, z-order |
-| Lists, tables, and images | 4 | Representative structural and replaced content |
+| Lists, tables, and images | 7 | Representative structural and replaced content |
 | Forms and interactive states | 0 | Basic visible controls, focus, checked/disabled states |
-| **Total** | **18 / 40** | Balanced coverage required before completion |
+| **Total** | **21 / 40** | Balanced coverage required before completion |
 
 ## Current Baseline
 
 | Metric | Current result | Core Web Parity v1 threshold |
 | --- | ---: | ---: |
-| Fixtures | 18 | At least 40 |
-| Median SSIM | 0.9941 | At least 0.98 |
+| Fixtures | 21 | At least 40 |
+| Median SSIM | 0.9946 | At least 0.98 |
 | Minimum fixture SSIM | 0.9805 | At least 0.95 |
 | Geometry edges within 2px | 100% | At least 95% |
 | Maximum edge error | 0.203px | At most 5px or documented |
@@ -29,7 +29,7 @@ Last updated: 2026-08-15
 | Runtime errors | 0 | 0 |
 
 All current fixtures pass every per-fixture quality threshold. The suite does
-not meet the completion gate because coverage is still 18 of 40 fixtures.
+not meet the completion gate because coverage is still 21 of 40 fixtures.
 
 ## Decisions
 
@@ -80,6 +80,12 @@ not meet the completion gate because coverage is still 18 of 40 fixtures.
     is not shadowed by a synthetic per-element global default.
 20. Fixed table layout uses explicit pixel and percentage `<col>` definitions.
     Space left by undefined columns is divided evenly among those columns.
+21. Replaced image content loads on a child plane above the element background.
+    Natural dimensions resolve after texture readiness while preserving the
+    element's top-left layout anchor; `fill`, `contain`, and `cover` use centered
+    aspect-ratio math and mirrored U coordinates compensate for the render axis.
+22. Inline formatting contexts with only positioned children do not collapse or
+    move their parent while attempting content-driven auto-height calculation.
 
 ## Iteration History
 
@@ -94,6 +100,7 @@ not meet the completion gate because coverage is still 18 of 40 fixtures.
 | Semantic block defaults | 14-fixture attempt; 94.8% edges within 2px; max error 431.571px; semantic fixture SSIM 0.9619 | 14 fixtures; median SSIM 0.9953; minimum 0.9805; 100% edges; max error 0.203px; exact text | Text-bearing blocks shrink-wrapped width, inherited parent height, used fixed-size `em` margins, and summed adjacent margins; text bounds also ignored resolved line height |
 | List flow and markers | 16-fixture attempt; 85.1% edges within 2px; max error 80.002px; minimum SSIM 0.9361 | 16 fixtures; median SSIM 0.9946; minimum 0.9805; 100% edges; max error 0.203px; exact text | Lists added a second indentation, narrowed items, divided container height equally, inserted fixed spacing, and used colored geometric placeholders for ordered markers |
 | Fixed table tracks | 18-fixture attempt; 98.1% edges within 2px; max error 59.998px | 18 fixtures; median SSIM 0.9941; minimum 0.9805; 100% edges; max error 0.203px; exact text | The table renderer parsed `<col>` definitions for column count but discarded their declared widths and redistributed every track equally |
+| Intrinsic images and object fit | 21-fixture attempt; 97.3% edges within 2px; max error 300.004px; minimum SSIM 0.1172 | 21 fixtures; median SSIM 0.9946; minimum 0.9805; 100% edges; max error 0.203px; exact text; image fixtures 0.9997–1.0000 SSIM | Images stretched one lit texture across the element, ignored natural size and object fit, rendered mirrored pixels, and exposed an inline auto-height bug that moved parents containing only positioned children |
 
 ## Known Intentional Deviations
 
@@ -103,6 +110,6 @@ block geometry by at most 0.203px; exact font-engine-specific leading is out of 
 
 ## Recommended Next Target
 
-Add deterministic image fixtures covering intrinsic dimensions and `object-fit`.
-Lists and fixed table tracks now have structural coverage, while replaced image
-content remains unmeasured in this category.
+Add deterministic basic form-control fixtures. Forms and visible interactive
+states remain the only zero-coverage category, and their specialized Babylon
+managers have not yet been measured against equivalent browser controls.

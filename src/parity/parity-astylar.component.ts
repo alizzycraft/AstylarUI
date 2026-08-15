@@ -117,8 +117,9 @@ export class ParityAstylarComponent {
         const hasAllElements = fixture.measurementIds.every((id) =>
           this.elementManager.elementsMap.has(id)
         );
+        const assetsReady = scene.textures.every((texture) => texture.isReady());
 
-        if (hasAllElements && renderedFrames >= 2) {
+        if (hasAllElements && assetsReady && renderedFrames >= 2) {
           scene.onAfterRenderObservable.remove(observer);
           canvas.dataset['parityReady'] = 'true';
           this.publishReport(
@@ -232,8 +233,8 @@ export class ParityAstylarComponent {
   }
 
   private projectMeshRect(mesh: Mesh, scene: Scene): ParityRect {
-    mesh.computeWorldMatrix(true);
     mesh.refreshBoundingInfo();
+    mesh.computeWorldMatrix(true);
 
     const engine = scene.getEngine();
     const camera = scene.activeCamera;

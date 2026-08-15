@@ -14,6 +14,7 @@ import { ElementBorderService } from "./element-border.service";
 import { ElementStyleParserService } from "./element-style-parser.service";
 import { ElementInteractionService } from "./element-interaction.service";
 import { DOMAncestryService } from "../dom-ancestry.service";
+import { ImageLayoutService } from "./image-layout.service";
 
 /**
  * Service responsible for creating DOM elements as Babylon.js meshes
@@ -33,6 +34,7 @@ export class ElementCreationService {
     private styleParser: ElementStyleParserService,
     private interactionService: ElementInteractionService,
     private ancestry: DOMAncestryService,
+    private imageLayout: ImageLayoutService,
   ) {}
 
   /**
@@ -180,20 +182,109 @@ export class ElementCreationService {
       // Apply image texture if src is present (either on element or in style)
       const imageSrc = element.src || style.src;
       if (imageSrc) {
+        const imageContent = render.actions.mesh.createPolygon(
+          `${meshId}-image-content`,
+          "rectangle",
+          worldWidth,
+          worldHeight,
+          0,
+        );
+        imageContent.renderingGroupId = 1;
+        imageContent.isPickable = false;
         const material = new BABYLON.StandardMaterial(
-          `${meshId}-material`,
+          `${meshId}-image-material`,
           render.scene,
         );
         const texture = new BABYLON.Texture(imageSrc, render.scene);
         material.diffuseTexture = texture;
-        material.diffuseTexture.hasAlpha = true;
+        material.emissiveTexture = texture;
+        material.diffuseColor = BABYLON.Color3.White();
+        material.emissiveColor = BABYLON.Color3.White();
+        material.specularColor = BABYLON.Color3.Black();
+        material.disableLighting = true;
+        material.disableDepthWrite = true;
+        material.backFaceCulling = false;
+        texture.hasAlpha = true;
+        texture.wrapU = BABYLON.Texture.CLAMP_ADDRESSMODE;
+        texture.wrapV = BABYLON.Texture.CLAMP_ADDRESSMODE;
         material.useAlphaFromDiffuseTexture = true;
 
         // Handle opacity
         const opacity = render.actions.style.parseOpacity(style?.opacity);
         material.alpha = opacity;
 
-        mesh.material = material;
+        imageContent.material = material;
+        render.actions.mesh.parentTextMesh(imageContent, mesh);
+
+        const configureImage = () => {
+          const imageSize = texture.getSize();
+          const insets = dimensions.padding;
+          const target = this.imageLayout.resolveIntrinsicBox(
+            dimensions.width,
+            dimensions.height,
+            insets.left + insets.right,
+            insets.top + insets.bottom,
+            imageSize.width,
+            imageSize.height,
+            style.width !== undefined && style.width !== 'auto',
+            style.height !== undefined && style.height !== 'auto',
+          );
+
+          if (target.width !== dimensions.width || target.height !== dimensions.height) {
+            const widthDelta = target.width - dimensions.width;
+            const heightDelta = target.height - dimensions.height;
+            render.actions.mesh.updateMeshWithBorderRadius(
+              mesh,
+              'rectangle',
+              target.width * scaleFactor,
+              target.height * scaleFactor,
+              borderRadius,
+            );
+            mesh.position.x -= widthDelta * scaleFactor / 2;
+            mesh.position.y -= heightDelta * scaleFactor / 2;
+            dimensions.width = target.width;
+            dimensions.height = target.height;
+            dom.context.elementDimensions.set(meshId, dimensions);
+          }
+
+          const contentWidth = Math.max(0, target.width - insets.left - insets.right);
+          const contentHeight = Math.max(0, target.height - insets.top - insets.bottom);
+          const fit = this.imageLayout.calculateFit(
+            contentWidth,
+            contentHeight,
+            imageSize.width,
+            imageSize.height,
+            style.objectFit,
+          );
+          render.actions.mesh.updateMeshWithBorderRadius(
+            imageContent,
+            'rectangle',
+            fit.renderedWidth * scaleFactor,
+            fit.renderedHeight * scaleFactor,
+            0,
+          );
+          // The renderer's logical X axis is mirrored at the camera boundary;
+          // reverse image U coordinates so replaced content keeps CSS orientation.
+          texture.uScale = -fit.uScale;
+          texture.vScale = fit.vScale;
+          texture.uOffset = fit.uOffset + fit.uScale;
+          texture.vOffset = fit.vOffset;
+
+          const contentCenterX = -target.width / 2 + insets.left + contentWidth / 2;
+          const contentCenterY = target.height / 2 - insets.top - contentHeight / 2;
+          render.actions.mesh.positionTextMesh(
+            imageContent,
+            contentCenterX * scaleFactor,
+            contentCenterY * scaleFactor,
+            0.1,
+          );
+        };
+
+        if (texture.isReady()) {
+          configureImage();
+        } else {
+          texture.onLoadObservable.addOnce(configureImage);
+        }
       }
     } else {
       // Default element creation
@@ -294,24 +385,22 @@ export class ElementCreationService {
       );
     }
 
-    // Apply material (only if not an image with its own material)
-    if (element.type !== "img") {
-      try {
-        this.materialService.applyElementMaterial(
-          dom,
-          render,
-          mesh,
-          element,
-          false,
-          style,
-        );
-        console.log(`[ElementCreation] Applied material for ${meshId}`);
-      } catch (e) {
-        console.error(
-          `[ElementCreation] Error applying material for ${meshId}:`,
-          e,
-        );
-      }
+    // Apply the element's background separately from replaced image content.
+    try {
+      this.materialService.applyElementMaterial(
+        dom,
+        render,
+        mesh,
+        element,
+        false,
+        style,
+      );
+      console.log(`[ElementCreation] Applied material for ${meshId}`);
+    } catch (e) {
+      console.error(
+        `[ElementCreation] Error applying material for ${meshId}:`,
+        e,
+      );
     }
 
     // Apply transforms if present
@@ -712,7 +801,11 @@ export class ElementCreationService {
     );
     const oldHeightPx = parentDims.height;
 
-    if (!hasExplicitHeight && Math.abs(computedHeightPx - oldHeightPx) > 0.1) {
+    if (
+      placements.length > 0 &&
+      !hasExplicitHeight &&
+      Math.abs(computedHeightPx - oldHeightPx) > 0.1
+    ) {
       const borderRadiusPx = this.borderService.parseBorderRadius(
         parentStyle?.borderRadius,
       );
