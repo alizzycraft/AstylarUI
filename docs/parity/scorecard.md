@@ -29,8 +29,8 @@ Last updated: 2026-08-15
 | Runtime errors | 0 | 0 |
 
 All current fixtures pass every per-fixture quality threshold and the objective
-completion thresholds. Three clean consecutive final assessment passes remain
-before Core Web Parity v1 is declared complete.
+completion thresholds. Core Web Parity v1 completed three consecutive enforcing
+assessment passes against the committed 40-fixture suite.
 
 ## Decisions
 
@@ -185,7 +185,22 @@ CSS `line-height: normal` is currently approximated as `1.15` times the resolved
 font size. For the deterministic Arial semantic fixture this differs from Chromium
 block geometry by at most 0.203px; exact font-engine-specific leading is out of v1.
 
+## Final Assessment
+
+| Pass | Fixtures | Median SSIM | Minimum SSIM | Edges within 2px | Maximum edge error | Text | Runtime | Result |
+| ---: | ---: | ---: | ---: | ---: | ---: | --- | --- | --- |
+| 1 | 40 | 0.9953 | 0.9805 | 100% | 0.203px | Exact | Clean | Pass |
+| 2 | 40 | 0.9953 | 0.9805 | 100% | 0.203px | Exact | Clean | Pass |
+| 3 | 40 | 0.9953 | 0.9805 | 100% | 0.203px | Exact | Clean | Pass |
+
+All three passes used `npm run parity:check` after commit `21bdab9`, and each
+reported `Completion thresholds: true`. The full 52-test suite, library build,
+and application build also pass; the application retains its pre-existing bundle
+and component-style budget warnings.
+
 ## Recommended Next Target
 
-Run and record three consecutive clean final assessment passes with the committed
-40-fixture suite.
+Core Web Parity v1 is complete. Future work can begin as a separately scoped v2
+effort, prioritizing selector combinators, additional control states, and broader
+responsive/application-level compositions rather than extending this gate
+indefinitely.
