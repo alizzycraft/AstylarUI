@@ -35,6 +35,22 @@ describe('StyleService cascade', () => {
     expect(service.findStyleForElement(element, styles)?.background).toBe('#2563eb');
   });
 
+  it('applies universal declarations at zero specificity', () => {
+    const element: DOMElement = { type: 'div', class: 'accent' };
+    const styles: StyleRule[] = [
+      { selector: '*', background: '#e2e8f0', color: '#334155', padding: '10px' },
+      { selector: 'div', background: '#bfdbfe' },
+      { selector: '.accent', color: '#9a3412' },
+    ];
+
+    const result = service.findStyleForElement(element, styles);
+
+    expect(result?.padding).toBe('10px');
+    expect(result?.background).toBe('#bfdbfe');
+    expect(result?.color).toBe('#9a3412');
+    expect(service.matchesSelector(element, '*')).toBeTrue();
+  });
+
   it('keeps inline declarations above stylesheet and context declarations', () => {
     const element: DOMElement = {
       type: 'div',

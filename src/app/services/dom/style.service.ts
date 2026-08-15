@@ -351,6 +351,10 @@ export class StyleService {
             return null;
         }
 
+        if (selector === '*') {
+            return 0;
+        }
+
         const tokens = Array.from(selector.matchAll(/([.#]?)([\w-]+)/g));
         if (!tokens.length || tokens.map(token => token[0]).join('') !== selector) {
             return null;
@@ -412,6 +416,10 @@ export class StyleService {
      * Determines if the provided element matches a CSS-like selector. Limited support (ID, class, type).
      */
     public matchesSelector(element: DOMElement, selector: string): boolean {
+        if (selector === '*') {
+            return true;
+        }
+
         if (selector.startsWith('#')) {
             const selectorId = selector.substring(1);
             const result = element.id === selectorId;

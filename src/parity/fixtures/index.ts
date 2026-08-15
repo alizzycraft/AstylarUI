@@ -30,6 +30,7 @@ import { flexWrapLinesFixture } from './flex-wrap-lines.fixture';
 import { negativeAutoStackingFixture } from './negative-auto-stacking.fixture';
 import { styledSelectFixture } from './styled-select.fixture';
 import { textTransformAlignmentFixture } from './text-transform-alignment.fixture';
+import { universalSelectorFixture } from './universal-selector.fixture';
 import { ParityFixture } from '../parity.types';
 
 const fixtures: readonly ParityFixture[] = [
@@ -64,7 +65,8 @@ const fixtures: readonly ParityFixture[] = [
   flexWrapLinesFixture,
   negativeAutoStackingFixture,
   styledSelectFixture,
-  textTransformAlignmentFixture
+  textTransformAlignmentFixture,
+  universalSelectorFixture
 ];
 
 const fixturesById = new Map(fixtures.map((fixture) => [fixture.id, fixture]));

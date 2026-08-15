@@ -190,5 +190,11 @@
     "title": "Text transform and right alignment",
     "category": "typography",
     "expectedBehavior": "Text transformation affects measured and painted glyphs while right alignment uses the content box edge."
+  },
+  {
+    "id": "universal-selector",
+    "title": "Universal selector cascade",
+    "category": "cascade-defaults",
+    "expectedBehavior": "The universal selector applies with zero specificity and remains overridden property-by-property by type and class rules."
   }
 ]
