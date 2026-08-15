@@ -8,20 +8,20 @@ Last updated: 2026-08-15
 | --- | ---: | --- |
 | Cascade and default styles | 3 | Selectors, specificity, inheritance, inline styles, UA-like defaults |
 | Block and inline flow | 2 | Block, inline, inline-block, none, inline-flex |
-| Box model and sizing units | 3 | Width/height, min/max, padding, margin, borders, px/%/viewport/font units |
+| Box model and sizing units | 4 | Width/height, min/max, padding, margin, borders, px/%/viewport/font units |
 | Typography and multiline text | 2 | Fonts, line height, wrapping, whitespace, alignment, overflow |
 | Flexbox | 3 | Direction, wrap, basis, grow/shrink, gap, order, alignment |
 | Positioning and stacking | 2 | Static, relative, absolute, fixed, containing blocks, z-order |
 | Lists, tables, and images | 7 | Representative structural and replaced content |
 | Forms and interactive states | 3 | Basic visible controls, focus, checked/disabled states |
-| **Total** | **25 / 40** | Balanced coverage required before completion |
+| **Total** | **26 / 40** | Balanced coverage required before completion |
 
 ## Current Baseline
 
 | Metric | Current result | Core Web Parity v1 threshold |
 | --- | ---: | ---: |
-| Fixtures | 25 | At least 40 |
-| Median SSIM | 0.9956 | At least 0.98 |
+| Fixtures | 26 | At least 40 |
+| Median SSIM | 0.9964 | At least 0.98 |
 | Minimum fixture SSIM | 0.9805 | At least 0.95 |
 | Geometry edges within 2px | 100% | At least 95% |
 | Maximum edge error | 0.203px | At most 5px or documented |
@@ -29,7 +29,7 @@ Last updated: 2026-08-15
 | Runtime errors | 0 | 0 |
 
 All current fixtures pass every per-fixture quality threshold. The suite does
-not meet the completion gate because coverage is still 25 of 40 fixtures.
+not meet the completion gate because coverage is still 26 of 40 fixtures.
 
 ## Decisions
 
@@ -98,6 +98,9 @@ not meet the completion gate because coverage is still 25 of 40 fixtures.
     inline style. A bounded monotonic world-depth mapping and matching material
     depth bias keep layers distinguishable at the UI camera distance without
     letting large CSS values cross the camera plane.
+26. `min-width`, `min-height`, `max-width`, and `max-height` constrain resolved
+    dimensions before content-box insets are added. Conflicting constraints use
+    the CSS precedence where the minimum wins over the maximum.
 
 ## Iteration History
 
@@ -116,6 +119,7 @@ not meet the completion gate because coverage is still 25 of 40 fixtures.
 | Styled buttons and text inputs | 23-fixture attempt; text input SSIM 0.9948 with value painted at a hard-coded 1.5px inset | 23 fixtures; median SSIM 0.9953; minimum 0.9805; 100% edges; max error 0.203px; exact text; both new controls at 0.9999-1.0000 SSIM | Text inputs ignored declared horizontal padding and border when positioning and clipping their value; control fixtures now explicitly remove native chrome |
 | Checked and disabled controls | 24-fixture attempt; 98.3% edges within 2px; max error 2.785px; checkbox SSIM 0.9920 | 24 fixtures; median SSIM 0.9956; minimum 0.9805; 100% edges; max error 0.203px; exact text; state fixture 0.9999 SSIM | Checkbox/radio managers discarded initial state, forced height from width, invented labels, and failed to apply element opacity to separate border materials |
 | Positioned sibling stacking | 25-fixture attempt; overlap SSIM 0.9917 with the later low-z sibling painted above the earlier high-z sibling | 25 fixtures; median SSIM 0.9956; minimum 0.9805; 100% edges; max error 0.203px; exact text; overlap fixture 1.0000 SSIM and 0.162px max edge error | Stacking read only inline element style, and its 0.01 depth step was too small for depth-buffer precision at the UI camera distance |
+| Minimum and maximum constraints | 26-fixture attempt; 99.2% edges within 2px; max error 110.002px; constraint fixture SSIM 0.9668 | 26 fixtures; median SSIM 0.9964; minimum 0.9805; 100% edges; max error 0.203px; exact text; constraint fixture 1.0000 SSIM | Dimension resolution applied minimum constraints but ignored `max-width` and `max-height` entirely |
 
 ## Known Intentional Deviations
 
@@ -126,5 +130,5 @@ block geometry by at most 0.203px; exact font-engine-specific leading is out of 
 ## Recommended Next Target
 
 Broaden block/inline and typography coverage, then add flex wrapping and
-negative/auto stacking cases. These are the least represented foundational
-behaviors after initial form and positioned-sibling coverage.
+negative/auto stacking cases. These remain the least represented foundational
+behaviors after explicit min/max sizing coverage.

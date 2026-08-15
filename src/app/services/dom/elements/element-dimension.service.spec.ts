@@ -145,4 +145,36 @@ describe('ElementDimensionService', () => {
     expect(result.x).toBe(-80);
     expect(result.y).toBe(59);
   });
+
+  it('applies maximum width and height constraints', () => {
+    const service = new ElementDimensionService({} as never, {} as never, new DOMAncestryService());
+    const parent = { name: 'root-body' } as Mesh;
+    const dom = {
+      context: {
+        elementDimensions: new Map([
+          ['root-body', { width: 800, height: 600, padding: { top: 0, right: 0, bottom: 0, left: 0 } }],
+        ]),
+        elementStyles: new Map(),
+      },
+    } as unknown as BabylonDOM;
+    const render = {
+      actions: { style: { getElementTypeDefaults: () => ({ display: 'block' }) } },
+    } as unknown as BabylonRender;
+    const style: StyleRule = {
+      selector: '#limited', width: '260px', height: '180px',
+      maxWidth: '150px', maxHeight: '80px', boxSizing: 'border-box'
+    };
+
+    const result = service.calculateDimensions(
+      dom,
+      render,
+      { id: 'limited', type: 'div' },
+      style,
+      parent,
+      [style],
+    );
+
+    expect(result.width).toBe(150);
+    expect(result.height).toBe(80);
+  });
 });

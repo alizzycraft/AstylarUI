@@ -196,6 +196,8 @@ export class ElementDimensionService {
 
         const minWidth = style?.minWidth ? this.parseLength(`${style.minWidth}`, contentWidth) : undefined;
         const minHeight = style?.minHeight ? this.parseLength(`${style.minHeight}`, contentHeight) : undefined;
+        const maxWidth = style?.maxWidth ? this.parseLength(`${style.maxWidth}`, contentWidth) : undefined;
+        const maxHeight = style?.maxHeight ? this.parseLength(`${style.maxHeight}`, contentHeight) : undefined;
         if (minWidth !== undefined && !Number.isNaN(minWidth)) {
             const originalWidth = width;
             width = Math.max(width, minWidth);
@@ -210,6 +212,28 @@ export class ElementDimensionService {
             if (height !== originalHeight) {
                 console.log(`[DIMENSION] ${debugKey} applied minHeight=${minHeight}, adjusted height ${originalHeight}→${height}`);
                 heightSource += '+minHeight';
+            }
+        }
+        if (maxWidth !== undefined && !Number.isNaN(maxWidth)) {
+            const originalWidth = width;
+            const effectiveMaxWidth = minWidth !== undefined && !Number.isNaN(minWidth)
+                ? Math.max(maxWidth, minWidth)
+                : maxWidth;
+            width = Math.min(width, effectiveMaxWidth);
+            if (width !== originalWidth) {
+                console.log(`[DIMENSION] ${debugKey} applied maxWidth=${maxWidth}, adjusted width ${originalWidth}→${width}`);
+                widthSource += '+maxWidth';
+            }
+        }
+        if (maxHeight !== undefined && !Number.isNaN(maxHeight)) {
+            const originalHeight = height;
+            const effectiveMaxHeight = minHeight !== undefined && !Number.isNaN(minHeight)
+                ? Math.max(maxHeight, minHeight)
+                : maxHeight;
+            height = Math.min(height, effectiveMaxHeight);
+            if (height !== originalHeight) {
+                console.log(`[DIMENSION] ${debugKey} applied maxHeight=${maxHeight}, adjusted height ${originalHeight}→${height}`);
+                heightSource += '+maxHeight';
             }
         }
 

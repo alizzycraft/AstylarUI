@@ -148,5 +148,11 @@
     "title": "Overlapping positioned siblings by z-index",
     "category": "positioning-stacking",
     "expectedBehavior": "A positioned sibling with the higher stylesheet z-index paints above a later DOM sibling throughout their overlap."
+  },
+  {
+    "id": "min-max-constraints",
+    "title": "Minimum and maximum size constraints",
+    "category": "box-model-units",
+    "expectedBehavior": "Minimum constraints expand undersized boxes and maximum constraints shrink oversized boxes on both axes."
   }
 ]
