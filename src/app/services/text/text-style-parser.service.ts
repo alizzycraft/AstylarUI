@@ -84,7 +84,10 @@ export class TextStyleParserService {
     }
 
     if (styleRule.lineHeight) {
-      textStyle.lineHeight = this.parseLineHeight(styleRule.lineHeight);
+      textStyle.lineHeight = this.parseLineHeight(
+        styleRule.lineHeight,
+        textStyle.fontSize,
+      );
     }
 
     if (styleRule.letterSpacing) {
@@ -365,7 +368,7 @@ export class TextStyleParserService {
    * @param lineHeight - The line-height CSS value
    * @returns Normalized line height as a multiplier
    */
-  private parseLineHeight(lineHeight: string): number {
+  private parseLineHeight(lineHeight: string, fontSize: number): number {
     const cleanedHeight = lineHeight.trim().toLowerCase();
 
     // Handle 'normal' keyword
@@ -383,8 +386,7 @@ export class TextStyleParserService {
     if (cleanedHeight.endsWith('px')) {
       const pixelValue = parseFloat(cleanedHeight.replace('px', ''));
       if (!isNaN(pixelValue)) {
-        // This is approximate - in real usage, we'd need the actual font size
-        return Math.max(0.1, pixelValue / this.DEFAULT_TEXT_STYLE.fontSize);
+        return Math.max(0.1, pixelValue / fontSize);
       }
     }
 

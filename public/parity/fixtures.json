@@ -46,5 +46,17 @@
     "title": "Inline-block run and display none",
     "category": "block-inline",
     "expectedBehavior": "Inline-block siblings share a line and display:none contributes neither rendering nor layout space."
+  },
+  {
+    "id": "multiline-wrapping",
+    "title": "Multiline wrapping and pixel line height",
+    "category": "typography",
+    "expectedBehavior": "Normal whitespace wraps at word boundaries and pixel line-height uses the resolved font size."
+  },
+  {
+    "id": "pre-line-alignment",
+    "title": "Preserved lines and centered text",
+    "category": "typography",
+    "expectedBehavior": "Pre-line preserves explicit line breaks, collapses spaces, and centers each rendered line."
   }
 ]
