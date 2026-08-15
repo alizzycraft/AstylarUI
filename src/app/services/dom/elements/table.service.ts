@@ -78,7 +78,11 @@ export class TableService {
 
       // Calculate shared row height for all sections
       const sharedRowHeight = containerDimensions.height / totalRowCount;
-      const sharedColumnWidths = new Array(totalColumnCount).fill(containerDimensions.width / totalColumnCount);
+      const sharedColumnWidths = this.resolveColumnWidths(
+        columnDefinitions,
+        containerDimensions.width,
+        totalColumnCount,
+      );
       console.log(`[TABLE DEBUG] Shared dimensions - rowHeight: ${sharedRowHeight}px, columnWidths: ${JSON.stringify(sharedColumnWidths)}`);
 
       // Filter out column definitions and captions from main table structure processing
@@ -447,6 +451,45 @@ export class TableService {
       }
     }
     return maxCols;
+  }
+
+  private resolveColumnWidths(
+    definitions: ColumnDefinition[],
+    tableWidth: number,
+    columnCount: number,
+  ): number[] {
+    if (columnCount <= 0) {
+      return [];
+    }
+
+    const widths = new Array<number | undefined>(columnCount).fill(undefined);
+    let explicitTotal = 0;
+
+    definitions.slice(0, columnCount).forEach((definition, index) => {
+      const value = definition.width?.trim();
+      if (!value) {
+        return;
+      }
+
+      const numeric = Number.parseFloat(value);
+      if (!Number.isFinite(numeric) || numeric < 0) {
+        return;
+      }
+
+      const width = value.endsWith('%')
+        ? tableWidth * numeric / 100
+        : numeric;
+      widths[index] = width;
+      explicitTotal += width;
+    });
+
+    const unspecifiedCount = widths.filter(width => width === undefined).length;
+    const remaining = Math.max(0, tableWidth - explicitTotal);
+    const fallback = unspecifiedCount > 0
+      ? remaining / unspecifiedCount
+      : 0;
+
+    return widths.map(width => width ?? fallback);
   }
 
   private getMaxColumnsInTable(tableRows: DOMElement[]): number {

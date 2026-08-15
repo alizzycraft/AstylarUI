@@ -94,5 +94,17 @@
     "title": "Ordered list flow and markers",
     "category": "lists-tables-images",
     "expectedBehavior": "Ordered list items stack at intrinsic line-box height and render sequential decimal markers outside the content box."
+  },
+  {
+    "id": "table-fixed-layout",
+    "title": "Fixed table rows and columns",
+    "category": "lists-tables-images",
+    "expectedBehavior": "A fixed-size two-by-two table divides its border-free grid evenly across rows and columns."
+  },
+  {
+    "id": "table-column-widths",
+    "title": "Explicit table column widths",
+    "category": "lists-tables-images",
+    "expectedBehavior": "Fixed table columns honor explicit pixel widths instead of being redistributed equally."
   }
 ]
