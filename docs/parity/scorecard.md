@@ -11,16 +11,16 @@ Last updated: 2026-08-15
 | Box model and sizing units | 4 | Width/height, min/max, padding, margin, borders, px/%/viewport/font units |
 | Typography and multiline text | 3 | Fonts, line height, wrapping, whitespace, alignment, overflow |
 | Flexbox | 4 | Direction, wrap, basis, grow/shrink, gap, order, alignment |
-| Positioning and stacking | 2 | Static, relative, absolute, fixed, containing blocks, z-order |
+| Positioning and stacking | 3 | Static, relative, absolute, fixed, containing blocks, z-order |
 | Lists, tables, and images | 7 | Representative structural and replaced content |
 | Forms and interactive states | 3 | Basic visible controls, focus, checked/disabled states |
-| **Total** | **29 / 40** | Balanced coverage required before completion |
+| **Total** | **30 / 40** | Balanced coverage required before completion |
 
 ## Current Baseline
 
 | Metric | Current result | Core Web Parity v1 threshold |
 | --- | ---: | ---: |
-| Fixtures | 29 | At least 40 |
+| Fixtures | 30 | At least 40 |
 | Median SSIM | 0.9956 | At least 0.98 |
 | Minimum fixture SSIM | 0.9805 | At least 0.95 |
 | Geometry edges within 2px | 100% | At least 95% |
@@ -29,7 +29,7 @@ Last updated: 2026-08-15
 | Runtime errors | 0 | 0 |
 
 All current fixtures pass every per-fixture quality threshold. The suite does
-not meet the completion gate because coverage is still 29 of 40 fixtures.
+not meet the completion gate because coverage is still 30 of 40 fixtures.
 
 ## Decisions
 
@@ -110,6 +110,9 @@ not meet the completion gate because coverage is still 29 of 40 fixtures.
 29. Wrapped row flex layout is covered with explicit basis, independent row and
     column gaps, and `align-content: space-between`; the existing multi-line flex
     algorithm matches the browser for this representative case.
+30. A positioned `z-index: 0` parent is covered with overlapping negative and
+    `auto` children, confirming that the negative child remains above the parent
+    background while the auto layer paints in front.
 
 ## Iteration History
 
@@ -132,6 +135,7 @@ not meet the completion gate because coverage is still 29 of 40 fixtures.
 | Letter and word spacing | 27-fixture attempt; 99.6% edges within 2px; max error 46.005px; spacing fixture SSIM 0.9891 | 27 fixtures; median SSIM 0.9964; minimum 0.9805; 100% edges; max error 0.203px; exact text; spacing fixture 0.9971 SSIM | Text spacing was parsed but omitted from every canvas measurement and paint context, leaving auto width and glyph positions unspaced |
 | Inline flex outer and inner flow | 28-fixture attempt; 93.7% edges within 2px; max error 100.008px; inline-flex fixture SSIM 0.9637 | 28 fixtures; median SSIM 0.9964; minimum 0.9805; 100% edges; max error 0.203px; exact text; inline-flex fixture 0.9856 SSIM | The outer inline layout recognized `inline-flex`, but the flex-container predicate did not, so each container's children were block-stacked instead of flex-laid out |
 | Wrapped flex lines | No deterministic flex-wrap comparison | 29 fixtures; median SSIM 0.9956; minimum 0.9805; 100% edges; max error 0.203px; exact text; wrap fixture 0.9836 SSIM and 0.005px max edge error | Added positive coverage confirming that line formation, flex basis, axis-specific gaps, and `align-content: space-between` already agree with Chromium |
+| Negative and auto stacking | No negative-versus-auto stacking comparison | 30 fixtures; median SSIM 0.9956; minimum 0.9805; 100% edges; max error 0.203px; exact text; stacking fixture 0.9880 SSIM and 0.098px max edge error | Added positive coverage confirming parent-background, negative child, and auto sibling paint order within a positioned stacking context |
 
 ## Known Intentional Deviations
 
@@ -141,6 +145,6 @@ block geometry by at most 0.203px; exact font-engine-specific leading is out of 
 
 ## Recommended Next Target
 
-Add negative/auto stacking cases, then broaden forms and typography states.
-These remain the least represented foundational behaviors after explicit flex
-wrapping coverage.
+Broaden forms and typography states, then cover fixed positioning and additional
+sizing units. These are the least represented foundational behaviors after
+negative and auto stacking coverage.

@@ -27,6 +27,7 @@ import { minMaxConstraintsFixture } from './min-max-constraints.fixture';
 import { textSpacingFixture } from './text-spacing.fixture';
 import { inlineFlexFlowFixture } from './inline-flex-flow.fixture';
 import { flexWrapLinesFixture } from './flex-wrap-lines.fixture';
+import { negativeAutoStackingFixture } from './negative-auto-stacking.fixture';
 import { ParityFixture } from '../parity.types';
 
 const fixtures: readonly ParityFixture[] = [
@@ -58,7 +59,8 @@ const fixtures: readonly ParityFixture[] = [
   minMaxConstraintsFixture,
   textSpacingFixture,
   inlineFlexFlowFixture,
-  flexWrapLinesFixture
+  flexWrapLinesFixture,
+  negativeAutoStackingFixture
 ];
 
 const fixturesById = new Map(fixtures.map((fixture) => [fixture.id, fixture]));

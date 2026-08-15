@@ -172,5 +172,11 @@
     "title": "Wrapped flex lines and align-content",
     "category": "flexbox",
     "expectedBehavior": "Flex items wrap onto multiple rows, preserve row and column gaps, and distribute lines with align-content."
+  },
+  {
+    "id": "negative-auto-stacking",
+    "title": "Negative and auto stacking inside a context",
+    "category": "positioning-stacking",
+    "expectedBehavior": "A negative z-index child paints above its stacking-context parent background but below a later auto-z sibling."
   }
 ]
