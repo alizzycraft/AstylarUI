@@ -11,16 +11,16 @@ Last updated: 2026-08-15
 | Box model and sizing units | 3 | Width/height, min/max, padding, margin, borders, px/%/viewport/font units |
 | Typography and multiline text | 2 | Fonts, line height, wrapping, whitespace, alignment, overflow |
 | Flexbox | 3 | Direction, wrap, basis, grow/shrink, gap, order, alignment |
-| Positioning and stacking | 1 | Static, relative, absolute, fixed, containing blocks, z-order |
+| Positioning and stacking | 2 | Static, relative, absolute, fixed, containing blocks, z-order |
 | Lists, tables, and images | 7 | Representative structural and replaced content |
 | Forms and interactive states | 3 | Basic visible controls, focus, checked/disabled states |
-| **Total** | **24 / 40** | Balanced coverage required before completion |
+| **Total** | **25 / 40** | Balanced coverage required before completion |
 
 ## Current Baseline
 
 | Metric | Current result | Core Web Parity v1 threshold |
 | --- | ---: | ---: |
-| Fixtures | 24 | At least 40 |
+| Fixtures | 25 | At least 40 |
 | Median SSIM | 0.9956 | At least 0.98 |
 | Minimum fixture SSIM | 0.9805 | At least 0.95 |
 | Geometry edges within 2px | 100% | At least 95% |
@@ -29,7 +29,7 @@ Last updated: 2026-08-15
 | Runtime errors | 0 | 0 |
 
 All current fixtures pass every per-fixture quality threshold. The suite does
-not meet the completion gate because coverage is still 24 of 40 fixtures.
+not meet the completion gate because coverage is still 25 of 40 fixtures.
 
 ## Decisions
 
@@ -94,6 +94,10 @@ not meet the completion gate because coverage is still 24 of 40 fixtures.
     `disabled` properties. Checkbox geometry preserves independent CSS width and
     height, labels exist only when authored, and element opacity also applies to
     separately rendered borders.
+25. Mesh stacking uses the fully cascaded stylesheet `z-index`, not only JSON
+    inline style. A bounded monotonic world-depth mapping and matching material
+    depth bias keep layers distinguishable at the UI camera distance without
+    letting large CSS values cross the camera plane.
 
 ## Iteration History
 
@@ -108,11 +112,10 @@ not meet the completion gate because coverage is still 24 of 40 fixtures.
 | Semantic block defaults | 14-fixture attempt; 94.8% edges within 2px; max error 431.571px; semantic fixture SSIM 0.9619 | 14 fixtures; median SSIM 0.9953; minimum 0.9805; 100% edges; max error 0.203px; exact text | Text-bearing blocks shrink-wrapped width, inherited parent height, used fixed-size `em` margins, and summed adjacent margins; text bounds also ignored resolved line height |
 | List flow and markers | 16-fixture attempt; 85.1% edges within 2px; max error 80.002px; minimum SSIM 0.9361 | 16 fixtures; median SSIM 0.9946; minimum 0.9805; 100% edges; max error 0.203px; exact text | Lists added a second indentation, narrowed items, divided container height equally, inserted fixed spacing, and used colored geometric placeholders for ordered markers |
 | Fixed table tracks | 18-fixture attempt; 98.1% edges within 2px; max error 59.998px | 18 fixtures; median SSIM 0.9941; minimum 0.9805; 100% edges; max error 0.203px; exact text | The table renderer parsed `<col>` definitions for column count but discarded their declared widths and redistributed every track equally |
-| Intrinsic images and object fit | 21-fixture attempt; 97.3% edges within 2px; max error 300.004px; minimum SSIM 0.1172 | 21 fixtures; median SSIM 0.9946; minimum 0.9805; 100% edges; max error 0.203px; exact text; image fixtures 0.9997–1.0000 SSIM | Images stretched one lit texture across the element, ignored natural size and object fit, rendered mirrored pixels, and exposed an inline auto-height bug that moved parents containing only positioned children |
-
+| Intrinsic images and object fit | 21-fixture attempt; 97.3% edges within 2px; max error 300.004px; minimum SSIM 0.1172 | 21 fixtures; median SSIM 0.9946; minimum 0.9805; 100% edges; max error 0.203px; exact text; image fixtures 0.9997-1.0000 SSIM | Images stretched one lit texture across the element, ignored natural size and object fit, rendered mirrored pixels, and exposed an inline auto-height bug that moved parents containing only positioned children |
 | Styled buttons and text inputs | 23-fixture attempt; text input SSIM 0.9948 with value painted at a hard-coded 1.5px inset | 23 fixtures; median SSIM 0.9953; minimum 0.9805; 100% edges; max error 0.203px; exact text; both new controls at 0.9999-1.0000 SSIM | Text inputs ignored declared horizontal padding and border when positioning and clipping their value; control fixtures now explicitly remove native chrome |
-
 | Checked and disabled controls | 24-fixture attempt; 98.3% edges within 2px; max error 2.785px; checkbox SSIM 0.9920 | 24 fixtures; median SSIM 0.9956; minimum 0.9805; 100% edges; max error 0.203px; exact text; state fixture 0.9999 SSIM | Checkbox/radio managers discarded initial state, forced height from width, invented labels, and failed to apply element opacity to separate border materials |
+| Positioned sibling stacking | 25-fixture attempt; overlap SSIM 0.9917 with the later low-z sibling painted above the earlier high-z sibling | 25 fixtures; median SSIM 0.9956; minimum 0.9805; 100% edges; max error 0.203px; exact text; overlap fixture 1.0000 SSIM and 0.162px max edge error | Stacking read only inline element style, and its 0.01 depth step was too small for depth-buffer precision at the UI camera distance |
 
 ## Known Intentional Deviations
 
@@ -122,6 +125,6 @@ block geometry by at most 0.203px; exact font-engine-specific leading is out of 
 
 ## Recommended Next Target
 
-Add a second positioning/stacking fixture, then broaden block/inline and
-typography coverage. Those categories are least represented after the initial
-form-state fixtures.
+Broaden block/inline and typography coverage, then add flex wrapping and
+negative/auto stacking cases. These are the least represented foundational
+behaviors after initial form and positioned-sibling coverage.

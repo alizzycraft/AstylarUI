@@ -307,7 +307,7 @@ export class ElementCreationService {
 
     // Calculate position
     const stackingZPosition =
-      this.stackingContextManager.calculateZPosition(element);
+      this.stackingContextManager.calculateZPosition(element, style);
     const zPosition = flexPosition ? flexPosition.z : stackingZPosition;
 
     let worldX: number, worldY: number;
@@ -351,6 +351,9 @@ export class ElementCreationService {
             borderProps.color,
           );
           borderMaterial.alpha = render.actions.style.parseOpacity(style?.opacity);
+          borderMaterial.zOffset = style.zIndex && style.zIndex !== 'auto'
+            ? Number.parseInt(style.zIndex, 10) || 0
+            : 0;
 
           // Parent all border frames to main mesh FIRST
           borderMeshes.forEach((borderMesh: BABYLON.Mesh) => {

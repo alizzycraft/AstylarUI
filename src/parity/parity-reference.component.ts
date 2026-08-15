@@ -159,7 +159,8 @@ export class ParityReferenceComponent {
         lineHeight: computed.lineHeight,
         textAlign: computed.textAlign,
         whiteSpace: computed.whiteSpace,
-        opacity: computed.opacity
+        opacity: computed.opacity,
+        zIndex: computed.zIndex
       },
       text: textContent ? { content: textContent, lineCount: lineRects.length } : undefined
     };

@@ -53,6 +53,7 @@ export class ElementMaterialService {
           width,
           height,
         );
+        material.zOffset = this.getDepthOffset(style.zIndex);
         mesh.material = material;
       } else {
         const finalOpacity =
@@ -62,6 +63,7 @@ export class ElementMaterialService {
           backgroundData.color,
           finalOpacity,
         );
+        material.zOffset = this.getDepthOffset(style.zIndex);
         mesh.material = material;
       }
     } else if (style?.background === "transparent") {
@@ -71,8 +73,17 @@ export class ElementMaterialService {
         new Color3(0, 0, 0),
         0, // Fully transparent
       );
+      material.zOffset = this.getDepthOffset(style.zIndex);
       mesh.material = material;
     }
+  }
+
+  private getDepthOffset(zIndex: string | undefined): number {
+    if (zIndex === undefined || zIndex === 'auto') {
+      return 0;
+    }
+    const parsed = Number.parseInt(zIndex, 10);
+    return Number.isFinite(parsed) ? parsed : 0;
   }
 
   /**

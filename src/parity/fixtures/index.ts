@@ -22,6 +22,7 @@ import { imageObjectFitCoverFixture } from './image-object-fit-cover.fixture';
 import { styledButtonFixture } from './styled-button.fixture';
 import { styledTextInputFixture } from './styled-text-input.fixture';
 import { checkboxStatesFixture } from './checkbox-states.fixture';
+import { zIndexOverlapFixture } from './z-index-overlap.fixture';
 import { ParityFixture } from '../parity.types';
 
 const fixtures: readonly ParityFixture[] = [
@@ -48,7 +49,8 @@ const fixtures: readonly ParityFixture[] = [
   imageObjectFitCoverFixture,
   styledButtonFixture,
   styledTextInputFixture,
-  checkboxStatesFixture
+  checkboxStatesFixture,
+  zIndexOverlapFixture
 ];
 
 const fixturesById = new Map(fixtures.map((fixture) => [fixture.id, fixture]));

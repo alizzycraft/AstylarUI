@@ -142,5 +142,11 @@
     "title": "Checked and disabled checkbox states",
     "category": "forms-interactive",
     "expectedBehavior": "Explicitly styled checkboxes preserve independent width and height, initialize checked state visibly, and retain disabled opacity without invented labels."
+  },
+  {
+    "id": "z-index-overlap",
+    "title": "Overlapping positioned siblings by z-index",
+    "category": "positioning-stacking",
+    "expectedBehavior": "A positioned sibling with the higher stylesheet z-index paints above a later DOM sibling throughout their overlap."
   }
 ]

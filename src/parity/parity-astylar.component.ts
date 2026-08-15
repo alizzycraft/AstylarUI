@@ -209,6 +209,8 @@ export class ParityAstylarComponent {
           lineHeight: style?.lineHeight,
           textAlign: style?.textAlign,
           whiteSpace: style?.whiteSpace,
+          zIndex: style?.zIndex,
+          internalZ: mesh.getAbsolutePosition().z,
           internalWidth: dimensions?.width,
           internalHeight: dimensions?.height
         },

@@ -3,6 +3,7 @@ import { DOMElement } from '../../../types/dom-element';
 import { StackingContext } from '../../../types/positioning';
 import { IStackingContextManager } from './interfaces/positioning.interfaces';
 import { PositioningUtils } from './utils/positioning.utils';
+import { StyleRule } from '../../../types/style-rule';
 
 @Injectable({
   providedIn: 'root'
@@ -184,14 +185,28 @@ export class StackingContextManager implements IStackingContextManager {
    * Gets the 3D Z position for an element based on its stacking context
    * This integrates with the existing z-index positioning logic
    */
-  calculateZPosition(element: DOMElement): number {
-    const effectiveZIndex = this.calculateEffectiveZIndex(element);
+  calculateZPosition(element: DOMElement, resolvedStyle?: StyleRule): number {
+    const effectiveZIndex = resolvedStyle
+      ? this.parseResolvedZIndex(resolvedStyle.zIndex)
+      : this.calculateEffectiveZIndex(element);
+    const normalizedZIndex = Math.atan(effectiveZIndex) * (20 / Math.PI);
     
     // Use the same calculation as the existing system
     const baseZ = 0.01;
-    const zScale = 0.01;
+    // Keep enough bounded world-space separation to survive depth-buffer
+    // precision at the UI camera distance. atan preserves ordering without
+    // allowing common large CSS z-index values to cross the camera plane.
+    const zScale = 0.1;
     
-    return baseZ + (effectiveZIndex * zScale);
+    return baseZ + (normalizedZIndex * zScale);
+  }
+
+  private parseResolvedZIndex(value: string | undefined): number {
+    if (value === undefined || value === 'auto') {
+      return 0;
+    }
+    const parsed = Number.parseInt(value, 10);
+    return Number.isFinite(parsed) ? parsed : 0;
   }
 
   /**
