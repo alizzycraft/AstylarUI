@@ -40,6 +40,7 @@ import { textOverflowEllipsisFixture } from './text-overflow-ellipsis.fixture';
 import { fontRelativeUnitsFixture } from './font-relative-units.fixture';
 import { descendantSelectorFixture } from './descendant-selector.fixture';
 import { childCombinatorFixture } from './child-combinator.fixture';
+import { adjacentSiblingFixture } from './adjacent-sibling.fixture';
 import { ParityFixture } from '../parity.types';
 
 const fixtures: readonly ParityFixture[] = [
@@ -84,7 +85,8 @@ const fixtures: readonly ParityFixture[] = [
   textOverflowEllipsisFixture,
   fontRelativeUnitsFixture,
   descendantSelectorFixture,
-  childCombinatorFixture
+  childCombinatorFixture,
+  adjacentSiblingFixture
 ];
 
 const fixturesById = new Map(fixtures.map((fixture) => [fixture.id, fixture]));

@@ -8,8 +8,8 @@ This scorecard tracks the second parity phase: making ordinary application-orien
 
 | Gate | Current | Target | Status |
 | --- | ---: | ---: | --- |
-| Total parity fixtures | 42 | 65 | Open |
-| New Phase 2 fixtures | 2 | 25 | Open |
+| Total parity fixtures | 43 | 65 | Open |
+| New Phase 2 fixtures | 3 | 25 | Open |
 | Composed application/component fixtures | 0 | 10 | Open |
 | Deterministic viewport sizes | 1 (`800x600`) | 3 | Open |
 | Median SSIM | 0.9953 | >= 0.98 | Passing baseline |
@@ -25,7 +25,7 @@ This scorecard tracks the second parity phase: making ordinary application-orien
 
 | Phase 2 category | Fixtures | Representative coverage | Status |
 | --- | ---: | --- | --- |
-| Selectors and cascade | 2 | Descendant and direct-child matching, subtree scoping, combined specificity | In progress |
+| Selectors and cascade | 3 | Descendant, direct-child, and adjacent-sibling matching; scoping and specificity | In progress |
 | CSS Grid | 0 | — | Open |
 | Responsive behavior | 0 | — | Open |
 | Overflow and scrolling | 0 | — | Open |
@@ -60,6 +60,7 @@ The committed 40-fixture Phase 1 suite was rerun before Phase 2 work began. It p
 | Phase 2 foundation | Phase 1 complete; no v2 scorecard | Added gates, category accounting, baseline, and decision log | Phase 1 parity suite green | `3fc1e3d` |
 | Descendant selectors | Nested target used base class colors; SSIM `0.9744` | Ancestry-aware multi-compound matching and summed specificity | Fixture SSIM `0.9971`; 100% edges within 2 px; exact text; 53 tests and both builds pass | `fix: support descendant selectors` |
 | Child combinator | Direct child retained base colors; SSIM `0.9912` | Parsed direct-child relations with immediate-parent matching | Fixture SSIM `0.9913`; visual output aligned; 100% edges within 2 px; exact text; 54 tests and both builds pass | `fix: support child combinators` |
+| Adjacent sibling | Immediate sibling retained base colors; SSIM `0.9924` | Resolved the previous sibling from authored parent child order | Fixture SSIM `0.9930`; visual output aligned; 100% edges within 2 px; exact text; 55 tests and both builds pass | `fix: support adjacent sibling selectors` |
 
 ## Remaining work
 
@@ -73,4 +74,4 @@ The committed 40-fixture Phase 1 suite was rerun before Phase 2 work began. It p
 
 ## Next target
 
-Add a focused adjacent-sibling fixture, using the parent's authored child order to distinguish the immediately preceding sibling from other siblings.
+Add a focused general-sibling fixture that matches all qualifying later siblings while excluding earlier and unrelated elements.

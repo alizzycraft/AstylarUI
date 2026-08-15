@@ -352,7 +352,7 @@ export class StyleService {
 
     private getMatchingSpecificity(element: DOMElement, selector: string): number | null {
         const normalizedSelector = selector.trim();
-        if (!normalizedSelector || normalizedSelector.includes(':') || /[+~]/.test(normalizedSelector)) {
+        if (!normalizedSelector || normalizedSelector.includes(':') || normalizedSelector.includes('~')) {
             return null;
         }
 
@@ -366,22 +366,31 @@ export class StyleService {
 
         for (let index = compounds.length - 2; index >= 0; index--) {
             const combinator = combinators[index];
-            let ancestor = this.ancestry.getParent(matchedElement);
-            let ancestorSpecificity: number | null = null;
+            let relatedElement: DOMElement | undefined;
+            let relatedSpecificity: number | null = null;
 
             if (combinator === 'child') {
-                if (ancestor) {
-                    ancestorSpecificity = this.getCompoundSpecificity(ancestor, compounds[index]);
+                relatedElement = this.ancestry.getParent(matchedElement);
+                if (relatedElement) {
+                    relatedSpecificity = this.getCompoundSpecificity(relatedElement, compounds[index]);
                 }
-            } else while (ancestor) {
-                ancestorSpecificity = this.getCompoundSpecificity(ancestor, compounds[index]);
-                if (ancestorSpecificity !== null) break;
-                ancestor = this.ancestry.getParent(ancestor);
+            } else if (combinator === 'adjacent') {
+                relatedElement = this.getPreviousSibling(matchedElement);
+                if (relatedElement) {
+                    relatedSpecificity = this.getCompoundSpecificity(relatedElement, compounds[index]);
+                }
+            } else {
+                relatedElement = this.ancestry.getParent(matchedElement);
+                while (relatedElement) {
+                    relatedSpecificity = this.getCompoundSpecificity(relatedElement, compounds[index]);
+                    if (relatedSpecificity !== null) break;
+                    relatedElement = this.ancestry.getParent(relatedElement);
+                }
             }
 
-            if (!ancestor || ancestorSpecificity === null) return null;
-            specificity += ancestorSpecificity;
-            matchedElement = ancestor;
+            if (!relatedElement || relatedSpecificity === null) return null;
+            specificity += relatedSpecificity;
+            matchedElement = relatedElement;
         }
 
         return specificity;
@@ -389,19 +398,29 @@ export class StyleService {
 
     private parseRelationalSelector(selector: string): {
         compounds: string[];
-        combinators: Array<'descendant' | 'child'>;
+        combinators: Array<'descendant' | 'child' | 'adjacent'>;
     } | null {
-        const normalized = selector.replace(/\s*>\s*/g, '>');
-        const compounds = normalized.split(/>|\s+/);
-        const combinators = Array.from(normalized.matchAll(/>|\s+/g), match =>
-            match[0] === '>' ? 'child' as const : 'descendant' as const,
-        );
+        const normalized = selector.replace(/\s*([>+])\s*/g, '$1');
+        const compounds = normalized.split(/[>+]|\s+/);
+        const combinators = Array.from(normalized.matchAll(/[>+]|\s+/g), match => {
+            if (match[0] === '>') return 'child' as const;
+            if (match[0] === '+') return 'adjacent' as const;
+            return 'descendant' as const;
+        });
 
         if (compounds.some(compound => !compound) || combinators.length !== compounds.length - 1) {
             return null;
         }
 
         return { compounds, combinators };
+    }
+
+    private getPreviousSibling(element: DOMElement): DOMElement | undefined {
+        const siblings = this.ancestry.getParent(element)?.children;
+        if (!siblings) return undefined;
+
+        const index = siblings.indexOf(element);
+        return index > 0 ? siblings[index - 1] : undefined;
     }
 
     private getCompoundSpecificity(element: DOMElement, selector: string): number | null {

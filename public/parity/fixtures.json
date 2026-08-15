@@ -250,5 +250,11 @@
     "title": "Direct-child combinator scoping",
     "category": "selectors-cascade",
     "expectedBehavior": "A child combinator matches only an immediate child, not an otherwise identical element nested more deeply."
+  },
+  {
+    "id": "adjacent-sibling",
+    "title": "Adjacent-sibling combinator scoping",
+    "category": "selectors-cascade",
+    "expectedBehavior": "An adjacent-sibling combinator matches only the first matching element immediately following the left-hand sibling."
   }
 ]

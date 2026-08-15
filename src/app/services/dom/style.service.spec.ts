@@ -109,4 +109,24 @@ describe('StyleService cascade', () => {
     expect(service.matchesSelector(direct, '.child-card>.status-chip')).toBeTrue();
     expect(service.matchesSelector(nested, '.child-card > .status-chip')).toBeFalse();
   });
+
+  it('matches adjacent combinators only against the immediately preceding sibling', () => {
+    const lead: DOMElement = { type: 'div', class: 'lead' };
+    const adjacent: DOMElement = { type: 'div', class: 'sibling-item' };
+    const later: DOMElement = { type: 'div', class: 'sibling-item' };
+    const panel: DOMElement = { type: 'section', children: [lead, adjacent, later] };
+    ancestry.setParent(lead, panel);
+    ancestry.setParent(adjacent, panel);
+    ancestry.setParent(later, panel);
+
+    const styles: StyleRule[] = [
+      { selector: '.sibling-item', background: '#fee2e2' },
+      { selector: '.lead + .sibling-item', background: '#dcfce7' },
+    ];
+
+    expect(service.findStyleForElement(adjacent, styles)?.background).toBe('#dcfce7');
+    expect(service.findStyleForElement(later, styles)?.background).toBe('#fee2e2');
+    expect(service.matchesSelector(adjacent, '.lead+.sibling-item')).toBeTrue();
+    expect(service.matchesSelector(later, '.lead + .sibling-item')).toBeFalse();
+  });
 });
