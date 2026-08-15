@@ -8,8 +8,8 @@ This scorecard tracks the second parity phase: making ordinary application-orien
 
 | Gate | Current | Target | Status |
 | --- | ---: | ---: | --- |
-| Total parity fixtures | 44 | 65 | Open |
-| New Phase 2 fixtures | 4 | 25 | Open |
+| Total parity fixtures | 45 | 65 | Open |
+| New Phase 2 fixtures | 5 | 25 | Open |
 | Composed application/component fixtures | 0 | 10 | Open |
 | Deterministic viewport sizes | 1 (`800x600`) | 3 | Open |
 | Median SSIM | 0.9953 | >= 0.98 | Passing baseline |
@@ -25,7 +25,7 @@ This scorecard tracks the second parity phase: making ordinary application-orien
 
 | Phase 2 category | Fixtures | Representative coverage | Status |
 | --- | ---: | --- | --- |
-| Selectors and cascade | 4 | Descendant, child, adjacent/general sibling matching; scoping and specificity | In progress |
+| Selectors and cascade | 5 | Relationship combinators plus first/last structural pseudo-classes | In progress |
 | CSS Grid | 0 | — | Open |
 | Responsive behavior | 0 | — | Open |
 | Overflow and scrolling | 0 | — | Open |
@@ -62,6 +62,7 @@ The committed 40-fixture Phase 1 suite was rerun before Phase 2 work began. It p
 | Child combinator | Direct child retained base colors; SSIM `0.9912` | Parsed direct-child relations with immediate-parent matching | Fixture SSIM `0.9913`; visual output aligned; 100% edges within 2 px; exact text; 54 tests and both builds pass | `fix: support child combinators` |
 | Adjacent sibling | Immediate sibling retained base colors; SSIM `0.9924` | Resolved the previous sibling from authored parent child order | Fixture SSIM `0.9930`; visual output aligned; 100% edges within 2 px; exact text; 55 tests and both builds pass | `fix: support adjacent sibling selectors` |
 | General sibling | Both later siblings retained base colors; SSIM `0.9865` | Searched authored preceding siblings in right-to-left selector order | Fixture SSIM `0.9868`; visual output aligned; 100% edges within 2 px; exact text; 56 tests and both builds pass | `fix: support general sibling selectors` |
+| Structural pseudo-classes | First and last items retained neutral colors; SSIM `0.9916` | Matched first/last authored siblings with class-level pseudo specificity | Fixture SSIM `0.9940`; visual output aligned; 100% edges within 2 px; exact text; 57 tests and both builds pass | `fix: support structural pseudo selectors` |
 
 ## Remaining work
 
@@ -75,4 +76,4 @@ The committed 40-fixture Phase 1 suite was rerun before Phase 2 work began. It p
 
 ## Next target
 
-Add a focused structural pseudo-class fixture for `:first-child` and `:last-child`, preserving pseudo-class specificity and authored sibling order.
+Generalize the parity harness from one hard-coded viewport to three deterministic viewport profiles, retaining Phase 1 at `800x600` while enabling explicit responsive fixture coverage.

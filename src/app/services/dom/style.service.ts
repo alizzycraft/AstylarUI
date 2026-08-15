@@ -352,7 +352,7 @@ export class StyleService {
 
     private getMatchingSpecificity(element: DOMElement, selector: string): number | null {
         const normalizedSelector = selector.trim();
-        if (!normalizedSelector || normalizedSelector.includes(':')) {
+        if (!normalizedSelector) {
             return null;
         }
 
@@ -442,10 +442,24 @@ export class StyleService {
     }
 
     private getCompoundSpecificity(element: DOMElement, selector: string): number | null {
-        if (selector === '*') return 0;
+        const pseudos = Array.from(selector.matchAll(/:(first-child|last-child)/g), match => match[1]);
+        const baseSelector = selector.replace(/:(first-child|last-child)/g, '');
+        if (baseSelector.includes(':')) return null;
 
-        const tokens = Array.from(selector.matchAll(/([.#]?)([\w-]+)/g));
-        if (!tokens.length || tokens.map(token => token[0]).join('') !== selector) {
+        if (pseudos.length) {
+            const siblings = this.ancestry.getParent(element)?.children;
+            if (!siblings) return null;
+            const index = siblings.indexOf(element);
+            if (index < 0) return null;
+            if (pseudos.includes('first-child') && index !== 0) return null;
+            if (pseudos.includes('last-child') && index !== siblings.length - 1) return null;
+        }
+
+        const pseudoSpecificity = pseudos.length * 10;
+        if (!baseSelector || baseSelector === '*') return pseudoSpecificity;
+
+        const tokens = Array.from(baseSelector.matchAll(/([.#]?)([\w-]+)/g));
+        if (!tokens.length || tokens.map(token => token[0]).join('') !== baseSelector) {
             return null;
         }
 
@@ -476,7 +490,7 @@ export class StyleService {
             }
         }
 
-        return ids * 100 + classCount * 10 + typeCount;
+        return ids * 100 + classCount * 10 + typeCount + pseudoSpecificity;
     }
 
     private logStyleResolution(element: DOMElement, style: StyleRule, segments: string[]): void {

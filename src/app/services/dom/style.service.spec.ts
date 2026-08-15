@@ -149,4 +149,25 @@ describe('StyleService cascade', () => {
     expect(service.matchesSelector(second, '.general-lead~.general-item')).toBeTrue();
     expect(service.matchesSelector(before, '.general-lead ~ .general-item')).toBeFalse();
   });
+
+  it('matches first and last child pseudo-classes with class specificity', () => {
+    const first: DOMElement = { type: 'div', class: 'edge-item' };
+    const middle: DOMElement = { type: 'div', class: 'edge-item' };
+    const last: DOMElement = { type: 'div', class: 'edge-item' };
+    const list: DOMElement = { type: 'section', children: [first, middle, last] };
+    for (const child of list.children ?? []) ancestry.setParent(child, list);
+
+    const styles: StyleRule[] = [
+      { selector: '.edge-item:first-child', background: '#dcfce7' },
+      { selector: '.edge-item:last-child', background: '#dbeafe' },
+      { selector: '.edge-item', background: '#f1f5f9' },
+    ];
+
+    expect(service.findStyleForElement(first, styles)?.background).toBe('#dcfce7');
+    expect(service.findStyleForElement(middle, styles)?.background).toBe('#f1f5f9');
+    expect(service.findStyleForElement(last, styles)?.background).toBe('#dbeafe');
+    expect(service.matchesSelector(first, ':first-child')).toBeTrue();
+    expect(service.matchesSelector(last, ':last-child')).toBeTrue();
+    expect(service.matchesSelector(middle, ':first-child')).toBeFalse();
+  });
 });
