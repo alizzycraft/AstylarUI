@@ -8,8 +8,8 @@ This scorecard tracks the second parity phase: making ordinary application-orien
 
 | Gate | Current | Target | Status |
 | --- | ---: | ---: | --- |
-| Total parity fixtures | 50 | 65 | Open |
-| New Phase 2 fixtures | 10 | 25 | Open |
+| Total parity fixtures | 51 | 65 | Open |
+| New Phase 2 fixtures | 11 | 25 | Open |
 | Composed application/component fixtures | 0 | 10 | Open |
 | Deterministic viewport sizes | 3 exercised | 3 exercised | Passing |
 | Median SSIM | 0.9973 | >= 0.98 | Passing |
@@ -26,7 +26,7 @@ This scorecard tracks the second parity phase: making ordinary application-orien
 | Phase 2 category | Fixtures | Representative coverage | Status |
 | --- | ---: | --- | --- |
 | Selectors and cascade | 5 | Relationship combinators plus first/last structural pseudo-classes | In progress |
-| CSS Grid | 0 | — | Open |
+| CSS Grid | 1 | Explicit px/fr tracks, independent gaps, stretch, and row-order auto-placement | In progress |
 | Responsive behavior | 2 | Viewport-relative geometry and width media conditions across three profiles | In progress |
 | Overflow and scrolling | 1 | Hidden overflow clipping for positioned descendants | In progress |
 | Controls and states | 1 | Enabled, disabled, and checked selector states with element opacity | In progress |
@@ -55,6 +55,7 @@ The committed 40-fixture Phase 1 suite was rerun before Phase 2 work began. It p
 - Keep parsed author-style caches distinct from renderer-authored context overrides so cached declarations cannot bypass the normal cascade.
 - Implement rectangular overflow clipping with per-material world-space clip planes and intersect bounds from nested clipping ancestors.
 - Use one hierarchy-aware physical-depth model for CSS stacking; do not duplicate z-index through Babylon material polygon offsets.
+- Start Grid with explicit px/percentage/fr tracks and DOM-order auto-placement; expand syntax only through representative fixtures.
 
 ## Iteration history
 
@@ -72,6 +73,7 @@ The committed 40-fixture Phase 1 suite was rerun before Phase 2 work began. It p
 | Control state selectors | Controls retained base colors despite semantic flags; visual inspection also found element opacity omitted from button text | Added `:enabled`, `:disabled`, and `:checked` matching with pseudo specificity; prevented parsed author caches from overriding cascade winners; propagated opacity to button labels | Fixture SSIM `0.9979`; 100% edges within 2 px; exact text; 60 tests and both builds pass | `fix: support control state selectors` |
 | Hidden overflow | Positioned descendants painted beyond an `overflow: hidden` ancestor; baseline SSIM `0.9738` despite exact geometry | Added four world-space material clip planes for hidden/clip overflow and intersected nested ancestor bounds | Fixture SSIM `1.0000`; 100% edges within 2 px; exact text; 62 tests and both builds pass | `fix: clip hidden overflow descendants` |
 | Nested stacking contexts | A child at `z-index: 100` escaped its parent at `z-index: 1` and covered a sibling context at `z-index: 2`; baseline SSIM `0.9924` | Added ancestry-aware context depth bands and removed duplicate material polygon offsets | Fixture SSIM `1.0000`; median suite SSIM `0.9973`; 100% edges within 2 px; 63 tests and both builds pass | `fix: contain nested stacking contexts` |
+| Explicit Grid tracks | Grid children fell through block layout, producing SSIM `0.8822` and a `600px` maximum edge error | Added explicit fixed/percentage/fr track resolution, row/column gaps, stretch sizing, and DOM-order auto-placement | Fixture SSIM `1.0000`; max edge error `0.010px`; exact text; 65 tests and both builds pass | `feat: add explicit grid track layout` |
 
 ## Remaining work
 
@@ -85,4 +87,4 @@ The committed 40-fixture Phase 1 suite was rerun before Phase 2 work began. It p
 
 ## Next target
 
-Establish a focused two-column CSS Grid baseline and implement the smallest general track-and-gap layout primitive needed for ordinary application shells.
+Begin composed coverage with a responsive dashboard shell combining Grid, flex navigation, typography, controls, and breakpoint-specific layout.

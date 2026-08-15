@@ -16,6 +16,7 @@ import { ElementInteractionService } from "./element-interaction.service";
 import { DOMAncestryService } from "../dom-ancestry.service";
 import { ImageLayoutService } from "./image-layout.service";
 import { OverflowClipService } from "./overflow-clip.service";
+import { GridService } from "./grid.service";
 
 /**
  * Service responsible for creating DOM elements as Babylon.js meshes
@@ -37,6 +38,7 @@ export class ElementCreationService {
     private ancestry: DOMAncestryService,
     private imageLayout: ImageLayoutService,
     private overflowClip: OverflowClipService,
+    private grid: GridService,
   ) {}
 
   /**
@@ -484,6 +486,9 @@ export class ElementCreationService {
     const isFlex =
       parentElement &&
       dom.actions.isFlexContainer(render, parentElement, styles, dom);
+    const isGrid = parentElement
+      ? this.grid.isGridContainer(render, parentElement, styles, dom)
+      : false;
     const useInlineFlow = parentElement
       ? this.shouldUseInlineFlow(render, parentElement, children, styles)
       : false;
@@ -516,6 +521,8 @@ export class ElementCreationService {
         styles,
         parentElement.type as "ul" | "ol",
       );
+    } else if (isGrid && parentElement) {
+      this.grid.processGridChildren(dom, render, children, parent, styles, parentElement);
     } else if (isFlex && parentElement) {
       console.log(
         `[ElementCreation] Processing flex children for ${parentElement.id}`,

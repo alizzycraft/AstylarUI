@@ -102,4 +102,10 @@ export interface StyleRule {
   flex?: string;
   alignSelf?: string;
   order?: string;
+
+  // Grid
+  gridTemplateColumns?: string;
+  gridTemplateRows?: string;
+  gridColumn?: string;
+  gridRow?: string;
 }

@@ -1,0 +1,120 @@
+import { Injectable } from '@angular/core';
+import { Mesh } from '@babylonjs/core';
+import { DOMElement } from '../../../types/dom-element';
+import { StyleRule } from '../../../types/style-rule';
+import { BabylonDOM } from '../interfaces/dom.types';
+import { BabylonRender } from '../interfaces/render.types';
+
+@Injectable({ providedIn: 'root' })
+export class GridService {
+  isGridContainer(
+    render: BabylonRender,
+    element: DOMElement,
+    styles: StyleRule[],
+    dom: BabylonDOM,
+  ): boolean {
+    const display = render.actions.style
+      .findStyleForElement(element, styles, dom.context.elementStyles)
+      ?.display?.toLowerCase();
+    return display === 'grid' || display === 'inline-grid';
+  }
+
+  processGridChildren(
+    dom: BabylonDOM,
+    render: BabylonRender,
+    children: DOMElement[],
+    parent: Mesh,
+    styles: StyleRule[],
+    parentElement: DOMElement,
+  ): void {
+    const style = render.actions.style.findStyleForElement(
+      parentElement,
+      styles,
+      dom.context.elementStyles,
+    );
+    const dimensions = dom.context.elementDimensions.get(parent.name);
+    if (!style || !dimensions) {
+      throw new Error(`GridService: missing style or dimensions for ${parent.name}`);
+    }
+
+    const visibleChildren = children.filter((child) =>
+      render.actions.style.findStyleForElement(child, styles, dom.context.elementStyles)
+        ?.display?.toLowerCase() !== 'none',
+    );
+    const columnGap = this.parseLength(style.columnGap ?? style.gap);
+    const rowGap = this.parseLength(style.rowGap ?? style.gap);
+    const contentWidth = Math.max(0, dimensions.width - dimensions.padding.left - dimensions.padding.right);
+    const contentHeight = Math.max(0, dimensions.height - dimensions.padding.top - dimensions.padding.bottom);
+    const columnCount = Math.max(1, this.trackCount(style.gridTemplateColumns));
+    const requiredRows = Math.max(1, Math.ceil(visibleChildren.length / columnCount));
+    const columns = this.resolveTracks(style.gridTemplateColumns, contentWidth, columnGap, columnCount);
+    const rows = this.resolveTracks(style.gridTemplateRows, contentHeight, rowGap, requiredRows);
+    const contentLeft = -dimensions.width / 2 + dimensions.padding.left;
+    const contentTop = dimensions.height / 2 - dimensions.padding.top;
+
+    visibleChildren.forEach((child, index) => {
+      const column = index % columns.length;
+      const row = Math.floor(index / columns.length);
+      if (row >= rows.length) return;
+
+      const xOffset = columns.slice(0, column).reduce((sum, value) => sum + value, 0) + column * columnGap;
+      const yOffset = rows.slice(0, row).reduce((sum, value) => sum + value, 0) + row * rowGap;
+      const width = columns[column];
+      const height = rows[row];
+      const childMesh = dom.actions.createElement(
+        dom,
+        render,
+        child,
+        parent,
+        styles,
+        {
+          x: contentLeft + xOffset + width / 2,
+          y: contentTop - yOffset - height / 2,
+          z: 0.01 + index * 0.01,
+        },
+        { width, height },
+      );
+
+      if (child.children?.length) {
+        dom.actions.processChildren(dom, render, child.children, childMesh, styles, child);
+      }
+    });
+  }
+
+  resolveTracks(template: string | undefined, availableSize: number, gap: number, fallbackCount: number): number[] {
+    const tokens = template?.trim().split(/\s+/).filter(Boolean) ?? [];
+    const trackTokens = tokens.length ? tokens : Array.from({ length: fallbackCount }, () => '1fr');
+    const trackSpace = Math.max(0, availableSize - Math.max(0, trackTokens.length - 1) * gap);
+    let fixed = 0;
+    let frTotal = 0;
+
+    const parsed = trackTokens.map((token) => {
+      if (token.endsWith('fr')) {
+        const value = Number.parseFloat(token);
+        const fraction = Number.isFinite(value) && value > 0 ? value : 1;
+        frTotal += fraction;
+        return { type: 'fr' as const, value: fraction };
+      }
+      const value = token.endsWith('%')
+        ? trackSpace * Number.parseFloat(token) / 100
+        : Number.parseFloat(token);
+      const pixels = Number.isFinite(value) ? Math.max(0, value) : 0;
+      fixed += pixels;
+      return { type: 'fixed' as const, value: pixels };
+    });
+
+    const remaining = Math.max(0, trackSpace - fixed);
+    return parsed.map((track) => track.type === 'fr'
+      ? (frTotal > 0 ? remaining * track.value / frTotal : 0)
+      : track.value);
+  }
+
+  private trackCount(template: string | undefined): number {
+    return template?.trim().split(/\s+/).filter(Boolean).length ?? 0;
+  }
+
+  private parseLength(value: string | undefined): number {
+    const parsed = Number.parseFloat(value ?? '0');
+    return Number.isFinite(parsed) ? Math.max(0, parsed) : 0;
+  }
+}

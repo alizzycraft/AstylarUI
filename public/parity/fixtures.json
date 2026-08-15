@@ -300,5 +300,11 @@
     "title": "Child z-index remains inside parent stacking context",
     "category": "layering-overlays",
     "expectedBehavior": "A high-z child inside a lower stacking context cannot paint above a sibling stacking context whose parent z-index is higher."
+  },
+  {
+    "id": "grid-explicit-tracks",
+    "title": "Explicit grid tracks with gaps",
+    "category": "grid",
+    "expectedBehavior": "Grid children auto-place in row order, stretch into explicit px/fr columns and rows, and preserve independent row and column gaps."
   }
 ]

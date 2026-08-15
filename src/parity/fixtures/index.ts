@@ -48,6 +48,7 @@ import { responsiveMediaFixture } from './responsive-media.fixture';
 import { controlStateSelectorsFixture } from './control-state-selectors.fixture';
 import { overflowHiddenFixture } from './overflow-hidden.fixture';
 import { nestedStackingContextFixture } from './nested-stacking-context.fixture';
+import { gridExplicitTracksFixture } from './grid-explicit-tracks.fixture';
 import { ParityFixture } from '../parity.types';
 
 const fixtures: readonly ParityFixture[] = [
@@ -100,7 +101,8 @@ const fixtures: readonly ParityFixture[] = [
   responsiveMediaFixture,
   controlStateSelectorsFixture,
   overflowHiddenFixture,
-  nestedStackingContextFixture
+  nestedStackingContextFixture,
+  gridExplicitTracksFixture
 ];
 
 const fixturesById = new Map(fixtures.map((fixture) => [fixture.id, fixture]));
