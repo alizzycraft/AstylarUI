@@ -288,5 +288,11 @@
     "title": "Semantic control state selectors",
     "category": "controls-states",
     "expectedBehavior": "Enabled, disabled, and checked pseudo-classes match semantic control state and participate in the normal cascade."
+  },
+  {
+    "id": "overflow-hidden",
+    "title": "Hidden overflow clips positioned descendants",
+    "category": "overflow-scrolling",
+    "expectedBehavior": "A child extending beyond an overflow-hidden parent remains laid out at its authored size but paints only inside the parent clipping edge."
   }
 ]

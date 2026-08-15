@@ -79,6 +79,7 @@ export interface StyleRule {
   whiteSpace?: string;
   wordWrap?: string;
   textOverflow?: string;
+  overflow?: 'visible' | 'hidden' | 'clip' | 'auto' | 'scroll';
   textShadow?: string;
   textDecoration?: string;
   textTransform?: string;

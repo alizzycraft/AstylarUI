@@ -15,6 +15,7 @@ import { ElementStyleParserService } from "./element-style-parser.service";
 import { ElementInteractionService } from "./element-interaction.service";
 import { DOMAncestryService } from "../dom-ancestry.service";
 import { ImageLayoutService } from "./image-layout.service";
+import { OverflowClipService } from "./overflow-clip.service";
 
 /**
  * Service responsible for creating DOM elements as Babylon.js meshes
@@ -35,6 +36,7 @@ export class ElementCreationService {
     private interactionService: ElementInteractionService,
     private ancestry: DOMAncestryService,
     private imageLayout: ImageLayoutService,
+    private overflowClip: OverflowClipService,
   ) {}
 
   /**
@@ -551,6 +553,17 @@ export class ElementCreationService {
         styles,
         parentElement,
       );
+    }
+
+    if (parentElement) {
+      const parentStyle = render.actions.style.findStyleForElement(
+        parentElement,
+        styles,
+        dom.context.elementStyles,
+      );
+      if (parentStyle) {
+        this.overflowClip.apply(parent, parentStyle);
+      }
     }
   }
 
