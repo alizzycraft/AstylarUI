@@ -136,5 +136,11 @@
     "title": "Explicitly styled text input",
     "category": "forms-interactive",
     "expectedBehavior": "An explicitly styled text input uses the declared border box and renders its value with browser-like content insets."
+  },
+  {
+    "id": "checkbox-states",
+    "title": "Checked and disabled checkbox states",
+    "category": "forms-interactive",
+    "expectedBehavior": "Explicitly styled checkboxes preserve independent width and height, initialize checked state visibly, and retain disabled opacity without invented labels."
   }
 ]

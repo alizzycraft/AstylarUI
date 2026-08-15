@@ -37,7 +37,7 @@ export class CheckboxManager {
             style: style,
             value: element.value || false,
             focused: false,
-            disabled: false,
+            disabled: element.disabled || false,
             required: element.required || false,
             validationRules: [],
             validationState: {
@@ -46,13 +46,15 @@ export class CheckboxManager {
                 touched: false,
                 dirty: false
             },
-            checked: false,
+            checked: element.checked || false,
             checkIndicatorMesh: undefined, // Will be created
             labelMesh: undefined // Will be created
         };
 
         checkbox.checkIndicatorMesh = this.createCheckIndicator(checkbox, render.scene);
-        checkbox.labelMesh = this.createLabelMesh(checkbox, render, style);
+        if (element.value || element.textContent) {
+            checkbox.labelMesh = this.createLabelMesh(checkbox, render, style);
+        }
 
         // Set cursor via metadata for global handler
         if (checkbox.mesh) {
@@ -86,7 +88,7 @@ export class CheckboxManager {
             style: style, // Store style
             value: element.value || false,
             focused: false,
-            disabled: false,
+            disabled: element.disabled || false,
             required: element.required || false,
             validationRules: [],
             validationState: {
@@ -95,14 +97,16 @@ export class CheckboxManager {
                 touched: false,
                 dirty: false
             },
-            checked: false,
+            checked: element.checked || false,
             groupName: element.name || 'default',
             selectionIndicatorMesh: undefined, // Will be created
             labelMesh: undefined // Will be created
         };
 
         radio.selectionIndicatorMesh = this.createSelectionIndicator(radio, render.scene);
-        radio.labelMesh = this.createLabelMesh(radio, render, style);
+        if (element.value || element.textContent) {
+            radio.labelMesh = this.createLabelMesh(radio, render, style);
+        }
 
         // Set cursor via metadata for global handler
         if (radio.mesh) {
@@ -185,13 +189,17 @@ export class CheckboxManager {
      */
     private createCheckboxMesh(element: DOMElement, render: BabylonRender, style: StyleRule, worldDimensions: { width: number; height: number }): BABYLON.Mesh {
         const scale = render.actions.camera.getPixelToWorldScale();
-        const size = worldDimensions.width > 0 ? worldDimensions.width : this.CHECKBOX_SIZE * scale * 100;
+        const width = worldDimensions.width > 0 ? worldDimensions.width : this.CHECKBOX_SIZE * scale * 100;
+        const height = worldDimensions.height > 0 ? worldDimensions.height : width;
+        const borderRadius = Math.max(0, parseFloat(style.borderRadius || '0')) * scale;
 
-        const checkboxMesh = BABYLON.MeshBuilder.CreateBox(`checkbox_${element.id}`, {
-            width: size,
-            height: size,
-            depth: 0.05 * scale * 100
-        }, render.scene);
+        const checkboxMesh = render.actions.mesh.createPolygon(
+            `checkbox_${element.id}`,
+            'rectangle',
+            width,
+            height,
+            borderRadius
+        );
 
         // Create material
         const material = new BABYLON.StandardMaterial(`checkboxMaterial_${element.id}`, render.scene);
@@ -240,13 +248,10 @@ export class CheckboxManager {
     private createCheckIndicator(checkbox: CheckboxInput, scene: BABYLON.Scene): BABYLON.Mesh {
         // Calculate size relative to parent mesh
         const bounds = checkbox.mesh.getBoundingInfo().boundingBox.extendSize;
-        const parentWidth = bounds.x * 2;
-        const size = parentWidth * 0.6;
-
-        const checkMark = BABYLON.MeshBuilder.CreateBox(`checkMark_${checkbox.element.id}`, {
-            width: size,
-            height: size,
-            depth: 0.03
+        const checkMark = BABYLON.MeshBuilder.CreatePlane(`checkMark_${checkbox.element.id}`, {
+            width: bounds.x * 2 * 0.6,
+            height: bounds.y * 2 * 0.7,
+            sideOrientation: BABYLON.Mesh.DOUBLESIDE
         }, scene);
 
         checkMark.parent = checkbox.mesh;
@@ -254,12 +259,15 @@ export class CheckboxManager {
 
         // Create material
         const material = new BABYLON.StandardMaterial(`checkMarkMaterial_${checkbox.element.id}`, scene);
-        material.diffuseColor = new BABYLON.Color3(0.2, 0.6, 0.2); // Green
-        material.emissiveColor = new BABYLON.Color3(0.1, 0.3, 0.1);
+        material.diffuseColor = BABYLON.Color3.White();
+        material.emissiveColor = BABYLON.Color3.White();
+        material.specularColor = BABYLON.Color3.Black();
+        material.disableLighting = true;
+        material.backFaceCulling = false;
         checkMark.material = material;
 
         checkMark.isPickable = true;
-        checkMark.isVisible = false;
+        checkMark.isVisible = checkbox.checked;
         checkMark.renderingGroupId = 2; // Ensure visibility on top
 
         // Add interaction to checkMark to ensure it captures clicks
@@ -307,7 +315,7 @@ export class CheckboxManager {
         indicator.material = material;
 
         indicator.isPickable = true;
-        indicator.isVisible = false;
+        indicator.isVisible = radio.checked;
         indicator.renderingGroupId = 2; // Ensure visibility on top
 
         // Add interaction to indicator to ensure it captures clicks

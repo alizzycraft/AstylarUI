@@ -13,15 +13,15 @@ Last updated: 2026-08-15
 | Flexbox | 3 | Direction, wrap, basis, grow/shrink, gap, order, alignment |
 | Positioning and stacking | 1 | Static, relative, absolute, fixed, containing blocks, z-order |
 | Lists, tables, and images | 7 | Representative structural and replaced content |
-| Forms and interactive states | 2 | Basic visible controls, focus, checked/disabled states |
-| **Total** | **23 / 40** | Balanced coverage required before completion |
+| Forms and interactive states | 3 | Basic visible controls, focus, checked/disabled states |
+| **Total** | **24 / 40** | Balanced coverage required before completion |
 
 ## Current Baseline
 
 | Metric | Current result | Core Web Parity v1 threshold |
 | --- | ---: | ---: |
-| Fixtures | 23 | At least 40 |
-| Median SSIM | 0.9953 | At least 0.98 |
+| Fixtures | 24 | At least 40 |
+| Median SSIM | 0.9956 | At least 0.98 |
 | Minimum fixture SSIM | 0.9805 | At least 0.95 |
 | Geometry edges within 2px | 100% | At least 95% |
 | Maximum edge error | 0.203px | At most 5px or documented |
@@ -29,7 +29,7 @@ Last updated: 2026-08-15
 | Runtime errors | 0 | 0 |
 
 All current fixtures pass every per-fixture quality threshold. The suite does
-not meet the completion gate because coverage is still 23 of 40 fixtures.
+not meet the completion gate because coverage is still 24 of 40 fixtures.
 
 ## Decisions
 
@@ -90,6 +90,10 @@ not meet the completion gate because coverage is still 23 of 40 fixtures.
     padding edge plus border, including asymmetric horizontal padding. Native
     browser control chrome remains outside the comparison; fixtures remove it
     and declare every visible style explicitly.
+24. Checkbox and radio state is initialized from the JSON DOM's `checked` and
+    `disabled` properties. Checkbox geometry preserves independent CSS width and
+    height, labels exist only when authored, and element opacity also applies to
+    separately rendered borders.
 
 ## Iteration History
 
@@ -108,6 +112,8 @@ not meet the completion gate because coverage is still 23 of 40 fixtures.
 
 | Styled buttons and text inputs | 23-fixture attempt; text input SSIM 0.9948 with value painted at a hard-coded 1.5px inset | 23 fixtures; median SSIM 0.9953; minimum 0.9805; 100% edges; max error 0.203px; exact text; both new controls at 0.9999-1.0000 SSIM | Text inputs ignored declared horizontal padding and border when positioning and clipping their value; control fixtures now explicitly remove native chrome |
 
+| Checked and disabled controls | 24-fixture attempt; 98.3% edges within 2px; max error 2.785px; checkbox SSIM 0.9920 | 24 fixtures; median SSIM 0.9956; minimum 0.9805; 100% edges; max error 0.203px; exact text; state fixture 0.9999 SSIM | Checkbox/radio managers discarded initial state, forced height from width, invented labels, and failed to apply element opacity to separate border materials |
+
 ## Known Intentional Deviations
 
 CSS `line-height: normal` is currently approximated as `1.15` times the resolved
@@ -116,6 +122,6 @@ block geometry by at most 0.203px; exact font-engine-specific leading is out of 
 
 ## Recommended Next Target
 
-Extend deterministic form coverage to checked and disabled states, then add a
-second positioning/stacking fixture. Those categories are the least represented
-after basic button and populated text-input parity.
+Add a second positioning/stacking fixture, then broaden block/inline and
+typography coverage. Those categories are least represented after the initial
+form-state fixtures.

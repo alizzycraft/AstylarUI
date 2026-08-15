@@ -350,6 +350,7 @@ export class ElementCreationService {
             `${meshId}-border-material`,
             borderProps.color,
           );
+          borderMaterial.alpha = render.actions.style.parseOpacity(style?.opacity);
 
           // Parent all border frames to main mesh FIRST
           borderMeshes.forEach((borderMesh: BABYLON.Mesh) => {
