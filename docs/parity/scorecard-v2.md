@@ -8,14 +8,14 @@ This scorecard tracks the second parity phase: making ordinary application-orien
 
 | Gate | Current | Target | Status |
 | --- | ---: | ---: | --- |
-| Total parity fixtures | 55 | 65 | Open |
-| New Phase 2 fixtures | 15 | 25 | Open |
-| Composed application/component fixtures | 4 | 10 | Open |
+| Total parity fixtures | 56 | 65 | Open |
+| New Phase 2 fixtures | 16 | 25 | Open |
+| Composed application/component fixtures | 5 | 10 | Open |
 | Deterministic viewport sizes | 3 exercised | 3 exercised | Passing |
-| Median SSIM | 0.9964 | >= 0.98 | Passing |
+| Median SSIM | 0.9960 | >= 0.98 | Passing |
 | Minimum fixture SSIM | 0.9626 | >= 0.95 | Passing |
 | Edges within 2 px | 100% | >= 95% | Passing baseline |
-| Maximum edge delta | 1.9338 px | <= 5 px | Passing |
+| Maximum edge delta | 3.9921 px | <= 5 px | Passing |
 | Visible text and line counts | Exact | Exact | Passing baseline |
 | Runtime errors | 0 | 0 | Passing baseline |
 | Phase 1 regressions | 0 | 0 | Passing baseline |
@@ -31,7 +31,7 @@ This scorecard tracks the second parity phase: making ordinary application-orien
 | Overflow and scrolling | 1 | Hidden overflow clipping for positioned descendants | In progress |
 | Controls and states | 1 | Enabled, disabled, and checked selector states with element opacity | In progress |
 | Layering and overlays | 1 | Nested parent stacking contexts and bounded child z-index | In progress |
-| Composed applications | 4 | Dashboard shell, responsive gallery, settings form, and fixed modal/backdrop | In progress |
+| Composed applications | 5 | Dashboard, responsive gallery, settings form, modal, and clipped popover | In progress |
 
 ## Baseline
 
@@ -60,6 +60,7 @@ The committed 40-fixture Phase 1 suite was rerun before Phase 2 work began. It p
 - Keep flex/Grid content planes far enough from parent surfaces to remain deterministic at every camera scale; `0.1` world units is the current verified minimum.
 - Keep ordinary element borders at their proven `0.05` local depth while select borders use `0.06`; selected-value content remains at `0.04` so nested selects paint deterministically without crossing general stacking bands.
 - Reserve `0.25` world units between adjacent root z-index levels so each context contains its descendant paint band without enough perspective shift to exceed geometry tolerance.
+- Separate genuinely nested positioned auto-z descendants from their parent surface by `0.15` world units; keep top-level positioned elements and static descendants on their prior paths.
 
 ## Iteration history
 
@@ -82,6 +83,7 @@ The committed 40-fixture Phase 1 suite was rerun before Phase 2 work began. It p
 | Responsive card gallery | Desktop/mobile passed, but tablet lost a header and card paint despite exact geometry, dropping SSIM to `0.8488` | Increased flex/Grid child-plane separation to a camera-stable depth while preserving sibling order | Desktop `0.9973`, tablet `0.9978`, mobile `0.9960`; max edge error `0.106px`; exact text; 65 tests and both builds pass | `test: add responsive gallery parity` |
 | Composed settings form | Nested Grid/control geometry and text were exact, but the final select border was depth-unstable; baseline SSIM `0.9285` | Established explicit local control-content/select-border depth layers while retaining the proven general border offset; reused verified heading metrics | Fixture SSIM `0.9626`; suite median `0.9969`; 100% edges within 2px; exact text; 66 tests and both builds pass | `test: add composed settings form parity` |
 | Composed modal and backdrop | Adjacent root z-index values 20/21 compressed to a `0.0015` world-depth gap, so the translucent backdrop painted over the dialog; baseline SSIM `0.8686` | Replaced the root `atan` compression with a `0.25` linear context step that reserves descendant paint space while limiting perspective growth | Fixture SSIM `0.9697`; max edge error `1.934px`; exact text and paint order; 67 tests and both builds pass | `test: add composed modal parity` |
+| Composed clipped popover | Aggregate baseline passed at SSIM `0.9718`, but visual inspection found the overlapped positioned card was depth-quantized into its parent surface | Added a hierarchy-scoped `0.15` paint band for nested positioned auto-z descendants without shifting top-level positioned fixtures | Fixture SSIM `0.9838`; clipping and overlap visually match; suite median `0.9960`; 68 tests and both builds pass | `test: add composed popover parity` |
 
 ## Remaining work
 
@@ -95,4 +97,4 @@ The committed 40-fixture Phase 1 suite was rerun before Phase 2 work began. It p
 
 ## Next target
 
-Add a composed dropdown/popover overlay covering anchored positioning, overlap, clipping boundaries, and visible paint order.
+Add a composed article/content page covering mixed headings, wrapped paragraphs, image sizing, and a flex metadata row.

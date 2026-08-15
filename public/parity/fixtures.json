@@ -331,5 +331,11 @@
     "title": "Composed modal and backdrop",
     "category": "composed-application",
     "expectedBehavior": "A fixed backdrop and modal paint above an application surface in z-index order while nested modal typography and actions retain their flex geometry."
+  },
+  {
+    "id": "composed-popover",
+    "title": "Composed clipped popover menu",
+    "category": "composed-application",
+    "expectedBehavior": "An anchored menu paints above application content, keeps its nested action layout, and clips consistently at an overflow-hidden shell boundary."
   }
 ]

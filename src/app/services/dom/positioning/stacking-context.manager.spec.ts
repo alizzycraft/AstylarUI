@@ -46,4 +46,23 @@ describe('StackingContextManager', () => {
 
     expect(dialogDepth - backdropDepth).toBeGreaterThan(0.2);
   });
+
+  it('separates positioned auto-z descendants from their parent surface', () => {
+    const ancestry = new DOMAncestryService();
+    const manager = new StackingContextManager(ancestry);
+    const root = { type: 'div' as const, id: 'root' };
+    const parent = { type: 'main' as const, id: 'content' };
+    const child = { type: 'article' as const, id: 'card' };
+    ancestry.setParent(parent, root);
+    ancestry.setParent(child, parent);
+
+    manager.calculateZPosition(root, { selector: '#root' });
+    const parentDepth = manager.calculateZPosition(parent, { selector: '#content' });
+    const childLocalDepth = manager.calculateZPosition(child, {
+      selector: '#card', position: 'absolute',
+    });
+
+    expect(childLocalDepth).toBeGreaterThan(0.1);
+    expect(parentDepth + childLocalDepth).toBeGreaterThan(parentDepth);
+  });
 });

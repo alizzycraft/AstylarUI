@@ -11,6 +11,7 @@ import { DOMAncestryService } from '../dom-ancestry.service';
 })
 export class StackingContextManager implements IStackingContextManager {
   private readonly rootContextStep = 0.25;
+  private readonly positionedDescendantStep = 0.15;
   private stackingContexts: Map<string, StackingContext> = new Map();
   private rootStackingContext: StackingContext | null = null;
   private resolvedStyles = new WeakMap<DOMElement, Partial<StyleRule>>();
@@ -213,7 +214,11 @@ export class StackingContextManager implements IStackingContextManager {
       // participate in the root context.
       worldDepth = this.rootContextDepth(zIndex);
     } else if (parent) {
-      worldDepth = parentWorldDepth + 0.001;
+      const isNestedPositioned =
+        this.ancestry.getParent(parent) !== undefined &&
+        style.position !== undefined && style.position !== 'static';
+      worldDepth = parentWorldDepth +
+        (isNestedPositioned ? this.positionedDescendantStep : 0.001);
     } else {
       worldDepth = this.rootContextDepth(zIndex);
     }
