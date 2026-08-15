@@ -47,6 +47,7 @@ import { responsiveViewportUnitsFixture } from './responsive-viewport-units.fixt
 import { responsiveMediaFixture } from './responsive-media.fixture';
 import { controlStateSelectorsFixture } from './control-state-selectors.fixture';
 import { overflowHiddenFixture } from './overflow-hidden.fixture';
+import { nestedStackingContextFixture } from './nested-stacking-context.fixture';
 import { ParityFixture } from '../parity.types';
 
 const fixtures: readonly ParityFixture[] = [
@@ -98,7 +99,8 @@ const fixtures: readonly ParityFixture[] = [
   responsiveViewportUnitsFixture,
   responsiveMediaFixture,
   controlStateSelectorsFixture,
-  overflowHiddenFixture
+  overflowHiddenFixture,
+  nestedStackingContextFixture
 ];
 
 const fixturesById = new Map(fixtures.map((fixture) => [fixture.id, fixture]));

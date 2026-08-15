@@ -294,5 +294,11 @@
     "title": "Hidden overflow clips positioned descendants",
     "category": "overflow-scrolling",
     "expectedBehavior": "A child extending beyond an overflow-hidden parent remains laid out at its authored size but paints only inside the parent clipping edge."
+  },
+  {
+    "id": "nested-stacking-context",
+    "title": "Child z-index remains inside parent stacking context",
+    "category": "layering-overlays",
+    "expectedBehavior": "A high-z child inside a lower stacking context cannot paint above a sibling stacking context whose parent z-index is higher."
   }
 ]

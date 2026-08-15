@@ -8,14 +8,14 @@ This scorecard tracks the second parity phase: making ordinary application-orien
 
 | Gate | Current | Target | Status |
 | --- | ---: | ---: | --- |
-| Total parity fixtures | 49 | 65 | Open |
-| New Phase 2 fixtures | 9 | 25 | Open |
+| Total parity fixtures | 50 | 65 | Open |
+| New Phase 2 fixtures | 10 | 25 | Open |
 | Composed application/component fixtures | 0 | 10 | Open |
 | Deterministic viewport sizes | 3 exercised | 3 exercised | Passing |
-| Median SSIM | 0.9964 | >= 0.98 | Passing |
-| Minimum fixture SSIM | 0.9805 | >= 0.95 | Passing baseline |
+| Median SSIM | 0.9973 | >= 0.98 | Passing |
+| Minimum fixture SSIM | 0.9804 | >= 0.95 | Passing |
 | Edges within 2 px | 100% | >= 95% | Passing baseline |
-| Maximum edge delta | 0.2030 px | <= 5 px | Passing baseline |
+| Maximum edge delta | 0.2048 px | <= 5 px | Passing |
 | Visible text and line counts | Exact | Exact | Passing baseline |
 | Runtime errors | 0 | 0 | Passing baseline |
 | Phase 1 regressions | 0 | 0 | Passing baseline |
@@ -30,7 +30,7 @@ This scorecard tracks the second parity phase: making ordinary application-orien
 | Responsive behavior | 2 | Viewport-relative geometry and width media conditions across three profiles | In progress |
 | Overflow and scrolling | 1 | Hidden overflow clipping for positioned descendants | In progress |
 | Controls and states | 1 | Enabled, disabled, and checked selector states with element opacity | In progress |
-| Layering and overlays | 0 | — | Open |
+| Layering and overlays | 1 | Nested parent stacking contexts and bounded child z-index | In progress |
 | Composed applications | 0 | — | Open |
 
 ## Baseline
@@ -54,6 +54,7 @@ The committed 40-fixture Phase 1 suite was rerun before Phase 2 work began. It p
 - Start with descendant selectors because application CSS depends on them and the current resolver explicitly rejects whitespace combinators.
 - Keep parsed author-style caches distinct from renderer-authored context overrides so cached declarations cannot bypass the normal cascade.
 - Implement rectangular overflow clipping with per-material world-space clip planes and intersect bounds from nested clipping ancestors.
+- Use one hierarchy-aware physical-depth model for CSS stacking; do not duplicate z-index through Babylon material polygon offsets.
 
 ## Iteration history
 
@@ -70,6 +71,7 @@ The committed 40-fixture Phase 1 suite was rerun before Phase 2 work began. It p
 | Responsive media conditions | Every JSON variant applied: desktop was `160px` too wide and tablet `64px` too wide | Added optional min/max width/height media bounds, evaluated in both cascade resolution and renderer context parsing | Desktop `0.9983`, tablet `0.9973`, mobile `0.9972`; max edge error `0.012px`; exact text; 58 tests and both builds pass | `fix: support responsive media conditions` |
 | Control state selectors | Controls retained base colors despite semantic flags; visual inspection also found element opacity omitted from button text | Added `:enabled`, `:disabled`, and `:checked` matching with pseudo specificity; prevented parsed author caches from overriding cascade winners; propagated opacity to button labels | Fixture SSIM `0.9979`; 100% edges within 2 px; exact text; 60 tests and both builds pass | `fix: support control state selectors` |
 | Hidden overflow | Positioned descendants painted beyond an `overflow: hidden` ancestor; baseline SSIM `0.9738` despite exact geometry | Added four world-space material clip planes for hidden/clip overflow and intersected nested ancestor bounds | Fixture SSIM `1.0000`; 100% edges within 2 px; exact text; 62 tests and both builds pass | `fix: clip hidden overflow descendants` |
+| Nested stacking contexts | A child at `z-index: 100` escaped its parent at `z-index: 1` and covered a sibling context at `z-index: 2`; baseline SSIM `0.9924` | Added ancestry-aware context depth bands and removed duplicate material polygon offsets | Fixture SSIM `1.0000`; median suite SSIM `0.9973`; 100% edges within 2 px; 63 tests and both builds pass | `fix: contain nested stacking contexts` |
 
 ## Remaining work
 
@@ -83,4 +85,4 @@ The committed 40-fixture Phase 1 suite was rerun before Phase 2 work began. It p
 
 ## Next target
 
-Add a focused overlay fixture that combines positioned descendants and sibling z-index, then verify paint order across distinct stacking contexts.
+Establish a focused two-column CSS Grid baseline and implement the smallest general track-and-gap layout primitive needed for ordinary application shells.

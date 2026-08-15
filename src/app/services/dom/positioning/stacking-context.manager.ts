@@ -4,6 +4,7 @@ import { StackingContext } from '../../../types/positioning';
 import { IStackingContextManager } from './interfaces/positioning.interfaces';
 import { PositioningUtils } from './utils/positioning.utils';
 import { StyleRule } from '../../../types/style-rule';
+import { DOMAncestryService } from '../dom-ancestry.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,10 @@ import { StyleRule } from '../../../types/style-rule';
 export class StackingContextManager implements IStackingContextManager {
   private stackingContexts: Map<string, StackingContext> = new Map();
   private rootStackingContext: StackingContext | null = null;
+  private resolvedStyles = new WeakMap<DOMElement, Partial<StyleRule>>();
+  private worldDepths = new WeakMap<DOMElement, number>();
+
+  constructor(private ancestry: DOMAncestryService = new DOMAncestryService()) {}
 
   /**
    * Creates a new stacking context for an element
@@ -186,19 +191,58 @@ export class StackingContextManager implements IStackingContextManager {
    * This integrates with the existing z-index positioning logic
    */
   calculateZPosition(element: DOMElement, resolvedStyle?: StyleRule): number {
-    const effectiveZIndex = resolvedStyle
-      ? this.parseResolvedZIndex(resolvedStyle.zIndex)
-      : this.calculateEffectiveZIndex(element);
-    const normalizedZIndex = Math.atan(effectiveZIndex) * (20 / Math.PI);
-    
-    // Use the same calculation as the existing system
-    const baseZ = 0.01;
-    // Keep enough bounded world-space separation to survive depth-buffer
-    // precision at the UI camera distance. atan preserves ordering without
-    // allowing common large CSS z-index values to cross the camera plane.
-    const zScale = 0.1;
-    
-    return baseZ + (normalizedZIndex * zScale);
+    const style = resolvedStyle ?? element.style ?? ({ selector: element.type } as StyleRule);
+    this.resolvedStyles.set(element, style);
+
+    const parent = this.ancestry.getParent(element);
+    const parentWorldDepth = parent ? (this.worldDepths.get(parent) ?? 0.01) : 0;
+    const stackingAncestor = this.findNearestStackingAncestor(parent);
+    const zIndex = this.parseResolvedZIndex(style.zIndex);
+    let worldDepth: number;
+
+    if (stackingAncestor) {
+      const contextDepth = this.worldDepths.get(stackingAncestor) ?? parentWorldDepth;
+      const normalizedWithinContext = Math.atan(zIndex) * (2 / Math.PI);
+      // Reserve a bounded depth band inside the ancestor context. The band is
+      // large enough for stable depth-buffer separation but remains below the
+      // spacing between ordinary adjacent root z-index levels.
+      worldDepth = contextDepth + 0.02 + normalizedWithinContext * 0.08;
+    } else if (parent && style.zIndex !== undefined && style.zIndex !== 'auto') {
+      // Positioned descendants without a containing stacking context
+      // participate in the root context.
+      worldDepth = this.rootContextDepth(zIndex);
+    } else if (parent) {
+      worldDepth = parentWorldDepth + 0.001;
+    } else {
+      worldDepth = this.rootContextDepth(zIndex);
+    }
+
+    this.worldDepths.set(element, worldDepth);
+    return parent ? worldDepth - parentWorldDepth : worldDepth;
+  }
+
+  private rootContextDepth(zIndex: number): number {
+    const normalizedZIndex = Math.atan(zIndex) * (20 / Math.PI);
+    return 0.01 + normalizedZIndex * 0.1;
+  }
+
+  private findNearestStackingAncestor(element: DOMElement | undefined): DOMElement | undefined {
+    let current = element;
+    while (current) {
+      const style = this.resolvedStyles.get(current) ?? current.style;
+      if (style && this.establishesStackingContext(style)) {
+        return current;
+      }
+      current = this.ancestry.getParent(current);
+    }
+    return undefined;
+  }
+
+  private establishesStackingContext(style: Partial<StyleRule>): boolean {
+    if (style.transform && style.transform !== 'none') return true;
+    if (style.opacity !== undefined && Number.parseFloat(style.opacity) < 1) return true;
+    return style.position !== undefined && style.position !== 'static' &&
+      style.zIndex !== undefined && style.zIndex !== 'auto';
   }
 
   private parseResolvedZIndex(value: string | undefined): number {
@@ -249,6 +293,8 @@ export class StackingContextManager implements IStackingContextManager {
   clearAll(): void {
     this.stackingContexts.clear();
     this.rootStackingContext = null;
+    this.resolvedStyles = new WeakMap<DOMElement, Partial<StyleRule>>();
+    this.worldDepths = new WeakMap<DOMElement, number>();
   }
 
   /**
