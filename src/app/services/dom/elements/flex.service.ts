@@ -22,7 +22,8 @@ export class FlexService {
     // Use elementStyles map if dom context is available for better performance
     const elementStyles = dom?.context?.elementStyles;
     const style = render.actions.style.findStyleForElement(parentElement, styles, elementStyles);
-    const isFlex = style?.display === 'flex';
+    const display = style?.display?.toLowerCase();
+    const isFlex = display === 'flex' || display === 'inline-flex';
     console.log(`[FlexService] isFlexContainer check for ${parentElement.id || parentElement.type}: display=${style?.display}, isFlex=${isFlex}`);
     return isFlex;
   }

@@ -160,5 +160,11 @@
     "title": "Letter and word spacing",
     "category": "typography",
     "expectedBehavior": "Letter-spacing and word-spacing affect both painted glyph positions and the intrinsic width of an auto-sized inline box."
+  },
+  {
+    "id": "inline-flex-flow",
+    "title": "Inline flex outer and inner flow",
+    "category": "block-inline",
+    "expectedBehavior": "Inline-flex containers participate in an inline formatting row while laying out their own children with flexbox."
   }
 ]

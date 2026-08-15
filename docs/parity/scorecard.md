@@ -7,20 +7,20 @@ Last updated: 2026-08-15
 | Category | Fixtures | Required direction |
 | --- | ---: | --- |
 | Cascade and default styles | 3 | Selectors, specificity, inheritance, inline styles, UA-like defaults |
-| Block and inline flow | 2 | Block, inline, inline-block, none, inline-flex |
+| Block and inline flow | 3 | Block, inline, inline-block, none, inline-flex |
 | Box model and sizing units | 4 | Width/height, min/max, padding, margin, borders, px/%/viewport/font units |
 | Typography and multiline text | 3 | Fonts, line height, wrapping, whitespace, alignment, overflow |
 | Flexbox | 3 | Direction, wrap, basis, grow/shrink, gap, order, alignment |
 | Positioning and stacking | 2 | Static, relative, absolute, fixed, containing blocks, z-order |
 | Lists, tables, and images | 7 | Representative structural and replaced content |
 | Forms and interactive states | 3 | Basic visible controls, focus, checked/disabled states |
-| **Total** | **27 / 40** | Balanced coverage required before completion |
+| **Total** | **28 / 40** | Balanced coverage required before completion |
 
 ## Current Baseline
 
 | Metric | Current result | Core Web Parity v1 threshold |
 | --- | ---: | ---: |
-| Fixtures | 27 | At least 40 |
+| Fixtures | 28 | At least 40 |
 | Median SSIM | 0.9964 | At least 0.98 |
 | Minimum fixture SSIM | 0.9805 | At least 0.95 |
 | Geometry edges within 2px | 100% | At least 95% |
@@ -29,7 +29,7 @@ Last updated: 2026-08-15
 | Runtime errors | 0 | 0 |
 
 All current fixtures pass every per-fixture quality threshold. The suite does
-not meet the completion gate because coverage is still 27 of 40 fixtures.
+not meet the completion gate because coverage is still 28 of 40 fixtures.
 
 ## Decisions
 
@@ -104,6 +104,9 @@ not meet the completion gate because coverage is still 27 of 40 fixtures.
 27. Canvas measurement, line wrapping, layout metrics, and glyph painting all
     receive the resolved `letter-spacing` and `word-spacing`, keeping intrinsic
     text dimensions and the rendered texture on the same native browser metrics.
+28. `inline-flex` participates in its parent's inline formatting context while
+    using the same internal flex layout algorithm as a block-level `flex`
+    container. Reference fixtures omit whitespace text nodes absent from JSON DOM.
 
 ## Iteration History
 
@@ -124,6 +127,7 @@ not meet the completion gate because coverage is still 27 of 40 fixtures.
 | Positioned sibling stacking | 25-fixture attempt; overlap SSIM 0.9917 with the later low-z sibling painted above the earlier high-z sibling | 25 fixtures; median SSIM 0.9956; minimum 0.9805; 100% edges; max error 0.203px; exact text; overlap fixture 1.0000 SSIM and 0.162px max edge error | Stacking read only inline element style, and its 0.01 depth step was too small for depth-buffer precision at the UI camera distance |
 | Minimum and maximum constraints | 26-fixture attempt; 99.2% edges within 2px; max error 110.002px; constraint fixture SSIM 0.9668 | 26 fixtures; median SSIM 0.9964; minimum 0.9805; 100% edges; max error 0.203px; exact text; constraint fixture 1.0000 SSIM | Dimension resolution applied minimum constraints but ignored `max-width` and `max-height` entirely |
 | Letter and word spacing | 27-fixture attempt; 99.6% edges within 2px; max error 46.005px; spacing fixture SSIM 0.9891 | 27 fixtures; median SSIM 0.9964; minimum 0.9805; 100% edges; max error 0.203px; exact text; spacing fixture 0.9971 SSIM | Text spacing was parsed but omitted from every canvas measurement and paint context, leaving auto width and glyph positions unspaced |
+| Inline flex outer and inner flow | 28-fixture attempt; 93.7% edges within 2px; max error 100.008px; inline-flex fixture SSIM 0.9637 | 28 fixtures; median SSIM 0.9964; minimum 0.9805; 100% edges; max error 0.203px; exact text; inline-flex fixture 0.9856 SSIM | The outer inline layout recognized `inline-flex`, but the flex-container predicate did not, so each container's children were block-stacked instead of flex-laid out |
 
 ## Known Intentional Deviations
 
@@ -133,6 +137,6 @@ block geometry by at most 0.203px; exact font-engine-specific leading is out of 
 
 ## Recommended Next Target
 
-Broaden block/inline flow, then add flex wrapping and negative/auto stacking
-cases. These remain the least represented foundational behaviors after explicit
-text-spacing coverage.
+Add flex wrapping and negative/auto stacking cases, then broaden forms and
+typography states. These remain the least represented foundational behaviors
+after explicit inline-flex coverage.

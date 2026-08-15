@@ -25,6 +25,7 @@ import { checkboxStatesFixture } from './checkbox-states.fixture';
 import { zIndexOverlapFixture } from './z-index-overlap.fixture';
 import { minMaxConstraintsFixture } from './min-max-constraints.fixture';
 import { textSpacingFixture } from './text-spacing.fixture';
+import { inlineFlexFlowFixture } from './inline-flex-flow.fixture';
 import { ParityFixture } from '../parity.types';
 
 const fixtures: readonly ParityFixture[] = [
@@ -54,7 +55,8 @@ const fixtures: readonly ParityFixture[] = [
   checkboxStatesFixture,
   zIndexOverlapFixture,
   minMaxConstraintsFixture,
-  textSpacingFixture
+  textSpacingFixture,
+  inlineFlexFlowFixture
 ];
 
 const fixturesById = new Map(fixtures.map((fixture) => [fixture.id, fixture]));
