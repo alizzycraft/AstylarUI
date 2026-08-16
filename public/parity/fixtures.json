@@ -343,5 +343,11 @@
     "title": "Composed article page",
     "category": "composed-application",
     "expectedBehavior": "An article composes a flex metadata row, heading, sized image, and wrapped body copy with browser-equivalent geometry, line breaks, and paint."
+  },
+  {
+    "id": "composed-sidebar-workspace",
+    "title": "Composed sidebar workspace",
+    "category": "composed-application",
+    "expectedBehavior": "A fixed-width nested navigation and flexible workspace column preserve active-item styling, toolbar alignment, and content geometry."
   }
 ]
