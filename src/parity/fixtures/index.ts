@@ -64,6 +64,7 @@ import { nestedOverflowIntersectionFixture } from './nested-overflow-intersectio
 import { controlRequirementSelectorsFixture } from './control-requirement-selectors.fixture';
 import { opacityStackingContextFixture } from './opacity-stacking-context.fixture';
 import { representativeProjectDashboardFixture } from './representative-project-dashboard.fixture';
+import { representativeDataManagementFixture } from './representative-data-management.fixture';
 import { ParityFixture } from '../parity.types';
 
 const fixtures: readonly ParityFixture[] = [
@@ -132,7 +133,8 @@ const fixtures: readonly ParityFixture[] = [
   nestedOverflowIntersectionFixture,
   controlRequirementSelectorsFixture,
   opacityStackingContextFixture,
-  representativeProjectDashboardFixture
+  representativeProjectDashboardFixture,
+  representativeDataManagementFixture
 ];
 
 const fixturesById = new Map(fixtures.map((fixture) => [fixture.id, fixture]));

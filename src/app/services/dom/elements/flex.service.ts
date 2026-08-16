@@ -442,6 +442,7 @@ export class FlexService {
         baseAvailableMainSpace,
         line.crossSize,
         crossOffset,
+        alignedLines.length > 1,
         containerWidth,
         containerHeight,
         padding,
@@ -715,6 +716,7 @@ export class FlexService {
     availableMainSpace: number,
     lineCrossSize: number,
     crossOffset: number,
+    isMultiLine: boolean,
     containerWidth: number,
     containerHeight: number,
     padding: { top: number; right: number; bottom: number; left: number },
@@ -848,7 +850,7 @@ export class FlexService {
         x = -(containerWidth / 2) + itemLeft + (item.width / 2);
 
         // Calculate Y position (cross axis) - handle single line vs multi-line differently
-        if (crossOffset === 0) {
+        if (!isMultiLine) {
           // Single line - check align-self first, then fall back to container's align-items
           const alignValue = item.alignSelf === 'auto' ? flexProps.alignItems : item.alignSelf;
 
@@ -939,7 +941,7 @@ export class FlexService {
         y = (containerHeight / 2) - itemTop - (item.height / 2);
 
         // Calculate X position (cross axis) - handle single line vs multi-line differently
-        if (crossOffset === 0) {
+        if (!isMultiLine) {
           // Single line - check align-self first, then fall back to container's align-items
           const alignValue = item.alignSelf === 'auto' ? flexProps.alignItems : item.alignSelf;
 

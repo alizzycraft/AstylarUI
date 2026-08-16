@@ -398,5 +398,12 @@
     "category": "composed-application",
     "expectedBehavior": "A realistic project workspace reflows its persistent navigation, toolbar, summary grid, task list, clipped activity panel, controls, and fixed help action across desktop, tablet, and mobile.",
     "viewportIds": ["desktop", "tablet", "mobile"]
+  },
+  {
+    "id": "representative-data-management",
+    "title": "Representative data management application",
+    "category": "composed-application",
+    "expectedBehavior": "A responsive inventory application preserves its navigation shell, filter toolbar, semantic fixed-column table, pagination, clipped narrow representation, local image, and positioned detail panel.",
+    "viewportIds": ["desktop", "tablet", "mobile"]
   }
 ]
