@@ -186,6 +186,31 @@ describe('FlexService', () => {
     expect(result[0].size.height).toBe(216);
   });
 
+  it('measures a height-auto grid from fixed row tracks and gaps', () => {
+    const service = new FlexService(new FlexLayoutService(), {} as never, {} as never);
+    const render = {
+      actions: { style: { findStyleForElement: () => undefined } },
+    } as unknown as BabylonRender;
+    const dom = {
+      context: { elementStyles: new Map() },
+    } as unknown as BabylonDOM;
+
+    const height = service['calculateIntrinsicContainerHeight'](
+      { type: 'div', id: 'grid', children: [{ type: 'div', id: 'cell' }] },
+      {
+        selector: '#grid', display: 'grid', width: '248px', height: 'auto',
+        gridTemplateRows: '40px 60px', rowGap: '10px',
+        padding: '12px', borderWidth: '2px',
+      },
+      [],
+      dom,
+      render,
+      248,
+    );
+
+    expect(height).toBe(138);
+  });
+
   it('positions the first wrapped line at the cross-axis start', () => {
     const service = new FlexService(new FlexLayoutService(), {} as never, {} as never);
     const item = (id: string, width: number, height: number): FlexItem => ({

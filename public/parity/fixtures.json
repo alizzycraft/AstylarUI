@@ -454,5 +454,11 @@
     "title": "Nested flex padding and stretch",
     "category": "flexbox",
     "expectedBehavior": "A padded flex container created as a flex item preserves its assigned used size while stretching an auto-sized child inside its content box."
+  },
+  {
+    "id": "grid-auto-height",
+    "title": "Explicit grid tracks driving auto height",
+    "category": "grid",
+    "expectedBehavior": "A height-auto grid contributes the sum of its explicit row tracks, row gaps, padding, and borders before its flex parent positions it."
   }
 ]

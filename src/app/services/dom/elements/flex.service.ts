@@ -419,6 +419,15 @@ export class FlexService {
       0,
       borderBoxWidth - padding.left - padding.right - borderWidth * 2,
     );
+    const fixedGridRows = style?.display?.toLowerCase() === 'grid'
+      ? this.parseFixedGridTracks(style.gridTemplateRows)
+      : null;
+    if (fixedGridRows && fixedGridRows.length > 0) {
+      const rowGap = this.parseGapProperties(style!).rowGap;
+      return fixedGridRows.reduce((sum, track) => sum + track, 0) +
+        rowGap * (fixedGridRows.length - 1) +
+        padding.top + padding.bottom + borderWidth * 2;
+    }
     let contentHeight = 0;
     let previousBottomMargin = 0;
     let hasFlowChild = false;
@@ -473,6 +482,20 @@ export class FlexService {
       return percentageReference * (Number.parseFloat(value) || 0) / 100;
     }
     return Number.parseFloat(value) || 0;
+  }
+
+  private parseFixedGridTracks(template: string | undefined): number[] | null {
+    if (!template?.trim()) return null;
+    const expanded = template.replace(
+      /repeat\(\s*(\d+)\s*,\s*([+-]?(?:\d+\.?\d*|\.\d+))px\s*\)/gi,
+      (_match, count: string, size: string) =>
+        Array(Number.parseInt(count, 10)).fill(`${size}px`).join(' '),
+    );
+    const tokens = expanded.trim().split(/\s+/);
+    if (tokens.some(token => !/^[+-]?(?:\d+\.?\d*|\.\d+)px$/i.test(token))) {
+      return null;
+    }
+    return tokens.map(token => Math.max(0, Number.parseFloat(token)));
   }
 
   /**
