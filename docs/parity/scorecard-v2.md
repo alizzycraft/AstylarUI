@@ -8,11 +8,11 @@ This scorecard tracks the second parity phase: making ordinary application-orien
 
 | Gate | Current | Target | Status |
 | --- | ---: | ---: | --- |
-| Total parity fixtures | 64 | 65 | Open |
-| New Phase 2 fixtures | 24 | 25 | Open |
+| Total parity fixtures | 65 | 65 | Passing |
+| New Phase 2 fixtures | 25 | 25 | Passing |
 | Composed application/component fixtures | 10 | 10 | Passing |
 | Deterministic viewport sizes | 3 exercised | 3 exercised | Passing |
-| Median SSIM | 0.9956 | >= 0.98 | Passing |
+| Median SSIM | 0.9953 | >= 0.98 | Passing |
 | Minimum fixture SSIM | 0.9502 | >= 0.95 | Passing |
 | Edges within 2 px | 99.7% | >= 95% | Passing baseline |
 | Maximum edge delta | 3.9921 px | <= 5 px | Passing |
@@ -30,7 +30,7 @@ This scorecard tracks the second parity phase: making ordinary application-orien
 | Responsive behavior | 2 | Viewport-relative geometry and width media conditions across three profiles | In progress |
 | Overflow and scrolling | 2 | Hidden overflow for positioned descendants and intersected nested clipping ancestors | Passing |
 | Controls and states | 2 | Enabled, disabled, checked, required, optional, read-only, and read-write selector states | Passing |
-| Layering and overlays | 1 | Nested parent stacking contexts and bounded child z-index | In progress |
+| Layering and overlays | 2 | Positioned and opacity-created stacking contexts with bounded descendant z-index | Passing |
 | Composed applications | 10 | Dashboard, responsive gallery, settings, modal, popover, article, sidebar, data table, checkout, and notification-center pages | Passing |
 
 ## Baseline
@@ -97,6 +97,7 @@ The committed 40-fixture Phase 1 suite was rerun before Phase 2 work began. It p
 | Mixed Grid tracks | Three columns with unequal fractional weights and a second explicit row had no unsupported behavior | No renderer change; retained the six-item case as a focused regression fixture | Fixture SSIM `0.9998`; max edge error `0.041px`; all suite thresholds pass | `test: cover mixed grid tracks` |
 | Nested overflow intersection | A descendant crossed both an inner clip and its narrower outer ancestor | No renderer change; retained the intersected clip as a focused regression fixture | Fixture SSIM `1.0000`; max edge error `0.078px`; clipping visually exact | `test: cover nested overflow intersection` |
 | Requirement and editability selectors | Required/optional and read-only/read-write selectors were rejected by the pseudo-class parser | Added semantic matching for requirement and editability flags with normal pseudo-class specificity | Fixture SSIM `1.0000`; exact geometry and paint; 76 tests and both builds pass | `fix: support requirement state selectors` |
+| Opacity stacking context | A high-z child inside an opacity-created context overlaps a root sibling at z-index 1 | No renderer change; retained the containment case as a focused paint-order regression fixture | Fixture SSIM `0.9880`; max edge error `0.063px`; root overlay order visually correct | `test: cover opacity stacking contexts` |
 
 ## Remaining work
 
@@ -110,4 +111,4 @@ The committed 40-fixture Phase 1 suite was rerun before Phase 2 work began. It p
 
 ## Next target
 
-Add a focused opacity stacking-context fixture, then run the three final enforcing passes.
+Run three consecutive enforcing passes on the unchanged 65-fixture suite.

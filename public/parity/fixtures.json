@@ -385,5 +385,11 @@
     "title": "Requirement and editability selectors",
     "category": "controls-states",
     "expectedBehavior": "Required, optional, read-only, and read-write pseudo-classes match semantic input state and participate in cascade specificity."
+  },
+  {
+    "id": "opacity-stacking-context",
+    "title": "Opacity stacking-context containment",
+    "category": "layering-overlays",
+    "expectedBehavior": "Opacity creates a stacking context, so a high-z descendant remains below a root sibling with a higher stacking level."
   }
 ]

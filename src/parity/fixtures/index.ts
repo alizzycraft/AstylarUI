@@ -62,6 +62,7 @@ import { composedNotificationCenterFixture } from './composed-notification-cente
 import { gridMixedTracksFixture } from './grid-mixed-tracks.fixture';
 import { nestedOverflowIntersectionFixture } from './nested-overflow-intersection.fixture';
 import { controlRequirementSelectorsFixture } from './control-requirement-selectors.fixture';
+import { opacityStackingContextFixture } from './opacity-stacking-context.fixture';
 import { ParityFixture } from '../parity.types';
 
 const fixtures: readonly ParityFixture[] = [
@@ -128,7 +129,8 @@ const fixtures: readonly ParityFixture[] = [
   composedNotificationCenterFixture,
   gridMixedTracksFixture,
   nestedOverflowIntersectionFixture,
-  controlRequirementSelectorsFixture
+  controlRequirementSelectorsFixture,
+  opacityStackingContextFixture
 ];
 
 const fixturesById = new Map(fixtures.map((fixture) => [fixture.id, fixture]));
