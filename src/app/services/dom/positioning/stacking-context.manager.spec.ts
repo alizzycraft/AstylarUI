@@ -65,4 +65,25 @@ describe('StackingContextManager', () => {
     expect(childLocalDepth).toBeGreaterThan(0.1);
     expect(parentDepth + childLocalDepth).toBeGreaterThan(parentDepth);
   });
+
+  it('reserves stable paint depth for semantic table descendants', () => {
+    const ancestry = new DOMAncestryService();
+    const manager = new StackingContextManager(ancestry);
+    const table = { type: 'table' as const, id: 'table' };
+    const body = { type: 'tbody' as const, id: 'body' };
+    const row = { type: 'tr' as const, id: 'row' };
+    const cell = { type: 'td' as const, id: 'cell' };
+    ancestry.setParent(body, table);
+    ancestry.setParent(row, body);
+    ancestry.setParent(cell, row);
+
+    manager.calculateZPosition(table, { selector: '#table' });
+    const bodyDepth = manager.calculateZPosition(body, { selector: '#body' });
+    const rowDepth = manager.calculateZPosition(row, { selector: '#row' });
+    const cellDepth = manager.calculateZPosition(cell, { selector: '#cell' });
+
+    expect(bodyDepth).toBeCloseTo(0.05, 8);
+    expect(rowDepth).toBeCloseTo(0.05, 8);
+    expect(cellDepth).toBeCloseTo(0.05, 8);
+  });
 });

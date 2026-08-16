@@ -8,11 +8,11 @@ This scorecard tracks the second parity phase: making ordinary application-orien
 
 | Gate | Current | Target | Status |
 | --- | ---: | ---: | --- |
-| Total parity fixtures | 58 | 65 | Open |
-| New Phase 2 fixtures | 18 | 25 | Open |
-| Composed application/component fixtures | 7 | 10 | Open |
+| Total parity fixtures | 59 | 65 | Open |
+| New Phase 2 fixtures | 19 | 25 | Open |
+| Composed application/component fixtures | 8 | 10 | Open |
 | Deterministic viewport sizes | 3 exercised | 3 exercised | Passing |
-| Median SSIM | 0.9956 | >= 0.98 | Passing |
+| Median SSIM | 0.9953 | >= 0.98 | Passing |
 | Minimum fixture SSIM | 0.9626 | >= 0.95 | Passing |
 | Edges within 2 px | 99.7% | >= 95% | Passing baseline |
 | Maximum edge delta | 3.9921 px | <= 5 px | Passing |
@@ -31,7 +31,7 @@ This scorecard tracks the second parity phase: making ordinary application-orien
 | Overflow and scrolling | 1 | Hidden overflow clipping for positioned descendants | In progress |
 | Controls and states | 1 | Enabled, disabled, and checked selector states with element opacity | In progress |
 | Layering and overlays | 1 | Nested parent stacking contexts and bounded child z-index | In progress |
-| Composed applications | 7 | Dashboard, responsive gallery, settings form, modal, clipped popover, article page, and sidebar workspace | In progress |
+| Composed applications | 8 | Dashboard, responsive gallery, settings form, modal, clipped popover, article, sidebar, and semantic data table pages | In progress |
 
 ## Baseline
 
@@ -61,6 +61,7 @@ The committed 40-fixture Phase 1 suite was rerun before Phase 2 work began. It p
 - Keep ordinary element borders at their proven `0.05` local depth while select borders use `0.06`; selected-value content remains at `0.04` so nested selects paint deterministically without crossing general stacking bands.
 - Reserve `0.25` world units between adjacent root z-index levels so each context contains its descendant paint band without enough perspective shift to exceed geometry tolerance.
 - Separate genuinely nested positioned auto-z descendants from their parent surface by `0.15` world units; keep top-level positioned elements and static descendants on their prior paths.
+- Register the full semantic table subtree with renderer ancestry, position row groups at table-relative offsets, keep rows local to each group, and reserve `0.05` world units per table paint level.
 
 ## Iteration history
 
@@ -86,6 +87,7 @@ The committed 40-fixture Phase 1 suite was rerun before Phase 2 work began. It p
 | Composed clipped popover | Aggregate baseline passed at SSIM `0.9718`, but visual inspection found the overlapped positioned card was depth-quantized into its parent surface | Added a hierarchy-scoped `0.15` paint band for nested positioned auto-z descendants without shifting top-level positioned fixtures | Fixture SSIM `0.9838`; clipping and overlap visually match; suite median `0.9960`; 68 tests and both builds pass | `test: add composed popover parity` |
 | Composed article page | The first composed render passed at SSIM `0.9630` with exact geometry and text; visual inspection showed avoidable upscaling blur from the small shared SVG | Kept CSS sizing and object-fit under test while using a deterministic high-resolution source asset representative of application imagery | Fixture SSIM `0.9647`; max edge error `0.055px`; exact wrapped lines; suite median `0.9956`; 68 tests and both builds pass | `test: add composed article parity` |
 | Composed sidebar workspace | New nested navigation, active compound-descendant styling, flexible content, and toolbar composition had no unsupported behavior | No renderer change; retained the ordinary authored structure as a regression fixture | Fixture SSIM `0.9847`; max edge error `0.109px`; exact text; suite median `0.9956`; 68 tests and both builds pass | `test: add composed sidebar parity` |
+| Composed semantic data table | Header and body groups independently consumed table height, overlapping at SSIM `0.7807` with `112.516px` edge error; after geometry repair, descendant styles and cell surfaces were still absent | Positioned semantic groups cumulatively with local rows, registered manually rendered table ancestry for selectors, and reserved bounded paint depth for section/row/cell surfaces | Fixture SSIM `0.9747`; max edge error `0.123px`; existing table fixtures remain green; suite median `0.9953`; 71 tests and both builds pass | `fix: compose semantic table sections` |
 
 ## Remaining work
 
@@ -99,4 +101,4 @@ The committed 40-fixture Phase 1 suite was rerun before Phase 2 work began. It p
 
 ## Next target
 
-Add a composed data table page covering semantic table structure, explicit columns, header/body styling, and a surrounding application toolbar.
+Add a composed checkout form covering grouped fieldsets, labels, mixed controls, summary layout, and primary/secondary actions.

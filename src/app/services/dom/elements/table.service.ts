@@ -4,9 +4,11 @@ import { BabylonDOM } from '../interfaces/dom.types';
 import { BabylonRender } from '../interfaces/render.types';
 import { DOMElement } from '../../../types/dom-element';
 import { StyleRule } from '../../../types/style-rule';
+import { DOMAncestryService } from '../dom-ancestry.service';
 
 @Injectable({ providedIn: 'root' })
 export class TableService {
+  constructor(private readonly ancestry: DOMAncestryService) {}
 
   public processTable(dom: BabylonDOM, render: BabylonRender, tableChildren: DOMElement[], parent: Mesh, styles: StyleRule[], parentElement: DOMElement, tableMeshOverride?: Mesh): void {
     if (!parentElement.id) {
@@ -20,6 +22,7 @@ export class TableService {
 
     // ... rest of logging ...
     console.log(`[TABLE DEBUG] Table has ${tableChildren.length} children`);
+    this.registerTableAncestry(tableChildren, parentElement);
 
     try {
       // Use existing mesh or create a new one
@@ -173,7 +176,16 @@ export class TableService {
     };
 
     // Create tbody/thead/tfoot mesh with proportional dimensions
-    const sectionMesh = this.createTableSectionContainer(dom, render, sectionElement, tableMesh, styles, sectionDimensions, tableId);
+    const sectionMesh = this.createTableSectionContainer(
+      dom,
+      render,
+      sectionElement,
+      tableMesh,
+      styles,
+      sectionDimensions,
+      tableId,
+      sharedDimensions?.sectionStartY ?? 0,
+    );
     console.log(`[TABLE DEBUG] Created section mesh: ${sectionMesh.name}`);
 
     console.log(`[TABLE DEBUG] Found ${sectionRows.length} rows in ${sectionElement.type}`);
@@ -194,7 +206,7 @@ export class TableService {
     this.processTableRows(dom, render, rows, tableMesh, styles, containerDimensions, tableId);
   }
 
-  private createTableSectionContainer(dom: BabylonDOM, render: BabylonRender, sectionElement: DOMElement, tableMesh: Mesh, styles: StyleRule[], containerDimensions: { width: number; height: number }, tableId: string): Mesh {
+  private createTableSectionContainer(dom: BabylonDOM, render: BabylonRender, sectionElement: DOMElement, tableMesh: Mesh, styles: StyleRule[], containerDimensions: { width: number; height: number }, tableId: string, sectionStartY: number): Mesh {
     console.log(`[TABLE DEBUG] Creating section container for ${sectionElement.type}#${sectionElement.id} with dimensions: ${containerDimensions.width}x${containerDimensions.height}px`);
 
     // Create auto-positioned style for the section
@@ -203,20 +215,21 @@ export class TableService {
       selector: sectionElement.id ? `#${sectionElement.id}` : sectionElement.type,
       width: `${containerDimensions.width}px`,
       height: `${containerDimensions.height}px`,
-      top: '0px',
+      top: `${sectionStartY}px`,
       left: '0px'
     };
 
     console.log(`[TABLE DEBUG] Section ${sectionElement.type} layout override height: ${sectionLayoutOverride.height}`);
 
     // Store layout overrides in context temporarily
-    const storedStyles = sectionElement.id ? dom.context.elementStyles.get(sectionElement.id) : undefined;
-    if (sectionElement.id) {
-      dom.context.elementStyles.set(sectionElement.id, {
-        normal: { ...(storedStyles?.normal || {}), ...sectionLayoutOverride },
-        hover: storedStyles?.hover
-      });
-    }
+    const originalId = sectionElement.id;
+    const layoutId = originalId ?? `${tableId}-${sectionElement.type}-${sectionStartY}`;
+    sectionElement.id = layoutId;
+    const storedStyles = dom.context.elementStyles.get(layoutId);
+    dom.context.elementStyles.set(layoutId, {
+      normal: { ...(storedStyles?.normal || {}), ...sectionLayoutOverride },
+      hover: storedStyles?.hover
+    });
 
     // Create the section element
     const sectionMesh = dom.actions.createElement(dom, render, sectionElement, tableMesh, styles);
@@ -231,9 +244,12 @@ export class TableService {
     console.log(`📋 Stored section dimensions for ${sectionMesh.name}: ${containerDimensions.width}x${containerDimensions.height}px`);
 
     // Restore original styles
-    if (sectionElement.id && storedStyles) {
-      dom.context.elementStyles.set(sectionElement.id, storedStyles);
+    if (storedStyles) {
+      dom.context.elementStyles.set(layoutId, storedStyles);
+    } else {
+      dom.context.elementStyles.delete(layoutId);
     }
+    sectionElement.id = originalId;
 
     console.log(`📋 Created table section container: ${sectionElement.type}#${sectionElement.id}, inheriting dimensions: ${containerDimensions.width}x${containerDimensions.height}px`);
     return sectionMesh;
@@ -306,8 +322,9 @@ export class TableService {
     // Use shared dimensions instead of calculating per-section
     const { sharedRowHeight, sharedColumnWidths, sectionStartY } = sharedDimensions;
 
-    // Process each row sequentially starting from the section's Y position
-    let currentY = sectionStartY;
+    // The section mesh already carries the table-relative offset. Rows are
+    // positioned locally so row groups do not apply that offset twice.
+    let currentY = 0;
     tableRows.forEach((row, rowIndex) => {
       console.log(`[TABLE DEBUG] Processing row ${rowIndex + 1}/${tableRows.length}: ${row.type}#${row.id} at Y: ${currentY}`);
 
@@ -451,6 +468,15 @@ export class TableService {
       }
     }
     return maxCols;
+  }
+
+  private registerTableAncestry(children: DOMElement[], parent: DOMElement): void {
+    for (const child of children) {
+      this.ancestry.setParent(child, parent);
+      if (child.children?.length) {
+        this.registerTableAncestry(child.children, child);
+      }
+    }
   }
 
   private resolveColumnWidths(
