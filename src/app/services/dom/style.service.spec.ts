@@ -83,6 +83,18 @@ describe('StyleService cascade', () => {
     expect(result?.flexBasis).toBe('88px');
   });
 
+  it('matches required and editability control pseudo-classes', () => {
+    const required: DOMElement = { type: 'input', required: true, readonly: true };
+    const optional: DOMElement = { type: 'textarea' };
+    const styles: StyleRule[] = [
+      { selector: 'input:required:read-only', background: '#dcfce7' },
+      { selector: 'textarea:optional:read-write', background: '#dbeafe' },
+    ];
+
+    expect(service.findStyleForElement(required, styles)?.background).toBe('#dcfce7');
+    expect(service.findStyleForElement(optional, styles)?.background).toBe('#dbeafe');
+  });
+
   it('matches scoped descendant selectors through multiple ancestors', () => {
     const card: DOMElement = { type: 'section', class: 'selector-card' };
     const content: DOMElement = { type: 'div', class: 'selector-content' };

@@ -502,7 +502,7 @@ export class StyleService {
     }
 
     private getCompoundSpecificity(element: DOMElement, selector: string): number | null {
-        const pseudoPattern = /:(first-child|last-child|disabled|enabled|checked)/g;
+        const pseudoPattern = /:(first-child|last-child|disabled|enabled|checked|required|optional|read-only|read-write)/g;
         const pseudos = Array.from(selector.matchAll(pseudoPattern), match => match[1]);
         const baseSelector = selector.replace(pseudoPattern, '');
         if (baseSelector.includes(':')) return null;
@@ -520,6 +520,12 @@ export class StyleService {
         if (pseudos.includes('disabled') && (!disableable || !element.disabled)) return null;
         if (pseudos.includes('enabled') && (!disableable || element.disabled === true)) return null;
         if (pseudos.includes('checked') && element.checked !== true && element.selected !== true) return null;
+        const requirementAware = ['input', 'select', 'textarea'].includes(element.type);
+        if (pseudos.includes('required') && (!requirementAware || element.required !== true)) return null;
+        if (pseudos.includes('optional') && (!requirementAware || element.required === true)) return null;
+        const textEditable = element.type === 'input' || element.type === 'textarea';
+        if (pseudos.includes('read-only') && (!textEditable || element.readonly !== true)) return null;
+        if (pseudos.includes('read-write') && (!textEditable || element.readonly === true || element.disabled === true)) return null;
 
         const pseudoSpecificity = pseudos.length * 10;
         if (!baseSelector || baseSelector === '*') return pseudoSpecificity;

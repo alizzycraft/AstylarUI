@@ -61,6 +61,7 @@ import { composedCheckoutFixture } from './composed-checkout.fixture';
 import { composedNotificationCenterFixture } from './composed-notification-center.fixture';
 import { gridMixedTracksFixture } from './grid-mixed-tracks.fixture';
 import { nestedOverflowIntersectionFixture } from './nested-overflow-intersection.fixture';
+import { controlRequirementSelectorsFixture } from './control-requirement-selectors.fixture';
 import { ParityFixture } from '../parity.types';
 
 const fixtures: readonly ParityFixture[] = [
@@ -126,7 +127,8 @@ const fixtures: readonly ParityFixture[] = [
   composedCheckoutFixture,
   composedNotificationCenterFixture,
   gridMixedTracksFixture,
-  nestedOverflowIntersectionFixture
+  nestedOverflowIntersectionFixture,
+  controlRequirementSelectorsFixture
 ];
 
 const fixturesById = new Map(fixtures.map((fixture) => [fixture.id, fixture]));

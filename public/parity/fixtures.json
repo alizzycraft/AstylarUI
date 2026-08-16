@@ -379,5 +379,11 @@
     "title": "Intersected nested overflow clips",
     "category": "overflow-scrolling",
     "expectedBehavior": "A positioned descendant is clipped to the intersection of two overflow-hidden ancestor padding boxes."
+  },
+  {
+    "id": "control-requirement-selectors",
+    "title": "Requirement and editability selectors",
+    "category": "controls-states",
+    "expectedBehavior": "Required, optional, read-only, and read-write pseudo-classes match semantic input state and participate in cascade specificity."
   }
 ]
