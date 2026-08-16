@@ -460,5 +460,11 @@
     "title": "Explicit grid tracks driving auto height",
     "category": "grid",
     "expectedBehavior": "A height-auto grid contributes the sum of its explicit row tracks, row gaps, padding, and borders before its flex parent positions it."
+  },
+  {
+    "id": "intrinsic-textarea-rows",
+    "title": "Textarea rows driving auto height",
+    "category": "forms-interactive",
+    "expectedBehavior": "A height-auto appearance-none textarea derives its border-box height from rows, line height, padding, and borders."
   }
 ]

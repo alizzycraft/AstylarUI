@@ -250,6 +250,54 @@ describe('ElementDimensionService', () => {
     expect(result.height).toBe(44);
   });
 
+  it('derives textarea auto height from rows and line height', () => {
+    const textRendering = {
+      calculateTextDimensions: () => ({ width: 100, height: 24, lineHeight: 24 }),
+    };
+    const textStyleParser = {
+      parseTextProperties: () => ({ fontSize: 12, lineHeight: 2 }),
+    };
+    const service = new ElementDimensionService(
+      textRendering as never,
+      textStyleParser as never,
+      new DOMAncestryService(),
+    );
+    const parent = { name: 'root-body' } as Mesh;
+    const style: StyleRule = {
+      selector: '#bio', display: 'block', boxSizing: 'border-box',
+      width: '260px', height: 'auto', padding: '5px 9px', borderWidth: '1px',
+      fontSize: '12px', lineHeight: '24px',
+    };
+    const dom = {
+      context: {
+        elementDimensions: new Map([
+          ['root-body', { width: 800, height: 600, padding: { top: 0, right: 0, bottom: 0, left: 0 } }],
+        ]),
+        elementStyles: new Map(),
+      },
+    } as unknown as BabylonDOM;
+    const render = {
+      actions: {
+        style: {
+          getElementTypeDefaults: () => ({ display: 'block' }),
+          findStyleForElement: () => style,
+        },
+      },
+    } as unknown as BabylonRender;
+
+    const result = service.calculateDimensions(
+      dom,
+      render,
+      { id: 'bio', type: 'textarea', rows: 2, value: '' },
+      style,
+      parent,
+      [style],
+    );
+
+    expect(result.width).toBe(260);
+    expect(result.height).toBe(60);
+  });
+
   it('adds padding and borders outside explicit content-box dimensions', () => {
     const service = new ElementDimensionService({} as never, {} as never, new DOMAncestryService());
     const parent = { name: 'root-body' } as Mesh;

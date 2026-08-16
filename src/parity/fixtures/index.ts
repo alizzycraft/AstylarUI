@@ -74,6 +74,7 @@ import { intrinsicInputButtonFixture } from './intrinsic-input-button.fixture';
 import { flexAutoContainerFixture } from './flex-auto-container.fixture';
 import { nestedFlexPaddingStretchFixture } from './nested-flex-padding-stretch.fixture';
 import { gridAutoHeightFixture } from './grid-auto-height.fixture';
+import { intrinsicTextareaRowsFixture } from './intrinsic-textarea-rows.fixture';
 import { ParityFixture } from '../parity.types';
 
 const fixtures: readonly ParityFixture[] = [
@@ -152,7 +153,8 @@ const fixtures: readonly ParityFixture[] = [
   intrinsicInputButtonFixture,
   flexAutoContainerFixture,
   nestedFlexPaddingStretchFixture,
-  gridAutoHeightFixture
+  gridAutoHeightFixture,
+  intrinsicTextareaRowsFixture
 ];
 
 const fixturesById = new Map(fixtures.map((fixture) => [fixture.id, fixture]));

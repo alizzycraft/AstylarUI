@@ -211,6 +211,27 @@ describe('FlexService', () => {
     expect(height).toBe(138);
   });
 
+  it('derives textarea flex-item height from its row count', () => {
+    const textRendering = {
+      calculateTextDimensions: () => ({ width: 100, height: 24, lineHeight: 24 }),
+    };
+    const textStyleParser = {
+      parseTextProperties: () => ({ fontSize: 12, lineHeight: 2 }),
+    };
+    const service = new FlexService(
+      new FlexLayoutService(), textRendering as never, textStyleParser as never,
+    );
+
+    const height = service['calculateIntrinsicTextHeight'](
+      { type: 'textarea', id: 'bio', rows: 2, value: '' },
+      { selector: '#bio', width: '260px', height: 'auto', padding: '5px 9px', borderWidth: '1px' },
+      [],
+      260,
+    );
+
+    expect(height).toBe(60);
+  });
+
   it('positions the first wrapped line at the cross-axis start', () => {
     const service = new FlexService(new FlexLayoutService(), {} as never, {} as never);
     const item = (id: string, width: number, height: number): FlexItem => ({

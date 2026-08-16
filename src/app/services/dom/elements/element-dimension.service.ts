@@ -215,7 +215,7 @@ export class ElementDimensionService {
         if (heightValue !== undefined) {
             if (typeof heightValue === 'string') {
                 if (heightValue === 'auto') {
-                    if (isInlineLevel || hasTextContent) {
+                    if (isInlineLevel || hasTextContent || element.type === 'textarea') {
                         const intrinsicHeight = this.calculateIntrinsicHeight(element, constrainedTextMetrics, layoutInsets);
                         if (intrinsicHeight !== null) {
                             height = intrinsicHeight;
@@ -255,7 +255,7 @@ export class ElementDimensionService {
                 height = heightValue;
                 heightSource = `height:${heightValue}`;
             }
-        } else if (isInlineLevel || hasTextContent) {
+        } else if (isInlineLevel || hasTextContent || element.type === 'textarea') {
             const intrinsicHeight = this.calculateIntrinsicHeight(element, constrainedTextMetrics, layoutInsets);
             if (intrinsicHeight !== null) {
                 height = intrinsicHeight;
@@ -512,6 +512,11 @@ export class ElementDimensionService {
     ): number | null {
         const totalPadding = (padding.top || 0) + (padding.bottom || 0);
 
+        if (element.type === 'textarea' && textMetrics) {
+            const rows = Math.max(1, element.rows ?? 2);
+            return rows * textMetrics.lineHeight + totalPadding;
+        }
+
         if (!textMetrics) {
             if (element.type === 'input' || element.type === 'button') {
                 return Math.max(totalPadding, 40);
@@ -542,11 +547,13 @@ export class ElementDimensionService {
             textToMeasure = element.value || element.textContent || 'Button';
         } else if (element.type === 'input') {
             textToMeasure = element.value || element.placeholder || '';
+        } else if (element.type === 'textarea') {
+            textToMeasure = element.value || element.placeholder || ' ';
         } else if (element.textContent) {
             textToMeasure = element.textContent;
         }
 
-        if (!textToMeasure || textToMeasure.trim() === '') {
+        if (element.type !== 'textarea' && (!textToMeasure || textToMeasure.trim() === '')) {
             return null;
         }
 

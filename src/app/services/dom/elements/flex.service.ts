@@ -381,8 +381,10 @@ export class FlexService {
       ? element.value || element.textContent || 'Button'
       : element.type === 'input'
         ? element.value || element.placeholder || ''
+        : element.type === 'textarea'
+          ? element.value || element.placeholder || ' '
         : element.textContent || '';
-    if (!text.trim()) return null;
+    if (element.type !== 'textarea' && !text.trim()) return null;
 
     const effectiveStyle = { ...this.getInheritedTextStyle(element, styles), ...style };
     const textStyle = this.textStyleParser.parseTextProperties(effectiveStyle);
@@ -398,6 +400,11 @@ export class FlexService {
       contentWidth || undefined,
     );
     const lineHeight = dimensions.lineHeight ?? textStyle.fontSize * textStyle.lineHeight;
+    if (element.type === 'textarea') {
+      const rows = Math.max(1, element.rows ?? 2);
+      return rows * lineHeight +
+        padding.top + padding.bottom + borderWidth * 2;
+    }
     return Math.max(dimensions.height, lineHeight) +
       padding.top + padding.bottom + borderWidth * 2;
   }
