@@ -719,6 +719,14 @@ export class FlexService {
       const vValue = parseFloat(parts[0]) || 0;
       const hValue = parseFloat(parts[1]) || 0;
       return { top: vValue, right: hValue, bottom: vValue, left: hValue };
+    } else if (parts.length === 3) {
+      // padding: 10px 20px 30px (top horizontal bottom)
+      return {
+        top: parseFloat(parts[0]) || 0,
+        right: parseFloat(parts[1]) || 0,
+        bottom: parseFloat(parts[2]) || 0,
+        left: parseFloat(parts[1]) || 0,
+      };
     } else if (parts.length === 4) {
       // padding: 10px 20px 30px 40px (top right bottom left)
       return {
@@ -751,6 +759,14 @@ export class FlexService {
       const vValue = parseFloat(parts[0]) || 0;
       const hValue = parseFloat(parts[1]) || 0;
       return { top: vValue, right: hValue, bottom: vValue, left: hValue };
+    } else if (parts.length === 3) {
+      // margin: 10px 20px 30px (top horizontal bottom)
+      return {
+        top: parseFloat(parts[0]) || 0,
+        right: parseFloat(parts[1]) || 0,
+        bottom: parseFloat(parts[2]) || 0,
+        left: parseFloat(parts[1]) || 0,
+      };
     } else if (parts.length === 4) {
       // margin: 10px 20px 30px 40px (top right bottom left)
       return {

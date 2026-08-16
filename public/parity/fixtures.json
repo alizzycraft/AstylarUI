@@ -484,5 +484,11 @@
     "title": "Descendant styles during intrinsic pre-layout",
     "category": "selectors-cascade",
     "expectedBehavior": "Intrinsic pre-layout resolves child-combinator styles using the same complete DOM ancestry that is available during final element creation."
+  },
+  {
+    "id": "three-value-box-shorthand",
+    "title": "Three-value padding and margin shorthand",
+    "category": "box-model-units",
+    "expectedBehavior": "Intrinsic flex sizing expands three-value padding and margin shorthand as top, horizontal, and bottom values."
   }
 ]

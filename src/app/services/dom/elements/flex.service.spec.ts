@@ -6,6 +6,17 @@ import { StyleRule } from '../../../types/style-rule';
 import { FlexContainer, FlexItem, FlexLayoutService } from './flex-layout.service';
 
 describe('FlexService', () => {
+  it('expands three-value padding and margin shorthand', () => {
+    const service = new FlexService({} as never, {} as never, {} as never);
+
+    expect(service['parsePadding']('24px 12px 8px')).toEqual({
+      top: 24, right: 12, bottom: 8, left: 12,
+    });
+    expect(service['parseMargin']('6px 4px 10px')).toEqual({
+      top: 6, right: 4, bottom: 10, left: 4,
+    });
+  });
+
   it('recognizes both block-level and inline-level flex containers', () => {
     const service = new FlexService({} as never, {} as never, {} as never);
     const render = {
