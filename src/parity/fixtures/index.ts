@@ -80,6 +80,7 @@ import { flexColumnAutoHeightFixture } from './flex-column-auto-height.fixture';
 import { prelayoutDescendantStyleFixture } from './prelayout-descendant-style.fixture';
 import { threeValueBoxShorthandFixture } from './three-value-box-shorthand.fixture';
 import { flexScaledShrinkFixture } from './flex-scaled-shrink.fixture';
+import { standaloneFlexAutoHeightFixture } from './standalone-flex-auto-height.fixture';
 import { ParityFixture } from '../parity.types';
 
 const fixtures: readonly ParityFixture[] = [
@@ -164,7 +165,8 @@ const fixtures: readonly ParityFixture[] = [
   flexColumnAutoHeightFixture,
   prelayoutDescendantStyleFixture,
   threeValueBoxShorthandFixture,
-  flexScaledShrinkFixture
+  flexScaledShrinkFixture,
+  standaloneFlexAutoHeightFixture
 ];
 
 const fixturesById = new Map(fixtures.map((fixture) => [fixture.id, fixture]));

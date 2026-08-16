@@ -4,6 +4,7 @@ import { BabylonDOM } from '../interfaces/dom.types';
 import { DOMElement } from '../../../types/dom-element';
 import { StyleRule } from '../../../types/style-rule';
 import { FlexContainer, FlexItem, FlexLayoutService } from './flex-layout.service';
+import { Mesh } from '@babylonjs/core';
 
 describe('FlexService', () => {
   it('expands three-value padding and margin shorthand', () => {
@@ -230,6 +231,55 @@ describe('FlexService', () => {
     );
 
     expect(height).toBe(126);
+  });
+
+  it('resizes a standalone height-auto flex container before child layout', () => {
+    const service = new FlexService(new FlexLayoutService(), {} as never, {} as never);
+    const first: DOMElement = { type: 'div', id: 'first' };
+    const second: DOMElement = { type: 'div', id: 'second' };
+    const element: DOMElement = {
+      type: 'section', id: 'standalone', children: [first, second],
+    };
+    const style: StyleRule = {
+      selector: '#standalone', display: 'flex', flexDirection: 'column',
+      height: 'auto', padding: '12px', borderWidth: '2px', gap: '8px',
+    };
+    const resolved = new Map<string, StyleRule>([
+      ['first', { selector: '#first', height: '32px' }],
+      ['second', { selector: '#second', height: '44px' }],
+    ]);
+    const updateMeshWithBorderRadius = jasmine.createSpy('updateMeshWithBorderRadius');
+    const render = {
+      actions: {
+        camera: { getPixelToWorldScale: () => 0.01 },
+        mesh: { updateMeshWithBorderRadius },
+        style: { findStyleForElement: (child: DOMElement) => resolved.get(child.id ?? '') },
+      },
+    } as unknown as BabylonRender;
+    const dimensions = {
+      width: 240, height: 600,
+      padding: { top: 14, right: 14, bottom: 14, left: 14 },
+    };
+    const dom = {
+      context: {
+        elementStyles: new Map(),
+        elementDimensions: new Map([['standalone', dimensions]]),
+      },
+    } as unknown as BabylonDOM;
+    const mesh = {
+      name: 'standalone', position: { y: 0 }, metadata: {},
+    } as unknown as Mesh;
+
+    const height = service['resizeStandaloneAutoHeightContainer'](
+      element, style, [], dom, render, mesh, 240, 600, 0.01,
+    );
+
+    expect(height).toBe(112);
+    expect(dom.context.elementDimensions.get('standalone')?.height).toBe(112);
+    expect(mesh.position.y).toBeCloseTo(2.44, 8);
+    expect(updateMeshWithBorderRadius).toHaveBeenCalledWith(
+      mesh, 'rectangle', 2.4, 1.12, 0, 0.02,
+    );
   });
 
   it('stretches a height-auto item through a padded row flex container', () => {

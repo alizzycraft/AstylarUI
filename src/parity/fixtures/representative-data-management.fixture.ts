@@ -93,7 +93,7 @@ export const representativeDataManagementFixture: ParityFixture = {
       #dm-page-prev { width:88px; opacity:.55; } #dm-page-active { width:40px; } #dm-page-next { width:72px; }
       #dm-pagination input.active { background:#0f766e; color:#ffffff; }
       #dm-empty { width:376px; height:40px; padding:10px; background:#f8fafc; color:#64748b; font:400 12px/20px Arial,sans-serif; }
-      #dm-detail { display:flex; flex-direction:column; gap:12px; position:absolute; left:424px; top:76px; width:204px; height:408px; padding:16px; z-index:2; background:#ecfeff; overflow:hidden; }
+      #dm-detail { display:flex; flex-direction:column; gap:12px; position:absolute; left:424px; top:76px; width:204px; height:auto; padding:16px; z-index:2; background:#ecfeff; overflow:hidden; }
       #dm-detail-image { width:172px; height:96px; object-fit:cover; background:#bae6fd; }
       #dm-detail-body { display:flex; flex-direction:column; gap:8px; width:172px; height:auto; }
       #dm-detail-title { width:172px; height:52px; margin:0; color:#164e63; font:700 18px/26px Arial,sans-serif; }
@@ -112,7 +112,7 @@ export const representativeDataManagementFixture: ParityFixture = {
         #dm-table { height:132px; } #dm-table th, #dm-table td { height:44px; padding:10px 8px; }
         #dm-pagination { height:36px; padding:0; } #dm-pagination input { height:36px; padding:6px; line-height:24px; }
         #dm-empty { height:34px; padding:7px 10px; }
-        #dm-detail { flex-direction:row; gap:12px; left:12px; top:418px; width:476px; height:178px; padding:12px; }
+        #dm-detail { flex-direction:row; gap:12px; left:12px; top:418px; width:476px; height:auto; padding:12px; }
         #dm-detail-image { width:144px; height:154px; }
         #dm-detail-body { gap:4px; width:296px; }
         #dm-detail-title { width:296px; height:28px; margin:0; font-size:16px; line-height:28px; }
@@ -137,7 +137,7 @@ export const representativeDataManagementFixture: ParityFixture = {
         #dm-table { width:376px; height:132px; } #dm-table th, #dm-table td { height:44px; padding:10px 8px; font-size:11px; }
         #dm-pagination { height:36px; padding:0; } #dm-pagination input { height:36px; padding:6px; line-height:24px; }
         #dm-empty { height:34px; padding:7px 10px; }
-        #dm-detail { flex-direction:row; gap:10px; left:10px; top:418px; width:350px; height:246px; padding:12px; }
+        #dm-detail { flex-direction:row; gap:10px; left:10px; top:418px; width:350px; height:auto; padding:12px; }
         #dm-detail-image { width:112px; height:96px; }
         #dm-detail-body { gap:6px; width:204px; }
         #dm-detail-title { width:204px; height:52px; margin:0; font-size:16px; }
@@ -177,7 +177,7 @@ export const representativeDataManagementFixture: ParityFixture = {
       { selector:'#dm-pagination input', height:'40px', margin:'0', padding:'8px', borderWidth:'0', borderRadius:'0', background:'#e2e8f0', color:'#475569', fontFamily:'Arial, sans-serif', fontSize:'12px', fontWeight:'700', lineHeight:'24px', textAlign:'center' },
       { selector:'#dm-page-prev', width:'88px', opacity:'.55' }, { selector:'#dm-page-active', width:'40px' }, { selector:'#dm-page-next', width:'72px' }, { selector:'#dm-pagination input.active', background:'#0f766e', color:'#ffffff' },
       { selector:'#dm-empty', width:'376px', height:'40px', padding:'10px', background:'#f8fafc', color:'#64748b', fontFamily:'Arial, sans-serif', fontSize:'12px', lineHeight:'20px' },
-      { selector:'#dm-detail', display:'flex', flexDirection:'column', gap:'12px', position:'absolute', left:'424px', top:'76px', width:'204px', height:'408px', padding:'16px', zIndex:'2', background:'#ecfeff', overflow:'hidden' },
+      { selector:'#dm-detail', display:'flex', flexDirection:'column', gap:'12px', position:'absolute', left:'424px', top:'76px', width:'204px', height:'auto', padding:'16px', zIndex:'2', background:'#ecfeff', overflow:'hidden' },
       { selector:'#dm-detail-image', width:'172px', height:'96px', objectFit:'cover', background:'#bae6fd' },
       { selector:'#dm-detail-body', display:'flex', flexDirection:'column', gap:'8px', width:'172px', height:'auto' },
       { selector:'#dm-detail-title', width:'172px', height:'52px', margin:'0', color:'#164e63', fontFamily:'Arial, sans-serif', fontSize:'18px', fontWeight:'700', lineHeight:'26px' },
@@ -191,7 +191,7 @@ export const representativeDataManagementFixture: ParityFixture = {
       { selector:'#dm-toolbar', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'476px' }, { selector:'#dm-search', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'256px' }, { selector:'#dm-table-card', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'476px', height:'330px' },
       { selector:'#dm-table', mediaMinWidth:'600px', mediaMaxWidth:'749px', height:'132px' }, { selector:'#dm-table th, #dm-table td', mediaMinWidth:'600px', mediaMaxWidth:'749px', height:'44px', padding:'10px 8px' },
       { selector:'#dm-pagination', mediaMinWidth:'600px', mediaMaxWidth:'749px', height:'36px', padding:'0' }, { selector:'#dm-pagination input', mediaMinWidth:'600px', mediaMaxWidth:'749px', height:'36px', padding:'6px', lineHeight:'24px' }, { selector:'#dm-empty', mediaMinWidth:'600px', mediaMaxWidth:'749px', height:'34px', padding:'7px 10px' },
-      { selector:'#dm-detail', mediaMinWidth:'600px', mediaMaxWidth:'749px', flexDirection:'row', gap:'12px', left:'12px', top:'418px', width:'476px', height:'178px', padding:'12px' }, { selector:'#dm-detail-image', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'144px', height:'154px' }, { selector:'#dm-detail-body', mediaMinWidth:'600px', mediaMaxWidth:'749px', gap:'4px', width:'296px' },
+      { selector:'#dm-detail', mediaMinWidth:'600px', mediaMaxWidth:'749px', flexDirection:'row', gap:'12px', left:'12px', top:'418px', width:'476px', height:'auto', padding:'12px' }, { selector:'#dm-detail-image', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'144px', height:'154px' }, { selector:'#dm-detail-body', mediaMinWidth:'600px', mediaMaxWidth:'749px', gap:'4px', width:'296px' },
       { selector:'#dm-detail-title', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'296px', height:'28px', margin:'0', fontSize:'16px', lineHeight:'28px' }, { selector:'#dm-detail-copy', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'296px', height:'48px', margin:'0' },
       { selector:'#dm-detail-meta', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'296px', height:'32px', margin:'0', padding:'4px 0' }, { selector:'#dm-detail-action', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'140px', height:'34px', margin:'0', padding:'5px' },
       { selector:'#dm-shell', mediaMaxWidth:'599px', flexDirection:'column', left:'10px', top:'10px', width:'370px', height:'800px' }, { selector:'#dm-nav', mediaMaxWidth:'599px', flex:'0 0 64px', flexDirection:'row', alignItems:'center', gap:'10px', width:'370px', height:'64px', padding:'12px 10px' },
@@ -201,7 +201,7 @@ export const representativeDataManagementFixture: ParityFixture = {
       { selector:'#dm-toolbar #dm-search', mediaMaxWidth:'599px', flex:'0 0 206px', width:'206px', height:'32px', padding:'4px 8px' }, { selector:'#dm-toolbar #dm-filter', mediaMaxWidth:'599px', flex:'0 0 126px', width:'126px', height:'32px', padding:'4px' }, { selector:'#dm-toolbar #dm-export', mediaMaxWidth:'599px', flex:'0 0 90px', width:'90px', height:'28px', padding:'3px' },
       { selector:'#dm-table-card', mediaMaxWidth:'599px', left:'10px', top:'98px', width:'350px', height:'310px', padding:'12px' }, { selector:'#dm-table', mediaMaxWidth:'599px', width:'376px', height:'132px' }, { selector:'#dm-table th, #dm-table td', mediaMaxWidth:'599px', height:'44px', padding:'10px 8px', fontSize:'11px' },
       { selector:'#dm-pagination', mediaMaxWidth:'599px', height:'36px', padding:'0' }, { selector:'#dm-pagination input', mediaMaxWidth:'599px', height:'36px', padding:'6px', lineHeight:'24px' }, { selector:'#dm-empty', mediaMaxWidth:'599px', height:'34px', padding:'7px 10px' },
-      { selector:'#dm-detail', mediaMaxWidth:'599px', flexDirection:'row', gap:'10px', left:'10px', top:'418px', width:'350px', height:'246px', padding:'12px' }, { selector:'#dm-detail-image', mediaMaxWidth:'599px', width:'112px', height:'96px' }, { selector:'#dm-detail-body', mediaMaxWidth:'599px', gap:'6px', width:'204px' },
+      { selector:'#dm-detail', mediaMaxWidth:'599px', flexDirection:'row', gap:'10px', left:'10px', top:'418px', width:'350px', height:'auto', padding:'12px' }, { selector:'#dm-detail-image', mediaMaxWidth:'599px', width:'112px', height:'96px' }, { selector:'#dm-detail-body', mediaMaxWidth:'599px', gap:'6px', width:'204px' },
       { selector:'#dm-detail-title', mediaMaxWidth:'599px', width:'204px', height:'52px', margin:'0', fontSize:'16px' }, { selector:'#dm-detail-copy', mediaMaxWidth:'599px', width:'204px', height:'72px', margin:'0' }, { selector:'#dm-detail-meta', mediaMaxWidth:'599px', width:'204px', height:'36px', margin:'0', padding:'6px 0' }, { selector:'#dm-detail-action', mediaMaxWidth:'599px', width:'140px', height:'34px', margin:'0', padding:'5px' },
     ],
     root: { children:[{ type:'div', id:'dm-shell', children:[

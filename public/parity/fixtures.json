@@ -496,5 +496,11 @@
     "title": "Flex shrink scaled by base size",
     "category": "flexbox",
     "expectedBehavior": "Negative free space is distributed using each item flex-shrink factor multiplied by its flex base size."
+  },
+  {
+    "id": "standalone-flex-auto-height",
+    "title": "Standalone flex container intrinsic height",
+    "category": "flexbox",
+    "expectedBehavior": "A positioned height-auto flex container sizes its own border box from its in-flow children before laying them out."
   }
 ]

@@ -75,6 +75,13 @@ export class GridService {
         { width, height },
       );
 
+      // Grid track sizing produces a definite used size for the item. Nested
+      // flex or block layout must preserve it instead of re-running auto size.
+      childMesh.metadata = {
+        ...(childMesh.metadata ?? {}),
+        astylarGridAssignedSize: { width, height },
+      };
+
       if (child.children?.length) {
         dom.actions.processChildren(dom, render, child.children, childMesh, styles, child);
       }

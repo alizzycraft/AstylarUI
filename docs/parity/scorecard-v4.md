@@ -31,12 +31,14 @@ This phase removes renderer-specific dimensions from the representative applicat
 | Three-value padding and margin shorthand in intrinsic flex sizing | `top horizontal bottom` shorthand expands to distinct top/bottom values and a shared left/right value during intrinsic measurement. | New `three-value-box-shorthand` fixture: SSIM `0.9525`; `50%` of edges within `2px`; maximum edge error `24.0086px`; intrinsic flex sizing discarded all three padding and margin values. | Add the standard three-value expansion to the flex pre-layout padding and margin parsers, matching the existing general dimension parser. | SSIM `1.0000`; `100%` of edges within `2px`; maximum edge error `0.0468px`; exact geometry/text; runtime clean. | 81 fixtures / 93 renders / three viewports; median SSIM `0.9962`; minimum SSIM `0.9509`; `99.9%` of edges within `2px`; maximum edge error `3.9921px`; exact text; runtime clean. | Accepted |
 | Flex shrink scaled by base size | Negative free space is distributed in proportion to `flex-shrink × flex base size`, so equal shrink factors do not force unequal bases to the same final size. | New `flex-scaled-shrink` fixture: SSIM `0.9925`; `83.3%` of edges within `2px`; maximum edge error `19.2967px`; Astylar made the `200px` and `150px` bases both `135px`. | Replace inverse-factor final-size allocation with scaled shrink factors and subtract each item's proportional share of the deficit from its own flex base. | SSIM `0.9999`; `100%` of edges within `2px`; maximum edge error `0.0282px`; exact geometry/text; runtime clean. | 82 fixtures / 94 renders / three viewports; median SSIM `0.9965`; minimum SSIM `0.9509`; `99.9%` of edges within `2px`; maximum edge error `3.9921px`; exact text; runtime clean. | Accepted |
 
+| Standalone flex container auto height | A positioned height-auto flex container sizes its own border box from its in-flow items before laying them out; definite sizes assigned by an ancestor flex/grid layout remain authoritative. | New `standalone-flex-auto-height` fixture: SSIM `0.9559`; `75%` of edges within `2px`; maximum edge error `488.0004px`; the panel retained the containing block's height. | Apply recursive intrinsic flex height to standalone meshes before child layout, preserve the top border edge, update stored dimensions and border geometry, and mark grid track sizes as definite so nested flex layout cannot replace them. | SSIM `1.0000`; `100%` of edges within `2px`; maximum edge error `0.0306px`; exact geometry/text; runtime clean. | 83 fixtures / 95 renders / three viewports; median SSIM `0.9965`; minimum SSIM `0.9509`; `99.9%` of edges within `2px`; maximum edge error `3.9921px`; exact text; runtime clean; completion thresholds met. | Accepted |
+
 ## Current representative application floor
 
 | Application | Desktop | Tablet | Mobile |
 | --- | --- | --- | --- |
 | Project dashboard | `0.9743` | `0.9802` | `0.9603` |
-| Data management | `0.9668` | `0.9721` | `0.9528` |
+| Data management | `0.9668` | `0.9721` | `0.9527` |
 | Account settings | `0.9609` | `0.9664` | `0.9509` |
 
 All nine representative renders remain above the `0.95` floor after the current content-driven layout repairs.
@@ -45,7 +47,7 @@ The project dashboard title and metadata now derive their heights from typograph
 
 The account settings fieldset now derives its height from its four flex rows, gaps, three-value padding, and border at every viewport. Its bio row and two-row textarea derive their heights from content across desktop, tablet, and mobile; all fieldset, row, label, and textarea height workarounds for this region are gone. All account renders keep every measured edge within `2px` and remain above the representative floor.
 
-The data-management detail body's column height now derives from its title, copy, metadata, action, and responsive gaps at every viewport instead of desktop/tablet/mobile height declarations. Its representative scores and geometry are unchanged; the outer positioned panel remains explicit pending general auto-height sizing for standalone flex containers.
+The data-management detail body and its outer positioned panel now derive their heights from the image, title, copy, metadata, action, responsive flex direction, gaps, and padding at every viewport. All desktop/tablet/mobile height declarations for that detail chain are gone; every measured edge remains within `0.28px`, with exact text and line counts.
 
 ## Verification log
 
@@ -75,10 +77,12 @@ The data-management detail body's column height now derives from its title, copy
 - Full unit suite after three-value shorthand sizing: 98 passing.
 - Focused flex-layout tests after scaled shrink sizing: 2 passing.
 - Full unit suite after scaled shrink sizing: 99 passing.
+- Focused standalone flex and grid-assignment regressions: 2 passing.
+- Full unit suite after standalone flex auto-height sizing: 101 passing.
 - Angular application production build: passing (existing bundle/style budget warnings only).
 - Library TypeScript build: passing.
-- Full non-enforcing parity run: completion thresholds met.
+- Full non-enforcing parity run: 83 fixtures / 95 renders; median SSIM `0.9965`; minimum SSIM `0.9509`; `99.9%` of edges within `2px`; maximum edge error `3.9921px`; exact text; runtime clean; completion thresholds met.
 
 ## Next candidates
 
-The next increment should be chosen from fresh browser/Astylar baselines, prioritizing the behavior that removes the largest amount of representative-app workaround sizing. Likely candidates are intrinsic/fractional grid cross sizes, remaining representative-app region dimensions, and any other fresh browser/Astylar baseline with a larger practical impact. Do not remove an application workaround until its underlying general behavior has focused regression coverage and passes the full corpus.
+The next increment should be chosen from fresh browser/Astylar baselines, prioritizing the behavior that removes the largest amount of representative-app workaround sizing. Likely candidates are percentage flex-item widths against the container content box, intrinsic/fractional grid cross sizes, remaining representative-app region dimensions, and any other fresh browser/Astylar baseline with a larger practical impact. Do not remove an application workaround until its underlying general behavior has focused regression coverage and passes the full corpus.

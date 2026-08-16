@@ -7,6 +7,7 @@ import { Mesh } from '@babylonjs/core';
 import { FlexLayoutService, FlexItem, FlexContainer, FlexLine } from './flex-layout.service';
 import { TextRenderingService } from '../../text/text-rendering.service';
 import { TextStyleParserService } from '../../text/text-style-parser.service';
+import { ElementBorderService } from './element-border.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,8 @@ export class FlexService {
   constructor(
     private flexLayoutService: FlexLayoutService,
     private textRenderingService: TextRenderingService,
-    private textStyleParser: TextStyleParserService
+    private textStyleParser: TextStyleParserService,
+    private borderService?: ElementBorderService,
   ) { }
   public isFlexContainer(render: BabylonRender, parentElement: DOMElement, styles: StyleRule[], dom?: BabylonDOM): boolean {
     // Use elementStyles map if dom context is available for better performance
@@ -52,7 +54,17 @@ export class FlexService {
     }
     // Get container dimensions (in pixels)
     const containerWidth = parentDimensions.width;
-    const containerHeight = parentDimensions.height;
+    const containerHeight = this.resizeStandaloneAutoHeightContainer(
+      parentElement,
+      parentStyle,
+      styles,
+      dom,
+      render,
+      parent,
+      parentDimensions.width,
+      parentDimensions.height,
+      scaleFactor,
+    );
 
     // Get viewport info for debugging
     const viewportWidth = window.innerWidth;
@@ -325,6 +337,63 @@ export class FlexService {
     if (style?.display?.toLowerCase() === 'none') return 'hidden';
     if (style?.position === 'absolute' || style?.position === 'fixed') return 'positioned';
     return 'flow';
+  }
+
+  private resizeStandaloneAutoHeightContainer(
+    element: DOMElement,
+    style: StyleRule,
+    styles: StyleRule[],
+    dom: BabylonDOM,
+    render: BabylonRender,
+    mesh: Mesh,
+    width: number,
+    currentHeight: number,
+    scaleFactor: number,
+  ): number {
+    const hasExplicitHeight = style.height !== undefined && style.height !== 'auto';
+    const hasLayoutAssignedHeight =
+      mesh.metadata?.astylarFlexAssignedSize?.height !== undefined ||
+      mesh.metadata?.astylarGridAssignedSize?.height !== undefined;
+    if (mesh.name === 'root-body' || hasExplicitHeight || hasLayoutAssignedHeight) {
+      return currentHeight;
+    }
+
+    const intrinsicHeight = this.calculateIntrinsicContainerHeight(
+      element,
+      style,
+      styles,
+      dom,
+      render,
+      width,
+    );
+    if (intrinsicHeight === null || Math.abs(intrinsicHeight - currentHeight) <= 0.1) {
+      return currentHeight;
+    }
+
+    const borderRadius = this.borderService?.parseBorderRadius(style.borderRadius) ??
+      (Number.parseFloat(style.borderRadius ?? '0') || 0);
+    const borderWidth = this.borderService?.parseBorderProperties(render, style).width ??
+      (Number.parseFloat(style.borderWidth ?? '0') || 0) * scaleFactor;
+    render.actions.mesh.updateMeshWithBorderRadius(
+      mesh,
+      'rectangle',
+      width * scaleFactor,
+      intrinsicHeight * scaleFactor,
+      borderRadius * scaleFactor,
+      borderWidth,
+    );
+
+    // CSS top positioning fixes the top border edge, so changing auto height
+    // moves only the bottom edge and therefore shifts the mesh center upward.
+    mesh.position.y += ((currentHeight - intrinsicHeight) / 2) * scaleFactor;
+    const stored = dom.context.elementDimensions.get(mesh.name);
+    if (stored) {
+      dom.context.elementDimensions.set(mesh.name, {
+        ...stored,
+        height: intrinsicHeight,
+      });
+    }
+    return intrinsicHeight;
   }
 
   /**
