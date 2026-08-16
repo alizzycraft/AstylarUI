@@ -19,7 +19,7 @@ This scorecard tracks the second parity phase: making ordinary application-orien
 | Visible text and line counts | Exact | Exact | Passing baseline |
 | Runtime errors | 0 | 0 | Passing baseline |
 | Phase 1 regressions | 0 | 0 | Passing baseline |
-| Consecutive final enforcing passes | 0 | 3 | Open |
+| Consecutive final enforcing passes | 3 | 3 | Passing |
 
 ## Coverage balance
 
@@ -99,16 +99,15 @@ The committed 40-fixture Phase 1 suite was rerun before Phase 2 work began. It p
 | Requirement and editability selectors | Required/optional and read-only/read-write selectors were rejected by the pseudo-class parser | Added semantic matching for requirement and editability flags with normal pseudo-class specificity | Fixture SSIM `1.0000`; exact geometry and paint; 76 tests and both builds pass | `fix: support requirement state selectors` |
 | Opacity stacking context | A high-z child inside an opacity-created context overlaps a root sibling at z-index 1 | No renderer change; retained the containment case as a focused paint-order regression fixture | Fixture SSIM `0.9880`; max edge error `0.063px`; root overlay order visually correct | `test: cover opacity stacking contexts` |
 
-## Remaining work
+## Final verification
 
-- Add at least 25 focused Phase 2 fixtures, including at least 10 composed fixtures.
-- Establish three deterministic viewport sizes and responsive assertions.
-- Cover all seven categories with enough focused cases to expose interactions and regressions.
-- Add deterministic interaction checks for applicable transitions, focus, scrolling, and pointer targeting.
-- Continue exercising nested and scaled border paint in composed layering and responsive fixtures; select-specific depth precision is now covered by the settings form.
-- Keep quality, text, clipping, paint-order, runtime, test, and build gates enforcing.
-- Finish with three consecutive clean enforcing passes.
+- Three consecutive `parity:check`-equivalent enforcing runs passed on the unchanged 65-fixture tree.
+- Each pass rendered 71 browser/Astylar comparisons across all three viewport profiles.
+- Final median SSIM: `0.9953`; minimum fixture SSIM: `0.9502`.
+- Final edge accuracy: `99.8%` within 2px; maximum edge delta: `3.9921px`.
+- Visible text and line counts are exact, runtime errors are zero, and all Phase 1 fixtures remain green.
+- The final source-changing increment passed all 76 unit tests, the Angular application build, and the library TypeScript build.
 
-## Next target
+## Phase status
 
-Run three consecutive enforcing passes on the unchanged 65-fixture suite.
+Application Web Parity v2 is complete against the defined scope and thresholds. Future parity work should begin as a separately scoped phase driven by real application usage or newly selected browser behaviors.
