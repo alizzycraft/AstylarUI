@@ -156,7 +156,7 @@ export class FlexService {
         console.log(`[FLEX] Child ${child.id} using default width: ${width}px (no width specified, isRow=${isRow})`);
       }
 
-      if (style?.height) {
+      if (style?.height && style.height !== 'auto') {
         if (style.height.endsWith('px')) {
           height = parseFloat(style.height);
           console.log(`[FLEX] Child ${child.id} using px height: ${height}px`);
@@ -170,9 +170,16 @@ export class FlexService {
           console.log(`[FLEX] Child ${child.id} using numeric height: ${height}px`);
         }
       } else {
-        // Default height if not specified - use a reasonable default
-        height = 50; // Default height in pixels
-        console.log(`[FLEX] Child ${child.id} using default height: ${height}px (no height specified)`);
+        const intrinsicTextHeight = this.calculateIntrinsicTextHeight(
+          child,
+          style,
+          styles,
+          width,
+        );
+        // Non-text content sizing requires descendant measurement and remains
+        // a separate flex-container behavior. Preserve its legacy fallback.
+        height = intrinsicTextHeight ?? 50;
+        console.log(`[FLEX] Child ${child.id} using ${intrinsicTextHeight === null ? 'default' : 'intrinsic text'} height: ${height}px`);
       }
 
       console.log(`[FLEX] Child ${child.id} calculated dimensions: width=${width}px, height=${height}px`);
@@ -342,6 +349,37 @@ export class FlexService {
     console.log(`[FLEX-INTRINSIC] ${element.type}#${element.id}: text="${textToMeasure}", measured=${measuredWidth}px, padding=${totalPadding}px, final=${finalWidth}px`);
 
     return finalWidth;
+  }
+
+  private calculateIntrinsicTextHeight(
+    element: DOMElement,
+    style: StyleRule | undefined,
+    styles: StyleRule[],
+    borderBoxWidth: number,
+  ): number | null {
+    const text = element.type === 'button'
+      ? element.value || element.textContent || 'Button'
+      : element.type === 'input'
+        ? element.value || element.placeholder || ''
+        : element.textContent || '';
+    if (!text.trim()) return null;
+
+    const effectiveStyle = { ...this.getInheritedTextStyle(element, styles), ...style };
+    const textStyle = this.textStyleParser.parseTextProperties(effectiveStyle);
+    const padding = this.parsePadding(style?.padding);
+    const borderWidth = Math.max(0, Number.parseFloat(style?.borderWidth ?? '0') || 0);
+    const contentWidth = Math.max(
+      0,
+      borderBoxWidth - padding.left - padding.right - borderWidth * 2,
+    );
+    const dimensions = this.textRenderingService.calculateTextDimensions(
+      text,
+      textStyle,
+      contentWidth || undefined,
+    );
+    const lineHeight = dimensions.lineHeight ?? textStyle.fontSize * textStyle.lineHeight;
+    return Math.max(dimensions.height, lineHeight) +
+      padding.top + padding.bottom + borderWidth * 2;
   }
 
   /**

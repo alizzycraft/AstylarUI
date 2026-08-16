@@ -67,6 +67,31 @@ describe('FlexService', () => {
       .toBe('hidden');
   });
 
+  it('uses wrapped line height for a height-auto text flex item', () => {
+    const textRendering = {
+      calculateTextDimensions: (_text: string, _style: unknown, maxWidth?: number) => ({
+        width: 70, height: 20, lineHeight: 20, maxWidth,
+      }),
+    };
+    const textStyleParser = {
+      parseTextProperties: () => ({ fontSize: 12, lineHeight: 20 / 12 }),
+    };
+    const service = new FlexService(
+      new FlexLayoutService(),
+      textRendering as never,
+      textStyleParser as never,
+    );
+
+    const height = service['calculateIntrinsicTextHeight'](
+      { type: 'span', id: 'label', textContent: 'Completed' },
+      { selector: '#label', width: '160px', fontSize: '12px', lineHeight: '20px' },
+      [],
+      160,
+    );
+
+    expect(height).toBe(20);
+  });
+
   it('positions the first wrapped line at the cross-axis start', () => {
     const service = new FlexService(new FlexLayoutService(), {} as never, {} as never);
     const item = (id: string, width: number, height: number): FlexItem => ({

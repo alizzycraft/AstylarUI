@@ -68,6 +68,7 @@ import { representativeDataManagementFixture } from './representative-data-manag
 import { representativeAccountSettingsFixture } from './representative-account-settings.fixture';
 import { autoBlockHeightFixture } from './auto-block-height.fixture';
 import { autoWrappedTextFixture } from './auto-wrapped-text.fixture';
+import { flexAutoTextFixture } from './flex-auto-text.fixture';
 import { ParityFixture } from '../parity.types';
 
 const fixtures: readonly ParityFixture[] = [
@@ -140,7 +141,8 @@ const fixtures: readonly ParityFixture[] = [
   representativeDataManagementFixture,
   representativeAccountSettingsFixture,
   autoBlockHeightFixture,
-  autoWrappedTextFixture
+  autoWrappedTextFixture,
+  flexAutoTextFixture
 ];
 
 const fixturesById = new Map(fixtures.map((fixture) => [fixture.id, fixture]));
