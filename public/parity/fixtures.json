@@ -490,5 +490,11 @@
     "title": "Three-value padding and margin shorthand",
     "category": "box-model-units",
     "expectedBehavior": "Intrinsic flex sizing expands three-value padding and margin shorthand as top, horizontal, and bottom values."
+  },
+  {
+    "id": "flex-scaled-shrink",
+    "title": "Flex shrink scaled by base size",
+    "category": "flexbox",
+    "expectedBehavior": "Negative free space is distributed using each item flex-shrink factor multiplied by its flex base size."
   }
 ]

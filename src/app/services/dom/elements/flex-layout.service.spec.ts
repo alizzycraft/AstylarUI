@@ -55,4 +55,44 @@ describe('FlexLayoutService', () => {
     expect(result[1].width).toBeCloseTo(266.667, 3);
     expect(result[0].width + result[1].width + 12).toBeCloseTo(452, 6);
   });
+
+  it('scales flex shrink by each item flex base size', () => {
+    const item = (id: string, basis: number): FlexItem => ({
+      element: { type: 'div', id },
+      style: undefined,
+      width: basis,
+      height: 80,
+      baseWidth: basis,
+      baseHeight: 80,
+      margin: { top: 0, right: 0, bottom: 0, left: 0 },
+      flexGrow: 0,
+      flexShrink: 1,
+      flexBasis: basis,
+      alignSelf: 'auto',
+      order: 0,
+    });
+    const container: FlexContainer = {
+      width: 300,
+      height: 100,
+      padding: { top: 10, right: 10, bottom: 10, left: 10 },
+      flexDirection: 'row',
+      flexWrap: 'nowrap',
+      justifyContent: 'flex-start',
+      alignItems: 'stretch',
+      alignContent: 'stretch',
+      gap: 10,
+      rowGap: 10,
+      columnGap: 10,
+    };
+
+    const result = service.calculateFlexItemSizes(
+      [item('large', 200), item('small', 150)],
+      container,
+      280,
+    );
+
+    expect(result[0].width).toBeCloseTo(154.286, 3);
+    expect(result[1].width).toBeCloseTo(115.714, 3);
+    expect(result[0].width + result[1].width + 10).toBeCloseTo(280, 6);
+  });
 });

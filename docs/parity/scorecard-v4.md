@@ -29,6 +29,7 @@ This phase removes renderer-specific dimensions from the representative applicat
 | Intrinsic main size for nowrap column flex containers | A height-auto nowrap column flex container sums each in-flow item's outer main size and the inter-item gaps; flex-item margins do not collapse. | New `flex-column-auto-height` fixture: SSIM `0.9474`; `62.5%` of edges within `2px`; maximum edge error `7.5063px`; pre-layout applied block margin collapse and omitted the `10px` row gap. | Share recursive in-flow child measurement between intrinsic container modes; for column/column-reverse nowrap flex containers, sum each child's height and vertical margins, then add row gaps and container insets. | SSIM `1.0000`; `100%` of edges within `2px`; maximum edge error `0.0520px`; exact geometry/text; runtime clean. | 79 fixtures / 91 renders / three viewports; median SSIM `0.9962`; minimum SSIM `0.9509`; `99.9%` of edges within `2px`; maximum edge error `3.9921px`; exact text; runtime clean. | Accepted |
 | Complete DOM ancestry during intrinsic pre-layout | Selector matching during recursive measurement uses the same parent tree as final creation, including child/descendant combinators and structural selectors on grandchildren. | New `prelayout-descendant-style` fixture: SSIM `0.9635`; `60%` of edges within `2px`; maximum edge error `2.6179px`; the textarea's child-combinator typography was absent during pre-layout and present during final rendering. | Register the complete JSON DOM ancestry immediately after renderer state is cleared and before any element layout begins; retain per-parent registration during creation as an idempotent safeguard. | SSIM `0.9952`; `100%` of edges within `2px`; maximum edge error `0.0776px`; exact geometry/text; runtime clean. | 80 fixtures / 92 renders / three viewports; median SSIM `0.9962`; minimum SSIM `0.9509`; `99.9%` of edges within `2px`; maximum edge error `3.9921px`; exact text; runtime clean. | Accepted |
 | Three-value padding and margin shorthand in intrinsic flex sizing | `top horizontal bottom` shorthand expands to distinct top/bottom values and a shared left/right value during intrinsic measurement. | New `three-value-box-shorthand` fixture: SSIM `0.9525`; `50%` of edges within `2px`; maximum edge error `24.0086px`; intrinsic flex sizing discarded all three padding and margin values. | Add the standard three-value expansion to the flex pre-layout padding and margin parsers, matching the existing general dimension parser. | SSIM `1.0000`; `100%` of edges within `2px`; maximum edge error `0.0468px`; exact geometry/text; runtime clean. | 81 fixtures / 93 renders / three viewports; median SSIM `0.9962`; minimum SSIM `0.9509`; `99.9%` of edges within `2px`; maximum edge error `3.9921px`; exact text; runtime clean. | Accepted |
+| Flex shrink scaled by base size | Negative free space is distributed in proportion to `flex-shrink × flex base size`, so equal shrink factors do not force unequal bases to the same final size. | New `flex-scaled-shrink` fixture: SSIM `0.9925`; `83.3%` of edges within `2px`; maximum edge error `19.2967px`; Astylar made the `200px` and `150px` bases both `135px`. | Replace inverse-factor final-size allocation with scaled shrink factors and subtract each item's proportional share of the deficit from its own flex base. | SSIM `0.9999`; `100%` of edges within `2px`; maximum edge error `0.0282px`; exact geometry/text; runtime clean. | 82 fixtures / 94 renders / three viewports; median SSIM `0.9965`; minimum SSIM `0.9509`; `99.9%` of edges within `2px`; maximum edge error `3.9921px`; exact text; runtime clean. | Accepted |
 
 ## Current representative application floor
 
@@ -36,13 +37,13 @@ This phase removes renderer-specific dimensions from the representative applicat
 | --- | --- | --- | --- |
 | Project dashboard | `0.9743` | `0.9802` | `0.9603` |
 | Data management | `0.9668` | `0.9721` | `0.9528` |
-| Account settings | `0.9609` | `0.9665` | `0.9509` |
+| Account settings | `0.9609` | `0.9664` | `0.9509` |
 
 All nine representative renders remain above the `0.95` floor after the current content-driven layout repairs.
 
 The project dashboard title and metadata now derive their heights from typography rather than explicit `28px` and `20px` declarations. Its summary labels also derive their responsive one-, two-, or three-line heights without desktop/tablet/mobile height overrides. The summary grid and its nested flex cards no longer declare breakpoint widths or heights; flex stretch, grid tracks/gaps, and intrinsic content determine their used sizes. Workspace, header, main, primary-panel, sidebar, and desktop/tablet activity-panel sizes now derive from the outer shell, flex bases/growth, and cross-axis stretch instead of repeated breakpoint arithmetic. Dashboard SSIM remains unchanged at all three viewports.
 
-The account settings fieldset now derives its height from its four flex rows, gaps, three-value padding, and border at every viewport. Its bio row and two-row textarea derive their desktop/mobile heights from content instead of duplicated `58px` declarations; the intentionally compact `52px` tablet control override remains. All account renders keep every measured edge within `2px` and remain above the representative floor.
+The account settings fieldset now derives its height from its four flex rows, gaps, three-value padding, and border at every viewport. Its bio row and two-row textarea derive their heights from content across desktop, tablet, and mobile; all fieldset, row, label, and textarea height workarounds for this region are gone. All account renders keep every measured edge within `2px` and remain above the representative floor.
 
 ## Verification log
 
@@ -70,10 +71,12 @@ The account settings fieldset now derives its height from its four flex rows, ga
 - Full unit suite after pre-layout ancestry registration: 97 passing.
 - Focused flex tests after three-value shorthand sizing: 14 passing.
 - Full unit suite after three-value shorthand sizing: 98 passing.
+- Focused flex-layout tests after scaled shrink sizing: 2 passing.
+- Full unit suite after scaled shrink sizing: 99 passing.
 - Angular application production build: passing (existing bundle/style budget warnings only).
 - Library TypeScript build: passing.
 - Full non-enforcing parity run: completion thresholds met.
 
 ## Next candidates
 
-The next increment should be chosen from fresh browser/Astylar baselines, prioritizing the behavior that removes the largest amount of representative-app workaround sizing. Likely candidates are proportional flex shrinking in constrained columns (needed before the compact tablet bio override can safely become content-driven), intrinsic/fractional grid cross sizes, and remaining representative-app region dimensions. Do not remove an application workaround until its underlying general behavior has focused regression coverage and passes the full corpus.
+The next increment should be chosen from fresh browser/Astylar baselines, prioritizing the behavior that removes the largest amount of representative-app workaround sizing. Likely candidates are intrinsic/fractional grid cross sizes, remaining representative-app region dimensions, and any other fresh browser/Astylar baseline with a larger practical impact. Do not remove an application workaround until its underlying general behavior has focused regression coverage and passes the full corpus.

@@ -445,8 +445,8 @@ export class FlexLayoutService {
 
   /**
    * Apply flex-shrink to reduce item sizes when space is insufficient
-   * Uses intuitive ratio-based shrinking where flex-shrink values determine relative final sizes
-   * Higher flex-shrink = proportionally smaller final size
+   * Distributes negative free space using scaled flex shrink factors:
+   * flex-shrink multiplied by the item's flex base size.
    * All calculations in screen units (pixels)
    */
   private applyFlexShrink(items: Array<FlexItem & { calculatedFlexBasis: number }>, deficit: number, isRow: boolean): FlexItem[] {
@@ -470,10 +470,16 @@ export class FlexLayoutService {
       }));
     }
     
-    // Simple ratio-based algorithm: distribute space based on inverse flex-shrink ratios
-    // flex-shrink: 1 gets 1 unit, flex-shrink: 3 gets 1/3 unit
-    // This makes flex-shrink: 3 exactly 3 times smaller than flex-shrink: 1
-    
+    const totalShrinkingBasis = shrinkingItems.reduce(
+      (sum, item) => sum + item.calculatedFlexBasis,
+      0,
+    );
+    const shrinkDeficit = Math.max(0, totalShrinkingBasis - spaceForShrinkingItems);
+    const totalScaledShrinkFactor = shrinkingItems.reduce(
+      (sum, item) => sum + Number(item.flexShrink) * item.calculatedFlexBasis,
+      0,
+    );
+
     return items.map(item => {
       const flexShrinkValue = Number(item.flexShrink);
       
@@ -485,24 +491,13 @@ export class FlexLayoutService {
         };
       }
       
-      // Find the minimum flex-shrink value among shrinking items to use as base unit
-      const minFlexShrink = Math.min(...shrinkingItems.map(item => Number(item.flexShrink)));
-      
-      // Calculate relative size: item with min flex-shrink gets the most space
-      // Other items get proportionally less based on their flex-shrink ratio
-      const relativeSize = minFlexShrink / flexShrinkValue;
-      
-      // Calculate total relative units to normalize distribution
-      const totalRelativeUnits = shrinkingItems.reduce((sum, item) => {
-        const itemFlexShrink = Number(item.flexShrink);
-        return sum + (minFlexShrink / itemFlexShrink);
-      }, 0);
-      
-      // Distribute available space proportionally
-      const sizeRatio = relativeSize / totalRelativeUnits;
-      const newSize = spaceForShrinkingItems * sizeRatio;
+      const scaledShrinkFactor = flexShrinkValue * item.calculatedFlexBasis;
+      const shrinkRatio = totalScaledShrinkFactor > 0
+        ? scaledShrinkFactor / totalScaledShrinkFactor
+        : 0;
+      const newSize = item.calculatedFlexBasis - shrinkDeficit * shrinkRatio;
       const identifier = this.describeItem(item);
-      console.log(`[FLEX-SHRINK] ${identifier} flexShrink=${flexShrinkValue} relative=${relativeSize.toFixed(3)} sizeRatio=${sizeRatio.toFixed(3)} -> newSize=${newSize}px`);
+      console.log(`[FLEX-SHRINK] ${identifier} flexShrink=${flexShrinkValue} scaledFactor=${scaledShrinkFactor.toFixed(3)} shrinkRatio=${shrinkRatio.toFixed(3)} -> newSize=${newSize}px`);
       
       return {
         ...item,
