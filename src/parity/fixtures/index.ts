@@ -63,6 +63,7 @@ import { gridMixedTracksFixture } from './grid-mixed-tracks.fixture';
 import { nestedOverflowIntersectionFixture } from './nested-overflow-intersection.fixture';
 import { controlRequirementSelectorsFixture } from './control-requirement-selectors.fixture';
 import { opacityStackingContextFixture } from './opacity-stacking-context.fixture';
+import { representativeProjectDashboardFixture } from './representative-project-dashboard.fixture';
 import { ParityFixture } from '../parity.types';
 
 const fixtures: readonly ParityFixture[] = [
@@ -130,7 +131,8 @@ const fixtures: readonly ParityFixture[] = [
   gridMixedTracksFixture,
   nestedOverflowIntersectionFixture,
   controlRequirementSelectorsFixture,
-  opacityStackingContextFixture
+  opacityStackingContextFixture,
+  representativeProjectDashboardFixture
 ];
 
 const fixturesById = new Map(fixtures.map((fixture) => [fixture.id, fixture]));

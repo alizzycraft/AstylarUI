@@ -391,5 +391,12 @@
     "title": "Opacity stacking-context containment",
     "category": "layering-overlays",
     "expectedBehavior": "Opacity creates a stacking context, so a high-z descendant remains below a root sibling with a higher stacking level."
+  },
+  {
+    "id": "representative-project-dashboard",
+    "title": "Representative project management dashboard",
+    "category": "composed-application",
+    "expectedBehavior": "A realistic project workspace reflows its persistent navigation, toolbar, summary grid, task list, clipped activity panel, controls, and fixed help action across desktop, tablet, and mobile.",
+    "viewportIds": ["desktop", "tablet", "mobile"]
   }
 ]

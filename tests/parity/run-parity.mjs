@@ -38,9 +38,15 @@ try {
   if (!manifestResponse.ok) {
     throw new Error(`Unable to load fixture manifest: ${manifestResponse.status}`);
   }
-  const fixtures = await manifestResponse.json();
+  const manifestFixtures = await manifestResponse.json();
+  const requestedFixtureId = process.env['ASTYLAR_PARITY_FIXTURE'];
+  const fixtures = requestedFixtureId
+    ? manifestFixtures.filter((fixture) => fixture.id === requestedFixtureId)
+    : manifestFixtures;
   if (!Array.isArray(fixtures) || fixtures.length === 0) {
-    throw new Error('Parity fixture manifest is empty');
+    throw new Error(requestedFixtureId
+      ? `Parity fixture "${requestedFixtureId}" was not found in the manifest`
+      : 'Parity fixture manifest is empty');
   }
 
   await mkdir(ARTIFACTS_DIR, { recursive: true });

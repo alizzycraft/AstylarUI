@@ -23,6 +23,8 @@ separate render case while the fixture is counted once.
 
 Set `ASTYLAR_PARITY_BASE_URL` to measure an already-running server. Set
 `ASTYLAR_PARITY_BROWSER_CHANNEL` if the local Chromium channel is not `chrome`.
+Set `ASTYLAR_PARITY_FIXTURE` to a fixture ID for a focused diagnostic run; omit
+it for every enforcing or completion run.
 
 ## Fixture Contract
 
@@ -49,5 +51,6 @@ logic or mask meaningful screenshot regions.
   the parity run.
 
 Generated screenshots and reports are intentionally untracked. Accepted Phase 1
-metrics are maintained in `scorecard.md`; active Application Web Parity v2
-progress is maintained in `scorecard-v2.md`.
+metrics are maintained in `scorecard.md`, completed Application Web Parity v2
+results in `scorecard-v2.md`, and active representative-application parity
+progress in `scorecard-v3.md`.
