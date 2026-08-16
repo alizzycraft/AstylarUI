@@ -418,5 +418,11 @@
     "title": "Content-sized block height",
     "category": "box-model-units",
     "expectedBehavior": "An auto-height block grows from in-flow children, collapsed sibling margins, padding, and borders while auto-width children fill its content box."
+  },
+  {
+    "id": "auto-wrapped-text",
+    "title": "Wrapped text intrinsic height",
+    "category": "typography",
+    "expectedBehavior": "A width-constrained block with auto height grows to contain every wrapped line plus its padding and borders."
   }
 ]

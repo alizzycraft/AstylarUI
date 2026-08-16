@@ -78,6 +78,73 @@ describe('ElementDimensionService', () => {
     expect(result.height).toBe(37);
   });
 
+  it('measures auto text height at the resolved content width', () => {
+    const measuredWidths: Array<number | undefined> = [];
+    const textRendering = {
+      calculateTextDimensions: (_text: string, _style: unknown, maxWidth?: number) => {
+        measuredWidths.push(maxWidth);
+        return {
+          width: maxWidth ?? 640,
+          height: maxWidth === 238 ? 108 : 27,
+          lineHeight: 27,
+        };
+      },
+    };
+    const textStyleParser = {
+      parseTextProperties: () => ({ fontSize: 18, lineHeight: 1.5 }),
+    };
+    const service = new ElementDimensionService(
+      textRendering as never,
+      textStyleParser as never,
+      new DOMAncestryService(),
+    );
+    const parent = { name: 'root-body' } as Mesh;
+    const style: StyleRule = {
+      selector: '#wrapped',
+      display: 'block',
+      boxSizing: 'border-box',
+      width: '280px',
+      height: 'auto',
+      padding: '18px',
+      borderWidth: '3px',
+      fontSize: '18px',
+      lineHeight: '27px',
+    };
+    const dom = {
+      context: {
+        elementDimensions: new Map([
+          ['root-body', {
+            width: 800,
+            height: 600,
+            padding: { top: 0, right: 0, bottom: 0, left: 0 },
+          }],
+        ]),
+        elementStyles: new Map(),
+      },
+    } as unknown as BabylonDOM;
+    const render = {
+      actions: {
+        style: {
+          getElementTypeDefaults: () => ({ display: 'block' }),
+          findStyleForElement: () => style,
+        },
+      },
+    } as unknown as BabylonRender;
+
+    const result = service.calculateDimensions(
+      dom,
+      render,
+      { id: 'wrapped', type: 'p', textContent: 'Text that wraps onto four lines.' },
+      style,
+      parent,
+      [style],
+    );
+
+    expect(measuredWidths).toEqual([undefined, 238]);
+    expect(result.width).toBe(280);
+    expect(result.height).toBe(150);
+  });
+
   it('adds padding and borders outside explicit content-box dimensions', () => {
     const service = new ElementDimensionService({} as never, {} as never, new DOMAncestryService());
     const parent = { name: 'root-body' } as Mesh;

@@ -173,13 +173,25 @@ export class ElementDimensionService {
             console.log(`[DIMENSION-INTRINSIC] ${debugKey} text="${textMetrics.text.trim()}" measuredWidth=${textMetrics.width.toFixed(2)} paddingH=${horizontalPadding} finalWidth=${width.toFixed(2)} source=${widthSource}`);
         }
 
+        // Text height depends on the resolved content width. The initial
+        // unconstrained measurement is still needed for shrink-to-fit widths,
+        // but block text must be measured again at its actual wrapping width.
+        const hasExplicitContentBoxWidth = style?.boxSizing === 'content-box' &&
+            widthValue !== undefined && widthValue !== 'auto';
+        const textContentWidth = hasExplicitContentBoxWidth
+            ? width
+            : Math.max(0, width - layoutInsets.left - layoutInsets.right);
+        const constrainedTextMetrics = textMetrics && textContentWidth > 0
+            ? this.measureTextContent(dom, render, element, style, styles, textContentWidth)
+            : textMetrics;
+
         // Calculate height - percentages are relative to parent's content height
         const heightValue = style?.height;
         if (heightValue !== undefined) {
             if (typeof heightValue === 'string') {
                 if (heightValue === 'auto') {
-                    if (isInlineLevel) {
-                        const intrinsicHeight = this.calculateIntrinsicHeight(element, textMetrics, padding);
+                    if (isInlineLevel || hasTextContent) {
+                        const intrinsicHeight = this.calculateIntrinsicHeight(element, constrainedTextMetrics, layoutInsets);
                         if (intrinsicHeight !== null) {
                             height = intrinsicHeight;
                             heightSource = 'height:auto-intrinsic';
@@ -219,7 +231,7 @@ export class ElementDimensionService {
                 heightSource = `height:${heightValue}`;
             }
         } else if (isInlineLevel || hasTextContent) {
-            const intrinsicHeight = this.calculateIntrinsicHeight(element, textMetrics, padding);
+            const intrinsicHeight = this.calculateIntrinsicHeight(element, constrainedTextMetrics, layoutInsets);
             if (intrinsicHeight !== null) {
                 height = intrinsicHeight;
                 heightSource = isInlineLevel
@@ -228,8 +240,8 @@ export class ElementDimensionService {
             }
         }
 
-        if (textMetrics && heightSource.includes('intrinsic')) {
-            console.log(`[DIMENSION-INTRINSIC] ${debugKey} text="${textMetrics.text.trim()}" measuredHeight=${textMetrics.height.toFixed(2)} paddingV=${verticalPadding} finalHeight=${height.toFixed(2)} source=${heightSource}`);
+        if (constrainedTextMetrics && heightSource.includes('intrinsic')) {
+            console.log(`[DIMENSION-INTRINSIC] ${debugKey} text="${constrainedTextMetrics.text.trim()}" measuredHeight=${constrainedTextMetrics.height.toFixed(2)} paddingV=${verticalPadding} finalHeight=${height.toFixed(2)} source=${heightSource}`);
         }
 
         const minWidth = style?.minWidth ? this.parseLength(`${style.minWidth}`, contentWidth) : undefined;
@@ -510,7 +522,8 @@ export class ElementDimensionService {
         render: BabylonRender,
         element: DOMElement,
         style: StyleRule | undefined,
-        styles: StyleRule[]
+        styles: StyleRule[],
+        maxWidth?: number,
     ): IntrinsicTextMetrics | null {
         let textToMeasure = '';
 
@@ -532,7 +545,11 @@ export class ElementDimensionService {
             ? { ...textStyle, ...cascadedStyle, ...style }
             : (style ? { ...textStyle, ...style } : textStyle);
         const textStyleProperties = this.textStyleParser.parseTextProperties(effectiveStyle);
-        const dimensions = this.textRenderingService.calculateTextDimensions(textToMeasure, textStyleProperties);
+        const dimensions = this.textRenderingService.calculateTextDimensions(
+            textToMeasure,
+            textStyleProperties,
+            maxWidth,
+        );
 
         const measuredLineHeight = dimensions.lineHeight ?? (textStyleProperties.fontSize * textStyleProperties.lineHeight);
         const measuredHeight = Math.max(dimensions.height, measuredLineHeight);
