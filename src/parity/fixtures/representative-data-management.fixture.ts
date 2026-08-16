@@ -64,16 +64,16 @@ export const representativeDataManagementFixture: ParityFixture = {
       #parity-reference-viewport { position:relative; overflow:hidden; background:#dce3ea; font-family:Arial,sans-serif; }
       #dm-shell, #dm-shell * { box-sizing:border-box; }
       #dm-shell { display:flex; position:absolute; left:20px; top:20px; width:760px; height:560px; background:#ffffff; overflow:hidden; }
-      #dm-nav { display:flex; flex:0 0 120px; flex-direction:column; gap:28px; width:120px; height:560px; padding:20px 10px; background:#0f172a; }
+      #dm-nav { display:flex; flex:0 0 120px; flex-direction:column; gap:28px; width:120px; padding:20px 10px; background:#0f172a; }
       #dm-brand { width:100px; height:32px; padding:4px 0; color:#ffffff; font:700 15px/24px Arial,sans-serif; text-align:center; }
       #dm-nav-list { display:flex; flex-direction:column; gap:6px; width:100px; height:132px; }
       #dm-nav-list input { appearance:none; width:100px; height:40px; margin:0; padding:8px; border:0; border-radius:0; background:#0f172a; color:#cbd5e1; font:700 12px/24px Arial,sans-serif; text-align:left; }
       #dm-nav-list input.active { background:#0f766e; color:#ffffff; }
-      #dm-content { display:flex; flex:1 1 auto; flex-direction:column; width:640px; height:560px; background:#f8fafc; }
-      #dm-header { display:flex; flex:0 0 64px; align-items:center; justify-content:space-between; width:640px; height:64px; padding:12px 16px; background:#ffffff; }
+      #dm-content { display:flex; flex:1 1 auto; flex-direction:column; width:640px; background:#f8fafc; }
+      #dm-header { display:flex; flex:0 0 64px; align-items:center; justify-content:space-between; width:640px; padding:12px 16px; background:#ffffff; }
       #dm-title { width:180px; height:40px; margin:0; padding:4px 0; color:#0f172a; font:700 24px/32px Arial,sans-serif; }
       #dm-count { width:96px; height:28px; padding:4px 8px; background:#ccfbf1; color:#115e59; font:700 12px/20px Arial,sans-serif; text-align:center; }
-      #dm-main { position:relative; width:640px; height:496px; padding:12px; background:#eef2f7; overflow:hidden; }
+      #dm-main { position:relative; width:640px; padding:12px; background:#eef2f7; overflow:hidden; }
       #dm-toolbar { display:flex; align-items:center; gap:8px; width:616px; height:52px; padding:6px; background:#ffffff; }
       #dm-toolbar input { appearance:none; height:40px; margin:0; border:1px solid #cbd5e1; border-radius:0; font:400 13px/22px Arial,sans-serif; }
       #dm-search { flex:1 1 auto; width:396px; padding:8px 10px; background:#f8fafc; color:#475569; text-align:left; }
@@ -103,10 +103,10 @@ export const representativeDataManagementFixture: ParityFixture = {
       #dm-detail-action { appearance:none; width:172px; height:40px; margin:0; padding:8px; border:0; border-radius:0; background:#0f766e; color:#ffffff; font:700 13px/24px Arial,sans-serif; text-align:center; }
       @media (min-width:600px) and (max-width:749px) {
         #dm-shell { left:20px; top:20px; width:600px; height:680px; }
-        #dm-nav { flex-basis:100px; width:100px; height:680px; padding:20px 8px; }
+        #dm-nav { flex-basis:100px; width:100px; padding:20px 8px; }
         #dm-brand, #dm-nav-list, #dm-nav-list input { width:84px; } #dm-brand { font-size:13px; }
-        #dm-content { width:500px; height:680px; } #dm-header { width:500px; height:72px; flex-basis:72px; }
-        #dm-main { width:500px; height:608px; }
+        #dm-content { width:500px; } #dm-header { width:500px; flex-basis:72px; }
+        #dm-main { width:500px; }
         #dm-toolbar { width:476px; } #dm-search { width:256px; }
         #dm-table-card { width:476px; height:330px; }
         #dm-table { height:132px; } #dm-table th, #dm-table td { height:44px; padding:10px 8px; }
@@ -122,13 +122,13 @@ export const representativeDataManagementFixture: ParityFixture = {
       }
       @media (max-width:599px) {
         #dm-shell { flex-direction:column; left:10px; top:10px; width:370px; height:800px; }
-        #dm-nav { flex:0 0 64px; flex-direction:row; align-items:center; gap:10px; width:370px; height:64px; padding:12px 10px; }
+        #dm-nav { flex:0 0 64px; flex-direction:row; align-items:center; gap:10px; width:370px; padding:12px 10px; }
         #dm-brand { flex:0 0 92px; width:92px; height:40px; font-size:13px; }
         #dm-nav-list { flex-direction:row; gap:4px; width:248px; height:40px; }
         #dm-nav-list input { width:80px; height:40px; padding:8px 4px; font-size:11px; text-align:center; }
-        #dm-content { width:370px; height:736px; } #dm-header { width:370px; height:72px; flex-basis:72px; padding:12px 10px; }
+        #dm-content { width:370px; } #dm-header { width:370px; flex-basis:72px; padding:12px 10px; }
         #dm-title { width:160px; } #dm-count { width:100px; }
-        #dm-main { width:370px; height:664px; padding:10px; }
+        #dm-main { width:370px; padding:10px; }
         #dm-toolbar { flex-wrap:wrap; gap:6px; width:350px; height:78px; padding:6px; }
         #dm-toolbar #dm-search { flex:0 0 206px; width:206px; height:32px; padding:4px 8px; }
         #dm-toolbar #dm-filter { flex-basis:126px; width:126px; height:32px; padding:4px; }
@@ -151,16 +151,16 @@ export const representativeDataManagementFixture: ParityFixture = {
     styles: [
       { selector:'root', background:'#dce3ea', fontFamily:'Arial, sans-serif' }, { selector:'#dm-shell, #dm-shell *', boxSizing:'border-box' },
       { selector:'#dm-shell', display:'flex', position:'absolute', left:'20px', top:'20px', width:'760px', height:'560px', background:'#ffffff', overflow:'hidden' },
-      { selector:'#dm-nav', display:'flex', flex:'0 0 120px', flexDirection:'column', gap:'28px', width:'120px', height:'560px', padding:'20px 10px', background:'#0f172a' },
+      { selector:'#dm-nav', display:'flex', flex:'0 0 120px', flexDirection:'column', gap:'28px', width:'120px', padding:'20px 10px', background:'#0f172a' },
       { selector:'#dm-brand', width:'100px', height:'32px', padding:'4px 0', color:'#ffffff', fontFamily:'Arial, sans-serif', fontSize:'15px', fontWeight:'700', lineHeight:'24px', textAlign:'center' },
       { selector:'#dm-nav-list', display:'flex', flexDirection:'column', gap:'6px', width:'100px', height:'132px' },
       { selector:'#dm-nav-list input', width:'100px', height:'40px', margin:'0', padding:'8px', borderWidth:'0', borderRadius:'0', background:'#0f172a', color:'#cbd5e1', fontFamily:'Arial, sans-serif', fontSize:'12px', fontWeight:'700', lineHeight:'24px', textAlign:'left' },
       { selector:'#dm-nav-list input.active', background:'#0f766e', color:'#ffffff' },
-      { selector:'#dm-content', display:'flex', flex:'1 1 auto', flexDirection:'column', width:'640px', height:'560px', background:'#f8fafc' },
-      { selector:'#dm-header', display:'flex', flex:'0 0 64px', alignItems:'center', justifyContent:'space-between', width:'640px', height:'64px', padding:'12px 16px', background:'#ffffff' },
+      { selector:'#dm-content', display:'flex', flex:'1 1 auto', flexDirection:'column', width:'640px', background:'#f8fafc' },
+      { selector:'#dm-header', display:'flex', flex:'0 0 64px', alignItems:'center', justifyContent:'space-between', width:'640px', padding:'12px 16px', background:'#ffffff' },
       { selector:'#dm-title', width:'180px', height:'40px', margin:'0', padding:'4px 0', color:'#0f172a', fontFamily:'Arial, sans-serif', fontSize:'24px', fontWeight:'700', lineHeight:'32px' },
       { selector:'#dm-count', width:'96px', height:'28px', padding:'4px 8px', background:'#ccfbf1', color:'#115e59', fontFamily:'Arial, sans-serif', fontSize:'12px', fontWeight:'700', lineHeight:'20px', textAlign:'center' },
-      { selector:'#dm-main', position:'relative', width:'640px', height:'496px', padding:'12px', background:'#eef2f7', overflow:'hidden' },
+      { selector:'#dm-main', position:'relative', width:'640px', padding:'12px', background:'#eef2f7', overflow:'hidden' },
       { selector:'#dm-toolbar', display:'flex', alignItems:'center', gap:'8px', width:'616px', height:'52px', padding:'6px', background:'#ffffff' },
       { selector:'#dm-toolbar input', height:'40px', margin:'0', borderWidth:'1px', borderStyle:'solid', borderColor:'#cbd5e1', borderRadius:'0', fontFamily:'Arial, sans-serif', fontSize:'13px', lineHeight:'22px' },
       { selector:'#dm-search', flex:'1 1 auto', width:'396px', padding:'8px 10px', background:'#f8fafc', color:'#475569', textAlign:'left' },
@@ -185,19 +185,19 @@ export const representativeDataManagementFixture: ParityFixture = {
       { selector:'#dm-detail-meta', display:'flex', justifyContent:'space-between', width:'172px', height:'40px', margin:'0', padding:'8px 0', color:'#334155', fontFamily:'Arial, sans-serif', fontSize:'12px', lineHeight:'24px' },
       { selector:'#dm-detail-meta strong', width:'68px', height:'24px', fontWeight:'700' }, { selector:'#dm-detail-meta span', width:'84px', height:'24px', textAlign:'right' },
       { selector:'#dm-detail-action', width:'172px', height:'40px', margin:'0', padding:'8px', borderWidth:'0', borderRadius:'0', background:'#0f766e', color:'#ffffff', fontFamily:'Arial, sans-serif', fontSize:'13px', fontWeight:'700', lineHeight:'24px', textAlign:'center' },
-      { selector:'#dm-shell', mediaMinWidth:'600px', mediaMaxWidth:'749px', left:'20px', top:'20px', width:'600px', height:'680px' }, { selector:'#dm-nav', mediaMinWidth:'600px', mediaMaxWidth:'749px', flex:'0 0 100px', width:'100px', height:'680px', padding:'20px 8px' },
+      { selector:'#dm-shell', mediaMinWidth:'600px', mediaMaxWidth:'749px', left:'20px', top:'20px', width:'600px', height:'680px' }, { selector:'#dm-nav', mediaMinWidth:'600px', mediaMaxWidth:'749px', flex:'0 0 100px', width:'100px', padding:'20px 8px' },
       { selector:'#dm-brand, #dm-nav-list, #dm-nav-list input', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'84px' }, { selector:'#dm-brand', mediaMinWidth:'600px', mediaMaxWidth:'749px', fontSize:'13px' },
-      { selector:'#dm-content', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'500px', height:'680px' }, { selector:'#dm-header', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'500px', height:'72px', flex:'0 0 72px' }, { selector:'#dm-main', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'500px', height:'608px' },
+      { selector:'#dm-content', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'500px' }, { selector:'#dm-header', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'500px', flex:'0 0 72px' }, { selector:'#dm-main', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'500px' },
       { selector:'#dm-toolbar', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'476px' }, { selector:'#dm-search', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'256px' }, { selector:'#dm-table-card', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'476px', height:'330px' },
       { selector:'#dm-table', mediaMinWidth:'600px', mediaMaxWidth:'749px', height:'132px' }, { selector:'#dm-table th, #dm-table td', mediaMinWidth:'600px', mediaMaxWidth:'749px', height:'44px', padding:'10px 8px' },
       { selector:'#dm-pagination', mediaMinWidth:'600px', mediaMaxWidth:'749px', height:'36px', padding:'0' }, { selector:'#dm-pagination input', mediaMinWidth:'600px', mediaMaxWidth:'749px', height:'36px', padding:'6px', lineHeight:'24px' }, { selector:'#dm-empty', mediaMinWidth:'600px', mediaMaxWidth:'749px', height:'34px', padding:'7px 10px' },
       { selector:'#dm-detail', mediaMinWidth:'600px', mediaMaxWidth:'749px', flexDirection:'row', gap:'12px', left:'12px', top:'418px', width:'476px', height:'auto', padding:'12px' }, { selector:'#dm-detail-image', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'144px', height:'154px' }, { selector:'#dm-detail-body', mediaMinWidth:'600px', mediaMaxWidth:'749px', gap:'4px', width:'296px' },
       { selector:'#dm-detail-title', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'296px', height:'28px', margin:'0', fontSize:'16px', lineHeight:'28px' }, { selector:'#dm-detail-copy', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'296px', height:'48px', margin:'0' },
       { selector:'#dm-detail-meta', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'296px', height:'32px', margin:'0', padding:'4px 0' }, { selector:'#dm-detail-action', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'140px', height:'34px', margin:'0', padding:'5px' },
-      { selector:'#dm-shell', mediaMaxWidth:'599px', flexDirection:'column', left:'10px', top:'10px', width:'370px', height:'800px' }, { selector:'#dm-nav', mediaMaxWidth:'599px', flex:'0 0 64px', flexDirection:'row', alignItems:'center', gap:'10px', width:'370px', height:'64px', padding:'12px 10px' },
+      { selector:'#dm-shell', mediaMaxWidth:'599px', flexDirection:'column', left:'10px', top:'10px', width:'370px', height:'800px' }, { selector:'#dm-nav', mediaMaxWidth:'599px', flex:'0 0 64px', flexDirection:'row', alignItems:'center', gap:'10px', width:'370px', padding:'12px 10px' },
       { selector:'#dm-brand', mediaMaxWidth:'599px', flex:'0 0 92px', width:'92px', height:'40px', fontSize:'13px' }, { selector:'#dm-nav-list', mediaMaxWidth:'599px', flexDirection:'row', gap:'4px', width:'248px', height:'40px' }, { selector:'#dm-nav-list input', mediaMaxWidth:'599px', width:'80px', height:'40px', padding:'8px 4px', fontSize:'11px', textAlign:'center' },
-      { selector:'#dm-content', mediaMaxWidth:'599px', width:'370px', height:'736px' }, { selector:'#dm-header', mediaMaxWidth:'599px', width:'370px', height:'72px', flex:'0 0 72px', padding:'12px 10px' }, { selector:'#dm-title', mediaMaxWidth:'599px', width:'160px' }, { selector:'#dm-count', mediaMaxWidth:'599px', width:'100px' },
-      { selector:'#dm-main', mediaMaxWidth:'599px', width:'370px', height:'664px', padding:'10px' }, { selector:'#dm-toolbar', mediaMaxWidth:'599px', flexWrap:'wrap', gap:'6px', width:'350px', height:'78px', padding:'6px' },
+      { selector:'#dm-content', mediaMaxWidth:'599px', width:'370px' }, { selector:'#dm-header', mediaMaxWidth:'599px', width:'370px', flex:'0 0 72px', padding:'12px 10px' }, { selector:'#dm-title', mediaMaxWidth:'599px', width:'160px' }, { selector:'#dm-count', mediaMaxWidth:'599px', width:'100px' },
+      { selector:'#dm-main', mediaMaxWidth:'599px', width:'370px', padding:'10px' }, { selector:'#dm-toolbar', mediaMaxWidth:'599px', flexWrap:'wrap', gap:'6px', width:'350px', height:'78px', padding:'6px' },
       { selector:'#dm-toolbar #dm-search', mediaMaxWidth:'599px', flex:'0 0 206px', width:'206px', height:'32px', padding:'4px 8px' }, { selector:'#dm-toolbar #dm-filter', mediaMaxWidth:'599px', flex:'0 0 126px', width:'126px', height:'32px', padding:'4px' }, { selector:'#dm-toolbar #dm-export', mediaMaxWidth:'599px', flex:'0 0 90px', width:'90px', height:'28px', padding:'3px' },
       { selector:'#dm-table-card', mediaMaxWidth:'599px', left:'10px', top:'98px', width:'350px', height:'310px', padding:'12px' }, { selector:'#dm-table', mediaMaxWidth:'599px', width:'376px', height:'132px' }, { selector:'#dm-table th, #dm-table td', mediaMaxWidth:'599px', height:'44px', padding:'10px 8px', fontSize:'11px' },
       { selector:'#dm-pagination', mediaMaxWidth:'599px', height:'36px', padding:'0' }, { selector:'#dm-pagination input', mediaMaxWidth:'599px', height:'36px', padding:'6px', lineHeight:'24px' }, { selector:'#dm-empty', mediaMaxWidth:'599px', height:'34px', padding:'7px 10px' },

@@ -40,7 +40,7 @@ This phase removes renderer-specific dimensions from the representative applicat
 | Application | Desktop | Tablet | Mobile |
 | --- | --- | --- | --- |
 | Project dashboard | `0.9743` | `0.9802` | `0.9603` |
-| Data management | `0.9668` | `0.9721` | `0.9527` |
+| Data management | `0.9891` | `0.9898` | `0.9804` |
 | Account settings | `0.9609` | `0.9664` | `0.9509` |
 
 All nine representative renders remain above the `0.95` floor after the current content-driven layout repairs.
@@ -49,7 +49,7 @@ The project dashboard title and metadata now derive their heights from typograph
 
 The account settings fieldset now derives its height from its four flex rows, gaps, three-value padding, and border at every viewport. Its bio row and two-row textarea derive their heights from content across desktop, tablet, and mobile; all fieldset, row, label, and textarea height workarounds for this region are gone. The outer `sidebar → workspace → header/main → form/plan` chain also derives its responsive height from the shell, flex bases/growth, cross-axis stretch, padding, and intrinsic content. Seventeen repeated height declarations have been removed from each of the reference and Astylar representations, leaving the account application predominantly flex/content-driven below its intentional viewport-sized shell. All account renders keep every measured edge within `2px` and remain above the representative floor.
 
-The data-management detail body and its outer positioned panel now derive their heights from the image, title, copy, metadata, action, responsive flex direction, gaps, and padding at every viewport. All desktop/tablet/mobile height declarations for that detail chain are gone; every measured edge remains within `0.28px`, with exact text and line counts.
+The data-management detail body and its outer positioned panel now derive their heights from the image, title, copy, metadata, action, responsive flex direction, gaps, and padding at every viewport. Its major `nav → content → header/main` regions also derive height from the shell and flex layout, removing twelve declarations from each representation across base and responsive rules. All desktop/tablet/mobile height declarations for the detail chain are gone; every measured edge remains within `0.28px`, with exact text and line counts. Removing the redundant outer heights improved desktop/tablet/mobile SSIM from `0.9668 / 0.9721 / 0.9527` to `0.9891 / 0.9898 / 0.9804`.
 
 ## Verification log
 
