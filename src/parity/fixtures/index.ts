@@ -59,6 +59,7 @@ import { composedSidebarWorkspaceFixture } from './composed-sidebar-workspace.fi
 import { composedDataTableFixture } from './composed-data-table.fixture';
 import { composedCheckoutFixture } from './composed-checkout.fixture';
 import { composedNotificationCenterFixture } from './composed-notification-center.fixture';
+import { gridMixedTracksFixture } from './grid-mixed-tracks.fixture';
 import { ParityFixture } from '../parity.types';
 
 const fixtures: readonly ParityFixture[] = [
@@ -122,7 +123,8 @@ const fixtures: readonly ParityFixture[] = [
   composedSidebarWorkspaceFixture,
   composedDataTableFixture,
   composedCheckoutFixture,
-  composedNotificationCenterFixture
+  composedNotificationCenterFixture,
+  gridMixedTracksFixture
 ];
 
 const fixturesById = new Map(fixtures.map((fixture) => [fixture.id, fixture]));

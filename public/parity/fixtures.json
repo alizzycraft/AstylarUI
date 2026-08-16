@@ -367,5 +367,11 @@
     "title": "Composed notification center",
     "category": "composed-application",
     "expectedBehavior": "A compact toolbar and clipped stack of fixed-height notification rows preserve nested flex alignment, ellipsis, status styling, and the overflow boundary."
+  },
+  {
+    "id": "grid-mixed-tracks",
+    "title": "Mixed three-column grid tracks",
+    "category": "grid",
+    "expectedBehavior": "Six items auto-place across two explicit rows with fixed and fractional columns plus independent row and column gaps."
   }
 ]

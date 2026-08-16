@@ -8,11 +8,11 @@ This scorecard tracks the second parity phase: making ordinary application-orien
 
 | Gate | Current | Target | Status |
 | --- | ---: | ---: | --- |
-| Total parity fixtures | 61 | 65 | Open |
-| New Phase 2 fixtures | 21 | 25 | Open |
+| Total parity fixtures | 62 | 65 | Open |
+| New Phase 2 fixtures | 22 | 25 | Open |
 | Composed application/component fixtures | 10 | 10 | Passing |
 | Deterministic viewport sizes | 3 exercised | 3 exercised | Passing |
-| Median SSIM | 0.9952 | >= 0.98 | Passing |
+| Median SSIM | 0.9953 | >= 0.98 | Passing |
 | Minimum fixture SSIM | 0.9502 | >= 0.95 | Passing |
 | Edges within 2 px | 99.7% | >= 95% | Passing baseline |
 | Maximum edge delta | 3.9921 px | <= 5 px | Passing |
@@ -26,7 +26,7 @@ This scorecard tracks the second parity phase: making ordinary application-orien
 | Phase 2 category | Fixtures | Representative coverage | Status |
 | --- | ---: | --- | --- |
 | Selectors and cascade | 5 | Relationship combinators plus first/last structural pseudo-classes | In progress |
-| CSS Grid | 1 | Explicit px/fr tracks, independent gaps, stretch, and row-order auto-placement | In progress |
+| CSS Grid | 2 | Two- and three-column mixed fixed/fr tracks, independent gaps, stretch, and row-order auto-placement | Passing |
 | Responsive behavior | 2 | Viewport-relative geometry and width media conditions across three profiles | In progress |
 | Overflow and scrolling | 1 | Hidden overflow clipping for positioned descendants | In progress |
 | Controls and states | 1 | Enabled, disabled, and checked selector states with element opacity | In progress |
@@ -94,6 +94,7 @@ The committed 40-fixture Phase 1 suite was rerun before Phase 2 work began. It p
 | Composed semantic data table | Header and body groups independently consumed table height, overlapping at SSIM `0.7807` with `112.516px` edge error; after geometry repair, descendant styles and cell surfaces were still absent | Positioned semantic groups cumulatively with local rows, registered manually rendered table ancestry for selectors, and reserved bounded paint depth for section/row/cell surfaces | Fixture SSIM `0.9747`; max edge error `0.123px`; existing table fixtures remain green; suite median `0.9953`; 71 tests and both builds pass | `fix: compose semantic table sections` |
 | Composed checkout form | Baseline SSIM `0.9569`; ID-less summary spans painted no text, and `margin-top: 8px` on the total row was ignored, exceeding the edge gate at `8.006px` | Used generated mesh IDs for ID-less text rendering and applied flex margin longhands over shorthand values | Fixture SSIM `0.9585`; max edge error `0.104px`; exact text; suite median `0.9953`; 73 tests and both builds pass | `fix: support ordinary checkout composition` |
 | Composed notification center | Fixed-height rows shrank by `20px` each despite `flex: 0 0 88px`, producing SSIM `0.8861` and `99.969px` maximum edge error; explicit badge stacking was also discarded inside flex layout | Expanded flex shorthand in the cascade and honored explicit z-index for positioned flex items | Fixture SSIM `0.9502`; max edge error `0.095px`; exact text and clipping; suite median `0.9952`; 75 tests and both builds pass | `fix: preserve fixed notification layout` |
+| Mixed Grid tracks | Three columns with unequal fractional weights and a second explicit row had no unsupported behavior | No renderer change; retained the six-item case as a focused regression fixture | Fixture SSIM `0.9998`; max edge error `0.041px`; all suite thresholds pass | `test: cover mixed grid tracks` |
 
 ## Remaining work
 
@@ -107,4 +108,4 @@ The committed 40-fixture Phase 1 suite was rerun before Phase 2 work began. It p
 
 ## Next target
 
-Add a focused Grid fixture covering mixed fixed and fractional columns, multiple rows, and independent row/column gaps.
+Add a focused nested-overflow fixture covering intersected clipping ancestors.
