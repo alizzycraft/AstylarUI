@@ -405,5 +405,12 @@
     "category": "composed-application",
     "expectedBehavior": "A responsive inventory application preserves its navigation shell, filter toolbar, semantic fixed-column table, pagination, clipped narrow representation, local image, and positioned detail panel.",
     "viewportIds": ["desktop", "tablet", "mobile"]
+  },
+  {
+    "id": "representative-account-settings",
+    "title": "Representative account settings application",
+    "category": "composed-application",
+    "expectedBehavior": "A responsive account workspace preserves semantic form controls, state selectors, section navigation, a plan summary, overflow boundaries, and a deterministic confirmation modal with backdrop.",
+    "viewportIds": ["desktop", "tablet", "mobile"]
   }
 ]

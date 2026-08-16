@@ -13,6 +13,7 @@ import { TextLayoutMetrics, TextStyleProperties, StoredTextLayoutMetrics } from 
 import { TextInteractionRegistryService } from '../../dom/interaction/text-interaction-registry.service';
 import { TextSelectionControllerService } from '../../dom/interaction/text-selection-controller.service';
 import { Subscription } from 'rxjs';
+import { CONTROL_CONTENT_Z_OFFSET } from '../render-depth.constants';
 
 /**
  * Service responsible for managing text input fields
@@ -331,9 +332,9 @@ export class TextInputManager {
 
             textMesh.parent = textInput.mesh;
             textMesh.position.y = -2 * pixelScale;
-            textMesh.position.z = -0.15; // Slightly in front
+            textMesh.position.z = CONTROL_CONTENT_Z_OFFSET;
             textMesh.isPickable = true;
-            textMesh.renderingGroupId = 2; // Ensure it renders on top
+            textMesh.renderingGroupId = 0;
 
             // Rotate the text mesh 180 degrees around the Z axis to fix horizontal flipping without affecting vertical orientation
             // Only apply this rotation to text input meshes
@@ -362,9 +363,9 @@ export class TextInputManager {
 
                 clippedTextMesh.parent = textInput.mesh;
                 clippedTextMesh.position.y = -2 * pixelScale;
-                clippedTextMesh.position.z = -0.15;
+                clippedTextMesh.position.z = CONTROL_CONTENT_Z_OFFSET;
                 clippedTextMesh.isPickable = true;
-                clippedTextMesh.renderingGroupId = 2;
+                clippedTextMesh.renderingGroupId = 0;
                 clippedTextMesh.rotation.z = Math.PI;
 
                 textInput.textMesh = clippedTextMesh;

@@ -55,6 +55,18 @@ describe('FlexService', () => {
     })).toEqual({ flexGrow: 2, flexShrink: 0, flexBasis: '88px' });
   });
 
+  it('keeps positioned and hidden children out of flex sizing', () => {
+    const service = new FlexService({} as never, {} as never, {} as never);
+
+    expect(service['classifyFlexChild']({ selector: '#normal' })).toBe('flow');
+    expect(service['classifyFlexChild']({ selector: '#legend', position: 'absolute' }))
+      .toBe('positioned');
+    expect(service['classifyFlexChild']({ selector: '#overlay', position: 'fixed' }))
+      .toBe('positioned');
+    expect(service['classifyFlexChild']({ selector: '#omitted', display: 'none' }))
+      .toBe('hidden');
+  });
+
   it('positions the first wrapped line at the cross-axis start', () => {
     const service = new FlexService(new FlexLayoutService(), {} as never, {} as never);
     const item = (id: string, width: number, height: number): FlexItem => ({

@@ -1242,7 +1242,11 @@ export class BabylonMeshService {
 
       // Configure mesh properties for text rendering
       textPlane.billboardMode = Mesh.BILLBOARDMODE_NONE;
-      textPlane.renderingGroupId = 1; // Render after background elements
+      // Keep text in the normal render group so depth testing and CSS-like
+      // stacking contexts can occlude it (for example, behind a modal).
+      // The small local Z offset applied by the caller is sufficient to keep
+      // the text in front of its own element background.
+      textPlane.renderingGroupId = 0;
 
       console.log(`✅ Created text mesh: ${name} with texture material`);
       return textPlane;

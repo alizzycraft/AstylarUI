@@ -104,10 +104,24 @@ export class FlexService {
 
     console.log(`[FLEX-GAP] FlexContainer created with gap integration: gap=${flexContainer.gap}px, rowGap=${flexContainer.rowGap}px, columnGap=${flexContainer.columnGap}px`);
 
+    const childStyles = new Map<DOMElement, StyleRule | undefined>();
+    for (const child of children) {
+      childStyles.set(
+        child,
+        render.actions.style.findStyleForElement(child, styles, dom.context.elementStyles),
+      );
+    }
+    const flowChildren = children.filter(
+      child => this.classifyFlexChild(childStyles.get(child)) === 'flow',
+    );
+    const positionedChildren = children.filter(
+      child => this.classifyFlexChild(childStyles.get(child)) === 'positioned',
+    );
+
     // Get child items with their styles and dimensions - using FlexLayoutService
-    const childItems: FlexItem[] = children.map(child => {
+    const childItems: FlexItem[] = flowChildren.map(child => {
       // Use findStyleForElement to properly resolve styles including type defaults, classes, and IDs
-      const style = render.actions.style.findStyleForElement(child, styles, dom.context.elementStyles);
+      const style = childStyles.get(child);
       const margin = this.parseMarginBox(style);
       console.log(`[FLEX] Child ${child.id || child.type} margin: top=${margin.top}, right=${margin.right}, bottom=${margin.bottom}, left=${margin.left}`);
       console.log(`[FLEX] Child ${child.id || child.type} height property: "${style?.height}"`);
@@ -138,7 +152,7 @@ export class FlexService {
         // Default width if not specified and not an intrinsic element
         // In a row, divide space equally. In a column, use full width.
         const isRow = flexDirection === 'row' || flexDirection === 'row-reverse';
-        width = isRow ? (containerWidth / children.length) : containerWidth;
+        width = isRow ? (containerWidth / flowChildren.length) : containerWidth;
         console.log(`[FLEX] Child ${child.id} using default width: ${width}px (no width specified, isRow=${isRow})`);
       }
 
@@ -276,7 +290,20 @@ export class FlexService {
       }
     });
 
+    for (const child of positionedChildren) {
+      const childMesh = dom.actions.createElement(dom, render, child, parent, styles);
+      if (child.children?.length) {
+        dom.actions.processChildren(dom, render, child.children, childMesh, styles, child);
+      }
+    }
+
     console.log(`[FLEX] Finished processing all flex children for parent:`, parent.name);
+  }
+
+  private classifyFlexChild(style: StyleRule | undefined): 'flow' | 'positioned' | 'hidden' {
+    if (style?.display?.toLowerCase() === 'none') return 'hidden';
+    if (style?.position === 'absolute' || style?.position === 'fixed') return 'positioned';
+    return 'flow';
   }
 
   /**

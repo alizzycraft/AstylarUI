@@ -65,6 +65,7 @@ import { controlRequirementSelectorsFixture } from './control-requirement-select
 import { opacityStackingContextFixture } from './opacity-stacking-context.fixture';
 import { representativeProjectDashboardFixture } from './representative-project-dashboard.fixture';
 import { representativeDataManagementFixture } from './representative-data-management.fixture';
+import { representativeAccountSettingsFixture } from './representative-account-settings.fixture';
 import { ParityFixture } from '../parity.types';
 
 const fixtures: readonly ParityFixture[] = [
@@ -134,7 +135,8 @@ const fixtures: readonly ParityFixture[] = [
   controlRequirementSelectorsFixture,
   opacityStackingContextFixture,
   representativeProjectDashboardFixture,
-  representativeDataManagementFixture
+  representativeDataManagementFixture,
+  representativeAccountSettingsFixture
 ];
 
 const fixturesById = new Map(fixtures.map((fixture) => [fixture.id, fixture]));

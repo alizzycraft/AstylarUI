@@ -6,6 +6,7 @@ import { StyleRule } from '../../../types/style-rule';
 import { CheckboxInput, RadioInput, InputType, ValidationState } from '../../../types/input-types';
 import { TextRenderingService } from '../../text/text-rendering.service';
 import { BabylonMeshService } from '../../babylon-mesh.service';
+import { CONTROL_CONTENT_Z_OFFSET } from '../render-depth.constants';
 
 @Injectable({
     providedIn: 'root'
@@ -255,7 +256,7 @@ export class CheckboxManager {
         }, scene);
 
         checkMark.parent = checkbox.mesh;
-        checkMark.position.z = -0.1; // In front of checkbox
+        checkMark.position.z = CONTROL_CONTENT_Z_OFFSET;
 
         // Create material
         const material = new BABYLON.StandardMaterial(`checkMarkMaterial_${checkbox.element.id}`, scene);
@@ -268,7 +269,7 @@ export class CheckboxManager {
 
         checkMark.isPickable = true;
         checkMark.isVisible = checkbox.checked;
-        checkMark.renderingGroupId = 2; // Ensure visibility on top
+        checkMark.renderingGroupId = 0;
 
         // Add interaction to checkMark to ensure it captures clicks
         checkMark.actionManager = new BABYLON.ActionManager(scene);
@@ -306,7 +307,7 @@ export class CheckboxManager {
         // Let's try setting rotation to Zero relative to parent, because parent is already facing camera!
         indicator.rotation.x = 0;
         indicator.parent = radio.mesh;
-        indicator.position.z = -0.1; // In front of radio button
+        indicator.position.z = CONTROL_CONTENT_Z_OFFSET;
 
         // Create material
         const material = new BABYLON.StandardMaterial(`radioIndicatorMaterial_${radio.element.id}`, scene);
@@ -316,7 +317,7 @@ export class CheckboxManager {
 
         indicator.isPickable = true;
         indicator.isVisible = radio.checked;
-        indicator.renderingGroupId = 2; // Ensure visibility on top
+        indicator.renderingGroupId = 0;
 
         // Add interaction to indicator to ensure it captures clicks
         indicator.actionManager = new BABYLON.ActionManager(scene);

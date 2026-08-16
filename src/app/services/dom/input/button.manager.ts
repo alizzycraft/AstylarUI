@@ -7,6 +7,7 @@ import { BabylonRender } from '../interfaces/render.types';
 import { TextRenderingService } from '../../text/text-rendering.service';
 import { ElementBorderService } from '../elements/element-border.service';
 import { BabylonMeshService } from '../../babylon-mesh.service';
+import { CONTROL_CONTENT_Z_OFFSET } from '../render-depth.constants';
 
 /**
  * Service responsible for managing button elements
@@ -287,7 +288,7 @@ export class ButtonManager {
 
             labelPlane.parent = button.mesh;
             labelPlane.position.y = -2 * scale;
-            labelPlane.position.z = -0.15; // Slightly in front
+            labelPlane.position.z = CONTROL_CONTENT_Z_OFFSET;
             labelPlane.isPickable = false;
             const textAlign = style.textAlign?.toLowerCase();
             const buttonWidth = button.mesh.getBoundingInfo().boundingBox.extendSize.x * 2;
@@ -309,7 +310,7 @@ export class ButtonManager {
             }, render.scene);
 
             labelPlane.parent = button.mesh;
-            labelPlane.position.z = -0.06;
+            labelPlane.position.z = CONTROL_CONTENT_Z_OFFSET;
 
             const material = new BABYLON.StandardMaterial(`labelMaterial_${button.element.id}`, render.scene);
             material.diffuseColor = BABYLON.Color3.Black();

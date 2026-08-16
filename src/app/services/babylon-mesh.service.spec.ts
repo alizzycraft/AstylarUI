@@ -1,4 +1,4 @@
-import { Color3, Mesh, NullEngine, Scene, Vector3 } from '@babylonjs/core';
+import { Color3, DynamicTexture, Mesh, NullEngine, Scene, Vector3 } from '@babylonjs/core';
 
 import { BabylonMeshService } from './babylon-mesh.service';
 
@@ -31,6 +31,22 @@ describe('BabylonMeshService', () => {
       expect(material.emissiveColor.equals(color)).toBeTrue();
       expect(material.disableLighting).toBeTrue();
       expect(material.backFaceCulling).toBeFalse();
+
+      engine.dispose();
+    });
+  });
+
+  describe('createTextMesh', () => {
+    it('keeps text in the depth-tested render group for stacking-context occlusion', () => {
+      const engine = new NullEngine();
+      const scene = new Scene(engine);
+      const service = new BabylonMeshService();
+      service.initialize(scene);
+      const texture = new DynamicTexture('text', { width: 16, height: 16 }, scene);
+
+      const mesh = service.createTextMesh('text-plane', texture, 1, 1);
+
+      expect(mesh.renderingGroupId).toBe(0);
 
       engine.dispose();
     });
