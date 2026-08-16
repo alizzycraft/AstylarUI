@@ -991,10 +991,16 @@ export class BabylonMeshService {
 
       // If there's a border width, update border meshes too
       if (borderWidth > 0) {
-        const borderMeshName = `${meshName}_border_frame`;
-        const borderMesh = targetScene.getMeshByName(
-          borderMeshName,
-        ) as Mesh | null;
+        const borderMeshNames = [
+          `${meshName}_border_frame`,
+          `${meshName}-border_border_frame`,
+        ];
+        const borderMeshName = borderMeshNames.find((name) =>
+          targetScene.getMeshByName(name)
+        );
+        const borderMesh = borderMeshName
+          ? targetScene.getMeshByName(borderMeshName) as Mesh | null
+          : null;
 
         if (borderMesh) {
           // Single border frame mesh - recreate it with new border radius

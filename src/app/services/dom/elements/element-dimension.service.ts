@@ -127,7 +127,7 @@ export class ElementDimensionService {
         if (widthValue !== undefined) {
             if (typeof widthValue === 'string') {
                 if (widthValue === 'auto') {
-                    if (isInlineLevel || hasTextContent || element.type === 'button' || element.type === 'input') {
+                    if (isInlineLevel || element.type === 'button' || element.type === 'input') {
                         width = this.calculateIntrinsicWidth(element, style, textMetrics, padding);
                         widthSource = 'width:auto-intrinsic';
                     }

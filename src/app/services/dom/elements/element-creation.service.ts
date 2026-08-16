@@ -923,6 +923,7 @@ export class ElementCreationService {
       let parentWidth = 0;
       let paddingTop = 0;
       let paddingLeft = 0;
+      let paddingBottom = 0;
 
       if (dom.context.elementDimensions.has(parent.name)) {
         const dims = dom.context.elementDimensions.get(parent.name)!;
@@ -930,6 +931,7 @@ export class ElementCreationService {
         parentWidth = dims.width;
         paddingTop = dims.padding.top;
         paddingLeft = dims.padding.left;
+        paddingBottom = dims.padding.bottom;
       } else {
         const scale = render.actions.camera.getPixelToWorldScale();
         const bounds = parent.getBoundingInfo().boundingBox;
@@ -939,9 +941,21 @@ export class ElementCreationService {
         paddingLeft = 0;
       }
 
-      let cursorY = parentHeight / 2 - paddingTop;
-      let previousMarginBottom = 0;
       const scaleFactor = render.actions.camera.getPixelToWorldScale();
+
+      type BlockPlacement = {
+        child: DOMElement;
+        mesh: Mesh;
+        style: StyleRule | undefined;
+        width: number;
+        height: number;
+        margin: { top: number; right: number; bottom: number; left: number };
+        top: number;
+      };
+
+      const placements: BlockPlacement[] = [];
+      const positionedChildren: DOMElement[] = [];
+      const flowItems: Array<{ height: number; marginTop: number; marginBottom: number }> = [];
 
       for (let i = 0; i < children.length; i++) {
         const child = children[i];
@@ -965,6 +979,14 @@ export class ElementCreationService {
           continue;
         }
 
+        const isRemovedFromFlow =
+          resolvedStyle?.position === "absolute" || resolvedStyle?.position === "fixed";
+
+        if (isRemovedFromFlow) {
+          positionedChildren.push(child);
+          continue;
+        }
+
         console.log(
           `[ElementCreation] Creating child ${child.type}#${child.id}`,
         );
@@ -976,25 +998,17 @@ export class ElementCreationService {
           styles,
         );
 
-        const isRemovedFromFlow =
-          resolvedStyle?.position === "absolute" || resolvedStyle?.position === "fixed";
-
-        if (isRemovedFromFlow) {
-          console.log(
-            `[ElementCreation] Skipping stacking for out-of-flow element: ${child.id || child.type}`,
+        // A nested auto-height block must resolve its own descendants before
+        // this parent uses its final border-box height in normal flow.
+        if (child.children && child.children.length > 0) {
+          this.processChildren(
+            dom,
+            render,
+            child.children,
+            childMesh,
+            styles,
+            child,
           );
-
-          if (child.children && child.children.length > 0) {
-            this.processChildren(
-              dom,
-              render,
-              child.children,
-              childMesh,
-              styles,
-              child,
-            );
-          }
-          continue;
         }
 
         let childWidth = 0;
@@ -1017,55 +1031,97 @@ export class ElementCreationService {
           dom.context.elementStyles,
         );
         const marginBox = this.parseMarginBox(childResolvedStyle);
-        const marginTop = marginBox.top;
-        const marginBottom = marginBox.bottom;
-        let childCenterX =
-          -parentWidth / 2 + paddingLeft + marginBox.left + childWidth / 2;
+        flowItems.push({
+          height: childHeight,
+          marginTop: marginBox.top,
+          marginBottom: marginBox.bottom,
+        });
+        placements.push({
+          child,
+          mesh: childMesh,
+          style: childResolvedStyle,
+          width: childWidth,
+          height: childHeight,
+          margin: marginBox,
+          top: 0,
+        });
+      }
 
-        cursorY -= this.collapseVerticalMargins(
-          previousMarginBottom,
-          marginTop,
+      const flow = this.calculateBlockFlow(paddingTop, paddingBottom, flowItems);
+      placements.forEach((placement, index) => placement.top = flow.tops[index]);
+
+      const parentStyle = parentElement
+        ? render.actions.style.findStyleForElement(
+            parentElement,
+            styles,
+            dom.context.elementStyles,
+          )
+        : undefined;
+      const hasExplicitHeight = parentStyle?.height !== undefined &&
+        parentStyle.height !== 'auto';
+
+      if (
+        parentElement &&
+        parent.name !== 'root-body' &&
+        !hasExplicitHeight &&
+        Math.abs(flow.height - parentHeight) > 0.1
+      ) {
+        const borderRadiusPx = this.borderService.parseBorderRadius(parentStyle?.borderRadius);
+        const border = this.borderService.parseBorderProperties(render, parentStyle);
+        render.actions.mesh.updateMeshWithBorderRadius(
+          parent,
+          'rectangle',
+          parentWidth * scaleFactor,
+          flow.height * scaleFactor,
+          borderRadiusPx * scaleFactor,
+          border.width,
         );
 
-        let childCenterY = cursorY - childHeight / 2;
+        // Preserve the element's top border edge while its auto height changes.
+        parent.position.y += ((parentHeight - flow.height) / 2) * scaleFactor;
+        parentHeight = flow.height;
+        const stored = dom.context.elementDimensions.get(parent.name);
+        if (stored) {
+          dom.context.elementDimensions.set(parent.name, {
+            ...stored,
+            height: flow.height,
+          });
+        }
+      }
 
-        if (resolvedStyle?.position === "relative") {
-          const fontSize = this.parseFontSize(resolvedStyle.fontSize);
-          if (resolvedStyle.left !== undefined) {
-            childCenterX += this.parseLengthValue(resolvedStyle.left, fontSize);
-          } else if (resolvedStyle.right !== undefined) {
-            childCenterX -= this.parseLengthValue(resolvedStyle.right, fontSize);
+      for (const placement of placements) {
+        const fontSize = this.parseFontSize(placement.style?.fontSize);
+        let childCenterX = -parentWidth / 2 + paddingLeft +
+          placement.margin.left + placement.width / 2;
+        let childCenterY = parentHeight / 2 - placement.top - placement.height / 2;
+
+        if (placement.style?.position === 'relative') {
+          if (placement.style.left !== undefined) {
+            childCenterX += this.parseLengthValue(placement.style.left, fontSize);
+          } else if (placement.style.right !== undefined) {
+            childCenterX -= this.parseLengthValue(placement.style.right, fontSize);
           }
-          if (resolvedStyle.top !== undefined) {
-            childCenterY -= this.parseLengthValue(resolvedStyle.top, fontSize);
-          } else if (resolvedStyle.bottom !== undefined) {
-            childCenterY += this.parseLengthValue(resolvedStyle.bottom, fontSize);
+          if (placement.style.top !== undefined) {
+            childCenterY -= this.parseLengthValue(placement.style.top, fontSize);
+          } else if (placement.style.bottom !== undefined) {
+            childCenterY += this.parseLengthValue(placement.style.bottom, fontSize);
           }
         }
 
         render.actions.mesh.positionTextMesh(
-          childMesh,
+          placement.mesh,
           childCenterX * scaleFactor,
           childCenterY * scaleFactor,
-          childMesh.position.z,
+          placement.mesh.position.z,
         );
+      }
 
-        console.log(
-          `[Layout] Stacked ${child.id} at Y=${childCenterY} (Height: ${childHeight}, Margins: ${marginTop}/${marginBottom})`,
-        );
-
-        cursorY -= childHeight;
-        previousMarginBottom = marginBottom;
-
-        if (child.children && child.children.length > 0) {
-          this.processChildren(
-            dom,
-            render,
-            child.children,
-            childMesh,
-            styles,
-            child,
-          );
+      // Resolve absolute/fixed descendants after the final containing-block
+      // height is known. They do not contribute to auto height.
+      for (const child of positionedChildren) {
+        const childMesh = this.createElement(dom, render, child, parent, styles);
+        if (child.children?.length) {
+          this.processChildren(dom, render, child.children, childMesh, styles, child);
         }
       }
       console.log(
@@ -1077,6 +1133,29 @@ export class ElementCreationService {
         error,
       );
     }
+  }
+
+  private calculateBlockFlow(
+    paddingTop: number,
+    paddingBottom: number,
+    items: Array<{ height: number; marginTop: number; marginBottom: number }>,
+  ): { height: number; tops: number[] } {
+    const tops: number[] = [];
+    let cursor = paddingTop;
+    let previousMarginBottom = 0;
+
+    for (const item of items) {
+      cursor += this.collapseVerticalMargins(previousMarginBottom, item.marginTop);
+      tops.push(cursor);
+      cursor += item.height;
+      previousMarginBottom = item.marginBottom;
+    }
+
+    const height = Math.max(
+      paddingTop + paddingBottom,
+      cursor + previousMarginBottom + paddingBottom,
+    );
+    return { height, tops };
   }
 
   private parseMarginBox(style: StyleRule | undefined): {

@@ -412,5 +412,11 @@
     "category": "composed-application",
     "expectedBehavior": "A responsive account workspace preserves semantic form controls, state selectors, section navigation, a plan summary, overflow boundaries, and a deterministic confirmation modal with backdrop.",
     "viewportIds": ["desktop", "tablet", "mobile"]
+  },
+  {
+    "id": "auto-block-height",
+    "title": "Content-sized block height",
+    "category": "box-model-units",
+    "expectedBehavior": "An auto-height block grows from in-flow children, collapsed sibling margins, padding, and borders while auto-width children fill its content box."
   }
 ]

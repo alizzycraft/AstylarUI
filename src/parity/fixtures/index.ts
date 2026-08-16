@@ -66,6 +66,7 @@ import { opacityStackingContextFixture } from './opacity-stacking-context.fixtur
 import { representativeProjectDashboardFixture } from './representative-project-dashboard.fixture';
 import { representativeDataManagementFixture } from './representative-data-management.fixture';
 import { representativeAccountSettingsFixture } from './representative-account-settings.fixture';
+import { autoBlockHeightFixture } from './auto-block-height.fixture';
 import { ParityFixture } from '../parity.types';
 
 const fixtures: readonly ParityFixture[] = [
@@ -136,7 +137,8 @@ const fixtures: readonly ParityFixture[] = [
   opacityStackingContextFixture,
   representativeProjectDashboardFixture,
   representativeDataManagementFixture,
-  representativeAccountSettingsFixture
+  representativeAccountSettingsFixture,
+  autoBlockHeightFixture
 ];
 
 const fixturesById = new Map(fixtures.map((fixture) => [fixture.id, fixture]));

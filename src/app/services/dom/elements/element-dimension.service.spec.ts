@@ -40,6 +40,7 @@ describe('ElementDimensionService', () => {
     const style: StyleRule = {
       selector: 'h1',
       display: 'block',
+      width: 'auto',
       fontSize: '32px',
       lineHeight: 'normal',
     };
