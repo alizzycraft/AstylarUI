@@ -477,17 +477,19 @@ export class ElementDimensionService {
         padding: { top: number; right: number; bottom: number; left: number }
     ): number {
         const totalPadding = (padding.left || 0) + (padding.right || 0);
+        const borderWidth = Math.max(0, Number.parseFloat(style?.borderWidth ?? '0') || 0);
+        const isTextInput = element.type === 'input' && !this.isButtonLikeInput(element);
 
         let measuredWidth = textMetrics?.width ?? 0;
 
-        if (!textMetrics && element.type === 'input') {
+        if (!textMetrics && isTextInput) {
             // Ensure inputs still have a reasonable default width when no content is present
-            measuredWidth = Math.max(measuredWidth, 170 - totalPadding);
+            measuredWidth = Math.max(measuredWidth, 170 - totalPadding - borderWidth * 2);
         }
 
-        let finalWidth = measuredWidth + totalPadding;
+        let finalWidth = measuredWidth + totalPadding + borderWidth * 2;
 
-        if (element.type === 'input') {
+        if (isTextInput) {
             finalWidth = Math.max(finalWidth, 170);
         }
 
@@ -496,6 +498,11 @@ export class ElementDimensionService {
         }
 
         return finalWidth;
+    }
+
+    private isButtonLikeInput(element: DOMElement): boolean {
+        return element.type === 'input' &&
+            ['button', 'submit', 'reset'].includes((element.inputType ?? '').toLowerCase());
     }
 
     private calculateIntrinsicHeight(

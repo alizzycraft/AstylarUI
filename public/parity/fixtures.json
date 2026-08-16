@@ -436,5 +436,11 @@
     "title": "Max-width constrained intrinsic text height",
     "category": "box-model-units",
     "expectedBehavior": "An auto-height text block wraps and grows using its final max-width-constrained content box."
+  },
+  {
+    "id": "intrinsic-input-button",
+    "title": "Content-sized input button",
+    "category": "forms-interactive",
+    "expectedBehavior": "An appearance-none input button with auto dimensions sizes its border box from its label, line height, padding, and borders."
   }
 ]

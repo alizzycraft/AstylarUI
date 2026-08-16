@@ -92,6 +92,32 @@ describe('FlexService', () => {
     expect(height).toBe(20);
   });
 
+  it('content-sizes a button-like input while preserving text-input minimum width', () => {
+    const textRendering = {
+      calculateTextDimensions: () => ({ width: 76, height: 20, lineHeight: 20 }),
+    };
+    const textStyleParser = {
+      parseTextProperties: () => ({ fontSize: 14, lineHeight: 20 / 14 }),
+    };
+    const service = new FlexService(
+      new FlexLayoutService(),
+      textRendering as never,
+      textStyleParser as never,
+    );
+    const style = { selector: '#control', padding: '10px 16px', borderWidth: '2px' };
+
+    expect(service['calculateIntrinsicWidth'](
+      { type: 'input', inputType: 'button', id: 'control', value: 'Create item' },
+      style,
+      [style],
+    )).toBe(112);
+    expect(service['calculateIntrinsicWidth'](
+      { type: 'input', inputType: 'text', id: 'control', value: 'Create item' },
+      style,
+      [style],
+    )).toBe(170);
+  });
+
   it('positions the first wrapped line at the cross-axis start', () => {
     const service = new FlexService(new FlexLayoutService(), {} as never, {} as never);
     const item = (id: string, width: number, height: number): FlexItem => ({

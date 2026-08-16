@@ -70,6 +70,7 @@ import { autoBlockHeightFixture } from './auto-block-height.fixture';
 import { autoWrappedTextFixture } from './auto-wrapped-text.fixture';
 import { flexAutoTextFixture } from './flex-auto-text.fixture';
 import { maxWidthAutoTextFixture } from './max-width-auto-text.fixture';
+import { intrinsicInputButtonFixture } from './intrinsic-input-button.fixture';
 import { ParityFixture } from '../parity.types';
 
 const fixtures: readonly ParityFixture[] = [
@@ -144,7 +145,8 @@ const fixtures: readonly ParityFixture[] = [
   autoBlockHeightFixture,
   autoWrappedTextFixture,
   flexAutoTextFixture,
-  maxWidthAutoTextFixture
+  maxWidthAutoTextFixture,
+  intrinsicInputButtonFixture
 ];
 
 const fixturesById = new Map(fixtures.map((fixture) => [fixture.id, fixture]));

@@ -338,17 +338,23 @@ export class FlexService {
     // Parse padding
     const padding = this.parsePadding(style?.padding);
     const totalPadding = padding.left + padding.right;
+    const borderWidth = Math.max(0, Number.parseFloat(style?.borderWidth ?? '0') || 0);
 
-    let finalWidth = measuredWidth + totalPadding;
+    let finalWidth = measuredWidth + totalPadding + borderWidth * 2;
 
     // Apply minimum width for text inputs
-    if (element.type === 'input') {
+    if (element.type === 'input' && !this.isButtonLikeInput(element)) {
       finalWidth = Math.max(finalWidth, 170);
     }
 
     console.log(`[FLEX-INTRINSIC] ${element.type}#${element.id}: text="${textToMeasure}", measured=${measuredWidth}px, padding=${totalPadding}px, final=${finalWidth}px`);
 
     return finalWidth;
+  }
+
+  private isButtonLikeInput(element: DOMElement): boolean {
+    return element.type === 'input' &&
+      ['button', 'submit', 'reset'].includes((element.inputType ?? '').toLowerCase());
   }
 
   private calculateIntrinsicTextHeight(

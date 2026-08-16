@@ -202,6 +202,54 @@ describe('ElementDimensionService', () => {
     expect(result.height).toBe(142);
   });
 
+  it('content-sizes an input button without the text-input minimum width', () => {
+    const textRendering = {
+      calculateTextDimensions: () => ({ width: 76.265625, height: 20, lineHeight: 20 }),
+    };
+    const textStyleParser = {
+      parseTextProperties: () => ({ fontSize: 14, lineHeight: 20 / 14 }),
+    };
+    const service = new ElementDimensionService(
+      textRendering as never,
+      textStyleParser as never,
+      new DOMAncestryService(),
+    );
+    const parent = { name: 'root-body' } as Mesh;
+    const style: StyleRule = {
+      selector: '#action', display: 'block', boxSizing: 'border-box',
+      width: 'auto', height: 'auto', padding: '10px 16px', borderWidth: '2px',
+      fontSize: '14px', lineHeight: '20px',
+    };
+    const dom = {
+      context: {
+        elementDimensions: new Map([
+          ['root-body', { width: 800, height: 600, padding: { top: 0, right: 0, bottom: 0, left: 0 } }],
+        ]),
+        elementStyles: new Map(),
+      },
+    } as unknown as BabylonDOM;
+    const render = {
+      actions: {
+        style: {
+          getElementTypeDefaults: () => ({ display: 'block' }),
+          findStyleForElement: () => style,
+        },
+      },
+    } as unknown as BabylonRender;
+
+    const result = service.calculateDimensions(
+      dom,
+      render,
+      { id: 'action', type: 'input', inputType: 'button', value: 'Create item' },
+      style,
+      parent,
+      [style],
+    );
+
+    expect(result.width).toBe(112.265625);
+    expect(result.height).toBe(44);
+  });
+
   it('adds padding and borders outside explicit content-box dimensions', () => {
     const service = new ElementDimensionService({} as never, {} as never, new DOMAncestryService());
     const parent = { name: 'root-body' } as Mesh;
