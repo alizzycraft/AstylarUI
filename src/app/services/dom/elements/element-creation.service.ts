@@ -441,14 +441,14 @@ export class ElementCreationService {
       padding: pixelPadding,
     });
 
-    // Store hover state and handle text content only for elements with IDs
+    // Authored IDs are only required for addressable hover state. Text uses
+    // the generated mesh ID when no authored ID is present.
     if (element.id) {
       dom.context.hoverStates.set(element.id, false);
+    }
 
-      // Handle text content if present
-      if (element.textContent && element.textContent.trim() !== "") {
-        dom.actions.handleTextContent(dom, render, element, mesh, styles);
-      }
+    if (element.textContent && element.textContent.trim() !== "") {
+      dom.actions.handleTextContent(dom, render, element, mesh, styles);
     }
 
     // Attach input events if it's an input element

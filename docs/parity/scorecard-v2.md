@@ -8,12 +8,12 @@ This scorecard tracks the second parity phase: making ordinary application-orien
 
 | Gate | Current | Target | Status |
 | --- | ---: | ---: | --- |
-| Total parity fixtures | 59 | 65 | Open |
-| New Phase 2 fixtures | 19 | 25 | Open |
-| Composed application/component fixtures | 8 | 10 | Open |
+| Total parity fixtures | 60 | 65 | Open |
+| New Phase 2 fixtures | 20 | 25 | Open |
+| Composed application/component fixtures | 9 | 10 | Open |
 | Deterministic viewport sizes | 3 exercised | 3 exercised | Passing |
 | Median SSIM | 0.9953 | >= 0.98 | Passing |
-| Minimum fixture SSIM | 0.9626 | >= 0.95 | Passing |
+| Minimum fixture SSIM | 0.9585 | >= 0.95 | Passing |
 | Edges within 2 px | 99.7% | >= 95% | Passing baseline |
 | Maximum edge delta | 3.9921 px | <= 5 px | Passing |
 | Visible text and line counts | Exact | Exact | Passing baseline |
@@ -31,7 +31,7 @@ This scorecard tracks the second parity phase: making ordinary application-orien
 | Overflow and scrolling | 1 | Hidden overflow clipping for positioned descendants | In progress |
 | Controls and states | 1 | Enabled, disabled, and checked selector states with element opacity | In progress |
 | Layering and overlays | 1 | Nested parent stacking contexts and bounded child z-index | In progress |
-| Composed applications | 8 | Dashboard, responsive gallery, settings form, modal, clipped popover, article, sidebar, and semantic data table pages | In progress |
+| Composed applications | 9 | Dashboard, responsive gallery, settings, modal, popover, article, sidebar, data table, and checkout pages | In progress |
 
 ## Baseline
 
@@ -62,6 +62,8 @@ The committed 40-fixture Phase 1 suite was rerun before Phase 2 work began. It p
 - Reserve `0.25` world units between adjacent root z-index levels so each context contains its descendant paint band without enough perspective shift to exceed geometry tolerance.
 - Separate genuinely nested positioned auto-z descendants from their parent surface by `0.15` world units; keep top-level positioned elements and static descendants on their prior paths.
 - Register the full semantic table subtree with renderer ancestry, position row groups at table-relative offsets, keep rows local to each group, and reserve `0.05` world units per table paint level.
+- Render text-bearing elements under their generated mesh identity when no authored ID exists; IDs remain optional metadata, as in HTML.
+- Resolve flex item margin shorthand first, then apply authored longhand overrides on each edge.
 
 ## Iteration history
 
@@ -88,6 +90,7 @@ The committed 40-fixture Phase 1 suite was rerun before Phase 2 work began. It p
 | Composed article page | The first composed render passed at SSIM `0.9630` with exact geometry and text; visual inspection showed avoidable upscaling blur from the small shared SVG | Kept CSS sizing and object-fit under test while using a deterministic high-resolution source asset representative of application imagery | Fixture SSIM `0.9647`; max edge error `0.055px`; exact wrapped lines; suite median `0.9956`; 68 tests and both builds pass | `test: add composed article parity` |
 | Composed sidebar workspace | New nested navigation, active compound-descendant styling, flexible content, and toolbar composition had no unsupported behavior | No renderer change; retained the ordinary authored structure as a regression fixture | Fixture SSIM `0.9847`; max edge error `0.109px`; exact text; suite median `0.9956`; 68 tests and both builds pass | `test: add composed sidebar parity` |
 | Composed semantic data table | Header and body groups independently consumed table height, overlapping at SSIM `0.7807` with `112.516px` edge error; after geometry repair, descendant styles and cell surfaces were still absent | Positioned semantic groups cumulatively with local rows, registered manually rendered table ancestry for selectors, and reserved bounded paint depth for section/row/cell surfaces | Fixture SSIM `0.9747`; max edge error `0.123px`; existing table fixtures remain green; suite median `0.9953`; 71 tests and both builds pass | `fix: compose semantic table sections` |
+| Composed checkout form | Baseline SSIM `0.9569`; ID-less summary spans painted no text, and `margin-top: 8px` on the total row was ignored, exceeding the edge gate at `8.006px` | Used generated mesh IDs for ID-less text rendering and applied flex margin longhands over shorthand values | Fixture SSIM `0.9585`; max edge error `0.104px`; exact text; suite median `0.9953`; 73 tests and both builds pass | `fix: support ordinary checkout composition` |
 
 ## Remaining work
 
@@ -101,4 +104,4 @@ The committed 40-fixture Phase 1 suite was rerun before Phase 2 work began. It p
 
 ## Next target
 
-Add a composed checkout form covering grouped fieldsets, labels, mixed controls, summary layout, and primary/secondary actions.
+Add a composed notification center covering a compact toolbar, stacked message rows, ellipsis, status badges, and bounded overflow.

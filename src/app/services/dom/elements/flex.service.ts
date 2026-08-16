@@ -108,7 +108,7 @@ export class FlexService {
     const childItems: FlexItem[] = children.map(child => {
       // Use findStyleForElement to properly resolve styles including type defaults, classes, and IDs
       const style = render.actions.style.findStyleForElement(child, styles, dom.context.elementStyles);
-      const margin = this.parseMargin(style?.margin);
+      const margin = this.parseMarginBox(style);
       console.log(`[FLEX] Child ${child.id || child.type} margin: top=${margin.top}, right=${margin.right}, bottom=${margin.bottom}, left=${margin.left}`);
       console.log(`[FLEX] Child ${child.id || child.type} height property: "${style?.height}"`);
       console.log(`[FLEX] Child ${child.id || child.type} width property: "${style?.width}"`);
@@ -526,6 +526,15 @@ export class FlexService {
     }
 
     return { top: 0, right: 0, bottom: 0, left: 0 };
+  }
+
+  private parseMarginBox(style?: StyleRule): { top: number; right: number; bottom: number; left: number } {
+    const margin = this.parseMargin(style?.margin);
+    if (style?.marginTop !== undefined) margin.top = parseFloat(style.marginTop) || 0;
+    if (style?.marginRight !== undefined) margin.right = parseFloat(style.marginRight) || 0;
+    if (style?.marginBottom !== undefined) margin.bottom = parseFloat(style.marginBottom) || 0;
+    if (style?.marginLeft !== undefined) margin.left = parseFloat(style.marginLeft) || 0;
+    return margin;
   }
 
   /**

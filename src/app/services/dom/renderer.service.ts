@@ -233,13 +233,6 @@ export class BabylonDOMRendererService {
       return; // No text content to render
     }
 
-    if (!element.id) {
-      console.warn(
-        "⚠️ Text content found but element has no ID, skipping text rendering",
-      );
-      return;
-    }
-
     try {
       console.log(
         `📝 Processing text content for element ${element.id}: "${element.textContent.substring(0, 50)}..."`,
@@ -393,7 +386,7 @@ export class BabylonDOMRendererService {
 
       // Create text mesh using BabylonMeshService (texture size)
       const textMesh = this.createTextMesh(
-        element.id,
+        element.id ?? mesh.name,
         textTexture,
         textureDimensions,
         render,
@@ -418,7 +411,7 @@ export class BabylonDOMRendererService {
         availableWidthPx,
       );
       this.elementManager.registerTextElement(
-        element.id,
+        element.id ?? mesh.name,
         textMesh,
         textTexture,
         element.textContent,
@@ -546,11 +539,6 @@ export class BabylonDOMRendererService {
     errors: string[];
   } {
     const errors: string[] = [];
-
-    // Check for required properties
-    if (!element.id) {
-      errors.push("Element must have an ID for text rendering");
-    }
 
     if (!element.textContent) {
       errors.push("Element must have textContent property");

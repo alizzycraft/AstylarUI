@@ -355,5 +355,11 @@
     "title": "Composed data table page",
     "category": "composed-application",
     "expectedBehavior": "A semantic table with explicit columns and distinct header/body styling retains its row geometry inside a toolbar-based application page."
+  },
+  {
+    "id": "composed-checkout",
+    "title": "Composed checkout form",
+    "category": "composed-application",
+    "expectedBehavior": "A semantic checkout form composes a positioned fieldset, mixed controls, aligned actions, and a flex order summary without renderer-specific structure."
   }
 ]
