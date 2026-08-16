@@ -45,6 +45,8 @@ The project dashboard title and metadata now derive their heights from typograph
 
 The account settings fieldset now derives its height from its four flex rows, gaps, three-value padding, and border at every viewport. Its bio row and two-row textarea derive their heights from content across desktop, tablet, and mobile; all fieldset, row, label, and textarea height workarounds for this region are gone. All account renders keep every measured edge within `2px` and remain above the representative floor.
 
+The data-management detail body's column height now derives from its title, copy, metadata, action, and responsive gaps at every viewport instead of desktop/tablet/mobile height declarations. Its representative scores and geometry are unchanged; the outer positioned panel remains explicit pending general auto-height sizing for standalone flex containers.
+
 ## Verification log
 
 - Focused block-layout unit tests: 9 passing.
