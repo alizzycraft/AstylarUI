@@ -845,8 +845,9 @@ export class BabylonDOMRendererService {
     );
 
     // Position text mesh relative to parent (slightly in front to avoid z-fighting)
+    const baselineInsetPx = this.getTextBaselineInsetPx(style);
     textMesh.position.x = offsetXPx * scale;
-    textMesh.position.y = offsetYPx * scale;
+    textMesh.position.y = (offsetYPx - baselineInsetPx) * scale;
     textMesh.position.z = 0.001; // Slightly in front of parent element - TODO: TECH-DEBT
 
     console.log(
@@ -859,5 +860,17 @@ export class BabylonDOMRendererService {
     this.interactionService.clearAllInteractions();
     this.scene = undefined;
     this.render = undefined;
+  }
+
+  private getTextBaselineInsetPx(style?: StyleRule): number {
+    const fontSizePx = Number.parseFloat(style?.fontSize ?? '16');
+    const declaredWeight = style?.fontWeight ?? '400';
+    const fontWeight = declaredWeight === 'bold'
+      ? 700
+      : Number.parseInt(declaredWeight, 10);
+    if (fontSizePx <= 13 && fontWeight >= 600) {
+      return 4;
+    }
+    return fontSizePx <= 20 ? 2 : 1;
   }
 }

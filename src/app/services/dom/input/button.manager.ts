@@ -286,6 +286,7 @@ export class ButtonManager {
             labelPlane.rotation.z = Math.PI;
 
             labelPlane.parent = button.mesh;
+            labelPlane.position.y = -2 * scale;
             labelPlane.position.z = -0.15; // Slightly in front
             labelPlane.isPickable = false;
             const textAlign = style.textAlign?.toLowerCase();

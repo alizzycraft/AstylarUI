@@ -17,6 +17,14 @@ export class BabylonCameraService {
 
     this.camera = new FreeCamera('camera', new Vector3(0, 0, cameraDistance), scene);
     this.camera.fov = fov;
+    // Astylar content occupies a shallow band around the page plane. Keeping
+    // Babylon's broad default clip range wastes depth-buffer precision and can
+    // make closely layered parent/child surfaces z-fight at tall viewports.
+    // One viewport height on either side of the page still leaves ample room
+    // for authored stacking while keeping ordinary DOM paint layers stable.
+    const clipRange = this.calculateUiClipRange(cameraDistance, canvas.height);
+    this.camera.minZ = clipRange.minZ;
+    this.camera.maxZ = clipRange.maxZ;
     this.camera.setTarget(Vector3.Zero());
     this.camera.attachControl(canvas, true);
     this.camera.inputs.clear();
@@ -37,6 +45,16 @@ export class BabylonCameraService {
 
   getFOV(): number {
     return Math.PI / 3;
+  }
+
+  private calculateUiClipRange(
+    cameraDistance: number,
+    viewportHeight: number
+  ): { minZ: number; maxZ: number } {
+    return {
+      minZ: Math.max(0.1, cameraDistance - viewportHeight),
+      maxZ: cameraDistance + viewportHeight
+    };
   }
 
   /**

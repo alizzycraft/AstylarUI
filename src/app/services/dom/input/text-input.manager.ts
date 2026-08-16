@@ -330,6 +330,7 @@ export class TextInputManager {
             );
 
             textMesh.parent = textInput.mesh;
+            textMesh.position.y = -2 * pixelScale;
             textMesh.position.z = -0.15; // Slightly in front
             textMesh.isPickable = true;
             textMesh.renderingGroupId = 2; // Ensure it renders on top
@@ -360,6 +361,7 @@ export class TextInputManager {
                 );
 
                 clippedTextMesh.parent = textInput.mesh;
+                clippedTextMesh.position.y = -2 * pixelScale;
                 clippedTextMesh.position.z = -0.15;
                 clippedTextMesh.isPickable = true;
                 clippedTextMesh.renderingGroupId = 2;
