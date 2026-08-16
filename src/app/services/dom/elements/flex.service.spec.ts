@@ -1,5 +1,7 @@
 import { FlexService } from './flex.service';
 import { BabylonRender } from '../interfaces/render.types';
+import { BabylonDOM } from '../interfaces/dom.types';
+import { DOMElement } from '../../../types/dom-element';
 import { FlexContainer, FlexItem, FlexLayoutService } from './flex-layout.service';
 
 describe('FlexService', () => {
@@ -116,6 +118,38 @@ describe('FlexService', () => {
       style,
       [style],
     )).toBe(170);
+  });
+
+  it('measures a non-text flex item from its in-flow descendants', () => {
+    const service = new FlexService(new FlexLayoutService(), {} as never, {} as never);
+    const first: DOMElement = { type: 'div', id: 'first' };
+    const second: DOMElement = { type: 'div', id: 'second' };
+    const card: DOMElement = { type: 'article', id: 'card', children: [first, second] };
+    const resolved = new Map([
+      ['first', { selector: '#first', height: '32px', margin: '0' }],
+      ['second', { selector: '#second', height: '44px', marginTop: '8px' }],
+    ]);
+    const render = {
+      actions: {
+        style: {
+          findStyleForElement: (element: { id?: string }) => resolved.get(element.id ?? ''),
+        },
+      },
+    } as unknown as BabylonRender;
+    const dom = {
+      context: { elementStyles: new Map() },
+    } as unknown as BabylonDOM;
+
+    const height = service['calculateIntrinsicContainerHeight'](
+      card,
+      { selector: '#card', width: '240px', padding: '12px', borderWidth: '2px' },
+      [],
+      dom,
+      render,
+      240,
+    );
+
+    expect(height).toBe(112);
   });
 
   it('positions the first wrapped line at the cross-axis start', () => {

@@ -21,6 +21,7 @@ This phase removes renderer-specific dimensions from the representative applicat
 | Intrinsic text height in flex pre-layout | A height-auto text flex item contributes its line-box height before `justify-content` positions the item group. | New `flex-auto-text` fixture: SSIM `0.9906`; `66.7%` of edges within `2px`; maximum edge error `15.0200px`; the heightless label was assigned the renderer's legacy `50px` fallback. | Measure text-bearing flex items at their resolved content width and include padding/borders; retain the legacy fallback only for non-text descendants pending general content-sized flex containers. | SSIM `0.9985`; `100%` of edges within `2px`; maximum edge error `0.0310px`; exact text; runtime clean. | 71 fixtures / 83 renders / three viewports; median SSIM `0.9958`; minimum SSIM `0.9509`; `99.9%` of edges within `2px`; maximum edge error `3.9921px`; exact text; runtime clean. | Accepted |
 | Max-width-constrained intrinsic text height | An auto-height text box wraps and grows using its final used width after horizontal min/max constraints. | New `max-width-auto-text` fixture: SSIM `0.9296`; `75%` of edges within `2px`; maximum edge error `81.0002px`; the box narrowed to `max-width` only after height was measured at the wider declared width. | Resolve horizontal min/max constraints before the width-dependent text measurement, while retaining the existing final stage for vertical constraints. | SSIM `0.9879`; `100%` of edges within `2px`; maximum edge error `0.0003px`; exact text/line count; runtime clean. | 72 fixtures / 84 renders / three viewports; median SSIM `0.9958`; minimum SSIM `0.9509`; `99.9%` of edges within `2px`; maximum edge error `3.9921px`; exact text; runtime clean. | Accepted |
 | Intrinsic width for button-like inputs | An appearance-none `input` with button semantics and auto dimensions sizes from its label, padding, and borders rather than inheriting a text-field minimum width. | New `intrinsic-input-button` fixture: SSIM `0.9888`; `75%` of edges within `2px`; maximum edge error `57.7343px`; browser width was `112.2656px` while Astylar forced `170px`. | Classify `button`, `submit`, and `reset` input types as button-like in ordinary and flex intrinsic sizing; include border widths in the intrinsic border box; retain the `170px` minimum only for text-like inputs. | SSIM `0.9989`; `100%` of edges within `2px`; maximum edge error `0.0109px`; exact text; runtime clean. | 73 fixtures / 85 renders / three viewports; median SSIM `0.9958`; minimum SSIM `0.9509`; `99.9%` of edges within `2px`; maximum edge error `3.9921px`; exact text; runtime clean. | Accepted |
+| Descendant-driven height for non-text flex items | A height-auto flex item with nested block content contributes its content height before its parent applies main-axis alignment. | New `flex-auto-container` fixture: SSIM `0.9224`; `62.5%` of edges within `2px`; maximum edge error `30.9958px`; the outer flex layout centered a legacy `50px` estimate instead of the final `112px` card. | Recursively pre-measure in-flow descendants, adjacent collapsed margins, and container padding/borders for non-text flex items before flex layout; retain the fallback only when no measurable content exists. | SSIM `1.0000`; `100%` of edges within `2px`; maximum edge error `0.0272px`; exact geometry/text; runtime clean. | 74 fixtures / 86 renders / three viewports; median SSIM `0.9962`; minimum SSIM `0.9509`; `99.9%` of edges within `2px`; maximum edge error `3.9921px`; exact text; runtime clean. | Accepted |
 
 ## Current representative application floor
 
@@ -32,7 +33,7 @@ This phase removes renderer-specific dimensions from the representative applicat
 
 All nine representative renders remain above the `0.95` floor after the current content-driven layout repairs.
 
-The project dashboard title and metadata now derive their heights from typography rather than explicit `28px` and `20px` declarations. Its summary labels also derive their responsive one-, two-, or three-line heights without desktop/tablet/mobile height overrides. Dashboard SSIM remains unchanged at all three viewports.
+The project dashboard title and metadata now derive their heights from typography rather than explicit `28px` and `20px` declarations. Its summary labels also derive their responsive one-, two-, or three-line heights without desktop/tablet/mobile height overrides. The nested flex summary cards no longer declare desktop/tablet/mobile heights; their grid tracks and intrinsic content determine the used size. Dashboard SSIM remains unchanged at all three viewports.
 
 ## Verification log
 
@@ -44,10 +45,12 @@ The project dashboard title and metadata now derive their heights from typograph
 - Full unit suite after constraint-aware text sizing: 86 passing.
 - Focused control/dimension unit tests after button-input sizing: 17 passing.
 - Full unit suite after button-input sizing: 88 passing.
+- Focused flex tests after descendant-driven item sizing: 8 passing.
+- Full unit suite after descendant-driven item sizing: 89 passing.
 - Angular application production build: passing (existing bundle/style budget warnings only).
 - Library TypeScript build: passing.
 - Full non-enforcing parity run: completion thresholds met.
 
 ## Next candidates
 
-The next increment should be chosen from fresh browser/Astylar baselines, prioritizing the behavior that removes the largest amount of representative-app workaround sizing. Likely candidates are content-driven non-text flex containers and grid cross sizes, followed by multiline control sizing. Do not remove an application workaround until its underlying general behavior has focused regression coverage and passes the full corpus.
+The next increment should be chosen from fresh browser/Astylar baselines, prioritizing the behavior that removes the largest amount of representative-app workaround sizing. Likely candidates are auto-sized flex containers themselves, grid intrinsic cross sizes, and multiline control sizing. Do not remove an application workaround until its underlying general behavior has focused regression coverage and passes the full corpus.

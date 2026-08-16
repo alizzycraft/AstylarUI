@@ -176,10 +176,16 @@ export class FlexService {
           styles,
           width,
         );
-        // Non-text content sizing requires descendant measurement and remains
-        // a separate flex-container behavior. Preserve its legacy fallback.
-        height = intrinsicTextHeight ?? 50;
-        console.log(`[FLEX] Child ${child.id} using ${intrinsicTextHeight === null ? 'default' : 'intrinsic text'} height: ${height}px`);
+        const intrinsicContainerHeight = intrinsicTextHeight === null
+          ? this.calculateIntrinsicContainerHeight(child, style, styles, dom, render, width)
+          : null;
+        height = intrinsicTextHeight ?? intrinsicContainerHeight ?? 50;
+        const heightKind = intrinsicTextHeight !== null
+          ? 'intrinsic text'
+          : intrinsicContainerHeight !== null
+            ? 'intrinsic container'
+            : 'default';
+        console.log(`[FLEX] Child ${child.id} using ${heightKind} height: ${height}px`);
       }
 
       console.log(`[FLEX] Child ${child.id} calculated dimensions: width=${width}px, height=${height}px`);
@@ -386,6 +392,79 @@ export class FlexService {
     const lineHeight = dimensions.lineHeight ?? textStyle.fontSize * textStyle.lineHeight;
     return Math.max(dimensions.height, lineHeight) +
       padding.top + padding.bottom + borderWidth * 2;
+  }
+
+  private calculateIntrinsicContainerHeight(
+    element: DOMElement,
+    style: StyleRule | undefined,
+    styles: StyleRule[],
+    dom: BabylonDOM,
+    render: BabylonRender,
+    borderBoxWidth: number,
+  ): number | null {
+    const children = element.children ?? [];
+    if (children.length === 0) return null;
+
+    const padding = this.parsePadding(style?.padding);
+    const borderWidth = Math.max(0, Number.parseFloat(style?.borderWidth ?? '0') || 0);
+    const contentWidth = Math.max(
+      0,
+      borderBoxWidth - padding.left - padding.right - borderWidth * 2,
+    );
+    let contentHeight = 0;
+    let previousBottomMargin = 0;
+    let hasFlowChild = false;
+
+    for (const child of children) {
+      const childStyle = render.actions.style.findStyleForElement(
+        child,
+        styles,
+        dom.context.elementStyles,
+      );
+      if (this.classifyFlexChild(childStyle) !== 'flow') continue;
+
+      const margin = this.parseMarginBox(childStyle);
+      const childWidth = childStyle?.width && childStyle.width !== 'auto'
+        ? this.parseIntrinsicPixelLength(childStyle.width, contentWidth)
+        : contentWidth;
+      let childHeight = childStyle?.height && childStyle.height !== 'auto'
+        ? this.parseIntrinsicPixelLength(childStyle.height, 0)
+        : null;
+      if (childHeight === null) {
+        childHeight = this.calculateIntrinsicTextHeight(
+          child,
+          childStyle,
+          styles,
+          childWidth,
+        ) ?? this.calculateIntrinsicContainerHeight(
+          child,
+          childStyle,
+          styles,
+          dom,
+          render,
+          childWidth,
+        );
+      }
+      if (childHeight === null) continue;
+
+      contentHeight += hasFlowChild
+        ? Math.max(previousBottomMargin, margin.top)
+        : margin.top;
+      contentHeight += childHeight;
+      previousBottomMargin = margin.bottom;
+      hasFlowChild = true;
+    }
+
+    if (!hasFlowChild) return null;
+    return contentHeight + previousBottomMargin +
+      padding.top + padding.bottom + borderWidth * 2;
+  }
+
+  private parseIntrinsicPixelLength(value: string, percentageReference: number): number {
+    if (value.endsWith('%')) {
+      return percentageReference * (Number.parseFloat(value) || 0) / 100;
+    }
+    return Number.parseFloat(value) || 0;
   }
 
   /**

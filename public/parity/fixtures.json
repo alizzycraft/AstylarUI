@@ -442,5 +442,11 @@
     "title": "Content-sized input button",
     "category": "forms-interactive",
     "expectedBehavior": "An appearance-none input button with auto dimensions sizes its border box from its label, line height, padding, and borders."
+  },
+  {
+    "id": "flex-auto-container",
+    "title": "Content-sized non-text flex item",
+    "category": "flexbox",
+    "expectedBehavior": "A non-text flex item contributes its descendant-driven auto height before its flex parent centers the item."
   }
 ]

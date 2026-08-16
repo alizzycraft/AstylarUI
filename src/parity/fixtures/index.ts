@@ -71,6 +71,7 @@ import { autoWrappedTextFixture } from './auto-wrapped-text.fixture';
 import { flexAutoTextFixture } from './flex-auto-text.fixture';
 import { maxWidthAutoTextFixture } from './max-width-auto-text.fixture';
 import { intrinsicInputButtonFixture } from './intrinsic-input-button.fixture';
+import { flexAutoContainerFixture } from './flex-auto-container.fixture';
 import { ParityFixture } from '../parity.types';
 
 const fixtures: readonly ParityFixture[] = [
@@ -146,7 +147,8 @@ const fixtures: readonly ParityFixture[] = [
   autoWrappedTextFixture,
   flexAutoTextFixture,
   maxWidthAutoTextFixture,
-  intrinsicInputButtonFixture
+  intrinsicInputButtonFixture,
+  flexAutoContainerFixture
 ];
 
 const fixturesById = new Map(fixtures.map((fixture) => [fixture.id, fixture]));
