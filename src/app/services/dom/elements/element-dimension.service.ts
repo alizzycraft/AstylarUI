@@ -173,6 +173,31 @@ export class ElementDimensionService {
             console.log(`[DIMENSION-INTRINSIC] ${debugKey} text="${textMetrics.text.trim()}" measuredWidth=${textMetrics.width.toFixed(2)} paddingH=${horizontalPadding} finalWidth=${width.toFixed(2)} source=${widthSource}`);
         }
 
+        // Width constraints participate in line wrapping. Resolve them before
+        // measuring width-dependent text height so the line count reflects the
+        // element's final used width rather than its unconstrained declaration.
+        const minWidth = style?.minWidth ? this.parseLength(`${style.minWidth}`, contentWidth) : undefined;
+        const maxWidth = style?.maxWidth ? this.parseLength(`${style.maxWidth}`, contentWidth) : undefined;
+        if (minWidth !== undefined && !Number.isNaN(minWidth)) {
+            const originalWidth = width;
+            width = Math.max(width, minWidth);
+            if (width !== originalWidth) {
+                console.log(`[DIMENSION] ${debugKey} applied minWidth=${minWidth}, adjusted width ${originalWidth}→${width}`);
+                widthSource += '+minWidth';
+            }
+        }
+        if (maxWidth !== undefined && !Number.isNaN(maxWidth)) {
+            const originalWidth = width;
+            const effectiveMaxWidth = minWidth !== undefined && !Number.isNaN(minWidth)
+                ? Math.max(maxWidth, minWidth)
+                : maxWidth;
+            width = Math.min(width, effectiveMaxWidth);
+            if (width !== originalWidth) {
+                console.log(`[DIMENSION] ${debugKey} applied maxWidth=${maxWidth}, adjusted width ${originalWidth}→${width}`);
+                widthSource += '+maxWidth';
+            }
+        }
+
         // Text height depends on the resolved content width. The initial
         // unconstrained measurement is still needed for shrink-to-fit widths,
         // but block text must be measured again at its actual wrapping width.
@@ -244,35 +269,14 @@ export class ElementDimensionService {
             console.log(`[DIMENSION-INTRINSIC] ${debugKey} text="${constrainedTextMetrics.text.trim()}" measuredHeight=${constrainedTextMetrics.height.toFixed(2)} paddingV=${verticalPadding} finalHeight=${height.toFixed(2)} source=${heightSource}`);
         }
 
-        const minWidth = style?.minWidth ? this.parseLength(`${style.minWidth}`, contentWidth) : undefined;
         const minHeight = style?.minHeight ? this.parseLength(`${style.minHeight}`, contentHeight) : undefined;
-        const maxWidth = style?.maxWidth ? this.parseLength(`${style.maxWidth}`, contentWidth) : undefined;
         const maxHeight = style?.maxHeight ? this.parseLength(`${style.maxHeight}`, contentHeight) : undefined;
-        if (minWidth !== undefined && !Number.isNaN(minWidth)) {
-            const originalWidth = width;
-            width = Math.max(width, minWidth);
-            if (width !== originalWidth) {
-                console.log(`[DIMENSION] ${debugKey} applied minWidth=${minWidth}, adjusted width ${originalWidth}→${width}`);
-                widthSource += '+minWidth';
-            }
-        }
         if (minHeight !== undefined && !Number.isNaN(minHeight)) {
             const originalHeight = height;
             height = Math.max(height, minHeight);
             if (height !== originalHeight) {
                 console.log(`[DIMENSION] ${debugKey} applied minHeight=${minHeight}, adjusted height ${originalHeight}→${height}`);
                 heightSource += '+minHeight';
-            }
-        }
-        if (maxWidth !== undefined && !Number.isNaN(maxWidth)) {
-            const originalWidth = width;
-            const effectiveMaxWidth = minWidth !== undefined && !Number.isNaN(minWidth)
-                ? Math.max(maxWidth, minWidth)
-                : maxWidth;
-            width = Math.min(width, effectiveMaxWidth);
-            if (width !== originalWidth) {
-                console.log(`[DIMENSION] ${debugKey} applied maxWidth=${maxWidth}, adjusted width ${originalWidth}→${width}`);
-                widthSource += '+maxWidth';
             }
         }
         if (maxHeight !== undefined && !Number.isNaN(maxHeight)) {

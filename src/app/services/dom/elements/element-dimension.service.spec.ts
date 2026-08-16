@@ -145,6 +145,63 @@ describe('ElementDimensionService', () => {
     expect(result.height).toBe(150);
   });
 
+  it('measures auto text height after applying max-width', () => {
+    const measuredWidths: Array<number | undefined> = [];
+    const textRendering = {
+      calculateTextDimensions: (_text: string, _style: unknown, maxWidth?: number) => {
+        measuredWidths.push(maxWidth);
+        return {
+          width: maxWidth ?? 640,
+          height: maxWidth === 186 ? 108 : 27,
+          lineHeight: 27,
+        };
+      },
+    };
+    const textStyleParser = {
+      parseTextProperties: () => ({ fontSize: 18, lineHeight: 1.5 }),
+    };
+    const service = new ElementDimensionService(
+      textRendering as never,
+      textStyleParser as never,
+      new DOMAncestryService(),
+    );
+    const parent = { name: 'root-body' } as Mesh;
+    const style: StyleRule = {
+      selector: '#constrained', display: 'block', boxSizing: 'border-box',
+      width: '420px', maxWidth: '220px', height: 'auto', padding: '14px',
+      borderWidth: '3px', fontSize: '18px', lineHeight: '27px',
+    };
+    const dom = {
+      context: {
+        elementDimensions: new Map([
+          ['root-body', { width: 800, height: 600, padding: { top: 0, right: 0, bottom: 0, left: 0 } }],
+        ]),
+        elementStyles: new Map(),
+      },
+    } as unknown as BabylonDOM;
+    const render = {
+      actions: {
+        style: {
+          getElementTypeDefaults: () => ({ display: 'block' }),
+          findStyleForElement: () => style,
+        },
+      },
+    } as unknown as BabylonRender;
+
+    const result = service.calculateDimensions(
+      dom,
+      render,
+      { id: 'constrained', type: 'p', textContent: 'Text wrapping at the constrained width.' },
+      style,
+      parent,
+      [style],
+    );
+
+    expect(measuredWidths).toEqual([undefined, 186]);
+    expect(result.width).toBe(220);
+    expect(result.height).toBe(142);
+  });
+
   it('adds padding and borders outside explicit content-box dimensions', () => {
     const service = new ElementDimensionService({} as never, {} as never, new DOMAncestryService());
     const parent = { name: 'root-body' } as Mesh;

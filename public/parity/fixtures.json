@@ -430,5 +430,11 @@
     "title": "Intrinsic text sizing in flex layout",
     "category": "flexbox",
     "expectedBehavior": "Height-auto text flex items use their wrapped line-box height when justify-content positions the item group."
+  },
+  {
+    "id": "max-width-auto-text",
+    "title": "Max-width constrained intrinsic text height",
+    "category": "box-model-units",
+    "expectedBehavior": "An auto-height text block wraps and grows using its final max-width-constrained content box."
   }
 ]
