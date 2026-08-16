@@ -148,10 +148,15 @@ export class FlexService {
           width = parseFloat(style.width);
           console.log(`[FLEX] Child ${child.id} using px width: ${width}px`);
         } else if (style.width.endsWith('%')) {
-          // Percentage calculations are based on CSS pixels, not affected by DPR
-          const widthPercent = parseFloat(style.width);
-          width = (widthPercent / 100) * containerWidth;
-          console.log(`[DPR] Flex percentage width calculation for ${child.id}: ${widthPercent}% of ${containerWidth}px = ${width}px`);
+          // A flex item's percentage width uses its containing block's
+          // content box, excluding the container border and padding insets.
+          width = this.resolvePercentageFlexItemSize(
+            style.width,
+            containerWidth,
+            padding.left,
+            padding.right,
+          );
+          console.log(`[DPR] Flex percentage width calculation for ${child.id}: ${style.width} of content box = ${width}px`);
         } else {
           width = parseFloat(style.width);
           console.log(`[FLEX] Child ${child.id} using numeric width: ${width}px`);
@@ -608,6 +613,19 @@ export class FlexService {
       return percentageReference * (Number.parseFloat(value) || 0) / 100;
     }
     return Number.parseFloat(value) || 0;
+  }
+
+  private resolvePercentageFlexItemSize(
+    value: string,
+    containerBorderBoxSize: number,
+    startInset: number,
+    endInset: number,
+  ): number {
+    const contentBoxSize = Math.max(
+      0,
+      containerBorderBoxSize - startInset - endInset,
+    );
+    return contentBoxSize * (Number.parseFloat(value) || 0) / 100;
   }
 
   private parseFixedGridTracks(template: string | undefined): number[] | null {

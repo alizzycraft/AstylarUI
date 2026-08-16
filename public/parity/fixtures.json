@@ -502,5 +502,11 @@
     "title": "Standalone flex container intrinsic height",
     "category": "flexbox",
     "expectedBehavior": "A positioned height-auto flex container sizes its own border box from its in-flow children before laying them out."
+  },
+  {
+    "id": "flex-percentage-content-width",
+    "title": "Percentage flex item width from content box",
+    "category": "flexbox",
+    "expectedBehavior": "A percentage width on a flex item resolves against the flex container content box, excluding its padding and borders."
   }
 ]

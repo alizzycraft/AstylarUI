@@ -33,6 +33,8 @@ This phase removes renderer-specific dimensions from the representative applicat
 
 | Standalone flex container auto height | A positioned height-auto flex container sizes its own border box from its in-flow items before laying them out; definite sizes assigned by an ancestor flex/grid layout remain authoritative. | New `standalone-flex-auto-height` fixture: SSIM `0.9559`; `75%` of edges within `2px`; maximum edge error `488.0004px`; the panel retained the containing block's height. | Apply recursive intrinsic flex height to standalone meshes before child layout, preserve the top border edge, update stored dimensions and border geometry, and mark grid track sizes as definite so nested flex layout cannot replace them. | SSIM `1.0000`; `100%` of edges within `2px`; maximum edge error `0.0306px`; exact geometry/text; runtime clean. | 83 fixtures / 95 renders / three viewports; median SSIM `0.9965`; minimum SSIM `0.9509`; `99.9%` of edges within `2px`; maximum edge error `3.9921px`; exact text; runtime clean; completion thresholds met. | Accepted |
 
+| Percentage flex-item width from the content box | A percentage width on a flex item resolves against the containing flex content box, excluding its padding and borders. | New `flex-percentage-content-width` fixture: SSIM `0.9963`; `87.5%` of edges within `2px`; maximum edge error `21.9876px`; `50%` used the `300px` border box instead of the `256px` content box. | Subtract the complete horizontal content inset before applying the percentage while retaining CSS-pixel calculations independent of device pixel ratio. | SSIM `1.0000`; `100%` of edges within `2px`; maximum edge error `0.0270px`; exact geometry/text; runtime clean. | 84 fixtures / 96 renders / three viewports; median SSIM `0.9966`; minimum SSIM `0.9509`; `99.9%` of edges within `2px`; maximum edge error `3.9921px`; exact text; runtime clean; completion thresholds met. | Accepted |
+
 ## Current representative application floor
 
 | Application | Desktop | Tablet | Mobile |
@@ -79,10 +81,12 @@ The data-management detail body and its outer positioned panel now derive their 
 - Full unit suite after scaled shrink sizing: 99 passing.
 - Focused standalone flex and grid-assignment regressions: 2 passing.
 - Full unit suite after standalone flex auto-height sizing: 101 passing.
+- Focused percentage flex-item width regression: 1 passing.
+- Full unit suite after percentage flex-item width sizing: 102 passing.
 - Angular application production build: passing (existing bundle/style budget warnings only).
 - Library TypeScript build: passing.
-- Full non-enforcing parity run: 83 fixtures / 95 renders; median SSIM `0.9965`; minimum SSIM `0.9509`; `99.9%` of edges within `2px`; maximum edge error `3.9921px`; exact text; runtime clean; completion thresholds met.
+- Full non-enforcing parity run: 84 fixtures / 96 renders; median SSIM `0.9966`; minimum SSIM `0.9509`; `99.9%` of edges within `2px`; maximum edge error `3.9921px`; exact text; runtime clean; completion thresholds met.
 
 ## Next candidates
 
-The next increment should be chosen from fresh browser/Astylar baselines, prioritizing the behavior that removes the largest amount of representative-app workaround sizing. Likely candidates are percentage flex-item widths against the container content box, intrinsic/fractional grid cross sizes, remaining representative-app region dimensions, and any other fresh browser/Astylar baseline with a larger practical impact. Do not remove an application workaround until its underlying general behavior has focused regression coverage and passes the full corpus.
+The next increment should be chosen from fresh browser/Astylar baselines, prioritizing the behavior that removes the largest amount of representative-app workaround sizing. Likely candidates are intrinsic/fractional grid cross sizes, remaining representative-app region dimensions, and any other fresh browser/Astylar baseline with a larger practical impact. Do not remove an application workaround until its underlying general behavior has focused regression coverage and passes the full corpus.

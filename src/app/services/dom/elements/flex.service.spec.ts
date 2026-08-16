@@ -18,6 +18,13 @@ describe('FlexService', () => {
     });
   });
 
+  it('resolves a flex item percentage width against the container content box', () => {
+    const service = new FlexService({} as never, {} as never, {} as never);
+
+    expect(service['resolvePercentageFlexItemSize']('50%', 300, 22, 22))
+      .toBe(128);
+  });
+
   it('recognizes both block-level and inline-level flex containers', () => {
     const service = new FlexService({} as never, {} as never, {} as never);
     const render = {
