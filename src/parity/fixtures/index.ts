@@ -77,6 +77,7 @@ import { gridAutoHeightFixture } from './grid-auto-height.fixture';
 import { intrinsicTextareaRowsFixture } from './intrinsic-textarea-rows.fixture';
 import { flexRowAutoHeightFixture } from './flex-row-auto-height.fixture';
 import { flexColumnAutoHeightFixture } from './flex-column-auto-height.fixture';
+import { prelayoutDescendantStyleFixture } from './prelayout-descendant-style.fixture';
 import { ParityFixture } from '../parity.types';
 
 const fixtures: readonly ParityFixture[] = [
@@ -158,7 +159,8 @@ const fixtures: readonly ParityFixture[] = [
   gridAutoHeightFixture,
   intrinsicTextareaRowsFixture,
   flexRowAutoHeightFixture,
-  flexColumnAutoHeightFixture
+  flexColumnAutoHeightFixture,
+  prelayoutDescendantStyleFixture
 ];
 
 const fixturesById = new Map(fixtures.map((fixture) => [fixture.id, fixture]));

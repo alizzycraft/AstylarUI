@@ -1,4 +1,6 @@
 import { BabylonDOMRendererService } from './renderer.service';
+import { DOMAncestryService } from './dom-ancestry.service';
+import { DOMElement } from '../../types/dom-element';
 
 describe('BabylonDOMRendererService', () => {
   it('accepts text content without an authored element ID', () => {
@@ -40,5 +42,23 @@ describe('BabylonDOMRendererService', () => {
       fontSize: '28px',
       fontWeight: '700',
     })).toBe(1);
+  });
+
+  it('registers complete DOM ancestry before intrinsic pre-layout', () => {
+    const renderer = Object.create(
+      BabylonDOMRendererService.prototype,
+    ) as BabylonDOMRendererService;
+    const ancestry = new DOMAncestryService();
+    (renderer as unknown as { ancestry: DOMAncestryService }).ancestry = ancestry;
+    const textarea: DOMElement = { type: 'textarea', id: 'bio' };
+    const row: DOMElement = { type: 'div', id: 'row', children: [textarea] };
+    const panel: DOMElement = { type: 'section', id: 'panel', children: [row] };
+    const root: DOMElement = { type: 'div', id: 'root-body' };
+
+    renderer['registerAncestry']([panel], root);
+
+    expect(ancestry.getParent(panel)).toBe(root);
+    expect(ancestry.getParent(row)).toBe(panel);
+    expect(ancestry.getParent(textarea)).toBe(row);
   });
 });

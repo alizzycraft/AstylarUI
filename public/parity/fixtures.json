@@ -478,5 +478,11 @@
     "title": "Column flex container intrinsic height",
     "category": "flexbox",
     "expectedBehavior": "A height-auto nowrap column flex container sums its in-flow items, non-collapsing main-axis margins, gaps, padding, and borders."
+  },
+  {
+    "id": "prelayout-descendant-style",
+    "title": "Descendant styles during intrinsic pre-layout",
+    "category": "selectors-cascade",
+    "expectedBehavior": "Intrinsic pre-layout resolves child-combinator styles using the same complete DOM ancestry that is available during final element creation."
   }
 ]

@@ -154,9 +154,14 @@ export class BabylonDOMRendererService {
       this.render!,
       siteData.styles,
     );
+    const rootElement: DOMElement = { id: "root-body", type: "div" };
 
     // Process children recursively - these will be positioned relative to the body
     if (siteData.root.children) {
+      // Intrinsic pre-layout can inspect grandchildren before their parent is
+      // created. Register the complete tree first so selector resolution is
+      // identical during measurement and final element creation.
+      this.registerAncestry(siteData.root.children, rootElement);
       console.log("👨‍👩‍👧‍👦 Processing root children:", siteData.root.children);
       console.log("👨‍👩‍👧‍👦 Root children count:", siteData.root.children.length);
       console.log(
@@ -169,7 +174,7 @@ export class BabylonDOMRendererService {
         siteData.root.children,
         rootBodyMesh,
         siteData.styles,
-        { id: "root-body", type: "div" as const },
+        rootElement,
       );
     } else {
       console.log("⚠️ No root children found in siteData");
@@ -183,6 +188,15 @@ export class BabylonDOMRendererService {
       "🗺️ All elements created:",
       Array.from(this.elementManager.elementsMap.keys()),
     );
+  }
+
+  private registerAncestry(children: DOMElement[], parent: DOMElement): void {
+    for (const child of children) {
+      this.ancestry.setParent(child, parent);
+      if (child.children?.length) {
+        this.registerAncestry(child.children, child);
+      }
+    }
   }
 
   /**
