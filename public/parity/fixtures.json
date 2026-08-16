@@ -466,5 +466,11 @@
     "title": "Textarea rows driving auto height",
     "category": "forms-interactive",
     "expectedBehavior": "A height-auto appearance-none textarea derives its border-box height from rows, line height, padding, and borders."
+  },
+  {
+    "id": "flex-row-auto-height",
+    "title": "Row flex container intrinsic height",
+    "category": "flexbox",
+    "expectedBehavior": "A nowrap row flex container with height auto uses the largest outer cross size of its in-flow items, plus its own padding and borders."
   }
 ]

@@ -75,6 +75,7 @@ import { flexAutoContainerFixture } from './flex-auto-container.fixture';
 import { nestedFlexPaddingStretchFixture } from './nested-flex-padding-stretch.fixture';
 import { gridAutoHeightFixture } from './grid-auto-height.fixture';
 import { intrinsicTextareaRowsFixture } from './intrinsic-textarea-rows.fixture';
+import { flexRowAutoHeightFixture } from './flex-row-auto-height.fixture';
 import { ParityFixture } from '../parity.types';
 
 const fixtures: readonly ParityFixture[] = [
@@ -154,7 +155,8 @@ const fixtures: readonly ParityFixture[] = [
   flexAutoContainerFixture,
   nestedFlexPaddingStretchFixture,
   gridAutoHeightFixture,
-  intrinsicTextareaRowsFixture
+  intrinsicTextareaRowsFixture,
+  flexRowAutoHeightFixture
 ];
 
 const fixturesById = new Map(fixtures.map((fixture) => [fixture.id, fixture]));

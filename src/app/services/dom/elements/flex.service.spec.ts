@@ -2,6 +2,7 @@ import { FlexService } from './flex.service';
 import { BabylonRender } from '../interfaces/render.types';
 import { BabylonDOM } from '../interfaces/dom.types';
 import { DOMElement } from '../../../types/dom-element';
+import { StyleRule } from '../../../types/style-rule';
 import { FlexContainer, FlexItem, FlexLayoutService } from './flex-layout.service';
 
 describe('FlexService', () => {
@@ -150,6 +151,44 @@ describe('FlexService', () => {
     );
 
     expect(height).toBe(112);
+  });
+
+  it('uses the largest outer cross size for a nowrap row flex container', () => {
+    const textRendering = {
+      calculateTextDimensions: () => ({ width: 100, height: 24, lineHeight: 24 }),
+    };
+    const textStyleParser = {
+      parseTextProperties: () => ({ fontSize: 12, lineHeight: 2 }),
+    };
+    const service = new FlexService(
+      new FlexLayoutService(), textRendering as never, textStyleParser as never,
+    );
+    const label: DOMElement = { type: 'label', id: 'label', textContent: 'Bio' };
+    const textarea: DOMElement = { type: 'textarea', id: 'bio', rows: 2, value: '' };
+    const resolved = new Map<string, StyleRule>([
+      ['label', { selector: '#label', width: '72px', height: '59px', marginTop: '2px' }],
+      ['bio', { selector: '#bio', width: '176px', height: 'auto', padding: '5px 9px', borderWidth: '1px' }],
+    ]);
+    const render = {
+      actions: { style: { findStyleForElement: (element: DOMElement) => resolved.get(element.id ?? '') } },
+    } as unknown as BabylonRender;
+    const dom = {
+      context: { elementStyles: new Map() },
+    } as unknown as BabylonDOM;
+
+    const height = service['calculateIntrinsicContainerHeight'](
+      { type: 'div', id: 'row', children: [label, textarea] },
+      {
+        selector: '#row', display: 'flex', flexDirection: 'row', flexWrap: 'nowrap',
+        width: '280px', height: 'auto', padding: '8px', borderWidth: '2px',
+      },
+      [],
+      dom,
+      render,
+      280,
+    );
+
+    expect(height).toBe(81);
   });
 
   it('stretches a height-auto item through a padded row flex container', () => {

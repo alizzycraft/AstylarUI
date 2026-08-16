@@ -435,6 +435,50 @@ export class FlexService {
         rowGap * (fixedGridRows.length - 1) +
         padding.top + padding.bottom + borderWidth * 2;
     }
+    const isNowrapRowFlex = ['flex', 'inline-flex'].includes(style?.display?.toLowerCase() ?? '') &&
+      ['row', 'row-reverse'].includes(style?.flexDirection?.toLowerCase() ?? 'row') &&
+      (style?.flexWrap?.toLowerCase() ?? 'nowrap') === 'nowrap';
+    if (isNowrapRowFlex) {
+      let largestOuterCrossSize: number | null = null;
+      for (const child of children) {
+        const childStyle = render.actions.style.findStyleForElement(
+          child,
+          styles,
+          dom.context.elementStyles,
+        );
+        if (this.classifyFlexChild(childStyle) !== 'flow') continue;
+
+        const margin = this.parseMarginBox(childStyle);
+        const childWidth = childStyle?.width && childStyle.width !== 'auto'
+          ? this.parseIntrinsicPixelLength(childStyle.width, contentWidth)
+          : contentWidth;
+        let childHeight = childStyle?.height && childStyle.height !== 'auto'
+          ? this.parseIntrinsicPixelLength(childStyle.height, 0)
+          : null;
+        if (childHeight === null) {
+          childHeight = this.calculateIntrinsicTextHeight(
+            child,
+            childStyle,
+            styles,
+            childWidth,
+          ) ?? this.calculateIntrinsicContainerHeight(
+            child,
+            childStyle,
+            styles,
+            dom,
+            render,
+            childWidth,
+          );
+        }
+        if (childHeight === null) continue;
+
+        const outerCrossSize = margin.top + childHeight + margin.bottom;
+        largestOuterCrossSize = Math.max(largestOuterCrossSize ?? 0, outerCrossSize);
+      }
+      if (largestOuterCrossSize !== null) {
+        return largestOuterCrossSize + padding.top + padding.bottom + borderWidth * 2;
+      }
+    }
     let contentHeight = 0;
     let previousBottomMargin = 0;
     let hasFlowChild = false;
