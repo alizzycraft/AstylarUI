@@ -1064,6 +1064,7 @@ export class ElementCreationService {
         parentElement &&
         parent.name !== 'root-body' &&
         !hasExplicitHeight &&
+        !this.hasFlexAssignedHeight(parent) &&
         Math.abs(flow.height - parentHeight) > 0.1
       ) {
         const borderRadiusPx = this.borderService.parseBorderRadius(parentStyle?.borderRadius);
@@ -1133,6 +1134,11 @@ export class ElementCreationService {
         error,
       );
     }
+  }
+
+  private hasFlexAssignedHeight(mesh: Mesh): boolean {
+    const assignedHeight = mesh.metadata?.astylarFlexAssignedSize?.height;
+    return typeof assignedHeight === 'number' && Number.isFinite(assignedHeight);
   }
 
   private calculateBlockFlow(

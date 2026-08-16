@@ -448,5 +448,11 @@
     "title": "Content-sized non-text flex item",
     "category": "flexbox",
     "expectedBehavior": "A non-text flex item contributes its descendant-driven auto height before its flex parent centers the item."
+  },
+  {
+    "id": "nested-flex-padding-stretch",
+    "title": "Nested flex padding and stretch",
+    "category": "flexbox",
+    "expectedBehavior": "A padded flex container created as a flex item preserves its assigned used size while stretching an auto-sized child inside its content box."
   }
 ]

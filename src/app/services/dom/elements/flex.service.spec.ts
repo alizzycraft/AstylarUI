@@ -152,6 +152,40 @@ describe('FlexService', () => {
     expect(height).toBe(112);
   });
 
+  it('stretches a height-auto item through a padded row flex container', () => {
+    const service = new FlexService(new FlexLayoutService(), {} as never, {} as never);
+    const item: FlexItem = {
+      element: { type: 'article', id: 'panel' },
+      style: { selector: '#panel', width: '140px', height: 'auto' },
+      width: 140,
+      height: 284,
+      baseWidth: 140,
+      baseHeight: 284,
+      margin: { top: 0, right: 0, bottom: 0, left: 0 },
+      flexGrow: 0,
+      flexShrink: 1,
+      flexBasis: 'auto',
+      alignSelf: 'auto',
+      order: 0,
+    };
+    const padding = { top: 12, right: 12, bottom: 12, left: 12 };
+    const flexProps = {
+      flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'stretch',
+      flexWrap: 'nowrap', alignContent: 'stretch',
+    };
+    const container: FlexContainer = {
+      width: 360, height: 240, padding, ...flexProps,
+      gap: 12, rowGap: 12, columnGap: 12,
+    };
+
+    const result = service['calculateFlexLayout'](
+      [item], container.width, container.height, padding,
+      flexProps, {} as BabylonRender, container,
+    );
+
+    expect(result[0].size.height).toBe(216);
+  });
+
   it('positions the first wrapped line at the cross-axis start', () => {
     const service = new FlexService(new FlexLayoutService(), {} as never, {} as never);
     const item = (id: string, width: number, height: number): FlexItem => ({

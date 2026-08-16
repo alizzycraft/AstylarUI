@@ -24,4 +24,13 @@ describe('ElementCreationService', () => {
     expect(flow.tops).toEqual([10, 60]);
     expect(flow.height).toBe(100);
   });
+
+  it('recognizes a definite height assigned by flex layout', () => {
+    const service = Object.create(ElementCreationService.prototype) as ElementCreationService;
+
+    expect(service['hasFlexAssignedHeight']({
+      metadata: { astylarFlexAssignedSize: { width: 140, height: 216 } },
+    } as never)).toBeTrue();
+    expect(service['hasFlexAssignedHeight']({ metadata: {} } as never)).toBeFalse();
+  });
 });

@@ -290,6 +290,14 @@ export class FlexService {
           item.size      // sizes in CSS pixels
         );
 
+        // A flex item's used size is definite for this layout pass. Nested
+        // block processing must not later replace it with descendant-driven
+        // auto sizing and undo flex grow, shrink, basis, or stretch.
+        childMesh.metadata = {
+          ...(childMesh.metadata ?? {}),
+          astylarFlexAssignedSize: { ...item.size },
+        };
+
         console.log(`[FLEX] Created flex child mesh:`, childMesh.name, `Position:`, childMesh.position);
 
         // Process nested children if any
@@ -1024,7 +1032,7 @@ export class FlexService {
               break;
             case 'stretch':
               // For stretch, we should adjust the item height to fill the container height
-              if (!item.style?.height) {
+              if (!item.style?.height || item.style.height === 'auto') {
                 const availableHeight = containerHeight - padding.top - padding.bottom;
                 item.height = availableHeight - item.margin.top - item.margin.bottom;
                 console.log(`[FLEX-POSITION] Item ${item.element.id} single-line align: stretch, new height=${item.height}px`);
@@ -1065,7 +1073,7 @@ export class FlexService {
               break;
             case 'stretch':
               // For stretch, we should adjust the item height to fill the line height
-              if (!item.style?.height) {
+              if (!item.style?.height || item.style.height === 'auto') {
                 item.height = lineCrossSize - item.margin.top - item.margin.bottom;
                 console.log(`[FLEX-POSITION] Item ${item.element.id} align-self: stretch, new height=${item.height}px`);
                 y = (containerHeight / 2) - baseCrossPos - (lineCrossSize / 2);
@@ -1115,7 +1123,7 @@ export class FlexService {
               break;
             case 'stretch':
               // For stretch, we should adjust the item width to fill the container width
-              if (!item.style?.width) {
+              if (!item.style?.width || item.style.width === 'auto') {
                 const availableWidth = containerWidth - padding.left - padding.right;
                 item.width = availableWidth - item.margin.left - item.margin.right;
                 console.log(`[FLEX-POSITION] Item ${item.element.id} single-line align: stretch, new width=${item.width}px`);
@@ -1156,7 +1164,7 @@ export class FlexService {
               break;
             case 'stretch':
               // For stretch, we should adjust the item width to fill the line width
-              if (!item.style?.width) {
+              if (!item.style?.width || item.style.width === 'auto') {
                 item.width = lineCrossSize - item.margin.left - item.margin.right;
                 console.log(`[FLEX-POSITION] Item ${item.element.id} align-self: stretch, new width=${item.width}px`);
                 x = -(containerWidth / 2) + baseCrossPos + (lineCrossSize / 2);

@@ -103,7 +103,7 @@ export const representativeProjectDashboardFixture: ParityFixture = {
       #pm-task-list > article > strong { flex:1 1 auto; width:244px; height:24px; min-width:0; overflow:hidden; color:#1e293b; font:700 12px/24px Arial,sans-serif; white-space:nowrap; text-overflow:ellipsis; }
       #pm-status-one, #pm-status-two, #pm-status-three { flex:0 0 88px; width:88px; height:24px; padding:2px 6px; border-radius:12px; font:700 10px/20px Arial,sans-serif; text-align:center; }
       #pm-status-one { background:#ede9fe; color:#6d28d9; } #pm-status-two { background:#fef3c7; color:#92400e; } #pm-status-three { background:#fee2e2; color:#991b1b; }
-      #pm-activity { width:168px; height:464px; padding:12px; background:#ffffff; overflow:hidden; }
+      #pm-activity { width:168px; padding:12px; background:#ffffff; overflow:hidden; }
       #pm-activity-title { width:144px; height:28px; margin:0 0 8px; color:#0f172a; font:700 16px/28px Arial,sans-serif; }
       #pm-activity-list { display:flex; flex-direction:column; gap:8px; width:144px; height:428px; background:#f1f5f9; overflow:hidden; }
       #pm-activity-list article { display:flex; flex:0 0 88px; flex-direction:column; width:144px; height:88px; padding:10px; background:#f1f5f9; border-radius:6px; }
@@ -125,7 +125,7 @@ export const representativeProjectDashboardFixture: ParityFixture = {
         #pm-task-list { height:252px; } #pm-task-list article { width:296px; height:84px; flex-basis:84px; }
         #pm-task-list > article > strong { width:172px; }
         #pm-status-one, #pm-status-two, #pm-status-three { flex-basis:72px; width:72px; }
-        #pm-activity { width:124px; height:584px; padding:10px; } #pm-activity-title, #pm-activity-list { width:104px; }
+        #pm-activity { width:124px; padding:10px; } #pm-activity-title, #pm-activity-list { width:104px; }
         #pm-activity-list { height:536px; } #pm-activity-list article { width:104px; height:112px; flex-basis:112px; padding:8px; }
       }
       @media (max-width:599px) {
@@ -193,7 +193,7 @@ export const representativeProjectDashboardFixture: ParityFixture = {
       { selector:'#pm-task-list > article > strong', flex:'1 1 auto', width:'244px', height:'24px', minWidth:'0', overflow:'hidden', color:'#1e293b', fontFamily:'Arial, sans-serif', fontSize:'12px', fontWeight:'700', lineHeight:'24px', whiteSpace:'nowrap', textOverflow:'ellipsis' },
       { selector:'#pm-status-one, #pm-status-two, #pm-status-three', flex:'0 0 88px', width:'88px', height:'24px', padding:'2px 6px', borderRadius:'12px', fontFamily:'Arial, sans-serif', fontSize:'10px', fontWeight:'700', lineHeight:'20px', textAlign:'center' },
       { selector:'#pm-status-one', background:'#ede9fe', color:'#6d28d9' }, { selector:'#pm-status-two', background:'#fef3c7', color:'#92400e' }, { selector:'#pm-status-three', background:'#fee2e2', color:'#991b1b' },
-      { selector:'#pm-activity', width:'168px', height:'464px', padding:'12px', background:'#ffffff', overflow:'hidden' },
+      { selector:'#pm-activity', width:'168px', padding:'12px', background:'#ffffff', overflow:'hidden' },
       { selector:'#pm-activity-title', width:'144px', height:'28px', margin:'0 0 8px', color:'#0f172a', fontFamily:'Arial, sans-serif', fontSize:'16px', fontWeight:'700', lineHeight:'28px' },
       { selector:'#pm-activity-list', display:'flex', flexDirection:'column', gap:'8px', width:'144px', height:'428px', background:'#f1f5f9', overflow:'hidden' },
       { selector:'#pm-activity-list article', display:'flex', flex:'0 0 88px', flexDirection:'column', width:'144px', height:'88px', padding:'10px', background:'#f1f5f9', borderRadius:'6px' },
@@ -213,7 +213,7 @@ export const representativeProjectDashboardFixture: ParityFixture = {
       { selector:'#pm-tasks', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'320px', height:'304px' }, { selector:'#pm-task-heading, #pm-task-list', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'296px' },
       { selector:'#pm-task-list', mediaMinWidth:'600px', mediaMaxWidth:'749px', height:'252px' }, { selector:'#pm-task-list article', mediaMinWidth:'600px', mediaMaxWidth:'749px', flex:'0 0 84px', width:'296px', height:'84px' },
       { selector:'#pm-task-list > article > strong', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'172px' }, { selector:'#pm-status-one, #pm-status-two, #pm-status-three', mediaMinWidth:'600px', mediaMaxWidth:'749px', flex:'0 0 72px', width:'72px' },
-      { selector:'#pm-activity', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'124px', height:'584px', padding:'10px' }, { selector:'#pm-activity-title, #pm-activity-list', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'104px' },
+      { selector:'#pm-activity', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'124px', padding:'10px' }, { selector:'#pm-activity-title, #pm-activity-list', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'104px' },
       { selector:'#pm-activity-list', mediaMinWidth:'600px', mediaMaxWidth:'749px', height:'536px' }, { selector:'#pm-activity-list article', mediaMinWidth:'600px', mediaMaxWidth:'749px', flex:'0 0 112px', width:'104px', height:'112px', padding:'8px' },
       { selector:'#pm-shell', mediaMaxWidth:'599px', flexDirection:'column', left:'10px', top:'10px', width:'370px', height:'824px' },
       { selector:'#pm-help', mediaMaxWidth:'599px', left:'346px', top:'800px' },
