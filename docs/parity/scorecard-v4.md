@@ -33,7 +33,7 @@ This phase removes renderer-specific dimensions from the representative applicat
 
 All nine representative renders remain above the `0.95` floor after the current content-driven layout repairs.
 
-The project dashboard title and metadata now derive their heights from typography rather than explicit `28px` and `20px` declarations. Its summary labels also derive their responsive one-, two-, or three-line heights without desktop/tablet/mobile height overrides. The nested flex summary cards no longer declare desktop/tablet/mobile heights; their grid tracks and intrinsic content determine the used size. Dashboard SSIM remains unchanged at all three viewports.
+The project dashboard title and metadata now derive their heights from typography rather than explicit `28px` and `20px` declarations. Its summary labels also derive their responsive one-, two-, or three-line heights without desktop/tablet/mobile height overrides. The nested flex summary cards no longer declare desktop/tablet/mobile heights; their grid tracks and intrinsic content determine the used size. Workspace, header, main, and primary-panel sizes now derive from the outer shell, flex bases/growth, and cross-axis stretch instead of repeated breakpoint arithmetic. Dashboard SSIM remains unchanged at all three viewports.
 
 ## Verification log
 

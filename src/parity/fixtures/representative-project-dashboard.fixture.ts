@@ -73,8 +73,8 @@ export const representativeProjectDashboardFixture: ParityFixture = {
       #pm-nav { display:flex; flex-direction:column; gap:6px; width:132px; height:132px; }
       #pm-nav input { appearance:none; width:132px; height:40px; margin:0; padding:8px 10px; border:0; border-radius:6px; background:#172554; color:#bfdbfe; font:700 13px/24px Arial,sans-serif; text-align:left; }
       #pm-nav input.active { background:#2563eb; color:#ffffff; }
-      #pm-workspace { display:flex; flex:1 1 auto; flex-direction:column; width:600px; height:560px; background:#f8fafc; }
-      #pm-header { display:flex; flex:0 0 72px; align-items:center; justify-content:space-between; width:600px; height:72px; padding:12px 16px; background:#ffffff; }
+      #pm-workspace { display:flex; flex:1 1 auto; flex-direction:column; background:#f8fafc; }
+      #pm-header { display:flex; flex:0 0 72px; align-items:center; justify-content:space-between; padding:12px 16px; background:#ffffff; }
       #pm-heading { display:flex; flex-direction:column; width:150px; height:48px; }
       #pm-heading strong { height:24px; color:#0f172a; font:700 14px/24px Arial,sans-serif; }
       #pm-heading span { height:20px; color:#64748b; font:400 12px/20px Arial,sans-serif; }
@@ -82,8 +82,8 @@ export const representativeProjectDashboardFixture: ParityFixture = {
       #pm-search, #pm-new { appearance:none; height:40px; margin:0; border:1px solid #cbd5e1; border-radius:6px; font:400 13px/22px Arial,sans-serif; }
       #pm-search { width:184px; padding:8px 10px; background:#f8fafc; color:#475569; text-align:left; }
       #pm-new { width:96px; padding:8px; background:#2563eb; border-color:#2563eb; color:#ffffff; font-weight:700; text-align:center; }
-      #pm-main { display:flex; flex:1 1 auto; flex-direction:row; gap:12px; width:600px; height:488px; padding:12px; background:#eef2f7; overflow:hidden; }
-      #pm-primary { display:flex; flex:0 0 396px; flex-direction:column; gap:12px; width:396px; height:464px; background:#eef2f7; }
+      #pm-main { display:flex; flex:1 1 auto; flex-direction:row; gap:12px; padding:12px; background:#eef2f7; overflow:hidden; }
+      #pm-primary { display:flex; flex:0 0 396px; flex-direction:column; gap:12px; background:#eef2f7; }
       #pm-intro { width:396px; height:68px; padding:8px 10px; background:#ffffff; }
       #pm-title { width:376px; margin:0; color:#0f172a; font:700 20px/28px Arial,sans-serif; }
       #pm-meta { width:376px; margin:4px 0 0; color:#64748b; font:400 12px/20px Arial,sans-serif; }
@@ -116,10 +116,8 @@ export const representativeProjectDashboardFixture: ParityFixture = {
         #pm-sidebar { flex-basis:120px; width:120px; height:680px; padding:20px 10px; }
         #pm-brand { width:100px; } #pm-brand span { width:68px; font-size:13px; }
         #pm-nav, #pm-nav input { width:100px; }
-        #pm-workspace { width:480px; height:680px; } #pm-header { width:480px; }
         #pm-heading { width:132px; } #pm-tools { width:280px; } #pm-search { width:176px; }
-        #pm-main { width:480px; height:608px; }
-        #pm-primary { flex-basis:320px; width:320px; height:584px; }
+        #pm-primary { flex-basis:320px; }
         #pm-intro { width:320px; height:76px; } #pm-title, #pm-meta { width:300px; }
         #pm-summary { grid-template-columns:1fr 1fr; grid-template-rows:84px 84px; width:320px; height:180px; }
         #pm-summary article { padding:8px 12px; } #pm-summary strong { height:28px; font-size:20px; line-height:28px; } #pm-summary span { white-space:nowrap; }
@@ -137,11 +135,10 @@ export const representativeProjectDashboardFixture: ParityFixture = {
         #pm-brand { flex:0 0 100px; width:100px; height:40px; } #pm-brand span { width:68px; font-size:13px; }
         #pm-nav { flex-direction:row; gap:4px; width:240px; height:40px; }
         #pm-nav input { width:77.333px; height:40px; padding:8px 5px; font-size:11px; text-align:center; }
-        #pm-workspace { width:370px; height:760px; }
-        #pm-header { flex-basis:96px; width:370px; height:96px; padding:12px 10px; }
+        #pm-header { flex-basis:96px; padding:12px 10px; }
         #pm-heading { width:144px; } #pm-tools { width:198px; } #pm-search { width:110px; } #pm-new { width:80px; }
-        #pm-main { flex-direction:column; gap:10px; width:370px; height:664px; padding:10px; }
-        #pm-primary { flex:0 0 430px; width:350px; height:430px; gap:10px; }
+        #pm-main { flex-direction:column; gap:10px; padding:10px; }
+        #pm-primary { flex:0 0 430px; gap:10px; }
         #pm-intro { width:350px; height:76px; } #pm-title, #pm-meta { width:330px; }
         #pm-summary { grid-template-columns:1fr 1fr 1fr; grid-template-rows:130px; gap:8px; width:350px; height:130px; }
         #pm-summary article { padding:10px; } #pm-summary strong { height:32px; font-size:20px; }
@@ -167,8 +164,8 @@ export const representativeProjectDashboardFixture: ParityFixture = {
       { selector:'#pm-nav', display:'flex', flexDirection:'column', gap:'6px', width:'132px', height:'132px' },
       { selector:'#pm-nav input', width:'132px', height:'40px', margin:'0', padding:'8px 10px', borderWidth:'0', borderRadius:'6px', background:'#172554', color:'#bfdbfe', fontFamily:'Arial, sans-serif', fontSize:'13px', fontWeight:'700', lineHeight:'24px', textAlign:'left' },
       { selector:'#pm-nav input.active', background:'#2563eb', color:'#ffffff' },
-      { selector:'#pm-workspace', display:'flex', flex:'1 1 auto', flexDirection:'column', width:'600px', height:'560px', background:'#f8fafc' },
-      { selector:'#pm-header', display:'flex', flex:'0 0 72px', alignItems:'center', justifyContent:'space-between', width:'600px', height:'72px', padding:'12px 16px', background:'#ffffff' },
+      { selector:'#pm-workspace', display:'flex', flex:'1 1 auto', flexDirection:'column', background:'#f8fafc' },
+      { selector:'#pm-header', display:'flex', flex:'0 0 72px', alignItems:'center', justifyContent:'space-between', padding:'12px 16px', background:'#ffffff' },
       { selector:'#pm-heading', display:'flex', flexDirection:'column', width:'150px', height:'48px' },
       { selector:'#pm-heading strong', height:'24px', color:'#0f172a', fontFamily:'Arial, sans-serif', fontSize:'14px', fontWeight:'700', lineHeight:'24px' },
       { selector:'#pm-heading span', height:'20px', color:'#64748b', fontFamily:'Arial, sans-serif', fontSize:'12px', lineHeight:'20px' },
@@ -176,8 +173,8 @@ export const representativeProjectDashboardFixture: ParityFixture = {
       { selector:'#pm-search, #pm-new', height:'40px', margin:'0', borderWidth:'1px', borderStyle:'solid', borderColor:'#cbd5e1', borderRadius:'6px', fontFamily:'Arial, sans-serif', fontSize:'13px', lineHeight:'22px' },
       { selector:'#pm-search', width:'184px', padding:'8px 10px', background:'#f8fafc', color:'#475569', textAlign:'left' },
       { selector:'#pm-new', width:'96px', padding:'8px', background:'#2563eb', borderColor:'#2563eb', color:'#ffffff', fontWeight:'700', textAlign:'center' },
-      { selector:'#pm-main', display:'flex', flex:'1 1 auto', flexDirection:'row', gap:'12px', width:'600px', height:'488px', padding:'12px', background:'#eef2f7', overflow:'hidden' },
-      { selector:'#pm-primary', display:'flex', flex:'0 0 396px', flexDirection:'column', gap:'12px', width:'396px', height:'464px', background:'#eef2f7' },
+      { selector:'#pm-main', display:'flex', flex:'1 1 auto', flexDirection:'row', gap:'12px', padding:'12px', background:'#eef2f7', overflow:'hidden' },
+      { selector:'#pm-primary', display:'flex', flex:'0 0 396px', flexDirection:'column', gap:'12px', background:'#eef2f7' },
       { selector:'#pm-intro', width:'396px', height:'68px', padding:'8px 10px', background:'#ffffff' },
       { selector:'#pm-title', width:'376px', margin:'0', color:'#0f172a', fontFamily:'Arial, sans-serif', fontSize:'20px', fontWeight:'700', lineHeight:'28px' },
       { selector:'#pm-meta', width:'376px', margin:'4px 0 0', color:'#64748b', fontFamily:'Arial, sans-serif', fontSize:'12px', lineHeight:'20px' },
@@ -208,9 +205,8 @@ export const representativeProjectDashboardFixture: ParityFixture = {
       { selector:'#pm-sidebar', mediaMinWidth:'600px', mediaMaxWidth:'749px', flex:'0 0 120px', width:'120px', height:'680px', padding:'20px 10px' },
       { selector:'#pm-brand', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'100px' }, { selector:'#pm-brand span', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'68px', fontSize:'13px' },
       { selector:'#pm-nav, #pm-nav input', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'100px' },
-      { selector:'#pm-workspace', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'480px', height:'680px' }, { selector:'#pm-header', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'480px' },
       { selector:'#pm-heading', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'132px' }, { selector:'#pm-tools', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'280px' }, { selector:'#pm-search', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'176px' },
-      { selector:'#pm-main', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'480px', height:'608px' }, { selector:'#pm-primary', mediaMinWidth:'600px', mediaMaxWidth:'749px', flex:'0 0 320px', width:'320px', height:'584px' },
+      { selector:'#pm-primary', mediaMinWidth:'600px', mediaMaxWidth:'749px', flex:'0 0 320px' },
       { selector:'#pm-intro', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'320px', height:'76px' }, { selector:'#pm-title, #pm-meta', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'300px' },
       { selector:'#pm-summary', mediaMinWidth:'600px', mediaMaxWidth:'749px', gridTemplateColumns:'1fr 1fr', gridTemplateRows:'84px 84px', width:'320px', height:'180px' },
       { selector:'#pm-summary article', mediaMinWidth:'600px', mediaMaxWidth:'749px', padding:'8px 12px' }, { selector:'#pm-summary strong', mediaMinWidth:'600px', mediaMaxWidth:'749px', height:'28px', fontSize:'20px', lineHeight:'28px' }, { selector:'#pm-summary span', mediaMinWidth:'600px', mediaMaxWidth:'749px', whiteSpace:'nowrap' },
@@ -224,9 +220,9 @@ export const representativeProjectDashboardFixture: ParityFixture = {
       { selector:'#pm-sidebar', mediaMaxWidth:'599px', flex:'0 0 64px', flexDirection:'row', alignItems:'center', gap:'10px', width:'370px', height:'64px', padding:'12px 10px' },
       { selector:'#pm-brand', mediaMaxWidth:'599px', flex:'0 0 100px', width:'100px', height:'40px' }, { selector:'#pm-brand span', mediaMaxWidth:'599px', width:'68px', fontSize:'13px' },
       { selector:'#pm-nav', mediaMaxWidth:'599px', flexDirection:'row', gap:'4px', width:'240px', height:'40px' }, { selector:'#pm-nav input', mediaMaxWidth:'599px', width:'77.333px', height:'40px', padding:'8px 5px', fontSize:'11px', textAlign:'center' },
-      { selector:'#pm-workspace', mediaMaxWidth:'599px', width:'370px', height:'760px' }, { selector:'#pm-header', mediaMaxWidth:'599px', flex:'0 0 96px', width:'370px', height:'96px', padding:'12px 10px' },
+      { selector:'#pm-header', mediaMaxWidth:'599px', flex:'0 0 96px', padding:'12px 10px' },
       { selector:'#pm-heading', mediaMaxWidth:'599px', width:'144px' }, { selector:'#pm-tools', mediaMaxWidth:'599px', width:'198px' }, { selector:'#pm-search', mediaMaxWidth:'599px', width:'110px' }, { selector:'#pm-new', mediaMaxWidth:'599px', width:'80px' },
-      { selector:'#pm-main', mediaMaxWidth:'599px', flexDirection:'column', gap:'10px', width:'370px', height:'664px', padding:'10px' }, { selector:'#pm-primary', mediaMaxWidth:'599px', flex:'0 0 430px', width:'350px', height:'430px', gap:'10px' },
+      { selector:'#pm-main', mediaMaxWidth:'599px', flexDirection:'column', gap:'10px', padding:'10px' }, { selector:'#pm-primary', mediaMaxWidth:'599px', flex:'0 0 430px', gap:'10px' },
       { selector:'#pm-intro', mediaMaxWidth:'599px', width:'350px', height:'76px' }, { selector:'#pm-title, #pm-meta', mediaMaxWidth:'599px', width:'330px' },
       { selector:'#pm-summary', mediaMaxWidth:'599px', gridTemplateColumns:'1fr 1fr 1fr', gridTemplateRows:'130px', gap:'8px', width:'350px', height:'130px' }, { selector:'#pm-summary article', mediaMaxWidth:'599px', padding:'10px' },
       { selector:'#pm-summary strong', mediaMaxWidth:'599px', height:'32px', fontSize:'20px' },
