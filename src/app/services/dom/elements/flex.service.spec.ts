@@ -33,4 +33,24 @@ describe('FlexService', () => {
 
     expect(margin).toEqual({ top: 8, right: 2, bottom: 3, left: 4 });
   });
+
+  it('expands the flex shorthand and lets longhands override it', () => {
+    const service = new FlexService({} as never, {} as never, {} as never);
+    const render = {
+      actions: {
+        style: {
+          parseFlexShorthand: () => ({ flexGrow: 0, flexShrink: 0, flexBasis: '88px' }),
+          parseFlexGrow: (value: string) => Number(value),
+          parseFlexShrink: (value: string) => Number(value),
+          parseFlexBasis: (value: string) => value,
+        },
+      },
+    } as unknown as BabylonRender;
+
+    expect(service['resolveFlexProperties'](render, {
+      selector: '#item',
+      flex: '0 0 88px',
+      flexGrow: '2',
+    })).toEqual({ flexGrow: 2, flexShrink: 0, flexBasis: '88px' });
+  });
 });

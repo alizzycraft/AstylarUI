@@ -312,7 +312,11 @@ export class ElementCreationService {
     // Calculate position
     const stackingZPosition =
       this.stackingContextManager.calculateZPosition(element, style);
-    const zPosition = flexPosition ? flexPosition.z : stackingZPosition;
+    const hasExplicitStackingOrder =
+      style.zIndex !== undefined && style.zIndex !== "auto";
+    const zPosition = flexPosition && !hasExplicitStackingOrder
+      ? flexPosition.z
+      : stackingZPosition;
 
     let worldX: number, worldY: number;
     if (flexPosition) {

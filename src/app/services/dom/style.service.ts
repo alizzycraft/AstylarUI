@@ -314,6 +314,19 @@ export class StyleService {
         const winners = new Map<keyof StyleRule, { specificity: number; sourceOrder: number; value: unknown }>();
         const debugSegments: string[] = [];
 
+        const recordWinner = (
+            property: keyof StyleRule,
+            value: unknown,
+            specificity: number,
+            sourceOrder: number,
+        ): void => {
+            const current = winners.get(property);
+            if (!current || specificity > current.specificity ||
+                (specificity === current.specificity && sourceOrder >= current.sourceOrder)) {
+                winners.set(property, { specificity, sourceOrder, value });
+            }
+        };
+
         styles.forEach((rule, sourceOrder) => {
             if (!this.matchesMediaConditions(rule)) return;
 
@@ -329,10 +342,12 @@ export class StyleService {
                         continue;
                     }
                     const key = property as keyof StyleRule;
-                    const current = winners.get(key);
-                    if (!current || specificity > current.specificity ||
-                        (specificity === current.specificity && sourceOrder >= current.sourceOrder)) {
-                        winners.set(key, { specificity, sourceOrder, value });
+                    recordWinner(key, value, specificity, sourceOrder);
+                    if (key === 'flex') {
+                        const expanded = this.parseFlexShorthand(String(value));
+                        recordWinner('flexGrow', String(expanded.flexGrow), specificity, sourceOrder);
+                        recordWinner('flexShrink', String(expanded.flexShrink), specificity, sourceOrder);
+                        recordWinner('flexBasis', expanded.flexBasis, specificity, sourceOrder);
                     }
                 }
             });
@@ -352,7 +367,16 @@ export class StyleService {
         }
 
         if (element.style) {
-            mergedStyle = { ...mergedStyle, ...element.style };
+            for (const [property, value] of Object.entries(element.style)) {
+                if (value === undefined) continue;
+                (mergedStyle as unknown as Record<string, unknown>)[property] = value;
+                if (property === 'flex') {
+                    const expanded = this.parseFlexShorthand(String(value));
+                    mergedStyle.flexGrow = String(expanded.flexGrow);
+                    mergedStyle.flexShrink = String(expanded.flexShrink);
+                    mergedStyle.flexBasis = expanded.flexBasis;
+                }
+            }
             debugSegments.push('inline');
         }
 

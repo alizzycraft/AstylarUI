@@ -361,5 +361,11 @@
     "title": "Composed checkout form",
     "category": "composed-application",
     "expectedBehavior": "A semantic checkout form composes a positioned fieldset, mixed controls, aligned actions, and a flex order summary without renderer-specific structure."
+  },
+  {
+    "id": "composed-notification-center",
+    "title": "Composed notification center",
+    "category": "composed-application",
+    "expectedBehavior": "A compact toolbar and clipped stack of fixed-height notification rows preserve nested flex alignment, ellipsis, status styling, and the overflow boundary."
   }
 ]

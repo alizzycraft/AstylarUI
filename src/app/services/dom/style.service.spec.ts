@@ -72,6 +72,17 @@ describe('StyleService cascade', () => {
     expect(service.findStyleForElement(element, styles, context)?.background).toBe('#f97316');
   });
 
+  it('expands authored flex shorthand over browser-default longhands', () => {
+    const element: DOMElement = { type: 'article', id: 'fixed-item' };
+    const result = service.findStyleForElement(element, [
+      { selector: '#fixed-item', flex: '0 0 88px' },
+    ]);
+
+    expect(result?.flexGrow).toBe('0');
+    expect(result?.flexShrink).toBe('0');
+    expect(result?.flexBasis).toBe('88px');
+  });
+
   it('matches scoped descendant selectors through multiple ancestors', () => {
     const card: DOMElement = { type: 'section', class: 'selector-card' };
     const content: DOMElement = { type: 'div', class: 'selector-content' };

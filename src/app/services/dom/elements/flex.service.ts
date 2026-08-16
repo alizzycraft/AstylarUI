@@ -163,11 +163,8 @@ export class FlexService {
 
       console.log(`[FLEX] Child ${child.id} calculated dimensions: width=${width}px, height=${height}px`);
 
-      const flexGrow = parseFloat(style?.flexGrow || '0') || 0;
-      // Fix: Handle flexShrink=0 correctly (don't use || 1 which converts 0 to 1)
-      const flexShrinkValue = style?.flexShrink !== undefined ? parseFloat(style.flexShrink) : 1;
-      const flexShrink = isNaN(flexShrinkValue) ? 1 : flexShrinkValue;
-      const flexBasis = style?.flexBasis || 'auto';
+      const flexProperties = this.resolveFlexProperties(render, style);
+      const { flexGrow, flexShrink, flexBasis } = flexProperties;
       const alignSelf = style?.alignSelf || 'auto';
       const order = parseFloat(style?.order || '0') || 0;
 
@@ -526,6 +523,24 @@ export class FlexService {
     }
 
     return { top: 0, right: 0, bottom: 0, left: 0 };
+  }
+
+  private resolveFlexProperties(
+    render: BabylonRender,
+    style: StyleRule | undefined,
+  ): { flexGrow: number; flexShrink: number; flexBasis: string } {
+    const shorthand = render.actions.style.parseFlexShorthand(style?.flex);
+    return {
+      flexGrow: style?.flexGrow !== undefined
+        ? render.actions.style.parseFlexGrow(style.flexGrow)
+        : shorthand.flexGrow,
+      flexShrink: style?.flexShrink !== undefined
+        ? render.actions.style.parseFlexShrink(style.flexShrink)
+        : shorthand.flexShrink,
+      flexBasis: style?.flexBasis !== undefined
+        ? render.actions.style.parseFlexBasis(style.flexBasis)
+        : shorthand.flexBasis,
+    };
   }
 
   private parseMarginBox(style?: StyleRule): { top: number; right: number; bottom: number; left: number } {
