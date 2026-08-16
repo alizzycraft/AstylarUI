@@ -373,5 +373,11 @@
     "title": "Mixed three-column grid tracks",
     "category": "grid",
     "expectedBehavior": "Six items auto-place across two explicit rows with fixed and fractional columns plus independent row and column gaps."
+  },
+  {
+    "id": "nested-overflow-intersection",
+    "title": "Intersected nested overflow clips",
+    "category": "overflow-scrolling",
+    "expectedBehavior": "A positioned descendant is clipped to the intersection of two overflow-hidden ancestor padding boxes."
   }
 ]

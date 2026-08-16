@@ -8,8 +8,8 @@ This scorecard tracks the second parity phase: making ordinary application-orien
 
 | Gate | Current | Target | Status |
 | --- | ---: | ---: | --- |
-| Total parity fixtures | 62 | 65 | Open |
-| New Phase 2 fixtures | 22 | 25 | Open |
+| Total parity fixtures | 63 | 65 | Open |
+| New Phase 2 fixtures | 23 | 25 | Open |
 | Composed application/component fixtures | 10 | 10 | Passing |
 | Deterministic viewport sizes | 3 exercised | 3 exercised | Passing |
 | Median SSIM | 0.9953 | >= 0.98 | Passing |
@@ -28,7 +28,7 @@ This scorecard tracks the second parity phase: making ordinary application-orien
 | Selectors and cascade | 5 | Relationship combinators plus first/last structural pseudo-classes | In progress |
 | CSS Grid | 2 | Two- and three-column mixed fixed/fr tracks, independent gaps, stretch, and row-order auto-placement | Passing |
 | Responsive behavior | 2 | Viewport-relative geometry and width media conditions across three profiles | In progress |
-| Overflow and scrolling | 1 | Hidden overflow clipping for positioned descendants | In progress |
+| Overflow and scrolling | 2 | Hidden overflow for positioned descendants and intersected nested clipping ancestors | Passing |
 | Controls and states | 1 | Enabled, disabled, and checked selector states with element opacity | In progress |
 | Layering and overlays | 1 | Nested parent stacking contexts and bounded child z-index | In progress |
 | Composed applications | 10 | Dashboard, responsive gallery, settings, modal, popover, article, sidebar, data table, checkout, and notification-center pages | Passing |
@@ -95,6 +95,7 @@ The committed 40-fixture Phase 1 suite was rerun before Phase 2 work began. It p
 | Composed checkout form | Baseline SSIM `0.9569`; ID-less summary spans painted no text, and `margin-top: 8px` on the total row was ignored, exceeding the edge gate at `8.006px` | Used generated mesh IDs for ID-less text rendering and applied flex margin longhands over shorthand values | Fixture SSIM `0.9585`; max edge error `0.104px`; exact text; suite median `0.9953`; 73 tests and both builds pass | `fix: support ordinary checkout composition` |
 | Composed notification center | Fixed-height rows shrank by `20px` each despite `flex: 0 0 88px`, producing SSIM `0.8861` and `99.969px` maximum edge error; explicit badge stacking was also discarded inside flex layout | Expanded flex shorthand in the cascade and honored explicit z-index for positioned flex items | Fixture SSIM `0.9502`; max edge error `0.095px`; exact text and clipping; suite median `0.9952`; 75 tests and both builds pass | `fix: preserve fixed notification layout` |
 | Mixed Grid tracks | Three columns with unequal fractional weights and a second explicit row had no unsupported behavior | No renderer change; retained the six-item case as a focused regression fixture | Fixture SSIM `0.9998`; max edge error `0.041px`; all suite thresholds pass | `test: cover mixed grid tracks` |
+| Nested overflow intersection | A descendant crossed both an inner clip and its narrower outer ancestor | No renderer change; retained the intersected clip as a focused regression fixture | Fixture SSIM `1.0000`; max edge error `0.078px`; clipping visually exact | `test: cover nested overflow intersection` |
 
 ## Remaining work
 
@@ -108,4 +109,4 @@ The committed 40-fixture Phase 1 suite was rerun before Phase 2 work began. It p
 
 ## Next target
 
-Add a focused nested-overflow fixture covering intersected clipping ancestors.
+Add a focused control-state fixture covering required/optional and read-only/read-write selectors.
