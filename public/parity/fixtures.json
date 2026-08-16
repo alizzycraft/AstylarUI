@@ -472,5 +472,11 @@
     "title": "Row flex container intrinsic height",
     "category": "flexbox",
     "expectedBehavior": "A nowrap row flex container with height auto uses the largest outer cross size of its in-flow items, plus its own padding and borders."
+  },
+  {
+    "id": "flex-column-auto-height",
+    "title": "Column flex container intrinsic height",
+    "category": "flexbox",
+    "expectedBehavior": "A height-auto nowrap column flex container sums its in-flow items, non-collapsing main-axis margins, gaps, padding, and borders."
   }
 ]

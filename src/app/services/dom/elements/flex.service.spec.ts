@@ -191,6 +191,36 @@ describe('FlexService', () => {
     expect(height).toBe(81);
   });
 
+  it('sums margins and gaps for a nowrap column flex container', () => {
+    const service = new FlexService(new FlexLayoutService(), {} as never, {} as never);
+    const first: DOMElement = { type: 'div', id: 'first' };
+    const second: DOMElement = { type: 'div', id: 'second' };
+    const resolved = new Map<string, StyleRule>([
+      ['first', { selector: '#first', height: '32px', marginBottom: '5px' }],
+      ['second', { selector: '#second', height: '44px', marginTop: '7px' }],
+    ]);
+    const render = {
+      actions: { style: { findStyleForElement: (element: DOMElement) => resolved.get(element.id ?? '') } },
+    } as unknown as BabylonRender;
+    const dom = {
+      context: { elementStyles: new Map() },
+    } as unknown as BabylonDOM;
+
+    const height = service['calculateIntrinsicContainerHeight'](
+      { type: 'div', id: 'column', children: [first, second] },
+      {
+        selector: '#column', display: 'flex', flexDirection: 'column', flexWrap: 'nowrap',
+        width: '240px', height: 'auto', gap: '10px', padding: '12px', borderWidth: '2px',
+      },
+      [],
+      dom,
+      render,
+      240,
+    );
+
+    expect(height).toBe(126);
+  });
+
   it('stretches a height-auto item through a padded row flex container', () => {
     const service = new FlexService(new FlexLayoutService(), {} as never, {} as never);
     const item: FlexItem = {

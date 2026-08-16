@@ -76,6 +76,7 @@ import { nestedFlexPaddingStretchFixture } from './nested-flex-padding-stretch.f
 import { gridAutoHeightFixture } from './grid-auto-height.fixture';
 import { intrinsicTextareaRowsFixture } from './intrinsic-textarea-rows.fixture';
 import { flexRowAutoHeightFixture } from './flex-row-auto-height.fixture';
+import { flexColumnAutoHeightFixture } from './flex-column-auto-height.fixture';
 import { ParityFixture } from '../parity.types';
 
 const fixtures: readonly ParityFixture[] = [
@@ -156,7 +157,8 @@ const fixtures: readonly ParityFixture[] = [
   nestedFlexPaddingStretchFixture,
   gridAutoHeightFixture,
   intrinsicTextareaRowsFixture,
-  flexRowAutoHeightFixture
+  flexRowAutoHeightFixture,
+  flexColumnAutoHeightFixture
 ];
 
 const fixturesById = new Map(fixtures.map((fixture) => [fixture.id, fixture]));

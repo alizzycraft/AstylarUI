@@ -441,42 +441,35 @@ export class FlexService {
     if (isNowrapRowFlex) {
       let largestOuterCrossSize: number | null = null;
       for (const child of children) {
-        const childStyle = render.actions.style.findStyleForElement(
-          child,
-          styles,
-          dom.context.elementStyles,
+        const measured = this.measureIntrinsicFlowChild(
+          child, styles, dom, render, contentWidth,
         );
-        if (this.classifyFlexChild(childStyle) !== 'flow') continue;
-
-        const margin = this.parseMarginBox(childStyle);
-        const childWidth = childStyle?.width && childStyle.width !== 'auto'
-          ? this.parseIntrinsicPixelLength(childStyle.width, contentWidth)
-          : contentWidth;
-        let childHeight = childStyle?.height && childStyle.height !== 'auto'
-          ? this.parseIntrinsicPixelLength(childStyle.height, 0)
-          : null;
-        if (childHeight === null) {
-          childHeight = this.calculateIntrinsicTextHeight(
-            child,
-            childStyle,
-            styles,
-            childWidth,
-          ) ?? this.calculateIntrinsicContainerHeight(
-            child,
-            childStyle,
-            styles,
-            dom,
-            render,
-            childWidth,
-          );
-        }
-        if (childHeight === null) continue;
-
-        const outerCrossSize = margin.top + childHeight + margin.bottom;
+        if (!measured) continue;
+        const outerCrossSize = measured.margin.top + measured.height + measured.margin.bottom;
         largestOuterCrossSize = Math.max(largestOuterCrossSize ?? 0, outerCrossSize);
       }
       if (largestOuterCrossSize !== null) {
         return largestOuterCrossSize + padding.top + padding.bottom + borderWidth * 2;
+      }
+    }
+    const isNowrapColumnFlex = ['flex', 'inline-flex'].includes(style?.display?.toLowerCase() ?? '') &&
+      ['column', 'column-reverse'].includes(style?.flexDirection?.toLowerCase() ?? 'row') &&
+      (style?.flexWrap?.toLowerCase() ?? 'nowrap') === 'nowrap';
+    if (isNowrapColumnFlex) {
+      let flexContentHeight = 0;
+      let flowChildCount = 0;
+      for (const child of children) {
+        const measured = this.measureIntrinsicFlowChild(
+          child, styles, dom, render, contentWidth,
+        );
+        if (!measured) continue;
+        flexContentHeight += measured.margin.top + measured.height + measured.margin.bottom;
+        flowChildCount++;
+      }
+      if (flowChildCount > 0) {
+        const rowGap = this.parseGapProperties(style!).rowGap;
+        return flexContentHeight + rowGap * (flowChildCount - 1) +
+          padding.top + padding.bottom + borderWidth * 2;
       }
     }
     let contentHeight = 0;
@@ -484,48 +477,61 @@ export class FlexService {
     let hasFlowChild = false;
 
     for (const child of children) {
-      const childStyle = render.actions.style.findStyleForElement(
-        child,
-        styles,
-        dom.context.elementStyles,
+      const measured = this.measureIntrinsicFlowChild(
+        child, styles, dom, render, contentWidth,
       );
-      if (this.classifyFlexChild(childStyle) !== 'flow') continue;
-
-      const margin = this.parseMarginBox(childStyle);
-      const childWidth = childStyle?.width && childStyle.width !== 'auto'
-        ? this.parseIntrinsicPixelLength(childStyle.width, contentWidth)
-        : contentWidth;
-      let childHeight = childStyle?.height && childStyle.height !== 'auto'
-        ? this.parseIntrinsicPixelLength(childStyle.height, 0)
-        : null;
-      if (childHeight === null) {
-        childHeight = this.calculateIntrinsicTextHeight(
-          child,
-          childStyle,
-          styles,
-          childWidth,
-        ) ?? this.calculateIntrinsicContainerHeight(
-          child,
-          childStyle,
-          styles,
-          dom,
-          render,
-          childWidth,
-        );
-      }
-      if (childHeight === null) continue;
+      if (!measured) continue;
 
       contentHeight += hasFlowChild
-        ? Math.max(previousBottomMargin, margin.top)
-        : margin.top;
-      contentHeight += childHeight;
-      previousBottomMargin = margin.bottom;
+        ? Math.max(previousBottomMargin, measured.margin.top)
+        : measured.margin.top;
+      contentHeight += measured.height;
+      previousBottomMargin = measured.margin.bottom;
       hasFlowChild = true;
     }
 
     if (!hasFlowChild) return null;
     return contentHeight + previousBottomMargin +
       padding.top + padding.bottom + borderWidth * 2;
+  }
+
+  private measureIntrinsicFlowChild(
+    child: DOMElement,
+    styles: StyleRule[],
+    dom: BabylonDOM,
+    render: BabylonRender,
+    contentWidth: number,
+  ): { height: number; margin: { top: number; right: number; bottom: number; left: number } } | null {
+    const childStyle = render.actions.style.findStyleForElement(
+      child,
+      styles,
+      dom.context.elementStyles,
+    );
+    if (this.classifyFlexChild(childStyle) !== 'flow') return null;
+
+    const childWidth = childStyle?.width && childStyle.width !== 'auto'
+      ? this.parseIntrinsicPixelLength(childStyle.width, contentWidth)
+      : contentWidth;
+    let childHeight = childStyle?.height && childStyle.height !== 'auto'
+      ? this.parseIntrinsicPixelLength(childStyle.height, 0)
+      : null;
+    if (childHeight === null) {
+      childHeight = this.calculateIntrinsicTextHeight(
+        child,
+        childStyle,
+        styles,
+        childWidth,
+      ) ?? this.calculateIntrinsicContainerHeight(
+        child,
+        childStyle,
+        styles,
+        dom,
+        render,
+        childWidth,
+      );
+    }
+    if (childHeight === null) return null;
+    return { height: childHeight, margin: this.parseMarginBox(childStyle) };
   }
 
   private parseIntrinsicPixelLength(value: string, percentageReference: number): number {
