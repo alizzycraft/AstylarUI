@@ -54,6 +54,7 @@ import { composedResponsiveGalleryFixture } from './composed-responsive-gallery.
 import { composedSettingsFormFixture } from './composed-settings-form.fixture';
 import { composedModalFixture } from './composed-modal.fixture';
 import { composedPopoverFixture } from './composed-popover.fixture';
+import { composedArticleFixture } from './composed-article.fixture';
 import { ParityFixture } from '../parity.types';
 
 const fixtures: readonly ParityFixture[] = [
@@ -112,7 +113,8 @@ const fixtures: readonly ParityFixture[] = [
   composedResponsiveGalleryFixture,
   composedSettingsFormFixture,
   composedModalFixture,
-  composedPopoverFixture
+  composedPopoverFixture,
+  composedArticleFixture
 ];
 
 const fixturesById = new Map(fixtures.map((fixture) => [fixture.id, fixture]));
