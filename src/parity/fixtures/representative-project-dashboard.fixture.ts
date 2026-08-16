@@ -67,7 +67,7 @@ export const representativeProjectDashboardFixture: ParityFixture = {
       #parity-reference-viewport { position:relative; overflow:hidden; background:#dbe4ee; font-family:Arial,sans-serif; }
       #pm-shell, #pm-shell * { box-sizing:border-box; }
       #pm-shell { display:flex; position:absolute; left:20px; top:20px; width:760px; height:560px; margin:0; padding:0; background:#ffffff; overflow:hidden; }
-      #pm-sidebar { display:flex; flex:0 0 160px; flex-direction:column; gap:28px; width:160px; height:560px; margin:0; padding:20px 14px; background:#172554; overflow:hidden; }
+      #pm-sidebar { display:flex; flex:0 0 160px; flex-direction:column; gap:28px; margin:0; padding:20px 14px; background:#172554; overflow:hidden; }
       #pm-brand { display:flex; align-items:center; gap:8px; width:132px; height:32px; color:#ffffff; font:700 16px/24px Arial,sans-serif; }
       #pm-brand span { width:132px; height:24px; }
       #pm-nav { display:flex; flex-direction:column; gap:6px; width:132px; height:132px; }
@@ -113,7 +113,7 @@ export const representativeProjectDashboardFixture: ParityFixture = {
       @media (min-width:600px) and (max-width:749px) {
         #pm-help { left:596px; top:676px; }
         #pm-shell { left:20px; top:20px; width:600px; height:680px; }
-        #pm-sidebar { flex-basis:120px; width:120px; height:680px; padding:20px 10px; }
+        #pm-sidebar { flex-basis:120px; padding:20px 10px; }
         #pm-brand { width:100px; } #pm-brand span { width:68px; font-size:13px; }
         #pm-nav, #pm-nav input { width:100px; }
         #pm-heading { width:132px; } #pm-tools { width:280px; } #pm-search { width:176px; }
@@ -131,7 +131,7 @@ export const representativeProjectDashboardFixture: ParityFixture = {
       @media (max-width:599px) {
         #pm-help { left:346px; top:800px; }
         #pm-shell { flex-direction:column; left:10px; top:10px; width:370px; height:824px; }
-        #pm-sidebar { flex:0 0 64px; flex-direction:row; align-items:center; gap:10px; width:370px; height:64px; padding:12px 10px; }
+        #pm-sidebar { flex:0 0 64px; flex-direction:row; align-items:center; gap:10px; padding:12px 10px; }
         #pm-brand { flex:0 0 100px; width:100px; height:40px; } #pm-brand span { width:68px; font-size:13px; }
         #pm-nav { flex-direction:row; gap:4px; width:240px; height:40px; }
         #pm-nav input { width:77.333px; height:40px; padding:8px 5px; font-size:11px; text-align:center; }
@@ -158,7 +158,7 @@ export const representativeProjectDashboardFixture: ParityFixture = {
       { selector:'root', background:'#dbe4ee', fontFamily:'Arial, sans-serif' },
       { selector:'#pm-shell, #pm-shell *', boxSizing:'border-box' },
       { selector:'#pm-shell', display:'flex', position:'absolute', left:'20px', top:'20px', width:'760px', height:'560px', margin:'0', padding:'0', background:'#ffffff', overflow:'hidden' },
-      { selector:'#pm-sidebar', display:'flex', flex:'0 0 160px', flexDirection:'column', gap:'28px', width:'160px', height:'560px', margin:'0', padding:'20px 14px', background:'#172554', overflow:'hidden' },
+      { selector:'#pm-sidebar', display:'flex', flex:'0 0 160px', flexDirection:'column', gap:'28px', margin:'0', padding:'20px 14px', background:'#172554', overflow:'hidden' },
       { selector:'#pm-brand', display:'flex', alignItems:'center', gap:'8px', width:'132px', height:'32px', color:'#ffffff', fontFamily:'Arial, sans-serif', fontSize:'16px', fontWeight:'700', lineHeight:'24px' },
       { selector:'#pm-brand span', width:'132px', height:'24px' },
       { selector:'#pm-nav', display:'flex', flexDirection:'column', gap:'6px', width:'132px', height:'132px' },
@@ -202,7 +202,7 @@ export const representativeProjectDashboardFixture: ParityFixture = {
       { selector:'#pm-help', position:'fixed', left:'756px', top:'556px', width:'36px', height:'36px', margin:'0', padding:'6px', borderWidth:'0', borderRadius:'18px', zIndex:'5', background:'#0f172a', color:'#ffffff', fontFamily:'Arial, sans-serif', fontSize:'16px', fontWeight:'700', lineHeight:'24px', textAlign:'center' },
       { selector:'#pm-help', mediaMinWidth:'600px', mediaMaxWidth:'749px', left:'596px', top:'676px' },
       { selector:'#pm-shell', mediaMinWidth:'600px', mediaMaxWidth:'749px', left:'20px', top:'20px', width:'600px', height:'680px' },
-      { selector:'#pm-sidebar', mediaMinWidth:'600px', mediaMaxWidth:'749px', flex:'0 0 120px', width:'120px', height:'680px', padding:'20px 10px' },
+      { selector:'#pm-sidebar', mediaMinWidth:'600px', mediaMaxWidth:'749px', flex:'0 0 120px', padding:'20px 10px' },
       { selector:'#pm-brand', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'100px' }, { selector:'#pm-brand span', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'68px', fontSize:'13px' },
       { selector:'#pm-nav, #pm-nav input', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'100px' },
       { selector:'#pm-heading', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'132px' }, { selector:'#pm-tools', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'280px' }, { selector:'#pm-search', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'176px' },
@@ -217,7 +217,7 @@ export const representativeProjectDashboardFixture: ParityFixture = {
       { selector:'#pm-activity-list', mediaMinWidth:'600px', mediaMaxWidth:'749px', height:'536px' }, { selector:'#pm-activity-list article', mediaMinWidth:'600px', mediaMaxWidth:'749px', flex:'0 0 112px', width:'104px', height:'112px', padding:'8px' },
       { selector:'#pm-shell', mediaMaxWidth:'599px', flexDirection:'column', left:'10px', top:'10px', width:'370px', height:'824px' },
       { selector:'#pm-help', mediaMaxWidth:'599px', left:'346px', top:'800px' },
-      { selector:'#pm-sidebar', mediaMaxWidth:'599px', flex:'0 0 64px', flexDirection:'row', alignItems:'center', gap:'10px', width:'370px', height:'64px', padding:'12px 10px' },
+      { selector:'#pm-sidebar', mediaMaxWidth:'599px', flex:'0 0 64px', flexDirection:'row', alignItems:'center', gap:'10px', padding:'12px 10px' },
       { selector:'#pm-brand', mediaMaxWidth:'599px', flex:'0 0 100px', width:'100px', height:'40px' }, { selector:'#pm-brand span', mediaMaxWidth:'599px', width:'68px', fontSize:'13px' },
       { selector:'#pm-nav', mediaMaxWidth:'599px', flexDirection:'row', gap:'4px', width:'240px', height:'40px' }, { selector:'#pm-nav input', mediaMaxWidth:'599px', width:'77.333px', height:'40px', padding:'8px 5px', fontSize:'11px', textAlign:'center' },
       { selector:'#pm-header', mediaMaxWidth:'599px', flex:'0 0 96px', padding:'12px 10px' },
