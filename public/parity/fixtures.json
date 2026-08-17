@@ -730,5 +730,12 @@
     "category": "forms-interactive",
     "expectedBehavior": "Submitting an empty required field emits invalid and focuses it without submit; after entry, the same button emits submit.",
     "interactionStepCount": 3
+  },
+  {
+    "id": "interaction-form-implicit-submit",
+    "title": "Single-line implicit form submission",
+    "category": "forms-interactive",
+    "expectedBehavior": "Enter in a focused single-line field synthesizes the form submit button click and submit while retaining field focus.",
+    "interactionStepCount": 2
   }
 ]

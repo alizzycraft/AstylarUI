@@ -876,6 +876,24 @@ describe('AstylarInteractionRuntime', () => {
     ]);
     expect(focusedElementId).toBe('name');
 
+    invalidIds = [];
+    events.length = 0;
+    const enter = new KeyboardEvent('keydown', {
+      key: 'Enter', code: 'Enter', bubbles: true, cancelable: true,
+    });
+    canvas.dispatchEvent(enter);
+    canvas.dispatchEvent(new KeyboardEvent('keyup', {
+      key: 'Enter', code: 'Enter', bubbles: true, cancelable: true,
+    }));
+    expect(enter.defaultPrevented).toBeTrue();
+    expect(events.map((event) => `${event.type}:${event.targetId}`)).toEqual([
+      'keydown:name',
+      'click:submit-button',
+      'submit:settings',
+      'keyup:name',
+    ]);
+    expect(focusedElementId).toBe('name');
+
     runtime.dispose();
     scene.dispose();
     engine.dispose();

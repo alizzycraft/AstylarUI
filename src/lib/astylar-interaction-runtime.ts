@@ -62,6 +62,7 @@ export class AstylarInteractionRuntime {
   private focusOrder: string[] = [];
   private labelTargets = new Map<string, string>();
   private formDefaults = new Map<string, AstylarFormDefault>();
+  private implicitSubmitTargets = new Map<string, string>();
   private focusedValueAtEntry?: string;
   private pendingSpaceActivationId?: string;
 
@@ -77,6 +78,7 @@ export class AstylarInteractionRuntime {
     this.focusOrder = this.buildFocusOrder(siteData);
     this.labelTargets = this.buildLabelTargets(siteData);
     this.formDefaults = this.buildFormDefaults(siteData);
+    this.implicitSubmitTargets = this.buildImplicitSubmitTargets(siteData);
     this.pointerObserver = scene.onPointerObservable.add((pointerInfo) => {
       this.handlePointer(pointerInfo);
     });
@@ -105,6 +107,7 @@ export class AstylarInteractionRuntime {
     this.focusOrder = this.buildFocusOrder(siteData);
     this.labelTargets = this.buildLabelTargets(siteData);
     this.formDefaults = this.buildFormDefaults(siteData);
+    this.implicitSubmitTargets = this.buildImplicitSubmitTargets(siteData);
     if (this.pressedElementId && !this.dispatcher.hasEnabledTarget(this.pressedElementId)) {
       this.pressedElementId = undefined;
     }
@@ -238,6 +241,14 @@ export class AstylarInteractionRuntime {
     if (event.key === 'Enter' && this.controls?.canActivateWithEnter?.(targetId)) {
       event.preventDefault();
       this.activateAndClick(targetId);
+      return;
+    }
+    const implicitSubmitTarget = event.key === 'Enter'
+      ? this.implicitSubmitTargets.get(targetId)
+      : undefined;
+    if (implicitSubmitTarget) {
+      event.preventDefault();
+      this.activateAndClick(implicitSubmitTarget);
       return;
     }
     if (event.key === ' ' && this.controls?.canActivateWithSpace?.(targetId)) {
@@ -456,6 +467,36 @@ export class AstylarInteractionRuntime {
     };
     siteData.root.children.forEach((element) => visit(element));
     return defaults;
+  }
+
+  private buildImplicitSubmitTargets(siteData: SiteData): Map<string, string> {
+    const targets = new Map<string, string>();
+    const textTypes = new Set(['text', 'password', 'email', 'number', 'search', 'tel', 'url']);
+    const visit = (
+      element: SiteData['root']['children'][number],
+      currentForm?: { id: string; fieldIds: string[]; submitId?: string },
+    ): void => {
+      let form = currentForm;
+      if (element.type === 'form' && element.id) {
+        form = { id: element.id, fieldIds: [] };
+      }
+      if (form && element.id) {
+        const inputType = element.inputType?.toLowerCase();
+        if (element.type === 'input' && textTypes.has(inputType ?? 'text') &&
+            !element.disabled && !element.readonly) {
+          form.fieldIds.push(element.id);
+        }
+        const isSubmit = (element.type === 'input' && inputType === 'submit') ||
+          (element.type === 'button' && (!inputType || inputType === 'submit'));
+        if (isSubmit && !element.disabled && !form.submitId) form.submitId = element.id;
+      }
+      element.children?.forEach((child) => visit(child, form));
+      if (element.type === 'form' && form && form.id === element.id && form.submitId) {
+        for (const fieldId of form.fieldIds) targets.set(fieldId, form.submitId);
+      }
+    };
+    siteData.root.children.forEach((element) => visit(element));
+    return targets;
   }
 
   private performFormDefault(buttonId: string): void {
