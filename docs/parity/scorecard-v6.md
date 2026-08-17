@@ -83,7 +83,9 @@ Current supported intrinsic rows are fixed pixel rows and non-spanning explicit 
 - Angular application production build and library TypeScript build after intrinsic `minmax()` row bounds: passing (existing Angular budget warnings only).
 - Focused nested application-content fixture: initial and accepted SSIM `0.9930`; all measured edges within `2px`; maximum error `0.0735px`; exact text/line counts; runtime clean. It covers a nested Grid, wrapped block text, button/text controls, and an explicitly sized image without requiring a new renderer workaround.
 - Full parity corpus with nested application-content coverage: 97 fixtures / 111 renders / three viewports; median SSIM `0.9966`; minimum SSIM `0.9509`; `99.9%` of measured edges within `2px`; maximum edge error `3.9921px`; exact text; runtime clean. All nine representative renders remain at their established values.
+- Final completion audit: 118/118 unit tests pass; the Angular application production build and library TypeScript build pass; the application build reports only the two pre-existing size-budget warnings; the committed worktree is clean.
+- Final stability procedure: after this audit is committed, run `npm run parity:check` three consecutive times without modifying the tree. The completion handoff records those results so that reporting them does not itself change the verified commit.
 
-## Next candidates
+## Deferred follow-up
 
 This phase's supported subset and completion thresholds are covered. Natural image dimensions cannot synchronously contribute to an ancestor track before texture metadata is available and remain deferred; a future phase should investigate asynchronous reflow before expanding this case. No further representative workaround should be changed without focused evidence.
