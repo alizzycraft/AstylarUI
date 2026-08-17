@@ -526,5 +526,11 @@
     "title": "Minmax grid tracks",
     "category": "grid",
     "expectedBehavior": "A minmax pixel-to-fr track participates in fractional sizing but cannot shrink below its minimum."
+  },
+  {
+    "id": "grid-auto-content-rows",
+    "title": "Content-sized auto grid rows",
+    "category": "grid",
+    "expectedBehavior": "Auto grid rows use the largest measurable item contribution in each row, and those rows plus gaps drive a height-auto grid container."
   }
 ]

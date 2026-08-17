@@ -5,6 +5,54 @@ import { StyleRule } from '../../../types/style-rule';
 import { BabylonDOM } from '../interfaces/dom.types';
 import { BabylonRender } from '../interfaces/render.types';
 
+export function tokenizeGridTrackList(template: string | undefined): string[] {
+  const source = template?.trim() ?? '';
+  if (!source) return [];
+  const tokens: string[] = [];
+  let token = '';
+  let depth = 0;
+  for (const character of source) {
+    if (/\s/.test(character) && depth === 0) {
+      if (token) tokens.push(token);
+      token = '';
+      continue;
+    }
+    token += character;
+    if (character === '(') depth++;
+    if (character === ')') depth = Math.max(0, depth - 1);
+  }
+  if (token) tokens.push(token);
+  return tokens;
+}
+
+export function resolveIntrinsicGridRows(
+  template: string | undefined,
+  columnCount: number,
+  itemOuterHeights: Array<number | null>,
+): number[] | null {
+  const explicitTokens = tokenizeGridTrackList(template);
+  const requiredRows = Math.max(1, Math.ceil(itemOuterHeights.length / Math.max(1, columnCount)));
+  const rowTokens = Array.from(
+    { length: Math.max(requiredRows, explicitTokens.length) },
+    (_, index) => explicitTokens[index] ?? 'auto',
+  );
+  if (rowTokens.some((token) => token !== 'auto' && !/^[+-]?(?:\d+\.?\d*|\.\d+)(?:px)?$/i.test(token))) {
+    return null;
+  }
+
+  const rows = rowTokens.map((token) => token === 'auto'
+    ? 0
+    : Math.max(0, Number.parseFloat(token) || 0));
+  for (let index = 0; index < itemOuterHeights.length; index++) {
+    const row = Math.floor(index / Math.max(1, columnCount));
+    if (rowTokens[row] !== 'auto') continue;
+    const contribution = itemOuterHeights[index];
+    if (contribution === null) return null;
+    rows[row] = Math.max(rows[row], contribution);
+  }
+  return rows;
+}
+
 @Injectable({ providedIn: 'root' })
 export class GridService {
   isGridContainer(
@@ -48,7 +96,20 @@ export class GridService {
     const columnCount = Math.max(1, this.trackCount(style.gridTemplateColumns));
     const requiredRows = Math.max(1, Math.ceil(visibleChildren.length / columnCount));
     const columns = this.resolveTracks(style.gridTemplateColumns, contentWidth, columnGap, columnCount);
-    const rows = this.resolveTracks(style.gridTemplateRows, contentHeight, rowGap, requiredRows);
+    const rowContributions = visibleChildren.map((child) => {
+      const childStyle = render.actions.style.findStyleForElement(
+        child, styles, dom.context.elementStyles,
+      );
+      const height = childStyle?.height?.trim();
+      return height && /^[+-]?(?:\d+\.?\d*|\.\d+)(?:px)?$/i.test(height)
+        ? Math.max(0, Number.parseFloat(height) || 0)
+        : null;
+    });
+    const intrinsicRows = resolveIntrinsicGridRows(
+      style.gridTemplateRows, columnCount, rowContributions,
+    );
+    const rows = intrinsicRows ??
+      this.resolveTracks(style.gridTemplateRows, contentHeight, rowGap, requiredRows);
     const contentLeft = -dimensions.width / 2 + dimensions.padding.left;
     const contentTop = dimensions.height / 2 - dimensions.padding.top;
 
@@ -89,7 +150,7 @@ export class GridService {
   }
 
   resolveTracks(template: string | undefined, availableSize: number, gap: number, fallbackCount: number): number[] {
-    const tokens = this.tokenizeTrackList(template);
+    const tokens = tokenizeGridTrackList(template);
     const trackTokens = tokens.length ? tokens : Array.from({ length: fallbackCount }, () => '1fr');
     const trackSpace = Math.max(0, availableSize - Math.max(0, trackTokens.length - 1) * gap);
     let fixed = 0;
@@ -152,27 +213,7 @@ export class GridService {
   }
 
   private trackCount(template: string | undefined): number {
-    return this.tokenizeTrackList(template).length;
-  }
-
-  private tokenizeTrackList(template: string | undefined): string[] {
-    const source = template?.trim() ?? '';
-    if (!source) return [];
-    const tokens: string[] = [];
-    let token = '';
-    let depth = 0;
-    for (const character of source) {
-      if (/\s/.test(character) && depth === 0) {
-        if (token) tokens.push(token);
-        token = '';
-        continue;
-      }
-      token += character;
-      if (character === '(') depth++;
-      if (character === ')') depth = Math.max(0, depth - 1);
-    }
-    if (token) tokens.push(token);
-    return tokens;
+    return tokenizeGridTrackList(template).length;
   }
 
   private resolveDefiniteTrackLength(value: string, percentageReference: number): number {

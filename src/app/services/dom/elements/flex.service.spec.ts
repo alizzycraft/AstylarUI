@@ -383,6 +383,37 @@ describe('FlexService', () => {
     expect(height).toBe(138);
   });
 
+  it('measures height-auto grid rows from item contributions and gaps', () => {
+    const service = new FlexService(new FlexLayoutService(), {} as never, {} as never);
+    const first: DOMElement = { type: 'div', id: 'first' };
+    const second: DOMElement = { type: 'div', id: 'second' };
+    const resolved = new Map<string, StyleRule>([
+      ['first', { selector: '#first', height: '36px' }],
+      ['second', { selector: '#second', height: '52px' }],
+    ]);
+    const render = {
+      actions: { style: { findStyleForElement: (element: DOMElement) => resolved.get(element.id ?? '') } },
+    } as unknown as BabylonRender;
+    const dom = {
+      context: { elementStyles: new Map() },
+    } as unknown as BabylonDOM;
+
+    const height = service['calculateIntrinsicContainerHeight'](
+      { type: 'div', id: 'grid', children: [first, second] },
+      {
+        selector: '#grid', display: 'grid', width: '248px', height: 'auto',
+        gridTemplateColumns: '220px', gridTemplateRows: 'auto auto', rowGap: '10px',
+        padding: '12px', borderWidth: '2px',
+      },
+      [],
+      dom,
+      render,
+      248,
+    );
+
+    expect(height).toBe(126);
+  });
+
   it('derives textarea flex-item height from its row count', () => {
     const textRendering = {
       calculateTextDimensions: () => ({ width: 100, height: 24, lineHeight: 24 }),

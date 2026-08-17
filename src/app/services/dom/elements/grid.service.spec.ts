@@ -1,4 +1,4 @@
-import { GridService } from './grid.service';
+import { GridService, resolveIntrinsicGridRows } from './grid.service';
 import { BabylonDOM } from '../interfaces/dom.types';
 import { BabylonRender } from '../interfaces/render.types';
 import { Mesh } from '@babylonjs/core';
@@ -18,6 +18,13 @@ describe('GridService', () => {
   it('keeps a flexible minmax track above its definite minimum', () => {
     expect(service.resolveTracks('minmax(260px, 1fr) 1fr', 460, 20, 2))
       .toEqual([260, 180]);
+  });
+
+  it('sizes auto rows from the largest item contribution in each row', () => {
+    expect(resolveIntrinsicGridRows('auto auto', 1, [36, 52]))
+      .toEqual([36, 52]);
+    expect(resolveIntrinsicGridRows('auto', 2, [24, 40]))
+      .toEqual([40]);
   });
 
   it('creates equal implicit tracks when no template is supplied', () => {

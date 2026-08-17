@@ -8,6 +8,7 @@ import { FlexLayoutService, FlexItem, FlexContainer, FlexLine } from './flex-lay
 import { TextRenderingService } from '../../text/text-rendering.service';
 import { TextStyleParserService } from '../../text/text-style-parser.service';
 import { ElementBorderService } from './element-border.service';
+import { resolveIntrinsicGridRows, tokenizeGridTrackList } from './grid.service';
 
 @Injectable({
   providedIn: 'root'
@@ -508,6 +509,26 @@ export class FlexService {
       return fixedGridRows.reduce((sum, track) => sum + track, 0) +
         rowGap * (fixedGridRows.length - 1) +
         padding.top + padding.bottom + borderWidth * 2;
+    }
+    if (style?.display?.toLowerCase() === 'grid') {
+      const columnCount = Math.max(1, tokenizeGridTrackList(style.gridTemplateColumns).length);
+      const contributions = children.map((child) => {
+        const measured = this.measureIntrinsicFlowChild(
+          child, styles, dom, render, contentWidth,
+        );
+        return measured
+          ? measured.margin.top + measured.height + measured.margin.bottom
+          : null;
+      });
+      const intrinsicRows = resolveIntrinsicGridRows(
+        style.gridTemplateRows, columnCount, contributions,
+      );
+      if (intrinsicRows) {
+        const rowGap = this.parseGapProperties(style).rowGap;
+        return intrinsicRows.reduce((sum, track) => sum + track, 0) +
+          rowGap * (intrinsicRows.length - 1) +
+          padding.top + padding.bottom + borderWidth * 2;
+      }
     }
     const isWrappedRowFlex = ['flex', 'inline-flex'].includes(style?.display?.toLowerCase() ?? '') &&
       ['row', 'row-reverse'].includes(style?.flexDirection?.toLowerCase() ?? 'row') &&
