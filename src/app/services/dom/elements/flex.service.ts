@@ -8,7 +8,11 @@ import { FlexLayoutService, FlexItem, FlexContainer, FlexLine } from './flex-lay
 import { TextRenderingService } from '../../text/text-rendering.service';
 import { TextStyleParserService } from '../../text/text-style-parser.service';
 import { ElementBorderService } from './element-border.service';
-import { resolveIntrinsicGridRows, tokenizeGridTrackList } from './grid-track-sizing';
+import {
+  resolveGridTracks,
+  resolveIntrinsicGridRows,
+  tokenizeGridTrackList,
+} from './grid-track-sizing';
 
 @Injectable({
   providedIn: 'root'
@@ -512,9 +516,13 @@ export class FlexService {
     }
     if (style?.display?.toLowerCase() === 'grid') {
       const columnCount = Math.max(1, tokenizeGridTrackList(style.gridTemplateColumns).length);
-      const contributions = children.map((child) => {
+      const { rowGap, columnGap } = this.parseGapProperties(style);
+      const columns = resolveGridTracks(
+        style.gridTemplateColumns, contentWidth, columnGap, columnCount,
+      );
+      const contributions = children.map((child, index) => {
         const measured = this.measureIntrinsicFlowChild(
-          child, styles, dom, render, contentWidth,
+          child, styles, dom, render, columns[index % columns.length] ?? contentWidth,
         );
         return measured
           ? measured.margin.top + measured.height + measured.margin.bottom
@@ -524,7 +532,6 @@ export class FlexService {
         style.gridTemplateRows, columnCount, contributions,
       );
       if (intrinsicRows) {
-        const rowGap = this.parseGapProperties(style).rowGap;
         return intrinsicRows.reduce((sum, track) => sum + track, 0) +
           rowGap * (intrinsicRows.length - 1) +
           padding.top + padding.bottom + borderWidth * 2;

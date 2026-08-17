@@ -87,6 +87,7 @@ import { gridPercentageContentWidthFixture } from './grid-percentage-content-wid
 import { gridMinmaxTracksFixture } from './grid-minmax-tracks.fixture';
 import { gridAutoContentRowsFixture } from './grid-auto-content-rows.fixture';
 import { gridAutoNestedFlexRowFixture } from './grid-auto-nested-flex-row.fixture';
+import { gridAutoWrappedTextRowFixture } from './grid-auto-wrapped-text-row.fixture';
 import { ParityFixture } from '../parity.types';
 
 const fixtures: readonly ParityFixture[] = [
@@ -178,7 +179,8 @@ const fixtures: readonly ParityFixture[] = [
   gridPercentageContentWidthFixture,
   gridMinmaxTracksFixture,
   gridAutoContentRowsFixture,
-  gridAutoNestedFlexRowFixture
+  gridAutoNestedFlexRowFixture,
+  gridAutoWrappedTextRowFixture
 ];
 
 const fixturesById = new Map(fixtures.map((fixture) => [fixture.id, fixture]));

@@ -538,5 +538,12 @@
     "title": "Auto grid row from nested flex content",
     "category": "grid",
     "expectedBehavior": "An auto grid row and height-auto grid container use the intrinsic height of a nested flex item whose children are text-sized."
+  },
+  {
+    "id": "grid-auto-wrapped-text-row",
+    "title": "Responsive auto grid row from wrapped text",
+    "category": "grid",
+    "expectedBehavior": "A Grid item is measured at its resolved column width, so responsive text wrapping drives the auto row and height-auto Grid container consistently.",
+    "viewportIds": ["desktop", "tablet", "mobile"]
   }
 ]

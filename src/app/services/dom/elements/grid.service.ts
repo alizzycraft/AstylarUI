@@ -5,7 +5,11 @@ import { StyleRule } from '../../../types/style-rule';
 import { BabylonDOM } from '../interfaces/dom.types';
 import { BabylonRender } from '../interfaces/render.types';
 import { FlexService } from './flex.service';
-import { resolveIntrinsicGridRows, tokenizeGridTrackList } from './grid-track-sizing';
+import {
+  resolveGridTracks,
+  resolveIntrinsicGridRows,
+  tokenizeGridTrackList,
+} from './grid-track-sizing';
 
 @Injectable({ providedIn: 'root' })
 export class GridService {
@@ -114,77 +118,11 @@ export class GridService {
   }
 
   resolveTracks(template: string | undefined, availableSize: number, gap: number, fallbackCount: number): number[] {
-    const tokens = tokenizeGridTrackList(template);
-    const trackTokens = tokens.length ? tokens : Array.from({ length: fallbackCount }, () => '1fr');
-    const trackSpace = Math.max(0, availableSize - Math.max(0, trackTokens.length - 1) * gap);
-    let fixed = 0;
-
-    const parsed = trackTokens.map((token) => {
-      const minmax = /^minmax\(\s*([^,]+)\s*,\s*([^)]+)\s*\)$/i.exec(token);
-      if (minmax) {
-        const minimum = this.resolveDefiniteTrackLength(minmax[1], availableSize);
-        const maximum = minmax[2].trim();
-        if (maximum.endsWith('fr')) {
-          const value = Number.parseFloat(maximum);
-          const fraction = Number.isFinite(value) && value > 0 ? value : 1;
-          return { type: 'fr' as const, value: fraction, minimum };
-        }
-        const maximumLength = this.resolveDefiniteTrackLength(maximum, availableSize);
-        const pixels = Math.max(minimum, maximumLength);
-        fixed += pixels;
-        return { type: 'fixed' as const, value: pixels, minimum: 0 };
-      }
-      if (token.endsWith('fr')) {
-        const value = Number.parseFloat(token);
-        const fraction = Number.isFinite(value) && value > 0 ? value : 1;
-        return { type: 'fr' as const, value: fraction, minimum: 0 };
-      }
-      const pixels = this.resolveDefiniteTrackLength(token, availableSize);
-      fixed += pixels;
-      return { type: 'fixed' as const, value: pixels, minimum: 0 };
-    });
-
-    let remaining = Math.max(0, trackSpace - fixed);
-    const flexible = parsed
-      .map((track, index) => ({ track, index }))
-      .filter((entry) => entry.track.type === 'fr');
-    const allocations = new Map<number, number>();
-    let active = flexible;
-
-    while (active.length > 0) {
-      const fractionTotal = active.reduce((sum, entry) => sum + entry.track.value, 0);
-      const constrained = active.filter((entry) =>
-        remaining * entry.track.value / fractionTotal < entry.track.minimum,
-      );
-      if (constrained.length === 0) {
-        active.forEach((entry) => allocations.set(
-          entry.index,
-          remaining * entry.track.value / fractionTotal,
-        ));
-        break;
-      }
-      constrained.forEach((entry) => {
-        allocations.set(entry.index, entry.track.minimum);
-        remaining = Math.max(0, remaining - entry.track.minimum);
-      });
-      const constrainedIndexes = new Set(constrained.map((entry) => entry.index));
-      active = active.filter((entry) => !constrainedIndexes.has(entry.index));
-    }
-
-    return parsed.map((track, index) => track.type === 'fr'
-      ? allocations.get(index) ?? track.minimum
-      : track.value);
+    return resolveGridTracks(template, availableSize, gap, fallbackCount);
   }
 
   private trackCount(template: string | undefined): number {
     return tokenizeGridTrackList(template).length;
-  }
-
-  private resolveDefiniteTrackLength(value: string, percentageReference: number): number {
-    const parsed = value.trim().endsWith('%')
-      ? percentageReference * Number.parseFloat(value) / 100
-      : Number.parseFloat(value);
-    return Number.isFinite(parsed) ? Math.max(0, parsed) : 0;
   }
 
   private parseLength(value: string | undefined): number {

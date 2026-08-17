@@ -172,6 +172,49 @@ describe('FlexService', () => {
     expect(height).toBe(112);
   });
 
+  it('measures wrapped grid content against its resolved column width', () => {
+    const measuredWidths: Array<number | undefined> = [];
+    const textRendering = {
+      calculateTextDimensions: (_text: string, _style: unknown, maxWidth?: number) => {
+        measuredWidths.push(maxWidth);
+        return { width: maxWidth ?? 0, height: (maxWidth ?? 0) <= 100 ? 60 : 20, lineHeight: 20 };
+      },
+    };
+    const textStyleParser = {
+      parseTextProperties: () => ({ fontSize: 14, lineHeight: 20 / 14 }),
+    };
+    const service = new FlexService(
+      new FlexLayoutService(), textRendering as never, textStyleParser as never,
+    );
+    const card: DOMElement = {
+      type: 'article', id: 'card', textContent: 'Text that wraps in a narrow grid track.',
+    };
+    const resolved = new Map<string, StyleRule>([
+      ['card', { selector: '#card', height: 'auto', padding: '10px', borderWidth: '2px' }],
+    ]);
+    const render = {
+      actions: { style: { findStyleForElement: (element: DOMElement) => resolved.get(element.id ?? '') } },
+    } as unknown as BabylonRender;
+    const dom = {
+      context: { elementStyles: new Map() },
+    } as unknown as BabylonDOM;
+
+    const height = service['calculateIntrinsicContainerHeight'](
+      { type: 'section', id: 'grid', children: [card] },
+      {
+        selector: '#grid', display: 'grid', gridTemplateColumns: '1fr 1fr',
+        gridTemplateRows: 'auto', columnGap: '16px', padding: '10px', borderWidth: '2px',
+      },
+      [],
+      dom,
+      render,
+      280,
+    );
+
+    expect(measuredWidths).toEqual([96]);
+    expect(height).toBe(108);
+  });
+
   it('uses the largest outer cross size for a nowrap row flex container', () => {
     const textRendering = {
       calculateTextDimensions: () => ({ width: 100, height: 24, lineHeight: 24 }),
