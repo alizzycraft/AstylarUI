@@ -525,6 +525,10 @@ async function captureInteractionMode(
     for (const action of steps[index].actions) {
       await performInteractionAction(page, mode, action, report);
     }
+    // The measured-pointer helper may scroll the outer harness document to
+    // expose a target. That scroll is not fixture state, so restore it before
+    // measuring the browser against the canvas.
+    await page.evaluate(() => window.scrollTo(0, 0));
     await page.evaluate(() => window.__ASTYLAR_PARITY_CAPTURE_INTERACTION__?.());
     await page.waitForFunction(
       (afterRevision) => (window.__ASTYLAR_PARITY_REPORT__?.revision ?? 0) > afterRevision,
@@ -548,35 +552,14 @@ async function performInteractionAction(page, mode, action, report) {
   switch (action.type) {
     case 'click':
     case 'hover': {
-      if (mode === 'reference') {
-        const locator = page.locator(`#${cssEscape(action.elementId)}`);
-        if (action.type === 'click') await locator.click();
-        else await locator.hover();
-        return;
-      }
-      const rect = report?.elements?.[action.elementId]?.borderBox;
-      if (!rect) throw new Error(`Missing Astylar interaction target geometry: ${action.elementId}`);
-      const canvas = await page.locator('#parity-astylar-canvas').boundingBox();
-      if (!canvas) throw new Error('Missing Astylar canvas bounds');
-      const x = canvas.x + rect.left + rect.width / 2;
-      const y = canvas.y + rect.top + rect.height / 2;
+      const { x, y } = await getInteractionPoint(page, mode, action.elementId, report);
       if (action.type === 'click') await page.mouse.click(x, y);
       else await page.mouse.move(x, y);
       return;
     }
     case 'pointer-down': {
-      if (mode === 'reference') {
-        await page.locator(`#${cssEscape(action.elementId)}`).hover();
-      } else {
-        const rect = report?.elements?.[action.elementId]?.borderBox;
-        if (!rect) throw new Error(`Missing Astylar interaction target geometry: ${action.elementId}`);
-        const canvas = await page.locator('#parity-astylar-canvas').boundingBox();
-        if (!canvas) throw new Error('Missing Astylar canvas bounds');
-        await page.mouse.move(
-          canvas.x + rect.left + rect.width / 2,
-          canvas.y + rect.top + rect.height / 2,
-        );
-      }
+      const { x, y } = await getInteractionPoint(page, mode, action.elementId, report);
+      await page.mouse.move(x, y);
       await page.mouse.down();
       return;
     }
@@ -608,8 +591,31 @@ async function performInteractionAction(page, mode, action, report) {
   }
 }
 
-function cssEscape(value) {
-  return value.replace(/[^a-zA-Z0-9_-]/g, (character) => `\\${character}`);
+async function getInteractionPoint(page, mode, elementId, report) {
+  const rect = report?.elements?.[elementId]?.borderBox;
+  if (!rect) throw new Error(`Missing ${mode} interaction target geometry: ${elementId}`);
+  const surfaceSelector = mode === 'reference'
+    ? '#parity-reference-viewport'
+    : '#parity-astylar-canvas';
+  let surface = await page.locator(surfaceSelector).boundingBox();
+  if (!surface) throw new Error(`Missing ${mode} comparison surface bounds`);
+
+  let x = surface.x + rect.left + rect.width / 2;
+  let y = surface.y + rect.top + rect.height / 2;
+  const viewport = page.viewportSize();
+  if (viewport && (x < 0 || x >= viewport.width || y < 0 || y >= viewport.height)) {
+    await page.evaluate(({ targetX, targetY }) => {
+      window.scrollBy(
+        targetX - window.innerWidth / 2,
+        targetY - window.innerHeight / 2,
+      );
+    }, { targetX: x, targetY: y });
+    surface = await page.locator(surfaceSelector).boundingBox();
+    if (!surface) throw new Error(`Missing ${mode} comparison surface bounds after scroll`);
+    x = surface.x + rect.left + rect.width / 2;
+    y = surface.y + rect.top + rect.height / 2;
+  }
+  return { x, y };
 }
 
 function compareInteraction(reference, astylar) {

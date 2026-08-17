@@ -1,11 +1,12 @@
 import { ParityFixture } from '../parity.types';
+import type { SiteData } from '../../app/types/site-data';
 
 export const representativeDataManagementFixture: ParityFixture = {
   id: 'representative-data-management',
   title: 'Representative data management application',
   category: 'composed-application',
   expectedBehavior:
-    'A responsive inventory application preserves its navigation shell, filter toolbar, semantic fixed-column table, pagination, clipped narrow representation, local image, and positioned detail panel.',
+    'A responsive inventory application preserves its data shell while search editing, page updates, and pointer/keyboard record actions retain browser-equivalent state and events.',
   viewportIds: ['desktop', 'tablet', 'mobile'],
   measurementIds: [
     'dm-shell', 'dm-nav', 'dm-brand', 'dm-nav-inventory', 'dm-content', 'dm-header',
@@ -15,6 +16,21 @@ export const representativeDataManagementFixture: ParityFixture = {
     'dm-pagination',
     'dm-page-prev', 'dm-page-active', 'dm-page-next', 'dm-empty', 'dm-detail', 'dm-detail-image',
     'dm-detail-title', 'dm-detail-copy', 'dm-detail-action',
+  ],
+  interactionIds: ['dm-search', 'dm-page-next', 'dm-detail-action'],
+  interactionEventTypes: [
+    'pointerdown', 'pointerup', 'click', 'focus', 'blur',
+    'keydown', 'keyup', 'input', 'change',
+  ],
+  interactionSteps: [
+    { id: 'focus-search', actions: [{ type: 'click', elementId: 'dm-search' }] },
+    { id: 'select-search', actions: [{ type: 'press-key', key: 'Control+A' }] },
+    { id: 'enter-search', actions: [{ type: 'type-text', text: 'camera' }] },
+    { id: 'request-next-page', actions: [{ type: 'click', elementId: 'dm-page-next' }] },
+    { id: 'show-next-page', actions: [{ type: 'apply-update', stepIndex: 0 }] },
+    { id: 'repeat-next-page-keyboard', actions: [{ type: 'press-key', key: 'Enter' }] },
+    { id: 'open-record-pointer', actions: [{ type: 'click', elementId: 'dm-detail-action' }] },
+    { id: 'open-record-keyboard', actions: [{ type: 'press-key', key: 'Space' }] },
   ],
   reference: {
     html: `
@@ -73,10 +89,11 @@ export const representativeDataManagementFixture: ParityFixture = {
       #dm-header { display:flex; flex:0 0 64px; align-items:center; justify-content:space-between; width:640px; padding:12px 16px; background:#ffffff; }
       #dm-title { width:180px; height:40px; margin:0; padding:4px 0; color:#0f172a; font:700 24px/32px Arial,sans-serif; }
       #dm-count { width:96px; height:28px; padding:4px 8px; background:#ccfbf1; color:#115e59; font:700 12px/20px Arial,sans-serif; text-align:center; }
-      #dm-main { position:relative; width:640px; padding:12px; background:#eef2f7; overflow:hidden; }
+      #dm-main { flex:1 1 auto; position:relative; width:640px; padding:12px; background:#eef2f7; overflow:hidden; }
       #dm-toolbar { display:flex; align-items:center; gap:8px; width:616px; height:52px; padding:6px; background:#ffffff; }
       #dm-toolbar input { appearance:none; height:40px; margin:0; border:1px solid #cbd5e1; border-radius:0; font:400 13px/22px Arial,sans-serif; }
-      #dm-search { flex:1 1 auto; width:396px; padding:8px 10px; background:#f8fafc; color:#475569; text-align:left; }
+      #dm-search { flex:1 1 auto; width:396px; padding:8px 10px; outline:0; background:#f8fafc; color:#475569; text-align:left; }
+      #dm-search:focus { background:#cffafe; }
       #dm-toolbar #dm-filter { flex:0 0 104px; width:104px; padding:8px; background:#ffffff; color:#334155; font-weight:700; text-align:center; }
       #dm-toolbar #dm-export { flex:0 0 92px; width:92px; padding:8px; background:#e2e8f0; color:#94a3b8; font-weight:700; text-align:center; opacity:.65; }
       #dm-table-card { position:absolute; left:12px; top:76px; width:400px; height:408px; padding:12px; background:#ffffff; overflow:hidden; }
@@ -90,7 +107,8 @@ export const representativeDataManagementFixture: ParityFixture = {
       #dm-table #dm-two-status { background:#fef3c7; color:#92400e; font-weight:700; }
       #dm-pagination { display:flex; gap:6px; width:376px; height:52px; padding:6px 0; background:#ffffff; }
       #dm-pagination input { appearance:none; height:40px; margin:0; padding:8px; border:0; border-radius:0; background:#e2e8f0; color:#475569; font:700 12px/24px Arial,sans-serif; text-align:center; }
-      #dm-page-prev { width:88px; opacity:.55; } #dm-page-active { width:40px; } #dm-page-next { width:72px; }
+      #dm-page-prev { width:88px; opacity:.55; } #dm-page-active { width:40px; } #dm-page-next { width:72px; outline:0; }
+      #dm-page-next:focus { background:#bae6fd; }
       #dm-pagination input.active { background:#0f766e; color:#ffffff; }
       #dm-empty { width:376px; height:40px; padding:10px; background:#f8fafc; color:#64748b; font:400 12px/20px Arial,sans-serif; }
       #dm-detail { display:flex; flex-direction:column; gap:12px; position:absolute; left:424px; top:76px; width:204px; height:auto; padding:16px; z-index:2; background:#ecfeff; overflow:hidden; }
@@ -100,7 +118,8 @@ export const representativeDataManagementFixture: ParityFixture = {
       #dm-detail-copy { width:172px; height:72px; margin:0; color:#475569; font:400 13px/24px Arial,sans-serif; }
       #dm-detail-meta { display:flex; justify-content:space-between; width:172px; height:40px; margin:0; padding:8px 0; color:#334155; font:400 12px/24px Arial,sans-serif; }
       #dm-detail-meta strong { width:68px; height:24px; font-weight:700; } #dm-detail-meta span { width:84px; height:24px; text-align:right; }
-      #dm-detail-action { appearance:none; width:172px; height:40px; margin:0; padding:8px; border:0; border-radius:0; background:#0f766e; color:#ffffff; font:700 13px/24px Arial,sans-serif; text-align:center; }
+      #dm-detail-action { appearance:none; width:172px; height:40px; margin:0; padding:8px; border:0; border-radius:0; outline:0; background:#0f766e; color:#ffffff; font:700 13px/24px Arial,sans-serif; text-align:center; }
+      #dm-detail-action:focus { background:#155e75; }
       @media (min-width:600px) and (max-width:749px) {
         #dm-shell { left:20px; top:20px; width:600px; height:680px; }
         #dm-nav { flex-basis:100px; width:100px; padding:20px 8px; }
@@ -160,10 +179,11 @@ export const representativeDataManagementFixture: ParityFixture = {
       { selector:'#dm-header', display:'flex', flex:'0 0 64px', alignItems:'center', justifyContent:'space-between', width:'640px', padding:'12px 16px', background:'#ffffff' },
       { selector:'#dm-title', width:'180px', height:'40px', margin:'0', padding:'4px 0', color:'#0f172a', fontFamily:'Arial, sans-serif', fontSize:'24px', fontWeight:'700', lineHeight:'32px' },
       { selector:'#dm-count', width:'96px', height:'28px', padding:'4px 8px', background:'#ccfbf1', color:'#115e59', fontFamily:'Arial, sans-serif', fontSize:'12px', fontWeight:'700', lineHeight:'20px', textAlign:'center' },
-      { selector:'#dm-main', position:'relative', width:'640px', padding:'12px', background:'#eef2f7', overflow:'hidden' },
+      { selector:'#dm-main', flex:'1 1 auto', position:'relative', width:'640px', padding:'12px', background:'#eef2f7', overflow:'hidden' },
       { selector:'#dm-toolbar', display:'flex', alignItems:'center', gap:'8px', width:'616px', height:'52px', padding:'6px', background:'#ffffff' },
       { selector:'#dm-toolbar input', height:'40px', margin:'0', borderWidth:'1px', borderStyle:'solid', borderColor:'#cbd5e1', borderRadius:'0', fontFamily:'Arial, sans-serif', fontSize:'13px', lineHeight:'22px' },
       { selector:'#dm-search', flex:'1 1 auto', width:'396px', padding:'8px 10px', background:'#f8fafc', color:'#475569', textAlign:'left' },
+      { selector:'#dm-search:focus', background:'#cffafe' },
       { selector:'#dm-toolbar #dm-filter', flex:'0 0 104px', width:'104px', padding:'8px', background:'#ffffff', color:'#334155', fontWeight:'700', textAlign:'center' },
       { selector:'#dm-toolbar #dm-export', flex:'0 0 92px', width:'92px', padding:'8px', background:'#e2e8f0', color:'#94a3b8', fontWeight:'700', textAlign:'center', opacity:'.65' },
       { selector:'#dm-table-card', position:'absolute', left:'12px', top:'76px', width:'400px', height:'408px', padding:'12px', background:'#ffffff', overflow:'hidden' },
@@ -175,7 +195,7 @@ export const representativeDataManagementFixture: ParityFixture = {
       { selector:'#dm-table #dm-one-status', background:'#dcfce7', color:'#166534', fontWeight:'700' }, { selector:'#dm-table #dm-two-status', background:'#fef3c7', color:'#92400e', fontWeight:'700' },
       { selector:'#dm-pagination', display:'flex', gap:'6px', width:'376px', height:'52px', padding:'6px 0', background:'#ffffff' },
       { selector:'#dm-pagination input', height:'40px', margin:'0', padding:'8px', borderWidth:'0', borderRadius:'0', background:'#e2e8f0', color:'#475569', fontFamily:'Arial, sans-serif', fontSize:'12px', fontWeight:'700', lineHeight:'24px', textAlign:'center' },
-      { selector:'#dm-page-prev', width:'88px', opacity:'.55' }, { selector:'#dm-page-active', width:'40px' }, { selector:'#dm-page-next', width:'72px' }, { selector:'#dm-pagination input.active', background:'#0f766e', color:'#ffffff' },
+      { selector:'#dm-page-prev', width:'88px', opacity:'.55' }, { selector:'#dm-page-active', width:'40px' }, { selector:'#dm-page-next', width:'72px' }, { selector:'#dm-page-next:focus', background:'#bae6fd' }, { selector:'#dm-pagination input.active', background:'#0f766e', color:'#ffffff' },
       { selector:'#dm-empty', width:'376px', height:'40px', padding:'10px', background:'#f8fafc', color:'#64748b', fontFamily:'Arial, sans-serif', fontSize:'12px', lineHeight:'20px' },
       { selector:'#dm-detail', display:'flex', flexDirection:'column', gap:'12px', position:'absolute', left:'424px', top:'76px', width:'204px', height:'auto', padding:'16px', zIndex:'2', background:'#ecfeff', overflow:'hidden' },
       { selector:'#dm-detail-image', width:'172px', height:'96px', objectFit:'cover', background:'#bae6fd' },
@@ -185,6 +205,7 @@ export const representativeDataManagementFixture: ParityFixture = {
       { selector:'#dm-detail-meta', display:'flex', justifyContent:'space-between', width:'172px', height:'40px', margin:'0', padding:'8px 0', color:'#334155', fontFamily:'Arial, sans-serif', fontSize:'12px', lineHeight:'24px' },
       { selector:'#dm-detail-meta strong', width:'68px', height:'24px', fontWeight:'700' }, { selector:'#dm-detail-meta span', width:'84px', height:'24px', textAlign:'right' },
       { selector:'#dm-detail-action', width:'172px', height:'40px', margin:'0', padding:'8px', borderWidth:'0', borderRadius:'0', background:'#0f766e', color:'#ffffff', fontFamily:'Arial, sans-serif', fontSize:'13px', fontWeight:'700', lineHeight:'24px', textAlign:'center' },
+      { selector:'#dm-detail-action:focus', background:'#155e75' },
       { selector:'#dm-shell', mediaMinWidth:'600px', mediaMaxWidth:'749px', left:'20px', top:'20px', width:'600px', height:'680px' }, { selector:'#dm-nav', mediaMinWidth:'600px', mediaMaxWidth:'749px', flex:'0 0 100px', width:'100px', padding:'20px 8px' },
       { selector:'#dm-brand, #dm-nav-list, #dm-nav-list input', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'84px' }, { selector:'#dm-brand', mediaMinWidth:'600px', mediaMaxWidth:'749px', fontSize:'13px' },
       { selector:'#dm-content', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'500px' }, { selector:'#dm-header', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'500px', flex:'0 0 72px' }, { selector:'#dm-main', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'500px' },
@@ -233,3 +254,55 @@ export const representativeDataManagementFixture: ParityFixture = {
     ] }] },
   },
 };
+
+const secondDataPage = JSON.parse(
+  JSON.stringify(representativeDataManagementFixture.siteData),
+) as SiteData;
+setDataText(secondDataPage, 'dm-count', 'Page 2 of 128');
+setDataText(secondDataPage, 'dm-one-item', 'Broadcast camera body');
+setDataText(secondDataPage, 'dm-one-status', 'Reserved');
+setDataText(secondDataPage, 'dm-one-owner', 'Tariq');
+setDataText(secondDataPage, 'dm-two-item', 'Camera support dolly');
+setDataText(secondDataPage, 'dm-detail-title', 'Broadcast camera body');
+setDataText(secondDataPage, 'dm-detail-copy', 'Reserved for the live production team until Friday afternoon.');
+const activePage = findDataElement(secondDataPage, 'dm-page-active');
+if (!activePage) throw new Error('Representative data page control is missing');
+activePage.value = '2';
+
+representativeDataManagementFixture.dynamicSteps = [{
+  id: 'inventory-page-two',
+  referenceMutations: [
+    { type: 'set-text', elementId: 'dm-count', textContent: 'Page 2 of 128' },
+    { type: 'set-text', elementId: 'dm-one-item', textContent: 'Broadcast camera body' },
+    { type: 'set-text', elementId: 'dm-one-status', textContent: 'Reserved' },
+    { type: 'set-text', elementId: 'dm-one-owner', textContent: 'Tariq' },
+    { type: 'set-text', elementId: 'dm-two-item', textContent: 'Camera support dolly' },
+    { type: 'set-text', elementId: 'dm-detail-title', textContent: 'Broadcast camera body' },
+    {
+      type: 'set-text',
+      elementId: 'dm-detail-copy',
+      textContent: 'Reserved for the live production team until Friday afternoon.',
+    },
+    { type: 'set-value', elementId: 'dm-page-active', value: '2' },
+  ],
+  siteData: secondDataPage,
+}];
+
+function setDataText(siteData: SiteData, elementId: string, textContent: string): void {
+  const element = findDataElement(siteData, elementId);
+  if (!element) throw new Error(`Representative data element is missing: ${elementId}`);
+  element.textContent = textContent;
+}
+
+function findDataElement(
+  siteData: SiteData,
+  elementId: string,
+): SiteData['root']['children'][number] | undefined {
+  const pending = [...siteData.root.children];
+  while (pending.length) {
+    const element = pending.shift();
+    if (element?.id === elementId) return element;
+    if (element?.children) pending.push(...element.children);
+  }
+  return undefined;
+}
