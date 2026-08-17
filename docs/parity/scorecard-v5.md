@@ -29,6 +29,16 @@ This phase extends browser parity across responsive intrinsic flex/grid layout a
 
 The accepted Phase 4 baseline remains the starting point: project dashboard desktop/tablet/mobile SSIM `0.9743 / 0.9802 / 0.9603`; data management `0.9891 / 0.9898 / 0.9804`; account settings `0.9609 / 0.9664 / 0.9509`. All nine renders are above the `0.95` floor.
 
+## Representative workaround review
+
+The new grid behaviors do not justify removing another representative declaration yet. The remaining outer shell dimensions intentionally define each application's viewport-framed composition. Explicit control, dialog, scroll-panel, and truncation sizes are application design constraints rather than renderer compensation. The project dashboard's explicit responsive grid rows cannot yet be replaced by `auto` because its cards require nested text/container contributions during final grid track sizing; this phase supports definite or recursively measurable pre-layout contributions but deliberately does not approximate unresolved intrinsic keyword combinations. Account settings and data management do not contain a newly enabled grid workaround. The Phase 4 content-driven removals therefore remain the correct boundary.
+
+## Typography and paint fidelity review
+
+The lowest representative render is account settings mobile at SSIM `0.9509`, with `100%` of its measured edges within `2px`, maximum edge error `1.4484px`, exact text and line counts, and no runtime errors. Visual inspection and pixel sampling show exact flat colors for the white dialog, gray secondary button, and purple primary button. The backdrop-composited page differs by at most one RGB level at sampled flat points because the browser and Babylon alpha pipelines round independently.
+
+The remaining visible difference is concentrated at glyph edges. Chromium paints reference DOM text directly into the page, while Astylar first rasterizes the same font through a transparent canvas and then samples that raster through a Babylon texture plane. A measured nearest-neighbor sampling experiment changed account desktop/tablet/mobile from `0.9609 / 0.9664 / 0.9509` to `0.9608 / 0.9667 / 0.9513`: one regression and two improvements below `0.0005`. The accepted linear mode was restored. This is explained rasterization variance, and changing the global sampler would be negligible, mixed, and likely to make transformed 3D text worse. No typography or paint renderer change is accepted without a larger, consistent browser-parity gain.
+
 ## Verification log
 
 - Focused wrapped-flex unit tests: 17 passing.
@@ -55,4 +65,4 @@ The accepted Phase 4 baseline remains the starting point: project dashboard desk
 
 ## Next candidates
 
-After each accepted increment, select the largest fresh measured mismatch. Current required candidates are intrinsic grid sizing, percentage/`minmax()` track behavior, responsive representative-app workaround removal enabled by those repairs, and evidence-led typography/paint fidelity.
+The required responsive intrinsic layout cases and evidence-led paint review are complete for this phase. Future expansion should begin with a focused baseline for nested text/container contributions to `auto`, `min-content`, or `max-content` grid tracks, or with a text-compositing approach that demonstrates a material, consistent gain across text-heavy fixtures without degrading transformed 3D text.
