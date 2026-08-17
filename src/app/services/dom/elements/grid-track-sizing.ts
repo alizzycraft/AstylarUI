@@ -69,6 +69,12 @@ export function resolveGridTracks(
   const parsed = trackTokens.map((token) => {
     const minmax = /^minmax\(\s*([^,]+)\s*,\s*([^)]+)\s*\)$/i.exec(token);
     if (minmax) {
+      const minimumToken = minmax[1].trim().toLowerCase();
+      if (['auto', 'min-content', 'max-content'].includes(minimumToken)) {
+        throw new Error(
+          `Intrinsic minmax() bounds in "${token}" require measurable, indefinite row sizing.`,
+        );
+      }
       const minimum = resolveDefiniteTrackLength(minmax[1], availableSize);
       const maximum = minmax[2].trim();
       if (maximum.endsWith('fr')) {
@@ -145,8 +151,13 @@ export function resolveIntrinsicGridRows(
   const isIntrinsicTrack = (token: string) =>
     ['auto', 'min-content', 'max-content'].includes(token.toLowerCase());
   const flexFactor = (token: string): number | null => {
-    if (!token.toLowerCase().endsWith('fr')) return null;
-    const parsed = Number.parseFloat(token);
+    const normalized = token.trim().toLowerCase();
+    const intrinsicMinmax = /^minmax\(\s*(?:auto|min-content|max-content)\s*,\s*([+-]?(?:\d+\.?\d*|\.\d+))fr\s*\)$/.exec(normalized);
+    const parsed = intrinsicMinmax
+      ? Number.parseFloat(intrinsicMinmax[1])
+      : normalized.endsWith('fr')
+        ? Number.parseFloat(normalized)
+        : Number.NaN;
     return Number.isFinite(parsed) && parsed > 0 ? parsed : null;
   };
   if (rowTokens.some((token) =>

@@ -93,6 +93,7 @@ import { gridFixedRepeatTracksFixture } from './grid-fixed-repeat-tracks.fixture
 import { gridIntrinsicKeywordRowsFixture } from './grid-intrinsic-keyword-rows.fixture';
 import { gridMixedIntrinsicRowsFixture } from './grid-mixed-intrinsic-rows.fixture';
 import { gridAutoRowStretchFixture } from './grid-auto-row-stretch.fixture';
+import { gridIntrinsicMinmaxRowsFixture } from './grid-intrinsic-minmax-rows.fixture';
 import { ParityFixture } from '../parity.types';
 
 const fixtures: readonly ParityFixture[] = [
@@ -190,7 +191,8 @@ const fixtures: readonly ParityFixture[] = [
   gridFixedRepeatTracksFixture,
   gridIntrinsicKeywordRowsFixture,
   gridMixedIntrinsicRowsFixture,
-  gridAutoRowStretchFixture
+  gridAutoRowStretchFixture,
+  gridIntrinsicMinmaxRowsFixture
 ];
 
 const fixturesById = new Map(fixtures.map((fixture) => [fixture.id, fixture]));

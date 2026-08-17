@@ -34,6 +34,11 @@ describe('GridService', () => {
       .toThrowError(/only positive fixed counts are supported/);
   });
 
+  it('explicitly rejects intrinsic minmax bounds without measurable row content', () => {
+    expect(() => service.resolveTracks('minmax(min-content, 1fr)', 320, 0, 1))
+      .toThrowError(/require measurable, indefinite row sizing/);
+  });
+
   it('sizes auto rows from the largest item contribution in each row', () => {
     expect(resolveIntrinsicGridRows('auto auto', 1, [36, 52]))
       .toEqual([36, 52]);
@@ -54,6 +59,15 @@ describe('GridService', () => {
       { sizeIndefiniteFlexibleTracks: true },
     )).toEqual([40, 32, 36, 44, 30, 60]);
     expect(resolveIntrinsicGridRows('1fr', 1, [30])).toBeNull();
+  });
+
+  it('content-sizes intrinsic minmax rows with proportional flexible maxima', () => {
+    expect(resolveIntrinsicGridRows(
+      'minmax(min-content, 1fr) minmax(auto, 2fr)',
+      1,
+      [40, 60],
+      { sizeIndefiniteFlexibleTracks: true },
+    )).toEqual([40, 80]);
   });
 
   it('stretches auto rows equally after their content bases in a definite size', () => {

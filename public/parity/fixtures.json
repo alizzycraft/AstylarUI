@@ -575,5 +575,11 @@
     "title": "Auto grid rows stretch in a definite height",
     "category": "grid",
     "expectedBehavior": "Implicit auto rows first use their largest content contribution, then share remaining definite block-axis space equally under normal stretch alignment."
+  },
+  {
+    "id": "grid-intrinsic-minmax-rows",
+    "title": "Intrinsic minmax grid rows",
+    "category": "grid",
+    "expectedBehavior": "Height-auto Grid rows with min-content or auto minima and flexible maxima use measurable content bases while retaining their fractional proportions."
   }
 ]
