@@ -97,6 +97,9 @@ import { gridIntrinsicMinmaxRowsFixture } from './grid-intrinsic-minmax-rows.fix
 import { gridAutoNestedCompositeFixture } from './grid-auto-nested-composite.fixture';
 import { reactiveTextUpdateFixture } from './reactive-text-update.fixture';
 import { reactiveNaturalImageFixture } from './reactive-natural-image.fixture';
+import { reactiveValueStyleFixture } from './reactive-value-style.fixture';
+import { reactiveChildListFixture } from './reactive-child-list.fixture';
+import { reactiveImageSourceFixture } from './reactive-image-source.fixture';
 import { ParityFixture } from '../parity.types';
 
 const fixtures: readonly ParityFixture[] = [
@@ -198,7 +201,10 @@ const fixtures: readonly ParityFixture[] = [
   gridIntrinsicMinmaxRowsFixture,
   gridAutoNestedCompositeFixture,
   reactiveTextUpdateFixture,
-  reactiveNaturalImageFixture
+  reactiveNaturalImageFixture,
+  reactiveValueStyleFixture,
+  reactiveChildListFixture,
+  reactiveImageSourceFixture
 ];
 
 const fixturesById = new Map(fixtures.map((fixture) => [fixture.id, fixture]));

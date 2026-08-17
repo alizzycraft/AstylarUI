@@ -85,6 +85,13 @@ try {
       }
       results.push(...await measureResponsiveFixture(desktopContext, fixture, results));
     }
+    if (fixture.dynamicStepCount) {
+      const desktopContext = contexts.get('desktop');
+      if (!desktopContext) {
+        throw new Error(`Dynamic sequence for "${fixture.id}" requires a desktop context`);
+      }
+      results.push(...await measureDynamicFixture(desktopContext, fixture));
+    }
   }
 
   const summary = summarize(results);
@@ -237,6 +244,145 @@ async function captureMode(context, url, selector, screenshotPath) {
     throw new Error(`Parity report was not published for ${url}`);
   }
   return { report, screenshot, pageErrors };
+}
+
+async function measureDynamicFixture(context, fixture) {
+  const sequenceDir = path.join(ARTIFACTS_DIR, fixture.id, 'updates');
+  await mkdir(sequenceDir, { recursive: true });
+  const freshStates = [];
+  for (let index = 0; index < fixture.dynamicStepCount; index += 1) {
+    const query = `?viewport=desktop&dynamic-state=${index}`;
+    freshStates.push({
+      reference: await captureMode(
+        context,
+        `${BASE_URL}/parity/reference/${encodeURIComponent(fixture.id)}${query}`,
+        '#parity-reference-viewport',
+        path.join(sequenceDir, `${index + 1}-fresh-reference.png`),
+      ),
+      astylar: await captureMode(
+        context,
+        `${BASE_URL}/parity/astylar/${encodeURIComponent(fixture.id)}${query}`,
+        '#parity-astylar-canvas',
+        path.join(sequenceDir, `${index + 1}-fresh-astylar.png`),
+      ),
+    });
+  }
+  const referenceStates = await captureDynamicMode(
+    context,
+    `${BASE_URL}/parity/reference/${encodeURIComponent(fixture.id)}?viewport=desktop&dynamic=true`,
+    '#parity-reference-viewport',
+    'reference',
+    sequenceDir,
+    fixture.dynamicStepCount,
+  );
+  const astylarStates = await captureDynamicMode(
+    context,
+    `${BASE_URL}/parity/astylar/${encodeURIComponent(fixture.id)}?viewport=desktop&dynamic=true`,
+    '#parity-astylar-canvas',
+    'astylar',
+    sequenceDir,
+    fixture.dynamicStepCount,
+  );
+
+  return referenceStates.map((reference, index) => {
+    const astylar = astylarStates[index];
+    const fresh = freshStates[index];
+    const runtimeErrors = [
+      ...reference.pageErrors.map((error) => `reference: ${error}`),
+      ...astylar.pageErrors.map((error) => `astylar: ${error}`),
+      ...fresh.reference.pageErrors.map((error) => `fresh reference: ${error}`),
+      ...fresh.astylar.pageErrors.map((error) => `fresh astylar: ${error}`),
+      ...reference.report.errors.map((error) => `reference: ${error}`),
+      ...astylar.report.errors.map((error) => `astylar: ${error}`),
+    ];
+    const comparisons = [
+      ['reference', fresh.reference.report, reference.report],
+      ['astylar', fresh.astylar.report, astylar.report],
+    ];
+    for (const [label, expected, actual] of comparisons) {
+      const geometry = compareGeometry(expected, actual);
+      const text = compareText(expected, actual);
+      if ((geometry.maximumEdgeError ?? Infinity) > freshGeometryTolerancePx) {
+        runtimeErrors.push(`${label}: in-place update ${index + 1} differs from fresh geometry`);
+      }
+      if (!text.allContentMatches || !text.allLineCountsMatch) {
+        runtimeErrors.push(`${label}: in-place update ${index + 1} differs from fresh text`);
+      }
+    }
+    const freshResources = fresh.astylar.report.resources;
+    const currentResources = astylar.report.resources;
+    if (
+      freshResources && currentResources &&
+      (currentResources.meshes !== freshResources.meshes ||
+        currentResources.materials > freshResources.materials ||
+        currentResources.textures > freshResources.textures)
+    ) {
+      runtimeErrors.push(
+        `astylar: in-place update ${index + 1} resource counts exceed fresh render ` +
+        `(${JSON.stringify(currentResources)} vs ${JSON.stringify(freshResources)})`,
+      );
+    }
+    return {
+      id: fixture.id,
+      scenario: `update-${index + 1}`,
+      viewport: viewportProfiles.desktop,
+      title: fixture.title,
+      category: fixture.category,
+      expectedBehavior: fixture.expectedBehavior,
+      screenshotSimilarity: comparePng(reference.screenshot, astylar.screenshot),
+      geometry: compareGeometry(reference.report, astylar.report),
+      text: compareText(reference.report, astylar.report),
+      styles: compareStyles(reference.report, astylar.report),
+      runtimeErrors,
+      reference: reference.report,
+      astylar: astylar.report,
+    };
+  });
+}
+
+async function captureDynamicMode(
+  context,
+  url,
+  selector,
+  mode,
+  sequenceDir,
+  stepCount,
+) {
+  const page = await context.newPage();
+  await installDeterministicAssetDelay(page);
+  const pageErrors = [];
+  const states = [];
+  page.on('pageerror', (error) => pageErrors.push(error.message));
+  await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 30_000 });
+  await page.waitForFunction(
+    () => typeof window.__ASTYLAR_PARITY_APPLY_STEP__ === 'function',
+    undefined,
+    { timeout: 30_000 },
+  );
+
+  let previousRevision = 0;
+  for (let index = 0; index < stepCount; index += 1) {
+    await page.evaluate((stepIndex) => window.__ASTYLAR_PARITY_APPLY_STEP__?.(stepIndex), index);
+    await page.waitForFunction(
+      (afterRevision) => {
+        const report = window.__ASTYLAR_PARITY_REPORT__;
+        return report?.ready === true && (report.revision ?? 0) > afterRevision;
+      },
+      previousRevision,
+      { timeout: 30_000 },
+    );
+    await page.waitForLoadState('networkidle');
+    const report = await page.evaluate(() => window.__ASTYLAR_PARITY_REPORT__);
+    if (!report) throw new Error(`${mode} dynamic step ${index + 1} did not publish a report`);
+    previousRevision = report.revision ?? previousRevision + 1;
+    const screenshot = await page.locator(selector).screenshot({
+      path: path.join(sequenceDir, `${index + 1}-live-${mode}.png`),
+      animations: 'disabled',
+    });
+    states.push({ report, screenshot, pageErrors: [...pageErrors] });
+  }
+  await page.close();
+  return states;
 }
 
 async function measureResponsiveFixture(context, fixture, staticResults) {

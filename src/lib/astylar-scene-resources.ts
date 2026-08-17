@@ -22,9 +22,10 @@ export class AstylarSceneResources {
     };
   }
 
-  replace(render: () => void): void {
+  replace(render: () => void, retainedTextures: ReadonlySet<BaseTexture> = new Set()): void {
     this.clearMeshes();
     this.clearMaterials();
+    this.clearTextures(retainedTextures);
     const existingMeshes = new Set(this.scene.meshes);
     const existingMaterials = new Set(this.scene.materials);
     const existingTextures = new Set(this.scene.textures);
@@ -35,9 +36,10 @@ export class AstylarSceneResources {
       this.materials = new Set(
         this.scene.materials.filter((item) => !existingMaterials.has(item))
       );
-      this.scene.textures
-        .filter((item) => !existingTextures.has(item))
-        .forEach((item) => this.textures.add(item));
+      this.textures = new Set([
+        ...[...retainedTextures].filter((item) => this.scene.textures.includes(item)),
+        ...this.scene.textures.filter((item) => !existingTextures.has(item)),
+      ]);
     }
   }
 
@@ -48,10 +50,7 @@ export class AstylarSceneResources {
   private clear(): void {
     this.clearMeshes();
     this.clearMaterials();
-    for (const texture of this.textures) {
-      if (this.isLive(texture)) texture.dispose();
-    }
-    this.textures.clear();
+    this.clearTextures();
   }
 
   private clearMeshes(): void {
@@ -66,6 +65,15 @@ export class AstylarSceneResources {
       if (this.isLive(material)) material.dispose(true, false);
     }
     this.materials.clear();
+  }
+
+  private clearTextures(retainedTextures: ReadonlySet<BaseTexture> = new Set()): void {
+    for (const texture of this.textures) {
+      if (!retainedTextures.has(texture) && this.isLive(texture)) texture.dispose();
+    }
+    this.textures = new Set(
+      [...retainedTextures].filter((item) => this.scene.textures.includes(item)),
+    );
   }
 
   private countPresent<T>(items: Set<T>, sceneItems: readonly T[]): number {

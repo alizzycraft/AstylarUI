@@ -594,12 +594,34 @@
     "id": "reactive-text-update",
     "title": "Reactive wrapped text update",
     "category": "responsive",
-    "expectedBehavior": "Updating short text to wrapped text in the same render session grows auto-height ancestors and moves following content exactly as browser reflow does."
+    "expectedBehavior": "Updating short text to wrapped text in the same render session grows auto-height ancestors and moves following content exactly as browser reflow does.",
+    "dynamicStepCount": 1
   },
   {
     "id": "reactive-natural-image",
     "title": "Delayed natural image in nested intrinsic containers",
     "category": "lists-tables-images",
     "expectedBehavior": "A delayed image without authored dimensions adopts its natural size, including padding and border, and reflows nested height-auto Flex and Grid ancestors plus following content."
+  },
+  {
+    "id": "reactive-value-style",
+    "title": "Reactive control value and layout styles",
+    "category": "responsive",
+    "expectedBehavior": "Updating a visible textarea value and authored Flex direction, width, and height reflows the existing scene to the same result as a fresh render.",
+    "dynamicStepCount": 1
+  },
+  {
+    "id": "reactive-child-list",
+    "title": "Reactive implicit Grid child list",
+    "category": "responsive",
+    "expectedBehavior": "Removing, reordering, relabeling, and adding Grid children reflows implicit rows in the existing scene without leaving the removed child behind.",
+    "dynamicStepCount": 1
+  },
+  {
+    "id": "reactive-image-source",
+    "title": "Reactive image source replacement",
+    "category": "responsive",
+    "expectedBehavior": "Replacing a still-loading image source shows only the new image; completion of the older delayed source cannot overwrite the current element or grow scene resources.",
+    "dynamicStepCount": 1
   }
 ]

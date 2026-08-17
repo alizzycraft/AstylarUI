@@ -13,6 +13,7 @@ import {
   getParityViewport,
   PARITY_VIEWPORTS,
   ParityElementMeasurement,
+  ParityReferenceMutation,
   ParityRect,
   ParityRuntimeReport,
   ParityViewport
@@ -48,6 +49,7 @@ export class ParityReferenceComponent {
     this.destroyRef.onDestroy(() => {
       window.removeEventListener('resize', this.onWindowResize);
       delete window.__ASTYLAR_PARITY_SET_VIEWPORT__;
+      delete window.__ASTYLAR_PARITY_APPLY_STEP__;
     });
   }
 
@@ -69,27 +71,36 @@ export class ParityReferenceComponent {
 
     const viewport = this.viewport().nativeElement;
     viewport.innerHTML = `<style>${fixture.reference.css}</style>${fixture.reference.html}`;
+    const dynamicSequence = this.route.snapshot.queryParamMap.get('dynamic') === 'true' &&
+      !!fixture.dynamicSteps?.length;
+    const freshStep = Number.parseInt(
+      this.route.snapshot.queryParamMap.get('dynamic-state') ?? '',
+      10,
+    );
 
     await this.document.fonts?.ready;
+    if (dynamicSequence) {
+      window.__ASTYLAR_PARITY_APPLY_STEP__ = async (index) => {
+        const step = fixture.dynamicSteps?.[index];
+        if (!step) throw new Error(`Unknown dynamic step: ${index}`);
+        viewport.dataset['parityReady'] = 'false';
+        this.applyReferenceStep(viewport, step.referenceMutations);
+        await this.waitForImages(viewport);
+        await this.nextFrame();
+        await this.nextFrame();
+        this.publishCurrentReport(fixture, viewport);
+      };
+      return;
+    }
+
+    const steps = fixture.dynamicSteps ?? [];
+    const lastStep = Number.isInteger(freshStep) ? freshStep : steps.length - 1;
+    for (let index = 0; index <= lastStep && index < steps.length; index++) {
+      this.applyReferenceStep(viewport, steps[index].referenceMutations);
+    }
     await this.waitForImages(viewport);
     await this.nextFrame();
     await this.nextFrame();
-
-    for (const step of fixture.dynamicSteps ?? []) {
-      for (const mutation of step.referenceMutations) {
-        if (mutation.type === 'set-text') {
-          const target = viewport.querySelector<HTMLElement>(
-            `#${CSS.escape(mutation.elementId)}`
-          );
-          if (!target) {
-            throw new Error(`Missing reference mutation target: ${mutation.elementId}`);
-          }
-          target.textContent = mutation.textContent;
-        }
-      }
-      await this.nextFrame();
-      await this.nextFrame();
-    }
 
     if (
       fixture.responsiveSequence &&
@@ -100,6 +111,43 @@ export class ParityReferenceComponent {
         this.applyResponsiveViewport(PARITY_VIEWPORTS[id]);
     }
     this.publishCurrentReport(fixture, viewport);
+  }
+
+  private applyReferenceStep(
+    viewport: HTMLElement,
+    mutations: ParityReferenceMutation[],
+  ): void {
+    for (const mutation of mutations) {
+      const target = viewport.querySelector<HTMLElement>(
+        `#${CSS.escape(mutation.elementId)}`
+      );
+      if (!target) {
+        throw new Error(`Missing reference mutation target: ${mutation.elementId}`);
+      }
+      switch (mutation.type) {
+        case 'set-text':
+          target.textContent = mutation.textContent;
+          break;
+        case 'set-value':
+          if (!(target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement || target instanceof HTMLSelectElement)) {
+            throw new Error(`Reference value target is not a control: ${mutation.elementId}`);
+          }
+          target.value = mutation.value;
+          break;
+        case 'set-style':
+          target.style.setProperty(mutation.property, mutation.value);
+          break;
+        case 'set-children':
+          target.innerHTML = mutation.html;
+          break;
+        case 'set-source':
+          if (!(target instanceof HTMLImageElement)) {
+            throw new Error(`Reference source target is not an image: ${mutation.elementId}`);
+          }
+          target.src = mutation.source;
+          break;
+      }
+    }
   }
 
   private readonly onWindowResize = (): void => {
@@ -162,6 +210,12 @@ export class ParityReferenceComponent {
       const rect = element.getBoundingClientRect();
       if (getComputedStyle(element).display !== 'none' || rect.width !== 0 || rect.height !== 0) {
         errors.push(`Reference element expected display:none: ${id}`);
+      }
+    }
+
+    for (const id of fixture.expectedMissingIds ?? []) {
+      if (viewport.querySelector(`#${CSS.escape(id)}`)) {
+        errors.push(`Reference element expected to be removed: ${id}`);
       }
     }
 

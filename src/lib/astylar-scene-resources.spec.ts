@@ -44,4 +44,27 @@ describe('AstylarSceneResources', () => {
     expect(externalMesh.isDisposed()).toBeFalse();
     expect(resources.snapshot).toEqual({ meshes: 0, materials: 0, textures: 0 });
   });
+
+  it('disposes replaced textures while preserving explicitly retained session textures', () => {
+    const resources = new AstylarSceneResources(scene);
+    const retained = new DynamicTexture('retained', 32, scene);
+    let perRender = new DynamicTexture('first-render', 32, scene);
+
+    resources.replace(() => undefined);
+    resources.replace(() => {
+      perRender = new DynamicTexture('second-render', 32, scene);
+    }, new Set([retained]));
+
+    expect(scene.textures).toContain(retained);
+    expect(scene.textures).toContain(perRender);
+    expect(resources.snapshot.textures).toBe(2);
+
+    resources.replace(() => {
+      perRender = new DynamicTexture('third-render', 32, scene);
+    }, new Set([retained]));
+
+    expect(scene.textures).toContain(retained);
+    expect(scene.textures).toContain(perRender);
+    expect(resources.snapshot.textures).toBe(2);
+  });
 });

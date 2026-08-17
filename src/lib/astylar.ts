@@ -249,8 +249,9 @@ export class Astylar {
           canvas.clientWidth || viewportWidth,
           canvas.clientHeight || viewportHeight,
         );
-        sceneResources.replace(() =>
-          this.babylonDOMRenderer.createSiteFromData(currentSiteData)
+        sceneResources.replace(
+          () => this.babylonDOMRenderer.createSiteFromData(currentSiteData),
+          this.imageResources.getSceneTextures(scene),
         );
       },
     );

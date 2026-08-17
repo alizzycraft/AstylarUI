@@ -45,6 +45,7 @@ export interface ParityFixture {
   viewportIds?: ParityViewport['id'][];
   responsiveSequence?: ParityViewport['id'][];
   expectedAbsentIds?: string[];
+  expectedMissingIds?: string[];
   reference: {
     html: string;
     css: string;
@@ -59,7 +60,37 @@ export interface ParityReferenceSetTextMutation {
   textContent: string;
 }
 
-export type ParityReferenceMutation = ParityReferenceSetTextMutation;
+export interface ParityReferenceSetValueMutation {
+  type: 'set-value';
+  elementId: string;
+  value: string;
+}
+
+export interface ParityReferenceSetStyleMutation {
+  type: 'set-style';
+  elementId: string;
+  property: string;
+  value: string;
+}
+
+export interface ParityReferenceSetChildrenMutation {
+  type: 'set-children';
+  elementId: string;
+  html: string;
+}
+
+export interface ParityReferenceSetSourceMutation {
+  type: 'set-source';
+  elementId: string;
+  source: string;
+}
+
+export type ParityReferenceMutation =
+  | ParityReferenceSetTextMutation
+  | ParityReferenceSetValueMutation
+  | ParityReferenceSetStyleMutation
+  | ParityReferenceSetChildrenMutation
+  | ParityReferenceSetSourceMutation;
 
 export interface ParityDynamicStep {
   id: string;
@@ -103,5 +134,6 @@ declare global {
   interface Window {
     __ASTYLAR_PARITY_REPORT__?: ParityRuntimeReport;
     __ASTYLAR_PARITY_SET_VIEWPORT__?: (id: ParityViewport['id']) => void;
+    __ASTYLAR_PARITY_APPLY_STEP__?: (index: number) => Promise<void>;
   }
 }

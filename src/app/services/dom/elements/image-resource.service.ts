@@ -57,6 +57,12 @@ export class ImageResourceService {
     return source ? this.naturalSizes.get(source) : undefined;
   }
 
+  getSceneTextures(scene: Scene): ReadonlySet<Texture> {
+    return new Set(
+      [...(this.sceneEntries.get(scene)?.values() ?? [])].map((entry) => entry.texture),
+    );
+  }
+
   subscribe(listener: (event: ImageResourceEvent) => void): () => void {
     this.listeners.add(listener);
     return () => this.listeners.delete(listener);

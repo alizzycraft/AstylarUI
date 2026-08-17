@@ -79,6 +79,7 @@ export class ParityAstylarComponent {
     this.destroyRef.onDestroy(() => {
       window.removeEventListener('resize', this.onWindowResize);
       delete window.__ASTYLAR_PARITY_SET_VIEWPORT__;
+      delete window.__ASTYLAR_PARITY_APPLY_STEP__;
       const engine = this.scene?.getEngine();
       if (engine && !engine.isDisposed) {
         engine.dispose();
@@ -105,7 +106,16 @@ export class ParityAstylarComponent {
 
     this.zone.runOutsideAngular(() => {
       const canvas = this.canvas().nativeElement;
-      const scene = this.astylar.render(canvas, fixture.siteData, {
+      const freshStep = Number.parseInt(
+        this.route.snapshot.queryParamMap.get('dynamic-state') ?? '',
+        10,
+      );
+      const renderData = Number.isInteger(freshStep)
+        ? fixture.dynamicSteps?.[freshStep]?.siteData ?? fixture.siteData
+        : fixture.siteData;
+      const dynamicSequence = this.route.snapshot.queryParamMap.get('dynamic') === 'true' &&
+        !!fixture.dynamicSteps?.length;
+      const scene = this.astylar.render(canvas, renderData, {
         antialias: false,
         setupLighting: (lightingScene) => {
           const light = new HemisphericLight(
@@ -120,6 +130,16 @@ export class ParityAstylarComponent {
       });
       scene.activeCamera?.detachControl();
       this.scene = scene;
+      if (dynamicSequence) {
+        window.__ASTYLAR_PARITY_APPLY_STEP__ = async (index) => {
+          const step = fixture.dynamicSteps?.[index];
+          if (!step) throw new Error(`Unknown dynamic step: ${index}`);
+          canvas.dataset['parityReady'] = 'false';
+          await this.astylar.update(step.siteData, scene);
+          this.captureWhenReady(scene, canvas, fixture);
+        };
+        return;
+      }
       if (
         fixture.responsiveSequence &&
         this.route.snapshot.queryParamMap.get('dynamic') === 'true'
@@ -129,7 +149,10 @@ export class ParityAstylarComponent {
           this.applyResponsiveViewport(PARITY_VIEWPORTS[id]);
       }
 
-      void this.applyDynamicSteps(scene, fixture).then(() => {
+      const shouldApplyDynamicSteps = !Number.isInteger(freshStep);
+      void (shouldApplyDynamicSteps
+        ? this.applyDynamicSteps(scene, fixture)
+        : this.astylar.whenSettled(scene)).then(() => {
         this.captureWhenReady(scene, canvas, fixture);
       }).catch((error) => {
         this.publishReport({
@@ -225,7 +248,8 @@ export class ParityAstylarComponent {
             scene,
             fixtureId,
             fixture.measurementIds,
-            fixture.expectedAbsentIds ?? []
+            fixture.expectedAbsentIds ?? [],
+            fixture.expectedMissingIds ?? []
           )
         );
         return;
@@ -239,6 +263,7 @@ export class ParityAstylarComponent {
             fixtureId,
             fixture.measurementIds,
             fixture.expectedAbsentIds ?? [],
+            fixture.expectedMissingIds ?? [],
             ['Timed out waiting for all Astylar elements to render']
           )
         );
@@ -251,12 +276,13 @@ export class ParityAstylarComponent {
     fixtureId: string,
     measurementIds: string[],
     expectedAbsentIds: string[],
+    expectedMissingIds: string[],
     initialErrors: string[] = []
   ): ParityRuntimeReport {
     const elements: Record<string, ParityElementMeasurement> = {};
     const errors = [...initialErrors];
 
-    for (const id of expectedAbsentIds) {
+    for (const id of [...expectedAbsentIds, ...expectedMissingIds]) {
       if (this.elementManager.elementsMap.has(id)) {
         errors.push(`Unexpected Astylar mesh for display:none element: ${id}`);
       }
