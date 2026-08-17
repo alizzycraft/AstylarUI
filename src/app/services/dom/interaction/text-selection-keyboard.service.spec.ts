@@ -71,6 +71,27 @@ describe('TextSelectionKeyboardService', () => {
     expect(controller.moveSelectionWithKeyboard).toHaveBeenCalledWith(entry, 'left', true);
   });
 
+  it('leaves navigation keys to a focused Astylar text control', () => {
+    const entry: TextInteractionEntry = {
+      elementId: 'textarea-1',
+      mesh: {
+        parent: {
+          metadata: {
+            textInput: { focused: true }
+          }
+        }
+      } as any
+    };
+    store.setElementId(entry.elementId);
+    store.setActiveEntry(entry);
+
+    const event = createKeyEvent('keydown', 'ArrowLeft', { shiftKey: true });
+    documentStub.dispatchKeydown(event);
+
+    expect(event.defaultPrevented).toBeFalse();
+    expect(controller.moveSelectionWithKeyboard).not.toHaveBeenCalled();
+  });
+
   it('invokes clipboard copy shortcut when selection exists', () => {
     store.setHasSelection(true);
     const event = createKeyEvent('keydown', 'c', { ctrlKey: true });

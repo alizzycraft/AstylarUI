@@ -380,16 +380,15 @@ export class MultiLineTextRendererService {
       }
     }
 
-    // Add the last line
-    if (currentLine) {
-      const lineMetrics = ctx.measureText(currentLine);
-      const lineWidth = lineMetrics.width;
-      lines.push({
-        text: currentLine,
-        width: lineWidth,
-        y: 0
-      });
-    }
+    // A preserved empty line is still a rendered line. This matters for blank
+    // lines between content and for a trailing newline in editable controls.
+    const lineMetrics = ctx.measureText(currentLine);
+    const lineWidth = lineMetrics.width;
+    lines.push({
+      text: currentLine,
+      width: lineWidth,
+      y: 0
+    });
 
     return lines;
   }

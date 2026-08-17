@@ -74,6 +74,30 @@ describe('MultiLineTextRendererService', () => {
     expect(lines[0].text).toBe(text);
   });
 
+  it('preserves blank and trailing lines for pre-wrap text', () => {
+    const style: TextStyleProperties = {
+      fontFamily: 'Arial',
+      fontSize: 16,
+      fontWeight: 'normal',
+      fontStyle: 'normal',
+      color: '#000000',
+      textAlign: 'left',
+      verticalAlign: 'baseline',
+      lineHeight: 1.5,
+      letterSpacing: 0,
+      wordSpacing: 0,
+      whiteSpace: 'pre-wrap',
+      wordWrap: 'normal',
+      textOverflow: 'clip',
+      textDecoration: 'none',
+      textTransform: 'none'
+    };
+
+    const lines = service.wrapText('Alpha\n\n', 300, style);
+
+    expect(lines.map((line) => line.text)).toEqual(['Alpha', '', '']);
+  });
+
   it('should calculate line positions correctly', () => {
     const style: TextStyleProperties = {
       fontFamily: 'Arial',

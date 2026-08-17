@@ -608,12 +608,16 @@ export class TextInputManager {
         if (isShiftKey) {
             if (!textInput.cursorState.selectionActive) {
                 textInput.cursorState.selectionActive = true;
-                textInput.selectionStart = textInput.cursorPosition;
+                textInput.cursorState.selectionStart = textInput.cursorPosition;
             }
-            textInput.selectionEnd = newPosition;
+            textInput.cursorState.selectionEnd = newPosition;
+            textInput.selectionStart = Math.min(textInput.cursorState.selectionStart, newPosition);
+            textInput.selectionEnd = Math.max(textInput.cursorState.selectionStart, newPosition);
         } else {
             // Clear selection when moving without shift
             textInput.cursorState.selectionActive = false;
+            textInput.cursorState.selectionStart = newPosition;
+            textInput.cursorState.selectionEnd = newPosition;
             textInput.selectionStart = newPosition;
             textInput.selectionEnd = newPosition;
         }
@@ -666,6 +670,8 @@ export class TextInputManager {
 
         // Clear selection
         textInput.cursorState.selectionActive = false;
+        textInput.cursorState.selectionStart = textInput.cursorPosition;
+        textInput.cursorState.selectionEnd = textInput.cursorPosition;
         textInput.selectionStart = textInput.cursorPosition;
         textInput.selectionEnd = textInput.cursorPosition;
 

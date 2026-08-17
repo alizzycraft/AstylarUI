@@ -60,6 +60,15 @@ export class TextSelectionKeyboardService {
       }
     }
 
+    // Astylar text controls render their editable value on a child text mesh.
+    // When one is focused the browser event still targets the canvas, so the
+    // DOM tag checks above cannot distinguish control editing from page-text
+    // selection. Let the control keyboard handler own those events.
+    const activeEntry = this.selectionStore.activeEntry();
+    if (activeEntry?.mesh.parent?.metadata?.textInput?.focused) {
+      return false;
+    }
+
     // Only react when we have a selection context or the clipboard shortcut applies
     if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'c') {
       return this.selectionStore.hasSelection();

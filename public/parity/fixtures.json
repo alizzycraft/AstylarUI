@@ -653,5 +653,12 @@
     "category": "forms-interactive",
     "expectedBehavior": "Typing and deleting in a focused text input updates value and selection, emits input after each mutation, and commits change when focus leaves the control.",
     "interactionStepCount": 4
+  },
+  {
+    "id": "interaction-textarea-selection",
+    "title": "Textarea selection and multiline editing",
+    "category": "forms-interactive",
+    "expectedBehavior": "Shift-arrow selection, selection replacement, newline insertion, continued multiline typing, and blur commit match a browser textarea.",
+    "interactionStepCount": 5
   }
 ]
