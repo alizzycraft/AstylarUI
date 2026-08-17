@@ -646,5 +646,12 @@
     "category": "forms-interactive",
     "expectedBehavior": "Pointer focus, forward and reverse Tab navigation, disabled-control skipping, and outside-click blur report the same focus and event order as the browser.",
     "interactionStepCount": 4
+  },
+  {
+    "id": "interaction-text-editing",
+    "title": "Text input editing events",
+    "category": "forms-interactive",
+    "expectedBehavior": "Typing and deleting in a focused text input updates value and selection, emits input after each mutation, and commits change when focus leaves the control.",
+    "interactionStepCount": 4
   }
 ]

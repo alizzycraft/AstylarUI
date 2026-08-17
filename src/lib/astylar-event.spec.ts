@@ -145,6 +145,7 @@ describe('AstylarInteractionRuntime', () => {
           return true;
         },
         handleKeyDown: (_elementId, event) => handledKeys.push(event.key),
+        commitsValueOnBlur: () => false,
       },
       canvas,
     );
@@ -190,6 +191,79 @@ describe('AstylarInteractionRuntime', () => {
     canvas.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', code: 'Tab' }));
     expect(runtime.snapshot.keyboardListeners).toBe(0);
     expect(events.length).toBe(9);
+    scene.dispose();
+    engine.dispose();
+  });
+
+  it('emits input after text mutation and commits change before blur', () => {
+    const engine = new NullEngine();
+    const scene = new Scene(engine);
+    const mesh = MeshBuilder.CreatePlane('field-mesh', {}, scene);
+    mesh.metadata = { elementId: 'field' };
+    const canvas = document.createElement('canvas');
+    const events: AstylarEventSnapshot[] = [];
+    let focusedElementId: string | undefined;
+    let value = 'Seed';
+    const runtime = new AstylarInteractionRuntime(
+      scene,
+      {
+        styles: [],
+        root: { children: [{ type: 'input', inputType: 'text', id: 'field', value }] },
+      },
+      {
+        handlers: {
+          field: {
+            keydown: (event) => {
+              if (event.key === 'y') event.preventDefault();
+            },
+          },
+        },
+        onEvent: (event) => events.push(event),
+      },
+      () => ({ value }),
+      {
+        getFocusedElementId: () => focusedElementId,
+        focus: (elementId) => {
+          focusedElementId = elementId;
+          return true;
+        },
+        blur: () => {
+          focusedElementId = undefined;
+          return true;
+        },
+        handleKeyDown: (_elementId, event) => {
+          if (event.key.length === 1) value += event.key;
+        },
+        commitsValueOnBlur: () => true,
+      },
+      canvas,
+    );
+    const pointerEvent = new PointerEvent('pointerdown', { button: 0 });
+
+    scene.onPointerObservable.notifyObservers({
+      type: PointerEventTypes.POINTERDOWN,
+      event: pointerEvent,
+      pickInfo: { pickedMesh: mesh },
+    } as unknown as PointerInfo);
+    canvas.dispatchEvent(new KeyboardEvent('keydown', { key: 'x', code: 'KeyX' }));
+    canvas.dispatchEvent(new KeyboardEvent('keydown', { key: 'y', code: 'KeyY' }));
+    scene.onPointerObservable.notifyObservers({
+      type: PointerEventTypes.POINTERDOWN,
+      event: pointerEvent,
+      pickInfo: undefined,
+    } as unknown as PointerInfo);
+
+    expect(events.map((event) => `${event.type}:${event.value}`)).toEqual([
+      'pointerdown:Seed',
+      'focus:Seed',
+      'keydown:Seed',
+      'input:Seedx',
+      'keydown:Seedx',
+      'change:Seedx',
+      'blur:Seedx',
+    ]);
+    expect(events[4].defaultPrevented).toBeTrue();
+    runtime.dispose();
     scene.dispose();
     engine.dispose();
   });

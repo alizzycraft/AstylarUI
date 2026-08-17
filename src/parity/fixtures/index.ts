@@ -103,6 +103,7 @@ import { reactiveImageSourceFixture } from './reactive-image-source.fixture';
 import { reactiveLifecycleCyclesFixture } from './reactive-lifecycle-cycles.fixture';
 import { interactionPointerClickFixture } from './interaction-pointer-click.fixture';
 import { interactionFocusNavigationFixture } from './interaction-focus-navigation.fixture';
+import { interactionTextEditingFixture } from './interaction-text-editing.fixture';
 import { ParityFixture } from '../parity.types';
 
 const fixtures: readonly ParityFixture[] = [
@@ -210,7 +211,8 @@ const fixtures: readonly ParityFixture[] = [
   reactiveImageSourceFixture,
   reactiveLifecycleCyclesFixture,
   interactionPointerClickFixture,
-  interactionFocusNavigationFixture
+  interactionFocusNavigationFixture,
+  interactionTextEditingFixture
 ];
 
 const fixturesById = new Map(fixtures.map((fixture) => [fixture.id, fixture]));

@@ -249,6 +249,16 @@ export class InputElementService {
         this.handleKeyboardInput(event, render, focusedElement.style);
     }
 
+    /** Text-entry controls commit their edited value when focus leaves. */
+    commitsValueOnBlur(elementId: string): boolean {
+        const input = this.inputElements.get(elementId);
+        return !!input && (input.type === InputType.Text ||
+            input.type === InputType.Password ||
+            input.type === InputType.Email ||
+            input.type === InputType.Number ||
+            input.type === InputType.Textarea);
+    }
+
     /**
      * Determines input type from element
      */

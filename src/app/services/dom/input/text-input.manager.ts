@@ -793,6 +793,11 @@ export class TextInputManager {
             }
         }
 
+        textInput.selectionStart = textInput.cursorPosition;
+        textInput.selectionEnd = textInput.cursorPosition;
+        textInput.cursorState.selectionStart = textInput.cursorPosition;
+        textInput.cursorState.selectionEnd = textInput.cursorPosition;
+
         // Mark as dirty
         textInput.validationState.dirty = true;
 

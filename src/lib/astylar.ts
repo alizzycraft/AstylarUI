@@ -289,6 +289,8 @@ export class Astylar {
         handleKeyDown: (elementId, event) => {
           this.inputElementService.handleFocusedKeyDown(elementId, event);
         },
+        commitsValueOnBlur: (elementId) =>
+          this.inputElementService.commitsValueOnBlur(elementId),
       },
     );
     this.interactions.set(scene, interaction);

@@ -30,6 +30,7 @@ export interface AstylarInteractionControlAdapter {
   focus(elementId: string): boolean;
   blur(elementId: string): boolean;
   handleKeyDown(elementId: string, event: KeyboardEvent): void;
+  commitsValueOnBlur(elementId: string): boolean;
 }
 
 /** Owns the Babylon observers for one scene and emits a small DOM-like event subset. */
@@ -41,6 +42,7 @@ export class AstylarInteractionRuntime {
   private disposed = false;
   private readonly canvas: HTMLCanvasElement | null;
   private focusOrder: string[] = [];
+  private focusedValueAtEntry?: string;
 
   constructor(
     private readonly scene: Scene,
@@ -200,7 +202,18 @@ export class AstylarInteractionRuntime {
       this.moveFocus(event.shiftKey ? -1 : 1);
       return;
     }
+    const before = this.liveState(targetId);
     this.controls?.handleKeyDown(targetId, event);
+    const after = this.liveState(targetId);
+    if (this.controls?.commitsValueOnBlur(targetId) &&
+        (before.value !== after.value || before.checked !== after.checked ||
+          before.selectedValue !== after.selectedValue)) {
+      this.dispatcher.dispatch({
+        type: 'input',
+        targetId,
+        ...after,
+      });
+    }
   };
 
   private moveFocus(direction: -1 | 1): void {
@@ -216,6 +229,16 @@ export class AstylarInteractionRuntime {
   private setFocus(elementId: string | undefined): void {
     const previous = this.controls?.getFocusedElementId();
     if (previous === elementId) return;
+    if (previous) {
+      const state = this.liveState(previous);
+      if (this.controls?.commitsValueOnBlur(previous) && state.value !== this.focusedValueAtEntry) {
+        this.dispatcher.dispatch({
+          type: 'change',
+          targetId: previous,
+          ...state,
+        });
+      }
+    }
     if (previous && this.controls?.blur(previous)) {
       this.dispatcher.dispatch({
         type: 'blur',
@@ -224,11 +247,14 @@ export class AstylarInteractionRuntime {
       });
     }
     if (elementId && this.controls?.focus(elementId)) {
+      this.focusedValueAtEntry = this.liveState(elementId).value;
       this.dispatcher.dispatch({
         type: 'focus',
         targetId: elementId,
         ...this.liveState(elementId),
       });
+    } else if (!elementId) {
+      this.focusedValueAtEntry = undefined;
     }
   }
 
