@@ -90,7 +90,7 @@ try {
       if (!desktopContext) {
         throw new Error(`Dynamic sequence for "${fixture.id}" requires a desktop context`);
       }
-      results.push(...await measureDynamicFixture(desktopContext, fixture));
+      results.push(...await measureDynamicFixture(contexts, fixture));
     }
   }
 
@@ -246,21 +246,26 @@ async function captureMode(context, url, selector, screenshotPath) {
   return { report, screenshot, pageErrors };
 }
 
-async function measureDynamicFixture(context, fixture) {
+async function measureDynamicFixture(contexts, fixture) {
+  const context = contexts.get('desktop');
+  if (!context) throw new Error('Missing desktop dynamic viewport context');
   const sequenceDir = path.join(ARTIFACTS_DIR, fixture.id, 'updates');
   await mkdir(sequenceDir, { recursive: true });
   const freshStates = [];
   for (let index = 0; index < fixture.dynamicStepCount; index += 1) {
-    const query = `?viewport=desktop&dynamic-state=${index}`;
+    const viewportId = fixture.lifecycleViewports?.[index] ?? 'desktop';
+    const freshContext = contexts.get(viewportId);
+    if (!freshContext) throw new Error(`Missing dynamic viewport context: ${viewportId}`);
+    const query = `?viewport=${viewportId}&dynamic-state=${index}`;
     freshStates.push({
       reference: await captureMode(
-        context,
+        freshContext,
         `${BASE_URL}/parity/reference/${encodeURIComponent(fixture.id)}${query}`,
         '#parity-reference-viewport',
         path.join(sequenceDir, `${index + 1}-fresh-reference.png`),
       ),
       astylar: await captureMode(
-        context,
+        freshContext,
         `${BASE_URL}/parity/astylar/${encodeURIComponent(fixture.id)}${query}`,
         '#parity-astylar-canvas',
         path.join(sequenceDir, `${index + 1}-fresh-astylar.png`),
@@ -274,6 +279,7 @@ async function measureDynamicFixture(context, fixture) {
     'reference',
     sequenceDir,
     fixture.dynamicStepCount,
+    fixture.lifecycleViewports,
   );
   const astylarStates = await captureDynamicMode(
     context,
@@ -282,6 +288,8 @@ async function measureDynamicFixture(context, fixture) {
     'astylar',
     sequenceDir,
     fixture.dynamicStepCount,
+    fixture.lifecycleViewports,
+    true,
   );
 
   return referenceStates.map((reference, index) => {
@@ -322,10 +330,40 @@ async function measureDynamicFixture(context, fixture) {
         `(${JSON.stringify(currentResources)} vs ${JSON.stringify(freshResources)})`,
       );
     }
+    const freshRegistries = fresh.astylar.report.registries;
+    const currentRegistries = astylar.report.registries;
+    if (
+      freshRegistries && currentRegistries &&
+      (freshRegistries.elements !== currentRegistries.elements ||
+        freshRegistries.inputs !== currentRegistries.inputs)
+    ) {
+      runtimeErrors.push(
+        `astylar: in-place update ${index + 1} registry counts differ from fresh render ` +
+        `(${JSON.stringify(currentRegistries)} vs ${JSON.stringify(freshRegistries)})`,
+      );
+    }
+    if (index === astylarStates.length - 1 && astylar.disposal) {
+      const before = astylar.disposal.before;
+      const after = astylar.disposal.after;
+      const resources = after.resources;
+      if (
+        (fixture.lifecycleViewports && before.inputs < 1) ||
+        before.cleanupRegistrations < 1 ||
+        after.sessionStatus !== 'disposed' ||
+        !after.engineDisposed ||
+        !after.sceneDisposed ||
+        after.cleanupRegistrations !== 0 ||
+        after.elements !== 0 ||
+        after.inputs !== 0 ||
+        !resources || resources.meshes !== 0 || resources.materials !== 0 || resources.textures !== 0
+      ) {
+        runtimeErrors.push(`astylar: disposal did not clean lifecycle state ${JSON.stringify(astylar.disposal)}`);
+      }
+    }
     return {
       id: fixture.id,
       scenario: `update-${index + 1}`,
-      viewport: viewportProfiles.desktop,
+      viewport: viewportProfiles[fixture.lifecycleViewports?.[index] ?? 'desktop'],
       title: fixture.title,
       category: fixture.category,
       expectedBehavior: fixture.expectedBehavior,
@@ -347,6 +385,8 @@ async function captureDynamicMode(
   mode,
   sequenceDir,
   stepCount,
+  lifecycleViewports = [],
+  disposeAfter = false,
 ) {
   const page = await context.newPage();
   await installDeterministicAssetDelay(page);
@@ -362,7 +402,18 @@ async function captureDynamicMode(
 
   let previousRevision = 0;
   for (let index = 0; index < stepCount; index += 1) {
-    await page.evaluate((stepIndex) => window.__ASTYLAR_PARITY_APPLY_STEP__?.(stepIndex), index);
+    const viewportId = lifecycleViewports[index];
+    if (viewportId) {
+      const viewport = viewportProfiles[viewportId];
+      await page.setViewportSize({ width: viewport.width, height: viewport.height });
+    }
+    await page.evaluate(
+      ({ stepIndex, targetViewport }) => window.__ASTYLAR_PARITY_APPLY_STEP__?.(
+        stepIndex,
+        targetViewport,
+      ),
+      { stepIndex: index, targetViewport: viewportId },
+    );
     await page.waitForFunction(
       (afterRevision) => {
         const report = window.__ASTYLAR_PARITY_REPORT__;
@@ -381,7 +432,11 @@ async function captureDynamicMode(
     });
     states.push({ report, screenshot, pageErrors: [...pageErrors] });
   }
+  const disposal = disposeAfter
+    ? await page.evaluate(() => window.__ASTYLAR_PARITY_DISPOSE__?.())
+    : undefined;
   await page.close();
+  if (disposal && states.length) states.at(-1).disposal = disposal;
   return states;
 }
 

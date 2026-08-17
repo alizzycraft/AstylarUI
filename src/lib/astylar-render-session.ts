@@ -13,6 +13,7 @@ export interface AstylarSessionSnapshot {
   revision: number;
   status: 'idle' | 'scheduled' | 'rendering' | 'disposed';
   pendingReasons: readonly AstylarInvalidationReason[];
+  cleanupRegistrations: number;
 }
 
 export interface AstylarRenderSessionOptions {
@@ -78,6 +79,7 @@ export class AstylarRenderSession {
             ? 'scheduled'
             : 'idle',
       pendingReasons: [...this.pendingReasons],
+      cleanupRegistrations: this.cleanupCallbacks.size,
     };
   }
 

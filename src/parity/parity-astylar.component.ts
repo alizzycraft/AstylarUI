@@ -80,6 +80,7 @@ export class ParityAstylarComponent {
       window.removeEventListener('resize', this.onWindowResize);
       delete window.__ASTYLAR_PARITY_SET_VIEWPORT__;
       delete window.__ASTYLAR_PARITY_APPLY_STEP__;
+      delete window.__ASTYLAR_PARITY_DISPOSE__;
       const engine = this.scene?.getEngine();
       if (engine && !engine.isDisposed) {
         engine.dispose();
@@ -131,12 +132,41 @@ export class ParityAstylarComponent {
       scene.activeCamera?.detachControl();
       this.scene = scene;
       if (dynamicSequence) {
-        window.__ASTYLAR_PARITY_APPLY_STEP__ = async (index) => {
+        window.__ASTYLAR_PARITY_APPLY_STEP__ = async (index, viewportId) => {
           const step = fixture.dynamicSteps?.[index];
           if (!step) throw new Error(`Unknown dynamic step: ${index}`);
+          if (viewportId) {
+            this.setViewportBox(PARITY_VIEWPORTS[viewportId]);
+            await this.nextFrame();
+            await this.nextFrame();
+            await this.astylar.invalidate('resize', scene);
+          }
           canvas.dataset['parityReady'] = 'false';
           await this.astylar.update(step.siteData, scene);
           this.captureWhenReady(scene, canvas, fixture);
+        };
+        window.__ASTYLAR_PARITY_DISPOSE__ = () => {
+          const session = this.astylar.getSession(scene);
+          const before = {
+            resources: this.astylar.getResourceSnapshot(scene),
+            elements: this.elementManager.elementsMap.size,
+            inputs: this.elementManager.inputElementsMap.size,
+            cleanupRegistrations: session?.snapshot.cleanupRegistrations ?? 0,
+          };
+          const engine = scene.getEngine();
+          engine.dispose();
+          return {
+            before,
+            after: {
+              resources: this.astylar.getResourceSnapshot(scene),
+              elements: this.elementManager.elementsMap.size,
+              inputs: this.elementManager.inputElementsMap.size,
+              cleanupRegistrations: session?.snapshot.cleanupRegistrations ?? 0,
+              sessionStatus: session?.snapshot.status,
+              engineDisposed: engine.isDisposed,
+              sceneDisposed: scene.isDisposed,
+            },
+          };
         };
         return;
       }
@@ -179,6 +209,16 @@ export class ParityAstylarComponent {
   private applyResponsiveViewport(viewport: ParityViewport): void {
     const scene = this.scene;
     if (!scene) return;
+    this.setViewportBox(viewport);
+    const canvas = this.canvas().nativeElement;
+    canvas.dataset['parityReady'] = 'false';
+    const fixture = getParityFixture(this.route.snapshot.paramMap.get('fixtureId') ?? '');
+    if (!fixture) return;
+    const generation = ++this.resizeGeneration;
+    void this.captureAfterResponsiveReflow(generation, scene, canvas, fixture);
+  }
+
+  private setViewportBox(viewport: ParityViewport): void {
     this.parityViewport = viewport;
     const canvas = this.canvas().nativeElement;
     canvas.style.width = `${viewport.width}px`;
@@ -187,11 +227,6 @@ export class ParityAstylarComponent {
       canvas.parentElement.style.width = `${viewport.width}px`;
       canvas.parentElement.style.height = `${viewport.height}px`;
     }
-    canvas.dataset['parityReady'] = 'false';
-    const fixture = getParityFixture(this.route.snapshot.paramMap.get('fixtureId') ?? '');
-    if (!fixture) return;
-    const generation = ++this.resizeGeneration;
-    void this.captureAfterResponsiveReflow(generation, scene, canvas, fixture);
   }
 
   private async captureAfterResponsiveReflow(
@@ -359,7 +394,11 @@ export class ParityAstylarComponent {
       viewport: this.parityViewport,
       elements,
       errors,
-      resources: this.astylar.getResourceSnapshot(scene)
+      resources: this.astylar.getResourceSnapshot(scene),
+      registries: {
+        elements: this.elementManager.elementsMap.size,
+        inputs: this.elementManager.inputElementsMap.size,
+      },
     };
   }
 

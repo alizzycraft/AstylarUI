@@ -52,6 +52,7 @@ export interface ParityFixture {
   };
   siteData: SiteData;
   dynamicSteps?: ParityDynamicStep[];
+  lifecycleViewports?: ParityViewport['id'][];
 }
 
 export interface ParityReferenceSetTextMutation {
@@ -128,12 +129,35 @@ export interface ParityRuntimeReport {
   elements: Record<string, ParityElementMeasurement>;
   errors: string[];
   resources?: { meshes: number; materials: number; textures: number };
+  registries?: { elements: number; inputs: number };
+}
+
+export interface ParityDisposalReport {
+  before: {
+    resources?: { meshes: number; materials: number; textures: number };
+    elements: number;
+    inputs: number;
+    cleanupRegistrations: number;
+  };
+  after: {
+    resources?: { meshes: number; materials: number; textures: number };
+    elements: number;
+    inputs: number;
+    cleanupRegistrations: number;
+    sessionStatus?: string;
+    engineDisposed: boolean;
+    sceneDisposed: boolean;
+  };
 }
 
 declare global {
   interface Window {
     __ASTYLAR_PARITY_REPORT__?: ParityRuntimeReport;
     __ASTYLAR_PARITY_SET_VIEWPORT__?: (id: ParityViewport['id']) => void;
-    __ASTYLAR_PARITY_APPLY_STEP__?: (index: number) => Promise<void>;
+    __ASTYLAR_PARITY_APPLY_STEP__?: (
+      index: number,
+      viewportId?: ParityViewport['id'],
+    ) => Promise<void>;
+    __ASTYLAR_PARITY_DISPOSE__?: () => ParityDisposalReport;
   }
 }

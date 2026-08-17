@@ -131,7 +131,12 @@ describe('AstylarRenderSession', () => {
     const failed = session.invalidate('initial');
     frames.flush();
     await expectAsync(failed).toBeRejectedWithError('render failed');
-    expect(session.snapshot).toEqual({ revision: 0, status: 'idle', pendingReasons: [] });
+    expect(session.snapshot).toEqual({
+      revision: 0,
+      status: 'idle',
+      pendingReasons: [],
+      cleanupRegistrations: 0,
+    });
 
     shouldFail = false;
     const retried = session.invalidate('manual');
@@ -161,9 +166,11 @@ describe('AstylarRenderSession', () => {
     const session = new AstylarRenderSession(scene, site('initial'), () => undefined);
 
     session.addCleanup(cleanup);
+    expect(session.snapshot.cleanupRegistrations).toBe(1);
     session.dispose();
     session.dispose();
 
     expect(cleanup).toHaveBeenCalledTimes(1);
+    expect(session.snapshot.cleanupRegistrations).toBe(0);
   });
 });

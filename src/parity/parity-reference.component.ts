@@ -80,9 +80,10 @@ export class ParityReferenceComponent {
 
     await this.document.fonts?.ready;
     if (dynamicSequence) {
-      window.__ASTYLAR_PARITY_APPLY_STEP__ = async (index) => {
+      window.__ASTYLAR_PARITY_APPLY_STEP__ = async (index, viewportId) => {
         const step = fixture.dynamicSteps?.[index];
         if (!step) throw new Error(`Unknown dynamic step: ${index}`);
+        if (viewportId) this.setViewportBox(PARITY_VIEWPORTS[viewportId]);
         viewport.dataset['parityReady'] = 'false';
         this.applyReferenceStep(viewport, step.referenceMutations);
         await this.waitForImages(viewport);
@@ -159,6 +160,16 @@ export class ParityReferenceComponent {
   };
 
   private applyResponsiveViewport(viewport: ParityViewport): void {
+    this.setViewportBox(viewport);
+    const element = this.viewport().nativeElement;
+    const fixtureId = this.route.snapshot.paramMap.get('fixtureId') ?? '';
+    const fixture = getParityFixture(fixtureId);
+    if (!fixture) return;
+    const generation = ++this.resizeGeneration;
+    void this.publishAfterLayout(generation, fixture, element);
+  }
+
+  private setViewportBox(viewport: ParityViewport): void {
     this.parityViewport = viewport;
     const element = this.viewport().nativeElement;
     element.style.width = `${viewport.width}px`;
@@ -167,11 +178,6 @@ export class ParityReferenceComponent {
       element.parentElement.style.width = `${viewport.width}px`;
       element.parentElement.style.height = `${viewport.height}px`;
     }
-    const fixtureId = this.route.snapshot.paramMap.get('fixtureId') ?? '';
-    const fixture = getParityFixture(fixtureId);
-    if (!fixture) return;
-    const generation = ++this.resizeGeneration;
-    void this.publishAfterLayout(generation, fixture, element);
   }
 
   private async publishAfterLayout(

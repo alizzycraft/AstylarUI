@@ -623,5 +623,14 @@
     "category": "responsive",
     "expectedBehavior": "Replacing a still-loading image source shows only the new image; completion of the older delayed source cannot overwrite the current element or grow scene resources.",
     "dynamicStepCount": 1
+  },
+  {
+    "id": "reactive-lifecycle-cycles",
+    "title": "Repeated resize and update lifecycle",
+    "category": "responsive",
+    "expectedBehavior": "Alternating desktop, tablet, and mobile resizes with short/long text updates remains identical to fresh rendering on every cycle and disposes all owned lifecycle state.",
+    "viewportIds": ["desktop", "tablet", "mobile"],
+    "dynamicStepCount": 6,
+    "lifecycleViewports": ["desktop", "tablet", "mobile", "desktop", "mobile", "desktop"]
   }
 ]
