@@ -514,5 +514,11 @@
     "title": "Wrapped row flex intrinsic height",
     "category": "flexbox",
     "expectedBehavior": "A height-auto wrapped row flex container sums its flex line cross sizes and row gaps, then adds its padding and borders."
+  },
+  {
+    "id": "grid-percentage-content-width",
+    "title": "Percentage grid track from content box",
+    "category": "grid",
+    "expectedBehavior": "A percentage grid column resolves against the grid content box before column gaps are removed, and fractional tracks receive the remaining space."
   }
 ]

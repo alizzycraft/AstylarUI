@@ -21,6 +21,7 @@ This phase extends browser parity across responsive intrinsic flex/grid layout a
 | Increment | Browser expectation | Baseline | General repair | Focused result | Full-corpus result | Status |
 | --- | --- | --- | --- | --- | --- | --- |
 | Wrapped row flex intrinsic height | A height-auto wrapped row flex container forms lines using definite item bases and available content width, then sums the largest outer cross size per line, row gaps, padding, and borders. | New `flex-wrap-auto-height` fixture: SSIM `0.9823`; `93.8%` of edges within `2px`; maximum edge error `15.9999px`; child placement was correct but the container used block-style item-height accumulation and became `132px` instead of `116px`. | Measure definite widths and flex bases during intrinsic pre-layout, form wrapped row lines including margins and column gaps, and sum their outer cross sizes with row gaps and container insets. | SSIM `1.0000`; `100%` of edges within `2px`; maximum edge error `0.0280px`; exact geometry/text; runtime clean; focused flex suite `17/17`. | 85 fixtures / 97 renders / three viewports; median SSIM `0.9966`; minimum SSIM `0.9509`; `99.9%` of edges within `2px`; maximum edge error `3.9921px`; exact text; runtime clean; all nine representative renders unchanged. | Accepted |
+| Percentage grid tracks from the content box | A percentage grid track resolves against the full content-box dimension before gaps are removed; fractional tracks then receive the remaining track space. | New `grid-percentage-content-width` fixture: SSIM `0.9890`; `83.3%` of edges within `2px`; maximum edge error `8.0052px`; Astylar resolved `40%` against the gap-reduced track space, making the first column `8px` too narrow. | Resolve percentage tokens against `availableSize`; continue subtracting gaps when computing the free space distributed to `fr` tracks. | SSIM `1.0000`; `100%` of edges within `2px`; maximum edge error `0.0246px`; exact geometry/text; runtime clean; focused grid suite `4/4`. | 86 fixtures / 98 renders / three viewports; median SSIM `0.9966`; minimum SSIM `0.9509`; `99.9%` of edges within `2px`; maximum edge error `3.9921px`; exact text; runtime clean; all nine representative renders unchanged. | Accepted |
 
 ## Representative application baseline
 
@@ -34,6 +35,11 @@ The accepted Phase 4 baseline remains the starting point: project dashboard desk
 - Full parity corpus: 85 fixtures / 97 renders / three viewports; median SSIM `0.9966`; minimum SSIM `0.9509`; `99.9%` of measured edges within `2px`; maximum edge error `3.9921px`; exact text; runtime clean.
 - Angular application production build: passing (existing bundle/style budget warnings only).
 - Library TypeScript build: passing.
+- Focused percentage-grid unit tests: 4 passing.
+- Focused `grid-percentage-content-width` parity: SSIM `1.0000`; all measured edges within `2px`; maximum edge error `0.0246px`; runtime clean.
+- Full unit suite after percentage-grid sizing: 104 passing.
+- Full parity corpus after percentage-grid sizing: 86 fixtures / 98 renders / three viewports; median SSIM `0.9966`; minimum SSIM `0.9509`; `99.9%` of measured edges within `2px`; maximum edge error `3.9921px`; exact text; runtime clean.
+- Angular application production build and library TypeScript build after percentage-grid sizing: passing (existing Angular budget warnings only).
 
 ## Next candidates
 

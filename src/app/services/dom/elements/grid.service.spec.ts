@@ -11,6 +11,10 @@ describe('GridService', () => {
     expect(service.resolveTracks('1fr 2fr', 320, 20, 2)).toEqual([100, 200]);
   });
 
+  it('resolves percentage tracks against the content box before subtracting gaps', () => {
+    expect(service.resolveTracks('40% 1fr', 460, 20, 2)).toEqual([184, 256]);
+  });
+
   it('creates equal implicit tracks when no template is supplied', () => {
     expect(service.resolveTracks(undefined, 220, 10, 2)).toEqual([105, 105]);
   });

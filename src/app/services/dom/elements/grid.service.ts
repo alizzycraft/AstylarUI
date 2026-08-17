@@ -103,7 +103,7 @@ export class GridService {
         return { type: 'fr' as const, value: fraction };
       }
       const value = token.endsWith('%')
-        ? trackSpace * Number.parseFloat(token) / 100
+        ? availableSize * Number.parseFloat(token) / 100
         : Number.parseFloat(token);
       const pixels = Number.isFinite(value) ? Math.max(0, value) : 0;
       fixed += pixels;

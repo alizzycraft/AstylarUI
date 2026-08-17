@@ -83,6 +83,7 @@ import { flexScaledShrinkFixture } from './flex-scaled-shrink.fixture';
 import { standaloneFlexAutoHeightFixture } from './standalone-flex-auto-height.fixture';
 import { flexPercentageContentWidthFixture } from './flex-percentage-content-width.fixture';
 import { flexWrapAutoHeightFixture } from './flex-wrap-auto-height.fixture';
+import { gridPercentageContentWidthFixture } from './grid-percentage-content-width.fixture';
 import { ParityFixture } from '../parity.types';
 
 const fixtures: readonly ParityFixture[] = [
@@ -170,7 +171,8 @@ const fixtures: readonly ParityFixture[] = [
   flexScaledShrinkFixture,
   standaloneFlexAutoHeightFixture,
   flexPercentageContentWidthFixture,
-  flexWrapAutoHeightFixture
+  flexWrapAutoHeightFixture,
+  gridPercentageContentWidthFixture
 ];
 
 const fixturesById = new Map(fixtures.map((fixture) => [fixture.id, fixture]));
