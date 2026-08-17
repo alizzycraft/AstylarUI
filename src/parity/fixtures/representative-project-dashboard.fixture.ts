@@ -7,6 +7,7 @@ export const representativeProjectDashboardFixture: ParityFixture = {
   expectedBehavior:
     'A realistic project workspace reflows its persistent navigation, toolbar, summary grid, task list, clipped activity panel, controls, and fixed help action across desktop, tablet, and mobile.',
   viewportIds: ['desktop', 'tablet', 'mobile'],
+  responsiveSequence: ['desktop', 'tablet', 'mobile', 'desktop'],
   measurementIds: [
     'pm-shell', 'pm-sidebar', 'pm-brand', 'pm-nav', 'pm-nav-projects', 'pm-workspace',
     'pm-header', 'pm-heading', 'pm-search', 'pm-new', 'pm-main', 'pm-primary', 'pm-intro',

@@ -7,6 +7,7 @@ export const gridAutoWrappedTextRowFixture: ParityFixture = {
   expectedBehavior: 'A Grid item is measured at its resolved column width, so responsive text wrapping drives the auto row and height-auto Grid container consistently.',
   measurementIds: ['grid-wrap-shell', 'grid-wrap-box', 'grid-wrap-card', 'grid-wrap-copy'],
   viewportIds: ['desktop', 'tablet', 'mobile'],
+  responsiveSequence: ['desktop', 'tablet', 'mobile', 'desktop'],
   reference: {
     html: '<section id="grid-wrap-shell"><div id="grid-wrap-box"><article id="grid-wrap-card"><p id="grid-wrap-copy">Responsive grid content wraps into additional lines as the available track becomes narrower.</p></article></div></section>',
     css: `

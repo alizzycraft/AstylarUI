@@ -135,7 +135,9 @@ export class BabylonDOMRendererService {
 
     console.log("🏗️ Creating site from data:", siteData);
 
-    // Clear existing elements and state
+    // Clear existing elements and state. Cached text textures reference the
+    // meshes being replaced and must not survive into the next full rebuild.
+    this.textRenderingService.clearCache();
     this.elementManager.clearAll();
     this.interactionService.clearAllInteractions();
     this.ancestry.clear();

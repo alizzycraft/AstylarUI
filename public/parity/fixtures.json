@@ -397,7 +397,8 @@
     "title": "Representative project management dashboard",
     "category": "composed-application",
     "expectedBehavior": "A realistic project workspace reflows its persistent navigation, toolbar, summary grid, task list, clipped activity panel, controls, and fixed help action across desktop, tablet, and mobile.",
-    "viewportIds": ["desktop", "tablet", "mobile"]
+    "viewportIds": ["desktop", "tablet", "mobile"],
+    "responsiveSequence": ["desktop", "tablet", "mobile", "desktop"]
   },
   {
     "id": "representative-data-management",
@@ -544,7 +545,8 @@
     "title": "Responsive auto grid row from wrapped text",
     "category": "grid",
     "expectedBehavior": "A Grid item is measured at its resolved column width, so responsive text wrapping drives the auto row and height-auto Grid container consistently.",
-    "viewportIds": ["desktop", "tablet", "mobile"]
+    "viewportIds": ["desktop", "tablet", "mobile"],
+    "responsiveSequence": ["desktop", "tablet", "mobile", "desktop"]
   },
   {
     "id": "grid-implicit-auto-rows",

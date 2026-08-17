@@ -43,6 +43,7 @@ export interface ParityFixture {
   expectedBehavior: string;
   measurementIds: string[];
   viewportIds?: ParityViewport['id'][];
+  responsiveSequence?: ParityViewport['id'][];
   expectedAbsentIds?: string[];
   reference: {
     html: string;
@@ -89,15 +90,18 @@ export interface ParityElementMeasurement {
 
 export interface ParityRuntimeReport {
   ready: boolean;
+  revision?: number;
   fixtureId: string;
   mode: 'reference' | 'astylar';
   viewport: ParityViewport;
   elements: Record<string, ParityElementMeasurement>;
   errors: string[];
+  resources?: { meshes: number; materials: number; textures: number };
 }
 
 declare global {
   interface Window {
     __ASTYLAR_PARITY_REPORT__?: ParityRuntimeReport;
+    __ASTYLAR_PARITY_SET_VIEWPORT__?: (id: ParityViewport['id']) => void;
   }
 }

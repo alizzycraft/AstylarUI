@@ -21,6 +21,11 @@ can set `viewportIds` to any combination of `desktop` (`800x600`), `tablet`
 (`640x720`), and `mobile` (`390x844`); each selected profile is measured as a
 separate render case while the fixture is counted once.
 
+A fixture can additionally set `responsiveSequence` to drive those named sizes
+through the same browser page and Astylar scene. Every settled state is captured
+and compared with Chromium and its equivalent fresh render, including live
+resource counts.
+
 Set `ASTYLAR_PARITY_BASE_URL` to measure an already-running server. Set
 `ASTYLAR_PARITY_BROWSER_CHANNEL` if the local Chromium channel is not `chrome`.
 Set `ASTYLAR_PARITY_FIXTURE` to a fixture ID for a focused diagnostic run; omit
@@ -56,3 +61,4 @@ results in `scorecard-v2.md`, representative-application parity in
 `scorecard-v3.md`, content-driven layout parity in `scorecard-v4.md`, and the
 active responsive intrinsic layout and paint-fidelity phase in `scorecard-v5.md`.
 Application-grade intrinsic Grid work continues in `scorecard-v6.md`.
+Reactive layout and reflow work continues in `scorecard-v7.md`.

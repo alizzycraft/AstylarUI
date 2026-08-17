@@ -28,6 +28,8 @@ import type {
   AstylarInvalidationReason,
   AstylarSessionSnapshot,
 } from "./astylar-render-session";
+import { AstylarSceneResources } from './astylar-scene-resources';
+import type { AstylarSceneResourceSnapshot } from './astylar-scene-resources';
 
 /**
  * Configuration options for rendering
@@ -53,6 +55,7 @@ export class Astylar {
   private styleService = inject(StyleService);
   private styleDefaultsService = inject(StyleDefaultsService);
   private readonly sessions = new WeakMap<Scene, AstylarRenderSession>();
+  private readonly sceneResources = new WeakMap<Scene, AstylarSceneResources>();
   private activeSession?: AstylarRenderSession;
 
   /**
@@ -226,34 +229,59 @@ export class Astylar {
 
     // Initialize DOM service
     this.babylonDOMRenderer.initialize(renderContext, viewportWidth, viewportHeight);
+    const sceneResources = new AstylarSceneResources(scene);
+    this.sceneResources.set(scene, sceneResources);
 
     const session = new AstylarRenderSession(
       scene,
       siteData,
-      async (currentSiteData) => {
-        await scene.whenReadyAsync();
+      (currentSiteData) => {
         engine.resize(true);
         this.babylonDOMRenderer.initialize(
           renderContext,
           canvas.clientWidth || viewportWidth,
           canvas.clientHeight || viewportHeight,
         );
-        this.babylonDOMRenderer.createSiteFromData(currentSiteData);
+        sceneResources.replace(() =>
+          this.babylonDOMRenderer.createSiteFromData(currentSiteData)
+        );
       },
     );
     this.sessions.set(scene, session);
     this.activeSession = session;
+    session.addCleanup(() => sceneResources.dispose());
 
     // Start render loop
     engine.runRenderLoop(() => {
       scene.render();
     });
 
-    // Handle window resize
+    // A canvas can resize without a window event (for example, a flex/grid
+    // container changing size), so observe its actual CSS box.
+    let observedWidth = canvas.clientWidth;
+    let observedHeight = canvas.clientHeight;
     const resizeHandler = () => {
-      engine.resize();
+      const width = canvas.clientWidth;
+      const height = canvas.clientHeight;
+      if (width === observedWidth && height === observedHeight) return;
+      observedWidth = width;
+      observedHeight = height;
+      void session.invalidate('resize').catch((error) => {
+        if (!session.isDisposed) {
+          console.error('[Astylar] Resize reflow failed:', error);
+        }
+      });
     };
-    window.addEventListener("resize", resizeHandler);
+    const resizeObserver = typeof ResizeObserver === 'undefined'
+      ? undefined
+      : new ResizeObserver(resizeHandler);
+    if (resizeObserver) {
+      resizeObserver.observe(canvas as unknown as Element);
+      session.addCleanup(() => resizeObserver.disconnect());
+    } else {
+      window.addEventListener('resize', resizeHandler);
+      session.addCleanup(() => window.removeEventListener('resize', resizeHandler));
+    }
 
     // Queue the initial layout through the same lifecycle used by later reflows.
     void session.invalidate('initial').catch((error) => {
@@ -267,7 +295,6 @@ export class Astylar {
       if (this.activeSession === session) {
         this.activeSession = undefined;
       }
-      window.removeEventListener("resize", resizeHandler);
       this.babylonDOMRenderer.cleanup();
       this.babylonCameraService.cleanup();
       this.babylonMeshService.cleanup();
@@ -285,6 +312,10 @@ export class Astylar {
 
   getSession(scene?: Scene): AstylarRenderSession | undefined {
     return scene ? this.sessions.get(scene) : this.activeSession;
+  }
+
+  getResourceSnapshot(scene: Scene): AstylarSceneResourceSnapshot | undefined {
+    return this.sceneResources.get(scene)?.snapshot;
   }
 
   update(siteData: SiteData, scene?: Scene): Promise<AstylarSessionSnapshot> {

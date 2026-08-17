@@ -155,4 +155,15 @@ describe('AstylarRenderSession', () => {
     expect(session.snapshot.status).toBe('disposed');
     expect(() => session.invalidate()).toThrowError(/session is disposed/);
   });
+
+  it('runs owned observer and listener cleanup exactly once', () => {
+    const cleanup = jasmine.createSpy('cleanup');
+    const session = new AstylarRenderSession(scene, site('initial'), () => undefined);
+
+    session.addCleanup(cleanup);
+    session.dispose();
+    session.dispose();
+
+    expect(cleanup).toHaveBeenCalledTimes(1);
+  });
 });

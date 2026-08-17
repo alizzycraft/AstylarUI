@@ -41,6 +41,7 @@ export class AstylarRenderSession {
   private readonly cancelFrame: (handle: number) => void;
   private readonly pendingReasons = new Set<AstylarInvalidationReason>();
   private readonly settlementWaiters: SettlementWaiter[] = [];
+  private readonly cleanupCallbacks = new Set<() => void>();
   private scheduledFrame: number | null = null;
   private rendering = false;
   private disposed = false;
@@ -80,6 +81,13 @@ export class AstylarRenderSession {
     };
   }
 
+  /** Registers a listener or observer cleanup owned by this session. */
+  addCleanup(cleanup: () => void): () => void {
+    this.ensureActive();
+    this.cleanupCallbacks.add(cleanup);
+    return () => this.cleanupCallbacks.delete(cleanup);
+  }
+
   update(siteData: SiteData): Promise<AstylarSessionSnapshot> {
     this.ensureActive();
     this.currentSiteData = siteData;
@@ -111,6 +119,14 @@ export class AstylarRenderSession {
       this.scheduledFrame = null;
     }
     this.pendingReasons.clear();
+    for (const cleanup of this.cleanupCallbacks) {
+      try {
+        cleanup();
+      } catch (error) {
+        console.error('[Astylar] Render-session cleanup failed:', error);
+      }
+    }
+    this.cleanupCallbacks.clear();
     this.rejectWaiters(new Error('Astylar render session was disposed before settling.'));
   }
 

@@ -1,6 +1,7 @@
 import { DOCUMENT } from '@angular/common';
 import {
   Component,
+  DestroyRef,
   ElementRef,
   afterNextRender,
   inject,
@@ -10,9 +11,11 @@ import { ActivatedRoute } from '@angular/router';
 import { getParityFixture } from './fixtures';
 import {
   getParityViewport,
+  PARITY_VIEWPORTS,
   ParityElementMeasurement,
   ParityRect,
-  ParityRuntimeReport
+  ParityRuntimeReport,
+  ParityViewport
 } from './parity.types';
 
 @Component({
@@ -32,13 +35,20 @@ import {
 export class ParityReferenceComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly document = inject(DOCUMENT);
+  private readonly destroyRef = inject(DestroyRef);
   private readonly viewport = viewChild.required<ElementRef<HTMLDivElement>>('viewport');
-  protected readonly parityViewport = getParityViewport(
+  protected parityViewport = getParityViewport(
     this.route.snapshot.queryParamMap.get('viewport')
   );
+  private revision = 0;
+  private resizeGeneration = 0;
 
   constructor() {
     afterNextRender(() => void this.initialize());
+    this.destroyRef.onDestroy(() => {
+      window.removeEventListener('resize', this.onWindowResize);
+      delete window.__ASTYLAR_PARITY_SET_VIEWPORT__;
+    });
   }
 
   private async initialize(): Promise<void> {
@@ -80,6 +90,56 @@ export class ParityReferenceComponent {
       await this.nextFrame();
     }
 
+    if (
+      fixture.responsiveSequence &&
+      this.route.snapshot.queryParamMap.get('dynamic') === 'true'
+    ) {
+      window.addEventListener('resize', this.onWindowResize);
+      window.__ASTYLAR_PARITY_SET_VIEWPORT__ = (id) =>
+        this.applyResponsiveViewport(PARITY_VIEWPORTS[id]);
+    }
+    this.publishCurrentReport(fixture, viewport);
+  }
+
+  private readonly onWindowResize = (): void => {
+    const viewport = Object.values(PARITY_VIEWPORTS).find(
+      (candidate) => candidate.width === window.innerWidth
+    );
+    if (!viewport) return;
+    this.applyResponsiveViewport(viewport);
+  };
+
+  private applyResponsiveViewport(viewport: ParityViewport): void {
+    this.parityViewport = viewport;
+    const element = this.viewport().nativeElement;
+    element.style.width = `${viewport.width}px`;
+    element.style.height = `${viewport.height}px`;
+    if (element.parentElement) {
+      element.parentElement.style.width = `${viewport.width}px`;
+      element.parentElement.style.height = `${viewport.height}px`;
+    }
+    const fixtureId = this.route.snapshot.paramMap.get('fixtureId') ?? '';
+    const fixture = getParityFixture(fixtureId);
+    if (!fixture) return;
+    const generation = ++this.resizeGeneration;
+    void this.publishAfterLayout(generation, fixture, element);
+  }
+
+  private async publishAfterLayout(
+    generation: number,
+    fixture: NonNullable<ReturnType<typeof getParityFixture>>,
+    viewport: HTMLDivElement
+  ): Promise<void> {
+    await this.nextFrame();
+    await this.nextFrame();
+    if (generation !== this.resizeGeneration) return;
+    this.publishCurrentReport(fixture, viewport);
+  }
+
+  private publishCurrentReport(
+    fixture: NonNullable<ReturnType<typeof getParityFixture>>,
+    viewport: HTMLDivElement
+  ): void {
     const elements: Record<string, ParityElementMeasurement> = {};
     const errors: string[] = [];
 
@@ -107,9 +167,10 @@ export class ParityReferenceComponent {
     viewport.dataset['parityReady'] = 'true';
     this.publishReport({
       ready: true,
-      fixtureId,
+      fixtureId: fixture.id,
       mode: 'reference',
       viewport: this.parityViewport,
+      revision: ++this.revision,
       elements,
       errors
     });

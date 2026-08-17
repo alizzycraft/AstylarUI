@@ -516,15 +516,19 @@ export class TextRenderingService implements TextCacheManager {
     };
   }
 
+  /** Clears cached textures before a full rendered-DOM replacement. */
+  clearCache(): void {
+    for (const cacheEntry of this.textureCache.values()) {
+      cacheEntry.texture.dispose();
+    }
+    this.textureCache.clear();
+  }
+
   /**
    * Cleanup method for service disposal
    */
   dispose(): void {
-    // Dispose all cached textures
-    for (const [key, cacheEntry] of this.textureCache.entries()) {
-      cacheEntry.texture.dispose();
-    }
-    this.textureCache.clear();
+    this.clearCache();
     this.scene = undefined;
     console.log('🗑️ TextRenderingService disposed');
   }

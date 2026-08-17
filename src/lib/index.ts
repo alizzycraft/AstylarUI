@@ -11,6 +11,8 @@ import { Scene } from "@babylonjs/core";
 export { Astylar } from "./astylar";
 export type { AstylarRenderOptions } from "./astylar";
 export { AstylarRenderSession } from "./astylar-render-session";
+export { AstylarSceneResources } from './astylar-scene-resources';
+export type { AstylarSceneResourceSnapshot } from './astylar-scene-resources';
 export type {
   AstylarInvalidationReason,
   AstylarSessionSnapshot,

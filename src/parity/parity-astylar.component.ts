@@ -22,9 +22,11 @@ import { BabylonElementManagerService } from '../app/services/dom/element-manage
 import { getParityFixture } from './fixtures';
 import {
   getParityViewport,
+  PARITY_VIEWPORTS,
   ParityElementMeasurement,
   ParityRect,
-  ParityRuntimeReport
+  ParityRuntimeReport,
+  ParityViewport
 } from './parity.types';
 
 @Component({
@@ -65,15 +67,18 @@ export class ParityAstylarComponent {
   private readonly zone = inject(NgZone);
   private readonly destroyRef = inject(DestroyRef);
   private readonly canvas = viewChild.required<ElementRef<HTMLCanvasElement>>('canvas');
-  protected readonly parityViewport = getParityViewport(
+  protected parityViewport = getParityViewport(
     this.route.snapshot.queryParamMap.get('viewport')
   );
 
   private scene?: Scene;
+  private resizeGeneration = 0;
 
   constructor() {
     afterNextRender(() => this.initialize());
     this.destroyRef.onDestroy(() => {
+      window.removeEventListener('resize', this.onWindowResize);
+      delete window.__ASTYLAR_PARITY_SET_VIEWPORT__;
       const engine = this.scene?.getEngine();
       if (engine && !engine.isDisposed) {
         engine.dispose();
@@ -115,6 +120,14 @@ export class ParityAstylarComponent {
       });
       scene.activeCamera?.detachControl();
       this.scene = scene;
+      if (
+        fixture.responsiveSequence &&
+        this.route.snapshot.queryParamMap.get('dynamic') === 'true'
+      ) {
+        window.addEventListener('resize', this.onWindowResize);
+        window.__ASTYLAR_PARITY_SET_VIEWPORT__ = (id) =>
+          this.applyResponsiveViewport(PARITY_VIEWPORTS[id]);
+      }
 
       void this.applyDynamicSteps(scene, fixture).then(() => {
         this.captureWhenReady(scene, canvas, fixture);
@@ -129,6 +142,53 @@ export class ParityAstylarComponent {
         });
       });
     });
+  }
+
+  private readonly onWindowResize = (): void => {
+    const viewport = Object.values(PARITY_VIEWPORTS).find(
+      (candidate) => candidate.width === window.innerWidth
+    );
+    const scene = this.scene;
+    if (!viewport || !scene) return;
+    this.applyResponsiveViewport(viewport);
+  };
+
+  private applyResponsiveViewport(viewport: ParityViewport): void {
+    const scene = this.scene;
+    if (!scene) return;
+    this.parityViewport = viewport;
+    const canvas = this.canvas().nativeElement;
+    canvas.style.width = `${viewport.width}px`;
+    canvas.style.height = `${viewport.height}px`;
+    if (canvas.parentElement) {
+      canvas.parentElement.style.width = `${viewport.width}px`;
+      canvas.parentElement.style.height = `${viewport.height}px`;
+    }
+    canvas.dataset['parityReady'] = 'false';
+    const fixture = getParityFixture(this.route.snapshot.paramMap.get('fixtureId') ?? '');
+    if (!fixture) return;
+    const generation = ++this.resizeGeneration;
+    void this.captureAfterResponsiveReflow(generation, scene, canvas, fixture);
+  }
+
+  private async captureAfterResponsiveReflow(
+    generation: number,
+    scene: Scene,
+    canvas: HTMLCanvasElement,
+    fixture: NonNullable<ReturnType<typeof getParityFixture>>
+  ): Promise<void> {
+    await this.nextFrame();
+    await this.nextFrame();
+    // The production ResizeObserver requests this same reason. The explicit
+    // request gives the action harness a deterministic await point and
+    // coalesces with the observer when both occur in the same frame.
+    await this.astylar.invalidate('resize', scene);
+    if (generation !== this.resizeGeneration) return;
+    this.captureWhenReady(scene, canvas, fixture);
+  }
+
+  private nextFrame(): Promise<void> {
+    return new Promise((resolve) => requestAnimationFrame(() => resolve()));
   }
 
   private async applyDynamicSteps(
@@ -266,11 +326,13 @@ export class ParityAstylarComponent {
 
     return {
       ready: true,
+      revision: this.astylar.getSession(scene)?.snapshot.revision,
       fixtureId,
       mode: 'astylar',
       viewport: this.parityViewport,
       elements,
-      errors
+      errors,
+      resources: this.astylar.getResourceSnapshot(scene)
     };
   }
 

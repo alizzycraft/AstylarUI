@@ -24,6 +24,7 @@ const thresholds = {
   minimumFixtureSsim: 0.95,
   minimumMedianSsim: 0.98
 };
+const freshGeometryTolerancePx = 0.5;
 
 let server;
 let browser;
@@ -76,6 +77,13 @@ try {
         contexts.set(viewportId, context);
       }
       results.push(await measureFixture(context, fixture, viewport));
+    }
+    if (fixture.responsiveSequence) {
+      const desktopContext = contexts.get('desktop');
+      if (!desktopContext) {
+        throw new Error(`Responsive sequence for "${fixture.id}" requires a desktop context`);
+      }
+      results.push(...await measureResponsiveFixture(desktopContext, fixture, results));
     }
   }
 
@@ -228,6 +236,152 @@ async function captureMode(context, url, selector, screenshotPath) {
     throw new Error(`Parity report was not published for ${url}`);
   }
   return { report, screenshot, pageErrors };
+}
+
+async function measureResponsiveFixture(context, fixture, staticResults) {
+  const sequenceDir = path.join(ARTIFACTS_DIR, fixture.id, 'in-place');
+  await mkdir(sequenceDir, { recursive: true });
+  const sequence = fixture.responsiveSequence.map((id) => {
+    const viewport = viewportProfiles[id];
+    if (!viewport) throw new Error(`Unknown responsive viewport "${id}"`);
+    return viewport;
+  });
+  const referenceStates = await captureResponsiveMode(
+    context,
+    `${BASE_URL}/parity/reference/${encodeURIComponent(fixture.id)}?viewport=desktop&dynamic=true`,
+    '#parity-reference-viewport',
+    'reference',
+    sequenceDir,
+    sequence
+  );
+  const astylarStates = await captureResponsiveMode(
+    context,
+    `${BASE_URL}/parity/astylar/${encodeURIComponent(fixture.id)}?viewport=desktop&dynamic=true`,
+    '#parity-astylar-canvas',
+    'astylar',
+    sequenceDir,
+    sequence
+  );
+
+  return sequence.map((viewport, index) => {
+    const reference = referenceStates[index];
+    const astylar = astylarStates[index];
+    const fresh = staticResults.find(
+      (result) => result.id === fixture.id && result.viewport.id === viewport.id && !result.scenario
+    );
+    const runtimeErrors = [
+      ...reference.pageErrors.map((error) => `reference: ${error}`),
+      ...astylar.pageErrors.map((error) => `astylar: ${error}`),
+      ...reference.report.errors.map((error) => `reference: ${error}`),
+      ...astylar.report.errors.map((error) => `astylar: ${error}`)
+    ];
+    if (!fresh) {
+      runtimeErrors.push(`No fresh-render comparison found for ${viewport.id}`);
+    } else {
+      const referenceFreshGeometry = compareGeometry(fresh.reference, reference.report);
+      const astylarFreshGeometry = compareGeometry(fresh.astylar, astylar.report);
+      const referenceFreshText = compareText(fresh.reference, reference.report);
+      const astylarFreshText = compareText(fresh.astylar, astylar.report);
+      if ((referenceFreshGeometry.maximumEdgeError ?? Infinity) > freshGeometryTolerancePx) {
+        runtimeErrors.push(`reference: in-place ${viewport.id} differs from fresh geometry`);
+      }
+      if ((astylarFreshGeometry.maximumEdgeError ?? Infinity) > freshGeometryTolerancePx) {
+        runtimeErrors.push(`astylar: in-place ${viewport.id} differs from fresh geometry`);
+      }
+      if (!referenceFreshText.allContentMatches || !referenceFreshText.allLineCountsMatch) {
+        runtimeErrors.push(`reference: in-place ${viewport.id} differs from fresh text`);
+      }
+      if (!astylarFreshText.allContentMatches || !astylarFreshText.allLineCountsMatch) {
+        runtimeErrors.push(`astylar: in-place ${viewport.id} differs from fresh text`);
+      }
+      const freshResources = fresh.astylar.resources;
+      const currentResources = astylar.report.resources;
+      if (
+        freshResources && currentResources &&
+        (currentResources.meshes !== freshResources.meshes ||
+          currentResources.materials > freshResources.materials ||
+          currentResources.textures > freshResources.textures)
+      ) {
+        runtimeErrors.push(
+          `astylar: in-place ${viewport.id} resource counts exceed fresh render ` +
+          `(${JSON.stringify(currentResources)} vs ${JSON.stringify(freshResources)})`
+        );
+      }
+    }
+    return {
+      id: fixture.id,
+      scenario: `in-place-${index + 1}`,
+      viewport,
+      title: fixture.title,
+      category: fixture.category,
+      expectedBehavior: fixture.expectedBehavior,
+      screenshotSimilarity: comparePng(reference.screenshot, astylar.screenshot),
+      geometry: compareGeometry(reference.report, astylar.report),
+      text: compareText(reference.report, astylar.report),
+      styles: compareStyles(reference.report, astylar.report),
+      runtimeErrors,
+      reference: reference.report,
+      astylar: astylar.report
+    };
+  });
+}
+
+async function captureResponsiveMode(
+  context,
+  url,
+  selector,
+  mode,
+  sequenceDir,
+  sequence
+) {
+  const page = await context.newPage();
+  const pageErrors = [];
+  const states = [];
+  page.on('pageerror', (error) => pageErrors.push(error.message));
+  await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 30_000 });
+
+  let previousRevision = 0;
+  for (let index = 0; index < sequence.length; index += 1) {
+    const viewport = sequence[index];
+    if (index > 0) {
+      await page.setViewportSize({ width: viewport.width, height: viewport.height });
+      // Chromium can deliver separate width/height resize notifications while
+      // Playwright applies both dimensions. Dispatch once after the final box
+      // is visible so the harness selects the intended named profile.
+      await page.evaluate((targetId) => {
+        window.dispatchEvent(new Event('resize'));
+        window.__ASTYLAR_PARITY_SET_VIEWPORT__?.(targetId);
+      }, viewport.id);
+    }
+    try {
+      await page.waitForFunction(
+        ({ targetId, afterRevision }) => {
+          const report = window.__ASTYLAR_PARITY_REPORT__;
+          return report?.ready === true && report.viewport.id === targetId &&
+            (report.revision ?? 0) > afterRevision;
+        },
+        { targetId: viewport.id, afterRevision: previousRevision },
+        { timeout: 30_000 }
+      );
+    } catch (error) {
+      const report = await page.evaluate(() => window.__ASTYLAR_PARITY_REPORT__);
+      throw new Error(
+        `${mode} responsive step ${index + 1} (${viewport.id}) did not settle after revision ` +
+        `${previousRevision}; latest=${JSON.stringify(report)}; pageErrors=${JSON.stringify(pageErrors)}`,
+        { cause: error }
+      );
+    }
+    const report = await page.evaluate(() => window.__ASTYLAR_PARITY_REPORT__);
+    if (!report) throw new Error(`Responsive report was not published for ${url}`);
+    previousRevision = report.revision ?? previousRevision + 1;
+    const screenshot = await page.locator(selector).screenshot({
+      path: path.join(sequenceDir, `${index + 1}-${viewport.id}-${mode}.png`),
+      animations: 'disabled'
+    });
+    states.push({ report, screenshot, pageErrors: [...pageErrors] });
+  }
+  await page.close();
+  return states;
 }
 
 function comparePng(referenceBuffer, astylarBuffer) {
