@@ -569,5 +569,11 @@
     "title": "Mixed fixed, intrinsic, and fractional grid rows",
     "category": "grid",
     "expectedBehavior": "An indefinite-height Grid combines fixed and contribution-sized rows with content-sized fractional rows that retain their authored proportions."
+  },
+  {
+    "id": "grid-auto-row-stretch",
+    "title": "Auto grid rows stretch in a definite height",
+    "category": "grid",
+    "expectedBehavior": "Implicit auto rows first use their largest content contribution, then share remaining definite block-axis space equally under normal stretch alignment."
   }
 ]

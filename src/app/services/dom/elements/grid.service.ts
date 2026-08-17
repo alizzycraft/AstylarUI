@@ -73,11 +73,23 @@ export class GridService {
         ? Math.max(0, Number.parseFloat(height) || 0)
         : null;
     });
+    const hasAssignedDefiniteHeight =
+      (style.height !== undefined && style.height !== 'auto') ||
+      (parent.metadata?.astylarFlexAssignedSize?.height !== undefined &&
+        parent.metadata.astylarFlexAssignedSize.heightIsIntrinsic !== true) ||
+      parent.metadata?.astylarGridAssignedSize?.height !== undefined;
+    const stretchAutoTracks = !style.alignContent ||
+      ['normal', 'stretch'].includes(style.alignContent.toLowerCase());
     const intrinsicRows = resolveIntrinsicGridRows(
       style.gridTemplateRows,
       columnCount,
       rowContributions,
-      style.height === undefined || style.height === 'auto',
+      {
+        sizeIndefiniteFlexibleTracks: !hasAssignedDefiniteHeight,
+        availableSize: hasAssignedDefiniteHeight ? contentHeight : undefined,
+        gap: rowGap,
+        stretchAutoTracks,
+      },
     );
     const rows = intrinsicRows ??
       this.resolveTracks(style.gridTemplateRows, contentHeight, rowGap, requiredRows);

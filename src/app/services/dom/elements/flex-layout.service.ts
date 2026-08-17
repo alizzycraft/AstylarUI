@@ -28,6 +28,7 @@ export interface FlexItem {
   flexShrink: number;
   flexBasis: number | 'auto' | string;
   alignSelf: string;
+  heightWasIntrinsic?: boolean;
   order: number;
 }
 

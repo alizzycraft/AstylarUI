@@ -147,6 +147,7 @@ export class FlexService {
       // Get explicit width and height from style - proper sizing logic
       let width = 0;
       let height = 0;
+      const heightWasIntrinsic = !style?.height || style.height === 'auto';
 
       if (style?.width && style.width !== 'auto') {
         if (style.width.endsWith('px')) {
@@ -242,7 +243,8 @@ export class FlexService {
         flexShrink,
         flexBasis,
         alignSelf,
-        order
+        order,
+        heightWasIntrinsic,
       };
     });
 
@@ -317,7 +319,11 @@ export class FlexService {
         // auto sizing and undo flex grow, shrink, basis, or stretch.
         childMesh.metadata = {
           ...(childMesh.metadata ?? {}),
-          astylarFlexAssignedSize: { ...item.size },
+          astylarFlexAssignedSize: {
+            ...item.size,
+            heightIsIntrinsic: child.heightWasIntrinsic &&
+              Math.abs(item.size.height - child.baseHeight) <= 0.1,
+          },
         };
 
         console.log(`[FLEX] Created flex child mesh:`, childMesh.name, `Position:`, childMesh.position);
@@ -529,7 +535,10 @@ export class FlexService {
           : null;
       });
       const intrinsicRows = resolveIntrinsicGridRows(
-        style.gridTemplateRows, columnCount, contributions, true,
+        style.gridTemplateRows,
+        columnCount,
+        contributions,
+        { sizeIndefiniteFlexibleTracks: true },
       );
       if (intrinsicRows) {
         return intrinsicRows.reduce((sum, track) => sum + track, 0) +

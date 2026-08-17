@@ -51,9 +51,18 @@ describe('GridService', () => {
       '40px auto min-content max-content 1fr 2fr',
       1,
       [24, 32, 36, 44, 30, 50],
-      true,
+      { sizeIndefiniteFlexibleTracks: true },
     )).toEqual([40, 32, 36, 44, 30, 60]);
     expect(resolveIntrinsicGridRows('1fr', 1, [30])).toBeNull();
+  });
+
+  it('stretches auto rows equally after their content bases in a definite size', () => {
+    expect(resolveIntrinsicGridRows(
+      undefined,
+      2,
+      [40, 60, 40, 60],
+      { availableSize: 182, gap: 10, stretchAutoTracks: true },
+    )).toEqual([86, 86]);
   });
 
   it('creates content-sized implicit auto rows beyond the explicit columns', () => {

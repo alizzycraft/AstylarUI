@@ -123,11 +123,18 @@ export function resolveGridTracks(
     : track.value);
 }
 
+export interface IntrinsicGridRowSizingOptions {
+  sizeIndefiniteFlexibleTracks?: boolean;
+  availableSize?: number;
+  gap?: number;
+  stretchAutoTracks?: boolean;
+}
+
 export function resolveIntrinsicGridRows(
   template: string | undefined,
   columnCount: number,
   itemOuterHeights: Array<number | null>,
-  sizeIndefiniteFlexibleTracks = false,
+  options: IntrinsicGridRowSizingOptions = {},
 ): number[] | null {
   const explicitTokens = tokenizeGridTrackList(template);
   const requiredRows = Math.max(1, Math.ceil(itemOuterHeights.length / Math.max(1, columnCount)));
@@ -144,7 +151,7 @@ export function resolveIntrinsicGridRows(
   };
   if (rowTokens.some((token) =>
     !isIntrinsicTrack(token) &&
-    !(sizeIndefiniteFlexibleTracks && flexFactor(token) !== null) &&
+    !(options.sizeIndefiniteFlexibleTracks && flexFactor(token) !== null) &&
     !/^[+-]?(?:\d+\.?\d*|\.\d+)(?:px)?$/i.test(token),
   )) {
     return null;
@@ -171,6 +178,21 @@ export function resolveIntrinsicGridRows(
     flexibleRows.forEach(({ factor, index }) => {
       rows[index] = Math.max(rows[index], flexFraction * factor);
     });
+  }
+
+  if (options.stretchAutoTracks && options.availableSize !== undefined) {
+    const autoRows = rowTokens
+      .map((token, index) => ({ token: token.toLowerCase(), index }))
+      .filter((entry) => entry.token === 'auto');
+    const trackSpace = Math.max(
+      0,
+      options.availableSize - Math.max(0, rows.length - 1) * (options.gap ?? 0),
+    );
+    const freeSpace = Math.max(0, trackSpace - rows.reduce((sum, row) => sum + row, 0));
+    if (autoRows.length > 0 && freeSpace > 0) {
+      const stretch = freeSpace / autoRows.length;
+      autoRows.forEach(({ index }) => rows[index] += stretch);
+    }
   }
   return rows;
 }
