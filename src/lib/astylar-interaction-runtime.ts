@@ -52,6 +52,7 @@ export class AstylarInteractionRuntime {
   private disposed = false;
   private readonly canvas: HTMLCanvasElement | null;
   private focusOrder: string[] = [];
+  private labelTargets = new Map<string, string>();
   private focusedValueAtEntry?: string;
   private pendingSpaceActivationId?: string;
 
@@ -65,6 +66,7 @@ export class AstylarInteractionRuntime {
   ) {
     this.dispatcher = new AstylarEventDispatcher(siteData, options);
     this.focusOrder = this.buildFocusOrder(siteData);
+    this.labelTargets = this.buildLabelTargets(siteData);
     this.pointerObserver = scene.onPointerObservable.add((pointerInfo) => {
       this.handlePointer(pointerInfo);
     });
@@ -91,6 +93,7 @@ export class AstylarInteractionRuntime {
   setSiteData(siteData: SiteData): void {
     this.dispatcher.setSiteData(siteData);
     this.focusOrder = this.buildFocusOrder(siteData);
+    this.labelTargets = this.buildLabelTargets(siteData);
     if (this.pressedElementId && !this.dispatcher.hasEnabledTarget(this.pressedElementId)) {
       this.pressedElementId = undefined;
     }
@@ -147,7 +150,12 @@ export class AstylarInteractionRuntime {
     if (pointerInfo.type === PointerEventTypes.POINTERUP) {
       if (targetId) this.dispatchPointer('pointerup', targetId, pointerInfo);
       if (targetId && targetId === this.pressedElementId) {
-        this.activateAndClick(targetId, pointerInfo);
+        const accepted = this.activateAndClick(targetId, pointerInfo);
+        const labelTargetId = accepted ? this.labelTargets.get(targetId) : undefined;
+        if (labelTargetId && this.dispatcher.hasEnabledTarget(labelTargetId)) {
+          this.setFocus(this.focusOrder.includes(labelTargetId) ? labelTargetId : undefined);
+          this.activateAndClick(labelTargetId, pointerInfo);
+        }
       }
       this.pressedElementId = undefined;
     }
@@ -289,7 +297,7 @@ export class AstylarInteractionRuntime {
     if (shouldActivate) this.activateAndClick(targetId);
   };
 
-  private activateAndClick(targetId: string, pointerInfo?: PointerInfo): void {
+  private activateAndClick(targetId: string, pointerInfo?: PointerInfo): boolean {
     const activation = this.controls?.activate?.(targetId);
     const click = pointerInfo
       ? this.dispatchPointer('click', targetId, pointerInfo)
@@ -307,6 +315,7 @@ export class AstylarInteractionRuntime {
       this.dispatcher.dispatch({ type: 'input', targetId, ...state });
       this.dispatcher.dispatch({ type: 'change', targetId, ...state });
     }
+    return !!click && !click.defaultPrevented;
   }
 
   private moveFocus(direction: -1 | 1): void {
@@ -388,6 +397,18 @@ export class AstylarInteractionRuntime {
           left.order - right.order;
       })
       .map((entry) => entry.id);
+  }
+
+  private buildLabelTargets(siteData: SiteData): Map<string, string> {
+    const targets = new Map<string, string>();
+    const visit = (element: SiteData['root']['children'][number]): void => {
+      if (element.type === 'label' && element.id && element.for && element.for !== element.id) {
+        targets.set(element.id, element.for);
+      }
+      element.children?.forEach(visit);
+    };
+    siteData.root.children.forEach(visit);
+    return targets;
   }
 
   private resolveElementId(mesh: AbstractMesh | undefined): string | undefined {

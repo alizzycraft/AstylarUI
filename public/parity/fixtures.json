@@ -702,5 +702,12 @@
     "category": "forms-interactive",
     "expectedBehavior": "Enter synthesizes a button click during keydown, while Space synthesizes its click after keyup, with browser-compatible keyboard click details.",
     "interactionStepCount": 3
+  },
+  {
+    "id": "interaction-label-control",
+    "title": "Explicit label control activation",
+    "category": "forms-interactive",
+    "expectedBehavior": "Clicking an explicit label focuses and activates its associated checkbox through a synthesized control click with normal input and change events.",
+    "interactionStepCount": 2
   }
 ]

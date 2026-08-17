@@ -315,7 +315,9 @@ export class ParityReferenceComponent {
       const control = viewport.querySelector<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>(
         `#${CSS.escape(id)}`,
       );
-      if (!control) continue;
+      if (!(control instanceof HTMLInputElement) &&
+          !(control instanceof HTMLTextAreaElement) &&
+          !(control instanceof HTMLSelectElement)) continue;
       controls[id] = {
         type: control instanceof HTMLInputElement ? control.type : control.tagName.toLowerCase(),
         value: control.value,

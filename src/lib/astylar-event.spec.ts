@@ -571,4 +571,105 @@ describe('AstylarInteractionRuntime', () => {
     scene.dispose();
     engine.dispose();
   });
+
+  it('focuses and activates the enabled control associated with an explicit label', () => {
+    const engine = new NullEngine();
+    const scene = new Scene(engine);
+    const labelMesh = MeshBuilder.CreatePlane('label-mesh', {}, scene);
+    labelMesh.metadata = { elementId: 'alerts-label' };
+    const canvas = document.createElement('canvas');
+    const events: AstylarEventSnapshot[] = [];
+    let focusedElementId: string | undefined;
+    let checked = false;
+    let cancelLabelClick = false;
+    const runtime = new AstylarInteractionRuntime(
+      scene,
+      {
+        styles: [],
+        root: {
+          children: [
+            { type: 'input', inputType: 'checkbox', id: 'alerts', value: 'on' },
+            { type: 'label', id: 'alerts-label', for: 'alerts', textContent: 'Alerts' },
+          ],
+        },
+      },
+      {
+        handlers: {
+          'alerts-label': {
+            click: (event) => { if (cancelLabelClick) event.preventDefault(); },
+          },
+        },
+        onEvent: (event) => events.push(event),
+      },
+      (elementId) => elementId === 'alerts' ? { value: 'on', checked } : {},
+      {
+        getFocusedElementId: () => focusedElementId,
+        focus: (elementId) => {
+          focusedElementId = elementId;
+          return true;
+        },
+        blur: () => {
+          focusedElementId = undefined;
+          return true;
+        },
+        handleKeyDown: () => undefined,
+        commitsValueOnBlur: () => false,
+        activate: (elementId) => {
+          if (elementId !== 'alerts') return undefined;
+          const before = checked;
+          checked = !checked;
+          return { changed: true, rollback: () => { checked = before; } };
+        },
+      },
+      canvas,
+    );
+    const pointerEvent = new PointerEvent('pointerdown', { button: 0 });
+
+    scene.onPointerObservable.notifyObservers({
+      type: PointerEventTypes.POINTERDOWN,
+      event: pointerEvent,
+      pickInfo: { pickedMesh: labelMesh },
+    } as unknown as PointerInfo);
+    scene.onPointerObservable.notifyObservers({
+      type: PointerEventTypes.POINTERUP,
+      event: pointerEvent,
+      pickInfo: { pickedMesh: labelMesh },
+    } as unknown as PointerInfo);
+
+    expect(focusedElementId).toBe('alerts');
+    expect(checked).toBeTrue();
+    expect(events.map((event) => `${event.type}:${event.targetId}:${event.checked}`)).toEqual([
+      'pointerdown:alerts-label:undefined',
+      'pointerup:alerts-label:undefined',
+      'click:alerts-label:undefined',
+      'focus:alerts:false',
+      'click:alerts:true',
+      'input:alerts:true',
+      'change:alerts:true',
+    ]);
+
+    cancelLabelClick = true;
+    events.length = 0;
+    scene.onPointerObservable.notifyObservers({
+      type: PointerEventTypes.POINTERDOWN,
+      event: pointerEvent,
+      pickInfo: { pickedMesh: labelMesh },
+    } as unknown as PointerInfo);
+    scene.onPointerObservable.notifyObservers({
+      type: PointerEventTypes.POINTERUP,
+      event: pointerEvent,
+      pickInfo: { pickedMesh: labelMesh },
+    } as unknown as PointerInfo);
+
+    expect(focusedElementId).toBeUndefined();
+    expect(checked).toBeTrue();
+    expect(events.map((event) => event.type)).toEqual([
+      'pointerdown', 'blur', 'pointerup', 'click',
+    ]);
+    expect(events.at(-1)?.defaultPrevented).toBeTrue();
+
+    runtime.dispose();
+    scene.dispose();
+    engine.dispose();
+  });
 });
