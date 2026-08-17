@@ -112,6 +112,7 @@ import { interactionRadioKeyboardFixture } from './interaction-radio-keyboard.fi
 import { interactionSelectKeyboardFixture } from './interaction-select-keyboard.fixture';
 import { interactionButtonKeyboardFixture } from './interaction-button-keyboard.fixture';
 import { interactionLabelControlFixture } from './interaction-label-control.fixture';
+import { interactionFormResetFixture } from './interaction-form-reset.fixture';
 import { ParityFixture } from '../parity.types';
 
 const fixtures: readonly ParityFixture[] = [
@@ -228,7 +229,8 @@ const fixtures: readonly ParityFixture[] = [
   interactionRadioKeyboardFixture,
   interactionSelectKeyboardFixture,
   interactionButtonKeyboardFixture,
-  interactionLabelControlFixture
+  interactionLabelControlFixture,
+  interactionFormResetFixture
 ];
 
 const fixturesById = new Map(fixtures.map((fixture) => [fixture.id, fixture]));

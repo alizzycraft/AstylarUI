@@ -709,5 +709,12 @@
     "category": "forms-interactive",
     "expectedBehavior": "Clicking an explicit label focuses and activates its associated checkbox through a synthesized control click with normal input and change events.",
     "interactionStepCount": 2
+  },
+  {
+    "id": "interaction-form-reset",
+    "title": "Form reset default action",
+    "category": "forms-interactive",
+    "expectedBehavior": "A reset button emits click then reset and restores authored text and checked defaults without input or change events for the restored values.",
+    "interactionStepCount": 4
   }
 ]

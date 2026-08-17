@@ -175,4 +175,85 @@ describe('InputElementService', () => {
     expect(service.canActivateWithSpace('checkbox')).toBeTrue();
     expect(service.canActivateWithEnter('disabled')).toBeFalse();
   });
+
+  it('recognizes reset inputs as buttons', () => {
+    const service = new InputElementService(
+      {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
+    );
+
+    expect(service['mapStringToInputType']('reset')).toBe(InputType.Button);
+  });
+
+  it('restores authored form defaults through each control manager', () => {
+    const textInputManager = {
+      resetTextValue: jasmine.createSpy('resetTextValue').and.callFake((input, value) => {
+        input.value = value;
+      }),
+    };
+    const checkboxManager = {
+      setCheckboxChecked: jasmine.createSpy('setCheckboxChecked').and.callFake((input, checked) => {
+        input.checked = checked;
+      }),
+      setRadioChecked: jasmine.createSpy('setRadioChecked').and.callFake((input, checked) => {
+        input.checked = checked;
+      }),
+    };
+    const selectManager = {
+      selectOption: jasmine.createSpy('selectOption').and.callFake((input, index) => {
+        input.selectedIndex = index;
+        input.value = input.options[index].value;
+      }),
+    };
+    const service = new InputElementService(
+      textInputManager as never,
+      {} as never,
+      checkboxManager as never,
+      selectManager as never,
+      {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
+    );
+    const validationState = () => ({ valid: false, errors: ['edited'], touched: true, dirty: true });
+    const text = {
+      type: InputType.Text, value: 'SeedX', element: { value: 'Seed' }, validationState: validationState(),
+    };
+    const checkbox = {
+      type: InputType.Checkbox, checked: false, element: { checked: true }, validationState: validationState(),
+    };
+    const radio = {
+      type: InputType.Radio, checked: true, element: { checked: false }, validationState: validationState(),
+    };
+    const select = {
+      type: InputType.Select,
+      value: 'alpha',
+      selectedIndex: 0,
+      options: [{ value: 'alpha', label: 'Alpha' }, { value: 'beta', label: 'Beta' }],
+      element: { value: 'beta' },
+      validationState: validationState(),
+    };
+    service['inputElements'].set('text', text as never);
+    service['inputElements'].set('checkbox', checkbox as never);
+    service['inputElements'].set('radio', radio as never);
+    service['inputElements'].set('select', select as never);
+
+    service.resetFormControls(['text', 'checkbox', 'radio', 'select']);
+
+    expect(textInputManager.resetTextValue).toHaveBeenCalledWith(text, 'Seed');
+    expect(checkboxManager.setCheckboxChecked).toHaveBeenCalledWith(checkbox, true);
+    expect(checkboxManager.setRadioChecked).toHaveBeenCalledWith(radio, false);
+    expect(selectManager.selectOption).toHaveBeenCalledWith(select, 1);
+    for (const input of [text, checkbox, radio, select]) {
+      expect(input.validationState).toEqual({ valid: true, errors: [], touched: false, dirty: false });
+    }
+  });
 });

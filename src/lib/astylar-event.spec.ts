@@ -672,4 +672,98 @@ describe('AstylarInteractionRuntime', () => {
     scene.dispose();
     engine.dispose();
   });
+
+  it('dispatches an accepted form reset after click and restores its controls', () => {
+    const engine = new NullEngine();
+    const scene = new Scene(engine);
+    const buttonMesh = MeshBuilder.CreatePlane('reset-mesh', {}, scene);
+    buttonMesh.metadata = { elementId: 'reset-button' };
+    const canvas = document.createElement('canvas');
+    const events: AstylarEventSnapshot[] = [];
+    let focusedElementId: string | undefined;
+    let resetIds: readonly string[] = [];
+    let cancelReset = false;
+    const runtime = new AstylarInteractionRuntime(
+      scene,
+      {
+        styles: [],
+        root: {
+          children: [{
+            type: 'form', id: 'settings', children: [
+              { type: 'input', inputType: 'text', id: 'name', value: 'Seed' },
+              { type: 'input', inputType: 'reset', id: 'reset-button', value: 'Reset' },
+            ],
+          }],
+        },
+      },
+      {
+        handlers: {
+          settings: {
+            reset: (event) => {
+              if (cancelReset) event.preventDefault();
+            },
+          },
+        },
+        onEvent: (event) => events.push(event),
+      },
+      () => ({ value: 'Reset' }),
+      {
+        getFocusedElementId: () => focusedElementId,
+        focus: (elementId) => {
+          focusedElementId = elementId;
+          return true;
+        },
+        blur: () => true,
+        handleKeyDown: () => undefined,
+        commitsValueOnBlur: () => false,
+        resetFormControls: (elementIds) => { resetIds = elementIds; },
+      },
+      canvas,
+    );
+    const pointerEvent = new PointerEvent('pointerdown', { button: 0 });
+
+    scene.onPointerObservable.notifyObservers({
+      type: PointerEventTypes.POINTERDOWN,
+      event: pointerEvent,
+      pickInfo: { pickedMesh: buttonMesh },
+    } as unknown as PointerInfo);
+    scene.onPointerObservable.notifyObservers({
+      type: PointerEventTypes.POINTERUP,
+      event: pointerEvent,
+      pickInfo: { pickedMesh: buttonMesh },
+    } as unknown as PointerInfo);
+
+    expect(events.map((event) => `${event.type}:${event.targetId}`)).toEqual([
+      'pointerdown:reset-button',
+      'focus:reset-button',
+      'pointerup:reset-button',
+      'click:reset-button',
+      'reset:settings',
+    ]);
+    expect(resetIds).toEqual(['name', 'reset-button']);
+
+    cancelReset = true;
+    resetIds = [];
+    events.length = 0;
+    scene.onPointerObservable.notifyObservers({
+      type: PointerEventTypes.POINTERDOWN,
+      event: pointerEvent,
+      pickInfo: { pickedMesh: buttonMesh },
+    } as unknown as PointerInfo);
+    scene.onPointerObservable.notifyObservers({
+      type: PointerEventTypes.POINTERUP,
+      event: pointerEvent,
+      pickInfo: { pickedMesh: buttonMesh },
+    } as unknown as PointerInfo);
+
+    expect(events.map((event) => event.type)).toEqual([
+      'pointerdown', 'pointerup', 'click', 'reset',
+    ]);
+    expect(events.at(-1)?.defaultPrevented).toBeTrue();
+    expect(resetIds).toEqual([]);
+
+    runtime.dispose();
+    scene.dispose();
+    engine.dispose();
+  });
 });

@@ -41,6 +41,13 @@ export interface AstylarInteractionControlAdapter {
   canActivateWithSpace?(elementId: string): boolean;
   canActivateWithEnter?(elementId: string): boolean;
   getRadioNavigationTarget?(elementId: string, direction: -1 | 1): string | undefined;
+  resetFormControls?(elementIds: readonly string[]): void;
+}
+
+interface AstylarFormDefault {
+  formId: string;
+  controlIds: readonly string[];
+  type: 'reset';
 }
 
 /** Owns the Babylon observers for one scene and emits a small DOM-like event subset. */
@@ -53,6 +60,7 @@ export class AstylarInteractionRuntime {
   private readonly canvas: HTMLCanvasElement | null;
   private focusOrder: string[] = [];
   private labelTargets = new Map<string, string>();
+  private formDefaults = new Map<string, AstylarFormDefault>();
   private focusedValueAtEntry?: string;
   private pendingSpaceActivationId?: string;
 
@@ -67,6 +75,7 @@ export class AstylarInteractionRuntime {
     this.dispatcher = new AstylarEventDispatcher(siteData, options);
     this.focusOrder = this.buildFocusOrder(siteData);
     this.labelTargets = this.buildLabelTargets(siteData);
+    this.formDefaults = this.buildFormDefaults(siteData);
     this.pointerObserver = scene.onPointerObservable.add((pointerInfo) => {
       this.handlePointer(pointerInfo);
     });
@@ -94,6 +103,7 @@ export class AstylarInteractionRuntime {
     this.dispatcher.setSiteData(siteData);
     this.focusOrder = this.buildFocusOrder(siteData);
     this.labelTargets = this.buildLabelTargets(siteData);
+    this.formDefaults = this.buildFormDefaults(siteData);
     if (this.pressedElementId && !this.dispatcher.hasEnabledTarget(this.pressedElementId)) {
       this.pressedElementId = undefined;
     }
@@ -315,7 +325,9 @@ export class AstylarInteractionRuntime {
       this.dispatcher.dispatch({ type: 'input', targetId, ...state });
       this.dispatcher.dispatch({ type: 'change', targetId, ...state });
     }
-    return !!click && !click.defaultPrevented;
+    const accepted = !!click && !click.defaultPrevented;
+    if (accepted) this.performFormDefault(targetId);
+    return accepted;
   }
 
   private moveFocus(direction: -1 | 1): void {
@@ -409,6 +421,44 @@ export class AstylarInteractionRuntime {
     };
     siteData.root.children.forEach(visit);
     return targets;
+  }
+
+  private buildFormDefaults(siteData: SiteData): Map<string, AstylarFormDefault> {
+    const defaults = new Map<string, AstylarFormDefault>();
+    const visit = (
+      element: SiteData['root']['children'][number],
+      currentForm?: { id: string; controlIds: string[]; resetIds: string[] },
+    ): void => {
+      let form = currentForm;
+      if (element.type === 'form' && element.id) {
+        form = { id: element.id, controlIds: [], resetIds: [] };
+      }
+      if (form && element.id &&
+          (element.type === 'input' || element.type === 'button' ||
+            element.type === 'select' || element.type === 'textarea')) {
+        form.controlIds.push(element.id);
+        if (element.inputType?.toLowerCase() === 'reset') form.resetIds.push(element.id);
+      }
+      element.children?.forEach((child) => visit(child, form));
+      if (element.type === 'form' && form && form.id === element.id) {
+        for (const resetId of form.resetIds) {
+          defaults.set(resetId, {
+            formId: form.id,
+            controlIds: [...form.controlIds],
+            type: 'reset',
+          });
+        }
+      }
+    };
+    siteData.root.children.forEach((element) => visit(element));
+    return defaults;
+  }
+
+  private performFormDefault(buttonId: string): void {
+    const action = this.formDefaults.get(buttonId);
+    if (!action || action.type !== 'reset') return;
+    const reset = this.dispatcher.dispatch({ type: 'reset', targetId: action.formId });
+    if (!reset?.defaultPrevented) this.controls?.resetFormControls?.(action.controlIds);
   }
 
   private resolveElementId(mesh: AbstractMesh | undefined): string | undefined {

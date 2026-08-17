@@ -876,6 +876,23 @@ export class TextInputManager {
         return isNaN(num) ? undefined : num;
     }
 
+    /** Restores an authored value and collapsed selection for a form reset. */
+    resetTextValue(textInput: TextInput, value: string): void {
+        textInput.value = value;
+        textInput.textContent = value;
+        textInput.cursorPosition = 0;
+        textInput.selectionStart = 0;
+        textInput.selectionEnd = 0;
+        textInput.cursorState.position = 0;
+        textInput.cursorState.selectionStart = 0;
+        textInput.cursorState.selectionEnd = 0;
+        textInput.cursorState.selectionActive = false;
+        textInput.scrollOffset = 0;
+        if (this.activeRender) {
+            this.updateTextDisplay(textInput, this.activeRender, textInput.style);
+        }
+    }
+
     /**
      * Resolve the CSS content edges used by single-line controls. Babylon's
      * local X axis is mirrored by the parity camera, so callers use these

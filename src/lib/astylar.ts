@@ -301,6 +301,8 @@ export class Astylar {
           this.inputElementService.canActivateWithEnter(elementId),
         getRadioNavigationTarget: (elementId, direction) =>
           this.inputElementService.getRadioNavigationTarget(elementId, direction),
+        resetFormControls: (elementIds) =>
+          this.inputElementService.resetFormControls(elementIds),
       },
     );
     this.interactions.set(scene, interaction);

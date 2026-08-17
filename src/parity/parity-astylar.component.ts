@@ -456,8 +456,9 @@ export class ParityAstylarComponent {
       const input = this.elementManager.inputElementsMap.get(id);
       if (!input) continue;
       const options = Array.isArray(input.options) ? input.options : [];
+      const semanticType = 'buttonType' in input ? input.buttonType : input.type;
       controls[id] = {
-        type: String(input.type),
+        type: String(semanticType),
         value: String(input.value ?? ''),
         checked: typeof input.checked === 'boolean' ? input.checked : undefined,
         selectedIndex: typeof input.selectedIndex === 'number' ? input.selectedIndex : undefined,

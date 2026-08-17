@@ -324,6 +324,46 @@ export class InputElementService {
         return enabledGroup[nextIndex].element.id;
     }
 
+    /** Restores authored form defaults without emitting control mutation events. */
+    resetFormControls(elementIds: readonly string[]): void {
+        const inputs = elementIds
+            .map((elementId) => this.inputElements.get(elementId))
+            .filter((input): input is InputElement => !!input);
+
+        for (const input of inputs) {
+            if (input.type === InputType.Text || input.type === InputType.Password ||
+                input.type === InputType.Email || input.type === InputType.Number ||
+                input.type === InputType.Textarea) {
+                this.textInputManager.resetTextValue(
+                    input as TextInput,
+                    String(input.element.value ?? ''),
+                );
+            } else if (input.type === InputType.Checkbox) {
+                this.checkboxManager.setCheckboxChecked(
+                    input as CheckboxInput,
+                    !!input.element.checked,
+                );
+            } else if (input.type === InputType.Radio) {
+                this.checkboxManager.setRadioChecked(
+                    input as RadioInput,
+                    !!input.element.checked,
+                );
+            } else if (input.type === InputType.Select) {
+                const select = input as SelectElement;
+                const authoredIndex = select.options.findIndex((option) =>
+                    option.value === select.element.value && !option.disabled);
+                const fallbackIndex = select.options.findIndex((option) => !option.disabled);
+                const index = authoredIndex >= 0 ? authoredIndex : fallbackIndex;
+                if (index >= 0) this.selectManager.selectOption(select, index);
+            }
+
+            input.validationState.touched = false;
+            input.validationState.dirty = false;
+            input.validationState.valid = true;
+            input.validationState.errors = [];
+        }
+    }
+
     /**
      * Determines input type from element
      */
@@ -365,6 +405,7 @@ export class InputElementService {
             case 'number': return InputType.Number;
             case 'button': return InputType.Button;
             case 'submit': return InputType.Submit;
+            case 'reset': return InputType.Button;
             case 'checkbox': return InputType.Checkbox;
             case 'radio': return InputType.Radio;
             case 'select': return InputType.Select;
