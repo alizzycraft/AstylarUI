@@ -256,7 +256,7 @@ export class SelectManager {
 
         // Always update display mesh when selection changes
         if (selectElement.displayMesh) {
-            selectElement.displayMesh.dispose();
+            this.disposeDisplayMesh(selectElement.displayMesh);
             // Use stored camera scale instead of trying to recreate render object
             selectElement.displayMesh = this.createDisplayMeshWithStoredScale(selectElement, selectElement.style);
         }
@@ -789,6 +789,14 @@ export class SelectManager {
 
         // Default fallback
         return BABYLON.Color3.White();
+    }
+
+    /** Releases a mesh-local material without disposing its cache-owned text texture. */
+    private disposeDisplayMesh(mesh: BABYLON.AbstractMesh): void {
+        const material = mesh.material;
+        mesh.material = null;
+        mesh.dispose();
+        material?.dispose(false, false);
     }
 
     /**

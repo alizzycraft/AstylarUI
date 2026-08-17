@@ -182,6 +182,9 @@ export class ParityReferenceComponent {
           }
           target.src = mutation.source;
           break;
+        case 'remove-element':
+          target.remove();
+          break;
       }
     }
   }

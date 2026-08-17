@@ -48,6 +48,7 @@ describe('TextInputManager', () => {
       selectionAnchor: 6,
       selectionFocus: 5,
       scrollOffset: 12,
+      preserveSelectionOnReset: true,
     });
 
     expect(textInput.value).toBe('Edited');
@@ -59,6 +60,56 @@ describe('TextInputManager', () => {
     expect(textInput.cursorState.selectionStart).toBe(6);
     expect(textInput.cursorState.selectionEnd).toBe(5);
     expect(textInput.scrollOffset).toBe(12);
+    expect(textInput.preserveSelectionOnReset).toBeTrue();
+  });
+
+  it('preserves and clamps caret state when a form reset restores its authored value', () => {
+    const manager = Object.create(TextInputManager.prototype) as TextInputManager;
+    const textInput = createTextInput('Maya Rivera', 11);
+    textInput.selectionStart = 11;
+    textInput.selectionEnd = 11;
+    textInput.cursorState.position = 11;
+    textInput.cursorState.selectionStart = 11;
+    textInput.cursorState.selectionEnd = 11;
+    textInput.scrollOffset = 7;
+    textInput.preserveSelectionOnReset = true;
+
+    manager.resetTextValue(textInput, 'Maya Chen');
+
+    expect(textInput.value).toBe('Maya Chen');
+    expect(textInput.textContent).toBe('Maya Chen');
+    expect(textInput.cursorPosition).toBe(9);
+    expect(textInput.selectionStart).toBe(9);
+    expect(textInput.selectionEnd).toBe(9);
+    expect(textInput.cursorState.position).toBe(9);
+    expect(textInput.cursorState.selectionStart).toBe(9);
+    expect(textInput.cursorState.selectionEnd).toBe(9);
+    expect(textInput.cursorState.selectionActive).toBeFalse();
+    expect(textInput.scrollOffset).toBe(7);
+  });
+
+  it('clears caret and scroll state after a pointer-blurred control is reset', () => {
+    const manager = Object.create(TextInputManager.prototype) as TextInputManager;
+    const textInput = createTextInput('SeedX', 5);
+    textInput.selectionStart = 5;
+    textInput.selectionEnd = 5;
+    textInput.cursorState.position = 5;
+    textInput.cursorState.selectionStart = 5;
+    textInput.cursorState.selectionEnd = 5;
+    textInput.scrollOffset = 7;
+    textInput.preserveSelectionOnReset = false;
+
+    manager.resetTextValue(textInput, 'Seed');
+
+    expect(textInput.value).toBe('Seed');
+    expect(textInput.cursorPosition).toBe(0);
+    expect(textInput.selectionStart).toBe(0);
+    expect(textInput.selectionEnd).toBe(0);
+    expect(textInput.cursorState.position).toBe(0);
+    expect(textInput.cursorState.selectionStart).toBe(0);
+    expect(textInput.cursorState.selectionEnd).toBe(0);
+    expect(textInput.cursorState.selectionActive).toBeFalse();
+    expect(textInput.scrollOffset).toBe(0);
   });
 });
 

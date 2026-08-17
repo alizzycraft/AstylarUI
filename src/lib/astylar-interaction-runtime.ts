@@ -33,7 +33,7 @@ export interface AstylarControlActivation {
 export interface AstylarInteractionControlAdapter {
   getFocusedElementId(): string | undefined;
   focus(elementId: string): boolean;
-  blur(elementId: string): boolean;
+  blur(elementId: string, preserveSelectionOnReset?: boolean): boolean;
   handleKeyDown(elementId: string, event: KeyboardEvent): void;
   commitsValueOnBlur(elementId: string): boolean;
   emitsImmediateChangeOnKeyboardMutation?(elementId: string): boolean;
@@ -367,7 +367,7 @@ export class AstylarInteractionRuntime {
     const nextIndex = direction === 1
       ? (currentIndex + 1 + this.focusOrder.length) % this.focusOrder.length
       : (currentIndex <= 0 ? this.focusOrder.length - 1 : currentIndex - 1);
-    this.setFocus(this.focusOrder[nextIndex]);
+    this.setFocus(this.focusOrder[nextIndex], true);
   }
 
   private radioNavigationDirection(key: string): -1 | 1 | undefined {
@@ -376,7 +376,10 @@ export class AstylarInteractionRuntime {
     return undefined;
   }
 
-  private setFocus(elementId: string | undefined): void {
+  private setFocus(
+    elementId: string | undefined,
+    preservePreviousSelectionOnReset: boolean = false,
+  ): void {
     const previous = this.controls?.getFocusedElementId();
     if (previous === elementId) return;
     if (previous) {
@@ -389,7 +392,7 @@ export class AstylarInteractionRuntime {
         });
       }
     }
-    if (previous && this.controls?.blur(previous)) {
+    if (previous && this.controls?.blur(previous, preservePreviousSelectionOnReset)) {
       this.controls.setFocusState?.(previous, false);
       this.dispatcher.dispatch({
         type: 'blur',

@@ -1,20 +1,56 @@
 import { ParityFixture } from '../parity.types';
+import type { SiteData } from '../../app/types/site-data';
 
 export const representativeAccountSettingsFixture: ParityFixture = {
   id: 'representative-account-settings',
   title: 'Representative account settings application',
   category: 'composed-application',
   expectedBehavior:
-    'A responsive account workspace preserves semantic form controls, state selectors, section navigation, a plan summary, overflow boundaries, and a deterministic confirmation modal with backdrop.',
+    'A responsive account workspace preserves its form and modal layout while dialog dismissal, validation, editing, submit, and reset retain browser-equivalent state and events.',
   viewportIds: ['desktop', 'tablet', 'mobile'],
   measurementIds: [
     'as-shell', 'as-sidebar', 'as-brand', 'as-nav-profile', 'as-workspace', 'as-header',
     'as-heading', 'as-main', 'as-form', 'as-form-intro', 'as-profile-fields', 'as-profile-legend',
     'as-name-row', 'as-name', 'as-email-row', 'as-email', 'as-bio-row', 'as-bio',
-    'as-region-row', 'as-region', 'as-help', 'as-preferences', 'as-reports-slot',
+    'as-region-row', 'as-region', 'as-help', 'as-preferences', 'as-reports-slot', 'as-reports-label',
     'as-actions', 'as-cancel', 'as-save', 'as-plan', 'as-plan-title', 'as-plan-price',
     'as-plan-list', 'as-backdrop', 'as-dialog', 'as-dialog-title',
     'as-dialog-copy', 'as-dialog-actions', 'as-dialog-edit', 'as-dialog-confirm',
+  ],
+  optionalMeasurementIds: [
+    'as-backdrop', 'as-dialog', 'as-dialog-title', 'as-dialog-copy',
+    'as-dialog-actions', 'as-dialog-edit', 'as-dialog-confirm',
+    'as-plan', 'as-plan-title', 'as-plan-price', 'as-plan-list',
+    'as-sidebar', 'as-brand', 'as-nav-profile',
+    'as-bio-row', 'as-bio',
+  ],
+  interactionIds: [
+    'as-dialog-edit', 'as-form', 'as-name', 'as-region',
+    'as-reports-label', 'as-reports', 'as-save', 'as-cancel',
+  ],
+  interactionEventTypes: [
+    'pointerdown', 'pointerup', 'click', 'focus', 'blur', 'keydown', 'keyup',
+    'input', 'change', 'invalid', 'submit', 'reset',
+  ],
+  interactionSteps: [
+    { id: 'dismiss-dialog', actions: [{ type: 'click', elementId: 'as-dialog-edit' }] },
+    { id: 'show-editing-form', actions: [{ type: 'apply-update', stepIndex: 0 }] },
+    { id: 'focus-name', actions: [{ type: 'click', elementId: 'as-name' }] },
+    { id: 'select-name', actions: [{ type: 'press-key', key: 'Control+A' }] },
+    { id: 'clear-required-name', actions: [{ type: 'press-key', key: 'Backspace' }] },
+    { id: 'reject-invalid-save', actions: [{ type: 'click', elementId: 'as-save' }] },
+    { id: 'enter-valid-name', actions: [{ type: 'type-text', text: 'Maya Rivera' }] },
+    {
+      id: 'navigate-to-region',
+      actions: [
+        { type: 'press-key', key: 'Tab' },
+        { type: 'press-key', key: 'Tab' },
+      ],
+    },
+    { id: 'change-region', actions: [{ type: 'press-key', key: 'ArrowDown' }] },
+    { id: 'toggle-reports', actions: [{ type: 'click', elementId: 'as-reports-label' }] },
+    { id: 'submit-profile', actions: [{ type: 'click', elementId: 'as-save' }] },
+    { id: 'reset-profile', actions: [{ type: 'click', elementId: 'as-cancel' }] },
   ],
   reference: {
     html: `
@@ -40,8 +76,8 @@ export const representativeAccountSettingsFixture: ParityFixture = {
                 <div id="as-region-row" class="as-field-row"><label for="as-region">Region</label><select id="as-region"><option value="africa" selected>Africa</option><option value="europe">Europe</option></select></div>
               </fieldset>
               <p id="as-help">Your email is managed by your organization.</p>
-              <fieldset id="as-preferences"><legend>Notifications</legend><div id="as-reports-slot"><input id="as-reports" type="checkbox" checked></div><label for="as-reports">Email weekly account reports</label></fieldset>
-              <div id="as-actions"><input id="as-cancel" type="button" value="Cancel"><input id="as-save" type="button" value="Save changes"></div>
+              <fieldset id="as-preferences"><legend>Notifications</legend><div id="as-reports-slot"><input id="as-reports" type="checkbox" checked></div><label id="as-reports-label" for="as-reports">Email weekly account reports</label></fieldset>
+              <div id="as-actions"><input id="as-cancel" type="reset" value="Cancel"><input id="as-save" type="submit" value="Save changes"></div>
             </form>
             <aside id="as-plan"><h2 id="as-plan-title">Current plan</h2><strong id="as-plan-price">Studio</strong><div id="as-plan-list"><span>12 team seats</span><span>Private projects</span><span>Priority support</span></div><p>Renews on 24 September.</p><input id="as-upgrade" type="button" value="Upgrade unavailable" disabled></aside>
           </main>
@@ -76,7 +112,8 @@ export const representativeAccountSettingsFixture: ParityFixture = {
       .as-field-row { display:flex; flex:0 0 40px; align-items:center; gap:6px; width:346px; height:40px; }
       .as-field-row > label { flex:0 0 92px; width:92px; height:40px; padding:8px 0; color:#334155; font:700 11px/24px Arial,sans-serif; }
       .as-field-row > label span { color:#64748b; font-weight:400; } .as-field-row > label .as-label-main { color:#334155; font-weight:700; }
-      .as-field-row > input, .as-field-row > select, .as-field-row > textarea { appearance:none; flex:0 0 248px; width:248px; height:40px; margin:0; padding:7px 9px; border:1px solid #94a3b8; border-radius:0; background:#f8fafc; color:#0f172a; font:400 12px/24px Arial,sans-serif; text-align:left; }
+      .as-field-row > input, .as-field-row > select, .as-field-row > textarea { appearance:none; flex:0 0 248px; width:248px; height:40px; margin:0; padding:7px 9px; border:1px solid #94a3b8; border-radius:0; outline:0; background:#f8fafc; color:#0f172a; font:400 12px/24px Arial,sans-serif; text-align:left; }
+      #as-name:focus, #as-region:focus { background:#e0e7ff; }
       #as-bio-row { flex-basis:auto; height:auto; align-items:flex-start; } #as-bio { height:auto; padding:5px 9px; white-space:pre-wrap; }
       #as-name:required { border-color:#dc2626; } #as-email:read-only { background:#e2e8f0; color:#64748b; }
       #as-help { width:368px; height:24px; margin:0; padding:2px 8px; background:#fff7ed; color:#9a3412; font:400 11px/20px Arial,sans-serif; }
@@ -86,8 +123,10 @@ export const representativeAccountSettingsFixture: ParityFixture = {
       #as-reports { position:absolute; left:-40px; top:0; width:16px; height:16px; opacity:0; }
       #as-preferences > label { width:270px; height:24px; color:#334155; font:400 11px/24px Arial,sans-serif; }
       #as-actions { display:flex; justify-content:flex-end; gap:8px; width:368px; height:40px; }
-      #as-actions input, #as-dialog-actions input, #as-upgrade { appearance:none; height:40px; margin:0; padding:8px 12px; border:0; border-radius:0; font:700 12px/24px Arial,sans-serif; text-align:center; }
+      #as-actions input, #as-dialog-actions input, #as-upgrade { appearance:none; height:40px; margin:0; padding:8px 12px; border:0; border-radius:0; outline:0; font:700 12px/24px Arial,sans-serif; text-align:center; }
       #as-cancel { width:84px; background:#e2e8f0; color:#334155; } #as-save { width:116px; background:#4f46e5; color:#ffffff; }
+      #as-cancel:focus { background:#cbd5e1; } #as-save:focus { background:#4338ca; }
+      #as-dialog-edit:focus { background:#cbd5e1; }
       #as-plan { display:flex; flex:0 0 182px; flex-direction:column; gap:10px; width:182px; padding:14px; background:#eef2ff; overflow:hidden; }
       #as-plan-title { width:154px; height:28px; margin:0; color:#312e81; font:700 16px/28px Arial,sans-serif; }
       #as-plan-price { width:154px; height:36px; color:#4338ca; font:700 24px/36px Arial,sans-serif; }
@@ -138,11 +177,14 @@ export const representativeAccountSettingsFixture: ParityFixture = {
       { selector:'#as-profile-fields', display:'flex', flexDirection:'column', gap:'4px', position:'relative', width:'368px', height:'auto', margin:'0', padding:'32px 10px 10px', borderWidth:'1px', borderStyle:'solid', borderColor:'#cbd5e1', background:'#ffffff', overflow:'hidden' }, { selector:'#as-profile-legend', position:'absolute', left:'10px', top:'4px', width:'132px', height:'24px', margin:'0', padding:'0', color:'#3730a3', fontFamily:'Arial, sans-serif', fontSize:'13px', fontWeight:'700', lineHeight:'24px' },
       { selector:'.as-field-row', display:'flex', flex:'0 0 40px', alignItems:'center', gap:'6px', width:'346px', height:'40px' }, { selector:'.as-field-row > label', flex:'0 0 92px', width:'92px', height:'40px', padding:'8px 0', color:'#334155', fontFamily:'Arial, sans-serif', fontSize:'11px', fontWeight:'700', lineHeight:'24px' }, { selector:'.as-field-row > label span', color:'#64748b', fontWeight:'400' }, { selector:'.as-field-row > label .as-label-main', color:'#334155', fontWeight:'700' },
       { selector:'.as-field-row > input, .as-field-row > select, .as-field-row > textarea', flex:'0 0 248px', width:'248px', height:'40px', margin:'0', padding:'7px 9px', borderWidth:'1px', borderStyle:'solid', borderColor:'#94a3b8', borderRadius:'0', background:'#f8fafc', color:'#0f172a', fontFamily:'Arial, sans-serif', fontSize:'12px', lineHeight:'24px', textAlign:'left' },
+      { selector:'#as-name:focus, #as-region:focus', background:'#e0e7ff' },
       { selector:'#as-bio-row', flexBasis:'auto', height:'auto', alignItems:'flex-start' }, { selector:'#as-bio', height:'auto', padding:'5px 9px', whiteSpace:'pre-wrap' }, { selector:'#as-name:required', borderColor:'#dc2626' }, { selector:'#as-email:read-only', background:'#e2e8f0', color:'#64748b' },
       { selector:'#as-help', width:'368px', height:'24px', margin:'0', padding:'2px 8px', background:'#fff7ed', color:'#9a3412', fontFamily:'Arial, sans-serif', fontSize:'11px', lineHeight:'20px' },
       { selector:'#as-preferences', display:'flex', alignItems:'center', gap:'8px', position:'relative', width:'368px', height:'56px', margin:'0', padding:'20px 8px 4px', borderWidth:'1px', borderStyle:'solid', borderColor:'#cbd5e1', overflow:'hidden' }, { selector:'#as-preferences legend', position:'absolute', left:'8px', top:'0', width:'100px', height:'20px', color:'#3730a3', fontFamily:'Arial, sans-serif', fontSize:'11px', fontWeight:'700', lineHeight:'20px' },
       { selector:'#as-reports-slot', position:'relative', flex:'0 0 22px', width:'22px', height:'22px', borderWidth:'2px', borderStyle:'solid', borderColor:'#4f46e5', background:'#4f46e5', overflow:'hidden' }, { selector:'#as-reports', position:'absolute', left:'-40px', top:'0', width:'16px', height:'16px', opacity:'0' }, { selector:'#as-preferences > label', width:'270px', height:'24px', color:'#334155', fontFamily:'Arial, sans-serif', fontSize:'11px', lineHeight:'24px' },
       { selector:'#as-actions', display:'flex', justifyContent:'flex-end', gap:'8px', width:'368px', height:'40px' }, { selector:'#as-actions input, #as-dialog-actions input, #as-upgrade', height:'40px', margin:'0', padding:'8px 12px', borderWidth:'0', borderRadius:'0', fontFamily:'Arial, sans-serif', fontSize:'12px', fontWeight:'700', lineHeight:'24px', textAlign:'center' }, { selector:'#as-cancel', width:'84px', background:'#e2e8f0', color:'#334155' }, { selector:'#as-save', width:'116px', background:'#4f46e5', color:'#ffffff' },
+      { selector:'#as-cancel:focus', background:'#cbd5e1' }, { selector:'#as-save:focus', background:'#4338ca' },
+      { selector:'#as-dialog-edit:focus', background:'#cbd5e1' },
       { selector:'#as-plan', display:'flex', flex:'0 0 182px', flexDirection:'column', gap:'10px', width:'182px', padding:'14px', background:'#eef2ff', overflow:'hidden' }, { selector:'#as-plan-title', width:'154px', height:'28px', margin:'0', color:'#312e81', fontFamily:'Arial, sans-serif', fontSize:'16px', fontWeight:'700', lineHeight:'28px' }, { selector:'#as-plan-price', width:'154px', height:'36px', color:'#4338ca', fontFamily:'Arial, sans-serif', fontSize:'24px', fontWeight:'700', lineHeight:'36px' },
       { selector:'#as-plan-list', display:'flex', flexDirection:'column', width:'154px', height:'108px' }, { selector:'#as-plan-list span', width:'154px', height:'36px', padding:'6px 0', color:'#475569', fontFamily:'Arial, sans-serif', fontSize:'11px', lineHeight:'24px' }, { selector:'#as-plan p', width:'154px', height:'48px', margin:'0', color:'#64748b', fontFamily:'Arial, sans-serif', fontSize:'11px', lineHeight:'24px' }, { selector:'#as-upgrade', width:'154px', background:'#c7d2fe', color:'#64748b', opacity:'.65' },
       { selector:'#as-backdrop', position:'fixed', left:'0', top:'0', width:'100vw', height:'100vh', zIndex:'20', background:'#0f172a', opacity:'.9' }, { selector:'#as-dialog', display:'flex', flexDirection:'column', gap:'12px', position:'fixed', left:'150px', top:'190px', width:'500px', height:'220px', padding:'20px', zIndex:'21', background:'#ffffff' }, { selector:'#as-dialog-title', width:'460px', height:'32px', margin:'0', color:'#0f172a', fontFamily:'Arial, sans-serif', fontSize:'19px', fontWeight:'700', lineHeight:'32px' }, { selector:'#as-dialog-copy', width:'460px', height:'48px', margin:'0', color:'#475569', fontFamily:'Arial, sans-serif', fontSize:'12px', lineHeight:'24px' },
@@ -173,8 +215,8 @@ export const representativeAccountSettingsFixture: ParityFixture = {
                 { type:'div', id:'as-region-row', class:'as-field-row', children:[{ type:'label', for:'as-region', textContent:'Region' }, { type:'select', id:'as-region', value:'africa', options:[{ value:'africa', label:'Africa' }, { value:'europe', label:'Europe' }] }] },
               ] },
               { type:'p', id:'as-help', textContent:'Your email is managed by your organization.' },
-              { type:'fieldset', id:'as-preferences', children:[{ type:'legend', textContent:'Notifications' }, { type:'div', id:'as-reports-slot', children:[{ type:'input', inputType:'checkbox', id:'as-reports', checked:true }] }, { type:'label', for:'as-reports', textContent:'Email weekly account reports' }] },
-              { type:'div', id:'as-actions', children:[{ type:'input', inputType:'button', id:'as-cancel', value:'Cancel' }, { type:'input', inputType:'button', id:'as-save', value:'Save changes' }] },
+              { type:'fieldset', id:'as-preferences', children:[{ type:'legend', textContent:'Notifications' }, { type:'div', id:'as-reports-slot', children:[{ type:'input', inputType:'checkbox', id:'as-reports', checked:true }] }, { type:'label', id:'as-reports-label', for:'as-reports', textContent:'Email weekly account reports' }] },
+              { type:'div', id:'as-actions', children:[{ type:'input', inputType:'reset', id:'as-cancel', value:'Cancel' }, { type:'input', inputType:'submit', id:'as-save', value:'Save changes' }] },
             ] },
             { type:'aside', id:'as-plan', children:[{ type:'h2', id:'as-plan-title', textContent:'Current plan' }, { type:'strong', id:'as-plan-price', textContent:'Studio' }, { type:'div', id:'as-plan-list', children:[{ type:'span', textContent:'12 team seats' }, { type:'span', textContent:'Private projects' }, { type:'span', textContent:'Priority support' }] }, { type:'p', textContent:'Renews on 24 September.' }, { type:'input', inputType:'button', id:'as-upgrade', value:'Upgrade unavailable', disabled:true }] },
           ] },
@@ -185,3 +227,48 @@ export const representativeAccountSettingsFixture: ParityFixture = {
     ] },
   },
 };
+
+const editingAccountSiteData = JSON.parse(
+  JSON.stringify(representativeAccountSettingsFixture.siteData),
+) as SiteData;
+editingAccountSiteData.root.children = editingAccountSiteData.root.children.filter(
+  (element) => element.id !== 'as-backdrop' &&
+    element.id !== 'as-dialog',
+);
+const editingAccountShell = findAccountElement(editingAccountSiteData, 'as-shell');
+if (!editingAccountShell?.children) throw new Error('Representative account shell is missing');
+editingAccountShell.children = editingAccountShell.children.filter(
+  (element) => element.id !== 'as-sidebar',
+);
+const editingAccountMain = findAccountElement(editingAccountSiteData, 'as-main');
+if (!editingAccountMain?.children) throw new Error('Representative account main region is missing');
+editingAccountMain.children = editingAccountMain.children.filter((element) => element.id !== 'as-plan');
+const editingAccountFields = findAccountElement(editingAccountSiteData, 'as-profile-fields');
+if (!editingAccountFields?.children) throw new Error('Representative account fields are missing');
+editingAccountFields.children = editingAccountFields.children.filter(
+  (element) => element.id !== 'as-bio-row',
+);
+representativeAccountSettingsFixture.dynamicSteps = [{
+  id: 'dismiss-save-dialog',
+  referenceMutations: [
+    { type: 'remove-element', elementId: 'as-backdrop' },
+    { type: 'remove-element', elementId: 'as-dialog' },
+    { type: 'remove-element', elementId: 'as-sidebar' },
+    { type: 'remove-element', elementId: 'as-plan' },
+    { type: 'remove-element', elementId: 'as-bio-row' },
+  ],
+  siteData: editingAccountSiteData,
+}];
+
+function findAccountElement(
+  siteData: SiteData,
+  elementId: string,
+): SiteData['root']['children'][number] | undefined {
+  const pending = [...siteData.root.children];
+  while (pending.length) {
+    const element = pending.shift();
+    if (element?.id === elementId) return element;
+    if (element?.children) pending.push(...element.children);
+  }
+  return undefined;
+}

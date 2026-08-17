@@ -179,6 +179,7 @@ describe('AstylarInteractionRuntime', () => {
     const focusStates: Array<[string, boolean]> = [];
     let focusedElementId: string | undefined;
     const handledKeys: string[] = [];
+    const preservedSelectionOnBlur: boolean[] = [];
     const siteData: SiteData = {
       styles: [],
       root: {
@@ -200,7 +201,8 @@ describe('AstylarInteractionRuntime', () => {
           focusedElementId = elementId;
           return true;
         },
-        blur: (elementId) => {
+        blur: (elementId, preserveSelectionOnReset) => {
+          preservedSelectionOnBlur.push(preserveSelectionOnReset === true);
           if (focusedElementId === elementId) focusedElementId = undefined;
           return true;
         },
@@ -253,6 +255,7 @@ describe('AstylarInteractionRuntime', () => {
     expect(events.at(-1)?.targetId).toBe('second');
     expect(focusedElementId).toBeUndefined();
     expect(focusStates.at(-1)).toEqual(['second', false]);
+    expect(preservedSelectionOnBlur).toEqual([true, false]);
 
     runtime.dispose();
     canvas.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', code: 'Tab' }));

@@ -145,8 +145,8 @@ export class InputElementService {
     /**
      * Blurs an input element
      */
-    blurInputElement(inputElement: InputElement): void {
-        this.focusManager.blurElement(inputElement);
+    blurInputElement(inputElement: InputElement, preserveSelectionOnReset: boolean = false): void {
+        this.focusManager.blurElement(inputElement, preserveSelectionOnReset);
     }
 
     /**
@@ -291,6 +291,7 @@ export class InputElementService {
                     selectionAnchor: text.cursorState.selectionStart,
                     selectionFocus: text.cursorState.selectionEnd,
                     scrollOffset: text.scrollOffset ?? 0,
+                    preserveSelectionOnReset: text.preserveSelectionOnReset === true,
                 },
             });
         }

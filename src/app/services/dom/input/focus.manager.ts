@@ -26,10 +26,10 @@ export class FocusManager {
     /**
      * Focuses an input element
      */
-    focusElement(inputElement: InputElement): void {
+    focusElement(inputElement: InputElement, preservePreviousSelectionOnReset: boolean = false): void {
         // Blur previously focused element
         if (this.focusedElement && this.focusedElement !== inputElement) {
-            this.blurElement(this.focusedElement);
+            this.blurElement(this.focusedElement, preservePreviousSelectionOnReset);
         }
 
         this.focusedElement = inputElement;
@@ -68,7 +68,7 @@ export class FocusManager {
     /**
      * Removes focus from an input element
      */
-    blurElement(inputElement: InputElement): void {
+    blurElement(inputElement: InputElement, preserveSelectionOnReset: boolean = false): void {
         inputElement.focused = false;
 
         // Hide focus indicator
@@ -76,6 +76,7 @@ export class FocusManager {
 
         // Handle text input blur (show placeholder if empty, stop cursor blinking)
         if (this.isTextInput(inputElement)) {
+            (inputElement as TextInput).preserveSelectionOnReset = preserveSelectionOnReset;
             this.textInputManager.handleBlur(inputElement as TextInput);
             this.cursorRenderer.stopBlinking(inputElement as TextInput);
         }
@@ -114,7 +115,7 @@ export class FocusManager {
         }
 
         if (!this.tabOrder[nextIndex].disabled) {
-            this.focusElement(this.tabOrder[nextIndex]);
+            this.focusElement(this.tabOrder[nextIndex], true);
         }
     }
 

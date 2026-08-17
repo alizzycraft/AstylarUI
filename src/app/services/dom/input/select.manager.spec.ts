@@ -81,4 +81,39 @@ describe('SelectManager', () => {
     expect(select.value).toBe('beta');
     expect(select.validationState.dirty).toBeTrue();
   });
+
+  it('disposes the replaced display material when selection redraws', () => {
+    const textRendering = {
+      renderTextToTexture: () => ({ getSize: () => ({ width: 80, height: 24 }) }),
+    } as unknown as TextRenderingService;
+    const meshService = {
+      createTextMesh: (name: string, _texture: unknown, width: number, height: number) => {
+        const mesh = BABYLON.MeshBuilder.CreatePlane(name, { width, height }, scene);
+        mesh.material = new BABYLON.StandardMaterial(`${name}-material`, scene);
+        return mesh;
+      },
+    } as unknown as BabylonMeshService;
+    const manager = new SelectManager(textRendering, meshService);
+    const select = manager.createSelectElement(
+      {
+        type: 'select', id: 'choice', value: 'alpha', options: [
+          { value: 'alpha', label: 'Alpha' },
+          { value: 'beta', label: 'Beta' },
+        ],
+      },
+      {
+        scene,
+        actions: { camera: { getPixelToWorldScale: () => 0.01 } },
+      } as any,
+      { selector: '#choice', background: '#ffffff', color: '#000000' },
+      { width: 3, height: 0.5 },
+    );
+    const firstMaterial = select.displayMesh?.material as BABYLON.Material;
+    const initialMaterialCount = scene.materials.length;
+
+    manager.selectOption(select, 1);
+
+    expect(scene.materials).not.toContain(firstMaterial);
+    expect(scene.materials.length).toBe(initialMaterialCount);
+  });
 });

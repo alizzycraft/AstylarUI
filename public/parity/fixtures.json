@@ -415,8 +415,10 @@
     "id": "representative-account-settings",
     "title": "Representative account settings application",
     "category": "composed-application",
-    "expectedBehavior": "A responsive account workspace preserves semantic form controls, state selectors, section navigation, a plan summary, overflow boundaries, and a deterministic confirmation modal with backdrop.",
-    "viewportIds": ["desktop", "tablet", "mobile"]
+    "expectedBehavior": "A responsive account workspace preserves its form and modal layout while dialog dismissal, validation, editing, submit, and reset retain browser-equivalent state and events.",
+    "viewportIds": ["desktop", "tablet", "mobile"],
+    "dynamicStepCount": 1,
+    "interactionStepCount": 12
   },
   {
     "id": "auto-block-height",

@@ -155,12 +155,18 @@ export interface ParityReferenceSetSourceMutation {
   source: string;
 }
 
+export interface ParityReferenceRemoveElementMutation {
+  type: 'remove-element';
+  elementId: string;
+}
+
 export type ParityReferenceMutation =
   | ParityReferenceSetTextMutation
   | ParityReferenceSetValueMutation
   | ParityReferenceSetStyleMutation
   | ParityReferenceSetChildrenMutation
-  | ParityReferenceSetSourceMutation;
+  | ParityReferenceSetSourceMutation
+  | ParityReferenceRemoveElementMutation;
 
 export interface ParityDynamicStep {
   id: string;

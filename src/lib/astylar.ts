@@ -308,10 +308,10 @@ export class Astylar {
           this.inputElementService.focusInputElement(input);
           return true;
         },
-        blur: (elementId) => {
+        blur: (elementId, preserveSelectionOnReset) => {
           const input = this.inputElementService.getInputElement(elementId);
           if (!input) return false;
-          this.inputElementService.blurInputElement(input);
+          this.inputElementService.blurInputElement(input, preserveSelectionOnReset);
           return true;
         },
         handleKeyDown: (elementId, event) => {

@@ -24,6 +24,7 @@ export interface TextInputMutableState {
     selectionAnchor: number;
     selectionFocus: number;
     scrollOffset: number;
+    preserveSelectionOnReset: boolean;
 }
 
 /**
@@ -101,7 +102,8 @@ export class TextInputManager {
             mesh: inputMesh,
             placeholder: element.placeholder,
             maxLength: element.maxLength,
-            cursorState
+            cursorState,
+            preserveSelectionOnReset: false,
         };
 
         // Store reference to textInput in mesh metadata for interaction handler
@@ -265,13 +267,21 @@ export class TextInputManager {
         }
     }
 
+    /** Releases a mesh-local material without disposing its cache-owned text texture. */
+    private disposeTextMesh(mesh: BABYLON.AbstractMesh): void {
+        const material = mesh.material;
+        mesh.material = null;
+        mesh.dispose();
+        material?.dispose(false, false);
+    }
+
     /**
      * Updates the text display mesh
      */
     private updateTextDisplay(textInput: TextInput, render: BabylonRender, style: StyleRule): void {
         // Dispose existing text mesh
         if (textInput.textMesh) {
-            textInput.textMesh.dispose();
+            this.disposeTextMesh(textInput.textMesh);
             textInput.textMesh = undefined;
         }
 
@@ -364,7 +374,7 @@ export class TextInputManager {
 
                 // Re-create mesh with clipped width or just scale it?
                 // Re-creating is safer to ensure bounding info is correct for interactions
-                textMesh.dispose();
+                this.disposeTextMesh(textMesh);
                 const clippedTextMesh = this.babylonMeshService.createTextMesh(
                     `text_${textInput.element.id}`,
                     texture,
@@ -887,18 +897,26 @@ export class TextInputManager {
         return isNaN(num) ? undefined : num;
     }
 
-    /** Restores an authored value and collapsed selection for a form reset. */
+    /** Restores an authored value using the native reset behavior for the last blur modality. */
     resetTextValue(textInput: TextInput, value: string): void {
+        const clamp = (position: number): number =>
+            Math.max(0, Math.min(value.length, position));
+        const preserveSelection = textInput.preserveSelectionOnReset === true;
         textInput.value = value;
         textInput.textContent = value;
-        textInput.cursorPosition = 0;
-        textInput.selectionStart = 0;
-        textInput.selectionEnd = 0;
-        textInput.cursorState.position = 0;
-        textInput.cursorState.selectionStart = 0;
-        textInput.cursorState.selectionEnd = 0;
-        textInput.cursorState.selectionActive = false;
-        textInput.scrollOffset = 0;
+        textInput.cursorPosition = preserveSelection ? clamp(textInput.cursorPosition) : 0;
+        textInput.selectionStart = preserveSelection ? clamp(textInput.selectionStart) : 0;
+        textInput.selectionEnd = preserveSelection ? clamp(textInput.selectionEnd) : 0;
+        textInput.cursorState.position = textInput.cursorPosition;
+        textInput.cursorState.selectionStart = preserveSelection
+            ? clamp(textInput.cursorState.selectionStart)
+            : 0;
+        textInput.cursorState.selectionEnd = preserveSelection
+            ? clamp(textInput.cursorState.selectionEnd)
+            : 0;
+        textInput.cursorState.selectionActive = textInput.cursorState.selectionActive &&
+            textInput.selectionStart !== textInput.selectionEnd;
+        if (!preserveSelection) textInput.scrollOffset = 0;
         if (this.activeRender) {
             this.updateTextDisplay(textInput, this.activeRender, textInput.style);
         }
@@ -920,6 +938,7 @@ export class TextInputManager {
         textInput.cursorState.selectionStart = clamp(state.selectionAnchor);
         textInput.cursorState.selectionEnd = clamp(state.selectionFocus);
         textInput.scrollOffset = Math.max(0, state.scrollOffset);
+        textInput.preserveSelectionOnReset = state.preserveSelectionOnReset;
         if (this.activeRender) {
             this.updateTextDisplay(textInput, this.activeRender, textInput.style);
         }
