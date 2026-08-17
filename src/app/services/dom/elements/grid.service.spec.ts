@@ -1,4 +1,6 @@
-import { GridService, resolveIntrinsicGridRows } from './grid.service';
+import { GridService } from './grid.service';
+import { resolveIntrinsicGridRows } from './grid-track-sizing';
+import { FlexService } from './flex.service';
 import { BabylonDOM } from '../interfaces/dom.types';
 import { BabylonRender } from '../interfaces/render.types';
 import { Mesh } from '@babylonjs/core';
@@ -69,5 +71,45 @@ describe('GridService', () => {
     );
 
     expect(processChildren).toHaveBeenCalled();
+  });
+
+  it('uses recursive flex measurement for a nested auto-row contribution', () => {
+    const intrinsic = jasmine.createSpy('measureIntrinsicFlowChildOuterHeight').and.returnValue(74);
+    const measuredService = new GridService({
+      measureIntrinsicFlowChildOuterHeight: intrinsic,
+    } as unknown as FlexService);
+    const childMesh = { metadata: {} } as Mesh;
+    const createElement = jasmine.createSpy('createElement').and.returnValue(childMesh);
+    const dom = {
+      context: {
+        elementStyles: new Map(),
+        elementDimensions: new Map([['grid', {
+          width: 280, height: 102,
+          padding: { top: 14, right: 14, bottom: 14, left: 14 },
+        }]]),
+      },
+      actions: { createElement, processChildren: jasmine.createSpy('processChildren') },
+    } as unknown as BabylonDOM;
+    const render = {
+      actions: {
+        style: {
+          findStyleForElement: (element: { id?: string }) => element.id === 'grid'
+            ? { selector: '#grid', display: 'grid', gridTemplateColumns: '252px', gridTemplateRows: 'auto' }
+            : { selector: '#card', display: 'flex', height: 'auto' },
+        },
+      },
+    } as unknown as BabylonRender;
+
+    measuredService.processGridChildren(
+      dom,
+      render,
+      [{ type: 'article', id: 'card' }],
+      { name: 'grid' } as Mesh,
+      [],
+      { type: 'section', id: 'grid' },
+    );
+
+    expect(intrinsic).toHaveBeenCalled();
+    expect(createElement.calls.mostRecent().args[6]).toEqual({ width: 252, height: 74 });
   });
 });

@@ -532,5 +532,11 @@
     "title": "Content-sized auto grid rows",
     "category": "grid",
     "expectedBehavior": "Auto grid rows use the largest measurable item contribution in each row, and those rows plus gaps drive a height-auto grid container."
+  },
+  {
+    "id": "grid-auto-nested-flex-row",
+    "title": "Auto grid row from nested flex content",
+    "category": "grid",
+    "expectedBehavior": "An auto grid row and height-auto grid container use the intrinsic height of a nested flex item whose children are text-sized."
   }
 ]

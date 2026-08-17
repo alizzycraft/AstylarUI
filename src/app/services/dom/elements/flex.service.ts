@@ -8,7 +8,7 @@ import { FlexLayoutService, FlexItem, FlexContainer, FlexLine } from './flex-lay
 import { TextRenderingService } from '../../text/text-rendering.service';
 import { TextStyleParserService } from '../../text/text-style-parser.service';
 import { ElementBorderService } from './element-border.service';
-import { resolveIntrinsicGridRows, tokenizeGridTrackList } from './grid.service';
+import { resolveIntrinsicGridRows, tokenizeGridTrackList } from './grid-track-sizing';
 
 @Injectable({
   providedIn: 'root'
@@ -625,6 +625,19 @@ export class FlexService {
     if (!hasFlowChild) return null;
     return contentHeight + previousBottomMargin +
       padding.top + padding.bottom + borderWidth * 2;
+  }
+
+  public measureIntrinsicFlowChildOuterHeight(
+    child: DOMElement,
+    styles: StyleRule[],
+    dom: BabylonDOM,
+    render: BabylonRender,
+    contentWidth: number,
+  ): number | null {
+    const measured = this.measureIntrinsicFlowChild(child, styles, dom, render, contentWidth);
+    return measured
+      ? measured.margin.top + measured.height + measured.margin.bottom
+      : null;
   }
 
   private measureIntrinsicFlowChild(

@@ -1,60 +1,16 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Optional } from '@angular/core';
 import { Mesh } from '@babylonjs/core';
 import { DOMElement } from '../../../types/dom-element';
 import { StyleRule } from '../../../types/style-rule';
 import { BabylonDOM } from '../interfaces/dom.types';
 import { BabylonRender } from '../interfaces/render.types';
-
-export function tokenizeGridTrackList(template: string | undefined): string[] {
-  const source = template?.trim() ?? '';
-  if (!source) return [];
-  const tokens: string[] = [];
-  let token = '';
-  let depth = 0;
-  for (const character of source) {
-    if (/\s/.test(character) && depth === 0) {
-      if (token) tokens.push(token);
-      token = '';
-      continue;
-    }
-    token += character;
-    if (character === '(') depth++;
-    if (character === ')') depth = Math.max(0, depth - 1);
-  }
-  if (token) tokens.push(token);
-  return tokens;
-}
-
-export function resolveIntrinsicGridRows(
-  template: string | undefined,
-  columnCount: number,
-  itemOuterHeights: Array<number | null>,
-): number[] | null {
-  const explicitTokens = tokenizeGridTrackList(template);
-  const requiredRows = Math.max(1, Math.ceil(itemOuterHeights.length / Math.max(1, columnCount)));
-  const rowTokens = Array.from(
-    { length: Math.max(requiredRows, explicitTokens.length) },
-    (_, index) => explicitTokens[index] ?? 'auto',
-  );
-  if (rowTokens.some((token) => token !== 'auto' && !/^[+-]?(?:\d+\.?\d*|\.\d+)(?:px)?$/i.test(token))) {
-    return null;
-  }
-
-  const rows = rowTokens.map((token) => token === 'auto'
-    ? 0
-    : Math.max(0, Number.parseFloat(token) || 0));
-  for (let index = 0; index < itemOuterHeights.length; index++) {
-    const row = Math.floor(index / Math.max(1, columnCount));
-    if (rowTokens[row] !== 'auto') continue;
-    const contribution = itemOuterHeights[index];
-    if (contribution === null) return null;
-    rows[row] = Math.max(rows[row], contribution);
-  }
-  return rows;
-}
+import { FlexService } from './flex.service';
+import { resolveIntrinsicGridRows, tokenizeGridTrackList } from './grid-track-sizing';
 
 @Injectable({ providedIn: 'root' })
 export class GridService {
+  constructor(@Optional() private flexService?: FlexService) {}
+
   isGridContainer(
     render: BabylonRender,
     element: DOMElement,
@@ -96,7 +52,15 @@ export class GridService {
     const columnCount = Math.max(1, this.trackCount(style.gridTemplateColumns));
     const requiredRows = Math.max(1, Math.ceil(visibleChildren.length / columnCount));
     const columns = this.resolveTracks(style.gridTemplateColumns, contentWidth, columnGap, columnCount);
-    const rowContributions = visibleChildren.map((child) => {
+    const rowContributions = visibleChildren.map((child, index) => {
+      const measured = this.flexService?.measureIntrinsicFlowChildOuterHeight(
+        child,
+        styles,
+        dom,
+        render,
+        columns[index % columns.length] ?? contentWidth,
+      );
+      if (measured !== null && measured !== undefined) return measured;
       const childStyle = render.actions.style.findStyleForElement(
         child, styles, dom.context.elementStyles,
       );

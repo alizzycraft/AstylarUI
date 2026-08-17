@@ -55,3 +55,4 @@ metrics are maintained in `scorecard.md`, completed Application Web Parity v2
 results in `scorecard-v2.md`, representative-application parity in
 `scorecard-v3.md`, content-driven layout parity in `scorecard-v4.md`, and the
 active responsive intrinsic layout and paint-fidelity phase in `scorecard-v5.md`.
+Application-grade intrinsic Grid work continues in `scorecard-v6.md`.
