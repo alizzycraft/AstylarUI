@@ -39,6 +39,7 @@ export interface AstylarInteractionControlAdapter {
   emitsImmediateChangeOnKeyboardMutation?(elementId: string): boolean;
   activate?(elementId: string): AstylarControlActivation | undefined;
   canActivateWithSpace?(elementId: string): boolean;
+  canActivateWithEnter?(elementId: string): boolean;
   getRadioNavigationTarget?(elementId: string, direction: -1 | 1): string | undefined;
 }
 
@@ -213,6 +214,11 @@ export class AstylarInteractionRuntime {
     if (event.key === 'Tab') {
       event.preventDefault();
       this.moveFocus(event.shiftKey ? -1 : 1);
+      return;
+    }
+    if (event.key === 'Enter' && this.controls?.canActivateWithEnter?.(targetId)) {
+      event.preventDefault();
+      this.activateAndClick(targetId);
       return;
     }
     if (event.key === ' ' && this.controls?.canActivateWithSpace?.(targetId)) {

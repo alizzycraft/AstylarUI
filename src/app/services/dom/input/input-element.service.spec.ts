@@ -152,4 +152,27 @@ describe('InputElementService', () => {
     expect(service.emitsImmediateChangeOnKeyboardMutation('choice')).toBeTrue();
     expect(service.emitsImmediateChangeOnKeyboardMutation('field')).toBeFalse();
   });
+
+  it('exposes browser keyboard activation keys for buttons and choice controls', () => {
+    const service = new InputElementService(
+      {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
+    );
+    service['inputElements'].set('button', { type: InputType.Button, disabled: false } as never);
+    service['inputElements'].set('checkbox', { type: InputType.Checkbox, disabled: false } as never);
+    service['inputElements'].set('disabled', { type: InputType.Button, disabled: true } as never);
+
+    expect(service.canActivateWithEnter('button')).toBeTrue();
+    expect(service.canActivateWithSpace('button')).toBeTrue();
+    expect(service.canActivateWithEnter('checkbox')).toBeFalse();
+    expect(service.canActivateWithSpace('checkbox')).toBeTrue();
+    expect(service.canActivateWithEnter('disabled')).toBeFalse();
+  });
 });

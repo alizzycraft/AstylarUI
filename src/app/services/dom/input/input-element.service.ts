@@ -297,7 +297,14 @@ export class InputElementService {
     canActivateWithSpace(elementId: string): boolean {
         const input = this.inputElements.get(elementId);
         return !!input && !input.disabled &&
-            (input.type === InputType.Checkbox || input.type === InputType.Radio);
+            (input.type === InputType.Checkbox || input.type === InputType.Radio ||
+                input.type === InputType.Button || input.type === InputType.Submit);
+    }
+
+    canActivateWithEnter(elementId: string): boolean {
+        const input = this.inputElements.get(elementId);
+        return !!input && !input.disabled &&
+            (input.type === InputType.Button || input.type === InputType.Submit);
     }
 
     /** Finds the next enabled member for native-style radio arrow navigation. */

@@ -517,4 +517,58 @@ describe('AstylarInteractionRuntime', () => {
     scene.dispose();
     engine.dispose();
   });
+
+  it('synthesizes button clicks at the browser Enter and Space boundaries', () => {
+    const engine = new NullEngine();
+    const scene = new Scene(engine);
+    const canvas = document.createElement('canvas');
+    const events: AstylarEventSnapshot[] = [];
+    const runtime = new AstylarInteractionRuntime(
+      scene,
+      {
+        styles: [],
+        root: { children: [{ type: 'input', inputType: 'button', id: 'run', value: 'Run' }] },
+      },
+      { onEvent: (event) => events.push(event) },
+      () => ({ value: 'Run' }),
+      {
+        getFocusedElementId: () => 'run',
+        focus: () => true,
+        blur: () => true,
+        handleKeyDown: () => undefined,
+        commitsValueOnBlur: () => false,
+        canActivateWithEnter: () => true,
+        canActivateWithSpace: () => true,
+      },
+      canvas,
+    );
+
+    canvas.dispatchEvent(new KeyboardEvent('keydown', {
+      key: 'Enter', code: 'Enter', bubbles: true, cancelable: true,
+    }));
+    canvas.dispatchEvent(new KeyboardEvent('keyup', {
+      key: 'Enter', code: 'Enter', bubbles: true, cancelable: true,
+    }));
+    canvas.dispatchEvent(new KeyboardEvent('keydown', {
+      key: ' ', code: 'Space', bubbles: true, cancelable: true,
+    }));
+    canvas.dispatchEvent(new KeyboardEvent('keyup', {
+      key: ' ', code: 'Space', bubbles: true, cancelable: true,
+    }));
+
+    expect(events.map((event) => event.type)).toEqual([
+      'keydown', 'click', 'keyup', 'keydown', 'keyup', 'click',
+    ]);
+    expect(events.filter((event) => event.type === 'click').map((event) => ({
+      button: event.button,
+      pointerType: event.pointerType,
+    }))).toEqual([
+      { button: 0, pointerType: '' },
+      { button: 0, pointerType: '' },
+    ]);
+
+    runtime.dispose();
+    scene.dispose();
+    engine.dispose();
+  });
 });

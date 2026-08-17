@@ -695,5 +695,12 @@
     "category": "forms-interactive",
     "expectedBehavior": "Arrow keys change a focused closed select immediately, skip disabled options, update its displayed value, and emit input then change before keyup.",
     "interactionStepCount": 5
+  },
+  {
+    "id": "interaction-button-keyboard",
+    "title": "Button keyboard activation",
+    "category": "forms-interactive",
+    "expectedBehavior": "Enter synthesizes a button click during keydown, while Space synthesizes its click after keyup, with browser-compatible keyboard click details.",
+    "interactionStepCount": 3
   }
 ]
