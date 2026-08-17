@@ -62,6 +62,7 @@ The remaining visible difference is concentrated at glyph edges. Chromium paints
 - Full unit suite after content-sized grid rows: 107 passing.
 - Full parity corpus after content-sized grid rows: 88 fixtures / 100 renders / three viewports; median SSIM `0.9966`; minimum SSIM `0.9509`; `99.9%` of measured edges within `2px`; maximum edge error `3.9921px`; exact text; runtime clean.
 - Angular application production build and library TypeScript build after content-sized grid rows: passing (existing Angular budget warnings only).
+- Three consecutive preliminary `parity:check` runs passed on the unchanged implementation tree with identical aggregate metrics: 88 fixtures / 100 renders, median SSIM `0.9966`, minimum SSIM `0.9509`, `99.9%` of edges within `2px`, maximum edge error `3.9921px`, exact text, and no runtime errors. The final scorecard-only commit is followed by the required final committed-tree stability runs.
 
 ## Next candidates
 
