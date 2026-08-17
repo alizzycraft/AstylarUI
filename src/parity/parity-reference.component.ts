@@ -129,8 +129,10 @@ export class ParityReferenceComponent {
 
     const steps = fixture.dynamicSteps ?? [];
     const lastStep = Number.isInteger(freshStep) ? freshStep : steps.length - 1;
-    for (let index = 0; index <= lastStep && index < steps.length; index++) {
-      this.applyReferenceStep(viewport, steps[index].referenceMutations);
+    if (!interactionSequence) {
+      for (let index = 0; index <= lastStep && index < steps.length; index++) {
+        this.applyReferenceStep(viewport, steps[index].referenceMutations);
+      }
     }
     await this.waitForImages(viewport);
     await this.nextFrame();
@@ -138,7 +140,7 @@ export class ParityReferenceComponent {
 
     if (
       fixture.responsiveSequence &&
-      this.route.snapshot.queryParamMap.get('dynamic') === 'true'
+      this.route.snapshot.queryParamMap.get('responsive') === 'true'
     ) {
       window.addEventListener('resize', this.onWindowResize);
       window.__ASTYLAR_PARITY_SET_VIEWPORT__ = (id) =>

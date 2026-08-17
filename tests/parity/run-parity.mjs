@@ -590,6 +590,11 @@ async function performInteractionAction(page, mode, action, report) {
       await page.keyboard.type(action.text);
       return;
     case 'apply-update':
+      if (action.viewportId) {
+        const viewport = viewportProfiles[action.viewportId];
+        if (!viewport) throw new Error(`Unknown interaction viewport: ${action.viewportId}`);
+        await page.setViewportSize({ width: viewport.width, height: viewport.height });
+      }
       await page.evaluate(
         ({ stepIndex, viewportId }) => window.__ASTYLAR_PARITY_APPLY_STEP__?.(
           stepIndex,
@@ -665,7 +670,7 @@ async function measureResponsiveFixture(context, fixture, staticResults) {
   });
   const referenceStates = await captureResponsiveMode(
     context,
-    `${BASE_URL}/parity/reference/${encodeURIComponent(fixture.id)}?viewport=desktop&dynamic=true`,
+    `${BASE_URL}/parity/reference/${encodeURIComponent(fixture.id)}?viewport=desktop&responsive=true`,
     '#parity-reference-viewport',
     'reference',
     sequenceDir,
@@ -673,7 +678,7 @@ async function measureResponsiveFixture(context, fixture, staticResults) {
   );
   const astylarStates = await captureResponsiveMode(
     context,
-    `${BASE_URL}/parity/astylar/${encodeURIComponent(fixture.id)}?viewport=desktop&dynamic=true`,
+    `${BASE_URL}/parity/astylar/${encodeURIComponent(fixture.id)}?viewport=desktop&responsive=true`,
     '#parity-astylar-canvas',
     'astylar',
     sequenceDir,

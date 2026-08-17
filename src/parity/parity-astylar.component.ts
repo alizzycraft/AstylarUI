@@ -215,14 +215,14 @@ export class ParityAstylarComponent {
       }
       if (
         fixture.responsiveSequence &&
-        this.route.snapshot.queryParamMap.get('dynamic') === 'true'
+        this.route.snapshot.queryParamMap.get('responsive') === 'true'
       ) {
         window.addEventListener('resize', this.onWindowResize);
         window.__ASTYLAR_PARITY_SET_VIEWPORT__ = (id) =>
           this.applyResponsiveViewport(PARITY_VIEWPORTS[id]);
       }
 
-      const shouldApplyDynamicSteps = !Number.isInteger(freshStep);
+      const shouldApplyDynamicSteps = !interactionSequence && !Number.isInteger(freshStep);
       void (shouldApplyDynamicSteps
         ? this.applyDynamicSteps(scene, fixture)
         : this.astylar.whenSettled(scene)).then(() => {

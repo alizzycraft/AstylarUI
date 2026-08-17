@@ -1,11 +1,12 @@
 import { ParityFixture } from '../parity.types';
+import type { SiteData } from '../../app/types/site-data';
 
 export const representativeProjectDashboardFixture: ParityFixture = {
   id: 'representative-project-dashboard',
   title: 'Representative project management dashboard',
   category: 'composed-application',
   expectedBehavior:
-    'A realistic project workspace reflows its persistent navigation, toolbar, summary grid, task list, clipped activity panel, controls, and fixed help action across desktop, tablet, and mobile.',
+    'A realistic project workspace reflows across desktop, tablet, and mobile while search editing, filtered application updates, and pointer/keyboard task toggling retain browser-equivalent state and events.',
   viewportIds: ['desktop', 'tablet', 'mobile'],
   responsiveSequence: ['desktop', 'tablet', 'mobile', 'desktop'],
   measurementIds: [
@@ -13,9 +14,29 @@ export const representativeProjectDashboardFixture: ParityFixture = {
     'pm-header', 'pm-heading', 'pm-search', 'pm-new', 'pm-main', 'pm-primary', 'pm-intro',
     'pm-title', 'pm-summary', 'pm-summary-active', 'pm-summary-due', 'pm-summary-done',
     'pm-tasks', 'pm-task-heading', 'pm-task-one', 'pm-task-one-slot', 'pm-task-one-title',
-    'pm-task-two', 'pm-task-two-title', 'pm-task-three', 'pm-task-three-title',
+    'pm-task-two', 'pm-task-two-slot', 'pm-task-two-title', 'pm-task-three', 'pm-task-three-title',
     'pm-activity', 'pm-activity-title', 'pm-activity-list', 'pm-activity-one',
     'pm-activity-two', 'pm-activity-three', 'pm-activity-four', 'pm-help',
+  ],
+  optionalMeasurementIds: [
+    'pm-task-one', 'pm-task-one-slot', 'pm-task-one-title',
+    'pm-task-three', 'pm-task-three-title',
+  ],
+  interactionIds: ['pm-search', 'pm-task-two-slot', 'pm-task-two-check'],
+  interactionEventTypes: [
+    'pointerdown', 'pointerup', 'click', 'focus', 'blur',
+    'keydown', 'keyup', 'input', 'change',
+  ],
+  interactionSteps: [
+    { id: 'focus-search', actions: [{ type: 'click', elementId: 'pm-search' }] },
+    { id: 'select-search', actions: [{ type: 'press-key', key: 'Control+A' }] },
+    { id: 'enter-filter', actions: [{ type: 'type-text', text: 'launch' }] },
+    {
+      id: 'filter-and-reflow-mobile',
+      actions: [{ type: 'apply-update', stepIndex: 0, viewportId: 'mobile' }],
+    },
+    { id: 'complete-filtered-task', actions: [{ type: 'click', elementId: 'pm-task-two-slot' }] },
+    { id: 'reopen-filtered-task', actions: [{ type: 'press-key', key: 'Space' }] },
   ],
   reference: {
     html: `
@@ -44,9 +65,9 @@ export const representativeProjectDashboardFixture: ParityFixture = {
               <section id="pm-tasks">
                 <h2 id="pm-task-heading">Priority tasks</h2>
                 <div id="pm-task-list">
-                  <article id="pm-task-one"><div id="pm-task-one-slot" class="pm-check-slot"><input id="pm-task-one-check" type="checkbox" checked></div><strong id="pm-task-one-title">Approve responsive homepage</strong><span id="pm-status-one">Review</span></article>
-                  <article id="pm-task-two"><div id="pm-task-two-slot" class="pm-check-slot"><input id="pm-task-two-check" type="checkbox"></div><strong id="pm-task-two-title">Prepare launch checklist and owner notes</strong><span id="pm-status-two">In progress</span></article>
-                  <article id="pm-task-three"><div id="pm-task-three-slot" class="pm-check-slot"><input id="pm-task-three-check" type="checkbox" disabled></div><strong id="pm-task-three-title">Archive the previous campaign</strong><span id="pm-status-three">Blocked</span></article>
+                  <article id="pm-task-one"><label id="pm-task-one-slot" class="pm-check-slot" for="pm-task-one-check"><input id="pm-task-one-check" type="checkbox" checked></label><strong id="pm-task-one-title">Approve responsive homepage</strong><span id="pm-status-one">Review</span></article>
+                  <article id="pm-task-two"><label id="pm-task-two-slot" class="pm-check-slot" for="pm-task-two-check"><input id="pm-task-two-check" type="checkbox"></label><strong id="pm-task-two-title">Prepare launch checklist and owner notes</strong><span id="pm-status-two">In progress</span></article>
+                  <article id="pm-task-three"><label id="pm-task-three-slot" class="pm-check-slot" for="pm-task-three-check"><input id="pm-task-three-check" type="checkbox" disabled></label><strong id="pm-task-three-title">Archive the previous campaign</strong><span id="pm-status-three">Blocked</span></article>
                 </div>
               </section>
             </section>
@@ -81,7 +102,8 @@ export const representativeProjectDashboardFixture: ParityFixture = {
       #pm-heading span { height:20px; color:#64748b; font:400 12px/20px Arial,sans-serif; }
       #pm-tools { display:flex; align-items:center; gap:8px; width:288px; height:40px; }
       #pm-search, #pm-new { appearance:none; height:40px; margin:0; border:1px solid #cbd5e1; border-radius:6px; font:400 13px/22px Arial,sans-serif; }
-      #pm-search { width:184px; padding:8px 10px; background:#f8fafc; color:#475569; text-align:left; }
+      #pm-search { width:184px; padding:8px 10px; outline:0; background:#f8fafc; color:#475569; text-align:left; }
+      #pm-search:focus { background:#dbeafe; }
       #pm-new { width:96px; padding:8px; background:#2563eb; border-color:#2563eb; color:#ffffff; font-weight:700; text-align:center; }
       #pm-main { display:flex; flex:1 1 auto; flex-direction:row; gap:12px; padding:12px; background:#eef2f7; overflow:hidden; }
       #pm-primary { display:flex; flex:0 0 396px; flex-direction:column; gap:12px; background:#eef2f7; }
@@ -173,6 +195,7 @@ export const representativeProjectDashboardFixture: ParityFixture = {
       { selector:'#pm-tools', display:'flex', alignItems:'center', gap:'8px', width:'288px', height:'40px' },
       { selector:'#pm-search, #pm-new', height:'40px', margin:'0', borderWidth:'1px', borderStyle:'solid', borderColor:'#cbd5e1', borderRadius:'6px', fontFamily:'Arial, sans-serif', fontSize:'13px', lineHeight:'22px' },
       { selector:'#pm-search', width:'184px', padding:'8px 10px', background:'#f8fafc', color:'#475569', textAlign:'left' },
+      { selector:'#pm-search:focus', background:'#dbeafe' },
       { selector:'#pm-new', width:'96px', padding:'8px', background:'#2563eb', borderColor:'#2563eb', color:'#ffffff', fontWeight:'700', textAlign:'center' },
       { selector:'#pm-main', display:'flex', flex:'1 1 auto', flexDirection:'row', gap:'12px', padding:'12px', background:'#eef2f7', overflow:'hidden' },
       { selector:'#pm-primary', display:'flex', flex:'0 0 396px', flexDirection:'column', gap:'12px', background:'#eef2f7' },
@@ -257,9 +280,9 @@ export const representativeProjectDashboardFixture: ParityFixture = {
               { type:'section', id:'pm-tasks', children:[
                 { type:'h2', id:'pm-task-heading', textContent:'Priority tasks' },
                 { type:'div', id:'pm-task-list', children:[
-                  { type:'article', id:'pm-task-one', children:[{ type:'div', id:'pm-task-one-slot', class:'pm-check-slot', children:[{ type:'input', inputType:'checkbox', id:'pm-task-one-check', checked:true }] }, { type:'strong', id:'pm-task-one-title', textContent:'Approve responsive homepage' }, { type:'span', id:'pm-status-one', textContent:'Review' }] },
-                  { type:'article', id:'pm-task-two', children:[{ type:'div', id:'pm-task-two-slot', class:'pm-check-slot', children:[{ type:'input', inputType:'checkbox', id:'pm-task-two-check' }] }, { type:'strong', id:'pm-task-two-title', textContent:'Prepare launch checklist and owner notes' }, { type:'span', id:'pm-status-two', textContent:'In progress' }] },
-                  { type:'article', id:'pm-task-three', children:[{ type:'div', id:'pm-task-three-slot', class:'pm-check-slot', children:[{ type:'input', inputType:'checkbox', id:'pm-task-three-check', disabled:true }] }, { type:'strong', id:'pm-task-three-title', textContent:'Archive the previous campaign' }, { type:'span', id:'pm-status-three', textContent:'Blocked' }] },
+                  { type:'article', id:'pm-task-one', children:[{ type:'label', id:'pm-task-one-slot', class:'pm-check-slot', for:'pm-task-one-check', children:[{ type:'input', inputType:'checkbox', id:'pm-task-one-check', checked:true }] }, { type:'strong', id:'pm-task-one-title', textContent:'Approve responsive homepage' }, { type:'span', id:'pm-status-one', textContent:'Review' }] },
+                  { type:'article', id:'pm-task-two', children:[{ type:'label', id:'pm-task-two-slot', class:'pm-check-slot', for:'pm-task-two-check', children:[{ type:'input', inputType:'checkbox', id:'pm-task-two-check' }] }, { type:'strong', id:'pm-task-two-title', textContent:'Prepare launch checklist and owner notes' }, { type:'span', id:'pm-status-two', textContent:'In progress' }] },
+                  { type:'article', id:'pm-task-three', children:[{ type:'label', id:'pm-task-three-slot', class:'pm-check-slot', for:'pm-task-three-check', children:[{ type:'input', inputType:'checkbox', id:'pm-task-three-check', disabled:true }] }, { type:'strong', id:'pm-task-three-title', textContent:'Archive the previous campaign' }, { type:'span', id:'pm-status-three', textContent:'Blocked' }] },
                 ] },
               ] },
             ] },
@@ -279,3 +302,39 @@ export const representativeProjectDashboardFixture: ParityFixture = {
     ] },
   },
 };
+
+const filteredDashboardSiteData = JSON.parse(
+  JSON.stringify(representativeProjectDashboardFixture.siteData),
+) as SiteData;
+const filteredTaskList = findDashboardElement(filteredDashboardSiteData, 'pm-task-list');
+const filteredHeading = findDashboardElement(filteredDashboardSiteData, 'pm-task-heading');
+if (!filteredTaskList?.children || !filteredHeading) {
+  throw new Error('Representative dashboard filter targets are missing');
+}
+filteredTaskList.children = filteredTaskList.children.filter((child) => child.id === 'pm-task-two');
+filteredHeading.textContent = 'Filtered tasks';
+representativeProjectDashboardFixture.dynamicSteps = [{
+  id: 'filtered-launch-tasks',
+  referenceMutations: [
+    { type: 'set-text', elementId: 'pm-task-heading', textContent: 'Filtered tasks' },
+    {
+      type: 'set-children',
+      elementId: 'pm-task-list',
+      html: '<article id="pm-task-two"><label id="pm-task-two-slot" class="pm-check-slot" for="pm-task-two-check"><input id="pm-task-two-check" type="checkbox"></label><strong id="pm-task-two-title">Prepare launch checklist and owner notes</strong><span id="pm-status-two">In progress</span></article>',
+    },
+  ],
+  siteData: filteredDashboardSiteData,
+}];
+
+function findDashboardElement(
+  siteData: SiteData,
+  elementId: string,
+): SiteData['root']['children'][number] | undefined {
+  const pending = [...siteData.root.children];
+  while (pending.length) {
+    const element = pending.shift();
+    if (element?.id === elementId) return element;
+    if (element?.children) pending.push(...element.children);
+  }
+  return undefined;
+}
