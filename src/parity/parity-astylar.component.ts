@@ -130,7 +130,8 @@ export class ParityAstylarComponent {
         events: interactionSequence
           ? {
               onEvent: (event) => {
-                if (fixture.interactionEventTypes?.includes(event.type)) {
+                if (fixture.interactionEventTypes?.includes(event.type) &&
+                    fixture.interactionIds?.includes(event.targetId)) {
                   this.interactionEvents.push(this.normalizeEvent(event));
                 }
               },

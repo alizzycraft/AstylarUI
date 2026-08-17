@@ -80,7 +80,11 @@ export class ParityReferenceComponent {
     const interactionSequence = this.route.snapshot.queryParamMap.get('interaction') === 'true' &&
       !!fixture.interactionSteps?.length;
     if (interactionSequence) {
-      this.installInteractionCapture(viewport, fixture.interactionEventTypes ?? []);
+      this.installInteractionCapture(
+        viewport,
+        fixture.interactionEventTypes ?? [],
+        fixture.interactionIds ?? [],
+      );
       window.__ASTYLAR_PARITY_INTERACTION_STEPS__ = fixture.interactionSteps;
       window.__ASTYLAR_PARITY_CAPTURE_INTERACTION__ = async () => {
         await this.nextFrame();
@@ -264,11 +268,13 @@ export class ParityReferenceComponent {
   private installInteractionCapture(
     viewport: HTMLElement,
     eventTypes: ParityInteractionEventType[],
+    targetIds: string[],
   ): void {
+    const allowedTargets = new Set(targetIds);
     for (const type of eventTypes) {
       viewport.addEventListener(type, (event) => {
         const target = event.target instanceof HTMLElement ? event.target : undefined;
-        if (!target?.id) return;
+        if (!target?.id || !allowedTargets.has(target.id)) return;
         const pointer = event instanceof PointerEvent ? event : undefined;
         const keyboard = event instanceof KeyboardEvent ? event : undefined;
         const control = target instanceof HTMLInputElement ||

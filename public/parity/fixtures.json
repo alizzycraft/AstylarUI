@@ -737,5 +737,12 @@
     "category": "forms-interactive",
     "expectedBehavior": "Enter in a focused single-line field synthesizes the form submit button click and submit while retaining field focus.",
     "interactionStepCount": 2
+  },
+  {
+    "id": "interaction-hover-style",
+    "title": "Authored hover-state paint",
+    "category": "controls-states",
+    "expectedBehavior": "Pointer enter applies authored hover paint and pointer leave restores normal paint with browser-order boundary events.",
+    "interactionStepCount": 2
   }
 ]
