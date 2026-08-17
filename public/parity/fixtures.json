@@ -639,5 +639,12 @@
     "category": "forms-interactive",
     "expectedBehavior": "A real primary-pointer activation targets the authored button and reports pointerdown, pointerup, and click once in browser order.",
     "interactionStepCount": 1
+  },
+  {
+    "id": "interaction-focus-navigation",
+    "title": "Focus and keyboard navigation",
+    "category": "forms-interactive",
+    "expectedBehavior": "Pointer focus, forward and reverse Tab navigation, disabled-control skipping, and outside-click blur report the same focus and event order as the browser.",
+    "interactionStepCount": 4
   }
 ]

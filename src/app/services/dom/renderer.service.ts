@@ -23,6 +23,7 @@ import { BabylonMeshService } from "../babylon-mesh.service";
 import { BabylonElementManagerService } from "./element-manager.service";
 import { BabylonInteractionService } from "./interaction.service";
 import { DOMAncestryService } from "./dom-ancestry.service";
+import { InputElementService } from "./input/input-element.service";
 
 @Injectable({
   providedIn: "root",
@@ -49,6 +50,7 @@ export class BabylonDOMRendererService {
     private elementManager: BabylonElementManagerService,
     private interactionService: BabylonInteractionService,
     private ancestry: DOMAncestryService,
+    private inputElementService: InputElementService,
   ) {}
 
   public get dom(): BabylonDOM {
@@ -138,6 +140,7 @@ export class BabylonDOMRendererService {
     // Clear existing elements and state. Cached text textures reference the
     // meshes being replaced and must not survive into the next full rebuild.
     this.textRenderingService.clearCache();
+    this.inputElementService.cleanup();
     this.elementManager.clearAll();
     this.interactionService.clearAllInteractions();
     this.ancestry.clear();
@@ -872,6 +875,7 @@ export class BabylonDOMRendererService {
   }
 
   cleanup(): void {
+    this.inputElementService.cleanup();
     this.elementManager.clearAll();
     this.interactionService.clearAllInteractions();
     this.scene = undefined;

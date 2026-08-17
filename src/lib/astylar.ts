@@ -36,6 +36,7 @@ import { BabylonElementManagerService } from '../app/services/dom/element-manage
 import { AstylarInteractionRuntime } from './astylar-interaction-runtime';
 import type { AstylarInteractionSnapshot } from './astylar-interaction-runtime';
 import type { AstylarEventOptions, AstylarEventState } from './astylar-event';
+import { InputElementService } from '../app/services/dom/input/input-element.service';
 
 /**
  * Configuration options for rendering
@@ -64,6 +65,7 @@ export class Astylar {
   private styleDefaultsService = inject(StyleDefaultsService);
   private imageResources = inject(ImageResourceService);
   private elementManager = inject(BabylonElementManagerService);
+  private inputElementService = inject(InputElementService);
   private readonly sessions = new WeakMap<Scene, AstylarRenderSession>();
   private readonly sceneResources = new WeakMap<Scene, AstylarSceneResources>();
   private readonly interactions = new WeakMap<Scene, AstylarInteractionRuntime>();
@@ -270,6 +272,24 @@ export class Astylar {
       siteData,
       options?.events,
       (elementId) => this.getLiveEventState(elementId),
+      {
+        getFocusedElementId: () => this.inputElementService.getFocusedElementId(),
+        focus: (elementId) => {
+          const input = this.inputElementService.getInputElement(elementId);
+          if (!input || input.disabled) return false;
+          this.inputElementService.focusInputElement(input);
+          return true;
+        },
+        blur: (elementId) => {
+          const input = this.inputElementService.getInputElement(elementId);
+          if (!input) return false;
+          this.inputElementService.blurInputElement(input);
+          return true;
+        },
+        handleKeyDown: (elementId, event) => {
+          this.inputElementService.handleFocusedKeyDown(elementId, event);
+        },
+      },
     );
     this.interactions.set(scene, interaction);
     session.addCleanup(() => interaction.dispose());

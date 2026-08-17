@@ -109,4 +109,88 @@ describe('AstylarInteractionRuntime', () => {
     scene.dispose();
     engine.dispose();
   });
+
+  it('owns keyboard navigation and emits browser-order focus events', () => {
+    const engine = new NullEngine();
+    const scene = new Scene(engine);
+    const first = MeshBuilder.CreatePlane('first-mesh', {}, scene);
+    first.metadata = { elementId: 'first' };
+    const canvas = document.createElement('canvas');
+    const events: AstylarEventSnapshot[] = [];
+    let focusedElementId: string | undefined;
+    const handledKeys: string[] = [];
+    const siteData: SiteData = {
+      styles: [],
+      root: {
+        children: [
+          { type: 'button', id: 'first', textContent: 'First' },
+          { type: 'button', id: 'disabled', textContent: 'Disabled', disabled: true },
+          { type: 'button', id: 'second', textContent: 'Second' },
+        ],
+      },
+    };
+    const runtime = new AstylarInteractionRuntime(
+      scene,
+      siteData,
+      { onEvent: (event) => events.push(event) },
+      undefined,
+      {
+        getFocusedElementId: () => focusedElementId,
+        focus: (elementId) => {
+          focusedElementId = elementId;
+          return true;
+        },
+        blur: (elementId) => {
+          if (focusedElementId === elementId) focusedElementId = undefined;
+          return true;
+        },
+        handleKeyDown: (_elementId, event) => handledKeys.push(event.key),
+      },
+      canvas,
+    );
+    const pointerEvent = new PointerEvent('pointerdown', { button: 0 });
+
+    scene.onPointerObservable.notifyObservers({
+      type: PointerEventTypes.POINTERDOWN,
+      event: pointerEvent,
+      pickInfo: { pickedMesh: first },
+    } as unknown as PointerInfo);
+    scene.onPointerObservable.notifyObservers({
+      type: PointerEventTypes.POINTERUP,
+      event: pointerEvent,
+      pickInfo: { pickedMesh: first },
+    } as unknown as PointerInfo);
+    canvas.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', code: 'Tab' }));
+    canvas.dispatchEvent(new KeyboardEvent('keydown', { key: 'a', code: 'KeyA' }));
+
+    expect(events.map((event) => `${event.type}:${event.targetId}`)).toEqual([
+      'pointerdown:first',
+      'focus:first',
+      'pointerup:first',
+      'click:first',
+      'keydown:first',
+      'blur:first',
+      'focus:second',
+      'keydown:second',
+    ]);
+    expect(focusedElementId).toBe('second');
+    expect(handledKeys).toEqual(['a']);
+    expect(runtime.snapshot.keyboardListeners).toBe(1);
+
+    scene.onPointerObservable.notifyObservers({
+      type: PointerEventTypes.POINTERDOWN,
+      event: pointerEvent,
+      pickInfo: undefined,
+    } as unknown as PointerInfo);
+    expect(events.at(-1)?.type).toBe('blur');
+    expect(events.at(-1)?.targetId).toBe('second');
+    expect(focusedElementId).toBeUndefined();
+
+    runtime.dispose();
+    canvas.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', code: 'Tab' }));
+    expect(runtime.snapshot.keyboardListeners).toBe(0);
+    expect(events.length).toBe(9);
+    scene.dispose();
+    engine.dispose();
+  });
 });

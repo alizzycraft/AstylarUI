@@ -153,8 +153,10 @@ export class AstylarEventDispatcher {
   getElementState(elementId: string): AstylarEventState {
     const element = this.elements.get(elementId)?.element;
     if (!element) return {};
+    const valueBearing = element.type === 'input' || element.type === 'button' ||
+      element.type === 'select' || element.type === 'textarea' || element.type === 'option';
     return {
-      value: element.value ?? element.textContent,
+      value: valueBearing ? element.value ?? element.textContent : undefined,
       checked: element.checked,
       selectedValue: element.type === 'select' ? element.value : undefined,
     };

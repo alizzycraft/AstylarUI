@@ -433,17 +433,6 @@ export class ElementCreationService {
       dom.actions.handleTextContent(dom, render, element, mesh, styles);
     }
 
-    // Attach input events if it's an input element
-    const foundInputElement = dom.context.inputElements.get(
-      element.id || mesh.name,
-    );
-    if (foundInputElement && render.scene) {
-      this.inputElementService.attachInputEvents(
-        foundInputElement,
-        render.scene,
-      );
-    }
-
     return mesh;
   }
 

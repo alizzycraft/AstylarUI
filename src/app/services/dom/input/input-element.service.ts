@@ -34,9 +34,7 @@ export class InputElementService {
         private formValidator: FormValidatorService,
         private formManager: FormManager,
         private cameraService: BabylonCameraService
-    ) {
-        this.setupGlobalKeyboardListener();
-    }
+    ) { }
 
     /**
      * Creates an input element based on type
@@ -91,7 +89,6 @@ export class InputElementService {
         // Attach input events (click to focus, etc.)
         if (render.scene) {
             this.attachInputEvents(inputElement, render.scene);
-            this.ensureGlobalBlurListener(render.scene);
         }
 
         // Add validation rules if specified
@@ -232,6 +229,26 @@ export class InputElementService {
         return Array.from(this.inputElements.values());
     }
 
+    /** Gets the authored ID of the currently focused input, if any. */
+    getFocusedElementId(): string | undefined {
+        return this.focusManager.getFocusedElement()?.element.id;
+    }
+
+    /** Applies the native keyboard default action after public event dispatch. */
+    handleFocusedKeyDown(elementId: string, event: KeyboardEvent): void {
+        const focusedElement = this.focusManager.getFocusedElement();
+        if (!focusedElement || focusedElement.element.id !== elementId) return;
+
+        const scene = focusedElement.mesh.getScene();
+        const render: BabylonRender = {
+            scene,
+            actions: { camera: this.cameraService },
+            engine: scene.getEngine(),
+            canvas: scene.getEngine().getRenderingCanvas()
+        } as any;
+        this.handleKeyboardInput(event, render, focusedElement.style);
+    }
+
     /**
      * Determines input type from element
      */
@@ -278,39 +295,6 @@ export class InputElementService {
             case 'select': return InputType.Select;
             case 'textarea': return InputType.Textarea;
             default: return null;
-        }
-    }
-
-    /**
-     * Sets up global keyboard listener
-     */
-    private setupGlobalKeyboardListener(): void {
-        if (typeof window !== 'undefined') {
-            window.addEventListener('keydown', (event) => {
-                const focusedElement = this.focusManager.getFocusedElement();
-                if (focusedElement) {
-                    // Prevent default browser behavior for input elements
-                    this.keyboardHandler.preventEventPropagation(event);
-
-                    // Construct proper BabylonRender object
-                    const scene = focusedElement.mesh.getScene();
-                    const render: BabylonRender = {
-                        scene: scene,
-                        actions: {
-                            camera: this.cameraService
-                        },
-                        engine: scene.getEngine(),
-                        canvas: scene.getEngine().getRenderingCanvas()
-                    } as any;
-
-                    // Handle keyboard input
-                    this.handleKeyboardInput(
-                        event,
-                        render,
-                        focusedElement.style
-                    );
-                }
-            });
         }
     }
 
@@ -399,93 +383,14 @@ export class InputElementService {
             )
         );
 
-        // Add hover effects for buttons
-        if (inputElement.type === InputType.Button || inputElement.type === InputType.Submit) {
-            inputElement.mesh.actionManager.registerAction(
-                new BABYLON.ExecuteCodeAction(
-                    BABYLON.ActionManager.OnPointerOverTrigger,
-                    () => {
-                        if (!inputElement.disabled) {
-                            this.buttonManager.handleButtonHover(inputElement as Button, true);
-                        }
-                    }
-                )
-            );
-
-            inputElement.mesh.actionManager.registerAction(
-                new BABYLON.ExecuteCodeAction(
-                    BABYLON.ActionManager.OnPointerOutTrigger,
-                    () => {
-                        if (!inputElement.disabled) {
-                            this.buttonManager.handleButtonHover(inputElement as Button, false);
-                        }
-                    }
-                )
-            );
-        }
-    }
-
-    private globalBlurListenerAttached = false;
-
-    /**
-     * Ensures a global listener is attached to handle blur on click-outside
-     */
-    private ensureGlobalBlurListener(scene: BABYLON.Scene): void {
-        if (this.globalBlurListenerAttached) return;
-
-        scene.onPointerObservable.add((pointerInfo) => {
-            if (pointerInfo.type === BABYLON.PointerEventTypes.POINTERDOWN) {
-                const focusedElement = this.focusManager.getFocusedElement();
-
-                // If nothing is focused, nothing to do
-                if (!focusedElement) return;
-
-                const pickedMesh = pointerInfo.pickInfo?.pickedMesh;
-
-                // Check if we clicked on the focused element or any of its descendants
-                let isClickOnFocusedElement = false;
-
-                if (pickedMesh) {
-                    // Check direct match
-                    if (pickedMesh === focusedElement.mesh) {
-                        isClickOnFocusedElement = true;
-                    }
-                    // Check if it's the text mesh or cursor mesh associated with the input
-                    // Using metadata or parent hierarchy
-                    else if (pickedMesh.isDescendantOf(focusedElement.mesh)) {
-                        isClickOnFocusedElement = true;
-                    }
-                    // Check specific components referencing the input (like text mesh which is parented)
-                    else if (focusedElement.type === InputType.Text ||
-                        focusedElement.type === InputType.Password ||
-                        focusedElement.type === InputType.Email ||
-                        focusedElement.type === InputType.Number ||
-                        focusedElement.type === InputType.Textarea) {
-                        const textInput = focusedElement as TextInput;
-                        if (pickedMesh === textInput.textMesh || pickedMesh === textInput.cursorMesh) {
-                            isClickOnFocusedElement = true;
-                        }
-                    }
-                }
-
-                // If click was NOT on the focused element, blur it
-                if (!isClickOnFocusedElement) {
-                    // console.log('[GlobalBlur] Click outside focused element detected. Blurring:', focusedElement.element.id);
-                    this.blurInputElement(focusedElement);
-                }
-            }
-        });
-
-        this.globalBlurListenerAttached = true;
     }
 
     /**
      * Cleanup all resources
      */
     cleanup(): void {
+        this.focusManager.cleanup();
         this.inputElements.forEach(input => this.disposeInputElement(input));
         this.inputElements.clear();
-        this.focusManager.cleanup();
-        this.globalBlurListenerAttached = false;
     }
 }

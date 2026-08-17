@@ -19,10 +19,18 @@ export interface AstylarInteractionSnapshot {
   handlers: number;
   pressedElementId?: string;
   hoveredElementId?: string;
+  focusedElementId?: string;
   disposed: boolean;
 }
 
 export type AstylarInteractionStateProvider = (elementId: string) => AstylarEventState;
+
+export interface AstylarInteractionControlAdapter {
+  getFocusedElementId(): string | undefined;
+  focus(elementId: string): boolean;
+  blur(elementId: string): boolean;
+  handleKeyDown(elementId: string, event: KeyboardEvent): void;
+}
 
 /** Owns the Babylon observers for one scene and emits a small DOM-like event subset. */
 export class AstylarInteractionRuntime {
@@ -31,37 +39,53 @@ export class AstylarInteractionRuntime {
   private pressedElementId?: string;
   private hoveredElementId?: string;
   private disposed = false;
+  private readonly canvas: HTMLCanvasElement | null;
+  private focusOrder: string[] = [];
 
   constructor(
     private readonly scene: Scene,
     siteData: SiteData,
     options: AstylarEventOptions = {},
     private readonly getLiveState?: AstylarInteractionStateProvider,
+    private readonly controls?: AstylarInteractionControlAdapter,
+    canvasOverride?: HTMLCanvasElement,
   ) {
     this.dispatcher = new AstylarEventDispatcher(siteData, options);
+    this.focusOrder = this.buildFocusOrder(siteData);
     this.pointerObserver = scene.onPointerObservable.add((pointerInfo) => {
       this.handlePointer(pointerInfo);
     });
+    this.canvas = canvasOverride ?? scene.getEngine().getRenderingCanvas();
+    if (this.canvas) {
+      if (this.canvas.tabIndex < 0) this.canvas.tabIndex = 0;
+      this.canvas.addEventListener('keydown', this.handleKeyDown);
+    }
   }
 
   get snapshot(): AstylarInteractionSnapshot {
     return {
       pointerObservers: this.pointerObserver ? 1 : 0,
-      keyboardListeners: 0,
+      keyboardListeners: this.canvas && !this.disposed ? 1 : 0,
       handlers: this.dispatcher.handlerCount,
       pressedElementId: this.pressedElementId,
       hoveredElementId: this.hoveredElementId,
+      focusedElementId: this.controls?.getFocusedElementId(),
       disposed: this.disposed,
     };
   }
 
   setSiteData(siteData: SiteData): void {
     this.dispatcher.setSiteData(siteData);
+    this.focusOrder = this.buildFocusOrder(siteData);
     if (this.pressedElementId && !this.dispatcher.hasEnabledTarget(this.pressedElementId)) {
       this.pressedElementId = undefined;
     }
     if (this.hoveredElementId && !this.dispatcher.hasEnabledTarget(this.hoveredElementId)) {
       this.hoveredElementId = undefined;
+    }
+    const focusedElementId = this.controls?.getFocusedElementId();
+    if (focusedElementId && !this.focusOrder.includes(focusedElementId)) {
+      this.setFocus(undefined);
     }
   }
 
@@ -72,6 +96,7 @@ export class AstylarInteractionRuntime {
       this.scene.onPointerObservable.remove(this.pointerObserver);
       this.pointerObserver = null;
     }
+    this.canvas?.removeEventListener('keydown', this.handleKeyDown);
     this.pressedElementId = undefined;
     this.hoveredElementId = undefined;
   }
@@ -84,12 +109,23 @@ export class AstylarInteractionRuntime {
       return;
     }
     if (pointerInfo.type === PointerEventTypes.POINTERDOWN) {
-      if (!targetId || !this.dispatcher.hasEnabledTarget(targetId)) {
+      if (!targetId) {
         this.pressedElementId = undefined;
+        this.canvas?.focus();
+        this.setFocus(undefined);
+        return;
+      }
+      if (!this.dispatcher.hasEnabledTarget(targetId)) {
+        this.pressedElementId = undefined;
+        this.setFocus(undefined);
         return;
       }
       this.pressedElementId = targetId;
-      this.dispatchPointer('pointerdown', targetId, pointerInfo);
+      const dispatched = this.dispatchPointer('pointerdown', targetId, pointerInfo);
+      if (!dispatched?.defaultPrevented) {
+        this.canvas?.focus();
+        this.setFocus(this.focusOrder.includes(targetId) ? targetId : undefined);
+      }
       return;
     }
     if (pointerInfo.type === PointerEventTypes.POINTERUP) {
@@ -118,13 +154,13 @@ export class AstylarInteractionRuntime {
     type: AstylarEventType,
     targetId: string,
     pointerInfo: PointerInfo,
-  ): void {
+  ) {
     const nativeEvent = pointerInfo.event as PointerEvent | MouseEvent | undefined;
     const state = {
       ...this.dispatcher.getElementState(targetId),
       ...this.getLiveState?.(targetId),
     };
-    this.dispatcher.dispatch({
+    return this.dispatcher.dispatch({
       type,
       targetId,
       ...state,
@@ -133,6 +169,100 @@ export class AstylarInteractionRuntime {
         ? nativeEvent.pointerType || 'mouse'
         : 'mouse',
     });
+  }
+
+  private readonly handleKeyDown = (event: KeyboardEvent): void => {
+    if (this.disposed) return;
+    const targetId = this.controls?.getFocusedElementId();
+    if (!targetId) return;
+    const state = {
+      ...this.dispatcher.getElementState(targetId),
+      ...this.getLiveState?.(targetId),
+    };
+    const dispatched = this.dispatcher.dispatch({
+      type: 'keydown',
+      targetId,
+      ...state,
+      key: event.key,
+      code: event.code,
+      shiftKey: event.shiftKey,
+      ctrlKey: event.ctrlKey,
+      altKey: event.altKey,
+      metaKey: event.metaKey,
+    });
+    if (dispatched?.propagationStopped) event.stopPropagation();
+    if (dispatched?.defaultPrevented) {
+      event.preventDefault();
+      return;
+    }
+    if (event.key === 'Tab') {
+      event.preventDefault();
+      this.moveFocus(event.shiftKey ? -1 : 1);
+      return;
+    }
+    this.controls?.handleKeyDown(targetId, event);
+  };
+
+  private moveFocus(direction: -1 | 1): void {
+    if (!this.focusOrder.length) return;
+    const current = this.controls?.getFocusedElementId();
+    const currentIndex = current ? this.focusOrder.indexOf(current) : -1;
+    const nextIndex = direction === 1
+      ? (currentIndex + 1 + this.focusOrder.length) % this.focusOrder.length
+      : (currentIndex <= 0 ? this.focusOrder.length - 1 : currentIndex - 1);
+    this.setFocus(this.focusOrder[nextIndex]);
+  }
+
+  private setFocus(elementId: string | undefined): void {
+    const previous = this.controls?.getFocusedElementId();
+    if (previous === elementId) return;
+    if (previous && this.controls?.blur(previous)) {
+      this.dispatcher.dispatch({
+        type: 'blur',
+        targetId: previous,
+        ...this.liveState(previous),
+      });
+    }
+    if (elementId && this.controls?.focus(elementId)) {
+      this.dispatcher.dispatch({
+        type: 'focus',
+        targetId: elementId,
+        ...this.liveState(elementId),
+      });
+    }
+  }
+
+  private liveState(elementId: string): AstylarEventState {
+    return {
+      ...this.dispatcher.getElementState(elementId),
+      ...this.getLiveState?.(elementId),
+    };
+  }
+
+  private buildFocusOrder(siteData: SiteData): string[] {
+    const entries: Array<{ id: string; tabIndex: number; order: number }> = [];
+    let order = 0;
+    const visit = (element: SiteData['root']['children'][number]): void => {
+      const currentOrder = order++;
+      const focusable = element.type === 'input' || element.type === 'button' ||
+        element.type === 'select' || element.type === 'textarea' ||
+        (element.type === 'a' && !!element.href);
+      const tabIndex = element.tabindex ?? 0;
+      if (element.id && focusable && !element.disabled && !element.hidden && tabIndex >= 0) {
+        entries.push({ id: element.id, tabIndex, order: currentOrder });
+      }
+      element.children?.forEach(visit);
+    };
+    siteData.root.children.forEach(visit);
+    return entries
+      .sort((left, right) => {
+        const leftGroup = left.tabIndex > 0 ? 0 : 1;
+        const rightGroup = right.tabIndex > 0 ? 0 : 1;
+        return leftGroup - rightGroup ||
+          (leftGroup === 0 ? left.tabIndex - right.tabIndex : 0) ||
+          left.order - right.order;
+      })
+      .map((entry) => entry.id);
   }
 
   private resolveElementId(mesh: AbstractMesh | undefined): string | undefined {

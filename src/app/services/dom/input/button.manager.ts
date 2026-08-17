@@ -17,7 +17,6 @@ import { CONTROL_CONTENT_Z_OFFSET } from '../render-depth.constants';
 })
 export class ButtonManager {
     private readonly PRESS_OFFSET = 0.05; // Visual press down effect
-    private readonly STATE_TRANSITION_MS = 100;
 
     constructor(
         private textRenderingService: TextRenderingService,
@@ -85,15 +84,7 @@ export class ButtonManager {
      */
     handleButtonClick(button: Button): void {
         if (button.disabled) return;
-
-        // Visual feedback - press state
-        this.updateButtonState(button, ButtonState.Pressed);
-
-        // Execute action after brief delay for visual feedback
-        setTimeout(() => {
-            this.updateButtonState(button, button.focused ? ButtonState.Focused : ButtonState.Normal);
-            this.executeButtonAction(button);
-        }, this.STATE_TRANSITION_MS);
+        this.executeButtonAction(button);
     }
 
     /**

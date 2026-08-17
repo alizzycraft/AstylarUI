@@ -295,7 +295,7 @@ export class ParityReferenceComponent {
           button: pointer?.button,
           pointerType: pointer?.pointerType,
         });
-      });
+      }, type === 'focus' || type === 'blur' || type === 'pointerenter' || type === 'pointerleave');
     }
   }
 
