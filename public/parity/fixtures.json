@@ -581,5 +581,11 @@
     "title": "Intrinsic minmax grid rows",
     "category": "grid",
     "expectedBehavior": "Height-auto Grid rows with min-content or auto minima and flexible maxima use measurable content bases while retaining their fractional proportions."
+  },
+  {
+    "id": "grid-auto-nested-composite",
+    "title": "Auto grid row with nested application content",
+    "category": "grid",
+    "expectedBehavior": "A height-auto Grid row recursively includes a nested Grid card containing wrapped block text, controls, and an explicitly sized image."
   }
 ]
