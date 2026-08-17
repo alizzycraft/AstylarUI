@@ -295,6 +295,10 @@ export class ParityReferenceComponent {
           button: pointer?.button,
           pointerType: pointer?.pointerType,
         });
+        // Keep the parity page measurable after observing an otherwise-uncancelled
+        // browser submission. Record first so defaultPrevented still reflects the
+        // application-visible event state at this boundary.
+        if (type === 'submit') event.preventDefault();
       }, type === 'focus' || type === 'blur' || type === 'pointerenter' || type === 'pointerleave');
     }
   }

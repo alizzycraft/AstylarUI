@@ -766,4 +766,82 @@ describe('AstylarInteractionRuntime', () => {
     scene.dispose();
     engine.dispose();
   });
+
+  it('dispatches a cancellable form submit after an accepted submit-button click', () => {
+    const engine = new NullEngine();
+    const scene = new Scene(engine);
+    const buttonMesh = MeshBuilder.CreatePlane('submit-mesh', {}, scene);
+    buttonMesh.metadata = { elementId: 'submit-button' };
+    const canvas = document.createElement('canvas');
+    const events: AstylarEventSnapshot[] = [];
+    let cancelSubmit = false;
+    const runtime = new AstylarInteractionRuntime(
+      scene,
+      {
+        styles: [],
+        root: {
+          children: [{
+            type: 'form', id: 'settings', children: [
+              { type: 'input', inputType: 'text', id: 'name', value: 'Seed' },
+              { type: 'input', inputType: 'submit', id: 'submit-button', value: 'Save' },
+            ],
+          }],
+        },
+      },
+      {
+        handlers: {
+          settings: {
+            submit: (event) => {
+              if (cancelSubmit) event.preventDefault();
+            },
+          },
+        },
+        onEvent: (event) => events.push(event),
+      },
+      () => ({ value: 'Save' }),
+      {
+        getFocusedElementId: () => 'submit-button',
+        focus: () => true,
+        blur: () => true,
+        handleKeyDown: () => undefined,
+        commitsValueOnBlur: () => false,
+      },
+      canvas,
+    );
+    const pointerEvent = new PointerEvent('pointerdown', { button: 0 });
+    const click = (): void => {
+      scene.onPointerObservable.notifyObservers({
+        type: PointerEventTypes.POINTERDOWN,
+        event: pointerEvent,
+        pickInfo: { pickedMesh: buttonMesh },
+      } as unknown as PointerInfo);
+      scene.onPointerObservable.notifyObservers({
+        type: PointerEventTypes.POINTERUP,
+        event: pointerEvent,
+        pickInfo: { pickedMesh: buttonMesh },
+      } as unknown as PointerInfo);
+    };
+
+    click();
+
+    expect(events.map((event) => `${event.type}:${event.targetId}`)).toEqual([
+      'pointerdown:submit-button',
+      'pointerup:submit-button',
+      'click:submit-button',
+      'submit:settings',
+    ]);
+    expect(events.at(-1)?.defaultPrevented).toBeFalse();
+
+    cancelSubmit = true;
+    events.length = 0;
+    click();
+    expect(events.map((event) => event.type)).toEqual([
+      'pointerdown', 'pointerup', 'click', 'submit',
+    ]);
+    expect(events.at(-1)?.defaultPrevented).toBeTrue();
+
+    runtime.dispose();
+    scene.dispose();
+    engine.dispose();
+  });
 });

@@ -47,7 +47,7 @@ export interface AstylarInteractionControlAdapter {
 interface AstylarFormDefault {
   formId: string;
   controlIds: readonly string[];
-  type: 'reset';
+  type: 'reset' | 'submit';
 }
 
 /** Owns the Babylon observers for one scene and emits a small DOM-like event subset. */
@@ -427,25 +427,28 @@ export class AstylarInteractionRuntime {
     const defaults = new Map<string, AstylarFormDefault>();
     const visit = (
       element: SiteData['root']['children'][number],
-      currentForm?: { id: string; controlIds: string[]; resetIds: string[] },
+      currentForm?: { id: string; controlIds: string[]; buttonDefaults: Map<string, 'reset' | 'submit'> },
     ): void => {
       let form = currentForm;
       if (element.type === 'form' && element.id) {
-        form = { id: element.id, controlIds: [], resetIds: [] };
+        form = { id: element.id, controlIds: [], buttonDefaults: new Map() };
       }
       if (form && element.id &&
           (element.type === 'input' || element.type === 'button' ||
             element.type === 'select' || element.type === 'textarea')) {
         form.controlIds.push(element.id);
-        if (element.inputType?.toLowerCase() === 'reset') form.resetIds.push(element.id);
+        const buttonType = element.inputType?.toLowerCase();
+        if (buttonType === 'reset' || buttonType === 'submit') {
+          form.buttonDefaults.set(element.id, buttonType);
+        }
       }
       element.children?.forEach((child) => visit(child, form));
       if (element.type === 'form' && form && form.id === element.id) {
-        for (const resetId of form.resetIds) {
-          defaults.set(resetId, {
+        for (const [buttonId, type] of form.buttonDefaults) {
+          defaults.set(buttonId, {
             formId: form.id,
             controlIds: [...form.controlIds],
-            type: 'reset',
+            type,
           });
         }
       }
@@ -456,7 +459,11 @@ export class AstylarInteractionRuntime {
 
   private performFormDefault(buttonId: string): void {
     const action = this.formDefaults.get(buttonId);
-    if (!action || action.type !== 'reset') return;
+    if (!action) return;
+    if (action.type === 'submit') {
+      this.dispatcher.dispatch({ type: 'submit', targetId: action.formId });
+      return;
+    }
     const reset = this.dispatcher.dispatch({ type: 'reset', targetId: action.formId });
     if (!reset?.defaultPrevented) this.controls?.resetFormControls?.(action.controlIds);
   }

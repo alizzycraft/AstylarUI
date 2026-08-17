@@ -716,5 +716,12 @@
     "category": "forms-interactive",
     "expectedBehavior": "A reset button emits click then reset and restores authored text and checked defaults without input or change events for the restored values.",
     "interactionStepCount": 4
+  },
+  {
+    "id": "interaction-form-submit",
+    "title": "Form submission default action",
+    "category": "forms-interactive",
+    "expectedBehavior": "Pointer and Enter activation of a submit button emit click then submit on its containing form after edited text commits.",
+    "interactionStepCount": 4
   }
 ]
