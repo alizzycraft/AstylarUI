@@ -293,6 +293,8 @@ export class Astylar {
           this.inputElementService.commitsValueOnBlur(elementId),
         activate: (elementId) =>
           this.inputElementService.activateInputElement(elementId),
+        canActivateWithSpace: (elementId) =>
+          this.inputElementService.canActivateWithSpace(elementId),
       },
     );
     this.interactions.set(scene, interaction);

@@ -67,6 +67,7 @@ export type ParityInteractionEventType =
   | 'focus'
   | 'blur'
   | 'keydown'
+  | 'keyup'
   | 'input'
   | 'change'
   | 'submit'

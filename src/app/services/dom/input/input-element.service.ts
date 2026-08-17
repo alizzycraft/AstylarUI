@@ -289,6 +289,12 @@ export class InputElementService {
         return undefined;
     }
 
+    canActivateWithSpace(elementId: string): boolean {
+        const input = this.inputElements.get(elementId);
+        return !!input && !input.disabled &&
+            (input.type === InputType.Checkbox || input.type === InputType.Radio);
+    }
+
     /**
      * Determines input type from element
      */

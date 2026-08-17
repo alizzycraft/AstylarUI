@@ -10,6 +10,7 @@ export type AstylarEventType =
   | 'focus'
   | 'blur'
   | 'keydown'
+  | 'keyup'
   | 'input'
   | 'change'
   | 'submit'

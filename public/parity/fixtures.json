@@ -674,5 +674,12 @@
     "category": "forms-interactive",
     "expectedBehavior": "Clicking a different radio selects it and clears its group peer before click, while clicking the selected radio again emits no input or change.",
     "interactionStepCount": 3
+  },
+  {
+    "id": "interaction-checkbox-keyboard",
+    "title": "Checkbox Space-key activation",
+    "category": "forms-interactive",
+    "expectedBehavior": "Space on a focused checkbox reports keydown and keyup before a synthesized click, then emits input and change with the toggled checked state.",
+    "interactionStepCount": 2
   }
 ]

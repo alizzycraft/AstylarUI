@@ -37,6 +37,7 @@ export interface AstylarInteractionControlAdapter {
   handleKeyDown(elementId: string, event: KeyboardEvent): void;
   commitsValueOnBlur(elementId: string): boolean;
   activate?(elementId: string): AstylarControlActivation | undefined;
+  canActivateWithSpace?(elementId: string): boolean;
 }
 
 /** Owns the Babylon observers for one scene and emits a small DOM-like event subset. */
@@ -49,6 +50,7 @@ export class AstylarInteractionRuntime {
   private readonly canvas: HTMLCanvasElement | null;
   private focusOrder: string[] = [];
   private focusedValueAtEntry?: string;
+  private pendingSpaceActivationId?: string;
 
   constructor(
     private readonly scene: Scene,
@@ -67,13 +69,14 @@ export class AstylarInteractionRuntime {
     if (this.canvas) {
       if (this.canvas.tabIndex < 0) this.canvas.tabIndex = 0;
       this.canvas.addEventListener('keydown', this.handleKeyDown);
+      this.canvas.addEventListener('keyup', this.handleKeyUp);
     }
   }
 
   get snapshot(): AstylarInteractionSnapshot {
     return {
       pointerObservers: this.pointerObserver ? 1 : 0,
-      keyboardListeners: this.canvas && !this.disposed ? 1 : 0,
+      keyboardListeners: this.canvas && !this.disposed ? 2 : 0,
       handlers: this.dispatcher.handlerCount,
       pressedElementId: this.pressedElementId,
       hoveredElementId: this.hoveredElementId,
@@ -105,8 +108,10 @@ export class AstylarInteractionRuntime {
       this.pointerObserver = null;
     }
     this.canvas?.removeEventListener('keydown', this.handleKeyDown);
+    this.canvas?.removeEventListener('keyup', this.handleKeyUp);
     this.pressedElementId = undefined;
     this.hoveredElementId = undefined;
+    this.pendingSpaceActivationId = undefined;
   }
 
   private handlePointer(pointerInfo: PointerInfo): void {
@@ -139,15 +144,7 @@ export class AstylarInteractionRuntime {
     if (pointerInfo.type === PointerEventTypes.POINTERUP) {
       if (targetId) this.dispatchPointer('pointerup', targetId, pointerInfo);
       if (targetId && targetId === this.pressedElementId) {
-        const activation = this.controls?.activate?.(targetId);
-        const click = this.dispatchPointer('click', targetId, pointerInfo);
-        if (click?.defaultPrevented) {
-          activation?.rollback();
-        } else if (activation?.changed) {
-          const state = this.liveState(targetId);
-          this.dispatcher.dispatch({ type: 'input', targetId, ...state });
-          this.dispatcher.dispatch({ type: 'change', targetId, ...state });
-        }
+        this.activateAndClick(targetId, pointerInfo);
       }
       this.pressedElementId = undefined;
     }
@@ -216,6 +213,11 @@ export class AstylarInteractionRuntime {
       this.moveFocus(event.shiftKey ? -1 : 1);
       return;
     }
+    if (event.key === ' ' && this.controls?.canActivateWithSpace?.(targetId)) {
+      event.preventDefault();
+      this.pendingSpaceActivationId = targetId;
+      return;
+    }
     const before = this.liveState(targetId);
     this.controls?.handleKeyDown(targetId, event);
     const after = this.liveState(targetId);
@@ -229,6 +231,52 @@ export class AstylarInteractionRuntime {
       });
     }
   };
+
+  private readonly handleKeyUp = (event: KeyboardEvent): void => {
+    if (this.disposed) return;
+    const targetId = this.controls?.getFocusedElementId();
+    if (!targetId) return;
+    const state = this.liveState(targetId);
+    const dispatched = this.dispatcher.dispatch({
+      type: 'keyup',
+      targetId,
+      ...state,
+      key: event.key,
+      code: event.code,
+      shiftKey: event.shiftKey,
+      ctrlKey: event.ctrlKey,
+      altKey: event.altKey,
+      metaKey: event.metaKey,
+    });
+    if (dispatched?.propagationStopped) event.stopPropagation();
+    if (dispatched?.defaultPrevented) event.preventDefault();
+
+    const shouldActivate = event.key === ' ' &&
+      this.pendingSpaceActivationId === targetId &&
+      !dispatched?.defaultPrevented;
+    this.pendingSpaceActivationId = undefined;
+    if (shouldActivate) this.activateAndClick(targetId);
+  };
+
+  private activateAndClick(targetId: string, pointerInfo?: PointerInfo): void {
+    const activation = this.controls?.activate?.(targetId);
+    const click = pointerInfo
+      ? this.dispatchPointer('click', targetId, pointerInfo)
+      : this.dispatcher.dispatch({
+          type: 'click',
+          targetId,
+          ...this.liveState(targetId),
+          button: 0,
+          pointerType: '',
+        });
+    if (click?.defaultPrevented) {
+      activation?.rollback();
+    } else if (activation?.changed) {
+      const state = this.liveState(targetId);
+      this.dispatcher.dispatch({ type: 'input', targetId, ...state });
+      this.dispatcher.dispatch({ type: 'change', targetId, ...state });
+    }
+  }
 
   private moveFocus(direction: -1 | 1): void {
     if (!this.focusOrder.length) return;

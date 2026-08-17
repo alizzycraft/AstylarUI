@@ -176,7 +176,7 @@ describe('AstylarInteractionRuntime', () => {
     ]);
     expect(focusedElementId).toBe('second');
     expect(handledKeys).toEqual(['a']);
-    expect(runtime.snapshot.keyboardListeners).toBe(1);
+    expect(runtime.snapshot.keyboardListeners).toBe(2);
 
     scene.onPointerObservable.notifyObservers({
       type: PointerEventTypes.POINTERDOWN,
@@ -277,6 +277,7 @@ describe('AstylarInteractionRuntime', () => {
     const events: AstylarEventSnapshot[] = [];
     let checked = false;
     let cancelClick = false;
+    let cancelKeydown = false;
     let focusedElementId: string | undefined;
     const runtime = new AstylarInteractionRuntime(
       scene,
@@ -286,7 +287,10 @@ describe('AstylarInteractionRuntime', () => {
       },
       {
         handlers: {
-          alerts: { click: (event) => { if (cancelClick) event.preventDefault(); } },
+          alerts: {
+            click: (event) => { if (cancelClick) event.preventDefault(); },
+            keydown: (event) => { if (cancelKeydown) event.preventDefault(); },
+          },
         },
         onEvent: (event) => events.push(event),
       },
@@ -308,6 +312,7 @@ describe('AstylarInteractionRuntime', () => {
           checked = !checked;
           return { changed: true, rollback: () => { checked = before; } };
         },
+        canActivateWithSpace: () => true,
       },
       canvas,
     );
@@ -353,6 +358,35 @@ describe('AstylarInteractionRuntime', () => {
     ]);
     expect(events.at(-1)?.defaultPrevented).toBeTrue();
     expect(checked).toBeTrue();
+
+    cancelClick = false;
+    canvas.dispatchEvent(new KeyboardEvent('keydown', {
+      key: ' ', code: 'Space', bubbles: true, cancelable: true,
+    }));
+    canvas.dispatchEvent(new KeyboardEvent('keyup', {
+      key: ' ', code: 'Space', bubbles: true, cancelable: true,
+    }));
+
+    expect(events.slice(-5).map((event) => `${event.type}:${event.checked}`)).toEqual([
+      'keydown:true',
+      'keyup:true',
+      'click:false',
+      'input:false',
+      'change:false',
+    ]);
+    expect(checked).toBeFalse();
+
+    cancelKeydown = true;
+    canvas.dispatchEvent(new KeyboardEvent('keydown', {
+      key: ' ', code: 'Space', bubbles: true, cancelable: true,
+    }));
+    canvas.dispatchEvent(new KeyboardEvent('keyup', {
+      key: ' ', code: 'Space', bubbles: true, cancelable: true,
+    }));
+
+    expect(events.slice(-2).map((event) => event.type)).toEqual(['keydown', 'keyup']);
+    expect(events.at(-2)?.defaultPrevented).toBeTrue();
+    expect(checked).toBeFalse();
     runtime.dispose();
     scene.dispose();
     engine.dispose();
