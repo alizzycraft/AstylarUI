@@ -667,5 +667,12 @@
     "category": "forms-interactive",
     "expectedBehavior": "Each primary-pointer click toggles a checkbox before click listeners run, then emits input and change with the new checked state.",
     "interactionStepCount": 2
+  },
+  {
+    "id": "interaction-radio-group",
+    "title": "Radio group pointer activation",
+    "category": "forms-interactive",
+    "expectedBehavior": "Clicking a different radio selects it and clears its group peer before click, while clicking the selected radio again emits no input or change.",
+    "interactionStepCount": 3
   }
 ]

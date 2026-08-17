@@ -55,4 +55,40 @@ describe('InputElementService', () => {
       [checkbox, false],
     ]);
   });
+
+  it('activates and restores every member of a radio group', () => {
+    const alpha = { type: InputType.Radio, groupName: 'channel', checked: true, disabled: false };
+    const beta = { type: InputType.Radio, groupName: 'channel', checked: false, disabled: false };
+    const checkboxManager = {
+      getRadioGroup: () => [alpha, beta],
+      selectRadioButton: jasmine.createSpy('selectRadioButton').and.callFake((selected) => {
+        alpha.checked = selected === alpha;
+        beta.checked = selected === beta;
+      }),
+      setRadioChecked: jasmine.createSpy('setRadioChecked').and.callFake((input, checked) => {
+        input.checked = checked;
+      }),
+    };
+    const service = new InputElementService(
+      {} as never,
+      {} as never,
+      checkboxManager as never,
+      {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
+    );
+    service['inputElements'].set('beta', beta as never);
+
+    const activation = service.activateInputElement('beta');
+
+    expect(activation?.changed).toBeTrue();
+    expect(alpha.checked).toBeFalse();
+    expect(beta.checked).toBeTrue();
+    activation?.rollback();
+    expect(alpha.checked).toBeTrue();
+    expect(beta.checked).toBeFalse();
+  });
 });

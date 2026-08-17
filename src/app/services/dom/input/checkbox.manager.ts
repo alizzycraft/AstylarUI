@@ -102,16 +102,9 @@ export class CheckboxManager {
             radio.labelMesh = this.createLabelMesh(radio, render, style);
         }
 
-        // Set cursor via metadata for global handler
+        // Set cursor metadata; scene-owned interaction applies activation.
         if (radio.mesh) {
             radio.mesh.metadata = { ...radio.mesh.metadata, cursor: 'pointer', isTextMesh: false };
-
-            // Attach interaction to the radio mesh directly
-            radio.mesh.actionManager = new BABYLON.ActionManager(render.scene);
-            radio.mesh.actionManager.registerAction(new BABYLON.ExecuteCodeAction(
-                BABYLON.ActionManager.OnPickTrigger,
-                () => this.selectRadioButton(radio)
-            ));
         }
 
         this.registerRadioButton(radio);
@@ -143,13 +136,16 @@ export class CheckboxManager {
         const group = this.radioGroups.get(radio.groupName);
         if (group) {
             group.forEach(r => {
-                r.checked = false;
-                this.updateSelectionIndicator(r);
+                this.setRadioChecked(r, false);
             });
         }
 
         // Check this one
-        radio.checked = true;
+        this.setRadioChecked(radio, true);
+    }
+
+    setRadioChecked(radio: RadioInput, checked: boolean): void {
+        radio.checked = checked;
         this.updateSelectionIndicator(radio);
     }
 
@@ -309,13 +305,6 @@ export class CheckboxManager {
         indicator.isVisible = radio.checked;
         indicator.renderingGroupId = 0;
 
-        // Add interaction to indicator to ensure it captures clicks
-        indicator.actionManager = new BABYLON.ActionManager(scene);
-        indicator.actionManager.registerAction(new BABYLON.ExecuteCodeAction(
-            BABYLON.ActionManager.OnPickTrigger,
-            () => this.selectRadioButton(radio)
-        ));
-
         // Defensive: Force cursor pointer and disable text mesh inference
         indicator.metadata = { cursor: 'pointer', isTextMesh: false };
 
@@ -388,16 +377,6 @@ export class CheckboxManager {
             }
 
             labelPlane.isPickable = true; // Allow clicking label
-
-            // Radio activation still uses the legacy path until its parity
-            // increment moves it into the scene-owned interaction runtime.
-            if (input.type === InputType.Radio) {
-                labelPlane.actionManager = new BABYLON.ActionManager(render.scene);
-                labelPlane.actionManager.registerAction(new BABYLON.ExecuteCodeAction(
-                    BABYLON.ActionManager.OnPickTrigger,
-                    () => this.selectRadioButton(input as RadioInput)
-                ));
-            }
 
             // Hover cursor for labels via metadata
             labelPlane.metadata = { ...labelPlane.metadata, cursor: 'pointer' };

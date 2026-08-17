@@ -274,6 +274,18 @@ export class InputElementService {
             };
         }
 
+        if (input.type === InputType.Radio) {
+            const radio = input as RadioInput;
+            const groupBefore = this.checkboxManager.getRadioGroup(radio.groupName)
+                .map((member) => ({ member, checked: member.checked }));
+            this.checkboxManager.selectRadioButton(radio);
+            return {
+                changed: groupBefore.some(({ member, checked }) => member.checked !== checked),
+                rollback: () => groupBefore.forEach(({ member, checked }) =>
+                    this.checkboxManager.setRadioChecked(member, checked)),
+            };
+        }
+
         return undefined;
     }
 

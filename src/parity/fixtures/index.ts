@@ -106,6 +106,7 @@ import { interactionFocusNavigationFixture } from './interaction-focus-navigatio
 import { interactionTextEditingFixture } from './interaction-text-editing.fixture';
 import { interactionTextareaSelectionFixture } from './interaction-textarea-selection.fixture';
 import { interactionCheckboxClickFixture } from './interaction-checkbox-click.fixture';
+import { interactionRadioGroupFixture } from './interaction-radio-group.fixture';
 import { ParityFixture } from '../parity.types';
 
 const fixtures: readonly ParityFixture[] = [
@@ -216,7 +217,8 @@ const fixtures: readonly ParityFixture[] = [
   interactionFocusNavigationFixture,
   interactionTextEditingFixture,
   interactionTextareaSelectionFixture,
-  interactionCheckboxClickFixture
+  interactionCheckboxClickFixture,
+  interactionRadioGroupFixture
 ];
 
 const fixturesById = new Map(fixtures.map((fixture) => [fixture.id, fixture]));
