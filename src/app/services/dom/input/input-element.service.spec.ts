@@ -315,6 +315,67 @@ describe('InputElementService', () => {
     expect(textInputManager.restoreMutableState).not.toHaveBeenCalled();
   });
 
+  it('restores compatible checkbox, radio, and select state with focus', () => {
+    const checkboxManager = {
+      setCheckboxChecked: jasmine.createSpy('setCheckboxChecked').and.callFake((input, checked) => {
+        input.checked = checked;
+      }),
+      setRadioChecked: jasmine.createSpy('setRadioChecked').and.callFake((input, checked) => {
+        input.checked = checked;
+      }),
+    };
+    const selectManager = {
+      selectOption: jasmine.createSpy('selectOption').and.callFake((input, index) => {
+        input.selectedIndex = index;
+        input.value = input.options[index].value;
+      }),
+    };
+    const service = new InputElementService(
+      {} as never,
+      {} as never,
+      checkboxManager as never,
+      selectManager as never,
+      {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
+    );
+    const validationState = { valid: true, errors: [] as string[], touched: true, dirty: true };
+    const checkbox = {
+      type: InputType.Checkbox, element: { id: 'check', checked: false }, checked: true,
+      focused: false, validationState,
+    };
+    const radio = {
+      type: InputType.Radio, element: { id: 'radio', checked: false }, groupName: 'channel',
+      checked: true, focused: true, validationState,
+    };
+    const select = {
+      type: InputType.Select, element: { id: 'select', value: 'alpha' }, value: 'beta',
+      selectedIndex: 1, options: [{ value: 'alpha' }, { value: 'beta' }],
+      focused: false, validationState,
+    };
+    service['inputElements'].set('check', checkbox as never);
+    service['inputElements'].set('radio', radio as never);
+    service['inputElements'].set('select', select as never);
+    const snapshots = service.captureNonTextControlStates();
+
+    checkbox.checked = false;
+    radio.checked = false;
+    select.value = 'alpha';
+    select.selectedIndex = 0;
+
+    expect(service.restoreNonTextControlStates(snapshots)).toBe('radio');
+    expect(checkboxManager.setCheckboxChecked).toHaveBeenCalledWith(checkbox, true);
+    expect(checkboxManager.setRadioChecked).toHaveBeenCalledWith(radio, true);
+    expect(selectManager.selectOption).toHaveBeenCalledWith(select, 1);
+
+    checkboxManager.setCheckboxChecked.calls.reset();
+    checkbox.element.checked = true;
+    expect(service.restoreNonTextControlStates(snapshots)).toBe('radio');
+    expect(checkboxManager.setCheckboxChecked).not.toHaveBeenCalled();
+  });
+
   it('validates eligible form controls in authored order', () => {
     const formValidator = {
       validateInput: jasmine.createSpy('validateInput').and.callFake((input) => ({

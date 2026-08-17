@@ -23,6 +23,18 @@ export interface TextControlStateSnapshot {
     mutable: TextInputMutableState;
 }
 
+export interface NonTextControlStateSnapshot {
+    elementId: string;
+    type: InputType;
+    focused: boolean;
+    validationState: { valid: boolean; errors: string[]; touched: boolean; dirty: boolean };
+    authoredChecked?: boolean;
+    authoredValue?: unknown;
+    authoredGroupName?: string;
+    checked?: boolean;
+    selectedValue?: unknown;
+}
+
 /**
  * Main orchestration service for input elements
  */
@@ -298,6 +310,75 @@ export class InputElementService {
             const text = input as TextInput;
             this.textInputManager.restoreMutableState(text, snapshot.mutable);
             text.validationState = {
+                valid: snapshot.validationState.valid,
+                errors: [...snapshot.validationState.errors],
+                touched: snapshot.validationState.touched,
+                dirty: snapshot.validationState.dirty,
+            };
+            if (snapshot.focused) focusedElementId = snapshot.elementId;
+        }
+        return focusedElementId;
+    }
+
+    /** Captures choice state and focus for uniquely identified non-text controls. */
+    captureNonTextControlStates(): readonly NonTextControlStateSnapshot[] {
+        const snapshots: NonTextControlStateSnapshot[] = [];
+        for (const [elementId, input] of this.inputElements) {
+            if (!input.element.id || this.duplicateInputIds.has(elementId) || this.isTextEntry(input)) {
+                continue;
+            }
+            const snapshot: NonTextControlStateSnapshot = {
+                elementId,
+                type: input.type,
+                focused: input.focused,
+                validationState: {
+                    valid: input.validationState.valid,
+                    errors: [...input.validationState.errors],
+                    touched: input.validationState.touched,
+                    dirty: input.validationState.dirty,
+                },
+            };
+            if (input.type === InputType.Checkbox) {
+                snapshot.authoredChecked = !!input.element.checked;
+                snapshot.checked = (input as CheckboxInput).checked;
+            } else if (input.type === InputType.Radio) {
+                snapshot.authoredChecked = !!input.element.checked;
+                snapshot.authoredGroupName = (input as RadioInput).groupName;
+                snapshot.checked = (input as RadioInput).checked;
+            } else if (input.type === InputType.Select) {
+                const select = input as SelectElement;
+                snapshot.authoredValue = input.element.value;
+                snapshot.selectedValue = select.options[select.selectedIndex]?.value;
+            }
+            snapshots.push(snapshot);
+        }
+        return snapshots;
+    }
+
+    /** Restores compatible choice state and returns the non-text control that should regain focus. */
+    restoreNonTextControlStates(snapshots: readonly NonTextControlStateSnapshot[]): string | undefined {
+        let focusedElementId: string | undefined;
+        for (const snapshot of snapshots) {
+            const input = this.inputElements.get(snapshot.elementId);
+            if (!input || this.duplicateInputIds.has(snapshot.elementId) ||
+                input.type !== snapshot.type || this.isTextEntry(input) ||
+                !this.isCompatibleNonTextSnapshot(input, snapshot)) {
+                continue;
+            }
+
+            if (input.type === InputType.Checkbox) {
+                this.checkboxManager.setCheckboxChecked(input as CheckboxInput, !!snapshot.checked);
+            } else if (input.type === InputType.Radio) {
+                this.checkboxManager.setRadioChecked(input as RadioInput, !!snapshot.checked);
+            } else if (input.type === InputType.Select) {
+                const select = input as SelectElement;
+                const selectedIndex = select.options.findIndex((option) =>
+                    Object.is(option.value, snapshot.selectedValue) && !option.disabled);
+                if (selectedIndex < 0) continue;
+                this.selectManager.selectOption(select, selectedIndex);
+            }
+
+            input.validationState = {
                 valid: snapshot.validationState.valid,
                 errors: [...snapshot.validationState.errors],
                 touched: snapshot.validationState.touched,
@@ -591,6 +672,25 @@ export class InputElementService {
         return input.type === InputType.Text || input.type === InputType.Password ||
             input.type === InputType.Email || input.type === InputType.Number ||
             input.type === InputType.Textarea;
+    }
+
+    private isCompatibleNonTextSnapshot(
+        input: InputElement,
+        snapshot: NonTextControlStateSnapshot,
+    ): boolean {
+        if (input.type === InputType.Checkbox) {
+            return !!input.element.checked === snapshot.authoredChecked;
+        }
+        if (input.type === InputType.Radio) {
+            return !!input.element.checked === snapshot.authoredChecked &&
+                (input as RadioInput).groupName === snapshot.authoredGroupName;
+        }
+        if (input.type === InputType.Select) {
+            return Object.is(input.element.value, snapshot.authoredValue) &&
+                (input as SelectElement).options.some((option) =>
+                    Object.is(option.value, snapshot.selectedValue) && !option.disabled);
+        }
+        return input.type === InputType.Button || input.type === InputType.Submit;
     }
 
     /**

@@ -253,6 +253,9 @@ export class Astylar {
         const textState = hasCompletedRender
           ? this.inputElementService.captureTextControlStates()
           : [];
+        const nonTextState = hasCompletedRender
+          ? this.inputElementService.captureNonTextControlStates()
+          : [];
         engine.resize(true);
         this.imageResources.retain(
           scene,
@@ -266,7 +269,9 @@ export class Astylar {
         sceneResources.replace(
           () => {
             this.babylonDOMRenderer.createSiteFromData(currentSiteData);
-            const focusedElementId = this.inputElementService.restoreTextControlStates(textState);
+            const textFocusId = this.inputElementService.restoreTextControlStates(textState);
+            const nonTextFocusId = this.inputElementService.restoreNonTextControlStates(nonTextState);
+            const focusedElementId = textFocusId ?? nonTextFocusId;
             if (focusedElementId) {
               const input = this.inputElementService.getInputElement(focusedElementId);
               if (input && !input.disabled) {

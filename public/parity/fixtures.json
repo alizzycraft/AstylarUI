@@ -766,5 +766,13 @@
     "expectedBehavior": "A compatible stable-ID text input retains its user-edited value, focus, caret, and selection when an application update changes a sibling.",
     "dynamicStepCount": 2,
     "interactionStepCount": 3
+  },
+  {
+    "id": "interaction-update-choice-state",
+    "title": "Choice-control state across application update",
+    "category": "forms-interactive",
+    "expectedBehavior": "Stable compatible checkbox, radio, and select controls retain their live checked, selected, and focused state across unrelated updates and responsive reflow.",
+    "dynamicStepCount": 2,
+    "interactionStepCount": 7
   }
 ]
