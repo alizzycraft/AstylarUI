@@ -660,5 +660,12 @@
     "category": "forms-interactive",
     "expectedBehavior": "Shift-arrow selection, selection replacement, newline insertion, continued multiline typing, and blur commit match a browser textarea.",
     "interactionStepCount": 5
+  },
+  {
+    "id": "interaction-checkbox-click",
+    "title": "Checkbox pointer activation",
+    "category": "forms-interactive",
+    "expectedBehavior": "Each primary-pointer click toggles a checkbox before click listeners run, then emits input and change with the new checked state.",
+    "interactionStepCount": 2
   }
 ]

@@ -36,7 +36,7 @@ export class CheckboxManager {
             element: element,
             mesh: mesh,
             style: style,
-            value: element.value || false,
+            value: element.value ?? 'on',
             focused: false,
             disabled: element.disabled || false,
             required: element.required || false,
@@ -57,16 +57,9 @@ export class CheckboxManager {
             checkbox.labelMesh = this.createLabelMesh(checkbox, render, style);
         }
 
-        // Set cursor via metadata for global handler
+        // Set cursor metadata; scene-owned interaction applies activation.
         if (checkbox.mesh) {
             checkbox.mesh.metadata = { ...checkbox.mesh.metadata, cursor: 'pointer', isTextMesh: false };
-
-            // Attach interaction to the checkbox mesh directly to ensure robust picking
-            checkbox.mesh.actionManager = new BABYLON.ActionManager(render.scene);
-            checkbox.mesh.actionManager.registerAction(new BABYLON.ExecuteCodeAction(
-                BABYLON.ActionManager.OnPickTrigger,
-                () => this.toggleCheckbox(checkbox)
-            ));
         }
 
         return checkbox;
@@ -87,7 +80,7 @@ export class CheckboxManager {
             element: element,
             mesh: mesh,
             style: style, // Store style
-            value: element.value || false,
+            value: element.value ?? 'on',
             focused: false,
             disabled: element.disabled || false,
             required: element.required || false,
@@ -132,7 +125,11 @@ export class CheckboxManager {
     toggleCheckbox(checkbox: CheckboxInput): void {
         if (checkbox.disabled) return;
 
-        checkbox.checked = !checkbox.checked;
+        this.setCheckboxChecked(checkbox, !checkbox.checked);
+    }
+
+    setCheckboxChecked(checkbox: CheckboxInput, checked: boolean): void {
+        checkbox.checked = checked;
         this.updateCheckIndicator(checkbox);
     }
 
@@ -271,13 +268,6 @@ export class CheckboxManager {
         checkMark.isVisible = checkbox.checked;
         checkMark.renderingGroupId = 0;
 
-        // Add interaction to checkMark to ensure it captures clicks
-        checkMark.actionManager = new BABYLON.ActionManager(scene);
-        checkMark.actionManager.registerAction(new BABYLON.ExecuteCodeAction(
-            BABYLON.ActionManager.OnPickTrigger,
-            () => this.toggleCheckbox(checkbox)
-        ));
-
         // Defensive: Force cursor pointer and disable text mesh inference
         checkMark.metadata = { cursor: 'pointer', isTextMesh: false };
 
@@ -399,18 +389,15 @@ export class CheckboxManager {
 
             labelPlane.isPickable = true; // Allow clicking label
 
-            // Add interaction
-            labelPlane.actionManager = new BABYLON.ActionManager(render.scene);
-            labelPlane.actionManager.registerAction(new BABYLON.ExecuteCodeAction(
-                BABYLON.ActionManager.OnPickTrigger,
-                () => {
-                    if (input.type === InputType.Checkbox) {
-                        this.toggleCheckbox(input as CheckboxInput);
-                    } else if (input.type === InputType.Radio) {
-                        this.selectRadioButton(input as RadioInput);
-                    }
-                }
-            ));
+            // Radio activation still uses the legacy path until its parity
+            // increment moves it into the scene-owned interaction runtime.
+            if (input.type === InputType.Radio) {
+                labelPlane.actionManager = new BABYLON.ActionManager(render.scene);
+                labelPlane.actionManager.registerAction(new BABYLON.ExecuteCodeAction(
+                    BABYLON.ActionManager.OnPickTrigger,
+                    () => this.selectRadioButton(input as RadioInput)
+                ));
+            }
 
             // Hover cursor for labels via metadata
             labelPlane.metadata = { ...labelPlane.metadata, cursor: 'pointer' };

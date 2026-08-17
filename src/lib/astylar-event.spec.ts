@@ -267,4 +267,94 @@ describe('AstylarInteractionRuntime', () => {
     scene.dispose();
     engine.dispose();
   });
+
+  it('orders checkbox activation events and rolls back a cancelled click', () => {
+    const engine = new NullEngine();
+    const scene = new Scene(engine);
+    const mesh = MeshBuilder.CreatePlane('checkbox-mesh', {}, scene);
+    mesh.metadata = { elementId: 'alerts' };
+    const canvas = document.createElement('canvas');
+    const events: AstylarEventSnapshot[] = [];
+    let checked = false;
+    let cancelClick = false;
+    let focusedElementId: string | undefined;
+    const runtime = new AstylarInteractionRuntime(
+      scene,
+      {
+        styles: [],
+        root: { children: [{ type: 'input', inputType: 'checkbox', id: 'alerts' }] },
+      },
+      {
+        handlers: {
+          alerts: { click: (event) => { if (cancelClick) event.preventDefault(); } },
+        },
+        onEvent: (event) => events.push(event),
+      },
+      () => ({ value: 'on', checked }),
+      {
+        getFocusedElementId: () => focusedElementId,
+        focus: (elementId) => {
+          focusedElementId = elementId;
+          return true;
+        },
+        blur: () => {
+          focusedElementId = undefined;
+          return true;
+        },
+        handleKeyDown: () => undefined,
+        commitsValueOnBlur: () => false,
+        activate: () => {
+          const before = checked;
+          checked = !checked;
+          return { changed: true, rollback: () => { checked = before; } };
+        },
+      },
+      canvas,
+    );
+    const pointerEvent = new PointerEvent('pointerdown', { button: 0 });
+
+    scene.onPointerObservable.notifyObservers({
+      type: PointerEventTypes.POINTERDOWN,
+      event: pointerEvent,
+      pickInfo: { pickedMesh: mesh },
+    } as unknown as PointerInfo);
+    scene.onPointerObservable.notifyObservers({
+      type: PointerEventTypes.POINTERUP,
+      event: pointerEvent,
+      pickInfo: { pickedMesh: mesh },
+    } as unknown as PointerInfo);
+
+    expect(events.map((event) => `${event.type}:${event.checked}`)).toEqual([
+      'pointerdown:false',
+      'focus:false',
+      'pointerup:false',
+      'click:true',
+      'input:true',
+      'change:true',
+    ]);
+    expect(checked).toBeTrue();
+
+    cancelClick = true;
+    scene.onPointerObservable.notifyObservers({
+      type: PointerEventTypes.POINTERDOWN,
+      event: pointerEvent,
+      pickInfo: { pickedMesh: mesh },
+    } as unknown as PointerInfo);
+    scene.onPointerObservable.notifyObservers({
+      type: PointerEventTypes.POINTERUP,
+      event: pointerEvent,
+      pickInfo: { pickedMesh: mesh },
+    } as unknown as PointerInfo);
+
+    expect(events.slice(-3).map((event) => `${event.type}:${event.checked}`)).toEqual([
+      'pointerdown:true',
+      'pointerup:true',
+      'click:false',
+    ]);
+    expect(events.at(-1)?.defaultPrevented).toBeTrue();
+    expect(checked).toBeTrue();
+    runtime.dispose();
+    scene.dispose();
+    engine.dispose();
+  });
 });

@@ -291,6 +291,8 @@ export class Astylar {
         },
         commitsValueOnBlur: (elementId) =>
           this.inputElementService.commitsValueOnBlur(elementId),
+        activate: (elementId) =>
+          this.inputElementService.activateInputElement(elementId),
       },
     );
     this.interactions.set(scene, interaction);

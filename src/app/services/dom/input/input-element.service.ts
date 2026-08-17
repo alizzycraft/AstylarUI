@@ -259,6 +259,24 @@ export class InputElementService {
             input.type === InputType.Textarea);
     }
 
+    /** Applies a control's click activation and returns a cancellation rollback. */
+    activateInputElement(elementId: string): { changed: boolean; rollback: () => void } | undefined {
+        const input = this.inputElements.get(elementId);
+        if (!input || input.disabled) return undefined;
+
+        if (input.type === InputType.Checkbox) {
+            const checkbox = input as CheckboxInput;
+            const checkedBefore = checkbox.checked;
+            this.checkboxManager.setCheckboxChecked(checkbox, !checkedBefore);
+            return {
+                changed: checkbox.checked !== checkedBefore,
+                rollback: () => this.checkboxManager.setCheckboxChecked(checkbox, checkedBefore),
+            };
+        }
+
+        return undefined;
+    }
+
     /**
      * Determines input type from element
      */

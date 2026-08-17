@@ -25,12 +25,18 @@ export interface AstylarInteractionSnapshot {
 
 export type AstylarInteractionStateProvider = (elementId: string) => AstylarEventState;
 
+export interface AstylarControlActivation {
+  changed: boolean;
+  rollback(): void;
+}
+
 export interface AstylarInteractionControlAdapter {
   getFocusedElementId(): string | undefined;
   focus(elementId: string): boolean;
   blur(elementId: string): boolean;
   handleKeyDown(elementId: string, event: KeyboardEvent): void;
   commitsValueOnBlur(elementId: string): boolean;
+  activate?(elementId: string): AstylarControlActivation | undefined;
 }
 
 /** Owns the Babylon observers for one scene and emits a small DOM-like event subset. */
@@ -133,7 +139,15 @@ export class AstylarInteractionRuntime {
     if (pointerInfo.type === PointerEventTypes.POINTERUP) {
       if (targetId) this.dispatchPointer('pointerup', targetId, pointerInfo);
       if (targetId && targetId === this.pressedElementId) {
-        this.dispatchPointer('click', targetId, pointerInfo);
+        const activation = this.controls?.activate?.(targetId);
+        const click = this.dispatchPointer('click', targetId, pointerInfo);
+        if (click?.defaultPrevented) {
+          activation?.rollback();
+        } else if (activation?.changed) {
+          const state = this.liveState(targetId);
+          this.dispatcher.dispatch({ type: 'input', targetId, ...state });
+          this.dispatcher.dispatch({ type: 'change', targetId, ...state });
+        }
       }
       this.pressedElementId = undefined;
     }
