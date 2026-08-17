@@ -364,6 +364,18 @@ export class InputElementService {
         }
     }
 
+    /** Validates form-associated controls and returns invalid IDs in authored order. */
+    validateFormControls(elementIds: readonly string[]): readonly string[] {
+        const invalidIds: string[] = [];
+        for (const elementId of elementIds) {
+            const input = this.inputElements.get(elementId);
+            if (!input || input.disabled || input.element.readonly ||
+                input.type === InputType.Button || input.type === InputType.Submit) continue;
+            if (!this.validateInput(input)) invalidIds.push(elementId);
+        }
+        return invalidIds;
+    }
+
     /**
      * Determines input type from element
      */

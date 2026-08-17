@@ -70,6 +70,7 @@ export type ParityInteractionEventType =
   | 'keyup'
   | 'input'
   | 'change'
+  | 'invalid'
   | 'submit'
   | 'reset';
 

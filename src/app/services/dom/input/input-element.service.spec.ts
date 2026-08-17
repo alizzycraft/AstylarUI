@@ -256,4 +256,45 @@ describe('InputElementService', () => {
       expect(input.validationState).toEqual({ valid: true, errors: [], touched: false, dirty: false });
     }
   });
+
+  it('validates eligible form controls in authored order', () => {
+    const formValidator = {
+      validateInput: jasmine.createSpy('validateInput').and.callFake((input) => ({
+        valid: input.value !== '', errors: input.value === '' ? ['required'] : [],
+      })),
+    };
+    const service = new InputElementService(
+      {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
+      formValidator as never,
+      {} as never,
+      {} as never,
+    );
+    const control = (value: string, extra: Record<string, unknown> = {}) => ({
+      type: InputType.Text,
+      value,
+      disabled: false,
+      element: {},
+      ...extra,
+    });
+    const first = control('');
+    const valid = control('ready');
+    const second = control('');
+    const disabled = control('', { disabled: true });
+    const readonly = control('', { element: { readonly: true } });
+    service['inputElements'].set('first', first as never);
+    service['inputElements'].set('valid', valid as never);
+    service['inputElements'].set('second', second as never);
+    service['inputElements'].set('disabled', disabled as never);
+    service['inputElements'].set('readonly', readonly as never);
+
+    expect(service.validateFormControls([
+      'first', 'valid', 'second', 'disabled', 'readonly', 'missing',
+    ])).toEqual(['first', 'second']);
+    expect(formValidator.validateInput.calls.allArgs()).toEqual([[first], [valid], [second]]);
+  });
 });

@@ -42,6 +42,7 @@ export interface AstylarInteractionControlAdapter {
   canActivateWithEnter?(elementId: string): boolean;
   getRadioNavigationTarget?(elementId: string, direction: -1 | 1): string | undefined;
   resetFormControls?(elementIds: readonly string[]): void;
+  validateFormControls?(elementIds: readonly string[]): readonly string[];
 }
 
 interface AstylarFormDefault {
@@ -461,6 +462,20 @@ export class AstylarInteractionRuntime {
     const action = this.formDefaults.get(buttonId);
     if (!action) return;
     if (action.type === 'submit') {
+      const invalidControlIds = this.controls?.validateFormControls?.(action.controlIds) ?? [];
+      let focusTargetId: string | undefined;
+      for (const controlId of invalidControlIds) {
+        const invalid = this.dispatcher.dispatch({
+          type: 'invalid',
+          targetId: controlId,
+          ...this.liveState(controlId),
+        });
+        if (!focusTargetId && invalid && !invalid.defaultPrevented) focusTargetId = controlId;
+      }
+      if (invalidControlIds.length) {
+        if (focusTargetId) this.setFocus(focusTargetId);
+        return;
+      }
       this.dispatcher.dispatch({ type: 'submit', targetId: action.formId });
       return;
     }

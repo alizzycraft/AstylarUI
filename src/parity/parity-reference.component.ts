@@ -299,7 +299,8 @@ export class ParityReferenceComponent {
         // browser submission. Record first so defaultPrevented still reflects the
         // application-visible event state at this boundary.
         if (type === 'submit') event.preventDefault();
-      }, type === 'focus' || type === 'blur' || type === 'pointerenter' || type === 'pointerleave');
+      }, type === 'focus' || type === 'blur' || type === 'invalid' ||
+        type === 'pointerenter' || type === 'pointerleave');
     }
   }
 

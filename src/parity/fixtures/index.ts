@@ -114,6 +114,7 @@ import { interactionButtonKeyboardFixture } from './interaction-button-keyboard.
 import { interactionLabelControlFixture } from './interaction-label-control.fixture';
 import { interactionFormResetFixture } from './interaction-form-reset.fixture';
 import { interactionFormSubmitFixture } from './interaction-form-submit.fixture';
+import { interactionFormValidationFixture } from './interaction-form-validation.fixture';
 import { ParityFixture } from '../parity.types';
 
 const fixtures: readonly ParityFixture[] = [
@@ -232,7 +233,8 @@ const fixtures: readonly ParityFixture[] = [
   interactionButtonKeyboardFixture,
   interactionLabelControlFixture,
   interactionFormResetFixture,
-  interactionFormSubmitFixture
+  interactionFormSubmitFixture,
+  interactionFormValidationFixture
 ];
 
 const fixturesById = new Map(fixtures.map((fixture) => [fixture.id, fixture]));

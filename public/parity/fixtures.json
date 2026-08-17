@@ -723,5 +723,12 @@
     "category": "forms-interactive",
     "expectedBehavior": "Pointer and Enter activation of a submit button emit click then submit on its containing form after edited text commits.",
     "interactionStepCount": 4
+  },
+  {
+    "id": "interaction-form-validation",
+    "title": "Required-field submission validation",
+    "category": "forms-interactive",
+    "expectedBehavior": "Submitting an empty required field emits invalid and focuses it without submit; after entry, the same button emits submit.",
+    "interactionStepCount": 3
   }
 ]

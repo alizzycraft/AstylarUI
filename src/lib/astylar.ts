@@ -303,6 +303,8 @@ export class Astylar {
           this.inputElementService.getRadioNavigationTarget(elementId, direction),
         resetFormControls: (elementIds) =>
           this.inputElementService.resetFormControls(elementIds),
+        validateFormControls: (elementIds) =>
+          this.inputElementService.validateFormControls(elementIds),
       },
     );
     this.interactions.set(scene, interaction);

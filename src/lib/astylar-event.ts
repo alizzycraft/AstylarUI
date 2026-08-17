@@ -13,6 +13,7 @@ export type AstylarEventType =
   | 'keyup'
   | 'input'
   | 'change'
+  | 'invalid'
   | 'submit'
   | 'reset';
 
@@ -72,6 +73,7 @@ const NON_BUBBLING_EVENTS = new Set<AstylarEventType>([
   'pointerleave',
   'focus',
   'blur',
+  'invalid',
 ]);
 
 class MutableAstylarEvent implements AstylarEvent {

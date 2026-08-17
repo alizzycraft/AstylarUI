@@ -775,6 +775,9 @@ describe('AstylarInteractionRuntime', () => {
     const canvas = document.createElement('canvas');
     const events: AstylarEventSnapshot[] = [];
     let cancelSubmit = false;
+    let cancelInvalid = false;
+    let focusedElementId = 'submit-button';
+    let invalidIds: readonly string[] = [];
     const runtime = new AstylarInteractionRuntime(
       scene,
       {
@@ -790,6 +793,11 @@ describe('AstylarInteractionRuntime', () => {
       },
       {
         handlers: {
+          name: {
+            invalid: (event) => {
+              if (cancelInvalid) event.preventDefault();
+            },
+          },
           settings: {
             submit: (event) => {
               if (cancelSubmit) event.preventDefault();
@@ -798,13 +806,17 @@ describe('AstylarInteractionRuntime', () => {
         },
         onEvent: (event) => events.push(event),
       },
-      () => ({ value: 'Save' }),
+      (elementId) => ({ value: elementId === 'name' ? '' : 'Save' }),
       {
-        getFocusedElementId: () => 'submit-button',
-        focus: () => true,
+        getFocusedElementId: () => focusedElementId,
+        focus: (elementId) => {
+          focusedElementId = elementId;
+          return true;
+        },
         blur: () => true,
         handleKeyDown: () => undefined,
         commitsValueOnBlur: () => false,
+        validateFormControls: () => invalidIds,
       },
       canvas,
     );
@@ -839,6 +851,30 @@ describe('AstylarInteractionRuntime', () => {
       'pointerdown', 'pointerup', 'click', 'submit',
     ]);
     expect(events.at(-1)?.defaultPrevented).toBeTrue();
+
+    cancelSubmit = false;
+    invalidIds = ['name'];
+    cancelInvalid = true;
+    events.length = 0;
+    click();
+    expect(events.map((event) => event.type)).toEqual([
+      'pointerdown', 'pointerup', 'click', 'invalid',
+    ]);
+    expect(events.at(-1)?.defaultPrevented).toBeTrue();
+    expect(focusedElementId).toBe('submit-button');
+
+    cancelInvalid = false;
+    events.length = 0;
+    click();
+    expect(events.map((event) => `${event.type}:${event.targetId}`)).toEqual([
+      'pointerdown:submit-button',
+      'pointerup:submit-button',
+      'click:submit-button',
+      'invalid:name',
+      'blur:submit-button',
+      'focus:name',
+    ]);
+    expect(focusedElementId).toBe('name');
 
     runtime.dispose();
     scene.dispose();
