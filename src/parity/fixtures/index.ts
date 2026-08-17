@@ -82,6 +82,7 @@ import { threeValueBoxShorthandFixture } from './three-value-box-shorthand.fixtu
 import { flexScaledShrinkFixture } from './flex-scaled-shrink.fixture';
 import { standaloneFlexAutoHeightFixture } from './standalone-flex-auto-height.fixture';
 import { flexPercentageContentWidthFixture } from './flex-percentage-content-width.fixture';
+import { flexWrapAutoHeightFixture } from './flex-wrap-auto-height.fixture';
 import { ParityFixture } from '../parity.types';
 
 const fixtures: readonly ParityFixture[] = [
@@ -168,7 +169,8 @@ const fixtures: readonly ParityFixture[] = [
   threeValueBoxShorthandFixture,
   flexScaledShrinkFixture,
   standaloneFlexAutoHeightFixture,
-  flexPercentageContentWidthFixture
+  flexPercentageContentWidthFixture,
+  flexWrapAutoHeightFixture
 ];
 
 const fixturesById = new Map(fixtures.map((fixture) => [fixture.id, fixture]));

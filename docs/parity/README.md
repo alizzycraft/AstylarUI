@@ -52,5 +52,6 @@ logic or mask meaningful screenshot regions.
 
 Generated screenshots and reports are intentionally untracked. Accepted Phase 1
 metrics are maintained in `scorecard.md`, completed Application Web Parity v2
-results in `scorecard-v2.md`, and active representative-application parity
-progress in `scorecard-v3.md`.
+results in `scorecard-v2.md`, representative-application parity in
+`scorecard-v3.md`, content-driven layout parity in `scorecard-v4.md`, and the
+active responsive intrinsic layout and paint-fidelity phase in `scorecard-v5.md`.

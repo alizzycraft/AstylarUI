@@ -509,6 +509,43 @@ export class FlexService {
         rowGap * (fixedGridRows.length - 1) +
         padding.top + padding.bottom + borderWidth * 2;
     }
+    const isWrappedRowFlex = ['flex', 'inline-flex'].includes(style?.display?.toLowerCase() ?? '') &&
+      ['row', 'row-reverse'].includes(style?.flexDirection?.toLowerCase() ?? 'row') &&
+      (style?.flexWrap?.toLowerCase() ?? 'nowrap') !== 'nowrap';
+    if (isWrappedRowFlex) {
+      const { rowGap, columnGap } = this.parseGapProperties(style!);
+      let currentLineWidth = 0;
+      let currentLineHeight = 0;
+      const lineHeights: number[] = [];
+
+      for (const child of children) {
+        const measured = this.measureIntrinsicFlowChild(
+          child, styles, dom, render, contentWidth,
+        );
+        if (!measured) continue;
+
+        const outerMainSize = measured.width + measured.margin.left + measured.margin.right;
+        const outerCrossSize = measured.height + measured.margin.top + measured.margin.bottom;
+        const requiredWidth = currentLineWidth === 0
+          ? outerMainSize
+          : columnGap + outerMainSize;
+        if (currentLineWidth > 0 && currentLineWidth + requiredWidth > contentWidth) {
+          lineHeights.push(currentLineHeight);
+          currentLineWidth = outerMainSize;
+          currentLineHeight = outerCrossSize;
+        } else {
+          currentLineWidth += requiredWidth;
+          currentLineHeight = Math.max(currentLineHeight, outerCrossSize);
+        }
+      }
+
+      if (currentLineWidth > 0) {
+        lineHeights.push(currentLineHeight);
+        return lineHeights.reduce((sum, lineHeight) => sum + lineHeight, 0) +
+          rowGap * (lineHeights.length - 1) +
+          padding.top + padding.bottom + borderWidth * 2;
+      }
+    }
     const isNowrapRowFlex = ['flex', 'inline-flex'].includes(style?.display?.toLowerCase() ?? '') &&
       ['row', 'row-reverse'].includes(style?.flexDirection?.toLowerCase() ?? 'row') &&
       (style?.flexWrap?.toLowerCase() ?? 'nowrap') === 'nowrap';
@@ -575,7 +612,7 @@ export class FlexService {
     dom: BabylonDOM,
     render: BabylonRender,
     contentWidth: number,
-  ): { height: number; margin: { top: number; right: number; bottom: number; left: number } } | null {
+  ): { width: number; height: number; margin: { top: number; right: number; bottom: number; left: number } } | null {
     const childStyle = render.actions.style.findStyleForElement(
       child,
       styles,
@@ -583,9 +620,13 @@ export class FlexService {
     );
     if (this.classifyFlexChild(childStyle) !== 'flow') return null;
 
-    const childWidth = childStyle?.width && childStyle.width !== 'auto'
+    let childWidth = childStyle?.width && childStyle.width !== 'auto'
       ? this.parseIntrinsicPixelLength(childStyle.width, contentWidth)
-      : contentWidth;
+      : ['button', 'input'].includes(child.type)
+        ? this.calculateIntrinsicWidth(child, childStyle, styles)
+        : contentWidth;
+    const definiteFlexBasis = this.parseDefiniteIntrinsicFlexBasis(childStyle, contentWidth);
+    if (definiteFlexBasis !== null) childWidth = definiteFlexBasis;
     let childHeight = childStyle?.height && childStyle.height !== 'auto'
       ? this.parseIntrinsicPixelLength(childStyle.height, 0)
       : null;
@@ -605,7 +646,25 @@ export class FlexService {
       );
     }
     if (childHeight === null) return null;
-    return { height: childHeight, margin: this.parseMarginBox(childStyle) };
+    return { width: childWidth, height: childHeight, margin: this.parseMarginBox(childStyle) };
+  }
+
+  private parseDefiniteIntrinsicFlexBasis(
+    style: StyleRule | undefined,
+    percentageReference: number,
+  ): number | null {
+    const longhand = style?.flexBasis?.trim();
+    if (longhand && longhand !== 'auto' && longhand !== 'content') {
+      return this.parseIntrinsicPixelLength(longhand, percentageReference);
+    }
+
+    const shorthand = style?.flex?.trim();
+    if (!shorthand || ['auto', 'none', 'initial'].includes(shorthand)) return null;
+    const basis = shorthand.split(/\s+/).at(-1);
+    if (!basis || basis === 'auto' || basis === 'content' || !/[a-z%]$/i.test(basis)) {
+      return null;
+    }
+    return this.parseIntrinsicPixelLength(basis, percentageReference);
   }
 
   private parseIntrinsicPixelLength(value: string, percentageReference: number): number {

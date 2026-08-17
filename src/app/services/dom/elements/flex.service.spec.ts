@@ -210,6 +210,41 @@ describe('FlexService', () => {
     expect(height).toBe(81);
   });
 
+  it('sums flex line cross sizes and row gaps for a wrapped row container', () => {
+    const service = new FlexService(new FlexLayoutService(), {} as never, {} as never);
+    const children: DOMElement[] = [
+      { type: 'div', id: 'first' },
+      { type: 'div', id: 'second' },
+      { type: 'div', id: 'third' },
+    ];
+    const resolved = new Map<string, StyleRule>([
+      ['first', { selector: '#first', flex: '0 0 100px', width: '100px', height: '36px' }],
+      ['second', { selector: '#second', flex: '0 0 100px', width: '100px', height: '28px' }],
+      ['third', { selector: '#third', flex: '0 0 100px', width: '100px', height: '44px' }],
+    ]);
+    const render = {
+      actions: { style: { findStyleForElement: (element: DOMElement) => resolved.get(element.id ?? '') } },
+    } as unknown as BabylonRender;
+    const dom = {
+      context: { elementStyles: new Map() },
+    } as unknown as BabylonDOM;
+
+    const height = service['calculateIntrinsicContainerHeight'](
+      { type: 'section', id: 'wrapped', children },
+      {
+        selector: '#wrapped', display: 'flex', flexDirection: 'row', flexWrap: 'wrap',
+        width: '260px', height: 'auto', columnGap: '8px', rowGap: '12px',
+        padding: '10px', borderWidth: '2px',
+      },
+      [],
+      dom,
+      render,
+      260,
+    );
+
+    expect(height).toBe(116);
+  });
+
   it('sums margins and gaps for a nowrap column flex container', () => {
     const service = new FlexService(new FlexLayoutService(), {} as never, {} as never);
     const first: DOMElement = { type: 'div', id: 'first' };

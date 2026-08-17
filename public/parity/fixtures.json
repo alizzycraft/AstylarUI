@@ -508,5 +508,11 @@
     "title": "Percentage flex item width from content box",
     "category": "flexbox",
     "expectedBehavior": "A percentage width on a flex item resolves against the flex container content box, excluding its padding and borders."
+  },
+  {
+    "id": "flex-wrap-auto-height",
+    "title": "Wrapped row flex intrinsic height",
+    "category": "flexbox",
+    "expectedBehavior": "A height-auto wrapped row flex container sums its flex line cross sizes and row gaps, then adds its padding and borders."
   }
 ]
