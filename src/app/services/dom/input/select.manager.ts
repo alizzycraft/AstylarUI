@@ -203,7 +203,7 @@ export class SelectManager {
      * Navigates between options using keyboard
      */
     navigateOptions(selectElement: SelectElement, direction: 'up' | 'down'): void {
-        if (!selectElement.dropdownOpen || selectElement.options.length === 0) return;
+        if (selectElement.options.length === 0) return;
 
         let newIndex = selectElement.selectedIndex;
 
@@ -231,10 +231,15 @@ export class SelectManager {
         }
 
         if (newIndex !== selectElement.selectedIndex) {
-            // Update visual highlight
-            this.updateOptionHighlight(selectElement, selectElement.selectedIndex, newIndex);
-            selectElement.selectedIndex = newIndex;
-            selectElement.value = selectElement.options[newIndex].value;
+            if (selectElement.dropdownOpen) {
+                // An open custom popup moves its highlight until Enter commits it.
+                this.updateOptionHighlight(selectElement, selectElement.selectedIndex, newIndex);
+                selectElement.selectedIndex = newIndex;
+                selectElement.value = selectElement.options[newIndex].value;
+            } else {
+                // Native closed selects commit an arrow-key choice immediately.
+                this.selectOption(selectElement, newIndex);
+            }
         }
     }
 

@@ -259,6 +259,11 @@ export class InputElementService {
             input.type === InputType.Textarea);
     }
 
+    /** Select keyboard choices commit immediately rather than waiting for blur. */
+    emitsImmediateChangeOnKeyboardMutation(elementId: string): boolean {
+        return this.inputElements.get(elementId)?.type === InputType.Select;
+    }
+
     /** Applies a control's click activation and returns a cancellation rollback. */
     activateInputElement(elementId: string): { changed: boolean; rollback: () => void } | undefined {
         const input = this.inputElements.get(elementId);

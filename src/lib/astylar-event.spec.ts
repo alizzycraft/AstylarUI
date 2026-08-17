@@ -466,4 +466,55 @@ describe('AstylarInteractionRuntime', () => {
     scene.dispose();
     engine.dispose();
   });
+
+  it('emits input and change for an immediate select keyboard mutation', () => {
+    const engine = new NullEngine();
+    const scene = new Scene(engine);
+    const canvas = document.createElement('canvas');
+    const events: AstylarEventSnapshot[] = [];
+    let selectedValue = 'alpha';
+    const runtime = new AstylarInteractionRuntime(
+      scene,
+      {
+        styles: [],
+        root: {
+          children: [{
+            type: 'select', id: 'choice', value: 'alpha',
+            options: [{ value: 'alpha', label: 'Alpha' }, { value: 'beta', label: 'Beta' }],
+          }],
+        },
+      },
+      { onEvent: (event) => events.push(event) },
+      () => ({ value: selectedValue, selectedValue }),
+      {
+        getFocusedElementId: () => 'choice',
+        focus: () => true,
+        blur: () => true,
+        handleKeyDown: (_elementId, event) => {
+          if (event.key === 'ArrowDown') selectedValue = 'beta';
+        },
+        commitsValueOnBlur: () => false,
+        emitsImmediateChangeOnKeyboardMutation: () => true,
+      },
+      canvas,
+    );
+
+    canvas.dispatchEvent(new KeyboardEvent('keydown', {
+      key: 'ArrowDown', code: 'ArrowDown', bubbles: true, cancelable: true,
+    }));
+    canvas.dispatchEvent(new KeyboardEvent('keyup', {
+      key: 'ArrowDown', code: 'ArrowDown', bubbles: true, cancelable: true,
+    }));
+
+    expect(events.map((event) => `${event.type}:${event.selectedValue}`)).toEqual([
+      'keydown:alpha',
+      'input:beta',
+      'change:beta',
+      'keyup:beta',
+    ]);
+
+    runtime.dispose();
+    scene.dispose();
+    engine.dispose();
+  });
 });

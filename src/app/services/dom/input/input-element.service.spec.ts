@@ -133,4 +133,23 @@ describe('InputElementService', () => {
     expect(service.getRadioNavigationTarget('alpha', -1)).toBe('beta');
     expect(service.getRadioNavigationTarget('beta', 1)).toBe('alpha');
   });
+
+  it('identifies selects as immediate keyboard-change controls', () => {
+    const service = new InputElementService(
+      {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
+    );
+    service['inputElements'].set('choice', { type: InputType.Select } as never);
+    service['inputElements'].set('field', { type: InputType.Text } as never);
+
+    expect(service.emitsImmediateChangeOnKeyboardMutation('choice')).toBeTrue();
+    expect(service.emitsImmediateChangeOnKeyboardMutation('field')).toBeFalse();
+  });
 });

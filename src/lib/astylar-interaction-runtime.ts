@@ -36,6 +36,7 @@ export interface AstylarInteractionControlAdapter {
   blur(elementId: string): boolean;
   handleKeyDown(elementId: string, event: KeyboardEvent): void;
   commitsValueOnBlur(elementId: string): boolean;
+  emitsImmediateChangeOnKeyboardMutation?(elementId: string): boolean;
   activate?(elementId: string): AstylarControlActivation | undefined;
   canActivateWithSpace?(elementId: string): boolean;
   getRadioNavigationTarget?(elementId: string, direction: -1 | 1): string | undefined;
@@ -235,14 +236,24 @@ export class AstylarInteractionRuntime {
     const before = this.liveState(targetId);
     this.controls?.handleKeyDown(targetId, event);
     const after = this.liveState(targetId);
-    if (this.controls?.commitsValueOnBlur(targetId) &&
-        (before.value !== after.value || before.checked !== after.checked ||
-          before.selectedValue !== after.selectedValue)) {
+    const changed = before.value !== after.value || before.checked !== after.checked ||
+      before.selectedValue !== after.selectedValue;
+    const commitsOnBlur = this.controls?.commitsValueOnBlur(targetId);
+    const changesImmediately =
+      this.controls?.emitsImmediateChangeOnKeyboardMutation?.(targetId);
+    if (changed && (commitsOnBlur || changesImmediately)) {
       this.dispatcher.dispatch({
         type: 'input',
         targetId,
         ...after,
       });
+      if (changesImmediately) {
+        this.dispatcher.dispatch({
+          type: 'change',
+          targetId,
+          ...after,
+        });
+      }
     }
   };
 

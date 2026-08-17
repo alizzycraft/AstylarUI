@@ -56,7 +56,6 @@ export class KeyboardInputHandler {
                 break;
 
             case InputType.Select:
-            case InputType.Select:
                 this.handleSelectKeyboard(event, inputElement as SelectElement, render, style);
                 break;
         }
@@ -183,16 +182,12 @@ export class KeyboardInputHandler {
     private handleSelectKeyboard(event: KeyboardEvent, selectElement: SelectElement, render: BabylonRender, style: StyleRule): void {
         switch (event.key) {
             case 'ArrowUp':
-                if (selectElement.dropdownOpen) {
-                    this.selectManager.navigateOptions(selectElement, 'up');
-                }
+                this.selectManager.navigateOptions(selectElement, 'up');
                 event.preventDefault();
                 break;
 
             case 'ArrowDown':
-                if (selectElement.dropdownOpen) {
-                    this.selectManager.navigateOptions(selectElement, 'down');
-                }
+                this.selectManager.navigateOptions(selectElement, 'down');
                 event.preventDefault();
                 break;
 

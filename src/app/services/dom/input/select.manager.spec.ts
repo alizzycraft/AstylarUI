@@ -49,4 +49,36 @@ describe('SelectManager', () => {
     expect(select.displayMesh?.position.z).toBeLessThan(SELECT_BORDER_Z_OFFSET);
     expect(select.displayMesh?.position.z).toBeGreaterThan(0);
   });
+
+  it('commits closed arrow navigation and skips disabled options', () => {
+    const textRendering = {
+      renderTextToTexture: () => ({ getSize: () => ({ width: 80, height: 24 }) }),
+    } as unknown as TextRenderingService;
+    const meshService = {
+      createTextMesh: (name: string, _texture: unknown, width: number, height: number) =>
+        BABYLON.MeshBuilder.CreatePlane(name, { width, height }, scene),
+    } as unknown as BabylonMeshService;
+    const manager = new SelectManager(textRendering, meshService);
+    const select = manager.createSelectElement(
+      {
+        type: 'select', id: 'choice', value: 'alpha', options: [
+          { value: 'alpha', label: 'Alpha' },
+          { value: 'blocked', label: 'Blocked', disabled: true },
+          { value: 'beta', label: 'Beta' },
+        ],
+      },
+      {
+        scene,
+        actions: { camera: { getPixelToWorldScale: () => 0.01 } },
+      } as any,
+      { selector: '#choice', background: '#ffffff', color: '#000000' },
+      { width: 3, height: 0.5 },
+    );
+
+    manager.navigateOptions(select, 'down');
+
+    expect(select.selectedIndex).toBe(2);
+    expect(select.value).toBe('beta');
+    expect(select.validationState.dirty).toBeTrue();
+  });
 });
