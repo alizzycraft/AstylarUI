@@ -44,6 +44,7 @@ export interface AstylarInteractionControlAdapter {
   resetFormControls?(elementIds: readonly string[]): void;
   validateFormControls?(elementIds: readonly string[]): readonly string[];
   setActiveState?(elementId: string, active: boolean): void;
+  setFocusState?(elementId: string, focused: boolean): void;
 }
 
 interface AstylarFormDefault {
@@ -132,6 +133,8 @@ export class AstylarInteractionRuntime {
     this.canvas?.removeEventListener('keydown', this.handleKeyDown);
     this.canvas?.removeEventListener('keyup', this.handleKeyUp);
     if (this.pressedElementId) this.controls?.setActiveState?.(this.pressedElementId, false);
+    const focusedElementId = this.controls?.getFocusedElementId();
+    if (focusedElementId) this.controls?.setFocusState?.(focusedElementId, false);
     this.pressedElementId = undefined;
     this.hoveredElementId = undefined;
     this.pendingSpaceActivationId = undefined;
@@ -379,6 +382,7 @@ export class AstylarInteractionRuntime {
       }
     }
     if (previous && this.controls?.blur(previous)) {
+      this.controls.setFocusState?.(previous, false);
       this.dispatcher.dispatch({
         type: 'blur',
         targetId: previous,
@@ -386,6 +390,7 @@ export class AstylarInteractionRuntime {
       });
     }
     if (elementId && this.controls?.focus(elementId)) {
+      this.controls.setFocusState?.(elementId, true);
       this.focusedValueAtEntry = this.liveState(elementId).value;
       this.dispatcher.dispatch({
         type: 'focus',

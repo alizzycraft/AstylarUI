@@ -40,7 +40,7 @@ export interface BabylonDOMActions {
 export interface BabylonDOMContext {
     elements: Map<string, Mesh>;
     hoverStates: Map<string, boolean>;
-    elementStyles: Map<string, { normal: StyleRule, hover?: StyleRule, active?: StyleRule }>;
+    elementStyles: Map<string, { normal: StyleRule, hover?: StyleRule, active?: StyleRule, focus?: StyleRule }>;
     elementTypes: Map<string, string>;
     elementDimensions: Map<string, { width: number, height: number, padding: { top: number; right: number; bottom: number; left: number } }>;
     originalBorderRadius?: Map<string, number>;

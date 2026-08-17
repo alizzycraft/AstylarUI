@@ -126,6 +126,7 @@ describe('AstylarInteractionRuntime', () => {
     first.metadata = { elementId: 'first' };
     const canvas = document.createElement('canvas');
     const events: AstylarEventSnapshot[] = [];
+    const focusStates: Array<[string, boolean]> = [];
     let focusedElementId: string | undefined;
     const handledKeys: string[] = [];
     const siteData: SiteData = {
@@ -155,6 +156,7 @@ describe('AstylarInteractionRuntime', () => {
         },
         handleKeyDown: (_elementId, event) => handledKeys.push(event.key),
         commitsValueOnBlur: () => false,
+        setFocusState: (elementId, focused) => focusStates.push([elementId, focused]),
       },
       canvas,
     );
@@ -184,6 +186,11 @@ describe('AstylarInteractionRuntime', () => {
       'keydown:second',
     ]);
     expect(focusedElementId).toBe('second');
+    expect(focusStates).toEqual([
+      ['first', true],
+      ['first', false],
+      ['second', true],
+    ]);
     expect(handledKeys).toEqual(['a']);
     expect(runtime.snapshot.keyboardListeners).toBe(2);
 
@@ -195,6 +202,7 @@ describe('AstylarInteractionRuntime', () => {
     expect(events.at(-1)?.type).toBe('blur');
     expect(events.at(-1)?.targetId).toBe('second');
     expect(focusedElementId).toBeUndefined();
+    expect(focusStates.at(-1)).toEqual(['second', false]);
 
     runtime.dispose();
     canvas.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', code: 'Tab' }));

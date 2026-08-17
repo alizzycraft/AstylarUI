@@ -118,6 +118,7 @@ import { interactionFormValidationFixture } from './interaction-form-validation.
 import { interactionFormImplicitSubmitFixture } from './interaction-form-implicit-submit.fixture';
 import { interactionHoverStyleFixture } from './interaction-hover-style.fixture';
 import { interactionActiveStyleFixture } from './interaction-active-style.fixture';
+import { interactionFocusStyleFixture } from './interaction-focus-style.fixture';
 import { ParityFixture } from '../parity.types';
 
 const fixtures: readonly ParityFixture[] = [
@@ -240,7 +241,8 @@ const fixtures: readonly ParityFixture[] = [
   interactionFormValidationFixture,
   interactionFormImplicitSubmitFixture,
   interactionHoverStyleFixture,
-  interactionActiveStyleFixture
+  interactionActiveStyleFixture,
+  interactionFocusStyleFixture
 ];
 
 const fixturesById = new Map(fixtures.map((fixture) => [fixture.id, fixture]));

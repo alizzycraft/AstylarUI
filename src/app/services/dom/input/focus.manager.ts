@@ -15,6 +15,7 @@ export class FocusManager {
     private focusedElement: InputElement | null = null;
     private tabOrder: InputElement[] = [];
     private focusIndicators: Map<string, BABYLON.Mesh[]> = new Map();
+    private defaultFocusIndicatorEnabled: Map<string, boolean> = new Map();
 
     constructor(
         private cursorRenderer: TextCursorRenderer,
@@ -34,8 +35,12 @@ export class FocusManager {
         this.focusedElement = inputElement;
         inputElement.focused = true;
 
-        // Show focus indicator
-        this.showFocusIndicator(inputElement);
+        // Authored :focus paint can replace Astylar's fallback indicator.
+        if (this.defaultFocusIndicatorEnabled.get(inputElement.element.id || '') !== false) {
+            this.showFocusIndicator(inputElement);
+        } else {
+            this.hideFocusIndicator(inputElement);
+        }
 
         // Handle text input focus (hide placeholder, start cursor blinking)
         if (this.isTextInput(inputElement)) {
@@ -152,6 +157,7 @@ export class FocusManager {
 
         // Remove focus indicator
         this.disposeFocusIndicator(inputElement);
+        this.defaultFocusIndicatorEnabled.delete(inputElement.element.id || '');
     }
 
     /**
@@ -255,6 +261,14 @@ export class FocusManager {
         return this.focusedElement === inputElement;
     }
 
+    /** Enables or suppresses the fallback ring for one authored element. */
+    setDefaultFocusIndicatorEnabled(elementId: string, enabled: boolean): void {
+        this.defaultFocusIndicatorEnabled.set(elementId, enabled);
+        if (!enabled && this.focusedElement?.element.id === elementId) {
+            this.hideFocusIndicator(this.focusedElement);
+        }
+    }
+
     /**
      * Helper to check if input is a text input
      */
@@ -276,6 +290,7 @@ export class FocusManager {
             materials.forEach(material => material?.dispose());
         });
         this.focusIndicators.clear();
+        this.defaultFocusIndicatorEnabled.clear();
         this.tabOrder = [];
         this.focusedElement = null;
     }

@@ -116,6 +116,11 @@ export class InputElementService {
         this.focusManager.focusElement(inputElement);
     }
 
+    /** Configures whether Astylar should draw its fallback focus ring. */
+    setDefaultFocusIndicatorEnabled(elementId: string, enabled: boolean): void {
+        this.focusManager.setDefaultFocusIndicatorEnabled(elementId, enabled);
+    }
+
     /**
      * Blurs an input element
      */

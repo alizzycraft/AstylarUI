@@ -751,5 +751,12 @@
     "category": "controls-states",
     "expectedBehavior": "Primary pointer down applies authored active paint until pointer up, then restores normal paint and completes click.",
     "interactionStepCount": 2
+  },
+  {
+    "id": "interaction-focus-style",
+    "title": "Authored focus-state paint",
+    "category": "controls-states",
+    "expectedBehavior": "Focusing a control applies authored focus paint and blurring it restores normal paint without changing geometry.",
+    "interactionStepCount": 4
   }
 ]

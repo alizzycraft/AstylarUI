@@ -82,7 +82,7 @@ export class BabylonDOMService {
   /**
    * @deprecated Use BabylonElementManagerService directly
    */
-  get elementStyles(): Map<string, { normal: StyleRule; hover?: StyleRule; active?: StyleRule }> {
+  get elementStyles(): Map<string, { normal: StyleRule; hover?: StyleRule; active?: StyleRule; focus?: StyleRule }> {
     return this.elementManager.elementStylesMap;
   }
 

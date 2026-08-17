@@ -245,4 +245,25 @@ describe('StyleService cascade', () => {
 
     expect(service.findStyleForElement(checked, styles, elementStyles)?.background).toBe('#22c55e');
   });
+
+  it('stores authored active and focus paint independently from normal paint', () => {
+    const styles: StyleRule[] = [
+      { selector: '#stateful', background: '#dbeafe' },
+      { selector: '#stateful:active', background: '#1d4ed8' },
+      { selector: '#stateful:focus', background: '#93c5fd' },
+    ];
+    const elementStyles = new Map<string, {
+      normal: StyleRule;
+      hover?: StyleRule;
+      active?: StyleRule;
+      focus?: StyleRule;
+    }>();
+    const dom = { context: { elementStyles } } as any;
+
+    service.parseStyles(dom, {} as any, styles);
+
+    expect(elementStyles.get('stateful')?.normal.background).toBe('#dbeafe');
+    expect(elementStyles.get('stateful')?.active?.background).toBe('#1d4ed8');
+    expect(elementStyles.get('stateful')?.focus?.background).toBe('#93c5fd');
+  });
 });

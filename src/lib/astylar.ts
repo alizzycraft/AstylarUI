@@ -277,6 +277,10 @@ export class Astylar {
         focus: (elementId) => {
           const input = this.inputElementService.getInputElement(elementId);
           if (!input || input.disabled) return false;
+          this.inputElementService.setDefaultFocusIndicatorEnabled(
+            elementId,
+            !this.hasAuthoredFocusPaint(elementId),
+          );
           this.inputElementService.focusInputElement(input);
           return true;
         },
@@ -307,6 +311,8 @@ export class Astylar {
           this.inputElementService.validateFormControls(elementIds),
         setActiveState: (elementId, active) =>
           this.setElementActiveState(elementId, active),
+        setFocusState: (elementId, focused) =>
+          this.setElementFocusState(elementId, focused),
       },
     );
     this.interactions.set(scene, interaction);
@@ -450,33 +456,66 @@ export class Astylar {
   }
 
   private setElementActiveState(elementId: string, active: boolean): void {
+    this.setElementPseudoState(elementId, 'active', active);
+  }
+
+  private setElementFocusState(elementId: string, focused: boolean): void {
+    this.setElementPseudoState(elementId, 'focus', focused);
+  }
+
+  private hasAuthoredFocusPaint(elementId: string): boolean {
+    const styles = this.elementManager.elementStylesMap.get(elementId);
+    if (!styles?.focus) return false;
+    const merged = { ...styles.normal, ...styles.focus };
+    return !!merged.background &&
+      this.styleService.parseBackgroundColor(merged.background)?.type === 'color';
+  }
+
+  private setElementPseudoState(
+    elementId: string,
+    state: 'active' | 'focus',
+    enabled: boolean,
+  ): void {
     const mesh = this.elementManager.elementsMap.get(elementId);
     const styles = this.elementManager.elementStylesMap.get(elementId);
-    if (!mesh || !styles?.active) return;
+    if (!mesh || !styles?.[state]) return;
     mesh.metadata = mesh.metadata ?? {};
-    if (!active) {
-      if (mesh.metadata.astylarPreActiveMaterial) {
-        mesh.material = mesh.metadata.astylarPreActiveMaterial;
-        delete mesh.metadata.astylarPreActiveMaterial;
-      }
+    const stateKey = state === 'active' ? 'astylarActiveState' : 'astylarFocusState';
+    mesh.metadata[stateKey] = enabled;
+    if (!Object.prototype.hasOwnProperty.call(mesh.metadata, 'astylarInteractionBaseMaterial')) {
+      mesh.metadata.astylarInteractionBaseMaterial = mesh.material;
+    }
+
+    const active = !!mesh.metadata.astylarActiveState && !!styles.active;
+    const focused = !!mesh.metadata.astylarFocusState && !!styles.focus;
+    if (!active && !focused) {
+      mesh.material = mesh.metadata.astylarInteractionBaseMaterial;
       return;
     }
-    mesh.metadata.astylarPreActiveMaterial = mesh.material;
-    if (!mesh.metadata.astylarActiveMaterial) {
-      const style = { ...styles.normal, ...styles.active };
+
+    const materialKey = active && focused
+      ? 'astylarActiveFocusMaterial'
+      : active ? 'astylarActiveMaterial' : 'astylarFocusMaterial';
+    const materialSuffix = active && focused ? 'active-focus' : active ? 'active' : 'focus';
+    if (!mesh.metadata[materialKey]) {
+      const style = {
+        ...styles.normal,
+        ...(focused ? styles.focus : {}),
+        ...(active ? styles.active : {}),
+      };
       const background = style.background
         ? this.styleService.parseBackgroundColor(style.background)
         : undefined;
       if (background?.type === 'color') {
-        mesh.metadata.astylarActiveMaterial = this.babylonMeshService.createMaterial(
-          `${elementId}-active-material`,
+        mesh.metadata[materialKey] = this.babylonMeshService.createMaterial(
+          `${elementId}-${materialSuffix}-material`,
           background.color,
           background.alpha ?? this.styleService.parseOpacity(style.opacity),
         );
       }
     }
-    if (mesh.metadata.astylarActiveMaterial) {
-      mesh.material = mesh.metadata.astylarActiveMaterial;
+    if (mesh.metadata[materialKey]) {
+      mesh.material = mesh.metadata[materialKey];
     }
   }
 }
