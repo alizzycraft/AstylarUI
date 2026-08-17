@@ -22,6 +22,18 @@ describe('GridService', () => {
       .toEqual([260, 180]);
   });
 
+  it('expands fixed-count repeat patterns containing complete track functions', () => {
+    expect(service.resolveTracks('repeat(2, minmax(100px, 1fr)) 80px', 424, 12, 3))
+      .toEqual([160, 160, 80]);
+    expect(service.resolveTracks('repeat(2, 54px)', 118, 10, 2))
+      .toEqual([54, 54]);
+  });
+
+  it('explicitly rejects automatic repeat counts', () => {
+    expect(() => service.resolveTracks('repeat(auto-fit, 100px)', 320, 10, 1))
+      .toThrowError(/only positive fixed counts are supported/);
+  });
+
   it('sizes auto rows from the largest item contribution in each row', () => {
     expect(resolveIntrinsicGridRows('auto auto', 1, [36, 52]))
       .toEqual([36, 52]);

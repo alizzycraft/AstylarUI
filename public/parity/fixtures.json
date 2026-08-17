@@ -551,5 +551,11 @@
     "title": "Content-sized implicit grid rows",
     "category": "grid",
     "expectedBehavior": "Items overflowing the explicit column structure create implicit auto rows whose heights use the largest item contribution in each row."
+  },
+  {
+    "id": "grid-fixed-repeat-tracks",
+    "title": "Fixed-count repeated grid tracks",
+    "category": "grid",
+    "expectedBehavior": "A fixed-count repeat expands complete track functions before sizing and auto-placement, including repeated minmax columns and fixed rows."
   }
 ]

@@ -15,7 +15,31 @@ export function tokenizeGridTrackList(template: string | undefined): string[] {
     if (character === ')') depth = Math.max(0, depth - 1);
   }
   if (token) tokens.push(token);
-  return tokens;
+  return tokens.flatMap((trackToken) => expandFixedRepeatToken(trackToken));
+}
+
+function expandFixedRepeatToken(token: string): string[] {
+  if (!/^repeat\(/i.test(token) || !token.endsWith(')')) return [token];
+  const body = token.slice(token.indexOf('(') + 1, -1);
+  let depth = 0;
+  let separator = -1;
+  for (let index = 0; index < body.length; index++) {
+    const character = body[index];
+    if (character === '(') depth++;
+    if (character === ')') depth = Math.max(0, depth - 1);
+    if (character === ',' && depth === 0) {
+      separator = index;
+      break;
+    }
+  }
+  if (separator < 0) return [token];
+
+  const countSource = body.slice(0, separator).trim();
+  if (!/^\d+$/.test(countSource)) return [token];
+  const count = Number.parseInt(countSource, 10);
+  const repeatedTracks = tokenizeGridTrackList(body.slice(separator + 1));
+  if (count < 1 || repeatedTracks.length === 0) return [token];
+  return Array.from({ length: count }, () => repeatedTracks).flat();
 }
 
 function resolveDefiniteTrackLength(value: string, percentageReference: number): number {
@@ -32,6 +56,12 @@ export function resolveGridTracks(
   fallbackCount: number,
 ): number[] {
   const tokens = tokenizeGridTrackList(template);
+  const unsupportedRepeat = tokens.find((token) => /^repeat\(/i.test(token));
+  if (unsupportedRepeat) {
+    throw new Error(
+      `Unsupported Grid repeat() count in "${unsupportedRepeat}"; only positive fixed counts are supported.`,
+    );
+  }
   const trackTokens = tokens.length ? tokens : Array.from({ length: fallbackCount }, () => '1fr');
   const trackSpace = Math.max(0, availableSize - Math.max(0, trackTokens.length - 1) * gap);
   let fixed = 0;
