@@ -23,6 +23,11 @@ import { StyleService } from "../app/services/dom/style.service";
 import { StyleDefaultsService } from "../app/services/dom/style-defaults.service";
 import { SiteData } from "../app/types/site-data";
 import { BabylonRender } from "../app/services/dom/interfaces/render.types";
+import { AstylarRenderSession } from "./astylar-render-session";
+import type {
+  AstylarInvalidationReason,
+  AstylarSessionSnapshot,
+} from "./astylar-render-session";
 
 /**
  * Configuration options for rendering
@@ -47,6 +52,8 @@ export class Astylar {
   private textureService = inject(TextureService);
   private styleService = inject(StyleService);
   private styleDefaultsService = inject(StyleDefaultsService);
+  private readonly sessions = new WeakMap<Scene, AstylarRenderSession>();
+  private activeSession?: AstylarRenderSession;
 
   /**
    * Renders a site data structure to a BabylonJS 3D scene on the provided canvas.
@@ -218,11 +225,24 @@ export class Astylar {
     };
 
     // Initialize DOM service
-    this.babylonDOMRenderer.initialize(
-      renderContext,
-      viewportWidth,
-      viewportHeight,
+    this.babylonDOMRenderer.initialize(renderContext, viewportWidth, viewportHeight);
+
+    const session = new AstylarRenderSession(
+      scene,
+      siteData,
+      async (currentSiteData) => {
+        await scene.whenReadyAsync();
+        engine.resize(true);
+        this.babylonDOMRenderer.initialize(
+          renderContext,
+          canvas.clientWidth || viewportWidth,
+          canvas.clientHeight || viewportHeight,
+        );
+        this.babylonDOMRenderer.createSiteFromData(currentSiteData);
+      },
     );
+    this.sessions.set(scene, session);
+    this.activeSession = session;
 
     // Start render loop
     engine.runRenderLoop(() => {
@@ -235,15 +255,18 @@ export class Astylar {
     };
     window.addEventListener("resize", resizeHandler);
 
-    // Wait for scene ready then create content
-    scene.onReadyObservable.addOnce(() => {
-      engine.resize(true);
-      this.babylonDOMRenderer.createSiteFromData(siteData);
+    // Queue the initial layout through the same lifecycle used by later reflows.
+    void session.invalidate('initial').catch((error) => {
+      console.error('[Astylar] Initial render failed:', error);
     });
 
     // Set up cleanup on scene disposal
     scene.onDisposeObservable.add(() => {
       console.log("[Astylar] Scene disposing, cleaning up services...");
+      session.dispose();
+      if (this.activeSession === session) {
+        this.activeSession = undefined;
+      }
       window.removeEventListener("resize", resizeHandler);
       this.babylonDOMRenderer.cleanup();
       this.babylonCameraService.cleanup();
@@ -258,5 +281,32 @@ export class Astylar {
 
     // Return the scene directly
     return scene;
+  }
+
+  getSession(scene?: Scene): AstylarRenderSession | undefined {
+    return scene ? this.sessions.get(scene) : this.activeSession;
+  }
+
+  update(siteData: SiteData, scene?: Scene): Promise<AstylarSessionSnapshot> {
+    return this.requireSession(scene).update(siteData);
+  }
+
+  invalidate(
+    reason: AstylarInvalidationReason = 'manual',
+    scene?: Scene,
+  ): Promise<AstylarSessionSnapshot> {
+    return this.requireSession(scene).invalidate(reason);
+  }
+
+  whenSettled(scene?: Scene): Promise<AstylarSessionSnapshot> {
+    return this.requireSession(scene).whenSettled();
+  }
+
+  private requireSession(scene?: Scene): AstylarRenderSession {
+    const session = this.getSession(scene);
+    if (!session) {
+      throw new Error('No active Astylar render session was found.');
+    }
+    return session;
   }
 }

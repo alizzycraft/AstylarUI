@@ -49,6 +49,21 @@ export interface ParityFixture {
     css: string;
   };
   siteData: SiteData;
+  dynamicSteps?: ParityDynamicStep[];
+}
+
+export interface ParityReferenceSetTextMutation {
+  type: 'set-text';
+  elementId: string;
+  textContent: string;
+}
+
+export type ParityReferenceMutation = ParityReferenceSetTextMutation;
+
+export interface ParityDynamicStep {
+  id: string;
+  referenceMutations: ParityReferenceMutation[];
+  siteData: SiteData;
 }
 
 export interface ParityRect {

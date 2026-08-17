@@ -64,6 +64,22 @@ export class ParityReferenceComponent {
     await this.nextFrame();
     await this.nextFrame();
 
+    for (const step of fixture.dynamicSteps ?? []) {
+      for (const mutation of step.referenceMutations) {
+        if (mutation.type === 'set-text') {
+          const target = viewport.querySelector<HTMLElement>(
+            `#${CSS.escape(mutation.elementId)}`
+          );
+          if (!target) {
+            throw new Error(`Missing reference mutation target: ${mutation.elementId}`);
+          }
+          target.textContent = mutation.textContent;
+        }
+      }
+      await this.nextFrame();
+      await this.nextFrame();
+    }
+
     const elements: Record<string, ParityElementMeasurement> = {};
     const errors: string[] = [];
 

@@ -10,6 +10,11 @@
 import { Scene } from "@babylonjs/core";
 export { Astylar } from "./astylar";
 export type { AstylarRenderOptions } from "./astylar";
+export { AstylarRenderSession } from "./astylar-render-session";
+export type {
+  AstylarInvalidationReason,
+  AstylarSessionSnapshot,
+} from "./astylar-render-session";
 
 /**
  * Functional API wrapper for the Astylar library.
@@ -20,6 +25,7 @@ import { inject } from "@angular/core";
 import { Astylar } from "./astylar";
 import type { SiteData } from "../app/types/site-data";
 import type { AstylarRenderOptions } from "./astylar";
+import type { AstylarSessionSnapshot } from "./astylar-render-session";
 
 export const astylar = {
   /**
@@ -38,12 +44,12 @@ export const astylar = {
   /**
    * Updates an existing 3D UI scene with new site data.
    */
-  update(siteData: SiteData) {
+  get update(): (
+    siteData: SiteData,
+    scene?: Scene,
+  ) => Promise<AstylarSessionSnapshot> {
     const service = inject(Astylar);
-    const babylonDOMRenderer = (service as any).babylonDOMRenderer;
-    if (babylonDOMRenderer) {
-      babylonDOMRenderer.createSiteFromData(siteData);
-    }
+    return service.update.bind(service);
   },
 };
 

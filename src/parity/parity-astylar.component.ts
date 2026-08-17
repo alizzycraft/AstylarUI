@@ -116,41 +116,72 @@ export class ParityAstylarComponent {
       scene.activeCamera?.detachControl();
       this.scene = scene;
 
-      let renderedFrames = 0;
-      const observer = scene.onAfterRenderObservable.add(() => {
-        renderedFrames += 1;
-        const hasAllElements = fixture.measurementIds.every((id) =>
-          this.elementManager.elementsMap.has(id)
-        );
-        const assetsReady = scene.textures.every((texture) => texture.isReady());
-
-        if (hasAllElements && assetsReady && renderedFrames >= 2) {
-          scene.onAfterRenderObservable.remove(observer);
-          canvas.dataset['parityReady'] = 'true';
-          this.publishReport(
-            this.createReport(
-              scene,
-              fixtureId,
-              fixture.measurementIds,
-              fixture.expectedAbsentIds ?? []
-            )
-          );
-          return;
-        }
-
-        if (renderedFrames > 300) {
-          scene.onAfterRenderObservable.remove(observer);
-          this.publishReport(
-            this.createReport(
-              scene,
-              fixtureId,
-              fixture.measurementIds,
-              fixture.expectedAbsentIds ?? [],
-              ['Timed out waiting for all Astylar elements to render']
-            )
-          );
-        }
+      void this.applyDynamicSteps(scene, fixture).then(() => {
+        this.captureWhenReady(scene, canvas, fixture);
+      }).catch((error) => {
+        this.publishReport({
+          ready: true,
+          fixtureId,
+          mode: 'astylar',
+          viewport: this.parityViewport,
+          elements: {},
+          errors: [error instanceof Error ? error.message : String(error)]
+        });
       });
+    });
+  }
+
+  private async applyDynamicSteps(
+    scene: Scene,
+    fixture: NonNullable<ReturnType<typeof getParityFixture>>
+  ): Promise<void> {
+    await this.astylar.whenSettled(scene);
+    for (const step of fixture.dynamicSteps ?? []) {
+      await this.astylar.update(step.siteData, scene);
+    }
+  }
+
+  private captureWhenReady(
+    scene: Scene,
+    canvas: HTMLCanvasElement,
+    fixture: NonNullable<ReturnType<typeof getParityFixture>>
+  ): void {
+    const fixtureId = fixture.id;
+
+    let renderedFrames = 0;
+    const observer = scene.onAfterRenderObservable.add(() => {
+      renderedFrames += 1;
+      const hasAllElements = fixture.measurementIds.every((id) =>
+        this.elementManager.elementsMap.has(id)
+      );
+      const assetsReady = scene.textures.every((texture) => texture.isReady());
+
+      if (hasAllElements && assetsReady && renderedFrames >= 2) {
+        scene.onAfterRenderObservable.remove(observer);
+        canvas.dataset['parityReady'] = 'true';
+        this.publishReport(
+          this.createReport(
+            scene,
+            fixtureId,
+            fixture.measurementIds,
+            fixture.expectedAbsentIds ?? []
+          )
+        );
+        return;
+      }
+
+      if (renderedFrames > 300) {
+        scene.onAfterRenderObservable.remove(observer);
+        this.publishReport(
+          this.createReport(
+            scene,
+            fixtureId,
+            fixture.measurementIds,
+            fixture.expectedAbsentIds ?? [],
+            ['Timed out waiting for all Astylar elements to render']
+          )
+        );
+      }
     });
   }
 

@@ -587,5 +587,11 @@
     "title": "Auto grid row with nested application content",
     "category": "grid",
     "expectedBehavior": "A height-auto Grid row recursively includes a nested Grid card containing wrapped block text, controls, and an explicitly sized image."
+  },
+  {
+    "id": "reactive-text-update",
+    "title": "Reactive wrapped text update",
+    "category": "responsive",
+    "expectedBehavior": "Updating short text to wrapped text in the same render session grows auto-height ancestors and moves following content exactly as browser reflow does."
   }
 ]
