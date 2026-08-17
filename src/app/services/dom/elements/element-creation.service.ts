@@ -55,7 +55,7 @@ export class ElementCreationService {
     parent: Mesh,
     styles: StyleRule[],
     flexPosition?: { x: number; y: number; z: number },
-    flexSize?: { width: number; height: number },
+    flexSize?: { width?: number; height?: number },
   ): Mesh {
     console.log(
       `🔨 [ElementCreation] START creating element:`,
@@ -133,8 +133,8 @@ export class ElementCreationService {
     const dimensions = flexSize
       ? {
           ...calculatedDimensions,
-          width: flexSize.width,
-          height: flexSize.height,
+          ...(flexSize.width !== undefined ? { width: flexSize.width } : {}),
+          ...(flexSize.height !== undefined ? { height: flexSize.height } : {}),
         }
       : calculatedDimensions;
 

@@ -90,6 +90,11 @@ export class GridService {
       const yOffset = rows.slice(0, row).reduce((sum, value) => sum + value, 0) + row * rowGap;
       const width = columns[column];
       const height = rows[row];
+      const childStyle = render.actions.style.findStyleForElement(
+        child, styles, dom.context.elementStyles,
+      );
+      const hasDefiniteWidth = this.hasDefiniteItemSize(childStyle?.width);
+      const hasDefiniteHeight = this.hasDefiniteItemSize(childStyle?.height);
       const childMesh = dom.actions.createElement(
         dom,
         render,
@@ -101,14 +106,31 @@ export class GridService {
           y: contentTop - yOffset - height / 2,
           z: 0.1 + index * 0.01,
         },
-        { width, height },
+        {
+          width: hasDefiniteWidth ? undefined : width,
+          height: hasDefiniteHeight ? undefined : height,
+        },
+      );
+
+      const usedSize = dom.context.elementDimensions.get(childMesh.name) ?? { width, height };
+      const horizontalAlignment = this.resolveItemAlignment(undefined, hasDefiniteWidth);
+      const verticalAlignment = this.resolveItemAlignment(
+        childStyle?.alignSelf ?? style.alignItems,
+        hasDefiniteHeight,
+      );
+      const scaleFactor = render.actions.camera?.getPixelToWorldScale?.() ?? 1;
+      render.actions.mesh?.positionTextMesh?.(
+        childMesh,
+        (contentLeft + xOffset + this.alignItemWithinTrack(width, usedSize.width, horizontalAlignment)) * scaleFactor,
+        (contentTop - yOffset - this.alignItemWithinTrack(height, usedSize.height, verticalAlignment)) * scaleFactor,
+        0.1 + index * 0.01,
       );
 
       // Grid track sizing produces a definite used size for the item. Nested
       // flex or block layout must preserve it instead of re-running auto size.
       childMesh.metadata = {
         ...(childMesh.metadata ?? {}),
-        astylarGridAssignedSize: { width, height },
+        astylarGridAssignedSize: { width: usedSize.width, height: usedSize.height },
       };
 
       if (child.children?.length) {
@@ -128,5 +150,29 @@ export class GridService {
   private parseLength(value: string | undefined): number {
     const parsed = Number.parseFloat(value ?? '0');
     return Number.isFinite(parsed) ? Math.max(0, parsed) : 0;
+  }
+
+  private hasDefiniteItemSize(value: string | undefined): boolean {
+    const normalized = value?.trim().toLowerCase();
+    return !!normalized && normalized !== 'auto' &&
+      /^[+-]?(?:\d+\.?\d*|\.\d+)(?:px)?$/i.test(normalized);
+  }
+
+  private resolveItemAlignment(value: string | undefined, hasDefiniteSize: boolean): 'start' | 'center' | 'end' {
+    const normalized = value?.trim().toLowerCase() ?? 'stretch';
+    if (normalized === 'center') return 'center';
+    if (normalized === 'end' || normalized === 'flex-end') return 'end';
+    if (normalized === 'stretch' && !hasDefiniteSize) return 'center';
+    return 'start';
+  }
+
+  private alignItemWithinTrack(
+    trackSize: number,
+    itemSize: number,
+    alignment: 'start' | 'center' | 'end',
+  ): number {
+    if (alignment === 'center') return trackSize / 2;
+    if (alignment === 'end') return trackSize - itemSize / 2;
+    return itemSize / 2;
   }
 }

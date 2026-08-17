@@ -545,5 +545,11 @@
     "category": "grid",
     "expectedBehavior": "A Grid item is measured at its resolved column width, so responsive text wrapping drives the auto row and height-auto Grid container consistently.",
     "viewportIds": ["desktop", "tablet", "mobile"]
+  },
+  {
+    "id": "grid-implicit-auto-rows",
+    "title": "Content-sized implicit grid rows",
+    "category": "grid",
+    "expectedBehavior": "Items overflowing the explicit column structure create implicit auto rows whose heights use the largest item contribution in each row."
   }
 ]

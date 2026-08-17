@@ -47,7 +47,7 @@ export class ElementService {
     parent: Mesh,
     styles: StyleRule[],
     flexPosition?: { x: number; y: number; z: number },
-    flexSize?: { width: number; height: number }
+    flexSize?: { width?: number; height?: number }
   ): Mesh {
     return this.creationService.createElement(dom, render, element, parent, styles, flexPosition, flexSize);
   }

@@ -88,6 +88,7 @@ import { gridMinmaxTracksFixture } from './grid-minmax-tracks.fixture';
 import { gridAutoContentRowsFixture } from './grid-auto-content-rows.fixture';
 import { gridAutoNestedFlexRowFixture } from './grid-auto-nested-flex-row.fixture';
 import { gridAutoWrappedTextRowFixture } from './grid-auto-wrapped-text-row.fixture';
+import { gridImplicitAutoRowsFixture } from './grid-implicit-auto-rows.fixture';
 import { ParityFixture } from '../parity.types';
 
 const fixtures: readonly ParityFixture[] = [
@@ -180,7 +181,8 @@ const fixtures: readonly ParityFixture[] = [
   gridMinmaxTracksFixture,
   gridAutoContentRowsFixture,
   gridAutoNestedFlexRowFixture,
-  gridAutoWrappedTextRowFixture
+  gridAutoWrappedTextRowFixture,
+  gridImplicitAutoRowsFixture
 ];
 
 const fixturesById = new Map(fixtures.map((fixture) => [fixture.id, fixture]));

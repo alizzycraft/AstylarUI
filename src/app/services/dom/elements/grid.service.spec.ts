@@ -29,6 +29,11 @@ describe('GridService', () => {
       .toEqual([40]);
   });
 
+  it('creates content-sized implicit auto rows beyond the explicit columns', () => {
+    expect(resolveIntrinsicGridRows(undefined, 2, [28, 44, 36, 52, 40]))
+      .toEqual([44, 52, 40]);
+  });
+
   it('creates equal implicit tracks when no template is supplied', () => {
     expect(service.resolveTracks(undefined, 220, 10, 2)).toEqual([105, 105]);
   });
@@ -111,5 +116,60 @@ describe('GridService', () => {
 
     expect(intrinsic).toHaveBeenCalled();
     expect(createElement.calls.mostRecent().args[6]).toEqual({ width: 252, height: 74 });
+  });
+
+  it('preserves a definite item height and aligns it at the start of a taller row', () => {
+    const firstMesh = { name: 'first', metadata: {} } as Mesh;
+    const secondMesh = { name: 'second', metadata: {} } as Mesh;
+    const dimensions = new Map<string, unknown>([
+      ['grid', {
+        width: 372, height: 72,
+        padding: { top: 12, right: 12, bottom: 12, left: 12 },
+      }],
+    ]);
+    const createElement = jasmine.createSpy('createElement').and.callFake(
+      (_dom: unknown, _render: unknown, child: { id?: string }) => {
+        const height = child.id === 'first' ? 28 : 44;
+        dimensions.set(child.id!, {
+          width: child.id === 'first' ? 150 : 180,
+          height,
+          padding: { top: 0, right: 0, bottom: 0, left: 0 },
+        });
+        return child.id === 'first' ? firstMesh : secondMesh;
+      },
+    );
+    const positionTextMesh = jasmine.createSpy('positionTextMesh');
+    const dom = {
+      context: { elementStyles: new Map(), elementDimensions: dimensions },
+      actions: { createElement, processChildren: jasmine.createSpy('processChildren') },
+    } as unknown as BabylonDOM;
+    const resolved = new Map([
+      ['grid', {
+        selector: '#grid', display: 'grid', gridTemplateColumns: '150px 180px',
+        columnGap: '14px', gridTemplateRows: 'auto',
+      }],
+      ['first', { selector: '#first', width: 'auto', height: '28px' }],
+      ['second', { selector: '#second', width: 'auto', height: '44px' }],
+    ]);
+    const render = {
+      actions: {
+        style: { findStyleForElement: (element: { id?: string }) => resolved.get(element.id ?? '') },
+        camera: { getPixelToWorldScale: () => 1 },
+        mesh: { positionTextMesh },
+      },
+    } as unknown as BabylonRender;
+
+    service.processGridChildren(
+      dom,
+      render,
+      [{ type: 'div', id: 'first' }, { type: 'div', id: 'second' }],
+      { name: 'grid' } as Mesh,
+      [],
+      { type: 'section', id: 'grid' },
+    );
+
+    expect(createElement.calls.argsFor(0)[6]).toEqual({ width: 150, height: undefined });
+    expect(firstMesh.metadata.astylarGridAssignedSize).toEqual({ width: 150, height: 28 });
+    expect(positionTextMesh.calls.argsFor(0).slice(1, 3)).toEqual([-99, 10]);
   });
 });
