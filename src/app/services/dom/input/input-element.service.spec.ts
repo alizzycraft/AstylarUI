@@ -91,4 +91,46 @@ describe('InputElementService', () => {
     expect(alpha.checked).toBeTrue();
     expect(beta.checked).toBeFalse();
   });
+
+  it('wraps radio arrow navigation and skips disabled group members', () => {
+    const alpha = {
+      type: InputType.Radio,
+      groupName: 'channel',
+      checked: true,
+      disabled: false,
+      element: { id: 'alpha' },
+    };
+    const disabled = {
+      type: InputType.Radio,
+      groupName: 'channel',
+      checked: false,
+      disabled: true,
+      element: { id: 'disabled' },
+    };
+    const beta = {
+      type: InputType.Radio,
+      groupName: 'channel',
+      checked: false,
+      disabled: false,
+      element: { id: 'beta' },
+    };
+    const checkboxManager = { getRadioGroup: () => [alpha, disabled, beta] };
+    const service = new InputElementService(
+      {} as never,
+      {} as never,
+      checkboxManager as never,
+      {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
+    );
+    service['inputElements'].set('alpha', alpha as never);
+    service['inputElements'].set('beta', beta as never);
+
+    expect(service.getRadioNavigationTarget('alpha', 1)).toBe('beta');
+    expect(service.getRadioNavigationTarget('alpha', -1)).toBe('beta');
+    expect(service.getRadioNavigationTarget('beta', 1)).toBe('alpha');
+  });
 });

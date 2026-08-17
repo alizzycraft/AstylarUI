@@ -295,6 +295,8 @@ export class Astylar {
           this.inputElementService.activateInputElement(elementId),
         canActivateWithSpace: (elementId) =>
           this.inputElementService.canActivateWithSpace(elementId),
+        getRadioNavigationTarget: (elementId, direction) =>
+          this.inputElementService.getRadioNavigationTarget(elementId, direction),
       },
     );
     this.interactions.set(scene, interaction);

@@ -681,5 +681,12 @@
     "category": "forms-interactive",
     "expectedBehavior": "Space on a focused checkbox reports keydown and keyup before a synthesized click, then emits input and change with the toggled checked state.",
     "interactionStepCount": 2
+  },
+  {
+    "id": "interaction-radio-keyboard",
+    "title": "Radio group arrow-key navigation",
+    "category": "forms-interactive",
+    "expectedBehavior": "Arrow keys move focus and exclusive selection within a named radio group, emitting input and change on the newly selected member before keyup.",
+    "interactionStepCount": 3
   }
 ]

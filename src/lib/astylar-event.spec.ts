@@ -391,4 +391,79 @@ describe('AstylarInteractionRuntime', () => {
     scene.dispose();
     engine.dispose();
   });
+
+  it('moves and activates a named radio group with arrow keys', () => {
+    const engine = new NullEngine();
+    const scene = new Scene(engine);
+    const canvas = document.createElement('canvas');
+    const events: AstylarEventSnapshot[] = [];
+    let focusedElementId: string | undefined = 'alpha';
+    let checkedId = 'alpha';
+    const runtime = new AstylarInteractionRuntime(
+      scene,
+      {
+        styles: [],
+        root: {
+          children: [
+            { type: 'input', inputType: 'radio', id: 'alpha', name: 'channel' },
+            { type: 'input', inputType: 'radio', id: 'beta', name: 'channel' },
+          ],
+        },
+      },
+      { onEvent: (event) => events.push(event) },
+      (elementId) => ({ value: elementId, checked: checkedId === elementId }),
+      {
+        getFocusedElementId: () => focusedElementId,
+        focus: (elementId) => {
+          focusedElementId = elementId;
+          return true;
+        },
+        blur: () => {
+          focusedElementId = undefined;
+          return true;
+        },
+        handleKeyDown: () => undefined,
+        commitsValueOnBlur: () => false,
+        getRadioNavigationTarget: (elementId, direction) => {
+          if (elementId === 'alpha' && direction === 1) return 'beta';
+          if (elementId === 'beta' && direction === -1) return 'alpha';
+          return undefined;
+        },
+        activate: (elementId) => {
+          const before = checkedId;
+          checkedId = elementId;
+          return {
+            changed: before !== checkedId,
+            rollback: () => { checkedId = before; },
+          };
+        },
+      },
+      canvas,
+    );
+
+    const keydown = new KeyboardEvent('keydown', {
+      key: 'ArrowRight', code: 'ArrowRight', bubbles: true, cancelable: true,
+    });
+    canvas.dispatchEvent(keydown);
+    canvas.dispatchEvent(new KeyboardEvent('keyup', {
+      key: 'ArrowRight', code: 'ArrowRight', bubbles: true, cancelable: true,
+    }));
+
+    expect(keydown.defaultPrevented).toBeTrue();
+    expect(focusedElementId).toBe('beta');
+    expect(checkedId).toBe('beta');
+    expect(events.map((event) => `${event.type}:${event.targetId}:${event.checked}`)).toEqual([
+      'keydown:alpha:true',
+      'blur:alpha:true',
+      'focus:beta:false',
+      'click:beta:true',
+      'input:beta:true',
+      'change:beta:true',
+      'keyup:beta:true',
+    ]);
+
+    runtime.dispose();
+    scene.dispose();
+    engine.dispose();
+  });
 });

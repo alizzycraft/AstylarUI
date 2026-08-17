@@ -295,6 +295,23 @@ export class InputElementService {
             (input.type === InputType.Checkbox || input.type === InputType.Radio);
     }
 
+    /** Finds the next enabled member for native-style radio arrow navigation. */
+    getRadioNavigationTarget(elementId: string, direction: -1 | 1): string | undefined {
+        const input = this.inputElements.get(elementId);
+        if (!input || input.type !== InputType.Radio || input.disabled) return undefined;
+
+        const radio = input as RadioInput;
+        if (!radio.groupName) return undefined;
+        const enabledGroup = this.checkboxManager.getRadioGroup(radio.groupName)
+            .filter((member) => !member.disabled && !!member.element.id);
+        if (enabledGroup.length < 2) return undefined;
+
+        const currentIndex = enabledGroup.indexOf(radio);
+        if (currentIndex < 0) return undefined;
+        const nextIndex = (currentIndex + direction + enabledGroup.length) % enabledGroup.length;
+        return enabledGroup[nextIndex].element.id;
+    }
+
     /**
      * Determines input type from element
      */

@@ -38,6 +38,7 @@ export interface AstylarInteractionControlAdapter {
   commitsValueOnBlur(elementId: string): boolean;
   activate?(elementId: string): AstylarControlActivation | undefined;
   canActivateWithSpace?(elementId: string): boolean;
+  getRadioNavigationTarget?(elementId: string, direction: -1 | 1): string | undefined;
 }
 
 /** Owns the Babylon observers for one scene and emits a small DOM-like event subset. */
@@ -218,6 +219,19 @@ export class AstylarInteractionRuntime {
       this.pendingSpaceActivationId = targetId;
       return;
     }
+    const radioDirection = this.radioNavigationDirection(event.key);
+    if (radioDirection) {
+      const nextRadioId = this.controls?.getRadioNavigationTarget?.(
+        targetId,
+        radioDirection,
+      );
+      if (nextRadioId) {
+        event.preventDefault();
+        this.setFocus(nextRadioId);
+        this.activateAndClick(nextRadioId);
+        return;
+      }
+    }
     const before = this.liveState(targetId);
     this.controls?.handleKeyDown(targetId, event);
     const after = this.liveState(targetId);
@@ -286,6 +300,12 @@ export class AstylarInteractionRuntime {
       ? (currentIndex + 1 + this.focusOrder.length) % this.focusOrder.length
       : (currentIndex <= 0 ? this.focusOrder.length - 1 : currentIndex - 1);
     this.setFocus(this.focusOrder[nextIndex]);
+  }
+
+  private radioNavigationDirection(key: string): -1 | 1 | undefined {
+    if (key === 'ArrowLeft' || key === 'ArrowUp') return -1;
+    if (key === 'ArrowRight' || key === 'ArrowDown') return 1;
+    return undefined;
   }
 
   private setFocus(elementId: string | undefined): void {
