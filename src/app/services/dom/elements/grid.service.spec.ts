@@ -41,6 +41,11 @@ describe('GridService', () => {
       .toEqual([40]);
   });
 
+  it('sizes non-spanning intrinsic keyword rows from measurable contributions', () => {
+    expect(resolveIntrinsicGridRows('min-content max-content', 2, [36, 56, 40, 76]))
+      .toEqual([56, 76]);
+  });
+
   it('creates content-sized implicit auto rows beyond the explicit columns', () => {
     expect(resolveIntrinsicGridRows(undefined, 2, [28, 44, 36, 52, 40]))
       .toEqual([44, 52, 40]);

@@ -134,16 +134,20 @@ export function resolveIntrinsicGridRows(
     { length: Math.max(requiredRows, explicitTokens.length) },
     (_, index) => explicitTokens[index] ?? 'auto',
   );
-  if (rowTokens.some((token) => token !== 'auto' && !/^[+-]?(?:\d+\.?\d*|\.\d+)(?:px)?$/i.test(token))) {
+  const isIntrinsicTrack = (token: string) =>
+    ['auto', 'min-content', 'max-content'].includes(token.toLowerCase());
+  if (rowTokens.some((token) =>
+    !isIntrinsicTrack(token) && !/^[+-]?(?:\d+\.?\d*|\.\d+)(?:px)?$/i.test(token),
+  )) {
     return null;
   }
 
-  const rows = rowTokens.map((token) => token === 'auto'
+  const rows = rowTokens.map((token) => isIntrinsicTrack(token)
     ? 0
     : Math.max(0, Number.parseFloat(token) || 0));
   for (let index = 0; index < itemOuterHeights.length; index++) {
     const row = Math.floor(index / Math.max(1, columnCount));
-    if (rowTokens[row] !== 'auto') continue;
+    if (!isIntrinsicTrack(rowTokens[row])) continue;
     const contribution = itemOuterHeights[index];
     if (contribution === null) return null;
     rows[row] = Math.max(rows[row], contribution);

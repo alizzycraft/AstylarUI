@@ -557,5 +557,11 @@
     "title": "Fixed-count repeated grid tracks",
     "category": "grid",
     "expectedBehavior": "A fixed-count repeat expands complete track functions before sizing and auto-placement, including repeated minmax columns and fixed rows."
+  },
+  {
+    "id": "grid-intrinsic-keyword-rows",
+    "title": "Min-content and max-content grid rows",
+    "category": "grid",
+    "expectedBehavior": "Non-spanning min-content and max-content rows use the largest measurable text contribution at the resolved column width and drive a height-auto Grid container."
   }
 ]
