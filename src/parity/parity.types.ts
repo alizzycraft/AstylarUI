@@ -103,13 +103,20 @@ export interface ParityTypeTextAction {
   text: string;
 }
 
+export interface ParityApplyUpdateAction {
+  type: 'apply-update';
+  stepIndex: number;
+  viewportId?: ParityViewport['id'];
+}
+
 export type ParityInteractionAction =
   | ParityClickAction
   | ParityHoverAction
   | ParityPointerDownAction
   | ParityPointerUpAction
   | ParityPressKeyAction
-  | ParityTypeTextAction;
+  | ParityTypeTextAction
+  | ParityApplyUpdateAction;
 
 export interface ParityInteractionStep {
   id: string;

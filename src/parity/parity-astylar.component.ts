@@ -158,6 +158,21 @@ export class ParityAstylarComponent {
           await this.nextFrame();
           this.captureWhenReady(scene, canvas, fixture);
         };
+        if (fixture.dynamicSteps?.length) {
+          window.__ASTYLAR_PARITY_APPLY_STEP__ = async (index, viewportId) => {
+            const step = fixture.dynamicSteps?.[index];
+            if (!step) throw new Error(`Unknown interaction update step: ${index}`);
+            if (viewportId) {
+              this.setViewportBox(PARITY_VIEWPORTS[viewportId]);
+              await this.nextFrame();
+              await this.nextFrame();
+            }
+            canvas.dataset['parityReady'] = 'false';
+            await this.astylar.update(step.siteData, scene);
+            await this.nextFrame();
+            await this.nextFrame();
+          };
+        }
       }
       if (dynamicSequence) {
         window.__ASTYLAR_PARITY_APPLY_STEP__ = async (index, viewportId) => {

@@ -15,6 +15,17 @@ import { TextSelectionControllerService } from '../../dom/interaction/text-selec
 import { Subscription } from 'rxjs';
 import { CONTROL_CONTENT_Z_OFFSET } from '../render-depth.constants';
 
+export interface TextInputMutableState {
+    value: string;
+    cursorPosition: number;
+    selectionStart: number;
+    selectionEnd: number;
+    selectionActive: boolean;
+    selectionAnchor: number;
+    selectionFocus: number;
+    scrollOffset: number;
+}
+
 /**
  * Service responsible for managing text input fields
  */
@@ -888,6 +899,27 @@ export class TextInputManager {
         textInput.cursorState.selectionEnd = 0;
         textInput.cursorState.selectionActive = false;
         textInput.scrollOffset = 0;
+        if (this.activeRender) {
+            this.updateTextDisplay(textInput, this.activeRender, textInput.style);
+        }
+    }
+
+    /** Restores user-owned text state after a compatible full renderer rebuild. */
+    restoreMutableState(textInput: TextInput, state: TextInputMutableState): void {
+        const value = state.value;
+        const clamp = (position: number): number =>
+            Math.max(0, Math.min(value.length, position));
+        textInput.value = value;
+        textInput.textContent = value;
+        textInput.cursorPosition = clamp(state.cursorPosition);
+        textInput.selectionStart = clamp(state.selectionStart);
+        textInput.selectionEnd = clamp(state.selectionEnd);
+        textInput.cursorState.position = textInput.cursorPosition;
+        textInput.cursorState.selectionActive = state.selectionActive &&
+            textInput.selectionStart !== textInput.selectionEnd;
+        textInput.cursorState.selectionStart = clamp(state.selectionAnchor);
+        textInput.cursorState.selectionEnd = clamp(state.selectionFocus);
+        textInput.scrollOffset = Math.max(0, state.scrollOffset);
         if (this.activeRender) {
             this.updateTextDisplay(textInput, this.activeRender, textInput.style);
         }

@@ -257,6 +257,64 @@ describe('InputElementService', () => {
     }
   });
 
+  it('restores compatible text state but lets a changed authored value win', () => {
+    const textInputManager = {
+      restoreMutableState: jasmine.createSpy('restoreMutableState'),
+    };
+    const service = new InputElementService(
+      textInputManager as never,
+      {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
+    );
+    const oldInput = {
+      type: InputType.Text,
+      value: 'Edited',
+      element: { id: 'field', value: 'Seed' },
+      focused: true,
+      cursorPosition: 5,
+      selectionStart: 5,
+      selectionEnd: 6,
+      scrollOffset: 12,
+      cursorState: {
+        selectionActive: true, selectionStart: 6, selectionEnd: 5,
+      },
+      validationState: { valid: false, errors: ['edited'], touched: true, dirty: true },
+    };
+    service['inputElements'].set('field', oldInput as never);
+    const snapshots = service.captureTextControlStates();
+    const rebuiltInput = {
+      ...oldInput,
+      value: 'Seed',
+      focused: false,
+      cursorPosition: 0,
+      selectionStart: 0,
+      selectionEnd: 0,
+      cursorState: { selectionActive: false, selectionStart: 0, selectionEnd: 0 },
+      validationState: { valid: true, errors: [] as string[], touched: false, dirty: false },
+    };
+    service['inputElements'].set('field', rebuiltInput as never);
+
+    expect(service.restoreTextControlStates(snapshots)).toBe('field');
+    expect(textInputManager.restoreMutableState).toHaveBeenCalledWith(
+      rebuiltInput,
+      jasmine.objectContaining({ value: 'Edited', cursorPosition: 5, selectionAnchor: 6 }),
+    );
+    expect(rebuiltInput.validationState).toEqual({
+      valid: false, errors: ['edited'], touched: true, dirty: true,
+    });
+
+    textInputManager.restoreMutableState.calls.reset();
+    rebuiltInput.element = { id: 'field', value: 'Server value' };
+    expect(service.restoreTextControlStates(snapshots)).toBeUndefined();
+    expect(textInputManager.restoreMutableState).not.toHaveBeenCalled();
+  });
+
   it('validates eligible form controls in authored order', () => {
     const formValidator = {
       validateInput: jasmine.createSpy('validateInput').and.callFake((input) => ({

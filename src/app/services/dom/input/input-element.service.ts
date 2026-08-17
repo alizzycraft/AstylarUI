@@ -4,7 +4,7 @@ import { DOMElement } from '../../../types/dom-element';
 import { InputElement, InputType, CheckboxInput, RadioInput, SelectElement, ValidationRule, Button, TextInput } from '../../../types/input-types';
 import * as BABYLON from '@babylonjs/core';
 import { StyleRule } from '../../../types/style-rule';
-import { TextInputManager } from './text-input.manager';
+import { TextInputManager, TextInputMutableState } from './text-input.manager';
 import { ButtonManager } from './button.manager';
 import { CheckboxManager } from './checkbox.manager';
 import { SelectManager } from './select.manager';
@@ -14,6 +14,14 @@ import { FormValidatorService } from './form-validator.service';
 import { FormManager } from './form.manager';
 import { BabylonCameraService } from '../../babylon-camera.service';
 
+export interface TextControlStateSnapshot {
+    elementId: string;
+    type: InputType;
+    authoredValue: string;
+    focused: boolean;
+    validationState: { valid: boolean; errors: string[]; touched: boolean; dirty: boolean };
+    mutable: TextInputMutableState;
+}
 
 /**
  * Main orchestration service for input elements
@@ -23,6 +31,7 @@ import { BabylonCameraService } from '../../babylon-camera.service';
 })
 export class InputElementService {
     private inputElements: Map<string, InputElement> = new Map();
+    private duplicateInputIds = new Set<string>();
 
     constructor(
         private textInputManager: TextInputManager,
@@ -200,6 +209,9 @@ export class InputElementService {
      */
     registerInput(inputElement: InputElement): void {
         const elementId = inputElement.element.id || `input_${Date.now()}`;
+        if (inputElement.element.id && this.inputElements.has(elementId)) {
+            this.duplicateInputIds.add(elementId);
+        }
         this.inputElements.set(elementId, inputElement);
 
         // Add to tab order
@@ -237,6 +249,63 @@ export class InputElementService {
     /** Gets the authored ID of the currently focused input, if any. */
     getFocusedElementId(): string | undefined {
         return this.focusManager.getFocusedElement()?.element.id;
+    }
+
+    /** Captures mutable state for uniquely identified text-entry controls. */
+    captureTextControlStates(): readonly TextControlStateSnapshot[] {
+        const snapshots: TextControlStateSnapshot[] = [];
+        for (const [elementId, input] of this.inputElements) {
+            if (!input.element.id || this.duplicateInputIds.has(elementId) || !this.isTextEntry(input)) {
+                continue;
+            }
+            const text = input as TextInput;
+            snapshots.push({
+                elementId,
+                type: text.type,
+                authoredValue: String(text.element.value ?? ''),
+                focused: text.focused,
+                validationState: {
+                    valid: text.validationState.valid,
+                    errors: [...text.validationState.errors],
+                    touched: text.validationState.touched,
+                    dirty: text.validationState.dirty,
+                },
+                mutable: {
+                    value: String(text.value ?? ''),
+                    cursorPosition: text.cursorPosition,
+                    selectionStart: text.selectionStart,
+                    selectionEnd: text.selectionEnd,
+                    selectionActive: text.cursorState.selectionActive,
+                    selectionAnchor: text.cursorState.selectionStart,
+                    selectionFocus: text.cursorState.selectionEnd,
+                    scrollOffset: text.scrollOffset ?? 0,
+                },
+            });
+        }
+        return snapshots;
+    }
+
+    /** Restores compatible text state and returns the control that should regain focus. */
+    restoreTextControlStates(snapshots: readonly TextControlStateSnapshot[]): string | undefined {
+        let focusedElementId: string | undefined;
+        for (const snapshot of snapshots) {
+            const input = this.inputElements.get(snapshot.elementId);
+            if (!input || this.duplicateInputIds.has(snapshot.elementId) ||
+                input.type !== snapshot.type || !this.isTextEntry(input) ||
+                String(input.element.value ?? '') !== snapshot.authoredValue) {
+                continue;
+            }
+            const text = input as TextInput;
+            this.textInputManager.restoreMutableState(text, snapshot.mutable);
+            text.validationState = {
+                valid: snapshot.validationState.valid,
+                errors: [...snapshot.validationState.errors],
+                touched: snapshot.validationState.touched,
+                dirty: snapshot.validationState.dirty,
+            };
+            if (snapshot.focused) focusedElementId = snapshot.elementId;
+        }
+        return focusedElementId;
     }
 
     /** Applies the native keyboard default action after public event dispatch. */
@@ -518,6 +587,12 @@ export class InputElementService {
 
     }
 
+    private isTextEntry(input: InputElement): boolean {
+        return input.type === InputType.Text || input.type === InputType.Password ||
+            input.type === InputType.Email || input.type === InputType.Number ||
+            input.type === InputType.Textarea;
+    }
+
     /**
      * Cleanup all resources
      */
@@ -525,5 +600,6 @@ export class InputElementService {
         this.focusManager.cleanup();
         this.inputElements.forEach(input => this.disposeInputElement(input));
         this.inputElements.clear();
+        this.duplicateInputIds.clear();
     }
 }

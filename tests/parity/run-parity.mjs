@@ -589,6 +589,15 @@ async function performInteractionAction(page, mode, action, report) {
     case 'type-text':
       await page.keyboard.type(action.text);
       return;
+    case 'apply-update':
+      await page.evaluate(
+        ({ stepIndex, viewportId }) => window.__ASTYLAR_PARITY_APPLY_STEP__?.(
+          stepIndex,
+          viewportId,
+        ),
+        action,
+      );
+      return;
     default:
       throw new Error(`Unsupported interaction action: ${JSON.stringify(action)}`);
   }
@@ -642,6 +651,7 @@ function normalizeComparableControl(control) {
     focused: control.focused,
     selectionStart: control.selectionStart,
     selectionEnd: control.selectionEnd,
+    cursorPosition: control.cursorPosition,
   }).filter(([, value]) => value !== undefined));
 }
 

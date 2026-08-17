@@ -245,10 +245,14 @@ export class Astylar {
     const sceneResources = new AstylarSceneResources(scene);
     this.sceneResources.set(scene, sceneResources);
 
+    let hasCompletedRender = false;
     const session = new AstylarRenderSession(
       scene,
       siteData,
       (currentSiteData) => {
+        const textState = hasCompletedRender
+          ? this.inputElementService.captureTextControlStates()
+          : [];
         engine.resize(true);
         this.imageResources.retain(
           scene,
@@ -260,9 +264,24 @@ export class Astylar {
           canvas.clientHeight || viewportHeight,
         );
         sceneResources.replace(
-          () => this.babylonDOMRenderer.createSiteFromData(currentSiteData),
+          () => {
+            this.babylonDOMRenderer.createSiteFromData(currentSiteData);
+            const focusedElementId = this.inputElementService.restoreTextControlStates(textState);
+            if (focusedElementId) {
+              const input = this.inputElementService.getInputElement(focusedElementId);
+              if (input && !input.disabled) {
+                this.inputElementService.setDefaultFocusIndicatorEnabled(
+                  focusedElementId,
+                  !this.hasAuthoredFocusPaint(focusedElementId),
+                );
+                this.inputElementService.focusInputElement(input);
+                this.setElementFocusState(focusedElementId, true);
+              }
+            }
+          },
           this.imageResources.getSceneTextures(scene),
         );
+        hasCompletedRender = true;
       },
     );
     this.sessions.set(scene, session);

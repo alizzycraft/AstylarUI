@@ -91,6 +91,18 @@ export class ParityReferenceComponent {
         await this.nextFrame();
         this.publishCurrentReport(fixture, viewport);
       };
+      if (fixture.dynamicSteps?.length) {
+        window.__ASTYLAR_PARITY_APPLY_STEP__ = async (index, viewportId) => {
+          const step = fixture.dynamicSteps?.[index];
+          if (!step) throw new Error(`Unknown interaction update step: ${index}`);
+          if (viewportId) this.setViewportBox(PARITY_VIEWPORTS[viewportId]);
+          viewport.dataset['parityReady'] = 'false';
+          this.applyReferenceStep(viewport, step.referenceMutations);
+          await this.waitForImages(viewport);
+          await this.nextFrame();
+          await this.nextFrame();
+        };
+      }
     }
     const dynamicSequence = this.route.snapshot.queryParamMap.get('dynamic') === 'true' &&
       !!fixture.dynamicSteps?.length;
@@ -345,6 +357,11 @@ export class ParityReferenceComponent {
           : undefined,
         selectionEnd: control instanceof HTMLInputElement || control instanceof HTMLTextAreaElement
           ? control.selectionEnd ?? undefined
+          : undefined,
+        cursorPosition: control instanceof HTMLInputElement || control instanceof HTMLTextAreaElement
+          ? control.selectionDirection === 'backward'
+            ? control.selectionStart ?? undefined
+            : control.selectionEnd ?? undefined
           : undefined,
       };
     }

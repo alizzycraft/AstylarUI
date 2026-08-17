@@ -758,5 +758,13 @@
     "category": "controls-states",
     "expectedBehavior": "Focusing a control applies authored focus paint and blurring it restores normal paint without changing geometry.",
     "interactionStepCount": 4
+  },
+  {
+    "id": "interaction-update-text-state",
+    "title": "Text-control state across application update",
+    "category": "forms-interactive",
+    "expectedBehavior": "A compatible stable-ID text input retains its user-edited value, focus, caret, and selection when an application update changes a sibling.",
+    "dynamicStepCount": 2,
+    "interactionStepCount": 3
   }
 ]

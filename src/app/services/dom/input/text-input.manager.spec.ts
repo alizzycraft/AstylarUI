@@ -34,6 +34,32 @@ describe('TextInputManager', () => {
     expect(textInput.cursorState.selectionStart).toBe(4);
     expect(textInput.cursorState.selectionEnd).toBe(4);
   });
+
+  it('restores and clamps mutable value, caret, selection, and scroll state', () => {
+    const manager = Object.create(TextInputManager.prototype) as TextInputManager;
+    const textInput = createTextInput('Seed', 0);
+
+    manager.restoreMutableState(textInput, {
+      value: 'Edited',
+      cursorPosition: 5,
+      selectionStart: 5,
+      selectionEnd: 99,
+      selectionActive: true,
+      selectionAnchor: 6,
+      selectionFocus: 5,
+      scrollOffset: 12,
+    });
+
+    expect(textInput.value).toBe('Edited');
+    expect(textInput.textContent).toBe('Edited');
+    expect(textInput.cursorPosition).toBe(5);
+    expect(textInput.selectionStart).toBe(5);
+    expect(textInput.selectionEnd).toBe(6);
+    expect(textInput.cursorState.selectionActive).toBeTrue();
+    expect(textInput.cursorState.selectionStart).toBe(6);
+    expect(textInput.cursorState.selectionEnd).toBe(5);
+    expect(textInput.scrollOffset).toBe(12);
+  });
 });
 
 function createTextInput(value: string, cursorPosition: number): TextInput {
