@@ -87,7 +87,7 @@ export const representativeProjectDashboardFixture: ParityFixture = {
       #pm-intro { width:396px; height:68px; padding:8px 10px; background:#ffffff; }
       #pm-title { width:376px; margin:0; color:#0f172a; font:700 20px/28px Arial,sans-serif; }
       #pm-meta { width:376px; margin:4px 0 0; color:#64748b; font:400 12px/20px Arial,sans-serif; }
-      #pm-summary { display:grid; grid-template-columns:1fr 1fr 1fr; grid-template-rows:120px; gap:12px; background:#eef2f7; }
+      #pm-summary { display:grid; flex:1 1 auto; grid-template-columns:1fr 1fr 1fr; gap:12px; background:#eef2f7; }
       #pm-summary article { display:flex; flex-direction:column; justify-content:center; width:auto; padding:14px; }
       #pm-summary strong { height:32px; font:700 24px/32px Arial,sans-serif; }
       #pm-summary span { font:400 12px/20px Arial,sans-serif; }
@@ -119,7 +119,7 @@ export const representativeProjectDashboardFixture: ParityFixture = {
         #pm-heading { width:132px; } #pm-tools { width:280px; } #pm-search { width:176px; }
         #pm-primary { flex-basis:320px; }
         #pm-intro { width:320px; height:76px; } #pm-title, #pm-meta { width:300px; }
-        #pm-summary { grid-template-columns:1fr 1fr; grid-template-rows:84px 84px; }
+        #pm-summary { grid-template-columns:1fr 1fr; }
         #pm-summary article { padding:8px 12px; } #pm-summary strong { height:28px; font-size:20px; line-height:28px; } #pm-summary span { white-space:nowrap; }
         #pm-tasks { width:320px; height:304px; } #pm-task-heading, #pm-task-list { width:296px; }
         #pm-task-list { height:252px; } #pm-task-list article { width:296px; height:84px; flex-basis:84px; }
@@ -140,7 +140,7 @@ export const representativeProjectDashboardFixture: ParityFixture = {
         #pm-main { flex-direction:column; gap:10px; padding:10px; }
         #pm-primary { flex:0 0 430px; gap:10px; }
         #pm-intro { width:350px; height:76px; } #pm-title, #pm-meta { width:330px; }
-        #pm-summary { grid-template-columns:1fr 1fr 1fr; grid-template-rows:130px; gap:8px; }
+        #pm-summary { grid-template-columns:1fr 1fr 1fr; gap:8px; }
         #pm-summary article { padding:10px; } #pm-summary strong { height:32px; font-size:20px; }
         #pm-tasks { width:350px; height:204px; padding:10px; } #pm-task-heading, #pm-task-list { width:330px; }
         #pm-task-heading { height:24px; margin-bottom:4px; line-height:24px; } #pm-task-list { height:156px; }
@@ -178,7 +178,7 @@ export const representativeProjectDashboardFixture: ParityFixture = {
       { selector:'#pm-intro', width:'396px', height:'68px', padding:'8px 10px', background:'#ffffff' },
       { selector:'#pm-title', width:'376px', margin:'0', color:'#0f172a', fontFamily:'Arial, sans-serif', fontSize:'20px', fontWeight:'700', lineHeight:'28px' },
       { selector:'#pm-meta', width:'376px', margin:'4px 0 0', color:'#64748b', fontFamily:'Arial, sans-serif', fontSize:'12px', lineHeight:'20px' },
-      { selector:'#pm-summary', display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gridTemplateRows:'120px', gap:'12px', background:'#eef2f7' },
+      { selector:'#pm-summary', display:'grid', flex:'1 1 auto', gridTemplateColumns:'1fr 1fr 1fr', gap:'12px', background:'#eef2f7' },
       { selector:'#pm-summary article', display:'flex', flexDirection:'column', justifyContent:'center', padding:'14px' },
       { selector:'#pm-summary strong', height:'32px', fontFamily:'Arial, sans-serif', fontSize:'24px', fontWeight:'700', lineHeight:'32px' },
       { selector:'#pm-summary span', fontFamily:'Arial, sans-serif', fontSize:'12px', lineHeight:'20px' },
@@ -208,7 +208,7 @@ export const representativeProjectDashboardFixture: ParityFixture = {
       { selector:'#pm-heading', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'132px' }, { selector:'#pm-tools', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'280px' }, { selector:'#pm-search', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'176px' },
       { selector:'#pm-primary', mediaMinWidth:'600px', mediaMaxWidth:'749px', flex:'0 0 320px' },
       { selector:'#pm-intro', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'320px', height:'76px' }, { selector:'#pm-title, #pm-meta', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'300px' },
-      { selector:'#pm-summary', mediaMinWidth:'600px', mediaMaxWidth:'749px', gridTemplateColumns:'1fr 1fr', gridTemplateRows:'84px 84px' },
+      { selector:'#pm-summary', mediaMinWidth:'600px', mediaMaxWidth:'749px', gridTemplateColumns:'1fr 1fr' },
       { selector:'#pm-summary article', mediaMinWidth:'600px', mediaMaxWidth:'749px', padding:'8px 12px' }, { selector:'#pm-summary strong', mediaMinWidth:'600px', mediaMaxWidth:'749px', height:'28px', fontSize:'20px', lineHeight:'28px' }, { selector:'#pm-summary span', mediaMinWidth:'600px', mediaMaxWidth:'749px', whiteSpace:'nowrap' },
       { selector:'#pm-tasks', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'320px', height:'304px' }, { selector:'#pm-task-heading, #pm-task-list', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'296px' },
       { selector:'#pm-task-list', mediaMinWidth:'600px', mediaMaxWidth:'749px', height:'252px' }, { selector:'#pm-task-list article', mediaMinWidth:'600px', mediaMaxWidth:'749px', flex:'0 0 84px', width:'296px', height:'84px' },
@@ -224,7 +224,7 @@ export const representativeProjectDashboardFixture: ParityFixture = {
       { selector:'#pm-heading', mediaMaxWidth:'599px', width:'144px' }, { selector:'#pm-tools', mediaMaxWidth:'599px', width:'198px' }, { selector:'#pm-search', mediaMaxWidth:'599px', width:'110px' }, { selector:'#pm-new', mediaMaxWidth:'599px', width:'80px' },
       { selector:'#pm-main', mediaMaxWidth:'599px', flexDirection:'column', gap:'10px', padding:'10px' }, { selector:'#pm-primary', mediaMaxWidth:'599px', flex:'0 0 430px', gap:'10px' },
       { selector:'#pm-intro', mediaMaxWidth:'599px', width:'350px', height:'76px' }, { selector:'#pm-title, #pm-meta', mediaMaxWidth:'599px', width:'330px' },
-      { selector:'#pm-summary', mediaMaxWidth:'599px', gridTemplateColumns:'1fr 1fr 1fr', gridTemplateRows:'130px', gap:'8px' }, { selector:'#pm-summary article', mediaMaxWidth:'599px', padding:'10px' },
+      { selector:'#pm-summary', mediaMaxWidth:'599px', gridTemplateColumns:'1fr 1fr 1fr', gap:'8px' }, { selector:'#pm-summary article', mediaMaxWidth:'599px', padding:'10px' },
       { selector:'#pm-summary strong', mediaMaxWidth:'599px', height:'32px', fontSize:'20px' },
       { selector:'#pm-tasks', mediaMaxWidth:'599px', width:'350px', height:'204px', padding:'10px' }, { selector:'#pm-task-heading, #pm-task-list', mediaMaxWidth:'599px', width:'330px' },
       { selector:'#pm-task-heading', mediaMaxWidth:'599px', height:'24px', margin:'0 0 4px', lineHeight:'24px' }, { selector:'#pm-task-list', mediaMaxWidth:'599px', height:'156px' }, { selector:'#pm-task-list article', mediaMaxWidth:'599px', flex:'0 0 52px', width:'330px', height:'52px', padding:'4px 0' },
