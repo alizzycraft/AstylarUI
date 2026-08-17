@@ -84,6 +84,7 @@ import { standaloneFlexAutoHeightFixture } from './standalone-flex-auto-height.f
 import { flexPercentageContentWidthFixture } from './flex-percentage-content-width.fixture';
 import { flexWrapAutoHeightFixture } from './flex-wrap-auto-height.fixture';
 import { gridPercentageContentWidthFixture } from './grid-percentage-content-width.fixture';
+import { gridMinmaxTracksFixture } from './grid-minmax-tracks.fixture';
 import { ParityFixture } from '../parity.types';
 
 const fixtures: readonly ParityFixture[] = [
@@ -172,7 +173,8 @@ const fixtures: readonly ParityFixture[] = [
   standaloneFlexAutoHeightFixture,
   flexPercentageContentWidthFixture,
   flexWrapAutoHeightFixture,
-  gridPercentageContentWidthFixture
+  gridPercentageContentWidthFixture,
+  gridMinmaxTracksFixture
 ];
 
 const fixturesById = new Map(fixtures.map((fixture) => [fixture.id, fixture]));

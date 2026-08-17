@@ -15,6 +15,11 @@ describe('GridService', () => {
     expect(service.resolveTracks('40% 1fr', 460, 20, 2)).toEqual([184, 256]);
   });
 
+  it('keeps a flexible minmax track above its definite minimum', () => {
+    expect(service.resolveTracks('minmax(260px, 1fr) 1fr', 460, 20, 2))
+      .toEqual([260, 180]);
+  });
+
   it('creates equal implicit tracks when no template is supplied', () => {
     expect(service.resolveTracks(undefined, 220, 10, 2)).toEqual([105, 105]);
   });

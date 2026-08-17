@@ -520,5 +520,11 @@
     "title": "Percentage grid track from content box",
     "category": "grid",
     "expectedBehavior": "A percentage grid column resolves against the grid content box before column gaps are removed, and fractional tracks receive the remaining space."
+  },
+  {
+    "id": "grid-minmax-tracks",
+    "title": "Minmax grid tracks",
+    "category": "grid",
+    "expectedBehavior": "A minmax pixel-to-fr track participates in fractional sizing but cannot shrink below its minimum."
   }
 ]
