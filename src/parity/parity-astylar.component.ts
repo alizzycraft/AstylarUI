@@ -312,7 +312,9 @@ export class ParityAstylarComponent {
     let renderedFrames = 0;
     const observer = scene.onAfterRenderObservable.add(() => {
       renderedFrames += 1;
-      const hasAllElements = fixture.measurementIds.every((id) =>
+      const hasAllElements = fixture.measurementIds
+        .filter((id) => !fixture.optionalMeasurementIds?.includes(id))
+        .every((id) =>
         this.elementManager.elementsMap.has(id)
       );
       const assetsReady = scene.textures.every((texture) => texture.isReady());
@@ -326,6 +328,7 @@ export class ParityAstylarComponent {
             scene,
             fixtureId,
             fixture.measurementIds,
+            fixture.optionalMeasurementIds ?? [],
             fixture.expectedAbsentIds ?? [],
             fixture.expectedMissingIds ?? [],
             fixture.interactionIds ?? [],
@@ -342,6 +345,7 @@ export class ParityAstylarComponent {
             scene,
             fixtureId,
             fixture.measurementIds,
+            fixture.optionalMeasurementIds ?? [],
             fixture.expectedAbsentIds ?? [],
             fixture.expectedMissingIds ?? [],
             fixture.interactionIds ?? [],
@@ -357,6 +361,7 @@ export class ParityAstylarComponent {
     scene: Scene,
     fixtureId: string,
     measurementIds: string[],
+    optionalMeasurementIds: string[],
     expectedAbsentIds: string[],
     expectedMissingIds: string[],
     interactionIds: string[],
@@ -375,7 +380,9 @@ export class ParityAstylarComponent {
     for (const id of measurementIds) {
       const mesh = this.elementManager.elementsMap.get(id);
       if (!mesh) {
-        errors.push(`Missing Astylar mesh: ${id}`);
+        if (!optionalMeasurementIds.includes(id)) {
+          errors.push(`Missing Astylar mesh: ${id}`);
+        }
         continue;
       }
 

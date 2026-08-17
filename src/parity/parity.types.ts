@@ -42,6 +42,7 @@ export interface ParityFixture {
   category: ParityCategory;
   expectedBehavior: string;
   measurementIds: string[];
+  optionalMeasurementIds?: string[];
   viewportIds?: ParityViewport['id'][];
   responsiveSequence?: ParityViewport['id'][];
   expectedAbsentIds?: string[];

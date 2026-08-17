@@ -234,7 +234,9 @@ export class ParityReferenceComponent {
     for (const id of fixture.measurementIds) {
       const element = viewport.querySelector<HTMLElement>(`#${CSS.escape(id)}`);
       if (!element) {
-        errors.push(`Missing reference element: ${id}`);
+        if (!fixture.optionalMeasurementIds?.includes(id)) {
+          errors.push(`Missing reference element: ${id}`);
+        }
         continue;
       }
       elements[id] = this.measureElement(element, viewport);

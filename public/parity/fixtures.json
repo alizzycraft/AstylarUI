@@ -774,5 +774,13 @@
     "expectedBehavior": "Stable compatible checkbox, radio, and select controls retain their live checked, selected, and focused state across unrelated updates and responsive reflow.",
     "dynamicStepCount": 2,
     "interactionStepCount": 7
+  },
+  {
+    "id": "interaction-replacement-cleanup",
+    "title": "Removed and incompatible control cleanup",
+    "category": "forms-interactive",
+    "expectedBehavior": "An incompatibly replaced or removed focused control loses its live state and focus, unregisters cleanly, and does not resurrect stale state when the authored ID is later reused.",
+    "dynamicStepCount": 3,
+    "interactionStepCount": 8
   }
 ]

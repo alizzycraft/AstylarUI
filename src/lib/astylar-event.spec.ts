@@ -74,6 +74,56 @@ describe('AstylarEventDispatcher', () => {
 });
 
 describe('AstylarInteractionRuntime', () => {
+  it('commits and blurs focus before a control is removed or incompatibly replaced', () => {
+    const engine = new NullEngine();
+    const scene = new Scene(engine);
+    const events: AstylarEventSnapshot[] = [];
+    const focusStates: Array<[string, boolean]> = [];
+    let focusedElementId: string | undefined = 'field';
+    const textSiteData: SiteData = {
+      styles: [],
+      root: { children: [{ type: 'input', inputType: 'text', id: 'field', value: 'Seed' }] },
+    };
+    const runtime = new AstylarInteractionRuntime(
+      scene,
+      textSiteData,
+      { onEvent: (event) => events.push(event) },
+      () => ({ value: 'Edited' }),
+      {
+        getFocusedElementId: () => focusedElementId,
+        focus: () => true,
+        blur: (elementId) => {
+          if (focusedElementId === elementId) focusedElementId = undefined;
+          return true;
+        },
+        handleKeyDown: () => undefined,
+        commitsValueOnBlur: () => true,
+        setFocusState: (elementId, focused) => focusStates.push([elementId, focused]),
+      },
+    );
+
+    runtime.setSiteData({
+      styles: [],
+      root: { children: [{ type: 'input', inputType: 'text', id: 'field', value: 'Server' }] },
+    });
+    expect(events).toEqual([]);
+    expect(focusedElementId).toBe('field');
+
+    runtime.setSiteData({
+      styles: [],
+      root: { children: [{ type: 'input', inputType: 'checkbox', id: 'field' }] },
+    });
+    expect(events.map((event) => `${event.type}:${event.targetId}`)).toEqual([
+      'change:field', 'blur:field',
+    ]);
+    expect(focusedElementId).toBeUndefined();
+    expect(focusStates).toEqual([['field', false]]);
+
+    runtime.dispose();
+    scene.dispose();
+    engine.dispose();
+  });
+
   it('owns one scene pointer observer and emits one activation sequence', () => {
     const engine = new NullEngine();
     const scene = new Scene(engine);

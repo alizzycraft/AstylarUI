@@ -62,6 +62,7 @@ export class AstylarInteractionRuntime {
   private disposed = false;
   private readonly canvas: HTMLCanvasElement | null;
   private focusOrder: string[] = [];
+  private controlTypes = new Map<string, string>();
   private labelTargets = new Map<string, string>();
   private formDefaults = new Map<string, AstylarFormDefault>();
   private implicitSubmitTargets = new Map<string, string>();
@@ -78,6 +79,7 @@ export class AstylarInteractionRuntime {
   ) {
     this.dispatcher = new AstylarEventDispatcher(siteData, options);
     this.focusOrder = this.buildFocusOrder(siteData);
+    this.controlTypes = this.buildControlTypes(siteData);
     this.labelTargets = this.buildLabelTargets(siteData);
     this.formDefaults = this.buildFormDefaults(siteData);
     this.implicitSubmitTargets = this.buildImplicitSubmitTargets(siteData);
@@ -105,8 +107,18 @@ export class AstylarInteractionRuntime {
   }
 
   setSiteData(siteData: SiteData): void {
+    const nextFocusOrder = this.buildFocusOrder(siteData);
+    const nextControlTypes = this.buildControlTypes(siteData);
+    const focusedElementId = this.controls?.getFocusedElementId();
+    if (focusedElementId &&
+        (!nextFocusOrder.includes(focusedElementId) ||
+          this.controlTypes.get(focusedElementId) !== nextControlTypes.get(focusedElementId))) {
+      // Dispatch commit/blur while the old element and event path are still live.
+      this.setFocus(undefined);
+    }
     this.dispatcher.setSiteData(siteData);
-    this.focusOrder = this.buildFocusOrder(siteData);
+    this.focusOrder = nextFocusOrder;
+    this.controlTypes = nextControlTypes;
     this.labelTargets = this.buildLabelTargets(siteData);
     this.formDefaults = this.buildFormDefaults(siteData);
     this.implicitSubmitTargets = this.buildImplicitSubmitTargets(siteData);
@@ -116,10 +128,6 @@ export class AstylarInteractionRuntime {
     }
     if (this.hoveredElementId && !this.dispatcher.hasEnabledTarget(this.hoveredElementId)) {
       this.hoveredElementId = undefined;
-    }
-    const focusedElementId = this.controls?.getFocusedElementId();
-    if (focusedElementId && !this.focusOrder.includes(focusedElementId)) {
-      this.setFocus(undefined);
     }
   }
 
@@ -433,6 +441,28 @@ export class AstylarInteractionRuntime {
           left.order - right.order;
       })
       .map((entry) => entry.id);
+  }
+
+  private buildControlTypes(siteData: SiteData): Map<string, string> {
+    const types = new Map<string, string>();
+    const visit = (element: SiteData['root']['children'][number]): void => {
+      let type: string | undefined;
+      if (element.type === 'input') {
+        const inputType = element.inputType?.toLowerCase() ?? 'text';
+        type = inputType === 'reset' ? 'button' : inputType;
+      } else if (element.type === 'button') {
+        const buttonType = element.inputType?.toLowerCase();
+        type = buttonType === 'submit' ? 'submit' : 'button';
+      } else if (element.type === 'select' || element.type === 'textarea') {
+        type = element.type;
+      }
+      if (element.id && type) {
+        types.set(element.id, types.has(element.id) ? '#duplicate' : type);
+      }
+      element.children?.forEach(visit);
+    };
+    siteData.root.children.forEach(visit);
+    return types;
   }
 
   private buildLabelTargets(siteData: SiteData): Map<string, string> {
