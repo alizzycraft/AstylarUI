@@ -127,6 +127,7 @@ export function resolveIntrinsicGridRows(
   template: string | undefined,
   columnCount: number,
   itemOuterHeights: Array<number | null>,
+  sizeIndefiniteFlexibleTracks = false,
 ): number[] | null {
   const explicitTokens = tokenizeGridTrackList(template);
   const requiredRows = Math.max(1, Math.ceil(itemOuterHeights.length / Math.max(1, columnCount)));
@@ -136,21 +137,40 @@ export function resolveIntrinsicGridRows(
   );
   const isIntrinsicTrack = (token: string) =>
     ['auto', 'min-content', 'max-content'].includes(token.toLowerCase());
+  const flexFactor = (token: string): number | null => {
+    if (!token.toLowerCase().endsWith('fr')) return null;
+    const parsed = Number.parseFloat(token);
+    return Number.isFinite(parsed) && parsed > 0 ? parsed : null;
+  };
   if (rowTokens.some((token) =>
-    !isIntrinsicTrack(token) && !/^[+-]?(?:\d+\.?\d*|\.\d+)(?:px)?$/i.test(token),
+    !isIntrinsicTrack(token) &&
+    !(sizeIndefiniteFlexibleTracks && flexFactor(token) !== null) &&
+    !/^[+-]?(?:\d+\.?\d*|\.\d+)(?:px)?$/i.test(token),
   )) {
     return null;
   }
 
-  const rows = rowTokens.map((token) => isIntrinsicTrack(token)
+  const rows = rowTokens.map((token) => isIntrinsicTrack(token) || flexFactor(token) !== null
     ? 0
     : Math.max(0, Number.parseFloat(token) || 0));
   for (let index = 0; index < itemOuterHeights.length; index++) {
     const row = Math.floor(index / Math.max(1, columnCount));
-    if (!isIntrinsicTrack(rowTokens[row])) continue;
+    if (!isIntrinsicTrack(rowTokens[row]) && flexFactor(rowTokens[row]) === null) continue;
     const contribution = itemOuterHeights[index];
     if (contribution === null) return null;
     rows[row] = Math.max(rows[row], contribution);
+  }
+
+  const flexibleRows = rowTokens
+    .map((token, index) => ({ factor: flexFactor(token), index }))
+    .filter((entry): entry is { factor: number; index: number } => entry.factor !== null);
+  if (flexibleRows.length > 0) {
+    const flexFraction = Math.max(...flexibleRows.map(({ factor, index }) =>
+      factor > 1 ? rows[index] / factor : rows[index],
+    ));
+    flexibleRows.forEach(({ factor, index }) => {
+      rows[index] = Math.max(rows[index], flexFraction * factor);
+    });
   }
   return rows;
 }

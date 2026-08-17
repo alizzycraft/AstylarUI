@@ -529,7 +529,7 @@ export class FlexService {
           : null;
       });
       const intrinsicRows = resolveIntrinsicGridRows(
-        style.gridTemplateRows, columnCount, contributions,
+        style.gridTemplateRows, columnCount, contributions, true,
       );
       if (intrinsicRows) {
         return intrinsicRows.reduce((sum, track) => sum + track, 0) +

@@ -563,5 +563,11 @@
     "title": "Min-content and max-content grid rows",
     "category": "grid",
     "expectedBehavior": "Non-spanning min-content and max-content rows use the largest measurable text contribution at the resolved column width and drive a height-auto Grid container."
+  },
+  {
+    "id": "grid-mixed-intrinsic-rows",
+    "title": "Mixed fixed, intrinsic, and fractional grid rows",
+    "category": "grid",
+    "expectedBehavior": "An indefinite-height Grid combines fixed and contribution-sized rows with content-sized fractional rows that retain their authored proportions."
   }
 ]

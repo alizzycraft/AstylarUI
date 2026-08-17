@@ -74,7 +74,10 @@ export class GridService {
         : null;
     });
     const intrinsicRows = resolveIntrinsicGridRows(
-      style.gridTemplateRows, columnCount, rowContributions,
+      style.gridTemplateRows,
+      columnCount,
+      rowContributions,
+      style.height === undefined || style.height === 'auto',
     );
     const rows = intrinsicRows ??
       this.resolveTracks(style.gridTemplateRows, contentHeight, rowGap, requiredRows);

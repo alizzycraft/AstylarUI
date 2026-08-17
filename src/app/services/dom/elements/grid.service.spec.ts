@@ -46,6 +46,16 @@ describe('GridService', () => {
       .toEqual([56, 76]);
   });
 
+  it('content-sizes proportional fr rows when the grid block size is indefinite', () => {
+    expect(resolveIntrinsicGridRows(
+      '40px auto min-content max-content 1fr 2fr',
+      1,
+      [24, 32, 36, 44, 30, 50],
+      true,
+    )).toEqual([40, 32, 36, 44, 30, 60]);
+    expect(resolveIntrinsicGridRows('1fr', 1, [30])).toBeNull();
+  });
+
   it('creates content-sized implicit auto rows beyond the explicit columns', () => {
     expect(resolveIntrinsicGridRows(undefined, 2, [28, 44, 36, 52, 40]))
       .toEqual([44, 52, 40]);
