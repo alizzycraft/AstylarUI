@@ -55,6 +55,8 @@ export interface ParityFixture {
   dynamicSteps?: ParityDynamicStep[];
   lifecycleViewports?: ParityViewport['id'][];
   interactionSteps?: ParityInteractionStep[];
+  /** Repeated interaction phases used to enforce warm resource plateaus and final disposal. */
+  interactionCycleLength?: number;
   interactionIds?: string[];
   interactionEventTypes?: ParityInteractionEventType[];
 }

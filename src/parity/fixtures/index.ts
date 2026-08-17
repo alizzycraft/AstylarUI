@@ -122,6 +122,7 @@ import { interactionFocusStyleFixture } from './interaction-focus-style.fixture'
 import { interactionUpdateTextStateFixture } from './interaction-update-text-state.fixture';
 import { interactionUpdateChoiceStateFixture } from './interaction-update-choice-state.fixture';
 import { interactionReplacementCleanupFixture } from './interaction-replacement-cleanup.fixture';
+import { interactionLifecycleStressFixture } from './interaction-lifecycle-stress.fixture';
 import { ParityFixture } from '../parity.types';
 
 const fixtures: readonly ParityFixture[] = [
@@ -248,7 +249,8 @@ const fixtures: readonly ParityFixture[] = [
   interactionFocusStyleFixture,
   interactionUpdateTextStateFixture,
   interactionUpdateChoiceStateFixture,
-  interactionReplacementCleanupFixture
+  interactionReplacementCleanupFixture,
+  interactionLifecycleStressFixture
 ];
 
 const fixturesById = new Map(fixtures.map((fixture) => [fixture.id, fixture]));

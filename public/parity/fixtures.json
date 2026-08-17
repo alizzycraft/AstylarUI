@@ -788,5 +788,14 @@
     "expectedBehavior": "An incompatibly replaced or removed focused control loses its live state and focus, unregisters cleanly, and does not resurrect stale state when the authored ID is later reused.",
     "dynamicStepCount": 3,
     "interactionStepCount": 8
+  },
+  {
+    "id": "interaction-lifecycle-stress",
+    "title": "Repeated interactive update lifecycle",
+    "category": "forms-interactive",
+    "expectedBehavior": "Three equivalent text, select, checkbox, reset, update, and responsive cycles keep browser-equivalent state while resources and registrations plateau and final disposal cleans the scene.",
+    "dynamicStepCount": 2,
+    "interactionStepCount": 24,
+    "interactionCycleLength": 8
   }
 ]

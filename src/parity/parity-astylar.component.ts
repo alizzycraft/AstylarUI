@@ -150,6 +150,31 @@ export class ParityAstylarComponent {
       });
       scene.activeCamera?.detachControl();
       this.scene = scene;
+      if (dynamicSequence || interactionSequence) {
+        window.__ASTYLAR_PARITY_DISPOSE__ = () => {
+          const session = this.astylar.getSession(scene);
+          const before = {
+            resources: this.astylar.getResourceSnapshot(scene),
+            elements: this.elementManager.elementsMap.size,
+            inputs: this.elementManager.inputElementsMap.size,
+            cleanupRegistrations: session?.snapshot.cleanupRegistrations ?? 0,
+          };
+          const engine = scene.getEngine();
+          engine.dispose();
+          return {
+            before,
+            after: {
+              resources: this.astylar.getResourceSnapshot(scene),
+              elements: this.elementManager.elementsMap.size,
+              inputs: this.elementManager.inputElementsMap.size,
+              cleanupRegistrations: session?.snapshot.cleanupRegistrations ?? 0,
+              sessionStatus: session?.snapshot.status,
+              engineDisposed: engine.isDisposed,
+              sceneDisposed: scene.isDisposed,
+            },
+          };
+        };
+      }
       if (interactionSequence) {
         window.__ASTYLAR_PARITY_INTERACTION_STEPS__ = fixture.interactionSteps;
         window.__ASTYLAR_PARITY_CAPTURE_INTERACTION__ = async () => {
@@ -187,29 +212,6 @@ export class ParityAstylarComponent {
           canvas.dataset['parityReady'] = 'false';
           await this.astylar.update(step.siteData, scene);
           this.captureWhenReady(scene, canvas, fixture);
-        };
-        window.__ASTYLAR_PARITY_DISPOSE__ = () => {
-          const session = this.astylar.getSession(scene);
-          const before = {
-            resources: this.astylar.getResourceSnapshot(scene),
-            elements: this.elementManager.elementsMap.size,
-            inputs: this.elementManager.inputElementsMap.size,
-            cleanupRegistrations: session?.snapshot.cleanupRegistrations ?? 0,
-          };
-          const engine = scene.getEngine();
-          engine.dispose();
-          return {
-            before,
-            after: {
-              resources: this.astylar.getResourceSnapshot(scene),
-              elements: this.elementManager.elementsMap.size,
-              inputs: this.elementManager.inputElementsMap.size,
-              cleanupRegistrations: session?.snapshot.cleanupRegistrations ?? 0,
-              sessionStatus: session?.snapshot.status,
-              engineDisposed: engine.isDisposed,
-              sceneDisposed: scene.isDisposed,
-            },
-          };
         };
         return;
       }

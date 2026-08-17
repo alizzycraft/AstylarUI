@@ -465,11 +465,13 @@ async function measureInteractionFixture(context, fixture) {
     'astylar',
     sequenceDir,
     fixture.interactionStepCount,
+    !!fixture.interactionCycleLength,
   );
 
   return referenceStates.map((reference, index) => {
     const astylar = astylarStates[index];
     const interactionErrors = compareInteraction(reference.report, astylar.report);
+    const lifecycleErrors = compareInteractionLifecycle(fixture, astylarStates, index);
     return {
       id: fixture.id,
       scenario: `interaction-${index + 1}`,
@@ -487,6 +489,7 @@ async function measureInteractionFixture(context, fixture) {
         ...reference.report.errors.map((error) => `reference: ${error}`),
         ...astylar.report.errors.map((error) => `astylar: ${error}`),
         ...interactionErrors.map((error) => `interaction: ${error}`),
+        ...lifecycleErrors,
       ],
       reference: reference.report,
       astylar: astylar.report,
@@ -501,6 +504,7 @@ async function captureInteractionMode(
   mode,
   sequenceDir,
   stepCount,
+  disposeAfter = false,
 ) {
   const page = await context.newPage();
   const pageErrors = [];
@@ -544,8 +548,83 @@ async function captureInteractionMode(
     });
     states.push({ report, screenshot, pageErrors: [...pageErrors] });
   }
+  const disposal = disposeAfter
+    ? await page.evaluate(() => window.__ASTYLAR_PARITY_DISPOSE__?.())
+    : undefined;
   await page.close();
+  if (disposal && states.length) states.at(-1).disposal = disposal;
   return states;
+}
+
+function compareInteractionLifecycle(fixture, astylarStates, index) {
+  const cycleLength = fixture.interactionCycleLength;
+  if (!cycleLength) return [];
+  if (cycleLength < 1 || fixture.interactionStepCount < cycleLength * 3 ||
+      fixture.interactionStepCount % cycleLength !== 0) {
+    return index === 0
+      ? [`astylar: invalid interaction lifecycle cycle configuration (${JSON.stringify({
+          interactionStepCount: fixture.interactionStepCount,
+          interactionCycleLength: cycleLength,
+        })})`]
+      : [];
+  }
+
+  const errors = [];
+  const cycleIndex = Math.floor(index / cycleLength);
+  if (cycleIndex >= 2) {
+    const phase = index % cycleLength;
+    const baseline = astylarStates[cycleLength + phase]?.report;
+    const current = astylarStates[index]?.report;
+    const baselineResources = baseline?.resources;
+    const currentResources = current?.resources;
+    if (!baselineResources || !currentResources ||
+        currentResources.meshes > baselineResources.meshes ||
+        currentResources.materials > baselineResources.materials ||
+        currentResources.textures > baselineResources.textures) {
+      errors.push(
+        `astylar: interaction lifecycle resources grew at cycle ${cycleIndex + 1}, ` +
+        `phase ${phase + 1} (${JSON.stringify(currentResources)} vs ` +
+        `${JSON.stringify(baselineResources)})`,
+      );
+    }
+
+    const baselineRegistries = baseline?.registries;
+    const currentRegistries = current?.registries;
+    if (!baselineRegistries || !currentRegistries ||
+        JSON.stringify(currentRegistries) !== JSON.stringify(baselineRegistries)) {
+      errors.push(
+        `astylar: interaction lifecycle registries changed at cycle ${cycleIndex + 1}, ` +
+        `phase ${phase + 1} (${JSON.stringify(currentRegistries)} vs ` +
+        `${JSON.stringify(baselineRegistries)})`,
+      );
+    }
+
+    const baselineRegistrations = baseline?.interaction?.registrations;
+    const currentRegistrations = current?.interaction?.registrations;
+    for (const key of ['pointerObservers', 'keyboardListeners', 'handlers']) {
+      if (currentRegistrations?.[key] !== baselineRegistrations?.[key]) {
+        errors.push(
+          `astylar: interaction lifecycle ${key} changed at cycle ${cycleIndex + 1}, ` +
+          `phase ${phase + 1} (${currentRegistrations?.[key]} vs ` +
+          `${baselineRegistrations?.[key]})`,
+        );
+      }
+    }
+  }
+
+  if (index === astylarStates.length - 1) {
+    const disposal = astylarStates[index]?.disposal;
+    const before = disposal?.before;
+    const after = disposal?.after;
+    const resources = after?.resources;
+    if (!before || before.inputs < 1 || before.cleanupRegistrations < 1 ||
+        after?.sessionStatus !== 'disposed' || !after.engineDisposed || !after.sceneDisposed ||
+        after.cleanupRegistrations !== 0 || after.elements !== 0 || after.inputs !== 0 ||
+        !resources || resources.meshes !== 0 || resources.materials !== 0 || resources.textures !== 0) {
+      errors.push(`astylar: interaction lifecycle disposal was not clean ${JSON.stringify(disposal)}`);
+    }
+  }
+  return errors;
 }
 
 async function performInteractionAction(page, mode, action, report) {
