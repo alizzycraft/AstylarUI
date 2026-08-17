@@ -564,6 +564,25 @@ async function performInteractionAction(page, mode, action, report) {
       else await page.mouse.move(x, y);
       return;
     }
+    case 'pointer-down': {
+      if (mode === 'reference') {
+        await page.locator(`#${cssEscape(action.elementId)}`).hover();
+      } else {
+        const rect = report?.elements?.[action.elementId]?.borderBox;
+        if (!rect) throw new Error(`Missing Astylar interaction target geometry: ${action.elementId}`);
+        const canvas = await page.locator('#parity-astylar-canvas').boundingBox();
+        if (!canvas) throw new Error('Missing Astylar canvas bounds');
+        await page.mouse.move(
+          canvas.x + rect.left + rect.width / 2,
+          canvas.y + rect.top + rect.height / 2,
+        );
+      }
+      await page.mouse.down();
+      return;
+    }
+    case 'pointer-up':
+      await page.mouse.up();
+      return;
     case 'press-key':
       await page.keyboard.press(action.key);
       return;

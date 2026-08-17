@@ -43,6 +43,7 @@ export interface AstylarInteractionControlAdapter {
   getRadioNavigationTarget?(elementId: string, direction: -1 | 1): string | undefined;
   resetFormControls?(elementIds: readonly string[]): void;
   validateFormControls?(elementIds: readonly string[]): readonly string[];
+  setActiveState?(elementId: string, active: boolean): void;
 }
 
 interface AstylarFormDefault {
@@ -109,6 +110,7 @@ export class AstylarInteractionRuntime {
     this.formDefaults = this.buildFormDefaults(siteData);
     this.implicitSubmitTargets = this.buildImplicitSubmitTargets(siteData);
     if (this.pressedElementId && !this.dispatcher.hasEnabledTarget(this.pressedElementId)) {
+      this.controls?.setActiveState?.(this.pressedElementId, false);
       this.pressedElementId = undefined;
     }
     if (this.hoveredElementId && !this.dispatcher.hasEnabledTarget(this.hoveredElementId)) {
@@ -129,6 +131,7 @@ export class AstylarInteractionRuntime {
     }
     this.canvas?.removeEventListener('keydown', this.handleKeyDown);
     this.canvas?.removeEventListener('keyup', this.handleKeyUp);
+    if (this.pressedElementId) this.controls?.setActiveState?.(this.pressedElementId, false);
     this.pressedElementId = undefined;
     this.hoveredElementId = undefined;
     this.pendingSpaceActivationId = undefined;
@@ -155,6 +158,7 @@ export class AstylarInteractionRuntime {
       }
       this.pressedElementId = targetId;
       const dispatched = this.dispatchPointer('pointerdown', targetId, pointerInfo);
+      this.controls?.setActiveState?.(targetId, true);
       if (!dispatched?.defaultPrevented) {
         this.canvas?.focus();
         this.setFocus(this.focusOrder.includes(targetId) ? targetId : undefined);
@@ -162,6 +166,9 @@ export class AstylarInteractionRuntime {
       return;
     }
     if (pointerInfo.type === PointerEventTypes.POINTERUP) {
+      if (this.pressedElementId) {
+        this.controls?.setActiveState?.(this.pressedElementId, false);
+      }
       if (targetId) this.dispatchPointer('pointerup', targetId, pointerInfo);
       if (targetId && targetId === this.pressedElementId) {
         const accepted = this.activateAndClick(targetId, pointerInfo);

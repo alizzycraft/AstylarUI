@@ -84,6 +84,15 @@ export interface ParityHoverAction {
   elementId: string;
 }
 
+export interface ParityPointerDownAction {
+  type: 'pointer-down';
+  elementId: string;
+}
+
+export interface ParityPointerUpAction {
+  type: 'pointer-up';
+}
+
 export interface ParityPressKeyAction {
   type: 'press-key';
   key: string;
@@ -97,6 +106,8 @@ export interface ParityTypeTextAction {
 export type ParityInteractionAction =
   | ParityClickAction
   | ParityHoverAction
+  | ParityPointerDownAction
+  | ParityPointerUpAction
   | ParityPressKeyAction
   | ParityTypeTextAction;
 

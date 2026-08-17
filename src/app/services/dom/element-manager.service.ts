@@ -14,7 +14,7 @@ export class BabylonElementManagerService implements OnDestroy {
   // Element lifecycle maps
   private elements: Map<string, Mesh> = new Map();
   private hoverStates: Map<string, boolean> = new Map();
-  private elementStyles: Map<string, { normal: StyleRule, hover?: StyleRule }> = new Map();
+  private elementStyles: Map<string, { normal: StyleRule, hover?: StyleRule, active?: StyleRule }> = new Map();
   private elementTypes: Map<string, string> = new Map();
   private elementDimensions: Map<string, {
     width: number;
@@ -47,7 +47,7 @@ export class BabylonElementManagerService implements OnDestroy {
     return this.hoverStates;
   }
 
-  get elementStylesMap(): Map<string, { normal: StyleRule, hover?: StyleRule }> {
+  get elementStylesMap(): Map<string, { normal: StyleRule, hover?: StyleRule, active?: StyleRule }> {
     return this.elementStyles;
   }
 
@@ -91,7 +91,7 @@ export class BabylonElementManagerService implements OnDestroy {
     this.focusedInputId = value;
   }
 
-  registerElement(id: string, mesh: Mesh, type: string, styles: { normal: StyleRule, hover?: StyleRule }): void {
+  registerElement(id: string, mesh: Mesh, type: string, styles: { normal: StyleRule, hover?: StyleRule, active?: StyleRule }): void {
     this.elements.set(id, mesh);
     this.elementTypes.set(id, type);
     this.elementStyles.set(id, styles);

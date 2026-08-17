@@ -80,8 +80,16 @@ describe('AstylarInteractionRuntime', () => {
     const mesh = MeshBuilder.CreatePlane('button-mesh', {}, scene);
     mesh.metadata = { elementId: 'button' };
     const events: AstylarEventSnapshot[] = [];
+    const activeStates: Array<[string, boolean]> = [];
     const runtime = new AstylarInteractionRuntime(scene, createSiteData(), {
       onEvent: (event) => events.push(event),
+    }, undefined, {
+      getFocusedElementId: () => undefined,
+      focus: () => false,
+      blur: () => false,
+      handleKeyDown: () => undefined,
+      commitsValueOnBlur: () => false,
+      setActiveState: (elementId, active) => activeStates.push([elementId, active]),
     });
     const pointerEvent = new PointerEvent('pointerdown', {
       button: 0,
@@ -101,6 +109,7 @@ describe('AstylarInteractionRuntime', () => {
 
     expect(events.map((event) => event.type)).toEqual(['pointerdown', 'pointerup', 'click']);
     expect(events.every((event) => event.targetId === 'button')).toBeTrue();
+    expect(activeStates).toEqual([['button', true], ['button', false]]);
     expect(runtime.snapshot.pointerObservers).toBe(1);
 
     runtime.dispose();

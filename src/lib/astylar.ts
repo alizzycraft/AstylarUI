@@ -305,6 +305,8 @@ export class Astylar {
           this.inputElementService.resetFormControls(elementIds),
         validateFormControls: (elementIds) =>
           this.inputElementService.validateFormControls(elementIds),
+        setActiveState: (elementId, active) =>
+          this.setElementActiveState(elementId, active),
       },
     );
     this.interactions.set(scene, interaction);
@@ -445,5 +447,36 @@ export class Astylar {
       state.selectedValue = String(input.options?.[input.selectedIndex]?.value ?? input.value ?? '');
     }
     return state;
+  }
+
+  private setElementActiveState(elementId: string, active: boolean): void {
+    const mesh = this.elementManager.elementsMap.get(elementId);
+    const styles = this.elementManager.elementStylesMap.get(elementId);
+    if (!mesh || !styles?.active) return;
+    mesh.metadata = mesh.metadata ?? {};
+    if (!active) {
+      if (mesh.metadata.astylarPreActiveMaterial) {
+        mesh.material = mesh.metadata.astylarPreActiveMaterial;
+        delete mesh.metadata.astylarPreActiveMaterial;
+      }
+      return;
+    }
+    mesh.metadata.astylarPreActiveMaterial = mesh.material;
+    if (!mesh.metadata.astylarActiveMaterial) {
+      const style = { ...styles.normal, ...styles.active };
+      const background = style.background
+        ? this.styleService.parseBackgroundColor(style.background)
+        : undefined;
+      if (background?.type === 'color') {
+        mesh.metadata.astylarActiveMaterial = this.babylonMeshService.createMaterial(
+          `${elementId}-active-material`,
+          background.color,
+          background.alpha ?? this.styleService.parseOpacity(style.opacity),
+        );
+      }
+    }
+    if (mesh.metadata.astylarActiveMaterial) {
+      mesh.material = mesh.metadata.astylarActiveMaterial;
+    }
   }
 }

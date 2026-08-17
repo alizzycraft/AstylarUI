@@ -264,6 +264,14 @@ export class StyleService {
                     }
                     dom.context.elementStyles.get(elementId)!.hover = style;
                     console.log(`[STYLE-PARSE] Hover style for ${elementId}`);
+                } else if (selector.includes(':active')) {
+                    const baseSelector = selector.replace(':active', '');
+                    const elementId = baseSelector.replace('#', '');
+                    if (!dom.context.elementStyles.has(elementId)) {
+                        dom.context.elementStyles.set(elementId, { normal: {} as StyleRule });
+                    }
+                    dom.context.elementStyles.get(elementId)!.active = style;
+                    console.log(`[STYLE-PARSE] Active style for ${elementId}`);
                 } else if (selector.startsWith('#')) {
                     // This is a normal element style
                     const elementId = selector.replace('#', '');
@@ -303,7 +311,7 @@ export class StyleService {
         console.log(`[STYLE-PARSE] Completed parsing. Total stored style keys: ${dom.context.elementStyles.size}`);
     }
 
-    public findStyleForElement(element: DOMElement, styles: StyleRule[], elementStylesOverride?: Map<string, { normal: StyleRule; hover?: StyleRule }>): StyleRule | undefined {
+    public findStyleForElement(element: DOMElement, styles: StyleRule[], elementStylesOverride?: Map<string, { normal: StyleRule; hover?: StyleRule; active?: StyleRule }>): StyleRule | undefined {
         const typeDefaults = this.styleDefaults.getElementTypeDefaults(element.type);
 
         let mergedStyle: StyleRule = {

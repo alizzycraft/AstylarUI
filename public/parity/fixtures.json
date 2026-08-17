@@ -744,5 +744,12 @@
     "category": "controls-states",
     "expectedBehavior": "Pointer enter applies authored hover paint and pointer leave restores normal paint with browser-order boundary events.",
     "interactionStepCount": 2
+  },
+  {
+    "id": "interaction-active-style",
+    "title": "Authored active-state paint",
+    "category": "controls-states",
+    "expectedBehavior": "Primary pointer down applies authored active paint until pointer up, then restores normal paint and completes click.",
+    "interactionStepCount": 2
   }
 ]
