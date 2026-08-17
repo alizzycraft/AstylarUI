@@ -92,6 +92,13 @@ try {
       }
       results.push(...await measureDynamicFixture(contexts, fixture));
     }
+    if (fixture.interactionStepCount) {
+      const desktopContext = contexts.get('desktop');
+      if (!desktopContext) {
+        throw new Error(`Interaction sequence for "${fixture.id}" requires a desktop context`);
+      }
+      results.push(...await measureInteractionFixture(desktopContext, fixture));
+    }
   }
 
   const summary = summarize(results);
@@ -438,6 +445,185 @@ async function captureDynamicMode(
   await page.close();
   if (disposal && states.length) states.at(-1).disposal = disposal;
   return states;
+}
+
+async function measureInteractionFixture(context, fixture) {
+  const sequenceDir = path.join(ARTIFACTS_DIR, fixture.id, 'interaction');
+  await mkdir(sequenceDir, { recursive: true });
+  const referenceStates = await captureInteractionMode(
+    context,
+    `${BASE_URL}/parity/reference/${encodeURIComponent(fixture.id)}?viewport=desktop&interaction=true`,
+    '#parity-reference-viewport',
+    'reference',
+    sequenceDir,
+    fixture.interactionStepCount,
+  );
+  const astylarStates = await captureInteractionMode(
+    context,
+    `${BASE_URL}/parity/astylar/${encodeURIComponent(fixture.id)}?viewport=desktop&interaction=true`,
+    '#parity-astylar-canvas',
+    'astylar',
+    sequenceDir,
+    fixture.interactionStepCount,
+  );
+
+  return referenceStates.map((reference, index) => {
+    const astylar = astylarStates[index];
+    const interactionErrors = compareInteraction(reference.report, astylar.report);
+    return {
+      id: fixture.id,
+      scenario: `interaction-${index + 1}`,
+      viewport: viewportProfiles.desktop,
+      title: fixture.title,
+      category: fixture.category,
+      expectedBehavior: fixture.expectedBehavior,
+      screenshotSimilarity: comparePng(reference.screenshot, astylar.screenshot),
+      geometry: compareGeometry(reference.report, astylar.report),
+      text: compareText(reference.report, astylar.report),
+      styles: compareStyles(reference.report, astylar.report),
+      runtimeErrors: [
+        ...reference.pageErrors.map((error) => `reference: ${error}`),
+        ...astylar.pageErrors.map((error) => `astylar: ${error}`),
+        ...reference.report.errors.map((error) => `reference: ${error}`),
+        ...astylar.report.errors.map((error) => `astylar: ${error}`),
+        ...interactionErrors.map((error) => `interaction: ${error}`),
+      ],
+      reference: reference.report,
+      astylar: astylar.report,
+    };
+  });
+}
+
+async function captureInteractionMode(
+  context,
+  url,
+  selector,
+  mode,
+  sequenceDir,
+  stepCount,
+) {
+  const page = await context.newPage();
+  const pageErrors = [];
+  const states = [];
+  page.on('pageerror', (error) => pageErrors.push(error.message));
+  await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 30_000 });
+  await page.waitForFunction(
+    () => window.__ASTYLAR_PARITY_REPORT__?.ready === true &&
+      typeof window.__ASTYLAR_PARITY_CAPTURE_INTERACTION__ === 'function' &&
+      Array.isArray(window.__ASTYLAR_PARITY_INTERACTION_STEPS__),
+    undefined,
+    { timeout: 30_000 },
+  );
+  const steps = await page.evaluate(() => window.__ASTYLAR_PARITY_INTERACTION_STEPS__);
+  if (!steps || steps.length !== stepCount) {
+    throw new Error(`${mode} interaction steps differ from manifest for ${url}`);
+  }
+  let report = await page.evaluate(() => window.__ASTYLAR_PARITY_REPORT__);
+  let previousRevision = report?.revision ?? 0;
+
+  for (let index = 0; index < stepCount; index += 1) {
+    for (const action of steps[index].actions) {
+      await performInteractionAction(page, mode, action, report);
+    }
+    await page.evaluate(() => window.__ASTYLAR_PARITY_CAPTURE_INTERACTION__?.());
+    await page.waitForFunction(
+      (afterRevision) => (window.__ASTYLAR_PARITY_REPORT__?.revision ?? 0) > afterRevision,
+      previousRevision,
+      { timeout: 30_000 },
+    );
+    report = await page.evaluate(() => window.__ASTYLAR_PARITY_REPORT__);
+    if (!report) throw new Error(`${mode} interaction step ${index + 1} did not publish a report`);
+    previousRevision = report.revision ?? previousRevision + 1;
+    const screenshot = await page.locator(selector).screenshot({
+      path: path.join(sequenceDir, `${index + 1}-${mode}.png`),
+      animations: 'disabled',
+    });
+    states.push({ report, screenshot, pageErrors: [...pageErrors] });
+  }
+  await page.close();
+  return states;
+}
+
+async function performInteractionAction(page, mode, action, report) {
+  switch (action.type) {
+    case 'click':
+    case 'hover': {
+      if (mode === 'reference') {
+        const locator = page.locator(`#${cssEscape(action.elementId)}`);
+        if (action.type === 'click') await locator.click();
+        else await locator.hover();
+        return;
+      }
+      const rect = report?.elements?.[action.elementId]?.borderBox;
+      if (!rect) throw new Error(`Missing Astylar interaction target geometry: ${action.elementId}`);
+      const canvas = await page.locator('#parity-astylar-canvas').boundingBox();
+      if (!canvas) throw new Error('Missing Astylar canvas bounds');
+      const x = canvas.x + rect.left + rect.width / 2;
+      const y = canvas.y + rect.top + rect.height / 2;
+      if (action.type === 'click') await page.mouse.click(x, y);
+      else await page.mouse.move(x, y);
+      return;
+    }
+    case 'press-key':
+      await page.keyboard.press(action.key);
+      return;
+    case 'type-text':
+      await page.keyboard.type(action.text);
+      return;
+    default:
+      throw new Error(`Unsupported interaction action: ${JSON.stringify(action)}`);
+  }
+}
+
+function cssEscape(value) {
+  return value.replace(/[^a-zA-Z0-9_-]/g, (character) => `\\${character}`);
+}
+
+function compareInteraction(reference, astylar) {
+  const referenceInteraction = reference.interaction;
+  const astylarInteraction = astylar.interaction;
+  if (!referenceInteraction || !astylarInteraction) {
+    return ['missing interaction report'];
+  }
+  const errors = [];
+  if (JSON.stringify(referenceInteraction.events) !== JSON.stringify(astylarInteraction.events)) {
+    errors.push(
+      `event logs differ (${JSON.stringify(referenceInteraction.events)} vs ${JSON.stringify(astylarInteraction.events)})`,
+    );
+  }
+  if (referenceInteraction.focusedElementId !== astylarInteraction.focusedElementId) {
+    errors.push(
+      `focused element differs (${referenceInteraction.focusedElementId ?? 'none'} vs ` +
+      `${astylarInteraction.focusedElementId ?? 'none'})`,
+    );
+  }
+  const controlIds = new Set([
+    ...Object.keys(referenceInteraction.controls),
+    ...Object.keys(astylarInteraction.controls),
+  ]);
+  for (const id of controlIds) {
+    const expected = normalizeComparableControl(referenceInteraction.controls[id]);
+    const actual = normalizeComparableControl(astylarInteraction.controls[id]);
+    if (JSON.stringify(expected) !== JSON.stringify(actual)) {
+      errors.push(`control state differs for ${id} (${JSON.stringify(expected)} vs ${JSON.stringify(actual)})`);
+    }
+  }
+  return errors;
+}
+
+function normalizeComparableControl(control) {
+  if (!control) return undefined;
+  return Object.fromEntries(Object.entries({
+    type: control.type,
+    value: control.value,
+    checked: control.checked,
+    selectedIndex: control.selectedIndex,
+    selectedValue: control.selectedValue,
+    disabled: control.disabled,
+    focused: control.focused,
+    selectionStart: control.selectionStart,
+    selectionEnd: control.selectionEnd,
+  }).filter(([, value]) => value !== undefined));
 }
 
 async function measureResponsiveFixture(context, fixture, staticResults) {

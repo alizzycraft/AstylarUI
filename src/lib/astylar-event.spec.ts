@@ -1,0 +1,112 @@
+import { MeshBuilder, NullEngine, PointerEventTypes, Scene } from '@babylonjs/core';
+import type { PointerInfo } from '@babylonjs/core';
+import type { SiteData } from '../app/types/site-data';
+import { AstylarEventDispatcher, AstylarEventSnapshot } from './astylar-event';
+import { AstylarInteractionRuntime } from './astylar-interaction-runtime';
+
+const createSiteData = (disabled = false): SiteData => ({
+  styles: [],
+  root: {
+    children: [{
+      type: 'section',
+      id: 'parent',
+      children: [{
+        type: 'input',
+        inputType: 'button',
+        id: 'button',
+        value: 'Activate',
+        disabled,
+      }],
+    }],
+  },
+});
+
+describe('AstylarEventDispatcher', () => {
+  it('dispatches target then ancestor handlers with DOM-like identity', () => {
+    const calls: string[] = [];
+    const dispatcher = new AstylarEventDispatcher(createSiteData(), {
+      handlers: {
+        button: { click: (event) => calls.push(`${event.targetId}:${event.currentTargetId}`) },
+        parent: { click: (event) => calls.push(`${event.targetId}:${event.currentTargetId}`) },
+      },
+    });
+
+    dispatcher.dispatch({ type: 'click', targetId: 'button', value: 'Activate' });
+
+    expect(calls).toEqual(['button:button', 'button:parent']);
+  });
+
+  it('supports propagation and default cancellation without executable SiteData', () => {
+    let observed: AstylarEventSnapshot | undefined;
+    const calls: string[] = [];
+    const dispatcher = new AstylarEventDispatcher(createSiteData(), {
+      handlers: {
+        button: {
+          click: (event) => {
+            calls.push('button');
+            event.preventDefault();
+            event.stopPropagation();
+          },
+        },
+        parent: { click: () => calls.push('parent') },
+      },
+      onEvent: (event) => { observed = event; },
+    });
+
+    dispatcher.dispatch({ type: 'click', targetId: 'button' });
+
+    expect(calls).toEqual(['button']);
+    expect(observed?.defaultPrevented).toBeTrue();
+    expect(observed?.propagationStopped).toBeTrue();
+  });
+
+  it('does not dispatch to disabled or removed targets', () => {
+    const events: AstylarEventSnapshot[] = [];
+    const dispatcher = new AstylarEventDispatcher(createSiteData(true), {
+      onEvent: (event) => events.push(event),
+    });
+    expect(dispatcher.dispatch({ type: 'click', targetId: 'button' })).toBeUndefined();
+
+    dispatcher.setSiteData({ styles: [], root: { children: [] } });
+    expect(dispatcher.dispatch({ type: 'click', targetId: 'button' })).toBeUndefined();
+    expect(events).toEqual([]);
+  });
+});
+
+describe('AstylarInteractionRuntime', () => {
+  it('owns one scene pointer observer and emits one activation sequence', () => {
+    const engine = new NullEngine();
+    const scene = new Scene(engine);
+    const mesh = MeshBuilder.CreatePlane('button-mesh', {}, scene);
+    mesh.metadata = { elementId: 'button' };
+    const events: AstylarEventSnapshot[] = [];
+    const runtime = new AstylarInteractionRuntime(scene, createSiteData(), {
+      onEvent: (event) => events.push(event),
+    });
+    const pointerEvent = new PointerEvent('pointerdown', {
+      button: 0,
+      pointerType: 'mouse',
+    });
+
+    scene.onPointerObservable.notifyObservers({
+      type: PointerEventTypes.POINTERDOWN,
+      event: pointerEvent,
+      pickInfo: { pickedMesh: mesh },
+    } as unknown as PointerInfo);
+    scene.onPointerObservable.notifyObservers({
+      type: PointerEventTypes.POINTERUP,
+      event: pointerEvent,
+      pickInfo: { pickedMesh: mesh },
+    } as unknown as PointerInfo);
+
+    expect(events.map((event) => event.type)).toEqual(['pointerdown', 'pointerup', 'click']);
+    expect(events.every((event) => event.targetId === 'button')).toBeTrue();
+    expect(runtime.snapshot.pointerObservers).toBe(1);
+
+    runtime.dispose();
+    expect(runtime.snapshot.pointerObservers).toBe(0);
+    expect(runtime.snapshot.disposed).toBeTrue();
+    scene.dispose();
+    engine.dispose();
+  });
+});

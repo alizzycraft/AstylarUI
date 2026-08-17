@@ -18,12 +18,15 @@ import {
   Vector3
 } from '@babylonjs/core';
 import { Astylar } from '../lib';
+import type { AstylarEventSnapshot } from '../lib';
 import { BabylonElementManagerService } from '../app/services/dom/element-manager.service';
 import { getParityFixture } from './fixtures';
 import {
   getParityViewport,
   PARITY_VIEWPORTS,
+  ParityControlState,
   ParityElementMeasurement,
+  ParityNormalizedEvent,
   ParityRect,
   ParityRuntimeReport,
   ParityViewport
@@ -73,6 +76,8 @@ export class ParityAstylarComponent {
 
   private scene?: Scene;
   private resizeGeneration = 0;
+  private reportRevision = 0;
+  private readonly interactionEvents: ParityNormalizedEvent[] = [];
 
   constructor() {
     afterNextRender(() => this.initialize());
@@ -81,6 +86,8 @@ export class ParityAstylarComponent {
       delete window.__ASTYLAR_PARITY_SET_VIEWPORT__;
       delete window.__ASTYLAR_PARITY_APPLY_STEP__;
       delete window.__ASTYLAR_PARITY_DISPOSE__;
+      delete window.__ASTYLAR_PARITY_INTERACTION_STEPS__;
+      delete window.__ASTYLAR_PARITY_CAPTURE_INTERACTION__;
       const engine = this.scene?.getEngine();
       if (engine && !engine.isDisposed) {
         engine.dispose();
@@ -116,8 +123,19 @@ export class ParityAstylarComponent {
         : fixture.siteData;
       const dynamicSequence = this.route.snapshot.queryParamMap.get('dynamic') === 'true' &&
         !!fixture.dynamicSteps?.length;
+      const interactionSequence = this.route.snapshot.queryParamMap.get('interaction') === 'true' &&
+        !!fixture.interactionSteps?.length;
       const scene = this.astylar.render(canvas, renderData, {
         antialias: false,
+        events: interactionSequence
+          ? {
+              onEvent: (event) => {
+                if (fixture.interactionEventTypes?.includes(event.type)) {
+                  this.interactionEvents.push(this.normalizeEvent(event));
+                }
+              },
+            }
+          : undefined,
         setupLighting: (lightingScene) => {
           const light = new HemisphericLight(
             'parity-light',
@@ -131,6 +149,15 @@ export class ParityAstylarComponent {
       });
       scene.activeCamera?.detachControl();
       this.scene = scene;
+      if (interactionSequence) {
+        window.__ASTYLAR_PARITY_INTERACTION_STEPS__ = fixture.interactionSteps;
+        window.__ASTYLAR_PARITY_CAPTURE_INTERACTION__ = async () => {
+          await this.astylar.whenSettled(scene);
+          await this.nextFrame();
+          await this.nextFrame();
+          this.captureWhenReady(scene, canvas, fixture);
+        };
+      }
       if (dynamicSequence) {
         window.__ASTYLAR_PARITY_APPLY_STEP__ = async (index, viewportId) => {
           const step = fixture.dynamicSteps?.[index];
@@ -284,7 +311,9 @@ export class ParityAstylarComponent {
             fixtureId,
             fixture.measurementIds,
             fixture.expectedAbsentIds ?? [],
-            fixture.expectedMissingIds ?? []
+            fixture.expectedMissingIds ?? [],
+            fixture.interactionIds ?? [],
+            !!fixture.interactionSteps?.length,
           )
         );
         return;
@@ -299,6 +328,8 @@ export class ParityAstylarComponent {
             fixture.measurementIds,
             fixture.expectedAbsentIds ?? [],
             fixture.expectedMissingIds ?? [],
+            fixture.interactionIds ?? [],
+            !!fixture.interactionSteps?.length,
             ['Timed out waiting for all Astylar elements to render']
           )
         );
@@ -312,6 +343,8 @@ export class ParityAstylarComponent {
     measurementIds: string[],
     expectedAbsentIds: string[],
     expectedMissingIds: string[],
+    interactionIds: string[],
+    includeInteraction: boolean,
     initialErrors: string[] = []
   ): ParityRuntimeReport {
     const elements: Record<string, ParityElementMeasurement> = {};
@@ -388,7 +421,7 @@ export class ParityAstylarComponent {
 
     return {
       ready: true,
-      revision: this.astylar.getSession(scene)?.snapshot.revision,
+      revision: ++this.reportRevision,
       fixtureId,
       mode: 'astylar',
       viewport: this.parityViewport,
@@ -399,6 +432,68 @@ export class ParityAstylarComponent {
         elements: this.elementManager.elementsMap.size,
         inputs: this.elementManager.inputElementsMap.size,
       },
+      interaction: includeInteraction
+        ? {
+            events: [...this.interactionEvents],
+            focusedElementId: this.getFocusedElementId(),
+            controls: this.measureControls(interactionIds),
+            registrations: this.astylar.getInteractionSnapshot(scene),
+          }
+        : undefined,
+    };
+  }
+
+  private getFocusedElementId(): string | undefined {
+    for (const [id, input] of this.elementManager.inputElementsMap) {
+      if (input?.focused) return id;
+    }
+    return undefined;
+  }
+
+  private measureControls(ids: string[]): Record<string, ParityControlState> {
+    const controls: Record<string, ParityControlState> = {};
+    for (const id of ids) {
+      const input = this.elementManager.inputElementsMap.get(id);
+      if (!input) continue;
+      const options = Array.isArray(input.options) ? input.options : [];
+      controls[id] = {
+        type: String(input.type),
+        value: String(input.value ?? ''),
+        checked: typeof input.checked === 'boolean' ? input.checked : undefined,
+        selectedIndex: typeof input.selectedIndex === 'number' ? input.selectedIndex : undefined,
+        selectedValue: typeof input.selectedIndex === 'number'
+          ? String(options[input.selectedIndex]?.value ?? input.value ?? '')
+          : undefined,
+        disabled: !!input.disabled,
+        focused: !!input.focused,
+        selectionStart: typeof input.selectionStart === 'number' ? input.selectionStart : undefined,
+        selectionEnd: typeof input.selectionEnd === 'number' ? input.selectionEnd : undefined,
+        cursorPosition: typeof input.cursorPosition === 'number' ? input.cursorPosition : undefined,
+        touched: input.validationState?.touched,
+        dirty: input.validationState?.dirty,
+        valid: input.validationState?.valid,
+      };
+    }
+    return controls;
+  }
+
+  private normalizeEvent(event: AstylarEventSnapshot): ParityNormalizedEvent {
+    return {
+      type: event.type,
+      targetId: event.targetId,
+      currentTargetId: event.currentTargetId,
+      defaultPrevented: event.defaultPrevented,
+      value: event.value,
+      checked: event.checked,
+      selectedValue: event.selectedValue,
+      key: event.key,
+      code: event.code,
+      shiftKey: event.shiftKey,
+      ctrlKey: event.ctrlKey,
+      altKey: event.altKey,
+      metaKey: event.metaKey,
+      button: event.button,
+      pointerType: event.pointerType,
     };
   }
 

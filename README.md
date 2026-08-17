@@ -94,6 +94,28 @@ You can also use the `<astylar-render>` component directly in your templates:
 <astylar-render [canvas]="externalCanvas" [siteData]="myCustomData"></astylar-render>
 ```
 
+### 3. Typed application events
+
+Keep executable handlers outside serializable `SiteData` and address elements by their authored IDs:
+
+```typescript
+this.scene = this.astylar.render(canvas, siteData, {
+  events: {
+    handlers: {
+      'save-button': {
+        click: (event) => {
+          console.log(event.targetId, event.currentTargetId);
+          if (!canSave()) event.preventDefault();
+        },
+      },
+    },
+    onEvent: (event) => console.log(event.type, event.targetId),
+  },
+});
+```
+
+Supported events use a deliberately small DOM-like contract with authored target/current-target IDs, common control values, pointer/keyboard fields, propagation stopping, and default cancellation. `DOMElement.onclick` strings are deprecated and are never evaluated by this API.
+
 ## Developing AstylarUI
 
 The current implementation status, document map, and recommended next work are

@@ -26,6 +26,11 @@ through the same browser page and Astylar scene. Every settled state is captured
 and compared with Chromium and its equivalent fresh render, including live
 resource counts.
 
+Fixtures with interaction steps are driven through real Playwright pointer and
+keyboard input in the existing native page and Babylon scene. Each step captures
+normalized event order, focus, supported control state, geometry, text, paint,
+runtime errors, and Astylar interaction registrations.
+
 Set `ASTYLAR_PARITY_BASE_URL` to measure an already-running server. Set
 `ASTYLAR_PARITY_BROWSER_CHANNEL` if the local Chromium channel is not `chrome`.
 Set `ASTYLAR_PARITY_FIXTURE` to a fixture ID for a focused diagnostic run; omit
@@ -62,3 +67,4 @@ results in `scorecard-v2.md`, representative-application parity in
 active responsive intrinsic layout and paint-fidelity phase in `scorecard-v5.md`.
 Application-grade intrinsic Grid work continues in `scorecard-v6.md`.
 Reactive layout and reflow work continues in `scorecard-v7.md`.
+Stateful interaction and form parity continues in `scorecard-v8.md`.

@@ -53,6 +53,54 @@ export interface ParityFixture {
   siteData: SiteData;
   dynamicSteps?: ParityDynamicStep[];
   lifecycleViewports?: ParityViewport['id'][];
+  interactionSteps?: ParityInteractionStep[];
+  interactionIds?: string[];
+  interactionEventTypes?: ParityInteractionEventType[];
+}
+
+export type ParityInteractionEventType =
+  | 'pointerenter'
+  | 'pointerleave'
+  | 'pointerdown'
+  | 'pointerup'
+  | 'click'
+  | 'focus'
+  | 'blur'
+  | 'keydown'
+  | 'input'
+  | 'change'
+  | 'submit'
+  | 'reset';
+
+export interface ParityClickAction {
+  type: 'click';
+  elementId: string;
+}
+
+export interface ParityHoverAction {
+  type: 'hover';
+  elementId: string;
+}
+
+export interface ParityPressKeyAction {
+  type: 'press-key';
+  key: string;
+}
+
+export interface ParityTypeTextAction {
+  type: 'type-text';
+  text: string;
+}
+
+export type ParityInteractionAction =
+  | ParityClickAction
+  | ParityHoverAction
+  | ParityPressKeyAction
+  | ParityTypeTextAction;
+
+export interface ParityInteractionStep {
+  id: string;
+  actions: ParityInteractionAction[];
 }
 
 export interface ParityReferenceSetTextMutation {
@@ -130,6 +178,52 @@ export interface ParityRuntimeReport {
   errors: string[];
   resources?: { meshes: number; materials: number; textures: number };
   registries?: { elements: number; inputs: number };
+  interaction?: ParityInteractionReport;
+}
+
+export interface ParityNormalizedEvent {
+  type: ParityInteractionEventType;
+  targetId: string;
+  currentTargetId: string;
+  defaultPrevented: boolean;
+  value?: string;
+  checked?: boolean;
+  selectedValue?: string;
+  key?: string;
+  code?: string;
+  shiftKey?: boolean;
+  ctrlKey?: boolean;
+  altKey?: boolean;
+  metaKey?: boolean;
+  button?: number;
+  pointerType?: string;
+}
+
+export interface ParityControlState {
+  type: string;
+  value: string;
+  checked?: boolean;
+  selectedIndex?: number;
+  selectedValue?: string;
+  disabled: boolean;
+  focused: boolean;
+  selectionStart?: number;
+  selectionEnd?: number;
+  cursorPosition?: number;
+  touched?: boolean;
+  dirty?: boolean;
+  valid?: boolean;
+}
+
+export interface ParityInteractionReport {
+  events: ParityNormalizedEvent[];
+  focusedElementId?: string;
+  controls: Record<string, ParityControlState>;
+  registrations?: {
+    pointerObservers: number;
+    keyboardListeners: number;
+    handlers: number;
+  };
 }
 
 export interface ParityDisposalReport {
@@ -159,5 +253,7 @@ declare global {
       viewportId?: ParityViewport['id'],
     ) => Promise<void>;
     __ASTYLAR_PARITY_DISPOSE__?: () => ParityDisposalReport;
+    __ASTYLAR_PARITY_INTERACTION_STEPS__?: ParityInteractionStep[];
+    __ASTYLAR_PARITY_CAPTURE_INTERACTION__?: () => Promise<void>;
   }
 }

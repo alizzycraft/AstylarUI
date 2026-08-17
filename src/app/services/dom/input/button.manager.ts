@@ -208,15 +208,6 @@ export class ButtonManager {
             console.log('Reset button clicked:', button.element.id);
         }
 
-        // Execute onclick handler if defined
-        if (button.element.onclick) {
-            try {
-                // Evaluate onclick handler (simplified - in production would use safer evaluation)
-                console.log('Executing onclick:', button.element.onclick);
-            } catch (error) {
-                console.error('Error executing button onclick:', error);
-            }
-        }
     }
 
     /**

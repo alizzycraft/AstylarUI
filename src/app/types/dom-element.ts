@@ -73,7 +73,8 @@ export interface DOMElement {
   // Input-specific
   inputType?: string; // Type of input element (text, button, checkbox, etc.)
   inputElement?: any; // Reference to InputElement state object
-  onclick?: string; // Click handler for buttons
+  /** @deprecated Executable strings are not supported. Use AstylarRenderOptions.events. */
+  onclick?: string;
   options?: Array<{ value: any; label: string; disabled?: boolean }>; // Options for select elements
   validationRules?: Array<{ type: string; value?: any; message: string }>; // Validation rules
 }

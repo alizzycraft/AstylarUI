@@ -32,6 +32,10 @@ import { AstylarSceneResources } from './astylar-scene-resources';
 import type { AstylarSceneResourceSnapshot } from './astylar-scene-resources';
 import { ImageResourceService } from '../app/services/dom/elements/image-resource.service';
 import { DOMElement } from '../app/types/dom-element';
+import { BabylonElementManagerService } from '../app/services/dom/element-manager.service';
+import { AstylarInteractionRuntime } from './astylar-interaction-runtime';
+import type { AstylarInteractionSnapshot } from './astylar-interaction-runtime';
+import type { AstylarEventOptions, AstylarEventState } from './astylar-event';
 
 /**
  * Configuration options for rendering
@@ -43,6 +47,8 @@ export interface AstylarRenderOptions {
   antialias?: boolean;
   /** Custom lighting setup - if not provided, default hemisphere light is created */
   setupLighting?: (scene: Scene) => void;
+  /** Typed handlers and an observer kept outside serializable SiteData. */
+  events?: AstylarEventOptions;
 }
 
 /**
@@ -57,8 +63,10 @@ export class Astylar {
   private styleService = inject(StyleService);
   private styleDefaultsService = inject(StyleDefaultsService);
   private imageResources = inject(ImageResourceService);
+  private elementManager = inject(BabylonElementManagerService);
   private readonly sessions = new WeakMap<Scene, AstylarRenderSession>();
   private readonly sceneResources = new WeakMap<Scene, AstylarSceneResources>();
+  private readonly interactions = new WeakMap<Scene, AstylarInteractionRuntime>();
   private activeSession?: AstylarRenderSession;
 
   /**
@@ -257,6 +265,14 @@ export class Astylar {
     );
     this.sessions.set(scene, session);
     this.activeSession = session;
+    const interaction = new AstylarInteractionRuntime(
+      scene,
+      siteData,
+      options?.events,
+      (elementId) => this.getLiveEventState(elementId),
+    );
+    this.interactions.set(scene, interaction);
+    session.addCleanup(() => interaction.dispose());
     session.addCleanup(() => sceneResources.dispose());
     session.addCleanup(this.imageResources.subscribe((event) => {
       if (event.scene !== scene || session.isDisposed) return;
@@ -336,8 +352,14 @@ export class Astylar {
     return this.sceneResources.get(scene)?.snapshot;
   }
 
+  getInteractionSnapshot(scene: Scene): AstylarInteractionSnapshot | undefined {
+    return this.interactions.get(scene)?.snapshot;
+  }
+
   update(siteData: SiteData, scene?: Scene): Promise<AstylarSessionSnapshot> {
-    return this.requireSession(scene).update(siteData);
+    const session = this.requireSession(scene);
+    this.interactions.get(session.scene)?.setSiteData(siteData);
+    return session.update(siteData);
   }
 
   invalidate(
@@ -374,5 +396,18 @@ export class Astylar {
     };
     siteData.root.children.forEach(visit);
     return sources;
+  }
+
+  private getLiveEventState(elementId: string): AstylarEventState {
+    const input = this.elementManager.inputElementsMap.get(elementId);
+    if (!input) return {};
+    const state: AstylarEventState = {
+      value: String(input.value ?? ''),
+    };
+    if (typeof input.checked === 'boolean') state.checked = input.checked;
+    if (typeof input.selectedIndex === 'number') {
+      state.selectedValue = String(input.options?.[input.selectedIndex]?.value ?? input.value ?? '');
+    }
+    return state;
   }
 }

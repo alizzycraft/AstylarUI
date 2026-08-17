@@ -12,7 +12,10 @@ import { getParityFixture } from './fixtures';
 import {
   getParityViewport,
   PARITY_VIEWPORTS,
+  ParityControlState,
   ParityElementMeasurement,
+  ParityInteractionEventType,
+  ParityNormalizedEvent,
   ParityReferenceMutation,
   ParityRect,
   ParityRuntimeReport,
@@ -43,6 +46,7 @@ export class ParityReferenceComponent {
   );
   private revision = 0;
   private resizeGeneration = 0;
+  private readonly interactionEvents: ParityNormalizedEvent[] = [];
 
   constructor() {
     afterNextRender(() => void this.initialize());
@@ -50,6 +54,8 @@ export class ParityReferenceComponent {
       window.removeEventListener('resize', this.onWindowResize);
       delete window.__ASTYLAR_PARITY_SET_VIEWPORT__;
       delete window.__ASTYLAR_PARITY_APPLY_STEP__;
+      delete window.__ASTYLAR_PARITY_INTERACTION_STEPS__;
+      delete window.__ASTYLAR_PARITY_CAPTURE_INTERACTION__;
     });
   }
 
@@ -71,6 +77,17 @@ export class ParityReferenceComponent {
 
     const viewport = this.viewport().nativeElement;
     viewport.innerHTML = `<style>${fixture.reference.css}</style>${fixture.reference.html}`;
+    const interactionSequence = this.route.snapshot.queryParamMap.get('interaction') === 'true' &&
+      !!fixture.interactionSteps?.length;
+    if (interactionSequence) {
+      this.installInteractionCapture(viewport, fixture.interactionEventTypes ?? []);
+      window.__ASTYLAR_PARITY_INTERACTION_STEPS__ = fixture.interactionSteps;
+      window.__ASTYLAR_PARITY_CAPTURE_INTERACTION__ = async () => {
+        await this.nextFrame();
+        await this.nextFrame();
+        this.publishCurrentReport(fixture, viewport);
+      };
+    }
     const dynamicSequence = this.route.snapshot.queryParamMap.get('dynamic') === 'true' &&
       !!fixture.dynamicSteps?.length;
     const freshStep = Number.parseInt(
@@ -233,8 +250,92 @@ export class ParityReferenceComponent {
       viewport: this.parityViewport,
       revision: ++this.revision,
       elements,
-      errors
+      errors,
+      interaction: fixture.interactionSteps?.length
+        ? {
+            events: [...this.interactionEvents],
+            focusedElementId: this.getFocusedElementId(viewport),
+            controls: this.measureControls(viewport, fixture.interactionIds ?? []),
+          }
+        : undefined,
     });
+  }
+
+  private installInteractionCapture(
+    viewport: HTMLElement,
+    eventTypes: ParityInteractionEventType[],
+  ): void {
+    for (const type of eventTypes) {
+      viewport.addEventListener(type, (event) => {
+        const target = event.target instanceof HTMLElement ? event.target : undefined;
+        if (!target?.id) return;
+        const pointer = event instanceof PointerEvent ? event : undefined;
+        const keyboard = event instanceof KeyboardEvent ? event : undefined;
+        const control = target instanceof HTMLInputElement ||
+          target instanceof HTMLTextAreaElement || target instanceof HTMLSelectElement
+          ? target
+          : undefined;
+        this.interactionEvents.push({
+          type,
+          targetId: target.id,
+          currentTargetId: target.id,
+          defaultPrevented: event.defaultPrevented,
+          value: control?.value,
+          checked: control instanceof HTMLInputElement &&
+            (control.type === 'checkbox' || control.type === 'radio')
+            ? control.checked
+            : undefined,
+          selectedValue: control instanceof HTMLSelectElement ? control.value : undefined,
+          key: keyboard?.key,
+          code: keyboard?.code,
+          shiftKey: keyboard?.shiftKey,
+          ctrlKey: keyboard?.ctrlKey,
+          altKey: keyboard?.altKey,
+          metaKey: keyboard?.metaKey,
+          button: pointer?.button,
+          pointerType: pointer?.pointerType,
+        });
+      });
+    }
+  }
+
+  private getFocusedElementId(viewport: HTMLElement): string | undefined {
+    const active = this.document.activeElement;
+    return active instanceof HTMLElement && viewport.contains(active) && active.id
+      ? active.id
+      : undefined;
+  }
+
+  private measureControls(
+    viewport: HTMLElement,
+    ids: string[],
+  ): Record<string, ParityControlState> {
+    const controls: Record<string, ParityControlState> = {};
+    for (const id of ids) {
+      const control = viewport.querySelector<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>(
+        `#${CSS.escape(id)}`,
+      );
+      if (!control) continue;
+      controls[id] = {
+        type: control instanceof HTMLInputElement ? control.type : control.tagName.toLowerCase(),
+        value: control.value,
+        checked: control instanceof HTMLInputElement &&
+          (control.type === 'checkbox' || control.type === 'radio')
+          ? control.checked
+          : undefined,
+        selectedIndex: control instanceof HTMLSelectElement ? control.selectedIndex : undefined,
+        selectedValue: control instanceof HTMLSelectElement ? control.value : undefined,
+        disabled: control.disabled,
+        focused: this.document.activeElement === control,
+        selectionStart: control instanceof HTMLInputElement || control instanceof HTMLTextAreaElement
+          ? control.selectionStart ?? undefined
+          : undefined,
+        selectionEnd: control instanceof HTMLInputElement || control instanceof HTMLTextAreaElement
+          ? control.selectionEnd ?? undefined
+          : undefined,
+      };
+    }
+    return controls;
   }
 
   private measureElement(

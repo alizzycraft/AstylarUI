@@ -13,6 +13,19 @@ export type { AstylarRenderOptions } from "./astylar";
 export { AstylarRenderSession } from "./astylar-render-session";
 export { AstylarSceneResources } from './astylar-scene-resources';
 export type { AstylarSceneResourceSnapshot } from './astylar-scene-resources';
+export { AstylarEventDispatcher } from './astylar-event';
+export { AstylarInteractionRuntime } from './astylar-interaction-runtime';
+export type {
+  AstylarEvent,
+  AstylarEventHandler,
+  AstylarEventHandlers,
+  AstylarEventInit,
+  AstylarEventOptions,
+  AstylarEventSnapshot,
+  AstylarEventState,
+  AstylarEventType,
+} from './astylar-event';
+export type { AstylarInteractionSnapshot } from './astylar-interaction-runtime';
 export type {
   AstylarInvalidationReason,
   AstylarSessionSnapshot,

@@ -101,6 +101,7 @@ import { reactiveValueStyleFixture } from './reactive-value-style.fixture';
 import { reactiveChildListFixture } from './reactive-child-list.fixture';
 import { reactiveImageSourceFixture } from './reactive-image-source.fixture';
 import { reactiveLifecycleCyclesFixture } from './reactive-lifecycle-cycles.fixture';
+import { interactionPointerClickFixture } from './interaction-pointer-click.fixture';
 import { ParityFixture } from '../parity.types';
 
 const fixtures: readonly ParityFixture[] = [
@@ -206,7 +207,8 @@ const fixtures: readonly ParityFixture[] = [
   reactiveValueStyleFixture,
   reactiveChildListFixture,
   reactiveImageSourceFixture,
-  reactiveLifecycleCyclesFixture
+  reactiveLifecycleCyclesFixture,
+  interactionPointerClickFixture
 ];
 
 const fixturesById = new Map(fixtures.map((fixture) => [fixture.id, fixture]));

@@ -632,5 +632,12 @@
     "viewportIds": ["desktop", "tablet", "mobile"],
     "dynamicStepCount": 6,
     "lifecycleViewports": ["desktop", "tablet", "mobile", "desktop", "mobile", "desktop"]
+  },
+  {
+    "id": "interaction-pointer-click",
+    "title": "Pointer activation event order",
+    "category": "forms-interactive",
+    "expectedBehavior": "A real primary-pointer activation targets the authored button and reports pointerdown, pointerup, and click once in browser order.",
+    "interactionStepCount": 1
   }
 ]
