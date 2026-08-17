@@ -7,6 +7,8 @@ import { Mesh } from '@babylonjs/core';
 import { TextRenderingService } from '../../text/text-rendering.service';
 import { TextStyleParserService } from '../../text/text-style-parser.service';
 import { DOMAncestryService } from '../dom-ancestry.service';
+import { ImageLayoutService } from './image-layout.service';
+import { ImageResourceService } from './image-resource.service';
 
 interface IntrinsicTextMetrics {
     text: string;
@@ -25,7 +27,9 @@ export class ElementDimensionService {
     constructor(
         private textRenderingService: TextRenderingService,
         private textStyleParser: TextStyleParserService,
-        private ancestry: DOMAncestryService
+        private ancestry: DOMAncestryService,
+        private imageResources?: ImageResourceService,
+        private imageLayout?: ImageLayoutService,
     ) { }
 
     /**
@@ -303,6 +307,30 @@ export class ElementDimensionService {
                 height += verticalPadding + borderWidth * 2;
                 heightSource += '+content-box';
             }
+        }
+
+        const naturalImageSize = element.type === 'img'
+            ? this.imageResources?.getNaturalSize(element.src || style?.src)
+            : undefined;
+        if (naturalImageSize && this.imageLayout) {
+            const target = this.imageLayout.resolveIntrinsicBox(
+                width,
+                height,
+                layoutInsets.left + layoutInsets.right,
+                layoutInsets.top + layoutInsets.bottom,
+                naturalImageSize.width,
+                naturalImageSize.height,
+                widthValue !== undefined && widthValue !== 'auto',
+                heightValue !== undefined && heightValue !== 'auto',
+            );
+            width = target.width;
+            height = target.height;
+            widthSource = widthValue !== undefined && widthValue !== 'auto'
+                ? widthSource
+                : 'image-natural-width';
+            heightSource = heightValue !== undefined && heightValue !== 'auto'
+                ? heightSource
+                : 'image-natural-height';
         }
 
         if (style) {

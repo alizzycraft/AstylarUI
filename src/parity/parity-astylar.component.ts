@@ -215,8 +215,9 @@ export class ParityAstylarComponent {
         this.elementManager.elementsMap.has(id)
       );
       const assetsReady = scene.textures.every((texture) => texture.isReady());
+      const sessionSettled = this.astylar.getSession(scene)?.snapshot.status === 'idle';
 
-      if (hasAllElements && assetsReady && renderedFrames >= 2) {
+      if (hasAllElements && assetsReady && sessionSettled && renderedFrames >= 2) {
         scene.onAfterRenderObservable.remove(observer);
         canvas.dataset['parityReady'] = 'true';
         this.publishReport(

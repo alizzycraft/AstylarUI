@@ -10,10 +10,14 @@ import {
   resolveIntrinsicGridRows,
   tokenizeGridTrackList,
 } from './grid-track-sizing';
+import { ElementBorderService } from './element-border.service';
 
 @Injectable({ providedIn: 'root' })
 export class GridService {
-  constructor(@Optional() private flexService?: FlexService) {}
+  constructor(
+    @Optional() private flexService?: FlexService,
+    @Optional() private borderService?: ElementBorderService,
+  ) {}
 
   isGridContainer(
     render: BabylonRender,
@@ -52,7 +56,7 @@ export class GridService {
     const columnGap = this.parseLength(style.columnGap ?? style.gap);
     const rowGap = this.parseLength(style.rowGap ?? style.gap);
     const contentWidth = Math.max(0, dimensions.width - dimensions.padding.left - dimensions.padding.right);
-    const contentHeight = Math.max(0, dimensions.height - dimensions.padding.top - dimensions.padding.bottom);
+    let contentHeight = Math.max(0, dimensions.height - dimensions.padding.top - dimensions.padding.bottom);
     const columnCount = Math.max(1, this.trackCount(style.gridTemplateColumns));
     const requiredRows = Math.max(1, Math.ceil(visibleChildren.length / columnCount));
     const columns = this.resolveTracks(style.gridTemplateColumns, contentWidth, columnGap, columnCount);
@@ -93,6 +97,33 @@ export class GridService {
     );
     const rows = intrinsicRows ??
       this.resolveTracks(style.gridTemplateRows, contentHeight, rowGap, requiredRows);
+    if (!hasAssignedDefiniteHeight && intrinsicRows) {
+      const intrinsicHeight = rows.reduce((sum, row) => sum + row, 0) +
+        rowGap * Math.max(0, rows.length - 1) +
+        dimensions.padding.top + dimensions.padding.bottom;
+      if (Math.abs(intrinsicHeight - dimensions.height) > 0.1) {
+        const scaleFactor = render.actions.camera.getPixelToWorldScale();
+        const borderRadius = this.borderService?.parseBorderRadius(style.borderRadius) ??
+          (Number.parseFloat(style.borderRadius ?? '0') || 0);
+        const borderWidth = this.borderService?.parseBorderProperties(render, style).width ??
+          (Number.parseFloat(style.borderWidth ?? '0') || 0) * scaleFactor;
+        render.actions.mesh.updateMeshWithBorderRadius(
+          parent,
+          'rectangle',
+          dimensions.width * scaleFactor,
+          intrinsicHeight * scaleFactor,
+          borderRadius * scaleFactor,
+          borderWidth,
+        );
+        parent.position.y += ((dimensions.height - intrinsicHeight) / 2) * scaleFactor;
+        dimensions.height = intrinsicHeight;
+        dom.context.elementDimensions.set(parent.name, dimensions);
+        contentHeight = Math.max(
+          0,
+          intrinsicHeight - dimensions.padding.top - dimensions.padding.bottom,
+        );
+      }
+    }
     const contentLeft = -dimensions.width / 2 + dimensions.padding.left;
     const contentTop = dimensions.height / 2 - dimensions.padding.top;
 

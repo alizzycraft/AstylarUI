@@ -13,6 +13,8 @@ import {
   resolveIntrinsicGridRows,
   tokenizeGridTrackList,
 } from './grid-track-sizing';
+import { ImageLayoutService } from './image-layout.service';
+import { ImageResourceService } from './image-resource.service';
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +26,8 @@ export class FlexService {
     private textRenderingService: TextRenderingService,
     private textStyleParser: TextStyleParserService,
     private borderService?: ElementBorderService,
+    private imageResources?: ImageResourceService,
+    private imageLayout?: ImageLayoutService,
   ) { }
   public isFlexContainer(render: BabylonRender, parentElement: DOMElement, styles: StyleRule[], dom?: BabylonDOM): boolean {
     // Use elementStyles map if dom context is available for better performance
@@ -148,6 +152,11 @@ export class FlexService {
       let width = 0;
       let height = 0;
       const heightWasIntrinsic = !style?.height || style.height === 'auto';
+      const intrinsicImageBox = this.calculateIntrinsicImageBox(
+        child,
+        style,
+        containerWidth - padding.left - padding.right,
+      );
 
       if (style?.width && style.width !== 'auto') {
         if (style.width.endsWith('px')) {
@@ -171,6 +180,8 @@ export class FlexService {
         // Calculate intrinsic width for buttons and inputs
         width = this.calculateIntrinsicWidth(child, style, styles);
         console.log(`[FLEX] Child ${child.id} using intrinsic width: ${width}px`);
+      } else if (intrinsicImageBox) {
+        width = intrinsicImageBox.width;
       } else {
         // Default width if not specified and not an intrinsic element
         // In a row, divide space equally. In a column, use full width.
@@ -193,7 +204,7 @@ export class FlexService {
           console.log(`[FLEX] Child ${child.id} using numeric height: ${height}px`);
         }
       } else {
-        const intrinsicTextHeight = this.calculateIntrinsicTextHeight(
+        const intrinsicTextHeight = intrinsicImageBox?.height ?? this.calculateIntrinsicTextHeight(
           child,
           style,
           styles,
@@ -670,6 +681,14 @@ export class FlexService {
     );
     if (this.classifyFlexChild(childStyle) !== 'flow') return null;
 
+    const intrinsicImageBox = this.calculateIntrinsicImageBox(child, childStyle, contentWidth);
+    if (intrinsicImageBox) {
+      return {
+        ...intrinsicImageBox,
+        margin: this.parseMarginBox(childStyle),
+      };
+    }
+
     let childWidth = childStyle?.width && childStyle.width !== 'auto'
       ? this.parseIntrinsicPixelLength(childStyle.width, contentWidth)
       : ['button', 'input'].includes(child.type)
@@ -697,6 +716,40 @@ export class FlexService {
     }
     if (childHeight === null) return null;
     return { width: childWidth, height: childHeight, margin: this.parseMarginBox(childStyle) };
+  }
+
+  private calculateIntrinsicImageBox(
+    element: DOMElement,
+    style: StyleRule | undefined,
+    contentWidth: number,
+  ): { width: number; height: number } | null {
+    const naturalSize = element.type === 'img'
+      ? this.imageResources?.getNaturalSize(element.src || style?.src)
+      : undefined;
+    if (!naturalSize || !this.imageLayout) return null;
+
+    const padding = this.parsePadding(style?.padding);
+    const borderWidth = Math.max(0, Number.parseFloat(style?.borderWidth ?? '0') || 0);
+    const horizontalInsets = padding.left + padding.right + borderWidth * 2;
+    const verticalInsets = padding.top + padding.bottom + borderWidth * 2;
+    const hasExplicitWidth = style?.width !== undefined && style.width !== 'auto';
+    const hasExplicitHeight = style?.height !== undefined && style.height !== 'auto';
+    const currentWidth = hasExplicitWidth
+      ? this.parseIntrinsicPixelLength(style!.width!, contentWidth)
+      : naturalSize.width + horizontalInsets;
+    const currentHeight = hasExplicitHeight
+      ? this.parseIntrinsicPixelLength(style!.height!, 0)
+      : naturalSize.height + verticalInsets;
+    return this.imageLayout.resolveIntrinsicBox(
+      currentWidth,
+      currentHeight,
+      horizontalInsets,
+      verticalInsets,
+      naturalSize.width,
+      naturalSize.height,
+      hasExplicitWidth,
+      hasExplicitHeight,
+    );
   }
 
   private parseDefiniteIntrinsicFlexBasis(

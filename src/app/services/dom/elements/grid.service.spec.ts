@@ -168,6 +168,60 @@ describe('GridService', () => {
     expect(createElement.calls.mostRecent().args[6]).toEqual({ width: 252, height: 74 });
   });
 
+  it('resizes an unassigned height-auto grid to its intrinsic rows', () => {
+    const measuredService = new GridService({
+      measureIntrinsicFlowChildOuterHeight: () => 74,
+    } as unknown as FlexService);
+    const updateMesh = jasmine.createSpy('updateMeshWithBorderRadius');
+    const parent = { name: 'grid', metadata: {}, position: { y: 0 } } as Mesh;
+    const dimensions = {
+      width: 280,
+      height: 400,
+      padding: { top: 14, right: 14, bottom: 14, left: 14 },
+    };
+    const childMesh = { name: 'card', metadata: {} } as Mesh;
+    const dom = {
+      context: {
+        elementStyles: new Map(),
+        elementDimensions: new Map<string, any>([
+          ['grid', dimensions],
+          ['card', { width: 252, height: 74 }],
+        ]),
+      },
+      actions: {
+        createElement: () => childMesh,
+        processChildren: jasmine.createSpy('processChildren'),
+      },
+    } as unknown as BabylonDOM;
+    const render = {
+      actions: {
+        style: {
+          findStyleForElement: (element: { id?: string }) => element.id === 'grid'
+            ? { selector: '#grid', display: 'grid', gridTemplateColumns: '252px', gridTemplateRows: 'auto', height: 'auto' }
+            : { selector: '#card', height: 'auto' },
+        },
+        camera: { getPixelToWorldScale: () => 1 },
+        mesh: {
+          updateMeshWithBorderRadius: updateMesh,
+          positionTextMesh: jasmine.createSpy('positionTextMesh'),
+        },
+      },
+    } as unknown as BabylonRender;
+
+    measuredService.processGridChildren(
+      dom,
+      render,
+      [{ type: 'article', id: 'card' }],
+      parent,
+      [],
+      { type: 'section', id: 'grid' },
+    );
+
+    expect(dimensions.height).toBe(102);
+    expect(parent.position.y).toBe(149);
+    expect(updateMesh).toHaveBeenCalled();
+  });
+
   it('preserves a definite item height and aligns it at the start of a taller row', () => {
     const firstMesh = { name: 'first', metadata: {} } as Mesh;
     const secondMesh = { name: 'second', metadata: {} } as Mesh;
@@ -196,7 +250,7 @@ describe('GridService', () => {
     const resolved = new Map([
       ['grid', {
         selector: '#grid', display: 'grid', gridTemplateColumns: '150px 180px',
-        columnGap: '14px', gridTemplateRows: 'auto',
+        columnGap: '14px', gridTemplateRows: 'auto', height: '72px',
       }],
       ['first', { selector: '#first', width: 'auto', height: '28px' }],
       ['second', { selector: '#second', width: 'auto', height: '44px' }],

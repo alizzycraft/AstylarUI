@@ -71,6 +71,7 @@ export class ParityReferenceComponent {
     viewport.innerHTML = `<style>${fixture.reference.css}</style>${fixture.reference.html}`;
 
     await this.document.fonts?.ready;
+    await this.waitForImages(viewport);
     await this.nextFrame();
     await this.nextFrame();
 
@@ -287,6 +288,18 @@ export class ParityReferenceComponent {
 
   private nextFrame(): Promise<void> {
     return new Promise((resolve) => requestAnimationFrame(() => resolve()));
+  }
+
+  private async waitForImages(viewport: HTMLElement): Promise<void> {
+    await Promise.all(
+      Array.from(viewport.querySelectorAll('img')).map(async (image) => {
+        if (image.complete) return;
+        await new Promise<void>((resolve) => {
+          image.addEventListener('load', () => resolve(), { once: true });
+          image.addEventListener('error', () => resolve(), { once: true });
+        });
+      })
+    );
   }
 
   private publishReport(report: ParityRuntimeReport): void {

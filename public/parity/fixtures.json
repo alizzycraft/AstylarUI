@@ -595,5 +595,11 @@
     "title": "Reactive wrapped text update",
     "category": "responsive",
     "expectedBehavior": "Updating short text to wrapped text in the same render session grows auto-height ancestors and moves following content exactly as browser reflow does."
+  },
+  {
+    "id": "reactive-natural-image",
+    "title": "Delayed natural image in nested intrinsic containers",
+    "category": "lists-tables-images",
+    "expectedBehavior": "A delayed image without authored dimensions adopts its natural size, including padding and border, and reflows nested height-auto Flex and Grid ancestors plus following content."
   }
 ]

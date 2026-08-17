@@ -5,8 +5,26 @@ import { DOMElement } from '../../../types/dom-element';
 import { StyleRule } from '../../../types/style-rule';
 import { FlexContainer, FlexItem, FlexLayoutService } from './flex-layout.service';
 import { Mesh } from '@babylonjs/core';
+import { ImageLayoutService } from './image-layout.service';
 
 describe('FlexService', () => {
+  it('measures a loaded natural image including padding and borders', () => {
+    const service = new FlexService(
+      {} as never,
+      {} as never,
+      {} as never,
+      undefined,
+      { getNaturalSize: () => ({ width: 120, height: 80 }) } as never,
+      new ImageLayoutService(),
+    );
+
+    expect(service['calculateIntrinsicImageBox'](
+      { type: 'img', src: 'art.svg' },
+      { selector: 'img', padding: '6px', borderWidth: '2px' },
+      400,
+    )).toEqual({ width: 136, height: 96 });
+  });
+
   it('expands three-value padding and margin shorthand', () => {
     const service = new FlexService({} as never, {} as never, {} as never);
 

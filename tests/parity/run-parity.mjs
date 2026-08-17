@@ -217,6 +217,7 @@ async function measureFixture(context, fixture, viewport) {
 
 async function captureMode(context, url, selector, screenshotPath) {
   const page = await context.newPage();
+  await installDeterministicAssetDelay(page);
   const pageErrors = [];
   page.on('pageerror', (error) => pageErrors.push(error.message));
   await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 30_000 });
@@ -335,6 +336,7 @@ async function captureResponsiveMode(
   sequence
 ) {
   const page = await context.newPage();
+  await installDeterministicAssetDelay(page);
   const pageErrors = [];
   const states = [];
   page.on('pageerror', (error) => pageErrors.push(error.message));
@@ -382,6 +384,19 @@ async function captureResponsiveMode(
   }
   await page.close();
   return states;
+}
+
+async function installDeterministicAssetDelay(page) {
+  await page.route('**/*parity-delay=*', async (route) => {
+    const delay = Number.parseInt(
+      new URL(route.request().url()).searchParams.get('parity-delay') ?? '0',
+      10
+    );
+    if (Number.isFinite(delay) && delay > 0) {
+      await new Promise((resolve) => setTimeout(resolve, delay));
+    }
+    await route.continue();
+  });
 }
 
 function comparePng(referenceBuffer, astylarBuffer) {

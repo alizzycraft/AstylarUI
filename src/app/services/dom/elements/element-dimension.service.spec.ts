@@ -6,8 +6,54 @@ import { BabylonDOM } from '../interfaces/dom.types';
 import { BabylonRender } from '../interfaces/render.types';
 import { ElementDimensionService } from './element-dimension.service';
 import { DOMAncestryService } from '../dom-ancestry.service';
+import { ImageLayoutService } from './image-layout.service';
 
 describe('ElementDimensionService', () => {
+  it('uses loaded image metadata for an un-sized image border box', () => {
+    const service = new ElementDimensionService(
+      {} as never,
+      {} as never,
+      new DOMAncestryService(),
+      { getNaturalSize: () => ({ width: 120, height: 80 }) } as never,
+      new ImageLayoutService(),
+    );
+    const parent = { name: 'root-body' } as Mesh;
+    const style: StyleRule = {
+      selector: '#image',
+      display: 'block',
+      boxSizing: 'border-box',
+      padding: '6px',
+      borderWidth: '2px',
+    };
+    const dom = {
+      context: {
+        elementDimensions: new Map([['root-body', {
+          width: 800,
+          height: 600,
+          padding: { top: 0, right: 0, bottom: 0, left: 0 },
+        }]]),
+        elementStyles: new Map(),
+      },
+    } as unknown as BabylonDOM;
+    const render = {
+      actions: {
+        style: { getElementTypeDefaults: () => ({ display: 'block' }) },
+      },
+    } as unknown as BabylonRender;
+
+    const result = service.calculateDimensions(
+      dom,
+      render,
+      { type: 'img', id: 'image', src: 'art.svg' },
+      style,
+      parent,
+      [],
+    );
+
+    expect(result.width).toBe(136);
+    expect(result.height).toBe(96);
+  });
+
   it('uses the viewport root as the layout parent for fixed elements', () => {
     const service = new ElementDimensionService({} as never, {} as never, new DOMAncestryService());
     const root = { name: 'root-body' } as Mesh;

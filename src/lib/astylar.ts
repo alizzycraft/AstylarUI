@@ -30,6 +30,8 @@ import type {
 } from "./astylar-render-session";
 import { AstylarSceneResources } from './astylar-scene-resources';
 import type { AstylarSceneResourceSnapshot } from './astylar-scene-resources';
+import { ImageResourceService } from '../app/services/dom/elements/image-resource.service';
+import { DOMElement } from '../app/types/dom-element';
 
 /**
  * Configuration options for rendering
@@ -54,6 +56,7 @@ export class Astylar {
   private textureService = inject(TextureService);
   private styleService = inject(StyleService);
   private styleDefaultsService = inject(StyleDefaultsService);
+  private imageResources = inject(ImageResourceService);
   private readonly sessions = new WeakMap<Scene, AstylarRenderSession>();
   private readonly sceneResources = new WeakMap<Scene, AstylarSceneResources>();
   private activeSession?: AstylarRenderSession;
@@ -237,6 +240,10 @@ export class Astylar {
       siteData,
       (currentSiteData) => {
         engine.resize(true);
+        this.imageResources.retain(
+          scene,
+          this.collectImageSources(currentSiteData),
+        );
         this.babylonDOMRenderer.initialize(
           renderContext,
           canvas.clientWidth || viewportWidth,
@@ -250,6 +257,16 @@ export class Astylar {
     this.sessions.set(scene, session);
     this.activeSession = session;
     session.addCleanup(() => sceneResources.dispose());
+    session.addCleanup(this.imageResources.subscribe((event) => {
+      if (event.scene !== scene || session.isDisposed) return;
+      if (!this.collectImageSources(session.siteData).has(event.source)) return;
+      void session.invalidate('asset').catch((error) => {
+        if (!session.isDisposed) {
+          console.error('[Astylar] Image asset reflow failed:', error);
+        }
+      });
+    }));
+    session.addCleanup(() => this.imageResources.disposeScene(scene));
 
     // Start render loop
     engine.runRenderLoop(() => {
@@ -339,5 +356,22 @@ export class Astylar {
       throw new Error('No active Astylar render session was found.');
     }
     return session;
+  }
+
+  private collectImageSources(siteData: SiteData): Set<string> {
+    const sources = new Set<string>();
+    const visit = (element: DOMElement): void => {
+      if (element.type === 'img') {
+        const resolvedStyle = this.styleService.findStyleForElement(
+          element,
+          siteData.styles,
+        );
+        const source = element.src || element.style?.src || resolvedStyle?.src;
+        if (source) sources.add(source);
+      }
+      element.children?.forEach(visit);
+    };
+    siteData.root.children.forEach(visit);
+    return sources;
   }
 }

@@ -17,6 +17,7 @@ import { DOMAncestryService } from "../dom-ancestry.service";
 import { ImageLayoutService } from "./image-layout.service";
 import { OverflowClipService } from "./overflow-clip.service";
 import { GridService } from "./grid.service";
+import { ImageResourceService } from "./image-resource.service";
 import {
   ELEMENT_BORDER_Z_OFFSET,
   SELECT_BORDER_Z_OFFSET,
@@ -43,6 +44,7 @@ export class ElementCreationService {
     private imageLayout: ImageLayoutService,
     private overflowClip: OverflowClipService,
     private grid: GridService,
+    private imageResources: ImageResourceService,
   ) {}
 
   /**
@@ -199,7 +201,10 @@ export class ElementCreationService {
           `${meshId}-image-material`,
           render.scene,
         );
-        const texture = new BABYLON.Texture(imageSrc, render.scene);
+        const resourceTexture = this.imageResources.getTexture(imageSrc, render.scene!);
+        // UV transforms are per replaced element even when the decoded image
+        // resource is shared by several elements or across layout passes.
+        const texture = resourceTexture.clone();
         material.diffuseTexture = texture;
         material.emissiveTexture = texture;
         material.diffuseColor = BABYLON.Color3.White();
@@ -221,38 +226,11 @@ export class ElementCreationService {
         render.actions.mesh.parentTextMesh(imageContent, mesh);
 
         const configureImage = () => {
-          const imageSize = texture.getSize();
+          if (mesh.isDisposed() || imageContent.isDisposed()) return;
+          const imageSize = resourceTexture.getSize();
           const insets = dimensions.padding;
-          const target = this.imageLayout.resolveIntrinsicBox(
-            dimensions.width,
-            dimensions.height,
-            insets.left + insets.right,
-            insets.top + insets.bottom,
-            imageSize.width,
-            imageSize.height,
-            style.width !== undefined && style.width !== 'auto',
-            style.height !== undefined && style.height !== 'auto',
-          );
-
-          if (target.width !== dimensions.width || target.height !== dimensions.height) {
-            const widthDelta = target.width - dimensions.width;
-            const heightDelta = target.height - dimensions.height;
-            render.actions.mesh.updateMeshWithBorderRadius(
-              mesh,
-              'rectangle',
-              target.width * scaleFactor,
-              target.height * scaleFactor,
-              borderRadius,
-            );
-            mesh.position.x -= widthDelta * scaleFactor / 2;
-            mesh.position.y -= heightDelta * scaleFactor / 2;
-            dimensions.width = target.width;
-            dimensions.height = target.height;
-            dom.context.elementDimensions.set(meshId, dimensions);
-          }
-
-          const contentWidth = Math.max(0, target.width - insets.left - insets.right);
-          const contentHeight = Math.max(0, target.height - insets.top - insets.bottom);
+          const contentWidth = Math.max(0, dimensions.width - insets.left - insets.right);
+          const contentHeight = Math.max(0, dimensions.height - insets.top - insets.bottom);
           const fit = this.imageLayout.calculateFit(
             contentWidth,
             contentHeight,
@@ -274,8 +252,8 @@ export class ElementCreationService {
           texture.uOffset = fit.uOffset + fit.uScale;
           texture.vOffset = fit.vOffset;
 
-          const contentCenterX = -target.width / 2 + insets.left + contentWidth / 2;
-          const contentCenterY = target.height / 2 - insets.top - contentHeight / 2;
+          const contentCenterX = -dimensions.width / 2 + insets.left + contentWidth / 2;
+          const contentCenterY = dimensions.height / 2 - insets.top - contentHeight / 2;
           render.actions.mesh.positionTextMesh(
             imageContent,
             contentCenterX * scaleFactor,
@@ -284,10 +262,10 @@ export class ElementCreationService {
           );
         };
 
-        if (texture.isReady()) {
+        if (resourceTexture.isReady()) {
           configureImage();
         } else {
-          texture.onLoadObservable.addOnce(configureImage);
+          resourceTexture.onLoadObservable.addOnce(configureImage);
         }
       }
     } else {
