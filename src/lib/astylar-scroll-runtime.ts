@@ -33,12 +33,14 @@ export interface AstylarScrollRuntimeOptions {
   getDimensions(elementId: string): ElementDimensions | undefined;
   getStyle(elementId: string): StyleRule | undefined;
   getPixelToWorldScale(): number;
+  refreshClipping?(entries: ReadonlyArray<{ mesh: Mesh; style: StyleRule }>): void;
 }
 
 /** Owns scroll-container state and content transforms for one Astylar scene. */
 export class AstylarScrollRuntime {
   private containers = new Map<string, ScrollContainer>();
   private parentIds = new Map<string, string>();
+  private clipEntries: Array<{ mesh: Mesh; style: StyleRule }> = [];
   private disposed = false;
 
   constructor(private readonly options: AstylarScrollRuntimeOptions) {}
@@ -58,6 +60,7 @@ export class AstylarScrollRuntime {
     if (this.disposed) return;
     this.containers.clear();
     this.parentIds.clear();
+    this.clipEntries = [];
 
     const counts = new Map<string, number>();
     const visit = (element: DOMElement, parentId?: string): void => {
@@ -74,6 +77,11 @@ export class AstylarScrollRuntime {
       const id = element.id;
       const style = id ? this.options.getStyle(id) : undefined;
       const overflow = element.style?.overflow ?? style?.overflow;
+      const mesh = id && counts.get(id) === 1 ? this.options.getMesh(id) : undefined;
+      if (mesh && style && (overflow === 'hidden' || overflow === 'clip' ||
+          overflow === 'auto' || overflow === 'scroll')) {
+        this.clipEntries.push({ mesh, style: { ...style, overflow } });
+      }
       if (id && counts.get(id) === 1 && (overflow === 'auto' || overflow === 'scroll')) {
         const container = this.createContainer(element);
         if (container) {
@@ -89,6 +97,7 @@ export class AstylarScrollRuntime {
       element.children?.forEach(register);
     };
     siteData.root.children.forEach(register);
+    this.refreshClipping();
   }
 
   scrollFrom(elementId: string, deltaX: number, deltaY: number): boolean {
@@ -111,6 +120,7 @@ export class AstylarScrollRuntime {
           container.scrollLeft = nextLeft;
           container.scrollTop = nextTop;
           this.applyOffset(container);
+          this.refreshClipping();
           return true;
         }
       }
@@ -141,6 +151,7 @@ export class AstylarScrollRuntime {
     this.disposed = true;
     this.containers.clear();
     this.parentIds.clear();
+    this.clipEntries = [];
   }
 
   private createContainer(element: DOMElement): ScrollContainer | undefined {
@@ -208,6 +219,10 @@ export class AstylarScrollRuntime {
       root.mesh.position.y = root.y + container.scrollTop * scale;
       root.mesh.computeWorldMatrix(true);
     }
+  }
+
+  private refreshClipping(): void {
+    this.options.refreshClipping?.(this.clipEntries);
   }
 
   private publicState(container: ScrollContainer): AstylarScrollState {

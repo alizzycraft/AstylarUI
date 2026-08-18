@@ -99,6 +99,60 @@ describe('AstylarScrollRuntime', () => {
     expect(rebuilt.meshes.get('one')?.position.y).toBe(100);
   });
 
+  it('propagates a wheel delta to an ancestor only after the inner boundary', () => {
+    const innerContent: DOMElement = { type: 'div', id: 'inner-content' };
+    const inner: DOMElement = { type: 'div', id: 'inner', children: [innerContent] };
+    const outerContent: DOMElement = { type: 'div', id: 'outer-content', children: [inner] };
+    const outer: DOMElement = { type: 'div', id: 'outer', children: [outerContent] };
+    const siteData: SiteData = { styles: [], root: { children: [outer] } };
+    const meshes = new Map<string, Mesh>();
+    const makeMesh = (
+      element: DOMElement,
+      width: number,
+      height: number,
+      parent?: Mesh,
+      y = 0,
+    ): Mesh => {
+      const mesh = MeshBuilder.CreatePlane(element.id!, { width, height }, scene);
+      mesh.parent = parent ?? null;
+      mesh.position.y = y;
+      mesh.metadata = { element, elementId: element.id };
+      meshes.set(element.id!, mesh);
+      return mesh;
+    };
+    const outerMesh = makeMesh(outer, 300, 300);
+    const outerContentMesh = makeMesh(outerContent, 300, 420, outerMesh, -60);
+    const innerMesh = makeMesh(inner, 220, 120, outerContentMesh);
+    makeMesh(innerContent, 220, 220, innerMesh, -50);
+    const dimensions = new Map<string, { width: number; height: number }>([
+      ['outer', { width: 300, height: 300 }],
+      ['inner', { width: 220, height: 120 }],
+    ]);
+    const styles = new Map<string, StyleRule>([
+      ['outer', { selector: '#outer', overflow: 'auto' }],
+      ['inner', { selector: '#inner', overflow: 'auto' }],
+    ]);
+    const runtime = new AstylarScrollRuntime({
+      getMesh: (id) => meshes.get(id),
+      getDimensions: (id) => dimensions.get(id),
+      getStyle: (id) => styles.get(id),
+      getPixelToWorldScale: () => 1,
+    });
+
+    runtime.reconcile(siteData);
+    expect(runtime.scrollFrom('inner-content', 0, 500)).toBeTrue();
+    expect(runtime.snapshot.containers['inner'].scrollTop).toBe(100);
+    expect(runtime.snapshot.containers['outer'].scrollTop).toBe(0);
+
+    expect(runtime.scrollFrom('inner-content', 0, 50)).toBeTrue();
+    expect(runtime.snapshot.containers['inner'].scrollTop).toBe(100);
+    expect(runtime.snapshot.containers['outer'].scrollTop).toBe(50);
+
+    expect(runtime.scrollFrom('inner-content', 0, -40)).toBeTrue();
+    expect(runtime.snapshot.containers['inner'].scrollTop).toBe(60);
+    expect(runtime.snapshot.containers['outer'].scrollTop).toBe(50);
+  });
+
   it('does not restore duplicate scroll-container IDs and cleans its registry', () => {
     const { runtime, siteData } = createVerticalRuntime(scene);
     const duplicate = siteData.root.children[0];

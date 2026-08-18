@@ -9,10 +9,32 @@ interface ClipBounds {
   maxY: number;
 }
 
+export interface OverflowClipEntry {
+  mesh: BABYLON.Mesh;
+  style: StyleRule;
+}
+
 const CLIP_BOUNDS_METADATA = 'astylarOverflowClipBounds';
 
 @Injectable({ providedIn: 'root' })
 export class OverflowClipService {
+  /** Recomputes world-space clip intersections after the authored layout moves. */
+  refresh(entries: readonly OverflowClipEntry[]): void {
+    const descendants = new Set<BABYLON.AbstractMesh>();
+    for (const { mesh } of entries) {
+      mesh.getChildMeshes(false).forEach((descendant) => descendants.add(descendant));
+    }
+    for (const descendant of descendants) {
+      if (descendant.metadata) {
+        delete descendant.metadata[CLIP_BOUNDS_METADATA];
+      }
+      this.clearPlanes(descendant.material);
+    }
+    for (const { mesh, style } of entries) {
+      this.apply(mesh, style);
+    }
+  }
+
   apply(parent: BABYLON.Mesh, style: StyleRule): void {
     if (style.overflow !== 'hidden' && style.overflow !== 'clip' &&
         style.overflow !== 'auto' && style.overflow !== 'scroll') {
@@ -55,5 +77,13 @@ export class OverflowClipService {
     material.clipPlane2 = new BABYLON.Plane(1, 0, 0, -bounds.maxX);
     material.clipPlane3 = new BABYLON.Plane(0, -1, 0, bounds.minY);
     material.clipPlane4 = new BABYLON.Plane(0, 1, 0, -bounds.maxY);
+  }
+
+  private clearPlanes(material: BABYLON.Nullable<BABYLON.Material>): void {
+    if (!material) return;
+    material.clipPlane = null;
+    material.clipPlane2 = null;
+    material.clipPlane3 = null;
+    material.clipPlane4 = null;
   }
 }

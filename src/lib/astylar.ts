@@ -39,6 +39,7 @@ import type { AstylarEventOptions, AstylarEventState } from './astylar-event';
 import { InputElementService } from '../app/services/dom/input/input-element.service';
 import { AstylarScrollRuntime } from './astylar-scroll-runtime';
 import type { AstylarScrollSnapshot } from './astylar-scroll-runtime';
+import { OverflowClipService } from '../app/services/dom/elements/overflow-clip.service';
 
 /**
  * Configuration options for rendering
@@ -68,6 +69,7 @@ export class Astylar {
   private imageResources = inject(ImageResourceService);
   private elementManager = inject(BabylonElementManagerService);
   private inputElementService = inject(InputElementService);
+  private overflowClipService = inject(OverflowClipService);
   private readonly sessions = new WeakMap<Scene, AstylarRenderSession>();
   private readonly sceneResources = new WeakMap<Scene, AstylarSceneResources>();
   private readonly interactions = new WeakMap<Scene, AstylarInteractionRuntime>();
@@ -253,6 +255,7 @@ export class Astylar {
       getDimensions: (elementId) => this.elementManager.elementDimensionsMap.get(elementId),
       getStyle: (elementId) => this.elementManager.elementStylesMap.get(elementId)?.normal,
       getPixelToWorldScale: () => this.babylonCameraService.getPixelToWorldScale(),
+      refreshClipping: (entries) => this.overflowClipService.refresh(entries),
     });
     this.scrolling.set(scene, scrollRuntime);
 

@@ -1,5 +1,6 @@
 import * as BABYLON from '@babylonjs/core';
 import { OverflowClipService } from './overflow-clip.service';
+import type { StyleRule } from '../../../types/style-rule';
 
 describe('OverflowClipService', () => {
   let engine: BABYLON.NullEngine;
@@ -55,5 +56,28 @@ describe('OverflowClipService', () => {
     expect(child.material.clipPlane2?.asArray()).toEqual([1, 0, 0, -2]);
     expect(child.material.clipPlane3?.asArray()).toEqual([0, -1, 0, -1]);
     expect(child.material.clipPlane4?.asArray()).toEqual([0, 1, 0, -1]);
+  });
+
+  it('refreshes nested clip intersections after normal-flow layout moves a container', () => {
+    const outer = BABYLON.MeshBuilder.CreatePlane('outer', { width: 10, height: 10 }, scene);
+    const inner = BABYLON.MeshBuilder.CreatePlane('inner', { width: 6, height: 4 }, scene);
+    inner.parent = outer;
+    inner.material = new BABYLON.StandardMaterial('inner-material', scene);
+    const child = BABYLON.MeshBuilder.CreatePlane('child', { width: 8, height: 8 }, scene);
+    child.parent = inner;
+    child.material = new BABYLON.StandardMaterial('child-material', scene);
+    const outerStyle: StyleRule = { selector: '#outer', overflow: 'auto' };
+    const innerStyle: StyleRule = { selector: '#inner', overflow: 'auto' };
+
+    service.apply(outer, outerStyle);
+    service.apply(inner, innerStyle);
+    inner.position.y = 3;
+    service.refresh([
+      { mesh: outer, style: outerStyle },
+      { mesh: inner, style: innerStyle },
+    ]);
+
+    expect(child.material.clipPlane3?.asArray()).toEqual([0, -1, 0, 1]);
+    expect(child.material.clipPlane4?.asArray()).toEqual([0, 1, 0, -5]);
   });
 });

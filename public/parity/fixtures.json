@@ -811,5 +811,12 @@
     "category": "overflow-scrolling",
     "expectedBehavior": "Horizontal wheel input scrolls a fixed-width overflow:auto container, clamps at both ends, moves its row beneath a stable clip, and reports browser-equivalent scroll extents.",
     "interactionStepCount": 3
+  },
+  {
+    "id": "overflow-nested-wheel",
+    "title": "Nested wheel propagation",
+    "category": "overflow-scrolling",
+    "expectedBehavior": "The nearest nested overflow container consumes wheel movement until it reaches a boundary, then further movement in that direction scrolls and clamps its overflow ancestor.",
+    "interactionStepCount": 8
   }
 ]
