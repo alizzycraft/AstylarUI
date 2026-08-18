@@ -34,7 +34,10 @@ import { ImageResourceService } from '../app/services/dom/elements/image-resourc
 import { DOMElement } from '../app/types/dom-element';
 import { BabylonElementManagerService } from '../app/services/dom/element-manager.service';
 import { AstylarInteractionRuntime } from './astylar-interaction-runtime';
-import type { AstylarInteractionSnapshot } from './astylar-interaction-runtime';
+import type {
+  AstylarInteractionSnapshot,
+  AstylarNavigationOptions,
+} from './astylar-interaction-runtime';
 import type { AstylarEventOptions, AstylarEventState } from './astylar-event';
 import { InputElementService } from '../app/services/dom/input/input-element.service';
 import { AstylarScrollRuntime } from './astylar-scroll-runtime';
@@ -61,6 +64,8 @@ export interface AstylarRenderOptions {
   events?: AstylarEventOptions;
   /** Browser accessibility semantics. Enabled by default; pass false to opt out. */
   accessibility?: boolean | AstylarSemanticBridgeOptions;
+  /** Accepted anchor outcomes; external URLs remain host-routable intents. */
+  navigation?: AstylarNavigationOptions;
 }
 
 /**
@@ -323,7 +328,8 @@ export class Astylar {
             semanticBridge?.syncControlStates((elementId) =>
               this.getLiveSemanticControlState(elementId));
             semanticBridge?.queueFocusSync(
-              () => this.inputElementService.getFocusedElementId(),
+              () => interaction?.snapshot.focusedElementId ??
+                this.inputElementService.getFocusedElementId(),
               (elementId) => this.hasLiveTextSelection(elementId),
             );
           },
@@ -355,7 +361,8 @@ export class Astylar {
             if (event.type !== 'focus' && !pointerTransition &&
                 !pointerFocusTransaction && !selectedTextClick) {
               semanticBridge.queueFocusSync(
-                () => this.inputElementService.getFocusedElementId(),
+                () => interaction?.snapshot.focusedElementId ??
+                  this.inputElementService.getFocusedElementId(),
                 (elementId) => this.hasLiveTextSelection(elementId),
               );
             }
@@ -421,10 +428,11 @@ export class Astylar {
       },
       undefined,
       scrollRuntime,
+      options?.navigation,
     );
     this.interactions.set(scene, interaction);
     semanticBridge?.connectInteractions({
-      getFocusedElementId: () => this.inputElementService.getFocusedElementId(),
+      getFocusedElementId: () => interaction?.snapshot.focusedElementId,
       focus: (elementId, preservePreviousSelectionOnReset) =>
         interaction?.focusSemanticElement(elementId, preservePreviousSelectionOnReset) ?? false,
       blur: (elementId) => interaction?.blurSemanticElement(elementId) ?? false,

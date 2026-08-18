@@ -44,6 +44,22 @@ describe('AstylarScrollRuntime', () => {
     expect(meshes.get('one')?.position.y).toBe(90);
   });
 
+  it('scrolls destinations to the start and uses nearest focus visibility', () => {
+    const { runtime, siteData, meshes } = createVerticalRuntime(scene);
+    runtime.reconcile(siteData);
+
+    expect(runtime.scrollIntoView('three')).toBeTrue();
+    expect(runtime.snapshot.containers['box'].scrollTop).toBe(80);
+    expect(meshes.get('one')?.position.y).toBe(120);
+
+    expect(runtime.scrollIntoView('three', 'nearest')).toBeFalse();
+    expect(runtime.snapshot.containers['box'].scrollTop).toBe(80);
+
+    expect(runtime.scrollIntoView('one', 'nearest')).toBeTrue();
+    expect(runtime.snapshot.containers['box'].scrollTop).toBe(0);
+    expect(meshes.get('one')?.position.y).toBe(40);
+  });
+
   it('measures rightward screen overflow and applies horizontal scroll offsets', () => {
     const boxElement: DOMElement = {
       type: 'div', id: 'box', children: [{ type: 'div', id: 'strip' }],

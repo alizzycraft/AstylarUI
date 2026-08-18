@@ -16,6 +16,7 @@ import {
   ParityElementMeasurement,
   ParityInteractionEventType,
   ParityNormalizedEvent,
+  ParityNavigationOutcome,
   ParityReferenceMutation,
   ParityRect,
   ParityRuntimeReport,
@@ -47,6 +48,7 @@ export class ParityReferenceComponent {
   private revision = 0;
   private resizeGeneration = 0;
   private readonly interactionEvents: ParityNormalizedEvent[] = [];
+  private readonly navigationOutcomes: ParityNavigationOutcome[] = [];
 
   constructor() {
     afterNextRender(() => void this.initialize());
@@ -80,11 +82,13 @@ export class ParityReferenceComponent {
     const interactionSequence = this.route.snapshot.queryParamMap.get('interaction') === 'true' &&
       !!fixture.interactionSteps?.length;
     if (interactionSequence) {
+      this.installClickCancellation(viewport, fixture.cancelClickIds ?? []);
       this.installInteractionCapture(
         viewport,
         fixture.interactionEventTypes ?? [],
         fixture.interactionIds ?? [],
       );
+      this.installNavigationCapture(viewport, fixture.interactionIds ?? []);
       window.__ASTYLAR_PARITY_INTERACTION_STEPS__ = fixture.interactionSteps;
       window.__ASTYLAR_PARITY_CAPTURE_INTERACTION__ = async () => {
         await this.nextFrame();
@@ -280,6 +284,7 @@ export class ParityReferenceComponent {
             focusedElementId: this.getFocusedElementId(viewport),
             controls: this.measureControls(viewport, fixture.interactionIds ?? []),
             scrollContainers: this.measureScrollContainers(viewport, fixture.scrollIds ?? []),
+            navigationOutcomes: [...this.navigationOutcomes],
           }
         : undefined,
     });
@@ -328,6 +333,52 @@ export class ParityReferenceComponent {
       }, type === 'focus' || type === 'blur' || type === 'invalid' ||
         type === 'pointerenter' || type === 'pointerleave');
     }
+  }
+
+  private installClickCancellation(viewport: HTMLElement, ids: string[]): void {
+    const cancelled = new Set(ids);
+    viewport.addEventListener('click', (event) => {
+      const target = event.target instanceof Element
+        ? event.target.closest<HTMLElement>('[id]')
+        : undefined;
+      if (target?.id && cancelled.has(target.id)) event.preventDefault();
+    });
+  }
+
+  private installNavigationCapture(viewport: HTMLElement, targetIds: string[]): void {
+    const allowed = new Set(targetIds);
+    viewport.addEventListener('click', (event) => {
+      const anchor = event.target instanceof Element
+        ? event.target.closest<HTMLAnchorElement>('a[href]')
+        : undefined;
+      if (!anchor?.id || !allowed.has(anchor.id) || event.defaultPrevented) return;
+      const href = anchor.getAttribute('href') ?? '';
+      const resolved = new URL(anchor.href, this.document.baseURI);
+      const current = new URL(this.document.location.href);
+      const authoredFragment = href.startsWith('#');
+      const fragment = authoredFragment || (!!resolved.hash && resolved.origin === current.origin &&
+        resolved.pathname === current.pathname && resolved.search === current.search);
+      let fragmentId: string | undefined;
+      if (fragment) {
+        try { fragmentId = decodeURIComponent(resolved.hash.slice(1)); }
+        catch { fragmentId = resolved.hash.slice(1); }
+      }
+      this.navigationOutcomes.push({
+        sourceId: anchor.id,
+        href,
+        kind: fragment ? 'fragment' : 'external',
+        url: fragment ? (authoredFragment ? href : resolved.hash) : resolved.href,
+        target: anchor.target || undefined,
+        fragmentId,
+      });
+      if (authoredFragment) {
+        event.preventDefault();
+        if (fragmentId) viewport.querySelector<HTMLElement>(`#${CSS.escape(fragmentId)}`)
+          ?.scrollIntoView();
+      } else if (!fragment) {
+        event.preventDefault();
+      }
+    });
   }
 
   private getFocusedElementId(viewport: HTMLElement): string | undefined {

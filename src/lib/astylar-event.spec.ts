@@ -1398,4 +1398,116 @@ describe('AstylarInteractionRuntime', () => {
     scene.dispose();
     engine.dispose();
   });
+
+  it('focuses anchors and performs only accepted navigation defaults', () => {
+    const engine = new NullEngine();
+    const scene = new Scene(engine);
+    const canvas = document.createElement('canvas');
+    const events: AstylarEventSnapshot[] = [];
+    const scrolls: Array<[string, 'start' | 'nearest' | undefined]> = [];
+    const outcomes: Array<{
+      sourceId: string;
+      href: string;
+      kind: 'fragment' | 'external';
+      url: string;
+      target?: string;
+      fragmentId?: string;
+    }> = [];
+    const runtime = new AstylarInteractionRuntime(
+      scene,
+      {
+        styles: [],
+        root: { children: [
+          { type: 'a', id: 'fragment', href: '#destination', textContent: 'Jump' },
+          {
+            type: 'a', id: 'external', href: 'https://example.com/docs#intro',
+            target: '_blank', textContent: 'Docs',
+          },
+          { type: 'a', id: 'cancelled', href: '#blocked', textContent: 'Blocked' },
+          { type: 'div', id: 'destination' },
+          { type: 'div', id: 'blocked' },
+        ] },
+      },
+      {
+        handlers: {
+          cancelled: { click: (event) => event.preventDefault() },
+        },
+        onEvent: (event) => events.push(event),
+      },
+      undefined,
+      {
+        getFocusedElementId: () => undefined,
+        focus: () => false,
+        blur: () => false,
+        handleKeyDown: () => undefined,
+        commitsValueOnBlur: () => false,
+      },
+      canvas,
+      {
+        scrollFrom: () => false,
+        isPointVisible: () => true,
+        scrollIntoView: (elementId, alignment) => {
+          scrolls.push([elementId, alignment]);
+          return true;
+        },
+      },
+      { onNavigate: (outcome) => outcomes.push({ ...outcome }) },
+    );
+
+    expect(runtime.focusSemanticElement('fragment')).toBeTrue();
+    expect(runtime.snapshot.focusedElementId).toBe('fragment');
+    expect(scrolls).toEqual([['fragment', 'nearest']]);
+
+    const enter = new KeyboardEvent('keydown', {
+      key: 'Enter', code: 'Enter', cancelable: true,
+    });
+    runtime.handleSemanticKeyDown(enter);
+    expect(enter.defaultPrevented).toBeTrue();
+    expect(scrolls).toEqual([
+      ['fragment', 'nearest'],
+      ['destination', undefined],
+    ]);
+    expect(outcomes[0]).toEqual({
+      sourceId: 'fragment',
+      href: '#destination',
+      kind: 'fragment',
+      url: '#destination',
+      target: undefined,
+      fragmentId: 'destination',
+    });
+
+    expect(runtime.focusSemanticElement('external')).toBeTrue();
+    expect(runtime.activateSemanticElement('external')).toBeTrue();
+    expect(outcomes[1]).toEqual({
+      sourceId: 'external',
+      href: 'https://example.com/docs#intro',
+      kind: 'external',
+      url: 'https://example.com/docs#intro',
+      target: '_blank',
+      fragmentId: undefined,
+    });
+
+    expect(runtime.focusSemanticElement('cancelled')).toBeTrue();
+    expect(runtime.activateSemanticElement('cancelled')).toBeFalse();
+    expect(outcomes).toHaveSize(2);
+    expect(runtime.snapshot.navigationOutcomes).toEqual(outcomes);
+    expect(events.map((event) => `${event.type}:${event.targetId}`)).toEqual([
+      'focus:fragment',
+      'keydown:fragment',
+      'click:fragment',
+      'blur:fragment',
+      'focus:external',
+      'click:external',
+      'blur:external',
+      'focus:cancelled',
+      'click:cancelled',
+    ]);
+    expect(events.at(-1)?.defaultPrevented).toBeTrue();
+
+    runtime.dispose();
+    expect(runtime.snapshot.navigationOutcomes).toEqual([]);
+    expect(runtime.snapshot.focusedElementId).toBeUndefined();
+    scene.dispose();
+    engine.dispose();
+  });
 });

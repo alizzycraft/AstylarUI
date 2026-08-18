@@ -150,6 +150,61 @@ export class AstylarScrollRuntime {
     return true;
   }
 
+  /** Aligns a fragment destination to each scrollable ancestor's start edge. */
+  scrollIntoView(elementId: string, alignment: 'start' | 'nearest' = 'start'): boolean {
+    if (this.disposed) return false;
+    const target = this.options.getMesh(elementId);
+    if (!target) return false;
+    const ancestors: ScrollContainer[] = [];
+    let currentId = this.parentIds.get(elementId);
+    while (currentId) {
+      const container = this.containers.get(currentId);
+      if (container) ancestors.push(container);
+      currentId = this.parentIds.get(currentId);
+    }
+    let changed = false;
+    const scale = this.options.getPixelToWorldScale();
+    for (const container of ancestors) {
+      target.computeWorldMatrix(true);
+      container.mesh.computeWorldMatrix(true);
+      const targetBounds = target.getBoundingInfo().boundingBox;
+      const containerBounds = container.mesh.getBoundingInfo().boundingBox;
+      const horizontallyVisible = targetBounds.minimumWorld.x >= containerBounds.minimumWorld.x &&
+        targetBounds.maximumWorld.x <= containerBounds.maximumWorld.x;
+      const verticallyVisible = targetBounds.minimumWorld.y >= containerBounds.minimumWorld.y &&
+        targetBounds.maximumWorld.y <= containerBounds.maximumWorld.y;
+      const horizontalDelta = alignment === 'nearest' && !horizontallyVisible
+        ? ((containerBounds.minimumWorld.x + containerBounds.maximumWorld.x) / 2 -
+          (targetBounds.minimumWorld.x + targetBounds.maximumWorld.x) / 2) / scale
+        : (containerBounds.maximumWorld.x - targetBounds.maximumWorld.x) / scale;
+      const verticalDelta = alignment === 'nearest' && !verticallyVisible
+        ? ((containerBounds.minimumWorld.y + containerBounds.maximumWorld.y) / 2 -
+          (targetBounds.minimumWorld.y + targetBounds.maximumWorld.y) / 2) / scale
+        : (containerBounds.maximumWorld.y - targetBounds.maximumWorld.y) / scale;
+      const nextLeft = this.clamp(
+        alignment === 'nearest' && horizontallyVisible
+          ? container.scrollLeft
+          : container.scrollLeft + horizontalDelta,
+        0,
+        Math.max(0, container.scrollWidth - container.clientWidth),
+      );
+      const nextTop = this.clamp(
+        alignment === 'nearest' && verticallyVisible
+          ? container.scrollTop
+          : container.scrollTop + verticalDelta,
+        0,
+        Math.max(0, container.scrollHeight - container.clientHeight),
+      );
+      if (nextLeft === container.scrollLeft && nextTop === container.scrollTop) continue;
+      container.scrollLeft = nextLeft;
+      container.scrollTop = nextTop;
+      this.applyOffset(container);
+      changed = true;
+    }
+    if (changed) this.refreshClipping();
+    return changed;
+  }
+
   dispose(): void {
     this.disposed = true;
     this.containers.clear();

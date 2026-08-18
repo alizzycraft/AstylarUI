@@ -18,7 +18,7 @@ import {
   Vector3
 } from '@babylonjs/core';
 import { Astylar } from '../lib';
-import type { AstylarEventSnapshot } from '../lib';
+import type { AstylarEvent, AstylarEventSnapshot } from '../lib';
 import { BabylonElementManagerService } from '../app/services/dom/element-manager.service';
 import { InputElementService } from '../app/services/dom/input/input-element.service';
 import { getParityFixture } from './fixtures';
@@ -28,6 +28,7 @@ import {
   ParityControlState,
   ParityElementMeasurement,
   ParityNormalizedEvent,
+  ParityNavigationOutcome,
   ParityRect,
   ParityRuntimeReport,
   ParityViewport
@@ -80,6 +81,7 @@ export class ParityAstylarComponent {
   private resizeGeneration = 0;
   private reportRevision = 0;
   private readonly interactionEvents: ParityNormalizedEvent[] = [];
+  private readonly navigationOutcomes: ParityNavigationOutcome[] = [];
 
   constructor() {
     afterNextRender(() => this.initialize());
@@ -131,6 +133,11 @@ export class ParityAstylarComponent {
         antialias: false,
         events: interactionSequence
           ? {
+              handlers: Object.fromEntries(
+                (fixture.cancelClickIds ?? []).map((id) => [id, {
+                  click: (event: AstylarEvent) => event.preventDefault(),
+                }]),
+              ),
               onEvent: (event) => {
                 if (fixture.interactionEventTypes?.includes(event.type) &&
                     fixture.interactionIds?.includes(event.targetId)) {
@@ -138,6 +145,9 @@ export class ParityAstylarComponent {
                 }
               },
             }
+          : undefined,
+        navigation: interactionSequence
+          ? { onNavigate: (outcome) => this.navigationOutcomes.push({ ...outcome }) }
           : undefined,
         setupLighting: (lightingScene) => {
           const light = new HemisphericLight(
@@ -468,12 +478,13 @@ export class ParityAstylarComponent {
       interaction: includeInteraction
         ? {
             events: [...this.interactionEvents],
-            focusedElementId: this.getFocusedElementId(),
+            focusedElementId: this.astylar.getInteractionSnapshot(scene)?.focusedElementId,
             controls: this.measureControls(interactionIds),
             scrollContainers: Object.fromEntries(
               scrollIds.map((id) => [id, this.astylar.getScrollSnapshot(scene)?.containers[id]])
                 .filter((entry) => entry[1] !== undefined),
             ),
+            navigationOutcomes: [...this.navigationOutcomes],
             registrations: {
               pointerObservers: this.astylar.getInteractionSnapshot(scene)?.pointerObservers ?? 0,
               wheelHandlers: this.astylar.getInteractionSnapshot(scene)?.wheelHandlers ?? 0,

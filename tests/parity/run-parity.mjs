@@ -917,6 +917,13 @@ function compareInteraction(reference, astylar) {
       `${astylarInteraction.focusedElementId ?? 'none'})`,
     );
   }
+  if (JSON.stringify(referenceInteraction.navigationOutcomes ?? []) !==
+      JSON.stringify(astylarInteraction.navigationOutcomes ?? [])) {
+    errors.push(
+      `navigation outcomes differ (${JSON.stringify(referenceInteraction.navigationOutcomes ?? [])} vs ` +
+      `${JSON.stringify(astylarInteraction.navigationOutcomes ?? [])})`,
+    );
+  }
   const controlIds = new Set([
     ...Object.keys(referenceInteraction.controls),
     ...Object.keys(astylarInteraction.controls),

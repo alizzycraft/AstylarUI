@@ -116,6 +116,23 @@ this.scene = this.astylar.render(canvas, siteData, {
 
 Supported events use a deliberately small DOM-like contract with authored target/current-target IDs, common control values, pointer/keyboard fields, propagation stopping, and default cancellation. `DOMElement.onclick` strings are deprecated and are never evaluated by this API.
 
+Accepted anchor defaults expose deterministic navigation outcomes without forcing
+the host page to navigate. Same-document fragments scroll Astylar containers;
+external URLs remain host-owned routing intents:
+
+```typescript
+this.scene = this.astylar.render(canvas, siteData, {
+  navigation: {
+    onNavigate: (outcome) => {
+      if (outcome.kind === 'external') routeFromHost(outcome.url, outcome.target);
+    },
+  },
+});
+```
+
+Calling `preventDefault()` from the anchor's typed `click` handler suppresses the
+fragment scroll or external outcome.
+
 ## Developing AstylarUI
 
 The current implementation status, document map, and recommended next work are

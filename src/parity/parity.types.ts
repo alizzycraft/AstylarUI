@@ -63,6 +63,8 @@ export interface ParityFixture {
   /** Authored IDs whose browser accessibility snapshots must match exactly. */
   semanticIds?: string[];
   interactionEventTypes?: ParityInteractionEventType[];
+  /** Click handlers installed outside serializable fixture data. */
+  cancelClickIds?: string[];
 }
 
 export type ParityInteractionEventType =
@@ -301,6 +303,7 @@ export interface ParityInteractionReport {
   focusedElementId?: string;
   controls: Record<string, ParityControlState>;
   scrollContainers?: Record<string, ParityScrollState>;
+  navigationOutcomes?: ParityNavigationOutcome[];
   registrations?: {
     pointerObservers: number;
     wheelHandlers: number;
@@ -312,6 +315,15 @@ export interface ParityInteractionReport {
     popupMaterials?: number;
     popupTextures?: number;
   };
+}
+
+export interface ParityNavigationOutcome {
+  sourceId: string;
+  href: string;
+  kind: 'fragment' | 'external';
+  url: string;
+  target?: string;
+  fragmentId?: string;
 }
 
 export interface ParityScrollState {

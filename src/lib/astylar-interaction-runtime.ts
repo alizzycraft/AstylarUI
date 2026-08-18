@@ -21,7 +21,22 @@ export interface AstylarInteractionSnapshot {
   pressedElementId?: string;
   hoveredElementId?: string;
   focusedElementId?: string;
+  navigationOutcomes: readonly AstylarNavigationOutcome[];
   disposed: boolean;
+}
+
+export interface AstylarNavigationOutcome {
+  sourceId: string;
+  href: string;
+  kind: 'fragment' | 'external';
+  url: string;
+  target?: string;
+  fragmentId?: string;
+}
+
+export interface AstylarNavigationOptions {
+  /** Observes accepted anchor defaults; hosts may route external intents here. */
+  onNavigate?: (outcome: Readonly<AstylarNavigationOutcome>) => void;
 }
 
 export type AstylarInteractionStateProvider = (elementId: string) => AstylarEventState;
@@ -66,6 +81,7 @@ export interface AstylarInteractionControlAdapter {
 export interface AstylarInteractionScrollAdapter {
   scrollFrom(elementId: string, deltaX: number, deltaY: number): boolean;
   isPointVisible(elementId: string, point?: { x: number; y: number }): boolean;
+  scrollIntoView?(elementId: string, alignment?: 'start' | 'nearest'): boolean;
 }
 
 interface AstylarFormDefault {
@@ -91,6 +107,9 @@ export class AstylarInteractionRuntime {
   private pendingSpaceActivationId?: string;
   private readonly suppressedKeyUps = new Set<string>();
   private pressedExpandedSelectOption?: { elementId: string; optionIndex: number };
+  private focusedNonControlId?: string;
+  private anchors = new Map<string, { href: string; target?: string }>();
+  private readonly navigationOutcomes: AstylarNavigationOutcome[] = [];
 
   constructor(
     private readonly scene: Scene,
@@ -100,6 +119,7 @@ export class AstylarInteractionRuntime {
     private readonly controls?: AstylarInteractionControlAdapter,
     canvasOverride?: HTMLCanvasElement,
     private readonly scrolling?: AstylarInteractionScrollAdapter,
+    private readonly navigation: AstylarNavigationOptions = {},
   ) {
     this.dispatcher = new AstylarEventDispatcher(siteData, options);
     this.focusOrder = this.buildFocusOrder(siteData);
@@ -107,6 +127,7 @@ export class AstylarInteractionRuntime {
     this.labelTargets = this.buildLabelTargets(siteData);
     this.formDefaults = this.buildFormDefaults(siteData);
     this.implicitSubmitTargets = this.buildImplicitSubmitTargets(siteData);
+    this.anchors = this.buildAnchors(siteData);
     this.pointerObserver = scene.onPointerObservable.add((pointerInfo) => {
       this.handlePointer(pointerInfo);
     });
@@ -129,7 +150,8 @@ export class AstylarInteractionRuntime {
       handlers: this.dispatcher.handlerCount,
       pressedElementId: this.pressedElementId,
       hoveredElementId: this.hoveredElementId,
-      focusedElementId: this.controls?.getFocusedElementId(),
+      focusedElementId: this.getFocusedElementId(),
+      navigationOutcomes: [...this.navigationOutcomes],
       disposed: this.disposed,
     };
   }
@@ -142,14 +164,15 @@ export class AstylarInteractionRuntime {
     if (this.disposed || !this.focusOrder.includes(elementId) ||
         !this.dispatcher.hasEnabledTarget(elementId)) return false;
     this.setFocus(elementId, preservePreviousSelectionOnReset);
-    return this.controls?.getFocusedElementId() === elementId;
+    this.scrolling?.scrollIntoView?.(elementId, 'nearest');
+    return this.getFocusedElementId() === elementId;
   }
 
   /** Clears scene focus when its corresponding native semantic node blurs. */
   blurSemanticElement(elementId: string): boolean {
-    if (this.disposed || this.controls?.getFocusedElementId() !== elementId) return false;
+    if (this.disposed || this.getFocusedElementId() !== elementId) return false;
     this.setFocus(undefined);
-    return this.controls?.getFocusedElementId() === undefined;
+    return this.getFocusedElementId() === undefined;
   }
 
   /** Routes assistive/native click activation through typed Astylar defaults. */
@@ -185,7 +208,7 @@ export class AstylarInteractionRuntime {
 
   private dispatchSemanticTabKey(event: KeyboardEvent, type: 'keydown' | 'keyup'): void {
     if (this.disposed) return;
-    const targetId = this.controls?.getFocusedElementId();
+    const targetId = this.getFocusedElementId();
     if (!targetId) return;
     const dispatched = this.dispatcher.dispatch({
       type,
@@ -205,7 +228,7 @@ export class AstylarInteractionRuntime {
   setSiteData(siteData: SiteData): void {
     const nextFocusOrder = this.buildFocusOrder(siteData);
     const nextControlTypes = this.buildControlTypes(siteData);
-    const focusedElementId = this.controls?.getFocusedElementId();
+    const focusedElementId = this.getFocusedElementId();
     if (focusedElementId &&
         (!nextFocusOrder.includes(focusedElementId) ||
           this.controlTypes.get(focusedElementId) !== nextControlTypes.get(focusedElementId))) {
@@ -218,6 +241,7 @@ export class AstylarInteractionRuntime {
     this.labelTargets = this.buildLabelTargets(siteData);
     this.formDefaults = this.buildFormDefaults(siteData);
     this.implicitSubmitTargets = this.buildImplicitSubmitTargets(siteData);
+    this.anchors = this.buildAnchors(siteData);
     if (this.pressedElementId && !this.dispatcher.hasEnabledTarget(this.pressedElementId)) {
       this.controls?.setActiveState?.(this.pressedElementId, false);
       this.pressedElementId = undefined;
@@ -238,13 +262,15 @@ export class AstylarInteractionRuntime {
     this.canvas?.removeEventListener('keyup', this.handleKeyUp);
     this.canvas?.removeEventListener('wheel', this.handleWheel);
     if (this.pressedElementId) this.controls?.setActiveState?.(this.pressedElementId, false);
-    const focusedElementId = this.controls?.getFocusedElementId();
+    const focusedElementId = this.getFocusedElementId();
     if (focusedElementId) this.controls?.setFocusState?.(focusedElementId, false);
     this.pressedElementId = undefined;
     this.hoveredElementId = undefined;
     this.pendingSpaceActivationId = undefined;
     this.suppressedKeyUps.clear();
     this.pressedExpandedSelectOption = undefined;
+    this.focusedNonControlId = undefined;
+    this.navigationOutcomes.length = 0;
   }
 
   private handlePointer(pointerInfo: PointerInfo): void {
@@ -396,7 +422,7 @@ export class AstylarInteractionRuntime {
 
   private readonly handleKeyDown = (event: KeyboardEvent): void => {
     if (this.disposed) return;
-    const targetId = this.controls?.getFocusedElementId();
+    const targetId = this.getFocusedElementId();
     if (!targetId) return;
     const expandedSelectResult = this.controls?.handleExpandedSelectKeyDown?.(targetId, event);
     if (expandedSelectResult?.handled) {
@@ -445,7 +471,8 @@ export class AstylarInteractionRuntime {
       this.moveFocus(event.shiftKey ? -1 : 1);
       return;
     }
-    if (event.key === 'Enter' && this.controls?.canActivateWithEnter?.(targetId)) {
+    if (event.key === 'Enter' &&
+        (this.anchors.has(targetId) || this.controls?.canActivateWithEnter?.(targetId))) {
       event.preventDefault();
       this.activateAndClick(targetId);
       return;
@@ -522,7 +549,7 @@ export class AstylarInteractionRuntime {
 
   private readonly handleKeyUp = (event: KeyboardEvent): void => {
     if (this.disposed) return;
-    const targetId = this.controls?.getFocusedElementId();
+    const targetId = this.getFocusedElementId();
     if (!targetId) return;
     const keyUpToken = this.keyUpToken(targetId, event);
     if (this.suppressedKeyUps.delete(keyUpToken)) return;
@@ -571,13 +598,16 @@ export class AstylarInteractionRuntime {
       this.dispatcher.dispatch({ type: 'change', targetId, ...state });
     }
     const accepted = !!click && !click.defaultPrevented;
-    if (accepted) this.performFormDefault(targetId);
+    if (accepted) {
+      this.performFormDefault(targetId);
+      this.performNavigationDefault(targetId);
+    }
     return accepted;
   }
 
   private moveFocus(direction: -1 | 1): void {
     if (!this.focusOrder.length) return;
-    const current = this.controls?.getFocusedElementId();
+    const current = this.getFocusedElementId();
     const currentIndex = current ? this.focusOrder.indexOf(current) : -1;
     const nextIndex = direction === 1
       ? (currentIndex + 1 + this.focusOrder.length) % this.focusOrder.length
@@ -595,7 +625,7 @@ export class AstylarInteractionRuntime {
     elementId: string | undefined,
     preservePreviousSelectionOnReset: boolean = false,
   ): void {
-    const previous = this.controls?.getFocusedElementId();
+    const previous = this.getFocusedElementId();
     if (previous === elementId) return;
     if (previous) {
       const state = this.liveState(previous);
@@ -607,16 +637,26 @@ export class AstylarInteractionRuntime {
         });
       }
     }
-    if (previous && this.controls?.blur(previous, preservePreviousSelectionOnReset)) {
-      this.controls.setFocusState?.(previous, false);
-      this.dispatcher.dispatch({
-        type: 'blur',
-        targetId: previous,
-        ...this.liveState(previous),
-      });
+    if (previous) {
+      const blurred = this.controlTypes.has(previous)
+        ? this.controls?.blur(previous, preservePreviousSelectionOnReset)
+        : this.focusedNonControlId === previous;
+      if (blurred) {
+        this.focusedNonControlId = undefined;
+        this.controls?.setFocusState?.(previous, false);
+        this.dispatcher.dispatch({
+          type: 'blur',
+          targetId: previous,
+          ...this.liveState(previous),
+        });
+      }
     }
-    if (elementId && this.controls?.focus(elementId)) {
-      this.controls.setFocusState?.(elementId, true);
+    const focused = elementId && (this.controlTypes.has(elementId)
+      ? this.controls?.focus(elementId)
+      : this.focusOrder.includes(elementId));
+    if (elementId && focused) {
+      if (!this.controlTypes.has(elementId)) this.focusedNonControlId = elementId;
+      this.controls?.setFocusState?.(elementId, true);
       this.focusedValueAtEntry = this.liveState(elementId).value;
       this.dispatcher.dispatch({
         type: 'focus',
@@ -633,6 +673,10 @@ export class AstylarInteractionRuntime {
       ...this.dispatcher.getElementState(elementId),
       ...this.getLiveState?.(elementId),
     };
+  }
+
+  private getFocusedElementId(): string | undefined {
+    return this.focusedNonControlId ?? this.controls?.getFocusedElementId();
   }
 
   private buildFocusOrder(siteData: SiteData): string[] {
@@ -757,6 +801,55 @@ export class AstylarInteractionRuntime {
     };
     siteData.root.children.forEach((element) => visit(element));
     return targets;
+  }
+
+  private buildAnchors(siteData: SiteData): Map<string, { href: string; target?: string }> {
+    const anchors = new Map<string, { href: string; target?: string }>();
+    const visit = (element: SiteData['root']['children'][number]): void => {
+      if (element.type === 'a' && element.id && element.href) {
+        anchors.set(element.id, { href: element.href, target: element.target });
+      }
+      element.children?.forEach(visit);
+    };
+    siteData.root.children.forEach(visit);
+    return anchors;
+  }
+
+  private performNavigationDefault(sourceId: string): void {
+    const anchor = this.anchors.get(sourceId);
+    if (!anchor) return;
+    const document = this.canvas?.ownerDocument;
+    const base = document?.defaultView?.location.href ?? document?.baseURI ?? 'http://localhost/';
+    let resolved: URL;
+    try {
+      resolved = new URL(anchor.href, base);
+    } catch {
+      return;
+    }
+    const current = new URL(base);
+    const sameDocumentFragment = !!resolved.hash &&
+      resolved.origin === current.origin &&
+      resolved.pathname === current.pathname &&
+      resolved.search === current.search;
+    let fragmentId: string | undefined;
+    if (sameDocumentFragment) {
+      try {
+        fragmentId = decodeURIComponent(resolved.hash.slice(1));
+      } catch {
+        fragmentId = resolved.hash.slice(1);
+      }
+      if (fragmentId) this.scrolling?.scrollIntoView?.(fragmentId);
+    }
+    const outcome: AstylarNavigationOutcome = {
+      sourceId,
+      href: anchor.href,
+      kind: sameDocumentFragment ? 'fragment' : 'external',
+      url: sameDocumentFragment ? resolved.hash : resolved.href,
+      target: anchor.target,
+      fragmentId,
+    };
+    this.navigationOutcomes.push(outcome);
+    this.navigation.onNavigate?.(outcome);
   }
 
   private performFormDefault(buttonId: string): void {

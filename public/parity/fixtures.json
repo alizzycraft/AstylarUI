@@ -23,6 +23,14 @@
     "semanticIds": ["semantic-check", "semantic-radio-alpha", "semantic-radio-beta", "semantic-text", "semantic-select", "semantic-locked", "semantic-disabled"]
   },
   {
+    "id": "semantic-anchor-navigation",
+    "title": "Semantic anchor navigation outcomes",
+    "category": "accessibility-semantics",
+    "expectedBehavior": "Accepted pointer, keyboard, and semantic anchor activation records one deterministic navigation outcome; same-document fragments scroll their destination into view, external URLs remain host-routable intents, and cancelled clicks do neither.",
+    "interactionStepCount": 6,
+    "semanticIds": ["anchor-fragment", "anchor-external", "anchor-cancelled", "anchor-target"]
+  },
+  {
     "id": "box-model-basic",
     "title": "Basic content-box geometry",
     "category": "box-model-units",
