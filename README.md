@@ -154,6 +154,12 @@ Tab order. Background semantic content becomes inert and background canvas
 input is suppressed. Dialog and backdrop paint remain explicitly authored;
 Astylar does not generate a visual backdrop.
 
+Escape dispatches the dialog's typed, cancelable `cancel` event. When accepted,
+the dialog closes, restores the control that was focused when it opened, and
+then emits `close`; `event.preventDefault()` keeps it open. Removing an active
+dialog through `Astylar.update()` follows the browser's removal boundary: it
+cleans modal/focus ownership without synthesizing `close` or restoring focus.
+
 ## Developing AstylarUI
 
 The current implementation status, document map, and recommended next work are

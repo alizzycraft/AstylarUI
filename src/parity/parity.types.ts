@@ -67,6 +67,8 @@ export interface ParityFixture {
   cancelClickIds?: string[];
   /** Native reference dialogs opened with showModal() after fixture reconciliation. */
   modalDialogIds?: string[];
+  /** Native reference dialog cancel events prevented by application policy. */
+  cancelDialogIds?: string[];
 }
 
 export type ParityInteractionEventType =
@@ -83,7 +85,9 @@ export type ParityInteractionEventType =
   | 'change'
   | 'invalid'
   | 'submit'
-  | 'reset';
+  | 'reset'
+  | 'cancel'
+  | 'close';
 
 export interface ParityClickAction {
   type: 'click';

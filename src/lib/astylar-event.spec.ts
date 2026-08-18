@@ -1602,4 +1602,117 @@ describe('AstylarInteractionRuntime', () => {
     scene.dispose();
     engine.dispose();
   });
+
+  it('dispatches cancelable modal dismissal, restores its invoker, and cleans update removal', () => {
+    jasmine.clock().install();
+    const engine = new NullEngine();
+    const scene = new Scene(engine);
+    const canvas = document.createElement('canvas');
+    const events: AstylarEventSnapshot[] = [];
+    const presentation: string[] = [];
+    let focusedElementId: string | undefined;
+    let cancelDismissal = true;
+    const base: SiteData = {
+      styles: [],
+      root: { children: [
+        { type: 'input', inputType: 'button', id: 'invoker', value: 'Open' },
+      ] },
+    };
+    const modal: SiteData = {
+      styles: [],
+      root: { children: [
+        ...base.root.children,
+        {
+          type: 'dialog', id: 'dialog', open: true, modal: true,
+          children: [
+            { type: 'input', inputType: 'button', id: 'action', value: 'Action', autofocus: true },
+          ],
+        },
+      ] },
+    };
+    const runtime = new AstylarInteractionRuntime(
+      scene,
+      base,
+      {
+        handlers: {
+          dialog: { cancel: (event) => { if (cancelDismissal) event.preventDefault(); } },
+        },
+        onEvent: (event) => events.push(event),
+      },
+      undefined,
+      {
+        getFocusedElementId: () => focusedElementId,
+        focus: (elementId) => { focusedElementId = elementId; return true; },
+        blur: (elementId) => {
+          if (focusedElementId === elementId) focusedElementId = undefined;
+          return true;
+        },
+        handleKeyDown: () => undefined,
+        commitsValueOnBlur: () => false,
+      },
+      canvas,
+      undefined,
+      undefined,
+      {
+        setTopLayer: (ids, active) => presentation.push(
+          `layer:${active}:${ids.join(',')}`,
+        ),
+        setOpen: (id, ids, open) => presentation.push(
+          `open:${open}:${id}:${ids.join(',')}`,
+        ),
+        restoreFocus: (id) => presentation.push(`restore:${id}`),
+      },
+    );
+
+    try {
+      expect(runtime.focusSemanticElement('invoker')).toBeTrue();
+      runtime.setSiteData(modal);
+      runtime.reconcileModalState();
+      expect(focusedElementId).toBe('action');
+
+      const canceledEscape = new KeyboardEvent('keydown', {
+        key: 'Escape', code: 'Escape', cancelable: true,
+      });
+      runtime.handleSemanticKeyDown(canceledEscape);
+      runtime.handleSemanticKeyUp(new KeyboardEvent('keyup', {
+        key: 'Escape', code: 'Escape', cancelable: true,
+      }));
+      jasmine.clock().tick(1);
+      expect(runtime.snapshot.modalDialogId).toBe('dialog');
+      expect(focusedElementId).toBe('action');
+      expect(events.find((event) => event.type === 'cancel')?.defaultPrevented).toBeTrue();
+      expect(events.some((event) => event.type === 'close')).toBeFalse();
+
+      cancelDismissal = false;
+      runtime.handleSemanticKeyDown(new KeyboardEvent('keydown', {
+        key: 'Escape', code: 'Escape', cancelable: true,
+      }));
+      expect(runtime.snapshot.modalDialogId).toBeUndefined();
+      expect(focusedElementId).toBe('invoker');
+      runtime.handleSemanticKeyUp(new KeyboardEvent('keyup', {
+        key: 'Escape', code: 'Escape', cancelable: true,
+      }));
+      jasmine.clock().tick(1);
+      expect(events.map((event) => event.type).slice(-6)).toEqual([
+        'keydown', 'cancel', 'blur', 'focus', 'keyup', 'close',
+      ]);
+      expect(presentation).toContain('restore:invoker');
+
+      runtime.setSiteData(modal);
+      runtime.reconcileModalState();
+      expect(focusedElementId).toBe('action');
+      runtime.setSiteData(base);
+      runtime.reconcileModalState();
+      expect(runtime.snapshot.modalDialogId).toBeUndefined();
+      expect(focusedElementId).toBeUndefined();
+      expect(events.at(-1)?.type).toBe('blur');
+      expect(presentation.at(-2)).toBe('layer:false:dialog,action');
+      expect(presentation.at(-1)).toBe('open:false:dialog:dialog,action');
+    } finally {
+      runtime.dispose();
+      scene.dispose();
+      engine.dispose();
+      jasmine.clock().uninstall();
+    }
+  });
 });

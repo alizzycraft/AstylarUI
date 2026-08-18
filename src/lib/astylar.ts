@@ -444,6 +444,19 @@ export class Astylar {
           }
           for (const mesh of meshes) mesh.renderingGroupId = groupId;
         },
+        setOpen: (dialogId, elementIds, open) => {
+          const meshes = new Set<Mesh>();
+          for (const elementId of elementIds) {
+            const root = this.elementManager.elementsMap.get(elementId);
+            if (!root) continue;
+            meshes.add(root);
+            for (const descendant of root.getChildMeshes(false)) {
+              if (descendant instanceof Mesh) meshes.add(descendant);
+            }
+          }
+          for (const mesh of meshes) mesh.setEnabled(open);
+          semanticBridge?.setModalPresentation(dialogId, open);
+        },
         restoreFocus: (elementId) => {
           semanticBridge?.queueFocusSync(() => elementId);
         },

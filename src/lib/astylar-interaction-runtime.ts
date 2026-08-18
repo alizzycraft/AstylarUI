@@ -28,6 +28,7 @@ export interface AstylarInteractionSnapshot {
 
 export interface AstylarInteractionDialogAdapter {
   setTopLayer(elementIds: readonly string[], active: boolean): void;
+  setOpen?(dialogId: string, elementIds: readonly string[], open: boolean): void;
   restoreFocus?(elementId: string): void;
 }
 
@@ -126,6 +127,7 @@ export class AstylarInteractionRuntime {
   private modalDialog?: AstylarModalDialogState;
   private presentedModalDialog?: AstylarModalDialogState;
   private pendingModalInitialFocus = false;
+  private modalInvokerId?: string;
 
   constructor(
     private readonly scene: Scene,
@@ -257,6 +259,12 @@ export class AstylarInteractionRuntime {
     const nextModalDialog = this.buildActiveModalDialog(siteData, nextFocusOrder);
     const modalChanged = this.modalDialog?.id !== nextModalDialog?.id;
     const focusedElementId = this.getFocusedElementId();
+    if (modalChanged) {
+      this.modalInvokerId = nextModalDialog && focusedElementId &&
+          !nextModalDialog.elementIds.has(focusedElementId)
+        ? focusedElementId
+        : undefined;
+    }
     const modalNeedsFocus = !!nextModalDialog &&
       (!focusedElementId || !nextModalDialog.elementIds.has(focusedElementId));
     if (focusedElementId &&
@@ -291,10 +299,20 @@ export class AstylarInteractionRuntime {
     if (this.presentedModalDialog?.id !== this.modalDialog?.id) {
       if (this.presentedModalDialog) {
         this.dialogs?.setTopLayer([...this.presentedModalDialog.elementIds], false);
+        this.dialogs?.setOpen?.(
+          this.presentedModalDialog.id,
+          [...this.presentedModalDialog.elementIds],
+          false,
+        );
       }
     }
     this.presentedModalDialog = this.modalDialog;
     if (this.modalDialog) {
+      this.dialogs?.setOpen?.(
+        this.modalDialog.id,
+        [...this.modalDialog.elementIds],
+        true,
+      );
       this.dialogs?.setTopLayer([...this.modalDialog.elementIds], true);
     }
     if (!this.pendingModalInitialFocus || !this.modalDialog) return;
@@ -326,10 +344,16 @@ export class AstylarInteractionRuntime {
     this.navigationOutcomes.length = 0;
     if (this.presentedModalDialog) {
       this.dialogs?.setTopLayer([...this.presentedModalDialog.elementIds], false);
+      this.dialogs?.setOpen?.(
+        this.presentedModalDialog.id,
+        [...this.presentedModalDialog.elementIds],
+        false,
+      );
     }
     this.modalDialog = undefined;
     this.presentedModalDialog = undefined;
     this.pendingModalInitialFocus = false;
+    this.modalInvokerId = undefined;
   }
 
   private handlePointer(pointerInfo: PointerInfo): void {
@@ -536,6 +560,15 @@ export class AstylarInteractionRuntime {
       event.preventDefault();
       return;
     }
+    if (event.key === 'Escape' && this.modalDialog) {
+      event.preventDefault();
+      const cancel = this.dispatcher.dispatch({
+        type: 'cancel',
+        targetId: this.modalDialog.id,
+      });
+      if (!cancel?.defaultPrevented) this.dismissActiveModal();
+      return;
+    }
     if (event.key === 'Tab') {
       event.preventDefault();
       this.moveFocus(event.shiftKey ? -1 : 1);
@@ -648,6 +681,27 @@ export class AstylarInteractionRuntime {
 
   private keyUpToken(targetId: string, event: KeyboardEvent): string {
     return `${targetId}:${event.code || event.key}`;
+  }
+
+  private dismissActiveModal(): void {
+    const dialog = this.modalDialog;
+    if (!dialog) return;
+    const invokerId = this.modalInvokerId;
+    this.setFocus(undefined);
+    this.dialogs?.setTopLayer([...dialog.elementIds], false);
+    this.dialogs?.setOpen?.(dialog.id, [...dialog.elementIds], false);
+    this.modalDialog = undefined;
+    this.presentedModalDialog = undefined;
+    this.pendingModalInitialFocus = false;
+    this.modalInvokerId = undefined;
+    if (invokerId && this.focusOrder.includes(invokerId) &&
+        this.dispatcher.hasEnabledTarget(invokerId)) {
+      this.setFocus(invokerId);
+      this.dialogs?.restoreFocus?.(invokerId);
+    }
+    setTimeout(() => {
+      if (!this.disposed) this.dispatcher.dispatch({ type: 'close', targetId: dialog.id });
+    }, 0);
   }
 
   private activateAndClick(targetId: string, pointerInfo?: PointerInfo): boolean {

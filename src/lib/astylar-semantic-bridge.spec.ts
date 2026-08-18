@@ -253,6 +253,13 @@ describe('AstylarSemanticBridge', () => {
     expect(dialog?.inert).toBeFalse();
     expect(action?.inert).toBeFalse();
 
+    bridge.setModalPresentation('dialog', false);
+    expect(background?.inert).toBeFalse();
+    expect(dialog?.open).toBeFalse();
+    bridge.setModalPresentation('dialog', true);
+    expect(background?.inert).toBeTrue();
+    expect(dialog?.open).toBeTrue();
+
     bridge.reconcile({
       ...modalSiteData,
       root: { children: [

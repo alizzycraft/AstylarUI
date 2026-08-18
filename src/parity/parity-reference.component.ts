@@ -83,6 +83,7 @@ export class ParityReferenceComponent {
       !!fixture.interactionSteps?.length;
     if (interactionSequence) {
       this.installClickCancellation(viewport, fixture.cancelClickIds ?? []);
+      this.installDialogCancellation(viewport, fixture.cancelDialogIds ?? []);
       this.installInteractionCapture(
         viewport,
         fixture.interactionEventTypes ?? [],
@@ -236,6 +237,14 @@ export class ParityReferenceComponent {
     });
   }
 
+  private installDialogCancellation(viewport: HTMLElement, ids: readonly string[]): void {
+    const cancelled = new Set(ids);
+    viewport.addEventListener('cancel', (event) => {
+      const dialog = event.target instanceof HTMLDialogElement ? event.target : undefined;
+      if (dialog && cancelled.has(dialog.id)) event.preventDefault();
+    }, true);
+  }
+
   private readonly onWindowResize = (): void => {
     const viewport = Object.values(PARITY_VIEWPORTS).find(
       (candidate) => candidate.width === window.innerWidth
@@ -376,6 +385,7 @@ export class ParityReferenceComponent {
         // application-visible event state at this boundary.
         if (type === 'submit') event.preventDefault();
       }, type === 'focus' || type === 'blur' || type === 'invalid' ||
+        type === 'cancel' || type === 'close' ||
         type === 'pointerenter' || type === 'pointerleave');
     }
   }

@@ -39,6 +39,14 @@
     "semanticIds": ["modal-containment-dialog", "modal-containment-title", "modal-containment-primary", "modal-containment-secondary", "modal-containment-background-button"]
   },
   {
+    "id": "semantic-modal-lifecycle",
+    "title": "Semantic modal dismissal and restoration",
+    "category": "accessibility-semantics",
+    "expectedBehavior": "Modal Escape dispatches a cancelable cancel event, accepted dismissal closes the dialog and restores its invoker, canceled dismissal remains contained, and application removal releases modal and focus ownership without a synthetic close event.",
+    "interactionStepCount": 9,
+    "semanticIds": ["modal-life-invoker", "modal-life-cancel-dialog", "modal-life-cancel-title", "modal-life-cancel-action", "modal-life-close-dialog", "modal-life-close-title", "modal-life-close-action"]
+  },
+  {
     "id": "box-model-basic",
     "title": "Basic content-box geometry",
     "category": "box-model-units",

@@ -133,11 +133,19 @@ export class ParityAstylarComponent {
         antialias: false,
         events: interactionSequence
           ? {
-              handlers: Object.fromEntries(
-                (fixture.cancelClickIds ?? []).map((id) => [id, {
-                  click: (event: AstylarEvent) => event.preventDefault(),
-                }]),
-              ),
+              handlers: Object.fromEntries([
+                ...new Set([
+                  ...(fixture.cancelClickIds ?? []),
+                  ...(fixture.cancelDialogIds ?? []),
+                ]),
+              ].map((id) => [id, {
+                ...(fixture.cancelClickIds?.includes(id)
+                  ? { click: (event: AstylarEvent) => event.preventDefault() }
+                  : {}),
+                ...(fixture.cancelDialogIds?.includes(id)
+                  ? { cancel: (event: AstylarEvent) => event.preventDefault() }
+                  : {}),
+              }])),
               onEvent: (event) => {
                 if (fixture.interactionEventTypes?.includes(event.type) &&
                     fixture.interactionIds?.includes(event.targetId)) {

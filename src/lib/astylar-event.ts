@@ -15,7 +15,9 @@ export type AstylarEventType =
   | 'change'
   | 'invalid'
   | 'submit'
-  | 'reset';
+  | 'reset'
+  | 'cancel'
+  | 'close';
 
 export interface AstylarEventState {
   value?: string;
@@ -74,6 +76,8 @@ const NON_BUBBLING_EVENTS = new Set<AstylarEventType>([
   'focus',
   'blur',
   'invalid',
+  'cancel',
+  'close',
 ]);
 
 class MutableAstylarEvent implements AstylarEvent {

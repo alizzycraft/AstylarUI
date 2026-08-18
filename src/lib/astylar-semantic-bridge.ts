@@ -172,6 +172,16 @@ export class AstylarSemanticBridge {
     });
   }
 
+  /** Applies live modal visibility/inertness without rebuilding authored semantics. */
+  setModalPresentation(elementId: string, open: boolean): void {
+    if (this.disposed) return;
+    const dialog = [...this.nodes.values()].find((node) =>
+      node.dataset['astylarId'] === elementId && node instanceof HTMLDialogElement);
+    if (dialog instanceof HTMLDialogElement) dialog.open = open;
+    this.clearModalInertness();
+    if (open && dialog instanceof HTMLDialogElement) this.applyModalInertnessFor(dialog);
+  }
+
   dispose(): void {
     if (this.disposed) return;
     this.disposed = true;
@@ -479,6 +489,14 @@ export class AstylarSemanticBridge {
     const dialog = [...this.nodes.values()].find((node) =>
       node.dataset['astylarId'] === activeId);
     if (!dialog) return;
+    this.applyModalInertnessFor(dialog);
+  }
+
+  private clearModalInertness(): void {
+    for (const node of this.nodes.values()) node.inert = false;
+  }
+
+  private applyModalInertnessFor(dialog: Element): void {
     let branch: Element = dialog;
     let parent = branch.parentElement;
     while (parent && parent !== this.root) {
