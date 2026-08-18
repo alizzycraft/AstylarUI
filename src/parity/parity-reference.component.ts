@@ -193,6 +193,10 @@ export class ParityReferenceComponent {
         case 'remove-element':
           target.remove();
           break;
+        case 'set-attribute':
+          if (mutation.value === undefined) target.removeAttribute(mutation.name);
+          else target.setAttribute(mutation.name, mutation.value);
+          break;
       }
     }
   }

@@ -62,6 +62,8 @@ export interface ParityFixture {
   scrollIds?: string[];
   /** Authored IDs whose browser accessibility snapshots must match exactly. */
   semanticIds?: string[];
+  /** Live-region IDs whose non-empty mutation announcements must match exactly. */
+  announcementIds?: string[];
   interactionEventTypes?: ParityInteractionEventType[];
   /** Click handlers installed outside serializable fixture data. */
   cancelClickIds?: string[];
@@ -218,13 +220,21 @@ export interface ParityReferenceRemoveElementMutation {
   elementId: string;
 }
 
+export interface ParityReferenceSetAttributeMutation {
+  type: 'set-attribute';
+  elementId: string;
+  name: string;
+  value?: string;
+}
+
 export type ParityReferenceMutation =
   | ParityReferenceSetTextMutation
   | ParityReferenceSetValueMutation
   | ParityReferenceSetStyleMutation
   | ParityReferenceSetChildrenMutation
   | ParityReferenceSetSourceMutation
-  | ParityReferenceRemoveElementMutation;
+  | ParityReferenceRemoveElementMutation
+  | ParityReferenceSetAttributeMutation;
 
 export interface ParityDynamicStep {
   id: string;

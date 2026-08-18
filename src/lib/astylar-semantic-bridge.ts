@@ -315,7 +315,7 @@ export class AstylarSemanticBridge {
       if (!text) {
         text = this.canvas.ownerDocument.createTextNode(element.textContent);
         this.textNodes.set(key, text);
-      } else {
+      } else if (text.data !== element.textContent) {
         text.data = element.textContent;
       }
       childNodes.push(text);
@@ -331,7 +331,9 @@ export class AstylarSemanticBridge {
         liveKeys,
       ));
     }
-    node.replaceChildren(...childNodes);
+    const childrenChanged = node.childNodes.length !== childNodes.length ||
+      childNodes.some((child, index) => node.childNodes[index] !== child);
+    if (childrenChanged) node.replaceChildren(...childNodes);
     this.applyControlState(node, this.authoredControlState(element));
     return node;
   }

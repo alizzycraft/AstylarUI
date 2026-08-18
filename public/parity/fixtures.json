@@ -47,6 +47,15 @@
     "semanticIds": ["modal-life-invoker", "modal-life-cancel-dialog", "modal-life-cancel-title", "modal-life-cancel-action", "modal-life-close-dialog", "modal-life-close-title", "modal-life-close-action"]
   },
   {
+    "id": "semantic-status-validation",
+    "title": "Status and validation announcements",
+    "category": "accessibility-semantics",
+    "expectedBehavior": "Required-field invalid state and error descriptions stay synchronized while assertive error and polite status regions emit one deterministic non-empty update, ignore unrelated repeated data updates, and cleanly disappear when removed.",
+    "interactionStepCount": 6,
+    "semanticIds": ["announce-form", "announce-name", "announce-error", "announce-status", "announce-summary"],
+    "announcementIds": ["announce-error", "announce-status"]
+  },
+  {
     "id": "box-model-basic",
     "title": "Basic content-box geometry",
     "category": "box-model-units",

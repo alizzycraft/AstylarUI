@@ -18,6 +18,7 @@ import { semanticControlStateFixture } from './semantic-control-state.fixture';
 import { semanticAnchorNavigationFixture } from './semantic-anchor-navigation.fixture';
 import { semanticModalContainmentFixture } from './semantic-modal-containment.fixture';
 import { semanticModalLifecycleFixture } from './semantic-modal-lifecycle.fixture';
+import { semanticStatusValidationFixture } from './semantic-status-validation.fixture';
 import { unorderedListLayoutFixture } from './unordered-list-layout.fixture';
 import { orderedListLayoutFixture } from './ordered-list-layout.fixture';
 import { tableFixedLayoutFixture } from './table-fixed-layout.fixture';
@@ -171,6 +172,7 @@ const fixtures: readonly ParityFixture[] = [
   semanticAnchorNavigationFixture,
   semanticModalContainmentFixture,
   semanticModalLifecycleFixture,
+  semanticStatusValidationFixture,
   unorderedListLayoutFixture,
   orderedListLayoutFixture,
   tableFixedLayoutFixture,

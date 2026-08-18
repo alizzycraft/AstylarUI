@@ -320,6 +320,36 @@ async function captureSemanticSnapshots(page, mode, semanticIds = []) {
   return semantics;
 }
 
+async function installAnnouncementCapture(page, mode, announcementIds = []) {
+  if (!announcementIds?.length) return;
+  await page.evaluate(({ captureMode, ids }) => {
+    const selectorFor = (id) => captureMode === 'astylar'
+      ? `[data-astylar-id="${CSS.escape(id)}"]`
+      : `#${CSS.escape(id)}`;
+    window.__ASTYLAR_PARITY_ANNOUNCEMENTS__ = [];
+    window.__ASTYLAR_PARITY_ANNOUNCEMENT_OBSERVERS__ = ids.flatMap((id) => {
+      const region = document.querySelector(selectorFor(id));
+      if (!region) return [];
+      const observer = new MutationObserver(() => {
+        const text = (region.textContent ?? '').trim();
+        if (text) window.__ASTYLAR_PARITY_ANNOUNCEMENTS__.push({ id, text });
+      });
+      observer.observe(region, { childList: true, characterData: true, subtree: true });
+      return [observer];
+    });
+  }, { captureMode: mode, ids: announcementIds });
+}
+
+async function captureAnnouncements(page) {
+  return page.evaluate(() => [...(window.__ASTYLAR_PARITY_ANNOUNCEMENTS__ ?? [])]);
+}
+
+function compareAnnouncements(reference, astylar) {
+  return JSON.stringify(reference ?? []) === JSON.stringify(astylar ?? [])
+    ? []
+    : [`announcement log differs (${JSON.stringify(reference ?? [])} vs ${JSON.stringify(astylar ?? [])})`];
+}
+
 function normalizeAccessibilityNode(node) {
   if (!node) return undefined;
   const supportedProperties = new Set([
@@ -377,6 +407,7 @@ async function measureDynamicFixture(contexts, fixture) {
     fixture.lifecycleViewports,
     false,
     fixture.semanticIds,
+    fixture.announcementIds,
   );
   let astylarStates = await captureDynamicMode(
     context,
@@ -388,6 +419,7 @@ async function measureDynamicFixture(contexts, fixture) {
     fixture.lifecycleViewports,
     true,
     fixture.semanticIds,
+    fixture.announcementIds,
   );
   const catastrophicDynamicIndex = findCatastrophicCapture(referenceStates, astylarStates);
   if (catastrophicDynamicIndex >= 0) {
@@ -405,6 +437,7 @@ async function measureDynamicFixture(contexts, fixture) {
       fixture.lifecycleViewports,
       true,
       fixture.semanticIds,
+      fixture.announcementIds,
     );
   }
 
@@ -419,6 +452,8 @@ async function measureDynamicFixture(contexts, fixture) {
       ...reference.report.errors.map((error) => `reference: ${error}`),
       ...astylar.report.errors.map((error) => `astylar: ${error}`),
       ...compareSemantics(reference.semantics, astylar.semantics),
+      ...compareAnnouncements(reference.announcements, astylar.announcements)
+        .map((error) => `announcement: ${error}`),
       ...compareSemantics(fresh.reference.semantics, reference.semantics)
         .map((error) => `reference update: ${error}`),
       ...compareSemantics(fresh.astylar.semantics, astylar.semantics)
@@ -494,6 +529,10 @@ async function measureDynamicFixture(contexts, fixture) {
       text: compareText(reference.report, astylar.report),
       styles: compareStyles(reference.report, astylar.report),
       semantics: { reference: reference.semantics, astylar: astylar.semantics },
+      announcements: {
+        reference: reference.announcements,
+        astylar: astylar.announcements,
+      },
       runtimeErrors,
       reference: reference.report,
       astylar: astylar.report,
@@ -511,6 +550,7 @@ async function captureDynamicMode(
   lifecycleViewports = [],
   disposeAfter = false,
   semanticIds = [],
+  announcementIds = [],
 ) {
   const page = await context.newPage();
   await installDeterministicAssetDelay(page);
@@ -523,6 +563,7 @@ async function captureDynamicMode(
     undefined,
     { timeout: 30_000 },
   );
+  await installAnnouncementCapture(page, mode, announcementIds);
 
   let previousRevision = 0;
   for (let index = 0; index < stepCount; index += 1) {
@@ -555,7 +596,8 @@ async function captureDynamicMode(
       animations: 'disabled',
     });
     const semantics = await captureSemanticSnapshots(page, mode, semanticIds);
-    states.push({ report, screenshot, pageErrors: [...pageErrors], semantics });
+    const announcements = await captureAnnouncements(page);
+    states.push({ report, screenshot, pageErrors: [...pageErrors], semantics, announcements });
   }
   const disposal = disposeAfter
     ? await page.evaluate(() => window.__ASTYLAR_PARITY_DISPOSE__?.())
@@ -577,6 +619,7 @@ async function measureInteractionFixture(context, fixture) {
     fixture.interactionStepCount,
     false,
     fixture.semanticIds,
+    fixture.announcementIds,
   );
   let astylarStates = await captureInteractionMode(
     context,
@@ -587,6 +630,7 @@ async function measureInteractionFixture(context, fixture) {
     fixture.interactionStepCount,
     !!fixture.interactionCycleLength,
     fixture.semanticIds,
+    fixture.announcementIds,
   );
   const catastrophicInteractionIndex = findCatastrophicCapture(referenceStates, astylarStates);
   if (catastrophicInteractionIndex >= 0) {
@@ -603,6 +647,7 @@ async function measureInteractionFixture(context, fixture) {
       fixture.interactionStepCount,
       !!fixture.interactionCycleLength,
       fixture.semanticIds,
+      fixture.announcementIds,
     );
   }
 
@@ -621,12 +666,19 @@ async function measureInteractionFixture(context, fixture) {
       geometry: compareGeometry(reference.report, astylar.report),
       text: compareText(reference.report, astylar.report),
       styles: compareStyles(reference.report, astylar.report),
+      semantics: { reference: reference.semantics, astylar: astylar.semantics },
+      announcements: {
+        reference: reference.announcements,
+        astylar: astylar.announcements,
+      },
       runtimeErrors: [
         ...reference.pageErrors.map((error) => `reference: ${error}`),
         ...astylar.pageErrors.map((error) => `astylar: ${error}`),
         ...reference.report.errors.map((error) => `reference: ${error}`),
         ...astylar.report.errors.map((error) => `astylar: ${error}`),
         ...compareSemantics(reference.semantics, astylar.semantics),
+        ...compareAnnouncements(reference.announcements, astylar.announcements)
+          .map((error) => `announcement: ${error}`),
         ...interactionErrors.map((error) => `interaction: ${error}`),
         ...lifecycleErrors,
       ],
@@ -645,6 +697,7 @@ async function captureInteractionMode(
   stepCount,
   disposeAfter = false,
   semanticIds = [],
+  announcementIds = [],
 ) {
   const page = await context.newPage();
   const pageErrors = [];
@@ -662,6 +715,7 @@ async function captureInteractionMode(
   if (!steps || steps.length !== stepCount) {
     throw new Error(`${mode} interaction steps differ from manifest for ${url}`);
   }
+  await installAnnouncementCapture(page, mode, announcementIds);
   let report = await page.evaluate(() => window.__ASTYLAR_PARITY_REPORT__);
   let previousRevision = report?.revision ?? 0;
 
@@ -687,7 +741,8 @@ async function captureInteractionMode(
       animations: 'disabled',
     });
     const semantics = await captureSemanticSnapshots(page, mode, semanticIds);
-    states.push({ report, screenshot, pageErrors: [...pageErrors], semantics });
+    const announcements = await captureAnnouncements(page);
+    states.push({ report, screenshot, pageErrors: [...pageErrors], semantics, announcements });
   }
   const disposal = disposeAfter
     ? await page.evaluate(() => window.__ASTYLAR_PARITY_DISPOSE__?.())

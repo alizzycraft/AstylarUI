@@ -160,6 +160,14 @@ then emits `close`; `event.preventDefault()` keeps it open. Removing an active
 dialog through `Astylar.update()` follows the browser's removal boundary: it
 cleans modal/focus ownership without synthesizing `close` or restoring focus.
 
+Status and validation semantics use the same authored fields as equivalent
+HTML. For example, a live status can use `role: 'status'`,
+`ariaLive: 'polite'`, and `ariaAtomic: true`; update its `textContent` through
+`Astylar.update()`. Compatible updates preserve the semantic node and do not
+mutate unchanged live-region text, so unrelated application updates do not
+produce duplicate browser-observable announcements. Required controls may add
+or remove `ariaDescribedby` as their visible validation message changes.
+
 ## Developing AstylarUI
 
 The current implementation status, document map, and recommended next work are

@@ -273,6 +273,36 @@ describe('AstylarSemanticBridge', () => {
     bridge.dispose();
   });
 
+  it('does not mutate an unchanged live region during an unrelated reconciliation', async () => {
+    const bridge = new AstylarSemanticBridge(canvas);
+    const createData = (status: string, summary: string): SiteData => ({
+      styles: [],
+      root: { children: [
+        {
+          type: 'div', id: 'status', role: 'status', ariaLive: 'polite',
+          ariaAtomic: true, textContent: status,
+        },
+        { type: 'p', id: 'summary', textContent: summary },
+      ] },
+    });
+    bridge.reconcile(createData('Saved.', 'Initial summary'));
+    const status = host.querySelector<HTMLElement>('[data-astylar-id="status"]')!;
+    const mutations: MutationRecord[] = [];
+    const observer = new MutationObserver((records) => mutations.push(...records));
+    observer.observe(status, { childList: true, characterData: true, subtree: true });
+
+    bridge.reconcile(createData('Saved.', 'Updated summary'));
+    await Promise.resolve();
+    expect(mutations).toEqual([]);
+
+    bridge.reconcile(createData('Saved again.', 'Updated summary'));
+    await Promise.resolve();
+    expect(mutations).toHaveSize(1);
+    expect(status.textContent).toBe('Saved again.');
+    observer.disconnect();
+    bridge.dispose();
+  });
+
   function siteData(): SiteData {
     return {
       styles: [],
