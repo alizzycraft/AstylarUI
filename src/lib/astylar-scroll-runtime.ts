@@ -32,6 +32,7 @@ export interface AstylarScrollRuntimeOptions {
   getMesh(elementId: string): Mesh | undefined;
   getDimensions(elementId: string): ElementDimensions | undefined;
   getStyle(elementId: string): StyleRule | undefined;
+  resolveStyle?(element: DOMElement, siteData: SiteData): StyleRule | undefined;
   getPixelToWorldScale(): number;
   refreshClipping?(entries: ReadonlyArray<{ mesh: Mesh; style: StyleRule }>): void;
 }
@@ -75,7 +76,8 @@ export class AstylarScrollRuntime {
 
     const register = (element: DOMElement): void => {
       const id = element.id;
-      const style = id ? this.options.getStyle(id) : undefined;
+      const style = this.options.resolveStyle?.(element, siteData) ??
+        (id ? this.options.getStyle(id) : undefined);
       const overflow = element.style?.overflow ?? style?.overflow;
       const mesh = id && counts.get(id) === 1 ? this.options.getMesh(id) : undefined;
       if (mesh && style && (overflow === 'hidden' || overflow === 'clip' ||

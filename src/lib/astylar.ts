@@ -254,6 +254,8 @@ export class Astylar {
       getMesh: (elementId) => this.elementManager.elementsMap.get(elementId),
       getDimensions: (elementId) => this.elementManager.elementDimensionsMap.get(elementId),
       getStyle: (elementId) => this.elementManager.elementStylesMap.get(elementId)?.normal,
+      resolveStyle: (element, currentSiteData) =>
+        this.styleService.findStyleForElement(element, currentSiteData.styles),
       getPixelToWorldScale: () => this.babylonCameraService.getPixelToWorldScale(),
       refreshClipping: (entries) => this.overflowClipService.refresh(entries),
     });

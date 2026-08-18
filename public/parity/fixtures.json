@@ -826,5 +826,13 @@
     "expectedBehavior": "A stable unique scroll container preserves its offset through a compatible sibling update and clamps that offset when a later compatible update shortens its content.",
     "dynamicStepCount": 2,
     "interactionStepCount": 3
+  },
+  {
+    "id": "overflow-replacement-cleanup",
+    "title": "Removed and incompatible scroll cleanup",
+    "category": "overflow-scrolling",
+    "expectedBehavior": "A disabled, removed, or duplicate scroll-container identity leaves no live registry state, and later reuse of the ID starts from the authored zero offset rather than resurrecting stale state.",
+    "dynamicStepCount": 4,
+    "interactionStepCount": 7
   }
 ]

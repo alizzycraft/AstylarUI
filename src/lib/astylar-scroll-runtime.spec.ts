@@ -165,6 +165,34 @@ describe('AstylarScrollRuntime', () => {
     runtime.dispose();
     expect(runtime.snapshot).toEqual({ containers: {}, disposed: true });
   });
+
+  it('uses the current authored cascade when an update disables scrolling', () => {
+    const { runtime, siteData } = createVerticalRuntime(scene);
+    const disabledSiteData: SiteData = {
+      ...siteData,
+      styles: [
+        { selector: '#box', overflow: 'auto' },
+        { selector: '#box.disabled', overflow: 'hidden' },
+      ],
+      root: {
+        children: [{ ...siteData.root.children[0], class: 'disabled' }],
+      },
+    };
+    const disabledRuntime = new AstylarScrollRuntime({
+      getMesh: (id) => id === 'box' ? scene.getMeshByName('box') as Mesh : undefined,
+      getDimensions: (id) => id === 'box' ? { width: 240, height: 160 } : undefined,
+      getStyle: () => ({ selector: '#box', overflow: 'auto' }),
+      resolveStyle: (element) => ({
+        selector: '#box.disabled',
+        overflow: element.class === 'disabled' ? 'hidden' : 'auto',
+      }),
+      getPixelToWorldScale: () => 1,
+    });
+
+    runtime.dispose();
+    disabledRuntime.reconcile(disabledSiteData);
+    expect(disabledRuntime.snapshot.containers).toEqual({});
+  });
 });
 
 function createVerticalRuntime(scene: Scene, clientHeight = 160): {

@@ -382,8 +382,11 @@ export class ParityReferenceComponent {
   ): Record<string, import('./parity.types').ParityScrollState> {
     const containers: Record<string, import('./parity.types').ParityScrollState> = {};
     for (const id of ids) {
-      const element = viewport.querySelector<HTMLElement>(`#${CSS.escape(id)}`);
-      if (!element) continue;
+      const matches = viewport.querySelectorAll<HTMLElement>(`#${CSS.escape(id)}`);
+      if (matches.length !== 1) continue;
+      const element = matches[0];
+      const computed = getComputedStyle(element);
+      if (computed.overflow !== 'auto' && computed.overflow !== 'scroll') continue;
       containers[id] = {
         scrollLeft: element.scrollLeft,
         scrollTop: element.scrollTop,
