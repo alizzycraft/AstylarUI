@@ -107,10 +107,10 @@ export class InputElementService {
         // Register input element
         this.registerInput(inputElement);
 
-        // Attach input events (click to focus, etc.)
-        if (render.scene) {
-            this.attachInputEvents(inputElement, render.scene);
-        }
+        // Pointer focus and activation are owned by the scene interaction runtime.
+        // A mesh OnPickTrigger bypasses overflow hit filtering because Babylon
+        // picking is independent of material clipping, so do not install the
+        // legacy parallel default-action path on rendered controls.
 
         // Add validation rules if specified
         if (element.validationRules) {

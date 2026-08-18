@@ -834,5 +834,12 @@
     "expectedBehavior": "A disabled, removed, or duplicate scroll-container identity leaves no live registry state, and later reuse of the ID starts from the authored zero offset rather than resurrecting stale state.",
     "dynamicStepCount": 4,
     "interactionStepCount": 7
+  },
+  {
+    "id": "overflow-scrolled-target",
+    "title": "Pointer targeting after scrolling",
+    "category": "overflow-scrolling",
+    "expectedBehavior": "A clipped control cannot be activated, becomes pointer-targetable and focusable after scrolling into view, and becomes inert again when scrolled back outside the clip.",
+    "interactionStepCount": 5
   }
 ]

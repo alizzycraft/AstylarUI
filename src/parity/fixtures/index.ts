@@ -128,6 +128,7 @@ import { overflowHorizontalWheelFixture } from './overflow-horizontal-wheel.fixt
 import { overflowNestedWheelFixture } from './overflow-nested-wheel.fixture';
 import { overflowUpdateStateFixture } from './overflow-update-state.fixture';
 import { overflowReplacementCleanupFixture } from './overflow-replacement-cleanup.fixture';
+import { overflowScrolledTargetFixture } from './overflow-scrolled-target.fixture';
 import { ParityFixture } from '../parity.types';
 
 const fixtures: readonly ParityFixture[] = [
@@ -260,7 +261,8 @@ const fixtures: readonly ParityFixture[] = [
   overflowHorizontalWheelFixture,
   overflowNestedWheelFixture,
   overflowUpdateStateFixture,
-  overflowReplacementCleanupFixture
+  overflowReplacementCleanupFixture,
+  overflowScrolledTargetFixture
 ];
 
 const fixturesById = new Map(fixtures.map((fixture) => [fixture.id, fixture]));
