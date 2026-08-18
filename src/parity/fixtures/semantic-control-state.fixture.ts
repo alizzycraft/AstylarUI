@@ -62,6 +62,26 @@ export const semanticControlStateFixture: ParityFixture = {
         { type: 'click', elementId: 'semantic-control-blur' },
       ],
     },
+    {
+      id: 'semantic-checkbox-activation',
+      actions: [
+        { type: 'semantic-focus', elementId: 'semantic-check' },
+        { type: 'semantic-activate', elementId: 'semantic-check' },
+      ],
+    },
+    {
+      id: 'semantic-checkbox-keyboard',
+      actions: [{ type: 'press-key', key: 'Space' }],
+    },
+    {
+      id: 'semantic-text-keyboard',
+      actions: [
+        { type: 'semantic-focus', elementId: 'semantic-text' },
+        { type: 'press-key', key: 'End' },
+        { type: 'type-text', text: 'X' },
+        { type: 'click', elementId: 'semantic-control-blur' },
+      ],
+    },
   ],
   reference: {
     html: `

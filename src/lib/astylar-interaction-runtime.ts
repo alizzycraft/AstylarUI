@@ -134,6 +134,74 @@ export class AstylarInteractionRuntime {
     };
   }
 
+  /** Applies browser semantic focus through the same scene-owned focus path. */
+  focusSemanticElement(
+    elementId: string,
+    preservePreviousSelectionOnReset = false,
+  ): boolean {
+    if (this.disposed || !this.focusOrder.includes(elementId) ||
+        !this.dispatcher.hasEnabledTarget(elementId)) return false;
+    this.setFocus(elementId, preservePreviousSelectionOnReset);
+    return this.controls?.getFocusedElementId() === elementId;
+  }
+
+  /** Clears scene focus when its corresponding native semantic node blurs. */
+  blurSemanticElement(elementId: string): boolean {
+    if (this.disposed || this.controls?.getFocusedElementId() !== elementId) return false;
+    this.setFocus(undefined);
+    return this.controls?.getFocusedElementId() === undefined;
+  }
+
+  /** Routes assistive/native click activation through typed Astylar defaults. */
+  activateSemanticElement(elementId: string): boolean {
+    if (this.disposed || !this.dispatcher.hasEnabledTarget(elementId)) return false;
+    if (this.focusOrder.includes(elementId)) this.setFocus(elementId);
+    const accepted = this.activateAndClick(elementId);
+    const labelTargetId = accepted ? this.labelTargets.get(elementId) : undefined;
+    if (labelTargetId && this.dispatcher.hasEnabledTarget(labelTargetId)) {
+      if (this.focusOrder.includes(labelTargetId)) this.setFocus(labelTargetId);
+      return this.activateAndClick(labelTargetId);
+    }
+    return accepted;
+  }
+
+  /** Reuses the canvas keyboard/default-action pipeline for semantic focus. */
+  handleSemanticKeyDown(event: KeyboardEvent): void {
+    if (event.key === 'Tab') {
+      this.dispatchSemanticTabKey(event, 'keydown');
+      return;
+    }
+    this.handleKeyDown(event);
+  }
+
+  /** Reuses the canvas keyboard/default-action pipeline for semantic focus. */
+  handleSemanticKeyUp(event: KeyboardEvent): void {
+    if (event.key === 'Tab') {
+      this.dispatchSemanticTabKey(event, 'keyup');
+      return;
+    }
+    this.handleKeyUp(event);
+  }
+
+  private dispatchSemanticTabKey(event: KeyboardEvent, type: 'keydown' | 'keyup'): void {
+    if (this.disposed) return;
+    const targetId = this.controls?.getFocusedElementId();
+    if (!targetId) return;
+    const dispatched = this.dispatcher.dispatch({
+      type,
+      targetId,
+      ...this.liveState(targetId),
+      key: event.key,
+      code: event.code,
+      shiftKey: event.shiftKey,
+      ctrlKey: event.ctrlKey,
+      altKey: event.altKey,
+      metaKey: event.metaKey,
+    });
+    if (dispatched?.propagationStopped) event.stopPropagation();
+    if (dispatched?.defaultPrevented) event.preventDefault();
+  }
+
   setSiteData(siteData: SiteData): void {
     const nextFocusOrder = this.buildFocusOrder(siteData);
     const nextControlTypes = this.buildControlTypes(siteData);

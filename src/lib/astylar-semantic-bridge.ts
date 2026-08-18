@@ -20,6 +20,18 @@ export interface AstylarSemanticControlState {
   readonly?: boolean;
   selectedIndex?: number;
   expanded?: boolean;
+  selectionStart?: number;
+  selectionEnd?: number;
+}
+
+/** Routes native semantic input into the scene's existing interaction owner. */
+export interface AstylarSemanticInteractionAdapter {
+  getFocusedElementId(): string | undefined;
+  focus(elementId: string, preservePreviousSelectionOnReset?: boolean): boolean;
+  blur(elementId: string): boolean;
+  activate(elementId: string): boolean;
+  keyDown(event: KeyboardEvent): void;
+  keyUp(event: KeyboardEvent): void;
 }
 
 /**
@@ -38,7 +50,11 @@ export class AstylarSemanticBridge {
   private readonly nodes = new Map<string, HTMLElement>();
   private readonly textNodes = new Map<string, Text>();
   private readonly previousCanvasAriaHidden: string | null;
+  private readonly previousCanvasTabIndex: string | null;
+  private interactionAdapter?: AstylarSemanticInteractionAdapter;
   private controlSyncQueued = false;
+  private focusSyncQueued = false;
+  private preserveSelectionForNextFocus = false;
   private disposed = false;
 
   constructor(
@@ -61,6 +77,7 @@ export class AstylarSemanticBridge {
       'border:0',
     ].join(';');
     this.previousCanvasAriaHidden = canvas.getAttribute('aria-hidden');
+    this.previousCanvasTabIndex = canvas.getAttribute('tabindex');
     canvas.setAttribute('aria-hidden', 'true');
     (options.host ?? canvas.parentElement ?? document.body).appendChild(this.root);
   }
@@ -72,7 +89,7 @@ export class AstylarSemanticBridge {
   get snapshot(): AstylarSemanticSnapshot {
     return {
       nodes: this.nodes.size,
-      eventRegistrations: 0,
+      eventRegistrations: this.interactionAdapter ? 5 : 0,
       observerRegistrations: 0,
     };
   }
@@ -124,10 +141,41 @@ export class AstylarSemanticBridge {
     });
   }
 
+  /** Connects delegated semantic input to one scene interaction runtime. */
+  connectInteractions(adapter: AstylarSemanticInteractionAdapter): void {
+    if (this.disposed) return;
+    if (!this.interactionAdapter) {
+      this.root.addEventListener('focusin', this.handleFocusIn);
+      this.root.addEventListener('focusout', this.handleFocusOut);
+      this.root.addEventListener('keydown', this.handleKeyDown);
+      this.root.addEventListener('keyup', this.handleKeyUp);
+      this.root.addEventListener('click', this.handleClick);
+    }
+    this.interactionAdapter = adapter;
+    // Programmatic focus still works for scene pointer input, but browser Tab
+    // reaches the authored semantic controls instead of the implementation canvas.
+    this.canvas.tabIndex = -1;
+  }
+
+  /** Synchronizes native accessibility focus from the scene after one event turn. */
+  queueFocusSync(
+    getFocusedElementId: () => string | undefined,
+    keepCanvasFocus: (elementId: string) => boolean = () => false,
+  ): void {
+    if (this.disposed || this.focusSyncQueued) return;
+    this.focusSyncQueued = true;
+    queueMicrotask(() => {
+      this.focusSyncQueued = false;
+      const elementId = getFocusedElementId();
+      this.syncFocus(elementId, !!elementId && keepCanvasFocus(elementId));
+    });
+  }
+
   dispose(): void {
     if (this.disposed) return;
     this.disposed = true;
     this.root.remove();
+    this.disconnectInteractions();
     this.nodes.clear();
     this.textNodes.clear();
     if (this.previousCanvasAriaHidden === null) {
@@ -135,6 +183,101 @@ export class AstylarSemanticBridge {
     } else {
       this.canvas.setAttribute('aria-hidden', this.previousCanvasAriaHidden);
     }
+    if (this.previousCanvasTabIndex === null) {
+      this.canvas.removeAttribute('tabindex');
+    } else {
+      this.canvas.setAttribute('tabindex', this.previousCanvasTabIndex);
+    }
+  }
+
+  private readonly handleFocusIn = (event: FocusEvent): void => {
+    const elementId = this.semanticEventElementId(event);
+    if (elementId) {
+      this.interactionAdapter?.focus(elementId, this.preserveSelectionForNextFocus);
+      this.preserveSelectionForNextFocus = false;
+    }
+  };
+
+  private readonly handleFocusOut = (event: FocusEvent): void => {
+    const elementId = this.semanticEventElementId(event);
+    if (!elementId) return;
+    // Native focusout fires before Babylon's canvas pointer observer. A task
+    // boundary lets that observer preserve browser ordering (pointerdown before
+    // change/blur) and makes this a no-op when it establishes the next focus.
+    setTimeout(() => {
+      const active = this.canvas.ownerDocument.activeElement;
+      if (active instanceof HTMLElement &&
+          this.root.contains(active) &&
+          active.dataset['astylarId'] === elementId) return;
+      if (active === (this.canvas as unknown as Element) &&
+          this.interactionAdapter?.getFocusedElementId() === elementId) return;
+      this.interactionAdapter?.blur(elementId);
+    }, 0);
+  };
+
+  private readonly handleKeyDown = (event: KeyboardEvent): void => {
+    this.interactionAdapter?.keyDown(event);
+    if (event.key === 'Tab' && !event.defaultPrevented) {
+      this.preserveSelectionForNextFocus = true;
+    }
+    if (event.key !== 'Tab') event.preventDefault();
+    event.stopPropagation();
+  };
+
+  private readonly handleKeyUp = (event: KeyboardEvent): void => {
+    this.interactionAdapter?.keyUp(event);
+    if (event.key === 'Tab') this.preserveSelectionForNextFocus = false;
+    if (event.key !== 'Tab') event.preventDefault();
+    event.stopPropagation();
+  };
+
+  private readonly handleClick = (event: MouseEvent): void => {
+    const elementId = this.semanticEventElementId(event);
+    if (!elementId) return;
+    event.preventDefault();
+    event.stopPropagation();
+    this.interactionAdapter?.activate(elementId);
+  };
+
+  private semanticEventElementId(event: Event): string | undefined {
+    const target = event.target;
+    if (!(target instanceof Element)) return undefined;
+    const semantic = target.closest<HTMLElement>('[data-astylar-id]');
+    if (!semantic || !this.root.contains(semantic)) return undefined;
+    return semantic.dataset['astylarId'] || undefined;
+  }
+
+  private syncFocus(elementId: string | undefined, keepCanvasFocus = false): void {
+    const active = this.canvas.ownerDocument.activeElement;
+    const activeSemantic = active instanceof HTMLElement && this.root.contains(active)
+      ? active
+      : undefined;
+    if (!elementId) {
+      activeSemantic?.blur();
+      return;
+    }
+    const node = [...this.nodes.values()].find((candidate) =>
+      candidate.dataset['astylarId'] === elementId);
+    // Astylar's text editor owns directional pointer selection. Moving browser
+    // focus into its semantic mirror while a range is selected collapses that
+    // richer scene state. Collapsed carets can safely use native focus (and its
+    // browser Tab order); native/AT focus always routes into the scene.
+    if (keepCanvasFocus) {
+      if (activeSemantic && activeSemantic !== node) activeSemantic.blur();
+      if (active !== node) this.canvas.focus({ preventScroll: true });
+      return;
+    }
+    if (node && active !== node) node.focus({ preventScroll: true });
+  }
+
+  private disconnectInteractions(): void {
+    if (!this.interactionAdapter) return;
+    this.root.removeEventListener('focusin', this.handleFocusIn);
+    this.root.removeEventListener('focusout', this.handleFocusOut);
+    this.root.removeEventListener('keydown', this.handleKeyDown);
+    this.root.removeEventListener('keyup', this.handleKeyUp);
+    this.root.removeEventListener('click', this.handleClick);
+    this.interactionAdapter = undefined;
   }
 
   private reconcileElement(
@@ -236,6 +379,11 @@ export class AstylarSemanticBridge {
   private applyControlState(node: HTMLElement, state: AstylarSemanticControlState): void {
     if (node instanceof HTMLInputElement) {
       if (state.value !== undefined) node.value = state.value;
+      if (state.selectionStart !== undefined && state.selectionEnd !== undefined &&
+          node.type !== 'button' && node.type !== 'submit' && node.type !== 'reset' &&
+          node.type !== 'checkbox' && node.type !== 'radio') {
+        node.setSelectionRange(state.selectionStart, state.selectionEnd);
+      }
       if (state.checked !== undefined) node.checked = state.checked;
       if (state.disabled !== undefined) node.disabled = state.disabled;
       if (state.required !== undefined) node.required = state.required;
@@ -244,6 +392,9 @@ export class AstylarSemanticBridge {
     }
     if (node instanceof HTMLTextAreaElement) {
       if (state.value !== undefined) node.value = state.value;
+      if (state.selectionStart !== undefined && state.selectionEnd !== undefined) {
+        node.setSelectionRange(state.selectionStart, state.selectionEnd);
+      }
       if (state.disabled !== undefined) node.disabled = state.disabled;
       if (state.required !== undefined) node.required = state.required;
       if (state.readonly !== undefined) node.readOnly = state.readonly;

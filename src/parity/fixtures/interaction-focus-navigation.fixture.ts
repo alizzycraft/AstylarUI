@@ -5,7 +5,7 @@ export const interactionFocusNavigationFixture: ParityFixture = {
   title: 'Focus and keyboard navigation',
   category: 'forms-interactive',
   expectedBehavior:
-    'Pointer focus, forward and reverse Tab navigation, disabled-control skipping, and outside-click blur report the same focus and event order as the browser.',
+    'Pointer and semantic focus stay synchronized through forward/reverse Tab navigation, disabled-control skipping, outside blur, semantic activation, and keyboard activation.',
   measurementIds: [
     'focus-surface',
     'focus-first',
@@ -14,12 +14,28 @@ export const interactionFocusNavigationFixture: ParityFixture = {
     'focus-outside',
   ],
   interactionIds: ['focus-first', 'focus-disabled', 'focus-second'],
+  semanticIds: ['focus-first', 'focus-disabled', 'focus-second'],
   interactionEventTypes: ['pointerdown', 'pointerup', 'click', 'focus', 'blur', 'keydown'],
   interactionSteps: [
     { id: 'pointer-focus-first', actions: [{ type: 'click', elementId: 'focus-first' }] },
     { id: 'tab-skips-disabled', actions: [{ type: 'press-key', key: 'Tab' }] },
     { id: 'reverse-tab', actions: [{ type: 'press-key', key: 'Shift+Tab' }] },
     { id: 'outside-click-blurs', actions: [{ type: 'click', elementId: 'focus-outside' }] },
+    {
+      id: 'semantic-focus-second',
+      actions: [{ type: 'semantic-focus', elementId: 'focus-second' }],
+    },
+    {
+      id: 'semantic-activate-second',
+      actions: [{ type: 'semantic-activate', elementId: 'focus-second' }],
+    },
+    {
+      id: 'semantic-enter-first',
+      actions: [
+        { type: 'semantic-focus', elementId: 'focus-first' },
+        { type: 'press-key', key: 'Enter' },
+      ],
+    },
   ],
   reference: {
     html: `

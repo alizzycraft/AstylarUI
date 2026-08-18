@@ -322,6 +322,10 @@ export class Astylar {
             }
             semanticBridge?.syncControlStates((elementId) =>
               this.getLiveSemanticControlState(elementId));
+            semanticBridge?.queueFocusSync(
+              () => this.inputElementService.getFocusedElementId(),
+              (elementId) => this.hasLiveTextSelection(elementId),
+            );
           },
           this.imageResources.getSceneTextures(scene),
         );
@@ -330,17 +334,35 @@ export class Astylar {
     );
     this.sessions.set(scene, session);
     this.activeSession = session;
+    let interaction: AstylarInteractionRuntime | undefined;
+    let pointerFocusTransaction = false;
     const interactionEvents = semanticBridge
       ? {
           ...options?.events,
           onEvent: (event: Parameters<NonNullable<AstylarEventOptions['onEvent']>>[0]) => {
+            if (event.type === 'pointerdown') pointerFocusTransaction = true;
             options?.events?.onEvent?.(event);
             semanticBridge.queueControlStateSync((elementId) =>
               this.getLiveSemanticControlState(elementId));
+            const focusedElementId = this.inputElementService.getFocusedElementId();
+            const pointerTransition = event.type.startsWith('pointer');
+            const selectedTextClick = event.type === 'click' && !!focusedElementId &&
+              this.hasLiveTextSelection(focusedElementId);
+            if (event.type === 'click') pointerFocusTransaction = false;
+            if (event.type === 'pointerup') {
+              queueMicrotask(() => { pointerFocusTransaction = false; });
+            }
+            if (event.type !== 'focus' && !pointerTransition &&
+                !pointerFocusTransaction && !selectedTextClick) {
+              semanticBridge.queueFocusSync(
+                () => this.inputElementService.getFocusedElementId(),
+                (elementId) => this.hasLiveTextSelection(elementId),
+              );
+            }
           },
         }
       : options?.events;
-    const interaction = new AstylarInteractionRuntime(
+    interaction = new AstylarInteractionRuntime(
       scene,
       siteData,
       interactionEvents,
@@ -401,6 +423,15 @@ export class Astylar {
       scrollRuntime,
     );
     this.interactions.set(scene, interaction);
+    semanticBridge?.connectInteractions({
+      getFocusedElementId: () => this.inputElementService.getFocusedElementId(),
+      focus: (elementId, preservePreviousSelectionOnReset) =>
+        interaction?.focusSemanticElement(elementId, preservePreviousSelectionOnReset) ?? false,
+      blur: (elementId) => interaction?.blurSemanticElement(elementId) ?? false,
+      activate: (elementId) => interaction?.activateSemanticElement(elementId) ?? false,
+      keyDown: (event) => interaction?.handleSemanticKeyDown(event),
+      keyUp: (event) => interaction?.handleSemanticKeyUp(event),
+    });
     session.addCleanup(() => interaction.dispose());
     session.addCleanup(() => scrollRuntime.dispose());
     if (semanticBridge) session.addCleanup(() => semanticBridge.dispose());
@@ -565,6 +596,8 @@ export class Astylar {
       checked?: boolean;
       selectedIndex?: number;
       dropdownOpen?: boolean;
+      selectionStart?: number;
+      selectionEnd?: number;
     };
     if (typeof live.checked === 'boolean') {
       state.checked = live.checked;
@@ -575,7 +608,21 @@ export class Astylar {
     if (typeof live.dropdownOpen === 'boolean') {
       state.expanded = live.dropdownOpen;
     }
+    if (typeof live.selectionStart === 'number' && typeof live.selectionEnd === 'number') {
+      state.selectionStart = live.selectionStart;
+      state.selectionEnd = live.selectionEnd;
+    }
     return state;
+  }
+
+  private hasLiveTextSelection(elementId: string): boolean {
+    const input = this.inputElementService.getInputElement(elementId) as unknown as {
+      selectionStart?: number;
+      selectionEnd?: number;
+    } | undefined;
+    return typeof input?.selectionStart === 'number' &&
+      typeof input.selectionEnd === 'number' &&
+      input.selectionStart !== input.selectionEnd;
   }
 
   private setElementActiveState(elementId: string, active: boolean): void {

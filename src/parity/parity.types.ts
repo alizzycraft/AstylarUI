@@ -130,6 +130,18 @@ export interface ParityTypeTextAction {
   text: string;
 }
 
+/** Focuses the native authored node (or Astylar semantic counterpart). */
+export interface ParitySemanticFocusAction {
+  type: 'semantic-focus';
+  elementId: string;
+}
+
+/** Invokes native semantic activation without pointer-driving the visual surface. */
+export interface ParitySemanticActivateAction {
+  type: 'semantic-activate';
+  elementId: string;
+}
+
 export interface ParityApplyUpdateAction {
   type: 'apply-update';
   stepIndex: number;
@@ -152,6 +164,8 @@ export type ParityInteractionAction =
   | ParityPauseAction
   | ParityPressKeyAction
   | ParityTypeTextAction
+  | ParitySemanticFocusAction
+  | ParitySemanticActivateAction
   | ParityApplyUpdateAction
   | ParityWheelAction;
 

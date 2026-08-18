@@ -74,6 +74,55 @@ describe('AstylarEventDispatcher', () => {
 });
 
 describe('AstylarInteractionRuntime', () => {
+  it('routes semantic focus and activation through the existing typed defaults', () => {
+    const engine = new NullEngine();
+    const scene = new Scene(engine);
+    const events: AstylarEventSnapshot[] = [];
+    let focusedElementId: string | undefined;
+    let checked = false;
+    const runtime = new AstylarInteractionRuntime(
+      scene,
+      {
+        styles: [],
+        root: { children: [{
+          type: 'input', inputType: 'checkbox', id: 'choice', checked: false,
+        }] },
+      },
+      { onEvent: (event) => events.push(event) },
+      () => ({ value: 'on', checked }),
+      {
+        getFocusedElementId: () => focusedElementId,
+        focus: (elementId) => {
+          focusedElementId = elementId;
+          return true;
+        },
+        blur: (elementId) => {
+          if (focusedElementId === elementId) focusedElementId = undefined;
+          return true;
+        },
+        handleKeyDown: () => undefined,
+        commitsValueOnBlur: () => false,
+        activate: () => {
+          const before = checked;
+          checked = !checked;
+          return { changed: true, rollback: () => { checked = before; } };
+        },
+      },
+    );
+
+    expect(runtime.focusSemanticElement('choice')).toBeTrue();
+    expect(runtime.activateSemanticElement('choice')).toBeTrue();
+    expect(runtime.blurSemanticElement('choice')).toBeTrue();
+    expect(checked).toBeTrue();
+    expect(events.map((event) => `${event.type}:${event.checked}`)).toEqual([
+      'focus:false', 'click:true', 'input:true', 'change:true', 'blur:true',
+    ]);
+
+    runtime.dispose();
+    scene.dispose();
+    engine.dispose();
+  });
+
   it('commits and blurs focus before a control is removed or incompatibly replaced', () => {
     const engine = new NullEngine();
     const scene = new Scene(engine);

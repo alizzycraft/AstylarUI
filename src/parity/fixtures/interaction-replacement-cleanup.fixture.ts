@@ -47,7 +47,7 @@ const createCheckboxSiteData = (): SiteData => ({
     type: 'section', id: 'replacement-surface', children: [
       {
         type: 'input', inputType: 'checkbox', id: 'volatile-control',
-        class: 'replacement-check', checked: false,
+        class: 'replacement-check', checked: false, ariaLabel: 'Replacement',
       },
       { type: 'div', id: 'replacement-status', textContent: 'Checkbox replacement' },
     ],
@@ -72,6 +72,7 @@ export const interactionReplacementCleanupFixture: ParityFixture = {
   measurementIds: ['replacement-surface', 'volatile-control', 'replacement-status'],
   optionalMeasurementIds: ['volatile-control'],
   interactionIds: ['volatile-control'],
+  semanticIds: ['volatile-control'],
   interactionEventTypes: [
     'pointerdown', 'pointerup', 'click', 'focus', 'blur', 'keydown', 'keyup', 'input', 'change',
   ],

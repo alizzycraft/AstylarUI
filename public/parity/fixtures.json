@@ -19,7 +19,7 @@
     "title": "Native semantic control values and states",
     "category": "accessibility-semantics",
     "expectedBehavior": "Native checkbox, radio, text, select, readonly, required, invalid, and disabled semantics reflect authored defaults and the same live values after scene interactions and form reset.",
-    "interactionStepCount": 5,
+    "interactionStepCount": 8,
     "semanticIds": ["semantic-check", "semantic-radio-alpha", "semantic-radio-beta", "semantic-text", "semantic-select", "semantic-locked", "semantic-disabled"]
   },
   {
@@ -673,8 +673,9 @@
     "id": "interaction-focus-navigation",
     "title": "Focus and keyboard navigation",
     "category": "forms-interactive",
-    "expectedBehavior": "Pointer focus, forward and reverse Tab navigation, disabled-control skipping, and outside-click blur report the same focus and event order as the browser.",
-    "interactionStepCount": 4
+    "expectedBehavior": "Pointer and semantic focus stay synchronized through forward/reverse Tab navigation, disabled-control skipping, outside blur, semantic activation, and keyboard activation.",
+    "interactionStepCount": 7,
+    "semanticIds": ["focus-first", "focus-disabled", "focus-second"]
   },
   {
     "id": "interaction-text-editing",
@@ -810,7 +811,8 @@
     "category": "forms-interactive",
     "expectedBehavior": "An incompatibly replaced or removed focused control loses its live state and focus, unregisters cleanly, and does not resurrect stale state when the authored ID is later reused.",
     "dynamicStepCount": 3,
-    "interactionStepCount": 8
+    "interactionStepCount": 8,
+    "semanticIds": ["volatile-control"]
   },
   {
     "id": "interaction-lifecycle-stress",

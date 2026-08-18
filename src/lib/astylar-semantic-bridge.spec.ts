@@ -128,6 +128,103 @@ describe('AstylarSemanticBridge', () => {
     expect(plan?.getAttribute('aria-expanded')).toBe('true');
   });
 
+  it('delegates semantic focus, keyboard input, and activation and restores canvas focus state', async () => {
+    canvas.setAttribute('tabindex', '4');
+    const bridge = new AstylarSemanticBridge(canvas);
+    bridge.reconcile({
+      styles: [],
+      root: { children: [
+        { type: 'button', id: 'action', textContent: 'Run' },
+      ] },
+    });
+    const calls: string[] = [];
+    let focusedElementId: string | undefined;
+    bridge.connectInteractions({
+      getFocusedElementId: () => focusedElementId,
+      focus: (elementId) => {
+        focusedElementId = elementId;
+        calls.push(`focus:${elementId}`);
+        return true;
+      },
+      blur: (elementId) => {
+        focusedElementId = undefined;
+        calls.push(`blur:${elementId}`);
+        return true;
+      },
+      activate: (elementId) => {
+        calls.push(`activate:${elementId}`);
+        return true;
+      },
+      keyDown: (event) => calls.push(`keydown:${event.key}`),
+      keyUp: (event) => calls.push(`keyup:${event.key}`),
+    });
+
+    const action = host.querySelector<HTMLButtonElement>('[data-astylar-id="action"]');
+    expect(canvas.tabIndex).toBe(-1);
+    expect(bridge.snapshot.eventRegistrations).toBe(5);
+    action?.focus();
+    action?.dispatchEvent(new KeyboardEvent('keydown', {
+      key: 'Enter', bubbles: true, cancelable: true,
+    }));
+    action?.dispatchEvent(new KeyboardEvent('keyup', {
+      key: 'Enter', bubbles: true, cancelable: true,
+    }));
+    action?.click();
+    action?.blur();
+    await new Promise<void>((resolve) => setTimeout(resolve, 0));
+
+    bridge.queueFocusSync(() => 'action');
+    await Promise.resolve();
+    expect(document.activeElement).toBe(action);
+    expect(calls).toEqual([
+      'focus:action', 'keydown:Enter', 'keyup:Enter', 'activate:action',
+      'blur:action', 'focus:action',
+    ]);
+
+    bridge.dispose();
+    expect(canvas.tabIndex).toBe(4);
+    expect(bridge.snapshot.eventRegistrations).toBe(0);
+  });
+
+  it('marks native Tab focus transitions as selection preserving', () => {
+    const bridge = new AstylarSemanticBridge(canvas);
+    bridge.reconcile({
+      styles: [],
+      root: { children: [
+        { type: 'input', inputType: 'text', id: 'first', value: 'First' },
+        { type: 'input', inputType: 'text', id: 'second', value: 'Second' },
+      ] },
+    });
+    const focusCalls: Array<[string, boolean]> = [];
+    let focusedElementId: string | undefined;
+    bridge.connectInteractions({
+      getFocusedElementId: () => focusedElementId,
+      focus: (elementId, preserveSelection) => {
+        focusedElementId = elementId;
+        focusCalls.push([elementId, !!preserveSelection]);
+        return true;
+      },
+      blur: (elementId) => {
+        if (focusedElementId === elementId) focusedElementId = undefined;
+        return true;
+      },
+      activate: () => true,
+      keyDown: () => undefined,
+      keyUp: () => undefined,
+    });
+
+    const first = host.querySelector<HTMLInputElement>('[data-astylar-id="first"]');
+    const second = host.querySelector<HTMLInputElement>('[data-astylar-id="second"]');
+    first?.focus();
+    first?.dispatchEvent(new KeyboardEvent('keydown', {
+      key: 'Tab', bubbles: true, cancelable: true,
+    }));
+    second?.focus();
+
+    expect(focusCalls).toEqual([['first', false], ['second', true]]);
+    bridge.dispose();
+  });
+
   function siteData(): SiteData {
     return {
       styles: [],

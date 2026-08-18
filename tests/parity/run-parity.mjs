@@ -830,6 +830,23 @@ async function performInteractionAction(page, mode, action, report) {
     case 'type-text':
       await page.keyboard.type(action.text);
       return;
+    case 'semantic-focus': {
+      const selector = mode === 'astylar'
+        ? `[data-astylar-id="${escapeSelectorValue(action.elementId)}"]`
+        : `[id="${escapeSelectorValue(action.elementId)}"]`;
+      await page.locator(selector).focus();
+      return;
+    }
+    case 'semantic-activate': {
+      const selector = mode === 'astylar'
+        ? `[data-astylar-id="${escapeSelectorValue(action.elementId)}"]`
+        : `[id="${escapeSelectorValue(action.elementId)}"]`;
+      await page.locator(selector).evaluate((element) => {
+        if (!(element instanceof HTMLElement)) throw new Error('Semantic target is not an element');
+        element.click();
+      });
+      return;
+    }
     case 'wheel': {
       const { x, y } = await getInteractionPoint(page, mode, action.elementId, report);
       await page.mouse.move(x, y);
