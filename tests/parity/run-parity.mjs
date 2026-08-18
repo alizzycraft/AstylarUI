@@ -961,9 +961,11 @@ function compareInteraction(reference, astylar) {
     return ['missing interaction report'];
   }
   const errors = [];
-  if (JSON.stringify(referenceInteraction.events) !== JSON.stringify(astylarInteraction.events)) {
+  const referenceEvents = normalizeModalCloseScheduling(referenceInteraction.events);
+  const astylarEvents = normalizeModalCloseScheduling(astylarInteraction.events);
+  if (JSON.stringify(referenceEvents) !== JSON.stringify(astylarEvents)) {
     errors.push(
-      `event logs differ (${JSON.stringify(referenceInteraction.events)} vs ${JSON.stringify(astylarInteraction.events)})`,
+      `event logs differ (${JSON.stringify(referenceEvents)} vs ${JSON.stringify(astylarEvents)})`,
     );
   }
   if (referenceInteraction.focusedElementId !== astylarInteraction.focusedElementId) {
@@ -1023,6 +1025,25 @@ function compareInteraction(reference, astylar) {
     }
   }
   return errors;
+}
+
+/**
+ * Native dialog `close` is queued as a task. Depending on browser/OS input-task
+ * timing, that task can run immediately before or after the physical Escape
+ * keyup. Canonicalize only that adjacent pair; cancel, blur, restored focus,
+ * every other event, and all other ordering remain exact.
+ */
+function normalizeModalCloseScheduling(events = []) {
+  const normalized = [...events];
+  for (let index = 0; index < normalized.length - 1; index += 1) {
+    if (normalized[index]?.type === 'close' &&
+        normalized[index + 1]?.type === 'keyup' &&
+        normalized[index + 1]?.key === 'Escape') {
+      [normalized[index], normalized[index + 1]] = [normalized[index + 1], normalized[index]];
+      index += 1;
+    }
+  }
+  return normalized;
 }
 
 function normalizeComparableControl(control) {
