@@ -308,6 +308,44 @@ describe('AstylarInteractionRuntime', () => {
     engine.dispose();
   });
 
+  it('walks generated mesh ancestry to find the authored wheel target', () => {
+    const engine = new NullEngine();
+    const scene = new Scene(engine);
+    const ancestor = MeshBuilder.CreatePlane('ancestor', {}, scene);
+    ancestor.metadata = { elementId: 'ancestor' };
+    const child = MeshBuilder.CreatePlane('generated-text-child', {}, scene);
+    child.parent = ancestor;
+    child.metadata = { elementId: 'generated-text-id' };
+    const point = { x: 0, y: 0, z: 0 };
+    const canvas = document.createElement('canvas');
+    const calls: string[] = [];
+    spyOn(scene, 'pick').and.returnValue({ hit: true, pickedMesh: child, pickedPoint: point } as never);
+    const runtime = new AstylarInteractionRuntime(
+      scene,
+      { styles: [], root: { children: [{ type: 'div', id: 'ancestor' }] } },
+      {},
+      undefined,
+      undefined,
+      canvas,
+      {
+        scrollFrom: (elementId) => {
+          calls.push(elementId);
+          return elementId === 'ancestor';
+        },
+        isPointVisible: () => true,
+      },
+    );
+    const wheel = new WheelEvent('wheel', { deltaY: 70, cancelable: true });
+
+    canvas.dispatchEvent(wheel);
+
+    expect(calls).toEqual(['generated-text-id', 'ancestor']);
+    expect(wheel.defaultPrevented).toBeTrue();
+    runtime.dispose();
+    scene.dispose();
+    engine.dispose();
+  });
+
   it('emits input after text mutation and commits change before blur', () => {
     const engine = new NullEngine();
     const scene = new Scene(engine);

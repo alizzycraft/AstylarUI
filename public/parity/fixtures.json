@@ -396,11 +396,11 @@
     "id": "representative-project-dashboard",
     "title": "Representative project management dashboard",
     "category": "composed-application",
-    "expectedBehavior": "A realistic project workspace reflows across desktop, tablet, and mobile while search editing, filtered application updates, and pointer/keyboard task toggling retain browser-equivalent state and events.",
+    "expectedBehavior": "A realistic project workspace scrolls vertically and horizontally across responsive reflow while pointer-selected search editing, filtered application updates, and pointer/keyboard task toggling retain browser-equivalent state and events.",
     "viewportIds": ["desktop", "tablet", "mobile"],
     "responsiveSequence": ["desktop", "tablet", "mobile", "desktop"],
     "dynamicStepCount": 1,
-    "interactionStepCount": 6
+    "interactionStepCount": 7
   },
   {
     "id": "representative-data-management",

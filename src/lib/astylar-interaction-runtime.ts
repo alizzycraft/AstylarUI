@@ -434,17 +434,19 @@ export class AstylarInteractionRuntime {
   private readonly handleWheel = (event: WheelEvent): void => {
     if (this.disposed || !this.scrolling) return;
     const pick = this.scene.pick(this.scene.pointerX, this.scene.pointerY);
-    const targetId = this.resolveElementId(pick?.pickedMesh ?? undefined);
-    if (!targetId || !this.scrolling.isPointVisible(targetId, pick?.pickedPoint ?? undefined)) {
-      return;
-    }
     const lineScale = 16;
     const pageScale = this.canvas?.clientHeight || 1;
     const factor = event.deltaMode === WheelEvent.DOM_DELTA_LINE
       ? lineScale
       : event.deltaMode === WheelEvent.DOM_DELTA_PAGE ? pageScale : 1;
-    if (this.scrolling.scrollFrom(targetId, event.deltaX * factor, event.deltaY * factor)) {
-      event.preventDefault();
+    const deltaX = event.deltaX * factor;
+    const deltaY = event.deltaY * factor;
+    for (const targetId of this.resolveElementIds(pick?.pickedMesh ?? undefined)) {
+      if (this.scrolling.isPointVisible(targetId, pick?.pickedPoint ?? undefined) &&
+          this.scrolling.scrollFrom(targetId, deltaX, deltaY)) {
+        event.preventDefault();
+        return;
+      }
     }
   };
 
@@ -713,12 +715,19 @@ export class AstylarInteractionRuntime {
   }
 
   private resolveElementId(mesh: AbstractMesh | undefined): string | undefined {
+    return this.resolveElementIds(mesh)[0];
+  }
+
+  private resolveElementIds(mesh: AbstractMesh | undefined): string[] {
+    const elementIds: string[] = [];
     let candidate: AbstractMesh | null | undefined = mesh;
     while (candidate) {
       const elementId = candidate.metadata?.elementId;
-      if (typeof elementId === 'string' && elementId) return elementId;
+      if (typeof elementId === 'string' && elementId && !elementIds.includes(elementId)) {
+        elementIds.push(elementId);
+      }
       candidate = candidate.parent instanceof AbstractMesh ? candidate.parent : undefined;
     }
-    return undefined;
+    return elementIds;
   }
 }

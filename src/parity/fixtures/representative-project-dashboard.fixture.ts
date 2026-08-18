@@ -6,7 +6,7 @@ export const representativeProjectDashboardFixture: ParityFixture = {
   title: 'Representative project management dashboard',
   category: 'composed-application',
   expectedBehavior:
-    'A realistic project workspace reflows across desktop, tablet, and mobile while search editing, filtered application updates, and pointer/keyboard task toggling retain browser-equivalent state and events.',
+    'A realistic project workspace scrolls vertically and horizontally across responsive reflow while pointer-selected search editing, filtered application updates, and pointer/keyboard task toggling retain browser-equivalent state and events.',
   viewportIds: ['desktop', 'tablet', 'mobile'],
   responsiveSequence: ['desktop', 'tablet', 'mobile', 'desktop'],
   measurementIds: [
@@ -16,25 +16,32 @@ export const representativeProjectDashboardFixture: ParityFixture = {
     'pm-tasks', 'pm-task-heading', 'pm-task-one', 'pm-task-one-slot', 'pm-task-one-title',
     'pm-task-two', 'pm-task-two-slot', 'pm-task-two-title', 'pm-task-three', 'pm-task-three-title',
     'pm-activity', 'pm-activity-title', 'pm-activity-list', 'pm-activity-one',
-    'pm-activity-two', 'pm-activity-three', 'pm-activity-four', 'pm-help',
+    'pm-activity-two', 'pm-activity-three', 'pm-activity-four', 'pm-activity-five',
+    'pm-activity-six', 'pm-help',
   ],
   optionalMeasurementIds: [
     'pm-task-one', 'pm-task-one-slot', 'pm-task-one-title',
     'pm-task-three', 'pm-task-three-title',
   ],
   interactionIds: ['pm-search', 'pm-task-two-slot', 'pm-task-two-check'],
+  scrollIds: ['pm-activity-list'],
   interactionEventTypes: [
     'pointerdown', 'pointerup', 'click', 'focus', 'blur',
     'keydown', 'keyup', 'input', 'change',
   ],
   interactionSteps: [
-    { id: 'focus-search', actions: [{ type: 'click', elementId: 'pm-search' }] },
-    { id: 'select-search', actions: [{ type: 'press-key', key: 'Control+A' }] },
+    { id: 'scroll-recent-activity', actions: [{ type: 'wheel', elementId: 'pm-activity-list', deltaY: 96 }] },
+    { id: 'select-search-backward', actions: [
+      { type: 'pointer-down', elementId: 'pm-search', offsetX: 174, offsetY: 20 },
+      { type: 'hover', elementId: 'pm-search', offsetX: 10, offsetY: 20 },
+      { type: 'pointer-up' },
+    ] },
     { id: 'enter-filter', actions: [{ type: 'type-text', text: 'launch' }] },
     {
       id: 'filter-and-reflow-mobile',
       actions: [{ type: 'apply-update', stepIndex: 0, viewportId: 'mobile' }],
     },
+    { id: 'scroll-mobile-activity', actions: [{ type: 'wheel', elementId: 'pm-activity-list', deltaX: 112 }] },
     { id: 'complete-filtered-task', actions: [{ type: 'click', elementId: 'pm-task-two-slot' }] },
     { id: 'reopen-filtered-task', actions: [{ type: 'press-key', key: 'Space' }] },
   ],
@@ -78,6 +85,8 @@ export const representativeProjectDashboardFixture: ParityFixture = {
                 <article id="pm-activity-two"><span>Ravi moved a task to review</span></article>
                 <article id="pm-activity-three"><span>Sasha shared final assets</span></article>
                 <article id="pm-activity-four"><span>Jon added a launch note</span></article>
+                <article id="pm-activity-five"><span>Leah updated the timeline</span></article>
+                <article id="pm-activity-six"><span>Omar assigned final QA</span></article>
               </div>
             </aside>
           </main>
@@ -128,7 +137,7 @@ export const representativeProjectDashboardFixture: ParityFixture = {
       #pm-status-one { background:#ede9fe; color:#6d28d9; } #pm-status-two { background:#fef3c7; color:#92400e; } #pm-status-three { background:#fee2e2; color:#991b1b; }
       #pm-activity { width:168px; padding:12px; background:#ffffff; overflow:hidden; }
       #pm-activity-title { width:144px; height:28px; margin:0 0 8px; color:#0f172a; font:700 16px/28px Arial,sans-serif; }
-      #pm-activity-list { display:flex; flex-direction:column; gap:8px; width:144px; height:428px; background:#f1f5f9; overflow:hidden; }
+      #pm-activity-list { display:flex; flex-direction:column; gap:8px; width:144px; height:428px; background:#f1f5f9; overflow:auto; }
       #pm-activity-list article { display:flex; flex:0 0 88px; flex-direction:column; width:144px; height:88px; padding:10px; background:#f1f5f9; border-radius:6px; }
       #pm-activity-list strong { height:24px; color:#1e3a8a; font:700 12px/24px Arial,sans-serif; }
       #pm-activity-list span { height:60px; color:#475569; font:400 12px/20px Arial,sans-serif; }
@@ -219,7 +228,7 @@ export const representativeProjectDashboardFixture: ParityFixture = {
       { selector:'#pm-status-one', background:'#ede9fe', color:'#6d28d9' }, { selector:'#pm-status-two', background:'#fef3c7', color:'#92400e' }, { selector:'#pm-status-three', background:'#fee2e2', color:'#991b1b' },
       { selector:'#pm-activity', width:'168px', padding:'12px', background:'#ffffff', overflow:'hidden' },
       { selector:'#pm-activity-title', width:'144px', height:'28px', margin:'0 0 8px', color:'#0f172a', fontFamily:'Arial, sans-serif', fontSize:'16px', fontWeight:'700', lineHeight:'28px' },
-      { selector:'#pm-activity-list', display:'flex', flexDirection:'column', gap:'8px', width:'144px', height:'428px', background:'#f1f5f9', overflow:'hidden' },
+      { selector:'#pm-activity-list', display:'flex', flexDirection:'column', gap:'8px', width:'144px', height:'428px', background:'#f1f5f9', overflow:'auto' },
       { selector:'#pm-activity-list article', display:'flex', flex:'0 0 88px', flexDirection:'column', width:'144px', height:'88px', padding:'10px', background:'#f1f5f9', borderRadius:'6px' },
       { selector:'#pm-activity-list strong', height:'24px', color:'#1e3a8a', fontFamily:'Arial, sans-serif', fontSize:'12px', fontWeight:'700', lineHeight:'24px' },
       { selector:'#pm-activity-list span', height:'60px', color:'#475569', fontFamily:'Arial, sans-serif', fontSize:'12px', lineHeight:'20px' },
@@ -293,6 +302,8 @@ export const representativeProjectDashboardFixture: ParityFixture = {
                 { type:'article', id:'pm-activity-two', children:[{ type:'span', textContent:'Ravi moved a task to review' }] },
                 { type:'article', id:'pm-activity-three', children:[{ type:'span', textContent:'Sasha shared final assets' }] },
                 { type:'article', id:'pm-activity-four', children:[{ type:'span', textContent:'Jon added a launch note' }] },
+                { type:'article', id:'pm-activity-five', children:[{ type:'span', textContent:'Leah updated the timeline' }] },
+                { type:'article', id:'pm-activity-six', children:[{ type:'span', textContent:'Omar assigned final QA' }] },
               ] },
             ] },
           ] },
