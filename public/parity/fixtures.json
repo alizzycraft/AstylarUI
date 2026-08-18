@@ -848,5 +848,12 @@
     "category": "forms-interactive",
     "expectedBehavior": "Clicking at different horizontal positions in a text input focuses it and places a collapsed caret at the nearest browser text boundary.",
     "interactionStepCount": 3
+  },
+  {
+    "id": "interaction-pointer-drag-selection",
+    "title": "Bidirectional pointer drag selection",
+    "category": "forms-interactive",
+    "expectedBehavior": "Forward and backward pointer drags expose ordered selection endpoints while retaining the active caret direction, and typing replaces each selected range with browser-equivalent events.",
+    "interactionStepCount": 4
   }
 ]

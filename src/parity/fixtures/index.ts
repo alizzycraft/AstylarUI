@@ -130,6 +130,7 @@ import { overflowUpdateStateFixture } from './overflow-update-state.fixture';
 import { overflowReplacementCleanupFixture } from './overflow-replacement-cleanup.fixture';
 import { overflowScrolledTargetFixture } from './overflow-scrolled-target.fixture';
 import { interactionPointerCaretFixture } from './interaction-pointer-caret.fixture';
+import { interactionPointerDragSelectionFixture } from './interaction-pointer-drag-selection.fixture';
 import { ParityFixture } from '../parity.types';
 
 const fixtures: readonly ParityFixture[] = [
@@ -264,7 +265,8 @@ const fixtures: readonly ParityFixture[] = [
   overflowUpdateStateFixture,
   overflowReplacementCleanupFixture,
   overflowScrolledTargetFixture,
-  interactionPointerCaretFixture
+  interactionPointerCaretFixture,
+  interactionPointerDragSelectionFixture
 ];
 
 const fixturesById = new Map(fixtures.map((fixture) => [fixture.id, fixture]));
