@@ -653,11 +653,51 @@ export class SelectManager {
         const dropdownHeight = selectElement.dropdownMesh.getBoundingInfo().boundingBox.extendSize.y * 2;
 
         const nativePopupGap = selectElement.cameraScale || 0.001;
-        selectElement.dropdownMesh.position.y = -(selectHeight / 2 + dropdownHeight / 2 + nativePopupGap);
+        const popupOffset = selectHeight / 2 + dropdownHeight / 2 + nativePopupGap;
+        selectElement.dropdownMesh.position.y = this.shouldPlacePopupAbove(
+            selectElement,
+            dropdownHeight
+        ) ? popupOffset : -popupOffset;
         selectElement.dropdownMesh.position.z = 0.15; // Move forward (Positive Z) to avoid Z-fighting/hiding
 
         // Add border to dropdown for HTML-like appearance
         this.addDropdownBorder(selectElement);
+    }
+
+    private shouldPlacePopupAbove(
+        selectElement: SelectElement,
+        dropdownHeight: number
+    ): boolean {
+        const scene = selectElement.mesh.getScene();
+        const camera = scene.activeCamera;
+        if (!camera) return false;
+
+        const canvas = scene.getEngine().getRenderingCanvas();
+        const viewportWidth = canvas?.clientWidth || scene.getEngine().getRenderWidth();
+        const viewportHeight = canvas?.clientHeight || scene.getEngine().getRenderHeight();
+        const viewport = camera.viewport.toGlobal(viewportWidth, viewportHeight);
+        const projectedCenter = BABYLON.Vector3.Project(
+            selectElement.mesh.getAbsolutePosition(),
+            BABYLON.Matrix.IdentityReadOnly,
+            scene.getTransformMatrix(),
+            viewport
+        );
+        const scale = selectElement.cameraScale || 0.001;
+        const selectHeight = selectElement.mesh.getBoundingInfo().boundingBox.extendSize.y * 2;
+        const selectHeightPx = selectHeight / scale;
+        const popupHeightPx = dropdownHeight / scale;
+        const gapPx = 1;
+        const spaceAbove = projectedCenter.y - selectHeightPx / 2;
+        const spaceBelow = viewportHeight - (projectedCenter.y + selectHeightPx / 2);
+        return this.choosePopupDirection(spaceAbove, spaceBelow, popupHeightPx + gapPx) === 'above';
+    }
+
+    private choosePopupDirection(
+        spaceAbove: number,
+        spaceBelow: number,
+        requiredSpace: number
+    ): 'above' | 'below' {
+        return spaceBelow < requiredSpace && spaceAbove > spaceBelow ? 'above' : 'below';
     }
 
     /**

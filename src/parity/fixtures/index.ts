@@ -139,6 +139,7 @@ import { interactionSelectExpandedCancelFixture } from './interaction-select-exp
 import { interactionSelectExpandedKeyboardFixture } from './interaction-select-expanded-keyboard.fixture';
 import { interactionSelectExpandedPointerFixture } from './interaction-select-expanded-pointer.fixture';
 import { interactionSelectExpandedClickawayFixture } from './interaction-select-expanded-clickaway.fixture';
+import { interactionSelectExpandedPlacementFixture } from './interaction-select-expanded-placement.fixture';
 import { ParityFixture } from '../parity.types';
 
 const fixtures: readonly ParityFixture[] = [
@@ -282,7 +283,8 @@ const fixtures: readonly ParityFixture[] = [
   interactionSelectExpandedCancelFixture,
   interactionSelectExpandedKeyboardFixture,
   interactionSelectExpandedPointerFixture,
-  interactionSelectExpandedClickawayFixture
+  interactionSelectExpandedClickawayFixture,
+  interactionSelectExpandedPlacementFixture
 ];
 
 const fixturesById = new Map(fixtures.map((fixture) => [fixture.id, fixture]));

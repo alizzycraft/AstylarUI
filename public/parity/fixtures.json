@@ -911,5 +911,12 @@
     "category": "forms-interactive",
     "expectedBehavior": "Clicking a non-focusable surface outside an expanded single-select dismisses its popup without changing the selected option and applies the browser focus/event boundary.",
     "interactionStepCount": 2
+  },
+  {
+    "id": "interaction-select-expanded-placement",
+    "title": "Expanded select viewport placement",
+    "category": "forms-interactive",
+    "expectedBehavior": "An expanded single-select near the viewport bottom places its complete popup above the control when the available space below is insufficient.",
+    "interactionStepCount": 2
   }
 ]

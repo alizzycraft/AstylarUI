@@ -167,6 +167,14 @@ describe('SelectManager', () => {
     expect(select.validationState.dirty).toBeTrue();
   });
 
+  it('places a popup above only when below space is insufficient and above is larger', () => {
+    const manager = new SelectManager({} as TextRenderingService, {} as BabylonMeshService);
+
+    expect(manager['choosePopupDirection'](490, 54, 105)).toBe('above');
+    expect(manager['choosePopupDirection'](180, 220, 105)).toBe('below');
+    expect(manager['choosePopupDirection'](40, 54, 105)).toBe('below');
+  });
+
   it('disposes the replaced display material when selection redraws', () => {
     const textRendering = {
       renderTextToTexture: () => ({ getSize: () => ({ width: 80, height: 24 }) }),
