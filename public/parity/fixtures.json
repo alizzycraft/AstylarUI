@@ -904,5 +904,12 @@
     "category": "forms-interactive",
     "expectedBehavior": "A pointer click on an enabled option in an expanded single-select commits that option, closes the popup, and exposes only the browser events owned by the select control.",
     "interactionStepCount": 2
+  },
+  {
+    "id": "interaction-select-expanded-clickaway",
+    "title": "Expanded select click-away dismissal",
+    "category": "forms-interactive",
+    "expectedBehavior": "Clicking a non-focusable surface outside an expanded single-select dismisses its popup without changing the selected option and applies the browser focus/event boundary.",
+    "interactionStepCount": 2
   }
 ]
