@@ -818,5 +818,13 @@
     "category": "overflow-scrolling",
     "expectedBehavior": "The nearest nested overflow container consumes wheel movement until it reaches a boundary, then further movement in that direction scrolls and clamps its overflow ancestor.",
     "interactionStepCount": 8
+  },
+  {
+    "id": "overflow-update-state",
+    "title": "Scroll state across compatible updates",
+    "category": "overflow-scrolling",
+    "expectedBehavior": "A stable unique scroll container preserves its offset through a compatible sibling update and clamps that offset when a later compatible update shortens its content.",
+    "dynamicStepCount": 2,
+    "interactionStepCount": 3
   }
 ]
