@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Matrix, Mesh, PointerInfo, Vector3 } from '@babylonjs/core';
+import { Matrix, Mesh, Plane, PointerInfo, Vector3 } from '@babylonjs/core';
 import { BabylonRender } from '../interfaces/render.types';
 import { TextInteractionEntry, TextInteractionRegistryService } from './text-interaction-registry.service';
 import { CssPoint, TextSelectionControllerService } from './text-selection-controller.service';
@@ -35,12 +35,12 @@ export class PointerInteractionService {
       return;
     }
 
-    const entry = this.resolveTextEntry(pointerInfo, render);
+    const entry = this.resolveActiveTextEntry();
     if (!entry) {
       return;
     }
 
-    const cssPoint = this.toCssPoint(pointerInfo, entry);
+    const cssPoint = this.toCssPoint(pointerInfo, entry, false);
     if (!cssPoint) {
       return;
     }
@@ -72,9 +72,9 @@ export class PointerInteractionService {
       return;
     }
 
-    const entry = this.resolveTextEntry(pointerInfo, render);
+    const entry = this.resolveActiveTextEntry();
     if (entry) {
-      const cssPoint = this.toCssPoint(pointerInfo, entry);
+      const cssPoint = this.toCssPoint(pointerInfo, entry, false);
       if (cssPoint) {
         this.textSelectionController.updateSelection(entry, cssPoint);
       }
@@ -150,7 +150,16 @@ export class PointerInteractionService {
     return this.textInteractionRegistry.getByMesh(mesh);
   }
 
-  private toCssPoint(pointerInfo: PointerInfo, entry: TextInteractionEntry): CssPoint | undefined {
+  private resolveActiveTextEntry(): TextInteractionEntry | undefined {
+    const elementId = this.textSelectionController.snapshot.elementId;
+    return elementId ? this.textInteractionRegistry.getByElementId(elementId) : undefined;
+  }
+
+  private toCssPoint(
+    pointerInfo: PointerInfo,
+    entry: TextInteractionEntry,
+    constrainToViewport = true
+  ): CssPoint | undefined {
     const metrics = entry.metrics;
     if (!metrics) {
       return undefined;
@@ -170,13 +179,17 @@ export class PointerInteractionService {
 
         if (hit.hit && hit.pickedPoint) {
           pickedPoint = hit.pickedPoint;
-          console.log('[toCssPoint] Manual ray cast successful:', pickedPoint);
         } else {
-          console.log('[toCssPoint] Manual ray cast failed');
-          return undefined;
+          const world = entry.mesh.computeWorldMatrix(true);
+          const planeOrigin = Vector3.TransformCoordinates(Vector3.Zero(), world);
+          const planeNormal = Vector3.TransformNormal(Vector3.Forward(), world).normalize();
+          const distance = ray.intersectsPlane(Plane.FromPositionAndNormal(planeOrigin, planeNormal));
+          if (distance === null) {
+            return undefined;
+          }
+          pickedPoint = ray.origin.add(ray.direction.scale(distance));
         }
       } else {
-        console.log('[toCssPoint] Cannot perform manual ray cast - missing scene or event data');
         return undefined;
       }
     }
@@ -199,10 +212,12 @@ export class PointerInteractionService {
     // With World X+ being Left and the text mesh rotated 180 degrees on Z,
     // the local X+ aligns with World Right (Visual Right).
     // So (local.x + halfWidth) / width correctly maps Visual Left to 0 and Visual Right to 1.
-    const normalizedX = clamp((localPoint.x + halfWidth) / width, 0, 1);
+    const rawNormalizedX = (localPoint.x + halfWidth) / width;
+    const normalizedX = constrainToViewport ? clamp(rawNormalizedX, 0, 1) : rawNormalizedX;
     // Similarly, with 180 degree rotation, local Y+ aligns with World Down (Visual Down).
     // So (local.y + halfHeight) / height correctly maps Visual Top to 0 and Visual Bottom to 1.
-    const normalizedY = clamp((localPoint.y + halfHeight) / height, 0, 1);
+    const rawNormalizedY = (localPoint.y + halfHeight) / height;
+    const normalizedY = constrainToViewport ? clamp(rawNormalizedY, 0, 1) : rawNormalizedY;
 
     const cssMetrics = entry.metrics?.css;
     const cssWidth = cssMetrics?.totalWidth ?? 0;

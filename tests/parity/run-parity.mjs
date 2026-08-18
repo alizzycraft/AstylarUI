@@ -649,6 +649,9 @@ async function performInteractionAction(page, mode, action, report) {
     case 'pointer-up':
       await page.mouse.up();
       return;
+    case 'pause':
+      await page.waitForTimeout(action.durationMs);
+      return;
     case 'press-key':
       await page.keyboard.press(action.key);
       return;

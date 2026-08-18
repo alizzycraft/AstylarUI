@@ -156,10 +156,21 @@ export class TextInputManager {
             // Only sync if focused
             if (!textInput.focused) return;
 
-            this.applyControllerState(textInput, state);
+            const suppressPointerSelectionScroll =
+                state.selectionSource === 'pointer' && state.hasSelection;
+            if (suppressPointerSelectionScroll) {
+                this.suppressSelectionScroll.add(state.elementId);
+            }
+            try {
+                this.applyControllerState(textInput, state);
 
-            // Update visual cursor
-            this.updateCursorPosition(textInput, this.activeRender, textInput.style);
+                // Update visual cursor
+                this.updateCursorPosition(textInput, this.activeRender, textInput.style);
+            } finally {
+                if (suppressPointerSelectionScroll) {
+                    this.suppressSelectionScroll.delete(state.elementId);
+                }
+            }
         });
     }
 

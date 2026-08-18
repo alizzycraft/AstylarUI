@@ -20,7 +20,8 @@ describe('TextSelectionControllerService', () => {
       anchorIndex: 2,
       focusIndex: 2,
       isPointerDown: true,
-      hasSelection: false
+      hasSelection: false,
+      selectionSource: 'pointer'
     });
   });
 
@@ -34,6 +35,7 @@ describe('TextSelectionControllerService', () => {
       focusIndex: 4,
       isPointerDown: true,
       hasSelection: true,
+      selectionSource: 'pointer',
       range: { start: 0, end: 4 }
     });
   });
@@ -59,7 +61,8 @@ describe('TextSelectionControllerService', () => {
     expectState(stateAfterRight, {
       anchorIndex: 1,
       focusIndex: 1,
-      hasSelection: false
+      hasSelection: false,
+      selectionSource: 'keyboard'
     });
 
     const stateAfterShift = service.moveSelectionWithKeyboard(entry, 'right', true);

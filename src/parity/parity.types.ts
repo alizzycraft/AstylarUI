@@ -103,6 +103,11 @@ export interface ParityPointerUpAction {
   type: 'pointer-up';
 }
 
+export interface ParityPauseAction {
+  type: 'pause';
+  durationMs: number;
+}
+
 export interface ParityPressKeyAction {
   type: 'press-key';
   key: string;
@@ -131,6 +136,7 @@ export type ParityInteractionAction =
   | ParityHoverAction
   | ParityPointerDownAction
   | ParityPointerUpAction
+  | ParityPauseAction
   | ParityPressKeyAction
   | ParityTypeTextAction
   | ParityApplyUpdateAction

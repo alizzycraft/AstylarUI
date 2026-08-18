@@ -19,6 +19,7 @@ export interface TextSelectionState {
   range: TextSelectionRange | null;
   isPointerDown: boolean;
   hasSelection: boolean;
+  selectionSource: 'pointer' | 'keyboard' | null;
 }
 
 const DEFAULT_STATE: TextSelectionState = {
@@ -27,7 +28,8 @@ const DEFAULT_STATE: TextSelectionState = {
   focusIndex: null,
   range: null,
   isPointerDown: false,
-  hasSelection: false
+  hasSelection: false,
+  selectionSource: null
 };
 
 @Injectable({ providedIn: 'root' })
@@ -54,7 +56,8 @@ export class TextSelectionControllerService {
       focusIndex: caretIndex,
       range: { start: caretIndex, end: caretIndex },
       isPointerDown: true,
-      hasSelection: false
+      hasSelection: false,
+      selectionSource: 'pointer'
     };
 
     this.activeEntry = entry;
@@ -85,7 +88,8 @@ export class TextSelectionControllerService {
       focusIndex: caretIndex,
       range,
       isPointerDown: true,
-      hasSelection: range !== null && range.start !== range.end
+      hasSelection: range !== null && range.start !== range.end,
+      selectionSource: 'pointer'
     };
 
     console.log('[TextSelectionController] Update selection:', nextState);
@@ -186,7 +190,8 @@ export class TextSelectionControllerService {
       focusIndex: nextFocus,
       range,
       isPointerDown: false,
-      hasSelection
+      hasSelection,
+      selectionSource: 'keyboard'
     });
   }
 
@@ -206,7 +211,8 @@ export class TextSelectionControllerService {
       focusIndex: focus,
       range,
       isPointerDown: false,
-      hasSelection: range !== null && range.start !== range.end
+      hasSelection: range !== null && range.start !== range.end,
+      selectionSource: 'keyboard'
     });
   }
 
