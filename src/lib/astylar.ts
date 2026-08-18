@@ -43,6 +43,7 @@ import { OverflowClipService } from '../app/services/dom/elements/overflow-clip.
 import {
   AstylarSemanticBridge,
   AstylarSemanticBridgeOptions,
+  AstylarSemanticControlState,
   AstylarSemanticSnapshot,
 } from './astylar-semantic-bridge';
 
@@ -319,6 +320,8 @@ export class Astylar {
                 this.setElementFocusState(focusedElementId, true);
               }
             }
+            semanticBridge?.syncControlStates((elementId) =>
+              this.getLiveSemanticControlState(elementId));
           },
           this.imageResources.getSceneTextures(scene),
         );
@@ -327,10 +330,20 @@ export class Astylar {
     );
     this.sessions.set(scene, session);
     this.activeSession = session;
+    const interactionEvents = semanticBridge
+      ? {
+          ...options?.events,
+          onEvent: (event: Parameters<NonNullable<AstylarEventOptions['onEvent']>>[0]) => {
+            options?.events?.onEvent?.(event);
+            semanticBridge.queueControlStateSync((elementId) =>
+              this.getLiveSemanticControlState(elementId));
+          },
+        }
+      : options?.events;
     const interaction = new AstylarInteractionRuntime(
       scene,
       siteData,
-      options?.events,
+      interactionEvents,
       (elementId) => this.getLiveEventState(elementId),
       {
         getFocusedElementId: () => this.inputElementService.getFocusedElementId(),
@@ -533,6 +546,34 @@ export class Astylar {
     if (typeof input.checked === 'boolean') state.checked = input.checked;
     if (typeof input.selectedIndex === 'number') {
       state.selectedValue = String(input.options?.[input.selectedIndex]?.value ?? input.value ?? '');
+    }
+    return state;
+  }
+
+  private getLiveSemanticControlState(
+    elementId: string,
+  ): AstylarSemanticControlState | undefined {
+    const input = this.inputElementService.getInputElement(elementId);
+    if (!input) return undefined;
+    const state: AstylarSemanticControlState = {
+      value: String(input.value ?? ''),
+      disabled: input.disabled,
+      required: input.required,
+      readonly: !!input.element.readonly,
+    };
+    const live = input as unknown as {
+      checked?: boolean;
+      selectedIndex?: number;
+      dropdownOpen?: boolean;
+    };
+    if (typeof live.checked === 'boolean') {
+      state.checked = live.checked;
+    }
+    if (typeof live.selectedIndex === 'number') {
+      state.selectedIndex = live.selectedIndex;
+    }
+    if (typeof live.dropdownOpen === 'boolean') {
+      state.expanded = live.dropdownOpen;
     }
     return state;
   }

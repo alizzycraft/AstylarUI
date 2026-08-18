@@ -14,6 +14,7 @@ import { flexGrowGapFixture } from './flex-grow-gap.fixture';
 import { semanticDefaultFlowFixture } from './semantic-default-flow.fixture';
 import { semanticStructureFixture } from './semantic-structure.fixture';
 import { semanticNamingFixture } from './semantic-naming.fixture';
+import { semanticControlStateFixture } from './semantic-control-state.fixture';
 import { unorderedListLayoutFixture } from './unordered-list-layout.fixture';
 import { orderedListLayoutFixture } from './ordered-list-layout.fixture';
 import { tableFixedLayoutFixture } from './table-fixed-layout.fixture';
@@ -163,6 +164,7 @@ const fixtures: readonly ParityFixture[] = [
   semanticDefaultFlowFixture,
   semanticStructureFixture,
   semanticNamingFixture,
+  semanticControlStateFixture,
   unorderedListLayoutFixture,
   orderedListLayoutFixture,
   tableFixedLayoutFixture,

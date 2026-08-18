@@ -77,6 +77,57 @@ describe('AstylarSemanticBridge', () => {
     expect(input?.value).toBe('Atlas');
   });
 
+  it('maps native control properties and synchronizes mutable scene state', () => {
+    const bridge = new AstylarSemanticBridge(canvas);
+    bridge.reconcile({
+      styles: [],
+      root: { children: [
+        {
+          type: 'input', id: 'choice', inputType: 'checkbox', value: 'yes',
+          checked: false, required: true, ariaLabel: 'Choice',
+        },
+        {
+          type: 'input', id: 'locked', value: 'Read only', readonly: true,
+          disabled: true, ariaLabel: 'Locked value',
+        },
+        {
+          type: 'select', id: 'plan', value: 'team', required: true,
+          ariaLabel: 'Plan', options: [
+            { value: 'solo', label: 'Solo' },
+            { value: 'team', label: 'Team' },
+            { value: 'retired', label: 'Retired', disabled: true },
+          ],
+        },
+      ] },
+    });
+
+    const choice = host.querySelector<HTMLInputElement>('[data-astylar-id="choice"]');
+    const locked = host.querySelector<HTMLInputElement>('[data-astylar-id="locked"]');
+    const plan = host.querySelector<HTMLSelectElement>('[data-astylar-id="plan"]');
+    expect(choice?.type).toBe('checkbox');
+    expect(choice?.value).toBe('yes');
+    expect(choice?.checked).toBeFalse();
+    expect(choice?.required).toBeTrue();
+    expect(locked?.readOnly).toBeTrue();
+    expect(locked?.disabled).toBeTrue();
+    expect(Array.from(plan?.options ?? []).map((option) => option.textContent)).toEqual([
+      'Solo', 'Team', 'Retired',
+    ]);
+    expect(plan?.selectedIndex).toBe(1);
+    expect(plan?.required).toBeTrue();
+    expect(plan?.options[2].disabled).toBeTrue();
+
+    bridge.syncControlStates((elementId) => ({
+      choice: { value: 'yes', checked: true, required: true, disabled: false },
+      plan: { value: 'solo', selectedIndex: 0, required: true, expanded: true },
+    })[elementId]);
+
+    expect(choice?.checked).toBeTrue();
+    expect(plan?.value).toBe('solo');
+    expect(plan?.selectedIndex).toBe(0);
+    expect(plan?.getAttribute('aria-expanded')).toBe('true');
+  });
+
   function siteData(): SiteData {
     return {
       styles: [],

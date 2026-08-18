@@ -15,6 +15,14 @@
     "semanticIds": ["name-label", "name-control", "name-help", "named-action", "labelled-panel", "panel-title", "panel-description", "named-image"]
   },
   {
+    "id": "semantic-control-state",
+    "title": "Native semantic control values and states",
+    "category": "accessibility-semantics",
+    "expectedBehavior": "Native checkbox, radio, text, select, readonly, required, invalid, and disabled semantics reflect authored defaults and the same live values after scene interactions and form reset.",
+    "interactionStepCount": 5,
+    "semanticIds": ["semantic-check", "semantic-radio-alpha", "semantic-radio-beta", "semantic-text", "semantic-select", "semantic-locked", "semantic-disabled"]
+  },
+  {
     "id": "box-model-basic",
     "title": "Basic content-box geometry",
     "category": "box-model-units",

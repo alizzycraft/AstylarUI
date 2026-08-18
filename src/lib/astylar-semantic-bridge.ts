@@ -11,6 +11,17 @@ export interface AstylarSemanticBridgeOptions {
   host?: HTMLElement;
 }
 
+/** Mutable browser-facing state owned by an Astylar control instance. */
+export interface AstylarSemanticControlState {
+  value?: string;
+  checked?: boolean;
+  disabled?: boolean;
+  required?: boolean;
+  readonly?: boolean;
+  selectedIndex?: number;
+  expanded?: boolean;
+}
+
 /**
  * Maintains the browser-owned semantic counterpart of an Astylar scene.
  *
@@ -27,6 +38,7 @@ export class AstylarSemanticBridge {
   private readonly nodes = new Map<string, HTMLElement>();
   private readonly textNodes = new Map<string, Text>();
   private readonly previousCanvasAriaHidden: string | null;
+  private controlSyncQueued = false;
   private disposed = false;
 
   constructor(
@@ -87,6 +99,31 @@ export class AstylarSemanticBridge {
     }
   }
 
+  /** Synchronizes live scene control state without rebuilding the semantic tree. */
+  syncControlStates(
+    getState: (elementId: string) => AstylarSemanticControlState | undefined,
+  ): void {
+    if (this.disposed) return;
+    for (const node of this.nodes.values()) {
+      const elementId = node.dataset['astylarId'];
+      if (!elementId) continue;
+      const state = getState(elementId);
+      if (state) this.applyControlState(node, state);
+    }
+  }
+
+  /** Coalesces state changes produced during one native input/default-action turn. */
+  queueControlStateSync(
+    getState: (elementId: string) => AstylarSemanticControlState | undefined,
+  ): void {
+    if (this.disposed || this.controlSyncQueued) return;
+    this.controlSyncQueued = true;
+    queueMicrotask(() => {
+      this.controlSyncQueued = false;
+      this.syncControlStates(getState);
+    });
+  }
+
   dispose(): void {
     if (this.disposed) return;
     this.disposed = true;
@@ -131,7 +168,7 @@ export class AstylarSemanticBridge {
     } else {
       this.textNodes.delete(key);
     }
-    for (const [index, child] of (element.children ?? []).entries()) {
+    for (const [index, child] of this.semanticChildren(element).entries()) {
       if (child.hidden) continue;
       childNodes.push(this.reconcileElement(
         child,
@@ -141,6 +178,7 @@ export class AstylarSemanticBridge {
       ));
     }
     node.replaceChildren(...childNodes);
+    this.applyControlState(node, this.authoredControlState(element));
     return node;
   }
 
@@ -181,27 +219,90 @@ export class AstylarSemanticBridge {
     if (element.for && node instanceof HTMLLabelElement) node.htmlFor = this.nativeId(element.for);
     if (node instanceof HTMLInputElement) {
       node.type = element.inputType || 'text';
-      node.value = String(element.value ?? '');
-      node.checked = !!element.checked;
-      node.disabled = !!element.disabled;
-      node.required = !!element.required;
-      node.readOnly = !!element.readonly;
       if (element.placeholder !== undefined) node.placeholder = element.placeholder;
       if (element.name !== undefined) node.name = element.name;
     }
     if (node instanceof HTMLTextAreaElement) {
-      node.value = String(element.value ?? element.textContent ?? '');
-      node.disabled = !!element.disabled;
-      node.required = !!element.required;
-      node.readOnly = !!element.readonly;
       if (element.placeholder !== undefined) node.placeholder = element.placeholder;
       if (element.name !== undefined) node.name = element.name;
     }
     if (node instanceof HTMLButtonElement) {
       node.type = element.inputType === 'submit' ? 'submit' :
         element.inputType === 'reset' ? 'reset' : 'button';
-      node.disabled = !!element.disabled;
     }
+    if (node instanceof HTMLOptionElement) node.value = String(element.value ?? '');
+  }
+
+  private applyControlState(node: HTMLElement, state: AstylarSemanticControlState): void {
+    if (node instanceof HTMLInputElement) {
+      if (state.value !== undefined) node.value = state.value;
+      if (state.checked !== undefined) node.checked = state.checked;
+      if (state.disabled !== undefined) node.disabled = state.disabled;
+      if (state.required !== undefined) node.required = state.required;
+      if (state.readonly !== undefined) node.readOnly = state.readonly;
+      return;
+    }
+    if (node instanceof HTMLTextAreaElement) {
+      if (state.value !== undefined) node.value = state.value;
+      if (state.disabled !== undefined) node.disabled = state.disabled;
+      if (state.required !== undefined) node.required = state.required;
+      if (state.readonly !== undefined) node.readOnly = state.readonly;
+      return;
+    }
+    if (node instanceof HTMLSelectElement) {
+      if (state.disabled !== undefined) node.disabled = state.disabled;
+      if (state.required !== undefined) node.required = state.required;
+      if (state.selectedIndex !== undefined) node.selectedIndex = state.selectedIndex;
+      else if (state.value !== undefined) node.value = state.value;
+      if (state.expanded !== undefined) {
+        node.setAttribute('aria-expanded', String(state.expanded));
+      }
+      return;
+    }
+    if (node instanceof HTMLButtonElement) {
+      if (state.disabled !== undefined) node.disabled = state.disabled;
+      return;
+    }
+    if (node instanceof HTMLOptionElement) {
+      if (state.disabled !== undefined) node.disabled = state.disabled;
+      if (state.checked !== undefined) node.selected = state.checked;
+    }
+  }
+
+  private authoredControlState(element: DOMElement): AstylarSemanticControlState {
+    const state: AstylarSemanticControlState = {
+      disabled: !!element.disabled,
+      required: !!element.required,
+      readonly: !!element.readonly,
+    };
+    if (element.type === 'input' || element.type === 'textarea' ||
+        element.type === 'select' || element.type === 'option') {
+      state.value = String(element.value ?? element.textContent ?? '');
+    }
+    if (element.type === 'input') state.checked = !!element.checked;
+    if (element.type === 'option') state.checked = !!element.selected;
+    if (element.type === 'select') {
+      const options = element.options ?? [];
+      const selectedIndex = element.value === undefined
+        ? 0
+        : options.findIndex((option) => option.value === element.value);
+      state.selectedIndex = selectedIndex < 0 ? 0 : selectedIndex;
+      state.expanded = false;
+    }
+    return state;
+  }
+
+  private semanticChildren(element: DOMElement): DOMElement[] {
+    if (element.children?.length || element.type !== 'select' || !element.options) {
+      return element.children ?? [];
+    }
+    return element.options.map((option) => ({
+      type: 'option',
+      value: String(option.value),
+      textContent: option.label,
+      disabled: option.disabled,
+      selected: element.value !== undefined && option.value === element.value,
+    }));
   }
 
   private nativeId(authoredId: string): string {

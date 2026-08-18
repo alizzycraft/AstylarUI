@@ -29,6 +29,7 @@ export type { AstylarInteractionSnapshot } from './astylar-interaction-runtime';
 export { AstylarSemanticBridge } from './astylar-semantic-bridge';
 export type {
   AstylarSemanticBridgeOptions,
+  AstylarSemanticControlState,
   AstylarSemanticSnapshot,
 } from './astylar-semantic-bridge';
 export type {

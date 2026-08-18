@@ -575,6 +575,8 @@ async function measureInteractionFixture(context, fixture) {
     'reference',
     sequenceDir,
     fixture.interactionStepCount,
+    false,
+    fixture.semanticIds,
   );
   let astylarStates = await captureInteractionMode(
     context,
@@ -584,6 +586,7 @@ async function measureInteractionFixture(context, fixture) {
     sequenceDir,
     fixture.interactionStepCount,
     !!fixture.interactionCycleLength,
+    fixture.semanticIds,
   );
   const catastrophicInteractionIndex = findCatastrophicCapture(referenceStates, astylarStates);
   if (catastrophicInteractionIndex >= 0) {
@@ -599,6 +602,7 @@ async function measureInteractionFixture(context, fixture) {
       sequenceDir,
       fixture.interactionStepCount,
       !!fixture.interactionCycleLength,
+      fixture.semanticIds,
     );
   }
 
@@ -622,6 +626,7 @@ async function measureInteractionFixture(context, fixture) {
         ...astylar.pageErrors.map((error) => `astylar: ${error}`),
         ...reference.report.errors.map((error) => `reference: ${error}`),
         ...astylar.report.errors.map((error) => `astylar: ${error}`),
+        ...compareSemantics(reference.semantics, astylar.semantics),
         ...interactionErrors.map((error) => `interaction: ${error}`),
         ...lifecycleErrors,
       ],
@@ -639,6 +644,7 @@ async function captureInteractionMode(
   sequenceDir,
   stepCount,
   disposeAfter = false,
+  semanticIds = [],
 ) {
   const page = await context.newPage();
   const pageErrors = [];
@@ -680,7 +686,8 @@ async function captureInteractionMode(
       path: path.join(sequenceDir, `${index + 1}-${mode}.png`),
       animations: 'disabled',
     });
-    states.push({ report, screenshot, pageErrors: [...pageErrors] });
+    const semantics = await captureSemanticSnapshots(page, mode, semanticIds);
+    states.push({ report, screenshot, pageErrors: [...pageErrors], semantics });
   }
   const disposal = disposeAfter
     ? await page.evaluate(() => window.__ASTYLAR_PARITY_DISPOSE__?.())
