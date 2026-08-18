@@ -63,6 +63,7 @@ export class SelectManager {
             value: options[selectedIndex]?.value || null,
             options,
             selectedIndex,
+            activeOptionIndex: selectedIndex,
             dropdownOpen: false,
             optionMeshes: [],
             focused: false,
@@ -111,6 +112,7 @@ export class SelectManager {
     openDropdown(selectElement: SelectElement, scene: BABYLON.Scene, style: StyleRule): void {
         if (selectElement.disabled || selectElement.dropdownOpen) return;
 
+        selectElement.activeOptionIndex = selectElement.selectedIndex;
         selectElement.dropdownOpen = true;
 
         // Create dropdown mesh
@@ -133,6 +135,11 @@ export class SelectManager {
         if (!selectElement.dropdownOpen) return;
 
         selectElement.dropdownOpen = false;
+        const hadUncommittedPreview = selectElement.activeOptionIndex !== selectElement.selectedIndex;
+        selectElement.activeOptionIndex = selectElement.selectedIndex;
+        if (hadUncommittedPreview) {
+            this.redrawDisplay(selectElement, selectElement.selectedIndex);
+        }
 
         // Remove click-away listener
         this.removeClickAwayListener(selectElement);
@@ -205,12 +212,15 @@ export class SelectManager {
     navigateOptions(selectElement: SelectElement, direction: 'up' | 'down'): void {
         if (selectElement.options.length === 0) return;
 
-        let newIndex = selectElement.selectedIndex;
+        const currentIndex = selectElement.dropdownOpen
+            ? selectElement.activeOptionIndex
+            : selectElement.selectedIndex;
+        let newIndex = currentIndex;
 
         if (direction === 'up') {
-            newIndex = Math.max(0, selectElement.selectedIndex - 1);
+            newIndex = Math.max(0, currentIndex - 1);
         } else {
-            newIndex = Math.min(selectElement.options.length - 1, selectElement.selectedIndex + 1);
+            newIndex = Math.min(selectElement.options.length - 1, currentIndex + 1);
         }
 
         // Skip disabled options
@@ -218,24 +228,21 @@ export class SelectManager {
             if (direction === 'up') {
                 newIndex--;
                 if (newIndex < 0) {
-                    newIndex = selectElement.selectedIndex; // Stay on current
+                    newIndex = currentIndex; // Stay on current
                     break;
                 }
             } else {
                 newIndex++;
                 if (newIndex >= selectElement.options.length) {
-                    newIndex = selectElement.selectedIndex; // Stay on current
+                    newIndex = currentIndex; // Stay on current
                     break;
                 }
             }
         }
 
-        if (newIndex !== selectElement.selectedIndex) {
+        if (newIndex !== currentIndex) {
             if (selectElement.dropdownOpen) {
-                // An open custom popup moves its highlight until Enter commits it.
-                this.updateOptionHighlight(selectElement, selectElement.selectedIndex, newIndex);
-                selectElement.selectedIndex = newIndex;
-                selectElement.value = selectElement.options[newIndex].value;
+                this.updateOptionHighlight(selectElement, newIndex);
             } else {
                 // Native closed selects commit an arrow-key choice immediately.
                 this.selectOption(selectElement, newIndex);
@@ -251,15 +258,12 @@ export class SelectManager {
         if (selectElement.options[index].disabled) return;
 
         selectElement.selectedIndex = index;
+        selectElement.activeOptionIndex = index;
         selectElement.value = selectElement.options[index].value;
         selectElement.validationState.dirty = true;
 
         // Always update display mesh when selection changes
-        if (selectElement.displayMesh) {
-            this.disposeDisplayMesh(selectElement.displayMesh);
-            // Use stored camera scale instead of trying to recreate render object
-            selectElement.displayMesh = this.createDisplayMeshWithStoredScale(selectElement, selectElement.style);
-        }
+        this.redrawDisplay(selectElement, index);
 
         // Close dropdown
         this.closeDropdown(selectElement);
@@ -268,22 +272,12 @@ export class SelectManager {
     /**
      * Updates the visual highlight on options during keyboard navigation
      */
-    private updateOptionHighlight(selectElement: SelectElement, oldIndex: number, newIndex: number): void {
-        // Update old option material
-        if (selectElement.optionMeshes[oldIndex]) {
-            const oldMaterial = selectElement.optionMeshes[oldIndex].material as BABYLON.StandardMaterial;
-            if (oldMaterial) {
-                oldMaterial.diffuseColor = BABYLON.Color3.White();
-            }
-        }
-
-        // Update new option material
-        if (selectElement.optionMeshes[newIndex]) {
-            const newMaterial = selectElement.optionMeshes[newIndex].material as BABYLON.StandardMaterial;
-            if (newMaterial) {
-                newMaterial.diffuseColor = new BABYLON.Color3(0.9, 0.9, 1.0); // Highlight color
-            }
-        }
+    private updateOptionHighlight(selectElement: SelectElement, newIndex: number): void {
+        selectElement.activeOptionIndex = newIndex;
+        this.redrawDisplay(selectElement, newIndex);
+        const scene = selectElement.mesh.getScene();
+        this.disposeOptionMeshes(selectElement);
+        selectElement.optionMeshes = this.createOptionMeshes(selectElement, scene, selectElement.style);
     }
 
     /**
@@ -318,10 +312,13 @@ export class SelectManager {
     /**
      * Creates the display mesh for showing selected value using stored camera scale
      */
-    private createDisplayMeshWithStoredScale(selectElement: SelectElement, style: StyleRule): BABYLON.Mesh {
+    private createDisplayMeshWithStoredScale(
+        selectElement: SelectElement,
+        style: StyleRule,
+        displayIndex: number = selectElement.selectedIndex
+    ): BABYLON.Mesh {
         const options = selectElement.options;
-        const selectedIndex = selectElement.selectedIndex;
-        const selectedOption = options[selectedIndex];
+        const selectedOption = options[displayIndex];
         const textContent = selectedOption ? selectedOption.label : 'Select...';
 
         // Use style as-is, matching text-input behavior
@@ -554,7 +551,7 @@ export class SelectManager {
 
             // Create material
             const material = new BABYLON.StandardMaterial(`optionMaterial_${selectElement.element.id}_${index}`, scene);
-            const baseColor = index === selectElement.selectedIndex
+            const baseColor = index === selectElement.activeOptionIndex
                 ? BABYLON.Color3.FromHexString('#1967d2')
                 : BABYLON.Color3.White();
 
@@ -606,8 +603,8 @@ export class SelectManager {
                         () => {
                             const mat = optionMesh.material as BABYLON.StandardMaterial;
                             if (mat) {
-                                const color = index === selectElement.selectedIndex
-                                    ? new BABYLON.Color3(0.9, 0.9, 1.0)
+                                const color = index === selectElement.activeOptionIndex
+                                    ? BABYLON.Color3.FromHexString('#1967d2')
                                     : BABYLON.Color3.White();
                                 mat.diffuseColor = color;
                                 mat.emissiveColor = color;
@@ -623,7 +620,7 @@ export class SelectManager {
             textStyle.fontSize = style.fontSize || '16px';
             textStyle.color = option.disabled
                 ? '#6b7280'
-                : index === selectElement.selectedIndex ? '#ffffff' : '#000000';
+                : index === selectElement.activeOptionIndex ? '#ffffff' : '#000000';
             if (!textStyle.fontFamily) textStyle.fontFamily = 'Arial';
 
             try {
@@ -682,7 +679,8 @@ export class SelectManager {
         const selectHeight = selectElement.mesh.getBoundingInfo().boundingBox.extendSize.y * 2;
         const dropdownHeight = selectElement.dropdownMesh.getBoundingInfo().boundingBox.extendSize.y * 2;
 
-        selectElement.dropdownMesh.position.y = -(selectHeight / 2 + dropdownHeight / 2);
+        const nativePopupGap = selectElement.cameraScale || 0.001;
+        selectElement.dropdownMesh.position.y = -(selectHeight / 2 + dropdownHeight / 2 + nativePopupGap);
         selectElement.dropdownMesh.position.z = 0.15; // Move forward (Positive Z) to avoid Z-fighting/hiding
 
         // Add border to dropdown for HTML-like appearance
@@ -806,6 +804,29 @@ export class SelectManager {
         mesh.material = null;
         mesh.dispose();
         material?.dispose(false, false);
+    }
+
+    private redrawDisplay(selectElement: SelectElement, displayIndex: number): void {
+        if (!selectElement.displayMesh) return;
+        this.disposeDisplayMesh(selectElement.displayMesh);
+        selectElement.displayMesh = this.createDisplayMeshWithStoredScale(
+            selectElement,
+            selectElement.style,
+            displayIndex
+        );
+    }
+
+    private disposeOptionMeshes(selectElement: SelectElement): void {
+        for (const optionMesh of selectElement.optionMeshes) {
+            const meshes = [...optionMesh.getChildMeshes(false), optionMesh];
+            for (const mesh of meshes) {
+                const material = mesh.material;
+                mesh.material = null;
+                mesh.dispose();
+                material?.dispose(false, false);
+            }
+        }
+        selectElement.optionMeshes = [];
     }
 
     /**

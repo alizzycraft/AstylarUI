@@ -209,8 +209,8 @@ export class KeyboardInputHandler {
 
             case 'Enter':
                 if (selectElement.dropdownOpen) {
-                    // Select current option and close
-                    this.selectManager.selectOption(selectElement, selectElement.selectedIndex);
+                    // Commit the popup highlight and close.
+                    this.selectManager.selectOption(selectElement, selectElement.activeOptionIndex);
                 } else {
                     // Open dropdown
                     this.selectManager.openDropdown(selectElement, selectElement.mesh.getScene(), style);

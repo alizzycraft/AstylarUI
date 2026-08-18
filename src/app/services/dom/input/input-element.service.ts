@@ -431,6 +431,37 @@ export class InputElementService {
         return true;
     }
 
+    /** Applies native popup-owned keyboard behavior before page key listeners run. */
+    handleExpandedSelectKeyDown(
+        elementId: string,
+        event: KeyboardEvent,
+    ): { handled: boolean; changed: boolean; dispatchClick: boolean; suppressKeyUp: boolean } | undefined {
+        const input = this.inputElements.get(elementId);
+        if (!input || input.type !== InputType.Select) return undefined;
+        const select = input as SelectElement;
+        if (!select.dropdownOpen) return undefined;
+
+        if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+            this.selectManager.navigateOptions(select, event.key === 'ArrowUp' ? 'up' : 'down');
+            return { handled: true, changed: false, dispatchClick: false, suppressKeyUp: true };
+        }
+        if (event.key === 'Enter') {
+            const valueBefore = select.value;
+            this.selectManager.selectOption(select, select.activeOptionIndex);
+            return {
+                handled: true,
+                changed: !Object.is(valueBefore, select.value),
+                dispatchClick: true,
+                suppressKeyUp: false,
+            };
+        }
+        if (event.key === 'Escape') {
+            this.selectManager.closeDropdown(select);
+            return { handled: true, changed: false, dispatchClick: false, suppressKeyUp: false };
+        }
+        return undefined;
+    }
+
     /** Applies a control's click activation and returns a cancellation rollback. */
     activateInputElement(elementId: string): { changed: boolean; rollback: () => void } | undefined {
         const input = this.inputElements.get(elementId);

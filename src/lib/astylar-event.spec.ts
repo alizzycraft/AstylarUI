@@ -628,6 +628,75 @@ describe('AstylarInteractionRuntime', () => {
     engine.dispose();
   });
 
+  it('keeps expanded select arrows private and emits the native Enter commit sequence', () => {
+    const engine = new NullEngine();
+    const scene = new Scene(engine);
+    const canvas = document.createElement('canvas');
+    const events: AstylarEventSnapshot[] = [];
+    let selectedValue = 'alpha';
+    let activeValue = 'alpha';
+    let expanded = true;
+    const runtime = new AstylarInteractionRuntime(
+      scene,
+      {
+        styles: [],
+        root: { children: [{
+          type: 'select', id: 'choice', value: 'alpha',
+          options: [
+            { value: 'alpha', label: 'Alpha' },
+            { value: 'beta', label: 'Beta' },
+            { value: 'gamma', label: 'Gamma' },
+          ],
+        }] },
+      },
+      { onEvent: (event) => events.push(event) },
+      () => ({ value: selectedValue, selectedValue }),
+      {
+        getFocusedElementId: () => 'choice',
+        focus: () => true,
+        blur: () => true,
+        handleKeyDown: () => undefined,
+        commitsValueOnBlur: () => false,
+        handleExpandedSelectKeyDown: (_elementId, event) => {
+          if (!expanded) return undefined;
+          if (event.key === 'ArrowDown') {
+            activeValue = activeValue === 'alpha' ? 'beta' : 'gamma';
+            return { handled: true, changed: false, dispatchClick: false, suppressKeyUp: true };
+          }
+          if (event.key === 'Enter') {
+            selectedValue = activeValue;
+            expanded = false;
+            return { handled: true, changed: true, dispatchClick: true, suppressKeyUp: false };
+          }
+          return undefined;
+        },
+      },
+      canvas,
+    );
+
+    for (const key of ['ArrowDown', 'ArrowDown', 'Enter']) {
+      canvas.dispatchEvent(new KeyboardEvent('keydown', {
+        key, code: key, bubbles: true, cancelable: true,
+      }));
+      canvas.dispatchEvent(new KeyboardEvent('keyup', {
+        key, code: key, bubbles: true, cancelable: true,
+      }));
+    }
+
+    expect(selectedValue).toBe('gamma');
+    expect(events.map((event) => `${event.type}:${event.selectedValue}`)).toEqual([
+      'input:gamma',
+      'change:gamma',
+      'click:gamma',
+      'keyup:gamma',
+    ]);
+    expect(events[2].button).toBe(-1);
+
+    runtime.dispose();
+    scene.dispose();
+    engine.dispose();
+  });
+
   it('emits input and change for an immediate select keyboard mutation', () => {
     const engine = new NullEngine();
     const scene = new Scene(engine);

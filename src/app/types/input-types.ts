@@ -168,6 +168,8 @@ export interface SelectOption {
 export interface SelectElement extends InputElement {
     options: SelectOption[];
     selectedIndex: number;
+    /** Highlighted popup option; it is only committed to selectedIndex on acceptance. */
+    activeOptionIndex: number;
     dropdownOpen: boolean;
     dropdownMesh?: BABYLON.Mesh;
     optionMeshes: BABYLON.Mesh[];

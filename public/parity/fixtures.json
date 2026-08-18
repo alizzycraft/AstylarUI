@@ -890,5 +890,12 @@
     "category": "forms-interactive",
     "expectedBehavior": "A primary pointer click focuses and expands an enabled single-select; Escape closes it without changing the selected option or emitting mutation events.",
     "interactionStepCount": 2
+  },
+  {
+    "id": "interaction-select-expanded-keyboard",
+    "title": "Expanded select keyboard commit",
+    "category": "forms-interactive",
+    "expectedBehavior": "Arrow keys move the active option in an expanded single-select while skipping disabled choices, and Enter commits the active option and closes the popup with native events.",
+    "interactionStepCount": 4
   }
 ]

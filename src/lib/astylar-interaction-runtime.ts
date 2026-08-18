@@ -31,6 +31,13 @@ export interface AstylarControlActivation {
   rollback(): void;
 }
 
+export interface AstylarExpandedSelectKeyResult {
+  handled: boolean;
+  changed: boolean;
+  dispatchClick: boolean;
+  suppressKeyUp: boolean;
+}
+
 export interface AstylarInteractionControlAdapter {
   getFocusedElementId(): string | undefined;
   focus(elementId: string): boolean;
@@ -38,6 +45,10 @@ export interface AstylarInteractionControlAdapter {
   handleKeyDown(elementId: string, event: KeyboardEvent): void;
   commitsValueOnBlur(elementId: string): boolean;
   emitsImmediateChangeOnKeyboardMutation?(elementId: string): boolean;
+  handleExpandedSelectKeyDown?(
+    elementId: string,
+    event: KeyboardEvent,
+  ): AstylarExpandedSelectKeyResult | undefined;
   cancelExpandedSelect?(elementId: string): boolean;
   activate?(elementId: string): AstylarControlActivation | undefined;
   canActivateWithSpace?(elementId: string): boolean;
@@ -75,6 +86,7 @@ export class AstylarInteractionRuntime {
   private implicitSubmitTargets = new Map<string, string>();
   private focusedValueAtEntry?: string;
   private pendingSpaceActivationId?: string;
+  private readonly suppressedKeyUps = new Set<string>();
 
   constructor(
     private readonly scene: Scene,
@@ -159,6 +171,7 @@ export class AstylarInteractionRuntime {
     this.pressedElementId = undefined;
     this.hoveredElementId = undefined;
     this.pendingSpaceActivationId = undefined;
+    this.suppressedKeyUps.clear();
   }
 
   private handlePointer(pointerInfo: PointerInfo): void {
@@ -249,6 +262,24 @@ export class AstylarInteractionRuntime {
     if (this.disposed) return;
     const targetId = this.controls?.getFocusedElementId();
     if (!targetId) return;
+    const expandedSelectResult = this.controls?.handleExpandedSelectKeyDown?.(targetId, event);
+    if (expandedSelectResult?.handled) {
+      event.preventDefault();
+      if (expandedSelectResult.suppressKeyUp) {
+        this.suppressedKeyUps.add(this.keyUpToken(targetId, event));
+      }
+      const state = this.liveState(targetId);
+      if (expandedSelectResult.changed) {
+        this.dispatcher.dispatch({ type: 'input', targetId, ...state });
+        this.dispatcher.dispatch({ type: 'change', targetId, ...state });
+      }
+      if (expandedSelectResult.dispatchClick) {
+        this.dispatcher.dispatch({
+          type: 'click', targetId, ...state, button: -1, pointerType: '',
+        });
+      }
+      return;
+    }
     if (event.key === 'Escape' && this.controls?.cancelExpandedSelect?.(targetId)) {
       event.preventDefault();
       return;
@@ -354,6 +385,8 @@ export class AstylarInteractionRuntime {
     if (this.disposed) return;
     const targetId = this.controls?.getFocusedElementId();
     if (!targetId) return;
+    const keyUpToken = this.keyUpToken(targetId, event);
+    if (this.suppressedKeyUps.delete(keyUpToken)) return;
     const state = this.liveState(targetId);
     const dispatched = this.dispatcher.dispatch({
       type: 'keyup',
@@ -375,6 +408,10 @@ export class AstylarInteractionRuntime {
     this.pendingSpaceActivationId = undefined;
     if (shouldActivate) this.activateAndClick(targetId);
   };
+
+  private keyUpToken(targetId: string, event: KeyboardEvent): string {
+    return `${targetId}:${event.code || event.key}`;
+  }
 
   private activateAndClick(targetId: string, pointerInfo?: PointerInfo): boolean {
     const activation = this.controls?.activate?.(targetId);

@@ -121,6 +121,52 @@ describe('SelectManager', () => {
     expect(selectedMaterial.diffuseColor.b).toBeCloseTo(210 / 255, 5);
   });
 
+  it('keeps expanded keyboard navigation tentative until the active option is committed', () => {
+    const renderedText: string[] = [];
+    const textRendering = {
+      renderTextToTexture: (_element: unknown, text: string) => {
+        renderedText.push(text);
+        return { getSize: () => ({ width: 80, height: 24 }) };
+      },
+    } as unknown as TextRenderingService;
+    const meshService = {
+      createTextMesh: (name: string, _texture: unknown, width: number, height: number) =>
+        BABYLON.MeshBuilder.CreatePlane(name, { width, height }, scene),
+    } as unknown as BabylonMeshService;
+    const manager = new SelectManager(textRendering, meshService);
+    const select = manager.createSelectElement(
+      {
+        type: 'select', id: 'choice', value: 'alpha', options: [
+          { value: 'alpha', label: 'Alpha' },
+          { value: 'blocked', label: 'Blocked', disabled: true },
+          { value: 'beta', label: 'Beta' },
+        ],
+      },
+      {
+        scene,
+        actions: { camera: { getPixelToWorldScale: () => 0.01 } },
+      } as any,
+      { selector: '#choice', background: '#ffffff', color: '#000000' },
+      { width: 3, height: 0.5 },
+    );
+
+    manager.openDropdown(select, scene, select.style);
+    manager.navigateOptions(select, 'down');
+
+    expect(select.activeOptionIndex).toBe(2);
+    expect(select.selectedIndex).toBe(0);
+    expect(select.value).toBe('alpha');
+    expect(select.validationState.dirty).toBeFalse();
+    expect(renderedText.at(-4)).toBe('Beta');
+
+    manager.selectOption(select, select.activeOptionIndex);
+
+    expect(select.selectedIndex).toBe(2);
+    expect(select.value).toBe('beta');
+    expect(select.dropdownOpen).toBeFalse();
+    expect(select.validationState.dirty).toBeTrue();
+  });
+
   it('disposes the replaced display material when selection redraws', () => {
     const textRendering = {
       renderTextToTexture: () => ({ getSize: () => ({ width: 80, height: 24 }) }),

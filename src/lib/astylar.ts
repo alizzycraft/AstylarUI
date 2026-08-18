@@ -341,6 +341,8 @@ export class Astylar {
           this.inputElementService.commitsValueOnBlur(elementId),
         emitsImmediateChangeOnKeyboardMutation: (elementId) =>
           this.inputElementService.emitsImmediateChangeOnKeyboardMutation(elementId),
+        handleExpandedSelectKeyDown: (elementId, event) =>
+          this.inputElementService.handleExpandedSelectKeyDown(elementId, event),
         cancelExpandedSelect: (elementId) =>
           this.inputElementService.cancelExpandedSelect(elementId),
         activate: (elementId) =>
@@ -541,8 +543,15 @@ export class Astylar {
 
     const active = !!mesh.metadata.astylarActiveState && !!styles.active;
     const focused = !!mesh.metadata.astylarFocusState && !!styles.focus;
+    const borderMeshes = mesh.getChildMeshes(false)
+      .filter((child) => child.name.startsWith(`${elementId}-border`));
     if (!active && !focused) {
       mesh.material = mesh.metadata.astylarInteractionBaseMaterial;
+      for (const borderMesh of borderMeshes) {
+        if (borderMesh.metadata?.astylarInteractionBaseMaterial) {
+          borderMesh.material = borderMesh.metadata.astylarInteractionBaseMaterial;
+        }
+      }
       return;
     }
 
@@ -550,12 +559,12 @@ export class Astylar {
       ? 'astylarActiveFocusMaterial'
       : active ? 'astylarActiveMaterial' : 'astylarFocusMaterial';
     const materialSuffix = active && focused ? 'active-focus' : active ? 'active' : 'focus';
+    const style = {
+      ...styles.normal,
+      ...(focused ? styles.focus : {}),
+      ...(active ? styles.active : {}),
+    };
     if (!mesh.metadata[materialKey]) {
-      const style = {
-        ...styles.normal,
-        ...(focused ? styles.focus : {}),
-        ...(active ? styles.active : {}),
-      };
       const background = style.background
         ? this.styleService.parseBackgroundColor(style.background)
         : undefined;
@@ -569,6 +578,32 @@ export class Astylar {
     }
     if (mesh.metadata[materialKey]) {
       mesh.material = mesh.metadata[materialKey];
+    }
+
+    if (borderMeshes.length > 0 && style.borderColor) {
+      const borderMaterialKey = `${materialKey}Border`;
+      if (!mesh.metadata[borderMaterialKey]) {
+        const border = this.styleService.parseBackgroundColor(style.borderColor);
+        if (border?.type === 'color') {
+          mesh.metadata[borderMaterialKey] = this.babylonMeshService.createMaterial(
+            `${elementId}-${materialSuffix}-border-material`,
+            border.color,
+            border.alpha ?? this.styleService.parseOpacity(style.opacity),
+          );
+        }
+      }
+      if (mesh.metadata[borderMaterialKey]) {
+        for (const borderMesh of borderMeshes) {
+          borderMesh.metadata = borderMesh.metadata ?? {};
+          if (!Object.prototype.hasOwnProperty.call(
+            borderMesh.metadata,
+            'astylarInteractionBaseMaterial',
+          )) {
+            borderMesh.metadata.astylarInteractionBaseMaterial = borderMesh.material;
+          }
+          borderMesh.material = mesh.metadata[borderMaterialKey];
+        }
+      }
     }
   }
 }
