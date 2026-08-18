@@ -697,6 +697,70 @@ describe('AstylarInteractionRuntime', () => {
     engine.dispose();
   });
 
+  it('keeps expanded option pointer events private and emits only the committed mutation', () => {
+    const engine = new NullEngine();
+    const scene = new Scene(engine);
+    const optionMesh = MeshBuilder.CreatePlane('choice-option-2', {}, scene);
+    optionMesh.metadata = {
+      optionIndex: 2,
+      selectElement: { element: { id: 'choice' } },
+    };
+    const events: AstylarEventSnapshot[] = [];
+    let selectedValue = 'alpha';
+    const runtime = new AstylarInteractionRuntime(
+      scene,
+      {
+        styles: [],
+        root: { children: [{
+          type: 'select', id: 'choice', value: 'alpha',
+          options: [
+            { value: 'alpha', label: 'Alpha' },
+            { value: 'blocked', label: 'Blocked', disabled: true },
+            { value: 'beta', label: 'Beta' },
+          ],
+        }] },
+      },
+      { onEvent: (event) => events.push(event) },
+      () => ({ value: selectedValue, selectedValue }),
+      {
+        getFocusedElementId: () => 'choice',
+        focus: () => true,
+        blur: () => true,
+        handleKeyDown: () => undefined,
+        commitsValueOnBlur: () => false,
+        commitExpandedSelectOption: (_elementId, optionIndex) => {
+          expect(optionIndex).toBe(2);
+          selectedValue = 'beta';
+          return true;
+        },
+      },
+    );
+    const pointerEvent = new PointerEvent('pointerdown', {
+      button: 0,
+      pointerType: 'mouse',
+    });
+
+    scene.onPointerObservable.notifyObservers({
+      type: PointerEventTypes.POINTERDOWN,
+      event: pointerEvent,
+      pickInfo: { pickedMesh: optionMesh },
+    } as unknown as PointerInfo);
+    scene.onPointerObservable.notifyObservers({
+      type: PointerEventTypes.POINTERUP,
+      event: pointerEvent,
+      pickInfo: { pickedMesh: optionMesh },
+    } as unknown as PointerInfo);
+
+    expect(events.map((event) => `${event.type}:${event.selectedValue}`)).toEqual([
+      'input:beta',
+      'change:beta',
+    ]);
+
+    runtime.dispose();
+    scene.dispose();
+    engine.dispose();
+  });
+
   it('emits input and change for an immediate select keyboard mutation', () => {
     const engine = new NullEngine();
     const scene = new Scene(engine);

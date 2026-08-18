@@ -85,6 +85,15 @@ export interface ParityClickAction {
   offsetY?: number;
 }
 
+/** Chooses a native popup option semantically and the equivalent Astylar row by pointer. */
+export interface ParitySelectOptionAction {
+  type: 'select-option';
+  elementId: string;
+  value: string;
+  offsetX: number;
+  offsetY: number;
+}
+
 export interface ParityHoverAction {
   type: 'hover';
   elementId: string;
@@ -133,6 +142,7 @@ export interface ParityWheelAction {
 
 export type ParityInteractionAction =
   | ParityClickAction
+  | ParitySelectOptionAction
   | ParityHoverAction
   | ParityPointerDownAction
   | ParityPointerUpAction

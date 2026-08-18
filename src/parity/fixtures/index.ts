@@ -137,6 +137,7 @@ import { interactionTextareaVerticalNavigationFixture } from './interaction-text
 import { interactionTextareaPointerAutoscrollFixture } from './interaction-textarea-pointer-autoscroll.fixture';
 import { interactionSelectExpandedCancelFixture } from './interaction-select-expanded-cancel.fixture';
 import { interactionSelectExpandedKeyboardFixture } from './interaction-select-expanded-keyboard.fixture';
+import { interactionSelectExpandedPointerFixture } from './interaction-select-expanded-pointer.fixture';
 import { ParityFixture } from '../parity.types';
 
 const fixtures: readonly ParityFixture[] = [
@@ -278,7 +279,8 @@ const fixtures: readonly ParityFixture[] = [
   interactionTextareaVerticalNavigationFixture,
   interactionTextareaPointerAutoscrollFixture,
   interactionSelectExpandedCancelFixture,
-  interactionSelectExpandedKeyboardFixture
+  interactionSelectExpandedKeyboardFixture,
+  interactionSelectExpandedPointerFixture
 ];
 
 const fixturesById = new Map(fixtures.map((fixture) => [fixture.id, fixture]));

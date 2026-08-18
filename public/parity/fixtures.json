@@ -897,5 +897,12 @@
     "category": "forms-interactive",
     "expectedBehavior": "Arrow keys move the active option in an expanded single-select while skipping disabled choices, and Enter commits the active option and closes the popup with native events.",
     "interactionStepCount": 4
+  },
+  {
+    "id": "interaction-select-expanded-pointer",
+    "title": "Expanded select pointer commit",
+    "category": "forms-interactive",
+    "expectedBehavior": "A pointer click on an enabled option in an expanded single-select commits that option, closes the popup, and exposes only the browser events owned by the select control.",
+    "interactionStepCount": 2
   }
 ]

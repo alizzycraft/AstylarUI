@@ -489,7 +489,38 @@ export class InputElementService {
             };
         }
 
+        if (input.type === InputType.Select) {
+            const select = input as SelectElement;
+            const wasOpen = select.dropdownOpen;
+            if (wasOpen) {
+                this.selectManager.closeDropdown(select);
+            } else {
+                this.selectManager.openDropdown(select, select.mesh.getScene(), select.style);
+            }
+            return {
+                changed: false,
+                rollback: () => {
+                    if (wasOpen && !select.dropdownOpen) {
+                        this.selectManager.openDropdown(select, select.mesh.getScene(), select.style);
+                    } else if (!wasOpen && select.dropdownOpen) {
+                        this.selectManager.closeDropdown(select);
+                    }
+                },
+            };
+        }
+
         return undefined;
+    }
+
+    /** Commits a popup row selected by the scene-owned pointer runtime. */
+    commitExpandedSelectOption(elementId: string, optionIndex: number): boolean {
+        const input = this.inputElements.get(elementId);
+        if (!input || input.type !== InputType.Select) return false;
+        const select = input as SelectElement;
+        if (!select.dropdownOpen || select.options[optionIndex]?.disabled) return false;
+        const valueBefore = select.value;
+        this.selectManager.selectOption(select, optionIndex);
+        return !Object.is(valueBefore, select.value);
     }
 
     canActivateWithSpace(elementId: string): boolean {

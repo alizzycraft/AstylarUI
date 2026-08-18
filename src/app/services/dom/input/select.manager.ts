@@ -80,26 +80,8 @@ export class SelectManager {
         // Store camera scale for consistent text sizing across select and dropdown
         selectElement.cameraScale = render.actions.camera.getPixelToWorldScale();
 
-        // Attach Interactions to the Select Mesh
+        // Pointer defaults are owned by the scene interaction runtime.
         if (selectElement.mesh) {
-            selectElement.mesh.actionManager = new BABYLON.ActionManager(render.scene);
-
-            // Toggle dropdown on click
-            selectElement.mesh.actionManager.registerAction(new BABYLON.ExecuteCodeAction(
-                BABYLON.ActionManager.OnPickTrigger,
-                () => {
-                    if (selectElement.dropdownOpen) {
-                        this.closeDropdown(selectElement);
-                    } else {
-                        // We checked render.scene is present at start of function
-                        if (render.scene) {
-                            this.openDropdown(selectElement, render.scene, style);
-                        }
-                    }
-                }
-            ));
-
-            // Set cursor via metadata for global handler
             selectElement.mesh.metadata = { ...selectElement.mesh.metadata, cursor: 'pointer' };
         }
 
@@ -573,15 +555,6 @@ export class SelectManager {
             // Add click handler for option selection
             if (!option.disabled) {
                 optionMesh.actionManager = new BABYLON.ActionManager(scene);
-                optionMesh.actionManager.registerAction(
-                    new BABYLON.ExecuteCodeAction(
-                        BABYLON.ActionManager.OnPickTrigger,
-                        () => {
-                            this.selectOption(selectElement, index);
-                        }
-                    )
-                );
-
                 // Add hover effect - light blue like HTML select
                 optionMesh.actionManager.registerAction(
                     new BABYLON.ExecuteCodeAction(

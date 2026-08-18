@@ -49,6 +49,7 @@ export interface AstylarInteractionControlAdapter {
     elementId: string,
     event: KeyboardEvent,
   ): AstylarExpandedSelectKeyResult | undefined;
+  commitExpandedSelectOption?(elementId: string, optionIndex: number): boolean;
   cancelExpandedSelect?(elementId: string): boolean;
   activate?(elementId: string): AstylarControlActivation | undefined;
   canActivateWithSpace?(elementId: string): boolean;
@@ -87,6 +88,7 @@ export class AstylarInteractionRuntime {
   private focusedValueAtEntry?: string;
   private pendingSpaceActivationId?: string;
   private readonly suppressedKeyUps = new Set<string>();
+  private pressedExpandedSelectOption?: { elementId: string; optionIndex: number };
 
   constructor(
     private readonly scene: Scene,
@@ -172,11 +174,39 @@ export class AstylarInteractionRuntime {
     this.hoveredElementId = undefined;
     this.pendingSpaceActivationId = undefined;
     this.suppressedKeyUps.clear();
+    this.pressedExpandedSelectOption = undefined;
   }
 
   private handlePointer(pointerInfo: PointerInfo): void {
     if (this.disposed) return;
-    let targetId = this.resolveElementId(pointerInfo.pickInfo?.pickedMesh ?? undefined);
+    const pickedMesh = pointerInfo.pickInfo?.pickedMesh ?? undefined;
+    const expandedSelectOption = this.resolveExpandedSelectOption(pickedMesh);
+    if (pointerInfo.type === PointerEventTypes.POINTERDOWN && expandedSelectOption) {
+      if (!this.scrolling || this.scrolling.isPointVisible(
+        expandedSelectOption.elementId,
+        pointerInfo.pickInfo?.pickedPoint ?? undefined,
+      )) {
+        this.pressedExpandedSelectOption = expandedSelectOption;
+        this.canvas?.focus();
+      }
+      return;
+    }
+    if (pointerInfo.type === PointerEventTypes.POINTERUP && this.pressedExpandedSelectOption) {
+      const pressed = this.pressedExpandedSelectOption;
+      this.pressedExpandedSelectOption = undefined;
+      if (expandedSelectOption?.elementId === pressed.elementId &&
+          expandedSelectOption.optionIndex === pressed.optionIndex &&
+          this.controls?.commitExpandedSelectOption?.(
+            pressed.elementId,
+            pressed.optionIndex,
+          )) {
+        const state = this.liveState(pressed.elementId);
+        this.dispatcher.dispatch({ type: 'input', targetId: pressed.elementId, ...state });
+        this.dispatcher.dispatch({ type: 'change', targetId: pressed.elementId, ...state });
+      }
+      return;
+    }
+    let targetId = this.resolveElementId(pickedMesh);
     if (targetId && this.scrolling &&
         !this.scrolling.isPointVisible(targetId, pointerInfo.pickInfo?.pickedPoint ?? undefined)) {
       targetId = undefined;
@@ -235,6 +265,22 @@ export class AstylarInteractionRuntime {
     if (this.hoveredElementId) {
       this.dispatchPointer('pointerenter', this.hoveredElementId, pointerInfo);
     }
+  }
+
+  private resolveExpandedSelectOption(
+    mesh: AbstractMesh | undefined,
+  ): { elementId: string; optionIndex: number } | undefined {
+    let current = mesh;
+    while (current) {
+      const optionIndex = current.metadata?.optionIndex;
+      const selectElement = current.metadata?.selectElement;
+      const elementId = selectElement?.element?.id;
+      if (Number.isInteger(optionIndex) && elementId) {
+        return { elementId, optionIndex };
+      }
+      current = current.parent as AbstractMesh | undefined;
+    }
+    return undefined;
   }
 
   private dispatchPointer(

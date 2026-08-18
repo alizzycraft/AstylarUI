@@ -629,6 +629,22 @@ function compareInteractionLifecycle(fixture, astylarStates, index) {
 
 async function performInteractionAction(page, mode, action, report) {
   switch (action.type) {
+    case 'select-option': {
+      if (mode === 'reference') {
+        await page.locator(`[id="${action.elementId}"]`).selectOption(action.value);
+        // Playwright changes the native control but leaves an already-open
+        // platform popup visible. Escape dismisses that popup without another
+        // mutation; fixtures that model pointer choice intentionally omit
+        // keyboard events from their observed public boundary.
+        await page.keyboard.press('Escape');
+      } else {
+        const { x, y } = await getInteractionPoint(
+          page, mode, action.elementId, report, action.offsetX, action.offsetY,
+        );
+        await page.mouse.click(x, y);
+      }
+      return;
+    }
     case 'click':
     case 'hover': {
       const { x, y } = await getInteractionPoint(
