@@ -36,6 +36,7 @@ export class TextSelectionControllerService {
   private readonly stateSubject = new BehaviorSubject<TextSelectionState>(this.state);
   private activeEntry?: TextInteractionEntry;
   private pointerActive = false;
+  private preferredVerticalCaretX: number | null = null;
 
   get selection$(): Observable<TextSelectionState> {
     return this.stateSubject.asObservable();
@@ -58,6 +59,7 @@ export class TextSelectionControllerService {
 
     this.activeEntry = entry;
     this.pointerActive = true;
+    this.preferredVerticalCaretX = null;
     console.log('[TextSelectionController] Begin selection:', nextState);
     return this.updateState(nextState);
   }
@@ -72,6 +74,7 @@ export class TextSelectionControllerService {
     }
 
     const caretIndex = this.getCaretIndexForPoint(entry, position);
+    this.preferredVerticalCaretX = null;
     const anchorIndex = this.state.anchorIndex ?? caretIndex;
     const range = this.createRange(anchorIndex, caretIndex);
 
@@ -126,8 +129,9 @@ export class TextSelectionControllerService {
       currentState.range.start !== currentState.range.end;
 
     let collapseOnly = false;
-    if (!extendSelection && hasRange && currentState.range) {
-      if (direction === 'left' || direction === 'up') {
+    if (!extendSelection && hasRange && currentState.range &&
+        (direction === 'left' || direction === 'right')) {
+      if (direction === 'left') {
         focusIndex = currentState.range.start;
       } else {
         focusIndex = currentState.range.end;
@@ -141,6 +145,11 @@ export class TextSelectionControllerService {
     }
 
     let nextFocus = focusIndex;
+    if (direction === 'left' || direction === 'right') {
+      this.preferredVerticalCaretX = null;
+    } else if (this.preferredVerticalCaretX === null) {
+      this.preferredVerticalCaretX = this.resolveCaretContext(entry, focusIndex).caretX;
+    }
     if (!collapseOnly) {
       switch (direction) {
         case 'left':
@@ -150,10 +159,14 @@ export class TextSelectionControllerService {
           nextFocus = Math.min(maxCaretIndex, focusIndex + 1);
           break;
         case 'up':
-          nextFocus = this.moveCaretVertically(entry, focusIndex, -1);
+          nextFocus = this.moveCaretVertically(
+            entry, focusIndex, -1, this.preferredVerticalCaretX ?? undefined
+          );
           break;
         case 'down':
-          nextFocus = this.moveCaretVertically(entry, focusIndex, 1);
+          nextFocus = this.moveCaretVertically(
+            entry, focusIndex, 1, this.preferredVerticalCaretX ?? undefined
+          );
           break;
         default:
           break;
@@ -186,6 +199,7 @@ export class TextSelectionControllerService {
 
     this.pointerActive = false;
     this.activeEntry = entry;
+    this.preferredVerticalCaretX = null;
     return this.updateState({
       elementId: entry.elementId,
       anchorIndex: anchor,
@@ -211,6 +225,7 @@ export class TextSelectionControllerService {
   clearSelection(): TextSelectionState {
     this.pointerActive = false;
     this.activeEntry = undefined;
+    this.preferredVerticalCaretX = null;
     return this.updateState({ ...DEFAULT_STATE });
   }
 
@@ -319,7 +334,12 @@ export class TextSelectionControllerService {
     return { start, end };
   }
 
-  private moveCaretVertically(entry: TextInteractionEntry, currentIndex: number, deltaLine: number): number {
+  private moveCaretVertically(
+    entry: TextInteractionEntry,
+    currentIndex: number,
+    deltaLine: number,
+    preferredCaretX?: number
+  ): number {
     const metrics = entry.metrics?.css;
     if (!metrics || !metrics.lines.length) {
       return currentIndex;
@@ -343,7 +363,7 @@ export class TextSelectionControllerService {
     const targetLine = metrics.lines[targetLineIndex];
     const lineCenter = (targetLine.top + targetLine.bottom) / 2;
     const cssPoint = {
-      x: caretX,
+      x: preferredCaretX ?? caretX,
       y: lineCenter - minTop
     };
 

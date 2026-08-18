@@ -79,6 +79,22 @@ export class KeyboardInputHandler {
                 event.preventDefault();
                 break;
 
+            case 'ArrowUp':
+                if (textInput.type === InputType.Textarea) {
+                    this.textInputManager.moveCursor(textInput, CursorDirection.Up, event.shiftKey);
+                    this.textInputManager.updateCursorAfterMovement(textInput, render, style);
+                    event.preventDefault();
+                }
+                break;
+
+            case 'ArrowDown':
+                if (textInput.type === InputType.Textarea) {
+                    this.textInputManager.moveCursor(textInput, CursorDirection.Down, event.shiftKey);
+                    this.textInputManager.updateCursorAfterMovement(textInput, render, style);
+                    event.preventDefault();
+                }
+                break;
+
             case 'Home':
                 this.textInputManager.moveCursor(textInput, CursorDirection.Home, event.shiftKey);
                 this.textInputManager.updateCursorAfterMovement(textInput, render, style);

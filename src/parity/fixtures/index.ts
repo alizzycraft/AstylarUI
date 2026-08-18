@@ -133,6 +133,7 @@ import { interactionPointerCaretFixture } from './interaction-pointer-caret.fixt
 import { interactionPointerDragSelectionFixture } from './interaction-pointer-drag-selection.fixture';
 import { interactionInputAutoscrollFixture } from './interaction-input-autoscroll.fixture';
 import { interactionTextareaAutoscrollFixture } from './interaction-textarea-autoscroll.fixture';
+import { interactionTextareaVerticalNavigationFixture } from './interaction-textarea-vertical-navigation.fixture';
 import { ParityFixture } from '../parity.types';
 
 const fixtures: readonly ParityFixture[] = [
@@ -270,7 +271,8 @@ const fixtures: readonly ParityFixture[] = [
   interactionPointerCaretFixture,
   interactionPointerDragSelectionFixture,
   interactionInputAutoscrollFixture,
-  interactionTextareaAutoscrollFixture
+  interactionTextareaAutoscrollFixture,
+  interactionTextareaVerticalNavigationFixture
 ];
 
 const fixturesById = new Map(fixtures.map((fixture) => [fixture.id, fixture]));

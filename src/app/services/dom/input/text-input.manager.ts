@@ -11,7 +11,7 @@ import { BabylonRender } from '../interfaces/render.types';
 import { BabylonMeshService } from '../../babylon-mesh.service';
 import { TextLayoutMetrics, TextStyleProperties, StoredTextLayoutMetrics } from '../../../types/text-rendering';
 import { TextInteractionRegistryService } from '../../dom/interaction/text-interaction-registry.service';
-import { TextSelectionControllerService } from '../../dom/interaction/text-selection-controller.service';
+import { TextSelectionControllerService, TextSelectionState } from '../../dom/interaction/text-selection-controller.service';
 import { Subscription } from 'rxjs';
 import { CONTROL_CONTENT_Z_OFFSET } from '../render-depth.constants';
 
@@ -38,6 +38,7 @@ export class TextInputManager {
     private selectionSubscription: Subscription | null = null;
     private inputs: Map<string, TextInput> = new Map();
     private activeRender: BabylonRender | null = null;
+    private readonly suppressSelectionScroll = new Set<string>();
 
     constructor(
         private cursorRenderer: TextCursorRenderer,
@@ -155,19 +156,7 @@ export class TextInputManager {
             // Only sync if focused
             if (!textInput.focused) return;
 
-            // Sync indices
-            if (state.range) {
-                textInput.selectionStart = state.range.start;
-                textInput.selectionEnd = state.range.end;
-                textInput.cursorState.selectionStart = state.anchorIndex ?? state.range.start;
-                textInput.cursorState.selectionEnd = state.focusIndex ?? state.range.end;
-                textInput.cursorState.selectionActive = state.hasSelection;
-            }
-
-            if (state.focusIndex !== null) {
-                textInput.cursorPosition = state.focusIndex;
-                textInput.cursorState.position = state.focusIndex;
-            }
+            this.applyControllerState(textInput, state);
 
             // Update visual cursor
             this.updateCursorPosition(textInput, this.activeRender, textInput.style);
@@ -265,6 +254,20 @@ export class TextInputManager {
         if (textInput.cursorMesh) {
             textInput.cursorMesh.isVisible = false;
             textInput.cursorState.visible = false;
+        }
+    }
+
+    private applyControllerState(textInput: TextInput, state: TextSelectionState): void {
+        if (state.range) {
+            textInput.selectionStart = state.range.start;
+            textInput.selectionEnd = state.range.end;
+            textInput.cursorState.selectionStart = state.anchorIndex ?? state.range.start;
+            textInput.cursorState.selectionEnd = state.focusIndex ?? state.range.end;
+            textInput.cursorState.selectionActive = state.hasSelection;
+        }
+        if (state.focusIndex !== null) {
+            textInput.cursorPosition = state.focusIndex;
+            textInput.cursorState.position = state.focusIndex;
         }
     }
 
@@ -525,7 +528,7 @@ export class TextInputManager {
             textInput.scrollTop = Math.max(0, textInput.scrollTop || 0);
             const cursorLine = this.findCursorLine(textInput);
             const hasSelection = textInput.selectionStart !== textInput.selectionEnd;
-            if (cursorLine && !hasSelection) {
+            if (cursorLine && (!hasSelection || !this.suppressSelectionScroll.has(textInput.element.id!))) {
                 const fontSize = this.parseSize(textInput.style.fontSize) || 16;
                 const lineHeight = this.parseSize(textInput.style.lineHeight) || fontSize * 1.2;
                 const halfLeading = Math.max(0, (lineHeight - fontSize) / 2);
@@ -667,6 +670,30 @@ export class TextInputManager {
         let newPosition = textInput.cursorPosition;
         const hasSelection = textInput.selectionStart !== textInput.selectionEnd;
 
+        if (direction === CursorDirection.Up || direction === CursorDirection.Down) {
+            const entry = textInput.textMesh
+                ? this.textInteractionRegistry?.getByMesh(textInput.textMesh)
+                : undefined;
+            if (!entry) return;
+
+            const anchor = isShiftKey && textInput.cursorState.selectionActive
+                ? textInput.cursorState.selectionStart
+                : textInput.cursorPosition;
+            const controllerState = this.textSelectionController.snapshot;
+            if (controllerState.elementId !== entry.elementId ||
+                controllerState.focusIndex !== textInput.cursorPosition ||
+                (isShiftKey && controllerState.anchorIndex !== anchor)) {
+                this.textSelectionController.setSelection(entry, anchor, textInput.cursorPosition);
+            }
+            const state = this.textSelectionController.moveSelectionWithKeyboard(
+                entry,
+                direction === CursorDirection.Up ? 'up' : 'down',
+                isShiftKey
+            );
+            this.applyControllerState(textInput, state);
+            return;
+        }
+
         if (!isShiftKey && hasSelection) {
             newPosition = direction === CursorDirection.Left || direction === CursorDirection.Home
                 ? Math.min(textInput.selectionStart, textInput.selectionEnd)
@@ -796,17 +823,22 @@ export class TextInputManager {
         textInput.cursorState.selectionEnd = textLength;
         textInput.cursorState.position = textLength;
 
-        // Sync the exact range with the global controller. Pointer coordinates
-        // cannot represent the end of a multiline value on the first row.
-        if (textInput.textMesh) {
-            const entry = this.textInteractionRegistry.getByMesh(textInput.textMesh);
-            if (entry) {
-                this.textSelectionController.setSelection(entry, 0, textLength);
+        this.suppressSelectionScroll.add(textInput.element.id!);
+        try {
+            // Sync the exact range with the global controller. Pointer coordinates
+            // cannot represent the end of a multiline value on the first row.
+            if (textInput.textMesh) {
+                const entry = this.textInteractionRegistry.getByMesh(textInput.textMesh);
+                if (entry) {
+                    this.textSelectionController.setSelection(entry, 0, textLength);
+                }
             }
-        }
 
-        if (this.activeRender) {
-            this.updateCursorPosition(textInput, this.activeRender, textInput.style);
+            if (this.activeRender) {
+                this.updateCursorPosition(textInput, this.activeRender, textInput.style);
+            }
+        } finally {
+            this.suppressSelectionScroll.delete(textInput.element.id!);
         }
     }
 

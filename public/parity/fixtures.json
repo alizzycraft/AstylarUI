@@ -869,5 +869,12 @@
     "category": "forms-interactive",
     "expectedBehavior": "Moving the caret beyond a multiline textarea viewport scrolls vertically to keep it visible, preserves selection/editing state there, and returns to the leading viewport with the caret.",
     "interactionStepCount": 6
+  },
+  {
+    "id": "interaction-textarea-vertical-navigation",
+    "title": "Textarea vertical keyboard navigation",
+    "category": "forms-interactive",
+    "expectedBehavior": "ArrowUp and ArrowDown preserve the caret column across textarea lines; Shift extends from a stable anchor, scrolls the focus into view, and an unshifted arrow collapses the range directionally.",
+    "interactionStepCount": 6
   }
 ]
