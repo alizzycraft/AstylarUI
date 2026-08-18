@@ -107,6 +107,7 @@ export class AstylarSemanticBridge {
         liveKeys,
       ));
     this.root.replaceChildren(...children);
+    this.applyModalInertness(siteData);
 
     for (const [key, node] of this.nodes) {
       if (liveKeys.has(key)) continue;
@@ -351,6 +352,10 @@ export class AstylarSemanticBridge {
     if (element.ariaCurrent !== undefined) {
       node.setAttribute('aria-current', String(element.ariaCurrent));
     }
+    if (node instanceof HTMLDialogElement) {
+      node.open = !!element.open;
+      if (element.modal) node.setAttribute('aria-modal', 'true');
+    }
 
     if (element.href && node instanceof HTMLAnchorElement) node.href = element.href;
     if (element.target && node instanceof HTMLAnchorElement) node.target = element.target;
@@ -458,6 +463,36 @@ export class AstylarSemanticBridge {
 
   private nativeId(authoredId: string): string {
     return `${this.prefix}${authoredId}`;
+  }
+
+  private applyModalInertness(siteData: SiteData): void {
+    const activeModalIds: string[] = [];
+    const visit = (element: DOMElement): void => {
+      if (!element.hidden && element.type === 'dialog' && element.open && element.modal && element.id) {
+        activeModalIds.push(element.id);
+      }
+      element.children?.forEach(visit);
+    };
+    siteData.root.children.forEach(visit);
+    const activeId = activeModalIds.at(-1);
+    if (!activeId) return;
+    const dialog = [...this.nodes.values()].find((node) =>
+      node.dataset['astylarId'] === activeId);
+    if (!dialog) return;
+    let branch: Element = dialog;
+    let parent = branch.parentElement;
+    while (parent && parent !== this.root) {
+      for (const sibling of [...parent.children]) {
+        if (sibling !== branch && sibling instanceof HTMLElement) sibling.inert = true;
+      }
+      branch = parent;
+      parent = parent.parentElement;
+    }
+    if (parent === this.root) {
+      for (const sibling of [...this.root.children]) {
+        if (sibling !== branch && sibling instanceof HTMLElement) sibling.inert = true;
+      }
+    }
   }
 
   private nativeIdRefs(authoredIds: string): string {

@@ -41,6 +41,10 @@ export interface DOMElement {
   accept?: string;
   autocomplete?: string;
   autofocus?: boolean;
+  /** Whether a dialog is currently open. */
+  open?: boolean;
+  /** Opts an open dialog into the supported modal/top-layer subset. */
+  modal?: boolean;
   cols?: number;
   rows?: number;
   wrap?: string;

@@ -133,6 +133,27 @@ this.scene = this.astylar.render(canvas, siteData, {
 Calling `preventDefault()` from the anchor's typed `click` handler suppresses the
 fragment scroll or external outcome.
 
+Author an open modal dialog with the same declarative shape as its HTML
+counterpart:
+
+```typescript
+{
+  type: 'dialog',
+  id: 'confirm-dialog',
+  open: true,
+  modal: true,
+  children: [
+    { type: 'button', id: 'cancel', autofocus: true, textContent: 'Cancel' },
+    { type: 'button', id: 'confirm', textContent: 'Confirm' },
+  ],
+}
+```
+
+The last open modal owns the interaction top layer, initial focus, and wrapped
+Tab order. Background semantic content becomes inert and background canvas
+input is suppressed. Dialog and backdrop paint remain explicitly authored;
+Astylar does not generate a visual backdrop.
+
 ## Developing AstylarUI
 
 The current implementation status, document map, and recommended next work are

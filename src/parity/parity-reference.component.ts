@@ -88,6 +88,7 @@ export class ParityReferenceComponent {
         fixture.interactionEventTypes ?? [],
         fixture.interactionIds ?? [],
       );
+      this.installModalContainment(viewport, fixture.modalDialogIds ?? []);
       this.installNavigationCapture(viewport, fixture.interactionIds ?? []);
       window.__ASTYLAR_PARITY_INTERACTION_STEPS__ = fixture.interactionSteps;
       window.__ASTYLAR_PARITY_CAPTURE_INTERACTION__ = async () => {
@@ -102,6 +103,7 @@ export class ParityReferenceComponent {
           if (viewportId) this.setViewportBox(PARITY_VIEWPORTS[viewportId]);
           viewport.dataset['parityReady'] = 'false';
           this.applyReferenceStep(viewport, step.referenceMutations);
+          this.activateModalDialogs(viewport, fixture.modalDialogIds ?? []);
           await this.waitForImages(viewport);
           await this.nextFrame();
           await this.nextFrame();
@@ -116,6 +118,7 @@ export class ParityReferenceComponent {
     );
 
     await this.document.fonts?.ready;
+    this.activateModalDialogs(viewport, fixture.modalDialogIds ?? []);
     if (dynamicSequence) {
       window.__ASTYLAR_PARITY_APPLY_STEP__ = async (index, viewportId) => {
         const step = fixture.dynamicSteps?.[index];
@@ -191,6 +194,46 @@ export class ParityReferenceComponent {
           break;
       }
     }
+  }
+
+  private activateModalDialogs(viewport: HTMLElement, ids: readonly string[]): void {
+    for (const id of ids) {
+      const dialog = viewport.querySelector<HTMLDialogElement>(`#${CSS.escape(id)}`);
+      if (dialog && !dialog.open) dialog.showModal();
+    }
+  }
+
+  private installModalContainment(viewport: HTMLElement, ids: readonly string[]): void {
+    const allowed = new Set(ids);
+    viewport.addEventListener('keydown', (event) => {
+      if (event.key !== 'Tab') return;
+      const dialog = [...viewport.querySelectorAll<HTMLDialogElement>('dialog')]
+        .find((candidate) => allowed.has(candidate.id) && candidate.matches(':modal'));
+      if (!dialog) return;
+      const focusable = [...dialog.querySelectorAll<HTMLElement>(
+        'button:not(:disabled), input:not(:disabled), select:not(:disabled), ' +
+        'textarea:not(:disabled), a[href], [tabindex]:not([tabindex="-1"])',
+      )];
+      if (!focusable.length) return;
+      const active = this.document.activeElement;
+      const first = focusable[0];
+      const last = focusable.at(-1)!;
+      if (event.shiftKey ? active === first : active === last) {
+        event.preventDefault();
+        (event.shiftKey ? last : first).focus();
+      }
+    });
+    viewport.addEventListener('pointerdown', (event) => {
+      const dialog = event.target instanceof HTMLDialogElement && allowed.has(event.target.id)
+        ? event.target
+        : undefined;
+      if (!dialog || !dialog.matches(':modal')) return;
+      const rect = dialog.getBoundingClientRect();
+      if (event.clientX < rect.left || event.clientX > rect.right ||
+          event.clientY < rect.top || event.clientY > rect.bottom) {
+        event.preventDefault();
+      }
+    });
   }
 
   private readonly onWindowResize = (): void => {
@@ -282,6 +325,8 @@ export class ParityReferenceComponent {
         ? {
             events: [...this.interactionEvents],
             focusedElementId: this.getFocusedElementId(viewport),
+            modalDialogId: fixture.modalDialogIds?.find((id) =>
+              viewport.querySelector<HTMLDialogElement>(`#${CSS.escape(id)}`)?.matches(':modal')),
             controls: this.measureControls(viewport, fixture.interactionIds ?? []),
             scrollContainers: this.measureScrollContainers(viewport, fixture.scrollIds ?? []),
             navigationOutcomes: [...this.navigationOutcomes],

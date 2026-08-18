@@ -31,6 +31,14 @@
     "semanticIds": ["anchor-fragment", "anchor-external", "anchor-cancelled", "anchor-target"]
   },
   {
+    "id": "semantic-modal-containment",
+    "title": "Semantic modal containment",
+    "category": "accessibility-semantics",
+    "expectedBehavior": "An authored modal dialog takes visual and interaction priority over the background, exposes browser modality, receives deterministic initial focus, contains forward and reverse Tab navigation, and makes background controls inert.",
+    "interactionStepCount": 5,
+    "semanticIds": ["modal-containment-dialog", "modal-containment-title", "modal-containment-primary", "modal-containment-secondary", "modal-containment-background-button"]
+  },
+  {
     "id": "box-model-basic",
     "title": "Basic content-box geometry",
     "category": "box-model-units",

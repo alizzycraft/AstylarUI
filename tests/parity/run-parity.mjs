@@ -917,6 +917,12 @@ function compareInteraction(reference, astylar) {
       `${astylarInteraction.focusedElementId ?? 'none'})`,
     );
   }
+  if (referenceInteraction.modalDialogId !== astylarInteraction.modalDialogId) {
+    errors.push(
+      `modal dialog differs (${referenceInteraction.modalDialogId ?? 'none'} vs ` +
+      `${astylarInteraction.modalDialogId ?? 'none'})`,
+    );
+  }
   if (JSON.stringify(referenceInteraction.navigationOutcomes ?? []) !==
       JSON.stringify(astylarInteraction.navigationOutcomes ?? [])) {
     errors.push(

@@ -21,8 +21,14 @@ export interface AstylarInteractionSnapshot {
   pressedElementId?: string;
   hoveredElementId?: string;
   focusedElementId?: string;
+  modalDialogId?: string;
   navigationOutcomes: readonly AstylarNavigationOutcome[];
   disposed: boolean;
+}
+
+export interface AstylarInteractionDialogAdapter {
+  setTopLayer(elementIds: readonly string[], active: boolean): void;
+  restoreFocus?(elementId: string): void;
 }
 
 export interface AstylarNavigationOutcome {
@@ -90,6 +96,13 @@ interface AstylarFormDefault {
   type: 'reset' | 'submit';
 }
 
+interface AstylarModalDialogState {
+  id: string;
+  elementIds: ReadonlySet<string>;
+  focusOrder: readonly string[];
+  initialFocusId?: string;
+}
+
 /** Owns the Babylon observers for one scene and emits a small DOM-like event subset. */
 export class AstylarInteractionRuntime {
   private readonly dispatcher: AstylarEventDispatcher;
@@ -110,6 +123,9 @@ export class AstylarInteractionRuntime {
   private focusedNonControlId?: string;
   private anchors = new Map<string, { href: string; target?: string }>();
   private readonly navigationOutcomes: AstylarNavigationOutcome[] = [];
+  private modalDialog?: AstylarModalDialogState;
+  private presentedModalDialog?: AstylarModalDialogState;
+  private pendingModalInitialFocus = false;
 
   constructor(
     private readonly scene: Scene,
@@ -120,6 +136,7 @@ export class AstylarInteractionRuntime {
     canvasOverride?: HTMLCanvasElement,
     private readonly scrolling?: AstylarInteractionScrollAdapter,
     private readonly navigation: AstylarNavigationOptions = {},
+    private readonly dialogs?: AstylarInteractionDialogAdapter,
   ) {
     this.dispatcher = new AstylarEventDispatcher(siteData, options);
     this.focusOrder = this.buildFocusOrder(siteData);
@@ -128,6 +145,8 @@ export class AstylarInteractionRuntime {
     this.formDefaults = this.buildFormDefaults(siteData);
     this.implicitSubmitTargets = this.buildImplicitSubmitTargets(siteData);
     this.anchors = this.buildAnchors(siteData);
+    this.modalDialog = this.buildActiveModalDialog(siteData, this.focusOrder);
+    this.pendingModalInitialFocus = !!this.modalDialog;
     this.pointerObserver = scene.onPointerObservable.add((pointerInfo) => {
       this.handlePointer(pointerInfo);
     });
@@ -151,6 +170,7 @@ export class AstylarInteractionRuntime {
       pressedElementId: this.pressedElementId,
       hoveredElementId: this.hoveredElementId,
       focusedElementId: this.getFocusedElementId(),
+      modalDialogId: this.modalDialog?.id,
       navigationOutcomes: [...this.navigationOutcomes],
       disposed: this.disposed,
     };
@@ -162,6 +182,7 @@ export class AstylarInteractionRuntime {
     preservePreviousSelectionOnReset = false,
   ): boolean {
     if (this.disposed || !this.focusOrder.includes(elementId) ||
+        !this.isAllowedByModal(elementId) ||
         !this.dispatcher.hasEnabledTarget(elementId)) return false;
     this.setFocus(elementId, preservePreviousSelectionOnReset);
     this.scrolling?.scrollIntoView?.(elementId, 'nearest');
@@ -177,7 +198,8 @@ export class AstylarInteractionRuntime {
 
   /** Routes assistive/native click activation through typed Astylar defaults. */
   activateSemanticElement(elementId: string): boolean {
-    if (this.disposed || !this.dispatcher.hasEnabledTarget(elementId)) return false;
+    if (this.disposed || !this.isAllowedByModal(elementId) ||
+        !this.dispatcher.hasEnabledTarget(elementId)) return false;
     if (this.focusOrder.includes(elementId)) this.setFocus(elementId);
     const accepted = this.activateAndClick(elementId);
     const labelTargetId = accepted ? this.labelTargets.get(elementId) : undefined;
@@ -191,6 +213,10 @@ export class AstylarInteractionRuntime {
   /** Reuses the canvas keyboard/default-action pipeline for semantic focus. */
   handleSemanticKeyDown(event: KeyboardEvent): void {
     if (event.key === 'Tab') {
+      if (this.modalDialog) {
+        this.handleKeyDown(event);
+        return;
+      }
       this.dispatchSemanticTabKey(event, 'keydown');
       return;
     }
@@ -228,7 +254,11 @@ export class AstylarInteractionRuntime {
   setSiteData(siteData: SiteData): void {
     const nextFocusOrder = this.buildFocusOrder(siteData);
     const nextControlTypes = this.buildControlTypes(siteData);
+    const nextModalDialog = this.buildActiveModalDialog(siteData, nextFocusOrder);
+    const modalChanged = this.modalDialog?.id !== nextModalDialog?.id;
     const focusedElementId = this.getFocusedElementId();
+    const modalNeedsFocus = !!nextModalDialog &&
+      (!focusedElementId || !nextModalDialog.elementIds.has(focusedElementId));
     if (focusedElementId &&
         (!nextFocusOrder.includes(focusedElementId) ||
           this.controlTypes.get(focusedElementId) !== nextControlTypes.get(focusedElementId))) {
@@ -242,6 +272,10 @@ export class AstylarInteractionRuntime {
     this.formDefaults = this.buildFormDefaults(siteData);
     this.implicitSubmitTargets = this.buildImplicitSubmitTargets(siteData);
     this.anchors = this.buildAnchors(siteData);
+    this.modalDialog = nextModalDialog;
+    if ((modalChanged || modalNeedsFocus) && nextModalDialog) {
+      this.pendingModalInitialFocus = true;
+    }
     if (this.pressedElementId && !this.dispatcher.hasEnabledTarget(this.pressedElementId)) {
       this.controls?.setActiveState?.(this.pressedElementId, false);
       this.pressedElementId = undefined;
@@ -249,6 +283,25 @@ export class AstylarInteractionRuntime {
     if (this.hoveredElementId && !this.dispatcher.hasEnabledTarget(this.hoveredElementId)) {
       this.hoveredElementId = undefined;
     }
+  }
+
+  /** Applies modal presentation and deterministic initial focus after a scene rebuild. */
+  reconcileModalState(): void {
+    if (this.disposed) return;
+    if (this.presentedModalDialog?.id !== this.modalDialog?.id) {
+      if (this.presentedModalDialog) {
+        this.dialogs?.setTopLayer([...this.presentedModalDialog.elementIds], false);
+      }
+    }
+    this.presentedModalDialog = this.modalDialog;
+    if (this.modalDialog) {
+      this.dialogs?.setTopLayer([...this.modalDialog.elementIds], true);
+    }
+    if (!this.pendingModalInitialFocus || !this.modalDialog) return;
+    this.pendingModalInitialFocus = false;
+    const current = this.getFocusedElementId();
+    if (current && this.modalDialog.elementIds.has(current)) return;
+    if (this.modalDialog.initialFocusId) this.setFocus(this.modalDialog.initialFocusId);
   }
 
   dispose(): void {
@@ -271,6 +324,12 @@ export class AstylarInteractionRuntime {
     this.pressedExpandedSelectOption = undefined;
     this.focusedNonControlId = undefined;
     this.navigationOutcomes.length = 0;
+    if (this.presentedModalDialog) {
+      this.dialogs?.setTopLayer([...this.presentedModalDialog.elementIds], false);
+    }
+    this.modalDialog = undefined;
+    this.presentedModalDialog = undefined;
+    this.pendingModalInitialFocus = false;
   }
 
   private handlePointer(pointerInfo: PointerInfo): void {
@@ -303,6 +362,9 @@ export class AstylarInteractionRuntime {
       return;
     }
     let targetId = this.resolveElementId(pickedMesh);
+    if (this.modalDialog && !this.isAllowedByModal(targetId)) {
+      targetId = this.resolveModalPointerTarget(pointerInfo);
+    }
     if (targetId && this.scrolling &&
         !this.scrolling.isPointVisible(targetId, pointerInfo.pickInfo?.pickedPoint ?? undefined)) {
       targetId = undefined;
@@ -315,8 +377,16 @@ export class AstylarInteractionRuntime {
     if (pointerInfo.type === PointerEventTypes.POINTERDOWN) {
       if (!targetId) {
         this.pressedElementId = undefined;
-        this.canvas?.focus();
-        this.setFocus(undefined);
+        if (!this.modalDialog) {
+          this.canvas?.focus();
+          this.setFocus(undefined);
+        } else {
+          pointerInfo.event?.preventDefault();
+          const focusedElementId = this.getFocusedElementId();
+          if (focusedElementId) {
+            setTimeout(() => this.dialogs?.restoreFocus?.(focusedElementId), 0);
+          }
+        }
         return;
       }
       if (!this.dispatcher.hasEnabledTarget(targetId)) {
@@ -538,6 +608,7 @@ export class AstylarInteractionRuntime {
     const deltaX = event.deltaX * factor;
     const deltaY = event.deltaY * factor;
     for (const targetId of this.resolveElementIds(pick?.pickedMesh ?? undefined)) {
+      if (!this.isAllowedByModal(targetId)) continue;
       if (!this.scrolling.isPointVisible(targetId, pick?.pickedPoint ?? undefined)) continue;
       if (this.controls?.scrollTextControl?.(targetId, deltaX, deltaY) ||
           this.scrolling.scrollFrom(targetId, deltaX, deltaY)) {
@@ -606,13 +677,14 @@ export class AstylarInteractionRuntime {
   }
 
   private moveFocus(direction: -1 | 1): void {
-    if (!this.focusOrder.length) return;
+    const focusOrder = this.modalDialog?.focusOrder ?? this.focusOrder;
+    if (!focusOrder.length) return;
     const current = this.getFocusedElementId();
-    const currentIndex = current ? this.focusOrder.indexOf(current) : -1;
+    const currentIndex = current ? focusOrder.indexOf(current) : -1;
     const nextIndex = direction === 1
-      ? (currentIndex + 1 + this.focusOrder.length) % this.focusOrder.length
-      : (currentIndex <= 0 ? this.focusOrder.length - 1 : currentIndex - 1);
-    this.setFocus(this.focusOrder[nextIndex], true);
+      ? (currentIndex + 1 + focusOrder.length) % focusOrder.length
+      : (currentIndex <= 0 ? focusOrder.length - 1 : currentIndex - 1);
+    this.setFocus(focusOrder[nextIndex], true);
   }
 
   private radioNavigationDirection(key: string): -1 | 1 | undefined {
@@ -625,6 +697,7 @@ export class AstylarInteractionRuntime {
     elementId: string | undefined,
     preservePreviousSelectionOnReset: boolean = false,
   ): void {
+    if (elementId && !this.isAllowedByModal(elementId)) return;
     const previous = this.getFocusedElementId();
     if (previous === elementId) return;
     if (previous) {
@@ -813,6 +886,64 @@ export class AstylarInteractionRuntime {
     };
     siteData.root.children.forEach(visit);
     return anchors;
+  }
+
+  private buildActiveModalDialog(
+    siteData: SiteData,
+    focusOrder: readonly string[],
+  ): AstylarModalDialogState | undefined {
+    const dialogs: AstylarModalDialogState[] = [];
+    const collectIds = (
+      element: SiteData['root']['children'][number],
+      ids: Set<string>,
+      autofocusIds: string[],
+    ): void => {
+      if (element.hidden) return;
+      if (element.id) {
+        ids.add(element.id);
+        if (element.autofocus) autofocusIds.push(element.id);
+      }
+      element.children?.forEach((child) => collectIds(child, ids, autofocusIds));
+    };
+    const visit = (element: SiteData['root']['children'][number]): void => {
+      if (!element.hidden && element.type === 'dialog' && element.open && element.modal && element.id) {
+        const elementIds = new Set<string>();
+        const autofocusIds: string[] = [];
+        collectIds(element, elementIds, autofocusIds);
+        const dialogFocusOrder = focusOrder.filter((id) => elementIds.has(id));
+        dialogs.push({
+          id: element.id,
+          elementIds,
+          focusOrder: dialogFocusOrder,
+          initialFocusId: autofocusIds.find((id) => dialogFocusOrder.includes(id)) ??
+            dialogFocusOrder[0],
+        });
+      }
+      element.children?.forEach(visit);
+    };
+    siteData.root.children.forEach(visit);
+    return dialogs.at(-1);
+  }
+
+  private isAllowedByModal(elementId: string | undefined): boolean {
+    return !this.modalDialog || (!!elementId && this.modalDialog.elementIds.has(elementId));
+  }
+
+  private resolveModalPointerTarget(pointerInfo: PointerInfo): string | undefined {
+    if (!this.modalDialog) return this.resolveElementId(pointerInfo.pickInfo?.pickedMesh ?? undefined);
+    const nativeEvent = pointerInfo.event as PointerEvent | MouseEvent | undefined;
+    const x = nativeEvent?.offsetX ?? this.scene.pointerX;
+    const y = nativeEvent?.offsetY ?? this.scene.pointerY;
+    const picks = this.scene.multiPick(x, y, (mesh) => mesh.isPickable) ?? [];
+    for (const pick of picks) {
+      for (const elementId of this.resolveElementIds(pick.pickedMesh ?? undefined)) {
+        if (this.modalDialog.elementIds.has(elementId) &&
+            (!this.scrolling || this.scrolling.isPointVisible(elementId, pick.pickedPoint ?? undefined))) {
+          return elementId;
+        }
+      }
+    }
+    return undefined;
   }
 
   private performNavigationDefault(sourceId: string): void {

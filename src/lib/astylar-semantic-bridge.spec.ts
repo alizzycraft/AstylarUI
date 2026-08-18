@@ -225,6 +225,47 @@ describe('AstylarSemanticBridge', () => {
     bridge.dispose();
   });
 
+  it('exposes modal dialog state and makes the background semantic subtree inert', () => {
+    const bridge = new AstylarSemanticBridge(canvas);
+    const modalSiteData: SiteData = {
+      styles: [],
+      root: { children: [
+        { type: 'section', id: 'background', children: [
+          { type: 'button', id: 'background-action', textContent: 'Background' },
+        ] },
+        {
+          type: 'dialog', id: 'dialog', open: true, modal: true,
+          ariaLabelledby: 'dialog-title', children: [
+            { type: 'h2', id: 'dialog-title', textContent: 'Confirm' },
+            { type: 'button', id: 'dialog-action', textContent: 'Continue', autofocus: true },
+          ],
+        },
+      ] },
+    };
+    bridge.reconcile(modalSiteData);
+
+    const background = host.querySelector<HTMLElement>('[data-astylar-id="background"]');
+    const dialog = host.querySelector<HTMLDialogElement>('[data-astylar-id="dialog"]');
+    const action = host.querySelector<HTMLElement>('[data-astylar-id="dialog-action"]');
+    expect(background?.inert).toBeTrue();
+    expect(dialog?.open).toBeTrue();
+    expect(dialog?.getAttribute('aria-modal')).toBe('true');
+    expect(dialog?.inert).toBeFalse();
+    expect(action?.inert).toBeFalse();
+
+    bridge.reconcile({
+      ...modalSiteData,
+      root: { children: [
+        modalSiteData.root.children[0],
+        { ...modalSiteData.root.children[1], open: false, modal: false },
+      ] },
+    });
+    expect(background?.inert).toBeFalse();
+    expect(dialog?.open).toBeFalse();
+    expect(dialog?.hasAttribute('aria-modal')).toBeFalse();
+    bridge.dispose();
+  });
+
   function siteData(): SiteData {
     return {
       styles: [],

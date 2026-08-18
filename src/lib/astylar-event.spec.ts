@@ -1510,4 +1510,96 @@ describe('AstylarInteractionRuntime', () => {
     scene.dispose();
     engine.dispose();
   });
+
+  it('owns modal autofocus, Tab containment, background inertness, and top-layer cleanup', () => {
+    const engine = new NullEngine();
+    const scene = new Scene(engine);
+    const canvas = document.createElement('canvas');
+    const events: AstylarEventSnapshot[] = [];
+    const topLayerCalls: Array<{ ids: readonly string[]; active: boolean }> = [];
+    let focusedElementId: string | undefined;
+    const runtime = new AstylarInteractionRuntime(
+      scene,
+      {
+        styles: [],
+        root: { children: [
+          { type: 'input', inputType: 'button', id: 'background', value: 'Background' },
+          {
+            type: 'dialog', id: 'dialog', open: true, modal: true,
+            children: [
+              { type: 'h2', id: 'title', textContent: 'Confirm' },
+              {
+                type: 'input', inputType: 'button', id: 'first',
+                value: 'First', autofocus: true,
+              },
+              { type: 'input', inputType: 'button', id: 'second', value: 'Second' },
+            ],
+          },
+        ] },
+      },
+      { onEvent: (event) => events.push(event) },
+      undefined,
+      {
+        getFocusedElementId: () => focusedElementId,
+        focus: (elementId) => {
+          focusedElementId = elementId;
+          return true;
+        },
+        blur: (elementId) => {
+          if (focusedElementId === elementId) focusedElementId = undefined;
+          return true;
+        },
+        handleKeyDown: () => undefined,
+        commitsValueOnBlur: () => false,
+      },
+      canvas,
+      undefined,
+      undefined,
+      {
+        setTopLayer: (ids, active) => topLayerCalls.push({ ids: [...ids], active }),
+      },
+    );
+
+    runtime.reconcileModalState();
+    expect(runtime.snapshot.modalDialogId).toBe('dialog');
+    expect(focusedElementId).toBe('first');
+    expect(topLayerCalls).toEqual([{
+      ids: ['dialog', 'title', 'first', 'second'],
+      active: true,
+    }]);
+    expect(runtime.focusSemanticElement('background')).toBeFalse();
+    expect(runtime.activateSemanticElement('background')).toBeFalse();
+
+    const tab = (shiftKey = false): void => {
+      const down = new KeyboardEvent('keydown', {
+        key: 'Tab', code: 'Tab', shiftKey, cancelable: true,
+      });
+      runtime.handleSemanticKeyDown(down);
+      expect(down.defaultPrevented).toBeTrue();
+      runtime.handleSemanticKeyUp(new KeyboardEvent('keyup', {
+        key: 'Tab', code: 'Tab', shiftKey, cancelable: true,
+      }));
+    };
+    tab();
+    expect(focusedElementId).toBe('second');
+    tab();
+    expect(focusedElementId).toBe('first');
+    tab(true);
+    expect(focusedElementId).toBe('second');
+    expect(events.map((event) => `${event.type}:${event.targetId}`)).toEqual([
+      'focus:first',
+      'keydown:first', 'blur:first', 'focus:second', 'keyup:second',
+      'keydown:second', 'blur:second', 'focus:first', 'keyup:first',
+      'keydown:first', 'blur:first', 'focus:second', 'keyup:second',
+    ]);
+
+    runtime.dispose();
+    expect(topLayerCalls.at(-1)).toEqual({
+      ids: ['dialog', 'title', 'first', 'second'],
+      active: false,
+    });
+    expect(runtime.snapshot.modalDialogId).toBeUndefined();
+    scene.dispose();
+    engine.dispose();
+  });
 });

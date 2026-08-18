@@ -479,6 +479,7 @@ export class ParityAstylarComponent {
         ? {
             events: [...this.interactionEvents],
             focusedElementId: this.astylar.getInteractionSnapshot(scene)?.focusedElementId,
+            modalDialogId: this.astylar.getInteractionSnapshot(scene)?.modalDialogId,
             controls: this.measureControls(interactionIds),
             scrollContainers: Object.fromEntries(
               scrollIds.map((id) => [id, this.astylar.getScrollSnapshot(scene)?.containers[id]])

@@ -65,6 +65,8 @@ export interface ParityFixture {
   interactionEventTypes?: ParityInteractionEventType[];
   /** Click handlers installed outside serializable fixture data. */
   cancelClickIds?: string[];
+  /** Native reference dialogs opened with showModal() after fixture reconciliation. */
+  modalDialogIds?: string[];
 }
 
 export type ParityInteractionEventType =
@@ -301,6 +303,7 @@ export interface ParityControlState {
 export interface ParityInteractionReport {
   events: ParityNormalizedEvent[];
   focusedElementId?: string;
+  modalDialogId?: string;
   controls: Record<string, ParityControlState>;
   scrollContainers?: Record<string, ParityScrollState>;
   navigationOutcomes?: ParityNavigationOutcome[];

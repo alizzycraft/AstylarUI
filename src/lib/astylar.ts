@@ -325,6 +325,7 @@ export class Astylar {
                 this.setElementFocusState(focusedElementId, true);
               }
             }
+            interaction?.reconcileModalState();
             semanticBridge?.syncControlStates((elementId) =>
               this.getLiveSemanticControlState(elementId));
             semanticBridge?.queueFocusSync(
@@ -429,6 +430,24 @@ export class Astylar {
       undefined,
       scrollRuntime,
       options?.navigation,
+      {
+        setTopLayer: (elementIds, active) => {
+          const groupId = active ? 2 : 0;
+          const meshes = new Set<Mesh>();
+          for (const elementId of elementIds) {
+            const root = this.elementManager.elementsMap.get(elementId);
+            if (!root) continue;
+            meshes.add(root);
+            for (const descendant of root.getChildMeshes(false)) {
+              if (descendant instanceof Mesh) meshes.add(descendant);
+            }
+          }
+          for (const mesh of meshes) mesh.renderingGroupId = groupId;
+        },
+        restoreFocus: (elementId) => {
+          semanticBridge?.queueFocusSync(() => elementId);
+        },
+      },
     );
     this.interactions.set(scene, interaction);
     semanticBridge?.connectInteractions({
