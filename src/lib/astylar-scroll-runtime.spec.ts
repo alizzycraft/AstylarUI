@@ -59,7 +59,11 @@ describe('AstylarScrollRuntime', () => {
     strip.metadata = { element: boxElement.children![0], elementId: 'strip' };
     const runtime = new AstylarScrollRuntime({
       getMesh: (id) => id === 'box' ? box : id === 'strip' ? strip : undefined,
-      getDimensions: (id) => id === 'box' ? { width: 240, height: 120 } : undefined,
+      getDimensions: (id) => id === 'box' ? {
+        width: 240,
+        height: 120,
+        padding: { top: 0, right: 12, bottom: 0, left: 0 },
+      } : undefined,
       getStyle: (id) => id === 'box' ? { selector: '#box', overflow: 'auto' } : undefined,
       getPixelToWorldScale: () => 1,
     });
@@ -68,7 +72,7 @@ describe('AstylarScrollRuntime', () => {
     expect(runtime.snapshot.containers['box']).toEqual({
       scrollLeft: 0,
       scrollTop: 0,
-      scrollWidth: 360,
+      scrollWidth: 372,
       scrollHeight: 120,
       clientWidth: 240,
       clientHeight: 120,
@@ -79,8 +83,8 @@ describe('AstylarScrollRuntime', () => {
     expect(strip.position.x).toBe(5);
 
     expect(runtime.scrollFrom('strip', 500, 0)).toBeTrue();
-    expect(runtime.snapshot.containers['box'].scrollLeft).toBe(120);
-    expect(strip.position.x).toBe(60);
+    expect(runtime.snapshot.containers['box'].scrollLeft).toBe(132);
+    expect(strip.position.x).toBe(72);
   });
 
   it('preserves and clamps compatible state across a rebuilt scene graph', () => {

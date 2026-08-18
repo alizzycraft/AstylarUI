@@ -26,6 +26,7 @@ interface ScrollContainer extends AstylarScrollState {
 interface ElementDimensions {
   width: number;
   height: number;
+  padding?: { top: number; right: number; bottom: number; left: number };
 }
 
 export interface AstylarScrollRuntimeOptions {
@@ -170,10 +171,10 @@ export class AstylarScrollRuntime {
       .filter((child): child is Mesh => !!child)
       .map((child) => ({ mesh: child, x: child.position.x, y: child.position.y }));
 
-    let minX = containerBounds.minimumWorld.x;
-    let maxX = containerBounds.maximumWorld.x;
-    let minY = containerBounds.minimumWorld.y;
-    let maxY = containerBounds.maximumWorld.y;
+    let minX = Number.POSITIVE_INFINITY;
+    let maxX = Number.NEGATIVE_INFINITY;
+    let minY = Number.POSITIVE_INFINITY;
+    let maxY = Number.NEGATIVE_INFINITY;
     for (const root of roots) {
       const bounds = root.mesh.getHierarchyBoundingVectors(true);
       minX = Math.min(minX, bounds.min.x);
@@ -183,20 +184,24 @@ export class AstylarScrollRuntime {
     }
     const clientWidth = this.round(dimensions.width);
     const clientHeight = this.round(dimensions.height);
+    const trailingPaddingX = dimensions.padding?.right ?? 0;
+    const trailingPaddingY = dimensions.padding?.bottom ?? 0;
+    const contentWidth = roots.length ? Math.max(
+      maxX - containerBounds.minimumWorld.x,
+      containerBounds.maximumWorld.x - minX,
+    ) / scale + trailingPaddingX : 0;
+    const contentHeight = roots.length ? Math.max(
+      maxY - containerBounds.minimumWorld.y,
+      containerBounds.maximumWorld.y - minY,
+    ) / scale + trailingPaddingY : 0;
     return {
       id,
       mesh,
       roots,
       scrollLeft: 0,
       scrollTop: 0,
-      scrollWidth: Math.max(clientWidth, this.round(Math.max(
-        maxX - containerBounds.minimumWorld.x,
-        containerBounds.maximumWorld.x - minX,
-      ) / scale)),
-      scrollHeight: Math.max(clientHeight, this.round(Math.max(
-        maxY - containerBounds.minimumWorld.y,
-        containerBounds.maximumWorld.y - minY,
-      ) / scale)),
+      scrollWidth: Math.max(clientWidth, this.round(contentWidth)),
+      scrollHeight: Math.max(clientHeight, this.round(contentHeight)),
       clientWidth,
       clientHeight,
     };
