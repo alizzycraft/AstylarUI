@@ -157,12 +157,16 @@ export class AstylarScrollRuntime {
       .filter((child): child is Mesh => !!child)
       .map((child) => ({ mesh: child, x: child.position.x, y: child.position.y }));
 
-    let minY = containerBounds.minimumWorld.y;
+    let minX = containerBounds.minimumWorld.x;
     let maxX = containerBounds.maximumWorld.x;
+    let minY = containerBounds.minimumWorld.y;
+    let maxY = containerBounds.maximumWorld.y;
     for (const root of roots) {
       const bounds = root.mesh.getHierarchyBoundingVectors(true);
-      minY = Math.min(minY, bounds.min.y);
+      minX = Math.min(minX, bounds.min.x);
       maxX = Math.max(maxX, bounds.max.x);
+      minY = Math.min(minY, bounds.min.y);
+      maxY = Math.max(maxY, bounds.max.y);
     }
     const clientWidth = this.round(dimensions.width);
     const clientHeight = this.round(dimensions.height);
@@ -172,8 +176,14 @@ export class AstylarScrollRuntime {
       roots,
       scrollLeft: 0,
       scrollTop: 0,
-      scrollWidth: Math.max(clientWidth, this.round((maxX - containerBounds.minimumWorld.x) / scale)),
-      scrollHeight: Math.max(clientHeight, this.round((containerBounds.maximumWorld.y - minY) / scale)),
+      scrollWidth: Math.max(clientWidth, this.round(Math.max(
+        maxX - containerBounds.minimumWorld.x,
+        containerBounds.maximumWorld.x - minX,
+      ) / scale)),
+      scrollHeight: Math.max(clientHeight, this.round(Math.max(
+        maxY - containerBounds.minimumWorld.y,
+        containerBounds.maximumWorld.y - minY,
+      ) / scale)),
       clientWidth,
       clientHeight,
     };
@@ -192,7 +202,9 @@ export class AstylarScrollRuntime {
   private applyOffset(container: ScrollContainer): void {
     const scale = this.options.getPixelToWorldScale();
     for (const root of container.roots) {
-      root.mesh.position.x = root.x - container.scrollLeft * scale;
+      // Astylar's camera faces the planes from negative Z, so increasing world X
+      // moves content toward the screen's left edge as browser scrollLeft grows.
+      root.mesh.position.x = root.x + container.scrollLeft * scale;
       root.mesh.position.y = root.y + container.scrollTop * scale;
       root.mesh.computeWorldMatrix(true);
     }

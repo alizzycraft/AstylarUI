@@ -804,5 +804,12 @@
     "category": "overflow-scrolling",
     "expectedBehavior": "Wheel input scrolls a fixed-height overflow:auto container, clamps at both ends, moves its content under a stable clip, and reports browser-equivalent scroll extents.",
     "interactionStepCount": 3
+  },
+  {
+    "id": "overflow-horizontal-wheel",
+    "title": "Horizontal wheel scrolling",
+    "category": "overflow-scrolling",
+    "expectedBehavior": "Horizontal wheel input scrolls a fixed-width overflow:auto container, clamps at both ends, moves its row beneath a stable clip, and reports browser-equivalent scroll extents.",
+    "interactionStepCount": 3
   }
 ]

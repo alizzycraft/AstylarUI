@@ -44,6 +44,45 @@ describe('AstylarScrollRuntime', () => {
     expect(meshes.get('one')?.position.y).toBe(90);
   });
 
+  it('measures rightward screen overflow and applies horizontal scroll offsets', () => {
+    const boxElement: DOMElement = {
+      type: 'div', id: 'box', children: [{ type: 'div', id: 'strip' }],
+    };
+    const siteData: SiteData = { styles: [], root: { children: [boxElement] } };
+    const box = MeshBuilder.CreatePlane('box', { width: 240, height: 120 }, scene);
+    box.metadata = { element: boxElement, elementId: 'box' };
+    const strip = MeshBuilder.CreatePlane('strip', { width: 360, height: 120 }, scene);
+    strip.parent = box;
+    // The rendered camera reverses screen X, so content flowing right extends
+    // toward negative world X while retaining its authored leading edge.
+    strip.position.x = -60;
+    strip.metadata = { element: boxElement.children![0], elementId: 'strip' };
+    const runtime = new AstylarScrollRuntime({
+      getMesh: (id) => id === 'box' ? box : id === 'strip' ? strip : undefined,
+      getDimensions: (id) => id === 'box' ? { width: 240, height: 120 } : undefined,
+      getStyle: (id) => id === 'box' ? { selector: '#box', overflow: 'auto' } : undefined,
+      getPixelToWorldScale: () => 1,
+    });
+
+    runtime.reconcile(siteData);
+    expect(runtime.snapshot.containers['box']).toEqual({
+      scrollLeft: 0,
+      scrollTop: 0,
+      scrollWidth: 360,
+      scrollHeight: 120,
+      clientWidth: 240,
+      clientHeight: 120,
+    });
+
+    expect(runtime.scrollFrom('strip', 65, 0)).toBeTrue();
+    expect(runtime.snapshot.containers['box'].scrollLeft).toBe(65);
+    expect(strip.position.x).toBe(5);
+
+    expect(runtime.scrollFrom('strip', 500, 0)).toBeTrue();
+    expect(runtime.snapshot.containers['box'].scrollLeft).toBe(120);
+    expect(strip.position.x).toBe(60);
+  });
+
   it('preserves and clamps compatible state across a rebuilt scene graph', () => {
     const initial = createVerticalRuntime(scene);
     initial.runtime.reconcile(initial.siteData);
