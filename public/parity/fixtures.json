@@ -841,5 +841,12 @@
     "category": "overflow-scrolling",
     "expectedBehavior": "A clipped control cannot be activated, becomes pointer-targetable and focusable after scrolling into view, and becomes inert again when scrolled back outside the clip.",
     "interactionStepCount": 5
+  },
+  {
+    "id": "interaction-pointer-caret",
+    "title": "Pointer caret placement",
+    "category": "forms-interactive",
+    "expectedBehavior": "Clicking at different horizontal positions in a text input focuses it and places a collapsed caret at the nearest browser text boundary.",
+    "interactionStepCount": 3
   }
 ]

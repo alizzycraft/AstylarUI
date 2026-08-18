@@ -631,13 +631,17 @@ async function performInteractionAction(page, mode, action, report) {
   switch (action.type) {
     case 'click':
     case 'hover': {
-      const { x, y } = await getInteractionPoint(page, mode, action.elementId, report);
+      const { x, y } = await getInteractionPoint(
+        page, mode, action.elementId, report, action.offsetX, action.offsetY,
+      );
       if (action.type === 'click') await page.mouse.click(x, y);
       else await page.mouse.move(x, y);
       return;
     }
     case 'pointer-down': {
-      const { x, y } = await getInteractionPoint(page, mode, action.elementId, report);
+      const { x, y } = await getInteractionPoint(
+        page, mode, action.elementId, report, action.offsetX, action.offsetY,
+      );
       await page.mouse.move(x, y);
       await page.mouse.down();
       return;
@@ -676,7 +680,7 @@ async function performInteractionAction(page, mode, action, report) {
   }
 }
 
-async function getInteractionPoint(page, mode, elementId, report) {
+async function getInteractionPoint(page, mode, elementId, report, offsetX, offsetY) {
   const rect = report?.elements?.[elementId]?.borderBox;
   if (!rect) throw new Error(`Missing ${mode} interaction target geometry: ${elementId}`);
   const surfaceSelector = mode === 'reference'
@@ -685,8 +689,8 @@ async function getInteractionPoint(page, mode, elementId, report) {
   let surface = await page.locator(surfaceSelector).boundingBox();
   if (!surface) throw new Error(`Missing ${mode} comparison surface bounds`);
 
-  let x = surface.x + rect.left + rect.width / 2;
-  let y = surface.y + rect.top + rect.height / 2;
+  let x = surface.x + rect.left + (offsetX ?? rect.width / 2);
+  let y = surface.y + rect.top + (offsetY ?? rect.height / 2);
   const viewport = page.viewportSize();
   if (viewport && (x < 0 || x >= viewport.width || y < 0 || y >= viewport.height)) {
     await page.evaluate(({ targetX, targetY }) => {
@@ -697,8 +701,8 @@ async function getInteractionPoint(page, mode, elementId, report) {
     }, { targetX: x, targetY: y });
     surface = await page.locator(surfaceSelector).boundingBox();
     if (!surface) throw new Error(`Missing ${mode} comparison surface bounds after scroll`);
-    x = surface.x + rect.left + rect.width / 2;
-    y = surface.y + rect.top + rect.height / 2;
+    x = surface.x + rect.left + (offsetX ?? rect.width / 2);
+    y = surface.y + rect.top + (offsetY ?? rect.height / 2);
   }
   return { x, y };
 }

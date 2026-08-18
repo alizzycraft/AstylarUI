@@ -81,16 +81,22 @@ export type ParityInteractionEventType =
 export interface ParityClickAction {
   type: 'click';
   elementId: string;
+  offsetX?: number;
+  offsetY?: number;
 }
 
 export interface ParityHoverAction {
   type: 'hover';
   elementId: string;
+  offsetX?: number;
+  offsetY?: number;
 }
 
 export interface ParityPointerDownAction {
   type: 'pointer-down';
   elementId: string;
+  offsetX?: number;
+  offsetY?: number;
 }
 
 export interface ParityPointerUpAction {
