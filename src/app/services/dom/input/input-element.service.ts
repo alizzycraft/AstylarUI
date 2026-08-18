@@ -421,6 +421,16 @@ export class InputElementService {
         return this.inputElements.get(elementId)?.type === InputType.Select;
     }
 
+    /** Native expanded selects consume Escape before page keydown listeners observe it. */
+    cancelExpandedSelect(elementId: string): boolean {
+        const input = this.inputElements.get(elementId);
+        if (!input || input.type !== InputType.Select) return false;
+        const select = input as SelectElement;
+        if (!select.dropdownOpen) return false;
+        this.selectManager.closeDropdown(select);
+        return true;
+    }
+
     /** Applies a control's click activation and returns a cancellation rollback. */
     activateInputElement(elementId: string): { changed: boolean; rollback: () => void } | undefined {
         const input = this.inputElements.get(elementId);

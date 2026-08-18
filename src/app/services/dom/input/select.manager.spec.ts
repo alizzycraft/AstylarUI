@@ -82,6 +82,45 @@ describe('SelectManager', () => {
     expect(select.validationState.dirty).toBeTrue();
   });
 
+  it('opens compact popup rows with native selected and disabled treatment', () => {
+    const textRendering = {
+      renderTextToTexture: () => ({ getSize: () => ({ width: 80, height: 24 }) }),
+    } as unknown as TextRenderingService;
+    const meshService = {
+      createTextMesh: (name: string, _texture: unknown, width: number, height: number) =>
+        BABYLON.MeshBuilder.CreatePlane(name, { width, height }, scene),
+    } as unknown as BabylonMeshService;
+    const manager = new SelectManager(textRendering, meshService);
+    const select = manager.createSelectElement(
+      {
+        type: 'select', id: 'choice', value: 'alpha', options: [
+          { value: 'alpha', label: 'Alpha' },
+          { value: 'blocked', label: 'Blocked', disabled: true },
+          { value: 'beta', label: 'Beta' },
+        ],
+      },
+      {
+        scene,
+        actions: { camera: { getPixelToWorldScale: () => 0.01 } },
+      } as any,
+      {
+        selector: '#choice', background: '#ffffff', color: '#000000',
+        fontSize: '16px', padding: '12px 14px', borderWidth: '2px',
+      },
+      { width: 2.2, height: 0.56 },
+    );
+
+    manager.openDropdown(select, scene, select.style);
+
+    const dropdownHeight = select.dropdownMesh!.getBoundingInfo().boundingBox.extendSize.y * 2;
+    const selectedMaterial = select.optionMeshes[0].material as BABYLON.StandardMaterial;
+    expect(dropdownHeight).toBeCloseTo(0.78, 5);
+    expect(select.optionMeshes[1].isPickable).toBeFalse();
+    expect(selectedMaterial.diffuseColor.r).toBeCloseTo(25 / 255, 5);
+    expect(selectedMaterial.diffuseColor.g).toBeCloseTo(103 / 255, 5);
+    expect(selectedMaterial.diffuseColor.b).toBeCloseTo(210 / 255, 5);
+  });
+
   it('disposes the replaced display material when selection redraws', () => {
     const textRendering = {
       renderTextToTexture: () => ({ getSize: () => ({ width: 80, height: 24 }) }),

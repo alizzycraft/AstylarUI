@@ -497,6 +497,7 @@ export class ParityAstylarComponent {
         selectedValue: typeof input.selectedIndex === 'number'
           ? String(options[input.selectedIndex]?.value ?? input.value ?? '')
           : undefined,
+        expanded: typeof input.dropdownOpen === 'boolean' ? input.dropdownOpen : undefined,
         disabled: !!input.disabled,
         focused: !!input.focused,
         selectionStart: typeof input.selectionStart === 'number' ? input.selectionStart : undefined,

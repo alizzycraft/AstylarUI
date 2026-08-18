@@ -883,5 +883,12 @@
     "category": "forms-interactive",
     "expectedBehavior": "Dragging a held pointer below a multiline textarea viewport extends the selection through off-screen lines while retaining the browser scroll offset before release.",
     "interactionStepCount": 6
+  },
+  {
+    "id": "interaction-select-expanded-cancel",
+    "title": "Expanded select Escape cancellation",
+    "category": "forms-interactive",
+    "expectedBehavior": "A primary pointer click focuses and expands an enabled single-select; Escape closes it without changing the selected option or emitting mutation events.",
+    "interactionStepCount": 2
   }
 ]

@@ -761,6 +761,7 @@ function normalizeComparableControl(control) {
     checked: control.checked,
     selectedIndex: control.selectedIndex,
     selectedValue: control.selectedValue,
+    expanded: control.expanded,
     disabled: control.disabled,
     focused: control.focused,
     selectionStart: control.selectionStart,

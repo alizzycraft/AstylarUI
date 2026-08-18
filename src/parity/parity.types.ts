@@ -255,6 +255,7 @@ export interface ParityControlState {
   checked?: boolean;
   selectedIndex?: number;
   selectedValue?: string;
+  expanded?: boolean;
   disabled: boolean;
   focused: boolean;
   selectionStart?: number;

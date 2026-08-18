@@ -341,6 +341,8 @@ export class Astylar {
           this.inputElementService.commitsValueOnBlur(elementId),
         emitsImmediateChangeOnKeyboardMutation: (elementId) =>
           this.inputElementService.emitsImmediateChangeOnKeyboardMutation(elementId),
+        cancelExpandedSelect: (elementId) =>
+          this.inputElementService.cancelExpandedSelect(elementId),
         activate: (elementId) =>
           this.inputElementService.activateInputElement(elementId),
         canActivateWithSpace: (elementId) =>

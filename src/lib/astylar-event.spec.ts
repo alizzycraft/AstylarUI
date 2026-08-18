@@ -580,6 +580,54 @@ describe('AstylarInteractionRuntime', () => {
     engine.dispose();
   });
 
+  it('lets an expanded select consume Escape before public keydown dispatch', () => {
+    const engine = new NullEngine();
+    const scene = new Scene(engine);
+    const canvas = document.createElement('canvas');
+    const events: AstylarEventSnapshot[] = [];
+    let cancelCalls = 0;
+    const runtime = new AstylarInteractionRuntime(
+      scene,
+      {
+        styles: [],
+        root: { children: [{
+          type: 'select', id: 'choice', value: 'alpha',
+          options: [{ value: 'alpha', label: 'Alpha' }],
+        }] },
+      },
+      { onEvent: (event) => events.push(event) },
+      () => ({ value: 'alpha', selectedValue: 'alpha' }),
+      {
+        getFocusedElementId: () => 'choice',
+        focus: () => true,
+        blur: () => true,
+        handleKeyDown: () => undefined,
+        commitsValueOnBlur: () => false,
+        cancelExpandedSelect: () => {
+          cancelCalls += 1;
+          return true;
+        },
+      },
+      canvas,
+    );
+    const keydown = new KeyboardEvent('keydown', {
+      key: 'Escape', code: 'Escape', bubbles: true, cancelable: true,
+    });
+
+    canvas.dispatchEvent(keydown);
+    canvas.dispatchEvent(new KeyboardEvent('keyup', {
+      key: 'Escape', code: 'Escape', bubbles: true, cancelable: true,
+    }));
+
+    expect(cancelCalls).toBe(1);
+    expect(keydown.defaultPrevented).toBeTrue();
+    expect(events.map((event) => event.type)).toEqual(['keyup']);
+
+    runtime.dispose();
+    scene.dispose();
+    engine.dispose();
+  });
+
   it('emits input and change for an immediate select keyboard mutation', () => {
     const engine = new NullEngine();
     const scene = new Scene(engine);

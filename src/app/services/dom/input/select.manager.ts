@@ -491,8 +491,7 @@ export class SelectManager {
         const bounds = selectElement.mesh.getBoundingInfo().boundingBox.extendSize;
         const width = bounds.x * 2;
 
-        // Dynamic Option Height: Use select height as base
-        const optionHeight = bounds.y * 2;
+        const optionHeight = this.getPopupOptionHeight(selectElement, style);
 
         const optionsCount = selectElement.options.length;
         // Limit max height to e.g. 5 items
@@ -529,7 +528,7 @@ export class SelectManager {
         // Use proper world width from parent select mesh
         const bounds = selectElement.mesh.getBoundingInfo().boundingBox.extendSize;
         const width = bounds.x * 2;
-        const optionHeight = bounds.y * 2; // Match select height
+        const optionHeight = this.getPopupOptionHeight(selectElement, style);
 
         const optionMeshes: BABYLON.Mesh[] = [];
 
@@ -539,10 +538,9 @@ export class SelectManager {
 
         selectElement.options.forEach((option, index) => {
             // Background for option - minimal margin for tighter spacing
-            const margin = 0.005; // Very small fixed margin
             const optionMesh = BABYLON.MeshBuilder.CreatePlane(`option_${selectElement.element.id}_${index}`, {
-                width: width - (margin * 2),
-                height: optionHeight - (margin * 2)
+                width,
+                height: optionHeight
             }, scene);
 
             // Position relative to dropdown
@@ -557,7 +555,7 @@ export class SelectManager {
             // Create material
             const material = new BABYLON.StandardMaterial(`optionMaterial_${selectElement.element.id}_${index}`, scene);
             const baseColor = index === selectElement.selectedIndex
-                ? new BABYLON.Color3(0.9, 0.9, 1.0) // Highlight selected
+                ? BABYLON.Color3.FromHexString('#1967d2')
                 : BABYLON.Color3.White();
 
             material.diffuseColor = baseColor;
@@ -569,7 +567,11 @@ export class SelectManager {
             optionMesh.isPickable = !option.disabled;
 
             // Store option index in metadata for click handling and set cursor
-            optionMesh.metadata = { optionIndex: index, selectElement: selectElement, cursor: 'pointer' };
+            optionMesh.metadata = {
+                optionIndex: index,
+                selectElement: selectElement,
+                cursor: option.disabled ? 'default' : 'pointer'
+            };
 
             // Add click handler for option selection
             if (!option.disabled) {
@@ -618,8 +620,10 @@ export class SelectManager {
             // Use style as-is, matching text-input behavior
             const textStyle = { ...style };
             // Use 16px to match other input elements
-            textStyle.fontSize = '16px';
-            textStyle.color = '#000000';
+            textStyle.fontSize = style.fontSize || '16px';
+            textStyle.color = option.disabled
+                ? '#6b7280'
+                : index === selectElement.selectedIndex ? '#ffffff' : '#000000';
             if (!textStyle.fontFamily) textStyle.fontFamily = 'Arial';
 
             try {
@@ -654,9 +658,8 @@ export class SelectManager {
                 textMesh.renderingGroupId = 3; // Higher rendering group to ensure it's on top
 
                 // Align text to left edge - match text-input positioning logic
-                const padding = 1.5; // Match text-input padding
-                // Use same formula as text-input for consistency
-                textMesh.position.x = (width / 2) - (textureWidth / 2) - padding;
+                const insets = this.getHorizontalContentInsets(style, cameraScale);
+                textMesh.position.x = (width / 2) - (textureWidth / 2) - insets.left;
 
             } catch (e) {
                 console.error('Failed to create option text', e);
@@ -679,7 +682,7 @@ export class SelectManager {
         const selectHeight = selectElement.mesh.getBoundingInfo().boundingBox.extendSize.y * 2;
         const dropdownHeight = selectElement.dropdownMesh.getBoundingInfo().boundingBox.extendSize.y * 2;
 
-        selectElement.dropdownMesh.position.y = -(selectHeight / 2 + dropdownHeight / 2 + 0.05);
+        selectElement.dropdownMesh.position.y = -(selectHeight / 2 + dropdownHeight / 2);
         selectElement.dropdownMesh.position.z = 0.15; // Move forward (Positive Z) to avoid Z-fighting/hiding
 
         // Add border to dropdown for HTML-like appearance
@@ -696,7 +699,7 @@ export class SelectManager {
         const bounds = selectElement.dropdownMesh.getBoundingInfo().boundingBox.extendSize;
         const width = bounds.x * 2;
         const height = bounds.y * 2;
-        const borderWidth = 0.02; // Thin border
+        const borderWidth = selectElement.cameraScale || 0.001;
 
         // Create border as a slightly larger plane behind the dropdown
         const borderMesh = BABYLON.MeshBuilder.CreatePlane(`dropdownBorder_${selectElement.element.id}`, {
@@ -706,8 +709,8 @@ export class SelectManager {
         }, scene);
 
         const borderMaterial = new BABYLON.StandardMaterial(`dropdownBorderMaterial_${selectElement.element.id}`, scene);
-        borderMaterial.diffuseColor = new BABYLON.Color3(0.7, 0.7, 0.7); // Gray border
-        borderMaterial.emissiveColor = new BABYLON.Color3(0.7, 0.7, 0.7);
+        borderMaterial.diffuseColor = BABYLON.Color3.FromHexString('#767676');
+        borderMaterial.emissiveColor = BABYLON.Color3.FromHexString('#767676');
         borderMaterial.disableLighting = true;
         borderMaterial.backFaceCulling = false;
         borderMesh.material = borderMaterial;
@@ -789,6 +792,12 @@ export class SelectManager {
 
         // Default fallback
         return BABYLON.Color3.White();
+    }
+
+    private getPopupOptionHeight(selectElement: SelectElement, style: StyleRule): number {
+        const scale = selectElement.cameraScale || 0.001;
+        const fontSize = Math.max(1, this.parseSize(style.fontSize) || 16);
+        return Math.max(18, fontSize + 10) * scale;
     }
 
     /** Releases a mesh-local material without disposing its cache-owned text texture. */

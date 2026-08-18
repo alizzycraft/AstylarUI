@@ -38,6 +38,7 @@ export interface AstylarInteractionControlAdapter {
   handleKeyDown(elementId: string, event: KeyboardEvent): void;
   commitsValueOnBlur(elementId: string): boolean;
   emitsImmediateChangeOnKeyboardMutation?(elementId: string): boolean;
+  cancelExpandedSelect?(elementId: string): boolean;
   activate?(elementId: string): AstylarControlActivation | undefined;
   canActivateWithSpace?(elementId: string): boolean;
   canActivateWithEnter?(elementId: string): boolean;
@@ -248,6 +249,10 @@ export class AstylarInteractionRuntime {
     if (this.disposed) return;
     const targetId = this.controls?.getFocusedElementId();
     if (!targetId) return;
+    if (event.key === 'Escape' && this.controls?.cancelExpandedSelect?.(targetId)) {
+      event.preventDefault();
+      return;
+    }
     const state = {
       ...this.dispatcher.getElementState(targetId),
       ...this.getLiveState?.(targetId),

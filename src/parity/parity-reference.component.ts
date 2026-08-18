@@ -358,6 +358,9 @@ export class ParityReferenceComponent {
           : undefined,
         selectedIndex: control instanceof HTMLSelectElement ? control.selectedIndex : undefined,
         selectedValue: control instanceof HTMLSelectElement ? control.value : undefined,
+        expanded: control instanceof HTMLSelectElement
+          ? (() => { try { return control.matches(':open'); } catch { return false; } })()
+          : undefined,
         disabled: control.disabled,
         focused: this.document.activeElement === control,
         selectionStart: control instanceof HTMLInputElement || control instanceof HTMLTextAreaElement
