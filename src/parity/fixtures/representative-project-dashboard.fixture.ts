@@ -6,7 +6,7 @@ export const representativeProjectDashboardFixture: ParityFixture = {
   title: 'Representative project management dashboard',
   category: 'composed-application',
   expectedBehavior:
-    'A realistic project workspace scrolls vertically and horizontally across responsive reflow while pointer-selected search editing, filtered application updates, and pointer/keyboard task toggling retain browser-equivalent state and events.',
+    'A realistic project workspace exposes landmark and heading navigation, activates an internal project link, announces task-status updates, and retains browser-equivalent scroll, selection, responsive, control, event, and semantic state.',
   viewportIds: ['desktop', 'tablet', 'mobile'],
   responsiveSequence: ['desktop', 'tablet', 'mobile', 'desktop'],
   measurementIds: [
@@ -23,13 +23,20 @@ export const representativeProjectDashboardFixture: ParityFixture = {
     'pm-task-one', 'pm-task-one-slot', 'pm-task-one-title',
     'pm-task-three', 'pm-task-three-title',
   ],
-  interactionIds: ['pm-search', 'pm-task-two-slot', 'pm-task-two-check'],
+  interactionIds: ['pm-nav-overview', 'pm-search', 'pm-task-two-slot', 'pm-task-two-check'],
   scrollIds: ['pm-activity-list'],
+  semanticIds: [
+    'pm-nav', 'pm-nav-overview', 'pm-main', 'pm-title', 'pm-task-heading',
+    'pm-task-two-check', 'pm-status-two',
+  ],
+  announcementIds: ['pm-status-two'],
   interactionEventTypes: [
     'pointerdown', 'pointerup', 'click', 'focus', 'blur',
     'keydown', 'keyup', 'input', 'change',
   ],
   interactionSteps: [
+    { id: 'focus-overview-link', actions: [{ type: 'semantic-focus', elementId: 'pm-nav-overview' }] },
+    { id: 'activate-overview-fragment', actions: [{ type: 'press-key', key: 'Enter' }] },
     { id: 'scroll-recent-activity', actions: [{ type: 'wheel', elementId: 'pm-activity-list', deltaY: 96 }] },
     { id: 'select-search-backward', actions: [
       { type: 'pointer-down', elementId: 'pm-search', offsetX: 174, offsetY: 20 },
@@ -43,7 +50,9 @@ export const representativeProjectDashboardFixture: ParityFixture = {
     },
     { id: 'scroll-mobile-activity', actions: [{ type: 'wheel', elementId: 'pm-activity-list', deltaX: 112 }] },
     { id: 'complete-filtered-task', actions: [{ type: 'click', elementId: 'pm-task-two-slot' }] },
+    { id: 'announce-completed-task', actions: [{ type: 'apply-update', stepIndex: 1 }] },
     { id: 'reopen-filtered-task', actions: [{ type: 'press-key', key: 'Space' }] },
+    { id: 'announce-reopened-task', actions: [{ type: 'apply-update', stepIndex: 2 }] },
   ],
   reference: {
     html: `
@@ -51,7 +60,7 @@ export const representativeProjectDashboardFixture: ParityFixture = {
         <aside id="pm-sidebar">
           <div id="pm-brand"><span>Northstar</span></div>
           <nav id="pm-nav">
-            <input id="pm-nav-overview" type="button" value="Overview">
+            <a id="pm-nav-overview" href="#pm-title">Overview</a>
             <input id="pm-nav-projects" class="active" type="button" value="Projects">
             <input id="pm-nav-team" type="button" value="Team">
           </nav>
@@ -73,7 +82,7 @@ export const representativeProjectDashboardFixture: ParityFixture = {
                 <h2 id="pm-task-heading">Priority tasks</h2>
                 <div id="pm-task-list">
                   <article id="pm-task-one"><label id="pm-task-one-slot" class="pm-check-slot" for="pm-task-one-check"><input id="pm-task-one-check" type="checkbox" checked></label><strong id="pm-task-one-title">Approve responsive homepage</strong><span id="pm-status-one">Review</span></article>
-                  <article id="pm-task-two"><label id="pm-task-two-slot" class="pm-check-slot" for="pm-task-two-check"><input id="pm-task-two-check" type="checkbox"></label><strong id="pm-task-two-title">Prepare launch checklist and owner notes</strong><span id="pm-status-two">In progress</span></article>
+                  <article id="pm-task-two"><label id="pm-task-two-slot" class="pm-check-slot" for="pm-task-two-check"><input id="pm-task-two-check" type="checkbox"></label><strong id="pm-task-two-title">Prepare launch checklist and owner notes</strong><span id="pm-status-two" role="status" aria-live="polite" aria-atomic="true">In progress</span></article>
                   <article id="pm-task-three"><label id="pm-task-three-slot" class="pm-check-slot" for="pm-task-three-check"><input id="pm-task-three-check" type="checkbox" disabled></label><strong id="pm-task-three-title">Archive the previous campaign</strong><span id="pm-status-three">Blocked</span></article>
                 </div>
               </section>
@@ -102,8 +111,8 @@ export const representativeProjectDashboardFixture: ParityFixture = {
       #pm-brand { display:flex; align-items:center; gap:8px; width:132px; height:32px; color:#ffffff; font:700 16px/24px Arial,sans-serif; }
       #pm-brand span { width:132px; height:24px; }
       #pm-nav { display:flex; flex-direction:column; gap:6px; width:132px; height:132px; }
-      #pm-nav input { appearance:none; width:132px; height:40px; margin:0; padding:8px 10px; border:0; border-radius:6px; background:#172554; color:#bfdbfe; font:700 13px/24px Arial,sans-serif; text-align:left; }
-      #pm-nav input.active { background:#2563eb; color:#ffffff; }
+      #pm-nav input, #pm-nav a { appearance:none; width:132px; height:40px; margin:0; padding:8px 10px; border:0; border-radius:6px; outline:0; background:#172554; color:#bfdbfe; font:700 13px/24px Arial,sans-serif; text-align:left; text-decoration:none; }
+      #pm-nav input.active, #pm-nav a.active { background:#2563eb; color:#ffffff; }
       #pm-workspace { display:flex; flex:1 1 auto; flex-direction:column; background:#f8fafc; }
       #pm-header { display:flex; flex:0 0 72px; align-items:center; justify-content:space-between; padding:12px 16px; background:#ffffff; }
       #pm-heading { display:flex; flex-direction:column; width:150px; height:48px; }
@@ -147,7 +156,7 @@ export const representativeProjectDashboardFixture: ParityFixture = {
         #pm-shell { left:20px; top:20px; width:600px; height:680px; }
         #pm-sidebar { flex-basis:120px; padding:20px 10px; }
         #pm-brand { width:100px; } #pm-brand span { width:68px; font-size:13px; }
-        #pm-nav, #pm-nav input { width:100px; }
+        #pm-nav, #pm-nav input, #pm-nav a { width:100px; }
         #pm-heading { width:132px; } #pm-tools { width:280px; } #pm-search { width:176px; }
         #pm-primary { flex-basis:320px; }
         #pm-intro { width:320px; height:76px; } #pm-title, #pm-meta { width:300px; }
@@ -166,7 +175,7 @@ export const representativeProjectDashboardFixture: ParityFixture = {
         #pm-sidebar { flex:0 0 64px; flex-direction:row; align-items:center; gap:10px; padding:12px 10px; }
         #pm-brand { flex:0 0 100px; width:100px; height:40px; } #pm-brand span { width:68px; font-size:13px; }
         #pm-nav { flex-direction:row; gap:4px; width:240px; height:40px; }
-        #pm-nav input { width:77.333px; height:40px; padding:8px 5px; font-size:11px; text-align:center; }
+        #pm-nav input, #pm-nav a { width:77.333px; height:40px; padding:8px 5px; font-size:11px; text-align:center; }
         #pm-header { flex-basis:96px; padding:12px 10px; }
         #pm-heading { width:144px; } #pm-tools { width:198px; } #pm-search { width:110px; } #pm-new { width:80px; }
         #pm-main { flex-direction:column; gap:10px; padding:10px; }
@@ -194,8 +203,8 @@ export const representativeProjectDashboardFixture: ParityFixture = {
       { selector:'#pm-brand', display:'flex', alignItems:'center', gap:'8px', width:'132px', height:'32px', color:'#ffffff', fontFamily:'Arial, sans-serif', fontSize:'16px', fontWeight:'700', lineHeight:'24px' },
       { selector:'#pm-brand span', width:'132px', height:'24px' },
       { selector:'#pm-nav', display:'flex', flexDirection:'column', gap:'6px', width:'132px', height:'132px' },
-      { selector:'#pm-nav input', width:'132px', height:'40px', margin:'0', padding:'8px 10px', borderWidth:'0', borderRadius:'6px', background:'#172554', color:'#bfdbfe', fontFamily:'Arial, sans-serif', fontSize:'13px', fontWeight:'700', lineHeight:'24px', textAlign:'left' },
-      { selector:'#pm-nav input.active', background:'#2563eb', color:'#ffffff' },
+      { selector:'#pm-nav input, #pm-nav a', width:'132px', height:'40px', margin:'0', padding:'8px 10px', borderWidth:'0', borderRadius:'6px', background:'#172554', color:'#bfdbfe', fontFamily:'Arial, sans-serif', fontSize:'13px', fontWeight:'700', lineHeight:'24px', textAlign:'left', textDecoration:'none' },
+      { selector:'#pm-nav input.active, #pm-nav a.active', background:'#2563eb', color:'#ffffff' },
       { selector:'#pm-workspace', display:'flex', flex:'1 1 auto', flexDirection:'column', background:'#f8fafc' },
       { selector:'#pm-header', display:'flex', flex:'0 0 72px', alignItems:'center', justifyContent:'space-between', padding:'12px 16px', background:'#ffffff' },
       { selector:'#pm-heading', display:'flex', flexDirection:'column', width:'150px', height:'48px' },
@@ -237,7 +246,7 @@ export const representativeProjectDashboardFixture: ParityFixture = {
       { selector:'#pm-shell', mediaMinWidth:'600px', mediaMaxWidth:'749px', left:'20px', top:'20px', width:'600px', height:'680px' },
       { selector:'#pm-sidebar', mediaMinWidth:'600px', mediaMaxWidth:'749px', flex:'0 0 120px', padding:'20px 10px' },
       { selector:'#pm-brand', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'100px' }, { selector:'#pm-brand span', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'68px', fontSize:'13px' },
-      { selector:'#pm-nav, #pm-nav input', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'100px' },
+      { selector:'#pm-nav, #pm-nav input, #pm-nav a', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'100px' },
       { selector:'#pm-heading', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'132px' }, { selector:'#pm-tools', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'280px' }, { selector:'#pm-search', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'176px' },
       { selector:'#pm-primary', mediaMinWidth:'600px', mediaMaxWidth:'749px', flex:'0 0 320px' },
       { selector:'#pm-intro', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'320px', height:'76px' }, { selector:'#pm-title, #pm-meta', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'300px' },
@@ -252,7 +261,7 @@ export const representativeProjectDashboardFixture: ParityFixture = {
       { selector:'#pm-help', mediaMaxWidth:'599px', left:'346px', top:'800px' },
       { selector:'#pm-sidebar', mediaMaxWidth:'599px', flex:'0 0 64px', flexDirection:'row', alignItems:'center', gap:'10px', padding:'12px 10px' },
       { selector:'#pm-brand', mediaMaxWidth:'599px', flex:'0 0 100px', width:'100px', height:'40px' }, { selector:'#pm-brand span', mediaMaxWidth:'599px', width:'68px', fontSize:'13px' },
-      { selector:'#pm-nav', mediaMaxWidth:'599px', flexDirection:'row', gap:'4px', width:'240px', height:'40px' }, { selector:'#pm-nav input', mediaMaxWidth:'599px', width:'77.333px', height:'40px', padding:'8px 5px', fontSize:'11px', textAlign:'center' },
+      { selector:'#pm-nav', mediaMaxWidth:'599px', flexDirection:'row', gap:'4px', width:'240px', height:'40px' }, { selector:'#pm-nav input, #pm-nav a', mediaMaxWidth:'599px', width:'77.333px', height:'40px', padding:'8px 5px', fontSize:'11px', textAlign:'center' },
       { selector:'#pm-header', mediaMaxWidth:'599px', flex:'0 0 96px', padding:'12px 10px' },
       { selector:'#pm-heading', mediaMaxWidth:'599px', width:'144px' }, { selector:'#pm-tools', mediaMaxWidth:'599px', width:'198px' }, { selector:'#pm-search', mediaMaxWidth:'599px', width:'110px' }, { selector:'#pm-new', mediaMaxWidth:'599px', width:'80px' },
       { selector:'#pm-main', mediaMaxWidth:'599px', flexDirection:'column', gap:'10px', padding:'10px' }, { selector:'#pm-primary', mediaMaxWidth:'599px', flex:'0 0 430px', gap:'10px' },
@@ -270,7 +279,7 @@ export const representativeProjectDashboardFixture: ParityFixture = {
         { type:'aside', id:'pm-sidebar', children:[
           { type:'div', id:'pm-brand', children:[{ type:'span', textContent:'Northstar' }] },
           { type:'nav', id:'pm-nav', children:[
-            { type:'input', inputType:'button', id:'pm-nav-overview', value:'Overview' }, { type:'input', inputType:'button', id:'pm-nav-projects', class:'active', value:'Projects' }, { type:'input', inputType:'button', id:'pm-nav-team', value:'Team' },
+            { type:'a', id:'pm-nav-overview', href:'#pm-title', textContent:'Overview' }, { type:'input', inputType:'button', id:'pm-nav-projects', class:'active', value:'Projects' }, { type:'input', inputType:'button', id:'pm-nav-team', value:'Team' },
           ] },
         ] },
         { type:'section', id:'pm-workspace', children:[
@@ -290,7 +299,7 @@ export const representativeProjectDashboardFixture: ParityFixture = {
                 { type:'h2', id:'pm-task-heading', textContent:'Priority tasks' },
                 { type:'div', id:'pm-task-list', children:[
                   { type:'article', id:'pm-task-one', children:[{ type:'label', id:'pm-task-one-slot', class:'pm-check-slot', for:'pm-task-one-check', children:[{ type:'input', inputType:'checkbox', id:'pm-task-one-check', checked:true }] }, { type:'strong', id:'pm-task-one-title', textContent:'Approve responsive homepage' }, { type:'span', id:'pm-status-one', textContent:'Review' }] },
-                  { type:'article', id:'pm-task-two', children:[{ type:'label', id:'pm-task-two-slot', class:'pm-check-slot', for:'pm-task-two-check', children:[{ type:'input', inputType:'checkbox', id:'pm-task-two-check' }] }, { type:'strong', id:'pm-task-two-title', textContent:'Prepare launch checklist and owner notes' }, { type:'span', id:'pm-status-two', textContent:'In progress' }] },
+                  { type:'article', id:'pm-task-two', children:[{ type:'label', id:'pm-task-two-slot', class:'pm-check-slot', for:'pm-task-two-check', children:[{ type:'input', inputType:'checkbox', id:'pm-task-two-check' }] }, { type:'strong', id:'pm-task-two-title', textContent:'Prepare launch checklist and owner notes' }, { type:'span', id:'pm-status-two', role:'status', ariaLive:'polite', ariaAtomic:true, textContent:'In progress' }] },
                   { type:'article', id:'pm-task-three', children:[{ type:'label', id:'pm-task-three-slot', class:'pm-check-slot', for:'pm-task-three-check', children:[{ type:'input', inputType:'checkbox', id:'pm-task-three-check', disabled:true }] }, { type:'strong', id:'pm-task-three-title', textContent:'Archive the previous campaign' }, { type:'span', id:'pm-status-three', textContent:'Blocked' }] },
                 ] },
               ] },
@@ -324,18 +333,40 @@ if (!filteredTaskList?.children || !filteredHeading) {
 }
 filteredTaskList.children = filteredTaskList.children.filter((child) => child.id === 'pm-task-two');
 filteredHeading.textContent = 'Filtered tasks';
-representativeProjectDashboardFixture.dynamicSteps = [{
-  id: 'filtered-launch-tasks',
-  referenceMutations: [
-    { type: 'set-text', elementId: 'pm-task-heading', textContent: 'Filtered tasks' },
-    {
-      type: 'set-children',
-      elementId: 'pm-task-list',
-      html: '<article id="pm-task-two"><label id="pm-task-two-slot" class="pm-check-slot" for="pm-task-two-check"><input id="pm-task-two-check" type="checkbox"></label><strong id="pm-task-two-title">Prepare launch checklist and owner notes</strong><span id="pm-status-two">In progress</span></article>',
-    },
-  ],
-  siteData: filteredDashboardSiteData,
-}];
+const completedDashboardSiteData = JSON.parse(JSON.stringify(filteredDashboardSiteData)) as SiteData;
+const completedStatus = findDashboardElement(completedDashboardSiteData, 'pm-status-two');
+if (!completedStatus) throw new Error('Representative dashboard task status is missing');
+completedStatus.textContent = 'Completed';
+const reopenedDashboardSiteData = JSON.parse(JSON.stringify(completedDashboardSiteData)) as SiteData;
+const reopenedStatus = findDashboardElement(reopenedDashboardSiteData, 'pm-status-two');
+if (!reopenedStatus) throw new Error('Representative dashboard reopened status is missing');
+reopenedStatus.textContent = 'In progress';
+
+representativeProjectDashboardFixture.dynamicSteps = [
+  {
+    id: 'filtered-launch-tasks',
+    referenceMutations: [
+      { type: 'set-text', elementId: 'pm-task-heading', textContent: 'Filtered tasks' },
+      { type: 'remove-element', elementId: 'pm-task-one' },
+      { type: 'remove-element', elementId: 'pm-task-three' },
+    ],
+    siteData: filteredDashboardSiteData,
+  },
+  {
+    id: 'completed-task-status',
+    referenceMutations: [
+      { type: 'set-text', elementId: 'pm-status-two', textContent: 'Completed' },
+    ],
+    siteData: completedDashboardSiteData,
+  },
+  {
+    id: 'reopened-task-status',
+    referenceMutations: [
+      { type: 'set-text', elementId: 'pm-status-two', textContent: 'In progress' },
+    ],
+    siteData: reopenedDashboardSiteData,
+  },
+];
 
 function findDashboardElement(
   siteData: SiteData,

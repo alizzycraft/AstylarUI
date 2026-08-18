@@ -452,11 +452,11 @@
     "id": "representative-project-dashboard",
     "title": "Representative project management dashboard",
     "category": "composed-application",
-    "expectedBehavior": "A realistic project workspace scrolls vertically and horizontally across responsive reflow while pointer-selected search editing, filtered application updates, and pointer/keyboard task toggling retain browser-equivalent state and events.",
+    "expectedBehavior": "A realistic project workspace exposes landmark and heading navigation, activates an internal project link, announces task-status updates, and retains browser-equivalent scroll, selection, responsive, control, event, and semantic state.",
     "viewportIds": ["desktop", "tablet", "mobile"],
     "responsiveSequence": ["desktop", "tablet", "mobile", "desktop"],
-    "dynamicStepCount": 1,
-    "interactionStepCount": 7
+    "dynamicStepCount": 3,
+    "interactionStepCount": 11
   },
   {
     "id": "representative-data-management",
