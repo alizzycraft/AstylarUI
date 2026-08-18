@@ -363,11 +363,15 @@ export class TextInputManager {
             const borderSize = Math.max(0, this.parseSize(textStyle.borderWidth) || 0) * pixelScale;
             const verticalOrigin = Math.max(0, verticalInsets.top - borderSize);
             const clientHeight = Math.max(0, inputHeight - (borderSize * 2));
+            const contentHeight = Math.max(
+                0,
+                inputHeight - verticalInsets.top - verticalInsets.bottom
+            );
             const paddedTextureHeight = textureHeight + verticalOrigin
                 + Math.max(0, verticalInsets.bottom - borderSize);
             const isVerticallyClipped = isTextarea && paddedTextureHeight > clientHeight;
             const visibleWidth = Math.min(textureWidth, availableWidth);
-            const visibleHeight = isVerticallyClipped ? clientHeight : textureHeight;
+            const visibleHeight = isVerticallyClipped ? contentHeight : textureHeight;
 
             // A clipped plane is the control's content viewport. UV scaling
             // selects the corresponding portion of the full cached texture.
@@ -414,9 +418,8 @@ export class TextInputManager {
 
             textInput.textMesh = textMesh;
             if (isTextarea) {
-                textInput.textMesh.position.y = isVerticallyClipped
-                    ? 0
-                    : inputHeight / 2 - verticalInsets.top - visibleHeight / 2;
+                textInput.textMesh.position.y =
+                    inputHeight / 2 - verticalInsets.top - visibleHeight / 2;
             }
             this.syncScroll(textInput, render);
 
@@ -538,8 +541,7 @@ export class TextInputManager {
         } else {
             textInput.scrollTop = Math.max(0, textInput.scrollTop || 0);
             const cursorLine = this.findCursorLine(textInput);
-            const hasSelection = textInput.selectionStart !== textInput.selectionEnd;
-            if (cursorLine && (!hasSelection || !this.suppressSelectionScroll.has(textInput.element.id!))) {
+            if (cursorLine && !this.suppressSelectionScroll.has(textInput.element.id!)) {
                 const fontSize = this.parseSize(textInput.style.fontSize) || 16;
                 const lineHeight = this.parseSize(textInput.style.lineHeight) || fontSize * 1.2;
                 const halfLeading = Math.max(0, (lineHeight - fontSize) / 2);
@@ -590,6 +592,24 @@ export class TextInputManager {
         // Update interaction registry
         this.textInteractionRegistry.updateScrollOffset(textInput.element.id!, textInput.scrollOffset || 0);
         this.textInteractionRegistry.updateScrollTop(textInput.element.id!, textInput.scrollTop || 0);
+    }
+
+    /** Applies wheel deltas without snapping the viewport back to the caret. */
+    scrollBy(textInput: TextInput, deltaX: number, deltaY: number): boolean {
+        if (!this.activeRender || textInput.type !== InputType.Textarea ||
+            !textInput.textMesh || !textInput.textLayoutMetrics) return false;
+        const previousLeft = textInput.scrollOffset ?? 0;
+        const previousTop = textInput.scrollTop ?? 0;
+        textInput.scrollOffset = Math.max(0, previousLeft + deltaX);
+        textInput.scrollTop = Math.max(0, previousTop + deltaY);
+        const elementId = textInput.element.id!;
+        this.suppressSelectionScroll.add(elementId);
+        try {
+            this.syncScroll(textInput, this.activeRender);
+        } finally {
+            this.suppressSelectionScroll.delete(elementId);
+        }
+        return textInput.scrollOffset !== previousLeft || textInput.scrollTop !== previousTop;
     }
 
     private findCursorLine(textInput: TextInput): { top: number; bottom: number } | undefined {
@@ -1049,7 +1069,13 @@ export class TextInputManager {
             textInput.scrollTop = 0;
         }
         if (this.activeRender) {
-            this.updateTextDisplay(textInput, this.activeRender, textInput.style);
+            const elementId = textInput.element.id!;
+            if (preserveSelection) this.suppressSelectionScroll.add(elementId);
+            try {
+                this.updateTextDisplay(textInput, this.activeRender, textInput.style);
+            } finally {
+                if (preserveSelection) this.suppressSelectionScroll.delete(elementId);
+            }
         }
     }
 
@@ -1072,7 +1098,13 @@ export class TextInputManager {
         textInput.scrollTop = Math.max(0, state.scrollTop ?? 0);
         textInput.preserveSelectionOnReset = state.preserveSelectionOnReset;
         if (this.activeRender) {
-            this.updateTextDisplay(textInput, this.activeRender, textInput.style);
+            const elementId = textInput.element.id!;
+            this.suppressSelectionScroll.add(elementId);
+            try {
+                this.updateTextDisplay(textInput, this.activeRender, textInput.style);
+            } finally {
+                this.suppressSelectionScroll.delete(elementId);
+            }
         }
     }
 

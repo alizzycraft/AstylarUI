@@ -297,7 +297,7 @@ export class Astylar {
               if (input && !input.disabled) {
                 this.inputElementService.setDefaultFocusIndicatorEnabled(
                   focusedElementId,
-                  !this.hasAuthoredFocusPaint(focusedElementId),
+                  this.shouldShowDefaultFocusIndicator(focusedElementId),
                 );
                 this.inputElementService.focusInputElement(input);
                 this.setElementFocusState(focusedElementId, true);
@@ -323,7 +323,7 @@ export class Astylar {
           if (!input || input.disabled) return false;
           this.inputElementService.setDefaultFocusIndicatorEnabled(
             elementId,
-            !this.hasAuthoredFocusPaint(elementId),
+            this.shouldShowDefaultFocusIndicator(elementId),
           );
           this.inputElementService.focusInputElement(input);
           return true;
@@ -337,6 +337,8 @@ export class Astylar {
         handleKeyDown: (elementId, event) => {
           this.inputElementService.handleFocusedKeyDown(elementId, event);
         },
+        scrollTextControl: (elementId, deltaX, deltaY) =>
+          this.inputElementService.scrollTextControl(elementId, deltaX, deltaY),
         commitsValueOnBlur: (elementId) =>
           this.inputElementService.commitsValueOnBlur(elementId),
         emitsImmediateChangeOnKeyboardMutation: (elementId) =>
@@ -528,6 +530,12 @@ export class Astylar {
     const merged = { ...styles.normal, ...styles.focus };
     return !!merged.background &&
       this.styleService.parseBackgroundColor(merged.background)?.type === 'color';
+  }
+
+  private shouldShowDefaultFocusIndicator(elementId: string): boolean {
+    const normal = this.elementManager.elementStylesMap.get(elementId)?.normal;
+    return this.styleService.parseOpacity(normal?.opacity) > 0 &&
+      !this.hasAuthoredFocusPaint(elementId);
   }
 
   private setElementPseudoState(

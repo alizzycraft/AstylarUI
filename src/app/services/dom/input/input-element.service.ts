@@ -414,6 +414,13 @@ export class InputElementService {
         this.handleKeyboardInput(event, render, focusedElement.style);
     }
 
+    /** Scrolls a native-like text-control viewport beneath the pointer. */
+    scrollTextControl(elementId: string, deltaX: number, deltaY: number): boolean {
+        const input = this.inputElements.get(elementId);
+        if (!input || input.disabled || !this.isTextEntry(input)) return false;
+        return this.textInputManager.scrollBy(input as TextInput, deltaX, deltaY);
+    }
+
     /** Text-entry controls commit their edited value when focus leaves. */
     commitsValueOnBlur(elementId: string): boolean {
         const input = this.inputElements.get(elementId);

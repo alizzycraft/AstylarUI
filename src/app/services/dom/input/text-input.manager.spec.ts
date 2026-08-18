@@ -79,6 +79,33 @@ describe('TextInputManager', () => {
     expect(textInput.preserveSelectionOnReset).toBeTrue();
   });
 
+  it('restores a scrolled viewport without snapping it back to the caret', () => {
+    const manager = Object.create(TextInputManager.prototype) as TextInputManager;
+    const textInput = createTextInput('Alpha\nBravo\nCharlie', 2);
+    (manager as any).activeRender = {};
+    (manager as any).suppressSelectionScroll = new Set<string>();
+    const update = spyOn<any>(manager, 'updateTextDisplay').and.callFake(() => {
+      expect((manager as any).suppressSelectionScroll.has('textarea-1')).toBeTrue();
+      expect(textInput.scrollTop).toBe(96);
+    });
+
+    manager.restoreMutableState(textInput, {
+      value: textInput.value,
+      cursorPosition: 2,
+      selectionStart: 2,
+      selectionEnd: 2,
+      selectionActive: false,
+      selectionAnchor: 2,
+      selectionFocus: 2,
+      scrollOffset: 0,
+      scrollTop: 96,
+      preserveSelectionOnReset: true,
+    });
+
+    expect(update).toHaveBeenCalled();
+    expect((manager as any).suppressSelectionScroll.size).toBe(0);
+  });
+
   it('preserves and clamps caret state when a form reset restores its authored value', () => {
     const manager = Object.create(TextInputManager.prototype) as TextInputManager;
     const textInput = createTextInput('Maya Rivera', 11);
@@ -90,6 +117,12 @@ describe('TextInputManager', () => {
     textInput.scrollOffset = 7;
     textInput.scrollTop = 15;
     textInput.preserveSelectionOnReset = true;
+    (manager as any).activeRender = {};
+    (manager as any).suppressSelectionScroll = new Set<string>();
+    const update = spyOn<any>(manager, 'updateTextDisplay').and.callFake(() => {
+      expect((manager as any).suppressSelectionScroll.has('textarea-1')).toBeTrue();
+      expect(textInput.scrollTop).toBe(15);
+    });
 
     manager.resetTextValue(textInput, 'Maya Chen');
 
@@ -104,6 +137,8 @@ describe('TextInputManager', () => {
     expect(textInput.cursorState.selectionActive).toBeFalse();
     expect(textInput.scrollOffset).toBe(7);
     expect(textInput.scrollTop).toBe(15);
+    expect(update).toHaveBeenCalled();
+    expect((manager as any).suppressSelectionScroll.size).toBe(0);
   });
 
   it('clears caret and scroll state after a pointer-blurred control is reset', () => {
@@ -130,6 +165,25 @@ describe('TextInputManager', () => {
     expect(textInput.cursorState.selectionActive).toBeFalse();
     expect(textInput.scrollOffset).toBe(0);
     expect(textInput.scrollTop).toBe(0);
+  });
+
+  it('applies and clamps textarea wheel scrolling without retaining suppression state', () => {
+    const manager = Object.create(TextInputManager.prototype) as TextInputManager;
+    const textInput = createTextInput('Alpha\nBravo\nCharlie', 0);
+    textInput.textMesh = {} as never;
+    textInput.textLayoutMetrics = { lines: [] };
+    (manager as any).activeRender = {};
+    (manager as any).suppressSelectionScroll = new Set<string>();
+    spyOn<any>(manager, 'syncScroll').and.callFake((input: TextInput) => {
+      input.scrollTop = Math.min(input.scrollTop ?? 0, 120);
+    });
+
+    expect(manager.scrollBy(textInput, 0, 96)).toBeTrue();
+    expect(textInput.scrollTop).toBe(96);
+    expect((manager as any).suppressSelectionScroll.size).toBe(0);
+    expect(manager.scrollBy(textInput, 0, 500)).toBeTrue();
+    expect(textInput.scrollTop).toBe(120);
+    expect(manager.scrollBy(textInput, 0, 10)).toBeFalse();
   });
 });
 

@@ -346,6 +346,52 @@ describe('AstylarInteractionRuntime', () => {
     engine.dispose();
   });
 
+  it('lets a hovered text control consume wheel input before a scroll ancestor', () => {
+    const engine = new NullEngine();
+    const scene = new Scene(engine);
+    const mesh = MeshBuilder.CreatePlane('textarea', {}, scene);
+    mesh.metadata = { elementId: 'bio' };
+    const canvas = document.createElement('canvas');
+    const textCalls: Array<[string, number, number]> = [];
+    const containerCalls: string[] = [];
+    spyOn(scene, 'pick').and.returnValue({
+      hit: true,
+      pickedMesh: mesh,
+      pickedPoint: { x: 0, y: 0, z: 0 },
+    } as never);
+    const runtime = new AstylarInteractionRuntime(
+      scene,
+      { styles: [], root: { children: [{ type: 'textarea', id: 'bio', value: 'Alpha' }] } },
+      {},
+      undefined,
+      {
+        getFocusedElementId: () => undefined,
+        scrollTextControl: (elementId: string, deltaX: number, deltaY: number) => {
+          textCalls.push([elementId, deltaX, deltaY]);
+          return true;
+        },
+      } as never,
+      canvas,
+      {
+        scrollFrom: (elementId) => {
+          containerCalls.push(elementId);
+          return true;
+        },
+        isPointVisible: () => true,
+      },
+    );
+    const wheel = new WheelEvent('wheel', { deltaY: 96, cancelable: true });
+
+    canvas.dispatchEvent(wheel);
+
+    expect(textCalls).toEqual([['bio', 0, 96]]);
+    expect(containerCalls).toEqual([]);
+    expect(wheel.defaultPrevented).toBeTrue();
+    runtime.dispose();
+    scene.dispose();
+    engine.dispose();
+  });
+
   it('emits input after text mutation and commits change before blur', () => {
     const engine = new NullEngine();
     const scene = new Scene(engine);

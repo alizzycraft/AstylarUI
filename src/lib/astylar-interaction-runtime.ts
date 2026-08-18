@@ -43,6 +43,7 @@ export interface AstylarInteractionControlAdapter {
   focus(elementId: string): boolean;
   blur(elementId: string, preserveSelectionOnReset?: boolean): boolean;
   handleKeyDown(elementId: string, event: KeyboardEvent): void;
+  scrollTextControl?(elementId: string, deltaX: number, deltaY: number): boolean;
   commitsValueOnBlur(elementId: string): boolean;
   emitsImmediateChangeOnKeyboardMutation?(elementId: string): boolean;
   handleExpandedSelectKeyDown?(
@@ -442,7 +443,8 @@ export class AstylarInteractionRuntime {
     const deltaX = event.deltaX * factor;
     const deltaY = event.deltaY * factor;
     for (const targetId of this.resolveElementIds(pick?.pickedMesh ?? undefined)) {
-      if (this.scrolling.isPointVisible(targetId, pick?.pickedPoint ?? undefined) &&
+      if (!this.scrolling.isPointVisible(targetId, pick?.pickedPoint ?? undefined)) continue;
+      if (this.controls?.scrollTextControl?.(targetId, deltaX, deltaY) ||
           this.scrolling.scrollFrom(targetId, deltaX, deltaY)) {
         event.preventDefault();
         return;

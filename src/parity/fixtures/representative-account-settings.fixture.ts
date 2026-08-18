@@ -1,12 +1,14 @@
 import { ParityFixture } from '../parity.types';
 import type { SiteData } from '../../app/types/site-data';
 
+const expandedAccountBio = 'Spatial UI\nAccessibility\nComponents\nStrategy\nMentoring\nOpen source';
+
 export const representativeAccountSettingsFixture: ParityFixture = {
   id: 'representative-account-settings',
   title: 'Representative account settings application',
   category: 'composed-application',
   expectedBehavior:
-    'A responsive account workspace preserves its form and modal layout while dialog dismissal, validation, editing, submit, and reset retain browser-equivalent state and events.',
+    'A responsive account workspace preserves pointer-edited form state, textarea scrolling, expanded-select commit/cancel behavior, and validation state through modal dismissal, application-data replacement, submit, and reset.',
   viewportIds: ['desktop', 'tablet', 'mobile'],
   measurementIds: [
     'as-shell', 'as-sidebar', 'as-brand', 'as-nav-profile', 'as-workspace', 'as-header',
@@ -25,7 +27,7 @@ export const representativeAccountSettingsFixture: ParityFixture = {
     'as-bio-row', 'as-bio',
   ],
   interactionIds: [
-    'as-dialog-edit', 'as-form', 'as-name', 'as-region',
+    'as-dialog-edit', 'as-form', 'as-name', 'as-bio', 'as-region',
     'as-reports-label', 'as-reports', 'as-save', 'as-cancel',
   ],
   interactionEventTypes: [
@@ -35,20 +37,42 @@ export const representativeAccountSettingsFixture: ParityFixture = {
   interactionSteps: [
     { id: 'dismiss-dialog', actions: [{ type: 'click', elementId: 'as-dialog-edit' }] },
     { id: 'show-editing-form', actions: [{ type: 'apply-update', stepIndex: 0 }] },
-    { id: 'focus-name', actions: [{ type: 'click', elementId: 'as-name' }] },
-    { id: 'select-name', actions: [{ type: 'press-key', key: 'Control+A' }] },
+    { id: 'select-name-backward', actions: [
+      { type: 'pointer-down', elementId: 'as-name', offsetX: 76, offsetY: 20 },
+      { type: 'hover', elementId: 'as-name', offsetX: 9, offsetY: 20 },
+      { type: 'pointer-up' },
+    ] },
     { id: 'clear-required-name', actions: [{ type: 'press-key', key: 'Backspace' }] },
-    { id: 'reject-invalid-save', actions: [{ type: 'click', elementId: 'as-save' }] },
-    { id: 'enter-valid-name', actions: [{ type: 'type-text', text: 'Maya Rivera' }] },
-    {
-      id: 'navigate-to-region',
-      actions: [
-        { type: 'press-key', key: 'Tab' },
-        { type: 'press-key', key: 'Tab' },
-      ],
-    },
-    { id: 'change-region', actions: [{ type: 'press-key', key: 'ArrowDown' }] },
+    { id: 'reject-invalid-save', actions: [
+      { type: 'click', elementId: 'as-save' },
+      { type: 'press-key', key: 'Tab' },
+      { type: 'press-key', key: 'Tab' },
+      { type: 'press-key', key: 'Tab' },
+    ] },
+    { id: 'enter-valid-name', actions: [
+      { type: 'press-key', key: 'Shift+Tab' },
+      { type: 'press-key', key: 'Shift+Tab' },
+      { type: 'press-key', key: 'Shift+Tab' },
+      { type: 'type-text', text: 'Maya Rivera' },
+    ] },
+    { id: 'scroll-bio', actions: [
+      { type: 'press-key', key: 'Tab' },
+      { type: 'press-key', key: 'Tab' },
+      { type: 'click', elementId: 'as-bio', offsetX: 28, offsetY: 14 },
+      { type: 'wheel', elementId: 'as-bio', deltaY: 96 },
+      { type: 'press-key', key: 'Tab' },
+    ] },
+    { id: 'cancel-region-change', actions: [
+      { type: 'click', elementId: 'as-region' },
+      { type: 'press-key', key: 'Escape' },
+    ] },
+    { id: 'commit-region-change', actions: [
+      { type: 'click', elementId: 'as-region' },
+      { type: 'press-key', key: 'ArrowDown' },
+      { type: 'press-key', key: 'Enter' },
+    ] },
     { id: 'toggle-reports', actions: [{ type: 'click', elementId: 'as-reports-label' }] },
+    { id: 'compact-account-data', actions: [{ type: 'apply-update', stepIndex: 1 }] },
     { id: 'submit-profile', actions: [{ type: 'click', elementId: 'as-save' }] },
     { id: 'reset-profile', actions: [{ type: 'click', elementId: 'as-cancel' }] },
   ],
@@ -113,8 +137,8 @@ export const representativeAccountSettingsFixture: ParityFixture = {
       .as-field-row > label { flex:0 0 92px; width:92px; height:40px; padding:8px 0; color:#334155; font:700 11px/24px Arial,sans-serif; }
       .as-field-row > label span { color:#64748b; font-weight:400; } .as-field-row > label .as-label-main { color:#334155; font-weight:700; }
       .as-field-row > input, .as-field-row > select, .as-field-row > textarea { appearance:none; flex:0 0 248px; width:248px; height:40px; margin:0; padding:7px 9px; border:1px solid #94a3b8; border-radius:0; outline:0; background:#f8fafc; color:#0f172a; font:400 12px/24px Arial,sans-serif; text-align:left; }
-      #as-name:focus, #as-region:focus { background:#e0e7ff; }
-      #as-bio-row { flex-basis:auto; height:auto; align-items:flex-start; } #as-bio { height:auto; padding:5px 9px; white-space:pre-wrap; }
+      #as-name:focus, #as-bio:focus, #as-region:focus { background:#e0e7ff; }
+      #as-bio-row { flex-basis:auto; height:auto; align-items:flex-start; } #as-bio { height:auto; padding:5px 9px; color:#334155; white-space:pre-wrap; }
       #as-name:required { border-color:#dc2626; } #as-email:read-only { background:#e2e8f0; color:#64748b; }
       #as-help { width:368px; height:24px; margin:0; padding:2px 8px; background:#fff7ed; color:#9a3412; font:400 11px/20px Arial,sans-serif; }
       #as-preferences { display:flex; align-items:center; gap:8px; position:relative; width:368px; height:56px; margin:0; padding:20px 8px 4px; border:1px solid #cbd5e1; overflow:hidden; }
@@ -177,8 +201,8 @@ export const representativeAccountSettingsFixture: ParityFixture = {
       { selector:'#as-profile-fields', display:'flex', flexDirection:'column', gap:'4px', position:'relative', width:'368px', height:'auto', margin:'0', padding:'32px 10px 10px', borderWidth:'1px', borderStyle:'solid', borderColor:'#cbd5e1', background:'#ffffff', overflow:'hidden' }, { selector:'#as-profile-legend', position:'absolute', left:'10px', top:'4px', width:'132px', height:'24px', margin:'0', padding:'0', color:'#3730a3', fontFamily:'Arial, sans-serif', fontSize:'13px', fontWeight:'700', lineHeight:'24px' },
       { selector:'.as-field-row', display:'flex', flex:'0 0 40px', alignItems:'center', gap:'6px', width:'346px', height:'40px' }, { selector:'.as-field-row > label', flex:'0 0 92px', width:'92px', height:'40px', padding:'8px 0', color:'#334155', fontFamily:'Arial, sans-serif', fontSize:'11px', fontWeight:'700', lineHeight:'24px' }, { selector:'.as-field-row > label span', color:'#64748b', fontWeight:'400' }, { selector:'.as-field-row > label .as-label-main', color:'#334155', fontWeight:'700' },
       { selector:'.as-field-row > input, .as-field-row > select, .as-field-row > textarea', flex:'0 0 248px', width:'248px', height:'40px', margin:'0', padding:'7px 9px', borderWidth:'1px', borderStyle:'solid', borderColor:'#94a3b8', borderRadius:'0', background:'#f8fafc', color:'#0f172a', fontFamily:'Arial, sans-serif', fontSize:'12px', lineHeight:'24px', textAlign:'left' },
-      { selector:'#as-name:focus, #as-region:focus', background:'#e0e7ff' },
-      { selector:'#as-bio-row', flexBasis:'auto', height:'auto', alignItems:'flex-start' }, { selector:'#as-bio', height:'auto', padding:'5px 9px', whiteSpace:'pre-wrap' }, { selector:'#as-name:required', borderColor:'#dc2626' }, { selector:'#as-email:read-only', background:'#e2e8f0', color:'#64748b' },
+      { selector:'#as-name:focus, #as-bio:focus, #as-region:focus', background:'#e0e7ff' },
+      { selector:'#as-bio-row', flexBasis:'auto', height:'auto', alignItems:'flex-start' }, { selector:'#as-bio', height:'auto', padding:'5px 9px', color:'#334155', whiteSpace:'pre-wrap' }, { selector:'#as-name:required', borderColor:'#dc2626' }, { selector:'#as-email:read-only', background:'#e2e8f0', color:'#64748b' },
       { selector:'#as-help', width:'368px', height:'24px', margin:'0', padding:'2px 8px', background:'#fff7ed', color:'#9a3412', fontFamily:'Arial, sans-serif', fontSize:'11px', lineHeight:'20px' },
       { selector:'#as-preferences', display:'flex', alignItems:'center', gap:'8px', position:'relative', width:'368px', height:'56px', margin:'0', padding:'20px 8px 4px', borderWidth:'1px', borderStyle:'solid', borderColor:'#cbd5e1', overflow:'hidden' }, { selector:'#as-preferences legend', position:'absolute', left:'8px', top:'0', width:'100px', height:'20px', color:'#3730a3', fontFamily:'Arial, sans-serif', fontSize:'11px', fontWeight:'700', lineHeight:'20px' },
       { selector:'#as-reports-slot', position:'relative', flex:'0 0 22px', width:'22px', height:'22px', borderWidth:'2px', borderStyle:'solid', borderColor:'#4f46e5', background:'#4f46e5', overflow:'hidden' }, { selector:'#as-reports', position:'absolute', left:'-40px', top:'0', width:'16px', height:'16px', opacity:'0' }, { selector:'#as-preferences > label', width:'270px', height:'24px', color:'#334155', fontFamily:'Arial, sans-serif', fontSize:'11px', lineHeight:'24px' },
@@ -228,37 +252,71 @@ export const representativeAccountSettingsFixture: ParityFixture = {
   },
 };
 
-const editingAccountSiteData = JSON.parse(
+const dialogDismissedAccountSiteData = JSON.parse(
   JSON.stringify(representativeAccountSettingsFixture.siteData),
 ) as SiteData;
-editingAccountSiteData.root.children = editingAccountSiteData.root.children.filter(
+dialogDismissedAccountSiteData.root.children = dialogDismissedAccountSiteData.root.children.filter(
   (element) => element.id !== 'as-backdrop' &&
     element.id !== 'as-dialog',
 );
-const editingAccountShell = findAccountElement(editingAccountSiteData, 'as-shell');
-if (!editingAccountShell?.children) throw new Error('Representative account shell is missing');
-editingAccountShell.children = editingAccountShell.children.filter(
+const dialogDismissedAccountShell = findAccountElement(dialogDismissedAccountSiteData, 'as-shell');
+if (!dialogDismissedAccountShell?.children) throw new Error('Representative account shell is missing');
+dialogDismissedAccountShell.children = dialogDismissedAccountShell.children.filter(
   (element) => element.id !== 'as-sidebar',
 );
-const editingAccountMain = findAccountElement(editingAccountSiteData, 'as-main');
-if (!editingAccountMain?.children) throw new Error('Representative account main region is missing');
-editingAccountMain.children = editingAccountMain.children.filter((element) => element.id !== 'as-plan');
-const editingAccountFields = findAccountElement(editingAccountSiteData, 'as-profile-fields');
-if (!editingAccountFields?.children) throw new Error('Representative account fields are missing');
-editingAccountFields.children = editingAccountFields.children.filter(
+const dialogDismissedAccountMain = findAccountElement(dialogDismissedAccountSiteData, 'as-main');
+if (!dialogDismissedAccountMain?.children) throw new Error('Representative account main region is missing');
+dialogDismissedAccountMain.children = dialogDismissedAccountMain.children.filter(
+  (element) => element.id !== 'as-plan',
+);
+const dialogDismissedAccountBio = findAccountElement(dialogDismissedAccountSiteData, 'as-bio');
+if (!dialogDismissedAccountBio) throw new Error('Representative account bio is missing');
+dialogDismissedAccountBio.value = expandedAccountBio;
+const compactAccountSiteData = JSON.parse(
+  JSON.stringify(dialogDismissedAccountSiteData),
+) as SiteData;
+const compactAccountState = findAccountElement(compactAccountSiteData, 'as-state');
+if (!compactAccountState) throw new Error('Representative account state is missing');
+compactAccountState.textContent = 'Ready';
+const completedAccountSiteData = JSON.parse(
+  JSON.stringify(compactAccountSiteData),
+) as SiteData;
+const completedAccountFields = findAccountElement(completedAccountSiteData, 'as-profile-fields');
+if (!completedAccountFields?.children) throw new Error('Representative account fields are missing');
+completedAccountFields.children = completedAccountFields.children.filter(
   (element) => element.id !== 'as-bio-row',
 );
-representativeAccountSettingsFixture.dynamicSteps = [{
-  id: 'dismiss-save-dialog',
-  referenceMutations: [
-    { type: 'remove-element', elementId: 'as-backdrop' },
-    { type: 'remove-element', elementId: 'as-dialog' },
-    { type: 'remove-element', elementId: 'as-sidebar' },
-    { type: 'remove-element', elementId: 'as-plan' },
-    { type: 'remove-element', elementId: 'as-bio-row' },
-  ],
-  siteData: editingAccountSiteData,
-}];
+representativeAccountSettingsFixture.dynamicSteps = [
+  {
+    id: 'dismiss-save-dialog',
+    referenceMutations: [
+      { type: 'remove-element', elementId: 'as-backdrop' },
+      { type: 'remove-element', elementId: 'as-dialog' },
+      { type: 'remove-element', elementId: 'as-sidebar' },
+      { type: 'remove-element', elementId: 'as-plan' },
+      {
+        type: 'set-children',
+        elementId: 'as-bio-row',
+        html: `<label for="as-bio"><span class="as-label-main">Bio</span><span>Optional</span></label><textarea id="as-bio" rows="2" style="resize:none;scrollbar-width:none">${expandedAccountBio}</textarea>`,
+      },
+    ],
+    siteData: dialogDismissedAccountSiteData,
+  },
+  {
+    id: 'compact-account-data',
+    referenceMutations: [
+      { type: 'set-text', elementId: 'as-state', textContent: 'Ready' },
+    ],
+    siteData: compactAccountSiteData,
+  },
+  {
+    id: 'remove-completed-bio',
+    referenceMutations: [
+      { type: 'remove-element', elementId: 'as-bio-row' },
+    ],
+    siteData: completedAccountSiteData,
+  },
+];
 
 function findAccountElement(
   siteData: SiteData,
