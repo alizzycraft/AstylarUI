@@ -254,6 +254,8 @@ export interface ParityControlState {
   selectionStart?: number;
   selectionEnd?: number;
   cursorPosition?: number;
+  scrollLeft?: number;
+  scrollTop?: number;
   touched?: boolean;
   dirty?: boolean;
   valid?: boolean;

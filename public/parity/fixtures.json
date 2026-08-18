@@ -855,5 +855,12 @@
     "category": "forms-interactive",
     "expectedBehavior": "Forward and backward pointer drags expose ordered selection endpoints while retaining the active caret direction, and typing replaces each selected range with browser-equivalent events.",
     "interactionStepCount": 4
+  },
+  {
+    "id": "interaction-input-autoscroll",
+    "title": "Single-line input caret autoscrolling",
+    "category": "forms-interactive",
+    "expectedBehavior": "Keyboard and pointer caret movement keep a long single-line input caret visible by updating horizontal text scroll state, then return to the leading edge at Home.",
+    "interactionStepCount": 5
   }
 ]

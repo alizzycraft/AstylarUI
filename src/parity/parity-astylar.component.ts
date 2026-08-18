@@ -502,6 +502,7 @@ export class ParityAstylarComponent {
         selectionStart: typeof input.selectionStart === 'number' ? input.selectionStart : undefined,
         selectionEnd: typeof input.selectionEnd === 'number' ? input.selectionEnd : undefined,
         cursorPosition: typeof input.cursorPosition === 'number' ? input.cursorPosition : undefined,
+        scrollLeft: typeof input.scrollOffset === 'number' ? input.scrollOffset : undefined,
         touched: input.validationState?.touched,
         dirty: input.validationState?.dirty,
         valid: input.validationState?.valid,

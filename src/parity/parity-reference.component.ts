@@ -371,6 +371,11 @@ export class ParityReferenceComponent {
             ? control.selectionStart ?? undefined
             : control.selectionEnd ?? undefined
           : undefined,
+        scrollLeft: control instanceof HTMLTextAreaElement ||
+          (control instanceof HTMLInputElement && ['text', 'password', 'email', 'number'].includes(control.type))
+          ? control.scrollLeft
+          : undefined,
+        scrollTop: control instanceof HTMLTextAreaElement ? control.scrollTop : undefined,
       };
     }
     return controls;
