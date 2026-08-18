@@ -3,7 +3,8 @@
 The parity harness renders equivalent native HTML/CSS and Astylar `SiteData` in
 the same Chromium environment at an 800 × 600 CSS-pixel viewport and DPR 1. It
 captures screenshots, element geometry, computed visual styles, text content,
-and line counts.
+line counts, supported interaction state, and requested browser accessibility
+snapshots.
 
 ## Run
 
@@ -68,5 +69,6 @@ active responsive intrinsic layout and paint-fidelity phase in `scorecard-v5.md`
 Application-grade intrinsic Grid work continues in `scorecard-v6.md`.
 Reactive layout and reflow work continues in `scorecard-v7.md`.
 Stateful interaction and form parity continues in `scorecard-v8.md`.
-Scrolling, pointer selection, and popup interaction parity continues in
-`scorecard-v9.md`.
+Scrolling, pointer selection, and popup interaction parity is completed in
+`scorecard-v9.md`. Semantic application behavior and accessibility parity
+continues in `scorecard-v10.md`.

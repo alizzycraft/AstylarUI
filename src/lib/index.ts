@@ -26,6 +26,11 @@ export type {
   AstylarEventType,
 } from './astylar-event';
 export type { AstylarInteractionSnapshot } from './astylar-interaction-runtime';
+export { AstylarSemanticBridge } from './astylar-semantic-bridge';
+export type {
+  AstylarSemanticBridgeOptions,
+  AstylarSemanticSnapshot,
+} from './astylar-semantic-bridge';
 export type {
   AstylarInvalidationReason,
   AstylarSessionSnapshot,

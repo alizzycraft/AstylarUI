@@ -193,13 +193,15 @@ async function measureFixture(context, fixture, viewport) {
     context,
     `${BASE_URL}/parity/reference/${encodeURIComponent(fixture.id)}${viewportQuery}`,
     '#parity-reference-viewport',
-    path.join(fixtureDir, 'reference.png')
+    path.join(fixtureDir, 'reference.png'),
+    fixture.semanticIds,
   );
   let astylar = await captureMode(
     context,
     `${BASE_URL}/parity/astylar/${encodeURIComponent(fixture.id)}${viewportQuery}`,
     '#parity-astylar-canvas',
-    path.join(fixtureDir, 'astylar.png')
+    path.join(fixtureDir, 'astylar.png'),
+    fixture.semanticIds,
   );
 
   let screenshotSimilarity = comparePng(reference.screenshot, astylar.screenshot);
@@ -214,17 +216,20 @@ async function measureFixture(context, fixture, viewport) {
       `${BASE_URL}/parity/astylar/${encodeURIComponent(fixture.id)}${viewportQuery}`,
       '#parity-astylar-canvas',
       path.join(fixtureDir, 'astylar.png'),
+      fixture.semanticIds,
     );
     screenshotSimilarity = comparePng(reference.screenshot, astylar.screenshot);
   }
   const geometry = compareGeometry(reference.report, astylar.report);
   const text = compareText(reference.report, astylar.report);
   const styles = compareStyles(reference.report, astylar.report);
+  const semanticErrors = compareSemantics(reference.semantics, astylar.semantics);
   const runtimeErrors = [
     ...reference.pageErrors.map((error) => `reference: ${error}`),
     ...astylar.pageErrors.map((error) => `astylar: ${error}`),
     ...reference.report.errors.map((error) => `reference: ${error}`),
-    ...astylar.report.errors.map((error) => `astylar: ${error}`)
+    ...astylar.report.errors.map((error) => `astylar: ${error}`),
+    ...semanticErrors,
   ];
 
   return {
@@ -237,13 +242,17 @@ async function measureFixture(context, fixture, viewport) {
     geometry,
     text,
     styles,
+    semantics: {
+      reference: reference.semantics,
+      astylar: astylar.semantics,
+    },
     runtimeErrors,
     reference: reference.report,
     astylar: astylar.report
   };
 }
 
-async function captureMode(context, url, selector, screenshotPath) {
+async function captureMode(context, url, selector, screenshotPath, semanticIds = []) {
   const page = await context.newPage();
   await installDeterministicAssetDelay(page);
   const pageErrors = [];
@@ -255,6 +264,17 @@ async function captureMode(context, url, selector, screenshotPath) {
     { timeout: 30_000 }
   );
   const report = await page.evaluate(() => window.__ASTYLAR_PARITY_REPORT__);
+  const astylarMode = url.includes('/parity/astylar/');
+  const semantics = {};
+  for (const id of semanticIds ?? []) {
+    const semanticSelector = astylarMode
+      ? `[data-astylar-id="${escapeSelectorValue(id)}"]`
+      : `#${escapeSelectorValue(id)}`;
+    const semanticNode = page.locator(semanticSelector);
+    semantics[id] = await semanticNode.count() === 1
+      ? await semanticNode.ariaSnapshot()
+      : undefined;
+  }
   const screenshot = await page.locator(selector).screenshot({
     path: screenshotPath,
     animations: 'disabled'
@@ -264,7 +284,11 @@ async function captureMode(context, url, selector, screenshotPath) {
   if (!report) {
     throw new Error(`Parity report was not published for ${url}`);
   }
-  return { report, screenshot, pageErrors };
+  return { report, screenshot, pageErrors, semantics };
+}
+
+function escapeSelectorValue(value) {
+  return String(value).replaceAll('\\', '\\\\').replaceAll('"', '\\"');
 }
 
 async function measureDynamicFixture(contexts, fixture) {
@@ -391,6 +415,7 @@ async function measureDynamicFixture(contexts, fixture) {
         !after.engineDisposed ||
         !after.sceneDisposed ||
         after.cleanupRegistrations !== 0 ||
+        after.semanticNodes !== 0 ||
         after.elements !== 0 ||
         after.inputs !== 0 ||
         !resources || resources.meshes !== 0 || resources.materials !== 0 || resources.textures !== 0
@@ -660,6 +685,17 @@ function compareInteractionLifecycle(fixture, astylarStates, index) {
         );
       }
     }
+
+    const baselineSemantics = baseline?.semantics;
+    const currentSemantics = current?.semantics;
+    if (!baselineSemantics || !currentSemantics ||
+        JSON.stringify(currentSemantics) !== JSON.stringify(baselineSemantics)) {
+      errors.push(
+        `astylar: interaction lifecycle semantic ownership changed at cycle ${cycleIndex + 1}, ` +
+        `phase ${phase + 1} (${JSON.stringify(currentSemantics)} vs ` +
+        `${JSON.stringify(baselineSemantics)})`,
+      );
+    }
   }
 
   if (index === astylarStates.length - 1) {
@@ -669,7 +705,8 @@ function compareInteractionLifecycle(fixture, astylarStates, index) {
     const resources = after?.resources;
     if (!before || before.inputs < 1 || before.cleanupRegistrations < 1 ||
         after?.sessionStatus !== 'disposed' || !after.engineDisposed || !after.sceneDisposed ||
-        after.cleanupRegistrations !== 0 || after.elements !== 0 || after.inputs !== 0 ||
+        after.cleanupRegistrations !== 0 || after.semanticNodes !== 0 ||
+        after.elements !== 0 || after.inputs !== 0 ||
         !resources || resources.meshes !== 0 || resources.materials !== 0 || resources.textures !== 0) {
       errors.push(`astylar: interaction lifecycle disposal was not clean ${JSON.stringify(disposal)}`);
     }
@@ -1047,6 +1084,19 @@ function findCatastrophicCapture(referenceStates, astylarStates) {
       astylar.report.errors.length === 0 &&
       comparePng(reference.screenshot, astylar.screenshot) < 0.5;
   });
+}
+
+function compareSemantics(reference = {}, astylar = {}) {
+  const errors = [];
+  for (const id of new Set([...Object.keys(reference), ...Object.keys(astylar)])) {
+    if (reference[id] !== astylar[id]) {
+      errors.push(
+        `semantic: accessibility snapshot differs for ${id}; ` +
+        `reference=${JSON.stringify(reference[id])}, astylar=${JSON.stringify(astylar[id])}`,
+      );
+    }
+  }
+  return errors;
 }
 
 function compareGeometry(reference, astylar) {

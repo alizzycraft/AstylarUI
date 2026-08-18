@@ -160,6 +160,7 @@ export class ParityAstylarComponent {
             elements: this.elementManager.elementsMap.size,
             inputs: this.elementManager.inputElementsMap.size,
             cleanupRegistrations: session?.snapshot.cleanupRegistrations ?? 0,
+            semanticNodes: this.astylar.getSemanticSnapshot(scene)?.nodes ?? 0,
           };
           const engine = scene.getEngine();
           engine.dispose();
@@ -170,6 +171,7 @@ export class ParityAstylarComponent {
               elements: this.elementManager.elementsMap.size,
               inputs: this.elementManager.inputElementsMap.size,
               cleanupRegistrations: session?.snapshot.cleanupRegistrations ?? 0,
+              semanticNodes: this.astylar.getSemanticSnapshot(scene)?.nodes ?? 0,
               sessionStatus: session?.snapshot.status,
               engineDisposed: engine.isDisposed,
               sceneDisposed: scene.isDisposed,
@@ -462,6 +464,7 @@ export class ParityAstylarComponent {
         elements: this.elementManager.elementsMap.size,
         inputs: this.elementManager.inputElementsMap.size,
       },
+      semantics: this.astylar.getSemanticSnapshot(scene),
       interaction: includeInteraction
         ? {
             events: [...this.interactionEvents],

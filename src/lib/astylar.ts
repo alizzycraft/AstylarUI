@@ -40,6 +40,11 @@ import { InputElementService } from '../app/services/dom/input/input-element.ser
 import { AstylarScrollRuntime } from './astylar-scroll-runtime';
 import type { AstylarScrollSnapshot } from './astylar-scroll-runtime';
 import { OverflowClipService } from '../app/services/dom/elements/overflow-clip.service';
+import {
+  AstylarSemanticBridge,
+  AstylarSemanticBridgeOptions,
+  AstylarSemanticSnapshot,
+} from './astylar-semantic-bridge';
 
 /**
  * Configuration options for rendering
@@ -53,6 +58,8 @@ export interface AstylarRenderOptions {
   setupLighting?: (scene: Scene) => void;
   /** Typed handlers and an observer kept outside serializable SiteData. */
   events?: AstylarEventOptions;
+  /** Browser accessibility semantics. Enabled by default; pass false to opt out. */
+  accessibility?: boolean | AstylarSemanticBridgeOptions;
 }
 
 /**
@@ -74,6 +81,7 @@ export class Astylar {
   private readonly sceneResources = new WeakMap<Scene, AstylarSceneResources>();
   private readonly interactions = new WeakMap<Scene, AstylarInteractionRuntime>();
   private readonly scrolling = new WeakMap<Scene, AstylarScrollRuntime>();
+  private readonly semantics = new WeakMap<Scene, AstylarSemanticBridge>();
   private activeSession?: AstylarRenderSession;
 
   /**
@@ -260,6 +268,13 @@ export class Astylar {
       refreshClipping: (entries) => this.overflowClipService.refresh(entries),
     });
     this.scrolling.set(scene, scrollRuntime);
+    const semanticBridge = options?.accessibility === false
+      ? undefined
+      : new AstylarSemanticBridge(
+          canvas,
+          typeof options?.accessibility === 'object' ? options.accessibility : undefined,
+        );
+    if (semanticBridge) this.semantics.set(scene, semanticBridge);
 
     let hasCompletedRender = false;
     const session = new AstylarRenderSession(
@@ -289,6 +304,7 @@ export class Astylar {
           () => {
             this.babylonDOMRenderer.createSiteFromData(currentSiteData);
             scrollRuntime.reconcile(currentSiteData, scrollState);
+            semanticBridge?.reconcile(currentSiteData);
             const textFocusId = this.inputElementService.restoreTextControlStates(textState);
             const nonTextFocusId = this.inputElementService.restoreNonTextControlStates(nonTextState);
             const focusedElementId = textFocusId ?? nonTextFocusId;
@@ -374,6 +390,7 @@ export class Astylar {
     this.interactions.set(scene, interaction);
     session.addCleanup(() => interaction.dispose());
     session.addCleanup(() => scrollRuntime.dispose());
+    if (semanticBridge) session.addCleanup(() => semanticBridge.dispose());
     session.addCleanup(() => sceneResources.dispose());
     session.addCleanup(this.imageResources.subscribe((event) => {
       if (event.scene !== scene || session.isDisposed) return;
@@ -459,6 +476,10 @@ export class Astylar {
 
   getScrollSnapshot(scene: Scene): AstylarScrollSnapshot | undefined {
     return this.scrolling.get(scene)?.snapshot;
+  }
+
+  getSemanticSnapshot(scene: Scene): AstylarSemanticSnapshot | undefined {
+    return this.semantics.get(scene)?.snapshot;
   }
 
   update(siteData: SiteData, scene?: Scene): Promise<AstylarSessionSnapshot> {

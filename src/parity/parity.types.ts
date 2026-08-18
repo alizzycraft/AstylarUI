@@ -34,7 +34,8 @@ export type ParityCategory =
   | 'overflow-scrolling'
   | 'controls-states'
   | 'layering-overlays'
-  | 'composed-application';
+  | 'composed-application'
+  | 'accessibility-semantics';
 
 export interface ParityFixture {
   id: string;
@@ -59,6 +60,8 @@ export interface ParityFixture {
   interactionCycleLength?: number;
   interactionIds?: string[];
   scrollIds?: string[];
+  /** Authored IDs whose browser accessibility snapshots must match exactly. */
+  semanticIds?: string[];
   interactionEventTypes?: ParityInteractionEventType[];
 }
 
@@ -238,6 +241,7 @@ export interface ParityRuntimeReport {
   errors: string[];
   resources?: { meshes: number; materials: number; textures: number };
   registries?: { elements: number; inputs: number };
+  semantics?: { nodes: number; eventRegistrations: number; observerRegistrations: number };
   interaction?: ParityInteractionReport;
 }
 
@@ -311,12 +315,14 @@ export interface ParityDisposalReport {
     elements: number;
     inputs: number;
     cleanupRegistrations: number;
+    semanticNodes?: number;
   };
   after: {
     resources?: { meshes: number; materials: number; textures: number };
     elements: number;
     inputs: number;
     cleanupRegistrations: number;
+    semanticNodes?: number;
     sessionStatus?: string;
     engineDisposed: boolean;
     sceneDisposed: boolean;

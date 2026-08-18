@@ -1,5 +1,12 @@
 [
   {
+    "id": "semantic-structure",
+    "title": "Native document and application semantics",
+    "category": "accessibility-semantics",
+    "expectedBehavior": "Astylar exposes the authored landmark, heading, paragraph, list, link, button, and table hierarchy through native browser accessibility semantics without exposing Babylon implementation meshes.",
+    "semanticIds": ["semantic-shell", "semantic-header", "semantic-title", "semantic-nav", "semantic-main", "semantic-section", "semantic-list", "semantic-link", "semantic-button", "semantic-table", "semantic-footer"]
+  },
+  {
     "id": "box-model-basic",
     "title": "Basic content-box geometry",
     "category": "box-model-units",
