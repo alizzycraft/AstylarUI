@@ -462,10 +462,10 @@
     "id": "representative-data-management",
     "title": "Representative data management application",
     "category": "composed-application",
-    "expectedBehavior": "A responsive inventory application preserves its data shell while search editing, expanded status filtering, long-table scrolling, page updates, and post-scroll pointer/keyboard record actions retain browser-equivalent state and events.",
+    "expectedBehavior": "A responsive inventory application exposes labelled table and pagination semantics, preserves meaningful focus through page replacement, activates the selected-row action semantically, and retains browser-equivalent search, filter, scroll, control, and event state.",
     "viewportIds": ["desktop", "tablet", "mobile"],
     "dynamicStepCount": 1,
-    "interactionStepCount": 9
+    "interactionStepCount": 11
   },
   {
     "id": "representative-account-settings",

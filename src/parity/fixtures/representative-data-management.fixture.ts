@@ -6,7 +6,7 @@ export const representativeDataManagementFixture: ParityFixture = {
   title: 'Representative data management application',
   category: 'composed-application',
   expectedBehavior:
-    'A responsive inventory application preserves its data shell while search editing, expanded status filtering, long-table scrolling, page updates, and post-scroll pointer/keyboard record actions retain browser-equivalent state and events.',
+    'A responsive inventory application exposes labelled table and pagination semantics, preserves meaningful focus through page replacement, activates the selected-row action semantically, and retains browser-equivalent search, filter, scroll, control, and event state.',
   viewportIds: ['desktop', 'tablet', 'mobile'],
   measurementIds: [
     'dm-shell', 'dm-nav', 'dm-brand', 'dm-nav-inventory', 'dm-content', 'dm-header',
@@ -20,6 +20,12 @@ export const representativeDataManagementFixture: ParityFixture = {
   ],
   interactionIds: ['dm-search', 'dm-filter', 'dm-page-next', 'dm-detail-action'],
   scrollIds: ['dm-table-card'],
+  semanticIds: [
+    'dm-table', 'dm-head-row', 'dm-head-item', 'dm-head-status', 'dm-head-owner',
+    'dm-row-one', 'dm-one-item', 'dm-one-status', 'dm-one-owner',
+    'dm-pagination', 'dm-page-prev', 'dm-page-active', 'dm-page-next',
+    'dm-detail-action',
+  ],
   interactionEventTypes: [
     'pointerdown', 'pointerup', 'click', 'focus', 'blur',
     'keydown', 'keyup', 'input', 'change',
@@ -37,6 +43,8 @@ export const representativeDataManagementFixture: ParityFixture = {
     { id: 'request-next-page', actions: [{ type: 'click', elementId: 'dm-page-next' }] },
     { id: 'show-next-page', actions: [{ type: 'apply-update', stepIndex: 0 }] },
     { id: 'repeat-next-page-keyboard', actions: [{ type: 'press-key', key: 'Enter' }] },
+    { id: 'focus-updated-row-action', actions: [{ type: 'semantic-focus', elementId: 'dm-detail-action' }] },
+    { id: 'activate-updated-row-action', actions: [{ type: 'semantic-activate', elementId: 'dm-detail-action' }] },
     { id: 'open-record-pointer', actions: [{ type: 'click', elementId: 'dm-detail-action' }] },
     { id: 'open-record-keyboard', actions: [{ type: 'press-key', key: 'Space' }] },
   ],
@@ -60,7 +68,7 @@ export const representativeDataManagementFixture: ParityFixture = {
               <input id="dm-export" type="button" value="Export" disabled>
             </div>
             <section id="dm-table-card">
-              <table id="dm-table">
+              <table id="dm-table" aria-label="Inventory records">
                 <colgroup><col style="width:180px"><col style="width:100px"><col style="width:96px"></colgroup>
                 <thead><tr id="dm-head-row"><th id="dm-head-item">Item</th><th id="dm-head-status">Status</th><th id="dm-head-owner">Owner</th></tr></thead>
                 <tbody>
@@ -74,7 +82,7 @@ export const representativeDataManagementFixture: ParityFixture = {
                   <tr id="dm-row-eight"><td id="dm-eight-item">Lens case</td><td id="dm-eight-status">Available</td><td id="dm-eight-owner">Ravi</td></tr>
                 </tbody>
               </table>
-              <div id="dm-pagination"><input id="dm-page-prev" type="button" value="Previous" disabled><input id="dm-page-active" class="active" type="button" value="1"><input id="dm-page-next" type="button" value="Next"></div>
+              <nav id="dm-pagination" aria-label="Inventory pages"><input id="dm-page-prev" type="button" value="Previous" aria-label="Previous page" disabled><input id="dm-page-active" class="active" type="button" value="1" aria-label="Page 1, current page" aria-current="page"><input id="dm-page-next" type="button" value="Next" aria-label="Next page"></nav>
               <div id="dm-empty">No archived records.</div>
             </section>
             <aside id="dm-detail">
@@ -83,7 +91,7 @@ export const representativeDataManagementFixture: ParityFixture = {
                 <h2 id="dm-detail-title">Studio camera kit</h2>
                 <p id="dm-detail-copy">Ready for checkout from the central equipment room.</p>
                 <div id="dm-detail-meta"><strong>Asset ID</strong><span>CAM-2048</span></div>
-                <input id="dm-detail-action" type="button" value="View record">
+                <input id="dm-detail-action" type="button" value="View record" aria-label="View Studio camera kit record">
               </div>
             </aside>
           </main>
@@ -248,7 +256,7 @@ export const representativeDataManagementFixture: ParityFixture = {
         { type:'main', id:'dm-main', children:[
           { type:'div', id:'dm-toolbar', children:[{ type:'input', inputType:'text', id:'dm-search', value:'Search inventory' }, { type:'select', id:'dm-filter', value:'all', options:[{ value:'all', label:'All status' }, { value:'reserved', label:'Reserved' }, { value:'unavailable', label:'Unavailable' }] }, { type:'input', inputType:'button', id:'dm-export', value:'Export', disabled:true }] },
           { type:'section', id:'dm-table-card', children:[
-            { type:'table', id:'dm-table', tableProperties:{ tableLayout:'fixed' }, children:[
+            { type:'table', id:'dm-table', ariaLabel:'Inventory records', tableProperties:{ tableLayout:'fixed' }, children:[
               { type:'colgroup', children:[{ type:'col', tableProperties:{ width:'180px' } }, { type:'col', tableProperties:{ width:'100px' } }, { type:'col', tableProperties:{ width:'96px' } }] },
               { type:'thead', children:[{ type:'tr', id:'dm-head-row', children:[{ type:'th', id:'dm-head-item', textContent:'Item' }, { type:'th', id:'dm-head-status', textContent:'Status' }, { type:'th', id:'dm-head-owner', textContent:'Owner' }] }] },
               { type:'tbody', children:[
@@ -262,13 +270,13 @@ export const representativeDataManagementFixture: ParityFixture = {
                 { type:'tr', id:'dm-row-eight', children:[{ type:'td', id:'dm-eight-item', textContent:'Lens case' }, { type:'td', id:'dm-eight-status', textContent:'Available' }, { type:'td', id:'dm-eight-owner', textContent:'Ravi' }] },
               ] },
             ] },
-            { type:'div', id:'dm-pagination', children:[{ type:'input', inputType:'button', id:'dm-page-prev', value:'Previous', disabled:true }, { type:'input', inputType:'button', id:'dm-page-active', class:'active', value:'1' }, { type:'input', inputType:'button', id:'dm-page-next', value:'Next' }] },
+            { type:'nav', id:'dm-pagination', ariaLabel:'Inventory pages', children:[{ type:'input', inputType:'button', id:'dm-page-prev', value:'Previous', ariaLabel:'Previous page', disabled:true }, { type:'input', inputType:'button', id:'dm-page-active', class:'active', value:'1', ariaLabel:'Page 1, current page', ariaCurrent:'page' }, { type:'input', inputType:'button', id:'dm-page-next', value:'Next', ariaLabel:'Next page' }] },
             { type:'div', id:'dm-empty', textContent:'No archived records.' },
           ] },
           { type:'aside', id:'dm-detail', children:[
             { type:'img', id:'dm-detail-image', src:'/parity/article-pattern.svg', alt:'Inventory preview' }, { type:'div', id:'dm-detail-body', children:[
               { type:'h2', id:'dm-detail-title', textContent:'Studio camera kit' }, { type:'p', id:'dm-detail-copy', textContent:'Ready for checkout from the central equipment room.' },
-              { type:'div', id:'dm-detail-meta', children:[{ type:'strong', textContent:'Asset ID' }, { type:'span', textContent:'CAM-2048' }] }, { type:'input', inputType:'button', id:'dm-detail-action', value:'View record' },
+              { type:'div', id:'dm-detail-meta', children:[{ type:'strong', textContent:'Asset ID' }, { type:'span', textContent:'CAM-2048' }] }, { type:'input', inputType:'button', id:'dm-detail-action', value:'View record', ariaLabel:'View Studio camera kit record' },
             ] },
           ] },
         ] },
@@ -288,8 +296,11 @@ setDataText(secondDataPage, 'dm-two-item', 'Camera support dolly');
 setDataText(secondDataPage, 'dm-detail-title', 'Broadcast camera body');
 setDataText(secondDataPage, 'dm-detail-copy', 'Reserved for the live production team until Friday afternoon.');
 const activePage = findDataElement(secondDataPage, 'dm-page-active');
-if (!activePage) throw new Error('Representative data page control is missing');
+const selectedRowAction = findDataElement(secondDataPage, 'dm-detail-action');
+if (!activePage || !selectedRowAction) throw new Error('Representative data page controls are missing');
 activePage.value = '2';
+activePage.ariaLabel = 'Page 2, current page';
+selectedRowAction.ariaLabel = 'View Broadcast camera body record';
 
 representativeDataManagementFixture.dynamicSteps = [{
   id: 'inventory-page-two',
@@ -306,6 +317,8 @@ representativeDataManagementFixture.dynamicSteps = [{
       textContent: 'Reserved for the live production team until Friday afternoon.',
     },
     { type: 'set-value', elementId: 'dm-page-active', value: '2' },
+    { type: 'set-attribute', elementId: 'dm-page-active', name: 'aria-label', value: 'Page 2, current page' },
+    { type: 'set-attribute', elementId: 'dm-detail-action', name: 'aria-label', value: 'View Broadcast camera body record' },
   ],
   siteData: secondDataPage,
 }];
