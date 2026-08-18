@@ -24,6 +24,7 @@ export interface TextInputMutableState {
     selectionAnchor: number;
     selectionFocus: number;
     scrollOffset: number;
+    scrollTop?: number;
     preserveSelectionOnReset: boolean;
 }
 
@@ -158,8 +159,8 @@ export class TextInputManager {
             if (state.range) {
                 textInput.selectionStart = state.range.start;
                 textInput.selectionEnd = state.range.end;
-                textInput.cursorState.selectionStart = state.range.start;
-                textInput.cursorState.selectionEnd = state.range.end;
+                textInput.cursorState.selectionStart = state.anchorIndex ?? state.range.start;
+                textInput.cursorState.selectionEnd = state.focusIndex ?? state.range.end;
                 textInput.cursorState.selectionActive = state.hasSelection;
             }
 
@@ -343,12 +344,24 @@ export class TextInputManager {
             const textureWidth = (textureWidthPx / devicePixelRatio) * pixelScale;
             const textureHeight = (textureHeightPx / devicePixelRatio) * pixelScale;
 
-            // Create text mesh using BabylonMeshService
+            const inputHeight = textInput.mesh.getBoundingInfo().boundingBox.extendSize.y * 2;
+            const verticalInsets = this.getVerticalContentInsets(textStyle, pixelScale);
+            const borderSize = Math.max(0, this.parseSize(textStyle.borderWidth) || 0) * pixelScale;
+            const verticalOrigin = Math.max(0, verticalInsets.top - borderSize);
+            const clientHeight = Math.max(0, inputHeight - (borderSize * 2));
+            const paddedTextureHeight = textureHeight + verticalOrigin
+                + Math.max(0, verticalInsets.bottom - borderSize);
+            const isVerticallyClipped = isTextarea && paddedTextureHeight > clientHeight;
+            const visibleWidth = Math.min(textureWidth, availableWidth);
+            const visibleHeight = isVerticallyClipped ? clientHeight : textureHeight;
+
+            // A clipped plane is the control's content viewport. UV scaling
+            // selects the corresponding portion of the full cached texture.
             const textMesh = this.babylonMeshService.createTextMesh(
                 `text_${textInput.element.id}`,
                 texture,
-                textureWidth,
-                textureHeight
+                visibleWidth,
+                visibleHeight
             );
 
             textMesh.parent = textInput.mesh;
@@ -363,6 +376,7 @@ export class TextInputManager {
 
             // Store world-space texture width for cursor positioning
             textInput.textureWidth = textureWidth;
+            textInput.textureHeight = textureHeight;
 
             // Align text mesh based on textAlign style
             const textAlign = (textStyle.textAlign || 'left').toLowerCase();
@@ -371,29 +385,7 @@ export class TextInputManager {
             // Handle clipping if text exceeds available width
             if (textureWidth > availableWidth) {
                 console.log(`[TextInputManager] Clipping text mesh: ${textureWidth.toFixed(3)} > ${availableWidth.toFixed(3)}`);
-
-                // Re-create mesh with clipped width or just scale it?
-                // Re-creating is safer to ensure bounding info is correct for interactions
-                this.disposeTextMesh(textMesh);
-                const clippedTextMesh = this.babylonMeshService.createTextMesh(
-                    `text_${textInput.element.id}`,
-                    texture,
-                    availableWidth,
-                    textureHeight
-                );
-
-                clippedTextMesh.parent = textInput.mesh;
-                clippedTextMesh.position.y = -2 * pixelScale;
-                clippedTextMesh.position.z = CONTROL_CONTENT_Z_OFFSET;
-                clippedTextMesh.isPickable = true;
-                clippedTextMesh.renderingGroupId = 0;
-                clippedTextMesh.rotation.z = Math.PI;
-
-                textInput.textMesh = clippedTextMesh;
-                clippedTextMesh.position.x = (insets.right - insets.left) / 2;
-
-                // Sync scroll and UVs
-                this.syncScroll(textInput, render);
+                textMesh.position.x = (insets.right - insets.left) / 2;
             } else {
                 // No clipping needed
                 textInput.scrollOffset = 0;
@@ -404,25 +396,15 @@ export class TextInputManager {
                 } else {
                     textMesh.position.x = (inputWidth / 2) - (textureWidth / 2) - insets.left;
                 }
-                textInput.textMesh = textMesh;
-
-                // If not clipped, ensure UVs are reset
-                const mat = textMesh.material as BABYLON.StandardMaterial;
-                if (mat && mat.diffuseTexture) {
-                    (mat.diffuseTexture as BABYLON.Texture).uScale = 1.0;
-                    (mat.diffuseTexture as BABYLON.Texture).uOffset = 0.0;
-                    if (mat.emissiveTexture) {
-                        (mat.emissiveTexture as BABYLON.Texture).uScale = 1.0;
-                        (mat.emissiveTexture as BABYLON.Texture).uOffset = 0.0;
-                    }
-                }
             }
 
-            if (isTextarea && textInput.textMesh) {
-                const inputHeight = textInput.mesh.getBoundingInfo().boundingBox.extendSize.y * 2;
-                const verticalInsets = this.getVerticalContentInsets(textStyle, pixelScale);
-                textInput.textMesh.position.y = inputHeight / 2 - verticalInsets.top - textureHeight / 2;
+            textInput.textMesh = textMesh;
+            if (isTextarea) {
+                textInput.textMesh.position.y = isVerticallyClipped
+                    ? 0
+                    : inputHeight / 2 - verticalInsets.top - visibleHeight / 2;
             }
+            this.syncScroll(textInput, render);
 
             // Register with text interaction registry for drag selection
             const storedMetrics: StoredTextLayoutMetrics = {
@@ -456,7 +438,9 @@ export class TextInputManager {
                 style,
                 storedMetrics,
                 textToRender,
-                textInput.scrollOffset || 0
+                textInput.scrollOffset || 0,
+                textInput.scrollTop || 0,
+                verticalOrigin / pixelScale
             );
 
         } catch (error) {
@@ -475,10 +459,23 @@ export class TextInputManager {
         const insets = this.getHorizontalContentInsets(textInput.style, scale);
         const availableWidth = Math.max(0, inputWidth - insets.left - insets.right);
         const vw = availableWidth / scale; // Visible width in CSS pixels
+        const borderWidth = Math.max(0, this.parseSize(textInput.style.borderWidth) || 0) * scale;
+        const paddingLeft = Math.max(0, insets.left - borderWidth) / scale;
+        const paddingRight = Math.max(0, insets.right - borderWidth) / scale;
+        const clientWidth = Math.max(0, inputWidth - (borderWidth * 2)) / scale;
+        const inputHeight = textInput.mesh.getBoundingInfo().boundingBox.extendSize.y * 2;
+        const verticalInsets = this.getVerticalContentInsets(textInput.style, scale);
+        const borderSize = borderWidth;
+        const paddingTop = Math.max(0, verticalInsets.top - borderSize) / scale;
+        const paddingBottom = Math.max(0, verticalInsets.bottom - borderSize) / scale;
+        const availableHeight = Math.max(0, inputHeight - (borderSize * 2));
+        const vh = availableHeight / scale;
 
         // Get actual texture width from stored metrics
         const fullTextureWidth = textInput.textureWidth || 1;
+        const fullTextureHeight = textInput.textureHeight || 1;
         const currentMeshWidth = textInput.textMesh.getBoundingInfo().boundingBox.maximum.x - textInput.textMesh.getBoundingInfo().boundingBox.minimum.x;
+        const currentMeshHeight = textInput.textMesh.getBoundingInfo().boundingBox.maximum.y - textInput.textMesh.getBoundingInfo().boundingBox.minimum.y;
 
         // Only scroll if text is wider than available area
         if (fullTextureWidth <= availableWidth) {
@@ -507,6 +504,41 @@ export class TextInputManager {
                     textInput.scrollOffset = cursorX - vw + buffer;
                 }
             }
+            const horizontalScrollWidth = textInput.textLayoutMetrics.totalWidth
+                + paddingLeft + paddingRight;
+            const maximumScrollOffset = Math.max(
+                0,
+                Math.floor(horizontalScrollWidth) - Math.floor(clientWidth)
+            );
+            textInput.scrollOffset = Math.min(
+                textInput.scrollOffset || 0,
+                maximumScrollOffset
+            );
+        }
+
+        // Keep the active textarea line within the vertically clipped viewport.
+        const scrollHeight = (fullTextureHeight / scale) + paddingTop + paddingBottom;
+        const isVerticalScrollable = textInput.type === InputType.Textarea && scrollHeight > vh;
+        if (!isVerticalScrollable) {
+            textInput.scrollTop = 0;
+        } else {
+            textInput.scrollTop = Math.max(0, textInput.scrollTop || 0);
+            const cursorLine = this.findCursorLine(textInput);
+            const hasSelection = textInput.selectionStart !== textInput.selectionEnd;
+            if (cursorLine && !hasSelection) {
+                const fontSize = this.parseSize(textInput.style.fontSize) || 16;
+                const lineHeight = this.parseSize(textInput.style.lineHeight) || fontSize * 1.2;
+                const halfLeading = Math.max(0, (lineHeight - fontSize) / 2);
+                const cursorTop = cursorLine.top + paddingTop;
+                const cursorBottom = cursorLine.bottom + paddingTop + halfLeading;
+                if (cursorTop < textInput.scrollTop) {
+                    textInput.scrollTop = Math.max(0, cursorTop - Math.max(1, halfLeading / 4));
+                } else if (cursorBottom > textInput.scrollTop + vh) {
+                    textInput.scrollTop = cursorBottom - vh;
+                }
+            }
+            const maxScrollTop = Math.max(0, scrollHeight - vh);
+            textInput.scrollTop = Math.min(textInput.scrollTop, maxScrollTop);
         }
 
         // Apply UV offset to show the scrolled portion
@@ -528,10 +560,34 @@ export class TextInputManager {
                 emissTex.uScale = diffTex.uScale;
                 emissTex.uOffset = diffTex.uOffset;
             }
+
+            diffTex.vScale = currentMeshHeight / fullTextureHeight;
+            diffTex.vOffset = isVerticalScrollable
+                ? ((textInput.scrollTop || 0) - paddingTop)
+                    / Math.max(1, textInput.textLayoutMetrics.totalHeight)
+                : 0;
+            if (mat.emissiveTexture) {
+                const emissTex = mat.emissiveTexture as BABYLON.Texture;
+                emissTex.vScale = diffTex.vScale;
+                emissTex.vOffset = diffTex.vOffset;
+            }
         }
 
         // Update interaction registry
         this.textInteractionRegistry.updateScrollOffset(textInput.element.id!, textInput.scrollOffset || 0);
+        this.textInteractionRegistry.updateScrollTop(textInput.element.id!, textInput.scrollTop || 0);
+    }
+
+    private findCursorLine(textInput: TextInput): { top: number; bottom: number } | undefined {
+        const lines = textInput.textLayoutMetrics?.lines ?? [];
+        let cursorLine = lines[lines.length - 1];
+        for (const line of lines) {
+            if (textInput.cursorPosition <= line.endIndex) {
+                cursorLine = line;
+                break;
+            }
+        }
+        return cursorLine;
     }
 
     /**
@@ -609,20 +665,27 @@ export class TextInputManager {
     moveCursor(textInput: TextInput, direction: CursorDirection, isShiftKey: boolean = false): void {
         const textLength = textInput.textContent.length;
         let newPosition = textInput.cursorPosition;
+        const hasSelection = textInput.selectionStart !== textInput.selectionEnd;
 
-        switch (direction) {
-            case CursorDirection.Left:
-                newPosition = Math.max(0, textInput.cursorPosition - 1);
-                break;
-            case CursorDirection.Right:
-                newPosition = Math.min(textLength, textInput.cursorPosition + 1);
-                break;
-            case CursorDirection.Home:
-                newPosition = 0;
-                break;
-            case CursorDirection.End:
-                newPosition = textLength;
-                break;
+        if (!isShiftKey && hasSelection) {
+            newPosition = direction === CursorDirection.Left || direction === CursorDirection.Home
+                ? Math.min(textInput.selectionStart, textInput.selectionEnd)
+                : Math.max(textInput.selectionStart, textInput.selectionEnd);
+        } else {
+            switch (direction) {
+                case CursorDirection.Left:
+                    newPosition = Math.max(0, textInput.cursorPosition - 1);
+                    break;
+                case CursorDirection.Right:
+                    newPosition = Math.min(textLength, textInput.cursorPosition + 1);
+                    break;
+                case CursorDirection.Home:
+                    newPosition = 0;
+                    break;
+                case CursorDirection.End:
+                    newPosition = textLength;
+                    break;
+            }
         }
 
         // Handle selection with shift key
@@ -645,6 +708,17 @@ export class TextInputManager {
 
         textInput.cursorPosition = newPosition;
         textInput.cursorState.position = newPosition;
+
+        const entry = textInput.textMesh
+            ? this.textInteractionRegistry?.getByMesh(textInput.textMesh)
+            : undefined;
+        if (entry) {
+            this.textSelectionController.setSelection(
+                entry,
+                isShiftKey ? textInput.cursorState.selectionStart : newPosition,
+                newPosition
+            );
+        }
     }
 
     /**
@@ -722,14 +796,12 @@ export class TextInputManager {
         textInput.cursorState.selectionEnd = textLength;
         textInput.cursorState.position = textLength;
 
-        // Sync with global controller
+        // Sync the exact range with the global controller. Pointer coordinates
+        // cannot represent the end of a multiline value on the first row.
         if (textInput.textMesh) {
             const entry = this.textInteractionRegistry.getByMesh(textInput.textMesh);
             if (entry) {
-                // Approximate a select-all by moving from start to end
-                this.textSelectionController.beginSelection(entry, { x: 0, y: 0 });
-                this.textSelectionController.updateSelection(entry, { x: 999999, y: 0 }); // Far right
-                this.textSelectionController.finalizeSelection();
+                this.textSelectionController.setSelection(entry, 0, textLength);
             }
         }
 
@@ -886,6 +958,19 @@ export class TextInputManager {
             widthCorrectionRatio,
             textInput.scrollOffset || 0
         );
+
+        if (textInput.type === InputType.Textarea) {
+            const cursorLine = this.findCursorLine(textInput);
+            if (cursorLine) {
+                const inputHeight = textInput.mesh.getBoundingInfo().boundingBox.extendSize.y * 2;
+                const verticalInsets = this.getVerticalContentInsets(style, pixelScale);
+                const borderSize = Math.max(0, this.parseSize(style.borderWidth) || 0) * pixelScale;
+                const paddingTop = Math.max(0, verticalInsets.top - borderSize);
+                const lineCenter = (cursorLine.top + cursorLine.bottom) / 2;
+                textInput.cursorMesh.position.y = inputHeight / 2 - borderSize - paddingTop
+                    - ((lineCenter - (textInput.scrollTop || 0)) * pixelScale);
+            }
+        }
     }
 
     /**
@@ -916,7 +1001,10 @@ export class TextInputManager {
             : 0;
         textInput.cursorState.selectionActive = textInput.cursorState.selectionActive &&
             textInput.selectionStart !== textInput.selectionEnd;
-        if (!preserveSelection) textInput.scrollOffset = 0;
+        if (!preserveSelection) {
+            textInput.scrollOffset = 0;
+            textInput.scrollTop = 0;
+        }
         if (this.activeRender) {
             this.updateTextDisplay(textInput, this.activeRender, textInput.style);
         }
@@ -938,6 +1026,7 @@ export class TextInputManager {
         textInput.cursorState.selectionStart = clamp(state.selectionAnchor);
         textInput.cursorState.selectionEnd = clamp(state.selectionFocus);
         textInput.scrollOffset = Math.max(0, state.scrollOffset);
+        textInput.scrollTop = Math.max(0, state.scrollTop ?? 0);
         textInput.preserveSelectionOnReset = state.preserveSelectionOnReset;
         if (this.activeRender) {
             this.updateTextDisplay(textInput, this.activeRender, textInput.style);

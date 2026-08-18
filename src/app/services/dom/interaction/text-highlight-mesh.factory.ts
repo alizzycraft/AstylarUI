@@ -155,6 +155,8 @@ export class TextHighlightMeshFactory {
     // Using metrics.scale is usually safer if known.
     const scale = metrics.scale ?? (actualContentWidth > 0 ? textWidth / actualContentWidth : 1);
     const scrollOffset = entry.scrollOffset || 0;
+    const scrollTop = entry.scrollTop || 0;
+    const verticalOrigin = entry.verticalOrigin || 0;
 
     console.log(`[TextHighlight] Scale calculation: textWidth=${textWidth}, actualContentWidth=${actualContentWidth}, scale=${scale}, scrollOffset=${scrollOffset}`);
 
@@ -218,12 +220,18 @@ export class TextHighlightMeshFactory {
 
       const topOffsetCss = line.top - minTop;
       const heightCss = Math.max(line.bottom - line.top, line.height ?? 0);
-      const heightWorld = Math.max(heightCss * scale, MIN_SEGMENT_HEIGHT);
-      const topOffsetWorld = topOffsetCss * scale;
+      const unclippedTopWorld = (topOffsetCss + verticalOrigin - scrollTop) * scale;
+      const unclippedBottomWorld = unclippedTopWorld + (heightCss * scale);
+      const clippedTopWorld = Math.max(0, Math.min(unclippedTopWorld, textHeight));
+      const clippedBottomWorld = Math.max(0, Math.min(unclippedBottomWorld, textHeight));
+      const heightWorld = clippedBottomWorld - clippedTopWorld;
+      if (heightWorld <= MIN_SEGMENT_HEIGHT) {
+        continue;
+      }
       // Convert from top-left origin (text metrics) to center origin (text mesh)
       // With 180 degree rotation, local Y+ aligns with World Down (Visual Down).
       // Visual Top is at local -halfHeight, Visual Bottom is at local +halfHeight.
-      const centerY = (topOffsetWorld + (heightWorld / 2)) - halfHeight;
+      const centerY = ((clippedTopWorld + clippedBottomWorld) / 2) - halfHeight;
 
       // Debug logging for calculated positions
       console.log(`[TextHighlight] Line ${line.index}: startXWorld=${startXWorld}, endXWorld=${endXWorld}, centerX=${centerX}, centerY=${centerY}`);

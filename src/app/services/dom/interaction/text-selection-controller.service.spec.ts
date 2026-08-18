@@ -71,6 +71,18 @@ describe('TextSelectionControllerService', () => {
     });
   });
 
+  it('sets an exact multiline-sized selection without pointer approximation', () => {
+    const state = service.setSelection(entry, 0, entry.text!.length);
+
+    expectState(state, {
+      anchorIndex: 0,
+      focusIndex: 5,
+      range: { start: 0, end: 5 },
+      hasSelection: true,
+      isPointerDown: false
+    });
+  });
+
   it('clears selection', () => {
     service.beginSelection(entry, { x: 0, y: 5 });
     service.updateSelection(entry, { x: 44, y: 5 });

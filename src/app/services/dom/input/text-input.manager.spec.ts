@@ -16,7 +16,7 @@ describe('TextInputManager', () => {
     expect(textInput.cursorState.selectionEnd).toBe(3);
   });
 
-  it('collapses an existing selection when moving without shift', () => {
+  it('collapses an existing selection to its end when moving right without shift', () => {
     const manager = Object.create(TextInputManager.prototype) as TextInputManager;
     const textInput = createTextInput('Alpha', 3);
     textInput.selectionStart = 3;
@@ -27,12 +27,26 @@ describe('TextInputManager', () => {
 
     manager.moveCursor(textInput, CursorDirection.Right);
 
-    expect(textInput.cursorPosition).toBe(4);
-    expect(textInput.selectionStart).toBe(4);
-    expect(textInput.selectionEnd).toBe(4);
+    expect(textInput.cursorPosition).toBe(5);
+    expect(textInput.selectionStart).toBe(5);
+    expect(textInput.selectionEnd).toBe(5);
     expect(textInput.cursorState.selectionActive).toBeFalse();
-    expect(textInput.cursorState.selectionStart).toBe(4);
-    expect(textInput.cursorState.selectionEnd).toBe(4);
+    expect(textInput.cursorState.selectionStart).toBe(5);
+    expect(textInput.cursorState.selectionEnd).toBe(5);
+  });
+
+  it('collapses an existing selection to its start when moving left without shift', () => {
+    const manager = Object.create(TextInputManager.prototype) as TextInputManager;
+    const textInput = createTextInput('Alpha', 5);
+    textInput.selectionStart = 1;
+    textInput.selectionEnd = 5;
+    textInput.cursorState.selectionActive = true;
+
+    manager.moveCursor(textInput, CursorDirection.Left);
+
+    expect(textInput.cursorPosition).toBe(1);
+    expect(textInput.selectionStart).toBe(1);
+    expect(textInput.selectionEnd).toBe(1);
   });
 
   it('restores and clamps mutable value, caret, selection, and scroll state', () => {
@@ -48,6 +62,7 @@ describe('TextInputManager', () => {
       selectionAnchor: 6,
       selectionFocus: 5,
       scrollOffset: 12,
+      scrollTop: 36,
       preserveSelectionOnReset: true,
     });
 
@@ -60,6 +75,7 @@ describe('TextInputManager', () => {
     expect(textInput.cursorState.selectionStart).toBe(6);
     expect(textInput.cursorState.selectionEnd).toBe(5);
     expect(textInput.scrollOffset).toBe(12);
+    expect(textInput.scrollTop).toBe(36);
     expect(textInput.preserveSelectionOnReset).toBeTrue();
   });
 
@@ -72,6 +88,7 @@ describe('TextInputManager', () => {
     textInput.cursorState.selectionStart = 11;
     textInput.cursorState.selectionEnd = 11;
     textInput.scrollOffset = 7;
+    textInput.scrollTop = 15;
     textInput.preserveSelectionOnReset = true;
 
     manager.resetTextValue(textInput, 'Maya Chen');
@@ -86,6 +103,7 @@ describe('TextInputManager', () => {
     expect(textInput.cursorState.selectionEnd).toBe(9);
     expect(textInput.cursorState.selectionActive).toBeFalse();
     expect(textInput.scrollOffset).toBe(7);
+    expect(textInput.scrollTop).toBe(15);
   });
 
   it('clears caret and scroll state after a pointer-blurred control is reset', () => {
@@ -97,6 +115,7 @@ describe('TextInputManager', () => {
     textInput.cursorState.selectionStart = 5;
     textInput.cursorState.selectionEnd = 5;
     textInput.scrollOffset = 7;
+    textInput.scrollTop = 15;
     textInput.preserveSelectionOnReset = false;
 
     manager.resetTextValue(textInput, 'Seed');
@@ -110,6 +129,7 @@ describe('TextInputManager', () => {
     expect(textInput.cursorState.selectionEnd).toBe(0);
     expect(textInput.cursorState.selectionActive).toBeFalse();
     expect(textInput.scrollOffset).toBe(0);
+    expect(textInput.scrollTop).toBe(0);
   });
 });
 

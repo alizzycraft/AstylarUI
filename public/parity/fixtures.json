@@ -862,5 +862,12 @@
     "category": "forms-interactive",
     "expectedBehavior": "Keyboard and pointer caret movement keep a long single-line input caret visible by updating horizontal text scroll state, then return to the leading edge at Home.",
     "interactionStepCount": 5
+  },
+  {
+    "id": "interaction-textarea-autoscroll",
+    "title": "Textarea caret autoscrolling",
+    "category": "forms-interactive",
+    "expectedBehavior": "Moving the caret beyond a multiline textarea viewport scrolls vertically to keep it visible, preserves selection/editing state there, and returns to the leading viewport with the caret.",
+    "interactionStepCount": 6
   }
 ]

@@ -291,6 +291,7 @@ export class InputElementService {
                     selectionAnchor: text.cursorState.selectionStart,
                     selectionFocus: text.cursorState.selectionEnd,
                     scrollOffset: text.scrollOffset ?? 0,
+                    scrollTop: text.scrollTop ?? 0,
                     preserveSelectionOnReset: text.preserveSelectionOnReset === true,
                 },
             });

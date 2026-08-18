@@ -132,6 +132,7 @@ import { overflowScrolledTargetFixture } from './overflow-scrolled-target.fixtur
 import { interactionPointerCaretFixture } from './interaction-pointer-caret.fixture';
 import { interactionPointerDragSelectionFixture } from './interaction-pointer-drag-selection.fixture';
 import { interactionInputAutoscrollFixture } from './interaction-input-autoscroll.fixture';
+import { interactionTextareaAutoscrollFixture } from './interaction-textarea-autoscroll.fixture';
 import { ParityFixture } from '../parity.types';
 
 const fixtures: readonly ParityFixture[] = [
@@ -268,7 +269,8 @@ const fixtures: readonly ParityFixture[] = [
   overflowScrolledTargetFixture,
   interactionPointerCaretFixture,
   interactionPointerDragSelectionFixture,
-  interactionInputAutoscrollFixture
+  interactionInputAutoscrollFixture,
+  interactionTextareaAutoscrollFixture
 ];
 
 const fixturesById = new Map(fixtures.map((fixture) => [fixture.id, fixture]));

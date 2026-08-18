@@ -177,6 +177,25 @@ export class TextSelectionControllerService {
     });
   }
 
+  /** Sets an exact keyboard-owned selection without approximating it through pointer coordinates. */
+  setSelection(entry: TextInteractionEntry, anchorIndex: number, focusIndex: number): TextSelectionState {
+    const textLength = entry.text?.length ?? 0;
+    const anchor = clamp(anchorIndex, 0, textLength);
+    const focus = clamp(focusIndex, 0, textLength);
+    const range = this.createRange(anchor, focus);
+
+    this.pointerActive = false;
+    this.activeEntry = entry;
+    return this.updateState({
+      elementId: entry.elementId,
+      anchorIndex: anchor,
+      focusIndex: focus,
+      range,
+      isPointerDown: false,
+      hasSelection: range !== null && range.start !== range.end
+    });
+  }
+
   cancelSelection(): TextSelectionState {
     if (!this.pointerActive) {
       return this.state;

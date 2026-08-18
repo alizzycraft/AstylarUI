@@ -114,7 +114,9 @@ export interface TextInput extends InputElement {
     cursorState: CursorState;
     textLayoutMetrics?: any; // Will store TextLayoutMetrics from text rendering service
     textureWidth?: number; // Store world-space texture width for cursor positioning
+    textureHeight?: number; // Store world-space texture height for multiline clipping
     scrollOffset?: number; // Horizontal scroll offset in CSS pixels
+    scrollTop?: number; // Vertical scroll offset in CSS pixels for textareas
     /** Native reset keeps a tab-blurred caret but clears a pointer-blurred caret. */
     preserveSelectionOnReset?: boolean;
 }

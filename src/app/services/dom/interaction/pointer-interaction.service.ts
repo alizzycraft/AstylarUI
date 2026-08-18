@@ -213,13 +213,16 @@ export class PointerInteractionService {
     const scale = metrics.scale ?? 1;
     const availableWidthCss = width / scale;
     const scrollOffset = entry.scrollOffset || 0;
+    const availableHeightCss = height / scale;
+    const scrollTop = entry.scrollTop || 0;
+    const verticalOrigin = entry.verticalOrigin || 0;
 
     // x in CSS pixels = (normalized percentage of visible area * pixels in visible area) + scroll offset
     let x = (normalizedX * availableWidthCss) + scrollOffset;
 
     return {
       x,
-      y: normalizedY * cssHeight
+      y: clamp((normalizedY * availableHeightCss) + scrollTop - verticalOrigin, 0, cssHeight)
     };
   }
 

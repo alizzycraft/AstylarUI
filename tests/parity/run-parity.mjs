@@ -763,6 +763,8 @@ function normalizeComparableControl(control) {
     selectionStart: control.selectionStart,
     selectionEnd: control.selectionEnd,
     cursorPosition: control.cursorPosition,
+    scrollLeft: control.scrollLeft,
+    scrollTop: control.scrollTop,
   }).filter(([, value]) => value !== undefined));
 }
 
