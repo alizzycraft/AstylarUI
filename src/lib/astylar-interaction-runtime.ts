@@ -811,11 +811,12 @@ export class AstylarInteractionRuntime {
     let order = 0;
     const visit = (element: SiteData['root']['children'][number]): void => {
       const currentOrder = order++;
+      if (element.hidden) return;
       const focusable = element.type === 'input' || element.type === 'button' ||
         element.type === 'select' || element.type === 'textarea' ||
         (element.type === 'a' && !!element.href);
       const tabIndex = element.tabindex ?? 0;
-      if (element.id && focusable && !element.disabled && !element.hidden && tabIndex >= 0) {
+      if (element.id && focusable && !element.disabled && tabIndex >= 0) {
         entries.push({ id: element.id, tabIndex, order: currentOrder });
       }
       element.children?.forEach(visit);
@@ -960,7 +961,8 @@ export class AstylarInteractionRuntime {
       element.children?.forEach((child) => collectIds(child, ids, autofocusIds));
     };
     const visit = (element: SiteData['root']['children'][number]): void => {
-      if (!element.hidden && element.type === 'dialog' && element.open && element.modal && element.id) {
+      if (element.hidden) return;
+      if (element.type === 'dialog' && element.open && element.modal && element.id) {
         const elementIds = new Set<string>();
         const autofocusIds: string[] = [];
         collectIds(element, elementIds, autofocusIds);

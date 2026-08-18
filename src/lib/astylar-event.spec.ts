@@ -1630,6 +1630,18 @@ describe('AstylarInteractionRuntime', () => {
         },
       ] },
     };
+    const hiddenModal: SiteData = {
+      styles: [],
+      root: { children: [
+        ...base.root.children,
+        {
+          type: 'dialog', id: 'dialog', open: false, modal: true, hidden: true,
+          children: [
+            { type: 'input', inputType: 'button', id: 'action', value: 'Action', autofocus: true },
+          ],
+        },
+      ] },
+    };
     const runtime = new AstylarInteractionRuntime(
       scene,
       base,
@@ -1697,6 +1709,15 @@ describe('AstylarInteractionRuntime', () => {
         'keydown', 'cancel', 'blur', 'focus', 'keyup', 'close',
       ]);
       expect(presentation).toContain('restore:invoker');
+
+      runtime.setSiteData(modal);
+      runtime.reconcileModalState();
+      expect(focusedElementId).toBe('action');
+      runtime.setSiteData(hiddenModal);
+      runtime.reconcileModalState();
+      expect(runtime.snapshot.modalDialogId).toBeUndefined();
+      expect(focusedElementId).toBeUndefined();
+      expect(events.at(-1)?.type).toBe('blur');
 
       runtime.setSiteData(modal);
       runtime.reconcileModalState();

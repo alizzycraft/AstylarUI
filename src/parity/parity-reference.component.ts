@@ -127,6 +127,7 @@ export class ParityReferenceComponent {
         if (viewportId) this.setViewportBox(PARITY_VIEWPORTS[viewportId]);
         viewport.dataset['parityReady'] = 'false';
         this.applyReferenceStep(viewport, step.referenceMutations);
+        this.activateModalDialogs(viewport, fixture.modalDialogIds ?? []);
         await this.waitForImages(viewport);
         await this.nextFrame();
         await this.nextFrame();
@@ -141,6 +142,7 @@ export class ParityReferenceComponent {
       for (let index = 0; index <= lastStep && index < steps.length; index++) {
         this.applyReferenceStep(viewport, steps[index].referenceMutations);
       }
+      this.activateModalDialogs(viewport, fixture.modalDialogIds ?? []);
     }
     await this.waitForImages(viewport);
     await this.nextFrame();
@@ -194,7 +196,14 @@ export class ParityReferenceComponent {
           target.remove();
           break;
         case 'set-attribute':
-          if (mutation.value === undefined) target.removeAttribute(mutation.name);
+          if (
+            mutation.value === undefined &&
+            mutation.name === 'open' &&
+            target instanceof HTMLDialogElement &&
+            target.open
+          ) {
+            target.close();
+          } else if (mutation.value === undefined) target.removeAttribute(mutation.name);
           else target.setAttribute(mutation.name, mutation.value);
           break;
       }
@@ -204,7 +213,9 @@ export class ParityReferenceComponent {
   private activateModalDialogs(viewport: HTMLElement, ids: readonly string[]): void {
     for (const id of ids) {
       const dialog = viewport.querySelector<HTMLDialogElement>(`#${CSS.escape(id)}`);
-      if (dialog && !dialog.open) dialog.showModal();
+      if (dialog && !dialog.open && !dialog.closest('[hidden]')) {
+        dialog.showModal();
+      }
     }
   }
 

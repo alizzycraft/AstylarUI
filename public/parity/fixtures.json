@@ -471,10 +471,10 @@
     "id": "representative-account-settings",
     "title": "Representative account settings application",
     "category": "composed-application",
-    "expectedBehavior": "A responsive account workspace preserves pointer-edited form state, textarea scrolling, expanded-select commit/cancel behavior, and validation state through modal dismissal, application-data replacement, submit, and reset.",
+    "expectedBehavior": "A responsive account workspace exposes labelled native controls, synchronized validation and status announcements, and a modal workflow with focus containment and restoration while preserving browser-equivalent edited form state through application-data replacement, submit, and reset.",
     "viewportIds": ["desktop", "tablet", "mobile"],
-    "dynamicStepCount": 3,
-    "interactionStepCount": 13
+    "dynamicStepCount": 6,
+    "interactionStepCount": 22
   },
   {
     "id": "auto-block-height",

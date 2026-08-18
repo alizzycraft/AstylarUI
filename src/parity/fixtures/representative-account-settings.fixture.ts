@@ -8,7 +8,7 @@ export const representativeAccountSettingsFixture: ParityFixture = {
   title: 'Representative account settings application',
   category: 'composed-application',
   expectedBehavior:
-    'A responsive account workspace preserves pointer-edited form state, textarea scrolling, expanded-select commit/cancel behavior, and validation state through modal dismissal, application-data replacement, submit, and reset.',
+    'A responsive account workspace exposes labelled native controls, synchronized validation and status announcements, and a modal workflow with focus containment and restoration while preserving browser-equivalent edited form state through application-data replacement, submit, and reset.',
   viewportIds: ['desktop', 'tablet', 'mobile'],
   measurementIds: [
     'as-shell', 'as-sidebar', 'as-brand', 'as-nav-profile', 'as-workspace', 'as-header',
@@ -16,26 +16,37 @@ export const representativeAccountSettingsFixture: ParityFixture = {
     'as-name-row', 'as-name', 'as-email-row', 'as-email', 'as-bio-row', 'as-bio',
     'as-region-row', 'as-region', 'as-help', 'as-preferences', 'as-reports-slot', 'as-reports-label',
     'as-actions', 'as-cancel', 'as-save', 'as-plan', 'as-plan-title', 'as-plan-price',
-    'as-plan-list', 'as-backdrop', 'as-dialog', 'as-dialog-title',
-    'as-dialog-copy', 'as-dialog-actions', 'as-dialog-edit', 'as-dialog-confirm',
+    'as-plan-list', 'as-backdrop',
   ],
   optionalMeasurementIds: [
-    'as-backdrop', 'as-dialog', 'as-dialog-title', 'as-dialog-copy',
-    'as-dialog-actions', 'as-dialog-edit', 'as-dialog-confirm',
+    'as-backdrop',
     'as-plan', 'as-plan-title', 'as-plan-price', 'as-plan-list',
     'as-sidebar', 'as-brand', 'as-nav-profile',
     'as-bio-row', 'as-bio',
   ],
   interactionIds: [
-    'as-dialog-edit', 'as-form', 'as-name', 'as-bio', 'as-region',
+    'as-form', 'as-name', 'as-bio', 'as-region',
     'as-reports-label', 'as-reports', 'as-save', 'as-cancel',
   ],
+  semanticIds: [
+    'as-dialog', 'as-dialog-title', 'as-dialog-copy', 'as-dialog-edit', 'as-dialog-confirm',
+    'as-main', 'as-form', 'as-name', 'as-email', 'as-bio', 'as-region',
+    'as-help', 'as-reports', 'as-state', 'as-save', 'as-cancel',
+  ],
+  announcementIds: ['as-help', 'as-state'],
+  modalDialogIds: ['as-dialog'],
   interactionEventTypes: [
     'pointerdown', 'pointerup', 'click', 'focus', 'blur', 'keydown', 'keyup',
     'input', 'change', 'invalid', 'submit', 'reset',
   ],
   interactionSteps: [
-    { id: 'dismiss-dialog', actions: [{ type: 'click', elementId: 'as-dialog-edit' }] },
+    { id: 'modal-forward-focus', actions: [{ type: 'press-key', key: 'Tab' }] },
+    { id: 'modal-forward-wrap', actions: [{ type: 'press-key', key: 'Tab' }] },
+    { id: 'modal-reverse-wrap', actions: [{ type: 'press-key', key: 'Shift+Tab' }] },
+    { id: 'dismiss-dialog', actions: [
+      { type: 'semantic-focus', elementId: 'as-dialog-edit' },
+      { type: 'semantic-activate', elementId: 'as-dialog-edit' },
+    ] },
     { id: 'show-editing-form', actions: [{ type: 'apply-update', stepIndex: 0 }] },
     { id: 'select-name-backward', actions: [
       { type: 'pointer-down', elementId: 'as-name', offsetX: 76, offsetY: 20 },
@@ -49,12 +60,14 @@ export const representativeAccountSettingsFixture: ParityFixture = {
       { type: 'press-key', key: 'Tab' },
       { type: 'press-key', key: 'Tab' },
     ] },
+    { id: 'publish-validation-error', actions: [{ type: 'apply-update', stepIndex: 1 }] },
     { id: 'enter-valid-name', actions: [
       { type: 'press-key', key: 'Shift+Tab' },
       { type: 'press-key', key: 'Shift+Tab' },
       { type: 'press-key', key: 'Shift+Tab' },
       { type: 'type-text', text: 'Maya Rivera' },
     ] },
+    { id: 'clear-validation-error', actions: [{ type: 'apply-update', stepIndex: 2 }] },
     { id: 'scroll-bio', actions: [
       { type: 'press-key', key: 'Tab' },
       { type: 'press-key', key: 'Tab' },
@@ -72,8 +85,12 @@ export const representativeAccountSettingsFixture: ParityFixture = {
       { type: 'press-key', key: 'Enter' },
     ] },
     { id: 'toggle-reports', actions: [{ type: 'click', elementId: 'as-reports-label' }] },
-    { id: 'compact-account-data', actions: [{ type: 'apply-update', stepIndex: 1 }] },
+    { id: 'compact-account-data', actions: [{ type: 'apply-update', stepIndex: 3 }] },
     { id: 'submit-profile', actions: [{ type: 'click', elementId: 'as-save' }] },
+    { id: 'reopen-save-dialog', actions: [{ type: 'apply-update', stepIndex: 4 }] },
+    { id: 'choose-confirm-action', actions: [{ type: 'press-key', key: 'Tab' }] },
+    { id: 'escape-restores-save-focus', actions: [{ type: 'press-key', key: 'Escape' }] },
+    { id: 'publish-saved-status', actions: [{ type: 'apply-update', stepIndex: 5 }] },
     { id: 'reset-profile', actions: [{ type: 'click', elementId: 'as-cancel' }] },
   ],
   reference: {
@@ -88,7 +105,7 @@ export const representativeAccountSettingsFixture: ParityFixture = {
           </nav>
         </aside>
         <section id="as-workspace">
-          <header id="as-header"><div id="as-heading"><strong>Account settings</strong><span>Personal workspace</span></div><span id="as-state">Unsaved changes</span></header>
+          <header id="as-header"><div id="as-heading"><strong>Account settings</strong><span>Personal workspace</span></div><span id="as-state" role="status" aria-live="polite" aria-atomic="true">Unsaved changes</span></header>
           <main id="as-main">
             <form id="as-form">
               <div id="as-form-intro"><h1>Profile</h1><p>Manage the details shown to your collaborators.</p></div>
@@ -108,11 +125,11 @@ export const representativeAccountSettingsFixture: ParityFixture = {
         </section>
       </div>
       <div id="as-backdrop"></div>
-      <section id="as-dialog">
+      <dialog id="as-dialog" aria-labelledby="as-dialog-title">
         <h2 id="as-dialog-title">Save account changes?</h2>
         <p id="as-dialog-copy">Your profile and notification preference will be updated.</p>
-        <div id="as-dialog-actions"><input id="as-dialog-edit" type="button" value="Keep editing"><input id="as-dialog-confirm" type="button" value="Confirm save"></div>
-      </section>
+        <div id="as-dialog-actions"><input id="as-dialog-edit" type="button" value="Keep editing" autofocus><input id="as-dialog-confirm" type="button" value="Confirm save"></div>
+      </dialog>
     `,
     css: `
       #parity-reference-viewport { position:relative; overflow:hidden; background:#dbe4ee; font-family:Arial,sans-serif; }
@@ -158,8 +175,11 @@ export const representativeAccountSettingsFixture: ParityFixture = {
       #as-plan-list span { width:154px; height:36px; padding:6px 0; color:#475569; font:400 11px/24px Arial,sans-serif; }
       #as-plan p { width:154px; height:48px; margin:0; color:#64748b; font:400 11px/24px Arial,sans-serif; }
       #as-upgrade { width:154px; background:#c7d2fe; color:#64748b; opacity:.65; }
+      #as-backdrop.as-overlay-hidden, #as-dialog.as-overlay-hidden { display:none; }
       #as-backdrop { position:fixed; left:0; top:0; width:100vw; height:100vh; z-index:20; background:#0f172a; opacity:.9; }
-      #as-dialog { display:flex; flex-direction:column; gap:12px; position:fixed; left:150px; top:190px; width:500px; height:220px; padding:20px; z-index:21; background:#ffffff; }
+      #as-dialog { display:flex; flex-direction:column; gap:12px; position:fixed; left:150px; right:auto; top:190px; bottom:auto; width:500px; height:220px; margin:0; padding:20px; border:0; z-index:21; background:#ffffff; }
+      #as-dialog:not([open]) { display:none; }
+      #as-dialog::backdrop { background:transparent; }
       #as-dialog-title { width:460px; height:32px; margin:0; color:#0f172a; font:700 19px/32px Arial,sans-serif; }
       #as-dialog-copy { width:460px; height:48px; margin:0; color:#475569; font:400 12px/24px Arial,sans-serif; }
       #as-dialog-actions { display:flex; justify-content:flex-end; gap:8px; width:460px; height:40px; }
@@ -211,7 +231,7 @@ export const representativeAccountSettingsFixture: ParityFixture = {
       { selector:'#as-dialog-edit:focus', background:'#cbd5e1' },
       { selector:'#as-plan', display:'flex', flex:'0 0 182px', flexDirection:'column', gap:'10px', width:'182px', padding:'14px', background:'#eef2ff', overflow:'hidden' }, { selector:'#as-plan-title', width:'154px', height:'28px', margin:'0', color:'#312e81', fontFamily:'Arial, sans-serif', fontSize:'16px', fontWeight:'700', lineHeight:'28px' }, { selector:'#as-plan-price', width:'154px', height:'36px', color:'#4338ca', fontFamily:'Arial, sans-serif', fontSize:'24px', fontWeight:'700', lineHeight:'36px' },
       { selector:'#as-plan-list', display:'flex', flexDirection:'column', width:'154px', height:'108px' }, { selector:'#as-plan-list span', width:'154px', height:'36px', padding:'6px 0', color:'#475569', fontFamily:'Arial, sans-serif', fontSize:'11px', lineHeight:'24px' }, { selector:'#as-plan p', width:'154px', height:'48px', margin:'0', color:'#64748b', fontFamily:'Arial, sans-serif', fontSize:'11px', lineHeight:'24px' }, { selector:'#as-upgrade', width:'154px', background:'#c7d2fe', color:'#64748b', opacity:'.65' },
-      { selector:'#as-backdrop', position:'fixed', left:'0', top:'0', width:'100vw', height:'100vh', zIndex:'20', background:'#0f172a', opacity:'.9' }, { selector:'#as-dialog', display:'flex', flexDirection:'column', gap:'12px', position:'fixed', left:'150px', top:'190px', width:'500px', height:'220px', padding:'20px', zIndex:'21', background:'#ffffff' }, { selector:'#as-dialog-title', width:'460px', height:'32px', margin:'0', color:'#0f172a', fontFamily:'Arial, sans-serif', fontSize:'19px', fontWeight:'700', lineHeight:'32px' }, { selector:'#as-dialog-copy', width:'460px', height:'48px', margin:'0', color:'#475569', fontFamily:'Arial, sans-serif', fontSize:'12px', lineHeight:'24px' },
+      { selector:'#as-backdrop.as-overlay-hidden, #as-dialog.as-overlay-hidden', display:'none' }, { selector:'#as-backdrop', position:'fixed', left:'0', top:'0', width:'100vw', height:'100vh', zIndex:'20', background:'#0f172a', opacity:'.9' }, { selector:'#as-dialog', display:'flex', flexDirection:'column', gap:'12px', position:'fixed', left:'150px', right:'auto', top:'190px', bottom:'auto', width:'500px', height:'220px', margin:'0', padding:'20px', borderWidth:'0', zIndex:'21', background:'#ffffff' }, { selector:'#as-dialog-title', width:'460px', height:'32px', margin:'0', color:'#0f172a', fontFamily:'Arial, sans-serif', fontSize:'19px', fontWeight:'700', lineHeight:'32px' }, { selector:'#as-dialog-copy', width:'460px', height:'48px', margin:'0', color:'#475569', fontFamily:'Arial, sans-serif', fontSize:'12px', lineHeight:'24px' },
       { selector:'#as-dialog-actions', display:'flex', justifyContent:'flex-end', gap:'8px', width:'460px', height:'40px' }, { selector:'#as-dialog-edit', width:'108px', background:'#e2e8f0', color:'#334155' }, { selector:'#as-dialog-confirm', width:'116px', background:'#4f46e5', color:'#ffffff' },
       { selector:'#as-shell', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'600px', height:'680px' }, { selector:'#as-sidebar', mediaMinWidth:'600px', mediaMaxWidth:'749px', flex:'0 0 120px', width:'120px', padding:'20px 10px' }, { selector:'#as-brand, #as-nav, #as-nav input', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'100px' },
       { selector:'#as-workspace', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'480px' }, { selector:'#as-header', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'480px' }, { selector:'#as-main', mediaMinWidth:'600px', mediaMaxWidth:'749px', flexDirection:'column', gap:'10px', width:'480px' },
@@ -227,7 +247,7 @@ export const representativeAccountSettingsFixture: ParityFixture = {
       { type:'div', id:'as-shell', children:[
         { type:'aside', id:'as-sidebar', children:[{ type:'div', id:'as-brand', textContent:'Astylar ID' }, { type:'nav', id:'as-nav', children:[{ type:'input', inputType:'button', id:'as-nav-profile', class:'active', value:'Profile' }, { type:'input', inputType:'button', id:'as-nav-security', value:'Security' }, { type:'input', inputType:'button', id:'as-nav-billing', value:'Billing' }] }] },
         { type:'section', id:'as-workspace', children:[
-          { type:'header', id:'as-header', children:[{ type:'div', id:'as-heading', children:[{ type:'strong', textContent:'Account settings' }, { type:'span', textContent:'Personal workspace' }] }, { type:'span', id:'as-state', textContent:'Unsaved changes' }] },
+          { type:'header', id:'as-header', children:[{ type:'div', id:'as-heading', children:[{ type:'strong', textContent:'Account settings' }, { type:'span', textContent:'Personal workspace' }] }, { type:'span', id:'as-state', role:'status', ariaLive:'polite', ariaAtomic:true, textContent:'Unsaved changes' }] },
           { type:'main', id:'as-main', children:[
             { type:'form', id:'as-form', children:[
               { type:'div', id:'as-form-intro', children:[{ type:'h1', textContent:'Profile' }, { type:'p', textContent:'Manage the details shown to your collaborators.' }] },
@@ -247,7 +267,7 @@ export const representativeAccountSettingsFixture: ParityFixture = {
         ] },
       ] },
       { type:'div', id:'as-backdrop' },
-      { type:'section', id:'as-dialog', children:[{ type:'h2', id:'as-dialog-title', textContent:'Save account changes?' }, { type:'p', id:'as-dialog-copy', textContent:'Your profile and notification preference will be updated.' }, { type:'div', id:'as-dialog-actions', children:[{ type:'input', inputType:'button', id:'as-dialog-edit', value:'Keep editing' }, { type:'input', inputType:'button', id:'as-dialog-confirm', value:'Confirm save' }] }] },
+      { type:'dialog', id:'as-dialog', open:true, modal:true, ariaLabelledby:'as-dialog-title', children:[{ type:'h2', id:'as-dialog-title', textContent:'Save account changes?' }, { type:'p', id:'as-dialog-copy', textContent:'Your profile and notification preference will be updated.' }, { type:'div', id:'as-dialog-actions', children:[{ type:'input', inputType:'button', id:'as-dialog-edit', value:'Keep editing', autofocus:true }, { type:'input', inputType:'button', id:'as-dialog-confirm', value:'Confirm save' }] }] },
     ] },
   },
 };
@@ -255,10 +275,16 @@ export const representativeAccountSettingsFixture: ParityFixture = {
 const dialogDismissedAccountSiteData = JSON.parse(
   JSON.stringify(representativeAccountSettingsFixture.siteData),
 ) as SiteData;
-dialogDismissedAccountSiteData.root.children = dialogDismissedAccountSiteData.root.children.filter(
-  (element) => element.id !== 'as-backdrop' &&
-    element.id !== 'as-dialog',
-);
+const dialogDismissedAccountBackdrop = findAccountElement(dialogDismissedAccountSiteData, 'as-backdrop');
+const dialogDismissedAccountDialog = findAccountElement(dialogDismissedAccountSiteData, 'as-dialog');
+if (!dialogDismissedAccountBackdrop || !dialogDismissedAccountDialog) {
+  throw new Error('Representative account overlay is missing');
+}
+dialogDismissedAccountBackdrop.hidden = true;
+dialogDismissedAccountDialog.hidden = true;
+dialogDismissedAccountBackdrop.class = 'as-overlay-hidden';
+dialogDismissedAccountDialog.class = 'as-overlay-hidden';
+dialogDismissedAccountDialog.open = false;
 const dialogDismissedAccountShell = findAccountElement(dialogDismissedAccountSiteData, 'as-shell');
 if (!dialogDismissedAccountShell?.children) throw new Error('Representative account shell is missing');
 dialogDismissedAccountShell.children = dialogDismissedAccountShell.children.filter(
@@ -272,15 +298,59 @@ dialogDismissedAccountMain.children = dialogDismissedAccountMain.children.filter
 const dialogDismissedAccountBio = findAccountElement(dialogDismissedAccountSiteData, 'as-bio');
 if (!dialogDismissedAccountBio) throw new Error('Representative account bio is missing');
 dialogDismissedAccountBio.value = expandedAccountBio;
-const compactAccountSiteData = JSON.parse(
+
+const validationErrorAccountSiteData = JSON.parse(
   JSON.stringify(dialogDismissedAccountSiteData),
+) as SiteData;
+const validationErrorAccountName = findAccountElement(validationErrorAccountSiteData, 'as-name');
+const validationErrorAccountHelp = findAccountElement(validationErrorAccountSiteData, 'as-help');
+if (!validationErrorAccountName || !validationErrorAccountHelp) {
+  throw new Error('Representative account validation elements are missing');
+}
+validationErrorAccountName.ariaDescribedby = 'as-help';
+validationErrorAccountHelp.role = 'alert';
+validationErrorAccountHelp.ariaLive = 'assertive';
+validationErrorAccountHelp.ariaAtomic = true;
+validationErrorAccountHelp.textContent = 'Display name is required.';
+
+const validationClearedAccountSiteData = JSON.parse(
+  JSON.stringify(validationErrorAccountSiteData),
+) as SiteData;
+const validationClearedAccountName = findAccountElement(validationClearedAccountSiteData, 'as-name');
+const validationClearedAccountHelp = findAccountElement(validationClearedAccountSiteData, 'as-help');
+if (!validationClearedAccountName || !validationClearedAccountHelp) {
+  throw new Error('Representative account validation elements are missing');
+}
+validationClearedAccountName.ariaDescribedby = undefined;
+validationClearedAccountHelp.textContent = '';
+
+const compactAccountSiteData = JSON.parse(
+  JSON.stringify(validationClearedAccountSiteData),
 ) as SiteData;
 const compactAccountState = findAccountElement(compactAccountSiteData, 'as-state');
 if (!compactAccountState) throw new Error('Representative account state is missing');
 compactAccountState.textContent = 'Ready';
+
+const reopenedAccountSiteData = JSON.parse(
+  JSON.stringify(compactAccountSiteData),
+) as SiteData;
+const reopenedAccountBackdrop = findAccountElement(reopenedAccountSiteData, 'as-backdrop');
+const reopenedAccountDialog = findAccountElement(reopenedAccountSiteData, 'as-dialog');
+if (!reopenedAccountBackdrop || !reopenedAccountDialog) {
+  throw new Error('Representative account overlay is missing');
+}
+reopenedAccountBackdrop.hidden = false;
+reopenedAccountDialog.hidden = false;
+reopenedAccountBackdrop.class = undefined;
+reopenedAccountDialog.class = undefined;
+reopenedAccountDialog.open = true;
+
 const completedAccountSiteData = JSON.parse(
   JSON.stringify(compactAccountSiteData),
 ) as SiteData;
+const completedAccountState = findAccountElement(completedAccountSiteData, 'as-state');
+if (!completedAccountState) throw new Error('Representative account state is missing');
+completedAccountState.textContent = 'Saved';
 const completedAccountFields = findAccountElement(completedAccountSiteData, 'as-profile-fields');
 if (!completedAccountFields?.children) throw new Error('Representative account fields are missing');
 completedAccountFields.children = completedAccountFields.children.filter(
@@ -290,8 +360,9 @@ representativeAccountSettingsFixture.dynamicSteps = [
   {
     id: 'dismiss-save-dialog',
     referenceMutations: [
-      { type: 'remove-element', elementId: 'as-backdrop' },
-      { type: 'remove-element', elementId: 'as-dialog' },
+      { type: 'set-attribute', elementId: 'as-backdrop', name: 'hidden', value: '' },
+      { type: 'set-attribute', elementId: 'as-dialog', name: 'hidden', value: '' },
+      { type: 'set-attribute', elementId: 'as-dialog', name: 'open' },
       { type: 'remove-element', elementId: 'as-sidebar' },
       { type: 'remove-element', elementId: 'as-plan' },
       {
@@ -303,6 +374,25 @@ representativeAccountSettingsFixture.dynamicSteps = [
     siteData: dialogDismissedAccountSiteData,
   },
   {
+    id: 'validation-error',
+    referenceMutations: [
+      { type: 'set-text', elementId: 'as-help', textContent: 'Display name is required.' },
+      { type: 'set-attribute', elementId: 'as-help', name: 'role', value: 'alert' },
+      { type: 'set-attribute', elementId: 'as-help', name: 'aria-live', value: 'assertive' },
+      { type: 'set-attribute', elementId: 'as-help', name: 'aria-atomic', value: 'true' },
+      { type: 'set-attribute', elementId: 'as-name', name: 'aria-describedby', value: 'as-help' },
+    ],
+    siteData: validationErrorAccountSiteData,
+  },
+  {
+    id: 'clear-validation-error',
+    referenceMutations: [
+      { type: 'set-text', elementId: 'as-help', textContent: '' },
+      { type: 'set-attribute', elementId: 'as-name', name: 'aria-describedby' },
+    ],
+    siteData: validationClearedAccountSiteData,
+  },
+  {
     id: 'compact-account-data',
     referenceMutations: [
       { type: 'set-text', elementId: 'as-state', textContent: 'Ready' },
@@ -310,9 +400,21 @@ representativeAccountSettingsFixture.dynamicSteps = [
     siteData: compactAccountSiteData,
   },
   {
+    id: 'reopen-save-dialog',
+    referenceMutations: [
+      { type: 'set-attribute', elementId: 'as-backdrop', name: 'hidden' },
+      { type: 'set-attribute', elementId: 'as-dialog', name: 'hidden' },
+    ],
+    siteData: reopenedAccountSiteData,
+  },
+  {
     id: 'remove-completed-bio',
     referenceMutations: [
+      { type: 'set-attribute', elementId: 'as-backdrop', name: 'hidden', value: '' },
+      { type: 'set-attribute', elementId: 'as-dialog', name: 'hidden', value: '' },
+      { type: 'set-attribute', elementId: 'as-dialog', name: 'open' },
       { type: 'remove-element', elementId: 'as-bio-row' },
+      { type: 'set-text', elementId: 'as-state', textContent: 'Saved' },
     ],
     siteData: completedAccountSiteData,
   },
