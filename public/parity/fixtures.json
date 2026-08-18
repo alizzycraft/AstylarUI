@@ -791,12 +791,12 @@
   },
   {
     "id": "interaction-lifecycle-stress",
-    "title": "Repeated interactive update lifecycle",
+    "title": "Combined Phase 9 interaction lifecycle",
     "category": "forms-interactive",
-    "expectedBehavior": "Three equivalent text, select, checkbox, reset, update, and responsive cycles keep browser-equivalent state while resources and registrations plateau and final disposal cleans the scene.",
-    "dynamicStepCount": 2,
-    "interactionStepCount": 24,
-    "interactionCycleLength": 8
+    "expectedBehavior": "Three equivalent scroll, backward pointer selection, expanded-select cancel/commit, compatible responsive update, incompatible replacement, restoration, and disposal cycles keep state exact while every owned resource and registration plateaus and cleans up.",
+    "dynamicStepCount": 3,
+    "interactionStepCount": 30,
+    "interactionCycleLength": 10
   },
   {
     "id": "overflow-vertical-wheel",

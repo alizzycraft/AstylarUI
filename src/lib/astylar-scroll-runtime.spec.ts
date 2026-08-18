@@ -87,6 +87,43 @@ describe('AstylarScrollRuntime', () => {
     expect(strip.position.x).toBe(72);
   });
 
+  it('excludes a rendered border from client and scroll dimensions', () => {
+    const content: DOMElement = { type: 'div', id: 'bordered-content' };
+    const boxElement: DOMElement = {
+      type: 'div', id: 'bordered-box', children: [content],
+    };
+    const siteData: SiteData = { styles: [], root: { children: [boxElement] } };
+    const box = MeshBuilder.CreatePlane('bordered-box', { width: 240, height: 110 }, scene);
+    box.metadata = { element: boxElement, elementId: 'bordered-box' };
+    const contentMesh = MeshBuilder.CreatePlane(
+      'bordered-content', { width: 240, height: 222 }, scene,
+    );
+    contentMesh.parent = box;
+    contentMesh.position.y = -56;
+    contentMesh.metadata = { element: content, elementId: 'bordered-content' };
+    const runtime = new AstylarScrollRuntime({
+      getMesh: (id) => id === 'bordered-box' ? box :
+        id === 'bordered-content' ? contentMesh : undefined,
+      getDimensions: (id) => id === 'bordered-box'
+        ? { width: 240, height: 110 }
+        : undefined,
+      getStyle: (id) => id === 'bordered-box' ? {
+        selector: '#bordered-box', overflow: 'auto', borderWidth: '1px', borderStyle: 'solid',
+      } : undefined,
+      getPixelToWorldScale: () => 1,
+    });
+
+    runtime.reconcile(siteData);
+    expect(runtime.snapshot.containers['bordered-box']).toEqual({
+      scrollLeft: 0,
+      scrollTop: 0,
+      scrollWidth: 238,
+      scrollHeight: 220,
+      clientWidth: 238,
+      clientHeight: 108,
+    });
+  });
+
   it('preserves and clamps compatible state across a rebuilt scene graph', () => {
     const initial = createVerticalRuntime(scene);
     initial.runtime.reconcile(initial.siteData);

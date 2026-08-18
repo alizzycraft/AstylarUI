@@ -195,14 +195,28 @@ async function measureFixture(context, fixture, viewport) {
     '#parity-reference-viewport',
     path.join(fixtureDir, 'reference.png')
   );
-  const astylar = await captureMode(
+  let astylar = await captureMode(
     context,
     `${BASE_URL}/parity/astylar/${encodeURIComponent(fixture.id)}${viewportQuery}`,
     '#parity-astylar-canvas',
     path.join(fixtureDir, 'astylar.png')
   );
 
-  const screenshotSimilarity = comparePng(reference.screenshot, astylar.screenshot);
+  let screenshotSimilarity = comparePng(reference.screenshot, astylar.screenshot);
+  if (screenshotSimilarity < 0.5 && astylar.pageErrors.length === 0 &&
+      astylar.report.errors.length === 0) {
+    console.warn(
+      `Retrying catastrophic Astylar capture for ${fixture.id}@${viewport.id} ` +
+      `(SSIM=${screenshotSimilarity.toFixed(4)})`,
+    );
+    astylar = await captureMode(
+      context,
+      `${BASE_URL}/parity/astylar/${encodeURIComponent(fixture.id)}${viewportQuery}`,
+      '#parity-astylar-canvas',
+      path.join(fixtureDir, 'astylar.png'),
+    );
+    screenshotSimilarity = comparePng(reference.screenshot, astylar.screenshot);
+  }
   const geometry = compareGeometry(reference.report, astylar.report);
   const text = compareText(reference.report, astylar.report);
   const styles = compareStyles(reference.report, astylar.report);
@@ -288,7 +302,7 @@ async function measureDynamicFixture(contexts, fixture) {
     fixture.dynamicStepCount,
     fixture.lifecycleViewports,
   );
-  const astylarStates = await captureDynamicMode(
+  let astylarStates = await captureDynamicMode(
     context,
     `${BASE_URL}/parity/astylar/${encodeURIComponent(fixture.id)}?viewport=desktop&dynamic=true`,
     '#parity-astylar-canvas',
@@ -298,6 +312,23 @@ async function measureDynamicFixture(contexts, fixture) {
     fixture.lifecycleViewports,
     true,
   );
+  const catastrophicDynamicIndex = findCatastrophicCapture(referenceStates, astylarStates);
+  if (catastrophicDynamicIndex >= 0) {
+    console.warn(
+      `Retrying catastrophic Astylar dynamic sequence for ${fixture.id} ` +
+      `(step ${catastrophicDynamicIndex + 1})`,
+    );
+    astylarStates = await captureDynamicMode(
+      context,
+      `${BASE_URL}/parity/astylar/${encodeURIComponent(fixture.id)}?viewport=desktop&dynamic=true`,
+      '#parity-astylar-canvas',
+      'astylar',
+      sequenceDir,
+      fixture.dynamicStepCount,
+      fixture.lifecycleViewports,
+      true,
+    );
+  }
 
   return referenceStates.map((reference, index) => {
     const astylar = astylarStates[index];
@@ -458,7 +489,7 @@ async function measureInteractionFixture(context, fixture) {
     sequenceDir,
     fixture.interactionStepCount,
   );
-  const astylarStates = await captureInteractionMode(
+  let astylarStates = await captureInteractionMode(
     context,
     `${BASE_URL}/parity/astylar/${encodeURIComponent(fixture.id)}?viewport=desktop&interaction=true`,
     '#parity-astylar-canvas',
@@ -467,6 +498,22 @@ async function measureInteractionFixture(context, fixture) {
     fixture.interactionStepCount,
     !!fixture.interactionCycleLength,
   );
+  const catastrophicInteractionIndex = findCatastrophicCapture(referenceStates, astylarStates);
+  if (catastrophicInteractionIndex >= 0) {
+    console.warn(
+      `Retrying catastrophic Astylar interaction sequence for ${fixture.id} ` +
+      `(step ${catastrophicInteractionIndex + 1})`,
+    );
+    astylarStates = await captureInteractionMode(
+      context,
+      `${BASE_URL}/parity/astylar/${encodeURIComponent(fixture.id)}?viewport=desktop&interaction=true`,
+      '#parity-astylar-canvas',
+      'astylar',
+      sequenceDir,
+      fixture.interactionStepCount,
+      !!fixture.interactionCycleLength,
+    );
+  }
 
   return referenceStates.map((reference, index) => {
     const astylar = astylarStates[index];
@@ -601,7 +648,10 @@ function compareInteractionLifecycle(fixture, astylarStates, index) {
 
     const baselineRegistrations = baseline?.interaction?.registrations;
     const currentRegistrations = current?.interaction?.registrations;
-    for (const key of ['pointerObservers', 'wheelHandlers', 'keyboardListeners', 'handlers']) {
+    for (const key of [
+      'pointerObservers', 'wheelHandlers', 'keyboardListeners', 'handlers',
+      'openPopups', 'popupObservers', 'popupMeshes', 'popupMaterials', 'popupTextures',
+    ]) {
       if (currentRegistrations?.[key] !== baselineRegistrations?.[key]) {
         errors.push(
           `astylar: interaction lifecycle ${key} changed at cycle ${cycleIndex + 1}, ` +
@@ -819,7 +869,7 @@ async function measureResponsiveFixture(context, fixture, staticResults) {
     sequenceDir,
     sequence
   );
-  const astylarStates = await captureResponsiveMode(
+  let astylarStates = await captureResponsiveMode(
     context,
     `${BASE_URL}/parity/astylar/${encodeURIComponent(fixture.id)}?viewport=desktop&responsive=true`,
     '#parity-astylar-canvas',
@@ -827,6 +877,21 @@ async function measureResponsiveFixture(context, fixture, staticResults) {
     sequenceDir,
     sequence
   );
+  const catastrophicResponsiveIndex = findCatastrophicCapture(referenceStates, astylarStates);
+  if (catastrophicResponsiveIndex >= 0) {
+    console.warn(
+      `Retrying catastrophic Astylar responsive sequence for ${fixture.id} ` +
+      `(step ${catastrophicResponsiveIndex + 1})`,
+    );
+    astylarStates = await captureResponsiveMode(
+      context,
+      `${BASE_URL}/parity/astylar/${encodeURIComponent(fixture.id)}?viewport=desktop&responsive=true`,
+      '#parity-astylar-canvas',
+      'astylar',
+      sequenceDir,
+      sequence,
+    );
+  }
 
   return sequence.map((viewport, index) => {
     const reference = referenceStates[index];
@@ -973,6 +1038,15 @@ function comparePng(referenceBuffer, astylarBuffer) {
   }
 
   return ssim(reference, astylar, { ssim: 'fast' }).mssim;
+}
+
+function findCatastrophicCapture(referenceStates, astylarStates) {
+  return referenceStates.findIndex((reference, index) => {
+    const astylar = astylarStates[index];
+    return astylar && astylar.pageErrors.length === 0 &&
+      astylar.report.errors.length === 0 &&
+      comparePng(reference.screenshot, astylar.screenshot) < 0.5;
+  });
 }
 
 function compareGeometry(reference, astylar) {

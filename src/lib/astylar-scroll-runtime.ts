@@ -86,7 +86,7 @@ export class AstylarScrollRuntime {
         this.clipEntries.push({ mesh, style: { ...style, overflow } });
       }
       if (id && counts.get(id) === 1 && (overflow === 'auto' || overflow === 'scroll')) {
-        const container = this.createContainer(element);
+        const container = this.createContainer(element, style);
         if (container) {
           const previous = preserved[id];
           container.scrollLeft = this.clamp(previous?.scrollLeft ?? 0, 0,
@@ -157,7 +157,7 @@ export class AstylarScrollRuntime {
     this.clipEntries = [];
   }
 
-  private createContainer(element: DOMElement): ScrollContainer | undefined {
+  private createContainer(element: DOMElement, style?: StyleRule): ScrollContainer | undefined {
     const id = element.id;
     if (!id) return undefined;
     const mesh = this.options.getMesh(id);
@@ -182,18 +182,23 @@ export class AstylarScrollRuntime {
       minY = Math.min(minY, bounds.min.y);
       maxY = Math.max(maxY, bounds.max.y);
     }
-    const clientWidth = this.round(dimensions.width);
-    const clientHeight = this.round(dimensions.height);
+    const borderWidth = style?.borderStyle && style.borderStyle !== 'none' &&
+        style.borderStyle !== 'hidden'
+      ? this.parsePixelLength(style.borderWidth)
+      : 0;
+    const borderBoxAdjustment = borderWidth * 2;
+    const clientWidth = this.round(Math.max(0, dimensions.width - borderBoxAdjustment));
+    const clientHeight = this.round(Math.max(0, dimensions.height - borderBoxAdjustment));
     const trailingPaddingX = dimensions.padding?.right ?? 0;
     const trailingPaddingY = dimensions.padding?.bottom ?? 0;
-    const contentWidth = roots.length ? Math.max(
+    const contentWidth = roots.length ? Math.max(0, Math.max(
       maxX - containerBounds.minimumWorld.x,
       containerBounds.maximumWorld.x - minX,
-    ) / scale + trailingPaddingX : 0;
-    const contentHeight = roots.length ? Math.max(
+    ) / scale + trailingPaddingX - borderBoxAdjustment) : 0;
+    const contentHeight = roots.length ? Math.max(0, Math.max(
       maxY - containerBounds.minimumWorld.y,
       containerBounds.maximumWorld.y - minY,
-    ) / scale + trailingPaddingY : 0;
+    ) / scale + trailingPaddingY - borderBoxAdjustment) : 0;
     return {
       id,
       mesh,
@@ -249,5 +254,10 @@ export class AstylarScrollRuntime {
 
   private round(value: number): number {
     return Math.round(value * 1000) / 1000;
+  }
+
+  private parsePixelLength(value: string | undefined): number {
+    const parsed = Number.parseFloat(value ?? '0');
+    return Number.isFinite(parsed) ? Math.max(0, parsed) : 0;
   }
 }
