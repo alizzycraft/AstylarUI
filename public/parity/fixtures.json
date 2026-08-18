@@ -918,5 +918,12 @@
     "category": "forms-interactive",
     "expectedBehavior": "An expanded single-select near the viewport bottom places its complete popup above the control when the available space below is insufficient.",
     "interactionStepCount": 2
+  },
+  {
+    "id": "interaction-select-expanded-stacking",
+    "title": "Expanded select stacking and targeting",
+    "category": "forms-interactive",
+    "expectedBehavior": "An expanded single-select popup paints and receives option selection above overlapping high-z-index page content, like native platform select UI.",
+    "interactionStepCount": 2
   }
 ]

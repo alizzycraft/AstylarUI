@@ -158,7 +158,11 @@ export class SelectManager {
             // Check if clicked on dropdown, options, select itself, or any descendant
             // We use safe navigation because pickedMesh might be null
             const isSelectMesh = pickedMesh && (pickedMesh === selectElement.mesh || pickedMesh.isDescendantOf(selectElement.mesh));
-            const isDropdownMesh = pickedMesh && (pickedMesh === selectElement.dropdownMesh || (selectElement.dropdownMesh && pickedMesh.isDescendantOf(selectElement.dropdownMesh)));
+            const isDropdownMesh = this.isPopupPointerTarget(
+                selectElement,
+                scene,
+                pointerInfo,
+            );
 
             // Allow clicking display mesh
             const isDisplayMesh = pickedMesh && (pickedMesh === selectElement.displayMesh || (selectElement.displayMesh && pickedMesh.isDescendantOf(selectElement.displayMesh)));
@@ -431,6 +435,24 @@ export class SelectManager {
                 height: 0.3
             }, render.scene);
         }
+    }
+
+    /** Native select popups remain the pointer target above authored page layers. */
+    private isPopupPointerTarget(
+        selectElement: SelectElement,
+        scene: BABYLON.Scene,
+        pointerInfo: BABYLON.PointerInfo,
+    ): boolean {
+        const isPopupMesh = (mesh: BABYLON.AbstractMesh | null | undefined): boolean =>
+            !!mesh && !!selectElement.dropdownMesh &&
+            (mesh === selectElement.dropdownMesh || mesh.isDescendantOf(selectElement.dropdownMesh));
+        if (isPopupMesh(pointerInfo.pickInfo?.pickedMesh)) return true;
+
+        const nativeEvent = pointerInfo.event as PointerEvent | MouseEvent | undefined;
+        const x = nativeEvent?.offsetX ?? scene.pointerX;
+        const y = nativeEvent?.offsetY ?? scene.pointerY;
+        return scene.multiPick(x, y, (mesh) => mesh.isPickable)
+            ?.some((pick) => isPopupMesh(pick.pickedMesh)) ?? false;
     }
 
     private getHorizontalContentInsets(

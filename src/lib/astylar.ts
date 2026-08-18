@@ -343,6 +343,8 @@ export class Astylar {
           this.inputElementService.emitsImmediateChangeOnKeyboardMutation(elementId),
         handleExpandedSelectKeyDown: (elementId, event) =>
           this.inputElementService.handleExpandedSelectKeyDown(elementId, event),
+        hasExpandedSelectPopup: () =>
+          this.inputElementService.hasExpandedSelectPopup(),
         commitExpandedSelectOption: (elementId, optionIndex) =>
           this.inputElementService.commitExpandedSelectOption(elementId, optionIndex),
         cancelExpandedSelect: (elementId) =>

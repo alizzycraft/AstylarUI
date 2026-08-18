@@ -175,6 +175,29 @@ describe('SelectManager', () => {
     expect(manager['choosePopupDirection'](40, 54, 105)).toBe('below');
   });
 
+  it('treats a popup hit behind an authored mesh as inside the expanded select', () => {
+    const manager = new SelectManager({} as TextRenderingService, {} as BabylonMeshService);
+    const selectMesh = BABYLON.MeshBuilder.CreatePlane('choice', {}, scene);
+    const dropdownMesh = BABYLON.MeshBuilder.CreatePlane('dropdown', {}, scene);
+    const optionMesh = BABYLON.MeshBuilder.CreatePlane('option', {}, scene);
+    const blocker = BABYLON.MeshBuilder.CreatePlane('page-layer', {}, scene);
+    dropdownMesh.parent = selectMesh;
+    optionMesh.parent = dropdownMesh;
+    spyOn(scene, 'multiPick').and.returnValue([
+      { pickedMesh: blocker },
+      { pickedMesh: optionMesh },
+    ] as any);
+
+    expect(manager['isPopupPointerTarget'](
+      { mesh: selectMesh, dropdownMesh } as any,
+      scene,
+      {
+        event: new PointerEvent('pointerdown'),
+        pickInfo: { pickedMesh: blocker },
+      } as unknown as BABYLON.PointerInfo,
+    )).toBeTrue();
+  });
+
   it('disposes the replaced display material when selection redraws', () => {
     const textRendering = {
       renderTextToTexture: () => ({ getSize: () => ({ width: 80, height: 24 }) }),

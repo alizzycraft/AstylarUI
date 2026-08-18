@@ -512,6 +512,16 @@ export class InputElementService {
         return undefined;
     }
 
+    /** Lets the pointer runtime avoid an all-mesh pick when no popup is open. */
+    hasExpandedSelectPopup(): boolean {
+        for (const input of this.inputElements.values()) {
+            if (input.type === InputType.Select && (input as SelectElement).dropdownOpen) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /** Commits a popup row selected by the scene-owned pointer runtime. */
     commitExpandedSelectOption(elementId: string, optionIndex: number): boolean {
         const input = this.inputElements.get(elementId);

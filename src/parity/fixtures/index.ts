@@ -140,6 +140,7 @@ import { interactionSelectExpandedKeyboardFixture } from './interaction-select-e
 import { interactionSelectExpandedPointerFixture } from './interaction-select-expanded-pointer.fixture';
 import { interactionSelectExpandedClickawayFixture } from './interaction-select-expanded-clickaway.fixture';
 import { interactionSelectExpandedPlacementFixture } from './interaction-select-expanded-placement.fixture';
+import { interactionSelectExpandedStackingFixture } from './interaction-select-expanded-stacking.fixture';
 import { ParityFixture } from '../parity.types';
 
 const fixtures: readonly ParityFixture[] = [
@@ -284,7 +285,8 @@ const fixtures: readonly ParityFixture[] = [
   interactionSelectExpandedKeyboardFixture,
   interactionSelectExpandedPointerFixture,
   interactionSelectExpandedClickawayFixture,
-  interactionSelectExpandedPlacementFixture
+  interactionSelectExpandedPlacementFixture,
+  interactionSelectExpandedStackingFixture
 ];
 
 const fixturesById = new Map(fixtures.map((fixture) => [fixture.id, fixture]));

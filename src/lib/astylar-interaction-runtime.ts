@@ -49,6 +49,7 @@ export interface AstylarInteractionControlAdapter {
     elementId: string,
     event: KeyboardEvent,
   ): AstylarExpandedSelectKeyResult | undefined;
+  hasExpandedSelectPopup?(): boolean;
   commitExpandedSelectOption?(elementId: string, optionIndex: number): boolean;
   cancelExpandedSelect?(elementId: string): boolean;
   activate?(elementId: string): AstylarControlActivation | undefined;
@@ -180,7 +181,7 @@ export class AstylarInteractionRuntime {
   private handlePointer(pointerInfo: PointerInfo): void {
     if (this.disposed) return;
     const pickedMesh = pointerInfo.pickInfo?.pickedMesh ?? undefined;
-    const expandedSelectOption = this.resolveExpandedSelectOption(pickedMesh);
+    const expandedSelectOption = this.resolveExpandedSelectOption(pointerInfo);
     if (pointerInfo.type === PointerEventTypes.POINTERDOWN && expandedSelectOption) {
       if (!this.scrolling || this.scrolling.isPointVisible(
         expandedSelectOption.elementId,
@@ -268,6 +269,26 @@ export class AstylarInteractionRuntime {
   }
 
   private resolveExpandedSelectOption(
+    pointerInfo: PointerInfo,
+  ): { elementId: string; optionIndex: number } | undefined {
+    const direct = this.expandedSelectOptionFromMesh(
+      pointerInfo.pickInfo?.pickedMesh ?? undefined,
+    );
+    if (direct) return direct;
+    if (!this.controls?.hasExpandedSelectPopup?.()) return undefined;
+
+    const nativeEvent = pointerInfo.event as PointerEvent | MouseEvent | undefined;
+    const x = nativeEvent?.offsetX ?? this.scene.pointerX;
+    const y = nativeEvent?.offsetY ?? this.scene.pointerY;
+    const picks = this.scene.multiPick(x, y, (mesh) => mesh.isPickable);
+    for (const pick of picks ?? []) {
+      const option = this.expandedSelectOptionFromMesh(pick.pickedMesh ?? undefined);
+      if (option) return option;
+    }
+    return undefined;
+  }
+
+  private expandedSelectOptionFromMesh(
     mesh: AbstractMesh | undefined,
   ): { elementId: string; optionIndex: number } | undefined {
     let current = mesh;

@@ -728,6 +728,7 @@ describe('AstylarInteractionRuntime', () => {
         blur: () => true,
         handleKeyDown: () => undefined,
         commitsValueOnBlur: () => false,
+        hasExpandedSelectPopup: () => true,
         commitExpandedSelectOption: (_elementId, optionIndex) => {
           expect(optionIndex).toBe(2);
           selectedValue = 'beta';
@@ -754,6 +755,78 @@ describe('AstylarInteractionRuntime', () => {
     expect(events.map((event) => `${event.type}:${event.selectedValue}`)).toEqual([
       'input:beta',
       'change:beta',
+    ]);
+
+    runtime.dispose();
+    scene.dispose();
+    engine.dispose();
+  });
+
+  it('gives an expanded select option pointer priority over an overlapping page mesh', () => {
+    const engine = new NullEngine();
+    const scene = new Scene(engine);
+    const blocker = MeshBuilder.CreatePlane('page-layer', {}, scene);
+    const optionMesh = MeshBuilder.CreatePlane('choice-option-2', {}, scene);
+    optionMesh.metadata = {
+      optionIndex: 2,
+      selectElement: { element: { id: 'choice' } },
+    };
+    spyOn(scene, 'multiPick').and.returnValue([
+      { pickedMesh: blocker },
+      { pickedMesh: optionMesh },
+    ] as any);
+    const events: AstylarEventSnapshot[] = [];
+    let selectedValue = 'alpha';
+    const runtime = new AstylarInteractionRuntime(
+      scene,
+      {
+        styles: [],
+        root: { children: [{
+          type: 'select', id: 'choice', value: 'alpha',
+          options: [
+            { value: 'alpha', label: 'Alpha' },
+            { value: 'beta', label: 'Beta' },
+            { value: 'gamma', label: 'Gamma' },
+          ],
+        }] },
+      },
+      { onEvent: (event) => events.push(event) },
+      () => ({ value: selectedValue, selectedValue }),
+      {
+        getFocusedElementId: () => 'choice',
+        focus: () => true,
+        blur: () => true,
+        handleKeyDown: () => undefined,
+        commitsValueOnBlur: () => false,
+        hasExpandedSelectPopup: () => true,
+        commitExpandedSelectOption: (_elementId, optionIndex) => {
+          expect(optionIndex).toBe(2);
+          selectedValue = 'gamma';
+          return true;
+        },
+      },
+    );
+    const pointerEvent = new PointerEvent('pointerdown', {
+      button: 0,
+      pointerType: 'mouse',
+    });
+    const pointerInfo = {
+      event: pointerEvent,
+      pickInfo: { pickedMesh: blocker },
+    } as unknown as PointerInfo;
+
+    scene.onPointerObservable.notifyObservers({
+      ...pointerInfo,
+      type: PointerEventTypes.POINTERDOWN,
+    } as unknown as PointerInfo);
+    scene.onPointerObservable.notifyObservers({
+      ...pointerInfo,
+      type: PointerEventTypes.POINTERUP,
+    } as unknown as PointerInfo);
+
+    expect(events.map((event) => `${event.type}:${event.selectedValue}`)).toEqual([
+      'input:gamma',
+      'change:gamma',
     ]);
 
     runtime.dispose();
