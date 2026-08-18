@@ -60,6 +60,16 @@ export interface DOMElement {
   tabindex?: number;
   title?: string;
   translate?: boolean;
+  /** Explicit semantic role for the supported accessibility subset. */
+  role?: string;
+  ariaLabel?: string;
+  /** Space-separated authored element IDs. */
+  ariaLabelledby?: string;
+  /** Space-separated authored element IDs. */
+  ariaDescribedby?: string;
+  ariaLive?: 'off' | 'polite' | 'assertive';
+  ariaAtomic?: boolean;
+  ariaCurrent?: boolean | 'page' | 'step' | 'location' | 'date' | 'time';
   // Table-specific
   tableProperties?: {
     colspan?: number;

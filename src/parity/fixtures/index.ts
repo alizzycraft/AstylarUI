@@ -13,6 +13,7 @@ import { flexColumnAlignmentFixture } from './flex-column-alignment.fixture';
 import { flexGrowGapFixture } from './flex-grow-gap.fixture';
 import { semanticDefaultFlowFixture } from './semantic-default-flow.fixture';
 import { semanticStructureFixture } from './semantic-structure.fixture';
+import { semanticNamingFixture } from './semantic-naming.fixture';
 import { unorderedListLayoutFixture } from './unordered-list-layout.fixture';
 import { orderedListLayoutFixture } from './ordered-list-layout.fixture';
 import { tableFixedLayoutFixture } from './table-fixed-layout.fixture';
@@ -161,6 +162,7 @@ const fixtures: readonly ParityFixture[] = [
   flexGrowGapFixture,
   semanticDefaultFlowFixture,
   semanticStructureFixture,
+  semanticNamingFixture,
   unorderedListLayoutFixture,
   orderedListLayoutFixture,
   tableFixedLayoutFixture,

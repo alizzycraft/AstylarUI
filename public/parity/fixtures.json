@@ -7,6 +7,14 @@
     "semanticIds": ["semantic-shell", "semantic-header", "semantic-title", "semantic-nav", "semantic-main", "semantic-section", "semantic-list", "semantic-link", "semantic-button", "semantic-table", "semantic-footer"]
   },
   {
+    "id": "semantic-naming",
+    "title": "Accessible names and descriptions",
+    "category": "accessibility-semantics",
+    "expectedBehavior": "Native labels, element text and alt text, aria-label, aria-labelledby, and aria-describedby produce browser-equivalent names/descriptions and remain synchronized through updates with safe missing, repeated, and removed references.",
+    "dynamicStepCount": 2,
+    "semanticIds": ["name-label", "name-control", "name-help", "named-action", "labelled-panel", "panel-title", "panel-description", "named-image"]
+  },
+  {
     "id": "box-model-basic",
     "title": "Basic content-box geometry",
     "category": "box-model-units",

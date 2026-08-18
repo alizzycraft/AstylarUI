@@ -264,17 +264,11 @@ async function captureMode(context, url, selector, screenshotPath, semanticIds =
     { timeout: 30_000 }
   );
   const report = await page.evaluate(() => window.__ASTYLAR_PARITY_REPORT__);
-  const astylarMode = url.includes('/parity/astylar/');
-  const semantics = {};
-  for (const id of semanticIds ?? []) {
-    const semanticSelector = astylarMode
-      ? `[data-astylar-id="${escapeSelectorValue(id)}"]`
-      : `#${escapeSelectorValue(id)}`;
-    const semanticNode = page.locator(semanticSelector);
-    semantics[id] = await semanticNode.count() === 1
-      ? await semanticNode.ariaSnapshot()
-      : undefined;
-  }
+  const semantics = await captureSemanticSnapshots(
+    page,
+    url.includes('/parity/astylar/') ? 'astylar' : 'reference',
+    semanticIds,
+  );
   const screenshot = await page.locator(selector).screenshot({
     path: screenshotPath,
     animations: 'disabled'
@@ -289,6 +283,60 @@ async function captureMode(context, url, selector, screenshotPath, semanticIds =
 
 function escapeSelectorValue(value) {
   return String(value).replaceAll('\\', '\\\\').replaceAll('"', '\\"');
+}
+
+async function captureSemanticSnapshots(page, mode, semanticIds = []) {
+  const semantics = {};
+  if (!semanticIds?.length) return semantics;
+  const cdp = await page.context().newCDPSession(page);
+  await cdp.send('DOM.enable');
+  await cdp.send('Accessibility.enable');
+  const documentNode = await cdp.send('DOM.getDocument', { depth: 0 });
+  for (const id of semanticIds ?? []) {
+    const semanticSelector = mode === 'astylar'
+      ? `[data-astylar-id="${escapeSelectorValue(id)}"]`
+      : `#${escapeSelectorValue(id)}`;
+    const semanticNode = page.locator(semanticSelector);
+    if (await semanticNode.count() !== 1) {
+      semantics[id] = undefined;
+      continue;
+    }
+    const domNode = await cdp.send('DOM.querySelector', {
+      nodeId: documentNode.root.nodeId,
+      selector: semanticSelector,
+    });
+    const partialTree = domNode.nodeId
+      ? await cdp.send('Accessibility.getPartialAXTree', {
+          nodeId: domNode.nodeId,
+          fetchRelatives: false,
+        })
+      : { nodes: [] };
+    semantics[id] = {
+      tree: await semanticNode.ariaSnapshot(),
+      node: normalizeAccessibilityNode(partialTree.nodes[0]),
+    };
+  }
+  await cdp.detach();
+  return semantics;
+}
+
+function normalizeAccessibilityNode(node) {
+  if (!node) return undefined;
+  const supportedProperties = new Set([
+    'checked', 'disabled', 'expanded', 'focused', 'invalid', 'level', 'modal',
+    'multiselectable', 'readonly', 'required', 'selected', 'url',
+  ]);
+  return {
+    role: node.role?.value,
+    name: node.name?.value,
+    description: node.description?.value,
+    value: node.value?.value,
+    properties: Object.fromEntries(
+      (node.properties ?? [])
+        .filter((property) => supportedProperties.has(property.name))
+        .map((property) => [property.name, property.value?.value]),
+    ),
+  };
 }
 
 async function measureDynamicFixture(contexts, fixture) {
@@ -308,12 +356,14 @@ async function measureDynamicFixture(contexts, fixture) {
         `${BASE_URL}/parity/reference/${encodeURIComponent(fixture.id)}${query}`,
         '#parity-reference-viewport',
         path.join(sequenceDir, `${index + 1}-fresh-reference.png`),
+        fixture.semanticIds,
       ),
       astylar: await captureMode(
         freshContext,
         `${BASE_URL}/parity/astylar/${encodeURIComponent(fixture.id)}${query}`,
         '#parity-astylar-canvas',
         path.join(sequenceDir, `${index + 1}-fresh-astylar.png`),
+        fixture.semanticIds,
       ),
     });
   }
@@ -325,6 +375,8 @@ async function measureDynamicFixture(contexts, fixture) {
     sequenceDir,
     fixture.dynamicStepCount,
     fixture.lifecycleViewports,
+    false,
+    fixture.semanticIds,
   );
   let astylarStates = await captureDynamicMode(
     context,
@@ -335,6 +387,7 @@ async function measureDynamicFixture(contexts, fixture) {
     fixture.dynamicStepCount,
     fixture.lifecycleViewports,
     true,
+    fixture.semanticIds,
   );
   const catastrophicDynamicIndex = findCatastrophicCapture(referenceStates, astylarStates);
   if (catastrophicDynamicIndex >= 0) {
@@ -351,6 +404,7 @@ async function measureDynamicFixture(contexts, fixture) {
       fixture.dynamicStepCount,
       fixture.lifecycleViewports,
       true,
+      fixture.semanticIds,
     );
   }
 
@@ -364,6 +418,11 @@ async function measureDynamicFixture(contexts, fixture) {
       ...fresh.astylar.pageErrors.map((error) => `fresh astylar: ${error}`),
       ...reference.report.errors.map((error) => `reference: ${error}`),
       ...astylar.report.errors.map((error) => `astylar: ${error}`),
+      ...compareSemantics(reference.semantics, astylar.semantics),
+      ...compareSemantics(fresh.reference.semantics, reference.semantics)
+        .map((error) => `reference update: ${error}`),
+      ...compareSemantics(fresh.astylar.semantics, astylar.semantics)
+        .map((error) => `astylar update: ${error}`),
     ];
     const comparisons = [
       ['reference', fresh.reference.report, reference.report],
@@ -434,6 +493,7 @@ async function measureDynamicFixture(contexts, fixture) {
       geometry: compareGeometry(reference.report, astylar.report),
       text: compareText(reference.report, astylar.report),
       styles: compareStyles(reference.report, astylar.report),
+      semantics: { reference: reference.semantics, astylar: astylar.semantics },
       runtimeErrors,
       reference: reference.report,
       astylar: astylar.report,
@@ -450,6 +510,7 @@ async function captureDynamicMode(
   stepCount,
   lifecycleViewports = [],
   disposeAfter = false,
+  semanticIds = [],
 ) {
   const page = await context.newPage();
   await installDeterministicAssetDelay(page);
@@ -493,7 +554,8 @@ async function captureDynamicMode(
       path: path.join(sequenceDir, `${index + 1}-live-${mode}.png`),
       animations: 'disabled',
     });
-    states.push({ report, screenshot, pageErrors: [...pageErrors] });
+    const semantics = await captureSemanticSnapshots(page, mode, semanticIds);
+    states.push({ report, screenshot, pageErrors: [...pageErrors], semantics });
   }
   const disposal = disposeAfter
     ? await page.evaluate(() => window.__ASTYLAR_PARITY_DISPOSE__?.())
@@ -1089,7 +1151,7 @@ function findCatastrophicCapture(referenceStates, astylarStates) {
 function compareSemantics(reference = {}, astylar = {}) {
   const errors = [];
   for (const id of new Set([...Object.keys(reference), ...Object.keys(astylar)])) {
-    if (reference[id] !== astylar[id]) {
+    if (JSON.stringify(reference[id]) !== JSON.stringify(astylar[id])) {
       errors.push(
         `semantic: accessibility snapshot differs for ${id}; ` +
         `reference=${JSON.stringify(reference[id])}, astylar=${JSON.stringify(astylar[id])}`,

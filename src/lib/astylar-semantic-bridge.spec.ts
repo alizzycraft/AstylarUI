@@ -56,6 +56,27 @@ describe('AstylarSemanticBridge', () => {
     expect(bridge.snapshot.nodes).toBe(0);
   });
 
+  it('maps authored label and ARIA ID references into the isolated native namespace', () => {
+    const bridge = new AstylarSemanticBridge(canvas);
+    bridge.reconcile({
+      styles: [],
+      root: { children: [
+        { type: 'label', id: 'name-label', for: 'name', textContent: 'Name' },
+        { type: 'input', id: 'name', value: 'Atlas', ariaLabel: 'Fallback', ariaLabelledby: 'name-label name-label', ariaDescribedby: 'help' },
+        { type: 'p', id: 'help', textContent: 'Public name.' },
+      ] },
+    });
+
+    const label = host.querySelector<HTMLLabelElement>('[data-astylar-id="name-label"]');
+    const input = host.querySelector<HTMLInputElement>('[data-astylar-id="name"]');
+    const help = host.querySelector<HTMLElement>('[data-astylar-id="help"]');
+    expect(label?.htmlFor).toBe(input?.id);
+    expect(input?.getAttribute('aria-labelledby')).toBe(`${label?.id} ${label?.id}`);
+    expect(input?.getAttribute('aria-describedby')).toBe(help?.id);
+    expect(input?.getAttribute('aria-label')).toBe('Fallback');
+    expect(input?.value).toBe('Atlas');
+  });
+
   function siteData(): SiteData {
     return {
       styles: [],

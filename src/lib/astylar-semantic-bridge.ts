@@ -155,6 +155,21 @@ export class AstylarSemanticBridge {
     if (element.lang) node.lang = element.lang;
     if (element.dir) node.dir = element.dir;
     if (element.tabindex !== undefined) node.tabIndex = element.tabindex;
+    if (element.role) node.setAttribute('role', element.role);
+    if (element.ariaLabel !== undefined) node.setAttribute('aria-label', element.ariaLabel);
+    if (element.ariaLabelledby) {
+      node.setAttribute('aria-labelledby', this.nativeIdRefs(element.ariaLabelledby));
+    }
+    if (element.ariaDescribedby) {
+      node.setAttribute('aria-describedby', this.nativeIdRefs(element.ariaDescribedby));
+    }
+    if (element.ariaLive) node.setAttribute('aria-live', element.ariaLive);
+    if (element.ariaAtomic !== undefined) {
+      node.setAttribute('aria-atomic', String(element.ariaAtomic));
+    }
+    if (element.ariaCurrent !== undefined) {
+      node.setAttribute('aria-current', String(element.ariaCurrent));
+    }
 
     if (element.href && node instanceof HTMLAnchorElement) node.href = element.href;
     if (element.target && node instanceof HTMLAnchorElement) node.target = element.target;
@@ -164,10 +179,38 @@ export class AstylarSemanticBridge {
     if (element.colspan && node instanceof HTMLTableCellElement) node.colSpan = element.colspan;
     if (element.rowspan && node instanceof HTMLTableCellElement) node.rowSpan = element.rowspan;
     if (element.for && node instanceof HTMLLabelElement) node.htmlFor = this.nativeId(element.for);
+    if (node instanceof HTMLInputElement) {
+      node.type = element.inputType || 'text';
+      node.value = String(element.value ?? '');
+      node.checked = !!element.checked;
+      node.disabled = !!element.disabled;
+      node.required = !!element.required;
+      node.readOnly = !!element.readonly;
+      if (element.placeholder !== undefined) node.placeholder = element.placeholder;
+      if (element.name !== undefined) node.name = element.name;
+    }
+    if (node instanceof HTMLTextAreaElement) {
+      node.value = String(element.value ?? element.textContent ?? '');
+      node.disabled = !!element.disabled;
+      node.required = !!element.required;
+      node.readOnly = !!element.readonly;
+      if (element.placeholder !== undefined) node.placeholder = element.placeholder;
+      if (element.name !== undefined) node.name = element.name;
+    }
+    if (node instanceof HTMLButtonElement) {
+      node.type = element.inputType === 'submit' ? 'submit' :
+        element.inputType === 'reset' ? 'reset' : 'button';
+      node.disabled = !!element.disabled;
+    }
   }
 
   private nativeId(authoredId: string): string {
     return `${this.prefix}${authoredId}`;
+  }
+
+  private nativeIdRefs(authoredIds: string): string {
+    return authoredIds.trim().split(/\s+/).filter(Boolean)
+      .map((authoredId) => this.nativeId(authoredId)).join(' ');
   }
 
   private semanticTagName(type: DOMElementType): string {
