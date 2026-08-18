@@ -56,6 +56,17 @@
     "announcementIds": ["announce-error", "announce-status"]
   },
   {
+    "id": "semantic-lifecycle-stress",
+    "title": "Repeated semantic and modal lifecycle",
+    "category": "accessibility-semantics",
+    "expectedBehavior": "Three identical semantic focus/activation, responsive modal open/contain/dismiss, status announcement, incompatible data replacement, restoration, and final disposal cycles remain browser-exact while semantic nodes, listeners, observers, registries, and Babylon resources plateau and clean up.",
+    "dynamicStepCount": 4,
+    "interactionStepCount": 24,
+    "interactionCycleLength": 8,
+    "semanticIds": ["semantic-life-status", "semantic-life-invoker", "semantic-life-content", "semantic-life-data", "semantic-life-dialog", "semantic-life-dialog-title", "semantic-life-dialog-action"],
+    "announcementIds": ["semantic-life-status"]
+  },
+  {
     "id": "box-model-basic",
     "title": "Basic content-box geometry",
     "category": "box-model-units",

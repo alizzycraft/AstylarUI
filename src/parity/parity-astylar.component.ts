@@ -173,15 +173,19 @@ export class ParityAstylarComponent {
       if (dynamicSequence || interactionSequence) {
         window.__ASTYLAR_PARITY_DISPOSE__ = () => {
           const session = this.astylar.getSession(scene);
+          const semanticBefore = this.astylar.getSemanticSnapshot(scene);
           const before = {
             resources: this.astylar.getResourceSnapshot(scene),
             elements: this.elementManager.elementsMap.size,
             inputs: this.elementManager.inputElementsMap.size,
             cleanupRegistrations: session?.snapshot.cleanupRegistrations ?? 0,
-            semanticNodes: this.astylar.getSemanticSnapshot(scene)?.nodes ?? 0,
+            semanticNodes: semanticBefore?.nodes ?? 0,
+            semanticEventRegistrations: semanticBefore?.eventRegistrations ?? 0,
+            semanticObserverRegistrations: semanticBefore?.observerRegistrations ?? 0,
           };
           const engine = scene.getEngine();
           engine.dispose();
+          const semanticAfter = this.astylar.getSemanticSnapshot(scene);
           return {
             before,
             after: {
@@ -189,7 +193,9 @@ export class ParityAstylarComponent {
               elements: this.elementManager.elementsMap.size,
               inputs: this.elementManager.inputElementsMap.size,
               cleanupRegistrations: session?.snapshot.cleanupRegistrations ?? 0,
-              semanticNodes: this.astylar.getSemanticSnapshot(scene)?.nodes ?? 0,
+              semanticNodes: semanticAfter?.nodes ?? 0,
+              semanticEventRegistrations: semanticAfter?.eventRegistrations ?? 0,
+              semanticObserverRegistrations: semanticAfter?.observerRegistrations ?? 0,
               sessionStatus: session?.snapshot.status,
               engineDisposed: engine.isDisposed,
               sceneDisposed: scene.isDisposed,

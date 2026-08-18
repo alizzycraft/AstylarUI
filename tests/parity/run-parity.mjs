@@ -510,6 +510,8 @@ async function measureDynamicFixture(contexts, fixture) {
         !after.sceneDisposed ||
         after.cleanupRegistrations !== 0 ||
         after.semanticNodes !== 0 ||
+        after.semanticEventRegistrations !== 0 ||
+        after.semanticObserverRegistrations !== 0 ||
         after.elements !== 0 ||
         after.inputs !== 0 ||
         !resources || resources.meshes !== 0 || resources.materials !== 0 || resources.textures !== 0
@@ -830,6 +832,7 @@ function compareInteractionLifecycle(fixture, astylarStates, index) {
     if (!before || before.inputs < 1 || before.cleanupRegistrations < 1 ||
         after?.sessionStatus !== 'disposed' || !after.engineDisposed || !after.sceneDisposed ||
         after.cleanupRegistrations !== 0 || after.semanticNodes !== 0 ||
+        after.semanticEventRegistrations !== 0 || after.semanticObserverRegistrations !== 0 ||
         after.elements !== 0 || after.inputs !== 0 ||
         !resources || resources.meshes !== 0 || resources.materials !== 0 || resources.textures !== 0) {
       errors.push(`astylar: interaction lifecycle disposal was not clean ${JSON.stringify(disposal)}`);

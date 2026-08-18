@@ -359,6 +359,8 @@ export interface ParityDisposalReport {
     inputs: number;
     cleanupRegistrations: number;
     semanticNodes?: number;
+    semanticEventRegistrations?: number;
+    semanticObserverRegistrations?: number;
   };
   after: {
     resources?: { meshes: number; materials: number; textures: number };
@@ -366,6 +368,8 @@ export interface ParityDisposalReport {
     inputs: number;
     cleanupRegistrations: number;
     semanticNodes?: number;
+    semanticEventRegistrations?: number;
+    semanticObserverRegistrations?: number;
     sessionStatus?: string;
     engineDisposed: boolean;
     sceneDisposed: boolean;
