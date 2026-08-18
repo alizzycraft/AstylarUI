@@ -37,6 +37,8 @@ import { AstylarInteractionRuntime } from './astylar-interaction-runtime';
 import type { AstylarInteractionSnapshot } from './astylar-interaction-runtime';
 import type { AstylarEventOptions, AstylarEventState } from './astylar-event';
 import { InputElementService } from '../app/services/dom/input/input-element.service';
+import { AstylarScrollRuntime } from './astylar-scroll-runtime';
+import type { AstylarScrollSnapshot } from './astylar-scroll-runtime';
 
 /**
  * Configuration options for rendering
@@ -69,6 +71,7 @@ export class Astylar {
   private readonly sessions = new WeakMap<Scene, AstylarRenderSession>();
   private readonly sceneResources = new WeakMap<Scene, AstylarSceneResources>();
   private readonly interactions = new WeakMap<Scene, AstylarInteractionRuntime>();
+  private readonly scrolling = new WeakMap<Scene, AstylarScrollRuntime>();
   private activeSession?: AstylarRenderSession;
 
   /**
@@ -245,6 +248,14 @@ export class Astylar {
     const sceneResources = new AstylarSceneResources(scene);
     this.sceneResources.set(scene, sceneResources);
 
+    const scrollRuntime = new AstylarScrollRuntime({
+      getMesh: (elementId) => this.elementManager.elementsMap.get(elementId),
+      getDimensions: (elementId) => this.elementManager.elementDimensionsMap.get(elementId),
+      getStyle: (elementId) => this.elementManager.elementStylesMap.get(elementId)?.normal,
+      getPixelToWorldScale: () => this.babylonCameraService.getPixelToWorldScale(),
+    });
+    this.scrolling.set(scene, scrollRuntime);
+
     let hasCompletedRender = false;
     const session = new AstylarRenderSession(
       scene,
@@ -256,6 +267,9 @@ export class Astylar {
         const nonTextState = hasCompletedRender
           ? this.inputElementService.captureNonTextControlStates()
           : [];
+        const scrollState = hasCompletedRender
+          ? scrollRuntime.snapshot.containers
+          : {};
         engine.resize(true);
         this.imageResources.retain(
           scene,
@@ -269,6 +283,7 @@ export class Astylar {
         sceneResources.replace(
           () => {
             this.babylonDOMRenderer.createSiteFromData(currentSiteData);
+            scrollRuntime.reconcile(currentSiteData, scrollState);
             const textFocusId = this.inputElementService.restoreTextControlStates(textState);
             const nonTextFocusId = this.inputElementService.restoreNonTextControlStates(nonTextState);
             const focusedElementId = textFocusId ?? nonTextFocusId;
@@ -338,9 +353,12 @@ export class Astylar {
         setFocusState: (elementId, focused) =>
           this.setElementFocusState(elementId, focused),
       },
+      undefined,
+      scrollRuntime,
     );
     this.interactions.set(scene, interaction);
     session.addCleanup(() => interaction.dispose());
+    session.addCleanup(() => scrollRuntime.dispose());
     session.addCleanup(() => sceneResources.dispose());
     session.addCleanup(this.imageResources.subscribe((event) => {
       if (event.scene !== scene || session.isDisposed) return;
@@ -422,6 +440,10 @@ export class Astylar {
 
   getInteractionSnapshot(scene: Scene): AstylarInteractionSnapshot | undefined {
     return this.interactions.get(scene)?.snapshot;
+  }
+
+  getScrollSnapshot(scene: Scene): AstylarScrollSnapshot | undefined {
+    return this.scrolling.get(scene)?.snapshot;
   }
 
   update(siteData: SiteData, scene?: Scene): Promise<AstylarSessionSnapshot> {

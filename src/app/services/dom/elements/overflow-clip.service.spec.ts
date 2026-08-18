@@ -42,4 +42,18 @@ describe('OverflowClipService', () => {
 
     expect(child.material.clipPlane).toBeUndefined();
   });
+
+  it('clips scroll-container descendants to the stable viewport bounds', () => {
+    const parent = BABYLON.MeshBuilder.CreatePlane('parent', { width: 4, height: 2 }, scene);
+    const child = BABYLON.MeshBuilder.CreatePlane('child', { width: 4, height: 6 }, scene);
+    child.parent = parent;
+    child.material = new BABYLON.StandardMaterial('child-material', scene);
+
+    service.apply(parent, { selector: '#parent', overflow: 'auto' });
+
+    expect(child.material.clipPlane?.asArray()).toEqual([-1, 0, 0, -2]);
+    expect(child.material.clipPlane2?.asArray()).toEqual([1, 0, 0, -2]);
+    expect(child.material.clipPlane3?.asArray()).toEqual([0, -1, 0, -1]);
+    expect(child.material.clipPlane4?.asArray()).toEqual([0, 1, 0, -1]);
+  });
 });

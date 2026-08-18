@@ -123,6 +123,7 @@ import { interactionUpdateTextStateFixture } from './interaction-update-text-sta
 import { interactionUpdateChoiceStateFixture } from './interaction-update-choice-state.fixture';
 import { interactionReplacementCleanupFixture } from './interaction-replacement-cleanup.fixture';
 import { interactionLifecycleStressFixture } from './interaction-lifecycle-stress.fixture';
+import { overflowVerticalWheelFixture } from './overflow-vertical-wheel.fixture';
 import { ParityFixture } from '../parity.types';
 
 const fixtures: readonly ParityFixture[] = [
@@ -250,7 +251,8 @@ const fixtures: readonly ParityFixture[] = [
   interactionUpdateTextStateFixture,
   interactionUpdateChoiceStateFixture,
   interactionReplacementCleanupFixture,
-  interactionLifecycleStressFixture
+  interactionLifecycleStressFixture,
+  overflowVerticalWheelFixture
 ];
 
 const fixturesById = new Map(fixtures.map((fixture) => [fixture.id, fixture]));

@@ -15,6 +15,7 @@ import {
 
 export interface AstylarInteractionSnapshot {
   pointerObservers: number;
+  wheelHandlers: number;
   keyboardListeners: number;
   handlers: number;
   pressedElementId?: string;
@@ -47,6 +48,11 @@ export interface AstylarInteractionControlAdapter {
   setFocusState?(elementId: string, focused: boolean): void;
 }
 
+export interface AstylarInteractionScrollAdapter {
+  scrollFrom(elementId: string, deltaX: number, deltaY: number): boolean;
+  isPointVisible(elementId: string, point?: { x: number; y: number }): boolean;
+}
+
 interface AstylarFormDefault {
   formId: string;
   controlIds: readonly string[];
@@ -76,6 +82,7 @@ export class AstylarInteractionRuntime {
     private readonly getLiveState?: AstylarInteractionStateProvider,
     private readonly controls?: AstylarInteractionControlAdapter,
     canvasOverride?: HTMLCanvasElement,
+    private readonly scrolling?: AstylarInteractionScrollAdapter,
   ) {
     this.dispatcher = new AstylarEventDispatcher(siteData, options);
     this.focusOrder = this.buildFocusOrder(siteData);
@@ -91,12 +98,16 @@ export class AstylarInteractionRuntime {
       if (this.canvas.tabIndex < 0) this.canvas.tabIndex = 0;
       this.canvas.addEventListener('keydown', this.handleKeyDown);
       this.canvas.addEventListener('keyup', this.handleKeyUp);
+      if (this.scrolling) {
+        this.canvas.addEventListener('wheel', this.handleWheel, { passive: false });
+      }
     }
   }
 
   get snapshot(): AstylarInteractionSnapshot {
     return {
       pointerObservers: this.pointerObserver ? 1 : 0,
+      wheelHandlers: this.scrolling && !this.disposed ? 1 : 0,
       keyboardListeners: this.canvas && !this.disposed ? 2 : 0,
       handlers: this.dispatcher.handlerCount,
       pressedElementId: this.pressedElementId,
@@ -140,6 +151,7 @@ export class AstylarInteractionRuntime {
     }
     this.canvas?.removeEventListener('keydown', this.handleKeyDown);
     this.canvas?.removeEventListener('keyup', this.handleKeyUp);
+    this.canvas?.removeEventListener('wheel', this.handleWheel);
     if (this.pressedElementId) this.controls?.setActiveState?.(this.pressedElementId, false);
     const focusedElementId = this.controls?.getFocusedElementId();
     if (focusedElementId) this.controls?.setFocusState?.(focusedElementId, false);
@@ -150,7 +162,12 @@ export class AstylarInteractionRuntime {
 
   private handlePointer(pointerInfo: PointerInfo): void {
     if (this.disposed) return;
-    const targetId = this.resolveElementId(pointerInfo.pickInfo?.pickedMesh ?? undefined);
+    let targetId = this.resolveElementId(pointerInfo.pickInfo?.pickedMesh ?? undefined);
+    if (targetId && this.scrolling &&
+        !this.scrolling.isPointVisible(targetId, pointerInfo.pickInfo?.pickedPoint ?? undefined)) {
+      targetId = undefined;
+    }
+    if (pointerInfo.type === PointerEventTypes.POINTERWHEEL) return;
     if (pointerInfo.type === PointerEventTypes.POINTERMOVE) {
       this.updateHover(targetId, pointerInfo);
       return;
@@ -308,6 +325,23 @@ export class AstylarInteractionRuntime {
           ...after,
         });
       }
+    }
+  };
+
+  private readonly handleWheel = (event: WheelEvent): void => {
+    if (this.disposed || !this.scrolling) return;
+    const pick = this.scene.pick(this.scene.pointerX, this.scene.pointerY);
+    const targetId = this.resolveElementId(pick?.pickedMesh ?? undefined);
+    if (!targetId || !this.scrolling.isPointVisible(targetId, pick?.pickedPoint ?? undefined)) {
+      return;
+    }
+    const lineScale = 16;
+    const pageScale = this.canvas?.clientHeight || 1;
+    const factor = event.deltaMode === WheelEvent.DOM_DELTA_LINE
+      ? lineScale
+      : event.deltaMode === WheelEvent.DOM_DELTA_PAGE ? pageScale : 1;
+    if (this.scrolling.scrollFrom(targetId, event.deltaX * factor, event.deltaY * factor)) {
+      event.preventDefault();
     }
   };
 

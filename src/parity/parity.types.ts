@@ -58,6 +58,7 @@ export interface ParityFixture {
   /** Repeated interaction phases used to enforce warm resource plateaus and final disposal. */
   interactionCycleLength?: number;
   interactionIds?: string[];
+  scrollIds?: string[];
   interactionEventTypes?: ParityInteractionEventType[];
 }
 
@@ -112,6 +113,13 @@ export interface ParityApplyUpdateAction {
   viewportId?: ParityViewport['id'];
 }
 
+export interface ParityWheelAction {
+  type: 'wheel';
+  elementId: string;
+  deltaX?: number;
+  deltaY?: number;
+}
+
 export type ParityInteractionAction =
   | ParityClickAction
   | ParityHoverAction
@@ -119,7 +127,8 @@ export type ParityInteractionAction =
   | ParityPointerUpAction
   | ParityPressKeyAction
   | ParityTypeTextAction
-  | ParityApplyUpdateAction;
+  | ParityApplyUpdateAction
+  | ParityWheelAction;
 
 export interface ParityInteractionStep {
   id: string;
@@ -248,11 +257,22 @@ export interface ParityInteractionReport {
   events: ParityNormalizedEvent[];
   focusedElementId?: string;
   controls: Record<string, ParityControlState>;
+  scrollContainers?: Record<string, ParityScrollState>;
   registrations?: {
     pointerObservers: number;
+    wheelHandlers: number;
     keyboardListeners: number;
     handlers: number;
   };
+}
+
+export interface ParityScrollState {
+  scrollLeft: number;
+  scrollTop: number;
+  scrollWidth: number;
+  scrollHeight: number;
+  clientWidth: number;
+  clientHeight: number;
 }
 
 export interface ParityDisposalReport {

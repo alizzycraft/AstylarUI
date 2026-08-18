@@ -68,3 +68,5 @@ active responsive intrinsic layout and paint-fidelity phase in `scorecard-v5.md`
 Application-grade intrinsic Grid work continues in `scorecard-v6.md`.
 Reactive layout and reflow work continues in `scorecard-v7.md`.
 Stateful interaction and form parity continues in `scorecard-v8.md`.
+Scrolling, pointer selection, and popup interaction parity continues in
+`scorecard-v9.md`.

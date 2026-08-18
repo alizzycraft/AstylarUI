@@ -334,6 +334,7 @@ export class ParityAstylarComponent {
             fixture.expectedAbsentIds ?? [],
             fixture.expectedMissingIds ?? [],
             fixture.interactionIds ?? [],
+            fixture.scrollIds ?? [],
             !!fixture.interactionSteps?.length,
           )
         );
@@ -351,6 +352,7 @@ export class ParityAstylarComponent {
             fixture.expectedAbsentIds ?? [],
             fixture.expectedMissingIds ?? [],
             fixture.interactionIds ?? [],
+            fixture.scrollIds ?? [],
             !!fixture.interactionSteps?.length,
             ['Timed out waiting for all Astylar elements to render']
           )
@@ -367,6 +369,7 @@ export class ParityAstylarComponent {
     expectedAbsentIds: string[],
     expectedMissingIds: string[],
     interactionIds: string[],
+    scrollIds: string[],
     includeInteraction: boolean,
     initialErrors: string[] = []
   ): ParityRuntimeReport {
@@ -462,6 +465,10 @@ export class ParityAstylarComponent {
             events: [...this.interactionEvents],
             focusedElementId: this.getFocusedElementId(),
             controls: this.measureControls(interactionIds),
+            scrollContainers: Object.fromEntries(
+              scrollIds.map((id) => [id, this.astylar.getScrollSnapshot(scene)?.containers[id]])
+                .filter((entry) => entry[1] !== undefined),
+            ),
             registrations: this.astylar.getInteractionSnapshot(scene),
           }
         : undefined,

@@ -14,7 +14,8 @@ const CLIP_BOUNDS_METADATA = 'astylarOverflowClipBounds';
 @Injectable({ providedIn: 'root' })
 export class OverflowClipService {
   apply(parent: BABYLON.Mesh, style: StyleRule): void {
-    if (style.overflow !== 'hidden' && style.overflow !== 'clip') {
+    if (style.overflow !== 'hidden' && style.overflow !== 'clip' &&
+        style.overflow !== 'auto' && style.overflow !== 'scroll') {
       return;
     }
 

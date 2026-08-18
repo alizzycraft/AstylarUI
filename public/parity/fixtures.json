@@ -797,5 +797,12 @@
     "dynamicStepCount": 2,
     "interactionStepCount": 24,
     "interactionCycleLength": 8
+  },
+  {
+    "id": "overflow-vertical-wheel",
+    "title": "Vertical wheel scrolling",
+    "category": "overflow-scrolling",
+    "expectedBehavior": "Wheel input scrolls a fixed-height overflow:auto container, clamps at both ends, moves its content under a stable clip, and reports browser-equivalent scroll extents.",
+    "interactionStepCount": 3
   }
 ]

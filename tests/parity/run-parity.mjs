@@ -601,7 +601,7 @@ function compareInteractionLifecycle(fixture, astylarStates, index) {
 
     const baselineRegistrations = baseline?.interaction?.registrations;
     const currentRegistrations = current?.interaction?.registrations;
-    for (const key of ['pointerObservers', 'keyboardListeners', 'handlers']) {
+    for (const key of ['pointerObservers', 'wheelHandlers', 'keyboardListeners', 'handlers']) {
       if (currentRegistrations?.[key] !== baselineRegistrations?.[key]) {
         errors.push(
           `astylar: interaction lifecycle ${key} changed at cycle ${cycleIndex + 1}, ` +
@@ -651,6 +651,12 @@ async function performInteractionAction(page, mode, action, report) {
     case 'type-text':
       await page.keyboard.type(action.text);
       return;
+    case 'wheel': {
+      const { x, y } = await getInteractionPoint(page, mode, action.elementId, report);
+      await page.mouse.move(x, y);
+      await page.mouse.wheel(action.deltaX ?? 0, action.deltaY ?? 0);
+      return;
+    }
     case 'apply-update':
       if (action.viewportId) {
         const viewport = viewportProfiles[action.viewportId];
@@ -724,6 +730,17 @@ function compareInteraction(reference, astylar) {
     const actual = normalizeComparableControl(astylarInteraction.controls[id]);
     if (JSON.stringify(expected) !== JSON.stringify(actual)) {
       errors.push(`control state differs for ${id} (${JSON.stringify(expected)} vs ${JSON.stringify(actual)})`);
+    }
+  }
+  const scrollIds = new Set([
+    ...Object.keys(referenceInteraction.scrollContainers ?? {}),
+    ...Object.keys(astylarInteraction.scrollContainers ?? {}),
+  ]);
+  for (const id of scrollIds) {
+    const expected = referenceInteraction.scrollContainers?.[id];
+    const actual = astylarInteraction.scrollContainers?.[id];
+    if (JSON.stringify(expected) !== JSON.stringify(actual)) {
+      errors.push(`scroll state differs for ${id} (${JSON.stringify(expected)} vs ${JSON.stringify(actual)})`);
     }
   }
   return errors;

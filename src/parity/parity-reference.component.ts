@@ -279,6 +279,7 @@ export class ParityReferenceComponent {
             events: [...this.interactionEvents],
             focusedElementId: this.getFocusedElementId(viewport),
             controls: this.measureControls(viewport, fixture.interactionIds ?? []),
+            scrollContainers: this.measureScrollContainers(viewport, fixture.scrollIds ?? []),
           }
         : undefined,
     });
@@ -373,6 +374,26 @@ export class ParityReferenceComponent {
       };
     }
     return controls;
+  }
+
+  private measureScrollContainers(
+    viewport: HTMLElement,
+    ids: string[],
+  ): Record<string, import('./parity.types').ParityScrollState> {
+    const containers: Record<string, import('./parity.types').ParityScrollState> = {};
+    for (const id of ids) {
+      const element = viewport.querySelector<HTMLElement>(`#${CSS.escape(id)}`);
+      if (!element) continue;
+      containers[id] = {
+        scrollLeft: element.scrollLeft,
+        scrollTop: element.scrollTop,
+        scrollWidth: element.scrollWidth,
+        scrollHeight: element.scrollHeight,
+        clientWidth: element.clientWidth,
+        clientHeight: element.clientHeight,
+      };
+    }
+    return containers;
   }
 
   private measureElement(

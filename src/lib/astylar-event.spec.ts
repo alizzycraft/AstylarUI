@@ -265,6 +265,49 @@ describe('AstylarInteractionRuntime', () => {
     engine.dispose();
   });
 
+  it('owns one non-passive wheel path and removes it on disposal', () => {
+    const engine = new NullEngine();
+    const scene = new Scene(engine);
+    const mesh = MeshBuilder.CreatePlane('scroll-child', {}, scene);
+    mesh.metadata = { elementId: 'child' };
+    const canvas = document.createElement('canvas');
+    const calls: Array<[string, number, number]> = [];
+    spyOn(scene, 'pick').and.returnValue({
+      hit: true,
+      pickedMesh: mesh,
+      pickedPoint: { x: 0, y: 0, z: 0 },
+    } as never);
+    const runtime = new AstylarInteractionRuntime(
+      scene,
+      { styles: [], root: { children: [{ type: 'div', id: 'child' }] } },
+      {},
+      undefined,
+      undefined,
+      canvas,
+      {
+        scrollFrom: (elementId, deltaX, deltaY) => {
+          calls.push([elementId, deltaX, deltaY]);
+          return true;
+        },
+        isPointVisible: () => true,
+      },
+    );
+    const wheel = new WheelEvent('wheel', { deltaY: 70, cancelable: true });
+
+    canvas.dispatchEvent(wheel);
+
+    expect(calls).toEqual([['child', 0, 70]]);
+    expect(wheel.defaultPrevented).toBeTrue();
+    expect(runtime.snapshot.wheelHandlers).toBe(1);
+
+    runtime.dispose();
+    canvas.dispatchEvent(new WheelEvent('wheel', { deltaY: 20, cancelable: true }));
+    expect(calls.length).toBe(1);
+    expect(runtime.snapshot.wheelHandlers).toBe(0);
+    scene.dispose();
+    engine.dispose();
+  });
+
   it('emits input after text mutation and commits change before blur', () => {
     const engine = new NullEngine();
     const scene = new Scene(engine);
