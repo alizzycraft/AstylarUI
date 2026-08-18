@@ -288,6 +288,11 @@ export interface ParityInteractionReport {
     wheelHandlers: number;
     keyboardListeners: number;
     handlers: number;
+    openPopups?: number;
+    popupObservers?: number;
+    popupMeshes?: number;
+    popupMaterials?: number;
+    popupTextures?: number;
   };
 }
 

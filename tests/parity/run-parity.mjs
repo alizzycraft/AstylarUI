@@ -766,6 +766,21 @@ function compareInteraction(reference, astylar) {
       errors.push(`scroll state differs for ${id} (${JSON.stringify(expected)} vs ${JSON.stringify(actual)})`);
     }
   }
+  const registrations = astylarInteraction.registrations;
+  const expandedCount = Object.values(astylarInteraction.controls)
+    .filter((control) => control.expanded === true).length;
+  if (registrations?.openPopups !== expandedCount) {
+    errors.push(`popup registry count differs (${registrations?.openPopups} vs ${expandedCount})`);
+  }
+  if (registrations?.popupObservers !== expandedCount) {
+    errors.push(`popup observer count differs (${registrations?.popupObservers} vs ${expandedCount})`);
+  }
+  for (const key of ['popupMeshes', 'popupMaterials', 'popupTextures']) {
+    const count = registrations?.[key];
+    if (expandedCount === 0 ? count !== 0 : !(count > 0)) {
+      errors.push(`${key} do not match expanded popup state (${count} vs ${expandedCount})`);
+    }
+  }
   return errors;
 }
 

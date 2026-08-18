@@ -925,5 +925,12 @@
     "category": "forms-interactive",
     "expectedBehavior": "An expanded single-select popup paints and receives option selection above overlapping high-z-index page content, like native platform select UI.",
     "interactionStepCount": 2
+  },
+  {
+    "id": "interaction-select-expanded-cleanup",
+    "title": "Expanded select replacement cleanup",
+    "category": "forms-interactive",
+    "expectedBehavior": "Removing an expanded single-select closes its popup and releases popup resources and observers; reusing the ID creates a fresh closed control without lifecycle growth.",
+    "interactionStepCount": 9
   }
 ]

@@ -35,6 +35,14 @@ export interface NonTextControlStateSnapshot {
     selectedValue?: unknown;
 }
 
+export interface SelectPopupLifecycleSnapshot {
+    openPopups: number;
+    popupObservers: number;
+    popupMeshes: number;
+    popupMaterials: number;
+    popupTextures: number;
+}
+
 /**
  * Main orchestration service for input elements
  */
@@ -520,6 +528,42 @@ export class InputElementService {
             }
         }
         return false;
+    }
+
+    getSelectPopupLifecycleSnapshot(): SelectPopupLifecycleSnapshot {
+        const meshes = new Set<BABYLON.AbstractMesh>();
+        const materials = new Set<BABYLON.Material>();
+        const textures = new Set<BABYLON.BaseTexture>();
+        let openPopups = 0;
+
+        for (const input of this.inputElements.values()) {
+            if (input.type !== InputType.Select) continue;
+            const select = input as SelectElement;
+            if (!select.dropdownOpen) continue;
+            openPopups += 1;
+            if (select.dropdownMesh && !select.dropdownMesh.isDisposed()) {
+                meshes.add(select.dropdownMesh);
+                select.dropdownMesh.getChildMeshes(false).forEach((mesh) => meshes.add(mesh));
+            }
+            select.optionMeshes.forEach((mesh) => {
+                if (!mesh.isDisposed()) meshes.add(mesh);
+            });
+        }
+
+        for (const mesh of meshes) {
+            if (mesh.material) materials.add(mesh.material);
+        }
+        for (const material of materials) {
+            material.getActiveTextures().forEach((texture) => textures.add(texture));
+        }
+
+        return {
+            openPopups,
+            popupObservers: this.selectManager.clickAwayObserverCount,
+            popupMeshes: meshes.size,
+            popupMaterials: materials.size,
+            popupTextures: textures.size,
+        };
     }
 
     /** Commits a popup row selected by the scene-owned pointer runtime. */

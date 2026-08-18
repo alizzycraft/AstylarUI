@@ -198,6 +198,45 @@ describe('SelectManager', () => {
     )).toBeTrue();
   });
 
+  it('releases popup observers, meshes, and materials when an expanded select is disposed', () => {
+    const textRendering = {
+      renderTextToTexture: () => ({ getSize: () => ({ width: 80, height: 24 }) }),
+    } as unknown as TextRenderingService;
+    const meshService = {
+      createTextMesh: (name: string, _texture: unknown, width: number, height: number) =>
+        BABYLON.MeshBuilder.CreatePlane(name, { width, height }, scene),
+    } as unknown as BabylonMeshService;
+    const manager = new SelectManager(textRendering, meshService);
+    const select = manager.createSelectElement(
+      {
+        type: 'select', id: 'choice', value: 'alpha', options: [
+          { value: 'alpha', label: 'Alpha' },
+          { value: 'beta', label: 'Beta' },
+        ],
+      },
+      {
+        scene,
+        actions: { camera: { getPixelToWorldScale: () => 0.01 } },
+      } as any,
+      { selector: '#choice', background: '#ffffff', color: '#000000' },
+      { width: 3, height: 0.5 },
+    );
+    const observerCountBefore = scene.onPointerObservable.observers.length;
+    manager.openDropdown(select, scene, select.style);
+    const popupMaterials = scene.materials.filter((material) =>
+      material.name.startsWith('dropdown') || material.name.startsWith('option'));
+
+    expect(manager.clickAwayObserverCount).toBe(1);
+    expect(scene.onPointerObservable.observers.length).toBe(observerCountBefore + 1);
+    expect(popupMaterials.length).toBeGreaterThan(0);
+
+    manager.disposeSelect(select);
+
+    expect(select.dropdownOpen).toBeFalse();
+    expect(manager.clickAwayObserverCount).toBe(0);
+    expect(scene.materials.filter((material) => popupMaterials.includes(material))).toEqual([]);
+  });
+
   it('disposes the replaced display material when selection redraws', () => {
     const textRendering = {
       renderTextToTexture: () => ({ getSize: () => ({ width: 80, height: 24 }) }),

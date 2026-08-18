@@ -22,6 +22,10 @@ export class SelectManager {
     // Track click-away observers for each open dropdown
     private clickAwayObservers: Map<string, BABYLON.Observer<BABYLON.PointerInfo>> = new Map();
 
+    get clickAwayObserverCount(): number {
+        return this.clickAwayObservers.size;
+    }
+
     constructor(
         private textRenderingService: TextRenderingService,
         private babylonMeshService: BabylonMeshService
@@ -126,17 +130,8 @@ export class SelectManager {
         // Remove click-away listener
         this.removeClickAwayListener(selectElement);
 
-        // Dispose dropdown mesh
-        if (selectElement.dropdownMesh) {
-            selectElement.dropdownMesh.dispose();
-            selectElement.dropdownMesh = undefined;
-        }
-
-        // Dispose option meshes
-        if (selectElement.optionMeshes) {
-            selectElement.optionMeshes.forEach(mesh => mesh.dispose());
-            selectElement.optionMeshes = [];
-        }
+        this.disposeOptionMeshes(selectElement);
+        this.disposeDropdownMesh(selectElement);
     }
 
     /**
@@ -864,20 +859,37 @@ export class SelectManager {
         selectElement.optionMeshes = [];
     }
 
+    private disposeDropdownMesh(selectElement: SelectElement): void {
+        const dropdown = selectElement.dropdownMesh;
+        if (!dropdown) return;
+        const meshes = [...dropdown.getChildMeshes(false), dropdown];
+        for (const mesh of meshes) {
+            if (mesh.isDisposed()) continue;
+            const material = mesh.material;
+            mesh.material = null;
+            mesh.dispose(false, false);
+            material?.dispose(false, false);
+        }
+        selectElement.dropdownMesh = undefined;
+    }
+
     /**
      * Cleanup select resources
      */
     disposeSelect(selectElement: SelectElement): void {
+        if (selectElement.dropdownOpen) {
+            this.closeDropdown(selectElement);
+        } else {
+            // A rebuilt control can inherit the ID of an observer owned by the
+            // removed popup lifetime. Disposal must clear that registration too.
+            this.removeClickAwayListener(selectElement);
+            this.disposeOptionMeshes(selectElement);
+            this.disposeDropdownMesh(selectElement);
+        }
+
         if (selectElement.displayMesh) {
-            selectElement.displayMesh.dispose();
-        }
-
-        if (selectElement.dropdownMesh) {
-            selectElement.dropdownMesh.dispose();
-        }
-
-        if (selectElement.optionMeshes) {
-            selectElement.optionMeshes.forEach(mesh => mesh.dispose());
+            this.disposeDisplayMesh(selectElement.displayMesh);
+            selectElement.displayMesh = undefined;
         }
 
         if (selectElement.mesh) {

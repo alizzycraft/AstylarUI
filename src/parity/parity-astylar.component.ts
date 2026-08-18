@@ -20,6 +20,7 @@ import {
 import { Astylar } from '../lib';
 import type { AstylarEventSnapshot } from '../lib';
 import { BabylonElementManagerService } from '../app/services/dom/element-manager.service';
+import { InputElementService } from '../app/services/dom/input/input-element.service';
 import { getParityFixture } from './fixtures';
 import {
   getParityViewport,
@@ -66,6 +67,7 @@ import {
 export class ParityAstylarComponent {
   private readonly astylar = inject(Astylar);
   private readonly elementManager = inject(BabylonElementManagerService);
+  private readonly inputElementService = inject(InputElementService);
   private readonly route = inject(ActivatedRoute);
   private readonly zone = inject(NgZone);
   private readonly destroyRef = inject(DestroyRef);
@@ -469,7 +471,13 @@ export class ParityAstylarComponent {
               scrollIds.map((id) => [id, this.astylar.getScrollSnapshot(scene)?.containers[id]])
                 .filter((entry) => entry[1] !== undefined),
             ),
-            registrations: this.astylar.getInteractionSnapshot(scene),
+            registrations: {
+              pointerObservers: this.astylar.getInteractionSnapshot(scene)?.pointerObservers ?? 0,
+              wheelHandlers: this.astylar.getInteractionSnapshot(scene)?.wheelHandlers ?? 0,
+              keyboardListeners: this.astylar.getInteractionSnapshot(scene)?.keyboardListeners ?? 0,
+              handlers: this.astylar.getInteractionSnapshot(scene)?.handlers ?? 0,
+              ...this.inputElementService.getSelectPopupLifecycleSnapshot(),
+            },
           }
         : undefined,
     };
