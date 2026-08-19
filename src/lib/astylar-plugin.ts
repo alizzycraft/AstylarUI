@@ -100,7 +100,7 @@ export interface AstylarPluginRendererDefinition {
   readonly id: string;
   /** Canonical element identities claimed by this renderer. */
   readonly elements: readonly string[];
-  /** Injectable type, which must be present in the plugin's providers. */
+  /** Injectable type; Astylar automatically provides it in each surface scope. */
   readonly renderer: Type<AstylarPluginElementRenderer>;
 }
 
@@ -110,7 +110,7 @@ export interface AstylarPluginLifecycle {
 
 export interface AstylarPluginLifecycleDefinition {
   readonly id: string;
-  /** Injectable surface-scoped lifecycle type. */
+  /** Injectable type automatically provided in each surface scope. */
   readonly lifecycle: Type<AstylarPluginLifecycle>;
 }
 

@@ -76,11 +76,12 @@ the fixed Phase 12 parity baseline.
 - Renderer plugins may use documented Babylon.js types and facilities. The
   plugin API is Angular-native, not Babylon-agnostic.
 - A renderer receives only the scene, resolved element/style data, layout and
-  identity information, diagnostics, invalidation facilities, and documented
-  resource helpers needed by the public contract.
+  identity information, pixel-to-world scale, and diagnostics needed by the
+  public contract.
 - Plugin-created meshes, materials, and textures are tracked by the same scene
-  replacement/disposal boundary as core output. Plugin observers and other
-  services are destroyed with the surface injector, including failed mounts.
+  replacement/disposal boundary as core output when created during the render
+  transaction. Plugin observers and other services are destroyed with the
+  surface injector, including failed mounts.
 
 ### Trust model
 

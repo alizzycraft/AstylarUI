@@ -43,6 +43,41 @@ describe('AstylarDiagnostics', () => {
     }));
   });
 
+  it('identifies a missing namespaced element contribution without mutating data', () => {
+    const element = {
+      id: 'missing-widget',
+      type: 'missing.widgets:card',
+      data: { retained: true },
+    };
+
+    expect(() => diagnostics.validate({ styles: [], root: { children: [element] } }))
+      .toThrowError(AstylarDiagnosticError, /invalid-element-type/);
+    expect(reported[0]).toEqual(jasmine.objectContaining({
+      code: 'invalid-element-type',
+      pluginId: 'missing.widgets',
+      contributionId: 'missing.widgets:card',
+      elementId: 'missing-widget',
+    }));
+    expect(element.data).toEqual({ retained: true });
+  });
+
+  it('warns for a missing namespaced property contribution and preserves its value', () => {
+    const extensions = { 'missing.widgets:depth': { authored: 0.25 } };
+
+    diagnostics.validate({
+      styles: [{ selector: '#card', extensions }],
+      root: { children: [{ id: 'card', type: 'div' }] },
+    });
+
+    expect(reported).toEqual([jasmine.objectContaining({
+      code: 'unsupported-style-property',
+      pluginId: 'missing.widgets',
+      contributionId: 'missing.widgets:depth',
+      property: 'missing.widgets:depth',
+    })]);
+    expect(extensions['missing.widgets:depth']).toEqual({ authored: 0.25 });
+  });
+
   it('warns deterministically for duplicate IDs and unsupported styles', () => {
     diagnostics.validate({
       styles: [{ selector: '#same', madeUpStyle: 'yes' }],

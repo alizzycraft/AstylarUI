@@ -5,7 +5,7 @@ AstylarUI is an Angular 20 library for rendering HTML-like structures in Babylon
 ## Key Features
 - **Angular 20 Core**: Leverages modern Angular signals and zoneless change detection.
 - **3D UI Rendering**: Render complex UI layouts described by JSON-like `SiteData` into BabylonJS.
-- **Highly Extensible**: Framework-agnostic rendering services wrapped in a clean Angular service.
+- **Angular-Native Extensions**: Surface-scoped Angular plugins can add validated elements, style properties, lifecycle services, and Babylon renderers.
 - **SSR Ready**: Built-in support for Server-Side Rendering via Express.
 
 ## Installation
@@ -82,6 +82,57 @@ updates, modal focus, explicit resize, disposal, remounting, and SSR/prerender.
 It imports only the package root and is verified from a packed tarball rather
 than repository source.
 
+### 3. Angular-native plugins
+
+Angular 20 is an intentional foundation of Astylar's plugin ecosystem. Register
+immutable plugin definitions through the application provider API; injectable
+plugin services, lifecycle hooks, and Babylon renderers are then created in each
+surface's child `EnvironmentInjector`:
+
+```typescript
+import {
+  ASTYLAR_PLUGIN_API_VERSION,
+  defineAstylarPlugin,
+  provideAstylar,
+} from 'astylarui';
+import { BadgeRenderer } from './badge.renderer';
+
+const badges = defineAstylarPlugin({
+  id: 'example.badges',
+  version: '1.0.0',
+  pluginApiVersion: ASTYLAR_PLUGIN_API_VERSION,
+  dependencies: ['astylar.core'],
+  contributes: ['elements', 'renderers'],
+  contributions: {
+    elements: [{
+      id: 'example.badges:badge',
+      alias: 'badge',
+      children: 'none',
+    }],
+    renderers: [{
+      id: 'example.badges:renderer',
+      elements: ['example.badges:badge'],
+      renderer: BadgeRenderer,
+    }],
+  },
+});
+
+export const appConfig = {
+  providers: [provideAstylar({ plugins: [badges] })],
+};
+```
+
+Mutable plugin services must be surface providers, not root singletons. They may
+use normal Angular DI, signals, injection tokens, and `DestroyRef`. Plugin-owned
+element values use `DOMElement.data`; plugin style declarations use the
+unknown-safe `StyleRule.extensions` bag and participate in validation, defaults,
+inheritance, and the normal style cascade.
+
+The full v1 contract, renderer context, namespacing/conflict rules, resource
+ownership, SSR requirements, diagnostics, and trust boundary are documented in
+[docs/plugins.md](docs/plugins.md). The packed external proof is
+[`examples/angular-consumer/src/app/consumer-badge.plugin.ts`](examples/angular-consumer/src/app/consumer-badge.plugin.ts).
+
 Validation and lifecycle failures use stable diagnostic codes and severities.
 Fatal input or lifecycle misuse throws `AstylarDiagnosticError`; all diagnostics
 are also retained in `surface.diagnostics.messages`. A host can observe them or
@@ -101,7 +152,7 @@ errors only in production. Validation covers malformed roots, invalid element
 types, duplicate IDs, and unknown style properties; runtime diagnostics cover
 asset failures and invalid surface/canvas lifecycle operations.
 
-### 3. Typed application events
+### 4. Typed application events
 
 Keep executable handlers outside serializable `SiteData` and address elements by their authored IDs:
 
