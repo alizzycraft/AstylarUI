@@ -58,6 +58,17 @@ describe('StyleService cascade', () => {
     expect(service.matchesSelector(element, '*')).toBeTrue();
   });
 
+  it('uses the browser dialog display default for its open state', () => {
+    const closed: DOMElement = { type: 'dialog', open: false };
+    const open: DOMElement = { type: 'dialog', open: true };
+
+    expect(service.findStyleForElement(closed, [])?.display).toBe('none');
+    expect(service.findStyleForElement(open, [])?.display).toBe('block');
+    expect(service.findStyleForElement(open, [
+      { selector: 'dialog', display: 'flex' },
+    ])?.display).toBe('flex');
+  });
+
   it('keeps inline declarations above stylesheet and context declarations', () => {
     const element: DOMElement = {
       type: 'div',

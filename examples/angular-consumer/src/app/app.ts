@@ -40,6 +40,9 @@ export class App {
     events: {
       handlers: {
         'add-item': { click: () => this.zone.run(() => this.refreshData()) },
+        'item-one-action': {
+          click: () => this.zone.run(() => this.status.set('Primary nested table action activated.')),
+        },
         'dialog-close': { click: () => this.zone.run(() => this.toggleDialog()) },
         'search': {
           keydown: (event) => this.zone.run(() => {
@@ -198,7 +201,7 @@ export class App {
                     type: 'dialog', id: 'details-dialog', modal: true, open: dialogOpen, children: [
                       { type: 'h2', id: 'dialog-title', textContent: 'Item details' },
                       { type: 'p', id: 'dialog-copy', textContent: 'This modal is rendered and reconciled by the installed AstylarUI package.' },
-                      { type: 'button', id: 'dialog-close', value: 'Close' },
+                      { type: 'button', id: 'dialog-close', value: 'Close', autofocus: true },
                     ],
                   },
                 ],
@@ -226,7 +229,7 @@ export class App {
         { selector: '#summary-grid article', padding: '18px', background: '#ffffff', borderRadius: '10px' },
         { selector: '#summary-grid p', margin: '0 0 8px 0', color: '#526079' },
         { selector: '#summary-grid strong', fontSize: '26px' },
-        { selector: '#table-scroll', overflow: 'auto', maxHeight: '250px', background: '#ffffff', borderRadius: '10px' },
+        { selector: '#table-scroll', overflow: 'auto', maxHeight: '80px', background: '#ffffff', borderRadius: '10px' },
         { selector: '#inventory-table', width: '100%', background: '#ffffff' },
         { selector: '#inventory-table th', padding: '12px', textAlign: 'left', background: '#e3eaf4', fontWeight: '700' },
         { selector: '#inventory-table td', padding: '12px', borderWidth: '0 0 1px 0', borderStyle: 'solid', borderColor: '#d9e1ec' },

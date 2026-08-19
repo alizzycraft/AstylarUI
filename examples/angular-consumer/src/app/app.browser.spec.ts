@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
-import type { AstylarSurface } from 'astylarui';
+import { By } from '@angular/platform-browser';
+import { AstylarSurfaceComponent, type AstylarSurface } from 'astylarui';
 import { App } from './app';
 
 describe('external AstylarUI browser acceptance', () => {
@@ -16,13 +17,22 @@ describe('external AstylarUI browser acceptance', () => {
     fixture.detectChanges();
 
     try {
-      await waitFor(() => {
-        fixture.detectChanges();
-        return semanticRoots(fixture.nativeElement).length === 2 &&
-          [...semanticRoots(fixture.nativeElement)]
-            .every((root) => !!root.querySelector('[data-astylar-id="workspace"]')) &&
-          text(fixture.nativeElement, 'consumer-status').includes('renderer settled and ready');
-      }, 'initial surfaces');
+      try {
+        await waitFor(() => {
+          fixture.detectChanges();
+          return semanticRoots(fixture.nativeElement).length === 2 &&
+            [...semanticRoots(fixture.nativeElement)]
+              .every((root) => !!root.querySelector('[data-astylar-id="workspace"]')) &&
+            text(fixture.nativeElement, 'consumer-status').includes('renderer settled and ready');
+        }, 'initial surfaces', 20_000);
+      } catch (error) {
+        const snapshots = fixture.debugElement
+          .queryAll(By.directive(AstylarSurfaceComponent))
+          .map((element) => element.componentInstance.surface()?.diagnostics.session);
+        throw new Error(`${String(error)} Sessions: ${JSON.stringify(snapshots)}; ` +
+          `semantic roots: ${semanticRoots(fixture.nativeElement).length}; ` +
+          `status: ${JSON.stringify(text(fixture.nativeElement, 'consumer-status'))}.`);
+      }
       expect(fixture.nativeElement.querySelectorAll('astylar-surface canvas').length).toBe(2);
       expect(fixture.nativeElement.querySelector('[data-testid="consumer-status"]')?.textContent)
         .toContain('renderer settled and ready');
@@ -31,6 +41,46 @@ describe('external AstylarUI browser acceptance', () => {
       const secondary = surface(fixture.nativeElement, 'secondary');
       expect(primary.querySelector('[data-astylar-id="workspace"]')).toBeTruthy();
       expect(secondary.querySelector('[data-astylar-id="workspace"]')).toBeTruthy();
+
+      const primaryHost = fixture.nativeElement.querySelector(
+        '[data-testid="primary-astylar-surface"]',
+      ) as HTMLElement;
+      primaryHost.style.width = '900px';
+      await handles.primarySurface!.resize();
+      const desktopSidebarWidth = meshWidth(handles.primarySurface!, 'sidebar');
+      const desktopSummaryDelta = meshYDelta(
+        handles.primarySurface!,
+        'summary-total',
+        'summary-low',
+      );
+
+      primaryHost.style.width = '650px';
+      await handles.primarySurface!.resize();
+      expect(meshWidth(handles.primarySurface!, 'sidebar')).toBeLessThan(desktopSidebarWidth);
+
+      primaryHost.style.width = '480px';
+      await handles.primarySurface!.resize();
+      expect(meshYDelta(handles.primarySurface!, 'summary-total', 'summary-low'))
+        .toBeGreaterThan(desktopSummaryDelta + 0.1);
+
+      primaryHost.style.width = '';
+      await handles.primarySurface!.resize();
+
+      const actionCellMesh = mesh(handles.primarySurface!, 'item-one-action-cell');
+      const nestedActionMesh = mesh(handles.primarySurface!, 'item-one-action');
+      const actionCell = actionCellMesh.getBoundingInfo().boundingBox;
+      const nestedAction = nestedActionMesh.getBoundingInfo().boundingBox;
+      expect(nestedActionMesh.isDescendantOf(actionCellMesh)).toBeTrue();
+      expect(nestedAction.maximumWorld.x).toBeGreaterThan(actionCell.minimumWorld.x);
+      expect(nestedAction.minimumWorld.x).toBeLessThan(actionCell.maximumWorld.x);
+      expect(nestedAction.maximumWorld.y).toBeGreaterThan(actionCell.minimumWorld.y);
+      expect(nestedAction.minimumWorld.y).toBeLessThan(actionCell.maximumWorld.y);
+
+      (primary.querySelector('[data-astylar-id="item-one-action"]') as HTMLButtonElement).click();
+      await waitFor(() => {
+        fixture.detectChanges();
+        return text(fixture.nativeElement, 'consumer-status') === 'Primary nested table action activated.';
+      }, 'nested table action');
 
       (primary.querySelector('[data-astylar-id="add-item"]') as HTMLButtonElement).click();
       fixture.detectChanges();
@@ -43,18 +93,6 @@ describe('external AstylarUI browser acceptance', () => {
       }, 'primary update');
       expect(text(fixture.nativeElement, 'secondary-revision')).toContain('1');
 
-      const stablePrimaryResources = handles.primarySurface?.diagnostics.resources;
-      clickShellButton(fixture.nativeElement, 'Update data');
-      fixture.detectChanges();
-      await waitFor(() => {
-        fixture.detectChanges();
-        return text(fixture.nativeElement, 'primary-revision').includes('3') &&
-          (surface(fixture.nativeElement, 'primary')
-            .querySelector('[data-astylar-id="kicker"]')?.textContent ?? '')
-            .includes('revision 3');
-      }, 'repeated primary update');
-      expect(handles.primarySurface?.diagnostics.resources).toEqual(stablePrimaryResources);
-
       const search = primary.querySelector('[data-astylar-id="search"]') as HTMLInputElement;
       search.focus();
       search.dispatchEvent(new KeyboardEvent('keydown', { key: 'A', bubbles: true }));
@@ -66,6 +104,42 @@ describe('external AstylarUI browser acceptance', () => {
         },
         'keyboard event',
       );
+      expect(search.value).toBe('A');
+
+      clickShellButton(fixture.nativeElement, 'Update data');
+      fixture.detectChanges();
+      await waitFor(() => {
+        fixture.detectChanges();
+        return text(fixture.nativeElement, 'primary-revision').includes('3') &&
+          (surface(fixture.nativeElement, 'primary')
+            .querySelector('[data-astylar-id="kicker"]')?.textContent ?? '')
+            .includes('revision 3');
+      }, 'repeated primary update');
+      const stablePrimaryResources = await waitForStableResources(handles.primarySurface!);
+      expect((surface(fixture.nativeElement, 'primary')
+        .querySelector('[data-astylar-id="search"]') as HTMLInputElement).value).toBe('A');
+
+      clickShellButton(fixture.nativeElement, 'Update data');
+      fixture.detectChanges();
+      await waitFor(() => {
+        fixture.detectChanges();
+        return text(fixture.nativeElement, 'primary-revision').includes('4') &&
+          (surface(fixture.nativeElement, 'primary')
+            .querySelector('[data-astylar-id="kicker"]')?.textContent ?? '')
+            .includes('revision 4');
+      }, 'second repeated primary update');
+      expect(await waitForStableResources(handles.primarySurface!)).toEqual(stablePrimaryResources);
+      expect((surface(fixture.nativeElement, 'primary')
+        .querySelector('[data-astylar-id="search"]') as HTMLInputElement).value).toBe('A');
+
+      const lastAction = surface(fixture.nativeElement, 'primary')
+        .querySelector('[data-astylar-id="item-two-action"]') as HTMLButtonElement;
+      lastAction.focus();
+      await waitFor(
+        () => (handles.primarySurface?.diagnostics.scrolling
+          ?.containers['table-scroll']?.scrollTop ?? 0) > 0,
+        'table scroll into view',
+      );
 
       clickShellButton(fixture.nativeElement, 'Open details');
       fixture.detectChanges();
@@ -73,7 +147,22 @@ describe('external AstylarUI browser acceptance', () => {
         const dialog = surface(fixture.nativeElement, 'primary')
           .querySelector('[data-astylar-id="details-dialog"]');
         return dialog instanceof HTMLDialogElement && dialog.open;
-      }, 'modal open');
+      }, 'modal presentation');
+      try {
+        await waitFor(() => {
+          const close = surface(fixture.nativeElement, 'primary')
+            .querySelector('[data-astylar-id="dialog-close"]');
+          return document.activeElement === close &&
+            handles.primarySurface?.diagnostics.interaction?.modalDialogId === 'details-dialog' &&
+            handles.primarySurface?.diagnostics.interaction?.focusedElementId === 'dialog-close';
+        }, 'modal focus ownership');
+      } catch (error) {
+        const active = document.activeElement instanceof HTMLElement
+          ? document.activeElement.dataset['astylarId'] ?? document.activeElement.tagName
+          : undefined;
+        throw new Error(`${String(error)} Active: ${active}; interaction: ` +
+          `${JSON.stringify(handles.primarySurface?.diagnostics.interaction)}.`);
+      }
 
       clickShellButton(fixture.nativeElement, 'Update secondary');
       fixture.detectChanges();
@@ -126,7 +215,7 @@ describe('external AstylarUI browser acceptance', () => {
     expect(finalSecondary?.disposed).toBeTrue();
     expect(finalPrimary?.diagnostics.resources).toEqual({ meshes: 0, materials: 0, textures: 0 });
     expect(finalSecondary?.diagnostics.resources).toEqual({ meshes: 0, materials: 0, textures: 0 });
-  }, 20_000);
+  }, 40_000);
 });
 
 function semanticRoots(host: HTMLElement): NodeListOf<HTMLElement> {
@@ -149,6 +238,43 @@ function clickShellButton(host: HTMLElement, label: string): void {
     .find((candidate) => candidate.textContent?.trim() === label);
   if (!button) throw new Error(`Could not find shell button ${JSON.stringify(label)}.`);
   button.click();
+}
+
+function mesh(surfaceHandle: AstylarSurface, elementId: string) {
+  const result = surfaceHandle.scene.meshes.find(
+    (candidate) => candidate.metadata?.elementId === elementId && !candidate.isDisposed(),
+  );
+  if (!result) throw new Error(`Could not find Babylon mesh for ${JSON.stringify(elementId)}.`);
+  result.computeWorldMatrix(true);
+  return result;
+}
+
+function meshBounds(surfaceHandle: AstylarSurface, elementId: string) {
+  return mesh(surfaceHandle, elementId).getBoundingInfo().boundingBox;
+}
+
+function meshCenter(surfaceHandle: AstylarSurface, elementId: string) {
+  return meshBounds(surfaceHandle, elementId).centerWorld;
+}
+
+function meshWidth(surfaceHandle: AstylarSurface, elementId: string): number {
+  return meshBounds(surfaceHandle, elementId).extendSizeWorld.x * 2;
+}
+
+function meshYDelta(surfaceHandle: AstylarSurface, firstId: string, secondId: string): number {
+  return Math.abs(meshCenter(surfaceHandle, firstId).y - meshCenter(surfaceHandle, secondId).y);
+}
+
+async function waitForStableResources(surfaceHandle: AstylarSurface) {
+  let previous = JSON.stringify(surfaceHandle.diagnostics.resources);
+  let stableSamples = 0;
+  while (stableSamples < 3) {
+    await new Promise<void>((resolve) => setTimeout(resolve, 50));
+    const current = JSON.stringify(surfaceHandle.diagnostics.resources);
+    stableSamples = current === previous ? stableSamples + 1 : 0;
+    previous = current;
+  }
+  return surfaceHandle.diagnostics.resources;
 }
 
 async function waitFor(

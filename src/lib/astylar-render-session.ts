@@ -56,8 +56,38 @@ export class AstylarRenderSession {
     options: AstylarRenderSessionOptions = {},
   ) {
     this.currentSiteData = initialSiteData;
-    this.requestFrame = options.requestFrame ?? ((callback) => requestAnimationFrame(callback));
-    this.cancelFrame = options.cancelFrame ?? ((handle) => cancelAnimationFrame(handle));
+    if (options.requestFrame) {
+      this.requestFrame = options.requestFrame;
+      this.cancelFrame = options.cancelFrame ?? ((handle) => cancelAnimationFrame(handle));
+    } else {
+      // Background browser tabs can suspend animation frames indefinitely. A
+      // consumer lifecycle promise must still settle when its host is hidden,
+      // so retain frame coalescing while providing a cancellable timer fallback.
+      let nextHandle = 0;
+      const scheduled = new Map<number, { animationFrame: number; timeout: number }>();
+      this.requestFrame = (callback) => {
+        const handle = ++nextHandle;
+        const run = () => {
+          const pending = scheduled.get(handle);
+          if (!pending) return;
+          scheduled.delete(handle);
+          cancelAnimationFrame(pending.animationFrame);
+          clearTimeout(pending.timeout);
+          callback();
+        };
+        const animationFrame = requestAnimationFrame(run);
+        const timeout = window.setTimeout(run, 100);
+        scheduled.set(handle, { animationFrame, timeout });
+        return handle;
+      };
+      this.cancelFrame = (handle) => {
+        const pending = scheduled.get(handle);
+        if (!pending) return;
+        scheduled.delete(handle);
+        cancelAnimationFrame(pending.animationFrame);
+        clearTimeout(pending.timeout);
+      };
+    }
   }
 
   get siteData(): SiteData {

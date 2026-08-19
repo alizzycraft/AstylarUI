@@ -324,7 +324,11 @@ export class StyleService {
 
         let mergedStyle: StyleRule = {
             selector: element.id ? `#${element.id}` : element.type,
-            ...typeDefaults
+            ...typeDefaults,
+            // The browser UA stylesheet hides a dialog only while its `open`
+            // attribute is absent. Model that state here so authored display
+            // declarations can still override the default in the cascade.
+            ...(element.type === 'dialog' && element.open ? { display: 'block' as const } : {}),
         };
 
         const winners = new Map<keyof StyleRule, { specificity: number; sourceOrder: number; value: unknown }>();

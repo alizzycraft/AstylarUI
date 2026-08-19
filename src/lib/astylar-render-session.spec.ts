@@ -1,4 +1,4 @@
-import { Scene } from '@babylonjs/core';
+import { NullEngine, Scene } from '@babylonjs/core';
 import { SiteData } from '../app/types/site-data';
 import { AstylarRenderSession } from './astylar-render-session';
 
@@ -33,6 +33,32 @@ const site = (textContent: string): SiteData => ({
 });
 
 describe('AstylarRenderSession', () => {
+  it('settles through a timer when the browser suspends animation frames', async () => {
+    jasmine.clock().install();
+    const originalRequestAnimationFrame = window.requestAnimationFrame;
+    const originalCancelAnimationFrame = window.cancelAnimationFrame;
+    window.requestAnimationFrame = () => 41;
+    window.cancelAnimationFrame = jasmine.createSpy('cancelAnimationFrame');
+    const engine = new NullEngine();
+    const scene = new Scene(engine);
+    const reflow = jasmine.createSpy('reflow');
+    const session = new AstylarRenderSession(scene, site('initial'), reflow);
+
+    try {
+      const settlement = session.invalidate('initial');
+      jasmine.clock().tick(100);
+      await expectAsync(settlement).toBeResolved();
+      expect(reflow).toHaveBeenCalledOnceWith(site('initial'), ['initial']);
+      expect(window.cancelAnimationFrame).toHaveBeenCalledWith(41);
+    } finally {
+      session.dispose();
+      engine.dispose();
+      window.requestAnimationFrame = originalRequestAnimationFrame;
+      window.cancelAnimationFrame = originalCancelAnimationFrame;
+      jasmine.clock().uninstall();
+    }
+  });
+
   const scene = {} as Scene;
 
   it('coalesces invalidations and renders the latest site data once per frame', async () => {
