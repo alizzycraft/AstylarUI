@@ -269,3 +269,37 @@ Status: complete.
   factories can produce different injected values for simultaneous surfaces.
 - `npm run consumer:check` passed a fresh packed install with 395 package files,
   browser and SSR builds, one prerendered route, and both real-Chrome tests.
+
+### Increment 6: release documentation and verification
+
+Status: complete.
+
+- Published `docs/plugins.md` as the public plugin API v1 guide and updated the
+  README, external-consumer guide, and authoritative project status to describe
+  the implemented Angular-native contract rather than future intentions.
+- `npm test -- --watch=false` passes all 254 tests.
+- `npm run build:lib` passes.
+- `npm run build` passes and prerenders two routes. Its only warnings remain the
+  accepted initial-bundle and `src/app/app.scss` budgets.
+- `npm run consumer:check` passes a fresh packed install with 395 files, browser
+  and SSR builds, one prerendered route, and both real-Chrome tests. The proof
+  consumer independently resolved Babylon.js 8.56.2, exercising the declared
+  peer boundary rather than the repository's 8.15.1 installation.
+- A complete pre-freeze `npm run parity:check` passes 155 fixtures and 522
+  renders across three viewport profiles with exact required text, clean
+  runtime checks, and all thresholds met.
+- Final acceptance requires three consecutive full parity runs after this
+  documentation commit, with no source or commit changes between them. Those
+  unchanged-commit results are reported with the final handoff.
+
+Final parity metrics:
+
+| Metric | Result |
+| --- | ---: |
+| Median SSIM | `0.9900079622614616` |
+| Minimum SSIM | `0.9501815836061078` |
+| Edges within 2 px | `0.9998168050806058` |
+| Maximum edge error | `3.99209364194121 px` |
+| Exact required text | Yes |
+| Runtime clean | Yes |
+| Completion thresholds | Met |

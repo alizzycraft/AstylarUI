@@ -1,22 +1,56 @@
 # AstylarUI Project Status
 
-Last reconciled: 2026-08-19
+Last reconciled: 2026-08-20
 
 This is the authoritative handoff for the repository. Older planning documents
 remain design history; their unchecked items are not automatically active work.
 
 ## Current milestone
 
-Phase 12, Consumer-Ready Application Integration, is complete. Its contract,
-implementation increments, and acceptance evidence are maintained in
-`docs/parity/scorecard-v12.md`.
+Phase 13, Angular-Native Extension Kernel, is complete. Its contract,
+implementation increments, architectural boundaries, and acceptance evidence
+are maintained in `docs/parity/scorecard-v13.md`.
 
-The renderer is now usable from an independently installed Angular application
-through a small public API. The repository includes a committed consumer,
-tarball install verification, explicit lifecycle and diagnostics, SSR-safe
-Angular integration, simultaneous-surface isolation, and real-Chrome acceptance.
+The renderer is now an extensible Angular-native platform. Applications install
+plugins through the public provider API; each mounted surface resolves an
+immutable, deterministic capability graph in its own `EnvironmentInjector`.
+Plugins can contribute namespaced elements, style properties, injectable
+renderers, and lifecycle services without importing private Astylar code. The
+committed external consumer proves the complete packed-package path with an
+Angular DI-based Babylon.js plugin.
 
-## Phase 12 completion baseline
+## Phase 13 completion baseline
+
+- The package root exports plugin API v1, `provideAstylar(...)`, and
+  `provideAstylarPlugin(...)`. Plugin metadata and document extension data stay
+  strongly typed and serializable while runtime construction uses Angular DI.
+- Every surface owns isolated plugin services, a sealed registry, lifecycle
+  activation, diagnostics, Babylon resources, and injector/`DestroyRef`
+  cleanup. Deterministic dependency resolution is independent of Angular
+  multi-provider order.
+- The registry rejects incompatible APIs, graph failures, duplicate or
+  ambiguous identities, invalid contribution values and renderer claims,
+  overrides, post-seal mutation, initialization failures, and renderer
+  failures with typed diagnostics.
+- Core elements use the same registry and renderer resolver through the
+  `astylar.core` compatibility contribution, preserving the mature Phase 12
+  rendering implementation.
+- The external Angular consumer installs the packed package and contributes
+  `consumer.proof:badge` plus `consumer.proof:depth`. Its two real-Chrome tests
+  prove DI configuration, distinct simultaneous-surface service instances,
+  updates, stable resource counts, disposal, and SSR-safe registration.
+- 254 repository tests pass; library and production application builds pass.
+  Production prerender still covers two routes with only the accepted bundle
+  and application-style budget warnings.
+- The packed consumer contains 395 files, builds its browser and server targets,
+  prerenders one route, and passes both browser tests against its independently
+  resolved Angular and Babylon.js dependencies.
+- The full parity corpus remains 155 fixtures and 522 renders. Median SSIM is
+  `0.99000796`, minimum SSIM is `0.95018158`, edge-tolerance ratio is
+  `0.99981681`, maximum edge error is `3.99209364 px`, visible text matches
+  exactly, runtime checks are clean, and all completion thresholds pass.
+
+## Phase 12 completion baseline (historical)
 
 - The clean external consumer installs the packed root entry point and declared
   peers, then produces browser and SSR builds and prerenders its route.
@@ -53,7 +87,24 @@ is:
 - Production prerender covers two routes. The only expected build warnings are
   the initial bundle and `src/app/app.scss` budgets.
 
-## Resolved Phase 12 starting constraints
+## Resolved Phase 13 starting constraints
+
+- Angular is an explicit platform foundation for Astylar and its plugin
+  ecosystem; there is no framework-neutral runtime, custom DI container, or
+  speculative portability layer.
+- Application-level plugin definitions are immutable provider recipes. Mutable
+  runtime state is created in a surface-owned child injector and cannot gain
+  precedence through provider order.
+- Closed element dispatch now passes through a capability registry. The public
+  document model preserves namespaced element data and property declarations
+  without an `any` escape hatch.
+- Plugin renderers receive a curated public context, use the existing scene
+  transaction for Babylon ownership, and cannot replace core or plugin
+  renderers implicitly.
+- Phase 13 plugins are documented as trusted in-process Angular code. DI is an
+  ownership boundary, not a permissions or security sandbox.
+
+## Resolved Phase 12 starting constraints (historical)
 
 - `npm run consumer:check` now provides the external tarball workflow and always
   removes its temporary installation.
@@ -81,6 +132,8 @@ is:
 
 | Document | Status | Use |
 | --- | --- | --- |
+| `plugins.md` | Current | Public Angular-native plugin API and authoring guide |
+| `parity/scorecard-v13.md` | Complete | Extension kernel contract and Phase 13 freeze evidence |
 | `parity/scorecard-v12.md` | Complete | Consumer integration and Phase 12 freeze evidence |
 | `parity/scorecard-v11.md` | Complete | Reconciliation and Phase 11 freeze evidence |
 | `parity/scorecard-v2.md` through `scorecard-v10.md` | Complete | Earlier parity milestone evidence |
@@ -90,7 +143,11 @@ is:
 
 ## Scope boundary
 
-Phase 12 did not add an arbitrary HTML/CSS parser, broad CSS features, advanced
-animations, XR, physics, post-processing, dirty-subtree optimization, a demo
-redesign, or npm publication. Rendering changes must remain general, measured,
-and compatible with the fixed Phase 11 parity gates.
+Phase 13 deliberately did not add framework-neutral adapters, a custom DI
+system, editor extensions, asset/game/XR systems, dynamic discovery,
+marketplaces, hot loading, permissions or sandboxing, full schema migrations,
+Babylon abstraction, a Babylon.js major upgrade, or authoring-framework
+adapters. It migrated only the core dispatch needed to dogfood the registry;
+the remaining mature built-in implementation stays behind a compatibility
+contribution. Future rendering changes must remain general, measured, and
+compatible with the fixed parity gates.
