@@ -115,4 +115,32 @@ Status: complete.
 
 ## Increment 2: public lifecycle and Angular surface integration
 
+Status: complete.
+
+- Added `Astylar.mount()` and the public `AstylarSurface` ownership handle with
+  scene-bound update, explicit resize, settlement, composite diagnostics,
+  disposed-state reporting, and idempotent disposal. The legacy `render()` API
+  now delegates to mount and remains source-compatible.
+- Added the standalone `AstylarSurfaceComponent`. It creates the renderer only
+  after its canvas exists and only in a browser, performs renderer work outside
+  Angular's zone, reconciles changed `siteData` inputs, exposes mounted/failure
+  outputs, and disposes its surface with the Angular component. Async completion
+  callbacks are suppressed after destruction.
+- Replaced the public export of the router/demo-specific `SiteComponent` with the
+  consumer-facing surface component; the repository demo now imports its legacy
+  component locally.
+- Migrated the external example to the new component and handle contract,
+  including dynamic input updates, typed event/navigation options, explicit
+  resize, mount readiness, and surfaced errors.
+- Added five focused lifecycle/component tests covering scene binding,
+  responsive resize, deterministic disposed-operation failures, idempotent
+  disposal, SSR suppression, post-canvas mounting, input updates, and Angular
+  destruction.
+- `npm test -- --watch=false`: 226 tests passed.
+- `npm run build:lib`: passed.
+- `npm run consumer:check`: 371 packed files; consumer browser/server build,
+  prerendered route, and consumer test passed.
+
+## Increment 3: simultaneous surface isolation
+
 Status: pending.

@@ -19,80 +19,61 @@ npm install astylarui
 
 ## Usage
 
-The primary way to use the library is via the `Astylar` service.
+For Angular applications, the recommended entry point is the standalone
+`AstylarSurfaceComponent`. It creates Babylon only in the browser, waits until its
+canvas exists, updates when its `siteData` input changes, observes element size,
+and disposes its owned renderer resources with the component.
 
-### 1. Simple Rendering
-
-In your Angular component:
+### 1. Angular surface component
 
 ```typescript
-import { Component, ElementRef, viewChild, inject, afterNextRender, OnDestroy } from '@angular/core';
-import { Scene } from '@babylonjs/core';
-import { Astylar } from 'astylarui';
+import { Component, signal } from '@angular/core';
+import { AstylarSurfaceComponent, type SiteData } from 'astylarui';
 
 @Component({
-  selector: 'app-3d-ui',
+  selector: 'app-workspace',
   standalone: true,
-  template: `<canvas #myCanvas></canvas>`,
-  styles: [`canvas { width: 100%; height: 100%; }`]
+  imports: [AstylarSurfaceComponent],
+  template: `<astylar-surface [siteData]="siteData()" />`,
+  styles: [`astylar-surface { display: block; width: 100%; height: 600px; }`],
 })
-export class My3DUIComponent implements OnDestroy {
-  private astylar = inject(Astylar);
-  private canvas = viewChild.required<ElementRef<HTMLCanvasElement>>('myCanvas');
-  private scene: Scene | null = null;
-
-  constructor() {
-    afterNextRender(() => {
-      this.render();
-    });
-  }
-
-  render() {
-    const siteData = {
-      root: {
-        type: 'div' as const,
-        id: 'main-root',
-        styles: { backgroundColor: '#1e3c72', width: '100vw', height: '100vh' },
-        children: [
-          { 
-            type: 'h1' as const, 
-            id: 'main-title',
-            textContent: 'Hello 3D World!', 
-            styles: { color: 'white', marginTop: 20 } 
-          }
-        ]
-      },
-      styles: []
-    };
-
-    this.scene = this.astylar.render(this.canvas().nativeElement, siteData as any);
-  }
-
-  ngOnDestroy() {
-    // Dispose the engine to clean up all resources
-    if (this.scene) {
-      this.scene.getEngine().dispose();
-      this.scene = null;
-    }
-  }
+export class WorkspaceComponent {
+  readonly siteData = signal<SiteData>({
+    root: {
+      children: [
+        { type: 'h1', id: 'title', textContent: 'Hello 3D world' },
+        { type: 'button', id: 'save', value: 'Save' },
+      ],
+    },
+    styles: [
+      { selector: '#title', color: '#ffffff', fontSize: '32px' },
+      { selector: '#save', padding: '10px 16px', background: '#2563eb' },
+    ],
+  });
 }
 ```
 
-### 2. Using the Component (Angular Only)
+The `mounted` output provides the owned `AstylarSurface` handle when explicit
+control is useful. It exposes `update()`, `resize()`, `whenSettled()`,
+`diagnostics`, and idempotent `dispose()`.
 
-You can also use the `<astylar-render>` component directly in your templates:
+### 2. Direct lifecycle API
 
-```html
-<!-- Via siteId -->
-<astylar-render siteId="dashboard"></astylar-render>
+Hosts that own their own canvas can inject `Astylar` and mount explicitly after
+the canvas exists:
 
-<!-- Via direct siteData -->
-<astylar-render [siteData]="myCustomData"></astylar-render>
-
-<!-- Using an external canvas -->
-<canvas #externalCanvas></canvas>
-<astylar-render [canvas]="externalCanvas" [siteData]="myCustomData"></astylar-render>
+```typescript
+const surface = astylar.mount(canvas, siteData, options);
+await surface.whenSettled();
+await surface.update(nextSiteData);
+await surface.resize();
+console.log(surface.diagnostics);
+surface.dispose();
 ```
+
+`render()` and the scene-parameter forms of `update()` and `whenSettled()` remain
+available for compatibility, but new integrations should keep the surface handle
+so lifecycle ownership is unambiguous.
 
 ### 3. Typed application events
 

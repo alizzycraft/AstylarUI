@@ -10,6 +10,7 @@
 import { Scene } from "@babylonjs/core";
 export { Astylar } from "./astylar";
 export type { AstylarRenderOptions } from "./astylar";
+export type { AstylarSurface, AstylarSurfaceDiagnostics } from './astylar-surface';
 export { AstylarRenderSession } from "./astylar-render-session";
 export { AstylarSceneResources } from './astylar-scene-resources';
 export type { AstylarSceneResourceSnapshot } from './astylar-scene-resources';
@@ -69,6 +70,16 @@ import type { AstylarRenderOptions } from "./astylar";
 import type { AstylarSessionSnapshot } from "./astylar-render-session";
 
 export const astylar = {
+  /** Creates an explicitly owned rendering surface. */
+  get mount(): (
+    canvas: HTMLCanvasElement,
+    siteData: SiteData,
+    options?: AstylarRenderOptions,
+  ) => import('./astylar-surface').AstylarSurface {
+    const service = inject(Astylar);
+    return service.mount.bind(service);
+  },
+
   /**
    * Renders a 3D UI scene using the Astylar library.
    * Note: This must be captured during component construction or field initialization.
@@ -94,8 +105,8 @@ export const astylar = {
   },
 };
 
-// Component exports
-export { SiteComponent } from "../app/components/site.component";
+// Angular integration
+export { AstylarSurfaceComponent } from './astylar-surface.component';
 
 // Types for consumers
 export type { SiteData } from "../app/types/site-data";

@@ -1,75 +1,69 @@
 import {
-  afterNextRender,
   Component,
-  DestroyRef,
-  ElementRef,
+  computed,
   inject,
   NgZone,
-  PLATFORM_ID,
   signal,
-  viewChild,
 } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
-import { Astylar, type SiteData } from 'astylarui';
+import {
+  AstylarSurfaceComponent,
+  type AstylarRenderOptions,
+  type AstylarSurface,
+  type SiteData,
+} from 'astylarui';
 
 @Component({
   selector: 'app-root',
+  imports: [AstylarSurfaceComponent],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })
 export class App {
-  private readonly astylar = inject(Astylar);
-  private readonly destroyRef = inject(DestroyRef);
   private readonly zone = inject(NgZone);
-  private readonly platformId = inject(PLATFORM_ID);
-  private readonly canvas = viewChild.required<ElementRef<HTMLCanvasElement>>('surfaceCanvas');
-  private scene?: ReturnType<Astylar['render']>;
+  private activeSurface?: AstylarSurface;
 
   protected readonly revision = signal(1);
   protected readonly dialogOpen = signal(false);
   protected readonly status = signal('Waiting for the browser renderer.');
+  protected readonly siteData = computed(() => this.createSiteData());
+  protected readonly renderOptions: AstylarRenderOptions = {
+    events: {
+      handlers: {
+        'add-item': { click: () => this.zone.run(() => this.refreshData()) },
+        'dialog-close': { click: () => this.zone.run(() => this.toggleDialog()) },
+      },
+    },
+    navigation: {
+      onNavigate: (outcome) => this.zone.run(() => {
+        this.status.set(`Navigation accepted: ${outcome.href}`);
+      }),
+    },
+  };
 
-  constructor() {
-    afterNextRender(() => {
-      if (!isPlatformBrowser(this.platformId)) return;
-      this.zone.runOutsideAngular(() => {
-        this.scene = this.astylar.render(
-          this.canvas().nativeElement,
-          this.createSiteData(),
-          {
-            navigation: {
-              onNavigate: (outcome) => this.zone.run(() => {
-                this.status.set(`Navigation accepted: ${outcome.href}`);
-              }),
-            },
-          },
-        );
-        void this.astylar.whenSettled(this.scene).then(() => {
-          this.zone.run(() => this.status.set('Renderer settled and ready.'));
-        });
-      });
-    });
+  protected onMounted(surface: AstylarSurface): void {
+    this.activeSurface = surface;
+    this.status.set('Renderer settled and ready.');
+  }
 
-    this.destroyRef.onDestroy(() => this.scene?.dispose());
+  protected onFailed(error: unknown): void {
+    this.status.set(`Renderer error: ${error instanceof Error ? error.message : String(error)}`);
   }
 
   protected refreshData(): void {
     this.revision.update((value) => value + 1);
-    this.updateSurface(`Applied revision ${this.revision()}.`);
+    this.status.set(`Applying revision ${this.revision()}.`);
   }
 
   protected toggleDialog(): void {
     this.dialogOpen.update((open) => !open);
-    this.updateSurface(this.dialogOpen() ? 'Details dialog opened.' : 'Details dialog closed.');
+    this.status.set(this.dialogOpen() ? 'Opening details dialog.' : 'Closing details dialog.');
   }
 
-  private updateSurface(message: string): void {
-    if (!this.scene) return;
-    this.zone.runOutsideAngular(() => {
-      void this.astylar.update(this.createSiteData(), this.scene).then(() => {
-        this.zone.run(() => this.status.set(message));
-      });
-    });
+  protected resizeSurface(): void {
+    const resize = this.activeSurface?.resize();
+    if (resize) {
+      void resize.then(() => this.zone.run(() => this.status.set('Explicit resize completed.')));
+    }
   }
 
   private createSiteData(): SiteData {

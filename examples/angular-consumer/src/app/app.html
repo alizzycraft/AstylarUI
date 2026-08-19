@@ -10,6 +10,7 @@
       <button type="button" (click)="toggleDialog()">
         {{ dialogOpen() ? 'Close details' : 'Open details' }}
       </button>
+      <button type="button" (click)="resizeSurface()">Resize surface</button>
     </div>
   </header>
 
@@ -21,8 +22,12 @@
       </div>
       <output aria-live="polite">Revision {{ revision() }}</output>
     </div>
-    <canvas #surfaceCanvas data-testid="astylar-surface">
-      AstylarUI requires a browser with canvas support.
-    </canvas>
+    <astylar-surface
+      data-testid="astylar-surface"
+      [siteData]="siteData()"
+      [options]="renderOptions"
+      (mounted)="onMounted($event)"
+      (failed)="onFailed($event)"
+    />
   </section>
 </main>

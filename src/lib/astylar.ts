@@ -52,6 +52,10 @@ import {
 import { AstylarVisualReconciler } from './astylar-visual-reconciler';
 import type { AstylarVisualReconciliationSnapshot } from './astylar-visual-reconciler';
 import { AstylarVisualResourceReconciler } from './astylar-visual-resource-reconciler';
+import {
+  AstylarSurfaceHandle,
+  type AstylarSurface,
+} from './astylar-surface';
 
 /**
  * Configuration options for rendering
@@ -92,17 +96,48 @@ export class Astylar {
   private readonly scrolling = new WeakMap<Scene, AstylarScrollRuntime>();
   private readonly semantics = new WeakMap<Scene, AstylarSemanticBridge>();
   private readonly visualReconciliation = new WeakMap<Scene, AstylarVisualReconciler>();
+  private readonly surfaceHandles = new WeakMap<Scene, AstylarSurface>();
   private activeSession?: AstylarRenderSession;
 
   /**
-   * Renders a site data structure to a BabylonJS 3D scene on the provided canvas.
+   * Mounts an explicitly owned rendering surface on the provided canvas.
    *
    * @param canvas - The HTML canvas element to render to
    * @param siteData - The site data describing the UI structure and styles
    * @param options - Optional configuration options
-   * @returns The initialized BabylonJS Scene
+   * @returns A lifecycle handle for updates, resize, diagnostics, and disposal
+   */
+  mount(
+    canvas: HTMLCanvasElement,
+    siteData: SiteData,
+    options?: AstylarRenderOptions,
+  ): AstylarSurface {
+    const scene = this.createScene(canvas, siteData, options);
+    const surface = new AstylarSurfaceHandle(scene, this);
+    this.surfaceHandles.set(scene, surface);
+    scene.onDisposeObservable.addOnce(() => {
+      this.surfaceHandles.delete(scene);
+    });
+    return surface;
+  }
+
+  /**
+   * Compatibility API returning the Babylon scene directly.
+   * Prefer `mount()` for new consumers so ownership remains explicit.
    */
   render(
+    canvas: HTMLCanvasElement,
+    siteData: SiteData,
+    options?: AstylarRenderOptions,
+  ): Scene {
+    return this.mount(canvas, siteData, options).scene;
+  }
+
+  getSurface(scene: Scene): AstylarSurface | undefined {
+    return this.surfaceHandles.get(scene);
+  }
+
+  private createScene(
     canvas: HTMLCanvasElement,
     siteData: SiteData,
     options?: AstylarRenderOptions,

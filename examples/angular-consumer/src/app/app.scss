@@ -10,5 +10,5 @@ button { border: 0; border-radius: 8px; padding: 10px 14px; background: #1f5ca8;
 .surface-card { overflow: hidden; border: 1px solid #d5deea; border-radius: 16px; background: white; box-shadow: 0 18px 45px rgba(31, 51, 73, .12); }
 .surface-heading { padding: 16px 20px; border-bottom: 1px solid #d5deea; }
 .surface-heading > div { display: grid; gap: 4px; }
-canvas { display: block; width: 100%; height: min(66vh, 620px); min-height: 430px; outline: none; touch-action: none; }
-@media (max-width: 700px) { .consumer-header, .surface-heading { align-items: stretch; flex-direction: column; } canvas { height: 650px; } }
+astylar-surface { display: block; width: 100%; height: min(66vh, 620px); min-height: 430px; }
+@media (max-width: 700px) { .consumer-header, .surface-heading { align-items: stretch; flex-direction: column; } astylar-surface { height: 650px; } }

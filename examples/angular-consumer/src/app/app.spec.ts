@@ -3,11 +3,14 @@ import { Astylar } from 'astylarui';
 import { App } from './app';
 
 describe('external AstylarUI consumer', () => {
-  const scene = { dispose: jasmine.createSpy('dispose') };
-  const astylar = {
-    render: jasmine.createSpy('render').and.returnValue(scene),
-    update: jasmine.createSpy('update').and.resolveTo({}),
+  const surface = {
     whenSettled: jasmine.createSpy('whenSettled').and.resolveTo({}),
+    update: jasmine.createSpy('update').and.resolveTo({}),
+    resize: jasmine.createSpy('resize').and.resolveTo({}),
+    dispose: jasmine.createSpy('dispose'),
+  };
+  const astylar = {
+    mount: jasmine.createSpy('mount').and.returnValue(surface),
   };
 
   beforeEach(async () => {
