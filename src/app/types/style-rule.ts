@@ -108,4 +108,6 @@ export interface StyleRule {
   gridTemplateRows?: string;
   gridColumn?: string;
   gridRow?: string;
+  /** Unknown-safe declarations resolved through the plugin property registry. */
+  extensions?: Readonly<Record<string, unknown>>;
 }

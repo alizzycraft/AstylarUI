@@ -1,6 +1,11 @@
 import { Injectable, isDevMode } from '@angular/core';
 import type { DOMElement } from '../app/types/dom-element';
 import type { SiteData } from '../app/types/site-data';
+import type {
+  AstylarCapabilityRegistry,
+  AstylarPluginValidationContext,
+  AstylarPluginValidationResult,
+} from './astylar-plugin';
 
 export type AstylarDiagnosticSeverity = 'info' | 'warning' | 'error';
 
@@ -140,7 +145,10 @@ export class AstylarDiagnostics {
     return frozen;
   }
 
-  validate(siteData: unknown): asserts siteData is SiteData {
+  validate(
+    siteData: unknown,
+    registry?: AstylarCapabilityRegistry,
+  ): asserts siteData is SiteData {
     if (!siteData || typeof siteData !== 'object' || Array.isArray(siteData)) {
       this.fail('malformed-site-data', 'Site data must be an object.', '$', siteData);
     }
@@ -157,10 +165,10 @@ export class AstylarDiagnostics {
 
     const ids = new Map<string, string>();
     for (const [index, style] of candidate.styles.entries()) {
-      this.validateStyle(style, `$.styles[${index}]`);
+      this.validateStyle(style, `$.styles[${index}]`, undefined, registry);
     }
     candidate.root.children.forEach((element, index) => {
-      this.validateElement(element, `$.root.children[${index}]`, ids);
+      this.validateElement(element, `$.root.children[${index}]`, ids, registry);
     });
   }
 
@@ -168,19 +176,71 @@ export class AstylarDiagnostics {
     value: unknown,
     path: string,
     ids: Map<string, string>,
+    registry?: AstylarCapabilityRegistry,
   ): void {
     if (!value || typeof value !== 'object' || Array.isArray(value)) {
       this.fail('invalid-element-type', 'Every child must be an element object.', path, value);
     }
     const element = value as DOMElement;
-    if (typeof element.type !== 'string' || !elementTypes.has(element.type)) {
+    const pluginElement = typeof element.type === 'string'
+      ? registry?.resolveElement(element.type)
+      : undefined;
+    if (typeof element.type !== 'string' ||
+        (!elementTypes.has(element.type) && !pluginElement)) {
+      const missingContribution = typeof element.type === 'string' && element.type.includes(':')
+        ? element.type
+        : undefined;
       this.fail(
         'invalid-element-type',
         `Unsupported element type ${JSON.stringify(element.type)}.`,
         `${path}.type`,
         element.type,
         element.id,
+        missingContribution ? contributionPluginId(missingContribution) : undefined,
+        missingContribution,
       );
+    }
+    if (pluginElement) {
+      const context: AstylarPluginValidationContext = {
+        pluginId: contributionPluginId(pluginElement.id),
+        contributionId: pluginElement.id,
+        path,
+        elementId: element.id,
+      };
+      const effectiveElement = {
+        ...(pluginElement.defaults ?? {}),
+        ...(value as Readonly<Record<string, unknown>>),
+      };
+      this.assertPluginValidation(
+        'plugin-element-invalid',
+        this.runPluginValidator(() =>
+          pluginElement.validate?.(effectiveElement, context) ?? true),
+        context,
+        value,
+      );
+      const children = Array.isArray(element.children) ? element.children : [];
+      if (pluginElement.children === 'none' && children.length > 0) {
+        this.assertPluginValidation(
+          'plugin-element-invalid',
+          'This element does not accept children.',
+          context,
+          value,
+        );
+      }
+      if (Array.isArray(pluginElement.children)) {
+        children.forEach((child, index) => {
+          const childDefinition = registry?.resolveElement(child.type);
+          const childIdentity = childDefinition?.id ?? child.type;
+          if (!pluginElement.children!.includes(childIdentity)) {
+            this.assertPluginValidation(
+              'plugin-element-invalid',
+              `Child ${JSON.stringify(child.type)} is not accepted.`,
+              { ...context, path: `${path}.children[${index}]` },
+              child,
+            );
+          }
+        });
+      }
     }
     if (element.id) {
       const firstPath = ids.get(element.id);
@@ -197,21 +257,89 @@ export class AstylarDiagnostics {
         ids.set(element.id, `${path}.id`);
       }
     }
-    if (element.style !== undefined) this.validateStyle(element.style, `${path}.style`, element.id);
+    if (element.style !== undefined) {
+      this.validateStyle(element.style, `${path}.style`, element.id, registry);
+    }
     if (element.children !== undefined && !Array.isArray(element.children)) {
       this.fail('malformed-site-data', 'Element children must be an array.', `${path}.children`, element.children, element.id);
     }
     element.children?.forEach((child, index) => {
-      this.validateElement(child, `${path}.children[${index}]`, ids);
+      this.validateElement(child, `${path}.children[${index}]`, ids, registry);
     });
   }
 
-  private validateStyle(value: unknown, path: string, elementId?: string): void {
+  private validateStyle(
+    value: unknown,
+    path: string,
+    elementId?: string,
+    registry?: AstylarCapabilityRegistry,
+  ): void {
     if (!value || typeof value !== 'object' || Array.isArray(value)) {
       this.fail('malformed-site-data', 'A style rule must be an object.', path, value, elementId);
     }
     for (const property of Object.keys(value)) {
+      if (property === 'extensions') {
+        const extensions = (value as { extensions?: unknown }).extensions;
+        if (!extensions || typeof extensions !== 'object' || Array.isArray(extensions)) {
+          this.fail(
+            'malformed-site-data',
+            'Style extensions must be an object.',
+            `${path}.extensions`,
+            extensions,
+            elementId,
+          );
+        }
+        for (const [identity, extensionValue] of Object.entries(extensions)) {
+          const pluginProperty = registry?.resolveProperty(identity);
+          if (!pluginProperty) {
+            this.report({
+              code: 'unsupported-style-property',
+              severity: 'warning',
+              message: `Plugin style property ${JSON.stringify(identity)} is not registered and will be ignored.`,
+              path: `${path}.extensions.${identity}`,
+              elementId,
+              property: identity,
+              value: extensionValue,
+              pluginId: identity.includes(':') ? contributionPluginId(identity) : undefined,
+              contributionId: identity.includes(':') ? identity : undefined,
+            });
+            continue;
+          }
+          const context: AstylarPluginValidationContext = {
+            pluginId: contributionPluginId(pluginProperty.id),
+            contributionId: pluginProperty.id,
+            path: `${path}.extensions.${identity}`,
+            elementId,
+          };
+          this.assertPluginValidation(
+            'plugin-property-invalid',
+            this.runPluginValidator(() => pluginProperty.validate(extensionValue, context)),
+            context,
+            extensionValue,
+            identity,
+          );
+        }
+        continue;
+      }
       if (styleProperties.has(property)) continue;
+      const pluginProperty = registry?.resolveProperty(property);
+      if (pluginProperty) {
+        const context: AstylarPluginValidationContext = {
+          pluginId: contributionPluginId(pluginProperty.id),
+          contributionId: pluginProperty.id,
+          path: `${path}.${property}`,
+          elementId,
+        };
+        this.assertPluginValidation(
+          'plugin-property-invalid',
+          this.runPluginValidator(() =>
+            pluginProperty.validate((value as Record<string, unknown>)[property], context)),
+          context,
+          (value as Record<string, unknown>)[property],
+          property,
+        );
+        continue;
+      }
       this.report({
         code: 'unsupported-style-property',
         severity: 'warning',
@@ -224,12 +352,46 @@ export class AstylarDiagnostics {
     }
   }
 
+  private assertPluginValidation(
+    code: 'plugin-element-invalid' | 'plugin-property-invalid',
+    result: AstylarPluginValidationResult,
+    context: AstylarPluginValidationContext,
+    value: unknown,
+    property?: string,
+  ): void {
+    if (result === true) return;
+    const message = typeof result === 'string' ? result : result.join('; ');
+    throw new AstylarDiagnosticError(this.report({
+      code,
+      severity: 'error',
+      message,
+      path: context.path,
+      elementId: context.elementId,
+      property,
+      value,
+      pluginId: context.pluginId,
+      contributionId: context.contributionId,
+    }));
+  }
+
+  private runPluginValidator(
+    validate: () => AstylarPluginValidationResult,
+  ): AstylarPluginValidationResult {
+    try {
+      return validate();
+    } catch (error) {
+      return `Validator threw: ${error instanceof Error ? error.message : String(error)}`;
+    }
+  }
+
   private fail(
     code: Extract<AstylarDiagnosticCode, 'malformed-site-data' | 'invalid-root' | 'invalid-element-type'>,
     message: string,
     path: string,
     value: unknown,
     elementId?: string,
+    pluginId?: string,
+    contributionId?: string,
   ): never {
     throw new AstylarDiagnosticError(this.report({
       code,
@@ -238,6 +400,8 @@ export class AstylarDiagnostics {
       path,
       elementId,
       value,
+      pluginId,
+      contributionId,
     }));
   }
 
@@ -249,4 +413,8 @@ export class AstylarDiagnostics {
     else if (diagnostic.severity === 'warning') console.warn(label, diagnostic);
     else console.info(label, diagnostic);
   }
+}
+
+function contributionPluginId(contributionId: string): string {
+  return contributionId.slice(0, contributionId.indexOf(':'));
 }

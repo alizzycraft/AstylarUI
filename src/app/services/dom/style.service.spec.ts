@@ -83,6 +83,36 @@ describe('StyleService cascade', () => {
     expect(service.findStyleForElement(element, styles, context)?.background).toBe('#f97316');
   });
 
+  it('cascades plugin extension declarations independently without losing unknown data', () => {
+    const element: DOMElement = {
+      type: 'example.badges:badge',
+      id: 'badge',
+      style: { extensions: { badgeDepth: 0.4 } },
+    };
+    const styles: StyleRule[] = [
+      {
+        selector: 'example.badges:badge',
+        extensions: { badgeDepth: 0.1, badgeTone: 'violet' },
+      },
+      { selector: '#badge', extensions: { badgeDepth: 0.2 } },
+    ];
+    const context = new Map([
+      ['badge', {
+        normal: {
+          selector: '#badge',
+          extensions: { badgeTone: 'teal', badgeRaised: true },
+        },
+      }],
+    ]);
+
+    expect(service.findStyleForElement(element, styles, context)?.extensions).toEqual({
+      badgeDepth: 0.4,
+      badgeTone: 'teal',
+      badgeRaised: true,
+    });
+    expect(service.matchesSelector(element, 'example.badges:badge')).toBeTrue();
+  });
+
   it('expands authored flex shorthand over browser-default longhands', () => {
     const element: DOMElement = { type: 'article', id: 'fixed-item' };
     const result = service.findStyleForElement(element, [

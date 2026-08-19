@@ -70,6 +70,7 @@ import {
 } from './astylar-diagnostics';
 import {
   ASTYLAR_PLUGIN_DEFINITIONS,
+  ASTYLAR_PLUGIN_SURFACE_CONTEXT,
   AstylarCapabilityRegistry,
   type AstylarCapabilityRegistrySnapshot,
   type AstylarPluginDefinition,
@@ -120,6 +121,7 @@ class AstylarRenderer {
   private inputElementService = inject(InputElementService);
   private overflowClipService = inject(OverflowClipService);
   private pluginRuntime = inject(AstylarPluginRuntime);
+  private capabilityRegistry = inject(AstylarCapabilityRegistry);
   private readonly sessions = new WeakMap<Scene, AstylarRenderSession>();
   private readonly sceneResources = new WeakMap<Scene, AstylarSceneResources>();
   private readonly interactions = new WeakMap<Scene, AstylarInteractionRuntime>();
@@ -152,7 +154,7 @@ class AstylarRenderer {
     options?: AstylarRenderOptions,
   ): AstylarSurface {
     this.diagnostics.configure(options?.diagnostics);
-    this.diagnostics.validate(siteData);
+    this.diagnostics.validate(siteData, this.capabilityRegistry);
     const scene = this.createScene(canvas, siteData, options);
     const surface = new AstylarSurfaceHandle(scene, this);
     this.surfaceHandles.set(scene, surface);
@@ -704,7 +706,7 @@ class AstylarRenderer {
   }
 
   update(siteData: SiteData, scene?: Scene): Promise<AstylarSessionSnapshot> {
-    this.diagnostics.validate(siteData);
+    this.diagnostics.validate(siteData, this.capabilityRegistry);
     const session = this.requireSession(scene);
     this.interactions.get(session.scene)?.setSiteData(siteData);
     return session.update(siteData);
@@ -730,6 +732,9 @@ class AstylarRenderer {
   }
 
   private reportRenderFailure(message: string, error: unknown): void {
+    // Typed contribution failures are reported at their source with plugin and
+    // contribution identity; do not obscure them with a generic trailing entry.
+    if (error instanceof AstylarDiagnosticError) return;
     this.diagnostics.report({
       code: 'render-failed',
       severity: 'error',
@@ -969,6 +974,18 @@ export class Astylar {
             this.pluginDefinitions,
             (diagnostic) => inject(AstylarDiagnostics).report(diagnostic),
           ),
+        },
+        {
+          provide: ASTYLAR_PLUGIN_SURFACE_CONTEXT,
+          useFactory: () => {
+            const registry = inject(AstylarCapabilityRegistry);
+            const diagnostics = inject(AstylarDiagnostics);
+            return Object.freeze({
+              surfaceId: Symbol('AstylarPluginSurface'),
+              capabilities: registry.snapshot,
+              report: (diagnostic: AstylarDiagnostic) => diagnostics.report(diagnostic),
+            });
+          },
         },
         AstylarPluginRuntime,
       ],

@@ -144,6 +144,17 @@ export interface AstylarConfig {
 export const ASTYLAR_PLUGIN_DEFINITIONS =
   new InjectionToken<readonly AstylarPluginDefinition[]>('ASTYLAR_PLUGIN_DEFINITIONS');
 
+/** Curated surface-scoped host facilities available through Angular DI. */
+export interface AstylarPluginSurfaceContext {
+  /** Unique identity useful for proving and keying surface-local state. */
+  readonly surfaceId: symbol;
+  readonly capabilities: AstylarCapabilityRegistrySnapshot;
+  report(diagnostic: AstylarDiagnostic): AstylarDiagnostic;
+}
+
+export const ASTYLAR_PLUGIN_SURFACE_CONTEXT =
+  new InjectionToken<AstylarPluginSurfaceContext>('ASTYLAR_PLUGIN_SURFACE_CONTEXT');
+
 export function defineAstylarPlugin<const T extends AstylarPluginDefinition>(
   definition: T,
 ): Readonly<T> {
@@ -267,6 +278,10 @@ export class AstylarCapabilityRegistry {
 
   resolveProperty(identity: string): AstylarPluginPropertyDefinition | undefined {
     return this.propertiesById.get(identity) ?? this.propertyAliases.get(identity);
+  }
+
+  get propertyDefinitions(): readonly AstylarPluginPropertyDefinition[] {
+    return Object.freeze([...this.propertiesById.values()]);
   }
 
   resolveRendererForElement(
@@ -427,6 +442,24 @@ export class AstylarCapabilityRegistry {
           this.fail(
             'plugin-contribution-invalid',
             `Property ${JSON.stringify(property.id)} must declare valid invalidation domains.`,
+            plugin.id,
+            property.id,
+          );
+        }
+        let initialResult: AstylarPluginValidationResult;
+        try {
+          initialResult = property.validate(property.initial, {
+            pluginId: plugin.id,
+            contributionId: property.id,
+            path: '<plugin-definition>.initial',
+          });
+        } catch (error) {
+          initialResult = `Validator threw: ${errorMessage(error)}`;
+        }
+        if (initialResult !== true) {
+          this.fail(
+            'plugin-contribution-invalid',
+            `Property ${JSON.stringify(property.id)} has an invalid initial value: ${validationMessage(initialResult)}.`,
             plugin.id,
             property.id,
           );
@@ -607,4 +640,12 @@ function contributionKinds(
 
 function capitalize(value: string): string {
   return `${value.charAt(0).toUpperCase()}${value.slice(1)}`;
+}
+
+function validationMessage(result: string | readonly string[]): string {
+  return typeof result === 'string' ? result : result.join('; ');
+}
+
+function errorMessage(error: unknown): string {
+  return error instanceof Error ? error.message : String(error);
 }

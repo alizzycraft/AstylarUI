@@ -13,9 +13,12 @@ export type DOMElementType =
   | 'details' | 'summary' | 'dialog' // interactive
   | 'canvas' | 'iframe' | 'embed' | 'object' | 'video' | 'audio' | 'map' | 'param' | 'source' | 'track'; // media
 
+/** Known HTML-like elements retain autocomplete while plugins may add identities. */
+export type DOMElementIdentity = DOMElementType | (string & Record<never, never>);
+
 export interface DOMElement {
   id?: string;
-  type: DOMElementType;
+  type: DOMElementIdentity;
   style?: Partial<Omit<StyleRule, 'selector'>>;
   children?: DOMElement[];
   textContent?: string;
@@ -91,4 +94,6 @@ export interface DOMElement {
   onclick?: string;
   options?: Array<{ value: any; label: string; disabled?: boolean }>; // Options for select elements
   validationRules?: Array<{ type: string; value?: any; message: string }>; // Validation rules
+  /** Unknown-safe data owned and validated by the element's plugin. */
+  data?: Readonly<Record<string, unknown>>;
 }

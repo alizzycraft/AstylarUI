@@ -22,6 +22,9 @@ import {
   ELEMENT_BORDER_Z_OFFSET,
   SELECT_BORDER_Z_OFFSET,
 } from "../render-depth.constants";
+import { AstylarCapabilityRegistry } from "../../../../lib/astylar-plugin";
+import { AstylarDiagnostics } from "../../../../lib/astylar-diagnostics";
+import { AstylarPluginRuntime } from "../../../../lib/astylar-plugin-runtime";
 
 /**
  * Service responsible for creating DOM elements as Babylon.js meshes
@@ -45,6 +48,9 @@ export class ElementCreationService {
     private overflowClip: OverflowClipService,
     private grid: GridService,
     private imageResources: ImageResourceService,
+    private capabilityRegistry: AstylarCapabilityRegistry,
+    private pluginRuntime: AstylarPluginRuntime,
+    private diagnostics: AstylarDiagnostics,
   ) {}
 
   /**
@@ -59,8 +65,10 @@ export class ElementCreationService {
     flexPosition?: { x: number; y: number; z: number },
     flexSize?: { width?: number; height?: number },
   ): Mesh {
-
-
+    const pluginElement = this.capabilityRegistry.resolveElement(element.type);
+    if (pluginElement?.defaults) {
+      element = { ...pluginElement.defaults, ...element } as DOMElement;
+    }
     // Ensure pointer observer is set up
     this.interactionService.ensurePointerObserver(render);
 
@@ -83,7 +91,14 @@ export class ElementCreationService {
     // Inline declarations are the highest author-origin specificity and must
     // remain above renderer context and stylesheet declarations.
     if (element.style) {
-      style = { ...style, ...element.style };
+      style = {
+        ...style,
+        ...element.style,
+        extensions: {
+          ...style.extensions,
+          ...element.style.extensions,
+        },
+      };
     }
 
     const isHovered = element.id
@@ -144,15 +159,18 @@ export class ElementCreationService {
     const borderRadius = borderRadiusPixels * scaleFactor;
     const worldWidth = dimensions.width * scaleFactor;
     const worldHeight = dimensions.height * scaleFactor;
+    const pluginProperties = this.resolvePluginProperties(style, layoutParent);
 
     // DEBUG: Log dimensions for troubleshooting
 
 
     let mesh: Mesh;
 
+    const pluginRenderer = this.pluginRuntime.resolveRenderer(element.type);
+
     // Check if it's an input element and delegate creation
     const inputElement =
-      render.scene &&
+      !pluginRenderer && render.scene &&
       (element.type === "input" ||
         element.type === "button" ||
         element.type === "select" ||
@@ -163,7 +181,26 @@ export class ElementCreationService {
           })
         : null;
 
-    if (inputElement) {
+    if (pluginRenderer) {
+      mesh = this.pluginRuntime.render(pluginRenderer, {
+        scene: render.scene!,
+        parent: layoutParent,
+        meshId,
+        element,
+        style,
+        properties: pluginProperties,
+        dimensions: {
+          x: dimensions.x,
+          y: dimensions.y,
+          width: dimensions.width,
+          height: dimensions.height,
+          padding: dimensions.padding,
+          pixelToWorldScale: scaleFactor,
+        },
+        report: (diagnostic) => this.diagnostics.report(diagnostic),
+      });
+      mesh.name = meshId;
+    } else if (inputElement) {
       dom.context.inputElements.set(
         element.id || inputElement.mesh.name,
         inputElement,
@@ -279,6 +316,7 @@ export class ElementCreationService {
       cursor: style.cursor,
       elementId: element.id,
       element: element, // Store the element object for hover handling
+      astylarPluginProperties: pluginProperties,
     };
 
     // Calculate position
@@ -1051,11 +1089,45 @@ export class ElementCreationService {
       }
 
     } catch (error) {
+      if (error instanceof Error && error.name === 'AstylarDiagnosticError') {
+        throw error;
+      }
       console.error(
         `[ElementCreation] Error in children loop for ${parentElement?.id}:`,
         error,
       );
     }
+  }
+
+  private resolvePluginProperties(
+    style: StyleRule,
+    parent: Mesh,
+  ): Readonly<Record<string, unknown>> {
+    const declarations = style.extensions ?? {};
+    const inherited = parent.metadata?.astylarPluginProperties as
+      | Readonly<Record<string, unknown>>
+      | undefined;
+    const values: Record<string, unknown> = {};
+    for (const definition of this.capabilityRegistry.propertyDefinitions) {
+      const canonicalAuthored = Object.prototype.hasOwnProperty.call(
+        declarations,
+        definition.id,
+      );
+      const aliasAuthored = !!definition.alias && Object.prototype.hasOwnProperty.call(
+        declarations,
+        definition.alias,
+      );
+      const value = canonicalAuthored
+        ? declarations[definition.id]
+        : aliasAuthored
+          ? declarations[definition.alias!]
+          : definition.inherits
+            ? inherited?.[definition.id] ?? definition.initial
+            : definition.initial;
+      values[definition.id] = value;
+      if (definition.alias) values[definition.alias] = value;
+    }
+    return Object.freeze(values);
   }
 
   private hasFlexAssignedHeight(mesh: Mesh): boolean {

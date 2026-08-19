@@ -571,7 +571,7 @@ export class AstylarSemanticBridge {
       .map((authoredId) => this.nativeId(authoredId)).join(' ');
   }
 
-  private semanticTagName(type: DOMElementType): string {
+  private semanticTagName(type: DOMElementType | string): string {
     // These types are all valid native semantic elements. Area is only useful
     // inside an image map and is kept generic until that subset is supported.
     return type === 'area' || type === 'canvas' ? 'div' : type;

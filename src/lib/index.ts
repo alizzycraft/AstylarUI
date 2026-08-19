@@ -68,6 +68,7 @@ export type {
 export {
   ASTYLAR_PLUGIN_API_VERSION,
   ASTYLAR_PLUGIN_DEFINITIONS,
+  ASTYLAR_PLUGIN_SURFACE_CONTEXT,
   AstylarCapabilityRegistry,
   defineAstylarPlugin,
   provideAstylar,
@@ -89,6 +90,7 @@ export type {
   AstylarPluginRendererDefinition,
   AstylarPluginRenderContext,
   AstylarPluginRenderDimensions,
+  AstylarPluginSurfaceContext,
   AstylarPluginValidationContext,
   AstylarPluginValidationResult,
 } from './astylar-plugin';
@@ -146,7 +148,11 @@ export { AstylarSurfaceComponent } from './astylar-surface.component';
 // Types for consumers
 export type { SiteData } from "../app/types/site-data";
 export type { StyleRule } from "../app/types/style-rule";
-export type { DOMElement, DOMElementType } from "../app/types/dom-element";
+export type {
+  DOMElement,
+  DOMElementIdentity,
+  DOMElementType,
+} from "../app/types/dom-element";
 export type {
   BabylonRender,
   BabylonRenderActions,

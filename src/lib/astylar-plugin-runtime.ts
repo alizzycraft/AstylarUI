@@ -1,5 +1,5 @@
 import { EnvironmentInjector, Injectable, inject } from '@angular/core';
-import type { Mesh } from '@babylonjs/core';
+import { Mesh } from '@babylonjs/core';
 import {
   AstylarCapabilityRegistry,
   type AstylarPluginElementRenderer,
@@ -76,7 +76,11 @@ export class AstylarPluginRuntime {
     context: AstylarPluginRenderContext,
   ): Mesh {
     try {
-      return resolved.renderer.render(context);
+      const mesh = resolved.renderer.render(context);
+      if (!(mesh instanceof Mesh) || mesh.getScene() !== context.scene || mesh.isDisposed()) {
+        throw new Error('The renderer must return a live Babylon Mesh owned by the current scene.');
+      }
+      return mesh;
     } catch (error) {
       throw this.failure(
         'plugin-render-failed',

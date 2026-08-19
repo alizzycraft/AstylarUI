@@ -196,3 +196,31 @@ Status: complete.
 - Removed 14.4 GB of ignored historical output from `dist/test-out` after it
   exhausted the development drive during the gate; no source or tracked files
   were removed.
+
+### Increment 3: registry-backed documents and renderer execution
+
+Status: complete.
+
+- Replaced the relevant closed checks with registry-backed element and property
+  resolution while retaining the existing core element/property validation.
+- Chose an unknown-safe document model: custom element payloads live in
+  `DOMElement.data`, while custom declarations live in `StyleRule.extensions`.
+  Neither boundary uses `any`, and authored data is retained in the source model.
+- Extension declarations now cascade independently by normal selector
+  specificity and source order, then context and inline precedence. Property
+  definitions apply initial values and inheritance and validate both authored
+  and initial values.
+- Added the injectable `ASTYLAR_PLUGIN_SURFACE_CONTEXT` with a unique surface
+  identity, immutable capability snapshot, and diagnostics reporter.
+- Injectable plugin renderers now receive the curated scene, parent, identity,
+  element, resolved style/property values, and layout dimensions. Returned
+  meshes must be live and belong to the current scene; the existing render
+  transaction owns their Babylon resources.
+- Typed validator, initialization, and renderer failures retain plugin and
+  contribution identity instead of being obscured by generic render failures.
+- Added browser-backed coverage for DI-created Babylon rendering, configuration
+  token injection, host context injection, aliases, defaults, inheritance,
+  updates, two-surface isolation, invalid values, renderer failures, and final
+  resource cleanup. Added focused cascade coverage for namespaced selectors and
+  unknown extension data. The complete suite passes with 251 tests.
+- `npm run build:lib` passes with the extended document and renderer contracts.

@@ -332,6 +332,7 @@ export class StyleService {
         };
 
         const winners = new Map<keyof StyleRule, { specificity: number; sourceOrder: number; value: unknown }>();
+        const extensionWinners = new Map<string, { specificity: number; sourceOrder: number; value: unknown }>();
         const debugSegments: string[] = [];
 
         const recordWinner = (
@@ -361,6 +362,20 @@ export class StyleService {
                     if (property === 'selector' || property.startsWith('media') || value === undefined) {
                         continue;
                     }
+                    if (property === 'extensions' && value && typeof value === 'object' && !Array.isArray(value)) {
+                        for (const [identity, extensionValue] of Object.entries(value)) {
+                            const current = extensionWinners.get(identity);
+                            if (!current || specificity > current.specificity ||
+                                (specificity === current.specificity && sourceOrder >= current.sourceOrder)) {
+                                extensionWinners.set(identity, {
+                                    specificity,
+                                    sourceOrder,
+                                    value: extensionValue,
+                                });
+                            }
+                        }
+                        continue;
+                    }
                     const key = property as keyof StyleRule;
                     recordWinner(key, value, specificity, sourceOrder);
                     if (key === 'flex') {
@@ -376,19 +391,38 @@ export class StyleService {
         for (const [property, winner] of winners) {
             (mergedStyle as unknown as Record<string, unknown>)[property] = winner.value;
         }
+        if (extensionWinners.size > 0) {
+            mergedStyle.extensions = Object.fromEntries(
+                [...extensionWinners].map(([identity, winner]) => [identity, winner.value]),
+            );
+        }
 
         // Context overrides are renderer-authored declarations (for example table
         // layout adjustments), so they sit above stylesheet rules but below inline style.
         if (element.id) {
             const contextOverride = elementStylesOverride?.get(element.id)?.normal;
             if (contextOverride && !this.parsedAuthorStyles.has(contextOverride)) {
-                mergedStyle = { ...mergedStyle, ...contextOverride };
+                mergedStyle = {
+                    ...mergedStyle,
+                    ...contextOverride,
+                    extensions: {
+                        ...mergedStyle.extensions,
+                        ...contextOverride.extensions,
+                    },
+                };
             }
         }
 
         if (element.style) {
             for (const [property, value] of Object.entries(element.style)) {
                 if (value === undefined) continue;
+                if (property === 'extensions' && value && typeof value === 'object' && !Array.isArray(value)) {
+                    mergedStyle.extensions = {
+                        ...mergedStyle.extensions,
+                        ...(value as Record<string, unknown>),
+                    };
+                    continue;
+                }
                 (mergedStyle as unknown as Record<string, unknown>)[property] = value;
                 if (property === 'flex') {
                     const expanded = this.parseFlexShorthand(String(value));
@@ -435,6 +469,9 @@ export class StyleService {
         if (!normalizedSelector) {
             return null;
         }
+        // Namespaced plugin element identities contain a colon, which otherwise
+        // looks like an unsupported pseudo-class to the compact selector parser.
+        if (normalizedSelector === element.type) return 1;
 
         const parsedSelector = this.parseRelationalSelector(normalizedSelector);
         if (!parsedSelector) return null;
