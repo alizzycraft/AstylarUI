@@ -243,3 +243,28 @@ Status: complete.
 - Added focused browser assertions for core capability visibility, a valid core
   dependency, continued core rendering, and rejected core alias replacement.
   The complete suite passes with 252 tests and `npm run build:lib` passes.
+
+### Increment 5: packed external Angular plugin
+
+Status: complete.
+
+- Added `examples/angular-consumer/src/app/consumer-badge.plugin.ts`, a
+  project-local plugin importing Astylar only from the installed package root.
+- The proof uses an Angular configuration token, injectable signal state,
+  `inject()`, `DestroyRef`, a lifecycle service, a surface-context injection,
+  and an injectable Babylon renderer. No mutable service is root-provided.
+- It contributes `consumer.proof:badge` (`consumer-badge`) and
+  `consumer.proof:depth` (`consumerBadgeDepth`) with defaults, validation,
+  explicit invalidation domains, and a dependency on `astylar.core`.
+- The renderer returns a distinctive property-driven box mesh and records
+  plugin/service identity in metadata. It performs no browser, canvas, WebGL,
+  scene, or Babylon work during module evaluation, registration, SSR, or
+  prerendering.
+- The consumer's two surfaces render distinct plugin service instances. Browser
+  acceptance verifies plugin metadata, configuration, lifecycle activation,
+  property-driven updates, isolation, stable repeated-update resource counts,
+  independent disposal/remount, and final zero resources.
+- Focused in-repository coverage also proves surface-created configuration
+  factories can produce different injected values for simultaneous surfaces.
+- `npm run consumer:check` passed a fresh packed install with 395 package files,
+  browser and SSR builds, one prerendered route, and both real-Chrome tests.

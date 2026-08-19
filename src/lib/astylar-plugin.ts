@@ -165,7 +165,7 @@ export function defineAstylarPlugin<const T extends AstylarPluginDefinition>(
             Object.freeze({
               ...element,
               ...(element.defaults
-                ? { defaults: Object.freeze({ ...element.defaults }) }
+                ? { defaults: freezeData({ ...element.defaults }) }
                 : {}),
               ...(Array.isArray(element.children)
                 ? { children: Object.freeze([...element.children]) }
@@ -178,6 +178,7 @@ export function defineAstylarPlugin<const T extends AstylarPluginDefinition>(
           properties: Object.freeze(definition.contributions.properties.map((property) =>
             Object.freeze({
               ...property,
+              initial: freezeData(property.initial),
               affects: Object.freeze([...property.affects]),
             }))),
         }
@@ -640,6 +641,21 @@ function contributionKinds(
 
 function capitalize(value: string): string {
   return `${value.charAt(0).toUpperCase()}${value.slice(1)}`;
+}
+
+function freezeData<T>(value: T): T {
+  if (Array.isArray(value)) {
+    return Object.freeze(value.map((entry) => freezeData(entry))) as T;
+  }
+  if (value && typeof value === 'object') {
+    const prototype = Object.getPrototypeOf(value);
+    if (prototype === Object.prototype || prototype === null) {
+      return Object.freeze(Object.fromEntries(
+        Object.entries(value).map(([key, entry]) => [key, freezeData(entry)]),
+      )) as T;
+    }
+  }
+  return value;
 }
 
 function validationMessage(result: string | readonly string[]): string {

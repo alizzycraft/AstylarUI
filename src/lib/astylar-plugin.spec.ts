@@ -52,6 +52,7 @@ function plugin(
       elements: [{
         id: elementId,
         alias: options.elementAlias,
+        defaults: { data: { tone: 'violet' } },
         children: 'any',
       }],
       properties: [{
@@ -90,6 +91,10 @@ describe('Angular-native Astylar plugin API', () => {
     expect(Object.isFrozen(definitions[0].contributions)).toBeTrue();
     expect(Object.isFrozen(definitions[0].providers)).toBeTrue();
     expect(Object.isFrozen(definitions[0].contributions.elements?.[0])).toBeTrue();
+    expect(Object.isFrozen(definitions[0].contributions.elements?.[0].defaults)).toBeTrue();
+    expect(Object.isFrozen(
+      definitions[0].contributions.elements?.[0].defaults?.['data'],
+    )).toBeTrue();
     expect(Object.isFrozen(definitions[0].contributions.properties?.[0].affects)).toBeTrue();
   });
 

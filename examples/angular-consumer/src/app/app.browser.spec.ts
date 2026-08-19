@@ -2,10 +2,17 @@ import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { AstylarSurfaceComponent, type AstylarSurface } from 'astylarui';
 import { App } from './app';
+import { provideConsumerBadgePlugin } from './consumer-badge.plugin';
 
 describe('external AstylarUI browser acceptance', () => {
   it('runs two installed-package surfaces through update, input, modal, resize, and disposal', async () => {
-    await TestBed.configureTestingModule({ imports: [App] }).compileComponents();
+    await TestBed.configureTestingModule({
+      imports: [App],
+      providers: [provideConsumerBadgePlugin({
+        marker: 'packed-angular-consumer',
+        minimumDepth: 0.06,
+      })],
+    }).compileComponents();
     const fixture = TestBed.createComponent(App);
     const handles = fixture.componentInstance as unknown as {
       primarySurface?: AstylarSurface;
@@ -43,6 +50,19 @@ describe('external AstylarUI browser acceptance', () => {
       expect(secondary.querySelector('[data-astylar-id="workspace"]')).toBeTruthy();
       expect(primary.querySelector('[data-astylar-id="add-item"]')?.textContent).toBe('Add item');
       expect(primary.querySelector('[data-astylar-id="item-one-action"]')?.textContent).toBe('Inspect');
+      const initialPrimaryBadge = mesh(handles.primarySurface!, 'plugin-badge');
+      const initialSecondaryBadge = mesh(handles.secondarySurface!, 'plugin-badge');
+      expect(initialPrimaryBadge.metadata).toEqual(jasmine.objectContaining({
+        astylarPluginId: 'consumer.proof',
+        astylarPluginMarker: 'packed-angular-consumer',
+        astylarPluginActive: true,
+        astylarPluginLabel: 'Consumer proof revision 1',
+      }));
+      expect(initialPrimaryBadge.metadata.astylarPluginDepth).toBeCloseTo(0.09, 6);
+      expect(initialPrimaryBadge.metadata.astylarPluginInstanceId)
+        .not.toBe(initialSecondaryBadge.metadata.astylarPluginInstanceId);
+      expect(handles.primarySurface?.diagnostics.plugins.pluginIds)
+        .toEqual(['astylar.core', 'consumer.proof']);
 
       const primaryHost = fixture.nativeElement.querySelector(
         '[data-testid="primary-astylar-surface"]',
@@ -94,6 +114,14 @@ describe('external AstylarUI browser acceptance', () => {
             .includes('revision 2');
       }, 'primary update');
       expect(text(fixture.nativeElement, 'secondary-revision')).toContain('1');
+      expect(mesh(handles.primarySurface!, 'plugin-badge').metadata)
+        .toEqual(jasmine.objectContaining({
+          astylarPluginLabel: 'Consumer proof revision 2',
+        }));
+      expect(mesh(handles.primarySurface!, 'plugin-badge').metadata.astylarPluginDepth)
+        .toBeCloseTo(0.1, 6);
+      expect(mesh(handles.secondarySurface!, 'plugin-badge').metadata.astylarPluginDepth)
+        .toBeCloseTo(0.09, 6);
 
       const search = primary.querySelector('[data-astylar-id="search"]') as HTMLInputElement;
       search.focus();
@@ -131,6 +159,12 @@ describe('external AstylarUI browser acceptance', () => {
             .includes('revision 4');
       }, 'second repeated primary update');
       expect(await waitForStableResources(handles.primarySurface!)).toEqual(stablePrimaryResources);
+      expect(mesh(handles.primarySurface!, 'plugin-badge').metadata)
+        .toEqual(jasmine.objectContaining({
+          astylarPluginLabel: 'Consumer proof revision 4',
+        }));
+      expect(mesh(handles.primarySurface!, 'plugin-badge').metadata.astylarPluginDepth)
+        .toBeCloseTo(0.12, 6);
       expect((surface(fixture.nativeElement, 'primary')
         .querySelector('[data-astylar-id="search"]') as HTMLInputElement).value).toBe('A');
 

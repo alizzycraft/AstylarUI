@@ -21,6 +21,7 @@ import {
 } from './astylar-plugin';
 
 const BADGE_CONFIG = new InjectionToken<{ readonly marker: string }>('badge config');
+let nextBadgeConfig = 0;
 
 @Injectable()
 class BadgeRenderer implements AstylarPluginElementRenderer {
@@ -121,7 +122,10 @@ const badgePlugin = defineAstylarPlugin({
   pluginApiVersion: ASTYLAR_PLUGIN_API_VERSION,
   dependencies: ['astylar.core'],
   contributes: ['elements', 'properties', 'renderers'],
-  providers: [{ provide: BADGE_CONFIG, useValue: { marker: 'consumer-badge' } }],
+  providers: [{
+    provide: BADGE_CONFIG,
+    useFactory: () => ({ marker: `surface-config-${++nextBadgeConfig}` }),
+  }],
   contributions: {
     elements: [{
       id: 'example.badges:badge',
@@ -166,6 +170,7 @@ describe('Astylar surface plugin runtime', () => {
     LifecycleProbe.destroyed = [];
     FailingLifecycle.destroyed = 0;
     BadgeRenderer.surfaceIds = [];
+    nextBadgeConfig = 0;
   });
 
   it('creates, activates, and destroys plugin services independently per surface', async () => {
@@ -262,12 +267,13 @@ describe('Astylar surface plugin runtime', () => {
       const firstBadge = first.scene.getMeshByName('proof-badge')!;
       const secondBadge = second.scene.getMeshByName('proof-badge')!;
       expect(firstBadge.metadata).toEqual(jasmine.objectContaining({
-        pluginMarker: 'consumer-badge',
+        pluginMarker: 'surface-config-1',
         pluginDepth: 0.12,
         pluginLabel: 'Proof',
         pluginTone: 'teal',
       }));
       expect(secondBadge.metadata.pluginDepth).toBe(0.2);
+      expect(secondBadge.metadata.pluginMarker).toBe('surface-config-2');
       expect(secondBadge.metadata.pluginLabel).toBe('Default badge');
       expect(firstBadge.metadata.surfaceId).not.toBe(secondBadge.metadata.surfaceId);
       expect(BadgeRenderer.surfaceIds.length).toBe(2);

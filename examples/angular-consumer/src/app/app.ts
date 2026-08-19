@@ -138,6 +138,11 @@ export class App {
                     ],
                   },
                   {
+                    type: 'consumer-badge',
+                    id: 'plugin-badge',
+                    data: { label: `Consumer proof revision ${revision}` },
+                  },
+                  {
                     type: 'form', id: 'filters', children: [
                       { type: 'label', id: 'search-label', for: 'search', textContent: 'Search inventory' },
                       { type: 'input', inputType: 'text', id: 'search', name: 'search', placeholder: 'Product or SKU', value: '' },
@@ -222,6 +227,17 @@ export class App {
         { selector: '#kicker', margin: '0 0 6px 0', color: '#526079', fontSize: '13px', textTransform: 'uppercase', letterSpacing: '1px' },
         { selector: '#title', margin: '0', fontSize: '30px', lineHeight: '36px' },
         { selector: 'button', padding: '10px 14px', background: '#2367d1', color: '#ffffff', borderWidth: '0', borderRadius: '7px' },
+        {
+          selector: '#plugin-badge',
+          width: '240px',
+          height: '36px',
+          marginBottom: '14px',
+          padding: '8px 12px',
+          background: '#6d28d9',
+          color: '#ffffff',
+          borderRadius: '9px',
+          extensions: { consumerBadgeDepth: 0.08 + revision * 0.01 },
+        },
         { selector: '#filters', display: 'grid', gridTemplateColumns: '140px minmax(180px, 1fr) 70px 180px', gap: '10px', alignItems: 'center', padding: '16px', marginBottom: '18px', background: '#ffffff', borderRadius: '10px' },
         { selector: '#filters input', padding: '9px 10px', borderWidth: '1px', borderStyle: 'solid', borderColor: '#c8d2e1', borderRadius: '6px' },
         { selector: '#filters select', padding: '9px 10px', borderWidth: '1px', borderStyle: 'solid', borderColor: '#c8d2e1', borderRadius: '6px' },
