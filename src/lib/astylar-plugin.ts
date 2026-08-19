@@ -1,0 +1,610 @@
+import {
+  EnvironmentProviders,
+  InjectionToken,
+  Provider,
+  Type,
+  makeEnvironmentProviders,
+} from '@angular/core';
+import type { Mesh, Scene } from '@babylonjs/core';
+import type { DOMElement } from '../app/types/dom-element';
+import type { StyleRule } from '../app/types/style-rule';
+import {
+  AstylarDiagnosticError,
+  type AstylarDiagnostic,
+} from './astylar-diagnostics';
+
+/** Versioned independently from the Astylar package. */
+export const ASTYLAR_PLUGIN_API_VERSION = 1 as const;
+
+export type AstylarPluginApiVersion = typeof ASTYLAR_PLUGIN_API_VERSION;
+export type AstylarPluginContributionKind =
+  | 'elements'
+  | 'properties'
+  | 'renderers'
+  | 'lifecycle';
+export type AstylarPluginInvalidationDomain =
+  | 'layout'
+  | 'paint'
+  | 'semantics'
+  | 'interaction';
+
+export interface AstylarPluginValidationContext {
+  readonly pluginId: string;
+  readonly contributionId: string;
+  readonly path: string;
+  readonly elementId?: string;
+}
+
+/** `true` accepts a value; a message or messages reject it. */
+export type AstylarPluginValidationResult = true | string | readonly string[];
+
+export interface AstylarPluginElementDefinition {
+  /** Canonical identity, for example `example.badges:badge`. */
+  readonly id: string;
+  /** Optional author-facing identity. Aliases must be globally unambiguous. */
+  readonly alias?: string;
+  readonly defaults?: Readonly<Record<string, unknown>>;
+  readonly children?: 'any' | 'none' | readonly string[];
+  readonly validate?: (
+    element: Readonly<Record<string, unknown>>,
+    context: AstylarPluginValidationContext,
+  ) => AstylarPluginValidationResult;
+}
+
+export interface AstylarPluginPropertyDefinition {
+  /** Canonical identity, for example `example.badges:depth`. */
+  readonly id: string;
+  /** Optional JSON-style identity, for example `badgeDepth`. */
+  readonly alias?: string;
+  readonly initial: unknown;
+  readonly inherits: boolean;
+  readonly affects: readonly AstylarPluginInvalidationDomain[];
+  readonly validate: (
+    value: unknown,
+    context: AstylarPluginValidationContext,
+  ) => AstylarPluginValidationResult;
+}
+
+export interface AstylarPluginRenderDimensions {
+  readonly x: number;
+  readonly y: number;
+  readonly width: number;
+  readonly height: number;
+  readonly padding: Readonly<{
+    top: number;
+    right: number;
+    bottom: number;
+    left: number;
+  }>;
+  readonly pixelToWorldScale: number;
+}
+
+/** Curated public context supplied to an injectable plugin renderer. */
+export interface AstylarPluginRenderContext {
+  readonly scene: Scene;
+  readonly parent: Mesh;
+  readonly meshId: string;
+  readonly element: DOMElement;
+  readonly style: Readonly<StyleRule>;
+  readonly properties: Readonly<Record<string, unknown>>;
+  readonly dimensions: AstylarPluginRenderDimensions;
+  report(diagnostic: AstylarDiagnostic): void;
+}
+
+export interface AstylarPluginElementRenderer {
+  render(context: AstylarPluginRenderContext): Mesh;
+}
+
+export interface AstylarPluginRendererDefinition {
+  /** Canonical renderer contribution identity. */
+  readonly id: string;
+  /** Canonical element identities claimed by this renderer. */
+  readonly elements: readonly string[];
+  /** Injectable type, which must be present in the plugin's providers. */
+  readonly renderer: Type<AstylarPluginElementRenderer>;
+}
+
+export interface AstylarPluginLifecycle {
+  activate?(): void;
+}
+
+export interface AstylarPluginLifecycleDefinition {
+  readonly id: string;
+  /** Injectable surface-scoped lifecycle type. */
+  readonly lifecycle: Type<AstylarPluginLifecycle>;
+}
+
+export interface AstylarPluginContributions {
+  readonly elements?: readonly AstylarPluginElementDefinition[];
+  readonly properties?: readonly AstylarPluginPropertyDefinition[];
+  readonly renderers?: readonly AstylarPluginRendererDefinition[];
+  readonly lifecycle?: readonly AstylarPluginLifecycleDefinition[];
+}
+
+export interface AstylarPluginDefinition {
+  /** Namespaced plugin identity, for example `example.badges`. */
+  readonly id: string;
+  readonly version: string;
+  readonly pluginApiVersion: number;
+  readonly dependencies?: readonly string[];
+  readonly contributes: readonly AstylarPluginContributionKind[];
+  /** Providers installed into every surface before contributions resolve. */
+  readonly providers?: readonly (Provider | EnvironmentProviders)[];
+  readonly contributions: AstylarPluginContributions;
+}
+
+export interface AstylarConfig {
+  readonly plugins?: readonly AstylarPluginDefinition[];
+}
+
+/**
+ * Application-level definitions collected by `provideAstylar*` helpers.
+ * The multi-provider's runtime value is a readonly definition array.
+ */
+export const ASTYLAR_PLUGIN_DEFINITIONS =
+  new InjectionToken<readonly AstylarPluginDefinition[]>('ASTYLAR_PLUGIN_DEFINITIONS');
+
+export function defineAstylarPlugin<const T extends AstylarPluginDefinition>(
+  definition: T,
+): Readonly<T> {
+  const contributions = Object.freeze({
+    ...(definition.contributions.elements
+      ? {
+          elements: Object.freeze(definition.contributions.elements.map((element) =>
+            Object.freeze({
+              ...element,
+              ...(element.defaults
+                ? { defaults: Object.freeze({ ...element.defaults }) }
+                : {}),
+              ...(Array.isArray(element.children)
+                ? { children: Object.freeze([...element.children]) }
+                : {}),
+            }))),
+        }
+      : {}),
+    ...(definition.contributions.properties
+      ? {
+          properties: Object.freeze(definition.contributions.properties.map((property) =>
+            Object.freeze({
+              ...property,
+              affects: Object.freeze([...property.affects]),
+            }))),
+        }
+      : {}),
+    ...(definition.contributions.renderers
+      ? {
+          renderers: Object.freeze(definition.contributions.renderers.map((renderer) =>
+            Object.freeze({
+              ...renderer,
+              elements: Object.freeze([...renderer.elements]),
+            }))),
+        }
+      : {}),
+    ...(definition.contributions.lifecycle
+      ? {
+          lifecycle: Object.freeze(definition.contributions.lifecycle.map((lifecycle) =>
+            Object.freeze({ ...lifecycle }))),
+        }
+      : {}),
+  });
+  return Object.freeze({
+    ...definition,
+    dependencies: Object.freeze([...(definition.dependencies ?? [])]),
+    contributes: Object.freeze([...definition.contributes]),
+    providers: Object.freeze([...(definition.providers ?? [])]),
+    contributions,
+  }) as unknown as Readonly<T>;
+}
+
+/** Installs a complete immutable Astylar configuration at application scope. */
+export function provideAstylar(config: AstylarConfig = {}): EnvironmentProviders {
+  return makeEnvironmentProviders(
+    (config.plugins ?? []).map((plugin) => ({
+      provide: ASTYLAR_PLUGIN_DEFINITIONS,
+      multi: true,
+      useValue: defineAstylarPlugin(plugin),
+    })),
+  );
+}
+
+/** Allows a plugin package to expose one idiomatic Angular provider helper. */
+export function provideAstylarPlugin(
+  plugin: AstylarPluginDefinition,
+): EnvironmentProviders {
+  return provideAstylar({ plugins: [plugin] });
+}
+
+export interface AstylarCapabilityRegistrySnapshot {
+  readonly sealed: true;
+  readonly pluginIds: readonly string[];
+  readonly elementIds: readonly string[];
+  readonly propertyIds: readonly string[];
+  readonly rendererIds: readonly string[];
+  readonly lifecycleIds: readonly string[];
+}
+
+type DiagnosticReporter = (diagnostic: AstylarDiagnostic) => AstylarDiagnostic;
+
+/**
+ * Deterministic, sealed view of all core and application plugin capabilities.
+ * A fresh instance is created for every mounted surface.
+ */
+export class AstylarCapabilityRegistry {
+  readonly sealed = true as const;
+  readonly plugins: readonly AstylarPluginDefinition[];
+
+  private readonly pluginsById = new Map<string, AstylarPluginDefinition>();
+  private readonly elementsById = new Map<string, AstylarPluginElementDefinition>();
+  private readonly elementAliases = new Map<string, AstylarPluginElementDefinition>();
+  private readonly propertiesById = new Map<string, AstylarPluginPropertyDefinition>();
+  private readonly propertyAliases = new Map<string, AstylarPluginPropertyDefinition>();
+  private readonly renderersById = new Map<string, AstylarPluginRendererDefinition>();
+  private readonly rendererByElementId = new Map<string, AstylarPluginRendererDefinition>();
+  private readonly lifecyclesById = new Map<string, AstylarPluginLifecycleDefinition>();
+
+  constructor(
+    definitions: readonly AstylarPluginDefinition[],
+    private readonly report?: DiagnosticReporter,
+  ) {
+    this.plugins = Object.freeze(this.resolvePlugins(definitions));
+    this.indexContributions();
+  }
+
+  get snapshot(): AstylarCapabilityRegistrySnapshot {
+    return Object.freeze({
+      sealed: true,
+      pluginIds: Object.freeze(this.plugins.map(({ id }) => id)),
+      elementIds: Object.freeze([...this.elementsById.keys()].sort()),
+      propertyIds: Object.freeze([...this.propertiesById.keys()].sort()),
+      rendererIds: Object.freeze([...this.renderersById.keys()].sort()),
+      lifecycleIds: Object.freeze([...this.lifecyclesById.keys()].sort()),
+    });
+  }
+
+  resolveElement(identity: string): AstylarPluginElementDefinition | undefined {
+    return this.elementsById.get(identity) ?? this.elementAliases.get(identity);
+  }
+
+  resolveProperty(identity: string): AstylarPluginPropertyDefinition | undefined {
+    return this.propertiesById.get(identity) ?? this.propertyAliases.get(identity);
+  }
+
+  resolveRendererForElement(
+    elementIdentity: string,
+  ): AstylarPluginRendererDefinition | undefined {
+    const element = this.resolveElement(elementIdentity);
+    return element ? this.rendererByElementId.get(element.id) : undefined;
+  }
+
+  resolveLifecycle(identity: string): AstylarPluginLifecycleDefinition | undefined {
+    return this.lifecyclesById.get(identity);
+  }
+
+  /** Registry mutation is never supported after construction. */
+  registerPlugin(_definition: AstylarPluginDefinition): never {
+    this.fail(
+      'plugin-registry-sealed',
+      'The Astylar capability registry is sealed before rendering begins.',
+    );
+  }
+
+  private resolvePlugins(
+    definitions: readonly AstylarPluginDefinition[],
+  ): AstylarPluginDefinition[] {
+    for (const rawDefinition of definitions) {
+      const definition = defineAstylarPlugin(rawDefinition);
+      this.validatePluginMetadata(definition);
+      if (this.pluginsById.has(definition.id)) {
+        this.fail(
+          'plugin-duplicate',
+          `Plugin ${JSON.stringify(definition.id)} is registered more than once.`,
+          definition.id,
+        );
+      }
+      this.pluginsById.set(definition.id, definition);
+    }
+
+    for (const definition of this.pluginsById.values()) {
+      for (const dependency of definition.dependencies ?? []) {
+        if (!this.pluginsById.has(dependency)) {
+          this.fail(
+            'plugin-dependency-missing',
+            `Plugin ${JSON.stringify(definition.id)} requires missing plugin ${JSON.stringify(dependency)}.`,
+            definition.id,
+            dependency,
+          );
+        }
+      }
+    }
+
+    const indegree = new Map<string, number>();
+    const dependents = new Map<string, string[]>();
+    for (const definition of this.pluginsById.values()) {
+      indegree.set(definition.id, definition.dependencies?.length ?? 0);
+      for (const dependency of definition.dependencies ?? []) {
+        const entries = dependents.get(dependency) ?? [];
+        entries.push(definition.id);
+        dependents.set(dependency, entries);
+      }
+    }
+
+    const ready = [...indegree]
+      .filter(([, count]) => count === 0)
+      .map(([id]) => id)
+      .sort();
+    const result: AstylarPluginDefinition[] = [];
+    while (ready.length > 0) {
+      const id = ready.shift()!;
+      result.push(this.pluginsById.get(id)!);
+      for (const dependent of (dependents.get(id) ?? []).sort()) {
+        const remaining = indegree.get(dependent)! - 1;
+        indegree.set(dependent, remaining);
+        if (remaining === 0) {
+          ready.push(dependent);
+          ready.sort();
+        }
+      }
+    }
+
+    if (result.length !== this.pluginsById.size) {
+      const cycle = [...indegree]
+        .filter(([, count]) => count > 0)
+        .map(([id]) => id)
+        .sort();
+      this.fail(
+        'plugin-dependency-cycle',
+        `Plugin dependency cycle includes: ${cycle.join(', ')}.`,
+        cycle[0],
+      );
+    }
+    return result;
+  }
+
+  private validatePluginMetadata(definition: AstylarPluginDefinition): void {
+    if (!isPluginId(definition.id)) {
+      this.fail(
+        'plugin-id-invalid',
+        `Plugin ID ${JSON.stringify(definition.id)} must be a lowercase namespaced identity.`,
+        definition.id,
+      );
+    }
+    if (!isSemver(definition.version)) {
+      this.fail(
+        'plugin-version-invalid',
+        `Plugin ${JSON.stringify(definition.id)} has invalid version ${JSON.stringify(definition.version)}.`,
+        definition.id,
+      );
+    }
+    if (definition.pluginApiVersion !== ASTYLAR_PLUGIN_API_VERSION) {
+      this.fail(
+        'plugin-api-incompatible',
+        `Plugin ${JSON.stringify(definition.id)} requires plugin API ${definition.pluginApiVersion}; Astylar supports ${ASTYLAR_PLUGIN_API_VERSION}.`,
+        definition.id,
+      );
+    }
+    const dependencies = definition.dependencies ?? [];
+    if (new Set(dependencies).size !== dependencies.length || dependencies.includes(definition.id)) {
+      this.fail(
+        'plugin-dependency-invalid',
+        `Plugin ${JSON.stringify(definition.id)} has duplicate or self-referential dependencies.`,
+        definition.id,
+      );
+    }
+    for (const dependency of dependencies) {
+      if (!isPluginId(dependency)) {
+        this.fail(
+          'plugin-dependency-invalid',
+          `Plugin ${JSON.stringify(definition.id)} has invalid dependency ${JSON.stringify(dependency)}.`,
+          definition.id,
+          dependency,
+        );
+      }
+    }
+
+    const actual = contributionKinds(definition.contributions);
+    const declared = [...new Set(definition.contributes)].sort();
+    if (declared.length !== definition.contributes.length ||
+        actual.join('\0') !== declared.join('\0')) {
+      this.fail(
+        'plugin-contribution-invalid',
+        `Plugin ${JSON.stringify(definition.id)} declares ${declared.join(', ') || 'no contributions'} but provides ${actual.join(', ') || 'none'}.`,
+        definition.id,
+      );
+    }
+  }
+
+  private indexContributions(): void {
+    for (const plugin of this.plugins) {
+      for (const element of plugin.contributions.elements ?? []) {
+        this.addContribution(plugin.id, 'element', element.id, this.elementsById, element);
+        this.addAlias(plugin.id, 'element', element.id, element.alias, this.elementAliases, element);
+      }
+      for (const property of plugin.contributions.properties ?? []) {
+        this.addContribution(plugin.id, 'property', property.id, this.propertiesById, property);
+        this.addAlias(plugin.id, 'property', property.id, property.alias, this.propertyAliases, property);
+        if (property.affects.length === 0 ||
+            property.affects.some((domain) => !INVALIDATION_DOMAINS.has(domain))) {
+          this.fail(
+            'plugin-contribution-invalid',
+            `Property ${JSON.stringify(property.id)} must declare valid invalidation domains.`,
+            plugin.id,
+            property.id,
+          );
+        }
+      }
+      for (const renderer of plugin.contributions.renderers ?? []) {
+        this.addContribution(plugin.id, 'renderer', renderer.id, this.renderersById, renderer);
+      }
+      for (const lifecycle of plugin.contributions.lifecycle ?? []) {
+        this.addContribution(plugin.id, 'lifecycle', lifecycle.id, this.lifecyclesById, lifecycle);
+      }
+    }
+
+    for (const plugin of this.plugins) {
+      for (const renderer of plugin.contributions.renderers ?? []) {
+        if (renderer.elements.length === 0 || new Set(renderer.elements).size !== renderer.elements.length) {
+          this.fail(
+            'plugin-renderer-claim-invalid',
+            `Renderer ${JSON.stringify(renderer.id)} must claim one or more distinct elements.`,
+            plugin.id,
+            renderer.id,
+          );
+        }
+        for (const elementId of renderer.elements) {
+          const element = this.elementsById.get(elementId);
+          if (!element || !elementId.startsWith(`${plugin.id}:`)) {
+            this.fail(
+              'plugin-renderer-claim-invalid',
+              `Renderer ${JSON.stringify(renderer.id)} may only claim elements contributed by ${JSON.stringify(plugin.id)}.`,
+              plugin.id,
+              renderer.id,
+            );
+          }
+          const existing = this.rendererByElementId.get(element.id);
+          if (existing) {
+            this.fail(
+              'plugin-renderer-conflict',
+              `Element ${JSON.stringify(element.id)} is claimed by both ${JSON.stringify(existing.id)} and ${JSON.stringify(renderer.id)}.`,
+              plugin.id,
+              renderer.id,
+            );
+          }
+          this.rendererByElementId.set(element.id, renderer);
+        }
+      }
+    }
+
+    for (const plugin of this.plugins) {
+      for (const element of plugin.contributions.elements ?? []) {
+        if (!this.rendererByElementId.has(element.id)) {
+          this.fail(
+            'plugin-renderer-missing',
+            `Element ${JSON.stringify(element.id)} has no renderer contribution.`,
+            plugin.id,
+            element.id,
+          );
+        }
+      }
+    }
+  }
+
+  private addContribution<T>(
+    pluginId: string,
+    kind: string,
+    id: string,
+    target: Map<string, T>,
+    value: T,
+  ): void {
+    if (!isContributionId(pluginId, id)) {
+      this.fail(
+        'plugin-contribution-invalid',
+        `${capitalize(kind)} ID ${JSON.stringify(id)} must be namespaced by ${JSON.stringify(pluginId)}.`,
+        pluginId,
+        id,
+      );
+    }
+    if (target.has(id)) {
+      this.fail(
+        'plugin-contribution-duplicate',
+        `${capitalize(kind)} ${JSON.stringify(id)} is registered more than once.`,
+        pluginId,
+        id,
+      );
+    }
+    target.set(id, value);
+  }
+
+  private addAlias<T>(
+    pluginId: string,
+    kind: string,
+    contributionId: string,
+    alias: string | undefined,
+    target: Map<string, T>,
+    value: T,
+  ): void {
+    if (!alias) return;
+    if (!/^[a-z][A-Za-z0-9-]*$/.test(alias)) {
+      this.fail(
+        'plugin-alias-invalid',
+        `${capitalize(kind)} alias ${JSON.stringify(alias)} is invalid.`,
+        pluginId,
+        contributionId,
+      );
+    }
+    if (target.has(alias)) {
+      this.fail(
+        'plugin-alias-conflict',
+        `${capitalize(kind)} alias ${JSON.stringify(alias)} is ambiguous.`,
+        pluginId,
+        contributionId,
+      );
+    }
+    target.set(alias, value);
+  }
+
+  private fail(
+    code: Extract<AstylarDiagnostic['code'],
+      | 'plugin-id-invalid'
+      | 'plugin-version-invalid'
+      | 'plugin-api-incompatible'
+      | 'plugin-duplicate'
+      | 'plugin-dependency-invalid'
+      | 'plugin-dependency-missing'
+      | 'plugin-dependency-cycle'
+      | 'plugin-contribution-invalid'
+      | 'plugin-contribution-duplicate'
+      | 'plugin-alias-invalid'
+      | 'plugin-alias-conflict'
+      | 'plugin-renderer-claim-invalid'
+      | 'plugin-renderer-conflict'
+      | 'plugin-renderer-missing'
+      | 'plugin-registry-sealed'>,
+    message: string,
+    pluginId?: string,
+    contributionId?: string,
+  ): never {
+    const diagnostic: AstylarDiagnostic = {
+      code,
+      severity: 'error',
+      message,
+      pluginId,
+      contributionId,
+    };
+    throw new AstylarDiagnosticError(this.report?.(diagnostic) ?? diagnostic);
+  }
+}
+
+const INVALIDATION_DOMAINS = new Set<AstylarPluginInvalidationDomain>([
+  'layout',
+  'paint',
+  'semantics',
+  'interaction',
+]);
+
+function isPluginId(id: string): boolean {
+  return /^[a-z][a-z0-9]*(?:[.-][a-z0-9][a-z0-9-]*)+$/.test(id);
+}
+
+function isContributionId(pluginId: string, id: string): boolean {
+  if (!id.startsWith(`${pluginId}:`)) return false;
+  return /^[a-z][a-z0-9]*(?:[.-][a-z0-9][a-z0-9-]*)+:[a-z][a-z0-9-]*(?:\.[a-z0-9-]+)*$/.test(id);
+}
+
+function isSemver(version: string): boolean {
+  return /^(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?$/.test(version);
+}
+
+function contributionKinds(
+  contributions: AstylarPluginContributions,
+): AstylarPluginContributionKind[] {
+  const result: AstylarPluginContributionKind[] = [];
+  if (contributions.elements?.length) result.push('elements');
+  if (contributions.properties?.length) result.push('properties');
+  if (contributions.renderers?.length) result.push('renderers');
+  if (contributions.lifecycle?.length) result.push('lifecycle');
+  return result.sort();
+}
+
+function capitalize(value: string): string {
+  return `${value.charAt(0).toUpperCase()}${value.slice(1)}`;
+}

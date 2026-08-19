@@ -65,6 +65,33 @@ export type {
   AstylarInvalidationReason,
   AstylarSessionSnapshot,
 } from "./astylar-render-session";
+export {
+  ASTYLAR_PLUGIN_API_VERSION,
+  ASTYLAR_PLUGIN_DEFINITIONS,
+  AstylarCapabilityRegistry,
+  defineAstylarPlugin,
+  provideAstylar,
+  provideAstylarPlugin,
+} from './astylar-plugin';
+export type {
+  AstylarCapabilityRegistrySnapshot,
+  AstylarConfig,
+  AstylarPluginApiVersion,
+  AstylarPluginContributionKind,
+  AstylarPluginContributions,
+  AstylarPluginDefinition,
+  AstylarPluginElementDefinition,
+  AstylarPluginElementRenderer,
+  AstylarPluginInvalidationDomain,
+  AstylarPluginLifecycle,
+  AstylarPluginLifecycleDefinition,
+  AstylarPluginPropertyDefinition,
+  AstylarPluginRendererDefinition,
+  AstylarPluginRenderContext,
+  AstylarPluginRenderDimensions,
+  AstylarPluginValidationContext,
+  AstylarPluginValidationResult,
+} from './astylar-plugin';
 
 /**
  * Functional API wrapper for the Astylar library.

@@ -160,3 +160,19 @@ Status: complete.
 - Fixed Angular-native architecture, DI ownership, deterministic registry,
   renderer trust, and scope boundaries before implementation.
 
+### Increment 1: public contract and sealed registry
+
+Status: complete.
+
+- Added the versioned Angular-native plugin definition, contribution, renderer,
+  lifecycle, validation, configuration, and provider-helper API.
+- Added immutable definitions and a sealed per-surface capability registry with
+  deterministic dependency ordering and namespaced element, property, renderer,
+  and lifecycle lookup.
+- Added typed failures for malformed or duplicate identities, incompatible API
+  versions, dependency failures, ambiguous aliases, invalid renderer claims,
+  missing renderers, and attempted late mutation.
+- Added nine focused tests covering Angular multi-provider collection,
+  immutability, deterministic ordering, lookup, conflicts, graph failures, and
+  sealing. The complete suite passes with 244 tests.
+- `npm run build:lib` passes with the new public declarations.

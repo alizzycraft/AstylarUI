@@ -14,7 +14,26 @@ export type AstylarDiagnosticCode =
   | 'surface-disposed'
   | 'surface-not-found'
   | 'canvas-in-use'
-  | 'render-failed';
+  | 'render-failed'
+  | 'plugin-id-invalid'
+  | 'plugin-version-invalid'
+  | 'plugin-api-incompatible'
+  | 'plugin-duplicate'
+  | 'plugin-dependency-invalid'
+  | 'plugin-dependency-missing'
+  | 'plugin-dependency-cycle'
+  | 'plugin-contribution-invalid'
+  | 'plugin-contribution-duplicate'
+  | 'plugin-alias-invalid'
+  | 'plugin-alias-conflict'
+  | 'plugin-renderer-claim-invalid'
+  | 'plugin-renderer-conflict'
+  | 'plugin-renderer-missing'
+  | 'plugin-registry-sealed'
+  | 'plugin-initialization-failed'
+  | 'plugin-render-failed'
+  | 'plugin-element-invalid'
+  | 'plugin-property-invalid';
 
 export interface AstylarDiagnostic {
   readonly code: AstylarDiagnosticCode;
@@ -24,6 +43,8 @@ export interface AstylarDiagnostic {
   readonly elementId?: string;
   readonly property?: string;
   readonly value?: unknown;
+  readonly pluginId?: string;
+  readonly contributionId?: string;
 }
 
 export type AstylarDiagnosticLogLevel = AstylarDiagnosticSeverity | 'silent';
@@ -105,6 +126,8 @@ export class AstylarDiagnostics {
       frozen.path ?? '',
       frozen.elementId ?? '',
       frozen.property ?? '',
+      frozen.pluginId ?? '',
+      frozen.contributionId ?? '',
     ].join('\u0000');
     if (this.seen.has(key)) return frozen;
     this.seen.add(key);
