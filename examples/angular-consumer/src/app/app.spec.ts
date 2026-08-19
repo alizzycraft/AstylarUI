@@ -23,6 +23,7 @@ describe('external AstylarUI consumer', () => {
     const fixture = TestBed.createComponent(App);
     fixture.detectChanges();
     expect(fixture.componentInstance).toBeTruthy();
-    expect(fixture.nativeElement.querySelector('[data-testid="astylar-surface"]')).toBeTruthy();
+    expect(fixture.nativeElement.querySelector('[data-testid="primary-astylar-surface"]')).toBeTruthy();
+    expect(fixture.nativeElement.querySelector('[data-testid="secondary-astylar-surface"]')).toBeTruthy();
   });
 });

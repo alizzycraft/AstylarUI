@@ -143,4 +143,35 @@ Status: complete.
 
 ## Increment 3: simultaneous surface isolation
 
+Status: complete.
+
+- Refactored the root `Astylar` service into a lightweight public factory. Every
+  `mount()` creates a child environment injector containing a complete private
+  renderer dependency graph, and destroying the scene releases that injector.
+  Mutable camera, mesh, DOM, style, input, focus, form, selection, scroll,
+  clipping, resource, positioning, and text services are no longer shared across
+  public surfaces.
+- Added a browser integration regression that mounts two real WebGL scenes using
+  the same authored IDs, settles both, updates only one, disposes it, verifies its
+  resources and registrations reach zero/disposed state, continues updating the
+  other, and then verifies the second surface's final cleanup. Each surface owns
+  and disconnects its own resize observer.
+- Fixed re-entrant Babylon engine disposal discovered by the two-surface test.
+  Explicit surface disposal now disposes the scene and then the engine; legacy
+  scene-only disposal defers engine cleanup until Babylon finishes its scene
+  cleanup stack.
+- Cancelled the camera service's delayed diagnostic callback during cleanup so it
+  cannot access a disposed camera or outlive its surface.
+- Expanded the external consumer to keep two responsive Astylar components live
+  simultaneously, update them independently, explicitly resize the secondary
+  surface, and remove/remount the primary while the secondary remains active.
+- `npm test -- --watch=false`: 227 tests passed.
+- `npm run build:lib`: passed.
+- `npm run build`: passed and prerendered two routes with only the established
+  initial-bundle and stylesheet budget warnings.
+- `npm run consumer:check`: 375 packed files; consumer browser/server build,
+  prerender, and test passed with the two-surface application.
+
+## Increment 4: typed validation diagnostics and logging
+
 Status: pending.

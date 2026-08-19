@@ -20,13 +20,23 @@ import {
 })
 export class App {
   private readonly zone = inject(NgZone);
-  private activeSurface?: AstylarSurface;
+  private primarySurface?: AstylarSurface;
+  private secondarySurface?: AstylarSurface;
 
   protected readonly revision = signal(1);
+  protected readonly secondaryRevision = signal(1);
   protected readonly dialogOpen = signal(false);
+  protected readonly primaryVisible = signal(true);
   protected readonly status = signal('Waiting for the browser renderer.');
-  protected readonly siteData = computed(() => this.createSiteData());
-  protected readonly renderOptions: AstylarRenderOptions = {
+  protected readonly primaryData = computed(() => this.createSiteData(
+    this.revision(),
+    this.dialogOpen(),
+  ));
+  protected readonly secondaryData = computed(() => this.createSiteData(
+    this.secondaryRevision(),
+    false,
+  ));
+  protected readonly primaryOptions: AstylarRenderOptions = {
     events: {
       handlers: {
         'add-item': { click: () => this.zone.run(() => this.refreshData()) },
@@ -39,10 +49,23 @@ export class App {
       }),
     },
   };
+  protected readonly secondaryOptions: AstylarRenderOptions = {
+    events: {
+      handlers: {
+        'add-item': { click: () => this.zone.run(() => this.refreshSecondaryData()) },
+      },
+    },
+    navigation: {
+      onNavigate: (outcome) => this.zone.run(() => {
+        this.status.set(`Secondary navigation accepted: ${outcome.href}`);
+      }),
+    },
+  };
 
-  protected onMounted(surface: AstylarSurface): void {
-    this.activeSurface = surface;
-    this.status.set('Renderer settled and ready.');
+  protected onMounted(kind: 'primary' | 'secondary', surface: AstylarSurface): void {
+    if (kind === 'primary') this.primarySurface = surface;
+    else this.secondarySurface = surface;
+    this.status.set(`${kind === 'primary' ? 'Primary' : 'Secondary'} renderer settled and ready.`);
   }
 
   protected onFailed(error: unknown): void {
@@ -54,20 +77,30 @@ export class App {
     this.status.set(`Applying revision ${this.revision()}.`);
   }
 
+  protected refreshSecondaryData(): void {
+    this.secondaryRevision.update((value) => value + 1);
+    this.status.set(`Applying secondary revision ${this.secondaryRevision()}.`);
+  }
+
+  protected togglePrimarySurface(): void {
+    this.primaryVisible.update((visible) => !visible);
+    if (!this.primaryVisible()) this.primarySurface = undefined;
+    this.status.set(this.primaryVisible() ? 'Remounting the primary surface.' : 'Disposed the primary surface; secondary remains active.');
+  }
+
   protected toggleDialog(): void {
     this.dialogOpen.update((open) => !open);
     this.status.set(this.dialogOpen() ? 'Opening details dialog.' : 'Closing details dialog.');
   }
 
-  protected resizeSurface(): void {
-    const resize = this.activeSurface?.resize();
+  protected resizeSurface(kind: 'primary' | 'secondary'): void {
+    const resize = (kind === 'primary' ? this.primarySurface : this.secondarySurface)?.resize();
     if (resize) {
       void resize.then(() => this.zone.run(() => this.status.set('Explicit resize completed.')));
     }
   }
 
-  private createSiteData(): SiteData {
-    const revision = this.revision();
+  private createSiteData(revision: number, dialogOpen: boolean): SiteData {
     return {
       root: {
         children: [
@@ -157,7 +190,7 @@ export class App {
                     ],
                   },
                   {
-                    type: 'dialog', id: 'details-dialog', modal: true, open: this.dialogOpen(), children: [
+                    type: 'dialog', id: 'details-dialog', modal: true, open: dialogOpen, children: [
                       { type: 'h2', id: 'dialog-title', textContent: 'Item details' },
                       { type: 'p', id: 'dialog-copy', textContent: 'This modal is rendered and reconciled by the installed AstylarUI package.' },
                       { type: 'button', id: 'dialog-close', value: 'Close' },

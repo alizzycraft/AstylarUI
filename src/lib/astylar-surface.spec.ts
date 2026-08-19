@@ -7,7 +7,11 @@ describe('AstylarSurfaceHandle', () => {
 
   function setup() {
     let disposed = false;
-    const engine = { resize: jasmine.createSpy('resize') };
+    const engine = {
+      isDisposed: false,
+      resize: jasmine.createSpy('resize'),
+      dispose: jasmine.createSpy('dispose').and.callFake(() => { engine.isDisposed = true; }),
+    };
     const scene = {
       get isDisposed() { return disposed; },
       getEngine: () => engine,

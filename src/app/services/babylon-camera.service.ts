@@ -6,6 +6,7 @@ import { Scene, FreeCamera, Vector3 } from '@babylonjs/core';
 })
 export class BabylonCameraService {
   private camera?: FreeCamera;
+  private dprLogTimer?: ReturnType<typeof setTimeout>;
 
   constructor() { }
 
@@ -32,8 +33,10 @@ export class BabylonCameraService {
     // Log for debugging
     console.log(`[DPR] Camera initialized for DPR-aware FOV: cssHeight=${canvas.height}, fov=${(fov * 180 / Math.PI).toFixed(1)}, cameraDistance=${cameraDistance}`);
 
-    setTimeout(() => {
-      this.logDprInfo();
+    if (this.dprLogTimer) clearTimeout(this.dprLogTimer);
+    this.dprLogTimer = setTimeout(() => {
+      this.dprLogTimer = undefined;
+      if (this.camera) this.logDprInfo();
     }, 100);
 
     return this.camera;
@@ -413,6 +416,10 @@ export class BabylonCameraService {
   }
 
   cleanup(): void {
+    if (this.dprLogTimer) {
+      clearTimeout(this.dprLogTimer);
+      this.dprLogTimer = undefined;
+    }
     this.camera?.dispose();
     this.camera = undefined;
   }

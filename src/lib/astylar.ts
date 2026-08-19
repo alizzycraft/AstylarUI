@@ -4,7 +4,12 @@
  * Main entry point for rendering HTML-like structures in BabylonJS 3D scenes.
  */
 
-import { Injectable, inject } from "@angular/core";
+import {
+  createEnvironmentInjector,
+  EnvironmentInjector,
+  Injectable,
+  inject,
+} from "@angular/core";
 import {
   Engine,
   Scene,
@@ -56,6 +61,7 @@ import {
   AstylarSurfaceHandle,
   type AstylarSurface,
 } from './astylar-surface';
+import { ASTYLAR_SURFACE_SERVICE_PROVIDERS } from './astylar-surface-providers';
 
 /**
  * Configuration options for rendering
@@ -78,8 +84,8 @@ export interface AstylarRenderOptions {
 /**
  * AstylarService - Provides an API for rendering 3D UI scenes
  */
-@Injectable({ providedIn: "root" })
-export class Astylar {
+@Injectable()
+class AstylarRenderer {
   private babylonDOMRenderer = inject(BabylonDOMRendererService);
   private babylonCameraService = inject(BabylonCameraService);
   private babylonMeshService = inject(BabylonMeshService);
@@ -606,11 +612,11 @@ export class Astylar {
       this.babylonCameraService.cleanup();
       this.babylonMeshService.cleanup();
 
-      // Dispose engine only if it's not already in the process of disposing
-      if (engine && !engine.isDisposed) {
-        console.log("[Astylar] Disposing engine");
-        engine.dispose();
-      }
+      // Scene disposal is still inside Babylon's cleanup stack here. Deferring
+      // legacy scene-only engine ownership avoids re-entering Engine.dispose().
+      queueMicrotask(() => {
+        if (!engine.isDisposed) engine.dispose();
+      });
     });
 
     // Return the scene directly
@@ -857,5 +863,130 @@ export class Astylar {
         }
       }
     }
+  }
+}
+
+interface AstylarSurfaceRecord {
+  readonly injector: EnvironmentInjector;
+  readonly renderer: AstylarRenderer;
+  readonly surface: AstylarSurface;
+}
+
+/** Public factory and compatibility facade for independently scoped surfaces. */
+@Injectable({ providedIn: 'root' })
+export class Astylar {
+  private readonly parentInjector = inject(EnvironmentInjector);
+  private readonly surfaces = new WeakMap<Scene, AstylarSurfaceRecord>();
+  private activeScene?: Scene;
+
+  mount(
+    canvas: HTMLCanvasElement,
+    siteData: SiteData,
+    options?: AstylarRenderOptions,
+  ): AstylarSurface {
+    const injector = createEnvironmentInjector(
+      [AstylarRenderer, ...ASTYLAR_SURFACE_SERVICE_PROVIDERS],
+      this.parentInjector,
+      'AstylarSurface',
+    );
+    let injectorDestroyed = false;
+    const destroyInjector = (): void => {
+      if (injectorDestroyed) return;
+      injectorDestroyed = true;
+      injector.destroy();
+    };
+    try {
+      const renderer = injector.get(AstylarRenderer);
+      const surface = renderer.mount(canvas, siteData, options);
+      const record: AstylarSurfaceRecord = { injector, renderer, surface };
+      this.surfaces.set(surface.scene, record);
+      this.activeScene = surface.scene;
+      surface.scene.onDisposeObservable.addOnce(() => {
+        this.surfaces.delete(surface.scene);
+        if (this.activeScene === surface.scene) this.activeScene = undefined;
+        destroyInjector();
+      });
+      return surface;
+    } catch (error) {
+      destroyInjector();
+      throw error;
+    }
+  }
+
+  /** Compatibility API. Prefer retaining the handle returned by `mount()`. */
+  render(
+    canvas: HTMLCanvasElement,
+    siteData: SiteData,
+    options?: AstylarRenderOptions,
+  ): Scene {
+    return this.mount(canvas, siteData, options).scene;
+  }
+
+  getSurface(scene: Scene): AstylarSurface | undefined {
+    return this.surfaces.get(scene)?.surface;
+  }
+
+  getSession(scene?: Scene): AstylarRenderSession | undefined {
+    const record = this.getRecord(scene, false);
+    return record?.renderer.getSession(scene ?? this.activeScene);
+  }
+
+  getResourceSnapshot(scene: Scene): AstylarSceneResourceSnapshot | undefined {
+    return this.surfaces.get(scene)?.renderer.getResourceSnapshot(scene);
+  }
+
+  getInteractionSnapshot(scene: Scene): AstylarInteractionSnapshot | undefined {
+    return this.surfaces.get(scene)?.renderer.getInteractionSnapshot(scene);
+  }
+
+  getScrollSnapshot(scene: Scene): AstylarScrollSnapshot | undefined {
+    return this.surfaces.get(scene)?.renderer.getScrollSnapshot(scene);
+  }
+
+  getSemanticSnapshot(scene: Scene): AstylarSemanticSnapshot | undefined {
+    return this.surfaces.get(scene)?.renderer.getSemanticSnapshot(scene);
+  }
+
+  getVisualReconciliationSnapshot(
+    scene: Scene,
+  ): AstylarVisualReconciliationSnapshot | undefined {
+    return this.surfaces.get(scene)?.renderer.getVisualReconciliationSnapshot(scene);
+  }
+
+  update(siteData: SiteData, scene?: Scene): Promise<AstylarSessionSnapshot> {
+    const record = this.getRecord(scene);
+    return record.renderer.update(siteData, scene ?? this.activeScene);
+  }
+
+  invalidate(
+    reason: AstylarInvalidationReason = 'manual',
+    scene?: Scene,
+  ): Promise<AstylarSessionSnapshot> {
+    const record = this.getRecord(scene);
+    return record.renderer.invalidate(reason, scene ?? this.activeScene);
+  }
+
+  whenSettled(scene?: Scene): Promise<AstylarSessionSnapshot> {
+    const record = this.getRecord(scene);
+    return record.renderer.whenSettled(scene ?? this.activeScene);
+  }
+
+  private getRecord(
+    scene?: Scene,
+  ): AstylarSurfaceRecord;
+  private getRecord(
+    scene: Scene | undefined,
+    required: false,
+  ): AstylarSurfaceRecord | undefined;
+  private getRecord(
+    scene?: Scene,
+    required = true,
+  ): AstylarSurfaceRecord | undefined {
+    const resolvedScene = scene ?? this.activeScene;
+    const record = resolvedScene ? this.surfaces.get(resolvedScene) : undefined;
+    if (!record && required) {
+      throw new Error('No active Astylar rendering surface was found.');
+    }
+    return record;
   }
 }

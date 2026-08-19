@@ -10,24 +10,49 @@
       <button type="button" (click)="toggleDialog()">
         {{ dialogOpen() ? 'Close details' : 'Open details' }}
       </button>
-      <button type="button" (click)="resizeSurface()">Resize surface</button>
+      <button type="button" (click)="refreshSecondaryData()">Update secondary</button>
+      <button type="button" (click)="togglePrimarySurface()">
+        {{ primaryVisible() ? 'Dispose primary' : 'Remount primary' }}
+      </button>
+      <button type="button" (click)="resizeSurface('secondary')">Resize secondary</button>
     </div>
   </header>
 
-  <section class="surface-card" aria-labelledby="surface-title">
-    <div class="surface-heading">
-      <div>
-        <p class="eyebrow">Public API surface</p>
-        <h2 id="surface-title">Responsive inventory view</h2>
+  <div class="surface-grid">
+    @if (primaryVisible()) {
+      <section class="surface-card" aria-labelledby="primary-surface-title">
+        <div class="surface-heading">
+          <div>
+            <p class="eyebrow">Primary public API surface</p>
+            <h2 id="primary-surface-title">Responsive inventory view</h2>
+          </div>
+          <output aria-live="polite">Revision {{ revision() }}</output>
+        </div>
+        <astylar-surface
+          data-testid="primary-astylar-surface"
+          [siteData]="primaryData()"
+          [options]="primaryOptions"
+          (mounted)="onMounted('primary', $event)"
+          (failed)="onFailed($event)"
+        />
+      </section>
+    }
+
+    <section class="surface-card" aria-labelledby="secondary-surface-title">
+      <div class="surface-heading">
+        <div>
+          <p class="eyebrow">Independent secondary surface</p>
+          <h2 id="secondary-surface-title">Parallel renderer ownership</h2>
+        </div>
+        <output aria-live="polite">Revision {{ secondaryRevision() }}</output>
       </div>
-      <output aria-live="polite">Revision {{ revision() }}</output>
-    </div>
-    <astylar-surface
-      data-testid="astylar-surface"
-      [siteData]="siteData()"
-      [options]="renderOptions"
-      (mounted)="onMounted($event)"
-      (failed)="onFailed($event)"
-    />
-  </section>
+      <astylar-surface
+        data-testid="secondary-astylar-surface"
+        [siteData]="secondaryData()"
+        [options]="secondaryOptions"
+        (mounted)="onMounted('secondary', $event)"
+        (failed)="onFailed($event)"
+      />
+    </section>
+  </div>
 </main>

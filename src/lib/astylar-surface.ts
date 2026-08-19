@@ -89,7 +89,9 @@ export class AstylarSurfaceHandle implements AstylarSurface {
   dispose(): void {
     if (this.disposed) return;
     this.disposeRequested = true;
+    const engine = this.scene.getEngine();
     this.scene.dispose();
+    if (!engine.isDisposed) engine.dispose();
   }
 
   private assertActive(operation: string): void {
