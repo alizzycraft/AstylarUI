@@ -89,6 +89,14 @@ export interface AstylarRenderOptions {
   diagnostics?: AstylarDiagnosticsOptions;
 }
 
+/** @internal Test-harness access to the registries owned by one isolated surface. */
+export const ASTYLAR_INTERNAL_INSPECTION = Symbol('AstylarInternalInspection');
+
+export interface AstylarInternalInspection {
+  readonly elementManager: BabylonElementManagerService;
+  readonly inputElementService: InputElementService;
+}
+
 /**
  * AstylarService - Provides an API for rendering 3D UI scenes
  */
@@ -113,6 +121,14 @@ class AstylarRenderer {
   private readonly surfaceHandles = new WeakMap<Scene, AstylarSurface>();
   private readonly diagnostics: AstylarDiagnostics = inject(AstylarDiagnostics);
   private activeSession?: AstylarRenderSession;
+
+  /** @internal */
+  get inspection(): AstylarInternalInspection {
+    return {
+      elementManager: this.elementManager,
+      inputElementService: this.inputElementService,
+    };
+  }
 
   /**
    * Mounts an explicitly owned rendering surface on the provided canvas.
@@ -915,6 +931,11 @@ export class Astylar {
   private readonly surfaces = new WeakMap<Scene, AstylarSurfaceRecord>();
   private readonly canvases = new WeakMap<HTMLCanvasElement, AstylarSurface>();
   private activeScene?: Scene;
+
+  /** @internal Used by the repository parity harness; not exported by the package entry point. */
+  [ASTYLAR_INTERNAL_INSPECTION](scene: Scene): AstylarInternalInspection | undefined {
+    return this.surfaces.get(scene)?.renderer.inspection;
+  }
 
   mount(
     canvas: HTMLCanvasElement,

@@ -21,6 +21,7 @@ import { Astylar } from '../lib';
 import type { AstylarEvent, AstylarEventSnapshot } from '../lib';
 import { BabylonElementManagerService } from '../app/services/dom/element-manager.service';
 import { InputElementService } from '../app/services/dom/input/input-element.service';
+import { ASTYLAR_INTERNAL_INSPECTION } from '../lib/astylar';
 import { getParityFixture } from './fixtures';
 import {
   getParityViewport,
@@ -67,8 +68,8 @@ import {
 })
 export class ParityAstylarComponent {
   private readonly astylar = inject(Astylar);
-  private readonly elementManager = inject(BabylonElementManagerService);
-  private readonly inputElementService = inject(InputElementService);
+  private elementManager!: BabylonElementManagerService;
+  private inputElementService!: InputElementService;
   private readonly route = inject(ActivatedRoute);
   private readonly zone = inject(NgZone);
   private readonly destroyRef = inject(DestroyRef);
@@ -172,33 +173,38 @@ export class ParityAstylarComponent {
       });
       scene.activeCamera?.detachControl();
       this.scene = scene;
+      const surface = this.astylar.getSurface(scene);
+      if (!surface) throw new Error('Astylar surface handle is unavailable.');
+      const inspection = this.astylar[ASTYLAR_INTERNAL_INSPECTION](scene);
+      if (!inspection) throw new Error('Astylar surface inspection is unavailable.');
+      this.elementManager = inspection.elementManager;
+      this.inputElementService = inspection.inputElementService;
       if (dynamicSequence || interactionSequence) {
         window.__ASTYLAR_PARITY_DISPOSE__ = () => {
-          const session = this.astylar.getSession(scene);
-          const semanticBefore = this.astylar.getSemanticSnapshot(scene);
+          const diagnosticsBefore = surface.diagnostics;
           const before = {
-            resources: this.astylar.getResourceSnapshot(scene),
+            resources: diagnosticsBefore.resources,
             elements: this.elementManager.elementsMap.size,
             inputs: this.elementManager.inputElementsMap.size,
-            cleanupRegistrations: session?.snapshot.cleanupRegistrations ?? 0,
-            semanticNodes: semanticBefore?.nodes ?? 0,
-            semanticEventRegistrations: semanticBefore?.eventRegistrations ?? 0,
-            semanticObserverRegistrations: semanticBefore?.observerRegistrations ?? 0,
+            cleanupRegistrations: diagnosticsBefore.session?.cleanupRegistrations ?? 0,
+            semanticNodes: diagnosticsBefore.semantics?.nodes ?? 0,
+            semanticEventRegistrations: diagnosticsBefore.semantics?.eventRegistrations ?? 0,
+            semanticObserverRegistrations: diagnosticsBefore.semantics?.observerRegistrations ?? 0,
           };
           const engine = scene.getEngine();
-          engine.dispose();
-          const semanticAfter = this.astylar.getSemanticSnapshot(scene);
+          surface.dispose();
+          const diagnosticsAfter = surface.diagnostics;
           return {
             before,
             after: {
-              resources: this.astylar.getResourceSnapshot(scene),
+              resources: diagnosticsAfter.resources,
               elements: this.elementManager.elementsMap.size,
               inputs: this.elementManager.inputElementsMap.size,
-              cleanupRegistrations: session?.snapshot.cleanupRegistrations ?? 0,
-              semanticNodes: semanticAfter?.nodes ?? 0,
-              semanticEventRegistrations: semanticAfter?.eventRegistrations ?? 0,
-              semanticObserverRegistrations: semanticAfter?.observerRegistrations ?? 0,
-              sessionStatus: session?.snapshot.status,
+              cleanupRegistrations: diagnosticsAfter.session?.cleanupRegistrations ?? 0,
+              semanticNodes: diagnosticsAfter.semantics?.nodes ?? 0,
+              semanticEventRegistrations: diagnosticsAfter.semantics?.eventRegistrations ?? 0,
+              semanticObserverRegistrations: diagnosticsAfter.semantics?.observerRegistrations ?? 0,
+              sessionStatus: diagnosticsAfter.session?.status,
               engineDisposed: engine.isDisposed,
               sceneDisposed: scene.isDisposed,
             },
