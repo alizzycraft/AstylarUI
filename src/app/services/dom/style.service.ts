@@ -248,7 +248,7 @@ export class StyleService {
     }
 
     public parseStyles(dom: BabylonDOM, render: BabylonRender, styles: StyleRule[]): void {
-        console.log(`[STYLE-PARSE] Starting to parse ${styles.length} styles`);
+
         styles.forEach((style, index) => {
             if (!this.matchesMediaConditions(style)) return;
 
@@ -263,7 +263,7 @@ export class StyleService {
                         dom.context.elementStyles.set(elementId, { normal: {} as StyleRule });
                     }
                     dom.context.elementStyles.get(elementId)!.hover = style;
-                    console.log(`[STYLE-PARSE] Hover style for ${elementId}`);
+
                 } else if (selector.includes(':active')) {
                     const baseSelector = selector.replace(':active', '');
                     const elementId = baseSelector.replace('#', '');
@@ -271,7 +271,7 @@ export class StyleService {
                         dom.context.elementStyles.set(elementId, { normal: {} as StyleRule });
                     }
                     dom.context.elementStyles.get(elementId)!.active = style;
-                    console.log(`[STYLE-PARSE] Active style for ${elementId}`);
+
                 } else if (selector.includes(':focus')) {
                     const baseSelector = selector.replace(':focus', '');
                     const elementId = baseSelector.replace('#', '');
@@ -279,7 +279,7 @@ export class StyleService {
                         dom.context.elementStyles.set(elementId, { normal: {} as StyleRule });
                     }
                     dom.context.elementStyles.get(elementId)!.focus = style;
-                    console.log(`[STYLE-PARSE] Focus style for ${elementId}`);
+
                 } else if (selector.startsWith('#')) {
                     // This is a normal element style
                     const elementId = selector.replace('#', '');
@@ -316,7 +316,7 @@ export class StyleService {
         for (const entry of dom.context.elementStyles.values()) {
             this.parsedAuthorStyles.add(entry.normal);
         }
-        console.log(`[STYLE-PARSE] Completed parsing. Total stored style keys: ${dom.context.elementStyles.size}`);
+
     }
 
     public findStyleForElement(element: DOMElement, styles: StyleRule[], elementStylesOverride?: Map<string, { normal: StyleRule; hover?: StyleRule; active?: StyleRule; focus?: StyleRule }>): StyleRule | undefined {
@@ -600,7 +600,7 @@ export class StyleService {
             .map(prop => `${prop}=${style[prop] ?? '∅'}`)
             .join(', ');
 
-        console.log(`[STYLE-RESOLVE] ${identifier} via ${path} | ${propSummary}`);
+
     }
 
     /**
@@ -631,20 +631,20 @@ export class StyleService {
 
     public parseBackgroundColor(background?: string): ParsedBackground | null {
         if (!background) {
-            console.log('🎨 COLOR DEBUG: No background color provided, using default');
+
             return {
                 type: 'color',
                 color: new Color3(0.2, 0.2, 0.3)
             };
         }
 
-        console.log(`🎨 COLOR DEBUG: Parsing background color: "${background}"`);
+
         const trimmedBackground = background.trim();
         const colorLower = trimmedBackground.toLowerCase();
 
         const gradient = this.tryParseLinearGradient(trimmedBackground);
         if (gradient) {
-            console.log('🎨 COLOR DEBUG: Successfully parsed linear-gradient background');
+
             return {
                 type: 'gradient',
                 gradient,
@@ -654,15 +654,15 @@ export class StyleService {
 
         // Handle transparent backgrounds
         if (colorLower === 'transparent') {
-            console.log('🎨 COLOR DEBUG: Transparent background detected, returning null');
+
             return null;
         }
 
         // Handle hex colors (#ff0000, #f00)
         if (colorLower.startsWith('#')) {
-            console.log(`🎨 COLOR DEBUG: Parsing hex color: ${background}`);
+
             const result = this.parseHexColor(colorLower);
-            console.log(`🎨 COLOR DEBUG: Hex color result: RGB(${result.r.toFixed(3)}, ${result.g.toFixed(3)}, ${result.b.toFixed(3)})`);
+
             return {
                 type: 'color',
                 color: result
@@ -842,9 +842,9 @@ export class StyleService {
         };
 
         if (namedColors[colorLower]) {
-            console.log(`🎨 COLOR DEBUG: Found named color: ${colorLower}`);
+
             const result = namedColors[colorLower];
-            console.log(`🎨 COLOR DEBUG: Named color result: RGB(${result.r.toFixed(3)}, ${result.g.toFixed(3)}, ${result.b.toFixed(3)})`);
+
             return {
                 type: 'color',
                 color: result
@@ -853,9 +853,9 @@ export class StyleService {
 
         // Handle rgb() and rgba() formats
         if (colorLower.startsWith('rgb(') || colorLower.startsWith('rgba(')) {
-            console.log(`🎨 COLOR DEBUG: Parsing RGB(A) color: ${background}`);
+
             const result = this.parseRgbColor(colorLower);
-            console.log(`🎨 COLOR DEBUG: RGB(A) color result: RGB(${result.color.r.toFixed(3)}, ${result.color.g.toFixed(3)}, ${result.color.b.toFixed(3)}), A=${result.alpha}`);
+
             return {
                 type: 'color',
                 color: result.color,
@@ -864,7 +864,7 @@ export class StyleService {
         }
 
         // Fallback to default
-        console.log(`🎨 COLOR DEBUG: Unknown color format: ${background}, using default`);
+
         return {
             type: 'color',
             color: new Color3(0.2, 0.2, 0.3)
@@ -1123,7 +1123,7 @@ export class StyleService {
         const b = parseInt(values[2], 10) / 255;
         const a = values.length >= 4 ? parseFloat(values[3]) : undefined;
 
-        console.log(`🎨 COLOR DEBUG: Parsed RGB(A): R=${r}, G=${g}, B=${b}, A=${a}`);
+
         return { color: new Color3(r, g, b), alpha: a };
     }
 

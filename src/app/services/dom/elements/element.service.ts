@@ -32,7 +32,7 @@ export class ElementService {
     styles: StyleRule[],
     parentElement?: DOMElement
   ): void {
-    console.log(`[ElementService] processChildren called for ${parentElement?.id || 'unknown'}`);
+
     return this.creationService.processChildren(dom, render, children, parent, styles, parentElement);
   }
 

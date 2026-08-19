@@ -63,7 +63,7 @@ export class TextSelectionControllerService {
     this.activeEntry = entry;
     this.pointerActive = true;
     this.preferredVerticalCaretX = null;
-    console.log('[TextSelectionController] Begin selection:', nextState);
+
     return this.updateState(nextState);
   }
 
@@ -92,7 +92,7 @@ export class TextSelectionControllerService {
       selectionSource: 'pointer'
     };
 
-    console.log('[TextSelectionController] Update selection:', nextState);
+
     return this.updateState(nextState);
   }
 
@@ -110,7 +110,7 @@ export class TextSelectionControllerService {
         this.state.range.start !== this.state.range.end
     };
 
-    console.log('[TextSelectionController] Finalize selection:', finalState);
+
     return this.updateState(finalState);
   }
 
@@ -279,23 +279,12 @@ export class TextSelectionControllerService {
         const widthForComparison = character.width || character.advance;
         const midpoint = character.x + widthForComparison / 2;
         const result = relativeX < midpoint ? character.index : character.index + 1;
-        console.log('[Selection] getCaretIndexForPoint', {
-          position,
-          lineIndex: targetLine.index,
-          relativeX,
-          character: entry.text?.[character.index],
-          characterIndex: character.index,
-          result
-        });
+
         return result;
       }
     }
 
-    console.log('[Selection] getCaretIndexForPoint - end of line', {
-      position,
-      lineIndex: targetLine.index,
-      result: targetLine.endIndex
-    });
+
     return targetLine.endIndex;
   }
 
@@ -336,7 +325,7 @@ export class TextSelectionControllerService {
 
     const start = Math.min(anchor, focus);
     const end = Math.max(anchor, focus);
-    console.log(`[TextSelectionController] createRange: anchor=${anchor}, focus=${focus} -> start=${start}, end=${end}`);
+
     return { start, end };
   }
 
@@ -444,7 +433,7 @@ export class TextSelectionControllerService {
   }
 
   private updateState(nextState: TextSelectionState): TextSelectionState {
-    console.log('[TextSelectionController] Updating state:', nextState);
+
     this.state = nextState;
     this.stateSubject.next(this.state);
     return this.state;

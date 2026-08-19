@@ -135,7 +135,7 @@ export class BabylonDOMRendererService {
       return;
     }
 
-    console.log("🏗️ Creating site from data:", siteData);
+
 
     // Clear existing elements and state. Cached text textures reference the
     // meshes being replaced and must not survive into the next full rebuild.
@@ -146,12 +146,9 @@ export class BabylonDOMRendererService {
     this.ancestry.clear();
 
     // Parse and organize styles
-    console.log("📝 Parsing styles...");
+
     this.styleService.parseStyles(this.dom, this.render!, siteData.styles);
-    console.log(
-      "📝 Parsed styles. ElementStyles map:",
-      this.elementManager.elementStylesMap,
-    );
+
 
     // Create root body element that represents the full viewport/document
     const rootBodyMesh = this.rootService.createRootBodyElement(
@@ -167,12 +164,9 @@ export class BabylonDOMRendererService {
       // created. Register the complete tree first so selector resolution is
       // identical during measurement and final element creation.
       this.registerAncestry(siteData.root.children, rootElement);
-      console.log("👨‍👩‍👧‍👦 Processing root children:", siteData.root.children);
-      console.log("👨‍👩‍👧‍👦 Root children count:", siteData.root.children.length);
-      console.log(
-        "👨‍👩‍👧‍👦 Root children details:",
-        siteData.root.children.map((c) => `${c.type}#${c.id}`),
-      );
+
+
+
       this.elementService.processChildren(
         this.dom,
         this.render!,
@@ -182,17 +176,11 @@ export class BabylonDOMRendererService {
         rootElement,
       );
     } else {
-      console.log("⚠️ No root children found in siteData");
+
     }
 
-    console.log(
-      "✅ Site creation complete. Elements:",
-      this.elementManager.elementsMap.size,
-    );
-    console.log(
-      "🗺️ All elements created:",
-      Array.from(this.elementManager.elementsMap.keys()),
-    );
+
+
   }
 
   private registerAncestry(children: DOMElement[], parent: DOMElement): void {
@@ -253,9 +241,7 @@ export class BabylonDOMRendererService {
     }
 
     try {
-      console.log(
-        `📝 Processing text content for element ${element.id}: "${element.textContent.substring(0, 50)}..."`,
-      );
+
 
       // Validate text element
       const validation = this.validateTextElement(element);
@@ -298,9 +284,7 @@ export class BabylonDOMRendererService {
           height: heightPx,
           padding: { top: 0, right: 0, bottom: 0, left: 0 },
         };
-        console.log(
-          `[TEXT DEBUG] ${element.id}: using fallback element dimensions from mesh bounds: ${widthPx.toFixed(2)}x${heightPx.toFixed(2)}px`,
-        );
+
       }
 
       const resolvedDims = storedDims ??
@@ -311,10 +295,7 @@ export class BabylonDOMRendererService {
         };
 
       if (storedDims) {
-        console.log(
-          `[TEXT DEBUG] ${element.id}: using stored element dimensions: ${storedDims.width.toFixed(2)}x${storedDims.height.toFixed(2)}px with padding`,
-          storedDims.padding,
-        );
+
       } else if (!fallbackDims) {
         console.warn(
           `[TEXT DEBUG] ${element.id}: no stored or fallback dimensions available; proceeding with zeros`,
@@ -339,9 +320,7 @@ export class BabylonDOMRendererService {
             )
           : undefined;
 
-      console.log(
-        `[TEXT DEBUG] ${element.id}: available content box ${availableWidthPx ?? -1}x${availableHeightPx ?? -1}px (padding L:${paddingPx.left}, R:${paddingPx.right}, T:${paddingPx.top}, B:${paddingPx.bottom})`,
-      );
+
 
       const textStyleProperties = this.textRenderingService[
         "parseElementTextStyle"
@@ -374,9 +353,7 @@ export class BabylonDOMRendererService {
           availableWidthPx,
         );
 
-      console.log(
-        `[TEXT DEBUG] ${element.id}: measured text dimensions ${measuredDimensions.width.toFixed(2)}x${measuredDimensions.height.toFixed(2)}px`,
-      );
+
 
       // Convert text dimensions from CSS pixels to world units
       const textScaleFactor = render.actions.camera.getPixelToWorldScale();
@@ -399,9 +376,7 @@ export class BabylonDOMRendererService {
         rawHeight: measuredDimensions.height,
       };
 
-      console.log(
-        `[TEXT DEBUG] ${element.id}: layout dimensions ${layoutDimensions.width.toFixed(2)}x${layoutDimensions.height.toFixed(2)}px (raw ${layoutDimensions.rawWidth.toFixed(2)}x${layoutDimensions.rawHeight.toFixed(2)}px)`,
-      );
+
 
       // Create text mesh using BabylonMeshService (texture size)
       const textMesh = this.createTextMesh(
@@ -437,9 +412,7 @@ export class BabylonDOMRendererService {
         storedMetrics,
       );
 
-      console.log(
-        `✅ Text rendering complete for ${element.id}: ${layoutDimensions.width.toFixed(2)}x${layoutDimensions.height.toFixed(2)} (raw: ${layoutDimensions.rawWidth.toFixed(2)}x${layoutDimensions.rawHeight.toFixed(2)})`,
-      );
+
     } catch (error) {
       console.error(`❌ Error handling text content for ${element.id}:`, error);
     }
@@ -459,9 +432,7 @@ export class BabylonDOMRendererService {
     newContent: string,
   ): void {
     try {
-      console.log(
-        `🔄 Updating text content for ${elementId}: "${newContent.substring(0, 50)}..."`,
-      );
+
 
       // Get existing text mesh and texture
       const existingTextMesh = dom.context.textMeshes.get(elementId);
@@ -542,7 +513,7 @@ export class BabylonDOMRendererService {
         },
       };
 
-      console.log(`✅ Text content updated for ${elementId}`);
+
     } catch (error) {
       console.error(`❌ Error updating text content for ${elementId}:`, error);
     }
@@ -727,9 +698,7 @@ export class BabylonDOMRendererService {
       textDimensions: dimensions,
     };
 
-    console.log(
-      `🎨 Created text mesh: ${textMesh.name} (${dimensions.width.toFixed(3)}x${dimensions.height.toFixed(3)} world units)`,
-    );
+
 
     return textMesh;
   }
@@ -771,9 +740,7 @@ export class BabylonDOMRendererService {
     const parentWidthPx = elementDims?.width ?? parentWidthWorld / scale;
     const parentHeightPx = elementDims?.height ?? parentHeightWorld / scale;
 
-    console.log(
-      `[TEXT POS DEBUG] Parent mesh bounds for ${parentMesh.name}: world ${parentWidthWorld.toFixed(3)}x${parentHeightWorld.toFixed(3)}, px ${parentWidthPx.toFixed(2)}x${parentHeightPx.toFixed(2)} (scale ${scale.toFixed(6)})`,
-    );
+
 
     const effectivePadding = {
       top: paddingPx.top ?? 0,
@@ -794,10 +761,7 @@ export class BabylonDOMRendererService {
     const textWidthPx = dimensions.width;
     const textHeightPx = dimensions.height;
 
-    console.log(
-      `[TEXT POS DEBUG] Content box: ${contentWidthPx.toFixed(2)}x${contentHeightPx.toFixed(2)}px, text ${textWidthPx.toFixed(2)}x${textHeightPx.toFixed(2)}px, padding`,
-      effectivePadding,
-    );
+
 
     const textAlign = (style?.textAlign ?? "left").toLowerCase();
     let offsetXPx: number;
@@ -869,9 +833,7 @@ export class BabylonDOMRendererService {
     textMesh.position.y = (offsetYPx - baselineInsetPx) * scale;
     textMesh.position.z = 0.001; // Slightly in front of parent element - TODO: TECH-DEBT
 
-    console.log(
-      `📍 Positioned text mesh at offset (${textMesh.position.x.toFixed(3)}, ${textMesh.position.y.toFixed(3)}, 0.001) with alignment: ${textAlign}/${verticalAlign}`,
-    );
+
   }
 
   cleanup(): void {

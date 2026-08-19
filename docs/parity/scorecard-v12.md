@@ -174,4 +174,30 @@ Status: complete.
 
 ## Increment 4: typed validation diagnostics and logging
 
+Status: complete.
+
+- Added public diagnostic types, stable codes, severity, `AstylarDiagnosticError`,
+  per-surface history, host callbacks, duplicate suppression, and configurable
+  console thresholds. Defaults are development-aware (`warning`) and
+  production-aware (`error`), while callbacks always receive every severity.
+- Initial mounts and updates now validate malformed site/root structures,
+  unsupported element types, duplicate authored IDs, and unknown style
+  properties with deterministic JSON-style paths and element/property context.
+- Image loading failures, render/reflow failures, reused live canvases, missing
+  surfaces, repeated disposal, and update/resize/wait calls after disposal now
+  have typed lifecycle diagnostics instead of generic or ad hoc failures.
+- Removed 546 unconditional renderer debug statements left over from layout,
+  geometry, interaction, input, selection, texture, and rendering development.
+  Actionable fallback/error reporting remains, while the public diagnostic path
+  is explicitly controllable by consumers.
+- Added five focused diagnostic tests plus a real WebGL duplicate-canvas/release
+  regression. `npm test -- --watch=false`: 232 tests passed.
+- `npm run build:lib`: passed.
+- `npm run build`: passed and prerendered two routes with only the established
+  initial-bundle and stylesheet budget warnings.
+- `npm run consumer:check`: 379 packed files; isolated consumer browser/server
+  build, prerender, and test passed.
+
+## Increment 5: browser-driven consumer acceptance
+
 Status: pending.

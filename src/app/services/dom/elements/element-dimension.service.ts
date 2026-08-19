@@ -111,12 +111,12 @@ export class ElementDimensionService {
 
         const textMetrics = this.measureTextContent(dom, render, element, style, styles);
         if (textMetrics) {
-            console.log(`[DIMENSION] ${debugKey} intrinsicText width=${textMetrics.width.toFixed(2)} height=${textMetrics.height.toFixed(2)} lineHeight=${textMetrics.lineHeight.toFixed(2)}`);
+
         }
 
         const hasTextContent = !!textMetrics;
 
-        console.log(`[DIMENSION] ${debugKey} parentContent=${contentWidth}x${contentHeight} padding=${this.formatBox(padding)} margin=${this.formatBox(margin)} display=${display}`);
+
 
         // Default dimensions - use content area, not full parent dimensions
         let width = contentWidth;
@@ -174,7 +174,7 @@ export class ElementDimensionService {
         }
 
         if (textMetrics && widthSource.includes('intrinsic')) {
-            console.log(`[DIMENSION-INTRINSIC] ${debugKey} text="${textMetrics.text.trim()}" measuredWidth=${textMetrics.width.toFixed(2)} paddingH=${horizontalPadding} finalWidth=${width.toFixed(2)} source=${widthSource}`);
+
         }
 
         // Width constraints participate in line wrapping. Resolve them before
@@ -186,7 +186,7 @@ export class ElementDimensionService {
             const originalWidth = width;
             width = Math.max(width, minWidth);
             if (width !== originalWidth) {
-                console.log(`[DIMENSION] ${debugKey} applied minWidth=${minWidth}, adjusted width ${originalWidth}→${width}`);
+
                 widthSource += '+minWidth';
             }
         }
@@ -197,7 +197,7 @@ export class ElementDimensionService {
                 : maxWidth;
             width = Math.min(width, effectiveMaxWidth);
             if (width !== originalWidth) {
-                console.log(`[DIMENSION] ${debugKey} applied maxWidth=${maxWidth}, adjusted width ${originalWidth}→${width}`);
+
                 widthSource += '+maxWidth';
             }
         }
@@ -270,7 +270,7 @@ export class ElementDimensionService {
         }
 
         if (constrainedTextMetrics && heightSource.includes('intrinsic')) {
-            console.log(`[DIMENSION-INTRINSIC] ${debugKey} text="${constrainedTextMetrics.text.trim()}" measuredHeight=${constrainedTextMetrics.height.toFixed(2)} paddingV=${verticalPadding} finalHeight=${height.toFixed(2)} source=${heightSource}`);
+
         }
 
         const minHeight = style?.minHeight ? this.parseLength(`${style.minHeight}`, contentHeight) : undefined;
@@ -279,7 +279,7 @@ export class ElementDimensionService {
             const originalHeight = height;
             height = Math.max(height, minHeight);
             if (height !== originalHeight) {
-                console.log(`[DIMENSION] ${debugKey} applied minHeight=${minHeight}, adjusted height ${originalHeight}→${height}`);
+
                 heightSource += '+minHeight';
             }
         }
@@ -290,7 +290,7 @@ export class ElementDimensionService {
                 : maxHeight;
             height = Math.min(height, effectiveMaxHeight);
             if (height !== originalHeight) {
-                console.log(`[DIMENSION] ${debugKey} applied maxHeight=${maxHeight}, adjusted height ${originalHeight}→${height}`);
+
                 heightSource += '+maxHeight';
             }
         }
@@ -358,19 +358,19 @@ export class ElementDimensionService {
                     x = -(parentWidth / 2) + horizontalOriginInset + leftPixels + (width / 2);
                 } else if (typeof style.left === 'string' && style.left.endsWith('px')) {
                     x = -(parentWidth / 2) + horizontalOriginInset + parseFloat(style.left) + (width / 2);
-                    console.log(`[ElementDimension] Calculated X (px): ${x} (parentW=${parentWidth}, contentW=${contentWidth}, paddingLeft=${parentPadding.left}, left=${style.left}, width=${width})`);
+
                 } else if (typeof style.left === 'string' && style.left.endsWith('%')) {
                     const leftPercent = parseFloat(style.left);
                     const leftPixels = ((usesPositionedContainingBlock ? positionedReferenceWidth : contentWidth) * leftPercent) / 100;
                     x = -(parentWidth / 2) + horizontalOriginInset + leftPixels + (width / 2);
-                    console.log(`[ElementDimension] Calculated X (%): ${x} (parentW=${parentWidth}, contentW=${contentWidth}, paddingLeft=${parentPadding.left}, left=${style.left}, leftPx=${leftPixels}, width=${width})`);
+
                 } else {
                     x = -(parentWidth / 2) + horizontalOriginInset + parseFloat(`${style.left}`) + (width / 2);
-                    console.log(`[ElementDimension] Calculated X (val): ${x} (parentW=${parentWidth}, contentW=${contentWidth}, paddingLeft=${parentPadding.left}, left=${style.left}, width=${width})`);
+
                 }
             } else {
                 x = -(parentWidth / 2) + parentPadding.left + (contentWidth / 2);
-                console.log(`[ElementDimension] No left style for ${style.selector}, x centered in content area: ${x}`);
+
             }
 
             if (style.top !== undefined) {
@@ -400,10 +400,10 @@ export class ElementDimensionService {
             }
         }
 
-        console.log(`[DIMENSION] ${debugKey} widthResolved=${width} [source=${widthSource}]`);
-        console.log(`[DIMENSION] ${debugKey} heightResolved=${height} [source=${heightSource}]`);
 
-        console.log(`[DIMENSION] ${debugKey} final width=${width} height=${height} position=(${x}, ${y})`);
+
+
+
 
         return { width, height, x, y, padding: layoutInsets, margin };
     }

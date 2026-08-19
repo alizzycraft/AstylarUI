@@ -117,7 +117,7 @@ export class TextInputManager {
             const layoutText = textInput.textContent || textInput.placeholder || ' ';
             const textStyleProps = this.parseTextStyle(style);
             const pixelScale = render.actions.camera.getPixelToWorldScale();
-            console.log('[TextInputManager] Creating initial layout metrics for:', layoutText);
+
 
             // Use text rendering service to create consistent layout metrics
             const storedLayoutMetrics = this.textRenderingService.createStoredLayoutMetrics(
@@ -128,7 +128,7 @@ export class TextInputManager {
 
             // Extract CSS metrics for cursor positioning (these are in CSS pixels)
             textInput.textLayoutMetrics = storedLayoutMetrics.css;
-            console.log('[TextInputManager] Initial layout metrics:', textInput.textLayoutMetrics);
+
         }
 
         // Create text mesh if there's initial content or placeholder
@@ -178,7 +178,7 @@ export class TextInputManager {
      * Handles focus event - hides placeholder and creates cursor
      */
     handleFocus(textInput: TextInput, render: BabylonRender, style: StyleRule): void {
-        console.log('[TextInputManager] handleFocus called for:', textInput.element.id);
+
 
         // If showing placeholder (no actual value), hide the text mesh
         if (!textInput.textContent && textInput.placeholder && textInput.textMesh) {
@@ -196,7 +196,7 @@ export class TextInputManager {
 
             // Extract CSS metrics for cursor positioning (these are in CSS pixels)
             textInput.textLayoutMetrics = storedLayoutMetrics.css;
-            console.log('[TextInputManager] Recalculated empty layout metrics for focus');
+
             // Also compute a texture width that matches the empty layout so cursor
             // positioning uses consistent units (avoid using the placeholder texture width)
             try {
@@ -210,7 +210,7 @@ export class TextInputManager {
                 const devicePixelRatio = window.devicePixelRatio || 1;
                 textInput.textureWidth = (size.width / devicePixelRatio) * scale;
                 // We intentionally do not create a visible text mesh for empty content
-                console.log('[TextInputManager] Computed empty texture width for cursor positioning:', textInput.textureWidth);
+
             } catch (err) {
                 console.warn('[TextInputManager] Failed to compute empty texture width:', err);
                 // Fallback to 0 so left-edge calculations behave reasonably
@@ -220,7 +220,7 @@ export class TextInputManager {
 
         // Create cursor mesh if it doesn't exist and we have layout metrics
         if (!textInput.cursorMesh && render.scene && textInput.textLayoutMetrics && textInput.textureWidth !== undefined) {
-            console.log('[TextInputManager] Creating cursor mesh with scale:', render.actions.camera.getPixelToWorldScale());
+
             const textStyle = this.parseTextStyle(style);
             textInput.cursorMesh = this.textSelectionService.createTextCursor(
                 textInput.cursorPosition,
@@ -240,7 +240,7 @@ export class TextInputManager {
         if (textInput.cursorMesh) {
             textInput.cursorMesh.isVisible = true;
             textInput.cursorState.visible = true;
-            console.log('[TextInputManager] Cursor made visible');
+
         }
     }
 
@@ -324,8 +324,8 @@ export class TextInputManager {
             const contentInsets = this.getHorizontalContentInsets(textStyle, pixelScale);
             const availableWidth = Math.max(0, inputWidth - contentInsets.left - contentInsets.right);
             const maxTextWidth = isTextarea ? availableWidth / pixelScale : undefined;
-            console.log('[TextInputManager] Calculating layout metrics for text:', textToRender);
-            console.log('[TextInputManager] Text style props:', textStyleProps);
+
+
 
             // Use text rendering service to create consistent layout metrics
             const storedLayoutMetrics = this.textRenderingService.createStoredLayoutMetrics(
@@ -337,7 +337,7 @@ export class TextInputManager {
 
             // Extract CSS metrics for cursor positioning (these are in CSS pixels)
             textInput.textLayoutMetrics = storedLayoutMetrics.css;
-            console.log('[TextInputManager] Layout metrics calculated:', textInput.textLayoutMetrics);
+
 
             // Get texture from service
             const texture = this.textRenderingService.renderTextToTexture(
@@ -402,7 +402,7 @@ export class TextInputManager {
 
             // Handle clipping if text exceeds available width
             if (textureWidth > availableWidth) {
-                console.log(`[TextInputManager] Clipping text mesh: ${textureWidth.toFixed(3)} > ${availableWidth.toFixed(3)}`);
+
                 textMesh.position.x = (insets.right - insets.left) / 2;
             } else {
                 // No clipping needed
@@ -887,7 +887,7 @@ export class TextInputManager {
 
         try {
             await navigator.clipboard.writeText(selectedText);
-            console.log('[TextInputManager] Copied to clipboard:', selectedText);
+
         } catch (err) {
             console.error('[TextInputManager] Clipboard copy failed:', err);
         }
@@ -901,7 +901,7 @@ export class TextInputManager {
             const pastedText = await navigator.clipboard.readText();
             if (pastedText) {
                 this.insertTextAtCursor(textInput, pastedText, render, style);
-                console.log('[TextInputManager] Pasted from clipboard:', pastedText);
+
             }
         } catch (err) {
             console.error('[TextInputManager] Clipboard paste failed:', err);
@@ -1009,7 +1009,7 @@ export class TextInputManager {
 
         if (!textInput.cursorMesh) return;
 
-        console.log('[TextInputManager] Width correction ratio:', widthCorrectionRatio);
+
 
         // Use text selection service for accurate cursor positioning
         this.textSelectionService.updateCursorPosition(

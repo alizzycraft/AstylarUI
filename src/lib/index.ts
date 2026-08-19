@@ -11,6 +11,14 @@ import { Scene } from "@babylonjs/core";
 export { Astylar } from "./astylar";
 export type { AstylarRenderOptions } from "./astylar";
 export type { AstylarSurface, AstylarSurfaceDiagnostics } from './astylar-surface';
+export { AstylarDiagnosticError } from './astylar-diagnostics';
+export type {
+  AstylarDiagnostic,
+  AstylarDiagnosticCode,
+  AstylarDiagnosticLogLevel,
+  AstylarDiagnosticsOptions,
+  AstylarDiagnosticSeverity,
+} from './astylar-diagnostics';
 export { AstylarRenderSession } from "./astylar-render-session";
 export { AstylarSceneResources } from './astylar-scene-resources';
 export type { AstylarSceneResourceSnapshot } from './astylar-scene-resources';

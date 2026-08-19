@@ -28,6 +28,8 @@ describe('AstylarSurfaceHandle', () => {
       getScrollSnapshot: jasmine.createSpy('getScrollSnapshot'),
       getSemanticSnapshot: jasmine.createSpy('getSemanticSnapshot'),
       getVisualReconciliationSnapshot: jasmine.createSpy('getVisualReconciliationSnapshot'),
+      getDiagnosticSnapshot: jasmine.createSpy('getDiagnosticSnapshot').and.returnValue([]),
+      reportDiagnostic: jasmine.createSpy('reportDiagnostic'),
     } satisfies jasmine.SpyObj<AstylarSurfaceHost>;
     return { engine, host, scene, surface: new AstylarSurfaceHandle(scene, host) };
   }
@@ -54,7 +56,7 @@ describe('AstylarSurfaceHandle', () => {
   });
 
   it('disposes idempotently and rejects later operations', () => {
-    const { scene, surface } = setup();
+    const { host, scene, surface } = setup();
 
     surface.dispose();
     surface.dispose();
@@ -63,5 +65,9 @@ describe('AstylarSurfaceHandle', () => {
     expect(surface.disposed).toBeTrue();
     expect(() => surface.update(data)).toThrowError(/disposed Astylar surface/);
     expect(() => surface.resize()).toThrowError(/disposed Astylar surface/);
+    expect(host.reportDiagnostic).toHaveBeenCalledWith(jasmine.objectContaining({
+      code: 'surface-disposed',
+      severity: 'error',
+    }));
   });
 });

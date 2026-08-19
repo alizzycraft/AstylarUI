@@ -119,18 +119,9 @@ export class ElementInteractionService {
           ? { ...baseMergedStyle, ...elementStyles.hover }
           : baseMergedStyle;
 
-        console.log(
-          `RYPT Mouse over for ${elementId} - boxShadow in base style:`,
-          baseMergedStyle.boxShadow,
-        );
-        console.log(
-          `RYPT Mouse over for ${elementId} - boxShadow in hover style:`,
-          elementStyles?.hover?.boxShadow,
-        );
-        console.log(
-          `RYPT Mouse over for ${elementId} - boxShadow in merged hover style:`,
-          hoverMergedStyle.boxShadow,
-        );
+
+
+
 
         // Check if we need to recreate geometry (border radius or polygon type changes)
         const normalRadius = this.parseBorderRadius(
@@ -147,19 +138,11 @@ export class ElementInteractionService {
         const needsGeometryUpdate =
           normalRadius !== hoverRadius ||
           normalPolygonType !== hoverPolygonType;
-        console.log(`[HOVER DEBUG] Element: ${elementId}`);
-        console.log(
-          `[HOVER DEBUG] Normal Radius: ${normalRadius}, Hover Radius: ${hoverRadius}`,
-        );
-        console.log(
-          `[HOVER DEBUG] Normal Type: ${normalPolygonType}, Hover Type: ${hoverPolygonType}`,
-        );
-        console.log(
-          `[HOVER DEBUG] Needs Geometry Update: ${needsGeometryUpdate}`,
-        );
-        console.log(
-          `[HOVER DEBUG] Dimensions found: ${!!dom.context.elementDimensions.get(elementId)}`,
-        );
+
+
+
+
+
 
         const safeHoverRadius = isNaN(hoverRadius) ? 0 : hoverRadius;
         const dimensions = dom.context.elementDimensions.get(elementId);
@@ -192,9 +175,7 @@ export class ElementInteractionService {
           if (singleBorderMesh) {
             singleBorderMesh.dispose();
             dom.context.elements.delete(`${elementId}-border_border_frame`);
-            console.log(
-              `[ELEMENT HOVER DEBUG] Disposed old single border mesh for hover: ${elementId}-border_border_frame`,
-            );
+
           }
 
           // Remove up to 4 rectangular border meshes
@@ -205,9 +186,7 @@ export class ElementInteractionService {
             if (borderMesh) {
               borderMesh.dispose();
               dom.context.elements.delete(`${elementId}-border-${i}`);
-              console.log(
-                `[ELEMENT HOVER DEBUG] Disposed old border mesh for hover: ${elementId}-border-${i}`,
-              );
+
             }
 
             // Also check for named rectangular borders
@@ -221,23 +200,15 @@ export class ElementInteractionService {
                 dom.context.elements.delete(
                   `${elementId}-border${borderNames[i]}`,
                 );
-                console.log(
-                  `[ELEMENT HOVER DEBUG] Disposed old named border mesh for hover: ${elementId}-border${borderNames[i]}`,
-                );
+
               }
             }
           }
 
           // Create new border meshes for hover
-          console.log(
-            `[BORDER DEBUG] ${elementId} - hoverMergedStyle.borderWidth RAW: "${hoverMergedStyle?.borderWidth}"`,
-          );
-          console.log(
-            `[BORDER DEBUG] ${elementId} - hoverMergedStyle.borderColor RAW: "${hoverMergedStyle?.borderColor}"`,
-          );
-          console.log(
-            `[BORDER DEBUG] ${elementId} - hoverMergedStyle.borderStyle RAW: "${hoverMergedStyle?.borderStyle}"`,
-          );
+
+
+
 
           const borderWidth = this.parseBorderWidth(
             render,
@@ -249,15 +220,9 @@ export class ElementInteractionService {
           const borderColor =
             colorData?.type === "color" ? colorData.color : undefined;
 
-          console.log(
-            `[BORDER DEBUG] ${elementId} hover - PARSED borderWidth: ${borderWidth} (world units)`,
-          );
-          console.log(
-            `[BORDER DEBUG] ${elementId} hover - PARSED borderColor: ${JSON.stringify(colorData)}`,
-          );
-          console.log(
-            `[BORDER DEBUG] ${elementId} hover - borderStyle: ${hoverMergedStyle?.borderStyle}`,
-          );
+
+
+
 
           // Use polygon border for proper rounded corner support
           const borderMeshes = render.actions.mesh.createPolygonBorder(
@@ -317,12 +282,7 @@ export class ElementInteractionService {
 
           borderMeshes.forEach((borderMesh, index) => {
             borderMesh.material = borderMaterial;
-            console.log(`[BORDER MATERIAL DEBUG] Applied material:`, {
-              meshName: borderMesh.name,
-              materialName: borderMaterial.name,
-              diffuseColor: (borderMaterial as any).diffuseColor,
-              expectedColor: borderColor,
-            });
+
 
             // Refresh bounding info to ensure proper rendering of rounded corners
             borderMesh.refreshBoundingInfo();
@@ -357,18 +317,14 @@ export class ElementInteractionService {
                 `${elementId}-border_border_frame`,
                 borderMesh,
               );
-              console.log(
-                `[ELEMENT HOVER DEBUG] Created hover border mesh: ${elementId}-border_border_frame`,
-              );
+
             } else {
               // Multiple rectangular borders
               dom.context.elements.set(
                 `${elementId}-border-${index}`,
                 borderMesh,
               );
-              console.log(
-                `[ELEMENT HOVER DEBUG] Created hover border mesh: ${elementId}-border-${index}`,
-              );
+
             }
           });
 
@@ -456,12 +412,8 @@ export class ElementInteractionService {
           // Shadow automatically inherits transforms through parenting - no manual intervention needed
           const shadowMesh = dom.context.elements.get(`${elementId}-shadow`);
           if (shadowMesh) {
-            console.log(
-              `RYPT HOVER: Shadow for ${elementId} will automatically inherit element transforms via parenting`,
-            );
-            console.log(
-              `RYPT Element transform: scale=(${transform.scale.x}, ${transform.scale.y}), rotation=(${transform.rotate.x}, ${transform.rotate.y}, ${transform.rotate.z})`,
-            );
+
+
           }
         }
 
@@ -489,27 +441,19 @@ export class ElementInteractionService {
 
         // After all style/geometry updates, log the mesh rotation and transform
         if (hoverMergedStyle.transform) {
-          console.log(
-            `[HOVER DEBUG] ${elementId} transform string:`,
-            hoverMergedStyle.transform,
-          );
+
         }
-        console.log(
-          `[HOVER DEBUG] ${elementId} mesh.rotation after hover:`,
-          mainMesh.rotation,
-        );
+
       }),
     );
 
     mesh.actionManager.registerAction(
       new ExecuteCodeAction(ActionManager.OnPointerOutTrigger, () => {
-        console.log(`[DEBUG] Mouse out event fired for element: ${elementId}`);
+
         // Always get the latest mesh reference
         const mainMesh = dom.context.elements.get(elementId);
         if (!mainMesh) {
-          console.log(
-            `[DEBUG] Mouse out event: mainMesh not found for element: ${elementId}`,
-          );
+
           return;
         }
         const elementType = dom.context.elementTypes.get(elementId) || "div";
@@ -525,14 +469,8 @@ export class ElementInteractionService {
           selector: `#${elementId}`,
         };
 
-        console.log(
-          `RYPT Mouse out for ${elementId} - boxShadow in normal style:`,
-          normalStyle.boxShadow,
-        );
-        console.log(
-          `RYPT Mouse out for ${elementId} - boxShadow in merged style:`,
-          mergedStyle.boxShadow,
-        );
+
+
 
         // Check if we need to recreate geometry (border radius or polygon type changes)
         const hoverMergedStyle = elementStyles?.hover
@@ -581,9 +519,7 @@ export class ElementInteractionService {
           if (singleBorderMesh) {
             singleBorderMesh.dispose();
             dom.context.elements.delete(`${elementId}-border_border_frame`);
-            console.log(
-              `[ELEMENT HOVER DEBUG] Disposed old single border mesh for normal: ${elementId}-border_border_frame`,
-            );
+
           }
 
           // Remove up to 4 rectangular border meshes
@@ -594,9 +530,7 @@ export class ElementInteractionService {
             if (borderMesh) {
               borderMesh.dispose();
               dom.context.elements.delete(`${elementId}-border-${i}`);
-              console.log(
-                `[ELEMENT HOVER DEBUG] Disposed old border mesh for normal: ${elementId}-border-${i}`,
-              );
+
             }
 
             // Also check for named rectangular borders
@@ -610,9 +544,7 @@ export class ElementInteractionService {
                 dom.context.elements.delete(
                   `${elementId}-border${borderNames[i]}`,
                 );
-                console.log(
-                  `[ELEMENT HOVER DEBUG] Disposed old named border mesh for normal: ${elementId}-border${borderNames[i]}`,
-                );
+
               }
             }
           }
@@ -627,9 +559,7 @@ export class ElementInteractionService {
           );
           const borderColor =
             colorData?.type === "color" ? colorData.color : undefined;
-          console.log(
-            `[BORDER DEBUG] ${elementId} normal - borderWidth: ${borderWidth}, borderColor: ${JSON.stringify(colorData)}, borderStyle: ${mergedStyle?.borderStyle}`,
-          );
+
 
           // Use polygon border for proper rounded corner support
           const borderMeshes = render.actions.mesh.createPolygonBorder(
@@ -717,18 +647,14 @@ export class ElementInteractionService {
                 `${elementId}-border_border_frame`,
                 borderMesh,
               );
-              console.log(
-                `[ELEMENT HOVER DEBUG] Created normal border mesh: ${elementId}-border_border_frame`,
-              );
+
             } else {
               // Multiple rectangular borders
               dom.context.elements.set(
                 `${elementId}-border-${index}`,
                 borderMesh,
               );
-              console.log(
-                `[ELEMENT HOVER DEBUG] Created normal border mesh: ${elementId}-border-${index}`,
-              );
+
             }
           });
 
@@ -808,12 +734,8 @@ export class ElementInteractionService {
           // Shadow automatically inherits transforms through parenting - no manual intervention needed
           const shadowMesh = dom.context.elements.get(`${elementId}-shadow`);
           if (shadowMesh) {
-            console.log(
-              `RYPT NORMAL: Shadow for ${elementId} will automatically inherit element transforms via parenting`,
-            );
-            console.log(
-              `RYPT Element transform: scale=(${transform.scale.x}, ${transform.scale.y}), rotation=(${transform.rotate.x}, ${transform.rotate.y}, ${transform.rotate.z})`,
-            );
+
+
           }
         } else {
           // Smoothly reset transforms to default values
@@ -861,18 +783,10 @@ export class ElementInteractionService {
           // Shadow automatically resets transforms through parenting - no manual intervention needed
           const shadowMesh = dom.context.elements.get(`${elementId}-shadow`);
           if (shadowMesh) {
-            console.log(
-              `RYPT RESET: Shadow for ${elementId} will automatically reset transforms via parenting`,
-            );
-            console.log(
-              `RYPT RESET: Reset shadow transforms and shader uniforms for ${elementId}`,
-            );
-            console.log(
-              `RYPT Element position: (${mainMesh.position.x.toFixed(3)}, ${mainMesh.position.y.toFixed(3)}, ${mainMesh.position.z.toFixed(3)})`,
-            );
-            console.log(
-              `RYPT Shadow position: (${shadowMesh.position.x.toFixed(3)}, ${shadowMesh.position.y.toFixed(3)}, ${shadowMesh.position.z.toFixed(3)})`,
-            );
+
+
+
+
           }
         }
 
@@ -986,7 +900,7 @@ export class ElementInteractionService {
     transforms: TransformData,
     duration: number = 200,
   ): void {
-    console.log(`🔄 Applying smooth transforms to ${mesh.name}:`, transforms);
+
 
     // Store initial values
     const initialPosition = mesh.position.clone();
@@ -1045,7 +959,7 @@ export class ElementInteractionService {
       if (progress < 1) {
         requestAnimationFrame(animate);
       } else {
-        console.log(`✅ Smooth transform animation completed for ${mesh.name}`);
+
       }
     };
 
@@ -1178,9 +1092,7 @@ export class ElementInteractionService {
     const blur = parseFloat(match[3].replace("px", ""));
     const color = match[4].trim();
 
-    console.log(
-      `🎯 Parsed box shadow: offsetX=${offsetX}, offsetY=${offsetY}, blur=${blur}, color="${color}"`,
-    );
+
     return { offsetX, offsetY, blur, color };
   }
 
@@ -1223,33 +1135,25 @@ export class ElementInteractionService {
     polygonType: string,
     transform?: TransformData,
   ) {
-    console.log(
-      `RYPT updateShadowMesh called for ${elementId} with boxShadow: "${style?.boxShadow}"`,
-    );
+
 
     const boxShadow = this.parseBoxShadow(style?.boxShadow);
     const existingShadow = dom.context.elements.get(`${elementId}-shadow`);
 
-    console.log(`RYPT Parsed boxShadow for ${elementId}:`, boxShadow);
+
 
     // Check if this is initial creation or hover update
     const isHoverState = dom.context.hoverStates.get(elementId) || false;
-    console.log(
-      `RYPT Shadow update context for ${elementId}: ${isHoverState ? "HOVER" : "NORMAL"} state`,
-    );
+
 
     // If no box shadow is needed, remove existing shadow
     if (!boxShadow) {
       if (existingShadow) {
         existingShadow.dispose();
         dom.context.elements.delete(`${elementId}-shadow`);
-        console.log(
-          `RYPT Removed shadow for ${elementId} (no box-shadow style)`,
-        );
+
       } else {
-        console.log(
-          `RYPT No shadow to remove for ${elementId} (no box-shadow style and no existing shadow)`,
-        );
+
       }
       return;
     }
@@ -1268,14 +1172,7 @@ export class ElementInteractionService {
       styleOpacity,
     );
 
-    console.log(`RYPT Shadow parameters for ${elementId}:`, {
-      originalBlur: boxShadow.blur,
-      scaledBlur: scaledBlur,
-      originalColor: boxShadow.color,
-      finalColor: shadowColor,
-      styleOpacity: styleOpacity,
-      worldSize: `${worldWidth.toFixed(1)}x${worldHeight.toFixed(1)}`,
-    });
+
 
     // Check if we can reuse existing shadow
     let needsRecreation = !existingShadow;
@@ -1306,42 +1203,19 @@ export class ElementInteractionService {
       needsRecreation = paramChanged;
 
       if (!paramChanged) {
-        console.log(
-          `RYPT ✅ Reusing existing shadow for ${elementId} (all parameters identical)`,
-        );
+
       } else {
-        console.log(`RYPT ❌ Shadow parameters changed for ${elementId}:`, {
-          widthChanged: widthChanged
-            ? `${lastParams.width} → ${worldWidth}`
-            : "unchanged",
-          heightChanged: heightChanged
-            ? `${lastParams.height} → ${worldHeight}`
-            : "unchanged",
-          blurChanged: blurChanged
-            ? `${lastParams.blur} → ${scaledBlur}`
-            : "unchanged",
-          colorChanged: colorChanged
-            ? `${lastParams.color} → ${shadowColor}`
-            : "unchanged",
-          radiusChanged: radiusChanged
-            ? `${lastParams.borderRadius} → ${borderRadius}`
-            : "unchanged",
-          typeChanged: typeChanged
-            ? `${lastParams.polygonType} → ${polygonType}`
-            : "unchanged",
-        });
+
       }
     } else {
-      console.log(
-        `RYPT 🆕 No existing shadow metadata for ${elementId}, creating new shadow`,
-      );
+
     }
 
     // Remove old shadow if recreating
     if (needsRecreation && existingShadow) {
       existingShadow.dispose();
       dom.context.elements.delete(`${elementId}-shadow`);
-      console.log(`RYPT Disposed existing shadow for ${elementId}`);
+
     }
 
     // Get the element mesh for parenting and positioning
@@ -1385,9 +1259,7 @@ export class ElementInteractionService {
       render.actions.mesh.parentTextMesh(shadowMesh, elementMesh);
       dom.context.elements.set(`${elementId}-shadow`, shadowMesh);
 
-      console.log(
-        `RYPT Created shadow for ${elementId} (${worldWidth.toFixed(1)}x${worldHeight.toFixed(1)}) blur=${scaledBlur.toFixed(1)} color=${shadowColor}`,
-      );
+
     } else {
       shadowMesh = existingShadow!;
     }
@@ -1400,15 +1272,11 @@ export class ElementInteractionService {
       // Position shadow relative to element (parenting will handle world positioning)
       shadowMesh.position.set(shadowX, shadowY, -0.01); // Behind element in local space
 
-      console.log(
-        `RYPT Set initial shadow offset for ${elementId}: (${shadowX.toFixed(3)}, ${shadowY.toFixed(3)}, -0.01)`,
-      );
+
     }
 
     // Since shadow is parented to element, it will automatically inherit all transforms and position changes
     // No need to manually apply transforms - parenting handles this automatically
-    console.log(
-      `RYPT Shadow will automatically follow element ${elementId} via parenting`,
-    );
+
   }
 }

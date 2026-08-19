@@ -56,9 +56,11 @@ import { TextCursorRenderer } from '../app/services/dom/input/text-cursor.render
 import { InputElementService } from '../app/services/dom/input/input-element.service';
 import { FormValidatorService } from '../app/services/dom/input/form-validator.service';
 import { SelectManager } from '../app/services/dom/input/select.manager';
+import { AstylarDiagnostics } from './astylar-diagnostics';
 
 /** Complete renderer dependency scope. Every mount receives new instances. */
 export const ASTYLAR_SURFACE_SERVICE_PROVIDERS: Provider[] = [
+  AstylarDiagnostics,
   TextSelectionStore,
   CoordinateTransformService,
   BabylonCameraService,

@@ -182,9 +182,7 @@ export class BabylonMeshService {
     const mesh = new Mesh(name, this.scene);
     vertexData.applyToMesh(mesh);
 
-    console.log(
-      `🎨 Created rounded rectangle: ${name} (${width.toFixed(3)} x ${height.toFixed(3)}) radius=${radius.toFixed(3)}`,
-    );
+
 
     return mesh;
   }
@@ -210,9 +208,7 @@ export class BabylonMeshService {
     const mesh = new Mesh(name, this.scene);
     vertexData.applyToMesh(mesh);
 
-    console.log(
-      `🎨 Created ${polygonType}: ${name} (${width.toFixed(3)} x ${height.toFixed(3)}) radius=${borderRadius.toFixed(3)}`,
-    );
+
 
     return mesh;
   }
@@ -300,21 +296,17 @@ export class BabylonMeshService {
       { x: -halfWidth, y: -halfHeight }, // Bottom-left
     ];
 
-    console.log(
-      `🔍 Using round-polygon library for ${width.toFixed(1)}x${height.toFixed(1)} rectangle (radius=${radius.toFixed(1)}):`,
-    );
+
 
     // Generate rounded polygon using the library
     const roundedPolygon = roundPolygon(rectangleCorners, radius);
-    console.log(`   Generated ${roundedPolygon.length} rounded corner points`);
+
 
     // Convert arcs to segments for triangulation with higher resolution
     // Use smaller segment length for smoother curves (0.5 units per segment instead of 2)
     const segmentLength = Math.max(0.3, radius / 10); // Dynamic based on radius, minimum 0.3
     const segments = getSegments(roundedPolygon, "LENGTH", segmentLength);
-    console.log(
-      `   Generated ${segments.length} segments for smooth curves (segment length: ${segmentLength.toFixed(2)})`,
-    );
+
 
     let vertexIndex = 0;
 
@@ -332,7 +324,7 @@ export class BabylonMeshService {
       vertices.push(addVertex(segment.x, segment.y));
     }
 
-    console.log(`   Created ${vertices.length} vertices from segments`);
+
 
     // Use simple fan triangulation (should work well with evenly distributed points)
     this.earClipTriangulation(vertices, indices);
@@ -343,9 +335,7 @@ export class BabylonMeshService {
     vertexData.normals = normals;
     vertexData.uvs = uvs;
 
-    console.log(
-      `🎨 Generated rounded rectangle: ${vertices.length} vertices, ${indices.length / 3} triangles (round-polygon library)`,
-    );
+
 
     return vertexData;
   }
@@ -356,15 +346,11 @@ export class BabylonMeshService {
     height: number,
     borderRadius: number,
   ): VertexData {
-    console.log(
-      `🔍 createPolygonVertexData: ${polygonType}, ${width.toFixed(1)}×${height.toFixed(1)}, radius=${borderRadius.toFixed(3)}`,
-    );
+
 
     // Special case for rectangles with border radius - use optimized rectangle method
     if (polygonType === "rectangle" && borderRadius > 0) {
-      console.log(
-        `✅ Using createRoundedRectangleVertexData for rectangle with radius ${borderRadius.toFixed(3)}`,
-      );
+
       return this.createRoundedRectangleVertexData(width, height, borderRadius);
     }
 
@@ -381,9 +367,7 @@ export class BabylonMeshService {
     );
 
     if (borderRadius > 0) {
-      console.log(
-        `✅ Using rounded polygon path for ${polygonType} with radius ${borderRadius.toFixed(3)}`,
-      );
+
       // Use round-polygon library for rounded corners
       return this.createRoundedPolygonVertexData(
         polygonPoints,
@@ -392,9 +376,7 @@ export class BabylonMeshService {
         height,
       );
     } else {
-      console.log(
-        `⚠️ Using sharp polygon path for ${polygonType} (borderRadius=${borderRadius})`,
-      );
+
       // Create sharp-cornered polygon
       return this.createSharpPolygonVertexData(polygonPoints, width, height);
     }
@@ -418,9 +400,7 @@ export class BabylonMeshService {
       points.push({ x: halfWidth, y: -halfHeight }); // Bottom-right
       points.push({ x: -halfWidth, y: -halfHeight }); // Bottom-left
 
-      console.log(
-        `🔸 Generated rectangle with ${points.length} vertices (${width.toFixed(1)}x${height.toFixed(1)})`,
-      );
+
       return points;
     }
 
@@ -473,9 +453,7 @@ export class BabylonMeshService {
       points.push({ x, y });
     }
 
-    console.log(
-      `🔸 Generated ${sides}-sided ${polygonType} with ${points.length} vertices (startAngle=${((startAngle * 180) / Math.PI).toFixed(1)}°)`,
-    );
+
     return points;
   }
 
@@ -490,18 +468,14 @@ export class BabylonMeshService {
     const normals: number[] = [];
     const uvs: number[] = [];
 
-    console.log(
-      `🔍 Using round-polygon library for ${polygonPoints.length}-sided polygon (radius=${borderRadius.toFixed(1)}):`,
-    );
-    console.log(`   Input polygon points:`, polygonPoints);
-    console.log(
-      `   Shape dimensions: ${width.toFixed(1)} × ${height.toFixed(1)}`,
-    );
+
+
+
 
     // Generate rounded polygon using the library
     const roundedPolygon = roundPolygon(polygonPoints, borderRadius);
-    console.log(`   Generated ${roundedPolygon.length} rounded corner points`);
-    console.log(`   First few rounded points:`, roundedPolygon.slice(0, 5));
+
+
 
     if (roundedPolygon.length === 0) {
       console.error(`❌ round-polygon library returned empty result! Input:`, {
@@ -517,9 +491,7 @@ export class BabylonMeshService {
     // Convert arcs to segments for triangulation with high resolution
     const segmentLength = Math.max(0.3, borderRadius / 10);
     const segments = getSegments(roundedPolygon, "LENGTH", segmentLength);
-    console.log(
-      `   Generated ${segments.length} segments for smooth curves (segment length: ${segmentLength.toFixed(2)})`,
-    );
+
 
     if (segments.length === 0) {
       console.error(`❌ getSegments returned empty result!`);
@@ -544,7 +516,7 @@ export class BabylonMeshService {
       vertices.push(addVertex(segment.x, segment.y));
     }
 
-    console.log(`   Created ${vertices.length} vertices from segments`);
+
 
     // Use fan triangulation for the polygon
     this.earClipTriangulation(vertices, indices);
@@ -555,9 +527,7 @@ export class BabylonMeshService {
     vertexData.normals = normals;
     vertexData.uvs = uvs;
 
-    console.log(
-      `🎨 Generated rounded ${polygonPoints.length}-sided polygon: ${vertices.length} vertices, ${indices.length / 3} triangles`,
-    );
+
 
     return vertexData;
   }
@@ -590,7 +560,7 @@ export class BabylonMeshService {
       vertices.push(addVertex(point.x, point.y));
     }
 
-    console.log(`   Created ${vertices.length} vertices for sharp polygon`);
+
 
     // Use fan triangulation for the polygon
     this.earClipTriangulation(vertices, indices);
@@ -601,9 +571,7 @@ export class BabylonMeshService {
     vertexData.normals = normals;
     vertexData.uvs = uvs;
 
-    console.log(
-      `🎨 Generated sharp ${polygonPoints.length}-sided polygon: ${vertices.length} vertices, ${indices.length / 3} triangles`,
-    );
+
 
     return vertexData;
   }
@@ -615,9 +583,7 @@ export class BabylonMeshService {
     borderWidth: number,
     borderRadius: number,
   ): VertexData {
-    console.log(
-      `🖼️ createPolygonFrameVertexData: ${polygonType}, ${width.toFixed(1)}×${height.toFixed(1)}, borderWidth=${borderWidth.toFixed(3)}, borderRadius=${borderRadius.toFixed(3)}`,
-    );
+
 
     const positions: number[] = [];
     const indices: number[] = [];
@@ -655,19 +621,10 @@ export class BabylonMeshService {
       innerHeight,
     );
 
-    console.log(`🔧 Creating polygon border frame:`, {
-      polygonType,
-      outerDimensions: `${width.toFixed(2)}×${height.toFixed(2)}`,
-      innerDimensions: `${innerWidth.toFixed(2)}×${innerHeight.toFixed(2)}`,
-      borderWidth: borderWidth.toFixed(2),
-      outerPoints: outerPolygonPoints.length,
-      innerPoints: innerPolygonPoints.length,
-    });
+
 
     if (borderRadius > 0) {
-      console.log(
-        `✅ Creating ROUNDED polygon border with radius ${borderRadius.toFixed(3)}`,
-      );
+
       // Create rounded polygon border
       return this.createRoundedPolygonFrameVertexData(
         outerPolygonPoints,
@@ -678,9 +635,7 @@ export class BabylonMeshService {
         borderWidth,
       );
     } else {
-      console.log(
-        `⚠️ Creating SHARP polygon border (borderRadius=${borderRadius})`,
-      );
+
       // Create sharp polygon border
       return this.createSharpPolygonFrameVertexData(
         outerPolygonPoints,
@@ -704,9 +659,7 @@ export class BabylonMeshService {
     const normals: number[] = [];
     const uvs: number[] = [];
 
-    console.log(
-      `🔍 Using round-polygon library for polygon border (radius=${borderRadius.toFixed(1)}):`,
-    );
+
 
     // Generate rounded outer polygon
     const roundedOuter = roundPolygon(outerPoints, borderRadius);
@@ -720,12 +673,8 @@ export class BabylonMeshService {
     const roundedInner = roundPolygon(innerPoints, innerBorderRadius);
     const innerSegments = getSegments(roundedInner, "LENGTH", segmentLength);
 
-    console.log(
-      `   Border radius: outer=${borderRadius.toFixed(3)}, inner=${innerBorderRadius.toFixed(3)}`,
-    );
-    console.log(
-      `   Generated ${outerSegments.length} outer segments, ${innerSegments.length} inner segments`,
-    );
+
+
 
     const halfWidth = width / 2;
     const halfHeight = height / 2;
@@ -760,9 +709,7 @@ export class BabylonMeshService {
     vertexData.normals = normals;
     vertexData.uvs = uvs;
 
-    console.log(
-      `🎨 Generated rounded polygon border: ${outerVertices.length + innerVertices.length} vertices, ${indices.length / 3} triangles`,
-    );
+
 
     return vertexData;
   }
@@ -811,9 +758,7 @@ export class BabylonMeshService {
     vertexData.normals = normals;
     vertexData.uvs = uvs;
 
-    console.log(
-      `🎨 Generated sharp polygon border: ${outerVertices.length + innerVertices.length} vertices, ${indices.length / 3} triangles`,
-    );
+
 
     return vertexData;
   }
@@ -841,9 +786,7 @@ export class BabylonMeshService {
       }
     } else {
       // Different vertex counts - use ratio-based mapping
-      console.log(
-        `⚠️ Vertex count mismatch: outer=${outerCount}, inner=${innerCount} - using ratio mapping`,
-      );
+
 
       for (let i = 0; i < outerCount; i++) {
         const nextI = (i + 1) % outerCount;
@@ -932,9 +875,7 @@ export class BabylonMeshService {
       const borderMesh = new Mesh(`${name}_border_frame`, this.scene);
       vertexData.applyToMesh(borderMesh);
 
-      console.log(
-        `✅ Created polygon border frame for ${name} (${polygonType})`,
-      );
+
       return [borderMesh];
     } catch (error) {
       console.warn("Failed to create polygon border:", error);
@@ -974,9 +915,7 @@ export class BabylonMeshService {
       meshName = mainMesh.name;
     }
 
-    console.log(
-      `🔄 Updating mesh and borders with new border radius: ${meshName}, radius=${borderRadius.toFixed(2)}`,
-    );
+
 
     try {
       // Update the main mesh geometry
@@ -1004,7 +943,7 @@ export class BabylonMeshService {
 
         if (borderMesh) {
           // Single border frame mesh - recreate it with new border radius
-          console.log(`🔄 Updating border frame mesh: ${borderMeshName}`);
+
 
           // Create new border vertex data
           const borderVertexData = this.createPolygonFrameVertexData(
@@ -1019,24 +958,20 @@ export class BabylonMeshService {
           borderVertexData.applyToMesh(borderMesh, true);
           borderMesh.refreshBoundingInfo();
         } else {
-          console.log(`⚠️ No border mesh found for ${borderMeshName}`);
+
 
           // Check for legacy rectangular border meshes so we can alert developers
           for (let i = 0; i < 4; i++) {
             const legacyName = `${meshName}-border-${i}`;
             const legacyMesh = targetScene.getMeshByName(legacyName);
             if (legacyMesh) {
-              console.log(
-                `⚠️ Found legacy rectangular border mesh: ${legacyName} – not updated for border radius`,
-              );
+
             }
           }
         }
       }
 
-      console.log(
-        `✅ Successfully updated mesh geometry with border radius: ${borderRadius.toFixed(2)}`,
-      );
+
     } catch (error) {
       console.error(`❌ Error updating mesh with border radius:`, error);
       throw error;
@@ -1057,9 +992,7 @@ export class BabylonMeshService {
       throw new Error("Scene not initialized");
     }
 
-    console.log(
-      `🔄 updateMeshBorderRadius called for mesh: ${mesh.name}, width=${width}, height=${height}, radius=${borderRadius.toFixed(2)}`,
-    );
+
 
     try {
       // For rectangles, we need to recreate the mesh with the new border radius
@@ -1139,9 +1072,7 @@ export class BabylonMeshService {
         // Refresh the bounding info to ensure proper interactions
         mesh.refreshBoundingInfo();
 
-        console.log(
-          `✅ Successfully updated mesh geometry with border radius=${borderRadius.toFixed(2)}`,
-        );
+
       } else {
         console.error(`❌ Mesh has no geometry to update`);
       }
@@ -1169,9 +1100,7 @@ export class BabylonMeshService {
       throw new Error("Mesh service not initialized");
     }
 
-    console.log(
-      `🔄 Creating new mesh with border radius: width=${width}, height=${height}, radius=${borderRadius.toFixed(2)}`,
-    );
+
 
     try {
       // Create a new mesh with the desired border radius
@@ -1196,9 +1125,7 @@ export class BabylonMeshService {
         newMesh.actionManager = originalMesh.actionManager;
       }
 
-      console.log(
-        `✅ Successfully created new mesh with border radius=${borderRadius.toFixed(2)}`,
-      );
+
 
       return newMesh;
     } catch (error) {
@@ -1227,9 +1154,7 @@ export class BabylonMeshService {
       throw new Error("Mesh service not initialized");
     }
 
-    console.log(
-      `📝 Creating text mesh: ${name} (${width.toFixed(3)} x ${height.toFixed(3)})`,
-    );
+
 
     try {
       // Create a plane mesh for the text
@@ -1254,7 +1179,7 @@ export class BabylonMeshService {
       // the text in front of its own element background.
       textPlane.renderingGroupId = 0;
 
-      console.log(`✅ Created text mesh: ${name} with texture material`);
+
       return textPlane;
     } catch (error) {
       console.error(`❌ Error creating text mesh: ${name}`, error);
@@ -1291,7 +1216,7 @@ export class BabylonMeshService {
     material.specularColor = new Color3(0, 0, 0);
     material.roughness = 1.0;
 
-    console.log(`🎨 Created text material: ${name} with alpha support`);
+
     return material;
   }
 
@@ -1322,7 +1247,7 @@ export class BabylonMeshService {
     material.disableLighting = true;
     material.backFaceCulling = false;
 
-    console.log(`🎨 Created material: ${name} with color`, color);
+
     return material;
   }
 
@@ -1343,7 +1268,7 @@ export class BabylonMeshService {
       throw new Error("Mesh service not initialized");
     }
 
-    console.log(`🔄 Updating text mesh: ${textMesh.name}`);
+
 
     try {
       // Update material texture
@@ -1373,12 +1298,10 @@ export class BabylonMeshService {
         newVertexData.applyToMesh(textMesh, true);
         textMesh.refreshBoundingInfo();
 
-        console.log(
-          `📏 Updated text mesh dimensions: ${newWidth.toFixed(3)} x ${newHeight.toFixed(3)}`,
-        );
+
       }
 
-      console.log(`✅ Successfully updated text mesh: ${textMesh.name}`);
+
     } catch (error) {
       console.error(`❌ Error updating text mesh: ${textMesh.name}`, error);
       throw new Error(`Failed to update text mesh: ${error}`);
@@ -1459,7 +1382,7 @@ export class BabylonMeshService {
    * @param textMesh - The text mesh to dispose
    */
   disposeTextMesh(textMesh: Mesh): void {
-    console.log(`🗑️ Disposing text mesh: ${textMesh.name}`);
+
 
     try {
       // Dispose material and textures
@@ -1491,7 +1414,7 @@ export class BabylonMeshService {
       // Dispose mesh
       textMesh.dispose();
 
-      console.log(`✅ Successfully disposed text mesh and resources`);
+
     } catch (error) {
       console.error(`❌ Error disposing text mesh: ${textMesh.name}`, error);
     }
@@ -1512,9 +1435,7 @@ export class BabylonMeshService {
     );
 
     textMesh.position.copyFrom(renderPosition);
-    console.log(
-      `📍 Positioned text mesh: ${textMesh.name} at (${x.toFixed(3)}, ${y.toFixed(3)}, ${z.toFixed(3)})`,
-    );
+
   }
 
   /**
@@ -1524,9 +1445,7 @@ export class BabylonMeshService {
    */
   parentTextMesh(textMesh: Mesh, parentMesh: Mesh): void {
     textMesh.parent = parentMesh;
-    console.log(
-      `🔗 Parented text mesh: ${textMesh.name} to ${parentMesh.name}`,
-    );
+
   }
 
   /**
@@ -1554,9 +1473,7 @@ export class BabylonMeshService {
       borderMesh.position.y = centerY;
       borderMesh.position.z = centerZ;
     });
-    console.log(
-      `📍 Positioned ${borders.length} border frames at (${centerX}, ${centerY}, ${centerZ})`,
-    );
+
   }
 
   /**
@@ -1594,15 +1511,13 @@ export class BabylonMeshService {
           material.transparencyMode = Material.MATERIAL_OPAQUE;
         }
 
-        console.log(
-          `🎨 Updated text mesh opacity: ${textMesh.name} = ${material.alpha.toFixed(2)}`,
-        );
+
       }
 
       // Update color tint
       if (color) {
         material.diffuseColor = color;
-        console.log(`🎨 Updated text mesh color: ${textMesh.name}`);
+
       }
     } catch (error) {
       console.error(
@@ -1665,7 +1580,7 @@ export class BabylonMeshService {
     material.diffuseTexture = gradientTexture;
     material.emissiveTexture = gradientTexture;
 
-    console.log(`🎨 Created gradient material: ${name}`);
+
     return material;
   }
 
@@ -1723,7 +1638,7 @@ export class BabylonMeshService {
     shadowMesh.position.y = -offsetY; // Invert Y for BabylonJS
     shadowMesh.position.z = -0.01; // Behind the element
 
-    console.log(`🌑 Created shadow mesh: ${name}`);
+
     return shadowMesh;
   }
 }

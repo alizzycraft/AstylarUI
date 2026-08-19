@@ -62,6 +62,12 @@ import {
   type AstylarSurface,
 } from './astylar-surface';
 import { ASTYLAR_SURFACE_SERVICE_PROVIDERS } from './astylar-surface-providers';
+import {
+  AstylarDiagnosticError,
+  AstylarDiagnostics,
+  type AstylarDiagnostic,
+  type AstylarDiagnosticsOptions,
+} from './astylar-diagnostics';
 
 /**
  * Configuration options for rendering
@@ -79,6 +85,8 @@ export interface AstylarRenderOptions {
   accessibility?: boolean | AstylarSemanticBridgeOptions;
   /** Accepted anchor outcomes; external URLs remain host-routable intents. */
   navigation?: AstylarNavigationOptions;
+  /** Validation reporting and controlled console output. */
+  diagnostics?: AstylarDiagnosticsOptions;
 }
 
 /**
@@ -103,6 +111,7 @@ class AstylarRenderer {
   private readonly semantics = new WeakMap<Scene, AstylarSemanticBridge>();
   private readonly visualReconciliation = new WeakMap<Scene, AstylarVisualReconciler>();
   private readonly surfaceHandles = new WeakMap<Scene, AstylarSurface>();
+  private readonly diagnostics: AstylarDiagnostics = inject(AstylarDiagnostics);
   private activeSession?: AstylarRenderSession;
 
   /**
@@ -118,6 +127,8 @@ class AstylarRenderer {
     siteData: SiteData,
     options?: AstylarRenderOptions,
   ): AstylarSurface {
+    this.diagnostics.configure(options?.diagnostics);
+    this.diagnostics.validate(siteData);
     const scene = this.createScene(canvas, siteData, options);
     const surface = new AstylarSurfaceHandle(scene, this);
     this.surfaceHandles.set(scene, surface);
@@ -556,9 +567,17 @@ class AstylarRenderer {
     session.addCleanup(this.imageResources.subscribe((event) => {
       if (event.scene !== scene || session.isDisposed) return;
       if (!this.collectImageSources(session.siteData).has(event.source)) return;
+      if (event.status === 'error') {
+        this.diagnostics.report({
+          code: 'asset-load-failed',
+          severity: 'error',
+          message: `Failed to load image asset ${JSON.stringify(event.source)}.`,
+          value: event.source,
+        });
+      }
       void session.invalidate('asset').catch((error) => {
         if (!session.isDisposed) {
-          console.error('[Astylar] Image asset reflow failed:', error);
+          this.reportRenderFailure('Image asset reflow failed.', error);
         }
       });
     }));
@@ -581,7 +600,7 @@ class AstylarRenderer {
       observedHeight = height;
       void session.invalidate('resize').catch((error) => {
         if (!session.isDisposed) {
-          console.error('[Astylar] Resize reflow failed:', error);
+          this.reportRenderFailure('Resize reflow failed.', error);
         }
       });
     };
@@ -598,12 +617,11 @@ class AstylarRenderer {
 
     // Queue the initial layout through the same lifecycle used by later reflows.
     void session.invalidate('initial').catch((error) => {
-      console.error('[Astylar] Initial render failed:', error);
+      this.reportRenderFailure('Initial render failed.', error);
     });
 
     // Set up cleanup on scene disposal
     scene.onDisposeObservable.add(() => {
-      console.log("[Astylar] Scene disposing, cleaning up services...");
       session.dispose();
       if (this.activeSession === session) {
         this.activeSession = undefined;
@@ -649,7 +667,16 @@ class AstylarRenderer {
     return this.visualReconciliation.get(scene)?.snapshot;
   }
 
+  getDiagnosticSnapshot(): readonly AstylarDiagnostic[] {
+    return this.diagnostics.snapshot;
+  }
+
+  reportDiagnostic(diagnostic: AstylarDiagnostic): void {
+    this.diagnostics.report(diagnostic);
+  }
+
   update(siteData: SiteData, scene?: Scene): Promise<AstylarSessionSnapshot> {
+    this.diagnostics.validate(siteData);
     const session = this.requireSession(scene);
     this.interactions.get(session.scene)?.setSiteData(siteData);
     return session.update(siteData);
@@ -672,6 +699,15 @@ class AstylarRenderer {
       throw new Error('No active Astylar render session was found.');
     }
     return session;
+  }
+
+  private reportRenderFailure(message: string, error: unknown): void {
+    this.diagnostics.report({
+      code: 'render-failed',
+      severity: 'error',
+      message,
+      value: error instanceof Error ? error.message : error,
+    });
   }
 
   private collectImageSources(siteData: SiteData): Set<string> {
@@ -877,6 +913,7 @@ interface AstylarSurfaceRecord {
 export class Astylar {
   private readonly parentInjector = inject(EnvironmentInjector);
   private readonly surfaces = new WeakMap<Scene, AstylarSurfaceRecord>();
+  private readonly canvases = new WeakMap<HTMLCanvasElement, AstylarSurface>();
   private activeScene?: Scene;
 
   mount(
@@ -889,6 +926,8 @@ export class Astylar {
       this.parentInjector,
       'AstylarSurface',
     );
+    const diagnostics = injector.get(AstylarDiagnostics);
+    diagnostics.configure(options?.diagnostics);
     let injectorDestroyed = false;
     const destroyInjector = (): void => {
       if (injectorDestroyed) return;
@@ -896,13 +935,24 @@ export class Astylar {
       injector.destroy();
     };
     try {
+      const existing = this.canvases.get(canvas);
+      if (existing && !existing.disposed) {
+        const diagnostic = diagnostics.report({
+          code: 'canvas-in-use',
+          severity: 'error',
+          message: 'This canvas already hosts a live Astylar surface.',
+        });
+        throw new AstylarDiagnosticError(diagnostic);
+      }
       const renderer = injector.get(AstylarRenderer);
       const surface = renderer.mount(canvas, siteData, options);
       const record: AstylarSurfaceRecord = { injector, renderer, surface };
       this.surfaces.set(surface.scene, record);
+      this.canvases.set(canvas, surface);
       this.activeScene = surface.scene;
       surface.scene.onDisposeObservable.addOnce(() => {
         this.surfaces.delete(surface.scene);
+        if (this.canvases.get(canvas) === surface) this.canvases.delete(canvas);
         if (this.activeScene === surface.scene) this.activeScene = undefined;
         destroyInjector();
       });
@@ -985,7 +1035,11 @@ export class Astylar {
     const resolvedScene = scene ?? this.activeScene;
     const record = resolvedScene ? this.surfaces.get(resolvedScene) : undefined;
     if (!record && required) {
-      throw new Error('No active Astylar rendering surface was found.');
+      throw new AstylarDiagnosticError({
+        code: 'surface-not-found',
+        severity: 'error',
+        message: 'No active Astylar rendering surface was found.',
+      });
     }
     return record;
   }

@@ -36,7 +36,7 @@ export class TextHighlightMeshFactory {
     this.textSelectionController.selection$
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((state) => {
-        console.log('[TextHighlight] Subscription received state update:', state);
+
         const entry = state.elementId
           ? this.textInteractionRegistry.getByElementId(state.elementId)
           : undefined;
@@ -57,14 +57,7 @@ export class TextHighlightMeshFactory {
   }
 
   private applySelection(state: TextSelectionState, entry?: TextInteractionEntry): void {
-    console.log('[TextHighlight] applySelection called:', {
-      hasRange: !!state.range,
-      rangeStart: state.range?.start,
-      rangeEnd: state.range?.end,
-      isPointerDown: state.isPointerDown,
-      hasEntry: !!entry,
-      hasMetrics: !!entry?.metrics
-    });
+
 
     if (!state.range || state.range.start === state.range.end || !entry || !entry.metrics) {
       this.clearCurrentHighlights();
@@ -72,7 +65,7 @@ export class TextHighlightMeshFactory {
     }
 
     // Debug logging for range values
-    console.log(`[TextHighlight] Applying selection range: start=${state.range.start}, end=${state.range.end}`);
+
 
     if (this.currentElementId && this.currentElementId !== entry.elementId) {
       this.disposeHighlights(this.currentElementId);
@@ -103,7 +96,7 @@ export class TextHighlightMeshFactory {
     }
 
     // Debug logging for selection range
-    console.log(`[TextHighlight] computeSegments called with start=${start}, end=${end}`);
+
 
     const lineCharMap = new Map<number, typeof characters>();
     for (const character of characters) {
@@ -128,8 +121,8 @@ export class TextHighlightMeshFactory {
     const halfHeight = textHeight / 2;
 
     // Debug logging for text mesh position
-    console.log(`[TextHighlight] Text mesh position: x=${textMesh.position.x}, y=${textMesh.position.y}`);
-    console.log(`[TextHighlight] Text mesh absolute position: x=${textMesh.absolutePosition.x}, y=${textMesh.absolutePosition.y}`);
+
+
 
     const minTop = cssMetrics.lines.reduce((acc: number, line: any) => Math.min(acc, line.top), Number.POSITIVE_INFINITY);
 
@@ -158,7 +151,7 @@ export class TextHighlightMeshFactory {
     const scrollTop = entry.scrollTop || 0;
     const verticalOrigin = entry.verticalOrigin || 0;
 
-    console.log(`[TextHighlight] Scale calculation: textWidth=${textWidth}, actualContentWidth=${actualContentWidth}, scale=${scale}, scrollOffset=${scrollOffset}`);
+
 
     for (const line of cssMetrics.lines) {
       const lineChars = lineCharMap.get(line.index) ?? [];
@@ -169,12 +162,12 @@ export class TextHighlightMeshFactory {
         continue;
       }
 
-      console.log(`[TextHighlight] Processing line ${line.index}: overlapStart=${overlapStart}, overlapEnd=${overlapEnd}, line.startIndex=${line.startIndex}, line.endIndex=${line.endIndex}`);
+
 
       const lineStartCaret = this.resolveCaretPosition(overlapStart, line, lineChars);
       const lineEndCaret = this.resolveCaretPosition(overlapEnd, line, lineChars, true);
 
-      console.log(`[TextHighlight] Line ${line.index} caret positions: lineStartCaret=${lineStartCaret}, lineEndCaret=${lineEndCaret}`);
+
 
       // Character x positions in CSS metrics are relative to line start (x=0)
       // We need to add lineOffset if text is aligned (center/right)
@@ -234,8 +227,8 @@ export class TextHighlightMeshFactory {
       const centerY = ((clippedTopWorld + clippedBottomWorld) / 2) - halfHeight;
 
       // Debug logging for calculated positions
-      console.log(`[TextHighlight] Line ${line.index}: startXWorld=${startXWorld}, endXWorld=${endXWorld}, centerX=${centerX}, centerY=${centerY}`);
-      console.log(`[TextHighlight] Line ${line.index}: widthWorld=${widthWorld}, heightWorld=${heightWorld}`);
+
+
 
       segments.push({
         centerX,
@@ -270,39 +263,39 @@ export class TextHighlightMeshFactory {
     clampToEnd = false
   ): number {
     // Debug logging for caret position resolution
-    console.log(`[TextHighlight] Resolving caret position: targetIndex=${targetIndex}, line.startIndex=${line.startIndex}, line.endIndex=${line.endIndex}, clampToEnd=${clampToEnd}`);
+
 
     if (!lineCharacters.length) {
-      console.log(`[TextHighlight] No line characters, returning 0`);
+
       return 0;
     }
 
     if (targetIndex <= line.startIndex) {
-      console.log(`[TextHighlight] Target index <= line start index, returning 0`);
+
       return 0;
     }
 
     if (targetIndex >= line.endIndex) {
       const last = lineCharacters[lineCharacters.length - 1];
       const result = clampToEnd ? last.x + last.advance : last.x + last.advance;
-      console.log(`[TextHighlight] Target index >= line end index, returning ${result} (last.x=${last.x}, last.advance=${last.advance})`);
+
       return result;
     }
 
     const exact = lineCharacters.find((char) => char.index === targetIndex);
     if (exact) {
-      console.log(`[TextHighlight] Found exact character match, returning ${exact.x}`);
+
       return exact.x;
     }
 
     const preceding = this.findPrecedingCharacter(targetIndex, lineCharacters);
     if (preceding) {
       const result = preceding.x + preceding.advance;
-      console.log(`[TextHighlight] Found preceding character, returning ${result} (preceding.x=${preceding.x}, preceding.advance=${preceding.advance})`);
+
       return result;
     }
 
-    console.log(`[TextHighlight] No match found, returning 0`);
+
     return 0;
   }
 
@@ -352,7 +345,7 @@ export class TextHighlightMeshFactory {
       mesh.isVisible = true; // Ensure mesh visibility
 
       // Debug logging for mesh positioning
-      console.log(`[TextHighlight] Mesh ${index}: position=(${mesh.position.x}, ${mesh.position.y}), scale=(${mesh.scaling.x}, ${mesh.scaling.y})`);
+
     });
 
     this.highlightRecords.set(entry.elementId, existing);

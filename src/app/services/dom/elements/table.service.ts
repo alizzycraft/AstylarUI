@@ -15,46 +15,46 @@ export class TableService {
       throw new Error("Parent table element has no id.");
     }
 
-    console.log(`[TABLE DEBUG] ===== PROCESSING TABLE "${parentElement.id}" =====`);
+
     if (tableMeshOverride) {
-      console.log(`[TABLE DEBUG] Using existing table mesh: ${tableMeshOverride.name}`);
+
     }
 
     // ... rest of logging ...
-    console.log(`[TABLE DEBUG] Table has ${tableChildren.length} children`);
+
     this.registerTableAncestry(tableChildren, parentElement);
 
     try {
       // Use existing mesh or create a new one
       const tableMesh = tableMeshOverride || this.createTableContainer(dom, render, parentElement, parent, styles);
-      console.log(`[TABLE DEBUG] ===== USING TABLE MESH: ${tableMesh.name} =====`);
+
 
       // Process column definitions first (col, colgroup) to establish column layout
       const columnDefinitions = this.extractColumnDefinitions(tableChildren);
-      console.log(`[TABLE DEBUG] Found ${columnDefinitions.length} column definitions`);
+
 
       // Process caption if present
       const captionElement = tableChildren.find(child => child.type === 'caption');
       if (captionElement) {
-        console.log(`[TABLE DEBUG] Processing table caption: ${captionElement.id}`);
+
         this.processCaption(dom, render, captionElement, tableMesh, styles);
       }
 
       // Check if table has explicit dimensions or needs content-based sizing
       let containerDimensions;
       try {
-        console.log(`[TABLE DEBUG] ===== ATTEMPTING TO GET TABLE DIMENSIONS FOR ${parentElement.id} =====`);
+
         containerDimensions = this.getTableContainerDimensions(dom, tableMesh);
-        console.log(`[TABLE DEBUG] ===== SUCCESS: Table container dimensions: ${JSON.stringify(containerDimensions)} =====`);
+
       } catch (error) {
-        console.log(`[TABLE DEBUG] ===== CONTENT-BASED: Table ${parentElement.id} using content-based sizing: ${error} =====`);
+
 
         // Debug: Show available elementStyles keys
-        console.log(`[TABLE DEBUG] Available elementStyles keys: ${JSON.stringify(Array.from(dom.context.elementStyles.keys()))}`);
+
 
         try {
           containerDimensions = this.calculateContentBasedTableDimensions(dom, tableChildren);
-          console.log(`[TABLE DEBUG] Content-based table dimensions: ${JSON.stringify(containerDimensions)}`);
+
 
           // Validate calculated dimensions
           if (!containerDimensions || containerDimensions.width === null || isNaN(containerDimensions.width) || containerDimensions.height === null || isNaN(containerDimensions.height)) {
@@ -67,7 +67,7 @@ export class TableService {
             height: containerDimensions.height,
             padding: { top: 0, right: 0, bottom: 0, left: 0 }
           });
-          console.log(`[TABLE DEBUG] Updated stored dimensions for ${tableMesh.name}: ${JSON.stringify(dom.context.elementDimensions.get(tableMesh.name))}`);
+
         } catch (contentError) {
           console.error(`[TABLE DEBUG] Content-based calculation failed: ${contentError}`);
           throw contentError;
@@ -77,7 +77,7 @@ export class TableService {
       // Calculate total row count across all sections for proper row height distribution
       const totalRowCount = this.calculateTotalRowCount(tableChildren);
       const totalColumnCount = this.calculateTotalColumnCount(tableChildren);
-      console.log(`[TABLE DEBUG] Total table dimensions - rows: ${totalRowCount}, columns: ${totalColumnCount}`);
+
 
       // Calculate shared row height for all sections
       const sharedRowHeight = containerDimensions.height / totalRowCount;
@@ -86,7 +86,7 @@ export class TableService {
         containerDimensions.width,
         totalColumnCount,
       );
-      console.log(`[TABLE DEBUG] Shared dimensions - rowHeight: ${sharedRowHeight}px, columnWidths: ${JSON.stringify(sharedColumnWidths)}`);
+
 
       // Filter out column definitions and captions from main table structure processing
       const tableStructureChildren = tableChildren.filter(child =>
@@ -97,7 +97,7 @@ export class TableService {
       let currentTableY = 0;
       for (const child of tableStructureChildren) {
         if (child.type === 'tbody' || child.type === 'thead' || child.type === 'tfoot') {
-          console.log(`[TABLE DEBUG] Processing table section: ${child.type}#${child.id} at Y: ${currentTableY}`);
+
           const sectionRowCount = (child.children || []).filter(c => c.type === 'tr').length;
           this.processTableSection(dom, render, child, tableMesh, styles, containerDimensions, parentElement.id, {
             sharedRowHeight,
@@ -106,13 +106,13 @@ export class TableService {
           });
           currentTableY += sectionRowCount * sharedRowHeight;
         } else if (child.type === 'tr') {
-          console.log(`[TABLE DEBUG] Processing direct table row: ${child.type}#${child.id}`);
+
           // Handle direct rows (no tbody wrapper) - create implicit tbody
           this.processDirectTableRows(dom, render, [child], tableMesh, styles, containerDimensions, parentElement.id);
         }
       }
 
-      console.log(`[TABLE DEBUG] Successfully processed table "${parentElement.id}"`);
+
 
     } catch (error) {
       console.error(`[TABLE DEBUG] Critical error in processTable for "${parentElement.id}": ${error}`);
@@ -121,36 +121,36 @@ export class TableService {
   }
 
   private createTableContainer(dom: BabylonDOM, render: BabylonRender, tableElement: DOMElement, parent: Mesh, styles: StyleRule[]): Mesh {
-    console.log(`[TABLE CREATE] ===== CREATING TABLE CONTAINER FOR ${tableElement.id} =====`);
-    console.log(`[TABLE CREATE] Parent mesh: ${parent.name}`);
+
+
 
     // Check parent dimensions before creating table
     const parentDimensions = dom.context.elementDimensions.get(parent.name);
-    console.log(`[TABLE CREATE] Parent (${parent.name}) dimensions: ${JSON.stringify(parentDimensions)}`);
+
 
     // Fix: For tables, if parent is the table itself, look for the actual container parent
     let actualParentDimensions = parentDimensions;
     if (parent.name === tableElement.id) {
-      console.log(`[TABLE CREATE] Table parent is itself, looking for actual container parent`);
+
       // Look for the container that should be the real parent
       const containerName = tableElement.id?.replace('-table', '-container') || 'complex-container';
       actualParentDimensions = dom.context.elementDimensions.get(containerName);
-      console.log(`[TABLE CREATE] Actual parent container (${containerName}) dimensions: ${JSON.stringify(actualParentDimensions)}`);
+
 
       // Debug: Check what the container's parent dimensions are
       const rootDimensions = dom.context.elementDimensions.get('root-body');
-      console.log(`[TABLE CREATE] Root body dimensions: ${JSON.stringify(rootDimensions)}`);
+
       if (rootDimensions) {
         const containerExpectedHeight = rootDimensions.height * 0.7;
-        console.log(`[TABLE CREATE] Container expected height (70% of ${rootDimensions.height}px): ${containerExpectedHeight}px`);
-        console.log(`[TABLE CREATE] Container actual height: ${actualParentDimensions?.height}px`);
+
+
       }
     }
 
     // Check what the table's CSS height should resolve to
     if (actualParentDimensions && tableElement.id === 'complex-table') {
       const expectedHeight = actualParentDimensions.height * 0.7;
-      console.log(`[TABLE CREATE] Expected table height (70% of ${actualParentDimensions.height}px): ${expectedHeight}px`);
+
     }
 
     // Create the main table mesh using existing createElement
@@ -158,14 +158,14 @@ export class TableService {
 
     // Check if table dimensions were properly stored after creation
     const tableDimensions = dom.context.elementDimensions.get(tableMesh.name);
-    console.log(`[TABLE CREATE] Table (${tableMesh.name}) dimensions after creation: ${JSON.stringify(tableDimensions)}`);
 
-    console.log(`📊 Created table container: ${tableMesh.name}, dimensions stored in elementDimensions`);
+
+
     return tableMesh;
   }
 
   private processTableSection(dom: BabylonDOM, render: BabylonRender, sectionElement: DOMElement, tableMesh: Mesh, styles: StyleRule[], containerDimensions: { width: number; height: number }, tableId: string, sharedDimensions?: { sharedRowHeight: number; sharedColumnWidths: number[]; sectionStartY: number }): void {
-    console.log(`[TABLE DEBUG] Processing table section: ${sectionElement.type}#${sectionElement.id}`);
+
 
     // Calculate section-specific dimensions
     const sectionRows = (sectionElement.children || []).filter(c => c.type === 'tr');
@@ -186,14 +186,14 @@ export class TableService {
       tableId,
       sharedDimensions?.sectionStartY ?? 0,
     );
-    console.log(`[TABLE DEBUG] Created section mesh: ${sectionMesh.name}`);
 
-    console.log(`[TABLE DEBUG] Found ${sectionRows.length} rows in ${sectionElement.type}`);
-    console.log(`[TABLE DEBUG] Row IDs: ${JSON.stringify(sectionRows.map(r => r.id))}`);
+
+
+
 
     if (sectionRows.length > 0) {
       if (sharedDimensions) {
-        console.log(`[TABLE DEBUG] Using shared dimensions for ${sectionElement.type} - rowHeight: ${sharedDimensions.sharedRowHeight}, startY: ${sharedDimensions.sectionStartY}`);
+
         this.processTableRowsWithSharedDimensions(dom, render, sectionRows, sectionMesh, styles, sharedDimensions, sectionElement.id || `${tableId}-${sectionElement.type}`);
       } else {
         this.processTableRows(dom, render, sectionRows, sectionMesh, styles, sectionDimensions, sectionElement.id || `${tableId}-${sectionElement.type}`);
@@ -202,12 +202,12 @@ export class TableService {
   }
 
   private processDirectTableRows(dom: BabylonDOM, render: BabylonRender, rows: DOMElement[], tableMesh: Mesh, styles: StyleRule[], containerDimensions: { width: number; height: number }, tableId: string): void {
-    console.log(`📝 Processing ${rows.length} direct table rows (no tbody)`);
+
     this.processTableRows(dom, render, rows, tableMesh, styles, containerDimensions, tableId);
   }
 
   private createTableSectionContainer(dom: BabylonDOM, render: BabylonRender, sectionElement: DOMElement, tableMesh: Mesh, styles: StyleRule[], containerDimensions: { width: number; height: number }, tableId: string, sectionStartY: number): Mesh {
-    console.log(`[TABLE DEBUG] Creating section container for ${sectionElement.type}#${sectionElement.id} with dimensions: ${containerDimensions.width}x${containerDimensions.height}px`);
+
 
     // Create auto-positioned style for the section
     // We only provide layout overrides here; createElement will resolve the full style cascade
@@ -219,7 +219,7 @@ export class TableService {
       left: '0px'
     };
 
-    console.log(`[TABLE DEBUG] Section ${sectionElement.type} layout override height: ${sectionLayoutOverride.height}`);
+
 
     // Store layout overrides in context temporarily
     const originalId = sectionElement.id;
@@ -241,7 +241,7 @@ export class TableService {
       height: containerDimensions.height,
       padding: { top: 0, right: 0, bottom: 0, left: 0 }
     });
-    console.log(`📋 Stored section dimensions for ${sectionMesh.name}: ${containerDimensions.width}x${containerDimensions.height}px`);
+
 
     // Restore original styles
     if (storedStyles) {
@@ -251,38 +251,38 @@ export class TableService {
     }
     sectionElement.id = originalId;
 
-    console.log(`📋 Created table section container: ${sectionElement.type}#${sectionElement.id}, inheriting dimensions: ${containerDimensions.width}x${containerDimensions.height}px`);
+
     return sectionMesh;
   }
 
   private getTableContainerDimensions(dom: BabylonDOM, tableMesh: Mesh): { width: number; height: number } {
     const tableId = this.getElementIdFromMeshName(tableMesh.name);
-    console.log(`[TABLE DEBUG] Getting table container dimensions for: ${tableMesh.name}, extracted ID: ${tableId}`);
-    console.log(`[TABLE DEBUG] Available elementDimensions keys: ${JSON.stringify(Array.from(dom.context.elementDimensions.keys()))}`);
+
+
 
     if (!tableId) {
       throw new Error(`[TABLE ERROR] Could not extract table ID from mesh name: ${tableMesh.name}`);
     }
 
     const containerDimensions = dom.context.elementDimensions.get(tableId);
-    console.log(`[TABLE DEBUG] Table dimensions for ${tableId}: ${JSON.stringify(containerDimensions)}`);
+
 
     // Debug: Check parent container dimensions for percentage calculation validation
     const parentContainerDimensions = dom.context.elementDimensions.get('complex-container');
-    console.log(`[TABLE DEBUG] Parent container (complex-container) dimensions: ${JSON.stringify(parentContainerDimensions)}`);
+
 
     if (parentContainerDimensions && containerDimensions) {
       const expectedHeight = parentContainerDimensions.height * 0.7;
-      console.log(`[TABLE DEBUG] Expected table height (70% of ${parentContainerDimensions.height}px): ${expectedHeight}px`);
-      console.log(`[TABLE DEBUG] Actual table height: ${containerDimensions.height}px`);
-      console.log(`[TABLE DEBUG] Height difference: ${Math.abs(expectedHeight - containerDimensions.height)}px`);
+
+
+
     }
 
     if (!containerDimensions) {
       throw new Error(`[TABLE ERROR] No dimensions found for table ID: ${tableId}. Available keys: ${JSON.stringify(Array.from(dom.context.elementDimensions.keys()))}`);
     }
 
-    console.log(`[TABLE DEBUG] Checking width: ${containerDimensions.width}, type: ${typeof containerDimensions.width}, isNull: ${containerDimensions.width === null}, isUndefined: ${containerDimensions.width === undefined}, isNaN: ${isNaN(containerDimensions.width)}`);
+
 
     if (containerDimensions.width === null || containerDimensions.width === undefined || isNaN(containerDimensions.width)) {
       throw new Error(`[TABLE ERROR] Table ${tableId} has null/undefined/NaN width: ${containerDimensions.width} (type: ${typeof containerDimensions.width}). Dimensions: ${JSON.stringify(containerDimensions)}`);
@@ -311,8 +311,8 @@ export class TableService {
   }
 
   private processTableRowsWithSharedDimensions(dom: BabylonDOM, render: BabylonRender, tableRows: DOMElement[], parentMesh: Mesh, styles: StyleRule[], sharedDimensions: { sharedRowHeight: number; sharedColumnWidths: number[]; sectionStartY: number }, parentId: string): void {
-    console.log(`[TABLE DEBUG] Processing ${tableRows.length} table rows with shared dimensions in container "${parentId}"`);
-    console.log(`[TABLE DEBUG] Shared rowHeight: ${sharedDimensions.sharedRowHeight}, sectionStartY: ${sharedDimensions.sectionStartY}`);
+
+
 
     if (tableRows.length === 0) {
       console.warn(`[TABLE DEBUG] No table rows to process`);
@@ -326,18 +326,18 @@ export class TableService {
     // positioned locally so row groups do not apply that offset twice.
     let currentY = 0;
     tableRows.forEach((row, rowIndex) => {
-      console.log(`[TABLE DEBUG] Processing row ${rowIndex + 1}/${tableRows.length}: ${row.type}#${row.id} at Y: ${currentY}`);
+
 
       try {
         // Ensure unique row identification
         const originalId = row.id;
         if (!row.id) {
           row.id = `${parentMesh.name}-tr-${rowIndex}`;
-          console.log(`[TABLE DEBUG] Assigned temporary row ID: ${row.id}`);
+
         }
 
         const rowMesh = this.createTableRow(dom, render, row, parentMesh, styles, currentY, sharedRowHeight, parentMesh.name);
-        console.log(`[TABLE DEBUG] Created row mesh: ${rowMesh.name} at Y: ${currentY}`);
+
 
         // Restore original ID
         row.id = originalId;
@@ -347,7 +347,7 @@ export class TableService {
 
         // Move to next row position
         currentY += sharedRowHeight;
-        console.log(`[TABLE DEBUG] Updated currentY to: ${currentY}`);
+
 
       } catch (error) {
         console.error(`[TABLE DEBUG] Error processing table row ${row.type}#${row.id}: ${error}`);
@@ -357,8 +357,8 @@ export class TableService {
   }
 
   private processTableRows(dom: BabylonDOM, render: BabylonRender, tableRows: DOMElement[], parentMesh: Mesh, styles: StyleRule[], containerDimensions: { width: number; height: number }, parentId: string): void {
-    console.log(`[TABLE DEBUG] Processing ${tableRows.length} table rows in container "${parentId}"`);
-    console.log(`[TABLE DEBUG] Parent mesh name: ${parentMesh.name}`);
+
+
 
     if (tableRows.length === 0) {
       console.warn(`[TABLE DEBUG] No table rows to process`);
@@ -367,24 +367,24 @@ export class TableService {
 
     // Calculate automatic row and column dimensions
     const { rowHeight, columnWidths } = this.calculateTableDimensions(tableRows, containerDimensions);
-    console.log(`[TABLE DEBUG] Calculated dimensions - rowHeight: ${rowHeight}px, columnWidths: ${JSON.stringify(columnWidths)}`);
+
 
     // Process each row sequentially (like list items)
     let currentY = 0;
     tableRows.forEach((row, rowIndex) => {
-      console.log(`[TABLE DEBUG] Processing row ${rowIndex + 1}/${tableRows.length}: ${row.type}#${row.id}`);
-      console.log(`[TABLE DEBUG] Row currentY: ${currentY}, rowHeight: ${rowHeight}`);
+
+
 
       try {
         // Ensure unique row identification by temporarily setting an ID if none exists
         const originalId = row.id;
         if (!row.id) {
           row.id = `${parentMesh.name}-tr-${rowIndex}`;
-          console.log(`[TABLE DEBUG] Assigned temporary row ID: ${row.id}`);
+
         }
 
         const rowMesh = this.createTableRow(dom, render, row, parentMesh, styles, currentY, rowHeight, parentMesh.name);
-        console.log(`[TABLE DEBUG] Created row mesh: ${rowMesh.name}`);
+
 
         // Restore original ID
         row.id = originalId;
@@ -394,7 +394,7 @@ export class TableService {
 
         // Move to next row position
         currentY += rowHeight;
-        console.log(`[TABLE DEBUG] Updated currentY to: ${currentY}`);
+
 
       } catch (error) {
         console.error(`[TABLE DEBUG] Error processing table row ${row.type}#${row.id}: ${error}`);
@@ -407,14 +407,14 @@ export class TableService {
     const numRows = tableRows.length;
     const numCols = this.getMaxColumnsInTable(tableRows);
 
-    console.log(`🧮 Table dimensions calculation:`);
-    console.log(`   Container: ${containerDimensions.width}x${containerDimensions.height}px`);
-    console.log(`   Rows: ${numRows}, Columns: ${numCols}`);
-    console.log(`   ⚠️  WARNING: This calculation is per-section, not per-table!`);
+
+
+
+
 
     // Calculate automatic row height (distribute evenly)
     const rowHeight = Math.floor(containerDimensions.height / numRows);
-    console.log(`   Row height: ${containerDimensions.height}px ÷ ${numRows} = ${rowHeight}px`);
+
 
     // Calculate automatic column widths (distribute evenly)
     if (containerDimensions.width === null || containerDimensions.width === undefined || isNaN(containerDimensions.width)) {
@@ -427,7 +427,7 @@ export class TableService {
 
     const columnWidth = Math.floor(containerDimensions.width / numCols);
     const columnWidths = new Array(numCols).fill(columnWidth);
-    console.log(`[TABLE DEBUG] Column width: ${containerDimensions.width}px ÷ ${numCols} = ${columnWidth}px each`);
+
 
     return { rowHeight, columnWidths };
   }
@@ -449,7 +449,7 @@ export class TableService {
     // First check if we have column definitions
     const columnDefinitions = this.extractColumnDefinitions(tableChildren);
     if (columnDefinitions.length > 0) {
-      console.log(`[TABLE DEBUG] Using column definitions for column count: ${columnDefinitions.length}`);
+
       return columnDefinitions.length;
     }
 
@@ -530,12 +530,12 @@ export class TableService {
   }
 
   private createTableRow(dom: BabylonDOM, render: BabylonRender, rowElement: DOMElement, parent: Mesh, styles: StyleRule[], yOffset: number, rowHeight: number, parentId: string): Mesh {
-    console.log(`[TABLE DEBUG] Creating table row ${rowElement.id}, parent: ${parent.name}, parentId: ${parentId}`);
-    console.log(`[TABLE DEBUG] Available elementDimensions keys: ${JSON.stringify(Array.from(dom.context.elementDimensions.keys()))}`);
+
+
 
     // Get parent container dimensions (could be table or tbody)
     const containerDimensions = dom.context.elementDimensions.get(parentId);
-    console.log(`[TABLE DEBUG] Container dimensions for ${parentId}: ${JSON.stringify(containerDimensions)}`);
+
 
     const containerPadding = containerDimensions?.padding || { left: 0, right: 0, top: 0, bottom: 0 };
 
@@ -554,7 +554,7 @@ export class TableService {
       throw new Error(`[TABLE ERROR] Calculated row width is invalid: ${rowWidth}. Container width: ${containerDimensions.width}, padding: ${JSON.stringify(containerPadding)}`);
     }
 
-    console.log(`[TABLE DEBUG] Calculated row width: ${rowWidth}, yOffset: ${yOffset}, rowHeight: ${rowHeight}`);
+
 
     // Create layout override for the row
     const rowLayoutOverride: StyleRule = {
@@ -584,7 +584,7 @@ export class TableService {
       height: rowHeight,
       padding: { top: 0, right: 0, bottom: 0, left: 0 }
     });
-    console.log(`� Stored drow dimensions for ${rowMesh.name}: ${rowWidth}x${rowHeight}px`);
+
 
     // Restore original styles
     if (rowElement.id && storedStyles) {
@@ -595,26 +595,26 @@ export class TableService {
   }
 
   private processTableCells(dom: BabylonDOM, render: BabylonRender, cells: DOMElement[], rowMesh: Mesh, styles: StyleRule[], columnWidths: number[], rowElement: DOMElement): void {
-    console.log(`[TABLE DEBUG] Processing ${cells.length} cells in row "${rowMesh.name}"`);
-    console.log(`[TABLE DEBUG] Cell types: ${JSON.stringify(cells.map(c => c.type))}`);
-    console.log(`[TABLE DEBUG] Cell IDs: ${JSON.stringify(cells.map(c => c.id))}`);
+
+
+
 
     const tableCells = cells.filter(c => c.type === 'td' || c.type === 'th');
-    console.log(`[TABLE DEBUG] Filtered to ${tableCells.length} table cells`);
+
 
     let currentX = 0;
     let columnIndex = 0;
 
     tableCells.forEach((cell, cellIndex) => {
-      console.log(`[TABLE DEBUG] Processing cell ${cellIndex + 1}/${tableCells.length}: ${cell.type}#${cell.id}`);
+
 
       // Handle colspan
       const colspan = cell.colspan || cell.tableProperties?.colspan || 1;
       const rowspan = cell.rowspan || cell.tableProperties?.rowspan || 1;
 
-      console.log(`[TABLE-SPAN] ${cell.id || 'unknown'}: colspan=${colspan} rowspan=${rowspan} class="${cell.class || 'none'}"`);
+
       if (colspan > 1 || rowspan > 1) {
-        console.log(`[TABLE-SPAN] *** SPANNING CELL DETECTED: ${cell.id} spans ${colspan}x${rowspan} ***`);
+
       }
 
       // Calculate cell width based on colspan
@@ -623,7 +623,7 @@ export class TableService {
         cellWidth += columnWidths[columnIndex + i];
       }
 
-      console.log(`[TABLE DEBUG] Cell currentX: ${currentX}, cellWidth: ${cellWidth} (spanning ${colspan} columns)`);
+
 
       try {
         if (cellWidth === null || cellWidth === undefined || isNaN(cellWidth)) {
@@ -631,38 +631,38 @@ export class TableService {
         }
 
         const cellMesh = this.createTableCellWithSpanning(dom, render, cell, rowMesh, styles, currentX, cellWidth, rowMesh.name, colspan, rowspan);
-        console.log(`[TABLE DEBUG] Created cell mesh: ${cellMesh.name}`);
+
 
         // Process cell children if any
         if (cell.children && cell.children.length > 0) {
-          console.log(`[TABLE DEBUG] Cell ${cell.id} has ${cell.children.length} sub-children`);
-          console.log(`[TABLE DEBUG] Cell children details: ${JSON.stringify(cell.children.map(c => ({ type: c.type, id: c.id, class: c.class })))}`);
+
+
 
           // Debug: Check if the cell content styles are available
           for (const child of cell.children) {
-            console.log(`[TABLE DEBUG] Processing child: type=${child.type}, id=${child.id}, class=${child.class}`);
+
             if (child.class) {
               const childStyle = dom.context.elementStyles.get('.' + child.class) || dom.context.elementStyles.get(child.class);
-              console.log(`[TABLE DEBUG] Child ${child.id} with class ${child.class} style: ${JSON.stringify(childStyle)}`);
+
             } else {
-              console.log(`[TABLE DEBUG] Child ${child.id} has NO CLASS PROPERTY`);
+
             }
             if (child.id) {
               const childStyle = dom.context.elementStyles.get(child.id);
-              console.log(`[TABLE DEBUG] Child ${child.id} style by ID: ${JSON.stringify(childStyle)}`);
+
             }
           }
 
           // Final check before processChildren
-          console.log(`[TABLE-CHILDREN] Cell ${cell.id} has ${cell.children.length} children:`, cell.children.map(c => ({ type: c.type, id: c.id, class: c.class })));
+
           dom.actions.processChildren(dom, render, cell.children, cellMesh, styles, cell);
-          console.log(`[TABLE-CHILDREN] Completed processing children for cell ${cell.id}`);
+
         }
 
         // Move to next cell position, accounting for colspan
         currentX += cellWidth;
         columnIndex += colspan;
-        console.log(`[TABLE DEBUG] Updated currentX to: ${currentX}, columnIndex to: ${columnIndex}`);
+
 
       } catch (error) {
         console.error(`[TABLE DEBUG] Error processing table cell ${cell.type}#${cell.id}: ${error}`);
@@ -676,23 +676,23 @@ export class TableService {
   }
 
   private createTableCellWithSpanning(dom: BabylonDOM, render: BabylonRender, cellElement: DOMElement, rowMesh: Mesh, styles: StyleRule[], xOffset: number, cellWidth: number, rowId: string, colspan: number, rowspan: number): Mesh {
-    console.log(`[TABLE DEBUG] Creating cell ${cellElement.id}, rowMesh: ${rowMesh.name}, rowId: ${rowId}`);
-    console.log(`[TABLE DEBUG] Cell xOffset: ${xOffset}, cellWidth: ${cellWidth}, colspan: ${colspan}, rowspan: ${rowspan}`);
-    console.log(`[TABLE DEBUG] Cell element details: type=${cellElement.type}, id=${cellElement.id}, class=${cellElement.class}`);
+
+
+
 
     // Debug: Check if the cell's styles are available
     if (cellElement.id) {
       const cellIdStyle = dom.context.elementStyles.get(cellElement.id);
-      console.log(`[TABLE DEBUG] Cell ${cellElement.id} style by ID:`, JSON.stringify(cellIdStyle));
+
     }
     if (cellElement.class) {
       const cellClassStyle = dom.context.elementStyles.get('.' + cellElement.class);
-      console.log(`[TABLE DEBUG] Cell ${cellElement.id} style by class .${cellElement.class}:`, JSON.stringify(cellClassStyle));
+
     }
 
     // Get row dimensions for height calculation
     const rowDimensions = dom.context.elementDimensions.get(rowId);
-    console.log(`[TABLE DEBUG] Row dimensions for ${rowId}: ${JSON.stringify(rowDimensions)}`);
+
     if (!rowDimensions) {
       throw new Error(`[TABLE ERROR] No row dimensions found for row ID: ${rowId}. Available keys: ${JSON.stringify(Array.from(dom.context.elementDimensions.keys()))}`);
     }
@@ -702,7 +702,7 @@ export class TableService {
     if (cellHeight === null || cellHeight === undefined || isNaN(cellHeight)) {
       throw new Error(`[TABLE ERROR] Invalid cell height from row ${rowId}: ${cellHeight}. Row dimensions: ${JSON.stringify(rowDimensions)}`);
     }
-    console.log(`[TABLE DEBUG] Cell height: ${cellHeight} (spanning ${rowspan} rows)`);
+
 
     // Create layout override for the cell
     const cellLayoutOverride: StyleRule = {
@@ -725,7 +725,7 @@ export class TableService {
     // Create the cell element using existing createElement method
     const cellMesh = dom.actions.createElement(dom, render, cellElement, rowMesh, styles);
 
-    console.log(`[TABLE DEBUG] Cell mesh created: ${cellMesh.name}, material:`, cellMesh.material?.name);
+
 
     // The generic element path has already resolved the authored cell padding. Keep
     // that content-box origin while replacing only the table algorithm's final
@@ -747,7 +747,7 @@ export class TableService {
   }
 
   private calculateContentBasedTableDimensions(dom: BabylonDOM, tableChildren: DOMElement[]): { width: number; height: number } {
-    console.log(`[TABLE DEBUG] Calculating content-based table dimensions`);
+
 
     // Extract all rows from table structure
     const allRows: DOMElement[] = [];
@@ -759,7 +759,7 @@ export class TableService {
         allRows.push(child);
       }
     }
-    console.log(`[TABLE DEBUG] Found ${allRows.length} rows for content calculation`);
+
 
     if (allRows.length === 0) {
       throw new Error(`[TABLE ERROR] Cannot calculate content-based dimensions - no rows found`);
@@ -767,7 +767,7 @@ export class TableService {
 
     // Calculate maximum columns
     const maxCols = this.getMaxColumnsInTable(allRows);
-    console.log(`[TABLE DEBUG] Maximum columns: ${maxCols}`);
+
 
     // Calculate column widths by examining cell content
     const columnWidths: number[] = [];
@@ -783,7 +783,7 @@ export class TableService {
       }
 
       columnWidths.push(maxColumnWidth);
-      console.log(`[TABLE DEBUG] Column ${col} width: ${maxColumnWidth}px`);
+
     }
 
     // Calculate row heights by examining cell content
@@ -799,12 +799,12 @@ export class TableService {
       }
 
       totalHeight += maxRowHeight;
-      console.log(`[TABLE DEBUG] Row ${rowIndex} height: ${maxRowHeight}px`);
+
     }
 
     const totalWidth = columnWidths.reduce((sum, width) => sum + width, 0);
 
-    console.log(`[TABLE DEBUG] Calculated table size: ${totalWidth}x${totalHeight}px`);
+
 
     if (totalWidth <= 0 || totalHeight <= 0) {
       throw new Error(`[TABLE ERROR] Invalid calculated table dimensions: ${totalWidth}x${totalHeight}px`);
@@ -817,60 +817,60 @@ export class TableService {
   }
 
   private calculateCellContentWidth(dom: BabylonDOM, cell: DOMElement): number {
-    console.log(`[TABLE DEBUG] Calculating content width for cell ${cell.id}`);
-    console.log(`[TABLE DEBUG] Cell children: ${JSON.stringify(cell.children?.map(c => ({ type: c.type, id: c.id, class: c.class })))}`);
+
+
 
     // Look for explicit cell content dimensions
     if (cell.children && cell.children.length > 0) {
       const contentChild = cell.children[0];
-      console.log(`[TABLE DEBUG] Content child: type=${contentChild.type}, id=${contentChild.id}, class=${contentChild.class}`);
+
 
       if (contentChild.class) {
-        console.log(`[TABLE DEBUG] Looking for style with class: .${contentChild.class} and ${contentChild.class}`);
+
 
         const dotClassStyle = dom.context.elementStyles.get('.' + contentChild.class);
         const classStyle = dom.context.elementStyles.get(contentChild.class);
-        console.log(`[TABLE DEBUG] Style with .${contentChild.class}: ${JSON.stringify(dotClassStyle)}`);
-        console.log(`[TABLE DEBUG] Style with ${contentChild.class}: ${JSON.stringify(classStyle)}`);
+
+
 
         const contentStyle = dotClassStyle?.normal || classStyle?.normal;
-        console.log(`[TABLE DEBUG] Final content style: ${JSON.stringify(contentStyle)}`);
+
 
         if (contentStyle?.width) {
           const width = typeof contentStyle.width === 'string' ? parseFloat(contentStyle.width) : contentStyle.width;
-          console.log(`[TABLE DEBUG] Cell ${cell.id} content width from class ${contentChild.class}: ${width}px`);
+
           if (!isNaN(width)) {
             return width;
           } else {
-            console.log(`[TABLE DEBUG] Parsed width is NaN: ${contentStyle.width}`);
+
           }
         } else {
-          console.log(`[TABLE DEBUG] No width found in content style`);
+
         }
       }
       if (contentChild.id) {
         const contentStyle = dom.context.elementStyles.get(contentChild.id)?.normal;
-        console.log(`[TABLE DEBUG] Found content style by ID: ${JSON.stringify(contentStyle)}`);
+
         if (contentStyle?.width) {
           const width = typeof contentStyle.width === 'string' ? parseFloat(contentStyle.width) : contentStyle.width;
-          console.log(`[TABLE DEBUG] Cell ${cell.id} content width from ID ${contentChild.id}: ${width}px`);
+
           return width;
         }
       }
     }
 
     // Default minimum cell width
-    console.log(`[TABLE DEBUG] Cell ${cell.id} using default width: 100px`);
+
     return 100;
   }
 
   private calculateCellContentHeight(dom: BabylonDOM, cell: DOMElement): number {
-    console.log(`[TABLE DEBUG] Calculating content height for cell ${cell.id}`);
+
 
     // Look for explicit cell content dimensions
     if (cell.children && cell.children.length > 0) {
       const contentChild = cell.children[0];
-      console.log(`[TABLE DEBUG] Content child for height: type=${contentChild.type}, id=${contentChild.id}, class=${contentChild.class}`);
+
 
       if (contentChild.class) {
         const dotClassStyle = dom.context.elementStyles.get('.' + contentChild.class);
@@ -879,7 +879,7 @@ export class TableService {
 
         if (contentStyle?.height) {
           const height = typeof contentStyle.height === 'string' ? parseFloat(contentStyle.height) : contentStyle.height;
-          console.log(`[TABLE DEBUG] Cell ${cell.id} content height from class ${contentChild.class}: ${height}px`);
+
           if (!isNaN(height)) {
             return height;
           }
@@ -889,7 +889,7 @@ export class TableService {
         const contentStyle = dom.context.elementStyles.get(contentChild.id)?.normal;
         if (contentStyle?.height) {
           const height = typeof contentStyle.height === 'string' ? parseFloat(contentStyle.height) : contentStyle.height;
-          console.log(`[TABLE DEBUG] Cell ${cell.id} content height from ID ${contentChild.id}: ${height}px`);
+
           if (!isNaN(height)) {
             return height;
           }
@@ -898,21 +898,21 @@ export class TableService {
     }
 
     // Default minimum cell height
-    console.log(`[TABLE DEBUG] Cell ${cell.id} using default height: 30px`);
+
     return 30;
   }
 
   private getElementIdFromMeshName(meshName: string): string | null {
-    console.log(`🔍 Extracting ID from mesh name: "${meshName}"`);
+
 
     // The mesh name should be the same as the element ID
     // If it's not found in elementDimensions, it might be a generated name
     if (meshName) {
-      console.log(`� Usintg mesh name as ID: "${meshName}"`);
+
       return meshName;
     }
 
-    console.log(`⚠️ No mesh name provided`);
+
     return null;
   }
 
@@ -950,12 +950,12 @@ export class TableService {
       }
     }
 
-    console.log(`[TABLE DEBUG] Extracted column definitions: ${JSON.stringify(columnDefinitions)}`);
+
     return columnDefinitions;
   }
 
   private processCaption(dom: BabylonDOM, render: BabylonRender, captionElement: DOMElement, tableMesh: Mesh, styles: StyleRule[]): void {
-    console.log(`[TABLE DEBUG] Processing caption: ${captionElement.id}`);
+
 
     // Get table dimensions for caption positioning
     const tableDimensions = dom.context.elementDimensions.get(tableMesh.name);
@@ -989,7 +989,7 @@ export class TableService {
 
     // Create the caption element
     const captionMesh = dom.actions.createElement(dom, render, captionElement, tableMesh, styles);
-    console.log(`[TABLE DEBUG] Created caption mesh: ${captionMesh.name}`);
+
 
     // Restore original styles
     if (captionElement.id && elementStyles) {

@@ -9,8 +9,13 @@ import type {
   AstylarSessionSnapshot,
 } from './astylar-render-session';
 import type { AstylarVisualReconciliationSnapshot } from './astylar-visual-reconciler';
+import {
+  AstylarDiagnosticError,
+  type AstylarDiagnostic,
+} from './astylar-diagnostics';
 
 export interface AstylarSurfaceDiagnostics {
+  readonly messages: readonly AstylarDiagnostic[];
   readonly session?: AstylarSessionSnapshot;
   readonly resources?: AstylarSceneResourceSnapshot;
   readonly interaction?: AstylarInteractionSnapshot;
@@ -45,10 +50,13 @@ export interface AstylarSurfaceHost {
   getVisualReconciliationSnapshot(
     scene: Scene,
   ): AstylarVisualReconciliationSnapshot | undefined;
+  getDiagnosticSnapshot(): readonly AstylarDiagnostic[];
+  reportDiagnostic(diagnostic: AstylarDiagnostic): void;
 }
 
 export class AstylarSurfaceHandle implements AstylarSurface {
   private disposeRequested = false;
+  private disposeMisuseReported = false;
 
   constructor(
     readonly scene: Scene,
@@ -61,6 +69,7 @@ export class AstylarSurfaceHandle implements AstylarSurface {
 
   get diagnostics(): AstylarSurfaceDiagnostics {
     return {
+      messages: this.host.getDiagnosticSnapshot(),
       session: this.host.getSession(this.scene)?.snapshot,
       resources: this.host.getResourceSnapshot(this.scene),
       interaction: this.host.getInteractionSnapshot(this.scene),
@@ -87,7 +96,17 @@ export class AstylarSurfaceHandle implements AstylarSurface {
   }
 
   dispose(): void {
-    if (this.disposed) return;
+    if (this.disposed) {
+      if (!this.disposeMisuseReported) {
+        this.disposeMisuseReported = true;
+        this.host.reportDiagnostic({
+          code: 'surface-disposed',
+          severity: 'info',
+          message: 'dispose() was called on an already disposed Astylar surface.',
+        });
+      }
+      return;
+    }
     this.disposeRequested = true;
     const engine = this.scene.getEngine();
     this.scene.dispose();
@@ -96,7 +115,13 @@ export class AstylarSurfaceHandle implements AstylarSurface {
 
   private assertActive(operation: string): void {
     if (this.disposed) {
-      throw new Error(`Cannot ${operation} a disposed Astylar surface.`);
+      const diagnostic: AstylarDiagnostic = {
+        code: 'surface-disposed',
+        severity: 'error',
+        message: `Cannot ${operation} a disposed Astylar surface.`,
+      };
+      this.host.reportDiagnostic(diagnostic);
+      throw new AstylarDiagnosticError(diagnostic);
     }
   }
 }

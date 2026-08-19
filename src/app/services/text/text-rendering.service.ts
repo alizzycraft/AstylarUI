@@ -19,7 +19,7 @@ import { MultiLineTextRendererService } from './multi-line-text-renderer.service
 
 /**
  * TextRenderingService - Main orchestration service for text rendering
- * 
+ *
  * This service coordinates all text rendering operations by combining canvas rendering,
  * texture creation, and BabylonJS integration. It provides the main interface for
  * rendering text content as 3D textures and managing text-related resources.
@@ -56,7 +56,7 @@ export class TextRenderingService implements TextCacheManager {
       this.options = { ...this.options, ...options };
     }
 
-    console.log('🎨 TextRenderingService initialized with options:', this.options);
+
   }
 
   createStoredLayoutMetrics(text: string, style: TextStyleProperties, scale: number, maxWidth?: number): StoredTextLayoutMetrics {
@@ -143,7 +143,7 @@ export class TextRenderingService implements TextCacheManager {
     if (this.options.enableCaching) {
       const cachedTexture = this.getTexture(cacheKey);
       if (cachedTexture) {
-        console.log(`🎨 Using cached texture for text: "${textContent.substring(0, 30)}..."`);
+
         return cachedTexture;
       }
     }
@@ -194,7 +194,7 @@ export class TextRenderingService implements TextCacheManager {
         this.setTexture(cacheKey, texture);
       }
 
-      console.log(`🎨 Created text texture: "${textContent.substring(0, 30)}..." (${canvas.width}x${canvas.height})`);
+
 
       return texture;
     } catch (error) {
@@ -225,7 +225,7 @@ export class TextRenderingService implements TextCacheManager {
       // Update element reference
       textElement.textTexture = newTexture;
 
-      console.log(`🔄 Updated text texture for element with new content: "${newContent.substring(0, 30)}..."`);
+
     } catch (error) {
       console.error('❌ Error updating text texture:', error);
       throw new Error(`Failed to update text texture: ${error}`);
@@ -272,7 +272,7 @@ export class TextRenderingService implements TextCacheManager {
         }
       };
 
-      console.log(`📏 Calculated text dimensions: ${dimensions.width.toFixed(2)}x${dimensions.height.toFixed(2)} for "${text.substring(0, 30)}..."`);
+
 
       return dimensions;
     } catch (error) {
@@ -303,14 +303,14 @@ export class TextRenderingService implements TextCacheManager {
         if (cacheEntry.referenceCount <= 0) {
           textElement.textTexture.dispose();
           this.textureCache.delete(cacheKey);
-          console.log(`🗑️ Disposed text texture and removed from cache: ${cacheKey}`);
+
         } else {
-          console.log(`🔗 Text texture still has ${cacheEntry.referenceCount} references, not disposing`);
+
         }
       } else {
         // Not in cache, dispose directly
         textElement.textTexture.dispose();
-        console.log(`🗑️ Disposed text texture (not cached)`);
+
       }
 
       // Clear element reference
@@ -356,7 +356,7 @@ export class TextRenderingService implements TextCacheManager {
     };
 
     this.textureCache.set(key, cacheEntry);
-    console.log(`💾 Cached text texture: ${key} (cache size: ${this.textureCache.size})`);
+
   }
 
   /**
@@ -368,7 +368,7 @@ export class TextRenderingService implements TextCacheManager {
     if (cacheEntry) {
       cacheEntry.texture.dispose();
       this.textureCache.delete(key);
-      console.log(`🗑️ Removed texture from cache: ${key}`);
+
     }
   }
 
@@ -390,7 +390,7 @@ export class TextRenderingService implements TextCacheManager {
     }
 
     if (removedCount > 0) {
-      console.log(`🧹 Cleaned up ${removedCount} unused text textures from cache`);
+
     }
   }
 
@@ -494,7 +494,7 @@ export class TextRenderingService implements TextCacheManager {
 
     if (oldestKey) {
       this.removeTexture(oldestKey);
-      console.log(`🗑️ Evicted oldest texture from cache: ${oldestKey}`);
+
     }
   }
 
@@ -530,6 +530,6 @@ export class TextRenderingService implements TextCacheManager {
   dispose(): void {
     this.clearCache();
     this.scene = undefined;
-    console.log('🗑️ TextRenderingService disposed');
+
   }
 }

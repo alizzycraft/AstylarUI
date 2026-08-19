@@ -766,7 +766,7 @@ export class SelectManager {
         // This would update the text on the display mesh
         // In production, would use TextRenderingService
         const selectedOption = selectElement.options[selectElement.selectedIndex];
-        console.log('Selected option:', selectedOption?.label);
+
     }
 
     /**

@@ -191,12 +191,12 @@ export class ButtonManager {
         if (button.buttonType === 'submit') {
             // This would trigger form submission
             // Will be handled by FormManager
-            console.log('Submit button clicked:', button.element.id);
+
         }
 
         // Handle reset for reset buttons
         if (button.buttonType === 'reset') {
-            console.log('Reset button clicked:', button.element.id);
+
         }
 
     }

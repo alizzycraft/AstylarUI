@@ -66,7 +66,7 @@ export class BabylonInteractionService {
 
     // Apply hover style changes to mesh material
     // This would integrate with the existing style application logic
-    console.log(`🖱️ Applying hover style for ${elementId}`);
+
   }
 
   /**
@@ -80,7 +80,7 @@ export class BabylonInteractionService {
 
     // Apply normal style changes to mesh material
     // This would integrate with the existing style application logic
-    console.log(`🖱️ Applying normal style for ${elementId}`);
+
   }
 
   /**
@@ -122,9 +122,9 @@ export class BabylonInteractionService {
 
     if (elementType === 'input' || elementType === 'textarea' || elementType === 'select') {
       this.setFocusedInput(elementId);
-      console.log(`🖱️ Focused input: ${elementId}`);
+
     } else if (elementType === 'a') {
-      console.log(`🔗 Link clicked: ${elementId}`);
+
       // Handle link navigation if needed
     }
   }

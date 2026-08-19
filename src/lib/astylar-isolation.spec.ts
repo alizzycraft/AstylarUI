@@ -2,6 +2,7 @@ import { provideZonelessChangeDetection } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import type { SiteData } from '../app/types/site-data';
 import { Astylar } from './astylar';
+import { AstylarDiagnosticError, type AstylarDiagnostic } from './astylar-diagnostics';
 
 describe('Astylar simultaneous surface isolation', () => {
   const originalResizeObserver = globalThis.ResizeObserver;
@@ -71,6 +72,32 @@ describe('Astylar simultaneous surface isolation', () => {
     expect(observers[1].disconnected).toBeTrue();
     expect(second.diagnostics.resources).toEqual({ meshes: 0, materials: 0, textures: 0 });
     expect(second.diagnostics.interaction?.disposed).toBeTrue();
+  });
+
+  it('reports duplicate canvas mounts and releases the canvas after disposal', () => {
+    const astylar = TestBed.inject(Astylar);
+    const canvas = document.createElement('canvas');
+    const reported: AstylarDiagnostic[] = [];
+    document.body.append(canvas);
+    const options = {
+      diagnostics: {
+        logLevel: 'silent' as const,
+        onDiagnostic: (diagnostic: AstylarDiagnostic) => reported.push(diagnostic),
+      },
+    };
+    const first = astylar.mount(canvas, site('First'), options);
+
+    expect(() => astylar.mount(canvas, site('Second'), options))
+      .toThrowError(AstylarDiagnosticError, /canvas-in-use/);
+    expect(reported.at(-1)).toEqual(jasmine.objectContaining({
+      code: 'canvas-in-use',
+      severity: 'error',
+    }));
+
+    first.dispose();
+    const remounted = astylar.mount(canvas, site('Remounted'), options);
+    remounted.dispose();
+    canvas.remove();
   });
 });
 

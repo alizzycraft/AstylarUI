@@ -59,11 +59,7 @@ export class ElementCreationService {
     flexPosition?: { x: number; y: number; z: number },
     flexSize?: { width?: number; height?: number },
   ): Mesh {
-    console.log(
-      `🔨 [ElementCreation] START creating element:`,
-      element.type,
-      element.id,
-    );
+
 
     // Ensure pointer observer is set up
     this.interactionService.ensurePointerObserver(render);
@@ -97,7 +93,7 @@ export class ElementCreationService {
     // If element is hovered, merge in hover styles
     if (isHovered && elementStyles?.hover) {
       style = { ...style, ...elementStyles.hover };
-      console.log(`[ElementCreation] Applying HOVER styles for ${element.id}`);
+
     }
 
     // Logic to fix cursor for checkboxes and radio buttons
@@ -150,9 +146,7 @@ export class ElementCreationService {
     const worldHeight = dimensions.height * scaleFactor;
 
     // DEBUG: Log dimensions for troubleshooting
-    console.log(
-      `[ElementCreation] Creating ${element.type} (${element.id}): raw dimensions=${dimensions.width}x${dimensions.height}, scale=${scaleFactor}, world=${worldWidth.toFixed(2)}x${worldHeight.toFixed(2)}`,
-    );
+
 
     let mesh: Mesh;
 
@@ -308,7 +302,7 @@ export class ElementCreationService {
     // Position and parent the mesh
     render.actions.mesh.positionTextMesh(mesh, worldX, worldY, zPosition);
     render.actions.mesh.parentTextMesh(mesh, layoutParent);
-    console.log(`[ElementCreation] Positioned mesh ${meshId}`);
+
 
     // Create borders if border width is defined
     try {
@@ -316,7 +310,7 @@ export class ElementCreationService {
         render,
         style,
       );
-      console.log(`[ElementCreation] Border props for ${meshId}:`, borderProps);
+
 
       if (borderProps.width > 0) {
         // Use createPolygonBorder (not createBorderMesh) to match original implementation
@@ -363,7 +357,7 @@ export class ElementCreationService {
             dom.context.elements.set(borderMesh.name, borderMesh);
           });
 
-          console.log(`[ElementCreation] Created borders for ${meshId}`);
+
         }
       }
     } catch (e) {
@@ -383,7 +377,7 @@ export class ElementCreationService {
         false,
         style,
       );
-      console.log(`[ElementCreation] Applied material for ${meshId}`);
+
     } catch (e) {
       console.error(
         `[ElementCreation] Error applying material for ${meshId}:`,
@@ -396,18 +390,15 @@ export class ElementCreationService {
     if (transform) {
       this.materialService.applyTransforms(mesh, transform);
     }
-    console.log(`[ElementCreation] Finished transforms for ${meshId}`);
 
-    console.log(`[Element ${element.id}] elementStyles:`, elementStyles);
-    console.log(
-      `[Element ${element.id}] hasHoverStyles:`,
-      elementStyles?.hover !== undefined,
-    );
+
+
+
 
     // Setup hover events if needed
     const hasHoverStyles = elementStyles?.hover !== undefined;
     if (element.id && hasHoverStyles) {
-      console.log(`[Element ${element.id}] Setting up mouse events`);
+
       this.interactionService.setupMouseEvents(dom, render, mesh, element.id);
     }
 
@@ -447,9 +438,7 @@ export class ElementCreationService {
     styles: StyleRule[],
     parentElement?: DOMElement,
   ): void {
-    console.log(
-      `[ElementCreation] processChildren: processing ${children.length} children for ${parentElement?.id || "unknown"}`,
-    );
+
 
     for (const child of children) {
       this.ancestry.setParent(child, parentElement);
@@ -469,14 +458,10 @@ export class ElementCreationService {
     const useInlineFlow = parentElement
       ? this.shouldUseInlineFlow(render, parentElement, children, styles)
       : false;
-    console.log(
-      `[ElementCreation] isFlexContainer(${parentElement?.id || parentElement?.type}): ${isFlex}, isListContainer: ${isListContainer}, inlineFlow: ${useInlineFlow}`,
-    );
+
 
     if (parentElement?.type === "table") {
-      console.log(
-        `[ElementCreation] Processing table children for ${parentElement.id}`,
-      );
+
       dom.actions.processTable(
         dom,
         render,
@@ -487,9 +472,7 @@ export class ElementCreationService {
         parent,
       );
     } else if (isListContainer && parentElement) {
-      console.log(
-        `[ElementCreation] Processing list children for ${parentElement.type} container`,
-      );
+
       dom.actions.processListChildren(
         dom,
         render,
@@ -501,9 +484,7 @@ export class ElementCreationService {
     } else if (isGrid && parentElement) {
       this.grid.processGridChildren(dom, render, children, parent, styles, parentElement);
     } else if (isFlex && parentElement) {
-      console.log(
-        `[ElementCreation] Processing flex children for ${parentElement.id}`,
-      );
+
       dom.actions.processFlexChildren(
         dom,
         render,
@@ -513,9 +494,7 @@ export class ElementCreationService {
         parentElement,
       );
     } else if (useInlineFlow && parentElement) {
-      console.log(
-        `[ElementCreation] Processing inline flow children for ${parentElement.id ?? parentElement.type}`,
-      );
+
       this.layoutInlineChildren(
         dom,
         render,
@@ -687,23 +666,17 @@ export class ElementCreationService {
         dom.context.elementStyles,
       );
       if (childStyle?.display?.toLowerCase() === 'none') {
-        console.log(
-          `[InlineLayout] Skipping display:none child ${child.id ?? child.type}`,
-        );
+
         continue;
       }
 
-      console.log(
-        `[InlineLayout] Creating inline child ${child.id ?? child.type} at index ${index}`,
-      );
+
       const childMesh = this.createElement(dom, render, child, parent, styles);
 
       const hasExplicitPositioning =
         childStyle?.top !== undefined || childStyle?.left !== undefined;
       if (hasExplicitPositioning) {
-        console.log(
-          `[InlineLayout] Child ${child.id ?? child.type} has explicit positioning. Skipping inline positioning.`,
-        );
+
         if (child.children?.length) {
           this.processChildren(
             dom,
@@ -724,9 +697,7 @@ export class ElementCreationService {
         .toString()
         .toLowerCase();
       if (!display.startsWith("inline")) {
-        console.log(
-          `[InlineLayout] Encountered non-inline child ${child.id ?? child.type} (display=${display}). Falling back to block layout.`,
-        );
+
         dom.context.elements.delete(childMesh.name);
         childMesh.dispose();
         const remainingChildren = children.slice(index);
@@ -755,9 +726,7 @@ export class ElementCreationService {
 
       const requiredWidth = marginBox.left + childWidth + marginBox.right;
       if (hasContent && cursorX + requiredWidth > contentRightX + 0.1) {
-        console.log(
-          `[InlineLayout] Wrapping to new line before placing ${child.id ?? child.type}`,
-        );
+
         cursorX = contentLeftX;
         cursorY += currentLineHeight;
         currentLineHeight = 0;
@@ -874,17 +843,11 @@ export class ElementCreationService {
     styles: StyleRule[],
     parentElement?: DOMElement,
   ): void {
-    console.log(
-      `[ElementCreation] Processing standard children for ${parentElement?.id}`,
-    );
-    console.log(
-      `[ElementCreation] Children array check: isArray=${Array.isArray(children)}, length=${children.length}`,
-    );
+
+
 
     try {
-      console.log(
-        `[ElementCreation] Starting standard layout loop. Children: ${children.length}`,
-      );
+
 
       let parentHeight = 0;
       let parentWidth = 0;
@@ -926,9 +889,7 @@ export class ElementCreationService {
 
       for (let i = 0; i < children.length; i++) {
         const child = children[i];
-        console.log(
-          `[ElementCreation] Loop index ${i}: child=${child ? child.id : "undefined"}`,
-        );
+
 
         if (!child) {
           continue;
@@ -940,9 +901,7 @@ export class ElementCreationService {
           dom.context.elementStyles,
         );
         if (resolvedStyle?.display?.toLowerCase() === 'none') {
-          console.log(
-            `[BlockLayout] Skipping display:none child ${child.id ?? child.type}`,
-          );
+
           continue;
         }
 
@@ -954,9 +913,7 @@ export class ElementCreationService {
           continue;
         }
 
-        console.log(
-          `[ElementCreation] Creating child ${child.type}#${child.id}`,
-        );
+
         const childMesh = this.createElement(
           dom,
           render,
@@ -1092,9 +1049,7 @@ export class ElementCreationService {
           this.processChildren(dom, render, child.children, childMesh, styles, child);
         }
       }
-      console.log(
-        `[ElementCreation] Finished processing children for ${parentElement?.id}`,
-      );
+
     } catch (error) {
       console.error(
         `[ElementCreation] Error in children loop for ${parentElement?.id}:`,

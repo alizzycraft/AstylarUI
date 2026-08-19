@@ -74,18 +74,12 @@ export class RootService {
         "root-body-material",
         new Color3(0.8, 0.1, 0.1),
       );
-      console.log("No root background style found, using test red color");
+
     }
 
     rootBody.material = material;
 
-    console.log("Created root body element (calculated full screen):", {
-      position: rootBody.position,
-      width: visibleWidth,
-      height: visibleHeight,
-      cssWidth,
-      cssHeight,
-    });
+
 
     dom.context.elements.set("root-body", rootBody);
 

@@ -75,6 +75,25 @@ surface.dispose();
 available for compatibility, but new integrations should keep the surface handle
 so lifecycle ownership is unambiguous.
 
+Validation and lifecycle failures use stable diagnostic codes and severities.
+Fatal input or lifecycle misuse throws `AstylarDiagnosticError`; all diagnostics
+are also retained in `surface.diagnostics.messages`. A host can observe them or
+control console output at mount time:
+
+```typescript
+const surface = astylar.mount(canvas, siteData, {
+  diagnostics: {
+    logLevel: 'error', // 'silent', 'info', 'warning', or 'error'
+    onDiagnostic: (diagnostic) => reportToTelemetry(diagnostic),
+  },
+});
+```
+
+Without an explicit level, Astylar logs warnings and errors in development and
+errors only in production. Validation covers malformed roots, invalid element
+types, duplicate IDs, and unknown style properties; runtime diagnostics cover
+asset failures and invalid surface/canvas lifecycle operations.
+
 ### 3. Typed application events
 
 Keep executable handlers outside serializable `SiteData` and address elements by their authored IDs:

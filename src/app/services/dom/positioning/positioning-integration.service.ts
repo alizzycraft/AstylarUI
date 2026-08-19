@@ -153,7 +153,7 @@ export class PositioningIntegrationService {
   }): void {
     // Update the ViewportService with new dimensions
     this.viewportService.updateViewport(viewportData);
-    console.log("[POSITIONING] Viewport updated:", viewportData);
+
   }
 
   /**
