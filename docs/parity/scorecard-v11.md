@@ -39,3 +39,18 @@ Representative data-management integration remains a separate Phase 11 increment
 4. Preserve transient control, focus, selection, scroll, popup, modal, semantic, and event state across compatible updates; clean up replaced and removed owners.
 5. Add representative-app update workflows, including the corrected table-cell control behavior, without reducing the fixed parity thresholds.
 6. Update the public API documentation and README, run three consecutive unchanged-commit completion passes, and publish the final Phase 11 evidence.
+
+## Increment 2: authored identity contract
+
+Status: complete pending commit.
+
+- Added a shared reconciliation identity index with diagnostics for unique IDs, anonymous nodes, and duplicate IDs.
+- Unique authored IDs remain stable through insertion, removal, reorder, and reparenting. Anonymous and duplicate-ID nodes use deterministic typed positional paths and do not promise continuity when that path changes.
+- Defined compatible same-type updates and explicit replacement boundaries for element-type and input-manager-kind changes.
+- Applied the shared contract to semantic reconciliation, including compatible input reuse and incompatible input replacement.
+- Added per-reconciliation semantic diagnostics for reused, created, replaced, and disposed owners.
+- Published the contract in `docs/reconciliation.md` and exported its public types and helpers from the library entry point.
+- `npm test -- --watch=false`: 214 tests passed.
+- `npm run build:lib`: passed.
+- `npm run build`: passed with the existing application bundle and stylesheet budget warnings.
+- Focused `semantic-lifecycle-stress`: 29 renders, median SSIM `0.9751`, minimum SSIM `0.9548`, 100% of edges within 2 px, maximum edge error `0.0010 px`, exact text, and no runtime errors.

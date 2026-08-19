@@ -73,3 +73,6 @@ Scrolling, pointer selection, and popup interaction parity is completed in
 `scorecard-v9.md`. Semantic application behavior and accessibility parity
 continues in `scorecard-v10.md`. Incremental rendered-tree reconciliation and
 state continuity continue in `scorecard-v11.md`.
+
+The shared authored-ID, positional fallback, compatibility, and replacement
+rules are documented in `../reconciliation.md`.

@@ -1,10 +1,25 @@
 import { DOMElement, DOMElementType } from '../app/types/dom-element';
 import { SiteData } from '../app/types/site-data';
+import {
+  areAstylarReconciliationNodesCompatible,
+  AstylarReconciliationIdentityIndex,
+  astylarChildReconciliationPath,
+} from './astylar-reconciliation-identity';
+import type { AstylarReconciliationIdentitySnapshot } from './astylar-reconciliation-identity';
+
+export interface AstylarSemanticReconciliationSnapshot {
+  reused: number;
+  created: number;
+  replaced: number;
+  disposed: number;
+}
 
 export interface AstylarSemanticSnapshot {
   nodes: number;
   eventRegistrations: number;
   observerRegistrations: number;
+  identities: AstylarReconciliationIdentitySnapshot;
+  reconciliation: AstylarSemanticReconciliationSnapshot;
 }
 
 export interface AstylarSemanticBridgeOptions {
@@ -49,8 +64,22 @@ export class AstylarSemanticBridge {
   private readonly root: HTMLDivElement;
   private readonly nodes = new Map<string, HTMLElement>();
   private readonly textNodes = new Map<string, Text>();
+  private readonly elements = new Map<string, DOMElement>();
   private readonly previousCanvasAriaHidden: string | null;
   private readonly previousCanvasTabIndex: string | null;
+  private identitySnapshot: AstylarReconciliationIdentitySnapshot = {
+    totalNodes: 0,
+    uniqueAuthoredIds: 0,
+    anonymousNodes: 0,
+    duplicateAuthoredIds: [],
+    duplicateNodes: 0,
+  };
+  private reconciliationSnapshot: AstylarSemanticReconciliationSnapshot = {
+    reused: 0,
+    created: 0,
+    replaced: 0,
+    disposed: 0,
+  };
   private interactionAdapter?: AstylarSemanticInteractionAdapter;
   private controlSyncQueued = false;
   private focusSyncQueued = false;
@@ -91,19 +120,23 @@ export class AstylarSemanticBridge {
       nodes: this.nodes.size,
       eventRegistrations: this.interactionAdapter ? 5 : 0,
       observerRegistrations: 0,
+      identities: this.identitySnapshot,
+      reconciliation: this.reconciliationSnapshot,
     };
   }
 
   reconcile(siteData: SiteData): void {
     if (this.disposed) return;
-    const idCounts = this.countIds(siteData.root.children);
+    const identities = new AstylarReconciliationIdentityIndex(siteData.root.children);
+    this.identitySnapshot = identities.snapshot;
+    this.reconciliationSnapshot = { reused: 0, created: 0, replaced: 0, disposed: 0 };
     const liveKeys = new Set<string>();
     const children = siteData.root.children
       .filter((element) => !element.hidden)
       .map((element, index) => this.reconcileElement(
         element,
         `root/${index}:${element.type}`,
-        idCounts,
+        identities,
         liveKeys,
       ));
     this.root.replaceChildren(...children);
@@ -114,6 +147,8 @@ export class AstylarSemanticBridge {
       node.remove();
       this.nodes.delete(key);
       this.textNodes.delete(key);
+      this.elements.delete(key);
+      this.reconciliationSnapshot.disposed += 1;
     }
   }
 
@@ -189,6 +224,7 @@ export class AstylarSemanticBridge {
     this.disconnectInteractions();
     this.nodes.clear();
     this.textNodes.clear();
+    this.elements.clear();
     if (this.previousCanvasAriaHidden === null) {
       this.canvas.removeAttribute('aria-hidden');
     } else {
@@ -294,19 +330,32 @@ export class AstylarSemanticBridge {
   private reconcileElement(
     element: DOMElement,
     path: string,
-    idCounts: Map<string, number>,
+    identities: AstylarReconciliationIdentityIndex,
     liveKeys: Set<string>,
   ): HTMLElement {
-    const key = element.id && idCounts.get(element.id) === 1 ? `id:${element.id}` : path;
+    const key = identities.key(element, path);
     liveKeys.add(key);
     const tagName = this.semanticTagName(element.type);
     let node = this.nodes.get(key);
-    if (!node || node.tagName.toLowerCase() !== tagName) {
+    const previousElement = this.elements.get(key);
+    if (!node || !previousElement ||
+        !areAstylarReconciliationNodesCompatible(previousElement, element) ||
+        node.tagName.toLowerCase() !== tagName) {
       const replacement = this.canvas.ownerDocument.createElement(tagName);
       node?.replaceWith(replacement);
+      if (node) {
+        this.reconciliationSnapshot.replaced += 1;
+      } else {
+        this.reconciliationSnapshot.created += 1;
+      }
       node = replacement;
       this.nodes.set(key, node);
+    } else {
+      this.reconciliationSnapshot.reused += 1;
     }
+    // Store the compatibility fields by value so an author mutating and reusing
+    // the same SiteData object cannot rewrite our previous-owner record.
+    this.elements.set(key, { ...element });
     this.applyAttributes(node, element);
 
     const childNodes: Node[] = [];
@@ -326,8 +375,8 @@ export class AstylarSemanticBridge {
       if (child.hidden) continue;
       childNodes.push(this.reconcileElement(
         child,
-        `${path}/${index}:${child.type}`,
-        idCounts,
+        astylarChildReconciliationPath(path, index, child),
+        identities,
         liveKeys,
       ));
     }
@@ -526,13 +575,4 @@ export class AstylarSemanticBridge {
     return type === 'area' || type === 'canvas' ? 'div' : type;
   }
 
-  private countIds(elements: DOMElement[]): Map<string, number> {
-    const counts = new Map<string, number>();
-    const visit = (element: DOMElement): void => {
-      if (element.id) counts.set(element.id, (counts.get(element.id) ?? 0) + 1);
-      element.children?.forEach(visit);
-    };
-    elements.forEach(visit);
-    return counts;
-  }
 }

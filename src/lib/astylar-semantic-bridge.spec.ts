@@ -43,6 +43,68 @@ describe('AstylarSemanticBridge', () => {
     expect(heading?.textContent).toBe('Updated heading');
     expect(host.querySelector('[data-astylar-id="link"]')).toBeNull();
     expect(bridge.snapshot.nodes).toBe(2);
+    expect(bridge.snapshot.reconciliation).toEqual({
+      reused: 2,
+      created: 0,
+      replaced: 0,
+      disposed: 2,
+    });
+  });
+
+  it('keeps unique authored identity through reorder and replaces incompatible input kinds', () => {
+    const bridge = new AstylarSemanticBridge(canvas);
+    bridge.reconcile({
+      styles: [],
+      root: { children: [
+        { type: 'input', id: 'control', inputType: 'text', value: 'Draft' },
+        { type: 'p', id: 'copy', textContent: 'Copy' },
+      ] },
+    });
+    const textControl = host.querySelector('[data-astylar-id="control"]');
+    const copy = host.querySelector('[data-astylar-id="copy"]');
+
+    bridge.reconcile({
+      styles: [],
+      root: { children: [
+        { type: 'p', id: 'copy', textContent: 'Moved copy' },
+        { type: 'input', id: 'control', inputType: 'email', value: 'user@example.test' },
+      ] },
+    });
+    expect(host.querySelector('[data-astylar-id="copy"]')).toBe(copy);
+    expect(host.querySelector('[data-astylar-id="control"]')).toBe(textControl);
+
+    bridge.reconcile({
+      styles: [],
+      root: { children: [
+        { type: 'p', id: 'copy', textContent: 'Moved copy' },
+        { type: 'input', id: 'control', inputType: 'checkbox', checked: true },
+      ] },
+    });
+    expect(host.querySelector('[data-astylar-id="copy"]')).toBe(copy);
+    expect(host.querySelector('[data-astylar-id="control"]')).not.toBe(textControl);
+    expect(bridge.snapshot.reconciliation).toEqual({
+      reused: 1,
+      created: 0,
+      replaced: 1,
+      disposed: 0,
+    });
+    bridge.dispose();
+  });
+
+  it('detects incompatible changes when the same SiteData object is mutated in place', () => {
+    const bridge = new AstylarSemanticBridge(canvas);
+    const control = { type: 'input', id: 'control', inputType: 'text', value: 'Draft' } as const;
+    const data: SiteData = { styles: [], root: { children: [{ ...control }] } };
+    bridge.reconcile(data);
+    const textControl = host.querySelector('[data-astylar-id="control"]');
+
+    data.root.children[0].inputType = 'checkbox';
+    data.root.children[0].checked = true;
+    bridge.reconcile(data);
+
+    expect(host.querySelector('[data-astylar-id="control"]')).not.toBe(textControl);
+    expect(bridge.snapshot.reconciliation.replaced).toBe(1);
+    bridge.dispose();
   });
 
   it('removes owned nodes and restores the canvas accessibility state on disposal', () => {

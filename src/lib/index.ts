@@ -34,8 +34,16 @@ export { AstylarSemanticBridge } from './astylar-semantic-bridge';
 export type {
   AstylarSemanticBridgeOptions,
   AstylarSemanticControlState,
+  AstylarSemanticReconciliationSnapshot,
   AstylarSemanticSnapshot,
 } from './astylar-semantic-bridge';
+export {
+  areAstylarReconciliationNodesCompatible,
+  AstylarReconciliationIdentityIndex,
+  astylarChildReconciliationPath,
+  astylarInputReconciliationKind,
+} from './astylar-reconciliation-identity';
+export type { AstylarReconciliationIdentitySnapshot } from './astylar-reconciliation-identity';
 export type {
   AstylarInvalidationReason,
   AstylarSessionSnapshot,
