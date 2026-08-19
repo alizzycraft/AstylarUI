@@ -1,6 +1,7 @@
 import {
   cpSync,
   existsSync,
+  lstatSync,
   mkdtempSync,
   readFileSync,
   readdirSync,
@@ -57,8 +58,34 @@ function validateConsumerImports() {
   }
 }
 
+function dependencyEntries(manifest) {
+  return ['dependencies', 'peerDependencies', 'optionalDependencies']
+    .flatMap((section) => Object.entries(manifest[section] ?? {})
+      .map(([name, version]) => ({ section, name, version })));
+}
+
+function validatePackageBoundary(libraryManifest, consumerManifest) {
+  const localDependencies = dependencyEntries(libraryManifest).filter(({ version }) =>
+    /^(?:file|link|workspace):/i.test(String(version)) || path.isAbsolute(String(version)));
+  if (localDependencies.length > 0) {
+    throw new Error(`Published dependencies must not use local paths: ${localDependencies
+      .map(({ section, name, version }) => `${section}.${name}=${version}`)
+      .join(', ')}`);
+  }
+
+  const consumerDependencies = consumerManifest.dependencies ?? {};
+  const missingPeers = Object.keys(libraryManifest.peerDependencies ?? {})
+    .filter((name) => !(name in consumerDependencies));
+  if (missingPeers.length > 0) {
+    throw new Error(`Consumer must declare library peer dependencies: ${missingPeers.join(', ')}`);
+  }
+}
+
 try {
   validateConsumerImports();
+  const manifest = JSON.parse(readFileSync(path.join(root, 'package.json'), 'utf8'));
+  const consumerManifest = JSON.parse(readFileSync(path.join(sourceApp, 'package.json'), 'utf8'));
+  validatePackageBoundary(manifest, consumerManifest);
   run(npm, ['run', 'build:lib'], root);
 
   const packOutput = run(npm, ['pack', '--json', '--pack-destination', temporaryRoot], root, true);
@@ -72,7 +99,6 @@ try {
   const leaked = [...paths].filter((file) => forbiddenRoots.some((prefix) => file.startsWith(prefix)));
   if (leaked.length > 0) throw new Error(`Packed package leaks repository files: ${leaked.join(', ')}`);
 
-  const manifest = JSON.parse(readFileSync(path.join(root, 'package.json'), 'utf8'));
   if (Object.keys(manifest.exports ?? {}).join(',') !== '.') {
     throw new Error('The package must expose only its documented root entry point.');
   }
@@ -80,6 +106,14 @@ try {
   cpSync(sourceApp, temporaryApp, { recursive: true });
   cpSync(path.join(temporaryRoot, packResult.filename), path.join(temporaryApp, 'astylarui.tgz'));
   run(npm, ['install', '--no-audit', '--no-fund'], temporaryApp);
+  const installedPackage = path.join(temporaryApp, 'node_modules', 'astylarui');
+  if (!existsSync(installedPackage) || lstatSync(installedPackage).isSymbolicLink()) {
+    throw new Error('Consumer must install AstylarUI as a real packed dependency, not a workspace link.');
+  }
+  const installedManifest = JSON.parse(readFileSync(path.join(installedPackage, 'package.json'), 'utf8'));
+  if (installedManifest.version !== manifest.version) {
+    throw new Error(`Installed AstylarUI version ${installedManifest.version} does not match ${manifest.version}.`);
+  }
   run(npm, ['run', 'build'], temporaryApp);
   run(npm, ['test', '--', '--watch=false'], temporaryApp);
 
