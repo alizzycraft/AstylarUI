@@ -1003,6 +1003,15 @@
     "interactionStepCount": 9
   },
   {
+    "id": "reconciliation-semantic-reuse",
+    "title": "Semantic-only visual owner reuse",
+    "category": "accessibility-semantics",
+    "expectedBehavior": "Changing semantic labels and advisory titles updates the native semantic tree without reflowing or replacing compatible Babylon visual owners.",
+    "dynamicStepCount": 2,
+    "visualReuseStepIndexes": [0, 1],
+    "semanticIds": ["reuse-panel", "reuse-action"]
+  },
+  {
     "id": "table-cell-control-content-box",
     "title": "Control inside a padded table cell",
     "category": "lists-tables-images",

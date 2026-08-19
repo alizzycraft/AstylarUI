@@ -49,6 +49,8 @@ import {
   AstylarSemanticControlState,
   AstylarSemanticSnapshot,
 } from './astylar-semantic-bridge';
+import { AstylarVisualReconciler } from './astylar-visual-reconciler';
+import type { AstylarVisualReconciliationSnapshot } from './astylar-visual-reconciler';
 
 /**
  * Configuration options for rendering
@@ -88,6 +90,7 @@ export class Astylar {
   private readonly interactions = new WeakMap<Scene, AstylarInteractionRuntime>();
   private readonly scrolling = new WeakMap<Scene, AstylarScrollRuntime>();
   private readonly semantics = new WeakMap<Scene, AstylarSemanticBridge>();
+  private readonly visualReconciliation = new WeakMap<Scene, AstylarVisualReconciler>();
   private activeSession?: AstylarRenderSession;
 
   /**
@@ -263,6 +266,8 @@ export class Astylar {
     this.babylonDOMRenderer.initialize(renderContext, viewportWidth, viewportHeight);
     const sceneResources = new AstylarSceneResources(scene);
     this.sceneResources.set(scene, sceneResources);
+    const visualReconciler = new AstylarVisualReconciler();
+    this.visualReconciliation.set(scene, visualReconciler);
 
     const scrollRuntime = new AstylarScrollRuntime({
       getMesh: (elementId) => this.elementManager.elementsMap.get(elementId),
@@ -286,7 +291,22 @@ export class Astylar {
     const session = new AstylarRenderSession(
       scene,
       siteData,
-      (currentSiteData) => {
+      (currentSiteData, reasons) => {
+        const visualPlan = visualReconciler.plan(currentSiteData, reasons);
+        if (!visualPlan.rebuild) {
+          semanticBridge?.reconcile(currentSiteData);
+          interaction?.reconcileModalState();
+          semanticBridge?.syncControlStates((elementId) =>
+            this.getLiveSemanticControlState(elementId));
+          semanticBridge?.queueFocusSync(
+            () => interaction?.snapshot.focusedElementId ??
+              this.inputElementService.getFocusedElementId(),
+            (elementId) => this.hasLiveTextSelection(elementId),
+          );
+          visualPlan.commit();
+          hasCompletedRender = true;
+          return;
+        }
         const textState = hasCompletedRender
           ? this.inputElementService.captureTextControlStates()
           : [];
@@ -336,6 +356,7 @@ export class Astylar {
           },
           this.imageResources.getSceneTextures(scene),
         );
+        visualPlan.commit();
         hasCompletedRender = true;
       },
     );
@@ -564,6 +585,12 @@ export class Astylar {
 
   getSemanticSnapshot(scene: Scene): AstylarSemanticSnapshot | undefined {
     return this.semantics.get(scene)?.snapshot;
+  }
+
+  getVisualReconciliationSnapshot(
+    scene: Scene,
+  ): AstylarVisualReconciliationSnapshot | undefined {
+    return this.visualReconciliation.get(scene)?.snapshot;
   }
 
   update(siteData: SiteData, scene?: Scene): Promise<AstylarSessionSnapshot> {

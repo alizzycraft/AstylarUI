@@ -14,7 +14,7 @@ Phase 11 replaces whole-tree visual reconstruction with identity-aware rendered-
 
 ## Increment 1: padded table-cell content origins
 
-Status: complete pending commit.
+Status: complete (`c5c1867`).
 
 The table layout algorithm previously overwrote the padding resolved by generic element creation with zeroes before processing nested children. Nested controls were therefore laid out from the cell border edge rather than its CSS content-box origin. The general table-cell path now retains resolved padding while applying the table algorithm's final border-box width and height.
 
@@ -42,7 +42,7 @@ Representative data-management integration remains a separate Phase 11 increment
 
 ## Increment 2: authored identity contract
 
-Status: complete pending commit.
+Status: complete (`16b1e6d`).
 
 - Added a shared reconciliation identity index with diagnostics for unique IDs, anonymous nodes, and duplicate IDs.
 - Unique authored IDs remain stable through insertion, removal, reorder, and reparenting. Anonymous and duplicate-ID nodes use deterministic typed positional paths and do not promise continuity when that path changes.
@@ -54,3 +54,17 @@ Status: complete pending commit.
 - `npm run build:lib`: passed.
 - `npm run build`: passed with the existing application bundle and stylesheet budget warnings.
 - Focused `semantic-lifecycle-stress`: 29 renders, median SSIM `0.9751`, minimum SSIM `0.9548`, 100% of edges within 2 px, maximum edge error `0.0010 px`, exact text, and no runtime errors.
+
+## Increment 3: visual reconciliation boundary and diagnostics
+
+Status: complete.
+
+- Added a visual reconciliation planner that shares the authored-ID and compatibility contract with the semantic bridge.
+- Exact and semantic-only `Astylar.update()` calls now retain the complete live Babylon visual tree; resize, asset, manual, layout, paint, text, child, image, and control-data changes remain on the safe full-reflow path.
+- Added public latest-pass and cumulative diagnostics for reuse, creation, replacement, disposal, reconciliation, and reflow.
+- Extended parity reports with stable per-component Babylon mesh-owner tokens and reconciliation diagnostics.
+- Added `reconciliation-semantic-reuse`, a two-update live/fresh fixture that changes accessible labels and titles while enforcing zero visual reflow and stable mesh identity.
+- `npm test -- --watch=false`: 218 tests passed.
+- `npm run build:lib`: passed.
+- `npm run build`: passed with the existing application bundle and stylesheet budget warnings.
+- Focused fixture: three renders, median/minimum SSIM `0.9925`, 100% of edges within 2 px, maximum edge error `0.0006 px`, exact text and browser-computed semantics, stable visual-owner tokens, and no runtime errors. The focused `--enforce` command exits nonzero only because the global completion gate requires the full corpus coverage.

@@ -44,6 +44,12 @@ export {
   astylarInputReconciliationKind,
 } from './astylar-reconciliation-identity';
 export type { AstylarReconciliationIdentitySnapshot } from './astylar-reconciliation-identity';
+export { AstylarVisualReconciler } from './astylar-visual-reconciler';
+export type {
+  AstylarVisualReconciliationCounts,
+  AstylarVisualReconciliationPlan,
+  AstylarVisualReconciliationSnapshot,
+} from './astylar-visual-reconciler';
 export type {
   AstylarInvalidationReason,
   AstylarSessionSnapshot,

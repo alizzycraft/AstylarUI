@@ -82,6 +82,8 @@ export class ParityAstylarComponent {
   private reportRevision = 0;
   private readonly interactionEvents: ParityNormalizedEvent[] = [];
   private readonly navigationOutcomes: ParityNavigationOutcome[] = [];
+  private readonly visualOwnerTokens = new WeakMap<Mesh, number>();
+  private nextVisualOwnerToken = 1;
 
   constructor() {
     afterNextRender(() => this.initialize());
@@ -489,6 +491,13 @@ export class ParityAstylarComponent {
         inputs: this.elementManager.inputElementsMap.size,
       },
       semantics: this.astylar.getSemanticSnapshot(scene),
+      visualOwners: Object.fromEntries(
+        measurementIds.flatMap((id) => {
+          const mesh = this.elementManager.elementsMap.get(id);
+          return mesh ? [[id, this.visualOwnerToken(mesh)]] : [];
+        }),
+      ),
+      visualReconciliation: this.astylar.getVisualReconciliationSnapshot(scene),
       interaction: includeInteraction
         ? {
             events: [...this.interactionEvents],
@@ -572,6 +581,15 @@ export class ParityAstylarComponent {
       button: event.button,
       pointerType: event.pointerType,
     };
+  }
+
+  private visualOwnerToken(mesh: Mesh): number {
+    let token = this.visualOwnerTokens.get(mesh);
+    if (token === undefined) {
+      token = this.nextVisualOwnerToken++;
+      this.visualOwnerTokens.set(mesh, token);
+    }
+    return token;
   }
 
   private projectMeshRect(mesh: Mesh, scene: Scene): ParityRect {

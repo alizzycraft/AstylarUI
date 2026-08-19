@@ -64,6 +64,8 @@ export interface ParityFixture {
   semanticIds?: string[];
   /** Live-region IDs whose non-empty mutation announcements must match exactly. */
   announcementIds?: string[];
+  /** Zero-based dynamic-step indexes that must retain measured Babylon owners. */
+  visualReuseStepIndexes?: number[];
   interactionEventTypes?: ParityInteractionEventType[];
   /** Click handlers installed outside serializable fixture data. */
   cancelClickIds?: string[];
@@ -274,6 +276,18 @@ export interface ParityRuntimeReport {
   resources?: { meshes: number; materials: number; textures: number };
   registries?: { elements: number; inputs: number };
   semantics?: { nodes: number; eventRegistrations: number; observerRegistrations: number };
+  visualOwners?: Record<string, number>;
+  visualReconciliation?: {
+    strategy: 'initial' | 'reuse' | 'rebuild';
+    last: {
+      reused: number;
+      created: number;
+      replaced: number;
+      disposed: number;
+      reconciled: number;
+      reflowed: number;
+    };
+  };
   interaction?: ParityInteractionReport;
 }
 

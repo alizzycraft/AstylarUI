@@ -39,4 +39,6 @@ Changing between these input kinds replaces the owner and disposes its transient
 
 ## Diagnostics
 
-`AstylarReconciliationIdentityIndex.snapshot` reports total nodes, unique authored IDs, anonymous nodes, duplicate IDs, and duplicate-node count. Semantic reconciliation snapshots additionally report the numbers of reused, created, replaced, and disposed native semantic owners for the most recent reconciliation. Visual/resource diagnostics will adopt the same vocabulary as Phase 11 implementation proceeds.
+`AstylarReconciliationIdentityIndex.snapshot` reports total nodes, unique authored IDs, anonymous nodes, duplicate IDs, and duplicate-node count. Semantic reconciliation snapshots additionally report the numbers of reused, created, replaced, and disposed native semantic owners for the most recent reconciliation.
+
+`Astylar.getVisualReconciliationSnapshot(scene)` reports the latest strategy plus per-pass and cumulative reused, created, replaced, disposed, reconciled, and reflowed node counts. An update whose visual projection is unchanged uses the `reuse` strategy: the existing Babylon meshes, materials, textures, layout registrations, controls, and interaction state stay live while the semantic tree is reconciled. Resize, asset, manual, layout, paint, content, child-list, image-source, and control-data changes currently use the safe `rebuild` strategy. Later Phase 11 increments narrow that rebuild boundary resource by resource.
