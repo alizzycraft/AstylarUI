@@ -197,25 +197,10 @@ export class TextInputManager {
             // Extract CSS metrics for cursor positioning (these are in CSS pixels)
             textInput.textLayoutMetrics = storedLayoutMetrics.css;
 
-            // Also compute a texture width that matches the empty layout so cursor
-            // positioning uses consistent units (avoid using the placeholder texture width)
-            try {
-                const emptyTexture = this.textRenderingService.renderTextToTexture(
-                    textInput.element,
-                    '',
-                    style
-                );
-                const size = emptyTexture.getSize();
-                const scale = render.actions.camera.getPixelToWorldScale();
-                const devicePixelRatio = window.devicePixelRatio || 1;
-                textInput.textureWidth = (size.width / devicePixelRatio) * scale;
-                // We intentionally do not create a visible text mesh for empty content
-
-            } catch (err) {
-                console.warn('[TextInputManager] Failed to compute empty texture width:', err);
-                // Fallback to 0 so left-edge calculations behave reasonably
-                textInput.textureWidth = 0;
-            }
+            // Empty content intentionally has no texture; using zero keeps the
+            // caret at the left edge without asking the text renderer to create
+            // a texture it cannot represent.
+            textInput.textureWidth = 0;
         }
 
         // Create cursor mesh if it doesn't exist and we have layout metrics

@@ -41,6 +41,11 @@ export class App {
       handlers: {
         'add-item': { click: () => this.zone.run(() => this.refreshData()) },
         'dialog-close': { click: () => this.zone.run(() => this.toggleDialog()) },
+        'search': {
+          keydown: (event) => this.zone.run(() => {
+            this.status.set(`Primary keyboard input: ${event.key}`);
+          }),
+        },
       },
     },
     navigation: {

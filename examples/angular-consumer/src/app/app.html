@@ -3,7 +3,7 @@
     <div>
       <p class="eyebrow">Installed package example</p>
       <h1>AstylarUI operations workspace</h1>
-      <p>{{ status() }}</p>
+      <p data-testid="consumer-status">{{ status() }}</p>
     </div>
     <div class="consumer-actions" aria-label="Example controls">
       <button type="button" (click)="refreshData()">Update data</button>
@@ -26,7 +26,7 @@
             <p class="eyebrow">Primary public API surface</p>
             <h2 id="primary-surface-title">Responsive inventory view</h2>
           </div>
-          <output aria-live="polite">Revision {{ revision() }}</output>
+          <output data-testid="primary-revision" aria-live="polite">Revision {{ revision() }}</output>
         </div>
         <astylar-surface
           data-testid="primary-astylar-surface"
@@ -44,7 +44,7 @@
           <p class="eyebrow">Independent secondary surface</p>
           <h2 id="secondary-surface-title">Parallel renderer ownership</h2>
         </div>
-        <output aria-live="polite">Revision {{ secondaryRevision() }}</output>
+        <output data-testid="secondary-revision" aria-live="polite">Revision {{ secondaryRevision() }}</output>
       </div>
       <astylar-surface
         data-testid="secondary-astylar-surface"

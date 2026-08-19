@@ -200,4 +200,25 @@ Status: complete.
 
 ## Increment 5: browser-driven consumer acceptance
 
-Status: pending.
+Status: complete.
+
+- Added a real-Chrome acceptance test to the independently installed consumer.
+  It waits for two populated semantic surfaces, drives a renderer-owned button
+  and keyboard event, opens a modal, updates each surface independently,
+  performs explicit resize, disposes one surface while the other remains live,
+  and remounts it.
+- Repeated same-structure updates assert a stable Babylon resource count.
+  Explicit surface disposal and final Angular fixture destruction assert that
+  owned meshes, materials, and textures return to zero on both handles, with no
+  error diagnostics.
+- The first browser pass exposed readiness checks that were observing the
+  semantic host before renderer settlement. The acceptance now waits on
+  renderer-authored content and revision state rather than shell presence.
+- Focusing an empty text input exposed an obsolete attempt to render an empty
+  string texture. Empty controls now use a zero content width directly, keeping
+  the caret at the left edge without producing a rejected texture or console
+  warning.
+- `npm test -- --watch=false`: 233 tests passed.
+- `npm run consumer:check`: 379 packed files; isolated consumer browser/server
+  build, prerender, ordinary component test, and full WebGL browser acceptance
+  passed.
