@@ -1001,5 +1001,12 @@
     "category": "forms-interactive",
     "expectedBehavior": "Removing an expanded single-select closes its popup and releases popup resources and observers; reusing the ID creates a fresh closed control without lifecycle growth.",
     "interactionStepCount": 9
+  },
+  {
+    "id": "table-cell-control-content-box",
+    "title": "Control inside a padded table cell",
+    "category": "lists-tables-images",
+    "expectedBehavior": "A nested visual control is positioned from the padded content origin of its table cell at every representative viewport.",
+    "viewportIds": ["desktop", "tablet", "mobile"]
   }
 ]

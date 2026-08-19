@@ -71,4 +71,5 @@ Reactive layout and reflow work continues in `scorecard-v7.md`.
 Stateful interaction and form parity continues in `scorecard-v8.md`.
 Scrolling, pointer selection, and popup interaction parity is completed in
 `scorecard-v9.md`. Semantic application behavior and accessibility parity
-continues in `scorecard-v10.md`.
+continues in `scorecard-v10.md`. Incremental rendered-tree reconciliation and
+state continuity continue in `scorecard-v11.md`.

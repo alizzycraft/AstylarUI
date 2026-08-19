@@ -727,11 +727,15 @@ export class TableService {
 
     console.log(`[TABLE DEBUG] Cell mesh created: ${cellMesh.name}, material:`, cellMesh.material?.name);
 
-    // Store cell dimensions for potential child elements
+    // The generic element path has already resolved the authored cell padding. Keep
+    // that content-box origin while replacing only the table algorithm's final
+    // border-box dimensions. Nested controls must flow from the padded origin just
+    // as they do in a browser table cell.
+    const createdDimensions = dom.context.elementDimensions.get(cellMesh.name);
     dom.context.elementDimensions.set(cellMesh.name, {
       width: cellWidth,
       height: cellHeight,
-      padding: { top: 0, right: 0, bottom: 0, left: 0 }
+      padding: createdDimensions?.padding ?? { top: 0, right: 0, bottom: 0, left: 0 }
     });
 
     // Restore original styles
