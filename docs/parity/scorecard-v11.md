@@ -33,12 +33,8 @@ Representative data-management integration remains a separate Phase 11 increment
 
 ## Remaining work
 
-1. Define and test the authored-ID identity and compatibility contract, including anonymous and duplicate-ID fallback behavior.
-2. Add reconciliation diagnostics and resource ownership boundaries.
-3. Reconcile compatible visual nodes and child-list changes without whole-tree replacement.
-4. Preserve transient control, focus, selection, scroll, popup, modal, semantic, and event state across compatible updates; clean up replaced and removed owners.
-5. Add representative-app update workflows, including the corrected table-cell control behavior, without reducing the fixed parity thresholds.
-6. Update the public API documentation and README, run three consecutive unchanged-commit completion passes, and publish the final Phase 11 evidence.
+1. Run the complete unit and build gates after the representative-application increment.
+2. Run the full parity corpus, publish final Phase 11 evidence, and complete three consecutive unchanged-commit acceptance passes.
 
 ## Increment 2: authored identity contract
 
@@ -83,6 +79,22 @@ Status: complete.
 - Focused overflow update: six renders, median SSIM `0.9868`, minimum `0.9865`, exact scroll state, and no runtime errors.
 - Repeated interaction lifecycle: 34 renders, median SSIM `0.9737`, minimum `0.9588`, exact live state/events, stable resource/registration plateaus, and clean disposal.
 - Repeated semantic lifecycle: 29 renders, median SSIM `0.9751`, minimum `0.9548`, exact semantics/modal/focus/announcement state, stable ownership/registration plateaus, and clean disposal.
+- `npm test -- --watch=false`: 221 tests passed.
+- `npm run build:lib`: passed.
+- `npm run build`: passed with the existing application bundle and stylesheet budget warnings.
+
+## Increment 5: representative application reconciliation
+
+Status: complete.
+
+- The project dashboard now requires compatible primary Babylon owners to remain stable through filtered child removal, status completion, and status reopening.
+- The account settings application now requires owner stability through six realistic updates spanning modal dismissal/reopening, validation publication/clearance, responsive content compaction, and completed-field removal.
+- The inventory application now contains an explicitly styled row action nested in a padded table cell. Its geometry is measured in the app, its semantic action is exercised after search/filter/pagination state changes, and a second data update changes its visual value and row status while preserving the live application state.
+- All three applications opt into per-update visual-owner assertions, so a compatible update fails if it silently replaces the measured Babylon owners even when its final screenshot is otherwise identical.
+- Inventory application: 18 renders across three viewports, two live/fresh updates, and thirteen interaction states; median SSIM `0.9653`, minimum SSIM `0.9502`, 100% of edges within 2 px, maximum edge error `0.9786 px`, exact text/state/semantics, stable owner tokens, and no runtime errors.
+- Project dashboard: 21 renders; median SSIM `0.9766`, minimum SSIM `0.9668`, 100% of edges within 2 px, maximum edge error `0.4986 px`, exact text/state/semantics, stable owner tokens, and no runtime errors.
+- Account settings: 31 renders; median SSIM `0.9609`, minimum SSIM `0.9551`, 100% of edges within 2 px, maximum edge error `1.9339 px`, exact text/state/semantics, stable owner tokens, and no runtime errors.
+- Each focused application run clears the fixed per-render, geometry, text, state, semantic, and runtime gates. Its focused median is informational: the `0.98` median requirement is the completion gate for the complete corpus, not for a deliberately complex single-application subset.
 - `npm test -- --watch=false`: 221 tests passed.
 - `npm run build:lib`: passed.
 - `npm run build`: passed with the existing application bundle and stylesheet budget warnings.

@@ -6,23 +6,23 @@ export const representativeDataManagementFixture: ParityFixture = {
   title: 'Representative data management application',
   category: 'composed-application',
   expectedBehavior:
-    'A responsive inventory application exposes labelled table and pagination semantics, preserves meaningful focus through page replacement, activates the selected-row action semantically, and retains browser-equivalent search, filter, scroll, control, and event state.',
+    'A responsive inventory application exposes labelled table and pagination semantics, positions and activates a nested row action inside a padded table cell, preserves meaningful focus through repeated page updates, and retains browser-equivalent search, filter, scroll, control, and event state.',
   viewportIds: ['desktop', 'tablet', 'mobile'],
   measurementIds: [
     'dm-shell', 'dm-nav', 'dm-brand', 'dm-nav-inventory', 'dm-content', 'dm-header',
     'dm-title', 'dm-count', 'dm-main', 'dm-toolbar', 'dm-search', 'dm-filter', 'dm-export',
     'dm-table-card', 'dm-table', 'dm-head-row', 'dm-head-item', 'dm-head-status', 'dm-head-owner',
     'dm-row-one', 'dm-one-item', 'dm-one-status', 'dm-one-owner', 'dm-row-two', 'dm-two-item',
-    'dm-row-eight', 'dm-eight-item',
+    'dm-row-three', 'dm-three-owner', 'dm-three-action', 'dm-row-eight', 'dm-eight-item',
     'dm-pagination',
     'dm-page-prev', 'dm-page-active', 'dm-page-next', 'dm-empty', 'dm-detail', 'dm-detail-image',
     'dm-detail-title', 'dm-detail-copy', 'dm-detail-action',
   ],
-  interactionIds: ['dm-search', 'dm-filter', 'dm-page-next', 'dm-detail-action'],
+  interactionIds: ['dm-search', 'dm-filter', 'dm-page-next', 'dm-three-action', 'dm-detail-action'],
   scrollIds: ['dm-table-card'],
   semanticIds: [
     'dm-table', 'dm-head-row', 'dm-head-item', 'dm-head-status', 'dm-head-owner',
-    'dm-row-one', 'dm-one-item', 'dm-one-status', 'dm-one-owner',
+    'dm-row-one', 'dm-one-item', 'dm-one-status', 'dm-one-owner', 'dm-three-action',
     'dm-pagination', 'dm-page-prev', 'dm-page-active', 'dm-page-next',
     'dm-detail-action',
   ],
@@ -43,6 +43,11 @@ export const representativeDataManagementFixture: ParityFixture = {
     { id: 'request-next-page', actions: [{ type: 'click', elementId: 'dm-page-next' }] },
     { id: 'show-next-page', actions: [{ type: 'apply-update', stepIndex: 0 }] },
     { id: 'repeat-next-page-keyboard', actions: [{ type: 'press-key', key: 'Enter' }] },
+    { id: 'open-row-action', actions: [
+      { type: 'semantic-focus', elementId: 'dm-three-action' },
+      { type: 'semantic-activate', elementId: 'dm-three-action' },
+    ] },
+    { id: 'confirm-row-action-update', actions: [{ type: 'apply-update', stepIndex: 1 }] },
     { id: 'focus-updated-row-action', actions: [{ type: 'semantic-focus', elementId: 'dm-detail-action' }] },
     { id: 'activate-updated-row-action', actions: [{ type: 'semantic-activate', elementId: 'dm-detail-action' }] },
     { id: 'open-record-pointer', actions: [{ type: 'click', elementId: 'dm-detail-action' }] },
@@ -70,11 +75,11 @@ export const representativeDataManagementFixture: ParityFixture = {
             <section id="dm-table-card">
               <table id="dm-table" aria-label="Inventory records">
                 <colgroup><col style="width:180px"><col style="width:100px"><col style="width:96px"></colgroup>
-                <thead><tr id="dm-head-row"><th id="dm-head-item">Item</th><th id="dm-head-status">Status</th><th id="dm-head-owner">Owner</th></tr></thead>
+                <thead><tr id="dm-head-row"><th id="dm-head-item">Item</th><th id="dm-head-status">Status</th><th id="dm-head-owner">Owner / action</th></tr></thead>
                 <tbody>
                   <tr id="dm-row-one"><td id="dm-one-item">Studio camera kit</td><td id="dm-one-status">Available</td><td id="dm-one-owner">Mina</td></tr>
                   <tr id="dm-row-two"><td id="dm-two-item">Portable lighting rig</td><td id="dm-two-status">Reserved</td><td id="dm-two-owner">Ravi</td></tr>
-                  <tr id="dm-row-three"><td id="dm-three-item">Audio recorder</td><td id="dm-three-status">Available</td><td id="dm-three-owner">Leah</td></tr>
+                  <tr id="dm-row-three"><td id="dm-three-item">Audio recorder</td><td id="dm-three-status">Available</td><td id="dm-three-owner"><input id="dm-three-action" type="button" value="Open" aria-label="View Audio recorder row"></td></tr>
                   <tr id="dm-row-four"><td id="dm-four-item">Wireless monitor</td><td id="dm-four-status">Reserved</td><td id="dm-four-owner">Omar</td></tr>
                   <tr id="dm-row-five"><td id="dm-five-item">Tripod adapter</td><td id="dm-five-status">Repair</td><td id="dm-five-owner">Nia</td></tr>
                   <tr id="dm-row-six"><td id="dm-six-item">Field microphone</td><td id="dm-six-status">Available</td><td id="dm-six-owner">Tariq</td></tr>
@@ -129,6 +134,8 @@ export const representativeDataManagementFixture: ParityFixture = {
       #dm-table tbody tr:nth-child(even) td { background:#ffffff; }
       #dm-table #dm-one-status { background:#dcfce7; color:#166534; font-weight:700; }
       #dm-table #dm-two-status { background:#fef3c7; color:#92400e; font-weight:700; }
+      #dm-three-action { appearance:none; width:64px; height:24px; margin:0; padding:2px 6px; border:0; border-radius:0; outline:0; background:#0f766e; color:#ffffff; font:700 10px/20px Arial,sans-serif; text-align:center; }
+      #dm-three-action:focus { background:#155e75; }
       #dm-pagination { display:flex; gap:6px; width:376px; height:52px; padding:6px 0; background:#ffffff; }
       #dm-pagination input { appearance:none; height:40px; margin:0; padding:8px; border:0; border-radius:0; background:#e2e8f0; color:#475569; font:700 12px/24px Arial,sans-serif; text-align:center; }
       #dm-page-prev { width:88px; opacity:.55; } #dm-page-active { width:40px; } #dm-page-next { width:72px; outline:0; }
@@ -217,6 +224,8 @@ export const representativeDataManagementFixture: ParityFixture = {
       { selector:'#dm-table th', background:'#164e63', color:'#ffffff', fontWeight:'700' },
       { selector:'#dm-table tbody tr:nth-child(odd) td', background:'#f8fafc' }, { selector:'#dm-table tbody tr:nth-child(even) td', background:'#ffffff' },
       { selector:'#dm-table #dm-one-status', background:'#dcfce7', color:'#166534', fontWeight:'700' }, { selector:'#dm-table #dm-two-status', background:'#fef3c7', color:'#92400e', fontWeight:'700' },
+      { selector:'#dm-three-action', width:'64px', height:'24px', margin:'0', padding:'2px 6px', borderWidth:'0', borderRadius:'0', background:'#0f766e', color:'#ffffff', fontFamily:'Arial, sans-serif', fontSize:'10px', fontWeight:'700', lineHeight:'20px', textAlign:'center' },
+      { selector:'#dm-three-action:focus', background:'#155e75' },
       { selector:'#dm-pagination', display:'flex', gap:'6px', width:'376px', height:'52px', padding:'6px 0', background:'#ffffff' },
       { selector:'#dm-pagination input', height:'40px', margin:'0', padding:'8px', borderWidth:'0', borderRadius:'0', background:'#e2e8f0', color:'#475569', fontFamily:'Arial, sans-serif', fontSize:'12px', fontWeight:'700', lineHeight:'24px', textAlign:'center' },
       { selector:'#dm-page-prev', width:'88px', opacity:'.55' }, { selector:'#dm-page-active', width:'40px' }, { selector:'#dm-page-next', width:'72px' }, { selector:'#dm-page-next:focus', background:'#bae6fd' }, { selector:'#dm-pagination input.active', background:'#0f766e', color:'#ffffff' },
@@ -258,11 +267,11 @@ export const representativeDataManagementFixture: ParityFixture = {
           { type:'section', id:'dm-table-card', children:[
             { type:'table', id:'dm-table', ariaLabel:'Inventory records', tableProperties:{ tableLayout:'fixed' }, children:[
               { type:'colgroup', children:[{ type:'col', tableProperties:{ width:'180px' } }, { type:'col', tableProperties:{ width:'100px' } }, { type:'col', tableProperties:{ width:'96px' } }] },
-              { type:'thead', children:[{ type:'tr', id:'dm-head-row', children:[{ type:'th', id:'dm-head-item', textContent:'Item' }, { type:'th', id:'dm-head-status', textContent:'Status' }, { type:'th', id:'dm-head-owner', textContent:'Owner' }] }] },
+              { type:'thead', children:[{ type:'tr', id:'dm-head-row', children:[{ type:'th', id:'dm-head-item', textContent:'Item' }, { type:'th', id:'dm-head-status', textContent:'Status' }, { type:'th', id:'dm-head-owner', textContent:'Owner / action' }] }] },
               { type:'tbody', children:[
                 { type:'tr', id:'dm-row-one', children:[{ type:'td', id:'dm-one-item', textContent:'Studio camera kit' }, { type:'td', id:'dm-one-status', textContent:'Available' }, { type:'td', id:'dm-one-owner', textContent:'Mina' }] },
                 { type:'tr', id:'dm-row-two', children:[{ type:'td', id:'dm-two-item', textContent:'Portable lighting rig' }, { type:'td', id:'dm-two-status', textContent:'Reserved' }, { type:'td', id:'dm-two-owner', textContent:'Ravi' }] },
-                { type:'tr', id:'dm-row-three', children:[{ type:'td', id:'dm-three-item', textContent:'Audio recorder' }, { type:'td', id:'dm-three-status', textContent:'Available' }, { type:'td', id:'dm-three-owner', textContent:'Leah' }] },
+                { type:'tr', id:'dm-row-three', children:[{ type:'td', id:'dm-three-item', textContent:'Audio recorder' }, { type:'td', id:'dm-three-status', textContent:'Available' }, { type:'td', id:'dm-three-owner', children:[{ type:'input', inputType:'button', id:'dm-three-action', value:'Open', ariaLabel:'View Audio recorder row' }] }] },
                 { type:'tr', id:'dm-row-four', children:[{ type:'td', id:'dm-four-item', textContent:'Wireless monitor' }, { type:'td', id:'dm-four-status', textContent:'Reserved' }, { type:'td', id:'dm-four-owner', textContent:'Omar' }] },
                 { type:'tr', id:'dm-row-five', children:[{ type:'td', id:'dm-five-item', textContent:'Tripod adapter' }, { type:'td', id:'dm-five-status', textContent:'Repair' }, { type:'td', id:'dm-five-owner', textContent:'Nia' }] },
                 { type:'tr', id:'dm-row-six', children:[{ type:'td', id:'dm-six-item', textContent:'Field microphone' }, { type:'td', id:'dm-six-status', textContent:'Available' }, { type:'td', id:'dm-six-owner', textContent:'Tariq' }] },
@@ -291,16 +300,24 @@ const secondDataPage = JSON.parse(
 setDataText(secondDataPage, 'dm-count', 'Page 2 of 128');
 setDataText(secondDataPage, 'dm-one-item', 'Broadcast camera body');
 setDataText(secondDataPage, 'dm-one-status', 'Reserved');
-setDataText(secondDataPage, 'dm-one-owner', 'Tariq');
 setDataText(secondDataPage, 'dm-two-item', 'Camera support dolly');
 setDataText(secondDataPage, 'dm-detail-title', 'Broadcast camera body');
 setDataText(secondDataPage, 'dm-detail-copy', 'Reserved for the live production team until Friday afternoon.');
 const activePage = findDataElement(secondDataPage, 'dm-page-active');
 const selectedRowAction = findDataElement(secondDataPage, 'dm-detail-action');
-if (!activePage || !selectedRowAction) throw new Error('Representative data page controls are missing');
+const tableRowAction = findDataElement(secondDataPage, 'dm-three-action');
+if (!activePage || !selectedRowAction || !tableRowAction) throw new Error('Representative data page controls are missing');
 activePage.value = '2';
 activePage.ariaLabel = 'Page 2, current page';
 selectedRowAction.ariaLabel = 'View Broadcast camera body record';
+tableRowAction.ariaLabel = 'View Audio recorder row';
+
+const confirmedRowActionPage = JSON.parse(JSON.stringify(secondDataPage)) as SiteData;
+setDataText(confirmedRowActionPage, 'dm-three-status', 'Checked out');
+const confirmedTableRowAction = findDataElement(confirmedRowActionPage, 'dm-three-action');
+if (!confirmedTableRowAction) throw new Error('Representative data row action is missing');
+confirmedTableRowAction.value = 'Opened';
+confirmedTableRowAction.ariaLabel = 'Audio recorder row opened';
 
 representativeDataManagementFixture.dynamicSteps = [{
   id: 'inventory-page-two',
@@ -308,7 +325,6 @@ representativeDataManagementFixture.dynamicSteps = [{
     { type: 'set-text', elementId: 'dm-count', textContent: 'Page 2 of 128' },
     { type: 'set-text', elementId: 'dm-one-item', textContent: 'Broadcast camera body' },
     { type: 'set-text', elementId: 'dm-one-status', textContent: 'Reserved' },
-    { type: 'set-text', elementId: 'dm-one-owner', textContent: 'Tariq' },
     { type: 'set-text', elementId: 'dm-two-item', textContent: 'Camera support dolly' },
     { type: 'set-text', elementId: 'dm-detail-title', textContent: 'Broadcast camera body' },
     {
@@ -319,9 +335,20 @@ representativeDataManagementFixture.dynamicSteps = [{
     { type: 'set-value', elementId: 'dm-page-active', value: '2' },
     { type: 'set-attribute', elementId: 'dm-page-active', name: 'aria-label', value: 'Page 2, current page' },
     { type: 'set-attribute', elementId: 'dm-detail-action', name: 'aria-label', value: 'View Broadcast camera body record' },
+    { type: 'set-attribute', elementId: 'dm-three-action', name: 'aria-label', value: 'View Audio recorder row' },
   ],
   siteData: secondDataPage,
+}, {
+  id: 'confirm-row-opened',
+  referenceMutations: [
+    { type: 'set-text', elementId: 'dm-three-status', textContent: 'Checked out' },
+    { type: 'set-value', elementId: 'dm-three-action', value: 'Opened' },
+    { type: 'set-attribute', elementId: 'dm-three-action', name: 'aria-label', value: 'Audio recorder row opened' },
+  ],
+  siteData: confirmedRowActionPage,
 }];
+
+representativeDataManagementFixture.visualOwnerReuseStepIndexes = [0, 1];
 
 function setDataText(siteData: SiteData, elementId: string, textContent: string): void {
   const element = findDataElement(siteData, elementId);

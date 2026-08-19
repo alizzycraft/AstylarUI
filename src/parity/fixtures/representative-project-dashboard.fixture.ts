@@ -30,6 +30,7 @@ export const representativeProjectDashboardFixture: ParityFixture = {
     'pm-task-two-check', 'pm-status-two',
   ],
   announcementIds: ['pm-status-two'],
+  visualOwnerReuseStepIndexes: [0, 1, 2],
   interactionEventTypes: [
     'pointerdown', 'pointerup', 'click', 'focus', 'blur',
     'keydown', 'keyup', 'input', 'change',

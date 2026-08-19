@@ -467,16 +467,18 @@
     "viewportIds": ["desktop", "tablet", "mobile"],
     "responsiveSequence": ["desktop", "tablet", "mobile", "desktop"],
     "dynamicStepCount": 3,
-    "interactionStepCount": 11
+    "interactionStepCount": 11,
+    "visualOwnerReuseStepIndexes": [0, 1, 2]
   },
   {
     "id": "representative-data-management",
     "title": "Representative data management application",
     "category": "composed-application",
-    "expectedBehavior": "A responsive inventory application exposes labelled table and pagination semantics, preserves meaningful focus through page replacement, activates the selected-row action semantically, and retains browser-equivalent search, filter, scroll, control, and event state.",
+    "expectedBehavior": "A responsive inventory application exposes labelled table and pagination semantics, positions and activates a nested row action inside a padded table cell, preserves meaningful focus through repeated page updates, and retains browser-equivalent search, filter, scroll, control, and event state.",
     "viewportIds": ["desktop", "tablet", "mobile"],
-    "dynamicStepCount": 1,
-    "interactionStepCount": 11
+    "dynamicStepCount": 2,
+    "interactionStepCount": 13,
+    "visualOwnerReuseStepIndexes": [0, 1]
   },
   {
     "id": "representative-account-settings",
@@ -485,7 +487,8 @@
     "expectedBehavior": "A responsive account workspace exposes labelled native controls, synchronized validation and status announcements, and a modal workflow with focus containment and restoration while preserving browser-equivalent edited form state through application-data replacement, submit, and reset.",
     "viewportIds": ["desktop", "tablet", "mobile"],
     "dynamicStepCount": 6,
-    "interactionStepCount": 22
+    "interactionStepCount": 22,
+    "visualOwnerReuseStepIndexes": [0, 1, 2, 3, 4, 5]
   },
   {
     "id": "auto-block-height",

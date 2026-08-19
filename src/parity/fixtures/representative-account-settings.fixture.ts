@@ -34,6 +34,7 @@ export const representativeAccountSettingsFixture: ParityFixture = {
     'as-help', 'as-reports', 'as-state', 'as-save', 'as-cancel',
   ],
   announcementIds: ['as-help', 'as-state'],
+  visualOwnerReuseStepIndexes: [0, 1, 2, 3, 4, 5],
   modalDialogIds: ['as-dialog'],
   interactionEventTypes: [
     'pointerdown', 'pointerup', 'click', 'focus', 'blur', 'keydown', 'keyup',
