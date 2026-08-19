@@ -43,6 +43,18 @@ export class AstylarSceneResources {
     }
   }
 
+  /** Temporarily releases meshes that an incremental reconciliation will retain. */
+  releaseMeshes(meshes: Iterable<AbstractMesh>): void {
+    for (const mesh of meshes) this.meshes.delete(mesh);
+  }
+
+  /** Re-adopts retained meshes so final session disposal still owns them. */
+  adoptMeshes(meshes: Iterable<AbstractMesh>): void {
+    for (const mesh of meshes) {
+      if (this.scene.meshes.includes(mesh)) this.meshes.add(mesh);
+    }
+  }
+
   dispose(): void {
     this.clear();
   }

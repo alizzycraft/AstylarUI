@@ -50,6 +50,8 @@ export type {
   AstylarVisualReconciliationPlan,
   AstylarVisualReconciliationSnapshot,
 } from './astylar-visual-reconciler';
+export { AstylarVisualResourceReconciler } from './astylar-visual-resource-reconciler';
+export type { AstylarVisualResourceReconciliationResult } from './astylar-visual-resource-reconciler';
 export type {
   AstylarInvalidationReason,
   AstylarSessionSnapshot,

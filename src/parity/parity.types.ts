@@ -66,6 +66,8 @@ export interface ParityFixture {
   announcementIds?: string[];
   /** Zero-based dynamic-step indexes that must retain measured Babylon owners. */
   visualReuseStepIndexes?: number[];
+  /** Zero-based visual-update indexes that must retain common measured mesh owners. */
+  visualOwnerReuseStepIndexes?: number[];
   interactionEventTypes?: ParityInteractionEventType[];
   /** Click handlers installed outside serializable fixture data. */
   cancelClickIds?: string[];

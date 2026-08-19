@@ -27,7 +27,7 @@ export interface AstylarVisualReconciliationSnapshot {
 export interface AstylarVisualReconciliationPlan {
   readonly rebuild: boolean;
   readonly snapshot: AstylarVisualReconciliationSnapshot;
-  commit(): void;
+  commit(countOverrides?: Partial<AstylarVisualReconciliationCounts>): void;
 }
 
 interface ReconciliationNode {
@@ -112,9 +112,12 @@ export class AstylarVisualReconciler {
     return {
       rebuild,
       snapshot,
-      commit: () => {
+      commit: (countOverrides = {}) => {
         if (committed) return;
         committed = true;
+        const finalCounts = { ...counts, ...countOverrides };
+        snapshot.last = finalCounts;
+        snapshot.totals = addCounts(this.committedSnapshot.totals, finalCounts);
         this.previousNodes = new Map(
           [...nextNodes].map(([key, element]) => [key, { ...element }]),
         );

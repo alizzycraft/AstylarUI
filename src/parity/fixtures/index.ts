@@ -21,6 +21,7 @@ import { semanticModalLifecycleFixture } from './semantic-modal-lifecycle.fixtur
 import { semanticStatusValidationFixture } from './semantic-status-validation.fixture';
 import { semanticLifecycleStressFixture } from './semantic-lifecycle-stress.fixture';
 import { reconciliationSemanticReuseFixture } from './reconciliation-semantic-reuse.fixture';
+import { reconciliationVisualUpdatesFixture } from './reconciliation-visual-updates.fixture';
 import { unorderedListLayoutFixture } from './unordered-list-layout.fixture';
 import { orderedListLayoutFixture } from './ordered-list-layout.fixture';
 import { tableFixedLayoutFixture } from './table-fixed-layout.fixture';
@@ -178,6 +179,7 @@ const fixtures: readonly ParityFixture[] = [
   semanticStatusValidationFixture,
   semanticLifecycleStressFixture,
   reconciliationSemanticReuseFixture,
+  reconciliationVisualUpdatesFixture,
   unorderedListLayoutFixture,
   orderedListLayoutFixture,
   tableFixedLayoutFixture,

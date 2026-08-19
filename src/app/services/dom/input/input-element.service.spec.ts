@@ -211,6 +211,7 @@ describe('InputElementService', () => {
         input.selectedIndex = index;
         input.value = input.options[index].value;
       }),
+      restoreExpandedState: jasmine.createSpy('restoreExpandedState'),
     };
     const service = new InputElementService(
       textInputManager as never,
@@ -329,6 +330,7 @@ describe('InputElementService', () => {
         input.selectedIndex = index;
         input.value = input.options[index].value;
       }),
+      restoreExpandedState: jasmine.createSpy('restoreExpandedState'),
     };
     const service = new InputElementService(
       {} as never,
@@ -353,7 +355,7 @@ describe('InputElementService', () => {
     const select = {
       type: InputType.Select, element: { id: 'select', value: 'alpha' }, value: 'beta',
       selectedIndex: 1, options: [{ value: 'alpha' }, { value: 'beta' }],
-      focused: false, validationState,
+      activeOptionIndex: 0, dropdownOpen: true, focused: false, validationState,
     };
     service['inputElements'].set('check', checkbox as never);
     service['inputElements'].set('radio', radio as never);
@@ -369,6 +371,7 @@ describe('InputElementService', () => {
     expect(checkboxManager.setCheckboxChecked).toHaveBeenCalledWith(checkbox, true);
     expect(checkboxManager.setRadioChecked).toHaveBeenCalledWith(radio, true);
     expect(selectManager.selectOption).toHaveBeenCalledWith(select, 1);
+    expect(selectManager.restoreExpandedState).toHaveBeenCalledWith(select, 0);
 
     checkboxManager.setCheckboxChecked.calls.reset();
     checkbox.element.checked = true;

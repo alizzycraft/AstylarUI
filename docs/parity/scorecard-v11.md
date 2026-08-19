@@ -68,3 +68,21 @@ Status: complete.
 - `npm run build:lib`: passed.
 - `npm run build`: passed with the existing application bundle and stylesheet budget warnings.
 - Focused fixture: three renders, median/minimum SSIM `0.9925`, 100% of edges within 2 px, maximum edge error `0.0006 px`, exact text and browser-computed semantics, stable visual-owner tokens, and no runtime errors. The focused `--enforce` command exits nonzero only because the global completion gate requires the full corpus coverage.
+
+## Increment 4: keyed Babylon owner retention
+
+Status: complete.
+
+- Added a staged visual-resource transaction that detaches compatible uniquely identified meshes before the old owned tree is cleared, renders the authoritative new layout, transplants its geometry/material/children/transforms/metadata/picking state, and re-adopts retained owners for final session disposal.
+- Parent/child retained owners are reconciled in tree order, so insertion, removal, reorder, and reparenting keep correct Babylon ancestry.
+- Compatible control meshes are released from old manager-private resources and rebound to fresh typed control managers before focus, control-state, scrolling, clipping, modal, and semantic restoration.
+- Expanded single-select snapshots now retain an open compatible popup and its uncommitted active option by value; removed or incompatible controls still close and dispose their popup lifetime.
+- Added `reconciliation-visual-updates`, covering text, paint/layout, child insertion/reorder, and image-source replacement with fresh/live parity and stable per-element mesh tokens.
+- Visual-update fixture: five renders, median/minimum SSIM `0.9790`, 100% of edges within 2 px, maximum edge error `0.0338 px`, exact text, stable owner tokens, and no runtime errors.
+- Focused text-control update: six renders, median SSIM `0.9931`, minimum `0.9914`, exact control/focus/selection state, stable owner tokens, and no runtime errors.
+- Focused overflow update: six renders, median SSIM `0.9868`, minimum `0.9865`, exact scroll state, and no runtime errors.
+- Repeated interaction lifecycle: 34 renders, median SSIM `0.9737`, minimum `0.9588`, exact live state/events, stable resource/registration plateaus, and clean disposal.
+- Repeated semantic lifecycle: 29 renders, median SSIM `0.9751`, minimum `0.9548`, exact semantics/modal/focus/announcement state, stable ownership/registration plateaus, and clean disposal.
+- `npm test -- --watch=false`: 221 tests passed.
+- `npm run build:lib`: passed.
+- `npm run build`: passed with the existing application bundle and stylesheet budget warnings.

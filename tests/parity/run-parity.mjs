@@ -520,6 +520,27 @@ async function measureDynamicFixture(contexts, fixture) {
         }
       }
     }
+    if (fixture.visualOwnerReuseStepIndexes?.includes(index)) {
+      const reconciliation = astylar.report.visualReconciliation;
+      if (!reconciliation || reconciliation.last.reused < 1) {
+        runtimeErrors.push(
+          `astylar: update ${index + 1} did not retain any visual owners ` +
+          `${JSON.stringify(reconciliation)}`,
+        );
+      }
+      if (index > 0) {
+        const previousOwners = astylarStates[index - 1].report.visualOwners ?? {};
+        const currentOwners = astylar.report.visualOwners ?? {};
+        for (const [elementId, token] of Object.entries(previousOwners)) {
+          if (currentOwners[elementId] !== undefined && currentOwners[elementId] !== token) {
+            runtimeErrors.push(
+              `astylar: visual update ${index + 1} replaced compatible owner ${elementId} ` +
+              `(${token} -> ${currentOwners[elementId]})`,
+            );
+          }
+        }
+      }
+    }
     if (index === astylarStates.length - 1 && astylar.disposal) {
       const before = astylar.disposal.before;
       const after = astylar.disposal.after;

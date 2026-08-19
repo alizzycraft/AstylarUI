@@ -1012,6 +1012,14 @@
     "semanticIds": ["reuse-panel", "reuse-action"]
   },
   {
+    "id": "reconciliation-visual-updates",
+    "title": "Keyed visual updates retain mesh owners",
+    "category": "responsive",
+    "expectedBehavior": "Text, paint/layout, child insertion/reorder, and image-source updates match fresh browser layout while compatible uniquely identified Babylon element meshes retain identity.",
+    "dynamicStepCount": 4,
+    "visualOwnerReuseStepIndexes": [0, 1, 2, 3]
+  },
+  {
     "id": "table-cell-control-content-box",
     "title": "Control inside a padded table cell",
     "category": "lists-tables-images",

@@ -432,6 +432,16 @@ export class SelectManager {
         }
     }
 
+    /** Reopens a compatible live select and restores its uncommitted active option. */
+    restoreExpandedState(selectElement: SelectElement, activeOptionIndex: number): void {
+        if (activeOptionIndex < 0 || activeOptionIndex >= selectElement.options.length ||
+            selectElement.options[activeOptionIndex].disabled) return;
+        this.openDropdown(selectElement, selectElement.mesh.getScene(), selectElement.style);
+        if (selectElement.dropdownOpen && activeOptionIndex !== selectElement.activeOptionIndex) {
+            this.updateOptionHighlight(selectElement, activeOptionIndex);
+        }
+    }
+
     /** Native select popups remain the pointer target above authored page layers. */
     private isPopupPointerTarget(
         selectElement: SelectElement,

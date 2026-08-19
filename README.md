@@ -168,6 +168,14 @@ mutate unchanged live-region text, so unrelated application updates do not
 produce duplicate browser-observable announcements. Required controls may add
 or remove `ariaDescribedby` as their visible validation message changes.
 
+`Astylar.update()` uses unique authored IDs as reconciliation keys. Compatible
+elements retain their primary Babylon mesh across text, style/layout,
+child-list/reorder, image-source, and control updates; transient control,
+selection, scroll, focus, modal, semantic, and event state is restored around
+the reflow. Use `getVisualReconciliationSnapshot(scene)` for latest-pass and
+cumulative lifecycle diagnostics. The identity, fallback, and replacement
+rules are documented in [docs/reconciliation.md](docs/reconciliation.md).
+
 ## Developing AstylarUI
 
 The current implementation status, document map, and recommended next work are

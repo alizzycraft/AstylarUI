@@ -51,6 +51,7 @@ import {
 } from './astylar-semantic-bridge';
 import { AstylarVisualReconciler } from './astylar-visual-reconciler';
 import type { AstylarVisualReconciliationSnapshot } from './astylar-visual-reconciler';
+import { AstylarVisualResourceReconciler } from './astylar-visual-resource-reconciler';
 
 /**
  * Configuration options for rendering
@@ -268,6 +269,8 @@ export class Astylar {
     this.sceneResources.set(scene, sceneResources);
     const visualReconciler = new AstylarVisualReconciler();
     this.visualReconciliation.set(scene, visualReconciler);
+    const visualResources = new AstylarVisualResourceReconciler();
+    let previousVisualIdentityData: SiteData | undefined;
 
     const scrollRuntime = new AstylarScrollRuntime({
       getMesh: (elementId) => this.elementManager.elementsMap.get(elementId),
@@ -304,6 +307,7 @@ export class Astylar {
             (elementId) => this.hasLiveTextSelection(elementId),
           );
           visualPlan.commit();
+          previousVisualIdentityData = this.snapshotVisualIdentityData(currentSiteData);
           hasCompletedRender = true;
           return;
         }
@@ -326,9 +330,18 @@ export class Astylar {
           canvas.clientWidth || viewportWidth,
           canvas.clientHeight || viewportHeight,
         );
+        const visualResourceTransaction = visualResources.stage(
+          previousVisualIdentityData,
+          currentSiteData,
+          this.elementManager,
+          sceneResources,
+          this.inputElementService,
+        );
+        let reusedVisualMeshes = 0;
         sceneResources.replace(
           () => {
             this.babylonDOMRenderer.createSiteFromData(currentSiteData);
+            reusedVisualMeshes = visualResourceTransaction.reconcile().reusedMeshes;
             scrollRuntime.reconcile(currentSiteData, scrollState);
             semanticBridge?.reconcile(currentSiteData);
             const textFocusId = this.inputElementService.restoreTextControlStates(textState);
@@ -356,7 +369,9 @@ export class Astylar {
           },
           this.imageResources.getSceneTextures(scene),
         );
-        visualPlan.commit();
+        visualResourceTransaction.commitOwnership();
+        visualPlan.commit({ reused: reusedVisualMeshes });
+        previousVisualIdentityData = this.snapshotVisualIdentityData(currentSiteData);
         hasCompletedRender = true;
       },
     );
@@ -633,6 +648,20 @@ export class Astylar {
     };
     siteData.root.children.forEach(visit);
     return sources;
+  }
+
+  private snapshotVisualIdentityData(siteData: SiteData): SiteData {
+    const snapshotElement = (element: DOMElement): DOMElement => ({
+      type: element.type,
+      id: element.id,
+      inputType: element.inputType,
+      hidden: element.hidden,
+      children: element.children?.map(snapshotElement),
+    });
+    return {
+      styles: [],
+      root: { children: siteData.root.children.map(snapshotElement) },
+    };
   }
 
   private getLiveEventState(elementId: string): AstylarEventState {

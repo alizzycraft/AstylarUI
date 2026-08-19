@@ -33,6 +33,8 @@ export interface NonTextControlStateSnapshot {
     authoredGroupName?: string;
     checked?: boolean;
     selectedValue?: unknown;
+    dropdownOpen?: boolean;
+    activeOptionValue?: unknown;
 }
 
 export interface SelectPopupLifecycleSnapshot {
@@ -266,6 +268,24 @@ export class InputElementService {
         return Array.from(this.inputElements.values());
     }
 
+    /**
+     * Releases a uniquely addressed control's primary mesh for visual-owner
+     * reconciliation while disposing the old manager's private subresources.
+     */
+    releaseInputMesh(elementId: string): BABYLON.Mesh | undefined {
+        const input = this.inputElements.get(elementId);
+        if (!input || this.duplicateInputIds.has(elementId)) return undefined;
+        this.inputElements.delete(elementId);
+        this.duplicateInputIds.delete(elementId);
+        this.focusManager.removeFromTabOrder(input);
+        this.formValidator.clearValidationRules(input);
+        const mesh = input.mesh;
+        input.mesh = undefined as unknown as BABYLON.Mesh;
+        this.disposeInputElement(input);
+        input.mesh = mesh;
+        return mesh;
+    }
+
     /** Gets the authored ID of the currently focused input, if any. */
     getFocusedElementId(): string | undefined {
         return this.focusManager.getFocusedElement()?.element.id;
@@ -359,6 +379,8 @@ export class InputElementService {
                 const select = input as SelectElement;
                 snapshot.authoredValue = input.element.value;
                 snapshot.selectedValue = select.options[select.selectedIndex]?.value;
+                snapshot.dropdownOpen = select.dropdownOpen;
+                snapshot.activeOptionValue = select.options[select.activeOptionIndex]?.value;
             }
             snapshots.push(snapshot);
         }
@@ -386,6 +408,13 @@ export class InputElementService {
                     Object.is(option.value, snapshot.selectedValue) && !option.disabled);
                 if (selectedIndex < 0) continue;
                 this.selectManager.selectOption(select, selectedIndex);
+                if (snapshot.dropdownOpen) {
+                    const activeIndex = select.options.findIndex((option) =>
+                        Object.is(option.value, snapshot.activeOptionValue) && !option.disabled);
+                    if (activeIndex >= 0) {
+                        this.selectManager.restoreExpandedState(select, activeIndex);
+                    }
+                }
             }
 
             input.validationState = {
