@@ -75,6 +75,13 @@ surface.dispose();
 available for compatibility, but new integrations should keep the surface handle
 so lifecycle ownership is unambiguous.
 
+A complete standalone Angular consumer is committed at
+[`examples/angular-consumer`](examples/angular-consumer). It demonstrates two
+independent surfaces, responsive layouts, controls, a scrolling table, an image,
+updates, modal focus, explicit resize, disposal, remounting, and SSR/prerender.
+It imports only the package root and is verified from a packed tarball rather
+than repository source.
+
 Validation and lifecycle failures use stable diagnostic codes and severities.
 Fatal input or lifecycle misuse throws `AstylarDiagnosticError`; all diagnostics
 are also retained in `surface.diagnostics.messages`. A host can observe them or
@@ -196,6 +203,17 @@ npm run build:lib
 ```bash
 npm run build
 ```
+
+### Verify a clean external consumer
+
+```bash
+npm run consumer:check
+```
+
+This builds and packs AstylarUI, copies the committed Angular example outside
+the repository, installs its declared dependencies and the tarball, builds its
+browser and SSR outputs, runs its real-Chrome acceptance tests, and removes the
+temporary installation.
 
 ---
 

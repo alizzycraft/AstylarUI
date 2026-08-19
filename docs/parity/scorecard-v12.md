@@ -222,3 +222,43 @@ Status: complete.
 - `npm run consumer:check`: 379 packed files; isolated consumer browser/server
   build, prerender, ordinary component test, and full WebGL browser acceptance
   passed.
+
+## Increment 6: final consumer hardening and parity freeze
+
+Status: complete.
+
+- Expanded the packaged real-Chrome scenario to cover desktop/tablet/mobile
+  reflow, nested table-control placement and activation, keyboard editing,
+  retained live values, two fully settled repeated-update resource plateaus,
+  scroll-into-view movement, modal presentation and initial focus ownership,
+  independent surface updates, explicit resize, disposal, remounting, and final
+  cleanup.
+- Fixed browser-background initial renders that could remain scheduled forever
+  when `requestAnimationFrame` was suspended. Default sessions retain frame
+  coalescing and now use a cancellable timer fallback; injected schedulers keep
+  their original deterministic contract.
+- Fixed the browser default for an open `dialog`: closed dialogs remain
+  `display:none`, open dialogs default to `display:block`, and authored display
+  declarations still win. This made real modal controls renderable and eligible
+  for autofocus.
+- Fixed the semantic bridge so a JSON `button.value` becomes native button text,
+  matching the visible Astylar label and providing the expected accessible name.
+- Strengthened package verification to reject local/workspace dependency specs,
+  require the consumer to declare library peers, and confirm that the installed
+  package is the expected tarball version rather than a symlink.
+- Updated the parity harness to inspect the registries of the selected isolated
+  surface and to retain its public handle for post-disposal diagnostics. The
+  harness no longer reads obsolete root-scoped services or loses cleanup state
+  after the factory releases a disposed surface.
+- Interactive inspection of the external consumer confirmed named semantic
+  controls, open-modal focus on `dialog-close`, background inertness, and stacked
+  mobile application cards.
+- Final verification: 235 unit tests, the library build, production application
+  build with two prerendered routes, and the clean external consumer check with
+  379 packed files and two browser tests all pass. The only application-build
+  warnings are the established initial-bundle and stylesheet budgets.
+- Three consecutive full parity gates pass on one unchanged commit with a clean
+  tree: 155 fixtures, 522 renders, three viewport profiles, median SSIM
+  `0.99000796`, minimum SSIM `0.95018158`, edge-tolerance ratio `0.99981681`,
+  maximum edge error `3.99209364 px`, exact visible text, clean runtime checks,
+  and every completion threshold satisfied.
