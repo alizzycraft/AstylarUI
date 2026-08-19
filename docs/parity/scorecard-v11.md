@@ -33,8 +33,7 @@ Representative data-management integration remains a separate Phase 11 increment
 
 ## Remaining work
 
-1. Run the complete unit and build gates after the representative-application increment.
-2. Run the full parity corpus, publish final Phase 11 evidence, and complete three consecutive unchanged-commit acceptance passes.
+1. Complete three consecutive full parity acceptance passes on the final unchanged commit.
 
 ## Increment 2: authored identity contract
 
@@ -49,6 +48,7 @@ Status: complete (`16b1e6d`).
 - `npm test -- --watch=false`: 214 tests passed.
 - `npm run build:lib`: passed.
 - `npm run build`: passed with the existing application bundle and stylesheet budget warnings.
+
 - Focused `semantic-lifecycle-stress`: 29 renders, median SSIM `0.9751`, minimum SSIM `0.9548`, 100% of edges within 2 px, maximum edge error `0.0010 px`, exact text, and no runtime errors.
 
 ## Increment 3: visual reconciliation boundary and diagnostics
@@ -98,3 +98,17 @@ Status: complete.
 - `npm test -- --watch=false`: 221 tests passed.
 - `npm run build:lib`: passed.
 - `npm run build`: passed with the existing application bundle and stylesheet budget warnings.
+
+## Increment 6: final Phase 11 baseline
+
+Status: implementation and documentation complete; unchanged-commit verification pending.
+
+- Full pre-freeze corpus: 155 fixtures / 522 renders across desktop, tablet, and mobile.
+- Median SSIM `0.9900`; minimum SSIM `0.9502`.
+- 100% of measured edges are within 2 px; maximum edge error `3.9921 px`.
+- Visible text, live-vs-fresh output, interaction/control/focus/selection/scroll/modal state, browser-computed semantics, announcements, navigation outcomes, retained-owner assertions, resource plateaus, and disposal audits are exact and runtime-clean.
+- The enforced completion command reports `Completion thresholds: true`.
+- `npm test -- --watch=false`: 221 tests passed.
+- `npm run build:lib`: passed.
+- `npm run build`: passed with only the two existing application bundle and stylesheet budget warnings.
+- The final acceptance procedure is three consecutive `npm run parity:check` executions after this evidence is committed, without changing the commit between runs.
