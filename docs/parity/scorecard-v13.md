@@ -224,3 +224,22 @@ Status: complete.
   resource cleanup. Added focused cascade coverage for namespaced selectors and
   unknown extension data. The complete suite passes with 251 tests.
 - `npm run build:lib` passes with the extended document and renderer contracts.
+
+### Increment 4: core compatibility contribution
+
+Status: complete.
+
+- Added the internal `astylar.core` plugin definition containing every supported
+  built-in element identity, its existing author-facing tag alias, and one
+  surface-scoped compatibility renderer contribution.
+- Built-in and external element renderers now resolve through the same sealed
+  capability registry. The compatibility adapter deliberately retains the
+  specialized input, image, and generic core branches rather than rewriting
+  stable Phase 12 rendering behavior.
+- External plugins may declare an explicit dependency on `astylar.core`; the
+  proof fixture does so. Core aliases and renderer identities participate in the
+  same duplicate/conflict rules, so a plugin cannot replace `div` or another
+  built-in renderer through registration or Angular provider order.
+- Added focused browser assertions for core capability visibility, a valid core
+  dependency, continued core rendering, and rejected core alias replacement.
+  The complete suite passes with 252 tests and `npm run build:lib` passes.

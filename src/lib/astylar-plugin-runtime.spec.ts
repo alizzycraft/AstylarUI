@@ -119,6 +119,7 @@ const badgePlugin = defineAstylarPlugin({
   id: 'example.badges',
   version: '1.0.0',
   pluginApiVersion: ASTYLAR_PLUGIN_API_VERSION,
+  dependencies: ['astylar.core'],
   contributes: ['elements', 'properties', 'renderers'],
   providers: [{ provide: BADGE_CONFIG, useValue: { marker: 'consumer-badge' } }],
   contributions: {
@@ -185,9 +186,12 @@ describe('Astylar surface plugin runtime', () => {
       expect(LifecycleProbe.activated).toEqual([1, 2]);
       expect(first.diagnostics.plugins).toEqual(jasmine.objectContaining({
         sealed: true,
-        pluginIds: ['example.lifecycle'],
+        pluginIds: ['astylar.core', 'example.lifecycle'],
         lifecycleIds: ['example.lifecycle:surface-probe'],
       }));
+      expect(first.diagnostics.plugins.elementIds).toContain('astylar.core:div');
+      expect(first.diagnostics.plugins.rendererIds)
+        .toContain('astylar.core:compatibility-renderer');
       first.dispose();
       expect(LifecycleProbe.destroyed).toEqual([1]);
       expect(second.disposed).toBeFalse();
@@ -343,6 +347,35 @@ describe('Astylar surface plugin runtime', () => {
     }));
     surface.dispose();
     expect(surface.diagnostics.resources).toEqual({ meshes: 0, materials: 0, textures: 0 });
+  });
+
+  it('rejects plugin aliases that attempt to replace a core element renderer', () => {
+    const conflictingPlugin = defineAstylarPlugin({
+      id: 'example.override',
+      version: '1.0.0',
+      pluginApiVersion: ASTYLAR_PLUGIN_API_VERSION,
+      contributes: ['elements', 'renderers'],
+      contributions: {
+        elements: [{ id: 'example.override:panel', alias: 'div' }],
+        renderers: [{
+          id: 'example.override:renderer',
+          elements: ['example.override:panel'],
+          renderer: ThrowingRenderer,
+        }],
+      },
+    });
+    TestBed.configureTestingModule({
+      providers: [
+        provideZonelessChangeDetection(),
+        provideAstylar({ plugins: [conflictingPlugin] }),
+      ],
+    });
+
+    expect(() => TestBed.inject(Astylar).mount(
+      document.createElement('canvas'),
+      site(),
+      { diagnostics: { logLevel: 'silent' } },
+    )).toThrowError(AstylarDiagnosticError, /plugin-alias-conflict/);
   });
 });
 

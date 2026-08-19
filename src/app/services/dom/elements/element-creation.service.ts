@@ -25,6 +25,7 @@ import {
 import { AstylarCapabilityRegistry } from "../../../../lib/astylar-plugin";
 import { AstylarDiagnostics } from "../../../../lib/astylar-diagnostics";
 import { AstylarPluginRuntime } from "../../../../lib/astylar-plugin-runtime";
+import { AstylarCoreCompatibilityRenderer } from "../../../../lib/astylar-core-plugin";
 
 /**
  * Service responsible for creating DOM elements as Babylon.js meshes
@@ -166,7 +167,11 @@ export class ElementCreationService {
 
     let mesh: Mesh;
 
-    const pluginRenderer = this.pluginRuntime.resolveRenderer(element.type);
+    const resolvedRenderer = this.pluginRuntime.resolveRenderer(element.type);
+    const pluginRenderer = resolvedRenderer &&
+      !(resolvedRenderer.renderer instanceof AstylarCoreCompatibilityRenderer)
+      ? resolvedRenderer
+      : undefined;
 
     // Check if it's an input element and delegate creation
     const inputElement =

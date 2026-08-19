@@ -76,6 +76,7 @@ import {
   type AstylarPluginDefinition,
 } from './astylar-plugin';
 import { AstylarPluginRuntime } from './astylar-plugin-runtime';
+import { ASTYLAR_CORE_PLUGIN } from './astylar-core-plugin';
 
 /**
  * Configuration options for rendering
@@ -948,6 +949,10 @@ export class Astylar {
   private readonly pluginDefinitions = inject(ASTYLAR_PLUGIN_DEFINITIONS, {
     optional: true,
   }) ?? [];
+  private readonly resolvedPluginDefinitions = Object.freeze([
+    ASTYLAR_CORE_PLUGIN,
+    ...this.pluginDefinitions,
+  ]);
   private readonly surfaces = new WeakMap<Scene, AstylarSurfaceRecord>();
   private readonly canvases = new WeakMap<HTMLCanvasElement, AstylarSurface>();
   private activeScene?: Scene;
@@ -962,7 +967,7 @@ export class Astylar {
     siteData: SiteData,
     options?: AstylarRenderOptions,
   ): AstylarSurface {
-    const pluginProviders = this.getPluginProviders(this.pluginDefinitions);
+    const pluginProviders = this.getPluginProviders(this.resolvedPluginDefinitions);
     const injector = createEnvironmentInjector(
       [
         AstylarRenderer,
@@ -971,7 +976,7 @@ export class Astylar {
         {
           provide: AstylarCapabilityRegistry,
           useFactory: () => new AstylarCapabilityRegistry(
-            this.pluginDefinitions,
+            this.resolvedPluginDefinitions,
             (diagnostic) => inject(AstylarDiagnostics).report(diagnostic),
           ),
         },
