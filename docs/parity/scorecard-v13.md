@@ -176,3 +176,23 @@ Status: complete.
   immutability, deterministic ordering, lookup, conflicts, graph failures, and
   sealing. The complete suite passes with 244 tests.
 - `npm run build:lib` passes with the new public declarations.
+
+### Increment 2: Angular surface scope and activation
+
+Status: complete.
+
+- Every mount now installs plugin providers, renderer types, and lifecycle types
+  into that surface's child `EnvironmentInjector`.
+- The registry is built and sealed before plugin activation. Lifecycle hooks run
+  in deterministic plugin dependency order, renderer services resolve lazily,
+  and all plugin code executes in the surface injection context.
+- Plugin activation and rendering failures are normalized into typed diagnostics
+  with plugin and contribution identities while retaining the original error as
+  the cause.
+- Surface diagnostics expose the immutable capability snapshot for inspection.
+- Added three browser-backed tests proving simultaneous-surface service identity,
+  independent disposal, typed activation failure, and injector cleanup after
+  both plugin and core mount failures. The complete suite passes with 247 tests.
+- Removed 14.4 GB of ignored historical output from `dist/test-out` after it
+  exhausted the development drive during the gate; no source or tracked files
+  were removed.

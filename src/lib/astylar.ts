@@ -68,6 +68,13 @@ import {
   type AstylarDiagnostic,
   type AstylarDiagnosticsOptions,
 } from './astylar-diagnostics';
+import {
+  ASTYLAR_PLUGIN_DEFINITIONS,
+  AstylarCapabilityRegistry,
+  type AstylarCapabilityRegistrySnapshot,
+  type AstylarPluginDefinition,
+} from './astylar-plugin';
+import { AstylarPluginRuntime } from './astylar-plugin-runtime';
 
 /**
  * Configuration options for rendering
@@ -112,6 +119,7 @@ class AstylarRenderer {
   private elementManager = inject(BabylonElementManagerService);
   private inputElementService = inject(InputElementService);
   private overflowClipService = inject(OverflowClipService);
+  private pluginRuntime = inject(AstylarPluginRuntime);
   private readonly sessions = new WeakMap<Scene, AstylarRenderSession>();
   private readonly sceneResources = new WeakMap<Scene, AstylarSceneResources>();
   private readonly interactions = new WeakMap<Scene, AstylarInteractionRuntime>();
@@ -687,6 +695,10 @@ class AstylarRenderer {
     return this.diagnostics.snapshot;
   }
 
+  getPluginSnapshot(): AstylarCapabilityRegistrySnapshot {
+    return this.pluginRuntime.snapshot;
+  }
+
   reportDiagnostic(diagnostic: AstylarDiagnostic): void {
     this.diagnostics.report(diagnostic);
   }
@@ -928,6 +940,9 @@ interface AstylarSurfaceRecord {
 @Injectable({ providedIn: 'root' })
 export class Astylar {
   private readonly parentInjector = inject(EnvironmentInjector);
+  private readonly pluginDefinitions = inject(ASTYLAR_PLUGIN_DEFINITIONS, {
+    optional: true,
+  }) ?? [];
   private readonly surfaces = new WeakMap<Scene, AstylarSurfaceRecord>();
   private readonly canvases = new WeakMap<HTMLCanvasElement, AstylarSurface>();
   private activeScene?: Scene;
@@ -942,8 +957,21 @@ export class Astylar {
     siteData: SiteData,
     options?: AstylarRenderOptions,
   ): AstylarSurface {
+    const pluginProviders = this.getPluginProviders(this.pluginDefinitions);
     const injector = createEnvironmentInjector(
-      [AstylarRenderer, ...ASTYLAR_SURFACE_SERVICE_PROVIDERS],
+      [
+        AstylarRenderer,
+        ...ASTYLAR_SURFACE_SERVICE_PROVIDERS,
+        ...pluginProviders,
+        {
+          provide: AstylarCapabilityRegistry,
+          useFactory: () => new AstylarCapabilityRegistry(
+            this.pluginDefinitions,
+            (diagnostic) => inject(AstylarDiagnostics).report(diagnostic),
+          ),
+        },
+        AstylarPluginRuntime,
+      ],
       this.parentInjector,
       'AstylarSurface',
     );
@@ -965,6 +993,8 @@ export class Astylar {
         });
         throw new AstylarDiagnosticError(diagnostic);
       }
+      injector.get(AstylarCapabilityRegistry);
+      injector.get(AstylarPluginRuntime).activate();
       const renderer = injector.get(AstylarRenderer);
       const surface = renderer.mount(canvas, siteData, options);
       const record: AstylarSurfaceRecord = { injector, renderer, surface };
@@ -982,6 +1012,16 @@ export class Astylar {
       destroyInjector();
       throw error;
     }
+  }
+
+  private getPluginProviders(
+    definitions: readonly AstylarPluginDefinition[],
+  ) {
+    return definitions.flatMap((plugin) => [
+      ...(plugin.contributions.renderers ?? []).map(({ renderer }) => renderer),
+      ...(plugin.contributions.lifecycle ?? []).map(({ lifecycle }) => lifecycle),
+      ...(plugin.providers ?? []),
+    ]);
   }
 
   /** Compatibility API. Prefer retaining the handle returned by `mount()`. */

@@ -29,6 +29,14 @@ describe('AstylarSurfaceHandle', () => {
       getSemanticSnapshot: jasmine.createSpy('getSemanticSnapshot'),
       getVisualReconciliationSnapshot: jasmine.createSpy('getVisualReconciliationSnapshot'),
       getDiagnosticSnapshot: jasmine.createSpy('getDiagnosticSnapshot').and.returnValue([]),
+      getPluginSnapshot: jasmine.createSpy('getPluginSnapshot').and.returnValue({
+        sealed: true,
+        pluginIds: [],
+        elementIds: [],
+        propertyIds: [],
+        rendererIds: [],
+        lifecycleIds: [],
+      }),
       reportDiagnostic: jasmine.createSpy('reportDiagnostic'),
     } satisfies jasmine.SpyObj<AstylarSurfaceHost>;
     return { engine, host, scene, surface: new AstylarSurfaceHandle(scene, host) };

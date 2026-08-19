@@ -59,8 +59,11 @@ export interface AstylarDiagnosticsOptions {
 export class AstylarDiagnosticError extends Error {
   override readonly name = 'AstylarDiagnosticError';
 
-  constructor(readonly diagnostic: AstylarDiagnostic) {
-    super(`${diagnostic.code}: ${diagnostic.message}`);
+  constructor(
+    readonly diagnostic: AstylarDiagnostic,
+    options?: ErrorOptions,
+  ) {
+    super(`${diagnostic.code}: ${diagnostic.message}`, options);
   }
 }
 
