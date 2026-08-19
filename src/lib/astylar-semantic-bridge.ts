@@ -359,13 +359,15 @@ export class AstylarSemanticBridge {
     this.applyAttributes(node, element);
 
     const childNodes: Node[] = [];
-    if (element.textContent) {
+    const semanticText = element.textContent ??
+      (element.type === 'button' ? String(element.value ?? '') : '');
+    if (semanticText) {
       let text = this.textNodes.get(key);
       if (!text) {
-        text = this.canvas.ownerDocument.createTextNode(element.textContent);
+        text = this.canvas.ownerDocument.createTextNode(semanticText);
         this.textNodes.set(key, text);
-      } else if (text.data !== element.textContent) {
-        text.data = element.textContent;
+      } else if (text.data !== semanticText) {
+        text.data = semanticText;
       }
       childNodes.push(text);
     } else {

@@ -41,6 +41,8 @@ describe('external AstylarUI browser acceptance', () => {
       const secondary = surface(fixture.nativeElement, 'secondary');
       expect(primary.querySelector('[data-astylar-id="workspace"]')).toBeTruthy();
       expect(secondary.querySelector('[data-astylar-id="workspace"]')).toBeTruthy();
+      expect(primary.querySelector('[data-astylar-id="add-item"]')?.textContent).toBe('Add item');
+      expect(primary.querySelector('[data-astylar-id="item-one-action"]')?.textContent).toBe('Inspect');
 
       const primaryHost = fixture.nativeElement.querySelector(
         '[data-testid="primary-astylar-surface"]',

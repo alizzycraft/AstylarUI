@@ -144,6 +144,7 @@ describe('AstylarSemanticBridge', () => {
     bridge.reconcile({
       styles: [],
       root: { children: [
+        { type: 'button', id: 'save', value: 'Save changes' },
         {
           type: 'input', id: 'choice', inputType: 'checkbox', value: 'yes',
           checked: false, required: true, ariaLabel: 'Choice',
@@ -163,9 +164,12 @@ describe('AstylarSemanticBridge', () => {
       ] },
     });
 
+    const save = host.querySelector<HTMLButtonElement>('[data-astylar-id="save"]');
     const choice = host.querySelector<HTMLInputElement>('[data-astylar-id="choice"]');
     const locked = host.querySelector<HTMLInputElement>('[data-astylar-id="locked"]');
     const plan = host.querySelector<HTMLSelectElement>('[data-astylar-id="plan"]');
+    expect(save?.textContent).toBe('Save changes');
+    expect(save?.type).toBe('button');
     expect(choice?.type).toBe('checkbox');
     expect(choice?.value).toBe('yes');
     expect(choice?.checked).toBeFalse();
