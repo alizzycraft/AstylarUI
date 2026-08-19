@@ -89,5 +89,30 @@ and weakened assertions are prohibited.
 
 ## Increment 1: package boundary and consumer scaffold
 
-Status: pending.
+Status: complete.
 
+- Added a committed standalone Angular 20 consumer with SSR/prerender support at
+  `examples/angular-consumer/`. Its source imports AstylarUI only from
+  `astylarui` and includes responsive navigation, a form, summary grid, scrolling
+  table with nested controls, a local image, updates, and modal state without
+  advanced animation.
+- Added a cross-platform library build and `npm run consumer:check`. The checker
+  rejects source/internal/deep imports, builds and packs the library, verifies the
+  root-only export map and required tarball entries, rejects repository-source
+  leakage, copies the example to an OS temporary directory, installs the tarball,
+  builds browser and server outputs, prerenders the route, runs the consumer unit
+  test, and removes the temporary directory in a `finally` path.
+- The first external check exposed two real distribution failures: CommonJS
+  output broke Angular SSR route extraction, and plain TypeScript decorator
+  output required the unavailable JIT compiler during prerender. The library now
+  emits ESM using Angular partial compilation (`ngc`) so consumer linking and AOT
+  prerender work correctly.
+- Final external check: 367 packed files, consumer browser/server build and one
+  prerendered route passed, and the consumer test passed.
+- Repository regression checks: 221 tests passed; library build passed;
+  production application build passed and prerendered two routes with only the
+  established initial-bundle and stylesheet budget warnings.
+
+## Increment 2: public lifecycle and Angular surface integration
+
+Status: pending.

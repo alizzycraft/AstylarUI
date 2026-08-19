@@ -1,0 +1,28 @@
+<main class="consumer-shell">
+  <header class="consumer-header">
+    <div>
+      <p class="eyebrow">Installed package example</p>
+      <h1>AstylarUI operations workspace</h1>
+      <p>{{ status() }}</p>
+    </div>
+    <div class="consumer-actions" aria-label="Example controls">
+      <button type="button" (click)="refreshData()">Update data</button>
+      <button type="button" (click)="toggleDialog()">
+        {{ dialogOpen() ? 'Close details' : 'Open details' }}
+      </button>
+    </div>
+  </header>
+
+  <section class="surface-card" aria-labelledby="surface-title">
+    <div class="surface-heading">
+      <div>
+        <p class="eyebrow">Public API surface</p>
+        <h2 id="surface-title">Responsive inventory view</h2>
+      </div>
+      <output aria-live="polite">Revision {{ revision() }}</output>
+    </div>
+    <canvas #surfaceCanvas data-testid="astylar-surface">
+      AstylarUI requires a browser with canvas support.
+    </canvas>
+  </section>
+</main>
