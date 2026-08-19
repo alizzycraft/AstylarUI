@@ -1,89 +1,77 @@
 # AstylarUI Project Status
 
-Last reconciled: 2026-08-15
+Last reconciled: 2026-08-19
 
-This is the authoritative handoff for the state of the repository. Older planning
-documents are retained for design history, but their unchecked items are not all
-active work.
+This is the authoritative handoff for the repository. Older planning documents
+remain design history; their unchecked items are not automatically active work.
 
-## Last Completed Work
+## Current milestone
 
-The last committed development effort was the May 2026 Phase 1 architecture
-refactor:
+Phase 12, Consumer-Ready Application Integration, is active. Its contract,
+starting evidence, increments, and acceptance gates are maintained in
+`docs/parity/scorecard-v12.md`.
 
-1. `BabylonDOMService` was replaced internally by focused renderer, element
-   manager, and interaction services. The old service remains as a deprecated
-   compatibility facade.
-2. The follow-up commit repaired the renderer and mesh-action type/build errors
-   exposed by that split.
-3. Phase 1.2 extracted element defaults from `StyleDefaultsService` into
-   `src/app/config/browser-defaults.ts`. That extraction was left uncommitted and
-   initially omitted five defaults; the reconciliation work restored them and
-   added regression coverage.
+The objective is to make the proven renderer usable from an independently
+installed Angular application through a small public API. The work includes a
+committed consumer example, tarball install verification, explicit lifecycle and
+diagnostics, SSR-safe Angular integration, and simultaneous-surface isolation.
 
-Phase 1 is now complete. It is not necessary to finish the later architecture
-proposal before beginning rendering-parity work.
+## Completed parity baseline
 
-## Ready Baseline
+Phases 2 through 11 established the browser/Astylar comparison harness and then
+expanded layout, paint, typography, responsive behavior, controls, interaction,
+semantics, scrolling, assets, lifecycle ownership, representative applications,
+and identity-aware reconciliation.
 
-- Angular 20 standalone application with zoneless change detection and SSR.
-- Babylon.js 8 renderer exposed through the `Astylar` service and
-  `astylar-render` component.
-- Browser-only engine creation is guarded by `afterNextRender` and
-  `isPlatformBrowser` in the Angular component.
-- Paired browser/Astylar diagnostic fixtures exist for inline-flex and header
-  alignment.
-- The production application build, library type-check, and unit tests are the
-  required baseline checks before parity work.
+The Phase 11 final commit is `94d95d6`. Its unchanged-commit acceptance baseline
+is:
 
-## Known Constraints, Not Unfinished Refactor Work
+- 155 fixtures and 522 renders across desktop, tablet, and mobile.
+- Median SSIM `0.99000796`; minimum SSIM `0.95018158`.
+- Edge-tolerance ratio `0.99981681`; maximum edge error `3.99209364 px`.
+- Exact visible text and required state/semantic checks, no runtime errors, and
+  all completion thresholds satisfied.
+- 221 unit tests, the library build, and the production application build pass.
+- Production prerender covers two routes. The only expected build warnings are
+  the initial bundle and `src/app/app.scss` budgets.
 
-- Renderer state is held by root-provided services and currently assumes one
-  active Astylar rendering surface.
-- Debug logging is extensive and has no production-aware logging abstraction.
-- Babylon.js types are intentionally still used directly throughout the renderer.
-- Several services remain large and contain `any` values.
-- The production bundle exceeds its warning budget.
-- Browser-default values are legacy compatibility values. Some are intentionally
-  styled Astylar defaults rather than accurate browser user-agent defaults; parity
-  work must measure and revise them instead of assuming the filename guarantees
-  browser accuracy.
+## Phase 12 starting constraints
 
-These are backlog or parity concerns. They are not evidence that the May service
-split is incomplete.
+- The package has no external tarball install/build/test workflow.
+- Its dry-run tarball contains 367 files and exposes compiled `dist/lib/app/**`
+  internals in addition to the public entry point.
+- The exported `SiteComponent` is coupled to the repository demo and router.
+- `Astylar` has per-scene session maps but also an implicit active session and a
+  graph of root-provided mutable services. Disposing a scene invokes global
+  service cleanup, so independent simultaneous consumers are not guaranteed.
+- Resize observation exists in the renderer, but there is no explicit public
+  mount/resize/dispose handle or focused consumer diagnostics contract.
+- Debug logging is extensive and not production-aware.
+- One baseline test invocation transiently failed two tests and two immediate
+  reruns passed all 221. Phase 12 must leave repeated acceptance deterministic.
 
-## Document Map
+## Active verification commands
+
+- `npm test -- --watch=false`
+- `npm run build:lib`
+- `npm run build`
+- `npm run consumer:check` (to be added in Phase 12)
+- `npm run parity:check`
+
+## Document map
 
 | Document | Status | Use |
 | --- | --- | --- |
-| `architectural-refactor-plan.md` | Phase 1 complete; Phases 2-7 future backlog | Architecture proposals and technical-debt context |
-| `phase-1.1-implementation-summary.md` | Historical implementation record | Details of the completed service split |
-| `renderer-layout-roadmap.md` | Future parity roadmap | Starting point for layout-parity work |
-| `debug-inline-flex.html` | Active browser reference fixture | Compare with the `debug-inline-flex` Astylar scene |
-| `debug-header-alignment.html` | Active browser reference fixture | Compare with the `debug-header-alignment` Astylar scene |
-| `html-kitchen-sink-reference.html` | Active broad browser reference | Compare with the `html-kitchen-sink` Astylar scene |
-| `enhanced_features_plan.md` | Historical, partially implemented | Original feature vision; not a current checklist |
-| `refactor_layout.md` | Historical design direction, partially implemented | Pixel-first layout principles |
-| `seperation_of_concerns_improvement.md` | Superseded analysis | Motivation for the completed Phase 1 split |
+| `parity/scorecard-v12.md` | Active | Phase 12 contract and evidence |
+| `parity/scorecard-v11.md` | Complete | Reconciliation and Phase 11 freeze evidence |
+| `parity/scorecard-v2.md` through `scorecard-v10.md` | Complete | Earlier parity milestone evidence |
+| `reconciliation.md` | Current | Authored identity and replacement contract |
+| `renderer-layout-roadmap.md` | Historical roadmap | Original parity direction |
+| `architectural-refactor-plan.md` | Partially completed historical plan | Technical-debt context |
 
-## Recommended Next Work
+## Scope boundary
 
-Begin the measurable HTML/CSS parity initiative rather than another broad
-architecture refactor:
-
-1. Establish deterministic side-by-side browser and Astylar fixture capture.
-2. Record element geometry and screenshot baselines for the existing focused
-   fixtures.
-3. Fix the highest-impact layout discrepancy with a focused regression test.
-4. Expand fixture coverage incrementally while keeping the build and unit tests
-   green.
-
-## Reconciliation Verification
-
-Verified on 2026-08-15:
-
-- `npm test -- --watch=false --browsers=ChromeHeadless`: 24 tests passed.
-- `npx tsc -p tsconfig.lib.json --noEmit`: passed.
-- `npm run build`: passed and prerendered two routes.
-- Production build warnings remain for the 5.99 MB initial bundle and the 4.59 kB
-  app stylesheet. These are documented backlog items, not Phase 1 failures.
+Phase 12 does not add an arbitrary HTML/CSS parser, broad CSS features, advanced
+animations, XR, physics, post-processing, dirty-subtree optimization, a demo
+redesign, or npm publication. Rendering changes must remain general, measured,
+and compatible with the fixed Phase 11 parity gates.

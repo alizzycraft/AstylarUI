@@ -1,0 +1,93 @@
+# Phase 12 Consumer-Ready Application Integration
+
+Phase 12 turns the renderer proven through Phase 11 into a package that a normal
+Angular application can install and operate without reaching into AstylarUI's
+source tree. Work is delivered as bounded, independently tested commits. This
+scorecard is the active completion contract and evidence log for the phase.
+
+## Completion contract
+
+- A committed `examples/angular-consumer/` application installs AstylarUI only
+  through its public package entry point. It has no source aliases, workspace
+  links, or imports from `src/`, internal renderer modules, or parity tooling.
+- The consumer demonstrates responsive desktop, tablet, and mobile layouts;
+  navigation; forms and validation; a data table with a nested control; scroll;
+  modal or overlay behavior; images; dynamic updates; and pointer and keyboard
+  interaction without advanced CSS animation requirements.
+- The public API has a coherent lifecycle for mount, initial settlement, update,
+  explicit resize, events and navigation, diagnostics, and idempotent disposal.
+- Angular integration creates the browser-only renderer after its canvas exists,
+  remains safe during SSR and prerender, runs renderer work outside Angular's
+  zone, responds to element size changes, and releases observers and Babylon
+  resources on destruction.
+- Two simultaneous rendering surfaces have independent scenes, resources,
+  registries, focus, input, scrolling, semantics, modal and popup state,
+  reconciliation, resize handling, and disposal. Updating or disposing one
+  surface cannot mutate the other.
+- Deterministic typed diagnostics cover malformed roots, duplicate authored IDs,
+  invalid element types, unsupported style declarations, asset failures,
+  operations on disposed surfaces, and mount/dispose misuse. Default logging is
+  production-aware and routine renderer operation does not flood the console.
+- `npm run consumer:check` builds the library, packs it, validates the tarball,
+  copies the consumer outside the repository, installs only the tarball and
+  declared dependencies, builds and tests it, and always removes temporary files.
+- Browser-backed consumer acceptance covers representative rendering and
+  interaction, two-surface independence, lifecycle resource plateaus and final
+  cleanup, responsive resize, and SSR/prerender safety.
+- Phase 11 parity thresholds, fixtures, expected output, and assertions are not
+  weakened. The final commit passes unit tests, both builds, the consumer check,
+  SSR/prerender acceptance, the full parity gate, and three consecutive unchanged
+  commit parity runs with a clean working tree.
+
+## Starting baseline
+
+Recorded on 2026-08-19 at commit `94d95d6` on branch `more-html`.
+
+- Phase 11 acceptance was completed on the same unchanged commit in three
+  consecutive full runs: 155 fixtures, 522 renders, median SSIM `0.99000796`,
+  minimum SSIM `0.95018158`, edge-tolerance ratio `0.99981681`, maximum edge
+  error `3.99209364 px`, exact text, no runtime errors, and all completion
+  thresholds satisfied.
+- `npm test -- --watch=false`: one first run reported two transient failures;
+  two immediate unchanged reruns passed all 221 tests. Phase 12 must identify or
+  remove this flake before final acceptance.
+- `npm run build:lib`: passed.
+- `npm run build`: passed and prerendered two routes with only the established
+  initial-bundle and application-stylesheet budget warnings.
+- `npm pack --dry-run --json`: produced a 367-file package, 472,418 bytes packed
+  and 2,747,412 bytes unpacked. It currently exposes compiled `dist/lib/app/**`
+  internals and publishes the demo-oriented `SiteComponent`; no external install
+  check exists.
+- `Astylar` already owns per-scene sessions and observes canvas size, but it also
+  retains an implicit active session and uses root-scoped mutable services whose
+  cleanup is global. That is not a safe two-surface public lifecycle boundary.
+- `SiteComponent` is tied to the repository demo/router and is not an appropriate
+  consumer-facing integration component.
+
+## Planned increments
+
+1. Package boundary and external consumer scaffold.
+2. Public lifecycle handle and SSR-safe Angular surface integration.
+3. Complete per-surface dependency isolation and two-surface regressions.
+4. Typed validation diagnostics and production-aware logging.
+5. Browser-backed consumer acceptance, repeated lifecycle audit, and packaging
+   cleanup.
+6. Final documentation, complete verification matrix, parity freeze, and three
+   unchanged-commit acceptance runs.
+
+Each increment begins with a failing check, fixes the general library behavior,
+runs focused verification, updates this scorecard, reviews the diff, and commits
+one coherent change. Fixture-specific rendering branches, reduced thresholds,
+and weakened assertions are prohibited.
+
+## Out of scope
+
+- An arbitrary HTML or CSS parser.
+- Broad new CSS features, advanced animations, XR, physics, or post-processing.
+- Dirty-subtree performance work or a redesign of the repository demo.
+- Publishing the package to npm.
+
+## Increment 1: package boundary and consumer scaffold
+
+Status: pending.
+
