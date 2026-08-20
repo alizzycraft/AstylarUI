@@ -45,6 +45,12 @@ foundation and Babylon.js as the owned rendering substrate.
 
 ## Load only the references needed
 
+- Read [application-workflows.md](references/application-workflows.md) for
+  application creation, compatibility answers, and HTML/CSS conversion.
+- Read [angular-babylon.md](references/angular-babylon.md) for component versus
+  direct mounting, Angular state/SSR, Babylon ownership, assets, and cleanup.
+- Read [diagnosis-verification.md](references/diagnosis-verification.md) when
+  debugging, reviewing, comparing output, or selecting tests.
 - Read [html-css.md](references/html-css.md) for the complete human translation
   model and important browser/Astylar differences.
 - Query [capabilities.json](references/capabilities.json) for exact element,
