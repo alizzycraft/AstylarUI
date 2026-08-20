@@ -63,13 +63,20 @@ describe('AudioPlaybackService', () => {
   });
 
   it('plays, reports progress, restarts, pauses, and releases its object URL', async () => {
+    spyOn(Date, 'now').and.returnValues(1_000, 1_050, 1_101);
     const service = TestBed.inject(AudioPlaybackService);
     await service.toggle(generation);
     expect(service.snapshot()).toEqual(jasmine.objectContaining({ activeId: 'speech-1', state: 'playing' }));
 
+    audio.currentTime = 0.5;
+    audio.emit('timeupdate');
+    expect(service.snapshot().progressPercent).toBe(25);
     audio.currentTime = 1;
     audio.emit('timeupdate');
-    expect(service.snapshot().progressPercent).toBe(50);
+    expect(service.snapshot().progressPercent).toBe(25);
+    audio.currentTime = 1.5;
+    audio.emit('timeupdate');
+    expect(service.snapshot().progressPercent).toBe(75);
     await service.restart('speech-1');
     expect(audio.currentTime).toBe(0);
     await service.toggle(generation);
@@ -78,6 +85,7 @@ describe('AudioPlaybackService', () => {
     service.stop();
     expect(revoke).toHaveBeenCalledOnceWith('blob:test');
     expect(service.snapshot().state).toBe('idle');
+    expect([...audio.listeners.values()].every((listeners) => listeners.size === 0)).toBeTrue();
   });
 
   it('downloads from in-memory bytes with a safe filename', () => {

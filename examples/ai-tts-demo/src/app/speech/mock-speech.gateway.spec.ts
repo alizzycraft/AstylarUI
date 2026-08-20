@@ -17,4 +17,21 @@ describe('MockSpeechGateway', () => {
     expect(new MockSpeechGateway().mode).toBe('mock');
     expect(result.bytes.byteLength).toBeGreaterThan(44);
   });
+
+  it('cancels mock generation without producing audio', async () => {
+    const abort = new AbortController();
+    const generation = new MockSpeechGateway().generate({
+      model: 'gpt-4o-mini-tts',
+      voice: 'alloy',
+      instructions: '',
+      input: 'Cancel this preview',
+    }, abort.signal);
+
+    abort.abort();
+
+    await generation.then(
+      () => fail('Expected generation to be cancelled.'),
+      (error: DOMException) => expect(error.name).toBe('AbortError'),
+    );
+  });
 });

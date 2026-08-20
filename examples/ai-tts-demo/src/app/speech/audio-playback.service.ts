@@ -72,6 +72,7 @@ const IDLE_PLAYBACK: PlaybackSnapshot = {
   duration: 0,
   progressPercent: 0,
 };
+const PROGRESS_UPDATE_INTERVAL_MS = 100;
 
 @Injectable({ providedIn: 'root' })
 export class AudioPlaybackService {
@@ -82,6 +83,7 @@ export class AudioPlaybackService {
   private audio?: AudioElementPort;
   private objectUrl?: string;
   private listeners: readonly [string, () => void][] = [];
+  private lastProgressSyncAt = Number.NEGATIVE_INFINITY;
 
   readonly snapshot = this.state.asReadonly();
 
@@ -136,6 +138,7 @@ export class AudioPlaybackService {
     this.objectUrl = url;
     audio.src = url;
     const sync = () => this.syncTime(audio.paused ? 'paused' : 'playing');
+    const syncProgress = () => this.syncTime(audio.paused ? 'paused' : 'playing', true);
     const ended = () => this.syncTime('ended');
     const error = () => this.state.set({
       ...this.state(),
@@ -144,12 +147,13 @@ export class AudioPlaybackService {
     });
     this.listeners = [
       ['loadedmetadata', sync],
-      ['timeupdate', sync],
+      ['timeupdate', syncProgress],
       ['play', sync],
       ['pause', sync],
       ['ended', ended],
       ['error', error],
     ];
+    this.lastProgressSyncAt = Number.NEGATIVE_INFINITY;
     this.listeners.forEach(([type, listener]) => audio.addEventListener(type, listener));
     this.state.set({
       activeId: generation.id,
@@ -161,8 +165,13 @@ export class AudioPlaybackService {
     audio.load();
   }
 
-  private syncTime(state: PlaybackSnapshot['state']): void {
+  private syncTime(state: PlaybackSnapshot['state'], throttleProgress = false): void {
     if (!this.audio) return;
+    if (throttleProgress) {
+      const now = Date.now();
+      if (now - this.lastProgressSyncAt < PROGRESS_UPDATE_INTERVAL_MS) return;
+      this.lastProgressSyncAt = now;
+    }
     const duration = Number.isFinite(this.audio.duration) && this.audio.duration > 0
       ? this.audio.duration
       : this.state().duration;
@@ -187,5 +196,6 @@ export class AudioPlaybackService {
     this.audio = undefined;
     this.objectUrl = undefined;
     this.listeners = [];
+    this.lastProgressSyncAt = Number.NEGATIVE_INFINITY;
   }
 }

@@ -44,8 +44,22 @@ export function createMockWave(input: string): ArrayBuffer {
 export class MockSpeechGateway implements SpeechGateway {
   readonly mode = 'mock' as const;
 
-  async generate(request: SpeechRequest): Promise<SpeechAudio> {
-    await new Promise<void>((resolve) => globalThis.setTimeout(resolve, 180));
+  async generate(request: SpeechRequest, signal?: AbortSignal): Promise<SpeechAudio> {
+    await new Promise<void>((resolve, reject) => {
+      const onAbort = () => {
+        globalThis.clearTimeout(timer);
+        reject(new DOMException('Speech generation was cancelled.', 'AbortError'));
+      };
+      const timer = globalThis.setTimeout(() => {
+        signal?.removeEventListener('abort', onAbort);
+        resolve();
+      }, 180);
+      if (signal?.aborted) {
+        onAbort();
+      } else {
+        signal?.addEventListener('abort', onAbort, { once: true });
+      }
+    });
     return {
       bytes: createMockWave(`${request.voice}:${request.instructions}:${request.input}`),
       mimeType: 'audio/wav',

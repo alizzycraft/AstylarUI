@@ -55,6 +55,7 @@ export class App {
     }
     if (event.type !== 'click') return;
     if (event.targetId === 'generate-speech') void this.store.generate();
+    if (event.targetId === 'cancel-speech') this.store.cancelGeneration();
     if (event.targetId === 'clear-history') this.store.clearHistory();
     if (event.targetId === 'storage-summary') this.store.toggleStorageDisclosure();
     if (event.targetId === 'selected-play' && this.store.selectedGenerationId()) {

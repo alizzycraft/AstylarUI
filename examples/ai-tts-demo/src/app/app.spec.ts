@@ -1,8 +1,9 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { AstylarSurfaceComponent } from 'astylarui';
+import { AstylarSurfaceComponent, type DOMElement } from 'astylarui';
 import { App } from './app';
 import { buildTtsDemoSite } from './ui/tts-demo-site';
+import { DEFAULT_TTS_VIEW_MODEL } from './ui/tts-demo-model';
 
 @Component({
   selector: 'astylar-surface',
@@ -52,5 +53,37 @@ describe('App', () => {
     expect(serialized).toContain('generation-status');
     expect(serialized).toContain('player-placeholder');
     expect(serialized).toContain('history-empty');
+    expect(serialized).toContain('This voice is AI-generated.');
+  });
+
+  it('authors stable unique IDs throughout the default document', () => {
+    const ids: string[] = [];
+    const visit = (element: DOMElement) => {
+      if (element.id) ids.push(element.id);
+      element.children?.forEach(visit);
+    };
+    buildTtsDemoSite().root.children?.forEach(visit);
+
+    expect(ids.length).toBeGreaterThan(30);
+    expect(new Set(ids).size).toBe(ids.length);
+  });
+
+  it('provides responsive rules below, at, and above its meaningful breakpoints', () => {
+    const styles = buildTtsDemoSite().styles;
+    expect(styles.some((rule) => rule.mediaMaxWidth === '1050px')).toBeTrue();
+    expect(styles.some((rule) => rule.mediaMaxWidth === '760px')).toBeTrue();
+    expect(styles.some((rule) => rule.mediaMaxWidth === '520px')).toBeTrue();
+  });
+
+  it('exposes a cancellable static loading state', () => {
+    const site = buildTtsDemoSite({
+      ...DEFAULT_TTS_VIEW_MODEL,
+      status: 'generating',
+      statusMessage: 'Generating a deterministic mock preview...',
+    });
+    const serialized = JSON.stringify(site.root);
+    expect(serialized).toContain('cancel-speech');
+    expect(serialized).toContain('Generating speech…');
+    expect(serialized).toContain('"disabled":true');
   });
 });

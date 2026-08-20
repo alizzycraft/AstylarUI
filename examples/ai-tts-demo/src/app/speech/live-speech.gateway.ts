@@ -17,11 +17,12 @@ export class LiveSpeechGateway implements SpeechGateway {
   private readonly fetch = inject(SPEECH_FETCH);
   readonly mode = 'live' as const;
 
-  async generate(request: SpeechRequest): Promise<SpeechAudio> {
+  async generate(request: SpeechRequest, signal?: AbortSignal): Promise<SpeechAudio> {
     const response = await this.fetch('/api/speech', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify(request),
+      signal,
     });
     if (!response.ok) {
       const body = await response.json().catch(() => ({})) as ApiErrorBody;

@@ -1,4 +1,4 @@
-import { computed, inject, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, OnDestroy, signal } from '@angular/core';
 import { SPEECH_GATEWAY } from './speech-gateway.token';
 import {
   SUPPORTED_VOICES,
@@ -20,7 +20,7 @@ export function formatTime(totalSeconds = 0): string {
 }
 
 @Injectable({ providedIn: 'root' })
-export class TtsDemoStore {
+export class TtsDemoStore implements OnDestroy {
   private readonly gateway = inject(SPEECH_GATEWAY);
   private readonly playback = inject(AudioPlaybackService);
   private readonly title = signal('');
@@ -33,6 +33,7 @@ export class TtsDemoStore {
   private readonly historyQuery = signal('');
   private readonly selectedHistoryId = signal<string | undefined>(undefined);
   private readonly storageDisclosureOpen = signal(true);
+  private generationAbort?: AbortController;
   private nextGeneration = 1;
 
   readonly generations = this.history.asReadonly();
@@ -121,6 +122,7 @@ export class TtsDemoStore {
   }
 
   async generate(): Promise<void> {
+    if (this.status() === 'generating') return;
     const input = this.text().trim();
     if (!input) {
       this.status.set('error');
@@ -132,13 +134,15 @@ export class TtsDemoStore {
     this.statusMessage.set(this.gateway.mode === 'live'
       ? 'Requesting speech from the secure server endpoint...'
       : 'Generating a deterministic mock preview...');
+    const abort = new AbortController();
+    this.generationAbort = abort;
     try {
       const audio = await this.gateway.generate({
         model: 'gpt-4o-mini-tts',
         voice: this.voice(),
         instructions: this.instructions().trim(),
         input,
-      });
+      }, abort.signal);
       const id = `speech-${this.nextGeneration}`;
       this.nextGeneration += 1;
       const generation: SpeechGeneration = {
@@ -158,9 +162,20 @@ export class TtsDemoStore {
       this.status.set('success');
       this.statusMessage.set(`Generated ${audio.fileExtension.toUpperCase()} preview in ${this.gateway.mode} mode.`);
     } catch (error) {
-      this.status.set('error');
-      this.statusMessage.set(error instanceof Error ? error.message : 'Speech generation failed.');
+      if (error instanceof DOMException && error.name === 'AbortError') {
+        this.status.set('idle');
+        this.statusMessage.set('Speech generation cancelled.');
+      } else {
+        this.status.set('error');
+        this.statusMessage.set(error instanceof Error ? error.message : 'Speech generation failed.');
+      }
+    } finally {
+      if (this.generationAbort === abort) this.generationAbort = undefined;
     }
+  }
+
+  cancelGeneration(): void {
+    this.generationAbort?.abort();
   }
 
   async togglePlayback(id: string): Promise<void> {
@@ -207,5 +222,9 @@ export class TtsDemoStore {
 
   selectedGenerationId(): string | undefined {
     return this.selectedHistoryId();
+  }
+
+  ngOnDestroy(): void {
+    this.generationAbort?.abort();
   }
 }

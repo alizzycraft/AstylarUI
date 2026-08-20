@@ -115,12 +115,21 @@ function workspacePanel(view: TtsDemoViewModel): DOMElement {
                 id: 'character-count',
                 textContent: `${view.text.length.toLocaleString()} / ${view.maxCharacters.toLocaleString()} characters`,
               },
-              button(
-                'generate-speech',
-                view.status === 'generating' ? 'Generating speech…' : 'Generate speech',
-                'primary',
-                view.status === 'generating' || view.text.trim().length === 0,
-              ),
+              {
+                type: 'div',
+                id: 'generation-actions',
+                children: [
+                  ...(view.status === 'generating'
+                    ? [button('cancel-speech', 'Cancel generation')]
+                    : []),
+                  button(
+                    'generate-speech',
+                    view.status === 'generating' ? 'Generating speech…' : 'Generate speech',
+                    'primary',
+                    view.status === 'generating' || view.text.trim().length === 0,
+                  ),
+                ],
+              },
             ],
           },
         ],
@@ -169,8 +178,8 @@ function historyPanel(view: TtsDemoViewModel): DOMElement {
         id: 'storage-disclosure',
         open: view.storageDisclosureOpen,
         children: [
-          { type: 'summary', id: 'storage-summary', textContent: 'Session-only storage' },
-          { type: 'p', id: 'storage-copy', textContent: 'Audio remains in memory for this tab. Nothing is written to local storage.' },
+          { type: 'summary', id: 'storage-summary', textContent: 'AI-generated voice and session storage' },
+          { type: 'p', id: 'storage-copy', textContent: 'This voice is AI-generated. Audio remains in memory for this tab and is not written to local storage.' },
         ],
       },
       textControl({
@@ -229,6 +238,7 @@ const styles: StyleRule[] = [
   { selector: '#speech-form', padding: '20px', background: '#171d25', borderWidth: '1px', borderStyle: 'solid', borderColor: '#27303c', borderRadius: '14px', boxShadow: '0 14px 34px rgba(0, 0, 0, 0.18)' },
   { selector: '#speech-text', minHeight: '250px' },
   { selector: '#editor-footer', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '16px' },
+  { selector: '#generation-actions', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '8px' },
   { selector: '#character-count', color: '#8b9bb0', fontSize: '12px' },
   { selector: '#generate-speech', width: '180px' },
   { selector: '.ui-button', padding: '10px 14px', background: '#283342', color: '#f4f7fb', borderWidth: '1px', borderStyle: 'solid', borderColor: '#39475a', borderRadius: '8px', fontWeight: '700', cursor: 'pointer' },

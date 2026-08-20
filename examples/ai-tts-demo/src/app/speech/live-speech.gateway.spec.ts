@@ -10,14 +10,18 @@ describe('LiveSpeechGateway', () => {
     }));
     TestBed.configureTestingModule({ providers: [{ provide: SPEECH_FETCH, useValue: fetch }] });
 
+    const abort = new AbortController();
     const result = await TestBed.inject(LiveSpeechGateway).generate({
       model: 'gpt-4o-mini-tts',
       voice: 'alloy',
       instructions: 'Warm',
       input: 'Hello',
-    });
+    }, abort.signal);
 
-    expect(fetch).toHaveBeenCalledOnceWith('/api/speech', jasmine.objectContaining({ method: 'POST' }));
+    expect(fetch).toHaveBeenCalledOnceWith('/api/speech', jasmine.objectContaining({
+      method: 'POST',
+      signal: abort.signal,
+    }));
     expect(result.fileExtension).toBe('mp3');
     expect(Array.from(new Uint8Array(result.bytes))).toEqual([73, 68, 51]);
   });
