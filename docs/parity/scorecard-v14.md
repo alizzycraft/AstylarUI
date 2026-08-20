@@ -243,3 +243,20 @@ Status: complete.
   builds, one prerendered route, and all three real-Chrome tests. The consumer
   independently resolved Babylon.js `8.56.2` and finished with zero scene and
   plugin-owned resources.
+
+### Increment 6: machine-readable compatibility catalog
+
+Status: complete.
+
+- Added `docs/compatibility/capabilities.json` with the Phase 14 classification
+  taxonomy, all 91 registered element identities, all 62 public `DOMElement`
+  fields, all 84 public `StyleRule` fields, selectors, platform mappings,
+  explicit unsupported examples, plugin alternatives, and 80 implementation,
+  fixture, or example evidence references.
+- Added `npm run capabilities:check`. It parses the authoritative TypeScript
+  registries/types, checks exact catalog coverage and uniqueness, validates
+  evidence paths and fixture IDs, and verifies normalized fingerprints for the
+  public defaults and relevant style/render parsing sources.
+- The deterministic check passes and turns source changes into an explicit
+  compatibility-contract review instead of permitting silent documentation
+  drift.
