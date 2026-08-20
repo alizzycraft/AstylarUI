@@ -258,7 +258,7 @@ const styles: StyleRule[] = [
   { selector: '#history-list', display: 'flex', flexDirection: 'column', gap: '10px' },
   { selector: '.history-card', position: 'relative', padding: '14px', background: '#171d25', borderWidth: '1px', borderStyle: 'solid', borderColor: '#293440', borderRadius: '10px' },
   { selector: '.history-card-selected', borderColor: '#4089e8', background: '#182435' },
-  { selector: '.history-select', position: 'absolute', top: '0', left: '0', width: '100%', height: '100%', background: 'rgba(0, 0, 0, 0)', borderWidth: '0', color: 'rgba(0, 0, 0, 0)', cursor: 'pointer' },
+  { selector: '.history-select', width: '100%', padding: '7px 9px', margin: '0 0 7px 0', background: '#202b38', color: '#dce8f8', borderWidth: '1px', borderStyle: 'solid', borderColor: '#34465b', borderRadius: '7px', textAlign: 'left', fontWeight: '700', cursor: 'pointer' },
   { selector: '.history-card h3', position: 'relative', margin: '5px 0', fontSize: '15px' },
   { selector: '.history-meta', position: 'relative', margin: '0', color: '#7790ad', fontSize: '10px' },
   { selector: '.history-text', position: 'relative', margin: '0 0 12px 0', color: '#b6c1d0', fontSize: '12px', lineHeight: '18px' },

@@ -203,9 +203,10 @@ export function historyCard(
     children: [
       {
         type: 'button',
+        inputType: 'button',
         id: `history-${item.id}-select`,
         class: 'history-select',
-        value: `${item.title}. ${item.text}`,
+        value: `Select ${item.title}`,
         ariaLabel: `Select ${item.title}`,
       },
       { type: 'p', id: `history-${item.id}-meta`, class: 'history-meta', textContent: `OpenAI · ${item.voice} · ${item.createdLabel}` },

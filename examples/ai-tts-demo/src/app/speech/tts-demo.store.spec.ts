@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { SPEECH_GATEWAY } from './speech-gateway.token';
 import type { SpeechGateway } from './speech.types';
 import { TtsDemoStore } from './tts-demo.store';
+import { AudioPlaybackService } from './audio-playback.service';
 
 describe('TtsDemoStore', () => {
   const gateway: SpeechGateway = {
@@ -15,7 +16,16 @@ describe('TtsDemoStore', () => {
   };
 
   beforeEach(() => {
-    TestBed.configureTestingModule({ providers: [{ provide: SPEECH_GATEWAY, useValue: gateway }] });
+    TestBed.configureTestingModule({ providers: [
+      { provide: SPEECH_GATEWAY, useValue: gateway },
+      { provide: AudioPlaybackService, useValue: {
+        snapshot: () => ({ state: 'idle', currentTime: 0, duration: 0, progressPercent: 0 }),
+        stop: jasmine.createSpy('stop'),
+        toggle: jasmine.createSpy('toggle').and.resolveTo(),
+        restart: jasmine.createSpy('restart').and.resolveTo(),
+        download: jasmine.createSpy('download'),
+      } },
+    ] });
   });
 
   it('generates, selects, searches, and removes session-only history', async () => {

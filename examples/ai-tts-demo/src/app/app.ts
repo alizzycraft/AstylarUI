@@ -49,9 +49,18 @@ export class App {
     if (event.targetId === 'generate-speech') void this.store.generate();
     if (event.targetId === 'clear-history') this.store.clearHistory();
     if (event.targetId === 'storage-summary') this.store.toggleStorageDisclosure();
+    if (event.targetId === 'selected-play' && this.store.selectedGenerationId()) {
+      void this.store.togglePlayback(this.store.selectedGenerationId()!);
+    }
+    if (event.targetId === 'selected-restart') void this.store.restartSelected();
+    if (event.targetId === 'selected-download' && this.store.selectedGenerationId()) {
+      this.store.downloadGeneration(this.store.selectedGenerationId()!);
+    }
 
-    const historyAction = /^history-(speech-\d+)-(select|delete)$/.exec(event.targetId);
+    const historyAction = /^history-(speech-\d+)-(select|play|download|delete)$/.exec(event.targetId);
     if (historyAction?.[2] === 'select') this.store.selectGeneration(historyAction[1]);
+    if (historyAction?.[2] === 'play') void this.store.togglePlayback(historyAction[1]);
+    if (historyAction?.[2] === 'download') this.store.downloadGeneration(historyAction[1]);
     if (historyAction?.[2] === 'delete') this.store.deleteGeneration(historyAction[1]);
   }
 }
