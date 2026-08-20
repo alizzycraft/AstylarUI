@@ -373,7 +373,7 @@
       "classification": "plugin",
       "webConcept": "Custom elements/properties or non-browser visual behavior",
       "astylarPattern": "Trusted Angular providers contribute namespaced schema, renderer, lifecycle, migration and invalidation contracts with explicit Babylon resource ownership.",
-      "evidence": ["file:docs/plugins.md", "file:examples/angular-consumer/src/app/consumer-badge.plugin.ts", "file:docs/compatibility/examples/manifest.json"]
+      "evidence": ["file:docs/plugins.md", "file:examples/angular-consumer/src/app/consumer-badge.plugin.ts", "file:docs/compatibility/examples/manifest.json", "file:docs/compatibility/html-css.md"]
     }
   ],
   "unsupported": {

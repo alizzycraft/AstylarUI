@@ -3,6 +3,8 @@
 [`capabilities.json`](capabilities.json) is the machine-readable inventory for
 HTML/CSS-to-Astylar translation. It is repository and future Phase 15 skill
 source material, not a claim that Astylar implements the complete web platform.
+The companion [`html-css.md`](html-css.md) is the maintained human explanation
+of the same contract.
 
 The catalog classifies behavior as `direct`, `compatible`, `different`,
 `unsupported`, or `plugin`. Its grouped entries cover every public built-in

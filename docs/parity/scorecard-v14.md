@@ -276,3 +276,18 @@ Status: complete.
   source completeness, public catalog names, plugin requirements, unsupported
   boundaries, and evidence paths. The deterministic check passes with ten pairs
   (seven parity-backed and three focused inline).
+
+### Increment 8: public compatibility documentation
+
+Status: complete.
+
+- Added `docs/compatibility/html-css.md` as the human contract covering the
+  SiteData/DOM mapping, selectors/cascade, values/units/defaults/inheritance,
+  layout modes, responsiveness, typography/paint, controls/interaction,
+  scrolling, semantics, assets, reconciliation, Angular mounting, Babylon scene
+  ownership, plugins, intentional differences, unsupported features, and
+  recommended alternatives.
+- Linked the human contract, checked machine catalog, and verified paired
+  translations from the package README and parity documentation.
+- Kept exhaustive public-name data in the freshness-checked JSON rather than
+  duplicating another manual registry in prose.

@@ -133,6 +133,20 @@ ownership, SSR requirements, diagnostics, and trust boundary are documented in
 [docs/plugins.md](docs/plugins.md). The packed external proof is
 [`examples/angular-consumer/src/app/consumer-badge.plugin.ts`](examples/angular-consumer/src/app/consumer-badge.plugin.ts).
 
+## HTML/CSS knowledge transfer
+
+Astylar intentionally uses familiar DOM structure, selectors, cascade, box,
+Flexbox, Grid, typography, form, interaction, responsive, and accessibility
+concepts, then renders them as owned Babylon scene resources. It is a measured
+web-compatible subset rather than a complete browser implementation.
+
+Use the human [HTML/CSS translation contract](docs/compatibility/html-css.md),
+the checked [machine-readable capability catalog](docs/compatibility/capabilities.json),
+and the ten [paired web/Astylar examples](docs/compatibility/examples/README.md)
+before assuming an untested browser feature transfers. Run
+`npm run capabilities:check` and `npm run examples:check` when changing the
+public authoring surface.
+
 Validation and lifecycle failures use stable diagnostic codes and severities.
 Fatal input or lifecycle misuse throws `AstylarDiagnosticError`; all diagnostics
 are also retained in `surface.diagnostics.messages`. A host can observe them or

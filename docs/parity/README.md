@@ -73,6 +73,10 @@ Scrolling, pointer selection, and popup interaction parity is completed in
 `scorecard-v9.md`. Semantic application behavior and accessibility parity
 continues in `scorecard-v10.md`. Incremental rendered-tree reconciliation and
 state continuity continue in `scorecard-v11.md`.
+Packed-package consumer integration and owned Angular surfaces are completed in
+`scorecard-v12.md`. The Angular-native plugin kernel is completed in
+`scorecard-v13.md`. Durable plugin documents, recovery, asynchronous ownership,
+and the agent-ready compatibility contract continue in `scorecard-v14.md`.
 
 The shared authored-ID, positional fallback, compatibility, and replacement
 rules are documented in `../reconciliation.md`.
