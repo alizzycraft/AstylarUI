@@ -7,8 +7,8 @@
       "source": "docs/compatibility/html-css.md",
       "destination": "html-css.md",
       "transform": "portable-html-css-links",
-      "sourceSha256": "58c63bb5108e95b3e3a766707d9efa9c78618db414ef5efc2114908a745181f9",
-      "bundledSha256": "a22e60e4ef9740283b64ffaec5242ec6d86ae5d422828f207890683812835fa8"
+      "sourceSha256": "40f37552b68e96f17026134429c49ae75c5986032b11408b8f4c964af4597875",
+      "bundledSha256": "5c40b6887d64c75d3c39f19cf8826afe24b3973d28f04c2cd1fa2543eccedc54"
     },
     {
       "source": "docs/compatibility/capabilities.json",
@@ -32,8 +32,8 @@
     {
       "source": "docs/reconciliation.md",
       "destination": "reconciliation.md",
-      "sourceSha256": "ab4ea716823265efe6d0f82e504b545612a87e0fcba325dfd33887e338f87fb0",
-      "bundledSha256": "ab4ea716823265efe6d0f82e504b545612a87e0fcba325dfd33887e338f87fb0"
+      "sourceSha256": "38179189ec2055a40e6e8eaac54a76b1b8e9c7f1e45ba7581f60fc2c5e51508b",
+      "bundledSha256": "38179189ec2055a40e6e8eaac54a76b1b8e9c7f1e45ba7581f60fc2c5e51508b"
     },
     {
       "source": "examples/angular-consumer/src/app/app.config.ts",

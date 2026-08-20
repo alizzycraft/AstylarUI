@@ -75,9 +75,14 @@ foundation and Babylon.js as the owned rendering substrate.
 
 ## Keep the public boundary
 
-- Build replaceable, serializable `SiteData` from Angular state. Call
+- Build replaceable, serializable `SiteData` from Angular state. Publish a
+  replacement object through the component's `[siteData]` input, and call
   `surface.update(nextSiteData)` instead of mutating internal meshes or renderer
-  state.
+  state when mounting directly.
+- A direct `AstylarSurface.update(siteData)` call explicitly rereads the current
+  document even when the caller reused the same object reference. That does not
+  make an in-place mutation observable to `<astylar-surface [siteData]>`, whose
+  Angular input delivery relies on replacement object identity.
 - Await `surface.whenSettled()` when asynchronous assets or plugin work affect
   readiness. Call `surface.resize()` after direct-host viewport changes.
 - Dispose a directly mounted surface as one ownership unit. The Angular surface

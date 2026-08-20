@@ -122,8 +122,13 @@ engine or dispose `surface.scene` separately; dispose the surface unit.
 ## State and update lifecycle
 
 - Use signals/computed values or the consuming app's established reactive state.
-- Create a new `SiteData` object for a meaningful revision. The component skips
-  updates when the input reference is unchanged.
+- For `<astylar-surface [siteData]>`, publish a new `SiteData` object for every
+  meaningful revision. The component skips updates when the input reference is
+  unchanged, so mutating an already-published object is not delivered.
+- A direct `AstylarSurface.update(siteData)` call is itself an explicit update
+  request and rereads the current document even when the caller reused the same
+  object reference. Prefer replacement objects for application state anyway;
+  direct-call behavior does not change Angular's input-identity boundary.
 - Keep authored IDs and compatible element kinds stable to retain focus, control
   values, scroll offsets, and visual owners.
 - Treat a type change or input-manager kind change as a replacement boundary.
@@ -184,4 +189,3 @@ by the newer generation.
 - Repeated updates reach a stable resource plateau.
 - Final diagnostics report zero owned resources after disposal where the test
   exposes those counters.
-

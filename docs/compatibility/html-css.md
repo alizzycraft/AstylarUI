@@ -35,7 +35,7 @@ HTML/CSS knowledge is the starting vocabulary; Astylar is not a browser DOM.
 | Inline style | `DOMElement.style` | Direct |
 | Browser layout and paint | Measured CSS-like layout converted into owned Babylon meshes, materials, and textures | Compatible / Different |
 | Browser events | Typed handlers supplied separately through `AstylarRenderOptions.events` | Different |
-| DOM mutation | Produce new `SiteData` from Angular state and call `surface.update()` | Different |
+| DOM mutation | Derive replacement `SiteData` from Angular state. `[siteData]` needs a new input identity; an explicit direct `surface.update(siteData)` call rereads the current object even when its reference is reused. | Different |
 | A document/window lifetime | One Angular-owned `AstylarSurface` mounted on a canvas | Different |
 
 IDs should be non-empty and unique whenever focus, control state, scroll state,
@@ -251,6 +251,13 @@ to the reconciliation contract. Changing element type or input manager kind is
 a replacement boundary. Do not retain or mutate internal meshes as a substitute
 for `update()`.
 
+A direct `AstylarSurface.update(siteData)` call always submits an update and
+rereads the argument's current contents, including when the caller reused the
+same object reference. This is distinct from `AstylarSurfaceComponent`, whose
+Angular `[siteData]` input reacts to a new object identity. Application state
+should still publish replacement `SiteData` objects so Angular delivers each
+revision predictably.
+
 ## Angular and Babylon-specific concepts
 
 Angular 20 is an intentional foundation. Prefer `AstylarSurfaceComponent` in an
@@ -287,7 +294,7 @@ The catalog contains the checked list. The most important boundaries are:
 | CSS variables and `calc()` | Unsupported | Resolve values in Angular/TypeScript and author supported final values |
 | Sticky, floats, columns, subgrid, container queries | Unsupported | Use supported block/Flex/Grid/positioned composition and surface breakpoints |
 | SVG/MathML and browser media/embed behavior | Unsupported as native subsystems | Pre-rendered image, host Angular content, or purpose-built plugin renderer |
-| Browser DOM querying/mutation | Different | Keep application state in Angular and replace `SiteData` through `surface.update()` |
+| Browser DOM querying/mutation | Different | Keep application state in Angular and publish replacement `SiteData`; direct hosts explicitly call `surface.update()` for each revision |
 | Inline JavaScript event attributes | Unsupported | Typed `AstylarRenderOptions.events` handlers |
 | Web components/custom CSS as renderer registration | Different | A versioned Angular-native plugin with namespaced data/properties |
 | Complete browser UA defaults | Intentionally different | Author explicit styles for parity-critical output |

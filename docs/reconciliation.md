@@ -8,6 +8,21 @@ A non-empty `DOMElement.id` is stable only when it occurs exactly once in the co
 
 Authors should assign unique IDs to every element whose identity or live state must survive `Astylar.update()`.
 
+## Update delivery and object identity
+
+`AstylarSurface.update(siteData)` is an explicit update request, not an object-
+identity change detector. Every call rereads, validates, and reconciles the
+current document contents. A direct-mount caller that mutates and reuses the
+same `SiteData` object will therefore submit those changes when it explicitly
+calls `surface.update(siteData)`.
+
+`AstylarSurfaceComponent` has a separate Angular input-delivery boundary. Its
+`[siteData]` input updates the mounted surface only when Angular publishes a new
+object identity; mutating an already-published object does not deliver another
+component update. Applications should derive serializable replacement
+`SiteData` objects from Angular state. That remains the recommended state model
+even though the direct surface API can reread a reused object reference.
+
 ## Positional fallback
 
 Anonymous elements and every occurrence of a duplicate ID use a typed positional path such as `root/2:section/0:span`. This fallback is deterministic, but intentionally does not promise continuity across insertion, removal, reordering, or reparenting. A node at the same typed position may be reused when compatible; a changed position or type creates a different key.

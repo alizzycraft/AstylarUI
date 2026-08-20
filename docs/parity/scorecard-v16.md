@@ -294,3 +294,22 @@ Status: complete in the fifth Phase 16 commit.
 - Extended deterministic validation so all seven maintainer references are
   present and directly linked and the new plugin, lifecycle, parity, and
   package-proof contracts remain represented.
+
+### Increment 5: independent forward evaluation
+
+Status: complete in the sixth Phase 16 commit.
+
+- Twelve fresh agents received isolated worktrees, the committed maintainer
+  skill, and raw requests without expected classifications, causes, patches, or
+  prior conclusions.
+- Every required category passed, including compiling layout/lifecycle/public-
+  API/capability changes, browser parity diagnosis, packed consumer and SSR
+  proof, public reproduction handoff, cross-skill synchronization, and ordinary
+  application routing.
+- FT-01 exposed an over-broad same-reference update statement. FT-11
+  independently proved the direct-host versus Angular-input boundary; canonical
+  reconciliation/compatibility guidance and the developer skill were corrected
+  and regenerated in canonical-first order.
+- Full raw requests, classifications, before/after metrics, commands, results,
+  limitations, and the disposition of disposable changes are recorded in
+  [`forward-tests-v16.md`](forward-tests-v16.md).
