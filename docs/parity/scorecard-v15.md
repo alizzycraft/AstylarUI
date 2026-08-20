@@ -285,3 +285,42 @@ Compile-oriented evaluation artifacts all used the public package boundary. The
 evaluation explicitly distinguishes compilation from browser/SSR/runtime proof;
 the final repository release matrix supplies the latter for the maintained
 consumer and renderer.
+
+### Increment 6: final release acceptance
+
+Status: complete.
+
+- `npm run skill:check` passed the skill metadata, reference, freshness, public
+  API, taxonomy, package-boundary, and example checks: 118 `SKILL.md` lines,
+  eleven synchronized sources, 105 public root exports, and ten verified
+  translations.
+- The standard skill `quick_validate.py` validator passed. The independent
+  compatibility gates also passed with 91 elements, 84 style fields, 62 DOM
+  fields, 82 evidence references, and ten translations (seven parity-backed and
+  three focused inline).
+- `npm test -- --watch=false` passed all 282 repository tests.
+- `npm run build:lib` and `npm run build` passed. The application production
+  build prerendered two routes; its existing initial-bundle and
+  `src/app/app.scss` budget warnings remain accepted warnings.
+- `npm run consumer:check` passed from the packed 415-file artifact: the clean
+  Angular consumer built successfully and all three real-Chrome tests passed
+  against Babylon.js `8.56.2`.
+- `npm run parity:check` passed all enforced checks with the exact final metrics
+  below.
+
+| Metric | Final Phase 15 result |
+| --- | ---: |
+| Fixtures / renders / viewports | `155 / 522 / 3` |
+| Median SSIM | `0.9900079622614616` |
+| Minimum SSIM | `0.9501815836061078` |
+| Edges within 2 px | `0.9998168050806058` |
+| Maximum edge error | `3.99209364194121 px` |
+| Exact required text | Yes |
+| Runtime clean | Yes |
+| Completion thresholds | Met |
+
+Phase 15 changes application-development guidance and checked portable evidence,
+not renderer behavior. The final parity metrics are unchanged from the Phase 14
+baseline. The skill now provides an honest public-API handoff when application
+evidence indicates a probable core defect; implementing or diagnosing that core
+change belongs to the dedicated Phase 16 maintainer skill.

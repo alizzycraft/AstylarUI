@@ -147,6 +147,13 @@ before assuming an untested browser feature transfers. Run
 `npm run capabilities:check` and `npm run examples:check` when changing the
 public authoring surface.
 
+Agents building consuming applications can use the repository-owned
+[`astylarui-developer` skill](.agents/skills/astylarui-developer/SKILL.md). It
+packages the checked compatibility evidence and public Angular/Babylon
+workflows for application creation, conversion, plugins, diagnosis, and
+verification. Renderer and parity-harness maintenance is intentionally outside
+that skill's scope.
+
 Validation and lifecycle failures use stable diagnostic codes and severities.
 Fatal input or lifecycle misuse throws `AstylarDiagnosticError`; all diagnostics
 are also retained in `surface.diagnostics.messages`. A host can observe them or

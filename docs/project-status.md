@@ -7,17 +7,46 @@ remain design history; their unchecked items are not automatically active work.
 
 ## Current milestone
 
-Phase 14, Durable Plugins and Agent-Ready Compatibility, is complete. Its
-contract, implementation increments, architectural boundaries, and acceptance
-evidence are maintained in `docs/parity/scorecard-v14.md`.
+Phase 15, AstylarUI Application-Development Skill, is complete. Its contract,
+implementation increments, ten independent forward tests, corrections, and
+acceptance evidence are maintained in `docs/parity/scorecard-v15.md`.
 
-Plugin-backed documents now persist version/schema requirements, prepare
-plugin-owned migrations atomically, recover unavailable capabilities through an
-explicit strict-or-placeholder policy, and own asynchronous resources and
-invalidation without private renderer access. The packed external consumer
-proves the complete workflow across the package boundary. A freshness-checked
-capability catalog, human HTML/CSS translation contract, and ten verified paired
-examples are ready as authoritative input for a later Phase 15 agent skill.
+The repository-owned `.agents/skills/astylarui-developer` skill now transfers
+ordinary HTML/CSS and Angular application knowledge through AstylarUI's checked
+public contract. It handles application creation, conversion, responsive
+layout, Angular state/events/accessibility/SSR, Babylon surface ownership,
+public plugins, diagnosis, review, testing, and a strict Phase 16 handoff for
+probable core defects. Portable bundled references are generated from canonical
+repository evidence and checked for versioned source freshness.
+
+## Phase 15 completion baseline
+
+- The `astylarui-developer` skill is a concise 118-line router backed by focused
+  application, Angular/Babylon, diagnosis, plugin, compatibility, public-API,
+  translation, and consumer-proof references. It uses package-root imports and
+  explicitly excludes renderer, registry, layout, paint, reconciliation, and
+  parity-harness maintenance.
+- Deterministic validation covers skill and UI metadata, local links, unfinished
+  content, eleven synchronized authoritative sources, source/bundle hashes,
+  AstylarUI version, 105 public root exports, catalogued element/style names,
+  all ten verified translations, and forbidden private/deep-import guidance.
+- Ten fresh-agent forward tests passed: compatibility lookup, responsive app
+  creation, HTML/CSS conversion, Angular state and accessibility, application
+  plugin authoring, intentional differences, unsupported behavior, flawed-code
+  review, probable core-defect handoff, and negative-trigger core maintenance.
+  The plugin test caused two evidence-led corrections for geometry invalidation
+  and migration preservation before its successful rerun.
+- 282 repository tests pass; library and production application builds pass.
+  Production prerender covers two routes with only the accepted initial-bundle
+  and `src/app/app.scss` budget warnings.
+- The packed external consumer still contains 415 files, builds successfully,
+  and passes all three real-Chrome tests against independently resolved
+  Babylon.js `8.56.2`.
+- The full parity corpus remains 155 fixtures and 522 renders over three
+  viewports. Median SSIM is `0.9900079622614616`, minimum SSIM is
+  `0.9501815836061078`, edge-tolerance ratio is `0.9998168050806058`, maximum
+  edge error is `3.99209364194121 px`, visible text matches exactly, runtime
+  checks are clean, and all completion thresholds pass.
 
 ## Phase 14 completion baseline
 
@@ -160,6 +189,7 @@ is:
 - `npm run consumer:check`
 - `npm run capabilities:check`
 - `npm run examples:check`
+- `npm run skill:check`
 - `npm run parity:check`
 
 ## Document map
@@ -170,6 +200,8 @@ is:
 | `compatibility/capabilities.json` | Current and checked | Machine-readable capability/evidence source |
 | `compatibility/examples/manifest.json` | Current and checked | Ten Phase 15-ready paired translations |
 | `plugins.md` | Current | Public Angular-native plugin API and authoring guide |
+| `../.agents/skills/astylarui-developer/SKILL.md` | Current and checked | Phase 15 application-development agent workflow |
+| `parity/scorecard-v15.md` | Complete | Application-development skill contract and evidence |
 | `parity/scorecard-v14.md` | Complete | Durable plugin and compatibility-contract evidence |
 | `parity/scorecard-v13.md` | Complete | Extension kernel contract and Phase 13 freeze evidence |
 | `parity/scorecard-v12.md` | Complete | Consumer integration and Phase 12 freeze evidence |
@@ -181,10 +213,12 @@ is:
 
 ## Scope boundary
 
-Phase 14 deliberately did not create the Phase 15 skill, framework-neutral
-adapters, a custom DI system, editor or game/XR systems, general asset plugins,
-dynamic discovery/installation, marketplaces, hot loading, permissions or
-sandboxing, a generic CSS engine, dirty-subtree renderer rewrite, Babylon
+Phase 15 deliberately did not create the Phase 16 `astylarui-maintainer` skill
+or teach application agents to modify renderer internals, core registries,
+layout, paint, reconciliation, or the parity harness. It also did not add new
+renderer capabilities, framework-neutral adapters, a custom DI system, dynamic
+plugin discovery/installation, marketplaces, hot loading, permissions,
+sandboxing, a generic CSS engine, a dirty-subtree renderer rewrite, Babylon
 abstraction, or a Babylon.js major upgrade. Registered media-like identities do
 not imply native browser playback/embed behavior. Future rendering changes must
 remain general, measured, reflected in the checked capability contract, and
