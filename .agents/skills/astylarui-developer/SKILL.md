@@ -103,8 +103,9 @@ If public evidence indicates a probable core defect:
 2. Add the equivalent HTML/CSS reference and record expected versus actual
    behavior, versions, viewport, diagnostics, and verification steps.
 3. Check that the feature is actually claimed by the compatibility catalog.
-4. Hand the reproduction to the future `astylarui-maintainer` workflow. Do not
-   reach into private services to repair it from an application task.
+4. Hand the reproduction to the repository
+   [`astylarui-maintainer`](../astylarui-maintainer/SKILL.md) skill. Do not reach
+   into private services to repair it from an application task.
 
 ## Verify proportionally
 

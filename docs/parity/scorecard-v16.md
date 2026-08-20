@@ -250,3 +250,29 @@ Status: complete in the third Phase 16 commit.
   implementation-boundary, proportional-gate, and pre-commit review guidance.
 - Revalidated the skill and confirmed all three references are directly linked,
   structured for progressive loading, and contain no placeholder content.
+
+### Increment 3: application-skill cooperation and validation
+
+Status: complete in the fourth Phase 16 commit.
+
+- Added a first-class two-skill protocol covering trigger ownership, public
+  reproduction intake, developer-skill use during maintenance, canonical-source
+  update order, generated-reference synchronization, evidence-led procedural
+  improvements, metadata changes, and joint verification.
+- Replaced the developer skill's “future maintainer” handoff with a live link to
+  the repository `astylarui-maintainer` skill while preserving its strict
+  public/private boundary.
+- Split named developer reference/check and maintainer check scripts while
+  retaining the Phase 15 `skill:references:*` compatibility aliases. The root
+  `npm run skill:check` now validates both skills in sequence.
+- Added deterministic maintainer validation for metadata, UI strings, links,
+  unfinished content, required classifications/workflows/safeguards, trigger
+  boundaries, important paths and package scripts, application package-root
+  imports, and the developer handoff/freshness procedure.
+- Both standard validators and the combined repository check pass: 119
+  developer `SKILL.md` lines, eleven synchronized sources, 105 public exports,
+  ten translations, 110 maintainer `SKILL.md` lines, and four maintainer
+  references.
+- Confirmed the combined check rejects a deliberately altered generated
+  `html-css.md` reference with expected/received SHA-256 values; restored the
+  file and reconfirmed both the combined check and legacy freshness alias pass.

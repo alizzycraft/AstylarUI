@@ -32,6 +32,9 @@ contract as the observable product boundary.
 - Read [maintenance-workflow.md](references/maintenance-workflow.md) when
   classifying a report, designing a minimal proof, choosing an implementation
   boundary, or selecting proportional verification.
+- Read [application-skill.md](references/application-skill.md) when receiving a
+  public reproduction, checking application authorship, changing observable
+  behavior, or synchronizing/improving `astylarui-developer`.
 - Inspect current source and tests after using these maps. File paths and symbols
   are navigation aids; implementation remains authoritative.
 
