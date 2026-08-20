@@ -1,0 +1,4 @@
+interface:
+  display_name: "AstylarUI Maintainer"
+  short_description: "Maintain and improve AstylarUI core"
+  default_prompt: "Use $astylarui-maintainer to diagnose and implement a bounded AstylarUI core change with the correct evidence."

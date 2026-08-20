@@ -214,3 +214,19 @@ Status: complete in the first Phase 16 commit.
 - Audited the public library, internal renderer-service, parity-fixture, packed
   consumer, documentation, and existing skill file surfaces to seed the
   architecture work without treating historical plans as current truth.
+
+### Increment 1: initialized skill and trigger boundary
+
+Status: complete in the second Phase 16 commit.
+
+- Initialized `.agents/skills/astylarui-maintainer` with the standard
+  skill-creation script, `references` and `scripts` resource directories, and
+  generated `agents/openai.yaml` metadata.
+- Replaced the scaffold with a 93-line evidence-first router covering case
+  establishment, classification, proof before implementation, owning-boundary
+  fixes, observable-contract synchronization, proportional verification, and
+  bounded commits.
+- The trigger covers the named core, public API, packaging, parity, evidence,
+  and downstream-skill surfaces while excluding ordinary application creation.
+- The standard `quick_validate.py` validator passes and the skill contains no
+  placeholders or unfinished scaffold text.
