@@ -291,3 +291,35 @@ Status: complete.
   translations from the package README and parity documentation.
 - Kept exhaustive public-name data in the freshness-checked JSON rather than
   duplicating another manual registry in prose.
+
+### Increment 9: release documentation and pre-freeze acceptance
+
+Status: complete.
+
+- `npm test -- --watch=false` passes all 282 tests.
+- `npm run build:lib` passes.
+- `npm run build` passes and prerenders two routes. The only warnings remain the
+  accepted initial-bundle and `src/app/app.scss` budgets.
+- `npm run consumer:check` passes a fresh 415-file install, browser and SSR
+  builds, one prerendered route, and all three real-Chrome tests against
+  independently resolved Babylon.js `8.56.2`.
+- `npm run capabilities:check` passes with 91 elements, 62 DOM fields, 84 style
+  fields, and 82 unique evidence references. `npm run examples:check` passes all
+  ten pairs (seven parity-backed and three focused inline).
+- A complete pre-freeze `npm run parity:check` passes 155 fixtures and 522
+  renders with exact visible text, clean runtime checks, and every threshold met.
+- Updated the authoritative project status only after the complete non-parity
+  matrix and pre-freeze parity gate passed. Final acceptance now requires three
+  consecutive parity runs at the unchanged documentation commit.
+
+Pre-freeze parity metrics:
+
+| Metric | Result |
+| --- | ---: |
+| Median SSIM | `0.9900079622614616` |
+| Minimum SSIM | `0.9501815836061078` |
+| Edges within 2 px | `0.9998168050806058` |
+| Maximum edge error | `3.99209364194121 px` |
+| Exact required text | Yes |
+| Runtime clean | Yes |
+| Completion thresholds | Met |

@@ -7,19 +7,51 @@ remain design history; their unchecked items are not automatically active work.
 
 ## Current milestone
 
-Phase 13, Angular-Native Extension Kernel, is complete. Its contract,
-implementation increments, architectural boundaries, and acceptance evidence
-are maintained in `docs/parity/scorecard-v13.md`.
+Phase 14, Durable Plugins and Agent-Ready Compatibility, is complete. Its
+contract, implementation increments, architectural boundaries, and acceptance
+evidence are maintained in `docs/parity/scorecard-v14.md`.
 
-The renderer is now an extensible Angular-native platform. Applications install
-plugins through the public provider API; each mounted surface resolves an
-immutable, deterministic capability graph in its own `EnvironmentInjector`.
-Plugins can contribute namespaced elements, style properties, injectable
-renderers, and lifecycle services without importing private Astylar code. The
-committed external consumer proves the complete packed-package path with an
-Angular DI-based Babylon.js plugin.
+Plugin-backed documents now persist version/schema requirements, prepare
+plugin-owned migrations atomically, recover unavailable capabilities through an
+explicit strict-or-placeholder policy, and own asynchronous resources and
+invalidation without private renderer access. The packed external consumer
+proves the complete workflow across the package boundary. A freshness-checked
+capability catalog, human HTML/CSS translation contract, and ten verified paired
+examples are ready as authoritative input for a later Phase 15 agent skill.
 
-## Phase 13 completion baseline
+## Phase 14 completion baseline
+
+- Plugin API v1 remains additive and compatible. Definitions can declare
+  Astylar/package compatibility, constrained dependencies, and independently
+  versioned document schemas; `SiteData.plugins` persists document requirements.
+- Explicit pure migrations operate only on frozen plugin-owned element data and
+  namespaced extensions. Successful output is detached/idempotent, while any
+  failure returns the complete original document without partial mutation.
+- Strict recovery remains the default. Tolerant recovery aggregates typed
+  affected-path diagnostics and renders stable owned leaf placeholders without
+  deleting source data; a compatible new surface restores the real renderer.
+- Generation/surface resource owners track Babylon and custom resources,
+  cleanup callbacks, cancellable delayed work, settlement, stale completion,
+  and zero-count disposal. Property `affects` domains drive coalesced safe public
+  invalidation with recursion guards and attributed diagnostics.
+- The packed Angular consumer contains 415 files, builds browser and SSR targets,
+  prerenders one route, and passes three real-Chrome tests against independently
+  resolved Babylon.js `8.56.2`. It proves schema migration, incompatible-version
+  placeholder recovery, delayed material cancellation/readiness, two-surface
+  isolation, update plateaus, independent disposal, and final zero resources.
+- The checked compatibility catalog covers 91 built-in elements, 62 public
+  `DOMElement` fields, 84 public `StyleRule` fields, and 82 unique evidence
+  references. Ten paired translations cover the required web-to-Astylar topics;
+  seven reuse executable parity fixtures and three document platform boundaries.
+- 282 repository tests pass; library and production application builds pass.
+  Production prerender covers two routes with only the accepted initial-bundle
+  and `src/app/app.scss` budget warnings.
+- The full parity corpus remains 155 fixtures and 522 renders. Median SSIM is
+  `0.9900079622614616`, minimum SSIM is `0.9501815836061078`, edge-tolerance
+  ratio is `0.9998168050806058`, maximum edge error is `3.99209364194121 px`,
+  visible text matches exactly, runtime checks are clean, and all thresholds pass.
+
+## Phase 13 completion baseline (historical)
 
 - The package root exports plugin API v1, `provideAstylar(...)`, and
   `provideAstylarPlugin(...)`. Plugin metadata and document extension data stay
@@ -126,13 +158,19 @@ is:
 - `npm run build:lib`
 - `npm run build`
 - `npm run consumer:check`
+- `npm run capabilities:check`
+- `npm run examples:check`
 - `npm run parity:check`
 
 ## Document map
 
 | Document | Status | Use |
 | --- | --- | --- |
+| `compatibility/html-css.md` | Current | Human HTML/CSS-to-Astylar translation contract |
+| `compatibility/capabilities.json` | Current and checked | Machine-readable capability/evidence source |
+| `compatibility/examples/manifest.json` | Current and checked | Ten Phase 15-ready paired translations |
 | `plugins.md` | Current | Public Angular-native plugin API and authoring guide |
+| `parity/scorecard-v14.md` | Complete | Durable plugin and compatibility-contract evidence |
 | `parity/scorecard-v13.md` | Complete | Extension kernel contract and Phase 13 freeze evidence |
 | `parity/scorecard-v12.md` | Complete | Consumer integration and Phase 12 freeze evidence |
 | `parity/scorecard-v11.md` | Complete | Reconciliation and Phase 11 freeze evidence |
@@ -143,11 +181,11 @@ is:
 
 ## Scope boundary
 
-Phase 13 deliberately did not add framework-neutral adapters, a custom DI
-system, editor extensions, asset/game/XR systems, dynamic discovery,
-marketplaces, hot loading, permissions or sandboxing, full schema migrations,
-Babylon abstraction, a Babylon.js major upgrade, or authoring-framework
-adapters. It migrated only the core dispatch needed to dogfood the registry;
-the remaining mature built-in implementation stays behind a compatibility
-contribution. Future rendering changes must remain general, measured, and
+Phase 14 deliberately did not create the Phase 15 skill, framework-neutral
+adapters, a custom DI system, editor or game/XR systems, general asset plugins,
+dynamic discovery/installation, marketplaces, hot loading, permissions or
+sandboxing, a generic CSS engine, dirty-subtree renderer rewrite, Babylon
+abstraction, or a Babylon.js major upgrade. Registered media-like identities do
+not imply native browser playback/embed behavior. Future rendering changes must
+remain general, measured, reflected in the checked capability contract, and
 compatible with the fixed parity gates.
