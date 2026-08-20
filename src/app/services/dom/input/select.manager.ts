@@ -20,7 +20,10 @@ export class SelectManager {
     private readonly DROPDOWN_MAX_HEIGHT = 2.0;
 
     // Track click-away observers for each open dropdown
-    private clickAwayObservers: Map<string, BABYLON.Observer<BABYLON.PointerInfo>> = new Map();
+    private clickAwayObservers: Map<string, {
+        observer: BABYLON.Observer<BABYLON.PointerInfo>;
+        scene: BABYLON.Scene;
+    }> = new Map();
 
     get clickAwayObserverCount(): number {
         return this.clickAwayObservers.size;
@@ -169,7 +172,7 @@ export class SelectManager {
         });
 
         if (observer) {
-            this.clickAwayObservers.set(elementId, observer);
+            this.clickAwayObservers.set(elementId, { observer, scene });
         }
     }
 
@@ -178,11 +181,10 @@ export class SelectManager {
      */
     private removeClickAwayListener(selectElement: SelectElement): void {
         const elementId = selectElement.element.id || '';
-        const observer = this.clickAwayObservers.get(elementId);
+        const registration = this.clickAwayObservers.get(elementId);
 
-        if (observer) {
-            const scene = selectElement.mesh.getScene();
-            scene.onPointerObservable.remove(observer);
+        if (registration) {
+            registration.scene.onPointerObservable.remove(registration.observer);
             this.clickAwayObservers.delete(elementId);
         }
     }
