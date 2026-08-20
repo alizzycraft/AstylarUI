@@ -6,12 +6,15 @@ import {
   makeEnvironmentProviders,
 } from '@angular/core';
 import type { Mesh, Scene } from '@babylonjs/core';
+import { satisfies, valid, validRange } from 'semver';
 import type { DOMElement } from '../app/types/dom-element';
+import type { AstylarDocumentPluginRequirement } from '../app/types/site-data';
 import type { StyleRule } from '../app/types/style-rule';
 import {
   AstylarDiagnosticError,
   type AstylarDiagnostic,
 } from './astylar-diagnostics';
+import { ASTYLAR_VERSION } from './astylar-version';
 
 /** Versioned independently from the Astylar package. */
 export const ASTYLAR_PLUGIN_API_VERSION = 1 as const;
@@ -27,6 +30,28 @@ export type AstylarPluginInvalidationDomain =
   | 'paint'
   | 'semantics'
   | 'interaction';
+
+export interface AstylarPluginDependency {
+  readonly id: string;
+  readonly versionRange: string;
+}
+
+/** Phase 13 string dependencies remain shorthand for an unrestricted version. */
+export type AstylarPluginDependencyRequirement = string | AstylarPluginDependency;
+
+export type AstylarDocumentPluginCompatibilityStatus =
+  | 'compatible'
+  | 'missing'
+  | 'version-incompatible'
+  | 'migration-required'
+  | 'schema-unsupported';
+
+export interface AstylarDocumentPluginCompatibility {
+  readonly requirement: AstylarDocumentPluginRequirement;
+  readonly status: AstylarDocumentPluginCompatibilityStatus;
+  readonly installedVersion?: string;
+  readonly installedSchemaVersion?: number;
+}
 
 export interface AstylarPluginValidationContext {
   readonly pluginId: string;
@@ -126,7 +151,11 @@ export interface AstylarPluginDefinition {
   readonly id: string;
   readonly version: string;
   readonly pluginApiVersion: number;
-  readonly dependencies?: readonly string[];
+  /** Semantic-version range of Astylar releases supported by this plugin. */
+  readonly astylarVersionRange?: string;
+  /** Current positive integer version of plugin-owned persisted data. Defaults to 1. */
+  readonly documentSchemaVersion?: number;
+  readonly dependencies?: readonly AstylarPluginDependencyRequirement[];
   readonly contributes: readonly AstylarPluginContributionKind[];
   /** Providers installed into every surface before contributions resolve. */
   readonly providers?: readonly (Provider | EnvironmentProviders)[];
@@ -201,7 +230,10 @@ export function defineAstylarPlugin<const T extends AstylarPluginDefinition>(
   });
   return Object.freeze({
     ...definition,
-    dependencies: Object.freeze([...(definition.dependencies ?? [])]),
+    dependencies: Object.freeze((definition.dependencies ?? []).map((dependency) =>
+      typeof dependency === 'string'
+        ? dependency
+        : Object.freeze({ ...dependency }))),
     contributes: Object.freeze([...definition.contributes]),
     providers: Object.freeze([...(definition.providers ?? [])]),
     contributions,
@@ -277,6 +309,42 @@ export class AstylarCapabilityRegistry {
     return this.elementsById.get(identity) ?? this.elementAliases.get(identity);
   }
 
+  resolvePlugin(identity: string): AstylarPluginDefinition | undefined {
+    return this.pluginsById.get(identity);
+  }
+
+  inspectDocumentRequirements(
+    requirements: readonly AstylarDocumentPluginRequirement[],
+  ): readonly AstylarDocumentPluginCompatibility[] {
+    return Object.freeze(requirements.map((requirement) => {
+      const plugin = this.pluginsById.get(requirement.id);
+      if (!plugin) {
+        return Object.freeze({ requirement, status: 'missing' as const });
+      }
+      const installedSchemaVersion = plugin.documentSchemaVersion ?? 1;
+      if (!satisfies(plugin.version, requirement.versionRange)) {
+        return Object.freeze({
+          requirement,
+          status: 'version-incompatible' as const,
+          installedVersion: plugin.version,
+          installedSchemaVersion,
+        });
+      }
+      const status: AstylarDocumentPluginCompatibilityStatus =
+        requirement.schemaVersion < installedSchemaVersion
+          ? 'migration-required'
+          : requirement.schemaVersion > installedSchemaVersion
+            ? 'schema-unsupported'
+            : 'compatible';
+      return Object.freeze({
+        requirement,
+        status,
+        installedVersion: plugin.version,
+        installedSchemaVersion,
+      });
+    }));
+  }
+
   resolveProperty(identity: string): AstylarPluginPropertyDefinition | undefined {
     return this.propertiesById.get(identity) ?? this.propertyAliases.get(identity);
   }
@@ -321,13 +389,23 @@ export class AstylarCapabilityRegistry {
     }
 
     for (const definition of this.pluginsById.values()) {
-      for (const dependency of definition.dependencies ?? []) {
-        if (!this.pluginsById.has(dependency)) {
+      for (const rawDependency of definition.dependencies ?? []) {
+        const dependency = normalizeDependency(rawDependency);
+        const installed = this.pluginsById.get(dependency.id);
+        if (!installed) {
           this.fail(
             'plugin-dependency-missing',
-            `Plugin ${JSON.stringify(definition.id)} requires missing plugin ${JSON.stringify(dependency)}.`,
+            `Plugin ${JSON.stringify(definition.id)} requires missing plugin ${JSON.stringify(dependency.id)}.`,
             definition.id,
-            dependency,
+            dependency.id,
+          );
+        }
+        if (!satisfies(installed.version, dependency.versionRange)) {
+          this.fail(
+            'plugin-dependency-version-incompatible',
+            `Plugin ${JSON.stringify(definition.id)} requires ${JSON.stringify(dependency.id)} ${JSON.stringify(dependency.versionRange)}; installed version is ${JSON.stringify(installed.version)}.`,
+            definition.id,
+            dependency.id,
           );
         }
       }
@@ -336,11 +414,12 @@ export class AstylarCapabilityRegistry {
     const indegree = new Map<string, number>();
     const dependents = new Map<string, string[]>();
     for (const definition of this.pluginsById.values()) {
-      indegree.set(definition.id, definition.dependencies?.length ?? 0);
-      for (const dependency of definition.dependencies ?? []) {
-        const entries = dependents.get(dependency) ?? [];
+      const dependencies = (definition.dependencies ?? []).map(normalizeDependency);
+      indegree.set(definition.id, dependencies.length);
+      for (const dependency of dependencies) {
+        const entries = dependents.get(dependency.id) ?? [];
         entries.push(definition.id);
-        dependents.set(dependency, entries);
+        dependents.set(dependency.id, entries);
       }
     }
 
@@ -384,7 +463,7 @@ export class AstylarCapabilityRegistry {
         definition.id,
       );
     }
-    if (!isSemver(definition.version)) {
+    if (!valid(definition.version)) {
       this.fail(
         'plugin-version-invalid',
         `Plugin ${JSON.stringify(definition.id)} has invalid version ${JSON.stringify(definition.version)}.`,
@@ -398,21 +477,49 @@ export class AstylarCapabilityRegistry {
         definition.id,
       );
     }
+    if (definition.astylarVersionRange !== undefined) {
+      if (!validRange(definition.astylarVersionRange)) {
+        this.fail(
+          'plugin-astylar-version-invalid',
+          `Plugin ${JSON.stringify(definition.id)} has invalid Astylar version range ${JSON.stringify(definition.astylarVersionRange)}.`,
+          definition.id,
+        );
+      }
+      if (!satisfies(ASTYLAR_VERSION, definition.astylarVersionRange)) {
+        this.fail(
+          'plugin-astylar-version-incompatible',
+          `Plugin ${JSON.stringify(definition.id)} requires Astylar ${JSON.stringify(definition.astylarVersionRange)}; this package is ${ASTYLAR_VERSION}.`,
+          definition.id,
+        );
+      }
+    }
+    if (definition.documentSchemaVersion !== undefined &&
+        (!Number.isInteger(definition.documentSchemaVersion) ||
+          definition.documentSchemaVersion < 1)) {
+      this.fail(
+        'plugin-document-schema-invalid',
+        `Plugin ${JSON.stringify(definition.id)} must declare a positive integer document schema version.`,
+        definition.id,
+      );
+    }
     const dependencies = definition.dependencies ?? [];
-    if (new Set(dependencies).size !== dependencies.length || dependencies.includes(definition.id)) {
+    const normalizedDependencies = dependencies.map(normalizeDependency);
+    const dependencyIds = normalizedDependencies.map(({ id }) => id);
+    if (new Set(dependencyIds).size !== dependencyIds.length ||
+        dependencyIds.includes(definition.id)) {
       this.fail(
         'plugin-dependency-invalid',
         `Plugin ${JSON.stringify(definition.id)} has duplicate or self-referential dependencies.`,
         definition.id,
       );
     }
-    for (const dependency of dependencies) {
-      if (!isPluginId(dependency)) {
+    for (const dependency of normalizedDependencies) {
+      if (!isPluginId(dependency.id) || !validRange(dependency.versionRange)) {
         this.fail(
           'plugin-dependency-invalid',
           `Plugin ${JSON.stringify(definition.id)} has invalid dependency ${JSON.stringify(dependency)}.`,
           definition.id,
-          dependency,
+          dependency.id,
         );
       }
     }
@@ -580,11 +687,15 @@ export class AstylarCapabilityRegistry {
     code: Extract<AstylarDiagnostic['code'],
       | 'plugin-id-invalid'
       | 'plugin-version-invalid'
+      | 'plugin-astylar-version-invalid'
+      | 'plugin-astylar-version-incompatible'
       | 'plugin-api-incompatible'
       | 'plugin-duplicate'
       | 'plugin-dependency-invalid'
       | 'plugin-dependency-missing'
+      | 'plugin-dependency-version-incompatible'
       | 'plugin-dependency-cycle'
+      | 'plugin-document-schema-invalid'
       | 'plugin-contribution-invalid'
       | 'plugin-contribution-duplicate'
       | 'plugin-alias-invalid'
@@ -624,8 +735,12 @@ function isContributionId(pluginId: string, id: string): boolean {
   return /^[a-z][a-z0-9]*(?:[.-][a-z0-9][a-z0-9-]*)+:[a-z][a-z0-9-]*(?:\.[a-z0-9-]+)*$/.test(id);
 }
 
-function isSemver(version: string): boolean {
-  return /^(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?$/.test(version);
+function normalizeDependency(
+  dependency: AstylarPluginDependencyRequirement,
+): AstylarPluginDependency {
+  return typeof dependency === 'string'
+    ? { id: dependency, versionRange: '*' }
+    : dependency;
 }
 
 function contributionKinds(

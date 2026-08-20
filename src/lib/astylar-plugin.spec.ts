@@ -14,8 +14,10 @@ import {
   provideAstylar,
   provideAstylarPlugin,
   type AstylarPluginDefinition,
+  type AstylarPluginDependencyRequirement,
   type AstylarPluginElementRenderer,
 } from './astylar-plugin';
+import { ASTYLAR_VERSION } from './astylar-version';
 
 const CONFIG = new InjectionToken<string>('test plugin config');
 
@@ -30,7 +32,7 @@ class TestRenderer implements AstylarPluginElementRenderer {
 function plugin(
   id: string,
   options: {
-    dependencies?: readonly string[];
+    dependencies?: readonly AstylarPluginDependencyRequirement[];
     elementAlias?: string;
     propertyAlias?: string;
     elementId?: string;
@@ -38,6 +40,8 @@ function plugin(
     rendererId?: string;
     pluginApiVersion?: number;
     version?: string;
+    astylarVersionRange?: string;
+    documentSchemaVersion?: number;
   } = {},
 ): AstylarPluginDefinition {
   const elementId = options.elementId ?? `${id}:card`;
@@ -45,6 +49,8 @@ function plugin(
     id,
     version: options.version ?? '1.0.0',
     pluginApiVersion: options.pluginApiVersion ?? ASTYLAR_PLUGIN_API_VERSION,
+    astylarVersionRange: options.astylarVersionRange,
+    documentSchemaVersion: options.documentSchemaVersion,
     dependencies: options.dependencies,
     contributes: ['elements', 'properties', 'renderers'],
     providers: [TestRenderer, { provide: CONFIG, useValue: id }],
@@ -122,6 +128,34 @@ describe('Angular-native Astylar plugin API', () => {
       .toBe('example.alpha:card-renderer');
   });
 
+  it('supports legacy dependencies and enforces structured dependency ranges', () => {
+    const registry = new AstylarCapabilityRegistry([
+      plugin('example.consumer', {
+        dependencies: [{ id: 'example.provider', versionRange: '^2.0.0' }],
+      }),
+      plugin('example.legacy', { dependencies: ['example.provider'] }),
+      plugin('example.provider', { version: '2.4.0' }),
+    ]);
+
+    expect(registry.snapshot.pluginIds).toEqual([
+      'example.provider',
+      'example.consumer',
+      'example.legacy',
+    ]);
+    expect(() => new AstylarCapabilityRegistry([
+      plugin('example.consumer', {
+        dependencies: [{ id: 'example.provider', versionRange: '^3.0.0' }],
+      }),
+      plugin('example.provider', { version: '2.4.0' }),
+    ])).toThrowError(/plugin-dependency-version-incompatible/);
+    expect(() => new AstylarCapabilityRegistry([
+      plugin('example.consumer', {
+        dependencies: [{ id: 'example.provider', versionRange: 'not a range' }],
+      }),
+      plugin('example.provider'),
+    ])).toThrowError(/plugin-dependency-invalid/);
+  });
+
   it('resolves unambiguous element and property aliases', () => {
     const registry = new AstylarCapabilityRegistry([
       plugin('example.badges', { elementAlias: 'badge', propertyAlias: 'badgeDepth' }),
@@ -140,6 +174,51 @@ describe('Angular-native Astylar plugin API', () => {
     expect(() => new AstylarCapabilityRegistry([
       plugin('example.invalid', { version: 'latest' }),
     ])).toThrowError(/plugin-version-invalid/);
+  });
+
+  it('validates Astylar compatibility and document schema versions', () => {
+    expect(new AstylarCapabilityRegistry([
+      plugin('example.current', { astylarVersionRange: `^${ASTYLAR_VERSION}` }),
+    ]).snapshot.pluginIds).toEqual(['example.current']);
+    expect(() => new AstylarCapabilityRegistry([
+      plugin('example.invalid-range', { astylarVersionRange: 'next' }),
+    ])).toThrowError(/plugin-astylar-version-invalid/);
+    expect(() => new AstylarCapabilityRegistry([
+      plugin('example.future', { astylarVersionRange: '>=99.0.0' }),
+    ])).toThrowError(/plugin-astylar-version-incompatible/);
+    expect(() => new AstylarCapabilityRegistry([
+      plugin('example.invalid-schema', { documentSchemaVersion: 0 }),
+    ])).toThrowError(/plugin-document-schema-invalid/);
+  });
+
+  it('reports persisted document requirement compatibility without mutation', () => {
+    const requirements = Object.freeze([
+      Object.freeze({ id: 'example.current', versionRange: '^2.0.0', schemaVersion: 3 }),
+      Object.freeze({ id: 'example.old-data', versionRange: '^1.0.0', schemaVersion: 1 }),
+      Object.freeze({ id: 'example.future-data', versionRange: '^1.0.0', schemaVersion: 4 }),
+      Object.freeze({ id: 'example.wrong-version', versionRange: '^2.0.0', schemaVersion: 1 }),
+      Object.freeze({ id: 'example.missing', versionRange: '*', schemaVersion: 1 }),
+    ]);
+    const registry = new AstylarCapabilityRegistry([
+      plugin('example.current', { version: '2.1.0', documentSchemaVersion: 3 }),
+      plugin('example.old-data', { documentSchemaVersion: 2 }),
+      plugin('example.future-data', { documentSchemaVersion: 2 }),
+      plugin('example.wrong-version', { version: '1.5.0' }),
+    ]);
+
+    expect(registry.inspectDocumentRequirements(requirements).map(({ status }) => status))
+      .toEqual([
+        'compatible',
+        'migration-required',
+        'schema-unsupported',
+        'version-incompatible',
+        'missing',
+      ]);
+    expect(requirements[0]).toEqual({
+      id: 'example.current',
+      versionRange: '^2.0.0',
+      schemaVersion: 3,
+    });
   });
 
   it('rejects duplicate plugin and contribution IDs', () => {

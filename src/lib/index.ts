@@ -20,6 +20,7 @@ export type {
   AstylarDiagnosticSeverity,
 } from './astylar-diagnostics';
 export { AstylarRenderSession } from "./astylar-render-session";
+export { ASTYLAR_VERSION } from './astylar-version';
 export { AstylarSceneResources } from './astylar-scene-resources';
 export type { AstylarSceneResourceSnapshot } from './astylar-scene-resources';
 export { AstylarEventDispatcher } from './astylar-event';
@@ -77,10 +78,14 @@ export {
 export type {
   AstylarCapabilityRegistrySnapshot,
   AstylarConfig,
+  AstylarDocumentPluginCompatibility,
+  AstylarDocumentPluginCompatibilityStatus,
   AstylarPluginApiVersion,
   AstylarPluginContributionKind,
   AstylarPluginContributions,
   AstylarPluginDefinition,
+  AstylarPluginDependency,
+  AstylarPluginDependencyRequirement,
   AstylarPluginElementDefinition,
   AstylarPluginElementRenderer,
   AstylarPluginInvalidationDomain,
@@ -146,7 +151,10 @@ export const astylar = {
 export { AstylarSurfaceComponent } from './astylar-surface.component';
 
 // Types for consumers
-export type { SiteData } from "../app/types/site-data";
+export type {
+  AstylarDocumentPluginRequirement,
+  SiteData,
+} from "../app/types/site-data";
 export type { StyleRule } from "../app/types/style-rule";
 export type {
   DOMElement,
