@@ -311,6 +311,14 @@ describe('InputElementService', () => {
     });
 
     textInputManager.restoreMutableState.calls.reset();
+    rebuiltInput.element = { id: 'field', value: 'Edited' };
+    expect(service.restoreTextControlStates(snapshots)).toBe('field');
+    expect(textInputManager.restoreMutableState).toHaveBeenCalledWith(
+      rebuiltInput,
+      jasmine.objectContaining({ value: 'Edited', cursorPosition: 5, selectionAnchor: 6 }),
+    );
+
+    textInputManager.restoreMutableState.calls.reset();
     rebuiltInput.element = { id: 'field', value: 'Server value' };
     expect(service.restoreTextControlStates(snapshots)).toBeUndefined();
     expect(textInputManager.restoreMutableState).not.toHaveBeenCalled();

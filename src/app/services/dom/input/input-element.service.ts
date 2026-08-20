@@ -332,9 +332,11 @@ export class InputElementService {
         let focusedElementId: string | undefined;
         for (const snapshot of snapshots) {
             const input = this.inputElements.get(snapshot.elementId);
+            const rebuiltAuthoredValue = String(input?.element.value ?? '');
             if (!input || this.duplicateInputIds.has(snapshot.elementId) ||
                 input.type !== snapshot.type || !this.isTextEntry(input) ||
-                String(input.element.value ?? '') !== snapshot.authoredValue) {
+                (rebuiltAuthoredValue !== snapshot.authoredValue &&
+                    rebuiltAuthoredValue !== snapshot.mutable.value)) {
                 continue;
             }
             const text = input as TextInput;
