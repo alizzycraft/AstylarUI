@@ -77,6 +77,10 @@ import {
 } from './astylar-plugin';
 import { AstylarPluginRuntime } from './astylar-plugin-runtime';
 import { ASTYLAR_CORE_PLUGIN } from './astylar-core-plugin';
+import {
+  prepareAstylarDocument,
+  type AstylarDocumentPreparationResult,
+} from './astylar-document-preparation';
 
 /**
  * Configuration options for rendering
@@ -960,6 +964,15 @@ export class Astylar {
   /** @internal Used by the repository parity harness; not exported by the package entry point. */
   [ASTYLAR_INTERNAL_INSPECTION](scene: Scene): AstylarInternalInspection | undefined {
     return this.surfaces.get(scene)?.renderer.inspection;
+  }
+
+  /**
+   * Inspects compatibility and applies pure plugin-owned schema migrations to
+   * a detached copy. Rendering never mutates or silently upgrades authored data.
+   */
+  prepareDocument(siteData: SiteData): AstylarDocumentPreparationResult {
+    const registry = new AstylarCapabilityRegistry(this.resolvedPluginDefinitions);
+    return prepareAstylarDocument(siteData, registry);
   }
 
   mount(

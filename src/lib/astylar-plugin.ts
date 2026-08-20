@@ -24,7 +24,8 @@ export type AstylarPluginContributionKind =
   | 'elements'
   | 'properties'
   | 'renderers'
-  | 'lifecycle';
+  | 'lifecycle'
+  | 'migrations';
 export type AstylarPluginInvalidationDomain =
   | 'layout'
   | 'paint'
@@ -139,11 +140,50 @@ export interface AstylarPluginLifecycleDefinition {
   readonly lifecycle: Type<AstylarPluginLifecycle>;
 }
 
+/** Immutable plugin-owned element fragment passed to a pure migration. */
+export interface AstylarPluginElementMigrationData {
+  readonly type: string;
+  readonly data?: Readonly<Record<string, unknown>>;
+}
+
+/** Immutable plugin-owned style fragment passed to a pure migration. */
+export interface AstylarPluginStyleMigrationData {
+  readonly selector: string;
+  readonly extensions: Readonly<Record<string, unknown>>;
+}
+
+export interface AstylarPluginMigrationContext {
+  readonly pluginId: string;
+  readonly migrationId: string;
+  readonly fromSchemaVersion: number;
+  readonly toSchemaVersion: number;
+  readonly path: string;
+}
+
+/**
+ * One pure, deterministic edge in a plugin-owned document schema graph.
+ * Migration callbacks run without an Angular injection context.
+ */
+export interface AstylarPluginMigrationDefinition {
+  readonly id: string;
+  readonly fromSchemaVersion: number;
+  readonly toSchemaVersion: number;
+  readonly migrateElement?: (
+    element: AstylarPluginElementMigrationData,
+    context: AstylarPluginMigrationContext,
+  ) => AstylarPluginElementMigrationData;
+  readonly migrateStyle?: (
+    style: AstylarPluginStyleMigrationData,
+    context: AstylarPluginMigrationContext,
+  ) => AstylarPluginStyleMigrationData;
+}
+
 export interface AstylarPluginContributions {
   readonly elements?: readonly AstylarPluginElementDefinition[];
   readonly properties?: readonly AstylarPluginPropertyDefinition[];
   readonly renderers?: readonly AstylarPluginRendererDefinition[];
   readonly lifecycle?: readonly AstylarPluginLifecycleDefinition[];
+  readonly migrations?: readonly AstylarPluginMigrationDefinition[];
 }
 
 export interface AstylarPluginDefinition {
@@ -225,6 +265,12 @@ export function defineAstylarPlugin<const T extends AstylarPluginDefinition>(
       ? {
           lifecycle: Object.freeze(definition.contributions.lifecycle.map((lifecycle) =>
             Object.freeze({ ...lifecycle }))),
+        }
+      : {}),
+    ...(definition.contributions.migrations
+      ? {
+          migrations: Object.freeze(definition.contributions.migrations.map((migration) =>
+            Object.freeze({ ...migration }))),
         }
       : {}),
   });
@@ -534,6 +580,83 @@ export class AstylarCapabilityRegistry {
         definition.id,
       );
     }
+    this.validateMigrationGraph(definition);
+  }
+
+  private validateMigrationGraph(definition: AstylarPluginDefinition): void {
+    const migrations = definition.contributions.migrations ?? [];
+    if (migrations.length === 0) return;
+    const current = definition.documentSchemaVersion ?? 1;
+    const transitions = new Set<string>();
+    const adjacency = new Map<number, number[]>();
+    for (const migration of migrations) {
+      if (!isContributionId(definition.id, migration.id) ||
+          !Number.isInteger(migration.fromSchemaVersion) ||
+          !Number.isInteger(migration.toSchemaVersion) ||
+          migration.fromSchemaVersion < 1 ||
+          migration.toSchemaVersion < 1 ||
+          migration.fromSchemaVersion > current ||
+          migration.fromSchemaVersion === migration.toSchemaVersion ||
+          migration.toSchemaVersion > current ||
+          (!migration.migrateElement && !migration.migrateStyle)) {
+        this.fail(
+          'plugin-migration-invalid',
+          `Migration ${JSON.stringify(migration.id)} must define a valid transition ending at or before schema ${current} and at least one pure fragment callback.`,
+          definition.id,
+          migration.id,
+        );
+      }
+      const transition = `${migration.fromSchemaVersion}:${migration.toSchemaVersion}`;
+      if (transitions.has(transition)) {
+        this.fail(
+          'plugin-migration-duplicate',
+          `Plugin ${JSON.stringify(definition.id)} declares transition ${transition} more than once.`,
+          definition.id,
+          migration.id,
+        );
+      }
+      transitions.add(transition);
+      adjacency.set(
+        migration.fromSchemaVersion,
+        [...(adjacency.get(migration.fromSchemaVersion) ?? []), migration.toSchemaVersion],
+      );
+    }
+
+    const visiting = new Set<number>();
+    const visited = new Set<number>();
+    const visit = (version: number): void => {
+      if (visiting.has(version)) {
+        this.fail(
+          'plugin-migration-cycle',
+          `Plugin ${JSON.stringify(definition.id)} has a cyclic document migration graph.`,
+          definition.id,
+        );
+      }
+      if (visited.has(version)) return;
+      visiting.add(version);
+      for (const target of adjacency.get(version) ?? []) visit(target);
+      visiting.delete(version);
+      visited.add(version);
+    };
+    for (const version of adjacency.keys()) visit(version);
+
+    const versions = new Set<number>([current]);
+    for (const migration of migrations) {
+      versions.add(migration.fromSchemaVersion);
+      versions.add(migration.toSchemaVersion);
+    }
+    for (const source of versions) {
+      for (const target of versions) {
+        if (source === target) continue;
+        if (countMigrationPaths(adjacency, source, target, new Set()) > 1) {
+          this.fail(
+            'plugin-migration-path-ambiguous',
+            `Plugin ${JSON.stringify(definition.id)} has more than one migration path from schema ${source} to ${target}.`,
+            definition.id,
+          );
+        }
+      }
+    }
   }
 
   private indexContributions(): void {
@@ -696,6 +819,10 @@ export class AstylarCapabilityRegistry {
       | 'plugin-dependency-version-incompatible'
       | 'plugin-dependency-cycle'
       | 'plugin-document-schema-invalid'
+      | 'plugin-migration-invalid'
+      | 'plugin-migration-duplicate'
+      | 'plugin-migration-cycle'
+      | 'plugin-migration-path-ambiguous'
       | 'plugin-contribution-invalid'
       | 'plugin-contribution-duplicate'
       | 'plugin-alias-invalid'
@@ -751,7 +878,25 @@ function contributionKinds(
   if (contributions.properties?.length) result.push('properties');
   if (contributions.renderers?.length) result.push('renderers');
   if (contributions.lifecycle?.length) result.push('lifecycle');
+  if (contributions.migrations?.length) result.push('migrations');
   return result.sort();
+}
+
+function countMigrationPaths(
+  adjacency: ReadonlyMap<number, readonly number[]>,
+  source: number,
+  target: number,
+  visited: ReadonlySet<number>,
+): number {
+  if (source === target) return 1;
+  if (visited.has(source)) return 0;
+  const nextVisited = new Set(visited).add(source);
+  let count = 0;
+  for (const next of adjacency.get(source) ?? []) {
+    count += countMigrationPaths(adjacency, next, target, nextVisited);
+    if (count > 1) return count;
+  }
+  return count;
 }
 
 function capitalize(value: string): string {

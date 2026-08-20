@@ -52,7 +52,8 @@ foundation; no second service container is introduced.
 
 Plugin package versions and compatibility ranges use semantic-version rules.
 Plugin-owned document schema versions are positive integers. Migration steps
-advance one schema version at a time and are unique per source version, removing
+form an explicitly versioned directed graph. Registration rejects duplicate
+transitions, cycles, and multiple paths between the same versions, removing
 ambiguous path selection from the runtime.
 
 ### Explicit document preparation
@@ -178,3 +179,25 @@ Status: complete.
 - Fixed additive API compatibility, explicit pure migrations, strict-default
   recovery, leaf placeholders, generation/surface ownership, and compatibility
   classification before implementation.
+
+### Increment 1: versioned plugin and document contracts
+
+Status: complete in `4de6cee`.
+
+- Added public Astylar/package, plugin dependency, and persisted plugin schema
+  compatibility metadata while preserving Phase 13 string dependencies.
+- Added deterministic semantic-version enforcement and compatibility statuses
+  for installed, missing, version-mismatched, migration-required, and
+  unsupported-schema requirements.
+- Passed the public library build and all 257 tests.
+
+### Increment 2: pure document migrations
+
+Status: complete.
+
+- Added validated explicit migration graphs and a public non-mutating document
+  preparation result.
+- Limited callbacks to frozen plugin-owned element payloads and namespaced style
+  extensions, with no Angular injection context.
+- Proved atomic rollback, unrelated-data preservation, ownership enforcement,
+  missing-path diagnostics, already-current stability, and idempotence.

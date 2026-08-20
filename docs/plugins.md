@@ -47,7 +47,9 @@ const badges = defineAstylarPlugin({
   id: 'example.badges',
   version: '1.0.0',
   pluginApiVersion: ASTYLAR_PLUGIN_API_VERSION,
-  dependencies: ['astylar.core'],
+  astylarVersionRange: '^0.1.0',
+  documentSchemaVersion: 2,
+  dependencies: [{ id: 'astylar.core', versionRange: '^1.0.0' }],
   contributes: ['elements', 'properties', 'renderers'],
   providers: [{ provide: BADGE_CONFIG, useValue: { minimumDepth: 0.05 } }],
   contributions: {
@@ -100,8 +102,11 @@ surface registry. Angular multi-provider order never selects a winner.
   `example.badges:badge`.
 - Versions use semantic-version syntax. `pluginApiVersion` must equal the
   exported `ASTYLAR_PLUGIN_API_VERSION`.
-- `dependencies` contains canonical plugin IDs. Missing, self-referential, and
-  cyclic dependencies fail before activation.
+- `astylarVersionRange` optionally constrains compatible Astylar package
+  versions. `documentSchemaVersion` is a positive integer and defaults to `1`.
+- `dependencies` accepts Phase 13 canonical ID strings (meaning any version) or
+  `{ id, versionRange }` requirements. Missing, version-incompatible,
+  self-referential, and cyclic dependencies fail before activation.
 - `contributes` must exactly describe the non-empty contribution collections.
 - Aliases are optional author-facing names. They must be globally unambiguous.
 - Plugin API v1 does not support renderer replacement. A renderer may claim only
@@ -122,6 +127,11 @@ unknown-safe boundaries rather than weakening the model to `any`:
 
 ```ts
 const siteData: SiteData = {
+  plugins: [{
+    id: 'example.badges',
+    versionRange: '^1.0.0',
+    schemaVersion: 2,
+  }],
   root: {
     children: [{
       type: 'badge',
@@ -137,6 +147,12 @@ const siteData: SiteData = {
   }],
 };
 ```
+
+`SiteData.plugins` is persisted authored metadata, not inferred from the npm
+installation. A requirement records the canonical ID, accepted plugin version
+range, plugin-owned schema version, and an optional `required: false` marker.
+Required is the default. Plugin-free documents and Phase 13 string dependency
+declarations remain valid.
 
 `DOMElement.data` holds a custom element's payload. The element definition may
 provide defaults and validates the effective default-plus-authored object.
@@ -156,6 +172,52 @@ as unsupported, and ignored for rendering. Canonical missing identities allow
 the diagnostic to identify the expected plugin/contribution. Plugin API v1 does
 not render a missing-element placeholder because the current mount validation
 boundary cannot guarantee one without destabilizing layout.
+
+## Document migrations
+
+Plugins can add explicit schema edges through the additive `migrations`
+contribution. A migration may transform only its own canonical element
+`type`/`data` fragment and namespaced `StyleRule.extensions` entries:
+
+```ts
+const v1ToV2 = {
+  id: 'example.badges:v1-to-v2',
+  fromSchemaVersion: 1,
+  toSchemaVersion: 2,
+  migrateElement: (element: AstylarPluginElementMigrationData) => ({
+    ...element,
+    data: { ...element.data, label: element.data?.['text'] },
+  }),
+  migrateStyle: (style: AstylarPluginStyleMigrationData) => ({
+    selector: style.selector,
+    extensions: {
+      'example.badges:depth': style.extensions['example.badges:zDepth'],
+    },
+  }),
+};
+```
+
+List the step under `contributions.migrations` and include `migrations` in
+`contributes`. IDs and transitions are explicit. The sealed registry rejects
+invalid or duplicate edges, cycles, and graphs with more than one path between
+the same schema versions. Preparation reports a missing path rather than
+guessing.
+
+Call `Astylar.prepareDocument(siteData)` (or the lower-level exported
+`prepareAstylarDocument(siteData, registry)`) before saving or mounting old
+plugin data. The result is `ready`, `migrated`, or `blocked`, and includes the
+document, compatibility facts, applied steps, and typed diagnostics. A
+successful migration returns a detached clone and advances only the matching
+persisted schema requirement. An already-current document returns its original
+reference. Any failure returns the complete original document with no partial
+steps committed; a second preparation of successful output is idempotent.
+
+Migration callbacks are deliberately pure and non-injectable. Astylar supplies
+deeply frozen fragment data and immutable identity/path context. There is no
+Angular injection context, full-document access, network/resource facility, or
+permission to alter another plugin's extension keys. Authored children and all
+unrelated element/style fields are retained. Use canonical namespaced IDs in
+persisted plugin data so ownership remains durable across alias changes.
 
 ## Angular scope and injection
 

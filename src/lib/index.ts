@@ -20,6 +20,12 @@ export type {
   AstylarDiagnosticSeverity,
 } from './astylar-diagnostics';
 export { AstylarRenderSession } from "./astylar-render-session";
+export { prepareAstylarDocument } from './astylar-document-preparation';
+export type {
+  AstylarAppliedPluginMigration,
+  AstylarDocumentPreparationResult,
+  AstylarDocumentPreparationStatus,
+} from './astylar-document-preparation';
 export { ASTYLAR_VERSION } from './astylar-version';
 export { AstylarSceneResources } from './astylar-scene-resources';
 export type { AstylarSceneResourceSnapshot } from './astylar-scene-resources';
@@ -91,11 +97,15 @@ export type {
   AstylarPluginInvalidationDomain,
   AstylarPluginLifecycle,
   AstylarPluginLifecycleDefinition,
+  AstylarPluginMigrationContext,
+  AstylarPluginMigrationDefinition,
+  AstylarPluginElementMigrationData,
   AstylarPluginPropertyDefinition,
   AstylarPluginRendererDefinition,
   AstylarPluginRenderContext,
   AstylarPluginRenderDimensions,
   AstylarPluginSurfaceContext,
+  AstylarPluginStyleMigrationData,
   AstylarPluginValidationContext,
   AstylarPluginValidationResult,
 } from './astylar-plugin';
@@ -110,8 +120,14 @@ import { Astylar } from "./astylar";
 import type { SiteData } from "../app/types/site-data";
 import type { AstylarRenderOptions } from "./astylar";
 import type { AstylarSessionSnapshot } from "./astylar-render-session";
+import type { AstylarDocumentPreparationResult } from './astylar-document-preparation';
 
 export const astylar = {
+  /** Explicitly prepares a detached document copy for the configured plugins. */
+  get prepareDocument(): (siteData: SiteData) => AstylarDocumentPreparationResult {
+    const service = inject(Astylar);
+    return service.prepareDocument.bind(service);
+  },
   /** Creates an explicitly owned rendering surface. */
   get mount(): (
     canvas: HTMLCanvasElement,
