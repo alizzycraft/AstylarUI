@@ -43,6 +43,28 @@ foundation and Babylon.js as the owned rendering substrate.
 - For diagnosis or review, test authored data and public lifecycle assumptions
   before concluding that the renderer is defective.
 
+## Load only the references needed
+
+- Read [html-css.md](references/html-css.md) for the complete human translation
+  model and important browser/Astylar differences.
+- Query [capabilities.json](references/capabilities.json) for exact element,
+  `DOMElement`, `StyleRule`, selector, unsupported-feature, and plugin-extension
+  claims. Prefer targeted search or JSON extraction over loading it all.
+- Read [translation-examples.json](references/translation-examples.json) when a
+  task benefits from a verified HTML/CSS and `SiteData` pair.
+- Read [plugins.md](references/plugins.md) only when using, authoring, migrating,
+  recovering, or diagnosing an application-level plugin.
+- Read [reconciliation.md](references/reconciliation.md) when stable identity,
+  retained control/scroll state, replacement, or update behavior matters.
+- Use the bundled `consumer-app.*` and `consumer-badge.plugin.ts` sources as the
+  maintained package-boundary Angular/plugin example; consult the browser spec
+  when lifecycle, resource plateau, isolation, or recovery proof is needed.
+- Read [source-manifest.json](references/source-manifest.json) to compare the
+  bundled contract version and hashes with a consuming project's installed
+  AstylarUI package.
+- Query [public-api.json](references/public-api.json) before naming a package
+  export, and confirm it against the installed package when versions differ.
+
 ## Keep the public boundary
 
 - Build replaceable, serializable `SiteData` from Angular state. Call

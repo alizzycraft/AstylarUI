@@ -1,0 +1,232 @@
+{
+  "schema": "astylarui-translation-examples",
+  "version": 1,
+  "purpose": "Curated forward-testable source material for translating web-development knowledge into AstylarUI.",
+  "sourceContract": {
+    "fixtureBacked": "fixtureSource contains reference.html, reference.css, and the equivalent siteData.root/siteData.styles; the parity harness executes both forms in the same Chromium environment.",
+    "inline": "web contains reference HTML/CSS and astylar.siteData contains the equivalent serializable document. hostCode records required Angular/Astylar lifecycle behavior outside SiteData.",
+    "verification": "npm run examples:check validates this manifest; npm run parity:check executes the fixture-backed visual/behavioral pairs."
+  },
+  "examples": [
+    {
+      "id": "semantic-document",
+      "topic": "semantic-structure",
+      "title": "Semantic landmarks, text, links, lists, and tables",
+      "classification": "compatible",
+      "fixtureId": "semantic-structure",
+      "fixtureSource": "src/parity/fixtures/semantic-structure.fixture.ts",
+      "sourceFields": ["reference.html", "reference.css", "siteData.root", "siteData.styles"],
+      "directMappings": [
+        "HTML tag names map to DOMElement.type aliases.",
+        "id, text, children, href, scope, and authored order retain their ordinary meanings.",
+        "CSS declarations become camelCase fields on SiteData.styles rules."
+      ],
+      "importantDifferences": [
+        "SiteData is serializable authored data, not a live browser Node tree.",
+        "Astylar paints Babylon meshes and mirrors the supported semantics through an offscreen accessibility bridge."
+      ],
+      "evidence": ["file:src/parity/fixtures/semantic-structure.fixture.ts"]
+    },
+    {
+      "id": "box-model-card",
+      "topic": "box-model",
+      "title": "Block flow and the CSS box model",
+      "classification": "compatible",
+      "fixtureId": "box-model-basic",
+      "fixtureSource": "src/parity/fixtures/box-model-basic.fixture.ts",
+      "sourceFields": ["reference.html", "reference.css", "siteData.root", "siteData.styles"],
+      "directMappings": [
+        "width, height, padding, margin, border, background, and normal block flow use familiar CSS concepts.",
+        "The same authored IDs identify both browser boxes and Astylar meshes for parity measurement."
+      ],
+      "importantDifferences": [
+        "The visual box is Babylon geometry projected to the canvas; measured CSS pixels are converted to scene units internally."
+      ],
+      "evidence": ["file:src/parity/fixtures/box-model-basic.fixture.ts"]
+    },
+    {
+      "id": "responsive-breakpoints",
+      "topic": "responsive-layout",
+      "title": "Responsive viewport rules",
+      "classification": "different",
+      "fixtureId": "responsive-media",
+      "fixtureSource": "src/parity/fixtures/responsive-media.fixture.ts",
+      "sourceFields": ["reference.html", "reference.css", "siteData.root", "siteData.styles"],
+      "directMappings": [
+        "Viewport units, source order, breakpoint intent, and responsive sizing transfer directly.",
+        "Surface resize recomputes the same document against the new canvas viewport."
+      ],
+      "importantDifferences": [
+        "Instead of CSS @media blocks, each JSON rule carries mediaMinWidth/mediaMaxWidth/mediaMinHeight/mediaMaxHeight bounds.",
+        "The host calls surface.resize() or relies on AstylarSurfaceComponent resize observation."
+      ],
+      "evidence": ["file:src/parity/fixtures/responsive-media.fixture.ts"]
+    },
+    {
+      "id": "inherited-typography",
+      "topic": "typography",
+      "title": "Inherited typography and measured text",
+      "classification": "compatible",
+      "fixtureId": "text-inheritance",
+      "fixtureSource": "src/parity/fixtures/text-inheritance.fixture.ts",
+      "sourceFields": ["reference.html", "reference.css", "siteData.root", "siteData.styles"],
+      "directMappings": [
+        "Font family, size, weight, style, color, line height, spacing, alignment, and inherited values use CSS-like declarations.",
+        "Nested text receives inherited values through the Astylar cascade."
+      ],
+      "importantDifferences": [
+        "Text is measured and painted through canvas/Babylon resources, so available fonts and browser canvas metrics define the fidelity boundary.",
+        "Astylar implements a focused typography subset rather than every CSS text property."
+      ],
+      "evidence": ["file:src/parity/fixtures/text-inheritance.fixture.ts"]
+    },
+    {
+      "id": "validated-form",
+      "topic": "forms",
+      "title": "Interactive form controls and validation",
+      "classification": "compatible",
+      "fixtureId": "interaction-form-validation",
+      "fixtureSource": "src/parity/fixtures/interaction-form-validation.fixture.ts",
+      "sourceFields": ["reference.html", "reference.css", "siteData.root", "siteData.styles", "interactionSteps"],
+      "directMappings": [
+        "Form, label, input and button structure; required/pattern constraints; focus; keyboard editing; and submit intent follow the tested browser model.",
+        "Typed event names and authored IDs remain familiar."
+      ],
+      "importantDifferences": [
+        "Executable onclick strings are not evaluated; handlers live in AstylarRenderOptions.events.",
+        "Control behavior is a documented subset and state is reconciled across surface.update() rather than mutated through DOM APIs."
+      ],
+      "evidence": ["file:src/parity/fixtures/interaction-form-validation.fixture.ts", "file:src/lib/astylar-event.ts"]
+    },
+    {
+      "id": "modal-top-layer",
+      "topic": "modal-stacking",
+      "title": "Positioning, stacking, and modal focus containment",
+      "classification": "different",
+      "fixtureId": "semantic-modal-containment",
+      "fixtureSource": "src/parity/fixtures/semantic-modal-containment.fixture.ts",
+      "sourceFields": ["reference.html", "reference.css", "siteData.root", "siteData.styles", "interactionSteps"],
+      "directMappings": [
+        "dialog identity, open state, fixed positioning, z-index intent, autofocus, Escape cancel, and wrapped Tab navigation transfer to the supported subset."
+      ],
+      "importantDifferences": [
+        "DOMElement.modal is the explicit Astylar opt-in corresponding to showModal() behavior.",
+        "Astylar does not synthesize browser ::backdrop paint; author a backdrop element/style when it is visually required."
+      ],
+      "evidence": ["file:src/parity/fixtures/semantic-modal-containment.fixture.ts", "file:src/lib/astylar-semantic-bridge.ts"]
+    },
+    {
+      "id": "owned-image",
+      "topic": "async-images",
+      "title": "Asynchronously ready image assets",
+      "classification": "compatible",
+      "fixtureId": "image-intrinsic-size",
+      "fixtureSource": "src/parity/fixtures/image-intrinsic-size.fixture.ts",
+      "sourceFields": ["reference.html", "reference.css", "siteData.root", "siteData.styles"],
+      "directMappings": [
+        "img, src, alt, intrinsic sizing, explicit dimensions, and object-fit use familiar authoring concepts.",
+        "surface.whenSettled() provides a deterministic host boundary for asynchronously ready owned resources."
+      ],
+      "importantDifferences": [
+        "Image textures are Babylon resources owned by the surface/generation rather than browser image elements.",
+        "Use deterministic local or data assets for SSR, tests, and offline consumers."
+      ],
+      "evidence": ["file:src/parity/fixtures/image-intrinsic-size.fixture.ts", "file:src/app/services/dom/elements/image-resource.service.ts"]
+    },
+    {
+      "id": "scene-backed-card",
+      "topic": "three-dimensional-output",
+      "title": "A web-authored card inside an owned Babylon scene",
+      "classification": "different",
+      "web": {
+        "html": "<section id=\"card\"><h2>Scene card</h2><p>Web layout, Babylon output.</p></section>",
+        "css": "#card { width: 280px; padding: 20px; background: #172554; color: white; border-radius: 12px; } #card h2, #card p { margin: 0; font-family: Arial, sans-serif; } #card p { margin-top: 10px; }"
+      },
+      "astylar": {
+        "siteData": {
+          "styles": [
+            { "selector": "#card", "width": "280px", "padding": "20px", "background": "#172554", "color": "#ffffff", "borderRadius": "12px" },
+            { "selector": "h2, p", "margin": "0", "fontFamily": "Arial, sans-serif" },
+            { "selector": "p", "marginTop": "10px" }
+          ],
+          "root": {
+            "children": [
+              { "type": "section", "id": "card", "children": [
+                { "type": "h2", "textContent": "Scene card" },
+                { "type": "p", "textContent": "Web layout, Babylon output." }
+              ] }
+            ]
+          }
+        },
+        "hostCode": "const surface = astylar.mount(canvas, siteData, { clearColor: new Color4(0.01, 0.02, 0.08, 1), setupLighting: scene => setupHostLighting(scene) }); await surface.whenSettled(); // The host may inspect surface.scene, but must dispose surface ownership as a unit."
+      },
+      "directMappings": [
+        "The semantic card tree, CSS-like sizing, spacing, type, color, and radius remain ordinary Astylar document data."
+      ],
+      "importantDifferences": [
+        "The host owns a canvas, camera-facing Babylon scene, lighting callback, and disposable AstylarSurface rather than a browser document viewport.",
+        "CSS-like pixels are converted into scene geometry; direct Babylon customization belongs in host setup or a plugin, not arbitrary SiteData fields."
+      ],
+      "evidence": ["file:src/lib/astylar.ts", "file:src/app/services/babylon-camera.service.ts", "file:src/app/services/coordinate-transform.service.ts"]
+    },
+    {
+      "id": "animation-alternative",
+      "topic": "unsupported-web-feature",
+      "title": "Replace CSS transitions with explicit application state",
+      "classification": "unsupported",
+      "unsupportedWebCapabilities": ["transition", "animation", "@keyframes"],
+      "web": {
+        "html": "<button id=\"save\">Save</button>",
+        "css": "#save { background: #2563eb; transition: background 180ms ease, transform 180ms ease; } #save:hover { background: #1d4ed8; transform: translateY(-2px); }"
+      },
+      "astylar": {
+        "siteData": {
+          "styles": [
+            { "selector": "#save", "width": "120px", "height": "40px", "background": "#2563eb", "color": "#ffffff" },
+            { "selector": "#save:hover", "background": "#1d4ed8" }
+          ],
+          "root": { "children": [{ "type": "button", "id": "save", "textContent": "Save" }] }
+        },
+        "hostCode": "Use immediate supported :hover/:active paint for interaction feedback. For meaningful state changes, update an Angular signal and pass the resulting SiteData to surface.update(); for real 3D motion, use a lifecycle-owned plugin/Babylon animation."
+      },
+      "directMappings": [
+        "The button structure and the supported normal/hover background states transfer directly."
+      ],
+      "importantDifferences": [
+        "Astylar does not parse transition, animation, or @keyframes, so it intentionally shows the supported hover state immediately.",
+        "Application state and plugin-owned Babylon animation are explicit alternatives; silently copying animation CSS would be incorrect."
+      ],
+      "evidence": ["file:src/parity/fixtures/interaction-hover-style.fixture.ts", "file:src/app/types/style-rule.ts"]
+    },
+    {
+      "id": "plugin-badge",
+      "topic": "plugin-capability",
+      "title": "Angular plugin-backed custom element and style property",
+      "classification": "plugin",
+      "web": {
+        "html": "<consumer-badge id=\"badge\">Packed plugin</consumer-badge>",
+        "css": "consumer-badge { display: block; width: 180px; height: 44px; background: #7c3aed; --badge-depth: 0.12; }"
+      },
+      "astylar": {
+        "siteData": {
+          "plugins": [{ "id": "consumer.proof", "versionRange": "^1.0.0", "schemaVersion": 2 }],
+          "styles": [
+            { "selector": "#badge", "width": "180px", "height": "44px", "background": "#7c3aed", "extensions": { "consumer.proof:depth": 0.12 } }
+          ],
+          "root": {
+            "children": [{ "type": "consumer.proof:badge", "id": "badge", "data": { "label": "Packed plugin", "revision": 1 } }]
+          }
+        },
+        "hostCode": "Register provideConsumerBadgePlugin(...) in the Angular providers for each application configuration. The plugin validates data/extensions, injects surface state, owns Babylon resources, and requests safe invalidation."
+      },
+      "directMappings": [
+        "The custom component identity, dimensions, background, and authored payload intent remain declarative."
+      ],
+      "importantDifferences": [
+        "Astylar custom elements/properties require a versioned persisted plugin requirement and a trusted Angular provider contribution; CSS custom properties do not register renderer behavior.",
+        "Plugin-owned async Babylon resources must use generation/surface ownership and DestroyRef rather than escaping the surface lifecycle."
+      ],
+      "evidence": ["file:examples/angular-consumer/src/app/consumer-badge.plugin.ts", "file:examples/angular-consumer/src/app/app.browser.spec.ts", "file:docs/plugins.md"]
+    }
+  ]
+}
