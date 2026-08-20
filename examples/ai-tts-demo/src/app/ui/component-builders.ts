@@ -29,6 +29,7 @@ export function button(
 ): DOMElement {
   return {
     type: 'button',
+    inputType: 'button',
     id,
     class: `ui-button ui-button-${variant}`,
     value: label,
@@ -142,7 +143,7 @@ export function playerCard(options: {
           ] },
           button(
             `${options.idPrefix}-download`,
-            `Download ${options.title} as MP3`,
+            `Download ${options.title}`,
             'icon',
             options.disabled,
           ),
@@ -218,7 +219,7 @@ export function historyCard(
           { type: 'span', id: `history-${item.id}-size`, class: 'history-chip', textContent: item.sizeLabel },
           { type: 'span', id: `history-${item.id}-duration`, class: 'history-chip', textContent: item.durationLabel },
           button(`history-${item.id}-play`, options.playing ? 'Pause' : 'Play', 'icon'),
-          button(`history-${item.id}-download`, 'Download MP3', 'icon'),
+          button(`history-${item.id}-download`, `Download ${item.formatLabel}`, 'icon'),
           button(`history-${item.id}-delete`, `Delete ${item.title}`, 'danger'),
         ],
       },

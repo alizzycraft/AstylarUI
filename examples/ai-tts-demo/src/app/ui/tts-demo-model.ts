@@ -8,6 +8,7 @@ export interface SpeechHistoryItemView {
   createdLabel: string;
   sizeLabel: string;
   durationLabel: string;
+  formatLabel: string;
 }
 
 export interface TtsDemoViewModel {

@@ -1,11 +1,12 @@
-import { Component, signal } from '@angular/core';
+import { Component, computed, inject, NgZone, signal } from '@angular/core';
 import {
   AstylarSurfaceComponent,
+  type AstylarEventSnapshot,
   type AstylarRenderOptions,
   type AstylarSurface,
 } from 'astylarui';
+import { TtsDemoStore } from './speech/tts-demo.store';
 import { buildTtsDemoSite } from './ui/tts-demo-site';
-import { DEFAULT_TTS_VIEW_MODEL } from './ui/tts-demo-model';
 
 @Component({
   selector: 'app-root',
@@ -14,9 +15,14 @@ import { DEFAULT_TTS_VIEW_MODEL } from './ui/tts-demo-model';
   styleUrl: './app.scss',
 })
 export class App {
-  protected readonly siteData = signal(buildTtsDemoSite(DEFAULT_TTS_VIEW_MODEL));
+  private readonly store = inject(TtsDemoStore);
+  private readonly zone = inject(NgZone);
+
+  protected readonly siteData = computed(() => buildTtsDemoSite(this.store.viewModel()));
   protected readonly status = signal('Starting the AstylarUI renderer…');
-  protected readonly options: AstylarRenderOptions = {};
+  protected readonly options: AstylarRenderOptions = {
+    events: { onEvent: (event) => this.zone.run(() => this.handleEvent(event)) },
+  };
 
   protected onMounted(_surface: AstylarSurface): void {
     this.status.set('AstylarUI renderer ready.');
@@ -24,5 +30,28 @@ export class App {
 
   protected onFailed(error: unknown): void {
     this.status.set(`Renderer error: ${error instanceof Error ? error.message : String(error)}`);
+  }
+
+  private handleEvent(event: AstylarEventSnapshot): void {
+    if (event.type === 'input') {
+      const value = event.value ?? '';
+      if (event.targetId === 'history-title') this.store.setTitle(value);
+      if (event.targetId === 'speech-text') this.store.setText(value);
+      if (event.targetId === 'instructions') this.store.setInstructions(value);
+      if (event.targetId === 'history-search') this.store.setHistoryQuery(value);
+      return;
+    }
+    if (event.type === 'change' && event.targetId === 'voice') {
+      this.store.setVoice(event.selectedValue ?? event.value ?? '');
+      return;
+    }
+    if (event.type !== 'click') return;
+    if (event.targetId === 'generate-speech') void this.store.generate();
+    if (event.targetId === 'clear-history') this.store.clearHistory();
+    if (event.targetId === 'storage-summary') this.store.toggleStorageDisclosure();
+
+    const historyAction = /^history-(speech-\d+)-(select|delete)$/.exec(event.targetId);
+    if (historyAction?.[2] === 'select') this.store.selectGeneration(historyAction[1]);
+    if (historyAction?.[2] === 'delete') this.store.deleteGeneration(historyAction[1]);
   }
 }
