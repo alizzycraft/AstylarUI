@@ -101,6 +101,10 @@ in typed core fields; put only plugin-owned serializable values in `data` and
 - Define each custom element's allowed children, defaults, and data validator.
 - Define each property's initial value, inheritance, invalidation domains, and
   deterministic value validator.
+- Select every domain the observable output can change. A value that changes
+  mesh dimensions, placement, or geometry includes `layout` (and normally
+  `paint`); a material/color-only value uses `paint`; accessible names/state use
+  `semantics`; hit/focus behavior uses `interaction`.
 - Return `true` for success or useful user-facing messages for rejection.
 - Never rely on coercion by a private renderer service.
 - Treat validation inputs and context as readonly.
@@ -167,6 +171,8 @@ Migration callbacks:
 - receive frozen plugin-owned fragments and immutable path/version context;
 - return detached plugin-owned replacements;
 - remain deterministic and pure;
+- preserve every unchanged plugin-owned field/extension, removing only keys the
+  migration explicitly replaces;
 - preserve unrelated document data;
 - are idempotent once the document is current.
 
@@ -225,4 +231,3 @@ If the public plugin API cannot express a legitimate contribution, document the
 smallest missing public capability and a public reproduction. Hand it to Phase
 16. Do not import internal registry/renderer services, patch core dispatch,
 claim an undocumented override, or add a private escape hatch from this skill.
-
