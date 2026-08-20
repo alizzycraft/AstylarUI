@@ -39,6 +39,10 @@ export class AstylarVisualResourceReconciler {
       const mesh = elementManager.elementsMap.get(id);
       if (!nextElement || !mesh ||
           !areAstylarReconciliationNodesCompatible(previousElement, nextElement)) continue;
+      // Plugin renderer roots own a complete render generation. Retaining the
+      // old root would dispose the new mesh before delayed generation work can
+      // safely attach to it.
+      if (mesh.metadata?.astylarPluginRenderer) continue;
       if (isControl(previousElement) || isControl(nextElement)) {
         const releasedMesh = inputElementService?.releaseInputMesh(id);
         if (releasedMesh !== mesh) continue;

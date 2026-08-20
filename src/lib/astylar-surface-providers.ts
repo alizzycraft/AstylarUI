@@ -58,11 +58,13 @@ import { FormValidatorService } from '../app/services/dom/input/form-validator.s
 import { SelectManager } from '../app/services/dom/input/select.manager';
 import { AstylarDiagnostics } from './astylar-diagnostics';
 import { AstylarDocumentRecovery } from './astylar-document-recovery';
+import { AstylarPluginHost } from './astylar-plugin-host';
 
 /** Complete renderer dependency scope. Every mount receives new instances. */
 export const ASTYLAR_SURFACE_SERVICE_PROVIDERS: Provider[] = [
   AstylarDiagnostics,
   AstylarDocumentRecovery,
+  AstylarPluginHost,
   TextSelectionStore,
   CoordinateTransformService,
   BabylonCameraService,

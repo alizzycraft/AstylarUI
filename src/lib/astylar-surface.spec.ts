@@ -37,6 +37,12 @@ describe('AstylarSurfaceHandle', () => {
         rendererIds: [],
         lifecycleIds: [],
       }),
+      getPluginResourceSnapshot: jasmine.createSpy('getPluginResourceSnapshot').and.returnValue({
+        owners: 0,
+        resources: 0,
+        cleanups: 0,
+        pending: 0,
+      }),
       reportDiagnostic: jasmine.createSpy('reportDiagnostic'),
     } satisfies jasmine.SpyObj<AstylarSurfaceHost>;
     return { engine, host, scene, surface: new AstylarSurfaceHandle(scene, host) };

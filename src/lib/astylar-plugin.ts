@@ -109,6 +109,53 @@ export interface AstylarPluginRenderDimensions {
   readonly pixelToWorldScale: number;
 }
 
+export interface AstylarPluginInvalidationTarget {
+  /** Explicit work domains. Property-derived domains are added to this set. */
+  readonly domains?: readonly AstylarPluginInvalidationDomain[];
+  /** Canonical IDs or aliases whose `affects` declarations select work domains. */
+  readonly properties?: readonly string[];
+}
+
+export interface AstylarPluginInvalidationRequest extends AstylarPluginInvalidationTarget {
+  readonly pluginId: string;
+  readonly contributionId?: string;
+}
+
+export interface AstylarPluginResourceSource {
+  readonly pluginId: string;
+  readonly contributionId?: string;
+}
+
+export interface AstylarPluginAsyncResourceOptions<T extends object> {
+  /** Required only when the resource does not expose an idempotent `dispose()` method. */
+  readonly dispose?: (resource: T) => void;
+  /** Runs only while this owner is current. Throwing reports and releases the owner. */
+  readonly onReady?: (resource: T, signal: AbortSignal) => void | Promise<void>;
+  /** Optional coalesced invalidation after successful readiness. */
+  readonly invalidate?: AstylarPluginInvalidationTarget;
+}
+
+/** Curated lifetime boundary for Babylon and non-Babylon plugin resources. */
+export interface AstylarPluginResourceOwner {
+  readonly signal: AbortSignal;
+  readonly active: boolean;
+  own<T extends object>(resource: T, dispose?: (resource: T) => void): T;
+  addCleanup(cleanup: () => void): () => void;
+  track<T extends object>(
+    work: PromiseLike<T>,
+    options?: AstylarPluginAsyncResourceOptions<T>,
+  ): Promise<T | undefined>;
+  /** Idempotently aborts work and releases everything owned by this boundary. */
+  dispose(): void;
+}
+
+export interface AstylarPluginResourceSnapshot {
+  readonly owners: number;
+  readonly resources: number;
+  readonly cleanups: number;
+  readonly pending: number;
+}
+
 /** Curated public context supplied to an injectable plugin renderer. */
 export interface AstylarPluginRenderContext {
   readonly scene: Scene;
@@ -118,6 +165,10 @@ export interface AstylarPluginRenderContext {
   readonly style: Readonly<StyleRule>;
   readonly properties: Readonly<Record<string, unknown>>;
   readonly dimensions: AstylarPluginRenderDimensions;
+  /** Invalidated and disposed when this render generation is replaced. */
+  readonly resources: AstylarPluginResourceOwner;
+  /** Automatically attributes the request to this renderer contribution. */
+  requestInvalidation(target: AstylarPluginInvalidationTarget): void;
   report(diagnostic: AstylarDiagnostic): void;
 }
 
@@ -222,6 +273,12 @@ export interface AstylarPluginSurfaceContext {
   /** Unique identity useful for proving and keying surface-local state. */
   readonly surfaceId: symbol;
   readonly capabilities: AstylarCapabilityRegistrySnapshot;
+  /** Resources owned for the complete mounted-surface lifetime. */
+  readonly resources: AstylarPluginResourceOwner;
+  /** Creates a named surface-lifetime child owner suitable for an injectable service. */
+  createResourceOwner(source: AstylarPluginResourceSource): AstylarPluginResourceOwner;
+  /** Requests safe, coalesced work on this surface. Harmless after disposal. */
+  requestInvalidation(request: AstylarPluginInvalidationRequest): void;
   report(diagnostic: AstylarDiagnostic): AstylarDiagnostic;
 }
 

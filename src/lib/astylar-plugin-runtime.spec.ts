@@ -6,7 +6,7 @@ import {
   provideZonelessChangeDetection,
 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { MeshBuilder, type Mesh } from '@babylonjs/core';
+import { MeshBuilder, StandardMaterial, type Mesh } from '@babylonjs/core';
 import type { SiteData } from '../app/types/site-data';
 import { Astylar } from './astylar';
 import { AstylarDiagnosticError, type AstylarDiagnostic } from './astylar-diagnostics';
@@ -26,11 +26,13 @@ let nextBadgeConfig = 0;
 @Injectable()
 class BadgeRenderer implements AstylarPluginElementRenderer {
   static surfaceIds: symbol[] = [];
+  static surfaceContexts: Array<ReturnType<typeof injectSurfaceContext>> = [];
   private readonly config = inject(BADGE_CONFIG);
   private readonly surface = inject(ASTYLAR_PLUGIN_SURFACE_CONTEXT);
 
   constructor() {
     BadgeRenderer.surfaceIds.push(this.surface.surfaceId);
+    BadgeRenderer.surfaceContexts.push(this.surface);
   }
 
   render(context: AstylarPluginRenderContext): Mesh {
@@ -47,6 +49,44 @@ class BadgeRenderer implements AstylarPluginElementRenderer {
       pluginTone: context.properties['badgeTone'],
       surfaceId: this.surface.surfaceId,
     };
+    return mesh;
+  }
+}
+
+function injectSurfaceContext() {
+  return inject(ASTYLAR_PLUGIN_SURFACE_CONTEXT);
+}
+
+interface DelayedProbe {
+  readonly label: string;
+  readonly dispose: jasmine.Spy;
+}
+
+@Injectable()
+class DelayedRenderer implements AstylarPluginElementRenderer {
+  static pending: Array<{
+    resolve: (probe: DelayedProbe) => void;
+    signal: AbortSignal;
+  }> = [];
+
+  render(context: AstylarPluginRenderContext): Mesh {
+    const mesh = MeshBuilder.CreateBox(context.meshId, {
+      width: context.dimensions.width * context.dimensions.pixelToWorldScale,
+      height: context.dimensions.height * context.dimensions.pixelToWorldScale,
+      depth: 0.1,
+    }, context.scene);
+    let resolve!: (probe: DelayedProbe) => void;
+    const delayed = new Promise<DelayedProbe>((ready) => { resolve = ready; });
+    DelayedRenderer.pending.push({ resolve, signal: context.resources.signal });
+    void context.resources.track(delayed, {
+      onReady: (probe) => {
+        const material = context.resources.own(
+          new StandardMaterial(`${context.meshId}-${probe.label}`, context.scene),
+        );
+        mesh.material = material;
+        mesh.metadata = { readyLabel: probe.label };
+      },
+    });
     return mesh;
   }
 }
@@ -168,6 +208,21 @@ const incompatibleBadgePlugin = defineAstylarPlugin({
   version: '2.0.0',
 });
 
+const delayedPlugin = defineAstylarPlugin({
+  id: 'example.delayed',
+  version: '1.0.0',
+  pluginApiVersion: ASTYLAR_PLUGIN_API_VERSION,
+  contributes: ['elements', 'renderers'],
+  contributions: {
+    elements: [{ id: 'example.delayed:panel', children: 'none' }],
+    renderers: [{
+      id: 'example.delayed:renderer',
+      elements: ['example.delayed:panel'],
+      renderer: DelayedRenderer,
+    }],
+  },
+});
+
 describe('Astylar surface plugin runtime', () => {
   beforeEach(() => {
     LifecycleProbe.nextId = 0;
@@ -175,6 +230,8 @@ describe('Astylar surface plugin runtime', () => {
     LifecycleProbe.destroyed = [];
     FailingLifecycle.destroyed = 0;
     BadgeRenderer.surfaceIds = [];
+    BadgeRenderer.surfaceContexts = [];
+    DelayedRenderer.pending = [];
     nextBadgeConfig = 0;
   });
 
@@ -501,9 +558,89 @@ describe('Astylar surface plugin runtime', () => {
       expect(badge.metadata.pluginLabel).toBe('Unavailable');
       expect(badge.metadata.pluginDepth).toBe(0.15);
       expect(surface.scene.getMeshByName('unrendered-child')).toBeTruthy();
+
+      const beforeRevision = surface.diagnostics.session!.revision;
+      const pluginContext = BadgeRenderer.surfaceContexts[0];
+      pluginContext.requestInvalidation({
+        pluginId: 'example.badges',
+        properties: ['badgeDepth'],
+      });
+      pluginContext.requestInvalidation({
+        pluginId: 'example.badges',
+        properties: ['badgeDepth'],
+      });
+      await surface.whenSettled();
+      expect(surface.diagnostics.session!.revision).toBe(beforeRevision + 1);
+      expect(surface.diagnostics.reconciliation!.strategy).toBe('rebuild');
     } finally {
       surface.dispose();
     }
+    expect(() => BadgeRenderer.surfaceContexts[0].requestInvalidation({
+      pluginId: 'example.badges',
+      domains: ['paint'],
+    })).not.toThrow();
+  });
+
+  it('awaits current async resources and rejects stale generation completion', async () => {
+    TestBed.configureTestingModule({
+      providers: [
+        provideZonelessChangeDetection(),
+        provideAstylar({ plugins: [delayedPlugin] }),
+      ],
+    });
+    const surface = TestBed.inject(Astylar).mount(
+      document.createElement('canvas'),
+      delayedSite('first'),
+      { diagnostics: { logLevel: 'silent' } },
+    );
+    try {
+      const initialSettlement = surface.whenSettled();
+      await waitFor(() => DelayedRenderer.pending.length === 1);
+      const first = DelayedRenderer.pending[0];
+      const update = surface.update(delayedSite('second'));
+      await waitFor(() => DelayedRenderer.pending.length === 2);
+      expect(first.signal.aborted).toBeTrue();
+
+      const currentProbe: DelayedProbe = {
+        label: 'current',
+        dispose: jasmine.createSpy('currentDispose'),
+      };
+      DelayedRenderer.pending[1].resolve(currentProbe);
+      await update;
+      await initialSettlement;
+      expect(surface.scene.getMeshByName('delayed-panel')!.metadata.readyLabel).toBe('current');
+      expect(surface.diagnostics.resources!.materials).toBeGreaterThan(0);
+      expect(surface.diagnostics.pluginResources.resources).toBe(2);
+      expect(surface.diagnostics.pluginResources.pending).toBe(0);
+
+      const retainedMesh = surface.scene.getMeshByName('delayed-panel')!;
+      const retainedMaterial = retainedMesh.material;
+      const semanticOnly = delayedSite('second');
+      semanticOnly.root.children[0].ariaLabel = 'Updated semantics';
+      await surface.update(semanticOnly);
+      expect(DelayedRenderer.pending.length).toBe(2);
+      expect(surface.scene.getMeshByName('delayed-panel')).toBe(retainedMesh);
+      expect(retainedMesh.material).toBe(retainedMaterial);
+      expect(surface.diagnostics.pluginResources.resources).toBe(2);
+
+      const staleProbe: DelayedProbe = {
+        label: 'stale',
+        dispose: jasmine.createSpy('staleDispose'),
+      };
+      first.resolve(staleProbe);
+      await Promise.resolve();
+      await Promise.resolve();
+      expect(staleProbe.dispose).toHaveBeenCalledOnceWith();
+      expect(surface.scene.getMeshByName('delayed-panel')!.metadata.readyLabel).toBe('current');
+    } finally {
+      surface.dispose();
+    }
+    expect(surface.diagnostics.pluginResources).toEqual({
+      owners: 0,
+      resources: 0,
+      cleanups: 0,
+      pending: 0,
+    });
   });
 });
 
@@ -582,4 +719,26 @@ function missingBadgeSite(): SiteData {
       },
     ],
   };
+}
+
+function delayedSite(label: string): SiteData {
+  return {
+    plugins: [{ id: 'example.delayed', versionRange: '^1.0.0', schemaVersion: 1 }],
+    styles: [{ selector: '#delayed-panel', width: '120px', height: '40px' }],
+    root: {
+      children: [{
+        type: 'example.delayed:panel',
+        id: 'delayed-panel',
+        data: { label },
+      }],
+    },
+  };
+}
+
+async function waitFor(predicate: () => boolean): Promise<void> {
+  for (let attempt = 0; attempt < 100; attempt += 1) {
+    if (predicate()) return;
+    await new Promise((resolve) => setTimeout(resolve, 5));
+  }
+  throw new Error('Timed out waiting for asynchronous renderer state.');
 }

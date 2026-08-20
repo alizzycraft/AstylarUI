@@ -9,7 +9,10 @@ import type {
   AstylarSessionSnapshot,
 } from './astylar-render-session';
 import type { AstylarVisualReconciliationSnapshot } from './astylar-visual-reconciler';
-import type { AstylarCapabilityRegistrySnapshot } from './astylar-plugin';
+import type {
+  AstylarCapabilityRegistrySnapshot,
+  AstylarPluginResourceSnapshot,
+} from './astylar-plugin';
 import {
   AstylarDiagnosticError,
   type AstylarDiagnostic,
@@ -24,6 +27,7 @@ export interface AstylarSurfaceDiagnostics {
   readonly semantics?: AstylarSemanticSnapshot;
   readonly reconciliation?: AstylarVisualReconciliationSnapshot;
   readonly plugins: AstylarCapabilityRegistrySnapshot;
+  readonly pluginResources: AstylarPluginResourceSnapshot;
 }
 
 /** An explicitly owned rendering surface returned by `Astylar.mount()`. */
@@ -54,6 +58,7 @@ export interface AstylarSurfaceHost {
   ): AstylarVisualReconciliationSnapshot | undefined;
   getDiagnosticSnapshot(): readonly AstylarDiagnostic[];
   getPluginSnapshot(): AstylarCapabilityRegistrySnapshot;
+  getPluginResourceSnapshot(): AstylarPluginResourceSnapshot;
   reportDiagnostic(diagnostic: AstylarDiagnostic): void;
 }
 
@@ -80,6 +85,7 @@ export class AstylarSurfaceHandle implements AstylarSurface {
       semantics: this.host.getSemanticSnapshot(this.scene),
       reconciliation: this.host.getVisualReconciliationSnapshot(this.scene),
       plugins: this.host.getPluginSnapshot(),
+      pluginResources: this.host.getPluginResourceSnapshot(),
     };
   }
 

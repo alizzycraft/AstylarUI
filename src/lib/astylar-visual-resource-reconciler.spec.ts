@@ -104,6 +104,33 @@ describe('AstylarVisualResourceReconciler', () => {
     expect(elements.has('content')).toBeTrue();
   });
 
+  it('does not transplant plugin-renderer roots across generations', () => {
+    const resources = new AstylarSceneResources(scene);
+    const elements = new Map<string, Mesh>();
+    resources.replace(() => {
+      const mesh = MeshBuilder.CreatePlane('plugin-panel', {}, scene);
+      mesh.metadata = { astylarPluginRenderer: 'example.async:renderer' };
+      elements.set('plugin-panel', mesh);
+    });
+    const manager = {
+      elementsMap: elements,
+      inputElementsMap: new Map(),
+    } as unknown as BabylonElementManagerService;
+    const document: SiteData = {
+      styles: [],
+      root: { children: [{ type: 'example.async:panel', id: 'plugin-panel' }] },
+    };
+
+    new AstylarVisualResourceReconciler().stage(
+      document,
+      document,
+      manager,
+      resources,
+    );
+
+    expect(elements.has('plugin-panel')).toBeTrue();
+  });
+
   it('retains compatible control meshes after their old manager resources are released', () => {
     const resources = new AstylarSceneResources(scene);
     const elements = new Map<string, Mesh>();

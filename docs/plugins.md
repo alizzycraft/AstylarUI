@@ -272,15 +272,21 @@ Plugins may inject `ASTYLAR_PLUGIN_SURFACE_CONTEXT`. It contains:
 
 - a unique `surfaceId` symbol;
 - the immutable sealed capability snapshot;
-- the surface diagnostics reporter.
+- the surface diagnostics reporter;
+- a surface-lifetime resource owner;
+- `createResourceOwner(...)` for named plugin/service ownership;
+- `requestInvalidation(...)` for safe surface-scoped work requests.
 
-The snapshot is also available as `surface.diagnostics.plugins`.
+The capability snapshot is also available as `surface.diagnostics.plugins`.
+Resource counts are exposed separately as `surface.diagnostics.pluginResources`
+with owner, resource, cleanup, and pending-work counts.
 
 Lifecycle services may implement `activate()`. Activation runs once per surface
-in deterministic plugin dependency order. Use Angular `DestroyRef` for
-subscriptions, observers, timers, and other non-Babylon cleanup. Destroying a
-surface destroys its injector. Failed synchronous mount/activation also destroys
-the partially initialized injector. `dispose()` remains idempotent.
+in deterministic plugin dependency order. Angular services continue to use
+`DestroyRef` for service-state cleanup. A service that needs owned Babylon or
+custom resources can create a named child owner and dispose it from `DestroyRef`;
+surface destruction is the final idempotent fallback. Failed synchronous
+mount/activation also destroys the partially initialized injector.
 
 ## Rendering and resource ownership
 
@@ -291,6 +297,8 @@ the supported public facilities:
 - stable `meshId` and resolved element data;
 - resolved core style and plugin property values;
 - pixel layout dimensions, padding, and pixel-to-world scale;
+- a generation-scoped resource owner and `AbortSignal`;
+- an automatically attributed invalidation requester;
 - a diagnostics reporter.
 
 It does not expose Astylar's private renderer services. The renderer must return
@@ -299,11 +307,83 @@ identity, layout parent/position, paint, border, transform, hover, dimension, an
 text bookkeeping to the returned primary mesh.
 
 Meshes, materials, and textures created synchronously in the renderer participate
-in the same scene transaction as core output. They are released on replacement,
-rebuild, and final surface disposal. A renderer service persists for the life of
-its surface and may retain Angular state across updates; the renderer method is
-called again when the element is rebuilt. Use `DestroyRef` for resources that
-are not Babylon scene resources.
+in the same scene transaction as core output. A renderer service persists for
+the life of its surface and may retain Angular state across updates; the renderer
+method is called again when the element is rebuilt.
+
+`context.resources` owns work for that element's current render generation:
+
+- `signal` is aborted and `active` becomes false when the generation is replaced;
+- `own(resource, disposer?)` adopts a synchronously or asynchronously created
+  resource. Objects with `dispose()` need no explicit disposer;
+- `addCleanup(callback)` owns an observer removal, event-handler removal, timer,
+  or other callback and returns an unregister function;
+- `track(promise, options)` extends settlement through delayed readiness, adopts
+  the resolved resource only while current, disposes stale late completion, and
+  can run `onReady` plus one coalesced invalidation;
+- `dispose()` is idempotent.
+
+For example, a deterministic delayed dependency can be owned without making the
+renderer itself asynchronous:
+
+```ts
+void context.resources.track(loadMaterial(context.resources.signal), {
+  onReady: (material) => {
+    mesh.material = material;
+  },
+  invalidate: { properties: ['badgeDepth'] },
+});
+```
+
+Tracked failure reports `plugin-async-resource-failed` and releases the failed
+owner. Replacing a pending generation aborts settlement immediately; if the
+underlying operation ignores its signal and resolves later, its resource is
+disposed without invoking `onReady`. Plugin roots remain generation replacement
+units rather than being transplanted onto an older mesh, so delayed callbacks
+never target a disposed replacement. Async Babylon resources are adopted into
+the public scene-resource counts as well as the plugin owner counts.
+
+`ASTYLAR_PLUGIN_SURFACE_CONTEXT.resources` lasts for the mounted surface.
+`createResourceOwner({ pluginId, contributionId? })` creates an independently
+disposable child suitable for a surface-scoped Angular service. Use explicit
+disposers for objects without `dispose()`. The facility supports Babylon meshes,
+materials, textures and render targets, custom disposables, cleanup callbacks,
+observers, event handlers, and cancellable delayed work without exposing private
+Astylar services.
+
+## Plugin invalidation
+
+Property `affects` declarations are operational. A renderer can use its bound
+requester:
+
+```ts
+context.requestInvalidation({ properties: ['badgeDepth'] });
+```
+
+An injected service uses the surface context and states its identity:
+
+```ts
+surface.requestInvalidation({
+  pluginId: 'example.badges',
+  contributionId: 'example.badges:state',
+  domains: ['semantics'],
+});
+```
+
+Explicit `domains` and the `affects` domains of owned canonical property IDs or
+aliases are combined. Requests are validated against the sealed registry and
+coalesced into reasons such as `plugin:example.badges:layout,paint`. Phase 14
+uses the existing complete, safe reflow for every plugin domain; the domain is a
+real scheduling contract, not a claim of dirty-subtree optimization. Requests
+are isolated to their surface and become harmless after disposal.
+
+Synchronous invalidation from inside `render()` is diagnosed and ignored. A
+tracked async `onReady` request is valid because renderer execution has ended.
+Eight consecutive identical plugin-only reflows are stopped with
+`plugin-invalidation-recursive`; an update, resize, asset event, or other host
+reason resets the guard. Invalid requests and reflow failures report
+`plugin-invalidation-invalid` and `plugin-invalidation-failed` with plugin and
+contribution identities.
 
 Renderer and lifecycle construction failures become
 `plugin-initialization-failed`; renderer exceptions or invalid returned meshes

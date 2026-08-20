@@ -55,6 +55,19 @@ export class AstylarSceneResources {
     }
   }
 
+  /** Adopts a resource that was completed after the synchronous scene transaction. */
+  adopt(resource: object): void {
+    if (this.scene.meshes.includes(resource as AbstractMesh)) {
+      this.meshes.add(resource as AbstractMesh);
+    }
+    if (this.scene.materials.includes(resource as Material)) {
+      this.materials.add(resource as Material);
+    }
+    if (this.scene.textures.includes(resource as BaseTexture)) {
+      this.textures.add(resource as BaseTexture);
+    }
+  }
+
   dispose(): void {
     this.clear();
   }

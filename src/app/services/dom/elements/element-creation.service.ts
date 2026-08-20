@@ -27,6 +27,7 @@ import { AstylarDiagnostics } from "../../../../lib/astylar-diagnostics";
 import { AstylarPluginRuntime } from "../../../../lib/astylar-plugin-runtime";
 import { AstylarCoreCompatibilityRenderer } from "../../../../lib/astylar-core-plugin";
 import { AstylarDocumentRecovery } from "../../../../lib/astylar-document-recovery";
+import { AstylarPluginHost } from "../../../../lib/astylar-plugin-host";
 
 /**
  * Service responsible for creating DOM elements as Babylon.js meshes
@@ -54,6 +55,7 @@ export class ElementCreationService {
     private pluginRuntime: AstylarPluginRuntime,
     private diagnostics: AstylarDiagnostics,
     private documentRecovery: AstylarDocumentRecovery,
+    private pluginHost: AstylarPluginHost,
   ) {}
 
   /**
@@ -192,23 +194,41 @@ export class ElementCreationService {
         : null;
 
     if (pluginRenderer) {
-      mesh = this.pluginRuntime.render(pluginRenderer, {
-        scene: render.scene!,
-        parent: layoutParent,
-        meshId,
-        element,
-        style,
-        properties: pluginProperties,
-        dimensions: {
-          x: dimensions.x,
-          y: dimensions.y,
-          width: dimensions.width,
-          height: dimensions.height,
-          padding: dimensions.padding,
-          pixelToWorldScale: scaleFactor,
-        },
-        report: (diagnostic) => this.diagnostics.report(diagnostic),
-      });
+      const source = {
+        pluginId: pluginRenderer.definition.id.slice(
+          0,
+          pluginRenderer.definition.id.indexOf(':'),
+        ),
+        contributionId: pluginRenderer.definition.id,
+      };
+      const resources = this.pluginHost.createRenderOwner(source);
+      const exitRenderer = this.pluginHost.enterRenderer();
+      try {
+        mesh = this.pluginRuntime.render(pluginRenderer, {
+          scene: render.scene!,
+          parent: layoutParent,
+          meshId,
+          element,
+          style,
+          properties: pluginProperties,
+          dimensions: {
+            x: dimensions.x,
+            y: dimensions.y,
+            width: dimensions.width,
+            height: dimensions.height,
+            padding: dimensions.padding,
+            pixelToWorldScale: scaleFactor,
+          },
+          resources,
+          requestInvalidation: (target) => this.pluginHost.requestFor(source, target),
+          report: (diagnostic) => this.diagnostics.report(diagnostic),
+        });
+      } catch (error) {
+        resources.dispose();
+        throw error;
+      } finally {
+        exitRenderer();
+      }
       mesh.name = meshId;
     } else if (inputElement) {
       dom.context.inputElements.set(
@@ -327,6 +347,9 @@ export class ElementCreationService {
       elementId: element.id,
       element: element, // Store the element object for hover handling
       astylarPluginProperties: pluginProperties,
+      ...(pluginRenderer
+        ? { astylarPluginRenderer: pluginRenderer.definition.id }
+        : {}),
       ...(placeholder ? { astylarMissingPlugin: placeholder } : {}),
     };
 

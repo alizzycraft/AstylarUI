@@ -212,3 +212,18 @@ Status: complete.
   normal layout/paint participation, render-leaf child policy, and metadata.
 - Proved source immutability, repeated-update resource plateaus, final zero
   resources, and real-renderer restoration on a compatible new surface.
+
+### Increment 4: asynchronous ownership and invalidation
+
+Status: complete.
+
+- Added generation and surface resource owners for Babylon resources, custom
+  disposables, cleanup callbacks, observers/listeners, and tracked delayed work.
+- Integrated tracked readiness with settlement, abort-on-replacement, stale
+  completion disposal, async Babylon adoption, and public zero-count diagnostics.
+- Made property `affects` domains operational through validated, surface-scoped,
+  coalesced invalidation requests while retaining the safe complete-reflow path.
+- Prevented synchronous renderer recursion and bounded repeated plugin-only
+  invalidation loops with attributed diagnostics.
+- Proved plugin-root replacement, settled semantic-only generation retention,
+  async failure cleanup, Angular destruction, and harmless post-disposal calls.

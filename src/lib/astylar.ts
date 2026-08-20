@@ -74,6 +74,10 @@ import {
   AstylarCapabilityRegistry,
   type AstylarCapabilityRegistrySnapshot,
   type AstylarPluginDefinition,
+  type AstylarPluginResourceSnapshot,
+  type AstylarPluginResourceSource,
+  type AstylarPluginInvalidationRequest,
+  type AstylarPluginSurfaceContext,
 } from './astylar-plugin';
 import { AstylarPluginRuntime } from './astylar-plugin-runtime';
 import { ASTYLAR_CORE_PLUGIN } from './astylar-core-plugin';
@@ -85,6 +89,7 @@ import {
   AstylarDocumentRecovery,
   type AstylarPluginRecoveryPolicy,
 } from './astylar-document-recovery';
+import { AstylarPluginHost } from './astylar-plugin-host';
 
 /**
  * Configuration options for rendering
@@ -142,6 +147,7 @@ class AstylarRenderer {
   private readonly surfaceHandles = new WeakMap<Scene, AstylarSurface>();
   private readonly diagnostics: AstylarDiagnostics = inject(AstylarDiagnostics);
   private readonly documentRecovery = inject(AstylarDocumentRecovery);
+  private readonly pluginHost = inject(AstylarPluginHost);
   private activeSession?: AstylarRenderSession;
 
   /** @internal */
@@ -360,6 +366,7 @@ class AstylarRenderer {
     this.babylonDOMRenderer.initialize(renderContext, viewportWidth, viewportHeight);
     const sceneResources = new AstylarSceneResources(scene);
     this.sceneResources.set(scene, sceneResources);
+    this.pluginHost.bindResourceAdoption((resource) => sceneResources.adopt(resource));
     const visualReconciler = new AstylarVisualReconciler();
     this.visualReconciliation.set(scene, visualReconciler);
     const visualResources = new AstylarVisualResourceReconciler();
@@ -387,8 +394,11 @@ class AstylarRenderer {
     const session = new AstylarRenderSession(
       scene,
       siteData,
-      (currentSiteData, reasons) => {
-        const visualPlan = visualReconciler.plan(currentSiteData, reasons);
+      async (currentSiteData, reasons) => {
+        const planningReasons = hasCompletedRender && !this.pluginHost.hasActiveGeneration
+          ? [...reasons, 'plugin-generation-replaced']
+          : reasons;
+        const visualPlan = visualReconciler.plan(currentSiteData, planningReasons);
         if (!visualPlan.rebuild) {
           semanticBridge?.reconcile(currentSiteData);
           interaction?.reconcileModalState();
@@ -404,72 +414,82 @@ class AstylarRenderer {
           hasCompletedRender = true;
           return;
         }
-        const textState = hasCompletedRender
-          ? this.inputElementService.captureTextControlStates()
-          : [];
-        const nonTextState = hasCompletedRender
-          ? this.inputElementService.captureNonTextControlStates()
-          : [];
-        const scrollState = hasCompletedRender
-          ? scrollRuntime.snapshot.containers
-          : {};
-        engine.resize(true);
-        this.imageResources.retain(
-          scene,
-          this.collectImageSources(currentSiteData),
-        );
-        this.babylonDOMRenderer.initialize(
-          renderContext,
-          canvas.clientWidth || viewportWidth,
-          canvas.clientHeight || viewportHeight,
-        );
-        const visualResourceTransaction = visualResources.stage(
-          previousVisualIdentityData,
-          currentSiteData,
-          this.elementManager,
-          sceneResources,
-          this.inputElementService,
-        );
-        let reusedVisualMeshes = 0;
-        sceneResources.replace(
-          () => {
-            this.babylonDOMRenderer.createSiteFromData(currentSiteData);
-            reusedVisualMeshes = visualResourceTransaction.reconcile().reusedMeshes;
-            scrollRuntime.reconcile(currentSiteData, scrollState);
-            semanticBridge?.reconcile(currentSiteData);
-            const textFocusId = this.inputElementService.restoreTextControlStates(textState);
-            const nonTextFocusId = this.inputElementService.restoreNonTextControlStates(nonTextState);
-            const focusedElementId = textFocusId ?? nonTextFocusId;
-            if (focusedElementId) {
-              const input = this.inputElementService.getInputElement(focusedElementId);
-              if (input && !input.disabled) {
-                this.inputElementService.setDefaultFocusIndicatorEnabled(
-                  focusedElementId,
-                  this.shouldShowDefaultFocusIndicator(focusedElementId),
-                );
-                this.inputElementService.focusInputElement(input);
-                this.setElementFocusState(focusedElementId, true);
+        const generation = this.pluginHost.beginGeneration(planningReasons);
+        try {
+          const textState = hasCompletedRender
+            ? this.inputElementService.captureTextControlStates()
+            : [];
+          const nonTextState = hasCompletedRender
+            ? this.inputElementService.captureNonTextControlStates()
+            : [];
+          const scrollState = hasCompletedRender
+            ? scrollRuntime.snapshot.containers
+            : {};
+          engine.resize(true);
+          this.imageResources.retain(
+            scene,
+            this.collectImageSources(currentSiteData),
+          );
+          this.babylonDOMRenderer.initialize(
+            renderContext,
+            canvas.clientWidth || viewportWidth,
+            canvas.clientHeight || viewportHeight,
+          );
+          const visualResourceTransaction = visualResources.stage(
+            previousVisualIdentityData,
+            currentSiteData,
+            this.elementManager,
+            sceneResources,
+            this.inputElementService,
+          );
+          let reusedVisualMeshes = 0;
+          sceneResources.replace(
+            () => {
+              this.babylonDOMRenderer.createSiteFromData(currentSiteData);
+              reusedVisualMeshes = visualResourceTransaction.reconcile().reusedMeshes;
+              scrollRuntime.reconcile(currentSiteData, scrollState);
+              semanticBridge?.reconcile(currentSiteData);
+              const textFocusId = this.inputElementService.restoreTextControlStates(textState);
+              const nonTextFocusId = this.inputElementService.restoreNonTextControlStates(nonTextState);
+              const focusedElementId = textFocusId ?? nonTextFocusId;
+              if (focusedElementId) {
+                const input = this.inputElementService.getInputElement(focusedElementId);
+                if (input && !input.disabled) {
+                  this.inputElementService.setDefaultFocusIndicatorEnabled(
+                    focusedElementId,
+                    this.shouldShowDefaultFocusIndicator(focusedElementId),
+                  );
+                  this.inputElementService.focusInputElement(input);
+                  this.setElementFocusState(focusedElementId, true);
+                }
               }
-            }
-            interaction?.reconcileModalState();
-            semanticBridge?.syncControlStates((elementId) =>
-              this.getLiveSemanticControlState(elementId));
-            semanticBridge?.queueFocusSync(
-              () => interaction?.snapshot.focusedElementId ??
-                this.inputElementService.getFocusedElementId(),
-              (elementId) => this.hasLiveTextSelection(elementId),
-            );
-          },
-          this.imageResources.getSceneTextures(scene),
-        );
-        visualResourceTransaction.commitOwnership();
-        visualPlan.commit({ reused: reusedVisualMeshes });
-        previousVisualIdentityData = this.snapshotVisualIdentityData(currentSiteData);
-        hasCompletedRender = true;
+              interaction?.reconcileModalState();
+              semanticBridge?.syncControlStates((elementId) =>
+                this.getLiveSemanticControlState(elementId));
+              semanticBridge?.queueFocusSync(
+                () => interaction?.snapshot.focusedElementId ??
+                  this.inputElementService.getFocusedElementId(),
+                (elementId) => this.hasLiveTextSelection(elementId),
+              );
+            },
+            this.imageResources.getSceneTextures(scene),
+          );
+          await generation.whenSettled();
+          visualResourceTransaction.commitOwnership();
+          visualPlan.commit({ reused: reusedVisualMeshes });
+          previousVisualIdentityData = this.snapshotVisualIdentityData(currentSiteData);
+          hasCompletedRender = true;
+        } catch (error) {
+          this.pluginHost.invalidateCurrentGeneration();
+          throw error;
+        }
       },
     );
     this.sessions.set(scene, session);
     this.activeSession = session;
+    this.pluginHost.bindInvalidation((reason) => session.isDisposed
+      ? Promise.resolve(session.snapshot)
+      : session.invalidate(reason));
     let interaction: AstylarInteractionRuntime | undefined;
     let pointerFocusTransaction = false;
     const interactionEvents = semanticBridge
@@ -605,6 +625,7 @@ class AstylarRenderer {
     session.addCleanup(() => scrollRuntime.dispose());
     if (semanticBridge) session.addCleanup(() => semanticBridge.dispose());
     session.addCleanup(() => sceneResources.dispose());
+    session.addCleanup(() => this.pluginHost.invalidateCurrentGeneration());
     session.addCleanup(this.imageResources.subscribe((event) => {
       if (event.scene !== scene || session.isDisposed) return;
       if (!this.collectImageSources(session.siteData).has(event.source)) return;
@@ -716,6 +737,10 @@ class AstylarRenderer {
     return this.pluginRuntime.snapshot;
   }
 
+  getPluginResourceSnapshot(): AstylarPluginResourceSnapshot {
+    return this.pluginHost.snapshot;
+  }
+
   reportDiagnostic(diagnostic: AstylarDiagnostic): void {
     this.diagnostics.report(diagnostic);
   }
@@ -725,6 +750,7 @@ class AstylarRenderer {
     const renderDocument = this.documentRecovery.prepare(siteData);
     this.validateDocument(siteData);
     const session = this.requireSession(scene);
+    this.pluginHost.cancelPendingGeneration();
     this.interactions.get(session.scene)?.setSiteData(renderDocument);
     return session.update(renderDocument);
   }
@@ -1016,12 +1042,18 @@ export class Astylar {
         },
         {
           provide: ASTYLAR_PLUGIN_SURFACE_CONTEXT,
-          useFactory: () => {
+          useFactory: (): AstylarPluginSurfaceContext => {
             const registry = inject(AstylarCapabilityRegistry);
             const diagnostics = inject(AstylarDiagnostics);
+            const host = inject(AstylarPluginHost);
             return Object.freeze({
               surfaceId: Symbol('AstylarPluginSurface'),
               capabilities: registry.snapshot,
+              resources: host.resources,
+              createResourceOwner: (source: AstylarPluginResourceSource) =>
+                host.createSurfaceOwner(source),
+              requestInvalidation: (request: AstylarPluginInvalidationRequest) =>
+                host.requestInvalidation(request),
               report: (diagnostic: AstylarDiagnostic) => diagnostics.report(diagnostic),
             });
           },
