@@ -51,6 +51,8 @@ foundation and Babylon.js as the owned rendering substrate.
   direct mounting, Angular state/SSR, Babylon ownership, assets, and cleanup.
 - Read [diagnosis-verification.md](references/diagnosis-verification.md) when
   debugging, reviewing, comparing output, or selecting tests.
+- Read [plugin-workflow.md](references/plugin-workflow.md) before deciding on or
+  implementing an application-level plugin.
 - Read [html-css.md](references/html-css.md) for the complete human translation
   model and important browser/Astylar differences.
 - Query [capabilities.json](references/capabilities.json) for exact element,

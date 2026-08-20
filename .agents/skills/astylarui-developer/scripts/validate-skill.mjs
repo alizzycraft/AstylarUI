@@ -142,10 +142,12 @@ if (publicApi.astylarVersion !== packageJson.version || publicApi.packageRoot !=
 }
 const publicSymbols = new Set(publicApi.symbols.map((symbol) => symbol.name));
 for (const symbol of [
-  'ASTYLAR_VERSION', 'Astylar', 'AstylarRenderOptions', 'AstylarSurface',
-  'AstylarSurfaceComponent', 'DOMElement', 'SiteData', 'StyleRule',
-  'astylar', 'defineAstylarPlugin', 'prepareAstylarDocument', 'provideAstylar',
-  'provideAstylarPlugin',
+  'ASTYLAR_PLUGIN_API_VERSION', 'ASTYLAR_PLUGIN_SURFACE_CONTEXT',
+  'ASTYLAR_VERSION', 'Astylar', 'AstylarDocumentPreparationResult',
+  'AstylarPluginElementRenderer', 'AstylarPluginRenderContext',
+  'AstylarRenderOptions', 'AstylarSurface', 'AstylarSurfaceComponent',
+  'DOMElement', 'SiteData', 'StyleRule', 'astylar', 'defineAstylarPlugin',
+  'prepareAstylarDocument', 'provideAstylar', 'provideAstylarPlugin',
 ]) {
   if (!publicSymbols.has(symbol)) fail(`Required documented root export is missing: ${symbol}`);
 }
