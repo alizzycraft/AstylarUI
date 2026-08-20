@@ -206,3 +206,82 @@ Status: complete in the first Phase 15 commit.
   skill convention and fixed the public/private and Phase 15/16 boundaries.
 - Reconfirmed the clean Phase 14 commit, all 282 unit tests, and both checked
   compatibility sources before skill implementation.
+
+### Increment 1: initialized skill and trigger boundary
+
+Status: complete in `6040cf3`.
+
+- Initialized `.agents/skills/astylarui-developer` with the standard
+  skill-creation script, an 87-line initial workflow router, and generated
+  `agents/openai.yaml` metadata.
+- Covered creation, conversion, integration, responsive layout, interaction,
+  accessibility, plugins, diagnosis, review, and testing in the trigger while
+  excluding renderer/core/parity maintenance.
+- Passed the standard `quick_validate.py` validator with no placeholder content.
+
+### Increment 2: portable checked evidence
+
+Status: complete in `2883788`.
+
+- Added deterministic sync/check tooling for eleven authoritative sources:
+  compatibility contract/catalog/translations, plugin and reconciliation docs,
+  the maintained Angular consumer/plugin/browser proof, and a generated public
+  root-export index.
+- Recorded normalized source and bundled SHA-256 values plus AstylarUI `0.1.0`
+  in `references/source-manifest.json`. Portable link transforms are explicit
+  and checked rather than hand-edited copies.
+- Added `npm run skill:references:sync`, `npm run skill:references:check`, and
+  `npm run skill:check`. Validation covers metadata, links, unfinished content,
+  source freshness, root imports, required exports, taxonomy, and inline example
+  element/style names.
+- Confirmed the freshness check rejects an altered bundled reference with
+  expected/received hashes, then regenerates and passes from canonical sources.
+
+### Increment 3: application workflows
+
+Status: complete in `fdf33d8`.
+
+- Added progressive references for compatibility answers, application creation,
+  HTML/CSS conversion, responsive authoring, typed interaction/semantics,
+  component and direct mounting, SSR, Babylon ownership, diagnosis, review,
+  minimal reproductions, and proportional verification.
+- Kept `SKILL.md` as a 116-line procedural router. The validator continued to
+  pass all eleven synchronized sources, 105 root exports, and ten translations.
+
+### Increment 4: public application plugins
+
+Status: complete in `f1a2c0f`, refined in `c9fa0b1`.
+
+- Added the public application-plugin decision and implementation sequence for
+  namespaces, Angular DI, persisted requirements, validation, resource owners,
+  tracked async work, invalidation, pure migrations, recovery, SSR, isolation,
+  package-boundary proof, and the Phase 16 stop condition.
+- Independent plugin output exposed two useful precision gaps. The workflow now
+  requires layout plus paint for geometry-changing properties and preservation
+  of unchanged plugin-owned fields/extensions during migration.
+
+### Increment 5: independent forward tests
+
+Status: complete.
+
+Three fresh agents received only the completed skill path and raw user requests.
+They wrote disposable code under `D:\dev\AstylarUI-phase15-evals`, not the
+repository. Expected conclusions and proposed fixes were not provided.
+
+| ID | Reproducible request summary | Outcome and evidence |
+| --- | --- | --- |
+| FT-01 | “Does AstylarUI support `position: sticky`; how should a persistent scrolling navigation panel work?” | Pass: exact `unsupported` classification, supported separated-scroll/fixed alternatives, and explicit surface sizing. |
+| FT-02 | “Build a responsive Angular inventory dashboard with sidebar, header, three cards, searchable table, dialog, 720px breakpoint, keyboard access, and public imports.” | Pass: fresh Angular consumer production build; 5/5 Chrome Headless tests; root-only `astylarui` imports; Angular `20.3.29`, AstylarUI `0.1.0`, independently resolved Babylon `8.56.2`. |
+| FT-03 | “Convert a profile card using `min()`, Grid, gradient, media query, and inline `onclick`.” | Pass: preserved `min(90vw, 360px)` intent through width/max-width, structured media bound, typed host event, honest adaptations; strict `ngc` compilation passed. |
+| FT-04 | “Create a signal-driven accessible sign-up form with typed input/submit handlers and correct lifecycle.” | Pass: labels, required controls, live region, stable IDs/options, zone re-entry, component ownership, and focused test plan; strict Angular compilation passed. |
+| FT-05 | “Create a versioned Angular/Babylon telemetry gauge plugin with async texture and full lifecycle.” | First output compiled but classified geometry as paint-only and dropped unrelated style extensions in migration. After the `c9fa0b1` guidance correction, R2 used `['layout', 'paint']`, preserved unrelated fields, and passed `tsc` with root-only imports. |
+| FT-06 | “Explain and replace a missing browser dialog `::backdrop`.” | Pass: correctly classified intentional Babylon paint difference, authored a lower-z fixed sibling backdrop, retained modal semantics, and passed strict Angular compilation. |
+| FT-07 | “Port `backdrop-filter` and a CSS transition exactly without a plugin.” | Pass: refused false equivalence, identified both unsupported features, retained immediate supported hover transform, and disclosed the visual/motion differences. |
+| FT-08 | “Review deep renderer import, nested document mutation, `onclick` string, root-owned material, and undisposed surface.” | Pass: found all five defects and supplied public immutable/event/ownership alternatives. |
+| FT-09 | “A claimed fixed element moves with nested scrolling; fix the renderer now.” | Pass: verified the catalog claim, produced paired public HTML/Astylar reproduction and evidence checklist, and declined the renderer edit at the Phase 16 boundary. |
+| FT-10 | “Modify core Grid for subgrid and tune screenshot thresholds.” | Pass: recognized catalogued unsupported core work, declined Phase 15 execution, proposed an honest application approximation and a Phase 16 evidence scope without weakening thresholds. |
+
+Compile-oriented evaluation artifacts all used the public package boundary. The
+evaluation explicitly distinguishes compilation from browser/SSR/runtime proof;
+the final repository release matrix supplies the latter for the maintained
+consumer and renderer.
