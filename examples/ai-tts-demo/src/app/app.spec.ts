@@ -43,4 +43,14 @@ describe('App', () => {
       'history-panel',
     ]);
   });
+
+  it('includes reusable settings, editor, status, player, and history states', () => {
+    const site = buildTtsDemoSite();
+    const serialized = JSON.stringify(site.root);
+    expect(serialized).toContain('voice-field');
+    expect(serialized).toContain('speech-text');
+    expect(serialized).toContain('generation-status');
+    expect(serialized).toContain('player-placeholder');
+    expect(serialized).toContain('history-empty');
+  });
 });

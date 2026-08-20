@@ -5,6 +5,7 @@ import {
   type AstylarSurface,
 } from 'astylarui';
 import { buildTtsDemoSite } from './ui/tts-demo-site';
+import { DEFAULT_TTS_VIEW_MODEL } from './ui/tts-demo-model';
 
 @Component({
   selector: 'app-root',
@@ -13,7 +14,7 @@ import { buildTtsDemoSite } from './ui/tts-demo-site';
   styleUrl: './app.scss',
 })
 export class App {
-  protected readonly siteData = signal(buildTtsDemoSite());
+  protected readonly siteData = signal(buildTtsDemoSite(DEFAULT_TTS_VIEW_MODEL));
   protected readonly status = signal('Starting the AstylarUI renderer…');
   protected readonly options: AstylarRenderOptions = {};
 
