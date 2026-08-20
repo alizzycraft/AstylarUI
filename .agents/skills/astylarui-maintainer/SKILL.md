@@ -35,6 +35,15 @@ contract as the observable product boundary.
 - Read [application-skill.md](references/application-skill.md) when receiving a
   public reproduction, checking application authorship, changing observable
   behavior, or synchronizing/improving `astylarui-developer`.
+- Read [public-api-plugins.md](references/public-api-plugins.md) for exports,
+  package compatibility, plugin registration, recovery, migrations,
+  invalidation, and packed-consumer proof.
+- Read [lifecycle-resources.md](references/lifecycle-resources.md) for Angular
+  browser/SSR boundaries, surface injectors, render settlement, Babylon and
+  plugin resource ownership, cancellation, diagnostics, and disposal.
+- Read [parity-release.md](references/parity-release.md) when changing observable
+  output, adding fixtures, investigating a parity failure, or preparing release
+  acceptance and the project handoff.
 - Inspect current source and tests after using these maps. File paths and symbols
   are navigation aids; implementation remains authoritative.
 

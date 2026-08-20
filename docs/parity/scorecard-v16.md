@@ -276,3 +276,21 @@ Status: complete in the fourth Phase 16 commit.
 - Confirmed the combined check rejects a deliberately altered generated
   `html-css.md` reference with expected/received SHA-256 values; restored the
   file and reconfirmed both the combined check and legacy freshness alias pass.
+
+### Increment 4: public contracts, lifetime ownership, and release acceptance
+
+Status: complete in the fifth Phase 16 commit.
+
+- Added progressive references for the root-only installed-package boundary,
+  explicit compatibility decisions, packed-consumer proof, Angular-native
+  plugin registries, persisted metadata, recovery, pure migrations,
+  invalidation, and the trusted-code boundary.
+- Added Angular browser/SSR, per-surface injector, render-session settlement,
+  generation/surface ownership, cancellation, late-completion, diagnostic, and
+  resource plateau/final-zero guidance grounded in the current implementation.
+- Added parity fixture authorship, focused diagnosis, exact enforced
+  thresholds, complete release matrix, metric reporting, documentation, and
+  clean-worktree requirements.
+- Extended deterministic validation so all seven maintainer references are
+  present and directly linked and the new plugin, lifecycle, parity, and
+  package-proof contracts remain represented.

@@ -134,6 +134,7 @@ if (maintainerSkill.split(/\r?\n/).length > 500) {
 }
 for (const reference of [
   'architecture.md', 'subsystems.md', 'maintenance-workflow.md', 'application-skill.md',
+  'public-api-plugins.md', 'lifecycle-resources.md', 'parity-release.md',
 ]) {
   if (!await exists(path.join(skillDirectory, 'references', reference))) {
     fail(`Missing maintainer reference: ${reference}`);
@@ -152,6 +153,8 @@ requireTerms('Maintainer workflow', allMaintainerMarkdown, [
   'HTML/CSS', 'SiteData', 'failing', 'general', 'surface isolation', 'SSR',
   'settlement', 'cleanup', 'capabilities.json', 'translation', 'consumer:check',
   'parity:check', 'git diff --check',
+  'ASTYLAR_PLUGIN_API_VERSION', 'EnvironmentInjector', 'AbortSignal',
+  'minimumMedianSsim', 'fresh packed installation',
 ]);
 requireTerms('Maintainer safeguards', allMaintainerMarkdown, [
   'Never weaken a threshold', 'fixture-name', 'source-tree or package deep imports',
