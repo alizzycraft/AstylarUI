@@ -230,3 +230,23 @@ Status: complete in the second Phase 16 commit.
   and downstream-skill surfaces while excluding ordinary application creation.
 - The standard `quick_validate.py` validator passes and the skill contains no
   placeholders or unfinished scaffold text.
+
+### Increment 2: architecture and maintenance navigation
+
+Status: complete in the third Phase 16 commit.
+
+- Added progressive architecture, subsystem, and maintenance-workflow
+  references with tables of contents and stable source paths/symbols rather than
+  fragile line-number descriptions.
+- Mapped the package root through `Astylar`, per-surface child injectors, the
+  private renderer, document/plugin preparation, render sessions, visual plans,
+  resource transactions, the DOM-style renderer, runtime adapters, settlement,
+  and disposal.
+- Routed validation, cascade/default/media, intrinsic/Flex/Grid/table layout,
+  paint/text/assets/clipping, positioning/stacking/scrolling, controls/events/
+  semantics, reconciliation/resources, and plugin defects to their owning files
+  and closest proof.
+- Added classification, minimal paired reproduction, test ownership,
+  implementation-boundary, proportional-gate, and pre-commit review guidance.
+- Revalidated the skill and confirmed all three references are directly linked,
+  structured for progressive loading, and contain no placeholder content.

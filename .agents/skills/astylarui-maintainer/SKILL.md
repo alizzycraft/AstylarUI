@@ -22,6 +22,19 @@ contract as the observable product boundary.
    guidance, public API defect, or confirmed core defect.
 5. Stop or route to `astylarui-developer` when no core change is justified.
 
+## Load only the references needed
+
+- Read [architecture.md](references/architecture.md) to trace public entry
+  points, surface construction, the render/reflow pipeline, and ownership.
+- Read [subsystems.md](references/subsystems.md) to select the responsible style,
+  layout, paint, interaction, semantic, reconciliation, resource, or plugin
+  subsystem and its nearest tests.
+- Read [maintenance-workflow.md](references/maintenance-workflow.md) when
+  classifying a report, designing a minimal proof, choosing an implementation
+  boundary, or selecting proportional verification.
+- Inspect current source and tests after using these maps. File paths and symbols
+  are navigation aids; implementation remains authoritative.
+
 ## Build proof before implementation
 
 - For browser parity, create the smallest equivalent HTML/CSS and Astylar
