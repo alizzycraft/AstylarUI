@@ -1,0 +1,4 @@
+interface:
+  display_name: "AstylarUI Developer"
+  short_description: "Build Angular applications with AstylarUI"
+  default_prompt: "Use $astylarui-developer to build or translate an Angular application with AstylarUI public APIs."
