@@ -313,3 +313,53 @@ Status: complete in the sixth Phase 16 commit.
 - Full raw requests, classifications, before/after metrics, commands, results,
   limitations, and the disposition of disposable changes are recorded in
   [`forward-tests-v16.md`](forward-tests-v16.md).
+
+### Increment 6: release acceptance and handoff
+
+Status: complete in the final Phase 16 commit.
+
+The Windows evaluation-worktree cleanup removed the shared generated dependency
+cache through a directory link. No tracked source or Git history was affected.
+`npm ci --no-audit --no-fund` restored all 684 packages from `package-lock.json`
+before the release matrix; the remaining evaluation worktrees and registrations
+were removed.
+
+Final commands and results on the real `more-html` branch:
+
+- Standard `quick_validate.py` for both skills: passed twice with `Skill is
+  valid!`.
+- `npm run skill:check`: passed; the developer skill has 124 router lines,
+  eleven current sources, 105 root exports, and ten translations; the maintainer
+  skill has 119 router lines and seven references.
+- `npm run capabilities:check`: passed at 91 elements, 84 style fields, 62 DOM
+  fields, and 82 evidence references.
+- `npm run examples:check`: passed at ten translations (seven parity-backed,
+  three focused inline).
+- `npm test -- --watch=false --progress=false`: all 282 Chrome 151 tests passed.
+- `npm run build:lib`: passed.
+- `npm run build`: passed with browser/server output and two prerendered routes.
+  The only warnings are the existing initial bundle budget (`6.68 MB` against a
+  `2.00 MB` budget) and `src/app/app.scss` (`4.59 kB` against `4.00 kB`).
+- `npm run consumer:check`: passed from a fresh packed, non-symlink install;
+  415 files, browser/server output, one prerendered route, and 3/3 real-Chrome
+  tests. Its independent install resolved Babylon.js `8.56.2`; only existing
+  transitive npm deprecation notices were emitted.
+- `npm run parity:check` with no fixture filter: passed all enforced thresholds
+  with no runtime errors.
+
+Final parity evidence generated at `2026-08-20T14:27:11.214Z`:
+
+| Metric | Phase 16 final |
+| --- | ---: |
+| Fixtures / renders / viewports | `155 / 522 / 3` |
+| Median SSIM | `0.9900079622614616` |
+| Minimum SSIM | `0.9501815836061078` |
+| Edges within 2 px | `0.9998168050806058` |
+| Maximum edge error | `3.99209364194121 px` |
+| Exact required text | Yes |
+| Runtime clean | Yes |
+| Completion thresholds | Met |
+
+The result exactly reproduces the recorded Phase 15 aggregate on the unchanged
+renderer. No threshold, fixture, manifest, or browser-reference truth changed
+in Phase 16.

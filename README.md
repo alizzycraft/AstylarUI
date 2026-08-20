@@ -154,6 +154,14 @@ workflows for application creation, conversion, plugins, diagnosis, and
 verification. Renderer and parity-harness maintenance is intentionally outside
 that skill's scope.
 
+Agents diagnosing or evolving AstylarUI itself can use the repository-owned
+[`astylarui-maintainer` skill](.agents/skills/astylarui-maintainer/SKILL.md). It
+provides evidence-first routing across validation, style/layout/paint,
+interaction/semantics, reconciliation, Angular surface and Babylon resource
+ownership, plugins, package compatibility, parity, releases, and synchronized
+improvements to the application-development skill. Ordinary consuming-app work
+continues to belong to `astylarui-developer`.
+
 Validation and lifecycle failures use stable diagnostic codes and severities.
 Fatal input or lifecycle misuse throws `AstylarDiagnosticError`; all diagnostics
 are also retained in `surface.diagnostics.messages`. A host can observe them or

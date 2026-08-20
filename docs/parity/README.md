@@ -14,8 +14,9 @@ npm run parity
 
 This starts the Angular development server, launches installed Chrome headlessly,
 and writes current artifacts to `artifacts/parity/`. Use `npm run parity:check`
-to enforce the final Core Web Parity v1 thresholds; that command is expected to
-remain red until the full 40-fixture goal is complete.
+to enforce the current release thresholds across the complete manifest. The
+Phase 16 baseline is green at 155 fixtures and 522 render results; a focused
+fixture run is diagnostic evidence and is never release acceptance.
 
 Fixtures default to the deterministic `desktop` profile (`800x600`). A fixture
 can set `viewportIds` to any combination of `desktop` (`800x600`), `tablet`
@@ -77,6 +78,9 @@ Packed-package consumer integration and owned Angular surfaces are completed in
 `scorecard-v12.md`. The Angular-native plugin kernel is completed in
 `scorecard-v13.md`. Durable plugin documents, recovery, asynchronous ownership,
 and the agent-ready compatibility contract are completed in `scorecard-v14.md`.
+The application-development skill is completed in `scorecard-v15.md`. The
+maintainer skill, its release evidence, and its twelve isolated forward-test
+categories are completed in `scorecard-v16.md` and `forward-tests-v16.md`.
 
 The shared authored-ID, positional fallback, compatibility, and replacement
 rules are documented in `../reconciliation.md`.
