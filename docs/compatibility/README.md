@@ -31,7 +31,8 @@ When a tracked implementation changes, inspect its public effect, update the
 catalog statement and evidence if needed, then replace only the affected
 fingerprint with the value reported by the failing check.
 
-The catalog is intentionally structured so paired translation examples can add
-human-sized teaching material without duplicating its exhaustive public-name
-coverage. The future Phase 15 skill should consume both kinds of source material
-instead of treating the JSON alone as teaching prose.
+The paired translations under [`examples`](examples/README.md) add human-sized
+teaching material without duplicating the catalog's exhaustive public-name
+coverage. Run `npm run examples:check` to verify their sources and evidence. The
+future Phase 15 skill should consume both artifacts instead of treating the JSON
+alone as teaching prose.

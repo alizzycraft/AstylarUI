@@ -373,7 +373,7 @@
       "classification": "plugin",
       "webConcept": "Custom elements/properties or non-browser visual behavior",
       "astylarPattern": "Trusted Angular providers contribute namespaced schema, renderer, lifecycle, migration and invalidation contracts with explicit Babylon resource ownership.",
-      "evidence": ["file:docs/plugins.md", "file:examples/angular-consumer/src/app/consumer-badge.plugin.ts"]
+      "evidence": ["file:docs/plugins.md", "file:examples/angular-consumer/src/app/consumer-badge.plugin.ts", "file:docs/compatibility/examples/manifest.json"]
     }
   ],
   "unsupported": {
@@ -400,7 +400,7 @@
     "classification": "plugin",
     "canSupply": ["namespaced elements", "namespaced style properties", "Babylon renderers", "surface-scoped Angular services", "lifecycle hooks", "document migrations", "async resources", "layout/paint/semantics/interaction invalidation"],
     "cannotImply": ["browser security sandbox", "dynamic installation", "framework-neutral DI", "arbitrary new core CSS grammar"],
-    "evidence": ["file:docs/plugins.md", "file:src/lib/astylar-plugin.ts"]
+    "evidence": ["file:docs/plugins.md", "file:src/lib/astylar-plugin.ts", "file:docs/compatibility/examples/manifest.json"]
   },
   "freshness": {
     "policy": "The check compares exact public element, DOMElement and StyleRule names and verifies normalized SHA-256 fingerprints for semantic implementation sources. A public capability change must update and re-review this catalog.",

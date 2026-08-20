@@ -260,3 +260,19 @@ Status: complete.
 - The deterministic check passes and turns source changes into an explicit
   compatibility-contract review instead of permitting silent documentation
   drift.
+
+### Increment 7: paired web/Astylar translations
+
+Status: complete.
+
+- Added a verified ten-entry translation manifest covering semantic structure,
+  the box model, responsive layout, inherited typography, forms, modal stacking,
+  asynchronous images, 3D scene ownership, an unsupported animation
+  alternative, and a plugin-backed custom capability.
+- Seven entries reuse executed parity fixtures as their canonical co-located
+  HTML/CSS and `SiteData` sources. Three focused inline pairs document platform
+  boundaries without creating a duplicate example application framework.
+- Added `npm run examples:check` to enforce topic coverage, classifications,
+  source completeness, public catalog names, plugin requirements, unsupported
+  boundaries, and evidence paths. The deterministic check passes with ten pairs
+  (seven parity-backed and three focused inline).
