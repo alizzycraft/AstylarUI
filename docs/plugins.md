@@ -407,9 +407,16 @@ and marketplaces are not part of plugin API v1.
 ## Complete proof
 
 [`examples/angular-consumer/src/app/consumer-badge.plugin.ts`](../examples/angular-consumer/src/app/consumer-badge.plugin.ts)
-is the maintained package-boundary example. It demonstrates configuration-token
-injection, signals, `DestroyRef`, lifecycle activation, surface identity, element
-and property validation/defaults, Babylon output, repeated updates, two-surface
-isolation, SSR/prerender safety, resource plateaus, and zero-resource disposal.
-`npm run consumer:check` packs Astylar and tests that application from a fresh
-install without source or deep imports.
+is the maintained package-boundary example. In addition to configuration-token
+injection, signals, `DestroyRef`, lifecycle activation, and surface identity, it
+proves persisted schema v2 metadata, a pure v1-to-v2 migration, namespaced
+elements/properties, a delayed owned Babylon material, stale-generation
+cancellation, property-derived invalidation, repeated updates, and distinct
+two-surface state.
+
+Its real-Chrome acceptance also mounts an incompatible-version placeholder,
+checks aggregate diagnostics, verifies scene and plugin-owner plateaus, disposes
+one surface independently, remounts it, and reaches final zero counts. SSR and
+prerender remain safe because registration and module evaluation are browser
+independent. `npm run consumer:check` packs Astylar and tests that application
+from a fresh install without source or deep imports.

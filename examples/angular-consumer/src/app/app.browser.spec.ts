@@ -1,10 +1,100 @@
 import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { AstylarSurfaceComponent, type AstylarSurface } from 'astylarui';
+import {
+  Astylar,
+  AstylarSurfaceComponent,
+  type AstylarSurface,
+  type SiteData,
+} from 'astylarui';
 import { App } from './app';
 import { provideConsumerBadgePlugin } from './consumer-badge.plugin';
 
 describe('external AstylarUI browser acceptance', () => {
+  it('prepares persisted plugin data and recovers an incompatible document', async () => {
+    await TestBed.configureTestingModule({
+      providers: [provideConsumerBadgePlugin({
+        marker: 'packed-angular-consumer',
+        minimumDepth: 0.06,
+      })],
+    }).compileComponents();
+    const astylar = TestBed.inject(Astylar);
+    const legacy: SiteData = {
+      plugins: [{ id: 'consumer.proof', versionRange: '^1.0.0', schemaVersion: 1 }],
+      styles: [{
+        selector: '#legacy-badge',
+        width: '120px',
+        height: '36px',
+        extensions: { 'consumer.proof:z-depth': 0.14 },
+      }],
+      root: {
+        children: [{
+          type: 'consumer.proof:badge',
+          id: 'legacy-badge',
+          data: { text: 'Migrated package consumer' },
+        }],
+      },
+    };
+    const before = JSON.stringify(legacy);
+    const prepared = astylar.prepareDocument(legacy);
+
+    expect(prepared.status).toBe('migrated');
+    expect(prepared.document.plugins?.[0].schemaVersion).toBe(2);
+    expect(prepared.document.root.children[0].data).toEqual({
+      label: 'Migrated package consumer',
+      revision: 1,
+    });
+    expect(prepared.document.styles[0].extensions).toEqual({
+      'consumer.proof:depth': 0.14,
+    });
+    expect(JSON.stringify(legacy)).toBe(before);
+
+    const canvas = document.createElement('canvas');
+    canvas.width = 320;
+    canvas.height = 160;
+    document.body.appendChild(canvas);
+    const recovery = astylar.mount(canvas, {
+      plugins: [{ id: 'consumer.proof', versionRange: '^9.0.0', schemaVersion: 2 }],
+      styles: [{
+        selector: '#incompatible-badge',
+        width: '120px',
+        height: '36px',
+      }],
+      root: {
+        children: [{
+          type: 'consumer.proof:badge',
+          id: 'incompatible-badge',
+          data: { label: 'Unavailable package plugin', revision: 1 },
+        }],
+      },
+    }, {
+      accessibility: false,
+      pluginRecovery: 'placeholder',
+      diagnostics: { logLevel: 'silent' },
+    });
+    try {
+      await recovery.whenSettled();
+      expect(mesh(recovery, 'incompatible-badge').metadata.astylarMissingPlugin)
+        .toEqual(jasmine.objectContaining({
+          pluginId: 'consumer.proof',
+          reason: 'version-incompatible',
+        }));
+      expect(recovery.diagnostics.messages).toContain(jasmine.objectContaining({
+        code: 'plugin-capability-unavailable',
+        severity: 'warning',
+      }));
+    } finally {
+      recovery.dispose();
+      canvas.remove();
+    }
+    expect(recovery.diagnostics.resources).toEqual({ meshes: 0, materials: 0, textures: 0 });
+    expect(recovery.diagnostics.pluginResources).toEqual({
+      owners: 0,
+      resources: 0,
+      cleanups: 0,
+      pending: 0,
+    });
+  });
+
   it('runs two installed-package surfaces through update, input, modal, resize, and disposal', async () => {
     await TestBed.configureTestingModule({
       imports: [App],
@@ -43,6 +133,14 @@ describe('external AstylarUI browser acceptance', () => {
       expect(fixture.nativeElement.querySelectorAll('astylar-surface canvas').length).toBe(2);
       expect(fixture.nativeElement.querySelector('[data-testid="consumer-status"]')?.textContent)
         .toContain('renderer settled and ready');
+      await Promise.all([
+        handles.primarySurface!.whenSettled(),
+        handles.secondarySurface!.whenSettled(),
+      ]);
+      await waitFor(() =>
+        pluginReady(handles.primarySurface, 1) &&
+        pluginReady(handles.secondarySurface, 1),
+      'initial delayed plugin readiness');
 
       const primary = surface(fixture.nativeElement, 'primary');
       const secondary = surface(fixture.nativeElement, 'secondary');
@@ -57,12 +155,17 @@ describe('external AstylarUI browser acceptance', () => {
         astylarPluginMarker: 'packed-angular-consumer',
         astylarPluginActive: true,
         astylarPluginLabel: 'Consumer proof revision 1',
+        astylarPluginRevision: 1,
+        astylarPluginReadyRevision: 1,
+        astylarPluginAsyncReady: true,
       }));
       expect(initialPrimaryBadge.metadata.astylarPluginDepth).toBeCloseTo(0.09, 6);
       expect(initialPrimaryBadge.metadata.astylarPluginInstanceId)
         .not.toBe(initialSecondaryBadge.metadata.astylarPluginInstanceId);
       expect(handles.primarySurface?.diagnostics.plugins.pluginIds)
         .toEqual(['astylar.core', 'consumer.proof']);
+      expect(handles.primarySurface?.diagnostics.pluginResources.pending).toBe(0);
+      expect(handles.primarySurface?.diagnostics.pluginResources.resources).toBe(1);
 
       const primaryHost = fixture.nativeElement.querySelector(
         '[data-testid="primary-astylar-surface"]',
@@ -168,6 +271,23 @@ describe('external AstylarUI browser acceptance', () => {
       expect((surface(fixture.nativeElement, 'primary')
         .querySelector('[data-astylar-id="search"]') as HTMLInputElement).value).toBe('A');
 
+      clickShellButton(fixture.nativeElement, 'Update data');
+      fixture.detectChanges();
+      await waitFor(
+        () => (handles.primarySurface?.diagnostics.pluginResources.pending ?? 0) > 0,
+        'pending delayed plugin update',
+      );
+      clickShellButton(fixture.nativeElement, 'Update data');
+      fixture.detectChanges();
+      await waitFor(() => {
+        fixture.detectChanges();
+        return text(fixture.nativeElement, 'primary-revision').includes('6') &&
+          mesh(handles.primarySurface!, 'plugin-badge').metadata.astylarPluginReadyRevision === 6;
+      }, 'stale delayed plugin cancellation');
+      expect(mesh(handles.primarySurface!, 'plugin-badge').metadata.astylarPluginAsyncCancelledCount)
+        .toBeGreaterThan(0);
+      expect(handles.primarySurface?.diagnostics.pluginResources.pending).toBe(0);
+
       const lastAction = surface(fixture.nativeElement, 'primary')
         .querySelector('[data-astylar-id="item-two-action"]') as HTMLButtonElement;
       lastAction.focus();
@@ -218,6 +338,12 @@ describe('external AstylarUI browser acceptance', () => {
       expect(surface(fixture.nativeElement, 'secondary').querySelector('[data-astylar-id="workspace"]')).toBeTruthy();
       expect(disposedPrimary?.disposed).toBeTrue();
       expect(disposedPrimary?.diagnostics.resources).toEqual({ meshes: 0, materials: 0, textures: 0 });
+      expect(disposedPrimary?.diagnostics.pluginResources).toEqual({
+        owners: 0,
+        resources: 0,
+        cleanups: 0,
+        pending: 0,
+      });
 
       clickShellButton(fixture.nativeElement, 'Resize secondary');
       await waitFor(
@@ -251,6 +377,18 @@ describe('external AstylarUI browser acceptance', () => {
     expect(finalSecondary?.disposed).toBeTrue();
     expect(finalPrimary?.diagnostics.resources).toEqual({ meshes: 0, materials: 0, textures: 0 });
     expect(finalSecondary?.diagnostics.resources).toEqual({ meshes: 0, materials: 0, textures: 0 });
+    expect(finalPrimary?.diagnostics.pluginResources).toEqual({
+      owners: 0,
+      resources: 0,
+      cleanups: 0,
+      pending: 0,
+    });
+    expect(finalSecondary?.diagnostics.pluginResources).toEqual({
+      owners: 0,
+      resources: 0,
+      cleanups: 0,
+      pending: 0,
+    });
   }, 40_000);
 });
 
@@ -285,6 +423,14 @@ function mesh(surfaceHandle: AstylarSurface, elementId: string) {
   return result;
 }
 
+function pluginReady(surfaceHandle: AstylarSurface | undefined, revision: number): boolean {
+  if (!surfaceHandle || surfaceHandle.diagnostics.pluginResources.pending !== 0) return false;
+  const badge = surfaceHandle.scene.meshes.find(
+    (candidate) => candidate.metadata?.elementId === 'plugin-badge' && !candidate.isDisposed(),
+  );
+  return badge?.metadata?.astylarPluginReadyRevision === revision;
+}
+
 function meshBounds(surfaceHandle: AstylarSurface, elementId: string) {
   return mesh(surfaceHandle, elementId).getBoundingInfo().boundingBox;
 }
@@ -302,15 +448,19 @@ function meshYDelta(surfaceHandle: AstylarSurface, firstId: string, secondId: st
 }
 
 async function waitForStableResources(surfaceHandle: AstylarSurface) {
-  let previous = JSON.stringify(surfaceHandle.diagnostics.resources);
+  const snapshot = () => ({
+    scene: surfaceHandle.diagnostics.resources,
+    plugin: surfaceHandle.diagnostics.pluginResources,
+  });
+  let previous = JSON.stringify(snapshot());
   let stableSamples = 0;
   while (stableSamples < 3) {
     await new Promise<void>((resolve) => setTimeout(resolve, 50));
-    const current = JSON.stringify(surfaceHandle.diagnostics.resources);
+    const current = JSON.stringify(snapshot());
     stableSamples = current === previous ? stableSamples + 1 : 0;
     previous = current;
   }
-  return surfaceHandle.diagnostics.resources;
+  return snapshot();
 }
 
 async function waitFor(

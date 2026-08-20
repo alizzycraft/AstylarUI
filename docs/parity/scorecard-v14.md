@@ -227,3 +227,19 @@ Status: complete.
   invalidation loops with attributed diagnostics.
 - Proved plugin-root replacement, settled semantic-only generation retention,
   async failure cleanup, Angular destruction, and harmless post-disposal calls.
+
+### Increment 5: substantial packed external plugin
+
+Status: complete.
+
+- Evolved the committed Angular consumer plugin to schema v2 with persisted
+  requirements and a pure, non-mutating v1-to-v2 element/style migration.
+- Added deterministic delayed Babylon material ownership, abort-aware stale
+  cancellation, service ownership through `DestroyRef`, and one property-derived
+  invalidation per authored revision.
+- Added installed-but-incompatible tolerant placeholder and aggregate diagnostic
+  proof, alongside repeated updates and two independent configured surfaces.
+- `npm run consumer:check` passed a fresh 415-file packed install, browser and SSR
+  builds, one prerendered route, and all three real-Chrome tests. The consumer
+  independently resolved Babylon.js `8.56.2` and finished with zero scene and
+  plugin-owned resources.

@@ -110,6 +110,11 @@ export class App {
 
   private createSiteData(revision: number, dialogOpen: boolean): SiteData {
     return {
+      plugins: [{
+        id: 'consumer.proof',
+        versionRange: '^1.0.0',
+        schemaVersion: 2,
+      }],
       root: {
         children: [
           {
@@ -140,7 +145,10 @@ export class App {
                   {
                     type: 'consumer-badge',
                     id: 'plugin-badge',
-                    data: { label: `Consumer proof revision ${revision}` },
+                    data: {
+                      label: `Consumer proof revision ${revision}`,
+                      revision,
+                    },
                   },
                   {
                     type: 'form', id: 'filters', children: [
@@ -236,7 +244,7 @@ export class App {
           background: '#6d28d9',
           color: '#ffffff',
           borderRadius: '9px',
-          extensions: { consumerBadgeDepth: 0.08 + revision * 0.01 },
+          extensions: { 'consumer.proof:depth': 0.08 + revision * 0.01 },
         },
         { selector: '#filters', display: 'grid', gridTemplateColumns: '140px minmax(180px, 1fr) 70px 180px', gap: '10px', alignItems: 'center', padding: '16px', marginBottom: '18px', background: '#ffffff', borderRadius: '10px' },
         { selector: '#filters input', padding: '9px 10px', borderWidth: '1px', borderStyle: 'solid', borderColor: '#c8d2e1', borderRadius: '6px' },
