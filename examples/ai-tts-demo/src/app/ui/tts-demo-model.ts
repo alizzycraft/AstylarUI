@@ -12,6 +12,7 @@ export interface SpeechHistoryItemView {
 }
 
 export interface TtsDemoViewModel {
+  mode: 'mock' | 'live';
   provider: 'OpenAI';
   model: 'gpt-4o-mini-tts';
   voice: string;
@@ -32,6 +33,7 @@ export interface TtsDemoViewModel {
 }
 
 export const DEFAULT_TTS_VIEW_MODEL: TtsDemoViewModel = {
+  mode: 'mock',
   provider: 'OpenAI',
   model: 'gpt-4o-mini-tts',
   voice: 'alloy',

@@ -79,7 +79,12 @@ function workspacePanel(view: TtsDemoViewModel): DOMElement {
           { type: 'p', id: 'workspace-kicker', textContent: 'AstylarUI application demo' },
           { type: 'h2', id: 'workspace-title', textContent: 'Create a speech preview' },
         ] },
-        { type: 'span', id: 'mode-badge', class: 'mode-badge', textContent: 'MOCK BY DEFAULT' },
+        {
+          type: 'span',
+          id: 'mode-badge',
+          class: `mode-badge mode-badge-${view.mode}`,
+          textContent: view.mode === 'live' ? 'LIVE OPENAI MODE' : 'MOCK MODE · $0',
+        },
       ] },
       {
         type: 'form',
@@ -220,6 +225,7 @@ const styles: StyleRule[] = [
   { selector: '#workspace-kicker', margin: '0 0 5px 0', color: '#6da8ff', fontSize: '12px', fontWeight: '700', letterSpacing: '1px', textTransform: 'uppercase' },
   { selector: '#workspace-title', margin: '0', fontSize: '26px', lineHeight: '32px' },
   { selector: '.mode-badge', padding: '6px 9px', background: '#173622', color: '#74db94', borderWidth: '1px', borderStyle: 'solid', borderColor: '#245d37', borderRadius: '999px', fontSize: '10px', fontWeight: '700', letterSpacing: '1px' },
+  { selector: '.mode-badge-live', background: '#352a16', color: '#ffdc8a', borderColor: '#6d5420' },
   { selector: '#speech-form', padding: '20px', background: '#171d25', borderWidth: '1px', borderStyle: 'solid', borderColor: '#27303c', borderRadius: '14px', boxShadow: '0 14px 34px rgba(0, 0, 0, 0.18)' },
   { selector: '#speech-text', minHeight: '250px' },
   { selector: '#editor-footer', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '16px' },

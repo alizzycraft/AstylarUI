@@ -17,6 +17,7 @@ export interface SpeechAudio {
 }
 
 export interface SpeechGateway {
+  readonly mode: 'mock' | 'live';
   generate(request: SpeechRequest): Promise<SpeechAudio>;
 }
 

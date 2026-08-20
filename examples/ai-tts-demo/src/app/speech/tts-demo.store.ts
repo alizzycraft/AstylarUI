@@ -26,7 +26,7 @@ export class TtsDemoStore {
   private readonly voice = signal<SpeechVoice>('alloy');
   private readonly instructions = signal('Speak clearly in a warm, natural tone.');
   private readonly status = signal<TtsDemoViewModel['status']>('idle');
-  private readonly statusMessage = signal('Ready to generate a mock preview.');
+  private readonly statusMessage = signal(`Ready to generate a ${this.gateway.mode} preview.`);
   private readonly history = signal<readonly SpeechGeneration[]>([]);
   private readonly historyQuery = signal('');
   private readonly selectedHistoryId = signal<string | undefined>(undefined);
@@ -40,6 +40,7 @@ export class TtsDemoStore {
     const selected = history.find((item) => item.id === this.selectedHistoryId());
     return {
       provider: 'OpenAI',
+      mode: this.gateway.mode,
       model: 'gpt-4o-mini-tts',
       voice: this.voice(),
       instructions: this.instructions(),
@@ -76,7 +77,7 @@ export class TtsDemoStore {
     this.text.set(value.slice(0, MAX_CHARACTERS));
     if (this.status() === 'error') {
       this.status.set('idle');
-      this.statusMessage.set('Ready to generate a mock preview.');
+    this.statusMessage.set(`Ready to generate a ${this.gateway.mode} preview.`);
     }
   }
 
@@ -125,7 +126,9 @@ export class TtsDemoStore {
     }
 
     this.status.set('generating');
-    this.statusMessage.set('Generating a deterministic mock preview…');
+    this.statusMessage.set(this.gateway.mode === 'live'
+      ? 'Requesting speech from the secure server endpoint…'
+      : 'Generating a deterministic mock preview…');
     try {
       const audio = await this.gateway.generate({
         model: 'gpt-4o-mini-tts',
@@ -150,7 +153,7 @@ export class TtsDemoStore {
       this.history.update((items) => [generation, ...items]);
       this.selectedHistoryId.set(id);
       this.status.set('success');
-      this.statusMessage.set(`Generated ${audio.fileExtension.toUpperCase()} preview in mock mode.`);
+      this.statusMessage.set(`Generated ${audio.fileExtension.toUpperCase()} preview in ${this.gateway.mode} mode.`);
     } catch (error) {
       this.status.set('error');
       this.statusMessage.set(error instanceof Error ? error.message : 'Speech generation failed.');

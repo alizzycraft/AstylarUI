@@ -14,6 +14,7 @@ describe('MockSpeechGateway', () => {
       input: 'Hello',
     });
     expect(result.mimeType).toBe('audio/wav');
+    expect(new MockSpeechGateway().mode).toBe('mock');
     expect(result.bytes.byteLength).toBeGreaterThan(44);
   });
 });

@@ -42,6 +42,8 @@ export function createMockWave(input: string): ArrayBuffer {
 
 @Injectable({ providedIn: 'root' })
 export class MockSpeechGateway implements SpeechGateway {
+  readonly mode = 'mock' as const;
+
   async generate(request: SpeechRequest): Promise<SpeechAudio> {
     await new Promise<void>((resolve) => globalThis.setTimeout(resolve, 180));
     return {
