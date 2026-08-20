@@ -82,6 +82,12 @@ updates, modal focus, explicit resize, disposal, remounting, and SSR/prerender.
 It imports only the package root and is verified from a packed tarball rather
 than repository source.
 
+The component-driven [`examples/ai-tts-demo`](examples/ai-tts-demo) is a more
+realistic single-surface application. It demonstrates responsive settings,
+speech editing, deterministic mock generation, secure server-side OpenAI speech,
+owned browser audio, session history, accessibility semantics, and private
+application-level component builders without crossing the package boundary.
+
 ### 3. Angular-native plugins
 
 Angular 20 is an intentional foundation of Astylar's plugin ecosystem. Register
@@ -294,6 +300,19 @@ This builds and packs AstylarUI, copies the committed Angular example outside
 the repository, installs its declared dependencies and the tarball, builds its
 browser and SSR outputs, runs its real-Chrome acceptance tests, and removes the
 temporary installation.
+
+### Run or verify the AI text-to-speech example
+
+```bash
+npm run tts-demo:prepare
+npm run tts-demo:check
+```
+
+The prepare command installs a fresh packed library into the local example. The
+check command uses a separate temporary installation, mock speech only, browser
+and SSR builds, responsive visual captures, and real Chrome interaction checks.
+Live OpenAI setup is documented in
+[`examples/ai-tts-demo/README.md`](examples/ai-tts-demo/README.md).
 
 ---
 

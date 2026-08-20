@@ -126,7 +126,7 @@ function workspacePanel(view: TtsDemoViewModel): DOMElement {
                     'generate-speech',
                     view.status === 'generating' ? 'Generating speech…' : 'Generate speech',
                     'primary',
-                    view.status === 'generating' || view.text.trim().length === 0,
+                    view.status === 'generating',
                   ),
                 ],
               },

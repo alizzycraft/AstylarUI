@@ -27,6 +27,8 @@
     "parity": "node tests/parity/run-parity.mjs",
     "parity:check": "node tests/parity/run-parity.mjs --enforce",
     "consumer:check": "node scripts/consumer-check.mjs",
+    "tts-demo:prepare": "node scripts/prepare-tts-demo.mjs",
+    "tts-demo:check": "node scripts/tts-demo-check.mjs",
     "capabilities:check": "node scripts/check-capability-catalog.mjs",
     "examples:check": "node scripts/check-translation-examples.mjs",
     "skill:references:sync": "npm run skill:developer:references:sync",
