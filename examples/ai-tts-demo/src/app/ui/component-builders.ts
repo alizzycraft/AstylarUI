@@ -105,7 +105,7 @@ export function textControl(options: TextControlOptions): DOMElement {
 
 export function statusBanner(status: GenerationStatus, message: string): DOMElement {
   return {
-    type: 'output',
+    type: 'p',
     id: 'generation-status',
     class: `status-banner status-${status}`,
     role: status === 'error' ? 'alert' : 'status',

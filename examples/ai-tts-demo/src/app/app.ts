@@ -1,7 +1,7 @@
 import { Component, computed, inject, NgZone, signal } from '@angular/core';
 import {
   AstylarSurfaceComponent,
-  type AstylarEventSnapshot,
+  type AstylarEvent,
   type AstylarRenderOptions,
   type AstylarSurface,
 } from 'astylarui';
@@ -21,7 +21,15 @@ export class App {
   protected readonly siteData = computed(() => buildTtsDemoSite(this.store.viewModel()));
   protected readonly status = signal('Starting the AstylarUI renderer…');
   protected readonly options: AstylarRenderOptions = {
-    events: { onEvent: (event) => this.zone.run(() => this.handleEvent(event)) },
+    events: {
+      handlers: {
+        'tts-app': {
+          input: (event) => this.zone.run(() => this.handleEvent(event)),
+          change: (event) => this.zone.run(() => this.handleEvent(event)),
+          click: (event) => this.zone.run(() => this.handleEvent(event)),
+        },
+      },
+    },
   };
 
   protected onMounted(_surface: AstylarSurface): void {
@@ -32,10 +40,10 @@ export class App {
     this.status.set(`Renderer error: ${error instanceof Error ? error.message : String(error)}`);
   }
 
-  private handleEvent(event: AstylarEventSnapshot): void {
+  private handleEvent(event: AstylarEvent): void {
     if (event.type === 'input') {
       const value = event.value ?? '';
-      if (event.targetId === 'history-title') this.store.setTitle(value);
+      if (event.targetId === 'generation-title') this.store.setTitle(value);
       if (event.targetId === 'speech-text') this.store.setText(value);
       if (event.targetId === 'instructions') this.store.setInstructions(value);
       if (event.targetId === 'history-search') this.store.setHistoryQuery(value);
