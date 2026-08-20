@@ -131,7 +131,7 @@ const badgePlugin = defineAstylarPlugin({
       id: 'example.badges:badge',
       alias: 'badge',
       defaults: { data: { label: 'Default badge' } },
-      children: 'none',
+      children: 'any',
       validate: (element) => typeof (element['data'] as { label?: unknown } | undefined)?.label === 'string'
         ? true
         : 'Badge data.label must be a string.',
@@ -161,6 +161,11 @@ const badgePlugin = defineAstylarPlugin({
       renderer: BadgeRenderer,
     }],
   },
+});
+
+const incompatibleBadgePlugin = defineAstylarPlugin({
+  ...badgePlugin,
+  version: '2.0.0',
 });
 
 describe('Astylar surface plugin runtime', () => {
@@ -383,6 +388,123 @@ describe('Astylar surface plugin runtime', () => {
       { diagnostics: { logLevel: 'silent' } },
     )).toThrowError(AstylarDiagnosticError, /plugin-alias-conflict/);
   });
+
+  it('keeps strict recovery as the fail-fast default with aggregate diagnostics', () => {
+    const reported: AstylarDiagnostic[] = [];
+    TestBed.configureTestingModule({ providers: [provideZonelessChangeDetection()] });
+
+    expect(() => TestBed.inject(Astylar).mount(
+      document.createElement('canvas'),
+      missingBadgeSite(),
+      {
+        diagnostics: {
+          logLevel: 'silent',
+          onDiagnostic: (diagnostic) => reported.push(diagnostic),
+        },
+      },
+    )).toThrowError(AstylarDiagnosticError, /plugin-document-missing/);
+    expect(reported).toContain(jasmine.objectContaining({
+      code: 'plugin-capability-unavailable',
+      pluginId: 'example.badges',
+      affectedElements: 1,
+      affectedStyleDeclarations: 1,
+    }));
+  });
+
+  it('renders deterministic owned leaf placeholders without mutating source data', async () => {
+    TestBed.configureTestingModule({ providers: [provideZonelessChangeDetection()] });
+    const astylar = TestBed.inject(Astylar);
+    const authored = missingBadgeSite();
+    const before = JSON.stringify(authored);
+    const surface = astylar.mount(document.createElement('canvas'), authored, {
+      pluginRecovery: 'placeholder',
+      diagnostics: { logLevel: 'silent' },
+    });
+
+    try {
+      await surface.whenSettled();
+      const placeholder = surface.scene.getMeshByName('proof-badge')!;
+      expect(placeholder).toBeTruthy();
+      expect(placeholder.metadata.astylarMissingPlugin).toEqual(jasmine.objectContaining({
+        pluginId: 'example.badges',
+        contributionId: 'example.badges:badge',
+        originalType: 'example.badges:badge',
+        authoredChildCount: 1,
+      }));
+      expect(placeholder.metadata.element.type).toBe('example.badges:badge');
+      expect(placeholder.metadata.element.data).toEqual({ label: 'Unavailable' });
+      expect(placeholder.material?.name).toBe('proof-badge-missing-plugin-material');
+      expect(surface.scene.getMeshByName('unrendered-child')).toBeNull();
+      expect(surface.diagnostics.messages).toContain(jasmine.objectContaining({
+        code: 'plugin-capability-unavailable',
+        severity: 'warning',
+        relatedPaths: jasmine.arrayContaining([
+          '$.root.children[0].children[0]',
+          '$.styles[1].extensions["example.badges:depth"]',
+        ]),
+      }));
+      expect(JSON.stringify(authored)).toBe(before);
+
+      const plateau = surface.diagnostics.resources;
+      await surface.update(missingBadgeSite());
+      await surface.update(missingBadgeSite());
+      expect(surface.diagnostics.resources).toEqual(plateau);
+      expect(surface.scene.getMeshByName('proof-badge')!.metadata.astylarMissingPlugin.path)
+        .toBe('$.root.children[0].children[0]');
+    } finally {
+      surface.dispose();
+    }
+    expect(surface.diagnostics.resources).toEqual({ meshes: 0, materials: 0, textures: 0 });
+  });
+
+  it('does not resolve properties from an installed but document-incompatible plugin', async () => {
+    TestBed.configureTestingModule({
+      providers: [
+        provideZonelessChangeDetection(),
+        provideAstylar({ plugins: [incompatibleBadgePlugin] }),
+      ],
+    });
+    const surface = TestBed.inject(Astylar).mount(
+      document.createElement('canvas'),
+      missingBadgeSite(),
+      { pluginRecovery: 'placeholder', diagnostics: { logLevel: 'silent' } },
+    );
+
+    try {
+      await surface.whenSettled();
+      const placeholder = surface.scene.getMeshByName('proof-badge')!;
+      expect(placeholder.metadata.astylarMissingPlugin.reason).toBe('version-incompatible');
+      expect(placeholder.metadata.astylarPluginProperties).toEqual({});
+      expect(BadgeRenderer.surfaceIds).toEqual([]);
+    } finally {
+      surface.dispose();
+    }
+  });
+
+  it('uses the real renderer on a newly mounted compatible configuration', async () => {
+    TestBed.configureTestingModule({
+      providers: [
+        provideZonelessChangeDetection(),
+        provideAstylar({ plugins: [badgePlugin] }),
+      ],
+    });
+    const surface = TestBed.inject(Astylar).mount(
+      document.createElement('canvas'),
+      missingBadgeSite(),
+      { pluginRecovery: 'placeholder', diagnostics: { logLevel: 'silent' } },
+    );
+
+    try {
+      await surface.whenSettled();
+      const badge = surface.scene.getMeshByName('proof-badge')!;
+      expect(badge.metadata.astylarMissingPlugin).toBeUndefined();
+      expect(badge.metadata.pluginLabel).toBe('Unavailable');
+      expect(badge.metadata.pluginDepth).toBe(0.15);
+      expect(surface.scene.getMeshByName('unrendered-child')).toBeTruthy();
+    } finally {
+      surface.dispose();
+    }
+  });
 });
 
 function site(): SiteData {
@@ -422,6 +544,41 @@ function badgeSite(
         height: '40px',
         background: '#6d28d9',
         extensions: { badgeDepth: depth },
+      },
+    ],
+  };
+}
+
+function missingBadgeSite(): SiteData {
+  return {
+    plugins: [{
+      id: 'example.badges',
+      versionRange: '^1.0.0',
+      schemaVersion: 1,
+    }],
+    root: {
+      children: [{
+        type: 'div',
+        id: 'badge-host',
+        children: [{
+          type: 'example.badges:badge',
+          id: 'proof-badge',
+          data: { label: 'Unavailable' },
+          children: [{
+            type: 'span',
+            id: 'unrendered-child',
+            textContent: 'Source-only child',
+          }],
+        }],
+      }],
+    },
+    styles: [
+      { selector: '#badge-host', width: '200px', height: '100px' },
+      {
+        selector: '#proof-badge',
+        width: '140px',
+        height: '50px',
+        extensions: { 'example.badges:depth': 0.15 },
       },
     ],
   };

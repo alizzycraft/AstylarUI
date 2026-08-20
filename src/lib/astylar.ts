@@ -81,6 +81,10 @@ import {
   prepareAstylarDocument,
   type AstylarDocumentPreparationResult,
 } from './astylar-document-preparation';
+import {
+  AstylarDocumentRecovery,
+  type AstylarPluginRecoveryPolicy,
+} from './astylar-document-recovery';
 
 /**
  * Configuration options for rendering
@@ -100,6 +104,8 @@ export interface AstylarRenderOptions {
   navigation?: AstylarNavigationOptions;
   /** Validation reporting and controlled console output. */
   diagnostics?: AstylarDiagnosticsOptions;
+  /** Strict by default; placeholder mode visibly recovers unavailable plugin data. */
+  pluginRecovery?: AstylarPluginRecoveryPolicy;
 }
 
 /** @internal Test-harness access to the registries owned by one isolated surface. */
@@ -135,6 +141,7 @@ class AstylarRenderer {
   private readonly visualReconciliation = new WeakMap<Scene, AstylarVisualReconciler>();
   private readonly surfaceHandles = new WeakMap<Scene, AstylarSurface>();
   private readonly diagnostics: AstylarDiagnostics = inject(AstylarDiagnostics);
+  private readonly documentRecovery = inject(AstylarDocumentRecovery);
   private activeSession?: AstylarRenderSession;
 
   /** @internal */
@@ -159,8 +166,11 @@ class AstylarRenderer {
     options?: AstylarRenderOptions,
   ): AstylarSurface {
     this.diagnostics.configure(options?.diagnostics);
-    this.diagnostics.validate(siteData, this.capabilityRegistry);
-    const scene = this.createScene(canvas, siteData, options);
+    this.documentRecovery.configure(options?.pluginRecovery);
+    this.diagnostics.validateDocumentShape(siteData);
+    const renderDocument = this.documentRecovery.prepare(siteData);
+    this.validateDocument(siteData);
+    const scene = this.createScene(canvas, renderDocument, options);
     const surface = new AstylarSurfaceHandle(scene, this);
     this.surfaceHandles.set(scene, surface);
     scene.onDisposeObservable.addOnce(() => {
@@ -711,10 +721,21 @@ class AstylarRenderer {
   }
 
   update(siteData: SiteData, scene?: Scene): Promise<AstylarSessionSnapshot> {
-    this.diagnostics.validate(siteData, this.capabilityRegistry);
+    this.diagnostics.validateDocumentShape(siteData);
+    const renderDocument = this.documentRecovery.prepare(siteData);
+    this.validateDocument(siteData);
     const session = this.requireSession(scene);
-    this.interactions.get(session.scene)?.setSiteData(siteData);
-    return session.update(siteData);
+    this.interactions.get(session.scene)?.setSiteData(renderDocument);
+    return session.update(renderDocument);
+  }
+
+  private validateDocument(siteData: SiteData): void {
+    this.diagnostics.validate(siteData, this.capabilityRegistry, {
+      isUnavailableElement: (identity) =>
+        this.documentRecovery.isUnavailableElement(identity),
+      isUnavailableProperty: (identity) =>
+        this.documentRecovery.isUnavailableProperty(identity),
+    });
   }
 
   invalidate(

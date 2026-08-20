@@ -26,6 +26,7 @@ import { AstylarCapabilityRegistry } from "../../../../lib/astylar-plugin";
 import { AstylarDiagnostics } from "../../../../lib/astylar-diagnostics";
 import { AstylarPluginRuntime } from "../../../../lib/astylar-plugin-runtime";
 import { AstylarCoreCompatibilityRenderer } from "../../../../lib/astylar-core-plugin";
+import { AstylarDocumentRecovery } from "../../../../lib/astylar-document-recovery";
 
 /**
  * Service responsible for creating DOM elements as Babylon.js meshes
@@ -52,6 +53,7 @@ export class ElementCreationService {
     private capabilityRegistry: AstylarCapabilityRegistry,
     private pluginRuntime: AstylarPluginRuntime,
     private diagnostics: AstylarDiagnostics,
+    private documentRecovery: AstylarDocumentRecovery,
   ) {}
 
   /**
@@ -66,8 +68,9 @@ export class ElementCreationService {
     flexPosition?: { x: number; y: number; z: number },
     flexSize?: { width?: number; height?: number },
   ): Mesh {
+    const placeholder = this.documentRecovery.placeholderFor(element);
     const pluginElement = this.capabilityRegistry.resolveElement(element.type);
-    if (pluginElement?.defaults) {
+    if (!placeholder && pluginElement?.defaults) {
       element = { ...pluginElement.defaults, ...element } as DOMElement;
     }
     // Ensure pointer observer is set up
@@ -167,7 +170,9 @@ export class ElementCreationService {
 
     let mesh: Mesh;
 
-    const resolvedRenderer = this.pluginRuntime.resolveRenderer(element.type);
+    const resolvedRenderer = placeholder
+      ? undefined
+      : this.pluginRuntime.resolveRenderer(element.type);
     const pluginRenderer = resolvedRenderer &&
       !(resolvedRenderer.renderer instanceof AstylarCoreCompatibilityRenderer)
       ? resolvedRenderer
@@ -322,6 +327,7 @@ export class ElementCreationService {
       elementId: element.id,
       element: element, // Store the element object for hover handling
       astylarPluginProperties: pluginProperties,
+      ...(placeholder ? { astylarMissingPlugin: placeholder } : {}),
     };
 
     // Calculate position
@@ -420,6 +426,14 @@ export class ElementCreationService {
         false,
         style,
       );
+
+      if (placeholder &&
+          (!style.background || style.background.trim().toLowerCase() === 'transparent')) {
+        mesh.material = render.actions.mesh.createMaterial(
+          `${meshId}-missing-plugin-material`,
+          new BABYLON.Color3(0.42, 0.08, 0.16),
+        );
+      }
 
     } catch (e) {
       console.error(
@@ -1114,6 +1128,7 @@ export class ElementCreationService {
       | undefined;
     const values: Record<string, unknown> = {};
     for (const definition of this.capabilityRegistry.propertyDefinitions) {
+      if (this.documentRecovery.isUnavailableProperty(definition.id)) continue;
       const canonicalAuthored = Object.prototype.hasOwnProperty.call(
         declarations,
         definition.id,

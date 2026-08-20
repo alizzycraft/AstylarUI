@@ -1,4 +1,3 @@
-import { validRange } from 'semver';
 import type { DOMElement } from '../app/types/dom-element';
 import type {
   AstylarDocumentPluginRequirement,
@@ -12,6 +11,7 @@ import type {
   AstylarPluginMigrationContext,
   AstylarPluginMigrationDefinition,
 } from './astylar-plugin';
+import { isAstylarVersionRange } from './astylar-semver';
 
 export type AstylarDocumentPreparationStatus = 'ready' | 'migrated' | 'blocked';
 
@@ -40,7 +40,7 @@ export function prepareAstylarDocument(
   registry: AstylarCapabilityRegistry,
 ): AstylarDocumentPreparationResult {
   const requirements = document.plugins ?? [];
-  const invalidDiagnostics = validateRequirements(requirements);
+  const invalidDiagnostics = validateAstylarDocumentPluginRequirements(requirements);
   if (invalidDiagnostics.length > 0) {
     return blocked(document, [], invalidDiagnostics);
   }
@@ -129,15 +129,24 @@ export function prepareAstylarDocument(
   });
 }
 
-function validateRequirements(
-  requirements: readonly AstylarDocumentPluginRequirement[],
+export function validateAstylarDocumentPluginRequirements(
+  requirements: unknown,
 ): AstylarDiagnostic[] {
+  if (!Array.isArray(requirements)) {
+    return [Object.freeze({
+      code: 'plugin-document-requirement-invalid',
+      severity: 'error',
+      message: 'SiteData.plugins must be an array of persisted plugin requirements.',
+      path: '$.plugins',
+      value: requirements,
+    })];
+  }
   const diagnostics: AstylarDiagnostic[] = [];
   const ids = new Set<string>();
   requirements.forEach((requirement, index) => {
     if (!requirement || typeof requirement !== 'object' ||
         !isPluginId(requirement.id) ||
-        !validRange(requirement.versionRange) ||
+        !isAstylarVersionRange(requirement.versionRange) ||
         !Number.isInteger(requirement.schemaVersion) ||
         requirement.schemaVersion < 1 ||
         (requirement.required !== undefined && typeof requirement.required !== 'boolean') ||

@@ -165,13 +165,39 @@ retain their existing precedence. A property definition declares its initial
 value, inheritance behavior, invalidation domains, and validator. Canonical IDs
 take precedence over aliases if both are present in one effective style.
 
-Unknown source data is not deleted or mutated. An unavailable custom element
-fails validation rather than falling back to an unrelated core renderer. An
-unavailable extension property is retained in the authored `SiteData`, reported
-as unsupported, and ignored for rendering. Canonical missing identities allow
-the diagnostic to identify the expected plugin/contribution. Plugin API v1 does
-not render a missing-element placeholder because the current mount validation
-boundary cannot guarantee one without destabilizing layout.
+Unknown source data is not deleted or mutated. Strict recovery is the default:
+an unavailable custom element or required persisted plugin fails with a typed
+diagnostic rather than falling back to an unrelated core renderer. Unavailable
+extension properties remain in authored `SiteData`, are reported, and are
+ignored for rendering. Canonical identities let diagnostics identify the
+expected plugin and contribution.
+
+For an authoring or recovery host, pass `pluginRecovery: 'placeholder'` to
+`mount()`. Missing plugins, incompatible document/plugin versions, old schemas
+that require explicit preparation, future schemas, and removed contributions
+then produce warning diagnostics and deterministic diagnostic meshes. A
+placeholder:
+
+- keeps the original namespaced type and plugin data in its element metadata;
+- uses the normal cascade, box dimensions, positioning, borders, transforms,
+  stacking, and resource transaction;
+- uses authored background paint, or a dark diagnostic fallback when the
+  resolved background is transparent;
+- exposes `metadata.astylarMissingPlugin` with plugin/contribution identity,
+  authored path, incompatibility reason, child count, and relevant versions;
+- remains stable across repeated updates and is fully disposed with its surface.
+
+An unresolved element is intentionally a render leaf. Its authored children
+remain unchanged in the caller's document but are absent from the internal
+render-only clone, because the missing parent may own their layout semantics.
+The real renderer and normal children are used on a newly mounted compatible
+configuration. Phase 14 does not dynamically install or hot-load plugins.
+
+Diagnostics include the specific compatibility failure plus one
+`plugin-capability-unavailable` summary per plugin. The summary records affected
+element/style counts and sorted authored paths, the required schema, and the
+installed version when available. Invalid persisted requirement syntax remains
+an error in both policies; tolerant mode does not guess malformed metadata.
 
 ## Document migrations
 

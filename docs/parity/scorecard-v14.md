@@ -201,3 +201,14 @@ Status: complete.
   extensions, with no Angular injection context.
 - Proved atomic rollback, unrelated-data preservation, ownership enforcement,
   missing-path diagnostics, already-current stability, and idempotence.
+
+### Increment 3: strict and tolerant recovery
+
+Status: complete.
+
+- Preserved strict fail-fast behavior while distinguishing missing, incompatible,
+  old-schema, future-schema, and removed-contribution cases.
+- Added explicit placeholder recovery with aggregate affected-path diagnostics,
+  normal layout/paint participation, render-leaf child policy, and metadata.
+- Proved source immutability, repeated-update resource plateaus, final zero
+  resources, and real-renderer restoration on a compatible new surface.

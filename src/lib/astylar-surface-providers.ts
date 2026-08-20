@@ -57,10 +57,12 @@ import { InputElementService } from '../app/services/dom/input/input-element.ser
 import { FormValidatorService } from '../app/services/dom/input/form-validator.service';
 import { SelectManager } from '../app/services/dom/input/select.manager';
 import { AstylarDiagnostics } from './astylar-diagnostics';
+import { AstylarDocumentRecovery } from './astylar-document-recovery';
 
 /** Complete renderer dependency scope. Every mount receives new instances. */
 export const ASTYLAR_SURFACE_SERVICE_PROVIDERS: Provider[] = [
   AstylarDiagnostics,
+  AstylarDocumentRecovery,
   TextSelectionStore,
   CoordinateTransformService,
   BabylonCameraService,

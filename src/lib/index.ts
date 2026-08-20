@@ -26,6 +26,11 @@ export type {
   AstylarDocumentPreparationResult,
   AstylarDocumentPreparationStatus,
 } from './astylar-document-preparation';
+export type {
+  AstylarMissingPluginPlaceholderMetadata,
+  AstylarPluginRecoveryPolicy,
+  AstylarUnavailablePluginReason,
+} from './astylar-document-recovery';
 export { ASTYLAR_VERSION } from './astylar-version';
 export { AstylarSceneResources } from './astylar-scene-resources';
 export type { AstylarSceneResourceSnapshot } from './astylar-scene-resources';

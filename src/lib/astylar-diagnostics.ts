@@ -36,6 +36,8 @@ export type AstylarDiagnosticCode =
   | 'plugin-document-missing'
   | 'plugin-document-version-incompatible'
   | 'plugin-document-schema-unsupported'
+  | 'plugin-document-migration-required'
+  | 'plugin-capability-unavailable'
   | 'plugin-migration-invalid'
   | 'plugin-migration-duplicate'
   | 'plugin-migration-cycle'
@@ -65,6 +67,12 @@ export interface AstylarDiagnostic {
   readonly value?: unknown;
   readonly pluginId?: string;
   readonly contributionId?: string;
+  /** Aggregated authored paths affected by one unavailable capability. */
+  readonly relatedPaths?: readonly string[];
+  readonly affectedElements?: number;
+  readonly affectedStyleDeclarations?: number;
+  readonly requiredSchemaVersion?: number;
+  readonly installedVersion?: string;
 }
 
 export type AstylarDiagnosticLogLevel = AstylarDiagnosticSeverity | 'silent';
@@ -74,6 +82,12 @@ export interface AstylarDiagnosticsOptions {
   onDiagnostic?: (diagnostic: AstylarDiagnostic) => void;
   /** Defaults to `warning` in development and `error` in production. */
   logLevel?: AstylarDiagnosticLogLevel;
+}
+
+/** @internal Recovery-aware validation hooks owned by the mounted surface. */
+export interface AstylarDocumentValidationOptions {
+  readonly isUnavailableElement?: (identity: string) => boolean;
+  readonly isUnavailableProperty?: (identity: string) => boolean;
 }
 
 export class AstylarDiagnosticError extends Error {
@@ -151,7 +165,22 @@ export class AstylarDiagnostics {
   validate(
     siteData: unknown,
     registry?: AstylarCapabilityRegistry,
+    options: AstylarDocumentValidationOptions = {},
   ): asserts siteData is SiteData {
+    this.validateDocumentShape(siteData);
+    const candidate = siteData as SiteData;
+
+    const ids = new Map<string, string>();
+    for (const [index, style] of candidate.styles.entries()) {
+      this.validateStyle(style, `$.styles[${index}]`, undefined, registry, options);
+    }
+    candidate.root.children.forEach((element, index) => {
+      this.validateElement(element, `$.root.children[${index}]`, ids, registry, options);
+    });
+  }
+
+  /** @internal Validates the minimum shape needed before recovery analysis. */
+  validateDocumentShape(siteData: unknown): asserts siteData is SiteData {
     if (!siteData || typeof siteData !== 'object' || Array.isArray(siteData)) {
       this.fail('malformed-site-data', 'Site data must be an object.', '$', siteData);
     }
@@ -166,13 +195,6 @@ export class AstylarDiagnostics {
       this.fail('invalid-root', 'The root must contain a children array.', '$.root.children', candidate.root.children);
     }
 
-    const ids = new Map<string, string>();
-    for (const [index, style] of candidate.styles.entries()) {
-      this.validateStyle(style, `$.styles[${index}]`, undefined, registry);
-    }
-    candidate.root.children.forEach((element, index) => {
-      this.validateElement(element, `$.root.children[${index}]`, ids, registry);
-    });
   }
 
   private validateElement(
@@ -180,6 +202,7 @@ export class AstylarDiagnostics {
     path: string,
     ids: Map<string, string>,
     registry?: AstylarCapabilityRegistry,
+    options: AstylarDocumentValidationOptions = {},
   ): void {
     if (!value || typeof value !== 'object' || Array.isArray(value)) {
       this.fail('invalid-element-type', 'Every child must be an element object.', path, value);
@@ -188,8 +211,10 @@ export class AstylarDiagnostics {
     const pluginElement = typeof element.type === 'string'
       ? registry?.resolveElement(element.type)
       : undefined;
+    const unavailable = typeof element.type === 'string' &&
+      options.isUnavailableElement?.(element.type);
     if (typeof element.type !== 'string' ||
-        (!elementTypes.has(element.type) && !pluginElement)) {
+        (!elementTypes.has(element.type) && !pluginElement && !unavailable)) {
       const missingContribution = typeof element.type === 'string' && element.type.includes(':')
         ? element.type
         : undefined;
@@ -203,7 +228,7 @@ export class AstylarDiagnostics {
         missingContribution,
       );
     }
-    if (pluginElement) {
+    if (pluginElement && !unavailable) {
       const context: AstylarPluginValidationContext = {
         pluginId: contributionPluginId(pluginElement.id),
         contributionId: pluginElement.id,
@@ -261,13 +286,13 @@ export class AstylarDiagnostics {
       }
     }
     if (element.style !== undefined) {
-      this.validateStyle(element.style, `${path}.style`, element.id, registry);
+      this.validateStyle(element.style, `${path}.style`, element.id, registry, options);
     }
     if (element.children !== undefined && !Array.isArray(element.children)) {
       this.fail('malformed-site-data', 'Element children must be an array.', `${path}.children`, element.children, element.id);
     }
     element.children?.forEach((child, index) => {
-      this.validateElement(child, `${path}.children[${index}]`, ids, registry);
+      this.validateElement(child, `${path}.children[${index}]`, ids, registry, options);
     });
   }
 
@@ -276,6 +301,7 @@ export class AstylarDiagnostics {
     path: string,
     elementId?: string,
     registry?: AstylarCapabilityRegistry,
+    options: AstylarDocumentValidationOptions = {},
   ): void {
     if (!value || typeof value !== 'object' || Array.isArray(value)) {
       this.fail('malformed-site-data', 'A style rule must be an object.', path, value, elementId);
@@ -293,6 +319,7 @@ export class AstylarDiagnostics {
           );
         }
         for (const [identity, extensionValue] of Object.entries(extensions)) {
+          if (options.isUnavailableProperty?.(identity)) continue;
           const pluginProperty = registry?.resolveProperty(identity);
           if (!pluginProperty) {
             this.report({
@@ -325,6 +352,7 @@ export class AstylarDiagnostics {
         continue;
       }
       if (styleProperties.has(property)) continue;
+      if (options.isUnavailableProperty?.(property)) continue;
       const pluginProperty = registry?.resolveProperty(property);
       if (pluginProperty) {
         const context: AstylarPluginValidationContext = {

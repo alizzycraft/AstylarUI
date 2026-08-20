@@ -6,7 +6,6 @@ import {
   makeEnvironmentProviders,
 } from '@angular/core';
 import type { Mesh, Scene } from '@babylonjs/core';
-import { satisfies, valid, validRange } from 'semver';
 import type { DOMElement } from '../app/types/dom-element';
 import type { AstylarDocumentPluginRequirement } from '../app/types/site-data';
 import type { StyleRule } from '../app/types/style-rule';
@@ -15,6 +14,11 @@ import {
   type AstylarDiagnostic,
 } from './astylar-diagnostics';
 import { ASTYLAR_VERSION } from './astylar-version';
+import {
+  isAstylarVersion,
+  isAstylarVersionRange,
+  satisfiesAstylarVersion,
+} from './astylar-semver';
 
 /** Versioned independently from the Astylar package. */
 export const ASTYLAR_PLUGIN_API_VERSION = 1 as const;
@@ -368,7 +372,7 @@ export class AstylarCapabilityRegistry {
         return Object.freeze({ requirement, status: 'missing' as const });
       }
       const installedSchemaVersion = plugin.documentSchemaVersion ?? 1;
-      if (!satisfies(plugin.version, requirement.versionRange)) {
+      if (!satisfiesAstylarVersion(plugin.version, requirement.versionRange)) {
         return Object.freeze({
           requirement,
           status: 'version-incompatible' as const,
@@ -446,7 +450,7 @@ export class AstylarCapabilityRegistry {
             dependency.id,
           );
         }
-        if (!satisfies(installed.version, dependency.versionRange)) {
+        if (!satisfiesAstylarVersion(installed.version, dependency.versionRange)) {
           this.fail(
             'plugin-dependency-version-incompatible',
             `Plugin ${JSON.stringify(definition.id)} requires ${JSON.stringify(dependency.id)} ${JSON.stringify(dependency.versionRange)}; installed version is ${JSON.stringify(installed.version)}.`,
@@ -509,7 +513,7 @@ export class AstylarCapabilityRegistry {
         definition.id,
       );
     }
-    if (!valid(definition.version)) {
+    if (!isAstylarVersion(definition.version)) {
       this.fail(
         'plugin-version-invalid',
         `Plugin ${JSON.stringify(definition.id)} has invalid version ${JSON.stringify(definition.version)}.`,
@@ -524,14 +528,14 @@ export class AstylarCapabilityRegistry {
       );
     }
     if (definition.astylarVersionRange !== undefined) {
-      if (!validRange(definition.astylarVersionRange)) {
+      if (!isAstylarVersionRange(definition.astylarVersionRange)) {
         this.fail(
           'plugin-astylar-version-invalid',
           `Plugin ${JSON.stringify(definition.id)} has invalid Astylar version range ${JSON.stringify(definition.astylarVersionRange)}.`,
           definition.id,
         );
       }
-      if (!satisfies(ASTYLAR_VERSION, definition.astylarVersionRange)) {
+      if (!satisfiesAstylarVersion(ASTYLAR_VERSION, definition.astylarVersionRange)) {
         this.fail(
           'plugin-astylar-version-incompatible',
           `Plugin ${JSON.stringify(definition.id)} requires Astylar ${JSON.stringify(definition.astylarVersionRange)}; this package is ${ASTYLAR_VERSION}.`,
@@ -560,7 +564,8 @@ export class AstylarCapabilityRegistry {
       );
     }
     for (const dependency of normalizedDependencies) {
-      if (!isPluginId(dependency.id) || !validRange(dependency.versionRange)) {
+      if (!isPluginId(dependency.id) ||
+          !isAstylarVersionRange(dependency.versionRange)) {
         this.fail(
           'plugin-dependency-invalid',
           `Plugin ${JSON.stringify(definition.id)} has invalid dependency ${JSON.stringify(dependency)}.`,
