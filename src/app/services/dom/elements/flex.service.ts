@@ -575,10 +575,11 @@ export class FlexService {
       0,
       borderBoxWidth - padding.left - padding.right - borderWidth * 2,
     );
+    const measurementWidth = contentWidth > 0 ? contentWidth : 0.01;
     const dimensions = this.textRenderingService.calculateTextDimensions(
       text,
       textStyle,
-      contentWidth || undefined,
+      measurementWidth,
     );
     const lineHeight = dimensions.lineHeight ?? textStyle.fontSize * textStyle.lineHeight;
     if (element.type === 'textarea') {
@@ -705,7 +706,7 @@ export class FlexService {
       let flowChildCount = 0;
       for (const child of children) {
         const measured = this.measureIntrinsicFlowChild(
-          child, styles, dom, render, contentWidth,
+          child, styles, dom, render, contentWidth, true,
         );
         if (!measured) continue;
         flexContentHeight += measured.margin.top + measured.height + measured.margin.bottom;
@@ -759,6 +760,7 @@ export class FlexService {
     dom: BabylonDOM,
     render: BabylonRender,
     contentWidth: number,
+    stretchAutoWidth = false,
   ): { width: number; height: number; margin: { top: number; right: number; bottom: number; left: number } } | null {
     const childStyle = render.actions.style.findStyleForElement(
       child,
@@ -777,11 +779,17 @@ export class FlexService {
 
     const intrinsicInlineWidth = ['button', 'input', 'select'].includes(child.type) ||
       childStyle?.display?.toLowerCase().startsWith('inline') === true;
+    const hasAuthoredWidth = childStyle?.width !== undefined && childStyle.width !== 'auto';
+    const effectiveAlignSelf = childStyle?.alignSelf?.toLowerCase();
+    const shouldStretchWidth = stretchAutoWidth && !hasAuthoredWidth &&
+      (!effectiveAlignSelf || effectiveAlignSelf === 'auto' || effectiveAlignSelf === 'stretch');
     let childWidth = childStyle?.width && childStyle.width !== 'auto'
       ? this.parseIntrinsicPixelLength(childStyle.width, contentWidth)
-      : intrinsicInlineWidth
-        ? this.calculateIntrinsicWidth(child, childStyle, styles, dom, render)
-        : contentWidth;
+      : shouldStretchWidth
+        ? contentWidth
+        : intrinsicInlineWidth
+          ? this.calculateIntrinsicWidth(child, childStyle, styles, dom, render)
+          : contentWidth;
     const definiteFlexBasis = this.parseDefiniteIntrinsicFlexBasis(childStyle, contentWidth);
     if (definiteFlexBasis !== null) childWidth = definiteFlexBasis;
     if (childStyle?.minWidth) {

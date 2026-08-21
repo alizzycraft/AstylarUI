@@ -510,6 +510,30 @@ describe('FlexService', () => {
     )).toBe(100);
   });
 
+  it('measures zero-width text as constrained wrapped content', () => {
+    const measuredWidths: Array<number | undefined> = [];
+    const service = new FlexService(
+      new FlexLayoutService(),
+      {
+        calculateTextDimensions: (_text: string, _style: unknown, maxWidth?: number) => {
+          measuredWidths.push(maxWidth);
+          return { width: 40, height: 20, lineHeight: 20, lines: [{}, {}, {}] };
+        },
+      } as never,
+      { parseTextProperties: () => ({ fontSize: 16, lineHeight: 1.25 }) } as never,
+    );
+
+    const height = service['calculateIntrinsicTextHeight'](
+      { type: 'span', textContent: 'Save to History' },
+      { selector: 'span' },
+      [],
+      0,
+    );
+
+    expect(measuredWidths).toEqual([0.01]);
+    expect(height).toBe(60);
+  });
+
   it('measures a height-auto grid from fixed row tracks and gaps', () => {
     const service = new FlexService(new FlexLayoutService(), {} as never, {} as never);
     const render = {
