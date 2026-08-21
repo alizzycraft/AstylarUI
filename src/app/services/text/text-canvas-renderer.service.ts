@@ -89,9 +89,14 @@ export class TextCanvasRendererService {
     const transformedText = this.applyTextTransform(text, style.textTransform);
 
     // Handle multi-line text or single line using MultiLineTextRenderer
-    const lines = maxWidth ?
-      this.multiLineTextRenderer.wrapText(transformedText, maxWidth, style) :
-      [{ text: transformedText, width: ctx.measureText(transformedText).width, y: 0 }];
+    const preservesLineBreaks = ['pre', 'pre-wrap', 'pre-line'].includes(style.whiteSpace);
+    const lines = maxWidth
+      ? this.multiLineTextRenderer.wrapText(transformedText, maxWidth, style)
+      : preservesLineBreaks
+        ? this.multiLineTextRenderer.handleWhiteSpace(transformedText, style.whiteSpace)
+          .split('\n')
+          .map((line) => ({ text: line, width: ctx.measureText(line).width, y: 0 }))
+        : [{ text: transformedText, width: ctx.measureText(transformedText).width, y: 0 }];
 
     // Calculate proper line positions using MultiLineTextRenderer
     const positionedLines = this.multiLineTextRenderer.calculateLinePositions(
@@ -306,9 +311,14 @@ export class TextCanvasRendererService {
     const transformedText = this.applyTextTransform(text, style.textTransform);
 
     // Handle multi-line text measurement using MultiLineTextRenderer
-    const lines = maxWidth ?
-      this.multiLineTextRenderer.wrapText(transformedText, maxWidth, style) :
-      [{ text: transformedText, width: ctx.measureText(transformedText).width, y: 0 }];
+    const preservesLineBreaks = ['pre', 'pre-wrap', 'pre-line'].includes(style.whiteSpace);
+    const lines = maxWidth
+      ? this.multiLineTextRenderer.wrapText(transformedText, maxWidth, style)
+      : preservesLineBreaks
+        ? this.multiLineTextRenderer.handleWhiteSpace(transformedText, style.whiteSpace)
+          .split('\n')
+          .map((line) => ({ text: line, width: ctx.measureText(line).width, y: 0 }))
+        : [{ text: transformedText, width: ctx.measureText(transformedText).width, y: 0 }];
 
     let totalWidth = 0;
     let totalHeight = 0;

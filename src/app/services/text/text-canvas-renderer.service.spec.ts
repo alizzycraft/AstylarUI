@@ -62,6 +62,23 @@ describe('TextCanvasRendererService', () => {
     expect(spaced.width - unspaced.width).toBeCloseTo(46, 5);
   });
 
+  it('measures unconstrained pre-line content as separate intrinsic lines', () => {
+    const service = new TextCanvasRendererService(new MultiLineTextRendererService());
+    const style: TextStyleProperties = {
+      fontFamily: 'Arial, sans-serif', fontSize: 20, fontWeight: 'normal',
+      fontStyle: 'normal', color: '#000000', textAlign: 'left',
+      verticalAlign: 'baseline', lineHeight: 1.5, letterSpacing: 0, wordSpacing: 0,
+      whiteSpace: 'pre-line', wordWrap: 'normal', textOverflow: 'clip',
+      textDecoration: 'none', textTransform: 'none',
+    };
+
+    const first = service.measureTextBounds('Longest line', style);
+    const multiline = service.measureTextBounds('Longest line\nshort', style);
+
+    expect(multiline.width).toBeCloseTo(first.width, 5);
+    expect(multiline.height).toBe(60);
+  });
+
   it('uses logical CSS dimensions when laying out a DPR-scaled canvas', () => {
     const multiLine = new MultiLineTextRendererService();
     const service = new TextCanvasRendererService(multiLine);

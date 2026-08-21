@@ -174,6 +174,7 @@ export interface SelectElement extends InputElement {
     dropdownMesh?: BABYLON.Mesh;
     optionMeshes: BABYLON.Mesh[];
     displayMesh?: BABYLON.Mesh;
+    indicatorMesh?: BABYLON.Mesh;
     cameraScale?: number; // Store camera scale for consistent text sizing
 }
 

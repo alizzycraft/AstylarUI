@@ -50,6 +50,29 @@ describe('SelectManager', () => {
     expect(select.displayMesh?.position.z).toBeGreaterThan(0);
   });
 
+  it('keeps selected text at its CSS size on high-density displays', () => {
+    spyOnProperty(window, 'devicePixelRatio', 'get').and.returnValue(2);
+    const textRendering = {
+      renderTextToTexture: () => ({ getSize: () => ({ width: 80, height: 24 }) }),
+    } as unknown as TextRenderingService;
+    const meshService = {
+      createTextMesh: (name: string, _texture: unknown, width: number, height: number) =>
+        BABYLON.MeshBuilder.CreatePlane(name, { width, height }, scene),
+    } as unknown as BabylonMeshService;
+    const manager = new SelectManager(textRendering, meshService);
+
+    const select = manager.createSelectElement(
+      { type: 'select', id: 'density', value: 'dark', options: [{ value: 'dark', label: 'Dark' }] },
+      { scene, actions: { camera: { getPixelToWorldScale: () => 0.01 } } } as any,
+      { selector: '#density', background: '#ffffff', color: '#000000' },
+      { width: 3, height: 0.5 },
+    );
+
+    const size = select.displayMesh!.getBoundingInfo().boundingBox.extendSize;
+    expect(size.x * 2).toBeCloseTo(0.4, 5);
+    expect(size.y * 2).toBeCloseTo(0.12, 5);
+  });
+
   it('commits closed arrow navigation and skips disabled options', () => {
     const textRendering = {
       renderTextToTexture: () => ({ getSize: () => ({ width: 80, height: 24 }) }),

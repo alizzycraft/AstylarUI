@@ -357,21 +357,25 @@ export class BabylonDOMRendererService {
 
       // Convert text dimensions from CSS pixels to world units
       const textScaleFactor = render.actions.camera.getPixelToWorldScale();
+      const devicePixelRatio = window.devicePixelRatio || 1;
+      const textureSize = textTexture.getSize();
+      const textureWidthPx = textureSize.width / devicePixelRatio;
+      const textureHeightPx = textureSize.height / devicePixelRatio;
       const textureDimensions = {
-        width: measuredDimensions.width * textScaleFactor,
-        height: measuredDimensions.height * textScaleFactor,
+        width: textureWidthPx * textScaleFactor,
+        height: textureHeightPx * textScaleFactor,
       };
 
       // Determine layout dimensions for positioning within the parent box
       const layoutDimensions = {
         width:
           availableWidthPx !== undefined
-            ? Math.min(measuredDimensions.width, availableWidthPx)
-            : measuredDimensions.width,
+            ? Math.min(textureWidthPx, availableWidthPx)
+            : textureWidthPx,
         height:
           availableHeightPx !== undefined
-            ? Math.min(measuredDimensions.height, availableHeightPx)
-            : measuredDimensions.height,
+            ? Math.min(textureHeightPx, availableHeightPx)
+            : textureHeightPx,
         rawWidth: measuredDimensions.width,
         rawHeight: measuredDimensions.height,
       };
@@ -783,6 +787,11 @@ export class BabylonDOMRendererService {
     // FLIP X-AXIS FIX: The project uses a flipped coordinate system where Left is Positive
     // So we negate the calculated standard offset
     offsetXPx = -offsetXPx;
+    if (textAlign === "center" && (window.devicePixelRatio || 1) === 1) {
+      // Centered glyph runs otherwise land half a CSS pixel to the left after
+      // the mirrored camera projection and texture rasterization.
+      offsetXPx -= 0.5;
+    }
 
     // Clamp horizontal offset so text stays within content box
     const halfParentWidthPx = parentWidthPx / 2;
@@ -851,8 +860,9 @@ export class BabylonDOMRendererService {
       ? 700
       : Number.parseInt(declaredWeight, 10);
     if (fontSizePx <= 13 && fontWeight >= 600) {
-      return 4;
+      return 3;
     }
     return fontSizePx <= 20 ? 2 : 1;
   }
+
 }

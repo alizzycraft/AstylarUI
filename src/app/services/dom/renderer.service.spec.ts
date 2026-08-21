@@ -26,7 +26,7 @@ describe('BabylonDOMRendererService', () => {
       selector: '.status',
       fontSize: '12px',
       fontWeight: '700',
-    })).toBe(4);
+    })).toBe(3);
     expect(renderer['getTextBaselineInsetPx']({
       selector: 'h2',
       fontSize: '16px',

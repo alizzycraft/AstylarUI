@@ -114,7 +114,7 @@ export class TextInputManager {
         // Always create layout metrics, even for empty inputs (needed for cursor positioning)
         if (render.scene) {
             // Use placeholder or a single space for layout calculation if no content
-            const layoutText = textInput.textContent || textInput.placeholder || ' ';
+            const layoutText = this.getDisplayText(textInput) || ' ';
             const textStyleProps = this.parseTextStyle(style);
             const pixelScale = render.actions.camera.getPixelToWorldScale();
 
@@ -275,6 +275,14 @@ export class TextInputManager {
         material?.dispose(false, false);
     }
 
+    private getDisplayText(textInput: TextInput): string {
+        const value = `${textInput.value ?? ''}`;
+        if (!value) return textInput.placeholder ?? '';
+        return textInput.type === InputType.Password
+            ? '•'.repeat(Array.from(value).length)
+            : value;
+    }
+
     /**
      * Updates the text display mesh
      */
@@ -285,7 +293,7 @@ export class TextInputManager {
             textInput.textMesh = undefined;
         }
 
-        const textToRender = textInput.value || textInput.placeholder || '';
+        const textToRender = this.getDisplayText(textInput);
         if (!textToRender) return;
 
         // Determine style (placeholder vs normal)

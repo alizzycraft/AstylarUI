@@ -167,7 +167,7 @@ export class TextRenderingService implements TextCacheManager {
         { width: canvas.width, height: canvas.height },
         this.scene,
         false, // No mipmaps for text
-        BABYLON.Texture.TRILINEAR_SAMPLINGMODE,
+        BABYLON.Texture.NEAREST_SAMPLINGMODE,
         BABYLON.Engine.TEXTUREFORMAT_RGBA,
         false // Don't invert Y in the texture
       );
@@ -183,6 +183,7 @@ export class TextRenderingService implements TextCacheManager {
 
       // Update the texture
       texture.hasAlpha = true;
+      texture.level = 1.1;
       texture.update(false);
 
       // Ensure proper texture wrapping

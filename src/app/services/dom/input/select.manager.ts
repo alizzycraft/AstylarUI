@@ -83,6 +83,7 @@ export class SelectManager {
 
         // Create display mesh for selected value
         selectElement.displayMesh = this.createDisplayMesh(selectElement, render, style);
+        selectElement.indicatorMesh = this.createIndicatorMesh(selectElement, render, style);
 
         // Store camera scale for consistent text sizing across select and dropdown
         selectElement.cameraScale = render.actions.camera.getPixelToWorldScale();
@@ -93,6 +94,47 @@ export class SelectManager {
         }
 
         return selectElement;
+    }
+
+    private createIndicatorMesh(
+        selectElement: SelectElement,
+        render: BabylonRender,
+        style: StyleRule,
+    ): BABYLON.Mesh {
+        const scale = render.actions.camera.getPixelToWorldScale();
+        const indicatorStyle: StyleRule = {
+            ...style,
+            selector: style.selector,
+            color: style.color ?? '#e6edf3',
+            fontFamily: style.fontFamily ?? 'Segoe UI, Arial, sans-serif',
+            fontSize: '14px',
+            fontWeight: '700',
+            lineHeight: '14px',
+        };
+        const texture = this.textRenderingService.renderTextToTexture(
+            selectElement.element,
+            '▾',
+            indicatorStyle,
+        );
+        const textureSize = texture.getSize();
+        const devicePixelRatio = window.devicePixelRatio || 1;
+        const width = (textureSize.width / devicePixelRatio) * scale;
+        const height = (textureSize.height / devicePixelRatio) * scale;
+        const indicator = this.babylonMeshService.createTextMesh(
+            `selectIndicator_${selectElement.element.id}`,
+            texture,
+            width,
+            height,
+        );
+        const selectWidth = selectElement.mesh.getBoundingInfo().boundingBox.extendSize.x * 2;
+        const insets = this.getHorizontalContentInsets(style, scale);
+        indicator.parent = selectElement.mesh;
+        indicator.rotation.z = Math.PI;
+        indicator.position.x = -(selectWidth / 2) + insets.right + width / 2;
+        indicator.position.y = -2 * scale;
+        indicator.position.z = CONTROL_CONTENT_Z_OFFSET;
+        indicator.isPickable = false;
+        return indicator;
     }
 
     /**
@@ -323,8 +365,9 @@ export class SelectManager {
 
             // Get texture dimensions
             const textureSize = texture.getSize();
-            const textureWidthPx = textureSize.width;
-            const textureHeightPx = textureSize.height;
+            const devicePixelRatio = window.devicePixelRatio || 1;
+            const textureWidthPx = textureSize.width / devicePixelRatio;
+            const textureHeightPx = textureSize.height / devicePixelRatio;
 
             // Use stored camera scale for consistency
             const scale = selectElement.cameraScale || 0.001;
@@ -393,8 +436,9 @@ export class SelectManager {
 
             // Get texture dimensions
             const textureSize = texture.getSize();
-            const textureWidthPx = textureSize.width;
-            const textureHeightPx = textureSize.height;
+            const devicePixelRatio = window.devicePixelRatio || 1;
+            const textureWidthPx = textureSize.width / devicePixelRatio;
+            const textureHeightPx = textureSize.height / devicePixelRatio;
 
             // Convert to world units using camera's pixel-to-world scale (same as button)
             const scale = render.actions.camera.getPixelToWorldScale();
@@ -633,12 +677,13 @@ export class SelectManager {
                 );
 
                 const textureSize = texture.getSize();
+                const devicePixelRatio = window.devicePixelRatio || 1;
 
                 // Use the same camera scale as the select display for consistency
                 const cameraScale = selectElement.cameraScale || 0.001;
 
-                const textureWidth = textureSize.width * cameraScale;
-                const textureHeight = textureSize.height * cameraScale;
+                const textureWidth = (textureSize.width / devicePixelRatio) * cameraScale;
+                const textureHeight = (textureSize.height / devicePixelRatio) * cameraScale;
 
                 const textMesh = this.babylonMeshService.createTextMesh(
                     `optionText_${selectElement.element.id}_${index}`,

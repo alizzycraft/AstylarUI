@@ -2,6 +2,16 @@ import { CursorDirection, InputType, TextInput } from '../../../types/input-type
 import { TextInputManager } from './text-input.manager';
 
 describe('TextInputManager', () => {
+  it('masks password display text without changing the stored value', () => {
+    const manager = Object.create(TextInputManager.prototype) as TextInputManager;
+    const textInput = createTextInput('secret', 6);
+    textInput.type = InputType.Password;
+
+    expect((manager as any).getDisplayText(textInput)).toBe('••••••');
+    expect(textInput.value).toBe('secret');
+    expect(textInput.textContent).toBe('secret');
+  });
+
   it('reports leftward selections with ordered DOM-style endpoints', () => {
     const manager = Object.create(TextInputManager.prototype) as TextInputManager;
     const textInput = createTextInput('Alpha', 5);
