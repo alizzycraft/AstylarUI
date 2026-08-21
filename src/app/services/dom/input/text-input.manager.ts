@@ -402,8 +402,8 @@ export class TextInputManager {
 
             // Handle clipping if text exceeds available width
             if (textureWidth > availableWidth) {
-
-                textMesh.position.x = (insets.right - insets.left) / 2;
+                textMesh.position.x = (insets.right - insets.left) / 2
+                    + this.getCollapsedTextareaInlineCorrection(isTextarea, availableWidth, pixelScale);
             } else {
                 // No clipping needed
                 textInput.scrollOffset = 0;
@@ -602,6 +602,19 @@ export class TextInputManager {
         return textInput.type === InputType.Textarea &&
             textInput.element.wrap !== 'off' &&
             !['nowrap', 'pre'].includes(textInput.style.whiteSpace ?? 'normal');
+    }
+
+    private getCollapsedTextareaInlineCorrection(
+        isTextarea: boolean,
+        availableWidth: number,
+        pixelScale: number
+    ): number {
+        // With no nominal content width, the browser begins the first glyph on
+        // the inner border pixel. Centering the fallback texture lands it one
+        // logical pixel early because the canvas includes edge padding.
+        // The input plane is rotated by PI, so negative local X advances the
+        // glyph one logical pixel in screen-space inline direction.
+        return isTextarea && availableWidth <= pixelScale ? -pixelScale : 0;
     }
 
     /** Applies wheel deltas without snapping the viewport back to the caret. */

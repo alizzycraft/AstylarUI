@@ -12,6 +12,14 @@ describe('TextInputManager', () => {
     expect((manager as any).isHorizontallyWrappedTextarea(wrapped)).toBeFalse();
   });
 
+  it('corrects only a textarea whose content width collapses to one logical pixel', () => {
+    const manager = Object.create(TextInputManager.prototype) as TextInputManager;
+
+    expect((manager as any).getCollapsedTextareaInlineCorrection(true, 0, 0.25)).toBe(-0.25);
+    expect((manager as any).getCollapsedTextareaInlineCorrection(true, 0.5, 0.25)).toBe(0);
+    expect((manager as any).getCollapsedTextareaInlineCorrection(false, 0, 0.25)).toBe(0);
+  });
+
   it('masks password display text without changing the stored value', () => {
     const manager = Object.create(TextInputManager.prototype) as TextInputManager;
     const textInput = createTextInput('secret', 6);
