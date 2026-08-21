@@ -888,7 +888,7 @@
     "id": "interaction-focus-style",
     "title": "Authored focus-state paint",
     "category": "controls-states",
-    "expectedBehavior": "Focusing a control applies authored focus paint and blurring it restores normal paint without changing geometry.",
+    "expectedBehavior": "Focusing a control applies authored background and text-color paint and blurring it restores normal paint without changing geometry.",
     "interactionStepCount": 4
   },
   {

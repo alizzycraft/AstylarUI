@@ -45,6 +45,8 @@ import type {
 } from './astylar-interaction-runtime';
 import type { AstylarEventOptions, AstylarEventState } from './astylar-event';
 import { InputElementService } from '../app/services/dom/input/input-element.service';
+import type { Button } from '../app/types/input-types';
+import { TextRenderingService } from '../app/services/text/text-rendering.service';
 import { AstylarScrollRuntime } from './astylar-scroll-runtime';
 import type { AstylarScrollSnapshot } from './astylar-scroll-runtime';
 import { OverflowClipService } from '../app/services/dom/elements/overflow-clip.service';
@@ -135,6 +137,7 @@ class AstylarRenderer {
   private imageResources = inject(ImageResourceService);
   private elementManager = inject(BabylonElementManagerService);
   private inputElementService = inject(InputElementService);
+  private textRenderingService = inject(TextRenderingService);
   private overflowClipService = inject(OverflowClipService);
   private pluginRuntime = inject(AstylarPluginRuntime);
   private capabilityRegistry = inject(AstylarCapabilityRegistry);
@@ -946,6 +949,7 @@ class AstylarRenderer {
           borderMesh.material = borderMesh.metadata.astylarInteractionBaseMaterial;
         }
       }
+      this.setButtonLabelPseudoMaterial(elementId);
       return;
     }
 
@@ -999,6 +1003,54 @@ class AstylarRenderer {
         }
       }
     }
+    this.setButtonLabelPseudoMaterial(elementId, style, materialKey, materialSuffix);
+  }
+
+  /** Applies paint-only pseudo-state typography without rebuilding the control. */
+  private setButtonLabelPseudoMaterial(
+    elementId: string,
+    style?: import('../app/types/style-rule').StyleRule,
+    materialKey?: string,
+    materialSuffix?: string,
+  ): void {
+    const input = this.inputElementService.getInputElement(elementId) as Button | undefined;
+    const labelMesh = input?.labelMesh;
+    if (!input || !labelMesh) return;
+    labelMesh.metadata = labelMesh.metadata ?? {};
+    if (!Object.prototype.hasOwnProperty.call(
+      labelMesh.metadata,
+      'astylarInteractionBaseMaterial',
+    )) {
+      labelMesh.metadata.astylarInteractionBaseMaterial = labelMesh.material;
+    }
+    if (!style || !materialKey || !materialSuffix) {
+      labelMesh.material = labelMesh.metadata.astylarInteractionBaseMaterial;
+      return;
+    }
+
+    const normalColor = this.elementManager.elementStylesMap.get(elementId)?.normal.color;
+    if (!style.color || style.color === normalColor) {
+      labelMesh.material = labelMesh.metadata.astylarInteractionBaseMaterial;
+      return;
+    }
+    const labelMaterialKey = `${materialKey}Label`;
+    if (!labelMesh.metadata[labelMaterialKey]) {
+      const texture = this.textRenderingService.renderTextToTexture(
+        input.element,
+        input.label,
+        style,
+      );
+      const material = this.babylonMeshService.createTextMaterial(
+        `${elementId}-${materialSuffix}-label-material`,
+        texture,
+      );
+      material.alpha = this.styleService.parseOpacity(style.opacity);
+      labelMesh.metadata[labelMaterialKey] = material;
+      const resources = this.sceneResources.get(labelMesh.getScene());
+      resources?.adopt(texture);
+      resources?.adopt(material);
+    }
+    labelMesh.material = labelMesh.metadata[labelMaterialKey];
   }
 }
 

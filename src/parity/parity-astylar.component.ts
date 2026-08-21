@@ -429,9 +429,14 @@ export class ParityAstylarComponent {
 
       const borderBox = this.projectMeshRect(mesh, scene);
       const dimensions = this.elementManager.elementDimensionsMap.get(id);
-      const style = this.elementManager.elementStylesMap.get(id)?.normal;
+      const styles = this.elementManager.elementStylesMap.get(id);
       const elementType = this.elementManager.elementTypesMap.get(id);
       const inputElement = this.elementManager.inputElementsMap.get(id);
+      const style = {
+        ...styles?.normal,
+        ...(inputElement?.focused ? styles?.focus : {}),
+        ...(mesh.metadata?.astylarActiveState ? styles?.active : {}),
+      };
       const metrics = this.elementManager.textMetricsMap.get(id)?.css
         ?? (elementType === 'textarea' ? inputElement?.textLayoutMetrics : undefined);
       const textContent = elementType === 'textarea' ? `${inputElement?.value ?? ''}` : metrics?.text;
