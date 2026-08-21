@@ -108,6 +108,9 @@ skills after every cross-skill change.
   plugin, or lifecycle changes.
 - Run focused and enforced full parity for layout, responsive, typography,
   paint, controls, interaction, semantics, scrolling, or reconciliation changes.
+- When a maintained application benchmark covers the changed path, run its
+  report mode while diagnosing and its unfiltered enforced command for release;
+  `npm run parity:release:check` combines the general and TTS visual gates.
 - Run both builds and both skill validators before release acceptance.
 - Record exact commands, results, metrics, limitations, and accepted warnings.
 

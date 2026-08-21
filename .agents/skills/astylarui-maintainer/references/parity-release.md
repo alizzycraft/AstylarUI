@@ -79,6 +79,13 @@ release evidence and report exact fixture, render-result, and viewport counts,
 minimum and median SSIM, aggregate edge ratio, maximum edge error, text/runtime/
 semantic status, and threshold status.
 
+The pinned TTS application benchmark is also enforced release evidence. Run
+`npm run tts-parity:check` without changing its reference or calibrated targets;
+it requires all declared states, viewports, and DPR profiles to pass geometry,
+visibility, scrolling/reachability, exact visible text, local sharpness, SSIM,
+runtime, completeness, and repeatability. Use `npm run parity:release:check` to
+run the unfiltered fixture corpus and this application gate sequentially.
+
 Never weaken a threshold, delete or hide a fixture, filter the release run,
 change reference truth to match Astylar, omit an error, or broaden a capability
 claim to obtain green output. A legitimate metric change follows from a tested
@@ -96,7 +103,9 @@ project:
 4. `npm run build:lib` and `npm run build`.
 5. `npm run consumer:check` for a fresh packed installation, browser tests, and
    browser plus SSR output.
-6. `npm run parity:check` with no diagnostic fixture environment variable.
+6. `npm run parity:release:check` with no diagnostic fixture environment
+   variable. This runs both `parity:check` and `tts-parity:check`; record each
+   constituent result separately.
 7. `git diff --check`, documentation review, and `git status --short`.
 
 Run build/package checks in a sequence that avoids concurrent writers to

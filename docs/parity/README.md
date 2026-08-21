@@ -81,6 +81,9 @@ and the agent-ready compatibility contract are completed in `scorecard-v14.md`.
 The application-development skill is completed in `scorecard-v15.md`. The
 maintainer skill, its release evidence, and its twelve isolated forward-test
 categories are completed in `scorecard-v16.md` and `forward-tests-v16.md`.
+Reference-driven application measurement infrastructure is recorded in
+`scorecard-v18.md`; the enforced TTS application parity milestone and its final
+per-profile evidence are recorded in `scorecard-v19.md`.
 
 The shared authored-ID, positional fallback, compatibility, and replacement
 rules are documented in `../reconciliation.md`.

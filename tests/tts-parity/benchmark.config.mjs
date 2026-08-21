@@ -37,7 +37,8 @@ export const sharpnessRegions = [
 ];
 
 // Calibrated from exact-copy, synthetic blur, and degraded one-pixel-border cases.
-// Phase 18 reports these without enforcing them; Phase 19 activates them unchanged.
+// Phase 18 calibrated these without enforcing them; Phase 19 promoted the
+// unchanged configuration to release acceptance.
 export const acceptance = {
   maximumGeometryEdgeErrorPx: 4,
   minimumEdgesWithinTolerance: 0.95,

@@ -14,13 +14,23 @@ intentional adaptations are recorded in
 - `npm run tts-parity:report` rebuilds the local demo, captures all states and
   profiles, and succeeds when complete deterministic evidence was produced. It
   reports visual targets honestly but does not enforce them.
-- `npm run tts-parity:check` uses the same evidence and activates the immutable
+- `npm run tts-parity:check` uses the same evidence and enforces the immutable
   acceptance configuration in `tests/tts-parity/benchmark.config.mjs`.
+- `npm run parity:release:check` runs the unfiltered fixture corpus followed by
+  the enforced TTS application benchmark. It is the combined visual release
+  gate; neither constituent command may use a diagnostic fixture filter.
 
-The enforced command is prepared for Phase 19 but is not a Phase 18 release
-gate. Missing measurements, runtime errors, malformed artifacts, capture-size
-differences, font-readiness failures, or nondeterministic repeat captures fail
-both modes. A poor fidelity score alone fails only enforcement.
+Phase 19 promoted the enforced command after every declared state, viewport,
+and DPR profile passed the unchanged calibrated targets. Missing measurements,
+runtime errors, malformed artifacts, capture-size differences, font-readiness
+failures, or nondeterministic repeat captures fail both modes. A poor fidelity
+score alone fails only enforcement.
+
+The application thresholds are: maximum geometry edge error `4px`, at least
+`95%` of edges within `2px`, screenshot SSIM at least `0.965`, gradient-energy
+retention at least `0.82`, local edge alignment at least `0.82`, gradient RMSE
+at most `0.12`, and at most `1px` of incidental scroll extent. Visibility and
+scroll ownership must match exactly.
 
 ## Evidence contract
 
