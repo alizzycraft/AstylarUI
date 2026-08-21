@@ -207,11 +207,16 @@ class AstylarRenderer {
     options?: AstylarRenderOptions,
   ): Scene {
     // Create Babylon.js engine
-    const engine = new Engine(canvas, true, {
-      preserveDrawingBuffer: true,
-      stencil: true,
-      antialias: options?.antialias ?? false,
-    });
+    const engine = new Engine(
+      canvas,
+      true,
+      {
+        preserveDrawingBuffer: true,
+        stencil: true,
+        antialias: options?.antialias ?? false,
+      },
+      true,
+    );
 
     // Create scene
     const scene = new Scene(engine);

@@ -73,11 +73,14 @@ export class TextCanvasRendererService {
       throw new Error('Failed to get 2D rendering context from canvas');
     }
 
-    // Get device pixel ratio for consistent measurements
+    // Canvas backing-store dimensions are physical pixels, while text layout
+    // continues to use CSS pixels after createStyledCanvas scales the context.
     const devicePixelRatio = window.devicePixelRatio || 1;
+    const logicalWidth = parseFloat(canvas.style.width) || canvas.width / devicePixelRatio;
+    const logicalHeight = parseFloat(canvas.style.height) || canvas.height / devicePixelRatio;
 
     // Clear the canvas
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.clearRect(0, 0, logicalWidth, logicalHeight);
 
     // Re-apply styling (in case context was reset)
     this.applyTextStylingToContext(ctx, style);
@@ -94,12 +97,12 @@ export class TextCanvasRendererService {
     const positionedLines = this.multiLineTextRenderer.calculateLinePositions(
       lines,
       style,
-      canvas.height
+      logicalHeight
     );
 
     // Render each line of text
     positionedLines.forEach((line) => {
-      const x = this.calculateLineX(line.width, canvas.width, style.textAlign);
+      const x = this.calculateLineX(line.width, logicalWidth, style.textAlign);
 
       // Render text stroke (outline) first if specified
       if (style.textStroke && style.textStroke.width > 0) {

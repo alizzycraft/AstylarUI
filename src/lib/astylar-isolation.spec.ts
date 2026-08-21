@@ -99,6 +99,24 @@ describe('Astylar simultaneous surface isolation', () => {
     remounted.dispose();
     canvas.remove();
   });
+
+  it('sizes the render backing store for the browser device-pixel ratio', async () => {
+    spyOnProperty(window, 'devicePixelRatio', 'get').and.returnValue(2);
+    const canvas = document.createElement('canvas');
+    canvas.style.width = '200px';
+    canvas.style.height = '100px';
+    document.body.append(canvas);
+    const surface = TestBed.inject(Astylar).mount(canvas, site('DPR'));
+
+    try {
+      await surface.whenSettled();
+      expect(surface.scene.getEngine().getRenderWidth()).toBe(400);
+      expect(surface.scene.getEngine().getRenderHeight()).toBe(200);
+    } finally {
+      surface.dispose();
+      canvas.remove();
+    }
+  });
 });
 
 function site(label: string): SiteData {
