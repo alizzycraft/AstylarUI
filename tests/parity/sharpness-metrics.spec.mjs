@@ -45,6 +45,12 @@ test('deliberately blurred text fails', () => {
   assert.equal(evaluateSharpness(compareSharpness(text, blur(text))).meetsTarget, false);
 });
 
+test('a crisp one-physical-pixel raster phase difference passes', () => {
+  const shifted = image(text.width, text.height, (x, y) =>
+    x > 0 ? text.data[(y * text.width + x - 1) * 4] : 245);
+  assert.equal(evaluateSharpness(compareSharpness(text, shifted)).meetsTarget, true);
+});
+
 test('softened and displaced one-pixel border fails', () => {
   const border = image(80, 40, (_x, y) => y === 12 ? 15 : 245);
   const degraded = image(80, 40, (_x, y) => y >= 14 && y <= 16 ? 150 : 245);

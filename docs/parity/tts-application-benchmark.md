@@ -41,13 +41,14 @@ crop sheets under `artifacts/tts-parity/<state>/<profile>/`, plus
 
 The local metric computes luminance gradients inside identified text or border
 crops. It reports the reference/candidate high-gradient energy, retained energy
-ratio, spatial edge alignment, and gradient RMSE. Acceptance requires all three
-calibrated bounds. Using the strongest local gradients prevents a large flat
-background from dominating the measurement.
+ratio, one-physical-pixel-tolerant spatial edge alignment, and gradient RMSE.
+Acceptance requires all three calibrated bounds. Using the strongest local
+gradients prevents a large flat background from dominating the measurement,
+while the local alignment tolerance keeps raster phase separate from blur.
 
 Calibration proves exact copies pass while a five-sample text blur and a
 softened/displaced one-pixel border fail. The metric is diagnostic rather than
 a complete perceptual model: antialiasing color differences can affect it,
-off-screen regions cannot be sampled, and a high energy ratio alone can be
-caused by incorrectly sharp noise. Native-scale crop review, geometry, and edge
-alignment therefore remain required.
+off-screen regions cannot be sampled and are reported as non-applicable, and a
+high energy ratio alone can be caused by incorrectly sharp noise. Native-scale
+crop review, geometry, and edge alignment therefore remain required.

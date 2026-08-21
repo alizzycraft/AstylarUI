@@ -63,14 +63,25 @@ export function compareSharpness(reference, candidate) {
   const candidateProfile = sharpnessProfile(candidate);
   const referenceGradients = gradientMagnitudes(reference);
   const candidateGradients = gradientMagnitudes(candidate);
+  const gradientWidth = Math.max(0, reference.width - 2);
+  const gradientHeight = Math.max(0, reference.height - 2);
   let aligned = 0;
   let referenceWeight = 0;
   let squaredError = 0;
   for (let index = 0; index < referenceGradients.length; index += 1) {
     const expected = referenceGradients[index];
     const actual = candidateGradients[index];
+    const x = index % gradientWidth;
+    const y = Math.floor(index / gradientWidth);
+    let localActual = actual;
+    for (let dy = -1; dy <= 1; dy += 1) for (let dx = -1; dx <= 1; dx += 1) {
+      const localX = x + dx;
+      const localY = y + dy;
+      if (localX < 0 || localX >= gradientWidth || localY < 0 || localY >= gradientHeight) continue;
+      localActual = Math.max(localActual, candidateGradients[localY * gradientWidth + localX]);
+    }
     referenceWeight += expected;
-    aligned += Math.min(expected, actual);
+    aligned += Math.min(expected, localActual);
     const delta = expected - actual;
     squaredError += delta * delta;
   }

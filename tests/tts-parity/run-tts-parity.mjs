@@ -266,7 +266,7 @@ function compareScenario(referenceCapture, astylarCapture, viewport, scenarioDir
   const raster = compareRegions(referenceCapture, astylarCapture, viewport, scenarioDir, infrastructureErrors);
   writeCompositeArtifacts(referenceCapture.image, astylarCapture.image, scenarioDir);
   const meetsAcceptance = geometry.meetsTarget && visibility.matches && scrolling.matches && text.matches &&
-    screenshotSimilarity >= acceptance.minimumSsim && raster.every((region) => region.meetsTarget);
+    screenshotSimilarity >= acceptance.minimumSsim && raster.every((region) => region.skipped || region.meetsTarget);
   return {
     runtime: { referenceErrors: referenceCapture.errors, astylarErrors: astylarCapture.errors,
       fonts: { reference: referenceCapture.fontsReady, astylar: astylarCapture.fontsReady },
@@ -327,11 +327,16 @@ function compareRegions(referenceCapture, astylarCapture, viewport, scenarioDir,
     else bounds = { left: bounds.left - region.padding, top: bounds.top - region.padding,
       right: bounds.right + region.padding, bottom: bounds.bottom + region.padding };
     const physical = Object.fromEntries(Object.entries(bounds).map(([key, value]) => [key, value * scale]));
+    if (physical.left < 0 || physical.top < 0 ||
+        physical.right > referenceCapture.image.width || physical.bottom > referenceCapture.image.height) {
+      return [{ ...region, skipped: true,
+        reason: 'The authoritative region is not fully inside this capture profile.' }];
+    }
     const expected = cropRgba(referenceCapture.image, physical);
     const actual = cropRgba(astylarCapture.image, physical);
     if (!expected.width || !expected.height || !sameDimensions(expected, actual)) {
       return [{ ...region, bounds: expected.bounds, skipped: true,
-        reason: 'The authoritative region does not intersect this capture profile.', meetsTarget: false }];
+        reason: 'The authoritative region does not intersect this capture profile.' }];
     }
     const result = evaluateSharpness(compareSharpness(expected, actual), acceptance);
     const sheet = sideBySide(expected, actual);
@@ -388,8 +393,10 @@ function summarize(results) {
     scrollOwnershipMatches: results.filter((result) => result.scrolling.ownershipMatches).length,
     scrollReachabilityMatches: results.filter((result) => result.scrolling.reachabilityMatches).length,
     textMatches: results.filter((result) => result.text.matches).length,
-    sharpnessRegionsPassing: results.reduce((total, result) => total + result.raster.filter((region) => region.meetsTarget).length, 0),
-    sharpnessRegionsMeasured: results.reduce((total, result) => total + result.raster.length, 0),
+    sharpnessRegionsPassing: results.reduce((total, result) =>
+      total + result.raster.filter((region) => !region.skipped && region.meetsTarget).length, 0),
+    sharpnessRegionsMeasured: results.reduce((total, result) =>
+      total + result.raster.filter((region) => !region.skipped).length, 0),
     meetsAcceptance: results.every((result) => result.meetsAcceptance),
   };
 }
