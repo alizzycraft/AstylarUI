@@ -117,6 +117,28 @@ describe('Astylar simultaneous surface isolation', () => {
       canvas.remove();
     }
   });
+
+  it('does not resize the backing store for an ordinary visual update', async () => {
+    const canvas = document.createElement('canvas');
+    canvas.style.width = '320px';
+    canvas.style.height = '180px';
+    document.body.append(canvas);
+    const surface = TestBed.inject(Astylar).mount(canvas, site('Before update'));
+
+    try {
+      await surface.whenSettled();
+      const resize = spyOn(surface.scene.getEngine(), 'resize').and.callThrough();
+
+      await surface.update(site('After update'));
+
+      expect(resize).not.toHaveBeenCalled();
+      await surface.resize();
+      expect(resize).toHaveBeenCalledOnceWith();
+    } finally {
+      surface.dispose();
+      canvas.remove();
+    }
+  });
 });
 
 function site(label: string): SiteData {

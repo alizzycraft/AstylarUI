@@ -430,7 +430,12 @@ class AstylarRenderer {
           const scrollState = hasCompletedRender
             ? scrollRuntime.snapshot.containers
             : {};
-          engine.resize(true);
+          // Reassigning the canvas backing-store dimensions clears its current
+          // frame. Only resize for an actual viewport invalidation (or the
+          // initial render), and let Babylon skip a no-op size assignment.
+          if (!hasCompletedRender || reasons.includes('resize')) {
+            engine.resize();
+          }
           this.imageResources.retain(
             scene,
             this.collectImageSources(currentSiteData),
@@ -479,6 +484,11 @@ class AstylarRenderer {
             },
             this.imageResources.getSceneTextures(scene),
           );
+          // A backing-store resize clears the presented canvas immediately.
+          // Paint the rebuilt tree in the same task so the browser never gets
+          // an opportunity to composite the clear frame while settlement waits
+          // for optional asynchronous generation work.
+          if (!scene.isDisposed) scene.render();
           await generation.whenSettled();
           visualResourceTransaction.commitOwnership();
           visualPlan.commit({ reused: reusedVisualMeshes });

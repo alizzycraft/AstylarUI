@@ -96,7 +96,9 @@ export class AstylarSurfaceHandle implements AstylarSurface {
 
   resize(): Promise<AstylarSessionSnapshot> {
     this.assertActive('resize');
-    this.scene.getEngine().resize(true);
+    // The renderer owns backing-store resize and the immediately following
+    // paint as one reflow transaction. Resizing here would clear the canvas a
+    // frame before the rebuilt scene is ready.
     return this.host.invalidate('resize', this.scene);
   }
 

@@ -60,12 +60,12 @@ describe('AstylarSurfaceHandle', () => {
     expect(host.getSession).toHaveBeenCalledOnceWith(scene);
   });
 
-  it('resizes the engine and requests a responsive reflow', async () => {
+  it('requests one renderer-owned responsive reflow without clearing the canvas early', async () => {
     const { engine, host, scene, surface } = setup();
 
     await surface.resize();
 
-    expect(engine.resize).toHaveBeenCalledOnceWith(true);
+    expect(engine.resize).not.toHaveBeenCalled();
     expect(host.invalidate).toHaveBeenCalledOnceWith('resize', scene);
   });
 
