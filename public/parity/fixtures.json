@@ -534,6 +534,12 @@
     "expectedBehavior": "An auto-height block grows from in-flow children, collapsed sibling margins, padding, and borders while auto-width children fill its content box."
   },
   {
+    "id": "parent-child-margin-collapse",
+    "title": "Parent and child vertical margin collapse",
+    "category": "box-model-units",
+    "expectedBehavior": "The first and last child margins collapse through an unbordered, unpadded auto-height block and participate in its surrounding sibling flow."
+  },
+  {
     "id": "auto-wrapped-text",
     "title": "Wrapped text intrinsic height",
     "category": "typography",

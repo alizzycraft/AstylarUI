@@ -11,6 +11,8 @@ describe('ElementCreationService', () => {
 
     expect(flow.tops).toEqual([18, 78]);
     expect(flow.height).toBe(160);
+    expect(flow.collapsedMarginTop).toBe(0);
+    expect(flow.collapsedMarginBottom).toBe(0);
   });
 
   it('collapses adjacent positive margins to the larger margin', () => {
@@ -23,6 +25,23 @@ describe('ElementCreationService', () => {
 
     expect(flow.tops).toEqual([10, 60]);
     expect(flow.height).toBe(100);
+  });
+
+  it('moves adjoining first and last child margins outside an auto block', () => {
+    const service = Object.create(ElementCreationService.prototype) as ElementCreationService;
+
+    const flow = service['calculateBlockFlow'](
+      0,
+      0,
+      [{ height: 200, marginTop: 8, marginBottom: 12 }],
+      true,
+      true,
+    );
+
+    expect(flow.tops).toEqual([0]);
+    expect(flow.height).toBe(200);
+    expect(flow.collapsedMarginTop).toBe(8);
+    expect(flow.collapsedMarginBottom).toBe(12);
   });
 
   it('recognizes a definite height assigned by flex layout', () => {

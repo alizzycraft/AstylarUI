@@ -84,6 +84,7 @@ import { representativeProjectDashboardFixture } from './representative-project-
 import { representativeDataManagementFixture } from './representative-data-management.fixture';
 import { representativeAccountSettingsFixture } from './representative-account-settings.fixture';
 import { autoBlockHeightFixture } from './auto-block-height.fixture';
+import { parentChildMarginCollapseFixture } from './parent-child-margin-collapse.fixture';
 import { autoWrappedTextFixture } from './auto-wrapped-text.fixture';
 import { flexAutoTextFixture } from './flex-auto-text.fixture';
 import { flexAutoMainSizeFixture } from './flex-auto-main-size.fixture';
@@ -250,6 +251,7 @@ const fixtures: readonly ParityFixture[] = [
   representativeDataManagementFixture,
   representativeAccountSettingsFixture,
   autoBlockHeightFixture,
+  parentChildMarginCollapseFixture,
   autoWrappedTextFixture,
   flexAutoTextFixture,
   flexAutoMainSizeFixture,

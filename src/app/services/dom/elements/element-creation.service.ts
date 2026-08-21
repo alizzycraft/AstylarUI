@@ -1051,10 +1051,21 @@ export class ElementCreationService {
           dom.context.elementStyles,
         );
         const marginBox = this.parseMarginBox(childResolvedStyle);
+        const nestedMargins = childMesh.metadata?.astylarCollapsedBlockMargins as
+          | { top?: number; bottom?: number }
+          | undefined;
+        const flowMarginTop = this.collapseVerticalMargins(
+          marginBox.top,
+          nestedMargins?.top ?? 0,
+        );
+        const flowMarginBottom = this.collapseVerticalMargins(
+          marginBox.bottom,
+          nestedMargins?.bottom ?? 0,
+        );
         flowItems.push({
           height: childHeight,
-          marginTop: marginBox.top,
-          marginBottom: marginBox.bottom,
+          marginTop: flowMarginTop,
+          marginBottom: flowMarginBottom,
         });
         placements.push({
           child,
@@ -1067,9 +1078,6 @@ export class ElementCreationService {
         });
       }
 
-      const flow = this.calculateBlockFlow(paddingTop, paddingBottom, flowItems);
-      placements.forEach((placement, index) => placement.top = flow.tops[index]);
-
       const parentStyle = parentElement
         ? render.actions.style.findStyleForElement(
             parentElement,
@@ -1079,6 +1087,39 @@ export class ElementCreationService {
         : undefined;
       const hasExplicitHeight = parentStyle?.height !== undefined &&
         parentStyle.height !== 'auto';
+      const borderWidths = this.parseBorderWidthBox(parentStyle);
+      const establishesFormattingContext =
+        parent.name === 'root-body' ||
+        parentStyle?.display === 'flow-root' ||
+        parentStyle?.position === 'absolute' ||
+        parentStyle?.position === 'fixed' ||
+        ['hidden', 'auto', 'scroll'].includes(parentStyle?.overflow ?? 'visible');
+      const collapseFirstMargin = !establishesFormattingContext &&
+        paddingTop === 0 && borderWidths.top === 0;
+      const minimumHeight = parentStyle?.minHeight === undefined
+        ? 0
+        : this.parseLengthValue(
+            parentStyle.minHeight,
+            this.parseFontSize(parentStyle.fontSize),
+          );
+      const collapseLastMargin = !establishesFormattingContext &&
+        !hasExplicitHeight &&
+        !this.hasFlexAssignedHeight(parent) &&
+        minimumHeight === 0 &&
+        paddingBottom === 0 && borderWidths.bottom === 0;
+      const flow = this.calculateBlockFlow(
+        paddingTop,
+        paddingBottom,
+        flowItems,
+        collapseFirstMargin,
+        collapseLastMargin,
+      );
+      placements.forEach((placement, index) => placement.top = flow.tops[index]);
+      parent.metadata ??= {};
+      parent.metadata.astylarCollapsedBlockMargins = {
+        top: flow.collapsedMarginTop,
+        bottom: flow.collapsedMarginBottom,
+      };
 
       const usedAutoHeight = this.clampAutoBlockHeight(flow.height, parentStyle);
       if (
@@ -1199,23 +1240,43 @@ export class ElementCreationService {
     paddingTop: number,
     paddingBottom: number,
     items: Array<{ height: number; marginTop: number; marginBottom: number }>,
-  ): { height: number; tops: number[] } {
+    collapseFirstMargin = false,
+    collapseLastMargin = false,
+  ): {
+    height: number;
+    tops: number[];
+    collapsedMarginTop: number;
+    collapsedMarginBottom: number;
+  } {
     const tops: number[] = [];
     let cursor = paddingTop;
     let previousMarginBottom = 0;
 
-    for (const item of items) {
-      cursor += this.collapseVerticalMargins(previousMarginBottom, item.marginTop);
+    for (let index = 0; index < items.length; index++) {
+      const item = items[index];
+      const marginTop = collapseFirstMargin && index === 0 ? 0 : item.marginTop;
+      cursor += this.collapseVerticalMargins(previousMarginBottom, marginTop);
       tops.push(cursor);
       cursor += item.height;
-      previousMarginBottom = item.marginBottom;
+      previousMarginBottom = collapseLastMargin && index === items.length - 1
+        ? 0
+        : item.marginBottom;
     }
 
     const height = Math.max(
       paddingTop + paddingBottom,
       cursor + previousMarginBottom + paddingBottom,
     );
-    return { height, tops };
+    return {
+      height,
+      tops,
+      collapsedMarginTop: collapseFirstMargin && items.length > 0
+        ? items[0].marginTop
+        : 0,
+      collapsedMarginBottom: collapseLastMargin && items.length > 0
+        ? items[items.length - 1].marginBottom
+        : 0,
+    };
   }
 
   private clampAutoBlockHeight(height: number, style: StyleRule | undefined): number {
@@ -1288,6 +1349,36 @@ export class ElementCreationService {
     }
 
     return margin;
+  }
+
+  private parseBorderWidthBox(style: StyleRule | undefined): {
+    top: number;
+    right: number;
+    bottom: number;
+    left: number;
+  } {
+    const border = { top: 0, right: 0, bottom: 0, left: 0 };
+    if (!style?.borderWidth || style.borderStyle === 'none') return border;
+
+    const parts = style.borderWidth.toString().trim().split(/\s+/)
+      .map((part) => this.parseLengthValue(part));
+    const [first = 0, second = first, third = first, fourth = second] = parts;
+    if (parts.length === 1) {
+      border.top = border.right = border.bottom = border.left = first;
+    } else if (parts.length === 2) {
+      border.top = border.bottom = first;
+      border.right = border.left = second;
+    } else if (parts.length === 3) {
+      border.top = first;
+      border.right = border.left = second;
+      border.bottom = third;
+    } else {
+      border.top = first;
+      border.right = second;
+      border.bottom = third;
+      border.left = fourth;
+    }
+    return border;
   }
 
   private collapseVerticalMargins(previous: number, current: number): number {
