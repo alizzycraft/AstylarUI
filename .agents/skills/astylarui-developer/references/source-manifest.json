@@ -13,8 +13,8 @@
     {
       "source": "docs/compatibility/capabilities.json",
       "destination": "capabilities.json",
-      "sourceSha256": "df60a9b37a23f929ab5b81ab75fab9f8ec275192e483ceaffda85924c1fe93a1",
-      "bundledSha256": "df60a9b37a23f929ab5b81ab75fab9f8ec275192e483ceaffda85924c1fe93a1"
+      "sourceSha256": "b1986bd305af844902461ffa5c040bfa1555021239f2e7bae5a65c7c333062ba",
+      "bundledSha256": "b1986bd305af844902461ffa5c040bfa1555021239f2e7bae5a65c7c333062ba"
     },
     {
       "source": "docs/compatibility/examples/manifest.json",
