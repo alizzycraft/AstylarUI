@@ -75,6 +75,29 @@ describe('App', () => {
     expect(serialized).toContain('history-speech-1');
   });
 
+  it('lets history cards grow and uses authored transport focus color', () => {
+    const site = buildTtsDemoSite({
+      ...DEFAULT_TTS_VIEW_MODEL,
+      selectedHistoryId: 'speech-1',
+      playingHistoryId: 'speech-1',
+      history: [{
+        id: 'speech-1', title: 'Speech preview 1',
+        text: 'A longer generated passage that wraps across multiple history-card lines.',
+        voice: 'alloy', createdLabel: 'Just now', sizeLabel: '10.2 KB',
+        durationLabel: '0:01', formatLabel: 'WAV',
+      }],
+    });
+    const cardStyle = site.styles.find((rule) => rule.selector === '.history-item.expanded');
+    const focusStyle = site.styles.find((rule) =>
+      rule.selector === '.transport-play:focus, .transport-play.playing');
+    const serialized = JSON.stringify(site.root);
+
+    expect(cardStyle).toEqual(jasmine.objectContaining({ height: 'auto', minHeight: '133px' }));
+    expect(focusStyle?.color).toBe('#58a6ff');
+    expect(serialized).toContain('history-item selected expanded');
+    expect(serialized).toContain('transport-play playing');
+  });
+
   it('authors stable unique IDs throughout the default document', () => {
     const ids: string[] = [];
     const visit = (element: DOMElement) => {

@@ -188,6 +188,9 @@ export class App {
         const scrolling = surface.diagnostics.scrolling?.containers ?? {};
         return {
           elements,
+          visibleFocusIndicators: surface.scene.meshes
+            .filter((mesh) => mesh.name.startsWith('focusIndicator_') && mesh.isVisible)
+            .map((mesh) => mesh.name),
           scrolling: Object.fromEntries(Object.entries(scrolling).map(([id, value]) => [id, {
             ...value,
             initialScrollLeft: 0,

@@ -114,7 +114,7 @@ async function runBrowserSmoke() {
     await locator.dispatchEvent('click');
   };
 
-  await page.goto(baseUrl, { waitUntil: 'networkidle' });
+  await page.goto(`${baseUrl}/?parityState=interactive`, { waitUntil: 'networkidle' });
   await waitFor(
     async () => await page.getByTestId('renderer-status').textContent() === 'AstylarUI renderer ready.',
     'the AstylarUI surface to mount',
@@ -136,8 +136,9 @@ async function runBrowserSmoke() {
   const speech = page.getByRole('textbox', { name: 'Text to speak' });
   await speech.focus();
   await page.keyboard.press('Control+A');
-  await page.keyboard.type('hi', { delay: 80 });
-  await waitFor(async () => await speech.inputValue() === 'hi', 'controlled text entry');
+  const generatedText = 'AstylarUI brings familiar web application patterns into a Babylon-rendered space.';
+  await page.keyboard.type(generatedText, { delay: 20 });
+  await waitFor(async () => await speech.inputValue() === generatedText, 'controlled text entry');
 
   const voice = page.getByRole('combobox', { name: 'Voice', exact: true });
   await voice.focus();
@@ -153,6 +154,18 @@ async function runBrowserSmoke() {
     'mock speech generation',
   );
   assert.equal(await page.getByRole('button', { name: 'Select Speech preview 1' }).count(), 1);
+  const historyLayout = await page.evaluate(() => window.__ASTYLAR_TTS_BENCHMARK__?.measure([
+    'history-speech-1', 'history-speech-1-text', 'history-speech-1-actions',
+  ]));
+  const historyElements = historyLayout?.elements;
+  assert.ok(historyElements?.['history-speech-1']?.borderBox, 'History card geometry is missing.');
+  for (const id of ['history-speech-1-text', 'history-speech-1-actions']) {
+    const child = historyElements[id]?.borderBox;
+    const card = historyElements['history-speech-1'].borderBox;
+    assert.ok(child, `${id} geometry is missing.`);
+    assert.ok(child.top >= card.top - 0.5 && child.bottom <= card.bottom + 0.5,
+      `${id} escapes the history card (${JSON.stringify({ child, card })}).`);
+  }
 
   for (const [name, viewport] of Object.entries({
     desktop: { width: 1280, height: 800 },
@@ -182,6 +195,10 @@ async function runBrowserSmoke() {
   await play.focus();
   await page.keyboard.press('Enter');
   await waitFor(async () => await page.getByRole('button', { name: 'Pause', exact: true }).count() > 0, 'audio playback');
+  const focusedTransport = await page.evaluate(() =>
+    window.__ASTYLAR_TTS_BENCHMARK__?.measure([]));
+  assert.deepEqual(focusedTransport?.visibleFocusIndicators, [],
+    'Authored play-button focus color should replace the fallback focus box.');
   await waitFor(async () => await page.getByRole('button', { name: 'Play', exact: true }).count() > 0, 'audio completion');
 
   const downloadButton = page.locator('[data-astylar-id="selected-download"]');

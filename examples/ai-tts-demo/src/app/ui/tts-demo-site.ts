@@ -102,7 +102,10 @@ function player(view: TtsDemoViewModel): DOMElement {
       { type: 'strong', id: 'selected-player-title', textContent: selected.text },
       { type: 'div', id: 'selected-player-row', children: [
         { type: 'p', id: 'selected-player-meta', textContent: `Provider: openai\nModel: tts-1\nVoice: ${selected.voice}` },
-        { type: 'button', inputType: 'button', id: 'selected-play', value: view.playingHistoryId === selected.id ? 'Pause' : '▷', ariaLabel: view.playingHistoryId === selected.id ? 'Pause' : 'Play' },
+        { type: 'button', inputType: 'button', id: 'selected-play',
+          class: view.playingHistoryId === selected.id ? 'transport-play playing' : 'transport-play',
+          value: view.playingHistoryId === selected.id ? 'Pause' : '▷',
+          ariaLabel: view.playingHistoryId === selected.id ? 'Pause' : 'Play' },
         { type: 'span', id: 'selected-current-time', textContent: view.currentTimeLabel },
         { type: 'div', id: 'selected-progress-track', role: 'progressbar', ariaLabel: 'Playback progress', children: [
           { type: 'div', id: 'selected-progress-fill', style: { width: `${view.progressPercent}%` } },
@@ -116,8 +119,13 @@ function player(view: TtsDemoViewModel): DOMElement {
 }
 
 function historyItem(item: TtsDemoViewModel['history'][number], selected: boolean, playing: boolean): DOMElement {
+  const classNames = [
+    'history-item',
+    selected ? 'selected' : '',
+    item.text.length > 40 ? 'expanded' : '',
+  ].filter(Boolean).join(' ');
   return {
-    type: 'article', id: `history-${item.id}`, class: selected ? 'history-item selected' : 'history-item',
+    type: 'article', id: `history-${item.id}`, class: classNames,
     role: 'button', tabindex: 0, ariaLabel: `Select ${item.title}`, children: [
       { type: 'small', id: `history-${item.id}-meta`, children: [
         { type: 'span', id: `history-${item.id}-provider`, textContent: `⚙　Openai　　● ${item.voice.charAt(0).toUpperCase()}${item.voice.slice(1)}` },
@@ -126,7 +134,9 @@ function historyItem(item: TtsDemoViewModel['history'][number], selected: boolea
       { type: 'p', id: `history-${item.id}-text`, textContent: item.text },
       { type: 'footer', id: `history-${item.id}-actions`, children: [
         { type: 'span', id: `history-${item.id}-size`, textContent: `${item.sizeLabel}　 ${item.durationLabel}` },
-        { type: 'button', inputType: 'button', id: `history-${item.id}-play`, value: playing ? 'Pause' : '▷', ariaLabel: playing ? 'Pause' : 'Play' },
+        { type: 'button', inputType: 'button', id: `history-${item.id}-play`,
+          class: playing ? 'transport-play playing' : 'transport-play',
+          value: playing ? 'Pause' : '▷', ariaLabel: playing ? 'Pause' : 'Play' },
         { type: 'button', inputType: 'button', id: `history-${item.id}-download`, value: '⇩', ariaLabel: `Download ${item.title}` },
         { type: 'button', inputType: 'button', id: `history-${item.id}-delete`, value: '♲', ariaLabel: `Delete ${item.title}` },
       ] },
@@ -227,12 +237,15 @@ const styles: StyleRule[] = [
   { selector: '#history-search', flex: '1', minWidth: '0', height: '40px', padding: '10px', background: '#0d1117', color: '#e6edf3', borderWidth: '1px', borderStyle: 'solid', borderColor: '#21262d', borderRadius: '6px' },
   { selector: '#clear-history', width: '64px', background: '#0d1117', color: '#e6edf3', borderWidth: '1px', borderStyle: 'solid', borderColor: '#21262d', borderRadius: '6px' },
   { selector: '.history-item', position: 'relative', height: '133px', minHeight: '128px', margin: '0 8px', padding: '12px 16px', background: '#161b22', borderWidth: '1px', borderStyle: 'solid', borderColor: '#21262d', borderRadius: '6px' },
+  { selector: '.history-item.expanded', display: 'flex', flexDirection: 'column', height: 'auto', minHeight: '133px' },
   { selector: '.history-item.selected', borderColor: '#1f6feb' },
   { selector: '.history-item small', display: 'flex', justifyContent: 'space-between', height: '16px', margin: '3px 0 4px', lineHeight: '16px', color: '#7d8590' },
   { selector: '.history-item p', margin: '18px 0 0 0' },
   { selector: '.history-item footer', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '10px', margin: '28px 0 0 0', color: '#7d8590' },
+  { selector: '.history-item.expanded footer', flexShrink: '0', margin: '16px 0 0 0' },
   { selector: '.history-item footer span', margin: '0 auto 0 0' },
   { selector: '.history-item button', width: '11px', height: '21px', background: 'transparent', color: '#e6edf3', borderWidth: '0' },
+  { selector: '.transport-play:focus, .transport-play.playing', color: '#58a6ff' },
   { selector: '#history-empty', minHeight: '200px', margin: '8px', padding: '48px 16px', background: 'transparent', textAlign: 'center', color: '#7d8590' },
   { selector: '#history-empty-title', margin: '0', color: '#e6edf3', fontSize: '14px' },
   { selector: '#history-empty-copy', margin: '0' },
