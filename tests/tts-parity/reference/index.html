@@ -18,7 +18,7 @@
         <label>Voice Provider<select id="provider"><option>Openai</option></select></label>
         <label>Model<select id="model"><option>tts-1</option></select></label>
         <label>Voice<select id="voice"><option>Alloy</option></select></label>
-        <label>API Key<input id="instructions" type="password" value="••••••••••••••••••••••••"></label>
+        <label>API Key<input id="instructions" type="password" value="reference-only-reference-only"></label>
       </div>
       <footer>Licensed under AGPL v3</footer>
     </aside>
@@ -40,12 +40,12 @@
           </div>
         </div>
         <div class="editor-bottom">
-          <span id="status-banner">Speech generated successfully!</span>
+          <span id="generation-status" class="generated-only">Speech generated successfully!</span>
           <button id="generate-speech">♩　Generate Speech</button>
         </div>
       </section>
       <section id="selected-player" class="audio-player generated-only">
-        <strong>hello</strong>
+        <strong id="selected-player-title">hello</strong>
         <div class="player-row">
           <div>Provider: openai<br>Model: tts-1<br>Voice: alloy</div>
           <span class="play">▷</span><span>0:00</span><div class="progress"><i></i></div><span>0:00　⇩</span>
@@ -53,7 +53,7 @@
         </div>
       </section>
       <section id="player-placeholder" class="audio-player initial-only">
-        <strong>Generate speech to see audio controls here</strong>
+        <strong id="player-placeholder-title">Generate speech to see audio controls here</strong>
       </section>
     </main>
 
@@ -64,17 +64,17 @@
       </header>
       <div class="history-body">
         <section id="storage-disclosure" class="storage">
-          <strong>Storage　♧</strong><div class="storage-bar"></div>
-          <b>0%</b><span>7.5 KB / 20 MB</span>
+          <strong id="storage-title">Storage　♧</strong><div class="storage-bar"></div>
+          <div id="storage-text"><b>0%</b><span>7.5 KB / 20 MB</span></div>
         </section>
         <div class="search"><input id="history-search" placeholder="Search history..."><button>♲ All</button></div>
         <div id="history-list">
           <article id="history-speech-1" class="history-item generated-only">
             <small>⚙　Openai　　● Alloy <time>Just now</time></small>
-            <p>hello</p><footer><span>7.5 KB　 0:00</span><span>▷　⇩　♲</span></footer>
+            <p id="history-speech-1-text">hello</p><footer><span>7.5 KB　 0:00</span><span>▷　⇩　♲</span></footer>
           </article>
           <article id="history-empty" class="empty initial-only">
-            <h3>No TTS history yet</h3><p>Generated speech will appear here</p>
+            <h3 id="history-empty-title">No TTS history yet</h3><p id="history-empty-copy">Generated speech will appear here</p>
           </article>
         </div>
       </div>
