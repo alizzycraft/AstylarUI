@@ -194,7 +194,7 @@ const styles: StyleRule[] = [
   { selector: '#editor-header', display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '48px', padding: '12px 16px', background: '#2d3748', color: '#7d8590', fontSize: '12px', borderWidth: '0 0 1px 0', borderStyle: 'solid', borderColor: '#4a5568' },
   { selector: '#workspace-title', color: '#e2e8f0' },
   { selector: '#editor-wrapper', display: 'flex', flex: '1', minHeight: '0', overflow: 'hidden' },
-  { selector: '#line-numbers', width: '50px', minWidth: '50px', padding: '16px 12px', textAlign: 'right', whiteSpace: 'pre-line', background: '#2d3748', color: '#718096', borderWidth: '0 1px 0 0', borderStyle: 'solid', borderColor: '#4a5568' },
+  { selector: '#line-numbers', width: '50px', padding: '16px 12px', textAlign: 'right', whiteSpace: 'pre-line', background: '#2d3748', color: '#718096', borderWidth: '0 1px 0 0', borderStyle: 'solid', borderColor: '#4a5568' },
   { selector: '#speech-text', flex: '1', minWidth: '0', height: '100%', minHeight: '170px', padding: '16px', overflow: 'auto', whiteSpace: 'pre-wrap', background: '#1a202c', color: '#e2e8f0', fontFamily: 'Consolas', fontSize: '14px', lineHeight: '21px', borderWidth: '1px', borderStyle: 'solid', borderColor: '#30363d', borderRadius: '0' },
   { selector: '#editor-bottom', display: 'flex', alignItems: 'center', justifyContent: 'space-between', minHeight: '56px', gap: '12px' },
   { selector: '#generate-speech', height: 'auto', margin: '0 0 0 auto', minWidth: '198px', padding: '14px 24px', background: '#238636', color: '#ffffff', fontWeight: '600', borderWidth: '0', borderRadius: '6px' },
