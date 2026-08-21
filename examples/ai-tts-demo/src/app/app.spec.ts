@@ -34,7 +34,7 @@ describe('App', () => {
     expect(surfaces.length).toBe(1);
   });
 
-  it('builds the three representative application regions', () => {
+  it('builds the three application panels and fixed reference banner', () => {
     const site = buildTtsDemoSite();
     const shell = site.root.children?.[0];
     expect(shell?.id).toBe('tts-app');
@@ -42,6 +42,7 @@ describe('App', () => {
       'settings-panel',
       'workspace-panel',
       'history-panel',
+      'github-banner',
     ]);
   });
 
