@@ -107,9 +107,9 @@ export class SelectManager {
             selector: style.selector,
             color: style.color ?? '#e6edf3',
             fontFamily: style.fontFamily ?? 'Segoe UI, Arial, sans-serif',
-            fontSize: '14px',
+            fontSize: '20px',
             fontWeight: '700',
-            lineHeight: '14px',
+            lineHeight: '20px',
         };
         const texture = this.textRenderingService.renderTextToTexture(
             selectElement.element,
@@ -127,11 +127,12 @@ export class SelectManager {
             height,
         );
         const selectWidth = selectElement.mesh.getBoundingInfo().boundingBox.extendSize.x * 2;
-        const insets = this.getHorizontalContentInsets(style, scale);
         indicator.parent = selectElement.mesh;
         indicator.rotation.z = Math.PI;
-        indicator.position.x = -(selectWidth / 2) + insets.right + width / 2;
-        indicator.position.y = -2 * scale;
+        // Native selects reserve a compact UA-owned indicator gutter rather
+        // than positioning the arrow at the authored text padding edge.
+        indicator.position.x = -(selectWidth / 2) + (5 * scale) + width / 2;
+        indicator.position.y = 2 * scale;
         indicator.position.z = CONTROL_CONTENT_Z_OFFSET;
         indicator.isPickable = false;
         return indicator;
@@ -393,7 +394,8 @@ export class SelectManager {
             // Align text to the CSS content edge.
             const selectWidth = selectElement.mesh.getBoundingInfo().boundingBox.extendSize.x * 2;
             const insets = this.getHorizontalContentInsets(style, scale);
-            displayPlane.position.x = (selectWidth / 2) - (textureWidth / 2) - insets.left;
+            displayPlane.position.x = (selectWidth / 2) - (textureWidth / 2) - insets.left - (4 * scale);
+            displayPlane.position.y = -2 * scale;
 
             return displayPlane;
 
@@ -464,7 +466,8 @@ export class SelectManager {
             // Align text to the CSS content edge.
             const selectWidth = selectElement.mesh.getBoundingInfo().boundingBox.extendSize.x * 2;
             const insets = this.getHorizontalContentInsets(style, scale);
-            displayPlane.position.x = (selectWidth / 2) - (textureWidth / 2) - insets.left;
+            displayPlane.position.x = (selectWidth / 2) - (textureWidth / 2) - insets.left - (4 * scale);
+            displayPlane.position.y = -2 * scale;
 
             return displayPlane;
 

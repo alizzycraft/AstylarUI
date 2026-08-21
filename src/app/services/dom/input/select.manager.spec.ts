@@ -48,6 +48,8 @@ describe('SelectManager', () => {
     expect(select.displayMesh?.position.z).toBe(CONTROL_CONTENT_Z_OFFSET);
     expect(select.displayMesh?.position.z).toBeLessThan(SELECT_BORDER_Z_OFFSET);
     expect(select.displayMesh?.position.z).toBeGreaterThan(0);
+    expect(select.displayMesh?.position.y).toBeCloseTo(-0.02, 5);
+    expect(select.indicatorMesh?.position.y).toBeCloseTo(0.02, 5);
   });
 
   it('keeps selected text at its CSS size on high-density displays', () => {
