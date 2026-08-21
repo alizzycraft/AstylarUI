@@ -155,7 +155,11 @@ export class FlexService {
         .includes(style?.overflow?.toLowerCase() ?? 'visible');
       const automaticMinWidth = isRow && overflowAllowsAutoMinimum &&
           (child.textContent || child.type === 'button' || child.type === 'input')
-        ? this.calculateIntrinsicMinWidth(child, style, styles, dom, render)
+        ? this.calculateIntrinsicMinWidth(
+            child, style, styles, dom, render,
+            containerWidth - padding.left - padding.right,
+            viewportDimensions,
+          )
         : 0;
       const minWidthValue = Math.max(
         authoredMinWidth ?? automaticMinWidth,
@@ -526,23 +530,40 @@ export class FlexService {
     styles: StyleRule[],
     dom?: BabylonDOM,
     render?: BabylonRender,
+    percentageReference?: number,
+    viewport?: { width: number; height: number },
   ): number {
+    let intrinsicWidth: number;
     if (element.type === 'input') {
-      return this.calculateIntrinsicWidth(element, style, styles, dom, render);
+      intrinsicWidth = this.calculateIntrinsicWidth(element, style, styles, dom, render);
+    } else {
+      const text = element.type === 'button'
+        ? element.value || element.textContent || 'Button'
+        : element.textContent || '';
+      if (!text) return this.minimumBorderBox(style).width;
+      const effectiveStyle = { ...this.getInheritedTextStyle(element, styles, dom, render), ...style };
+      const textStyle = this.textStyleParser.parseTextProperties(effectiveStyle);
+      const whiteSpace = effectiveStyle.whiteSpace?.toLowerCase();
+      const pieces = whiteSpace === 'nowrap' || whiteSpace === 'pre'
+        ? [text]
+        : text.replace(/-/g, '- ').split(/\s+/).filter(Boolean);
+      const textWidth = Math.max(0, ...pieces.map((piece) =>
+        this.textRenderingService.calculateTextDimensions(piece, textStyle).width));
+      intrinsicWidth = textWidth + this.minimumBorderBox(style).width;
     }
-    const text = element.type === 'button'
-      ? element.value || element.textContent || 'Button'
-      : element.textContent || '';
-    if (!text) return this.minimumBorderBox(style).width;
-    const effectiveStyle = { ...this.getInheritedTextStyle(element, styles, dom, render), ...style };
-    const textStyle = this.textStyleParser.parseTextProperties(effectiveStyle);
-    const whiteSpace = effectiveStyle.whiteSpace?.toLowerCase();
-    const pieces = whiteSpace === 'nowrap' || whiteSpace === 'pre'
-      ? [text]
-      : text.replace(/-/g, '- ').split(/\s+/).filter(Boolean);
-    const textWidth = Math.max(0, ...pieces.map((piece) =>
-      this.textRenderingService.calculateTextDimensions(piece, textStyle).width));
-    return textWidth + this.minimumBorderBox(style).width;
+
+    // CSS's automatic main-axis minimum uses the specified-size suggestion as
+    // an upper bound. A small authored control width must not be expanded to a
+    // platform text-input intrinsic floor.
+    if (style?.width && style.width !== 'auto' && percentageReference !== undefined && viewport) {
+      const specifiedWidth = style.width.endsWith('%')
+        ? this.resolvePercentageFlexItemSize(style.width, percentageReference, 0, 0)
+        : this.resolveFlexItemLength(
+            style.width, percentageReference, viewport, style.fontSize,
+          );
+      return Math.min(intrinsicWidth, specifiedWidth);
+    }
+    return intrinsicWidth;
   }
 
   private isButtonLikeInput(element: DOMElement): boolean {

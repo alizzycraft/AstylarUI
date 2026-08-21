@@ -510,6 +510,26 @@ describe('FlexService', () => {
     )).toBe(100);
   });
 
+  it('clamps an input automatic minimum to its definite authored width', () => {
+    const service = new FlexService(
+      new FlexLayoutService(),
+      { calculateTextDimensions: () => ({ width: 0 }) } as never,
+      { parseTextProperties: () => ({}) } as never,
+    );
+    const viewport = { width: 800, height: 600 };
+
+    expect(service['calculateIntrinsicMinWidth'](
+      { type: 'input', inputType: 'checkbox' },
+      { selector: 'input', width: '24px', borderWidth: '2px' },
+      [], undefined, undefined, 472, viewport,
+    )).toBe(24);
+    expect(service['calculateIntrinsicMinWidth'](
+      { type: 'input', inputType: 'text', value: 'Search tasks' },
+      { selector: 'input', width: '110px' },
+      [], undefined, undefined, 198, viewport,
+    )).toBe(110);
+  });
+
   it('measures zero-width text as constrained wrapped content', () => {
     const measuredWidths: Array<number | undefined> = [];
     const service = new FlexService(
