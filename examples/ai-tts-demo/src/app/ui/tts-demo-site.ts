@@ -56,11 +56,11 @@ function editor(view: TtsDemoViewModel): DOMElement {
       { type: 'div', id: 'title-row', children: [
         { type: 'input', inputType: 'text', id: 'generation-title', name: 'generation-title',
           value: view.title, placeholder: 'Title for history (optional)', ariaLabel: 'Title for history', maxLength: 80 },
-        { type: 'span', id: 'save-history', textContent: '◉  Save to History' },
+        { type: 'span', id: 'save-history', textContent: '◉　Save to History' },
       ] },
       { type: 'div', id: 'editor-container', children: [
         { type: 'div', id: 'editor-header', children: [
-          { type: 'strong', id: 'workspace-title', textContent: '▣  text-to-speech.txt' },
+          { type: 'strong', id: 'workspace-title', textContent: '▣　text-to-speech.txt' },
           { type: 'span', id: 'character-count', textContent: `${lines} lines | ${view.text.length} chars | ${Math.max(1, Math.ceil(view.text.length / 4))} tks | ~$0.00007 est.` },
         ] },
         { type: 'div', id: 'editor-wrapper', children: [
@@ -82,7 +82,7 @@ function editor(view: TtsDemoViewModel): DOMElement {
           type: 'button' as const, inputType: 'button' as const, id: 'cancel-speech', value: 'Cancel generation',
         }] : []),
         { type: 'button', inputType: 'button', id: 'generate-speech',
-          value: view.status === 'generating' ? 'Generating...' : '♩  Generate Speech',
+          value: view.status === 'generating' ? 'Generating...' : '♩　Generate Speech',
           ariaLabel: view.status === 'generating' ? 'Generating speech' : 'Generate speech',
           disabled: view.status === 'generating' },
       ] },
@@ -119,10 +119,10 @@ function historyItem(item: TtsDemoViewModel['history'][number], selected: boolea
   return {
     type: 'article', id: `history-${item.id}`, class: selected ? 'history-item selected' : 'history-item',
     role: 'button', tabindex: 0, ariaLabel: `Select ${item.title}`, children: [
-      { type: 'small', id: `history-${item.id}-meta`, textContent: `⚙ Openai    ● ${item.voice}                         ${item.createdLabel}` },
+      { type: 'small', id: `history-${item.id}-meta`, textContent: `⚙　Openai　　● ${item.voice}　${item.createdLabel}` },
       { type: 'p', id: `history-${item.id}-text`, textContent: item.text },
       { type: 'div', id: `history-${item.id}-actions`, children: [
-        { type: 'span', id: `history-${item.id}-size`, textContent: `${item.sizeLabel}    ${item.durationLabel}` },
+        { type: 'span', id: `history-${item.id}-size`, textContent: `${item.sizeLabel}　 ${item.durationLabel}` },
         { type: 'button', inputType: 'button', id: `history-${item.id}-play`, value: playing ? 'Pause' : '▷', ariaLabel: playing ? 'Pause' : 'Play' },
         { type: 'button', inputType: 'button', id: `history-${item.id}-download`, value: '⇩', ariaLabel: `Download ${item.title}` },
         { type: 'button', inputType: 'button', id: `history-${item.id}-delete`, value: '♲', ariaLabel: `Delete ${item.title}` },
@@ -137,12 +137,12 @@ function historyPanel(view: TtsDemoViewModel): DOMElement {
   return {
     type: 'aside', id: 'history-panel', children: [
       { type: 'header', id: 'history-header', class: 'app-header', children: [
-        { type: 'h2', id: 'history-title', textContent: `▣  History (${view.history.length})` },
+        { type: 'h2', id: 'history-title', textContent: `▣　History (${view.history.length})` },
         { type: 'p', id: 'history-subtitle', textContent: 'Generated speech will appear here' },
       ] },
       { type: 'div', id: 'history-body', children: [
         { type: 'section', id: 'storage-disclosure', children: [
-          { type: 'strong', id: 'storage-title', textContent: 'Storage  ♧' },
+          { type: 'strong', id: 'storage-title', textContent: 'Storage　♧' },
           { type: 'div', id: 'storage-bar' },
           { type: 'div', id: 'storage-text', children: [
             { type: 'b', id: 'storage-percent', textContent: '0%' },
@@ -160,7 +160,7 @@ function historyPanel(view: TtsDemoViewModel): DOMElement {
               { type: 'p', id: 'history-empty-copy', textContent: 'Generated speech will appear here' },
             ] }] },
       ] },
-      { type: 'footer', id: 'history-footer', textContent: 'by:  ▣  ♧  ♡  ◎' },
+      { type: 'footer', id: 'history-footer', textContent: 'by:　▣　♧　♡　◎' },
     ],
   };
 }

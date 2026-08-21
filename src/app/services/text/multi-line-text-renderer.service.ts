@@ -119,12 +119,13 @@ export class MultiLineTextRendererService {
   handleWhiteSpace(text: string, whiteSpace: TextStyleProperties['whiteSpace']): string {
     switch (whiteSpace) {
       case 'normal':
-        // Collapse whitespace sequences and normalize line breaks
-        return text.replace(/\s+/g, ' ').trim();
+        // CSS collapsible whitespace is the ASCII space plus segment breaks
+        // and tabs. Typographic Unicode spaces such as U+3000 remain visible.
+        return text.replace(/[\u0009\u000A\u000C\u000D\u0020]+/g, ' ').trim();
         
       case 'nowrap':
         // Collapse whitespace and remove line breaks
-        return text.replace(/\s+/g, ' ').replace(/\n/g, ' ').trim();
+        return text.replace(/[\u0009\u000A\u000C\u000D\u0020]+/g, ' ').trim();
         
       case 'pre':
         // Preserve all whitespace and line breaks exactly as-is
@@ -139,7 +140,7 @@ export class MultiLineTextRendererService {
         return text.replace(/[ \t]+/g, ' ').replace(/[ \t]*\n[ \t]*/g, '\n').trim();
         
       default:
-        return text.replace(/\s+/g, ' ').trim();
+        return text.replace(/[\u0009\u000A\u000C\u000D\u0020]+/g, ' ').trim();
     }
   }
 

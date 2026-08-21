@@ -61,6 +61,13 @@ describe('MultiLineTextRendererService', () => {
     expect(lines.every((line) => line.width <= 70)).toBeTrue();
   });
 
+  it('preserves typographic Unicode spaces under normal white-space', () => {
+    expect(service.handleWhiteSpace('  Icon　label\nnext  ', 'normal'))
+      .toBe('Icon　label next');
+    expect(service.handleWhiteSpace('  Icon　label\nnext  ', 'nowrap'))
+      .toBe('Icon　label next');
+  });
+
   it('should handle nowrap white-space correctly', () => {
     const style: TextStyleProperties = {
       fontFamily: 'Arial',
