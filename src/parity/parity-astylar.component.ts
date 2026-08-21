@@ -452,6 +452,7 @@ export class ParityAstylarComponent {
         id,
         borderBox,
         contentBox,
+        visibility: this.measureVisibility(id, borderBox, scene),
         styles: {
           display: style?.display,
           position: style?.position,
@@ -511,7 +512,18 @@ export class ParityAstylarComponent {
             modalDialogId: this.astylar.getInteractionSnapshot(scene)?.modalDialogId,
             controls: this.measureControls(interactionIds),
             scrollContainers: Object.fromEntries(
-              scrollIds.map((id) => [id, this.astylar.getScrollSnapshot(scene)?.containers[id]])
+              scrollIds.map((id) => {
+                const state = this.astylar.getScrollSnapshot(scene)?.containers[id];
+                return [id, state ? {
+                  ...state,
+                  initialScrollLeft: 0,
+                  initialScrollTop: 0,
+                  maxScrollLeft: Math.max(0, state.scrollWidth - state.clientWidth),
+                  maxScrollTop: Math.max(0, state.scrollHeight - state.clientHeight),
+                  canReachRight: state.scrollLeft >= state.scrollWidth - state.clientWidth - 1,
+                  canReachBottom: state.scrollTop >= state.scrollHeight - state.clientHeight - 1,
+                } : undefined];
+              })
                 .filter((entry) => entry[1] !== undefined),
             ),
             navigationOutcomes: [...this.navigationOutcomes],
@@ -525,6 +537,87 @@ export class ParityAstylarComponent {
           }
         : undefined,
     };
+  }
+
+  private measureVisibility(
+    elementId: string,
+    borderBox: ParityRect,
+    scene: Scene,
+  ): import('./parity.types').ParityVisibilityMeasurement {
+    const viewportBox: ParityRect = {
+      left: 0,
+      top: 0,
+      right: this.parityViewport.width,
+      bottom: this.parityViewport.height,
+      width: this.parityViewport.width,
+      height: this.parityViewport.height,
+    };
+    let visible = this.intersectRects(borderBox, viewportBox);
+    const clippingAncestorIds: string[] = [];
+    const fixture = getParityFixture(this.route.snapshot.paramMap.get('fixtureId') ?? '');
+    const ancestors = fixture ? this.findAncestorIds(fixture.siteData.root.children, elementId) : [];
+    for (const ancestorId of ancestors) {
+      const overflow = this.elementManager.elementStylesMap.get(ancestorId)?.normal?.overflow;
+      if (!['hidden', 'clip', 'auto', 'scroll'].includes(overflow ?? '')) continue;
+      const ancestorMesh = this.elementManager.elementsMap.get(ancestorId);
+      if (!ancestorMesh) continue;
+      const ancestorRect = this.projectMeshRect(ancestorMesh, scene);
+      const next = visible && this.intersectRects(visible, ancestorRect);
+      if (!next || !visible || next.width < visible.width || next.height < visible.height) {
+        clippingAncestorIds.push(ancestorId);
+      }
+      visible = next;
+    }
+    const fullyVisible = !!visible &&
+      Math.abs(visible.left - borderBox.left) < 0.01 &&
+      Math.abs(visible.top - borderBox.top) < 0.01 &&
+      Math.abs(visible.right - borderBox.right) < 0.01 &&
+      Math.abs(visible.bottom - borderBox.bottom) < 0.01;
+    return {
+      exists: true,
+      intersectsViewport: !!visible,
+      fullyVisible,
+      clipped: !fullyVisible,
+      clippingAncestorIds,
+      viewportIntersection: visible,
+    };
+  }
+
+  private findAncestorIds(
+    roots: import('../app/types/dom-element').DOMElement[],
+    targetId: string,
+  ): string[] {
+    const visit = (
+      element: import('../app/types/dom-element').DOMElement,
+      ancestors: string[],
+    ): string[] | undefined => {
+      if (element.id === targetId) return ancestors;
+      const next = element.id ? [...ancestors, element.id] : ancestors;
+      for (const child of element.children ?? []) {
+        const found = visit(child, next);
+        if (found) return found;
+      }
+      return undefined;
+    };
+    for (const root of roots) {
+      const found = visit(root, []);
+      if (found) return found;
+    }
+    return [];
+  }
+
+  private intersectRects(left: ParityRect, right: ParityRect): ParityRect | undefined {
+    const intersection = {
+      left: Math.max(left.left, right.left),
+      top: Math.max(left.top, right.top),
+      right: Math.min(left.right, right.right),
+      bottom: Math.min(left.bottom, right.bottom),
+      width: 0,
+      height: 0,
+    };
+    intersection.width = Math.max(0, intersection.right - intersection.left);
+    intersection.height = Math.max(0, intersection.bottom - intersection.top);
+    return intersection.width > 0 && intersection.height > 0 ? intersection : undefined;
   }
 
   private getFocusedElementId(): string | undefined {

@@ -523,6 +523,12 @@ export class ParityReferenceComponent {
         scrollHeight: element.scrollHeight,
         clientWidth: element.clientWidth,
         clientHeight: element.clientHeight,
+        initialScrollLeft: 0,
+        initialScrollTop: 0,
+        maxScrollLeft: Math.max(0, element.scrollWidth - element.clientWidth),
+        maxScrollTop: Math.max(0, element.scrollHeight - element.clientHeight),
+        canReachRight: element.scrollLeft >= element.scrollWidth - element.clientWidth - 1,
+        canReachBottom: element.scrollTop >= element.scrollHeight - element.clientHeight - 1,
       };
     }
     return containers;
@@ -576,6 +582,7 @@ export class ParityReferenceComponent {
       id: element.id,
       borderBox,
       contentBox,
+      visibility: this.measureVisibility(element, viewport, borderBox),
       styles: {
         display: computed.display,
         position: computed.position,
@@ -597,6 +604,66 @@ export class ParityReferenceComponent {
       },
       text: textContent ? { content: textContent, lineCount } : undefined
     };
+  }
+
+  private measureVisibility(
+    element: HTMLElement,
+    viewport: HTMLElement,
+    borderBox: ParityRect,
+  ): import('./parity.types').ParityVisibilityMeasurement {
+    const viewportBox: ParityRect = {
+      left: 0,
+      top: 0,
+      right: viewport.clientWidth,
+      bottom: viewport.clientHeight,
+      width: viewport.clientWidth,
+      height: viewport.clientHeight,
+    };
+    let visible = this.intersectRects(borderBox, viewportBox);
+    const clippingAncestorIds: string[] = [];
+    let ancestor = element.parentElement;
+    while (ancestor && ancestor !== viewport) {
+      const style = getComputedStyle(ancestor);
+      if (['hidden', 'clip', 'auto', 'scroll'].includes(style.overflow) ||
+          ['hidden', 'clip', 'auto', 'scroll'].includes(style.overflowX) ||
+          ['hidden', 'clip', 'auto', 'scroll'].includes(style.overflowY)) {
+        const viewportRect = viewport.getBoundingClientRect();
+        const ancestorRect = this.toRelativeRect(ancestor.getBoundingClientRect(), viewportRect);
+        const next = visible && this.intersectRects(visible, ancestorRect);
+        if (!next || !visible || next.width < visible.width || next.height < visible.height) {
+          clippingAncestorIds.push(ancestor.id || ancestor.tagName.toLowerCase());
+        }
+        visible = next;
+      }
+      ancestor = ancestor.parentElement;
+    }
+    const fullyVisible = !!visible &&
+      Math.abs(visible.left - borderBox.left) < 0.01 &&
+      Math.abs(visible.top - borderBox.top) < 0.01 &&
+      Math.abs(visible.right - borderBox.right) < 0.01 &&
+      Math.abs(visible.bottom - borderBox.bottom) < 0.01;
+    return {
+      exists: true,
+      intersectsViewport: !!visible,
+      fullyVisible,
+      clipped: !fullyVisible,
+      clippingAncestorIds,
+      viewportIntersection: visible,
+    };
+  }
+
+  private intersectRects(left: ParityRect, right: ParityRect): ParityRect | undefined {
+    const intersection = {
+      left: Math.max(left.left, right.left),
+      top: Math.max(left.top, right.top),
+      right: Math.min(left.right, right.right),
+      bottom: Math.min(left.bottom, right.bottom),
+      width: 0,
+      height: 0,
+    };
+    intersection.width = Math.max(0, intersection.right - intersection.left);
+    intersection.height = Math.max(0, intersection.bottom - intersection.top);
+    return intersection.width > 0 && intersection.height > 0 ? intersection : undefined;
   }
 
   private getDirectTextNodes(element: HTMLElement): Text[] {

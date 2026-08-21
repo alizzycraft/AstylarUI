@@ -221,6 +221,8 @@ async function measureFixture(context, fixture, viewport) {
     screenshotSimilarity = comparePng(reference.screenshot, astylar.screenshot);
   }
   const geometry = compareGeometry(reference.report, astylar.report);
+  const visibility = compareVisibility(reference.report, astylar.report);
+  const scrolling = compareScrolling(reference.report, astylar.report);
   const text = compareText(reference.report, astylar.report);
   const styles = compareStyles(reference.report, astylar.report);
   const semanticErrors = compareSemantics(reference.semantics, astylar.semantics);
@@ -240,6 +242,8 @@ async function measureFixture(context, fixture, viewport) {
     expectedBehavior: fixture.expectedBehavior,
     screenshotSimilarity,
     geometry,
+    visibility,
+    scrolling,
     text,
     styles,
     semantics: {
@@ -1375,6 +1379,45 @@ function compareText(reference, astylar) {
     allContentMatches: elements.every((element) => element.contentMatches),
     allLineCountsMatch: elements.every((element) => element.lineCountMatches),
     elements
+  };
+}
+
+function compareVisibility(reference, astylar) {
+  const elements = [];
+  for (const [id, referenceElement] of Object.entries(reference.elements)) {
+    const expected = referenceElement.visibility;
+    const actual = astylar.elements[id]?.visibility;
+    elements.push({
+      id,
+      reference: expected,
+      astylar: actual,
+      matches: !!expected && !!actual &&
+        expected.intersectsViewport === actual.intersectsViewport &&
+        expected.fullyVisible === actual.fullyVisible &&
+        expected.clipped === actual.clipped,
+    });
+  }
+  return { allMatch: elements.every((element) => element.matches), elements };
+}
+
+function compareScrolling(reference, astylar) {
+  const expected = reference.interaction?.scrollContainers ?? {};
+  const actual = astylar.interaction?.scrollContainers ?? {};
+  const ids = [...new Set([...Object.keys(expected), ...Object.keys(actual)])];
+  const owners = ids.map((id) => ({
+    id,
+    reference: expected[id],
+    astylar: actual[id],
+    ownershipMatches: !!expected[id] === !!actual[id],
+    reachabilityMatches: !!expected[id] && !!actual[id]
+      ? expected[id].canReachBottom === actual[id].canReachBottom &&
+        expected[id].canReachRight === actual[id].canReachRight
+      : !!expected[id] === !!actual[id],
+  }));
+  return {
+    allOwnershipMatches: owners.every((owner) => owner.ownershipMatches),
+    allReachabilityMatches: owners.every((owner) => owner.reachabilityMatches),
+    owners,
   };
 }
 

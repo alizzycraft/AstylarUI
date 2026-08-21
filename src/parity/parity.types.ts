@@ -1,22 +1,23 @@
 import { SiteData } from '../app/types/site-data';
 
 export interface ParityViewport {
-  id: 'desktop' | 'tablet' | 'mobile';
+  /** Stable profile name. Fixtures and application benchmarks may add their own names. */
+  id: string;
   width: number;
   height: number;
   deviceScaleFactor: number;
 }
 
-export const PARITY_VIEWPORTS: Record<ParityViewport['id'], ParityViewport> = {
+export const PARITY_VIEWPORTS: Record<string, ParityViewport> = {
   desktop: { id: 'desktop', width: 800, height: 600, deviceScaleFactor: 1 },
   tablet: { id: 'tablet', width: 640, height: 720, deviceScaleFactor: 1 },
   mobile: { id: 'mobile', width: 390, height: 844, deviceScaleFactor: 1 },
 };
 
-export const PARITY_VIEWPORT = PARITY_VIEWPORTS.desktop;
+export const PARITY_VIEWPORT = PARITY_VIEWPORTS['desktop'];
 
 export function getParityViewport(id: string | null | undefined): ParityViewport {
-  return PARITY_VIEWPORTS[id as ParityViewport['id']] ?? PARITY_VIEWPORT;
+  return PARITY_VIEWPORTS[id ?? ''] ?? PARITY_VIEWPORT;
 }
 
 export type ParityCategory =
@@ -45,6 +46,8 @@ export interface ParityFixture {
   measurementIds: string[];
   optionalMeasurementIds?: string[];
   viewportIds?: ParityViewport['id'][];
+  /** Optional fixture-owned profiles used instead of the global smoke profiles. */
+  viewports?: ParityViewport[];
   responsiveSequence?: ParityViewport['id'][];
   expectedAbsentIds?: string[];
   expectedMissingIds?: string[];
@@ -265,6 +268,16 @@ export interface ParityElementMeasurement {
     lineCount: number;
     lines?: string[];
   };
+  visibility?: ParityVisibilityMeasurement;
+}
+
+export interface ParityVisibilityMeasurement {
+  exists: boolean;
+  intersectsViewport: boolean;
+  fullyVisible: boolean;
+  clipped: boolean;
+  clippingAncestorIds: string[];
+  viewportIntersection?: ParityRect;
 }
 
 export interface ParityRuntimeReport {
@@ -366,6 +379,12 @@ export interface ParityScrollState {
   scrollHeight: number;
   clientWidth: number;
   clientHeight: number;
+  initialScrollLeft?: number;
+  initialScrollTop?: number;
+  maxScrollLeft?: number;
+  maxScrollTop?: number;
+  canReachRight?: boolean;
+  canReachBottom?: boolean;
 }
 
 export interface ParityDisposalReport {
