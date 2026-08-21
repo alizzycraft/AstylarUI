@@ -58,6 +58,18 @@ describe('StyleService cascade', () => {
     expect(service.matchesSelector(element, '*')).toBeTrue();
   });
 
+  it('lets author shorthands clear lower-origin browser-default longhands', () => {
+    const heading: DOMElement = { type: 'h2', id: 'heading' };
+    const result = service.findStyleForElement(heading, [
+      { selector: '*', margin: '0', padding: '0' },
+    ]);
+
+    expect(result?.margin).toBe('0');
+    expect(result?.marginTop).toBeUndefined();
+    expect(result?.marginBottom).toBeUndefined();
+    expect(result?.padding).toBe('0');
+  });
+
   it('uses the browser dialog display default for its open state', () => {
     const closed: DOMElement = { type: 'dialog', open: false };
     const open: DOMElement = { type: 'dialog', open: true };

@@ -95,4 +95,26 @@ describe('FlexLayoutService', () => {
     expect(result[1].width).toBeCloseTo(115.714, 3);
     expect(result[0].width + result[1].width + 10).toBeCloseTo(280, 6);
   });
+
+  it('freezes flex items at their authored main-axis minimum', () => {
+    const item = (id: string, minWidth?: number): FlexItem => ({
+      element: { type: 'div', id }, style: undefined,
+      width: 180, height: 40, baseWidth: 180, baseHeight: 40, minWidth,
+      margin: { top: 0, right: 0, bottom: 0, left: 0 },
+      flexGrow: 0, flexShrink: 1, flexBasis: 180, alignSelf: 'auto', order: 0,
+    });
+    const container: FlexContainer = {
+      width: 260, height: 80,
+      padding: { top: 0, right: 0, bottom: 0, left: 0 },
+      flexDirection: 'row', flexWrap: 'nowrap', justifyContent: 'flex-start',
+      alignItems: 'stretch', alignContent: 'stretch', gap: 0, rowGap: 0, columnGap: 0,
+    };
+
+    const result = service.calculateFlexItemSizes(
+      [item('fixed-minimum', 160), item('remaining')], container, 260,
+    );
+
+    expect(result[0].width).toBe(160);
+    expect(result[1].width).toBe(100);
+  });
 });

@@ -391,6 +391,19 @@ export class StyleService {
         for (const [property, winner] of winners) {
             (mergedStyle as unknown as Record<string, unknown>)[property] = winner.value;
         }
+        // Author shorthands replace lower-origin UA longhands. Keeping the
+        // browser defaults here would make declarations such as `* { margin: 0 }`
+        // appear to win the cascade while the old heading margins still affect
+        // layout. Author longhands remain valid overrides of the shorthand.
+        for (const [shorthand, longhands] of [
+            ['margin', ['marginTop', 'marginRight', 'marginBottom', 'marginLeft']],
+            ['padding', ['paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft']],
+        ] as const) {
+            if (!winners.has(shorthand)) continue;
+            for (const longhand of longhands) {
+                if (!winners.has(longhand)) delete mergedStyle[longhand];
+            }
+        }
         if (extensionWinners.size > 0) {
             mergedStyle.extensions = Object.fromEntries(
                 [...extensionWinners].map(([identity, winner]) => [identity, winner.value]),

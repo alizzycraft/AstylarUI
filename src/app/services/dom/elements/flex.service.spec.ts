@@ -43,6 +43,25 @@ describe('FlexService', () => {
       .toBe(128);
   });
 
+  it('resolves viewport units for definite flex-item dimensions', () => {
+    const service = new FlexService({} as never, {} as never, {} as never);
+    const viewport = { width: 1280, height: 800 };
+
+    expect(service['resolveFlexItemLength']('100vh', 240, viewport)).toBe(800);
+    expect(service['resolveFlexItemLength']('25vw', 240, viewport)).toBe(320);
+    expect(service['resolveFlexItemLength']('2rem', 240, viewport)).toBe(32);
+    expect(service['resolveFlexItemLength']('2em', 240, viewport, '18px')).toBe(36);
+  });
+
+  it('recognizes auto margins from shorthand and longhand declarations', () => {
+    const service = new FlexService({} as never, {} as never, {} as never);
+
+    expect(service['parseAutoMarginBox']({ selector: '#action', margin: '0 0 0 auto' }))
+      .toEqual({ top: false, right: false, bottom: false, left: true });
+    expect(service['parseAutoMarginBox']({ selector: '#action', margin: 'auto', marginRight: '8px' }))
+      .toEqual({ top: true, right: false, bottom: true, left: true });
+  });
+
   it('recognizes both block-level and inline-level flex containers', () => {
     const service = new FlexService({} as never, {} as never, {} as never);
     const render = {
@@ -188,6 +207,28 @@ describe('FlexService', () => {
     );
 
     expect(height).toBe(112);
+  });
+
+  it('honors a descendant min-height during intrinsic container sizing', () => {
+    const service = new FlexService(new FlexLayoutService(), {} as never, {} as never);
+    const child: DOMElement = { type: 'article', id: 'empty', children: [
+      { type: 'div', id: 'copy' },
+    ] };
+    const resolved = new Map<string, StyleRule>([
+      ['empty', { selector: '#empty', minHeight: '200px', margin: '8px' }],
+      ['copy', { selector: '#copy', height: '42px' }],
+    ]);
+    const render = {
+      actions: { style: { findStyleForElement: (element: DOMElement) => resolved.get(element.id ?? '') } },
+    } as unknown as BabylonRender;
+    const dom = { context: { elementStyles: new Map() } } as unknown as BabylonDOM;
+
+    const height = service['calculateIntrinsicContainerHeight'](
+      { type: 'div', id: 'list', children: [child] },
+      { selector: '#list' }, [], dom, render, 320,
+    );
+
+    expect(height).toBe(216);
   });
 
   it('measures wrapped grid content against its resolved column width', () => {

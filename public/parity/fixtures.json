@@ -109,6 +109,12 @@
     "expectedBehavior": "Block children start at the content edge and stack vertically in source order."
   },
   {
+    "id": "block-auto-margin-width",
+    "title": "Auto block width with horizontal margins",
+    "category": "block-inline",
+    "expectedBehavior": "An in-flow block with auto width fills the containing block after its horizontal margins are subtracted."
+  },
+  {
     "id": "inline-block-flow",
     "title": "Inline-block run and display none",
     "category": "block-inline",
@@ -265,6 +271,12 @@
     "expectedBehavior": "The universal selector applies with zero specificity and remains overridden property-by-property by type and class rules."
   },
   {
+    "id": "author-reset-defaults",
+    "title": "Author reset over browser defaults",
+    "category": "cascade-defaults",
+    "expectedBehavior": "Author margin and padding shorthands clear lower-origin browser-default heading and paragraph longhands."
+  },
+  {
     "id": "fixed-positioning",
     "title": "Fixed positioning against the viewport",
     "category": "positioning-stacking",
@@ -275,6 +287,19 @@
     "title": "Viewport-relative sizing and offsets",
     "category": "box-model-units",
     "expectedBehavior": "Viewport width and height units resolve against the rendered viewport for dimensions and positioned offsets."
+  },
+  {
+    "id": "flex-viewport-height",
+    "title": "Viewport-height flex items",
+    "category": "box-model-units",
+    "expectedBehavior": "Viewport-relative heights on flex items resolve against the rendered viewport rather than being parsed as unitless pixel values.",
+    "viewportIds": ["desktop", "tablet", "mobile"]
+  },
+  {
+    "id": "flex-min-main-size",
+    "title": "Flex shrink respects main-axis minimums",
+    "category": "flexbox",
+    "expectedBehavior": "Negative free space is redistributed after an item freezes at its authored min-width."
   },
   {
     "id": "styled-textarea",
@@ -507,6 +532,18 @@
     "title": "Intrinsic text sizing in flex layout",
     "category": "flexbox",
     "expectedBehavior": "Height-auto text flex items use their wrapped line-box height when justify-content positions the item group."
+  },
+  {
+    "id": "flex-auto-main-size",
+    "title": "Intrinsic flex main sizes and auto margin",
+    "category": "flexbox",
+    "expectedBehavior": "Text flex items use their intrinsic main size, min-width constrains controls, and a main-axis auto margin absorbs positive free space."
+  },
+  {
+    "id": "intrinsic-min-height",
+    "title": "Intrinsic parent includes a child minimum height",
+    "category": "block-inline",
+    "expectedBehavior": "An auto-height block uses its in-flow child min-height contribution, including margins."
   },
   {
     "id": "max-width-auto-text",

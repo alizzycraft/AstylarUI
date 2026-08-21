@@ -933,6 +933,7 @@ export class ElementCreationService {
       let parentWidth = 0;
       let paddingTop = 0;
       let paddingLeft = 0;
+      let paddingRight = 0;
       let paddingBottom = 0;
 
       if (dom.context.elementDimensions.has(parent.name)) {
@@ -941,6 +942,7 @@ export class ElementCreationService {
         parentWidth = dims.width;
         paddingTop = dims.padding.top;
         paddingLeft = dims.padding.left;
+        paddingRight = dims.padding.right;
         paddingBottom = dims.padding.bottom;
       } else {
         const scale = render.actions.camera.getPixelToWorldScale();
@@ -994,12 +996,26 @@ export class ElementCreationService {
         }
 
 
+        const prelayoutMargin = this.parseMarginBox(resolvedStyle);
+        const defaultDisplay = this.styleDefaults
+          .getElementTypeDefaults(child.type)?.display ?? 'block';
+        const display = (resolvedStyle?.display ?? defaultDisplay).toLowerCase();
+        const autoBlockWidth = (!resolvedStyle?.width || resolvedStyle.width === 'auto') &&
+          ['block', 'flex', 'grid', 'list-item', 'flow-root'].includes(display)
+          ? Math.max(
+              0,
+              parentWidth - paddingLeft - paddingRight -
+                prelayoutMargin.left - prelayoutMargin.right,
+            )
+          : undefined;
         const childMesh = this.createElement(
           dom,
           render,
           child,
           parent,
           styles,
+          undefined,
+          autoBlockWidth !== undefined ? { width: autoBlockWidth } : undefined,
         );
 
         // A nested auto-height block must resolve its own descendants before
@@ -1064,12 +1080,13 @@ export class ElementCreationService {
       const hasExplicitHeight = parentStyle?.height !== undefined &&
         parentStyle.height !== 'auto';
 
+      const usedAutoHeight = this.clampAutoBlockHeight(flow.height, parentStyle);
       if (
         parentElement &&
         parent.name !== 'root-body' &&
         !hasExplicitHeight &&
         !this.hasFlexAssignedHeight(parent) &&
-        Math.abs(flow.height - parentHeight) > 0.1
+        Math.abs(usedAutoHeight - parentHeight) > 0.1
       ) {
         const borderRadiusPx = this.borderService.parseBorderRadius(parentStyle?.borderRadius);
         const border = this.borderService.parseBorderProperties(render, parentStyle);
@@ -1077,19 +1094,19 @@ export class ElementCreationService {
           parent,
           'rectangle',
           parentWidth * scaleFactor,
-          flow.height * scaleFactor,
+          usedAutoHeight * scaleFactor,
           borderRadiusPx * scaleFactor,
           border.width,
         );
 
         // Preserve the element's top border edge while its auto height changes.
-        parent.position.y += ((parentHeight - flow.height) / 2) * scaleFactor;
-        parentHeight = flow.height;
+        parent.position.y += ((parentHeight - usedAutoHeight) / 2) * scaleFactor;
+        parentHeight = usedAutoHeight;
         const stored = dom.context.elementDimensions.get(parent.name);
         if (stored) {
           dom.context.elementDimensions.set(parent.name, {
             ...stored,
-            height: flow.height,
+            height: usedAutoHeight,
           });
         }
       }
@@ -1199,6 +1216,22 @@ export class ElementCreationService {
       cursor + previousMarginBottom + paddingBottom,
     );
     return { height, tops };
+  }
+
+  private clampAutoBlockHeight(height: number, style: StyleRule | undefined): number {
+    const fontSize = this.parseFontSize(style?.fontSize);
+    let result = height;
+    if (style?.minHeight !== undefined) {
+      result = Math.max(result, this.parseLengthValue(style.minHeight, fontSize));
+    }
+    if (style?.maxHeight !== undefined) {
+      const maximum = this.parseLengthValue(style.maxHeight, fontSize);
+      const minimum = style.minHeight !== undefined
+        ? this.parseLengthValue(style.minHeight, fontSize)
+        : 0;
+      result = Math.min(result, Math.max(maximum, minimum));
+    }
+    return result;
   }
 
   private parseMarginBox(style: StyleRule | undefined): {

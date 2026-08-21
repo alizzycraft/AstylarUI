@@ -33,4 +33,15 @@ describe('ElementCreationService', () => {
     } as never)).toBeTrue();
     expect(service['hasFlexAssignedHeight']({ metadata: {} } as never)).toBeFalse();
   });
+
+  it('clamps descendant-driven auto height to authored min and max constraints', () => {
+    const service = Object.create(ElementCreationService.prototype) as ElementCreationService;
+
+    expect(service['clampAutoBlockHeight'](120, {
+      selector: '#empty', minHeight: '200px',
+    })).toBe(200);
+    expect(service['clampAutoBlockHeight'](260, {
+      selector: '#empty', minHeight: '200px', maxHeight: '220px',
+    })).toBe(220);
+  });
 });

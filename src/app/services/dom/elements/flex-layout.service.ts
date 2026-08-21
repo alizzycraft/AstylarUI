@@ -23,7 +23,10 @@ export interface FlexItem {
   height: number;
   baseWidth: number;
   baseHeight: number;
+  minWidth?: number;
+  minHeight?: number;
   margin: { top: number; right: number; bottom: number; left: number };
+  autoMargin?: { top: boolean; right: boolean; bottom: boolean; left: boolean };
   flexGrow: number;
   flexShrink: number;
   flexBasis: number | 'auto' | string;
@@ -449,60 +452,51 @@ export class FlexLayoutService {
    * All calculations in screen units (pixels)
    */
   private applyFlexShrink(items: Array<FlexItem & { calculatedFlexBasis: number }>, deficit: number, isRow: boolean): FlexItem[] {
-    // Separate shrinking and non-shrinking items
-    const nonShrinkingItems = items.filter(item => Number(item.flexShrink) === 0);
-    const shrinkingItems = items.filter(item => Number(item.flexShrink) > 0);
+    const sizes = items.map(item => item.calculatedFlexBasis);
+    const active = new Set(items
+      .map((item, index) => Number(item.flexShrink) > 0 ? index : -1)
+      .filter(index => index >= 0));
+    let remainingDeficit = deficit;
 
-    // Calculate space taken by non-shrinking items
-    const nonShrinkingSpace = nonShrinkingItems.reduce((sum, item) => sum + item.calculatedFlexBasis, 0);
+    // Flex items that reach their authored minimum freeze there. Redistribute
+    // the unmet negative free space over the remaining shrinkable items, just
+    // as the browser flex sizing algorithm does.
+    while (active.size > 0 && remainingDeficit > 1e-6) {
+      const totalFactor = [...active].reduce(
+        (sum, index) => sum + Number(items[index].flexShrink) * items[index].calculatedFlexBasis,
+        0,
+      );
+      if (totalFactor <= 0) break;
 
-    // Available space after removing deficit
-    const totalBasisSpace = items.reduce((sum, item) => sum + item.calculatedFlexBasis, 0);
-    const availableSpace = totalBasisSpace - deficit;
-    const spaceForShrinkingItems = availableSpace - nonShrinkingSpace;
-
-    if (shrinkingItems.length === 0 || spaceForShrinkingItems <= 0) {
-      // No shrinking items or no space - keep original sizes or set to 0
-      return items.map(item => ({
-        ...item,
-        [isRow ? 'width' : 'height']: Number(item.flexShrink) === 0 ? item.calculatedFlexBasis : 0
-      }));
-    }
-
-    const totalShrinkingBasis = shrinkingItems.reduce(
-      (sum, item) => sum + item.calculatedFlexBasis,
-      0,
-    );
-    const shrinkDeficit = Math.max(0, totalShrinkingBasis - spaceForShrinkingItems);
-    const totalScaledShrinkFactor = shrinkingItems.reduce(
-      (sum, item) => sum + Number(item.flexShrink) * item.calculatedFlexBasis,
-      0,
-    );
-
-    return items.map(item => {
-      const flexShrinkValue = Number(item.flexShrink);
-
-      if (flexShrinkValue === 0) {
-        // Non-shrinking items keep their original size
-        return {
-          ...item,
-          [isRow ? 'width' : 'height']: item.calculatedFlexBasis
-        };
+      const proposals = new Map<number, number>();
+      const newlyFrozen: number[] = [];
+      for (const index of active) {
+        const item = items[index];
+        const factor = Number(item.flexShrink) * item.calculatedFlexBasis;
+        const proposal = sizes[index] - remainingDeficit * factor / totalFactor;
+        const minimum = Math.max(0, isRow ? item.minWidth ?? 0 : item.minHeight ?? 0);
+        proposals.set(index, proposal);
+        if (proposal < minimum) newlyFrozen.push(index);
       }
 
-      const scaledShrinkFactor = flexShrinkValue * item.calculatedFlexBasis;
-      const shrinkRatio = totalScaledShrinkFactor > 0
-        ? scaledShrinkFactor / totalScaledShrinkFactor
-        : 0;
-      const newSize = item.calculatedFlexBasis - shrinkDeficit * shrinkRatio;
-      const identifier = this.describeItem(item);
+      if (newlyFrozen.length === 0) {
+        for (const [index, proposal] of proposals) sizes[index] = Math.max(0, proposal);
+        remainingDeficit = 0;
+        break;
+      }
 
+      for (const index of newlyFrozen) {
+        const minimum = Math.max(0, isRow ? items[index].minWidth ?? 0 : items[index].minHeight ?? 0);
+        remainingDeficit -= Math.max(0, sizes[index] - minimum);
+        sizes[index] = minimum;
+        active.delete(index);
+      }
+    }
 
-      return {
-        ...item,
-        [isRow ? 'width' : 'height']: Math.max(0, newSize)
-      };
-    });
+    return items.map((item, index) => ({
+      ...item,
+      [isRow ? 'width' : 'height']: sizes[index],
+    }));
   }
 
   /**

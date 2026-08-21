@@ -15,6 +15,7 @@ import {
 } from './grid-track-sizing';
 import { ImageLayoutService } from './image-layout.service';
 import { ImageResourceService } from './image-resource.service';
+import { DOMAncestryService } from '../dom-ancestry.service';
 
 @Injectable({
   providedIn: 'root'
@@ -28,6 +29,7 @@ export class FlexService {
     private borderService?: ElementBorderService,
     private imageResources?: ImageResourceService,
     private imageLayout?: ImageLayoutService,
+    private ancestry?: DOMAncestryService,
   ) { }
   public isFlexContainer(render: BabylonRender, parentElement: DOMElement, styles: StyleRule[], dom?: BabylonDOM): boolean {
     // Use elementStyles map if dom context is available for better performance
@@ -75,10 +77,10 @@ export class FlexService {
       scaleFactor,
     );
 
-    // Get viewport info for debugging
-    const viewportWidth = window.innerWidth;
-    const viewportHeight = window.innerHeight;
-    const devicePixelRatio = window.devicePixelRatio;
+    const viewportDimensions = dom.context.elementDimensions.get('root-body') ?? {
+      width: containerWidth,
+      height: containerHeight,
+    };
 
     // DPR debug log for every flex container
 
@@ -136,6 +138,7 @@ export class FlexService {
       // Use findStyleForElement to properly resolve styles including type defaults, classes, and IDs
       const style = childStyles.get(child);
       const margin = this.parseMarginBox(style);
+      const autoMargin = this.parseAutoMarginBox(style);
 
 
 
@@ -151,10 +154,7 @@ export class FlexService {
       );
 
       if (style?.width && style.width !== 'auto') {
-        if (style.width.endsWith('px')) {
-          width = parseFloat(style.width);
-
-        } else if (style.width.endsWith('%')) {
+        if (style.width.endsWith('%')) {
           // A flex item's percentage width uses its containing block's
           // content box, excluding the container border and padding insets.
           width = this.resolvePercentageFlexItemSize(
@@ -163,14 +163,17 @@ export class FlexService {
             padding.left,
             padding.right,
           );
-
         } else {
-          width = parseFloat(style.width);
-
+          width = this.resolveFlexItemLength(
+            style.width,
+            containerWidth,
+            viewportDimensions,
+            style.fontSize,
+          );
         }
-      } else if (child.type === 'button' || child.type === 'input') {
-        // Calculate intrinsic width for buttons and inputs
-        width = this.calculateIntrinsicWidth(child, style, styles);
+      } else if (child.type === 'button' || child.type === 'input' || child.textContent) {
+        // Auto main sizes for controls and direct text are content-based.
+        width = this.calculateIntrinsicWidth(child, style, styles, dom, render);
 
       } else if (intrinsicImageBox) {
         width = intrinsicImageBox.width;
@@ -183,17 +186,17 @@ export class FlexService {
       }
 
       if (style?.height && style.height !== 'auto') {
-        if (style.height.endsWith('px')) {
-          height = parseFloat(style.height);
-
-        } else if (style.height.endsWith('%')) {
+        if (style.height.endsWith('%')) {
           // Percentage calculations are based on CSS pixels, not affected by DPR
           const heightPercent = parseFloat(style.height);
           height = (heightPercent / 100) * containerHeight;
-
         } else {
-          height = parseFloat(style.height);
-
+          height = this.resolveFlexItemLength(
+            style.height,
+            containerHeight,
+            viewportDimensions,
+            style.fontSize,
+          );
         }
       } else {
         const intrinsicTextHeight = intrinsicImageBox?.height ?? this.calculateIntrinsicTextHeight(
@@ -201,6 +204,8 @@ export class FlexService {
           style,
           styles,
           width,
+          dom,
+          render,
         );
         const intrinsicContainerHeight = intrinsicTextHeight === null
           ? this.calculateIntrinsicContainerHeight(child, style, styles, dom, render, width)
@@ -215,6 +220,29 @@ export class FlexService {
       }
 
 
+
+      const minWidth = style?.minWidth
+        ? this.resolveFlexItemLength(
+          style.minWidth, containerWidth, viewportDimensions, style.fontSize,
+        )
+        : undefined;
+      const minHeight = style?.minHeight
+        ? this.resolveFlexItemLength(
+          style.minHeight, containerHeight, viewportDimensions, style.fontSize,
+        )
+        : undefined;
+      if (minWidth !== undefined) width = Math.max(width, minWidth);
+      if (style?.maxWidth) {
+        width = Math.min(width, this.resolveFlexItemLength(
+          style.maxWidth, containerWidth, viewportDimensions, style.fontSize,
+        ));
+      }
+      if (minHeight !== undefined) height = Math.max(height, minHeight);
+      if (style?.maxHeight) {
+        height = Math.min(height, this.resolveFlexItemLength(
+          style.maxHeight, containerHeight, viewportDimensions, style.fontSize,
+        ));
+      }
 
       const flexProperties = this.resolveFlexProperties(render, style);
       const { flexGrow, flexShrink, flexBasis } = flexProperties;
@@ -235,7 +263,10 @@ export class FlexService {
         height,
         baseWidth: width,
         baseHeight: height,
+        minWidth,
+        minHeight,
         margin,
+        autoMargin,
         flexGrow,
         flexShrink,
         flexBasis,
@@ -406,8 +437,14 @@ export class FlexService {
   /**
    * Calculate intrinsic width for elements like buttons and inputs
    */
-  private calculateIntrinsicWidth(element: DOMElement, style: StyleRule | undefined, styles: StyleRule[]): number {
-    const textStyle = this.getInheritedTextStyle(element, styles);
+  private calculateIntrinsicWidth(
+    element: DOMElement,
+    style: StyleRule | undefined,
+    styles: StyleRule[],
+    dom?: BabylonDOM,
+    render?: BabylonRender,
+  ): number {
+    const textStyle = { ...this.getInheritedTextStyle(element, styles, dom, render), ...style };
     const textStyleProperties = this.textStyleParser.parseTextProperties(textStyle);
 
     // Determine the relevant text for measurement
@@ -416,6 +453,8 @@ export class FlexService {
       textToMeasure = element.value || element.textContent || 'Button';
     } else if (element.type === 'input') {
       textToMeasure = element.value || element.placeholder || '';
+    } else {
+      textToMeasure = element.textContent || '';
     }
 
     // Measure text dimensions
@@ -452,6 +491,8 @@ export class FlexService {
     style: StyleRule | undefined,
     styles: StyleRule[],
     borderBoxWidth: number,
+    dom?: BabylonDOM,
+    render?: BabylonRender,
   ): number | null {
     const text = element.type === 'button'
       ? element.value || element.textContent || 'Button'
@@ -462,7 +503,7 @@ export class FlexService {
         : element.textContent || '';
     if (element.type !== 'textarea' && !text.trim()) return null;
 
-    const effectiveStyle = { ...this.getInheritedTextStyle(element, styles), ...style };
+    const effectiveStyle = { ...this.getInheritedTextStyle(element, styles, dom, render), ...style };
     const textStyle = this.textStyleParser.parseTextProperties(effectiveStyle);
     const padding = this.parsePadding(style?.padding);
     const borderWidth = Math.max(0, Number.parseFloat(style?.borderWidth ?? '0') || 0);
@@ -669,13 +710,27 @@ export class FlexService {
       };
     }
 
+    const intrinsicInlineWidth = ['button', 'input', 'select'].includes(child.type) ||
+      childStyle?.display?.toLowerCase().startsWith('inline') === true;
     let childWidth = childStyle?.width && childStyle.width !== 'auto'
       ? this.parseIntrinsicPixelLength(childStyle.width, contentWidth)
-      : ['button', 'input'].includes(child.type)
-        ? this.calculateIntrinsicWidth(child, childStyle, styles)
+      : intrinsicInlineWidth
+        ? this.calculateIntrinsicWidth(child, childStyle, styles, dom, render)
         : contentWidth;
     const definiteFlexBasis = this.parseDefiniteIntrinsicFlexBasis(childStyle, contentWidth);
     if (definiteFlexBasis !== null) childWidth = definiteFlexBasis;
+    if (childStyle?.minWidth) {
+      childWidth = Math.max(
+        childWidth,
+        this.parseIntrinsicPixelLength(childStyle.minWidth, contentWidth),
+      );
+    }
+    if (childStyle?.maxWidth) {
+      childWidth = Math.min(
+        childWidth,
+        this.parseIntrinsicPixelLength(childStyle.maxWidth, contentWidth),
+      );
+    }
     let childHeight = childStyle?.height && childStyle.height !== 'auto'
       ? this.parseIntrinsicPixelLength(childStyle.height, 0)
       : null;
@@ -685,6 +740,8 @@ export class FlexService {
         childStyle,
         styles,
         childWidth,
+        dom,
+        render,
       ) ?? this.calculateIntrinsicContainerHeight(
         child,
         childStyle,
@@ -695,6 +752,18 @@ export class FlexService {
       );
     }
     if (childHeight === null) return null;
+    if (childStyle?.minHeight) {
+      childHeight = Math.max(
+        childHeight,
+        this.parseIntrinsicPixelLength(childStyle.minHeight, 0),
+      );
+    }
+    if (childStyle?.maxHeight) {
+      childHeight = Math.min(
+        childHeight,
+        this.parseIntrinsicPixelLength(childStyle.maxHeight, 0),
+      );
+    }
     return { width: childWidth, height: childHeight, margin: this.parseMarginBox(childStyle) };
   }
 
@@ -770,6 +839,24 @@ export class FlexService {
     return contentBoxSize * (Number.parseFloat(value) || 0) / 100;
   }
 
+  private resolveFlexItemLength(
+    value: string,
+    percentageReference: number,
+    viewport: { width: number; height: number },
+    fontSizeValue?: string,
+  ): number {
+    const normalized = value.trim().toLowerCase();
+    const numeric = Number.parseFloat(normalized) || 0;
+    if (normalized.endsWith('vw')) return viewport.width * numeric / 100;
+    if (normalized.endsWith('vh')) return viewport.height * numeric / 100;
+    if (normalized.endsWith('rem')) return numeric * 16;
+    if (normalized.endsWith('em')) {
+      return numeric * (Number.parseFloat(fontSizeValue ?? '16px') || 16);
+    }
+    if (normalized.endsWith('%')) return percentageReference * numeric / 100;
+    return numeric;
+  }
+
   private parseFixedGridTracks(template: string | undefined): number[] | null {
     if (!template?.trim()) return null;
     const expanded = template.replace(
@@ -787,7 +874,12 @@ export class FlexService {
   /**
    * Helper to get inherited text style (similar to BabylonDOMService)
    */
-  private getInheritedTextStyle(element: DOMElement, styles: StyleRule[]): StyleRule {
+  private getInheritedTextStyle(
+    element: DOMElement,
+    styles: StyleRule[],
+    dom?: BabylonDOM,
+    render?: BabylonRender,
+  ): StyleRule {
     let inheritedStyle: StyleRule = {
       selector: element.id ? `#${element.id}` : element.type,
       fontFamily: 'Arial, sans-serif',
@@ -796,7 +888,22 @@ export class FlexService {
       color: '#000000'
     };
 
-    // Apply element type defaults (simplified)
+    if (dom && render && this.ancestry) {
+      const parent = this.ancestry.getParent(element);
+      const parentStyle = parent
+        ? this.pickInheritedTextProperties(
+            this.getInheritedTextStyle(parent, styles, dom, render),
+          )
+        : {};
+      const ownStyle = render.actions.style.findStyleForElement(
+        element,
+        styles,
+        dom.context.elementStyles,
+      );
+      return { ...inheritedStyle, ...parentStyle, ...ownStyle };
+    }
+
+    // Fallback used by isolated unit tests without a DOM ancestry context.
     if (element.type === 'button') {
       inheritedStyle.fontWeight = 'bold';
     }
@@ -821,6 +928,17 @@ export class FlexService {
     }
 
     return inheritedStyle;
+  }
+
+  private pickInheritedTextProperties(style: StyleRule): Partial<StyleRule> {
+    const properties: Array<keyof StyleRule> = [
+      'color', 'fontFamily', 'fontSize', 'fontWeight', 'fontStyle', 'lineHeight',
+      'letterSpacing', 'wordSpacing', 'textAlign', 'whiteSpace', 'wordWrap',
+      'textTransform', 'cursor',
+    ];
+    return Object.fromEntries(properties
+      .filter(property => style[property] !== undefined)
+      .map(property => [property, style[property]])) as Partial<StyleRule>;
   }
 
   /**
@@ -1027,6 +1145,27 @@ export class FlexService {
     if (style?.marginBottom !== undefined) margin.bottom = parseFloat(style.marginBottom) || 0;
     if (style?.marginLeft !== undefined) margin.left = parseFloat(style.marginLeft) || 0;
     return margin;
+  }
+
+  private parseAutoMarginBox(style?: StyleRule): { top: boolean; right: boolean; bottom: boolean; left: boolean } {
+    const parts = style?.margin?.trim().split(/\s+/).filter(Boolean) ?? [];
+    const expanded: Array<string | undefined> = parts.length === 1
+      ? [parts[0], parts[0], parts[0], parts[0]]
+      : parts.length === 2
+        ? [parts[0], parts[1], parts[0], parts[1]]
+        : parts.length === 3
+          ? [parts[0], parts[1], parts[2], parts[1]]
+          : parts.length >= 4
+            ? parts.slice(0, 4)
+            : [undefined, undefined, undefined, undefined];
+    const isAuto = (longhand: string | undefined, fallback: string | undefined) =>
+      (longhand ?? fallback)?.trim().toLowerCase() === 'auto';
+    return {
+      top: isAuto(style?.marginTop, expanded[0]),
+      right: isAuto(style?.marginRight, expanded[1]),
+      bottom: isAuto(style?.marginBottom, expanded[2]),
+      left: isAuto(style?.marginLeft, expanded[3]),
+    };
   }
 
   /**
@@ -1265,12 +1404,16 @@ export class FlexService {
       0,
       availableMainSpace - totalSize - totalGapSpacing,
     );
+    const autoMarginCount = sizedItems.reduce((count, item) => count + (isRow
+      ? Number(item.autoMargin?.left) + Number(item.autoMargin?.right)
+      : Number(item.autoMargin?.top) + Number(item.autoMargin?.bottom)), 0);
+    const autoMarginShare = autoMarginCount > 0 ? remainingSpace / autoMarginCount : 0;
 
     // Calculate spacing for justify-content
     let spacing = 0;
     let startOffset = 0;
 
-    switch (flexProps.justifyContent) {
+    switch (autoMarginCount > 0 ? 'flex-start' : flexProps.justifyContent) {
       case 'flex-start':
         startOffset = 0;
         break;
@@ -1310,7 +1453,9 @@ export class FlexService {
 
       if (isRow) {
         // Calculate X position (main axis)
-        const itemLeft = padding.left + currentOffset + item.margin.left;
+        const effectiveLeft = item.autoMargin?.left ? autoMarginShare : item.margin.left;
+        const effectiveRight = item.autoMargin?.right ? autoMarginShare : item.margin.right;
+        const itemLeft = padding.left + currentOffset + effectiveLeft;
         x = -(containerWidth / 2) + itemLeft + (item.width / 2);
 
         // Calculate Y position (cross axis) - handle single line vs multi-line differently
@@ -1398,10 +1543,12 @@ export class FlexService {
 
         // Add gap spacing between items (except after the last item)
         const gapSpacing = index < itemsToProcess.length - 1 ? gapProperties.columnGap : 0;
-        currentOffset += item.width + item.margin.left + item.margin.right + spacing + gapSpacing;
+        currentOffset += item.width + effectiveLeft + effectiveRight + spacing + gapSpacing;
       } else {
         // Calculate Y position (main axis)
-        const itemTop = padding.top + currentOffset + item.margin.top;
+        const effectiveTop = item.autoMargin?.top ? autoMarginShare : item.margin.top;
+        const effectiveBottom = item.autoMargin?.bottom ? autoMarginShare : item.margin.bottom;
+        const itemTop = padding.top + currentOffset + effectiveTop;
         y = (containerHeight / 2) - itemTop - (item.height / 2);
 
         // Calculate X position (cross axis) - handle single line vs multi-line differently
@@ -1489,7 +1636,7 @@ export class FlexService {
 
         // Add gap spacing between items (except after the last item)
         const gapSpacing = index < itemsToProcess.length - 1 ? gapProperties.rowGap : 0;
-        currentOffset += item.height + item.margin.top + item.margin.bottom + spacing + gapSpacing;
+        currentOffset += item.height + effectiveTop + effectiveBottom + spacing + gapSpacing;
       }
 
       layout.push({

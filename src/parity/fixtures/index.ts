@@ -5,6 +5,7 @@ import { percentageSizingFixture } from './percentage-sizing.fixture';
 import { cascadeSpecificityFixture } from './cascade-specificity.fixture';
 import { textInheritanceFixture } from './text-inheritance.fixture';
 import { blockFlowFixture } from './block-flow.fixture';
+import { blockAutoMarginWidthFixture } from './block-auto-margin-width.fixture';
 import { inlineBlockFlowFixture } from './inline-block-flow.fixture';
 import { multilineWrappingFixture } from './multiline-wrapping.fixture';
 import { preLineAlignmentFixture } from './pre-line-alignment.fixture';
@@ -42,8 +43,11 @@ import { negativeAutoStackingFixture } from './negative-auto-stacking.fixture';
 import { styledSelectFixture } from './styled-select.fixture';
 import { textTransformAlignmentFixture } from './text-transform-alignment.fixture';
 import { universalSelectorFixture } from './universal-selector.fixture';
+import { authorResetDefaultsFixture } from './author-reset-defaults.fixture';
 import { fixedPositioningFixture } from './fixed-positioning.fixture';
 import { viewportUnitsFixture } from './viewport-units.fixture';
+import { flexViewportHeightFixture } from './flex-viewport-height.fixture';
+import { flexMinMainSizeFixture } from './flex-min-main-size.fixture';
 import { styledTextareaFixture } from './styled-textarea.fixture';
 import { relativeBlockFlowFixture } from './relative-block-flow.fixture';
 import { flexOrderSelfFixture } from './flex-order-self.fixture';
@@ -80,6 +84,8 @@ import { representativeAccountSettingsFixture } from './representative-account-s
 import { autoBlockHeightFixture } from './auto-block-height.fixture';
 import { autoWrappedTextFixture } from './auto-wrapped-text.fixture';
 import { flexAutoTextFixture } from './flex-auto-text.fixture';
+import { flexAutoMainSizeFixture } from './flex-auto-main-size.fixture';
+import { intrinsicMinHeightFixture } from './intrinsic-min-height.fixture';
 import { maxWidthAutoTextFixture } from './max-width-auto-text.fixture';
 import { intrinsicInputButtonFixture } from './intrinsic-input-button.fixture';
 import { flexAutoContainerFixture } from './flex-auto-container.fixture';
@@ -163,6 +169,7 @@ const fixtures: readonly ParityFixture[] = [
   cascadeSpecificityFixture,
   textInheritanceFixture,
   blockFlowFixture,
+  blockAutoMarginWidthFixture,
   inlineBlockFlowFixture,
   multilineWrappingFixture,
   preLineAlignmentFixture,
@@ -200,8 +207,11 @@ const fixtures: readonly ParityFixture[] = [
   styledSelectFixture,
   textTransformAlignmentFixture,
   universalSelectorFixture,
+  authorResetDefaultsFixture,
   fixedPositioningFixture,
   viewportUnitsFixture,
+  flexViewportHeightFixture,
+  flexMinMainSizeFixture,
   styledTextareaFixture,
   relativeBlockFlowFixture,
   flexOrderSelfFixture,
@@ -238,6 +248,8 @@ const fixtures: readonly ParityFixture[] = [
   autoBlockHeightFixture,
   autoWrappedTextFixture,
   flexAutoTextFixture,
+  flexAutoMainSizeFixture,
+  intrinsicMinHeightFixture,
   maxWidthAutoTextFixture,
   intrinsicInputButtonFixture,
   flexAutoContainerFixture,
