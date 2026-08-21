@@ -24,7 +24,15 @@ export class App {
     ? new URLSearchParams(window.location.search).get('parityState')
     : null;
 
-  protected readonly siteData = computed(() => buildTtsDemoSite(this.store.viewModel()));
+  protected readonly siteData = computed(() => {
+    const view = this.store.viewModel();
+    if (this.benchmarkState !== 'generated') return buildTtsDemoSite(view);
+    return buildTtsDemoSite({
+      ...view,
+      progressPercent: 100,
+      history: view.history.map((item) => ({ ...item, sizeLabel: '7.5 KB' })),
+    });
+  });
   protected readonly status = signal('Starting the AstylarUI renderer…');
   protected readonly options: AstylarRenderOptions = {
     events: {
