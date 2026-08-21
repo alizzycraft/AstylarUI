@@ -24,6 +24,7 @@ import { BabylonElementManagerService } from "./element-manager.service";
 import { BabylonInteractionService } from "./interaction.service";
 import { DOMAncestryService } from "./dom-ancestry.service";
 import { InputElementService } from "./input/input-element.service";
+import { resolveComputedFontSize } from "./utils/computed-font-size.util";
 
 @Injectable({
   providedIn: "root",
@@ -647,7 +648,12 @@ export class BabylonDOMRendererService {
       this.elementManager.elementStylesMap,
     );
 
-    return { ...fallbackTextStyles, ...inheritedStyle, ...ownStyle };
+    const merged = { ...fallbackTextStyles, ...inheritedStyle, ...ownStyle };
+    merged.fontSize = resolveComputedFontSize(
+      ownStyle?.fontSize ?? inheritedStyle.fontSize ?? fallbackTextStyles.fontSize,
+      inheritedStyle.fontSize ?? fallbackTextStyles.fontSize,
+    );
+    return merged;
   }
 
   private pickInheritedTextProperties(style: StyleRule): Partial<StyleRule> {

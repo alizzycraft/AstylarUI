@@ -7,6 +7,7 @@ import { Mesh } from '@babylonjs/core';
 import { TextRenderingService } from '../../text/text-rendering.service';
 import { TextStyleParserService } from '../../text/text-style-parser.service';
 import { DOMAncestryService } from '../dom-ancestry.service';
+import { resolveComputedFontSize } from '../utils/computed-font-size.util';
 import { ImageLayoutService } from './image-layout.service';
 import { ImageResourceService } from './image-resource.service';
 
@@ -688,7 +689,12 @@ export class ElementDimensionService {
             styles,
             dom.context.elementStyles
         );
-        return { ...fallback, ...inherited, ...own };
+        const merged = { ...fallback, ...inherited, ...own };
+        merged.fontSize = resolveComputedFontSize(
+            own?.fontSize ?? inherited.fontSize ?? fallback.fontSize,
+            inherited.fontSize ?? fallback.fontSize,
+        );
+        return merged;
     }
 
     private pickInheritedTextProperties(style: StyleRule): Partial<StyleRule> {
