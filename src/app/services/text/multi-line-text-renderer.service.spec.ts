@@ -68,6 +68,19 @@ describe('MultiLineTextRendererService', () => {
       .toBe('Icon　label next');
   });
 
+  it('uses an ideographic space as a visible line-breaking opportunity', () => {
+    const style: TextStyleProperties = {
+      fontFamily: 'Arial', fontSize: 14, fontWeight: '700', fontStyle: 'normal',
+      color: '#000000', textAlign: 'left', verticalAlign: 'baseline', lineHeight: 1.5,
+      letterSpacing: 0, wordSpacing: 0, whiteSpace: 'normal', wordWrap: 'normal',
+      textOverflow: 'clip', textDecoration: 'none', textTransform: 'none'
+    };
+
+    const lines = service.wrapText('◉　Save to History', 0.01, style);
+
+    expect(lines.map((line) => line.text)).toEqual(['◉　', 'Save', 'to', 'History']);
+  });
+
   it('should handle nowrap white-space correctly', () => {
     const style: TextStyleProperties = {
       fontFamily: 'Arial',

@@ -203,11 +203,19 @@ export class MultiLineTextRendererService {
     const lines: TextLine[] = [];
     const words = text.split(' ');
     const segments = words.flatMap((word, wordIndex) => {
+      // Unlike an ASCII collapsible space, an ideographic space remains
+      // visible at the end of a line while still providing a normal CSS
+      // line-breaking opportunity. Attach it to the preceding segment so
+      // its advance is preserved whether or not the following text wraps.
+      const ideographicSegments = word.match(/[^\u3000]+\u3000*|\u3000+/g) ?? [word];
+
       // A visible hyphen is a normal CSS line-breaking opportunity. Keep the
       // hyphen on the preceding segment and remember that segments from the
       // same word must not gain a space when they remain on one line.
-      const hyphenSegments = word.match(/[^-]+-?|-/g) ?? [word];
-      return hyphenSegments.map((segment, segmentIndex) => ({
+      const breakableSegments = ideographicSegments.flatMap(
+        (ideographicSegment) => ideographicSegment.match(/[^-]+-?|-/g) ?? [ideographicSegment]
+      );
+      return breakableSegments.map((segment, segmentIndex) => ({
         text: segment,
         separator: wordIndex > 0 && segmentIndex === 0 ? ' ' : '',
       }));
