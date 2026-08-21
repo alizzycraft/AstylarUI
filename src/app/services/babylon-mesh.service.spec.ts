@@ -50,6 +50,23 @@ describe('BabylonMeshService', () => {
 
       engine.dispose();
     });
+
+    it('uses emissive illumination without multiplying the text texture by itself', () => {
+      const engine = new NullEngine();
+      const scene = new Scene(engine);
+      const service = new BabylonMeshService();
+      service.initialize(scene);
+      const texture = new DynamicTexture('text-color', { width: 16, height: 16 }, scene);
+
+      const mesh = service.createTextMesh('text-color-plane', texture, 1, 1);
+      const material = mesh.material as import('@babylonjs/core').StandardMaterial;
+
+      expect(material.diffuseTexture).toBe(texture);
+      expect(material.emissiveTexture).toBe(texture);
+      expect(material.useEmissiveAsIllumination).toBeTrue();
+
+      engine.dispose();
+    });
   });
 
   describe('createPolygonBorder', () => {

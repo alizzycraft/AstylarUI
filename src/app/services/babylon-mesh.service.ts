@@ -1231,6 +1231,10 @@ export class BabylonMeshService {
     // Disable lighting effects for consistent text appearance
     material.disableLighting = true;
     material.emissiveTexture = texture; // Use texture as emissive for consistent brightness
+    // Without this flag StandardMaterial multiplies the diffuse sample by the
+    // same emissive sample, producing a squared color transfer. Textures made
+    // from a display-encoded canvas should contribute their authored color once.
+    material.useEmissiveAsIllumination = true;
 
     // Remove specular and other effects
     material.specularColor = new Color3(0, 0, 0);

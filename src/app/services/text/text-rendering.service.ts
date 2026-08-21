@@ -183,7 +183,7 @@ export class TextRenderingService implements TextCacheManager {
 
       // Update the texture
       texture.hasAlpha = true;
-      texture.level = 1.1;
+      texture.level = 1;
       texture.update(false);
 
       // Ensure proper texture wrapping
