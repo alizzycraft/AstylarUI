@@ -63,3 +63,36 @@ The baseline is not hidden and does not fail `tts-parity:report`.
 
 Command results and final repository-wide acceptance are appended after the
 Phase 18 release matrix completes.
+
+## Final verification
+
+- `npm run parity:harness:check`: 9/9 Node tests passed (custom profiles;
+  clipping, ownership, and reachability; exact/blur/border/flat calibration).
+- Focused `overflow-scrolled-target` parity: 1 fixture, 6 renders, runtime
+  clean, exact text, 100% edges within 2px, maximum edge error
+  `0.0007367251439589495px`.
+- `npm run tts-parity:report`: 10/10 evidence scenarios completed with no
+  infrastructure error; the intentionally unmet visual baseline is recorded
+  above and in `artifacts/tts-parity/latest-report.json`.
+- Developer reference sync/freshness, developer validator, maintainer validator,
+  combined skill check, and standard quick validator for each skill passed.
+- `npm run capabilities:check`: 91 elements, 84 style fields, 62 DOM fields,
+  82 evidence references current.
+- `npm run examples:check`: 10 pairs current (7 parity-backed, 3 inline).
+- `npm test -- --watch=false`: 283/283 Chrome tests passed.
+- `npm run build:lib`: passed.
+- `npm run build`: passed and prerendered 2 routes; only the accepted initial
+  bundle and `src/app/app.scss` budget warnings remain.
+- Unfiltered `npm run parity:check`: 155 fixtures, 522 renders, 3 viewport
+  profiles, median SSIM `0.9900079622614616`, minimum SSIM
+  `0.9501815836061078`, 100% edges within 2px, maximum edge error
+  `3.99209364194121px`, exact text, clean runtime, all thresholds passed.
+- `git diff --check` passed before each commit. No public package behavior or
+  packed contents changed, so the conditional packed-consumer rerun was not
+  required for Phase 18.
+
+## Phase 18 commits
+
+- `fac0993` — `test(parity): measure visibility reachability and sharpness`
+- `01e954a` — `test(tts): add pinned application parity benchmark`
+- `fa61ecd` — `docs(skills): require source-driven visual evidence`
