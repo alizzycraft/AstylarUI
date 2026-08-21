@@ -35,7 +35,7 @@ function siteData(state: 0 | 1 | 2 | 3 | 4): SiteData {
         top: '60px', width: '500px', height: '420px',
         padding: state >= 2 ? '30px' : '20px',
         background: state >= 2 ? '#dbeafe' : '#e2e8f0',
-        borderWidth: '2px', borderColor: '#475569', borderRadius: '12px',
+        borderWidth: '2px', borderStyle: 'solid', borderColor: '#475569', borderRadius: '12px',
       },
       { selector: '#reconcile-title', height: '42px', margin: '0', fontSize: '24px', lineHeight: '30px' },
       { selector: '#reconcile-copy', height: '64px', margin: '0', padding: '8px', background: '#ffffff', fontSize: '14px', lineHeight: '20px' },
