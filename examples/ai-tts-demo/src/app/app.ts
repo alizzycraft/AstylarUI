@@ -119,8 +119,11 @@ export class App {
           const right = Math.max(...projected.map((point) => point.x)) * scaleX;
           const top = Math.min(...projected.map((point) => point.y)) * scaleY;
           const bottom = Math.max(...projected.map((point) => point.y)) * scaleY;
-          const intersectsViewport = right > 0 && bottom > 0 && left < canvas.clientWidth && top < canvas.clientHeight;
-          const fullyVisible = left >= 0 && top >= 0 && right <= canvas.clientWidth && bottom <= canvas.clientHeight;
+          const epsilon = 0.1;
+          const intersectsViewport = right > -epsilon && bottom > -epsilon &&
+            left < canvas.clientWidth + epsilon && top < canvas.clientHeight + epsilon;
+          const fullyVisible = left >= -epsilon && top >= -epsilon &&
+            right <= canvas.clientWidth + epsilon && bottom <= canvas.clientHeight + epsilon;
           return [id, {
             exists: true,
             borderBox: { left, top, right, bottom, width: right - left, height: bottom - top },
@@ -129,7 +132,7 @@ export class App {
               intersectsViewport,
               fullyVisible,
               clipped: !fullyVisible,
-              clippingAncestorIds: this.clippingAncestorIds(id),
+              clippingAncestorIds: fullyVisible ? [] : this.clippingAncestorIds(id),
             },
           }];
         }));
