@@ -118,7 +118,7 @@
     "id": "inline-block-flow",
     "title": "Inline-block run and display none",
     "category": "block-inline",
-    "expectedBehavior": "Inline-block siblings share a line and display:none contributes neither rendering nor layout space."
+    "expectedBehavior": "Inline siblings use their intrinsic text width, inline-block siblings share a line, and display:none contributes neither rendering nor layout space."
   },
   {
     "id": "multiline-wrapping",

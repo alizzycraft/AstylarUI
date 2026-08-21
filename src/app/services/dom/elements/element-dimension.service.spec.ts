@@ -296,6 +296,43 @@ describe('ElementDimensionService', () => {
     expect(result.height).toBe(44);
   });
 
+  it('does not impose a legacy minimum on short inline text', () => {
+    const style: StyleRule = {
+      selector: '#short-inline', display: 'inline', fontSize: '14px', lineHeight: '21px',
+    };
+    const service = new ElementDimensionService(
+      { calculateTextDimensions: () => ({ width: 32.53125, height: 21, lineHeight: 21 }) } as never,
+      { parseTextProperties: () => ({ fontSize: 14, lineHeight: 1.5 }) } as never,
+      new DOMAncestryService(),
+    );
+    const parent = { name: 'root-body' } as Mesh;
+    const dom = {
+      context: {
+        elementDimensions: new Map([['root-body', {
+          width: 800, height: 600, padding: { top: 0, right: 0, bottom: 0, left: 0 },
+        }]]),
+        elementStyles: new Map(),
+      },
+    } as unknown as BabylonDOM;
+    const render = {
+      actions: { style: {
+        getElementTypeDefaults: () => ({ display: 'inline' }),
+        findStyleForElement: () => style,
+      } },
+    } as unknown as BabylonRender;
+
+    const result = service.calculateDimensions(
+      dom,
+      render,
+      { id: 'short-inline', type: 'strong', textContent: 'hello' },
+      style,
+      parent,
+      [style],
+    );
+
+    expect(result.width).toBe(32.53125);
+  });
+
   it('derives textarea auto height from rows and line height', () => {
     const textRendering = {
       calculateTextDimensions: () => ({ width: 100, height: 24, lineHeight: 24 }),

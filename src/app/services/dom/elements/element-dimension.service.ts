@@ -521,10 +521,6 @@ export class ElementDimensionService {
             finalWidth = Math.max(finalWidth, 170);
         }
 
-        if (element.type !== 'input' && element.type !== 'button') {
-            finalWidth = Math.max(finalWidth, 40);
-        }
-
         return finalWidth;
     }
 
