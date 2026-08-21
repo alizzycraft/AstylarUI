@@ -201,10 +201,21 @@ export class MultiLineTextRendererService {
   ): TextLine[] {
     const lines: TextLine[] = [];
     const words = text.split(' ');
+    const segments = words.flatMap((word, wordIndex) => {
+      // A visible hyphen is a normal CSS line-breaking opportunity. Keep the
+      // hyphen on the preceding segment and remember that segments from the
+      // same word must not gain a space when they remain on one line.
+      const hyphenSegments = word.match(/[^-]+-?|-/g) ?? [word];
+      return hyphenSegments.map((segment, segmentIndex) => ({
+        text: segment,
+        separator: wordIndex > 0 && segmentIndex === 0 ? ' ' : '',
+      }));
+    });
     let currentLine = '';
 
-    for (const word of words) {
-      const testLine = currentLine + (currentLine ? ' ' : '') + word;
+    for (const segment of segments) {
+      const separator = currentLine ? segment.separator : '';
+      const testLine = currentLine + separator + segment.text;
       const metrics = ctx.measureText(testLine);
       const width = metrics.width;
 
@@ -217,11 +228,11 @@ export class MultiLineTextRendererService {
           width: lineWidth,
           y: 0 // Will be calculated later
         });
-        currentLine = word;
+        currentLine = segment.text;
 
         // Handle word breaking if single word is too long
         if (style.wordWrap === 'break-word' || style.wordWrap === 'anywhere') {
-          const brokenWords = this.breakLongWord(word, maxWidth, ctx);
+          const brokenWords = this.breakLongWord(segment.text, maxWidth, ctx);
           if (brokenWords.length > 1) {
             // Add all but the last broken word as complete lines
             for (let i = 0; i < brokenWords.length - 1; i++) {

@@ -132,6 +132,7 @@ export class FlexService {
     const positionedChildren = children.filter(
       child => this.classifyFlexChild(childStyles.get(child)) === 'positioned',
     );
+    const isRow = flexDirection === 'row' || flexDirection === 'row-reverse';
 
     // Get child items with their styles and dimensions - using FlexLayoutService
     const childItems: FlexItem[] = flowChildren.map(child => {
@@ -139,6 +140,33 @@ export class FlexService {
       const style = childStyles.get(child);
       const margin = this.parseMarginBox(style);
       const autoMargin = this.parseAutoMarginBox(style);
+      const authoredMinWidth = style?.minWidth
+        ? this.resolveFlexItemLength(
+          style.minWidth, containerWidth, viewportDimensions, style.fontSize,
+        )
+        : undefined;
+      const authoredMinHeight = style?.minHeight
+        ? this.resolveFlexItemLength(
+          style.minHeight, containerHeight, viewportDimensions, style.fontSize,
+        )
+        : undefined;
+      const minimumBorderBox = this.minimumBorderBox(style);
+      const overflowAllowsAutoMinimum = !['auto', 'scroll', 'hidden', 'clip']
+        .includes(style?.overflow?.toLowerCase() ?? 'visible');
+      const automaticMinWidth = isRow && overflowAllowsAutoMinimum &&
+          (child.textContent || child.type === 'button' || child.type === 'input')
+        ? this.calculateIntrinsicMinWidth(child, style, styles, dom, render)
+        : 0;
+      const minWidthValue = Math.max(
+        authoredMinWidth ?? automaticMinWidth,
+        minimumBorderBox.width,
+      );
+      const minHeightValue = Math.max(authoredMinHeight ?? 0, minimumBorderBox.height);
+      const minWidth = minWidthValue > 0 ? minWidthValue : undefined;
+      const minHeight = minHeightValue > 0 ? minHeightValue : undefined;
+      const effectiveCrossAlignment = style?.alignSelf && style.alignSelf !== 'auto'
+        ? style.alignSelf
+        : alignItems;
 
 
 
@@ -171,6 +199,12 @@ export class FlexService {
             style.fontSize,
           );
         }
+      } else if (!isRow && effectiveCrossAlignment === 'stretch') {
+        width = Math.max(
+          minWidth ?? 0,
+          containerWidth - padding.left - padding.right - margin.left - margin.right,
+          0,
+        );
       } else if (child.type === 'button' || child.type === 'input' || child.textContent) {
         // Auto main sizes for controls and direct text are content-based.
         width = this.calculateIntrinsicWidth(child, style, styles, dom, render);
@@ -180,7 +214,6 @@ export class FlexService {
       } else {
         // Default width if not specified and not an intrinsic element
         // In a row, divide space equally. In a column, use full width.
-        const isRow = flexDirection === 'row' || flexDirection === 'row-reverse';
         width = isRow ? (containerWidth / flowChildren.length) : containerWidth;
 
       }
@@ -221,21 +254,6 @@ export class FlexService {
 
 
 
-      const authoredMinWidth = style?.minWidth
-        ? this.resolveFlexItemLength(
-          style.minWidth, containerWidth, viewportDimensions, style.fontSize,
-        )
-        : undefined;
-      const authoredMinHeight = style?.minHeight
-        ? this.resolveFlexItemLength(
-          style.minHeight, containerHeight, viewportDimensions, style.fontSize,
-        )
-        : undefined;
-      const minimumBorderBox = this.minimumBorderBox(style);
-      const minWidthValue = Math.max(authoredMinWidth ?? 0, minimumBorderBox.width);
-      const minHeightValue = Math.max(authoredMinHeight ?? 0, minimumBorderBox.height);
-      const minWidth = minWidthValue > 0 ? minWidthValue : undefined;
-      const minHeight = minHeightValue > 0 ? minHeightValue : undefined;
       if (minWidth !== undefined) width = Math.max(width, minWidth);
       if (style?.maxWidth) {
         width = Math.min(width, this.resolveFlexItemLength(
@@ -253,6 +271,22 @@ export class FlexService {
       const { flexGrow, flexShrink, flexBasis } = flexProperties;
       const alignSelf = style?.alignSelf || 'auto';
       const order = parseFloat(style?.order || '0') || 0;
+      const intrinsicHeightResolver = heightWasIntrinsic
+        ? (usedWidth: number) => {
+          let resolved = this.calculateIntrinsicTextHeight(
+            child, style, styles, usedWidth, dom, render,
+          ) ?? this.calculateIntrinsicContainerHeight(
+            child, style, styles, dom, render, usedWidth,
+          ) ?? height;
+          if (minHeight !== undefined) resolved = Math.max(resolved, minHeight);
+          if (style?.maxHeight) {
+            resolved = Math.min(resolved, this.resolveFlexItemLength(
+              style.maxHeight, containerHeight, viewportDimensions, style.fontSize,
+            ));
+          }
+          return resolved;
+        }
+        : undefined;
 
       // Debug flex-shrink parsing for fs- items
       if (child.id?.startsWith('fs-')) {
@@ -276,6 +310,7 @@ export class FlexService {
         flexShrink,
         flexBasis,
         alignSelf,
+        intrinsicHeightResolver,
         order,
         heightWasIntrinsic,
       };
@@ -284,7 +319,6 @@ export class FlexService {
 
 
     // Use FlexLayoutService for advanced calculations
-    const isRow = flexDirection === 'row' || flexDirection === 'row-reverse';
     const availableMainSpace = isRow
       ? containerWidth - padding.left - padding.right
       : containerHeight - padding.top - padding.bottom;
@@ -486,6 +520,31 @@ export class FlexService {
     return finalWidth;
   }
 
+  private calculateIntrinsicMinWidth(
+    element: DOMElement,
+    style: StyleRule | undefined,
+    styles: StyleRule[],
+    dom?: BabylonDOM,
+    render?: BabylonRender,
+  ): number {
+    if (element.type === 'input') {
+      return this.calculateIntrinsicWidth(element, style, styles, dom, render);
+    }
+    const text = element.type === 'button'
+      ? element.value || element.textContent || 'Button'
+      : element.textContent || '';
+    if (!text) return this.minimumBorderBox(style).width;
+    const effectiveStyle = { ...this.getInheritedTextStyle(element, styles, dom, render), ...style };
+    const textStyle = this.textStyleParser.parseTextProperties(effectiveStyle);
+    const whiteSpace = effectiveStyle.whiteSpace?.toLowerCase();
+    const pieces = whiteSpace === 'nowrap' || whiteSpace === 'pre'
+      ? [text]
+      : text.replace(/-/g, '- ').split(/\s+/).filter(Boolean);
+    const textWidth = Math.max(0, ...pieces.map((piece) =>
+      this.textRenderingService.calculateTextDimensions(piece, textStyle).width));
+    return textWidth + this.minimumBorderBox(style).width;
+  }
+
   private isButtonLikeInput(element: DOMElement): boolean {
     return element.type === 'input' &&
       ['button', 'submit', 'reset'].includes((element.inputType ?? '').toLowerCase());
@@ -527,7 +586,8 @@ export class FlexService {
       return rows * lineHeight +
         padding.top + padding.bottom + borderWidth * 2;
     }
-    return Math.max(dimensions.height, lineHeight) +
+    const wrappedLineHeight = Math.max(1, dimensions.lines?.length ?? 1) * lineHeight;
+    return Math.max(dimensions.height, wrappedLineHeight) +
       padding.top + padding.bottom + borderWidth * 2;
   }
 
@@ -1384,7 +1444,9 @@ export class FlexService {
       items,
       flexContainer,
       lineAvailableSpace
-    );
+    ).map((item) => isRow && item.heightWasIntrinsic && item.intrinsicHeightResolver
+      ? { ...item, height: item.intrinsicHeightResolver(item.width) }
+      : item);
 
     sizedItems.forEach(item => {
 

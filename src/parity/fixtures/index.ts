@@ -49,6 +49,7 @@ import { viewportUnitsFixture } from './viewport-units.fixture';
 import { flexViewportHeightFixture } from './flex-viewport-height.fixture';
 import { flexMinMainSizeFixture } from './flex-min-main-size.fixture';
 import { flexStretchMinCrossSizeFixture } from './flex-stretch-min-cross-size.fixture';
+import { flexIntrinsicWrapFixture } from './flex-intrinsic-wrap.fixture';
 import { styledTextareaFixture } from './styled-textarea.fixture';
 import { relativeBlockFlowFixture } from './relative-block-flow.fixture';
 import { flexOrderSelfFixture } from './flex-order-self.fixture';
@@ -214,6 +215,7 @@ const fixtures: readonly ParityFixture[] = [
   flexViewportHeightFixture,
   flexMinMainSizeFixture,
   flexStretchMinCrossSizeFixture,
+  flexIntrinsicWrapFixture,
   styledTextareaFixture,
   relativeBlockFlowFixture,
   flexOrderSelfFixture,

@@ -32,6 +32,7 @@ export interface FlexItem {
   flexBasis: number | 'auto' | string;
   alignSelf: string;
   heightWasIntrinsic?: boolean;
+  intrinsicHeightResolver?: (usedWidth: number) => number;
   order: number;
 }
 

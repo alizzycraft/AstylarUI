@@ -496,6 +496,20 @@ describe('FlexService', () => {
     })).toEqual({ width: 54, height: 28 });
   });
 
+  it('uses the longest breakable segment as a text flex item automatic minimum', () => {
+    const service = new FlexService(
+      new FlexLayoutService(),
+      { calculateTextDimensions: (text: string) => ({ width: text.length * 10 }) } as never,
+      { parseTextProperties: () => ({}) } as never,
+    );
+
+    expect(service['calculateIntrinsicMinWidth'](
+      { type: 'strong', textContent: 'text-to-speech.txt' },
+      { selector: 'strong' },
+      [],
+    )).toBe(100);
+  });
+
   it('measures a height-auto grid from fixed row tracks and gaps', () => {
     const service = new FlexService(new FlexLayoutService(), {} as never, {} as never);
     const render = {

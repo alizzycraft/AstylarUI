@@ -308,6 +308,12 @@
     "expectedBehavior": "A stretched column item keeps its authored minimum and padding/border minimum when cross-axis space is exhausted, overflowing from the leading margin edge."
   },
   {
+    "id": "flex-intrinsic-wrap",
+    "title": "Flex intrinsic minimums and stretched text wrapping",
+    "category": "flexbox",
+    "expectedBehavior": "Row flex text items preserve their automatic min-content width, while column flex text items stretch to the cross-axis width and recompute their wrapped intrinsic height."
+  },
+  {
     "id": "styled-textarea",
     "title": "Styled semantic textarea control",
     "category": "forms-interactive",

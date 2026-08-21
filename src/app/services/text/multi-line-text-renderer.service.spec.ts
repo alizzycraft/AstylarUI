@@ -46,6 +46,21 @@ describe('MultiLineTextRendererService', () => {
     expect(lines[0].width).toBeGreaterThan(0);
   });
 
+  it('uses visible hyphens as normal line-breaking opportunities', () => {
+    const style: TextStyleProperties = {
+      fontFamily: 'Arial', fontSize: 12, fontWeight: 'normal', fontStyle: 'normal',
+      color: '#000000', textAlign: 'left', verticalAlign: 'baseline', lineHeight: 1.5,
+      letterSpacing: 0, wordSpacing: 0, whiteSpace: 'normal', wordWrap: 'normal',
+      textOverflow: 'clip', textDecoration: 'none', textTransform: 'none'
+    };
+
+    const lines = service.wrapText('text-to-speech.txt', 70, style);
+
+    expect(lines.length).toBe(2);
+    expect(lines.map((line) => line.text).join('')).toBe('text-to-speech.txt');
+    expect(lines.every((line) => line.width <= 70)).toBeTrue();
+  });
+
   it('should handle nowrap white-space correctly', () => {
     const style: TextStyleProperties = {
       fontFamily: 'Arial',
