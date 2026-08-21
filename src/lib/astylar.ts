@@ -399,6 +399,7 @@ class AstylarRenderer {
     if (semanticBridge) this.semantics.set(scene, semanticBridge);
 
     let hasCompletedRender = false;
+    let presentationSuspended = false;
     const session = new AstylarRenderSession(
       scene,
       siteData,
@@ -423,6 +424,7 @@ class AstylarRenderer {
           return;
         }
         const generation = this.pluginHost.beginGeneration(planningReasons);
+        presentationSuspended = true;
         try {
           const textState = hasCompletedRender
             ? this.inputElementService.captureTextControlStates()
@@ -438,6 +440,10 @@ class AstylarRenderer {
           // initial render), and let Babylon skip a no-op size assignment.
           if (!hasCompletedRender || reasons.includes('resize')) {
             engine.resize();
+            // Resizing clears the backing store immediately. Repaint the
+            // already-ready tree before replacing it so its frame remains
+            // visible while the rebuilt resources compile.
+            if (hasCompletedRender && !scene.isDisposed) scene.render();
           }
           this.imageResources.retain(
             scene,
@@ -487,12 +493,19 @@ class AstylarRenderer {
             },
             this.imageResources.getSceneTextures(scene),
           );
-          // A backing-store resize clears the presented canvas immediately.
-          // Paint the rebuilt tree in the same task so the browser never gets
-          // an opportunity to composite the clear frame while settlement waits
-          // for optional asynchronous generation work.
-          if (!scene.isDisposed) scene.render();
           await generation.whenSettled();
+          if (!scene.isDisposed) {
+            let disposeObserver: ReturnType<typeof scene.onDisposeObservable.addOnce> | undefined;
+            const disposed = new Promise<void>((resolve) => {
+              disposeObserver = scene.onDisposeObservable.addOnce(() => resolve());
+            });
+            try {
+              await Promise.race([scene.whenReadyAsync(), disposed]);
+            } finally {
+              if (disposeObserver) scene.onDisposeObservable.remove(disposeObserver);
+            }
+          }
+          if (!scene.isDisposed) scene.render();
           visualResourceTransaction.commitOwnership();
           visualPlan.commit({ reused: reusedVisualMeshes });
           previousVisualIdentityData = this.snapshotVisualIdentityData(currentSiteData);
@@ -500,6 +513,8 @@ class AstylarRenderer {
         } catch (error) {
           this.pluginHost.invalidateCurrentGeneration();
           throw error;
+        } finally {
+          presentationSuspended = false;
         }
       },
     );
@@ -665,7 +680,7 @@ class AstylarRenderer {
 
     // Start render loop
     engine.runRenderLoop(() => {
-      scene.render();
+      if (!presentationSuspended) scene.render();
     });
 
     // A canvas can resize without a window event (for example, a flex/grid

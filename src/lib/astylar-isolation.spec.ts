@@ -140,6 +140,35 @@ describe('Astylar simultaneous surface isolation', () => {
     }
   });
 
+  it('does not present rebuilt scene resources before they are ready', async () => {
+    const canvas = document.createElement('canvas');
+    document.body.append(canvas);
+    const surface = TestBed.inject(Astylar).mount(canvas, site('Before update'));
+
+    try {
+      await surface.whenSettled();
+      let releaseReadiness!: () => void;
+      const readiness = new Promise<void>((resolve) => { releaseReadiness = resolve; });
+      const whenReady = spyOn(surface.scene, 'whenReadyAsync').and.returnValue(readiness);
+      const render = spyOn(surface.scene, 'render').and.callThrough();
+
+      const update = surface.update(site('After update'));
+      await new Promise((resolve) => setTimeout(resolve, 50));
+
+      expect(whenReady).toHaveBeenCalledOnceWith();
+      const suspendedRenderCount = render.calls.count();
+      await new Promise((resolve) => requestAnimationFrame(() => resolve(undefined)));
+      expect(render.calls.count()).toBe(suspendedRenderCount);
+
+      releaseReadiness();
+      await update;
+      expect(render.calls.count()).toBeGreaterThan(suspendedRenderCount);
+    } finally {
+      surface.dispose();
+      canvas.remove();
+    }
+  });
+
   it('treats a class-authored focus color as the control focus indicator', async () => {
     const canvas = document.createElement('canvas');
     document.body.append(canvas);

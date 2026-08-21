@@ -90,6 +90,62 @@ async function waitFor(check, description, timeoutMs = 20_000) {
   throw new Error(`Timed out waiting for ${description}.${lastError ? ` ${String(lastError)}` : ''}`);
 }
 
+async function captureInputContinuity(page, targetId, nextValue, frameCount = 30) {
+  return await page.evaluate(async ({ targetId, nextValue, frameCount }) => {
+    const canvas = document.querySelector('astylar-surface canvas');
+    const target = document.querySelector(`[data-astylar-id="${targetId}"]`);
+    if (!(canvas instanceof HTMLCanvasElement)) throw new Error('AstylarUI canvas is missing.');
+    if (!(target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement)) {
+      throw new Error(`Semantic input ${targetId} is missing.`);
+    }
+
+    const probe = document.createElement('canvas');
+    probe.width = 96;
+    probe.height = 60;
+    const context = probe.getContext('2d', { willReadFrequently: true });
+    if (!context) throw new Error('Canvas continuity probe could not create a 2D context.');
+
+    const frames = [];
+    await new Promise((resolve) => {
+      const sample = () => {
+        context.clearRect(0, 0, probe.width, probe.height);
+        context.drawImage(canvas, 0, 0, probe.width, probe.height);
+        const { data } = context.getImageData(0, 0, probe.width, probe.height);
+        let edgeEnergy = 0;
+        let comparisons = 0;
+        for (let y = 0; y < probe.height; y += 1) {
+          for (let x = 0; x < probe.width; x += 1) {
+            const offset = (y * probe.width + x) * 4;
+            if (x + 1 < probe.width) {
+              const right = offset + 4;
+              edgeEnergy += Math.abs(data[offset] - data[right]) +
+                Math.abs(data[offset + 1] - data[right + 1]) +
+                Math.abs(data[offset + 2] - data[right + 2]);
+              comparisons += 3;
+            }
+            if (y + 1 < probe.height) {
+              const below = offset + probe.width * 4;
+              edgeEnergy += Math.abs(data[offset] - data[below]) +
+                Math.abs(data[offset + 1] - data[below + 1]) +
+                Math.abs(data[offset + 2] - data[below + 2]);
+              comparisons += 3;
+            }
+          }
+        }
+        frames.push(edgeEnergy / comparisons);
+        if (frames.length === 3) {
+          target.value = nextValue;
+          target.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+        if (frames.length < frameCount) requestAnimationFrame(sample);
+        else resolve();
+      };
+      requestAnimationFrame(sample);
+    });
+    return frames;
+  }, { targetId, nextValue, frameCount });
+}
+
 async function runBrowserSmoke() {
   browser = await chromium.launch({
     channel: process.env['ASTYLAR_TTS_BROWSER_CHANNEL'] ?? 'chrome',
@@ -134,6 +190,22 @@ async function runBrowserSmoke() {
   }
 
   const speech = page.getByRole('textbox', { name: 'Text to speak' });
+  const continuityFrames = await captureInputContinuity(
+    page,
+    'speech-text',
+    'Frame continuity probe',
+  );
+  const baselineEnergy = continuityFrames.slice(0, 2)
+    .reduce((total, value) => total + value, 0) / 2;
+  const minimumUpdateEnergy = Math.min(...continuityFrames.slice(4));
+  assert.ok(
+    minimumUpdateEnergy >= baselineEnergy * 0.5,
+    `Interactive reflow presented a cleared canvas frame (${JSON.stringify({
+      baselineEnergy,
+      minimumUpdateEnergy,
+      continuityFrames,
+    })}).`,
+  );
   await speech.focus();
   await page.keyboard.press('Control+A');
   const generatedText = 'AstylarUI brings familiar web application patterns into a Babylon-rendered space.';
