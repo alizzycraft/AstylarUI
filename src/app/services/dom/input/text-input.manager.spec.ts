@@ -2,6 +2,16 @@ import { CursorDirection, InputType, TextInput } from '../../../types/input-type
 import { TextInputManager } from './text-input.manager';
 
 describe('TextInputManager', () => {
+  it('treats normal and pre-wrap textareas as horizontally wrapped', () => {
+    const manager = Object.create(TextInputManager.prototype) as TextInputManager;
+    const wrapped = createTextInput('hello', 5);
+    wrapped.style = { selector: '#textarea-1', whiteSpace: 'pre-wrap' };
+    expect((manager as any).isHorizontallyWrappedTextarea(wrapped)).toBeTrue();
+
+    wrapped.element.wrap = 'off';
+    expect((manager as any).isHorizontallyWrappedTextarea(wrapped)).toBeFalse();
+  });
+
   it('masks password display text without changing the stored value', () => {
     const manager = Object.create(TextInputManager.prototype) as TextInputManager;
     const textInput = createTextInput('secret', 6);

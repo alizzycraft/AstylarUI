@@ -316,7 +316,12 @@ export class TextInputManager {
             const inputWidth = textInput.mesh.getBoundingInfo().boundingBox.extendSize.x * 2;
             const contentInsets = this.getHorizontalContentInsets(textStyle, pixelScale);
             const availableWidth = Math.max(0, inputWidth - contentInsets.left - contentInsets.right);
-            const maxTextWidth = isTextarea ? availableWidth / pixelScale : undefined;
+            // Browsers retain a minimal wrapping opportunity when textarea
+            // padding consumes the nominal content box. Zero would disable our
+            // wrapper entirely and make the value disappear at narrow widths.
+            const maxTextWidth = isTextarea
+                ? Math.max(1, availableWidth / pixelScale)
+                : undefined;
 
 
 
@@ -363,7 +368,9 @@ export class TextInputManager {
             const paddedTextureHeight = textureHeight + verticalOrigin
                 + Math.max(0, verticalInsets.bottom - borderSize);
             const isVerticallyClipped = isTextarea && paddedTextureHeight > clientHeight;
-            const visibleWidth = Math.min(textureWidth, availableWidth);
+            const visibleWidth = isTextarea && availableWidth <= pixelScale
+                ? textureWidth
+                : Math.min(textureWidth, availableWidth);
             const visibleHeight = isVerticallyClipped ? contentHeight : textureHeight;
 
             // A clipped plane is the control's content viewport. UV scaling
@@ -487,8 +494,12 @@ export class TextInputManager {
         const currentMeshWidth = textInput.textMesh.getBoundingInfo().boundingBox.maximum.x - textInput.textMesh.getBoundingInfo().boundingBox.minimum.x;
         const currentMeshHeight = textInput.textMesh.getBoundingInfo().boundingBox.maximum.y - textInput.textMesh.getBoundingInfo().boundingBox.minimum.y;
 
-        // Only scroll if text is wider than available area
-        if (fullTextureWidth <= availableWidth) {
+        const horizontallyWrappedTextarea = this.isHorizontallyWrappedTextarea(textInput);
+
+        // Soft-wrapped textareas own vertical scrolling only. Applying a
+        // horizontal caret offset to a zero-width content box sampled a blank
+        // part of the texture after the value had wrapped to one glyph per row.
+        if (horizontallyWrappedTextarea || fullTextureWidth <= availableWidth) {
             textInput.scrollOffset = 0;
         } else {
             // Calculate scroll offset to keep cursor in view
@@ -585,6 +596,12 @@ export class TextInputManager {
         // Update interaction registry
         this.textInteractionRegistry.updateScrollOffset(textInput.element.id!, textInput.scrollOffset || 0);
         this.textInteractionRegistry.updateScrollTop(textInput.element.id!, textInput.scrollTop || 0);
+    }
+
+    private isHorizontallyWrappedTextarea(textInput: TextInput): boolean {
+        return textInput.type === InputType.Textarea &&
+            textInput.element.wrap !== 'off' &&
+            !['nowrap', 'pre'].includes(textInput.style.whiteSpace ?? 'normal');
     }
 
     /** Applies wheel deltas without snapping the viewport back to the caret. */
