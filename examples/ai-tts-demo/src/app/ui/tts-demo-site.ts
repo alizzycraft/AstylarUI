@@ -229,7 +229,7 @@ const styles: StyleRule[] = [
   { selector: '.history-item', position: 'relative', height: '133px', minHeight: '128px', margin: '0 8px', padding: '12px 16px', background: '#161b22', borderWidth: '1px', borderStyle: 'solid', borderColor: '#21262d', borderRadius: '6px' },
   { selector: '.history-item.selected', borderColor: '#1f6feb' },
   { selector: '.history-item small', display: 'flex', justifyContent: 'space-between', height: '16px', margin: '3px 0 4px', lineHeight: '16px', color: '#7d8590' },
-  { selector: '.history-item p', margin: '16px 0 0 0' },
+  { selector: '.history-item p', margin: '18px 0 0 0' },
   { selector: '.history-item footer', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '10px', margin: '28px 0 0 0', color: '#7d8590' },
   { selector: '.history-item footer span', margin: '0 auto 0 0' },
   { selector: '.history-item button', width: '11px', height: '21px', background: 'transparent', color: '#e6edf3', borderWidth: '0' },
