@@ -460,6 +460,42 @@ describe('FlexService', () => {
     expect(result[0].size.height).toBe(216);
   });
 
+  it('preserves a cross-axis minimum and leading margin when stretch space is negative', () => {
+    const service = new FlexService(new FlexLayoutService(), {} as never, {} as never);
+    const item: FlexItem = {
+      element: { type: 'section', id: 'minimum-box' },
+      style: { selector: '#minimum-box' },
+      width: 0, height: 80, baseWidth: 0, baseHeight: 80, minWidth: 50,
+      margin: { top: 0, right: 16, bottom: 0, left: 16 },
+      flexGrow: 0, flexShrink: 1, flexBasis: 80, alignSelf: 'auto', order: 0,
+    };
+    const padding = { top: 0, right: 0, bottom: 0, left: 0 };
+    const flexProps = {
+      flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'stretch',
+      flexWrap: 'nowrap', alignContent: 'stretch',
+    };
+    const container: FlexContainer = {
+      width: 0, height: 100, padding, ...flexProps,
+      gap: 0, rowGap: 0, columnGap: 0,
+    };
+
+    const result = service['calculateFlexLayout'](
+      [item], container.width, container.height, padding,
+      flexProps, {} as BabylonRender, container,
+    );
+
+    expect(result[0].size.width).toBe(50);
+    expect(result[0].position.x).toBe(41);
+  });
+
+  it('derives the minimum border box from padding and per-side borders', () => {
+    const service = new FlexService(new FlexLayoutService(), {} as never, {} as never);
+
+    expect(service['minimumBorderBox']({
+      selector: '#box', padding: '12px 24px', borderWidth: '1px 2px 3px 4px',
+    })).toEqual({ width: 54, height: 28 });
+  });
+
   it('measures a height-auto grid from fixed row tracks and gaps', () => {
     const service = new FlexService(new FlexLayoutService(), {} as never, {} as never);
     const render = {

@@ -302,6 +302,12 @@
     "expectedBehavior": "Negative free space is redistributed after an item freezes at its authored min-width."
   },
   {
+    "id": "flex-stretch-min-cross-size",
+    "title": "Flex stretch preserves cross-axis minimums",
+    "category": "flexbox",
+    "expectedBehavior": "A stretched column item keeps its authored minimum and padding/border minimum when cross-axis space is exhausted, overflowing from the leading margin edge."
+  },
+  {
     "id": "styled-textarea",
     "title": "Styled semantic textarea control",
     "category": "forms-interactive",

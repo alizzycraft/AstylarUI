@@ -221,16 +221,21 @@ export class FlexService {
 
 
 
-      const minWidth = style?.minWidth
+      const authoredMinWidth = style?.minWidth
         ? this.resolveFlexItemLength(
           style.minWidth, containerWidth, viewportDimensions, style.fontSize,
         )
         : undefined;
-      const minHeight = style?.minHeight
+      const authoredMinHeight = style?.minHeight
         ? this.resolveFlexItemLength(
           style.minHeight, containerHeight, viewportDimensions, style.fontSize,
         )
         : undefined;
+      const minimumBorderBox = this.minimumBorderBox(style);
+      const minWidthValue = Math.max(authoredMinWidth ?? 0, minimumBorderBox.width);
+      const minHeightValue = Math.max(authoredMinHeight ?? 0, minimumBorderBox.height);
+      const minWidth = minWidthValue > 0 ? minWidthValue : undefined;
+      const minHeight = minHeightValue > 0 ? minHeightValue : undefined;
       if (minWidth !== undefined) width = Math.max(width, minWidth);
       if (style?.maxWidth) {
         width = Math.min(width, this.resolveFlexItemLength(
@@ -1485,9 +1490,12 @@ export class FlexService {
               // For stretch, we should adjust the item height to fill the container height
               if (!item.style?.height || item.style.height === 'auto') {
                 const availableHeight = containerHeight - padding.top - padding.bottom;
-                item.height = availableHeight - item.margin.top - item.margin.bottom;
-
-                y = 0; // Center of container when stretched to full height
+                item.height = this.resolveStretchedCrossSize(
+                  item,
+                  true,
+                  availableHeight - item.margin.top - item.margin.bottom,
+                );
+                y = (containerHeight / 2) - padding.top - item.margin.top - (item.height / 2);
               } else {
                 // Item has explicit height, so it can't stretch - position at flex-start instead
                 y = (containerHeight / 2) - padding.top - item.margin.top - (item.height / 2);
@@ -1525,9 +1533,12 @@ export class FlexService {
             case 'stretch':
               // For stretch, we should adjust the item height to fill the line height
               if (!item.style?.height || item.style.height === 'auto') {
-                item.height = lineCrossSize - item.margin.top - item.margin.bottom;
-
-                y = (containerHeight / 2) - baseCrossPos - (lineCrossSize / 2);
+                item.height = this.resolveStretchedCrossSize(
+                  item,
+                  true,
+                  lineCrossSize - item.margin.top - item.margin.bottom,
+                );
+                y = (containerHeight / 2) - baseCrossPos - item.margin.top - (item.height / 2);
               } else {
                 // Item has explicit height, so it can't stretch - position at flex-start instead
                 y = (containerHeight / 2) - baseCrossPos - item.margin.top - (item.height / 2);
@@ -1578,9 +1589,12 @@ export class FlexService {
               // For stretch, we should adjust the item width to fill the container width
               if (!item.style?.width || item.style.width === 'auto') {
                 const availableWidth = containerWidth - padding.left - padding.right;
-                item.width = availableWidth - item.margin.left - item.margin.right;
-
-                x = 0; // Center of container when stretched to full width
+                item.width = this.resolveStretchedCrossSize(
+                  item,
+                  false,
+                  availableWidth - item.margin.left - item.margin.right,
+                );
+                x = -(containerWidth / 2) + padding.left + item.margin.left + (item.width / 2);
               } else {
                 // Item has explicit width, so it can't stretch - position at flex-start instead
                 x = -(containerWidth / 2) + padding.left + item.margin.left + (item.width / 2);
@@ -1618,9 +1632,12 @@ export class FlexService {
             case 'stretch':
               // For stretch, we should adjust the item width to fill the line width
               if (!item.style?.width || item.style.width === 'auto') {
-                item.width = lineCrossSize - item.margin.left - item.margin.right;
-
-                x = -(containerWidth / 2) + baseCrossPos + (lineCrossSize / 2);
+                item.width = this.resolveStretchedCrossSize(
+                  item,
+                  false,
+                  lineCrossSize - item.margin.left - item.margin.right,
+                );
+                x = -(containerWidth / 2) + baseCrossPos + item.margin.left + (item.width / 2);
               } else {
                 // Item has explicit width, so it can't stretch - position at flex-start instead
                 x = -(containerWidth / 2) + baseCrossPos + item.margin.left + (item.width / 2);
@@ -1646,5 +1663,23 @@ export class FlexService {
     });
 
     return layout;
+  }
+
+  private resolveStretchedCrossSize(
+    item: FlexItem,
+    isRow: boolean,
+    availableSize: number,
+  ): number {
+    const minimum = isRow ? item.minHeight ?? 0 : item.minWidth ?? 0;
+    return Math.max(minimum, availableSize, 0);
+  }
+
+  private minimumBorderBox(style: StyleRule | undefined): { width: number; height: number } {
+    const padding = this.parsePadding(style?.padding);
+    const border = this.parsePadding(style?.borderWidth);
+    return {
+      width: padding.left + padding.right + border.left + border.right,
+      height: padding.top + padding.bottom + border.top + border.bottom,
+    };
   }
 }
