@@ -909,16 +909,60 @@ class AstylarRenderer {
     this.setElementPseudoState(elementId, 'focus', focused);
   }
 
+  /** Resolves the pseudo rules registered for an authored ID, type, or simple class. */
+  private getElementInteractionStyles(elementId: string): {
+    normal: import('../app/types/style-rule').StyleRule;
+    hover?: import('../app/types/style-rule').StyleRule;
+    active?: import('../app/types/style-rule').StyleRule;
+    focus?: import('../app/types/style-rule').StyleRule;
+  } | undefined {
+    const registered = this.elementManager.elementStylesMap.get(elementId);
+    const input = this.inputElementService.getInputElement(elementId);
+    if (!input) return registered;
+
+    const candidates = [
+      registered,
+      this.elementManager.elementStylesMap.get(input.element.type),
+      ...(input.element.class ?? '')
+        .split(/\s+/)
+        .filter(Boolean)
+        .flatMap((className) => [
+          this.elementManager.elementStylesMap.get(`.${className}`),
+          this.elementManager.elementStylesMap.get(className),
+        ]),
+    ].filter((candidate): candidate is NonNullable<typeof candidate> => !!candidate);
+    if (candidates.length === 0) return undefined;
+
+    const findPseudo = (state: 'hover' | 'active' | 'focus') =>
+      candidates.find((candidate) => candidate[state])?.[state];
+    return {
+      normal: input.style ?? registered?.normal ?? {},
+      hover: findPseudo('hover'),
+      active: findPseudo('active'),
+      focus: findPseudo('focus'),
+    };
+  }
+
   private hasAuthoredFocusPaint(elementId: string): boolean {
-    const styles = this.elementManager.elementStylesMap.get(elementId);
+    const styles = this.getElementInteractionStyles(elementId);
     if (!styles?.focus) return false;
-    const merged = { ...styles.normal, ...styles.focus };
-    return !!merged.background &&
-      this.styleService.parseBackgroundColor(merged.background)?.type === 'color';
+    const focusBackground = styles.focus.background
+      ? this.styleService.parseBackgroundColor(styles.focus.background)
+      : undefined;
+    const focusBorder = styles.focus.borderColor
+      ? this.styleService.parseBackgroundColor(styles.focus.borderColor)
+      : undefined;
+    // An explicitly authored focus color remains the control's indicator even
+    // when another live class (for example `.playing`) currently resolves to
+    // the same color.
+    const hasFocusTextColor = !!styles.focus.color;
+    return focusBackground?.type === 'color' ||
+      focusBorder?.type === 'color' ||
+      hasFocusTextColor;
   }
 
   private shouldShowDefaultFocusIndicator(elementId: string): boolean {
-    const normal = this.elementManager.elementStylesMap.get(elementId)?.normal;
+    const normal = this.getElementInteractionStyles(elementId)?.normal;
     return this.styleService.parseOpacity(normal?.opacity) > 0 &&
       !this.hasAuthoredFocusPaint(elementId);
   }
@@ -929,7 +973,7 @@ class AstylarRenderer {
     enabled: boolean,
   ): void {
     const mesh = this.elementManager.elementsMap.get(elementId);
-    const styles = this.elementManager.elementStylesMap.get(elementId);
+    const styles = this.getElementInteractionStyles(elementId);
     if (!mesh || !styles?.[state]) return;
     mesh.metadata = mesh.metadata ?? {};
     const stateKey = state === 'active' ? 'astylarActiveState' : 'astylarFocusState';
@@ -1028,7 +1072,7 @@ class AstylarRenderer {
       return;
     }
 
-    const normalColor = this.elementManager.elementStylesMap.get(elementId)?.normal.color;
+    const normalColor = this.getElementInteractionStyles(elementId)?.normal.color;
     if (!style.color || style.color === normalColor) {
       labelMesh.material = labelMesh.metadata.astylarInteractionBaseMaterial;
       return;

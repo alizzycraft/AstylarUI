@@ -139,6 +139,51 @@ describe('Astylar simultaneous surface isolation', () => {
       canvas.remove();
     }
   });
+
+  it('treats a class-authored focus color as the control focus indicator', async () => {
+    const canvas = document.createElement('canvas');
+    document.body.append(canvas);
+    const astylar = TestBed.inject(Astylar);
+    const surface = astylar.mount(canvas, {
+      root: {
+        children: [{
+          type: 'button', id: 'play', class: 'transport-play', value: 'Play',
+        }],
+      },
+      styles: [
+        { selector: '.transport-play', color: '#e6edf3' },
+        { selector: '.transport-play:focus', color: '#58a6ff' },
+      ],
+    });
+
+    try {
+      await surface.whenSettled();
+      const semanticButton = document.querySelector<HTMLElement>(
+        '[data-astylar-id="play"]',
+      );
+      expect(semanticButton).not.toBeNull();
+      semanticButton?.focus();
+      await Promise.resolve();
+      expect(surface.scene.meshes.some((mesh) =>
+        mesh.name.startsWith('focusIndicator_play_'))).toBeFalse();
+      await surface.update({
+        root: {
+          children: [{
+            type: 'button', id: 'play', class: 'transport-play playing', value: 'Pause',
+          }],
+        },
+        styles: [
+          { selector: '.transport-play', color: '#e6edf3' },
+          { selector: '.transport-play:focus, .transport-play.playing', color: '#58a6ff' },
+        ],
+      });
+      expect(surface.scene.meshes.some((mesh) =>
+        mesh.name.startsWith('focusIndicator_play_') && mesh.isVisible)).toBeFalse();
+    } finally {
+      surface.dispose();
+      canvas.remove();
+    }
+  });
 });
 
 function site(label: string): SiteData {
