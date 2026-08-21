@@ -8,8 +8,9 @@ import process from 'node:process';
 import { chromium } from 'playwright-core';
 import { PNG } from 'pngjs';
 import { ssim } from 'ssim.js';
-import { acceptance, measurementIds, reference, sharpnessRegions, states, viewports } from './benchmark.config.mjs';
+import { acceptance, measurementIds, reference, sharpnessRegions, states, textMeasurementIds, viewports } from './benchmark.config.mjs';
 import { cropRgba, compareSharpness, evaluateSharpness } from '../parity/sharpness-metrics.mjs';
+import { compareScrolling } from './scrolling-metrics.mjs';
 
 const root = process.cwd();
 const demo = path.join(root, 'examples', 'ai-tts-demo');
@@ -151,7 +152,15 @@ async function captureReference(context, state, viewport, scenarioDir) {
   const css = readFileSync(path.join(referenceRoot, 'styles.css'), 'utf8');
   await page.setContent(html.replace('<link rel="stylesheet" href="styles.css">', `<style>${css}</style>`),
     { waitUntil: 'domcontentloaded' });
-  await page.evaluate((value) => document.body.dataset['state'] = value, state);
+  await page.evaluate((value) => {
+    document.body.dataset['state'] = value;
+    const text = document.getElementById('speech-text');
+    const count = document.getElementById('character-count');
+    if (text instanceof HTMLTextAreaElement) text.value = value === 'generated' ? 'hello' : '';
+    if (count) count.textContent = value === 'generated'
+      ? '1 lines | 5 chars | 1 tks | ~$0.00007 est.'
+      : '1 lines | 0 chars | 1 tks | ~$0.00007 est.';
+  }, state);
   const fontsReady = await page.evaluate(async () => { await document.fonts.ready; return document.fonts.status; });
   await settle(page);
   const measurement = await page.evaluate(({ ids }) => {
@@ -163,7 +172,7 @@ async function captureReference(context, state, viewport, scenarioDir) {
     return {
       elements: Object.fromEntries(ids.map((id) => {
         const element = document.getElementById(id);
-        if (!element || getComputedStyle(element).display === 'none') return [id, { exists: false }];
+        if (!element || element.getClientRects().length === 0) return [id, { exists: false }];
         const rect = element.getBoundingClientRect();
         const borderBox = { left: rect.left, top: rect.top, right: rect.right, bottom: rect.bottom,
           width: rect.width, height: rect.height };
@@ -188,7 +197,7 @@ async function captureReference(context, state, viewport, scenarioDir) {
           visible.right === rect.right && visible.bottom === rect.bottom;
         return [id, { exists: true, borderBox, text: element instanceof HTMLInputElement ||
           element instanceof HTMLTextAreaElement || element instanceof HTMLSelectElement
-          ? element.value : element.textContent?.replace(/\s+/g, ' ').trim(),
+          ? element.value : element.innerText?.replace(/\s+/g, ' ').trim(),
           visibility: { exists: true, intersectsViewport, fullyVisible, clipped: !fullyVisible,
             clippingAncestorIds: owners } }];
       })),
@@ -246,13 +255,17 @@ function compareScenario(referenceCapture, astylarCapture, viewport, scenarioDir
   }
   const geometry = compareGeometry(referenceCapture.measurement.elements, astylarCapture.measurement.elements);
   const visibility = compareVisibility(referenceCapture.measurement.elements, astylarCapture.measurement.elements);
-  const scrolling = compareScrolling(referenceCapture.measurement.scrolling, astylarCapture.measurement.scrolling);
+  const scrolling = compareScrolling(
+    referenceCapture.measurement.scrolling,
+    astylarCapture.measurement.scrolling,
+    acceptance.maximumIncidentalScrollExtentPx,
+  );
   const text = compareText(referenceCapture.measurement.elements, astylarCapture.measurement.elements);
   const screenshotSimilarity = sameDimensions(referenceCapture.image, astylarCapture.image)
     ? ssim(referenceCapture.image, astylarCapture.image).mssim : 0;
   const raster = compareRegions(referenceCapture, astylarCapture, viewport, scenarioDir, infrastructureErrors);
   writeCompositeArtifacts(referenceCapture.image, astylarCapture.image, scenarioDir);
-  const meetsAcceptance = geometry.meetsTarget && visibility.matches && scrolling.ownershipMatches &&
+  const meetsAcceptance = geometry.meetsTarget && visibility.matches && scrolling.matches && text.matches &&
     screenshotSimilarity >= acceptance.minimumSsim && raster.every((region) => region.meetsTarget);
   return {
     runtime: { referenceErrors: referenceCapture.errors, astylarErrors: astylarCapture.errors,
@@ -276,7 +289,7 @@ function compareGeometry(referenceElements, astylarElements) {
     const edgeErrors = Object.fromEntries(['left', 'top', 'right', 'bottom'].map((edge) => {
       const error = Math.abs(expected.borderBox[edge] - actual.borderBox[edge]); edges.push(error); return [edge, error];
     }));
-    elements.push({ id, edgeErrors });
+    elements.push({ id, referenceBorderBox: expected.borderBox, astylarBorderBox: actual.borderBox, edgeErrors });
   }
   const within = edges.filter((value) => value <= acceptance.geometryTolerancePx).length / Math.max(1, edges.length);
   const maximum = edges.length ? Math.max(...edges) : Infinity;
@@ -296,16 +309,9 @@ function compareVisibility(referenceElements, astylarElements) {
   return { matches: elements.every((item) => item.matches), elements };
 }
 
-function compareScrolling(expected, actual) {
-  const relevant = new Set([...Object.entries(expected).filter(([, value]) => value.maxScrollLeft > 0 || value.maxScrollTop > 0).map(([id]) => id),
-    ...Object.entries(actual).filter(([, value]) => value.maxScrollLeft > 0 || value.maxScrollTop > 0).map(([id]) => id)]);
-  const owners = [...relevant].map((id) => ({ id, reference: expected[id], astylar: actual[id],
-    matches: !!expected[id] === !!actual[id] }));
-  return { ownershipMatches: owners.every((owner) => owner.matches), owners };
-}
-
 function compareText(expected, actual) {
-  const elements = Object.entries(expected).flatMap(([id, element]) => element.exists && element.text !== undefined
+  const selected = new Set(textMeasurementIds);
+  const elements = Object.entries(expected).flatMap(([id, element]) => selected.has(id) && element.exists && element.text !== undefined
     ? [{ id, reference: element.text, astylar: actual[id]?.text, matches: element.text === actual[id]?.text }] : []);
   return { matches: elements.every((element) => element.matches), elements };
 }
@@ -380,6 +386,8 @@ function summarize(results) {
     maximumGeometryEdgeErrorPx: Math.max(...results.map((result) => result.geometry.maximumEdgeErrorPx)),
     visibilityMatches: results.filter((result) => result.visibility.matches).length,
     scrollOwnershipMatches: results.filter((result) => result.scrolling.ownershipMatches).length,
+    scrollReachabilityMatches: results.filter((result) => result.scrolling.reachabilityMatches).length,
+    textMatches: results.filter((result) => result.text.matches).length,
     sharpnessRegionsPassing: results.reduce((total, result) => total + result.raster.filter((region) => region.meetsTarget).length, 0),
     sharpnessRegionsMeasured: results.reduce((total, result) => total + result.raster.length, 0),
     meetsAcceptance: results.every((result) => result.meetsAcceptance),
@@ -394,6 +402,8 @@ function humanSummary(report) {
     `- Scenarios meeting Phase 19 targets: ${s.acceptedScenarios}/${s.scenarios}\n` +
     `- Minimum SSIM: ${s.minimumSsim.toFixed(6)}\n- Maximum geometry edge error: ${s.maximumGeometryEdgeErrorPx.toFixed(3)}px\n` +
     `- Visibility matches: ${s.visibilityMatches}/${s.scenarios}\n- Scroll-owner matches: ${s.scrollOwnershipMatches}/${s.scenarios}\n` +
+    `- Scroll-reachability matches: ${s.scrollReachabilityMatches}/${s.scenarios}\n` +
+    `- Visible-text matches: ${s.textMatches}/${s.scenarios}\n` +
     `- Sharpness regions passing: ${s.sharpnessRegionsPassing}/${s.sharpnessRegionsMeasured}\n` +
     `- Acceptance: ${s.meetsAcceptance ? 'PASS' : 'UNMET (diagnostic in Phase 18)'}\n`;
 }

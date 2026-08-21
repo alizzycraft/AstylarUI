@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { states, viewports } from './benchmark.config.mjs';
+import { acceptance, measurementIds, states, textMeasurementIds, viewports } from './benchmark.config.mjs';
 
 test('application benchmark owns named viewport and DPR profiles', () => {
   assert.deepEqual(states, ['initial', 'generated']);
@@ -11,4 +11,7 @@ test('application benchmark owns named viewport and DPR profiles', () => {
   assert.ok(viewports.some((viewport) => viewport.deviceScaleFactor === 1));
   assert.ok(viewports.some((viewport) => viewport.deviceScaleFactor === 2));
   assert.equal(new Set(viewports.map((viewport) => viewport.id)).size, viewports.length);
+  assert.ok(textMeasurementIds.length >= 10);
+  assert.ok(textMeasurementIds.every((id) => measurementIds.includes(id)));
+  assert.equal(acceptance.maximumIncidentalScrollExtentPx, 1);
 });

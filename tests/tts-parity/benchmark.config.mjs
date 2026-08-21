@@ -19,6 +19,14 @@ export const measurementIds = [
   'speech-text', 'generate-speech', 'player-placeholder', 'selected-player', 'history-panel',
   'history-header', 'history-title', 'storage-disclosure', 'history-search', 'history-list',
   'history-empty', 'history-speech-1',
+  'generation-status', 'player-placeholder-title', 'selected-player-title', 'storage-title',
+  'history-empty-title', 'history-empty-copy', 'history-speech-1-text',
+];
+
+export const textMeasurementIds = [
+  'app-title', 'settings-title', 'workspace-title', 'speech-text', 'generate-speech',
+  'generation-status', 'player-placeholder-title', 'selected-player-title', 'history-title',
+  'storage-title', 'history-empty-title', 'history-empty-copy', 'history-speech-1-text',
 ];
 
 export const sharpnessRegions = [
@@ -38,6 +46,7 @@ export const acceptance = {
   minimumGradientEnergyRetention: 0.82,
   minimumEdgeAlignment: 0.82,
   maximumGradientRmse: 0.12,
+  maximumIncidentalScrollExtentPx: 1,
   visibilityMustMatch: true,
   scrollOwnershipMustMatch: true,
 };
