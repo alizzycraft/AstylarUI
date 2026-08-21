@@ -54,6 +54,35 @@ describe('ElementDimensionService', () => {
     expect(result.height).toBe(96);
   });
 
+  it('applies CSS border-width shorthand per side in the box model', () => {
+    const service = new ElementDimensionService({} as never, {} as never, new DOMAncestryService());
+    const parent = { name: 'root-body' } as Mesh;
+    const style: StyleRule = {
+      selector: '#asymmetric-border', display: 'block', boxSizing: 'content-box',
+      width: '100px', height: '50px', padding: '10px',
+      borderStyle: 'solid', borderWidth: '1px 2px 3px 4px',
+    };
+    const dom = {
+      context: {
+        elementDimensions: new Map([['root-body', {
+          width: 800, height: 600, padding: { top: 0, right: 0, bottom: 0, left: 0 },
+        }]]),
+        elementStyles: new Map(),
+      },
+    } as unknown as BabylonDOM;
+    const render = {
+      actions: { style: { getElementTypeDefaults: () => ({ display: 'block' }) } },
+    } as unknown as BabylonRender;
+
+    const result = service.calculateDimensions(
+      dom, render, { id: 'asymmetric-border', type: 'div' }, style, parent, [style],
+    );
+
+    expect(result.width).toBe(126);
+    expect(result.height).toBe(74);
+    expect(result.padding).toEqual({ top: 11, right: 12, bottom: 13, left: 14 });
+  });
+
   it('uses the viewport root as the layout parent for fixed elements', () => {
     const service = new ElementDimensionService({} as never, {} as never, new DOMAncestryService());
     const root = { name: 'root-body' } as Mesh;
@@ -64,6 +93,33 @@ describe('ElementDimensionService', () => {
 
     expect(service.resolveLayoutParent(dom, { selector: '#fixed', position: 'fixed' }, nestedParent)).toBe(root);
     expect(service.resolveLayoutParent(dom, { selector: '#absolute', position: 'absolute' }, nestedParent)).toBe(nestedParent);
+  });
+
+  it('positions fixed elements from right and bottom viewport edges', () => {
+    const service = new ElementDimensionService({} as never, {} as never, new DOMAncestryService());
+    const parent = { name: 'root-body' } as Mesh;
+    const dom = {
+      context: {
+        elementDimensions: new Map([['root-body', {
+          width: 800, height: 600, padding: { top: 0, right: 0, bottom: 0, left: 0 },
+        }]]),
+        elementStyles: new Map(),
+      },
+    } as unknown as BabylonDOM;
+    const render = {
+      actions: { style: { getElementTypeDefaults: () => ({ display: 'block' }) } },
+    } as unknown as BabylonRender;
+    const style: StyleRule = {
+      selector: '#fixed', position: 'fixed', right: '-38px', bottom: '26px',
+      width: '150px', height: '34px',
+    };
+
+    const result = service.calculateDimensions(
+      dom, render, { id: 'fixed', type: 'div' }, style, parent, [style],
+    );
+
+    expect(result.x).toBe(363);
+    expect(result.y).toBe(-257);
   });
 
   it('fills block width and uses intrinsic text height for auto dimensions', () => {

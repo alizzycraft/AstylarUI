@@ -392,7 +392,7 @@ export class ElementCreationService {
           "rectangle", // polygon type - all elements are rectangles
           worldWidth,
           worldHeight,
-          borderProps.width,
+          borderProps.widths,
           borderRadius,
         );
 
@@ -421,7 +421,7 @@ export class ElementCreationService {
               : ELEMENT_BORDER_Z_OFFSET,
             worldWidth,
             worldHeight,
-            borderProps.width,
+            borderProps.widths,
           );
 
           // Store border meshes in context so they can be disposed/updated later (e.g. on hover)
@@ -1137,7 +1137,7 @@ export class ElementCreationService {
           parentWidth * scaleFactor,
           usedAutoHeight * scaleFactor,
           borderRadiusPx * scaleFactor,
-          border.width,
+            border.widths,
         );
 
         // Preserve the element's top border edge while its auto height changes.

@@ -16,6 +16,8 @@ import {
   Texture,
 } from "@babylonjs/core";
 import {
+  BorderWidthBox,
+  BorderWidths,
   GradientStop,
   LinearGradientDefinition,
 } from "./dom/interfaces/render.types";
@@ -580,7 +582,7 @@ export class BabylonMeshService {
     polygonType: string,
     width: number,
     height: number,
-    borderWidth: number,
+    borderWidth: BorderWidths,
     borderRadius: number,
   ): VertexData {
 
@@ -597,6 +599,14 @@ export class BabylonMeshService {
       height,
     );
 
+    const borderWidths = this.normalizeBorderWidths(borderWidth);
+    const maximumBorderWidth = Math.max(
+      borderWidths.top,
+      borderWidths.right,
+      borderWidths.bottom,
+      borderWidths.left,
+    );
+
     // Generate inner polygon points (reduced by border width)
     // For rectangles, reduce both width and height by 2*borderWidth (border on both sides)
     // For circles, reduce radius by borderWidth
@@ -605,14 +615,14 @@ export class BabylonMeshService {
     if (polygonType === "circle") {
       // For circles, reduce radius by border width
       const outerRadius = Math.min(width, height) / 2;
-      const innerRadius = Math.max(0.1, outerRadius - borderWidth);
+      const innerRadius = Math.max(0.1, outerRadius - maximumBorderWidth);
       const innerScale = innerRadius / outerRadius;
       innerWidth = width * innerScale;
       innerHeight = height * innerScale;
     } else {
       // For rectangles and other polygons, reduce dimensions by 2*borderWidth (border on both sides)
-      innerWidth = Math.max(0.2, width - 2 * borderWidth);
-      innerHeight = Math.max(0.2, height - 2 * borderWidth);
+      innerWidth = Math.max(0.2, width - borderWidths.left - borderWidths.right);
+      innerHeight = Math.max(0.2, height - borderWidths.top - borderWidths.bottom);
     }
 
     const innerPolygonPoints = this.generatePolygonPoints(
@@ -620,6 +630,16 @@ export class BabylonMeshService {
       innerWidth,
       innerHeight,
     );
+    if (polygonType === "rectangle") {
+      // The renderer's logical X axis is mirrored at the camera boundary, so
+      // CSS left/right widths map to the opposite local mesh edges.
+      const offsetX = (borderWidths.right - borderWidths.left) / 2;
+      const offsetY = (borderWidths.bottom - borderWidths.top) / 2;
+      innerPolygonPoints.forEach((point) => {
+        point.x += offsetX;
+        point.y += offsetY;
+      });
+    }
 
 
 
@@ -632,7 +652,7 @@ export class BabylonMeshService {
         borderRadius,
         width,
         height,
-        borderWidth,
+        maximumBorderWidth,
       );
     } else {
 
@@ -832,7 +852,7 @@ export class BabylonMeshService {
     name: string,
     elementWidth: number,
     elementHeight: number,
-    borderWidth: number,
+    borderWidth: BorderWidths,
     borderRadius: number = 0,
   ): Mesh[] {
     if (!this.scene) {
@@ -855,7 +875,7 @@ export class BabylonMeshService {
     polygonType: string,
     width: number,
     height: number,
-    borderWidth: number,
+    borderWidth: BorderWidths,
     borderRadius: number = 0,
   ): Mesh[] {
     if (!this.scene) {
@@ -891,7 +911,7 @@ export class BabylonMeshService {
     width: number,
     height: number,
     borderRadius: number,
-    borderWidth: number = 0,
+    borderWidth: BorderWidths = 0,
     scene?: Scene,
   ): void {
     const targetScene = scene || this.scene;
@@ -929,7 +949,7 @@ export class BabylonMeshService {
       mainMesh.refreshBoundingInfo();
 
       // If there's a border width, update border meshes too
-      if (borderWidth > 0) {
+      if (this.maximumBorderWidth(borderWidth) > 0) {
         const borderMeshNames = [
           `${meshName}_border_frame`,
           `${meshName}-border_border_frame`,
@@ -1465,7 +1485,7 @@ export class BabylonMeshService {
     centerZ: number,
     elementWidth: number,
     elementHeight: number,
-    borderWidth: number,
+    borderWidth: BorderWidths,
   ): void {
     borders.forEach((borderMesh, index) => {
       // Position each border mesh relative to parent
@@ -1474,6 +1494,24 @@ export class BabylonMeshService {
       borderMesh.position.z = centerZ;
     });
 
+  }
+
+  private normalizeBorderWidths(borderWidth: BorderWidths): BorderWidthBox {
+    if (typeof borderWidth === "number") {
+      const width = Math.max(0, borderWidth);
+      return { top: width, right: width, bottom: width, left: width };
+    }
+    return {
+      top: Math.max(0, borderWidth.top),
+      right: Math.max(0, borderWidth.right),
+      bottom: Math.max(0, borderWidth.bottom),
+      left: Math.max(0, borderWidth.left),
+    };
+  }
+
+  private maximumBorderWidth(borderWidth: BorderWidths): number {
+    const widths = this.normalizeBorderWidths(borderWidth);
+    return Math.max(widths.top, widths.right, widths.bottom, widths.left);
   }
 
   /**

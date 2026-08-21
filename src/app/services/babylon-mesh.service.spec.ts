@@ -1,4 +1,4 @@
-import { Color3, DynamicTexture, Mesh, NullEngine, Scene, Vector3 } from '@babylonjs/core';
+import { Color3, DynamicTexture, Mesh, NullEngine, Scene, Vector3, VertexBuffer } from '@babylonjs/core';
 
 import { BabylonMeshService } from './babylon-mesh.service';
 
@@ -47,6 +47,34 @@ describe('BabylonMeshService', () => {
       const mesh = service.createTextMesh('text-plane', texture, 1, 1);
 
       expect(mesh.renderingGroupId).toBe(0);
+
+      engine.dispose();
+    });
+  });
+
+  describe('createPolygonBorder', () => {
+    it('places each edge of an asymmetric rectangular border at its CSS width', () => {
+      const engine = new NullEngine();
+      const scene = new Scene(engine);
+      const service = new BabylonMeshService();
+      service.initialize(scene);
+
+      const [mesh] = service.createPolygonBorder(
+        'asymmetric', 'rectangle', 100, 50,
+        { top: 1, right: 2, bottom: 3, left: 4 },
+      );
+      const positions = mesh.getVerticesData(VertexBuffer.PositionKind)!;
+      const inner = Array.from({ length: 4 }, (_, index) => ({
+        x: positions[(index + 4) * 3],
+        y: positions[(index + 4) * 3 + 1],
+      }));
+
+      expect(inner).toEqual([
+        { x: -48, y: 24 },
+        { x: 46, y: 24 },
+        { x: 46, y: -22 },
+        { x: -48, y: -22 },
+      ]);
 
       engine.dispose();
     });

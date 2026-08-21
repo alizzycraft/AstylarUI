@@ -20,26 +20,45 @@ export class ElementBorderService {
         style: StyleRule | undefined
     ): {
         width: number;
+        widths: { top: number; right: number; bottom: number; left: number };
         color: Color3;
         style: string;
     } {
         if (!style) {
-            return { width: 0, color: new Color3(0, 0, 0), style: 'solid' };
+            return {
+                width: 0,
+                widths: { top: 0, right: 0, bottom: 0, left: 0 },
+                color: new Color3(0, 0, 0),
+                style: 'solid',
+            };
         }
 
         // Parse border width
         const borderWidth = style.borderWidth;
-        let width = 0;
+        let widths = { top: 0, right: 0, bottom: 0, left: 0 };
         if (borderWidth) {
-            if (typeof borderWidth === 'string' && borderWidth.endsWith('px')) {
-                width = parseFloat(borderWidth);
+            const parts = `${borderWidth}`.trim().split(/\s+/)
+                .map(value => Math.max(0, Number.parseFloat(value) || 0));
+            const [first = 0, second = first, third = first, fourth = second] = parts;
+            if (parts.length === 1) {
+                widths = { top: first, right: first, bottom: first, left: first };
+            } else if (parts.length === 2) {
+                widths = { top: first, right: second, bottom: first, left: second };
+            } else if (parts.length === 3) {
+                widths = { top: first, right: second, bottom: third, left: second };
             } else {
-                width = parseFloat(borderWidth);
+                widths = { top: first, right: second, bottom: third, left: fourth };
             }
             // Scale border width to world coordinates
             const scaleFactor = render.actions.camera.getPixelToWorldScale();
-            width = width * scaleFactor;
+            widths = {
+                top: widths.top * scaleFactor,
+                right: widths.right * scaleFactor,
+                bottom: widths.bottom * scaleFactor,
+                left: widths.left * scaleFactor,
+            };
         }
+        const width = Math.max(widths.top, widths.right, widths.bottom, widths.left);
 
         // Parse border color
         let color = new Color3(0, 0, 0);
@@ -53,7 +72,7 @@ export class ElementBorderService {
         // Parse border style
         const borderStyle = style.borderStyle || 'solid';
 
-        return { width, color, style: borderStyle };
+        return { width, widths, color, style: borderStyle };
     }
 
     /**

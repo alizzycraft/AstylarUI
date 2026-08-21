@@ -76,9 +76,7 @@ export class ElementDimensionService {
         const elementFontSize = Math.max(0, parseFloat(`${style?.fontSize ?? '16px'}`) || 16);
         const parentPadding = parentDims.padding;
         const parentStyle = dom.context.elementStyles.get(parent.name)?.normal;
-        const parentBorderWidth = parentStyle?.borderWidth
-            ? Math.max(0, parseFloat(parentStyle.borderWidth) || 0)
-            : 0;
+        const parentBorder = this.parseBorderWidthBox(parentStyle);
         const usesPositionedContainingBlock =
             style?.position === 'absolute' || style?.position === 'fixed';
 
@@ -91,14 +89,12 @@ export class ElementDimensionService {
         // Parse padding and margin
         const padding = this.parsePadding(render, style, undefined);
         const margin = this.parseMargin(style);
-        const borderWidth = style?.borderWidth
-            ? Math.max(0, parseFloat(style.borderWidth) || 0)
-            : 0;
+        const borderWidth = this.parseBorderWidthBox(style);
         const layoutInsets = {
-            top: padding.top + borderWidth,
-            right: padding.right + borderWidth,
-            bottom: padding.bottom + borderWidth,
-            left: padding.left + borderWidth,
+            top: padding.top + borderWidth.top,
+            right: padding.right + borderWidth.right,
+            bottom: padding.bottom + borderWidth.bottom,
+            left: padding.left + borderWidth.left,
         };
 
         const horizontalPadding = padding.left + padding.right;
@@ -132,7 +128,7 @@ export class ElementDimensionService {
             if (typeof widthValue === 'string') {
                 if (widthValue === 'auto') {
                     if (isInlineLevel || element.type === 'button' || element.type === 'input') {
-                        width = this.calculateIntrinsicWidth(element, style, textMetrics, padding);
+                        width = this.calculateIntrinsicWidth(element, textMetrics, layoutInsets);
                         widthSource = 'width:auto-intrinsic';
                     }
                 } else if (widthValue.endsWith('rem')) {
@@ -153,7 +149,7 @@ export class ElementDimensionService {
                 } else if (widthValue.endsWith('%')) {
                     const widthPercent = parseFloat(widthValue);
                     const widthReference = usesPositionedContainingBlock
-                        ? parentWidth - parentBorderWidth * 2
+                        ? parentWidth - parentBorder.left - parentBorder.right
                         : contentWidth;
                     width = (widthReference * widthPercent) / 100;
                     widthSource = `width:${widthValue}`;
@@ -169,7 +165,7 @@ export class ElementDimensionService {
                 widthSource = `width:${widthValue}`;
             }
         } else if (isInlineLevel || element.type === 'button' || element.type === 'input') {
-            width = this.calculateIntrinsicWidth(element, style, textMetrics, padding);
+            width = this.calculateIntrinsicWidth(element, textMetrics, layoutInsets);
             widthSource = isInlineLevel ? 'inline-intrinsic' : 'text-intrinsic';
         }
 
@@ -244,7 +240,7 @@ export class ElementDimensionService {
                 } else if (heightValue.endsWith('%')) {
                     const heightPercent = parseFloat(heightValue);
                     const heightReference = usesPositionedContainingBlock
-                        ? parentHeight - parentBorderWidth * 2
+                        ? parentHeight - parentBorder.top - parentBorder.bottom
                         : contentHeight;
                     height = (heightReference * heightPercent) / 100;
                     heightSource = `height:${heightValue}`;
@@ -300,11 +296,11 @@ export class ElementDimensionService {
         // requested explicitly: padding and borders then sit outside width/height.
         if (style?.boxSizing === 'content-box') {
             if (widthValue !== undefined && widthValue !== 'auto') {
-                width += horizontalPadding + borderWidth * 2;
+                width += horizontalPadding + borderWidth.left + borderWidth.right;
                 widthSource += '+content-box';
             }
             if (heightValue !== undefined && heightValue !== 'auto') {
-                height += verticalPadding + borderWidth * 2;
+                height += verticalPadding + borderWidth.top + borderWidth.bottom;
                 heightSource += '+content-box';
             }
         }
@@ -335,13 +331,13 @@ export class ElementDimensionService {
 
         if (style) {
             const horizontalOriginInset = usesPositionedContainingBlock
-                ? parentBorderWidth
+                ? parentBorder.left
                 : parentPadding.left;
             const verticalOriginInset = usesPositionedContainingBlock
-                ? parentBorderWidth
+                ? parentBorder.top
                 : parentPadding.top;
-            const positionedReferenceWidth = parentWidth - parentBorderWidth * 2;
-            const positionedReferenceHeight = parentHeight - parentBorderWidth * 2;
+            const positionedReferenceWidth = parentWidth - parentBorder.left - parentBorder.right;
+            const positionedReferenceHeight = parentHeight - parentBorder.top - parentBorder.bottom;
 
             if (style.left !== undefined) {
                 if (typeof style.left === 'string' && style.left.endsWith('rem')) {
@@ -368,6 +364,14 @@ export class ElementDimensionService {
                     x = -(parentWidth / 2) + horizontalOriginInset + parseFloat(`${style.left}`) + (width / 2);
 
                 }
+            } else if (style.right !== undefined) {
+                const rightPixels = this.parsePositionLength(
+                    style.right,
+                    positionedReferenceWidth,
+                    viewportDims,
+                    elementFontSize,
+                );
+                x = (parentWidth / 2) - parentBorder.right - rightPixels - (width / 2);
             } else {
                 x = -(parentWidth / 2) + parentPadding.left + (contentWidth / 2);
 
@@ -395,6 +399,14 @@ export class ElementDimensionService {
                 } else {
                     y = (parentHeight / 2) - verticalOriginInset - parseFloat(`${style.top}`) - (height / 2);
                 }
+            } else if (style.bottom !== undefined) {
+                const bottomPixels = this.parsePositionLength(
+                    style.bottom,
+                    positionedReferenceHeight,
+                    viewportDims,
+                    elementFontSize,
+                );
+                y = -(parentHeight / 2) + parentBorder.bottom + bottomPixels + (height / 2);
             } else {
                 y = (parentHeight / 2) - parentPadding.top - (contentHeight / 2);
             }
@@ -406,6 +418,23 @@ export class ElementDimensionService {
 
 
         return { width, height, x, y, padding: layoutInsets, margin };
+    }
+
+    private parsePositionLength(
+        value: string | number,
+        percentageReference: number,
+        viewport: { width: number; height: number },
+        fontSize: number,
+    ): number {
+        if (typeof value === 'number') return value;
+        if (value.endsWith('rem')) return parseFloat(value) * 16;
+        if (value.endsWith('em')) return parseFloat(value) * fontSize;
+        if (value.endsWith('vw')) return (viewport.width * parseFloat(value)) / 100;
+        if (value.endsWith('vh')) return (viewport.height * parseFloat(value)) / 100;
+        if (value.endsWith('%')) return (percentageReference * parseFloat(value)) / 100;
+        if (value.endsWith('px')) return parseFloat(value);
+        const parsed = parseFloat(value);
+        return Number.isNaN(parsed) ? 0 : parsed;
     }
 
     /**
@@ -491,6 +520,32 @@ export class ElementDimensionService {
         return { top: 0, right: 0, bottom: 0, left: 0 };
     }
 
+    private parseBorderWidthBox(style: StyleRule | undefined): {
+        top: number;
+        right: number;
+        bottom: number;
+        left: number;
+    } {
+        if (!style?.borderWidth || style.borderStyle === 'none') {
+            return this.zeroBox();
+        }
+
+        const parts = `${style.borderWidth}`.trim().split(/\s+/)
+            .map(value => Math.max(0, this.parseLength(value)));
+        const [first = 0, second = first, third = first, fourth = second] = parts;
+
+        if (parts.length === 1) {
+            return { top: first, right: first, bottom: first, left: first };
+        }
+        if (parts.length === 2) {
+            return { top: first, right: second, bottom: first, left: second };
+        }
+        if (parts.length === 3) {
+            return { top: first, right: second, bottom: third, left: second };
+        }
+        return { top: first, right: second, bottom: third, left: fourth };
+    }
+
     private formatBox(box: { top: number; right: number; bottom: number; left: number }): string {
         return `top:${box.top},right:${box.right},bottom:${box.bottom},left:${box.left}`;
     }
@@ -500,22 +555,20 @@ export class ElementDimensionService {
      */
     private calculateIntrinsicWidth(
         element: DOMElement,
-        style: StyleRule | undefined,
         textMetrics: IntrinsicTextMetrics | null,
-        padding: { top: number; right: number; bottom: number; left: number }
+        layoutInsets: { top: number; right: number; bottom: number; left: number }
     ): number {
-        const totalPadding = (padding.left || 0) + (padding.right || 0);
-        const borderWidth = Math.max(0, Number.parseFloat(style?.borderWidth ?? '0') || 0);
+        const totalInsets = (layoutInsets.left || 0) + (layoutInsets.right || 0);
         const isTextInput = element.type === 'input' && !this.isButtonLikeInput(element);
 
         let measuredWidth = textMetrics?.width ?? 0;
 
         if (!textMetrics && isTextInput) {
             // Ensure inputs still have a reasonable default width when no content is present
-            measuredWidth = Math.max(measuredWidth, 170 - totalPadding - borderWidth * 2);
+            measuredWidth = Math.max(measuredWidth, 170 - totalInsets);
         }
 
-        let finalWidth = measuredWidth + totalPadding + borderWidth * 2;
+        let finalWidth = measuredWidth + totalInsets;
 
         if (isTextInput) {
             finalWidth = Math.max(finalWidth, 170);

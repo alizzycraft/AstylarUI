@@ -24,6 +24,15 @@ export type ParsedBackground =
   | { type: "color"; color: Color3; alpha?: number }
   | { type: "gradient"; gradient: LinearGradientDefinition; alpha?: number };
 
+export interface BorderWidthBox {
+  top: number;
+  right: number;
+  bottom: number;
+  left: number;
+}
+
+export type BorderWidths = number | BorderWidthBox;
+
 export interface MeshActions {
   createPolygon: (
     name: string,
@@ -67,7 +76,7 @@ export interface MeshActions {
     name: string,
     elementWidth: number,
     elementHeight: number,
-    borderWidth: number,
+    borderWidth: BorderWidths,
     borderRadius?: number,
   ) => Mesh[];
   createPolygonBorder: (
@@ -75,7 +84,7 @@ export interface MeshActions {
     polygonType: string,
     width: number,
     height: number,
-    borderWidth: number,
+    borderWidth: BorderWidths,
     borderRadius?: number,
   ) => Mesh[];
   updateTextMesh: (
@@ -95,7 +104,7 @@ export interface MeshActions {
     width: number,
     height: number,
     borderRadius: number,
-    borderWidth?: number,
+    borderWidth?: BorderWidths,
   ) => void;
   updateMeshBorderRadius: (
     mesh: Mesh,
@@ -130,7 +139,7 @@ export interface MeshActions {
     centerZ: number,
     elementWidth: number,
     elementHeight: number,
-    borderWidth: number,
+    borderWidth: BorderWidths,
   ) => void;
 }
 
