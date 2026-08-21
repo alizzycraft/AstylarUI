@@ -71,6 +71,14 @@ A renderer defect is plausible only when:
 - diagnostics do not identify invalid authored data or unavailable plugins;
 - the difference survives reduction to a small public-API reproduction.
 
+For a reference application, first prove the translation did not independently
+change structure, dimensions, density, overflow, responsive rules, fonts, or
+state. Capture both sides under matching viewport, DPR, font readiness, and
+settlement conditions. Test initial visibility and actual scroll reachability;
+do not infer them from page height. Whole-page SSIM and geometry do not detect
+blur reliably, so use identified text/border crops and a calibrated local edge
+metric for sharpness claims.
+
 Do not modify renderer internals in this skill. Preserve the reproduction for
 the Phase 16 maintainer workflow.
 
@@ -104,7 +112,7 @@ to prove the public contract boundary.
 | Multiple surfaces | Independent state, updates, disposal, and plugin instances |
 | SSR-sensitive code | Browser build, server build, and prerender or SSR evaluation |
 | Application plugin | Unit validation plus packed browser/SSR consumer when substantial |
-| Visual parity claim | Paired HTML/Astylar fixture at representative viewports |
+| Visual parity claim | Paired source-faithful HTML/Astylar evidence at representative viewports/DPR; geometry, visibility, scrolling, and defect-appropriate local raster metrics |
 
 Always run the consuming project's normal tests and production build. Generated
 code is incomplete until it compiles.
@@ -126,4 +134,3 @@ code is incomplete until it compiles.
   ownership match the public contract.
 - Tests cover observable behavior and do not weaken reference expectations.
 - A suspected core defect stops at a public minimal reproduction.
-

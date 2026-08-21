@@ -38,6 +38,12 @@ An ordinary application request stays with the developer skill. A maintainer
 may invoke it as a supporting workflow without turning application code into a
 core task.
 
+For an existing web application, require the developer workflow to inspect the
+authoritative source and preserve its structure, sizing, density, overflow,
+responsive rules, fonts, and states. If paired application evidence still
+differs after that audit, classify the delta and reduce probable core defects;
+do not use an independently redesigned application as renderer proof.
+
 ## Receive a public reproduction
 
 A useful developer-to-maintainer handoff contains:

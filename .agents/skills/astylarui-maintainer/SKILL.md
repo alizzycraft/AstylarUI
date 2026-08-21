@@ -17,6 +17,9 @@ contract as the observable product boundary.
    diagnostics, expected behavior, and actual behavior.
 3. For an application report, use the `astylarui-developer` skill to validate
    public authoring and reduce the case before inspecting private services.
+   A deterministic application-scale reference is valid diagnostic evidence,
+   but reduce a confirmed discrepancy to its smallest equivalent fixture before
+   modifying renderer internals.
 4. Classify the case as an application-authoring error, intentional difference,
    unsupported behavior, application-plugin opportunity, stale application
    guidance, public API defect, or confirmed core defect.
@@ -59,6 +62,9 @@ contract as the observable product boundary.
   package deep imports in application evidence.
 - Distinguish compilation, NullEngine behavior, real browser/WebGL behavior,
   SSR/prerender behavior, and visual parity. Do not use one as proof of another.
+- Match reference/Astylar input, state, viewport, DPR, fonts, and settlement.
+  Standalone screenshots, file-size checks, builds, semantics, geometry alone,
+  or whole-page SSIM alone cannot prove sharpness, clipping, or reachability.
 
 ## Implement at the owning boundary
 

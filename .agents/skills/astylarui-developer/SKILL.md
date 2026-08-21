@@ -22,6 +22,10 @@ foundation and Babylon.js as the owned rendering substrate.
    `unsupported`, or `plugin`. Do not infer support from browser familiarity.
 5. Preserve the user's design intent and disclose every meaningful adaptation,
    unsupported behavior, and verification gap.
+6. When converting an existing application, repository, or supplied design,
+   treat its inspected source as authoritative. Preserve structure, density,
+   sizing, overflow, breakpoints, fonts, and states; do not independently
+   redesign it or introduce scrolling without authorization.
 
 ## Route the task
 
@@ -114,10 +118,14 @@ If public evidence indicates a probable core defect:
 
 ## Verify proportionally
 
-Always compile generated TypeScript. Add focused unit, Angular integration,
-browser interaction, semantic/accessibility, responsive, ownership/disposal, or
-packed-consumer checks according to the behavior changed. Use a paired
-browser/Astylar comparison when visual equivalence matters.
+Always compile generated TypeScript. A green build, functional test, semantic
+snapshot, screenshot file, or unrelated parity fixture does not establish
+visual parity. Add focused unit, Angular integration, browser interaction,
+semantic/accessibility, responsive, ownership/disposal, or packed-consumer
+checks according to the behavior changed. Reference-driven work requires paired
+browser/Astylar evidence at matching states, viewports, DPR, fonts, and
+settlement boundaries, including visibility and scroll reachability wherever
+content can overflow.
 
 Never weaken an expected result, omit an unsupported declaration silently, or
 change reference output to conceal a mismatch.

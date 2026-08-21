@@ -70,6 +70,15 @@ Translate a normal web brief in this order:
 
 ## Convert HTML and CSS
 
+When the input is an existing application or repository, inspect its actual
+markup, styles, assets, responsive rules, and representative state code before
+authoring `SiteData`. The source is authoritative; a screenshot is supporting
+evidence only. Preserve DOM composition, panel sizing, density, overflow
+ownership, breakpoints, font stack, colors, and visible states unless a checked
+unsupported feature requires a disclosed adaptation. Do not turn a fixed shell
+into a scrollable page, substitute aesthetics, or simplify content merely
+because a new composition is easier to author.
+
 Do not convert markup and declarations one line at a time. First build an
 inventory with these columns:
 
@@ -98,7 +107,10 @@ Then convert:
    `::backdrop` paint.
 9. Do not copy transitions, animations, `@keyframes`, CSS variables, `calc()`,
    sticky positioning, or other catalogued gaps silently.
-10. Compare the web and Astylar result at the same viewport and state.
+10. Compare the web and Astylar result at the same viewport, device scale,
+    loaded fonts, state, and settlement boundary. Exercise initial visibility,
+    clipping owner, bottom/right reachability, and responsive overflow where
+    content can exceed its box.
 
 ## Author SiteData
 
@@ -213,3 +225,7 @@ Summarize:
 - verification completed;
 - remaining visual, behavioral, or version uncertainty.
 
+For reference-driven work, include paired reference/Astylar screenshots and
+measurements at representative viewports. Compilation, feature interaction,
+semantic equivalence, or the existence of a screenshot cannot substitute for
+geometry, visibility, scrolling, and defect-appropriate raster evidence.

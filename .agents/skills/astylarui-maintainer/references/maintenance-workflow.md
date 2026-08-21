@@ -41,6 +41,15 @@ For browser parity, reduce to:
 - dynamic or interaction steps only when state transitions are essential;
 - semantic IDs only for an accessibility claim.
 
+Application-scale evidence may precede that reduction when its source commit,
+state adapter, assets, fonts, viewport/DPR, and settlement boundary are pinned
+and deterministic. Use it to locate the failing category, then reduce the
+discrepancy to the owning minimal fixture. Confirm the metric can detect the
+claimed defect: geometry for position/size, explicit visibility and scroll
+reachability for overflow, and focused edge-sensitive crops for blurry text or
+one-pixel lines. Never describe a report-only diagnostic baseline as accepted
+parity.
+
 Register a new fixture in both `src/parity/fixtures/index.ts` and
 `public/parity/fixtures.json`. Keep browser reference output authoritative and
 never mask a meaningful region. For a public API/package problem, reduce in the

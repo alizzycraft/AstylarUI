@@ -44,6 +44,19 @@ the narrowest owning-boundary fix.
 A focused run is diagnostic evidence only. It cannot establish the aggregate
 median or prove that other fixtures did not regress.
 
+Application benchmarks are valid diagnostics when their source provenance and
+test-state adapter are pinned and offline-deterministic. Record browser version,
+viewport/DPR, font readiness, capture bounds, settlement, runtime errors,
+geometry, text, initial visibility, clipping owners, scroll ownership/extents,
+bottom/right reachability, screenshot similarity, and local raster evidence.
+Use identified typography and one-pixel-border crops with a synthetically
+calibrated edge/gradient metric; large flat backgrounds can hide blur in a
+whole-page scalar. A report command may intentionally succeed while calibrated
+visual targets remain unmet, but missing evidence, malformed reports, runtime
+errors, or nondeterminism must fail. Promote such a benchmark to release
+enforcement only after every declared state, viewport, and DPR passes unchanged
+targets.
+
 ## Enforced acceptance
 
 [`tests/parity/run-parity.mjs`](../../../..//tests/parity/run-parity.mjs) is the

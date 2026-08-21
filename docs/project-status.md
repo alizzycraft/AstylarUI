@@ -7,6 +7,19 @@ remain design history; their unchecked items are not automatically active work.
 
 ## Current milestone
 
+Phase 18, reference-driven application parity infrastructure, is complete. The
+pinned AI-TTS-MP3 source now has an offline deterministic adapter, paired app
+benchmark, application-specific viewport/DPR profiles, explicit visibility and
+scroll evidence, calibrated local sharpness measurement, durable artifacts, and
+report-only versus enforcement modes. Its intentionally failing visual baseline
+and Phase 19 backlog are recorded in `docs/parity/scorecard-v18.md`.
+
+Phase 17 added the packaged Angular TTS application demo and deterministic mock
+speech workflow. Phase 19 owns correcting that demo's source translation and
+general renderer fidelity before promoting the new benchmark to enforcement.
+
+## Phase 16 skill baseline
+
 Phase 16, AstylarUI Maintainer Skill, is complete. Its contract, seven bounded
 implementation increments, twelve independent forward-test categories,
 correction, and final acceptance evidence are maintained in
