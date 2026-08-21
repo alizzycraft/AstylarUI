@@ -117,4 +117,32 @@ describe('FlexLayoutService', () => {
     expect(result[0].width).toBe(160);
     expect(result[1].width).toBe(100);
   });
+
+  it('redistributes overflow created by a grown item minimum', () => {
+    const item = (
+      id: string,
+      basis: number,
+      flexGrow: number,
+      minWidth: number,
+    ): FlexItem => ({
+      element: { type: 'div', id }, style: undefined,
+      width: basis, height: 40, baseWidth: basis, baseHeight: 40, minWidth,
+      margin: { top: 0, right: 0, bottom: 0, left: 0 },
+      flexGrow, flexShrink: 1, flexBasis: basis, alignSelf: 'auto', order: 0,
+    });
+    const container: FlexContainer = {
+      width: 76, height: 80,
+      padding: { top: 0, right: 0, bottom: 0, left: 0 },
+      flexDirection: 'row', flexWrap: 'nowrap', justifyContent: 'flex-start',
+      alignItems: 'stretch', alignContent: 'stretch', gap: 0, rowGap: 0, columnGap: 0,
+    };
+
+    const result = service.calculateFlexItemSizes([
+      item('gutter', 50, 0, 26),
+      item('padded-control', 0, 1, 34),
+    ], container, 76);
+
+    expect(result[0].width).toBe(42);
+    expect(result[1].width).toBe(34);
+  });
 });

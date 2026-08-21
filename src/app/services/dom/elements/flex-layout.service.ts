@@ -335,6 +335,11 @@ export class FlexLayoutService {
 
     if (remainingSpace > 0) {
       result = this.applyFlexGrow(itemsWithBasis, remainingSpace, isRow);
+      result = this.reconcileFlexGrowMinimums(
+        result,
+        gapAdjustedAvailableSpace,
+        isRow,
+      );
     } else if (remainingSpace < 0) {
       result = this.applyFlexShrink(itemsWithBasis, Math.abs(remainingSpace), isRow);
     } else {
@@ -352,6 +357,35 @@ export class FlexLayoutService {
     });
 
     return result;
+  }
+
+  private reconcileFlexGrowMinimums(
+    items: Array<FlexItem & { calculatedFlexBasis?: number }>,
+    availableMainSpace: number,
+    isRow: boolean,
+  ): FlexItem[] {
+    const clamped = items.map((item) => {
+      const size = isRow ? item.width : item.height;
+      const minimum = Math.max(0, isRow ? item.minWidth ?? 0 : item.minHeight ?? 0);
+      return {
+        ...item,
+        [isRow ? 'width' : 'height']: Math.max(size, minimum),
+      };
+    });
+    const usedSpace = clamped.reduce((sum, item) => sum +
+      (isRow ? item.width + item.margin.left + item.margin.right
+        : item.height + item.margin.top + item.margin.bottom), 0);
+    const overflow = usedSpace - availableMainSpace;
+    if (overflow <= 1e-6) return clamped;
+
+    // A grown item can be clamped back to its automatic minimum. If that
+    // makes the line overflow, run the normal frozen-minimum shrink pass from
+    // those hypothetical sizes so unfrozen siblings absorb the deficit.
+    const constrained = clamped.map((item) => ({
+      ...item,
+      calculatedFlexBasis: isRow ? item.width : item.height,
+    }));
+    return this.applyFlexShrink(constrained, overflow, isRow);
   }
 
   /**

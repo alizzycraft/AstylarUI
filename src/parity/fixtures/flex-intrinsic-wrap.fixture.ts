@@ -5,7 +5,7 @@ export const flexIntrinsicWrapFixture: ParityFixture = {
   title: 'Flex intrinsic minimums and stretched text wrapping',
   category: 'flexbox',
   expectedBehavior:
-    'Row flex text items preserve their automatic min-content width, while column flex text items stretch to the cross-axis width and recompute their wrapped intrinsic height.',
+    'Row flex items preserve automatic minimums after grow and shrink, while column flex text items stretch to the cross-axis width and recompute their wrapped intrinsic height.',
   measurementIds: [
     'intrinsic-row',
     'intrinsic-row-text',
@@ -15,6 +15,9 @@ export const flexIntrinsicWrapFixture: ParityFixture = {
     'nested-stretch-text',
     'auto-row-cross-size',
     'auto-row-cross-text',
+    'grow-min-row',
+    'grow-min-gutter',
+    'grow-min-control',
   ],
   reference: {
     html: `
@@ -22,6 +25,7 @@ export const flexIntrinsicWrapFixture: ParityFixture = {
       <div id="stretch-wrap-column"><span id="stretch-wrap-text">Generate speech to see audio controls here</span></div>
       <div id="nested-stretch-column"><div id="nested-fixed"></div><span id="nested-stretch-text">Save speech to history</span></div>
       <div id="auto-row-cross-size"><strong id="auto-row-cross-text">Generate speech to see audio controls here</strong></div>
+      <div id="grow-min-row"><div id="grow-min-gutter"></div><textarea id="grow-min-control">x</textarea></div>
     `,
     css: `
       #parity-reference-viewport { position:relative; overflow:hidden; background:#f8fafc; font-family:Arial,sans-serif; }
@@ -35,6 +39,9 @@ export const flexIntrinsicWrapFixture: ParityFixture = {
       #nested-stretch-text { font:400 14px/21px Arial,sans-serif; background:#fde68a; }
       #auto-row-cross-size { position:absolute; left:560px; top:80px; width:80px; min-height:60px; padding:16px; display:flex; align-items:center; justify-content:center; background:#cbd5e1; border:1px solid #475569; }
       #auto-row-cross-text { font:700 14px/21px Arial,sans-serif; background:#ddd6fe; }
+      #grow-min-row { position:absolute; left:80px; top:300px; width:76px; height:80px; display:flex; background:#cbd5e1; }
+      #grow-min-gutter { width:50px; background:#38bdf8; }
+      #grow-min-control { flex:1; height:80px; padding:16px; overflow:auto; resize:none; border:1px solid #475569; background:#fef3c7; }
     `,
   },
   siteData: {
@@ -50,6 +57,9 @@ export const flexIntrinsicWrapFixture: ParityFixture = {
       { selector:'#nested-stretch-text', fontFamily:'Arial, sans-serif', fontSize:'14px', lineHeight:'21px', background:'#fde68a' },
       { selector:'#auto-row-cross-size', position:'absolute', left:'560px', top:'80px', width:'80px', minHeight:'60px', padding:'16px', display:'flex', alignItems:'center', justifyContent:'center', background:'#cbd5e1', borderWidth:'1px', borderStyle:'solid', borderColor:'#475569' },
       { selector:'#auto-row-cross-text', fontFamily:'Arial, sans-serif', fontSize:'14px', lineHeight:'21px', fontWeight:'700', background:'#ddd6fe' },
+      { selector:'#grow-min-row', position:'absolute', left:'80px', top:'300px', width:'76px', height:'80px', display:'flex', background:'#cbd5e1' },
+      { selector:'#grow-min-gutter', width:'50px', background:'#38bdf8' },
+      { selector:'#grow-min-control', flex:'1', height:'80px', padding:'16px', overflow:'auto', borderWidth:'1px', borderStyle:'solid', borderColor:'#475569', background:'#fef3c7' },
     ],
     root: { children: [
       { type:'div', id:'intrinsic-row', children:[
@@ -64,6 +74,10 @@ export const flexIntrinsicWrapFixture: ParityFixture = {
       ] },
       { type:'div', id:'auto-row-cross-size', children:[
         { type:'strong', id:'auto-row-cross-text', textContent:'Generate speech to see audio controls here' },
+      ] },
+      { type:'div', id:'grow-min-row', children:[
+        { type:'div', id:'grow-min-gutter' },
+        { type:'textarea', id:'grow-min-control', value:'x' },
       ] },
     ] },
   },
