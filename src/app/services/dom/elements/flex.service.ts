@@ -688,7 +688,7 @@ export class FlexService {
       let largestOuterCrossSize: number | null = null;
       for (const child of children) {
         const measured = this.measureIntrinsicFlowChild(
-          child, styles, dom, render, contentWidth,
+          child, styles, dom, render, contentWidth, false, true,
         );
         if (!measured) continue;
         const outerCrossSize = measured.margin.top + measured.height + measured.margin.bottom;
@@ -761,6 +761,7 @@ export class FlexService {
     render: BabylonRender,
     contentWidth: number,
     stretchAutoWidth = false,
+    constrainAutoWidth = false,
   ): { width: number; height: number; margin: { top: number; right: number; bottom: number; left: number } } | null {
     const childStyle = render.actions.style.findStyleForElement(
       child,
@@ -790,6 +791,14 @@ export class FlexService {
         : intrinsicInlineWidth
           ? this.calculateIntrinsicWidth(child, childStyle, styles, dom, render)
           : contentWidth;
+    if (constrainAutoWidth && !hasAuthoredWidth) {
+      const margin = this.parseMarginBox(childStyle);
+      const availableWidth = Math.max(0, contentWidth - margin.left - margin.right);
+      const automaticMinimum = child.textContent || child.type === 'button' || child.type === 'input'
+        ? this.calculateIntrinsicMinWidth(child, childStyle, styles, dom, render)
+        : this.minimumBorderBox(childStyle).width;
+      childWidth = Math.max(automaticMinimum, Math.min(childWidth, availableWidth));
+    }
     const definiteFlexBasis = this.parseDefiniteIntrinsicFlexBasis(childStyle, contentWidth);
     if (definiteFlexBasis !== null) childWidth = definiteFlexBasis;
     if (childStyle?.minWidth) {
@@ -1475,10 +1484,8 @@ export class FlexService {
       : gapProperties.rowGap;
     const totalGapSpacing =
       sizedItems.length > 1 ? mainAxisGap * (sizedItems.length - 1) : 0;
-    const remainingSpace = Math.max(
-      0,
-      availableMainSpace - totalSize - totalGapSpacing,
-    );
+    const freeSpace = availableMainSpace - totalSize - totalGapSpacing;
+    const remainingSpace = Math.max(0, freeSpace);
     const autoMarginCount = sizedItems.reduce((count, item) => count + (isRow
       ? Number(item.autoMargin?.left) + Number(item.autoMargin?.right)
       : Number(item.autoMargin?.top) + Number(item.autoMargin?.bottom)), 0);
@@ -1493,10 +1500,10 @@ export class FlexService {
         startOffset = 0;
         break;
       case 'flex-end':
-        startOffset = remainingSpace;
+        startOffset = freeSpace;
         break;
       case 'center':
-        startOffset = remainingSpace / 2;
+        startOffset = freeSpace / 2;
         break;
       case 'space-between':
         if (items.length > 1) {

@@ -661,4 +661,32 @@ describe('FlexService', () => {
     expect(top(1)).toBe(6);
     expect(top(2)).toBe(44);
   });
+
+  it('centers an overflowing min-content item with negative free space', () => {
+    const service = new FlexService(new FlexLayoutService(), {} as never, {} as never);
+    const item: FlexItem = {
+      element: { type: 'strong', id: 'overflowing-label' },
+      style: { selector: '#overflowing-label' },
+      width: 60, height: 42, baseWidth: 60, baseHeight: 42, minWidth: 60,
+      margin: { top: 0, right: 0, bottom: 0, left: 0 },
+      flexGrow: 0, flexShrink: 1, flexBasis: 'auto', alignSelf: 'auto', order: 0,
+    };
+    const padding = { top: 0, right: 17, bottom: 0, left: 17 };
+    const flexProps = {
+      flexDirection: 'row', justifyContent: 'center', alignItems: 'center',
+      flexWrap: 'nowrap', alignContent: 'stretch',
+    };
+    const container: FlexContainer = {
+      width: 80, height: 60, padding, ...flexProps,
+      gap: 0, rowGap: 0, columnGap: 0,
+    };
+
+    const [result] = service['calculateFlexLayout'](
+      [item], container.width, container.height, padding,
+      flexProps, {} as BabylonRender, container,
+    );
+
+    expect(result.position.x).toBe(0);
+    expect(result.size.width).toBe(60);
+  });
 });
