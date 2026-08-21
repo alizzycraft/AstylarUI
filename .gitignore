@@ -3,6 +3,7 @@
 # Compiled output
 /dist
 /artifacts/parity
+/artifacts/tts-parity
 /tmp
 /out-tsc
 /bazel-out

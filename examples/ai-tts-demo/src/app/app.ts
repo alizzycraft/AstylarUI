@@ -1,4 +1,6 @@
-import { Component, computed, inject, NgZone, signal } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { Component, computed, inject, NgZone, PLATFORM_ID, signal } from '@angular/core';
+import { Matrix, Vector3 } from '@babylonjs/core/Maths/math.vector';
 import {
   AstylarSurfaceComponent,
   type AstylarEvent,
@@ -17,6 +19,10 @@ import { buildTtsDemoSite } from './ui/tts-demo-site';
 export class App {
   private readonly store = inject(TtsDemoStore);
   private readonly zone = inject(NgZone);
+  private readonly platformId = inject(PLATFORM_ID);
+  private readonly benchmarkState = isPlatformBrowser(this.platformId)
+    ? new URLSearchParams(window.location.search).get('parityState')
+    : null;
 
   protected readonly siteData = computed(() => buildTtsDemoSite(this.store.viewModel()));
   protected readonly status = signal('Starting the AstylarUI renderer…');
@@ -32,7 +38,24 @@ export class App {
     },
   };
 
-  protected onMounted(_surface: AstylarSurface): void {
+  constructor() {
+    if (this.benchmarkState === 'initial') {
+      this.store.setTitle('');
+      this.store.setText('');
+      this.store.setInstructions('');
+    } else if (this.benchmarkState === 'generated') {
+      this.store.setTitle('');
+      this.store.setText('hello');
+      this.store.setInstructions('');
+    }
+  }
+
+  protected async onMounted(surface: AstylarSurface): Promise<void> {
+    if (this.benchmarkState === 'generated' && this.store.generations().length === 0) {
+      await this.store.generate();
+      await surface.whenSettled();
+    }
+    if (this.benchmarkState) this.installBenchmarkHook(surface);
     this.status.set('AstylarUI renderer ready.');
   }
 
@@ -71,5 +94,92 @@ export class App {
     if (historyAction?.[2] === 'play') void this.store.togglePlayback(historyAction[1]);
     if (historyAction?.[2] === 'download') this.store.downloadGeneration(historyAction[1]);
     if (historyAction?.[2] === 'delete') this.store.deleteGeneration(historyAction[1]);
+  }
+
+  private installBenchmarkHook(surface: AstylarSurface): void {
+    const canvas = surface.scene.getEngine().getRenderingCanvas();
+    if (!canvas) return;
+    window.__ASTYLAR_TTS_BENCHMARK__ = {
+      state: this.benchmarkState ?? 'interactive',
+      measure: (ids: string[]) => {
+        const elements = Object.fromEntries(ids.map((id) => {
+          const meshes = surface.scene.meshes.filter((mesh) => mesh.metadata?.elementId === id);
+          const mesh = meshes.find((candidate) => candidate.name === id) ?? meshes[0];
+          if (!mesh) return [id, { exists: false }];
+          mesh.computeWorldMatrix(true);
+          const engine = surface.scene.getEngine();
+          const camera = surface.scene.activeCamera;
+          if (!camera) return [id, { exists: true, error: 'No active camera.' }];
+          const renderViewport = camera.viewport.toGlobal(engine.getRenderWidth(), engine.getRenderHeight());
+          const projected = mesh.getBoundingInfo().boundingBox.vectorsWorld.map((point) =>
+            Vector3.Project(point, Matrix.IdentityReadOnly, surface.scene.getTransformMatrix(), renderViewport));
+          const scaleX = canvas.clientWidth / engine.getRenderWidth();
+          const scaleY = canvas.clientHeight / engine.getRenderHeight();
+          const left = Math.min(...projected.map((point) => point.x)) * scaleX;
+          const right = Math.max(...projected.map((point) => point.x)) * scaleX;
+          const top = Math.min(...projected.map((point) => point.y)) * scaleY;
+          const bottom = Math.max(...projected.map((point) => point.y)) * scaleY;
+          const intersectsViewport = right > 0 && bottom > 0 && left < canvas.clientWidth && top < canvas.clientHeight;
+          const fullyVisible = left >= 0 && top >= 0 && right <= canvas.clientWidth && bottom <= canvas.clientHeight;
+          return [id, {
+            exists: true,
+            borderBox: { left, top, right, bottom, width: right - left, height: bottom - top },
+            visibility: {
+              exists: true,
+              intersectsViewport,
+              fullyVisible,
+              clipped: !fullyVisible,
+              clippingAncestorIds: this.clippingAncestorIds(id),
+            },
+          }];
+        }));
+        const scrolling = surface.diagnostics.scrolling?.containers ?? {};
+        return {
+          elements,
+          scrolling: Object.fromEntries(Object.entries(scrolling).map(([id, value]) => [id, {
+            ...value,
+            initialScrollLeft: 0,
+            initialScrollTop: 0,
+            maxScrollLeft: Math.max(0, value.scrollWidth - value.clientWidth),
+            maxScrollTop: Math.max(0, value.scrollHeight - value.clientHeight),
+            canReachRight: value.scrollLeft >= value.scrollWidth - value.clientWidth - 1,
+            canReachBottom: value.scrollTop >= value.scrollHeight - value.clientHeight - 1,
+          }])),
+          settlement: surface.diagnostics.session,
+          diagnostics: surface.diagnostics.messages,
+          canvas: { width: canvas.clientWidth, height: canvas.clientHeight },
+        };
+      },
+    };
+  }
+
+  private clippingAncestorIds(targetId: string): string[] {
+    const site = this.siteData();
+    const visit = (element: typeof site.root.children[number], ancestors: string[]): string[] | undefined => {
+      if (element.id === targetId) return ancestors;
+      const rule = element.id ? site.styles.find((candidate) => candidate.selector === `#${element.id}`) : undefined;
+      const next = element.id && ['hidden', 'clip', 'auto', 'scroll'].includes(rule?.overflow ?? '')
+        ? [...ancestors, element.id]
+        : ancestors;
+      for (const child of element.children ?? []) {
+        const found = visit(child, next);
+        if (found) return found;
+      }
+      return undefined;
+    };
+    for (const root of site.root.children) {
+      const found = visit(root, []);
+      if (found) return found;
+    }
+    return [];
+  }
+}
+
+declare global {
+  interface Window {
+    __ASTYLAR_TTS_BENCHMARK__?: {
+      state: string;
+      measure(ids: string[]): unknown;
+    };
   }
 }
