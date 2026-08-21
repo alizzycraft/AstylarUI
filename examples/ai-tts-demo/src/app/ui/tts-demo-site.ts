@@ -205,6 +205,7 @@ const styles: StyleRule[] = [
   { selector: '#cancel-speech', padding: '10px 16px', background: '#21262d', color: '#e6edf3', borderWidth: '1px', borderStyle: 'solid', borderColor: '#30363d', borderRadius: '6px' },
   { selector: '.audio-player', flexShrink: '0', minHeight: '116px', margin: '8px 24px 16px', padding: '16px', background: '#161b22', borderWidth: '1px', borderStyle: 'solid', borderColor: '#21262d', borderRadius: '12px' },
   { selector: '#player-placeholder', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#7d8590' },
+  { selector: '#selected-player', height: '131px' },
   { selector: '#selected-player-row', display: 'flex', alignItems: 'center', gap: '16px', margin: '22px 0 0 0', color: '#7d8590', fontSize: '12px' },
   { selector: '#selected-player-title', height: '19px', lineHeight: '19px', margin: '1px 0 0 0' },
   { selector: '#selected-player-meta', minWidth: '100px', whiteSpace: 'pre-line' },
