@@ -90,14 +90,12 @@ async function waitFor(check, description, timeoutMs = 20_000) {
   throw new Error(`Timed out waiting for ${description}.${lastError ? ` ${String(lastError)}` : ''}`);
 }
 
-async function captureInputContinuity(page, targetId, nextValue, frameCount = 30) {
-  return await page.evaluate(async ({ targetId, nextValue, frameCount }) => {
+async function captureCanvasContinuity(page, action, frameCount = 30) {
+  return await page.evaluate(async ({ action, frameCount }) => {
     const canvas = document.querySelector('astylar-surface canvas');
-    const target = document.querySelector(`[data-astylar-id="${targetId}"]`);
+    const target = document.querySelector(`[data-astylar-id="${action.targetId}"]`);
     if (!(canvas instanceof HTMLCanvasElement)) throw new Error('AstylarUI canvas is missing.');
-    if (!(target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement)) {
-      throw new Error(`Semantic input ${targetId} is missing.`);
-    }
+    if (!(target instanceof HTMLElement)) throw new Error(`Semantic target ${action.targetId} is missing.`);
 
     const probe = document.createElement('canvas');
     probe.width = 96;
@@ -134,8 +132,15 @@ async function captureInputContinuity(page, targetId, nextValue, frameCount = 30
         }
         frames.push(edgeEnergy / comparisons);
         if (frames.length === 3) {
-          target.value = nextValue;
-          target.dispatchEvent(new Event('input', { bubbles: true }));
+          if (action.type === 'input' &&
+              (target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement)) {
+            target.value = action.value;
+            target.dispatchEvent(new Event('input', { bubbles: true }));
+          } else if (action.type === 'click') {
+            target.click();
+          } else {
+            throw new Error(`Unsupported continuity action for ${action.targetId}.`);
+          }
         }
         if (frames.length < frameCount) requestAnimationFrame(sample);
         else resolve();
@@ -143,7 +148,21 @@ async function captureInputContinuity(page, targetId, nextValue, frameCount = 30
       requestAnimationFrame(sample);
     });
     return frames;
-  }, { targetId, nextValue, frameCount });
+  }, { action, frameCount });
+}
+
+function assertCanvasContinuity(frames, label) {
+  const baselineEnergy = frames.slice(0, 2)
+    .reduce((total, value) => total + value, 0) / 2;
+  const minimumUpdateEnergy = Math.min(...frames.slice(4));
+  assert.ok(
+    minimumUpdateEnergy >= baselineEnergy * 0.5,
+    `${label} presented a cleared canvas frame (${JSON.stringify({
+      baselineEnergy,
+      minimumUpdateEnergy,
+      frames,
+    })}).`,
+  );
 }
 
 async function runBrowserSmoke() {
@@ -190,22 +209,11 @@ async function runBrowserSmoke() {
   }
 
   const speech = page.getByRole('textbox', { name: 'Text to speak' });
-  const continuityFrames = await captureInputContinuity(
+  const continuityFrames = await captureCanvasContinuity(
     page,
-    'speech-text',
-    'Frame continuity probe',
+    { type: 'input', targetId: 'speech-text', value: 'Frame continuity probe' },
   );
-  const baselineEnergy = continuityFrames.slice(0, 2)
-    .reduce((total, value) => total + value, 0) / 2;
-  const minimumUpdateEnergy = Math.min(...continuityFrames.slice(4));
-  assert.ok(
-    minimumUpdateEnergy >= baselineEnergy * 0.5,
-    `Interactive reflow presented a cleared canvas frame (${JSON.stringify({
-      baselineEnergy,
-      minimumUpdateEnergy,
-      continuityFrames,
-    })}).`,
-  );
+  assertCanvasContinuity(continuityFrames, 'Interactive input reflow');
   await speech.focus();
   await page.keyboard.press('Control+A');
   const generatedText = 'AstylarUI brings familiar web application patterns into a Babylon-rendered space.';
@@ -220,7 +228,12 @@ async function runBrowserSmoke() {
 
   const generate = page.getByRole('button', { name: 'Generate speech' });
   await generate.focus();
-  await page.keyboard.press('Enter');
+  const generationContinuityFrames = await captureCanvasContinuity(
+    page,
+    { type: 'click', targetId: 'generate-speech' },
+    60,
+  );
+  assertCanvasContinuity(generationContinuityFrames, 'Mock speech generation');
   await waitFor(
     async () => (await page.getByRole('status').textContent())?.includes('Speech generated successfully!') ?? false,
     'mock speech generation',

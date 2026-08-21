@@ -162,7 +162,7 @@ describe('Astylar simultaneous surface isolation', () => {
 
       releaseReadiness();
       await update;
-      expect(render.calls.count()).toBeGreaterThan(suspendedRenderCount);
+      expect(render.calls.count() - suspendedRenderCount).toBe(2);
     } finally {
       surface.dispose();
       canvas.remove();

@@ -505,7 +505,14 @@ class AstylarRenderer {
               if (disposeObserver) scene.onDisposeObservable.remove(disposeObserver);
             }
           }
-          if (!scene.isDisposed) scene.render();
+          if (!scene.isDisposed) {
+            // Keep the rebuilt tree off-screen for two submitted frames. The
+            // first render can still upload newly-created textures and compile
+            // materials; the second replaces that incomplete frame before the
+            // browser compositor can present it.
+            scene.render();
+            scene.render();
+          }
           visualResourceTransaction.commitOwnership();
           visualPlan.commit({ reused: reusedVisualMeshes });
           previousVisualIdentityData = this.snapshotVisualIdentityData(currentSiteData);
