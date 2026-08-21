@@ -45,15 +45,33 @@ describe('App', () => {
     ]);
   });
 
-  it('includes reusable settings, editor, status, player, and history states', () => {
+  it('includes the reference-derived settings, editor, player, storage, and history states', () => {
     const site = buildTtsDemoSite();
     const serialized = JSON.stringify(site.root);
+    expect(serialized).toContain('provider-field');
     expect(serialized).toContain('voice-field');
     expect(serialized).toContain('speech-text');
-    expect(serialized).toContain('generation-status');
     expect(serialized).toContain('player-placeholder');
     expect(serialized).toContain('history-empty');
-    expect(serialized).toContain('This voice is AI-generated.');
+    expect(serialized).toContain('storage-disclosure');
+    expect(serialized).not.toContain('generation-status');
+  });
+
+  it('renders the generated status, selected player, and history item together', () => {
+    const site = buildTtsDemoSite({
+      ...DEFAULT_TTS_VIEW_MODEL,
+      status: 'success',
+      statusMessage: 'Generated.',
+      selectedHistoryId: 'speech-1',
+      history: [{
+        id: 'speech-1', title: 'Speech preview 1', text: 'hello', voice: 'alloy',
+        createdLabel: 'Just now', sizeLabel: '7.5 KB', durationLabel: '0:00', formatLabel: 'WAV',
+      }],
+    });
+    const serialized = JSON.stringify(site.root);
+    expect(serialized).toContain('generation-status');
+    expect(serialized).toContain('selected-player');
+    expect(serialized).toContain('history-speech-1');
   });
 
   it('authors stable unique IDs throughout the default document', () => {
@@ -68,11 +86,10 @@ describe('App', () => {
     expect(new Set(ids).size).toBe(ids.length);
   });
 
-  it('provides responsive rules below, at, and above its meaningful breakpoints', () => {
+  it('provides the reference application responsive breakpoint rules', () => {
     const styles = buildTtsDemoSite().styles;
-    expect(styles.some((rule) => rule.mediaMaxWidth === '1050px')).toBeTrue();
-    expect(styles.some((rule) => rule.mediaMaxWidth === '760px')).toBeTrue();
-    expect(styles.some((rule) => rule.mediaMaxWidth === '520px')).toBeTrue();
+    expect(styles.some((rule) => rule.mediaMaxWidth === '768px')).toBeTrue();
+    expect(styles.some((rule) => rule.mediaMaxWidth === '760px')).toBeFalse();
   });
 
   it('exposes a cancellable static loading state', () => {
@@ -83,7 +100,7 @@ describe('App', () => {
     });
     const serialized = JSON.stringify(site.root);
     expect(serialized).toContain('cancel-speech');
-    expect(serialized).toContain('Generating speech…');
+    expect(serialized).toContain('Generating...');
     expect(serialized).toContain('"disabled":true');
   });
 });

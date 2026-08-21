@@ -1,12 +1,4 @@
 import type { DOMElement, SiteData, StyleRule } from 'astylarui';
-import {
-  button,
-  historyCard,
-  playerCard,
-  selectControl,
-  statusBanner,
-  textControl,
-} from './component-builders';
 import { DEFAULT_TTS_VIEW_MODEL, type TtsDemoViewModel } from './tts-demo-model';
 
 const VOICES = [
@@ -18,291 +10,244 @@ const VOICES = [
   { value: 'shimmer', label: 'Shimmer' },
 ];
 
-function settingsPanel(view: TtsDemoViewModel): DOMElement {
+function labelledSelect(
+  id: string,
+  label: string,
+  value: string,
+  options: readonly { value: string; label: string }[],
+  disabled = false,
+): DOMElement {
   return {
-    type: 'aside',
-    id: 'settings-panel',
-    ariaLabelledby: 'settings-title',
-    children: [
-      { type: 'header', id: 'brand-header', children: [
-        { type: 'p', id: 'brand-mark', textContent: '◉ ASTYLAR LABS' },
-        { type: 'h1', id: 'app-title', textContent: 'AI Speech Studio' },
-        { type: 'p', id: 'app-subtitle', textContent: 'Text to MP3 · session workspace' },
-      ] },
-      { type: 'h2', id: 'settings-title', textContent: 'Settings' },
-      selectControl({
-        id: 'provider',
-        label: 'Provider',
-        value: view.provider,
-        options: [{ value: 'OpenAI', label: 'OpenAI' }],
-        description: 'This focused demo supports one provider.',
-        disabled: true,
-      }),
-      selectControl({
-        id: 'model',
-        label: 'Model',
-        value: view.model,
-        options: [{ value: 'gpt-4o-mini-tts', label: 'GPT-4o mini TTS' }],
-        disabled: true,
-      }),
-      selectControl({ id: 'voice', label: 'Voice', value: view.voice, options: VOICES }),
-      textControl({
-        id: 'instructions',
-        label: 'Voice instructions',
-        value: view.instructions,
-        description: 'Describe tone, pace, emphasis, or delivery.',
-        multiline: true,
-        rows: 4,
-        maxLength: 500,
-      }),
-      {
-        type: 'div',
-        id: 'privacy-note',
-        class: 'note-card',
-        children: [
-          { type: 'strong', id: 'privacy-title', textContent: 'Server-side credentials' },
-          { type: 'p', id: 'privacy-copy', textContent: 'The browser never receives or stores an OpenAI API key.' },
-        ],
-      },
+    type: 'label', id: `${id}-field`, for: id, class: 'setting-field', children: [
+      { type: 'span', id: `${id}-label`, class: 'setting-label', textContent: label },
+      { type: 'select', id, name: id, value, options: [...options], ariaLabel: label, disabled },
     ],
   };
 }
 
-function workspacePanel(view: TtsDemoViewModel): DOMElement {
-  const hasSelection = !!view.selectedHistoryId;
+function settingsPanel(view: TtsDemoViewModel): DOMElement {
   return {
-    type: 'main',
-    id: 'workspace-panel',
-    children: [
-      { type: 'header', id: 'workspace-header', children: [
-        { type: 'div', id: 'workspace-heading', children: [
-          { type: 'p', id: 'workspace-kicker', textContent: 'AstylarUI application demo' },
-          { type: 'h2', id: 'workspace-title', textContent: 'Create a speech preview' },
-        ] },
-        {
-          type: 'span',
-          id: 'mode-badge',
-          class: `mode-badge mode-badge-${view.mode}`,
-          textContent: view.mode === 'live' ? 'LIVE OPENAI MODE' : 'MOCK MODE · $0',
-        },
+    type: 'aside', id: 'settings-panel', children: [
+      { type: 'header', id: 'brand-header', class: 'app-header', children: [
+        { type: 'h1', id: 'app-title', class: 'app-title', textContent: '◉ AI-TTS-MP3' },
+        { type: 'p', id: 'app-subtitle', class: 'app-subtitle', textContent: 'Text to MP3 conversion' },
       ] },
-      {
-        type: 'form',
-        id: 'speech-form',
-        children: [
-          textControl({
-            id: 'generation-title',
-            label: 'Title for session history (optional)',
-            value: view.title,
-            placeholder: 'Example: Product introduction',
-            maxLength: 80,
-          }),
-          textControl({
-            id: 'speech-text',
-            label: 'Text to speak',
-            value: view.text,
-            placeholder: 'Enter the text you want to hear…',
-            multiline: true,
-            rows: 12,
-            maxLength: view.maxCharacters,
-          }),
-          {
-            type: 'div',
-            id: 'editor-footer',
-            children: [
-              {
-                type: 'span',
-                id: 'character-count',
-                textContent: `${view.text.length.toLocaleString()} / ${view.maxCharacters.toLocaleString()} characters`,
-              },
-              {
-                type: 'div',
-                id: 'generation-actions',
-                children: [
-                  ...(view.status === 'generating'
-                    ? [button('cancel-speech', 'Cancel generation')]
-                    : []),
-                  button(
-                    'generate-speech',
-                    view.status === 'generating' ? 'Generating speech…' : 'Generate speech',
-                    'primary',
-                    view.status === 'generating',
-                  ),
-                ],
-              },
-            ],
-          },
-        ],
-      },
-      statusBanner(view.status, view.statusMessage),
-      ...(hasSelection ? [playerCard({
-        idPrefix: 'selected',
-        title: view.history.find((item) => item.id === view.selectedHistoryId)?.title ?? 'Selected speech',
-        voice: view.history.find((item) => item.id === view.selectedHistoryId)?.voice ?? view.voice,
-        currentTimeLabel: view.currentTimeLabel,
-        durationLabel: view.durationLabel,
-        progressPercent: view.progressPercent,
-        playing: view.playingHistoryId === view.selectedHistoryId,
-      })] : [{
-        type: 'section' as const,
-        id: 'player-placeholder',
-        class: 'empty-card',
-        children: [
-          { type: 'h3' as const, id: 'player-placeholder-title', textContent: 'Your latest generation will appear here' },
-          { type: 'p' as const, id: 'player-placeholder-copy', textContent: 'Generate a preview to unlock playback and MP3 download controls.' },
-        ],
-      }]),
+      { type: 'div', id: 'settings-header', children: [
+        { type: 'h2', id: 'settings-title', textContent: '⚙ Settings' },
+      ] },
+      { type: 'div', id: 'settings-content', children: [
+        labelledSelect('provider', 'Voice Provider', view.provider.toLowerCase(), [{ value: 'openai', label: 'Openai' }], true),
+        labelledSelect('model', 'Model', view.model, [{ value: view.model, label: 'tts-1' }], true),
+        labelledSelect('voice', 'Voice', view.voice, VOICES),
+        { type: 'label', id: 'instructions-field', for: 'instructions', class: 'setting-field', children: [
+          { type: 'span', id: 'instructions-label', class: 'setting-label', textContent: 'API Key' },
+          { type: 'input', inputType: 'password', id: 'instructions', name: 'instructions', value: view.instructions || 'reference-only-reference-only' },
+        ] },
+      ] },
+      { type: 'footer', id: 'settings-footer', textContent: 'Licensed under AGPL v3' },
+    ],
+  };
+}
+
+function editor(view: TtsDemoViewModel): DOMElement {
+  const lines = Math.max(1, view.text.split(/\r?\n/).length);
+  return {
+    type: 'section', id: 'speech-form', children: [
+      { type: 'div', id: 'title-row', children: [
+        { type: 'input', inputType: 'text', id: 'generation-title', name: 'generation-title',
+          value: view.title, placeholder: 'Title for history (optional)', ariaLabel: 'Title for history', maxLength: 80 },
+        { type: 'span', id: 'save-history', textContent: '◉  Save to History' },
+      ] },
+      { type: 'div', id: 'editor-container', children: [
+        { type: 'div', id: 'editor-header', children: [
+          { type: 'strong', id: 'workspace-title', textContent: '▣  text-to-speech.txt' },
+          { type: 'span', id: 'character-count', textContent: `${lines} lines | ${view.text.length} chars | ${Math.max(1, Math.ceil(view.text.length / 4))} tks | ~$0.00007 est.` },
+        ] },
+        { type: 'div', id: 'editor-wrapper', children: [
+          { type: 'div', id: 'line-numbers', textContent: Array.from({ length: lines }, (_, index) => `${index + 1}`).join('\n') },
+          { type: 'textarea', id: 'speech-text', name: 'speech-text', value: view.text,
+            placeholder: 'Enter text to convert to speech...', ariaLabel: 'Text to speak', rows: 12, maxLength: view.maxCharacters },
+        ] },
+      ] },
+      { type: 'div', id: 'editor-bottom', children: [
+        ...(view.status === 'idle' ? [] : [{
+          type: 'span' as const,
+          id: 'generation-status',
+          role: view.status === 'error' ? 'alert' as const : 'status' as const,
+          ariaLive: view.status === 'error' ? 'assertive' as const : 'polite' as const,
+          ariaAtomic: true,
+          textContent: view.status === 'success' ? 'Speech generated successfully!' : view.statusMessage,
+        }]),
+        ...(view.status === 'generating' ? [{
+          type: 'button' as const, inputType: 'button' as const, id: 'cancel-speech', value: 'Cancel generation',
+        }] : []),
+        { type: 'button', inputType: 'button', id: 'generate-speech',
+          value: view.status === 'generating' ? 'Generating...' : '♩  Generate Speech',
+          ariaLabel: view.status === 'generating' ? 'Generating speech' : 'Generate speech',
+          disabled: view.status === 'generating' },
+      ] },
+    ],
+  };
+}
+
+function player(view: TtsDemoViewModel): DOMElement {
+  const selected = view.history.find((item) => item.id === view.selectedHistoryId);
+  if (!selected) {
+    return { type: 'section', id: 'player-placeholder', class: 'audio-player', children: [
+      { type: 'strong', id: 'player-placeholder-title', textContent: 'Generate speech to see audio controls here' },
+    ] };
+  }
+  return {
+    type: 'article', id: 'selected-player', class: 'audio-player', ariaLabel: `Audio player for ${selected.title}`, children: [
+      { type: 'strong', id: 'selected-player-title', textContent: selected.text },
+      { type: 'div', id: 'selected-player-row', children: [
+        { type: 'p', id: 'selected-player-meta', textContent: `Provider: openai\nModel: tts-1\nVoice: ${selected.voice}` },
+        { type: 'button', inputType: 'button', id: 'selected-play', value: view.playingHistoryId === selected.id ? 'Pause' : '▷', ariaLabel: view.playingHistoryId === selected.id ? 'Pause' : 'Play' },
+        { type: 'span', id: 'selected-current-time', textContent: view.currentTimeLabel },
+        { type: 'div', id: 'selected-progress-track', role: 'progressbar', ariaLabel: 'Playback progress', children: [
+          { type: 'div', id: 'selected-progress-fill', style: { width: `${view.progressPercent}%` } },
+        ] },
+        { type: 'span', id: 'selected-duration', textContent: view.durationLabel },
+        { type: 'button', inputType: 'button', id: 'selected-download', value: '⇩', ariaLabel: `Download ${selected.title}` },
+        { type: 'p', id: 'selected-player-info', textContent: `${selected.createdLabel}\nSize: ${selected.sizeLabel}\nDuration: ${selected.durationLabel}` },
+      ] },
+    ],
+  };
+}
+
+function historyItem(item: TtsDemoViewModel['history'][number], selected: boolean, playing: boolean): DOMElement {
+  return {
+    type: 'article', id: `history-${item.id}`, class: selected ? 'history-item selected' : 'history-item',
+    role: 'button', tabindex: 0, ariaLabel: `Select ${item.title}`, children: [
+      { type: 'small', id: `history-${item.id}-meta`, textContent: `⚙ Openai    ● ${item.voice}                         ${item.createdLabel}` },
+      { type: 'p', id: `history-${item.id}-text`, textContent: item.text },
+      { type: 'div', id: `history-${item.id}-actions`, children: [
+        { type: 'span', id: `history-${item.id}-size`, textContent: `${item.sizeLabel}    ${item.durationLabel}` },
+        { type: 'button', inputType: 'button', id: `history-${item.id}-play`, value: playing ? 'Pause' : '▷', ariaLabel: playing ? 'Pause' : 'Play' },
+        { type: 'button', inputType: 'button', id: `history-${item.id}-download`, value: '⇩', ariaLabel: `Download ${item.title}` },
+        { type: 'button', inputType: 'button', id: `history-${item.id}-delete`, value: '♲', ariaLabel: `Delete ${item.title}` },
+      ] },
     ],
   };
 }
 
 function historyPanel(view: TtsDemoViewModel): DOMElement {
-  const query = view.historyQuery.trim().toLocaleLowerCase();
-  const filtered = view.history.filter((item) =>
-    !query || `${item.title} ${item.text} ${item.voice}`.toLocaleLowerCase().includes(query));
-
+  const query = view.historyQuery.trim().toLowerCase();
+  const filtered = view.history.filter((item) => !query || `${item.title} ${item.text} ${item.voice}`.toLowerCase().includes(query));
   return {
-    type: 'aside',
-    id: 'history-panel',
-    ariaLabelledby: 'history-title',
-    children: [
-      { type: 'header', id: 'history-header', children: [
-        { type: 'div', id: 'history-heading', children: [
-          { type: 'h2', id: 'history-title', textContent: 'Session history' },
-          { type: 'p', id: 'history-subtitle', textContent: `${view.history.length} generation${view.history.length === 1 ? '' : 's'} · cleared on refresh` },
-        ] },
-        button('clear-history', 'Clear all history', 'danger', view.history.length === 0),
+    type: 'aside', id: 'history-panel', children: [
+      { type: 'header', id: 'history-header', class: 'app-header', children: [
+        { type: 'h2', id: 'history-title', textContent: `▣  History (${view.history.length})` },
+        { type: 'p', id: 'history-subtitle', textContent: 'Generated speech will appear here' },
       ] },
-      {
-        type: 'details',
-        id: 'storage-disclosure',
-        open: view.storageDisclosureOpen,
-        children: [
-          { type: 'summary', id: 'storage-summary', textContent: 'AI-generated voice and session storage' },
-          { type: 'p', id: 'storage-copy', textContent: 'This voice is AI-generated. Audio remains in memory for this tab and is not written to local storage.' },
-        ],
-      },
-      textControl({
-        id: 'history-search',
-        label: 'Search history',
-        value: view.historyQuery,
-        placeholder: 'Search title, text, or voice…',
-      }),
-      {
-        type: 'section',
-        id: 'history-list',
-        ariaLabel: 'Generated speech history',
-        children: filtered.length > 0
-          ? filtered.map((item) => historyCard(item, {
-            selected: item.id === view.selectedHistoryId,
-            playing: item.id === view.playingHistoryId,
-          }))
-          : [{
-            type: 'div',
-            id: 'history-empty',
-            class: 'empty-card',
-            children: [
-              { type: 'h3', id: 'history-empty-title', textContent: query ? 'No matching generations' : 'No speech generated yet' },
-              { type: 'p', id: 'history-empty-copy', textContent: query ? 'Try a different history search.' : 'Your session history will appear here.' },
-            ],
-          }],
-      },
+      { type: 'div', id: 'history-body', children: [
+        { type: 'section', id: 'storage-disclosure', children: [
+          { type: 'strong', id: 'storage-title', textContent: 'Storage  ♧' },
+          { type: 'div', id: 'storage-bar' },
+          { type: 'div', id: 'storage-text', children: [
+            { type: 'b', id: 'storage-percent', textContent: '0%' },
+            { type: 'span', id: 'storage-size', textContent: '7.5 KB / 20 MB' },
+          ] },
+        ] },
+        { type: 'div', id: 'history-search-row', children: [
+          { type: 'input', inputType: 'text', id: 'history-search', name: 'history-search', value: view.historyQuery, placeholder: 'Search history...', ariaLabel: 'Search history' },
+          { type: 'button', inputType: 'button', id: 'clear-history', value: '♲ All', ariaLabel: 'Clear all history', disabled: view.history.length === 0 },
+        ] },
+        { type: 'div', id: 'history-list', children: filtered.length
+          ? filtered.map((item) => historyItem(item, item.id === view.selectedHistoryId, item.id === view.playingHistoryId))
+          : [{ type: 'article', id: 'history-empty', children: [
+              { type: 'h3', id: 'history-empty-title', textContent: query ? 'No items match your search' : 'No TTS history yet' },
+              { type: 'p', id: 'history-empty-copy', textContent: 'Generated speech will appear here' },
+            ] }] },
+      ] },
+      { type: 'footer', id: 'history-footer', textContent: 'by:  ▣  ♧  ♡  ◎' },
     ],
   };
 }
 
 const styles: StyleRule[] = [
-  { selector: '#tts-app', display: 'flex', width: '100%', height: '100%', minHeight: '640px', background: '#0b0f14', color: '#eef4ff', fontFamily: 'Arial', fontSize: '15px', lineHeight: '22px', overflow: 'hidden' },
-  { selector: '#settings-panel', boxSizing: 'border-box', width: '282px', padding: '28px 24px', background: '#151b23', borderWidth: '0 1px 0 0', borderStyle: 'solid', borderColor: '#27303c', overflow: 'auto' },
-  { selector: '#workspace-panel', boxSizing: 'border-box', flex: '1', minWidth: '0', padding: '28px', background: '#0f141b', overflow: 'auto' },
-  { selector: '#history-panel', boxSizing: 'border-box', width: '330px', padding: '28px 20px', background: '#11171e', borderWidth: '0 0 0 1px', borderStyle: 'solid', borderColor: '#27303c', overflow: 'auto' },
-  { selector: '#brand-header', margin: '0 0 34px 0', background: '#151b23' },
-  { selector: '#brand-mark', margin: '0 0 8px 0', color: '#66a3ff', fontSize: '12px', fontWeight: '700', letterSpacing: '1.4px' },
-  { selector: '#app-title', margin: '0 0 5px 0', fontSize: '23px', lineHeight: '29px' },
-  { selector: '#app-subtitle', margin: '0', color: '#91a0b5', fontSize: '13px' },
-  { selector: '#settings-title', margin: '0 0 20px 0', fontSize: '17px' },
-  { selector: '.control-field', display: 'flex', flexDirection: 'column', gap: '7px', margin: '0 0 18px 0' },
-  { selector: '.control-field label', color: '#eaf1fc', fontWeight: '700' },
-  { selector: '.control-field input', boxSizing: 'border-box', width: '100%', padding: '12px', background: '#0b1016', color: '#f4f7fb', borderWidth: '1px', borderStyle: 'solid', borderColor: '#2b3542', borderRadius: '8px' },
-  { selector: '.control-field select', boxSizing: 'border-box', width: '100%', padding: '12px', background: '#0b1016', color: '#f4f7fb', borderWidth: '1px', borderStyle: 'solid', borderColor: '#2b3542', borderRadius: '8px' },
-  { selector: '.control-field textarea', boxSizing: 'border-box', width: '100%', minHeight: '92px', padding: '12px', background: '#0b1016', color: '#f4f7fb', borderWidth: '1px', borderStyle: 'solid', borderColor: '#2b3542', borderRadius: '8px', lineHeight: '22px' },
-  { selector: '.control-help', color: '#8291a7', fontSize: '12px', lineHeight: '17px' },
-  { selector: '.note-card', padding: '14px', background: '#182432', borderWidth: '1px', borderStyle: 'solid', borderColor: '#263b50', borderRadius: '10px' },
-  { selector: '.note-card strong', color: '#b7d5ff' },
-  { selector: '.note-card p', margin: '6px 0 0 0', color: '#8fa3bc', fontSize: '12px', lineHeight: '18px' },
-  { selector: '#workspace-header', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '20px', margin: '0 0 20px 0', background: '#0f141b' },
-  { selector: '#workspace-kicker', margin: '0 0 5px 0', color: '#6da8ff', fontSize: '12px', fontWeight: '700', letterSpacing: '1px', textTransform: 'uppercase' },
-  { selector: '#workspace-title', margin: '0', fontSize: '26px', lineHeight: '32px' },
-  { selector: '.mode-badge', padding: '6px 9px', background: '#173622', color: '#74db94', borderWidth: '1px', borderStyle: 'solid', borderColor: '#245d37', borderRadius: '999px', fontSize: '10px', fontWeight: '700', letterSpacing: '1px' },
-  { selector: '.mode-badge-live', background: '#352a16', color: '#ffdc8a', borderColor: '#6d5420' },
-  { selector: '#speech-form', padding: '20px', background: '#171d25', borderWidth: '1px', borderStyle: 'solid', borderColor: '#27303c', borderRadius: '14px', boxShadow: '0 14px 34px rgba(0, 0, 0, 0.18)' },
-  { selector: '#speech-text', minHeight: '250px' },
-  { selector: '#editor-footer', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '16px' },
-  { selector: '#generation-actions', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '8px' },
-  { selector: '#character-count', color: '#8b9bb0', fontSize: '12px' },
-  { selector: '#generate-speech', width: '180px' },
-  { selector: '.ui-button', padding: '10px 14px', background: '#283342', color: '#f4f7fb', borderWidth: '1px', borderStyle: 'solid', borderColor: '#39475a', borderRadius: '8px', fontWeight: '700', cursor: 'pointer' },
-  { selector: '.ui-button-primary', background: '#247c3d', borderColor: '#329b50', color: '#ffffff' },
-  { selector: '.ui-button-danger', padding: '8px 10px', background: '#2c2024', borderColor: '#5a3038', color: '#ffb4bf', fontSize: '12px' },
-  { selector: '.ui-button-icon', padding: '8px 10px', background: '#1d2631', color: '#cbd6e5', fontSize: '12px' },
-  { selector: '.status-banner', display: 'block', margin: '16px 0', padding: '12px 14px', background: '#17202b', color: '#b8c6d8', borderWidth: '1px', borderStyle: 'solid', borderColor: '#293748', borderRadius: '9px' },
-  { selector: '.status-generating', background: '#2a2518', color: '#ffe19a', borderColor: '#55471e' },
-  { selector: '.status-success', background: '#14291c', color: '#9ce6ae', borderColor: '#285538' },
-  { selector: '.status-error', background: '#32191e', color: '#ffabb8', borderColor: '#6b2c38' },
-  { selector: '.player-card', padding: '18px', background: '#171d25', borderWidth: '1px', borderStyle: 'solid', borderColor: '#2b3542', borderRadius: '14px' },
-  { selector: '.player-heading', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '16px', margin: '0 0 16px 0' },
-  { selector: '.player-card h3', margin: '0 0 4px 0', fontSize: '17px' },
-  { selector: '.player-card p', margin: '0', color: '#8fa0b7', fontSize: '12px' },
-  { selector: '.transport-row', display: 'flex', alignItems: 'center', gap: '10px' },
-  { selector: '.progress-track', flex: '1', height: '7px', background: '#26303d', borderRadius: '999px', overflow: 'hidden' },
-  { selector: '.progress-fill', height: '100%', background: '#36a957', borderRadius: '999px' },
-  { selector: '.time-label', minWidth: '34px', color: '#93a2b6', fontSize: '11px', textAlign: 'center' },
-  { selector: '.empty-card', padding: '30px 20px', background: '#131920', borderWidth: '1px', borderStyle: 'solid', borderColor: '#27303c', borderRadius: '12px', textAlign: 'center' },
-  { selector: '.empty-card h3', margin: '0 0 8px 0', fontSize: '16px' },
-  { selector: '.empty-card p', margin: '0', color: '#8190a4' },
-  { selector: '#history-header', display: 'flex', flexDirection: 'column', alignItems: 'stretch', gap: '10px', margin: '0 0 16px 0', background: '#11171e' },
-  { selector: '#clear-history', width: '100%' },
-  { selector: '#history-title', margin: '0 0 5px 0', fontSize: '20px' },
-  { selector: '#history-subtitle', margin: '0', color: '#8392a7', fontSize: '12px' },
-  { selector: '#storage-disclosure', margin: '0 0 16px 0', padding: '12px', background: '#171e27', borderWidth: '1px', borderStyle: 'solid', borderColor: '#293543', borderRadius: '9px' },
-  { selector: '#storage-summary', color: '#d8e2ef', fontWeight: '700', cursor: 'pointer' },
-  { selector: '#storage-copy', margin: '8px 0 0 0', color: '#8291a6', fontSize: '12px', lineHeight: '18px' },
-  { selector: '#history-list', display: 'flex', flexDirection: 'column', gap: '10px' },
-  { selector: '.history-card', position: 'relative', padding: '14px', background: '#171d25', borderWidth: '1px', borderStyle: 'solid', borderColor: '#293440', borderRadius: '10px' },
-  { selector: '.history-card-selected', borderColor: '#4089e8', background: '#182435' },
-  { selector: '.history-select', width: '100%', padding: '7px 9px', margin: '0 0 7px 0', background: '#202b38', color: '#dce8f8', borderWidth: '1px', borderStyle: 'solid', borderColor: '#34465b', borderRadius: '7px', textAlign: 'left', fontWeight: '700', cursor: 'pointer' },
-  { selector: '.history-card h3', position: 'relative', margin: '5px 0', fontSize: '15px' },
-  { selector: '.history-meta', position: 'relative', margin: '0', color: '#7790ad', fontSize: '10px' },
-  { selector: '.history-text', position: 'relative', margin: '0 0 12px 0', color: '#b6c1d0', fontSize: '12px', lineHeight: '18px' },
-  { selector: '.history-actions', position: 'relative', display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '6px' },
-  { selector: '.history-chip', padding: '4px 6px', background: '#202a36', color: '#91a0b5', borderRadius: '5px', fontSize: '10px' },
-  { selector: '.visually-hidden', position: 'absolute', width: '1px', height: '1px', overflow: 'hidden' },
-  { selector: '#settings-panel', mediaMaxWidth: '1050px', width: '240px', padding: '22px 18px' },
-  { selector: '#history-panel', mediaMaxWidth: '1050px', width: '280px', padding: '22px 16px' },
-  { selector: '#workspace-panel', mediaMaxWidth: '1050px', padding: '22px' },
-  { selector: '#tts-app', mediaMaxWidth: '760px', flexDirection: 'column', height: 'auto', minHeight: '100%', overflow: 'auto' },
-  { selector: '#settings-panel', mediaMaxWidth: '760px', width: '100%', borderWidth: '0 0 1px 0', overflow: 'visible' },
-  { selector: '#workspace-panel', mediaMaxWidth: '760px', width: '100%', overflow: 'visible' },
-  { selector: '#history-panel', mediaMaxWidth: '760px', width: '100%', borderWidth: '1px 0 0 0', overflow: 'visible' },
-  { selector: '#workspace-header', mediaMaxWidth: '520px', alignItems: 'flex-start', flexDirection: 'column' },
-  { selector: '#editor-footer', mediaMaxWidth: '520px', alignItems: 'stretch', flexDirection: 'column' },
-  { selector: '.transport-row', mediaMaxWidth: '520px', flexWrap: 'wrap' },
+  { selector: '*', boxSizing: 'border-box', margin: '0', padding: '0' },
+  { selector: '#tts-app', display: 'flex', width: '100vw', height: '100vh', overflow: 'hidden', background: '#0d1117', color: '#e6edf3', fontFamily: 'Segoe UI, Arial, sans-serif', fontSize: '14px', lineHeight: '1.5' },
+  { selector: 'input', fontFamily: 'Segoe UI, Arial, sans-serif', fontSize: '14px', lineHeight: '1.5' },
+  { selector: 'select', fontFamily: 'Segoe UI, Arial, sans-serif', fontSize: '14px', lineHeight: '1.5' },
+  { selector: 'textarea', fontFamily: 'Segoe UI, Arial, sans-serif', fontSize: '14px', lineHeight: '1.5' },
+  { selector: 'button', fontFamily: 'Segoe UI, Arial, sans-serif', fontSize: '14px', lineHeight: '1.5' },
+  { selector: '#settings-panel', display: 'flex', flexDirection: 'column', flexShrink: '0', width: '320px', minWidth: '320px', maxWidth: '320px', height: '100vh', overflow: 'hidden', background: '#0d1117', borderWidth: '0 1px 0 0', borderStyle: 'solid', borderColor: '#21262d' },
+  { selector: '#history-panel', display: 'flex', flexDirection: 'column', flexShrink: '0', width: '320px', minWidth: '320px', maxWidth: '320px', height: '100vh', overflow: 'hidden', background: '#0d1117', borderWidth: '0 0 0 1px', borderStyle: 'solid', borderColor: '#21262d' },
+  { selector: '.app-header', padding: '24px 16px 16px', textAlign: 'center', background: '#161b22', borderWidth: '0 0 1px 0', borderStyle: 'solid', borderColor: '#21262d' },
+  { selector: '.app-title', margin: '0', fontSize: '18px', lineHeight: '27px', fontWeight: '700' },
+  { selector: '.app-subtitle', margin: '4px 0 0 0', color: '#7d8590', fontSize: '13px' },
+  { selector: '#settings-header', padding: '16px 16px 7px', background: '#161b22', borderWidth: '0 0 1px 0', borderStyle: 'solid', borderColor: '#21262d' },
+  { selector: '#settings-title', margin: '0', fontSize: '16px', lineHeight: '24px' },
+  { selector: '#settings-content', flex: '1', minHeight: '0', overflow: 'auto', padding: '16px', background: '#161b22' },
+  { selector: '.setting-field', display: 'block', margin: '0 0 24px 0', fontWeight: '600' },
+  { selector: '.setting-label', display: 'block', margin: '0 0 8px 0' },
+  { selector: '.setting-field select', display: 'block', width: '100%', height: '50px', padding: '12px', background: '#0d1117', color: '#e6edf3', borderWidth: '1px', borderStyle: 'solid', borderColor: '#21262d', borderRadius: '6px' },
+  { selector: '.setting-field input', display: 'block', width: '100%', height: '50px', padding: '12px', background: '#0d1117', color: '#e6edf3', borderWidth: '1px', borderStyle: 'solid', borderColor: '#21262d', borderRadius: '6px' },
+  { selector: '#settings-footer', padding: '12px 16px', textAlign: 'center', color: '#7d8590', background: '#161b22', borderWidth: '1px 0 0 0', borderStyle: 'solid', borderColor: '#21262d' },
+  { selector: '#workspace-panel', display: 'flex', flexDirection: 'column', flex: '1', minWidth: '0', height: '100vh', overflow: 'hidden', background: '#0d1117' },
+  { selector: '#speech-form', display: 'flex', flexDirection: 'column', flex: '1', minHeight: '0', gap: '12px', margin: '16px 24px 8px', padding: '16px 16px 8px', overflow: 'hidden', background: '#161b22', borderWidth: '1px', borderStyle: 'solid', borderColor: '#21262d', borderRadius: '12px' },
+  { selector: '#title-row', display: 'flex', alignItems: 'center', gap: '28px', height: '44px' },
+  { selector: '#generation-title', flex: '1', minWidth: '0', height: '44px', padding: '12px', background: '#0d1117', color: '#e6edf3', borderWidth: '1px', borderStyle: 'solid', borderColor: '#21262d', borderRadius: '6px' },
+  { selector: '#save-history', width: '180px', color: '#8b949e' },
+  { selector: '#editor-container', display: 'flex', flexDirection: 'column', flex: '1', minHeight: '200px', overflow: 'hidden', background: '#1a202c', borderWidth: '1px', borderStyle: 'solid', borderColor: '#21262d', borderRadius: '8px' },
+  { selector: '#editor-header', display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '48px', padding: '12px 16px', background: '#2d3748', color: '#7d8590', fontSize: '12px', borderWidth: '0 0 1px 0', borderStyle: 'solid', borderColor: '#4a5568' },
+  { selector: '#workspace-title', color: '#e2e8f0' },
+  { selector: '#editor-wrapper', display: 'flex', flex: '1', minHeight: '0', overflow: 'hidden' },
+  { selector: '#line-numbers', width: '50px', minWidth: '50px', padding: '16px 12px', textAlign: 'right', whiteSpace: 'pre-line', background: '#2d3748', color: '#718096', borderWidth: '0 1px 0 0', borderStyle: 'solid', borderColor: '#4a5568' },
+  { selector: '#speech-text', flex: '1', minWidth: '0', height: '100%', minHeight: '170px', padding: '16px', overflow: 'auto', whiteSpace: 'pre-wrap', background: '#1a202c', color: '#e2e8f0', fontFamily: 'Consolas', fontSize: '14px', lineHeight: '21px', borderWidth: '1px', borderStyle: 'solid', borderColor: '#30363d', borderRadius: '0' },
+  { selector: '#editor-bottom', display: 'flex', alignItems: 'center', justifyContent: 'space-between', minHeight: '56px', gap: '12px' },
+  { selector: '#generate-speech', height: 'auto', margin: '0 0 0 auto', minWidth: '198px', padding: '14px 24px', background: '#238636', color: '#ffffff', fontWeight: '600', borderWidth: '0', borderRadius: '6px' },
+  { selector: '#cancel-speech', padding: '10px 16px', background: '#21262d', color: '#e6edf3', borderWidth: '1px', borderStyle: 'solid', borderColor: '#30363d', borderRadius: '6px' },
+  { selector: '.audio-player', flexShrink: '0', minHeight: '116px', margin: '8px 24px 16px', padding: '16px', background: '#161b22', borderWidth: '1px', borderStyle: 'solid', borderColor: '#21262d', borderRadius: '12px' },
+  { selector: '#player-placeholder', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#7d8590' },
+  { selector: '#selected-player-row', display: 'flex', alignItems: 'center', gap: '16px', margin: '22px 0 0 0', color: '#7d8590', fontSize: '12px' },
+  { selector: '#selected-player-meta', minWidth: '100px', whiteSpace: 'pre-line' },
+  { selector: '#selected-play', width: '32px', height: '32px', background: 'transparent', color: '#e6edf3', borderWidth: '0' },
+  { selector: '#selected-progress-track', flex: '1', height: '10px', padding: '3px 0 2px' },
+  { selector: '#selected-progress-fill', width: '100%', height: '5px', background: '#238636', borderRadius: '3px' },
+  { selector: '#selected-download', width: '32px', height: '32px', background: 'transparent', color: '#e6edf3', borderWidth: '0' },
+  { selector: '#selected-player-info', minWidth: '100px', margin: '0', textAlign: 'right', whiteSpace: 'pre-line' },
+  { selector: '#history-title', margin: '0', fontSize: '18px', lineHeight: '27px' },
+  { selector: '#history-subtitle', margin: '4px 0 0 0', color: '#7d8590', fontSize: '13px' },
+  { selector: '#history-body', flex: '1', minHeight: '0', overflow: 'auto' },
+  { selector: '#storage-disclosure', margin: '16px', padding: '12px', background: '#161b22', borderWidth: '1px', borderStyle: 'solid', borderColor: '#21262d', borderRadius: '6px' },
+  { selector: '#storage-bar', height: '6px', margin: '12px 0 8px', background: '#21262d', borderRadius: '3px' },
+  { selector: '#storage-text', display: 'flex', justifyContent: 'space-between' },
+  { selector: '#storage-size', color: '#7d8590', fontSize: '12px' },
+  { selector: '#history-search-row', display: 'flex', gap: '8px', padding: '0 16px 16px' },
+  { selector: '#history-search', flex: '1', minWidth: '0', height: '40px', padding: '10px', background: '#0d1117', color: '#e6edf3', borderWidth: '1px', borderStyle: 'solid', borderColor: '#21262d', borderRadius: '6px' },
+  { selector: '#clear-history', width: '64px', background: '#0d1117', color: '#e6edf3', borderWidth: '1px', borderStyle: 'solid', borderColor: '#21262d', borderRadius: '6px' },
+  { selector: '.history-item', position: 'relative', minHeight: '128px', margin: '0 8px', padding: '12px 16px', background: '#161b22', borderWidth: '1px', borderStyle: 'solid', borderColor: '#21262d', borderRadius: '6px' },
+  { selector: '.history-item.selected', borderColor: '#1f6feb' },
+  { selector: '.history-item small', color: '#7d8590' },
+  { selector: '.history-item p', margin: '16px 0 0 0' },
+  { selector: '.history-item div', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '10px', margin: '24px 0 0 0', color: '#7d8590' },
+  { selector: '.history-item div span', margin: '0 auto 0 0' },
+  { selector: '.history-item button', width: '24px', height: '24px', background: 'transparent', color: '#e6edf3', borderWidth: '0' },
+  { selector: '#history-empty', minHeight: '200px', margin: '8px', padding: '48px 16px', background: 'transparent', textAlign: 'center', color: '#7d8590' },
+  { selector: '#history-empty-title', margin: '0', color: '#e6edf3', fontSize: '14px' },
+  { selector: '#history-empty-copy', margin: '4px 0 0 0' },
+  { selector: '#history-footer', padding: '12px 16px', textAlign: 'center', color: '#7d8590', borderWidth: '1px 0 0 0', borderStyle: 'solid', borderColor: '#21262d' },
+  { selector: '#history-panel', mediaMaxWidth: '768px', width: '280px', minWidth: '280px', maxWidth: '280px' },
+  { selector: '#speech-form', mediaMaxWidth: '768px', margin: '16px', padding: '24px' },
+  { selector: '#title-row', mediaMaxWidth: '768px', flexDirection: 'column', alignItems: 'stretch', height: 'auto' },
+  { selector: '#save-history', mediaMaxWidth: '768px', width: 'auto' },
+  { selector: '#editor-bottom', mediaMaxWidth: '768px', flexDirection: 'column', alignItems: 'stretch' },
 ];
 
 export function buildTtsDemoSite(view: TtsDemoViewModel = DEFAULT_TTS_VIEW_MODEL): SiteData {
   return {
-    root: {
-      children: [
-        {
-          type: 'div',
-          id: 'tts-app',
-          children: [settingsPanel(view), workspacePanel(view), historyPanel(view)],
-        },
-      ],
-    },
     styles,
     meta: {
       description: 'An Angular text-to-speech application rendered through the AstylarUI public API.',
     },
+    root: { children: [{
+      type: 'div', id: 'tts-app', children: [
+        settingsPanel(view),
+        { type: 'main', id: 'workspace-panel', children: [editor(view), player(view)] },
+        historyPanel(view),
+      ],
+    }] },
   };
 }

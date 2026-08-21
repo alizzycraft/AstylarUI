@@ -124,12 +124,11 @@ async function runBrowserSmoke() {
 
   const aria = await page.locator('body').ariaSnapshot();
   for (const expected of [
-    'heading "AI Speech Studio"',
+    'AI-TTS-MP3',
     'textbox "Text to speak"',
     'combobox "Voice"',
     'button "Generate speech"',
-    'status: Ready to generate a mock preview.',
-    'AI-generated voice and session storage',
+    'Storage',
   ]) {
     assert.ok(aria.includes(expected), `Semantic snapshot is missing ${expected}.`);
   }
@@ -140,7 +139,7 @@ async function runBrowserSmoke() {
   await page.keyboard.type('hi', { delay: 80 });
   await waitFor(async () => await speech.inputValue() === 'hi', 'controlled text entry');
 
-  const voice = page.getByRole('combobox', { name: 'Voice' });
+  const voice = page.getByRole('combobox', { name: 'Voice', exact: true });
   await voice.focus();
   await page.keyboard.press('ArrowDown');
   await page.keyboard.press('Enter');
@@ -150,7 +149,7 @@ async function runBrowserSmoke() {
   await generate.focus();
   await page.keyboard.press('Enter');
   await waitFor(
-    async () => (await page.getByRole('status').textContent())?.includes('Generated WAV preview in mock mode.') ?? false,
+    async () => (await page.getByRole('status').textContent())?.includes('Speech generated successfully!') ?? false,
     'mock speech generation',
   );
   assert.equal(await page.getByRole('button', { name: 'Select Speech preview 1' }).count(), 1);
@@ -169,7 +168,7 @@ async function runBrowserSmoke() {
     await page.screenshot({ path: capture });
     assert.ok(statSync(capture).size > 1_000, `${name} visual capture was unexpectedly empty.`);
   }
-  for (const width of [519, 520, 521, 759, 760, 761, 1049, 1050, 1051]) {
+  for (const width of [767, 768, 769]) {
     await page.setViewportSize({ width, height: 900 });
     await waitFor(
       async () => await page.getByTestId('renderer-status').textContent() === 'AstylarUI renderer ready.',
@@ -185,24 +184,24 @@ async function runBrowserSmoke() {
   await waitFor(async () => await page.getByRole('button', { name: 'Pause', exact: true }).count() > 0, 'audio playback');
   await waitFor(async () => await page.getByRole('button', { name: 'Play', exact: true }).count() > 0, 'audio completion');
 
-  const downloadPromise = page.waitForEvent('download');
-  const downloadButton = page.getByRole('button', { name: 'Download Speech preview 1' });
+  const downloadButton = page.locator('[data-astylar-id="selected-download"]');
   await downloadButton.focus();
-  await page.keyboard.press('Enter');
-  const download = await downloadPromise;
+  const [download] = await Promise.all([
+    page.waitForEvent('download'),
+    page.keyboard.press('Enter'),
+  ]);
   assert.match(download.suggestedFilename(), /^speech-preview-1\.wav$/);
   await download.cancel();
 
   await clickSemanticControl(generate);
   await waitFor(async () => await page.getByRole('button', { name: 'Select Speech preview 2' }).count() === 1, 'second history item');
-  await page.getByRole('button', { name: 'Select Speech preview 1' }).focus();
-  await page.keyboard.press('Enter');
+  await clickSemanticControl(page.getByRole('button', { name: 'Select Speech preview 1' }));
   await waitFor(async () => await page.getByRole('article', { name: 'Audio player for Speech preview 1' }).count() === 1, 'history selection');
 
   const search = page.getByRole('textbox', { name: 'Search history' });
   await search.focus();
   await page.keyboard.type('no-match', { delay: 40 });
-  await waitFor(async () => await page.getByRole('heading', { name: 'No matching generations' }).count() === 1, 'history filtering');
+  await waitFor(async () => await page.getByRole('heading', { name: 'No items match your search' }).count() === 1, 'history filtering');
   await search.focus();
   await page.keyboard.press('Control+A');
   await page.keyboard.press('Backspace');
@@ -213,7 +212,7 @@ async function runBrowserSmoke() {
   await waitFor(async () => await page.getByRole('button', { name: 'Delete Speech preview 1' }).count() === 0, 'history deletion');
   await page.getByRole('button', { name: 'Clear all history' }).focus();
   await page.keyboard.press('Enter');
-  await waitFor(async () => await page.getByRole('heading', { name: 'No speech generated yet' }).count() === 1, 'history clearing');
+  await waitFor(async () => await page.getByRole('heading', { name: 'No TTS history yet' }).count() === 1, 'history clearing');
 
   await speech.focus();
   await page.keyboard.press('Control+A');

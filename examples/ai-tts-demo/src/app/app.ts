@@ -88,6 +88,8 @@ export class App {
     if (event.targetId === 'selected-download' && this.store.selectedGenerationId()) {
       this.store.downloadGeneration(this.store.selectedGenerationId()!);
     }
+    const historyCard = /^history-(speech-\d+)$/.exec(event.targetId);
+    if (historyCard) this.store.selectGeneration(historyCard[1]);
 
     const historyAction = /^history-(speech-\d+)-(select|play|download|delete)$/.exec(event.targetId);
     if (historyAction?.[2] === 'select') this.store.selectGeneration(historyAction[1]);
@@ -102,14 +104,14 @@ export class App {
     window.__ASTYLAR_TTS_BENCHMARK__ = {
       state: this.benchmarkState ?? 'interactive',
       measure: (ids: string[]) => {
-        const elements = Object.fromEntries(ids.map((id) => {
+        const projectBox = (id: string) => {
           const meshes = surface.scene.meshes.filter((mesh) => mesh.metadata?.elementId === id);
           const mesh = meshes.find((candidate) => candidate.name === id) ?? meshes[0];
-          if (!mesh) return [id, { exists: false }];
+          if (!mesh) return undefined;
           mesh.computeWorldMatrix(true);
           const engine = surface.scene.getEngine();
           const camera = surface.scene.activeCamera;
-          if (!camera) return [id, { exists: true, error: 'No active camera.' }];
+          if (!camera) return undefined;
           const renderViewport = camera.viewport.toGlobal(engine.getRenderWidth(), engine.getRenderHeight());
           const projected = mesh.getBoundingInfo().boundingBox.vectorsWorld.map((point) =>
             Vector3.Project(point, Matrix.IdentityReadOnly, surface.scene.getTransformMatrix(), renderViewport));
@@ -119,20 +121,59 @@ export class App {
           const right = Math.max(...projected.map((point) => point.x)) * scaleX;
           const top = Math.min(...projected.map((point) => point.y)) * scaleY;
           const bottom = Math.max(...projected.map((point) => point.y)) * scaleY;
-          const epsilon = 0.1;
-          const intersectsViewport = right > -epsilon && bottom > -epsilon &&
-            left < canvas.clientWidth + epsilon && top < canvas.clientHeight + epsilon;
-          const fullyVisible = left >= -epsilon && top >= -epsilon &&
-            right <= canvas.clientWidth + epsilon && bottom <= canvas.clientHeight + epsilon;
+          return { left, top, right, bottom, width: right - left, height: bottom - top };
+        };
+        const intersect = (
+          first: { left: number; top: number; right: number; bottom: number },
+          second: { left: number; top: number; right: number; bottom: number },
+        ) => ({
+          left: Math.max(first.left, second.left),
+          top: Math.max(first.top, second.top),
+          right: Math.min(first.right, second.right),
+          bottom: Math.min(first.bottom, second.bottom),
+        });
+        const capture = { left: 0, top: 0, right: canvas.clientWidth, bottom: canvas.clientHeight };
+        const elements = Object.fromEntries(ids.map((id) => {
+          const borderBox = projectBox(id);
+          if (!borderBox) return [id, { exists: false }];
+          let visible = intersect(borderBox, capture);
+          const clippingAncestorIds: string[] = [];
+          for (const ancestorId of this.clippingAncestorIds(id)) {
+            const ancestorBox = projectBox(ancestorId);
+            if (!ancestorBox) continue;
+            const before = visible;
+            const next = intersect(visible, ancestorBox);
+            if (next.right <= next.left || next.bottom <= next.top ||
+                next.right - next.left < before.right - before.left ||
+                next.bottom - next.top < before.bottom - before.top) {
+              clippingAncestorIds.push(ancestorId);
+            }
+            visible = next;
+          }
+          const intersectsViewport = visible.right > visible.left && visible.bottom > visible.top;
+          const epsilon = 0.15;
+          const fullyVisible = intersectsViewport &&
+            Math.abs(visible.left - borderBox.left) <= epsilon &&
+            Math.abs(visible.top - borderBox.top) <= epsilon &&
+            Math.abs(visible.right - borderBox.right) <= epsilon &&
+            Math.abs(visible.bottom - borderBox.bottom) <= epsilon;
+          const semantic = document.querySelector<HTMLElement>(
+            `[data-astylar-id="${CSS.escape(id)}"]`,
+          );
+          const rawText = semantic instanceof HTMLInputElement ||
+            semantic instanceof HTMLTextAreaElement || semantic instanceof HTMLSelectElement
+            ? semantic.value
+            : semantic?.textContent;
           return [id, {
             exists: true,
-            borderBox: { left, top, right, bottom, width: right - left, height: bottom - top },
+            borderBox,
+            text: rawText?.replace(/\s+/g, ' ').trim(),
             visibility: {
               exists: true,
               intersectsViewport,
               fullyVisible,
               clipped: !fullyVisible,
-              clippingAncestorIds: fullyVisible ? [] : this.clippingAncestorIds(id),
+              clippingAncestorIds,
             },
           }];
         }));
