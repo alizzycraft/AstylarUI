@@ -249,8 +249,9 @@ export class ButtonManager {
 
             // Get texture dimensions
             const textureSize = texture.getSize();
-            const textureWidthPx = textureSize.width;
-            const textureHeightPx = textureSize.height;
+            const devicePixelRatio = window.devicePixelRatio || 1;
+            const textureWidthPx = textureSize.width / devicePixelRatio;
+            const textureHeightPx = textureSize.height / devicePixelRatio;
 
             // Convert to world units using camera's pixel-to-world scale
             const scale = render.actions.camera.getPixelToWorldScale();
