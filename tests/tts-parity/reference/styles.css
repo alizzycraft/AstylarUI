@@ -13,12 +13,15 @@ body[data-state="initial"] .generated-only, body[data-state="generated"] .initia
 .settings-content { flex: 1; overflow-y: auto; padding: 16px; background: #161b22; }
 .settings-content label { display: block; margin-bottom: 24px; font-weight: 600; }
 input, select, textarea, button { font: inherit; color: #e6edf3; background: #0d1117; border: 1px solid #21262d; border-radius: 6px; }
+input, textarea { cursor: text; } select, button, [role="button"] { cursor: pointer; }
 .settings-content input, .settings-content select { display: block; width: 100%; height: 50px; margin-top: 8px; padding: 12px; }
+.settings-content input:focus, .settings-content select:focus { outline: none; border-color: #1f6feb; box-shadow: 0 0 0 3px rgba(31,111,235,.3); }
 .settings-panel > footer, .history-panel > footer { padding: 12px 16px; text-align: center; color: #7d8590; background: #161b22; border-top: 1px solid #21262d; }
 .main-content { flex: 1; min-width: 0; height: 100vh; display: flex; flex-direction: column; overflow: hidden; background: #0d1117; }
 .editor-card { height: calc(100% - 24px); min-height: 0; margin: 16px 24px 8px; padding: 16px 16px 8px; display: flex; flex-direction: column; gap: 12px; overflow: hidden; background: #161b22; border: 1px solid #21262d; border-radius: 12px; }
 .title-row { height: 44px; display: flex; align-items: center; gap: 28px; }
 .title-row input { flex: 1; height: 44px; padding: 12px; }
+.title-row input:focus { outline: none; border-color: #1f6feb; box-shadow: 0 0 0 3px rgba(31,111,235,.3); }
 .title-row span { width: 180px; color: #8b949e; }
 .editor-container { flex: 1; min-height: 200px; display: flex; flex-direction: column; overflow: hidden; background: #1a202c; border: 1px solid #21262d; border-radius: 8px; }
 .editor-header { height: 48px; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; background: #2d3748; border-bottom: 1px solid #4a5568; font-size: 12px; color: #7d8590; }
@@ -26,11 +29,24 @@ input, select, textarea, button { font: inherit; color: #e6edf3; background: #0d
 .editor-wrapper { flex: 1; min-height: 0; display: flex; overflow: hidden; }
 .line-numbers { width: 50px; padding: 16px 12px; text-align: right; background: #2d3748; color: #718096; border-right: 1px solid #4a5568; }
 .editor-wrapper textarea { flex: 1; height: 100%; min-height: 170px; padding: 16px; resize: none; border-radius: 0; background: #1a202c; border-color: #30363d; font: 14px/1.5 "SFMono-Regular", Consolas, monospace; }
+.editor-wrapper textarea:focus { outline: none; background: #1e2a3a; color: #f7fafc; }
 .editor-bottom { min-height: 56px; display: flex; align-items: center; justify-content: space-between; }
 #generate-speech { min-width: 198px; margin-left: auto; padding: 14px 24px; border: 0; background: #238636; color: #fff; font-weight: 600; }
+#generate-speech:hover { background: #2ea043; transform: translateY(-1px); }
+#generate-speech:active { transform: translateY(0); }
 .audio-player { flex-shrink: 0; min-height: 116px; margin: 8px 24px 16px; padding: 16px; background: #161b22; border: 1px solid #21262d; border-radius: 12px; }
 .audio-player.initial-only { display: flex; align-items: center; justify-content: center; color: #7d8590; }
 .player-row { margin-top: 22px; display: flex; align-items: center; gap: 16px; color: #7d8590; font-size: 12px; }
-.player-row > div:first-child { min-width: 100px; }.player-row .play { font-size: 20px; }.progress { flex: 1; height: 10px; }.progress i { display: block; width: 100%; height: 5px; margin-top: 3px; background: #238636; border-radius: 3px; }.player-row .right { min-width: 100px; text-align: right; }
+.player-row > div:first-child { min-width: 100px; }.player-row button { padding: 0; border: 0; background: transparent; color: #7d8590; }.player-row .play { font-size: 20px; color: #e6edf3; }.progress { flex: 1; height: 10px; }.progress i { display: block; width: 100%; height: 5px; margin-top: 3px; background: #238636; border-radius: 3px; }.player-row .right { min-width: 100px; text-align: right; }
 .history-body { flex: 1; min-height: 0; overflow: auto; background: #0d1117; }.storage { margin: 16px; padding: 12px; background: #161b22; border: 1px solid #21262d; border-radius: 6px; }.storage-bar { height: 6px; margin: 12px 0 8px; background: #21262d; border-radius: 3px; }#storage-text { display: flex; justify-content: space-between; }.storage span { color: #7d8590; font-size: 12px; }.search { display: flex; gap: 8px; padding: 0 16px 16px; }.search input { flex: 1; min-width: 0; height: 40px; padding: 10px; }.search button { width: 64px; }.history-item { margin: 0 8px; padding: 12px 16px; min-height: 128px; background: #161b22; border: 1px solid #1f6feb; border-radius: 6px; }.history-item small { color: #7d8590; }.history-item time { float: right; }.history-item p { margin-top: 16px; }.history-item footer { margin-top: 28px; display: flex; justify-content: space-between; color: #7d8590; }.empty { margin: 8px; min-height: 200px; padding: 48px 16px; text-align: center; color: #7d8590; }.empty h3 { color: #e6edf3; font-size: 14px; }.github-banner { position: fixed; right: -38px; top: 26px; width: 150px; padding: 8px 0; transform: rotate(45deg); background: #2e394e; color: #8898b1; text-align: center; font-size: 12px; }
+.search input:focus { outline: none; border-color: #1f6feb; box-shadow: 0 0 0 2px rgba(31,111,235,.3); }
+.history-item:hover { background: #161b22; border-color: #30363d; }
+.history-item:focus-visible { outline: none; background: #161b22; box-shadow: 0 0 0 2px rgba(31,111,235,.3); }
+.history-item footer { justify-content: flex-end; gap: 10px; }
+.history-item footer > span { margin-right: auto; }
+.item-action { width: 11px; height: 21px; padding: 0; background: transparent; border: 0; color: #7d8590; border-radius: 4px; }
+.item-action:hover { background: #21262d; }
+.play-action:hover { color: #238636; }
+.download-action:hover { color: #1f6feb; }
+.delete-action:hover { color: #f85149; }
 @media (max-width: 768px) { .history-panel { width: 280px; min-width: 280px; }.editor-card { margin: 16px; padding: 24px; }.title-row { flex-direction: column; height: auto; align-items: stretch; }.title-row span { width: auto; }.editor-bottom { flex-direction: column; align-items: stretch; gap: 12px; } }

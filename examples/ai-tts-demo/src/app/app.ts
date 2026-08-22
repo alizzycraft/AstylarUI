@@ -34,8 +34,14 @@ export class App {
     });
   });
   protected readonly status = signal('Starting the AstylarUI renderer…');
+  private readonly benchmarkEvents: Array<{ type: string; targetId: string }> = [];
   protected readonly options: AstylarRenderOptions = {
     events: {
+      onEvent: (event) => {
+        if (this.benchmarkState) {
+          this.benchmarkEvents.push({ type: event.type, targetId: event.targetId });
+        }
+      },
       handlers: {
         'tts-app': {
           input: (event) => this.zone.run(() => this.handleEvent(event)),
@@ -109,6 +115,27 @@ export class App {
   private installBenchmarkHook(surface: AstylarSurface): void {
     const canvas = surface.scene.getEngine().getRenderingCanvas();
     if (!canvas) return;
+    let lastPointerPick: unknown;
+    surface.scene.onPointerObservable.add((pointerInfo) => {
+      const event = pointerInfo.event as PointerEvent | MouseEvent | undefined;
+      lastPointerPick = {
+        type: pointerInfo.type,
+        mesh: pointerInfo.pickInfo?.pickedMesh?.name,
+        elementId: pointerInfo.pickInfo?.pickedMesh?.metadata?.elementId,
+        clientX: event?.clientX,
+        clientY: event?.clientY,
+        offsetX: event?.offsetX,
+        offsetY: event?.offsetY,
+        sceneX: surface.scene.pointerX,
+        sceneY: surface.scene.pointerY,
+        skipPointerMovePicking: surface.scene.skipPointerMovePicking,
+        point: pointerInfo.pickInfo?.pickedPoint ? {
+          x: pointerInfo.pickInfo.pickedPoint.x,
+          y: pointerInfo.pickInfo.pickedPoint.y,
+          z: pointerInfo.pickInfo.pickedPoint.z,
+        } : undefined,
+      };
+    });
     window.__ASTYLAR_TTS_BENCHMARK__ = {
       state: this.benchmarkState ?? 'interactive',
       measure: (ids: string[]) => {
@@ -186,6 +213,73 @@ export class App {
           }];
         }));
         const scrolling = surface.diagnostics.scrolling?.containers ?? {};
+        const controlStates = Object.fromEntries(ids.flatMap((id) => {
+          const semantic = document.querySelector<HTMLElement>(
+            `[data-astylar-id="${CSS.escape(id)}"]`,
+          );
+          if (!(semantic instanceof HTMLInputElement || semantic instanceof HTMLTextAreaElement ||
+              semantic instanceof HTMLSelectElement)) return [];
+          return [[id, {
+            value: semantic.value,
+            focused: document.activeElement === semantic,
+            selectionStart: 'selectionStart' in semantic ? semantic.selectionStart : null,
+            selectionEnd: 'selectionEnd' in semantic ? semantic.selectionEnd : null,
+            selectionDirection: 'selectionDirection' in semantic ? semantic.selectionDirection : null,
+            selectedIndex: semantic instanceof HTMLSelectElement ? semantic.selectedIndex : null,
+            expanded: semantic.getAttribute('aria-expanded') === 'true',
+          }]];
+        }));
+        const centerPicks = Object.fromEntries(ids.flatMap((id) => {
+          const box = (elements[id] as { borderBox?: {
+            left: number; top: number; right: number; bottom: number;
+          } } | undefined)?.borderBox;
+          if (!box) return [];
+          const hits = surface.scene.multiPick(
+            (box.left + box.right) / 2,
+            (box.top + box.bottom) / 2,
+          ) ?? [];
+          return [[id, hits.filter((hit) => hit.hit).map((hit) => ({
+            mesh: hit.pickedMesh?.name,
+            elementId: hit.pickedMesh?.metadata?.elementId,
+            distance: hit.distance,
+            point: hit.pickedPoint ? {
+              x: hit.pickedPoint.x,
+              y: hit.pickedPoint.y,
+              z: hit.pickedPoint.z,
+            } : undefined,
+          }))]];
+        }));
+        const clippingBounds = Object.fromEntries(ids.flatMap((id) => {
+          const ancestors = this.clippingAncestorIds(id);
+          if (!ancestors.length) return [];
+          return [[id, Object.fromEntries(ancestors.flatMap((ancestorId) => {
+            const mesh = surface.scene.meshes.find((candidate) =>
+              candidate.metadata?.elementId === ancestorId && candidate.name === ancestorId,
+            );
+            if (!mesh) return [];
+            mesh.computeWorldMatrix(true);
+            const bounds = mesh.getBoundingInfo().boundingBox;
+            return [[ancestorId, {
+              minimum: {
+                x: bounds.minimumWorld.x,
+                y: bounds.minimumWorld.y,
+                z: bounds.minimumWorld.z,
+              },
+              maximum: {
+                x: bounds.maximumWorld.x,
+                y: bounds.maximumWorld.y,
+                z: bounds.maximumWorld.z,
+              },
+            }]];
+          }))]];
+        }));
+        const diagnostics = surface.diagnostics;
+        const resolvedStyles = Object.fromEntries(ids.flatMap((id) => {
+          const meshes = surface.scene.meshes.filter((candidate) => candidate.metadata?.elementId === id);
+          const mesh = meshes.find((candidate) => candidate.name === id) ?? meshes[0];
+          const style = mesh?.metadata?.astylarResolvedInteractionStyle;
+          return style && typeof style === 'object' ? [[id, { ...style }]] : [];
+        }));
         return {
           elements,
           visibleFocusIndicators: surface.scene.meshes
@@ -201,8 +295,22 @@ export class App {
             canReachBottom: value.scrollTop >= value.scrollHeight - value.clientHeight - 1,
           }])),
           settlement: surface.diagnostics.session,
-          diagnostics: surface.diagnostics.messages,
-          canvas: { width: canvas.clientWidth, height: canvas.clientHeight },
+          diagnostics: diagnostics.messages,
+          interaction: diagnostics.interaction,
+          resources: diagnostics.resources,
+          pluginResources: diagnostics.pluginResources,
+          semantics: diagnostics.semantics,
+          controlStates,
+          resolvedStyles,
+          events: [...this.benchmarkEvents],
+          centerPicks,
+          clippingBounds,
+          lastPointerPick,
+          canvas: {
+            width: canvas.clientWidth,
+            height: canvas.clientHeight,
+            cursor: getComputedStyle(canvas).cursor,
+          },
         };
       },
     };

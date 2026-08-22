@@ -15,9 +15,9 @@
       </header>
       <div class="settings-header"><h2 id="settings-title">⚙ Settings</h2></div>
       <div class="settings-content">
-        <label>Voice Provider<select id="provider"><option>Openai</option></select></label>
-        <label>Model<select id="model"><option>tts-1</option></select></label>
-        <label>Voice<select id="voice"><option>Alloy</option></select></label>
+        <label>Voice Provider<select id="provider"><option value="openai">Openai</option></select></label>
+        <label>Model<select id="model"><option value="gpt-4o-mini-tts">tts-1</option></select></label>
+        <label>Voice<select id="voice"><option value="alloy">Alloy</option><option value="coral">Coral</option><option value="nova">Nova</option><option value="onyx">Onyx</option><option value="sage">Sage</option><option value="shimmer">Shimmer</option></select></label>
         <label>API Key<input id="instructions" type="password" value="reference-only-reference-only"></label>
       </div>
       <footer>Licensed under AGPL v3</footer>
@@ -48,7 +48,7 @@
         <strong id="selected-player-title">hello</strong>
         <div class="player-row">
           <div>Provider: openai<br>Model: tts-1<br>Voice: alloy</div>
-          <span class="play">▷</span><span>0:00</span><div class="progress"><i></i></div><span>0:00　⇩</span>
+          <button id="selected-play" class="play" aria-label="Play">▷</button><span>0:00</span><div class="progress"><i></i></div><button id="selected-download" aria-label="Download hello">0:00　⇩</button>
           <div class="right">Just now<br>Size: 7.5 KB<br>Duration: 0:00</div>
         </div>
       </section>
@@ -67,11 +67,11 @@
           <strong id="storage-title">Storage　♧</strong><div class="storage-bar"></div>
           <div id="storage-text"><b>0%</b><span>7.5 KB / 20 MB</span></div>
         </section>
-        <div class="search"><input id="history-search" placeholder="Search history..."><button>♲ All</button></div>
+        <div class="search"><input id="history-search" placeholder="Search history..."><button id="clear-history">♲ All</button></div>
         <div id="history-list">
-          <article id="history-speech-1" class="history-item generated-only">
+          <article id="history-speech-1" class="history-item generated-only" tabindex="0" role="button" aria-label="Select hello">
             <small>⚙　Openai　　● Alloy <time>Just now</time></small>
-            <p id="history-speech-1-text">hello</p><footer><span>7.5 KB　 0:00</span><span>▷　⇩　♲</span></footer>
+            <p id="history-speech-1-text">hello</p><footer><span>7.5 KB　 0:00</span><button id="history-speech-1-play" class="item-action play-action" aria-label="Play">▷</button><button id="history-speech-1-download" class="item-action download-action" aria-label="Download hello">⇩</button><button id="history-speech-1-delete" class="item-action delete-action" aria-label="Delete hello">♲</button></footer>
           </article>
           <article id="history-empty" class="empty initial-only">
             <h3 id="history-empty-title">No TTS history yet</h3><p id="history-empty-copy">Generated speech will appear here</p>

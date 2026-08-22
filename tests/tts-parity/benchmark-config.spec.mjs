@@ -1,6 +1,9 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { acceptance, measurementIds, states, textMeasurementIds, viewports } from './benchmark.config.mjs';
+import {
+  acceptance, interactionApplicability, interactionScenarios, measurementIds, states,
+  textMeasurementIds, viewports,
+} from './benchmark.config.mjs';
 
 test('application benchmark owns named viewport and DPR profiles', () => {
   assert.deepEqual(states, ['initial', 'generated']);
@@ -14,4 +17,16 @@ test('application benchmark owns named viewport and DPR profiles', () => {
   assert.ok(textMeasurementIds.length >= 10);
   assert.ok(textMeasurementIds.every((id) => measurementIds.includes(id)));
   assert.equal(acceptance.maximumIncidentalScrollExtentPx, 1);
+});
+
+test('application benchmark owns a source-derived interaction matrix', () => {
+  assert.ok(interactionScenarios.length >= 10);
+  assert.equal(new Set(interactionScenarios.map(({ id }) => id)).size, interactionScenarios.length);
+  assert.ok(interactionScenarios.every(({ state }) => states.includes(state)));
+  assert.ok(interactionScenarios.every(({ profiles }) => profiles.includes('reference-large-dpr1')));
+  assert.ok(interactionScenarios.some(({ id }) => id === 'editor-selection'));
+  assert.ok(interactionScenarios.some(({ id }) => id === 'voice-pointer'));
+  assert.ok(interactionScenarios.some(({ id }) => id === 'voice-dismissal'));
+  assert.ok(interactionScenarios.some(({ id }) => id === 'history-play-hover'));
+  assert.match(interactionApplicability.mobile, /not applicable/i);
 });

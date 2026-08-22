@@ -5,6 +5,105 @@ export const reference = {
 
 export const states = ['initial', 'generated'];
 
+// These scenarios are derived from the pinned application's real controls and
+// intentionally describe steady states only. The source uses transitions, but
+// AstylarUI compares the settled hover/active/focus result rather than timing.
+export const interactionScenarios = [
+  {
+    id: 'generate-pointer', state: 'initial', elementId: 'generate-speech',
+    profiles: ['reference-large-dpr1', 'smoke-1280-dpr2'],
+    steps: [
+      { id: 'hover', styleProperties: ['backgroundColor', 'color', 'cursor', 'transform'], actions: [{ type: 'hover', elementId: 'generate-speech' }] },
+      { id: 'held-active', styleProperties: ['backgroundColor', 'color', 'cursor', 'transform'], actions: [{ type: 'pointer-down', elementId: 'generate-speech' }] },
+      { id: 'release', styleProperties: ['backgroundColor', 'color', 'cursor', 'transform'], actions: [{ type: 'pointer-up' }] },
+    ],
+  },
+  {
+    id: 'generate-keyboard-focus', state: 'initial', elementId: 'generate-speech',
+    profiles: ['reference-large-dpr1', 'smoke-1280-dpr2'],
+    steps: [{ id: 'focus-visible', visual: 'focus-indicator', actions: [
+      { type: 'keyboard-focus', elementId: 'generate-speech' },
+    ] }],
+  },
+  {
+    id: 'title-caret', state: 'initial', elementId: 'generation-title',
+    profiles: ['reference-large-dpr1', 'smoke-1280-dpr2'],
+    steps: [{ id: 'pointer-caret', styleProperties: ['backgroundColor', 'color', 'borderColor', 'boxShadow'], actions: [
+      { type: 'click', elementId: 'generation-title', offsetX: 72, offsetY: 22 },
+      { type: 'type-text', text: 'Demo title' },
+      { type: 'press-key', key: 'ArrowLeft' },
+    ] }],
+  },
+  {
+    id: 'editor-selection', state: 'generated', elementId: 'speech-text',
+    profiles: ['reference-large-dpr1', 'smoke-1280-dpr2'],
+    steps: [
+      { id: 'focus-caret', styleProperties: ['backgroundColor', 'color', 'borderColor'], actions: [
+        { type: 'click', elementId: 'speech-text' }, { type: 'press-key', key: 'Home' },
+      ] },
+      { id: 'forward-selection', actions: [
+        { type: 'press-key', key: 'Shift+ArrowRight' }, { type: 'press-key', key: 'Shift+ArrowRight' },
+      ] },
+      { id: 'replace-selection', actions: [{ type: 'type-text', text: 'HE' }] },
+      { id: 'backward-selection', actions: [
+        { type: 'press-key', key: 'End' }, { type: 'press-key', key: 'Shift+ArrowLeft' },
+        { type: 'press-key', key: 'Shift+ArrowLeft' },
+      ] },
+    ],
+  },
+  {
+    id: 'voice-keyboard', state: 'initial', elementId: 'voice',
+    profiles: ['reference-large-dpr1', 'smoke-1280-dpr2'],
+    steps: [
+      { id: 'open', visual: 'state-only', actions: [{ type: 'click', elementId: 'voice' }] },
+      { id: 'arrow-commit', styleProperties: ['backgroundColor', 'color', 'borderColor', 'boxShadow'], actions: [{ type: 'press-key', key: 'ArrowDown' }] },
+    ],
+  },
+  {
+    id: 'voice-pointer', state: 'initial', elementId: 'voice',
+    profiles: ['reference-large-dpr1', 'smoke-1280-dpr2'],
+    steps: [
+      { id: 'open', visual: 'state-only', actions: [{ type: 'click', elementId: 'voice' }] },
+      { id: 'commit-coral', styleProperties: ['backgroundColor', 'color', 'borderColor', 'boxShadow'], actions: [
+        { type: 'select-option', elementId: 'voice', value: 'coral', offsetX: 120, offsetY: 77 },
+      ] },
+    ],
+  },
+  {
+    id: 'voice-dismissal', state: 'initial', elementId: 'voice',
+    profiles: ['reference-large-dpr1', 'smoke-1280-dpr2'], repeatCycles: 3,
+    steps: [
+      { id: 'open-for-escape', visual: 'state-only', actions: [{ type: 'click', elementId: 'voice' }] },
+      { id: 'escape', actions: [{ type: 'press-key', key: 'Escape' }] },
+      { id: 'open-for-click-away', visual: 'state-only', actions: [{ type: 'click', elementId: 'voice' }] },
+      { id: 'click-away', actions: [{ type: 'click', elementId: 'settings-title' }] },
+    ],
+  },
+  {
+    id: 'history-search-selection', state: 'generated', elementId: 'history-search',
+    profiles: ['reference-large-dpr1', 'smoke-1280-dpr2'],
+    steps: [
+      { id: 'focus-caret', styleProperties: ['backgroundColor', 'color', 'borderColor', 'boxShadow'], actions: [
+        { type: 'click', elementId: 'history-search' }, { type: 'type-text', text: 'hello' },
+      ] },
+      { id: 'selection', actions: [
+        { type: 'press-key', key: 'Shift+Home' },
+      ] },
+    ],
+  },
+  ...['play', 'download', 'delete'].map((action) => ({
+    id: `history-${action}-hover`, state: 'generated', elementId: `history-speech-1-${action}`,
+    profiles: ['reference-large-dpr1', 'smoke-1280-dpr2'],
+    steps: [{ id: 'hover', styleProperties: ['color', 'cursor'], actions: [{ type: 'hover', elementId: `history-speech-1-${action}` }] }],
+  })),
+];
+
+export const interactionApplicability = {
+  desktop: 'All source controls are visible and are enforced at DPR 1 and DPR 2.',
+  tablet: 'The fixed three-column source shell clips the workspace/history targets; static visibility remains enforced.',
+  mobile: 'The pinned source does not reflow the fixed shell, so off-screen interaction targets are not applicable.',
+};
+
 export const viewports = [
   { id: 'reference-large-dpr1', width: 1919, height: 870, deviceScaleFactor: 1 },
   { id: 'smoke-1280-dpr1', width: 1280, height: 800, deviceScaleFactor: 1 },
@@ -44,6 +143,11 @@ export const acceptance = {
   minimumEdgesWithinTolerance: 0.95,
   geometryTolerancePx: 2,
   minimumSsim: 0.965,
+  minimumInteractionLocalSsim: 0.74,
+  maximumInteractionColorError: 0.08,
+  minimumInteractionColorEdgeAlignment: 0.65,
+  minimumInteractionEdgeAlignment: 0.7,
+  minimumInteractionGradientEnergyRetention: 0.75,
   minimumGradientEnergyRetention: 0.82,
   minimumEdgeAlignment: 0.82,
   maximumGradientRmse: 0.12,
