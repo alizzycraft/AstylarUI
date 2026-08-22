@@ -416,6 +416,9 @@ describe('AstylarInteractionRuntime', () => {
     expect(events.map((event) => `${event.type}:${event.targetId}`)).toEqual([
       'pointerenter:action',
     ]);
+    hoverStates.length = 0;
+    runtime.reconcileModalState();
+    expect(hoverStates).toEqual([['action', true]]);
     runtime.dispose();
     scene.dispose();
     engine.dispose();

@@ -301,6 +301,16 @@ export class AstylarInteractionRuntime {
   /** Applies modal presentation and deterministic initial focus after a scene rebuild. */
   reconcileModalState(): void {
     if (this.disposed) return;
+    // A visual rebuild replaces the meshes while the logical pointer state is
+    // intentionally preserved. Reapply that state to the replacement meshes
+    // even when the pointer has not moved, so :hover/:active paint does not
+    // disappear until the next native pointer event.
+    if (this.hoveredElementId && this.dispatcher.hasEnabledTarget(this.hoveredElementId)) {
+      this.controls?.setHoverState?.(this.hoveredElementId, true);
+    }
+    if (this.pressedElementId && this.dispatcher.hasEnabledTarget(this.pressedElementId)) {
+      this.controls?.setActiveState?.(this.pressedElementId, true);
+    }
     if (this.presentedModalDialog?.id !== this.modalDialog?.id) {
       if (this.presentedModalDialog) {
         this.dialogs?.setTopLayer([...this.presentedModalDialog.elementIds], false);
