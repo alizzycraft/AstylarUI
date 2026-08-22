@@ -27,6 +27,24 @@ nesting, overflow, transforms, responsive evaluation, controls, or dynamic
 updates. Reference and Astylar inputs must remain genuinely equivalent; do not
 edit reference markup merely to imitate an implementation limitation.
 
+For interaction work, drive the paired surfaces with the same real Playwright
+pointer and keyboard actions. Use `enforcedStyleProperties` for computed paint
+that must match exactly after normalization; border proofs should name every
+relevant side width, color, and style plus radius rather than relying on a
+screenshot scalar. Use `textSelectionIds` for selectable non-control text.
+Interaction reports compare the effective pointer cursor, control selection
+endpoints and direction, visible caret/highlight ownership, and document-text
+selection text, offsets, direction, collapse, and highlight state. A collapsed
+control selection has no meaningful direction and is normalized to `none`.
+
+Expanded native select pixels and its transient active-option presentation are
+operating-system UI, not inspectable authored browser DOM. Prove that boundary
+through the native control's focus, expanded state, committed value/index,
+keyboard/pointer event order, dismissal behavior, final closed paint, and the
+Astylar popup's exact observer/resource ownership. Do not invent a browser
+active-option field or replace the native reference with custom markup merely
+to make internal popup pixels inspectable.
+
 ## Focused diagnosis
 
 Use `ASTYLAR_PARITY_FIXTURE=<id> npm run parity` to shorten investigation after
@@ -40,6 +58,12 @@ Repeat a surprising failure before changing code, particularly for delayed
 assets or a catastrophic capture. Compare a fresh render with update/resize
 sequences where relevant. Keep the failing general fixture while implementing
 the narrowest owning-boundary fix.
+
+For fast interaction artifacts such as hover, active press, caret placement,
+selection, and popup transitions, capture after every action boundary and
+inspect the structured report as well as the screenshot. A screenshot can miss
+a transient state or show similar pixels while cursor, direction, ownership,
+or cleanup is wrong.
 
 A focused run is diagnostic evidence only. It cannot establish the aggregate
 median or prove that other fixtures did not regress.

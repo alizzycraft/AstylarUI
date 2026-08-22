@@ -15,8 +15,9 @@ npm run parity
 This starts the Angular development server, launches installed Chrome headlessly,
 and writes current artifacts to `artifacts/parity/`. Use `npm run parity:check`
 to enforce the current release thresholds across the complete manifest. The
-Phase 16 baseline is green at 155 fixtures and 522 render results; a focused
-fixture run is diagnostic evidence and is never release acceptance.
+The latest accepted corpus size and metrics are recorded in the newest
+scorecard; a focused fixture run is diagnostic evidence and is never release
+acceptance.
 
 Fixtures default to the deterministic `desktop` profile (`800x600`). A fixture
 can set `viewportIds` to any combination of `desktop` (`800x600`), `tablet`
@@ -30,8 +31,9 @@ resource counts.
 
 Fixtures with interaction steps are driven through real Playwright pointer and
 keyboard input in the existing native page and Babylon scene. Each step captures
-normalized event order, focus, supported control state, geometry, text, paint,
-runtime errors, and Astylar interaction registrations.
+normalized event order, focus, supported control state, effective pointer
+cursor, caret/selection visuals, requested non-control text selection,
+geometry, text, paint, runtime errors, and Astylar interaction registrations.
 
 Set `ASTYLAR_PARITY_BASE_URL` to measure an already-running server. Set
 `ASTYLAR_PARITY_BROWSER_CHANNEL` if the local Chromium channel is not `chrome`.
@@ -44,6 +46,8 @@ Each fixture lives under `src/parity/fixtures/` and contains:
 
 - stable ID, category, expected behavior, and measurement element IDs;
 - optional expected-absent IDs for behavior such as `display: none`;
+- optional exact computed-style properties per element and non-control text
+  selection owners;
 - native HTML and CSS reference content;
 - equivalent Astylar `SiteData` using the same content and style values.
 
@@ -59,6 +63,14 @@ logic or mask meaningful screenshot regions.
   CSS pixels. Internal renderer dimensions and text-layout metrics are recorded
   alongside them for diagnosis.
 - Screenshots use SSIM without broad masks or normalization.
+- Fixtures can enforce normalized computed paint exactly. Interactive border
+  proofs name all four side widths/colors/styles and radius explicitly.
+- Control reports compare selection endpoints/direction plus owned caret and
+  highlight visuals. Requested document-text selections compare selected text,
+  anchor/focus and ordered offsets, direction, collapse, and highlight state.
+- Expanded selects compare focus, open/closed state, value/index, events, and
+  Astylar popup observer/resource ownership. Native operating-system popup
+  pixels are not replaced with custom reference markup.
 - Browser page exceptions, missing meshes, timeouts, and non-finite geometry fail
   the parity run.
 
@@ -84,6 +96,8 @@ categories are completed in `scorecard-v16.md` and `forward-tests-v16.md`.
 Reference-driven application measurement infrastructure is recorded in
 `scorecard-v18.md`; the enforced TTS application parity milestone and its final
 per-profile evidence are recorded in `scorecard-v19.md`.
+Interactive visual-state evidence and document-text selection continue in
+`scorecard-v20.md`.
 
 The shared authored-ID, positional fallback, compatibility, and replacement
 rules are documented in `../reconciliation.md`.

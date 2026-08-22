@@ -188,6 +188,12 @@ autoscroll, radio groups, closed and expanded select workflows, tested
 constraints, invalid focus, submit/reset, and state preservation across
 compatible updates.
 
+Direct text in supported non-control elements participates in pointer selection
+with browser-equivalent forward/backward endpoints, selected text, text cursor,
+visible highlight ownership, and outside-click clearing for the tested subset.
+Authored pointer cursors continue to win on selectable links or other text whose
+effective cursor is not the ordinary text cursor.
+
 Handlers are trusted host code outside serializable documents:
 
 ```ts

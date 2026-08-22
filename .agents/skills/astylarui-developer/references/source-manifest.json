@@ -7,14 +7,14 @@
       "source": "docs/compatibility/html-css.md",
       "destination": "html-css.md",
       "transform": "portable-html-css-links",
-      "sourceSha256": "40f37552b68e96f17026134429c49ae75c5986032b11408b8f4c964af4597875",
-      "bundledSha256": "5c40b6887d64c75d3c39f19cf8826afe24b3973d28f04c2cd1fa2543eccedc54"
+      "sourceSha256": "17b2c4e80cd7d9b284e894daa4846956dce487ee96a9da1efdb5bf36cdfb569e",
+      "bundledSha256": "0a2fe924352f4f746efbb71c515693fa12935f1284e79a80239b93d71673a4af"
     },
     {
       "source": "docs/compatibility/capabilities.json",
       "destination": "capabilities.json",
-      "sourceSha256": "b1986bd305af844902461ffa5c040bfa1555021239f2e7bae5a65c7c333062ba",
-      "bundledSha256": "b1986bd305af844902461ffa5c040bfa1555021239f2e7bae5a65c7c333062ba"
+      "sourceSha256": "c6ce247970acf34ecfc068c46497a6b5008d15846907e04fbd9209c7d9268e88",
+      "bundledSha256": "c6ce247970acf34ecfc068c46497a6b5008d15846907e04fbd9209c7d9268e88"
     },
     {
       "source": "docs/compatibility/examples/manifest.json",
@@ -56,8 +56,8 @@
     {
       "source": "examples/angular-consumer/src/app/consumer-badge.plugin.ts",
       "destination": "consumer-badge.plugin.ts",
-      "sourceSha256": "d32b40b6156387a9b4d9125bd4cb0eb3885c3f05ee3297a8649c1c20dbda8e69",
-      "bundledSha256": "d32b40b6156387a9b4d9125bd4cb0eb3885c3f05ee3297a8649c1c20dbda8e69"
+      "sourceSha256": "d1e5aa327bf18d2984e4279b568e5978fdddaf014f886314dff14bb9394a2695",
+      "bundledSha256": "d1e5aa327bf18d2984e4279b568e5978fdddaf014f886314dff14bb9394a2695"
     },
     {
       "source": "examples/angular-consumer/src/app/app.browser.spec.ts",
