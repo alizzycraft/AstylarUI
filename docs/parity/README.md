@@ -15,7 +15,7 @@ npm run parity
 This starts the Angular development server, launches installed Chrome headlessly,
 and writes current artifacts to `artifacts/parity/`. Use `npm run parity:check`
 to enforce the current release thresholds across the complete manifest. The
-The latest accepted corpus size and metrics are recorded in the newest
+latest accepted corpus size and metrics are recorded in the newest
 scorecard; a focused fixture run is diagnostic evidence and is never release
 acceptance.
 
@@ -100,7 +100,8 @@ Reference-driven application measurement infrastructure is recorded in
 `scorecard-v18.md`; the enforced TTS application parity milestone and its final
 per-profile evidence are recorded in `scorecard-v19.md`.
 Interactive visual-state evidence and document-text selection continue in
-`scorecard-v20.md`.
+`scorecard-v20.md`. Source-derived TTS application interaction parity is
+recorded in `scorecard-v21.md`.
 
 The shared authored-ID, positional fallback, compatibility, and replacement
 rules are documented in `../reconciliation.md`.

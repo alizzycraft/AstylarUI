@@ -44,6 +44,12 @@ responsive rules, fonts, and states. If paired application evidence still
 differs after that audit, classify the delta and reduce probable core defects;
 do not use an independently redesigned application as renderer proof.
 
+Require the application workflow to preserve source interaction styling as
+well as static layout. A reference conversion must inventory hover, active,
+focus/focus-visible, caret, selection, dropdown, cursor, and dismissal behavior
+and verify representative states at their actual pointer/keyboard boundaries.
+Passing initial/generated screenshots is not evidence for those states.
+
 ## Receive a public reproduction
 
 A useful developer-to-maintainer handoff contains:

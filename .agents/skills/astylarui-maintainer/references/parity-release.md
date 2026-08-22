@@ -84,6 +84,23 @@ errors, or nondeterminism must fail. Promote such a benchmark to release
 enforcement only after every declared state, viewport, and DPR passes unchanged
 targets.
 
+For an interactive application, record an explicit source-derived interaction
+matrix before fixes. Drive both surfaces with equivalent real pointer/keyboard
+actions and capture after hover, held press, focus, caret/selection, edit,
+dropdown commit, and dismissal boundaries rather than only after the final
+state. Compare relevant computed/resolved paint exactly, including all border
+sides, radius, shadow/focus paint, cursor, and transform; also compare focused
+identity, value/index, selection endpoints/direction, visible caret/highlight,
+events, geometry, diagnostics, and settlement. Use padded element crops with a
+synthetically calibrated local metric that rejects wrong color, missing or
+shifted borders/rings, and blur. Repeat popup sequences and require observer and
+resource snapshots to return to a stable plateau.
+
+Native select popup pixels and pointer paint are host-platform UI. Do not fake
+them with reference DOM. Verify native focus/value/index/events/dismissal and
+the Astylar popup's targeting, placement, and cleanup, then compare the final
+closed control paint. State the boundary explicitly.
+
 ## Enforced acceptance
 
 [`tests/parity/run-parity.mjs`](../../../..//tests/parity/run-parity.mjs) is the
@@ -110,7 +127,9 @@ The pinned TTS application benchmark is also enforced release evidence. Run
 `npm run tts-parity:check` without changing its reference or calibrated targets;
 it requires all declared states, viewports, and DPR profiles to pass geometry,
 visibility, scrolling/reachability, exact visible text, local sharpness, SSIM,
-runtime, completeness, and repeatability. Use `npm run parity:release:check` to
+runtime, completeness, and repeatability, plus every declared interaction step
+to pass exact state/style/control, local raster, cursor/caret/selection,
+dropdown lifecycle, and resource checks. Use `npm run parity:release:check` to
 run the unfiltered fixture corpus and this application gate sequentially.
 
 Never weaken a threshold, delete or hide a fixture, filter the release run,

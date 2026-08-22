@@ -50,6 +50,10 @@ without replacing the native reference popup with artificial DOM.
   `0.967522`, maximum geometry edge error `1.978px`, 10/10 visibility, scroll
   ownership, scroll reachability, and visible-text matches, plus 36/36 sharpness
   regions.
+
+The Phase 20 TTS result above covered only the static `initial` and `generated`
+application states. It did not exercise the application's hover, active, focus,
+caret, selection, or dropdown sequences; Phase 21 adds that distinct evidence.
 - `npm test -- --watch=false --browsers=ChromeHeadless`: 322/322 tests passed.
 - Focused element-manager and pointer-interaction unit tests: 2/2 passed.
 - `npm run parity:harness:check`: 12/12 tests passed.

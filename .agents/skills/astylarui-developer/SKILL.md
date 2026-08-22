@@ -24,8 +24,9 @@ foundation and Babylon.js as the owned rendering substrate.
    unsupported behavior, and verification gap.
 6. When converting an existing application, repository, or supplied design,
    treat its inspected source as authoritative. Preserve structure, density,
-   sizing, overflow, breakpoints, fonts, and states; do not independently
-   redesign it or introduce scrolling without authorization.
+   sizing, overflow, breakpoints, fonts, hover/active/focus paint, caret and
+   selection behavior, dropdown states, cursors, and dismissal behavior; do not
+   independently redesign it or introduce scrolling without authorization.
 
 ## Route the task
 
@@ -125,7 +126,10 @@ semantic/accessibility, responsive, ownership/disposal, or packed-consumer
 checks according to the behavior changed. Reference-driven work requires paired
 browser/Astylar evidence at matching states, viewports, DPR, fonts, and
 settlement boundaries, including visibility and scroll reachability wherever
-content can overflow.
+content can overflow. For interactive references, capture every meaningful
+pointer/keyboard boundary (including held press), compare focused local crops
+and exact relevant style/state values, and repeat popup/dismissal sequences to
+check cleanup. Static screenshots do not establish interaction parity.
 
 Never weaken an expected result, omit an unsupported declaration silently, or
 change reference output to conceal a mismatch.

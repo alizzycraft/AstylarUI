@@ -111,7 +111,7 @@ try {
   console.log(humanSummary(report));
   assert.deepEqual(infrastructureErrors, [], 'TTS parity evidence was incomplete or malformed.');
   if (enforce) assert.equal(summary.meetsAcceptance, true,
-    'TTS parity remains below the calibrated Phase 18 acceptance configuration.');
+    'TTS parity remains below the calibrated acceptance configuration.');
 } catch (error) {
   if (serverOutput) console.error(`Recent TTS server output:\n${serverOutput}`);
   throw error;
@@ -885,7 +885,7 @@ function humanSummary(report) {
     `- Sharpness regions passing: ${s.sharpnessRegionsPassing}/${s.sharpnessRegionsMeasured}\n` +
     `- Interaction steps meeting Phase 21 targets: ${s.acceptedInteractionSteps}/${s.interactionSteps}\n` +
     `- Minimum interaction-local SSIM: ${s.minimumInteractionLocalSsim.toFixed(6)}\n` +
-    `- Acceptance: ${s.meetsAcceptance ? 'PASS' : 'UNMET (diagnostic in Phase 18)'}\n`;
+    `- Acceptance: ${s.meetsAcceptance ? 'PASS' : 'UNMET'}\n`;
 }
 
 function sameDimensions(left, right) { return left.width === right.width && left.height === right.height; }

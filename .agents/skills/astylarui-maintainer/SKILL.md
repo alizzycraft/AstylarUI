@@ -65,6 +65,12 @@ contract as the observable product boundary.
 - Match reference/Astylar input, state, viewport, DPR, fonts, and settlement.
   Standalone screenshots, file-size checks, builds, semantics, geometry alone,
   or whole-page SSIM alone cannot prove sharpness, clipping, or reachability.
+- For an interactive reference application, declare and drive representative
+  hover, held-active, keyboard focus, caret, forward/backward selection,
+  editing, dropdown commit/dismissal, and cursor states. Capture every action
+  boundary and verify exact state/control data, focused local rasters, and
+  repeated popup/resource cleanup. Static initial/final screenshots cannot
+  establish application interaction parity.
 
 ## Implement at the owning boundary
 
