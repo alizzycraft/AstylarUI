@@ -110,15 +110,24 @@ export class BabylonElementManagerService implements OnDestroy {
     this.elementDimensions.delete(id);
   }
 
-  registerTextElement(elementId: string, textMesh: Mesh, texture: any, content: string, metrics: StoredTextLayoutMetrics): void {
+  registerTextElement(
+    elementId: string,
+    textMesh: Mesh,
+    texture: any,
+    content: string,
+    metrics: StoredTextLayoutMetrics,
+    style?: StyleRule
+  ): void {
     this.textMeshes.set(elementId, textMesh);
     this.textTextures.set(elementId, texture);
     this.textContent.set(elementId, content);
     this.textMetrics.set(elementId, metrics);
+    this.textInteractionRegistry.register(elementId, textMesh, style, metrics, content);
   }
 
   unregisterTextElement(elementId: string): void {
     const textMesh = this.textMeshes.get(elementId);
+    this.textInteractionRegistry.unregisterByElementId(elementId);
     if (textMesh && !textMesh.isDisposed) {
       textMesh.dispose();
     }

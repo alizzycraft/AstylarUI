@@ -352,6 +352,14 @@ export class ElementInteractionService {
         }
 
         dom.context.hoverStates.set(elementId, true);
+        mainMesh.metadata = {
+          ...(mainMesh.metadata || {}),
+          cursor: hoverMergedStyle.cursor,
+        };
+        const hoverCanvas = render.scene?.getEngine().getRenderingCanvas();
+        if (hoverCanvas) {
+          hoverCanvas.style.cursor = hoverMergedStyle.cursor ?? 'default';
+        }
         this.applyElementMaterial(
           dom,
           render,
@@ -682,6 +690,14 @@ export class ElementInteractionService {
         }
 
         dom.context.hoverStates.set(elementId, false);
+        mainMesh.metadata = {
+          ...(mainMesh.metadata || {}),
+          cursor: mergedStyle.cursor,
+        };
+        const normalCanvas = render.scene?.getEngine().getRenderingCanvas();
+        if (normalCanvas) {
+          normalCanvas.style.cursor = mergedStyle.cursor ?? 'default';
+        }
         this.applyElementMaterial(
           dom,
           render,

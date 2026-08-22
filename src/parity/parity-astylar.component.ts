@@ -21,6 +21,8 @@ import { Astylar } from '../lib';
 import type { AstylarEvent, AstylarEventSnapshot } from '../lib';
 import { BabylonElementManagerService } from '../app/services/dom/element-manager.service';
 import { InputElementService } from '../app/services/dom/input/input-element.service';
+import { TextSelectionControllerService } from '../app/services/dom/interaction/text-selection-controller.service';
+import { TextInteractionRegistryService } from '../app/services/dom/interaction/text-interaction-registry.service';
 import { ASTYLAR_INTERNAL_INSPECTION } from '../lib/astylar';
 import { getParityFixture } from './fixtures';
 import {
@@ -32,6 +34,7 @@ import {
   ParityNavigationOutcome,
   ParityRect,
   ParityRuntimeReport,
+  ParityTextSelectionState,
   ParityViewport
 } from './parity.types';
 
@@ -70,6 +73,8 @@ export class ParityAstylarComponent {
   private readonly astylar = inject(Astylar);
   private elementManager!: BabylonElementManagerService;
   private inputElementService!: InputElementService;
+  private textSelectionController!: TextSelectionControllerService;
+  private textInteractionRegistry!: TextInteractionRegistryService;
   private readonly route = inject(ActivatedRoute);
   private readonly zone = inject(NgZone);
   private readonly destroyRef = inject(DestroyRef);
@@ -179,6 +184,8 @@ export class ParityAstylarComponent {
       if (!inspection) throw new Error('Astylar surface inspection is unavailable.');
       this.elementManager = inspection.elementManager;
       this.inputElementService = inspection.inputElementService;
+      this.textSelectionController = inspection.textSelectionController;
+      this.textInteractionRegistry = inspection.textInteractionRegistry;
       if (dynamicSequence || interactionSequence) {
         window.__ASTYLAR_PARITY_DISPOSE__ = () => {
           const diagnosticsBefore = surface.diagnostics;
@@ -370,6 +377,7 @@ export class ParityAstylarComponent {
             fixture.expectedAbsentIds ?? [],
             fixture.expectedMissingIds ?? [],
             fixture.interactionIds ?? [],
+            fixture.textSelectionIds ?? [],
             fixture.scrollIds ?? [],
             !!fixture.interactionSteps?.length,
           )
@@ -388,6 +396,7 @@ export class ParityAstylarComponent {
             fixture.expectedAbsentIds ?? [],
             fixture.expectedMissingIds ?? [],
             fixture.interactionIds ?? [],
+            fixture.textSelectionIds ?? [],
             fixture.scrollIds ?? [],
             !!fixture.interactionSteps?.length,
             ['Timed out waiting for all Astylar elements to render']
@@ -405,6 +414,7 @@ export class ParityAstylarComponent {
     expectedAbsentIds: string[],
     expectedMissingIds: string[],
     interactionIds: string[],
+    textSelectionIds: string[],
     scrollIds: string[],
     includeInteraction: boolean,
     initialErrors: string[] = []
@@ -434,6 +444,7 @@ export class ParityAstylarComponent {
       const inputElement = this.elementManager.inputElementsMap.get(id);
       const style = {
         ...styles?.normal,
+        ...(this.elementManager.hoverStatesMap.get(id) ? styles?.hover : {}),
         ...(inputElement?.focused ? styles?.focus : {}),
         ...(mesh.metadata?.astylarActiveState ? styles?.active : {}),
       };
@@ -464,7 +475,17 @@ export class ParityAstylarComponent {
           backgroundColor: material?.diffuseColor.toHexString(),
           opacity: material?.alpha,
           borderTopWidth: style?.borderWidth,
+          borderRightWidth: style?.borderWidth,
+          borderBottomWidth: style?.borderWidth,
+          borderLeftWidth: style?.borderWidth,
           borderTopColor: style?.borderColor,
+          borderRightColor: style?.borderColor,
+          borderBottomColor: style?.borderColor,
+          borderLeftColor: style?.borderColor,
+          borderTopStyle: style?.borderStyle,
+          borderRightStyle: style?.borderStyle,
+          borderBottomStyle: style?.borderStyle,
+          borderLeftStyle: style?.borderStyle,
           borderRadius: style?.borderRadius,
           color: style?.color,
           fontFamily: style?.fontFamily,
@@ -474,6 +495,7 @@ export class ParityAstylarComponent {
           lineHeight: style?.lineHeight,
           textAlign: style?.textAlign,
           whiteSpace: style?.whiteSpace,
+          cursor: style?.cursor ?? (metrics ? 'text' : 'default'),
           zIndex: style?.zIndex,
           internalZ: mesh.getAbsolutePosition().z,
           internalWidth: dimensions?.width,
@@ -515,7 +537,9 @@ export class ParityAstylarComponent {
             events: [...this.interactionEvents],
             focusedElementId: this.astylar.getInteractionSnapshot(scene)?.focusedElementId,
             modalDialogId: this.astylar.getInteractionSnapshot(scene)?.modalDialogId,
-            controls: this.measureControls(interactionIds),
+            controls: this.measureControls(interactionIds, scene),
+            pointerCursor: scene.getEngine().getRenderingCanvas()?.style.cursor || 'default',
+            textSelection: this.measureTextSelection(textSelectionIds, scene),
             scrollContainers: Object.fromEntries(
               scrollIds.map((id) => {
                 const state = this.astylar.getScrollSnapshot(scene)?.containers[id];
@@ -632,13 +656,21 @@ export class ParityAstylarComponent {
     return undefined;
   }
 
-  private measureControls(ids: string[]): Record<string, ParityControlState> {
+  private measureControls(ids: string[], scene: Scene): Record<string, ParityControlState> {
     const controls: Record<string, ParityControlState> = {};
     for (const id of ids) {
       const input = this.elementManager.inputElementsMap.get(id);
       if (!input) continue;
       const options = Array.isArray(input.options) ? input.options : [];
       const semanticType = 'buttonType' in input ? input.buttonType : input.type;
+      const hasTextSelection = typeof input.selectionStart === 'number' &&
+        typeof input.selectionEnd === 'number';
+      const selectionDirection = hasTextSelection
+        ? input.selectionStart === input.selectionEnd
+          ? 'none'
+          : input.cursorPosition === input.selectionStart ? 'backward' : 'forward'
+        : undefined;
+      const cursorMesh = 'cursorMesh' in input ? input.cursorMesh : undefined;
       controls[id] = {
         type: String(semanticType),
         value: String(input.value ?? ''),
@@ -652,7 +684,15 @@ export class ParityAstylarComponent {
         focused: !!input.focused,
         selectionStart: typeof input.selectionStart === 'number' ? input.selectionStart : undefined,
         selectionEnd: typeof input.selectionEnd === 'number' ? input.selectionEnd : undefined,
+        selectionDirection,
         cursorPosition: typeof input.cursorPosition === 'number' ? input.cursorPosition : undefined,
+        caretRendered: hasTextSelection
+          ? !!input.focused && input.selectionStart === input.selectionEnd &&
+            !!cursorMesh && !cursorMesh.isDisposed()
+          : undefined,
+        selectionRendered: hasTextSelection
+          ? input.selectionStart !== input.selectionEnd && this.hasSelectionHighlight(scene, id)
+          : undefined,
         scrollLeft: typeof input.selectionStart === 'number'
           ? Math.floor(input.scrollOffset ?? 0)
           : undefined,
@@ -665,6 +705,47 @@ export class ParityAstylarComponent {
       };
     }
     return controls;
+  }
+
+  private measureTextSelection(
+    ids: string[],
+    scene: Scene,
+  ): ParityTextSelectionState | undefined {
+    if (!ids.length) return undefined;
+    const empty: ParityTextSelectionState = {
+      text: '',
+      direction: 'none',
+      collapsed: true,
+      highlightRendered: false,
+    };
+    const selection = this.textSelectionController.snapshot;
+    if (!selection.elementId || !ids.includes(selection.elementId) ||
+        selection.anchorIndex === null || selection.focusIndex === null) {
+      return empty;
+    }
+    const entry = this.textInteractionRegistry.getByElementId(selection.elementId);
+    const anchorOffset = selection.anchorIndex;
+    const focusOffset = selection.focusIndex;
+    const collapsed = anchorOffset === focusOffset;
+    const startOffset = Math.min(anchorOffset, focusOffset);
+    const endOffset = Math.max(anchorOffset, focusOffset);
+    return {
+      elementId: selection.elementId,
+      text: entry?.text?.slice(startOffset, endOffset) ?? '',
+      anchorOffset,
+      focusOffset,
+      startOffset,
+      endOffset,
+      direction: collapsed ? 'none' : anchorOffset <= focusOffset ? 'forward' : 'backward',
+      collapsed,
+      highlightRendered: !collapsed && this.hasSelectionHighlight(scene, selection.elementId),
+    };
+  }
+
+  private hasSelectionHighlight(scene: Scene, elementId: string): boolean {
+    return scene.meshes.some((mesh) =>
+      !mesh.isDisposed() && mesh.isVisible &&
+      mesh.metadata?.highlight?.ownerElementId === elementId);
   }
 
   private normalizeEvent(event: AstylarEventSnapshot): ParityNormalizedEvent {

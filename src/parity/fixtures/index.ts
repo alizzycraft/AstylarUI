@@ -151,6 +151,7 @@ import { overflowReplacementCleanupFixture } from './overflow-replacement-cleanu
 import { overflowScrolledTargetFixture } from './overflow-scrolled-target.fixture';
 import { interactionPointerCaretFixture } from './interaction-pointer-caret.fixture';
 import { interactionPointerDragSelectionFixture } from './interaction-pointer-drag-selection.fixture';
+import { interactionDocumentTextSelectionFixture } from './interaction-document-text-selection.fixture';
 import { interactionInputAutoscrollFixture } from './interaction-input-autoscroll.fixture';
 import { interactionTextareaAutoscrollFixture } from './interaction-textarea-autoscroll.fixture';
 import { interactionTextareaVerticalNavigationFixture } from './interaction-textarea-vertical-navigation.fixture';
@@ -318,6 +319,7 @@ const fixtures: readonly ParityFixture[] = [
   overflowScrolledTargetFixture,
   interactionPointerCaretFixture,
   interactionPointerDragSelectionFixture,
+  interactionDocumentTextSelectionFixture,
   interactionInputAutoscrollFixture,
   interactionTextareaAutoscrollFixture,
   interactionTextareaVerticalNavigationFixture,

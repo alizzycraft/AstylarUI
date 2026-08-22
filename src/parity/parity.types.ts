@@ -44,6 +44,8 @@ export interface ParityFixture {
   category: ParityCategory;
   expectedBehavior: string;
   measurementIds: string[];
+  /** Computed style properties that must match exactly after normalization. */
+  enforcedStyleProperties?: Record<string, string[]>;
   optionalMeasurementIds?: string[];
   viewportIds?: ParityViewport['id'][];
   /** Optional fixture-owned profiles used instead of the global smoke profiles. */
@@ -62,6 +64,8 @@ export interface ParityFixture {
   /** Repeated interaction phases used to enforce warm resource plateaus and final disposal. */
   interactionCycleLength?: number;
   interactionIds?: string[];
+  /** Non-control text nodes whose browser/Astylar selection state must match. */
+  textSelectionIds?: string[];
   scrollIds?: string[];
   /** Authored IDs whose browser accessibility snapshots must match exactly. */
   semanticIds?: string[];
@@ -335,7 +339,12 @@ export interface ParityControlState {
   focused: boolean;
   selectionStart?: number;
   selectionEnd?: number;
+  selectionDirection?: 'forward' | 'backward' | 'none';
   cursorPosition?: number;
+  /** Whether the focused collapsed caret has an owned visual in the renderer. */
+  caretRendered?: boolean;
+  /** Whether a non-collapsed control selection has an owned highlight visual. */
+  selectionRendered?: boolean;
   scrollLeft?: number;
   scrollTop?: number;
   touched?: boolean;
@@ -348,6 +357,10 @@ export interface ParityInteractionReport {
   focusedElementId?: string;
   modalDialogId?: string;
   controls: Record<string, ParityControlState>;
+  /** Effective pointer cursor after the most recent pointer movement. */
+  pointerCursor?: string;
+  /** Browser Selection/Astylar text-selection state for non-control text. */
+  textSelection?: ParityTextSelectionState;
   scrollContainers?: Record<string, ParityScrollState>;
   navigationOutcomes?: ParityNavigationOutcome[];
   registrations?: {
@@ -361,6 +374,18 @@ export interface ParityInteractionReport {
     popupMaterials?: number;
     popupTextures?: number;
   };
+}
+
+export interface ParityTextSelectionState {
+  elementId?: string;
+  text: string;
+  anchorOffset?: number;
+  focusOffset?: number;
+  startOffset?: number;
+  endOffset?: number;
+  direction: 'forward' | 'backward' | 'none';
+  collapsed: boolean;
+  highlightRendered: boolean;
 }
 
 export interface ParityNavigationOutcome {

@@ -875,14 +875,32 @@
     "title": "Authored hover-state paint",
     "category": "controls-states",
     "expectedBehavior": "Pointer enter applies authored hover paint and pointer leave restores normal paint with browser-order boundary events.",
-    "interactionStepCount": 2
+    "interactionStepCount": 2,
+    "enforcedStyleProperties": {
+      "hover-style-target": [
+        "backgroundColor",
+        "borderTopWidth", "borderRightWidth", "borderBottomWidth", "borderLeftWidth",
+        "borderTopColor", "borderRightColor", "borderBottomColor", "borderLeftColor",
+        "borderTopStyle", "borderRightStyle", "borderBottomStyle", "borderLeftStyle",
+        "borderRadius", "cursor"
+      ]
+    }
   },
   {
     "id": "interaction-active-style",
     "title": "Authored active-state paint",
     "category": "controls-states",
     "expectedBehavior": "Primary pointer down applies authored active paint until pointer up, then restores normal paint and completes click.",
-    "interactionStepCount": 2
+    "interactionStepCount": 2,
+    "enforcedStyleProperties": {
+      "active-style-target": [
+        "backgroundColor",
+        "borderTopWidth", "borderRightWidth", "borderBottomWidth", "borderLeftWidth",
+        "borderTopColor", "borderRightColor", "borderBottomColor", "borderLeftColor",
+        "borderTopStyle", "borderRightStyle", "borderBottomStyle", "borderLeftStyle",
+        "borderRadius", "cursor"
+      ]
+    }
   },
   {
     "id": "interaction-focus-style",
@@ -982,6 +1000,22 @@
     "category": "forms-interactive",
     "expectedBehavior": "Forward and backward pointer drags expose ordered selection endpoints while retaining the active caret direction, and typing replaces each selected range with browser-equivalent events.",
     "interactionStepCount": 4
+  },
+  {
+    "id": "interaction-document-text-selection",
+    "title": "Non-control text selection",
+    "category": "forms-interactive",
+    "expectedBehavior": "Forward and backward pointer drags select the same authored text range, direction, and visible highlight as browser document text, and clicking outside clears either selection.",
+    "interactionStepCount": 4,
+    "textSelectionIds": ["document-selection-copy"],
+    "enforcedStyleProperties": {
+      "document-selection-copy": [
+        "borderTopWidth", "borderRightWidth", "borderBottomWidth", "borderLeftWidth",
+        "borderTopColor", "borderRightColor", "borderBottomColor", "borderLeftColor",
+        "borderTopStyle", "borderRightStyle", "borderBottomStyle", "borderLeftStyle",
+        "borderRadius", "cursor"
+      ]
+    }
   },
   {
     "id": "interaction-input-autoscroll",

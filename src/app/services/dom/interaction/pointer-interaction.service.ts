@@ -16,6 +16,7 @@ export class PointerInteractionService {
       return;
     }
 
+    this.updateCursor(pointerInfo, render);
     const entry = this.resolveTextEntry(pointerInfo, render);
     if (!entry) {
       this.textSelectionController.clearSelection();
@@ -55,10 +56,13 @@ export class PointerInteractionService {
     const mesh = this.resolvePreferredMesh(pointerInfo, render);
 
     if (mesh) {
-      if (mesh.metadata?.isTextMesh) {
+      const cursor = mesh.metadata?.cursor;
+      if (cursor && cursor !== 'auto' && cursor !== 'default') {
+        canvas.style.cursor = cursor;
+      } else if (mesh.metadata?.isTextMesh) {
         canvas.style.cursor = 'text';
-      } else if (mesh.metadata?.cursor) {
-        canvas.style.cursor = mesh.metadata.cursor;
+      } else if (cursor) {
+        canvas.style.cursor = cursor;
       } else {
         canvas.style.cursor = 'default';
       }
@@ -68,6 +72,7 @@ export class PointerInteractionService {
   }
 
   handlePointerUp(pointerInfo: PointerInfo, render: BabylonRender): void {
+    this.updateCursor(pointerInfo, render);
     if (!this.textSelectionController.snapshot.isPointerDown) {
       return;
     }
@@ -98,6 +103,13 @@ export class PointerInteractionService {
       if (directTextEntry) {
         return directTextEntry.mesh;
       }
+      const directElementId = directMesh.metadata?.elementId;
+      const ownedTextEntry = typeof directElementId === 'string'
+        ? this.textInteractionRegistry.getByElementId(directElementId)
+        : undefined;
+      if (ownedTextEntry) {
+        return ownedTextEntry.mesh;
+      }
     }
 
     const scene = render.scene;
@@ -106,7 +118,9 @@ export class PointerInteractionService {
       return directMesh;
     }
 
-    const picks = scene.multiPick(nativeEvent.clientX, nativeEvent.clientY, (mesh) => !!mesh && mesh.isPickable);
+    const pickX = Number.isFinite(scene.pointerX) ? scene.pointerX : nativeEvent.clientX;
+    const pickY = Number.isFinite(scene.pointerY) ? scene.pointerY : nativeEvent.clientY;
+    const picks = scene.multiPick(pickX, pickY, (mesh) => !!mesh && mesh.isPickable);
     if (!picks?.length) {
       return directMesh;
     }
@@ -123,6 +137,14 @@ export class PointerInteractionService {
         return entry.mesh;
       }
 
+      const elementId = pickedMesh.metadata?.elementId;
+      const ownedTextEntry = typeof elementId === 'string'
+        ? this.textInteractionRegistry.getByElementId(elementId)
+        : undefined;
+      if (ownedTextEntry) {
+        return ownedTextEntry.mesh;
+      }
+
       // Check if this is an input mesh that has a child text mesh
       if (pickedMesh.metadata?.textInput) {
         const textInput = pickedMesh.metadata.textInput;
@@ -134,9 +156,6 @@ export class PointerInteractionService {
         }
       }
 
-      if (pickedMesh === directMesh) {
-        break;
-      }
     }
 
     return directMesh;
@@ -174,7 +193,9 @@ export class PointerInteractionService {
       const nativeEvent = pointerInfo.event as PointerEvent | MouseEvent | undefined;
 
       if (scene && nativeEvent && typeof nativeEvent.clientX === 'number' && typeof nativeEvent.clientY === 'number') {
-        const ray = scene.createPickingRay(nativeEvent.clientX, nativeEvent.clientY, Matrix.Identity(), scene.activeCamera);
+        const pickX = Number.isFinite(scene.pointerX) ? scene.pointerX : nativeEvent.clientX;
+        const pickY = Number.isFinite(scene.pointerY) ? scene.pointerY : nativeEvent.clientY;
+        const ray = scene.createPickingRay(pickX, pickY, Matrix.Identity(), scene.activeCamera);
         const hit = ray.intersectsMesh(entry.mesh as any);
 
         if (hit.hit && hit.pickedPoint) {

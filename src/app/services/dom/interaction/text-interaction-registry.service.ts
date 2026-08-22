@@ -53,6 +53,8 @@ export class TextInteractionRegistryService {
 
     mesh.metadata = {
       ...(mesh.metadata || {}),
+      isTextMesh: true,
+      cursor: style?.cursor ?? mesh.metadata?.cursor,
       textInteraction: {
         ...(mesh.metadata?.textInteraction || {}),
         registered: true,

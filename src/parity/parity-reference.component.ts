@@ -20,6 +20,7 @@ import {
   ParityReferenceMutation,
   ParityRect,
   ParityRuntimeReport,
+  ParityTextSelectionState,
   ParityViewport
 } from './parity.types';
 
@@ -49,6 +50,7 @@ export class ParityReferenceComponent {
   private resizeGeneration = 0;
   private readonly interactionEvents: ParityNormalizedEvent[] = [];
   private readonly navigationOutcomes: ParityNavigationOutcome[] = [];
+  private pointerCursor = 'default';
 
   constructor() {
     afterNextRender(() => void this.initialize());
@@ -82,6 +84,7 @@ export class ParityReferenceComponent {
     const interactionSequence = this.route.snapshot.queryParamMap.get('interaction') === 'true' &&
       !!fixture.interactionSteps?.length;
     if (interactionSequence) {
+      this.installPointerCursorCapture(viewport);
       this.installClickCancellation(viewport, fixture.cancelClickIds ?? []);
       this.installDialogCancellation(viewport, fixture.cancelDialogIds ?? []);
       this.installInteractionCapture(
@@ -352,6 +355,11 @@ export class ParityReferenceComponent {
             modalDialogId: fixture.modalDialogIds?.find((id) =>
               viewport.querySelector<HTMLDialogElement>(`#${CSS.escape(id)}`)?.matches(':modal')),
             controls: this.measureControls(viewport, fixture.interactionIds ?? []),
+            pointerCursor: this.pointerCursor,
+            textSelection: this.measureTextSelection(
+              viewport,
+              fixture.textSelectionIds ?? [],
+            ),
             scrollContainers: this.measureScrollContainers(viewport, fixture.scrollIds ?? []),
             navigationOutcomes: [...this.navigationOutcomes],
           }
@@ -403,6 +411,24 @@ export class ParityReferenceComponent {
         type === 'cancel' || type === 'close' ||
         type === 'pointerenter' || type === 'pointerleave');
     }
+  }
+
+  private installPointerCursorCapture(viewport: HTMLElement): void {
+    viewport.addEventListener('pointermove', (event) => {
+      const target = event.target instanceof Element ? event.target : undefined;
+      const cursor = target ? getComputedStyle(target).cursor : 'default';
+      if (cursor !== 'auto') {
+        this.pointerCursor = cursor;
+        return;
+      }
+      const textControl = target instanceof HTMLTextAreaElement ||
+        (target instanceof HTMLInputElement &&
+          ['text', 'password', 'email', 'search', 'url', 'tel'].includes(target.type));
+      const selectableText = !!target && [...target.childNodes].some((node) =>
+        node.nodeType === Node.TEXT_NODE && !!node.textContent?.trim()) &&
+        getComputedStyle(target).userSelect !== 'none';
+      this.pointerCursor = textControl || selectableText ? 'text' : 'default';
+    });
   }
 
   private installClickCancellation(viewport: HTMLElement, ids: string[]): void {
@@ -490,10 +516,22 @@ export class ParityReferenceComponent {
         selectionEnd: control instanceof HTMLInputElement || control instanceof HTMLTextAreaElement
           ? control.selectionEnd ?? undefined
           : undefined,
+        selectionDirection: (control instanceof HTMLInputElement || control instanceof HTMLTextAreaElement) &&
+          control.selectionStart !== null && control.selectionEnd !== null
+          ? control.selectionDirection ?? 'none'
+          : undefined,
         cursorPosition: control instanceof HTMLInputElement || control instanceof HTMLTextAreaElement
           ? control.selectionDirection === 'backward'
             ? control.selectionStart ?? undefined
             : control.selectionEnd ?? undefined
+          : undefined,
+        caretRendered: (control instanceof HTMLInputElement || control instanceof HTMLTextAreaElement) &&
+          control.selectionStart !== null && control.selectionEnd !== null
+          ? this.document.activeElement === control && control.selectionStart === control.selectionEnd
+          : undefined,
+        selectionRendered: (control instanceof HTMLInputElement || control instanceof HTMLTextAreaElement) &&
+          control.selectionStart !== null && control.selectionEnd !== null
+          ? control.selectionStart !== control.selectionEnd
           : undefined,
         scrollLeft: control instanceof HTMLTextAreaElement ||
           (control instanceof HTMLInputElement && ['text', 'password', 'email', 'number'].includes(control.type))
@@ -503,6 +541,55 @@ export class ParityReferenceComponent {
       };
     }
     return controls;
+  }
+
+  private measureTextSelection(
+    viewport: HTMLElement,
+    ids: string[],
+  ): ParityTextSelectionState | undefined {
+    if (!ids.length) return undefined;
+    const empty: ParityTextSelectionState = {
+      text: '',
+      direction: 'none',
+      collapsed: true,
+      highlightRendered: false,
+    };
+    const selection = this.document.getSelection();
+    if (!selection || selection.rangeCount === 0 || !selection.anchorNode || !selection.focusNode) {
+      return empty;
+    }
+    const allowed = ids
+      .map((id) => viewport.querySelector<HTMLElement>(`#${CSS.escape(id)}`))
+      .filter((element): element is HTMLElement => !!element);
+    const owner = allowed.find((element) =>
+      element.contains(selection.anchorNode) && element.contains(selection.focusNode));
+    if (!owner) return empty;
+
+    const anchorOffset = this.textOffsetWithin(owner, selection.anchorNode, selection.anchorOffset);
+    const focusOffset = this.textOffsetWithin(owner, selection.focusNode, selection.focusOffset);
+    const collapsed = selection.isCollapsed || anchorOffset === focusOffset;
+    return {
+      elementId: owner.id,
+      text: selection.toString(),
+      anchorOffset,
+      focusOffset,
+      startOffset: Math.min(anchorOffset, focusOffset),
+      endOffset: Math.max(anchorOffset, focusOffset),
+      direction: collapsed ? 'none' : anchorOffset <= focusOffset ? 'forward' : 'backward',
+      collapsed,
+      highlightRendered: !collapsed,
+    };
+  }
+
+  private textOffsetWithin(owner: HTMLElement, node: Node, offset: number): number {
+    const range = this.document.createRange();
+    range.selectNodeContents(owner);
+    try {
+      range.setEnd(node, offset);
+      return range.toString().length;
+    } catch {
+      return 0;
+    }
   }
 
   private measureScrollContainers(
@@ -590,7 +677,17 @@ export class ParityReferenceComponent {
         backgroundColor: computed.backgroundColor,
         color: computed.color,
         borderTopWidth: computed.borderTopWidth,
+        borderRightWidth: computed.borderRightWidth,
+        borderBottomWidth: computed.borderBottomWidth,
+        borderLeftWidth: computed.borderLeftWidth,
         borderTopColor: computed.borderTopColor,
+        borderRightColor: computed.borderRightColor,
+        borderBottomColor: computed.borderBottomColor,
+        borderLeftColor: computed.borderLeftColor,
+        borderTopStyle: computed.borderTopStyle,
+        borderRightStyle: computed.borderRightStyle,
+        borderBottomStyle: computed.borderBottomStyle,
+        borderLeftStyle: computed.borderLeftStyle,
         borderRadius: computed.borderRadius,
         fontFamily: computed.fontFamily,
         fontSize: computed.fontSize,
@@ -599,6 +696,7 @@ export class ParityReferenceComponent {
         lineHeight: computed.lineHeight,
         textAlign: computed.textAlign,
         whiteSpace: computed.whiteSpace,
+        cursor: computed.cursor,
         opacity: computed.opacity,
         zIndex: computed.zIndex
       },

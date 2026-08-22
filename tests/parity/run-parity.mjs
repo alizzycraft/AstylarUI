@@ -224,7 +224,7 @@ async function measureFixture(context, fixture, viewport) {
   const visibility = compareVisibility(reference.report, astylar.report);
   const scrolling = compareScrolling(reference.report, astylar.report);
   const text = compareText(reference.report, astylar.report);
-  const styles = compareStyles(reference.report, astylar.report);
+  const styles = compareStyles(reference.report, astylar.report, fixture.enforcedStyleProperties);
   const semanticErrors = compareSemantics(reference.semantics, astylar.semantics);
   const runtimeErrors = [
     ...reference.pageErrors.map((error) => `reference: ${error}`),
@@ -232,6 +232,7 @@ async function measureFixture(context, fixture, viewport) {
     ...reference.report.errors.map((error) => `reference: ${error}`),
     ...astylar.report.errors.map((error) => `astylar: ${error}`),
     ...semanticErrors,
+    ...styles.errors.map((error) => `style: ${error}`),
   ];
 
   return {
@@ -448,6 +449,11 @@ async function measureDynamicFixture(contexts, fixture) {
   return referenceStates.map((reference, index) => {
     const astylar = astylarStates[index];
     const fresh = freshStates[index];
+    const styles = compareStyles(
+      reference.report,
+      astylar.report,
+      fixture.enforcedStyleProperties,
+    );
     const runtimeErrors = [
       ...reference.pageErrors.map((error) => `reference: ${error}`),
       ...astylar.pageErrors.map((error) => `astylar: ${error}`),
@@ -462,6 +468,7 @@ async function measureDynamicFixture(contexts, fixture) {
         .map((error) => `reference update: ${error}`),
       ...compareSemantics(fresh.astylar.semantics, astylar.semantics)
         .map((error) => `astylar update: ${error}`),
+      ...styles.errors.map((error) => `style: ${error}`),
     ];
     const comparisons = [
       ['reference', fresh.reference.report, reference.report],
@@ -576,7 +583,7 @@ async function measureDynamicFixture(contexts, fixture) {
       screenshotSimilarity: comparePng(reference.screenshot, astylar.screenshot),
       geometry: compareGeometry(reference.report, astylar.report),
       text: compareText(reference.report, astylar.report),
-      styles: compareStyles(reference.report, astylar.report),
+      styles,
       semantics: { reference: reference.semantics, astylar: astylar.semantics },
       announcements: {
         reference: reference.announcements,
@@ -704,6 +711,11 @@ async function measureInteractionFixture(context, fixture) {
     const astylar = astylarStates[index];
     const interactionErrors = compareInteraction(reference.report, astylar.report);
     const lifecycleErrors = compareInteractionLifecycle(fixture, astylarStates, index);
+    const styles = compareStyles(
+      reference.report,
+      astylar.report,
+      fixture.enforcedStyleProperties,
+    );
     return {
       id: fixture.id,
       scenario: `interaction-${index + 1}`,
@@ -714,7 +726,7 @@ async function measureInteractionFixture(context, fixture) {
       screenshotSimilarity: comparePng(reference.screenshot, astylar.screenshot),
       geometry: compareGeometry(reference.report, astylar.report),
       text: compareText(reference.report, astylar.report),
-      styles: compareStyles(reference.report, astylar.report),
+      styles,
       semantics: { reference: reference.semantics, astylar: astylar.semantics },
       announcements: {
         reference: reference.announcements,
@@ -729,6 +741,7 @@ async function measureInteractionFixture(context, fixture) {
         ...compareAnnouncements(reference.announcements, astylar.announcements)
           .map((error) => `announcement: ${error}`),
         ...interactionErrors.map((error) => `interaction: ${error}`),
+        ...styles.errors.map((error) => `style: ${error}`),
         ...lifecycleErrors,
       ],
       reference: reference.report,
@@ -1030,6 +1043,20 @@ function compareInteraction(reference, astylar) {
       `${astylarInteraction.modalDialogId ?? 'none'})`,
     );
   }
+  if ((referenceInteraction.pointerCursor ?? 'default') !==
+      (astylarInteraction.pointerCursor ?? 'default')) {
+    errors.push(
+      `pointer cursor differs (${referenceInteraction.pointerCursor ?? 'default'} vs ` +
+      `${astylarInteraction.pointerCursor ?? 'default'})`,
+    );
+  }
+  if (JSON.stringify(referenceInteraction.textSelection) !==
+      JSON.stringify(astylarInteraction.textSelection)) {
+    errors.push(
+      `text selection differs (${JSON.stringify(referenceInteraction.textSelection)} vs ` +
+      `${JSON.stringify(astylarInteraction.textSelection)})`,
+    );
+  }
   if (JSON.stringify(referenceInteraction.navigationOutcomes ?? []) !==
       JSON.stringify(astylarInteraction.navigationOutcomes ?? [])) {
     errors.push(
@@ -1098,6 +1125,8 @@ function normalizeModalCloseScheduling(events = []) {
 
 function normalizeComparableControl(control) {
   if (!control) return undefined;
+  const collapsedSelection = typeof control.selectionStart === 'number' &&
+    control.selectionStart === control.selectionEnd;
   return Object.fromEntries(Object.entries({
     type: control.type,
     value: control.value,
@@ -1109,7 +1138,13 @@ function normalizeComparableControl(control) {
     focused: control.focused,
     selectionStart: control.selectionStart,
     selectionEnd: control.selectionEnd,
+    // Browsers expose "forward" for a collapsed native selection while the
+    // direction has no observable meaning. Preserve strict direction checks
+    // only for a non-collapsed range.
+    selectionDirection: collapsedSelection ? 'none' : control.selectionDirection,
     cursorPosition: control.cursorPosition,
+    caretRendered: control.caretRendered,
+    selectionRendered: control.selectionRendered,
     scrollLeft: control.scrollLeft,
     scrollTop: control.scrollTop,
   }).filter(([, value]) => value !== undefined));
@@ -1161,11 +1196,17 @@ async function measureResponsiveFixture(context, fixture, staticResults) {
     const fresh = staticResults.find(
       (result) => result.id === fixture.id && result.viewport.id === viewport.id && !result.scenario
     );
+    const styles = compareStyles(
+      reference.report,
+      astylar.report,
+      fixture.enforcedStyleProperties,
+    );
     const runtimeErrors = [
       ...reference.pageErrors.map((error) => `reference: ${error}`),
       ...astylar.pageErrors.map((error) => `astylar: ${error}`),
       ...reference.report.errors.map((error) => `reference: ${error}`),
-      ...astylar.report.errors.map((error) => `astylar: ${error}`)
+      ...astylar.report.errors.map((error) => `astylar: ${error}`),
+      ...styles.errors.map((error) => `style: ${error}`),
     ];
     if (!fresh) {
       runtimeErrors.push(`No fresh-render comparison found for ${viewport.id}`);
@@ -1210,7 +1251,7 @@ async function measureResponsiveFixture(context, fixture, staticResults) {
       screenshotSimilarity: comparePng(reference.screenshot, astylar.screenshot),
       geometry: compareGeometry(reference.report, astylar.report),
       text: compareText(reference.report, astylar.report),
-      styles: compareStyles(reference.report, astylar.report),
+      styles,
       runtimeErrors,
       reference: reference.report,
       astylar: astylar.report
@@ -1421,8 +1462,8 @@ function compareScrolling(reference, astylar) {
   };
 }
 
-function compareStyles(reference, astylar) {
-  const properties = [
+function compareStyles(reference, astylar, enforcedByElement = {}) {
+  const defaultProperties = [
     'backgroundColor',
     'color',
     'borderTopWidth',
@@ -1436,20 +1477,59 @@ function compareStyles(reference, astylar) {
     'opacity'
   ];
   const elements = [];
+  const errors = [];
 
   for (const [id, referenceElement] of Object.entries(reference.elements)) {
     const astylarElement = astylar.elements[id];
     if (!astylarElement) {
       continue;
     }
+    const properties = [...new Set([
+      ...defaultProperties,
+      ...(enforcedByElement[id] ?? []),
+    ])];
     const measured = properties.map((property) => ({
       property,
       reference: referenceElement.styles[property],
       astylar: astylarElement.styles[property]
     }));
     elements.push({ id, properties: measured });
+    for (const property of enforcedByElement[id] ?? []) {
+      const expected = normalizeStyleValue(property, referenceElement.styles[property]);
+      const actual = normalizeStyleValue(property, astylarElement.styles[property]);
+      if (expected !== actual) {
+        errors.push(`${id}.${property} differs (${expected ?? 'missing'} vs ${actual ?? 'missing'})`);
+      }
+    }
   }
-  return { elements };
+  return { elements, errors };
+}
+
+function normalizeStyleValue(property, value) {
+  if (value === undefined || value === null || value === '') return undefined;
+  if (property.toLowerCase().includes('color')) return normalizeColor(value);
+  if (property === 'opacity') {
+    const numeric = Number.parseFloat(String(value));
+    return Number.isFinite(numeric) ? String(numeric) : String(value).trim().toLowerCase();
+  }
+  if (property === 'cursor') {
+    const cursor = String(value).trim().toLowerCase();
+    return cursor === 'auto' ? 'default' : cursor;
+  }
+  return String(value).trim().toLowerCase().replace(/\s+/g, ' ');
+}
+
+function normalizeColor(value) {
+  const source = String(value).trim().toLowerCase();
+  if (/^#[0-9a-f]{6}$/.test(source)) return source;
+  if (/^#[0-9a-f]{3}$/.test(source)) {
+    return `#${source[1]}${source[1]}${source[2]}${source[2]}${source[3]}${source[3]}`;
+  }
+  const match = source.match(/^rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/);
+  if (!match) return source;
+  return `#${[match[1], match[2], match[3]]
+    .map((component) => Number(component).toString(16).padStart(2, '0'))
+    .join('')}`;
 }
 
 function summarize(results) {

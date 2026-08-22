@@ -415,6 +415,7 @@ export class BabylonDOMRendererService {
         textTexture,
         element.textContent,
         storedMetrics,
+        textStyle,
       );
 
 

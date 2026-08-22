@@ -92,6 +92,8 @@ import {
   type AstylarPluginRecoveryPolicy,
 } from './astylar-document-recovery';
 import { AstylarPluginHost } from './astylar-plugin-host';
+import { TextSelectionControllerService } from '../app/services/dom/interaction/text-selection-controller.service';
+import { TextInteractionRegistryService } from '../app/services/dom/interaction/text-interaction-registry.service';
 
 /**
  * Configuration options for rendering
@@ -121,6 +123,8 @@ export const ASTYLAR_INTERNAL_INSPECTION = Symbol('AstylarInternalInspection');
 export interface AstylarInternalInspection {
   readonly elementManager: BabylonElementManagerService;
   readonly inputElementService: InputElementService;
+  readonly textSelectionController: TextSelectionControllerService;
+  readonly textInteractionRegistry: TextInteractionRegistryService;
 }
 
 /**
@@ -137,6 +141,8 @@ class AstylarRenderer {
   private imageResources = inject(ImageResourceService);
   private elementManager = inject(BabylonElementManagerService);
   private inputElementService = inject(InputElementService);
+  private textSelectionController = inject(TextSelectionControllerService);
+  private textInteractionRegistry = inject(TextInteractionRegistryService);
   private textRenderingService = inject(TextRenderingService);
   private overflowClipService = inject(OverflowClipService);
   private pluginRuntime = inject(AstylarPluginRuntime);
@@ -158,6 +164,8 @@ class AstylarRenderer {
     return {
       elementManager: this.elementManager,
       inputElementService: this.inputElementService,
+      textSelectionController: this.textSelectionController,
+      textInteractionRegistry: this.textInteractionRegistry,
     };
   }
 
@@ -1013,6 +1021,18 @@ class AstylarRenderer {
 
     const active = !!mesh.metadata.astylarActiveState && !!styles.active;
     const focused = !!mesh.metadata.astylarFocusState && !!styles.focus;
+    const hovered = !!this.elementManager.hoverStatesMap.get(elementId) && !!styles.hover;
+    const style = {
+      ...styles.normal,
+      ...(hovered ? styles.hover : {}),
+      ...(focused ? styles.focus : {}),
+      ...(active ? styles.active : {}),
+    };
+    if (state === 'active') {
+      mesh.metadata.cursor = style.cursor;
+      const canvas = mesh.getScene().getEngine().getRenderingCanvas();
+      if (canvas) canvas.style.cursor = style.cursor ?? 'default';
+    }
     const borderMeshes = mesh.getChildMeshes(false)
       .filter((child) => child.name.startsWith(`${elementId}-border`));
     if (!active && !focused) {
@@ -1030,11 +1050,6 @@ class AstylarRenderer {
       ? 'astylarActiveFocusMaterial'
       : active ? 'astylarActiveMaterial' : 'astylarFocusMaterial';
     const materialSuffix = active && focused ? 'active-focus' : active ? 'active' : 'focus';
-    const style = {
-      ...styles.normal,
-      ...(focused ? styles.focus : {}),
-      ...(active ? styles.active : {}),
-    };
     if (!mesh.metadata[materialKey]) {
       const background = style.background
         ? this.styleService.parseBackgroundColor(style.background)
