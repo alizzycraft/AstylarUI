@@ -17,6 +17,7 @@ export const interactionActiveStyleFixture: ParityFixture = {
     ],
   },
   interactionIds: ['active-style-target'],
+  enforcePointerCursor: true,
   interactionEventTypes: ['pointerdown', 'pointerup', 'click'],
   interactionSteps: [
     { id: 'press-target', actions: [{ type: 'pointer-down', elementId: 'active-style-target' }] },

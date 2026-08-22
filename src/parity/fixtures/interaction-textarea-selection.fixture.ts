@@ -8,6 +8,8 @@ export const interactionTextareaSelectionFixture: ParityFixture = {
     'Shift-arrow selection, selection replacement, newline insertion, continued multiline typing, and blur commit match a browser textarea.',
   measurementIds: ['textarea-surface', 'textarea-field', 'textarea-outside'],
   interactionIds: ['textarea-field'],
+  enforcePointerCursor: true,
+  controlVisualStateIds: ['textarea-field'],
   interactionEventTypes: ['pointerdown', 'pointerup', 'click', 'focus', 'blur', 'keydown', 'input', 'change'],
   interactionSteps: [
     {

@@ -32,10 +32,13 @@ pointer and keyboard actions. Use `enforcedStyleProperties` for computed paint
 that must match exactly after normalization; border proofs should name every
 relevant side width, color, and style plus radius rather than relying on a
 screenshot scalar. Use `textSelectionIds` for selectable non-control text.
-Interaction reports compare the effective pointer cursor, control selection
-endpoints and direction, visible caret/highlight ownership, and document-text
-selection text, offsets, direction, collapse, and highlight state. A collapsed
-control selection has no meaningful direction and is normalized to `none`.
+Interaction reports always record the effective pointer cursor and control
+caret/highlight state for diagnosis. Declare `enforcePointerCursor` when cursor
+parity is part of the fixture contract, and list controls in
+`controlVisualStateIds` when selection direction plus visible caret/highlight
+ownership must match. `textSelectionIds` compares document-text selection text,
+offsets, direction, collapse, and highlight state. A collapsed control selection
+has no meaningful direction and is normalized to `none`.
 
 Expanded native select pixels and its transient active-option presentation are
 operating-system UI, not inspectable authored browser DOM. Prove that boundary

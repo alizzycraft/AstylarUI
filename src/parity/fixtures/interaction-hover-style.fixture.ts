@@ -17,6 +17,7 @@ export const interactionHoverStyleFixture: ParityFixture = {
     ],
   },
   interactionIds: ['hover-style-target'],
+  enforcePointerCursor: true,
   interactionEventTypes: ['pointerenter', 'pointerleave'],
   interactionSteps: [
     { id: 'enter-target', actions: [{ type: 'hover', elementId: 'hover-style-target' }] },

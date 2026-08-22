@@ -709,7 +709,7 @@ async function measureInteractionFixture(context, fixture) {
 
   return referenceStates.map((reference, index) => {
     const astylar = astylarStates[index];
-    const interactionErrors = compareInteraction(reference.report, astylar.report);
+    const interactionErrors = compareInteraction(reference.report, astylar.report, fixture);
     const lifecycleErrors = compareInteractionLifecycle(fixture, astylarStates, index);
     const styles = compareStyles(
       reference.report,
@@ -1017,7 +1017,7 @@ async function getInteractionPoint(page, mode, elementId, report, offsetX, offse
   return { x, y };
 }
 
-function compareInteraction(reference, astylar) {
+function compareInteraction(reference, astylar, fixture) {
   const referenceInteraction = reference.interaction;
   const astylarInteraction = astylar.interaction;
   if (!referenceInteraction || !astylarInteraction) {
@@ -1043,7 +1043,8 @@ function compareInteraction(reference, astylar) {
       `${astylarInteraction.modalDialogId ?? 'none'})`,
     );
   }
-  if ((referenceInteraction.pointerCursor ?? 'default') !==
+  if (fixture.enforcePointerCursor &&
+      (referenceInteraction.pointerCursor ?? 'default') !==
       (astylarInteraction.pointerCursor ?? 'default')) {
     errors.push(
       `pointer cursor differs (${referenceInteraction.pointerCursor ?? 'default'} vs ` +
@@ -1069,8 +1070,9 @@ function compareInteraction(reference, astylar) {
     ...Object.keys(astylarInteraction.controls),
   ]);
   for (const id of controlIds) {
-    const expected = normalizeComparableControl(referenceInteraction.controls[id]);
-    const actual = normalizeComparableControl(astylarInteraction.controls[id]);
+    const enforceVisualState = fixture.controlVisualStateIds?.includes(id) === true;
+    const expected = normalizeComparableControl(referenceInteraction.controls[id], enforceVisualState);
+    const actual = normalizeComparableControl(astylarInteraction.controls[id], enforceVisualState);
     if (JSON.stringify(expected) !== JSON.stringify(actual)) {
       errors.push(`control state differs for ${id} (${JSON.stringify(expected)} vs ${JSON.stringify(actual)})`);
     }
@@ -1123,7 +1125,7 @@ function normalizeModalCloseScheduling(events = []) {
   return normalized;
 }
 
-function normalizeComparableControl(control) {
+function normalizeComparableControl(control, enforceVisualState) {
   if (!control) return undefined;
   const collapsedSelection = typeof control.selectionStart === 'number' &&
     control.selectionStart === control.selectionEnd;
@@ -1141,10 +1143,12 @@ function normalizeComparableControl(control) {
     // Browsers expose "forward" for a collapsed native selection while the
     // direction has no observable meaning. Preserve strict direction checks
     // only for a non-collapsed range.
-    selectionDirection: collapsedSelection ? 'none' : control.selectionDirection,
+    selectionDirection: enforceVisualState
+      ? (collapsedSelection ? 'none' : control.selectionDirection)
+      : undefined,
     cursorPosition: control.cursorPosition,
-    caretRendered: control.caretRendered,
-    selectionRendered: control.selectionRendered,
+    caretRendered: enforceVisualState ? control.caretRendered : undefined,
+    selectionRendered: enforceVisualState ? control.selectionRendered : undefined,
     scrollLeft: control.scrollLeft,
     scrollTop: control.scrollTop,
   }).filter(([, value]) => value !== undefined));

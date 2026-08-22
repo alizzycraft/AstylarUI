@@ -8,6 +8,8 @@ export const interactionPointerDragSelectionFixture: ParityFixture = {
     'Forward and backward pointer drags expose ordered selection endpoints while retaining the active caret direction, and typing replaces each selected range with browser-equivalent events.',
   measurementIds: ['forward-input', 'backward-input'],
   interactionIds: ['forward-input', 'backward-input'],
+  enforcePointerCursor: true,
+  controlVisualStateIds: ['forward-input', 'backward-input'],
   interactionEventTypes: ['pointerdown', 'focus', 'pointerup', 'click', 'input', 'change', 'blur'],
   interactionSteps: [
     { id: 'drag-forward', actions: [

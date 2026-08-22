@@ -46,8 +46,9 @@ Each fixture lives under `src/parity/fixtures/` and contains:
 
 - stable ID, category, expected behavior, and measurement element IDs;
 - optional expected-absent IDs for behavior such as `display: none`;
-- optional exact computed-style properties per element and non-control text
-  selection owners;
+- optional exact computed-style properties per element, pointer-cursor
+  enforcement, control visual-state owners, and non-control text-selection
+  owners;
 - native HTML and CSS reference content;
 - equivalent Astylar `SiteData` using the same content and style values.
 
@@ -65,8 +66,10 @@ logic or mask meaningful screenshot regions.
 - Screenshots use SSIM without broad masks or normalization.
 - Fixtures can enforce normalized computed paint exactly. Interactive border
   proofs name all four side widths/colors/styles and radius explicitly.
-- Control reports compare selection endpoints/direction plus owned caret and
-  highlight visuals. Requested document-text selections compare selected text,
+- Control reports always compare logical selection endpoints and record visual
+  diagnostics. Fixtures use `controlVisualStateIds` to enforce direction plus
+  owned caret/highlight visuals and `enforcePointerCursor` to enforce the
+  effective cursor. Requested document-text selections compare selected text,
   anchor/focus and ordered offsets, direction, collapse, and highlight state.
 - Expanded selects compare focus, open/closed state, value/index, events, and
   Astylar popup observer/resource ownership. Native operating-system popup

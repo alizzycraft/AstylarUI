@@ -8,6 +8,7 @@ export const interactionDocumentTextSelectionFixture: ParityFixture = {
     'Forward and backward pointer drags select the same authored text range, direction, and visible highlight as browser document text, and clicking outside clears either selection.',
   measurementIds: ['document-selection-copy', 'document-selection-outside'],
   interactionIds: ['document-selection-copy', 'document-selection-outside'],
+  enforcePointerCursor: true,
   textSelectionIds: ['document-selection-copy'],
   interactionEventTypes: [],
   enforcedStyleProperties: {

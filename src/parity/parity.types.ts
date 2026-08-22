@@ -64,6 +64,10 @@ export interface ParityFixture {
   /** Repeated interaction phases used to enforce warm resource plateaus and final disposal. */
   interactionCycleLength?: number;
   interactionIds?: string[];
+  /** Whether the pointer cursor must match after every interaction step. */
+  enforcePointerCursor?: boolean;
+  /** Text controls whose rendered caret/highlight and selection direction must match. */
+  controlVisualStateIds?: string[];
   /** Non-control text nodes whose browser/Astylar selection state must match. */
   textSelectionIds?: string[];
   scrollIds?: string[];

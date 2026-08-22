@@ -4,6 +4,8 @@ export const interactionPointerCaretFixture: ParityFixture = {
   id: 'interaction-pointer-caret', title: 'Pointer caret placement', category: 'forms-interactive',
   expectedBehavior: 'Clicking at different horizontal positions in a text input focuses it and places a collapsed caret at the nearest browser text boundary.',
   measurementIds: ['caret-input'], interactionIds: ['caret-input'],
+  enforcePointerCursor: true,
+  controlVisualStateIds: ['caret-input'],
   interactionEventTypes: ['pointerdown', 'focus', 'pointerup', 'click'],
   interactionSteps: [
     { id: 'place-near-start', actions: [{ type: 'click', elementId: 'caret-input', offsetX: 31, offsetY: 32 }] },

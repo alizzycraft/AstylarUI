@@ -791,7 +791,9 @@
     "title": "Textarea selection and multiline editing",
     "category": "forms-interactive",
     "expectedBehavior": "Shift-arrow selection, selection replacement, newline insertion, continued multiline typing, and blur commit match a browser textarea.",
-    "interactionStepCount": 5
+    "interactionStepCount": 5,
+    "enforcePointerCursor": true,
+    "controlVisualStateIds": ["textarea-field"]
   },
   {
     "id": "interaction-checkbox-click",
@@ -876,6 +878,7 @@
     "category": "controls-states",
     "expectedBehavior": "Pointer enter applies authored hover paint and pointer leave restores normal paint with browser-order boundary events.",
     "interactionStepCount": 2,
+    "enforcePointerCursor": true,
     "enforcedStyleProperties": {
       "hover-style-target": [
         "backgroundColor",
@@ -892,6 +895,7 @@
     "category": "controls-states",
     "expectedBehavior": "Primary pointer down applies authored active paint until pointer up, then restores normal paint and completes click.",
     "interactionStepCount": 2,
+    "enforcePointerCursor": true,
     "enforcedStyleProperties": {
       "active-style-target": [
         "backgroundColor",
@@ -992,14 +996,18 @@
     "title": "Pointer caret placement",
     "category": "forms-interactive",
     "expectedBehavior": "Clicking at different horizontal positions in a text input focuses it and places a collapsed caret at the nearest browser text boundary.",
-    "interactionStepCount": 3
+    "interactionStepCount": 3,
+    "enforcePointerCursor": true,
+    "controlVisualStateIds": ["caret-input"]
   },
   {
     "id": "interaction-pointer-drag-selection",
     "title": "Bidirectional pointer drag selection",
     "category": "forms-interactive",
     "expectedBehavior": "Forward and backward pointer drags expose ordered selection endpoints while retaining the active caret direction, and typing replaces each selected range with browser-equivalent events.",
-    "interactionStepCount": 4
+    "interactionStepCount": 4,
+    "enforcePointerCursor": true,
+    "controlVisualStateIds": ["forward-input", "backward-input"]
   },
   {
     "id": "interaction-document-text-selection",
@@ -1007,6 +1015,7 @@
     "category": "forms-interactive",
     "expectedBehavior": "Forward and backward pointer drags select the same authored text range, direction, and visible highlight as browser document text, and clicking outside clears either selection.",
     "interactionStepCount": 4,
+    "enforcePointerCursor": true,
     "textSelectionIds": ["document-selection-copy"],
     "enforcedStyleProperties": {
       "document-selection-copy": [
