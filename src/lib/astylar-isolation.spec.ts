@@ -150,6 +150,10 @@ describe('Astylar simultaneous surface isolation', () => {
       let releaseReadiness!: () => void;
       const readiness = new Promise<void>((resolve) => { releaseReadiness = resolve; });
       const whenReady = spyOn(surface.scene, 'whenReadyAsync').and.returnValue(readiness);
+      const autoClearStates: boolean[] = [];
+      const beforeRender = surface.scene.onBeforeRenderObservable.add(() => {
+        autoClearStates.push(surface.scene.autoClear);
+      });
       const render = spyOn(surface.scene, 'render').and.callThrough();
 
       const update = surface.update(site('After update'));
@@ -163,6 +167,8 @@ describe('Astylar simultaneous surface isolation', () => {
       releaseReadiness();
       await update;
       expect(render.calls.count() - suspendedRenderCount).toBe(2);
+      expect(autoClearStates.slice(-2)).toEqual([false, true]);
+      surface.scene.onBeforeRenderObservable.remove(beforeRender);
     } finally {
       surface.dispose();
       canvas.remove();

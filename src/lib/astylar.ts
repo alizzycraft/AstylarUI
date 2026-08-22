@@ -506,11 +506,18 @@ class AstylarRenderer {
             }
           }
           if (!scene.isDisposed) {
-            // Keep the rebuilt tree off-screen for two submitted frames. The
-            // first render can still upload newly-created textures and compile
-            // materials; the second replaces that incomplete frame before the
-            // browser compositor can present it.
-            scene.render();
+            // The first render can still upload newly-created textures and
+            // compile materials. Preserve the previous completed color buffer
+            // during that pass so an incomplete warm-up cannot look like a
+            // page reload; the second pass clears and paints the ready
+            // replacement.
+            const autoClear = scene.autoClear;
+            try {
+              scene.autoClear = false;
+              scene.render();
+            } finally {
+              scene.autoClear = autoClear;
+            }
             scene.render();
           }
           visualResourceTransaction.commitOwnership();
