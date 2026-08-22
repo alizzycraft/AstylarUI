@@ -545,6 +545,48 @@ describe('AstylarInteractionRuntime', () => {
     engine.dispose();
   });
 
+  it('prefers a picked authored descendant over its overlapping layout ancestor', () => {
+    const engine = new NullEngine();
+    const scene = new Scene(engine);
+    const layout = MeshBuilder.CreatePlane('layout', {}, scene);
+    layout.metadata = { elementId: 'layout' };
+    const card = MeshBuilder.CreatePlane('card', {}, scene);
+    card.metadata = { elementId: 'card' };
+    const point = { x: 0, y: 0, z: 0 };
+    spyOn(scene, 'multiPick').and.returnValue([
+      { hit: true, pickedMesh: layout, pickedPoint: point, distance: 1 },
+      { hit: true, pickedMesh: card, pickedPoint: point, distance: 2 },
+    ] as never);
+    const canvas = document.createElement('canvas');
+    const runtime = new AstylarInteractionRuntime(
+      scene,
+      { styles: [], root: { children: [{ type: 'div', id: 'layout', children: [
+        { type: 'article', id: 'card' },
+      ] }] } },
+      {},
+      undefined,
+      {
+        getFocusedElementId: () => undefined,
+        focus: () => false,
+        blur: () => false,
+        handleKeyDown: () => undefined,
+        commitsValueOnBlur: () => false,
+      } as never,
+      canvas,
+    );
+
+    scene.onPointerObservable.notifyObservers({
+      type: PointerEventTypes.POINTERMOVE,
+      event: new MouseEvent('pointermove', { clientX: 10, clientY: 10 }),
+      pickInfo: { hit: true, pickedMesh: layout, pickedPoint: point },
+    } as unknown as PointerInfo);
+
+    expect(runtime.snapshot.hoveredElementId).toBe('card');
+    runtime.dispose();
+    scene.dispose();
+    engine.dispose();
+  });
+
   it('walks generated mesh ancestry to find the authored wheel target', () => {
     const engine = new NullEngine();
     const scene = new Scene(engine);

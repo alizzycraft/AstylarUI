@@ -499,7 +499,12 @@ export class AstylarInteractionRuntime {
       directMesh,
       directPoint,
     );
-    if (direct) return direct;
+    if (direct) {
+      const descendant = this.dispatcher.hasEnabledDescendant(direct)
+        ? this.findPickedDescendantTarget(direct, pointerInfo)
+        : undefined;
+      return descendant ?? direct;
+    }
 
     // A direct hit on a visible authored but non-interactive element is still
     // authoritative pointer ownership. Returning it lets hover leave/blur
@@ -525,6 +530,33 @@ export class AstylarInteractionRuntime {
       if (target) return target;
     }
     return undefined;
+  }
+
+  private findPickedDescendantTarget(
+    ancestorId: string,
+    pointerInfo: PointerInfo,
+  ): string | undefined {
+    const nativeEvent = pointerInfo.event as PointerEvent | MouseEvent | undefined;
+    if (!nativeEvent) return undefined;
+    const x = Number.isFinite(nativeEvent.offsetX) ? nativeEvent.offsetX : this.scene.pointerX;
+    const y = Number.isFinite(nativeEvent.offsetY) ? nativeEvent.offsetY : this.scene.pointerY;
+    if (!Number.isFinite(x) || !Number.isFinite(y)) return undefined;
+    const picks = this.scene.multiPick(x, y, (mesh) => mesh.isPickable) ?? [];
+    let deepest: { id: string; depth: number } | undefined;
+    for (const pick of picks) {
+      const target = this.firstEligiblePointerTarget(
+        pick.pickedMesh ?? undefined,
+        pick.pickedPoint ?? undefined,
+      );
+      if (!target || target === ancestorId) continue;
+      const path = this.dispatcher.getElementPath(target);
+      const ancestorIndex = path.indexOf(ancestorId);
+      if (ancestorIndex < 1) continue;
+      if (!deepest || ancestorIndex > deepest.depth) {
+        deepest = { id: target, depth: ancestorIndex };
+      }
+    }
+    return deepest?.id;
   }
 
   private firstVisiblePointerElement(

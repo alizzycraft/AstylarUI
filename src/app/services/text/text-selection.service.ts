@@ -149,18 +149,12 @@ export class TextSelectionService {
 
     // Create cursor material
     const material = new BABYLON.StandardMaterial(`cursorMaterial_${parentMesh.name}`, scene);
+    cursor.material = material;
     // CSS caret-color:auto resolves to currentColor. Astylar does not yet
     // expose authored caret-color, so the resolved text color is the browser-
     // equivalent default and remains legible on dark controls.
-    const parsedCaret = this.styleService.parseBackgroundColor(style.color);
-    const caretColor = parsedCaret?.type === 'color'
-      ? parsedCaret.color
-      : BABYLON.Color3.Black();
-    material.diffuseColor = caretColor;
-    material.emissiveColor = caretColor;
-    material.alpha = parsedCaret?.type === 'color' ? parsedCaret.alpha ?? 1 : 1;
+    this.updateTextCursorColor(cursor, style);
     material.disableLighting = true;
-    cursor.material = material;
 
     // Position cursor relative to parent mesh (input field)
     cursor.parent = parentMesh;
@@ -207,6 +201,19 @@ export class TextSelectionService {
 
 
     return cursor;
+  }
+
+  /** Keeps an existing caret aligned with the currently resolved text color. */
+  updateTextCursorColor(cursor: BABYLON.Mesh, style: TextStyleProperties): void {
+    const material = cursor.material;
+    if (!(material instanceof BABYLON.StandardMaterial)) return;
+    const parsedCaret = this.styleService.parseBackgroundColor(style.color);
+    const caretColor = parsedCaret?.type === 'color'
+      ? parsedCaret.color
+      : BABYLON.Color3.Black();
+    material.diffuseColor = caretColor;
+    material.emissiveColor = caretColor;
+    material.alpha = parsedCaret?.type === 'color' ? parsedCaret.alpha ?? 1 : 1;
   }
 
   /**

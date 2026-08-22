@@ -78,6 +78,7 @@ try {
         deviceScaleFactor: viewport.deviceScaleFactor,
         colorScheme: 'dark',
         reducedMotion: 'reduce',
+        permissions: ['clipboard-read', 'clipboard-write'],
       });
       interactionResults.push(...await captureInteractionScenario(context, scenario, viewport));
       await context.close();
@@ -294,9 +295,19 @@ async function captureInteractionScenario(context, scenario, viewport) {
 
   for (let cycle = 0; cycle < cycles; cycle += 1) {
     for (const step of scenario.steps) {
+      let referenceClipboardText;
+      let astylarClipboardText;
       for (const action of step.actions) {
-        await performTtsInteractionAction(referencePage, 'reference', action, referenceMeasurement);
-        await performTtsInteractionAction(astylarPage, 'astylar', action, astylarMeasurement);
+        const referenceActionResult = await performTtsInteractionAction(
+          referencePage, 'reference', action, referenceMeasurement,
+        );
+        const astylarActionResult = await performTtsInteractionAction(
+          astylarPage, 'astylar', action, astylarMeasurement,
+        );
+        if (action.type === 'copy-selection') {
+          referenceClipboardText = referenceActionResult;
+          astylarClipboardText = astylarActionResult;
+        }
       }
       console.log(`  capture ${cycles > 1 ? `cycle-${cycle + 1}-` : ''}${step.id}`);
       await settle(referencePage);
@@ -307,6 +318,10 @@ async function captureInteractionScenario(context, scenario, viewport) {
       astylarMeasurement = await astylarPage.evaluate((targetIds) =>
         window.__ASTYLAR_TTS_BENCHMARK__?.measure(targetIds), ids);
       assert.ok(astylarMeasurement, 'The Astylar interaction benchmark hook did not return measurements.');
+      if (step.clipboardText) {
+        referenceMeasurement.clipboardText = referenceClipboardText;
+        astylarMeasurement.clipboardText = astylarClipboardText;
+      }
       astylarMeasurement.domPointerTarget = await astylarPage.evaluate(() => {
         const target = document.elementFromPoint(
           window.__TTS_POINTER_X__ ?? 0,
@@ -453,6 +468,19 @@ async function performTtsInteractionAction(page, mode, action, measurement) {
   if (action.type === 'press-key') { await page.keyboard.press(action.key); return; }
   if (action.type === 'type-text') { await page.keyboard.type(action.text); return; }
   if (action.type === 'pointer-up') { await page.mouse.up(); return; }
+  if (action.type === 'copy-selection') {
+    if (mode === 'reference') {
+      return page.evaluate(() => window.getSelection()?.toString() ?? '');
+    }
+    await page.evaluate(async () => {
+      await navigator.clipboard.writeText('__copy_seed__');
+      document.querySelector('[data-testid="tts-astylar-surface"] canvas')?.dispatchEvent(
+        new KeyboardEvent('keydown', { key: 'c', code: 'KeyC', ctrlKey: true, bubbles: true }),
+      );
+    });
+    await page.waitForFunction(async () => (await navigator.clipboard.readText()) !== '__copy_seed__');
+    return page.evaluate(() => navigator.clipboard.readText());
+  }
   if (action.type === 'keyboard-focus') {
     await page.evaluate(() => {
       if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
@@ -531,6 +559,20 @@ function compareInteractionStep(scenario, step, viewport, referenceMeasurement, 
         `${ringRadii.length ? ringRadii.join(',') : 'unreported'}).`,
       );
     }
+    const shadow = parseSpreadShadow(
+      referenceMeasurement.computedStyles?.[scenario.elementId]?.boxShadow,
+    );
+    if (shadow) {
+      const expectedOuterRadius = expectedRadius + shadow.spread;
+      const authoredRings = (astylarMeasurement.visibleFocusIndicators ?? [])
+        .filter((indicator) => indicator.kind === 'authored-box-shadow');
+      if (!authoredRings.some((indicator) =>
+          Math.abs(indicator.outerBorderRadiusPx - expectedOuterRadius) <= 0.01 &&
+          normalizeCssColor(indicator.color) === normalizeCssColor(shadow.color) &&
+          Math.abs(indicator.alpha - shadow.alpha) <= 0.01)) {
+        controlErrors.push(`${scenario.elementId} authored focus halo differs from ${referenceMeasurement.computedStyles?.[scenario.elementId]?.boxShadow}.`);
+      }
+    }
   }
   if (step.caretColor) {
     const expectedCaret = normalizeCssColor(
@@ -546,13 +588,36 @@ function compareInteractionStep(scenario, step, viewport, referenceMeasurement, 
       );
     }
   }
+  if (step.clipboardText) {
+    const expectedClipboard = referenceMeasurement.clipboardText;
+    const actualClipboard = astylarMeasurement.clipboardText;
+    if (!expectedClipboard || actualClipboard !== expectedClipboard) {
+      controlErrors.push(
+        `${scenario.elementId} clipboard text differs (` +
+        `${JSON.stringify(expectedClipboard)} vs ${JSON.stringify(actualClipboard)}).`,
+      );
+    }
+  }
+  if (step.selectionContrast) {
+    const highlights = astylarMeasurement.selectionHighlights ?? [];
+    if (!highlights.length || highlights.some((highlight) =>
+        highlight.backgroundContrast < 3 || highlight.textContrast < 3)) {
+      controlErrors.push(`${scenario.elementId} selection highlight does not preserve 3:1 surface and glyph contrast.`);
+    }
+  }
   const styleErrors = compareInteractionStyles(
     referenceMeasurement.computedStyles?.[scenario.elementId],
     astylarMeasurement.resolvedStyles?.[scenario.elementId],
     step.styleProperties ?? [],
   );
-  const measuredRaster = step.visual === 'state-only'
-    ? { skipped: true, meetsTarget: true, reason: 'Native platform select popup is not raster-comparable.' }
+  const measuredRaster = ['state-only', 'structural-selection'].includes(step.visual)
+    ? {
+        skipped: true,
+        meetsTarget: true,
+        reason: step.visual === 'structural-selection'
+          ? 'Selection is enforced through contrast and clipboard semantics; foreground recoloring is deferred.'
+          : 'Native platform select popup is not raster-comparable.',
+      }
     : compareInteractionCrop(referenceImage, astylarImage, referenceElement?.borderBox, viewport, stepDir);
   const localRaster = step.visual === 'focus-indicator'
     ? {
@@ -592,7 +657,7 @@ function compareInteractionState(referenceMeasurement, astylarMeasurement, scena
   const expected = referenceMeasurement.interaction;
   const actual = astylarMeasurement.interaction ?? {};
   const lastAction = step.actions.at(-1)?.type;
-  const properties = ['focusedElementId'];
+  const properties = step.stateProperties ?? ['focusedElementId'];
   if (['hover', 'pointer-down', 'pointer-up'].includes(lastAction)) properties.push('hoveredElementId');
   if (lastAction === 'pointer-down') properties.push('pressedElementId');
   for (const property of properties) {
@@ -603,7 +668,8 @@ function compareInteractionState(referenceMeasurement, astylarMeasurement, scena
   // Native select popup cursor paint belongs to the host platform and is not
   // observable in headless Chromium. Pointer selection still verifies value,
   // events, focus, dismissal, geometry, local paint, and resource cleanup.
-  if (step.actions.some(({ type }) => ['click', 'hover', 'pointer-down', 'pointer-up'].includes(type))) {
+  if (step.compareCursor !== false &&
+      step.actions.some(({ type }) => ['click', 'hover', 'pointer-down', 'pointer-up'].includes(type))) {
     const expectedCursor = referenceMeasurement.cursor === 'auto' ? 'default' : referenceMeasurement.cursor;
     const actualCursor = astylarMeasurement.canvas?.cursor === 'auto' ? 'default' : astylarMeasurement.canvas?.cursor;
     if (expectedCursor !== actualCursor) errors.push(`cursor differs (${expectedCursor} vs ${actualCursor}).`);
@@ -685,6 +751,7 @@ function normalizeSimpleBoxShadow(value) {
 }
 
 function normalizeCssColor(value) {
+  if (!value) return undefined;
   const hex = value.match(/^#([\da-f]{3}|[\da-f]{4}|[\da-f]{6}|[\da-f]{8})$/i)?.[1];
   if (hex) {
     const expanded = hex.length <= 4 ? [...hex].map((digit) => digit + digit).join('') : hex;
@@ -695,6 +762,17 @@ function normalizeCssColor(value) {
   const rgb = value.match(/^rgba?\(\s*([\d.]+)[,\s]+([\d.]+)[,\s]+([\d.]+)(?:\s*[,/]\s*([\d.]+))?\s*\)$/i);
   if (rgb) return `rgba(${Number(rgb[1])},${Number(rgb[2])},${Number(rgb[3])},${rgb[4] === undefined ? 1 : Number(rgb[4])})`;
   return value.replace(/\s+/g, '').toLowerCase();
+}
+
+function parseSpreadShadow(value) {
+  if (!value || value === 'none') return undefined;
+  const colorMatch = value.match(/rgba?\([^)]*\)|#[\da-f]{3,8}/i);
+  const lengths = value.replace(colorMatch?.[0] ?? '', '').match(/-?[\d.]+(?:px)?/g)?.map(Number.parseFloat) ?? [];
+  if (!colorMatch || lengths.length < 4) return undefined;
+  const normalized = normalizeCssColor(colorMatch[0]);
+  const alpha = Number(normalized?.match(/,([\d.]+)\)$/)?.[1] ?? 1);
+  const opaqueColor = normalized?.replace(/,[\d.]+\)$/, ',1)');
+  return { spread: lengths[3], color: opaqueColor ?? colorMatch[0], alpha };
 }
 
 function compareInteractionCrop(referenceImage, astylarImage, borderBox, viewport, stepDir) {

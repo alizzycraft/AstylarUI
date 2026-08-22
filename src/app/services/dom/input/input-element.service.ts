@@ -173,6 +173,13 @@ export class InputElementService {
         this.focusManager.setFocusIndicatorAppearance(elementId, appearance);
     }
 
+    /** Applies resolved hover/active/focus typography to a live text control. */
+    setTextControlInteractionStyle(elementId: string, style: StyleRule): void {
+        const input = this.inputElements.get(elementId);
+        if (!input || !this.isTextEntry(input)) return;
+        this.textInputManager.updateInteractionStyle(input as TextInput, style);
+    }
+
     /**
      * Blurs an input element
      */

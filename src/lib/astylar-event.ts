@@ -157,6 +157,14 @@ export class AstylarEventDispatcher {
     return !!element && !element.disabled && !element.hidden;
   }
 
+  hasEnabledDescendant(elementId: string): boolean {
+    for (const [candidateId] of this.elements) {
+      if (candidateId === elementId || !this.hasEnabledTarget(candidateId)) continue;
+      if (this.buildPath(candidateId, true).includes(elementId)) return true;
+    }
+    return false;
+  }
+
   getElementState(elementId: string): AstylarEventState {
     const element = this.elements.get(elementId)?.element;
     if (!element) return {};

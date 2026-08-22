@@ -10,7 +10,7 @@ describe('TextSelectionService', () => {
     const service = new TextSelectionService(
       {} as never,
       {
-        parseBackgroundColor: () => ({ type: 'color', color: Color3.FromHexString('#e6edf3') }),
+        parseBackgroundColor: (value: string) => ({ type: 'color', color: Color3.FromHexString(value) }),
       } as never,
     );
 
@@ -26,6 +26,8 @@ describe('TextSelectionService', () => {
     const material = cursor.material as StandardMaterial;
 
     expect(material.emissiveColor.toHexString().toLowerCase()).toBe('#e6edf3');
+    service.updateTextCursorColor(cursor, textStyle('#f7fafc'));
+    expect(material.emissiveColor.toHexString().toLowerCase()).toBe('#f7fafc');
     cursor.dispose(false, true);
     parent.dispose(false, true);
     scene.dispose();

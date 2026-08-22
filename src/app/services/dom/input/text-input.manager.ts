@@ -1059,6 +1059,20 @@ export class TextInputManager {
         }
     }
 
+    /** Applies a resolved pseudo-state style without rebuilding the text control. */
+    updateInteractionStyle(textInput: TextInput, style: StyleRule): void {
+        textInput.style = style;
+        if (textInput.cursorMesh) {
+            this.textSelectionService.updateTextCursorColor(
+                textInput.cursorMesh,
+                this.parseTextStyle(style),
+            );
+        }
+        if (textInput.textMesh) {
+            this.textInteractionRegistry.updateStyle(textInput.element.id!, style);
+        }
+    }
+
     /**
      * Parses size value from style
      */

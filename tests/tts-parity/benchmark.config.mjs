@@ -38,7 +38,7 @@ export const interactionScenarios = [
     id: 'editor-selection', state: 'generated', elementId: 'speech-text',
     profiles: ['reference-large-dpr1', 'smoke-1280-dpr2'],
     steps: [
-      { id: 'focus-caret', styleProperties: ['backgroundColor', 'color', 'borderColor'], actions: [
+      { id: 'focus-caret', caretColor: true, styleProperties: ['backgroundColor', 'color', 'borderColor'], actions: [
         { type: 'click', elementId: 'speech-text' }, { type: 'press-key', key: 'Home' },
       ] },
       { id: 'forward-selection', actions: [
@@ -89,6 +89,35 @@ export const interactionScenarios = [
       { id: 'selection', actions: [
         { type: 'press-key', key: 'Shift+Home' },
       ] },
+    ],
+  },
+  {
+    id: 'history-card-hover', state: 'generated', elementId: 'history-speech-1',
+    profiles: ['reference-large-dpr1', 'smoke-1280-dpr2'],
+    steps: [{
+      id: 'blank-padding',
+      styleProperties: ['backgroundColor', 'borderColor', 'cursor'],
+      actions: [{ type: 'hover', elementId: 'history-speech-1', offsetX: 250, offsetY: 7 }],
+    }],
+  },
+  {
+    id: 'history-text-copy', state: 'generated', elementId: 'history-speech-1-text',
+    profiles: ['reference-large-dpr1', 'smoke-1280-dpr2'],
+    steps: [
+      {
+        id: 'select-text', selectionContrast: true, visual: 'structural-selection',
+        stateProperties: [], compareCursor: false,
+        actions: [
+          { type: 'pointer-down', elementId: 'history-speech-1-text', offsetX: 1, offsetY: 10 },
+          { type: 'hover', elementId: 'history-speech-1-text', offsetX: 75, offsetY: 10 },
+          { type: 'pointer-up' },
+        ],
+      },
+      {
+        id: 'copy-text', clipboardText: true, visual: 'structural-selection',
+        stateProperties: [], compareCursor: false,
+        actions: [{ type: 'copy-selection' }],
+      },
     ],
   },
   ...['play', 'download', 'delete'].map((action) => ({

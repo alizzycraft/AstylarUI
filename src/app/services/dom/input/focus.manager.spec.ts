@@ -37,6 +37,8 @@ describe('FocusManager', () => {
     expect(indicators.length).toBe(1);
     expect(indicators[0].isVisible).toBeTrue();
     expect(indicators[0].metadata.focusBorderRadiusPx).toBe(6);
+    expect(indicators[0].metadata.focusOuterBorderRadiusPx).toBe(9);
+    expect(indicators[0].metadata.focusIndicatorKind).toBe('authored-box-shadow');
     expect(indicators[0].getTotalVertices()).toBeGreaterThan(8);
 
     manager.cleanup();

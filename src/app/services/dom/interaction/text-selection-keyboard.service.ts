@@ -35,6 +35,15 @@ export class TextSelectionKeyboardService {
       return;
     }
 
+    if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'c' &&
+        this.selectionStore.hasSelection()) {
+      // Keep the native copy event available, but also write during the user
+      // activation. Some browsers do not dispatch `copy` when the focused
+      // canvas has no native DOM Range even though Astylar owns a scene range.
+      void this.clipboardService.copySelectedText();
+      return;
+    }
+
     if (this.handleNavigation(event)) {
       return;
     }

@@ -4,6 +4,7 @@ import { Color3, Mesh, MeshBuilder, Scene, StandardMaterial } from '@babylonjs/c
 import { TextSelectionControllerService, TextSelectionState } from './text-selection-controller.service';
 import { TextInteractionEntry, TextInteractionRegistryService } from './text-interaction-registry.service';
 import { TextSelectionStore } from '../../../store/text-selection.store';
+import { StyleService } from '../style.service';
 
 interface HighlightSegment {
   centerX: number;
@@ -15,11 +16,42 @@ interface HighlightSegment {
 interface HighlightMeshes {
   meshes: Mesh[];
   material: StandardMaterial;
+  contrast: { background: number; text: number };
 }
 
 const MIN_SEGMENT_WIDTH = 0.002;
 const MIN_SEGMENT_HEIGHT = 0.002;
-const HIGHLIGHT_Z_OFFSET = 0.0005;
+// The highlight is opaque for reliable contrast, so it must sit immediately
+// behind the glyph plane rather than tinting or covering the rendered text.
+const HIGHLIGHT_Z_OFFSET = -0.0005;
+
+const SELECTION_COLORS = [
+  Color3.FromHexString('#0078d4'),
+  Color3.FromHexString('#9ad5ff'),
+  Color3.FromHexString('#173f6b'),
+  Color3.FromHexString('#ffd43b'),
+];
+
+export function relativeLuminance(color: Color3): number {
+  const linear = (channel: number): number => channel <= 0.04045
+    ? channel / 12.92
+    : Math.pow((channel + 0.055) / 1.055, 2.4);
+  return 0.2126 * linear(color.r) + 0.7152 * linear(color.g) + 0.0722 * linear(color.b);
+}
+
+export function contrastRatio(left: Color3, right: Color3): number {
+  const [lighter, darker] = [relativeLuminance(left), relativeLuminance(right)]
+    .sort((a, b) => b - a);
+  return (lighter + 0.05) / (darker + 0.05);
+}
+
+export function chooseSelectionHighlightColor(background: Color3, text: Color3): Color3 {
+  return SELECTION_COLORS.reduce((best, candidate) => {
+    const score = Math.min(contrastRatio(candidate, background), contrastRatio(candidate, text));
+    const bestScore = Math.min(contrastRatio(best, background), contrastRatio(best, text));
+    return score > bestScore ? candidate : best;
+  }).clone();
+}
 
 @Injectable({ providedIn: 'root' })
 export class TextHighlightMeshFactory {
@@ -27,6 +59,7 @@ export class TextHighlightMeshFactory {
   private readonly destroyRef = inject(DestroyRef);
   private readonly textSelectionController = inject(TextSelectionControllerService);
   private readonly textInteractionRegistry = inject(TextInteractionRegistryService);
+  private readonly styleService = inject(StyleService);
 
   private readonly highlightRecords = new Map<string, HighlightMeshes>();
   private currentElementId?: string;
@@ -353,8 +386,8 @@ export class TextHighlightMeshFactory {
 
   private createHighlightRecord(entry: TextInteractionEntry): HighlightMeshes {
     const scene = entry.mesh.getScene();
-    const material = this.createHighlightMaterial(scene);
-    const record: HighlightMeshes = { meshes: [], material };
+    const { material, contrast } = this.createHighlightMaterial(scene, entry);
+    const record: HighlightMeshes = { meshes: [], material, contrast };
     this.highlightRecords.set(entry.elementId, record);
     return record;
   }
@@ -372,23 +405,58 @@ export class TextHighlightMeshFactory {
     mesh.metadata = {
       ...(mesh.metadata || {}),
       highlight: {
-        ownerElementId: entry.elementId
+        ownerElementId: entry.elementId,
+        color: material.emissiveColor.toHexString().toLowerCase(),
+        backgroundContrast: this.highlightRecords.get(entry.elementId)?.contrast.background,
+        textContrast: this.highlightRecords.get(entry.elementId)?.contrast.text,
       }
     };
     mesh.renderingGroupId = entry.mesh.renderingGroupId;
     return mesh;
   }
 
-  private createHighlightMaterial(scene: Scene): StandardMaterial {
+  private createHighlightMaterial(
+    scene: Scene,
+    entry: TextInteractionEntry,
+  ): { material: StandardMaterial; contrast: { background: number; text: number } } {
+    const background = this.resolveColor(entry.style?.background) ??
+      this.resolveAncestorBackground(entry.mesh) ?? Color3.White();
+    const text = this.resolveColor(entry.style?.color) ?? Color3.Black();
+    const highlight = chooseSelectionHighlightColor(background, text);
     const material = new StandardMaterial('text-selection-highlight', scene);
-    material.diffuseColor = new Color3(0.2, 0.45, 1.0);
-    material.alpha = 0.35;
+    material.diffuseColor = highlight;
+    material.alpha = 1;
     material.specularColor = Color3.Black();
-    material.emissiveColor = new Color3(0.05, 0.15, 0.35);
+    material.emissiveColor = highlight;
     material.backFaceCulling = false;
     material.disableLighting = true;
     material.disableDepthWrite = true;
-    return material;
+    return {
+      material,
+      contrast: {
+        background: contrastRatio(highlight, background),
+        text: contrastRatio(highlight, text),
+      },
+    };
+  }
+
+  private resolveColor(value: string | undefined): Color3 | undefined {
+    const parsed = value ? this.styleService.parseBackgroundColor(value) : undefined;
+    return parsed?.type === 'color' ? parsed.color : undefined;
+  }
+
+  private resolveAncestorBackground(mesh: Mesh): Color3 | undefined {
+    let candidate = mesh.parent;
+    while (candidate instanceof Mesh) {
+      const material = candidate.material;
+      if (material instanceof StandardMaterial &&
+          material.alpha * candidate.visibility > 0.01 &&
+          !material.diffuseTexture) {
+        return material.emissiveColor.clone();
+      }
+      candidate = candidate.parent;
+    }
+    return undefined;
   }
 
   private clearCurrentHighlights(): void {

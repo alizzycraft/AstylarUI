@@ -92,19 +92,20 @@ describe('TextSelectionKeyboardService', () => {
     expect(controller.moveSelectionWithKeyboard).not.toHaveBeenCalled();
   });
 
-  it('leaves the copy shortcut native and writes scene selection into its copy event', () => {
+  it('writes during the copy user activation and also populates its native copy event', () => {
     store.setHasSelection(true);
     store.setElementId('element-1');
     const keyEvent = createKeyEvent('keydown', 'c', { ctrlKey: true });
 
     documentStub.dispatchKeydown(keyEvent);
     expect(keyEvent.defaultPrevented).toBeFalse();
-    expect(clipboard.copySelectedText).not.toHaveBeenCalled();
+    expect(clipboard.copySelectedText).toHaveBeenCalledWith();
 
     const copyEvent = createCopyEvent();
     documentStub.dispatchCopy(copyEvent);
 
     expect(clipboard.copySelectedText).toHaveBeenCalledWith(copyEvent);
+    expect(clipboard.copySelectedText).toHaveBeenCalledTimes(2);
     expect(copyEvent.defaultPrevented).toBeTrue();
   });
 

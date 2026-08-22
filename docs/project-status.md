@@ -1,6 +1,6 @@
 # AstylarUI Project Status
 
-Last reconciled: 2026-08-22
+Last reconciled: 2026-08-23
 
 This is the authoritative handoff for the repository. Older planning documents
 remain design history; their unchecked items are not automatically active work.
@@ -19,6 +19,15 @@ default text-control caret follow the resolved text color, preserved ancestor
 `:hover` while pointing at rendered descendants, and connected visual document
 selection to the native clipboard event. The strengthened title-caret benchmark
 also requires raster agreement plus exact radius and caret-color evidence.
+
+A second application-shaped hardening pass now covers blank padding inside
+nested history cards, live pseudo-state caret color, rounded zero-blur focus
+halos, actual document-selection clipboard payloads, and selection contrast at
+DPR 1 and DPR 2. Selection backgrounds adapt to the rendered surface and remain
+behind the existing glyph plane. Browser-style per-glyph foreground recoloring
+inside a selected range is intentionally deferred as the next text-rendering
+phase because it requires glyph-range paint ownership rather than another
+whole-element overlay.
 
 ## Phase 16 skill baseline
 

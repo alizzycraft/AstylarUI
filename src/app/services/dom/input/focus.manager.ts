@@ -273,13 +273,15 @@ export class FocusManager {
                 0,
                 authored.borderRadiusPx + authored.offsetPx + authored.widthPx,
             ) * pixelScale;
-            const frame = this.meshService.createBorderMesh(
+            // A zero-blur spread shadow is a rounded silhouette behind the
+            // opaque control. Rendering the outer silhouette directly avoids
+            // the sharp inner-corner artifact produced by a narrow frame.
+            const frame = [this.meshService.createRoundedRectangle(
                 `focusIndicator_${elementId}_authored`,
                 outerWidth,
                 outerHeight,
-                outlineWidth,
                 outerRadius,
-            );
+            )];
             const material = new BABYLON.StandardMaterial(
                 `focusIndicatorMaterial_${elementId}_authored`,
                 scene,
@@ -299,6 +301,9 @@ export class FocusManager {
                 indicator.metadata = {
                     ...(indicator.metadata ?? {}),
                     focusBorderRadiusPx: authored.borderRadiusPx,
+                    focusOuterBorderRadiusPx:
+                        authored.borderRadiusPx + authored.offsetPx + authored.widthPx,
+                    focusIndicatorKind: 'authored-box-shadow',
                 };
             });
             return frame;

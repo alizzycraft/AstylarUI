@@ -1096,6 +1096,7 @@ class AstylarRenderer {
       ...(focused ? styles.focus : {}),
       ...(active ? styles.active : {}),
     };
+    this.inputElementService.setTextControlInteractionStyle(elementId, style);
     // Keep the effective authored declarations alongside the rendered mesh so
     // diagnostic consumers can verify state paint without depending on a
     // browser DOM implementation detail. This is intentionally generic and is

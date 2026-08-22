@@ -7,8 +7,8 @@
       "source": "docs/compatibility/html-css.md",
       "destination": "html-css.md",
       "transform": "portable-html-css-links",
-      "sourceSha256": "8333bd0634f56918480c187c589f3df523d276197fa3c7c2a5aa4a48e2d7ad2c",
-      "bundledSha256": "25cdaae41117baf36bb243d248495c86fa2549aeb21a28bc60f1453595e54765"
+      "sourceSha256": "2c5fd251e143f664d6a8b26bb233f56d202428c0e8426bae1e9df4b3aafcbeb6",
+      "bundledSha256": "ed7244b3848b9b077f93e4ecbb917a23864c59e79d2862a112a8cca0b3214a57"
     },
     {
       "source": "docs/compatibility/capabilities.json",

@@ -28,5 +28,7 @@ test('application benchmark owns a source-derived interaction matrix', () => {
   assert.ok(interactionScenarios.some(({ id }) => id === 'voice-pointer'));
   assert.ok(interactionScenarios.some(({ id }) => id === 'voice-dismissal'));
   assert.ok(interactionScenarios.some(({ id }) => id === 'history-play-hover'));
+  assert.ok(interactionScenarios.some(({ id }) => id === 'history-card-hover'));
+  assert.ok(interactionScenarios.some(({ id }) => id === 'history-text-copy'));
   assert.match(interactionApplicability.mobile, /not applicable/i);
 });

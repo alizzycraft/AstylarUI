@@ -295,7 +295,16 @@ export class App {
             .map((mesh) => ({
               name: mesh.name,
               borderRadiusPx: mesh.metadata?.focusBorderRadiusPx,
+              outerBorderRadiusPx: mesh.metadata?.focusOuterBorderRadiusPx,
+              kind: mesh.metadata?.focusIndicatorKind,
+              color: mesh.material && 'emissiveColor' in mesh.material
+                ? (mesh.material.emissiveColor as { toHexString(): string }).toHexString().toLowerCase()
+                : undefined,
+              alpha: mesh.material?.alpha,
             })),
+          selectionHighlights: surface.scene.meshes
+            .filter((mesh) => mesh.isVisible && mesh.metadata?.highlight)
+            .map((mesh) => ({ ...mesh.metadata.highlight })),
           scrolling: Object.fromEntries(Object.entries(scrolling).map(([id, value]) => [id, {
             ...value,
             initialScrollLeft: 0,

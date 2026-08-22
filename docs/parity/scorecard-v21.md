@@ -168,3 +168,43 @@ After that correction, the consumer reached the later delayed-plugin proof and
 passed 2/3 browser cases; its asynchronous cancellation counter remained zero,
 the same known plugin-timing limitation already recorded above. No OpenAI
 credential was read and no live API request was made.
+
+## Second post-completion hardening
+
+A further manual TTS pass exposed five gaps that the first interaction matrix
+still did not isolate: blank card padding could resolve to a layout ancestor
+instead of the nested interactive card, a focused editor caret retained its
+pre-focus color, a zero-blur authored focus halo had square inner artifacts,
+scene-selected text did not reliably reach the system clipboard from Ctrl/Cmd+C,
+and the translucent fixed selection tint could disappear against some surfaces.
+
+The runtime now searches overlapping eligible descendants when a directly
+picked layout ancestor owns interactive children, propagates live pseudo-state
+text color into an existing caret material, paints an authored spread shadow as
+a rounded silhouette behind the opaque control, writes a scene selection during
+the keyboard user activation while retaining the native copy-event path, and
+chooses an opaque selection background with at least 3:1 contrast against both
+the resolved surface and glyph color. The selection mesh sits behind the glyph
+plane, so existing text remains legible.
+
+The TTS matrix adds blank-padding card hover and document selection/copy at both
+DPR profiles. It now asserts authored halo radius/color/opacity, editor caret
+color, selection contrast metadata, and an exact browser-reference clipboard
+payload. Selection raster acceptance is structural until the renderer owns
+selected glyph spans: browser-style per-glyph foreground recoloring is recorded
+as future work for the next text-paint phase rather than hidden behind a looser
+image threshold.
+
+Focused changed suites passed 39/39 tests, the parity harness passed 19/19, the
+library build passed, and the complete application interaction matrix passed
+66/66 captures with minimum non-structural local SSIM `0.526838` under the
+existing UA-focus exception. The repository-wide unit run passed 333/334; the
+sole failure is the pre-existing `astylar-isolation` rebuilt-scene readiness
+timeout, which also reproduces when that six-test file runs alone and is outside
+this interaction-paint change. The full general parity corpus passed all 165
+fixtures / 541 renders across three viewport profiles with median SSIM `0.9896`,
+minimum SSIM `0.9542`, 99.9% of measured edges within `2px`, maximum edge error
+`3.99209364194121px`, exact text, clean runtime reports, and every completion
+threshold met. The root browser/SSR build and packed TTS demo check also passed;
+the latter contained 419 package files, passed all 23 demo tests, and recorded
+zero live API calls.
