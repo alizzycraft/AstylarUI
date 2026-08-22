@@ -468,16 +468,27 @@ export class AstylarInteractionRuntime {
 
   private resolvePointerTarget(pointerInfo: PointerInfo): string | undefined {
     const directPoint = pointerInfo.pickInfo?.pickedPoint ?? undefined;
+    const directMesh = pointerInfo.pickInfo?.pickedMesh ?? undefined;
     const direct = this.firstEligiblePointerTarget(
-      pointerInfo.pickInfo?.pickedMesh ?? undefined,
+      directMesh,
       directPoint,
     );
     if (direct) return direct;
 
+    // A direct hit on a visible authored but non-interactive element is still
+    // authoritative pointer ownership. Returning it lets hover leave/blur
+    // defaults run and prevents the fallback multi-pick from selecting a stale
+    // or visually obscured interactive mesh behind it.
+    const directBlocker = this.firstVisiblePointerElement(directMesh, directPoint);
+    if (directBlocker) return directBlocker;
+
     const nativeEvent = pointerInfo.event as PointerEvent | MouseEvent | undefined;
     if (!nativeEvent) return undefined;
-    const x = Number.isFinite(this.scene.pointerX) ? this.scene.pointerX : nativeEvent.offsetX;
-    const y = Number.isFinite(this.scene.pointerY) ? this.scene.pointerY : nativeEvent.offsetY;
+    // The native event carries the current movement coordinates. Babylon's
+    // scene pointer fields can still describe the previous pick when pointer
+    // move picking was skipped, which would make hover appear to stick.
+    const x = Number.isFinite(nativeEvent.offsetX) ? nativeEvent.offsetX : this.scene.pointerX;
+    const y = Number.isFinite(nativeEvent.offsetY) ? nativeEvent.offsetY : this.scene.pointerY;
     if (!Number.isFinite(x) || !Number.isFinite(y)) return undefined;
     const picks = this.scene.multiPick(x, y, (mesh) => mesh.isPickable) ?? [];
     for (const pick of [...picks].sort((left, right) => left.distance - right.distance)) {
@@ -486,6 +497,18 @@ export class AstylarInteractionRuntime {
         pick.pickedPoint ?? undefined,
       );
       if (target) return target;
+    }
+    return undefined;
+  }
+
+  private firstVisiblePointerElement(
+    mesh: AbstractMesh | undefined,
+    point?: { x: number; y: number },
+  ): string | undefined {
+    for (const elementId of this.resolveElementIds(mesh)) {
+      if (!this.isAllowedByModal(elementId)) continue;
+      if (this.scrolling && !this.scrolling.isPointVisible(elementId, point)) continue;
+      return elementId;
     }
     return undefined;
   }

@@ -424,6 +424,69 @@ describe('AstylarInteractionRuntime', () => {
     engine.dispose();
   });
 
+  it('transfers hover to a direct authored hit without falling through to a stale pick', () => {
+    const engine = new NullEngine();
+    const scene = new Scene(engine);
+    const action = MeshBuilder.CreatePlane('action', {}, scene);
+    action.metadata = { elementId: 'action' };
+    const outside = MeshBuilder.CreatePlane('outside', {}, scene);
+    outside.metadata = { elementId: 'outside' };
+    const canvas = document.createElement('canvas');
+    const hoverStates: Array<[string, boolean]> = [];
+    const point = { x: 0, y: 0, z: 0 };
+    const multiPick = spyOn(scene, 'multiPick').and.returnValue([
+      { hit: true, pickedMesh: action, pickedPoint: point, distance: 2 },
+    ] as never);
+    const runtime = new AstylarInteractionRuntime(
+      scene,
+      {
+        styles: [],
+        root: { children: [
+          { type: 'button', inputType: 'button', id: 'action', value: 'Play' },
+          { type: 'div', id: 'outside' },
+        ] },
+      },
+      {},
+      undefined,
+      {
+        getFocusedElementId: () => undefined,
+        focus: () => false,
+        blur: () => false,
+        handleKeyDown: () => undefined,
+        commitsValueOnBlur: () => false,
+        setHoverState: (elementId: string, hovered: boolean) =>
+          hoverStates.push([elementId, hovered]),
+      } as never,
+      canvas,
+      {
+        scrollFrom: () => false,
+        isPointVisible: () => true,
+      },
+    );
+
+    scene.onPointerObservable.notifyObservers({
+      type: PointerEventTypes.POINTERMOVE,
+      event: new MouseEvent('pointermove'),
+      pickInfo: { hit: true, pickedMesh: action, pickedPoint: point },
+    } as unknown as PointerInfo);
+    scene.onPointerObservable.notifyObservers({
+      type: PointerEventTypes.POINTERMOVE,
+      event: new MouseEvent('pointermove'),
+      pickInfo: { hit: true, pickedMesh: outside, pickedPoint: point },
+    } as unknown as PointerInfo);
+
+    expect(runtime.snapshot.hoveredElementId).toBe('outside');
+    expect(hoverStates).toEqual([
+      ['action', true],
+      ['action', false],
+      ['outside', true],
+    ]);
+    expect(multiPick).not.toHaveBeenCalled();
+    runtime.dispose();
+    scene.dispose();
+    engine.dispose();
+  });
+
   it('walks generated mesh ancestry to find the authored wheel target', () => {
     const engine = new NullEngine();
     const scene = new Scene(engine);
@@ -828,7 +891,7 @@ describe('AstylarInteractionRuntime', () => {
     engine.dispose();
   });
 
-  it('commits an expanded select arrow choice and keeps its keyup private', () => {
+  it('keeps expanded select arrows private and emits the native Enter commit sequence', () => {
     const engine = new NullEngine();
     const scene = new Scene(engine);
     const canvas = document.createElement('canvas');
@@ -861,9 +924,12 @@ describe('AstylarInteractionRuntime', () => {
           if (!expanded) return undefined;
           if (event.key === 'ArrowDown') {
             activeValue = activeValue === 'alpha' ? 'beta' : 'gamma';
+            return { handled: true, changed: false, dispatchClick: false, suppressKeyUp: true };
+          }
+          if (event.key === 'Enter') {
             selectedValue = activeValue;
             expanded = false;
-            return { handled: true, changed: true, dispatchClick: false, suppressKeyUp: true };
+            return { handled: true, changed: true, dispatchClick: true, suppressKeyUp: false };
           }
           return undefined;
         },
@@ -871,7 +937,7 @@ describe('AstylarInteractionRuntime', () => {
       canvas,
     );
 
-    for (const key of ['ArrowDown', 'Enter']) {
+    for (const key of ['ArrowDown', 'ArrowDown', 'Enter']) {
       canvas.dispatchEvent(new KeyboardEvent('keydown', {
         key, code: key, bubbles: true, cancelable: true,
       }));
@@ -880,13 +946,14 @@ describe('AstylarInteractionRuntime', () => {
       }));
     }
 
-    expect(selectedValue).toBe('beta');
+    expect(selectedValue).toBe('gamma');
     expect(events.map((event) => `${event.type}:${event.selectedValue}`)).toEqual([
-      'input:beta',
-      'change:beta',
-      'keydown:beta',
-      'keyup:beta',
+      'input:gamma',
+      'change:gamma',
+      'click:gamma',
+      'keyup:gamma',
     ]);
+    expect(events[2].button).toBe(-1);
 
     runtime.dispose();
     scene.dispose();

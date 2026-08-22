@@ -55,7 +55,7 @@ export const interactionScenarios = [
     id: 'voice-keyboard', state: 'initial', elementId: 'voice',
     profiles: ['reference-large-dpr1', 'smoke-1280-dpr2'],
     steps: [
-      { id: 'open', visual: 'state-only', actions: [{ type: 'click', elementId: 'voice' }] },
+      { id: 'focus', visual: 'state-only', actions: [{ type: 'keyboard-focus', elementId: 'voice' }] },
       { id: 'arrow-commit', styleProperties: ['backgroundColor', 'color', 'borderColor', 'boxShadow'], actions: [{ type: 'press-key', key: 'ArrowDown' }] },
     ],
   },

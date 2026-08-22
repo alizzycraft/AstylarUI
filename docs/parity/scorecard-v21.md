@@ -24,10 +24,13 @@ The first diagnostic run passed 42/62 captures. The failures separated into:
   select-keyboard, selection-direction, and rebuild-state defects;
 - native-select assumptions that did not match Chromium behavior.
 
-Direct Chromium measurement established that `ArrowDown` on the opened native
-select commits the next option and closes the popup. The redundant post-commit
-Enter step was removed because it began a new interaction rather than proving
-the commit. The resulting declared matrix contains 60 captures.
+Chromium's operating-system popup behavior is not uniform across the isolated
+fixture and the application-shaped reference: the generic expanded-select
+proof keeps arrow navigation tentative until Enter, while the application
+reference commits ArrowDown immediately. The application keyboard scenario
+therefore exercises native closed-select focus/navigation/commit; separate
+scenarios retain real open, pointer-choice, Escape, click-away, and popup
+lifecycle coverage. The resulting declared matrix contains 60 captures.
 
 ## Declared matrix
 
@@ -37,7 +40,7 @@ the commit. The resulting declared matrix contains 60 captures.
 | Generate keyboard focus | 2 | Focused identity and visible focus ownership |
 | Title caret | 2 | Focus, value, collapsed selection, caret, focus paint |
 | Editor selection/edit | 8 | Caret, forward/backward direction, replacement |
-| Voice keyboard | 4 | Open, ArrowDown commit, value/index/events/focus/cleanup |
+| Voice keyboard | 4 | Keyboard focus, closed-select ArrowDown commit, value/index/events |
 | Voice pointer | 4 | Open, Coral pointer commit, final closed paint |
 | Voice dismissal | 24 | Escape and click-away across three repeated cycles |
 | History search | 4 | Caret, forward selection, focus paint |
@@ -75,7 +78,8 @@ dropdown degradation that may not materially change a raster.
 - Resolve the nearest visible Babylon fallback pick for small nested actions.
 - Apply live hover state and specificity/source-order-correct pseudo cascades.
 - Render simple authored focus box shadows as owned focus-ring resources.
-- Match native immediate expanded-select keyboard commit behavior.
+- Preserve tentative expanded-select arrows with Enter commit while matching
+  immediate closed-select keyboard mutation.
 - Preserve stable focused non-text controls when Angular updates authored value.
 - Reapply preserved hover/active paint to replacement meshes after a rebuild.
 

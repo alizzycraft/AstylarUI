@@ -506,15 +506,8 @@ export class InputElementService {
         if (!select.dropdownOpen) return undefined;
 
         if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
-            const valueBefore = select.value;
             this.selectManager.navigateOptions(select, event.key === 'ArrowUp' ? 'up' : 'down');
-            this.selectManager.selectOption(select, select.activeOptionIndex);
-            return {
-                handled: true,
-                changed: !Object.is(valueBefore, select.value),
-                dispatchClick: false,
-                suppressKeyUp: true,
-            };
+            return { handled: true, changed: false, dispatchClick: false, suppressKeyUp: true };
         }
         if (event.key === 'Enter') {
             const valueBefore = select.value;

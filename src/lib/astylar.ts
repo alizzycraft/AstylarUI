@@ -1099,7 +1099,21 @@ class AstylarRenderer {
     const borderMeshes = mesh.getChildMeshes(false)
       .filter((child) => child.name.startsWith(`${elementId}-border`));
     if (!hovered && !active && !focused) {
-      mesh.material = mesh.metadata.astylarInteractionBaseMaterial;
+      const baseMaterial = mesh.metadata.astylarInteractionBaseMaterial;
+      const normalBackground = styles.normal.background
+        ? this.styleService.parseBackgroundColor(styles.normal.background)
+        : undefined;
+      if (baseMaterial instanceof StandardMaterial && normalBackground?.type === 'color') {
+        // A legacy Babylon pointer action can run before the typed runtime and
+        // replace the mesh material with hover paint. The typed runtime keeps
+        // ownership of state, so restore the authored normal color as well as
+        // the cached material identity when the final pseudo state clears.
+        baseMaterial.diffuseColor = normalBackground.color.clone();
+        baseMaterial.emissiveColor = normalBackground.color.clone();
+        baseMaterial.alpha = normalBackground.alpha ??
+          this.styleService.parseOpacity(styles.normal.opacity);
+      }
+      mesh.material = baseMaterial;
       for (const borderMesh of borderMeshes) {
         if (borderMesh.metadata?.astylarInteractionBaseMaterial) {
           borderMesh.material = borderMesh.metadata.astylarInteractionBaseMaterial;
