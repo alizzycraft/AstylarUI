@@ -88,8 +88,9 @@ proves the composed public behavior.
 
 ## Verification evidence
 
-- Focused core suites: 71/71 passed; the rebuild-state runtime suite passed
-  26/26.
+- Focused core suites: 71/71 passed before the final contract correction; the
+  rebuild-state runtime suite passed 26/26. The final full unit run passed
+  327/327.
 - `npm run parity:harness:check`: 19/19 passed, including six interaction
   calibration cases.
 - Unfiltered interaction-only enforcement: 60/60 passed; minimum raw local
@@ -98,10 +99,23 @@ proves the composed public behavior.
   calibrated scalar/edge/sharpness thresholds.
 - `npm run tts-demo:check`: passed with 419 packed files, 23/23 demo tests, a
   production build, and 0 live API calls.
-
-The final unfiltered general parity, static-plus-interactive TTS release run,
-full unit/build/capability/example/skill matrix, and their exact aggregate
-metrics are recorded in the final Phase 21 handoff commit.
+- `npm run parity:release:check`: passed. The general suite covered 165
+  fixtures / 538 renders / three viewport profiles, with median SSIM `0.9898`,
+  minimum SSIM `0.9547`, 100% of measured edges within `2px`, maximum edge
+  error `3.9921px`, exact text, clean runtime reports, and every completion
+  threshold met. The packed TTS suite retained all 10/10 static scenarios,
+  minimum SSIM `0.967522`, maximum geometry edge error `1.978px`, 10/10
+  visibility/scroll-owner/scroll-reachability/text matches, 36/36 sharpness
+  regions, and 60/60 interaction steps with minimum local SSIM `0.526838`.
+- `npm run capabilities:check`, `npm run examples:check`, and
+  `npm run skill:check` passed. Both repository skills also passed the standard
+  `quick_validate.py` validator.
+- `npm run build:lib` and `npm run build` passed. The application build retains
+  the existing initial-bundle and `app.scss` size-budget warnings.
+- `npm run consumer:check` built the clean packed consumer and passed 2/3
+  browser cases. The existing plugin-recovery case again exceeded Jasmine's
+  5000ms timeout; this is the same isolated timing failure recorded before the
+  Phase 21 changes, not an interaction-parity regression.
 
 ## Platform boundary
 
@@ -117,5 +131,7 @@ cleanup, and three-cycle repeatability.
 - `6e8597b` - `fix(interaction): align focus hover and select behavior`
 - `e10fed6` - `fix(interaction): restore pointer paint after rebuild`
 - `39bdabc` - `test(parity): enforce TTS application interactions`
+- `6b4c693` - `docs(parity): require application interaction evidence`
+- `0e17f14` - `fix(interaction): preserve browser select and hover contracts`
 
-The documentation and skill synchronization commit finalizes this scorecard.
+The final scorecard commit records the release evidence above.
