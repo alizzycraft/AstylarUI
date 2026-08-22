@@ -225,12 +225,14 @@ describe('AstylarSemanticBridge', () => {
       ] },
     });
     const calls: string[] = [];
+    const focusVisibility: boolean[] = [];
     let focusedElementId: string | undefined;
     bridge.connectInteractions({
       getFocusedElementId: () => focusedElementId,
-      focus: (elementId) => {
+      focus: (elementId, _preserveSelection, focusVisible) => {
         focusedElementId = elementId;
         calls.push(`focus:${elementId}`);
+        focusVisibility.push(focusVisible ?? true);
         return true;
       },
       blur: (elementId) => {
@@ -260,13 +262,14 @@ describe('AstylarSemanticBridge', () => {
     action?.blur();
     await new Promise<void>((resolve) => setTimeout(resolve, 0));
 
-    bridge.queueFocusSync(() => 'action');
+    bridge.queueFocusSync(() => 'action', () => false, () => false);
     await Promise.resolve();
     expect(document.activeElement).toBe(action);
     expect(calls).toEqual([
       'focus:action', 'keydown:Enter', 'keyup:Enter', 'activate:action',
       'blur:action', 'focus:action',
     ]);
+    expect(focusVisibility).toEqual([true, false]);
 
     bridge.dispose();
     expect(canvas.tabIndex).toBe(4);

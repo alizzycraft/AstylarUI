@@ -43,7 +43,11 @@ export interface AstylarSemanticControlState {
 /** Routes native semantic input into the scene's existing interaction owner. */
 export interface AstylarSemanticInteractionAdapter {
   getFocusedElementId(): string | undefined;
-  focus(elementId: string, preservePreviousSelectionOnReset?: boolean): boolean;
+  focus(
+    elementId: string,
+    preservePreviousSelectionOnReset?: boolean,
+    focusVisible?: boolean,
+  ): boolean;
   blur(elementId: string): boolean;
   activate(elementId: string): boolean;
   keyDown(event: KeyboardEvent): void;
@@ -84,6 +88,7 @@ export class AstylarSemanticBridge {
   private interactionAdapter?: AstylarSemanticInteractionAdapter;
   private controlSyncQueued = false;
   private focusSyncQueued = false;
+  private syncedFocusVisible: boolean | undefined;
   private preserveSelectionForNextFocus = false;
   private disposed = false;
 
@@ -198,13 +203,18 @@ export class AstylarSemanticBridge {
   queueFocusSync(
     getFocusedElementId: () => string | undefined,
     keepCanvasFocus: (elementId: string) => boolean = () => false,
+    getFocusVisible: () => boolean = () => true,
   ): void {
     if (this.disposed || this.focusSyncQueued) return;
     this.focusSyncQueued = true;
     queueMicrotask(() => {
       this.focusSyncQueued = false;
       const elementId = getFocusedElementId();
-      this.syncFocus(elementId, !!elementId && keepCanvasFocus(elementId));
+      this.syncFocus(
+        elementId,
+        !!elementId && keepCanvasFocus(elementId),
+        getFocusVisible(),
+      );
     });
   }
 
@@ -241,7 +251,15 @@ export class AstylarSemanticBridge {
   private readonly handleFocusIn = (event: FocusEvent): void => {
     const elementId = this.semanticEventElementId(event);
     if (elementId) {
-      this.interactionAdapter?.focus(elementId, this.preserveSelectionForNextFocus);
+      const target = event.target;
+      const focusVisible = this.syncedFocusVisible ??
+        (target instanceof HTMLElement && target.matches(':focus-visible'));
+      this.syncedFocusVisible = undefined;
+      this.interactionAdapter?.focus(
+        elementId,
+        this.preserveSelectionForNextFocus,
+        focusVisible,
+      );
       this.preserveSelectionForNextFocus = false;
     }
   };
@@ -295,7 +313,11 @@ export class AstylarSemanticBridge {
     return semantic.dataset['astylarId'] || undefined;
   }
 
-  private syncFocus(elementId: string | undefined, keepCanvasFocus = false): void {
+  private syncFocus(
+    elementId: string | undefined,
+    keepCanvasFocus = false,
+    focusVisible = true,
+  ): void {
     const active = this.canvas.ownerDocument.activeElement;
     const activeSemantic = active instanceof HTMLElement && this.root.contains(active)
       ? active
@@ -315,7 +337,10 @@ export class AstylarSemanticBridge {
       if (active !== node) this.canvas.focus({ preventScroll: true });
       return;
     }
-    if (node && active !== node) node.focus({ preventScroll: true });
+    if (node && active !== node) {
+      this.syncedFocusVisible = focusVisible;
+      node.focus({ preventScroll: true });
+    }
   }
 
   private disconnectInteractions(): void {

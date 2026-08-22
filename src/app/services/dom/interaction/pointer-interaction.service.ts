@@ -125,7 +125,8 @@ export class PointerInteractionService {
       return directMesh;
     }
 
-    for (const pick of picks) {
+    const orderedPicks = [...picks].sort((left, right) => left.distance - right.distance);
+    for (const pick of orderedPicks) {
       const pickedMesh = pick.pickedMesh as Mesh | undefined;
       if (!pickedMesh) {
         continue;
@@ -155,7 +156,9 @@ export class PointerInteractionService {
           }
         }
       }
-
+      // The nearest rendered element remains the cursor owner even when it is
+      // not registered for text selection (for example an icon-only button).
+      return pickedMesh;
     }
 
     return directMesh;

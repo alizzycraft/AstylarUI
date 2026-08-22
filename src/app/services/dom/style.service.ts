@@ -452,6 +452,72 @@ export class StyleService {
         return mergedStyle;
     }
 
+    /** Resolves the authored declarations for one live interaction pseudo-state. */
+    public findInteractionStyleForElement(
+        element: DOMElement,
+        styles: StyleRule[],
+        state: 'hover' | 'active' | 'focus',
+    ): StyleRule | undefined {
+        const winners = new Map<keyof StyleRule, {
+            specificity: number;
+            sourceOrder: number;
+            value: unknown;
+        }>();
+        const extensionWinners = new Map<string, {
+            specificity: number;
+            sourceOrder: number;
+            value: unknown;
+        }>();
+        const pseudo = new RegExp(`:${state}(?![\\w-])`, 'g');
+
+        styles.forEach((rule, sourceOrder) => {
+            if (!this.matchesMediaConditions(rule)) return;
+            rule.selector.split(',').map((selector) => selector.trim()).forEach((selector) => {
+                const targetCompound = selector.split(/[>+~]|\s+/).at(-1) ?? '';
+                if (!pseudo.test(targetCompound)) {
+                    pseudo.lastIndex = 0;
+                    return;
+                }
+                pseudo.lastIndex = 0;
+                const baseSelector = selector.replace(pseudo, '');
+                pseudo.lastIndex = 0;
+                const baseSpecificity = this.getMatchingSpecificity(element, baseSelector);
+                if (baseSpecificity === null) return;
+                const specificity = baseSpecificity + 10;
+                for (const [property, value] of Object.entries(rule)) {
+                    if (property === 'selector' || property.startsWith('media') || value === undefined) continue;
+                    if (property === 'extensions' && value && typeof value === 'object' && !Array.isArray(value)) {
+                        for (const [identity, extensionValue] of Object.entries(value)) {
+                            const current = extensionWinners.get(identity);
+                            if (!current || specificity > current.specificity ||
+                                (specificity === current.specificity && sourceOrder >= current.sourceOrder)) {
+                                extensionWinners.set(identity, { specificity, sourceOrder, value: extensionValue });
+                            }
+                        }
+                        continue;
+                    }
+                    const key = property as keyof StyleRule;
+                    const current = winners.get(key);
+                    if (!current || specificity > current.specificity ||
+                        (specificity === current.specificity && sourceOrder >= current.sourceOrder)) {
+                        winners.set(key, { specificity, sourceOrder, value });
+                    }
+                }
+            });
+        });
+        if (winners.size === 0 && extensionWinners.size === 0) return undefined;
+        const result: StyleRule = { selector: element.id ? `#${element.id}:${state}` : `${element.type}:${state}` };
+        for (const [property, winner] of winners) {
+            (result as unknown as Record<string, unknown>)[property] = winner.value;
+        }
+        if (extensionWinners.size > 0) {
+            result.extensions = Object.fromEntries(
+                [...extensionWinners].map(([identity, winner]) => [identity, winner.value]),
+            );
+        }
+        return result;
+    }
+
     private matchesMediaConditions(rule: StyleRule): boolean {
         const { width, height } = this.viewportService.getViewportDimensions();
         const conditions: Array<[string | undefined, number, 'min' | 'max']> = [

@@ -79,6 +79,7 @@ describe('AstylarInteractionRuntime', () => {
     const scene = new Scene(engine);
     const events: AstylarEventSnapshot[] = [];
     let focusedElementId: string | undefined;
+    const focusVisibility: boolean[] = [];
     let checked = false;
     const runtime = new AstylarInteractionRuntime(
       scene,
@@ -92,8 +93,9 @@ describe('AstylarInteractionRuntime', () => {
       () => ({ value: 'on', checked }),
       {
         getFocusedElementId: () => focusedElementId,
-        focus: (elementId) => {
+        focus: (elementId, focusVisible) => {
           focusedElementId = elementId;
+          focusVisibility.push(focusVisible ?? true);
           return true;
         },
         blur: (elementId) => {
@@ -111,12 +113,16 @@ describe('AstylarInteractionRuntime', () => {
     );
 
     expect(runtime.focusSemanticElement('choice')).toBeTrue();
+    expect(runtime.snapshot.focusVisible).toBeTrue();
+    expect(runtime.focusSemanticElement('choice', false, false)).toBeTrue();
+    expect(runtime.snapshot.focusVisible).toBeFalse();
     expect(runtime.activateSemanticElement('choice')).toBeTrue();
     expect(runtime.blurSemanticElement('choice')).toBeTrue();
     expect(checked).toBeTrue();
     expect(events.map((event) => `${event.type}:${event.checked}`)).toEqual([
       'focus:false', 'click:true', 'input:true', 'change:true', 'blur:true',
     ]);
+    expect(focusVisibility).toEqual([true, false]);
 
     runtime.dispose();
     scene.dispose();
@@ -353,6 +359,64 @@ describe('AstylarInteractionRuntime', () => {
     canvas.dispatchEvent(new WheelEvent('wheel', { deltaY: 20, cancelable: true }));
     expect(calls.length).toBe(1);
     expect(runtime.snapshot.wheelHandlers).toBe(0);
+    scene.dispose();
+    engine.dispose();
+  });
+
+  it('falls back to the nearest visible mesh when Babylon omits pointer-move pick data', () => {
+    const engine = new NullEngine();
+    const scene = new Scene(engine);
+    const backdrop = MeshBuilder.CreatePlane('backdrop', {}, scene);
+    backdrop.metadata = { elementId: 'backdrop' };
+    const action = MeshBuilder.CreatePlane('action', {}, scene);
+    action.metadata = { elementId: 'action' };
+    const canvas = document.createElement('canvas');
+    const hoverStates: Array<[string, boolean]> = [];
+    const events: AstylarEventSnapshot[] = [];
+    const point = { x: 2, y: 3, z: 0 };
+    spyOn(scene, 'multiPick').and.returnValue([
+      { hit: true, pickedMesh: backdrop, pickedPoint: point, distance: 20 },
+      { hit: true, pickedMesh: action, pickedPoint: point, distance: 2 },
+    ] as never);
+    const runtime = new AstylarInteractionRuntime(
+      scene,
+      {
+        styles: [],
+        root: { children: [
+          { type: 'div', id: 'backdrop' },
+          { type: 'button', inputType: 'button', id: 'action', value: 'Play' },
+        ] },
+      },
+      { onEvent: (event) => events.push(event) },
+      undefined,
+      {
+        getFocusedElementId: () => undefined,
+        focus: () => false,
+        blur: () => false,
+        handleKeyDown: () => undefined,
+        commitsValueOnBlur: () => false,
+        setHoverState: (elementId: string, hovered: boolean) =>
+          hoverStates.push([elementId, hovered]),
+      } as never,
+      canvas,
+      {
+        scrollFrom: () => false,
+        isPointVisible: (elementId) => elementId === 'action',
+      },
+    );
+
+    scene.onPointerObservable.notifyObservers({
+      type: PointerEventTypes.POINTERMOVE,
+      event: new MouseEvent('pointermove', { clientX: 10, clientY: 10 }),
+      pickInfo: undefined,
+    } as unknown as PointerInfo);
+
+    expect(runtime.snapshot.hoveredElementId).toBe('action');
+    expect(hoverStates).toEqual([['action', true]]);
+    expect(events.map((event) => `${event.type}:${event.targetId}`)).toEqual([
+      'pointerenter:action',
+    ]);
+    runtime.dispose();
     scene.dispose();
     engine.dispose();
   });
@@ -761,7 +825,7 @@ describe('AstylarInteractionRuntime', () => {
     engine.dispose();
   });
 
-  it('keeps expanded select arrows private and emits the native Enter commit sequence', () => {
+  it('commits an expanded select arrow choice and keeps its keyup private', () => {
     const engine = new NullEngine();
     const scene = new Scene(engine);
     const canvas = document.createElement('canvas');
@@ -794,12 +858,9 @@ describe('AstylarInteractionRuntime', () => {
           if (!expanded) return undefined;
           if (event.key === 'ArrowDown') {
             activeValue = activeValue === 'alpha' ? 'beta' : 'gamma';
-            return { handled: true, changed: false, dispatchClick: false, suppressKeyUp: true };
-          }
-          if (event.key === 'Enter') {
             selectedValue = activeValue;
             expanded = false;
-            return { handled: true, changed: true, dispatchClick: true, suppressKeyUp: false };
+            return { handled: true, changed: true, dispatchClick: false, suppressKeyUp: true };
           }
           return undefined;
         },
@@ -807,7 +868,7 @@ describe('AstylarInteractionRuntime', () => {
       canvas,
     );
 
-    for (const key of ['ArrowDown', 'ArrowDown', 'Enter']) {
+    for (const key of ['ArrowDown', 'Enter']) {
       canvas.dispatchEvent(new KeyboardEvent('keydown', {
         key, code: key, bubbles: true, cancelable: true,
       }));
@@ -816,14 +877,13 @@ describe('AstylarInteractionRuntime', () => {
       }));
     }
 
-    expect(selectedValue).toBe('gamma');
+    expect(selectedValue).toBe('beta');
     expect(events.map((event) => `${event.type}:${event.selectedValue}`)).toEqual([
-      'input:gamma',
-      'change:gamma',
-      'click:gamma',
-      'keyup:gamma',
+      'input:beta',
+      'change:beta',
+      'keydown:beta',
+      'keyup:beta',
     ]);
-    expect(events[2].button).toBe(-1);
 
     runtime.dispose();
     scene.dispose();

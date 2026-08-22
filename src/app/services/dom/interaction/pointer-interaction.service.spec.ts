@@ -52,4 +52,31 @@ describe('PointerInteractionService', () => {
 
     expect(canvas.style.cursor).toBe('pointer');
   });
+
+  it('uses the nearest generic mesh when pointer-move pick data is omitted', () => {
+    const service = new PointerInteractionService(
+      new TextInteractionRegistryService(),
+      new TextSelectionControllerService(),
+    );
+    const backdrop = { uniqueId: 4, metadata: { cursor: 'default' } } as unknown as Mesh;
+    const button = { uniqueId: 5, metadata: { cursor: 'pointer' } } as unknown as Mesh;
+    const scene = {
+      pointerX: 12,
+      pointerY: 18,
+      multiPick: () => [
+        { pickedMesh: backdrop, distance: 20 },
+        { pickedMesh: button, distance: 2 },
+      ],
+    };
+
+    const resolved = service.resolvePreferredMesh(
+      {
+        event: new MouseEvent('pointermove', { clientX: 12, clientY: 18 }),
+        pickInfo: undefined,
+      } as unknown as PointerInfo,
+      { scene } as unknown as BabylonRender,
+    );
+
+    expect(resolved).toBe(button);
+  });
 });

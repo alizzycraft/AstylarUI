@@ -385,6 +385,16 @@ describe('InputElementService', () => {
     checkbox.element.checked = true;
     expect(service.restoreNonTextControlStates(snapshots)).toBe('radio');
     expect(checkboxManager.setCheckboxChecked).not.toHaveBeenCalled();
+
+    selectManager.selectOption.calls.reset();
+    const controlledSnapshots = snapshots.map((snapshot) => snapshot.elementId === 'select'
+      ? { ...snapshot, focused: true }
+      : { ...snapshot, focused: false });
+    select.element.value = 'beta';
+    select.value = 'beta';
+    select.selectedIndex = 1;
+    expect(service.restoreNonTextControlStates(controlledSnapshots)).toBe('select');
+    expect(selectManager.selectOption).not.toHaveBeenCalled();
   });
 
   it('validates eligible form controls in authored order', () => {

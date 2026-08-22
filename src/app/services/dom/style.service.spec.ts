@@ -319,4 +319,21 @@ describe('StyleService cascade', () => {
     expect(elementStyles.get('stateful')?.active?.background).toBe('#1d4ed8');
     expect(elementStyles.get('stateful')?.focus?.background).toBe('#93c5fd');
   });
+
+  it('cascades every matching live pseudo rule by specificity and source order', () => {
+    const element: DOMElement = {
+      type: 'button', id: 'play', class: 'item-action play-action',
+    };
+    const styles: StyleRule[] = [
+      { selector: '.play-action:hover', color: '#166534' },
+      { selector: '.item-action:hover', background: '#21262d', color: '#94a3b8' },
+      { selector: '#play:hover', color: '#238636' },
+    ];
+
+    expect(service.findInteractionStyleForElement(element, styles, 'hover')).toEqual(jasmine.objectContaining({
+      background: '#21262d',
+      color: '#238636',
+    }));
+    expect(service.findInteractionStyleForElement(element, styles, 'focus')).toBeUndefined();
+  });
 });

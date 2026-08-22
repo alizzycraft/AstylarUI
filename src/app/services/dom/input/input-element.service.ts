@@ -143,13 +143,28 @@ export class InputElementService {
     /**
      * Focuses an input element
      */
-    focusInputElement(inputElement: InputElement): void {
-        this.focusManager.focusElement(inputElement);
+    focusInputElement(
+        inputElement: InputElement,
+        preservePreviousSelectionOnReset = false,
+        focusVisible = true,
+    ): void {
+        this.focusManager.focusElement(inputElement, preservePreviousSelectionOnReset, focusVisible);
+    }
+
+    isFocusVisible(): boolean {
+        return this.focusManager.isFocusVisible();
     }
 
     /** Configures whether Astylar should draw its fallback focus ring. */
     setDefaultFocusIndicatorEnabled(elementId: string, enabled: boolean): void {
         this.focusManager.setDefaultFocusIndicatorEnabled(elementId, enabled);
+    }
+
+    setFocusIndicatorAppearance(
+        elementId: string,
+        appearance?: { color: BABYLON.Color3; alpha: number; widthPx: number; offsetPx: number },
+    ): void {
+        this.focusManager.setFocusIndicatorAppearance(elementId, appearance);
     }
 
     /**
@@ -395,10 +410,14 @@ export class InputElementService {
         for (const snapshot of snapshots) {
             const input = this.inputElements.get(snapshot.elementId);
             if (!input || this.duplicateInputIds.has(snapshot.elementId) ||
-                input.type !== snapshot.type || this.isTextEntry(input) ||
-                !this.isCompatibleNonTextSnapshot(input, snapshot)) {
+                input.type !== snapshot.type || this.isTextEntry(input)) {
                 continue;
             }
+            // A controlled choice may legitimately author its just-committed
+            // value into the next tree. Preserve browser focus by stable
+            // identity even when the old mutable value must not be restored.
+            if (snapshot.focused && !input.disabled) focusedElementId = snapshot.elementId;
+            if (!this.isCompatibleNonTextSnapshot(input, snapshot)) continue;
 
             if (input.type === InputType.Checkbox) {
                 this.checkboxManager.setCheckboxChecked(input as CheckboxInput, !!snapshot.checked);
@@ -425,7 +444,6 @@ export class InputElementService {
                 touched: snapshot.validationState.touched,
                 dirty: snapshot.validationState.dirty,
             };
-            if (snapshot.focused) focusedElementId = snapshot.elementId;
         }
         return focusedElementId;
     }
@@ -488,8 +506,15 @@ export class InputElementService {
         if (!select.dropdownOpen) return undefined;
 
         if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+            const valueBefore = select.value;
             this.selectManager.navigateOptions(select, event.key === 'ArrowUp' ? 'up' : 'down');
-            return { handled: true, changed: false, dispatchClick: false, suppressKeyUp: true };
+            this.selectManager.selectOption(select, select.activeOptionIndex);
+            return {
+                handled: true,
+                changed: !Object.is(valueBefore, select.value),
+                dispatchClick: false,
+                suppressKeyUp: true,
+            };
         }
         if (event.key === 'Enter') {
             const valueBefore = select.value;

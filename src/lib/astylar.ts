@@ -425,6 +425,8 @@ class AstylarRenderer {
             () => interaction?.snapshot.focusedElementId ??
               this.inputElementService.getFocusedElementId(),
             (elementId) => this.hasLiveTextSelection(elementId),
+            () => interaction?.snapshot.focusVisible ??
+              this.inputElementService.isFocusVisible(),
           );
           visualPlan.commit();
           previousVisualIdentityData = this.snapshotVisualIdentityData(currentSiteData);
@@ -440,6 +442,9 @@ class AstylarRenderer {
           const nonTextState = hasCompletedRender
             ? this.inputElementService.captureNonTextControlStates()
             : [];
+          const focusVisibleState = hasCompletedRender
+            ? interaction?.snapshot.focusVisible ?? this.inputElementService.isFocusVisible()
+            : false;
           const scrollState = hasCompletedRender
             ? scrollRuntime.snapshot.containers
             : {};
@@ -482,12 +487,9 @@ class AstylarRenderer {
               if (focusedElementId) {
                 const input = this.inputElementService.getInputElement(focusedElementId);
                 if (input && !input.disabled) {
-                  this.inputElementService.setDefaultFocusIndicatorEnabled(
-                    focusedElementId,
-                    this.shouldShowDefaultFocusIndicator(focusedElementId),
-                  );
-                  this.inputElementService.focusInputElement(input);
-                  this.setElementFocusState(focusedElementId, true);
+                  this.configureFocusIndicator(focusedElementId, currentSiteData);
+                  this.inputElementService.focusInputElement(input, false, focusVisibleState);
+                  this.setElementFocusState(focusedElementId, true, currentSiteData);
                 }
               }
               interaction?.reconcileModalState();
@@ -497,6 +499,8 @@ class AstylarRenderer {
                 () => interaction?.snapshot.focusedElementId ??
                   this.inputElementService.getFocusedElementId(),
                 (elementId) => this.hasLiveTextSelection(elementId),
+                () => interaction?.snapshot.focusVisible ??
+                  this.inputElementService.isFocusVisible(),
               );
             },
             this.imageResources.getSceneTextures(scene),
@@ -569,6 +573,8 @@ class AstylarRenderer {
                 () => interaction?.snapshot.focusedElementId ??
                   this.inputElementService.getFocusedElementId(),
                 (elementId) => this.hasLiveTextSelection(elementId),
+                () => interaction?.snapshot.focusVisible ??
+                  this.inputElementService.isFocusVisible(),
               );
             }
           },
@@ -581,14 +587,11 @@ class AstylarRenderer {
       (elementId) => this.getLiveEventState(elementId),
       {
         getFocusedElementId: () => this.inputElementService.getFocusedElementId(),
-        focus: (elementId) => {
+        focus: (elementId, focusVisible) => {
           const input = this.inputElementService.getInputElement(elementId);
           if (!input || input.disabled) return false;
-          this.inputElementService.setDefaultFocusIndicatorEnabled(
-            elementId,
-            this.shouldShowDefaultFocusIndicator(elementId),
-          );
-          this.inputElementService.focusInputElement(input);
+          this.configureFocusIndicator(elementId, session.siteData);
+          this.inputElementService.focusInputElement(input, false, focusVisible ?? true);
           return true;
         },
         blur: (elementId, preserveSelectionOnReset) => {
@@ -626,10 +629,12 @@ class AstylarRenderer {
           this.inputElementService.resetFormControls(elementIds),
         validateFormControls: (elementIds) =>
           this.inputElementService.validateFormControls(elementIds),
+        setHoverState: (elementId, hovered) =>
+          this.setElementHoverState(elementId, hovered, session.siteData),
         setActiveState: (elementId, active) =>
-          this.setElementActiveState(elementId, active),
+          this.setElementActiveState(elementId, active, session.siteData),
         setFocusState: (elementId, focused) =>
-          this.setElementFocusState(elementId, focused),
+          this.setElementFocusState(elementId, focused, session.siteData),
       },
       undefined,
       scrollRuntime,
@@ -669,8 +674,12 @@ class AstylarRenderer {
     this.interactions.set(scene, interaction);
     semanticBridge?.connectInteractions({
       getFocusedElementId: () => interaction?.snapshot.focusedElementId,
-      focus: (elementId, preservePreviousSelectionOnReset) =>
-        interaction?.focusSemanticElement(elementId, preservePreviousSelectionOnReset) ?? false,
+      focus: (elementId, preservePreviousSelectionOnReset, focusVisible) =>
+        interaction?.focusSemanticElement(
+          elementId,
+          preservePreviousSelectionOnReset,
+          focusVisible,
+        ) ?? false,
       blur: (elementId) => interaction?.blurSemanticElement(elementId) ?? false,
       activate: (elementId) => interaction?.activateSemanticElement(elementId) ?? false,
       keyDown: (event) => interaction?.handleSemanticKeyDown(event),
@@ -942,16 +951,21 @@ class AstylarRenderer {
       input.selectionStart !== input.selectionEnd;
   }
 
-  private setElementActiveState(elementId: string, active: boolean): void {
-    this.setElementPseudoState(elementId, 'active', active);
+  private setElementActiveState(elementId: string, active: boolean, siteData?: SiteData): void {
+    this.setElementPseudoState(elementId, 'active', active, siteData);
   }
 
-  private setElementFocusState(elementId: string, focused: boolean): void {
-    this.setElementPseudoState(elementId, 'focus', focused);
+  private setElementHoverState(elementId: string, hovered: boolean, siteData?: SiteData): void {
+    this.elementManager.hoverStatesMap.set(elementId, hovered);
+    this.setElementPseudoState(elementId, 'hover', hovered, siteData);
+  }
+
+  private setElementFocusState(elementId: string, focused: boolean, siteData?: SiteData): void {
+    this.setElementPseudoState(elementId, 'focus', focused, siteData);
   }
 
   /** Resolves the pseudo rules registered for an authored ID, type, or simple class. */
-  private getElementInteractionStyles(elementId: string): {
+  private getElementInteractionStyles(elementId: string, siteData?: SiteData): {
     normal: import('../app/types/style-rule').StyleRule;
     hover?: import('../app/types/style-rule').StyleRule;
     active?: import('../app/types/style-rule').StyleRule;
@@ -959,12 +973,14 @@ class AstylarRenderer {
   } | undefined {
     const registered = this.elementManager.elementStylesMap.get(elementId);
     const input = this.inputElementService.getInputElement(elementId);
-    if (!input) return registered;
+    const mesh = this.elementManager.elementsMap.get(elementId);
+    const element = input?.element ?? mesh?.metadata?.element as DOMElement | undefined;
+    if (!element) return registered;
 
     const candidates = [
       registered,
-      this.elementManager.elementStylesMap.get(input.element.type),
-      ...(input.element.class ?? '')
+      this.elementManager.elementStylesMap.get(element.type),
+      ...(element.class ?? '')
         .split(/\s+/)
         .filter(Boolean)
         .flatMap((className) => [
@@ -972,12 +988,22 @@ class AstylarRenderer {
           this.elementManager.elementStylesMap.get(className),
         ]),
     ].filter((candidate): candidate is NonNullable<typeof candidate> => !!candidate);
-    if (candidates.length === 0) return undefined;
+    if (candidates.length === 0 && !siteData) return undefined;
 
-    const findPseudo = (state: 'hover' | 'active' | 'focus') =>
-      candidates.find((candidate) => candidate[state])?.[state];
+    const findPseudo = (state: 'hover' | 'active' | 'focus') => siteData
+      ? this.styleService.findInteractionStyleForElement(element, siteData.styles, state)
+      : candidates.reduce<import('../app/types/style-rule').StyleRule | undefined>(
+          (merged, candidate) => candidate[state] ? { ...merged, ...candidate[state] } : merged,
+          undefined,
+        );
     return {
-      normal: input.style ?? registered?.normal ?? {},
+      normal: input?.style ?? (siteData
+        ? this.styleService.findStyleForElement(
+            element,
+            siteData.styles,
+            this.elementManager.elementStylesMap,
+          )
+        : registered?.normal) ?? { selector: element.id ? `#${element.id}` : element.type },
       hover: findPseudo('hover'),
       active: findPseudo('active'),
       focus: findPseudo('focus'),
@@ -1008,16 +1034,44 @@ class AstylarRenderer {
       !this.hasAuthoredFocusPaint(elementId);
   }
 
+  private configureFocusIndicator(elementId: string, siteData: SiteData): void {
+    const focus = this.getElementInteractionStyles(elementId, siteData)?.focus;
+    const shadow = focus?.boxShadow?.trim().match(
+      /^0(?:px)?\s+0(?:px)?\s+0(?:px)?\s+([\d.]+)px\s+(.+)$/i,
+    );
+    if (shadow) {
+      const paint = this.styleService.parseBackgroundColor(shadow[2]);
+      if (paint?.type === 'color') {
+        this.inputElementService.setFocusIndicatorAppearance(elementId, {
+          color: paint.color,
+          alpha: paint.alpha ?? 1,
+          widthPx: Math.max(1, Number.parseFloat(shadow[1])),
+          offsetPx: 0,
+        });
+        this.inputElementService.setDefaultFocusIndicatorEnabled(elementId, true);
+        return;
+      }
+    }
+    this.inputElementService.setFocusIndicatorAppearance(elementId, undefined);
+    this.inputElementService.setDefaultFocusIndicatorEnabled(
+      elementId,
+      this.shouldShowDefaultFocusIndicator(elementId),
+    );
+  }
+
   private setElementPseudoState(
     elementId: string,
-    state: 'active' | 'focus',
+    state: 'hover' | 'active' | 'focus',
     enabled: boolean,
+    siteData?: SiteData,
   ): void {
     const mesh = this.elementManager.elementsMap.get(elementId);
-    const styles = this.getElementInteractionStyles(elementId);
+    const styles = this.getElementInteractionStyles(elementId, siteData);
     if (!mesh || !styles?.[state]) return;
     mesh.metadata = mesh.metadata ?? {};
-    const stateKey = state === 'active' ? 'astylarActiveState' : 'astylarFocusState';
+    const stateKey = state === 'hover'
+      ? 'astylarHoverState'
+      : state === 'active' ? 'astylarActiveState' : 'astylarFocusState';
     mesh.metadata[stateKey] = enabled;
     if (!Object.prototype.hasOwnProperty.call(mesh.metadata, 'astylarInteractionBaseMaterial')) {
       mesh.metadata.astylarInteractionBaseMaterial = mesh.material;
@@ -1025,21 +1079,26 @@ class AstylarRenderer {
 
     const active = !!mesh.metadata.astylarActiveState && !!styles.active;
     const focused = !!mesh.metadata.astylarFocusState && !!styles.focus;
-    const hovered = !!this.elementManager.hoverStatesMap.get(elementId) && !!styles.hover;
+    const hovered = !!mesh.metadata.astylarHoverState && !!styles.hover;
     const style = {
       ...styles.normal,
       ...(hovered ? styles.hover : {}),
       ...(focused ? styles.focus : {}),
       ...(active ? styles.active : {}),
     };
-    if (state === 'active') {
+    // Keep the effective authored declarations alongside the rendered mesh so
+    // diagnostic consumers can verify state paint without depending on a
+    // browser DOM implementation detail. This is intentionally generic and is
+    // refreshed for every pseudo-state transition.
+    mesh.metadata.astylarResolvedInteractionStyle = { ...style };
+    if (state === 'active' || state === 'hover') {
       mesh.metadata.cursor = style.cursor;
       const canvas = mesh.getScene().getEngine().getRenderingCanvas();
       if (canvas) canvas.style.cursor = style.cursor ?? 'default';
     }
     const borderMeshes = mesh.getChildMeshes(false)
       .filter((child) => child.name.startsWith(`${elementId}-border`));
-    if (!active && !focused) {
+    if (!hovered && !active && !focused) {
       mesh.material = mesh.metadata.astylarInteractionBaseMaterial;
       for (const borderMesh of borderMeshes) {
         if (borderMesh.metadata?.astylarInteractionBaseMaterial) {
@@ -1050,10 +1109,13 @@ class AstylarRenderer {
       return;
     }
 
-    const materialKey = active && focused
-      ? 'astylarActiveFocusMaterial'
-      : active ? 'astylarActiveMaterial' : 'astylarFocusMaterial';
-    const materialSuffix = active && focused ? 'active-focus' : active ? 'active' : 'focus';
+    const materialStates = [
+      hovered ? 'Hover' : '',
+      focused ? 'Focus' : '',
+      active ? 'Active' : '',
+    ].filter(Boolean);
+    const materialKey = `astylar${materialStates.join('')}Material`;
+    const materialSuffix = materialStates.map((value) => value.toLowerCase()).join('-');
     if (!mesh.metadata[materialKey]) {
       const background = style.background
         ? this.styleService.parseBackgroundColor(style.background)
