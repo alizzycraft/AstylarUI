@@ -162,7 +162,13 @@ export class InputElementService {
 
     setFocusIndicatorAppearance(
         elementId: string,
-        appearance?: { color: BABYLON.Color3; alpha: number; widthPx: number; offsetPx: number },
+        appearance?: {
+            color: BABYLON.Color3;
+            alpha: number;
+            widthPx: number;
+            offsetPx: number;
+            borderRadiusPx: number;
+        },
     ): void {
         this.focusManager.setFocusIndicatorAppearance(elementId, appearance);
     }

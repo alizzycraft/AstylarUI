@@ -398,7 +398,7 @@ async function measureReferenceInteraction(page, ids) {
       'borderLeftColor', 'borderTopWidth', 'borderRightWidth', 'borderBottomWidth',
       'borderLeftWidth', 'borderTopLeftRadius', 'borderTopRightRadius',
       'borderBottomRightRadius', 'borderBottomLeftRadius', 'boxShadow', 'outlineColor',
-      'outlineStyle', 'outlineWidth', 'cursor', 'transform',
+      'outlineStyle', 'outlineWidth', 'caretColor', 'cursor', 'transform',
     ];
     const elements = {};
     const controlStates = {};
@@ -425,6 +425,7 @@ async function measureReferenceInteraction(page, ids) {
           selectionDirection: 'selectionDirection' in element ? element.selectionDirection : null,
           selectedIndex: element instanceof HTMLSelectElement ? element.selectedIndex : null,
           expanded: element.dataset['benchmarkExpanded'] === 'true',
+          caretColor: style.caretColor,
         };
       }
     }
@@ -517,6 +518,34 @@ function compareInteractionStep(scenario, step, viewport, referenceMeasurement, 
     astylarMeasurement.controlStates,
     comparedControlIds,
   );
+  if (step.focusRingRadius) {
+    const expectedRadius = Number.parseFloat(
+      referenceMeasurement.computedStyles?.[scenario.elementId]?.borderTopLeftRadius ?? '0',
+    );
+    const ringRadii = (astylarMeasurement.visibleFocusIndicators ?? [])
+      .map((indicator) => indicator.borderRadiusPx)
+      .filter(Number.isFinite);
+    if (!ringRadii.some((radius) => Math.abs(radius - expectedRadius) <= 0.01)) {
+      controlErrors.push(
+        `${scenario.elementId} focus ring radius differs (${expectedRadius}px vs ` +
+        `${ringRadii.length ? ringRadii.join(',') : 'unreported'}).`,
+      );
+    }
+  }
+  if (step.caretColor) {
+    const expectedCaret = normalizeCssColor(
+      referenceMeasurement.controlStates?.[scenario.elementId]?.caretColor,
+    );
+    const actualCaret = normalizeCssColor(
+      astylarMeasurement.controlStates?.[scenario.elementId]?.caretColor,
+    );
+    if (!expectedCaret || expectedCaret !== actualCaret) {
+      controlErrors.push(
+        `${scenario.elementId}.caretColor differs (` +
+        `${JSON.stringify(expectedCaret)} vs ${JSON.stringify(actualCaret)}).`,
+      );
+    }
+  }
   const styleErrors = compareInteractionStyles(
     referenceMeasurement.computedStyles?.[scenario.elementId],
     astylarMeasurement.resolvedStyles?.[scenario.elementId],
@@ -595,7 +624,10 @@ function compareInteractionControls(referenceControls = {}, astylarControls = {}
     if (!expected) continue;
     const actual = astylarControls[id];
     if (!actual) { errors.push(`missing Astylar control state for ${id}.`); continue; }
-    for (const property of ['value', 'focused', 'selectionStart', 'selectionEnd', 'selectionDirection', 'selectedIndex']) {
+    for (const property of [
+      'value', 'focused', 'selectionStart', 'selectionEnd', 'selectionDirection',
+      'selectedIndex',
+    ]) {
       if (expected[property] !== actual[property]) {
         errors.push(`${id}.${property} differs (${JSON.stringify(expected[property])} vs ${JSON.stringify(actual[property])}).`);
       }

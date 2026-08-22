@@ -169,6 +169,11 @@ export class AstylarEventDispatcher {
     };
   }
 
+  /** Returns the enabled target followed by its authored DOM ancestors. */
+  getElementPath(elementId: string): readonly string[] {
+    return this.hasEnabledTarget(elementId) ? this.buildPath(elementId, true) : [];
+  }
+
   dispatch(init: AstylarEventInit): AstylarEventSnapshot | undefined {
     if (!this.hasEnabledTarget(init.targetId)) return undefined;
     const event = new MutableAstylarEvent(init);

@@ -9,10 +9,15 @@ export class TextSelectionClipboardService {
 
   constructor(private readonly selectionStore: TextSelectionStore) {}
 
-  async copySelectedText(): Promise<boolean> {
+  async copySelectedText(event?: ClipboardEvent): Promise<boolean> {
     const text = this.selectionStore.selectedText();
     if (!text) {
       return false;
+    }
+
+    if (event?.clipboardData) {
+      event.clipboardData.setData('text/plain', text);
+      return true;
     }
 
     const navigatorRef = this.window?.navigator as Navigator | undefined;

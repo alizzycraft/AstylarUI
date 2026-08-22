@@ -13,6 +13,7 @@ export class TextSelectionKeyboardService {
   private readonly windowRef = this.document?.defaultView ?? window;
 
   private readonly keydownListener = (event: KeyboardEvent) => this.handleKeyDown(event);
+  private readonly copyListener = (event: ClipboardEvent) => this.handleCopy(event);
 
   constructor(
     private readonly selectionStore: TextSelectionStore,
@@ -21,18 +22,16 @@ export class TextSelectionKeyboardService {
   ) {
     if (this.document) {
       this.document.addEventListener('keydown', this.keydownListener, true);
+      this.document.addEventListener('copy', this.copyListener, true);
       this.destroyRef.onDestroy(() => {
         this.document?.removeEventListener('keydown', this.keydownListener, true);
+        this.document?.removeEventListener('copy', this.copyListener, true);
       });
     }
   }
 
   private handleKeyDown(event: KeyboardEvent): void {
     if (!this.shouldHandleEvent(event)) {
-      return;
-    }
-
-    if (this.handleClipboard(event)) {
       return;
     }
 
@@ -47,17 +46,8 @@ export class TextSelectionKeyboardService {
 
   private shouldHandleEvent(event: KeyboardEvent): boolean {
     const target = event.target as HTMLElement | null;
-    if (target) {
-      const tagName = target.tagName?.toLowerCase();
-      const isEditable = (target as HTMLElement).isContentEditable;
-      if (
-        tagName === 'input' ||
-        tagName === 'textarea' ||
-        target.getAttribute('role') === 'textbox' ||
-        isEditable
-      ) {
-        return false;
-      }
+    if (this.isEditableTarget(target)) {
+      return false;
     }
 
     // Astylar text controls render their editable value on a child text mesh.
@@ -69,12 +59,14 @@ export class TextSelectionKeyboardService {
       return false;
     }
 
-    // Only react when we have a selection context or the clipboard shortcut applies
-    if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'c') {
-      return this.selectionStore.hasSelection();
-    }
-
     return !!this.selectionStore.elementId();
+  }
+
+  private isEditableTarget(target: HTMLElement | null): boolean {
+    if (!target) return false;
+    const tagName = target.tagName?.toLowerCase();
+    return tagName === 'input' || tagName === 'textarea' ||
+      target.getAttribute('role') === 'textbox' || target.isContentEditable;
   }
 
   private handleNavigation(event: KeyboardEvent): boolean {
@@ -111,23 +103,12 @@ export class TextSelectionKeyboardService {
     }
   }
 
-  private handleClipboard(event: KeyboardEvent): boolean {
-    if (!(event.ctrlKey || event.metaKey)) {
-      return false;
-    }
-
-    if (event.key.toLowerCase() !== 'c') {
-      return false;
-    }
-
-    if (!this.selectionStore.hasSelection()) {
-      return false;
-    }
-
-    this.clipboardService.copySelectedText();
+  private handleCopy(event: ClipboardEvent): void {
+    if (this.isEditableTarget(event.target as HTMLElement | null) ||
+        !this.selectionStore.hasSelection()) return;
+    void this.clipboardService.copySelectedText(event);
     event.preventDefault();
     event.stopPropagation();
-    return true;
   }
 
   private handleEscape(event: KeyboardEvent): boolean {

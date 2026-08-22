@@ -112,6 +112,7 @@ export class AstylarInteractionRuntime {
   private pointerObserver: Observer<PointerInfo> | null;
   private pressedElementId?: string;
   private hoveredElementId?: string;
+  private hoveredElementPath: string[] = [];
   private disposed = false;
   private readonly canvas: HTMLCanvasElement | null;
   private focusOrder: string[] = [];
@@ -294,7 +295,17 @@ export class AstylarInteractionRuntime {
       this.pressedElementId = undefined;
     }
     if (this.hoveredElementId && !this.dispatcher.hasEnabledTarget(this.hoveredElementId)) {
+      for (const elementId of this.hoveredElementPath) {
+        this.controls?.setHoverState?.(elementId, false);
+      }
       this.hoveredElementId = undefined;
+      this.hoveredElementPath = [];
+    } else if (this.hoveredElementId) {
+      const nextPath = [...this.dispatcher.getElementPath(this.hoveredElementId)];
+      for (const elementId of this.hoveredElementPath) {
+        if (!nextPath.includes(elementId)) this.controls?.setHoverState?.(elementId, false);
+      }
+      this.hoveredElementPath = nextPath;
     }
   }
 
@@ -306,7 +317,9 @@ export class AstylarInteractionRuntime {
     // even when the pointer has not moved, so :hover/:active paint does not
     // disappear until the next native pointer event.
     if (this.hoveredElementId && this.dispatcher.hasEnabledTarget(this.hoveredElementId)) {
-      this.controls?.setHoverState?.(this.hoveredElementId, true);
+      for (const elementId of [...this.hoveredElementPath].reverse()) {
+        this.controls?.setHoverState?.(elementId, true);
+      }
     }
     if (this.pressedElementId && this.dispatcher.hasEnabledTarget(this.pressedElementId)) {
       this.controls?.setActiveState?.(this.pressedElementId, true);
@@ -351,7 +364,11 @@ export class AstylarInteractionRuntime {
     const focusedElementId = this.getFocusedElementId();
     if (focusedElementId) this.controls?.setFocusState?.(focusedElementId, false);
     this.pressedElementId = undefined;
+    for (const elementId of this.hoveredElementPath) {
+      this.controls?.setHoverState?.(elementId, false);
+    }
     this.hoveredElementId = undefined;
+    this.hoveredElementPath = [];
     this.pendingSpaceActivationId = undefined;
     this.suppressedKeyUps.clear();
     this.pressedExpandedSelectOption = undefined;
@@ -453,17 +470,26 @@ export class AstylarInteractionRuntime {
 
   private updateHover(targetId: string | undefined, pointerInfo: PointerInfo): void {
     if (targetId === this.hoveredElementId) return;
-    if (this.hoveredElementId) {
-      this.dispatchPointer('pointerleave', this.hoveredElementId, pointerInfo);
-      this.controls?.setHoverState?.(this.hoveredElementId, false);
-    }
-    this.hoveredElementId = targetId && this.dispatcher.hasEnabledTarget(targetId)
+    const nextTargetId = targetId && this.dispatcher.hasEnabledTarget(targetId)
       ? targetId
       : undefined;
-    if (this.hoveredElementId) {
-      this.controls?.setHoverState?.(this.hoveredElementId, true);
-      this.dispatchPointer('pointerenter', this.hoveredElementId, pointerInfo);
+    const nextPath = nextTargetId
+      ? [...this.dispatcher.getElementPath(nextTargetId)]
+      : [];
+    const nextIds = new Set(nextPath);
+    const previousIds = new Set(this.hoveredElementPath);
+    for (const elementId of this.hoveredElementPath) {
+      if (nextIds.has(elementId)) continue;
+      this.dispatchPointer('pointerleave', elementId, pointerInfo);
+      this.controls?.setHoverState?.(elementId, false);
     }
+    for (const elementId of [...nextPath].reverse()) {
+      if (previousIds.has(elementId)) continue;
+      this.controls?.setHoverState?.(elementId, true);
+      this.dispatchPointer('pointerenter', elementId, pointerInfo);
+    }
+    this.hoveredElementId = nextTargetId;
+    this.hoveredElementPath = nextPath;
   }
 
   private resolvePointerTarget(pointerInfo: PointerInfo): string | undefined {

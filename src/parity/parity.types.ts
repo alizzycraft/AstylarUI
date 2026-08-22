@@ -150,6 +150,11 @@ export interface ParityPressKeyAction {
   key: string;
 }
 
+/** Copies the current browser or scene-owned document-text selection. */
+export interface ParityCopySelectionAction {
+  type: 'copy-selection';
+}
+
 export interface ParityTypeTextAction {
   type: 'type-text';
   text: string;
@@ -188,6 +193,7 @@ export type ParityInteractionAction =
   | ParityPointerUpAction
   | ParityPauseAction
   | ParityPressKeyAction
+  | ParityCopySelectionAction
   | ParityTypeTextAction
   | ParitySemanticFocusAction
   | ParitySemanticActivateAction
@@ -365,6 +371,8 @@ export interface ParityInteractionReport {
   pointerCursor?: string;
   /** Browser Selection/Astylar text-selection state for non-control text. */
   textSelection?: ParityTextSelectionState;
+  /** Text exposed by the latest native copy event in this interaction sequence. */
+  clipboardText?: string;
   scrollContainers?: Record<string, ParityScrollState>;
   navigationOutcomes?: ParityNavigationOutcome[];
   registrations?: {

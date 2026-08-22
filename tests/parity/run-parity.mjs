@@ -646,6 +646,11 @@ async function captureDynamicMode(
     await page.waitForLoadState('networkidle');
     const report = await page.evaluate(() => window.__ASTYLAR_PARITY_REPORT__);
     if (!report) throw new Error(`${mode} dynamic step ${index + 1} did not publish a report`);
+    if (report.interaction) {
+      report.interaction.clipboardText = await page.evaluate(
+        () => window.__ASTYLAR_PARITY_LAST_COPY__,
+      );
+    }
     previousRevision = report.revision ?? previousRevision + 1;
     const screenshot = await page.locator(selector).screenshot({
       path: path.join(sequenceDir, `${index + 1}-live-${mode}.png`),
@@ -945,6 +950,16 @@ async function performInteractionAction(page, mode, action, report) {
     case 'press-key':
       await page.keyboard.press(action.key);
       return;
+    case 'copy-selection':
+      await page.evaluate(() => {
+        window.__ASTYLAR_PARITY_LAST_COPY__ = undefined;
+        document.addEventListener('copy', (event) => {
+          const eventText = event.clipboardData?.getData('text/plain');
+          window.__ASTYLAR_PARITY_LAST_COPY__ = eventText || window.getSelection()?.toString() || '';
+        }, { once: true });
+      });
+      await page.keyboard.press(process.platform === 'darwin' ? 'Meta+C' : 'Control+C');
+      return;
     case 'type-text':
       await page.keyboard.type(action.text);
       return;
@@ -1056,6 +1071,13 @@ function compareInteraction(reference, astylar, fixture) {
     errors.push(
       `text selection differs (${JSON.stringify(referenceInteraction.textSelection)} vs ` +
       `${JSON.stringify(astylarInteraction.textSelection)})`,
+    );
+  }
+  if ((referenceInteraction.clipboardText ?? '') !==
+      (astylarInteraction.clipboardText ?? '')) {
+    errors.push(
+      `clipboard text differs (${JSON.stringify(referenceInteraction.clipboardText ?? '')} vs ` +
+      `${JSON.stringify(astylarInteraction.clipboardText ?? '')})`,
     );
   }
   if (JSON.stringify(referenceInteraction.navigationOutcomes ?? []) !==

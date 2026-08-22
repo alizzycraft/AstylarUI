@@ -219,6 +219,13 @@ export class App {
           );
           if (!(semantic instanceof HTMLInputElement || semantic instanceof HTMLTextAreaElement ||
               semantic instanceof HTMLSelectElement)) return [];
+          // Read the owned caret material independently of its blink phase.
+          const cursor = surface.scene.meshes.find((mesh) =>
+            mesh.name === `cursor_input_${id}`);
+          const cursorMaterial = cursor?.material;
+          const caretColor = cursorMaterial && 'emissiveColor' in cursorMaterial
+            ? (cursorMaterial.emissiveColor as { toHexString(): string }).toHexString().toLowerCase()
+            : undefined;
           return [[id, {
             value: semantic.value,
             focused: document.activeElement === semantic,
@@ -227,6 +234,7 @@ export class App {
             selectionDirection: 'selectionDirection' in semantic ? semantic.selectionDirection : null,
             selectedIndex: semantic instanceof HTMLSelectElement ? semantic.selectedIndex : null,
             expanded: semantic.getAttribute('aria-expanded') === 'true',
+            caretColor,
           }]];
         }));
         const centerPicks = Object.fromEntries(ids.flatMap((id) => {
@@ -284,7 +292,10 @@ export class App {
           elements,
           visibleFocusIndicators: surface.scene.meshes
             .filter((mesh) => mesh.name.startsWith('focusIndicator_') && mesh.isVisible)
-            .map((mesh) => mesh.name),
+            .map((mesh) => ({
+              name: mesh.name,
+              borderRadiusPx: mesh.metadata?.focusBorderRadiusPx,
+            })),
           scrolling: Object.fromEntries(Object.entries(scrolling).map(([id, value]) => [id, {
             ...value,
             initialScrollLeft: 0,

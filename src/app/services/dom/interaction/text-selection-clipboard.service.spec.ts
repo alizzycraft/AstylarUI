@@ -41,6 +41,16 @@ describe('TextSelectionClipboardService', () => {
     expect(documentStub.body.lastAppended?.value).toBe('hello world');
     expect(documentStub.body.lastRemoved).toBe(documentStub.body.lastAppended);
   });
+
+  it('writes selected text synchronously to a native copy event', async () => {
+    store.setSelectedText('scene selection');
+    const setData = jasmine.createSpy('setData');
+    const event = { clipboardData: { setData } } as unknown as ClipboardEvent;
+
+    expect(await service.copySelectedText(event)).toBeTrue();
+    expect(setData).toHaveBeenCalledWith('text/plain', 'scene selection');
+    expect(documentStub.execCommandSpy).not.toHaveBeenCalled();
+  });
 });
 
 class MockTextSelectionStore {

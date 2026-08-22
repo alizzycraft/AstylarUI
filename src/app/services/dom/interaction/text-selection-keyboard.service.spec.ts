@@ -92,14 +92,20 @@ describe('TextSelectionKeyboardService', () => {
     expect(controller.moveSelectionWithKeyboard).not.toHaveBeenCalled();
   });
 
-  it('invokes clipboard copy shortcut when selection exists', () => {
+  it('leaves the copy shortcut native and writes scene selection into its copy event', () => {
     store.setHasSelection(true);
-    const event = createKeyEvent('keydown', 'c', { ctrlKey: true });
+    store.setElementId('element-1');
+    const keyEvent = createKeyEvent('keydown', 'c', { ctrlKey: true });
 
-    documentStub.dispatchKeydown(event);
+    documentStub.dispatchKeydown(keyEvent);
+    expect(keyEvent.defaultPrevented).toBeFalse();
+    expect(clipboard.copySelectedText).not.toHaveBeenCalled();
 
-    expect(clipboard.copySelectedText).toHaveBeenCalled();
-    expect(event.defaultPrevented).toBeTrue();
+    const copyEvent = createCopyEvent();
+    documentStub.dispatchCopy(copyEvent);
+
+    expect(clipboard.copySelectedText).toHaveBeenCalledWith(copyEvent);
+    expect(copyEvent.defaultPrevented).toBeTrue();
   });
 
   it('clears selection on Escape key', () => {
@@ -183,6 +189,18 @@ class FakeDocument {
       }
     }
   }
+
+  dispatchCopy(event: ClipboardEvent): void {
+    const listeners = this.listeners.get('copy') ?? [];
+    for (const listener of listeners) {
+      if (typeof listener === 'function') listener(event);
+      else listener.handleEvent(event);
+    }
+  }
+}
+
+function createCopyEvent(): ClipboardEvent {
+  return new Event('copy', { bubbles: true, cancelable: true }) as ClipboardEvent;
 }
 
 function createKeyEvent(

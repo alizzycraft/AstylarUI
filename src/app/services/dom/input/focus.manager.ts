@@ -4,6 +4,7 @@ import { InputElement, TextInput, InputType } from '../../../types/input-types';
 import { TextCursorRenderer } from './text-cursor.renderer';
 import { TextInputManager } from './text-input.manager';
 import { BabylonCameraService } from '../../babylon-camera.service';
+import { BabylonMeshService } from '../../babylon-mesh.service';
 
 /**
  * Service responsible for managing focus state and tab navigation
@@ -21,13 +22,15 @@ export class FocusManager {
         alpha: number;
         widthPx: number;
         offsetPx: number;
+        borderRadiusPx: number;
     }> = new Map();
     private focusVisible = false;
 
     constructor(
         private cursorRenderer: TextCursorRenderer,
         private textInputManager: TextInputManager,
-        private cameraService: BabylonCameraService
+        private cameraService: BabylonCameraService,
+        private meshService: BabylonMeshService,
     ) { }
 
     /**
@@ -262,13 +265,43 @@ export class FocusManager {
         };
         const authored = this.focusIndicatorAppearance.get(elementId || '');
         if (authored) {
-            return createRing(
-                'authored',
-                authored.offsetPx,
-                authored.widthPx,
-                authored.color,
-                authored.alpha,
+            const outlineOffset = authored.offsetPx * pixelScale;
+            const outlineWidth = authored.widthPx * pixelScale;
+            const outerWidth = width + 2 * (outlineOffset + outlineWidth);
+            const outerHeight = height + 2 * (outlineOffset + outlineWidth);
+            const outerRadius = Math.max(
+                0,
+                authored.borderRadiusPx + authored.offsetPx + authored.widthPx,
+            ) * pixelScale;
+            const frame = this.meshService.createBorderMesh(
+                `focusIndicator_${elementId}_authored`,
+                outerWidth,
+                outerHeight,
+                outlineWidth,
+                outerRadius,
             );
+            const material = new BABYLON.StandardMaterial(
+                `focusIndicatorMaterial_${elementId}_authored`,
+                scene,
+            );
+            material.diffuseColor = authored.color;
+            material.emissiveColor = authored.color;
+            material.alpha = authored.alpha;
+            material.specularColor = BABYLON.Color3.Black();
+            material.disableLighting = true;
+            material.backFaceCulling = false;
+            frame.forEach(indicator => {
+                indicator.parent = inputElement.mesh;
+                indicator.position.z = -0.02;
+                indicator.material = material;
+                indicator.isPickable = false;
+                indicator.isVisible = false;
+                indicator.metadata = {
+                    ...(indicator.metadata ?? {}),
+                    focusBorderRadiusPx: authored.borderRadiusPx,
+                };
+            });
+            return frame;
         }
         // Chromium's automatic ring is a light one-pixel edge with a dark
         // one-pixel contrast edge immediately outside it.
@@ -321,7 +354,13 @@ export class FocusManager {
 
     setFocusIndicatorAppearance(
         elementId: string,
-        appearance?: { color: BABYLON.Color3; alpha: number; widthPx: number; offsetPx: number },
+        appearance?: {
+            color: BABYLON.Color3;
+            alpha: number;
+            widthPx: number;
+            offsetPx: number;
+            borderRadiusPx: number;
+        },
     ): void {
         this.disposeFocusIndicatorById(elementId);
         if (appearance) this.focusIndicatorAppearance.set(elementId, appearance);

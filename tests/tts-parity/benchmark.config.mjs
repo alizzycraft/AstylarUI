@@ -28,7 +28,7 @@ export const interactionScenarios = [
   {
     id: 'title-caret', state: 'initial', elementId: 'generation-title',
     profiles: ['reference-large-dpr1', 'smoke-1280-dpr2'],
-    steps: [{ id: 'pointer-caret', styleProperties: ['backgroundColor', 'color', 'borderColor', 'boxShadow'], actions: [
+    steps: [{ id: 'pointer-caret', caretColor: true, focusRingRadius: true, styleProperties: ['backgroundColor', 'color', 'borderColor', 'boxShadow'], actions: [
       { type: 'click', elementId: 'generation-title', offsetX: 72, offsetY: 22 },
       { type: 'type-text', text: 'Demo title' },
       { type: 'press-key', key: 'ArrowLeft' },

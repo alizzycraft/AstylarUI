@@ -178,6 +178,10 @@ supported hover/active/focus feedback; use Angular signals plus
 animation belongs in a trusted plugin and must keep Babylon/timer/observer
 resources inside the public ownership contract.
 
+Like browser CSS, `:hover` remains active on an element while the pointer is
+over one of its rendered descendants. Moving from a card surface onto its text
+or icon children does not clear the card's hover style.
+
 ## Forms, interaction, selection, and scrolling
 
 The implemented control subset includes text, password, email, number, textarea,
@@ -186,11 +190,14 @@ pointer and keyboard activation, explicit labels, focus navigation, editing,
 caret movement, selection/clipboard commands, textarea navigation and
 autoscroll, radio groups, closed and expanded select workflows, tested
 constraints, invalid focus, submit/reset, and state preservation across
-compatible updates.
+compatible updates. The default text-control caret follows the resolved text
+color, matching browser `caret-color: auto`; authored `caret-color` is not yet
+part of `StyleRule`.
 
 Direct text in supported non-control elements participates in pointer selection
 with browser-equivalent forward/backward endpoints, selected text, text cursor,
-visible highlight ownership, and outside-click clearing for the tested subset.
+visible highlight ownership, native Copy/Cmd+C clipboard transfer, and
+outside-click clearing for the tested subset.
 Authored pointer cursors continue to win on selectable links or other text whose
 effective cursor is not the ordinary text cursor.
 

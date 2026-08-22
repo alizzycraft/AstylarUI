@@ -1,22 +1,24 @@
 # AstylarUI Project Status
 
-Last reconciled: 2026-08-20
+Last reconciled: 2026-08-22
 
 This is the authoritative handoff for the repository. Older planning documents
 remain design history; their unchecked items are not automatically active work.
 
 ## Current milestone
 
-Phase 18, reference-driven application parity infrastructure, is complete. The
-pinned AI-TTS-MP3 source now has an offline deterministic adapter, paired app
-benchmark, application-specific viewport/DPR profiles, explicit visibility and
-scroll evidence, calibrated local sharpness measurement, durable artifacts, and
-report-only versus enforcement modes. Its intentionally failing visual baseline
-and Phase 19 backlog are recorded in `docs/parity/scorecard-v18.md`.
+Phase 21, TTS application interaction parity, is complete. The pinned
+AI-TTS-MP3 benchmark now enforces its 10 static scenarios and a source-derived
+interaction matrix across DPR-1 and DPR-2 profiles. Hover, active, focus,
+keyboard and pointer control behavior, selection/editing, native Copy for
+document text, dropdown workflows, and repeated dismissal/resource ownership
+all have executable evidence in the general and application-shaped harnesses.
 
-Phase 17 added the packaged Angular TTS application demo and deterministic mock
-speech workflow. Phase 19 owns correcting that demo's source translation and
-general renderer fidelity before promoting the new benchmark to enforcement.
+Post-Phase-21 hardening corrected rounded authored focus-ring geometry, made the
+default text-control caret follow the resolved text color, preserved ancestor
+`:hover` while pointing at rendered descendants, and connected visual document
+selection to the native clipboard event. The strengthened title-caret benchmark
+also requires raster agreement plus exact radius and caret-color evidence.
 
 ## Phase 16 skill baseline
 

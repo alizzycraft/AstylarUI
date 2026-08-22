@@ -60,7 +60,7 @@
         "id": "form-controls",
         "classification": "compatible",
         "names": ["input", "button", "form", "select", "textarea", "label", "option", "fieldset", "legend", "output"],
-        "behavior": "A deliberate control, focus, keyboard, pointer, validation, submit/reset, selection, and closed/expanded select subset is supported.",
+        "behavior": "A deliberate control, focus, keyboard, pointer, validation, submit/reset, selection, and closed/expanded select subset is supported. The default text-control caret follows the resolved text color; authored caret-color is not yet supported.",
         "defaultStyle": "elementDefaults[name] merged over globalDefaultStyle; checkbox/radio use inputType-specific defaults",
         "pluginCanSupply": false,
         "evidence": ["fixture:styled-text-input", "fixture:interaction-form-validation", "fixture:interaction-select-expanded-keyboard", "fixture:interaction-textarea-selection"]
@@ -69,7 +69,7 @@
         "id": "text-and-phrasing",
         "classification": "compatible",
         "names": ["span", "h1", "h2", "h3", "h4", "h5", "h6", "p", "br", "wbr", "hr", "b", "strong", "i", "em", "cite", "var", "dfn", "u", "ins", "s", "strike", "del", "code", "kbd", "samp", "pre", "small", "sub", "sup", "blockquote", "q", "abbr", "mark"],
-        "behavior": "Text content, measured wrapping, common inherited typography, inline/inline-block flow, pointer selection of direct non-control text, and the recorded defaults are supported within canvas-text constraints.",
+        "behavior": "Text content, measured wrapping, common inherited typography, inline/inline-block flow, pointer selection and native copy of direct non-control text, and the recorded defaults are supported within canvas-text constraints.",
         "defaultStyle": "elementDefaults[name] merged over globalDefaultStyle",
         "pluginCanSupply": false,
         "evidence": ["fixture:text-inheritance", "fixture:multiline-wrapping", "fixture:text-spacing", "fixture:inline-block-flow", "fixture:interaction-document-text-selection"]

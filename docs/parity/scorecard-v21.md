@@ -135,3 +135,36 @@ cleanup, and three-cycle repeatability.
 - `0e17f14` - `fix(interaction): preserve browser select and hover contracts`
 
 The final scorecard commit records the release evidence above.
+
+## Post-completion hardening
+
+A manual pass over the packaged TTS demo found four interaction details that the
+original matrix did not reject: authored focus shadows were rendered as square
+bars around a rounded control, a dark input received a black default caret,
+Copy did not transfer visually selected document text, and a card lost `:hover`
+when its text child became the pointer target.
+
+The renderer now builds authored focus shadows with the shared rounded-border
+geometry, resolves the default caret from the control's text color, handles
+document selection through the native `copy` event, and tracks the complete
+hover target ancestry. Focused general fixtures exercise native copy in both
+selection directions and movement from a parent surface onto nested text. The
+TTS title-caret scenario now requires local raster acceptance and exact
+focus-radius/caret-color evidence instead of accepting mesh presence alone.
+
+Post-hardening verification passed 331/331 unit tests and 19/19 parity-harness
+tests. The unfiltered general corpus passed 165 fixtures / 541 renders with
+median SSIM `0.9898`, minimum SSIM `0.9547`, 99.9% of measured edges within
+`2px`, maximum edge error `3.9921px`, exact text, clean runtime reports, and all
+completion thresholds met. The packed TTS corpus passed 10/10 static scenarios,
+36/36 sharpness regions, and 60/60 interaction steps; its minimum static SSIM
+remained `0.967522` and minimum interaction-local SSIM remained `0.526838`
+under the documented structural UA-focus exception.
+
+The library, root browser/SSR application, and packed external consumer all
+built successfully. The first consumer run exposed and the consumer fixture now
+closes an existing readiness race by requiring both mounted surface handles.
+After that correction, the consumer reached the later delayed-plugin proof and
+passed 2/3 browser cases; its asynchronous cancellation counter remained zero,
+the same known plugin-timing limitation already recorded above. No OpenAI
+credential was read and no live API request was made.

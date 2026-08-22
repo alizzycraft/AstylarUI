@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import * as BABYLON from '@babylonjs/core';
 import { TextLayoutMetrics, TextCharacterMetrics, TextStyleProperties } from '../../types/text-rendering';
 import { BabylonMeshService } from '../babylon-mesh.service';
+import { StyleService } from '../dom/style.service';
 
 /**
  * Service for creating and managing text selection highlighting
@@ -17,7 +18,10 @@ export class TextSelectionService {
 
 
 
-  constructor(private babylonMeshService: BabylonMeshService) { }
+  constructor(
+    private babylonMeshService: BabylonMeshService,
+    private styleService: StyleService,
+  ) { }
 
   /**
    * Creates selection highlight meshes for a text range
@@ -145,8 +149,16 @@ export class TextSelectionService {
 
     // Create cursor material
     const material = new BABYLON.StandardMaterial(`cursorMaterial_${parentMesh.name}`, scene);
-    material.diffuseColor = BABYLON.Color3.Black();
-    material.emissiveColor = BABYLON.Color3.Black();
+    // CSS caret-color:auto resolves to currentColor. Astylar does not yet
+    // expose authored caret-color, so the resolved text color is the browser-
+    // equivalent default and remains legible on dark controls.
+    const parsedCaret = this.styleService.parseBackgroundColor(style.color);
+    const caretColor = parsedCaret?.type === 'color'
+      ? parsedCaret.color
+      : BABYLON.Color3.Black();
+    material.diffuseColor = caretColor;
+    material.emissiveColor = caretColor;
+    material.alpha = parsedCaret?.type === 'color' ? parsedCaret.alpha ?? 1 : 1;
     material.disableLighting = true;
     cursor.material = material;
 

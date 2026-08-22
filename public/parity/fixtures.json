@@ -876,8 +876,8 @@
     "id": "interaction-hover-style",
     "title": "Authored hover-state paint",
     "category": "controls-states",
-    "expectedBehavior": "Pointer enter applies authored hover paint and pointer leave restores normal paint with browser-order boundary events.",
-    "interactionStepCount": 2,
+    "expectedBehavior": "Pointer enter applies authored hover paint, moving onto a nested text child preserves the ancestor hover state, and pointer leave restores normal paint with browser-order boundary events.",
+    "interactionStepCount": 3,
     "enforcePointerCursor": true,
     "enforcedStyleProperties": {
       "hover-style-target": [
@@ -1013,8 +1013,8 @@
     "id": "interaction-document-text-selection",
     "title": "Non-control text selection",
     "category": "forms-interactive",
-    "expectedBehavior": "Forward and backward pointer drags select the same authored text range, direction, and visible highlight as browser document text, and clicking outside clears either selection.",
-    "interactionStepCount": 4,
+    "expectedBehavior": "Forward and backward pointer drags select the same authored text range, direction, and visible highlight as browser document text, native copy exposes the selected text, and clicking outside clears either selection.",
+    "interactionStepCount": 6,
     "enforcePointerCursor": true,
     "textSelectionIds": ["document-selection-copy"],
     "enforcedStyleProperties": {

@@ -94,6 +94,7 @@ import {
 import { AstylarPluginHost } from './astylar-plugin-host';
 import { TextSelectionControllerService } from '../app/services/dom/interaction/text-selection-controller.service';
 import { TextInteractionRegistryService } from '../app/services/dom/interaction/text-interaction-registry.service';
+import { TextSelectionKeyboardService } from '../app/services/dom/interaction/text-selection-keyboard.service';
 
 /**
  * Configuration options for rendering
@@ -143,6 +144,8 @@ class AstylarRenderer {
   private inputElementService = inject(InputElementService);
   private textSelectionController = inject(TextSelectionControllerService);
   private textInteractionRegistry = inject(TextInteractionRegistryService);
+  // Instantiation owns the per-surface native keyboard/copy bridge.
+  private textSelectionKeyboard = inject(TextSelectionKeyboardService);
   private textRenderingService = inject(TextRenderingService);
   private overflowClipService = inject(OverflowClipService);
   private pluginRuntime = inject(AstylarPluginRuntime);
@@ -217,6 +220,8 @@ class AstylarRenderer {
     siteData: SiteData,
     options?: AstylarRenderOptions,
   ): Scene {
+    // Construct the surface-scoped native text-selection keyboard/copy bridge.
+    void this.textSelectionKeyboard;
     // Create Babylon.js engine
     const engine = new Engine(
       canvas,
@@ -1035,7 +1040,8 @@ class AstylarRenderer {
   }
 
   private configureFocusIndicator(elementId: string, siteData: SiteData): void {
-    const focus = this.getElementInteractionStyles(elementId, siteData)?.focus;
+    const styles = this.getElementInteractionStyles(elementId, siteData);
+    const focus = styles?.focus;
     const shadow = focus?.boxShadow?.trim().match(
       /^0(?:px)?\s+0(?:px)?\s+0(?:px)?\s+([\d.]+)px\s+(.+)$/i,
     );
@@ -1047,6 +1053,10 @@ class AstylarRenderer {
           alpha: paint.alpha ?? 1,
           widthPx: Math.max(1, Number.parseFloat(shadow[1])),
           offsetPx: 0,
+          borderRadiusPx: Math.max(
+            0,
+            Number.parseFloat(focus?.borderRadius ?? styles?.normal.borderRadius ?? '0') || 0,
+          ),
         });
         this.inputElementService.setDefaultFocusIndicatorEnabled(elementId, true);
         return;

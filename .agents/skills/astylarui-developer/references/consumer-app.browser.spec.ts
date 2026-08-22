@@ -120,6 +120,7 @@ describe('external AstylarUI browser acceptance', () => {
           return semanticRoots(fixture.nativeElement).length === 2 &&
             [...semanticRoots(fixture.nativeElement)]
               .every((root) => !!root.querySelector('[data-astylar-id="workspace"]')) &&
+            !!handles.primarySurface && !!handles.secondarySurface &&
             text(fixture.nativeElement, 'consumer-status').includes('renderer settled and ready');
         }, 'initial surfaces', 20_000);
       } catch (error) {

@@ -487,6 +487,64 @@ describe('AstylarInteractionRuntime', () => {
     engine.dispose();
   });
 
+  it('keeps authored ancestors hovered when the pointer moves onto a nested child', () => {
+    const engine = new NullEngine();
+    const scene = new Scene(engine);
+    const card = MeshBuilder.CreatePlane('card', {}, scene);
+    card.metadata = { elementId: 'card' };
+    const copy = MeshBuilder.CreatePlane('copy', {}, scene);
+    copy.metadata = { elementId: 'copy' };
+    copy.parent = card;
+    const canvas = document.createElement('canvas');
+    const hoverStates: Array<[string, boolean]> = [];
+    const events: AstylarEventSnapshot[] = [];
+    const runtime = new AstylarInteractionRuntime(
+      scene,
+      {
+        styles: [],
+        root: { children: [{ type: 'article', id: 'card', children: [
+          { type: 'p', id: 'copy', textContent: 'Nested copy' },
+        ] }] },
+      },
+      { onEvent: (event) => events.push(event) },
+      undefined,
+      {
+        getFocusedElementId: () => undefined,
+        focus: () => false,
+        blur: () => false,
+        handleKeyDown: () => undefined,
+        commitsValueOnBlur: () => false,
+        setHoverState: (elementId: string, hovered: boolean) =>
+          hoverStates.push([elementId, hovered]),
+      } as never,
+      canvas,
+    );
+
+    scene.onPointerObservable.notifyObservers({
+      type: PointerEventTypes.POINTERMOVE,
+      event: new MouseEvent('pointermove'),
+      pickInfo: { hit: true, pickedMesh: card },
+    } as unknown as PointerInfo);
+    scene.onPointerObservable.notifyObservers({
+      type: PointerEventTypes.POINTERMOVE,
+      event: new MouseEvent('pointermove'),
+      pickInfo: { hit: true, pickedMesh: copy },
+    } as unknown as PointerInfo);
+
+    expect(runtime.snapshot.hoveredElementId).toBe('copy');
+    expect(hoverStates).toEqual([
+      ['card', true],
+      ['copy', true],
+    ]);
+    expect(events.map((event) => `${event.type}:${event.targetId}`)).toEqual([
+      'pointerenter:card',
+      'pointerenter:copy',
+    ]);
+    runtime.dispose();
+    scene.dispose();
+    engine.dispose();
+  });
+
   it('walks generated mesh ancestry to find the authored wheel target', () => {
     const engine = new NullEngine();
     const scene = new Scene(engine);

@@ -5,7 +5,7 @@ export const interactionDocumentTextSelectionFixture: ParityFixture = {
   title: 'Non-control text selection',
   category: 'forms-interactive',
   expectedBehavior:
-    'Forward and backward pointer drags select the same authored text range, direction, and visible highlight as browser document text, and clicking outside clears either selection.',
+    'Forward and backward pointer drags select the same authored text range, direction, and visible highlight as browser document text, native copy exposes the selected text, and clicking outside clears either selection.',
   measurementIds: ['document-selection-copy', 'document-selection-outside'],
   interactionIds: ['document-selection-copy', 'document-selection-outside'],
   enforcePointerCursor: true,
@@ -28,6 +28,7 @@ export const interactionDocumentTextSelectionFixture: ParityFixture = {
         { type: 'pointer-up' },
       ],
     },
+    { id: 'copy-forward-selection', actions: [{ type: 'copy-selection' }] },
     {
       id: 'clear-forward-selection',
       actions: [{ type: 'click', elementId: 'document-selection-outside' }],
@@ -40,6 +41,7 @@ export const interactionDocumentTextSelectionFixture: ParityFixture = {
         { type: 'pointer-up' },
       ],
     },
+    { id: 'copy-backward-selection', actions: [{ type: 'copy-selection' }] },
     {
       id: 'clear-backward-selection',
       actions: [{ type: 'click', elementId: 'document-selection-outside' }],

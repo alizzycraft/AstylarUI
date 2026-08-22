@@ -304,9 +304,8 @@ export class BabylonMeshService {
     const roundedPolygon = roundPolygon(rectangleCorners, radius);
 
 
-    // Convert arcs to segments for triangulation with higher resolution
-    // Use smaller segment length for smoother curves (0.5 units per segment instead of 2)
-    const segmentLength = Math.max(0.3, radius / 10); // Dynamic based on radius, minimum 0.3
+    // Preserve rounded corners after CSS pixels are scaled into Babylon units.
+    const segmentLength = Math.max(0.001, radius / 10);
     const segments = getSegments(roundedPolygon, "LENGTH", segmentLength);
 
 
@@ -491,7 +490,7 @@ export class BabylonMeshService {
     }
 
     // Convert arcs to segments for triangulation with high resolution
-    const segmentLength = Math.max(0.3, borderRadius / 10);
+    const segmentLength = Math.max(0.001, borderRadius / 10);
     const segments = getSegments(roundedPolygon, "LENGTH", segmentLength);
 
 
@@ -683,7 +682,7 @@ export class BabylonMeshService {
 
     // Generate rounded outer polygon
     const roundedOuter = roundPolygon(outerPoints, borderRadius);
-    const segmentLength = Math.max(0.3, borderRadius / 10);
+    const segmentLength = Math.max(0.001, borderRadius / 10);
     const outerSegments = getSegments(roundedOuter, "LENGTH", segmentLength);
 
     // Generate rounded inner polygon with proportionally smaller radius
@@ -1057,7 +1056,7 @@ export class BabylonMeshService {
           const roundedPolygon = roundPolygon(rectangleCorners, borderRadius);
 
           // Convert to segments for smooth curves
-          const segmentLength = Math.max(0.3, borderRadius / 10);
+          const segmentLength = Math.max(0.001, borderRadius / 10);
           const segments = getSegments(roundedPolygon, "LENGTH", segmentLength);
 
           let vertexIndex = 0;
