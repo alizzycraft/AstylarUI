@@ -911,6 +911,7 @@ class AstylarRenderer {
       dropdownOpen?: boolean;
       selectionStart?: number;
       selectionEnd?: number;
+      cursorPosition?: number;
     };
     if (typeof live.checked === 'boolean') {
       state.checked = live.checked;
@@ -924,6 +925,9 @@ class AstylarRenderer {
     if (typeof live.selectionStart === 'number' && typeof live.selectionEnd === 'number') {
       state.selectionStart = live.selectionStart;
       state.selectionEnd = live.selectionEnd;
+      state.selectionDirection = live.selectionStart === live.selectionEnd
+        ? 'none'
+        : live.cursorPosition === live.selectionStart ? 'backward' : 'forward';
     }
     return state;
   }

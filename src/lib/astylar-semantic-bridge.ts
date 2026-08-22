@@ -37,6 +37,7 @@ export interface AstylarSemanticControlState {
   expanded?: boolean;
   selectionStart?: number;
   selectionEnd?: number;
+  selectionDirection?: 'forward' | 'backward' | 'none';
 }
 
 /** Routes native semantic input into the scene's existing interaction owner. */
@@ -450,7 +451,7 @@ export class AstylarSemanticBridge {
       if (state.selectionStart !== undefined && state.selectionEnd !== undefined &&
           node.type !== 'button' && node.type !== 'submit' && node.type !== 'reset' &&
           node.type !== 'checkbox' && node.type !== 'radio') {
-        node.setSelectionRange(state.selectionStart, state.selectionEnd);
+        node.setSelectionRange(state.selectionStart, state.selectionEnd, state.selectionDirection);
       }
       if (state.checked !== undefined) node.checked = state.checked;
       if (state.disabled !== undefined) node.disabled = state.disabled;
@@ -461,7 +462,7 @@ export class AstylarSemanticBridge {
     if (node instanceof HTMLTextAreaElement) {
       if (state.value !== undefined) node.value = state.value;
       if (state.selectionStart !== undefined && state.selectionEnd !== undefined) {
-        node.setSelectionRange(state.selectionStart, state.selectionEnd);
+        node.setSelectionRange(state.selectionStart, state.selectionEnd, state.selectionDirection);
       }
       if (state.disabled !== undefined) node.disabled = state.disabled;
       if (state.required !== undefined) node.required = state.required;

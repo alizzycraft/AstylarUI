@@ -194,6 +194,27 @@ describe('AstylarSemanticBridge', () => {
     expect(plan?.getAttribute('aria-expanded')).toBe('true');
   });
 
+  it('preserves forward and backward text selection direction in semantic controls', () => {
+    const bridge = new AstylarSemanticBridge(canvas);
+    bridge.reconcile({
+      styles: [],
+      root: { children: [
+        { type: 'input', inputType: 'text', id: 'title', value: 'Alpha' },
+        { type: 'textarea', id: 'copy', value: 'Bravo' },
+      ] },
+    });
+    const title = host.querySelector<HTMLInputElement>('[data-astylar-id="title"]')!;
+    const copy = host.querySelector<HTMLTextAreaElement>('[data-astylar-id="copy"]')!;
+
+    bridge.syncControlStates((id) => id === 'title'
+      ? { value: 'Alpha', selectionStart: 1, selectionEnd: 4, selectionDirection: 'forward' }
+      : { value: 'Bravo', selectionStart: 1, selectionEnd: 4, selectionDirection: 'backward' });
+
+    expect(title.selectionDirection).toBe('forward');
+    expect(copy.selectionDirection).toBe('backward');
+    bridge.dispose();
+  });
+
   it('delegates semantic focus, keyboard input, and activation and restores canvas focus state', async () => {
     canvas.setAttribute('tabindex', '4');
     const bridge = new AstylarSemanticBridge(canvas);
