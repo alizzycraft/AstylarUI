@@ -1,0 +1,22 @@
+@use '@angular/material' as mat;
+@import '@fontsource/roboto/400.css';
+@import '@fontsource/roboto/500.css';
+@import '@fontsource/roboto/700.css';
+
+html {
+  @include mat.theme((
+    color: (primary: mat.$violet-palette, tertiary: mat.$rose-palette),
+    typography: Roboto,
+    density: 0,
+  ));
+  height: 100%;
+}
+
+@for $level from 0 through 5 {
+  .density-#{$level} {
+    @include mat.all-component-densities(-$level);
+  }
+}
+
+body { height: 100%; margin: 0; }
+button, input, select { font: inherit; }

@@ -3,6 +3,7 @@
 # Compiled output
 /dist
 /artifacts/parity
+/artifacts/material-parity
 /artifacts/tts-parity
 /tmp
 /out-tsc
@@ -32,6 +33,7 @@ yarn-error.log
 
 # Miscellaneous
 /.angular/cache
+/.task-cache
 .sass-cache/
 /connect.lock
 /coverage

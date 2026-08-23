@@ -29,6 +29,12 @@
     },
     {
       "path": "./tsconfig.spec.json"
+    },
+    {
+      "path": "./examples/material-showcase/tsconfig.app.json"
+    },
+    {
+      "path": "./examples/material-showcase/tsconfig.spec.json"
     }
   ]
 }
