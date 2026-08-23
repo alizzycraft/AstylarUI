@@ -34,7 +34,7 @@ export class TextStyleParserService {
     color: '#000000',
     textAlign: 'left',
     verticalAlign: 'baseline',
-    lineHeight: 1.2,
+    lineHeight: 1.15,
     letterSpacing: 0,
     wordSpacing: 0,
     whiteSpace: 'normal',
@@ -84,7 +84,10 @@ export class TextStyleParserService {
     }
 
     if (styleRule.lineHeight) {
-      textStyle.lineHeight = this.parseLineHeight(styleRule.lineHeight);
+      textStyle.lineHeight = this.parseLineHeight(
+        styleRule.lineHeight,
+        textStyle.fontSize,
+      );
     }
 
     if (styleRule.letterSpacing) {
@@ -365,12 +368,12 @@ export class TextStyleParserService {
    * @param lineHeight - The line-height CSS value
    * @returns Normalized line height as a multiplier
    */
-  private parseLineHeight(lineHeight: string): number {
+  private parseLineHeight(lineHeight: string, fontSize: number): number {
     const cleanedHeight = lineHeight.trim().toLowerCase();
 
     // Handle 'normal' keyword
     if (cleanedHeight === 'normal') {
-      return 1.2; // Default normal line height
+      return this.DEFAULT_TEXT_STYLE.lineHeight; // Align with default CSS normal behavior approximation
     }
 
     // Handle numeric values (unitless multiplier)
@@ -383,8 +386,7 @@ export class TextStyleParserService {
     if (cleanedHeight.endsWith('px')) {
       const pixelValue = parseFloat(cleanedHeight.replace('px', ''));
       if (!isNaN(pixelValue)) {
-        // This is approximate - in real usage, we'd need the actual font size
-        return Math.max(0.1, pixelValue / this.DEFAULT_TEXT_STYLE.fontSize);
+        return Math.max(0.1, pixelValue / fontSize);
       }
     }
 
@@ -396,8 +398,8 @@ export class TextStyleParserService {
       }
     }
 
-    console.warn(`Invalid line-height value: "${lineHeight}". Using default 1.2.`);
-    return 1.2;
+    console.warn(`Invalid line-height value: "${lineHeight}". Using default ${this.DEFAULT_TEXT_STYLE.lineHeight}.`);
+    return this.DEFAULT_TEXT_STYLE.lineHeight;
   }
 
   /**

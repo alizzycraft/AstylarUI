@@ -7,6 +7,7 @@ import { BabylonRender } from '../interfaces/render.types';
 import { TextRenderingService } from '../../text/text-rendering.service';
 import { ElementBorderService } from '../elements/element-border.service';
 import { BabylonMeshService } from '../../babylon-mesh.service';
+import { CONTROL_CONTENT_Z_OFFSET } from '../render-depth.constants';
 
 /**
  * Service responsible for managing button elements
@@ -16,7 +17,6 @@ import { BabylonMeshService } from '../../babylon-mesh.service';
 })
 export class ButtonManager {
     private readonly PRESS_OFFSET = 0.05; // Visual press down effect
-    private readonly STATE_TRANSITION_MS = 100;
 
     constructor(
         private textRenderingService: TextRenderingService,
@@ -84,15 +84,7 @@ export class ButtonManager {
      */
     handleButtonClick(button: Button): void {
         if (button.disabled) return;
-
-        // Visual feedback - press state
-        this.updateButtonState(button, ButtonState.Pressed);
-
-        // Execute action after brief delay for visual feedback
-        setTimeout(() => {
-            this.updateButtonState(button, button.focused ? ButtonState.Focused : ButtonState.Normal);
-            this.executeButtonAction(button);
-        }, this.STATE_TRANSITION_MS);
+        this.executeButtonAction(button);
     }
 
     /**
@@ -199,23 +191,14 @@ export class ButtonManager {
         if (button.buttonType === 'submit') {
             // This would trigger form submission
             // Will be handled by FormManager
-            console.log('Submit button clicked:', button.element.id);
+
         }
 
         // Handle reset for reset buttons
         if (button.buttonType === 'reset') {
-            console.log('Reset button clicked:', button.element.id);
+
         }
 
-        // Execute onclick handler if defined
-        if (button.element.onclick) {
-            try {
-                // Evaluate onclick handler (simplified - in production would use safer evaluation)
-                console.log('Executing onclick:', button.element.onclick);
-            } catch (error) {
-                console.error('Error executing button onclick:', error);
-            }
-        }
     }
 
     /**
@@ -266,8 +249,9 @@ export class ButtonManager {
 
             // Get texture dimensions
             const textureSize = texture.getSize();
-            const textureWidthPx = textureSize.width;
-            const textureHeightPx = textureSize.height;
+            const devicePixelRatio = window.devicePixelRatio || 1;
+            const textureWidthPx = textureSize.width / devicePixelRatio;
+            const textureHeightPx = textureSize.height / devicePixelRatio;
 
             // Convert to world units using camera's pixel-to-world scale
             const scale = render.actions.camera.getPixelToWorldScale();
@@ -286,8 +270,19 @@ export class ButtonManager {
             labelPlane.rotation.z = Math.PI;
 
             labelPlane.parent = button.mesh;
-            labelPlane.position.z = -0.15; // Slightly in front
+            labelPlane.position.y = -2 * scale;
+            labelPlane.position.z = CONTROL_CONTENT_Z_OFFSET;
             labelPlane.isPickable = false;
+            const textAlign = style.textAlign?.toLowerCase();
+            const buttonWidth = button.mesh.getBoundingInfo().boundingBox.extendSize.x * 2;
+            if (textAlign === 'left' || textAlign === 'start') {
+                labelPlane.position.x = buttonWidth / 2 - this.parsePaddingSide(style, 'left') * scale - textureWidth / 2;
+            } else if (textAlign === 'right' || textAlign === 'end') {
+                labelPlane.position.x = -buttonWidth / 2 + this.parsePaddingSide(style, 'right') * scale + textureWidth / 2;
+            }
+            if (labelPlane.material) {
+                labelPlane.material.alpha = render.actions.style.parseOpacity(style.opacity);
+            }
 
             return labelPlane;
         } catch (error) {
@@ -298,7 +293,7 @@ export class ButtonManager {
             }, render.scene);
 
             labelPlane.parent = button.mesh;
-            labelPlane.position.z = -0.06;
+            labelPlane.position.z = CONTROL_CONTENT_Z_OFFSET;
 
             const material = new BABYLON.StandardMaterial(`labelMaterial_${button.element.id}`, render.scene);
             material.diffuseColor = BABYLON.Color3.Black();
@@ -325,6 +320,16 @@ export class ButtonManager {
         if (!value) return undefined;
         const num = parseFloat(value);
         return isNaN(num) ? undefined : num;
+    }
+
+    private parsePaddingSide(style: StyleRule, side: 'left' | 'right'): number {
+        const explicit = side === 'left' ? style.paddingLeft : style.paddingRight;
+        if (explicit !== undefined) return Number.parseFloat(explicit) || 0;
+        const parts = style.padding?.trim().split(/\s+/).map(value => Number.parseFloat(value) || 0) ?? [];
+        if (parts.length === 1) return parts[0];
+        if (parts.length === 2 || parts.length === 3) return parts[1];
+        if (parts.length >= 4) return side === 'right' ? parts[1] : parts[3];
+        return 0;
     }
 
     /**

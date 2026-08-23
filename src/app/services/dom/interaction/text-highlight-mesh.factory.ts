@@ -4,6 +4,7 @@ import { Color3, Mesh, MeshBuilder, Scene, StandardMaterial } from '@babylonjs/c
 import { TextSelectionControllerService, TextSelectionState } from './text-selection-controller.service';
 import { TextInteractionEntry, TextInteractionRegistryService } from './text-interaction-registry.service';
 import { TextSelectionStore } from '../../../store/text-selection.store';
+import { StyleService } from '../style.service';
 
 interface HighlightSegment {
   centerX: number;
@@ -15,11 +16,42 @@ interface HighlightSegment {
 interface HighlightMeshes {
   meshes: Mesh[];
   material: StandardMaterial;
+  contrast: { background: number; text: number };
 }
 
 const MIN_SEGMENT_WIDTH = 0.002;
 const MIN_SEGMENT_HEIGHT = 0.002;
-const HIGHLIGHT_Z_OFFSET = 0.0005;
+// The highlight is opaque for reliable contrast, so it must sit immediately
+// behind the glyph plane rather than tinting or covering the rendered text.
+const HIGHLIGHT_Z_OFFSET = -0.0005;
+
+const SELECTION_COLORS = [
+  Color3.FromHexString('#0078d4'),
+  Color3.FromHexString('#9ad5ff'),
+  Color3.FromHexString('#173f6b'),
+  Color3.FromHexString('#ffd43b'),
+];
+
+export function relativeLuminance(color: Color3): number {
+  const linear = (channel: number): number => channel <= 0.04045
+    ? channel / 12.92
+    : Math.pow((channel + 0.055) / 1.055, 2.4);
+  return 0.2126 * linear(color.r) + 0.7152 * linear(color.g) + 0.0722 * linear(color.b);
+}
+
+export function contrastRatio(left: Color3, right: Color3): number {
+  const [lighter, darker] = [relativeLuminance(left), relativeLuminance(right)]
+    .sort((a, b) => b - a);
+  return (lighter + 0.05) / (darker + 0.05);
+}
+
+export function chooseSelectionHighlightColor(background: Color3, text: Color3): Color3 {
+  return SELECTION_COLORS.reduce((best, candidate) => {
+    const score = Math.min(contrastRatio(candidate, background), contrastRatio(candidate, text));
+    const bestScore = Math.min(contrastRatio(best, background), contrastRatio(best, text));
+    return score > bestScore ? candidate : best;
+  }).clone();
+}
 
 @Injectable({ providedIn: 'root' })
 export class TextHighlightMeshFactory {
@@ -27,6 +59,7 @@ export class TextHighlightMeshFactory {
   private readonly destroyRef = inject(DestroyRef);
   private readonly textSelectionController = inject(TextSelectionControllerService);
   private readonly textInteractionRegistry = inject(TextInteractionRegistryService);
+  private readonly styleService = inject(StyleService);
 
   private readonly highlightRecords = new Map<string, HighlightMeshes>();
   private currentElementId?: string;
@@ -36,7 +69,7 @@ export class TextHighlightMeshFactory {
     this.textSelectionController.selection$
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((state) => {
-        console.log('[TextHighlight] Subscription received state update:', state);
+
         const entry = state.elementId
           ? this.textInteractionRegistry.getByElementId(state.elementId)
           : undefined;
@@ -57,14 +90,7 @@ export class TextHighlightMeshFactory {
   }
 
   private applySelection(state: TextSelectionState, entry?: TextInteractionEntry): void {
-    console.log('[TextHighlight] applySelection called:', {
-      hasRange: !!state.range,
-      rangeStart: state.range?.start,
-      rangeEnd: state.range?.end,
-      isPointerDown: state.isPointerDown,
-      hasEntry: !!entry,
-      hasMetrics: !!entry?.metrics
-    });
+
 
     if (!state.range || state.range.start === state.range.end || !entry || !entry.metrics) {
       this.clearCurrentHighlights();
@@ -72,7 +98,7 @@ export class TextHighlightMeshFactory {
     }
 
     // Debug logging for range values
-    console.log(`[TextHighlight] Applying selection range: start=${state.range.start}, end=${state.range.end}`);
+
 
     if (this.currentElementId && this.currentElementId !== entry.elementId) {
       this.disposeHighlights(this.currentElementId);
@@ -103,7 +129,7 @@ export class TextHighlightMeshFactory {
     }
 
     // Debug logging for selection range
-    console.log(`[TextHighlight] computeSegments called with start=${start}, end=${end}`);
+
 
     const lineCharMap = new Map<number, typeof characters>();
     for (const character of characters) {
@@ -128,8 +154,8 @@ export class TextHighlightMeshFactory {
     const halfHeight = textHeight / 2;
 
     // Debug logging for text mesh position
-    console.log(`[TextHighlight] Text mesh position: x=${textMesh.position.x}, y=${textMesh.position.y}`);
-    console.log(`[TextHighlight] Text mesh absolute position: x=${textMesh.absolutePosition.x}, y=${textMesh.absolutePosition.y}`);
+
+
 
     const minTop = cssMetrics.lines.reduce((acc: number, line: any) => Math.min(acc, line.top), Number.POSITIVE_INFINITY);
 
@@ -155,8 +181,10 @@ export class TextHighlightMeshFactory {
     // Using metrics.scale is usually safer if known.
     const scale = metrics.scale ?? (actualContentWidth > 0 ? textWidth / actualContentWidth : 1);
     const scrollOffset = entry.scrollOffset || 0;
+    const scrollTop = entry.scrollTop || 0;
+    const verticalOrigin = entry.verticalOrigin || 0;
 
-    console.log(`[TextHighlight] Scale calculation: textWidth=${textWidth}, actualContentWidth=${actualContentWidth}, scale=${scale}, scrollOffset=${scrollOffset}`);
+
 
     for (const line of cssMetrics.lines) {
       const lineChars = lineCharMap.get(line.index) ?? [];
@@ -167,12 +195,12 @@ export class TextHighlightMeshFactory {
         continue;
       }
 
-      console.log(`[TextHighlight] Processing line ${line.index}: overlapStart=${overlapStart}, overlapEnd=${overlapEnd}, line.startIndex=${line.startIndex}, line.endIndex=${line.endIndex}`);
+
 
       const lineStartCaret = this.resolveCaretPosition(overlapStart, line, lineChars);
       const lineEndCaret = this.resolveCaretPosition(overlapEnd, line, lineChars, true);
 
-      console.log(`[TextHighlight] Line ${line.index} caret positions: lineStartCaret=${lineStartCaret}, lineEndCaret=${lineEndCaret}`);
+
 
       // Character x positions in CSS metrics are relative to line start (x=0)
       // We need to add lineOffset if text is aligned (center/right)
@@ -218,16 +246,22 @@ export class TextHighlightMeshFactory {
 
       const topOffsetCss = line.top - minTop;
       const heightCss = Math.max(line.bottom - line.top, line.height ?? 0);
-      const heightWorld = Math.max(heightCss * scale, MIN_SEGMENT_HEIGHT);
-      const topOffsetWorld = topOffsetCss * scale;
+      const unclippedTopWorld = (topOffsetCss + verticalOrigin - scrollTop) * scale;
+      const unclippedBottomWorld = unclippedTopWorld + (heightCss * scale);
+      const clippedTopWorld = Math.max(0, Math.min(unclippedTopWorld, textHeight));
+      const clippedBottomWorld = Math.max(0, Math.min(unclippedBottomWorld, textHeight));
+      const heightWorld = clippedBottomWorld - clippedTopWorld;
+      if (heightWorld <= MIN_SEGMENT_HEIGHT) {
+        continue;
+      }
       // Convert from top-left origin (text metrics) to center origin (text mesh)
       // With 180 degree rotation, local Y+ aligns with World Down (Visual Down).
       // Visual Top is at local -halfHeight, Visual Bottom is at local +halfHeight.
-      const centerY = (topOffsetWorld + (heightWorld / 2)) - halfHeight;
+      const centerY = ((clippedTopWorld + clippedBottomWorld) / 2) - halfHeight;
 
       // Debug logging for calculated positions
-      console.log(`[TextHighlight] Line ${line.index}: startXWorld=${startXWorld}, endXWorld=${endXWorld}, centerX=${centerX}, centerY=${centerY}`);
-      console.log(`[TextHighlight] Line ${line.index}: widthWorld=${widthWorld}, heightWorld=${heightWorld}`);
+
+
 
       segments.push({
         centerX,
@@ -262,39 +296,39 @@ export class TextHighlightMeshFactory {
     clampToEnd = false
   ): number {
     // Debug logging for caret position resolution
-    console.log(`[TextHighlight] Resolving caret position: targetIndex=${targetIndex}, line.startIndex=${line.startIndex}, line.endIndex=${line.endIndex}, clampToEnd=${clampToEnd}`);
+
 
     if (!lineCharacters.length) {
-      console.log(`[TextHighlight] No line characters, returning 0`);
+
       return 0;
     }
 
     if (targetIndex <= line.startIndex) {
-      console.log(`[TextHighlight] Target index <= line start index, returning 0`);
+
       return 0;
     }
 
     if (targetIndex >= line.endIndex) {
       const last = lineCharacters[lineCharacters.length - 1];
       const result = clampToEnd ? last.x + last.advance : last.x + last.advance;
-      console.log(`[TextHighlight] Target index >= line end index, returning ${result} (last.x=${last.x}, last.advance=${last.advance})`);
+
       return result;
     }
 
     const exact = lineCharacters.find((char) => char.index === targetIndex);
     if (exact) {
-      console.log(`[TextHighlight] Found exact character match, returning ${exact.x}`);
+
       return exact.x;
     }
 
     const preceding = this.findPrecedingCharacter(targetIndex, lineCharacters);
     if (preceding) {
       const result = preceding.x + preceding.advance;
-      console.log(`[TextHighlight] Found preceding character, returning ${result} (preceding.x=${preceding.x}, preceding.advance=${preceding.advance})`);
+
       return result;
     }
 
-    console.log(`[TextHighlight] No match found, returning 0`);
+
     return 0;
   }
 
@@ -344,7 +378,7 @@ export class TextHighlightMeshFactory {
       mesh.isVisible = true; // Ensure mesh visibility
 
       // Debug logging for mesh positioning
-      console.log(`[TextHighlight] Mesh ${index}: position=(${mesh.position.x}, ${mesh.position.y}), scale=(${mesh.scaling.x}, ${mesh.scaling.y})`);
+
     });
 
     this.highlightRecords.set(entry.elementId, existing);
@@ -352,8 +386,8 @@ export class TextHighlightMeshFactory {
 
   private createHighlightRecord(entry: TextInteractionEntry): HighlightMeshes {
     const scene = entry.mesh.getScene();
-    const material = this.createHighlightMaterial(scene);
-    const record: HighlightMeshes = { meshes: [], material };
+    const { material, contrast } = this.createHighlightMaterial(scene, entry);
+    const record: HighlightMeshes = { meshes: [], material, contrast };
     this.highlightRecords.set(entry.elementId, record);
     return record;
   }
@@ -371,23 +405,58 @@ export class TextHighlightMeshFactory {
     mesh.metadata = {
       ...(mesh.metadata || {}),
       highlight: {
-        ownerElementId: entry.elementId
+        ownerElementId: entry.elementId,
+        color: material.emissiveColor.toHexString().toLowerCase(),
+        backgroundContrast: this.highlightRecords.get(entry.elementId)?.contrast.background,
+        textContrast: this.highlightRecords.get(entry.elementId)?.contrast.text,
       }
     };
     mesh.renderingGroupId = entry.mesh.renderingGroupId;
     return mesh;
   }
 
-  private createHighlightMaterial(scene: Scene): StandardMaterial {
+  private createHighlightMaterial(
+    scene: Scene,
+    entry: TextInteractionEntry,
+  ): { material: StandardMaterial; contrast: { background: number; text: number } } {
+    const background = this.resolveColor(entry.style?.background) ??
+      this.resolveAncestorBackground(entry.mesh) ?? Color3.White();
+    const text = this.resolveColor(entry.style?.color) ?? Color3.Black();
+    const highlight = chooseSelectionHighlightColor(background, text);
     const material = new StandardMaterial('text-selection-highlight', scene);
-    material.diffuseColor = new Color3(0.2, 0.45, 1.0);
-    material.alpha = 0.35;
+    material.diffuseColor = highlight;
+    material.alpha = 1;
     material.specularColor = Color3.Black();
-    material.emissiveColor = new Color3(0.05, 0.15, 0.35);
+    material.emissiveColor = highlight;
     material.backFaceCulling = false;
     material.disableLighting = true;
     material.disableDepthWrite = true;
-    return material;
+    return {
+      material,
+      contrast: {
+        background: contrastRatio(highlight, background),
+        text: contrastRatio(highlight, text),
+      },
+    };
+  }
+
+  private resolveColor(value: string | undefined): Color3 | undefined {
+    const parsed = value ? this.styleService.parseBackgroundColor(value) : undefined;
+    return parsed?.type === 'color' ? parsed.color : undefined;
+  }
+
+  private resolveAncestorBackground(mesh: Mesh): Color3 | undefined {
+    let candidate = mesh.parent;
+    while (candidate instanceof Mesh) {
+      const material = candidate.material;
+      if (material instanceof StandardMaterial &&
+          material.alpha * candidate.visibility > 0.01 &&
+          !material.diffuseTexture) {
+        return material.emissiveColor.clone();
+      }
+      candidate = candidate.parent;
+    }
+    return undefined;
   }
 
   private clearCurrentHighlights(): void {

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SiteData, SiteComponent } from '../../lib';
+import { SiteData } from '../../lib';
+import { SiteComponent } from './site.component';
 
 @Component({
   selector: 'app-simple-demo',

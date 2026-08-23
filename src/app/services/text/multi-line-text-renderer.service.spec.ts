@@ -46,6 +46,41 @@ describe('MultiLineTextRendererService', () => {
     expect(lines[0].width).toBeGreaterThan(0);
   });
 
+  it('uses visible hyphens as normal line-breaking opportunities', () => {
+    const style: TextStyleProperties = {
+      fontFamily: 'Arial', fontSize: 12, fontWeight: 'normal', fontStyle: 'normal',
+      color: '#000000', textAlign: 'left', verticalAlign: 'baseline', lineHeight: 1.5,
+      letterSpacing: 0, wordSpacing: 0, whiteSpace: 'normal', wordWrap: 'normal',
+      textOverflow: 'clip', textDecoration: 'none', textTransform: 'none'
+    };
+
+    const lines = service.wrapText('text-to-speech.txt', 70, style);
+
+    expect(lines.length).toBe(2);
+    expect(lines.map((line) => line.text).join('')).toBe('text-to-speech.txt');
+    expect(lines.every((line) => line.width <= 70)).toBeTrue();
+  });
+
+  it('preserves typographic Unicode spaces under normal white-space', () => {
+    expect(service.handleWhiteSpace('  Icon　label\nnext  ', 'normal'))
+      .toBe('Icon　label next');
+    expect(service.handleWhiteSpace('  Icon　label\nnext  ', 'nowrap'))
+      .toBe('Icon　label next');
+  });
+
+  it('uses an ideographic space as a visible line-breaking opportunity', () => {
+    const style: TextStyleProperties = {
+      fontFamily: 'Arial', fontSize: 14, fontWeight: '700', fontStyle: 'normal',
+      color: '#000000', textAlign: 'left', verticalAlign: 'baseline', lineHeight: 1.5,
+      letterSpacing: 0, wordSpacing: 0, whiteSpace: 'normal', wordWrap: 'normal',
+      textOverflow: 'clip', textDecoration: 'none', textTransform: 'none'
+    };
+
+    const lines = service.wrapText('◉　Save to History', 0.01, style);
+
+    expect(lines.map((line) => line.text)).toEqual(['◉　', 'Save', 'to', 'History']);
+  });
+
   it('should handle nowrap white-space correctly', () => {
     const style: TextStyleProperties = {
       fontFamily: 'Arial',
@@ -72,6 +107,30 @@ describe('MultiLineTextRendererService', () => {
     
     expect(lines.length).toBe(1);
     expect(lines[0].text).toBe(text);
+  });
+
+  it('preserves blank and trailing lines for pre-wrap text', () => {
+    const style: TextStyleProperties = {
+      fontFamily: 'Arial',
+      fontSize: 16,
+      fontWeight: 'normal',
+      fontStyle: 'normal',
+      color: '#000000',
+      textAlign: 'left',
+      verticalAlign: 'baseline',
+      lineHeight: 1.5,
+      letterSpacing: 0,
+      wordSpacing: 0,
+      whiteSpace: 'pre-wrap',
+      wordWrap: 'normal',
+      textOverflow: 'clip',
+      textDecoration: 'none',
+      textTransform: 'none'
+    };
+
+    const lines = service.wrapText('Alpha\n\n', 300, style);
+
+    expect(lines.map((line) => line.text)).toEqual(['Alpha', '', '']);
   });
 
   it('should calculate line positions correctly', () => {
@@ -105,6 +164,33 @@ describe('MultiLineTextRendererService', () => {
     expect(positionedLines[0].y).toBe(16); // fontSize
     expect(positionedLines[1].y).toBe(40); // fontSize + (fontSize * lineHeight)
     expect(positionedLines[2].y).toBe(64); // fontSize + 2 * (fontSize * lineHeight)
+  });
+
+  it('should truncate overflowing nowrap text with a single ellipsis glyph', () => {
+    const style: TextStyleProperties = {
+      fontFamily: 'Arial',
+      fontSize: 18,
+      fontWeight: 'normal',
+      fontStyle: 'normal',
+      color: '#000000',
+      textAlign: 'left',
+      verticalAlign: 'baseline',
+      lineHeight: 1.4,
+      letterSpacing: 0,
+      wordSpacing: 0,
+      whiteSpace: 'nowrap',
+      wordWrap: 'normal',
+      textOverflow: 'ellipsis',
+      textDecoration: 'none',
+      textTransform: 'none'
+    };
+
+    const lines = service.wrapText('A deliberately long navigation label', 150, style);
+    const visible = service.handleTextOverflow(lines, 150, 28, style);
+
+    expect(visible.length).toBe(1);
+    expect(visible[0].text.endsWith('\u2026')).toBeTrue();
+    expect(visible[0].width).toBeLessThanOrEqual(150);
   });
 
   it('should handle white-space processing correctly', () => {

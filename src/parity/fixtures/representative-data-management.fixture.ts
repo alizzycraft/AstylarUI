@@ -1,0 +1,370 @@
+import { ParityFixture } from '../parity.types';
+import type { SiteData } from '../../app/types/site-data';
+
+export const representativeDataManagementFixture: ParityFixture = {
+  id: 'representative-data-management',
+  title: 'Representative data management application',
+  category: 'composed-application',
+  expectedBehavior:
+    'A responsive inventory application exposes labelled table and pagination semantics, positions and activates a nested row action inside a padded table cell, preserves meaningful focus through repeated page updates, and retains browser-equivalent search, filter, scroll, control, and event state.',
+  viewportIds: ['desktop', 'tablet', 'mobile'],
+  measurementIds: [
+    'dm-shell', 'dm-nav', 'dm-brand', 'dm-nav-inventory', 'dm-content', 'dm-header',
+    'dm-title', 'dm-count', 'dm-main', 'dm-toolbar', 'dm-search', 'dm-filter', 'dm-export',
+    'dm-table-card', 'dm-table', 'dm-head-row', 'dm-head-item', 'dm-head-status', 'dm-head-owner',
+    'dm-row-one', 'dm-one-item', 'dm-one-status', 'dm-one-owner', 'dm-row-two', 'dm-two-item',
+    'dm-row-three', 'dm-three-owner', 'dm-three-action', 'dm-row-eight', 'dm-eight-item',
+    'dm-pagination',
+    'dm-page-prev', 'dm-page-active', 'dm-page-next', 'dm-empty', 'dm-detail', 'dm-detail-image',
+    'dm-detail-title', 'dm-detail-copy', 'dm-detail-action',
+  ],
+  interactionIds: ['dm-search', 'dm-filter', 'dm-page-next', 'dm-three-action', 'dm-detail-action'],
+  scrollIds: ['dm-table-card'],
+  semanticIds: [
+    'dm-table', 'dm-head-row', 'dm-head-item', 'dm-head-status', 'dm-head-owner',
+    'dm-row-one', 'dm-one-item', 'dm-one-status', 'dm-one-owner', 'dm-three-action',
+    'dm-pagination', 'dm-page-prev', 'dm-page-active', 'dm-page-next',
+    'dm-detail-action',
+  ],
+  interactionEventTypes: [
+    'pointerdown', 'pointerup', 'click', 'focus', 'blur',
+    'keydown', 'keyup', 'input', 'change',
+  ],
+  interactionSteps: [
+    { id: 'focus-search', actions: [{ type: 'click', elementId: 'dm-search' }] },
+    { id: 'select-search', actions: [{ type: 'press-key', key: 'Control+A' }] },
+    { id: 'enter-search', actions: [{ type: 'type-text', text: 'camera' }] },
+    { id: 'choose-reserved-and-scroll-to-pagination', actions: [
+      { type: 'click', elementId: 'dm-filter' },
+      { type: 'press-key', key: 'ArrowDown' },
+      { type: 'press-key', key: 'Enter' },
+      { type: 'wheel', elementId: 'dm-table-card', deltaY: 500 },
+    ] },
+    { id: 'request-next-page', actions: [{ type: 'click', elementId: 'dm-page-next' }] },
+    { id: 'show-next-page', actions: [{ type: 'apply-update', stepIndex: 0 }] },
+    { id: 'repeat-next-page-keyboard', actions: [{ type: 'press-key', key: 'Enter' }] },
+    { id: 'open-row-action', actions: [
+      { type: 'semantic-focus', elementId: 'dm-three-action' },
+      { type: 'semantic-activate', elementId: 'dm-three-action' },
+    ] },
+    { id: 'confirm-row-action-update', actions: [{ type: 'apply-update', stepIndex: 1 }] },
+    { id: 'focus-updated-row-action', actions: [{ type: 'semantic-focus', elementId: 'dm-detail-action' }] },
+    { id: 'activate-updated-row-action', actions: [{ type: 'semantic-activate', elementId: 'dm-detail-action' }] },
+    { id: 'open-record-pointer', actions: [{ type: 'click', elementId: 'dm-detail-action' }] },
+    { id: 'open-record-keyboard', actions: [{ type: 'press-key', key: 'Space' }] },
+  ],
+  reference: {
+    html: `
+      <div id="dm-shell">
+        <aside id="dm-nav">
+          <div id="dm-brand">Stockroom</div>
+          <nav id="dm-nav-list">
+            <input id="dm-nav-overview" type="button" value="Overview">
+            <input id="dm-nav-inventory" class="active" type="button" value="Inventory">
+            <input id="dm-nav-orders" type="button" value="Orders">
+          </nav>
+        </aside>
+        <section id="dm-content">
+          <header id="dm-header"><h1 id="dm-title">Inventory</h1><span id="dm-count">128 records</span></header>
+          <main id="dm-main">
+            <div id="dm-toolbar">
+              <input id="dm-search" type="text" value="Search inventory">
+              <select id="dm-filter"><option value="all" selected>All status</option><option value="reserved">Reserved</option><option value="unavailable">Unavailable</option></select>
+              <input id="dm-export" type="button" value="Export" disabled>
+            </div>
+            <section id="dm-table-card">
+              <table id="dm-table" aria-label="Inventory records">
+                <colgroup><col style="width:180px"><col style="width:100px"><col style="width:96px"></colgroup>
+                <thead><tr id="dm-head-row"><th id="dm-head-item">Item</th><th id="dm-head-status">Status</th><th id="dm-head-owner">Owner / action</th></tr></thead>
+                <tbody>
+                  <tr id="dm-row-one"><td id="dm-one-item">Studio camera kit</td><td id="dm-one-status">Available</td><td id="dm-one-owner">Mina</td></tr>
+                  <tr id="dm-row-two"><td id="dm-two-item">Portable lighting rig</td><td id="dm-two-status">Reserved</td><td id="dm-two-owner">Ravi</td></tr>
+                  <tr id="dm-row-three"><td id="dm-three-item">Audio recorder</td><td id="dm-three-status">Available</td><td id="dm-three-owner"><input id="dm-three-action" type="button" value="Open" aria-label="View Audio recorder row"></td></tr>
+                  <tr id="dm-row-four"><td id="dm-four-item">Wireless monitor</td><td id="dm-four-status">Reserved</td><td id="dm-four-owner">Omar</td></tr>
+                  <tr id="dm-row-five"><td id="dm-five-item">Tripod adapter</td><td id="dm-five-status">Repair</td><td id="dm-five-owner">Nia</td></tr>
+                  <tr id="dm-row-six"><td id="dm-six-item">Field microphone</td><td id="dm-six-status">Available</td><td id="dm-six-owner">Tariq</td></tr>
+                  <tr id="dm-row-seven"><td id="dm-seven-item">Battery pack</td><td id="dm-seven-status">Checkout</td><td id="dm-seven-owner">Mina</td></tr>
+                  <tr id="dm-row-eight"><td id="dm-eight-item">Lens case</td><td id="dm-eight-status">Available</td><td id="dm-eight-owner">Ravi</td></tr>
+                </tbody>
+              </table>
+              <nav id="dm-pagination" aria-label="Inventory pages"><input id="dm-page-prev" type="button" value="Previous" aria-label="Previous page" disabled><input id="dm-page-active" class="active" type="button" value="1" aria-label="Page 1, current page" aria-current="page"><input id="dm-page-next" type="button" value="Next" aria-label="Next page"></nav>
+              <div id="dm-empty">No archived records.</div>
+            </section>
+            <aside id="dm-detail">
+              <img id="dm-detail-image" src="/parity/article-pattern.svg" alt="Inventory preview">
+              <div id="dm-detail-body">
+                <h2 id="dm-detail-title">Studio camera kit</h2>
+                <p id="dm-detail-copy">Ready for checkout from the central equipment room.</p>
+                <div id="dm-detail-meta"><strong>Asset ID</strong><span>CAM-2048</span></div>
+                <input id="dm-detail-action" type="button" value="View record" aria-label="View Studio camera kit record">
+              </div>
+            </aside>
+          </main>
+        </section>
+      </div>
+    `,
+    css: `
+      #parity-reference-viewport { position:relative; overflow:hidden; background:#dce3ea; font-family:Arial,sans-serif; }
+      #dm-shell, #dm-shell * { box-sizing:border-box; }
+      #dm-shell { display:flex; position:absolute; left:20px; top:20px; width:760px; height:560px; background:#ffffff; overflow:hidden; }
+      #dm-nav { display:flex; flex:0 0 120px; flex-direction:column; gap:28px; width:120px; padding:20px 10px; background:#0f172a; }
+      #dm-brand { width:100px; height:32px; padding:4px 0; color:#ffffff; font:700 15px/24px Arial,sans-serif; text-align:center; }
+      #dm-nav-list { display:flex; flex-direction:column; gap:6px; width:100px; height:132px; }
+      #dm-nav-list input { appearance:none; width:100px; height:40px; margin:0; padding:8px; border:0; border-radius:0; background:#0f172a; color:#cbd5e1; font:700 12px/24px Arial,sans-serif; text-align:left; }
+      #dm-nav-list input.active { background:#0f766e; color:#ffffff; }
+      #dm-content { display:flex; flex:1 1 auto; flex-direction:column; width:640px; background:#f8fafc; }
+      #dm-header { display:flex; flex:0 0 64px; align-items:center; justify-content:space-between; width:640px; padding:12px 16px; background:#ffffff; }
+      #dm-title { width:180px; height:40px; margin:0; padding:4px 0; color:#0f172a; font:700 24px/32px Arial,sans-serif; }
+      #dm-count { width:96px; height:28px; padding:4px 8px; background:#ccfbf1; color:#115e59; font:700 12px/20px Arial,sans-serif; text-align:center; }
+      #dm-main { flex:1 1 auto; position:relative; width:640px; padding:12px; background:#eef2f7; overflow:hidden; }
+      #dm-toolbar { display:flex; align-items:center; gap:8px; width:616px; height:52px; padding:6px; background:#ffffff; }
+      #dm-toolbar input, #dm-toolbar select { appearance:none; height:40px; margin:0; border:1px solid #cbd5e1; border-radius:0; font:400 13px/22px Arial,sans-serif; }
+      #dm-search { flex:1 1 auto; width:396px; padding:8px 10px; outline:0; background:#f8fafc; color:#475569; text-align:left; }
+      #dm-search:focus { background:#cffafe; }
+      #dm-toolbar #dm-filter { flex:0 0 104px; width:104px; padding:8px; background:#ffffff; color:#334155; font-weight:700; text-align:center; }
+      #dm-toolbar #dm-export { flex:0 0 92px; width:92px; padding:8px; background:#e2e8f0; color:#94a3b8; font-weight:700; text-align:center; opacity:.65; }
+      #dm-table-card { position:absolute; left:12px; top:76px; width:400px; height:408px; padding:12px; background:#ffffff; overflow:auto; }
+      #dm-table-card { scrollbar-width:none; }
+      #dm-table-card::-webkit-scrollbar { display:none; }
+      #dm-table { box-sizing:border-box !important; width:376px; height:468px; margin:0; padding:0; border:0; border-spacing:0; table-layout:fixed; background:#ffffff; font:400 10px/20px Arial,sans-serif; }
+      #dm-table thead, #dm-table tbody, #dm-table tr { margin:0; padding:0; border:0; }
+      #dm-table th, #dm-table td { box-sizing:border-box !important; height:52px; margin:0; padding:14px 8px; border:0; overflow:hidden; color:#334155; font:400 10px/24px Arial,sans-serif; text-align:left; white-space:nowrap; text-overflow:ellipsis; vertical-align:middle; }
+      #dm-table th { background:#164e63; color:#ffffff; font-weight:700; }
+      #dm-table tbody tr:nth-child(odd) td { background:#f8fafc; }
+      #dm-table tbody tr:nth-child(even) td { background:#ffffff; }
+      #dm-table #dm-one-status { background:#dcfce7; color:#166534; font-weight:700; }
+      #dm-table #dm-two-status { background:#fef3c7; color:#92400e; font-weight:700; }
+      #dm-three-action { appearance:none; width:64px; height:24px; margin:0; padding:2px 6px; border:0; border-radius:0; outline:0; background:#0f766e; color:#ffffff; font:700 10px/20px Arial,sans-serif; text-align:center; }
+      #dm-three-action:focus { background:#155e75; }
+      #dm-pagination { display:flex; gap:6px; width:376px; height:52px; padding:6px 0; background:#ffffff; }
+      #dm-pagination input { appearance:none; height:40px; margin:0; padding:8px; border:0; border-radius:0; background:#e2e8f0; color:#475569; font:700 12px/24px Arial,sans-serif; text-align:center; }
+      #dm-page-prev { width:88px; opacity:.55; } #dm-page-active { width:40px; } #dm-page-next { width:72px; outline:0; }
+      #dm-page-next:focus { background:#bae6fd; }
+      #dm-pagination input.active { background:#0f766e; color:#ffffff; }
+      #dm-empty { width:376px; height:40px; padding:10px; background:#f8fafc; color:#64748b; font:400 12px/20px Arial,sans-serif; }
+      #dm-detail { display:flex; flex-direction:column; gap:12px; position:absolute; left:424px; top:76px; width:204px; height:auto; padding:16px; z-index:2; background:#ecfeff; overflow:hidden; }
+      #dm-detail-image { width:172px; height:96px; object-fit:cover; background:#bae6fd; }
+      #dm-detail-body { display:flex; flex-direction:column; gap:8px; width:172px; height:auto; }
+      #dm-detail-title { width:172px; height:52px; margin:0; color:#164e63; font:700 18px/26px Arial,sans-serif; }
+      #dm-detail-copy { width:172px; height:72px; margin:0; color:#475569; font:400 13px/24px Arial,sans-serif; }
+      #dm-detail-meta { display:flex; justify-content:space-between; width:172px; height:40px; margin:0; padding:8px 0; color:#334155; font:400 12px/24px Arial,sans-serif; }
+      #dm-detail-meta strong { width:68px; height:24px; font-weight:700; } #dm-detail-meta span { width:84px; height:24px; text-align:right; }
+      #dm-detail-action { appearance:none; width:172px; height:40px; margin:0; padding:8px; border:0; border-radius:0; outline:0; background:#0f766e; color:#ffffff; font:700 13px/24px Arial,sans-serif; text-align:center; }
+      #dm-detail-action:focus { background:#155e75; }
+      @media (min-width:600px) and (max-width:749px) {
+        #dm-shell { left:20px; top:20px; width:600px; height:680px; }
+        #dm-nav { flex-basis:100px; width:100px; padding:20px 8px; }
+        #dm-brand, #dm-nav-list, #dm-nav-list input { width:84px; } #dm-brand { font-size:13px; }
+        #dm-content { width:500px; } #dm-header { width:500px; flex-basis:72px; }
+        #dm-main { width:500px; }
+        #dm-toolbar { width:476px; } #dm-search { width:256px; }
+        #dm-table-card { width:476px; height:330px; }
+        #dm-table { height:396px; } #dm-table th, #dm-table td { height:44px; padding:10px 8px; }
+        #dm-pagination { height:36px; padding:0; } #dm-pagination input { height:36px; padding:6px; line-height:24px; }
+        #dm-empty { height:34px; padding:7px 10px; }
+        #dm-detail { flex-direction:row; gap:12px; left:12px; top:418px; width:476px; height:auto; padding:12px; }
+        #dm-detail-image { width:144px; height:154px; }
+        #dm-detail-body { gap:4px; width:296px; }
+        #dm-detail-title { width:296px; height:28px; margin:0; font-size:16px; line-height:28px; }
+        #dm-detail-copy { width:296px; height:48px; margin:0; }
+        #dm-detail-meta { width:296px; height:32px; margin:0; padding:4px 0; }
+        #dm-detail-action { width:140px; height:34px; margin:0; padding:5px; }
+      }
+      @media (max-width:599px) {
+        #dm-shell { flex-direction:column; left:10px; top:10px; width:370px; height:800px; }
+        #dm-nav { flex:0 0 64px; flex-direction:row; align-items:center; gap:10px; width:370px; padding:12px 10px; }
+        #dm-brand { flex:0 0 92px; width:92px; height:40px; font-size:13px; }
+        #dm-nav-list { flex-direction:row; gap:4px; width:248px; height:40px; }
+        #dm-nav-list input { width:80px; height:40px; padding:8px 4px; font-size:11px; text-align:center; }
+        #dm-content { width:370px; } #dm-header { width:370px; flex-basis:72px; padding:12px 10px; }
+        #dm-title { width:160px; } #dm-count { width:100px; }
+        #dm-main { width:370px; padding:10px; }
+        #dm-toolbar { flex-wrap:wrap; gap:6px; width:350px; height:78px; padding:6px; }
+        #dm-toolbar #dm-search { flex:0 0 206px; width:206px; height:32px; padding:4px 8px; }
+        #dm-toolbar #dm-filter { flex-basis:126px; width:126px; height:32px; padding:4px; }
+        #dm-toolbar #dm-export { flex-basis:90px; width:90px; height:28px; padding:3px; }
+        #dm-table-card { left:10px; top:98px; width:350px; height:180px; padding:12px; }
+        #dm-table { width:376px; height:612px; } #dm-table th, #dm-table td { height:68px; padding:22px 8px; font-size:11px; }
+        #dm-pagination { height:36px; padding:0; } #dm-pagination input { height:36px; padding:6px; line-height:24px; }
+        #dm-empty { height:34px; padding:7px 10px; }
+        #dm-detail { flex-direction:row; gap:10px; left:10px; top:288px; width:350px; height:auto; padding:12px; }
+        #dm-detail-image { width:112px; height:96px; }
+        #dm-detail-body { gap:6px; width:204px; }
+        #dm-detail-title { width:204px; height:52px; margin:0; font-size:16px; }
+        #dm-detail-copy { width:204px; height:72px; margin:0; }
+        #dm-detail-meta { width:204px; height:36px; margin:0; padding:6px 0; }
+        #dm-detail-action { width:140px; height:34px; margin:0; padding:5px; }
+      }
+    `,
+  },
+  siteData: {
+    styles: [
+      { selector:'root', background:'#dce3ea', fontFamily:'Arial, sans-serif' }, { selector:'#dm-shell, #dm-shell *', boxSizing:'border-box' },
+      { selector:'#dm-shell', display:'flex', position:'absolute', left:'20px', top:'20px', width:'760px', height:'560px', background:'#ffffff', overflow:'hidden' },
+      { selector:'#dm-nav', display:'flex', flex:'0 0 120px', flexDirection:'column', gap:'28px', width:'120px', padding:'20px 10px', background:'#0f172a' },
+      { selector:'#dm-brand', width:'100px', height:'32px', padding:'4px 0', color:'#ffffff', fontFamily:'Arial, sans-serif', fontSize:'15px', fontWeight:'700', lineHeight:'24px', textAlign:'center' },
+      { selector:'#dm-nav-list', display:'flex', flexDirection:'column', gap:'6px', width:'100px', height:'132px' },
+      { selector:'#dm-nav-list input', width:'100px', height:'40px', margin:'0', padding:'8px', borderWidth:'0', borderRadius:'0', background:'#0f172a', color:'#cbd5e1', fontFamily:'Arial, sans-serif', fontSize:'12px', fontWeight:'700', lineHeight:'24px', textAlign:'left' },
+      { selector:'#dm-nav-list input.active', background:'#0f766e', color:'#ffffff' },
+      { selector:'#dm-content', display:'flex', flex:'1 1 auto', flexDirection:'column', width:'640px', background:'#f8fafc' },
+      { selector:'#dm-header', display:'flex', flex:'0 0 64px', alignItems:'center', justifyContent:'space-between', width:'640px', padding:'12px 16px', background:'#ffffff' },
+      { selector:'#dm-title', width:'180px', height:'40px', margin:'0', padding:'4px 0', color:'#0f172a', fontFamily:'Arial, sans-serif', fontSize:'24px', fontWeight:'700', lineHeight:'32px' },
+      { selector:'#dm-count', width:'96px', height:'28px', padding:'4px 8px', background:'#ccfbf1', color:'#115e59', fontFamily:'Arial, sans-serif', fontSize:'12px', fontWeight:'700', lineHeight:'20px', textAlign:'center' },
+      { selector:'#dm-main', flex:'1 1 auto', position:'relative', width:'640px', padding:'12px', background:'#eef2f7', overflow:'hidden' },
+      { selector:'#dm-toolbar', display:'flex', alignItems:'center', gap:'8px', width:'616px', height:'52px', padding:'6px', background:'#ffffff' },
+      { selector:'#dm-toolbar input, #dm-toolbar select', height:'40px', margin:'0', borderWidth:'1px', borderStyle:'solid', borderColor:'#cbd5e1', borderRadius:'0', fontFamily:'Arial, sans-serif', fontSize:'13px', lineHeight:'22px' },
+      { selector:'#dm-search', flex:'1 1 auto', width:'396px', padding:'8px 10px', background:'#f8fafc', color:'#475569', textAlign:'left' },
+      { selector:'#dm-search:focus', background:'#cffafe' },
+      { selector:'#dm-toolbar #dm-filter', flex:'0 0 104px', width:'104px', padding:'8px', background:'#ffffff', color:'#334155', fontWeight:'700', textAlign:'center' },
+      { selector:'#dm-toolbar #dm-export', flex:'0 0 92px', width:'92px', padding:'8px', background:'#e2e8f0', color:'#94a3b8', fontWeight:'700', textAlign:'center', opacity:'.65' },
+      { selector:'#dm-table-card', position:'absolute', left:'12px', top:'76px', width:'400px', height:'408px', padding:'12px', background:'#ffffff', overflow:'auto' },
+      { selector:'#dm-table', boxSizing:'border-box', width:'376px', height:'468px', margin:'0', padding:'0', borderWidth:'0', background:'#ffffff', fontFamily:'Arial, sans-serif', fontSize:'10px', lineHeight:'20px' },
+      { selector:'#dm-table thead, #dm-table tbody, #dm-table tr', margin:'0', padding:'0', borderWidth:'0' },
+      { selector:'#dm-table th, #dm-table td', boxSizing:'border-box', height:'52px', margin:'0', padding:'14px 8px', borderWidth:'0', overflow:'hidden', color:'#334155', fontFamily:'Arial, sans-serif', fontSize:'10px', lineHeight:'24px', textAlign:'left', whiteSpace:'nowrap', textOverflow:'ellipsis', verticalAlign:'middle' },
+      { selector:'#dm-table th', background:'#164e63', color:'#ffffff', fontWeight:'700' },
+      { selector:'#dm-table tbody tr:nth-child(odd) td', background:'#f8fafc' }, { selector:'#dm-table tbody tr:nth-child(even) td', background:'#ffffff' },
+      { selector:'#dm-table #dm-one-status', background:'#dcfce7', color:'#166534', fontWeight:'700' }, { selector:'#dm-table #dm-two-status', background:'#fef3c7', color:'#92400e', fontWeight:'700' },
+      { selector:'#dm-three-action', width:'64px', height:'24px', margin:'0', padding:'2px 6px', borderWidth:'0', borderRadius:'0', background:'#0f766e', color:'#ffffff', fontFamily:'Arial, sans-serif', fontSize:'10px', fontWeight:'700', lineHeight:'20px', textAlign:'center' },
+      { selector:'#dm-three-action:focus', background:'#155e75' },
+      { selector:'#dm-pagination', display:'flex', gap:'6px', width:'376px', height:'52px', padding:'6px 0', background:'#ffffff' },
+      { selector:'#dm-pagination input', height:'40px', margin:'0', padding:'8px', borderWidth:'0', borderRadius:'0', background:'#e2e8f0', color:'#475569', fontFamily:'Arial, sans-serif', fontSize:'12px', fontWeight:'700', lineHeight:'24px', textAlign:'center' },
+      { selector:'#dm-page-prev', width:'88px', opacity:'.55' }, { selector:'#dm-page-active', width:'40px' }, { selector:'#dm-page-next', width:'72px' }, { selector:'#dm-page-next:focus', background:'#bae6fd' }, { selector:'#dm-pagination input.active', background:'#0f766e', color:'#ffffff' },
+      { selector:'#dm-empty', width:'376px', height:'40px', padding:'10px', background:'#f8fafc', color:'#64748b', fontFamily:'Arial, sans-serif', fontSize:'12px', lineHeight:'20px' },
+      { selector:'#dm-detail', display:'flex', flexDirection:'column', gap:'12px', position:'absolute', left:'424px', top:'76px', width:'204px', height:'auto', padding:'16px', zIndex:'2', background:'#ecfeff', overflow:'hidden' },
+      { selector:'#dm-detail-image', width:'172px', height:'96px', objectFit:'cover', background:'#bae6fd' },
+      { selector:'#dm-detail-body', display:'flex', flexDirection:'column', gap:'8px', width:'172px', height:'auto' },
+      { selector:'#dm-detail-title', width:'172px', height:'52px', margin:'0', color:'#164e63', fontFamily:'Arial, sans-serif', fontSize:'18px', fontWeight:'700', lineHeight:'26px' },
+      { selector:'#dm-detail-copy', width:'172px', height:'72px', margin:'0', color:'#475569', fontFamily:'Arial, sans-serif', fontSize:'13px', lineHeight:'24px' },
+      { selector:'#dm-detail-meta', display:'flex', justifyContent:'space-between', width:'172px', height:'40px', margin:'0', padding:'8px 0', color:'#334155', fontFamily:'Arial, sans-serif', fontSize:'12px', lineHeight:'24px' },
+      { selector:'#dm-detail-meta strong', width:'68px', height:'24px', fontWeight:'700' }, { selector:'#dm-detail-meta span', width:'84px', height:'24px', textAlign:'right' },
+      { selector:'#dm-detail-action', width:'172px', height:'40px', margin:'0', padding:'8px', borderWidth:'0', borderRadius:'0', background:'#0f766e', color:'#ffffff', fontFamily:'Arial, sans-serif', fontSize:'13px', fontWeight:'700', lineHeight:'24px', textAlign:'center' },
+      { selector:'#dm-detail-action:focus', background:'#155e75' },
+      { selector:'#dm-shell', mediaMinWidth:'600px', mediaMaxWidth:'749px', left:'20px', top:'20px', width:'600px', height:'680px' }, { selector:'#dm-nav', mediaMinWidth:'600px', mediaMaxWidth:'749px', flex:'0 0 100px', width:'100px', padding:'20px 8px' },
+      { selector:'#dm-brand, #dm-nav-list, #dm-nav-list input', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'84px' }, { selector:'#dm-brand', mediaMinWidth:'600px', mediaMaxWidth:'749px', fontSize:'13px' },
+      { selector:'#dm-content', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'500px' }, { selector:'#dm-header', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'500px', flex:'0 0 72px' }, { selector:'#dm-main', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'500px' },
+      { selector:'#dm-toolbar', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'476px' }, { selector:'#dm-search', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'256px' }, { selector:'#dm-table-card', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'476px', height:'330px' },
+      { selector:'#dm-table', mediaMinWidth:'600px', mediaMaxWidth:'749px', height:'396px' }, { selector:'#dm-table th, #dm-table td', mediaMinWidth:'600px', mediaMaxWidth:'749px', height:'44px', padding:'10px 8px' },
+      { selector:'#dm-pagination', mediaMinWidth:'600px', mediaMaxWidth:'749px', height:'36px', padding:'0' }, { selector:'#dm-pagination input', mediaMinWidth:'600px', mediaMaxWidth:'749px', height:'36px', padding:'6px', lineHeight:'24px' }, { selector:'#dm-empty', mediaMinWidth:'600px', mediaMaxWidth:'749px', height:'34px', padding:'7px 10px' },
+      { selector:'#dm-detail', mediaMinWidth:'600px', mediaMaxWidth:'749px', flexDirection:'row', gap:'12px', left:'12px', top:'418px', width:'476px', height:'auto', padding:'12px' }, { selector:'#dm-detail-image', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'144px', height:'154px' }, { selector:'#dm-detail-body', mediaMinWidth:'600px', mediaMaxWidth:'749px', gap:'4px', width:'296px' },
+      { selector:'#dm-detail-title', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'296px', height:'28px', margin:'0', fontSize:'16px', lineHeight:'28px' }, { selector:'#dm-detail-copy', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'296px', height:'48px', margin:'0' },
+      { selector:'#dm-detail-meta', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'296px', height:'32px', margin:'0', padding:'4px 0' }, { selector:'#dm-detail-action', mediaMinWidth:'600px', mediaMaxWidth:'749px', width:'140px', height:'34px', margin:'0', padding:'5px' },
+      { selector:'#dm-shell', mediaMaxWidth:'599px', flexDirection:'column', left:'10px', top:'10px', width:'370px', height:'800px' }, { selector:'#dm-nav', mediaMaxWidth:'599px', flex:'0 0 64px', flexDirection:'row', alignItems:'center', gap:'10px', width:'370px', padding:'12px 10px' },
+      { selector:'#dm-brand', mediaMaxWidth:'599px', flex:'0 0 92px', width:'92px', height:'40px', fontSize:'13px' }, { selector:'#dm-nav-list', mediaMaxWidth:'599px', flexDirection:'row', gap:'4px', width:'248px', height:'40px' }, { selector:'#dm-nav-list input', mediaMaxWidth:'599px', width:'80px', height:'40px', padding:'8px 4px', fontSize:'11px', textAlign:'center' },
+      { selector:'#dm-content', mediaMaxWidth:'599px', width:'370px' }, { selector:'#dm-header', mediaMaxWidth:'599px', width:'370px', flex:'0 0 72px', padding:'12px 10px' }, { selector:'#dm-title', mediaMaxWidth:'599px', width:'160px' }, { selector:'#dm-count', mediaMaxWidth:'599px', width:'100px' },
+      { selector:'#dm-main', mediaMaxWidth:'599px', width:'370px', padding:'10px' }, { selector:'#dm-toolbar', mediaMaxWidth:'599px', flexWrap:'wrap', gap:'6px', width:'350px', height:'78px', padding:'6px' },
+      { selector:'#dm-toolbar #dm-search', mediaMaxWidth:'599px', flex:'0 0 206px', width:'206px', height:'32px', padding:'4px 8px' }, { selector:'#dm-toolbar #dm-filter', mediaMaxWidth:'599px', flex:'0 0 126px', width:'126px', height:'32px', padding:'4px' }, { selector:'#dm-toolbar #dm-export', mediaMaxWidth:'599px', flex:'0 0 90px', width:'90px', height:'28px', padding:'3px' },
+      { selector:'#dm-table-card', mediaMaxWidth:'599px', left:'10px', top:'98px', width:'350px', height:'180px', padding:'12px' }, { selector:'#dm-table', mediaMaxWidth:'599px', width:'376px', height:'612px' }, { selector:'#dm-table th, #dm-table td', mediaMaxWidth:'599px', height:'68px', padding:'22px 8px', fontSize:'11px' },
+      { selector:'#dm-pagination', mediaMaxWidth:'599px', height:'36px', padding:'0' }, { selector:'#dm-pagination input', mediaMaxWidth:'599px', height:'36px', padding:'6px', lineHeight:'24px' }, { selector:'#dm-empty', mediaMaxWidth:'599px', height:'34px', padding:'7px 10px' },
+      { selector:'#dm-detail', mediaMaxWidth:'599px', flexDirection:'row', gap:'10px', left:'10px', top:'288px', width:'350px', height:'auto', padding:'12px' }, { selector:'#dm-detail-image', mediaMaxWidth:'599px', width:'112px', height:'96px' }, { selector:'#dm-detail-body', mediaMaxWidth:'599px', gap:'6px', width:'204px' },
+      { selector:'#dm-detail-title', mediaMaxWidth:'599px', width:'204px', height:'52px', margin:'0', fontSize:'16px' }, { selector:'#dm-detail-copy', mediaMaxWidth:'599px', width:'204px', height:'72px', margin:'0' }, { selector:'#dm-detail-meta', mediaMaxWidth:'599px', width:'204px', height:'36px', margin:'0', padding:'6px 0' }, { selector:'#dm-detail-action', mediaMaxWidth:'599px', width:'140px', height:'34px', margin:'0', padding:'5px' },
+    ],
+    root: { children:[{ type:'div', id:'dm-shell', children:[
+      { type:'aside', id:'dm-nav', children:[{ type:'div', id:'dm-brand', textContent:'Stockroom' }, { type:'nav', id:'dm-nav-list', children:[{ type:'input', inputType:'button', id:'dm-nav-overview', value:'Overview' }, { type:'input', inputType:'button', id:'dm-nav-inventory', class:'active', value:'Inventory' }, { type:'input', inputType:'button', id:'dm-nav-orders', value:'Orders' }] }] },
+      { type:'section', id:'dm-content', children:[
+        { type:'header', id:'dm-header', children:[{ type:'h1', id:'dm-title', textContent:'Inventory' }, { type:'span', id:'dm-count', textContent:'128 records' }] },
+        { type:'main', id:'dm-main', children:[
+          { type:'div', id:'dm-toolbar', children:[{ type:'input', inputType:'text', id:'dm-search', value:'Search inventory' }, { type:'select', id:'dm-filter', value:'all', options:[{ value:'all', label:'All status' }, { value:'reserved', label:'Reserved' }, { value:'unavailable', label:'Unavailable' }] }, { type:'input', inputType:'button', id:'dm-export', value:'Export', disabled:true }] },
+          { type:'section', id:'dm-table-card', children:[
+            { type:'table', id:'dm-table', ariaLabel:'Inventory records', tableProperties:{ tableLayout:'fixed' }, children:[
+              { type:'colgroup', children:[{ type:'col', tableProperties:{ width:'180px' } }, { type:'col', tableProperties:{ width:'100px' } }, { type:'col', tableProperties:{ width:'96px' } }] },
+              { type:'thead', children:[{ type:'tr', id:'dm-head-row', children:[{ type:'th', id:'dm-head-item', textContent:'Item' }, { type:'th', id:'dm-head-status', textContent:'Status' }, { type:'th', id:'dm-head-owner', textContent:'Owner / action' }] }] },
+              { type:'tbody', children:[
+                { type:'tr', id:'dm-row-one', children:[{ type:'td', id:'dm-one-item', textContent:'Studio camera kit' }, { type:'td', id:'dm-one-status', textContent:'Available' }, { type:'td', id:'dm-one-owner', textContent:'Mina' }] },
+                { type:'tr', id:'dm-row-two', children:[{ type:'td', id:'dm-two-item', textContent:'Portable lighting rig' }, { type:'td', id:'dm-two-status', textContent:'Reserved' }, { type:'td', id:'dm-two-owner', textContent:'Ravi' }] },
+                { type:'tr', id:'dm-row-three', children:[{ type:'td', id:'dm-three-item', textContent:'Audio recorder' }, { type:'td', id:'dm-three-status', textContent:'Available' }, { type:'td', id:'dm-three-owner', children:[{ type:'input', inputType:'button', id:'dm-three-action', value:'Open', ariaLabel:'View Audio recorder row' }] }] },
+                { type:'tr', id:'dm-row-four', children:[{ type:'td', id:'dm-four-item', textContent:'Wireless monitor' }, { type:'td', id:'dm-four-status', textContent:'Reserved' }, { type:'td', id:'dm-four-owner', textContent:'Omar' }] },
+                { type:'tr', id:'dm-row-five', children:[{ type:'td', id:'dm-five-item', textContent:'Tripod adapter' }, { type:'td', id:'dm-five-status', textContent:'Repair' }, { type:'td', id:'dm-five-owner', textContent:'Nia' }] },
+                { type:'tr', id:'dm-row-six', children:[{ type:'td', id:'dm-six-item', textContent:'Field microphone' }, { type:'td', id:'dm-six-status', textContent:'Available' }, { type:'td', id:'dm-six-owner', textContent:'Tariq' }] },
+                { type:'tr', id:'dm-row-seven', children:[{ type:'td', id:'dm-seven-item', textContent:'Battery pack' }, { type:'td', id:'dm-seven-status', textContent:'Checkout' }, { type:'td', id:'dm-seven-owner', textContent:'Mina' }] },
+                { type:'tr', id:'dm-row-eight', children:[{ type:'td', id:'dm-eight-item', textContent:'Lens case' }, { type:'td', id:'dm-eight-status', textContent:'Available' }, { type:'td', id:'dm-eight-owner', textContent:'Ravi' }] },
+              ] },
+            ] },
+            { type:'nav', id:'dm-pagination', ariaLabel:'Inventory pages', children:[{ type:'input', inputType:'button', id:'dm-page-prev', value:'Previous', ariaLabel:'Previous page', disabled:true }, { type:'input', inputType:'button', id:'dm-page-active', class:'active', value:'1', ariaLabel:'Page 1, current page', ariaCurrent:'page' }, { type:'input', inputType:'button', id:'dm-page-next', value:'Next', ariaLabel:'Next page' }] },
+            { type:'div', id:'dm-empty', textContent:'No archived records.' },
+          ] },
+          { type:'aside', id:'dm-detail', children:[
+            { type:'img', id:'dm-detail-image', src:'/parity/article-pattern.svg', alt:'Inventory preview' }, { type:'div', id:'dm-detail-body', children:[
+              { type:'h2', id:'dm-detail-title', textContent:'Studio camera kit' }, { type:'p', id:'dm-detail-copy', textContent:'Ready for checkout from the central equipment room.' },
+              { type:'div', id:'dm-detail-meta', children:[{ type:'strong', textContent:'Asset ID' }, { type:'span', textContent:'CAM-2048' }] }, { type:'input', inputType:'button', id:'dm-detail-action', value:'View record', ariaLabel:'View Studio camera kit record' },
+            ] },
+          ] },
+        ] },
+      ] },
+    ] }] },
+  },
+};
+
+const secondDataPage = JSON.parse(
+  JSON.stringify(representativeDataManagementFixture.siteData),
+) as SiteData;
+setDataText(secondDataPage, 'dm-count', 'Page 2 of 128');
+setDataText(secondDataPage, 'dm-one-item', 'Broadcast camera body');
+setDataText(secondDataPage, 'dm-one-status', 'Reserved');
+setDataText(secondDataPage, 'dm-two-item', 'Camera support dolly');
+setDataText(secondDataPage, 'dm-detail-title', 'Broadcast camera body');
+setDataText(secondDataPage, 'dm-detail-copy', 'Reserved for the live production team until Friday afternoon.');
+const activePage = findDataElement(secondDataPage, 'dm-page-active');
+const selectedRowAction = findDataElement(secondDataPage, 'dm-detail-action');
+const tableRowAction = findDataElement(secondDataPage, 'dm-three-action');
+if (!activePage || !selectedRowAction || !tableRowAction) throw new Error('Representative data page controls are missing');
+activePage.value = '2';
+activePage.ariaLabel = 'Page 2, current page';
+selectedRowAction.ariaLabel = 'View Broadcast camera body record';
+tableRowAction.ariaLabel = 'View Audio recorder row';
+
+const confirmedRowActionPage = JSON.parse(JSON.stringify(secondDataPage)) as SiteData;
+setDataText(confirmedRowActionPage, 'dm-three-status', 'Checked out');
+const confirmedTableRowAction = findDataElement(confirmedRowActionPage, 'dm-three-action');
+if (!confirmedTableRowAction) throw new Error('Representative data row action is missing');
+confirmedTableRowAction.value = 'Opened';
+confirmedTableRowAction.ariaLabel = 'Audio recorder row opened';
+
+representativeDataManagementFixture.dynamicSteps = [{
+  id: 'inventory-page-two',
+  referenceMutations: [
+    { type: 'set-text', elementId: 'dm-count', textContent: 'Page 2 of 128' },
+    { type: 'set-text', elementId: 'dm-one-item', textContent: 'Broadcast camera body' },
+    { type: 'set-text', elementId: 'dm-one-status', textContent: 'Reserved' },
+    { type: 'set-text', elementId: 'dm-two-item', textContent: 'Camera support dolly' },
+    { type: 'set-text', elementId: 'dm-detail-title', textContent: 'Broadcast camera body' },
+    {
+      type: 'set-text',
+      elementId: 'dm-detail-copy',
+      textContent: 'Reserved for the live production team until Friday afternoon.',
+    },
+    { type: 'set-value', elementId: 'dm-page-active', value: '2' },
+    { type: 'set-attribute', elementId: 'dm-page-active', name: 'aria-label', value: 'Page 2, current page' },
+    { type: 'set-attribute', elementId: 'dm-detail-action', name: 'aria-label', value: 'View Broadcast camera body record' },
+    { type: 'set-attribute', elementId: 'dm-three-action', name: 'aria-label', value: 'View Audio recorder row' },
+  ],
+  siteData: secondDataPage,
+}, {
+  id: 'confirm-row-opened',
+  referenceMutations: [
+    { type: 'set-text', elementId: 'dm-three-status', textContent: 'Checked out' },
+    { type: 'set-value', elementId: 'dm-three-action', value: 'Opened' },
+    { type: 'set-attribute', elementId: 'dm-three-action', name: 'aria-label', value: 'Audio recorder row opened' },
+  ],
+  siteData: confirmedRowActionPage,
+}];
+
+representativeDataManagementFixture.visualOwnerReuseStepIndexes = [0, 1];
+
+function setDataText(siteData: SiteData, elementId: string, textContent: string): void {
+  const element = findDataElement(siteData, elementId);
+  if (!element) throw new Error(`Representative data element is missing: ${elementId}`);
+  element.textContent = textContent;
+}
+
+function findDataElement(
+  siteData: SiteData,
+  elementId: string,
+): SiteData['root']['children'][number] | undefined {
+  const pending = [...siteData.root.children];
+  while (pending.length) {
+    const element = pending.shift();
+    if (element?.id === elementId) return element;
+    if (element?.children) pending.push(...element.children);
+  }
+  return undefined;
+}

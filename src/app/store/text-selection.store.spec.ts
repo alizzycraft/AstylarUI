@@ -1,3 +1,4 @@
+import { provideZonelessChangeDetection } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { Subject } from 'rxjs';
 import { TextSelectionStore } from './text-selection.store';
@@ -19,6 +20,7 @@ describe('TextSelectionStore', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
+        provideZonelessChangeDetection(),
         TextSelectionStore,
         TextSelectionControllerService,
         { provide: TextInteractionRegistryService, useClass: MockTextInteractionRegistryService }
@@ -35,7 +37,7 @@ describe('TextSelectionStore', () => {
 
   it('mirrors controller state updates', () => {
     controller.beginSelection(entry, { x: 0, y: 5 });
-    controller.updateSelection(entry, { x: 45, y: 5 });
+    controller.updateSelection(entry, { x: 44, y: 5 });
 
     expect(store.elementId()).toBe('element-1');
     expect(store.range()).toEqual({ start: 0, end: 4 });
@@ -46,14 +48,14 @@ describe('TextSelectionStore', () => {
 
   it('exposes selectedText based on registry entry text', () => {
     controller.beginSelection(entry, { x: 0, y: 5 });
-    controller.updateSelection(entry, { x: 45, y: 5 });
+    controller.updateSelection(entry, { x: 44, y: 5 });
 
     expect(store.selectedText()).toBe('hell');
   });
 
   it('clears selection when registry emits unregister for active element', () => {
     controller.beginSelection(entry, { x: 0, y: 5 });
-    controller.updateSelection(entry, { x: 45, y: 5 });
+    controller.updateSelection(entry, { x: 44, y: 5 });
 
     registry.emit({ type: 'unregister', elementId: entry.elementId });
 

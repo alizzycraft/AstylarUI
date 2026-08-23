@@ -20,13 +20,14 @@ describe('TextSelectionControllerService', () => {
       anchorIndex: 2,
       focusIndex: 2,
       isPointerDown: true,
-      hasSelection: false
+      hasSelection: false,
+      selectionSource: 'pointer'
     });
   });
 
   it('updates selection range as pointer moves', () => {
     service.beginSelection(entry, { x: 0, y: 5 });
-    const state = service.updateSelection(entry, { x: 45, y: 5 });
+    const state = service.updateSelection(entry, { x: 44, y: 5 });
 
     expectState(state, {
       elementId: 'element-1',
@@ -34,13 +35,14 @@ describe('TextSelectionControllerService', () => {
       focusIndex: 4,
       isPointerDown: true,
       hasSelection: true,
+      selectionSource: 'pointer',
       range: { start: 0, end: 4 }
     });
   });
 
   it('finalizes selection and preserves range state', () => {
     service.beginSelection(entry, { x: 0, y: 5 });
-    service.updateSelection(entry, { x: 45, y: 5 });
+    service.updateSelection(entry, { x: 44, y: 5 });
     const state = service.finalizeSelection();
 
     expectState(state, {
@@ -59,7 +61,8 @@ describe('TextSelectionControllerService', () => {
     expectState(stateAfterRight, {
       anchorIndex: 1,
       focusIndex: 1,
-      hasSelection: false
+      hasSelection: false,
+      selectionSource: 'keyboard'
     });
 
     const stateAfterShift = service.moveSelectionWithKeyboard(entry, 'right', true);
@@ -71,9 +74,32 @@ describe('TextSelectionControllerService', () => {
     });
   });
 
+  it('sets an exact multiline-sized selection without pointer approximation', () => {
+    const state = service.setSelection(entry, 0, entry.text!.length);
+
+    expectState(state, {
+      anchorIndex: 0,
+      focusIndex: 5,
+      range: { start: 0, end: 5 },
+      hasSelection: true,
+      isPointerDown: false
+    });
+  });
+
+  it('preserves the preferred caret x across proportional multiline navigation', () => {
+    const multilineEntry = createProportionalMultilineEntry();
+    service.setSelection(multilineEntry, 2, 2);
+
+    const firstMove = service.moveSelectionWithKeyboard(multilineEntry, 'down', false);
+    const secondMove = service.moveSelectionWithKeyboard(multilineEntry, 'down', false);
+
+    expect(firstMove.focusIndex).toBe(4);
+    expect(secondMove.focusIndex).toBe(8);
+  });
+
   it('clears selection', () => {
     service.beginSelection(entry, { x: 0, y: 5 });
-    service.updateSelection(entry, { x: 45, y: 5 });
+    service.updateSelection(entry, { x: 44, y: 5 });
     const state = service.clearSelection();
 
     expectState(state, {
@@ -172,6 +198,53 @@ function createCharacters(text: string) {
     });
   }
   return characters;
+}
+
+function createProportionalMultilineEntry(): TextInteractionEntry {
+  const text = 'aa\nbb\ncc';
+  const lines = [
+    { index: 0, text: 'aa', startIndex: 0, endIndex: 2, width: 15, top: 0, bottom: 20 },
+    { index: 1, text: 'bb', startIndex: 3, endIndex: 5, width: 20, top: 20, bottom: 40 },
+    { index: 2, text: 'cc', startIndex: 6, endIndex: 8, width: 17, top: 40, bottom: 60 },
+  ].map((line) => ({
+    ...line,
+    widthWithSpacing: line.width,
+    height: 20,
+    baseline: 15,
+    ascent: 15,
+    descent: 5,
+    x: 0,
+    y: line.top,
+    actualLeft: 0,
+    actualRight: line.width,
+  }));
+  const characters = [
+    { index: 0, char: 'a', lineIndex: 0, column: 0, x: 0, width: 7, advance: 7, isLineBreak: false },
+    { index: 1, char: 'a', lineIndex: 0, column: 1, x: 7, width: 8, advance: 8, isLineBreak: false },
+    { index: 3, char: 'b', lineIndex: 1, column: 0, x: 0, width: 11, advance: 11, isLineBreak: false },
+    { index: 4, char: 'b', lineIndex: 1, column: 1, x: 11, width: 9, advance: 9, isLineBreak: false },
+    { index: 6, char: 'c', lineIndex: 2, column: 0, x: 0, width: 10, advance: 10, isLineBreak: false },
+    { index: 7, char: 'c', lineIndex: 2, column: 1, x: 10, width: 7, advance: 7, isLineBreak: false },
+  ];
+  const css = {
+    text,
+    transformedText: text,
+    totalWidth: 20,
+    totalHeight: 60,
+    lineHeight: 20,
+    ascent: 15,
+    descent: 5,
+    lines,
+    characters,
+  } as StoredTextLayoutMetrics['css'];
+
+  return {
+    elementId: 'multiline',
+    mesh: { sideOrientation: 2 } as unknown as Mesh,
+    metrics: { scale: 1, css, world: css as StoredTextLayoutMetrics['world'] },
+    style: { selector: '.multiline', textAlign: 'left' },
+    text,
+  };
 }
 
 function expectState(state: TextSelectionState, expected: Partial<TextSelectionState>) {

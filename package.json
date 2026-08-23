@@ -1,7 +1,8 @@
 {
-  "name": "@the-erin-collective/astylarui",
+  "name": "astylarui",
   "version": "0.1.0",
   "description": "A 3D UI rendering library that renders HTML-like structures in BabylonJS scenes",
+  "type": "module",
   "main": "dist/lib/lib/index.js",
   "module": "dist/lib/lib/index.js",
   "types": "dist/lib/lib/index.d.ts",
@@ -20,9 +21,27 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "build:lib": "if exist dist\\lib rmdir /s /q dist\\lib && tsc -p tsconfig.lib.json",
+    "build:lib": "node scripts/build-library.mjs",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
+    "parity": "node tests/parity/run-parity.mjs",
+    "parity:check": "node tests/parity/run-parity.mjs --enforce",
+    "parity:harness:check": "node --test tests/parity/visibility-metrics.spec.mjs tests/parity/sharpness-metrics.spec.mjs tests/tts-parity/benchmark-config.spec.mjs tests/tts-parity/demo-workflow.spec.mjs tests/tts-parity/scrolling-metrics.spec.mjs tests/tts-parity/interaction-metrics.spec.mjs",
+    "tts-parity:report": "node tests/tts-parity/run-tts-parity.mjs",
+    "tts-parity:check": "node tests/tts-parity/run-tts-parity.mjs --enforce",
+    "parity:release:check": "npm run parity:check && npm run tts-parity:check",
+    "consumer:check": "node scripts/consumer-check.mjs",
+    "tts-demo:prepare": "node scripts/prepare-tts-demo.mjs",
+    "tts-demo:check": "node scripts/tts-demo-check.mjs",
+    "capabilities:check": "node scripts/check-capability-catalog.mjs",
+    "examples:check": "node scripts/check-translation-examples.mjs",
+    "skill:references:sync": "npm run skill:developer:references:sync",
+    "skill:references:check": "npm run skill:developer:references:check",
+    "skill:developer:references:sync": "node .agents/skills/astylarui-developer/scripts/sync-references.mjs --write",
+    "skill:developer:references:check": "node .agents/skills/astylarui-developer/scripts/sync-references.mjs --check",
+    "skill:developer:check": "npm run skill:developer:references:check && node .agents/skills/astylarui-developer/scripts/validate-skill.mjs",
+    "skill:maintainer:check": "node .agents/skills/astylarui-maintainer/scripts/validate-skill.mjs",
+    "skill:check": "npm run skill:developer:check && npm run skill:maintainer:check",
     "serve:ssr:astylarui": "node dist/astylarui/server/server.mjs",
     "prepublishOnly": "npm run build:lib",
     "build:gh-pages": "ng build --base-href /AstylarUI/ --configuration production",
@@ -37,7 +56,7 @@
     "webgl"
   ],
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
+    "access": "public"
   },
   "repository": {
     "type": "git",
@@ -63,6 +82,7 @@
     "@babylonjs/loaders": "^8.15.1",
     "@ngrx/operators": "^20.0.0-beta.0",
     "@ngrx/signals": "^20.0.0-beta.0",
+    "compare-versions": "^6.1.1",
     "express": "^5.1.0",
     "round-polygon": "^0.6.7",
     "rxjs": "~7.8.0",
@@ -83,6 +103,9 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
+    "playwright-core": "^1.62.1",
+    "pngjs": "^7.0.0",
+    "ssim.js": "^3.5.0",
     "ts-node": "^10.9.2",
     "typescript": "~5.8.2"
   }

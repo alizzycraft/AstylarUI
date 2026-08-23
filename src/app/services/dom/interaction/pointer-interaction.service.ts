@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Matrix, Mesh, PointerInfo, Vector3 } from '@babylonjs/core';
+import { Matrix, Mesh, Plane, PointerInfo, Vector3 } from '@babylonjs/core';
 import { BabylonRender } from '../interfaces/render.types';
 import { TextInteractionEntry, TextInteractionRegistryService } from './text-interaction-registry.service';
 import { CssPoint, TextSelectionControllerService } from './text-selection-controller.service';
@@ -16,6 +16,7 @@ export class PointerInteractionService {
       return;
     }
 
+    this.updateCursor(pointerInfo, render);
     const entry = this.resolveTextEntry(pointerInfo, render);
     if (!entry) {
       this.textSelectionController.clearSelection();
@@ -35,12 +36,12 @@ export class PointerInteractionService {
       return;
     }
 
-    const entry = this.resolveTextEntry(pointerInfo, render);
+    const entry = this.resolveActiveTextEntry();
     if (!entry) {
       return;
     }
 
-    const cssPoint = this.toCssPoint(pointerInfo, entry);
+    const cssPoint = this.toCssPoint(pointerInfo, entry, false);
     if (!cssPoint) {
       return;
     }
@@ -55,10 +56,13 @@ export class PointerInteractionService {
     const mesh = this.resolvePreferredMesh(pointerInfo, render);
 
     if (mesh) {
-      if (mesh.metadata?.isTextMesh) {
+      const cursor = mesh.metadata?.cursor;
+      if (cursor && cursor !== 'auto' && cursor !== 'default') {
+        canvas.style.cursor = cursor;
+      } else if (mesh.metadata?.isTextMesh) {
         canvas.style.cursor = 'text';
-      } else if (mesh.metadata?.cursor) {
-        canvas.style.cursor = mesh.metadata.cursor;
+      } else if (cursor) {
+        canvas.style.cursor = cursor;
       } else {
         canvas.style.cursor = 'default';
       }
@@ -68,13 +72,14 @@ export class PointerInteractionService {
   }
 
   handlePointerUp(pointerInfo: PointerInfo, render: BabylonRender): void {
+    this.updateCursor(pointerInfo, render);
     if (!this.textSelectionController.snapshot.isPointerDown) {
       return;
     }
 
-    const entry = this.resolveTextEntry(pointerInfo, render);
+    const entry = this.resolveActiveTextEntry();
     if (entry) {
-      const cssPoint = this.toCssPoint(pointerInfo, entry);
+      const cssPoint = this.toCssPoint(pointerInfo, entry, false);
       if (cssPoint) {
         this.textSelectionController.updateSelection(entry, cssPoint);
       }
@@ -98,6 +103,13 @@ export class PointerInteractionService {
       if (directTextEntry) {
         return directTextEntry.mesh;
       }
+      const directElementId = directMesh.metadata?.elementId;
+      const ownedTextEntry = typeof directElementId === 'string'
+        ? this.textInteractionRegistry.getByElementId(directElementId)
+        : undefined;
+      if (ownedTextEntry) {
+        return ownedTextEntry.mesh;
+      }
     }
 
     const scene = render.scene;
@@ -106,12 +118,15 @@ export class PointerInteractionService {
       return directMesh;
     }
 
-    const picks = scene.multiPick(nativeEvent.clientX, nativeEvent.clientY, (mesh) => !!mesh && mesh.isPickable);
+    const pickX = Number.isFinite(scene.pointerX) ? scene.pointerX : nativeEvent.clientX;
+    const pickY = Number.isFinite(scene.pointerY) ? scene.pointerY : nativeEvent.clientY;
+    const picks = scene.multiPick(pickX, pickY, (mesh) => !!mesh && mesh.isPickable);
     if (!picks?.length) {
       return directMesh;
     }
 
-    for (const pick of picks) {
+    const orderedPicks = [...picks].sort((left, right) => left.distance - right.distance);
+    for (const pick of orderedPicks) {
       const pickedMesh = pick.pickedMesh as Mesh | undefined;
       if (!pickedMesh) {
         continue;
@@ -121,6 +136,14 @@ export class PointerInteractionService {
       const entry = this.textInteractionRegistry.getByMesh(pickedMesh);
       if (entry) {
         return entry.mesh;
+      }
+
+      const elementId = pickedMesh.metadata?.elementId;
+      const ownedTextEntry = typeof elementId === 'string'
+        ? this.textInteractionRegistry.getByElementId(elementId)
+        : undefined;
+      if (ownedTextEntry) {
+        return ownedTextEntry.mesh;
       }
 
       // Check if this is an input mesh that has a child text mesh
@@ -133,10 +156,9 @@ export class PointerInteractionService {
           }
         }
       }
-
-      if (pickedMesh === directMesh) {
-        break;
-      }
+      // The nearest rendered element remains the cursor owner even when it is
+      // not registered for text selection (for example an icon-only button).
+      return pickedMesh;
     }
 
     return directMesh;
@@ -150,7 +172,16 @@ export class PointerInteractionService {
     return this.textInteractionRegistry.getByMesh(mesh);
   }
 
-  private toCssPoint(pointerInfo: PointerInfo, entry: TextInteractionEntry): CssPoint | undefined {
+  private resolveActiveTextEntry(): TextInteractionEntry | undefined {
+    const elementId = this.textSelectionController.snapshot.elementId;
+    return elementId ? this.textInteractionRegistry.getByElementId(elementId) : undefined;
+  }
+
+  private toCssPoint(
+    pointerInfo: PointerInfo,
+    entry: TextInteractionEntry,
+    constrainToViewport = true
+  ): CssPoint | undefined {
     const metrics = entry.metrics;
     if (!metrics) {
       return undefined;
@@ -165,18 +196,24 @@ export class PointerInteractionService {
       const nativeEvent = pointerInfo.event as PointerEvent | MouseEvent | undefined;
 
       if (scene && nativeEvent && typeof nativeEvent.clientX === 'number' && typeof nativeEvent.clientY === 'number') {
-        const ray = scene.createPickingRay(nativeEvent.clientX, nativeEvent.clientY, Matrix.Identity(), scene.activeCamera);
+        const pickX = Number.isFinite(scene.pointerX) ? scene.pointerX : nativeEvent.clientX;
+        const pickY = Number.isFinite(scene.pointerY) ? scene.pointerY : nativeEvent.clientY;
+        const ray = scene.createPickingRay(pickX, pickY, Matrix.Identity(), scene.activeCamera);
         const hit = ray.intersectsMesh(entry.mesh as any);
 
         if (hit.hit && hit.pickedPoint) {
           pickedPoint = hit.pickedPoint;
-          console.log('[toCssPoint] Manual ray cast successful:', pickedPoint);
         } else {
-          console.log('[toCssPoint] Manual ray cast failed');
-          return undefined;
+          const world = entry.mesh.computeWorldMatrix(true);
+          const planeOrigin = Vector3.TransformCoordinates(Vector3.Zero(), world);
+          const planeNormal = Vector3.TransformNormal(Vector3.Forward(), world).normalize();
+          const distance = ray.intersectsPlane(Plane.FromPositionAndNormal(planeOrigin, planeNormal));
+          if (distance === null) {
+            return undefined;
+          }
+          pickedPoint = ray.origin.add(ray.direction.scale(distance));
         }
       } else {
-        console.log('[toCssPoint] Cannot perform manual ray cast - missing scene or event data');
         return undefined;
       }
     }
@@ -199,10 +236,12 @@ export class PointerInteractionService {
     // With World X+ being Left and the text mesh rotated 180 degrees on Z,
     // the local X+ aligns with World Right (Visual Right).
     // So (local.x + halfWidth) / width correctly maps Visual Left to 0 and Visual Right to 1.
-    const normalizedX = clamp((localPoint.x + halfWidth) / width, 0, 1);
+    const rawNormalizedX = (localPoint.x + halfWidth) / width;
+    const normalizedX = constrainToViewport ? clamp(rawNormalizedX, 0, 1) : rawNormalizedX;
     // Similarly, with 180 degree rotation, local Y+ aligns with World Down (Visual Down).
     // So (local.y + halfHeight) / height correctly maps Visual Top to 0 and Visual Bottom to 1.
-    const normalizedY = clamp((localPoint.y + halfHeight) / height, 0, 1);
+    const rawNormalizedY = (localPoint.y + halfHeight) / height;
+    const normalizedY = constrainToViewport ? clamp(rawNormalizedY, 0, 1) : rawNormalizedY;
 
     const cssMetrics = entry.metrics?.css;
     const cssWidth = cssMetrics?.totalWidth ?? 0;
@@ -213,13 +252,16 @@ export class PointerInteractionService {
     const scale = metrics.scale ?? 1;
     const availableWidthCss = width / scale;
     const scrollOffset = entry.scrollOffset || 0;
+    const availableHeightCss = height / scale;
+    const scrollTop = entry.scrollTop || 0;
+    const verticalOrigin = entry.verticalOrigin || 0;
 
     // x in CSS pixels = (normalized percentage of visible area * pixels in visible area) + scroll offset
     let x = (normalizedX * availableWidthCss) + scrollOffset;
 
     return {
       x,
-      y: normalizedY * cssHeight
+      y: clamp((normalizedY * availableHeightCss) + scrollTop - verticalOrigin, 0, cssHeight)
     };
   }
 

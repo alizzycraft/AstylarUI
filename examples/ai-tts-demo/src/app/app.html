@@ -1,0 +1,10 @@
+<main class="demo-host">
+  <p class="sr-only" aria-live="polite" data-testid="renderer-status">{{ status() }}</p>
+  <astylar-surface
+    data-testid="tts-astylar-surface"
+    [siteData]="siteData()"
+    [options]="options"
+    (mounted)="onMounted($event)"
+    (failed)="onFailed($event)"
+  />
+</main>

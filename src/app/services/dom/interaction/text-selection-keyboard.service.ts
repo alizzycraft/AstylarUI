@@ -13,6 +13,7 @@ export class TextSelectionKeyboardService {
   private readonly windowRef = this.document?.defaultView ?? window;
 
   private readonly keydownListener = (event: KeyboardEvent) => this.handleKeyDown(event);
+  private readonly copyListener = (event: ClipboardEvent) => this.handleCopy(event);
 
   constructor(
     private readonly selectionStore: TextSelectionStore,
@@ -21,8 +22,10 @@ export class TextSelectionKeyboardService {
   ) {
     if (this.document) {
       this.document.addEventListener('keydown', this.keydownListener, true);
+      this.document.addEventListener('copy', this.copyListener, true);
       this.destroyRef.onDestroy(() => {
         this.document?.removeEventListener('keydown', this.keydownListener, true);
+        this.document?.removeEventListener('copy', this.copyListener, true);
       });
     }
   }
@@ -32,7 +35,12 @@ export class TextSelectionKeyboardService {
       return;
     }
 
-    if (this.handleClipboard(event)) {
+    if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'c' &&
+        this.selectionStore.hasSelection()) {
+      // Keep the native copy event available, but also write during the user
+      // activation. Some browsers do not dispatch `copy` when the focused
+      // canvas has no native DOM Range even though Astylar owns a scene range.
+      void this.clipboardService.copySelectedText();
       return;
     }
 
@@ -47,25 +55,27 @@ export class TextSelectionKeyboardService {
 
   private shouldHandleEvent(event: KeyboardEvent): boolean {
     const target = event.target as HTMLElement | null;
-    if (target) {
-      const tagName = target.tagName?.toLowerCase();
-      const isEditable = (target as HTMLElement).isContentEditable;
-      if (
-        tagName === 'input' ||
-        tagName === 'textarea' ||
-        target.getAttribute('role') === 'textbox' ||
-        isEditable
-      ) {
-        return false;
-      }
+    if (this.isEditableTarget(target)) {
+      return false;
     }
 
-    // Only react when we have a selection context or the clipboard shortcut applies
-    if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'c') {
-      return this.selectionStore.hasSelection();
+    // Astylar text controls render their editable value on a child text mesh.
+    // When one is focused the browser event still targets the canvas, so the
+    // DOM tag checks above cannot distinguish control editing from page-text
+    // selection. Let the control keyboard handler own those events.
+    const activeEntry = this.selectionStore.activeEntry();
+    if (activeEntry?.mesh.parent?.metadata?.textInput?.focused) {
+      return false;
     }
 
     return !!this.selectionStore.elementId();
+  }
+
+  private isEditableTarget(target: HTMLElement | null): boolean {
+    if (!target) return false;
+    const tagName = target.tagName?.toLowerCase();
+    return tagName === 'input' || tagName === 'textarea' ||
+      target.getAttribute('role') === 'textbox' || target.isContentEditable;
   }
 
   private handleNavigation(event: KeyboardEvent): boolean {
@@ -102,23 +112,12 @@ export class TextSelectionKeyboardService {
     }
   }
 
-  private handleClipboard(event: KeyboardEvent): boolean {
-    if (!(event.ctrlKey || event.metaKey)) {
-      return false;
-    }
-
-    if (event.key.toLowerCase() !== 'c') {
-      return false;
-    }
-
-    if (!this.selectionStore.hasSelection()) {
-      return false;
-    }
-
-    this.clipboardService.copySelectedText();
+  private handleCopy(event: ClipboardEvent): void {
+    if (this.isEditableTarget(event.target as HTMLElement | null) ||
+        !this.selectionStore.hasSelection()) return;
+    void this.clipboardService.copySelectedText(event);
     event.preventDefault();
     event.stopPropagation();
-    return true;
   }
 
   private handleEscape(event: KeyboardEvent): boolean {

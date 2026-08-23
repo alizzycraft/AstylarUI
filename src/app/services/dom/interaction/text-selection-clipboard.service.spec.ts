@@ -1,4 +1,5 @@
 import { DOCUMENT } from '@angular/common';
+import { provideZonelessChangeDetection } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { TextSelectionClipboardService } from './text-selection-clipboard.service';
 import { TextSelectionStore } from '../../../store/text-selection.store';
@@ -13,6 +14,7 @@ describe('TextSelectionClipboardService', () => {
 
     TestBed.configureTestingModule({
       providers: [
+        provideZonelessChangeDetection(),
         TextSelectionClipboardService,
         { provide: DOCUMENT, useValue: documentStub as unknown as Document },
         { provide: TextSelectionStore, useClass: MockTextSelectionStore }
@@ -38,6 +40,16 @@ describe('TextSelectionClipboardService', () => {
     expect(documentStub.execCommandSpy).toHaveBeenCalledWith('copy');
     expect(documentStub.body.lastAppended?.value).toBe('hello world');
     expect(documentStub.body.lastRemoved).toBe(documentStub.body.lastAppended);
+  });
+
+  it('writes selected text synchronously to a native copy event', async () => {
+    store.setSelectedText('scene selection');
+    const setData = jasmine.createSpy('setData');
+    const event = { clipboardData: { setData } } as unknown as ClipboardEvent;
+
+    expect(await service.copySelectedText(event)).toBeTrue();
+    expect(setData).toHaveBeenCalledWith('text/plain', 'scene selection');
+    expect(documentStub.execCommandSpy).not.toHaveBeenCalled();
   });
 });
 

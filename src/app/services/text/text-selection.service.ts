@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import * as BABYLON from '@babylonjs/core';
 import { TextLayoutMetrics, TextCharacterMetrics, TextStyleProperties } from '../../types/text-rendering';
 import { BabylonMeshService } from '../babylon-mesh.service';
+import { StyleService } from '../dom/style.service';
 
 /**
  * Service for creating and managing text selection highlighting
@@ -17,7 +18,10 @@ export class TextSelectionService {
 
 
 
-  constructor(private babylonMeshService: BabylonMeshService) { }
+  constructor(
+    private babylonMeshService: BabylonMeshService,
+    private styleService: StyleService,
+  ) { }
 
   /**
    * Creates selection highlight meshes for a text range
@@ -120,27 +124,22 @@ export class TextSelectionService {
     widthCorrectionRatio: number = 1.0,
     scrollOffset: number = 0
   ): BABYLON.Mesh {
-    console.log('[TextSelectionService] Creating cursor with ratio:', widthCorrectionRatio);
-    console.log('[TextSelectionService] Layout metrics:', layoutMetrics);
-    console.log('[TextSelectionService] Scale:', scale);
+
+
+
 
     const cursorX = this.calculateCursorPosition(cursorPosition, layoutMetrics);
     const cursorLine = this.findLineForPosition(cursorPosition, layoutMetrics);
 
-    console.log('[TextSelectionService] Calculated cursor X:', cursorX);
-    console.log('[TextSelectionService] Found cursor line:', cursorLine);
+
+
 
     const cursorHeight = style.fontSize * scale * 1.2; // Slightly taller than font
     const cursorWidth = 2 * scale; // 2px cursor width
 
-    console.log('[TextSelectionService] Final cursor dimensions:', {
-      width: cursorWidth,
-      height: cursorHeight,
-      fontSize: style.fontSize,
-      scale: scale
-    });
 
-    console.log('[TextSelectionService] Cursor dimensions:', { width: cursorWidth, height: cursorHeight });
+
+
 
     const cursor = BABYLON.MeshBuilder.CreateBox(`cursor_${parentMesh.name}`, {
       width: cursorWidth,
@@ -150,10 +149,12 @@ export class TextSelectionService {
 
     // Create cursor material
     const material = new BABYLON.StandardMaterial(`cursorMaterial_${parentMesh.name}`, scene);
-    material.diffuseColor = BABYLON.Color3.Black();
-    material.emissiveColor = BABYLON.Color3.Black();
-    material.disableLighting = true;
     cursor.material = material;
+    // CSS caret-color:auto resolves to currentColor. Astylar does not yet
+    // expose authored caret-color, so the resolved text color is the browser-
+    // equivalent default and remains legible on dark controls.
+    this.updateTextCursorColor(cursor, style);
+    material.disableLighting = true;
 
     // Position cursor relative to parent mesh (input field)
     cursor.parent = parentMesh;
@@ -193,13 +194,26 @@ export class TextSelectionService {
     cursor.position.y = 0; // Center vertically in input field
     cursor.position.z = 0.1 * scale; // In front of text
 
-    console.log('[TextSelectionService] Final cursor position:', cursor.position, 'Edge:', textLeftEdgeX, 'Offset:', cursorX * scale);
+
 
     cursor.isPickable = false;
     cursor.renderingGroupId = 3; // Highest priority for UI elements
 
-    console.log('[TextSelectionService] Cursor created successfully');
+
     return cursor;
+  }
+
+  /** Keeps an existing caret aligned with the currently resolved text color. */
+  updateTextCursorColor(cursor: BABYLON.Mesh, style: TextStyleProperties): void {
+    const material = cursor.material;
+    if (!(material instanceof BABYLON.StandardMaterial)) return;
+    const parsedCaret = this.styleService.parseBackgroundColor(style.color);
+    const caretColor = parsedCaret?.type === 'color'
+      ? parsedCaret.color
+      : BABYLON.Color3.Black();
+    material.diffuseColor = caretColor;
+    material.emissiveColor = caretColor;
+    material.alpha = parsedCaret?.type === 'color' ? parsedCaret.alpha ?? 1 : 1;
   }
 
   /**
@@ -361,11 +375,11 @@ export class TextSelectionService {
    * @returns X position in CSS pixels
    */
   private calculateCursorPosition(position: number, layoutMetrics: TextLayoutMetrics): number {
-    console.log('[TextSelectionService] Calculating cursor position for index:', position);
-    console.log('[TextSelectionService] Available characters:', layoutMetrics.characters.length);
+
+
 
     if (position <= 0) {
-      console.log('[TextSelectionService] Position 0, returning 0');
+
       return 0;
     }
 
@@ -373,14 +387,14 @@ export class TextSelectionService {
       // Position at end of text
       const lastChar = layoutMetrics.characters[layoutMetrics.characters.length - 1];
       const endPos = lastChar ? lastChar.x + lastChar.width : 0;
-      console.log('[TextSelectionService] End position:', endPos);
+
       return endPos;
     }
 
     // Position before the character at the given index
     const char = layoutMetrics.characters[position];
     const charPos = char ? char.x : 0;
-    console.log('[TextSelectionService] Character position:', charPos);
+
     return charPos;
   }
 
@@ -431,7 +445,7 @@ export class TextSelectionService {
       // If we are past the center of this character, we are likely closer to index i+1
       // If we are before the center, we are likely closer to index i
 
-      // Let's rely on finding the specific character whose center is closest, 
+      // Let's rely on finding the specific character whose center is closest,
       // then decide if we are left or right of it?
       // Actually, simpler: check the boundaries (cursor positions)
       // Cursor positions are at: char.x (Index i) and char.x + char.width (Index i+1)

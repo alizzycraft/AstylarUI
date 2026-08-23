@@ -1,0 +1,418 @@
+{
+  "schema": "astylarui-capabilities",
+  "version": 1,
+  "astylarVersion": "0.1.0",
+  "purpose": "Machine-readable source material for HTML/CSS-to-Astylar translation and the future Phase 15 agent skill.",
+  "classifications": {
+    "direct": "Ordinary web knowledge transfers without meaningful qualification.",
+    "compatible": "The observable result is equivalent within the stated Astylar constraints.",
+    "different": "The concept exists but its syntax, lifecycle, rendering, or semantics differ.",
+    "unsupported": "The current public document and renderer cannot express the capability.",
+    "plugin": "A trusted Angular plugin can contribute the capability through the public plugin contract."
+  },
+  "queryRules": {
+    "elements": "Find the name in elements.groups. A name absent there is not a built-in element; consult unsupported.elements and pluginExtensionPoints.",
+    "domFields": "Find the field in domFields.groups. SiteData is JSON-like data, not a live browser Node tree.",
+    "styleProperties": "Find the camelCase field in styleProperties.groups. Author stylesheet rules in SiteData.styles and inline declarations in DOMElement.style.",
+    "defaults": "Global and element defaults are authoritative in src/app/config/browser-defaults.ts; fingerprints below force review whenever they change.",
+    "proof": "Evidence entries name a parity fixture or a committed executable/source file. Absence of focused evidence must not be upgraded into a support claim."
+  },
+  "elements": {
+    "identitySyntax": "Built-ins accept their HTML tag alias. Plugins use canonical namespace:name IDs and may expose a conflict-free alias.",
+    "groups": [
+      {
+        "id": "semantic-containers",
+        "classification": "direct",
+        "names": ["div", "section", "article", "header", "footer", "nav", "main", "aside", "address", "figure", "figcaption", "hgroup"],
+        "behavior": "JSON children preserve authored order; semantic roles are bridged where the supported accessibility contract defines them.",
+        "defaultStyle": "elementDefaults[name] merged over globalDefaultStyle",
+        "pluginCanSupply": false,
+        "evidence": ["fixture:semantic-structure", "fixture:block-flow"]
+      },
+      {
+        "id": "lists",
+        "classification": "compatible",
+        "names": ["ul", "ol", "li", "dl", "dt", "dd", "menu"],
+        "behavior": "Ordered and unordered markers and browser-like block flow are supported; marker styling is not a complete CSS list module.",
+        "defaultStyle": "elementDefaults[name] merged over globalDefaultStyle",
+        "pluginCanSupply": false,
+        "evidence": ["fixture:unordered-list-layout", "fixture:ordered-list-layout"]
+      },
+      {
+        "id": "tables",
+        "classification": "compatible",
+        "names": ["table", "thead", "tbody", "tfoot", "tr", "td", "th", "caption", "col", "colgroup"],
+        "behavior": "The tested auto/fixed table subset, spans, column widths, captions, and semantic structure are supported.",
+        "defaultStyle": "elementDefaults[name] merged over globalDefaultStyle",
+        "pluginCanSupply": false,
+        "evidence": ["fixture:table-fixed-layout", "fixture:table-column-widths", "fixture:composed-data-table"]
+      },
+      {
+        "id": "links-and-images",
+        "classification": "compatible",
+        "names": ["a", "img"],
+        "behavior": "Anchors expose host-owned navigation outcomes; images load through owned asynchronous resources with intrinsic sizing and object-fit support.",
+        "defaultStyle": "elementDefaults[name] merged over globalDefaultStyle",
+        "pluginCanSupply": false,
+        "evidence": ["fixture:semantic-anchor-navigation", "fixture:image-intrinsic-size", "fixture:image-object-fit-cover"]
+      },
+      {
+        "id": "form-controls",
+        "classification": "compatible",
+        "names": ["input", "button", "form", "select", "textarea", "label", "option", "fieldset", "legend", "output"],
+        "behavior": "A deliberate control, focus, keyboard, pointer, validation, submit/reset, selection, and closed/expanded select subset is supported. The default text-control caret follows the resolved text color; authored caret-color is not yet supported.",
+        "defaultStyle": "elementDefaults[name] merged over globalDefaultStyle; checkbox/radio use inputType-specific defaults",
+        "pluginCanSupply": false,
+        "evidence": ["fixture:styled-text-input", "fixture:interaction-form-validation", "fixture:interaction-select-expanded-keyboard", "fixture:interaction-textarea-selection"]
+      },
+      {
+        "id": "text-and-phrasing",
+        "classification": "compatible",
+        "names": ["span", "h1", "h2", "h3", "h4", "h5", "h6", "p", "br", "wbr", "hr", "b", "strong", "i", "em", "cite", "var", "dfn", "u", "ins", "s", "strike", "del", "code", "kbd", "samp", "pre", "small", "sub", "sup", "blockquote", "q", "abbr", "mark"],
+        "behavior": "Text content, measured wrapping, common inherited typography, inline/inline-block flow, pointer selection and native copy of direct non-control text, and the recorded defaults are supported within canvas-text constraints.",
+        "defaultStyle": "elementDefaults[name] merged over globalDefaultStyle",
+        "pluginCanSupply": false,
+        "evidence": ["fixture:text-inheritance", "fixture:multiline-wrapping", "fixture:text-spacing", "fixture:inline-block-flow", "fixture:interaction-document-text-selection"]
+      },
+      {
+        "id": "modal",
+        "classification": "compatible",
+        "names": ["dialog"],
+        "behavior": "open plus modal opts into the tested top-layer, inertness, focus containment, Escape cancel, and close lifecycle subset; backdrop paint is authored explicitly.",
+        "defaultStyle": "display:none unless open or overridden",
+        "pluginCanSupply": false,
+        "evidence": ["fixture:semantic-modal-containment", "fixture:semantic-modal-lifecycle", "fixture:composed-modal"]
+      },
+      {
+        "id": "registered-generic-elements",
+        "classification": "different",
+        "names": ["area", "datalist", "optgroup", "details", "summary", "canvas", "iframe", "embed", "object", "video", "audio", "map", "param", "source", "track"],
+        "behavior": "These identities and defaults are registered, but native embedded browsing, media playback, canvas drawing, disclosure widgets, maps, and complete option-group behavior are not implemented. Treat them as generic or hidden layout nodes, not browser feature parity.",
+        "defaultStyle": "elementDefaults[name] merged over globalDefaultStyle",
+        "recommendedAlternative": "Use ordinary supported structure or a namespaced Angular plugin with an owned Babylon renderer.",
+        "pluginCanSupply": true,
+        "evidence": ["file:src/lib/astylar-core-capabilities.ts", "file:src/app/config/browser-defaults.ts"]
+      }
+    ]
+  },
+  "domFields": {
+    "groups": [
+      {
+        "id": "structure",
+        "classification": "direct",
+        "names": ["id", "type", "style", "children", "textContent", "class"],
+        "behavior": "Plain serializable authored identity and tree data; class is a whitespace-separated string and style is the camelCase inline declaration object.",
+        "evidence": ["fixture:cascade-specificity", "fixture:reactive-child-list"]
+      },
+      {
+        "id": "common-attributes",
+        "classification": "compatible",
+        "names": ["src", "alt", "href", "target", "value", "placeholder", "maxLength", "checked", "disabled", "required", "readonly", "multiple", "selected", "name", "min", "max", "step", "pattern", "accept", "autocomplete", "autofocus", "open", "cols", "rows", "wrap", "for", "headers", "colspan", "rowspan", "scope", "abbr", "accesskey", "contenteditable", "dir", "draggable", "hidden", "lang", "spellcheck", "tabindex", "title", "translate"],
+        "behavior": "Fields are supported only to the extent documented by the element, semantic, form, image, table, and interaction evidence; their presence does not imply every browser algorithm.",
+        "evidence": ["fixture:semantic-control-state", "fixture:interaction-form-validation", "fixture:table-column-widths", "fixture:image-intrinsic-size"]
+      },
+      {
+        "id": "astylar-modal",
+        "classification": "different",
+        "names": ["modal"],
+        "behavior": "Astylar-specific boolean paired with dialog.open to request the supported modal/top-layer subset.",
+        "evidence": ["fixture:semantic-modal-containment"]
+      },
+      {
+        "id": "accessibility",
+        "classification": "compatible",
+        "names": ["role", "ariaLabel", "ariaLabelledby", "ariaDescribedby", "ariaLive", "ariaAtomic", "ariaCurrent"],
+        "behavior": "CamelCase JSON fields feed Astylar's offscreen semantic bridge, not DOM attributes on the Babylon canvas.",
+        "evidence": ["fixture:semantic-naming", "fixture:semantic-status-validation"]
+      },
+      {
+        "id": "structured-control-data",
+        "classification": "different",
+        "names": ["tableProperties", "inputType", "inputElement", "options", "validationRules"],
+        "behavior": "JSON-oriented Astylar data replaces parts of browser DOM object state. inputElement is runtime compatibility state and should not be used as authored portable data.",
+        "evidence": ["fixture:table-fixed-layout", "fixture:styled-select", "fixture:interaction-form-validation"]
+      },
+      {
+        "id": "deprecated-executable-handler",
+        "classification": "unsupported",
+        "names": ["onclick"],
+        "behavior": "Executable strings are never evaluated.",
+        "recommendedAlternative": "Pass typed handlers through AstylarRenderOptions.events.",
+        "evidence": ["file:src/lib/astylar-event.ts"]
+      },
+      {
+        "id": "plugin-payload",
+        "classification": "plugin",
+        "names": ["data"],
+        "behavior": "Unknown-safe serializable payload owned and validated by the resolved element plugin.",
+        "evidence": ["file:examples/angular-consumer/src/app/consumer-badge.plugin.ts"]
+      }
+    ]
+  },
+  "styleProperties": {
+    "authoringSyntax": "camelCase StyleRule keys; selectors remain CSS-like strings; plugin declarations live in extensions under canonical namespace:name keys.",
+    "sharedLengthUnits": ["px", "%", "em", "rem", "vw", "vh"],
+    "groups": [
+      {
+        "id": "rule-and-responsive-metadata",
+        "classification": "different",
+        "names": ["selector", "mediaMinWidth", "mediaMaxWidth", "mediaMinHeight", "mediaMaxHeight"],
+        "values": "selector string plus px/em/rem/vw/vh media bounds",
+        "inherits": false,
+        "default": "selector required; media bounds absent",
+        "behavior": "Media queries are expressed as bounds on each JSON rule rather than an @media grammar.",
+        "evidence": ["fixture:responsive-media", "fixture:cascade-specificity"]
+      },
+      {
+        "id": "positioning",
+        "classification": "compatible",
+        "names": ["position", "top", "left", "right", "bottom", "zIndex"],
+        "values": "position: static|relative|absolute|fixed; offsets: auto or supported length; zIndex: integer|auto",
+        "units": ["px", "%", "em", "rem", "vw", "vh"],
+        "inherits": false,
+        "default": "position:static; offsets:auto; zIndex:auto/0",
+        "behavior": "Tested containing-block and stacking subset; no sticky positioning.",
+        "evidence": ["fixture:nested-positioning", "fixture:fixed-positioning", "fixture:z-index-overlap"]
+      },
+      {
+        "id": "sizing",
+        "classification": "compatible",
+        "names": ["width", "height", "boxSizing", "minWidth", "maxWidth", "minHeight", "maxHeight"],
+        "values": "auto, supported lengths and percentages; boxSizing content-box|border-box",
+        "units": ["px", "%", "em", "rem", "vw", "vh"],
+        "inherits": false,
+        "default": "width/height:auto; min constraints:0/auto; max constraints:none; boxSizing:content-box",
+        "evidence": ["fixture:box-model-basic", "fixture:border-box-basic", "fixture:min-max-constraints", "fixture:viewport-units"]
+      },
+      {
+        "id": "box-spacing",
+        "classification": "compatible",
+        "names": ["padding", "paddingTop", "paddingRight", "paddingBottom", "paddingLeft", "margin", "marginTop", "marginRight", "marginBottom", "marginLeft"],
+        "values": "one to four supported lengths; margins additionally accept auto in supported layout paths",
+        "units": ["px", "%", "em", "rem", "vw", "vh"],
+        "inherits": false,
+        "default": "0 except element defaults",
+        "evidence": ["fixture:box-model-basic", "fixture:three-value-box-shorthand", "fixture:auto-block-height"]
+      },
+      {
+        "id": "paint",
+        "classification": "compatible",
+        "names": ["background", "borderWidth", "borderColor", "borderStyle", "borderRadius", "boxShadow", "opacity"],
+        "values": "documented color/gradient, solid-border, radius, shadow and numeric-opacity subsets",
+        "units": ["px", "%"],
+        "inherits": false,
+        "default": "transparent background/border, no shadow, radius 0, opacity 1",
+        "behavior": "Paint is Babylon material/texture output; it is not a complete browser compositing engine.",
+        "evidence": ["fixture:styled-button", "fixture:opacity-stacking-context", "fixture:composed-notification-center"]
+      },
+      {
+        "id": "astylar-shape",
+        "classification": "different",
+        "names": ["polygonType"],
+        "values": ["rectangle", "circle", "triangle", "pentagon", "hexagon", "octagon"],
+        "inherits": false,
+        "default": "rectangle",
+        "behavior": "Astylar/Babylon mesh-shape selection; not a CSS property.",
+        "evidence": ["file:src/app/services/dom/elements/element-style-parser.service.ts"]
+      },
+      {
+        "id": "transforms",
+        "classification": "different",
+        "names": ["transform", "perspective"],
+        "values": "implemented transform/perspective string subset",
+        "inherits": false,
+        "default": "none",
+        "behavior": "Participates in Astylar positioning/stacking and Babylon output; browser transform grammar and 3D compositing are not complete.",
+        "evidence": ["fixture:nested-stacking-context", "file:src/app/services/dom/positioning/stacking-context.manager.ts"]
+      },
+      {
+        "id": "lists",
+        "classification": "compatible",
+        "names": ["listStyleType", "listItemSpacing"],
+        "values": "disc|circle|square|decimal|lower-alpha|upper-alpha|lower-roman|upper-roman|none plus length spacing",
+        "inherits": true,
+        "default": "element-dependent marker; spacing 0",
+        "evidence": ["fixture:unordered-list-layout", "fixture:ordered-list-layout"]
+      },
+      {
+        "id": "replaced-content",
+        "classification": "compatible",
+        "names": ["src", "objectFit"],
+        "values": "local/data/host-resolvable URL; objectFit fill|contain|cover|none|scale-down subset",
+        "inherits": false,
+        "default": "src absent; objectFit fill",
+        "evidence": ["fixture:image-intrinsic-size", "fixture:image-object-fit-contain", "fixture:reactive-image-source"]
+      },
+      {
+        "id": "legacy-link-style-fields",
+        "classification": "different",
+        "names": ["href", "target", "onclick"],
+        "values": "strings",
+        "inherits": false,
+        "default": "absent",
+        "behavior": "Prefer DOMElement href/target and typed events. onclick strings are not executed.",
+        "evidence": ["fixture:semantic-anchor-navigation", "file:src/lib/astylar-event.ts"]
+      },
+      {
+        "id": "inherited-typography",
+        "classification": "compatible",
+        "names": ["color", "fontFamily", "fontSize", "fontWeight", "fontStyle", "textAlign", "lineHeight", "letterSpacing", "wordSpacing", "whiteSpace", "wordWrap", "textTransform", "cursor"],
+        "values": "implemented CSS-like typography keywords, colors, font strings, unitless/length values, and whitespace/wrapping subsets",
+        "units": ["px", "em", "rem", "%"],
+        "inherits": true,
+        "default": "browser-like text defaults; element defaults may override",
+        "behavior": "Measured through canvas text; installed fonts and browser canvas metrics affect fidelity.",
+        "evidence": ["fixture:text-inheritance", "fixture:text-spacing", "fixture:text-transform-alignment", "fixture:font-relative-units"]
+      },
+      {
+        "id": "text-paint-and-alignment",
+        "classification": "compatible",
+        "names": ["verticalAlign", "textOverflow", "textShadow", "textDecoration", "textStroke"],
+        "values": "implemented keyword and compact string subsets; textOverflow clip|ellipsis",
+        "units": ["px", "em"],
+        "inherits": "property-dependent",
+        "default": "baseline/clip/none",
+        "evidence": ["fixture:text-overflow-ellipsis", "fixture:text-transform-alignment", "file:src/app/services/text/text-style-parser.service.ts"]
+      },
+      {
+        "id": "overflow",
+        "classification": "compatible",
+        "names": ["overflow"],
+        "values": ["visible", "hidden", "clip", "auto", "scroll"],
+        "inherits": false,
+        "default": "visible",
+        "behavior": "Owned clip regions and tested wheel/scroll-into-view behavior; not the complete browser scrolling API.",
+        "evidence": ["fixture:overflow-hidden", "fixture:overflow-nested-wheel", "fixture:overflow-scrolled-target"]
+      },
+      {
+        "id": "display",
+        "classification": "compatible",
+        "names": ["display"],
+        "values": "block|inline|inline-block|flex|inline-flex|grid|table family|list-item|none subset",
+        "inherits": false,
+        "default": "block globally, overridden by element defaults",
+        "evidence": ["fixture:block-flow", "fixture:inline-flex-flow", "fixture:grid-explicit-tracks", "fixture:table-fixed-layout"]
+      },
+      {
+        "id": "flexbox",
+        "classification": "compatible",
+        "names": ["flexDirection", "justifyContent", "alignItems", "alignContent", "flexWrap", "gap", "rowGap", "columnGap", "flexGrow", "flexShrink", "flexBasis", "flex", "alignSelf", "order"],
+        "values": "tested Flexbox keyword, numeric, shorthand and supported-length subset",
+        "units": ["px", "%", "em", "rem", "vw", "vh"],
+        "inherits": false,
+        "default": "row/nowrap/flex-start/stretch; grow 0, shrink 1, basis auto, order 0",
+        "evidence": ["fixture:flex-row-alignment", "fixture:flex-grow-gap", "fixture:flex-wrap-lines", "fixture:flex-order-self"]
+      },
+      {
+        "id": "grid",
+        "classification": "compatible",
+        "names": ["gridTemplateColumns", "gridTemplateRows", "gridColumn", "gridRow"],
+        "values": "explicit/implicit tracks using px, %, fr, auto, min-content, max-content, repeat() and supported minmax() forms; numeric line placement subset",
+        "units": ["px", "%", "fr"],
+        "inherits": false,
+        "default": "none/auto placement",
+        "evidence": ["fixture:grid-explicit-tracks", "fixture:grid-minmax-tracks", "fixture:grid-intrinsic-keyword-rows", "fixture:grid-auto-nested-composite"]
+      },
+      {
+        "id": "plugin-properties",
+        "classification": "plugin",
+        "names": ["extensions"],
+        "values": "unknown-safe values validated by the owning plugin property contribution",
+        "inherits": "declared by plugin",
+        "default": "declared by plugin",
+        "behavior": "Canonical namespace:name identities participate in cascade, validation, defaults and invalidation domains.",
+        "evidence": ["file:examples/angular-consumer/src/app/consumer-badge.plugin.ts", "file:docs/plugins.md"]
+      }
+    ]
+  },
+  "selectors": {
+    "classification": "compatible",
+    "supported": ["type", "#id", ".class", "*", "descendant", "child", "adjacent-sibling", "general-sibling", "comma-list", ":first-child", ":last-child", ":nth-child", ":hover", ":active", ":focus", "supported control-state and requirement pseudos"],
+    "cascade": "Element defaults, stylesheet specificity/source order, renderer context overrides, then inline style; extensions cascade by canonical identity.",
+    "differences": "This is a measured selector subset, not querySelector or a complete Selectors Level 4 engine.",
+    "evidence": ["fixture:cascade-specificity", "fixture:descendant-selector", "fixture:structural-pseudo", "fixture:control-state-selectors"]
+  },
+  "platform": [
+    {
+      "id": "site-data-tree",
+      "classification": "different",
+      "webConcept": "HTML DOM",
+      "astylarPattern": "Serializable SiteData.root.children DOMElement tree plus SiteData.styles.",
+      "evidence": ["file:src/app/types/site-data.ts"]
+    },
+    {
+      "id": "angular-mounting",
+      "classification": "different",
+      "webConcept": "Browser document lifecycle",
+      "astylarPattern": "Angular EnvironmentProviders and AstylarSurfaceComponent or Astylar.mount(); each mounted surface owns an EnvironmentInjector and Babylon scene lifetime.",
+      "evidence": ["file:src/lib/astylar-surface.component.ts", "file:src/lib/astylar.ts"]
+    },
+    {
+      "id": "three-dimensional-output",
+      "classification": "different",
+      "webConcept": "CSS pixels and browser compositing",
+      "astylarPattern": "Layout is authored in CSS-like pixels, projected through pixel-to-world scale into Babylon meshes/materials, camera and scene ownership.",
+      "evidence": ["file:src/app/services/coordinate-transform.service.ts", "file:src/app/services/dom/render-depth.constants.ts"]
+    },
+    {
+      "id": "reconciliation",
+      "classification": "compatible",
+      "webConcept": "Application-driven DOM updates retaining compatible state",
+      "astylarPattern": "AstylarSurface.update() reconciles authored identity and preserves compatible semantic/control/scroll state under the documented rules.",
+      "evidence": ["fixture:reconciliation-visual-updates", "fixture:reactive-lifecycle-cycles", "file:docs/reconciliation.md"]
+    },
+    {
+      "id": "semantics",
+      "classification": "compatible",
+      "webConcept": "DOM accessibility tree and focus",
+      "astylarPattern": "An offscreen semantic bridge mirrors the supported structure/state while Babylon remains the visual surface.",
+      "evidence": ["fixture:semantic-structure", "fixture:semantic-naming", "file:src/lib/astylar-semantic-bridge.ts"]
+    },
+    {
+      "id": "plugins",
+      "classification": "plugin",
+      "webConcept": "Custom elements/properties or non-browser visual behavior",
+      "astylarPattern": "Trusted Angular providers contribute namespaced schema, renderer, lifecycle, migration and invalidation contracts with explicit Babylon resource ownership.",
+      "evidence": ["file:docs/plugins.md", "file:examples/angular-consumer/src/app/consumer-badge.plugin.ts", "file:docs/compatibility/examples/manifest.json", "file:docs/compatibility/html-css.md"]
+    }
+  ],
+  "unsupported": {
+    "elements": [
+      {
+        "names": ["script", "style", "template", "slot", "picture", "svg", "math", "portal"],
+        "classification": "unsupported",
+        "recommendedAlternative": "Use host Angular code for behavior, SiteData.styles for declarations, supported structure/images, or a trusted namespaced plugin when custom Babylon output is appropriate.",
+        "pluginCanSupply": true,
+        "evidence": ["file:src/lib/astylar-core-capabilities.ts"]
+      }
+    ],
+    "css": [
+      {
+        "names": ["animation", "transition", "filter", "backdrop-filter", "clip-path", "mask", "shape-outside", "float", "clear", "columns", "subgrid", "sticky", "writing-mode", "container-queries", "custom-properties", "calc", "var"],
+        "classification": "unsupported",
+        "recommendedAlternative": "Author deterministic supported layout/paint values, drive state through Angular and AstylarSurface.update(), or use a plugin-owned Babylon capability with explicit lifecycle ownership.",
+        "pluginCanSupply": "Some visual/runtime concepts can be supplied by plugins, but plugins do not extend the core CSS parser itself.",
+        "evidence": ["file:src/app/types/style-rule.ts"]
+      }
+    ]
+  },
+  "pluginExtensionPoints": {
+    "classification": "plugin",
+    "canSupply": ["namespaced elements", "namespaced style properties", "Babylon renderers", "surface-scoped Angular services", "lifecycle hooks", "document migrations", "async resources", "layout/paint/semantics/interaction invalidation"],
+    "cannotImply": ["browser security sandbox", "dynamic installation", "framework-neutral DI", "arbitrary new core CSS grammar"],
+    "evidence": ["file:docs/plugins.md", "file:src/lib/astylar-plugin.ts", "file:docs/compatibility/examples/manifest.json"]
+  },
+  "freshness": {
+    "policy": "The check compares exact public element, DOMElement and StyleRule names and verifies normalized SHA-256 fingerprints for semantic implementation sources. A public capability change must update and re-review this catalog.",
+    "command": "npm run capabilities:check",
+    "authoritativeSources": [
+      { "path": "src/lib/astylar-core-capabilities.ts", "sha256": "ab7da6f8fb24ee3370d016f1366b656f2c32e6f1146df19b0a847e9822a7eee0" },
+      { "path": "src/app/types/dom-element.ts", "sha256": "dac9ca110f35e6b1451a6edead3b7e82b593a3829d0866b16587017e7a002f49" },
+      { "path": "src/app/types/style-rule.ts", "sha256": "4750f39b24e39fb9a9d0e0908af853d9d405b21691e5406f5b21209683da7c04" },
+      { "path": "src/app/config/browser-defaults.ts", "sha256": "b80995dc5599df550b9180c313c357c960f27199c6d364f67e778e073116a493" },
+      { "path": "src/app/services/dom/style.service.ts", "sha256": "a81383c44a51d5b458bc6840e4b7c53bcc38dfbce22bf48f710ac96698a881ba" },
+      { "path": "src/app/services/dom/elements/element-creation.service.ts", "sha256": "3e56d43004f808300dfb36655e7b0acf1bb972f75d9616afb9c107c70220c4bd" },
+      { "path": "src/app/services/text/text-style-parser.service.ts", "sha256": "d3f37b6201818f20d195a5d785a5969f970663e294f088e4d6017661bc148f33" }
+    ]
+  }
+}

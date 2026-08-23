@@ -3,14 +3,22 @@ import { StyleRule } from '../../types/style-rule';
 import { BabylonDOM } from './interfaces/dom.types';
 import { Color3 } from '@babylonjs/core';
 import { DOMElement } from '../../types/dom-element';
-import { BabylonRender } from './interfaces/render.types';
+import { BabylonRender, ParsedBackground, LinearGradientDefinition, GradientStop } from './interfaces/render.types';
 import { StyleDefaultsService } from './style-defaults.service';
+import { DOMAncestryService } from './dom-ancestry.service';
+import { ViewportService } from './positioning/viewport.service';
 
 @Injectable({
     providedIn: 'root'
 })
 export class StyleService {
-    constructor(private styleDefaults: StyleDefaultsService) { }
+    private readonly parsedAuthorStyles = new WeakSet<StyleRule>();
+
+    constructor(
+        private styleDefaults: StyleDefaultsService,
+        private ancestry: DOMAncestryService,
+        private viewportService: ViewportService,
+    ) { }
 
     /**
      * Parses the align-content property for flex containers
@@ -240,8 +248,10 @@ export class StyleService {
     }
 
     public parseStyles(dom: BabylonDOM, render: BabylonRender, styles: StyleRule[]): void {
-        console.log(`[STYLE-PARSE] Starting to parse ${styles.length} styles`);
+
         styles.forEach((style, index) => {
+            if (!this.matchesMediaConditions(style)) return;
+
             const selectors = style.selector.split(',').map(s => s.trim());
 
             selectors.forEach(selector => {
@@ -253,7 +263,23 @@ export class StyleService {
                         dom.context.elementStyles.set(elementId, { normal: {} as StyleRule });
                     }
                     dom.context.elementStyles.get(elementId)!.hover = style;
-                    console.log(`[STYLE-PARSE] Hover style for ${elementId}`);
+
+                } else if (selector.includes(':active')) {
+                    const baseSelector = selector.replace(':active', '');
+                    const elementId = baseSelector.replace('#', '');
+                    if (!dom.context.elementStyles.has(elementId)) {
+                        dom.context.elementStyles.set(elementId, { normal: {} as StyleRule });
+                    }
+                    dom.context.elementStyles.get(elementId)!.active = style;
+
+                } else if (selector.includes(':focus')) {
+                    const baseSelector = selector.replace(':focus', '');
+                    const elementId = baseSelector.replace('#', '');
+                    if (!dom.context.elementStyles.has(elementId)) {
+                        dom.context.elementStyles.set(elementId, { normal: {} as StyleRule });
+                    }
+                    dom.context.elementStyles.get(elementId)!.focus = style;
+
                 } else if (selector.startsWith('#')) {
                     // This is a normal element style
                     const elementId = selector.replace('#', '');
@@ -287,103 +313,423 @@ export class StyleService {
                 }
             });
         });
-        console.log(`[STYLE-PARSE] Completed parsing. Total stored style keys: ${dom.context.elementStyles.size}`);
+        for (const entry of dom.context.elementStyles.values()) {
+            this.parsedAuthorStyles.add(entry.normal);
+        }
+
     }
 
-    public findStyleForElement(element: DOMElement, styles: StyleRule[], elementStylesOverride?: Map<string, { normal: StyleRule; hover?: StyleRule }>): StyleRule | undefined {
+    public findStyleForElement(element: DOMElement, styles: StyleRule[], elementStylesOverride?: Map<string, { normal: StyleRule; hover?: StyleRule; active?: StyleRule; focus?: StyleRule }>): StyleRule | undefined {
         const typeDefaults = this.styleDefaults.getElementTypeDefaults(element.type);
 
         let mergedStyle: StyleRule = {
             selector: element.id ? `#${element.id}` : element.type,
-            ...typeDefaults
+            ...typeDefaults,
+            // The browser UA stylesheet hides a dialog only while its `open`
+            // attribute is absent. Model that state here so authored display
+            // declarations can still override the default in the cascade.
+            ...(element.type === 'dialog' && element.open ? { display: 'block' as const } : {}),
         };
 
-        // If we don't have the map, fall back to the slow array search (though we should always have the map now)
-        const getStyle = (selector: string): StyleRule | undefined => {
-            if (elementStylesOverride) {
-                return elementStylesOverride.get(selector)?.normal;
+        const winners = new Map<keyof StyleRule, { specificity: number; sourceOrder: number; value: unknown }>();
+        const extensionWinners = new Map<string, { specificity: number; sourceOrder: number; value: unknown }>();
+        const debugSegments: string[] = [];
+
+        const recordWinner = (
+            property: keyof StyleRule,
+            value: unknown,
+            specificity: number,
+            sourceOrder: number,
+        ): void => {
+            const current = winners.get(property);
+            if (!current || specificity > current.specificity ||
+                (specificity === current.specificity && sourceOrder >= current.sourceOrder)) {
+                winners.set(property, { specificity, sourceOrder, value });
             }
-            // Fallback to searching the raw array if no map provided
-            return styles.find(s => {
-                const parts = s.selector.split(',').map(p => p.trim());
-                return parts.includes(selector);
-            });
         };
 
-        // 1. Apply Type-based styles (e.g., "div")
-        const typeStyle = getStyle(element.type);
-        if (typeStyle) {
-            mergedStyle = { ...mergedStyle, ...typeStyle };
-        }
+        styles.forEach((rule, sourceOrder) => {
+            if (!this.matchesMediaConditions(rule)) return;
 
-        // 2. Apply Class-based styles (e.g., ".my-class")
-        if (element.class) {
-            const classNames = element.class.split(' ').filter(c => c.trim());
-            classNames.forEach(className => {
-                // Try both ".class" and "class" keys
-                const classStyle = getStyle(`.${className}`) || getStyle(className);
-                if (classStyle) {
-                    mergedStyle = { ...mergedStyle, ...classStyle };
+            rule.selector.split(',').map(selector => selector.trim()).forEach(selector => {
+                const specificity = this.getMatchingSpecificity(element, selector);
+                if (specificity === null) {
+                    return;
+                }
+
+                debugSegments.push(`${selector}[${specificity}]`);
+                for (const [property, value] of Object.entries(rule)) {
+                    if (property === 'selector' || property.startsWith('media') || value === undefined) {
+                        continue;
+                    }
+                    if (property === 'extensions' && value && typeof value === 'object' && !Array.isArray(value)) {
+                        for (const [identity, extensionValue] of Object.entries(value)) {
+                            const current = extensionWinners.get(identity);
+                            if (!current || specificity > current.specificity ||
+                                (specificity === current.specificity && sourceOrder >= current.sourceOrder)) {
+                                extensionWinners.set(identity, {
+                                    specificity,
+                                    sourceOrder,
+                                    value: extensionValue,
+                                });
+                            }
+                        }
+                        continue;
+                    }
+                    const key = property as keyof StyleRule;
+                    recordWinner(key, value, specificity, sourceOrder);
+                    if (key === 'flex') {
+                        const expanded = this.parseFlexShorthand(String(value));
+                        recordWinner('flexGrow', String(expanded.flexGrow), specificity, sourceOrder);
+                        recordWinner('flexShrink', String(expanded.flexShrink), specificity, sourceOrder);
+                        recordWinner('flexBasis', expanded.flexBasis, specificity, sourceOrder);
+                    }
                 }
             });
-        }
+        });
 
-        // 3. Apply ID-based styles (e.g., "#my-id")
-        if (element.id) {
-            const idStyle = getStyle(`#${element.id}`) || getStyle(element.id);
-            if (idStyle) {
-                mergedStyle = { ...mergedStyle, ...idStyle };
+        for (const [property, winner] of winners) {
+            (mergedStyle as unknown as Record<string, unknown>)[property] = winner.value;
+        }
+        // Author shorthands replace lower-origin UA longhands. Keeping the
+        // browser defaults here would make declarations such as `* { margin: 0 }`
+        // appear to win the cascade while the old heading margins still affect
+        // layout. Author longhands remain valid overrides of the shorthand.
+        for (const [shorthand, longhands] of [
+            ['margin', ['marginTop', 'marginRight', 'marginBottom', 'marginLeft']],
+            ['padding', ['paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft']],
+        ] as const) {
+            if (!winners.has(shorthand)) continue;
+            for (const longhand of longhands) {
+                if (!winners.has(longhand)) delete mergedStyle[longhand];
             }
         }
+        if (extensionWinners.size > 0) {
+            mergedStyle.extensions = Object.fromEntries(
+                [...extensionWinners].map(([identity, winner]) => [identity, winner.value]),
+            );
+        }
+
+        // Context overrides are renderer-authored declarations (for example table
+        // layout adjustments), so they sit above stylesheet rules but below inline style.
+        if (element.id) {
+            const contextOverride = elementStylesOverride?.get(element.id)?.normal;
+            if (contextOverride && !this.parsedAuthorStyles.has(contextOverride)) {
+                mergedStyle = {
+                    ...mergedStyle,
+                    ...contextOverride,
+                    extensions: {
+                        ...mergedStyle.extensions,
+                        ...contextOverride.extensions,
+                    },
+                };
+            }
+        }
+
+        if (element.style) {
+            for (const [property, value] of Object.entries(element.style)) {
+                if (value === undefined) continue;
+                if (property === 'extensions' && value && typeof value === 'object' && !Array.isArray(value)) {
+                    mergedStyle.extensions = {
+                        ...mergedStyle.extensions,
+                        ...(value as Record<string, unknown>),
+                    };
+                    continue;
+                }
+                (mergedStyle as unknown as Record<string, unknown>)[property] = value;
+                if (property === 'flex') {
+                    const expanded = this.parseFlexShorthand(String(value));
+                    mergedStyle.flexGrow = String(expanded.flexGrow);
+                    mergedStyle.flexShrink = String(expanded.flexShrink);
+                    mergedStyle.flexBasis = expanded.flexBasis;
+                }
+            }
+            debugSegments.push('inline');
+        }
+
+        this.logStyleResolution(element, mergedStyle, debugSegments);
 
         return mergedStyle;
     }
 
+    /** Resolves the authored declarations for one live interaction pseudo-state. */
+    public findInteractionStyleForElement(
+        element: DOMElement,
+        styles: StyleRule[],
+        state: 'hover' | 'active' | 'focus',
+    ): StyleRule | undefined {
+        const winners = new Map<keyof StyleRule, {
+            specificity: number;
+            sourceOrder: number;
+            value: unknown;
+        }>();
+        const extensionWinners = new Map<string, {
+            specificity: number;
+            sourceOrder: number;
+            value: unknown;
+        }>();
+        const pseudo = new RegExp(`:${state}(?![\\w-])`, 'g');
+
+        styles.forEach((rule, sourceOrder) => {
+            if (!this.matchesMediaConditions(rule)) return;
+            rule.selector.split(',').map((selector) => selector.trim()).forEach((selector) => {
+                const targetCompound = selector.split(/[>+~]|\s+/).at(-1) ?? '';
+                if (!pseudo.test(targetCompound)) {
+                    pseudo.lastIndex = 0;
+                    return;
+                }
+                pseudo.lastIndex = 0;
+                const baseSelector = selector.replace(pseudo, '');
+                pseudo.lastIndex = 0;
+                const baseSpecificity = this.getMatchingSpecificity(element, baseSelector);
+                if (baseSpecificity === null) return;
+                const specificity = baseSpecificity + 10;
+                for (const [property, value] of Object.entries(rule)) {
+                    if (property === 'selector' || property.startsWith('media') || value === undefined) continue;
+                    if (property === 'extensions' && value && typeof value === 'object' && !Array.isArray(value)) {
+                        for (const [identity, extensionValue] of Object.entries(value)) {
+                            const current = extensionWinners.get(identity);
+                            if (!current || specificity > current.specificity ||
+                                (specificity === current.specificity && sourceOrder >= current.sourceOrder)) {
+                                extensionWinners.set(identity, { specificity, sourceOrder, value: extensionValue });
+                            }
+                        }
+                        continue;
+                    }
+                    const key = property as keyof StyleRule;
+                    const current = winners.get(key);
+                    if (!current || specificity > current.specificity ||
+                        (specificity === current.specificity && sourceOrder >= current.sourceOrder)) {
+                        winners.set(key, { specificity, sourceOrder, value });
+                    }
+                }
+            });
+        });
+        if (winners.size === 0 && extensionWinners.size === 0) return undefined;
+        const result: StyleRule = { selector: element.id ? `#${element.id}:${state}` : `${element.type}:${state}` };
+        for (const [property, winner] of winners) {
+            (result as unknown as Record<string, unknown>)[property] = winner.value;
+        }
+        if (extensionWinners.size > 0) {
+            result.extensions = Object.fromEntries(
+                [...extensionWinners].map(([identity, winner]) => [identity, winner.value]),
+            );
+        }
+        return result;
+    }
+
+    private matchesMediaConditions(rule: StyleRule): boolean {
+        const { width, height } = this.viewportService.getViewportDimensions();
+        const conditions: Array<[string | undefined, number, 'min' | 'max']> = [
+            [rule.mediaMinWidth, width, 'min'],
+            [rule.mediaMaxWidth, width, 'max'],
+            [rule.mediaMinHeight, height, 'min'],
+            [rule.mediaMaxHeight, height, 'max'],
+        ];
+
+        return conditions.every(([value, actual, bound]) => {
+            if (value === undefined) return true;
+            const threshold = this.parseMediaLength(value);
+            if (threshold === null) return false;
+            return bound === 'min' ? actual >= threshold : actual <= threshold;
+        });
+    }
+
+    private parseMediaLength(value: string): number | null {
+        const normalized = value.trim().toLowerCase();
+        const match = normalized.match(/^(-?(?:\d+\.?\d*|\.\d+))(px|em|rem)?$/);
+        if (!match) return null;
+        const amount = Number.parseFloat(match[1]);
+        return match[2] === 'em' || match[2] === 'rem' ? amount * 16 : amount;
+    }
+
+    private getMatchingSpecificity(element: DOMElement, selector: string): number | null {
+        const normalizedSelector = selector.trim();
+        if (!normalizedSelector) {
+            return null;
+        }
+        // Namespaced plugin element identities contain a colon, which otherwise
+        // looks like an unsupported pseudo-class to the compact selector parser.
+        if (normalizedSelector === element.type) return 1;
+
+        const parsedSelector = this.parseRelationalSelector(normalizedSelector);
+        if (!parsedSelector) return null;
+
+        const { compounds, combinators } = parsedSelector;
+        let matchedElement: DOMElement | undefined = element;
+        let specificity = this.getCompoundSpecificity(matchedElement, compounds[compounds.length - 1]);
+        if (specificity === null) return null;
+
+        for (let index = compounds.length - 2; index >= 0; index--) {
+            const combinator = combinators[index];
+            let relatedElement: DOMElement | undefined;
+            let relatedSpecificity: number | null = null;
+
+            if (combinator === 'child') {
+                relatedElement = this.ancestry.getParent(matchedElement);
+                if (relatedElement) {
+                    relatedSpecificity = this.getCompoundSpecificity(relatedElement, compounds[index]);
+                }
+            } else if (combinator === 'adjacent') {
+                relatedElement = this.getPreviousSibling(matchedElement);
+                if (relatedElement) {
+                    relatedSpecificity = this.getCompoundSpecificity(relatedElement, compounds[index]);
+                }
+            } else if (combinator === 'general-sibling') {
+                for (const sibling of this.getPreviousSiblings(matchedElement)) {
+                    const siblingSpecificity = this.getCompoundSpecificity(sibling, compounds[index]);
+                    if (siblingSpecificity !== null) {
+                        relatedElement = sibling;
+                        relatedSpecificity = siblingSpecificity;
+                        break;
+                    }
+                }
+            } else {
+                relatedElement = this.ancestry.getParent(matchedElement);
+                while (relatedElement) {
+                    relatedSpecificity = this.getCompoundSpecificity(relatedElement, compounds[index]);
+                    if (relatedSpecificity !== null) break;
+                    relatedElement = this.ancestry.getParent(relatedElement);
+                }
+            }
+
+            if (!relatedElement || relatedSpecificity === null) return null;
+            specificity += relatedSpecificity;
+            matchedElement = relatedElement;
+        }
+
+        return specificity;
+    }
+
+    private parseRelationalSelector(selector: string): {
+        compounds: string[];
+        combinators: Array<'descendant' | 'child' | 'adjacent' | 'general-sibling'>;
+    } | null {
+        const normalized = selector.replace(/\s*([>+~])\s*/g, '$1');
+        const compounds = normalized.split(/[>+~]|\s+/);
+        const combinators = Array.from(normalized.matchAll(/[>+~]|\s+/g), match => {
+            if (match[0] === '>') return 'child' as const;
+            if (match[0] === '+') return 'adjacent' as const;
+            if (match[0] === '~') return 'general-sibling' as const;
+            return 'descendant' as const;
+        });
+
+        if (compounds.some(compound => !compound) || combinators.length !== compounds.length - 1) {
+            return null;
+        }
+
+        return { compounds, combinators };
+    }
+
+    private getPreviousSibling(element: DOMElement): DOMElement | undefined {
+        const siblings = this.ancestry.getParent(element)?.children;
+        if (!siblings) return undefined;
+
+        const index = siblings.indexOf(element);
+        return index > 0 ? siblings[index - 1] : undefined;
+    }
+
+    private getPreviousSiblings(element: DOMElement): DOMElement[] {
+        const siblings = this.ancestry.getParent(element)?.children;
+        if (!siblings) return [];
+
+        const index = siblings.indexOf(element);
+        return index > 0 ? siblings.slice(0, index).reverse() : [];
+    }
+
+    private getCompoundSpecificity(element: DOMElement, selector: string): number | null {
+        const pseudoPattern = /:(first-child|last-child|disabled|enabled|checked|required|optional|read-only|read-write)/g;
+        const pseudos = Array.from(selector.matchAll(pseudoPattern), match => match[1]);
+        const baseSelector = selector.replace(pseudoPattern, '');
+        if (baseSelector.includes(':')) return null;
+
+        if (pseudos.includes('first-child') || pseudos.includes('last-child')) {
+            const siblings = this.ancestry.getParent(element)?.children;
+            if (!siblings) return null;
+            const index = siblings.indexOf(element);
+            if (index < 0) return null;
+            if (pseudos.includes('first-child') && index !== 0) return null;
+            if (pseudos.includes('last-child') && index !== siblings.length - 1) return null;
+        }
+
+        const disableable = ['button', 'input', 'select', 'textarea', 'option', 'optgroup', 'fieldset'].includes(element.type);
+        if (pseudos.includes('disabled') && (!disableable || !element.disabled)) return null;
+        if (pseudos.includes('enabled') && (!disableable || element.disabled === true)) return null;
+        if (pseudos.includes('checked') && element.checked !== true && element.selected !== true) return null;
+        const requirementAware = ['input', 'select', 'textarea'].includes(element.type);
+        if (pseudos.includes('required') && (!requirementAware || element.required !== true)) return null;
+        if (pseudos.includes('optional') && (!requirementAware || element.required === true)) return null;
+        const textEditable = element.type === 'input' || element.type === 'textarea';
+        if (pseudos.includes('read-only') && (!textEditable || element.readonly !== true)) return null;
+        if (pseudos.includes('read-write') && (!textEditable || element.readonly === true || element.disabled === true)) return null;
+
+        const pseudoSpecificity = pseudos.length * 10;
+        if (!baseSelector || baseSelector === '*') return pseudoSpecificity;
+
+        const tokens = Array.from(baseSelector.matchAll(/([.#]?)([\w-]+)/g));
+        if (!tokens.length || tokens.map(token => token[0]).join('') !== baseSelector) {
+            return null;
+        }
+
+        const classes = new Set((element.class ?? '').split(/\s+/).filter(Boolean));
+        let ids = 0;
+        let classCount = 0;
+        let typeCount = 0;
+
+        for (const token of tokens) {
+            const prefix = token[1];
+            const value = token[2];
+            if (prefix === '#') {
+                if (element.id !== value) return null;
+                ids += 1;
+            } else if (prefix === '.') {
+                if (!classes.has(value)) return null;
+                classCount += 1;
+            } else if (value === element.type) {
+                typeCount += 1;
+            } else if (element.id === value) {
+                // Preserve Astylar's historical bare-ID selector support.
+                ids += 1;
+            } else if (classes.has(value)) {
+                // Preserve Astylar's historical bare-class selector support.
+                classCount += 1;
+            } else {
+                return null;
+            }
+        }
+
+        return ids * 100 + classCount * 10 + typeCount + pseudoSpecificity;
+    }
+
+    private logStyleResolution(element: DOMElement, style: StyleRule, segments: string[]): void {
+        const path = segments.length ? segments.join(' -> ') : 'defaults';
+        const identifier = element.id ? `#${element.id}` : element.type;
+
+        const keyProps: Array<keyof StyleRule> = [
+            'display',
+            'flexDirection',
+            'justifyContent',
+            'alignItems',
+            'minWidth',
+            'minHeight',
+            'padding',
+            'margin'
+        ];
+
+        const propSummary = keyProps
+            .map(prop => `${prop}=${style[prop] ?? '∅'}`)
+            .join(', ');
+
+
+    }
+
     /**
-     * Determines if an element matches a CSS selector
-     * @param element The DOM element to test
-     * @param selector The CSS selector to match against
-     * @returns True if the element matches the selector, false otherwise
+     * Determines if the provided element matches a CSS-like selector. Limited support (ID, class, type).
      */
     public matchesSelector(element: DOMElement, selector: string): boolean {
-        // Handle ID selectors (#id)
-        if (selector.startsWith('#')) {
-            const selectorId = selector.substring(1);
-            const result = element.id === selectorId;
-            // The following console.log was part of the original code, but the diff attempted to insert
-            // unrelated code here. Reverting to original logic for matchesSelector.
-            if (element.id && (element.id.includes('complete') || element.id.includes('th-') || element.id.includes('td-'))) {
-                console.log(`[SELECTOR-MATCH] ID "${selector}" vs element "${element.id}": ${result}`);
-            }
-            return result;
-        }
-
-        // Handle class selectors (.class)
-        if (selector.startsWith('.')) {
-            const selectorClass = selector.substring(1);
-            const elementClasses = element.class ? element.class.split(' ') : [];
-            const result = elementClasses.includes(selectorClass);
-            if (element.class && (element.class.includes('complete') || element.class.includes('spanning'))) {
-                console.log(`[SELECTOR-MATCH] Class "${selector}" vs element classes "${element.class}": ${result} (classes: [${elementClasses.join(', ')}])`);
-            }
-            return result;
-        }
-
-        // Handle element type selectors (div, span, etc.)
-        if (!selector.includes('.') && !selector.includes('#')) {
-            const result = element.type === selector;
-            return result;
-        }
-
-        // Handle child selectors (parent > child)
-        if (selector.includes('>')) {
-            // This would require parent context, which we don't have in this simple implementation
-            return false;
-        }
-
-        // Default: no match
-        return false;
+        return this.getMatchingSpecificity(element, selector) !== null;
     }
+
     public findStyleBySelector(selector: string, styles: StyleRule[]): StyleRule | undefined {
         // Try exact match first
         let style = styles.find(s => s.selector === selector);
@@ -403,27 +749,44 @@ export class StyleService {
         return undefined;
     }
 
-    public parseBackgroundColor(background?: string): { color: Color3, alpha?: number } | null {
+    public parseBackgroundColor(background?: string): ParsedBackground | null {
         if (!background) {
-            console.log('🎨 COLOR DEBUG: No background color provided, using default');
-            return { color: new Color3(0.2, 0.2, 0.3) }; // Default color
+
+            return {
+                type: 'color',
+                color: new Color3(0.2, 0.2, 0.3)
+            };
         }
 
-        console.log(`🎨 COLOR DEBUG: Parsing background color: "${background}"`);
-        const colorLower = background.toLowerCase();
+
+        const trimmedBackground = background.trim();
+        const colorLower = trimmedBackground.toLowerCase();
+
+        const gradient = this.tryParseLinearGradient(trimmedBackground);
+        if (gradient) {
+
+            return {
+                type: 'gradient',
+                gradient,
+                alpha: gradient.stops.some(stop => stop.alpha < 1) ? undefined : undefined
+            };
+        }
 
         // Handle transparent backgrounds
         if (colorLower === 'transparent') {
-            console.log('🎨 COLOR DEBUG: Transparent background detected, returning null');
+
             return null;
         }
 
         // Handle hex colors (#ff0000, #f00)
         if (colorLower.startsWith('#')) {
-            console.log(`🎨 COLOR DEBUG: Parsing hex color: ${background}`);
+
             const result = this.parseHexColor(colorLower);
-            console.log(`🎨 COLOR DEBUG: Hex color result: RGB(${result.r.toFixed(3)}, ${result.g.toFixed(3)}, ${result.b.toFixed(3)})`);
-            return { color: result };
+
+            return {
+                type: 'color',
+                color: result
+            };
         }
 
         // Handle named colors - expanded list
@@ -599,26 +962,272 @@ export class StyleService {
         };
 
         if (namedColors[colorLower]) {
-            console.log(`🎨 COLOR DEBUG: Found named color: ${colorLower}`);
+
             const result = namedColors[colorLower];
-            console.log(`🎨 COLOR DEBUG: Named color result: RGB(${result.r.toFixed(3)}, ${result.g.toFixed(3)}, ${result.b.toFixed(3)})`);
-            return { color: result };
+
+            return {
+                type: 'color',
+                color: result
+            };
         }
 
         // Handle rgb() and rgba() formats
         if (colorLower.startsWith('rgb(') || colorLower.startsWith('rgba(')) {
-            console.log(`🎨 COLOR DEBUG: Parsing RGB(A) color: ${background}`);
+
             const result = this.parseRgbColor(colorLower);
-            console.log(`🎨 COLOR DEBUG: RGB(A) color result: RGB(${result.color.r.toFixed(3)}, ${result.color.g.toFixed(3)}, ${result.color.b.toFixed(3)}), A=${result.alpha}`);
-            return result;
+
+            return {
+                type: 'color',
+                color: result.color,
+                alpha: result.alpha
+            };
         }
 
         // Fallback to default
-        console.log(`🎨 COLOR DEBUG: Unknown color format: ${background}, using default`);
-        return { color: new Color3(0.2, 0.2, 0.3) };
+
+        return {
+            type: 'color',
+            color: new Color3(0.2, 0.2, 0.3)
+        };
     }
 
-    private parseRgbColor(rgb: string): { color: Color3, alpha?: number } {
+    private tryParseLinearGradient(background: string): LinearGradientDefinition | null {
+        const gradientMatch = background.match(/^linear-gradient\((.*)\)$/i);
+        if (!gradientMatch) {
+            return null;
+        }
+
+        const inner = gradientMatch[1].trim();
+        if (!inner) {
+            return null;
+        }
+
+        const segments: string[] = [];
+        let current = '';
+        let depth = 0;
+
+        for (let i = 0; i < inner.length; i++) {
+            const char = inner[i];
+            if (char === '(') {
+                depth++;
+                current += char;
+                continue;
+            }
+            if (char === ')') {
+                depth--;
+                current += char;
+                continue;
+            }
+            if (char === ',' && depth === 0) {
+                segments.push(current.trim());
+                current = '';
+                continue;
+            }
+            current += char;
+        }
+
+        if (current.trim().length > 0) {
+            segments.push(current.trim());
+        }
+
+        if (segments.length < 2) {
+            console.warn(`🎨 COLOR DEBUG: linear-gradient requires at least two color stops: ${background}`);
+            return null;
+        }
+
+        let angle = 180; // default CSS angle (to bottom)
+        let startIndex = 0;
+        const possibleDirection = segments[0].toLowerCase();
+        if (this.isAngleSegment(possibleDirection) || this.isDirectionKeyword(possibleDirection)) {
+            angle = this.parseGradientAngle(possibleDirection);
+            startIndex = 1;
+        }
+
+        const stops: GradientStop[] = [];
+        for (let i = startIndex; i < segments.length; i++) {
+            const stop = this.parseGradientStop(segments[i]);
+            if (stop) {
+                stops.push(stop);
+            }
+        }
+
+        if (stops.length < 2) {
+            console.warn(`🎨 COLOR DEBUG: Failed to parse enough gradient stops from: ${background}`);
+            return null;
+        }
+
+        this.normaliseGradientStops(stops);
+
+        return {
+            type: 'linear',
+            angle,
+            stops
+        };
+    }
+
+    private isAngleSegment(segment: string): boolean {
+        return /(deg|rad|turn|grad)$/i.test(segment.trim());
+    }
+
+    private isDirectionKeyword(segment: string): boolean {
+        return segment.startsWith('to ');
+    }
+
+    private parseGradientAngle(segment: string): number {
+        const lower = segment.toLowerCase().trim();
+
+        if (lower.startsWith('to ')) {
+            const parts = lower.replace('to ', '').trim().split(/\s+/);
+            let angle = 0; // to right
+            const hasLeft = parts.includes('left');
+            const hasRight = parts.includes('right');
+            const hasTop = parts.includes('top');
+            const hasBottom = parts.includes('bottom');
+
+            if (hasTop && hasRight) {
+                angle = 315;
+            } else if (hasTop && hasLeft) {
+                angle = 225;
+            } else if (hasBottom && hasRight) {
+                angle = 45;
+            } else if (hasBottom && hasLeft) {
+                angle = 135;
+            } else if (hasTop) {
+                angle = 270;
+            } else if (hasBottom) {
+                angle = 90;
+            } else if (hasLeft) {
+                angle = 180;
+            } else {
+                angle = 0;
+            }
+
+            return angle;
+        }
+
+        if (lower.endsWith('deg')) {
+            return parseFloat(lower.replace('deg', ''));
+        }
+
+        if (lower.endsWith('rad')) {
+            const radians = parseFloat(lower.replace('rad', ''));
+            return radians * (180 / Math.PI);
+        }
+
+        if (lower.endsWith('turn')) {
+            return parseFloat(lower.replace('turn', '')) * 360;
+        }
+
+        if (lower.endsWith('grad')) {
+            return parseFloat(lower.replace('grad', '')) * 0.9;
+        }
+
+        const numeric = parseFloat(lower);
+        if (!Number.isNaN(numeric)) {
+            return numeric;
+        }
+
+        return 180;
+    }
+
+    private parseGradientStop(stop: string): GradientStop | null {
+        const parts = stop.split(/\s+/).filter(Boolean);
+        if (!parts.length) {
+            return null;
+        }
+
+        const colorValue = parts.shift()!;
+        const parsedColor = this.parseBackgroundColor(colorValue);
+        if (!parsedColor || parsedColor.type !== 'color') {
+            console.warn(`🎨 COLOR DEBUG: Gradient stop color could not be parsed: ${stop}`);
+            return null;
+        }
+
+        let offset: number | undefined;
+        let absolutePixelOffset: number | undefined;
+        let alpha = parsedColor.alpha ?? 1;
+
+        if (parts.length) {
+            const offsetToken = parts.shift()!;
+            if (offsetToken.endsWith('%')) {
+                offset = Math.min(Math.max(parseFloat(offsetToken) / 100, 0), 1);
+            } else if (offsetToken.endsWith('px')) {
+                absolutePixelOffset = parseFloat(offsetToken);
+            } else {
+                const numeric = parseFloat(offsetToken);
+                if (!Number.isNaN(numeric)) {
+                    offset = numeric > 1 ? numeric / 100 : numeric;
+                }
+            }
+        }
+
+        return {
+            color: parsedColor.color,
+            offset: offset ?? Number.NaN,
+            alpha
+        };
+    }
+
+    private normaliseGradientStops(stops: GradientStop[]): void {
+        // If no offsets defined, distribute evenly
+        const hasAnyDefinedOffset = stops.some(stop => !Number.isNaN(stop.offset));
+        if (!hasAnyDefinedOffset) {
+            const step = stops.length > 1 ? 1 / (stops.length - 1) : 0;
+            stops.forEach((stop, index) => {
+                stop.offset = step * index;
+            });
+            return;
+        }
+
+        // Ensure first and last offsets defined
+        if (Number.isNaN(stops[0].offset)) {
+            stops[0].offset = 0;
+        }
+        if (Number.isNaN(stops[stops.length - 1].offset)) {
+            stops[stops.length - 1].offset = 1;
+        }
+
+        let lastDefinedIndex = 0;
+        for (let i = 1; i < stops.length; i++) {
+            if (Number.isNaN(stops[i].offset)) {
+                continue;
+            }
+
+            const gap = i - lastDefinedIndex;
+            if (gap > 1) {
+                const startOffset = stops[lastDefinedIndex].offset;
+                const endOffset = stops[i].offset;
+                const increment = (endOffset - startOffset) / gap;
+                for (let j = 1; j < gap; j++) {
+                    stops[lastDefinedIndex + j].offset = startOffset + increment * j;
+                }
+            }
+
+            lastDefinedIndex = i;
+        }
+
+        // Fill any remaining NaNs with previous offset
+        for (let i = 1; i < stops.length; i++) {
+            if (Number.isNaN(stops[i].offset)) {
+                stops[i].offset = stops[i - 1].offset;
+            }
+        }
+
+        // Clamp to [0,1]
+        stops.forEach(stop => {
+            if (stop.offset > 1) {
+                stop.offset = 1;
+            }
+            if (stop.offset < 0) {
+                stop.offset = 0;
+            }
+        });
+
+        // Sort stops by offset to ensure correct order
+        stops.sort((a, b) => a.offset - b.offset);
+    }
+
+    private parseRgbColor(rgb: string): { color: Color3; alpha?: number } {
         // Extract the RGB values from the string - handle both comma and space separators
         // and handle the / alpha separator in CSS4 format
         const cleaned = rgb.replace(/rgba?\(|\)/g, '').replace(/\//g, ',');
@@ -634,7 +1243,7 @@ export class StyleService {
         const b = parseInt(values[2], 10) / 255;
         const a = values.length >= 4 ? parseFloat(values[3]) : undefined;
 
-        console.log(`🎨 COLOR DEBUG: Parsed RGB(A): R=${r}, G=${g}, B=${b}, A=${a}`);
+
         return { color: new Color3(r, g, b), alpha: a };
     }
 
@@ -667,4 +1276,4 @@ export class StyleService {
     public getElementTypeDefaults(elementType: string): Partial<StyleRule> {
         return this.styleDefaults.getElementTypeDefaults(elementType);
     }
-} 
+}

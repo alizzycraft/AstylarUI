@@ -1,0 +1,58 @@
+<main class="consumer-shell">
+  <header class="consumer-header">
+    <div>
+      <p class="eyebrow">Installed package example</p>
+      <h1>AstylarUI operations workspace</h1>
+      <p data-testid="consumer-status">{{ status() }}</p>
+    </div>
+    <div class="consumer-actions" aria-label="Example controls">
+      <button type="button" (click)="refreshData()">Update data</button>
+      <button type="button" (click)="toggleDialog()">
+        {{ dialogOpen() ? 'Close details' : 'Open details' }}
+      </button>
+      <button type="button" (click)="refreshSecondaryData()">Update secondary</button>
+      <button type="button" (click)="togglePrimarySurface()">
+        {{ primaryVisible() ? 'Dispose primary' : 'Remount primary' }}
+      </button>
+      <button type="button" (click)="resizeSurface('secondary')">Resize secondary</button>
+    </div>
+  </header>
+
+  <div class="surface-grid">
+    @if (primaryVisible()) {
+      <section class="surface-card" aria-labelledby="primary-surface-title">
+        <div class="surface-heading">
+          <div>
+            <p class="eyebrow">Primary public API surface</p>
+            <h2 id="primary-surface-title">Responsive inventory view</h2>
+          </div>
+          <output data-testid="primary-revision" aria-live="polite">Revision {{ revision() }}</output>
+        </div>
+        <astylar-surface
+          data-testid="primary-astylar-surface"
+          [siteData]="primaryData()"
+          [options]="primaryOptions"
+          (mounted)="onMounted('primary', $event)"
+          (failed)="onFailed($event)"
+        />
+      </section>
+    }
+
+    <section class="surface-card" aria-labelledby="secondary-surface-title">
+      <div class="surface-heading">
+        <div>
+          <p class="eyebrow">Independent secondary surface</p>
+          <h2 id="secondary-surface-title">Parallel renderer ownership</h2>
+        </div>
+        <output data-testid="secondary-revision" aria-live="polite">Revision {{ secondaryRevision() }}</output>
+      </div>
+      <astylar-surface
+        data-testid="secondary-astylar-surface"
+        [siteData]="secondaryData()"
+        [options]="secondaryOptions"
+        (mounted)="onMounted('secondary', $event)"
+        (failed)="onFailed($event)"
+      />
+    </section>
+  </div>
+</main>

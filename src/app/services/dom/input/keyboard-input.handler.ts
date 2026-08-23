@@ -56,7 +56,6 @@ export class KeyboardInputHandler {
                 break;
 
             case InputType.Select:
-            case InputType.Select:
                 this.handleSelectKeyboard(event, inputElement as SelectElement, render, style);
                 break;
         }
@@ -78,6 +77,22 @@ export class KeyboardInputHandler {
                 this.textInputManager.moveCursor(textInput, CursorDirection.Right, event.shiftKey);
                 this.textInputManager.updateCursorAfterMovement(textInput, render, style);
                 event.preventDefault();
+                break;
+
+            case 'ArrowUp':
+                if (textInput.type === InputType.Textarea) {
+                    this.textInputManager.moveCursor(textInput, CursorDirection.Up, event.shiftKey);
+                    this.textInputManager.updateCursorAfterMovement(textInput, render, style);
+                    event.preventDefault();
+                }
+                break;
+
+            case 'ArrowDown':
+                if (textInput.type === InputType.Textarea) {
+                    this.textInputManager.moveCursor(textInput, CursorDirection.Down, event.shiftKey);
+                    this.textInputManager.updateCursorAfterMovement(textInput, render, style);
+                    event.preventDefault();
+                }
                 break;
 
             case 'Home':
@@ -183,23 +198,19 @@ export class KeyboardInputHandler {
     private handleSelectKeyboard(event: KeyboardEvent, selectElement: SelectElement, render: BabylonRender, style: StyleRule): void {
         switch (event.key) {
             case 'ArrowUp':
-                if (selectElement.dropdownOpen) {
-                    this.selectManager.navigateOptions(selectElement, 'up');
-                }
+                this.selectManager.navigateOptions(selectElement, 'up');
                 event.preventDefault();
                 break;
 
             case 'ArrowDown':
-                if (selectElement.dropdownOpen) {
-                    this.selectManager.navigateOptions(selectElement, 'down');
-                }
+                this.selectManager.navigateOptions(selectElement, 'down');
                 event.preventDefault();
                 break;
 
             case 'Enter':
                 if (selectElement.dropdownOpen) {
-                    // Select current option and close
-                    this.selectManager.selectOption(selectElement, selectElement.selectedIndex);
+                    // Commit the popup highlight and close.
+                    this.selectManager.selectOption(selectElement, selectElement.activeOptionIndex);
                 } else {
                     // Open dropdown
                     this.selectManager.openDropdown(selectElement, selectElement.mesh.getScene(), style);

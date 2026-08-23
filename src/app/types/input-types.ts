@@ -114,7 +114,11 @@ export interface TextInput extends InputElement {
     cursorState: CursorState;
     textLayoutMetrics?: any; // Will store TextLayoutMetrics from text rendering service
     textureWidth?: number; // Store world-space texture width for cursor positioning
+    textureHeight?: number; // Store world-space texture height for multiline clipping
     scrollOffset?: number; // Horizontal scroll offset in CSS pixels
+    scrollTop?: number; // Vertical scroll offset in CSS pixels for textareas
+    /** Native reset keeps a tab-blurred caret but clears a pointer-blurred caret. */
+    preserveSelectionOnReset?: boolean;
 }
 
 /**
@@ -164,10 +168,13 @@ export interface SelectOption {
 export interface SelectElement extends InputElement {
     options: SelectOption[];
     selectedIndex: number;
+    /** Highlighted popup option; it is only committed to selectedIndex on acceptance. */
+    activeOptionIndex: number;
     dropdownOpen: boolean;
     dropdownMesh?: BABYLON.Mesh;
     optionMeshes: BABYLON.Mesh[];
     displayMesh?: BABYLON.Mesh;
+    indicatorMesh?: BABYLON.Mesh;
     cameraScale?: number; // Store camera scale for consistent text sizing
 }
 

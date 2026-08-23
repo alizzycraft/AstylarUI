@@ -308,7 +308,8 @@ export class ExamplesComponent {
       'flexbox-debug-simple': 'Flexbox-debug-simple Site',
       'flex-test': 'Flex-test Site',
       'tabletest': 'Tabletest Site',
-      'tablecomplex': 'Tablecomplex Site'
+      'tablecomplex': 'Tablecomplex Site',
+      'html-kitchen-sink': 'HTML5 Kitchen Sink'
     };
     return siteDisplayNames[siteName] || `${siteName.charAt(0).toUpperCase() + siteName.slice(1)} Site`;
   }
@@ -333,7 +334,8 @@ export class ExamplesComponent {
       'flexbox-debug-simple': '🌐',
       'flex-test': '🌐',
       'tabletest': '🌐',
-      'tablecomplex': '🌐'
+      'tablecomplex': '🌐',
+      'html-kitchen-sink': '🧪'
     };
     return icons[siteName] || '🌐';
   }

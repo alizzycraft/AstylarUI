@@ -1,5 +1,11 @@
 # Layout/Rendering Refactor Plan: Pixel-First Layout, World-Unit Rendering
 
+> **Status (2026-08-15):** Historical design direction, partially implemented
+> across the current camera, layout, and mesh services. The end-to-end audit and
+> strict separation described here were not completed. Treat the principles as
+> guidance and validate them through the parity harness rather than as active
+> unfinished Phase 1 work.
+
 ## Step 0: Separation of Concerns Analysis (Optional Side Quest)
 - **Before starting the main refactor, analyze the codebase for opportunities to split large files/services into smaller, more focused files/services.**
 - Look for:

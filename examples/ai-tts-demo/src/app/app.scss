@@ -1,0 +1,25 @@
+:host,
+.demo-host {
+  display: block;
+  width: 100%;
+  min-height: 100vh;
+}
+
+astylar-surface {
+  display: block;
+  width: 100%;
+  height: 100vh;
+  min-height: 640px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

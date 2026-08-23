@@ -1,0 +1,60 @@
+import assert from 'node:assert/strict';
+import test from 'node:test';
+import { evaluateInteractionRaster } from './interaction-metrics.mjs';
+
+function image(width, height, painter) {
+  const data = new Uint8Array(width * height * 4);
+  for (let y = 0; y < height; y += 1) for (let x = 0; x < width; x += 1) {
+    const color = painter(x, y);
+    const offset = (y * width + x) * 4;
+    data.set([...color, 255], offset);
+  }
+  return { width, height, data };
+}
+
+function button({ shift = 0, background = [35, 134, 54], blur = false } = {}) {
+  return image(120, 52, (x, y) => {
+    const ring = x === 3 + shift || x === 116 + shift || y === 3 + shift || y === 48 + shift;
+    const glyph = x >= 48 && x <= 72 && (y === 23 || y === 24 || (x === 48 && y >= 16 && y <= 31));
+    if (ring) return [31, 111, 235];
+    if (glyph) return blur ? [145, 190, 154] : [255, 255, 255];
+    return background;
+  });
+}
+
+test('an exact interaction crop passes', () => {
+  const reference = button();
+  assert.equal(evaluateInteractionRaster(reference, reference).meetsTarget, true);
+});
+
+test('one-pixel raster phase remains acceptable', () => {
+  const reference = button();
+  const shiftedGlyph = image(reference.width, reference.height, (x, y) => {
+    const sx = Math.max(0, x - 1);
+    const offset = (y * reference.width + sx) * 4;
+    return [...reference.data.subarray(offset, offset + 3)];
+  });
+  assert.equal(evaluateInteractionRaster(reference, shiftedGlyph).meetsTarget, true);
+});
+
+test('a wrong authored hover color fails', () => {
+  assert.equal(evaluateInteractionRaster(button(), button({ background: [110, 45, 45] })).meetsTarget, false);
+});
+
+test('a missing focus ring fails', () => {
+  const reference = button();
+  const missing = image(120, 52, (x, y) => {
+    const offset = (y * reference.width + x) * 4;
+    const isRing = x === 3 || x === 116 || y === 3 || y === 48;
+    return isRing ? [35, 134, 54] : [...reference.data.subarray(offset, offset + 3)];
+  });
+  assert.equal(evaluateInteractionRaster(reference, missing).meetsTarget, false);
+});
+
+test('a shifted focus ring fails', () => {
+  assert.equal(evaluateInteractionRaster(button(), button({ shift: 4 })).meetsTarget, false);
+});
+
+test('blurred control text fails', () => {
+  assert.equal(evaluateInteractionRaster(button(), button({ blur: true })).meetsTarget, false);
+});

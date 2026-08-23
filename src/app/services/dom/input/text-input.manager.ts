@@ -11,8 +11,22 @@ import { BabylonRender } from '../interfaces/render.types';
 import { BabylonMeshService } from '../../babylon-mesh.service';
 import { TextLayoutMetrics, TextStyleProperties, StoredTextLayoutMetrics } from '../../../types/text-rendering';
 import { TextInteractionRegistryService } from '../../dom/interaction/text-interaction-registry.service';
-import { TextSelectionControllerService } from '../../dom/interaction/text-selection-controller.service';
+import { TextSelectionControllerService, TextSelectionState } from '../../dom/interaction/text-selection-controller.service';
 import { Subscription } from 'rxjs';
+import { CONTROL_CONTENT_Z_OFFSET } from '../render-depth.constants';
+
+export interface TextInputMutableState {
+    value: string;
+    cursorPosition: number;
+    selectionStart: number;
+    selectionEnd: number;
+    selectionActive: boolean;
+    selectionAnchor: number;
+    selectionFocus: number;
+    scrollOffset: number;
+    scrollTop?: number;
+    preserveSelectionOnReset: boolean;
+}
 
 /**
  * Service responsible for managing text input fields
@@ -24,6 +38,7 @@ export class TextInputManager {
     private selectionSubscription: Subscription | null = null;
     private inputs: Map<string, TextInput> = new Map();
     private activeRender: BabylonRender | null = null;
+    private readonly suppressSelectionScroll = new Set<string>();
 
     constructor(
         private cursorRenderer: TextCursorRenderer,
@@ -89,7 +104,8 @@ export class TextInputManager {
             mesh: inputMesh,
             placeholder: element.placeholder,
             maxLength: element.maxLength,
-            cursorState
+            cursorState,
+            preserveSelectionOnReset: false,
         };
 
         // Store reference to textInput in mesh metadata for interaction handler
@@ -98,10 +114,10 @@ export class TextInputManager {
         // Always create layout metrics, even for empty inputs (needed for cursor positioning)
         if (render.scene) {
             // Use placeholder or a single space for layout calculation if no content
-            const layoutText = textInput.textContent || textInput.placeholder || ' ';
+            const layoutText = this.getDisplayText(textInput) || ' ';
             const textStyleProps = this.parseTextStyle(style);
             const pixelScale = render.actions.camera.getPixelToWorldScale();
-            console.log('[TextInputManager] Creating initial layout metrics for:', layoutText);
+
 
             // Use text rendering service to create consistent layout metrics
             const storedLayoutMetrics = this.textRenderingService.createStoredLayoutMetrics(
@@ -112,7 +128,7 @@ export class TextInputManager {
 
             // Extract CSS metrics for cursor positioning (these are in CSS pixels)
             textInput.textLayoutMetrics = storedLayoutMetrics.css;
-            console.log('[TextInputManager] Initial layout metrics:', textInput.textLayoutMetrics);
+
         }
 
         // Create text mesh if there's initial content or placeholder
@@ -140,22 +156,21 @@ export class TextInputManager {
             // Only sync if focused
             if (!textInput.focused) return;
 
-            // Sync indices
-            if (state.range) {
-                textInput.selectionStart = state.range.start;
-                textInput.selectionEnd = state.range.end;
-                textInput.cursorState.selectionStart = state.range.start;
-                textInput.cursorState.selectionEnd = state.range.end;
-                textInput.cursorState.selectionActive = state.hasSelection;
+            const suppressPointerSelectionScroll =
+                state.selectionSource === 'pointer' && state.hasSelection;
+            if (suppressPointerSelectionScroll) {
+                this.suppressSelectionScroll.add(state.elementId);
             }
+            try {
+                this.applyControllerState(textInput, state);
 
-            if (state.focusIndex !== null) {
-                textInput.cursorPosition = state.focusIndex;
-                textInput.cursorState.position = state.focusIndex;
+                // Update visual cursor
+                this.updateCursorPosition(textInput, this.activeRender, textInput.style);
+            } finally {
+                if (suppressPointerSelectionScroll) {
+                    this.suppressSelectionScroll.delete(state.elementId);
+                }
             }
-
-            // Update visual cursor
-            this.updateCursorPosition(textInput, this.activeRender, textInput.style);
         });
     }
 
@@ -163,7 +178,7 @@ export class TextInputManager {
      * Handles focus event - hides placeholder and creates cursor
      */
     handleFocus(textInput: TextInput, render: BabylonRender, style: StyleRule): void {
-        console.log('[TextInputManager] handleFocus called for:', textInput.element.id);
+
 
         // If showing placeholder (no actual value), hide the text mesh
         if (!textInput.textContent && textInput.placeholder && textInput.textMesh) {
@@ -181,31 +196,16 @@ export class TextInputManager {
 
             // Extract CSS metrics for cursor positioning (these are in CSS pixels)
             textInput.textLayoutMetrics = storedLayoutMetrics.css;
-            console.log('[TextInputManager] Recalculated empty layout metrics for focus');
-            // Also compute a texture width that matches the empty layout so cursor
-            // positioning uses consistent units (avoid using the placeholder texture width)
-            try {
-                const emptyTexture = this.textRenderingService.renderTextToTexture(
-                    textInput.element,
-                    '',
-                    style
-                );
-                const size = emptyTexture.getSize();
-                const scale = render.actions.camera.getPixelToWorldScale();
-                const devicePixelRatio = window.devicePixelRatio || 1;
-                textInput.textureWidth = (size.width / devicePixelRatio) * scale;
-                // We intentionally do not create a visible text mesh for empty content
-                console.log('[TextInputManager] Computed empty texture width for cursor positioning:', textInput.textureWidth);
-            } catch (err) {
-                console.warn('[TextInputManager] Failed to compute empty texture width:', err);
-                // Fallback to 0 so left-edge calculations behave reasonably
-                textInput.textureWidth = 0;
-            }
+
+            // Empty content intentionally has no texture; using zero keeps the
+            // caret at the left edge without asking the text renderer to create
+            // a texture it cannot represent.
+            textInput.textureWidth = 0;
         }
 
         // Create cursor mesh if it doesn't exist and we have layout metrics
         if (!textInput.cursorMesh && render.scene && textInput.textLayoutMetrics && textInput.textureWidth !== undefined) {
-            console.log('[TextInputManager] Creating cursor mesh with scale:', render.actions.camera.getPixelToWorldScale());
+
             const textStyle = this.parseTextStyle(style);
             textInput.cursorMesh = this.textSelectionService.createTextCursor(
                 textInput.cursorPosition,
@@ -225,7 +225,7 @@ export class TextInputManager {
         if (textInput.cursorMesh) {
             textInput.cursorMesh.isVisible = true;
             textInput.cursorState.visible = true;
-            console.log('[TextInputManager] Cursor made visible');
+
         }
     }
 
@@ -253,17 +253,47 @@ export class TextInputManager {
         }
     }
 
+    private applyControllerState(textInput: TextInput, state: TextSelectionState): void {
+        if (state.range) {
+            textInput.selectionStart = state.range.start;
+            textInput.selectionEnd = state.range.end;
+            textInput.cursorState.selectionStart = state.anchorIndex ?? state.range.start;
+            textInput.cursorState.selectionEnd = state.focusIndex ?? state.range.end;
+            textInput.cursorState.selectionActive = state.hasSelection;
+        }
+        if (state.focusIndex !== null) {
+            textInput.cursorPosition = state.focusIndex;
+            textInput.cursorState.position = state.focusIndex;
+        }
+    }
+
+    /** Releases a mesh-local material without disposing its cache-owned text texture. */
+    private disposeTextMesh(mesh: BABYLON.AbstractMesh): void {
+        const material = mesh.material;
+        mesh.material = null;
+        mesh.dispose();
+        material?.dispose(false, false);
+    }
+
+    private getDisplayText(textInput: TextInput): string {
+        const value = `${textInput.value ?? ''}`;
+        if (!value) return textInput.placeholder ?? '';
+        return textInput.type === InputType.Password
+            ? '•'.repeat(Array.from(value).length)
+            : value;
+    }
+
     /**
      * Updates the text display mesh
      */
     private updateTextDisplay(textInput: TextInput, render: BabylonRender, style: StyleRule): void {
         // Dispose existing text mesh
         if (textInput.textMesh) {
-            textInput.textMesh.dispose();
+            this.disposeTextMesh(textInput.textMesh);
             textInput.textMesh = undefined;
         }
 
-        const textToRender = textInput.value || textInput.placeholder || '';
+        const textToRender = this.getDisplayText(textInput);
         if (!textToRender) return;
 
         // Determine style (placeholder vs normal)
@@ -282,25 +312,37 @@ export class TextInputManager {
             // Use the same service method as text rendering to ensure consistency
             const textStyleProps = this.parseTextStyle(textStyle);
             const pixelScale = render.actions.camera.getPixelToWorldScale();
-            console.log('[TextInputManager] Calculating layout metrics for text:', textToRender);
-            console.log('[TextInputManager] Text style props:', textStyleProps);
+            const isTextarea = textInput.type === InputType.Textarea;
+            const inputWidth = textInput.mesh.getBoundingInfo().boundingBox.extendSize.x * 2;
+            const contentInsets = this.getHorizontalContentInsets(textStyle, pixelScale);
+            const availableWidth = Math.max(0, inputWidth - contentInsets.left - contentInsets.right);
+            // Browsers retain a minimal wrapping opportunity when textarea
+            // padding consumes the nominal content box. Zero would disable our
+            // wrapper entirely and make the value disappear at narrow widths.
+            const maxTextWidth = isTextarea
+                ? Math.max(1, availableWidth / pixelScale)
+                : undefined;
+
+
 
             // Use text rendering service to create consistent layout metrics
             const storedLayoutMetrics = this.textRenderingService.createStoredLayoutMetrics(
                 textToRender,
                 textStyleProps,
-                pixelScale
+                pixelScale,
+                maxTextWidth
             );
 
             // Extract CSS metrics for cursor positioning (these are in CSS pixels)
             textInput.textLayoutMetrics = storedLayoutMetrics.css;
-            console.log('[TextInputManager] Layout metrics calculated:', textInput.textLayoutMetrics);
+
 
             // Get texture from service
             const texture = this.textRenderingService.renderTextToTexture(
                 textInput.element,
                 textToRender,
-                textStyle
+                textStyle,
+                maxTextWidth
             );
 
             // Get texture dimensions
@@ -309,24 +351,42 @@ export class TextInputManager {
             const textureHeightPx = textureSize.height;
 
             // Convert to world units using camera's pixel-to-world scale
-            const scale = render.actions.camera.getPixelToWorldScale();
             const devicePixelRatio = window.devicePixelRatio || 1;
             // Normalize by DPR to ensure we use logical CSS pixels for world sizing
-            const textureWidth = (textureWidthPx / devicePixelRatio) * scale;
-            const textureHeight = (textureHeightPx / devicePixelRatio) * scale;
+            const textureWidth = (textureWidthPx / devicePixelRatio) * pixelScale;
+            const textureHeight = (textureHeightPx / devicePixelRatio) * pixelScale;
 
-            // Create text mesh using BabylonMeshService
+            const inputHeight = textInput.mesh.getBoundingInfo().boundingBox.extendSize.y * 2;
+            const verticalInsets = this.getVerticalContentInsets(textStyle, pixelScale);
+            const borderSize = Math.max(0, this.parseSize(textStyle.borderWidth) || 0) * pixelScale;
+            const verticalOrigin = Math.max(0, verticalInsets.top - borderSize);
+            const clientHeight = Math.max(0, inputHeight - (borderSize * 2));
+            const contentHeight = Math.max(
+                0,
+                inputHeight - verticalInsets.top - verticalInsets.bottom
+            );
+            const paddedTextureHeight = textureHeight + verticalOrigin
+                + Math.max(0, verticalInsets.bottom - borderSize);
+            const isVerticallyClipped = isTextarea && paddedTextureHeight > clientHeight;
+            const visibleWidth = isTextarea && availableWidth <= pixelScale
+                ? textureWidth
+                : Math.min(textureWidth, availableWidth);
+            const visibleHeight = isVerticallyClipped ? contentHeight : textureHeight;
+
+            // A clipped plane is the control's content viewport. UV scaling
+            // selects the corresponding portion of the full cached texture.
             const textMesh = this.babylonMeshService.createTextMesh(
                 `text_${textInput.element.id}`,
                 texture,
-                textureWidth,
-                textureHeight
+                visibleWidth,
+                visibleHeight
             );
 
             textMesh.parent = textInput.mesh;
-            textMesh.position.z = -0.15; // Slightly in front
+            textMesh.position.y = -2 * pixelScale;
+            textMesh.position.z = CONTROL_CONTENT_Z_OFFSET;
             textMesh.isPickable = true;
-            textMesh.renderingGroupId = 2; // Ensure it renders on top
+            textMesh.renderingGroupId = 0;
 
             // Rotate the text mesh 180 degrees around the Z axis to fix horizontal flipping without affecting vertical orientation
             // Only apply this rotation to text input meshes
@@ -334,61 +394,34 @@ export class TextInputManager {
 
             // Store world-space texture width for cursor positioning
             textInput.textureWidth = textureWidth;
+            textInput.textureHeight = textureHeight;
 
             // Align text mesh based on textAlign style
             const textAlign = (textStyle.textAlign || 'left').toLowerCase();
-            const inputWidth = textInput.mesh.getBoundingInfo().boundingBox.extendSize.x * 2;
-            const padding = 1.5 * scale; // Standard padding in world units
-            const availableWidth = inputWidth - (padding * 2);
+            const insets = contentInsets;
 
             // Handle clipping if text exceeds available width
             if (textureWidth > availableWidth) {
-                console.log(`[TextInputManager] Clipping text mesh: ${textureWidth.toFixed(3)} > ${availableWidth.toFixed(3)}`);
-
-                // Re-create mesh with clipped width or just scale it?
-                // Re-creating is safer to ensure bounding info is correct for interactions
-                textMesh.dispose();
-                const clippedTextMesh = this.babylonMeshService.createTextMesh(
-                    `text_${textInput.element.id}`,
-                    texture,
-                    availableWidth,
-                    textureHeight
-                );
-
-                clippedTextMesh.parent = textInput.mesh;
-                clippedTextMesh.position.z = -0.15;
-                clippedTextMesh.isPickable = true;
-                clippedTextMesh.renderingGroupId = 2;
-                clippedTextMesh.rotation.z = Math.PI;
-
-                textInput.textMesh = clippedTextMesh;
-                clippedTextMesh.position.x = (inputWidth / 2) - (availableWidth / 2) - padding;
-
-                // Sync scroll and UVs
-                this.syncScroll(textInput, render);
+                textMesh.position.x = (insets.right - insets.left) / 2
+                    + this.getCollapsedTextareaInlineCorrection(isTextarea, availableWidth, pixelScale);
             } else {
                 // No clipping needed
                 textInput.scrollOffset = 0;
                 if (textAlign === 'right') {
-                    textMesh.position.x = -(inputWidth / 2) + (textureWidth / 2) + padding;
+                    textMesh.position.x = -(inputWidth / 2) + (textureWidth / 2) + insets.right;
                 } else if (textAlign === 'center' || textAlign === 'middle') {
-                    textMesh.position.x = 0;
+                    textMesh.position.x = (insets.right - insets.left) / 2;
                 } else {
-                    textMesh.position.x = (inputWidth / 2) - (textureWidth / 2) - padding;
-                }
-                textInput.textMesh = textMesh;
-
-                // If not clipped, ensure UVs are reset
-                const mat = textMesh.material as BABYLON.StandardMaterial;
-                if (mat && mat.diffuseTexture) {
-                    (mat.diffuseTexture as BABYLON.Texture).uScale = 1.0;
-                    (mat.diffuseTexture as BABYLON.Texture).uOffset = 0.0;
-                    if (mat.emissiveTexture) {
-                        (mat.emissiveTexture as BABYLON.Texture).uScale = 1.0;
-                        (mat.emissiveTexture as BABYLON.Texture).uOffset = 0.0;
-                    }
+                    textMesh.position.x = (inputWidth / 2) - (textureWidth / 2) - insets.left;
                 }
             }
+
+            textInput.textMesh = textMesh;
+            if (isTextarea) {
+                textInput.textMesh.position.y =
+                    inputHeight / 2 - verticalInsets.top - visibleHeight / 2;
+            }
+            this.syncScroll(textInput, render);
 
             // Register with text interaction registry for drag selection
             const storedMetrics: StoredTextLayoutMetrics = {
@@ -422,7 +455,9 @@ export class TextInputManager {
                 style,
                 storedMetrics,
                 textToRender,
-                textInput.scrollOffset || 0
+                textInput.scrollOffset || 0,
+                textInput.scrollTop || 0,
+                verticalOrigin / pixelScale
             );
 
         } catch (error) {
@@ -438,16 +473,33 @@ export class TextInputManager {
 
         const inputWidth = textInput.mesh.getBoundingInfo().boundingBox.extendSize.x * 2;
         const scale = render.actions.camera.getPixelToWorldScale();
-        const padding = 1.5 * scale;
-        const availableWidth = inputWidth - (padding * 2);
+        const insets = this.getHorizontalContentInsets(textInput.style, scale);
+        const availableWidth = Math.max(0, inputWidth - insets.left - insets.right);
         const vw = availableWidth / scale; // Visible width in CSS pixels
+        const borderWidth = Math.max(0, this.parseSize(textInput.style.borderWidth) || 0) * scale;
+        const paddingLeft = Math.max(0, insets.left - borderWidth) / scale;
+        const paddingRight = Math.max(0, insets.right - borderWidth) / scale;
+        const clientWidth = Math.max(0, inputWidth - (borderWidth * 2)) / scale;
+        const inputHeight = textInput.mesh.getBoundingInfo().boundingBox.extendSize.y * 2;
+        const verticalInsets = this.getVerticalContentInsets(textInput.style, scale);
+        const borderSize = borderWidth;
+        const paddingTop = Math.max(0, verticalInsets.top - borderSize) / scale;
+        const paddingBottom = Math.max(0, verticalInsets.bottom - borderSize) / scale;
+        const availableHeight = Math.max(0, inputHeight - (borderSize * 2));
+        const vh = availableHeight / scale;
 
         // Get actual texture width from stored metrics
         const fullTextureWidth = textInput.textureWidth || 1;
+        const fullTextureHeight = textInput.textureHeight || 1;
         const currentMeshWidth = textInput.textMesh.getBoundingInfo().boundingBox.maximum.x - textInput.textMesh.getBoundingInfo().boundingBox.minimum.x;
+        const currentMeshHeight = textInput.textMesh.getBoundingInfo().boundingBox.maximum.y - textInput.textMesh.getBoundingInfo().boundingBox.minimum.y;
 
-        // Only scroll if text is wider than available area
-        if (fullTextureWidth <= availableWidth) {
+        const horizontallyWrappedTextarea = this.isHorizontallyWrappedTextarea(textInput);
+
+        // Soft-wrapped textareas own vertical scrolling only. Applying a
+        // horizontal caret offset to a zero-width content box sampled a blank
+        // part of the texture after the value had wrapped to one glyph per row.
+        if (horizontallyWrappedTextarea || fullTextureWidth <= availableWidth) {
             textInput.scrollOffset = 0;
         } else {
             // Calculate scroll offset to keep cursor in view
@@ -473,6 +525,40 @@ export class TextInputManager {
                     textInput.scrollOffset = cursorX - vw + buffer;
                 }
             }
+            const horizontalScrollWidth = textInput.textLayoutMetrics.totalWidth
+                + paddingLeft + paddingRight;
+            const maximumScrollOffset = Math.max(
+                0,
+                Math.floor(horizontalScrollWidth) - Math.floor(clientWidth)
+            );
+            textInput.scrollOffset = Math.min(
+                textInput.scrollOffset || 0,
+                maximumScrollOffset
+            );
+        }
+
+        // Keep the active textarea line within the vertically clipped viewport.
+        const scrollHeight = (fullTextureHeight / scale) + paddingTop + paddingBottom;
+        const isVerticalScrollable = textInput.type === InputType.Textarea && scrollHeight > vh;
+        if (!isVerticalScrollable) {
+            textInput.scrollTop = 0;
+        } else {
+            textInput.scrollTop = Math.max(0, textInput.scrollTop || 0);
+            const cursorLine = this.findCursorLine(textInput);
+            if (cursorLine && !this.suppressSelectionScroll.has(textInput.element.id!)) {
+                const fontSize = this.parseSize(textInput.style.fontSize) || 16;
+                const lineHeight = this.parseSize(textInput.style.lineHeight) || fontSize * 1.2;
+                const halfLeading = Math.max(0, (lineHeight - fontSize) / 2);
+                const cursorTop = cursorLine.top + paddingTop;
+                const cursorBottom = cursorLine.bottom + paddingTop + halfLeading;
+                if (cursorTop < textInput.scrollTop) {
+                    textInput.scrollTop = Math.max(0, cursorTop - Math.max(1, halfLeading / 4));
+                } else if (cursorBottom > textInput.scrollTop + vh) {
+                    textInput.scrollTop = cursorBottom - vh;
+                }
+            }
+            const maxScrollTop = Math.max(0, scrollHeight - vh);
+            textInput.scrollTop = Math.min(textInput.scrollTop, maxScrollTop);
         }
 
         // Apply UV offset to show the scrolled portion
@@ -494,10 +580,71 @@ export class TextInputManager {
                 emissTex.uScale = diffTex.uScale;
                 emissTex.uOffset = diffTex.uOffset;
             }
+
+            diffTex.vScale = currentMeshHeight / fullTextureHeight;
+            diffTex.vOffset = isVerticalScrollable
+                ? ((textInput.scrollTop || 0) - paddingTop)
+                    / Math.max(1, textInput.textLayoutMetrics.totalHeight)
+                : 0;
+            if (mat.emissiveTexture) {
+                const emissTex = mat.emissiveTexture as BABYLON.Texture;
+                emissTex.vScale = diffTex.vScale;
+                emissTex.vOffset = diffTex.vOffset;
+            }
         }
 
         // Update interaction registry
         this.textInteractionRegistry.updateScrollOffset(textInput.element.id!, textInput.scrollOffset || 0);
+        this.textInteractionRegistry.updateScrollTop(textInput.element.id!, textInput.scrollTop || 0);
+    }
+
+    private isHorizontallyWrappedTextarea(textInput: TextInput): boolean {
+        return textInput.type === InputType.Textarea &&
+            textInput.element.wrap !== 'off' &&
+            !['nowrap', 'pre'].includes(textInput.style.whiteSpace ?? 'normal');
+    }
+
+    private getCollapsedTextareaInlineCorrection(
+        isTextarea: boolean,
+        availableWidth: number,
+        pixelScale: number
+    ): number {
+        // With no nominal content width, the browser begins the first glyph on
+        // the inner border pixel. Centering the fallback texture lands it one
+        // logical pixel early because the canvas includes edge padding.
+        // The input plane is rotated by PI, so negative local X advances the
+        // glyph one logical pixel in screen-space inline direction.
+        return isTextarea && availableWidth <= pixelScale ? -pixelScale : 0;
+    }
+
+    /** Applies wheel deltas without snapping the viewport back to the caret. */
+    scrollBy(textInput: TextInput, deltaX: number, deltaY: number): boolean {
+        if (!this.activeRender || textInput.type !== InputType.Textarea ||
+            !textInput.textMesh || !textInput.textLayoutMetrics) return false;
+        const previousLeft = textInput.scrollOffset ?? 0;
+        const previousTop = textInput.scrollTop ?? 0;
+        textInput.scrollOffset = Math.max(0, previousLeft + deltaX);
+        textInput.scrollTop = Math.max(0, previousTop + deltaY);
+        const elementId = textInput.element.id!;
+        this.suppressSelectionScroll.add(elementId);
+        try {
+            this.syncScroll(textInput, this.activeRender);
+        } finally {
+            this.suppressSelectionScroll.delete(elementId);
+        }
+        return textInput.scrollOffset !== previousLeft || textInput.scrollTop !== previousTop;
+    }
+
+    private findCursorLine(textInput: TextInput): { top: number; bottom: number } | undefined {
+        const lines = textInput.textLayoutMetrics?.lines ?? [];
+        let cursorLine = lines[lines.length - 1];
+        for (const line of lines) {
+            if (textInput.cursorPosition <= line.endIndex) {
+                cursorLine = line;
+                break;
+            }
+        }
+        return cursorLine;
     }
 
     /**
@@ -545,6 +692,10 @@ export class TextInputManager {
      * Determines the input type from element
      */
     private determineInputType(element: DOMElement): InputType {
+        if (element.type === 'textarea') {
+            return InputType.Textarea;
+        }
+
         const inputType = element.inputType?.toLowerCase();
 
         switch (inputType) {
@@ -571,38 +722,84 @@ export class TextInputManager {
     moveCursor(textInput: TextInput, direction: CursorDirection, isShiftKey: boolean = false): void {
         const textLength = textInput.textContent.length;
         let newPosition = textInput.cursorPosition;
+        const hasSelection = textInput.selectionStart !== textInput.selectionEnd;
 
-        switch (direction) {
-            case CursorDirection.Left:
-                newPosition = Math.max(0, textInput.cursorPosition - 1);
-                break;
-            case CursorDirection.Right:
-                newPosition = Math.min(textLength, textInput.cursorPosition + 1);
-                break;
-            case CursorDirection.Home:
-                newPosition = 0;
-                break;
-            case CursorDirection.End:
-                newPosition = textLength;
-                break;
+        if (direction === CursorDirection.Up || direction === CursorDirection.Down) {
+            const entry = textInput.textMesh
+                ? this.textInteractionRegistry?.getByMesh(textInput.textMesh)
+                : undefined;
+            if (!entry) return;
+
+            const anchor = isShiftKey && textInput.cursorState.selectionActive
+                ? textInput.cursorState.selectionStart
+                : textInput.cursorPosition;
+            const controllerState = this.textSelectionController.snapshot;
+            if (controllerState.elementId !== entry.elementId ||
+                controllerState.focusIndex !== textInput.cursorPosition ||
+                (isShiftKey && controllerState.anchorIndex !== anchor)) {
+                this.textSelectionController.setSelection(entry, anchor, textInput.cursorPosition);
+            }
+            const state = this.textSelectionController.moveSelectionWithKeyboard(
+                entry,
+                direction === CursorDirection.Up ? 'up' : 'down',
+                isShiftKey
+            );
+            this.applyControllerState(textInput, state);
+            return;
+        }
+
+        if (!isShiftKey && hasSelection) {
+            newPosition = direction === CursorDirection.Left || direction === CursorDirection.Home
+                ? Math.min(textInput.selectionStart, textInput.selectionEnd)
+                : Math.max(textInput.selectionStart, textInput.selectionEnd);
+        } else {
+            switch (direction) {
+                case CursorDirection.Left:
+                    newPosition = Math.max(0, textInput.cursorPosition - 1);
+                    break;
+                case CursorDirection.Right:
+                    newPosition = Math.min(textLength, textInput.cursorPosition + 1);
+                    break;
+                case CursorDirection.Home:
+                    newPosition = 0;
+                    break;
+                case CursorDirection.End:
+                    newPosition = textLength;
+                    break;
+            }
         }
 
         // Handle selection with shift key
         if (isShiftKey) {
             if (!textInput.cursorState.selectionActive) {
                 textInput.cursorState.selectionActive = true;
-                textInput.selectionStart = textInput.cursorPosition;
+                textInput.cursorState.selectionStart = textInput.cursorPosition;
             }
-            textInput.selectionEnd = newPosition;
+            textInput.cursorState.selectionEnd = newPosition;
+            textInput.selectionStart = Math.min(textInput.cursorState.selectionStart, newPosition);
+            textInput.selectionEnd = Math.max(textInput.cursorState.selectionStart, newPosition);
         } else {
             // Clear selection when moving without shift
             textInput.cursorState.selectionActive = false;
+            textInput.cursorState.selectionStart = newPosition;
+            textInput.cursorState.selectionEnd = newPosition;
             textInput.selectionStart = newPosition;
             textInput.selectionEnd = newPosition;
         }
 
         textInput.cursorPosition = newPosition;
         textInput.cursorState.position = newPosition;
+
+        const entry = textInput.textMesh
+            ? this.textInteractionRegistry?.getByMesh(textInput.textMesh)
+            : undefined;
+        if (entry) {
+            this.textSelectionController.setSelection(
+                entry,
+                isShiftKey ? textInput.cursorState.selectionStart : newPosition,
+                newPosition
+            );
+        }
     }
 
     /**
@@ -649,6 +846,8 @@ export class TextInputManager {
 
         // Clear selection
         textInput.cursorState.selectionActive = false;
+        textInput.cursorState.selectionStart = textInput.cursorPosition;
+        textInput.cursorState.selectionEnd = textInput.cursorPosition;
         textInput.selectionStart = textInput.cursorPosition;
         textInput.selectionEnd = textInput.cursorPosition;
 
@@ -678,19 +877,22 @@ export class TextInputManager {
         textInput.cursorState.selectionEnd = textLength;
         textInput.cursorState.position = textLength;
 
-        // Sync with global controller
-        if (textInput.textMesh) {
-            const entry = this.textInteractionRegistry.getByMesh(textInput.textMesh);
-            if (entry) {
-                // Approximate a select-all by moving from start to end
-                this.textSelectionController.beginSelection(entry, { x: 0, y: 0 });
-                this.textSelectionController.updateSelection(entry, { x: 999999, y: 0 }); // Far right
-                this.textSelectionController.finalizeSelection();
+        this.suppressSelectionScroll.add(textInput.element.id!);
+        try {
+            // Sync the exact range with the global controller. Pointer coordinates
+            // cannot represent the end of a multiline value on the first row.
+            if (textInput.textMesh) {
+                const entry = this.textInteractionRegistry.getByMesh(textInput.textMesh);
+                if (entry) {
+                    this.textSelectionController.setSelection(entry, 0, textLength);
+                }
             }
-        }
 
-        if (this.activeRender) {
-            this.updateCursorPosition(textInput, this.activeRender, textInput.style);
+            if (this.activeRender) {
+                this.updateCursorPosition(textInput, this.activeRender, textInput.style);
+            }
+        } finally {
+            this.suppressSelectionScroll.delete(textInput.element.id!);
         }
     }
 
@@ -708,7 +910,7 @@ export class TextInputManager {
 
         try {
             await navigator.clipboard.writeText(selectedText);
-            console.log('[TextInputManager] Copied to clipboard:', selectedText);
+
         } catch (err) {
             console.error('[TextInputManager] Clipboard copy failed:', err);
         }
@@ -722,7 +924,7 @@ export class TextInputManager {
             const pastedText = await navigator.clipboard.readText();
             if (pastedText) {
                 this.insertTextAtCursor(textInput, pastedText, render, style);
-                console.log('[TextInputManager] Pasted from clipboard:', pastedText);
+
             }
         } catch (err) {
             console.error('[TextInputManager] Clipboard paste failed:', err);
@@ -776,6 +978,11 @@ export class TextInputManager {
             }
         }
 
+        textInput.selectionStart = textInput.cursorPosition;
+        textInput.selectionEnd = textInput.cursorPosition;
+        textInput.cursorState.selectionStart = textInput.cursorPosition;
+        textInput.cursorState.selectionEnd = textInput.cursorPosition;
+
         // Mark as dirty
         textInput.validationState.dirty = true;
 
@@ -825,7 +1032,7 @@ export class TextInputManager {
 
         if (!textInput.cursorMesh) return;
 
-        console.log('[TextInputManager] Width correction ratio:', widthCorrectionRatio);
+
 
         // Use text selection service for accurate cursor positioning
         this.textSelectionService.updateCursorPosition(
@@ -837,6 +1044,33 @@ export class TextInputManager {
             widthCorrectionRatio,
             textInput.scrollOffset || 0
         );
+
+        if (textInput.type === InputType.Textarea) {
+            const cursorLine = this.findCursorLine(textInput);
+            if (cursorLine) {
+                const inputHeight = textInput.mesh.getBoundingInfo().boundingBox.extendSize.y * 2;
+                const verticalInsets = this.getVerticalContentInsets(style, pixelScale);
+                const borderSize = Math.max(0, this.parseSize(style.borderWidth) || 0) * pixelScale;
+                const paddingTop = Math.max(0, verticalInsets.top - borderSize);
+                const lineCenter = (cursorLine.top + cursorLine.bottom) / 2;
+                textInput.cursorMesh.position.y = inputHeight / 2 - borderSize - paddingTop
+                    - ((lineCenter - (textInput.scrollTop || 0)) * pixelScale);
+            }
+        }
+    }
+
+    /** Applies a resolved pseudo-state style without rebuilding the text control. */
+    updateInteractionStyle(textInput: TextInput, style: StyleRule): void {
+        textInput.style = style;
+        if (textInput.cursorMesh) {
+            this.textSelectionService.updateTextCursorColor(
+                textInput.cursorMesh,
+                this.parseTextStyle(style),
+            );
+        }
+        if (textInput.textMesh) {
+            this.textInteractionRegistry.updateStyle(textInput.element.id!, style);
+        }
     }
 
     /**
@@ -848,10 +1082,139 @@ export class TextInputManager {
         return isNaN(num) ? undefined : num;
     }
 
+    /** Restores an authored value using the native reset behavior for the last blur modality. */
+    resetTextValue(textInput: TextInput, value: string): void {
+        const clamp = (position: number): number =>
+            Math.max(0, Math.min(value.length, position));
+        const preserveSelection = textInput.preserveSelectionOnReset === true;
+        textInput.value = value;
+        textInput.textContent = value;
+        textInput.cursorPosition = preserveSelection ? clamp(textInput.cursorPosition) : 0;
+        textInput.selectionStart = preserveSelection ? clamp(textInput.selectionStart) : 0;
+        textInput.selectionEnd = preserveSelection ? clamp(textInput.selectionEnd) : 0;
+        textInput.cursorState.position = textInput.cursorPosition;
+        textInput.cursorState.selectionStart = preserveSelection
+            ? clamp(textInput.cursorState.selectionStart)
+            : 0;
+        textInput.cursorState.selectionEnd = preserveSelection
+            ? clamp(textInput.cursorState.selectionEnd)
+            : 0;
+        textInput.cursorState.selectionActive = textInput.cursorState.selectionActive &&
+            textInput.selectionStart !== textInput.selectionEnd;
+        if (!preserveSelection) {
+            textInput.scrollOffset = 0;
+            textInput.scrollTop = 0;
+        }
+        if (this.activeRender) {
+            const elementId = textInput.element.id!;
+            if (preserveSelection) this.suppressSelectionScroll.add(elementId);
+            try {
+                this.updateTextDisplay(textInput, this.activeRender, textInput.style);
+            } finally {
+                if (preserveSelection) this.suppressSelectionScroll.delete(elementId);
+            }
+        }
+    }
+
+    /** Restores user-owned text state after a compatible full renderer rebuild. */
+    restoreMutableState(textInput: TextInput, state: TextInputMutableState): void {
+        const value = state.value;
+        const clamp = (position: number): number =>
+            Math.max(0, Math.min(value.length, position));
+        textInput.value = value;
+        textInput.textContent = value;
+        textInput.cursorPosition = clamp(state.cursorPosition);
+        textInput.selectionStart = clamp(state.selectionStart);
+        textInput.selectionEnd = clamp(state.selectionEnd);
+        textInput.cursorState.position = textInput.cursorPosition;
+        textInput.cursorState.selectionActive = state.selectionActive &&
+            textInput.selectionStart !== textInput.selectionEnd;
+        textInput.cursorState.selectionStart = clamp(state.selectionAnchor);
+        textInput.cursorState.selectionEnd = clamp(state.selectionFocus);
+        textInput.scrollOffset = Math.max(0, state.scrollOffset);
+        textInput.scrollTop = Math.max(0, state.scrollTop ?? 0);
+        textInput.preserveSelectionOnReset = state.preserveSelectionOnReset;
+        if (this.activeRender) {
+            const elementId = textInput.element.id!;
+            this.suppressSelectionScroll.add(elementId);
+            try {
+                this.updateTextDisplay(textInput, this.activeRender, textInput.style);
+            } finally {
+                this.suppressSelectionScroll.delete(elementId);
+            }
+        }
+    }
+
+    /**
+     * Resolve the CSS content edges used by single-line controls. Babylon's
+     * local X axis is mirrored by the parity camera, so callers use these
+     * physical insets when positioning text from the projected left/right.
+     */
+    private getHorizontalContentInsets(
+        style: StyleRule,
+        scale: number
+    ): { left: number; right: number } {
+        const padding = this.parseBoxShorthand(style.padding);
+        const border = Math.max(0, this.parseSize(style.borderWidth) || 0);
+        const left = Math.max(0, this.parseSize(style.paddingLeft) ?? padding.left);
+        const right = Math.max(0, this.parseSize(style.paddingRight) ?? padding.right);
+
+        return {
+            left: (border + left) * scale,
+            right: (border + right) * scale
+        };
+    }
+
+    private getVerticalContentInsets(
+        style: StyleRule,
+        scale: number
+    ): { top: number; bottom: number } {
+        const values = style.padding
+            ?.trim()
+            .split(/\s+/)
+            .map((part) => Math.max(0, this.parseSize(part) || 0)) ?? [];
+        const border = Math.max(0, this.parseSize(style.borderWidth) || 0);
+        const shorthandTop = values[0] ?? 0;
+        const shorthandBottom = values.length === 3 || values.length === 4
+            ? values[2]
+            : shorthandTop;
+        const top = Math.max(0, this.parseSize(style.paddingTop) ?? shorthandTop);
+        const bottom = Math.max(0, this.parseSize(style.paddingBottom) ?? shorthandBottom);
+
+        return {
+            top: (border + top) * scale,
+            bottom: (border + bottom) * scale
+        };
+    }
+
+    private parseBoxShorthand(value: string | undefined): { left: number; right: number } {
+        const values = value
+            ?.trim()
+            .split(/\s+/)
+            .map((part) => Math.max(0, this.parseSize(part) || 0)) ?? [];
+
+        if (values.length === 0) return { left: 0, right: 0 };
+        if (values.length === 1) return { left: values[0], right: values[0] };
+        if (values.length === 2 || values.length === 3) {
+            return { left: values[1], right: values[1] };
+        }
+        return { left: values[3], right: values[1] };
+    }
+
     /**
      * Converts StyleRule to TextStyleProperties
      */
     private parseTextStyle(style: StyleRule): TextStyleProperties {
+        const fontSize = this.parseSize(style.fontSize) || 16;
+        const parsedLineHeight = parseFloat(style.lineHeight as string);
+        const lineHeight = style.lineHeight?.endsWith('px')
+            ? parsedLineHeight / fontSize
+            : parsedLineHeight || 1.2;
+        const supportedWhiteSpace = ['normal', 'nowrap', 'pre', 'pre-wrap', 'pre-line'];
+        const whiteSpace = supportedWhiteSpace.includes(style.whiteSpace || '')
+            ? style.whiteSpace as TextStyleProperties['whiteSpace']
+            : 'normal';
+
         // Helper function to safely cast font weight
         const parseFontWeight = (weight: string | undefined): TextStyleProperties['fontWeight'] => {
             if (!weight) return 'normal';
@@ -880,16 +1243,16 @@ export class TextInputManager {
 
         return {
             fontFamily: style.fontFamily || 'Arial',
-            fontSize: this.parseSize(style.fontSize) || 16,
+            fontSize,
             fontWeight: parseFontWeight(style.fontWeight),
             fontStyle: parseFontStyle(style.fontStyle),
             color: style.color || '#000000',
             textAlign: (style.textAlign as any) || 'left',
             verticalAlign: 'baseline',
-            lineHeight: parseFloat(style.lineHeight as string) || 1.2,
+            lineHeight,
             letterSpacing: this.parseSize(style.letterSpacing) || 0,
             wordSpacing: this.parseSize(style.wordSpacing) || 0,
-            whiteSpace: 'normal',
+            whiteSpace,
             wordWrap: 'normal',
             textOverflow: 'clip',
             textDecoration: parseTextDecoration(style.textDecoration),

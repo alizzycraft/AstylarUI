@@ -1,0 +1,1130 @@
+[
+  {
+    "id": "semantic-structure",
+    "title": "Native document and application semantics",
+    "category": "accessibility-semantics",
+    "expectedBehavior": "Astylar exposes the authored landmark, heading, paragraph, list, link, button, and table hierarchy through native browser accessibility semantics without exposing Babylon implementation meshes.",
+    "semanticIds": ["semantic-shell", "semantic-header", "semantic-title", "semantic-nav", "semantic-main", "semantic-section", "semantic-list", "semantic-link", "semantic-button", "semantic-table", "semantic-footer"]
+  },
+  {
+    "id": "semantic-naming",
+    "title": "Accessible names and descriptions",
+    "category": "accessibility-semantics",
+    "expectedBehavior": "Native labels, element text and alt text, aria-label, aria-labelledby, and aria-describedby produce browser-equivalent names/descriptions and remain synchronized through updates with safe missing, repeated, and removed references.",
+    "dynamicStepCount": 2,
+    "semanticIds": ["name-label", "name-control", "name-help", "named-action", "labelled-panel", "panel-title", "panel-description", "named-image"]
+  },
+  {
+    "id": "semantic-control-state",
+    "title": "Native semantic control values and states",
+    "category": "accessibility-semantics",
+    "expectedBehavior": "Native checkbox, radio, text, select, readonly, required, invalid, and disabled semantics reflect authored defaults and the same live values after scene interactions and form reset.",
+    "interactionStepCount": 8,
+    "semanticIds": ["semantic-check", "semantic-radio-alpha", "semantic-radio-beta", "semantic-text", "semantic-select", "semantic-locked", "semantic-disabled"]
+  },
+  {
+    "id": "semantic-anchor-navigation",
+    "title": "Semantic anchor navigation outcomes",
+    "category": "accessibility-semantics",
+    "expectedBehavior": "Accepted pointer, keyboard, and semantic anchor activation records one deterministic navigation outcome; same-document fragments scroll their destination into view, external URLs remain host-routable intents, and cancelled clicks do neither.",
+    "interactionStepCount": 6,
+    "semanticIds": ["anchor-fragment", "anchor-external", "anchor-cancelled", "anchor-target"]
+  },
+  {
+    "id": "semantic-modal-containment",
+    "title": "Semantic modal containment",
+    "category": "accessibility-semantics",
+    "expectedBehavior": "An authored modal dialog takes visual and interaction priority over the background, exposes browser modality, receives deterministic initial focus, contains forward and reverse Tab navigation, and makes background controls inert.",
+    "interactionStepCount": 5,
+    "semanticIds": ["modal-containment-dialog", "modal-containment-title", "modal-containment-primary", "modal-containment-secondary", "modal-containment-background-button"]
+  },
+  {
+    "id": "semantic-modal-lifecycle",
+    "title": "Semantic modal dismissal and restoration",
+    "category": "accessibility-semantics",
+    "expectedBehavior": "Modal Escape dispatches a cancelable cancel event, accepted dismissal closes the dialog and restores its invoker, canceled dismissal remains contained, and application removal releases modal and focus ownership without a synthetic close event.",
+    "interactionStepCount": 9,
+    "semanticIds": ["modal-life-invoker", "modal-life-cancel-dialog", "modal-life-cancel-title", "modal-life-cancel-action", "modal-life-close-dialog", "modal-life-close-title", "modal-life-close-action"]
+  },
+  {
+    "id": "semantic-status-validation",
+    "title": "Status and validation announcements",
+    "category": "accessibility-semantics",
+    "expectedBehavior": "Required-field invalid state and error descriptions stay synchronized while assertive error and polite status regions emit one deterministic non-empty update, ignore unrelated repeated data updates, and cleanly disappear when removed.",
+    "interactionStepCount": 6,
+    "semanticIds": ["announce-form", "announce-name", "announce-error", "announce-status", "announce-summary"],
+    "announcementIds": ["announce-error", "announce-status"]
+  },
+  {
+    "id": "semantic-lifecycle-stress",
+    "title": "Repeated semantic and modal lifecycle",
+    "category": "accessibility-semantics",
+    "expectedBehavior": "Three identical semantic focus/activation, responsive modal open/contain/dismiss, status announcement, incompatible data replacement, restoration, and final disposal cycles remain browser-exact while semantic nodes, listeners, observers, registries, and Babylon resources plateau and clean up.",
+    "dynamicStepCount": 4,
+    "interactionStepCount": 24,
+    "interactionCycleLength": 8,
+    "semanticIds": ["semantic-life-status", "semantic-life-invoker", "semantic-life-content", "semantic-life-data", "semantic-life-dialog", "semantic-life-dialog-title", "semantic-life-dialog-action"],
+    "announcementIds": ["semantic-life-status"]
+  },
+  {
+    "id": "box-model-basic",
+    "title": "Basic content-box geometry",
+    "category": "box-model-units",
+    "expectedBehavior": "An absolutely positioned content-box includes padding and border outside its declared width and height."
+  },
+  {
+    "id": "border-box-basic",
+    "title": "Explicit border-box geometry",
+    "category": "box-model-units",
+    "expectedBehavior": "Padding and border remain inside an explicitly declared border-box size."
+  },
+  {
+    "id": "percentage-sizing",
+    "title": "Viewport-root percentage sizing",
+    "category": "box-model-units",
+    "expectedBehavior": "Percentage offsets and dimensions resolve against the root containing block."
+  },
+  {
+    "id": "nested-positioning",
+    "title": "Nested absolute positioning",
+    "category": "positioning-stacking",
+    "expectedBehavior": "An absolute child uses the padding box of its positioned parent as its containing block."
+  },
+  {
+    "id": "cascade-specificity",
+    "title": "Cascade specificity and source order",
+    "category": "cascade-defaults",
+    "expectedBehavior": "Type, class, ID, source order, compound selectors, and inline styles follow the CSS cascade."
+  },
+  {
+    "id": "text-inheritance",
+    "title": "Inherited text properties",
+    "category": "cascade-defaults",
+    "expectedBehavior": "A child inherits color and typography from its parent when it has no declaration of its own."
+  },
+  {
+    "id": "block-flow",
+    "title": "Normal block sibling flow",
+    "category": "block-inline",
+    "expectedBehavior": "Block children start at the content edge and stack vertically in source order."
+  },
+  {
+    "id": "block-auto-margin-width",
+    "title": "Auto block width with horizontal margins",
+    "category": "block-inline",
+    "expectedBehavior": "An in-flow block with auto width fills the containing block after its horizontal margins are subtracted."
+  },
+  {
+    "id": "inline-block-flow",
+    "title": "Inline-block run and display none",
+    "category": "block-inline",
+    "expectedBehavior": "Inline siblings use their intrinsic text width, inline-block siblings share a line, and display:none contributes neither rendering nor layout space."
+  },
+  {
+    "id": "multiline-wrapping",
+    "title": "Multiline wrapping and pixel line height",
+    "category": "typography",
+    "expectedBehavior": "Normal whitespace wraps at word boundaries and pixel line-height uses the resolved font size."
+  },
+  {
+    "id": "pre-line-alignment",
+    "title": "Preserved lines and centered text",
+    "category": "typography",
+    "expectedBehavior": "Pre-line preserves explicit line breaks, collapses spaces, and centers each rendered line."
+  },
+  {
+    "id": "flex-row-alignment",
+    "title": "Flex row gap and centered alignment",
+    "category": "flexbox",
+    "expectedBehavior": "A flex row centers its item group on the main axis, centers unequal item heights on the cross axis, and applies column gap once."
+  },
+  {
+    "id": "flex-column-alignment",
+    "title": "Flex column gap and end alignment",
+    "category": "flexbox",
+    "expectedBehavior": "A flex column packs items at the main-axis end, aligns unequal widths at the cross-axis end, and applies row gap once."
+  },
+  {
+    "id": "flex-grow-gap",
+    "title": "Flex growth with gap",
+    "category": "flexbox",
+    "expectedBehavior": "Flex growth distributes content-box free space by grow factor after reserving the main-axis gap exactly once."
+  },
+  {
+    "id": "semantic-default-flow",
+    "title": "Heading and paragraph browser defaults",
+    "category": "cascade-defaults",
+    "expectedBehavior": "Unstyled headings and paragraphs use centralized browser-like typography, auto block sizing, and vertical margins."
+  },
+  {
+    "id": "unordered-list-layout",
+    "title": "Unordered list flow and markers",
+    "category": "lists-tables-images",
+    "expectedBehavior": "List items stack at intrinsic line-box height inside the list content box and render outside disc markers."
+  },
+  {
+    "id": "ordered-list-layout",
+    "title": "Ordered list flow and markers",
+    "category": "lists-tables-images",
+    "expectedBehavior": "Ordered list items stack at intrinsic line-box height and render sequential decimal markers outside the content box."
+  },
+  {
+    "id": "table-fixed-layout",
+    "title": "Fixed table rows and columns",
+    "category": "lists-tables-images",
+    "expectedBehavior": "A fixed-size two-by-two table divides its border-free grid evenly across rows and columns."
+  },
+  {
+    "id": "table-column-widths",
+    "title": "Explicit table column widths",
+    "category": "lists-tables-images",
+    "expectedBehavior": "Fixed table columns honor explicit pixel widths instead of being redistributed equally."
+  },
+  {
+    "id": "image-intrinsic-size",
+    "title": "Image intrinsic dimensions",
+    "category": "lists-tables-images",
+    "expectedBehavior": "An image without declared CSS dimensions uses the deterministic asset’s natural width and height."
+  },
+  {
+    "id": "image-object-fit-contain",
+    "title": "Image object-fit contain",
+    "category": "lists-tables-images",
+    "expectedBehavior": "Contain preserves the image aspect ratio, centers it, and exposes the element background as letterboxing."
+  },
+  {
+    "id": "image-object-fit-cover",
+    "title": "Image object-fit cover",
+    "category": "lists-tables-images",
+    "expectedBehavior": "Cover fills the image box while preserving aspect ratio and cropping equally from the long axis."
+  },
+  {
+    "id": "styled-button",
+    "title": "Explicitly styled button",
+    "category": "forms-interactive",
+    "expectedBehavior": "An explicitly styled button uses the declared border box, background, border, radius, and centered label without relying on native browser chrome."
+  },
+  {
+    "id": "styled-text-input",
+    "title": "Explicitly styled text input",
+    "category": "forms-interactive",
+    "expectedBehavior": "An explicitly styled text input uses the declared border box and renders its value with browser-like content insets."
+  },
+  {
+    "id": "checkbox-states",
+    "title": "Checked and disabled checkbox states",
+    "category": "forms-interactive",
+    "expectedBehavior": "Explicitly styled checkboxes preserve independent width and height, initialize checked state visibly, and retain disabled opacity without invented labels."
+  },
+  {
+    "id": "z-index-overlap",
+    "title": "Overlapping positioned siblings by z-index",
+    "category": "positioning-stacking",
+    "expectedBehavior": "A positioned sibling with the higher stylesheet z-index paints above a later DOM sibling throughout their overlap."
+  },
+  {
+    "id": "min-max-constraints",
+    "title": "Minimum and maximum size constraints",
+    "category": "box-model-units",
+    "expectedBehavior": "Minimum constraints expand undersized boxes and maximum constraints shrink oversized boxes on both axes."
+  },
+  {
+    "id": "text-spacing",
+    "title": "Letter and word spacing",
+    "category": "typography",
+    "expectedBehavior": "Letter-spacing and word-spacing affect both painted glyph positions and the intrinsic width of an auto-sized inline box."
+  },
+  {
+    "id": "inline-flex-flow",
+    "title": "Inline flex outer and inner flow",
+    "category": "block-inline",
+    "expectedBehavior": "Inline-flex containers participate in an inline formatting row while laying out their own children with flexbox."
+  },
+  {
+    "id": "flex-wrap-lines",
+    "title": "Wrapped flex lines and align-content",
+    "category": "flexbox",
+    "expectedBehavior": "Flex items wrap onto multiple rows, preserve row and column gaps, and distribute lines with align-content."
+  },
+  {
+    "id": "negative-auto-stacking",
+    "title": "Negative and auto stacking inside a context",
+    "category": "positioning-stacking",
+    "expectedBehavior": "A negative z-index child paints above its stacking-context parent background but below a later auto-z sibling."
+  },
+  {
+    "id": "styled-select",
+    "title": "Styled semantic select control",
+    "category": "forms-interactive",
+    "expectedBehavior": "A select element is recognized from its semantic type and paints its selected option at the declared content inset."
+  },
+  {
+    "id": "text-transform-alignment",
+    "title": "Text transform and right alignment",
+    "category": "typography",
+    "expectedBehavior": "Text transformation affects measured and painted glyphs while right alignment uses the content box edge."
+  },
+  {
+    "id": "universal-selector",
+    "title": "Universal selector cascade",
+    "category": "cascade-defaults",
+    "expectedBehavior": "The universal selector applies with zero specificity and remains overridden property-by-property by type and class rules."
+  },
+  {
+    "id": "author-reset-defaults",
+    "title": "Author reset over browser defaults",
+    "category": "cascade-defaults",
+    "expectedBehavior": "Author margin and padding shorthands clear lower-origin browser-default heading and paragraph longhands."
+  },
+  {
+    "id": "fixed-positioning",
+    "title": "Fixed positioning against the viewport",
+    "category": "positioning-stacking",
+    "expectedBehavior": "A fixed descendant is removed from normal flow and resolves its offsets against the viewport rather than its positioned ancestor."
+  },
+  {
+    "id": "viewport-units",
+    "title": "Viewport-relative sizing and offsets",
+    "category": "box-model-units",
+    "expectedBehavior": "Viewport width and height units resolve against the rendered viewport for dimensions and positioned offsets."
+  },
+  {
+    "id": "flex-viewport-height",
+    "title": "Viewport-height flex items",
+    "category": "box-model-units",
+    "expectedBehavior": "Viewport-relative heights on flex items resolve against the rendered viewport rather than being parsed as unitless pixel values.",
+    "viewportIds": ["desktop", "tablet", "mobile"]
+  },
+  {
+    "id": "flex-min-main-size",
+    "title": "Flex shrink respects main-axis minimums",
+    "category": "flexbox",
+    "expectedBehavior": "Negative free space is redistributed after an item freezes at its authored min-width."
+  },
+  {
+    "id": "flex-stretch-min-cross-size",
+    "title": "Flex stretch preserves cross-axis minimums",
+    "category": "flexbox",
+    "expectedBehavior": "A stretched column item keeps its authored minimum and padding/border minimum when cross-axis space is exhausted, overflowing from the leading margin edge."
+  },
+  {
+    "id": "flex-intrinsic-wrap",
+    "title": "Flex intrinsic minimums and stretched text wrapping",
+    "category": "flexbox",
+    "expectedBehavior": "Row flex items preserve automatic minimums after grow and shrink, while column flex text items stretch to the cross-axis width and recompute their wrapped intrinsic height."
+  },
+  {
+    "id": "styled-textarea",
+    "title": "Styled semantic textarea control",
+    "category": "forms-interactive",
+    "expectedBehavior": "A textarea is recognized from its semantic type and renders authored line breaks from the declared content inset."
+  },
+  {
+    "id": "relative-block-flow",
+    "title": "Relative offsets preserve block flow",
+    "category": "block-inline",
+    "expectedBehavior": "A relatively positioned block is offset from its normal position while retaining its original space in sibling flow."
+  },
+  {
+    "id": "flex-order-self",
+    "title": "Flex order and individual alignment",
+    "category": "flexbox",
+    "expectedBehavior": "Flex items paint in ascending order while align-self overrides the container cross-axis alignment for individual items."
+  },
+  {
+    "id": "text-overflow-ellipsis",
+    "title": "Single-line text overflow ellipsis",
+    "category": "typography",
+    "expectedBehavior": "No-wrap text that exceeds a fixed content box is clipped and replaced by an ellipsis at the same glyph boundary as the browser."
+  },
+  {
+    "id": "font-relative-units",
+    "title": "Font-relative sizing and offsets",
+    "category": "box-model-units",
+    "expectedBehavior": "Em lengths use the element font size while rem lengths use the 16px parity root for dimensions and positioned offsets."
+  },
+  {
+    "id": "descendant-selector",
+    "title": "Scoped descendant selectors",
+    "category": "selectors-cascade",
+    "expectedBehavior": "Descendant selectors match through multiple ancestors, remain scoped to the matching subtree, and combine the specificity of every compound."
+  },
+  {
+    "id": "child-combinator",
+    "title": "Direct-child combinator scoping",
+    "category": "selectors-cascade",
+    "expectedBehavior": "A child combinator matches only an immediate child, not an otherwise identical element nested more deeply."
+  },
+  {
+    "id": "adjacent-sibling",
+    "title": "Adjacent-sibling combinator scoping",
+    "category": "selectors-cascade",
+    "expectedBehavior": "An adjacent-sibling combinator matches only the first matching element immediately following the left-hand sibling."
+  },
+  {
+    "id": "general-sibling",
+    "title": "General-sibling combinator scoping",
+    "category": "selectors-cascade",
+    "expectedBehavior": "A general-sibling combinator matches every qualifying later sibling while excluding matching elements before the anchor."
+  },
+  {
+    "id": "structural-pseudo",
+    "title": "First and last child pseudo-classes",
+    "category": "selectors-cascade",
+    "expectedBehavior": "The first-child and last-child pseudo-classes match authored sibling order and contribute class-level specificity."
+  },
+  {
+    "id": "responsive-viewport-units",
+    "title": "Viewport-relative responsive geometry",
+    "category": "responsive",
+    "expectedBehavior": "Viewport-relative offsets and dimensions recompute against desktop, tablet, and mobile viewport profiles.",
+    "viewportIds": ["desktop", "tablet", "mobile"]
+  },
+  {
+    "id": "responsive-media",
+    "title": "Width-based media conditions",
+    "category": "responsive",
+    "expectedBehavior": "Width media conditions participate in source order and select desktop, tablet, and mobile style variants at their matching breakpoints.",
+    "viewportIds": ["desktop", "tablet", "mobile"]
+  },
+  {
+    "id": "control-state-selectors",
+    "title": "Semantic control state selectors",
+    "category": "controls-states",
+    "expectedBehavior": "Enabled, disabled, and checked pseudo-classes match semantic control state and participate in the normal cascade."
+  },
+  {
+    "id": "overflow-hidden",
+    "title": "Hidden overflow clips positioned descendants",
+    "category": "overflow-scrolling",
+    "expectedBehavior": "A child extending beyond an overflow-hidden parent remains laid out at its authored size but paints only inside the parent clipping edge."
+  },
+  {
+    "id": "nested-stacking-context",
+    "title": "Child z-index remains inside parent stacking context",
+    "category": "layering-overlays",
+    "expectedBehavior": "A high-z child inside a lower stacking context cannot paint above a sibling stacking context whose parent z-index is higher."
+  },
+  {
+    "id": "grid-explicit-tracks",
+    "title": "Explicit grid tracks with gaps",
+    "category": "grid",
+    "expectedBehavior": "Grid children auto-place in row order, stretch into explicit px/fr columns and rows, and preserve independent row and column gaps."
+  },
+  {
+    "id": "composed-dashboard",
+    "title": "Composed dashboard shell",
+    "category": "composed-application",
+    "expectedBehavior": "A nested flex dashboard with sidebar controls, header typography and search, and a gapped card grid preserves browser geometry and paint."
+  },
+  {
+    "id": "composed-responsive-gallery",
+    "title": "Responsive composed card gallery",
+    "category": "composed-application",
+    "expectedBehavior": "One gallery DOM adapts from three columns to two and then one while its flex shell and explicit row tracks follow each deterministic viewport.",
+    "viewportIds": ["desktop", "tablet", "mobile"]
+  },
+  {
+    "id": "composed-settings-form",
+    "title": "Composed settings form",
+    "category": "composed-application",
+    "expectedBehavior": "A settings panel composes labels, text and select controls, checked and disabled states, and right-aligned actions without renderer-specific layout adjustments."
+  },
+  {
+    "id": "composed-modal",
+    "title": "Composed modal and backdrop",
+    "category": "composed-application",
+    "expectedBehavior": "A fixed backdrop and modal paint above an application surface in z-index order while nested modal typography and actions retain their flex geometry."
+  },
+  {
+    "id": "composed-popover",
+    "title": "Composed clipped popover menu",
+    "category": "composed-application",
+    "expectedBehavior": "An anchored menu paints above application content, keeps its nested action layout, and clips consistently at an overflow-hidden shell boundary."
+  },
+  {
+    "id": "composed-article",
+    "title": "Composed article page",
+    "category": "composed-application",
+    "expectedBehavior": "An article composes a flex metadata row, heading, sized image, and wrapped body copy with browser-equivalent geometry, line breaks, and paint."
+  },
+  {
+    "id": "composed-sidebar-workspace",
+    "title": "Composed sidebar workspace",
+    "category": "composed-application",
+    "expectedBehavior": "A fixed-width nested navigation and flexible workspace column preserve active-item styling, toolbar alignment, and content geometry."
+  },
+  {
+    "id": "composed-data-table",
+    "title": "Composed data table page",
+    "category": "composed-application",
+    "expectedBehavior": "A semantic table with explicit columns and distinct header/body styling retains its row geometry inside a toolbar-based application page."
+  },
+  {
+    "id": "composed-checkout",
+    "title": "Composed checkout form",
+    "category": "composed-application",
+    "expectedBehavior": "A semantic checkout form composes a positioned fieldset, mixed controls, aligned actions, and a flex order summary without renderer-specific structure."
+  },
+  {
+    "id": "composed-notification-center",
+    "title": "Composed notification center",
+    "category": "composed-application",
+    "expectedBehavior": "A compact toolbar and clipped stack of fixed-height notification rows preserve nested flex alignment, ellipsis, status styling, and the overflow boundary."
+  },
+  {
+    "id": "grid-mixed-tracks",
+    "title": "Mixed three-column grid tracks",
+    "category": "grid",
+    "expectedBehavior": "Six items auto-place across two explicit rows with fixed and fractional columns plus independent row and column gaps."
+  },
+  {
+    "id": "nested-overflow-intersection",
+    "title": "Intersected nested overflow clips",
+    "category": "overflow-scrolling",
+    "expectedBehavior": "A positioned descendant is clipped to the intersection of two overflow-hidden ancestor padding boxes."
+  },
+  {
+    "id": "control-requirement-selectors",
+    "title": "Requirement and editability selectors",
+    "category": "controls-states",
+    "expectedBehavior": "Required, optional, read-only, and read-write pseudo-classes match semantic input state and participate in cascade specificity."
+  },
+  {
+    "id": "opacity-stacking-context",
+    "title": "Opacity stacking-context containment",
+    "category": "layering-overlays",
+    "expectedBehavior": "Opacity creates a stacking context, so a high-z descendant remains below a root sibling with a higher stacking level."
+  },
+  {
+    "id": "representative-project-dashboard",
+    "title": "Representative project management dashboard",
+    "category": "composed-application",
+    "expectedBehavior": "A realistic project workspace exposes landmark and heading navigation, activates an internal project link, announces task-status updates, and retains browser-equivalent scroll, selection, responsive, control, event, and semantic state.",
+    "viewportIds": ["desktop", "tablet", "mobile"],
+    "responsiveSequence": ["desktop", "tablet", "mobile", "desktop"],
+    "dynamicStepCount": 3,
+    "interactionStepCount": 11,
+    "visualOwnerReuseStepIndexes": [0, 1, 2]
+  },
+  {
+    "id": "representative-data-management",
+    "title": "Representative data management application",
+    "category": "composed-application",
+    "expectedBehavior": "A responsive inventory application exposes labelled table and pagination semantics, positions and activates a nested row action inside a padded table cell, preserves meaningful focus through repeated page updates, and retains browser-equivalent search, filter, scroll, control, and event state.",
+    "viewportIds": ["desktop", "tablet", "mobile"],
+    "dynamicStepCount": 2,
+    "interactionStepCount": 13,
+    "visualOwnerReuseStepIndexes": [0, 1]
+  },
+  {
+    "id": "representative-account-settings",
+    "title": "Representative account settings application",
+    "category": "composed-application",
+    "expectedBehavior": "A responsive account workspace exposes labelled native controls, synchronized validation and status announcements, and a modal workflow with focus containment and restoration while preserving browser-equivalent edited form state through application-data replacement, submit, and reset.",
+    "viewportIds": ["desktop", "tablet", "mobile"],
+    "dynamicStepCount": 6,
+    "interactionStepCount": 22,
+    "visualOwnerReuseStepIndexes": [0, 1, 2, 3, 4, 5]
+  },
+  {
+    "id": "auto-block-height",
+    "title": "Content-sized block height",
+    "category": "box-model-units",
+    "expectedBehavior": "An auto-height block grows from in-flow children, collapsed sibling margins, padding, and borders while auto-width children fill its content box."
+  },
+  {
+    "id": "parent-child-margin-collapse",
+    "title": "Parent and child vertical margin collapse",
+    "category": "box-model-units",
+    "expectedBehavior": "The first and last child margins collapse through an unbordered, unpadded auto-height block and participate in its surrounding sibling flow."
+  },
+  {
+    "id": "auto-wrapped-text",
+    "title": "Wrapped text intrinsic height",
+    "category": "typography",
+    "expectedBehavior": "A width-constrained block with auto height grows to contain every wrapped line plus its padding and borders."
+  },
+  {
+    "id": "flex-auto-text",
+    "title": "Intrinsic text sizing in flex layout",
+    "category": "flexbox",
+    "expectedBehavior": "Height-auto text flex items use their wrapped line-box height when justify-content positions the item group."
+  },
+  {
+    "id": "flex-auto-main-size",
+    "title": "Intrinsic flex main sizes and auto margin",
+    "category": "flexbox",
+    "expectedBehavior": "Text flex items use their intrinsic main size, min-width constrains controls, and a main-axis auto margin absorbs positive free space."
+  },
+  {
+    "id": "intrinsic-min-height",
+    "title": "Intrinsic parent includes a child minimum height",
+    "category": "block-inline",
+    "expectedBehavior": "An auto-height block uses its in-flow child min-height contribution, including margins."
+  },
+  {
+    "id": "max-width-auto-text",
+    "title": "Max-width constrained intrinsic text height",
+    "category": "box-model-units",
+    "expectedBehavior": "An auto-height text block wraps and grows using its final max-width-constrained content box."
+  },
+  {
+    "id": "intrinsic-input-button",
+    "title": "Content-sized input button",
+    "category": "forms-interactive",
+    "expectedBehavior": "An appearance-none input button with auto dimensions sizes its border box from its label, line height, padding, and borders."
+  },
+  {
+    "id": "flex-auto-container",
+    "title": "Content-sized non-text flex item",
+    "category": "flexbox",
+    "expectedBehavior": "A non-text flex item contributes its descendant-driven auto height before its flex parent centers the item."
+  },
+  {
+    "id": "nested-flex-padding-stretch",
+    "title": "Nested flex padding and stretch",
+    "category": "flexbox",
+    "expectedBehavior": "A padded flex container created as a flex item preserves its assigned used size while stretching an auto-sized child inside its content box."
+  },
+  {
+    "id": "grid-auto-height",
+    "title": "Explicit grid tracks driving auto height",
+    "category": "grid",
+    "expectedBehavior": "A height-auto grid contributes the sum of its explicit row tracks, row gaps, padding, and borders before its flex parent positions it."
+  },
+  {
+    "id": "intrinsic-textarea-rows",
+    "title": "Textarea rows driving auto height",
+    "category": "forms-interactive",
+    "expectedBehavior": "A height-auto appearance-none textarea derives its border-box height from rows, line height, padding, and borders."
+  },
+  {
+    "id": "flex-row-auto-height",
+    "title": "Row flex container intrinsic height",
+    "category": "flexbox",
+    "expectedBehavior": "A nowrap row flex container with height auto uses the largest outer cross size of its in-flow items, plus its own padding and borders."
+  },
+  {
+    "id": "flex-column-auto-height",
+    "title": "Column flex container intrinsic height",
+    "category": "flexbox",
+    "expectedBehavior": "A height-auto nowrap column flex container sums its in-flow items, non-collapsing main-axis margins, gaps, padding, and borders."
+  },
+  {
+    "id": "prelayout-descendant-style",
+    "title": "Descendant styles during intrinsic pre-layout",
+    "category": "selectors-cascade",
+    "expectedBehavior": "Intrinsic pre-layout resolves child-combinator styles using the same complete DOM ancestry that is available during final element creation."
+  },
+  {
+    "id": "three-value-box-shorthand",
+    "title": "Three-value padding and margin shorthand",
+    "category": "box-model-units",
+    "expectedBehavior": "Intrinsic flex sizing expands three-value padding and margin shorthand as top, horizontal, and bottom values."
+  },
+  {
+    "id": "flex-scaled-shrink",
+    "title": "Flex shrink scaled by base size",
+    "category": "flexbox",
+    "expectedBehavior": "Negative free space is distributed using each item flex-shrink factor multiplied by its flex base size."
+  },
+  {
+    "id": "standalone-flex-auto-height",
+    "title": "Standalone flex container intrinsic height",
+    "category": "flexbox",
+    "expectedBehavior": "A positioned height-auto flex container sizes its own border box from its in-flow children before laying them out."
+  },
+  {
+    "id": "flex-percentage-content-width",
+    "title": "Percentage flex item width from content box",
+    "category": "flexbox",
+    "expectedBehavior": "A percentage width on a flex item resolves against the flex container content box, excluding its padding and borders."
+  },
+  {
+    "id": "flex-wrap-auto-height",
+    "title": "Wrapped row flex intrinsic height",
+    "category": "flexbox",
+    "expectedBehavior": "A height-auto wrapped row flex container sums its flex line cross sizes and row gaps, then adds its padding and borders."
+  },
+  {
+    "id": "grid-percentage-content-width",
+    "title": "Percentage grid track from content box",
+    "category": "grid",
+    "expectedBehavior": "A percentage grid column resolves against the grid content box before column gaps are removed, and fractional tracks receive the remaining space."
+  },
+  {
+    "id": "grid-minmax-tracks",
+    "title": "Minmax grid tracks",
+    "category": "grid",
+    "expectedBehavior": "A minmax pixel-to-fr track participates in fractional sizing but cannot shrink below its minimum."
+  },
+  {
+    "id": "grid-auto-content-rows",
+    "title": "Content-sized auto grid rows",
+    "category": "grid",
+    "expectedBehavior": "Auto grid rows use the largest measurable item contribution in each row, and those rows plus gaps drive a height-auto grid container."
+  },
+  {
+    "id": "grid-auto-nested-flex-row",
+    "title": "Auto grid row from nested flex content",
+    "category": "grid",
+    "expectedBehavior": "An auto grid row and height-auto grid container use the intrinsic height of a nested flex item whose children are text-sized."
+  },
+  {
+    "id": "grid-auto-wrapped-text-row",
+    "title": "Responsive auto grid row from wrapped text",
+    "category": "grid",
+    "expectedBehavior": "A Grid item is measured at its resolved column width, so responsive text wrapping drives the auto row and height-auto Grid container consistently.",
+    "viewportIds": ["desktop", "tablet", "mobile"],
+    "responsiveSequence": ["desktop", "tablet", "mobile", "desktop"]
+  },
+  {
+    "id": "grid-implicit-auto-rows",
+    "title": "Content-sized implicit grid rows",
+    "category": "grid",
+    "expectedBehavior": "Items overflowing the explicit column structure create implicit auto rows whose heights use the largest item contribution in each row."
+  },
+  {
+    "id": "grid-fixed-repeat-tracks",
+    "title": "Fixed-count repeated grid tracks",
+    "category": "grid",
+    "expectedBehavior": "A fixed-count repeat expands complete track functions before sizing and auto-placement, including repeated minmax columns and fixed rows."
+  },
+  {
+    "id": "grid-intrinsic-keyword-rows",
+    "title": "Min-content and max-content grid rows",
+    "category": "grid",
+    "expectedBehavior": "Non-spanning min-content and max-content rows use the largest measurable text contribution at the resolved column width and drive a height-auto Grid container."
+  },
+  {
+    "id": "grid-mixed-intrinsic-rows",
+    "title": "Mixed fixed, intrinsic, and fractional grid rows",
+    "category": "grid",
+    "expectedBehavior": "An indefinite-height Grid combines fixed and contribution-sized rows with content-sized fractional rows that retain their authored proportions."
+  },
+  {
+    "id": "grid-auto-row-stretch",
+    "title": "Auto grid rows stretch in a definite height",
+    "category": "grid",
+    "expectedBehavior": "Implicit auto rows first use their largest content contribution, then share remaining definite block-axis space equally under normal stretch alignment."
+  },
+  {
+    "id": "grid-intrinsic-minmax-rows",
+    "title": "Intrinsic minmax grid rows",
+    "category": "grid",
+    "expectedBehavior": "Height-auto Grid rows with min-content or auto minima and flexible maxima use measurable content bases while retaining their fractional proportions."
+  },
+  {
+    "id": "grid-auto-nested-composite",
+    "title": "Auto grid row with nested application content",
+    "category": "grid",
+    "expectedBehavior": "A height-auto Grid row recursively includes a nested Grid card containing wrapped block text, controls, and an explicitly sized image."
+  },
+  {
+    "id": "reactive-text-update",
+    "title": "Reactive wrapped text update",
+    "category": "responsive",
+    "expectedBehavior": "Updating short text to wrapped text in the same render session grows auto-height ancestors and moves following content exactly as browser reflow does.",
+    "dynamicStepCount": 1
+  },
+  {
+    "id": "reactive-natural-image",
+    "title": "Delayed natural image in nested intrinsic containers",
+    "category": "lists-tables-images",
+    "expectedBehavior": "A delayed image without authored dimensions adopts its natural size, including padding and border, and reflows nested height-auto Flex and Grid ancestors plus following content."
+  },
+  {
+    "id": "reactive-value-style",
+    "title": "Reactive control value and layout styles",
+    "category": "responsive",
+    "expectedBehavior": "Updating a visible textarea value and authored Flex direction, width, and height reflows the existing scene to the same result as a fresh render.",
+    "dynamicStepCount": 1
+  },
+  {
+    "id": "reactive-child-list",
+    "title": "Reactive implicit Grid child list",
+    "category": "responsive",
+    "expectedBehavior": "Removing, reordering, relabeling, and adding Grid children reflows implicit rows in the existing scene without leaving the removed child behind.",
+    "dynamicStepCount": 1
+  },
+  {
+    "id": "reactive-image-source",
+    "title": "Reactive image source replacement",
+    "category": "responsive",
+    "expectedBehavior": "Replacing a still-loading image source shows only the new image; completion of the older delayed source cannot overwrite the current element or grow scene resources.",
+    "dynamicStepCount": 1
+  },
+  {
+    "id": "reactive-lifecycle-cycles",
+    "title": "Repeated resize and update lifecycle",
+    "category": "responsive",
+    "expectedBehavior": "Alternating desktop, tablet, and mobile resizes with short/long text updates remains identical to fresh rendering on every cycle and disposes all owned lifecycle state.",
+    "viewportIds": ["desktop", "tablet", "mobile"],
+    "dynamicStepCount": 6,
+    "lifecycleViewports": ["desktop", "tablet", "mobile", "desktop", "mobile", "desktop"]
+  },
+  {
+    "id": "interaction-pointer-click",
+    "title": "Pointer activation event order",
+    "category": "forms-interactive",
+    "expectedBehavior": "A real primary-pointer activation targets the authored button and reports pointerdown, pointerup, and click once in browser order.",
+    "interactionStepCount": 1
+  },
+  {
+    "id": "interaction-focus-navigation",
+    "title": "Focus and keyboard navigation",
+    "category": "forms-interactive",
+    "expectedBehavior": "Pointer and semantic focus stay synchronized through forward/reverse Tab navigation, disabled-control skipping, outside blur, semantic activation, and keyboard activation.",
+    "interactionStepCount": 7,
+    "semanticIds": ["focus-first", "focus-disabled", "focus-second"]
+  },
+  {
+    "id": "interaction-text-editing",
+    "title": "Text input editing events",
+    "category": "forms-interactive",
+    "expectedBehavior": "Typing and deleting in a focused text input updates value and selection, emits input after each mutation, and commits change when focus leaves the control.",
+    "interactionStepCount": 4
+  },
+  {
+    "id": "interaction-textarea-selection",
+    "title": "Textarea selection and multiline editing",
+    "category": "forms-interactive",
+    "expectedBehavior": "Shift-arrow selection, selection replacement, newline insertion, continued multiline typing, and blur commit match a browser textarea.",
+    "interactionStepCount": 5,
+    "enforcePointerCursor": true,
+    "controlVisualStateIds": ["textarea-field"]
+  },
+  {
+    "id": "interaction-checkbox-click",
+    "title": "Checkbox pointer activation",
+    "category": "forms-interactive",
+    "expectedBehavior": "Each primary-pointer click toggles a checkbox before click listeners run, then emits input and change with the new checked state.",
+    "interactionStepCount": 2
+  },
+  {
+    "id": "interaction-radio-group",
+    "title": "Radio group pointer activation",
+    "category": "forms-interactive",
+    "expectedBehavior": "Clicking a different radio selects it and clears its group peer before click, while clicking the selected radio again emits no input or change.",
+    "interactionStepCount": 3
+  },
+  {
+    "id": "interaction-checkbox-keyboard",
+    "title": "Checkbox Space-key activation",
+    "category": "forms-interactive",
+    "expectedBehavior": "Space on a focused checkbox reports keydown and keyup before a synthesized click, then emits input and change with the toggled checked state.",
+    "interactionStepCount": 2
+  },
+  {
+    "id": "interaction-radio-keyboard",
+    "title": "Radio group arrow-key navigation",
+    "category": "forms-interactive",
+    "expectedBehavior": "Arrow keys move focus and exclusive selection within a named radio group, emitting input and change on the newly selected member before keyup.",
+    "interactionStepCount": 3
+  },
+  {
+    "id": "interaction-select-keyboard",
+    "title": "Closed select keyboard selection",
+    "category": "forms-interactive",
+    "expectedBehavior": "Arrow keys change a focused closed select immediately, skip disabled options, update its displayed value, and emit input then change before keyup.",
+    "interactionStepCount": 5
+  },
+  {
+    "id": "interaction-button-keyboard",
+    "title": "Button keyboard activation",
+    "category": "forms-interactive",
+    "expectedBehavior": "Enter synthesizes a button click during keydown, while Space synthesizes its click after keyup, with browser-compatible keyboard click details.",
+    "interactionStepCount": 3
+  },
+  {
+    "id": "interaction-label-control",
+    "title": "Explicit label control activation",
+    "category": "forms-interactive",
+    "expectedBehavior": "Clicking an explicit label focuses and activates its associated checkbox through a synthesized control click with normal input and change events.",
+    "interactionStepCount": 2
+  },
+  {
+    "id": "interaction-form-reset",
+    "title": "Form reset default action",
+    "category": "forms-interactive",
+    "expectedBehavior": "A reset button emits click then reset and restores authored text and checked defaults without input or change events for the restored values.",
+    "interactionStepCount": 4
+  },
+  {
+    "id": "interaction-form-submit",
+    "title": "Form submission default action",
+    "category": "forms-interactive",
+    "expectedBehavior": "Pointer and Enter activation of a submit button emit click then submit on its containing form after edited text commits.",
+    "interactionStepCount": 4
+  },
+  {
+    "id": "interaction-form-validation",
+    "title": "Required-field submission validation",
+    "category": "forms-interactive",
+    "expectedBehavior": "Submitting an empty required field emits invalid and focuses it without submit; after entry, the same button emits submit.",
+    "interactionStepCount": 3
+  },
+  {
+    "id": "interaction-form-implicit-submit",
+    "title": "Single-line implicit form submission",
+    "category": "forms-interactive",
+    "expectedBehavior": "Enter in a focused single-line field synthesizes the form submit button click and submit while retaining field focus.",
+    "interactionStepCount": 2
+  },
+  {
+    "id": "interaction-hover-style",
+    "title": "Authored hover-state paint",
+    "category": "controls-states",
+    "expectedBehavior": "Pointer enter applies authored hover paint, moving onto a nested text child preserves the ancestor hover state, and pointer leave restores normal paint with browser-order boundary events.",
+    "interactionStepCount": 3,
+    "enforcePointerCursor": true,
+    "enforcedStyleProperties": {
+      "hover-style-target": [
+        "backgroundColor",
+        "borderTopWidth", "borderRightWidth", "borderBottomWidth", "borderLeftWidth",
+        "borderTopColor", "borderRightColor", "borderBottomColor", "borderLeftColor",
+        "borderTopStyle", "borderRightStyle", "borderBottomStyle", "borderLeftStyle",
+        "borderRadius", "cursor"
+      ]
+    }
+  },
+  {
+    "id": "interaction-active-style",
+    "title": "Authored active-state paint",
+    "category": "controls-states",
+    "expectedBehavior": "Primary pointer down applies authored active paint until pointer up, then restores normal paint and completes click.",
+    "interactionStepCount": 2,
+    "enforcePointerCursor": true,
+    "enforcedStyleProperties": {
+      "active-style-target": [
+        "backgroundColor",
+        "borderTopWidth", "borderRightWidth", "borderBottomWidth", "borderLeftWidth",
+        "borderTopColor", "borderRightColor", "borderBottomColor", "borderLeftColor",
+        "borderTopStyle", "borderRightStyle", "borderBottomStyle", "borderLeftStyle",
+        "borderRadius", "cursor"
+      ]
+    }
+  },
+  {
+    "id": "interaction-focus-style",
+    "title": "Authored focus-state paint",
+    "category": "controls-states",
+    "expectedBehavior": "Focusing a control applies authored background and text-color paint and blurring it restores normal paint without changing geometry.",
+    "interactionStepCount": 4
+  },
+  {
+    "id": "interaction-update-text-state",
+    "title": "Text-control state across application update",
+    "category": "forms-interactive",
+    "expectedBehavior": "A compatible stable-ID text input retains its user-edited value, focus, caret, and selection when an application update changes a sibling.",
+    "dynamicStepCount": 2,
+    "interactionStepCount": 3
+  },
+  {
+    "id": "interaction-update-choice-state",
+    "title": "Choice-control state across application update",
+    "category": "forms-interactive",
+    "expectedBehavior": "Stable compatible checkbox, radio, and select controls retain their live checked, selected, and focused state across unrelated updates and responsive reflow.",
+    "dynamicStepCount": 2,
+    "interactionStepCount": 7
+  },
+  {
+    "id": "interaction-replacement-cleanup",
+    "title": "Removed and incompatible control cleanup",
+    "category": "forms-interactive",
+    "expectedBehavior": "An incompatibly replaced or removed focused control loses its live state and focus, unregisters cleanly, and does not resurrect stale state when the authored ID is later reused.",
+    "dynamicStepCount": 3,
+    "interactionStepCount": 8,
+    "semanticIds": ["volatile-control"]
+  },
+  {
+    "id": "interaction-lifecycle-stress",
+    "title": "Combined Phase 9 interaction lifecycle",
+    "category": "forms-interactive",
+    "expectedBehavior": "Three equivalent scroll, backward pointer selection, expanded-select cancel/commit, compatible responsive update, incompatible replacement, restoration, and disposal cycles keep state exact while every owned resource and registration plateaus and cleans up.",
+    "dynamicStepCount": 3,
+    "interactionStepCount": 30,
+    "interactionCycleLength": 10
+  },
+  {
+    "id": "overflow-vertical-wheel",
+    "title": "Vertical wheel scrolling",
+    "category": "overflow-scrolling",
+    "expectedBehavior": "Wheel input scrolls a fixed-height overflow:auto container, clamps at both ends, moves its content under a stable clip, and reports browser-equivalent scroll extents.",
+    "interactionStepCount": 3
+  },
+  {
+    "id": "overflow-horizontal-wheel",
+    "title": "Horizontal wheel scrolling",
+    "category": "overflow-scrolling",
+    "expectedBehavior": "Horizontal wheel input scrolls a fixed-width overflow:auto container, clamps at both ends, moves its row beneath a stable clip, and reports browser-equivalent scroll extents.",
+    "interactionStepCount": 3
+  },
+  {
+    "id": "overflow-nested-wheel",
+    "title": "Nested wheel propagation",
+    "category": "overflow-scrolling",
+    "expectedBehavior": "The nearest nested overflow container consumes wheel movement until it reaches a boundary, then further movement in that direction scrolls and clamps its overflow ancestor.",
+    "interactionStepCount": 8
+  },
+  {
+    "id": "overflow-update-state",
+    "title": "Scroll state across compatible updates",
+    "category": "overflow-scrolling",
+    "expectedBehavior": "A stable unique scroll container preserves its offset through a compatible sibling update and clamps that offset when a later compatible update shortens its content.",
+    "dynamicStepCount": 2,
+    "interactionStepCount": 3
+  },
+  {
+    "id": "overflow-replacement-cleanup",
+    "title": "Removed and incompatible scroll cleanup",
+    "category": "overflow-scrolling",
+    "expectedBehavior": "A disabled, removed, or duplicate scroll-container identity leaves no live registry state, and later reuse of the ID starts from the authored zero offset rather than resurrecting stale state.",
+    "dynamicStepCount": 4,
+    "interactionStepCount": 7
+  },
+  {
+    "id": "overflow-scrolled-target",
+    "title": "Pointer targeting after scrolling",
+    "category": "overflow-scrolling",
+    "expectedBehavior": "A clipped control cannot be activated, becomes pointer-targetable and focusable after scrolling into view, and becomes inert again when scrolled back outside the clip.",
+    "interactionStepCount": 5
+  },
+  {
+    "id": "interaction-pointer-caret",
+    "title": "Pointer caret placement",
+    "category": "forms-interactive",
+    "expectedBehavior": "Clicking at different horizontal positions in a text input focuses it and places a collapsed caret at the nearest browser text boundary.",
+    "interactionStepCount": 3,
+    "enforcePointerCursor": true,
+    "controlVisualStateIds": ["caret-input"]
+  },
+  {
+    "id": "interaction-pointer-drag-selection",
+    "title": "Bidirectional pointer drag selection",
+    "category": "forms-interactive",
+    "expectedBehavior": "Forward and backward pointer drags expose ordered selection endpoints while retaining the active caret direction, and typing replaces each selected range with browser-equivalent events.",
+    "interactionStepCount": 4,
+    "enforcePointerCursor": true,
+    "controlVisualStateIds": ["forward-input", "backward-input"]
+  },
+  {
+    "id": "interaction-document-text-selection",
+    "title": "Non-control text selection",
+    "category": "forms-interactive",
+    "expectedBehavior": "Forward and backward pointer drags select the same authored text range, direction, and visible highlight as browser document text, native copy exposes the selected text, and clicking outside clears either selection.",
+    "interactionStepCount": 6,
+    "enforcePointerCursor": true,
+    "textSelectionIds": ["document-selection-copy"],
+    "enforcedStyleProperties": {
+      "document-selection-copy": [
+        "borderTopWidth", "borderRightWidth", "borderBottomWidth", "borderLeftWidth",
+        "borderTopColor", "borderRightColor", "borderBottomColor", "borderLeftColor",
+        "borderTopStyle", "borderRightStyle", "borderBottomStyle", "borderLeftStyle",
+        "borderRadius", "cursor"
+      ]
+    }
+  },
+  {
+    "id": "interaction-input-autoscroll",
+    "title": "Single-line input caret autoscrolling",
+    "category": "forms-interactive",
+    "expectedBehavior": "Keyboard and pointer caret movement keep a long single-line input caret visible by updating horizontal text scroll state, then return to the leading edge at Home.",
+    "interactionStepCount": 5
+  },
+  {
+    "id": "interaction-textarea-autoscroll",
+    "title": "Textarea caret autoscrolling",
+    "category": "forms-interactive",
+    "expectedBehavior": "Moving the caret beyond a multiline textarea viewport scrolls vertically to keep it visible, preserves selection/editing state there, and returns to the leading viewport with the caret.",
+    "interactionStepCount": 6
+  },
+  {
+    "id": "interaction-textarea-vertical-navigation",
+    "title": "Textarea vertical keyboard navigation",
+    "category": "forms-interactive",
+    "expectedBehavior": "ArrowUp and ArrowDown preserve the caret column across textarea lines; Shift extends from a stable anchor, scrolls the focus into view, and an unshifted arrow collapses the range directionally.",
+    "interactionStepCount": 6
+  },
+  {
+    "id": "interaction-textarea-pointer-autoscroll",
+    "title": "Textarea pointer drag beyond its viewport",
+    "category": "forms-interactive",
+    "expectedBehavior": "Dragging a held pointer below a multiline textarea viewport extends the selection through off-screen lines while retaining the browser scroll offset before release.",
+    "interactionStepCount": 6
+  },
+  {
+    "id": "interaction-select-expanded-cancel",
+    "title": "Expanded select Escape cancellation",
+    "category": "forms-interactive",
+    "expectedBehavior": "A primary pointer click focuses and expands an enabled single-select; Escape closes it without changing the selected option or emitting mutation events.",
+    "interactionStepCount": 2
+  },
+  {
+    "id": "interaction-select-expanded-keyboard",
+    "title": "Expanded select keyboard commit",
+    "category": "forms-interactive",
+    "expectedBehavior": "Arrow keys move the active option in an expanded single-select while skipping disabled choices, and Enter commits the active option and closes the popup with native events.",
+    "interactionStepCount": 4
+  },
+  {
+    "id": "interaction-select-expanded-pointer",
+    "title": "Expanded select pointer commit",
+    "category": "forms-interactive",
+    "expectedBehavior": "A pointer click on an enabled option in an expanded single-select commits that option, closes the popup, and exposes only the browser events owned by the select control.",
+    "interactionStepCount": 2
+  },
+  {
+    "id": "interaction-select-expanded-clickaway",
+    "title": "Expanded select click-away dismissal",
+    "category": "forms-interactive",
+    "expectedBehavior": "Clicking a non-focusable surface outside an expanded single-select dismisses its popup without changing the selected option and applies the browser focus/event boundary.",
+    "interactionStepCount": 2
+  },
+  {
+    "id": "interaction-select-expanded-placement",
+    "title": "Expanded select viewport placement",
+    "category": "forms-interactive",
+    "expectedBehavior": "An expanded single-select near the viewport bottom places its complete popup above the control when the available space below is insufficient.",
+    "interactionStepCount": 2
+  },
+  {
+    "id": "interaction-select-expanded-stacking",
+    "title": "Expanded select stacking and targeting",
+    "category": "forms-interactive",
+    "expectedBehavior": "An expanded single-select popup paints and receives option selection above overlapping high-z-index page content, like native platform select UI.",
+    "interactionStepCount": 2
+  },
+  {
+    "id": "interaction-select-expanded-cleanup",
+    "title": "Expanded select replacement cleanup",
+    "category": "forms-interactive",
+    "expectedBehavior": "Removing an expanded single-select closes its popup and releases popup resources and observers; reusing the ID creates a fresh closed control without lifecycle growth.",
+    "interactionStepCount": 9
+  },
+  {
+    "id": "reconciliation-semantic-reuse",
+    "title": "Semantic-only visual owner reuse",
+    "category": "accessibility-semantics",
+    "expectedBehavior": "Changing semantic labels and advisory titles updates the native semantic tree without reflowing or replacing compatible Babylon visual owners.",
+    "dynamicStepCount": 2,
+    "visualReuseStepIndexes": [0, 1],
+    "semanticIds": ["reuse-panel", "reuse-action"]
+  },
+  {
+    "id": "reconciliation-visual-updates",
+    "title": "Keyed visual updates retain mesh owners",
+    "category": "responsive",
+    "expectedBehavior": "Text, paint/layout, child insertion/reorder, and image-source updates match fresh browser layout while compatible uniquely identified Babylon element meshes retain identity.",
+    "dynamicStepCount": 4,
+    "visualOwnerReuseStepIndexes": [0, 1, 2, 3]
+  },
+  {
+    "id": "table-cell-control-content-box",
+    "title": "Control inside a padded table cell",
+    "category": "lists-tables-images",
+    "expectedBehavior": "A nested visual control is positioned from the padded content origin of its table cell at every representative viewport.",
+    "viewportIds": ["desktop", "tablet", "mobile"]
+  }
+]

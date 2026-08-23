@@ -1,5 +1,10 @@
 # Enhanced Features Plan for ASTYLARUI
 
+> **Status (2026-08-15):** Historical vision document written before much of the
+> current renderer existed. Several features are now partially or fully present,
+> but this file was not maintained as a completion checklist. Use
+> `project-status.md` and measured parity fixtures for current planning.
+
 ## Overview
 This plan outlines the strategic development of DOM elements and styling capabilities, building from simple to complex features. The goal is to create a comprehensive HTML/CSS-like system in 3D space using BabylonJS, avoiding the standard BabylonJS GUI package due to its limitations for our use case.
 

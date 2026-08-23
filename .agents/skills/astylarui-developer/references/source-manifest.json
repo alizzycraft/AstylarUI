@@ -1,0 +1,76 @@
+{
+  "schema": "astylarui-skill-reference-sources",
+  "version": 1,
+  "astylarVersion": "0.1.0",
+  "sources": [
+    {
+      "source": "docs/compatibility/html-css.md",
+      "destination": "html-css.md",
+      "transform": "portable-html-css-links",
+      "sourceSha256": "2c5fd251e143f664d6a8b26bb233f56d202428c0e8426bae1e9df4b3aafcbeb6",
+      "bundledSha256": "ed7244b3848b9b077f93e4ecbb917a23864c59e79d2862a112a8cca0b3214a57"
+    },
+    {
+      "source": "docs/compatibility/capabilities.json",
+      "destination": "capabilities.json",
+      "sourceSha256": "de9e8d09d200d1eb83e10408c9bd6553b86518925890ae6ac8a6ae19a024bc48",
+      "bundledSha256": "de9e8d09d200d1eb83e10408c9bd6553b86518925890ae6ac8a6ae19a024bc48"
+    },
+    {
+      "source": "docs/compatibility/examples/manifest.json",
+      "destination": "translation-examples.json",
+      "sourceSha256": "dda0e9fa19cee2f5bccc767c484c2f91f8f82c1d7fc4ac404a56eec0cf1c6621",
+      "bundledSha256": "dda0e9fa19cee2f5bccc767c484c2f91f8f82c1d7fc4ac404a56eec0cf1c6621"
+    },
+    {
+      "source": "docs/plugins.md",
+      "destination": "plugins.md",
+      "transform": "portable-plugin-links",
+      "sourceSha256": "6696d540b14cbdc8ec8ecdff1fa00bc2e6e5d6dfb4f3687838b6b363c799940a",
+      "bundledSha256": "ee7463da9725904be9f45a26ea378ef2c63e86b481ad4836c8b571b4dfa2f53e"
+    },
+    {
+      "source": "docs/reconciliation.md",
+      "destination": "reconciliation.md",
+      "sourceSha256": "38179189ec2055a40e6e8eaac54a76b1b8e9c7f1e45ba7581f60fc2c5e51508b",
+      "bundledSha256": "38179189ec2055a40e6e8eaac54a76b1b8e9c7f1e45ba7581f60fc2c5e51508b"
+    },
+    {
+      "source": "examples/angular-consumer/src/app/app.config.ts",
+      "destination": "consumer-app.config.ts",
+      "sourceSha256": "2b25f639c89794f1c7dfa717eed9c635a2de2c1486c50aac7038a2b0530f8847",
+      "bundledSha256": "2b25f639c89794f1c7dfa717eed9c635a2de2c1486c50aac7038a2b0530f8847"
+    },
+    {
+      "source": "examples/angular-consumer/src/app/app.ts",
+      "destination": "consumer-app.ts",
+      "sourceSha256": "1c20c3836eeb5785a1588a8696ee739c20e986c72d80bf8064ccac6ed1b4aaa7",
+      "bundledSha256": "1c20c3836eeb5785a1588a8696ee739c20e986c72d80bf8064ccac6ed1b4aaa7"
+    },
+    {
+      "source": "examples/angular-consumer/src/app/app.html",
+      "destination": "consumer-app.html",
+      "sourceSha256": "6907313c09dea88c73876b1dd5886948d31cea9230a64eaf4492feb2593e7e42",
+      "bundledSha256": "6907313c09dea88c73876b1dd5886948d31cea9230a64eaf4492feb2593e7e42"
+    },
+    {
+      "source": "examples/angular-consumer/src/app/consumer-badge.plugin.ts",
+      "destination": "consumer-badge.plugin.ts",
+      "sourceSha256": "d1e5aa327bf18d2984e4279b568e5978fdddaf014f886314dff14bb9394a2695",
+      "bundledSha256": "d1e5aa327bf18d2984e4279b568e5978fdddaf014f886314dff14bb9394a2695"
+    },
+    {
+      "source": "examples/angular-consumer/src/app/app.browser.spec.ts",
+      "destination": "consumer-app.browser.spec.ts",
+      "sourceSha256": "fc33ecd00363d28f5eb9a81d025ff461101fdf689c0bfb493f026c965ebec5df",
+      "bundledSha256": "fc33ecd00363d28f5eb9a81d025ff461101fdf689c0bfb493f026c965ebec5df"
+    },
+    {
+      "source": "src/lib/index.ts",
+      "destination": "public-api.json",
+      "transform": "public-root-exports",
+      "sourceSha256": "b4714aaa613d348ec3eb924e6d3b3efb30ee529525490473138e400429101e89",
+      "bundledSha256": "f58b636373ce8d100bade9425ef6b0d988070c990513ae5dbd76a7a2f63cb8b4"
+    }
+  ]
+}

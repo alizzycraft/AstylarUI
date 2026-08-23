@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<!-- Active browser reference for the matching `html-kitchen-sink` Astylar fixture. -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>HTML Kitchen Sink Reference</title>
+  <style>
+    body {
+      background: #2c3e50;
+    }
+
+    #main-container {
+      top: 15%;
+      left: 5%;
+      width: 90%;
+      height: 90%;
+      background: #34495e;
+      border-radius: 8px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .section {
+      background: #3a4a5c;
+      border-radius: 6px;
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .section-header {
+      color: #ffffff;
+      padding: 8px 12px;
+      border-radius: 4px;
+      height: 30px;
+    }
+
+    #text-header {
+      background: #e74c3c;
+    }
+
+    #code-header {
+      background: #3498db;
+    }
+
+    #semantic-header {
+      background: #27ae60;
+    }
+
+    #interactive-header {
+      background: #9b59b6;
+    }
+
+    .element-row {
+      display: flex;
+      flex-direction: row;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .test-element {
+      border-radius: 4px;
+    }
+
+    .text-element {
+      background: #ecf0f1;
+    }
+
+    .code-element {
+      background: #2c3e50;
+      color: #ecf0f1;
+    }
+
+    .semantic-element {
+      background: #e67e22;
+      color: #ffffff;
+    }
+
+    .interactive-element {
+      background: #f39c12;
+      color: #ffffff;
+    }
+  </style>
+</head>
+<body>
+  <div id="main-container">
+    <section id="text-section" class="section">
+      <div id="text-header" class="section-header">Text Formatting</div>
+      <div class="element-row">
+        <b id="test-b" class="test-element text-element">Bold</b>
+        <strong id="test-strong" class="test-element text-element">Strong</strong>
+        <i id="test-i" class="test-element text-element">Italic</i>
+        <em id="test-em" class="test-element text-element">Emphasis</em>
+        <u id="test-u" class="test-element text-element">Underline</u>
+      </div>
+      <div class="element-row">
+        <small id="test-small" class="test-element text-element">Small</small>
+        <mark id="test-mark" class="test-element">Marked</mark>
+        <del id="test-del" class="test-element text-element">Deleted</del>
+        <ins id="test-ins" class="test-element">Inserted</ins>
+      </div>
+    </section>
+
+    <section id="code-section" class="section">
+      <div id="code-header" class="section-header">Code &amp; Preformatted</div>
+      <div class="element-row">
+        <code id="test-code" class="test-element code-element">code()</code>
+        <kbd id="test-kbd" class="test-element code-element">Ctrl+C</kbd>
+        <samp id="test-samp" class="test-element code-element">Output</samp>
+        <var id="test-var" class="test-element code-element">variable</var>
+      </div>
+    </section>
+
+    <section id="semantic-section" class="section">
+      <div id="semantic-header" class="section-header">Semantic Elements</div>
+      <div class="element-row">
+        <cite id="test-cite" class="test-element semantic-element">Citation</cite>
+        <abbr id="test-abbr" class="test-element semantic-element" title="HyperText Markup Language">HTML</abbr>
+        <dfn id="test-dfn" class="test-element semantic-element">Definition</dfn>
+      </div>
+    </section>
+
+    <section id="interactive-section" class="section">
+      <div id="interactive-header" class="section-header">Interactive &amp; Labels</div>
+      <div class="element-row">
+        <label id="test-label" class="test-element interactive-element" for="sample-input">Label</label>
+        <legend id="test-legend" class="test-element interactive-element">Legend</legend>
+        <summary id="test-summary" class="test-element interactive-element">Summary</summary>
+      </div>
+    </section>
+  </div>
+</body>
+</html>

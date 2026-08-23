@@ -110,7 +110,7 @@ export class FormManager {
         const validationResult = this.validateForm(form);
 
         if (!validationResult.valid) {
-            console.log('Form validation failed:', validationResult);
+
             this.displayValidationErrors(form);
             return false;
         }
@@ -130,7 +130,7 @@ export class FormManager {
             }
         }
 
-        console.log('Form submitted:', formData);
+
         return true;
     }
 
@@ -171,14 +171,14 @@ export class FormManager {
      */
     displayValidationErrors(form: Form): void {
         // In production, this would create visual error messages near inputs
-        console.log('Validation errors:');
+
 
         form.validationState.fieldErrors.forEach((errors, input) => {
-            console.log(`  ${input.element.id || 'unknown'}:`, errors);
+
         });
 
         if (form.validationState.globalErrors.length > 0) {
-            console.log('  Global errors:', form.validationState.globalErrors);
+
         }
     }
 

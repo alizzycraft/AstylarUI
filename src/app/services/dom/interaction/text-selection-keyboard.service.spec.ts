@@ -1,4 +1,5 @@
 import { DOCUMENT } from '@angular/common';
+import { provideZonelessChangeDetection } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { TextSelectionKeyboardService } from './text-selection-keyboard.service';
 import { TextSelectionStore } from '../../../store/text-selection.store';
@@ -18,6 +19,7 @@ describe('TextSelectionKeyboardService', () => {
 
     TestBed.configureTestingModule({
       providers: [
+        provideZonelessChangeDetection(),
         { provide: DOCUMENT, useValue: documentStub as unknown as Document },
         { provide: TextSelectionStore, useClass: MockTextSelectionStore },
         { provide: TextSelectionControllerService, useClass: MockTextSelectionControllerService },
@@ -69,14 +71,42 @@ describe('TextSelectionKeyboardService', () => {
     expect(controller.moveSelectionWithKeyboard).toHaveBeenCalledWith(entry, 'left', true);
   });
 
-  it('invokes clipboard copy shortcut when selection exists', () => {
-    store.setHasSelection(true);
-    const event = createKeyEvent('keydown', 'c', { ctrlKey: true });
+  it('leaves navigation keys to a focused Astylar text control', () => {
+    const entry: TextInteractionEntry = {
+      elementId: 'textarea-1',
+      mesh: {
+        parent: {
+          metadata: {
+            textInput: { focused: true }
+          }
+        }
+      } as any
+    };
+    store.setElementId(entry.elementId);
+    store.setActiveEntry(entry);
 
+    const event = createKeyEvent('keydown', 'ArrowLeft', { shiftKey: true });
     documentStub.dispatchKeydown(event);
 
-    expect(clipboard.copySelectedText).toHaveBeenCalled();
-    expect(event.defaultPrevented).toBeTrue();
+    expect(event.defaultPrevented).toBeFalse();
+    expect(controller.moveSelectionWithKeyboard).not.toHaveBeenCalled();
+  });
+
+  it('writes during the copy user activation and also populates its native copy event', () => {
+    store.setHasSelection(true);
+    store.setElementId('element-1');
+    const keyEvent = createKeyEvent('keydown', 'c', { ctrlKey: true });
+
+    documentStub.dispatchKeydown(keyEvent);
+    expect(keyEvent.defaultPrevented).toBeFalse();
+    expect(clipboard.copySelectedText).toHaveBeenCalledWith();
+
+    const copyEvent = createCopyEvent();
+    documentStub.dispatchCopy(copyEvent);
+
+    expect(clipboard.copySelectedText).toHaveBeenCalledWith(copyEvent);
+    expect(clipboard.copySelectedText).toHaveBeenCalledTimes(2);
+    expect(copyEvent.defaultPrevented).toBeTrue();
   });
 
   it('clears selection on Escape key', () => {
@@ -160,6 +190,18 @@ class FakeDocument {
       }
     }
   }
+
+  dispatchCopy(event: ClipboardEvent): void {
+    const listeners = this.listeners.get('copy') ?? [];
+    for (const listener of listeners) {
+      if (typeof listener === 'function') listener(event);
+      else listener.handleEvent(event);
+    }
+  }
+}
+
+function createCopyEvent(): ClipboardEvent {
+  return new Event('copy', { bubbles: true, cancelable: true }) as ClipboardEvent;
 }
 
 function createKeyEvent(

@@ -1,16 +1,25 @@
+import type { StyleRule } from './style-rule';
+
 // Table and anchor element types (clarified for type safety)
 export type DOMElementType =
-  | 'div' | 'section' | 'article' | 'header' | 'footer' | 'nav' | 'main'
-  | 'ul' | 'ol' | 'li'
+  | 'div' | 'section' | 'article' | 'header' | 'footer' | 'nav' | 'main' | 'aside' | 'address' | 'figure' | 'figcaption' | 'hgroup'
+  | 'ul' | 'ol' | 'li' | 'dl' | 'dt' | 'dd' | 'menu'
   | 'table' | 'thead' | 'tbody' | 'tfoot' | 'tr' | 'td' | 'th' | 'caption' | 'col' | 'colgroup'
   | 'a' | 'area' // anchor types
-  | 'img' | 'span' | 'input' | 'button' | 'form' | 'select' | 'textarea' | 'label' | 'option'
-  | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p'; // text elements
+  | 'img' | 'span' | 'input' | 'button' | 'form' | 'select' | 'textarea' | 'label' | 'option' | 'fieldset' | 'legend' | 'datalist' | 'output' | 'optgroup'
+  | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'br' | 'wbr' | 'hr'
+  | 'b' | 'strong' | 'i' | 'em' | 'cite' | 'var' | 'dfn' | 'u' | 'ins' | 's' | 'strike' | 'del' | 'code' | 'kbd' | 'samp' | 'pre'
+  | 'small' | 'sub' | 'sup' | 'blockquote' | 'q' | 'abbr' | 'mark'
+  | 'details' | 'summary' | 'dialog' // interactive
+  | 'canvas' | 'iframe' | 'embed' | 'object' | 'video' | 'audio' | 'map' | 'param' | 'source' | 'track'; // media
+
+/** Known HTML-like elements retain autocomplete while plugins may add identities. */
+export type DOMElementIdentity = DOMElementType | (string & Record<never, never>);
 
 export interface DOMElement {
   id?: string;
-  type: DOMElementType;
-  style?: any;
+  type: DOMElementIdentity;
+  style?: Partial<Omit<StyleRule, 'selector'>>;
   children?: DOMElement[];
   textContent?: string;
   class?: string;
@@ -35,6 +44,10 @@ export interface DOMElement {
   accept?: string;
   autocomplete?: string;
   autofocus?: boolean;
+  /** Whether a dialog is currently open. */
+  open?: boolean;
+  /** Opts an open dialog into the supported modal/top-layer subset. */
+  modal?: boolean;
   cols?: number;
   rows?: number;
   wrap?: string;
@@ -54,6 +67,16 @@ export interface DOMElement {
   tabindex?: number;
   title?: string;
   translate?: boolean;
+  /** Explicit semantic role for the supported accessibility subset. */
+  role?: string;
+  ariaLabel?: string;
+  /** Space-separated authored element IDs. */
+  ariaLabelledby?: string;
+  /** Space-separated authored element IDs. */
+  ariaDescribedby?: string;
+  ariaLive?: 'off' | 'polite' | 'assertive';
+  ariaAtomic?: boolean;
+  ariaCurrent?: boolean | 'page' | 'step' | 'location' | 'date' | 'time';
   // Table-specific
   tableProperties?: {
     colspan?: number;
@@ -67,7 +90,10 @@ export interface DOMElement {
   // Input-specific
   inputType?: string; // Type of input element (text, button, checkbox, etc.)
   inputElement?: any; // Reference to InputElement state object
-  onclick?: string; // Click handler for buttons
+  /** @deprecated Executable strings are not supported. Use AstylarRenderOptions.events. */
+  onclick?: string;
   options?: Array<{ value: any; label: string; disabled?: boolean }>; // Options for select elements
   validationRules?: Array<{ type: string; value?: any; message: string }>; // Validation rules
+  /** Unknown-safe data owned and validated by the element's plugin. */
+  data?: Readonly<Record<string, unknown>>;
 }

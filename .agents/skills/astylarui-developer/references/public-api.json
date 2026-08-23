@@ -1,0 +1,428 @@
+{
+  "schema": "astylarui-public-root-exports",
+  "version": 1,
+  "astylarVersion": "0.1.0",
+  "packageRoot": "astylarui",
+  "symbols": [
+    {
+      "name": "areAstylarReconciliationNodesCompatible",
+      "kind": "runtime"
+    },
+    {
+      "name": "astylar",
+      "kind": "runtime"
+    },
+    {
+      "name": "Astylar",
+      "kind": "runtime"
+    },
+    {
+      "name": "ASTYLAR_PLUGIN_API_VERSION",
+      "kind": "runtime"
+    },
+    {
+      "name": "ASTYLAR_PLUGIN_DEFINITIONS",
+      "kind": "runtime"
+    },
+    {
+      "name": "ASTYLAR_PLUGIN_SURFACE_CONTEXT",
+      "kind": "runtime"
+    },
+    {
+      "name": "ASTYLAR_VERSION",
+      "kind": "runtime"
+    },
+    {
+      "name": "AstylarAppliedPluginMigration",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarCapabilityRegistry",
+      "kind": "runtime"
+    },
+    {
+      "name": "AstylarCapabilityRegistrySnapshot",
+      "kind": "type"
+    },
+    {
+      "name": "astylarChildReconciliationPath",
+      "kind": "runtime"
+    },
+    {
+      "name": "AstylarConfig",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarDiagnostic",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarDiagnosticCode",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarDiagnosticError",
+      "kind": "runtime"
+    },
+    {
+      "name": "AstylarDiagnosticLogLevel",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarDiagnosticSeverity",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarDiagnosticsOptions",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarDocumentPluginCompatibility",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarDocumentPluginCompatibilityStatus",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarDocumentPluginRequirement",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarDocumentPreparationResult",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarDocumentPreparationStatus",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarEvent",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarEventDispatcher",
+      "kind": "runtime"
+    },
+    {
+      "name": "AstylarEventHandler",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarEventHandlers",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarEventInit",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarEventOptions",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarEventSnapshot",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarEventState",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarEventType",
+      "kind": "type"
+    },
+    {
+      "name": "astylarInputReconciliationKind",
+      "kind": "runtime"
+    },
+    {
+      "name": "AstylarInteractionRuntime",
+      "kind": "runtime"
+    },
+    {
+      "name": "AstylarInteractionSnapshot",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarInvalidationReason",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarMissingPluginPlaceholderMetadata",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarNavigationOptions",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarNavigationOutcome",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarPluginApiVersion",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarPluginAsyncResourceOptions",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarPluginContributionKind",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarPluginContributions",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarPluginDefinition",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarPluginDependency",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarPluginDependencyRequirement",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarPluginElementDefinition",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarPluginElementMigrationData",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarPluginElementRenderer",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarPluginInvalidationDomain",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarPluginInvalidationRequest",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarPluginInvalidationTarget",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarPluginLifecycle",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarPluginLifecycleDefinition",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarPluginMigrationContext",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarPluginMigrationDefinition",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarPluginPropertyDefinition",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarPluginRecoveryPolicy",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarPluginRenderContext",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarPluginRenderDimensions",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarPluginRendererDefinition",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarPluginResourceOwner",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarPluginResourceSnapshot",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarPluginResourceSource",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarPluginStyleMigrationData",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarPluginSurfaceContext",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarPluginValidationContext",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarPluginValidationResult",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarReconciliationIdentityIndex",
+      "kind": "runtime"
+    },
+    {
+      "name": "AstylarReconciliationIdentitySnapshot",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarRenderOptions",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarRenderSession",
+      "kind": "runtime"
+    },
+    {
+      "name": "AstylarSceneResources",
+      "kind": "runtime"
+    },
+    {
+      "name": "AstylarSceneResourceSnapshot",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarSemanticBridge",
+      "kind": "runtime"
+    },
+    {
+      "name": "AstylarSemanticBridgeOptions",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarSemanticControlState",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarSemanticReconciliationSnapshot",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarSemanticSnapshot",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarSessionSnapshot",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarSurface",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarSurfaceComponent",
+      "kind": "runtime"
+    },
+    {
+      "name": "AstylarSurfaceDiagnostics",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarUnavailablePluginReason",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarVisualReconciler",
+      "kind": "runtime"
+    },
+    {
+      "name": "AstylarVisualReconciliationCounts",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarVisualReconciliationPlan",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarVisualReconciliationSnapshot",
+      "kind": "type"
+    },
+    {
+      "name": "AstylarVisualResourceReconciler",
+      "kind": "runtime"
+    },
+    {
+      "name": "AstylarVisualResourceReconciliationResult",
+      "kind": "type"
+    },
+    {
+      "name": "BabylonRender",
+      "kind": "type"
+    },
+    {
+      "name": "BabylonRenderActions",
+      "kind": "type"
+    },
+    {
+      "name": "CameraActions",
+      "kind": "type"
+    },
+    {
+      "name": "defineAstylarPlugin",
+      "kind": "runtime"
+    },
+    {
+      "name": "DOMElement",
+      "kind": "type"
+    },
+    {
+      "name": "DOMElementIdentity",
+      "kind": "type"
+    },
+    {
+      "name": "DOMElementType",
+      "kind": "type"
+    },
+    {
+      "name": "MeshActions",
+      "kind": "type"
+    },
+    {
+      "name": "prepareAstylarDocument",
+      "kind": "runtime"
+    },
+    {
+      "name": "provideAstylar",
+      "kind": "runtime"
+    },
+    {
+      "name": "provideAstylarPlugin",
+      "kind": "runtime"
+    },
+    {
+      "name": "SiteData",
+      "kind": "type"
+    },
+    {
+      "name": "StyleActions",
+      "kind": "type"
+    },
+    {
+      "name": "StyleRule",
+      "kind": "type"
+    },
+    {
+      "name": "TextureActions",
+      "kind": "type"
+    }
+  ]
+}

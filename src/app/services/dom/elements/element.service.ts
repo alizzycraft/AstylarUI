@@ -32,7 +32,7 @@ export class ElementService {
     styles: StyleRule[],
     parentElement?: DOMElement
   ): void {
-    console.log(`[ElementService] processChildren called for ${parentElement?.id || 'unknown'}`);
+
     return this.creationService.processChildren(dom, render, children, parent, styles, parentElement);
   }
 
@@ -47,7 +47,7 @@ export class ElementService {
     parent: Mesh,
     styles: StyleRule[],
     flexPosition?: { x: number; y: number; z: number },
-    flexSize?: { width: number; height: number }
+    flexSize?: { width?: number; height?: number }
   ): Mesh {
     return this.creationService.createElement(dom, render, element, parent, styles, flexPosition, flexSize);
   }
@@ -91,12 +91,12 @@ export class ElementService {
 
     // Remove old border meshes
     // Handle single polygon border
-    const singleBorderMesh = dom.context.elements.get(`${elementId}_polygon_border_frame`);
+    const singleBorderMesh = dom.context.elements.get(`${elementId}-border_border_frame`);
     if (singleBorderMesh) {
       singleBorderMesh.dispose();
-      dom.context.elements.delete(`${elementId}_polygon_border_frame`);
+      dom.context.elements.delete(`${elementId}-border_border_frame`);
     }
-    
+
     // Remove up to 4 rectangular borders
     for (let i = 0; i < 4; i++) {
       const borderMesh = dom.context.elements.get(`${elementId}-border-${i}`);
@@ -104,7 +104,7 @@ export class ElementService {
         borderMesh.dispose();
         dom.context.elements.delete(`${elementId}-border-${i}`);
       }
-      
+
       // Also check for named rectangular borders
       const borderNames = ['-top', '-bottom', '-left', '-right'];
       if (i < borderNames.length) {

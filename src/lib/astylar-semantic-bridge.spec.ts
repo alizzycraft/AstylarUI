@@ -1,0 +1,410 @@
+import { AstylarSemanticBridge } from './astylar-semantic-bridge';
+import { SiteData } from '../app/types/site-data';
+
+describe('AstylarSemanticBridge', () => {
+  let host: HTMLDivElement;
+  let canvas: HTMLCanvasElement;
+
+  beforeEach(() => {
+    host = document.createElement('div');
+    canvas = document.createElement('canvas');
+    host.appendChild(canvas);
+    document.body.appendChild(host);
+  });
+
+  afterEach(() => host.remove());
+
+  it('creates a native nonvisual semantic hierarchy and hides the visual canvas', () => {
+    const bridge = new AstylarSemanticBridge(canvas);
+    bridge.reconcile(siteData());
+
+    const root = host.querySelector<HTMLElement>('[data-astylar-semantic-root]');
+    expect(root).not.toBeNull();
+    expect(canvas.getAttribute('aria-hidden')).toBe('true');
+    expect(root?.querySelector('[data-astylar-id="main"]')?.tagName).toBe('MAIN');
+    expect(root?.querySelector('[data-astylar-id="heading"]')?.tagName).toBe('H1');
+    expect(root?.querySelector('[data-astylar-id="link"]')?.textContent).toBe('Read more');
+    expect(bridge.snapshot.nodes).toBe(4);
+  });
+
+  it('retains unique stable nodes across compatible updates and removes stale nodes', () => {
+    const bridge = new AstylarSemanticBridge(canvas);
+    const initial = siteData();
+    bridge.reconcile(initial);
+    const heading = host.querySelector('[data-astylar-id="heading"]');
+
+    const updated = siteData();
+    updated.root.children[0].children = [
+      { type: 'h1', id: 'heading', textContent: 'Updated heading' },
+    ];
+    bridge.reconcile(updated);
+
+    expect(host.querySelector('[data-astylar-id="heading"]')).toBe(heading);
+    expect(heading?.textContent).toBe('Updated heading');
+    expect(host.querySelector('[data-astylar-id="link"]')).toBeNull();
+    expect(bridge.snapshot.nodes).toBe(2);
+    expect(bridge.snapshot.reconciliation).toEqual({
+      reused: 2,
+      created: 0,
+      replaced: 0,
+      disposed: 2,
+    });
+  });
+
+  it('keeps unique authored identity through reorder and replaces incompatible input kinds', () => {
+    const bridge = new AstylarSemanticBridge(canvas);
+    bridge.reconcile({
+      styles: [],
+      root: { children: [
+        { type: 'input', id: 'control', inputType: 'text', value: 'Draft' },
+        { type: 'p', id: 'copy', textContent: 'Copy' },
+      ] },
+    });
+    const textControl = host.querySelector('[data-astylar-id="control"]');
+    const copy = host.querySelector('[data-astylar-id="copy"]');
+
+    bridge.reconcile({
+      styles: [],
+      root: { children: [
+        { type: 'p', id: 'copy', textContent: 'Moved copy' },
+        { type: 'input', id: 'control', inputType: 'email', value: 'user@example.test' },
+      ] },
+    });
+    expect(host.querySelector('[data-astylar-id="copy"]')).toBe(copy);
+    expect(host.querySelector('[data-astylar-id="control"]')).toBe(textControl);
+
+    bridge.reconcile({
+      styles: [],
+      root: { children: [
+        { type: 'p', id: 'copy', textContent: 'Moved copy' },
+        { type: 'input', id: 'control', inputType: 'checkbox', checked: true },
+      ] },
+    });
+    expect(host.querySelector('[data-astylar-id="copy"]')).toBe(copy);
+    expect(host.querySelector('[data-astylar-id="control"]')).not.toBe(textControl);
+    expect(bridge.snapshot.reconciliation).toEqual({
+      reused: 1,
+      created: 0,
+      replaced: 1,
+      disposed: 0,
+    });
+    bridge.dispose();
+  });
+
+  it('detects incompatible changes when the same SiteData object is mutated in place', () => {
+    const bridge = new AstylarSemanticBridge(canvas);
+    const control = { type: 'input', id: 'control', inputType: 'text', value: 'Draft' } as const;
+    const data: SiteData = { styles: [], root: { children: [{ ...control }] } };
+    bridge.reconcile(data);
+    const textControl = host.querySelector('[data-astylar-id="control"]');
+
+    data.root.children[0].inputType = 'checkbox';
+    data.root.children[0].checked = true;
+    bridge.reconcile(data);
+
+    expect(host.querySelector('[data-astylar-id="control"]')).not.toBe(textControl);
+    expect(bridge.snapshot.reconciliation.replaced).toBe(1);
+    bridge.dispose();
+  });
+
+  it('removes owned nodes and restores the canvas accessibility state on disposal', () => {
+    canvas.setAttribute('aria-hidden', 'false');
+    const bridge = new AstylarSemanticBridge(canvas);
+    bridge.reconcile(siteData());
+    bridge.dispose();
+
+    expect(host.querySelector('[data-astylar-semantic-root]')).toBeNull();
+    expect(canvas.getAttribute('aria-hidden')).toBe('false');
+    expect(bridge.snapshot.nodes).toBe(0);
+  });
+
+  it('maps authored label and ARIA ID references into the isolated native namespace', () => {
+    const bridge = new AstylarSemanticBridge(canvas);
+    bridge.reconcile({
+      styles: [],
+      root: { children: [
+        { type: 'label', id: 'name-label', for: 'name', textContent: 'Name' },
+        { type: 'input', id: 'name', value: 'Atlas', ariaLabel: 'Fallback', ariaLabelledby: 'name-label name-label', ariaDescribedby: 'help' },
+        { type: 'p', id: 'help', textContent: 'Public name.' },
+      ] },
+    });
+
+    const label = host.querySelector<HTMLLabelElement>('[data-astylar-id="name-label"]');
+    const input = host.querySelector<HTMLInputElement>('[data-astylar-id="name"]');
+    const help = host.querySelector<HTMLElement>('[data-astylar-id="help"]');
+    expect(label?.htmlFor).toBe(input?.id);
+    expect(input?.getAttribute('aria-labelledby')).toBe(`${label?.id} ${label?.id}`);
+    expect(input?.getAttribute('aria-describedby')).toBe(help?.id);
+    expect(input?.getAttribute('aria-label')).toBe('Fallback');
+    expect(input?.value).toBe('Atlas');
+  });
+
+  it('maps native control properties and synchronizes mutable scene state', () => {
+    const bridge = new AstylarSemanticBridge(canvas);
+    bridge.reconcile({
+      styles: [],
+      root: { children: [
+        { type: 'button', id: 'save', value: 'Save changes' },
+        {
+          type: 'input', id: 'choice', inputType: 'checkbox', value: 'yes',
+          checked: false, required: true, ariaLabel: 'Choice',
+        },
+        {
+          type: 'input', id: 'locked', value: 'Read only', readonly: true,
+          disabled: true, ariaLabel: 'Locked value',
+        },
+        {
+          type: 'select', id: 'plan', value: 'team', required: true,
+          ariaLabel: 'Plan', options: [
+            { value: 'solo', label: 'Solo' },
+            { value: 'team', label: 'Team' },
+            { value: 'retired', label: 'Retired', disabled: true },
+          ],
+        },
+      ] },
+    });
+
+    const save = host.querySelector<HTMLButtonElement>('[data-astylar-id="save"]');
+    const choice = host.querySelector<HTMLInputElement>('[data-astylar-id="choice"]');
+    const locked = host.querySelector<HTMLInputElement>('[data-astylar-id="locked"]');
+    const plan = host.querySelector<HTMLSelectElement>('[data-astylar-id="plan"]');
+    expect(save?.textContent).toBe('Save changes');
+    expect(save?.type).toBe('button');
+    expect(choice?.type).toBe('checkbox');
+    expect(choice?.value).toBe('yes');
+    expect(choice?.checked).toBeFalse();
+    expect(choice?.required).toBeTrue();
+    expect(locked?.readOnly).toBeTrue();
+    expect(locked?.disabled).toBeTrue();
+    expect(Array.from(plan?.options ?? []).map((option) => option.textContent)).toEqual([
+      'Solo', 'Team', 'Retired',
+    ]);
+    expect(plan?.selectedIndex).toBe(1);
+    expect(plan?.required).toBeTrue();
+    expect(plan?.options[2].disabled).toBeTrue();
+
+    bridge.syncControlStates((elementId) => ({
+      choice: { value: 'yes', checked: true, required: true, disabled: false },
+      plan: { value: 'solo', selectedIndex: 0, required: true, expanded: true },
+    })[elementId]);
+
+    expect(choice?.checked).toBeTrue();
+    expect(plan?.value).toBe('solo');
+    expect(plan?.selectedIndex).toBe(0);
+    expect(plan?.getAttribute('aria-expanded')).toBe('true');
+  });
+
+  it('preserves forward and backward text selection direction in semantic controls', () => {
+    const bridge = new AstylarSemanticBridge(canvas);
+    bridge.reconcile({
+      styles: [],
+      root: { children: [
+        { type: 'input', inputType: 'text', id: 'title', value: 'Alpha' },
+        { type: 'textarea', id: 'copy', value: 'Bravo' },
+      ] },
+    });
+    const title = host.querySelector<HTMLInputElement>('[data-astylar-id="title"]')!;
+    const copy = host.querySelector<HTMLTextAreaElement>('[data-astylar-id="copy"]')!;
+
+    bridge.syncControlStates((id) => id === 'title'
+      ? { value: 'Alpha', selectionStart: 1, selectionEnd: 4, selectionDirection: 'forward' }
+      : { value: 'Bravo', selectionStart: 1, selectionEnd: 4, selectionDirection: 'backward' });
+
+    expect(title.selectionDirection).toBe('forward');
+    expect(copy.selectionDirection).toBe('backward');
+    bridge.dispose();
+  });
+
+  it('delegates semantic focus, keyboard input, and activation and restores canvas focus state', async () => {
+    canvas.setAttribute('tabindex', '4');
+    const bridge = new AstylarSemanticBridge(canvas);
+    bridge.reconcile({
+      styles: [],
+      root: { children: [
+        { type: 'button', id: 'action', textContent: 'Run' },
+      ] },
+    });
+    const calls: string[] = [];
+    const focusVisibility: boolean[] = [];
+    let focusedElementId: string | undefined;
+    bridge.connectInteractions({
+      getFocusedElementId: () => focusedElementId,
+      focus: (elementId, _preserveSelection, focusVisible) => {
+        focusedElementId = elementId;
+        calls.push(`focus:${elementId}`);
+        focusVisibility.push(focusVisible ?? true);
+        return true;
+      },
+      blur: (elementId) => {
+        focusedElementId = undefined;
+        calls.push(`blur:${elementId}`);
+        return true;
+      },
+      activate: (elementId) => {
+        calls.push(`activate:${elementId}`);
+        return true;
+      },
+      keyDown: (event) => calls.push(`keydown:${event.key}`),
+      keyUp: (event) => calls.push(`keyup:${event.key}`),
+    });
+
+    const action = host.querySelector<HTMLButtonElement>('[data-astylar-id="action"]');
+    expect(canvas.tabIndex).toBe(-1);
+    expect(bridge.snapshot.eventRegistrations).toBe(5);
+    action?.focus();
+    action?.dispatchEvent(new KeyboardEvent('keydown', {
+      key: 'Enter', bubbles: true, cancelable: true,
+    }));
+    action?.dispatchEvent(new KeyboardEvent('keyup', {
+      key: 'Enter', bubbles: true, cancelable: true,
+    }));
+    action?.click();
+    action?.blur();
+    await new Promise<void>((resolve) => setTimeout(resolve, 0));
+
+    bridge.queueFocusSync(() => 'action', () => false, () => false);
+    await Promise.resolve();
+    expect(document.activeElement).toBe(action);
+    expect(calls).toEqual([
+      'focus:action', 'keydown:Enter', 'keyup:Enter', 'activate:action',
+      'blur:action', 'focus:action',
+    ]);
+    expect(focusVisibility).toEqual([true, false]);
+
+    bridge.dispose();
+    expect(canvas.tabIndex).toBe(4);
+    expect(bridge.snapshot.eventRegistrations).toBe(0);
+  });
+
+  it('marks native Tab focus transitions as selection preserving', () => {
+    const bridge = new AstylarSemanticBridge(canvas);
+    bridge.reconcile({
+      styles: [],
+      root: { children: [
+        { type: 'input', inputType: 'text', id: 'first', value: 'First' },
+        { type: 'input', inputType: 'text', id: 'second', value: 'Second' },
+      ] },
+    });
+    const focusCalls: Array<[string, boolean]> = [];
+    let focusedElementId: string | undefined;
+    bridge.connectInteractions({
+      getFocusedElementId: () => focusedElementId,
+      focus: (elementId, preserveSelection) => {
+        focusedElementId = elementId;
+        focusCalls.push([elementId, !!preserveSelection]);
+        return true;
+      },
+      blur: (elementId) => {
+        if (focusedElementId === elementId) focusedElementId = undefined;
+        return true;
+      },
+      activate: () => true,
+      keyDown: () => undefined,
+      keyUp: () => undefined,
+    });
+
+    const first = host.querySelector<HTMLInputElement>('[data-astylar-id="first"]');
+    const second = host.querySelector<HTMLInputElement>('[data-astylar-id="second"]');
+    first?.focus();
+    first?.dispatchEvent(new KeyboardEvent('keydown', {
+      key: 'Tab', bubbles: true, cancelable: true,
+    }));
+    second?.focus();
+
+    expect(focusCalls).toEqual([['first', false], ['second', true]]);
+    bridge.dispose();
+  });
+
+  it('exposes modal dialog state and makes the background semantic subtree inert', () => {
+    const bridge = new AstylarSemanticBridge(canvas);
+    const modalSiteData: SiteData = {
+      styles: [],
+      root: { children: [
+        { type: 'section', id: 'background', children: [
+          { type: 'button', id: 'background-action', textContent: 'Background' },
+        ] },
+        {
+          type: 'dialog', id: 'dialog', open: true, modal: true,
+          ariaLabelledby: 'dialog-title', children: [
+            { type: 'h2', id: 'dialog-title', textContent: 'Confirm' },
+            { type: 'button', id: 'dialog-action', textContent: 'Continue', autofocus: true },
+          ],
+        },
+      ] },
+    };
+    bridge.reconcile(modalSiteData);
+
+    const background = host.querySelector<HTMLElement>('[data-astylar-id="background"]');
+    const dialog = host.querySelector<HTMLDialogElement>('[data-astylar-id="dialog"]');
+    const action = host.querySelector<HTMLElement>('[data-astylar-id="dialog-action"]');
+    expect(background?.inert).toBeTrue();
+    expect(dialog?.open).toBeTrue();
+    expect(dialog?.getAttribute('aria-modal')).toBe('true');
+    expect(dialog?.inert).toBeFalse();
+    expect(action?.inert).toBeFalse();
+
+    bridge.setModalPresentation('dialog', false);
+    expect(background?.inert).toBeFalse();
+    expect(dialog?.open).toBeFalse();
+    bridge.setModalPresentation('dialog', true);
+    expect(background?.inert).toBeTrue();
+    expect(dialog?.open).toBeTrue();
+
+    bridge.reconcile({
+      ...modalSiteData,
+      root: { children: [
+        modalSiteData.root.children[0],
+        { ...modalSiteData.root.children[1], open: false, modal: false },
+      ] },
+    });
+    expect(background?.inert).toBeFalse();
+    expect(dialog?.open).toBeFalse();
+    expect(dialog?.hasAttribute('aria-modal')).toBeFalse();
+    bridge.dispose();
+  });
+
+  it('does not mutate an unchanged live region during an unrelated reconciliation', async () => {
+    const bridge = new AstylarSemanticBridge(canvas);
+    const createData = (status: string, summary: string): SiteData => ({
+      styles: [],
+      root: { children: [
+        {
+          type: 'div', id: 'status', role: 'status', ariaLive: 'polite',
+          ariaAtomic: true, textContent: status,
+        },
+        { type: 'p', id: 'summary', textContent: summary },
+      ] },
+    });
+    bridge.reconcile(createData('Saved.', 'Initial summary'));
+    const status = host.querySelector<HTMLElement>('[data-astylar-id="status"]')!;
+    const mutations: MutationRecord[] = [];
+    const observer = new MutationObserver((records) => mutations.push(...records));
+    observer.observe(status, { childList: true, characterData: true, subtree: true });
+
+    bridge.reconcile(createData('Saved.', 'Updated summary'));
+    await Promise.resolve();
+    expect(mutations).toEqual([]);
+
+    bridge.reconcile(createData('Saved again.', 'Updated summary'));
+    await Promise.resolve();
+    expect(mutations).toHaveSize(1);
+    expect(status.textContent).toBe('Saved again.');
+    observer.disconnect();
+    bridge.dispose();
+  });
+
+  function siteData(): SiteData {
+    return {
+      styles: [],
+      root: {
+        children: [{
+          type: 'main', id: 'main', children: [
+            { type: 'h1', id: 'heading', textContent: 'Semantic heading' },
+            { type: 'p', id: 'paragraph', textContent: 'Introductory copy.' },
+            { type: 'a', id: 'link', href: '/details', textContent: 'Read more' },
+          ],
+        }],
+      },
+    };
+  }
+});

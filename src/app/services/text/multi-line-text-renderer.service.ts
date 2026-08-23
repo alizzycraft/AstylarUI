@@ -119,12 +119,13 @@ export class MultiLineTextRendererService {
   handleWhiteSpace(text: string, whiteSpace: TextStyleProperties['whiteSpace']): string {
     switch (whiteSpace) {
       case 'normal':
-        // Collapse whitespace sequences and normalize line breaks
-        return text.replace(/\s+/g, ' ').trim();
+        // CSS collapsible whitespace is the ASCII space plus segment breaks
+        // and tabs. Typographic Unicode spaces such as U+3000 remain visible.
+        return text.replace(/[\u0009\u000A\u000C\u000D\u0020]+/g, ' ').trim();
         
       case 'nowrap':
         // Collapse whitespace and remove line breaks
-        return text.replace(/\s+/g, ' ').replace(/\n/g, ' ').trim();
+        return text.replace(/[\u0009\u000A\u000C\u000D\u0020]+/g, ' ').trim();
         
       case 'pre':
         // Preserve all whitespace and line breaks exactly as-is
@@ -139,7 +140,7 @@ export class MultiLineTextRendererService {
         return text.replace(/[ \t]+/g, ' ').replace(/[ \t]*\n[ \t]*/g, '\n').trim();
         
       default:
-        return text.replace(/\s+/g, ' ').trim();
+        return text.replace(/[\u0009\u000A\u000C\u000D\u0020]+/g, ' ').trim();
     }
   }
 
@@ -181,6 +182,8 @@ export class MultiLineTextRendererService {
     ctx.font = `${style.fontStyle} ${style.fontWeight} ${style.fontSize}px ${style.fontFamily}`;
     ctx.textAlign = 'left'; // Always use left for measurement
     ctx.textBaseline = 'alphabetic';
+    ctx.letterSpacing = `${style.letterSpacing ?? 0}px`;
+    ctx.wordSpacing = `${style.wordSpacing ?? 0}px`;
   }
 
   /**
@@ -199,10 +202,29 @@ export class MultiLineTextRendererService {
   ): TextLine[] {
     const lines: TextLine[] = [];
     const words = text.split(' ');
+    const segments = words.flatMap((word, wordIndex) => {
+      // Unlike an ASCII collapsible space, an ideographic space remains
+      // visible at the end of a line while still providing a normal CSS
+      // line-breaking opportunity. Attach it to the preceding segment so
+      // its advance is preserved whether or not the following text wraps.
+      const ideographicSegments = word.match(/[^\u3000]+\u3000*|\u3000+/g) ?? [word];
+
+      // A visible hyphen is a normal CSS line-breaking opportunity. Keep the
+      // hyphen on the preceding segment and remember that segments from the
+      // same word must not gain a space when they remain on one line.
+      const breakableSegments = ideographicSegments.flatMap(
+        (ideographicSegment) => ideographicSegment.match(/[^-]+-?|-/g) ?? [ideographicSegment]
+      );
+      return breakableSegments.map((segment, segmentIndex) => ({
+        text: segment,
+        separator: wordIndex > 0 && segmentIndex === 0 ? ' ' : '',
+      }));
+    });
     let currentLine = '';
 
-    for (const word of words) {
-      const testLine = currentLine + (currentLine ? ' ' : '') + word;
+    for (const segment of segments) {
+      const separator = currentLine ? segment.separator : '';
+      const testLine = currentLine + separator + segment.text;
       const metrics = ctx.measureText(testLine);
       const width = metrics.width;
 
@@ -215,11 +237,11 @@ export class MultiLineTextRendererService {
           width: lineWidth,
           y: 0 // Will be calculated later
         });
-        currentLine = word;
+        currentLine = segment.text;
 
         // Handle word breaking if single word is too long
         if (style.wordWrap === 'break-word' || style.wordWrap === 'anywhere') {
-          const brokenWords = this.breakLongWord(word, maxWidth, ctx);
+          const brokenWords = this.breakLongWord(segment.text, maxWidth, ctx);
           if (brokenWords.length > 1) {
             // Add all but the last broken word as complete lines
             for (let i = 0; i < brokenWords.length - 1; i++) {
@@ -378,16 +400,15 @@ export class MultiLineTextRendererService {
       }
     }
 
-    // Add the last line
-    if (currentLine) {
-      const lineMetrics = ctx.measureText(currentLine);
-      const lineWidth = lineMetrics.width;
-      lines.push({
-        text: currentLine,
-        width: lineWidth,
-        y: 0
-      });
-    }
+    // A preserved empty line is still a rendered line. This matters for blank
+    // lines between content and for a trailing newline in editable controls.
+    const lineMetrics = ctx.measureText(currentLine);
+    const lineWidth = lineMetrics.width;
+    lines.push({
+      text: currentLine,
+      width: lineWidth,
+      y: 0
+    });
 
     return lines;
   }
@@ -505,7 +526,7 @@ export class MultiLineTextRendererService {
 
     this.applyTextStylingToContext(ctx, style);
     
-    const ellipsis = '…';
+    const ellipsis = '\u2026';
     const ellipsisWidth = ctx.measureText(ellipsis).width;
     const availableWidth = maxWidth - ellipsisWidth;
 

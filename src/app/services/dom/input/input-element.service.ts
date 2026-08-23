@@ -4,7 +4,7 @@ import { DOMElement } from '../../../types/dom-element';
 import { InputElement, InputType, CheckboxInput, RadioInput, SelectElement, ValidationRule, Button, TextInput } from '../../../types/input-types';
 import * as BABYLON from '@babylonjs/core';
 import { StyleRule } from '../../../types/style-rule';
-import { TextInputManager } from './text-input.manager';
+import { TextInputManager, TextInputMutableState } from './text-input.manager';
 import { ButtonManager } from './button.manager';
 import { CheckboxManager } from './checkbox.manager';
 import { SelectManager } from './select.manager';
@@ -14,6 +14,36 @@ import { FormValidatorService } from './form-validator.service';
 import { FormManager } from './form.manager';
 import { BabylonCameraService } from '../../babylon-camera.service';
 
+export interface TextControlStateSnapshot {
+    elementId: string;
+    type: InputType;
+    authoredValue: string;
+    focused: boolean;
+    validationState: { valid: boolean; errors: string[]; touched: boolean; dirty: boolean };
+    mutable: TextInputMutableState;
+}
+
+export interface NonTextControlStateSnapshot {
+    elementId: string;
+    type: InputType;
+    focused: boolean;
+    validationState: { valid: boolean; errors: string[]; touched: boolean; dirty: boolean };
+    authoredChecked?: boolean;
+    authoredValue?: unknown;
+    authoredGroupName?: string;
+    checked?: boolean;
+    selectedValue?: unknown;
+    dropdownOpen?: boolean;
+    activeOptionValue?: unknown;
+}
+
+export interface SelectPopupLifecycleSnapshot {
+    openPopups: number;
+    popupObservers: number;
+    popupMeshes: number;
+    popupMaterials: number;
+    popupTextures: number;
+}
 
 /**
  * Main orchestration service for input elements
@@ -23,6 +53,7 @@ import { BabylonCameraService } from '../../babylon-camera.service';
 })
 export class InputElementService {
     private inputElements: Map<string, InputElement> = new Map();
+    private duplicateInputIds = new Set<string>();
 
     constructor(
         private textInputManager: TextInputManager,
@@ -34,9 +65,7 @@ export class InputElementService {
         private formValidator: FormValidatorService,
         private formManager: FormManager,
         private cameraService: BabylonCameraService
-    ) {
-        this.setupGlobalKeyboardListener();
-    }
+    ) { }
 
     /**
      * Creates an input element based on type
@@ -88,11 +117,10 @@ export class InputElementService {
         // Register input element
         this.registerInput(inputElement);
 
-        // Attach input events (click to focus, etc.)
-        if (render.scene) {
-            this.attachInputEvents(inputElement, render.scene);
-            this.ensureGlobalBlurListener(render.scene);
-        }
+        // Pointer focus and activation are owned by the scene interaction runtime.
+        // A mesh OnPickTrigger bypasses overflow hit filtering because Babylon
+        // picking is independent of material clipping, so do not install the
+        // legacy parallel default-action path on rendered controls.
 
         // Add validation rules if specified
         if (element.validationRules) {
@@ -115,15 +143,48 @@ export class InputElementService {
     /**
      * Focuses an input element
      */
-    focusInputElement(inputElement: InputElement): void {
-        this.focusManager.focusElement(inputElement);
+    focusInputElement(
+        inputElement: InputElement,
+        preservePreviousSelectionOnReset = false,
+        focusVisible = true,
+    ): void {
+        this.focusManager.focusElement(inputElement, preservePreviousSelectionOnReset, focusVisible);
+    }
+
+    isFocusVisible(): boolean {
+        return this.focusManager.isFocusVisible();
+    }
+
+    /** Configures whether Astylar should draw its fallback focus ring. */
+    setDefaultFocusIndicatorEnabled(elementId: string, enabled: boolean): void {
+        this.focusManager.setDefaultFocusIndicatorEnabled(elementId, enabled);
+    }
+
+    setFocusIndicatorAppearance(
+        elementId: string,
+        appearance?: {
+            color: BABYLON.Color3;
+            alpha: number;
+            widthPx: number;
+            offsetPx: number;
+            borderRadiusPx: number;
+        },
+    ): void {
+        this.focusManager.setFocusIndicatorAppearance(elementId, appearance);
+    }
+
+    /** Applies resolved hover/active/focus typography to a live text control. */
+    setTextControlInteractionStyle(elementId: string, style: StyleRule): void {
+        const input = this.inputElements.get(elementId);
+        if (!input || !this.isTextEntry(input)) return;
+        this.textInputManager.updateInteractionStyle(input as TextInput, style);
     }
 
     /**
      * Blurs an input element
      */
-    blurInputElement(inputElement: InputElement): void {
-        this.focusManager.blurElement(inputElement);
+    blurInputElement(inputElement: InputElement, preserveSelectionOnReset: boolean = false): void {
+        this.focusManager.blurElement(inputElement, preserveSelectionOnReset);
     }
 
     /**
@@ -198,6 +259,9 @@ export class InputElementService {
      */
     registerInput(inputElement: InputElement): void {
         const elementId = inputElement.element.id || `input_${Date.now()}`;
+        if (inputElement.element.id && this.inputElements.has(elementId)) {
+            this.duplicateInputIds.add(elementId);
+        }
         this.inputElements.set(elementId, inputElement);
 
         // Add to tab order
@@ -233,6 +297,438 @@ export class InputElementService {
     }
 
     /**
+     * Releases a uniquely addressed control's primary mesh for visual-owner
+     * reconciliation while disposing the old manager's private subresources.
+     */
+    releaseInputMesh(elementId: string): BABYLON.Mesh | undefined {
+        const input = this.inputElements.get(elementId);
+        if (!input || this.duplicateInputIds.has(elementId)) return undefined;
+        this.inputElements.delete(elementId);
+        this.duplicateInputIds.delete(elementId);
+        this.focusManager.removeFromTabOrder(input);
+        this.formValidator.clearValidationRules(input);
+        const mesh = input.mesh;
+        input.mesh = undefined as unknown as BABYLON.Mesh;
+        this.disposeInputElement(input);
+        input.mesh = mesh;
+        return mesh;
+    }
+
+    /** Gets the authored ID of the currently focused input, if any. */
+    getFocusedElementId(): string | undefined {
+        return this.focusManager.getFocusedElement()?.element.id;
+    }
+
+    /** Captures mutable state for uniquely identified text-entry controls. */
+    captureTextControlStates(): readonly TextControlStateSnapshot[] {
+        const snapshots: TextControlStateSnapshot[] = [];
+        for (const [elementId, input] of this.inputElements) {
+            if (!input.element.id || this.duplicateInputIds.has(elementId) || !this.isTextEntry(input)) {
+                continue;
+            }
+            const text = input as TextInput;
+            snapshots.push({
+                elementId,
+                type: text.type,
+                authoredValue: String(text.element.value ?? ''),
+                focused: text.focused,
+                validationState: {
+                    valid: text.validationState.valid,
+                    errors: [...text.validationState.errors],
+                    touched: text.validationState.touched,
+                    dirty: text.validationState.dirty,
+                },
+                mutable: {
+                    value: String(text.value ?? ''),
+                    cursorPosition: text.cursorPosition,
+                    selectionStart: text.selectionStart,
+                    selectionEnd: text.selectionEnd,
+                    selectionActive: text.cursorState.selectionActive,
+                    selectionAnchor: text.cursorState.selectionStart,
+                    selectionFocus: text.cursorState.selectionEnd,
+                    scrollOffset: text.scrollOffset ?? 0,
+                    scrollTop: text.scrollTop ?? 0,
+                    preserveSelectionOnReset: text.preserveSelectionOnReset === true,
+                },
+            });
+        }
+        return snapshots;
+    }
+
+    /** Restores compatible text state and returns the control that should regain focus. */
+    restoreTextControlStates(snapshots: readonly TextControlStateSnapshot[]): string | undefined {
+        let focusedElementId: string | undefined;
+        for (const snapshot of snapshots) {
+            const input = this.inputElements.get(snapshot.elementId);
+            const rebuiltAuthoredValue = String(input?.element.value ?? '');
+            if (!input || this.duplicateInputIds.has(snapshot.elementId) ||
+                input.type !== snapshot.type || !this.isTextEntry(input) ||
+                (rebuiltAuthoredValue !== snapshot.authoredValue &&
+                    rebuiltAuthoredValue !== snapshot.mutable.value)) {
+                continue;
+            }
+            const text = input as TextInput;
+            this.textInputManager.restoreMutableState(text, snapshot.mutable);
+            text.validationState = {
+                valid: snapshot.validationState.valid,
+                errors: [...snapshot.validationState.errors],
+                touched: snapshot.validationState.touched,
+                dirty: snapshot.validationState.dirty,
+            };
+            if (snapshot.focused) focusedElementId = snapshot.elementId;
+        }
+        return focusedElementId;
+    }
+
+    /** Captures choice state and focus for uniquely identified non-text controls. */
+    captureNonTextControlStates(): readonly NonTextControlStateSnapshot[] {
+        const snapshots: NonTextControlStateSnapshot[] = [];
+        for (const [elementId, input] of this.inputElements) {
+            if (!input.element.id || this.duplicateInputIds.has(elementId) || this.isTextEntry(input)) {
+                continue;
+            }
+            const snapshot: NonTextControlStateSnapshot = {
+                elementId,
+                type: input.type,
+                focused: input.focused,
+                validationState: {
+                    valid: input.validationState.valid,
+                    errors: [...input.validationState.errors],
+                    touched: input.validationState.touched,
+                    dirty: input.validationState.dirty,
+                },
+            };
+            if (input.type === InputType.Checkbox) {
+                snapshot.authoredChecked = !!input.element.checked;
+                snapshot.checked = (input as CheckboxInput).checked;
+            } else if (input.type === InputType.Radio) {
+                snapshot.authoredChecked = !!input.element.checked;
+                snapshot.authoredGroupName = (input as RadioInput).groupName;
+                snapshot.checked = (input as RadioInput).checked;
+            } else if (input.type === InputType.Select) {
+                const select = input as SelectElement;
+                snapshot.authoredValue = input.element.value;
+                snapshot.selectedValue = select.options[select.selectedIndex]?.value;
+                snapshot.dropdownOpen = select.dropdownOpen;
+                snapshot.activeOptionValue = select.options[select.activeOptionIndex]?.value;
+            }
+            snapshots.push(snapshot);
+        }
+        return snapshots;
+    }
+
+    /** Restores compatible choice state and returns the non-text control that should regain focus. */
+    restoreNonTextControlStates(snapshots: readonly NonTextControlStateSnapshot[]): string | undefined {
+        let focusedElementId: string | undefined;
+        for (const snapshot of snapshots) {
+            const input = this.inputElements.get(snapshot.elementId);
+            if (!input || this.duplicateInputIds.has(snapshot.elementId) ||
+                input.type !== snapshot.type || this.isTextEntry(input)) {
+                continue;
+            }
+            // A controlled choice may legitimately author its just-committed
+            // value into the next tree. Preserve browser focus by stable
+            // identity even when the old mutable value must not be restored.
+            if (snapshot.focused && !input.disabled) focusedElementId = snapshot.elementId;
+            if (!this.isCompatibleNonTextSnapshot(input, snapshot)) continue;
+
+            if (input.type === InputType.Checkbox) {
+                this.checkboxManager.setCheckboxChecked(input as CheckboxInput, !!snapshot.checked);
+            } else if (input.type === InputType.Radio) {
+                this.checkboxManager.setRadioChecked(input as RadioInput, !!snapshot.checked);
+            } else if (input.type === InputType.Select) {
+                const select = input as SelectElement;
+                const selectedIndex = select.options.findIndex((option) =>
+                    Object.is(option.value, snapshot.selectedValue) && !option.disabled);
+                if (selectedIndex < 0) continue;
+                this.selectManager.selectOption(select, selectedIndex);
+                if (snapshot.dropdownOpen) {
+                    const activeIndex = select.options.findIndex((option) =>
+                        Object.is(option.value, snapshot.activeOptionValue) && !option.disabled);
+                    if (activeIndex >= 0) {
+                        this.selectManager.restoreExpandedState(select, activeIndex);
+                    }
+                }
+            }
+
+            input.validationState = {
+                valid: snapshot.validationState.valid,
+                errors: [...snapshot.validationState.errors],
+                touched: snapshot.validationState.touched,
+                dirty: snapshot.validationState.dirty,
+            };
+        }
+        return focusedElementId;
+    }
+
+    /** Applies the native keyboard default action after public event dispatch. */
+    handleFocusedKeyDown(elementId: string, event: KeyboardEvent): void {
+        const focusedElement = this.focusManager.getFocusedElement();
+        if (!focusedElement || focusedElement.element.id !== elementId) return;
+
+        const scene = focusedElement.mesh.getScene();
+        const render: BabylonRender = {
+            scene,
+            actions: { camera: this.cameraService },
+            engine: scene.getEngine(),
+            canvas: scene.getEngine().getRenderingCanvas()
+        } as any;
+        this.handleKeyboardInput(event, render, focusedElement.style);
+    }
+
+    /** Scrolls a native-like text-control viewport beneath the pointer. */
+    scrollTextControl(elementId: string, deltaX: number, deltaY: number): boolean {
+        const input = this.inputElements.get(elementId);
+        if (!input || input.disabled || !this.isTextEntry(input)) return false;
+        return this.textInputManager.scrollBy(input as TextInput, deltaX, deltaY);
+    }
+
+    /** Text-entry controls commit their edited value when focus leaves. */
+    commitsValueOnBlur(elementId: string): boolean {
+        const input = this.inputElements.get(elementId);
+        return !!input && (input.type === InputType.Text ||
+            input.type === InputType.Password ||
+            input.type === InputType.Email ||
+            input.type === InputType.Number ||
+            input.type === InputType.Textarea);
+    }
+
+    /** Select keyboard choices commit immediately rather than waiting for blur. */
+    emitsImmediateChangeOnKeyboardMutation(elementId: string): boolean {
+        return this.inputElements.get(elementId)?.type === InputType.Select;
+    }
+
+    /** Native expanded selects consume Escape before page keydown listeners observe it. */
+    cancelExpandedSelect(elementId: string): boolean {
+        const input = this.inputElements.get(elementId);
+        if (!input || input.type !== InputType.Select) return false;
+        const select = input as SelectElement;
+        if (!select.dropdownOpen) return false;
+        this.selectManager.closeDropdown(select);
+        return true;
+    }
+
+    /** Applies native popup-owned keyboard behavior before page key listeners run. */
+    handleExpandedSelectKeyDown(
+        elementId: string,
+        event: KeyboardEvent,
+    ): { handled: boolean; changed: boolean; dispatchClick: boolean; suppressKeyUp: boolean } | undefined {
+        const input = this.inputElements.get(elementId);
+        if (!input || input.type !== InputType.Select) return undefined;
+        const select = input as SelectElement;
+        if (!select.dropdownOpen) return undefined;
+
+        if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+            this.selectManager.navigateOptions(select, event.key === 'ArrowUp' ? 'up' : 'down');
+            return { handled: true, changed: false, dispatchClick: false, suppressKeyUp: true };
+        }
+        if (event.key === 'Enter') {
+            const valueBefore = select.value;
+            this.selectManager.selectOption(select, select.activeOptionIndex);
+            return {
+                handled: true,
+                changed: !Object.is(valueBefore, select.value),
+                dispatchClick: true,
+                suppressKeyUp: false,
+            };
+        }
+        if (event.key === 'Escape') {
+            this.selectManager.closeDropdown(select);
+            return { handled: true, changed: false, dispatchClick: false, suppressKeyUp: false };
+        }
+        return undefined;
+    }
+
+    /** Applies a control's click activation and returns a cancellation rollback. */
+    activateInputElement(elementId: string): { changed: boolean; rollback: () => void } | undefined {
+        const input = this.inputElements.get(elementId);
+        if (!input || input.disabled) return undefined;
+
+        if (input.type === InputType.Checkbox) {
+            const checkbox = input as CheckboxInput;
+            const checkedBefore = checkbox.checked;
+            this.checkboxManager.setCheckboxChecked(checkbox, !checkedBefore);
+            return {
+                changed: checkbox.checked !== checkedBefore,
+                rollback: () => this.checkboxManager.setCheckboxChecked(checkbox, checkedBefore),
+            };
+        }
+
+        if (input.type === InputType.Radio) {
+            const radio = input as RadioInput;
+            const groupBefore = this.checkboxManager.getRadioGroup(radio.groupName)
+                .map((member) => ({ member, checked: member.checked }));
+            this.checkboxManager.selectRadioButton(radio);
+            return {
+                changed: groupBefore.some(({ member, checked }) => member.checked !== checked),
+                rollback: () => groupBefore.forEach(({ member, checked }) =>
+                    this.checkboxManager.setRadioChecked(member, checked)),
+            };
+        }
+
+        if (input.type === InputType.Select) {
+            const select = input as SelectElement;
+            const wasOpen = select.dropdownOpen;
+            if (wasOpen) {
+                this.selectManager.closeDropdown(select);
+            } else {
+                this.selectManager.openDropdown(select, select.mesh.getScene(), select.style);
+            }
+            return {
+                changed: false,
+                rollback: () => {
+                    if (wasOpen && !select.dropdownOpen) {
+                        this.selectManager.openDropdown(select, select.mesh.getScene(), select.style);
+                    } else if (!wasOpen && select.dropdownOpen) {
+                        this.selectManager.closeDropdown(select);
+                    }
+                },
+            };
+        }
+
+        return undefined;
+    }
+
+    /** Lets the pointer runtime avoid an all-mesh pick when no popup is open. */
+    hasExpandedSelectPopup(): boolean {
+        for (const input of this.inputElements.values()) {
+            if (input.type === InputType.Select && (input as SelectElement).dropdownOpen) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    getSelectPopupLifecycleSnapshot(): SelectPopupLifecycleSnapshot {
+        const meshes = new Set<BABYLON.AbstractMesh>();
+        const materials = new Set<BABYLON.Material>();
+        const textures = new Set<BABYLON.BaseTexture>();
+        let openPopups = 0;
+
+        for (const input of this.inputElements.values()) {
+            if (input.type !== InputType.Select) continue;
+            const select = input as SelectElement;
+            if (!select.dropdownOpen) continue;
+            openPopups += 1;
+            if (select.dropdownMesh && !select.dropdownMesh.isDisposed()) {
+                meshes.add(select.dropdownMesh);
+                select.dropdownMesh.getChildMeshes(false).forEach((mesh) => meshes.add(mesh));
+            }
+            select.optionMeshes.forEach((mesh) => {
+                if (!mesh.isDisposed()) meshes.add(mesh);
+            });
+        }
+
+        for (const mesh of meshes) {
+            if (mesh.material) materials.add(mesh.material);
+        }
+        for (const material of materials) {
+            material.getActiveTextures().forEach((texture) => textures.add(texture));
+        }
+
+        return {
+            openPopups,
+            popupObservers: this.selectManager.clickAwayObserverCount,
+            popupMeshes: meshes.size,
+            popupMaterials: materials.size,
+            popupTextures: textures.size,
+        };
+    }
+
+    /** Commits a popup row selected by the scene-owned pointer runtime. */
+    commitExpandedSelectOption(elementId: string, optionIndex: number): boolean {
+        const input = this.inputElements.get(elementId);
+        if (!input || input.type !== InputType.Select) return false;
+        const select = input as SelectElement;
+        if (!select.dropdownOpen || select.options[optionIndex]?.disabled) return false;
+        const valueBefore = select.value;
+        this.selectManager.selectOption(select, optionIndex);
+        return !Object.is(valueBefore, select.value);
+    }
+
+    canActivateWithSpace(elementId: string): boolean {
+        const input = this.inputElements.get(elementId);
+        return !!input && !input.disabled &&
+            (input.type === InputType.Checkbox || input.type === InputType.Radio ||
+                input.type === InputType.Button || input.type === InputType.Submit);
+    }
+
+    canActivateWithEnter(elementId: string): boolean {
+        const input = this.inputElements.get(elementId);
+        return !!input && !input.disabled &&
+            (input.type === InputType.Button || input.type === InputType.Submit);
+    }
+
+    /** Finds the next enabled member for native-style radio arrow navigation. */
+    getRadioNavigationTarget(elementId: string, direction: -1 | 1): string | undefined {
+        const input = this.inputElements.get(elementId);
+        if (!input || input.type !== InputType.Radio || input.disabled) return undefined;
+
+        const radio = input as RadioInput;
+        if (!radio.groupName) return undefined;
+        const enabledGroup = this.checkboxManager.getRadioGroup(radio.groupName)
+            .filter((member) => !member.disabled && !!member.element.id);
+        if (enabledGroup.length < 2) return undefined;
+
+        const currentIndex = enabledGroup.indexOf(radio);
+        if (currentIndex < 0) return undefined;
+        const nextIndex = (currentIndex + direction + enabledGroup.length) % enabledGroup.length;
+        return enabledGroup[nextIndex].element.id;
+    }
+
+    /** Restores authored form defaults without emitting control mutation events. */
+    resetFormControls(elementIds: readonly string[]): void {
+        const inputs = elementIds
+            .map((elementId) => this.inputElements.get(elementId))
+            .filter((input): input is InputElement => !!input);
+
+        for (const input of inputs) {
+            if (input.type === InputType.Text || input.type === InputType.Password ||
+                input.type === InputType.Email || input.type === InputType.Number ||
+                input.type === InputType.Textarea) {
+                this.textInputManager.resetTextValue(
+                    input as TextInput,
+                    String(input.element.value ?? ''),
+                );
+            } else if (input.type === InputType.Checkbox) {
+                this.checkboxManager.setCheckboxChecked(
+                    input as CheckboxInput,
+                    !!input.element.checked,
+                );
+            } else if (input.type === InputType.Radio) {
+                this.checkboxManager.setRadioChecked(
+                    input as RadioInput,
+                    !!input.element.checked,
+                );
+            } else if (input.type === InputType.Select) {
+                const select = input as SelectElement;
+                const authoredIndex = select.options.findIndex((option) =>
+                    option.value === select.element.value && !option.disabled);
+                const fallbackIndex = select.options.findIndex((option) => !option.disabled);
+                const index = authoredIndex >= 0 ? authoredIndex : fallbackIndex;
+                if (index >= 0) this.selectManager.selectOption(select, index);
+            }
+
+            input.validationState.touched = false;
+            input.validationState.dirty = false;
+            input.validationState.valid = true;
+            input.validationState.errors = [];
+        }
+    }
+
+    /** Validates form-associated controls and returns invalid IDs in authored order. */
+    validateFormControls(elementIds: readonly string[]): readonly string[] {
+        const invalidIds: string[] = [];
+        for (const elementId of elementIds) {
+            const input = this.inputElements.get(elementId);
+            if (!input || input.disabled || input.element.readonly ||
+                input.type === InputType.Button || input.type === InputType.Submit) continue;
+            if (!this.validateInput(input)) invalidIds.push(elementId);
+        }
+        return invalidIds;
+    }
+
+    /**
      * Determines input type from element
      */
     private determineInputType(element: DOMElement): InputType | null {
@@ -251,6 +747,14 @@ export class InputElementService {
             return InputType.Button;
         }
 
+        if (element.type === 'select') {
+            return InputType.Select;
+        }
+
+        if (element.type === 'textarea') {
+            return InputType.Textarea;
+        }
+
         return null;
     }
 
@@ -265,44 +769,12 @@ export class InputElementService {
             case 'number': return InputType.Number;
             case 'button': return InputType.Button;
             case 'submit': return InputType.Submit;
+            case 'reset': return InputType.Button;
             case 'checkbox': return InputType.Checkbox;
             case 'radio': return InputType.Radio;
             case 'select': return InputType.Select;
             case 'textarea': return InputType.Textarea;
             default: return null;
-        }
-    }
-
-    /**
-     * Sets up global keyboard listener
-     */
-    private setupGlobalKeyboardListener(): void {
-        if (typeof window !== 'undefined') {
-            window.addEventListener('keydown', (event) => {
-                const focusedElement = this.focusManager.getFocusedElement();
-                if (focusedElement) {
-                    // Prevent default browser behavior for input elements
-                    this.keyboardHandler.preventEventPropagation(event);
-
-                    // Construct proper BabylonRender object
-                    const scene = focusedElement.mesh.getScene();
-                    const render: BabylonRender = {
-                        scene: scene,
-                        actions: {
-                            camera: this.cameraService
-                        },
-                        engine: scene.getEngine(),
-                        canvas: scene.getEngine().getRenderingCanvas()
-                    } as any;
-
-                    // Handle keyboard input
-                    this.handleKeyboardInput(
-                        event,
-                        render,
-                        focusedElement.style
-                    );
-                }
-            });
         }
     }
 
@@ -391,93 +863,40 @@ export class InputElementService {
             )
         );
 
-        // Add hover effects for buttons
-        if (inputElement.type === InputType.Button || inputElement.type === InputType.Submit) {
-            inputElement.mesh.actionManager.registerAction(
-                new BABYLON.ExecuteCodeAction(
-                    BABYLON.ActionManager.OnPointerOverTrigger,
-                    () => {
-                        if (!inputElement.disabled) {
-                            this.buttonManager.handleButtonHover(inputElement as Button, true);
-                        }
-                    }
-                )
-            );
-
-            inputElement.mesh.actionManager.registerAction(
-                new BABYLON.ExecuteCodeAction(
-                    BABYLON.ActionManager.OnPointerOutTrigger,
-                    () => {
-                        if (!inputElement.disabled) {
-                            this.buttonManager.handleButtonHover(inputElement as Button, false);
-                        }
-                    }
-                )
-            );
-        }
     }
 
-    private globalBlurListenerAttached = false;
+    private isTextEntry(input: InputElement): boolean {
+        return input.type === InputType.Text || input.type === InputType.Password ||
+            input.type === InputType.Email || input.type === InputType.Number ||
+            input.type === InputType.Textarea;
+    }
 
-    /**
-     * Ensures a global listener is attached to handle blur on click-outside
-     */
-    private ensureGlobalBlurListener(scene: BABYLON.Scene): void {
-        if (this.globalBlurListenerAttached) return;
-
-        scene.onPointerObservable.add((pointerInfo) => {
-            if (pointerInfo.type === BABYLON.PointerEventTypes.POINTERDOWN) {
-                const focusedElement = this.focusManager.getFocusedElement();
-
-                // If nothing is focused, nothing to do
-                if (!focusedElement) return;
-
-                const pickedMesh = pointerInfo.pickInfo?.pickedMesh;
-
-                // Check if we clicked on the focused element or any of its descendants
-                let isClickOnFocusedElement = false;
-
-                if (pickedMesh) {
-                    // Check direct match
-                    if (pickedMesh === focusedElement.mesh) {
-                        isClickOnFocusedElement = true;
-                    }
-                    // Check if it's the text mesh or cursor mesh associated with the input
-                    // Using metadata or parent hierarchy
-                    else if (pickedMesh.isDescendantOf(focusedElement.mesh)) {
-                        isClickOnFocusedElement = true;
-                    }
-                    // Check specific components referencing the input (like text mesh which is parented)
-                    else if (focusedElement.type === InputType.Text ||
-                        focusedElement.type === InputType.Password ||
-                        focusedElement.type === InputType.Email ||
-                        focusedElement.type === InputType.Number ||
-                        focusedElement.type === InputType.Textarea) {
-                        const textInput = focusedElement as TextInput;
-                        if (pickedMesh === textInput.textMesh || pickedMesh === textInput.cursorMesh) {
-                            isClickOnFocusedElement = true;
-                        }
-                    }
-                }
-
-                // If click was NOT on the focused element, blur it
-                if (!isClickOnFocusedElement) {
-                    // console.log('[GlobalBlur] Click outside focused element detected. Blurring:', focusedElement.element.id);
-                    this.blurInputElement(focusedElement);
-                }
-            }
-        });
-
-        this.globalBlurListenerAttached = true;
+    private isCompatibleNonTextSnapshot(
+        input: InputElement,
+        snapshot: NonTextControlStateSnapshot,
+    ): boolean {
+        if (input.type === InputType.Checkbox) {
+            return !!input.element.checked === snapshot.authoredChecked;
+        }
+        if (input.type === InputType.Radio) {
+            return !!input.element.checked === snapshot.authoredChecked &&
+                (input as RadioInput).groupName === snapshot.authoredGroupName;
+        }
+        if (input.type === InputType.Select) {
+            return Object.is(input.element.value, snapshot.authoredValue) &&
+                (input as SelectElement).options.some((option) =>
+                    Object.is(option.value, snapshot.selectedValue) && !option.disabled);
+        }
+        return input.type === InputType.Button || input.type === InputType.Submit;
     }
 
     /**
      * Cleanup all resources
      */
     cleanup(): void {
+        this.focusManager.cleanup();
         this.inputElements.forEach(input => this.disposeInputElement(input));
         this.inputElements.clear();
-        this.focusManager.cleanup();
-        this.globalBlurListenerAttached = false;
+        this.duplicateInputIds.clear();
     }
 }

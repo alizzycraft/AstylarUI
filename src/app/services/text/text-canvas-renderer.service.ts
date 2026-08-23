@@ -73,11 +73,14 @@ export class TextCanvasRendererService {
       throw new Error('Failed to get 2D rendering context from canvas');
     }
 
-    // Get device pixel ratio for consistent measurements
+    // Canvas backing-store dimensions are physical pixels, while text layout
+    // continues to use CSS pixels after createStyledCanvas scales the context.
     const devicePixelRatio = window.devicePixelRatio || 1;
+    const logicalWidth = parseFloat(canvas.style.width) || canvas.width / devicePixelRatio;
+    const logicalHeight = parseFloat(canvas.style.height) || canvas.height / devicePixelRatio;
 
     // Clear the canvas
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.clearRect(0, 0, logicalWidth, logicalHeight);
 
     // Re-apply styling (in case context was reset)
     this.applyTextStylingToContext(ctx, style);
@@ -86,20 +89,25 @@ export class TextCanvasRendererService {
     const transformedText = this.applyTextTransform(text, style.textTransform);
 
     // Handle multi-line text or single line using MultiLineTextRenderer
-    const lines = maxWidth ?
-      this.multiLineTextRenderer.wrapText(transformedText, maxWidth, style) :
-      [{ text: transformedText, width: ctx.measureText(transformedText).width, y: 0 }];
+    const preservesLineBreaks = ['pre', 'pre-wrap', 'pre-line'].includes(style.whiteSpace);
+    const lines = maxWidth
+      ? this.multiLineTextRenderer.wrapText(transformedText, maxWidth, style)
+      : preservesLineBreaks
+        ? this.multiLineTextRenderer.handleWhiteSpace(transformedText, style.whiteSpace)
+          .split('\n')
+          .map((line) => ({ text: line, width: ctx.measureText(line).width, y: 0 }))
+        : [{ text: transformedText, width: ctx.measureText(transformedText).width, y: 0 }];
 
     // Calculate proper line positions using MultiLineTextRenderer
     const positionedLines = this.multiLineTextRenderer.calculateLinePositions(
       lines,
       style,
-      canvas.height
+      logicalHeight
     );
 
     // Render each line of text
     positionedLines.forEach((line) => {
-      const x = this.calculateLineX(line.width, canvas.width, style.textAlign);
+      const x = this.calculateLineX(line.width, logicalWidth, style.textAlign);
 
       // Render text stroke (outline) first if specified
       if (style.textStroke && style.textStroke.width > 0) {
@@ -143,8 +151,6 @@ export class TextCanvasRendererService {
       linesWithPositions.push({ text: '', width: 0, y: style.fontSize });
     }
 
-    const letterSpacing = style.letterSpacing ?? 0;
-    const wordSpacing = style.wordSpacing ?? 0;
     const approxAscent = style.fontSize * 0.8;
     const approxDescent = style.fontSize * 0.2;
 
@@ -185,10 +191,6 @@ export class TextCanvasRendererService {
         // This effectively "assigns" the kerning adjustment to the character itself
         const charWidth = currentEndX - previousCharEndX;
 
-        // Since fillText ignores manual letterSpacing/wordSpacing on the canvas unless manually handled,
-        // and we are rendering full lines, we should NOT add extra spacing here to match the render.
-        const advanceSpacing = 0;
-
         // For height metrics, we still might want individual character metrics if possible,
         // but usually line metrics are sufficient. Let's try to get specific char metrics if needed
         // but usually using the line's max or the char's own measureText for height is okay.
@@ -207,14 +209,11 @@ export class TextCanvasRendererService {
           column: charIndex,
           x: previousCharEndX, // Start at previous end
           width: charWidth,
-          advance: charWidth + advanceSpacing,
+          advance: charWidth,
           isLineBreak: false
         });
 
-        previousCharEndX = currentEndX + advanceSpacing;
-
-        // Note: cursorX isn't strictly needed variable since we track previousCharEndX, 
-        // but we can keep it for parity if we want to track total width with manual spacing
+        previousCharEndX = currentEndX;
         cursorX = previousCharEndX;
 
         globalIndex += 1;
@@ -312,9 +311,14 @@ export class TextCanvasRendererService {
     const transformedText = this.applyTextTransform(text, style.textTransform);
 
     // Handle multi-line text measurement using MultiLineTextRenderer
-    const lines = maxWidth ?
-      this.multiLineTextRenderer.wrapText(transformedText, maxWidth, style) :
-      [{ text: transformedText, width: ctx.measureText(transformedText).width, y: 0 }];
+    const preservesLineBreaks = ['pre', 'pre-wrap', 'pre-line'].includes(style.whiteSpace);
+    const lines = maxWidth
+      ? this.multiLineTextRenderer.wrapText(transformedText, maxWidth, style)
+      : preservesLineBreaks
+        ? this.multiLineTextRenderer.handleWhiteSpace(transformedText, style.whiteSpace)
+          .split('\n')
+          .map((line) => ({ text: line, width: ctx.measureText(line).width, y: 0 }))
+        : [{ text: transformedText, width: ctx.measureText(transformedText).width, y: 0 }];
 
     let totalWidth = 0;
     let totalHeight = 0;
@@ -348,7 +352,8 @@ export class TextCanvasRendererService {
 
     // Calculate total height based on positioned lines
     totalHeight = positionedLines.length > 0 ?
-      (positionedLines[positionedLines.length - 1].y + style.fontSize * 0.2) :
+      (positionedLines[positionedLines.length - 1].y +
+        style.fontSize * Math.max(0, style.lineHeight - 1)) :
       style.fontSize * style.lineHeight;
 
     // Get font bounding box information
@@ -422,6 +427,8 @@ export class TextCanvasRendererService {
     ctx.fillStyle = style.color;
     ctx.textAlign = this.mapTextAlign(style.textAlign);
     ctx.textBaseline = this.mapVerticalAlign(style.verticalAlign);
+    ctx.letterSpacing = `${style.letterSpacing ?? 0}px`;
+    ctx.wordSpacing = `${style.wordSpacing ?? 0}px`;
 
     // Note: Text antialiasing is handled automatically by the browser
   }

@@ -4,6 +4,7 @@ import { InputElement, TextInput, InputType } from '../../../types/input-types';
 import { TextCursorRenderer } from './text-cursor.renderer';
 import { TextInputManager } from './text-input.manager';
 import { BabylonCameraService } from '../../babylon-camera.service';
+import { BabylonMeshService } from '../../babylon-mesh.service';
 
 /**
  * Service responsible for managing focus state and tab navigation
@@ -14,28 +15,50 @@ import { BabylonCameraService } from '../../babylon-camera.service';
 export class FocusManager {
     private focusedElement: InputElement | null = null;
     private tabOrder: InputElement[] = [];
-    private focusIndicators: Map<string, BABYLON.Mesh> = new Map();
+    private focusIndicators: Map<string, BABYLON.Mesh[]> = new Map();
+    private defaultFocusIndicatorEnabled: Map<string, boolean> = new Map();
+    private focusIndicatorAppearance: Map<string, {
+        color: BABYLON.Color3;
+        alpha: number;
+        widthPx: number;
+        offsetPx: number;
+        borderRadiusPx: number;
+    }> = new Map();
+    private focusVisible = false;
 
     constructor(
         private cursorRenderer: TextCursorRenderer,
         private textInputManager: TextInputManager,
-        private cameraService: BabylonCameraService
+        private cameraService: BabylonCameraService,
+        private meshService: BabylonMeshService,
     ) { }
 
     /**
      * Focuses an input element
      */
-    focusElement(inputElement: InputElement): void {
+    focusElement(
+        inputElement: InputElement,
+        preservePreviousSelectionOnReset: boolean = false,
+        focusVisible: boolean = true,
+    ): void {
         // Blur previously focused element
         if (this.focusedElement && this.focusedElement !== inputElement) {
-            this.blurElement(this.focusedElement);
+            this.blurElement(this.focusedElement, preservePreviousSelectionOnReset);
         }
 
         this.focusedElement = inputElement;
         inputElement.focused = true;
+        this.focusVisible = focusVisible;
 
-        // Show focus indicator
-        this.showFocusIndicator(inputElement);
+        // Authored :focus paint can replace Astylar's fallback indicator.
+        const elementId = inputElement.element.id || '';
+        const authoredIndicator = this.focusIndicatorAppearance.has(elementId);
+        if ((focusVisible || authoredIndicator) &&
+            this.defaultFocusIndicatorEnabled.get(elementId) !== false) {
+            this.showFocusIndicator(inputElement);
+        } else {
+            this.hideFocusIndicator(inputElement);
+        }
 
         // Handle text input focus (hide placeholder, start cursor blinking)
         if (this.isTextInput(inputElement)) {
@@ -63,7 +86,7 @@ export class FocusManager {
     /**
      * Removes focus from an input element
      */
-    blurElement(inputElement: InputElement): void {
+    blurElement(inputElement: InputElement, preserveSelectionOnReset: boolean = false): void {
         inputElement.focused = false;
 
         // Hide focus indicator
@@ -71,12 +94,14 @@ export class FocusManager {
 
         // Handle text input blur (show placeholder if empty, stop cursor blinking)
         if (this.isTextInput(inputElement)) {
+            (inputElement as TextInput).preserveSelectionOnReset = preserveSelectionOnReset;
             this.textInputManager.handleBlur(inputElement as TextInput);
             this.cursorRenderer.stopBlinking(inputElement as TextInput);
         }
 
         if (this.focusedElement === inputElement) {
             this.focusedElement = null;
+            this.focusVisible = false;
         }
     }
 
@@ -109,7 +134,7 @@ export class FocusManager {
         }
 
         if (!this.tabOrder[nextIndex].disabled) {
-            this.focusElement(this.tabOrder[nextIndex]);
+            this.focusElement(this.tabOrder[nextIndex], true);
         }
     }
 
@@ -152,6 +177,8 @@ export class FocusManager {
 
         // Remove focus indicator
         this.disposeFocusIndicator(inputElement);
+        this.defaultFocusIndicatorEnabled.delete(inputElement.element.id || '');
+        this.focusIndicatorAppearance.delete(inputElement.element.id || '');
     }
 
     /**
@@ -166,7 +193,7 @@ export class FocusManager {
             this.focusIndicators.set(elementId, indicator);
         }
 
-        indicator.isVisible = true;
+        indicator.forEach(mesh => mesh.isVisible = true);
     }
 
     /**
@@ -177,39 +204,116 @@ export class FocusManager {
         const indicator = this.focusIndicators.get(elementId);
 
         if (indicator) {
-            indicator.isVisible = false;
+            indicator.forEach(mesh => mesh.isVisible = false);
         }
     }
 
     /**
      * Creates a focus indicator mesh
      */
-    private createFocusIndicator(inputElement: InputElement): BABYLON.Mesh {
+    private createFocusIndicator(inputElement: InputElement): BABYLON.Mesh[] {
         const scene = inputElement.mesh.getScene();
         const bounds = inputElement.mesh.getBoundingInfo().boundingBox;
-        const width = bounds.maximumWorld.x - bounds.minimumWorld.x;
-        const height = bounds.maximumWorld.y - bounds.minimumWorld.y;
+        const width = bounds.extendSize.x * 2;
+        const height = bounds.extendSize.y * 2;
 
-        // Create outline indicator
-        const indicator = BABYLON.MeshBuilder.CreatePlane(`focusIndicator_${inputElement.element.id}`, {
-            width: width + 0.1,
-            height: height + 0.1
-        }, scene);
-
-        indicator.parent = inputElement.mesh;
-        indicator.position.z = -0.02; // Behind the input element
-
-        // Create material with blue outline effect
-        const material = new BABYLON.StandardMaterial(`focusIndicatorMaterial_${inputElement.element.id}`, scene);
-        material.diffuseColor = new BABYLON.Color3(0.2, 0.4, 1.0);
-        material.emissiveColor = new BABYLON.Color3(0.1, 0.2, 0.5);
-        material.alpha = 0.3;
-        indicator.material = material;
-
-        indicator.isPickable = false;
-        indicator.isVisible = false;
-
-        return indicator;
+        const pixelScale = this.cameraService.getPixelToWorldScale();
+        const elementId = inputElement.element.id;
+        const createRing = (
+            suffix: string,
+            offsetPx: number,
+            widthPx: number,
+            color: BABYLON.Color3,
+            alpha = 1,
+        ): BABYLON.Mesh[] => {
+            const outlineOffset = offsetPx * pixelScale;
+            const outlineWidth = widthPx * pixelScale;
+            const outerWidth = width + 2 * (outlineOffset + outlineWidth);
+            const outerHeight = height + 2 * (outlineOffset + outlineWidth);
+            const createBar = (edge: string, barWidth: number, barHeight: number): BABYLON.Mesh =>
+                BABYLON.MeshBuilder.CreatePlane(`focusIndicator_${elementId}_${suffix}-${edge}`, {
+                    width: barWidth,
+                    height: barHeight,
+                }, scene);
+            const top = createBar('top', outerWidth, outlineWidth);
+            const bottom = createBar('bottom', outerWidth, outlineWidth);
+            const left = createBar('left', outlineWidth, outerHeight - 2 * outlineWidth);
+            const right = createBar('right', outlineWidth, outerHeight - 2 * outlineWidth);
+            top.position.y = height / 2 + outlineOffset + outlineWidth / 2;
+            bottom.position.y = -top.position.y;
+            left.position.x = width / 2 + outlineOffset + outlineWidth / 2;
+            right.position.x = -left.position.x;
+            const material = new BABYLON.StandardMaterial(
+                `focusIndicatorMaterial_${elementId}_${suffix}`,
+                scene,
+            );
+            material.diffuseColor = color;
+            material.emissiveColor = color;
+            material.alpha = alpha;
+            material.specularColor = BABYLON.Color3.Black();
+            material.disableLighting = true;
+            material.backFaceCulling = false;
+            const bars = [top, bottom, left, right];
+            bars.forEach(indicator => {
+                indicator.parent = inputElement.mesh;
+                indicator.position.z = -0.02;
+                indicator.material = material;
+                indicator.isPickable = false;
+                indicator.isVisible = false;
+            });
+            return bars;
+        };
+        const authored = this.focusIndicatorAppearance.get(elementId || '');
+        if (authored) {
+            const outlineOffset = authored.offsetPx * pixelScale;
+            const outlineWidth = authored.widthPx * pixelScale;
+            const outerWidth = width + 2 * (outlineOffset + outlineWidth);
+            const outerHeight = height + 2 * (outlineOffset + outlineWidth);
+            const outerRadius = Math.max(
+                0,
+                authored.borderRadiusPx + authored.offsetPx + authored.widthPx,
+            ) * pixelScale;
+            // A zero-blur spread shadow is a rounded silhouette behind the
+            // opaque control. Rendering the outer silhouette directly avoids
+            // the sharp inner-corner artifact produced by a narrow frame.
+            const frame = [this.meshService.createRoundedRectangle(
+                `focusIndicator_${elementId}_authored`,
+                outerWidth,
+                outerHeight,
+                outerRadius,
+            )];
+            const material = new BABYLON.StandardMaterial(
+                `focusIndicatorMaterial_${elementId}_authored`,
+                scene,
+            );
+            material.diffuseColor = authored.color;
+            material.emissiveColor = authored.color;
+            material.alpha = authored.alpha;
+            material.specularColor = BABYLON.Color3.Black();
+            material.disableLighting = true;
+            material.backFaceCulling = false;
+            frame.forEach(indicator => {
+                indicator.parent = inputElement.mesh;
+                indicator.position.z = -0.02;
+                indicator.material = material;
+                indicator.isPickable = false;
+                indicator.isVisible = false;
+                indicator.metadata = {
+                    ...(indicator.metadata ?? {}),
+                    focusBorderRadiusPx: authored.borderRadiusPx,
+                    focusOuterBorderRadiusPx:
+                        authored.borderRadiusPx + authored.offsetPx + authored.widthPx,
+                    focusIndicatorKind: 'authored-box-shadow',
+                };
+            });
+            return frame;
+        }
+        // Chromium's automatic ring is a light one-pixel edge with a dark
+        // one-pixel contrast edge immediately outside it.
+        return [
+            ...createRing('inner', 0, 1, BABYLON.Color3.White()),
+            ...createRing('outer', 1, 1, BABYLON.Color3.FromHexString('#101010')),
+        ];
     }
 
     /**
@@ -220,7 +324,9 @@ export class FocusManager {
         const indicator = this.focusIndicators.get(elementId);
 
         if (indicator) {
-            indicator.dispose();
+            const materials = new Set(indicator.map(mesh => mesh.material).filter(Boolean));
+            indicator.forEach(mesh => mesh.dispose());
+            materials.forEach(material => material?.dispose());
             this.focusIndicators.delete(elementId);
         }
     }
@@ -232,11 +338,47 @@ export class FocusManager {
         return this.focusedElement;
     }
 
+    isFocusVisible(): boolean {
+        return !!this.focusedElement && this.focusVisible;
+    }
+
     /**
      * Checks if an element is focused
      */
     isFocused(inputElement: InputElement): boolean {
         return this.focusedElement === inputElement;
+    }
+
+    /** Enables or suppresses the fallback ring for one authored element. */
+    setDefaultFocusIndicatorEnabled(elementId: string, enabled: boolean): void {
+        this.defaultFocusIndicatorEnabled.set(elementId, enabled);
+        if (!enabled && this.focusedElement?.element.id === elementId) {
+            this.hideFocusIndicator(this.focusedElement);
+        }
+    }
+
+    setFocusIndicatorAppearance(
+        elementId: string,
+        appearance?: {
+            color: BABYLON.Color3;
+            alpha: number;
+            widthPx: number;
+            offsetPx: number;
+            borderRadiusPx: number;
+        },
+    ): void {
+        this.disposeFocusIndicatorById(elementId);
+        if (appearance) this.focusIndicatorAppearance.set(elementId, appearance);
+        else this.focusIndicatorAppearance.delete(elementId);
+    }
+
+    private disposeFocusIndicatorById(elementId: string): void {
+        const indicator = this.focusIndicators.get(elementId);
+        if (!indicator) return;
+        const materials = new Set(indicator.map((mesh) => mesh.material).filter(Boolean));
+        indicator.forEach((mesh) => mesh.dispose());
+        materials.forEach((material) => material?.dispose());
+        this.focusIndicators.delete(elementId);
     }
 
     /**
@@ -254,8 +396,14 @@ export class FocusManager {
      * Cleanup all focus resources
      */
     cleanup(): void {
-        this.focusIndicators.forEach(indicator => indicator.dispose());
+        this.focusIndicators.forEach(indicator => {
+            const materials = new Set(indicator.map(mesh => mesh.material).filter(Boolean));
+            indicator.forEach(mesh => mesh.dispose());
+            materials.forEach(material => material?.dispose());
+        });
         this.focusIndicators.clear();
+        this.defaultFocusIndicatorEnabled.clear();
+        this.focusIndicatorAppearance.clear();
         this.tabOrder = [];
         this.focusedElement = null;
     }

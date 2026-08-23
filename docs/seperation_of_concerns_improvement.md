@@ -1,5 +1,9 @@
 # Separation of Concerns Improvement Plan
 
+> **Status (2026-08-15):** Superseded analysis. Its primary recommendation—the
+> `BabylonDOMService` split—was implemented in `c7465b7` and repaired in
+> `40ac6f4`. Remaining suggestions are optional future refactors.
+
 ## Initial Analysis
 
 ### BabylonDOMService

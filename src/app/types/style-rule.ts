@@ -1,5 +1,10 @@
 export interface StyleRule {
   selector: string;
+  // Optional media bounds for conditionally applying this JSON style rule.
+  mediaMinWidth?: string;
+  mediaMaxWidth?: string;
+  mediaMinHeight?: string;
+  mediaMaxHeight?: string;
   // Positioning
   position?: 'static' | 'relative' | 'absolute' | 'fixed';
   top?: string;
@@ -8,6 +13,7 @@ export interface StyleRule {
   bottom?: string;
   width?: string;
   height?: string;
+  boxSizing?: 'content-box' | 'border-box';
   minWidth?: string;
   maxWidth?: string;
   minHeight?: string;
@@ -44,6 +50,7 @@ export interface StyleRule {
 
   // Transform
   transform?: string;
+  perspective?: string;
 
   // List
   listStyleType?: string;
@@ -72,6 +79,7 @@ export interface StyleRule {
   whiteSpace?: string;
   wordWrap?: string;
   textOverflow?: string;
+  overflow?: 'visible' | 'hidden' | 'clip' | 'auto' | 'scroll';
   textShadow?: string;
   textDecoration?: string;
   textTransform?: string;
@@ -94,4 +102,12 @@ export interface StyleRule {
   flex?: string;
   alignSelf?: string;
   order?: string;
+
+  // Grid
+  gridTemplateColumns?: string;
+  gridTemplateRows?: string;
+  gridColumn?: string;
+  gridRow?: string;
+  /** Unknown-safe declarations resolved through the plugin property registry. */
+  extensions?: Readonly<Record<string, unknown>>;
 }

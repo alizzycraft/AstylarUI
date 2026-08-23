@@ -3522,6 +3522,262 @@ export class SiteDataService {
       }
     },
 
+    'debug-inline-flex': {
+      meta: {
+        description: 'Focused inline-flex debug scene capturing spacing, padding, and intrinsic sizing interactions for instrumentation'
+      },
+      styles: [
+        {
+          selector: 'root',
+          background: '#0f172a'
+        },
+        {
+          selector: '#inline-stage',
+          top: '18%',
+          left: '14%',
+          width: '72%',
+          background: '#1e293b',
+          padding: '24px 28px',
+          borderRadius: '18px',
+          borderWidth: '2px',
+          borderColor: '#334155',
+          borderStyle: 'solid',
+          boxShadow: '0 18px 45px rgba(15, 23, 42, 0.45)'
+        },
+        {
+          selector: '.inline-label',
+          display: 'inline',
+          color: '#94a3b8',
+          fontFamily: '"Source Sans 3", sans-serif',
+          fontSize: '18px',
+          letterSpacing: '0.04em'
+        },
+        {
+          selector: '.inline-token',
+          display: 'inline-flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '12px 20px',
+          margin: '10px 8px 0 8px',
+          minWidth: '160px',
+          minHeight: '48px',
+          borderRadius: '999px',
+          fontFamily: '"Source Sans 3", sans-serif',
+          fontSize: '16px',
+          fontWeight: '600',
+          lineHeight: '1.1',
+          background: 'linear-gradient(135deg, #38bdf8, #2563eb)',
+          color: '#0f172a',
+          boxShadow: '0 6px 18px rgba(37, 99, 235, 0.35)'
+        },
+        {
+          selector: '#token-secondary',
+          background: 'linear-gradient(135deg, #c084fc, #7c3aed)'
+        },
+        {
+          selector: '#token-stretch',
+          minWidth: '220px',
+          minHeight: '64px',
+          padding: '18px 28px',
+          background: 'linear-gradient(135deg, #34d399, #059669)'
+        },
+        {
+          selector: '.compact-token',
+          minWidth: '120px',
+          minHeight: '40px',
+          padding: '10px 16px',
+          fontSize: '14px',
+          background: 'linear-gradient(135deg, #fbbf24, #f97316)'
+        }
+      ],
+      root: {
+        children: [
+          {
+            type: 'div',
+            id: 'inline-stage',
+            children: [
+              {
+                type: 'span',
+                id: 'inline-prefix',
+                class: 'inline-label',
+                textContent: 'Inline-flex badges:'
+              },
+              {
+                type: 'span',
+                id: 'token-primary',
+                class: 'inline-token',
+                textContent: 'Primary Badge'
+              },
+              {
+                type: 'span',
+                id: 'token-secondary',
+                class: 'inline-token',
+                textContent: 'Secondary Badge'
+              },
+              {
+                type: 'span',
+                id: 'token-stretch',
+                class: 'inline-token',
+                textContent: 'Min Constraints'
+              },
+              {
+                type: 'span',
+                id: 'token-compact',
+                class: 'inline-token compact-token',
+                textContent: 'Compact Token'
+              }
+            ]
+          }
+        ]
+      }
+    },
+
+    'debug-header-alignment': {
+      meta: {
+        description: 'Header alignment debug scene contrasting fixed-height headers and chip layouts for renderer instrumentation'
+      },
+      styles: [
+        {
+          selector: 'root',
+          background: '#0b1120'
+        },
+        {
+          selector: '#header-stage',
+          top: '16%',
+          left: '12%',
+          width: '76%',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '28px'
+        },
+        {
+          selector: '.debug-header',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          height: '96px',
+          padding: '0 32px',
+          borderRadius: '18px',
+          background: 'linear-gradient(135deg, #1e3a8a, #0f172a)',
+          borderWidth: '1px',
+          borderColor: '#1d4ed8',
+          borderStyle: 'solid',
+          boxShadow: '0 20px 55px rgba(30, 58, 138, 0.45)'
+        },
+        {
+          selector: '#sticky-header',
+          height: '120px',
+          alignItems: 'flex-end',
+          background: 'linear-gradient(135deg, #0f172a, #312e81)'
+        },
+        {
+          selector: '.header-title',
+          color: '#e0f2fe',
+          fontFamily: '"Source Sans 3", sans-serif',
+          fontSize: '30px',
+          fontWeight: '700',
+          letterSpacing: '0.05em'
+        },
+        {
+          selector: '.header-meta',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '14px'
+        },
+        {
+          selector: '.header-chip',
+          display: 'inline-flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          minWidth: '128px',
+          height: '44px',
+          padding: '0 18px',
+          borderRadius: '999px',
+          fontFamily: '"Source Sans 3", sans-serif',
+          fontSize: '15px',
+          fontWeight: '600',
+          letterSpacing: '0.04em',
+          background: '#2563eb',
+          color: '#f8fafc',
+          boxShadow: '0 8px 22px rgba(37, 99, 235, 0.4)'
+        },
+        {
+          selector: '.header-chip--muted',
+          background: '#475569',
+          color: '#e2e8f0',
+          boxShadow: '0 4px 16px rgba(71, 85, 105, 0.45)'
+        }
+      ],
+      root: {
+        children: [
+          {
+            type: 'div',
+            id: 'header-stage',
+            children: [
+              {
+                type: 'header',
+                id: 'primary-header',
+                class: 'debug-header',
+                children: [
+                  {
+                    type: 'div',
+                    id: 'primary-title',
+                    class: 'header-title',
+                    textContent: 'Renderer Diagnostics'
+                  },
+                  {
+                    type: 'div',
+                    id: 'primary-meta',
+                    class: 'header-meta',
+                    children: [
+                      {
+                        type: 'span',
+                        id: 'meta-chip-live',
+                        class: 'header-chip',
+                        textContent: 'Live Feed'
+                      },
+                      {
+                        type: 'span',
+                        id: 'meta-chip-version',
+                        class: 'header-chip',
+                        textContent: 'v1.2.0'
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                type: 'header',
+                id: 'sticky-header',
+                class: 'debug-header',
+                children: [
+                  {
+                    type: 'div',
+                    id: 'sticky-title',
+                    class: 'header-title',
+                    textContent: 'Alignment Check'
+                  },
+                  {
+                    type: 'div',
+                    id: 'sticky-meta',
+                    class: 'header-meta',
+                    children: [
+                      {
+                        type: 'span',
+                        id: 'sticky-chip-min',
+                        class: 'header-chip header-chip--muted',
+                        textContent: 'Min-Height 120px'
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+
     'flex-test': {
       meta: {
         description: 'Comprehensive flex test site with multiple containers showing space-between, center, and column layouts with rounded borders, gaps, and various flex-basis values'
@@ -5567,6 +5823,239 @@ export class SiteDataService {
                   { value: 'option2', label: 'Option 2' },
                   { value: 'option3', label: 'Option 3' },
                   { value: 'option4', label: 'Option 4' }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+
+    // HTML KITCHEN SINK TEST SITE
+    'html-kitchen-sink': {
+      meta: {
+        description: 'HTML kitchen sink test site showcasing various HTML text formatting and semantic tags'
+      },
+      styles: [
+        {
+          selector: 'root',
+          background: '#2c3e50'
+        },
+
+        // Main container
+        {
+          selector: '#main-container',
+          top: '15%',
+          left: '5%',
+          width: '90%',
+          height: '90%',
+          background: '#34495e',
+          borderRadius: '8px',
+          padding: '20px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '15px'
+        },
+
+        // Section containers
+        {
+          selector: '.section',
+          background: '#3a4a5c',
+          borderRadius: '6px',
+          padding: '15px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '10px'
+        },
+
+        // Section headers
+        {
+          selector: '.section-header',
+          color: '#ffffff',
+          display: 'flex',
+          alignItems: 'center',
+          fontWeight: '600',
+          padding: '8px 12px',
+          borderRadius: '4px',
+          height: '30px'
+        },
+
+        {
+          selector: '#text-header',
+          background: '#e74c3c'
+        },
+
+        {
+          selector: '#code-header',
+          background: '#3498db'
+        },
+
+        {
+          selector: '#semantic-header',
+          background: '#27ae60'
+        },
+
+        {
+          selector: '#interactive-header',
+          background: '#9b59b6'
+        },
+
+        // Row containers
+        {
+          selector: '.element-row',
+          display: 'flex',
+          flexDirection: 'row',
+          gap: '10px',
+          flexWrap: 'wrap'
+        },
+
+        // Element styling - minimal overrides, rely on defaults
+        {
+          selector: '.test-element',
+          padding: '12px 16px',
+          display: 'inline-flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          minWidth: '120px',
+          minHeight: '48px',
+          fontSize: '16px'
+        },
+
+        {
+          selector: '.text-element',
+          background: '#ecf0f1'
+        },
+
+        {
+          selector: '.code-element',
+          background: '#2c3e50',
+          color: '#ecf0f1'
+        },
+
+        {
+          selector: '.semantic-element',
+          background: '#e67e22',
+          color: '#ffffff'
+        },
+
+        {
+          selector: '.interactive-element',
+          background: '#f39c12',
+          color: '#ffffff'
+        }
+      ],
+      root: {
+        children: [
+          {
+            type: 'div',
+            id: 'main-container',
+            children: [
+              // Text Formatting Section
+              {
+                type: 'div',
+                id: 'text-section',
+                class: 'section',
+                children: [
+                  {
+                    type: 'div',
+                    id: 'text-header',
+                    class: 'section-header',
+                    textContent: 'Text Formatting'
+                  },
+                  {
+                    type: 'div',
+                    class: 'element-row',
+                    children: [
+                      { type: 'b', id: 'test-b', class: 'test-element text-element', textContent: 'Bold' },
+                      { type: 'strong', id: 'test-strong', class: 'test-element text-element', textContent: 'Strong' },
+                      { type: 'i', id: 'test-i', class: 'test-element text-element', textContent: 'Italic' },
+                      { type: 'em', id: 'test-em', class: 'test-element text-element', textContent: 'Emphasis' },
+                      { type: 'u', id: 'test-u', class: 'test-element text-element', textContent: 'Underline' }
+                    ]
+                  },
+                  {
+                    type: 'div',
+                    class: 'element-row',
+                    children: [
+                      { type: 'small', id: 'test-small', class: 'test-element text-element', textContent: 'Small' },
+                      { type: 'mark', id: 'test-mark', class: 'test-element', textContent: 'Marked' },
+                      { type: 'del', id: 'test-del', class: 'test-element text-element', textContent: 'Deleted' },
+                      { type: 'ins', id: 'test-ins', class: 'test-element', textContent: 'Inserted' }
+                    ]
+                  }
+                ]
+              },
+
+              // Code Section
+              {
+                type: 'div',
+                id: 'code-section',
+                class: 'section',
+                children: [
+                  {
+                    type: 'div',
+                    id: 'code-header',
+                    class: 'section-header',
+                    textContent: 'Code & Preformatted'
+                  },
+                  {
+                    type: 'div',
+                    class: 'element-row',
+                    children: [
+                      { type: 'code', id: 'test-code', class: 'test-element code-element', textContent: 'code()' },
+                      { type: 'kbd', id: 'test-kbd', class: 'test-element code-element', textContent: 'Ctrl+C' },
+                      { type: 'samp', id: 'test-samp', class: 'test-element code-element', textContent: 'Output' },
+                      { type: 'var', id: 'test-var', class: 'test-element code-element', textContent: 'variable' }
+                    ]
+                  }
+                ]
+              },
+
+              // Semantic Section
+              {
+                type: 'div',
+                id: 'semantic-section',
+                class: 'section',
+                children: [
+                  {
+                    type: 'div',
+                    id: 'semantic-header',
+                    class: 'section-header',
+                    textContent: 'Semantic Elements'
+                  },
+                  {
+                    type: 'div',
+                    class: 'element-row',
+                    children: [
+                      { type: 'cite', id: 'test-cite', class: 'test-element semantic-element', textContent: 'Citation' },
+                      { type: 'abbr', id: 'test-abbr', class: 'test-element semantic-element', textContent: 'HTML' },
+                      { type: 'dfn', id: 'test-dfn', class: 'test-element semantic-element', textContent: 'Definition' }
+                    ]
+                  }
+                ]
+              },
+
+              // Interactive Section
+              {
+                type: 'div',
+                id: 'interactive-section',
+                class: 'section',
+                children: [
+                  {
+                    type: 'div',
+                    id: 'interactive-header',
+                    class: 'section-header',
+                    textContent: 'Interactive & Labels'
+                  },
+                  {
+                    type: 'div',
+                    class: 'element-row',
+                    children: [
+                      { type: 'label', id: 'test-label', class: 'test-element interactive-element', textContent: 'Label' },
+                      { type: 'legend', id: 'test-legend', class: 'test-element interactive-element', textContent: 'Legend' },
+                      { type: 'summary', id: 'test-summary', class: 'test-element interactive-element', textContent: 'Summary' }
+                    ]
+                  }
                 ]
               }
             ]

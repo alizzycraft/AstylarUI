@@ -1,0 +1,69 @@
+# Responsive intrinsic layout and paint fidelity parity v5
+
+This phase extends browser parity across responsive intrinsic flex/grid layout and then addresses the largest evidence-backed typography and paint differences. Work proceeds one coherent behavior at a time: capture a focused browser/Astylar baseline, repair the general renderer rule, add regression coverage, run the representative applications and full corpus, document the evidence, and commit the increment.
+
+## Completion thresholds
+
+- Wrapped flex intrinsic height and supported intrinsic grid behavior have focused coverage.
+- Common percentage and `minmax()` flex/grid cases match browser layout within the supported CSS subset.
+- The largest representative typography and paint gaps are either repaired or explicitly explained; negligible rasterization and antialiasing differences are not chased.
+- Every one of the nine representative application renders has SSIM at or above `0.95`.
+- Full-suite median SSIM is at or above `0.98`.
+- At least 95% of measured edges are within `2px`, with no unexplained error above `5px`.
+- Visible text and line counts match exactly, with no runtime errors.
+- Unit tests, Angular application build, and library build pass.
+- Representative application workaround dimensions are removed where supported normal reflow can determine them.
+- Every renderer change has a focused regression and an entry in this scorecard.
+- The final tree is committed and `parity:check` succeeds three consecutive times without changes.
+
+## Increment log
+
+| Increment | Browser expectation | Baseline | General repair | Focused result | Full-corpus result | Status |
+| --- | --- | --- | --- | --- | --- | --- |
+| Wrapped row flex intrinsic height | A height-auto wrapped row flex container forms lines using definite item bases and available content width, then sums the largest outer cross size per line, row gaps, padding, and borders. | New `flex-wrap-auto-height` fixture: SSIM `0.9823`; `93.8%` of edges within `2px`; maximum edge error `15.9999px`; child placement was correct but the container used block-style item-height accumulation and became `132px` instead of `116px`. | Measure definite widths and flex bases during intrinsic pre-layout, form wrapped row lines including margins and column gaps, and sum their outer cross sizes with row gaps and container insets. | SSIM `1.0000`; `100%` of edges within `2px`; maximum edge error `0.0280px`; exact geometry/text; runtime clean; focused flex suite `17/17`. | 85 fixtures / 97 renders / three viewports; median SSIM `0.9966`; minimum SSIM `0.9509`; `99.9%` of edges within `2px`; maximum edge error `3.9921px`; exact text; runtime clean; all nine representative renders unchanged. | Accepted |
+| Percentage grid tracks from the content box | A percentage grid track resolves against the full content-box dimension before gaps are removed; fractional tracks then receive the remaining track space. | New `grid-percentage-content-width` fixture: SSIM `0.9890`; `83.3%` of edges within `2px`; maximum edge error `8.0052px`; Astylar resolved `40%` against the gap-reduced track space, making the first column `8px` too narrow. | Resolve percentage tokens against `availableSize`; continue subtracting gaps when computing the free space distributed to `fr` tracks. | SSIM `1.0000`; `100%` of edges within `2px`; maximum edge error `0.0246px`; exact geometry/text; runtime clean; focused grid suite `4/4`. | 86 fixtures / 98 renders / three viewports; median SSIM `0.9966`; minimum SSIM `0.9509`; `99.9%` of edges within `2px`; maximum edge error `3.9921px`; exact text; runtime clean; all nine representative renders unchanged. | Accepted |
+| Definite-minimum `minmax()` grid tracks | A `minmax(<length>, <flex>)` track participates in fractional allocation but freezes at its minimum when its proportional share would be smaller; whitespace inside the function does not create extra tracks. | New `grid-minmax-tracks` fixture: SSIM `0.9278`; `75%` of edges within `2px`; maximum edge error `439.0223px`; the whitespace tokenizer split one `minmax()` function into multiple bogus tracks. | Tokenize track lists at parenthesis depth, parse common definite `minmax()` bounds, and iteratively freeze constrained flex tracks before redistributing the remaining fraction space. Intrinsic keyword bounds remain unsupported pending content-contribution sizing. | SSIM `1.0000`; `100%` of edges within `2px`; maximum edge error `0.0246px`; exact geometry/text; runtime clean; focused grid suite `5/5`. | 87 fixtures / 99 renders / three viewports; median SSIM `0.9966`; minimum SSIM `0.9509`; `99.9%` of edges within `2px`; maximum edge error `3.9921px`; exact text; runtime clean; all nine representative renders unchanged. | Accepted |
+| Content-sized `auto` grid rows | Supported auto rows use the largest definite or recursively measurable outer item height in each row; their sum, row gaps, padding, and borders drive a height-auto grid before its flex parent positions it. | New `grid-auto-content-rows` fixture: SSIM `0.9475`; `62.5%` of edges within `2px`; maximum edge error `83.0293px`; pre-layout omitted the row gap and final grid sizing collapsed both `auto` rows to zero. | Share parenthesis-aware grid tokenization and a supported intrinsic-row resolver between flex pre-layout and final grid placement. Accept fixed/auto row lists with measurable item contributions; return unsupported for unresolved intrinsic/fractional row combinations rather than guessing. | SSIM `1.0000`; `100%` of edges within `2px`; maximum edge error `0.0508px`; exact geometry/text; runtime clean; focused flex/grid suites `24/24`. | 88 fixtures / 100 renders / three viewports; median SSIM `0.9966`; minimum SSIM `0.9509`; `99.9%` of edges within `2px`; maximum edge error `3.9921px`; exact text; runtime clean; all nine representative renders unchanged. | Accepted |
+
+## Representative application baseline
+
+The accepted Phase 4 baseline remains the starting point: project dashboard desktop/tablet/mobile SSIM `0.9743 / 0.9802 / 0.9603`; data management `0.9891 / 0.9898 / 0.9804`; account settings `0.9609 / 0.9664 / 0.9509`. All nine renders are above the `0.95` floor.
+
+## Representative workaround review
+
+The new grid behaviors do not justify removing another representative declaration yet. The remaining outer shell dimensions intentionally define each application's viewport-framed composition. Explicit control, dialog, scroll-panel, and truncation sizes are application design constraints rather than renderer compensation. The project dashboard's explicit responsive grid rows cannot yet be replaced by `auto` because its cards require nested text/container contributions during final grid track sizing; this phase supports definite or recursively measurable pre-layout contributions but deliberately does not approximate unresolved intrinsic keyword combinations. Account settings and data management do not contain a newly enabled grid workaround. The Phase 4 content-driven removals therefore remain the correct boundary.
+
+## Typography and paint fidelity review
+
+The lowest representative render is account settings mobile at SSIM `0.9509`, with `100%` of its measured edges within `2px`, maximum edge error `1.4484px`, exact text and line counts, and no runtime errors. Visual inspection and pixel sampling show exact flat colors for the white dialog, gray secondary button, and purple primary button. The backdrop-composited page differs by at most one RGB level at sampled flat points because the browser and Babylon alpha pipelines round independently.
+
+The remaining visible difference is concentrated at glyph edges. Chromium paints reference DOM text directly into the page, while Astylar first rasterizes the same font through a transparent canvas and then samples that raster through a Babylon texture plane. A measured nearest-neighbor sampling experiment changed account desktop/tablet/mobile from `0.9609 / 0.9664 / 0.9509` to `0.9608 / 0.9667 / 0.9513`: one regression and two improvements below `0.0005`. The accepted linear mode was restored. This is explained rasterization variance, and changing the global sampler would be negligible, mixed, and likely to make transformed 3D text worse. No typography or paint renderer change is accepted without a larger, consistent browser-parity gain.
+
+## Verification log
+
+- Focused wrapped-flex unit tests: 17 passing.
+- Focused `flex-wrap-auto-height` parity: SSIM `1.0000`; all measured edges within `2px`; maximum edge error `0.0280px`; runtime clean.
+- Full unit suite: 103 passing.
+- Full parity corpus: 85 fixtures / 97 renders / three viewports; median SSIM `0.9966`; minimum SSIM `0.9509`; `99.9%` of measured edges within `2px`; maximum edge error `3.9921px`; exact text; runtime clean.
+- Angular application production build: passing (existing bundle/style budget warnings only).
+- Library TypeScript build: passing.
+- Focused percentage-grid unit tests: 4 passing.
+- Focused `grid-percentage-content-width` parity: SSIM `1.0000`; all measured edges within `2px`; maximum edge error `0.0246px`; runtime clean.
+- Full unit suite after percentage-grid sizing: 104 passing.
+- Full parity corpus after percentage-grid sizing: 86 fixtures / 98 renders / three viewports; median SSIM `0.9966`; minimum SSIM `0.9509`; `99.9%` of measured edges within `2px`; maximum edge error `3.9921px`; exact text; runtime clean.
+- Angular application production build and library TypeScript build after percentage-grid sizing: passing (existing Angular budget warnings only).
+- Focused `minmax()` grid unit tests: 5 passing.
+- Focused `grid-minmax-tracks` parity: SSIM `1.0000`; all measured edges within `2px`; maximum edge error `0.0246px`; runtime clean.
+- Full unit suite after `minmax()` sizing: 105 passing.
+- Full parity corpus after `minmax()` sizing: 87 fixtures / 99 renders / three viewports; median SSIM `0.9966`; minimum SSIM `0.9509`; `99.9%` of measured edges within `2px`; maximum edge error `3.9921px`; exact text; runtime clean.
+- Angular application production build and library TypeScript build after `minmax()` sizing: passing (existing Angular budget warnings only).
+- Focused content-sized grid-row tests: 24 passing across flex and grid services.
+- Focused `grid-auto-content-rows` parity: SSIM `1.0000`; all measured edges within `2px`; maximum edge error `0.0508px`; runtime clean.
+- Full unit suite after content-sized grid rows: 107 passing.
+- Full parity corpus after content-sized grid rows: 88 fixtures / 100 renders / three viewports; median SSIM `0.9966`; minimum SSIM `0.9509`; `99.9%` of measured edges within `2px`; maximum edge error `3.9921px`; exact text; runtime clean.
+- Angular application production build and library TypeScript build after content-sized grid rows: passing (existing Angular budget warnings only).
+- Three consecutive preliminary `parity:check` runs passed on the unchanged implementation tree with identical aggregate metrics: 88 fixtures / 100 renders, median SSIM `0.9966`, minimum SSIM `0.9509`, `99.9%` of edges within `2px`, maximum edge error `3.9921px`, exact text, and no runtime errors. The final scorecard-only commit is followed by the required final committed-tree stability runs.
+
+## Next candidates
+
+The required responsive intrinsic layout cases and evidence-led paint review are complete for this phase. Future expansion should begin with a focused baseline for nested text/container contributions to `auto`, `min-content`, or `max-content` grid tracks, or with a text-compositing approach that demonstrates a material, consistent gain across text-heavy fixtures without degrading transformed 3D text.
