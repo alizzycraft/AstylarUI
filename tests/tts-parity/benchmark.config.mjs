@@ -183,6 +183,7 @@ export const sharpnessRegions = [
 // unchanged configuration to release acceptance.
 export const acceptance = {
   maximumGeometryEdgeErrorPx: 4,
+  maximumPopupWidthErrorPx: 0.5,
   minimumEdgesWithinTolerance: 0.95,
   geometryTolerancePx: 2,
   minimumSsim: 0.965,

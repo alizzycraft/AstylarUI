@@ -315,3 +315,33 @@ completion threshold met. The unfiltered packed TTS run passed 10/10 static
 scenarios, 36/36 sharpness regions, and 70/70 interaction steps; minimum static
 SSIM was `0.967585`. No OpenAI credential was read and no live API request was
 made.
+
+## Select popup inherited-color and width correction
+
+Manual comparison with the pinned TTS reference showed that expanded Astylar
+selects hard-coded white ordinary rows and black option text even when the
+closed select resolved authored dark foreground/background colors. The popup
+also added its `1px` border outside a surface already as wide as the control,
+making its outer box two pixels wider. Ordinary popup rows now inherit the
+resolved select `background` and `color`, while the active option retains the
+platform-style blue/white selection treatment. The popup surface is inset by
+its border width so its final outer box matches the select border box.
+
+Native expanded-select pixels remain operating-system UI and are not raster
+comparable in headless Chromium. The packed TTS benchmark therefore records
+the Astylar popup's resolved surface/row colors and projected outer box, checks
+ordinary rows against the reference select's computed colors, and enforces a
+`0.5px` popup-to-control width tolerance. The reference-large DPR-1 result
+resolved `#0d1117` / `#e6edf3` with a `0.0267px` width delta; the DPR-2 result
+resolved the same colors with a `0.0145px` delta.
+
+Verification passed the focused SelectManager suite 10/10, the parity-harness
+suite 23/23, and the full unit suite 339/339. The unfiltered general corpus
+passed all 165 fixtures / 541 renders with median SSIM `0.9899`, minimum SSIM
+`0.9509`, 99.9% of measured edges within `2px`, maximum edge error `3.9921px`,
+exact text, clean runtime reports, and every completion threshold met. The
+unfiltered packed TTS run passed 10/10 static scenarios, 36/36 sharpness
+regions, and 70/70 interaction steps; minimum static SSIM was `0.967585` and
+minimum interaction-local SSIM was `0.526838` under the documented structural
+UA-focus exception. No OpenAI credential was read and no live API request was
+made.

@@ -748,6 +748,42 @@ function compareInteractionState(referenceMeasurement, astylarMeasurement, scena
     const shouldBeExpanded = step.id.includes('open') || step.id === 'move-active-option';
     const expanded = astylarMeasurement.controlStates?.voice?.expanded;
     if (expanded !== shouldBeExpanded) errors.push(`voice expanded state was ${expanded}; expected ${shouldBeExpanded}.`);
+    const popup = astylarMeasurement.selectPopups?.voice;
+    if (shouldBeExpanded) {
+      if (!popup) {
+        errors.push('voice popup paint/geometry evidence is missing.');
+      } else {
+        const expectedBackground = normalizeInteractionStyleValue(
+          'backgroundColor', referenceMeasurement.computedStyles?.voice?.backgroundColor,
+        );
+        const expectedForeground = normalizeInteractionStyleValue(
+          'color', referenceMeasurement.computedStyles?.voice?.color,
+        );
+        const actualBackground = normalizeInteractionStyleValue('backgroundColor', popup.background);
+        if (actualBackground !== expectedBackground) {
+          errors.push(`voice popup background differs (${expectedBackground} vs ${actualBackground}).`);
+        }
+        for (const option of popup.options?.filter(({ active, disabled }) => !active && !disabled) ?? []) {
+          const background = normalizeInteractionStyleValue('backgroundColor', option.background);
+          const foreground = normalizeInteractionStyleValue('color', option.foreground);
+          if (background !== expectedBackground) {
+            errors.push(`voice option ${option.index} background differs (${expectedBackground} vs ${background}).`);
+          }
+          if (foreground !== expectedForeground) {
+            errors.push(`voice option ${option.index} foreground differs (${expectedForeground} vs ${foreground}).`);
+          }
+        }
+        const controlWidth = astylarMeasurement.elements?.voice?.borderBox?.width;
+        const popupWidth = popup.outerBox?.width;
+        if (!Number.isFinite(controlWidth) || !Number.isFinite(popupWidth)) {
+          errors.push('voice popup/control width evidence is missing.');
+        } else if (Math.abs(controlWidth - popupWidth) > acceptance.maximumPopupWidthErrorPx) {
+          errors.push(`voice popup width differs from its control (${controlWidth.toFixed(3)}px vs ${popupWidth.toFixed(3)}px).`);
+        }
+      }
+    } else if (popup) {
+      errors.push('voice popup paint/geometry evidence remained after dismissal.');
+    }
   }
   return errors;
 }

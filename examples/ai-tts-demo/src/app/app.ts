@@ -292,6 +292,32 @@ export class App {
           const style = mesh?.metadata?.astylarResolvedInteractionStyle;
           return style && typeof style === 'object' ? [[id, { ...style }]] : [];
         }));
+        const selectPopups = Object.fromEntries(ids.flatMap((id) => {
+          const semantic = document.querySelector<HTMLElement>(
+            `[data-astylar-id="${CSS.escape(id)}"]`,
+          );
+          if (!(semantic instanceof HTMLSelectElement) ||
+              semantic.getAttribute('aria-expanded') !== 'true') return [];
+          const dropdown = surface.scene.getMeshByName(`dropdown_${id}`);
+          const border = surface.scene.getMeshByName(`dropdownBorder_${id}`);
+          if (!dropdown || !border) return [];
+          const options = surface.scene.meshes
+            .filter((mesh) => mesh.name.startsWith(`option_${id}_`) &&
+              !mesh.name.startsWith(`optionText_${id}_`))
+            .map((mesh) => ({
+              index: mesh.metadata?.optionIndex,
+              active: mesh.metadata?.popupActive === true,
+              disabled: mesh.metadata?.popupDisabled === true,
+              background: mesh.metadata?.popupBackground,
+              foreground: mesh.metadata?.popupForeground,
+            }));
+          return [[id, {
+            surfaceBox: projectMeshBox(dropdown),
+            outerBox: projectMeshBox(border),
+            background: dropdown.metadata?.popupBackground,
+            options,
+          }]];
+        }));
         return {
           elements,
           visibleFocusIndicators: surface.scene.meshes
@@ -329,6 +355,7 @@ export class App {
           semantics: diagnostics.semantics,
           controlStates,
           resolvedStyles,
+          selectPopups,
           events: [...this.benchmarkEvents],
           centerPicks,
           clippingBounds,
