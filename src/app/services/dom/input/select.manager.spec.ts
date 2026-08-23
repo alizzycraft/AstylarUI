@@ -2,6 +2,7 @@ import * as BABYLON from '@babylonjs/core';
 import { BabylonMeshService } from '../../babylon-mesh.service';
 import { TextRenderingService } from '../../text/text-rendering.service';
 import { SelectManager } from './select.manager';
+import { StyleRule } from '../../../types/style-rule';
 import {
   CONTROL_CONTENT_Z_OFFSET,
   SELECT_BORDER_Z_OFFSET,
@@ -107,9 +108,13 @@ describe('SelectManager', () => {
     expect(select.validationState.dirty).toBeTrue();
   });
 
-  it('opens compact popup rows with native selected and disabled treatment', () => {
+  it('opens compact popup rows inside the control width with inherited select colors', () => {
+    const renderedStyles = new Map<string, StyleRule>();
     const textRendering = {
-      renderTextToTexture: () => ({ getSize: () => ({ width: 80, height: 24 }) }),
+      renderTextToTexture: (_element: unknown, text: string, style: StyleRule) => {
+        renderedStyles.set(text, style);
+        return { getSize: () => ({ width: 80, height: 24 }) };
+      },
     } as unknown as TextRenderingService;
     const meshService = {
       createTextMesh: (name: string, _texture: unknown, width: number, height: number) =>
@@ -129,7 +134,7 @@ describe('SelectManager', () => {
         actions: { camera: { getPixelToWorldScale: () => 0.01 } },
       } as any,
       {
-        selector: '#choice', background: '#ffffff', color: '#000000',
+        selector: '#choice', background: '#0d1117', color: '#e6edf3',
         fontSize: '16px', padding: '12px 14px', borderWidth: '2px',
       },
       { width: 2.2, height: 0.56 },
@@ -138,9 +143,19 @@ describe('SelectManager', () => {
     manager.openDropdown(select, scene, select.style);
 
     const dropdownHeight = select.dropdownMesh!.getBoundingInfo().boundingBox.extendSize.y * 2;
+    const selectWidth = select.mesh.getBoundingInfo().boundingBox.extendSize.x * 2;
+    const popupBorder = select.dropdownMesh!.getChildMeshes(false)
+      .find((mesh) => mesh.name === 'dropdownBorder_choice')!;
+    const popupOuterWidth = popupBorder.getBoundingInfo().boundingBox.extendSize.x * 2;
+    const dropdownMaterial = select.dropdownMesh!.material as BABYLON.StandardMaterial;
     const selectedMaterial = select.optionMeshes[0].material as BABYLON.StandardMaterial;
+    const ordinaryMaterial = select.optionMeshes[2].material as BABYLON.StandardMaterial;
     expect(dropdownHeight).toBeCloseTo(0.78, 5);
+    expect(popupOuterWidth).toBeCloseTo(selectWidth, 5);
     expect(select.optionMeshes[1].isPickable).toBeFalse();
+    expect(dropdownMaterial.diffuseColor.toHexString()).toBe('#0D1117');
+    expect(ordinaryMaterial.diffuseColor.toHexString()).toBe('#0D1117');
+    expect(renderedStyles.get('Beta')!.color).toBe('#e6edf3');
     expect(selectedMaterial.diffuseColor.r).toBeCloseTo(25 / 255, 5);
     expect(selectedMaterial.diffuseColor.g).toBeCloseTo(103 / 255, 5);
     expect(selectedMaterial.diffuseColor.b).toBeCloseTo(210 / 255, 5);

@@ -14,7 +14,12 @@ import {
 } from './benchmark.config.mjs';
 import { cropRgba, compareSharpness, evaluateSharpness } from '../parity/sharpness-metrics.mjs';
 import { compareScrolling } from './scrolling-metrics.mjs';
-import { evaluateInteractionRaster } from './interaction-metrics.mjs';
+import {
+  evaluateInteractionRaster,
+  hasRasterColor,
+  selectionCaretOffset,
+  selectionGlyphAlignment,
+} from './interaction-metrics.mjs';
 
 const root = process.cwd();
 const demo = path.join(root, 'examples', 'ai-tts-demo');
@@ -292,6 +297,8 @@ async function captureInteractionScenario(context, scenario, viewport) {
     window.__ASTYLAR_TTS_BENCHMARK__?.measure(targetIds), ids);
   const results = [];
   const cycles = scenario.repeatCycles ?? 1;
+  const astylarCanvas = astylarPage.getByTestId('tts-astylar-surface').locator('canvas');
+  let previousAstylarBuffer = await astylarCanvas.screenshot({ animations: 'disabled' });
 
   for (let cycle = 0; cycle < cycles; cycle += 1) {
     for (const step of scenario.steps) {
@@ -338,19 +345,19 @@ async function captureInteractionScenario(context, scenario, viewport) {
       const referenceBuffer = await referencePage.screenshot({
         path: path.join(stepDir, 'reference.png'), animations: 'disabled',
       });
-      const astylarCanvas = astylarPage.getByTestId('tts-astylar-surface').locator('canvas');
       const astylarBuffer = await astylarCanvas.screenshot({
         path: path.join(stepDir, 'astylar.png'), animations: 'disabled',
       });
       const comparison = compareInteractionStep(
         scenario, step, viewport, referenceMeasurement, astylarMeasurement,
-        referenceBuffer, astylarBuffer, stepDir,
+        referenceBuffer, astylarBuffer, previousAstylarBuffer, stepDir,
       );
       results.push({
         scenario: scenario.id, state: scenario.state, step: stepId, cycle: cycle + 1,
         viewport, ...comparison,
         runtime: { referenceErrors: [...referenceErrors], astylarErrors: [...astylarErrors] },
       });
+      previousAstylarBuffer = astylarBuffer;
     }
   }
   addInteractionLifecycleEvidence(results, scenario);
@@ -525,10 +532,11 @@ async function performTtsInteractionAction(page, mode, action, measurement) {
 }
 
 function compareInteractionStep(scenario, step, viewport, referenceMeasurement, astylarMeasurement,
-    referenceBuffer, astylarBuffer, stepDir) {
+    referenceBuffer, astylarBuffer, previousAstylarBuffer, stepDir) {
   const infrastructureErrors = [];
   const referenceImage = PNG.sync.read(referenceBuffer);
   const astylarImage = PNG.sync.read(astylarBuffer);
+  const previousAstylarImage = PNG.sync.read(previousAstylarBuffer);
   if (!sameDimensions(referenceImage, astylarImage)) infrastructureErrors.push('Interaction capture dimensions differ.');
   const referenceElement = referenceMeasurement.elements[scenario.elementId];
   const astylarElement = astylarMeasurement.elements[scenario.elementId];
@@ -546,6 +554,8 @@ function compareInteractionStep(scenario, step, viewport, referenceMeasurement, 
     astylarMeasurement.controlStates,
     comparedControlIds,
   );
+  const selectionGlyphAlignments = [];
+  let selectionCaretOffsetPx;
   if (step.focusRingRadius) {
     const expectedRadius = Number.parseFloat(
       referenceMeasurement.computedStyles?.[scenario.elementId]?.borderTopLeftRadius ?? '0',
@@ -600,9 +610,66 @@ function compareInteractionStep(scenario, step, viewport, referenceMeasurement, 
   }
   if (step.selectionContrast) {
     const highlights = astylarMeasurement.selectionHighlights ?? [];
+    const foregrounds = astylarMeasurement.selectionForegrounds ?? [];
     if (!highlights.length || highlights.some((highlight) =>
-        highlight.backgroundContrast < 3 || highlight.textContrast < 3)) {
-      controlErrors.push(`${scenario.elementId} selection highlight does not preserve 3:1 surface and glyph contrast.`);
+        highlight.backgroundContrast < 3 || highlight.foregroundContrast < 4.5)) {
+      controlErrors.push(`${scenario.elementId} selection does not preserve 3:1 surface and 4.5:1 selected-glyph contrast.`);
+    }
+    if (!foregrounds.length || foregrounds.length !== highlights.length ||
+        foregrounds.some((foreground) => foreground.ownerElementId !== scenario.elementId ||
+          foreground.contrast < 4.5)) {
+      controlErrors.push(`${scenario.elementId} selection is missing its contrast foreground glyph overlay.`);
+    }
+    if (foregrounds.some((foreground) => !hasRasterColor(
+      astylarImage,
+      foreground.borderBox,
+      foreground.color,
+      astylarMeasurement.canvas,
+    ))) {
+      controlErrors.push(`${scenario.elementId} selected-glyph foreground color is absent from the rendered pixels.`);
+    }
+    for (const foreground of foregrounds) {
+      const alignment = selectionGlyphAlignment(
+        previousAstylarImage,
+        astylarImage,
+        foreground.borderBox,
+        foreground.sourceColor,
+        foreground.color,
+        foreground.sourceBackgroundColor,
+        foreground.backgroundColor,
+        astylarMeasurement.canvas,
+      );
+      selectionGlyphAlignments.push({ ownerElementId: foreground.ownerElementId, alignment });
+      if (alignment < acceptance.minimumSelectionGlyphAlignment) {
+        controlErrors.push(
+          `${scenario.elementId} selected-glyph recolor is not aligned with the original glyph raster ` +
+          `(${alignment.toFixed(3)} < ${acceptance.minimumSelectionGlyphAlignment.toFixed(3)}).`,
+        );
+      }
+    }
+    const controlState = astylarMeasurement.controlStates?.[scenario.elementId];
+    const caretBox = controlState?.caretBox;
+    if (controlState && caretBox && highlights.length) {
+      selectionCaretOffsetPx = selectionCaretOffset(
+        caretBox,
+        highlights.map((highlight) => highlight.borderBox),
+        controlState.selectionDirection,
+      );
+      if (selectionCaretOffsetPx > acceptance.maximumSelectionCaretOffsetPx) {
+        controlErrors.push(
+          `${scenario.elementId} caret is displaced from the active selection edge ` +
+          `(${selectionCaretOffsetPx.toFixed(3)}px > ` +
+          `${acceptance.maximumSelectionCaretOffsetPx.toFixed(3)}px).`,
+        );
+      }
+    } else if (controlState) {
+      controlErrors.push(`${scenario.elementId} selection is missing its visible caret geometry.`);
+    }
+    const fontSize = Number.parseFloat(
+      referenceMeasurement.computedStyles?.[scenario.elementId]?.fontSize ?? '0',
+    );
+    if (fontSize > 0 && highlights.some((highlight) => highlight.heightCss < fontSize * 0.5)) {
+      controlErrors.push(`${scenario.elementId} selection highlight does not cover the glyph line box.`);
     }
   }
   const styleErrors = compareInteractionStyles(
@@ -615,7 +682,7 @@ function compareInteractionStep(scenario, step, viewport, referenceMeasurement, 
         skipped: true,
         meetsTarget: true,
         reason: step.visual === 'structural-selection'
-          ? 'Selection is enforced through contrast and clipboard semantics; foreground recoloring is deferred.'
+          ? 'Selection is enforced through full-height geometry, paired background/foreground contrast, and clipboard semantics.'
           : 'Native platform select popup is not raster-comparable.',
       }
     : compareInteractionCrop(referenceImage, astylarImage, referenceElement?.borderBox, viewport, stepDir);
@@ -636,6 +703,8 @@ function compareInteractionStep(scenario, step, viewport, referenceMeasurement, 
   return {
     reference: referenceMeasurement,
     astylar: astylarMeasurement,
+    selectionGlyphAlignments,
+    selectionCaretOffsetPx,
     stateErrors, geometryErrors, controlErrors, styleErrors, runtimeErrors, localRaster, meetsAcceptance, infrastructureErrors,
   };
 }
@@ -679,6 +748,42 @@ function compareInteractionState(referenceMeasurement, astylarMeasurement, scena
     const shouldBeExpanded = step.id.includes('open') || step.id === 'move-active-option';
     const expanded = astylarMeasurement.controlStates?.voice?.expanded;
     if (expanded !== shouldBeExpanded) errors.push(`voice expanded state was ${expanded}; expected ${shouldBeExpanded}.`);
+    const popup = astylarMeasurement.selectPopups?.voice;
+    if (shouldBeExpanded) {
+      if (!popup) {
+        errors.push('voice popup paint/geometry evidence is missing.');
+      } else {
+        const expectedBackground = normalizeInteractionStyleValue(
+          'backgroundColor', referenceMeasurement.computedStyles?.voice?.backgroundColor,
+        );
+        const expectedForeground = normalizeInteractionStyleValue(
+          'color', referenceMeasurement.computedStyles?.voice?.color,
+        );
+        const actualBackground = normalizeInteractionStyleValue('backgroundColor', popup.background);
+        if (actualBackground !== expectedBackground) {
+          errors.push(`voice popup background differs (${expectedBackground} vs ${actualBackground}).`);
+        }
+        for (const option of popup.options?.filter(({ active, disabled }) => !active && !disabled) ?? []) {
+          const background = normalizeInteractionStyleValue('backgroundColor', option.background);
+          const foreground = normalizeInteractionStyleValue('color', option.foreground);
+          if (background !== expectedBackground) {
+            errors.push(`voice option ${option.index} background differs (${expectedBackground} vs ${background}).`);
+          }
+          if (foreground !== expectedForeground) {
+            errors.push(`voice option ${option.index} foreground differs (${expectedForeground} vs ${foreground}).`);
+          }
+        }
+        const controlWidth = astylarMeasurement.elements?.voice?.borderBox?.width;
+        const popupWidth = popup.outerBox?.width;
+        if (!Number.isFinite(controlWidth) || !Number.isFinite(popupWidth)) {
+          errors.push('voice popup/control width evidence is missing.');
+        } else if (Math.abs(controlWidth - popupWidth) > acceptance.maximumPopupWidthErrorPx) {
+          errors.push(`voice popup width differs from its control (${controlWidth.toFixed(3)}px vs ${popupWidth.toFixed(3)}px).`);
+        }
+      }
+    } else if (popup) {
+      errors.push('voice popup paint/geometry evidence remained after dismissal.');
+    }
   }
   return errors;
 }

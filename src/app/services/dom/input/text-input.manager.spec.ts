@@ -1,7 +1,36 @@
+import { NullEngine, Scene } from '@babylonjs/core';
+import { BabylonMeshService } from '../../babylon-mesh.service';
 import { CursorDirection, InputType, TextInput } from '../../../types/input-types';
 import { TextInputManager } from './text-input.manager';
 
 describe('TextInputManager', () => {
+  it('uses the authored rounded silhouette for a text input background', () => {
+    const engine = new NullEngine();
+    const scene = new Scene(engine);
+    const meshService = new BabylonMeshService();
+    meshService.initialize(scene);
+    const manager = Object.create(TextInputManager.prototype) as TextInputManager;
+    (manager as any).babylonMeshService = meshService;
+
+    const mesh = (manager as any).createInputBackground(
+      { type: 'input', id: 'title' },
+      {
+        scene,
+        actions: { camera: { getPixelToWorldScale: () => 0.01 } },
+      },
+      { selector: '#title', background: '#0d1117', borderRadius: '6px' },
+      { width: 3.5, height: 0.44 },
+    );
+
+    expect(mesh.getTotalVertices()).toBeGreaterThan(4);
+    expect(mesh.getBoundingInfo().boundingBox.extendSize.x * 2).toBeCloseTo(3.5, 6);
+    expect(mesh.getBoundingInfo().boundingBox.extendSize.y * 2).toBeCloseTo(0.44, 6);
+
+    mesh.dispose(false, true);
+    scene.dispose();
+    engine.dispose();
+  });
+
   it('treats normal and pre-wrap textareas as horizontally wrapped', () => {
     const manager = Object.create(TextInputManager.prototype) as TextInputManager;
     const wrapped = createTextInput('hello', 5);

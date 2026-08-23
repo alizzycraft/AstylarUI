@@ -208,3 +208,176 @@ minimum SSIM `0.9542`, 99.9% of measured edges within `2px`, maximum edge error
 threshold met. The root browser/SSR build and packed TTS demo check also passed;
 the latter contained 419 package files, passed all 23 demo tests, and recorded
 zero live API calls.
+
+## Selection paint follow-up
+
+A manual TTS editor pass then showed that control selection geometry was
+applying padding twice, leaving only a baseline strip, and that selected glyphs
+still retained their normal color. Highlight geometry now stays in the text
+mesh's local coordinate system; the control's mesh placement remains the sole
+owner of padding. A cropped texture-mask shader repaints only selected glyphs
+with a black-or-white foreground chosen against the adaptive highlight, while
+preserving the original glyph alpha, kerning, and rasterization.
+
+The application benchmark now treats selection as a paired paint contract. It
+requires at least 3:1 highlight-to-surface contrast, 4.5:1 selected-foreground
+contrast, a highlight height covering the glyph line, a one-to-one foreground
+mesh, and matching foreground pixels in the captured canvas. The textarea,
+search input, and ordinary history-text scenarios pass at DPR 1 and DPR 2; the
+ordinary text scenario continues to prove the native clipboard payload. No
+OpenAI credential was read and no live API request was made.
+
+## Selection glyph alignment correction
+
+Manual packed-demo testing exposed that the cropped foreground pass reflected
+the selected interval around the full text texture. Once that mapping was
+corrected, Babylon's transparent pass could still let the original glyph plane
+overpaint the recolor. The foreground now maps the exact selected interval with
+the source texture's scale and offset, discards transparent texels, and writes
+depth only for the nearer recolored glyph fragments. The selected foreground
+therefore retains the source glyph order, position, kerning, and clipping while
+reliably replacing the original glyph color.
+
+The TTS editor scenario now types and selects the full 81-character sentence
+from the manual report at DPR 1 and DPR 2. The harness retains the preceding
+unselected frame and requires at least `0.70` bidirectional glyph-mask alignment
+using the source and selected foreground/background color pairs. This threshold
+passes the correctly aligned DPR-1 antialias raster while a synthetic shifted
+mask fails; the benchmark also uses a meaningful `SELECTION` sample for the
+backward-selection/edit cycle instead of calibrating against two glyphs.
+
+The focused factory suite passed 5/5 tests, the full unit suite passed 337/337,
+and the parity harness passed 22/22. The general corpus passed all 165 fixtures /
+541 renders with median SSIM `0.9901`, minimum SSIM `0.9542`, 99.9% of measured
+edges within `2px`, maximum edge error `3.9921px`, exact text, clean runtime
+reports, and every completion threshold met. The unfiltered packed TTS run
+passed 10/10 static scenarios, 36/36 sharpness regions, and 66/66 interaction
+steps across both DPR profiles; minimum static SSIM remained `0.967522` and
+minimum interaction-local SSIM remained `0.526838` under the documented
+structural UA-focus exception. No OpenAI credential was read and no live API
+request was made.
+
+## Caret origin correction
+
+A zoomed manual pass over a padded textarea showed that pointer hit-testing,
+selection geometry, and subsequent text insertion used the correct character
+index, while the rendered caret appeared two characters behind. The caret
+renderer still assumed a fixed `1.5px` inline inset instead of the control's
+actual rendered text origin. In the TTS editor this displaced the caret by
+`15.533px`, matching the observed two-character Consolas offset.
+
+Caret creation and updates now use the rendered text plane's visual left edge.
+That keeps authored padding, borders, alignment, clipping, and scroll ownership
+single-sourced in the text plane rather than recalculating them independently in
+the caret renderer. Selection indices, hit-testing, editing, glyph paint, and
+scroll state are unchanged.
+
+The TTS benchmark now projects owned caret geometry independently of its blink
+phase and requires a text-control caret to stay within `2px` of the active
+forward or backward selection edge. Its editor sequence includes the exact
+mid-line pointer drag over `ylarUI b` at DPR 1 and DPR 2. The final offsets are
+`0.023px` and `0.068px`; a synthetic displaced-caret case fails the harness.
+Ordinary document selection retains its contrast, glyph, and clipboard checks
+without requiring an input-only caret.
+
+Verification passed 338/338 unit tests and 23/23 parity-harness tests. The
+general corpus passed all 165 fixtures / 541 renders with median SSIM `0.9899`,
+minimum SSIM `0.9542`, 99.9% of measured edges within `2px`, maximum edge error
+`3.9921px`, exact text, clean runtime reports, and every completion threshold
+met. The unfiltered packed TTS run passed 10/10 static scenarios, 36/36
+sharpness regions, and 70/70 interaction steps. Minimum static SSIM remained
+`0.967522` and minimum interaction-local SSIM remained `0.526838` under the
+documented structural UA-focus exception. No OpenAI credential was read and no
+live API request was made.
+
+## Rounded text-input focus silhouette correction
+
+A zoomed manual pass over the focused TTS title input showed a rectangular
+background strip covering part of the authored rounded focus halo. The title
+correctly authors two focus layers—a `1px` blue border and a translucent `3px`
+spread shadow—but the text-input background itself was still a square plane.
+Its corners therefore protruded through the rounded border and over the halo.
+
+Text-input backgrounds now use the authored rounded-rectangle silhouette, while
+zero-radius inputs retain the existing plane path. A focused NullEngine
+regression requires rounded inputs to own non-rectangular background geometry.
+The paired title interaction at DPR 1 and DPR 2 retains the expected `6px`
+border radius and `9px` outer halo radius; its minimum local SSIM improved from
+`0.980638` to `0.982182`, and the dark corner spill is absent from the captured
+DPR-2 pixels.
+
+Verification passed 339/339 unit tests. The focused `styled-text-input` parity
+fixture reached SSIM `0.9958`, with 100% of measured edges within `2px`. The
+unfiltered general corpus passed all 165 fixtures / 541 renders with median
+SSIM `0.9899`, minimum SSIM `0.9542`, 99.9% of measured edges within `2px`,
+maximum edge error `3.9921px`, exact text, clean runtime reports, and every
+completion threshold met. The unfiltered packed TTS run passed 10/10 static
+scenarios, 36/36 sharpness regions, and 70/70 interaction steps; minimum static
+SSIM was `0.967585`. No OpenAI credential was read and no live API request was
+made.
+
+## Select popup inherited-color and width correction
+
+Manual comparison with the pinned TTS reference showed that expanded Astylar
+selects hard-coded white ordinary rows and black option text even when the
+closed select resolved authored dark foreground/background colors. The popup
+also added its `1px` border outside a surface already as wide as the control,
+making its outer box two pixels wider. Ordinary popup rows now inherit the
+resolved select `background` and `color`, while the active option retains the
+platform-style blue/white selection treatment. The popup surface is inset by
+its border width so its final outer box matches the select border box.
+
+Native expanded-select pixels remain operating-system UI and are not raster
+comparable in headless Chromium. The packed TTS benchmark therefore records
+the Astylar popup's resolved surface/row colors and projected outer box, checks
+ordinary rows against the reference select's computed colors, and enforces a
+`0.5px` popup-to-control width tolerance. The reference-large DPR-1 result
+resolved `#0d1117` / `#e6edf3` with a `0.0267px` width delta; the DPR-2 result
+resolved the same colors with a `0.0145px` delta.
+
+Verification passed the focused SelectManager suite 10/10, the parity-harness
+suite 23/23, and the full unit suite 339/339. The unfiltered general corpus
+passed all 165 fixtures / 541 renders with median SSIM `0.9899`, minimum SSIM
+`0.9509`, 99.9% of measured edges within `2px`, maximum edge error `3.9921px`,
+exact text, clean runtime reports, and every completion threshold met. The
+unfiltered packed TTS run passed 10/10 static scenarios, 36/36 sharpness
+regions, and 70/70 interaction steps; minimum static SSIM was `0.967585` and
+minimum interaction-local SSIM was `0.526838` under the documented structural
+UA-focus exception. No OpenAI credential was read and no live API request was
+made.
+
+## AstylarUI 0.2.0 release-candidate verification
+
+The complete `more-html` development line was prepared as the `0.2.0` release
+candidate. Package metadata, runtime compatibility, plugin examples, the public
+capability catalog, and the bundled application-development skill references
+now carry the same version. Superseded implementation plans were removed while
+historical parity scorecards and active raw HTML matching references were kept.
+
+Release verification passed:
+
+- `npm test -- --watch=false`: 339/339 tests.
+- `npm run build:lib`: packed library build.
+- `npm run build`: browser/SSR build and two prerendered routes; only the
+  accepted initial-bundle and `src/app/app.scss` budget warnings remain.
+- `npm run consumer:check`: 419 packed files, successful browser/SSR build and
+  prerender, and 3/3 real-Chrome tests.
+- `npm run capabilities:check`: 91 elements, 84 style fields, 62 DOM fields,
+  and 83 evidence references.
+- `npm run examples:check`: all 10 translations (7 parity-backed, 3 inline).
+- `npm run skill:check`: synchronized 0.2.0 developer references and both skill
+  validators.
+- `npm run parity:harness:check`: 23/23 tests.
+- `npm run parity:release:check`: 165 fixtures / 541 renders over three
+  viewports, median SSIM `0.9899`, minimum SSIM `0.9509`, 99.9% of measured
+  edges within `2px`, maximum edge error `3.9921px`, exact text, clean runtime,
+  and all completion thresholds; the mock TTS benchmark passed 10/10 static
+  scenarios, 36/36 sharpness regions, and 70/70 interaction steps with minimum
+  static SSIM `0.967585` and minimum interaction-local SSIM `0.526838`.
+
+The clean release run exposed two test-only timing assumptions under throttled
+headless scheduling. The isolation suite now polls for the renderer's existing
+100 ms background-tab fallback instead of assuming it fires within 50 ms, and
+the packed consumer's real Babylon recovery test uses the same explicit
+20-second ceiling as its larger browser acceptance test. Production renderer
+behavior was not changed by either stabilization.

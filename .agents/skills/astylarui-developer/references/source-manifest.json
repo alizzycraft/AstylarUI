@@ -1,20 +1,20 @@
 {
   "schema": "astylarui-skill-reference-sources",
   "version": 1,
-  "astylarVersion": "0.1.0",
+  "astylarVersion": "0.2.0",
   "sources": [
     {
       "source": "docs/compatibility/html-css.md",
       "destination": "html-css.md",
       "transform": "portable-html-css-links",
-      "sourceSha256": "2c5fd251e143f664d6a8b26bb233f56d202428c0e8426bae1e9df4b3aafcbeb6",
-      "bundledSha256": "ed7244b3848b9b077f93e4ecbb917a23864c59e79d2862a112a8cca0b3214a57"
+      "sourceSha256": "5b09290e9df10735fe452672f1cde5792589471c6fd8d4404b530d41d055f9ae",
+      "bundledSha256": "7d86d04ce22a7f484f61dbc06e20895d911de0d9883dbad067d5c10d6af102b2"
     },
     {
       "source": "docs/compatibility/capabilities.json",
       "destination": "capabilities.json",
-      "sourceSha256": "de9e8d09d200d1eb83e10408c9bd6553b86518925890ae6ac8a6ae19a024bc48",
-      "bundledSha256": "de9e8d09d200d1eb83e10408c9bd6553b86518925890ae6ac8a6ae19a024bc48"
+      "sourceSha256": "87ca4488b5a72c0eaf7c1be8860724188481ea169c12ce8ed0467ce094fa3202",
+      "bundledSha256": "87ca4488b5a72c0eaf7c1be8860724188481ea169c12ce8ed0467ce094fa3202"
     },
     {
       "source": "docs/compatibility/examples/manifest.json",
@@ -26,8 +26,8 @@
       "source": "docs/plugins.md",
       "destination": "plugins.md",
       "transform": "portable-plugin-links",
-      "sourceSha256": "6696d540b14cbdc8ec8ecdff1fa00bc2e6e5d6dfb4f3687838b6b363c799940a",
-      "bundledSha256": "ee7463da9725904be9f45a26ea378ef2c63e86b481ad4836c8b571b4dfa2f53e"
+      "sourceSha256": "0d17609263bccdbe3be63169a5d68462270535c168b3df056a7dece878e34985",
+      "bundledSha256": "533c64fd5896dd1ced92cecd4d872869fc346d9587d99750ff251d2a2ab95417"
     },
     {
       "source": "docs/reconciliation.md",
@@ -56,21 +56,21 @@
     {
       "source": "examples/angular-consumer/src/app/consumer-badge.plugin.ts",
       "destination": "consumer-badge.plugin.ts",
-      "sourceSha256": "d1e5aa327bf18d2984e4279b568e5978fdddaf014f886314dff14bb9394a2695",
-      "bundledSha256": "d1e5aa327bf18d2984e4279b568e5978fdddaf014f886314dff14bb9394a2695"
+      "sourceSha256": "0b231c682a68f94cd83e256401a3e2c2d504a791daf61822581355c282958d54",
+      "bundledSha256": "0b231c682a68f94cd83e256401a3e2c2d504a791daf61822581355c282958d54"
     },
     {
       "source": "examples/angular-consumer/src/app/app.browser.spec.ts",
       "destination": "consumer-app.browser.spec.ts",
-      "sourceSha256": "fc33ecd00363d28f5eb9a81d025ff461101fdf689c0bfb493f026c965ebec5df",
-      "bundledSha256": "fc33ecd00363d28f5eb9a81d025ff461101fdf689c0bfb493f026c965ebec5df"
+      "sourceSha256": "681d4cbd6fc4a521ecdf6fa612ee861a15ff4454d4bc483319d599bb1cdd001d",
+      "bundledSha256": "681d4cbd6fc4a521ecdf6fa612ee861a15ff4454d4bc483319d599bb1cdd001d"
     },
     {
       "source": "src/lib/index.ts",
       "destination": "public-api.json",
       "transform": "public-root-exports",
       "sourceSha256": "b4714aaa613d348ec3eb924e6d3b3efb30ee529525490473138e400429101e89",
-      "bundledSha256": "f58b636373ce8d100bade9425ef6b0d988070c990513ae5dbd76a7a2f63cb8b4"
+      "bundledSha256": "a8142d0a17da3a6ceaa052756d33fd69756b85a31aa2aea68a6638607cbb32b0"
     }
   ]
 }

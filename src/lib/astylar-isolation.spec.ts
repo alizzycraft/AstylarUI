@@ -157,11 +157,11 @@ describe('Astylar simultaneous surface isolation', () => {
       const render = spyOn(surface.scene, 'render').and.callThrough();
 
       const update = surface.update(site('After update'));
-      await new Promise((resolve) => setTimeout(resolve, 50));
+      await waitUntil(() => whenReady.calls.count() > 0);
 
       expect(whenReady).toHaveBeenCalledOnceWith();
       const suspendedRenderCount = render.calls.count();
-      await new Promise((resolve) => requestAnimationFrame(() => resolve(undefined)));
+      await new Promise((resolve) => setTimeout(resolve, 50));
       expect(render.calls.count()).toBe(suspendedRenderCount);
 
       releaseReadiness();
@@ -220,6 +220,13 @@ describe('Astylar simultaneous surface isolation', () => {
     }
   });
 });
+
+async function waitUntil(predicate: () => boolean, timeoutMs = 1000): Promise<void> {
+  const deadline = performance.now() + timeoutMs;
+  while (!predicate() && performance.now() < deadline) {
+    await new Promise((resolve) => setTimeout(resolve, 10));
+  }
+}
 
 function site(label: string): SiteData {
   return {

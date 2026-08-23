@@ -1,6 +1,15 @@
 import { DestroyRef, inject, Injectable } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Color3, Mesh, MeshBuilder, Scene, StandardMaterial } from '@babylonjs/core';
+import {
+  Color3,
+  Mesh,
+  MeshBuilder,
+  Scene,
+  ShaderMaterial,
+  StandardMaterial,
+  Texture,
+  VertexBuffer,
+} from '@babylonjs/core';
 import { TextSelectionControllerService, TextSelectionState } from './text-selection-controller.service';
 import { TextInteractionEntry, TextInteractionRegistryService } from './text-interaction-registry.service';
 import { TextSelectionStore } from '../../../store/text-selection.store';
@@ -14,9 +23,12 @@ interface HighlightSegment {
 }
 
 interface HighlightMeshes {
-  meshes: Mesh[];
-  material: StandardMaterial;
-  contrast: { background: number; text: number };
+  backgroundMeshes: Mesh[];
+  foregroundMeshes: Mesh[];
+  backgroundMaterial: StandardMaterial;
+  foregroundMaterial: ShaderMaterial;
+  contrast: { background: number; foreground: number };
+  colors: { background: Color3; foreground: Color3; source: Color3; sourceBackground: Color3 };
 }
 
 const MIN_SEGMENT_WIDTH = 0.002;
@@ -24,13 +36,10 @@ const MIN_SEGMENT_HEIGHT = 0.002;
 // The highlight is opaque for reliable contrast, so it must sit immediately
 // behind the glyph plane rather than tinting or covering the rendered text.
 const HIGHLIGHT_Z_OFFSET = -0.0005;
+const FOREGROUND_Z_OFFSET = 0.002;
 
-const SELECTION_COLORS = [
-  Color3.FromHexString('#0078d4'),
-  Color3.FromHexString('#9ad5ff'),
-  Color3.FromHexString('#173f6b'),
-  Color3.FromHexString('#ffd43b'),
-];
+const LIGHT_SELECTION = Color3.FromHexString('#9ad5ff');
+const DARK_SELECTION = Color3.FromHexString('#173f6b');
 
 export function relativeLuminance(color: Color3): number {
   const linear = (channel: number): number => channel <= 0.04045
@@ -45,12 +54,40 @@ export function contrastRatio(left: Color3, right: Color3): number {
   return (lighter + 0.05) / (darker + 0.05);
 }
 
-export function chooseSelectionHighlightColor(background: Color3, text: Color3): Color3 {
-  return SELECTION_COLORS.reduce((best, candidate) => {
-    const score = Math.min(contrastRatio(candidate, background), contrastRatio(candidate, text));
-    const bestScore = Math.min(contrastRatio(best, background), contrastRatio(best, text));
-    return score > bestScore ? candidate : best;
-  }).clone();
+export function chooseSelectionHighlightColor(background: Color3, _text: Color3): Color3 {
+  return chooseSelectionColors(background).background;
+}
+
+export function chooseSelectionColors(background: Color3): { background: Color3; foreground: Color3 } {
+  const black = Color3.Black();
+  const white = Color3.White();
+  const preferred = relativeLuminance(background) < 0.45 ? LIGHT_SELECTION : DARK_SELECTION;
+  const fallback = contrastRatio(black, background) >= contrastRatio(white, background)
+    ? black
+    : white;
+  const highlight = (contrastRatio(preferred, background) >= 3 ? preferred : fallback).clone();
+  const foreground = contrastRatio(black, highlight) >= contrastRatio(white, highlight)
+    ? black
+    : white;
+  return { background: highlight, foreground };
+}
+
+export function mapSelectionVertexUv(
+  positionX: number,
+  positionY: number,
+  segment: HighlightSegment,
+  textWidth: number,
+  textHeight: number,
+  textureTransform = { uScale: 1, uOffset: 0, vScale: 1, vOffset: 0 },
+): [number, number] {
+  const left = (segment.centerX - segment.width / 2 + textWidth / 2) / textWidth;
+  const top = (segment.centerY - segment.height / 2 + textHeight / 2) / textHeight;
+  return [
+    (left + ((positionX + 0.5) * segment.width / textWidth)) * textureTransform.uScale +
+      textureTransform.uOffset,
+    (top + ((positionY + 0.5) * segment.height / textHeight)) * textureTransform.vScale +
+      textureTransform.vOffset,
+  ];
 }
 
 @Injectable({ providedIn: 'root' })
@@ -182,10 +219,6 @@ export class TextHighlightMeshFactory {
     const scale = metrics.scale ?? (actualContentWidth > 0 ? textWidth / actualContentWidth : 1);
     const scrollOffset = entry.scrollOffset || 0;
     const scrollTop = entry.scrollTop || 0;
-    const verticalOrigin = entry.verticalOrigin || 0;
-
-
-
     for (const line of cssMetrics.lines) {
       const lineChars = lineCharMap.get(line.index) ?? [];
       const overlapStart = Math.max(start, line.startIndex);
@@ -246,7 +279,10 @@ export class TextHighlightMeshFactory {
 
       const topOffsetCss = line.top - minTop;
       const heightCss = Math.max(line.bottom - line.top, line.height ?? 0);
-      const unclippedTopWorld = (topOffsetCss + verticalOrigin - scrollTop) * scale;
+      // The selection planes are children of the text mesh. Padding has already
+      // been applied to that mesh's position, so its local origin is the top of
+      // the text texture rather than the control's padding box.
+      const unclippedTopWorld = (topOffsetCss - scrollTop) * scale;
       const unclippedBottomWorld = unclippedTopWorld + (heightCss * scale);
       const clippedTopWorld = Math.max(0, Math.min(unclippedTopWorld, textHeight));
       const clippedBottomWorld = Math.max(0, Math.min(unclippedBottomWorld, textHeight));
@@ -348,37 +384,41 @@ export class TextHighlightMeshFactory {
   private syncHighlightMeshes(entry: TextInteractionEntry, segments: HighlightSegment[]): void {
     const existing = this.highlightRecords.get(entry.elementId) ?? this.createHighlightRecord(entry);
     const scene = entry.mesh.getScene();
+    const textSize = this.resolveTextMeshSize(entry.mesh);
+    this.syncForegroundTexture(existing.foregroundMaterial, entry);
 
-    if (existing.meshes.length && existing.meshes[0].parent !== entry.mesh) {
-      existing.meshes.forEach((mesh) => {
+    if (existing.backgroundMeshes.length && existing.backgroundMeshes[0].parent !== entry.mesh) {
+      [...existing.backgroundMeshes, ...existing.foregroundMeshes].forEach((mesh) => {
         mesh.parent = entry.mesh;
       });
     }
 
     // Dispose surplus meshes if selection shrank
-    while (existing.meshes.length > segments.length) {
-      const mesh = existing.meshes.pop();
-      mesh?.dispose();
+    while (existing.backgroundMeshes.length > segments.length) {
+      existing.backgroundMeshes.pop()?.dispose();
+      existing.foregroundMeshes.pop()?.dispose();
     }
 
-    const isMultiLine = segments.length > 1;
-
     segments.forEach((segment, index) => {
-      let mesh = existing.meshes[index];
-      if (!mesh) {
-        mesh = this.createHighlightMesh(entry, existing.material, index, scene);
-        existing.meshes.push(mesh);
+      let backgroundMesh = existing.backgroundMeshes[index];
+      let foregroundMesh = existing.foregroundMeshes[index];
+      if (!backgroundMesh || !foregroundMesh) {
+        backgroundMesh = this.createHighlightMesh(entry, existing, index, scene);
+        foregroundMesh = this.createForegroundMesh(entry, existing, index, scene);
+        existing.backgroundMeshes.push(backgroundMesh);
+        existing.foregroundMeshes.push(foregroundMesh);
       }
 
-      mesh.scaling.x = segment.width;
-      mesh.scaling.y = segment.height;
-      mesh.position.x = segment.centerX;
-      mesh.position.y = segment.centerY;
-      mesh.position.z = HIGHLIGHT_Z_OFFSET;
-      mesh.isVisible = true; // Ensure mesh visibility
+      this.positionSelectionMesh(backgroundMesh, segment, HIGHLIGHT_Z_OFFSET);
+      this.positionSelectionMesh(foregroundMesh, segment, FOREGROUND_Z_OFFSET);
+      this.cropForegroundUvs(entry, foregroundMesh, segment, textSize.width, textSize.height);
 
-      // Debug logging for mesh positioning
-
+      backgroundMesh.metadata.highlight = {
+        ...backgroundMesh.metadata.highlight,
+        width: segment.width,
+        height: segment.height,
+        heightCss: segment.height / Math.max(entry.metrics?.scale ?? 1, Number.EPSILON),
+      };
     });
 
     this.highlightRecords.set(entry.elementId, existing);
@@ -386,43 +426,54 @@ export class TextHighlightMeshFactory {
 
   private createHighlightRecord(entry: TextInteractionEntry): HighlightMeshes {
     const scene = entry.mesh.getScene();
-    const { material, contrast } = this.createHighlightMaterial(scene, entry);
-    const record: HighlightMeshes = { meshes: [], material, contrast };
+    const sourceBackground = this.resolveBackground(entry);
+    const colors = {
+      ...chooseSelectionColors(sourceBackground),
+      source: this.resolveColor(entry.style?.color) ?? Color3.Black(),
+      sourceBackground,
+    };
+    const backgroundMaterial = this.createHighlightMaterial(scene, colors.background);
+    const foregroundMaterial = this.createForegroundMaterial(scene, entry, colors.foreground);
+    const record: HighlightMeshes = {
+      backgroundMeshes: [],
+      foregroundMeshes: [],
+      backgroundMaterial,
+      foregroundMaterial,
+      colors,
+      contrast: {
+        background: contrastRatio(colors.background, this.resolveBackground(entry)),
+        foreground: contrastRatio(colors.foreground, colors.background),
+      },
+    };
     this.highlightRecords.set(entry.elementId, record);
     return record;
   }
 
   private createHighlightMesh(
     entry: TextInteractionEntry,
-    material: StandardMaterial,
+    record: HighlightMeshes,
     index: number,
     scene: Scene
   ): Mesh {
     const mesh = MeshBuilder.CreatePlane(`${entry.elementId}-highlight-${index}`, { width: 1, height: 1, sideOrientation: entry.mesh.sideOrientation }, scene);
     mesh.parent = entry.mesh;
-    mesh.material = material;
+    mesh.material = record.backgroundMaterial;
     mesh.isPickable = false;
     mesh.metadata = {
       ...(mesh.metadata || {}),
       highlight: {
         ownerElementId: entry.elementId,
-        color: material.emissiveColor.toHexString().toLowerCase(),
-        backgroundContrast: this.highlightRecords.get(entry.elementId)?.contrast.background,
-        textContrast: this.highlightRecords.get(entry.elementId)?.contrast.text,
+        color: record.colors.background.toHexString().toLowerCase(),
+        foregroundColor: record.colors.foreground.toHexString().toLowerCase(),
+        backgroundContrast: record.contrast.background,
+        foregroundContrast: record.contrast.foreground,
       }
     };
     mesh.renderingGroupId = entry.mesh.renderingGroupId;
     return mesh;
   }
 
-  private createHighlightMaterial(
-    scene: Scene,
-    entry: TextInteractionEntry,
-  ): { material: StandardMaterial; contrast: { background: number; text: number } } {
-    const background = this.resolveColor(entry.style?.background) ??
-      this.resolveAncestorBackground(entry.mesh) ?? Color3.White();
-    const text = this.resolveColor(entry.style?.color) ?? Color3.Black();
-    const highlight = chooseSelectionHighlightColor(background, text);
+  private createHighlightMaterial(scene: Scene, highlight: Color3): StandardMaterial {
     const material = new StandardMaterial('text-selection-highlight', scene);
     material.diffuseColor = highlight;
     material.alpha = 1;
@@ -431,13 +482,154 @@ export class TextHighlightMeshFactory {
     material.backFaceCulling = false;
     material.disableLighting = true;
     material.disableDepthWrite = true;
-    return {
-      material,
-      contrast: {
-        background: contrastRatio(highlight, background),
-        text: contrastRatio(highlight, text),
+    return material;
+  }
+
+  private createForegroundMaterial(
+    scene: Scene,
+    entry: TextInteractionEntry,
+    foreground: Color3,
+  ): ShaderMaterial {
+    const material = new ShaderMaterial(
+      'text-selection-foreground',
+      scene,
+      {
+        vertexSource: `
+          precision highp float;
+          attribute vec3 position;
+          attribute vec2 uv;
+          uniform mat4 worldViewProjection;
+          varying vec2 vUV;
+          void main(void) {
+            gl_Position = worldViewProjection * vec4(position, 1.0);
+            vUV = uv;
+          }
+        `,
+        fragmentSource: `
+          precision highp float;
+          varying vec2 vUV;
+          uniform sampler2D textTexture;
+          uniform vec3 selectionColor;
+          void main(void) {
+            vec4 glyph = texture2D(textTexture, vUV);
+            if (glyph.a <= 0.001) discard;
+            gl_FragColor = vec4(selectionColor, glyph.a);
+          }
+        `,
+      },
+      {
+        attributes: ['position', 'uv'],
+        uniforms: ['worldViewProjection', 'selectionColor'],
+        samplers: ['textTexture'],
+        needAlphaBlending: true,
+      },
+    );
+    material.setColor3('selectionColor', foreground);
+    // Selected glyph fragments sit slightly nearer than the original text and
+    // write depth. Fully transparent texture pixels are discarded above, so
+    // they cannot occlude the source glyph plane if transparent sort order
+    // changes.
+    material.disableDepthWrite = false;
+    material.forceDepthWrite = true;
+    material.backFaceCulling = false;
+    this.syncForegroundTexture(material, entry);
+    return material;
+  }
+
+  private createForegroundMesh(
+    entry: TextInteractionEntry,
+    record: HighlightMeshes,
+    index: number,
+    scene: Scene,
+  ): Mesh {
+    const mesh = MeshBuilder.CreatePlane(
+      `${entry.elementId}-selection-foreground-${index}`,
+      { width: 1, height: 1, sideOrientation: entry.mesh.sideOrientation },
+      scene,
+    );
+    mesh.parent = entry.mesh;
+    mesh.material = record.foregroundMaterial;
+    mesh.isPickable = false;
+    mesh.renderingGroupId = entry.mesh.renderingGroupId;
+    mesh.metadata = {
+      ...(mesh.metadata || {}),
+      selectionForeground: {
+        ownerElementId: entry.elementId,
+        color: record.colors.foreground.toHexString().toLowerCase(),
+        sourceColor: record.colors.source.toHexString().toLowerCase(),
+        backgroundColor: record.colors.background.toHexString().toLowerCase(),
+        sourceBackgroundColor: record.colors.sourceBackground.toHexString().toLowerCase(),
+        contrast: record.contrast.foreground,
       },
     };
+    return mesh;
+  }
+
+  private positionSelectionMesh(mesh: Mesh, segment: HighlightSegment, z: number): void {
+    mesh.scaling.x = segment.width;
+    mesh.scaling.y = segment.height;
+    mesh.position.x = segment.centerX;
+    mesh.position.y = segment.centerY;
+    mesh.position.z = z;
+    mesh.isVisible = true;
+  }
+
+  private cropForegroundUvs(
+    entry: TextInteractionEntry,
+    mesh: Mesh,
+    segment: HighlightSegment,
+    textWidth: number,
+    textHeight: number,
+  ): void {
+    const positions = mesh.getVerticesData(VertexBuffer.PositionKind);
+    if (!positions || textWidth <= 0 || textHeight <= 0) {
+      return;
+    }
+    const texture = this.resolveForegroundTexture(entry);
+    const textureTransform = texture instanceof Texture
+      ? {
+          uScale: texture.uScale,
+          uOffset: texture.uOffset,
+          vScale: texture.vScale,
+          vOffset: texture.vOffset,
+        }
+      : undefined;
+    const uvs: number[] = [];
+    for (let index = 0; index < positions.length; index += 3) {
+      uvs.push(...mapSelectionVertexUv(
+        positions[index], positions[index + 1], segment, textWidth, textHeight, textureTransform,
+      ));
+    }
+    mesh.setVerticesData(VertexBuffer.UVKind, uvs, true);
+  }
+
+  private syncForegroundTexture(material: ShaderMaterial, entry: TextInteractionEntry): void {
+    const texture = this.resolveForegroundTexture(entry);
+    if (texture) {
+      material.setTexture('textTexture', texture);
+    }
+  }
+
+  private resolveForegroundTexture(entry: TextInteractionEntry) {
+    const textMaterial = entry.mesh.material;
+    return textMaterial instanceof StandardMaterial
+      ? textMaterial.diffuseTexture ?? textMaterial.emissiveTexture
+      : undefined;
+  }
+
+  private resolveTextMeshSize(mesh: Mesh): { width: number; height: number } {
+    mesh.computeWorldMatrix(true);
+    mesh.refreshBoundingInfo();
+    const bounds = mesh.getBoundingInfo().boundingBox;
+    return {
+      width: bounds.maximum.x - bounds.minimum.x,
+      height: bounds.maximum.y - bounds.minimum.y,
+    };
+  }
+
+  private resolveBackground(entry: TextInteractionEntry): Color3 {
+    return this.resolveColor(entry.style?.background) ??
+      this.resolveAncestorBackground(entry.mesh) ?? Color3.White();
   }
 
   private resolveColor(value: string | undefined): Color3 | undefined {
@@ -473,11 +665,12 @@ export class TextHighlightMeshFactory {
       return;
     }
 
-    for (const mesh of record.meshes) {
+    for (const mesh of [...record.backgroundMeshes, ...record.foregroundMeshes]) {
       mesh.dispose();
     }
 
-    record.material.dispose();
+    record.backgroundMaterial.dispose();
+    record.foregroundMaterial.dispose();
     this.highlightRecords.delete(elementId);
   }
 }

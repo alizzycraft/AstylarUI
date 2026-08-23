@@ -1,8 +1,9 @@
 # AstylarUI compatibility sources
 
 [`capabilities.json`](capabilities.json) is the machine-readable inventory for
-HTML/CSS-to-Astylar translation. It is repository and future Phase 15 skill
-source material, not a claim that Astylar implements the complete web platform.
+HTML/CSS-to-Astylar translation. It is repository and `astylarui-developer`
+skill source material, not a claim that Astylar implements the complete web
+platform.
 The companion [`html-css.md`](html-css.md) is the maintained human explanation
 of the same contract.
 
@@ -36,5 +37,5 @@ fingerprint with the value reported by the failing check.
 The paired translations under [`examples`](examples/README.md) add human-sized
 teaching material without duplicating the catalog's exhaustive public-name
 coverage. Run `npm run examples:check` to verify their sources and evidence. The
-future Phase 15 skill should consume both artifacts instead of treating the JSON
-alone as teaching prose.
+checked `astylarui-developer` skill consumes both artifacts instead of treating
+the JSON alone as teaching prose.
