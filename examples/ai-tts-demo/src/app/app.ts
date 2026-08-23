@@ -139,9 +139,7 @@ export class App {
     window.__ASTYLAR_TTS_BENCHMARK__ = {
       state: this.benchmarkState ?? 'interactive',
       measure: (ids: string[]) => {
-        const projectBox = (id: string) => {
-          const meshes = surface.scene.meshes.filter((mesh) => mesh.metadata?.elementId === id);
-          const mesh = meshes.find((candidate) => candidate.name === id) ?? meshes[0];
+        const projectMeshBox = (mesh: (typeof surface.scene.meshes)[number] | undefined) => {
           if (!mesh) return undefined;
           mesh.computeWorldMatrix(true);
           const engine = surface.scene.getEngine();
@@ -157,6 +155,10 @@ export class App {
           const top = Math.min(...projected.map((point) => point.y)) * scaleY;
           const bottom = Math.max(...projected.map((point) => point.y)) * scaleY;
           return { left, top, right, bottom, width: right - left, height: bottom - top };
+        };
+        const projectBox = (id: string) => {
+          const meshes = surface.scene.meshes.filter((mesh) => mesh.metadata?.elementId === id);
+          return projectMeshBox(meshes.find((candidate) => candidate.name === id) ?? meshes[0]);
         };
         const intersect = (
           first: { left: number; top: number; right: number; bottom: number },
@@ -235,6 +237,8 @@ export class App {
             selectedIndex: semantic instanceof HTMLSelectElement ? semantic.selectedIndex : null,
             expanded: semantic.getAttribute('aria-expanded') === 'true',
             caretColor,
+            // Measure the owned caret independently of its blink phase.
+            caretBox: cursor ? projectMeshBox(cursor) : undefined,
           }]];
         }));
         const centerPicks = Object.fromEntries(ids.flatMap((id) => {
@@ -288,6 +292,32 @@ export class App {
           const style = mesh?.metadata?.astylarResolvedInteractionStyle;
           return style && typeof style === 'object' ? [[id, { ...style }]] : [];
         }));
+        const selectPopups = Object.fromEntries(ids.flatMap((id) => {
+          const semantic = document.querySelector<HTMLElement>(
+            `[data-astylar-id="${CSS.escape(id)}"]`,
+          );
+          if (!(semantic instanceof HTMLSelectElement) ||
+              semantic.getAttribute('aria-expanded') !== 'true') return [];
+          const dropdown = surface.scene.getMeshByName(`dropdown_${id}`);
+          const border = surface.scene.getMeshByName(`dropdownBorder_${id}`);
+          if (!dropdown || !border) return [];
+          const options = surface.scene.meshes
+            .filter((mesh) => mesh.name.startsWith(`option_${id}_`) &&
+              !mesh.name.startsWith(`optionText_${id}_`))
+            .map((mesh) => ({
+              index: mesh.metadata?.optionIndex,
+              active: mesh.metadata?.popupActive === true,
+              disabled: mesh.metadata?.popupDisabled === true,
+              background: mesh.metadata?.popupBackground,
+              foreground: mesh.metadata?.popupForeground,
+            }));
+          return [[id, {
+            surfaceBox: projectMeshBox(dropdown),
+            outerBox: projectMeshBox(border),
+            background: dropdown.metadata?.popupBackground,
+            options,
+          }]];
+        }));
         return {
           elements,
           visibleFocusIndicators: surface.scene.meshes
@@ -304,7 +334,10 @@ export class App {
             })),
           selectionHighlights: surface.scene.meshes
             .filter((mesh) => mesh.isVisible && mesh.metadata?.highlight)
-            .map((mesh) => ({ ...mesh.metadata.highlight })),
+            .map((mesh) => ({ ...mesh.metadata.highlight, borderBox: projectMeshBox(mesh) })),
+          selectionForegrounds: surface.scene.meshes
+            .filter((mesh) => mesh.isVisible && mesh.metadata?.selectionForeground)
+            .map((mesh) => ({ ...mesh.metadata.selectionForeground, borderBox: projectMeshBox(mesh) })),
           scrolling: Object.fromEntries(Object.entries(scrolling).map(([id, value]) => [id, {
             ...value,
             initialScrollLeft: 0,
@@ -322,6 +355,7 @@ export class App {
           semantics: diagnostics.semantics,
           controlStates,
           resolvedStyles,
+          selectPopups,
           events: [...this.benchmarkEvents],
           centerPicks,
           clippingBounds,

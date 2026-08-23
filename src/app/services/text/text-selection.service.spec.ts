@@ -33,6 +33,39 @@ describe('TextSelectionService', () => {
     scene.dispose();
     engine.dispose();
   });
+
+  it('positions the caret from the rendered text edge instead of a fixed input inset', () => {
+    const engine = new NullEngine();
+    const scene = new Scene(engine);
+    const parent = MeshBuilder.CreatePlane('padded-input', { width: 4, height: 1 }, scene);
+    const service = new TextSelectionService(
+      {} as never,
+      {
+        parseBackgroundColor: (value: string) => ({ type: 'color', color: Color3.FromHexString(value) }),
+      } as never,
+    );
+    const metrics = {
+      ...emptyMetrics(),
+      text: 'ABCD', transformedText: 'ABCD', totalWidth: 40,
+      characters: Array.from({ length: 4 }, (_, index) => ({
+        index, character: 'ABCD'[index], x: index * 10, y: 0,
+        width: 10, height: 20, advance: 10, lineIndex: 0,
+      })),
+      lines: [{ index: 0, startIndex: 0, endIndex: 4, top: 0, bottom: 20, width: 40, height: 20 }],
+    } as unknown as TextLayoutMetrics;
+
+    const cursor = service.createTextCursor(
+      2, metrics, parent, scene, 0.01, textStyle('#ffffff'), 0.4, 1, 0, 1.25,
+    );
+    expect(cursor.position.x).toBeCloseTo(1.05);
+
+    service.updateCursorPosition(cursor, 3, metrics, 0.01, 0.4, 1, 0, 1.25);
+    expect(cursor.position.x).toBeCloseTo(0.95);
+    cursor.dispose(false, true);
+    parent.dispose(false, true);
+    scene.dispose();
+    engine.dispose();
+  });
 });
 
 function emptyMetrics(): TextLayoutMetrics {

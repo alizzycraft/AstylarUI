@@ -17,6 +17,7 @@ test('application benchmark owns named viewport and DPR profiles', () => {
   assert.ok(textMeasurementIds.length >= 10);
   assert.ok(textMeasurementIds.every((id) => measurementIds.includes(id)));
   assert.equal(acceptance.maximumIncidentalScrollExtentPx, 1);
+  assert.equal(acceptance.maximumPopupWidthErrorPx, 0.5);
 });
 
 test('application benchmark owns a source-derived interaction matrix', () => {

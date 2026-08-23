@@ -1,7 +1,7 @@
 {
   "schema": "astylarui-public-root-exports",
   "version": 1,
-  "astylarVersion": "0.1.0",
+  "astylarVersion": "0.2.0",
   "packageRoot": "astylarui",
   "symbols": [
     {

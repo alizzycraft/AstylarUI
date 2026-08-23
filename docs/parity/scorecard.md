@@ -198,9 +198,10 @@ reported `Completion thresholds: true`. The full 52-test suite, library build,
 and application build also pass; the application retains its pre-existing bundle
 and component-style budget warnings.
 
-## Recommended Next Target
+## Historical follow-through
 
-Core Web Parity v1 is complete. Future work can begin as a separately scoped v2
-effort, prioritizing selector combinators, additional control states, and broader
-responsive/application-level compositions rather than extending this gate
-indefinitely.
+Core Web Parity v1 completed at this boundary. Its recommended selector,
+control-state, responsive, and application-composition work was subsequently
+implemented and recorded in `scorecard-v2.md` through `scorecard-v21.md`. Use
+`../project-status.md` and the newest scorecard for current planning rather than
+treating this original recommendation as an active backlog.

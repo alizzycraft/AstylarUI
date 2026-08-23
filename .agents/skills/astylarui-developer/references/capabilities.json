@@ -1,8 +1,8 @@
 {
   "schema": "astylarui-capabilities",
   "version": 1,
-  "astylarVersion": "0.1.0",
-  "purpose": "Machine-readable source material for HTML/CSS-to-Astylar translation and the future Phase 15 agent skill.",
+  "astylarVersion": "0.2.0",
+  "purpose": "Machine-readable source material for HTML/CSS-to-Astylar translation and the checked astylarui-developer skill.",
   "classifications": {
     "direct": "Ordinary web knowledge transfers without meaningful qualification.",
     "compatible": "The observable result is equivalent within the stated Astylar constraints.",
@@ -60,7 +60,7 @@
         "id": "form-controls",
         "classification": "compatible",
         "names": ["input", "button", "form", "select", "textarea", "label", "option", "fieldset", "legend", "output"],
-        "behavior": "A deliberate control, focus, keyboard, pointer, validation, submit/reset, selection, range, and closed/expanded select subset is supported. Range inputs clamp min/max/step values and support pointer dragging plus Arrow/Page/Home/End keys. The default text-control caret follows the resolved text color; authored caret-color is not yet supported.",
+        "behavior": "A deliberate control, focus, keyboard, pointer, validation, submit/reset, selection, range, and closed/expanded select subset is supported. Range inputs clamp min/max/step values and support pointer dragging plus Arrow/Page/Home/End keys. Text selection uses full-line highlight geometry and a contrast-selected foreground glyph pass. The default text-control caret follows the resolved text color; authored caret-color is not yet supported.",
         "defaultStyle": "elementDefaults[name] merged over globalDefaultStyle; checkbox/radio/range use inputType-specific defaults",
         "pluginCanSupply": false,
         "evidence": ["fixture:styled-text-input", "fixture:interaction-form-validation", "fixture:interaction-select-expanded-keyboard", "fixture:interaction-textarea-selection"]
@@ -69,7 +69,7 @@
         "id": "text-and-phrasing",
         "classification": "compatible",
         "names": ["span", "h1", "h2", "h3", "h4", "h5", "h6", "p", "br", "wbr", "hr", "b", "strong", "i", "em", "cite", "var", "dfn", "u", "ins", "s", "strike", "del", "code", "kbd", "samp", "pre", "small", "sub", "sup", "blockquote", "q", "abbr", "mark"],
-        "behavior": "Text content, measured wrapping, common inherited typography, inline/inline-block flow, pointer selection and native copy of direct non-control text, and the recorded defaults are supported within canvas-text constraints.",
+        "behavior": "Text content, measured wrapping, common inherited typography, inline/inline-block flow, pointer selection, contrast-selected foreground glyph paint, native copy of direct non-control text, and the recorded defaults are supported within canvas-text constraints.",
         "defaultStyle": "elementDefaults[name] merged over globalDefaultStyle",
         "pluginCanSupply": false,
         "evidence": ["fixture:text-inheritance", "fixture:multiline-wrapping", "fixture:text-spacing", "fixture:inline-block-flow", "fixture:interaction-document-text-selection"]

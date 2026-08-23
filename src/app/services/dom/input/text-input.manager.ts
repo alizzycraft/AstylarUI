@@ -217,7 +217,9 @@ export class TextInputManager {
                 textInput.textureWidth,
                 // Pass width correction ratio to calibrate cursor position to actual texture width
                 textInput.textLayoutMetrics.totalWidth > 0 ?
-                    (textInput.textureWidth / render.actions.camera.getPixelToWorldScale()) / textInput.textLayoutMetrics.totalWidth : 1.0
+                    (textInput.textureWidth / render.actions.camera.getPixelToWorldScale()) / textInput.textLayoutMetrics.totalWidth : 1.0,
+                textInput.scrollOffset || 0,
+                this.resolveVisualTextLeftEdge(textInput)
             );
         }
 
@@ -660,11 +662,26 @@ export class TextInputManager {
         const width = worldDimensions.width;
         const height = worldDimensions.height;
 
-        const inputMesh = BABYLON.MeshBuilder.CreatePlane(`input_${element.id}`, {
-            width,
-            height,
-            sideOrientation: BABYLON.Mesh.DOUBLESIDE // Ensure visibility from both sides
-        }, render.scene);
+        const radiusValue = style?.borderRadius?.trim();
+        const borderRadius = radiusValue?.endsWith('%')
+            ? 0
+            : Math.max(0, this.parseSize(radiusValue) || 0) *
+                render.actions.camera.getPixelToWorldScale();
+        // The background owns the control's outer silhouette. A rectangular
+        // plane can protrude through a rounded border at the corners and cover
+        // an authored focus halo rendered behind the control.
+        const inputMesh = borderRadius > 0
+            ? this.babylonMeshService.createRoundedRectangle(
+                `input_${element.id}`,
+                width,
+                height,
+                borderRadius,
+            )
+            : BABYLON.MeshBuilder.CreatePlane(`input_${element.id}`, {
+                width,
+                height,
+                sideOrientation: BABYLON.Mesh.DOUBLESIDE // Ensure visibility from both sides
+            }, render.scene);
 
         // Create material with CSS background color
         const material = new BABYLON.StandardMaterial(`inputMaterial_${element.id}`, render.scene);
@@ -1026,7 +1043,8 @@ export class TextInputManager {
                 textStyle,
                 textInput.textureWidth,
                 widthCorrectionRatio,
-                textInput.scrollOffset || 0
+                textInput.scrollOffset || 0,
+                this.resolveVisualTextLeftEdge(textInput)
             );
         }
 
@@ -1042,7 +1060,8 @@ export class TextInputManager {
             pixelScale,
             textInput.textureWidth,
             widthCorrectionRatio,
-            textInput.scrollOffset || 0
+            textInput.scrollOffset || 0,
+            this.resolveVisualTextLeftEdge(textInput)
         );
 
         if (textInput.type === InputType.Textarea) {
@@ -1163,6 +1182,13 @@ export class TextInputManager {
             left: (border + left) * scale,
             right: (border + right) * scale
         };
+    }
+
+    private resolveVisualTextLeftEdge(textInput: TextInput): number | undefined {
+        const textMesh = textInput.textMesh;
+        if (!textMesh) return undefined;
+        const halfWidth = textMesh.getBoundingInfo().boundingBox.extendSize.x;
+        return textMesh.position.x + halfWidth;
     }
 
     private getVerticalContentInsets(

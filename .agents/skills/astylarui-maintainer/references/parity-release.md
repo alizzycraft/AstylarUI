@@ -40,6 +40,12 @@ ownership must match. `textSelectionIds` compares document-text selection text,
 offsets, direction, collapse, and highlight state. A collapsed control selection
 has no meaningful direction and is normalized to `none`.
 
+For selection-paint regressions, mesh presence and declared colors are not
+enough. Assert line-box coverage, paired highlight/foreground ownership,
+contrast ratios, and the selected foreground color in captured pixels. Exercise
+input, textarea, and ordinary document text at DPR 1 and DPR 2 so padding,
+clipping, texture coordinates, and native clipboard behavior remain composed.
+
 Expanded native select pixels and its transient active-option presentation are
 operating-system UI, not inspectable authored browser DOM. Prove that boundary
 through the native control's focus, expanded state, committed value/index,

@@ -39,15 +39,29 @@ export const interactionScenarios = [
     profiles: ['reference-large-dpr1', 'smoke-1280-dpr2'],
     steps: [
       { id: 'focus-caret', caretColor: true, styleProperties: ['backgroundColor', 'color', 'borderColor'], actions: [
-        { type: 'click', elementId: 'speech-text' }, { type: 'press-key', key: 'Home' },
+        { type: 'click', elementId: 'speech-text' },
+        { type: 'press-key', key: 'Control+A' },
+        { type: 'type-text', text: 'AstylarUI brings familiar web application patterns into a Babylon-rendered space.' },
+        { type: 'press-key', key: 'Control+Home' },
       ] },
-      { id: 'forward-selection', actions: [
-        { type: 'press-key', key: 'Shift+ArrowRight' }, { type: 'press-key', key: 'Shift+ArrowRight' },
+      { id: 'forward-selection', selectionContrast: true, visual: 'structural-selection', actions: [
+        { type: 'press-key', key: 'Control+Shift+End' },
       ] },
-      { id: 'replace-selection', actions: [{ type: 'type-text', text: 'HE' }] },
-      { id: 'backward-selection', actions: [
-        { type: 'press-key', key: 'End' }, { type: 'press-key', key: 'Shift+ArrowLeft' },
-        { type: 'press-key', key: 'Shift+ArrowLeft' },
+      { id: 'replace-selection', actions: [{ type: 'type-text', text: 'SELECTION' }] },
+      { id: 'backward-selection', selectionContrast: true, visual: 'structural-selection', actions: [
+        { type: 'press-key', key: 'Control+End' }, { type: 'press-key', key: 'Control+Shift+Home' },
+      ] },
+      { id: 'pointer-selection-setup', actions: [
+        { type: 'press-key', key: 'Control+A' },
+        { type: 'type-text', text: 'AstylarUI brings familiar web application patterns into a Babylon-rendered space.' },
+        { type: 'press-key', key: 'Control+Home' },
+      ] },
+      { id: 'pointer-mid-selection', selectionContrast: true, visual: 'structural-selection', actions: [
+        { type: 'click', elementId: 'speech-text', offsetX: 42, offsetY: 28 },
+        { type: 'pointer-down', elementId: 'speech-text', offsetX: 42, offsetY: 28 },
+        { type: 'hover', elementId: 'speech-text', offsetX: 101, offsetY: 28 },
+        { type: 'pointer-up' },
+        { type: 'keyboard-focus', elementId: 'speech-text' },
       ] },
     ],
   },
@@ -86,7 +100,7 @@ export const interactionScenarios = [
       { id: 'focus-caret', styleProperties: ['backgroundColor', 'color', 'borderColor', 'boxShadow'], actions: [
         { type: 'click', elementId: 'history-search' }, { type: 'type-text', text: 'hello' },
       ] },
-      { id: 'selection', actions: [
+      { id: 'selection', selectionContrast: true, visual: 'structural-selection', actions: [
         { type: 'press-key', key: 'Shift+Home' },
       ] },
     ],
@@ -169,6 +183,7 @@ export const sharpnessRegions = [
 // unchanged configuration to release acceptance.
 export const acceptance = {
   maximumGeometryEdgeErrorPx: 4,
+  maximumPopupWidthErrorPx: 0.5,
   minimumEdgesWithinTolerance: 0.95,
   geometryTolerancePx: 2,
   minimumSsim: 0.965,
@@ -177,6 +192,8 @@ export const acceptance = {
   minimumInteractionColorEdgeAlignment: 0.65,
   minimumInteractionEdgeAlignment: 0.7,
   minimumInteractionGradientEnergyRetention: 0.75,
+  minimumSelectionGlyphAlignment: 0.7,
+  maximumSelectionCaretOffsetPx: 2,
   minimumGradientEnergyRetention: 0.82,
   minimumEdgeAlignment: 0.82,
   maximumGradientRmse: 0.12,

@@ -542,9 +542,9 @@ export class SelectManager {
      * Creates the dropdown background mesh
      */
     private createDropdownMesh(selectElement: SelectElement, scene: BABYLON.Scene, style: StyleRule): BABYLON.Mesh {
-        // Use proper world width from parent select mesh to match dimensions exactly
-        const bounds = selectElement.mesh.getBoundingInfo().boundingBox.extendSize;
-        const width = bounds.x * 2;
+        // Keep the popup border inside the select's border-box, as native
+        // dropdowns do, instead of adding a pixel beyond each control edge.
+        const width = this.getPopupInteriorWidth(selectElement);
 
         const optionHeight = this.getPopupOptionHeight(selectElement, style);
 
@@ -560,17 +560,22 @@ export class SelectManager {
             sideOrientation: BABYLON.Mesh.DOUBLESIDE
         }, scene);
 
-        // Create material with white background and subtle border
+        // Unstyled option rows inherit the resolved select surface colors.
         const material = new BABYLON.StandardMaterial(`dropdownMaterial_${selectElement.element.id}`, scene);
-        material.diffuseColor = BABYLON.Color3.White(); // Pure white like HTML select
-        material.emissiveColor = BABYLON.Color3.White(); // Ensure visibility without light
+        const backgroundColor = this.parseColor(style.background);
+        material.diffuseColor = backgroundColor;
+        material.emissiveColor = backgroundColor;
         material.disableLighting = true;
         material.backFaceCulling = false; // Prevent culling issues
         dropdownMesh.material = material;
 
         dropdownMesh.parent = selectElement.mesh;
         dropdownMesh.isPickable = true; // Must be pickable to block clicks to the underlying select button
-        dropdownMesh.metadata = { isTextMesh: false, cursor: 'default' }; // Ensure no text cursor
+        dropdownMesh.metadata = {
+            isTextMesh: false,
+            cursor: 'default',
+            popupBackground: style.background || '#ffffff'
+        }; // Ensure no text cursor
         dropdownMesh.renderingGroupId = 2; // Ensure UI layer visibility
 
         return dropdownMesh;
@@ -580,10 +585,9 @@ export class SelectManager {
      * Creates meshes for each option
      */
     private createOptionMeshes(selectElement: SelectElement, scene: BABYLON.Scene, style: StyleRule): BABYLON.Mesh[] {
-        // Use proper world width from parent select mesh
-        const bounds = selectElement.mesh.getBoundingInfo().boundingBox.extendSize;
-        const width = bounds.x * 2;
+        const width = this.getPopupInteriorWidth(selectElement);
         const optionHeight = this.getPopupOptionHeight(selectElement, style);
+        const inheritedBackground = this.parseColor(style.background);
 
         const optionMeshes: BABYLON.Mesh[] = [];
 
@@ -611,7 +615,7 @@ export class SelectManager {
             const material = new BABYLON.StandardMaterial(`optionMaterial_${selectElement.element.id}_${index}`, scene);
             const baseColor = index === selectElement.activeOptionIndex
                 ? BABYLON.Color3.FromHexString('#1967d2')
-                : BABYLON.Color3.White();
+                : inheritedBackground;
 
             material.diffuseColor = baseColor;
             material.emissiveColor = baseColor; // Ensure visibility
@@ -625,7 +629,10 @@ export class SelectManager {
             optionMesh.metadata = {
                 optionIndex: index,
                 selectElement: selectElement,
-                cursor: option.disabled ? 'default' : 'pointer'
+                cursor: option.disabled ? 'default' : 'pointer',
+                popupBackground: baseColor.toHexString().toLowerCase(),
+                popupActive: index === selectElement.activeOptionIndex,
+                popupDisabled: !!option.disabled
             };
 
             // Add click handler for option selection
@@ -654,7 +661,7 @@ export class SelectManager {
                             if (mat) {
                                 const color = index === selectElement.activeOptionIndex
                                     ? BABYLON.Color3.FromHexString('#1967d2')
-                                    : BABYLON.Color3.White();
+                                    : inheritedBackground;
                                 mat.diffuseColor = color;
                                 mat.emissiveColor = color;
                             }
@@ -669,7 +676,8 @@ export class SelectManager {
             textStyle.fontSize = style.fontSize || '16px';
             textStyle.color = option.disabled
                 ? '#6b7280'
-                : index === selectElement.activeOptionIndex ? '#ffffff' : '#000000';
+                : index === selectElement.activeOptionIndex ? '#ffffff' : (style.color || '#000000');
+            optionMesh.metadata.popupForeground = textStyle.color;
             if (!textStyle.fontFamily) textStyle.fontFamily = 'Arial';
 
             try {
@@ -787,7 +795,7 @@ export class SelectManager {
         const bounds = selectElement.dropdownMesh.getBoundingInfo().boundingBox.extendSize;
         const width = bounds.x * 2;
         const height = bounds.y * 2;
-        const borderWidth = selectElement.cameraScale || 0.001;
+        const borderWidth = this.getPopupBorderWidth(selectElement);
 
         // Create border as a slightly larger plane behind the dropdown
         const borderMesh = BABYLON.MeshBuilder.CreatePlane(`dropdownBorder_${selectElement.element.id}`, {
@@ -807,6 +815,15 @@ export class SelectManager {
         borderMesh.position.z = -0.01; // Behind the dropdown
         borderMesh.isPickable = false;
         borderMesh.renderingGroupId = 2;
+    }
+
+    private getPopupInteriorWidth(selectElement: SelectElement): number {
+        const selectWidth = selectElement.mesh.getBoundingInfo().boundingBox.extendSize.x * 2;
+        return Math.max(0, selectWidth - this.getPopupBorderWidth(selectElement) * 2);
+    }
+
+    private getPopupBorderWidth(selectElement: SelectElement): number {
+        return selectElement.cameraScale || 0.001;
     }
 
     /**
