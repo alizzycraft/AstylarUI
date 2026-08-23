@@ -139,9 +139,7 @@ export class App {
     window.__ASTYLAR_TTS_BENCHMARK__ = {
       state: this.benchmarkState ?? 'interactive',
       measure: (ids: string[]) => {
-        const projectBox = (id: string) => {
-          const meshes = surface.scene.meshes.filter((mesh) => mesh.metadata?.elementId === id);
-          const mesh = meshes.find((candidate) => candidate.name === id) ?? meshes[0];
+        const projectMeshBox = (mesh: (typeof surface.scene.meshes)[number] | undefined) => {
           if (!mesh) return undefined;
           mesh.computeWorldMatrix(true);
           const engine = surface.scene.getEngine();
@@ -157,6 +155,10 @@ export class App {
           const top = Math.min(...projected.map((point) => point.y)) * scaleY;
           const bottom = Math.max(...projected.map((point) => point.y)) * scaleY;
           return { left, top, right, bottom, width: right - left, height: bottom - top };
+        };
+        const projectBox = (id: string) => {
+          const meshes = surface.scene.meshes.filter((mesh) => mesh.metadata?.elementId === id);
+          return projectMeshBox(meshes.find((candidate) => candidate.name === id) ?? meshes[0]);
         };
         const intersect = (
           first: { left: number; top: number; right: number; bottom: number },
@@ -304,7 +306,10 @@ export class App {
             })),
           selectionHighlights: surface.scene.meshes
             .filter((mesh) => mesh.isVisible && mesh.metadata?.highlight)
-            .map((mesh) => ({ ...mesh.metadata.highlight })),
+            .map((mesh) => ({ ...mesh.metadata.highlight, borderBox: projectMeshBox(mesh) })),
+          selectionForegrounds: surface.scene.meshes
+            .filter((mesh) => mesh.isVisible && mesh.metadata?.selectionForeground)
+            .map((mesh) => ({ ...mesh.metadata.selectionForeground, borderBox: projectMeshBox(mesh) })),
           scrolling: Object.fromEntries(Object.entries(scrolling).map(([id, value]) => [id, {
             ...value,
             initialScrollLeft: 0,

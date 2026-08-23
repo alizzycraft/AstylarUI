@@ -20,14 +20,15 @@ default text-control caret follow the resolved text color, preserved ancestor
 selection to the native clipboard event. The strengthened title-caret benchmark
 also requires raster agreement plus exact radius and caret-color evidence.
 
-A second application-shaped hardening pass now covers blank padding inside
+A second application-shaped hardening pass covers blank padding inside
 nested history cards, live pseudo-state caret color, rounded zero-blur focus
 halos, actual document-selection clipboard payloads, and selection contrast at
-DPR 1 and DPR 2. Selection backgrounds adapt to the rendered surface and remain
-behind the existing glyph plane. Browser-style per-glyph foreground recoloring
-inside a selected range is intentionally deferred as the next text-rendering
-phase because it requires glyph-range paint ownership rather than another
-whole-element overlay.
+DPR 1 and DPR 2. The subsequent selection-paint correction removes the control
+padding offset from text-local highlight geometry and adds a cropped glyph-mask
+pass so selected foregrounds become black or white at 4.5:1 contrast. The TTS
+gate now checks full-line highlight height, paired foreground ownership and the
+actual foreground pixels for textarea, input, and ordinary document text at
+both DPR profiles.
 
 ## Phase 16 skill baseline
 

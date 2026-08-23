@@ -7,14 +7,14 @@
       "source": "docs/compatibility/html-css.md",
       "destination": "html-css.md",
       "transform": "portable-html-css-links",
-      "sourceSha256": "2c5fd251e143f664d6a8b26bb233f56d202428c0e8426bae1e9df4b3aafcbeb6",
-      "bundledSha256": "ed7244b3848b9b077f93e4ecbb917a23864c59e79d2862a112a8cca0b3214a57"
+      "sourceSha256": "5b09290e9df10735fe452672f1cde5792589471c6fd8d4404b530d41d055f9ae",
+      "bundledSha256": "7d86d04ce22a7f484f61dbc06e20895d911de0d9883dbad067d5c10d6af102b2"
     },
     {
       "source": "docs/compatibility/capabilities.json",
       "destination": "capabilities.json",
-      "sourceSha256": "de9e8d09d200d1eb83e10408c9bd6553b86518925890ae6ac8a6ae19a024bc48",
-      "bundledSha256": "de9e8d09d200d1eb83e10408c9bd6553b86518925890ae6ac8a6ae19a024bc48"
+      "sourceSha256": "c2d21ddf8ff6a0fd652dc7b6d593390f4a2334e2849256c8519f08c12663f8ea",
+      "bundledSha256": "c2d21ddf8ff6a0fd652dc7b6d593390f4a2334e2849256c8519f08c12663f8ea"
     },
     {
       "source": "docs/compatibility/examples/manifest.json",

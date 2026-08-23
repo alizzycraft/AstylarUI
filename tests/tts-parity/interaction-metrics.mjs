@@ -69,6 +69,27 @@ export function evaluateInteractionRaster(reference, candidate, target = {}) {
   };
 }
 
+export function hasRasterColor(image, box, hexColor, canvas) {
+  const match = /^#([0-9a-f]{6})$/i.exec(hexColor ?? '');
+  if (!box || !match || !canvas?.width || !canvas?.height) return false;
+  const value = Number.parseInt(match[1], 16);
+  const expected = [(value >> 16) & 255, (value >> 8) & 255, value & 255];
+  const scaleX = image.width / canvas.width;
+  const scaleY = image.height / canvas.height;
+  const left = Math.max(0, Math.floor(box.left * scaleX));
+  const right = Math.min(image.width, Math.ceil(box.right * scaleX));
+  const top = Math.max(0, Math.floor(box.top * scaleY));
+  const bottom = Math.min(image.height, Math.ceil(box.bottom * scaleY));
+  for (let y = top; y < bottom; y += 1) for (let x = left; x < right; x += 1) {
+    const index = (y * image.width + x) * 4;
+    const difference = Math.abs(image.data[index] - expected[0]) +
+      Math.abs(image.data[index + 1] - expected[1]) +
+      Math.abs(image.data[index + 2] - expected[2]);
+    if (difference <= 36) return true;
+  }
+  return false;
+}
+
 function colorEdges(image) {
   const edges = [];
   for (let y = 1; y < image.height - 1; y += 1) for (let x = 1; x < image.width - 1; x += 1) {

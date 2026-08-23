@@ -198,11 +198,11 @@ Direct text in supported non-control elements participates in pointer selection
 with browser-equivalent forward/backward endpoints, selected text, text cursor,
 visible highlight ownership, native Copy/Cmd+C clipboard transfer, and
 outside-click clearing for the tested subset. Its opaque highlight background
-is selected from a contrast-aware palette and rendered behind the glyphs so it
-remains distinguishable from both light and dark surfaces without obscuring the
-current text color. Browser-style per-glyph foreground recoloring inside the
-selected range remains future work; Astylar currently preserves the element's
-resolved text color across selected and unselected glyphs.
+is selected from a contrast-aware light/dark pair and rendered behind the
+glyphs. A cropped glyph-mask pass recolors only the selected foreground to black
+or white, maintaining at least 4.5:1 foreground contrast while preserving the
+original texture's font rasterization and kerning. Controls and ordinary text
+share this selection paint path.
 Authored pointer cursors continue to win on selectable links or other text whose
 effective cursor is not the ordinary text cursor.
 

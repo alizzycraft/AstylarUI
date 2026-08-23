@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { evaluateInteractionRaster } from './interaction-metrics.mjs';
+import { evaluateInteractionRaster, hasRasterColor } from './interaction-metrics.mjs';
 
 function image(width, height, painter) {
   const data = new Uint8Array(width * height * 4);
@@ -57,4 +57,12 @@ test('a shifted focus ring fails', () => {
 
 test('blurred control text fails', () => {
   assert.equal(evaluateInteractionRaster(button(), button({ blur: true })).meetsTarget, false);
+});
+
+test('selection foreground sampling requires the requested color inside the projected box', () => {
+  const capture = image(20, 20, (x, y) => x === 9 && y === 10 ? [0, 0, 0] : [154, 213, 255]);
+  const canvas = { width: 10, height: 10 };
+
+  assert.equal(hasRasterColor(capture, { left: 4, top: 4, right: 6, bottom: 6 }, '#000000', canvas), true);
+  assert.equal(hasRasterColor(capture, { left: 0, top: 0, right: 2, bottom: 2 }, '#000000', canvas), false);
 });

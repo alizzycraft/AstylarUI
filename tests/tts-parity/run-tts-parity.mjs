@@ -14,7 +14,7 @@ import {
 } from './benchmark.config.mjs';
 import { cropRgba, compareSharpness, evaluateSharpness } from '../parity/sharpness-metrics.mjs';
 import { compareScrolling } from './scrolling-metrics.mjs';
-import { evaluateInteractionRaster } from './interaction-metrics.mjs';
+import { evaluateInteractionRaster, hasRasterColor } from './interaction-metrics.mjs';
 
 const root = process.cwd();
 const demo = path.join(root, 'examples', 'ai-tts-demo');
@@ -600,9 +600,29 @@ function compareInteractionStep(scenario, step, viewport, referenceMeasurement, 
   }
   if (step.selectionContrast) {
     const highlights = astylarMeasurement.selectionHighlights ?? [];
+    const foregrounds = astylarMeasurement.selectionForegrounds ?? [];
     if (!highlights.length || highlights.some((highlight) =>
-        highlight.backgroundContrast < 3 || highlight.textContrast < 3)) {
-      controlErrors.push(`${scenario.elementId} selection highlight does not preserve 3:1 surface and glyph contrast.`);
+        highlight.backgroundContrast < 3 || highlight.foregroundContrast < 4.5)) {
+      controlErrors.push(`${scenario.elementId} selection does not preserve 3:1 surface and 4.5:1 selected-glyph contrast.`);
+    }
+    if (!foregrounds.length || foregrounds.length !== highlights.length ||
+        foregrounds.some((foreground) => foreground.ownerElementId !== scenario.elementId ||
+          foreground.contrast < 4.5)) {
+      controlErrors.push(`${scenario.elementId} selection is missing its contrast foreground glyph overlay.`);
+    }
+    if (foregrounds.some((foreground) => !hasRasterColor(
+      astylarImage,
+      foreground.borderBox,
+      foreground.color,
+      astylarMeasurement.canvas,
+    ))) {
+      controlErrors.push(`${scenario.elementId} selected-glyph foreground color is absent from the rendered pixels.`);
+    }
+    const fontSize = Number.parseFloat(
+      referenceMeasurement.computedStyles?.[scenario.elementId]?.fontSize ?? '0',
+    );
+    if (fontSize > 0 && highlights.some((highlight) => highlight.heightCss < fontSize * 0.5)) {
+      controlErrors.push(`${scenario.elementId} selection highlight does not cover the glyph line box.`);
     }
   }
   const styleErrors = compareInteractionStyles(
@@ -615,7 +635,7 @@ function compareInteractionStep(scenario, step, viewport, referenceMeasurement, 
         skipped: true,
         meetsTarget: true,
         reason: step.visual === 'structural-selection'
-          ? 'Selection is enforced through contrast and clipboard semantics; foreground recoloring is deferred.'
+          ? 'Selection is enforced through full-height geometry, paired background/foreground contrast, and clipboard semantics.'
           : 'Native platform select popup is not raster-comparable.',
       }
     : compareInteractionCrop(referenceImage, astylarImage, referenceElement?.borderBox, viewport, stepDir);

@@ -208,3 +208,21 @@ minimum SSIM `0.9542`, 99.9% of measured edges within `2px`, maximum edge error
 threshold met. The root browser/SSR build and packed TTS demo check also passed;
 the latter contained 419 package files, passed all 23 demo tests, and recorded
 zero live API calls.
+
+## Selection paint follow-up
+
+A manual TTS editor pass then showed that control selection geometry was
+applying padding twice, leaving only a baseline strip, and that selected glyphs
+still retained their normal color. Highlight geometry now stays in the text
+mesh's local coordinate system; the control's mesh placement remains the sole
+owner of padding. A cropped texture-mask shader repaints only selected glyphs
+with a black-or-white foreground chosen against the adaptive highlight, while
+preserving the original glyph alpha, kerning, and rasterization.
+
+The application benchmark now treats selection as a paired paint contract. It
+requires at least 3:1 highlight-to-surface contrast, 4.5:1 selected-foreground
+contrast, a highlight height covering the glyph line, a one-to-one foreground
+mesh, and matching foreground pixels in the captured canvas. The textarea,
+search input, and ordinary history-text scenarios pass at DPR 1 and DPR 2; the
+ordinary text scenario continues to prove the native clipboard payload. No
+OpenAI credential was read and no live API request was made.

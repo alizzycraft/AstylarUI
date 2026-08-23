@@ -41,11 +41,11 @@ export const interactionScenarios = [
       { id: 'focus-caret', caretColor: true, styleProperties: ['backgroundColor', 'color', 'borderColor'], actions: [
         { type: 'click', elementId: 'speech-text' }, { type: 'press-key', key: 'Home' },
       ] },
-      { id: 'forward-selection', actions: [
+      { id: 'forward-selection', selectionContrast: true, visual: 'structural-selection', actions: [
         { type: 'press-key', key: 'Shift+ArrowRight' }, { type: 'press-key', key: 'Shift+ArrowRight' },
       ] },
       { id: 'replace-selection', actions: [{ type: 'type-text', text: 'HE' }] },
-      { id: 'backward-selection', actions: [
+      { id: 'backward-selection', selectionContrast: true, visual: 'structural-selection', actions: [
         { type: 'press-key', key: 'End' }, { type: 'press-key', key: 'Shift+ArrowLeft' },
         { type: 'press-key', key: 'Shift+ArrowLeft' },
       ] },
@@ -86,7 +86,7 @@ export const interactionScenarios = [
       { id: 'focus-caret', styleProperties: ['backgroundColor', 'color', 'borderColor', 'boxShadow'], actions: [
         { type: 'click', elementId: 'history-search' }, { type: 'type-text', text: 'hello' },
       ] },
-      { id: 'selection', actions: [
+      { id: 'selection', selectionContrast: true, visual: 'structural-selection', actions: [
         { type: 'press-key', key: 'Shift+Home' },
       ] },
     ],
