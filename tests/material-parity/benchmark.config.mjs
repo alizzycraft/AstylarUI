@@ -18,6 +18,17 @@ export const materialThresholds = Object.freeze({
   minimumEdgesWithinTolerance: .95,
   resultSsim: .95,
   aggregateMedianSsim: .98,
+  maximumTextCenterOffsetErrorPx: .75,
+});
+
+export const materialTextAlignmentTargets = Object.freeze({
+  core: ['core-primary'],
+  button: ['button-primary', 'button-secondary', 'button-disabled'],
+  menu: ['menu-primary'],
+  'bottom-sheet': ['bottom-sheet-primary'],
+  dialog: ['dialog-primary'],
+  'snack-bar': ['snack-bar-primary'],
+  tooltip: ['tooltip-primary'],
 });
 export const materialStaticCases = materialFamilies.flatMap((family) =>
   materialProfiles.flatMap((profile) => materialViewports.map((viewport) => ({ family, profile, viewport }))));

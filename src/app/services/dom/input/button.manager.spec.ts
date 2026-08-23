@@ -37,6 +37,7 @@ describe('ButtonManager', () => {
 
     expect(size.x * 2).toBeCloseTo(0.4, 5);
     expect(size.y * 2).toBeCloseTo(0.12, 5);
+    expect(label.position.y).toBeCloseTo(0.0075, 5);
     engine.dispose();
   });
 });

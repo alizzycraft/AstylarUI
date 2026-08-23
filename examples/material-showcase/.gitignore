@@ -1,0 +1,18 @@
+# Compiled output
+/dist
+/tmp
+/out-tsc
+
+# Local packed consumer dependency
+/node_modules
+/astylarui.tgz
+
+# Tool output
+/.angular/cache
+/coverage
+npm-debug.log
+yarn-error.log
+
+# System files
+.DS_Store
+Thumbs.db

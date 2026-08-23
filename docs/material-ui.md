@@ -26,6 +26,7 @@ Use a standards-first boundary: generic browser behavior belongs in Astylar core
 ## Showcase Application
 
 - Scaffold an Angular 20 standalone application with SCSS, routing, SSR/hydration, Jasmine/Karma tests, and package-root-only Astylar imports.
+- Keep the example as an independent Angular workspace with its own `package.json`, `angular.json`, TypeScript configuration, installed dependencies, build output, and README, mirroring the AI TTS example's packed-consumer workflow.
 - Routes:
   - `/compare` â€” token editor and two same-origin isolated frames.
   - `/reference/:family` â€” actual Angular Material implementation.
@@ -77,7 +78,7 @@ Use a standards-first boundary: generic browser behavior belongs in Astylar core
 
 - Add packed-example commands for preparation and validation, mirroring the existing TTS workflow: build/package Astylar, copy the tarball into a temporary clean example, install, unit-test, build browser and SSR outputs, prerender safe routes, and reject source/deep imports.
 - Add `material-parity:report` and enforced `material-parity:check`; include the enforced check in `parity:release:check`.
-- Reuse the existing geometry, SSIM, edge, sharpness, interaction, scrolling, semantics, and resource metrics rather than creating weaker Material-only measures.
+- Reuse the existing geometry, SSIM, edge, sharpness, interaction, scrolling, semantics, and resource metrics rather than creating weaker Material-only measures. Add component-local text-ink alignment checks so large blank page regions cannot hide vertically shifted labels.
 - Static gate: every family Ã— four canonical profiles at desktop `1440Ã—1000 DPR1`, tablet `768Ã—1024 DPR1`, and mobile `390Ã—844 DPR2`.
 - Interaction gate:
   - Representative native behavior for every family at desktop DPR1 and DPR2.
@@ -85,7 +86,7 @@ Use a standards-first boundary: generic browser behavior belongs in Astylar core
   - Mobile dismissal/responsive flows for overlays, sidenav, menus, pickers, tabs, and autocomplete in light and dark modes.
   - Slider dragging and keyboard boundaries; chips add/remove/select; sorting/pagination; calendar/time navigation; roving focus for composites; dialog/bottom-sheet focus containment and restoration; tooltip timing; snackbar actions; repeated popup dismissal.
 - Require exact visible text, values, selection, event ordering, focus identity, semantic roles/names/states, diagnostics, clipping ownership, and reachability.
-- Retain the existing enforced visual thresholds: geometry tolerance/edge requirements, per-result SSIM of at least `0.95`, and aggregate median of at least `0.98`. Do not lower thresholds or alter the Angular Material reference to conceal discrepancies.
+- Retain the existing enforced visual thresholds: geometry tolerance/edge requirements, per-result SSIM of at least `0.95`, aggregate median of at least `0.98`, and button-label center-offset error no greater than `0.75px`. Do not lower thresholds or alter the Angular Material reference to conceal discrepancies.
 - Repeat overlay and animated-plugin cycles to prove observer/resource plateaus, two-surface isolation, remount behavior, stale-work cancellation, and final zero owned resources.
 - Run focused checks while implementing, then the full unit/build/capability/example/skill/consumer/parity release matrix and `git diff --check`.
 

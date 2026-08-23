@@ -95,7 +95,7 @@ import { DomSanitizer } from '@angular/platform-browser';
           @case ('bottom-sheet') { <button id="bottom-sheet-primary" mat-flat-button (click)="openBottomSheet()">Open bottom sheet</button> }
           @case ('snack-bar') { <button id="snack-bar-primary" mat-flat-button (click)="openSnackBar()">Show snackbar</button> }
           @case ('core') { <button id="core-primary" mat-flat-button matRipple>Material ripple foundation</button> }
-          @default { <button mat-flat-button color="primary" id="button-primary">Primary action</button> <button mat-stroked-button>Secondary</button> <button mat-flat-button disabled>Disabled</button> }
+          @default { <button mat-flat-button color="primary" id="button-primary">Primary action</button> <button id="button-secondary" mat-stroked-button>Secondary</button> <button id="button-disabled" mat-flat-button disabled>Disabled</button> }
         }
       </section>
       <ng-template #dialogContent><h2 mat-dialog-title>Confirm action</h2><mat-dialog-content>Save Project Atlas?</mat-dialog-content><mat-dialog-actions><button mat-button mat-dialog-close>Cancel</button><button mat-flat-button mat-dialog-close>Save</button></mat-dialog-actions></ng-template>

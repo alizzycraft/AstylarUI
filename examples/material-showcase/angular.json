@@ -6,7 +6,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "astylarui": {
+    "material-showcase": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -21,6 +21,9 @@
           "builder": "@angular/build:application",
           "options": {
             "browser": "src/main.ts",
+            "polyfills": [
+              "zone.js"
+            ],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
@@ -43,13 +46,13 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2MB",
-                  "maximumError": "10MB"
+                  "maximumWarning": "8MB",
+                  "maximumError": "12MB"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "4kB",
-                  "maximumError": "8kB"
+                  "maximumWarning": "8kB",
+                  "maximumError": "16kB"
                 }
               ],
               "outputHashing": "all"
@@ -66,10 +69,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "astylarui:build:production"
+              "buildTarget": "material-showcase:build:production"
             },
             "development": {
-              "buildTarget": "astylarui:build:development"
+              "buildTarget": "material-showcase:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -80,6 +83,10 @@
         "test": {
           "builder": "@angular/build:karma",
           "options": {
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ],
             "tsConfig": "tsconfig.spec.json",
             "inlineStyleLanguage": "scss",
             "assets": [

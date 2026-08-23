@@ -9,14 +9,16 @@ import { PNG } from 'pngjs';
 import { ssim } from 'ssim.js';
 import {
   materialFamilies, materialInteractionCases, materialMobileFlowCases, materialProfiles,
-  materialStaticCases, materialThresholds,
+  materialStaticCases, materialTextAlignmentTargets, materialThresholds,
 } from './benchmark.config.mjs';
+import { measureTextInkCenter, textCenterOffsetError } from './text-alignment-metrics.mjs';
 
 const root = process.cwd();
 const enforce = process.argv.includes('--enforce');
 const skipBuild = process.argv.includes('--skip-build');
 const artifacts = path.join(root, 'artifacts', 'material-parity');
-const browserRoot = path.join(root, 'dist', 'material-showcase', 'browser');
+const showcaseRoot = path.join(root, 'examples', 'material-showcase');
+const browserRoot = path.join(showcaseRoot, 'dist', 'material-showcase', 'browser');
 const port = Number(process.env['ASTYLAR_MATERIAL_PARITY_PORT'] ?? 4431);
 const baseUrl = `http://127.0.0.1:${port}`;
 const npm = process.platform === 'win32' ? 'npm.cmd' : 'npm';
@@ -104,6 +106,14 @@ function csvFilter(name, allowed) {
   return new Set(values);
 }
 
+function benchmarkMeasurementIds(family) {
+  return [...new Set([
+    `${family}-root`,
+    `${family}-primary`,
+    ...(materialTextAlignmentTargets[family] ?? []),
+  ])];
+}
+
 function validateConfiguration() {
   const testRun = spawnSync(process.execPath, ['--test', 'tests/material-parity/benchmark-config.spec.mjs'], {
     cwd: root, stdio: 'inherit',
@@ -114,8 +124,12 @@ function validateConfiguration() {
 }
 
 function buildShowcase() {
-  const build = spawnSync(npm, ['run', 'material-showcase:build', '--', '--configuration', 'development'], {
+  const prepare = spawnSync(npm, ['run', 'material-showcase:prepare'], {
     cwd: root, stdio: 'inherit', shell: process.platform === 'win32',
+  });
+  assert.equal(prepare.status, 0, 'Material showcase preparation failed.');
+  const build = spawnSync(npm, ['run', 'build', '--', '--configuration', 'development'], {
+    cwd: showcaseRoot, stdio: 'inherit', shell: process.platform === 'win32',
   });
   assert.equal(build.status, 0, 'Material showcase build failed.');
   assert.ok(existsSync(path.join(browserRoot, 'index.csr.html')), 'Material browser output is missing.');
@@ -163,16 +177,21 @@ async function captureCase(benchmarkCase) {
     const astylar = await capturePage(context, 'astylar', benchmarkCase, directory);
     const screenshotSimilarity = comparePng(reference.image, astylar.image);
     const geometry = compareGeometry(reference.measurement.elements, astylar.measurement.elements);
+    const textAlignment = compareTextAlignment(
+      reference.image, astylar.image, reference.measurement.elements, astylar.measurement.elements,
+      materialTextAlignmentTargets[family] ?? [], viewport.deviceScaleFactor, directory,
+    );
     const semantics = compareSemantics(reference.measurement.semantics, astylar.measurement.semantics);
     const runtimeErrors = [...reference.errors.map((error) => `reference: ${error}`),
       ...astylar.errors.map((error) => `astylar: ${error}`)];
     return {
-      family, profile, viewport, screenshotSimilarity, geometry, semantics, runtimeErrors,
+      family, profile, viewport, screenshotSimilarity, geometry, textAlignment, semantics, runtimeErrors,
       diagnostics: astylar.measurement.diagnostics,
       meetsAcceptance: screenshotSimilarity >= materialThresholds.resultSsim &&
         geometry.maximumEdgeError !== null &&
         geometry.maximumEdgeError <= materialThresholds.maximumEdgeErrorPx &&
         geometry.edgesWithinTolerance >= materialThresholds.minimumEdgesWithinTolerance &&
+        textAlignment.every((result) => result.matches) &&
         semantics.every((result) => result.matches) && runtimeErrors.length === 0,
     };
   } finally {
@@ -199,7 +218,7 @@ async function capturePage(context, mode, benchmarkCase, directory) {
     await Promise.all(document.getAnimations().map((animation) => animation.finished.catch(() => undefined)));
     await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
   });
-  const ids = [`${benchmarkCase.family}-root`, `${benchmarkCase.family}-primary`];
+  const ids = benchmarkMeasurementIds(benchmarkCase.family);
   const measurement = mode === 'reference'
     ? await measureReference(page, ids)
     : await page.evaluate((targetIds) => window.__ASTYLAR_MATERIAL_BENCHMARK__?.measure(targetIds), ids);
@@ -246,9 +265,9 @@ async function captureInteractionCase(benchmarkCase) {
         await settleInteraction(astylar.page, 'astylar');
       }
       resourceSnapshots.push(await astylar.page.evaluate((ids) =>
-        window.__ASTYLAR_MATERIAL_BENCHMARK__?.measure(ids).diagnostics, [`${family}-root`, `${family}-primary`]));
+        window.__ASTYLAR_MATERIAL_BENCHMARK__?.measure(ids).diagnostics, benchmarkMeasurementIds(family)));
     }
-    const ids = [`${family}-root`, `${family}-primary`];
+    const ids = benchmarkMeasurementIds(family);
     const referenceMeasurement = await measureReference(reference.page, ids);
     const astylarMeasurement = await astylar.page.evaluate((targetIds) =>
       window.__ASTYLAR_MATERIAL_BENCHMARK__?.measure(targetIds), ids);
@@ -266,7 +285,13 @@ async function captureInteractionCase(benchmarkCase) {
     const referenceFocus = await focusedIdentity(reference.page, 'reference', family);
     const astylarFocus = await focusedIdentity(astylar.page, 'astylar', family);
     const semantics = compareSemantics(referenceMeasurement.semantics, astylarMeasurement.semantics);
-    const screenshotSimilarity = comparePng(PNG.sync.read(referenceBuffer), PNG.sync.read(astylarBuffer));
+    const referenceImage = PNG.sync.read(referenceBuffer);
+    const astylarImage = PNG.sync.read(astylarBuffer);
+    const screenshotSimilarity = comparePng(referenceImage, astylarImage);
+    const textAlignment = compareTextAlignment(
+      referenceImage, astylarImage, referenceMeasurement.elements, astylarMeasurement.elements,
+      materialTextAlignmentTargets[family] ?? [], viewport.deviceScaleFactor, directory,
+    );
     const runtimeErrors = [...reference.errors.map((error) => `reference: ${error}`),
       ...astylar.errors.map((error) => `astylar: ${error}`)];
     const eventComparison = compareEvents(referenceEvents, astylarEvents, family, state);
@@ -276,10 +301,11 @@ async function captureInteractionCase(benchmarkCase) {
         JSON.stringify(resourceCounts(resourceSnapshots.at(-1))));
     const focusMatches = state !== 'focus' || referenceFocus === astylarFocus;
     return {
-      family, profile, viewport, state, screenshotSimilarity, semantics, eventComparison,
+      family, profile, viewport, state, screenshotSimilarity, textAlignment, semantics, eventComparison,
       focus: { reference: referenceFocus, astylar: astylarFocus, matches: focusMatches },
       runtimeErrors, resourceSnapshots, resourcesStable, astylarState,
       meetsAcceptance: screenshotSimilarity >= materialThresholds.resultSsim &&
+        textAlignment.every((result) => result.matches) &&
         semantics.every((result) => result.matches) && eventComparison.matches && focusMatches &&
         runtimeErrors.length === 0 && resourcesStable,
     };
@@ -583,6 +609,53 @@ function comparePng(reference, candidate) {
   return ssim(reference, candidate, { ssim: 'fast' }).mssim;
 }
 
+function compareTextAlignment(referenceImage, candidateImage, referenceElements, candidateElements, targets, scale, directory) {
+  return targets.map((id) => {
+    const expectedBox = referenceElements[id]?.borderBox;
+    const actualBox = candidateElements[id]?.borderBox;
+    if (!expectedBox || !actualBox) return { id, matches: false, reason: 'target geometry is missing' };
+    const reference = measureTextInkCenter(referenceImage, expectedBox, scale);
+    const astylar = measureTextInkCenter(candidateImage, actualBox, scale);
+    if (!reference || !astylar) return { id, matches: false, reason: 'text ink could not be isolated' };
+    const offsetErrorPx = textCenterOffsetError(reference, astylar);
+    writeAlignmentArtifacts(referenceImage, candidateImage, expectedBox, scale, directory, id);
+    return {
+      id,
+      reference,
+      astylar,
+      offsetErrorPx,
+      matches: offsetErrorPx <= materialThresholds.maximumTextCenterOffsetErrorPx,
+    };
+  });
+}
+
+function writeAlignmentArtifacts(reference, candidate, box, scale, directory, id) {
+  const bounds = {
+    left: Math.max(0, Math.floor((box.left - 4) * scale)),
+    top: Math.max(0, Math.floor((box.top - 4) * scale)),
+    right: Math.min(reference.width, Math.ceil((box.right + 4) * scale)),
+    bottom: Math.min(reference.height, Math.ceil((box.bottom + 4) * scale)),
+  };
+  const referenceCrop = cropPng(reference, bounds);
+  const astylarCrop = cropPng(candidate, bounds);
+  writeFileSync(path.join(directory, `${id}-alignment-reference.png`), PNG.sync.write(referenceCrop));
+  writeFileSync(path.join(directory, `${id}-alignment-astylar.png`), PNG.sync.write(astylarCrop));
+}
+
+function cropPng(image, bounds) {
+  const width = Math.max(0, bounds.right - bounds.left);
+  const height = Math.max(0, bounds.bottom - bounds.top);
+  const output = new PNG({ width, height });
+  for (let y = 0; y < height; y += 1) {
+    for (let x = 0; x < width; x += 1) {
+      const sourceOffset = ((bounds.top + y) * image.width + bounds.left + x) * 4;
+      const targetOffset = (y * width + x) * 4;
+      output.data.set(image.data.subarray(sourceOffset, sourceOffset + 4), targetOffset);
+    }
+  }
+  return output;
+}
+
 function compareGeometry(reference, candidate) {
   const elements = [];
   const errors = [];
@@ -622,9 +695,15 @@ function summarize(results) {
   const medianSsim = similarities.length ? similarities[Math.floor(similarities.length / 2)] : 0;
   const minimumSsim = similarities.length ? similarities[0] : 0;
   const maximumEdgeError = Math.max(...results.map(({ geometry }) => geometry.maximumEdgeError ?? Infinity));
+  const textAlignmentResults = results.flatMap(({ textAlignment }) => textAlignment ?? []);
+  const maximumTextCenterOffsetErrorPx = textAlignmentResults.length
+    ? Math.max(...textAlignmentResults.map(({ offsetErrorPx }) => offsetErrorPx ?? Infinity)) : 0;
   const passingCases = results.filter(({ meetsAcceptance }) => meetsAcceptance).length;
   return {
     passingCases, failingCases: results.length - passingCases, minimumSsim, medianSsim, maximumEdgeError,
+    textAlignmentTargets: textAlignmentResults.length,
+    textAlignmentTargetsPassing: textAlignmentResults.filter(({ matches }) => matches).length,
+    maximumTextCenterOffsetErrorPx,
     meetsAcceptance: results.length === materialStaticCases.length && passingCases === results.length &&
       medianSsim >= materialThresholds.aggregateMedianSsim,
   };
@@ -633,12 +712,17 @@ function summarize(results) {
 function summarizeInteractions(results) {
   const similarities = results.map(({ screenshotSimilarity }) => screenshotSimilarity).sort((a, b) => a - b);
   const passingCases = results.filter(({ meetsAcceptance }) => meetsAcceptance).length;
+  const textAlignmentResults = results.flatMap(({ textAlignment }) => textAlignment ?? []);
   return {
     executedCases: results.length,
     passingCases,
     failingCases: results.length - passingCases,
     minimumSsim: similarities.length ? similarities[0] : 1,
     medianSsim: similarities.length ? similarities[Math.floor(similarities.length / 2)] : 1,
+    textAlignmentTargets: textAlignmentResults.length,
+    textAlignmentTargetsPassing: textAlignmentResults.filter(({ matches }) => matches).length,
+    maximumTextCenterOffsetErrorPx: textAlignmentResults.length
+      ? Math.max(...textAlignmentResults.map(({ offsetErrorPx }) => offsetErrorPx ?? Infinity)) : 0,
     meetsAcceptance: results.length === materialInteractionCases.length + materialMobileFlowCases.length &&
       passingCases === results.length,
   };
@@ -651,10 +735,15 @@ function humanSummary(report) {
     `- Passing: ${summary.passingCases}\n- Failing: ${summary.failingCases}\n` +
     `- Minimum SSIM: ${summary.minimumSsim.toFixed(6)}\n- Median SSIM: ${summary.medianSsim.toFixed(6)}\n` +
     `- Maximum edge error: ${Number.isFinite(summary.maximumEdgeError) ? `${summary.maximumEdgeError.toFixed(3)}px` : 'unmeasured'}\n` +
+    `- Text alignment: ${summary.textAlignmentTargetsPassing}/${summary.textAlignmentTargets} ` +
+    `(maximum center-offset error ${summary.maximumTextCenterOffsetErrorPx.toFixed(3)}px)\n` +
     `- Meets acceptance: ${summary.meetsAcceptance ? 'yes' : 'no'}\n` +
     `- Interaction cases: ${report.interactionSummary.executedCases}\n` +
     `- Interaction passing: ${report.interactionSummary.passingCases}\n` +
     `- Interaction failing: ${report.interactionSummary.failingCases}\n` +
     `- Interaction minimum SSIM: ${report.interactionSummary.minimumSsim.toFixed(6)}\n` +
+    `- Interaction text alignment: ${report.interactionSummary.textAlignmentTargetsPassing}/` +
+    `${report.interactionSummary.textAlignmentTargets} (maximum center-offset error ` +
+    `${report.interactionSummary.maximumTextCenterOffsetErrorPx.toFixed(3)}px)\n` +
     `- Interaction meets acceptance: ${report.interactionSummary.meetsAcceptance ? 'yes' : 'no'}\n`;
 }

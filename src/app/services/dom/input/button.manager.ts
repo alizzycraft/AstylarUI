@@ -17,6 +17,7 @@ import { CONTROL_CONTENT_Z_OFFSET } from '../render-depth.constants';
 })
 export class ButtonManager {
     private readonly PRESS_OFFSET = 0.05; // Visual press down effect
+    private readonly BUTTON_LABEL_OPTICAL_OFFSET_PX = 0.75;
 
     constructor(
         private textRenderingService: TextRenderingService,
@@ -270,7 +271,9 @@ export class ButtonManager {
             labelPlane.rotation.z = Math.PI;
 
             labelPlane.parent = button.mesh;
-            labelPlane.position.y = -2 * scale;
+            // Center the rendered line box while compensating for the canvas
+            // baseline's asymmetric glyph ink, matching native button labels.
+            labelPlane.position.y = this.BUTTON_LABEL_OPTICAL_OFFSET_PX * scale;
             labelPlane.position.z = CONTROL_CONTENT_Z_OFFSET;
             labelPlane.isPickable = false;
             const textAlign = style.textAlign?.toLowerCase();

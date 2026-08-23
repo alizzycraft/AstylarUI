@@ -88,6 +88,12 @@ speech editing, deterministic mock generation, secure server-side OpenAI speech,
 owned browser audio, session history, accessibility semantics, and private
 application-level component builders without crossing the package boundary.
 
+The standalone [`examples/material-showcase`](examples/material-showcase)
+compares real Angular Material components with package-boundary AstylarUI
+equivalents. Material-specific renderers remain private to the example, while
+its visual harness checks geometry, semantics, interactions, resources, and
+component-local button-label alignment.
+
 ### 3. Angular-native plugins
 
 Angular 20 is an intentional foundation of Astylar's plugin ecosystem. Register
@@ -316,6 +322,20 @@ The check command uses a separate temporary installation, mock speech only,
 browser and SSR builds, responsive visual captures, and real Chrome interaction checks.
 Live OpenAI setup is documented in
 [`examples/ai-tts-demo/README.md`](examples/ai-tts-demo/README.md).
+
+### Run or verify the Material showcase
+
+```bash
+npm run material-showcase:prepare
+cd examples/material-showcase
+npm start
+```
+
+Open `http://localhost:4200/compare`. Run
+`npm run material-showcase:check` from the repository root for a clean packed
+consumer test, or `npm run material-parity:report` for the paired parity matrix.
+See [`examples/material-showcase/README.md`](examples/material-showcase/README.md)
+for the standalone routes and focused commands.
 
 ---
 
