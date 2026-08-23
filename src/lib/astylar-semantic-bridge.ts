@@ -35,6 +35,7 @@ export interface AstylarSemanticControlState {
   readonly?: boolean;
   selectedIndex?: number;
   expanded?: boolean;
+  activeDescendant?: string;
   selectionStart?: number;
   selectionEnd?: number;
   selectionDirection?: 'forward' | 'backward' | 'none';
@@ -441,6 +442,64 @@ export class AstylarSemanticBridge {
     if (element.ariaCurrent !== undefined) {
       node.setAttribute('aria-current', String(element.ariaCurrent));
     }
+    if (element.ariaInvalid !== undefined) {
+      node.setAttribute('aria-invalid', String(element.ariaInvalid));
+    }
+    if (element.ariaDisabled !== undefined) {
+      node.setAttribute('aria-disabled', String(element.ariaDisabled));
+    }
+    if (element.ariaExpanded !== undefined) {
+      node.setAttribute('aria-expanded', String(element.ariaExpanded));
+    }
+    if (element.ariaControls) {
+      node.setAttribute('aria-controls', this.nativeIdRefs(element.ariaControls));
+    }
+    if (element.ariaHaspopup !== undefined) {
+      node.setAttribute('aria-haspopup', String(element.ariaHaspopup));
+    }
+    if (element.ariaPressed !== undefined) {
+      node.setAttribute('aria-pressed', String(element.ariaPressed));
+    }
+    if (element.ariaChecked !== undefined) {
+      node.setAttribute('aria-checked', String(element.ariaChecked));
+    }
+    if (element.ariaSelected !== undefined) {
+      node.setAttribute('aria-selected', String(element.ariaSelected));
+    }
+    if (element.ariaActivedescendant) {
+      node.setAttribute('aria-activedescendant', this.nativeId(element.ariaActivedescendant));
+    }
+    if (element.ariaAutocomplete) {
+      node.setAttribute('aria-autocomplete', element.ariaAutocomplete);
+    }
+    if (element.ariaOrientation) {
+      node.setAttribute('aria-orientation', element.ariaOrientation);
+    }
+    if (element.ariaSort) node.setAttribute('aria-sort', element.ariaSort);
+    if (element.ariaValueMin !== undefined) {
+      node.setAttribute('aria-valuemin', String(element.ariaValueMin));
+    }
+    if (element.ariaValueMax !== undefined) {
+      node.setAttribute('aria-valuemax', String(element.ariaValueMax));
+    }
+    if (element.ariaValueNow !== undefined) {
+      node.setAttribute('aria-valuenow', String(element.ariaValueNow));
+    }
+    if (element.ariaValueText !== undefined) {
+      node.setAttribute('aria-valuetext', element.ariaValueText);
+    }
+    if (element.ariaLevel !== undefined) {
+      node.setAttribute('aria-level', String(element.ariaLevel));
+    }
+    if (element.ariaPosinset !== undefined) {
+      node.setAttribute('aria-posinset', String(element.ariaPosinset));
+    }
+    if (element.ariaSetsize !== undefined) {
+      node.setAttribute('aria-setsize', String(element.ariaSetsize));
+    }
+    if (element.ariaMultiselectable !== undefined) {
+      node.setAttribute('aria-multiselectable', String(element.ariaMultiselectable));
+    }
     if (node instanceof HTMLDialogElement) {
       node.open = !!element.open;
       if (element.modal) node.setAttribute('aria-modal', 'true');
@@ -458,6 +517,10 @@ export class AstylarSemanticBridge {
       node.type = element.inputType || 'text';
       if (element.placeholder !== undefined) node.placeholder = element.placeholder;
       if (element.name !== undefined) node.name = element.name;
+      if (element.min !== undefined) node.min = element.min;
+      if (element.max !== undefined) node.max = element.max;
+      if (element.step !== undefined) node.step = element.step;
+      if (element.maxLength !== undefined) node.maxLength = element.maxLength;
     }
     if (node instanceof HTMLTextAreaElement) {
       if (element.placeholder !== undefined) node.placeholder = element.placeholder;
@@ -474,8 +537,7 @@ export class AstylarSemanticBridge {
     if (node instanceof HTMLInputElement) {
       if (state.value !== undefined) node.value = state.value;
       if (state.selectionStart !== undefined && state.selectionEnd !== undefined &&
-          node.type !== 'button' && node.type !== 'submit' && node.type !== 'reset' &&
-          node.type !== 'checkbox' && node.type !== 'radio') {
+          ['text', 'search', 'tel', 'url', 'password'].includes(node.type)) {
         node.setSelectionRange(state.selectionStart, state.selectionEnd, state.selectionDirection);
       }
       if (state.checked !== undefined) node.checked = state.checked;
@@ -501,6 +563,11 @@ export class AstylarSemanticBridge {
       else if (state.value !== undefined) node.value = state.value;
       if (state.expanded !== undefined) {
         node.setAttribute('aria-expanded', String(state.expanded));
+      }
+      if (state.activeDescendant) {
+        node.setAttribute('aria-activedescendant', this.nativeId(state.activeDescendant));
+      } else {
+        node.removeAttribute('aria-activedescendant');
       }
       return;
     }
@@ -541,8 +608,9 @@ export class AstylarSemanticBridge {
     if (element.children?.length || element.type !== 'select' || !element.options) {
       return element.children ?? [];
     }
-    return element.options.map((option) => ({
+    return element.options.map((option, index) => ({
       type: 'option',
+      id: element.id ? `${element.id}-option-${index}` : undefined,
       value: String(option.value),
       textContent: option.label,
       disabled: option.disabled,

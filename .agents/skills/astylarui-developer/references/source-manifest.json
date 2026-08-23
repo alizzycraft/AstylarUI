@@ -7,14 +7,14 @@
       "source": "docs/compatibility/html-css.md",
       "destination": "html-css.md",
       "transform": "portable-html-css-links",
-      "sourceSha256": "2c5fd251e143f664d6a8b26bb233f56d202428c0e8426bae1e9df4b3aafcbeb6",
-      "bundledSha256": "ed7244b3848b9b077f93e4ecbb917a23864c59e79d2862a112a8cca0b3214a57"
+      "sourceSha256": "53098856971d891aaeaf67a6c4087a593341eb298b0ed8498b5a59fcba924f22",
+      "bundledSha256": "2cc7391648e7a6e11b3e6701937f332644c1e9db096027334d07c2c43d09b615"
     },
     {
       "source": "docs/compatibility/capabilities.json",
       "destination": "capabilities.json",
-      "sourceSha256": "de9e8d09d200d1eb83e10408c9bd6553b86518925890ae6ac8a6ae19a024bc48",
-      "bundledSha256": "de9e8d09d200d1eb83e10408c9bd6553b86518925890ae6ac8a6ae19a024bc48"
+      "sourceSha256": "4fe05bd68bb48b98a29f774b63f6d756c0c4a162272481a5854d42fabe774755",
+      "bundledSha256": "4fe05bd68bb48b98a29f774b63f6d756c0c4a162272481a5854d42fabe774755"
     },
     {
       "source": "docs/compatibility/examples/manifest.json",
@@ -69,8 +69,8 @@
       "source": "src/lib/index.ts",
       "destination": "public-api.json",
       "transform": "public-root-exports",
-      "sourceSha256": "b4714aaa613d348ec3eb924e6d3b3efb30ee529525490473138e400429101e89",
-      "bundledSha256": "f58b636373ce8d100bade9425ef6b0d988070c990513ae5dbd76a7a2f63cb8b4"
+      "sourceSha256": "7a0a08f8d81815c798dd12ca4f0bf192b444d03fbb401671851fe405a47e4986",
+      "bundledSha256": "a89bfdf794b6c9aa374323ee8af5c5ac8d972e42f406b18434dc2561d8a3c602"
     }
   ]
 }

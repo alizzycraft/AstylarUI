@@ -1,9 +1,11 @@
 import {
   AbstractMesh,
+  Matrix,
   Observer,
   PointerEventTypes,
   PointerInfo,
   Scene,
+  Vector3,
 } from '@babylonjs/core';
 import type { SiteData } from '../app/types/site-data';
 import {
@@ -47,6 +49,11 @@ export interface AstylarNavigationOptions {
   onNavigate?: (outcome: Readonly<AstylarNavigationOutcome>) => void;
 }
 
+export interface AstylarInteractionFocusOptions {
+  focusVisible?: boolean;
+  scrollIntoView?: boolean;
+}
+
 export type AstylarInteractionStateProvider = (elementId: string) => AstylarEventState;
 
 export interface AstylarControlActivation {
@@ -69,6 +76,7 @@ export interface AstylarInteractionControlAdapter {
   scrollTextControl?(elementId: string, deltaX: number, deltaY: number): boolean;
   commitsValueOnBlur(elementId: string): boolean;
   emitsImmediateChangeOnKeyboardMutation?(elementId: string): boolean;
+  setRangeFromPointer?(elementId: string, localX: number, width: number): boolean;
   handleExpandedSelectKeyDown?(
     elementId: string,
     event: KeyboardEvent,
@@ -111,6 +119,7 @@ export class AstylarInteractionRuntime {
   private readonly dispatcher: AstylarEventDispatcher;
   private pointerObserver: Observer<PointerInfo> | null;
   private pressedElementId?: string;
+  private rangePointerChanged = false;
   private hoveredElementId?: string;
   private hoveredElementPath: string[] = [];
   private disposed = false;
@@ -184,24 +193,48 @@ export class AstylarInteractionRuntime {
   }
 
   /** Applies browser semantic focus through the same scene-owned focus path. */
+  focusElement(
+    elementId: string,
+    options: AstylarInteractionFocusOptions = {},
+    preservePreviousSelectionOnReset = false,
+  ): boolean {
+    if (this.disposed || !this.focusOrder.includes(elementId) ||
+        !this.isAllowedByModal(elementId) ||
+        !this.dispatcher.hasEnabledTarget(elementId)) return false;
+    this.setFocus(
+      elementId,
+      preservePreviousSelectionOnReset,
+      options.focusVisible ?? true,
+    );
+    if (options.scrollIntoView !== false) {
+      this.scrolling?.scrollIntoView?.(elementId, 'nearest');
+    }
+    return this.getFocusedElementId() === elementId;
+  }
+
+  blurElement(): boolean {
+    if (this.disposed || !this.getFocusedElementId()) return false;
+    this.setFocus(undefined);
+    return this.getFocusedElementId() === undefined;
+  }
+
+  /** Applies browser semantic focus through the same scene-owned focus path. */
   focusSemanticElement(
     elementId: string,
     preservePreviousSelectionOnReset = false,
     focusVisible = true,
   ): boolean {
-    if (this.disposed || !this.focusOrder.includes(elementId) ||
-        !this.isAllowedByModal(elementId) ||
-        !this.dispatcher.hasEnabledTarget(elementId)) return false;
-    this.setFocus(elementId, preservePreviousSelectionOnReset, focusVisible);
-    this.scrolling?.scrollIntoView?.(elementId, 'nearest');
-    return this.getFocusedElementId() === elementId;
+    return this.focusElement(
+      elementId,
+      { focusVisible },
+      preservePreviousSelectionOnReset,
+    );
   }
 
   /** Clears scene focus when its corresponding native semantic node blurs. */
   blurSemanticElement(elementId: string): boolean {
-    if (this.disposed || this.getFocusedElementId() !== elementId) return false;
-    this.setFocus(undefined);
-    return this.getFocusedElementId() === undefined;
+    if (this.getFocusedElementId() !== elementId) return false;
+    return this.blurElement();
   }
 
   /** Routes assistive/native click activation through typed Astylar defaults. */
@@ -420,6 +453,16 @@ export class AstylarInteractionRuntime {
     if (pointerInfo.type === PointerEventTypes.POINTERWHEEL) return;
     if (pointerInfo.type === PointerEventTypes.POINTERMOVE) {
       this.updateHover(targetId, pointerInfo);
+      const movementTargetId = this.pressedElementId ?? targetId;
+      if (movementTargetId && this.dispatcher.hasEnabledTarget(movementTargetId)) {
+        this.dispatchPointer('pointermove', movementTargetId, pointerInfo);
+        if (this.pressedElementId && this.updateRangeFromPointer(movementTargetId, pointerInfo)) {
+          this.rangePointerChanged = true;
+          this.dispatcher.dispatch({
+            type: 'input', targetId: movementTargetId, ...this.liveState(movementTargetId),
+          });
+        }
+      }
       return;
     }
     if (pointerInfo.type === PointerEventTypes.POINTERDOWN) {
@@ -443,19 +486,46 @@ export class AstylarInteractionRuntime {
         return;
       }
       this.pressedElementId = targetId;
+      this.rangePointerChanged = false;
       const dispatched = this.dispatchPointer('pointerdown', targetId, pointerInfo);
       this.controls?.setActiveState?.(targetId, true);
       if (!dispatched?.defaultPrevented) {
         this.canvas?.focus();
         this.setFocus(this.focusOrder.includes(targetId) ? targetId : undefined, false, false);
+        const nativeEvent = pointerInfo.event as PointerEvent | undefined;
+        if (nativeEvent?.pointerId !== undefined) {
+          try {
+            this.canvas?.setPointerCapture?.(nativeEvent.pointerId);
+          } catch {
+            // Synthetic events and detached canvases do not own a native pointer.
+          }
+        }
+        if (this.updateRangeFromPointer(targetId, pointerInfo)) {
+          this.rangePointerChanged = true;
+          this.dispatcher.dispatch({
+            type: 'input', targetId, ...this.liveState(targetId),
+          });
+        }
       }
       return;
     }
     if (pointerInfo.type === PointerEventTypes.POINTERUP) {
+      const pressedElementId = this.pressedElementId;
+      if (pressedElementId && this.updateRangeFromPointer(pressedElementId, pointerInfo)) {
+        this.rangePointerChanged = true;
+        this.dispatcher.dispatch({
+          type: 'input', targetId: pressedElementId, ...this.liveState(pressedElementId),
+        });
+      }
       if (this.pressedElementId) {
         this.controls?.setActiveState?.(this.pressedElementId, false);
       }
       if (targetId) this.dispatchPointer('pointerup', targetId, pointerInfo);
+      if (pressedElementId && this.rangePointerChanged) {
+        this.dispatcher.dispatch({
+          type: 'change', targetId: pressedElementId, ...this.liveState(pressedElementId),
+        });
+      }
       if (targetId && targetId === this.pressedElementId) {
         const accepted = this.activateAndClick(targetId, pointerInfo);
         const labelTargetId = accepted ? this.labelTargets.get(targetId) : undefined;
@@ -465,6 +535,16 @@ export class AstylarInteractionRuntime {
         }
       }
       this.pressedElementId = undefined;
+      this.rangePointerChanged = false;
+      const nativeEvent = pointerInfo.event as PointerEvent | undefined;
+      if (nativeEvent?.pointerId !== undefined &&
+          this.canvas?.hasPointerCapture?.(nativeEvent.pointerId)) {
+        try {
+          this.canvas.releasePointerCapture(nativeEvent.pointerId);
+        } catch {
+          // The browser may already have released capture during cancellation.
+        }
+      }
     }
   }
 
@@ -629,15 +709,73 @@ export class AstylarInteractionRuntime {
       ...this.dispatcher.getElementState(targetId),
       ...this.getLiveState?.(targetId),
     };
+    const canvasX = nativeEvent?.offsetX;
+    const canvasY = nativeEvent?.offsetY;
+    const targetRect = this.projectElementRect(targetId);
     return this.dispatcher.dispatch({
       type,
       targetId,
       ...state,
       button: nativeEvent?.button ?? 0,
+      buttons: nativeEvent?.buttons ?? 0,
+      pointerId: nativeEvent && 'pointerId' in nativeEvent
+        ? nativeEvent.pointerId
+        : 1,
       pointerType: nativeEvent && 'pointerType' in nativeEvent
         ? nativeEvent.pointerType || 'mouse'
         : 'mouse',
+      isPrimary: nativeEvent && 'isPrimary' in nativeEvent
+        ? nativeEvent.isPrimary
+        : true,
+      clientX: nativeEvent?.clientX,
+      clientY: nativeEvent?.clientY,
+      canvasX,
+      canvasY,
+      localX: canvasX !== undefined && targetRect ? canvasX - targetRect.left : undefined,
+      localY: canvasY !== undefined && targetRect ? canvasY - targetRect.top : undefined,
     });
+  }
+
+  private updateRangeFromPointer(elementId: string, pointerInfo: PointerInfo): boolean {
+    const nativeEvent = pointerInfo.event as PointerEvent | MouseEvent | undefined;
+    const canvasX = nativeEvent?.offsetX;
+    const rect = this.projectElementRect(elementId);
+    if (canvasX === undefined || !rect) return false;
+    return this.controls?.setRangeFromPointer?.(
+      elementId,
+      canvasX - rect.left,
+      rect.width,
+    ) ?? false;
+  }
+
+  private projectElementRect(
+    elementId: string,
+  ): { left: number; top: number; width: number; height: number } | undefined {
+    const camera = this.scene.activeCamera;
+    const canvas = this.canvas;
+    if (!camera || !canvas) return undefined;
+    const mesh = this.scene.meshes.find((candidate) =>
+      candidate.metadata?.elementId === elementId &&
+      candidate.metadata?.element?.id === elementId,
+    );
+    if (!mesh) return undefined;
+    mesh.computeWorldMatrix(true);
+    const engine = this.scene.getEngine();
+    const renderWidth = engine.getRenderWidth();
+    const renderHeight = engine.getRenderHeight();
+    if (!renderWidth || !renderHeight) return undefined;
+    const viewport = camera.viewport.toGlobal(renderWidth, renderHeight);
+    const transform = this.scene.getTransformMatrix();
+    const projected = mesh.getBoundingInfo().boundingBox.vectorsWorld.map((corner) =>
+      Vector3.Project(corner, Matrix.IdentityReadOnly, transform, viewport),
+    );
+    const xScale = canvas.clientWidth / renderWidth;
+    const yScale = canvas.clientHeight / renderHeight;
+    const left = Math.min(...projected.map((point) => point.x)) * xScale;
+    const right = Math.max(...projected.map((point) => point.x)) * xScale;
+    const top = Math.min(...projected.map((point) => point.y)) * yScale;
+    const bottom = Math.max(...projected.map((point) => point.y)) * yScale;
+    return { left, top, width: right - left, height: bottom - top };
   }
 
   private readonly handleKeyDown = (event: KeyboardEvent): void => {
@@ -948,7 +1086,8 @@ export class AstylarInteractionRuntime {
     const visit = (element: SiteData['root']['children'][number]): void => {
       const currentOrder = order++;
       if (element.hidden) return;
-      const focusable = element.type === 'input' || element.type === 'button' ||
+      const focusable = element.tabindex !== undefined ||
+        element.type === 'input' || element.type === 'button' ||
         element.type === 'select' || element.type === 'textarea' ||
         (element.type === 'a' && !!element.href);
       const tabIndex = element.tabindex ?? 0;

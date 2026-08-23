@@ -22,6 +22,8 @@ describe('AstylarSurfaceHandle', () => {
       update: jasmine.createSpy('update').and.resolveTo(snapshot),
       invalidate: jasmine.createSpy('invalidate').and.resolveTo(snapshot),
       whenSettled: jasmine.createSpy('whenSettled').and.resolveTo(snapshot),
+      focus: jasmine.createSpy('focus').and.returnValue(true),
+      blur: jasmine.createSpy('blur').and.returnValue(true),
       getSession: jasmine.createSpy('getSession').and.returnValue({ snapshot }),
       getResourceSnapshot: jasmine.createSpy('getResourceSnapshot'),
       getInteractionSnapshot: jasmine.createSpy('getInteractionSnapshot'),
@@ -69,6 +71,20 @@ describe('AstylarSurfaceHandle', () => {
     expect(host.invalidate).toHaveBeenCalledOnceWith('resize', scene);
   });
 
+  it('routes programmatic focus and blur through its own scene', () => {
+    const { host, scene, surface } = setup();
+
+    expect(surface.focus('menu', { focusVisible: false, scrollIntoView: false })).toBeTrue();
+    expect(surface.blur()).toBeTrue();
+
+    expect(host.focus).toHaveBeenCalledOnceWith(
+      'menu',
+      { focusVisible: false, scrollIntoView: false },
+      scene,
+    );
+    expect(host.blur).toHaveBeenCalledOnceWith(scene);
+  });
+
   it('disposes idempotently and rejects later operations', () => {
     const { host, scene, surface } = setup();
 
@@ -79,6 +95,8 @@ describe('AstylarSurfaceHandle', () => {
     expect(surface.disposed).toBeTrue();
     expect(() => surface.update(data)).toThrowError(/disposed Astylar surface/);
     expect(() => surface.resize()).toThrowError(/disposed Astylar surface/);
+    expect(() => surface.focus('menu')).toThrowError(/disposed Astylar surface/);
+    expect(() => surface.blur()).toThrowError(/disposed Astylar surface/);
     expect(host.reportDiagnostic).toHaveBeenCalledWith(jasmine.objectContaining({
       code: 'surface-disposed',
       severity: 'error',

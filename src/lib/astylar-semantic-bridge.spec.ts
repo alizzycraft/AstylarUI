@@ -139,6 +139,48 @@ describe('AstylarSemanticBridge', () => {
     expect(input?.value).toBe('Atlas');
   });
 
+  it('maps composite-widget ARIA state and authored ID references', () => {
+    const bridge = new AstylarSemanticBridge(canvas);
+    bridge.reconcile({
+      styles: [],
+      root: { children: [
+        {
+          type: 'div', id: 'picker', role: 'combobox', tabindex: 0,
+          ariaExpanded: true, ariaControls: 'choices help', ariaHaspopup: 'listbox',
+          ariaInvalid: 'spelling', ariaDisabled: false,
+          ariaActivedescendant: 'choice-two', ariaAutocomplete: 'list',
+          ariaOrientation: 'vertical', ariaValueMin: 0, ariaValueMax: 10,
+          ariaValueNow: 4, ariaValueText: 'Four', ariaMultiselectable: false,
+        },
+        { type: 'div', id: 'choices', role: 'listbox', children: [
+          {
+            type: 'div', id: 'choice-two', role: 'option', ariaSelected: true,
+            ariaChecked: 'mixed', ariaPressed: false, ariaPosinset: 2,
+            ariaSetsize: 3, ariaLevel: 1, ariaSort: 'ascending',
+          },
+        ] },
+        { type: 'p', id: 'help', textContent: 'Choose one.' },
+      ] },
+    });
+
+    const picker = host.querySelector<HTMLElement>('[data-astylar-id="picker"]')!;
+    const choice = host.querySelector<HTMLElement>('[data-astylar-id="choice-two"]')!;
+    const choices = host.querySelector<HTMLElement>('[data-astylar-id="choices"]')!;
+    const help = host.querySelector<HTMLElement>('[data-astylar-id="help"]')!;
+    expect(picker.getAttribute('aria-controls')).toBe(`${choices.id} ${help.id}`);
+    expect(picker.getAttribute('aria-activedescendant')).toBe(choice.id);
+    expect(picker.getAttribute('aria-expanded')).toBe('true');
+    expect(picker.getAttribute('aria-invalid')).toBe('spelling');
+    expect(picker.getAttribute('aria-disabled')).toBe('false');
+    expect(picker.getAttribute('aria-haspopup')).toBe('listbox');
+    expect(picker.getAttribute('aria-valuetext')).toBe('Four');
+    expect(picker.getAttribute('aria-multiselectable')).toBe('false');
+    expect(choice.getAttribute('aria-selected')).toBe('true');
+    expect(choice.getAttribute('aria-checked')).toBe('mixed');
+    expect(choice.getAttribute('aria-posinset')).toBe('2');
+    expect(choice.getAttribute('aria-sort')).toBe('ascending');
+  });
+
   it('maps native control properties and synchronizes mutable scene state', () => {
     const bridge = new AstylarSemanticBridge(canvas);
     bridge.reconcile({
@@ -185,13 +227,18 @@ describe('AstylarSemanticBridge', () => {
 
     bridge.syncControlStates((elementId) => ({
       choice: { value: 'yes', checked: true, required: true, disabled: false },
-      plan: { value: 'solo', selectedIndex: 0, required: true, expanded: true },
+      plan: {
+        value: 'solo', selectedIndex: 0, required: true, expanded: true,
+        activeDescendant: 'plan-option-0',
+      },
     })[elementId]);
 
     expect(choice?.checked).toBeTrue();
     expect(plan?.value).toBe('solo');
     expect(plan?.selectedIndex).toBe(0);
     expect(plan?.getAttribute('aria-expanded')).toBe('true');
+    expect(plan?.options[0].id).toBeTruthy();
+    expect(plan?.getAttribute('aria-activedescendant')).toBe(plan?.options[0].id);
   });
 
   it('preserves forward and backward text selection direction in semantic controls', () => {
@@ -212,6 +259,27 @@ describe('AstylarSemanticBridge', () => {
 
     expect(title.selectionDirection).toBe('forward');
     expect(copy.selectionDirection).toBe('backward');
+    bridge.dispose();
+  });
+
+  it('does not apply unsupported text selections to email and number inputs', () => {
+    const bridge = new AstylarSemanticBridge(canvas);
+    bridge.reconcile({
+      styles: [],
+      root: { children: [
+        { type: 'input', inputType: 'email', id: 'email', value: 'before@example.test' },
+        { type: 'input', inputType: 'number', id: 'quantity', value: '1' },
+      ] },
+    });
+
+    expect(() => bridge.syncControlStates((id) => ({
+      value: id === 'email' ? 'after@example.test' : '2',
+      selectionStart: 0,
+      selectionEnd: 1,
+      selectionDirection: 'forward',
+    }))).not.toThrow();
+    expect(host.querySelector<HTMLInputElement>('[data-astylar-id="email"]')?.value).toBe('after@example.test');
+    expect(host.querySelector<HTMLInputElement>('[data-astylar-id="quantity"]')?.value).toBe('2');
     bridge.dispose();
   });
 

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BabylonRender } from '../interfaces/render.types';
 import { DOMElement } from '../../../types/dom-element';
-import { InputElement, InputType, CheckboxInput, RadioInput, SelectElement, ValidationRule, Button, TextInput } from '../../../types/input-types';
+import { InputElement, InputType, CheckboxInput, RadioInput, SelectElement, ValidationRule, Button, TextInput, RangeInput } from '../../../types/input-types';
 import * as BABYLON from '@babylonjs/core';
 import { StyleRule } from '../../../types/style-rule';
 import { TextInputManager, TextInputMutableState } from './text-input.manager';
@@ -13,6 +13,7 @@ import { FocusManager } from './focus.manager';
 import { FormValidatorService } from './form-validator.service';
 import { FormManager } from './form.manager';
 import { BabylonCameraService } from '../../babylon-camera.service';
+import { RangeManager } from './range.manager';
 
 export interface TextControlStateSnapshot {
     elementId: string;
@@ -35,6 +36,7 @@ export interface NonTextControlStateSnapshot {
     selectedValue?: unknown;
     dropdownOpen?: boolean;
     activeOptionValue?: unknown;
+    rangeValue?: number;
 }
 
 export interface SelectPopupLifecycleSnapshot {
@@ -64,7 +66,8 @@ export class InputElementService {
         private focusManager: FocusManager,
         private formValidator: FormValidatorService,
         private formManager: FormManager,
-        private cameraService: BabylonCameraService
+        private cameraService: BabylonCameraService,
+        private rangeManager?: RangeManager,
     ) { }
 
     /**
@@ -91,6 +94,10 @@ export class InputElementService {
             case InputType.Number:
             case InputType.Textarea:
                 inputElement = this.textInputManager.createTextInput(element, render, null as any, style, worldDimensions);
+                break;
+
+            case InputType.Range:
+                inputElement = this.requireRangeManager().createRange(element, render, style, worldDimensions);
                 break;
 
             case InputType.Button:
@@ -220,6 +227,10 @@ export class InputElementService {
             case InputType.Number:
             case InputType.Textarea:
                 (inputElement as TextInput).textContent = String(value);
+                break;
+
+            case InputType.Range:
+                this.requireRangeManager().setValue(inputElement as RangeInput, Number(value));
                 break;
 
             case InputType.Checkbox:
@@ -411,6 +422,9 @@ export class InputElementService {
                 snapshot.selectedValue = select.options[select.selectedIndex]?.value;
                 snapshot.dropdownOpen = select.dropdownOpen;
                 snapshot.activeOptionValue = select.options[select.activeOptionIndex]?.value;
+            } else if (input.type === InputType.Range) {
+                snapshot.authoredValue = input.element.value;
+                snapshot.rangeValue = Number(input.value);
             }
             snapshots.push(snapshot);
         }
@@ -449,6 +463,8 @@ export class InputElementService {
                         this.selectManager.restoreExpandedState(select, activeIndex);
                     }
                 }
+            } else if (input.type === InputType.Range && snapshot.rangeValue !== undefined) {
+                this.requireRangeManager().setValue(input as RangeInput, snapshot.rangeValue);
             }
 
             input.validationState = {
@@ -495,7 +511,14 @@ export class InputElementService {
 
     /** Select keyboard choices commit immediately rather than waiting for blur. */
     emitsImmediateChangeOnKeyboardMutation(elementId: string): boolean {
-        return this.inputElements.get(elementId)?.type === InputType.Select;
+        const type = this.inputElements.get(elementId)?.type;
+        return type === InputType.Select || type === InputType.Range;
+    }
+
+    setRangeFromPointer(elementId: string, localX: number, width: number): boolean {
+        const input = this.inputElements.get(elementId);
+        if (!input || input.type !== InputType.Range || input.disabled || width <= 0) return false;
+        return this.requireRangeManager().setFromRatio(input as RangeInput, localX / width);
     }
 
     /** Native expanded selects consume Escape before page keydown listeners observe it. */
@@ -707,6 +730,11 @@ export class InputElementService {
                 const fallbackIndex = select.options.findIndex((option) => !option.disabled);
                 const index = authoredIndex >= 0 ? authoredIndex : fallbackIndex;
                 if (index >= 0) this.selectManager.selectOption(select, index);
+            } else if (input.type === InputType.Range) {
+                this.requireRangeManager().setValue(
+                    input as RangeInput,
+                    Number(input.element.value ?? ((input as RangeInput).min + (input as RangeInput).max) / 2),
+                );
             }
 
             input.validationState.touched = false;
@@ -767,6 +795,7 @@ export class InputElementService {
             case 'password': return InputType.Password;
             case 'email': return InputType.Email;
             case 'number': return InputType.Number;
+            case 'range': return InputType.Range;
             case 'button': return InputType.Button;
             case 'submit': return InputType.Submit;
             case 'reset': return InputType.Button;
@@ -789,6 +818,10 @@ export class InputElementService {
             case InputType.Number:
             case InputType.Textarea:
                 this.textInputManager.disposeTextInput(inputElement as TextInput);
+                break;
+
+            case InputType.Range:
+                this.requireRangeManager().dispose(inputElement as RangeInput);
                 break;
 
             case InputType.Button:
@@ -871,6 +904,11 @@ export class InputElementService {
             input.type === InputType.Textarea;
     }
 
+    private requireRangeManager(): RangeManager {
+        if (!this.rangeManager) throw new Error('RangeManager is required for range controls.');
+        return this.rangeManager;
+    }
+
     private isCompatibleNonTextSnapshot(
         input: InputElement,
         snapshot: NonTextControlStateSnapshot,
@@ -886,6 +924,9 @@ export class InputElementService {
             return Object.is(input.element.value, snapshot.authoredValue) &&
                 (input as SelectElement).options.some((option) =>
                     Object.is(option.value, snapshot.selectedValue) && !option.disabled);
+        }
+        if (input.type === InputType.Range) {
+            return Object.is(input.element.value, snapshot.authoredValue);
         }
         return input.type === InputType.Button || input.type === InputType.Submit;
     }

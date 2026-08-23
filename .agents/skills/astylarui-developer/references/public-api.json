@@ -133,6 +133,10 @@
       "kind": "type"
     },
     {
+      "name": "AstylarFocusOptions",
+      "kind": "type"
+    },
+    {
       "name": "astylarInputReconciliationKind",
       "kind": "runtime"
     },

@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { BabylonRender } from '../interfaces/render.types';
-import { InputElement, TextInput, Button, CheckboxInput, RadioInput, SelectElement, InputType, CursorDirection } from '../../../types/input-types';
+import { InputElement, TextInput, Button, CheckboxInput, RadioInput, SelectElement, RangeInput, InputType, CursorDirection } from '../../../types/input-types';
 import { TextInputManager } from './text-input.manager';
 import { ButtonManager } from './button.manager';
 import { CheckboxManager } from './checkbox.manager';
 import { SelectManager } from './select.manager';
 import * as BABYLON from '@babylonjs/core';
 import { StyleRule } from '../../../types/style-rule';
+import { RangeManager } from './range.manager';
 
 /**
  * Service responsible for handling keyboard input for input elements
@@ -19,7 +20,8 @@ export class KeyboardInputHandler {
         private textInputManager: TextInputManager,
         private buttonManager: ButtonManager,
         private checkboxManager: CheckboxManager,
-        private selectManager: SelectManager
+        private selectManager: SelectManager,
+        private rangeManager: RangeManager,
     ) { }
 
     /**
@@ -57,6 +59,10 @@ export class KeyboardInputHandler {
 
             case InputType.Select:
                 this.handleSelectKeyboard(event, inputElement as SelectElement, render, style);
+                break;
+
+            case InputType.Range:
+                this.rangeManager.handleKey(inputElement as RangeInput, event);
                 break;
         }
     }

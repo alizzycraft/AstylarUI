@@ -62,6 +62,7 @@ import { AstylarVisualResourceReconciler } from './astylar-visual-resource-recon
 import {
   AstylarSurfaceHandle,
   type AstylarSurface,
+  type AstylarFocusOptions,
 } from './astylar-surface';
 import { ASTYLAR_SURFACE_SERVICE_PROVIDERS } from './astylar-surface-providers';
 import {
@@ -614,6 +615,8 @@ class AstylarRenderer {
           this.inputElementService.commitsValueOnBlur(elementId),
         emitsImmediateChangeOnKeyboardMutation: (elementId) =>
           this.inputElementService.emitsImmediateChangeOnKeyboardMutation(elementId),
+        setRangeFromPointer: (elementId, localX, width) =>
+          this.inputElementService.setRangeFromPointer(elementId, localX, width),
         handleExpandedSelectKeyDown: (elementId, event) =>
           this.inputElementService.handleExpandedSelectKeyDown(elementId, event),
         hasExpandedSelectPopup: () =>
@@ -784,6 +787,14 @@ class AstylarRenderer {
     return this.interactions.get(scene)?.snapshot;
   }
 
+  focus(elementId: string, options: AstylarFocusOptions | undefined, scene: Scene): boolean {
+    return this.interactions.get(scene)?.focusElement(elementId, options) ?? false;
+  }
+
+  blur(scene: Scene): boolean {
+    return this.interactions.get(scene)?.blurElement() ?? false;
+  }
+
   getScrollSnapshot(scene: Scene): AstylarScrollSnapshot | undefined {
     return this.scrolling.get(scene)?.snapshot;
   }
@@ -923,6 +934,7 @@ class AstylarRenderer {
       checked?: boolean;
       selectedIndex?: number;
       dropdownOpen?: boolean;
+      activeOptionIndex?: number;
       selectionStart?: number;
       selectionEnd?: number;
       cursorPosition?: number;
@@ -935,6 +947,9 @@ class AstylarRenderer {
     }
     if (typeof live.dropdownOpen === 'boolean') {
       state.expanded = live.dropdownOpen;
+      if (live.dropdownOpen && typeof live.activeOptionIndex === 'number') {
+        state.activeDescendant = `${elementId}-option-${live.activeOptionIndex}`;
+      }
     }
     if (typeof live.selectionStart === 'number' && typeof live.selectionEnd === 'number') {
       state.selectionStart = live.selectionStart;
@@ -1382,6 +1397,18 @@ export class Astylar {
 
   getInteractionSnapshot(scene: Scene): AstylarInteractionSnapshot | undefined {
     return this.surfaces.get(scene)?.renderer.getInteractionSnapshot(scene);
+  }
+
+  /** Compatibility API. Prefer `surface.focus()` on the handle returned by `mount()`. */
+  focus(elementId: string, options?: AstylarFocusOptions, scene?: Scene): boolean {
+    const record = this.getRecord(scene);
+    return record.renderer.focus(elementId, options, scene ?? this.activeScene!);
+  }
+
+  /** Compatibility API. Prefer `surface.blur()` on the handle returned by `mount()`. */
+  blur(scene?: Scene): boolean {
+    const record = this.getRecord(scene);
+    return record.renderer.blur(scene ?? this.activeScene!);
   }
 
   getScrollSnapshot(scene: Scene): AstylarScrollSnapshot | undefined {

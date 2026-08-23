@@ -92,6 +92,7 @@ export type ParityInteractionEventType =
   | 'pointerenter'
   | 'pointerleave'
   | 'pointerdown'
+  | 'pointermove'
   | 'pointerup'
   | 'click'
   | 'focus'

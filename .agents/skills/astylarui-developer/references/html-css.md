@@ -184,8 +184,10 @@ or icon children does not clear the card's hover style.
 
 ## Forms, interaction, selection, and scrolling
 
-The implemented control subset includes text, password, email, number, textarea,
-button, submit/reset, checkbox, radio, and select behavior. Parity fixtures cover
+The implemented control subset includes text, password, email, number, range,
+textarea, button, submit/reset, checkbox, radio, and select behavior. Range
+inputs clamp and step values, drag with pointer capture, expose semantic range
+values, and implement Arrow/Page/Home/End keyboard boundaries. Parity fixtures cover
 pointer and keyboard activation, explicit labels, focus navigation, editing,
 caret movement, selection/clipboard commands, textarea navigation and
 autoscroll, radio groups, closed and expanded select workflows, tested
@@ -220,7 +222,9 @@ const options: AstylarRenderOptions = {
 
 `DOMElement.onclick` and `StyleRule.onclick` strings are deprecated compatibility
 fields and are never evaluated. Astylar events expose a small DOM-like contract
-rather than browser `EventTarget` and arbitrary DOM APIs.
+rather than browser `EventTarget` and arbitrary DOM APIs. Pointer events include
+stable pointer identity/type, button state, client/canvas coordinates, and
+target-local CSS-pixel coordinates.
 
 Overflow `hidden`, `clip`, `auto`, and `scroll`, nested clipping, wheel input,
 scroll-into-view, retained offset across compatible updates, and cleanup are
@@ -259,6 +263,7 @@ Build replaceable `SiteData` from application state. A mounted surface provides:
 
 - `update(nextSiteData)` to reconcile new authored data;
 - `resize()` for a changed canvas viewport;
+- `focus(elementId, options?)` and `blur()` for application-owned composite focus;
 - `whenSettled()` for the current owned generation;
 - diagnostics for sessions, resources, interaction, scrolling, semantics,
   reconciliation, plugins, and plugin resources;

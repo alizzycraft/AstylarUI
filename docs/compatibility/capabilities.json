@@ -60,8 +60,8 @@
         "id": "form-controls",
         "classification": "compatible",
         "names": ["input", "button", "form", "select", "textarea", "label", "option", "fieldset", "legend", "output"],
-        "behavior": "A deliberate control, focus, keyboard, pointer, validation, submit/reset, selection, and closed/expanded select subset is supported. The default text-control caret follows the resolved text color; authored caret-color is not yet supported.",
-        "defaultStyle": "elementDefaults[name] merged over globalDefaultStyle; checkbox/radio use inputType-specific defaults",
+        "behavior": "A deliberate control, focus, keyboard, pointer, validation, submit/reset, selection, range, and closed/expanded select subset is supported. Range inputs clamp min/max/step values and support pointer dragging plus Arrow/Page/Home/End keys. The default text-control caret follows the resolved text color; authored caret-color is not yet supported.",
+        "defaultStyle": "elementDefaults[name] merged over globalDefaultStyle; checkbox/radio/range use inputType-specific defaults",
         "pluginCanSupply": false,
         "evidence": ["fixture:styled-text-input", "fixture:interaction-form-validation", "fixture:interaction-select-expanded-keyboard", "fixture:interaction-textarea-selection"]
       },
@@ -121,7 +121,7 @@
       {
         "id": "accessibility",
         "classification": "compatible",
-        "names": ["role", "ariaLabel", "ariaLabelledby", "ariaDescribedby", "ariaLive", "ariaAtomic", "ariaCurrent"],
+        "names": ["role", "ariaLabel", "ariaLabelledby", "ariaDescribedby", "ariaLive", "ariaAtomic", "ariaCurrent", "ariaInvalid", "ariaDisabled", "ariaExpanded", "ariaControls", "ariaHaspopup", "ariaPressed", "ariaChecked", "ariaSelected", "ariaActivedescendant", "ariaAutocomplete", "ariaOrientation", "ariaSort", "ariaValueMin", "ariaValueMax", "ariaValueNow", "ariaValueText", "ariaLevel", "ariaPosinset", "ariaSetsize", "ariaMultiselectable"],
         "behavior": "CamelCase JSON fields feed Astylar's offscreen semantic bridge, not DOM attributes on the Babylon canvas.",
         "evidence": ["fixture:semantic-naming", "fixture:semantic-status-validation"]
       },
@@ -407,7 +407,7 @@
     "command": "npm run capabilities:check",
     "authoritativeSources": [
       { "path": "src/lib/astylar-core-capabilities.ts", "sha256": "ab7da6f8fb24ee3370d016f1366b656f2c32e6f1146df19b0a847e9822a7eee0" },
-      { "path": "src/app/types/dom-element.ts", "sha256": "dac9ca110f35e6b1451a6edead3b7e82b593a3829d0866b16587017e7a002f49" },
+      { "path": "src/app/types/dom-element.ts", "sha256": "72eef2f09d5cdacaab10db7328c40e5b4748c3f22640e2b40f0436a268351e83" },
       { "path": "src/app/types/style-rule.ts", "sha256": "4750f39b24e39fb9a9d0e0908af853d9d405b21691e5406f5b21209683da7c04" },
       { "path": "src/app/config/browser-defaults.ts", "sha256": "b80995dc5599df550b9180c313c357c960f27199c6d364f67e778e073116a493" },
       { "path": "src/app/services/dom/style.service.ts", "sha256": "a81383c44a51d5b458bc6840e4b7c53bcc38dfbce22bf48f710ac96698a881ba" },

@@ -5,6 +5,7 @@ export type AstylarEventType =
   | 'pointerenter'
   | 'pointerleave'
   | 'pointerdown'
+  | 'pointermove'
   | 'pointerup'
   | 'click'
   | 'focus'
@@ -35,7 +36,18 @@ export interface AstylarEventInit extends AstylarEventState {
   altKey?: boolean;
   metaKey?: boolean;
   button?: number;
+  buttons?: number;
+  pointerId?: number;
   pointerType?: string;
+  isPrimary?: boolean;
+  clientX?: number;
+  clientY?: number;
+  /** Pointer coordinates relative to the rendering canvas. */
+  canvasX?: number;
+  canvasY?: number;
+  /** Pointer coordinates relative to the target element's projected bounds. */
+  localX?: number;
+  localY?: number;
 }
 
 export interface AstylarEventSnapshot extends AstylarEventInit {
@@ -101,7 +113,16 @@ class MutableAstylarEvent implements AstylarEvent {
   get altKey(): boolean | undefined { return this.init.altKey; }
   get metaKey(): boolean | undefined { return this.init.metaKey; }
   get button(): number | undefined { return this.init.button; }
+  get buttons(): number | undefined { return this.init.buttons; }
+  get pointerId(): number | undefined { return this.init.pointerId; }
   get pointerType(): string | undefined { return this.init.pointerType; }
+  get isPrimary(): boolean | undefined { return this.init.isPrimary; }
+  get clientX(): number | undefined { return this.init.clientX; }
+  get clientY(): number | undefined { return this.init.clientY; }
+  get canvasX(): number | undefined { return this.init.canvasX; }
+  get canvasY(): number | undefined { return this.init.canvasY; }
+  get localX(): number | undefined { return this.init.localX; }
+  get localY(): number | undefined { return this.init.localY; }
 
   preventDefault(): void {
     this.defaultPrevented = true;

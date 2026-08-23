@@ -30,6 +30,13 @@ export interface AstylarSurfaceDiagnostics {
   readonly pluginResources: AstylarPluginResourceSnapshot;
 }
 
+export interface AstylarFocusOptions {
+  /** Paint focus-visible styling for keyboard-like programmatic focus. */
+  focusVisible?: boolean;
+  /** Scroll the focused element into the nearest visible position. Defaults to true. */
+  scrollIntoView?: boolean;
+}
+
 /** An explicitly owned rendering surface returned by `Astylar.mount()`. */
 export interface AstylarSurface {
   readonly scene: Scene;
@@ -38,6 +45,8 @@ export interface AstylarSurface {
   update(siteData: SiteData): Promise<AstylarSessionSnapshot>;
   resize(): Promise<AstylarSessionSnapshot>;
   whenSettled(): Promise<AstylarSessionSnapshot>;
+  focus(elementId: string, options?: AstylarFocusOptions): boolean;
+  blur(): boolean;
   dispose(): void;
 }
 
@@ -48,6 +57,8 @@ export interface AstylarSurfaceHost {
     scene: Scene,
   ): Promise<AstylarSessionSnapshot>;
   whenSettled(scene: Scene): Promise<AstylarSessionSnapshot>;
+  focus(elementId: string, options: AstylarFocusOptions | undefined, scene: Scene): boolean;
+  blur(scene: Scene): boolean;
   getSession(scene: Scene): { snapshot: AstylarSessionSnapshot } | undefined;
   getResourceSnapshot(scene: Scene): AstylarSceneResourceSnapshot | undefined;
   getInteractionSnapshot(scene: Scene): AstylarInteractionSnapshot | undefined;
@@ -105,6 +116,16 @@ export class AstylarSurfaceHandle implements AstylarSurface {
   whenSettled(): Promise<AstylarSessionSnapshot> {
     this.assertActive('wait for');
     return this.host.whenSettled(this.scene);
+  }
+
+  focus(elementId: string, options?: AstylarFocusOptions): boolean {
+    this.assertActive('focus');
+    return this.host.focus(elementId, options, this.scene);
+  }
+
+  blur(): boolean {
+    this.assertActive('blur');
+    return this.host.blur(this.scene);
   }
 
   dispose(): void {

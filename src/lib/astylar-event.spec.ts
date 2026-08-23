@@ -71,6 +71,35 @@ describe('AstylarEventDispatcher', () => {
     expect(dispatcher.dispatch({ type: 'click', targetId: 'button' })).toBeUndefined();
     expect(events).toEqual([]);
   });
+
+  it('preserves pointer identity and canvas-local coordinate data', () => {
+    let observed: AstylarEventSnapshot | undefined;
+    const dispatcher = new AstylarEventDispatcher(createSiteData(), {
+      handlers: {
+        button: {
+          pointermove: (event) => {
+            expect(event.pointerId).toBe(7);
+            expect(event.buttons).toBe(1);
+            expect(event.localX).toBe(12);
+          },
+        },
+      },
+      onEvent: (event) => { observed = event; },
+    });
+
+    dispatcher.dispatch({
+      type: 'pointermove', targetId: 'button', button: 0, buttons: 1,
+      pointerId: 7, pointerType: 'pen', isPrimary: true,
+      clientX: 42, clientY: 56, canvasX: 22, canvasY: 28,
+      localX: 12, localY: 8,
+    });
+
+    expect(observed).toEqual(jasmine.objectContaining({
+      type: 'pointermove', pointerId: 7, pointerType: 'pen', isPrimary: true,
+      clientX: 42, clientY: 56, canvasX: 22, canvasY: 28,
+      localX: 12, localY: 8,
+    }));
+  });
 });
 
 describe('AstylarInteractionRuntime', () => {
@@ -415,6 +444,7 @@ describe('AstylarInteractionRuntime', () => {
     expect(hoverStates).toEqual([['action', true]]);
     expect(events.map((event) => `${event.type}:${event.targetId}`)).toEqual([
       'pointerenter:action',
+      'pointermove:action',
     ]);
     hoverStates.length = 0;
     runtime.reconcileModalState();
@@ -538,7 +568,9 @@ describe('AstylarInteractionRuntime', () => {
     ]);
     expect(events.map((event) => `${event.type}:${event.targetId}`)).toEqual([
       'pointerenter:card',
+      'pointermove:card',
       'pointerenter:copy',
+      'pointermove:copy',
     ]);
     runtime.dispose();
     scene.dispose();

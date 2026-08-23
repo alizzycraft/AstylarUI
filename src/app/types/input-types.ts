@@ -10,6 +10,7 @@ export enum InputType {
     Password = 'password',
     Email = 'email',
     Number = 'number',
+    Range = 'range',
     Button = 'button',
     Submit = 'submit',
     Checkbox = 'checkbox',
@@ -151,6 +152,16 @@ export interface RadioInput extends InputElement {
     label?: string;
     selectionIndicatorMesh?: BABYLON.Mesh;
     labelMesh?: BABYLON.Mesh;
+}
+
+export interface RangeInput extends InputElement {
+    value: number;
+    min: number;
+    max: number;
+    step: number;
+    trackMesh?: BABYLON.Mesh;
+    activeTrackMesh?: BABYLON.Mesh;
+    thumbMesh?: BABYLON.Mesh;
 }
 
 /**

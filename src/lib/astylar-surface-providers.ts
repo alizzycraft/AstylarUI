@@ -56,6 +56,7 @@ import { TextCursorRenderer } from '../app/services/dom/input/text-cursor.render
 import { InputElementService } from '../app/services/dom/input/input-element.service';
 import { FormValidatorService } from '../app/services/dom/input/form-validator.service';
 import { SelectManager } from '../app/services/dom/input/select.manager';
+import { RangeManager } from '../app/services/dom/input/range.manager';
 import { AstylarDiagnostics } from './astylar-diagnostics';
 import { AstylarDocumentRecovery } from './astylar-document-recovery';
 import { AstylarPluginHost } from './astylar-plugin-host';
@@ -122,4 +123,5 @@ export const ASTYLAR_SURFACE_SERVICE_PROVIDERS: Provider[] = [
   InputElementService,
   FormValidatorService,
   SelectManager,
+  RangeManager,
 ];

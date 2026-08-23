@@ -77,6 +77,28 @@ export interface DOMElement {
   ariaLive?: 'off' | 'polite' | 'assertive';
   ariaAtomic?: boolean;
   ariaCurrent?: boolean | 'page' | 'step' | 'location' | 'date' | 'time';
+  ariaInvalid?: boolean | 'grammar' | 'spelling';
+  ariaDisabled?: boolean;
+  ariaExpanded?: boolean;
+  /** Space-separated authored element IDs. */
+  ariaControls?: string;
+  ariaHaspopup?: boolean | 'menu' | 'listbox' | 'tree' | 'grid' | 'dialog';
+  ariaPressed?: boolean | 'mixed';
+  ariaChecked?: boolean | 'mixed';
+  ariaSelected?: boolean;
+  /** An authored element ID identifying the active descendant. */
+  ariaActivedescendant?: string;
+  ariaAutocomplete?: 'none' | 'inline' | 'list' | 'both';
+  ariaOrientation?: 'horizontal' | 'vertical';
+  ariaSort?: 'none' | 'ascending' | 'descending' | 'other';
+  ariaValueMin?: number;
+  ariaValueMax?: number;
+  ariaValueNow?: number;
+  ariaValueText?: string;
+  ariaLevel?: number;
+  ariaPosinset?: number;
+  ariaSetsize?: number;
+  ariaMultiselectable?: boolean;
   // Table-specific
   tableProperties?: {
     colspan?: number;
