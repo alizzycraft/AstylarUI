@@ -60,7 +60,7 @@ import { DomSanitizer } from '@angular/platform-browser';
       <p class="eyebrow">Angular Material 20 reference</p><h1>{{ family() }}</h1>
       <section class="demo" [id]="family() + '-root'" [attr.aria-label]="family() + ' showcase'" [style.border-radius.px]="24 * store.tokens().cornerScale">
         @switch (family()) {
-          @case ('toolbar') { <mat-toolbar id="toolbar-primary" color="primary"><span>Material workspace</span><span class="spacer"></span><button mat-button>Action</button></mat-toolbar> }
+          @case ('toolbar') { <mat-toolbar id="toolbar-primary" color="primary"><span id="toolbar-title">Material workspace</span><span class="spacer"></span><button id="toolbar-action" mat-button>Action</button></mat-toolbar> }
           @case ('sidenav') { <mat-sidenav-container id="sidenav-primary"><mat-sidenav mode="side" opened>Navigation</mat-sidenav><mat-sidenav-content>Main content</mat-sidenav-content></mat-sidenav-container> }
           @case ('grid-list') { <mat-grid-list id="grid-list-primary" cols="2" rowHeight="80px"><mat-grid-tile>One</mat-grid-tile><mat-grid-tile>Two</mat-grid-tile></mat-grid-list> }
           @case ('divider') { <p>Above</p><mat-divider id="divider-primary"/><p>Below</p> }

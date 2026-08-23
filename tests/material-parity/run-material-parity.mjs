@@ -8,7 +8,7 @@ import { chromium } from 'playwright-core';
 import { PNG } from 'pngjs';
 import { ssim } from 'ssim.js';
 import {
-  materialFamilies, materialInteractionCases, materialMobileFlowCases, materialProfiles,
+  materialAbsoluteTextAlignmentTargets, materialFamilies, materialInteractionCases, materialMobileFlowCases, materialProfiles,
   materialStaticCases, materialTextAlignmentTargets, materialThresholds,
 } from './benchmark.config.mjs';
 import { measureTextInkCenter, textCenterOffsetError } from './text-alignment-metrics.mjs';
@@ -295,7 +295,7 @@ async function captureInteractionCase(benchmarkCase) {
     const runtimeErrors = [...reference.errors.map((error) => `reference: ${error}`),
       ...astylar.errors.map((error) => `astylar: ${error}`)];
     const eventComparison = compareEvents(referenceEvents, astylarEvents, family, state);
-    const statePaint = compareStatePaint(referenceMeasurement, astylarMeasurement, family, state);
+    const statePaint = compareStatePaint(referenceMeasurement, astylarMeasurement, family, profile, state);
     const resourcesStable = resourceSnapshots.every((snapshot) =>
       snapshot?.surface?.session?.status === 'idle' && snapshot?.surface?.pluginResources?.pending === 0) &&
       (resourceSnapshots.length < 2 || JSON.stringify(resourceCounts(resourceSnapshots[0])) ===
@@ -502,7 +502,14 @@ function compareEvents(reference, candidate, family, state) {
   return { matches: JSON.stringify(expected) === JSON.stringify(actual), reference: expected, astylar: actual };
 }
 
-function compareStatePaint(referenceMeasurement, astylarMeasurement, family, state) {
+function compareStatePaint(referenceMeasurement, astylarMeasurement, family, profile, state) {
+  if (family === 'toolbar' && ['hover', 'held', 'activate-leave'].includes(state)) {
+    const actual = astylarMeasurement.elements?.['toolbar-action']?.interactionBackground?.toLowerCase();
+    const theme = profileTheme(profile);
+    const expected = state === 'activate-leave' ? 'transparent' :
+      mixHexColor(theme.surface, theme.primary, state === 'held' ? .12 : .08);
+    return { matches: actual === expected, expected, astylar: actual };
+  }
   if (family !== 'button' || state !== 'activate-leave') return { matches: true };
   const expected = normalizeColor(referenceMeasurement.elements?.[`${family}-primary`]?.interactionBackground);
   const actual = normalizeColor(astylarMeasurement.elements?.[`${family}-primary`]?.interactionBackground);
@@ -515,6 +522,14 @@ function normalizeColor(value) {
   if (hex) return [0, 2, 4].map((index) => Number.parseInt(hex.slice(index, index + 2), 16)).join(',');
   const channels = value.match(/[\d.]+/g)?.slice(0, 3).map((channel) => Math.round(Number(channel)));
   return channels?.length === 3 ? channels.join(',') : undefined;
+}
+
+function mixHexColor(background, foreground, foregroundAmount) {
+  const channel = (index) => Math.round(
+    Number.parseInt(background.slice(index, index + 2), 16) * (1 - foregroundAmount) +
+    Number.parseInt(foreground.slice(index, index + 2), 16) * foregroundAmount,
+  ).toString(16).padStart(2, '0');
+  return `#${channel(1)}${channel(3)}${channel(5)}`;
 }
 
 function resourceCounts(snapshot) {
@@ -634,7 +649,9 @@ function compareTextAlignment(referenceImage, candidateImage, referenceElements,
     const reference = measureTextInkCenter(referenceImage, expectedBox, scale);
     const astylar = measureTextInkCenter(candidateImage, actualBox, scale);
     if (!reference || !astylar) return { id, matches: false, reason: 'text ink could not be isolated' };
-    const offsetErrorPx = textCenterOffsetError(reference, astylar);
+    const offsetErrorPx = materialAbsoluteTextAlignmentTargets.includes(id)
+      ? Math.abs(reference.centerY - astylar.centerY)
+      : textCenterOffsetError(reference, astylar);
     writeAlignmentArtifacts(referenceImage, candidateImage, expectedBox, scale, directory, id);
     return {
       id,

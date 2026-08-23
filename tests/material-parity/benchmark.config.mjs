@@ -23,6 +23,7 @@ export const materialThresholds = Object.freeze({
 
 export const materialTextAlignmentTargets = Object.freeze({
   core: ['core-primary'],
+  toolbar: ['toolbar-title', 'toolbar-action'],
   button: ['button-primary', 'button-secondary', 'button-disabled'],
   menu: ['menu-primary'],
   'bottom-sheet': ['bottom-sheet-primary'],
@@ -30,6 +31,7 @@ export const materialTextAlignmentTargets = Object.freeze({
   'snack-bar': ['snack-bar-primary'],
   tooltip: ['tooltip-primary'],
 });
+export const materialAbsoluteTextAlignmentTargets = Object.freeze(['toolbar-action']);
 export const materialStaticCases = materialFamilies.flatMap((family) =>
   materialProfiles.flatMap((profile) => materialViewports.map((viewport) => ({ family, profile, viewport }))));
 

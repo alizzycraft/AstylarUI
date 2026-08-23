@@ -300,10 +300,12 @@ export class AstylarShowcaseComponent {
         ...(theme.density === 0 ? [{ selector: '.toolbar', mediaMaxWidth: '500px', height: '56px' }] : []),
         ...(theme.density === -2 ? [{ selector: '.toolbar', mediaMaxWidth: '500px', height: '48px' }] : []),
         ...(theme.density <= -5 ? [{ selector: '.toolbar', mediaMaxWidth: '500px', height: '44px' }] : []),
-        { selector: '.toolbar-title', position: 'relative', top: '-4px', marginLeft: '16px', whiteSpace: 'nowrap', fontSize: '20px', fontWeight: '500' },
-        { selector: '.toolbar-title', mediaMaxWidth: '500px', top: '-9px' },
-        { selector: '.toolbar-action', position: 'absolute', top: `${theme.density === 0 ? 8 : 0}px`, right: '0', width: '64px', height: '40px', borderWidth: '0', background: 'transparent', color: theme.onSurface, fontWeight: '500' },
-        ...(theme.density === 0 ? [{ selector: '.toolbar-action', mediaMaxWidth: '500px', top: '4px' }] : []),
+        { selector: '.toolbar-title', width: '192.15625px', height: '28px', marginLeft: '16px', whiteSpace: 'nowrap', fontSize: '22px', fontWeight: '400', lineHeight: '28px' },
+        { selector: '.toolbar-title-text', position: 'relative', top: `${theme.density <= -5 ? -1 : -2}px` },
+        { selector: '.toolbar-action', position: 'absolute', top: `${theme.density === 0 ? 11 : theme.density <= -5 ? 14 : 12.5}px`, right: '16px', width: '65.140625px', height: `${theme.density === 0 ? 40 : theme.density <= -5 ? 24 : 28}px`, borderWidth: '0', borderRadius: '20px', background: 'transparent', color: theme.onSurface, fontSize: '14px', fontWeight: '500', cursor: 'pointer' },
+        { selector: '.toolbar-action', mediaMaxWidth: '500px', top: `${theme.density === 0 ? 7 : 9}px`, right: '-12.15625px', width: '64px' },
+        { selector: '.toolbar-action:hover', background: mixHex(theme.surface, theme.primary, .08) },
+        { selector: '.toolbar-action:active', background: mixHex(theme.surface, theme.primary, .12) },
         { selector: '.sidenav-container', width: '100%', height: '220px', display: 'flex', background: theme.surface },
         { selector: '.sidenav', width: '160px', height: '220px', boxSizing: 'border-box', padding: '17px 20px 20px', flexShrink: '0', background: theme.mode === 'dark' ? theme.surface : '#f3edf7', color: theme.mode === 'dark' ? '#49454f' : theme.onSurface },
         { selector: '.sidenav-content', flexGrow: '1', height: '220px', boxSizing: 'border-box', padding: '17px 20px 20px', background: theme.mode === 'dark' ? '#fff7ff' : theme.surface, color: theme.mode === 'dark' ? '#1d1b20' : theme.onSurface },
@@ -379,7 +381,7 @@ export class AstylarShowcaseComponent {
 
   private familyElements(family: MaterialFamily): DOMElement[] {
     const state = this.store.state();
-    if (family === 'toolbar') return [{ type: 'div', id: 'toolbar-primary', class: 'toolbar', children: [{ type: 'span', id: 'toolbar-title', class: 'toolbar-title', textContent: 'Material workspace' }, { type: 'button', id: 'toolbar-action', class: 'toolbar-action', value: 'Action' }] }];
+    if (family === 'toolbar') return [{ type: 'div', id: 'toolbar-primary', class: 'toolbar', children: [{ type: 'span', id: 'toolbar-title', class: 'toolbar-title', children: [{ type: 'span', id: 'toolbar-title-text', class: 'toolbar-title-text', textContent: 'Material workspace' }] }, { type: 'button', id: 'toolbar-action', class: 'toolbar-action', value: 'Action' }] }];
     if (family === 'sidenav') return [{ type: 'div', id: 'sidenav-primary', class: 'sidenav-container', children: [{ type: 'aside', id: 'sidenav-nav', class: 'sidenav', textContent: 'Navigation' }, { type: 'main', id: 'sidenav-content', class: 'sidenav-content', textContent: 'Main content' }] }];
     if (family === 'grid-list') return [{ type: 'div', id: 'grid-list-primary', class: 'grid-list', children: [{ type: 'div', id: 'grid-tile-one', class: 'grid-tile', textContent: 'One' }, { type: 'div', id: 'grid-tile-two', class: 'grid-tile', textContent: 'Two' }] }];
     if (family === 'badge') return [{ type: 'span', id: 'badge-primary', class: 'badge-anchor', textContent: 'Notifications', children: [{ type: 'span', id: 'badge-count', class: 'badge-bubble', textContent: '4', ariaLabel: '4 notifications' }] }];
