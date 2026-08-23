@@ -22,7 +22,9 @@ describe('MaterialRippleController', () => {
       width: 141, height: 40, cornerRadius: 20, color: '#ffffff',
     });
     expect(scene.meshes.find((mesh) => mesh.metadata?.showcaseMaterialVisual === 'ripple')?.metadata)
-      .toEqual(jasmine.objectContaining({ elementId: 'button-primary', originX: 18, originY: 20 }));
+      .toEqual(jasmine.objectContaining({
+        elementId: 'button-primary', originX: 18, originY: 20, textureOriginX: 123,
+      }));
     const resourceCounts = { meshes: scene.meshes.length, materials: scene.materials.length, textures: scene.textures.length };
 
     controller.activate({
@@ -32,7 +34,7 @@ describe('MaterialRippleController', () => {
     expect({ meshes: scene.meshes.length, materials: scene.materials.length, textures: scene.textures.length })
       .toEqual(resourceCounts);
     expect(scene.meshes.find((mesh) => mesh.metadata?.showcaseMaterialVisual === 'ripple')?.metadata)
-      .toEqual(jasmine.objectContaining({ originX: 122, originY: 20 }));
+      .toEqual(jasmine.objectContaining({ originX: 122, originY: 20, textureOriginX: 19 }));
 
     controller.dispose();
     expect(scene.meshes).toEqual([button]);

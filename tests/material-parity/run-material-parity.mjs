@@ -295,18 +295,19 @@ async function captureInteractionCase(benchmarkCase) {
     const runtimeErrors = [...reference.errors.map((error) => `reference: ${error}`),
       ...astylar.errors.map((error) => `astylar: ${error}`)];
     const eventComparison = compareEvents(referenceEvents, astylarEvents, family, state);
+    const statePaint = compareStatePaint(referenceMeasurement, astylarMeasurement, family, state);
     const resourcesStable = resourceSnapshots.every((snapshot) =>
       snapshot?.surface?.session?.status === 'idle' && snapshot?.surface?.pluginResources?.pending === 0) &&
       (resourceSnapshots.length < 2 || JSON.stringify(resourceCounts(resourceSnapshots[0])) ===
         JSON.stringify(resourceCounts(resourceSnapshots.at(-1))));
     const focusMatches = state !== 'focus' || referenceFocus === astylarFocus;
     return {
-      family, profile, viewport, state, screenshotSimilarity, textAlignment, semantics, eventComparison,
+      family, profile, viewport, state, screenshotSimilarity, textAlignment, semantics, eventComparison, statePaint,
       focus: { reference: referenceFocus, astylar: astylarFocus, matches: focusMatches },
       runtimeErrors, resourceSnapshots, resourcesStable, astylarState,
       meetsAcceptance: screenshotSimilarity >= materialThresholds.resultSsim &&
         textAlignment.every((result) => result.matches) &&
-        semantics.every((result) => result.matches) && eventComparison.matches && focusMatches &&
+        semantics.every((result) => result.matches) && eventComparison.matches && statePaint.matches && focusMatches &&
         runtimeErrors.length === 0 && resourcesStable,
     };
   } finally {
@@ -501,6 +502,21 @@ function compareEvents(reference, candidate, family, state) {
   return { matches: JSON.stringify(expected) === JSON.stringify(actual), reference: expected, astylar: actual };
 }
 
+function compareStatePaint(referenceMeasurement, astylarMeasurement, family, state) {
+  if (family !== 'button' || state !== 'activate-leave') return { matches: true };
+  const expected = normalizeColor(referenceMeasurement.elements?.[`${family}-primary`]?.interactionBackground);
+  const actual = normalizeColor(astylarMeasurement.elements?.[`${family}-primary`]?.interactionBackground);
+  return { matches: actual === expected, expected, astylar: actual };
+}
+
+function normalizeColor(value) {
+  if (typeof value !== 'string') return undefined;
+  const hex = value.trim().match(/^#([0-9a-f]{6})$/i)?.[1];
+  if (hex) return [0, 2, 4].map((index) => Number.parseInt(hex.slice(index, index + 2), 16)).join(',');
+  const channels = value.match(/[\d.]+/g)?.slice(0, 3).map((channel) => Math.round(Number(channel)));
+  return channels?.length === 3 ? channels.join(',') : undefined;
+}
+
 function resourceCounts(snapshot) {
   return snapshot ? {
     owners: snapshot.surface?.pluginResources?.owners,
@@ -544,7 +560,7 @@ async function measureReference(page, ids) {
       return [id, { exists: true, borderBox: {
         left: rect.left, top: rect.top, right: rect.right, bottom: rect.bottom,
         width: rect.width, height: rect.height,
-      } }];
+      }, interactionBackground: getComputedStyle(element).backgroundColor }];
     }));
     const semantics = Object.fromEntries(targetIds.map((id) => {
       const element = document.getElementById(id);

@@ -38,6 +38,10 @@ export class MaterialRippleController {
     const heightPx = Math.max(1, Math.ceil(activation.height));
     const originX = Math.max(0, Math.min(widthPx, activation.originX));
     const originY = Math.max(0, Math.min(heightPx, activation.originY));
+    // Astylar's button plane faces the camera with its U axis opposite screen X.
+    // Keep public pointer coordinates screen-relative and mirror only at the
+    // texture boundary so left/right activation matches the pointer origin.
+    const textureOriginX = widthPx - originX;
     const texture = new DynamicTexture(`material-ripple-${elementId}`, {
       width: widthPx,
       height: heightPx,
@@ -51,7 +55,7 @@ export class MaterialRippleController {
     plane.parent = button;
     plane.position.z = .02;
     plane.isPickable = false;
-    plane.metadata = { showcaseMaterialVisual: 'ripple', elementId, originX, originY };
+    plane.metadata = { showcaseMaterialVisual: 'ripple', elementId, originX, originY, textureOriginX };
     const material = new StandardMaterial(`material-ripple-${elementId}-material`, scene);
     material.disableLighting = true;
     material.backFaceCulling = false;
@@ -76,11 +80,11 @@ export class MaterialRippleController {
     };
     const observer = scene.onBeforeRenderObservable.add(() => {
       const phase = Math.min(1, (performance.now() - started) / 450);
-      drawRipple(texture, activation, originX, originY, phase);
+      drawRipple(texture, activation, textureOriginX, originY, phase);
       if (phase === 1) dispose();
     });
     this.active.set(elementId, { dispose });
-    drawRipple(texture, activation, originX, originY, 0);
+    drawRipple(texture, activation, textureOriginX, originY, 0);
   }
 
   dispose(): void {

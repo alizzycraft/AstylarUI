@@ -251,9 +251,9 @@ export class AstylarShowcaseComponent {
         { selector: '#snack-bar-primary', width: '145px' },
         { selector: '#tooltip-primary', width: '138px' },
         { selector: '.material-button:hover', background: mixHex(theme.primary, theme.onPrimary, .08) },
-        { selector: '.material-button:active, .material-button:focus', background: mixHex(theme.primary, theme.onPrimary, .12) },
+        { selector: '.material-button:active', background: mixHex(theme.primary, theme.onPrimary, .12) },
         { selector: '.material-button.outlined:hover', background: mixHex(theme.surfaceContainer, theme.primary, .08) },
-        { selector: '.material-button.outlined:active, .material-button.outlined:focus', background: mixHex(theme.surfaceContainer, theme.primary, .12) },
+        { selector: '.material-button.outlined:active', background: mixHex(theme.surfaceContainer, theme.primary, .12) },
         { selector: '.outlined', background: theme.surfaceContainer, color: theme.primary, borderWidth: '1px', borderStyle: 'solid', borderColor: '#79747e' },
         { selector: '.field', width: '100%', height: '56px', padding: '12px 16px', borderWidth: '1px', borderStyle: 'solid', borderColor: '#79747e', borderRadius: `${4 * theme.cornerScale}px`, background: theme.surface, color: theme.mode === 'dark' ? '#e6e1e5' : '#1d1b20' },
         { selector: '.field-shell', position: 'relative', width: '100%', height: `${theme.density === 0 ? 78 : theme.density <= -5 ? 62 : 70}px`, alignSelf: 'flex-start', boxSizing: 'border-box', background: 'transparent' },
@@ -516,7 +516,11 @@ export class AstylarShowcaseComponent {
       const right = Math.max(...projected.map((point) => point.x)) * scaleX;
       const top = Math.min(...projected.map((point) => point.y)) * scaleY;
       const bottom = Math.max(...projected.map((point) => point.y)) * scaleY;
-      return [id, { exists: true, borderBox: { left, top, right, bottom, width: right - left, height: bottom - top } }];
+      return [id, {
+        exists: true,
+        borderBox: { left, top, right, bottom, width: right - left, height: bottom - top },
+        interactionBackground: mesh.metadata?.astylarResolvedInteractionStyle?.background,
+      }];
     }));
     const semantics = Object.fromEntries(ids.map((id) => {
       const element = document.querySelector<HTMLElement>(`[data-astylar-id="${CSS.escape(id)}"]`);
