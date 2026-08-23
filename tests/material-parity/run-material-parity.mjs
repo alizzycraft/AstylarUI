@@ -1,0 +1,660 @@
+import assert from 'node:assert/strict';
+import { createServer } from 'node:http';
+import { spawnSync } from 'node:child_process';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import path from 'node:path';
+import process from 'node:process';
+import { chromium } from 'playwright-core';
+import { PNG } from 'pngjs';
+import { ssim } from 'ssim.js';
+import {
+  materialFamilies, materialInteractionCases, materialMobileFlowCases, materialProfiles,
+  materialStaticCases, materialThresholds,
+} from './benchmark.config.mjs';
+
+const root = process.cwd();
+const enforce = process.argv.includes('--enforce');
+const skipBuild = process.argv.includes('--skip-build');
+const artifacts = path.join(root, 'artifacts', 'material-parity');
+const browserRoot = path.join(root, 'dist', 'material-showcase', 'browser');
+const port = Number(process.env['ASTYLAR_MATERIAL_PARITY_PORT'] ?? 4431);
+const baseUrl = `http://127.0.0.1:${port}`;
+const npm = process.platform === 'win32' ? 'npm.cmd' : 'npm';
+const familyFilter = csvFilter('ASTYLAR_MATERIAL_FAMILIES', materialFamilies);
+const profileFilter = csvFilter('ASTYLAR_MATERIAL_PROFILES', materialProfiles);
+const viewportFilter = new Set((process.env['ASTYLAR_MATERIAL_VIEWPORTS'] ?? '').split(',').filter(Boolean));
+const interactionViewportFilter = new Set((process.env['ASTYLAR_MATERIAL_INTERACTION_VIEWPORTS'] ?? '').split(',').filter(Boolean));
+const interactionStateFilter = new Set((process.env['ASTYLAR_MATERIAL_INTERACTION_STATES'] ?? '').split(',').filter(Boolean));
+const staticOnly = process.argv.includes('--static-only');
+const interactionOnly = process.argv.includes('--interaction-only');
+const cases = interactionOnly ? [] : materialStaticCases.filter(({ family, profile, viewport }) =>
+  familyFilter.has(family) && profileFilter.has(profile) &&
+  (viewportFilter.size === 0 || viewportFilter.has(viewport.id)));
+const interactionCases = staticOnly ? [] : materialInteractionCases.filter(({ family, profile, viewport, state }) =>
+  familyFilter.has(family) && profileFilter.has(profile) &&
+  (interactionViewportFilter.size === 0 || interactionViewportFilter.has(viewport.id)) &&
+  (interactionStateFilter.size === 0 || interactionStateFilter.has(state)));
+const mobileFlowCases = staticOnly ? [] : materialMobileFlowCases.filter(({ family, profile }) =>
+  familyFilter.has(family) && profileFilter.has(profile) &&
+  (interactionStateFilter.size === 0 || interactionStateFilter.has('open-dismiss')));
+let browser;
+let server;
+
+try {
+  validateConfiguration();
+  mkdirSync(artifacts, { recursive: true });
+  if (!skipBuild) buildShowcase();
+  server = startStaticServer();
+  await waitForServer();
+  browser = await chromium.launch({
+    channel: process.env['ASTYLAR_MATERIAL_BROWSER_CHANNEL'] ?? 'chrome',
+    headless: true,
+  });
+  const results = [];
+  for (const benchmarkCase of cases) {
+    console.log(`Material parity: ${benchmarkCase.family}@${benchmarkCase.profile}/${benchmarkCase.viewport.id}`);
+    results.push(await captureCase(benchmarkCase));
+  }
+  const interactions = [];
+  for (const benchmarkCase of [...interactionCases, ...mobileFlowCases]) {
+    console.log(`Material interaction: ${benchmarkCase.family}@${benchmarkCase.profile}/${benchmarkCase.viewport.id}/${benchmarkCase.state}`);
+    interactions.push(await captureInteractionCase(benchmarkCase));
+  }
+  const summary = summarize(results);
+  const interactionSummary = summarizeInteractions(interactions);
+  const report = {
+    schemaVersion: 1,
+    generatedAt: new Date().toISOString(),
+    mode: enforce ? 'enforced' : 'report-only',
+    browser: { name: 'Chromium', version: await browser.version() },
+    thresholds: materialThresholds,
+    configuredCases: materialStaticCases.length,
+    executedCases: results.length,
+    filters: {
+      families: [...familyFilter], profiles: [...profileFilter],
+      viewports: viewportFilter.size ? [...viewportFilter] : ['desktop', 'tablet', 'mobile'],
+    },
+    summary,
+    interactionSummary,
+    results,
+    interactions,
+  };
+  writeFileSync(path.join(artifacts, 'latest-report.json'), `${JSON.stringify(report, null, 2)}\n`);
+  writeFileSync(path.join(artifacts, 'latest-summary.md'), humanSummary(report));
+  console.log(humanSummary(report));
+  if (enforce) {
+    assert.equal(results.length, materialStaticCases.length,
+      'An enforced Material parity run must execute the complete unfiltered matrix.');
+    assert.equal(interactions.length, materialInteractionCases.length + materialMobileFlowCases.length,
+      'An enforced Material parity run must execute the complete interaction matrix.');
+    assert.equal(summary.meetsAcceptance, true,
+      'Material parity remains below the existing geometry/SSIM/runtime acceptance thresholds.');
+    assert.equal(interactionSummary.meetsAcceptance, true,
+      'Material interaction parity remains below the required behavior/semantic/resource thresholds.');
+  }
+} finally {
+  await browser?.close();
+  await new Promise((resolve) => server?.close(resolve) ?? resolve());
+}
+
+function csvFilter(name, allowed) {
+  const requested = (process.env[name] ?? '').split(',').filter(Boolean);
+  const values = requested.length ? requested : allowed;
+  for (const value of values) assert.ok(allowed.includes(value), `Unknown ${name} value: ${value}`);
+  return new Set(values);
+}
+
+function validateConfiguration() {
+  const testRun = spawnSync(process.execPath, ['--test', 'tests/material-parity/benchmark-config.spec.mjs'], {
+    cwd: root, stdio: 'inherit',
+  });
+  assert.equal(testRun.status, 0, 'Material benchmark configuration validation failed.');
+  assert.ok(cases.length > 0 || interactionCases.length > 0 || mobileFlowCases.length > 0,
+    'The Material benchmark filters selected no cases.');
+}
+
+function buildShowcase() {
+  const build = spawnSync(npm, ['run', 'material-showcase:build', '--', '--configuration', 'development'], {
+    cwd: root, stdio: 'inherit', shell: process.platform === 'win32',
+  });
+  assert.equal(build.status, 0, 'Material showcase build failed.');
+  assert.ok(existsSync(path.join(browserRoot, 'index.csr.html')), 'Material browser output is missing.');
+}
+
+function startStaticServer() {
+  const index = path.join(browserRoot, 'index.csr.html');
+  const instance = createServer((request, response) => {
+    const pathname = decodeURIComponent(new URL(request.url ?? '/', baseUrl).pathname);
+    const candidate = path.resolve(browserRoot, pathname.replace(/^\/+/, ''));
+    const safe = candidate.startsWith(path.resolve(browserRoot));
+    const target = safe && path.extname(candidate) && existsSync(candidate) ? candidate : index;
+    const extension = path.extname(target);
+    const contentType = extension === '.js' ? 'text/javascript' : extension === '.css' ? 'text/css' :
+      extension === '.json' ? 'application/json' : extension === '.svg' ? 'image/svg+xml' :
+        extension === '.woff2' ? 'font/woff2' : 'text/html';
+    response.writeHead(200, { 'content-type': contentType, 'cache-control': 'no-store' });
+    response.end(readFileSync(target));
+  });
+  instance.listen(port, '127.0.0.1');
+  return instance;
+}
+
+async function waitForServer() {
+  const deadline = Date.now() + 30_000;
+  while (Date.now() < deadline) {
+    try { if ((await fetch(baseUrl)).ok) return; } catch { /* retry */ }
+    await new Promise((resolve) => setTimeout(resolve, 100));
+  }
+  throw new Error('Timed out waiting for the Material showcase server.');
+}
+
+async function captureCase(benchmarkCase) {
+  const { family, profile, viewport } = benchmarkCase;
+  const context = await browser.newContext({
+    viewport: { width: viewport.width, height: viewport.height },
+    deviceScaleFactor: viewport.deviceScaleFactor,
+    colorScheme: profile === 'dark' ? 'dark' : 'light',
+    reducedMotion: 'reduce',
+  });
+  const directory = path.join(artifacts, family, profile, viewport.id);
+  mkdirSync(directory, { recursive: true });
+  try {
+    const reference = await capturePage(context, 'reference', benchmarkCase, directory);
+    const astylar = await capturePage(context, 'astylar', benchmarkCase, directory);
+    const screenshotSimilarity = comparePng(reference.image, astylar.image);
+    const geometry = compareGeometry(reference.measurement.elements, astylar.measurement.elements);
+    const semantics = compareSemantics(reference.measurement.semantics, astylar.measurement.semantics);
+    const runtimeErrors = [...reference.errors.map((error) => `reference: ${error}`),
+      ...astylar.errors.map((error) => `astylar: ${error}`)];
+    return {
+      family, profile, viewport, screenshotSimilarity, geometry, semantics, runtimeErrors,
+      diagnostics: astylar.measurement.diagnostics,
+      meetsAcceptance: screenshotSimilarity >= materialThresholds.resultSsim &&
+        geometry.maximumEdgeError !== null &&
+        geometry.maximumEdgeError <= materialThresholds.maximumEdgeErrorPx &&
+        geometry.edgesWithinTolerance >= materialThresholds.minimumEdgesWithinTolerance &&
+        semantics.every((result) => result.matches) && runtimeErrors.length === 0,
+    };
+  } finally {
+    await context.close();
+  }
+}
+
+async function capturePage(context, mode, benchmarkCase, directory) {
+  const page = await context.newPage();
+  const errors = [];
+  page.on('pageerror', (error) => errors.push(error.message));
+  page.on('console', (message) => { if (message.type() === 'error') errors.push(message.text()); });
+  await page.goto(`${baseUrl}/${mode}/${benchmarkCase.family}?benchmark=1&profile=${benchmarkCase.profile}`, { waitUntil: 'networkidle' });
+  await page.locator('.frame').waitFor({ state: 'visible' });
+  const theme = profileTheme(benchmarkCase.profile);
+  await sendShowcaseCommand(page, { type: 'showcase:theme', theme });
+  await waitForThemeApplied(page, theme);
+  if (mode === 'astylar') {
+    await waitForAstylarBenchmark(page, errors, benchmarkCase);
+    await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__?.waitForSettled());
+  }
+  await page.evaluate(async () => {
+    await document.fonts.ready;
+    await Promise.all(document.getAnimations().map((animation) => animation.finished.catch(() => undefined)));
+    await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+  });
+  const ids = [`${benchmarkCase.family}-root`, `${benchmarkCase.family}-primary`];
+  const measurement = mode === 'reference'
+    ? await measureReference(page, ids)
+    : await page.evaluate((targetIds) => window.__ASTYLAR_MATERIAL_BENCHMARK__?.measure(targetIds), ids);
+  assert.ok(measurement, `${mode} benchmark measurement is missing.`);
+  const buffer = await page.screenshot({
+    path: path.join(directory, `${mode}.png`), animations: 'disabled',
+  });
+  await page.close();
+  return { image: PNG.sync.read(buffer), measurement, errors };
+}
+
+async function captureInteractionCase(benchmarkCase) {
+  const { family, profile, viewport, state } = benchmarkCase;
+  const context = await browser.newContext({
+    viewport: { width: viewport.width, height: viewport.height },
+    deviceScaleFactor: viewport.deviceScaleFactor,
+    colorScheme: profile === 'dark' ? 'dark' : 'light',
+    reducedMotion: 'reduce',
+  });
+  const directory = path.join(artifacts, 'interactions', family, profile, viewport.id, state);
+  mkdirSync(directory, { recursive: true });
+  const reference = await openInteractionPage(context, 'reference', benchmarkCase);
+  const astylar = await openInteractionPage(context, 'astylar', benchmarkCase);
+  try {
+    const cycles = state === 'open-dismiss' ? 3 : 1;
+    const resourceSnapshots = [];
+    let heldReleases = [];
+    for (let cycle = 0; cycle < cycles; cycle += 1) {
+      await setBenchmarkPhase(reference.page, 'start');
+      await setBenchmarkPhase(astylar.page, 'start');
+      heldReleases = [
+        await performInteraction(reference.page, 'reference', benchmarkCase),
+        await performInteraction(astylar.page, 'astylar', benchmarkCase),
+      ].filter(Boolean);
+      const phase = state === 'held' ? 'held' : 'settled';
+      await setBenchmarkPhase(reference.page, phase);
+      await setBenchmarkPhase(astylar.page, phase);
+      await settleInteraction(reference.page, 'reference');
+      await settleInteraction(astylar.page, 'astylar');
+      if (state === 'open-dismiss') {
+        await reference.page.keyboard.press('Escape');
+        await astylar.page.keyboard.press('Escape');
+        await settleInteraction(reference.page, 'reference');
+        await settleInteraction(astylar.page, 'astylar');
+      }
+      resourceSnapshots.push(await astylar.page.evaluate((ids) =>
+        window.__ASTYLAR_MATERIAL_BENCHMARK__?.measure(ids).diagnostics, [`${family}-root`, `${family}-primary`]));
+    }
+    const ids = [`${family}-root`, `${family}-primary`];
+    const referenceMeasurement = await measureReference(reference.page, ids);
+    const astylarMeasurement = await astylar.page.evaluate((targetIds) =>
+      window.__ASTYLAR_MATERIAL_BENCHMARK__?.measure(targetIds), ids);
+    const astylarState = await astylar.page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__?.state());
+    assert.ok(astylarMeasurement, 'Astylar interaction measurement is missing.');
+    const referenceBuffer = await captureInteractionImage(reference.page, 'reference', referenceMeasurement, family, state, directory);
+    const astylarBuffer = await captureInteractionImage(astylar.page, 'astylar', astylarMeasurement, family, state, directory);
+    for (const release of heldReleases) await release();
+    const referenceEvents = await reference.page.evaluate(() => window.__MATERIAL_REFERENCE_EVENTS__ ?? []);
+    const astylarEvents = await astylar.page.evaluate((family) => (window.__ASTYLAR_MATERIAL_BENCHMARK__?.events() ?? []).map((event) => {
+      const target = event.targetId ? document.querySelector(`[data-astylar-id="${CSS.escape(event.targetId)}"]`) : undefined;
+      return target?.closest(`[data-astylar-id="${CSS.escape(family)}-primary"]`)
+        ? { ...event, targetId: `${family}-primary` } : event;
+    }), family);
+    const referenceFocus = await focusedIdentity(reference.page, 'reference', family);
+    const astylarFocus = await focusedIdentity(astylar.page, 'astylar', family);
+    const semantics = compareSemantics(referenceMeasurement.semantics, astylarMeasurement.semantics);
+    const screenshotSimilarity = comparePng(PNG.sync.read(referenceBuffer), PNG.sync.read(astylarBuffer));
+    const runtimeErrors = [...reference.errors.map((error) => `reference: ${error}`),
+      ...astylar.errors.map((error) => `astylar: ${error}`)];
+    const eventComparison = compareEvents(referenceEvents, astylarEvents, family, state);
+    const resourcesStable = resourceSnapshots.every((snapshot) =>
+      snapshot?.surface?.session?.status === 'idle' && snapshot?.surface?.pluginResources?.pending === 0) &&
+      (resourceSnapshots.length < 2 || JSON.stringify(resourceCounts(resourceSnapshots[0])) ===
+        JSON.stringify(resourceCounts(resourceSnapshots.at(-1))));
+    const focusMatches = state !== 'focus' || referenceFocus === astylarFocus;
+    return {
+      family, profile, viewport, state, screenshotSimilarity, semantics, eventComparison,
+      focus: { reference: referenceFocus, astylar: astylarFocus, matches: focusMatches },
+      runtimeErrors, resourceSnapshots, resourcesStable, astylarState,
+      meetsAcceptance: screenshotSimilarity >= materialThresholds.resultSsim &&
+        semantics.every((result) => result.matches) && eventComparison.matches && focusMatches &&
+        runtimeErrors.length === 0 && resourcesStable,
+    };
+  } finally {
+    await reference.page.close();
+    await astylar.page.close();
+    await context.close();
+  }
+}
+
+async function openInteractionPage(context, mode, benchmarkCase) {
+  const page = await context.newPage();
+  const errors = [];
+  page.on('pageerror', (error) => errors.push(error.message));
+  page.on('console', (message) => { if (message.type() === 'error') errors.push(message.text()); });
+  await page.goto(`${baseUrl}/${mode}/${benchmarkCase.family}?benchmark=1&profile=${benchmarkCase.profile}&interaction=${benchmarkCase.state}`, { waitUntil: 'networkidle' });
+  await page.locator('.frame').waitFor({ state: 'visible' });
+  const theme = profileTheme(benchmarkCase.profile);
+  await sendShowcaseCommand(page, { type: 'showcase:theme', theme });
+  await waitForThemeApplied(page, theme);
+  if (mode === 'astylar') {
+    await waitForAstylarBenchmark(page, errors, benchmarkCase);
+    await page.evaluate(async () => {
+      await window.__ASTYLAR_MATERIAL_BENCHMARK__?.waitForSettled();
+      window.__ASTYLAR_MATERIAL_BENCHMARK__?.clearEvents();
+    });
+  } else {
+    await page.evaluate((family) => {
+      window.__MATERIAL_REFERENCE_EVENTS__ = [];
+      const primaryId = `${family}-primary`;
+      for (const type of ['pointerdown', 'pointerup', 'click', 'focus', 'blur', 'keydown', 'input', 'change']) {
+        document.addEventListener(type, (event) => {
+          const target = event.target;
+          if (!(target instanceof HTMLElement)) return;
+          const primary = target.closest(`#${CSS.escape(primaryId)}`);
+          window.__MATERIAL_REFERENCE_EVENTS__.push({
+            type,
+            targetId: primary ? primaryId : target.id || undefined,
+            value: target instanceof HTMLInputElement || target instanceof HTMLSelectElement || target instanceof HTMLTextAreaElement ? target.value : undefined,
+          });
+        }, true);
+      }
+    }, benchmarkCase.family);
+  }
+  await settleInteraction(page, mode);
+  return { page, errors };
+}
+
+async function waitForAstylarBenchmark(page, errors, benchmarkCase) {
+  try {
+    await page.waitForFunction(() => !!window.__ASTYLAR_MATERIAL_BENCHMARK__, undefined, { timeout: 30_000 });
+  } catch (error) {
+    throw new Error(
+      `Astylar benchmark hook did not mount for ${benchmarkCase.family}@${benchmarkCase.profile}/${benchmarkCase.viewport.id}. ` +
+      `Browser errors: ${errors.join(' | ') || 'none'}`,
+      { cause: error },
+    );
+  }
+}
+
+async function performInteraction(page, mode, benchmarkCase) {
+  const { family, state } = benchmarkCase;
+  if (state === 'inspect' || state === 'disabled' || state === 'selected' || state === 'error') return undefined;
+  const box = await interactionTargetBox(page, mode, family);
+  assert.ok(box, `${mode} ${family} primary interaction target is missing.`);
+  const x = box.x + box.width / 2;
+  const y = box.y + box.height / 2;
+  if (state === 'focus') {
+    if (mode === 'reference') {
+      await page.evaluate((id) => {
+        const host = document.getElementById(id);
+        const target = host?.matches('button:not(:disabled),input:not(:disabled),select:not(:disabled),textarea:not(:disabled),[tabindex]') ? host :
+          host?.querySelector('button:not(:disabled),input:not(:disabled),select:not(:disabled),textarea:not(:disabled),[tabindex]');
+        if (target instanceof HTMLElement) target.focus();
+      }, `${family}-primary`);
+    } else {
+      await page.evaluate((id) => {
+        const host = document.querySelector(`[data-astylar-id="${CSS.escape(id)}"]`);
+        const target = host?.matches('button:not(:disabled),input:not(:disabled),select:not(:disabled),textarea:not(:disabled),[tabindex]') ? host :
+          host?.querySelector('button:not(:disabled),input:not(:disabled),select:not(:disabled),textarea:not(:disabled),[tabindex]');
+        if (target instanceof HTMLElement) target.focus();
+      }, `${family}-primary`);
+    }
+    return undefined;
+  }
+  if (state === 'hover') { await page.mouse.move(x, y); return undefined; }
+  if (family === 'slider' && state === 'activate') {
+    if (mode === 'reference') await page.locator('#slider-primary').focus();
+    else await page.evaluate(() => document.querySelector('[data-astylar-id="slider-primary"]')?.focus());
+    await page.keyboard.press('End');
+    return undefined;
+  }
+  await page.mouse.move(x, y);
+  await page.mouse.down();
+  if (state === 'held') return async () => { await page.mouse.up(); };
+  await page.mouse.up();
+  return undefined;
+}
+
+async function interactionTargetBox(page, mode, family) {
+  const astylarTargets = {
+    toolbar: 'toolbar-action', card: 'card-open', chips: 'chip-0', sort: 'sort-trigger',
+    paginator: 'paginator-next', radio: 'radio-team', 'button-toggle': 'button-toggle-two',
+    tabs: 'tab-activity', stepper: 'step-review',
+  };
+  const referenceTargets = {
+    toolbar: '#toolbar-primary button', card: '#card-primary button', chips: '#chips-primary mat-chip-option:first-child',
+    sort: '#sort-primary [mat-sort-header]', paginator: '#paginator-primary .mat-mdc-paginator-navigation-next',
+    radio: '#radio-primary mat-radio-button:nth-of-type(2)',
+    'button-toggle': '#button-toggle-primary mat-button-toggle:nth-of-type(2)',
+    tabs: '#tabs-primary .mat-mdc-tab:nth-of-type(2)',
+    stepper: '#stepper-primary .mat-step-header:nth-of-type(2)',
+  };
+  if (mode === 'reference') return page.locator(referenceTargets[family] ?? `#${family}-primary`).boundingBox();
+  if (family === 'slider') {
+    const measurement = await page.evaluate(() =>
+      window.__ASTYLAR_MATERIAL_BENCHMARK__?.measure(['slider-material-visual']));
+    const local = measurement?.elements?.['slider-material-visual']?.borderBox;
+    const canvas = await page.locator('canvas').boundingBox();
+    return local && canvas ? {
+      x: canvas.x + local.left + local.width * .846,
+      y: canvas.y + local.top + local.height / 2,
+      width: 1,
+      height: 1,
+    } : undefined;
+  }
+  const targetId = astylarTargets[family] ?? `${family}-primary`;
+  const measurement = await page.evaluate((id) => window.__ASTYLAR_MATERIAL_BENCHMARK__?.measure([id]), targetId);
+  const local = measurement?.elements?.[targetId]?.borderBox;
+  const canvas = await page.locator('canvas').boundingBox();
+  return local && canvas ? { x: canvas.x + local.left, y: canvas.y + local.top, width: local.width, height: local.height } : undefined;
+}
+
+async function settleInteraction(page, mode) {
+  if (mode === 'astylar') await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__?.waitForSettled());
+  await page.evaluate(async () => {
+    await document.fonts.ready;
+    await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+  });
+}
+
+async function setBenchmarkPhase(page, phase) {
+  await sendShowcaseCommand(page, { type: 'showcase:benchmark', phase });
+}
+
+async function sendShowcaseCommand(page, command) {
+  await page.waitForFunction(() => typeof window.__MATERIAL_SHOWCASE_COMMAND__ === 'function');
+  const accepted = await page.evaluate((nextCommand) => window.__MATERIAL_SHOWCASE_COMMAND__?.(nextCommand), command);
+  assert.equal(accepted, true, `Showcase rejected benchmark command ${command.type}.`);
+}
+
+async function waitForThemeApplied(page, theme) {
+  await page.waitForFunction((expectedSurface) => {
+    const frame = document.querySelector('.frame');
+    if (!(frame instanceof HTMLElement)) return false;
+    const probe = document.createElement('span');
+    probe.style.color = expectedSurface;
+    document.body.append(probe);
+    const expected = getComputedStyle(probe).color;
+    probe.remove();
+    return getComputedStyle(frame).backgroundColor === expected;
+  }, theme.surface);
+  await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+}
+
+async function captureInteractionImage(page, mode, measurement, family, state, directory) {
+  const filename = path.join(directory, `${mode}.png`);
+  void mode;
+  void measurement;
+  void family;
+  void state;
+  return page.screenshot({ path: filename, animations: 'disabled' });
+}
+
+async function focusedIdentity(page, mode, family) {
+  return page.evaluate(({ mode, family }) => {
+    const active = document.activeElement;
+    if (!(active instanceof HTMLElement)) return undefined;
+    if (mode === 'astylar') return active.closest(`[data-astylar-id="${CSS.escape(family)}-primary"]`)
+      ? `${family}-primary` : active.dataset['astylarId'];
+    return active.closest(`#${CSS.escape(family)}-primary`) ? `${family}-primary` : active.id || undefined;
+  }, { mode, family });
+}
+
+function compareEvents(reference, candidate, family, state) {
+  if (!['activate', 'open', 'open-dismiss'].includes(state)) return { matches: true, reference, astylar: candidate };
+  const relevant = (events) => events.filter(({ targetId }) => targetId === `${family}-primary`)
+    .map(({ type }) => type).filter((type) => ['pointerdown', 'pointerup', 'click', 'input', 'change'].includes(type))
+    .filter((type, index, values) => index === 0 || type !== values[index - 1]);
+  const expected = relevant(reference);
+  const actual = relevant(candidate);
+  return { matches: JSON.stringify(expected) === JSON.stringify(actual), reference: expected, astylar: actual };
+}
+
+function resourceCounts(snapshot) {
+  return snapshot ? {
+    owners: snapshot.surface?.pluginResources?.owners,
+    resources: snapshot.surface?.pluginResources?.resources,
+    cleanups: snapshot.surface?.pluginResources?.cleanups,
+    meshes: snapshot.surface?.resources?.meshes,
+    materials: snapshot.surface?.resources?.materials,
+    textures: snapshot.surface?.resources?.textures,
+  } : undefined;
+}
+
+async function measureReference(page, ids) {
+  return page.evaluate((targetIds) => {
+    const roleOf = (element) => {
+      const explicit = element.getAttribute('role');
+      if (explicit) return explicit;
+      if (element instanceof HTMLButtonElement) return 'button';
+      if (element instanceof HTMLSelectElement) return element.multiple ? 'listbox' : 'combobox';
+      if (element instanceof HTMLTextAreaElement) return 'textbox';
+      if (element instanceof HTMLInputElement) {
+        if (element.type === 'checkbox') return 'checkbox';
+        if (element.type === 'radio') return 'radio';
+        if (element.type === 'range') return 'slider';
+        return 'textbox';
+      }
+      const tag = element.tagName.toLowerCase();
+      if (tag === 'img') return 'img';
+      if (tag === 'table') return 'table';
+      if (tag === 'th') return 'columnheader';
+      if (tag === 'td') return 'cell';
+      if (tag === 'nav') return 'navigation';
+      if (tag === 'main') return 'main';
+      if (tag === 'aside') return 'complementary';
+      if (tag === 'section' && (element.hasAttribute('aria-label') || element.hasAttribute('aria-labelledby'))) return 'region';
+      return undefined;
+    };
+    const elements = Object.fromEntries(targetIds.map((id) => {
+      const element = document.getElementById(id);
+      if (!element) return [id, { exists: false }];
+      const rect = element.getBoundingClientRect();
+      return [id, { exists: true, borderBox: {
+        left: rect.left, top: rect.top, right: rect.right, bottom: rect.bottom,
+        width: rect.width, height: rect.height,
+      } }];
+    }));
+    const semantics = Object.fromEntries(targetIds.map((id) => {
+      const element = document.getElementById(id);
+      const compoundSemanticHosts = new Set([
+        'MAT-FORM-FIELD', 'MAT-SLIDER', 'MAT-EXPANSION-PANEL', 'MAT-CHECKBOX', 'MAT-SLIDE-TOGGLE',
+      ]);
+      const semanticElement = element && compoundSemanticHosts.has(element.tagName) && !roleOf(element)
+        ? element.querySelector('button,input,select,textarea,[role]') ?? element : element;
+      return [id, element ? {
+        exists: true,
+        role: roleOf(semanticElement),
+        name: semanticName(semanticElement),
+        value: semanticElement instanceof HTMLSelectElement ? semanticElement.selectedOptions[0]?.textContent?.trim() :
+          semanticElement instanceof HTMLInputElement || semanticElement instanceof HTMLTextAreaElement ? semanticElement.value :
+            semanticElement.tagName === 'MAT-SELECT' ? semanticElement.textContent?.replace(/\s+/g, ' ').trim() : undefined,
+        checked: semanticElement instanceof HTMLInputElement && ['checkbox', 'radio'].includes(semanticElement.type) ? semanticElement.checked : booleanAttribute(semanticElement, 'aria-checked'),
+        selected: booleanAttribute(semanticElement, 'aria-selected'),
+        expanded: booleanAttribute(semanticElement, 'aria-expanded'),
+        pressed: booleanAttribute(semanticElement, 'aria-pressed'),
+        invalid: booleanAttribute(semanticElement, 'aria-invalid'),
+        sort: semanticElement.getAttribute('aria-sort') ?? undefined,
+        activeDescendant: semanticElement.getAttribute('aria-activedescendant') ?? undefined,
+        valueMin: numberAttribute(semanticElement, 'aria-valuemin'),
+        valueMax: numberAttribute(semanticElement, 'aria-valuemax'),
+        valueNow: numberAttribute(semanticElement, 'aria-valuenow'),
+        valueText: semanticElement.getAttribute('aria-valuetext') ?? undefined,
+        disabled: 'disabled' in semanticElement ? semanticElement.disabled : booleanAttribute(semanticElement, 'aria-disabled'),
+      } : { exists: false }];
+    }));
+    function booleanAttribute(element, attribute) {
+      const value = element.getAttribute(attribute);
+      if (value === 'true') return true;
+      if (value === 'false') return false;
+      return value === 'mixed' ? 'mixed' : undefined;
+    }
+    function numberAttribute(element, attribute) {
+      const value = element.getAttribute(attribute);
+      return value !== null && Number.isFinite(Number(value)) ? Number(value) : undefined;
+    }
+    function semanticName(element) {
+      const explicit = element.getAttribute('aria-label') ?? element.getAttribute('alt');
+      if (explicit !== null) return explicit;
+      const labelled = 'labels' in element ? [...(element.labels ?? [])].map((label) => label.textContent ?? '').join(' ') : '';
+      const enclosing = element.closest('label')?.textContent ?? '';
+      return (labelled || enclosing || element.textContent || '').replace(/\s+/g, ' ').trim();
+    }
+    return { elements, semantics };
+  }, ids);
+}
+
+function profileTheme(profile) {
+  const profiles = {
+    light: { mode: 'light', primary: '#6750a4', tertiary: '#7d5260', surface: '#fffbfe', error: '#b3261e', density: 0, cornerScale: 1, typographyScale: 1 },
+    dark: { mode: 'dark', primary: '#d0bcff', tertiary: '#efb8c8', surface: '#1c1b1f', error: '#f2b8b5', density: 0, cornerScale: 1, typographyScale: 1 },
+    contrast: { mode: 'light', primary: '#000000', tertiary: '#203864', surface: '#ffffff', error: '#8b0000', density: -5, cornerScale: .75, typographyScale: .9 },
+    custom: { mode: 'light', primary: '#006a6a', tertiary: '#a43c42', surface: '#f4fbfa', error: '#ba1a1a', density: -2, cornerScale: 1.5, typographyScale: 1.15 },
+  };
+  return profiles[profile];
+}
+
+function comparePng(reference, candidate) {
+  if (reference.width !== candidate.width || reference.height !== candidate.height) return 0;
+  return ssim(reference, candidate, { ssim: 'fast' }).mssim;
+}
+
+function compareGeometry(reference, candidate) {
+  const elements = [];
+  const errors = [];
+  for (const [id, expected] of Object.entries(reference)) {
+    const actual = candidate[id];
+    if (!expected.exists || !actual?.exists) { elements.push({ id, missing: true }); continue; }
+    const edgeErrors = Object.fromEntries(['left', 'top', 'right', 'bottom'].map((edge) => {
+      const error = Math.abs(expected.borderBox[edge] - actual.borderBox[edge]);
+      errors.push(error); return [edge, error];
+    }));
+    elements.push({ id, missing: false, expected: expected.borderBox, actual: actual.borderBox, edgeErrors });
+  }
+  return {
+    measuredEdgeCount: errors.length,
+    edgesWithinTolerance: errors.length ? errors.filter((error) => error <= materialThresholds.edgeTolerancePx).length / errors.length : 0,
+    maximumEdgeError: errors.length ? Math.max(...errors) : null,
+    elements,
+  };
+}
+
+function compareSemantics(reference, candidate) {
+  return Object.entries(reference).map(([id, expected]) => {
+    const actual = candidate[id];
+    const same = (property) => property === 'activeDescendant'
+      ? !!expected[property] === !!actual?.[property]
+      : expected[property] === actual?.[property];
+    const matches = expected.exists === actual?.exists && (!expected.exists ||
+      ['role', 'name', 'value', 'checked', 'selected', 'expanded', 'pressed', 'invalid', 'sort',
+        'activeDescendant', 'valueMin', 'valueMax', 'valueNow', 'valueText', 'disabled']
+        .every(same));
+    return { id, matches, expected, actual };
+  });
+}
+
+function summarize(results) {
+  const similarities = results.map(({ screenshotSimilarity }) => screenshotSimilarity).sort((a, b) => a - b);
+  const medianSsim = similarities.length ? similarities[Math.floor(similarities.length / 2)] : 0;
+  const minimumSsim = similarities.length ? similarities[0] : 0;
+  const maximumEdgeError = Math.max(...results.map(({ geometry }) => geometry.maximumEdgeError ?? Infinity));
+  const passingCases = results.filter(({ meetsAcceptance }) => meetsAcceptance).length;
+  return {
+    passingCases, failingCases: results.length - passingCases, minimumSsim, medianSsim, maximumEdgeError,
+    meetsAcceptance: results.length === materialStaticCases.length && passingCases === results.length &&
+      medianSsim >= materialThresholds.aggregateMedianSsim,
+  };
+}
+
+function summarizeInteractions(results) {
+  const similarities = results.map(({ screenshotSimilarity }) => screenshotSimilarity).sort((a, b) => a - b);
+  const passingCases = results.filter(({ meetsAcceptance }) => meetsAcceptance).length;
+  return {
+    executedCases: results.length,
+    passingCases,
+    failingCases: results.length - passingCases,
+    minimumSsim: similarities.length ? similarities[0] : 1,
+    medianSsim: similarities.length ? similarities[Math.floor(similarities.length / 2)] : 1,
+    meetsAcceptance: results.length === materialInteractionCases.length + materialMobileFlowCases.length &&
+      passingCases === results.length,
+  };
+}
+
+function humanSummary(report) {
+  const summary = report.summary;
+  return `# Material parity report\n\n` +
+    `- Mode: ${report.mode}\n- Cases: ${report.executedCases}/${report.configuredCases}\n` +
+    `- Passing: ${summary.passingCases}\n- Failing: ${summary.failingCases}\n` +
+    `- Minimum SSIM: ${summary.minimumSsim.toFixed(6)}\n- Median SSIM: ${summary.medianSsim.toFixed(6)}\n` +
+    `- Maximum edge error: ${Number.isFinite(summary.maximumEdgeError) ? `${summary.maximumEdgeError.toFixed(3)}px` : 'unmeasured'}\n` +
+    `- Meets acceptance: ${summary.meetsAcceptance ? 'yes' : 'no'}\n` +
+    `- Interaction cases: ${report.interactionSummary.executedCases}\n` +
+    `- Interaction passing: ${report.interactionSummary.passingCases}\n` +
+    `- Interaction failing: ${report.interactionSummary.failingCases}\n` +
+    `- Interaction minimum SSIM: ${report.interactionSummary.minimumSsim.toFixed(6)}\n` +
+    `- Interaction meets acceptance: ${report.interactionSummary.meetsAcceptance ? 'yes' : 'no'}\n`;
+}
