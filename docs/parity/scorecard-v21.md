@@ -289,3 +289,29 @@ sharpness regions, and 70/70 interaction steps. Minimum static SSIM remained
 `0.967522` and minimum interaction-local SSIM remained `0.526838` under the
 documented structural UA-focus exception. No OpenAI credential was read and no
 live API request was made.
+
+## Rounded text-input focus silhouette correction
+
+A zoomed manual pass over the focused TTS title input showed a rectangular
+background strip covering part of the authored rounded focus halo. The title
+correctly authors two focus layers—a `1px` blue border and a translucent `3px`
+spread shadow—but the text-input background itself was still a square plane.
+Its corners therefore protruded through the rounded border and over the halo.
+
+Text-input backgrounds now use the authored rounded-rectangle silhouette, while
+zero-radius inputs retain the existing plane path. A focused NullEngine
+regression requires rounded inputs to own non-rectangular background geometry.
+The paired title interaction at DPR 1 and DPR 2 retains the expected `6px`
+border radius and `9px` outer halo radius; its minimum local SSIM improved from
+`0.980638` to `0.982182`, and the dark corner spill is absent from the captured
+DPR-2 pixels.
+
+Verification passed 339/339 unit tests. The focused `styled-text-input` parity
+fixture reached SSIM `0.9958`, with 100% of measured edges within `2px`. The
+unfiltered general corpus passed all 165 fixtures / 541 renders with median
+SSIM `0.9899`, minimum SSIM `0.9542`, 99.9% of measured edges within `2px`,
+maximum edge error `3.9921px`, exact text, clean runtime reports, and every
+completion threshold met. The unfiltered packed TTS run passed 10/10 static
+scenarios, 36/36 sharpness regions, and 70/70 interaction steps; minimum static
+SSIM was `0.967585`. No OpenAI credential was read and no live API request was
+made.
