@@ -1,6 +1,10 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { evaluateInteractionRaster, hasRasterColor } from './interaction-metrics.mjs';
+import {
+  evaluateInteractionRaster,
+  hasRasterColor,
+  selectionGlyphAlignment,
+} from './interaction-metrics.mjs';
 
 function image(width, height, painter) {
   const data = new Uint8Array(width * height * 4);
@@ -65,4 +69,20 @@ test('selection foreground sampling requires the requested color inside the proj
 
   assert.equal(hasRasterColor(capture, { left: 4, top: 4, right: 6, bottom: 6 }, '#000000', canvas), true);
   assert.equal(hasRasterColor(capture, { left: 0, top: 0, right: 2, bottom: 2 }, '#000000', canvas), false);
+});
+
+test('selection glyph alignment rejects a recolor sampled from the wrong texture positions', () => {
+  const glyph = (x, y) => (x === 4 && y >= 3 && y <= 8) || (y === 8 && x >= 4 && x <= 9);
+  const unselected = image(16, 12, (x, y) => glyph(x, y) ? [240, 240, 240] : [25, 32, 44]);
+  const aligned = image(16, 12, (x, y) => glyph(x, y) ? [0, 0, 0] : [154, 213, 255]);
+  const shifted = image(16, 12, (x, y) => glyph(x - 6, y) ? [0, 0, 0] : [154, 213, 255]);
+  const box = { left: 0, top: 0, right: 16, bottom: 12 };
+  const canvas = { width: 16, height: 12 };
+
+  assert.equal(selectionGlyphAlignment(
+    unselected, aligned, box, '#f0f0f0', '#000000', '#19202c', '#9ad5ff', canvas,
+  ), 1);
+  assert.ok(selectionGlyphAlignment(
+    unselected, shifted, box, '#f0f0f0', '#000000', '#19202c', '#9ad5ff', canvas,
+  ) < 0.5);
 });

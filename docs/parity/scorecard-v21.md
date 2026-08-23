@@ -226,3 +226,33 @@ mesh, and matching foreground pixels in the captured canvas. The textarea,
 search input, and ordinary history-text scenarios pass at DPR 1 and DPR 2; the
 ordinary text scenario continues to prove the native clipboard payload. No
 OpenAI credential was read and no live API request was made.
+
+## Selection glyph alignment correction
+
+Manual packed-demo testing exposed that the cropped foreground pass reflected
+the selected interval around the full text texture. Once that mapping was
+corrected, Babylon's transparent pass could still let the original glyph plane
+overpaint the recolor. The foreground now maps the exact selected interval with
+the source texture's scale and offset, discards transparent texels, and writes
+depth only for the nearer recolored glyph fragments. The selected foreground
+therefore retains the source glyph order, position, kerning, and clipping while
+reliably replacing the original glyph color.
+
+The TTS editor scenario now types and selects the full 81-character sentence
+from the manual report at DPR 1 and DPR 2. The harness retains the preceding
+unselected frame and requires at least `0.70` bidirectional glyph-mask alignment
+using the source and selected foreground/background color pairs. This threshold
+passes the correctly aligned DPR-1 antialias raster while a synthetic shifted
+mask fails; the benchmark also uses a meaningful `SELECTION` sample for the
+backward-selection/edit cycle instead of calibrating against two glyphs.
+
+The focused factory suite passed 5/5 tests, the full unit suite passed 337/337,
+and the parity harness passed 22/22. The general corpus passed all 165 fixtures /
+541 renders with median SSIM `0.9901`, minimum SSIM `0.9542`, 99.9% of measured
+edges within `2px`, maximum edge error `3.9921px`, exact text, clean runtime
+reports, and every completion threshold met. The unfiltered packed TTS run
+passed 10/10 static scenarios, 36/36 sharpness regions, and 66/66 interaction
+steps across both DPR profiles; minimum static SSIM remained `0.967522` and
+minimum interaction-local SSIM remained `0.526838` under the documented
+structural UA-focus exception. No OpenAI credential was read and no live API
+request was made.

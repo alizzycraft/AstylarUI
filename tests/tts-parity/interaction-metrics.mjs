@@ -90,6 +90,84 @@ export function hasRasterColor(image, box, hexColor, canvas) {
   return false;
 }
 
+export function selectionGlyphAlignment(
+  unselected,
+  selected,
+  box,
+  sourceHexColor,
+  selectedHexColor,
+  sourceBackgroundHexColor,
+  selectedBackgroundHexColor,
+  canvas,
+  tolerance = 1,
+) {
+  assertSameDimensions(unselected, selected);
+  const sourceColor = parseHexColor(sourceHexColor);
+  const selectedColor = parseHexColor(selectedHexColor);
+  const sourceBackground = parseHexColor(sourceBackgroundHexColor);
+  const selectedBackground = parseHexColor(selectedBackgroundHexColor);
+  if (!box || !sourceColor || !selectedColor || !sourceBackground || !selectedBackground ||
+      !canvas?.width || !canvas?.height) return 0;
+  const scaleX = selected.width / canvas.width;
+  const scaleY = selected.height / canvas.height;
+  const left = Math.max(0, Math.floor(box.left * scaleX));
+  const right = Math.min(selected.width, Math.ceil(box.right * scaleX));
+  const top = Math.max(0, Math.floor(box.top * scaleY));
+  const bottom = Math.min(selected.height, Math.ceil(box.bottom * scaleY));
+  const sourceMask = colorAffinityMask(
+    unselected, sourceColor, sourceBackground, left, top, right, bottom,
+  );
+  const selectedMask = colorAffinityMask(
+    selected, selectedColor, selectedBackground, left, top, right, bottom,
+  );
+  if (!sourceMask.size || !selectedMask.size) return 0;
+  const directed = (expected, actual) => {
+    let aligned = 0;
+    for (const index of expected) {
+      const x = index % selected.width;
+      const y = Math.floor(index / selected.width);
+      let found = false;
+      for (let dy = -tolerance; dy <= tolerance && !found; dy += 1) {
+        for (let dx = -tolerance; dx <= tolerance; dx += 1) {
+          const candidateX = x + dx;
+          const candidateY = y + dy;
+          if (candidateX < 0 || candidateX >= selected.width ||
+              candidateY < 0 || candidateY >= selected.height) continue;
+          if (actual.has(candidateY * selected.width + candidateX)) { found = true; break; }
+        }
+      }
+      if (found) aligned += 1;
+    }
+    return aligned / expected.size;
+  };
+  return Math.min(directed(sourceMask, selectedMask), directed(selectedMask, sourceMask));
+}
+
+function colorAffinityMask(image, foreground, background, left, top, right, bottom) {
+  const mask = new Set();
+  for (let y = top; y < bottom; y += 1) for (let x = left; x < right; x += 1) {
+    const index = (y * image.width + x) * 4;
+    const foregroundDistance = Math.abs(image.data[index] - foreground[0]) +
+      Math.abs(image.data[index + 1] - foreground[1]) +
+      Math.abs(image.data[index + 2] - foreground[2]);
+    const backgroundDistance = Math.abs(image.data[index] - background[0]) +
+      Math.abs(image.data[index + 1] - background[1]) +
+      Math.abs(image.data[index + 2] - background[2]);
+    // Use the midpoint of each foreground/background pair as the mask
+    // boundary. The source and recolor passes then select the same glyph-alpha
+    // region even though their antialiased RGB values differ.
+    if (foregroundDistance < backgroundDistance) mask.add(y * image.width + x);
+  }
+  return mask;
+}
+
+function parseHexColor(value) {
+  const match = /^#([0-9a-f]{6})$/i.exec(value ?? '');
+  if (!match) return undefined;
+  const color = Number.parseInt(match[1], 16);
+  return [(color >> 16) & 255, (color >> 8) & 255, color & 255];
+}
+
 function colorEdges(image) {
   const edges = [];
   for (let y = 1; y < image.height - 1; y += 1) for (let x = 1; x < image.width - 1; x += 1) {

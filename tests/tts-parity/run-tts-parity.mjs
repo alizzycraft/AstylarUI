@@ -14,7 +14,11 @@ import {
 } from './benchmark.config.mjs';
 import { cropRgba, compareSharpness, evaluateSharpness } from '../parity/sharpness-metrics.mjs';
 import { compareScrolling } from './scrolling-metrics.mjs';
-import { evaluateInteractionRaster, hasRasterColor } from './interaction-metrics.mjs';
+import {
+  evaluateInteractionRaster,
+  hasRasterColor,
+  selectionGlyphAlignment,
+} from './interaction-metrics.mjs';
 
 const root = process.cwd();
 const demo = path.join(root, 'examples', 'ai-tts-demo');
@@ -292,6 +296,8 @@ async function captureInteractionScenario(context, scenario, viewport) {
     window.__ASTYLAR_TTS_BENCHMARK__?.measure(targetIds), ids);
   const results = [];
   const cycles = scenario.repeatCycles ?? 1;
+  const astylarCanvas = astylarPage.getByTestId('tts-astylar-surface').locator('canvas');
+  let previousAstylarBuffer = await astylarCanvas.screenshot({ animations: 'disabled' });
 
   for (let cycle = 0; cycle < cycles; cycle += 1) {
     for (const step of scenario.steps) {
@@ -338,19 +344,19 @@ async function captureInteractionScenario(context, scenario, viewport) {
       const referenceBuffer = await referencePage.screenshot({
         path: path.join(stepDir, 'reference.png'), animations: 'disabled',
       });
-      const astylarCanvas = astylarPage.getByTestId('tts-astylar-surface').locator('canvas');
       const astylarBuffer = await astylarCanvas.screenshot({
         path: path.join(stepDir, 'astylar.png'), animations: 'disabled',
       });
       const comparison = compareInteractionStep(
         scenario, step, viewport, referenceMeasurement, astylarMeasurement,
-        referenceBuffer, astylarBuffer, stepDir,
+        referenceBuffer, astylarBuffer, previousAstylarBuffer, stepDir,
       );
       results.push({
         scenario: scenario.id, state: scenario.state, step: stepId, cycle: cycle + 1,
         viewport, ...comparison,
         runtime: { referenceErrors: [...referenceErrors], astylarErrors: [...astylarErrors] },
       });
+      previousAstylarBuffer = astylarBuffer;
     }
   }
   addInteractionLifecycleEvidence(results, scenario);
@@ -525,10 +531,11 @@ async function performTtsInteractionAction(page, mode, action, measurement) {
 }
 
 function compareInteractionStep(scenario, step, viewport, referenceMeasurement, astylarMeasurement,
-    referenceBuffer, astylarBuffer, stepDir) {
+    referenceBuffer, astylarBuffer, previousAstylarBuffer, stepDir) {
   const infrastructureErrors = [];
   const referenceImage = PNG.sync.read(referenceBuffer);
   const astylarImage = PNG.sync.read(astylarBuffer);
+  const previousAstylarImage = PNG.sync.read(previousAstylarBuffer);
   if (!sameDimensions(referenceImage, astylarImage)) infrastructureErrors.push('Interaction capture dimensions differ.');
   const referenceElement = referenceMeasurement.elements[scenario.elementId];
   const astylarElement = astylarMeasurement.elements[scenario.elementId];
@@ -546,6 +553,7 @@ function compareInteractionStep(scenario, step, viewport, referenceMeasurement, 
     astylarMeasurement.controlStates,
     comparedControlIds,
   );
+  const selectionGlyphAlignments = [];
   if (step.focusRingRadius) {
     const expectedRadius = Number.parseFloat(
       referenceMeasurement.computedStyles?.[scenario.elementId]?.borderTopLeftRadius ?? '0',
@@ -618,6 +626,25 @@ function compareInteractionStep(scenario, step, viewport, referenceMeasurement, 
     ))) {
       controlErrors.push(`${scenario.elementId} selected-glyph foreground color is absent from the rendered pixels.`);
     }
+    for (const foreground of foregrounds) {
+      const alignment = selectionGlyphAlignment(
+        previousAstylarImage,
+        astylarImage,
+        foreground.borderBox,
+        foreground.sourceColor,
+        foreground.color,
+        foreground.sourceBackgroundColor,
+        foreground.backgroundColor,
+        astylarMeasurement.canvas,
+      );
+      selectionGlyphAlignments.push({ ownerElementId: foreground.ownerElementId, alignment });
+      if (alignment < acceptance.minimumSelectionGlyphAlignment) {
+        controlErrors.push(
+          `${scenario.elementId} selected-glyph recolor is not aligned with the original glyph raster ` +
+          `(${alignment.toFixed(3)} < ${acceptance.minimumSelectionGlyphAlignment.toFixed(3)}).`,
+        );
+      }
+    }
     const fontSize = Number.parseFloat(
       referenceMeasurement.computedStyles?.[scenario.elementId]?.fontSize ?? '0',
     );
@@ -656,6 +683,7 @@ function compareInteractionStep(scenario, step, viewport, referenceMeasurement, 
   return {
     reference: referenceMeasurement,
     astylar: astylarMeasurement,
+    selectionGlyphAlignments,
     stateErrors, geometryErrors, controlErrors, styleErrors, runtimeErrors, localRaster, meetsAcceptance, infrastructureErrors,
   };
 }

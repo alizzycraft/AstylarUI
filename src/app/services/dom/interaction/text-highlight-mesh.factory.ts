@@ -7,6 +7,7 @@ import {
   Scene,
   ShaderMaterial,
   StandardMaterial,
+  Texture,
   VertexBuffer,
 } from '@babylonjs/core';
 import { TextSelectionControllerService, TextSelectionState } from './text-selection-controller.service';
@@ -27,7 +28,7 @@ interface HighlightMeshes {
   backgroundMaterial: StandardMaterial;
   foregroundMaterial: ShaderMaterial;
   contrast: { background: number; foreground: number };
-  colors: { background: Color3; foreground: Color3 };
+  colors: { background: Color3; foreground: Color3; source: Color3; sourceBackground: Color3 };
 }
 
 const MIN_SEGMENT_WIDTH = 0.002;
@@ -35,7 +36,7 @@ const MIN_SEGMENT_HEIGHT = 0.002;
 // The highlight is opaque for reliable contrast, so it must sit immediately
 // behind the glyph plane rather than tinting or covering the rendered text.
 const HIGHLIGHT_Z_OFFSET = -0.0005;
-const FOREGROUND_Z_OFFSET = 0.0005;
+const FOREGROUND_Z_OFFSET = 0.002;
 
 const LIGHT_SELECTION = Color3.FromHexString('#9ad5ff');
 const DARK_SELECTION = Color3.FromHexString('#173f6b');
@@ -69,6 +70,24 @@ export function chooseSelectionColors(background: Color3): { background: Color3;
     ? black
     : white;
   return { background: highlight, foreground };
+}
+
+export function mapSelectionVertexUv(
+  positionX: number,
+  positionY: number,
+  segment: HighlightSegment,
+  textWidth: number,
+  textHeight: number,
+  textureTransform = { uScale: 1, uOffset: 0, vScale: 1, vOffset: 0 },
+): [number, number] {
+  const left = (segment.centerX - segment.width / 2 + textWidth / 2) / textWidth;
+  const top = (segment.centerY - segment.height / 2 + textHeight / 2) / textHeight;
+  return [
+    (left + ((positionX + 0.5) * segment.width / textWidth)) * textureTransform.uScale +
+      textureTransform.uOffset,
+    (top + ((positionY + 0.5) * segment.height / textHeight)) * textureTransform.vScale +
+      textureTransform.vOffset,
+  ];
 }
 
 @Injectable({ providedIn: 'root' })
@@ -392,7 +411,7 @@ export class TextHighlightMeshFactory {
 
       this.positionSelectionMesh(backgroundMesh, segment, HIGHLIGHT_Z_OFFSET);
       this.positionSelectionMesh(foregroundMesh, segment, FOREGROUND_Z_OFFSET);
-      this.cropForegroundUvs(foregroundMesh, segment, textSize.width, textSize.height);
+      this.cropForegroundUvs(entry, foregroundMesh, segment, textSize.width, textSize.height);
 
       backgroundMesh.metadata.highlight = {
         ...backgroundMesh.metadata.highlight,
@@ -407,7 +426,12 @@ export class TextHighlightMeshFactory {
 
   private createHighlightRecord(entry: TextInteractionEntry): HighlightMeshes {
     const scene = entry.mesh.getScene();
-    const colors = this.resolveSelectionColors(entry);
+    const sourceBackground = this.resolveBackground(entry);
+    const colors = {
+      ...chooseSelectionColors(sourceBackground),
+      source: this.resolveColor(entry.style?.color) ?? Color3.Black(),
+      sourceBackground,
+    };
     const backgroundMaterial = this.createHighlightMaterial(scene, colors.background);
     const foregroundMaterial = this.createForegroundMaterial(scene, entry, colors.foreground);
     const record: HighlightMeshes = {
@@ -488,6 +512,7 @@ export class TextHighlightMeshFactory {
           uniform vec3 selectionColor;
           void main(void) {
             vec4 glyph = texture2D(textTexture, vUV);
+            if (glyph.a <= 0.001) discard;
             gl_FragColor = vec4(selectionColor, glyph.a);
           }
         `,
@@ -500,7 +525,12 @@ export class TextHighlightMeshFactory {
       },
     );
     material.setColor3('selectionColor', foreground);
-    material.disableDepthWrite = true;
+    // Selected glyph fragments sit slightly nearer than the original text and
+    // write depth. Fully transparent texture pixels are discarded above, so
+    // they cannot occlude the source glyph plane if transparent sort order
+    // changes.
+    material.disableDepthWrite = false;
+    material.forceDepthWrite = true;
     material.backFaceCulling = false;
     this.syncForegroundTexture(material, entry);
     return material;
@@ -521,14 +551,14 @@ export class TextHighlightMeshFactory {
     mesh.material = record.foregroundMaterial;
     mesh.isPickable = false;
     mesh.renderingGroupId = entry.mesh.renderingGroupId;
-    // Selected glyphs share the original text depth, so explicit transparent
-    // ordering ensures this recolor pass is composed after the normal glyphs.
-    mesh.alphaIndex = entry.mesh.alphaIndex + 1;
     mesh.metadata = {
       ...(mesh.metadata || {}),
       selectionForeground: {
         ownerElementId: entry.elementId,
         color: record.colors.foreground.toHexString().toLowerCase(),
+        sourceColor: record.colors.source.toHexString().toLowerCase(),
+        backgroundColor: record.colors.background.toHexString().toLowerCase(),
+        sourceBackgroundColor: record.colors.sourceBackground.toHexString().toLowerCase(),
         contrast: record.contrast.foreground,
       },
     };
@@ -545,6 +575,7 @@ export class TextHighlightMeshFactory {
   }
 
   private cropForegroundUvs(
+    entry: TextInteractionEntry,
     mesh: Mesh,
     segment: HighlightSegment,
     textWidth: number,
@@ -554,30 +585,36 @@ export class TextHighlightMeshFactory {
     if (!positions || textWidth <= 0 || textHeight <= 0) {
       return;
     }
-    const left = (segment.centerX - segment.width / 2 + textWidth / 2) / textWidth;
-    const top = (segment.centerY - segment.height / 2 + textHeight / 2) / textHeight;
-    const width = segment.width / textWidth;
-    const height = segment.height / textHeight;
+    const texture = this.resolveForegroundTexture(entry);
+    const textureTransform = texture instanceof Texture
+      ? {
+          uScale: texture.uScale,
+          uOffset: texture.uOffset,
+          vScale: texture.vScale,
+          vOffset: texture.vOffset,
+        }
+      : undefined;
     const uvs: number[] = [];
     for (let index = 0; index < positions.length; index += 3) {
-      uvs.push(
-        // Text planes are rotated by PI around Z to compensate for Babylon's
-        // texture orientation, so visual-left maps to the texture's high-U edge.
-        1 - (left + ((positions[index] + 0.5) * width)),
-        top + ((positions[index + 1] + 0.5) * height),
-      );
+      uvs.push(...mapSelectionVertexUv(
+        positions[index], positions[index + 1], segment, textWidth, textHeight, textureTransform,
+      ));
     }
     mesh.setVerticesData(VertexBuffer.UVKind, uvs, true);
   }
 
   private syncForegroundTexture(material: ShaderMaterial, entry: TextInteractionEntry): void {
-    const textMaterial = entry.mesh.material;
-    const texture = textMaterial instanceof StandardMaterial
-      ? textMaterial.diffuseTexture ?? textMaterial.emissiveTexture
-      : undefined;
+    const texture = this.resolveForegroundTexture(entry);
     if (texture) {
       material.setTexture('textTexture', texture);
     }
+  }
+
+  private resolveForegroundTexture(entry: TextInteractionEntry) {
+    const textMaterial = entry.mesh.material;
+    return textMaterial instanceof StandardMaterial
+      ? textMaterial.diffuseTexture ?? textMaterial.emissiveTexture
+      : undefined;
   }
 
   private resolveTextMeshSize(mesh: Mesh): { width: number; height: number } {
@@ -593,10 +630,6 @@ export class TextHighlightMeshFactory {
   private resolveBackground(entry: TextInteractionEntry): Color3 {
     return this.resolveColor(entry.style?.background) ??
       this.resolveAncestorBackground(entry.mesh) ?? Color3.White();
-  }
-
-  private resolveSelectionColors(entry: TextInteractionEntry): { background: Color3; foreground: Color3 } {
-    return chooseSelectionColors(this.resolveBackground(entry));
   }
 
   private resolveColor(value: string | undefined): Color3 | undefined {
