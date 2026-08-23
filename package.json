@@ -1,6 +1,6 @@
 {
   "name": "astylarui",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A 3D UI rendering library that renders HTML-like structures in BabylonJS scenes",
   "type": "module",
   "main": "dist/lib/lib/index.js",

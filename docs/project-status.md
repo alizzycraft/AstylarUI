@@ -2,10 +2,17 @@
 
 Last reconciled: 2026-08-23
 
-This is the authoritative handoff for the repository. Older planning documents
-remain design history; their unchecked items are not automatically active work.
+This is the authoritative handoff for the repository. Historical acceptance
+evidence remains in the parity scorecards; superseded implementation plans were
+removed before the `0.2.0` release candidate so unchecked legacy lists cannot be
+mistaken for active work.
 
 ## Current milestone
+
+The complete `more-html` line is the AstylarUI `0.2.0` release candidate. It
+advances the package and runtime compatibility version together and synchronizes
+the public capability catalog, packed consumer, plugin examples, and bundled
+application-development skill evidence.
 
 Phase 21, TTS application interaction parity, is complete. The pinned
 AI-TTS-MP3 benchmark now enforces its 10 static scenarios and a source-derived
@@ -30,6 +37,28 @@ gate now checks full-line highlight height, paired foreground ownership and the
 actual foreground pixels for textarea, input, and ordinary document text at
 both DPR profiles.
 
+Final post-milestone corrections align caret origin with padded controls, clip
+rounded input backgrounds inside authored borders, and make expanded select
+popups inherit the closed control's foreground/background while matching its
+outer width.
+
+The `0.2.0` release-candidate matrix passes 339/339 repository unit tests, the
+library and production application builds, the checked capability/example/skill
+contracts, and the 419-file packed consumer with all three real-Chrome tests.
+The enforced general corpus passes 165 fixtures / 541 renders over three
+viewports with median SSIM `0.9899`, minimum SSIM `0.9509`, 99.9% of measured
+edges within `2px`, maximum edge error `3.9921px`, exact text, clean runtime
+reports, and every completion threshold met. The mock-only TTS benchmark passes
+10/10 static scenarios, 36/36 sharpness regions, and 70/70 interaction steps;
+minimum static SSIM is `0.967585` and minimum interaction-local SSIM is
+`0.526838` under its documented structural UA-focus exception. No OpenAI
+credential was read and no live API request was made.
+
+The next separately scoped milestone is native context-menu parity. It should
+begin from the released baseline and treat camera-projected semantic hit regions,
+native editing state, image-resource ownership, and complex spatial fallbacks as
+a new cross-cutting interaction/semantics design rather than another Phase 21 fix.
+
 ## Phase 16 skill baseline
 
 Phase 16, AstylarUI Maintainer Skill, is complete. Its contract, seven bounded
@@ -43,7 +72,7 @@ through the public package contract. `astylarui-maintainer` owns renderer and
 platform diagnosis, bounded core changes, public/package compatibility, parity
 and release evidence, and synchronized improvement of the developer skill.
 
-## Phase 16 completion baseline
+## Phase 16 completion baseline (historical)
 
 - `astylarui-maintainer` is a 119-line evidence-first router backed by seven
   progressive references for architecture, subsystems, maintenance workflow,
@@ -75,7 +104,7 @@ and release evidence, and synchronized improvement of the developer skill.
   edge error is `3.99209364194121 px`, visible text matches exactly, runtime is
   clean, and all completion thresholds pass.
 
-## Phase 15 completion baseline
+## Phase 15 completion baseline (historical)
 
 - The `astylarui-developer` skill is a concise 118-line router backed by focused
   application, Angular/Babylon, diagnosis, plugin, compatibility, public-API,
@@ -104,7 +133,7 @@ and release evidence, and synchronized improvement of the developer skill.
   edge error is `3.99209364194121 px`, visible text matches exactly, runtime
   checks are clean, and all completion thresholds pass.
 
-## Phase 14 completion baseline
+## Phase 14 completion baseline (historical)
 
 - Plugin API v1 remains additive and compatible. Definitions can declare
   Astylar/package compatibility, constrained dependencies, and independently
@@ -246,7 +275,7 @@ is:
 - `npm run capabilities:check`
 - `npm run examples:check`
 - `npm run skill:check`
-- `npm run parity:check`
+- `npm run parity:release:check`
 
 ## Document map
 
@@ -254,10 +283,15 @@ is:
 | --- | --- | --- |
 | `compatibility/html-css.md` | Current | Human HTML/CSS-to-Astylar translation contract |
 | `compatibility/capabilities.json` | Current and checked | Machine-readable capability/evidence source |
-| `compatibility/examples/manifest.json` | Current and checked | Ten Phase 15-ready paired translations |
+| `compatibility/examples/manifest.json` | Current and checked | Ten developer-skill paired translations |
 | `plugins.md` | Current | Public Angular-native plugin API and authoring guide |
 | `../.agents/skills/astylarui-developer/SKILL.md` | Current and checked | Phase 15 application-development agent workflow |
 | `../.agents/skills/astylarui-maintainer/SKILL.md` | Current and checked | Phase 16 AstylarUI core-maintenance workflow |
+| `parity/scorecard-v21.md` | Complete/current | TTS application interaction parity and post-completion hardening |
+| `parity/scorecard-v20.md` | Complete | Interactive visual-state and selection evidence |
+| `parity/scorecard-v19.md` | Complete | Enforced TTS application parity evidence |
+| `parity/scorecard-v18.md` | Complete | Reference-driven application measurement infrastructure |
+| `parity/tts-application-benchmark.md` | Current | Maintained TTS benchmark contract and commands |
 | `parity/scorecard-v16.md` | Complete | Maintainer skill contract, increments, and release evidence |
 | `parity/forward-tests-v16.md` | Complete | Twelve isolated raw requests, results, metrics, and corrections |
 | `parity/scorecard-v15.md` | Complete | Application-development skill contract and evidence |
@@ -267,16 +301,12 @@ is:
 | `parity/scorecard-v11.md` | Complete | Reconciliation and Phase 11 freeze evidence |
 | `parity/scorecard-v2.md` through `scorecard-v10.md` | Complete | Earlier parity milestone evidence |
 | `reconciliation.md` | Current | Authored identity and replacement contract |
-| `renderer-layout-roadmap.md` | Historical roadmap | Original parity direction |
-| `architectural-refactor-plan.md` | Partially completed historical plan | Technical-debt context |
 
-## Scope boundary
+## Platform scope boundary
 
-Phase 16 created maintenance knowledge and validation, not a speculative
-renderer rewrite. It did not merge the disposable feature/API patches used for
-forward evaluation, add framework-neutral adapters, replace Angular DI, add
-dynamic plugin discovery/installation, marketplaces, hot loading, permissions,
-sandboxing, a generic CSS engine, dirty-subtree rendering, a Babylon
+The maintained platform does not add framework-neutral adapters, replace Angular
+DI, add dynamic plugin discovery/installation, marketplaces, hot loading,
+permissions, sandboxing, a generic CSS engine, dirty-subtree rendering, a Babylon
 abstraction, or a Babylon.js major upgrade. Registered media-like identities do
 not imply native browser playback/embed behavior. Future rendering changes must
 remain general, measured, reflected in the checked capability contract, and

@@ -93,7 +93,7 @@ describe('external AstylarUI browser acceptance', () => {
       cleanups: 0,
       pending: 0,
     });
-  });
+  }, 20_000);
 
   it('runs two installed-package surfaces through update, input, modal, resize, and disposal', async () => {
     await TestBed.configureTestingModule({

@@ -16,7 +16,7 @@
 
 Inspect `package.json` and the installed `astylarui` declarations before coding.
 Use only exports listed in `public-api.json`, imported from `astylarui`. Treat
-this skill's examples as AstylarUI 0.1.0 examples; if the installed version is
+this skill's examples as AstylarUI 0.2.0 examples; if the installed version is
 different, confirm every used symbol and compatibility claim in that version.
 
 Prefer the Angular `AstylarSurfaceComponent` for ordinary application surfaces.

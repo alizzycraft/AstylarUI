@@ -1,7 +1,7 @@
 # Paired web and Astylar translations
 
 [`manifest.json`](manifest.json) curates ten bounded translation examples for
-human users and the future Phase 15 agent skill. Every entry includes its
+human users and the checked `astylarui-developer` skill. Every entry includes its
 classification, the web and Astylar sources, direct mappings, important
 differences, and executable or implementation evidence.
 

@@ -1,8 +1,8 @@
 {
   "schema": "astylarui-capabilities",
   "version": 1,
-  "astylarVersion": "0.1.0",
-  "purpose": "Machine-readable source material for HTML/CSS-to-Astylar translation and the future Phase 15 agent skill.",
+  "astylarVersion": "0.2.0",
+  "purpose": "Machine-readable source material for HTML/CSS-to-Astylar translation and the checked astylarui-developer skill.",
   "classifications": {
     "direct": "Ordinary web knowledge transfers without meaningful qualification.",
     "compatible": "The observable result is equivalent within the stated Astylar constraints.",

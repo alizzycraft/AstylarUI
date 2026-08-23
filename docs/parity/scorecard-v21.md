@@ -345,3 +345,39 @@ regions, and 70/70 interaction steps; minimum static SSIM was `0.967585` and
 minimum interaction-local SSIM was `0.526838` under the documented structural
 UA-focus exception. No OpenAI credential was read and no live API request was
 made.
+
+## AstylarUI 0.2.0 release-candidate verification
+
+The complete `more-html` development line was prepared as the `0.2.0` release
+candidate. Package metadata, runtime compatibility, plugin examples, the public
+capability catalog, and the bundled application-development skill references
+now carry the same version. Superseded implementation plans were removed while
+historical parity scorecards and active raw HTML matching references were kept.
+
+Release verification passed:
+
+- `npm test -- --watch=false`: 339/339 tests.
+- `npm run build:lib`: packed library build.
+- `npm run build`: browser/SSR build and two prerendered routes; only the
+  accepted initial-bundle and `src/app/app.scss` budget warnings remain.
+- `npm run consumer:check`: 419 packed files, successful browser/SSR build and
+  prerender, and 3/3 real-Chrome tests.
+- `npm run capabilities:check`: 91 elements, 84 style fields, 62 DOM fields,
+  and 83 evidence references.
+- `npm run examples:check`: all 10 translations (7 parity-backed, 3 inline).
+- `npm run skill:check`: synchronized 0.2.0 developer references and both skill
+  validators.
+- `npm run parity:harness:check`: 23/23 tests.
+- `npm run parity:release:check`: 165 fixtures / 541 renders over three
+  viewports, median SSIM `0.9899`, minimum SSIM `0.9509`, 99.9% of measured
+  edges within `2px`, maximum edge error `3.9921px`, exact text, clean runtime,
+  and all completion thresholds; the mock TTS benchmark passed 10/10 static
+  scenarios, 36/36 sharpness regions, and 70/70 interaction steps with minimum
+  static SSIM `0.967585` and minimum interaction-local SSIM `0.526838`.
+
+The clean release run exposed two test-only timing assumptions under throttled
+headless scheduling. The isolation suite now polls for the renderer's existing
+100 ms background-tab fallback instead of assuming it fires within 50 ms, and
+the packed consumer's real Babylon recovery test uses the same explicit
+20-second ceiling as its larger browser acceptance test. Production renderer
+behavior was not changed by either stabilization.

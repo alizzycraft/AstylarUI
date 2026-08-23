@@ -13,7 +13,7 @@
 
 ## Version and ownership model
 
-The bundled examples target Angular 20 and Babylon.js 8 through AstylarUI 0.1.0.
+The bundled examples target Angular 20 and Babylon.js 8 through AstylarUI 0.2.0.
 Inspect the consuming project before applying them. AstylarUI owns the engine,
 scene, camera, renderer graph, semantic bridge, interactions, resources, and
 surface child injector created for a mount.

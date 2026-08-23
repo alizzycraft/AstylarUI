@@ -81,14 +81,12 @@ Generated screenshots and reports are intentionally untracked. Accepted Phase 1
 metrics are maintained in `scorecard.md`, completed Application Web Parity v2
 results in `scorecard-v2.md`, representative-application parity in
 `scorecard-v3.md`, content-driven layout parity in `scorecard-v4.md`, and the
-active responsive intrinsic layout and paint-fidelity phase in `scorecard-v5.md`.
-Application-grade intrinsic Grid work continues in `scorecard-v6.md`.
-Reactive layout and reflow work continues in `scorecard-v7.md`.
-Stateful interaction and form parity continues in `scorecard-v8.md`.
-Scrolling, pointer selection, and popup interaction parity is completed in
-`scorecard-v9.md`. Semantic application behavior and accessibility parity
-continues in `scorecard-v10.md`. Incremental rendered-tree reconciliation and
-state continuity continue in `scorecard-v11.md`.
+completed responsive intrinsic layout and paint fidelity in `scorecard-v5.md`.
+Application-grade intrinsic Grid is recorded in `scorecard-v6.md`, reactive
+layout and reflow in `scorecard-v7.md`, stateful interaction and forms in
+`scorecard-v8.md`, scrolling/pointer selection/popups in `scorecard-v9.md`,
+semantic behavior and accessibility in `scorecard-v10.md`, and incremental
+rendered-tree reconciliation/state continuity in `scorecard-v11.md`.
 Packed-package consumer integration and owned Angular surfaces are completed in
 `scorecard-v12.md`. The Angular-native plugin kernel is completed in
 `scorecard-v13.md`. Durable plugin documents, recovery, asynchronous ownership,
