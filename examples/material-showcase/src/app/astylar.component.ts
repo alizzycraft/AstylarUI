@@ -14,10 +14,11 @@ import { FrameSync } from './frame-sync';
 import { MaterialFamily, isMaterialFamily } from './catalog';
 import { ShowcaseStore, type ShowcaseState } from './showcase.store';
 import { mixHex } from './theme';
+import { MaterialRippleController } from './material-plugin/material-ripple.controller';
 
 @Component({
   selector: 'app-astylar-showcase',
-  providers: [FrameSync],
+  providers: [FrameSync, MaterialRippleController],
   imports: [AstylarSurfaceComponent],
   template: `
     <main class="frame" [class.dark]="store.theme().mode === 'dark'" [style.background]="store.theme().surface">
@@ -35,6 +36,7 @@ export class AstylarShowcaseComponent {
   private readonly zone = inject(NgZone);
   private readonly destroyRef = inject(DestroyRef);
   private readonly sync = inject(FrameSync);
+  private readonly ripple = inject(MaterialRippleController);
   protected readonly status = signal('Rendering');
   private surface?: AstylarSurface;
   private pendingSurfaceUpdate?: Promise<unknown>;
@@ -50,7 +52,10 @@ export class AstylarShowcaseComponent {
     events: {
       handlers: new Proxy({}, {
         get: (_target, id: string) => ({
-          pointerdown: (event: AstylarEvent) => this.recordEvent(event),
+          pointerdown: (event: AstylarEvent) => this.zone.run(() => {
+            this.recordEvent(event);
+            if (!this.benchmarkMode) this.activateRipple(event);
+          }),
           pointerup: (event: AstylarEvent) => this.recordEvent(event),
           focus: (event: AstylarEvent) => this.zone.run(() => {
             this.recordEvent(event);
@@ -62,7 +67,10 @@ export class AstylarShowcaseComponent {
             if (this.focusedId() === event.targetId) this.focusedId.set(undefined);
           }),
           keydown: (event: AstylarEvent) => this.zone.run(() => { this.recordEvent(event); this.handleKeydown(id, event); }),
-          click: (event: AstylarEvent) => this.zone.run(() => { this.recordEvent(event); this.handleClick(id, event); }),
+          click: (event: AstylarEvent) => this.zone.run(() => {
+            this.recordEvent(event);
+            this.handleClick(id, event);
+          }),
           input: (event: AstylarEvent) => this.zone.run(() => {
             this.recordEvent(event);
             const targetId = event.targetId;
@@ -104,6 +112,7 @@ export class AstylarShowcaseComponent {
   }
 
   protected mounted(surface: AstylarSurface): void {
+    if (this.surface && this.surface !== surface) this.ripple.dispose();
     this.surface = surface;
     if (typeof window !== 'undefined') {
       window.__ASTYLAR_MATERIAL_BENCHMARK__ = {
@@ -161,6 +170,21 @@ export class AstylarShowcaseComponent {
       this.surface?.focus('dialog-primary', { focusVisible: true });
     }
     this.status.set(`Activated ${event.targetId}`);
+  }
+
+  private activateRipple(event: AstylarEvent): void {
+    if (!this.surface || !['button-primary', 'button-secondary', 'core-primary'].includes(event.targetId)) return;
+    const theme = this.store.tokens();
+    this.ripple.activate({
+      surface: this.surface,
+      elementId: event.targetId,
+      originX: event.localX ?? 0,
+      originY: event.localY ?? 0,
+      width: event.targetId === 'core-primary' ? 212.234375 : event.targetId === 'button-secondary' ? 117 : 141,
+      height: materialDensityHeight(theme.density),
+      cornerRadius: 20 * theme.cornerScale,
+      color: event.targetId === 'button-secondary' ? theme.primary : theme.onPrimary,
+    });
   }
 
   private handleKeydown(id: string, event: AstylarEvent): void {

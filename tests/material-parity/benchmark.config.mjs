@@ -45,7 +45,7 @@ const openableFamilies = new Set(['sidenav', 'autocomplete', 'select', 'datepick
 const disabledFamilies = new Set(['button', 'chips', 'form-field', 'input', 'autocomplete', 'checkbox', 'radio', 'select', 'slider', 'slide-toggle', 'datepicker', 'timepicker', 'button-toggle', 'menu', 'tabs', 'stepper', 'expansion']);
 
 export const materialInteractionCases = materialFamilies.flatMap((family) => {
-  const states = passiveFamilies.has(family) ? ['inspect'] : ['focus', 'hover', 'held', 'activate'];
+  const states = passiveFamilies.has(family) ? ['inspect'] : ['focus', 'hover', 'held', 'activate', 'activate-leave'];
   if (disabledFamilies.has(family)) states.push('disabled');
   if (selectableFamilies.has(family)) states.push('selected');
   if (errorFamilies.has(family)) states.push('error');

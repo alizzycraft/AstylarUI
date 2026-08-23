@@ -184,7 +184,7 @@ export function provideMaterialShowcasePlugin(
     id: 'showcase.material',
     version: '1.0.0',
     pluginApiVersion: ASTYLAR_PLUGIN_API_VERSION,
-    astylarVersionRange: '^0.1.0',
+    astylarVersionRange: '^0.2.0',
     documentSchemaVersion: 1,
     dependencies: [{ id: 'astylar.core', versionRange: '^1.0.0' }],
     contributes: ['elements', 'properties', 'renderers'],

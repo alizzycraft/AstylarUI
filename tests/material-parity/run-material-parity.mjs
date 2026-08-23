@@ -402,6 +402,7 @@ async function performInteraction(page, mode, benchmarkCase) {
   await page.mouse.down();
   if (state === 'held') return async () => { await page.mouse.up(); };
   await page.mouse.up();
+  if (state === 'activate-leave') await page.mouse.move(1, 1);
   return undefined;
 }
 
@@ -491,7 +492,7 @@ async function focusedIdentity(page, mode, family) {
 }
 
 function compareEvents(reference, candidate, family, state) {
-  if (!['activate', 'open', 'open-dismiss'].includes(state)) return { matches: true, reference, astylar: candidate };
+  if (!['activate', 'activate-leave', 'open', 'open-dismiss'].includes(state)) return { matches: true, reference, astylar: candidate };
   const relevant = (events) => events.filter(({ targetId }) => targetId === `${family}-primary`)
     .map(({ type }) => type).filter((type) => ['pointerdown', 'pointerup', 'click', 'input', 'change'].includes(type))
     .filter((type, index, values) => index === 0 || type !== values[index - 1]);

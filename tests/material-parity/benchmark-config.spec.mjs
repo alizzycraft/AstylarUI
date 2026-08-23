@@ -33,6 +33,10 @@ test('keeps the app catalog and enforced static matrix complete', () => {
     for (const profile of materialProfiles) {
       for (const viewport of materialInteractionViewports) {
         assert.ok(materialInteractionCases.some((entry) => entry.family === family && entry.profile === profile && entry.viewport.id === viewport.id));
+        if (!['divider', 'icon', 'progress-bar', 'progress-spinner'].includes(family)) {
+          assert.ok(materialInteractionCases.some((entry) => entry.family === family && entry.profile === profile &&
+            entry.viewport.id === viewport.id && entry.state === 'activate-leave'));
+        }
       }
     }
   }
