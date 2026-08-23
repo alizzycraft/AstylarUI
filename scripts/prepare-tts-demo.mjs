@@ -38,7 +38,17 @@ try {
     rmSync(installedPackage, { recursive: true, force: true });
   }
   run(npm, ['install', '--package-lock=false', '--no-audit', '--no-fund'], demo);
-  console.log('Prepared examples/ai-tts-demo with a fresh packed AstylarUI dependency.');
+
+  // Angular/Vite keys its optimized dependency cache by package identity. The
+  // local tarball deliberately keeps the real package version, so replacing
+  // it can otherwise leave ng serve executing an older AstylarUI bundle.
+  const angularCache = path.join(demo, '.angular', 'cache');
+  if (existsSync(angularCache)) {
+    rmSync(angularCache, { recursive: true, force: true });
+  }
+  console.log(
+    'Prepared examples/ai-tts-demo with a fresh packed AstylarUI dependency and cleared dev cache.',
+  );
 } finally {
   rmSync(temporaryRoot, { recursive: true, force: true });
 }

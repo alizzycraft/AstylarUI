@@ -18,6 +18,12 @@ npm start
 
 Open `http://localhost:4200/`. Mock mode is selected by default, makes no network request, and creates a deterministic 0.65-second WAV tone. It exercises real generation, playback, progress, download, history, and cleanup behavior without spending API credit.
 
+When rebuilding AstylarUI itself, stop the running demo, run
+`npm run tts-demo:prepare` again from the repository root, and restart the demo.
+Preparation clears Angular's optimized dependency cache, while this example's
+start command disables dependency prebundling so the unchanged local package
+version cannot leave an older renderer bundle active.
+
 ## Run live OpenAI speech
 
 Live mode is deliberately available only from the built Express/SSR server. Prepare the package, build the app, then set both server environment variables before starting it:

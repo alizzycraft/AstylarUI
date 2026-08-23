@@ -308,9 +308,12 @@ npm run tts-demo:prepare
 npm run tts-demo:check
 ```
 
-The prepare command installs a fresh packed library into the local example. The
-check command uses a separate temporary installation, mock speech only, browser
-and SSR builds, responsive visual captures, and real Chrome interaction checks.
+The prepare command installs a fresh packed library into the local example and
+clears Angular's optimized dependency cache. Stop a running demo before preparing
+it, then restart `npm start`; the example disables dependency prebundling so a
+newly packed AstylarUI build cannot be hidden behind a same-version Vite cache.
+The check command uses a separate temporary installation, mock speech only,
+browser and SSR builds, responsive visual captures, and real Chrome interaction checks.
 Live OpenAI setup is documented in
 [`examples/ai-tts-demo/README.md`](examples/ai-tts-demo/README.md).
 

@@ -29,6 +29,13 @@ Do not infer a renderer bug from visual surprise alone. Check the installed
 version, catalog classification, public types, authored IDs, selector/value
 support, host/canvas size, settlement, and diagnostics first.
 
+For a packed local Angular consumer, the installed files are not sufficient
+evidence that the running application uses them. A replacement tarball can keep
+the same package version while Vite reuses an older optimized bundle. Stop the
+consumer dev server, clear its `.angular/cache`, restart it, and confirm a
+distinctive changed symbol exists in the served JavaScript before reproducing
+or closing the report.
+
 ## Build a minimal reproduction
 
 For browser parity, reduce to:

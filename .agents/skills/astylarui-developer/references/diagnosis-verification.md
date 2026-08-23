@@ -56,6 +56,10 @@ Investigate in this order:
 - Holding a surface-scoped plugin service in a root singleton.
 - Creating Babylon resources without generation/surface ownership.
 - Importing private source paths that only resolve inside the AstylarUI repo.
+- Replacing a same-version local tarball while Angular/Vite continues serving a
+  previously optimized dependency bundle. Stop the dev server, clear its
+  `.angular/cache`, restart it, and verify a distinctive current symbol in the
+  served JavaScript before judging the new renderer behavior.
 
 ## Distinguish translation from renderer defects
 
