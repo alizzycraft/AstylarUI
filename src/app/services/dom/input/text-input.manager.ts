@@ -217,7 +217,9 @@ export class TextInputManager {
                 textInput.textureWidth,
                 // Pass width correction ratio to calibrate cursor position to actual texture width
                 textInput.textLayoutMetrics.totalWidth > 0 ?
-                    (textInput.textureWidth / render.actions.camera.getPixelToWorldScale()) / textInput.textLayoutMetrics.totalWidth : 1.0
+                    (textInput.textureWidth / render.actions.camera.getPixelToWorldScale()) / textInput.textLayoutMetrics.totalWidth : 1.0,
+                textInput.scrollOffset || 0,
+                this.resolveVisualTextLeftEdge(textInput)
             );
         }
 
@@ -1026,7 +1028,8 @@ export class TextInputManager {
                 textStyle,
                 textInput.textureWidth,
                 widthCorrectionRatio,
-                textInput.scrollOffset || 0
+                textInput.scrollOffset || 0,
+                this.resolveVisualTextLeftEdge(textInput)
             );
         }
 
@@ -1042,7 +1045,8 @@ export class TextInputManager {
             pixelScale,
             textInput.textureWidth,
             widthCorrectionRatio,
-            textInput.scrollOffset || 0
+            textInput.scrollOffset || 0,
+            this.resolveVisualTextLeftEdge(textInput)
         );
 
         if (textInput.type === InputType.Textarea) {
@@ -1163,6 +1167,13 @@ export class TextInputManager {
             left: (border + left) * scale,
             right: (border + right) * scale
         };
+    }
+
+    private resolveVisualTextLeftEdge(textInput: TextInput): number | undefined {
+        const textMesh = textInput.textMesh;
+        if (!textMesh) return undefined;
+        const halfWidth = textMesh.getBoundingInfo().boundingBox.extendSize.x;
+        return textMesh.position.x + halfWidth;
     }
 
     private getVerticalContentInsets(

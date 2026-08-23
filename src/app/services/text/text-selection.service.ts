@@ -122,7 +122,8 @@ export class TextSelectionService {
     style: TextStyleProperties,
     textureWidth?: number,
     widthCorrectionRatio: number = 1.0,
-    scrollOffset: number = 0
+    scrollOffset: number = 0,
+    visualTextLeftEdgeX?: number
   ): BABYLON.Mesh {
 
 
@@ -170,12 +171,12 @@ export class TextSelectionService {
     // Use the actual texture width if available, otherwise fall back to layout metrics
     const textWidth = textureWidth !== undefined ? textureWidth : layoutMetrics.totalWidth * scale;
     // With accurate metrics, we just need standard padding if any, but the metrics should be 1:1
-    const padding = 1.5 * scale; // Match text padding from text-input.manager.ts
+    const padding = 1.5 * scale; // Legacy fallback when no rendered text edge is available.
     const textMeshPosition = (inputWidth / 2) - (textWidth / 2) - padding;
-    // Calculate the starting X (Left Edge) in local coordinates.
-    // Since rotation is 180 (PI), Local +X is World Left.
-    // Start (Left) is at Center + Width/2.
-    const textLeftEdgeX = textMeshPosition + (textWidth / 2);
+    // Since the input text plane is rotated by PI, its visual left edge is its
+    // positive local-X edge. Prefer that rendered edge when the owner supplies
+    // it so authored padding, clipping, and alignment remain single-sourced.
+    const textLeftEdgeX = visualTextLeftEdgeX ?? textMeshPosition + (textWidth / 2);
 
     // Position cursor at the correct location
     // The cursorX is in CSS pixels, so we need to convert it to world units using the scale
@@ -230,7 +231,8 @@ export class TextSelectionService {
     scale: number,
     textureWidth?: number,
     widthCorrectionRatio: number = 1.0,
-    scrollOffset: number = 0
+    scrollOffset: number = 0,
+    visualTextLeftEdgeX?: number
   ): void {
     const cursorX = this.calculateCursorPosition(cursorPosition, layoutMetrics);
 
@@ -244,7 +246,7 @@ export class TextSelectionService {
       // Use the actual texture width if available, otherwise fall back to layout metrics
       const textWidth = textureWidth !== undefined ? textureWidth : layoutMetrics.totalWidth * scale;
       const textMeshPosition = (inputWidth / 2) - (textWidth / 2) - padding;
-      const textLeftEdgeX = textMeshPosition + (textWidth / 2);
+      const textLeftEdgeX = visualTextLeftEdgeX ?? textMeshPosition + (textWidth / 2);
 
       let scrollX = cursorX - scrollOffset;
 

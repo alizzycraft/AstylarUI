@@ -51,6 +51,18 @@ export const interactionScenarios = [
       { id: 'backward-selection', selectionContrast: true, visual: 'structural-selection', actions: [
         { type: 'press-key', key: 'Control+End' }, { type: 'press-key', key: 'Control+Shift+Home' },
       ] },
+      { id: 'pointer-selection-setup', actions: [
+        { type: 'press-key', key: 'Control+A' },
+        { type: 'type-text', text: 'AstylarUI brings familiar web application patterns into a Babylon-rendered space.' },
+        { type: 'press-key', key: 'Control+Home' },
+      ] },
+      { id: 'pointer-mid-selection', selectionContrast: true, visual: 'structural-selection', actions: [
+        { type: 'click', elementId: 'speech-text', offsetX: 42, offsetY: 28 },
+        { type: 'pointer-down', elementId: 'speech-text', offsetX: 42, offsetY: 28 },
+        { type: 'hover', elementId: 'speech-text', offsetX: 101, offsetY: 28 },
+        { type: 'pointer-up' },
+        { type: 'keyboard-focus', elementId: 'speech-text' },
+      ] },
     ],
   },
   {
@@ -180,6 +192,7 @@ export const acceptance = {
   minimumInteractionEdgeAlignment: 0.7,
   minimumInteractionGradientEnergyRetention: 0.75,
   minimumSelectionGlyphAlignment: 0.7,
+  maximumSelectionCaretOffsetPx: 2,
   minimumGradientEnergyRetention: 0.82,
   minimumEdgeAlignment: 0.82,
   maximumGradientRmse: 0.12,

@@ -17,6 +17,7 @@ import { compareScrolling } from './scrolling-metrics.mjs';
 import {
   evaluateInteractionRaster,
   hasRasterColor,
+  selectionCaretOffset,
   selectionGlyphAlignment,
 } from './interaction-metrics.mjs';
 
@@ -554,6 +555,7 @@ function compareInteractionStep(scenario, step, viewport, referenceMeasurement, 
     comparedControlIds,
   );
   const selectionGlyphAlignments = [];
+  let selectionCaretOffsetPx;
   if (step.focusRingRadius) {
     const expectedRadius = Number.parseFloat(
       referenceMeasurement.computedStyles?.[scenario.elementId]?.borderTopLeftRadius ?? '0',
@@ -645,6 +647,24 @@ function compareInteractionStep(scenario, step, viewport, referenceMeasurement, 
         );
       }
     }
+    const controlState = astylarMeasurement.controlStates?.[scenario.elementId];
+    const caretBox = controlState?.caretBox;
+    if (controlState && caretBox && highlights.length) {
+      selectionCaretOffsetPx = selectionCaretOffset(
+        caretBox,
+        highlights.map((highlight) => highlight.borderBox),
+        controlState.selectionDirection,
+      );
+      if (selectionCaretOffsetPx > acceptance.maximumSelectionCaretOffsetPx) {
+        controlErrors.push(
+          `${scenario.elementId} caret is displaced from the active selection edge ` +
+          `(${selectionCaretOffsetPx.toFixed(3)}px > ` +
+          `${acceptance.maximumSelectionCaretOffsetPx.toFixed(3)}px).`,
+        );
+      }
+    } else if (controlState) {
+      controlErrors.push(`${scenario.elementId} selection is missing its visible caret geometry.`);
+    }
     const fontSize = Number.parseFloat(
       referenceMeasurement.computedStyles?.[scenario.elementId]?.fontSize ?? '0',
     );
@@ -684,6 +704,7 @@ function compareInteractionStep(scenario, step, viewport, referenceMeasurement, 
     reference: referenceMeasurement,
     astylar: astylarMeasurement,
     selectionGlyphAlignments,
+    selectionCaretOffsetPx,
     stateErrors, geometryErrors, controlErrors, styleErrors, runtimeErrors, localRaster, meetsAcceptance, infrastructureErrors,
   };
 }

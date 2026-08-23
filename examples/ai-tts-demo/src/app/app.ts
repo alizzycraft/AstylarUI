@@ -237,6 +237,8 @@ export class App {
             selectedIndex: semantic instanceof HTMLSelectElement ? semantic.selectedIndex : null,
             expanded: semantic.getAttribute('aria-expanded') === 'true',
             caretColor,
+            // Measure the owned caret independently of its blink phase.
+            caretBox: cursor ? projectMeshBox(cursor) : undefined,
           }]];
         }));
         const centerPicks = Object.fromEntries(ids.flatMap((id) => {

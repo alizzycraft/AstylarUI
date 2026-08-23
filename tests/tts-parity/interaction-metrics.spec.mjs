@@ -3,6 +3,7 @@ import test from 'node:test';
 import {
   evaluateInteractionRaster,
   hasRasterColor,
+  selectionCaretOffset,
   selectionGlyphAlignment,
 } from './interaction-metrics.mjs';
 
@@ -85,4 +86,12 @@ test('selection glyph alignment rejects a recolor sampled from the wrong texture
   assert.ok(selectionGlyphAlignment(
     unselected, shifted, box, '#f0f0f0', '#000000', '#19202c', '#9ad5ff', canvas,
   ) < 0.5);
+});
+
+test('selection caret offset follows the active edge for forward and backward ranges', () => {
+  const highlights = [{ left: 10, right: 20 }, { left: 4, right: 14 }];
+
+  assert.equal(selectionCaretOffset({ left: 19, right: 21 }, highlights, 'forward'), 0);
+  assert.equal(selectionCaretOffset({ left: 3, right: 5 }, highlights, 'backward'), 0);
+  assert.equal(selectionCaretOffset({ left: 29, right: 31 }, highlights, 'forward'), 10);
 });

@@ -143,6 +143,15 @@ export function selectionGlyphAlignment(
   return Math.min(directed(sourceMask, selectedMask), directed(selectedMask, sourceMask));
 }
 
+export function selectionCaretOffset(caretBox, highlightBoxes, direction) {
+  if (!caretBox || !highlightBoxes?.length) return Number.POSITIVE_INFINITY;
+  const caretCenter = (caretBox.left + caretBox.right) / 2;
+  const edges = direction === 'backward'
+    ? highlightBoxes.map((box) => box.left)
+    : highlightBoxes.map((box) => box.right);
+  return Math.min(...edges.map((edge) => Math.abs(caretCenter - edge)));
+}
+
 function colorAffinityMask(image, foreground, background, left, top, right, bottom) {
   const mask = new Set();
   for (let y = top; y < bottom; y += 1) for (let x = left; x < right; x += 1) {

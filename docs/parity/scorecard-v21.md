@@ -256,3 +256,36 @@ steps across both DPR profiles; minimum static SSIM remained `0.967522` and
 minimum interaction-local SSIM remained `0.526838` under the documented
 structural UA-focus exception. No OpenAI credential was read and no live API
 request was made.
+
+## Caret origin correction
+
+A zoomed manual pass over a padded textarea showed that pointer hit-testing,
+selection geometry, and subsequent text insertion used the correct character
+index, while the rendered caret appeared two characters behind. The caret
+renderer still assumed a fixed `1.5px` inline inset instead of the control's
+actual rendered text origin. In the TTS editor this displaced the caret by
+`15.533px`, matching the observed two-character Consolas offset.
+
+Caret creation and updates now use the rendered text plane's visual left edge.
+That keeps authored padding, borders, alignment, clipping, and scroll ownership
+single-sourced in the text plane rather than recalculating them independently in
+the caret renderer. Selection indices, hit-testing, editing, glyph paint, and
+scroll state are unchanged.
+
+The TTS benchmark now projects owned caret geometry independently of its blink
+phase and requires a text-control caret to stay within `2px` of the active
+forward or backward selection edge. Its editor sequence includes the exact
+mid-line pointer drag over `ylarUI b` at DPR 1 and DPR 2. The final offsets are
+`0.023px` and `0.068px`; a synthetic displaced-caret case fails the harness.
+Ordinary document selection retains its contrast, glyph, and clipboard checks
+without requiring an input-only caret.
+
+Verification passed 338/338 unit tests and 23/23 parity-harness tests. The
+general corpus passed all 165 fixtures / 541 renders with median SSIM `0.9899`,
+minimum SSIM `0.9542`, 99.9% of measured edges within `2px`, maximum edge error
+`3.9921px`, exact text, clean runtime reports, and every completion threshold
+met. The unfiltered packed TTS run passed 10/10 static scenarios, 36/36
+sharpness regions, and 70/70 interaction steps. Minimum static SSIM remained
+`0.967522` and minimum interaction-local SSIM remained `0.526838` under the
+documented structural UA-focus exception. No OpenAI credential was read and no
+live API request was made.
