@@ -173,17 +173,21 @@ export class AstylarShowcaseComponent {
   }
 
   private activateRipple(event: AstylarEvent): void {
-    if (!this.surface || !['button-primary', 'button-secondary', 'core-primary'].includes(event.targetId)) return;
+    if (!this.surface || !['button-primary', 'button-secondary', 'core-primary', 'toolbar-action'].includes(event.targetId)) return;
     const theme = this.store.tokens();
+    const toolbarAction = event.targetId === 'toolbar-action';
+    const mobileToolbar = toolbarAction &&
+      (this.surface.scene.getEngine().getRenderingCanvas()?.clientWidth ?? Number.POSITIVE_INFINITY) <= 500;
     this.ripple.activate({
       surface: this.surface,
       elementId: event.targetId,
       originX: event.localX ?? 0,
       originY: event.localY ?? 0,
-      width: event.targetId === 'core-primary' ? 212.234375 : event.targetId === 'button-secondary' ? 117 : 141,
-      height: materialDensityHeight(theme.density),
+      width: toolbarAction ? mobileToolbar ? 64 : 65.140625 :
+        event.targetId === 'core-primary' ? 212.234375 : event.targetId === 'button-secondary' ? 117 : 141,
+      height: toolbarAction ? toolbarActionHeight(theme.density) : materialDensityHeight(theme.density),
       cornerRadius: 20 * theme.cornerScale,
-      color: event.targetId === 'button-secondary' ? theme.primary : theme.onPrimary,
+      color: event.targetId === 'button-secondary' || toolbarAction ? theme.primary : theme.onPrimary,
     });
   }
 
@@ -617,6 +621,12 @@ function semanticNumber(element: HTMLElement, attribute: string): number | undef
 function materialDensityHeight(density: number): number {
   if (density >= 0) return 40;
   if (density === -1) return 32;
+  if (density === -2) return 28;
+  return 24;
+}
+
+function toolbarActionHeight(density: number): number {
+  if (density >= 0) return 40;
   if (density === -2) return 28;
   return 24;
 }
