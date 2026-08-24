@@ -1258,10 +1258,11 @@ export class ElementInteractionService {
         },
       };
 
-      // Keep the shadow as a sibling of its owner. Parenting it to the painted
-      // element made the shadow inherit the owner's local placement twice in
-      // nested surfaces and left its falloff outside the expected box.
-      render.actions.mesh.parentTextMesh(shadowMesh, parent);
+      // Shadow paint belongs to the element's local coordinate system. Keeping
+      // it attached to the owner means later flex/block/positioning passes move
+      // both together instead of leaving the shadow at the provisional
+      // creation position.
+      render.actions.mesh.parentTextMesh(shadowMesh, elementMesh);
       dom.context.elements.set(`${elementId}-shadow`, shadowMesh);
 
 
@@ -1269,19 +1270,14 @@ export class ElementInteractionService {
       shadowMesh = existingShadow!;
     }
 
-    // Outer-shadow fragments are clipped to the owner's border box by the
-    // shadow shader. Keeping them just in front avoids ancestor backgrounds
-    // occluding the falloff while leaving the element itself untouched.
+    // Layer offsets are already local to the shadow root. The root itself must
+    // stay at the owner's origin; copying the owner's local position here would
+    // apply that placement twice once parented.
     if (needsRecreation) {
-      shadowMesh.position.set(
-        elementMesh.position.x,
-        elementMesh.position.y,
-        zPosition + ELEMENT_BORDER_Z_OFFSET / 2,
-      );
+      shadowMesh.position.set(0, 0, ELEMENT_BORDER_Z_OFFSET / 2);
     }
 
-    // Since shadow is parented to element, it will automatically inherit all transforms and position changes
-    // No need to manually apply transforms - parenting handles this automatically
+    // Parenting keeps subsequent layout placement and transforms synchronized.
 
   }
 }

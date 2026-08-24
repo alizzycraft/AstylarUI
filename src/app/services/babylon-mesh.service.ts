@@ -1724,6 +1724,11 @@ export class BabylonMeshService {
       material.setColor4("shadowColor", parsedColor.color.toColor4(parsedColor.alpha));
       material.backFaceCulling = false;
       material.needAlphaBlending = () => true;
+      // A translucent shadow must not claim depth for the rest of its plane.
+      // Doing so hides later-painted descendants wherever the shader emits a
+      // low-alpha fragment, making a nested shadow look like a displaced copy
+      // of the owning surface.
+      material.disableDepthWrite = true;
       plane.material = material;
       // Astylar's camera axes are opposite CSS screen axes.
       plane.position.set(-layer.offsetX, -layer.offsetY, -0.00005 * reverseIndex);

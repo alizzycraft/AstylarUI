@@ -1,4 +1,4 @@
-import { Color3, DynamicTexture, Mesh, NullEngine, Scene, Vector3, VertexBuffer } from '@babylonjs/core';
+import { Color3, DynamicTexture, Mesh, NullEngine, Scene, ShaderMaterial, Vector3, VertexBuffer } from '@babylonjs/core';
 
 import { BabylonMeshService } from './babylon-mesh.service';
 
@@ -88,6 +88,7 @@ describe('BabylonMeshService', () => {
         jasmine.objectContaining({ blur: 1, spread: -1, planeWidth: 122, planeHeight: 62 }),
       ]);
       expect(layers.map((layer) => layer.position.y)).toEqual([-1, -2]);
+      expect(layers.every((layer) => (layer.material as ShaderMaterial).disableDepthWrite)).toBeTrue();
 
       engine.dispose();
     });
