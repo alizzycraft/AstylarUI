@@ -39,11 +39,11 @@ export const elementDefaults: { [key: string]: Partial<StyleRule> } = {
   // Reference: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/div
   div: {},
   // Reference: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/section
-  section: { background: "#34495e" },
+  section: { background: "transparent" },
   // Reference: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/article
-  article: { background: "#27ae60" },
+  article: { background: "transparent" },
   // Reference: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/header
-  header: { background: "#3498db" },
+  header: { background: "transparent" },
   // Reference: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/footer
   footer: { display: "block" },
   // Reference: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/nav

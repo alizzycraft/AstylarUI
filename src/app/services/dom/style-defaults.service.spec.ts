@@ -28,6 +28,14 @@ describe('StyleDefaultsService', () => {
     );
   });
 
+  it('keeps semantic grouping containers transparent like browser defaults', () => {
+    for (const elementType of ['section', 'article', 'header']) {
+      expect(service.getElementTypeDefaults(elementType).background)
+        .withContext(`${elementType} should not receive decorative renderer paint`)
+        .toBe('transparent');
+    }
+  });
+
   it('lets shorthand spacing replace inherited side-specific values', () => {
     const merged = StyleDefaultsService.mergeStyles(
       { paddingTop: '1px', paddingRight: '2px', marginLeft: '3px' },

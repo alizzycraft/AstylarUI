@@ -1137,5 +1137,16 @@
     "scrollStateTolerancePx": 2.1,
     "dynamicStepCount": 1,
     "interactionStepCount": 7
+  },
+  {
+    "id": "semantic-container-transparent-defaults",
+    "title": "Semantic grouping container transparent defaults",
+    "category": "cascade-defaults",
+    "expectedBehavior": "Unstyled section, article, and header containers remain transparent instead of receiving decorative renderer paint.",
+    "enforcedStyleProperties": {
+      "transparent-default-section": ["backgroundColor"],
+      "transparent-default-article": ["backgroundColor"],
+      "transparent-default-header": ["backgroundColor"]
+    }
   }
 ]
