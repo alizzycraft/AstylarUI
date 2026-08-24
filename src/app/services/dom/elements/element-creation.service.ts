@@ -346,6 +346,10 @@ export class ElementCreationService {
       cursor: style.cursor,
       elementId: element.id,
       element: element, // Store the element object for hover handling
+      // Preserve the resolved normal style for diagnostics/parity inspection.
+      // The authored style map only stores source rules and cannot represent
+      // loaded-document styles after defaults and cascade resolution.
+      astylarResolvedStyle: { ...style },
       astylarPluginProperties: pluginProperties,
       ...(pluginRenderer
         ? { astylarPluginRenderer: pluginRenderer.definition.id }

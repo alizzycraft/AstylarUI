@@ -1598,12 +1598,14 @@ function normalizeStyleValue(property, value) {
 
 function normalizeColor(value) {
   const source = String(value).trim().toLowerCase();
+  if (source === 'transparent') return 'transparent';
   if (/^#[0-9a-f]{6}$/.test(source)) return source;
   if (/^#[0-9a-f]{3}$/.test(source)) {
     return `#${source[1]}${source[1]}${source[2]}${source[2]}${source[3]}${source[3]}`;
   }
-  const match = source.match(/^rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/);
+  const match = source.match(/^rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)(?:\s*,\s*([\d.]+))?/);
   if (!match) return source;
+  if (match[4] !== undefined && Number.parseFloat(match[4]) === 0) return 'transparent';
   return `#${[match[1], match[2], match[3]]
     .map((component) => Number(component).toString(16).padStart(2, '0'))
     .join('')}`;

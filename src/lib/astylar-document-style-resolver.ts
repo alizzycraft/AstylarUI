@@ -213,18 +213,18 @@ export class AstylarDocumentStyleResolver {
       const interactive = owner?.dataset['astylarInteractiveStyle'] !== undefined;
       if ((sheetKind === 'interactive') !== interactive) continue;
       const source = owner?.dataset['astylarLoadedStyleSource'] ?? 'loaded-style';
-      this.visitActiveStyleRules(document.defaultView!, sheet.cssRules, (rule) => {
+      this.visitActiveStyleRules(document.defaultView!, sheet.cssRules, (rule, selectorText) => {
         for (const entry of entries) {
           let matches = false;
           try {
-            matches = entry.mirror.matches(rule.selectorText);
+            matches = entry.mirror.matches(selectorText);
           } catch (error) {
             this.diagnostics.report({
               code: 'document-css-rule-unsupported',
               severity: 'warning',
-              message: `Skipped selector ${JSON.stringify(rule.selectorText)} from ${JSON.stringify(source)} because it cannot be matched safely.`,
+              message: `Skipped selector ${JSON.stringify(selectorText)} from ${JSON.stringify(source)} because it cannot be matched safely.`,
               source,
-              selector: rule.selectorText,
+              selector: selectorText,
               value: error instanceof Error ? error.message : String(error),
             });
           }
@@ -242,7 +242,7 @@ export class AstylarDocumentStyleResolver {
                 severity: 'warning',
                 message: `Loaded CSS property ${JSON.stringify(property)} is not translated by Astylar.`,
                 source,
-                selector: rule.selectorText,
+                selector: selectorText,
                 property,
                 value: rule.style.getPropertyValue(property),
                 affectedElements: 1,
@@ -260,17 +260,23 @@ export class AstylarDocumentStyleResolver {
   private visitActiveStyleRules(
     view: Window,
     rules: CSSRuleList,
-    visit: (rule: CSSStyleRule) => void,
+    visit: (rule: CSSStyleRule, selectorText: string) => void,
+    parentSelector?: string,
   ): void {
     for (const rule of Array.from(rules)) {
       if (rule.type === CSSRule.STYLE_RULE) {
-        visit(rule as CSSStyleRule);
+        const styleRule = rule as CSSStyleRule & { cssRules?: CSSRuleList };
+        const selectorText = resolveNestedSelector(parentSelector, styleRule.selectorText);
+        if (styleRule.style.length > 0) visit(styleRule, selectorText);
+        if (styleRule.cssRules?.length) {
+          this.visitActiveStyleRules(view, styleRule.cssRules, visit, selectorText);
+        }
         continue;
       }
       if (rule.type === CSSRule.MEDIA_RULE) {
         const media = rule as CSSMediaRule;
         if (view.matchMedia(media.conditionText).matches) {
-          this.visitActiveStyleRules(view, media.cssRules, visit);
+          this.visitActiveStyleRules(view, media.cssRules, visit, parentSelector);
         }
         continue;
       }
@@ -278,12 +284,14 @@ export class AstylarDocumentStyleResolver {
         const supports = rule as CSSSupportsRule;
         const css = (view as unknown as { CSS?: { supports(condition: string): boolean } }).CSS;
         if (css?.supports(supports.conditionText) ?? true) {
-          this.visitActiveStyleRules(view, supports.cssRules, visit);
+          this.visitActiveStyleRules(view, supports.cssRules, visit, parentSelector);
         }
         continue;
       }
       const grouping = rule as CSSRule & { cssRules?: CSSRuleList };
-      if (grouping.cssRules) this.visitActiveStyleRules(view, grouping.cssRules, visit);
+      if (grouping.cssRules) {
+        this.visitActiveStyleRules(view, grouping.cssRules, visit, parentSelector);
+      }
     }
   }
 
@@ -558,19 +566,27 @@ function createMirrorElement(document: Document, element: DOMElement): HTMLEleme
   return mirror;
 }
 
-function serializeInteractiveRules(rules: CSSRuleList | undefined): string {
+function serializeInteractiveRules(
+  rules: CSSRuleList | undefined,
+  parentSelector?: string,
+): string {
   if (!rules) return '';
   const output: string[] = [];
   for (const rule of Array.from(rules)) {
     if (rule.type === CSSRule.STYLE_RULE) {
-      const styleRule = rule as CSSStyleRule;
-      const selector = rewriteInteractiveSelector(styleRule.selectorText);
-      if (selector !== styleRule.selectorText) output.push(`${selector} { ${styleRule.style.cssText} }`);
+      const styleRule = rule as CSSStyleRule & { cssRules?: CSSRuleList };
+      const resolvedSelector = resolveNestedSelector(parentSelector, styleRule.selectorText);
+      const selector = rewriteInteractiveSelector(resolvedSelector);
+      if (selector !== resolvedSelector && styleRule.style.length > 0) {
+        output.push(`${selector} { ${styleRule.style.cssText} }`);
+      }
+      const nested = serializeInteractiveRules(styleRule.cssRules, resolvedSelector);
+      if (nested) output.push(nested);
       continue;
     }
     const grouping = rule as CSSRule & { cssRules?: CSSRuleList; conditionText?: string; name?: string };
     if (!grouping.cssRules) continue;
-    const nested = serializeInteractiveRules(grouping.cssRules);
+    const nested = serializeInteractiveRules(grouping.cssRules, parentSelector);
     if (!nested) continue;
     if (rule.type === CSSRule.MEDIA_RULE) {
       output.push(`@media ${(rule as CSSMediaRule).conditionText} { ${nested} }`);
@@ -584,12 +600,22 @@ function serializeInteractiveRules(rules: CSSRuleList | undefined): string {
   return output.join('\n');
 }
 
+function resolveNestedSelector(parentSelector: string | undefined, selector: string): string {
+  if (!parentSelector) return selector;
+  return selector.includes('&')
+    ? selector.replaceAll('&', `:is(${parentSelector})`)
+    : `${parentSelector} ${selector}`;
+}
+
 function rewriteInteractiveSelector(selector: string): string {
   return selector
-    .replace(/:focus-visible(?![\w-])/g, '[data-astylar-focus-visible]')
-    .replace(/:focus(?![\w-])/g, '[data-astylar-focus]')
-    .replace(/:hover(?![\w-])/g, '[data-astylar-hover]')
-    .replace(/:active(?![\w-])/g, '[data-astylar-active]');
+    // Tailwind encodes variants inside escaped class names (for example,
+    // `.tw\:hover\:bg-blue-500:hover`). Only rewrite the real pseudo-class;
+    // rewriting an escaped colon corrupts the class selector itself.
+    .replace(/(?<!\\):focus-visible(?![\w-])/g, '[data-astylar-focus-visible]')
+    .replace(/(?<!\\):focus(?![\w-])/g, '[data-astylar-focus]')
+    .replace(/(?<!\\):hover(?![\w-])/g, '[data-astylar-hover]')
+    .replace(/(?<!\\):active(?![\w-])/g, '[data-astylar-active]');
 }
 
 function internalSelector(

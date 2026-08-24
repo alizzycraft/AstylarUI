@@ -27,7 +27,7 @@
     "parity": "node tests/parity/run-parity.mjs",
     "parity:check": "node tests/parity/run-parity.mjs --enforce",
     "parity:tailwind:check": "node tests/parity/run-parity.mjs --fixture=tailwind-loaded-utilities --enforce-focused",
-    "parity:harness:check": "node --test tests/parity/visibility-metrics.spec.mjs tests/parity/sharpness-metrics.spec.mjs tests/tts-parity/benchmark-config.spec.mjs tests/tts-parity/demo-workflow.spec.mjs tests/tts-parity/scrolling-metrics.spec.mjs tests/tts-parity/interaction-metrics.spec.mjs",
+    "parity:harness:check": "node --test tests/parity/fixture-manifest.spec.mjs tests/parity/visibility-metrics.spec.mjs tests/parity/sharpness-metrics.spec.mjs tests/tts-parity/benchmark-config.spec.mjs tests/tts-parity/demo-workflow.spec.mjs tests/tts-parity/scrolling-metrics.spec.mjs tests/tts-parity/interaction-metrics.spec.mjs",
     "tts-parity:report": "node tests/tts-parity/run-tts-parity.mjs",
     "tts-parity:check": "node tests/tts-parity/run-tts-parity.mjs --enforce",
     "parity:release:check": "npm run parity:check && npm run tts-parity:check",

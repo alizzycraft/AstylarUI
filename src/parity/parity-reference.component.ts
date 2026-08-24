@@ -318,7 +318,11 @@ export class ParityReferenceComponent {
         }
         continue;
       }
-      elements[id] = this.measureElement(element, viewport);
+      elements[id] = this.measureElement(
+        element,
+        viewport,
+        fixture.enforcedStyleProperties?.[id] ?? [],
+      );
     }
 
     for (const id of fixture.expectedAbsentIds ?? []) {
@@ -623,7 +627,8 @@ export class ParityReferenceComponent {
 
   private measureElement(
     element: HTMLElement,
-    viewport: HTMLElement
+    viewport: HTMLElement,
+    enforcedStyleProperties: readonly string[],
   ): ParityElementMeasurement {
     const viewportRect = viewport.getBoundingClientRect();
     const rect = element.getBoundingClientRect();
@@ -665,43 +670,66 @@ export class ParityReferenceComponent {
       ? textareaValue.split(/\r?\n/).length
       : lineRects.length;
 
+    const measuredStyles: Record<string, string | number | undefined> = {
+      display: computed.display,
+      position: computed.position,
+      boxSizing: computed.boxSizing,
+      backgroundColor: this.normalizeComputedColor(computed.backgroundColor),
+      color: this.normalizeComputedColor(computed.color),
+      borderTopWidth: computed.borderTopWidth,
+      borderRightWidth: computed.borderRightWidth,
+      borderBottomWidth: computed.borderBottomWidth,
+      borderLeftWidth: computed.borderLeftWidth,
+      borderTopColor: this.normalizeComputedColor(computed.borderTopColor),
+      borderRightColor: this.normalizeComputedColor(computed.borderRightColor),
+      borderBottomColor: this.normalizeComputedColor(computed.borderBottomColor),
+      borderLeftColor: this.normalizeComputedColor(computed.borderLeftColor),
+      borderTopStyle: computed.borderTopStyle,
+      borderRightStyle: computed.borderRightStyle,
+      borderBottomStyle: computed.borderBottomStyle,
+      borderLeftStyle: computed.borderLeftStyle,
+      borderRadius: computed.borderRadius,
+      fontFamily: computed.fontFamily,
+      fontSize: computed.fontSize,
+      fontWeight: computed.fontWeight,
+      fontStyle: computed.fontStyle,
+      lineHeight: computed.lineHeight,
+      textAlign: computed.textAlign,
+      whiteSpace: computed.whiteSpace,
+      cursor: computed.cursor,
+      opacity: computed.opacity,
+      zIndex: computed.zIndex,
+    };
+    for (const property of enforcedStyleProperties) {
+      measuredStyles[property] ??= computed.getPropertyValue(
+        property.replace(/[A-Z]/g, (character) => `-${character.toLowerCase()}`),
+      ).trim();
+    }
+
     return {
       id: element.id,
       borderBox,
       contentBox,
       visibility: this.measureVisibility(element, viewport, borderBox),
-      styles: {
-        display: computed.display,
-        position: computed.position,
-        boxSizing: computed.boxSizing,
-        backgroundColor: computed.backgroundColor,
-        color: computed.color,
-        borderTopWidth: computed.borderTopWidth,
-        borderRightWidth: computed.borderRightWidth,
-        borderBottomWidth: computed.borderBottomWidth,
-        borderLeftWidth: computed.borderLeftWidth,
-        borderTopColor: computed.borderTopColor,
-        borderRightColor: computed.borderRightColor,
-        borderBottomColor: computed.borderBottomColor,
-        borderLeftColor: computed.borderLeftColor,
-        borderTopStyle: computed.borderTopStyle,
-        borderRightStyle: computed.borderRightStyle,
-        borderBottomStyle: computed.borderBottomStyle,
-        borderLeftStyle: computed.borderLeftStyle,
-        borderRadius: computed.borderRadius,
-        fontFamily: computed.fontFamily,
-        fontSize: computed.fontSize,
-        fontWeight: computed.fontWeight,
-        fontStyle: computed.fontStyle,
-        lineHeight: computed.lineHeight,
-        textAlign: computed.textAlign,
-        whiteSpace: computed.whiteSpace,
-        cursor: computed.cursor,
-        opacity: computed.opacity,
-        zIndex: computed.zIndex
-      },
+      styles: measuredStyles,
       text: textContent ? { content: textContent, lineCount } : undefined
     };
+  }
+
+  private normalizeComputedColor(value: string): string {
+    const canvas = this.document.createElement('canvas');
+    canvas.width = 1;
+    canvas.height = 1;
+    const context = canvas.getContext('2d', { willReadFrequently: true });
+    if (!context) return value;
+    context.clearRect(0, 0, 1, 1);
+    context.fillStyle = '#000000';
+    context.fillStyle = value;
+    context.fillRect(0, 0, 1, 1);
+    const [red, green, blue, alpha] = context.getImageData(0, 0, 1, 1).data;
+    return alpha === 255
+      ? `rgb(${red}, ${green}, ${blue})`
+      : `rgba(${red}, ${green}, ${blue}, ${Math.round((alpha / 255) * 1000) / 1000})`;
   }
 
   private measureVisibility(

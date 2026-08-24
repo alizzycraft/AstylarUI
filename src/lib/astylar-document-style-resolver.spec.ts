@@ -86,6 +86,28 @@ describe('AstylarDocumentStyleResolver', () => {
     expect(resolved.focus?.color).toBe('rgb(0, 0, 0)');
   });
 
+  it('resolves interaction variants nested beneath a Tailwind-style grouping rule', () => {
+    style.textContent = `
+      .tw\\:bg-blue-600 { background-color: rgb(21, 93, 252); }
+      .tw\\:hover\\:bg-blue-500 {
+        @media (min-width: 1px) {
+          &:hover { background-color: rgb(43, 127, 255); }
+        }
+      }
+    `;
+    const element: DOMElement = {
+      type: 'div',
+      id: 'nested-hover-action',
+      class: 'tw:bg-blue-600 tw:hover:bg-blue-500',
+    };
+
+    const resolved = resolver.resolve(document, site(element), { width: 700, height: 400 })
+      .elements.get(element)!;
+
+    expect(resolved.normal.background).toBe('rgb(21, 93, 252)');
+    expect(resolved.hover?.background).toBe('rgb(43, 127, 255)');
+  });
+
   it('translates Tailwind logical spacing, axis overflow, and individual transforms', () => {
     style.textContent = `
       .utility {
