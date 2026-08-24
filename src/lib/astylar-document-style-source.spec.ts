@@ -97,6 +97,12 @@ describe('AstylarDocumentStyleSource', () => {
     const source = TestBed.inject(AstylarDocumentStyleSource);
     let invalidations = 0;
     const disconnect = source.observe(document, () => invalidations++);
+    const unrelated = document.createElement('div');
+    document.body.append(unrelated);
+    unrelated.textContent = 'Semantic mirror updates must not invalidate CSS.';
+    await new Promise<void>((resolve) => setTimeout(resolve, 10));
+    expect(invalidations).toBe(0);
+
     const style = document.createElement('style');
     style.dataset['astylarStyleSourceTest'] = '';
     document.head.append(style);
@@ -108,5 +114,6 @@ describe('AstylarDocumentStyleSource', () => {
     style.textContent = '.late { color: blue; }';
     await new Promise<void>((resolve) => setTimeout(resolve, 10));
     expect(invalidations).toBe(1);
+    unrelated.remove();
   });
 });

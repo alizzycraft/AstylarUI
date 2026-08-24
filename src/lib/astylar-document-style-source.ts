@@ -91,7 +91,9 @@ export class AstylarDocumentStyleSource {
         if (this.observedDocument === document) invalidate();
       }, 0);
     };
-    this.observer = new MutationObserver(queueInvalidation);
+    this.observer = new MutationObserver((records) => {
+      if (records.some(isStylesheetMutation)) queueInvalidation();
+    });
     this.observer.observe(document.documentElement, {
       subtree: true,
       childList: true,
@@ -99,7 +101,9 @@ export class AstylarDocumentStyleSource {
       attributes: true,
       attributeFilter: ['disabled', 'href', 'media', 'rel'],
     });
-    this.loadListener = queueInvalidation;
+    this.loadListener = (event) => {
+      if (isStylesheetLink(event.target)) queueInvalidation();
+    };
     document.addEventListener('load', this.loadListener, true);
     return () => this.disconnect();
   }
@@ -214,4 +218,21 @@ function fingerprint(value: string): string {
     hash = Math.imul(hash, 0x01000193);
   }
   return (hash >>> 0).toString(16).padStart(8, '0');
+}
+
+function isStylesheetMutation(record: MutationRecord): boolean {
+  if (record.type === 'characterData') {
+    return record.target.parentElement?.closest('style') !== null;
+  }
+  if (record.type === 'attributes') {
+    return record.target instanceof HTMLStyleElement || isStylesheetLink(record.target);
+  }
+  if (record.target instanceof HTMLStyleElement) return true;
+  return [...Array.from(record.addedNodes), ...Array.from(record.removedNodes)]
+    .some((node) => node instanceof HTMLStyleElement || isStylesheetLink(node) ||
+      (node instanceof Element && !!node.querySelector('style, link[rel~="stylesheet"]')));
+}
+
+function isStylesheetLink(value: unknown): value is HTMLLinkElement {
+  return value instanceof HTMLLinkElement && value.relList.contains('stylesheet');
 }

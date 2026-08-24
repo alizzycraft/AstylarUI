@@ -13,12 +13,28 @@ import { ViewportService } from './positioning/viewport.service';
 })
 export class StyleService {
     private readonly parsedAuthorStyles = new WeakSet<StyleRule>();
+    private loadedDocumentStyles: ReadonlyMap<DOMElement, {
+        readonly normal: Readonly<StyleRule>;
+        readonly hover?: Readonly<StyleRule>;
+        readonly active?: Readonly<StyleRule>;
+        readonly focus?: Readonly<StyleRule>;
+    }> = new Map();
 
     constructor(
         private styleDefaults: StyleDefaultsService,
         private ancestry: DOMAncestryService,
         private viewportService: ViewportService,
     ) { }
+
+    /** @internal Installs browser-resolved loaded CSS for the current surface reflow. */
+    public setLoadedDocumentStyles(styles: ReadonlyMap<DOMElement, {
+        readonly normal: Readonly<StyleRule>;
+        readonly hover?: Readonly<StyleRule>;
+        readonly active?: Readonly<StyleRule>;
+        readonly focus?: Readonly<StyleRule>;
+    }>): void {
+        this.loadedDocumentStyles = styles;
+    }
 
     /**
      * Parses the align-content property for flex containers
@@ -331,6 +347,17 @@ export class StyleService {
             ...(element.type === 'dialog' && element.open ? { display: 'block' as const } : {}),
         };
 
+        // Loaded document CSS is an explicit opt-in author origin above
+        // Astylar defaults and below serializable SiteData rules.
+        const loaded = this.loadedDocumentStyles.get(element)?.normal;
+        if (loaded) {
+            mergedStyle = {
+                ...mergedStyle,
+                ...loaded,
+                selector: element.id ? `#${element.id}` : element.type,
+            };
+        }
+
         const winners = new Map<keyof StyleRule, { specificity: number; sourceOrder: number; value: unknown }>();
         const extensionWinners = new Map<string, { specificity: number; sourceOrder: number; value: unknown }>();
         const debugSegments: string[] = [];
@@ -437,6 +464,15 @@ export class StyleService {
                     continue;
                 }
                 (mergedStyle as unknown as Record<string, unknown>)[property] = value;
+                if (property === 'margin' || property === 'padding') {
+                    const prefix = property as 'margin' | 'padding';
+                    for (const suffix of ['Top', 'Right', 'Bottom', 'Left'] as const) {
+                        const longhand = `${prefix}${suffix}` as keyof StyleRule;
+                        if ((element.style as Record<string, unknown>)[longhand] === undefined) {
+                            delete mergedStyle[longhand];
+                        }
+                    }
+                }
                 if (property === 'flex') {
                     const expanded = this.parseFlexShorthand(String(value));
                     mergedStyle.flexGrow = String(expanded.flexGrow);
@@ -505,8 +541,12 @@ export class StyleService {
                 }
             });
         });
-        if (winners.size === 0 && extensionWinners.size === 0) return undefined;
-        const result: StyleRule = { selector: element.id ? `#${element.id}:${state}` : `${element.type}:${state}` };
+        const loaded = this.loadedDocumentStyles.get(element)?.[state];
+        if (winners.size === 0 && extensionWinners.size === 0 && !loaded) return undefined;
+        const result: StyleRule = {
+            ...loaded,
+            selector: element.id ? `#${element.id}:${state}` : `${element.type}:${state}`,
+        };
         for (const [property, winner] of winners) {
             (result as unknown as Record<string, unknown>)[property] = winner.value;
         }
