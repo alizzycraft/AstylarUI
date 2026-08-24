@@ -60,6 +60,7 @@ import { AstylarDiagnostics } from './astylar-diagnostics';
 import { AstylarDocumentRecovery } from './astylar-document-recovery';
 import { AstylarPluginHost } from './astylar-plugin-host';
 import { AstylarDocumentStyleSource } from './astylar-document-style-source';
+import { AstylarDocumentStyleResolver } from './astylar-document-style-resolver';
 
 /** Complete renderer dependency scope. Every mount receives new instances. */
 export const ASTYLAR_SURFACE_SERVICE_PROVIDERS: Provider[] = [
@@ -67,6 +68,7 @@ export const ASTYLAR_SURFACE_SERVICE_PROVIDERS: Provider[] = [
   AstylarDocumentRecovery,
   AstylarPluginHost,
   AstylarDocumentStyleSource,
+  AstylarDocumentStyleResolver,
   TextSelectionStore,
   CoordinateTransformService,
   BabylonCameraService,

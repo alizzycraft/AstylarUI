@@ -30,7 +30,8 @@ version and describe only its tested utility subset.
 | Increment | Invariant | Focused evidence | Commit |
 | --- | --- | --- | --- |
 | 1 | The public workflow and owning architecture are decided before behavior changes. | Documentation and diff checks | `76b52d6` |
-| 2 | Opt-in configuration is additive, and inspectable CSS is discovered in order while inaccessible sheets remain bounded diagnostics. | 16/16 focused provider/discovery tests; library build | This increment |
+| 2 | Opt-in configuration is additive, and inspectable CSS is discovered in order while inaccessible sheets remain bounded diagnostics. | 16/16 focused provider/discovery tests; library build | `8b4bc20` |
+| 3 | Browser CSS resolution produces typed per-element normal/state records at the surface viewport without importing unrelated UA defaults. | 4/4 resolver tests: layers, variables, calc, modern colors, responsive, escaped classes, state variants, filtering, caching | This increment |
 
 ## Required final evidence
 
@@ -41,6 +42,6 @@ or report-only run is not final acceptance.
 
 ## Current limitations
 
-The provider and stylesheet-source lifecycle are implemented, but loaded rules
-are not yet connected to `StyleService` and therefore do not affect rendering at
-this checkpoint.
+Discovery and browser-backed typed resolution are implemented, but the resolved
+records are not yet connected to `StyleService` and therefore do not affect
+Babylon rendering at this checkpoint.
