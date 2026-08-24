@@ -31,7 +31,7 @@ export class TailwindShowcaseComponent {
   protected readonly tabs = TAILWIND_SHOWCASE_TABS;
   protected readonly viewports: readonly ShowcaseViewport[] = [
     { id: 'compact', label: 'Compact · 520px', width: 520, height: 620 },
-    { id: 'desktop', label: 'Desktop · 720px', width: 720, height: 620 },
+    { id: 'desktop', label: 'Desktop · 800px', width: 800, height: 620 },
   ];
   protected readonly selectedTabId = signal<TailwindShowcaseTabId>('layout');
   protected readonly selectedViewportId = signal<ShowcaseViewport['id']>('compact');

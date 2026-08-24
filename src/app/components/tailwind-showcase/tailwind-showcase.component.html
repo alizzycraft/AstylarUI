@@ -87,7 +87,11 @@
           <span>{{ selectedViewport().width }} × {{ selectedViewport().height }}</span>
         </header>
         <div class="demo-viewport">
-          <app-tailwind-reference [nodes]="referenceNodes()" />
+          <app-tailwind-reference
+            [nodes]="referenceNodes()"
+            [width]="selectedViewport().width"
+            [height]="selectedViewport().height"
+          />
         </div>
       </section>
 

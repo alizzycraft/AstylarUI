@@ -57,7 +57,8 @@ describe('TailwindShowcaseComponent', () => {
     await fixture.whenStable();
 
     expect(controlsTab.getAttribute('aria-selected')).toBe('true');
-    expect(host.querySelector('[data-showcase-id="controls-primary"]')).not.toBeNull();
+    expect(host.querySelector<HTMLIFrameElement>('[data-testid="tailwind-reference"]')
+      ?.contentDocument?.querySelector('[data-showcase-id="controls-primary"]')).not.toBeNull();
 
     const desktopButton = [...host.querySelectorAll<HTMLButtonElement>('.viewport-button')]
       .find((button) => button.textContent?.includes('Desktop'))!;
@@ -66,7 +67,36 @@ describe('TailwindShowcaseComponent', () => {
 
     const grid = host.querySelector<HTMLElement>('.comparison-grid')!;
     expect(desktopButton.getAttribute('aria-pressed')).toBe('true');
-    expect(grid.style.getPropertyValue('--showcase-width')).toBe('720px');
+    expect(grid.style.getPropertyValue('--showcase-width')).toBe('800px');
+  });
+
+  it('evaluates responsive utilities against each comparison surface width', async () => {
+    const fixture = TestBed.createComponent(TailwindShowcaseComponent);
+    await fixture.whenStable();
+    const host = fixture.nativeElement as HTMLElement;
+
+    const responsiveTab = [...host.querySelectorAll<HTMLButtonElement>('[role="tab"]')]
+      .find((button) => button.textContent?.includes('Responsive'))!;
+    responsiveTab.click();
+    await fixture.whenStable();
+
+    const referenceFrame = host.querySelector<HTMLIFrameElement>(
+      'iframe[data-testid="tailwind-reference"]',
+    );
+    expect(referenceFrame).not.toBeNull();
+    expect(referenceFrame!.contentWindow!.getComputedStyle(
+      referenceFrame!.contentDocument!.querySelector('[data-showcase-id="responsive-direction"]')!,
+    ).flexDirection).toBe('column');
+
+    const desktopButton = [...host.querySelectorAll<HTMLButtonElement>('.viewport-button')]
+      .find((button) => button.textContent?.includes('Desktop'))!;
+    desktopButton.click();
+    await fixture.whenStable();
+
+    expect(referenceFrame!.style.width).toBe('800px');
+    expect(referenceFrame!.contentWindow!.getComputedStyle(
+      referenceFrame!.contentDocument!.querySelector('[data-showcase-id="responsive-direction"]')!,
+    ).flexDirection).toBe('row');
   });
 
   it('feeds the reference and Astylar panes from the same Tailwind-authored tree', () => {
