@@ -314,7 +314,10 @@ export class AstylarShowcaseComponent {
         { selector: '.sidenav', width: '160px', height: '220px', boxSizing: 'border-box', padding: '17px 20px 20px', flexShrink: '0', background: theme.mode === 'dark' ? theme.surface : '#f3edf7', color: theme.mode === 'dark' ? '#49454f' : theme.onSurface },
         { selector: '.sidenav-content', flexGrow: '1', height: '220px', boxSizing: 'border-box', padding: '17px 20px 20px', background: theme.mode === 'dark' ? '#fff7ff' : theme.surface, color: theme.mode === 'dark' ? '#1d1b20' : theme.onSurface },
         { selector: '.grid-list', width: '100%', height: '80px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0' },
-        { selector: '.grid-tile', height: '80px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: theme.mode === 'dark' ? '#2b2930' : '#f3edf7' },
+        { selector: '.grid-tile', position: 'relative', height: '80px', background: theme.surfaceContainer },
+        { selector: '.grid-tile-label', position: 'absolute', top: `${theme.density <= -5 ? 30 : theme.typographyScale > 1 ? 26 : 28}px`, left: '0', width: '100%', textAlign: 'center', whiteSpace: 'nowrap' },
+        ...(family === 'grid-list' && theme.density <= -5 ? [{ selector: '.grid-tile-label', mediaMaxWidth: '500px', top: '29px' }] : []),
+        ...(family === 'grid-list' && theme.typographyScale > 1 ? [{ selector: '.grid-tile-label', mediaMaxWidth: '500px', top: '25.5px' }] : []),
         { selector: '.badge-anchor', position: 'relative', width: '120px', height: '21px' },
         { selector: '#badge-primary', width: theme.density <= -5 ? '81.859375px' : theme.typographyScale > 1 ? '104.65625px' : '90.953125px' },
         { selector: '.badge-bubble', position: 'absolute', top: '-10px', right: '-10px', width: '20px', height: '20px', borderRadius: '10px', background: theme.primary, color: theme.onPrimary, fontSize: '12px', textAlign: 'center' },
@@ -387,7 +390,7 @@ export class AstylarShowcaseComponent {
     const state = this.store.state();
     if (family === 'toolbar') return [{ type: 'div', id: 'toolbar-primary', class: 'toolbar', children: [{ type: 'span', id: 'toolbar-title', class: 'toolbar-title', children: [{ type: 'span', id: 'toolbar-title-text', class: 'toolbar-title-text', textContent: 'Material workspace' }] }, { type: 'button', id: 'toolbar-action', class: 'toolbar-action', value: 'Action' }] }];
     if (family === 'sidenav') return [{ type: 'div', id: 'sidenav-primary', class: 'sidenav-container', children: [{ type: 'aside', id: 'sidenav-nav', class: 'sidenav', textContent: 'Navigation' }, { type: 'main', id: 'sidenav-content', class: 'sidenav-content', textContent: 'Main content' }] }];
-    if (family === 'grid-list') return [{ type: 'div', id: 'grid-list-primary', class: 'grid-list', children: [{ type: 'div', id: 'grid-tile-one', class: 'grid-tile', textContent: 'One' }, { type: 'div', id: 'grid-tile-two', class: 'grid-tile', textContent: 'Two' }] }];
+    if (family === 'grid-list') return [{ type: 'div', id: 'grid-list-primary', class: 'grid-list', children: [{ type: 'div', id: 'grid-tile-one', class: 'grid-tile', children: [{ type: 'span', id: 'grid-tile-one-label', class: 'grid-tile-label', textContent: 'One' }] }, { type: 'div', id: 'grid-tile-two', class: 'grid-tile', children: [{ type: 'span', id: 'grid-tile-two-label', class: 'grid-tile-label', textContent: 'Two' }] }] }];
     if (family === 'badge') return [{ type: 'span', id: 'badge-primary', class: 'badge-anchor', textContent: 'Notifications', children: [{ type: 'span', id: 'badge-count', class: 'badge-bubble', textContent: '4', ariaLabel: '4 notifications' }] }];
     if (family === 'chips') return [{ type: 'div', id: 'chips-primary', class: 'row', role: 'listbox', ariaLabel: 'Tags', ariaDisabled: false, ariaMultiselectable: true, children: state.chips.map((chip, index) => ({ type: 'button' as const, id: `chip-${index}`, class: 'chip', role: 'option', ariaSelected: state.selected, value: chip })) }];
     if (family === 'icon') return [{ type: 'img', id: 'icon-primary', class: 'material-icon', src: '/icons/favorite.svg', alt: 'Favorite' }];

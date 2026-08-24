@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import path from 'node:path';
-import { materialAbsoluteTextAlignmentTargets, materialFamilies, materialInteractionCases, materialInteractionViewports, materialMobileFlowCases, materialMobileFlowFamilies, materialProfiles, materialStaticCases, materialTextAlignmentTargets, materialThresholds, materialViewports } from './benchmark.config.mjs';
+import { materialAbsoluteTextAlignmentTargets, materialFamilies, materialInteractionCases, materialInteractionViewports, materialMobileFlowCases, materialMobileFlowFamilies, materialProfiles, materialStaticCases, materialTextAlignmentTargets, materialThresholds, materialUniformBackgroundTargets, materialViewports } from './benchmark.config.mjs';
 
 test('covers every installed Angular Material component entry point', () => {
   const packageJson = JSON.parse(readFileSync(path.resolve('node_modules/@angular/material/package.json'), 'utf8'));
@@ -30,6 +30,7 @@ test('keeps the app catalog and enforced static matrix complete', () => {
   assert.ok(Object.keys(materialTextAlignmentTargets).every((family) => materialFamilies.includes(family)));
   const enforcedTextTargets = new Set(Object.values(materialTextAlignmentTargets).flat());
   assert.ok(materialAbsoluteTextAlignmentTargets.every((target) => enforcedTextTargets.has(target)));
+  assert.ok(Object.keys(materialUniformBackgroundTargets).every((family) => materialFamilies.includes(family)));
   assert.equal(materialInteractionViewports.length, 2);
   for (const family of materialFamilies) {
     for (const profile of materialProfiles) {

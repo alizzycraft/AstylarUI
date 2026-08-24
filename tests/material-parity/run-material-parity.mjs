@@ -9,7 +9,7 @@ import { PNG } from 'pngjs';
 import { ssim } from 'ssim.js';
 import {
   materialAbsoluteTextAlignmentTargets, materialFamilies, materialInteractionCases, materialMobileFlowCases, materialProfiles,
-  materialStaticCases, materialTextAlignmentTargets, materialThresholds,
+  materialStaticCases, materialTextAlignmentTargets, materialThresholds, materialUniformBackgroundTargets,
 } from './benchmark.config.mjs';
 import { measureTextInkCenter, textCenterOffsetError } from './text-alignment-metrics.mjs';
 
@@ -107,10 +107,12 @@ function csvFilter(name, allowed) {
 }
 
 function benchmarkMeasurementIds(family) {
+  const uniformBackground = materialUniformBackgroundTargets[family];
   return [...new Set([
     `${family}-root`,
     `${family}-primary`,
     ...(materialTextAlignmentTargets[family] ?? []),
+    ...(uniformBackground ? [uniformBackground.container, ...uniformBackground.surfaces] : []),
   ])];
 }
 
@@ -181,17 +183,22 @@ async function captureCase(benchmarkCase) {
       reference.image, astylar.image, reference.measurement.elements, astylar.measurement.elements,
       materialTextAlignmentTargets[family] ?? [], viewport.deviceScaleFactor, directory,
     );
+    const uniformBackgrounds = compareUniformBackgrounds(
+      reference.image, astylar.image, reference.measurement.elements, astylar.measurement.elements,
+      materialUniformBackgroundTargets[family], viewport.deviceScaleFactor,
+    );
     const semantics = compareSemantics(reference.measurement.semantics, astylar.measurement.semantics);
     const runtimeErrors = [...reference.errors.map((error) => `reference: ${error}`),
       ...astylar.errors.map((error) => `astylar: ${error}`)];
     return {
-      family, profile, viewport, screenshotSimilarity, geometry, textAlignment, semantics, runtimeErrors,
+      family, profile, viewport, screenshotSimilarity, geometry, textAlignment, uniformBackgrounds, semantics, runtimeErrors,
       diagnostics: astylar.measurement.diagnostics,
       meetsAcceptance: screenshotSimilarity >= materialThresholds.resultSsim &&
         geometry.maximumEdgeError !== null &&
         geometry.maximumEdgeError <= materialThresholds.maximumEdgeErrorPx &&
         geometry.edgesWithinTolerance >= materialThresholds.minimumEdgesWithinTolerance &&
         textAlignment.every((result) => result.matches) &&
+        uniformBackgrounds.every((result) => result.matches) &&
         semantics.every((result) => result.matches) && runtimeErrors.length === 0,
     };
   } finally {
@@ -663,6 +670,47 @@ function compareTextAlignment(referenceImage, candidateImage, referenceElements,
   });
 }
 
+function compareUniformBackgrounds(referenceImage, candidateImage, referenceElements, candidateElements, target, scale) {
+  if (!target) return [];
+  const referenceContainerBox = referenceElements[target.container]?.borderBox;
+  const candidateContainerBox = candidateElements[target.container]?.borderBox;
+  if (!referenceContainerBox || !candidateContainerBox) {
+    return [{ id: target.container, matches: false, reason: 'container geometry is missing' }];
+  }
+  const referenceContainer = sampleFlatColor(referenceImage, referenceContainerBox, scale, 'top-center');
+  const astylarContainer = sampleFlatColor(candidateImage, candidateContainerBox, scale, 'top-center');
+  return target.surfaces.map((id) => {
+    const referenceBox = referenceElements[id]?.borderBox;
+    const candidateBox = candidateElements[id]?.borderBox;
+    if (!referenceBox || !candidateBox) return { id, matches: false, reason: 'surface geometry is missing' };
+    const referenceSurface = sampleFlatColor(referenceImage, referenceBox, scale, 'bottom');
+    const astylarSurface = sampleFlatColor(candidateImage, candidateBox, scale, 'bottom');
+    const maximumChannelError = Math.max(
+      colorChannelError(referenceContainer, referenceSurface),
+      colorChannelError(astylarContainer, astylarSurface),
+      colorChannelError(referenceContainer, astylarContainer),
+      colorChannelError(referenceSurface, astylarSurface),
+    );
+    return {
+      id, referenceContainer, referenceSurface, astylarContainer, astylarSurface, maximumChannelError,
+      matches: maximumChannelError <= 1,
+    };
+  });
+}
+
+function sampleFlatColor(image, box, scale, position = 'top-left') {
+  const sampleX = position === 'top-center' ? box.left + box.width / 2 : box.left + 10;
+  const x = Math.max(0, Math.min(image.width - 1, Math.round(sampleX * scale)));
+  const sampleY = position === 'bottom' ? box.bottom - 10 : box.top + 14;
+  const y = Math.max(0, Math.min(image.height - 1, Math.round(sampleY * scale)));
+  const offset = (y * image.width + x) * 4;
+  return [...image.data.subarray(offset, offset + 4)];
+}
+
+function colorChannelError(first, second) {
+  return Math.max(...first.map((channel, index) => Math.abs(channel - second[index])));
+}
+
 function writeAlignmentArtifacts(reference, candidate, box, scale, directory, id) {
   const bounds = {
     left: Math.max(0, Math.floor((box.left - 4) * scale)),
@@ -730,6 +778,7 @@ function summarize(results) {
   const minimumSsim = similarities.length ? similarities[0] : 0;
   const maximumEdgeError = Math.max(...results.map(({ geometry }) => geometry.maximumEdgeError ?? Infinity));
   const textAlignmentResults = results.flatMap(({ textAlignment }) => textAlignment ?? []);
+  const uniformBackgroundResults = results.flatMap(({ uniformBackgrounds }) => uniformBackgrounds ?? []);
   const maximumTextCenterOffsetErrorPx = textAlignmentResults.length
     ? Math.max(...textAlignmentResults.map(({ offsetErrorPx }) => offsetErrorPx ?? Infinity)) : 0;
   const passingCases = results.filter(({ meetsAcceptance }) => meetsAcceptance).length;
@@ -737,6 +786,8 @@ function summarize(results) {
     passingCases, failingCases: results.length - passingCases, minimumSsim, medianSsim, maximumEdgeError,
     textAlignmentTargets: textAlignmentResults.length,
     textAlignmentTargetsPassing: textAlignmentResults.filter(({ matches }) => matches).length,
+    uniformBackgroundTargets: uniformBackgroundResults.length,
+    uniformBackgroundTargetsPassing: uniformBackgroundResults.filter(({ matches }) => matches).length,
     maximumTextCenterOffsetErrorPx,
     meetsAcceptance: results.length === materialStaticCases.length && passingCases === results.length &&
       medianSsim >= materialThresholds.aggregateMedianSsim,
@@ -771,6 +822,7 @@ function humanSummary(report) {
     `- Maximum edge error: ${Number.isFinite(summary.maximumEdgeError) ? `${summary.maximumEdgeError.toFixed(3)}px` : 'unmeasured'}\n` +
     `- Text alignment: ${summary.textAlignmentTargetsPassing}/${summary.textAlignmentTargets} ` +
     `(maximum center-offset error ${summary.maximumTextCenterOffsetErrorPx.toFixed(3)}px)\n` +
+    `- Uniform backgrounds: ${summary.uniformBackgroundTargetsPassing}/${summary.uniformBackgroundTargets}\n` +
     `- Meets acceptance: ${summary.meetsAcceptance ? 'yes' : 'no'}\n` +
     `- Interaction cases: ${report.interactionSummary.executedCases}\n` +
     `- Interaction passing: ${report.interactionSummary.passingCases}\n` +
