@@ -142,7 +142,10 @@ export class AstylarShowcaseComponent {
     if (this.store.state().disabled && ['radio-solo', 'radio-team', 'slide-toggle-primary'].includes(id)) return;
     if (id === 'radio-team') this.store.patchState({ selected: true });
     if (id === 'radio-solo') this.store.patchState({ selected: false });
-    if (id === 'sort-primary' || id === 'sort-trigger') this.store.patchState({ sortDirection: this.store.state().sortDirection === 'asc' ? 'desc' : 'asc' });
+    if (id === 'sort-primary' || id === 'sort-trigger') this.store.patchState({
+      sortDirection: this.store.state().sortDirection === 'asc' ? 'desc' : 'asc',
+      open: true,
+    });
     if (id === 'paginator-next') this.store.patchState({ pageIndex: Math.min(9, this.store.state().pageIndex + 1) });
     if (id === 'paginator-previous') this.store.patchState({ pageIndex: Math.max(0, this.store.state().pageIndex - 1) });
     if (id === 'button-toggle-one' || id === 'tab-activity') this.store.patchState({ selected: false });
@@ -333,6 +336,8 @@ export class AstylarShowcaseComponent {
         { selector: '.list-item', width: '100%', height: `${theme.density === 0 ? 56 : theme.density <= -5 ? 40 : 48}px`, boxSizing: 'border-box', display: 'flex', alignItems: 'center' },
         { selector: '.list-label', marginLeft: '16px', fontSize: '16px' },
         { selector: '.sort-header', width: '100%', height: `${theme.density === -2 ? 22 : 19}px`, borderWidth: '0', background: 'transparent', color: theme.onSurface, textAlign: 'left', fontWeight: '500' },
+        { selector: '.sort-trigger', width: '132px', height: `${theme.density === -2 ? 22 : 19}px`, display: 'flex', alignItems: 'center', gap: '6px', color: theme.onSurface, fontSize: '17px', fontWeight: '500', cursor: 'pointer' },
+        { selector: '.sort-arrow', fontSize: '18px', fontWeight: '400' },
         { selector: '.paginator', position: 'relative', width: '100%', height: '56px', background: theme.surface, fontSize: '12px' },
         { selector: '#paginator-size', position: 'absolute', top: '-2.5px', right: '23px', whiteSpace: 'nowrap', fontSize: '12px' },
         { selector: '#paginator-range', position: 'absolute', top: '26px', right: '125.5px', whiteSpace: 'nowrap', fontSize: '12px' },
@@ -409,7 +414,14 @@ export class AstylarShowcaseComponent {
     if (family === 'chips') return [{ type: 'div', id: 'chips-primary', class: 'row', role: 'listbox', ariaLabel: 'Tags', ariaDisabled: false, ariaMultiselectable: true, children: state.chips.map((chip, index) => ({ type: 'button' as const, id: `chip-${index}`, class: 'chip', role: 'option', ariaSelected: state.selected, value: chip })) }];
     if (family === 'icon') return [{ type: 'img', id: 'icon-primary', class: 'material-icon', src: '/icons/favorite.svg', alt: 'Favorite' }];
     if (family === 'list') return [{ type: 'div', id: 'list-primary', class: 'material-list', ariaDisabled: false, children: [{ type: 'div', id: 'list-inbox', class: 'list-item', children: [{ type: 'span', id: 'list-inbox-label', class: 'list-label', textContent: 'Inbox' }] }, { type: 'div', id: 'list-archive', class: 'list-item', children: [{ type: 'span', id: 'list-archive-label', class: 'list-label', textContent: 'Archive' }] }] }];
-    if (family === 'sort') return [{ type: 'div', id: 'sort-primary', class: 'sort-header', children: [{ type: 'button', id: 'sort-trigger', ariaSort: state.sortDirection === 'asc' ? 'ascending' : 'descending', value: 'Sort by name' }] }];
+    if (family === 'sort') return [{ type: 'div', id: 'sort-primary', class: 'sort-header', ariaLabel: 'Sort by name', children: [{
+      type: 'div', id: 'sort-trigger', class: 'sort-trigger', role: 'button', tabindex: 0,
+      ariaSort: state.open ? state.sortDirection === 'asc' ? 'ascending' : 'descending' : undefined,
+      children: [
+        { type: 'span', id: 'sort-label', textContent: 'Sort by name' },
+        ...(state.open ? [{ type: 'span' as const, id: 'sort-arrow', class: 'sort-arrow', textContent: state.sortDirection === 'asc' ? '↑' : '↓' }] : []),
+      ],
+    }] }];
     if (family === 'paginator') return [{ type: 'div', id: 'paginator-primary', class: 'paginator', role: 'group', ariaLabel: `Items per page: 10 ${state.pageIndex * 10 + 1} – ${Math.min(100, state.pageIndex * 10 + 10)} of 100`, children: [{ type: 'span', id: 'paginator-size', textContent: 'Items per page: 10' }, { type: 'span', id: 'paginator-range', textContent: `${state.pageIndex * 10 + 1} – ${Math.min(100, state.pageIndex * 10 + 10)} of 100` }, { type: 'button', id: 'paginator-previous', class: 'paginator-button', disabled: state.pageIndex === 0, ariaLabel: 'Previous page', value: '‹' }, { type: 'button', id: 'paginator-next', class: 'paginator-button', disabled: state.pageIndex === 9, ariaLabel: 'Next page', value: '›' }] }];
     if (family === 'tree') return [{ type: 'div', id: 'tree-primary', class: 'material-tree', role: 'tree', children: ['Documents', 'Projects', 'Archive'].map((label, index) => ({ type: 'div' as const, id: `tree-item-${index}`, class: `tree-item${this.focusedId() === `tree-item-${index}` ? ' focused' : ''}`, role: 'treeitem', tabindex: index === 0 ? 0 : -1, ariaLevel: 1, ariaPosinset: index + 1, ariaSetsize: 3, textContent: label })) }];
     if (family === 'slider') return [{ type: 'div', id: 'slider-pair', class: 'range-stack', children: [

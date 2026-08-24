@@ -81,6 +81,9 @@ export const materialTextOnlyTargets = Object.freeze([
 export const materialUniformBackgroundTargets = Object.freeze({
   'grid-list': Object.freeze({ container: 'grid-list-root', surfaces: Object.freeze(['grid-tile-one', 'grid-tile-two']) }),
 });
+export const materialFocusedRasterTargets = Object.freeze({
+  sort: Object.freeze({ element: 'sort-primary', padding: 8, minimumSsim: .80 }),
+});
 export const materialShadowProfileTargets = Object.freeze({
   card: Object.freeze({ element: 'card-primary', maximumRowError: 22 }),
 });

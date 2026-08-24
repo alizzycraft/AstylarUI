@@ -8,7 +8,7 @@ import { chromium } from 'playwright-core';
 import { PNG } from 'pngjs';
 import { ssim } from 'ssim.js';
 import {
-  materialAbsoluteTextAlignmentTargets, materialFamilies, materialInteractionCases, materialMobileFlowCases, materialProfiles,
+  materialAbsoluteTextAlignmentTargets, materialFamilies, materialFocusedRasterTargets, materialInteractionCases, materialMobileFlowCases, materialProfiles,
   materialShadowProfileTargets, materialStaticCases, materialTextAlignmentTargets, materialTextAuditTargets, materialTextOnlyTargets, materialThresholds, materialUniformBackgroundTargets,
 } from './benchmark.config.mjs';
 import { measureTextInkCenter, textCenterOffsetError } from './text-alignment-metrics.mjs';
@@ -189,6 +189,11 @@ async function captureCase(benchmarkCase) {
       reference.image, astylar.image, reference.measurement.elements, astylar.measurement.elements,
       materialUniformBackgroundTargets[family], viewport.deviceScaleFactor,
     );
+    const focusedRasterTarget = materialFocusedRasterTargets[family];
+    const focusedRasters = focusedRasterTarget ? [compareFocusedRaster(
+      reference.image, astylar.image, reference.measurement.elements,
+      focusedRasterTarget, viewport.deviceScaleFactor, directory,
+    )] : [];
     const shadowTarget = materialShadowProfileTargets[family];
     const shadowProfiles = shadowTarget ? [{
       id: shadowTarget.element,
@@ -203,7 +208,7 @@ async function captureCase(benchmarkCase) {
     const runtimeErrors = [...reference.errors.map((error) => `reference: ${error}`),
       ...astylar.errors.map((error) => `astylar: ${error}`)];
     return {
-      family, profile, viewport, screenshotSimilarity, geometry, textAlignment, uniformBackgrounds, shadowProfiles, semantics, runtimeErrors,
+      family, profile, viewport, screenshotSimilarity, geometry, textAlignment, uniformBackgrounds, focusedRasters, shadowProfiles, semantics, runtimeErrors,
       diagnostics: astylar.measurement.diagnostics,
       meetsAcceptance: screenshotSimilarity >= materialThresholds.resultSsim &&
         geometry.maximumEdgeError !== null &&
@@ -211,6 +216,7 @@ async function captureCase(benchmarkCase) {
         geometry.edgesWithinTolerance >= materialThresholds.minimumEdgesWithinTolerance &&
         textAlignment.every((result) => result.matches) &&
         uniformBackgrounds.every((result) => result.matches) &&
+        focusedRasters.every((result) => result.matches) &&
         shadowProfiles.every((result) => result.matches) &&
         semantics.every((result) => result.matches) && runtimeErrors.length === 0,
     };
@@ -736,6 +742,24 @@ function colorChannelError(first, second) {
   return Math.max(...first.map((channel, index) => Math.abs(channel - second[index])));
 }
 
+function compareFocusedRaster(reference, candidate, referenceElements, target, scale, directory) {
+  const box = referenceElements[target.element]?.borderBox;
+  if (!box) return { id: target.element, matches: false, reason: 'target geometry is missing' };
+  const padding = target.padding ?? 0;
+  const bounds = {
+    left: Math.max(0, Math.floor((box.left - padding) * scale)),
+    top: Math.max(0, Math.floor((box.top - padding) * scale)),
+    right: Math.min(reference.width, Math.ceil((box.right + padding) * scale)),
+    bottom: Math.min(reference.height, Math.ceil((box.bottom + padding) * scale)),
+  };
+  const referenceCrop = cropPng(reference, bounds);
+  const astylarCrop = cropPng(candidate, bounds);
+  const similarity = comparePng(referenceCrop, astylarCrop);
+  writeFileSync(path.join(directory, `${target.element}-raster-reference.png`), PNG.sync.write(referenceCrop));
+  writeFileSync(path.join(directory, `${target.element}-raster-astylar.png`), PNG.sync.write(astylarCrop));
+  return { id: target.element, similarity, minimumSsim: target.minimumSsim, matches: similarity >= target.minimumSsim };
+}
+
 function writeAlignmentArtifacts(reference, candidate, box, scale, directory, id) {
   const bounds = {
     left: Math.max(0, Math.floor((box.left - 4) * scale)),
@@ -805,6 +829,7 @@ function summarize(results) {
   const maximumEdgeError = Math.max(...results.map(({ geometry }) => geometry.maximumEdgeError ?? Infinity));
   const textAlignmentResults = results.flatMap(({ textAlignment }) => textAlignment ?? []);
   const uniformBackgroundResults = results.flatMap(({ uniformBackgrounds }) => uniformBackgrounds ?? []);
+  const focusedRasterResults = results.flatMap(({ focusedRasters }) => focusedRasters ?? []);
   const shadowProfileResults = results.flatMap(({ shadowProfiles }) => shadowProfiles ?? []);
   const maximumTextCenterOffsetErrorPx = textAlignmentResults.length
     ? Math.max(...textAlignmentResults.map(({ offsetErrorPx }) => offsetErrorPx ?? Infinity)) : 0;
@@ -815,6 +840,8 @@ function summarize(results) {
     textAlignmentTargetsPassing: textAlignmentResults.filter(({ matches }) => matches).length,
     uniformBackgroundTargets: uniformBackgroundResults.length,
     uniformBackgroundTargetsPassing: uniformBackgroundResults.filter(({ matches }) => matches).length,
+    focusedRasterTargets: focusedRasterResults.length,
+    focusedRasterTargetsPassing: focusedRasterResults.filter(({ matches }) => matches).length,
     shadowProfileTargets: shadowProfileResults.length,
     shadowProfileTargetsPassing: shadowProfileResults.filter(({ matches }) => matches).length,
     maximumTextCenterOffsetErrorPx,
@@ -852,6 +879,7 @@ function humanSummary(report) {
     `- Text alignment: ${summary.textAlignmentTargetsPassing}/${summary.textAlignmentTargets} ` +
     `(maximum center-offset error ${summary.maximumTextCenterOffsetErrorPx.toFixed(3)}px)\n` +
     `- Uniform backgrounds: ${summary.uniformBackgroundTargetsPassing}/${summary.uniformBackgroundTargets}\n` +
+    `- Focused rasters: ${summary.focusedRasterTargetsPassing}/${summary.focusedRasterTargets}\n` +
     `- Shadow profiles: ${summary.shadowProfileTargetsPassing}/${summary.shadowProfileTargets}\n` +
     `- Meets acceptance: ${summary.meetsAcceptance ? 'yes' : 'no'}\n` +
     `- Interaction cases: ${report.interactionSummary.executedCases}\n` +
