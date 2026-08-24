@@ -40,4 +40,37 @@ describe('AstylarShowcaseComponent', () => {
       color: '#6750a4',
     });
   });
+
+  it('activates a compact primary-color ripple from the card action pointer origin', () => {
+    const activate = jasmine.createSpy('activate');
+    const tokens = resolveTheme(MATERIAL_THEME_PROFILES.light);
+    TestBed.configureTestingModule({
+      providers: [
+        { provide: ActivatedRoute, useValue: { snapshot: { paramMap: { get: () => 'card' } } } },
+        { provide: FrameSync, useValue: {} },
+        { provide: MaterialRippleController, useValue: { activate, dispose: () => undefined } },
+        { provide: ShowcaseStore, useValue: { tokens: () => tokens, state: () => DEFAULT_SHOWCASE_STATE } },
+      ],
+    });
+    const component = TestBed.runInInjectionContext(() => new AstylarShowcaseComponent());
+    const surface = {
+      scene: { getEngine: () => ({ getRenderingCanvas: () => ({ clientWidth: 900 }) }) },
+    } as unknown as AstylarSurface;
+    (component as unknown as { surface: AstylarSurface }).surface = surface;
+
+    (component as unknown as { activateRipple: (event: AstylarEvent) => void }).activateRipple({
+      targetId: 'card-open', localX: 10, localY: 8,
+    } as AstylarEvent);
+
+    expect(activate).toHaveBeenCalledOnceWith({
+      surface,
+      elementId: 'card-open',
+      originX: 10,
+      originY: 8,
+      width: 64,
+      height: 40,
+      cornerRadius: 20,
+      color: '#6750a4',
+    });
+  });
 });

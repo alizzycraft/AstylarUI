@@ -9,7 +9,7 @@ import { PNG } from 'pngjs';
 import { ssim } from 'ssim.js';
 import {
   materialAbsoluteTextAlignmentTargets, materialFamilies, materialInteractionCases, materialMobileFlowCases, materialProfiles,
-  materialStaticCases, materialTextAlignmentTargets, materialTextOnlyTargets, materialThresholds, materialUniformBackgroundTargets,
+  materialStaticCases, materialTextAlignmentTargets, materialTextAuditTargets, materialTextOnlyTargets, materialThresholds, materialUniformBackgroundTargets,
 } from './benchmark.config.mjs';
 import { measureTextInkCenter, textCenterOffsetError } from './text-alignment-metrics.mjs';
 
@@ -29,6 +29,7 @@ const interactionViewportFilter = new Set((process.env['ASTYLAR_MATERIAL_INTERAC
 const interactionStateFilter = new Set((process.env['ASTYLAR_MATERIAL_INTERACTION_STATES'] ?? '').split(',').filter(Boolean));
 const staticOnly = process.argv.includes('--static-only');
 const interactionOnly = process.argv.includes('--interaction-only');
+const textAudit = process.env['ASTYLAR_MATERIAL_TEXT_AUDIT'] === '1';
 const cases = interactionOnly ? [] : materialStaticCases.filter(({ family, profile, viewport }) =>
   familyFilter.has(family) && profileFilter.has(profile) &&
   (viewportFilter.size === 0 || viewportFilter.has(viewport.id)));
@@ -111,7 +112,7 @@ function benchmarkMeasurementIds(family) {
   return [...new Set([
     `${family}-root`,
     `${family}-primary`,
-    ...(materialTextAlignmentTargets[family] ?? []),
+    ...textTargets(family),
     ...(uniformBackground ? [uniformBackground.container, ...uniformBackground.surfaces] : []),
   ])];
 }
@@ -181,7 +182,7 @@ async function captureCase(benchmarkCase) {
     const geometry = compareGeometry(reference.measurement.elements, astylar.measurement.elements, materialTextOnlyTargets);
     const textAlignment = compareTextAlignment(
       reference.image, astylar.image, reference.measurement.elements, astylar.measurement.elements,
-      materialTextAlignmentTargets[family] ?? [], viewport.deviceScaleFactor, directory,
+      textTargets(family), viewport.deviceScaleFactor, directory,
     );
     const uniformBackgrounds = compareUniformBackgrounds(
       reference.image, astylar.image, reference.measurement.elements, astylar.measurement.elements,
@@ -297,7 +298,7 @@ async function captureInteractionCase(benchmarkCase) {
     const screenshotSimilarity = comparePng(referenceImage, astylarImage);
     const textAlignment = compareTextAlignment(
       referenceImage, astylarImage, referenceMeasurement.elements, astylarMeasurement.elements,
-      materialTextAlignmentTargets[family] ?? [], viewport.deviceScaleFactor, directory,
+      textTargets(family), viewport.deviceScaleFactor, directory,
     );
     const runtimeErrors = [...reference.errors.map((error) => `reference: ${error}`),
       ...astylar.errors.map((error) => `astylar: ${error}`)];
@@ -509,6 +510,10 @@ function compareEvents(reference, candidate, family, state) {
   return { matches: JSON.stringify(expected) === JSON.stringify(actual), reference: expected, astylar: actual };
 }
 
+function textTargets(family) {
+  return (textAudit ? materialTextAuditTargets : materialTextAlignmentTargets)[family] ?? [];
+}
+
 function compareStatePaint(referenceMeasurement, astylarMeasurement, family, profile, state) {
   if (family === 'toolbar' && ['hover', 'held', 'activate-leave'].includes(state)) {
     const actual = astylarMeasurement.elements?.['toolbar-action']?.interactionBackground?.toLowerCase();
@@ -576,7 +581,7 @@ async function measureReference(page, ids) {
       return undefined;
     };
     const elements = Object.fromEntries(targetIds.map((id) => {
-      const element = document.getElementById(id);
+      const element = document.getElementById(id) ?? referenceGeneratedTextTarget(id);
       if (!element) return [id, { exists: false }];
       const rect = element.getBoundingClientRect();
       return [id, { exists: true, borderBox: {
@@ -585,7 +590,7 @@ async function measureReference(page, ids) {
       }, interactionBackground: getComputedStyle(element).backgroundColor }];
     }));
     const semantics = Object.fromEntries(targetIds.map((id) => {
-      const element = document.getElementById(id);
+      const element = document.getElementById(id) ?? referenceGeneratedTextTarget(id);
       const compoundSemanticHosts = new Set([
         'MAT-FORM-FIELD', 'MAT-SLIDER', 'MAT-EXPANSION-PANEL', 'MAT-CHECKBOX', 'MAT-SLIDE-TOGGLE',
       ]);
@@ -621,6 +626,14 @@ async function measureReference(page, ids) {
     function numberAttribute(element, attribute) {
       const value = element.getAttribute(attribute);
       return value !== null && Number.isFinite(Number(value)) ? Number(value) : undefined;
+    }
+    function referenceGeneratedTextTarget(id) {
+      const selectors = {
+        'badge-count': '#badge-primary .mat-badge-content',
+        'paginator-size': '#paginator-primary .mat-mdc-paginator-page-size-label',
+        'paginator-range': '#paginator-primary .mat-mdc-paginator-range-label',
+      };
+      return selectors[id] ? document.querySelector(selectors[id]) : null;
     }
     function semanticName(element) {
       const explicit = element.getAttribute('aria-label') ?? element.getAttribute('alt');

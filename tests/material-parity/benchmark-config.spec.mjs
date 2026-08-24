@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import path from 'node:path';
-import { materialAbsoluteTextAlignmentTargets, materialComparisonViewport, materialFamilies, materialInteractionCases, materialInteractionViewports, materialMobileFlowCases, materialMobileFlowFamilies, materialProfiles, materialStaticCases, materialSupplementalStaticCases, materialTextAlignmentTargets, materialTextOnlyTargets, materialThresholds, materialUniformBackgroundTargets, materialViewports } from './benchmark.config.mjs';
+import { materialAbsoluteTextAlignmentTargets, materialComparisonViewport, materialFamilies, materialInteractionCases, materialInteractionViewports, materialMobileFlowCases, materialMobileFlowFamilies, materialProfiles, materialStaticCases, materialSupplementalStaticCases, materialTextAlignmentTargets, materialTextAuditTargets, materialTextlessFamilies, materialTextOnlyTargets, materialThresholds, materialUniformBackgroundTargets, materialViewports } from './benchmark.config.mjs';
 
 test('covers every installed Angular Material component entry point', () => {
   const packageJson = JSON.parse(readFileSync(path.resolve('node_modules/@angular/material/package.json'), 'utf8'));
@@ -32,6 +32,7 @@ test('keeps the app catalog and enforced static matrix complete', () => {
   assert.deepEqual(materialTextAlignmentTargets.button,
     ['button-primary', 'button-secondary', 'button-disabled']);
   assert.ok(Object.keys(materialTextAlignmentTargets).every((family) => materialFamilies.includes(family)));
+  assert.deepEqual(materialFamilies.filter((family) => !(family in materialTextAuditTargets)), materialTextlessFamilies);
   const enforcedTextTargets = new Set(Object.values(materialTextAlignmentTargets).flat());
   assert.ok(materialAbsoluteTextAlignmentTargets.every((target) => enforcedTextTargets.has(target)));
   assert.ok(materialTextOnlyTargets.every((target) => enforcedTextTargets.has(target)));

@@ -173,7 +173,7 @@ export class AstylarShowcaseComponent {
   }
 
   private activateRipple(event: AstylarEvent): void {
-    if (!this.surface || !['button-primary', 'button-secondary', 'core-primary', 'toolbar-action'].includes(event.targetId)) return;
+    if (!this.surface || !['button-primary', 'button-secondary', 'core-primary', 'toolbar-action', 'card-open'].includes(event.targetId)) return;
     const theme = this.store.tokens();
     const toolbarAction = event.targetId === 'toolbar-action';
     const mobileToolbar = toolbarAction &&
@@ -183,11 +183,11 @@ export class AstylarShowcaseComponent {
       elementId: event.targetId,
       originX: event.localX ?? 0,
       originY: event.localY ?? 0,
-      width: toolbarAction ? mobileToolbar ? 64 : 65.140625 :
+      width: event.targetId === 'card-open' ? 64 : toolbarAction ? mobileToolbar ? 64 : 65.140625 :
         event.targetId === 'core-primary' ? 212.234375 : event.targetId === 'button-secondary' ? 117 : 141,
-      height: toolbarAction ? toolbarActionHeight(theme.density) : materialDensityHeight(theme.density),
-      cornerRadius: 20 * theme.cornerScale,
-      color: event.targetId === 'button-secondary' || toolbarAction ? theme.primary : theme.onPrimary,
+      height: event.targetId === 'card-open' ? materialDensityHeight(theme.density) : toolbarAction ? toolbarActionHeight(theme.density) : materialDensityHeight(theme.density),
+      cornerRadius: (event.targetId === 'card-open' ? materialDensityHeight(theme.density) / 2 : 20) * theme.cornerScale,
+      color: event.targetId === 'button-secondary' || toolbarAction || event.targetId === 'card-open' ? theme.primary : theme.onPrimary,
     });
   }
 
@@ -285,10 +285,13 @@ export class AstylarShowcaseComponent {
         { selector: '.field-hint', position: 'absolute', top: `${theme.density === 0 ? 58 : 50}px`, left: '16px', fontSize: '12px', color: theme.onSurface },
         { selector: '.row', display: 'flex', flexWrap: 'wrap', gap: '0', alignItems: 'center' },
         { selector: '.card', padding: '20px', borderRadius: `${16 * theme.cornerScale}px`, background: theme.mode === 'dark' ? '#2b2930' : '#f3edf7', minHeight: '90px' },
-        { selector: '.material-card', position: 'relative', width: '100%', height: '120px', boxSizing: 'border-box', borderRadius: `${12 * theme.cornerScale}px`, background: theme.mode === 'dark' ? '#fff7ff' : '#f8f2f6', boxShadow: '0 1px 2px rgba(0,0,0,0.33)' },
-        { selector: '.card-title', position: 'absolute', top: '14px', left: '16px', fontSize: '22px', fontWeight: '400', whiteSpace: 'nowrap' },
-        { selector: '.card-copy', position: 'absolute', top: '41.5px', left: '16px', fontSize: '16px', whiteSpace: 'nowrap' },
-        { selector: '.text-button', position: 'absolute', top: '71.5px', left: '16px', width: '64px', height: '36px', padding: '0 8px', borderWidth: '0', background: 'transparent', color: theme.primary, fontWeight: '500' },
+        { selector: '.material-card', position: 'relative', width: '100%', height: '120px', boxSizing: 'border-box', borderRadius: `${12 * theme.cornerScale}px`, background: theme.mode === 'dark' ? '#fff7ff' : '#f8f2f6', zIndex: '2' },
+        { selector: '.card-shadow', position: 'absolute', top: '29px', left: '28px', right: '28px', width: 'auto', height: '122px', borderRadius: `${12 * theme.cornerScale}px`, background: 'rgba(0,0,0,0.025)', zIndex: '1' },
+        { selector: '.card-title', position: 'absolute', top: `${theme.density <= -5 ? 15.5 : 14.75}px`, left: '16px', fontSize: '22px', fontWeight: '400', whiteSpace: 'nowrap', zIndex: '2' },
+        { selector: '.card-copy', position: 'absolute', top: `${theme.typographyScale > 1 ? 43.5 : 42.75}px`, left: '0', fontSize: '16px', whiteSpace: 'nowrap', zIndex: '2' },
+        { selector: '.text-button', position: 'absolute', top: `${theme.density === 0 ? 71.25 : theme.density <= -5 ? 76 : 78}px`, left: '8px', width: '64px', height: `${densityHeight}px`, padding: '0 8px', borderWidth: '0', borderRadius: `${densityHeight / 2 * theme.cornerScale}px`, background: 'transparent', color: theme.primary, fontSize: '14px', fontWeight: '500', cursor: 'pointer', zIndex: '2' },
+        { selector: '.text-button:hover', background: mixHex(theme.mode === 'dark' ? '#fff7ff' : '#f8f2f6', theme.primary, .08) },
+        { selector: '.text-button:active', background: mixHex(theme.mode === 'dark' ? '#fff7ff' : '#f8f2f6', theme.primary, .12) },
         { selector: '.material-table', width: '100%', height: `${theme.density === 0 ? 162 : theme.density <= -5 ? 114 : 138}px`, borderWidth: '0', background: theme.surface, fontSize: '14px' },
         { selector: '.material-table th', position: 'relative', top: theme.density === -2 ? '-6px' : '0', height: `${theme.density === 0 ? 54 : theme.density <= -5 ? 40 : 48}px`, padding: '0 16px', borderWidth: '0', textAlign: 'left', verticalAlign: 'middle', fontWeight: '500', fontSize: '14px' },
         { selector: '.material-table td', position: 'relative', top: theme.density === -2 ? '-6px' : '0', height: `${theme.density === 0 ? 54 : theme.density <= -5 ? 36 : 44}px`, padding: '0 16px', borderWidth: '0', textAlign: 'left', verticalAlign: 'middle', fontSize: '14px' },
@@ -320,7 +323,10 @@ export class AstylarShowcaseComponent {
         ...(family === 'grid-list' && theme.typographyScale > 1 ? [{ selector: '.grid-tile-label', mediaMaxWidth: '500px', top: '25.5px' }] : []),
         { selector: '.badge-anchor', position: 'relative', width: '120px', height: '21px' },
         { selector: '#badge-primary', width: theme.density <= -5 ? '81.859375px' : theme.typographyScale > 1 ? '104.65625px' : '90.953125px' },
-        { selector: '.badge-bubble', position: 'absolute', top: '-10px', right: '-10px', width: '20px', height: '20px', borderRadius: '10px', background: theme.primary, color: theme.onPrimary, fontSize: '12px', textAlign: 'center' },
+        { selector: '.badge-label', position: 'relative', top: `${theme.density <= -5 ? '-0.5px' : '-2px'}`, whiteSpace: 'nowrap' },
+        ...(theme.density <= -5 ? [{ selector: '.badge-label', mediaMaxWidth: '500px', top: '-1px' }] : []),
+        { selector: '.badge-bubble', position: 'absolute', top: '-4px', right: '-4px', width: '16px', height: '16px', borderRadius: '8px', background: theme.primary, color: theme.onPrimary, fontSize: '11px', lineHeight: '16px', textAlign: 'center' },
+        { selector: '.badge-count-label', position: 'relative', top: '-2.5px', display: 'block', width: '100%', textAlign: 'center' },
         { selector: '.chip', width: '88px', height: '32px', padding: '0 16px', borderWidth: '1px', borderStyle: 'solid', borderColor: '#79747e', borderRadius: '16px', background: 'transparent', color: theme.onSurface },
         { selector: '.material-icon', width: '24px', height: '24px', objectFit: 'contain' },
         { selector: '#chips-primary', height: `${theme.density === 0 ? 40 : 32}px` },
@@ -400,7 +406,7 @@ export class AstylarShowcaseComponent {
     if (family === 'toolbar') return [{ type: 'div', id: 'toolbar-primary', class: 'toolbar', children: [{ type: 'span', id: 'toolbar-title', class: 'toolbar-title', children: [{ type: 'span', id: 'toolbar-title-text', class: 'toolbar-title-text', textContent: 'Material workspace' }] }, { type: 'button', id: 'toolbar-action', class: 'toolbar-action', value: 'Action' }] }];
     if (family === 'sidenav') return [{ type: 'div', id: 'sidenav-primary', class: 'sidenav-container', children: [{ type: 'aside', id: 'sidenav-nav', class: 'sidenav', textContent: 'Navigation' }, { type: 'main', id: 'sidenav-content', class: 'sidenav-content', textContent: 'Main content' }] }];
     if (family === 'grid-list') return [{ type: 'div', id: 'grid-list-primary', class: 'grid-list', children: [{ type: 'div', id: 'grid-tile-one', class: 'grid-tile', children: [{ type: 'span', id: 'grid-tile-one-label', class: 'grid-tile-label', textContent: 'One' }] }, { type: 'div', id: 'grid-tile-two', class: 'grid-tile', children: [{ type: 'span', id: 'grid-tile-two-label', class: 'grid-tile-label', textContent: 'Two' }] }] }];
-    if (family === 'badge') return [{ type: 'span', id: 'badge-primary', class: 'badge-anchor', textContent: 'Notifications', children: [{ type: 'span', id: 'badge-count', class: 'badge-bubble', textContent: '4', ariaLabel: '4 notifications' }] }];
+    if (family === 'badge') return [{ type: 'span', id: 'badge-primary', class: 'badge-anchor', children: [{ type: 'span', id: 'badge-label', class: 'badge-label', textContent: 'Notifications' }, { type: 'span', id: 'badge-count', class: 'badge-bubble', children: [{ type: 'span', id: 'badge-count-label', class: 'badge-count-label', textContent: '4' }] }] }];
     if (family === 'chips') return [{ type: 'div', id: 'chips-primary', class: 'row', role: 'listbox', ariaLabel: 'Tags', ariaDisabled: false, ariaMultiselectable: true, children: state.chips.map((chip, index) => ({ type: 'button' as const, id: `chip-${index}`, class: 'chip', role: 'option', ariaSelected: state.selected, value: chip })) }];
     if (family === 'icon') return [{ type: 'img', id: 'icon-primary', class: 'material-icon', src: '/icons/favorite.svg', alt: 'Favorite' }];
     if (family === 'list') return [{ type: 'div', id: 'list-primary', class: 'material-list', ariaDisabled: false, children: [{ type: 'div', id: 'list-inbox', class: 'list-item', children: [{ type: 'span', id: 'list-inbox-label', class: 'list-label', textContent: 'Inbox' }] }, { type: 'div', id: 'list-archive', class: 'list-item', children: [{ type: 'span', id: 'list-archive-label', class: 'list-label', textContent: 'Archive' }] }] }];
@@ -452,7 +458,7 @@ export class AstylarShowcaseComponent {
     if (family === 'stepper') return [{ type: 'div', id: 'stepper-primary', class: 'stepper', role: 'tablist', ariaLabel: state.selected ? '1Details2ReviewProject detailsReview changes' : 'EditablecreateDetails2ReviewProject detailsReview changes', children: [{ type: 'div', id: 'stepper-head', class: 'stepper-head', children: [{ type: 'div', id: 'step-details', class: 'step-tab', role: 'tab', tabindex: state.selected ? 0 : -1, ariaSelected: state.selected, children: [{ type: 'span', id: 'step-details-badge', class: `step-badge${state.selected ? ' selected' : ''}`, textContent: '1' }, { type: 'span', id: 'step-details-text', class: 'step-text', textContent: 'Details' }] }, { type: 'span', id: 'step-connector', class: 'step-connector' }, { type: 'div', id: 'step-review', class: 'step-tab', role: 'tab', tabindex: state.selected ? -1 : 0, ariaSelected: !state.selected, children: [{ type: 'span', id: 'step-review-badge', class: `step-badge${state.selected ? '' : ' selected'}`, textContent: '2' }, { type: 'span', id: 'step-review-text', class: 'step-text', textContent: 'Review' }] }] }, { type: 'div', id: 'stepper-content', role: 'tabpanel', textContent: state.selected ? 'Project details' : 'Review changes' }] }];
     if (family === 'button-toggle') return this.composite(family);
     if (family === 'divider') return [{ type: 'p', id: 'divider-above-row', class: 'divider-copy divider-above', children: [{ type: 'span', id: 'divider-above', textContent: 'Above' }] }, { type: 'div', id: 'divider-primary', class: 'divider', role: 'separator' }, { type: 'p', id: 'divider-below-row', class: 'divider-copy divider-below', children: [{ type: 'span', id: 'divider-below', textContent: 'Below' }] }];
-    if (family === 'card') return [{ type: 'div', id: 'card-primary', class: 'material-card', children: [{ type: 'h2', id: 'card-title', class: 'card-title', textContent: 'Project Atlas' }, { type: 'p', id: 'card-copy', class: 'card-copy', textContent: 'Material surface content.' }, { type: 'button', id: 'card-open', class: 'text-button', value: 'OPEN' }] }];
+    if (family === 'card') return [{ type: 'div', id: 'card-shadow', class: 'card-shadow' }, { type: 'div', id: 'card-primary', class: 'material-card', children: [{ type: 'h2', id: 'card-title', class: 'card-title', textContent: 'Project Atlas' }, { type: 'p', id: 'card-copy', class: 'card-copy', textContent: 'Material surface content.' }, { type: 'button', id: 'card-open', class: 'text-button', value: 'OPEN' }] }];
     if (family === 'table') return [{ type: 'table', id: 'table-primary', class: 'material-table', tableProperties: { tableLayout: 'fixed', borderCollapse: 'collapse' }, children: [
       { type: 'thead', id: 'table-head', children: [{ type: 'tr', id: 'table-header-row', children: [{ type: 'th', id: 'table-name-header', scope: 'col', textContent: 'Name' }] }] },
       { type: 'tbody', id: 'table-body', children: [

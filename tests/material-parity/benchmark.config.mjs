@@ -22,11 +22,47 @@ export const materialThresholds = Object.freeze({
   maximumTextCenterOffsetErrorPx: .75,
 });
 
+export const materialTextAuditTargets = Object.freeze({
+  core: ['core-primary'],
+  toolbar: ['toolbar-title', 'toolbar-action'],
+  sidenav: ['sidenav-nav', 'sidenav-content'],
+  'grid-list': ['grid-tile-one', 'grid-tile-two'],
+  divider: ['divider-above', 'divider-below'],
+  badge: ['badge-label', 'badge-count'],
+  card: ['card-title', 'card-copy', 'card-open'],
+  chips: ['chip-0', 'chip-1'],
+  list: ['list-inbox-label', 'list-archive-label'],
+  table: ['table-name-header', 'table-atlas', 'table-northstar'],
+  sort: ['sort-trigger'],
+  paginator: ['paginator-size', 'paginator-range'],
+  tree: ['tree-item-0', 'tree-item-1', 'tree-item-2'],
+  'form-field': ['form-field-label', 'form-field-control', 'form-field-hint'],
+  input: ['input-label', 'input-control'],
+  autocomplete: ['autocomplete-label'],
+  checkbox: ['checkbox-label'],
+  radio: ['radio-solo-label', 'radio-team-label'],
+  select: ['select-label', 'select-control'],
+  'slide-toggle': ['slide-toggle-label'],
+  datepicker: ['datepicker-label'],
+  timepicker: ['timepicker-label'],
+  button: ['button-primary', 'button-secondary', 'button-disabled'],
+  'button-toggle': ['button-toggle-one', 'button-toggle-two'],
+  menu: ['menu-primary'],
+  tabs: ['tab-overview', 'tab-activity', 'tab-panel'],
+  stepper: ['step-details-text', 'step-review-text', 'stepper-content'],
+  expansion: ['expansion-title'],
+  'bottom-sheet': ['bottom-sheet-primary'],
+  dialog: ['dialog-primary'],
+  'snack-bar': ['snack-bar-primary'],
+  tooltip: ['tooltip-primary'],
+});
 export const materialTextAlignmentTargets = Object.freeze({
   core: ['core-primary'],
   toolbar: ['toolbar-title', 'toolbar-action'],
   'grid-list': ['grid-tile-one', 'grid-tile-two'],
   divider: ['divider-above', 'divider-below'],
+  badge: ['badge-label', 'badge-count'],
+  card: ['card-title', 'card-copy', 'card-open'],
   button: ['button-primary', 'button-secondary', 'button-disabled'],
   menu: ['menu-primary'],
   'bottom-sheet': ['bottom-sheet-primary'],
@@ -34,8 +70,14 @@ export const materialTextAlignmentTargets = Object.freeze({
   'snack-bar': ['snack-bar-primary'],
   tooltip: ['tooltip-primary'],
 });
-export const materialAbsoluteTextAlignmentTargets = Object.freeze(['toolbar-action', 'divider-above', 'divider-below']);
-export const materialTextOnlyTargets = Object.freeze(['divider-above', 'divider-below']);
+export const materialTextlessFamilies = Object.freeze(['icon', 'slider', 'progress-bar', 'progress-spinner']);
+export const materialAbsoluteTextAlignmentTargets = Object.freeze([
+  'toolbar-action', 'divider-above', 'divider-below', 'badge-label', 'badge-count',
+  'card-title', 'card-copy', 'card-open',
+]);
+export const materialTextOnlyTargets = Object.freeze([
+  'divider-above', 'divider-below', 'badge-label', 'card-title', 'card-copy',
+]);
 export const materialUniformBackgroundTargets = Object.freeze({
   'grid-list': Object.freeze({ container: 'grid-list-root', surfaces: Object.freeze(['grid-tile-one', 'grid-tile-two']) }),
 });
