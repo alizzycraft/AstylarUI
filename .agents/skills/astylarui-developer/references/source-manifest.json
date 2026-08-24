@@ -7,14 +7,14 @@
       "source": "docs/compatibility/html-css.md",
       "destination": "html-css.md",
       "transform": "portable-html-css-links",
-      "sourceSha256": "79ec928214889f126b0e43ad49769b1bbee8cd4681c82451a3cfc2430fe11a61",
-      "bundledSha256": "c43c1c99e2b8a66409777d9862b8c36ecfe79e7fb8a24bfc5b66d50a839f4bb0"
+      "sourceSha256": "edf5d1abac3f5390522641d2e53ab36eabd8e741eff4af6175c6c24d52a22193",
+      "bundledSha256": "9fbec20bc5ab3cbfabaf13958fb88a679f4b1bf5efcd86f0743426be6fdeb7f8"
     },
     {
       "source": "docs/compatibility/capabilities.json",
       "destination": "capabilities.json",
-      "sourceSha256": "2836766588fa8f6603c93ff47c298e24234447816017ff632c1cd58c1f096294",
-      "bundledSha256": "2836766588fa8f6603c93ff47c298e24234447816017ff632c1cd58c1f096294"
+      "sourceSha256": "f4ca6564e8c20a4d61f4dfa47e13555fb34a52f32e76fa03a9c71816cb78a12b",
+      "bundledSha256": "f4ca6564e8c20a4d61f4dfa47e13555fb34a52f32e76fa03a9c71816cb78a12b"
     },
     {
       "source": "docs/compatibility/examples/manifest.json",

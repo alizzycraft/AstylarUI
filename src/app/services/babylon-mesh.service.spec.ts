@@ -69,6 +69,30 @@ describe('BabylonMeshService', () => {
     });
   });
 
+  describe('createShadow', () => {
+    it('creates one extent-aware blurred plane for every authored shadow layer', () => {
+      const engine = new NullEngine();
+      const scene = new Scene(engine);
+      const service = new BabylonMeshService();
+      service.initialize(scene);
+
+      const root = service.createShadow('card-shadow', 120, 60, [
+        { offsetX: 0, offsetY: 2, blur: 1, spread: -1, color: 'rgba(0,0,0,.2)' },
+        { offsetX: 0, offsetY: 1, blur: 3, spread: 0, color: 'rgba(0,0,0,.12)' },
+      ], 'roundedRectangle', 12);
+      const layers = root.getChildMeshes(false) as Mesh[];
+
+      expect(layers.length).toBe(2);
+      expect(layers.map((layer) => layer.metadata.shadowLayer)).toEqual([
+        jasmine.objectContaining({ blur: 3, spread: 0, planeWidth: 132, planeHeight: 72 }),
+        jasmine.objectContaining({ blur: 1, spread: -1, planeWidth: 122, planeHeight: 62 }),
+      ]);
+      expect(layers.map((layer) => layer.position.y)).toEqual([-1, -2]);
+
+      engine.dispose();
+    });
+  });
+
   describe('createPolygonBorder', () => {
     it('places each edge of an asymmetric rectangular border at its CSS width', () => {
       const engine = new NullEngine();

@@ -172,6 +172,11 @@ clipping, and stacking are Babylon output. Filters, backdrop filters, masks,
 clip paths, blend modes, and complete CSS compositing are unsupported.
 `polygonType` is an Astylar-specific shape selector, not CSS.
 
+The outer `box-shadow` subset supports comma-separated layers with pixel
+offsets, blur radius, spread radius, and color. Layers retain authored order,
+follow rounded border geometry, and clip paint inside the owning border box.
+Inset shadows and non-pixel shadow lengths remain unsupported.
+
 CSS animation, transitions, and `@keyframes` are unsupported. Prefer immediate
 supported hover/active/focus feedback; use Angular signals plus
 `surface.update()` for meaningful application state. Truly three-dimensional

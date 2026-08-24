@@ -20,6 +20,7 @@ import {
   ELEMENT_BORDER_Z_OFFSET,
   SELECT_BORDER_Z_OFFSET,
 } from "../render-depth.constants";
+import { parseBoxShadow } from "./box-shadow";
 
 /**
  * Service responsible for element interaction (mouse events, hover, etc.)
@@ -79,6 +80,30 @@ export class ElementInteractionService {
           this.pointerInteractionService.handlePointerOut();
         }
       },
+    );
+  }
+
+  syncShadow(
+    dom: BabylonDOM,
+    render: BabylonRender,
+    elementId: string,
+    style: StyleRule,
+    mesh: Mesh,
+    parent: Mesh,
+    dimensions: { width: number; height: number },
+  ): void {
+    const scale = render.actions.camera.getPixelToWorldScale();
+    this.updateShadowMesh(
+      dom,
+      render,
+      elementId,
+      style,
+      parent,
+      dimensions,
+      mesh.position.z,
+      this.parseBorderRadius(style.borderRadius) * scale,
+      this.parsePolygonType(style.polygonType) || "rectangle",
+      this.parseTransform(style.transform) || undefined,
     );
   }
 
@@ -1082,37 +1107,6 @@ export class ElementInteractionService {
   }
 
   /**
-   * Parse box-shadow CSS property
-   */
-  private parseBoxShadow(
-    boxShadowValue: string | undefined,
-  ): { offsetX: number; offsetY: number; blur: number; color: string } | null {
-    if (!boxShadowValue || boxShadowValue === "none") return null;
-
-    // Parse box-shadow: offset-x offset-y blur-radius color
-    // Example: "2px 2px 4px rgba(0,0,0,0.5)" or "1px 1px 2px #000000"
-    const trimmed = boxShadowValue.trim();
-
-    // Simple regex to match common box-shadow patterns
-    const boxShadowRegex =
-      /^(-?\d+(?:\.\d+)?(?:px)?)\s+(-?\d+(?:\.\d+)?(?:px)?)\s+(\d+(?:\.\d+)?(?:px)?)\s+(.+)$/;
-    const match = trimmed.match(boxShadowRegex);
-
-    if (!match) {
-      console.warn(`⚠️ Unable to parse box-shadow: "${boxShadowValue}"`);
-      return null;
-    }
-
-    const offsetX = parseFloat(match[1].replace("px", ""));
-    const offsetY = parseFloat(match[2].replace("px", ""));
-    const blur = parseFloat(match[3].replace("px", ""));
-    const color = match[4].trim();
-
-
-    return { offsetX, offsetY, blur, color };
-  }
-
-  /**
    * Helper to parse RGBA color and multiply alpha
    */
   private getBoxShadowColorWithOpacity(
@@ -1153,7 +1147,7 @@ export class ElementInteractionService {
   ) {
 
 
-    const boxShadow = this.parseBoxShadow(style?.boxShadow);
+    const boxShadow = parseBoxShadow(style?.boxShadow);
     const existingShadow = dom.context.elements.get(`${elementId}-shadow`);
 
 
@@ -1163,7 +1157,7 @@ export class ElementInteractionService {
 
 
     // If no box shadow is needed, remove existing shadow
-    if (!boxShadow) {
+    if (boxShadow.length === 0) {
       if (existingShadow) {
         existingShadow.dispose();
         dom.context.elements.delete(`${elementId}-shadow`);
@@ -1177,16 +1171,15 @@ export class ElementInteractionService {
     const scaleFactor = render.actions.camera.getPixelToWorldScale();
     const worldWidth = dimensions.width * scaleFactor;
     const worldHeight = dimensions.height * scaleFactor;
-    const scaledOffsetX = boxShadow.offsetX * scaleFactor;
-    const scaledOffsetY = boxShadow.offsetY * scaleFactor;
-    const scaledBlur = boxShadow.blur * scaleFactor;
-
-    // Multiply color alpha by style opacity
     const styleOpacity = render.actions.style.parseOpacity(style.opacity);
-    const shadowColor = this.getBoxShadowColorWithOpacity(
-      boxShadow.color,
-      styleOpacity,
-    );
+    const scaledLayers = boxShadow.map((layer) => ({
+      offsetX: layer.offsetX * scaleFactor,
+      offsetY: layer.offsetY * scaleFactor,
+      blur: layer.blur * scaleFactor,
+      spread: layer.spread * scaleFactor,
+      color: this.getBoxShadowColorWithOpacity(layer.color, styleOpacity),
+    }));
+    const layerSignature = JSON.stringify(scaledLayers);
 
 
 
@@ -1203,8 +1196,7 @@ export class ElementInteractionService {
       // More precise parameter comparison
       const widthChanged = Math.abs(lastParams.width - worldWidth) > 0.001;
       const heightChanged = Math.abs(lastParams.height - worldHeight) > 0.001;
-      const blurChanged = Math.abs(lastParams.blur - scaledBlur) > 0.001;
-      const colorChanged = lastParams.color !== shadowColor;
+      const layersChanged = lastParams.layerSignature !== layerSignature;
       const radiusChanged =
         Math.abs(lastParams.borderRadius - borderRadius) > 0.001;
       const typeChanged = lastParams.polygonType !== polygonType;
@@ -1212,8 +1204,7 @@ export class ElementInteractionService {
       const paramChanged =
         widthChanged ||
         heightChanged ||
-        blurChanged ||
-        colorChanged ||
+        layersChanged ||
         radiusChanged ||
         typeChanged;
       needsRecreation = paramChanged;
@@ -1251,10 +1242,7 @@ export class ElementInteractionService {
         `${elementId}-shadow`,
         worldWidth,
         worldHeight,
-        scaledOffsetX,
-        scaledOffsetY,
-        scaledBlur,
-        shadowColor,
+        scaledLayers,
         polygonType,
         borderRadius,
       );
@@ -1264,15 +1252,16 @@ export class ElementInteractionService {
         shadowParams: {
           width: worldWidth,
           height: worldHeight,
-          blur: scaledBlur,
-          color: shadowColor,
+          layerSignature,
           borderRadius: borderRadius,
           polygonType: polygonType,
         },
       };
 
-      // Parent shadow to the element itself so it follows the element's position and transforms
-      render.actions.mesh.parentTextMesh(shadowMesh, elementMesh);
+      // Keep the shadow as a sibling of its owner. Parenting it to the painted
+      // element made the shadow inherit the owner's local placement twice in
+      // nested surfaces and left its falloff outside the expected box.
+      render.actions.mesh.parentTextMesh(shadowMesh, parent);
       dom.context.elements.set(`${elementId}-shadow`, shadowMesh);
 
 
@@ -1280,15 +1269,15 @@ export class ElementInteractionService {
       shadowMesh = existingShadow!;
     }
 
-    // Set shadow position relative to parent element (only once during creation)
+    // Outer-shadow fragments are clipped to the owner's border box by the
+    // shadow shader. Keeping them just in front avoids ancestor backgrounds
+    // occluding the falloff while leaving the element itself untouched.
     if (needsRecreation) {
-      const shadowX = scaledOffsetX; // Offset from element position
-      const shadowY = -scaledOffsetY; // Negative because CSS Y is inverted
-
-      // Position shadow relative to element (parenting will handle world positioning)
-      shadowMesh.position.set(shadowX, shadowY, -0.01); // Behind element in local space
-
-
+      shadowMesh.position.set(
+        elementMesh.position.x,
+        elementMesh.position.y,
+        zPosition + ELEMENT_BORDER_Z_OFFSET / 2,
+      );
     }
 
     // Since shadow is parented to element, it will automatically inherit all transforms and position changes

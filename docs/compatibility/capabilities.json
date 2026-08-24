@@ -198,7 +198,7 @@
         "id": "paint",
         "classification": "compatible",
         "names": ["background", "borderWidth", "borderColor", "borderStyle", "borderRadius", "boxShadow", "opacity"],
-        "values": "documented color/gradient, solid-border, radius, shadow and numeric-opacity subsets",
+        "values": "documented color/gradient, solid-border, radius, layered outer pixel box-shadow and numeric-opacity subsets",
         "units": ["px", "%"],
         "inherits": false,
         "default": "transparent background/border, no shadow, radius 0, opacity 1",
@@ -411,7 +411,7 @@
       { "path": "src/app/types/style-rule.ts", "sha256": "4750f39b24e39fb9a9d0e0908af853d9d405b21691e5406f5b21209683da7c04" },
       { "path": "src/app/config/browser-defaults.ts", "sha256": "b80995dc5599df550b9180c313c357c960f27199c6d364f67e778e073116a493" },
       { "path": "src/app/services/dom/style.service.ts", "sha256": "a81383c44a51d5b458bc6840e4b7c53bcc38dfbce22bf48f710ac96698a881ba" },
-      { "path": "src/app/services/dom/elements/element-creation.service.ts", "sha256": "3e56d43004f808300dfb36655e7b0acf1bb972f75d9616afb9c107c70220c4bd" },
+      { "path": "src/app/services/dom/elements/element-creation.service.ts", "sha256": "ff9fa0cbd5bc572942d8f09cca1c2c82e203762acd8e136e44fd5a89a38a5b6e" },
       { "path": "src/app/services/text/text-style-parser.service.ts", "sha256": "d3f37b6201818f20d195a5d785a5969f970663e294f088e4d6017661bc148f33" }
     ]
   }

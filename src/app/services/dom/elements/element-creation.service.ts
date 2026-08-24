@@ -494,6 +494,16 @@ export class ElementCreationService {
       padding: pixelPadding,
     });
 
+    this.interactionService.syncShadow(
+      dom,
+      render,
+      meshId,
+      style,
+      mesh,
+      mesh.parent instanceof Mesh ? mesh.parent : parent,
+      dimensions,
+    );
+
     // Authored IDs are only required for addressable hover state. Text uses
     // the generated mesh ID when no authored ID is present.
     if (element.id) {

@@ -18,6 +18,7 @@ import {
 import {
   BorderWidthBox,
   BorderWidths,
+  BoxShadowLayer,
   GradientStop,
   LinearGradientDefinition,
 } from "./dom/interfaces/render.types";
@@ -47,6 +48,7 @@ export class BabylonMeshService {
     if (!this.scene) {
       throw new Error("Mesh service not initialized");
     }
+    const scene = this.scene;
 
     return MeshBuilder.CreatePlane(
       name,
@@ -54,7 +56,7 @@ export class BabylonMeshService {
         width: width,
         height: height,
       },
-      this.scene,
+      scene,
     );
   }
 
@@ -1642,44 +1644,93 @@ export class BabylonMeshService {
     name: string,
     width: number,
     height: number,
-    offsetX: number,
-    offsetY: number,
-    blur: number,
-    color: string,
-    polygonType: string,
+    layers: readonly BoxShadowLayer[],
+    _polygonType: string,
     borderRadius: number,
   ): Mesh {
     if (!this.scene) {
       throw new Error("Mesh service not initialized");
     }
+    const scene = this.scene;
 
-    // Create shadow mesh (slightly larger than element to simulate shadow)
-    const shadowWidth = width + blur * 2;
-    const shadowHeight = height + blur * 2;
+    Effect.ShadersStore["astylarBoxShadowVertexShader"] = `
+      precision highp float;
+      attribute vec3 position;
+      attribute vec2 uv;
+      uniform mat4 worldViewProjection;
+      varying vec2 vUV;
+      void main(void) { vUV = uv; gl_Position = worldViewProjection * vec4(position, 1.0); }
+    `;
+    Effect.ShadersStore["astylarBoxShadowFragmentShader"] = `
+      precision highp float;
+      varying vec2 vUV;
+      uniform vec2 planeSize;
+      uniform vec2 rectSize;
+      uniform vec2 elementSize;
+      uniform vec2 clipOffset;
+      uniform float radius;
+      uniform float elementRadius;
+      uniform float blur;
+      uniform vec4 shadowColor;
+      float roundedRectDistance(vec2 point, vec2 halfSize, float cornerRadius) {
+        vec2 delta = abs(point) - halfSize + cornerRadius;
+        return length(max(delta, 0.0)) + min(max(delta.x, delta.y), 0.0) - cornerRadius;
+      }
+      void main(void) {
+        vec2 point = (vUV - 0.5) * planeSize;
+        float distance = roundedRectDistance(point, rectSize * 0.5, radius);
+        float elementDistance = roundedRectDistance(point + clipOffset, elementSize * 0.5, elementRadius);
+        if (elementDistance <= 0.0) discard;
+        float coverage;
+        if (blur < 0.0001) {
+          coverage = step(distance, 0.0);
+        } else {
+          // Chromium's CSS blur kernel has partial coverage at the source edge
+          // and a tighter falloff than a half-radius Gaussian.
+          float sigma = max(blur * 0.4, 0.0001);
+          float outside = max(distance, 0.0) / sigma;
+          coverage = distance <= 0.0 ? 0.82 : 0.41 * exp(-0.5 * outside * outside);
+        }
+        gl_FragColor = vec4(shadowColor.rgb, shadowColor.a * coverage);
+      }
+    `;
 
-    const shadowMesh = this.createPolygon(
-      name,
-      polygonType,
-      shadowWidth,
-      shadowHeight,
-      borderRadius + blur,
-    );
-
-    // Create shadow material with the specified color
-    const shadowMaterial = new StandardMaterial(`${name}-material`, this.scene);
-    const parsedColor = this.parseCssColor(color);
-    shadowMaterial.diffuseColor = parsedColor.color;
-    shadowMaterial.alpha = parsedColor.alpha * 0.5; // Shadow is typically semi-transparent
-    shadowMaterial.backFaceCulling = false;
-
-    shadowMesh.material = shadowMaterial;
-
-    // Position shadow relative to element
-    shadowMesh.position.x = offsetX;
-    shadowMesh.position.y = -offsetY; // Invert Y for BabylonJS
-    shadowMesh.position.z = -0.01; // Behind the element
-
-
-    return shadowMesh;
+    const shadowRoot = new Mesh(name, scene);
+    layers.slice().reverse().forEach((layer, reverseIndex) => {
+      const spreadWidth = Math.max(0, width + layer.spread * 2);
+      const spreadHeight = Math.max(0, height + layer.spread * 2);
+      const margin = Math.max(0.001, layer.blur * 2);
+      const planeWidth = spreadWidth + margin * 2;
+      const planeHeight = spreadHeight + margin * 2;
+      const layerIndex = layers.length - reverseIndex - 1;
+      const plane = this.createPlane(`${name}-layer-${layerIndex}`, planeWidth, planeHeight);
+      const material = new ShaderMaterial(
+        `${plane.name}-material`,
+        scene,
+        { vertex: "astylarBoxShadow", fragment: "astylarBoxShadow" },
+        {
+          attributes: ["position", "uv"],
+          uniforms: ["worldViewProjection", "planeSize", "rectSize", "elementSize", "clipOffset", "radius", "elementRadius", "blur", "shadowColor"],
+        },
+      );
+      const parsedColor = this.parseCssColor(layer.color);
+      material.setVector2("planeSize", new Vector2(planeWidth, planeHeight));
+      material.setVector2("rectSize", new Vector2(spreadWidth, spreadHeight));
+      material.setVector2("elementSize", new Vector2(width, height));
+      material.setVector2("clipOffset", new Vector2(-layer.offsetX, -layer.offsetY));
+      material.setFloat("radius", Math.max(0, borderRadius + layer.spread));
+      material.setFloat("elementRadius", Math.max(0, borderRadius));
+      material.setFloat("blur", layer.blur);
+      material.setColor4("shadowColor", parsedColor.color.toColor4(parsedColor.alpha));
+      material.backFaceCulling = false;
+      material.needAlphaBlending = () => true;
+      plane.material = material;
+      // Astylar's camera axes are opposite CSS screen axes.
+      plane.position.set(-layer.offsetX, -layer.offsetY, -0.00005 * reverseIndex);
+      plane.isPickable = false;
+      plane.parent = shadowRoot;
+      plane.metadata = { shadowLayer: { ...layer, planeWidth, planeHeight } };
+    });
+    return shadowRoot;
   }
 }

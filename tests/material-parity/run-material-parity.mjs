@@ -9,9 +9,10 @@ import { PNG } from 'pngjs';
 import { ssim } from 'ssim.js';
 import {
   materialAbsoluteTextAlignmentTargets, materialFamilies, materialInteractionCases, materialMobileFlowCases, materialProfiles,
-  materialStaticCases, materialTextAlignmentTargets, materialTextAuditTargets, materialTextOnlyTargets, materialThresholds, materialUniformBackgroundTargets,
+  materialShadowProfileTargets, materialStaticCases, materialTextAlignmentTargets, materialTextAuditTargets, materialTextOnlyTargets, materialThresholds, materialUniformBackgroundTargets,
 } from './benchmark.config.mjs';
 import { measureTextInkCenter, textCenterOffsetError } from './text-alignment-metrics.mjs';
+import { compareBottomShadowProfiles } from './shadow-profile-metrics.mjs';
 
 const root = process.cwd();
 const enforce = process.argv.includes('--enforce');
@@ -188,11 +189,21 @@ async function captureCase(benchmarkCase) {
       reference.image, astylar.image, reference.measurement.elements, astylar.measurement.elements,
       materialUniformBackgroundTargets[family], viewport.deviceScaleFactor,
     );
+    const shadowTarget = materialShadowProfileTargets[family];
+    const shadowProfiles = shadowTarget ? [{
+      id: shadowTarget.element,
+      ...compareBottomShadowProfiles(
+        reference.image, astylar.image,
+        reference.measurement.elements[shadowTarget.element]?.borderBox,
+        astylar.measurement.elements[shadowTarget.element]?.borderBox,
+        viewport.deviceScaleFactor, shadowTarget.maximumRowError,
+      ),
+    }] : [];
     const semantics = compareSemantics(reference.measurement.semantics, astylar.measurement.semantics);
     const runtimeErrors = [...reference.errors.map((error) => `reference: ${error}`),
       ...astylar.errors.map((error) => `astylar: ${error}`)];
     return {
-      family, profile, viewport, screenshotSimilarity, geometry, textAlignment, uniformBackgrounds, semantics, runtimeErrors,
+      family, profile, viewport, screenshotSimilarity, geometry, textAlignment, uniformBackgrounds, shadowProfiles, semantics, runtimeErrors,
       diagnostics: astylar.measurement.diagnostics,
       meetsAcceptance: screenshotSimilarity >= materialThresholds.resultSsim &&
         geometry.maximumEdgeError !== null &&
@@ -200,6 +211,7 @@ async function captureCase(benchmarkCase) {
         geometry.edgesWithinTolerance >= materialThresholds.minimumEdgesWithinTolerance &&
         textAlignment.every((result) => result.matches) &&
         uniformBackgrounds.every((result) => result.matches) &&
+        shadowProfiles.every((result) => result.matches) &&
         semantics.every((result) => result.matches) && runtimeErrors.length === 0,
     };
   } finally {
@@ -793,6 +805,7 @@ function summarize(results) {
   const maximumEdgeError = Math.max(...results.map(({ geometry }) => geometry.maximumEdgeError ?? Infinity));
   const textAlignmentResults = results.flatMap(({ textAlignment }) => textAlignment ?? []);
   const uniformBackgroundResults = results.flatMap(({ uniformBackgrounds }) => uniformBackgrounds ?? []);
+  const shadowProfileResults = results.flatMap(({ shadowProfiles }) => shadowProfiles ?? []);
   const maximumTextCenterOffsetErrorPx = textAlignmentResults.length
     ? Math.max(...textAlignmentResults.map(({ offsetErrorPx }) => offsetErrorPx ?? Infinity)) : 0;
   const passingCases = results.filter(({ meetsAcceptance }) => meetsAcceptance).length;
@@ -802,6 +815,8 @@ function summarize(results) {
     textAlignmentTargetsPassing: textAlignmentResults.filter(({ matches }) => matches).length,
     uniformBackgroundTargets: uniformBackgroundResults.length,
     uniformBackgroundTargetsPassing: uniformBackgroundResults.filter(({ matches }) => matches).length,
+    shadowProfileTargets: shadowProfileResults.length,
+    shadowProfileTargetsPassing: shadowProfileResults.filter(({ matches }) => matches).length,
     maximumTextCenterOffsetErrorPx,
     meetsAcceptance: results.length === materialStaticCases.length && passingCases === results.length &&
       medianSsim >= materialThresholds.aggregateMedianSsim,
@@ -837,6 +852,7 @@ function humanSummary(report) {
     `- Text alignment: ${summary.textAlignmentTargetsPassing}/${summary.textAlignmentTargets} ` +
     `(maximum center-offset error ${summary.maximumTextCenterOffsetErrorPx.toFixed(3)}px)\n` +
     `- Uniform backgrounds: ${summary.uniformBackgroundTargetsPassing}/${summary.uniformBackgroundTargets}\n` +
+    `- Shadow profiles: ${summary.shadowProfileTargetsPassing}/${summary.shadowProfileTargets}\n` +
     `- Meets acceptance: ${summary.meetsAcceptance ? 'yes' : 'no'}\n` +
     `- Interaction cases: ${report.interactionSummary.executedCases}\n` +
     `- Interaction passing: ${report.interactionSummary.passingCases}\n` +

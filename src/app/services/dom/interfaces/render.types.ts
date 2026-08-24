@@ -33,6 +33,14 @@ export interface BorderWidthBox {
 
 export type BorderWidths = number | BorderWidthBox;
 
+export interface BoxShadowLayer {
+  offsetX: number;
+  offsetY: number;
+  blur: number;
+  spread: number;
+  color: string;
+}
+
 export interface MeshActions {
   createPolygon: (
     name: string,
@@ -59,10 +67,7 @@ export interface MeshActions {
     name: string,
     width: number,
     height: number,
-    offsetX: number,
-    offsetY: number,
-    blur: number,
-    color: string,
+    layers: readonly BoxShadowLayer[],
     polygonType: string,
     borderRadius: number,
   ) => Mesh;
