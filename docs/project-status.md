@@ -58,13 +58,14 @@ rounded input backgrounds inside authored borders, and make expanded select
 popups inherit the closed control's foreground/background while matching its
 outer width.
 
-The `0.2.0` release-candidate matrix passes 339/339 repository unit tests, the
+The `0.2.0` release-candidate matrix passes 356/356 repository unit tests, the
 library and production application builds, the checked capability/example/skill
-contracts, and the 419-file packed consumer with all three real-Chrome tests.
-The enforced general corpus passes 165 fixtures / 541 renders over three
-viewports with median SSIM `0.9899`, minimum SSIM `0.9509`, 99.9% of measured
-edges within `2px`, maximum edge error `3.9921px`, exact text, clean runtime
-reports, and every completion threshold met. The mock-only TTS benchmark passes
+contracts, and the 427-file packed consumer with all three real-Chrome tests.
+The enforced general corpus passes 166 fixtures / 551 renders over four
+viewport/DPR profiles with median SSIM `0.9896`, minimum SSIM `0.9509`, 99.9%
+of measured edges within `2px`, maximum edge error `3.9921px`, exact text,
+clean runtime reports, local sharpness, and every completion threshold met. The
+mock-only TTS benchmark passes
 10/10 static scenarios, 36/36 sharpness regions, and 70/70 interaction steps;
 minimum static SSIM is `0.967585` and minimum interaction-local SSIM is
 `0.526838` under its documented structural UA-focus exception. No OpenAI
