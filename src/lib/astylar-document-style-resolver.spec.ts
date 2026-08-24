@@ -116,6 +116,30 @@ describe('AstylarDocumentStyleResolver', () => {
     expect(resolved.active?.transform).toBe('scale(0.98)');
   });
 
+  it('translates native control appearance and checked/disabled computed state', () => {
+    style.textContent = `
+      .control { appearance: none; opacity: .8; color: rgb(15, 23, 42); }
+      .control:checked { opacity: 1; }
+      .control:disabled { color: rgb(100, 116, 139); }
+    `;
+    const checked: DOMElement = {
+      type: 'input', inputType: 'checkbox', id: 'checked', class: 'control', checked: true,
+    };
+    const disabled: DOMElement = {
+      type: 'input', inputType: 'button', id: 'disabled', class: 'control', disabled: true,
+    };
+    const result = resolver.resolve(document, site(checked, disabled), { width: 700, height: 400 });
+
+    expect(result.elements.get(checked)?.normal).toEqual(jasmine.objectContaining({
+      appearance: 'none',
+      opacity: '1',
+    }));
+    expect(result.elements.get(disabled)?.normal).toEqual(jasmine.objectContaining({
+      appearance: 'none',
+      color: 'rgb(100, 116, 139)',
+    }));
+  });
+
   it('keeps browser defaults out while retaining explicit declarations equal to them', () => {
     style.textContent = '.explicit { display: inline; color: rgb(0, 0, 0); }';
     const explicit: DOMElement = { type: 'span', id: 'explicit', class: 'explicit', children: [] };

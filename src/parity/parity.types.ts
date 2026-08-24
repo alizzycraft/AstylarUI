@@ -12,6 +12,9 @@ export const PARITY_VIEWPORTS: Record<string, ParityViewport> = {
   desktop: { id: 'desktop', width: 800, height: 600, deviceScaleFactor: 1 },
   tablet: { id: 'tablet', width: 640, height: 720, deviceScaleFactor: 1 },
   mobile: { id: 'mobile', width: 390, height: 844, deviceScaleFactor: 1 },
+  'tailwind-retina': {
+    id: 'tailwind-retina', width: 700, height: 600, deviceScaleFactor: 2,
+  },
 };
 
 export const PARITY_VIEWPORT = PARITY_VIEWPORTS['desktop'];

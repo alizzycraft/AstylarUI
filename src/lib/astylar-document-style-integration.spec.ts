@@ -96,6 +96,51 @@ describe('loaded document style surface integration', () => {
       surface.dispose();
     }
   });
+
+  it('matches equivalent explicit StyleRule layout and paint values', async () => {
+    style.textContent = `
+      .loaded-equivalent {
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        width: 240px;
+        height: 120px;
+        padding: 16px;
+        gap: 12px;
+        border: 2px solid rgb(59, 130, 246);
+        background-color: rgb(15, 23, 42);
+        color: rgb(226, 232, 240);
+      }
+    `;
+    const astylar = TestBed.inject(Astylar);
+    const loaded = astylar.mount(canvas, equivalentSite(true), { diagnostics: { logLevel: 'silent' } });
+    try {
+      await loaded.whenSettled();
+      const loadedInspection = astylar[ASTYLAR_INTERNAL_INSPECTION](loaded.scene)!;
+      const loadedDimensions = loadedInspection.elementManager.elementDimensionsMap.get('equivalent')!;
+      const loadedBackground = backgroundHex(loaded, 'equivalent');
+      loaded.dispose();
+
+      const explicit = astylar.mount(canvas, equivalentSite(false), { diagnostics: { logLevel: 'silent' } });
+      try {
+        await explicit.whenSettled();
+        const explicitInspection = astylar[ASTYLAR_INTERNAL_INSPECTION](explicit.scene)!;
+        const explicitDimensions = explicitInspection.elementManager.elementDimensionsMap.get('equivalent')!;
+        expect(loadedDimensions.width).toBeCloseTo(explicitDimensions.width, 0);
+        expect(loadedDimensions.height).toBeCloseTo(explicitDimensions.height, 0);
+        for (const side of ['top', 'right', 'bottom', 'left'] as const) {
+          expect(loadedDimensions.padding[side]).withContext(`padding.${side}`)
+            .toBeCloseTo(explicitDimensions.padding[side], 0);
+        }
+
+        expect(backgroundHex(explicit, 'equivalent')).toBe(loadedBackground);
+      } finally {
+        explicit.dispose();
+      }
+    } finally {
+      loaded.dispose();
+    }
+  });
 });
 
 function site(): SiteData {
@@ -110,6 +155,33 @@ function site(): SiteData {
       }],
     },
     styles: [{ selector: '#loaded', background: '#1e293b' }],
+  };
+}
+
+function backgroundHex(surface: ReturnType<Astylar['mount']>, elementId: string): string | undefined {
+  const mesh = surface.scene.meshes.find(
+    (candidate) => candidate.metadata?.elementId === elementId && !candidate.isDisposed(),
+  );
+  const material = mesh?.material as { diffuseColor?: { toHexString(): string } } | null;
+  return material?.diffuseColor?.toHexString();
+}
+
+function equivalentSite(loaded: boolean): SiteData {
+  return {
+    root: {
+      children: [{
+        type: 'section', id: 'equivalent', class: loaded ? 'loaded-equivalent' : undefined,
+        children: [],
+      }],
+    },
+    styles: loaded ? [] : [{
+      selector: '#equivalent', boxSizing: 'border-box', display: 'flex',
+      flexDirection: 'column', width: '240px', height: '120px',
+      paddingTop: '16px', paddingRight: '16px', paddingBottom: '16px', paddingLeft: '16px',
+      rowGap: '12px', columnGap: '12px', borderWidth: '2px', borderStyle: 'solid',
+      borderColor: 'rgb(59, 130, 246)', background: 'rgb(15, 23, 42)',
+      color: 'rgb(226, 232, 240)',
+    }],
   };
 }
 

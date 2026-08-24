@@ -83,7 +83,9 @@ export class SelectManager {
 
         // Create display mesh for selected value
         selectElement.displayMesh = this.createDisplayMesh(selectElement, render, style);
-        selectElement.indicatorMesh = this.createIndicatorMesh(selectElement, render, style);
+        if (style.appearance !== 'none') {
+            selectElement.indicatorMesh = this.createIndicatorMesh(selectElement, render, style);
+        }
 
         // Store camera scale for consistent text sizing across select and dropdown
         selectElement.cameraScale = render.actions.camera.getPixelToWorldScale();

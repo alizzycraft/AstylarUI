@@ -52,7 +52,9 @@ export class CheckboxManager {
             labelMesh: undefined // Will be created
         };
 
-        checkbox.checkIndicatorMesh = this.createCheckIndicator(checkbox, render.scene);
+        if (style.appearance !== 'none') {
+            checkbox.checkIndicatorMesh = this.createCheckIndicator(checkbox, render.scene);
+        }
         if (element.value || element.textContent) {
             checkbox.labelMesh = this.createLabelMesh(checkbox, render, style);
         }

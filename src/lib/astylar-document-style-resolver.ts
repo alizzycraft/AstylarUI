@@ -424,7 +424,8 @@ const COMPUTED_TO_ASTYLAR = new Map<string, keyof StyleRule>([
   ['margin-right', 'marginRight'], ['margin-bottom', 'marginBottom'], ['margin-left', 'marginLeft'],
   ['z-index', 'zIndex'], ['opacity', 'opacity'], ['transform', 'transform'],
   ['translate', 'transform'], ['rotate', 'transform'], ['scale', 'transform'],
-  ['list-style-type', 'listStyleType'], ['object-fit', 'objectFit'], ['color', 'color'],
+  ['list-style-type', 'listStyleType'], ['object-fit', 'objectFit'], ['appearance', 'appearance'],
+  ['color', 'color'],
   ['font-family', 'fontFamily'], ['font-size', 'fontSize'], ['font-weight', 'fontWeight'],
   ['font-style', 'fontStyle'], ['text-align', 'textAlign'], ['vertical-align', 'verticalAlign'],
   ['line-height', 'lineHeight'], ['letter-spacing', 'letterSpacing'], ['word-spacing', 'wordSpacing'],
@@ -534,20 +535,24 @@ function createMirrorElement(document: Document, element: DOMElement): HTMLEleme
   ] as const) {
     if (value) mirror.setAttribute(name, '');
   }
-  if (mirror instanceof HTMLInputElement) {
-    mirror.type = element.inputType ?? 'text';
-    if (element.value !== undefined) mirror.value = element.value;
-    mirror.checked = element.checked === true;
-  } else if (mirror instanceof HTMLTextAreaElement) {
-    mirror.value = element.value ?? element.textContent ?? '';
-  } else if (mirror instanceof HTMLSelectElement && element.options) {
+  // Mirror nodes belong to the resolver iframe realm, so parent-window
+  // constructors cannot be used for instanceof checks here.
+  if (mirror.localName === 'input') {
+    const input = mirror as HTMLInputElement;
+    input.type = element.inputType ?? 'text';
+    if (element.value !== undefined) input.value = element.value;
+    input.checked = element.checked === true;
+  } else if (mirror.localName === 'textarea') {
+    (mirror as HTMLTextAreaElement).value = element.value ?? element.textContent ?? '';
+  } else if (mirror.localName === 'select' && element.options) {
+    const select = mirror as HTMLSelectElement;
     for (const option of element.options) {
       const node = document.createElement('option');
       node.value = String(option.value);
       node.textContent = option.label;
       node.disabled = option.disabled === true;
       node.selected = String(element.value) === String(option.value);
-      mirror.append(node);
+      select.append(node);
     }
   }
   return mirror;

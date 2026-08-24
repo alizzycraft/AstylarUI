@@ -10,11 +10,14 @@ const ROOT = process.cwd();
 const BASE_URL = process.env['ASTYLAR_PARITY_BASE_URL'] ?? 'http://127.0.0.1:4300';
 const ARTIFACTS_DIR = path.join(ROOT, 'artifacts', 'parity');
 const enforceThresholds = process.argv.includes('--enforce');
+const enforceFocusedThresholds = process.argv.includes('--enforce-focused');
+const fixtureArgument = process.argv.find((argument) => argument.startsWith('--fixture='));
 const shouldStartServer = !process.env['ASTYLAR_PARITY_BASE_URL'];
 const viewportProfiles = {
   desktop: { id: 'desktop', width: 800, height: 600, deviceScaleFactor: 1 },
   tablet: { id: 'tablet', width: 640, height: 720, deviceScaleFactor: 1 },
-  mobile: { id: 'mobile', width: 390, height: 844, deviceScaleFactor: 1 }
+  mobile: { id: 'mobile', width: 390, height: 844, deviceScaleFactor: 1 },
+  'tailwind-retina': { id: 'tailwind-retina', width: 700, height: 600, deviceScaleFactor: 2 }
 };
 
 const thresholds = {
@@ -40,7 +43,8 @@ try {
     throw new Error(`Unable to load fixture manifest: ${manifestResponse.status}`);
   }
   const manifestFixtures = await manifestResponse.json();
-  const requestedFixtureId = process.env['ASTYLAR_PARITY_FIXTURE'];
+  const requestedFixtureId = process.env['ASTYLAR_PARITY_FIXTURE'] ??
+    fixtureArgument?.slice('--fixture='.length);
   const fixtures = requestedFixtureId
     ? manifestFixtures.filter((fixture) => fixture.id === requestedFixtureId)
     : manifestFixtures;
@@ -121,6 +125,8 @@ try {
   if (results.some((result) => result.runtimeErrors.length > 0)) {
     process.exitCode = 1;
   } else if (enforceThresholds && !summary.meetsCompletionThresholds) {
+    process.exitCode = 1;
+  } else if (enforceFocusedThresholds && !summary.meetsFocusedThresholds) {
     process.exitCode = 1;
   }
 } catch (error) {
@@ -1593,6 +1599,13 @@ function summarize(results) {
     maximumEdgeError,
     allTextMatches,
     noRuntimeErrors,
+    meetsFocusedThresholds:
+      everyFixtureSsimPasses &&
+      edgesWithinTolerance >= thresholds.minimumEdgesWithinTolerance &&
+      maximumEdgeError !== null &&
+      maximumEdgeError <= thresholds.maximumEdgeErrorPx &&
+      allTextMatches &&
+      noRuntimeErrors,
     meetsCompletionThresholds:
       results.length >= 40 &&
       medianSsim >= thresholds.minimumMedianSsim &&
@@ -1617,6 +1630,7 @@ function printSummary(report) {
   console.log(`Maximum edge error: ${report.summary.maximumEdgeError ?? 'n/a'}px`);
   console.log(`Text matches: ${report.summary.allTextMatches}`);
   console.log(`Runtime clean: ${report.summary.noRuntimeErrors}`);
+  console.log(`Focused thresholds: ${report.summary.meetsFocusedThresholds}`);
   console.log(`Completion thresholds: ${report.summary.meetsCompletionThresholds}`);
 
   for (const fixture of report.fixtures) {

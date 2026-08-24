@@ -1126,5 +1126,14 @@
     "category": "lists-tables-images",
     "expectedBehavior": "A nested visual control is positioned from the padded content origin of its table cell at every representative viewport.",
     "viewportIds": ["desktop", "tablet", "mobile"]
+  },
+  {
+    "id": "tailwind-loaded-utilities",
+    "title": "Loaded Tailwind utilities",
+    "category": "composed-application",
+    "expectedBehavior": "The browser and Astylar consume the same prefixed Tailwind 4.3.3 utility output, including escaped classes, browser-resolved values, responsive variants, controls, states, and overflow.",
+    "viewportIds": ["desktop", "tailwind-retina"],
+    "dynamicStepCount": 1,
+    "interactionStepCount": 5
   }
 ]

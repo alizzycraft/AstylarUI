@@ -76,6 +76,26 @@ describe('SelectManager', () => {
     expect(size.y * 2).toBeCloseTo(0.12, 5);
   });
 
+  it('suppresses the native-style indicator when appearance is none', () => {
+    const textRendering = {
+      renderTextToTexture: () => ({ getSize: () => ({ width: 80, height: 24 }) }),
+    } as unknown as TextRenderingService;
+    const meshService = {
+      createTextMesh: (name: string, _texture: unknown, width: number, height: number) =>
+        BABYLON.MeshBuilder.CreatePlane(name, { width, height }, scene),
+    } as unknown as BabylonMeshService;
+    const manager = new SelectManager(textRendering, meshService);
+
+    const select = manager.createSelectElement(
+      { type: 'select', id: 'plain', value: 'dark', options: [{ value: 'dark', label: 'Dark' }] },
+      { scene, actions: { camera: { getPixelToWorldScale: () => 0.01 } } } as any,
+      { selector: '#plain', appearance: 'none', background: '#ffffff', color: '#000000' },
+      { width: 3, height: 0.5 },
+    );
+
+    expect(select.indicatorMesh).toBeUndefined();
+  });
+
   it('commits closed arrow navigation and skips disabled options', () => {
     const textRendering = {
       renderTextToTexture: () => ({ getSize: () => ({ width: 80, height: 24 }) }),

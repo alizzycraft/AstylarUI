@@ -124,7 +124,7 @@ const styleProperties = new Set([
   'boxShadow', 'polygonType', 'padding', 'paddingTop', 'paddingRight',
   'paddingBottom', 'paddingLeft', 'margin', 'marginTop', 'marginRight',
   'marginBottom', 'marginLeft', 'zIndex', 'opacity', 'transform', 'perspective',
-  'listStyleType', 'listItemSpacing', 'src', 'objectFit', 'href', 'target',
+  'listStyleType', 'listItemSpacing', 'src', 'objectFit', 'appearance', 'href', 'target',
   'onclick', 'color', 'fontFamily', 'fontSize', 'fontWeight', 'fontStyle',
   'textAlign', 'verticalAlign', 'lineHeight', 'letterSpacing', 'wordSpacing',
   'whiteSpace', 'wordWrap', 'textOverflow', 'overflow', 'textShadow',

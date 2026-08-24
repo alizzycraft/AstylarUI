@@ -32,7 +32,9 @@ version and describe only its tested utility subset.
 | 1 | The public workflow and owning architecture are decided before behavior changes. | Documentation and diff checks | `76b52d6` |
 | 2 | Opt-in configuration is additive, and inspectable CSS is discovered in order while inaccessible sheets remain bounded diagnostics. | 16/16 focused provider/discovery tests; library build | `8b4bc20` |
 | 3 | Browser CSS resolution produces typed per-element normal/state records at the surface viewport without importing unrelated UA defaults. | 4/4 resolver tests: layers, variables, calc, modern colors, responsive, escaped classes, state variants, filtering, caching | `491f76d` |
-| 4 | Loaded CSS participates in the existing cascade and box model, stylesheet changes reflow once, unrelated DOM changes do not invalidate, and disposal releases the resolver document. | 46/46 focused style, dimension, source, resolver, and mounted WebGL integration tests | This increment |
+| 4 | Loaded CSS participates in the existing cascade and box model, stylesheet changes reflow once, unrelated DOM changes do not invalidate, and disposal releases the resolver document. | 46/46 focused style, dimension, source, resolver, and mounted WebGL integration tests | `ab12f41` |
+| 5 | A packed Angular consumer uses the official Tailwind 4.3.3 PostCSS setup, static ordinary class strings, responsive utilities, two isolated surfaces, repeated updates, and disposal without equivalent `StyleRule[]` for the Tailwind region. | 3/3 packed-consumer browser checks; consumer production build | `87c6068` |
+| 6 | The paired native/Astylar benchmark consumes one generated Tailwind stylesheet at DPR 1 and 2; iframe controls retain their real state; `appearance-none` reaches owned controls; loaded and explicit styles agree within parity tolerance. | 17/17 resolver/control tests; 3/3 mounted integration tests; 8 benchmark renders, minimum SSIM `0.9625`, 100% edges within 2 px, maximum edge error `1.9833px`, exact text, clean runtime | This increment |
 
 ## Required final evidence
 
@@ -44,5 +46,6 @@ or report-only run is not final acceptance.
 ## Current limitations
 
 The loaded-style path currently translates the supported Astylar style surface.
-Non-uniform border paint, separate `:focus-visible` modality, and the maintained
-Tailwind application/benchmark remain to be completed and evidenced.
+Non-uniform border paint and separate `:focus-visible` modality remain bounded
+limitations. The maintained Tailwind application and focused benchmark are now
+present; the complete unfiltered release matrix remains to be recorded.
