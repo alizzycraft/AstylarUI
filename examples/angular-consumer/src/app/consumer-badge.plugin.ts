@@ -149,7 +149,7 @@ class ConsumerBadgeRenderer implements AstylarPluginElementRenderer {
       // Keep the synthetic resource pending long enough for the browser
       // acceptance test to replace its revision deterministically, even when
       // the host is under build or shader-compilation load.
-      const timer = window.setTimeout(finish, 250);
+      const timer = window.setTimeout(finish, revision >= 5 ? 1200 : 250);
       const abort = () => {
         window.clearTimeout(timer);
         this.state.asyncCancelled.update((count) => count + 1);

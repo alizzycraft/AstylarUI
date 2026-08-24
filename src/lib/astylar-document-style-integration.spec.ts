@@ -69,6 +69,33 @@ describe('loaded document style surface integration', () => {
 
     expect(document.querySelectorAll('[data-astylar-style-resolver]').length).toBe(0);
   });
+
+  it('carries an escaped arbitrary width through loaded CSS and flex layout', async () => {
+    style.textContent = `
+      .utility-parent { display: flex; flex-direction: row; width: 600px; }
+      .w-\\[13rem\\] { width: 13rem; min-width: 0; max-width: 100%; }
+    `;
+    const astylar = TestBed.inject(Astylar);
+    const surface = astylar.mount(canvas, {
+      styles: [],
+      root: {
+        children: [{
+          type: 'section', id: 'utility-parent', class: 'utility-parent', children: [{
+            type: 'div', id: 'arbitrary-width', class: 'w-[13rem]', children: [],
+          }],
+        }],
+      },
+    }, { diagnostics: { logLevel: 'silent' } });
+
+    try {
+      await surface.whenSettled();
+      const inspection = astylar[ASTYLAR_INTERNAL_INSPECTION](surface.scene)!;
+      expect(inspection.elementManager.elementDimensionsMap.get('arbitrary-width')?.width)
+        .toBeCloseTo(208, 0);
+    } finally {
+      surface.dispose();
+    }
+  });
 });
 
 function site(): SiteData {

@@ -349,6 +349,28 @@ export class AstylarDocumentStyleResolver {
         });
         return;
       }
+    } else if (property === 'scale') {
+      const parts = value.trim().split(/\s+/);
+      if (value === 'none') return;
+      if (parts.length > 1 && parts.some((part) => part !== parts[0])) {
+        this.diagnostics.report({
+          code: 'document-css-value-unsupported',
+          severity: 'warning',
+          message: `Computed individual scale ${JSON.stringify(value)} is not uniform and cannot be translated safely.`,
+          elementId: element.id,
+          property,
+          value,
+        });
+        return;
+      }
+      translated = `scale(${parts[0]})`;
+    } else if (property === 'rotate') {
+      if (value === 'none') return;
+      translated = `rotate(${value})`;
+    } else if (property === 'translate') {
+      if (value === 'none') return;
+      const [x, y = '0px'] = value.trim().split(/\s+/);
+      translated = `translate(${x}, ${y})`;
     }
     if (property === 'background-color') {
       if (output.background === undefined) output.background = translated;
@@ -356,6 +378,12 @@ export class AstylarDocumentStyleResolver {
     }
     if (property === 'background-image') {
       output.background = translated;
+      return;
+    }
+    if (property === 'scale' || property === 'rotate' || property === 'translate') {
+      output.transform = output.transform && output.transform !== 'none'
+        ? `${output.transform} ${translated}`
+        : translated;
       return;
     }
     (output as unknown as Record<string, unknown>)[key] = translated;
@@ -395,6 +423,7 @@ const COMPUTED_TO_ASTYLAR = new Map<string, keyof StyleRule>([
   ['padding-bottom', 'paddingBottom'], ['padding-left', 'paddingLeft'], ['margin-top', 'marginTop'],
   ['margin-right', 'marginRight'], ['margin-bottom', 'marginBottom'], ['margin-left', 'marginLeft'],
   ['z-index', 'zIndex'], ['opacity', 'opacity'], ['transform', 'transform'],
+  ['translate', 'transform'], ['rotate', 'transform'], ['scale', 'transform'],
   ['list-style-type', 'listStyleType'], ['object-fit', 'objectFit'], ['color', 'color'],
   ['font-family', 'fontFamily'], ['font-size', 'fontSize'], ['font-weight', 'fontWeight'],
   ['font-style', 'fontStyle'], ['text-align', 'textAlign'], ['vertical-align', 'verticalAlign'],
@@ -431,6 +460,20 @@ function createPropertyFamilies(): ReadonlyMap<string, readonly string[]> {
   map.set('border-radius', ['border-top-left-radius']);
   map.set('padding', ['padding-top', 'padding-right', 'padding-bottom', 'padding-left']);
   map.set('margin', ['margin-top', 'margin-right', 'margin-bottom', 'margin-left']);
+  map.set('padding-inline', ['padding-left', 'padding-right']);
+  map.set('padding-inline-start', ['padding-left']);
+  map.set('padding-inline-end', ['padding-right']);
+  map.set('padding-block', ['padding-top', 'padding-bottom']);
+  map.set('padding-block-start', ['padding-top']);
+  map.set('padding-block-end', ['padding-bottom']);
+  map.set('margin-inline', ['margin-left', 'margin-right']);
+  map.set('margin-inline-start', ['margin-left']);
+  map.set('margin-inline-end', ['margin-right']);
+  map.set('margin-block', ['margin-top', 'margin-bottom']);
+  map.set('margin-block-start', ['margin-top']);
+  map.set('margin-block-end', ['margin-bottom']);
+  map.set('overflow-x', ['overflow']);
+  map.set('overflow-y', ['overflow']);
   map.set('gap', ['row-gap', 'column-gap']);
   map.set('flex', ['flex-grow', 'flex-shrink', 'flex-basis']);
   map.set('font', ['font-family', 'font-size', 'font-weight', 'font-style', 'line-height']);

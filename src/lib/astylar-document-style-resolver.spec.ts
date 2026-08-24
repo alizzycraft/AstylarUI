@@ -86,6 +86,36 @@ describe('AstylarDocumentStyleResolver', () => {
     expect(resolved.focus?.color).toBe('rgb(0, 0, 0)');
   });
 
+  it('translates Tailwind logical spacing, axis overflow, and individual transforms', () => {
+    style.textContent = `
+      .utility {
+        padding-inline: 12px;
+        padding-block: 8px;
+        margin-inline-start: 4px;
+        overflow-x: auto;
+        overflow-y: auto;
+      }
+      .w-\\[13rem\\] { width: 13rem; }
+      .active\\:scale-\\[0\\.98\\]:active { scale: 0.98; }
+    `;
+    const element: DOMElement = {
+      type: 'button', id: 'utility', class: 'utility w-[13rem] active:scale-[0.98]', children: [],
+    };
+    const resolved = resolver.resolve(document, site(element), { width: 700, height: 400 })
+      .elements.get(element)!;
+
+    expect(resolved.normal).toEqual(jasmine.objectContaining({
+      paddingTop: '8px',
+      paddingRight: '12px',
+      paddingBottom: '8px',
+      paddingLeft: '12px',
+      marginLeft: '4px',
+      overflow: 'auto',
+      width: '208px',
+    }));
+    expect(resolved.active?.transform).toBe('scale(0.98)');
+  });
+
   it('keeps browser defaults out while retaining explicit declarations equal to them', () => {
     style.textContent = '.explicit { display: inline; color: rgb(0, 0, 0); }';
     const explicit: DOMElement = { type: 'span', id: 'explicit', class: 'explicit', children: [] };
