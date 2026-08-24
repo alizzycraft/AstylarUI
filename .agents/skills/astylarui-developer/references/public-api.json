@@ -53,6 +53,10 @@
       "kind": "type"
     },
     {
+      "name": "AstylarCssOptions",
+      "kind": "type"
+    },
+    {
       "name": "AstylarDiagnostic",
       "kind": "type"
     },

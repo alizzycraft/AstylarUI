@@ -16,7 +16,9 @@ const selectClass = 'tw:m-0 tw:h-11 tw:w-full tw:appearance-none tw:rounded-lg t
 const checkLabelClass = 'tw:inline-flex tw:h-11 tw:w-full tw:items-center tw:gap-2 tw:text-sm tw:text-slate-200';
 const checkClass = 'tw:m-0 tw:h-4 tw:w-4 tw:rounded tw:bg-blue-500';
 const disabledClass = 'tw:m-0 tw:h-11 tw:w-full tw:rounded-lg tw:bg-slate-600 tw:px-4 tw:py-2 tw:text-center tw:text-sm tw:font-bold tw:text-slate-300';
-const scrollClass = 'tw:h-16 tw:w-full tw:overflow-auto tw:rounded-lg tw:border tw:border-slate-700 tw:bg-slate-800 tw:p-2 tw:text-xs tw:text-slate-300';
+const scrollClass = 'tw:h-16 tw:w-full tw:overflow-auto tw:rounded-lg tw:bg-slate-800 tw:p-0 tw:text-xs tw:text-slate-300 tw:shadow-inner';
+const scrollContentClass = 'tw:h-[120px] tw:w-full tw:p-2';
+const scrollLineClass = 'tw:m-0 tw:h-5 tw:leading-5';
 
 const createSiteData = (revision: number): SiteData => ({
   styles: [{ selector: 'root', background: '#e2e8f0', fontFamily: 'Arial, sans-serif' }],
@@ -57,12 +59,15 @@ const createSiteData = (revision: number): SiteData => ({
                 { type: 'div', id: 'tailwind-parity-disabled', textContent: 'Disabled', class: disabledClass },
                 {
                   type: 'div', id: 'tailwind-parity-scroll', class: scrollClass,
-                  children: Array.from({ length: 6 }, (_, index) => ({
-                    type: 'p' as const,
-                    id: `tailwind-parity-line-${index + 1}`,
-                    class: index < 5 ? 'tw:mb-2' : 'tw:m-0',
-                    textContent: `Line ${index + 1}`,
-                  })),
+                  children: [{
+                    type: 'div', id: 'tailwind-parity-scroll-content', class: scrollContentClass,
+                    children: Array.from({ length: 6 }, (_, index) => ({
+                      type: 'p' as const,
+                      id: `tailwind-parity-line-${index + 1}`,
+                      class: scrollLineClass,
+                      textContent: `Line ${index + 1}`,
+                    })),
+                  }],
                 },
               ],
             },
@@ -86,8 +91,11 @@ export const tailwindLoadedUtilitiesFixture: ParityFixture = {
     'tailwind-parity-kicker', 'tailwind-parity-description', 'tailwind-parity-controls',
     'tailwind-parity-action', 'tailwind-parity-input', 'tailwind-parity-select',
     'tailwind-parity-check-label', 'tailwind-parity-check', 'tailwind-parity-disabled',
-    'tailwind-parity-scroll', 'tailwind-parity-line-6',
+    'tailwind-parity-scroll', 'tailwind-parity-scroll-content', 'tailwind-parity-line-6',
   ],
+  scrollIds: ['tailwind-parity-scroll'],
+  scrollStateTolerancePx: 2.1,
+  sharpnessIds: ['tailwind-parity-title', 'tailwind-parity-action'],
   enforcedStyleProperties: {
     'tailwind-parity-root': ['display', 'flexDirection', 'width', 'height', 'backgroundColor'],
     'tailwind-parity-content': ['display', 'flexDirection', 'gap', 'width', 'height'],
@@ -107,6 +115,8 @@ export const tailwindLoadedUtilitiesFixture: ParityFixture = {
     { id: 'hold-action', actions: [{ type: 'pointer-down', elementId: 'tailwind-parity-action' }] },
     { id: 'release-action', actions: [{ type: 'pointer-up' }] },
     { id: 'focus-input', actions: [{ type: 'press-key', key: 'Tab' }] },
+    { id: 'scroll-content', actions: [{ type: 'wheel', elementId: 'tailwind-parity-scroll', deltaY: 40 }] },
+    { id: 'reach-scroll-end', actions: [{ type: 'wheel', elementId: 'tailwind-parity-scroll', deltaY: 500 }] },
     { id: 'update-revision', actions: [{ type: 'apply-update', stepIndex: 0 }] },
   ],
   reference: {
@@ -128,7 +138,7 @@ export const tailwindLoadedUtilitiesFixture: ParityFixture = {
             <div id="tailwind-parity-check-label" class="${checkLabelClass}"><span id="tailwind-parity-check" class="${checkClass}"></span><span id="tailwind-parity-check-copy">Checked</span></div>
             <div id="tailwind-parity-disabled" class="${disabledClass}">Disabled</div>
             <div id="tailwind-parity-scroll" class="${scrollClass}">
-              <p id="tailwind-parity-line-1" class="tw:mb-2">Line 1</p><p id="tailwind-parity-line-2" class="tw:mb-2">Line 2</p><p id="tailwind-parity-line-3" class="tw:mb-2">Line 3</p><p id="tailwind-parity-line-4" class="tw:mb-2">Line 4</p><p id="tailwind-parity-line-5" class="tw:mb-2">Line 5</p><p id="tailwind-parity-line-6" class="tw:m-0">Line 6</p>
+              <div id="tailwind-parity-scroll-content" class="${scrollContentClass}"><p id="tailwind-parity-line-1" class="${scrollLineClass}">Line 1</p><p id="tailwind-parity-line-2" class="${scrollLineClass}">Line 2</p><p id="tailwind-parity-line-3" class="${scrollLineClass}">Line 3</p><p id="tailwind-parity-line-4" class="${scrollLineClass}">Line 4</p><p id="tailwind-parity-line-5" class="${scrollLineClass}">Line 5</p><p id="tailwind-parity-line-6" class="${scrollLineClass}">Line 6</p></div>
             </div>
           </div>
         </main>

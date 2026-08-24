@@ -29,6 +29,32 @@ An additional package-boundary test prepares legacy data and renders an
 incompatible-version placeholder with aggregate diagnostics. Registration is
 side-effect free during SSR and prerendering.
 
+## Loaded Tailwind proof
+
+The consumer pins Tailwind `4.3.3` and `@tailwindcss/postcss` `4.3.3`, uses the
+official PostCSS plugin in `.postcssrc.json`, and imports Tailwind as ordinary
+global CSS with `@import "tailwindcss"` in `src/styles.css`. Angular enables the
+feature once with `provideAstylar({ css: { useDocumentStyles: true } })`.
+There is no Astylar CSS compiler call, stylesheet registration, source name, or
+Tailwind-specific runtime API.
+
+The proof authors complete static utility strings in `DOMElement.class` and
+does not duplicate its Tailwind region as equivalent `StyleRule[]`. It covers
+block/inline presentation, Flexbox, Grid, fixed/min/max sizing, spacing and gap,
+typography, colors, borders, radii, shadows and rings, `md:` responsive rules,
+`hover:`, `active:`, and `focus:` states, disabled and checked controls,
+input/select presentation, overflow, an arbitrary `13rem` value, and
+custom-property-composed color, transform, shadow, and ring output. Browser
+acceptance exercises two independent surfaces, responsive resizing, repeated
+updates, independent disposal, and final cleanup.
+
+This is an exact tested subset, not a claim that all Tailwind or CSS is
+supported. Tailwind must be able to discover complete class names in source;
+runtime construction from partial class fragments is outside this proof.
+Loaded CSS still resolves only to Astylar's supported final typed properties and
+values, and deliberate `SiteData.styles`/inline declarations keep higher
+precedence.
+
 Run it through the repository-level check:
 
 ```sh

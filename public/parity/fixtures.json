@@ -1133,7 +1133,9 @@
     "category": "composed-application",
     "expectedBehavior": "The browser and Astylar consume the same prefixed Tailwind 4.3.3 utility output, including escaped classes, browser-resolved values, responsive variants, controls, states, and overflow.",
     "viewportIds": ["desktop", "tailwind-retina"],
+    "sharpnessIds": ["tailwind-parity-title", "tailwind-parity-action"],
+    "scrollStateTolerancePx": 2.1,
     "dynamicStepCount": 1,
-    "interactionStepCount": 5
+    "interactionStepCount": 7
   }
 ]

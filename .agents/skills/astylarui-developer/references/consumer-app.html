@@ -18,6 +18,25 @@
     </div>
   </header>
 
+  <section class="native-tailwind-reference" aria-labelledby="native-tailwind-title">
+    <p class="eyebrow">Browser reference using the same generated CSS</p>
+    <div class="flex flex-col gap-4 rounded-xl bg-slate-900 p-5 text-slate-100 shadow-lg md:flex-row">
+      <div class="block w-[13rem] min-w-0 max-w-full">
+        <p class="mb-1 text-xs font-bold uppercase tracking-widest text-blue-300">Loaded global CSS</p>
+        <h2 id="native-tailwind-title" class="m-0 text-xl font-semibold leading-7 text-white">Tailwind revision {{ revision() }}</h2>
+        <p class="mt-2 text-sm leading-5 text-slate-300">The browser and Astylar consume the same generated utility rules.</p>
+      </div>
+      <div class="grid min-w-0 flex-1 grid-cols-2 gap-3 md:grid-cols-3">
+        <button type="button" class="rounded-lg border border-blue-400 bg-blue-600 px-4 py-2 text-sm font-bold text-white shadow-md hover:bg-blue-500 active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-blue-300 disabled:bg-slate-600">Preview</button>
+        <input class="rounded-lg border border-slate-600 bg-slate-800 px-3 py-2 text-sm text-white focus:border-blue-400" placeholder="Utility input">
+        <select class="rounded-lg border border-slate-600 bg-slate-800 px-3 py-2 text-sm text-white"><option>Ready</option><option>Review</option></select>
+        <label class="inline-flex items-center gap-2 text-sm text-slate-200"><input type="checkbox" checked class="h-4 w-4 opacity-80 checked:opacity-100"><span>Checked</span></label>
+        <button type="button" disabled class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-bold text-white disabled:bg-slate-600 disabled:text-slate-300">Disabled</button>
+        <div class="max-h-20 overflow-auto rounded-lg border border-slate-700 bg-slate-800 p-2 text-xs text-slate-300"><p class="mb-2">Scrollable line one</p><p class="mb-2">Scrollable line two</p><p>Scrollable line three</p></div>
+      </div>
+    </div>
+  </section>
+
   <div class="surface-grid">
     @if (primaryVisible()) {
       <section class="surface-card" aria-labelledby="primary-surface-title">

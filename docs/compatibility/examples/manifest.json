@@ -134,6 +134,25 @@
       "evidence": ["file:src/parity/fixtures/image-intrinsic-size.fixture.ts", "file:src/app/services/dom/elements/image-resource.service.ts"]
     },
     {
+      "id": "loaded-global-tailwind",
+      "topic": "loaded-global-css",
+      "title": "Ordinary generated Tailwind utilities loaded from Angular global CSS",
+      "classification": "different",
+      "fixtureId": "tailwind-loaded-utilities",
+      "fixtureSource": "src/parity/fixtures/tailwind-loaded-utilities.fixture.ts",
+      "sourceFields": ["reference.html", "reference.css", "siteData.root", "siteData.styles", "interactionSteps"],
+      "directMappings": [
+        "Generated Tailwind CSS remains an ordinary Angular global stylesheet and DOMElement.class uses normal static class strings.",
+        "Supported utility results for layout, spacing, typography, paint, responsive variants, states, controls, and overflow enter the existing typed renderer pipeline."
+      ],
+      "importantDifferences": [
+        "Applications enable document stylesheet discovery once with provideAstylar({ css: { useDocumentStyles: true } }); no compiler call or stylesheet registration is added to SiteData.",
+        "Only inspectable applicable CSS and supported final Astylar properties transfer. Tailwind must be able to discover complete static class names; dynamically assembled partial class names are outside this proof.",
+        "Loaded styles sit below SiteData.styles and DOMElement.style in the Astylar cascade, so typed rules remain deliberate overrides."
+      ],
+      "evidence": ["file:src/parity/fixtures/tailwind-loaded-utilities.fixture.ts", "file:docs/document-styles.md", "file:examples/angular-consumer/src/styles.css", "file:examples/angular-consumer/src/app/app.browser.spec.ts"]
+    },
+    {
       "id": "scene-backed-card",
       "topic": "three-dimensional-output",
       "title": "A web-authored card inside an owned Babylon scene",

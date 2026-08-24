@@ -57,7 +57,47 @@ The `mounted` output provides the owned `AstylarSurface` handle when explicit
 control is useful. It exposes `update()`, `resize()`, `whenSettled()`,
 `diagnostics`, and idempotent `dispose()`.
 
-### 2. Direct lifecycle API
+### 2. Loaded global CSS and Tailwind
+
+Applications can keep ordinary inspectable global CSS—including generated
+Tailwind CSS—and use normal static class strings in `DOMElement.class`. Enable
+the bridge once in Angular configuration:
+
+```typescript
+import { provideAstylar } from 'astylarui';
+
+export const appConfig = {
+  providers: [provideAstylar({ css: { useDocumentStyles: true } })],
+};
+```
+
+For Tailwind 4, use its normal global entry point and official PostCSS plugin:
+
+```css
+@import "tailwindcss";
+```
+
+```typescript
+const siteData: SiteData = {
+  root: {
+    children: [{
+      type: 'section',
+      class: 'flex gap-4 rounded-lg bg-slate-900 p-5 text-white md:flex-row',
+      children: [{ type: 'h2', class: 'text-xl font-bold', textContent: 'Card' }],
+    }],
+  },
+};
+```
+
+The browser resolves applicable rules, media queries, custom properties,
+`var()`, `calc()`, and generated compositions at each surface viewport; Astylar
+then accepts only its supported final typed properties and values. Precedence is
+defaults, loaded document styles, `SiteData.styles`, then inline
+`DOMElement.style`. No stylesheet compiler call, source name, or CSS field is
+added to `SiteData`. See [loaded document styles](docs/document-styles.md) for
+the exact subset, diagnostics, lifecycle, and Tailwind limits.
+
+### 3. Direct lifecycle API
 
 Hosts that own their own canvas can inject `Astylar` and mount explicitly after
 the canvas exists:
@@ -88,7 +128,7 @@ speech editing, deterministic mock generation, secure server-side OpenAI speech,
 owned browser audio, session history, accessibility semantics, and private
 application-level component builders without crossing the package boundary.
 
-### 3. Angular-native plugins
+### 4. Angular-native plugins
 
 Angular 20 is an intentional foundation of Astylar's plugin ecosystem. Register
 immutable plugin definitions through the application provider API; injectable
@@ -148,7 +188,7 @@ web-compatible subset rather than a complete browser implementation.
 
 Use the human [HTML/CSS translation contract](docs/compatibility/html-css.md),
 the checked [machine-readable capability catalog](docs/compatibility/capabilities.json),
-and the ten [paired web/Astylar examples](docs/compatibility/examples/README.md)
+and the eleven [paired web/Astylar examples](docs/compatibility/examples/README.md)
 before assuming an untested browser feature transfers. Run
 `npm run capabilities:check` and `npm run examples:check` when changing the
 public authoring surface.
@@ -187,7 +227,7 @@ errors only in production. Validation covers malformed roots, invalid element
 types, duplicate IDs, and unknown style properties; runtime diagnostics cover
 asset failures and invalid surface/canvas lifecycle operations.
 
-### 4. Typed application events
+### 5. Typed application events
 
 Keep executable handlers outside serializable `SiteData` and address elements by their authored IDs:
 

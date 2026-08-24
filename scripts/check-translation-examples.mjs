@@ -27,7 +27,7 @@ const parityIndex = fs.readFileSync(
 const requiredTopics = new Set([
   'semantic-structure', 'box-model', 'responsive-layout', 'typography',
   'forms', 'modal-stacking', 'async-images', 'three-dimensional-output',
-  'unsupported-web-feature', 'plugin-capability',
+  'unsupported-web-feature', 'plugin-capability', 'loaded-global-css',
 ]);
 
 function exists(relativePath) {
@@ -68,8 +68,8 @@ function verifySiteData(example, siteData) {
 if (examples.schema !== 'astylarui-translation-examples' || examples.version !== 1) {
   failures.push('Translation manifest must use astylarui-translation-examples v1.');
 }
-if (!Array.isArray(examples.examples) || examples.examples.length < 6 || examples.examples.length > 10) {
-  failures.push('Translation manifest must contain six to ten examples.');
+if (!Array.isArray(examples.examples) || examples.examples.length < 6 || examples.examples.length > 12) {
+  failures.push('Translation manifest must contain six to twelve examples.');
 }
 
 const ids = new Set();

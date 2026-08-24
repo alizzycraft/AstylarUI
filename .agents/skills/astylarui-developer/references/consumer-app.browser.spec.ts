@@ -3,6 +3,7 @@ import { By } from '@angular/platform-browser';
 import {
   Astylar,
   AstylarSurfaceComponent,
+  provideAstylar,
   type AstylarSurface,
   type SiteData,
 } from 'astylarui';
@@ -15,7 +16,7 @@ describe('external AstylarUI browser acceptance', () => {
       providers: [provideConsumerBadgePlugin({
         marker: 'packed-angular-consumer',
         minimumDepth: 0.06,
-      })],
+      }), provideAstylar({ css: { useDocumentStyles: true } })],
     }).compileComponents();
     const astylar = TestBed.inject(Astylar);
     const legacy: SiteData = {
@@ -101,7 +102,7 @@ describe('external AstylarUI browser acceptance', () => {
       providers: [provideConsumerBadgePlugin({
         marker: 'packed-angular-consumer',
         minimumDepth: 0.06,
-      })],
+      }), provideAstylar({ css: { useDocumentStyles: true } })],
     }).compileComponents();
     const fixture = TestBed.createComponent(App);
     const handles = fixture.componentInstance as unknown as {
@@ -147,8 +148,22 @@ describe('external AstylarUI browser acceptance', () => {
       const secondary = surface(fixture.nativeElement, 'secondary');
       expect(primary.querySelector('[data-astylar-id="workspace"]')).toBeTruthy();
       expect(secondary.querySelector('[data-astylar-id="workspace"]')).toBeTruthy();
+      expect(primary.querySelector('[data-astylar-id="tailwind-title"]')?.textContent)
+        .toBe('Tailwind revision 1');
       expect(primary.querySelector('[data-astylar-id="add-item"]')?.textContent).toBe('Add item');
       expect(primary.querySelector('[data-astylar-id="item-one-action"]')?.textContent).toBe('Inspect');
+      expect(meshBackgroundHex(handles.primarySurface!, 'tailwind-matrix')).toBe('#0F172B');
+      const nativeArbitraryWidth = fixture.nativeElement.querySelector(
+        '.native-tailwind-reference [class*="w-[13rem]"]',
+      ) as HTMLElement;
+      expect(getComputedStyle(nativeArbitraryWidth).width).toBe('208px');
+      expect(handles.primarySurface?.diagnostics.messages.some((message) =>
+        message.code === 'document-css-declaration-unsupported' &&
+        (message.selector?.includes('.px-3') ||
+          message.selector?.includes('.py-2') ||
+          message.selector?.includes('.overflow-auto') ||
+          message.selector?.includes('scale-')),
+      )).withContext('supported Tailwind utilities must not be diagnosed as unsupported').toBeFalse();
       const initialPrimaryBadge = mesh(handles.primarySurface!, 'plugin-badge');
       const initialSecondaryBadge = mesh(handles.secondarySurface!, 'plugin-badge');
       expect(initialPrimaryBadge.metadata).toEqual(jasmine.objectContaining({
@@ -174,6 +189,11 @@ describe('external AstylarUI browser acceptance', () => {
       primaryHost.style.width = '900px';
       await handles.primarySurface!.resize();
       const desktopSidebarWidth = meshWidth(handles.primarySurface!, 'sidebar');
+      expect(meshCssWidth(handles.primarySurface!, 'tailwind-copy')).toBeCloseTo(208, 0);
+      const desktopTailwindDelta = meshAxisDelta(
+        handles.primarySurface!, 'tailwind-copy', 'tailwind-controls',
+      );
+      expect(desktopTailwindDelta.x).toBeGreaterThan(desktopTailwindDelta.y);
       const desktopSummaryDelta = meshYDelta(
         handles.primarySurface!,
         'summary-total',
@@ -183,6 +203,10 @@ describe('external AstylarUI browser acceptance', () => {
       primaryHost.style.width = '650px';
       await handles.primarySurface!.resize();
       expect(meshWidth(handles.primarySurface!, 'sidebar')).toBeLessThan(desktopSidebarWidth);
+      const narrowTailwindDelta = meshAxisDelta(
+        handles.primarySurface!, 'tailwind-copy', 'tailwind-controls',
+      );
+      expect(narrowTailwindDelta.y).toBeGreaterThan(narrowTailwindDelta.x);
 
       primaryHost.style.width = '480px';
       await handles.primarySurface!.resize();
@@ -283,14 +307,15 @@ describe('external AstylarUI browser acceptance', () => {
       await waitFor(() => {
         fixture.detectChanges();
         return text(fixture.nativeElement, 'primary-revision').includes('6') &&
-          mesh(handles.primarySurface!, 'plugin-badge').metadata.astylarPluginReadyRevision === 6;
+          mesh(handles.primarySurface!, 'plugin-badge').metadata.astylarPluginReadyRevision === 6 &&
+          mesh(handles.primarySurface!, 'plugin-badge').metadata.astylarPluginAsyncCancelledCount > 0;
       }, 'stale delayed plugin cancellation');
       expect(mesh(handles.primarySurface!, 'plugin-badge').metadata.astylarPluginAsyncCancelledCount)
         .toBeGreaterThan(0);
       expect(handles.primarySurface?.diagnostics.pluginResources.pending).toBe(0);
 
       const lastAction = surface(fixture.nativeElement, 'primary')
-        .querySelector('[data-astylar-id="item-two-action"]') as HTMLButtonElement;
+        .querySelector('[data-astylar-id="item-four-action"]') as HTMLButtonElement;
       lastAction.focus();
       await waitFor(
         () => (handles.primarySurface?.diagnostics.scrolling
@@ -444,8 +469,34 @@ function meshWidth(surfaceHandle: AstylarSurface, elementId: string): number {
   return meshBounds(surfaceHandle, elementId).extendSizeWorld.x * 2;
 }
 
+function meshLocalWidth(surfaceHandle: AstylarSurface, elementId: string): number {
+  return mesh(surfaceHandle, elementId).getBoundingInfo().boundingBox.extendSize.x * 2;
+}
+
+function meshCssWidth(surfaceHandle: AstylarSurface, elementId: string): number {
+  const canvas = surfaceHandle.scene.getEngine().getRenderingCanvas();
+  if (!canvas || canvas.clientWidth <= 0) throw new Error('Surface canvas has no CSS width.');
+  const root = surfaceHandle.scene.getMeshByName('root-body');
+  if (!root) throw new Error('Surface root mesh is unavailable.');
+  const rootScale = root.getBoundingInfo().boundingBox.extendSize.x * 2 / canvas.clientWidth;
+  return meshLocalWidth(surfaceHandle, elementId) / rootScale;
+}
+
 function meshYDelta(surfaceHandle: AstylarSurface, firstId: string, secondId: string): number {
   return Math.abs(meshCenter(surfaceHandle, firstId).y - meshCenter(surfaceHandle, secondId).y);
+}
+
+function meshAxisDelta(surfaceHandle: AstylarSurface, firstId: string, secondId: string) {
+  const first = meshCenter(surfaceHandle, firstId);
+  const second = meshCenter(surfaceHandle, secondId);
+  return { x: Math.abs(first.x - second.x), y: Math.abs(first.y - second.y) };
+}
+
+function meshBackgroundHex(surfaceHandle: AstylarSurface, elementId: string): string | undefined {
+  const material = mesh(surfaceHandle, elementId).material as {
+    diffuseColor?: { toHexString(): string };
+  } | null;
+  return material?.diffuseColor?.toHexString();
 }
 
 async function waitForStableResources(surfaceHandle: AstylarSurface) {

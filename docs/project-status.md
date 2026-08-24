@@ -9,6 +9,22 @@ mistaken for active work.
 
 ## Current milestone
 
+Phase 22 adds an additive, opt-in loaded document-style bridge. Angular
+applications can keep ordinary inspectable global CSS—including generated
+Tailwind CSS—and use static class strings in `DOMElement.class` after enabling
+`provideAstylar({ css: { useDocumentStyles: true } })`. Each surface discovers
+applicable CSSOM sources, resolves them in a surface-sized browser document, and
+feeds supported final values through the existing typed cascade and renderer.
+`SiteData.styles` and inline styles remain higher-priority authored overrides.
+
+The maintained packed consumer pins Tailwind 4.3.3 with its official PostCSS
+plugin and proves responsive utilities, states, controls, arbitrary values,
+custom-property compositions, two-surface isolation, updates, and disposal.
+The paired `tailwind-loaded-utilities` benchmark runs at DPR 1 and 2. The exact
+architecture, supported subset, diagnostics, and limitations are documented in
+`docs/document-styles.md`; final Phase 22 release totals are recorded in
+`docs/parity/scorecard-v22.md`.
+
 The complete `more-html` line is the AstylarUI `0.2.0` release candidate. It
 advances the package and runtime compatibility version together and synchronizes
 the public capability catalog, packed consumer, plugin examples, and bundled
@@ -283,11 +299,13 @@ is:
 | --- | --- | --- |
 | `compatibility/html-css.md` | Current | Human HTML/CSS-to-Astylar translation contract |
 | `compatibility/capabilities.json` | Current and checked | Machine-readable capability/evidence source |
-| `compatibility/examples/manifest.json` | Current and checked | Ten developer-skill paired translations |
+| `compatibility/examples/manifest.json` | Current and checked | Eleven developer-skill paired translations |
+| `document-styles.md` | Current | Opt-in loaded global CSS and Tailwind workflow, architecture, and limits |
 | `plugins.md` | Current | Public Angular-native plugin API and authoring guide |
 | `../.agents/skills/astylarui-developer/SKILL.md` | Current and checked | Phase 15 application-development agent workflow |
 | `../.agents/skills/astylarui-maintainer/SKILL.md` | Current and checked | Phase 16 AstylarUI core-maintenance workflow |
 | `parity/scorecard-v21.md` | Complete/current | TTS application interaction parity and post-completion hardening |
+| `parity/scorecard-v22.md` | Current | Loaded global CSS/Tailwind implementation and release evidence |
 | `parity/scorecard-v20.md` | Complete | Interactive visual-state and selection evidence |
 | `parity/scorecard-v19.md` | Complete | Enforced TTS application parity evidence |
 | `parity/scorecard-v18.md` | Complete | Reference-driven application measurement infrastructure |
@@ -306,7 +324,8 @@ is:
 
 The maintained platform does not add framework-neutral adapters, replace Angular
 DI, add dynamic plugin discovery/installation, marketplaces, hot loading,
-permissions, sandboxing, a generic CSS engine, dirty-subtree rendering, a Babylon
+permissions, sandboxing, a general CSS engine beyond the bounded loaded-style
+bridge, dirty-subtree rendering, a Babylon
 abstraction, or a Babylon.js major upgrade. Registered media-like identities do
 not imply native browser playback/embed behavior. Future rendering changes must
 remain general, measured, reflected in the checked capability contract, and

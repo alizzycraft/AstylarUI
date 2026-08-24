@@ -41,8 +41,12 @@ Investigate in this order:
 ## Common application causes
 
 - Relying on Chromium defaults instead of authoring explicit matching styles.
-- Using CSS syntax (`@media`, kebab-case properties, `var()`, `calc()`, a full
-  shorthand, or an unsupported selector) where Astylar expects structured JSON.
+- Using CSS syntax (`@media`, kebab-case properties, `var()`, `calc()`, or a
+  full shorthand) in direct typed rules, or expecting loaded CSS to translate
+  an unsupported selector or final property/value.
+- Enabling loaded document styles while the needed sheet is inaccessible,
+  overlooking stylesheet diagnostics, or dynamically constructing Tailwind
+  class fragments that its source scanner cannot discover.
 - Mutating an existing `SiteData` object so Angular sees no new input identity.
 - Recreating IDs or changing element/input kinds on every update.
 - Giving the canvas host no height.

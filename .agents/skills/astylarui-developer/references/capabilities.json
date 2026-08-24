@@ -13,7 +13,7 @@
   "queryRules": {
     "elements": "Find the name in elements.groups. A name absent there is not a built-in element; consult unsupported.elements and pluginExtensionPoints.",
     "domFields": "Find the field in domFields.groups. SiteData is JSON-like data, not a live browser Node tree.",
-    "styleProperties": "Find the camelCase field in styleProperties.groups. Author stylesheet rules in SiteData.styles and inline declarations in DOMElement.style.",
+    "styleProperties": "Find the camelCase field in styleProperties.groups. Author typed rules in SiteData.styles and inline declarations in DOMElement.style, or opt into loaded document styles so supported browser-resolved declarations feed the same typed pipeline.",
     "defaults": "Global and element defaults are authoritative in src/app/config/browser-defaults.ts; fingerprints below force review whenever they change.",
     "proof": "Evidence entries name a parity fixture or a committed executable/source file. Absence of focused evidence must not be upgraded into a support claim."
   },
@@ -244,6 +244,16 @@
         "evidence": ["fixture:image-intrinsic-size", "fixture:image-object-fit-contain", "fixture:reactive-image-source"]
       },
       {
+        "id": "native-control-presentation",
+        "classification": "different",
+        "names": ["appearance"],
+        "values": ["auto", "none"],
+        "inherits": false,
+        "default": "auto",
+        "behavior": "appearance:none suppresses Astylar-owned select and checkbox indicator chrome while preserving control layout, state, semantics, and interaction; it is not a complete native-widget appearance implementation.",
+        "evidence": ["fixture:tailwind-loaded-utilities", "file:src/lib/astylar-document-style-resolver.spec.ts", "file:src/app/services/dom/elements/element-creation.service.ts"]
+      },
+      {
         "id": "legacy-link-style-fields",
         "classification": "different",
         "names": ["href", "target", "onclick"],
@@ -327,8 +337,8 @@
   },
   "selectors": {
     "classification": "compatible",
-    "supported": ["type", "#id", ".class", "*", "descendant", "child", "adjacent-sibling", "general-sibling", "comma-list", ":first-child", ":last-child", ":nth-child", ":hover", ":active", ":focus", "supported control-state and requirement pseudos"],
-    "cascade": "Element defaults, stylesheet specificity/source order, renderer context overrides, then inline style; extensions cascade by canonical identity.",
+    "supported": ["type", "#id", ".class", "*", "descendant", "child", "adjacent-sibling", "general-sibling", "comma-list", ":first-child", ":last-child", ":nth-child", ":hover", ":active", ":focus", ":focus-visible", "supported control-state and requirement pseudos"],
+    "cascade": "Element defaults, opted-in loaded document styles, SiteData.styles specificity/source order, renderer context overrides, then inline style; extensions cascade by canonical identity.",
     "differences": "This is a measured selector subset, not querySelector or a complete Selectors Level 4 engine.",
     "evidence": ["fixture:cascade-specificity", "fixture:descendant-selector", "fixture:structural-pseudo", "fixture:control-state-selectors"]
   },
@@ -339,6 +349,14 @@
       "webConcept": "HTML DOM",
       "astylarPattern": "Serializable SiteData.root.children DOMElement tree plus SiteData.styles.",
       "evidence": ["file:src/app/types/site-data.ts"]
+    },
+    {
+      "id": "loaded-document-styles",
+      "classification": "different",
+      "webConcept": "Ordinary global CSS, including generated Tailwind utility CSS and @media rules",
+      "astylarPattern": "Enable provideAstylar({ css: { useDocumentStyles: true } }) once. Each surface discovers inspectable applicable CSSOM sources, resolves them in a surface-sized browser document, and translates supported final values into the existing typed cascade; DOMElement.class remains an ordinary static class string.",
+      "limitations": "This is a bounded bridge, not a general CSS engine. Cross-origin inaccessible sheets produce diagnostics, dynamic partial Tailwind class construction is not discoverable by Tailwind scanning, and only final properties/values supported by Astylar are rendered.",
+      "evidence": ["fixture:tailwind-loaded-utilities", "file:docs/document-styles.md", "file:examples/angular-consumer/src/styles.css", "file:examples/angular-consumer/src/app/app.browser.spec.ts"]
     },
     {
       "id": "angular-mounting",
@@ -388,11 +406,18 @@
     ],
     "css": [
       {
-        "names": ["animation", "transition", "filter", "backdrop-filter", "clip-path", "mask", "shape-outside", "float", "clear", "columns", "subgrid", "sticky", "writing-mode", "container-queries", "custom-properties", "calc", "var"],
+        "names": ["animation", "transition", "filter", "backdrop-filter", "clip-path", "mask", "shape-outside", "float", "clear", "columns", "subgrid", "sticky", "writing-mode", "container-queries"],
         "classification": "unsupported",
         "recommendedAlternative": "Author deterministic supported layout/paint values, drive state through Angular and AstylarSurface.update(), or use a plugin-owned Babylon capability with explicit lifecycle ownership.",
         "pluginCanSupply": "Some visual/runtime concepts can be supplied by plugins, but plugins do not extend the core CSS parser itself.",
         "evidence": ["file:src/app/types/style-rule.ts"]
+      },
+      {
+        "names": ["custom-properties", "calc", "var"],
+        "classification": "different",
+        "recommendedAlternative": "For direct StyleRule authoring, supply supported resolved final values. With loaded document styles enabled, the browser may resolve custom properties, var(), calc(), modern colors, and generated utility compositions before supported final values enter Astylar's typed pipeline.",
+        "pluginCanSupply": false,
+        "evidence": ["fixture:tailwind-loaded-utilities", "file:docs/document-styles.md", "file:src/lib/astylar-document-style-resolver.spec.ts"]
       }
     ]
   },
@@ -408,9 +433,9 @@
     "authoritativeSources": [
       { "path": "src/lib/astylar-core-capabilities.ts", "sha256": "ab7da6f8fb24ee3370d016f1366b656f2c32e6f1146df19b0a847e9822a7eee0" },
       { "path": "src/app/types/dom-element.ts", "sha256": "dac9ca110f35e6b1451a6edead3b7e82b593a3829d0866b16587017e7a002f49" },
-      { "path": "src/app/types/style-rule.ts", "sha256": "4750f39b24e39fb9a9d0e0908af853d9d405b21691e5406f5b21209683da7c04" },
+      { "path": "src/app/types/style-rule.ts", "sha256": "e5c3e591602b1498a408ba305d226fc6662d402e949664c10e8569bb77b918ff" },
       { "path": "src/app/config/browser-defaults.ts", "sha256": "b80995dc5599df550b9180c313c357c960f27199c6d364f67e778e073116a493" },
-      { "path": "src/app/services/dom/style.service.ts", "sha256": "a81383c44a51d5b458bc6840e4b7c53bcc38dfbce22bf48f710ac96698a881ba" },
+      { "path": "src/app/services/dom/style.service.ts", "sha256": "71898f38173e8c62e268954e04f370332495d1c5c4be034c52e79c75136a3af2" },
       { "path": "src/app/services/dom/elements/element-creation.service.ts", "sha256": "3e56d43004f808300dfb36655e7b0acf1bb972f75d9616afb9c107c70220c4bd" },
       { "path": "src/app/services/text/text-style-parser.service.ts", "sha256": "d3f37b6201818f20d195a5d785a5969f970663e294f088e4d6017661bc148f33" }
     ]
