@@ -12,6 +12,7 @@ export const materialViewports = [
   { id: 'tablet', width: 768, height: 1024, deviceScaleFactor: 1 },
   { id: 'mobile', width: 390, height: 844, deviceScaleFactor: 2 },
 ];
+export const materialComparisonViewport = Object.freeze({ id: 'comparison', width: 609, height: 844, deviceScaleFactor: 1 });
 export const materialThresholds = Object.freeze({
   edgeTolerancePx: 2,
   maximumEdgeErrorPx: 5,
@@ -25,6 +26,7 @@ export const materialTextAlignmentTargets = Object.freeze({
   core: ['core-primary'],
   toolbar: ['toolbar-title', 'toolbar-action'],
   'grid-list': ['grid-tile-one', 'grid-tile-two'],
+  divider: ['divider-above', 'divider-below'],
   button: ['button-primary', 'button-secondary', 'button-disabled'],
   menu: ['menu-primary'],
   'bottom-sheet': ['bottom-sheet-primary'],
@@ -32,12 +34,18 @@ export const materialTextAlignmentTargets = Object.freeze({
   'snack-bar': ['snack-bar-primary'],
   tooltip: ['tooltip-primary'],
 });
-export const materialAbsoluteTextAlignmentTargets = Object.freeze(['toolbar-action']);
+export const materialAbsoluteTextAlignmentTargets = Object.freeze(['toolbar-action', 'divider-above', 'divider-below']);
+export const materialTextOnlyTargets = Object.freeze(['divider-above', 'divider-below']);
 export const materialUniformBackgroundTargets = Object.freeze({
   'grid-list': Object.freeze({ container: 'grid-list-root', surfaces: Object.freeze(['grid-tile-one', 'grid-tile-two']) }),
 });
-export const materialStaticCases = materialFamilies.flatMap((family) =>
-  materialProfiles.flatMap((profile) => materialViewports.map((viewport) => ({ family, profile, viewport }))));
+export const materialSupplementalStaticCases = materialProfiles.map((profile) =>
+  ({ family: 'divider', profile, viewport: materialComparisonViewport }));
+export const materialStaticCases = [
+  ...materialFamilies.flatMap((family) =>
+    materialProfiles.flatMap((profile) => materialViewports.map((viewport) => ({ family, profile, viewport })))),
+  ...materialSupplementalStaticCases,
+];
 
 export const materialInteractionViewports = [
   { id: 'desktop-dpr1', width: 1440, height: 1000, deviceScaleFactor: 1 },

@@ -63,7 +63,7 @@ import { DomSanitizer } from '@angular/platform-browser';
           @case ('toolbar') { <mat-toolbar id="toolbar-primary" color="primary"><span id="toolbar-title">Material workspace</span><span class="spacer"></span><button id="toolbar-action" mat-button>Action</button></mat-toolbar> }
           @case ('sidenav') { <mat-sidenav-container id="sidenav-primary"><mat-sidenav mode="side" opened>Navigation</mat-sidenav><mat-sidenav-content>Main content</mat-sidenav-content></mat-sidenav-container> }
           @case ('grid-list') { <mat-grid-list id="grid-list-primary" cols="2" rowHeight="80px"><mat-grid-tile id="grid-tile-one">One</mat-grid-tile><mat-grid-tile id="grid-tile-two">Two</mat-grid-tile></mat-grid-list> }
-          @case ('divider') { <p>Above</p><mat-divider id="divider-primary"/><p>Below</p> }
+          @case ('divider') { <p><span id="divider-above">Above</span></p><mat-divider id="divider-primary"/><p><span id="divider-below">Below</span></p> }
           @case ('badge') { <span id="badge-primary" matBadge="4">Notifications</span> }
           @case ('card') { <mat-card id="card-primary"><mat-card-header><mat-card-title>Project Atlas</mat-card-title></mat-card-header><mat-card-content>Material surface content.</mat-card-content><mat-card-actions><button mat-button>OPEN</button></mat-card-actions></mat-card> }
           @case ('chips') { <mat-chip-listbox id="chips-primary" aria-label="Tags" [multiple]="true">@for (chip of store.state().chips; track chip) { <mat-chip-option [selected]="store.state().selected">{{ chip }}</mat-chip-option> }</mat-chip-listbox> }

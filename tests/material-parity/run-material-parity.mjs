@@ -9,7 +9,7 @@ import { PNG } from 'pngjs';
 import { ssim } from 'ssim.js';
 import {
   materialAbsoluteTextAlignmentTargets, materialFamilies, materialInteractionCases, materialMobileFlowCases, materialProfiles,
-  materialStaticCases, materialTextAlignmentTargets, materialThresholds, materialUniformBackgroundTargets,
+  materialStaticCases, materialTextAlignmentTargets, materialTextOnlyTargets, materialThresholds, materialUniformBackgroundTargets,
 } from './benchmark.config.mjs';
 import { measureTextInkCenter, textCenterOffsetError } from './text-alignment-metrics.mjs';
 
@@ -74,7 +74,7 @@ try {
     executedCases: results.length,
     filters: {
       families: [...familyFilter], profiles: [...profileFilter],
-      viewports: viewportFilter.size ? [...viewportFilter] : ['desktop', 'tablet', 'mobile'],
+      viewports: viewportFilter.size ? [...viewportFilter] : [...new Set(cases.map(({ viewport }) => viewport.id))],
     },
     summary,
     interactionSummary,
@@ -178,7 +178,7 @@ async function captureCase(benchmarkCase) {
     const reference = await capturePage(context, 'reference', benchmarkCase, directory);
     const astylar = await capturePage(context, 'astylar', benchmarkCase, directory);
     const screenshotSimilarity = comparePng(reference.image, astylar.image);
-    const geometry = compareGeometry(reference.measurement.elements, astylar.measurement.elements);
+    const geometry = compareGeometry(reference.measurement.elements, astylar.measurement.elements, materialTextOnlyTargets);
     const textAlignment = compareTextAlignment(
       reference.image, astylar.image, reference.measurement.elements, astylar.measurement.elements,
       materialTextAlignmentTargets[family] ?? [], viewport.deviceScaleFactor, directory,
@@ -738,10 +738,11 @@ function cropPng(image, bounds) {
   return output;
 }
 
-function compareGeometry(reference, candidate) {
+function compareGeometry(reference, candidate, excludedIds = []) {
   const elements = [];
   const errors = [];
   for (const [id, expected] of Object.entries(reference)) {
+    if (excludedIds.includes(id)) continue;
     const actual = candidate[id];
     if (!expected.exists || !actual?.exists) { elements.push({ id, missing: true }); continue; }
     const edgeErrors = Object.fromEntries(['left', 'top', 'right', 'bottom'].map((edge) => {

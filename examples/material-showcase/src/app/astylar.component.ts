@@ -354,9 +354,18 @@ export class AstylarShowcaseComponent {
         { selector: '.step-text', marginLeft: '8px', whiteSpace: 'nowrap', fontWeight: '500', fontSize: '14px' },
         { selector: '.step-connector', width: '32px', height: '1px', background: '#79747e' },
         { selector: '#stepper-content', marginTop: '-1px' },
-        { selector: '.divider', position: 'absolute', top: `${theme.density === -2 ? 86.785 : theme.density <= -5 ? 74.785 : 80}px`, left: '28px', height: '1px', width: '720px', background: '#cac4d0' },
-        { selector: '.divider', mediaMaxWidth: '800px', width: '638px' },
-        { selector: '.divider', mediaMaxWidth: '500px', width: '260px' },
+        { selector: '.divider', position: 'absolute', top: `${theme.density === -2 ? 86.785 : theme.density <= -5 ? 74.785 : 80}px`, left: '28px', right: '28px', height: '1px', width: 'auto', background: '#cac4d0' },
+        { selector: '.divider-copy', position: 'absolute', left: '28px', right: '28px', width: 'auto', height: `${22 * theme.typographyScale}px` },
+        { selector: '.divider-above', top: `${theme.density === -2 ? 45.290625 : theme.density <= -5 ? 41.890625 : 42.69}px` },
+        { selector: '.divider-below', top: `${theme.density === -2 ? 105.071875 : theme.density <= -5 ? 89.671875 : 94.69}px` },
+        ...(family === 'divider' && theme.density <= -5 ? [
+          { selector: '.divider-above', mediaMaxWidth: '500px', top: '41.390625px' },
+          { selector: '.divider-below', mediaMaxWidth: '500px', top: '89.171875px' },
+        ] : []),
+        ...(family === 'divider' && theme.density === -2 ? [
+          { selector: '.divider-above', mediaMaxWidth: '500px', top: '44.990625px' },
+          { selector: '.divider-below', mediaMaxWidth: '500px', top: '104.771875px' },
+        ] : []),
         { selector: '#checkbox-primary', width: theme.density <= -5 ? '137.5625px' : theme.density < 0 ? '141.5625px' : '149.5625px', height: `${theme.density === 0 ? 40 : 32}px`, alignSelf: 'flex-start' },
         { selector: '.range', width: '100%', height: '48px', cursor: 'pointer' },
         { selector: '.range-stack', position: 'relative', width: '100%', height: '48px' },
@@ -442,7 +451,7 @@ export class AstylarShowcaseComponent {
     if (family === 'tabs') return [{ type: 'div', id: 'tabs-primary', class: 'tabs', children: [{ type: 'div', id: 'tabs-list', class: 'tab-list', role: 'tablist', children: [{ type: 'button', id: 'tab-overview', class: 'tab', role: 'tab', ariaSelected: state.selected, tabindex: state.selected ? 0 : -1, ariaControls: 'tab-panel', value: 'Overview' }, { type: 'button', id: 'tab-activity', class: 'tab', role: 'tab', ariaSelected: !state.selected, tabindex: state.selected ? -1 : 0, ariaControls: 'tab-panel', value: 'Activity' }] }, { type: 'div', id: 'tab-indicator', class: 'tab-indicator' }, { type: 'div', id: 'tab-panel', class: 'tab-panel', role: 'tabpanel', textContent: state.selected ? 'Overview content' : 'Activity content' }] }];
     if (family === 'stepper') return [{ type: 'div', id: 'stepper-primary', class: 'stepper', role: 'tablist', ariaLabel: state.selected ? '1Details2ReviewProject detailsReview changes' : 'EditablecreateDetails2ReviewProject detailsReview changes', children: [{ type: 'div', id: 'stepper-head', class: 'stepper-head', children: [{ type: 'div', id: 'step-details', class: 'step-tab', role: 'tab', tabindex: state.selected ? 0 : -1, ariaSelected: state.selected, children: [{ type: 'span', id: 'step-details-badge', class: `step-badge${state.selected ? ' selected' : ''}`, textContent: '1' }, { type: 'span', id: 'step-details-text', class: 'step-text', textContent: 'Details' }] }, { type: 'span', id: 'step-connector', class: 'step-connector' }, { type: 'div', id: 'step-review', class: 'step-tab', role: 'tab', tabindex: state.selected ? -1 : 0, ariaSelected: !state.selected, children: [{ type: 'span', id: 'step-review-badge', class: `step-badge${state.selected ? '' : ' selected'}`, textContent: '2' }, { type: 'span', id: 'step-review-text', class: 'step-text', textContent: 'Review' }] }] }, { type: 'div', id: 'stepper-content', role: 'tabpanel', textContent: state.selected ? 'Project details' : 'Review changes' }] }];
     if (family === 'button-toggle') return this.composite(family);
-    if (family === 'divider') return [{ type: 'p', id: 'above', textContent: 'Above' }, { type: 'div', id: 'divider-primary', class: 'divider', role: 'separator' }, { type: 'p', id: 'below', textContent: 'Below' }];
+    if (family === 'divider') return [{ type: 'p', id: 'divider-above-row', class: 'divider-copy divider-above', children: [{ type: 'span', id: 'divider-above', textContent: 'Above' }] }, { type: 'div', id: 'divider-primary', class: 'divider', role: 'separator' }, { type: 'p', id: 'divider-below-row', class: 'divider-copy divider-below', children: [{ type: 'span', id: 'divider-below', textContent: 'Below' }] }];
     if (family === 'card') return [{ type: 'div', id: 'card-primary', class: 'material-card', children: [{ type: 'h2', id: 'card-title', class: 'card-title', textContent: 'Project Atlas' }, { type: 'p', id: 'card-copy', class: 'card-copy', textContent: 'Material surface content.' }, { type: 'button', id: 'card-open', class: 'text-button', value: 'OPEN' }] }];
     if (family === 'table') return [{ type: 'table', id: 'table-primary', class: 'material-table', tableProperties: { tableLayout: 'fixed', borderCollapse: 'collapse' }, children: [
       { type: 'thead', id: 'table-head', children: [{ type: 'tr', id: 'table-header-row', children: [{ type: 'th', id: 'table-name-header', scope: 'col', textContent: 'Name' }] }] },
