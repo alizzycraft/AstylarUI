@@ -29,7 +29,8 @@ version and describe only its tested utility subset.
 
 | Increment | Invariant | Focused evidence | Commit |
 | --- | --- | --- | --- |
-| 1 | The public workflow and owning architecture are decided before behavior changes. | Documentation and diff checks | Pending |
+| 1 | The public workflow and owning architecture are decided before behavior changes. | Documentation and diff checks | `76b52d6` |
+| 2 | Opt-in configuration is additive, and inspectable CSS is discovered in order while inaccessible sheets remain bounded diagnostics. | 16/16 focused provider/discovery tests; library build | This increment |
 
 ## Required final evidence
 
@@ -40,4 +41,6 @@ or report-only run is not final acceptance.
 
 ## Current limitations
 
-No Phase 22 runtime behavior has been implemented at this checkpoint.
+The provider and stylesheet-source lifecycle are implemented, but loaded rules
+are not yet connected to `StyleService` and therefore do not affect rendering at
+this checkpoint.

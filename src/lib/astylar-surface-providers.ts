@@ -59,12 +59,14 @@ import { SelectManager } from '../app/services/dom/input/select.manager';
 import { AstylarDiagnostics } from './astylar-diagnostics';
 import { AstylarDocumentRecovery } from './astylar-document-recovery';
 import { AstylarPluginHost } from './astylar-plugin-host';
+import { AstylarDocumentStyleSource } from './astylar-document-style-source';
 
 /** Complete renderer dependency scope. Every mount receives new instances. */
 export const ASTYLAR_SURFACE_SERVICE_PROVIDERS: Provider[] = [
   AstylarDiagnostics,
   AstylarDocumentRecovery,
   AstylarPluginHost,
+  AstylarDocumentStyleSource,
   TextSelectionStore,
   CoordinateTransformService,
   BabylonCameraService,

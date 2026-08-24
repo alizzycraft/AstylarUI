@@ -16,6 +16,10 @@ export type AstylarDiagnosticCode =
   | 'duplicate-element-id'
   | 'invalid-element-type'
   | 'unsupported-style-property'
+  | 'document-stylesheet-inaccessible'
+  | 'document-css-rule-unsupported'
+  | 'document-css-declaration-unsupported'
+  | 'document-css-value-unsupported'
   | 'asset-load-failed'
   | 'surface-disposed'
   | 'surface-not-found'
@@ -72,6 +76,10 @@ export interface AstylarDiagnostic {
   readonly value?: unknown;
   readonly pluginId?: string;
   readonly contributionId?: string;
+  /** Stylesheet URL or stable document-local label when CSS is the source. */
+  readonly source?: string;
+  /** CSS selector associated with a loaded-style diagnostic. */
+  readonly selector?: string;
   /** Aggregated authored paths affected by one unavailable capability. */
   readonly relatedPaths?: readonly string[];
   readonly affectedElements?: number;

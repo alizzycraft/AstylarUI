@@ -88,6 +88,7 @@ export {
 } from './astylar-plugin';
 export type {
   AstylarCapabilityRegistrySnapshot,
+  AstylarCssOptions,
   AstylarConfig,
   AstylarDocumentPluginCompatibility,
   AstylarDocumentPluginCompatibilityStatus,
