@@ -128,6 +128,11 @@ speech editing, deterministic mock generation, secure server-side OpenAI speech,
 owned browser audio, session history, accessibility semantics, and private
 application-level component builders without crossing the package boundary.
 
+For a direct visual check of loaded Tailwind output, run the repository demo and
+open `/tailwind-showcase`. The [side-by-side showcase](docs/tailwind-showcase.md)
+renders one shared element/class model as ordinary browser content and as an
+Astylar surface at matching compact and desktop viewport sizes.
+
 ### 4. Angular-native plugins
 
 Angular 20 is an intentional foundation of Astylar's plugin ecosystem. Register

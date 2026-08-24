@@ -14,6 +14,10 @@ export const serverRoutes: ServerRoute[] = [
     renderMode: RenderMode.Prerender
   },
   {
+    path: 'tailwind-showcase',
+    renderMode: RenderMode.Client
+  },
+  {
     path: 'parity/**',
     renderMode: RenderMode.Client
   },

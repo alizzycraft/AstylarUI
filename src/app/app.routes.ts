@@ -4,11 +4,17 @@ import { SiteComponent } from './components/site.component';
 import { SimpleDemoComponent } from './components/simple-demo.component';
 import { ParityAstylarComponent } from '../parity/parity-astylar.component';
 import { ParityReferenceComponent } from '../parity/parity-reference.component';
+import { TailwindShowcaseComponent } from './components/tailwind-showcase/tailwind-showcase.component';
 
 export const routes: Routes = [
   { path: '', component: ExamplesComponent, title: 'AstylarUI - Demo Gallery' },
   { path: 'site/:siteId', component: SiteComponent, title: 'AstylarUI Demo' },
   { path: 'simple-demo', component: SimpleDemoComponent, title: 'AstylarUI Simple Demo' },
+  {
+    path: 'tailwind-showcase',
+    component: TailwindShowcaseComponent,
+    title: 'AstylarUI Tailwind Showcase'
+  },
   {
     path: 'parity/reference/:fixtureId',
     component: ParityReferenceComponent,
