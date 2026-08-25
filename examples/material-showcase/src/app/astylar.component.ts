@@ -139,9 +139,10 @@ export class AstylarShowcaseComponent {
   }
 
   private handleClick(id: string, event: AstylarEvent): void {
-    if (this.store.state().disabled && ['radio-solo', 'radio-team', 'slide-toggle-primary'].includes(id)) return;
+    if (this.store.state().disabled && ['checkbox-primary', 'radio-solo', 'radio-team', 'slide-toggle-primary'].includes(id)) return;
     if (id === 'radio-team') this.store.patchState({ selected: true });
     if (id === 'radio-solo') this.store.patchState({ selected: false });
+    if (id === 'checkbox-primary' || id.startsWith('chip-')) this.store.patchState({ selected: !this.store.state().selected });
     if (id === 'sort-primary' || id === 'sort-trigger') this.store.patchState({
       sortDirection: this.store.state().sortDirection === 'asc' ? 'desc' : 'asc',
       open: true,
@@ -248,8 +249,11 @@ export class AstylarShowcaseComponent {
         { selector: '.switch-track', position: 'absolute', top: '0', left: '0', width: '52px', height: '32px', borderRadius: '16px', background: state.selected ? theme.primary : '#79747e' },
         { selector: '.switch-thumb', position: 'absolute', top: '4px', left: state.selected ? '24px' : '4px', width: '24px', height: '24px', borderRadius: '12px', background: theme.surface, color: theme.primary, textAlign: 'center', fontSize: '18px' },
         { selector: '.switch-label', position: 'absolute', top: '6px', left: '60px', whiteSpace: 'nowrap', color: theme.onSurface, fontSize: '14px' },
-        { selector: '#button-toggle-primary', width: '130px', height: '42px', alignSelf: 'flex-start' },
-        { selector: '#button-toggle-one, #button-toggle-two', width: '65px', height: '42px', padding: '0 12px' },
+        { selector: '#button-toggle-primary', width: '130px', height: '42px', boxSizing: 'border-box', borderWidth: '1px', borderStyle: 'solid', borderColor: '#79747e', borderRadius: `${21 * theme.cornerScale}px`, display: 'flex', alignSelf: 'flex-start' },
+        { selector: '.button-toggle-option', height: '100%', boxSizing: 'border-box', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', color: theme.onSurface, fontSize: '14px', cursor: 'pointer' },
+        { selector: '#button-toggle-one', width: state.selected ? '48px' : '81px' },
+        { selector: '#button-toggle-two', width: state.selected ? '80px' : '47px', borderWidth: '0 0 0 1px', borderStyle: 'solid', borderColor: '#79747e', borderRadius: `0 ${20 * theme.cornerScale}px ${20 * theme.cornerScale}px 0` },
+        { selector: '.button-toggle-option.selected', background: '#eadef7', color: '#4b4357' },
         { selector: '#menu-primary', width: '120px' },
         { selector: '#menu-popup', position: 'absolute', top: '69px', left: '28px', width: '112px', height: '112px', boxSizing: 'border-box', padding: '8px 0', background: theme.mode === 'dark' ? '#211f26' : '#f3edf7', boxShadow: '0 2px 6px rgba(0,0,0,0.24)', zIndex: '50' },
         { selector: '#menu-rename, #menu-delete', width: '112px', height: '48px', padding: '0 12px', borderWidth: '0', background: 'transparent', color: theme.onSurface, textAlign: 'left', fontSize: '14px' },
@@ -329,7 +333,12 @@ export class AstylarShowcaseComponent {
         ...(theme.density <= -5 ? [{ selector: '.badge-label', mediaMaxWidth: '500px', top: '-1px' }] : []),
         { selector: '.badge-bubble', position: 'absolute', top: '-4px', right: '-4px', width: '16px', height: '16px', borderRadius: '8px', background: theme.primary, color: theme.onPrimary, fontSize: '11px', lineHeight: '16px', textAlign: 'center' },
         { selector: '.badge-count-label', position: 'relative', top: '-2.5px', display: 'block', width: '100%', textAlign: 'center' },
-        { selector: '.chip', width: '88px', height: '32px', padding: '0 16px', borderWidth: '1px', borderStyle: 'solid', borderColor: '#79747e', borderRadius: '16px', background: 'transparent', color: theme.onSurface },
+        { selector: '.chip', height: '32px', boxSizing: 'border-box', padding: '0 12px', borderWidth: '0', borderRadius: `${8 * theme.cornerScale}px`, display: 'flex', alignItems: 'center', gap: '8px', background: '#eadef7', color: '#4b4357', fontSize: '14px', cursor: 'pointer' },
+        { selector: '#chip-0', width: '98px' },
+        { selector: '#chip-1', width: '94px' },
+        { selector: '.selection-mark', width: '16px', height: '20px', flexShrink: '0', color: theme.onSurface, fontSize: '18px', fontWeight: '400', lineHeight: '20px', textAlign: 'center' },
+        { selector: '.checkbox-mark', color: theme.onPrimary, fontSize: '16px', lineHeight: '18px' },
+        { selector: '.switch-mark', color: theme.primary, fontSize: '18px', lineHeight: '24px' },
         { selector: '.material-icon', width: '24px', height: '24px', objectFit: 'contain' },
         { selector: '#chips-primary', height: `${theme.density === 0 ? 40 : 32}px` },
         { selector: '.material-list', width: '100%', display: 'flex', flexDirection: 'column', fontSize: '16px' },
@@ -376,7 +385,9 @@ export class AstylarShowcaseComponent {
           { selector: '.divider-above', mediaMaxWidth: '500px', top: '44.990625px' },
           { selector: '.divider-below', mediaMaxWidth: '500px', top: '104.771875px' },
         ] : []),
-        { selector: '#checkbox-primary', width: theme.density <= -5 ? '137.5625px' : theme.density < 0 ? '141.5625px' : '149.5625px', height: `${theme.density === 0 ? 40 : 32}px`, alignSelf: 'flex-start' },
+        { selector: '#checkbox-primary', width: theme.density <= -5 ? '137.5625px' : theme.density < 0 ? '141.5625px' : '149.5625px', height: `${theme.density === 0 ? 40 : 32}px`, boxSizing: 'border-box', padding: '0 11px', display: 'flex', alignItems: 'center', gap: '14px', alignSelf: 'flex-start', cursor: 'pointer' },
+        { selector: '.checkbox-box', width: '18px', height: '18px', flexShrink: '0', boxSizing: 'border-box', borderWidth: '2px', borderStyle: 'solid', borderColor: state.selected ? theme.primary : theme.onSurface, borderRadius: '2px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: state.selected ? theme.primary : 'transparent' },
+        { selector: '.checkbox-label', whiteSpace: 'nowrap', color: theme.onSurface, fontSize: `${14 * theme.typographyScale}px` },
         { selector: '.range', width: '100%', height: '48px', cursor: 'pointer' },
         { selector: '.range-stack', position: 'relative', width: '100%', height: '48px' },
         { selector: '.range-layer', position: 'absolute', top: '0', left: '0', width: '100%', height: '48px' },
@@ -411,7 +422,11 @@ export class AstylarShowcaseComponent {
     if (family === 'sidenav') return [{ type: 'div', id: 'sidenav-primary', class: 'sidenav-container', children: [{ type: 'aside', id: 'sidenav-nav', class: 'sidenav', textContent: 'Navigation' }, { type: 'main', id: 'sidenav-content', class: 'sidenav-content', textContent: 'Main content' }] }];
     if (family === 'grid-list') return [{ type: 'div', id: 'grid-list-primary', class: 'grid-list', children: [{ type: 'div', id: 'grid-tile-one', class: 'grid-tile', children: [{ type: 'span', id: 'grid-tile-one-label', class: 'grid-tile-label', textContent: 'One' }] }, { type: 'div', id: 'grid-tile-two', class: 'grid-tile', children: [{ type: 'span', id: 'grid-tile-two-label', class: 'grid-tile-label', textContent: 'Two' }] }] }];
     if (family === 'badge') return [{ type: 'span', id: 'badge-primary', class: 'badge-anchor', children: [{ type: 'span', id: 'badge-label', class: 'badge-label', textContent: 'Notifications' }, { type: 'span', id: 'badge-count', class: 'badge-bubble', children: [{ type: 'span', id: 'badge-count-label', class: 'badge-count-label', textContent: '4' }] }] }];
-    if (family === 'chips') return [{ type: 'div', id: 'chips-primary', class: 'row', role: 'listbox', ariaLabel: 'Tags', ariaDisabled: false, ariaMultiselectable: true, children: state.chips.map((chip, index) => ({ type: 'button' as const, id: `chip-${index}`, class: 'chip', role: 'option', ariaSelected: state.selected, value: chip })) }];
+    if (family === 'chips') return [{ type: 'div', id: 'chips-primary', class: 'row', role: 'listbox', ariaLabel: 'Tags', ariaDisabled: false, ariaMultiselectable: true, children: state.chips.map((chip, index) => ({
+      type: 'div' as const, id: `chip-${index}`, class: 'chip', role: 'option', tabindex: 0,
+      ariaLabel: chip, ariaSelected: state.selected,
+      children: [...(state.selected ? [this.selectionMark(`chip-${index}-mark`)] : []), { type: 'span' as const, id: `chip-${index}-label`, textContent: chip }],
+    })) }];
     if (family === 'icon') return [{ type: 'img', id: 'icon-primary', class: 'material-icon', src: '/icons/favorite.svg', alt: 'Favorite' }];
     if (family === 'list') return [{ type: 'div', id: 'list-primary', class: 'material-list', ariaDisabled: false, children: [{ type: 'div', id: 'list-inbox', class: 'list-item', children: [{ type: 'span', id: 'list-inbox-label', class: 'list-label', textContent: 'Inbox' }] }, { type: 'div', id: 'list-archive', class: 'list-item', children: [{ type: 'span', id: 'list-archive-label', class: 'list-label', textContent: 'Archive' }] }] }];
     if (family === 'sort') return [{ type: 'div', id: 'sort-primary', class: 'sort-header', ariaLabel: 'Sort by name', children: [{
@@ -440,7 +455,14 @@ export class AstylarShowcaseComponent {
         { type: 'div' as const, id: 'autocomplete-option-johannesburg', class: 'select-option', role: 'option', textContent: 'Johannesburg' },
       ] }] : []),
     ] }];
-    if (family === 'checkbox') return [{ type: 'input', inputType: 'checkbox', id: 'checkbox-primary', checked: state.selected, disabled: state.disabled, ariaLabel: 'Include archived' }];
+    if (family === 'checkbox') return [{
+      type: 'div', id: 'checkbox-primary', role: 'checkbox', tabindex: state.disabled ? -1 : 0,
+      ariaLabel: 'Include archived', ariaChecked: state.selected, ariaDisabled: state.disabled,
+      children: [
+        { type: 'span', id: 'checkbox-box', class: 'checkbox-box', children: state.selected ? [this.selectionMark('checkbox-mark', 'checkbox-mark')] : [] },
+        { type: 'span', id: 'checkbox-label', class: 'checkbox-label', textContent: 'Include archived' },
+      ],
+    }];
     if (family === 'radio') return [{ type: 'div', id: 'radio-primary', role: 'radiogroup', children: [
       { type: 'div', id: 'radio-solo', class: 'radio-option', role: 'radio', tabindex: state.selected ? -1 : 0, ariaChecked: !state.selected, ariaDisabled: state.disabled, children: [{ type: 'span', id: 'radio-solo-ring', class: `radio-ring${state.selected ? '' : ' selected'}`, children: state.selected ? [] : [{ type: 'span', id: 'radio-solo-dot', class: 'radio-dot' }] }, { type: 'span', id: 'radio-solo-label', class: 'radio-label', textContent: 'Solo' }] },
       { type: 'div', id: 'radio-team', class: 'radio-option', role: 'radio', tabindex: state.selected ? 0 : -1, ariaChecked: state.selected, ariaDisabled: state.disabled, children: [{ type: 'span', id: 'radio-team-ring', class: `radio-ring${state.selected ? ' selected' : ''}`, children: state.selected ? [{ type: 'span', id: 'radio-team-dot', class: 'radio-dot' }] : [] }, { type: 'span', id: 'radio-team-label', class: 'radio-label', textContent: 'Team' }] },
@@ -463,11 +485,14 @@ export class AstylarShowcaseComponent {
         ] },
       ] }] : []),
     ] }];
-    if (family === 'slide-toggle') return [{ type: 'div', id: 'slide-toggle-primary', role: 'switch', tabindex: state.disabled ? -1 : 0, ariaLabel: 'Automatic updates', ariaChecked: state.selected, ariaDisabled: state.disabled, children: [{ type: 'span', id: 'slide-toggle-track', class: 'switch-track', children: [{ type: 'span', id: 'slide-toggle-thumb', class: 'switch-thumb', textContent: state.selected ? '✓' : '' }] }, { type: 'span', id: 'slide-toggle-label', class: 'switch-label', textContent: 'Automatic updates' }] }];
+    if (family === 'slide-toggle') return [{ type: 'div', id: 'slide-toggle-primary', role: 'switch', tabindex: state.disabled ? -1 : 0, ariaLabel: 'Automatic updates', ariaChecked: state.selected, ariaDisabled: state.disabled, children: [{ type: 'span', id: 'slide-toggle-track', class: 'switch-track', children: [{ type: 'span', id: 'slide-toggle-thumb', class: 'switch-thumb', children: state.selected ? [this.selectionMark('slide-toggle-mark', 'switch-mark')] : [] }] }, { type: 'span', id: 'slide-toggle-label', class: 'switch-label', textContent: 'Automatic updates' }] }];
     if (family === 'menu') return [{ type: 'button', id: 'menu-primary', class: 'material-button', ariaHaspopup: 'menu', ariaExpanded: state.open, ariaControls: 'menu-popup', value: 'Open menu' }, ...(state.open ? [{ type: 'div' as const, id: 'menu-popup', role: 'menu', children: [{ type: 'button' as const, id: 'menu-rename', role: 'menuitem', value: 'Rename' }, { type: 'button' as const, id: 'menu-delete', role: 'menuitem', value: 'Delete' }] }] : [])];
     if (family === 'tabs') return [{ type: 'div', id: 'tabs-primary', class: 'tabs', children: [{ type: 'div', id: 'tabs-list', class: 'tab-list', role: 'tablist', children: [{ type: 'button', id: 'tab-overview', class: 'tab', role: 'tab', ariaSelected: state.selected, tabindex: state.selected ? 0 : -1, ariaControls: 'tab-panel', value: 'Overview' }, { type: 'button', id: 'tab-activity', class: 'tab', role: 'tab', ariaSelected: !state.selected, tabindex: state.selected ? -1 : 0, ariaControls: 'tab-panel', value: 'Activity' }] }, { type: 'div', id: 'tab-indicator', class: 'tab-indicator' }, { type: 'div', id: 'tab-panel', class: 'tab-panel', role: 'tabpanel', textContent: state.selected ? 'Overview content' : 'Activity content' }] }];
     if (family === 'stepper') return [{ type: 'div', id: 'stepper-primary', class: 'stepper', role: 'tablist', ariaLabel: state.selected ? '1Details2ReviewProject detailsReview changes' : 'EditablecreateDetails2ReviewProject detailsReview changes', children: [{ type: 'div', id: 'stepper-head', class: 'stepper-head', children: [{ type: 'div', id: 'step-details', class: 'step-tab', role: 'tab', tabindex: state.selected ? 0 : -1, ariaSelected: state.selected, children: [{ type: 'span', id: 'step-details-badge', class: `step-badge${state.selected ? ' selected' : ''}`, textContent: '1' }, { type: 'span', id: 'step-details-text', class: 'step-text', textContent: 'Details' }] }, { type: 'span', id: 'step-connector', class: 'step-connector' }, { type: 'div', id: 'step-review', class: 'step-tab', role: 'tab', tabindex: state.selected ? -1 : 0, ariaSelected: !state.selected, children: [{ type: 'span', id: 'step-review-badge', class: `step-badge${state.selected ? '' : ' selected'}`, textContent: '2' }, { type: 'span', id: 'step-review-text', class: 'step-text', textContent: 'Review' }] }] }, { type: 'div', id: 'stepper-content', role: 'tabpanel', textContent: state.selected ? 'Project details' : 'Review changes' }] }];
-    if (family === 'button-toggle') return this.composite(family);
+    if (family === 'button-toggle') return [{ type: 'div', id: 'button-toggle-primary', role: 'radiogroup', ariaLabel: 'ListGrid', ariaDisabled: false, children: [
+      { type: 'div', id: 'button-toggle-one', class: `button-toggle-option${state.selected ? '' : ' selected'}`, role: 'radio', tabindex: state.selected ? -1 : 0, ariaLabel: 'List', ariaChecked: !state.selected, children: [...(!state.selected ? [this.selectionMark('button-toggle-one-mark')] : []), { type: 'span', id: 'button-toggle-one-label', textContent: 'List' }] },
+      { type: 'div', id: 'button-toggle-two', class: `button-toggle-option${state.selected ? ' selected' : ''}`, role: 'radio', tabindex: state.selected ? 0 : -1, ariaLabel: 'Grid', ariaChecked: state.selected, children: [...(state.selected ? [this.selectionMark('button-toggle-two-mark')] : []), { type: 'span', id: 'button-toggle-two-label', textContent: 'Grid' }] },
+    ] }];
     if (family === 'divider') return [{ type: 'p', id: 'divider-above-row', class: 'divider-copy divider-above', children: [{ type: 'span', id: 'divider-above', textContent: 'Above' }] }, { type: 'div', id: 'divider-primary', class: 'divider', role: 'separator' }, { type: 'p', id: 'divider-below-row', class: 'divider-copy divider-below', children: [{ type: 'span', id: 'divider-below', textContent: 'Below' }] }];
     if (family === 'card') return [{ type: 'div', id: 'card-primary', class: 'material-card', children: [{ type: 'h2', id: 'card-title', class: 'card-title', textContent: 'Project Atlas' }, { type: 'p', id: 'card-copy', class: 'card-copy', textContent: 'Material surface content.' }, { type: 'button', id: 'card-open', class: 'text-button', value: 'OPEN' }] }];
     if (family === 'table') return [{ type: 'table', id: 'table-primary', class: 'material-table', tableProperties: { tableLayout: 'fixed', borderCollapse: 'collapse' }, children: [
@@ -529,6 +554,10 @@ export class AstylarShowcaseComponent {
       { type: 'button', id: `${family}-one`, class: 'material-button', role: family === 'tabs' ? 'tab' : family === 'tree' ? 'treeitem' : family === 'menu' ? 'menuitem' : undefined, ariaSelected: family === 'tabs' ? true : undefined, tabindex: 0, value: first },
       { type: 'button', id: `${family}-two`, class: 'material-button outlined', role: family === 'tabs' ? 'tab' : family === 'tree' ? 'treeitem' : family === 'menu' ? 'menuitem' : undefined, ariaSelected: family === 'tabs' ? false : undefined, tabindex: -1, value: second },
     ] }];
+  }
+
+  private selectionMark(id: string, extraClass = ''): DOMElement {
+    return { type: 'span', id, class: `selection-mark${extraClass ? ` ${extraClass}` : ''}`, role: 'presentation', textContent: '✓' };
   }
 
   private measure(surface: AstylarSurface, ids: readonly string[]): MaterialBenchmarkMeasurement {

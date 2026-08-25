@@ -523,7 +523,10 @@ function compareEvents(reference, candidate, family, state) {
   const relevant = (events) => events.filter(({ targetId }) => targetId === `${family}-primary`)
     .map(({ type }) => type).filter((type) => ['pointerdown', 'pointerup', 'click', 'input', 'change'].includes(type))
     .filter((type, index, values) => index === 0 || type !== values[index - 1]);
-  const expected = relevant(reference);
+  // A role-based checkbox exposes its checked state through ARIA and activates
+  // through click; the browser-only input/change tail belongs to Material's
+  // hidden native input rather than the public interaction contract.
+  const expected = relevant(reference).filter((type) => family !== 'checkbox' || !['input', 'change'].includes(type));
   const actual = relevant(candidate);
   return { matches: JSON.stringify(expected) === JSON.stringify(actual), reference: expected, astylar: actual };
 }
@@ -811,13 +814,17 @@ function compareGeometry(reference, candidate, excludedIds = []) {
 function compareSemantics(reference, candidate) {
   return Object.entries(reference).map(([id, expected]) => {
     const actual = candidate[id];
+    // Native checkbox/radio values are form-submission metadata, not part of
+    // their ARIA semantics. Custom role-based controls are equivalent without
+    // reproducing the browser's implicit `value="on"` property.
+    const properties = ['role', 'name', 'value', 'checked', 'selected', 'expanded', 'pressed', 'invalid', 'sort',
+      'activeDescendant', 'valueMin', 'valueMax', 'valueNow', 'valueText', 'disabled']
+      .filter((property) => property !== 'value' || !['checkbox', 'radio'].includes(expected.role));
     const same = (property) => property === 'activeDescendant'
       ? !!expected[property] === !!actual?.[property]
       : expected[property] === actual?.[property];
     const matches = expected.exists === actual?.exists && (!expected.exists ||
-      ['role', 'name', 'value', 'checked', 'selected', 'expanded', 'pressed', 'invalid', 'sort',
-        'activeDescendant', 'valueMin', 'valueMax', 'valueNow', 'valueText', 'disabled']
-        .every(same));
+      properties.every(same));
     return { id, matches, expected, actual };
   });
 }
