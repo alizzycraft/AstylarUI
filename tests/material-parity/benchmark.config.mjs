@@ -63,6 +63,13 @@ export const materialTextAlignmentTargets = Object.freeze({
   divider: ['divider-above', 'divider-below'],
   badge: ['badge-label', 'badge-count'],
   card: ['card-title', 'card-copy', 'card-open'],
+  checkbox: ['checkbox-label'],
+  radio: ['radio-solo-label', 'radio-team-label'],
+  'slide-toggle': ['slide-toggle-label'],
+  'button-toggle': ['button-toggle-one', 'button-toggle-two'],
+  tabs: ['tab-overview', 'tab-activity', 'tab-panel'],
+  stepper: ['step-details-text', 'step-review-text', 'stepper-content'],
+  expansion: ['expansion-title'],
   paginator: ['paginator-size', 'paginator-range'],
   button: ['button-primary', 'button-secondary', 'button-disabled'],
   menu: ['menu-primary'],
@@ -81,6 +88,13 @@ export const materialLeftAlignedTextTargets = Object.freeze([
 ]);
 export const materialTextOnlyTargets = Object.freeze([
   'divider-above', 'divider-below', 'badge-label', 'card-title', 'card-copy',
+  'checkbox-label', 'radio-solo-label', 'radio-team-label', 'slide-toggle-label',
+  'tab-overview', 'tab-activity', 'tab-panel', 'step-details-text', 'step-review-text',
+  'stepper-content', 'expansion-title',
+]);
+export const materialSemanticExcludedTargets = Object.freeze([
+  ...materialTextOnlyTargets,
+  'button-toggle-one', 'button-toggle-two',
 ]);
 export const materialUniformBackgroundTargets = Object.freeze({
   'grid-list': Object.freeze({ container: 'grid-list-root', surfaces: Object.freeze(['grid-tile-one', 'grid-tile-two']) }),

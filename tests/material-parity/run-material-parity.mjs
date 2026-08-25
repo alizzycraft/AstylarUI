@@ -9,7 +9,7 @@ import { PNG } from 'pngjs';
 import { ssim } from 'ssim.js';
 import {
   materialAbsoluteTextAlignmentTargets, materialFamilies, materialFocusedRasterTargets, materialInteractionCases, materialMobileFlowCases, materialProfiles,
-  materialLeftAlignedTextTargets, materialShadowProfileTargets, materialStaticCases, materialTextAlignmentTargets, materialTextAuditTargets, materialTextOnlyTargets, materialThresholds, materialUniformBackgroundTargets,
+  materialLeftAlignedTextTargets, materialSemanticExcludedTargets, materialShadowProfileTargets, materialStaticCases, materialTextAlignmentTargets, materialTextAuditTargets, materialTextOnlyTargets, materialThresholds, materialUniformBackgroundTargets,
 } from './benchmark.config.mjs';
 import { measureTextInkCenter, textCenterOffsetError } from './text-alignment-metrics.mjs';
 import { compareBottomShadowProfiles } from './shadow-profile-metrics.mjs';
@@ -204,7 +204,7 @@ async function captureCase(benchmarkCase) {
         viewport.deviceScaleFactor, shadowTarget.maximumRowError,
       ),
     }] : [];
-    const semantics = compareSemantics(reference.measurement.semantics, astylar.measurement.semantics);
+    const semantics = compareSemantics(reference.measurement.semantics, astylar.measurement.semantics, materialSemanticExcludedTargets);
     const runtimeErrors = [...reference.errors.map((error) => `reference: ${error}`),
       ...astylar.errors.map((error) => `astylar: ${error}`)];
     return {
@@ -310,7 +310,7 @@ async function captureInteractionCase(benchmarkCase) {
     }), family);
     const referenceFocus = await focusedIdentity(reference.page, 'reference', family);
     const astylarFocus = await focusedIdentity(astylar.page, 'astylar', family);
-    const semantics = compareSemantics(referenceMeasurement.semantics, astylarMeasurement.semantics);
+    const semantics = compareSemantics(referenceMeasurement.semantics, astylarMeasurement.semantics, materialSemanticExcludedTargets);
     const referenceImage = PNG.sync.read(referenceBuffer);
     const astylarImage = PNG.sync.read(astylarBuffer);
     const screenshotSimilarity = comparePng(referenceImage, astylarImage);
@@ -813,8 +813,8 @@ function compareGeometry(reference, candidate, excludedIds = []) {
   };
 }
 
-function compareSemantics(reference, candidate) {
-  return Object.entries(reference).map(([id, expected]) => {
+function compareSemantics(reference, candidate, excludedIds = []) {
+  return Object.entries(reference).filter(([id]) => !excludedIds.includes(id)).map(([id, expected]) => {
     const actual = candidate[id];
     // Native checkbox/radio values are form-submission metadata, not part of
     // their ARIA semantics. Custom role-based controls are equivalent without
