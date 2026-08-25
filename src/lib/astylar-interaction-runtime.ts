@@ -49,6 +49,29 @@ export interface AstylarNavigationOptions {
   onNavigate?: (outcome: Readonly<AstylarNavigationOutcome>) => void;
 }
 
+/** Selects the authored element plane rather than a renderer-owned descendant. */
+export function selectElementProjectionMesh(
+  meshes: readonly AbstractMesh[],
+  elementId: string,
+): AbstractMesh | undefined {
+  const candidates = meshes.filter((candidate) =>
+    candidate.metadata?.elementId === elementId &&
+    candidate.metadata?.element?.id === elementId,
+  );
+  return candidates.find((candidate) => candidate.name === elementId) ??
+    candidates.find((candidate) => candidate.metadata?.isTextMesh === false) ??
+    candidates[0];
+}
+
+/** Resolves pointer X in canvas CSS pixels even when offsetX is target-relative. */
+export function resolveCanvasPointerX(
+  event: Pick<PointerEvent, 'clientX' | 'offsetX'> | undefined,
+  canvasRect: Pick<DOMRect, 'left'> | undefined,
+): number | undefined {
+  if (event && canvasRect && Number.isFinite(event.clientX)) return event.clientX - canvasRect.left;
+  return event?.offsetX;
+}
+
 export interface AstylarInteractionFocusOptions {
   focusVisible?: boolean;
   scrollIntoView?: boolean;
@@ -738,7 +761,7 @@ export class AstylarInteractionRuntime {
 
   private updateRangeFromPointer(elementId: string, pointerInfo: PointerInfo): boolean {
     const nativeEvent = pointerInfo.event as PointerEvent | MouseEvent | undefined;
-    const canvasX = nativeEvent?.offsetX;
+    const canvasX = resolveCanvasPointerX(nativeEvent, this.canvas?.getBoundingClientRect());
     const rect = this.projectElementRect(elementId);
     if (canvasX === undefined || !rect) return false;
     return this.controls?.setRangeFromPointer?.(
@@ -754,10 +777,7 @@ export class AstylarInteractionRuntime {
     const camera = this.scene.activeCamera;
     const canvas = this.canvas;
     if (!camera || !canvas) return undefined;
-    const mesh = this.scene.meshes.find((candidate) =>
-      candidate.metadata?.elementId === elementId &&
-      candidate.metadata?.element?.id === elementId,
-    );
+    const mesh = selectElementProjectionMesh(this.scene.meshes, elementId);
     if (!mesh) return undefined;
     mesh.computeWorldMatrix(true);
     const engine = this.scene.getEngine();
