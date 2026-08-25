@@ -111,8 +111,11 @@ export const materialFocusedRasterTargets = Object.freeze({
 });
 export const materialInteractionFocusedRasterTargets = Object.freeze({
   expansion: Object.freeze({ element: 'expansion-root', padding: 8, minimumSsim: .90 }),
+  autocomplete: Object.freeze({ element: 'autocomplete-primary', padding: 8, paddingBottom: 130, minimumSsim: .85 }),
+  select: Object.freeze({ element: 'select-primary', padding: 8, paddingBottom: 130, minimumSsim: .85 }),
   datepicker: Object.freeze({ element: 'datepicker-primary', padding: 8, paddingBottom: 370, minimumSsim: .86 }),
   timepicker: Object.freeze({ element: 'timepicker-primary', padding: 8, paddingBottom: 270, minimumSsim: .88 }),
+  menu: Object.freeze({ element: 'menu-primary', padding: 8, paddingBottom: 160, minimumSsim: .86 }),
 });
 export const materialInteractionTextAlignmentTargets = Object.freeze({
   expansion: Object.freeze(['expansion-content']),

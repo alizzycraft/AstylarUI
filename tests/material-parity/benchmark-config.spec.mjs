@@ -49,6 +49,8 @@ test('keeps the app catalog and enforced static matrix complete', () => {
     { element: 'expansion-root', padding: 8, minimumSsim: .90 });
   assert.deepEqual(materialInteractionFocusedRasterTargets.datepicker,
     { element: 'datepicker-primary', padding: 8, paddingBottom: 370, minimumSsim: .86 });
+  assert.deepEqual(Object.keys(materialInteractionFocusedRasterTargets).sort(),
+    ['autocomplete', 'datepicker', 'expansion', 'menu', 'select', 'timepicker']);
   assert.ok(Object.keys(materialInteractionFocusedRasterTargets).every((family) => materialFamilies.includes(family)));
   assert.deepEqual(materialInteractionTextAlignmentTargets.expansion, ['expansion-content']);
   assert.equal(materialInteractionViewports.length, 2);
