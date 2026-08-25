@@ -84,7 +84,7 @@ export const materialAbsoluteTextAlignmentTargets = Object.freeze([
   'card-title', 'card-copy', 'card-open', 'paginator-range', 'tab-overview', 'tab-activity',
 ]);
 export const materialLeftAlignedTextTargets = Object.freeze([
-  'form-field-control', 'input-control', 'select-control',
+  'form-field-control', 'input-control', 'select-control', 'tab-panel',
 ]);
 export const materialTextAlignmentToleranceOverrides = Object.freeze({
   'tab-overview': 1.25,

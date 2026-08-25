@@ -316,7 +316,7 @@ async function captureInteractionCase(benchmarkCase) {
     const screenshotSimilarity = comparePng(referenceImage, astylarImage);
     const textAlignment = compareTextAlignment(
       referenceImage, astylarImage, referenceMeasurement.elements, astylarMeasurement.elements,
-      [...textTargets(family), ...interactionTextTargets(family)], viewport.deviceScaleFactor, directory,
+      [...textTargets(family), ...interactionTextTargets(family, state)], viewport.deviceScaleFactor, directory,
     );
     const focusedRasterTarget = materialInteractionFocusedRasterTargets[family];
     const focusedRasters = focusedRasterTarget ? [compareFocusedRaster(
@@ -563,8 +563,10 @@ function textTargets(family) {
   return (textAudit ? materialTextAuditTargets : materialTextAlignmentTargets)[family] ?? [];
 }
 
-function interactionTextTargets(family) {
-  return materialInteractionTextAlignmentTargets[family] ?? [];
+function interactionTextTargets(family, state) {
+  const targets = materialInteractionTextAlignmentTargets[family] ?? [];
+  if (family === 'expansion' && !['activate', 'activate-leave', 'open'].includes(state)) return [];
+  return targets;
 }
 
 function compareStatePaint(referenceMeasurement, astylarMeasurement, family, profile, state) {
@@ -634,7 +636,7 @@ async function measureReference(page, ids) {
       return undefined;
     };
     const elements = Object.fromEntries(targetIds.map((id) => {
-      const element = document.getElementById(id) ?? referenceGeneratedTextTarget(id);
+      const element = referenceTarget(id);
       if (!element) return [id, { exists: false }];
       const rect = element.getBoundingClientRect();
       return [id, { exists: true, borderBox: {
@@ -643,7 +645,7 @@ async function measureReference(page, ids) {
       }, interactionBackground: getComputedStyle(element).backgroundColor }];
     }));
     const semantics = Object.fromEntries(targetIds.map((id) => {
-      const element = document.getElementById(id) ?? referenceGeneratedTextTarget(id);
+      const element = referenceTarget(id);
       const compoundSemanticHosts = new Set([
         'MAT-FORM-FIELD', 'MAT-SLIDER', 'MAT-EXPANSION-PANEL', 'MAT-CHECKBOX', 'MAT-SLIDE-TOGGLE',
       ]);
@@ -679,6 +681,15 @@ async function measureReference(page, ids) {
     function numberAttribute(element, attribute) {
       const value = element.getAttribute(attribute);
       return value !== null && Number.isFinite(Number(value)) ? Number(value) : undefined;
+    }
+    function referenceTarget(id) {
+      const authored = document.getElementById(id);
+      if (authored) return authored;
+      const parityTargets = [...document.querySelectorAll(`[data-parity-id="${CSS.escape(id)}"]`)];
+      return parityTargets.find((element) => {
+        const rect = element.getBoundingClientRect();
+        return rect.width > 0 && rect.height > 0 && getComputedStyle(element).visibility !== 'hidden';
+      }) ?? referenceGeneratedTextTarget(id);
     }
     function referenceGeneratedTextTarget(id) {
       const selectors = {

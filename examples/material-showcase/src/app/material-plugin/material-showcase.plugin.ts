@@ -1,5 +1,5 @@
 import { EnvironmentProviders, Injectable, InjectionToken, inject } from '@angular/core';
-import { Color3, DynamicTexture, Mesh, MeshBuilder, StandardMaterial, Vector3 } from '@babylonjs/core';
+import { Color3, DynamicTexture, Mesh, MeshBuilder, StandardMaterial, Texture, Vector3 } from '@babylonjs/core';
 import {
   ASTYLAR_PLUGIN_API_VERSION,
   defineAstylarPlugin,
@@ -213,17 +213,28 @@ class MaterialCheckMarkRenderer extends MaterialRendererBase implements AstylarP
 class MaterialTabPanelRenderer extends MaterialRendererBase implements AstylarPluginElementRenderer {
   render(context: AstylarPluginRenderContext): Mesh {
     const root = this.root(context);
+    const scale = context.dimensions.pixelToWorldScale;
     const width = Math.max(1, Math.round(context.dimensions.width * 2));
     const height = Math.max(1, Math.round(context.dimensions.height * 2));
     const texture = context.resources.own(new DynamicTexture(`${context.meshId}-content`, { width, height }, context.scene, false));
     texture.hasAlpha = true;
+    texture.wrapU = Texture.CLAMP_ADDRESSMODE;
+    texture.wrapV = Texture.CLAMP_ADDRESSMODE;
+    texture.uScale = -1;
+    texture.uOffset = 1;
+    texture.vScale = -1;
+    texture.vOffset = 1;
     const material = this.material(context, 'content-material', '#ffffff');
     material.diffuseTexture = texture;
     material.emissiveTexture = texture;
     material.opacityTexture = texture;
     material.useAlphaFromDiffuseTexture = true;
-    root.material = material;
-    root.position.z = .02;
+    const content = this.ownChild(context, MeshBuilder.CreatePlane(`${context.meshId}-content-plane`, {
+      width: Math.max(scale, context.dimensions.width * scale),
+      height: Math.max(scale, context.dimensions.height * scale),
+    }, context.scene), root);
+    content.material = material;
+    content.position.z = .02;
 
     const selected = context.element.data?.['selected'] !== false;
     const direction = selected ? -1 : 1;
@@ -235,8 +246,9 @@ class MaterialTabPanelRenderer extends MaterialRendererBase implements AstylarPl
       canvas.clearRect(0, 0, width, height);
       canvas.fillStyle = color;
       canvas.font = '32px Roboto, Arial, sans-serif';
-      canvas.fillText(outgoing, -direction * phase * width, Math.min(height - 4, 30));
-      canvas.fillText(incoming, direction * (1 - phase) * width, Math.min(height - 4, 30));
+      const baseline = Math.min(height - 1, 30.5);
+      if (phase < 1) canvas.fillText(outgoing, -direction * phase * width, baseline);
+      if (phase > 0) canvas.fillText(incoming, direction * (1 - phase) * width, baseline);
       texture.update(false);
     };
     this.animateOnce(context, 320, draw);
