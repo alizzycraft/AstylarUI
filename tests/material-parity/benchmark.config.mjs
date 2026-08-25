@@ -118,6 +118,9 @@ export const materialFocusedRasterTargets = Object.freeze({
 });
 export const materialInteractionFocusedRasterTargets = Object.freeze({
   expansion: Object.freeze({ element: 'expansion-root', padding: 8, minimumSsim: .90 }),
+  sort: Object.freeze({ element: 'sort-primary', padding: 8, minimumSsim: .80 }),
+  'slide-toggle': Object.freeze({ element: 'slide-toggle-primary', padding: 8, minimumSsim: .40 }),
+  'button-toggle': Object.freeze({ element: 'button-toggle-primary', padding: 8, minimumSsim: .40 }),
   autocomplete: Object.freeze({ element: 'autocomplete-primary', padding: 8, paddingBottom: 130, minimumSsim: .85 }),
   select: Object.freeze({ element: 'select-primary', padding: 8, paddingBottom: 130, minimumSsim: .85 }),
   datepicker: Object.freeze({ element: 'datepicker-primary', padding: 8, paddingBottom: 370, minimumSsim: .86 }),
