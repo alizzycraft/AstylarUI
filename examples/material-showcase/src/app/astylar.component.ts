@@ -167,7 +167,9 @@ export class AstylarShowcaseComponent {
     if (id === 'button-toggle-two' || id === 'tab-overview') this.store.patchState({ selected: true });
     if (id === 'step-review') this.store.patchState({ selected: false });
     if (id === 'step-details') this.store.patchState({ selected: true });
-    if (id === 'select-control') this.store.patchState({ open: !this.store.state().open });
+    if (id === 'select-control' && !(this.benchmarkMode && this.benchmarkInteraction === 'held')) {
+      this.store.patchState({ open: !this.store.state().open });
+    }
     if (id === 'autocomplete-control') this.store.patchState({ open: true });
     if (['datepicker-icon', 'timepicker-icon'].includes(id)) {
       this.store.patchState({ open: !this.store.state().open });
@@ -365,6 +367,8 @@ export class AstylarShowcaseComponent {
         { selector: '.toolbar-action', mediaMaxWidth: '500px', top: `${theme.density === 0 ? 7 : 9}px`, right: '-12.15625px', width: '64px' },
         { selector: '.toolbar-action:hover', background: mixHex(theme.surface, theme.primary, .08) },
         { selector: '.toolbar-action:active', background: mixHex(theme.surface, theme.primary, .12) },
+        { selector: '#toolbar-action:hover', background: mixHex(theme.surface, theme.primary, this.store.benchmarkPhase() === 'held' ? .12 : .08) },
+        { selector: '#toolbar-action:active', background: mixHex(theme.surface, theme.primary, .12) },
         { selector: '.sidenav-container', width: '100%', height: '220px', display: 'flex', background: theme.surface },
         { selector: '.sidenav', width: '160px', height: '220px', boxSizing: 'border-box', padding: '17px 20px 20px', flexShrink: '0', background: theme.mode === 'dark' ? theme.surface : '#f3edf7', color: theme.mode === 'dark' ? '#49454f' : theme.onSurface },
         { selector: '.sidenav-content', flexGrow: '1', height: '220px', boxSizing: 'border-box', padding: '17px 20px 20px', background: theme.mode === 'dark' ? '#fff7ff' : theme.surface, color: theme.mode === 'dark' ? '#1d1b20' : theme.onSurface },

@@ -402,7 +402,7 @@ async function waitForAstylarBenchmark(page, errors, benchmarkCase) {
 async function performInteraction(page, mode, benchmarkCase) {
   const { family, state } = benchmarkCase;
   if (state === 'inspect' || state === 'disabled' || state === 'selected' || state === 'error') return undefined;
-  const box = await interactionTargetBox(page, mode, family);
+  const box = await interactionTargetBox(page, mode, family, state);
   assert.ok(box, `${mode} ${family} primary interaction target is missing.`);
   const x = box.x + box.width / 2;
   const y = box.y + box.height / 2;
@@ -437,7 +437,7 @@ async function performInteraction(page, mode, benchmarkCase) {
   await page.mouse.up();
   if (state === 'activate-twice') {
     await settleInteraction(page, mode);
-    const secondBox = await interactionTargetBox(page, mode, family);
+    const secondBox = await interactionTargetBox(page, mode, family, state);
     assert.ok(secondBox, `${mode} ${family} second interaction target is missing.`);
     await page.mouse.move(secondBox.x + secondBox.width / 2, secondBox.y + secondBox.height / 2);
     await page.mouse.down();
@@ -447,7 +447,7 @@ async function performInteraction(page, mode, benchmarkCase) {
   return undefined;
 }
 
-async function interactionTargetBox(page, mode, family) {
+async function interactionTargetBox(page, mode, family, state) {
   const astylarTargets = {
     toolbar: 'toolbar-action', card: 'card-open', chips: 'chip-0', sort: 'sort-trigger',
     paginator: 'paginator-next', radio: 'radio-team', 'button-toggle': 'button-toggle-two',
@@ -463,15 +463,23 @@ async function interactionTargetBox(page, mode, family) {
     datepicker: '#datepicker-primary mat-datepicker-toggle button',
     timepicker: '#timepicker-primary mat-timepicker-toggle button',
   };
-  if (mode === 'reference') return page.locator(referenceTargets[family] ?? `#${family}-primary`).boundingBox();
-  if (family === 'slider') {
-    const measurement = await page.evaluate(() =>
-      window.__ASTYLAR_MATERIAL_BENCHMARK__?.measure(['slider-material-visual']));
-    const local = measurement?.elements?.['slider-material-visual']?.borderBox;
+  if (mode === 'reference') {
+    if (family === 'slider' && ['hover', 'held', 'activate-leave'].includes(state)) {
+      return page.locator('#slider-primary').locator('xpath=ancestor::mat-slider')
+        .locator('mat-slider-visual-thumb').nth(1).boundingBox();
+    }
+    return page.locator(referenceTargets[family] ?? `#${family}-primary`).boundingBox();
+  }
+  if (family === 'slider' && ['hover', 'held', 'activate-leave'].includes(state)) {
+    const result = await page.evaluate(() => ({
+      measurement: window.__ASTYLAR_MATERIAL_BENCHMARK__?.measure(['slider-material-visual']),
+      value: window.__ASTYLAR_MATERIAL_BENCHMARK__?.state().sliderValue,
+    }));
+    const local = result.measurement?.elements?.['slider-material-visual']?.borderBox;
     const canvas = await page.locator('canvas').boundingBox();
-    return local && canvas ? {
-      x: canvas.x + local.left + local.width * .846,
-      y: canvas.y + local.top + local.height / 2,
+    return local && canvas && Number.isFinite(result.value) ? {
+      x: canvas.x + local.left + local.width * result.value / 100 - .5,
+      y: canvas.y + local.top + local.height / 2 - .5,
       width: 1,
       height: 1,
     } : undefined;
@@ -539,11 +547,15 @@ function compareEvents(reference, candidate, family, state) {
   const relevant = (events) => events.filter(({ targetId }) => targetId === `${family}-primary`)
     .map(({ type }) => type).filter((type) => ['pointerdown', 'pointerup', 'click', 'input', 'change'].includes(type))
     .filter((type, index, values) => index === 0 || type !== values[index - 1]);
-  // A role-based checkbox exposes its checked state through ARIA and activates
-  // through click; the browser-only input/change tail belongs to Material's
-  // hidden native input rather than the public interaction contract.
-  const expected = relevant(reference).filter((type) => family !== 'checkbox' || !['input', 'change'].includes(type));
-  const actual = relevant(candidate);
+  // Role-based selection controls expose their result through ARIA/value state.
+  // Material's hidden native inputs do not consistently bubble the input/change
+  // tail from the compared host, so compare the shared pointer contract here;
+  // semantic assertions above still require the resulting value to match.
+  const stateDrivenControl = family === 'checkbox' || family === 'slider';
+  const contractEvents = (events) => events.filter((type) =>
+    !stateDrivenControl || !['input', 'change'].includes(type));
+  const expected = contractEvents(relevant(reference));
+  const actual = contractEvents(relevant(candidate));
   return { matches: JSON.stringify(expected) === JSON.stringify(actual), reference: expected, astylar: actual };
 }
 
