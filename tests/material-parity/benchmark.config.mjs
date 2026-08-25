@@ -63,6 +63,7 @@ export const materialTextAlignmentTargets = Object.freeze({
   divider: ['divider-above', 'divider-below'],
   badge: ['badge-label', 'badge-count'],
   card: ['card-title', 'card-copy', 'card-open'],
+  paginator: ['paginator-size', 'paginator-range'],
   button: ['button-primary', 'button-secondary', 'button-disabled'],
   menu: ['menu-primary'],
   'bottom-sheet': ['bottom-sheet-primary'],
@@ -73,7 +74,7 @@ export const materialTextAlignmentTargets = Object.freeze({
 export const materialTextlessFamilies = Object.freeze(['icon', 'slider', 'progress-bar', 'progress-spinner']);
 export const materialAbsoluteTextAlignmentTargets = Object.freeze([
   'toolbar-action', 'divider-above', 'divider-below', 'badge-label', 'badge-count',
-  'card-title', 'card-copy', 'card-open',
+  'card-title', 'card-copy', 'card-open', 'paginator-range',
 ]);
 export const materialTextOnlyTargets = Object.freeze([
   'divider-above', 'divider-below', 'badge-label', 'card-title', 'card-copy',
@@ -85,6 +86,7 @@ export const materialFocusedRasterTargets = Object.freeze({
   sort: Object.freeze({ element: 'sort-primary', padding: 8, minimumSsim: .80 }),
   icon: Object.freeze({ element: 'icon-primary', padding: 8, minimumSsim: .80 }),
   table: Object.freeze({ element: 'table-primary', padding: 8, minimumSsim: .80 }),
+  paginator: Object.freeze({ element: 'paginator-primary', padding: 8, minimumSsim: .80 }),
   chips: Object.freeze({ element: 'chips-primary', padding: 8, minimumSsim: .79 }),
   checkbox: Object.freeze({ element: 'checkbox-primary', padding: 8, minimumSsim: .40 }),
   'button-toggle': Object.freeze({ element: 'button-toggle-primary', padding: 8, minimumSsim: .40 }),
