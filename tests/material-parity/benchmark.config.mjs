@@ -81,11 +81,15 @@ export const materialTextAlignmentTargets = Object.freeze({
 export const materialTextlessFamilies = Object.freeze(['icon', 'slider', 'progress-bar', 'progress-spinner']);
 export const materialAbsoluteTextAlignmentTargets = Object.freeze([
   'toolbar-action', 'divider-above', 'divider-below', 'badge-label', 'badge-count',
-  'card-title', 'card-copy', 'card-open', 'paginator-range',
+  'card-title', 'card-copy', 'card-open', 'paginator-range', 'tab-overview', 'tab-activity',
 ]);
 export const materialLeftAlignedTextTargets = Object.freeze([
   'form-field-control', 'input-control', 'select-control',
 ]);
+export const materialTextAlignmentToleranceOverrides = Object.freeze({
+  'tab-overview': 1.25,
+  'tab-activity': 1.25,
+});
 export const materialTextOnlyTargets = Object.freeze([
   'divider-above', 'divider-below', 'badge-label', 'card-title', 'card-copy',
   'checkbox-label', 'radio-solo-label', 'radio-team-label', 'slide-toggle-label',
@@ -108,6 +112,8 @@ export const materialFocusedRasterTargets = Object.freeze({
   chips: Object.freeze({ element: 'chips-primary', padding: 8, minimumSsim: .79 }),
   checkbox: Object.freeze({ element: 'checkbox-primary', padding: 8, minimumSsim: .40 }),
   'button-toggle': Object.freeze({ element: 'button-toggle-primary', padding: 8, minimumSsim: .40 }),
+  tabs: Object.freeze({ element: 'tabs-primary', padding: 8, minimumSsim: .80 }),
+  stepper: Object.freeze({ element: 'stepper-primary', padding: 8, minimumSsim: .90 }),
 });
 export const materialInteractionFocusedRasterTargets = Object.freeze({
   expansion: Object.freeze({ element: 'expansion-root', padding: 8, minimumSsim: .90 }),

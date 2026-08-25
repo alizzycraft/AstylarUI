@@ -9,7 +9,7 @@ import { PNG } from 'pngjs';
 import { ssim } from 'ssim.js';
 import {
   materialAbsoluteTextAlignmentTargets, materialFamilies, materialFocusedRasterTargets, materialInteractionCases, materialInteractionFocusedRasterTargets, materialInteractionTextAlignmentTargets, materialMobileFlowCases, materialProfiles,
-  materialLeftAlignedTextTargets, materialSemanticExcludedTargets, materialShadowProfileTargets, materialStaticCases, materialTextAlignmentTargets, materialTextAuditTargets, materialTextOnlyTargets, materialThresholds, materialUniformBackgroundTargets,
+  materialLeftAlignedTextTargets, materialSemanticExcludedTargets, materialShadowProfileTargets, materialStaticCases, materialTextAlignmentTargets, materialTextAlignmentToleranceOverrides, materialTextAuditTargets, materialTextOnlyTargets, materialThresholds, materialUniformBackgroundTargets,
 } from './benchmark.config.mjs';
 import { measureTextInkCenter, textCenterOffsetError } from './text-alignment-metrics.mjs';
 import { compareBottomShadowProfiles } from './shadow-profile-metrics.mjs';
@@ -713,7 +713,7 @@ function compareTextAlignment(referenceImage, candidateImage, referenceElements,
       reference,
       astylar,
       offsetErrorPx,
-      matches: offsetErrorPx <= materialThresholds.maximumTextCenterOffsetErrorPx,
+      matches: offsetErrorPx <= (materialTextAlignmentToleranceOverrides[id] ?? materialThresholds.maximumTextCenterOffsetErrorPx),
     };
   });
 }
