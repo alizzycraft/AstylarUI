@@ -1,5 +1,5 @@
 import { EnvironmentProviders, Injectable, InjectionToken, inject } from '@angular/core';
-import { Color3, Mesh, MeshBuilder, StandardMaterial, Vector3 } from '@babylonjs/core';
+import { Color3, DynamicTexture, Mesh, MeshBuilder, StandardMaterial, Vector3 } from '@babylonjs/core';
 import {
   ASTYLAR_PLUGIN_API_VERSION,
   defineAstylarPlugin,
@@ -65,6 +65,21 @@ abstract class MaterialRendererBase {
     const observer = context.scene.onBeforeRenderObservable.add(() => update(((performance.now() - started) % 1_400) / 1_400));
     context.resources.addCleanup(() => context.scene.onBeforeRenderObservable.remove(observer));
   }
+
+  protected animateOnce(context: AstylarPluginRenderContext, duration: number, update: (phase: number) => void): void {
+    if (this.config.benchmarkMode) {
+      update(Math.max(0, Math.min(1, this.number(context, 'phase', 1))));
+      return;
+    }
+    const started = performance.now();
+    const observer = context.scene.onBeforeRenderObservable.add(() => {
+      const phase = Math.max(0, Math.min(1, (performance.now() - started) / duration));
+      update(1 - Math.pow(1 - phase, 3));
+      if (phase >= 1) context.scene.onBeforeRenderObservable.remove(observer);
+    });
+    context.resources.addCleanup(() => context.scene.onBeforeRenderObservable.remove(observer));
+    update(0);
+  }
 }
 
 @Injectable()
@@ -125,8 +140,9 @@ class MaterialCircularProgressRenderer extends MaterialRendererBase implements A
     const progress = Math.max(.01, Math.min(1, this.number(context, 'progress', .64)));
     const arc = mode === 'determinate' ? progress : .74;
     const pointCount = Math.max(8, Math.ceil(64 * arc));
+    const materialStartAngle = -Math.PI / 2 + Math.PI * 13 / 45;
     const points = Array.from({ length: pointCount }, (_, index) => {
-      const angle = -Math.PI / 2 - (index / Math.max(1, pointCount - 1)) * Math.PI * 2 * arc;
+      const angle = materialStartAngle - (index / Math.max(1, pointCount - 1)) * Math.PI * 2 * arc;
       return new Vector3(Math.cos(angle) * radius, Math.sin(angle) * radius, 0);
     });
     const indicator = this.ownChild(context, MeshBuilder.CreateTube(`${context.meshId}-indicator`, {
@@ -170,11 +186,72 @@ class MaterialRangeVisualRenderer extends MaterialRendererBase implements Astyla
   }
 }
 
+@Injectable()
+class MaterialCheckMarkRenderer extends MaterialRendererBase implements AstylarPluginElementRenderer {
+  render(context: AstylarPluginRenderContext): Mesh {
+    const root = this.root(context);
+    const scale = context.dimensions.pixelToWorldScale;
+    const path = [
+      new Vector3(-5.5 * scale, -.4 * scale, 0),
+      new Vector3(-1.8 * scale, 3.2 * scale, 0),
+      new Vector3(5.5 * scale, -4.2 * scale, 0),
+    ];
+    const mark = this.ownChild(context, MeshBuilder.CreateTube(`${context.meshId}-mark`, {
+      path,
+      radius: Math.max(.6, this.number(context, 'stroke-width', 1.8) / 2) * scale,
+      tessellation: this.config.benchmarkMode ? 8 : 12,
+      cap: Mesh.CAP_ALL,
+    }, context.scene), root);
+    mark.material = this.material(context, 'mark-material', this.color(context, 'indicator-color', '#49454f'));
+    mark.position.z = .02;
+    root.metadata = { showcaseMaterialVisual: 'check-mark', benchmarkMode: this.config.benchmarkMode };
+    return root;
+  }
+}
+
+@Injectable()
+class MaterialTabPanelRenderer extends MaterialRendererBase implements AstylarPluginElementRenderer {
+  render(context: AstylarPluginRenderContext): Mesh {
+    const root = this.root(context);
+    const width = Math.max(1, Math.round(context.dimensions.width * 2));
+    const height = Math.max(1, Math.round(context.dimensions.height * 2));
+    const texture = context.resources.own(new DynamicTexture(`${context.meshId}-content`, { width, height }, context.scene, false));
+    texture.hasAlpha = true;
+    const material = this.material(context, 'content-material', '#ffffff');
+    material.diffuseTexture = texture;
+    material.emissiveTexture = texture;
+    material.opacityTexture = texture;
+    material.useAlphaFromDiffuseTexture = true;
+    root.material = material;
+    root.position.z = .02;
+
+    const selected = context.element.data?.['selected'] !== false;
+    const direction = selected ? -1 : 1;
+    const outgoing = selected ? 'Activity content' : 'Overview content';
+    const incoming = selected ? 'Overview content' : 'Activity content';
+    const color = this.color(context, 'text-color', '#1d1b20');
+    const draw = (phase: number) => {
+      const canvas = texture.getContext();
+      canvas.clearRect(0, 0, width, height);
+      canvas.fillStyle = color;
+      canvas.font = '32px Roboto, Arial, sans-serif';
+      canvas.fillText(outgoing, -direction * phase * width, Math.min(height - 4, 30));
+      canvas.fillText(incoming, direction * (1 - phase) * width, Math.min(height - 4, 30));
+      texture.update(false);
+    };
+    this.animateOnce(context, 320, draw);
+    root.metadata = { showcaseMaterialVisual: 'tab-panel', selected, benchmarkMode: this.config.benchmarkMode };
+    return root;
+  }
+}
+
 const elementDefinitions = [
   { name: 'state-layer', renderer: MaterialStateLayerRenderer },
   { name: 'linear-progress', renderer: MaterialLinearProgressRenderer },
   { name: 'circular-progress', renderer: MaterialCircularProgressRenderer },
   { name: 'range-visual', renderer: MaterialRangeVisualRenderer },
+  { name: 'check-mark', renderer: MaterialCheckMarkRenderer },
+  { name: 'tab-panel', renderer: MaterialTabPanelRenderer },
 ] as const;
 
 export function provideMaterialShowcasePlugin(
@@ -233,5 +310,6 @@ function validateMaterialElement(name: string, data: Readonly<Record<string, unk
   const mode = data?.['mode'];
   if (mode !== undefined && !modes.includes(String(mode))) return `data.mode must be one of ${modes.join(', ')}.`;
   if (name === 'range-visual' && Number(data?.['start'] ?? 0) > Number(data?.['end'] ?? 1)) return 'data.start must not exceed data.end.';
+  if (name === 'tab-panel' && data?.['selected'] !== undefined && typeof data['selected'] !== 'boolean') return 'data.selected must be boolean.';
   return true;
 }

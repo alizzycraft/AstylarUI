@@ -33,6 +33,9 @@ import { MaterialRippleController } from './material-plugin/material-ripple.cont
 export class AstylarShowcaseComponent {
   protected readonly store = inject(ShowcaseStore);
   private readonly benchmarkMode = typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('benchmark') === '1';
+  private readonly benchmarkInteraction = typeof window !== 'undefined'
+    ? new URLSearchParams(window.location.search).get('interaction')
+    : null;
   private readonly route = inject(ActivatedRoute);
   private readonly zone = inject(NgZone);
   private readonly destroyRef = inject(DestroyRef);
@@ -58,6 +61,16 @@ export class AstylarShowcaseComponent {
             if (!this.benchmarkMode) this.activateRipple(event);
           }),
           pointerup: (event: AstylarEvent) => this.recordEvent(event),
+          pointerenter: (event: AstylarEvent) => this.zone.run(() => {
+            this.recordEvent(event);
+            if (event.targetId === 'tooltip-primary' && !(this.benchmarkMode && this.benchmarkInteraction === 'open')) {
+              this.store.patchState({ open: true });
+            }
+          }),
+          pointerleave: (event: AstylarEvent) => this.zone.run(() => {
+            this.recordEvent(event);
+            if (event.targetId === 'tooltip-primary') this.store.patchState({ open: false });
+          }),
           focus: (event: AstylarEvent) => this.zone.run(() => {
             this.recordEvent(event);
             this.focusedId.set(event.targetId);
@@ -156,17 +169,21 @@ export class AstylarShowcaseComponent {
     if (id === 'step-details') this.store.patchState({ selected: true });
     if (id === 'select-control') this.store.patchState({ open: !this.store.state().open });
     if (id === 'autocomplete-control') this.store.patchState({ open: true });
-    if (['datepicker-control', 'datepicker-icon', 'timepicker-control', 'timepicker-icon'].includes(id)) {
+    if (['datepicker-icon', 'timepicker-icon'].includes(id)) {
       this.store.patchState({ open: !this.store.state().open });
     }
     if (id === 'slide-toggle-primary') this.store.patchState({ selected: !this.store.state().selected });
-    if (['dialog-primary', 'bottom-sheet-primary', 'snack-bar-primary'].includes(id)) {
+    if (['dialog-primary', 'bottom-sheet-primary'].includes(id)) {
       const wasOpen = this.store.state().open;
       this.store.patchState({ open: !wasOpen });
       if (wasOpen) this.surface?.focus(id, { focusVisible: true });
       else void this.surface?.whenSettled().then(() => this.surface?.focus(id.replace('-primary', '-dismiss')));
     }
+    if (id === 'snack-bar-primary') this.store.patchState({ open: true });
     if (id === 'menu-primary') this.store.patchState({ open: !this.store.state().open });
+    if (id === 'tooltip-primary' && this.benchmarkMode && this.benchmarkInteraction === 'open') {
+      this.store.patchState({ open: true });
+    }
     if (id === 'expansion-primary') this.store.patchState({ open: !this.store.state().open });
     if (id.endsWith('-dismiss')) {
       this.store.patchState({ open: false });
@@ -211,6 +228,7 @@ export class AstylarShowcaseComponent {
     if (this.surface) this.surface.scene.clearColor = Color4.FromHexString(`${theme.surface}ff`);
     const rootId = `${family}-root`;
     const densityHeight = materialDensityHeight(theme.density);
+    const emptyFieldActive = this.focusedId() !== undefined || state.error;
     const referenceHeight = family === 'button' ? 58 + densityHeight
       : materialReferenceHeight(family, theme.density) + (family === 'expansion' && state.open ? 88 : 0);
     const content = this.familyElements(family);
@@ -245,16 +263,19 @@ export class AstylarShowcaseComponent {
         { selector: '.radio-option', position: 'absolute', top: '-10px', height: '40px', display: 'flex', alignItems: 'center', color: theme.onSurface },
         { selector: '#radio-solo', left: '0', width: '68px' },
         { selector: '#radio-team', left: '73px', width: '80px' },
-        { selector: '.radio-ring', position: 'relative', width: '20px', height: '20px', boxSizing: 'border-box', borderWidth: '2px', borderStyle: 'solid', borderColor: theme.onSurface, borderRadius: '10px' },
+        { selector: '.radio-ring', position: 'relative', width: '20px', height: '20px', boxSizing: 'border-box', borderWidth: '2px', borderStyle: 'solid', borderColor: theme.onSurface, borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center' },
         { selector: '.radio-ring.selected', borderColor: theme.primary },
-        { selector: '.radio-dot', position: 'absolute', top: '3px', left: '3px', width: '10px', height: '10px', borderRadius: '5px', background: theme.primary },
+        { selector: '.radio-dot', width: '10px', height: '10px', flexShrink: '0', borderRadius: '5px', background: theme.primary },
         { selector: '.radio-label', marginLeft: '8px', fontSize: '14px', verticalAlign: 'middle' },
         { selector: '#slide-toggle-primary', position: 'relative', width: '179px', height: '32px', alignSelf: 'flex-start' },
-        { selector: '.switch-track', position: 'absolute', top: '0', left: '0', width: '52px', height: '32px', borderRadius: '16px', background: state.selected ? theme.primary : '#79747e' },
-        { selector: '.switch-thumb', position: 'absolute', top: '4px', left: state.selected ? '24px' : '4px', width: '24px', height: '24px', borderRadius: '12px', background: theme.surface, color: theme.primary, textAlign: 'center', fontSize: '18px' },
+        { selector: '.switch-state-layer', position: 'absolute', top: '-4px', left: state.selected ? '20px' : '2px', width: '40px', height: '40px', borderRadius: '20px', background: 'transparent' },
+        { selector: '#slide-toggle-primary:hover .switch-state-layer', background: mixHex(theme.surfaceContainer, state.selected ? theme.primary : theme.onSurface, .08) },
+        { selector: '#slide-toggle-primary:active .switch-state-layer', background: mixHex(theme.surfaceContainer, state.selected ? theme.primary : theme.onSurface, .12) },
+        { selector: '.switch-track', position: 'absolute', top: '0', left: '0', width: '52px', height: '32px', boxSizing: 'border-box', borderWidth: state.selected ? '0' : '2px', borderStyle: 'solid', borderColor: '#79747e', borderRadius: '16px', background: state.selected ? theme.primary : state.disabled ? mixHex(theme.surfaceContainer, theme.onSurface, .08) : 'transparent' },
+        { selector: '.switch-thumb', position: 'absolute', top: state.selected ? '4px' : '6px', left: state.selected ? '24px' : '6px', width: state.selected ? '24px' : '16px', height: state.selected ? '24px' : '16px', borderRadius: state.selected ? '12px' : '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: state.selected ? theme.surface : '#79747e', color: state.selected ? theme.primary : theme.surfaceContainer, textAlign: 'center', fontSize: '14px' },
         { selector: '.switch-label', position: 'absolute', top: '6px', left: '60px', whiteSpace: 'nowrap', color: theme.onSurface, fontSize: '14px', verticalAlign: 'middle' },
-        { selector: '#button-toggle-primary', width: '130px', height: '42px', boxSizing: 'border-box', borderWidth: '1px', borderStyle: 'solid', borderColor: '#79747e', borderRadius: `${21 * theme.cornerScale}px`, display: 'flex', alignSelf: 'flex-start' },
-        { selector: '.button-toggle-option', height: '100%', boxSizing: 'border-box', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', color: theme.onSurface, fontSize: '14px', cursor: 'pointer' },
+        { selector: '#button-toggle-primary', width: '130px', height: '42px', boxSizing: 'border-box', borderWidth: '1px', borderStyle: 'solid', borderColor: '#79747e', borderRadius: `${21 * theme.cornerScale}px`, display: 'flex', alignSelf: 'flex-start', overflow: 'hidden' },
+        { selector: '.button-toggle-option', height: '40px', boxSizing: 'border-box', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', color: theme.onSurface, fontSize: '14px', cursor: 'pointer' },
         { selector: '#button-toggle-one-label, #button-toggle-two-label', verticalAlign: 'middle' },
         { selector: '#button-toggle-one', width: state.selected ? '48px' : '81px' },
         { selector: '#button-toggle-two', width: state.selected ? '80px' : '47px', borderWidth: '0 0 0 1px', borderStyle: 'solid', borderColor: '#79747e', borderRadius: `0 ${20 * theme.cornerScale}px ${20 * theme.cornerScale}px 0` },
@@ -276,26 +297,31 @@ export class AstylarShowcaseComponent {
         { selector: '.field-surface', position: 'absolute', top: '0', left: '0', width: '100%', height: `${theme.density === 0 ? 56 : 48}px`, boxSizing: 'border-box', borderRadius: `${4 * theme.cornerScale}px`, background: theme.mode === 'dark' && !state.open ? '#49454f' : '#e8e0eb', boxShadow: `0 1px 0 ${theme.onSurface}` },
         { selector: '.field-surface.active', boxShadow: `0 2px 0 ${state.error ? theme.error : theme.primary}` },
         { selector: '.field-label', position: 'absolute', top: '8px', left: '16px', color: state.error ? theme.error : theme.mode === 'dark' ? '#cac4d0' : theme.density <= -5 ? '#000000' : '#49454f', fontSize: '12px', letterSpacing: '.4px', verticalAlign: 'middle' },
-        { selector: '.field-label.empty-field-label', top: `${state.open || state.error ? 8 : theme.density === 0 ? 20 : 16}px`, color: state.error ? theme.error : state.open ? theme.primary : theme.onSurface, fontSize: state.open || state.error ? '12px' : '16px', letterSpacing: state.open || state.error ? '.4px' : '.65px' },
+        { selector: '.field-label.empty-field-label', top: `${emptyFieldActive ? 8 : theme.density === 0 ? 20 : 16}px`, color: state.error ? theme.error : emptyFieldActive ? theme.primary : theme.onSurface, fontSize: emptyFieldActive ? '12px' : '16px', letterSpacing: emptyFieldActive ? '.4px' : '.65px' },
         { selector: '.field-input-region', position: 'absolute', top: `${theme.density === 0 ? 24 : 16}px`, left: '0', width: '100%', height: '24px', boxSizing: 'border-box', padding: '0 16px', background: 'transparent' },
+        { selector: '#datepicker-input-region', right: '48px', width: 'auto' },
+        { selector: '#timepicker-input-region', right: '48px', width: 'auto' },
         { selector: '.field-control', position: 'relative', width: '100%', height: '24px', boxSizing: 'border-box', padding: '0', borderWidth: '0', borderRadius: '0', background: 'transparent', boxShadow: 'none', color: theme.mode === 'dark' && state.open ? '#1d1b20' : theme.onSurface, fontSize: '16px' },
         { selector: '.field-control:focus', borderWidth: '0', color: theme.onSurface, boxShadow: 'none' },
         { selector: '.select-control', paddingRight: '32px', cursor: 'pointer', boxShadow: 'none' },
         { selector: '.select-caret', position: 'absolute', top: `${theme.density === 0 ? 20 : 16}px`, right: '16px', color: state.open ? theme.primary : theme.onSurface, fontSize: '14px' },
-        { selector: '.select-popup', position: 'absolute', top: `${theme.density === 0 ? 56 : 48}px`, left: '0', width: '100%', height: `${theme.density === 0 ? 112 : 96}px`, background: '#f2ecf1', boxShadow: '0 2px 6px rgba(0,0,0,0.24)', zIndex: '60' },
-        { selector: '.select-option', position: 'relative', width: '100%', height: `${theme.density === 0 ? 56 : 48}px`, boxSizing: 'border-box', padding: `${theme.density === 0 ? 18 : 14}px 16px`, color: '#1d1b20', fontSize: '16px' },
+        { selector: '.select-popup', position: 'absolute', top: `${theme.density === 0 ? 56 : 48}px`, left: '7px', right: '7px', width: 'auto', height: `${theme.density === 0 ? 112 : 104}px`, boxSizing: 'border-box', padding: '8px 0', background: '#f2ecf1', boxShadow: '0 2px 6px rgba(0,0,0,0.24)', zIndex: '60' },
+        { selector: '.select-option', position: 'relative', width: '100%', height: '48px', boxSizing: 'border-box', padding: '14px 16px', color: '#1d1b20', fontSize: '16px' },
         { selector: '.select-option.selected', background: '#eadef7' },
         { selector: '.autocomplete-popup', top: `${theme.density === 0 ? 58 : 50}px` },
         { selector: '.autocomplete-popup .select-option', padding: `${theme.density === 0 ? 20 : 16}px 16px` },
-        { selector: '.select-check', position: 'absolute', top: `${theme.density === 0 ? 16 : 12}px`, right: '16px', color: '#1d1b20', fontSize: '22px' },
+        { selector: '.select-check', position: 'absolute', top: '14px', right: '16px', color: '#49454f' },
         { selector: '.picker-control.open', boxShadow: 'none' },
-        { selector: '.picker-clock', position: 'absolute', top: `${theme.density === 0 ? 16 : 12}px`, right: '12px', color: theme.mode === 'dark' && state.open ? '#49454f' : theme.onSurface, fontSize: '24px' },
-        { selector: '.picker-popup', position: 'absolute', top: `${theme.density === 0 ? 64 : 56}px`, left: '0', width: '100%', height: `${theme.density === 0 ? 248 : 216}px`, background: '#f2ecf1', boxShadow: '0 2px 6px rgba(0,0,0,0.24)', zIndex: '60' },
+        { selector: '.picker-clock', position: 'absolute', top: `${theme.density === 0 ? 8 : 4}px`, right: '4px', width: '40px', height: '40px', boxSizing: 'border-box', padding: '0', borderWidth: '0', borderRadius: '20px', background: 'transparent', color: theme.mode === 'dark' && state.open ? '#49454f' : theme.onSurface, fontSize: '24px', zIndex: '4' },
+        { selector: '.picker-clock:hover', background: mixHex(theme.surfaceContainer, theme.onSurface, .08) },
+        { selector: '.picker-popup', position: 'absolute', top: `${theme.density === 0 ? 56 : 48}px`, left: '7px', right: '7px', width: 'auto', height: `${theme.density === 0 ? 312 : 280}px`, boxSizing: 'border-box', paddingTop: '8px', overflow: 'scroll', background: '#f2ecf1', boxShadow: '0 2px 6px rgba(0,0,0,0.24)', zIndex: '60' },
         { selector: '.picker-option', width: '100%', height: `${theme.density === 0 ? 48 : 42}px`, boxSizing: 'border-box', padding: `${theme.density === 0 ? 14 : 11}px 16px`, color: '#1d1b20', fontSize: '16px' },
         { selector: '.picker-option.selected', background: '#d8d2d8' },
         { selector: '.timepicker-shell .field-surface', height: `${theme.density <= -5 && state.open ? 34 : theme.density === 0 ? 56 : 48}px` },
         { selector: '.timepicker-shell .field-label', color: theme.density <= -5 && state.open ? '#e8e0eb' : state.open ? theme.primary : theme.onSurface },
-        { selector: '.timepicker-shell .picker-popup', top: `${theme.density <= -5 ? 39 : theme.density === 0 ? 64 : 56}px`, height: `${theme.density <= -5 ? 248 : theme.density === 0 ? 248 : 216}px`, paddingTop: `${theme.density <= -5 ? 8 : 0}px` },
+        { selector: '.timepicker-gap', position: 'absolute', top: `${theme.density <= -5 ? 34 : theme.density === 0 ? 56 : 48}px`, left: '7px', right: '7px', height: '8px', background: '#f2ecf1', zIndex: '60' },
+        { selector: '.timepicker-active-line', position: 'absolute', top: `${theme.density <= -5 ? 32 : theme.density === 0 ? 54 : 46}px`, left: '7px', right: '7px', height: '2px', background: theme.primary, zIndex: '61' },
+        { selector: '.timepicker-shell .picker-popup', top: `${theme.density <= -5 ? 42 : theme.density === 0 ? 64 : 56}px`, height: '248px', paddingTop: '0' },
         { selector: '.timepicker-shell .picker-option', height: `${theme.density <= -5 ? 48 : theme.density === 0 ? 48 : 42}px`, padding: `${theme.density <= -5 || theme.density === 0 ? 14 : 11}px 16px` },
         { selector: '.datepicker-popup', position: 'absolute', top: `${theme.density === 0 ? 59 : 51}px`, left: '7px', width: '291px', height: '349px', boxSizing: 'border-box', background: '#f3edf7', boxShadow: '0 2px 4px rgba(0,0,0,0.24)', zIndex: '60' },
         { selector: '.datepicker-header', position: 'relative', width: '100%', height: '64px', boxSizing: 'border-box', padding: '0 24px', display: 'flex', alignItems: 'center', color: '#1d1b20', fontSize: '14px', fontWeight: '500' },
@@ -306,28 +332,28 @@ export class AstylarShowcaseComponent {
         { selector: '.datepicker-grid', position: 'absolute', top: '64px', left: '21px', width: '280px', height: '280px', display: 'grid', gridTemplateColumns: 'repeat(7, 40px)', gridTemplateRows: 'repeat(7, 40px)' },
         { selector: '.datepicker-cell', width: '40px', height: '40px', boxSizing: 'border-box', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#1d1b20', fontSize: '14px', verticalAlign: 'middle' },
         { selector: '.datepicker-weekday, .datepicker-month-marker', fontWeight: '500' },
-        { selector: '.datepicker-selected', width: '36px', height: '36px', boxSizing: 'border-box', display: 'flex', alignItems: 'center', justifyContent: 'center', borderWidth: '1px', borderStyle: 'solid', borderColor: theme.primary, borderRadius: '18px', verticalAlign: 'middle' },
+        { selector: '.datepicker-selected', position: 'relative', width: '36px', height: '36px', boxSizing: 'border-box', borderWidth: '1px', borderStyle: 'solid', borderColor: theme.primary, borderRadius: '18px' },
+        { selector: '.datepicker-selected-label', position: 'absolute', top: '8px', left: '0', width: '100%', textAlign: 'center', verticalAlign: 'middle' },
         { selector: '.field-hint', position: 'absolute', top: `${theme.density === 0 ? 58 : 50}px`, left: '16px', fontSize: '12px', letterSpacing: '.4px', color: theme.onSurface },
         { selector: '.field-error', position: 'absolute', top: `${theme.density === 0 ? 58 : 50}px`, left: '16px', fontSize: '12px', letterSpacing: '.4px', color: theme.error },
         { selector: '.row', display: 'flex', flexWrap: 'wrap', gap: '0', alignItems: 'center' },
         { selector: '.card', padding: '20px', borderRadius: `${16 * theme.cornerScale}px`, background: theme.mode === 'dark' ? '#2b2930' : '#f3edf7', minHeight: '90px' },
         { selector: '.material-card', position: 'relative', width: '100%', height: '120px', boxSizing: 'border-box', borderRadius: `${12 * theme.cornerScale}px`, background: theme.mode === 'dark' ? '#fff7ff' : '#f8f2f6', boxShadow: '0 2px 1px -1px rgba(0,0,0,0.2), 0 1px 1px 0 rgba(0,0,0,0.14), 0 1px 3px 0 rgba(0,0,0,0.12)', zIndex: '2' },
         { selector: '.card-title', position: 'absolute', top: `${theme.density <= -5 ? 15.5 : 14.75}px`, left: '16px', fontSize: '22px', fontWeight: '400', whiteSpace: 'nowrap', zIndex: '2' },
-        { selector: '.card-copy', position: 'absolute', top: `${theme.typographyScale > 1 ? 43.5 : 42.75}px`, left: '0', fontSize: '16px', whiteSpace: 'nowrap', zIndex: '2' },
+        { selector: '.card-copy', position: 'absolute', top: `${theme.typographyScale > 1 ? 43.5 : 42.75}px`, left: '16px', fontSize: '16px', whiteSpace: 'nowrap', zIndex: '2' },
         { selector: '.text-button', position: 'absolute', top: `${theme.density === 0 ? 71.25 : theme.density <= -5 ? 76 : 78}px`, left: '8px', width: '64px', height: `${densityHeight}px`, padding: '0 8px', borderWidth: '0', borderRadius: `${densityHeight / 2 * theme.cornerScale}px`, background: 'transparent', color: theme.primary, fontSize: '14px', fontWeight: '500', cursor: 'pointer', zIndex: '2' },
         { selector: '.text-button:hover', background: mixHex(theme.mode === 'dark' ? '#fff7ff' : '#f8f2f6', theme.primary, .08) },
         { selector: '.text-button:active', background: mixHex(theme.mode === 'dark' ? '#fff7ff' : '#f8f2f6', theme.primary, .12) },
         { selector: '.material-table', width: '100%', height: `${theme.density === 0 ? 160 : theme.density <= -5 ? 112 : 136}px`, borderWidth: '0', background: theme.surface, fontSize: '16px' },
         { selector: '.material-table th', position: 'relative', height: `${theme.density === 0 ? 56 : theme.density <= -5 ? 40 : 48}px`, padding: '0 16px', borderWidth: '0', textAlign: 'left', verticalAlign: 'middle', fontWeight: '500', fontSize: '16px' },
         { selector: '.material-table td', position: 'relative', height: `${theme.density === 0 ? 52 : theme.density <= -5 ? 36 : 44}px`, padding: '0 16px', borderWidth: '0', textAlign: 'left', verticalAlign: 'middle', fontSize: '16px' },
-        { selector: '.table-rule', position: 'absolute', left: '28px', width: '720px', height: '1px', background: '#79747e' },
+        { selector: '.table-rule', position: 'absolute', left: '28px', right: '28px', width: 'auto', height: '1px', background: '#79747e' },
         { selector: '.table-rule-one', top: `${theme.density === 0 ? 84 : theme.density <= -5 ? 68 : 76}px` },
         { selector: '.table-rule-two', top: `${theme.density === 0 ? 136 : theme.density <= -5 ? 104 : 120}px` },
-        { selector: '.table-rule', mediaMaxWidth: '500px', width: '260px' },
         { selector: '.expansion-panel', position: 'relative', width: '100%', height: `${state.open ? theme.density === 0 ? 136 : theme.density <= -5 ? 112 : 120 : theme.density === 0 ? 48 : theme.density <= -5 ? 36 : 40}px`, borderRadius: `${12 * theme.cornerScale}px`, background: theme.surface, boxShadow: '0 1px 2px #00000055' },
         { selector: '.expansion-trigger', width: '100%', height: `${state.open ? theme.density === 0 ? 64 : theme.density <= -5 ? 52 : 56 : theme.density === 0 ? 48 : theme.density <= -5 ? 36 : 40}px`, boxSizing: 'border-box', padding: '0 24px', borderWidth: '0', display: 'flex', alignItems: 'center', background: 'transparent', color: theme.onSurface, fontWeight: '500', textAlign: 'left' },
         { selector: '.expansion-title', fontWeight: '500', lineHeight: '20px', verticalAlign: 'middle' },
-        { selector: '.expansion-chevron', position: 'absolute', top: `${state.open ? 21 : 13}px`, right: '20px', fontSize: '20px' },
+        { selector: '.expansion-chevron', position: 'absolute', top: `${state.open ? 21 : 13}px`, right: '20px', fontFamily: 'Arial, sans-serif', fontSize: '20px', fontWeight: '700', transform: 'scaleX(1.35)' },
         { selector: '#expansion-content', position: 'absolute', display: state.open ? 'block' : 'none', top: `${state.open ? theme.density === 0 ? 80 : theme.density <= -5 ? 60 : 68 : 0}px`, left: '24px', margin: '0', verticalAlign: 'middle' },
         { selector: '.toolbar', position: 'relative', width: '100%', height: `${theme.density === 0 ? 64 : theme.density <= -5 ? 52 : 56}px`, display: 'flex', alignItems: 'center', background: theme.surface, color: theme.onSurface },
         ...(theme.density === 0 ? [{ selector: '.toolbar', mediaMaxWidth: '500px', height: '56px' }] : []),
@@ -354,11 +380,12 @@ export class AstylarShowcaseComponent {
         { selector: '.badge-bubble', position: 'absolute', top: '-4px', right: '-4px', width: '16px', height: '16px', borderRadius: '8px', background: theme.primary, color: theme.onPrimary, fontSize: '11px', lineHeight: '16px', textAlign: 'center' },
         { selector: '.badge-count-label', position: 'relative', top: '-2.5px', display: 'block', width: '100%', textAlign: 'center' },
         { selector: '.chip', height: '32px', boxSizing: 'border-box', padding: '0 12px', borderWidth: '0', borderRadius: `${8 * theme.cornerScale}px`, display: 'flex', alignItems: 'center', gap: '8px', background: '#eadef7', color: '#4b4357', fontSize: '14px', cursor: 'pointer' },
+        { selector: '#chips-primary', gap: '10px' },
         { selector: '#chip-0', width: '98px' },
         { selector: '#chip-1', width: '94px' },
-        { selector: '.selection-mark', width: '16px', height: '20px', flexShrink: '0', color: theme.onSurface, fontSize: '18px', fontWeight: '400', lineHeight: '20px', textAlign: 'center', verticalAlign: 'middle' },
-        { selector: '.checkbox-mark', color: theme.onPrimary, fontSize: '16px', lineHeight: '18px' },
-        { selector: '.switch-mark', color: theme.primary, fontSize: '18px', lineHeight: '24px' },
+        { selector: '.selection-mark', width: '16px', height: '16px', flexShrink: '0' },
+        { selector: '.checkbox-mark', width: '14px', height: '14px' },
+        { selector: '.switch-mark', width: '16px', height: '16px' },
         { selector: '.material-icon', width: '24px', height: '24px', objectFit: 'contain' },
         { selector: '#chips-primary', height: `${theme.density === 0 ? 40 : 32}px` },
         { selector: '.material-list', width: '100%', display: 'flex', flexDirection: 'column', fontSize: '16px' },
@@ -366,7 +393,7 @@ export class AstylarShowcaseComponent {
         { selector: '.list-label', marginLeft: '16px', fontSize: '16px' },
         { selector: '.sort-header', width: '100%', height: `${theme.density === -2 ? 22 : 19}px`, borderWidth: '0', background: 'transparent', color: theme.onSurface, textAlign: 'left', fontWeight: '500' },
         { selector: '.sort-trigger', width: '132px', height: `${theme.density === -2 ? 22 : 19}px`, display: 'flex', alignItems: 'center', gap: '6px', color: theme.onSurface, fontSize: '17px', fontWeight: '500', cursor: 'pointer' },
-        { selector: '.sort-arrow', fontSize: '18px', fontWeight: '400' },
+        { selector: '.sort-arrow', fontSize: '16px', fontWeight: '700' },
         { selector: '.paginator', position: 'relative', width: '100%', height: '56px', background: theme.surface, fontSize: '13px' },
         { selector: '#paginator-size', position: 'absolute', top: `${theme.density === 0 ? 20 : theme.density <= -5 ? 12 : 16}px`, right: `${theme.density <= -5 ? 222.75 : 246.75}px`, whiteSpace: 'nowrap', fontSize: '13px', verticalAlign: 'middle' },
         { selector: '#paginator-page-size', position: 'absolute', top: `${theme.density === 0 ? 20 : theme.density <= -5 ? 12 : 16}px`, right: `${theme.density <= -5 ? 206 : 230}px`, whiteSpace: 'nowrap', fontSize: '13px', verticalAlign: 'middle' },
@@ -380,12 +407,13 @@ export class AstylarShowcaseComponent {
         { selector: '.paginator-button', mediaMaxWidth: '500px', top: `${theme.density === 0 ? 4 : theme.density <= -5 ? 4 : 8}px` },
         { selector: '.material-tree', width: '100%', display: 'flex', flexDirection: 'column', background: theme.surface },
         { selector: '.tree-item', width: '100%', height: `${theme.density < 0 ? 40 : 48}px`, padding: '0', boxSizing: 'border-box', display: 'flex', alignItems: 'center' },
+        { selector: '.tree-label', height: '20px', lineHeight: '20px', verticalAlign: 'middle' },
         { selector: '#tree-item-0:focus, #tree-item-0.focused', height: `${theme.density < 0 ? 42 : 50}px`, padding: '0', borderWidth: '2px', borderStyle: 'solid', borderColor: theme.onSurface, color: theme.onSurface, background: theme.surface },
         { selector: '.tabs', position: 'relative', width: '100%', display: 'flex', flexDirection: 'column' },
         { selector: '.tab-list', width: '100%', height: `${theme.density === 0 ? 48 : 43}px`, display: 'flex' },
         { selector: '.tab', width: '50%', height: `${theme.density === 0 ? 48 : 43}px`, boxSizing: 'border-box', flexShrink: '0', transform: 'translateY(-1px)', borderWidth: '0', background: 'transparent', color: theme.onSurface, fontSize: '14px', fontWeight: '700', verticalAlign: 'middle' },
         { selector: '.tab-indicator', position: 'absolute', top: `${theme.density === 0 ? 46 : 41}px`, left: state.selected ? '0' : '50%', width: '50%', height: '2px', background: theme.primary },
-        { selector: '.tab-panel', paddingTop: '12px', verticalAlign: 'middle' },
+        { selector: '.tab-panel', width: '100%', height: '20px', boxSizing: 'border-box', verticalAlign: 'middle' },
         { selector: '.stepper', width: '100%', display: 'flex', flexDirection: 'column' },
         { selector: '#stepper-primary', height: `${theme.density === 0 ? 115 : 110}px` },
         { selector: '.stepper-head', position: 'relative', width: '100%', height: '72px' },
@@ -412,6 +440,8 @@ export class AstylarShowcaseComponent {
           { selector: '.divider-below', mediaMaxWidth: '500px', top: '104.771875px' },
         ] : []),
         { selector: '#checkbox-primary', width: theme.density <= -5 ? '137.5625px' : theme.density < 0 ? '141.5625px' : '149.5625px', height: `${theme.density === 0 ? 40 : 32}px`, boxSizing: 'border-box', padding: '0 11px', display: 'flex', alignItems: 'center', gap: '14px', alignSelf: 'flex-start', cursor: 'pointer' },
+        { selector: '#checkbox-primary:hover', borderRadius: '20px', background: mixHex(theme.surfaceContainer, theme.primary, .08) },
+        { selector: '#checkbox-primary:active', borderRadius: '20px', background: mixHex(theme.surfaceContainer, theme.primary, .12) },
         { selector: '.checkbox-box', width: '18px', height: '18px', flexShrink: '0', boxSizing: 'border-box', borderWidth: '2px', borderStyle: 'solid', borderColor: state.selected ? theme.primary : theme.onSurface, borderRadius: '2px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: state.selected ? theme.primary : 'transparent' },
         { selector: '.checkbox-label', whiteSpace: 'nowrap', color: theme.onSurface, fontSize: `${14 * theme.typographyScale}px`, verticalAlign: 'middle' },
         { selector: '.range', width: '100%', height: '48px', cursor: 'pointer' },
@@ -426,18 +456,20 @@ export class AstylarShowcaseComponent {
         { selector: '.range-plugin-layer', width: '100%', height: '48px' },
         { selector: '.progress', width: family === 'progress-spinner' ? '100px' : '100%', height: family === 'progress-spinner' ? '100px' : '8px' },
         { selector: '.modal-overlay', position: 'fixed', top: '0', left: '0', width: '100%', height: '100%', boxSizing: 'border-box', padding: '32px', background: 'rgba(0,0,0,0.32)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: '1000' },
-        { selector: '.dialog-panel', position: 'relative', width: '232px', minHeight: '112px', boxSizing: 'content-box', padding: '24px', borderRadius: `${28 * theme.cornerScale}px`, background: theme.mode === 'dark' ? '#211f26' : '#fff7ff', color: theme.onSurface },
+        { selector: '.dialog-panel', width: '280px', minHeight: '160px', boxSizing: 'border-box', padding: '24px', borderRadius: `${28 * theme.cornerScale}px`, background: theme.mode === 'dark' ? '#211f26' : '#fff7ff', color: theme.onSurface, display: 'flex', flexDirection: 'column' },
         { selector: '.dialog-title', fontSize: '24px', fontWeight: '400' },
         { selector: '.dialog-copy', marginTop: '16px', fontSize: '14px' },
-        { selector: '.dialog-actions', position: 'absolute', right: '24px', bottom: '16px', height: '40px', display: 'flex', gap: '8px' },
+        { selector: '.dialog-actions', height: '40px', marginTop: '16px', display: 'flex', justifyContent: 'flex-end', gap: '8px' },
         { selector: '.dialog-action', width: '72px', height: '40px', borderWidth: '0', borderRadius: '20px', background: 'transparent', color: theme.primary, fontWeight: '500' },
         { selector: '.dialog-action.primary', background: theme.primary, color: theme.onPrimary },
         { selector: '.bottom-sheet-overlay', alignItems: 'flex-end', padding: '0' },
-        { selector: '.bottom-sheet-panel', width: '512px', minHeight: '128px', boxSizing: 'border-box', padding: '16px', borderRadius: `${28 * theme.cornerScale}px ${28 * theme.cornerScale}px 0 0`, background: theme.surface, color: theme.onSurface },
-        { selector: '.bottom-sheet-option', width: '100%', height: '48px', boxSizing: 'border-box', padding: '0 16px', borderWidth: '0', borderRadius: `${28 * theme.cornerScale}px`, background: 'transparent', color: theme.onSurface, textAlign: 'left', fontSize: '16px' },
+        { selector: '.bottom-sheet-panel', width: '720px', height: '128px', boxSizing: 'border-box', padding: '16px', borderRadius: `${28 * theme.cornerScale}px ${28 * theme.cornerScale}px 0 0`, background: theme.surface, color: theme.onSurface },
+        { selector: '.bottom-sheet-option', width: '100%', height: '48px', boxSizing: 'border-box', padding: '0 16px', borderWidth: '0', borderRadius: `${28 * theme.cornerScale}px`, background: 'transparent', color: theme.onSurface, textAlign: 'left', fontSize: '14px' },
         { selector: '.bottom-sheet-option:focus', color: theme.onSurface, background: mixHex(theme.surface, theme.onSurface, .12) },
         { selector: '.snack-surface', position: 'fixed', left: '24px', bottom: '24px', width: '360px', minHeight: '48px', boxSizing: 'border-box', padding: '10px 18px', borderRadius: '4px', background: '#322f35', color: '#ffffff', display: 'flex', justifyContent: 'space-between', alignItems: 'center', zIndex: '1000' },
         { selector: '.overlay-dismiss', width: '88px', height: '40px', borderWidth: '0', background: 'transparent', color: theme.primary, fontWeight: '500' },
+        { selector: '.material-button:focus', borderWidth: '0', boxShadow: 'none' },
+        { selector: '#tooltip-popup', position: 'absolute', top: `${28 + densityHeight + 8}px`, left: '48px', minWidth: '112px', height: '30px', boxSizing: 'border-box', padding: '6px 10px', borderRadius: '4px', background: '#322f35', color: '#ffffff', fontSize: '12px', zIndex: '1000' },
       ],
     };
   }
@@ -474,11 +506,11 @@ export class AstylarShowcaseComponent {
       ],
     }] }];
     if (family === 'paginator') return [{ type: 'div', id: 'paginator-primary', class: 'paginator', role: 'group', ariaLabel: `Items per page: 10 ${state.pageIndex * 10 + 1} – ${Math.min(100, state.pageIndex * 10 + 10)} of 100`, children: [{ type: 'span', id: 'paginator-size', textContent: 'Items per page:' }, { type: 'span', id: 'paginator-page-size', textContent: '10' }, { type: 'span', id: 'paginator-range', textContent: `${state.pageIndex * 10 + 1} – ${Math.min(100, state.pageIndex * 10 + 10)} of 100` }, { type: 'button', id: 'paginator-previous', class: 'paginator-button', disabled: state.pageIndex === 0, ariaLabel: 'Previous page', value: '‹' }, { type: 'button', id: 'paginator-next', class: 'paginator-button', disabled: state.pageIndex === 9, ariaLabel: 'Next page', value: '›' }] }];
-    if (family === 'tree') return [{ type: 'div', id: 'tree-primary', class: 'material-tree', role: 'tree', children: ['Documents', 'Projects', 'Archive'].map((label, index) => ({ type: 'div' as const, id: `tree-item-${index}`, class: `tree-item${this.focusedId() === `tree-item-${index}` ? ' focused' : ''}`, role: 'treeitem', tabindex: index === 0 ? 0 : -1, ariaLevel: 1, ariaPosinset: index + 1, ariaSetsize: 3, textContent: label })) }];
+    if (family === 'tree') return [{ type: 'div', id: 'tree-primary', class: 'material-tree', role: 'tree', children: ['Documents', 'Projects', 'Archive'].map((label, index) => ({ type: 'div' as const, id: `tree-item-${index}`, class: `tree-item${this.focusedId() === `tree-item-${index}` ? ' focused' : ''}`, role: 'treeitem', tabindex: index === 0 ? 0 : -1, ariaLevel: 1, ariaPosinset: index + 1, ariaSetsize: 3, children: [{ type: 'span' as const, id: `tree-item-${index}-label`, class: 'tree-label', textContent: label }] })) }];
     if (family === 'slider') return [{ type: 'div', id: 'slider-pair', class: 'range-stack', children: [
       { type: 'showcase.material:range-visual', id: 'slider-material-visual', class: 'range-plugin-layer', data: { start: state.sliderStart / 100, end: state.sliderValue / 100, 'indicator-color': this.store.tokens().primary, 'track-color': this.store.tokens().mode === 'dark' ? '#49454f' : '#e7e0ec' } },
-      { type: 'input', inputType: 'range', id: 'slider-start', class: 'range-layer', min: '0', max: '100', step: '5', value: String(state.sliderStart), disabled: state.disabled, ariaLabel: 'Minimum', ariaValueText: String(state.sliderStart) },
-      { type: 'input', inputType: 'range', id: 'slider-primary', class: 'range-layer', min: '0', max: '100', step: '5', value: String(state.sliderValue), disabled: state.disabled, ariaLabel: 'Maximum', ariaValueText: String(state.sliderValue) },
+      { type: 'input', inputType: 'range', id: 'slider-start', class: 'range-layer', min: '0', max: '50', step: '5', value: String(Math.min(50, state.sliderStart)), disabled: state.disabled, ariaLabel: 'Minimum', ariaValueText: String(state.sliderStart) },
+      { type: 'input', inputType: 'range', id: 'slider-primary', class: 'range-layer', min: '50', max: '100', step: '5', value: String(Math.max(50, state.sliderValue)), disabled: state.disabled, ariaLabel: 'Maximum', ariaValueText: String(state.sliderValue) },
     ] }];
     if (family === 'progress-bar') return [{ type: 'showcase.material:linear-progress', id: 'progress-bar-primary', class: 'progress', role: 'progressbar', ariaValueMin: 0, ariaValueMax: 100, ariaValueNow: 64, data: { mode: 'determinate', progress: .64, 'indicator-color': this.store.tokens().primary, 'track-color': this.store.tokens().mode === 'dark' ? '#49454f' : '#e7e0ec' } }];
     if (family === 'progress-spinner') return [{ type: 'showcase.material:circular-progress', id: 'progress-spinner-primary', class: 'progress', role: 'progressbar', ariaValueMin: 0, ariaValueMax: 100, ariaValueNow: 64, data: { mode: 'determinate', progress: .64, 'indicator-color': this.store.tokens().primary, 'stroke-width': 10 } }];
@@ -520,13 +552,17 @@ export class AstylarShowcaseComponent {
         { type: 'div' as const, id: 'select-option-solo', class: `select-option${state.selected ? '' : ' selected'}`, role: 'option', ariaSelected: !state.selected, textContent: 'Solo' },
         { type: 'div' as const, id: 'select-option-team', class: `select-option${state.selected ? ' selected' : ''}`, role: 'option', ariaSelected: state.selected, children: [
           { type: 'span' as const, id: 'select-team-label', textContent: 'Team' },
-          ...(state.selected ? [{ type: 'span' as const, id: 'select-check', class: 'select-check', role: 'presentation', textContent: '✓' }] : []),
+          ...(state.selected ? [this.selectionMark('select-check', 'select-check')] : []),
         ] },
       ] }] : []),
     ] }];
-    if (family === 'slide-toggle') return [{ type: 'div', id: 'slide-toggle-primary', role: 'switch', tabindex: state.disabled ? -1 : 0, ariaLabel: 'Automatic updates', ariaChecked: state.selected, ariaDisabled: state.disabled, children: [{ type: 'span', id: 'slide-toggle-track', class: 'switch-track', children: [{ type: 'span', id: 'slide-toggle-thumb', class: 'switch-thumb', children: state.selected ? [this.selectionMark('slide-toggle-mark', 'switch-mark')] : [] }] }, { type: 'span', id: 'slide-toggle-label', class: 'switch-label', textContent: 'Automatic updates' }] }];
+    if (family === 'slide-toggle') return [{ type: 'div', id: 'slide-toggle-primary', role: 'switch', tabindex: state.disabled ? -1 : 0, ariaLabel: 'Automatic updates', ariaChecked: state.selected, ariaDisabled: state.disabled, children: [
+      { type: 'span', id: 'slide-toggle-state-layer', class: 'switch-state-layer' },
+      { type: 'span', id: 'slide-toggle-track', class: 'switch-track', children: [{ type: 'span', id: 'slide-toggle-thumb', class: 'switch-thumb', children: state.selected ? [this.selectionMark('slide-toggle-mark', 'switch-mark')] : state.disabled ? [{ type: 'span', id: 'slide-toggle-minus', textContent: '−' }] : [] }] },
+      { type: 'span', id: 'slide-toggle-label', class: 'switch-label', textContent: 'Automatic updates' },
+    ] }];
     if (family === 'menu') return [{ type: 'button', id: 'menu-primary', class: 'material-button', ariaHaspopup: 'menu', ariaExpanded: state.open, ariaControls: 'menu-popup', value: 'Open menu' }, ...(state.open ? [{ type: 'div' as const, id: 'menu-popup', role: 'menu', children: [{ type: 'button' as const, id: 'menu-rename', role: 'menuitem', value: 'Rename' }, { type: 'button' as const, id: 'menu-delete', role: 'menuitem', value: 'Delete' }] }] : [])];
-    if (family === 'tabs') return [{ type: 'div', id: 'tabs-primary', class: 'tabs', children: [{ type: 'div', id: 'tabs-list', class: 'tab-list', role: 'tablist', children: [{ type: 'button', id: 'tab-overview', class: 'tab', role: 'tab', ariaSelected: state.selected, tabindex: state.selected ? 0 : -1, ariaControls: 'tab-panel', value: 'Overview' }, { type: 'button', id: 'tab-activity', class: 'tab', role: 'tab', ariaSelected: !state.selected, tabindex: state.selected ? -1 : 0, ariaControls: 'tab-panel', value: 'Activity' }] }, { type: 'div', id: 'tab-indicator', class: 'tab-indicator' }, { type: 'div', id: 'tab-panel', class: 'tab-panel', role: 'tabpanel', textContent: state.selected ? 'Overview content' : 'Activity content' }] }];
+    if (family === 'tabs') return [{ type: 'div', id: 'tabs-primary', class: 'tabs', children: [{ type: 'div', id: 'tabs-list', class: 'tab-list', role: 'tablist', children: [{ type: 'button', id: 'tab-overview', class: 'tab', role: 'tab', ariaSelected: state.selected, tabindex: state.selected ? 0 : -1, ariaControls: 'tab-panel', value: 'Overview' }, { type: 'button', id: 'tab-activity', class: 'tab', role: 'tab', ariaSelected: !state.selected, tabindex: state.selected ? -1 : 0, ariaControls: 'tab-panel', value: 'Activity' }] }, { type: 'div', id: 'tab-indicator', class: 'tab-indicator' }, { type: 'showcase.material:tab-panel', id: 'tab-panel', class: 'tab-panel', role: 'tabpanel', textContent: state.selected ? 'Overview content' : 'Activity content', data: { selected: state.selected, phase: this.benchmarkMode ? 1 : undefined, 'text-color': theme.onSurface } }] }];
     if (family === 'stepper') return [{ type: 'div', id: 'stepper-primary', class: 'stepper', role: 'tablist', ariaLabel: state.selected ? '1Details2ReviewProject detailsReview changes' : 'EditablecreateDetails2ReviewProject detailsReview changes', children: [{ type: 'div', id: 'stepper-head', class: 'stepper-head', children: [{ type: 'div', id: 'step-details', class: 'step-tab', role: 'tab', tabindex: state.selected ? 0 : -1, ariaSelected: state.selected, children: [{ type: 'span', id: 'step-details-badge', class: `step-badge${state.selected ? ' selected' : ''}`, textContent: '1' }, { type: 'span', id: 'step-details-text', class: 'step-text', textContent: 'Details' }] }, { type: 'span', id: 'step-connector', class: 'step-connector' }, { type: 'div', id: 'step-review', class: 'step-tab', role: 'tab', tabindex: state.selected ? -1 : 0, ariaSelected: !state.selected, children: [{ type: 'span', id: 'step-review-badge', class: `step-badge${state.selected ? '' : ' selected'}`, textContent: '2' }, { type: 'span', id: 'step-review-text', class: 'step-text', textContent: 'Review' }] }] }, { type: 'div', id: 'stepper-content', role: 'tabpanel', textContent: state.selected ? 'Project details' : 'Review changes' }] }];
     if (family === 'button-toggle') return [{ type: 'div', id: 'button-toggle-primary', role: 'radiogroup', ariaLabel: 'ListGrid', ariaDisabled: false, children: [
       { type: 'div', id: 'button-toggle-one', class: `button-toggle-option${state.selected ? '' : ' selected'}`, role: 'radio', tabindex: state.selected ? -1 : 0, ariaLabel: 'List', ariaChecked: !state.selected, children: [...(!state.selected ? [this.selectionMark('button-toggle-one-mark')] : []), { type: 'span', id: 'button-toggle-one-label', textContent: 'List' }] },
@@ -541,7 +577,7 @@ export class AstylarShowcaseComponent {
         { type: 'tr', id: 'table-northstar-row', children: [{ type: 'td', id: 'table-northstar', textContent: 'Northstar' }] },
       ] },
     ] }, { type: 'div', id: 'table-rule-one', class: 'table-rule table-rule-one' }, { type: 'div', id: 'table-rule-two', class: 'table-rule table-rule-two' }];
-    if (family === 'expansion') return [{ type: 'article', id: 'expansion-shell', class: 'expansion-panel', children: [{ type: 'div', id: 'expansion-primary', class: 'expansion-trigger', role: 'button', tabindex: state.disabled ? -1 : 0, ariaDisabled: state.disabled, ariaExpanded: state.open, ariaControls: 'expansion-content', children: [{ type: 'span', id: 'expansion-title', class: 'expansion-title', textContent: 'Advanced settings' }] }, { type: 'span', id: 'expansion-chevron', class: 'expansion-chevron', textContent: state.open ? '⌃' : '⌄' }, { type: 'p' as const, id: 'expansion-content', textContent: 'Additional options.' }] }];
+    if (family === 'expansion') return [{ type: 'article', id: 'expansion-shell', class: 'expansion-panel', children: [{ type: 'div', id: 'expansion-primary', class: 'expansion-trigger', role: 'button', tabindex: state.disabled ? -1 : 0, ariaDisabled: state.disabled, ariaExpanded: state.open, ariaControls: 'expansion-content', children: [{ type: 'span', id: 'expansion-title', class: 'expansion-title', textContent: 'Advanced settings' }] }, { type: 'span', id: 'expansion-chevron', class: 'expansion-chevron', textContent: state.open ? '^' : 'v' }, { type: 'p' as const, id: 'expansion-content', textContent: 'Additional options.' }] }];
     if (['dialog', 'bottom-sheet', 'snack-bar'].includes(family)) {
       const label = family === 'dialog' ? 'Open dialog' : family === 'bottom-sheet' ? 'Open bottom sheet' : 'Show snackbar';
       const overlay = family === 'snack-bar'
@@ -571,8 +607,12 @@ export class AstylarShowcaseComponent {
       fieldSurface(`${family}-control`),
       { type: 'label', id: `${family}-label`, class: 'field-label empty-field-label', for: `${family}-control`, textContent: family === 'datepicker' ? 'Due date' : 'Meeting time' },
       { type: 'div', id: `${family}-input-region`, class: 'field-input-region', children: [{ type: 'input', inputType: 'text', id: `${family}-control`, class: `field-control${family === 'timepicker' ? ' picker-control' : ''}${family === 'timepicker' && state.open ? ' open' : ''}`, value: '', disabled: state.disabled, role: family === 'timepicker' ? 'combobox' : undefined, ariaLabel: family === 'datepicker' ? 'Due date' : 'Meeting time', ariaInvalid: state.error, ariaHaspopup: 'dialog', ariaExpanded: family === 'timepicker' ? state.open : undefined, ariaControls: family === 'timepicker' ? 'timepicker-options' : undefined, ariaActivedescendant: family === 'timepicker' && state.open ? 'timepicker-option-0' : undefined }] },
-      ...([{ type: 'span' as const, id: `${family}-icon`, class: 'picker-clock', role: 'presentation', textContent: family === 'datepicker' ? '▦' : '◷' }]),
-      ...(family === 'timepicker' && state.open ? [{ type: 'div' as const, id: 'timepicker-options', class: 'picker-popup', role: 'listbox', children: ['12:00 AM', '12:30 AM', '1:00 AM', '1:30 AM', '2:00 AM'].map((label, index) => ({ type: 'div' as const, id: `timepicker-option-${index}`, class: `picker-option${index === 0 ? ' selected' : ''}`, role: 'option', ariaSelected: index === 0, textContent: label })) }] : []),
+      { type: 'button', id: `${family}-icon`, class: 'picker-clock', ariaLabel: family === 'datepicker' ? 'Open calendar' : 'Open time options', value: family === 'datepicker' ? '▦' : '◷' },
+       ...(family === 'timepicker' && state.open ? [
+        { type: 'div' as const, id: 'timepicker-gap', class: 'timepicker-gap' },
+        { type: 'div' as const, id: 'timepicker-active-line', class: 'timepicker-active-line' },
+        { type: 'div' as const, id: 'timepicker-options', class: 'picker-popup', role: 'listbox', children: materialTimeOptions().map((label, index) => ({ type: 'div' as const, id: `timepicker-option-${index}`, class: `picker-option${index === 0 ? ' selected' : ''}`, role: 'option', ariaSelected: index === 0, textContent: label })) },
+       ] : []),
       ...(family === 'datepicker' && state.open ? [{ type: 'div' as const, id: 'datepicker-popup', class: 'datepicker-popup', role: 'dialog', ariaLabel: 'Choose date', children: [
         { type: 'div' as const, id: 'datepicker-header', class: 'datepicker-header', children: [
           { type: 'span' as const, id: 'datepicker-month', class: 'datepicker-month', textContent: 'AUG 2026' },
@@ -585,7 +625,7 @@ export class AstylarShowcaseComponent {
           ...Array.from({ length: 5 }, (_, index) => ({ type: 'span' as const, id: `datepicker-leading-${index}`, class: 'datepicker-cell', textContent: '' })),
           { type: 'span' as const, id: 'datepicker-day-1', class: 'datepicker-cell', textContent: '1' },
           ...Array.from({ length: 30 }, (_, index) => index + 2 === 25
-            ? { type: 'span' as const, id: 'datepicker-day-25', class: 'datepicker-cell', children: [{ type: 'span' as const, id: 'datepicker-selected', class: 'datepicker-selected', textContent: '25' }] }
+            ? { type: 'span' as const, id: 'datepicker-day-25', class: 'datepicker-cell', children: [{ type: 'span' as const, id: 'datepicker-selected', class: 'datepicker-selected', children: [{ type: 'span' as const, id: 'datepicker-selected-label', class: 'datepicker-selected-label', textContent: '25' }] }] }
             : { type: 'span' as const, id: `datepicker-day-${index + 2}`, class: 'datepicker-cell', textContent: String(index + 2) }),
           ...Array.from({ length: 5 }, (_, index) => ({ type: 'span' as const, id: `datepicker-trailing-${index}`, class: 'datepicker-cell', textContent: '' })),
         ] },
@@ -614,7 +654,12 @@ export class AstylarShowcaseComponent {
   }
 
   private selectionMark(id: string, extraClass = ''): DOMElement {
-    return { type: 'span', id, class: `selection-mark${extraClass ? ` ${extraClass}` : ''}`, role: 'presentation', textContent: '✓' };
+    const theme = this.store.tokens();
+    const color = extraClass === 'checkbox-mark' ? theme.onPrimary : extraClass === 'switch-mark' ? theme.primary : '#49454f';
+    return {
+      type: 'showcase.material:check-mark', id, class: `selection-mark${extraClass ? ` ${extraClass}` : ''}`, role: 'presentation',
+      data: { 'indicator-color': color, 'stroke-width': 1.8 },
+    };
   }
 
   private measure(surface: AstylarSurface, ids: readonly string[]): MaterialBenchmarkMeasurement {
@@ -738,6 +783,17 @@ function materialDensityHeight(density: number): number {
   if (density === -1) return 32;
   if (density === -2) return 28;
   return 24;
+}
+
+function materialTimeOptions(): string[] {
+  return Array.from({ length: 48 }, (_, index) => {
+    const minutes = index * 30;
+    const hour24 = Math.floor(minutes / 60);
+    const minute = minutes % 60;
+    const suffix = hour24 < 12 ? 'AM' : 'PM';
+    const hour12 = hour24 % 12 || 12;
+    return `${hour12}:${String(minute).padStart(2, '0')} ${suffix}`;
+  });
 }
 
 function toolbarActionHeight(density: number): number {

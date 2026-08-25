@@ -154,6 +154,7 @@ const disabledFamilies = new Set(['button', 'chips', 'form-field', 'input', 'aut
 
 export const materialInteractionCases = materialFamilies.flatMap((family) => {
   const states = passiveFamilies.has(family) ? ['inspect'] : ['focus', 'hover', 'held', 'activate', 'activate-leave'];
+  if (family === 'sort' || family === 'snack-bar') states.push('activate-twice');
   if (disabledFamilies.has(family)) states.push('disabled');
   if (selectableFamilies.has(family)) states.push('selected');
   if (errorFamilies.has(family)) states.push('error');

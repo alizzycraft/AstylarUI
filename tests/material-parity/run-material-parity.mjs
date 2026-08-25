@@ -435,6 +435,14 @@ async function performInteraction(page, mode, benchmarkCase) {
   await page.mouse.down();
   if (state === 'held') return async () => { await page.mouse.up(); };
   await page.mouse.up();
+  if (state === 'activate-twice') {
+    await settleInteraction(page, mode);
+    const secondBox = await interactionTargetBox(page, mode, family);
+    assert.ok(secondBox, `${mode} ${family} second interaction target is missing.`);
+    await page.mouse.move(secondBox.x + secondBox.width / 2, secondBox.y + secondBox.height / 2);
+    await page.mouse.down();
+    await page.mouse.up();
+  }
   if (state === 'activate-leave') await page.mouse.move(1, 1);
   return undefined;
 }
@@ -527,7 +535,7 @@ async function focusedIdentity(page, mode, family) {
 }
 
 function compareEvents(reference, candidate, family, state) {
-  if (!['activate', 'activate-leave', 'open', 'open-dismiss'].includes(state)) return { matches: true, reference, astylar: candidate };
+  if (!['activate', 'activate-twice', 'activate-leave', 'open', 'open-dismiss'].includes(state)) return { matches: true, reference, astylar: candidate };
   const relevant = (events) => events.filter(({ targetId }) => targetId === `${family}-primary`)
     .map(({ type }) => type).filter((type) => ['pointerdown', 'pointerup', 'click', 'input', 'change'].includes(type))
     .filter((type, index, values) => index === 0 || type !== values[index - 1]);
