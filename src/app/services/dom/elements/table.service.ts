@@ -5,10 +5,14 @@ import { BabylonRender } from '../interfaces/render.types';
 import { DOMElement } from '../../../types/dom-element';
 import { StyleRule } from '../../../types/style-rule';
 import { DOMAncestryService } from '../dom-ancestry.service';
+import { StyleService } from '../style.service';
 
 @Injectable({ providedIn: 'root' })
 export class TableService {
-  constructor(private readonly ancestry: DOMAncestryService) {}
+  constructor(
+    private readonly ancestry: DOMAncestryService,
+    private readonly styleService: StyleService,
+  ) {}
 
   public processTable(dom: BabylonDOM, render: BabylonRender, tableChildren: DOMElement[], parent: Mesh, styles: StyleRule[], parentElement: DOMElement, tableMeshOverride?: Mesh): void {
     if (!parentElement.id) {
@@ -75,12 +79,16 @@ export class TableService {
       }
 
       // Calculate total row count across all sections for proper row height distribution
-      const totalRowCount = this.calculateTotalRowCount(tableChildren);
       const totalColumnCount = this.calculateTotalColumnCount(tableChildren);
 
 
-      // Calculate shared row height for all sections
-      const sharedRowHeight = containerDimensions.height / totalRowCount;
+      const tableRows = this.collectTableRows(tableChildren);
+      const sharedRowHeights = this.resolveRowHeights(
+        dom,
+        tableRows,
+        styles,
+        containerDimensions.height,
+      );
       const sharedColumnWidths = this.resolveColumnWidths(
         columnDefinitions,
         containerDimensions.width,
@@ -95,20 +103,41 @@ export class TableService {
 
       // Process table sections with shared dimensions and track Y position
       let currentTableY = 0;
+      let currentRowIndex = 0;
       for (const child of tableStructureChildren) {
         if (child.type === 'tbody' || child.type === 'thead' || child.type === 'tfoot') {
 
           const sectionRowCount = (child.children || []).filter(c => c.type === 'tr').length;
+          const sectionRowHeights = sharedRowHeights.slice(
+            currentRowIndex,
+            currentRowIndex + sectionRowCount,
+          );
           this.processTableSection(dom, render, child, tableMesh, styles, containerDimensions, parentElement.id, {
-            sharedRowHeight,
+            sharedRowHeights: sectionRowHeights,
             sharedColumnWidths,
             sectionStartY: currentTableY
           });
-          currentTableY += sectionRowCount * sharedRowHeight;
+          currentTableY += sectionRowHeights.reduce((sum, height) => sum + height, 0);
+          currentRowIndex += sectionRowCount;
         } else if (child.type === 'tr') {
 
           // Handle direct rows (no tbody wrapper) - create implicit tbody
-          this.processDirectTableRows(dom, render, [child], tableMesh, styles, containerDimensions, parentElement.id);
+          this.processTableRowsWithSharedDimensions(
+            dom,
+            render,
+            [child],
+            tableMesh,
+            styles,
+            {
+              sharedRowHeights: [sharedRowHeights[currentRowIndex]],
+              sharedColumnWidths,
+              sectionStartY: currentTableY,
+              localStartY: currentTableY,
+            },
+            parentElement.id,
+          );
+          currentTableY += sharedRowHeights[currentRowIndex] ?? 0;
+          currentRowIndex += 1;
         }
       }
 
@@ -164,12 +193,14 @@ export class TableService {
     return tableMesh;
   }
 
-  private processTableSection(dom: BabylonDOM, render: BabylonRender, sectionElement: DOMElement, tableMesh: Mesh, styles: StyleRule[], containerDimensions: { width: number; height: number }, tableId: string, sharedDimensions?: { sharedRowHeight: number; sharedColumnWidths: number[]; sectionStartY: number }): void {
+  private processTableSection(dom: BabylonDOM, render: BabylonRender, sectionElement: DOMElement, tableMesh: Mesh, styles: StyleRule[], containerDimensions: { width: number; height: number }, tableId: string, sharedDimensions?: { sharedRowHeights: number[]; sharedColumnWidths: number[]; sectionStartY: number }): void {
 
 
     // Calculate section-specific dimensions
     const sectionRows = (sectionElement.children || []).filter(c => c.type === 'tr');
-    const sectionHeight = sharedDimensions ? sectionRows.length * sharedDimensions.sharedRowHeight : containerDimensions.height;
+    const sectionHeight = sharedDimensions
+      ? sharedDimensions.sharedRowHeights.reduce((sum, height) => sum + height, 0)
+      : containerDimensions.height;
     const sectionDimensions = {
       width: containerDimensions.width,
       height: sectionHeight
@@ -310,7 +341,7 @@ export class TableService {
     };
   }
 
-  private processTableRowsWithSharedDimensions(dom: BabylonDOM, render: BabylonRender, tableRows: DOMElement[], parentMesh: Mesh, styles: StyleRule[], sharedDimensions: { sharedRowHeight: number; sharedColumnWidths: number[]; sectionStartY: number }, parentId: string): void {
+  private processTableRowsWithSharedDimensions(dom: BabylonDOM, render: BabylonRender, tableRows: DOMElement[], parentMesh: Mesh, styles: StyleRule[], sharedDimensions: { sharedRowHeights: number[]; sharedColumnWidths: number[]; sectionStartY: number; localStartY?: number }, parentId: string): void {
 
 
 
@@ -320,15 +351,19 @@ export class TableService {
     }
 
     // Use shared dimensions instead of calculating per-section
-    const { sharedRowHeight, sharedColumnWidths, sectionStartY } = sharedDimensions;
+    const { sharedRowHeights, sharedColumnWidths } = sharedDimensions;
 
     // The section mesh already carries the table-relative offset. Rows are
     // positioned locally so row groups do not apply that offset twice.
-    let currentY = 0;
+    let currentY = sharedDimensions.localStartY ?? 0;
     tableRows.forEach((row, rowIndex) => {
 
 
       try {
+        const rowHeight = sharedRowHeights[rowIndex];
+        if (!Number.isFinite(rowHeight)) {
+          throw new Error(`[TABLE ERROR] Missing row height for row ${rowIndex}`);
+        }
         // Ensure unique row identification
         const originalId = row.id;
         if (!row.id) {
@@ -336,7 +371,7 @@ export class TableService {
 
         }
 
-        const rowMesh = this.createTableRow(dom, render, row, parentMesh, styles, currentY, sharedRowHeight, parentMesh.name);
+        const rowMesh = this.createTableRow(dom, render, row, parentMesh, styles, currentY, rowHeight, parentMesh.name);
 
 
         // Restore original ID
@@ -346,7 +381,7 @@ export class TableService {
         this.processTableCells(dom, render, row.children || [], rowMesh, styles, sharedColumnWidths, row);
 
         // Move to next row position
-        currentY += sharedRowHeight;
+        currentY += rowHeight;
 
 
       } catch (error) {
@@ -432,17 +467,80 @@ export class TableService {
     return { rowHeight, columnWidths };
   }
 
-  private calculateTotalRowCount(tableChildren: DOMElement[]): number {
-    let totalRows = 0;
+  private collectTableRows(tableChildren: DOMElement[]): DOMElement[] {
+    const rows: DOMElement[] = [];
     for (const child of tableChildren) {
       if (child.type === 'tbody' || child.type === 'thead' || child.type === 'tfoot') {
-        const sectionRows = (child.children || []).filter(c => c.type === 'tr');
-        totalRows += sectionRows.length;
+        rows.push(...(child.children || []).filter(c => c.type === 'tr'));
       } else if (child.type === 'tr') {
-        totalRows += 1;
+        rows.push(child);
       }
     }
-    return totalRows;
+    return rows;
+  }
+
+  private resolveRowHeights(
+    dom: BabylonDOM,
+    rows: DOMElement[],
+    styles: StyleRule[],
+    tableHeight: number,
+  ): number[] {
+    if (rows.length === 0) {
+      return [];
+    }
+
+    const preferred = rows.map(row => {
+      const candidates = [
+        this.resolveAuthoredHeight(dom, row, styles, tableHeight),
+        ...(row.children || [])
+          .filter(cell => cell.type === 'td' || cell.type === 'th')
+          .map(cell => this.resolveAuthoredHeight(dom, cell, styles, tableHeight)),
+      ].filter((height): height is number => height !== undefined);
+      return candidates.length > 0 ? Math.max(...candidates) : undefined;
+    });
+    const explicitTotal = preferred.reduce(
+      (sum: number, height) => sum + (height ?? 0),
+      0,
+    );
+    const automaticCount = preferred.filter(height => height === undefined).length;
+
+    if (automaticCount > 0) {
+      const automaticHeight = Math.max(0, tableHeight - explicitTotal) / automaticCount;
+      return preferred.map(height => height ?? automaticHeight);
+    }
+
+    const extraPerRow = Math.max(0, tableHeight - explicitTotal) / rows.length;
+    return preferred.map(height => (height ?? 0) + extraPerRow);
+  }
+
+  private resolveAuthoredHeight(
+    dom: BabylonDOM,
+    element: DOMElement,
+    styles: StyleRule[],
+    containingHeight: number,
+  ): number | undefined {
+    const value = this.styleService.findStyleForElement(
+      element,
+      styles,
+      dom.context.elementStyles,
+    )?.height;
+    if (typeof value === 'number') {
+      return Number.isFinite(value) && value >= 0 ? value : undefined;
+    }
+    if (typeof value !== 'string') {
+      return undefined;
+    }
+    const normalized = value.trim().toLowerCase();
+    const numeric = Number.parseFloat(normalized);
+    if (!Number.isFinite(numeric) || numeric < 0) {
+      return undefined;
+    }
+    if (normalized.endsWith('%')) {
+      return containingHeight * numeric / 100;
+    }
+    return normalized.endsWith('px') || /^\d+(?:\.\d+)?$/.test(normalized)
+      ? numeric
+      : undefined;
   }
 
   private calculateTotalColumnCount(tableChildren: DOMElement[]): number {

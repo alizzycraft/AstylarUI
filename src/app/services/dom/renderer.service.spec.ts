@@ -38,6 +38,11 @@ describe('BabylonDOMRendererService', () => {
       fontWeight: '400',
     })).toBe(2);
     expect(renderer['getTextBaselineInsetPx']({
+      selector: 'td',
+      fontSize: '16px',
+      verticalAlign: 'middle',
+    })).toBe(1);
+    expect(renderer['getTextBaselineInsetPx']({
       selector: 'h1',
       fontSize: '28px',
       fontWeight: '700',

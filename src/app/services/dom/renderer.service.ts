@@ -861,6 +861,12 @@ export class BabylonDOMRendererService {
   }
 
   private getTextBaselineInsetPx(style?: StyleRule): number {
+    if (style?.verticalAlign === 'middle') {
+      // Middle-baseline canvas text is already centered inside its line box.
+      // Retain only the one-pixel raster settling inset instead of applying
+      // the alphabetic-baseline correction used by top/baseline text.
+      return 1;
+    }
     const fontSizePx = Number.parseFloat(style?.fontSize ?? '16');
     const declaredWeight = style?.fontWeight ?? '400';
     const fontWeight = declaredWeight === 'bold'

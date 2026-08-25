@@ -166,6 +166,24 @@ describe('MultiLineTextRendererService', () => {
     expect(positionedLines[2].y).toBe(64); // fontSize + 2 * (fontSize * lineHeight)
   });
 
+  it('centers middle-baseline text within each line box', () => {
+    const style: TextStyleProperties = {
+      fontFamily: 'Arial', fontSize: 16, fontWeight: 'normal',
+      fontStyle: 'normal', color: '#000000', textAlign: 'left',
+      verticalAlign: 'middle', lineHeight: 1.2, letterSpacing: 0, wordSpacing: 0,
+      whiteSpace: 'normal', wordWrap: 'normal', textOverflow: 'clip',
+      textDecoration: 'none', textTransform: 'none',
+    };
+
+    const positioned = service.calculateLinePositions(
+      [{ text: 'Centered', width: 64, y: 0 }],
+      style,
+      19.2,
+    );
+
+    expect(positioned[0].y).toBeCloseTo(9.6, 5);
+  });
+
   it('should truncate overflowing nowrap text with a single ellipsis glyph', () => {
     const style: TextStyleProperties = {
       fontFamily: 'Arial',

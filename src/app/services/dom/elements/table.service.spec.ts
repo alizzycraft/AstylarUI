@@ -1,10 +1,18 @@
 import { TableService } from './table.service';
 import { DOMAncestryService } from '../dom-ancestry.service';
+import { StyleService } from '../style.service';
+import { StyleDefaultsService } from '../style-defaults.service';
+import { ViewportService } from '../positioning/viewport.service';
 
 describe('TableService', () => {
   function createService(): { service: TableService; ancestry: DOMAncestryService } {
     const ancestry = new DOMAncestryService();
-    return { service: new TableService(ancestry), ancestry };
+    const styles = new StyleService(
+      new StyleDefaultsService(),
+      ancestry,
+      { getViewportDimensions: () => ({ width: 1024, height: 768 }) } as unknown as ViewportService,
+    );
+    return { service: new TableService(ancestry, styles), ancestry };
   }
 
   it('honors explicit pixel column definitions', () => {
@@ -47,12 +55,59 @@ describe('TableService', () => {
       ],
       { name: 'body-section' } as any,
       [],
-      { sharedRowHeight: 75, sharedColumnWidths: [200], sectionStartY: 75 },
+      { sharedRowHeights: [75, 75], sharedColumnWidths: [200], sectionStartY: 75 },
       'body-section',
     );
 
     expect(createRow.calls.argsFor(0)[5]).toBe(0);
     expect(createRow.calls.argsFor(1)[5]).toBe(75);
+  });
+
+  it('positions direct rows from their table-relative offset', () => {
+    const { service } = createService();
+    const createRow = spyOn<any>(service, 'createTableRow').and.callFake(
+      (_dom: unknown, _render: unknown, row: { id: string }) => ({ name: row.id }),
+    );
+    spyOn<any>(service, 'processTableCells');
+
+    service['processTableRowsWithSharedDimensions'](
+      {} as any,
+      {} as any,
+      [{ type: 'tr', id: 'direct-row' }],
+      { name: 'table' } as any,
+      [],
+      {
+        sharedRowHeights: [52],
+        sharedColumnWidths: [200],
+        sectionStartY: 56,
+        localStartY: 56,
+      },
+      'table',
+    );
+
+    expect(createRow.calls.argsFor(0)[5]).toBe(56);
+  });
+
+  it('honors distinct authored header and body row heights', () => {
+    const { service } = createService();
+    const dom = { context: { elementStyles: new Map() } } as any;
+    const rows = [
+      { type: 'tr', children: [{ type: 'th' }] },
+      { type: 'tr', children: [{ type: 'td' }] },
+      { type: 'tr', children: [{ type: 'td' }] },
+    ] as any[];
+
+    const heights = service['resolveRowHeights'](
+      dom,
+      rows,
+      [
+        { selector: 'th', height: '56px' },
+        { selector: 'td', height: '52px' },
+      ],
+      160,
+    );
+
+    expect(heights).toEqual([56, 52, 52]);
   });
 
   it('registers semantic table descendants for selector matching', () => {

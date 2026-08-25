@@ -351,10 +351,7 @@ export class TextCanvasRendererService {
     });
 
     // Calculate total height based on positioned lines
-    totalHeight = positionedLines.length > 0 ?
-      (positionedLines[positionedLines.length - 1].y +
-        style.fontSize * Math.max(0, style.lineHeight - 1)) :
-      style.fontSize * style.lineHeight;
+    totalHeight = Math.max(1, positionedLines.length) * style.fontSize * style.lineHeight;
 
     // Get font bounding box information
     const fontBoundingBoxAscent = style.fontSize; // Approximate ascent

@@ -84,6 +84,7 @@ export const materialUniformBackgroundTargets = Object.freeze({
 export const materialFocusedRasterTargets = Object.freeze({
   sort: Object.freeze({ element: 'sort-primary', padding: 8, minimumSsim: .80 }),
   icon: Object.freeze({ element: 'icon-primary', padding: 8, minimumSsim: .80 }),
+  table: Object.freeze({ element: 'table-primary', padding: 8, minimumSsim: .80 }),
   chips: Object.freeze({ element: 'chips-primary', padding: 8, minimumSsim: .79 }),
   checkbox: Object.freeze({ element: 'checkbox-primary', padding: 8, minimumSsim: .40 }),
   'button-toggle': Object.freeze({ element: 'button-toggle-primary', padding: 8, minimumSsim: .40 }),
