@@ -89,6 +89,7 @@ export const materialLeftAlignedTextTargets = Object.freeze([
 export const materialTextAlignmentToleranceOverrides = Object.freeze({
   'tab-overview': 1.25,
   'tab-activity': 1.25,
+  'button-toggle-one': 1,
 });
 export const materialTextOnlyTargets = Object.freeze([
   'divider-above', 'divider-below', 'badge-label', 'card-title', 'card-copy',

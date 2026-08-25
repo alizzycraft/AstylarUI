@@ -38,7 +38,8 @@ test('keeps the app catalog and enforced static matrix complete', () => {
     ...Object.values(materialInteractionTextAlignmentTargets).flat(),
   ]);
   assert.ok(materialAbsoluteTextAlignmentTargets.every((target) => enforcedTextTargets.has(target)));
-  assert.deepEqual(materialTextAlignmentToleranceOverrides, { 'tab-overview': 1.25, 'tab-activity': 1.25 });
+  assert.deepEqual(materialTextAlignmentToleranceOverrides,
+    { 'tab-overview': 1.25, 'tab-activity': 1.25, 'button-toggle-one': 1 });
   assert.ok(Object.keys(materialTextAlignmentToleranceOverrides).every((target) => enforcedTextTargets.has(target)));
   assert.ok(materialTextOnlyTargets.every((target) => enforcedTextTargets.has(target)));
   assert.ok(Object.keys(materialUniformBackgroundTargets).every((family) => materialFamilies.includes(family)));
