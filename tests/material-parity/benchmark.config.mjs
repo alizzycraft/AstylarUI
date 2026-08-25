@@ -90,7 +90,7 @@ export const materialTextOnlyTargets = Object.freeze([
   'divider-above', 'divider-below', 'badge-label', 'card-title', 'card-copy',
   'checkbox-label', 'radio-solo-label', 'radio-team-label', 'slide-toggle-label',
   'tab-overview', 'tab-activity', 'tab-panel', 'step-details-text', 'step-review-text',
-  'stepper-content', 'expansion-title',
+  'stepper-content', 'expansion-title', 'expansion-content',
 ]);
 export const materialSemanticExcludedTargets = Object.freeze([
   ...materialTextOnlyTargets,
@@ -108,6 +108,12 @@ export const materialFocusedRasterTargets = Object.freeze({
   chips: Object.freeze({ element: 'chips-primary', padding: 8, minimumSsim: .79 }),
   checkbox: Object.freeze({ element: 'checkbox-primary', padding: 8, minimumSsim: .40 }),
   'button-toggle': Object.freeze({ element: 'button-toggle-primary', padding: 8, minimumSsim: .40 }),
+});
+export const materialInteractionFocusedRasterTargets = Object.freeze({
+  expansion: Object.freeze({ element: 'expansion-root', padding: 8, minimumSsim: .90 }),
+});
+export const materialInteractionTextAlignmentTargets = Object.freeze({
+  expansion: Object.freeze(['expansion-content']),
 });
 export const materialShadowProfileTargets = Object.freeze({
   card: Object.freeze({ element: 'card-primary', maximumRowError: 22 }),

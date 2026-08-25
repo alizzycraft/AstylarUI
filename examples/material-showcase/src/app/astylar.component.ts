@@ -209,7 +209,8 @@ export class AstylarShowcaseComponent {
     if (this.surface) this.surface.scene.clearColor = Color4.FromHexString(`${theme.surface}ff`);
     const rootId = `${family}-root`;
     const densityHeight = materialDensityHeight(theme.density);
-    const referenceHeight = family === 'button' ? 58 + densityHeight : materialReferenceHeight(family, theme.density);
+    const referenceHeight = family === 'button' ? 58 + densityHeight
+      : materialReferenceHeight(family, theme.density) + (family === 'expansion' && state.open ? 88 : 0);
     const content = this.familyElements(family);
     return {
       plugins: [{ id: 'showcase.material', versionRange: '^1.0.0', schemaVersion: 1 }],
@@ -311,10 +312,11 @@ export class AstylarShowcaseComponent {
         { selector: '.table-rule-one', top: `${theme.density === 0 ? 84 : theme.density <= -5 ? 68 : 76}px` },
         { selector: '.table-rule-two', top: `${theme.density === 0 ? 136 : theme.density <= -5 ? 104 : 120}px` },
         { selector: '.table-rule', mediaMaxWidth: '500px', width: '260px' },
-        { selector: '.expansion-panel', position: 'relative', width: '100%', height: `${theme.density === 0 ? 48 : theme.density <= -5 ? 36 : 40}px`, borderRadius: `${12 * theme.cornerScale}px`, background: theme.surface, boxShadow: '0 1px 2px #00000055' },
-        { selector: '.expansion-trigger', width: '100%', height: `${theme.density === 0 ? 48 : theme.density <= -5 ? 36 : 40}px`, padding: '0 24px', borderWidth: '0', background: 'transparent', color: theme.onSurface, fontWeight: '500', textAlign: 'left' },
-        { selector: '.expansion-title', verticalAlign: 'middle' },
-        { selector: '.expansion-chevron', position: 'absolute', top: '13px', right: '20px', fontSize: '20px' },
+        { selector: '.expansion-panel', position: 'relative', width: '100%', height: `${state.open ? theme.density === 0 ? 136 : theme.density <= -5 ? 112 : 120 : theme.density === 0 ? 48 : theme.density <= -5 ? 36 : 40}px`, borderRadius: `${12 * theme.cornerScale}px`, background: theme.surface, boxShadow: '0 1px 2px #00000055' },
+        { selector: '.expansion-trigger', width: '100%', height: `${state.open ? theme.density === 0 ? 64 : theme.density <= -5 ? 52 : 56 : theme.density === 0 ? 48 : theme.density <= -5 ? 36 : 40}px`, boxSizing: 'border-box', padding: '0 24px', borderWidth: '0', display: 'flex', alignItems: 'center', background: 'transparent', color: theme.onSurface, fontWeight: '500', textAlign: 'left' },
+        { selector: '.expansion-title', fontWeight: '500', lineHeight: '20px', verticalAlign: 'middle' },
+        { selector: '.expansion-chevron', position: 'absolute', top: `${state.open ? 21 : 13}px`, right: '20px', fontSize: '20px' },
+        { selector: '#expansion-content', position: 'absolute', display: state.open ? 'block' : 'none', top: `${state.open ? theme.density === 0 ? 80 : theme.density <= -5 ? 60 : 68 : 0}px`, left: '24px', margin: '0', verticalAlign: 'middle' },
         { selector: '.toolbar', position: 'relative', width: '100%', height: `${theme.density === 0 ? 64 : theme.density <= -5 ? 52 : 56}px`, display: 'flex', alignItems: 'center', background: theme.surface, color: theme.onSurface },
         ...(theme.density === 0 ? [{ selector: '.toolbar', mediaMaxWidth: '500px', height: '56px' }] : []),
         ...(theme.density === -2 ? [{ selector: '.toolbar', mediaMaxWidth: '500px', height: '48px' }] : []),
@@ -526,7 +528,7 @@ export class AstylarShowcaseComponent {
         { type: 'tr', id: 'table-northstar-row', children: [{ type: 'td', id: 'table-northstar', textContent: 'Northstar' }] },
       ] },
     ] }, { type: 'div', id: 'table-rule-one', class: 'table-rule table-rule-one' }, { type: 'div', id: 'table-rule-two', class: 'table-rule table-rule-two' }];
-    if (family === 'expansion') return [{ type: 'article', id: 'expansion-shell', class: 'expansion-panel', children: [{ type: 'div', id: 'expansion-primary', class: 'expansion-trigger', role: 'button', tabindex: state.disabled ? -1 : 0, ariaDisabled: state.disabled, ariaExpanded: state.open, ariaControls: 'expansion-content', children: [{ type: 'span', id: 'expansion-title', class: 'expansion-title', textContent: 'Advanced settings' }] }, { type: 'span', id: 'expansion-chevron', class: 'expansion-chevron', textContent: state.open ? '⌃' : '⌄' }, ...(state.open ? [{ type: 'p' as const, id: 'expansion-content', textContent: 'Additional options.' }] : [])] }];
+    if (family === 'expansion') return [{ type: 'article', id: 'expansion-shell', class: 'expansion-panel', children: [{ type: 'div', id: 'expansion-primary', class: 'expansion-trigger', role: 'button', tabindex: state.disabled ? -1 : 0, ariaDisabled: state.disabled, ariaExpanded: state.open, ariaControls: 'expansion-content', children: [{ type: 'span', id: 'expansion-title', class: 'expansion-title', textContent: 'Advanced settings' }] }, { type: 'span', id: 'expansion-chevron', class: 'expansion-chevron', textContent: state.open ? '⌃' : '⌄' }, { type: 'p' as const, id: 'expansion-content', textContent: 'Additional options.' }] }];
     if (['dialog', 'bottom-sheet', 'snack-bar'].includes(family)) {
       const label = family === 'dialog' ? 'Open dialog' : family === 'bottom-sheet' ? 'Open bottom sheet' : 'Show snackbar';
       const overlay = family === 'snack-bar'

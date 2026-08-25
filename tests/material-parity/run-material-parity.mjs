@@ -8,7 +8,7 @@ import { chromium } from 'playwright-core';
 import { PNG } from 'pngjs';
 import { ssim } from 'ssim.js';
 import {
-  materialAbsoluteTextAlignmentTargets, materialFamilies, materialFocusedRasterTargets, materialInteractionCases, materialMobileFlowCases, materialProfiles,
+  materialAbsoluteTextAlignmentTargets, materialFamilies, materialFocusedRasterTargets, materialInteractionCases, materialInteractionFocusedRasterTargets, materialInteractionTextAlignmentTargets, materialMobileFlowCases, materialProfiles,
   materialLeftAlignedTextTargets, materialSemanticExcludedTargets, materialShadowProfileTargets, materialStaticCases, materialTextAlignmentTargets, materialTextAuditTargets, materialTextOnlyTargets, materialThresholds, materialUniformBackgroundTargets,
 } from './benchmark.config.mjs';
 import { measureTextInkCenter, textCenterOffsetError } from './text-alignment-metrics.mjs';
@@ -113,7 +113,7 @@ function benchmarkMeasurementIds(family) {
   return [...new Set([
     `${family}-root`,
     `${family}-primary`,
-    ...textTargets(family),
+    ...textTargets(family), ...interactionTextTargets(family),
     ...(uniformBackground ? [uniformBackground.container, ...uniformBackground.surfaces] : []),
   ])];
 }
@@ -316,8 +316,13 @@ async function captureInteractionCase(benchmarkCase) {
     const screenshotSimilarity = comparePng(referenceImage, astylarImage);
     const textAlignment = compareTextAlignment(
       referenceImage, astylarImage, referenceMeasurement.elements, astylarMeasurement.elements,
-      textTargets(family), viewport.deviceScaleFactor, directory,
+      [...textTargets(family), ...interactionTextTargets(family)], viewport.deviceScaleFactor, directory,
     );
+    const focusedRasterTarget = materialInteractionFocusedRasterTargets[family];
+    const focusedRasters = focusedRasterTarget ? [compareFocusedRaster(
+      referenceImage, astylarImage, referenceMeasurement.elements,
+      focusedRasterTarget, viewport.deviceScaleFactor, directory,
+    )] : [];
     const runtimeErrors = [...reference.errors.map((error) => `reference: ${error}`),
       ...astylar.errors.map((error) => `astylar: ${error}`)];
     const eventComparison = compareEvents(referenceEvents, astylarEvents, family, state);
@@ -328,11 +333,12 @@ async function captureInteractionCase(benchmarkCase) {
         JSON.stringify(resourceCounts(resourceSnapshots.at(-1))));
     const focusMatches = state !== 'focus' || referenceFocus === astylarFocus;
     return {
-      family, profile, viewport, state, screenshotSimilarity, textAlignment, semantics, eventComparison, statePaint,
+      family, profile, viewport, state, screenshotSimilarity, textAlignment, focusedRasters, semantics, eventComparison, statePaint,
       focus: { reference: referenceFocus, astylar: astylarFocus, matches: focusMatches },
       runtimeErrors, resourceSnapshots, resourcesStable, astylarState,
       meetsAcceptance: screenshotSimilarity >= materialThresholds.resultSsim &&
         textAlignment.every((result) => result.matches) &&
+        focusedRasters.every((result) => result.matches) &&
         semantics.every((result) => result.matches) && eventComparison.matches && statePaint.matches && focusMatches &&
         runtimeErrors.length === 0 && resourcesStable,
     };
@@ -533,6 +539,10 @@ function compareEvents(reference, candidate, family, state) {
 
 function textTargets(family) {
   return (textAudit ? materialTextAuditTargets : materialTextAlignmentTargets)[family] ?? [];
+}
+
+function interactionTextTargets(family) {
+  return materialInteractionTextAlignmentTargets[family] ?? [];
 }
 
 function compareStatePaint(referenceMeasurement, astylarMeasurement, family, profile, state) {
@@ -862,6 +872,7 @@ function summarizeInteractions(results) {
   const similarities = results.map(({ screenshotSimilarity }) => screenshotSimilarity).sort((a, b) => a - b);
   const passingCases = results.filter(({ meetsAcceptance }) => meetsAcceptance).length;
   const textAlignmentResults = results.flatMap(({ textAlignment }) => textAlignment ?? []);
+  const focusedRasterResults = results.flatMap(({ focusedRasters }) => focusedRasters ?? []);
   return {
     executedCases: results.length,
     passingCases,
@@ -870,6 +881,8 @@ function summarizeInteractions(results) {
     medianSsim: similarities.length ? similarities[Math.floor(similarities.length / 2)] : 1,
     textAlignmentTargets: textAlignmentResults.length,
     textAlignmentTargetsPassing: textAlignmentResults.filter(({ matches }) => matches).length,
+    focusedRasterTargets: focusedRasterResults.length,
+    focusedRasterTargetsPassing: focusedRasterResults.filter(({ matches }) => matches).length,
     maximumTextCenterOffsetErrorPx: maximumFiniteOffset(textAlignmentResults),
     meetsAcceptance: results.length === materialInteractionCases.length + materialMobileFlowCases.length &&
       passingCases === results.length,
@@ -901,5 +914,7 @@ function humanSummary(report) {
     `- Interaction text alignment: ${report.interactionSummary.textAlignmentTargetsPassing}/` +
     `${report.interactionSummary.textAlignmentTargets} (maximum center-offset error ` +
     `${report.interactionSummary.maximumTextCenterOffsetErrorPx.toFixed(3)}px)\n` +
+    `- Interaction focused rasters: ${report.interactionSummary.focusedRasterTargetsPassing}/` +
+    `${report.interactionSummary.focusedRasterTargets}\n` +
     `- Interaction meets acceptance: ${report.interactionSummary.meetsAcceptance ? 'yes' : 'no'}\n`;
 }

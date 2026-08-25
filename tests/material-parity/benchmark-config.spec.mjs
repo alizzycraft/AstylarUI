@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import path from 'node:path';
-import { materialAbsoluteTextAlignmentTargets, materialComparisonViewport, materialFamilies, materialFocusedRasterTargets, materialInteractionCases, materialInteractionViewports, materialMobileFlowCases, materialMobileFlowFamilies, materialProfiles, materialStaticCases, materialSupplementalStaticCases, materialTextAlignmentTargets, materialTextAuditTargets, materialTextlessFamilies, materialTextOnlyTargets, materialThresholds, materialUniformBackgroundTargets, materialViewports } from './benchmark.config.mjs';
+import { materialAbsoluteTextAlignmentTargets, materialComparisonViewport, materialFamilies, materialFocusedRasterTargets, materialInteractionCases, materialInteractionFocusedRasterTargets, materialInteractionTextAlignmentTargets, materialInteractionViewports, materialMobileFlowCases, materialMobileFlowFamilies, materialProfiles, materialStaticCases, materialSupplementalStaticCases, materialTextAlignmentTargets, materialTextAuditTargets, materialTextlessFamilies, materialTextOnlyTargets, materialThresholds, materialUniformBackgroundTargets, materialViewports } from './benchmark.config.mjs';
 
 test('covers every installed Angular Material component entry point', () => {
   const packageJson = JSON.parse(readFileSync(path.resolve('node_modules/@angular/material/package.json'), 'utf8'));
@@ -33,7 +33,10 @@ test('keeps the app catalog and enforced static matrix complete', () => {
     ['button-primary', 'button-secondary', 'button-disabled']);
   assert.ok(Object.keys(materialTextAlignmentTargets).every((family) => materialFamilies.includes(family)));
   assert.deepEqual(materialFamilies.filter((family) => !(family in materialTextAuditTargets)), materialTextlessFamilies);
-  const enforcedTextTargets = new Set(Object.values(materialTextAlignmentTargets).flat());
+  const enforcedTextTargets = new Set([
+    ...Object.values(materialTextAlignmentTargets).flat(),
+    ...Object.values(materialInteractionTextAlignmentTargets).flat(),
+  ]);
   assert.ok(materialAbsoluteTextAlignmentTargets.every((target) => enforcedTextTargets.has(target)));
   assert.ok(materialTextOnlyTargets.every((target) => enforcedTextTargets.has(target)));
   assert.ok(Object.keys(materialUniformBackgroundTargets).every((family) => materialFamilies.includes(family)));
@@ -42,6 +45,10 @@ test('keeps the app catalog and enforced static matrix complete', () => {
   assert.deepEqual(Object.keys(materialFocusedRasterTargets).sort(),
     ['button-toggle', 'checkbox', 'chips', 'form-field', 'icon', 'paginator', 'sort', 'table']);
   assert.ok(Object.keys(materialFocusedRasterTargets).every((family) => materialFamilies.includes(family)));
+  assert.deepEqual(materialInteractionFocusedRasterTargets.expansion,
+    { element: 'expansion-root', padding: 8, minimumSsim: .90 });
+  assert.ok(Object.keys(materialInteractionFocusedRasterTargets).every((family) => materialFamilies.includes(family)));
+  assert.deepEqual(materialInteractionTextAlignmentTargets.expansion, ['expansion-content']);
   assert.equal(materialInteractionViewports.length, 2);
   for (const family of materialFamilies) {
     for (const profile of materialProfiles) {
