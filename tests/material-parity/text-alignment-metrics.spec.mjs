@@ -21,7 +21,17 @@ test('normalizes text-ink offsets from DPR2 pixels to CSS pixels', () => {
   assert.ok(Math.abs(textCenterOffsetError(expected, actual) - 1) < 1e-9);
 });
 
-function syntheticButton(scale, inkTopCssPx) {
+test('can audit text placed at the inline edge of a control', () => {
+  const reference = syntheticButton(1, 8, 1, 7);
+  const shifted = syntheticButton(1, 9, 1, 7);
+  const options = { horizontalInsetFraction: 0 };
+  assert.ok(Math.abs(textCenterOffsetError(
+    measureTextInkCenter(reference, box, 1, options),
+    measureTextInkCenter(shifted, box, 1, options),
+  ) - 1) < 1e-9);
+});
+
+function syntheticButton(scale, inkTopCssPx, inkLeftCssPx = 14, inkRightCssPx = 26) {
   const image = new PNG({ width: box.width * scale, height: box.height * scale });
   for (let offset = 0; offset < image.data.length; offset += 4) {
     image.data[offset] = 103;
@@ -30,7 +40,7 @@ function syntheticButton(scale, inkTopCssPx) {
     image.data[offset + 3] = 255;
   }
   for (let y = inkTopCssPx * scale; y < (inkTopCssPx + 4) * scale; y += 1) {
-    for (let x = 14 * scale; x < 26 * scale; x += 1) {
+    for (let x = inkLeftCssPx * scale; x < inkRightCssPx * scale; x += 1) {
       const offset = (y * image.width + x) * 4;
       image.data[offset] = image.data[offset + 1] = image.data[offset + 2] = 255;
     }

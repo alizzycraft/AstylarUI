@@ -76,6 +76,9 @@ export const materialAbsoluteTextAlignmentTargets = Object.freeze([
   'toolbar-action', 'divider-above', 'divider-below', 'badge-label', 'badge-count',
   'card-title', 'card-copy', 'card-open', 'paginator-range',
 ]);
+export const materialLeftAlignedTextTargets = Object.freeze([
+  'form-field-control', 'input-control', 'select-control',
+]);
 export const materialTextOnlyTargets = Object.freeze([
   'divider-above', 'divider-below', 'badge-label', 'card-title', 'card-copy',
 ]);
@@ -87,6 +90,7 @@ export const materialFocusedRasterTargets = Object.freeze({
   icon: Object.freeze({ element: 'icon-primary', padding: 8, minimumSsim: .80 }),
   table: Object.freeze({ element: 'table-primary', padding: 8, minimumSsim: .80 }),
   paginator: Object.freeze({ element: 'paginator-primary', padding: 8, minimumSsim: .80 }),
+  'form-field': Object.freeze({ element: 'form-field-primary', padding: 8, minimumSsim: .80 }),
   chips: Object.freeze({ element: 'chips-primary', padding: 8, minimumSsim: .79 }),
   checkbox: Object.freeze({ element: 'checkbox-primary', padding: 8, minimumSsim: .40 }),
   'button-toggle': Object.freeze({ element: 'button-toggle-primary', padding: 8, minimumSsim: .40 }),

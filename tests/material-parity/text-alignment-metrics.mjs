@@ -1,6 +1,6 @@
-export function measureTextInkCenter(image, box, scale) {
-  const left = Math.max(0, Math.floor((box.left + box.width * .12) * scale));
-  const right = Math.min(image.width, Math.ceil((box.right - box.width * .12) * scale));
+export function measureTextInkCenter(image, box, scale, { horizontalInsetFraction = .12 } = {}) {
+  const left = Math.max(0, Math.floor((box.left + box.width * horizontalInsetFraction) * scale));
+  const right = Math.min(image.width, Math.ceil((box.right - box.width * horizontalInsetFraction) * scale));
   const top = Math.max(0, Math.floor((box.top + box.height * .15) * scale));
   const bottom = Math.min(image.height, Math.ceil((box.bottom - box.height * .15) * scale));
   if (left >= right || top >= bottom) return undefined;

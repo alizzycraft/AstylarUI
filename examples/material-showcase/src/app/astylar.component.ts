@@ -269,11 +269,14 @@ export class AstylarShowcaseComponent {
         { selector: '.outlined', background: theme.surfaceContainer, color: theme.primary, borderWidth: '1px', borderStyle: 'solid', borderColor: '#79747e' },
         { selector: '.field', width: '100%', height: '56px', padding: '12px 16px', borderWidth: '1px', borderStyle: 'solid', borderColor: '#79747e', borderRadius: `${4 * theme.cornerScale}px`, background: theme.surface, color: theme.mode === 'dark' ? '#e6e1e5' : '#1d1b20' },
         { selector: '.field-shell', position: 'relative', width: '100%', height: `${theme.density === 0 ? 78 : theme.density <= -5 ? 62 : 70}px`, alignSelf: 'flex-start', boxSizing: 'border-box', background: 'transparent' },
-        { selector: '.field-label', position: 'absolute', top: '8px', left: '16px', color: theme.primary, fontSize: '12px' },
-        { selector: '.field-label.empty-field-label', top: `${state.open ? 8 : theme.density === 0 ? 20 : 16}px`, color: state.open ? theme.primary : theme.onSurface, fontSize: state.open ? '12px' : '16px' },
-        { selector: '.field-control', position: 'absolute', top: '0', left: '0', width: '100%', height: `${theme.density === 0 ? 56 : 48}px`, boxSizing: 'border-box', padding: `${theme.density === 0 ? 20 : 8}px 16px 0`, borderWidth: '0', borderRadius: `${4 * theme.cornerScale}px`, background: theme.mode === 'dark' && !state.open ? '#49454f' : '#e8e0eb', boxShadow: `0 1px 0 ${theme.onSurface}`, color: theme.mode === 'dark' && state.open ? '#1d1b20' : theme.onSurface, fontSize: '16px' },
-        { selector: '.field-control:focus', borderWidth: '0', color: theme.onSurface, boxShadow: `0 2px 0 ${theme.primary}` },
-        { selector: '.select-control', paddingRight: '48px', cursor: 'pointer', boxShadow: state.open ? `0 2px 0 ${theme.primary}` : `0 1px 0 ${theme.onSurface}` },
+        { selector: '.field-surface', position: 'absolute', top: '0', left: '0', width: '100%', height: `${theme.density === 0 ? 56 : 48}px`, boxSizing: 'border-box', borderRadius: `${4 * theme.cornerScale}px`, background: theme.mode === 'dark' && !state.open ? '#49454f' : '#e8e0eb', boxShadow: `0 1px 0 ${theme.onSurface}` },
+        { selector: '.field-surface.active', boxShadow: `0 2px 0 ${state.error ? theme.error : theme.primary}` },
+        { selector: '.field-label', position: 'absolute', top: '8px', left: '16px', color: state.error ? theme.error : theme.mode === 'dark' ? '#cac4d0' : theme.density <= -5 ? '#000000' : '#49454f', fontSize: '12px', letterSpacing: '.4px', verticalAlign: 'middle' },
+        { selector: '.field-label.empty-field-label', top: `${state.open || state.error ? 8 : theme.density === 0 ? 20 : 16}px`, color: state.error ? theme.error : state.open ? theme.primary : theme.onSurface, fontSize: state.open || state.error ? '12px' : '16px' },
+        { selector: '.field-input-region', position: 'absolute', top: `${theme.density === 0 ? 24 : 16}px`, left: '0', width: '100%', height: '24px', boxSizing: 'border-box', padding: '0 16px', background: 'transparent' },
+        { selector: '.field-control', position: 'relative', width: '100%', height: '24px', boxSizing: 'border-box', padding: '0', borderWidth: '0', borderRadius: '0', background: 'transparent', boxShadow: 'none', color: theme.mode === 'dark' && state.open ? '#1d1b20' : theme.onSurface, fontSize: '16px' },
+        { selector: '.field-control:focus', borderWidth: '0', color: theme.onSurface, boxShadow: 'none' },
+        { selector: '.select-control', paddingRight: '32px', cursor: 'pointer', boxShadow: 'none' },
         { selector: '.select-caret', position: 'absolute', top: `${theme.density === 0 ? 20 : 16}px`, right: '16px', color: state.open ? theme.primary : theme.onSurface, fontSize: '14px' },
         { selector: '.select-popup', position: 'absolute', top: `${theme.density === 0 ? 56 : 48}px`, left: '0', width: '100%', height: `${theme.density === 0 ? 112 : 96}px`, background: '#f2ecf1', boxShadow: '0 2px 6px rgba(0,0,0,0.24)', zIndex: '60' },
         { selector: '.select-option', position: 'relative', width: '100%', height: `${theme.density === 0 ? 56 : 48}px`, boxSizing: 'border-box', padding: `${theme.density === 0 ? 18 : 14}px 16px`, color: '#1d1b20', fontSize: '16px' },
@@ -281,16 +284,17 @@ export class AstylarShowcaseComponent {
         { selector: '.autocomplete-popup', top: `${theme.density === 0 ? 58 : 50}px` },
         { selector: '.autocomplete-popup .select-option', padding: `${theme.density === 0 ? 20 : 16}px 16px` },
         { selector: '.select-check', position: 'absolute', top: `${theme.density === 0 ? 16 : 12}px`, right: '16px', color: '#1d1b20', fontSize: '22px' },
-        { selector: '.picker-control.open', boxShadow: `0 2px 0 ${theme.primary}` },
+        { selector: '.picker-control.open', boxShadow: 'none' },
         { selector: '.picker-clock', position: 'absolute', top: `${theme.density === 0 ? 16 : 12}px`, right: '12px', color: theme.mode === 'dark' && state.open ? '#49454f' : theme.onSurface, fontSize: '24px' },
         { selector: '.picker-popup', position: 'absolute', top: `${theme.density === 0 ? 64 : 56}px`, left: '0', width: '100%', height: `${theme.density === 0 ? 248 : 216}px`, background: '#f2ecf1', boxShadow: '0 2px 6px rgba(0,0,0,0.24)', zIndex: '60' },
         { selector: '.picker-option', width: '100%', height: `${theme.density === 0 ? 48 : 42}px`, boxSizing: 'border-box', padding: `${theme.density === 0 ? 14 : 11}px 16px`, color: '#1d1b20', fontSize: '16px' },
         { selector: '.picker-option.selected', background: '#d8d2d8' },
-        { selector: '.timepicker-shell .field-control', height: `${theme.density <= -5 && state.open ? 34 : theme.density === 0 ? 56 : 48}px` },
+        { selector: '.timepicker-shell .field-surface', height: `${theme.density <= -5 && state.open ? 34 : theme.density === 0 ? 56 : 48}px` },
         { selector: '.timepicker-shell .field-label', color: theme.density <= -5 && state.open ? '#e8e0eb' : state.open ? theme.primary : theme.onSurface },
         { selector: '.timepicker-shell .picker-popup', top: `${theme.density <= -5 ? 39 : theme.density === 0 ? 64 : 56}px`, height: `${theme.density <= -5 ? 248 : theme.density === 0 ? 248 : 216}px`, paddingTop: `${theme.density <= -5 ? 8 : 0}px` },
         { selector: '.timepicker-shell .picker-option', height: `${theme.density <= -5 ? 48 : theme.density === 0 ? 48 : 42}px`, padding: `${theme.density <= -5 || theme.density === 0 ? 14 : 11}px 16px` },
-        { selector: '.field-hint', position: 'absolute', top: `${theme.density === 0 ? 58 : 50}px`, left: '16px', fontSize: '12px', color: theme.onSurface },
+        { selector: '.field-hint', position: 'absolute', top: `${theme.density === 0 ? 58 : 50}px`, left: '16px', fontSize: '12px', letterSpacing: '.4px', color: theme.onSurface },
+        { selector: '.field-error', position: 'absolute', top: `${theme.density === 0 ? 58 : 50}px`, left: '16px', fontSize: '12px', letterSpacing: '.4px', color: theme.error },
         { selector: '.row', display: 'flex', flexWrap: 'wrap', gap: '0', alignItems: 'center' },
         { selector: '.card', padding: '20px', borderRadius: `${16 * theme.cornerScale}px`, background: theme.mode === 'dark' ? '#2b2930' : '#f3edf7', minHeight: '90px' },
         { selector: '.material-card', position: 'relative', width: '100%', height: '120px', boxSizing: 'border-box', borderRadius: `${12 * theme.cornerScale}px`, background: theme.mode === 'dark' ? '#fff7ff' : '#f8f2f6', boxShadow: '0 2px 1px -1px rgba(0,0,0,0.2), 0 1px 1px 0 rgba(0,0,0,0.14), 0 1px 3px 0 rgba(0,0,0,0.12)', zIndex: '2' },
@@ -424,6 +428,11 @@ export class AstylarShowcaseComponent {
   private familyElements(family: MaterialFamily): DOMElement[] {
     const state = this.store.state();
     const theme = this.store.tokens();
+    const fieldSurface = (controlId: string): DOMElement => ({
+      type: 'div',
+      id: `${controlId}-surface`,
+      class: `field-surface${this.focusedId() === controlId || state.open || state.error ? ' active' : ''}`,
+    });
     if (family === 'toolbar') return [{ type: 'div', id: 'toolbar-primary', class: 'toolbar', children: [{ type: 'span', id: 'toolbar-title', class: 'toolbar-title', children: [{ type: 'span', id: 'toolbar-title-text', class: 'toolbar-title-text', textContent: 'Material workspace' }] }, { type: 'button', id: 'toolbar-action', class: 'toolbar-action', value: 'Action' }] }];
     if (family === 'sidenav') return [{ type: 'div', id: 'sidenav-primary', class: 'sidenav-container', children: [{ type: 'aside', id: 'sidenav-nav', class: 'sidenav', textContent: 'Navigation' }, { type: 'main', id: 'sidenav-content', class: 'sidenav-content', textContent: 'Main content' }] }];
     if (family === 'grid-list') return [{ type: 'div', id: 'grid-list-primary', class: 'grid-list', children: [{ type: 'div', id: 'grid-tile-one', class: 'grid-tile', children: [{ type: 'span', id: 'grid-tile-one-label', class: 'grid-tile-label', textContent: 'One' }] }, { type: 'div', id: 'grid-tile-two', class: 'grid-tile', children: [{ type: 'span', id: 'grid-tile-two-label', class: 'grid-tile-label', textContent: 'Two' }] }] }];
@@ -457,9 +466,11 @@ export class AstylarShowcaseComponent {
     if (family === 'progress-bar') return [{ type: 'showcase.material:linear-progress', id: 'progress-bar-primary', class: 'progress', role: 'progressbar', ariaValueMin: 0, ariaValueMax: 100, ariaValueNow: 64, data: { mode: 'determinate', progress: .64, 'indicator-color': this.store.tokens().primary, 'track-color': this.store.tokens().mode === 'dark' ? '#49454f' : '#e7e0ec' } }];
     if (family === 'progress-spinner') return [{ type: 'showcase.material:circular-progress', id: 'progress-spinner-primary', class: 'progress', role: 'progressbar', ariaValueMin: 0, ariaValueMax: 100, ariaValueNow: 64, data: { mode: 'determinate', progress: .64, 'indicator-color': this.store.tokens().primary, 'stroke-width': 10 } }];
     if (['input', 'form-field', 'autocomplete'].includes(family)) return [{ type: 'div', id: `${family}-primary`, class: 'field-shell', children: [
+      fieldSurface(`${family}-control`),
       { type: 'label' as const, id: `${family}-label`, class: `field-label${family === 'autocomplete' ? ' empty-field-label' : ''}`, for: `${family}-control`, textContent: family === 'autocomplete' ? 'City' : family === 'form-field' ? 'Project name' : 'Email' },
-      { type: 'input', inputType: family === 'input' ? 'email' : 'text', id: `${family}-control`, class: 'field-control', value: family === 'autocomplete' ? '' : family === 'input' ? 'team@example.com' : 'Atlas', disabled: state.disabled, ariaLabel: family === 'autocomplete' ? 'City' : family === 'input' ? 'Email' : 'Project name', ariaInvalid: state.error, role: family === 'autocomplete' ? 'combobox' : undefined, ariaExpanded: family === 'autocomplete' ? state.open : undefined, ariaControls: family === 'autocomplete' ? 'field-options' : undefined, ariaAutocomplete: family === 'autocomplete' ? 'list' : undefined },
-      ...(family === 'form-field' ? [{ type: 'span' as const, id: 'form-field-hint', class: 'field-hint', textContent: 'Public label' }] : []),
+      { type: 'div', id: `${family}-input-region`, class: 'field-input-region', children: [{ type: 'input', inputType: family === 'input' ? 'email' : 'text', id: `${family}-control`, class: 'field-control', value: family === 'autocomplete' ? '' : family === 'input' ? 'team@example.com' : 'Atlas', disabled: state.disabled, ariaLabel: family === 'autocomplete' ? 'City' : family === 'input' ? 'Email' : 'Project name', ariaInvalid: state.error, role: family === 'autocomplete' ? 'combobox' : undefined, ariaExpanded: family === 'autocomplete' ? state.open : undefined, ariaControls: family === 'autocomplete' ? 'field-options' : undefined, ariaAutocomplete: family === 'autocomplete' ? 'list' : undefined }] },
+      ...(family === 'form-field' && !state.error ? [{ type: 'span' as const, id: 'form-field-hint', class: 'field-hint', textContent: 'Public label' }] : []),
+      ...(family === 'form-field' && state.error ? [{ type: 'span' as const, id: 'form-field-error', class: 'field-error', textContent: 'Project name is required' }] : []),
       ...(family === 'autocomplete' && state.open ? [{ type: 'div' as const, id: 'field-options', class: 'select-popup autocomplete-popup', role: 'listbox', children: [
         { type: 'div' as const, id: 'autocomplete-option-cape-town', class: 'select-option', role: 'option', textContent: 'Cape Town' },
         { type: 'div' as const, id: 'autocomplete-option-johannesburg', class: 'select-option', role: 'option', textContent: 'Johannesburg' },
@@ -478,14 +489,15 @@ export class AstylarShowcaseComponent {
       { type: 'div', id: 'radio-team', class: 'radio-option', role: 'radio', tabindex: state.selected ? 0 : -1, ariaChecked: state.selected, ariaDisabled: state.disabled, children: [{ type: 'span', id: 'radio-team-ring', class: `radio-ring${state.selected ? ' selected' : ''}`, children: state.selected ? [{ type: 'span', id: 'radio-team-dot', class: 'radio-dot' }] : [] }, { type: 'span', id: 'radio-team-label', class: 'radio-label', textContent: 'Team' }] },
     ] }];
     if (family === 'select') return [{ type: 'div', id: 'select-primary', class: 'field-shell', children: [
+      fieldSurface('select-control'),
       { type: 'label', id: 'select-label', class: 'field-label', for: 'select-control', textContent: 'Plan' },
-      {
+      { type: 'div', id: 'select-input-region', class: 'field-input-region', children: [{
         type: 'input', inputType: 'text', id: 'select-control', class: 'field-control select-control',
         value: state.selected ? 'Team' : 'Solo', readonly: true, disabled: state.disabled,
         role: 'combobox', ariaLabel: 'Plan', ariaInvalid: state.error, ariaExpanded: state.open,
         ariaControls: 'select-options', ariaActivedescendant: state.open
           ? state.selected ? 'select-option-team' : 'select-option-solo' : undefined,
-      },
+      }] },
       { type: 'span', id: 'select-caret', class: 'select-caret', role: 'presentation', textContent: '▾' },
       ...(state.open ? [{ type: 'div' as const, id: 'select-options', class: 'select-popup', role: 'listbox', children: [
         { type: 'div' as const, id: 'select-option-solo', class: `select-option${state.selected ? '' : ' selected'}`, role: 'option', ariaSelected: !state.selected, textContent: 'Solo' },
@@ -539,8 +551,9 @@ export class AstylarShowcaseComponent {
       ];
     }
     if (family === 'datepicker' || family === 'timepicker') return [{ type: 'div', id: `${family}-primary`, class: `field-shell${family === 'timepicker' ? ' timepicker-shell' : ''}`, children: [
+      fieldSurface(`${family}-control`),
       { type: 'label', id: `${family}-label`, class: 'field-label empty-field-label', for: `${family}-control`, textContent: family === 'datepicker' ? 'Due date' : 'Meeting time' },
-      { type: 'input', inputType: 'text', id: `${family}-control`, class: `field-control${family === 'timepicker' ? ' picker-control' : ''}${family === 'timepicker' && state.open ? ' open' : ''}`, value: '', disabled: state.disabled, role: family === 'timepicker' ? 'combobox' : undefined, ariaLabel: family === 'datepicker' ? 'Due date' : 'Meeting time', ariaInvalid: state.error, ariaHaspopup: 'dialog', ariaExpanded: family === 'timepicker' ? state.open : undefined, ariaControls: family === 'timepicker' ? 'timepicker-options' : undefined, ariaActivedescendant: family === 'timepicker' && state.open ? 'timepicker-option-0' : undefined },
+      { type: 'div', id: `${family}-input-region`, class: 'field-input-region', children: [{ type: 'input', inputType: 'text', id: `${family}-control`, class: `field-control${family === 'timepicker' ? ' picker-control' : ''}${family === 'timepicker' && state.open ? ' open' : ''}`, value: '', disabled: state.disabled, role: family === 'timepicker' ? 'combobox' : undefined, ariaLabel: family === 'datepicker' ? 'Due date' : 'Meeting time', ariaInvalid: state.error, ariaHaspopup: 'dialog', ariaExpanded: family === 'timepicker' ? state.open : undefined, ariaControls: family === 'timepicker' ? 'timepicker-options' : undefined, ariaActivedescendant: family === 'timepicker' && state.open ? 'timepicker-option-0' : undefined }] },
       ...([{ type: 'span' as const, id: `${family}-icon`, class: 'picker-clock', role: 'presentation', textContent: family === 'datepicker' ? '▦' : '◷' }]),
       ...(family === 'timepicker' && state.open ? [{ type: 'div' as const, id: 'timepicker-options', class: 'picker-popup', role: 'listbox', children: ['12:00 AM', '12:30 AM', '1:00 AM', '1:30 AM', '2:00 AM'].map((label, index) => ({ type: 'div' as const, id: `timepicker-option-${index}`, class: `picker-option${index === 0 ? ' selected' : ''}`, role: 'option', ariaSelected: index === 0, textContent: label })) }] : []),
     ] }];

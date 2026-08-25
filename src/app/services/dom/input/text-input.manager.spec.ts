@@ -49,6 +49,14 @@ describe('TextInputManager', () => {
     expect((manager as any).getCollapsedTextareaInlineCorrection(false, 0, 0.25)).toBe(0);
   });
 
+  it('centers single-line text inside asymmetric vertical padding', () => {
+    const manager = Object.create(TextInputManager.prototype) as TextInputManager;
+
+    expect((manager as any).resolveSingleLineTextY({ top: 22, bottom: 8 }, 1)).toBe(-6);
+    expect((manager as any).resolveSingleLineTextY({ top: 8, bottom: 8 }, 1)).toBe(1);
+    expect((manager as any).resolveSingleLineTextY({ top: 4, bottom: 4 }, .5)).toBe(.5);
+  });
+
   it('masks password display text without changing the stored value', () => {
     const manager = Object.create(TextInputManager.prototype) as TextInputManager;
     const textInput = createTextInput('secret', 6);

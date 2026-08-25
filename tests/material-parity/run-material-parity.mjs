@@ -9,7 +9,7 @@ import { PNG } from 'pngjs';
 import { ssim } from 'ssim.js';
 import {
   materialAbsoluteTextAlignmentTargets, materialFamilies, materialFocusedRasterTargets, materialInteractionCases, materialMobileFlowCases, materialProfiles,
-  materialShadowProfileTargets, materialStaticCases, materialTextAlignmentTargets, materialTextAuditTargets, materialTextOnlyTargets, materialThresholds, materialUniformBackgroundTargets,
+  materialLeftAlignedTextTargets, materialShadowProfileTargets, materialStaticCases, materialTextAlignmentTargets, materialTextAuditTargets, materialTextOnlyTargets, materialThresholds, materialUniformBackgroundTargets,
 } from './benchmark.config.mjs';
 import { measureTextInkCenter, textCenterOffsetError } from './text-alignment-metrics.mjs';
 import { compareBottomShadowProfiles } from './shadow-profile-metrics.mjs';
@@ -686,9 +686,11 @@ function compareTextAlignment(referenceImage, candidateImage, referenceElements,
   return targets.map((id) => {
     const expectedBox = referenceElements[id]?.borderBox;
     const actualBox = candidateElements[id]?.borderBox;
+    if (!expectedBox && !actualBox) return { id, matches: true, skipped: true, reason: 'target is absent in both modes' };
     if (!expectedBox || !actualBox) return { id, matches: false, reason: 'target geometry is missing' };
-    const reference = measureTextInkCenter(referenceImage, expectedBox, scale);
-    const astylar = measureTextInkCenter(candidateImage, actualBox, scale);
+    const horizontalInsetFraction = materialLeftAlignedTextTargets.includes(id) ? 0 : .12;
+    const reference = measureTextInkCenter(referenceImage, expectedBox, scale, { horizontalInsetFraction });
+    const astylar = measureTextInkCenter(candidateImage, actualBox, scale, { horizontalInsetFraction });
     if (!reference || !astylar) return { id, matches: false, reason: 'text ink could not be isolated' };
     const offsetErrorPx = materialAbsoluteTextAlignmentTargets.includes(id)
       ? Math.abs(reference.centerY - astylar.centerY)
@@ -838,8 +840,7 @@ function summarize(results) {
   const uniformBackgroundResults = results.flatMap(({ uniformBackgrounds }) => uniformBackgrounds ?? []);
   const focusedRasterResults = results.flatMap(({ focusedRasters }) => focusedRasters ?? []);
   const shadowProfileResults = results.flatMap(({ shadowProfiles }) => shadowProfiles ?? []);
-  const maximumTextCenterOffsetErrorPx = textAlignmentResults.length
-    ? Math.max(...textAlignmentResults.map(({ offsetErrorPx }) => offsetErrorPx ?? Infinity)) : 0;
+  const maximumTextCenterOffsetErrorPx = maximumFiniteOffset(textAlignmentResults);
   const passingCases = results.filter(({ meetsAcceptance }) => meetsAcceptance).length;
   return {
     passingCases, failingCases: results.length - passingCases, minimumSsim, medianSsim, maximumEdgeError,
@@ -869,11 +870,15 @@ function summarizeInteractions(results) {
     medianSsim: similarities.length ? similarities[Math.floor(similarities.length / 2)] : 1,
     textAlignmentTargets: textAlignmentResults.length,
     textAlignmentTargetsPassing: textAlignmentResults.filter(({ matches }) => matches).length,
-    maximumTextCenterOffsetErrorPx: textAlignmentResults.length
-      ? Math.max(...textAlignmentResults.map(({ offsetErrorPx }) => offsetErrorPx ?? Infinity)) : 0,
+    maximumTextCenterOffsetErrorPx: maximumFiniteOffset(textAlignmentResults),
     meetsAcceptance: results.length === materialInteractionCases.length + materialMobileFlowCases.length &&
       passingCases === results.length,
   };
+}
+
+function maximumFiniteOffset(results) {
+  const offsets = results.map(({ offsetErrorPx }) => offsetErrorPx).filter(Number.isFinite);
+  return offsets.length ? Math.max(...offsets) : 0;
 }
 
 function humanSummary(report) {

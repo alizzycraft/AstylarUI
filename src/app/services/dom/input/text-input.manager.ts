@@ -385,7 +385,9 @@ export class TextInputManager {
             );
 
             textMesh.parent = textInput.mesh;
-            textMesh.position.y = -2 * pixelScale;
+            textMesh.position.y = isTextarea
+                ? -2 * pixelScale
+                : this.resolveSingleLineTextY(verticalInsets, pixelScale);
             textMesh.position.z = CONTROL_CONTENT_Z_OFFSET;
             textMesh.isPickable = true;
             textMesh.renderingGroupId = 0;
@@ -1211,6 +1213,14 @@ export class TextInputManager {
             top: (border + top) * scale,
             bottom: (border + bottom) * scale
         };
+    }
+
+    private resolveSingleLineTextY(insets: { top: number; bottom: number }, pixelScale: number): number {
+        // CSS padding defines the input's content box. Center the line texture
+        // in that box. The logical-pixel correction compensates for the canvas
+        // glyph texture's lower raster bias without discarding asymmetric
+        // authored top/bottom padding.
+        return (insets.bottom - insets.top) / 2 + pixelScale;
     }
 
     private parseBoxShorthand(value: string | undefined): { left: number; right: number } {
