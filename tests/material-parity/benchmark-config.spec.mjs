@@ -47,6 +47,8 @@ test('keeps the app catalog and enforced static matrix complete', () => {
   assert.ok(Object.keys(materialFocusedRasterTargets).every((family) => materialFamilies.includes(family)));
   assert.deepEqual(materialInteractionFocusedRasterTargets.expansion,
     { element: 'expansion-root', padding: 8, minimumSsim: .90 });
+  assert.deepEqual(materialInteractionFocusedRasterTargets.datepicker,
+    { element: 'datepicker-primary', padding: 8, paddingBottom: 370, minimumSsim: .86 });
   assert.ok(Object.keys(materialInteractionFocusedRasterTargets).every((family) => materialFamilies.includes(family)));
   assert.deepEqual(materialInteractionTextAlignmentTargets.expansion, ['expansion-content']);
   assert.equal(materialInteractionViewports.length, 2);

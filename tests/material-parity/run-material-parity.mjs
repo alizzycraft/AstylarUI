@@ -443,7 +443,7 @@ async function interactionTargetBox(page, mode, family) {
   const astylarTargets = {
     toolbar: 'toolbar-action', card: 'card-open', chips: 'chip-0', sort: 'sort-trigger',
     paginator: 'paginator-next', radio: 'radio-team', 'button-toggle': 'button-toggle-two',
-    tabs: 'tab-activity', stepper: 'step-review',
+    tabs: 'tab-activity', stepper: 'step-review', datepicker: 'datepicker-icon', timepicker: 'timepicker-icon',
   };
   const referenceTargets = {
     toolbar: '#toolbar-primary button', card: '#card-primary button', chips: '#chips-primary mat-chip-option:first-child',
@@ -452,6 +452,8 @@ async function interactionTargetBox(page, mode, family) {
     'button-toggle': '#button-toggle-primary mat-button-toggle:nth-of-type(2)',
     tabs: '#tabs-primary .mat-mdc-tab:nth-of-type(2)',
     stepper: '#stepper-primary .mat-step-header:nth-of-type(2)',
+    datepicker: '#datepicker-primary mat-datepicker-toggle button',
+    timepicker: '#timepicker-primary mat-timepicker-toggle button',
   };
   if (mode === 'reference') return page.locator(referenceTargets[family] ?? `#${family}-primary`).boundingBox();
   if (family === 'slider') {
@@ -765,7 +767,7 @@ function compareFocusedRaster(reference, candidate, referenceElements, target, s
     left: Math.max(0, Math.floor((box.left - padding) * scale)),
     top: Math.max(0, Math.floor((box.top - padding) * scale)),
     right: Math.min(reference.width, Math.ceil((box.right + padding) * scale)),
-    bottom: Math.min(reference.height, Math.ceil((box.bottom + padding) * scale)),
+    bottom: Math.min(reference.height, Math.ceil((box.bottom + (target.paddingBottom ?? padding)) * scale)),
   };
   const referenceCrop = cropPng(reference, bounds);
   const astylarCrop = cropPng(candidate, bounds);

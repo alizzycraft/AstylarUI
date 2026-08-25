@@ -111,6 +111,8 @@ export const materialFocusedRasterTargets = Object.freeze({
 });
 export const materialInteractionFocusedRasterTargets = Object.freeze({
   expansion: Object.freeze({ element: 'expansion-root', padding: 8, minimumSsim: .90 }),
+  datepicker: Object.freeze({ element: 'datepicker-primary', padding: 8, paddingBottom: 370, minimumSsim: .86 }),
+  timepicker: Object.freeze({ element: 'timepicker-primary', padding: 8, paddingBottom: 270, minimumSsim: .88 }),
 });
 export const materialInteractionTextAlignmentTargets = Object.freeze({
   expansion: Object.freeze(['expansion-content']),

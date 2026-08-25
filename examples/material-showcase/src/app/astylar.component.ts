@@ -156,7 +156,9 @@ export class AstylarShowcaseComponent {
     if (id === 'step-details') this.store.patchState({ selected: true });
     if (id === 'select-control') this.store.patchState({ open: !this.store.state().open });
     if (id === 'autocomplete-control') this.store.patchState({ open: true });
-    if (id === 'timepicker-control') this.store.patchState({ open: !this.store.state().open });
+    if (['datepicker-control', 'datepicker-icon', 'timepicker-control', 'timepicker-icon'].includes(id)) {
+      this.store.patchState({ open: !this.store.state().open });
+    }
     if (id === 'slide-toggle-primary') this.store.patchState({ selected: !this.store.state().selected });
     if (['dialog-primary', 'bottom-sheet-primary', 'snack-bar-primary'].includes(id)) {
       const wasOpen = this.store.state().open;
@@ -295,6 +297,16 @@ export class AstylarShowcaseComponent {
         { selector: '.timepicker-shell .field-label', color: theme.density <= -5 && state.open ? '#e8e0eb' : state.open ? theme.primary : theme.onSurface },
         { selector: '.timepicker-shell .picker-popup', top: `${theme.density <= -5 ? 39 : theme.density === 0 ? 64 : 56}px`, height: `${theme.density <= -5 ? 248 : theme.density === 0 ? 248 : 216}px`, paddingTop: `${theme.density <= -5 ? 8 : 0}px` },
         { selector: '.timepicker-shell .picker-option', height: `${theme.density <= -5 ? 48 : theme.density === 0 ? 48 : 42}px`, padding: `${theme.density <= -5 || theme.density === 0 ? 14 : 11}px 16px` },
+        { selector: '.datepicker-popup', position: 'absolute', top: `${theme.density === 0 ? 59 : 51}px`, left: '7px', width: '291px', height: '349px', boxSizing: 'border-box', background: '#f3edf7', boxShadow: '0 2px 4px rgba(0,0,0,0.24)', zIndex: '60' },
+        { selector: '.datepicker-header', position: 'relative', width: '100%', height: '64px', boxSizing: 'border-box', padding: '0 24px', display: 'flex', alignItems: 'center', color: '#1d1b20', fontSize: '14px', fontWeight: '500' },
+        { selector: '.datepicker-month', position: 'absolute', top: '24px', left: '24px', verticalAlign: 'middle' },
+        { selector: '.datepicker-nav', position: 'absolute', top: '29px', width: '24px', height: '24px', color: '#49454f', fontSize: '24px', textAlign: 'center', verticalAlign: 'middle' },
+        { selector: '.datepicker-previous', right: '52px' },
+        { selector: '.datepicker-next', right: '12px' },
+        { selector: '.datepicker-grid', position: 'absolute', top: '64px', left: '21px', width: '280px', height: '280px', display: 'grid', gridTemplateColumns: 'repeat(7, 40px)', gridTemplateRows: 'repeat(7, 40px)' },
+        { selector: '.datepicker-cell', width: '40px', height: '40px', boxSizing: 'border-box', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#1d1b20', fontSize: '14px', verticalAlign: 'middle' },
+        { selector: '.datepicker-weekday, .datepicker-month-marker', fontWeight: '500' },
+        { selector: '.datepicker-selected', width: '36px', height: '36px', boxSizing: 'border-box', display: 'flex', alignItems: 'center', justifyContent: 'center', borderWidth: '1px', borderStyle: 'solid', borderColor: theme.primary, borderRadius: '18px', verticalAlign: 'middle' },
         { selector: '.field-hint', position: 'absolute', top: `${theme.density === 0 ? 58 : 50}px`, left: '16px', fontSize: '12px', letterSpacing: '.4px', color: theme.onSurface },
         { selector: '.field-error', position: 'absolute', top: `${theme.density === 0 ? 58 : 50}px`, left: '16px', fontSize: '12px', letterSpacing: '.4px', color: theme.error },
         { selector: '.row', display: 'flex', flexWrap: 'wrap', gap: '0', alignItems: 'center' },
@@ -560,6 +572,23 @@ export class AstylarShowcaseComponent {
       { type: 'div', id: `${family}-input-region`, class: 'field-input-region', children: [{ type: 'input', inputType: 'text', id: `${family}-control`, class: `field-control${family === 'timepicker' ? ' picker-control' : ''}${family === 'timepicker' && state.open ? ' open' : ''}`, value: '', disabled: state.disabled, role: family === 'timepicker' ? 'combobox' : undefined, ariaLabel: family === 'datepicker' ? 'Due date' : 'Meeting time', ariaInvalid: state.error, ariaHaspopup: 'dialog', ariaExpanded: family === 'timepicker' ? state.open : undefined, ariaControls: family === 'timepicker' ? 'timepicker-options' : undefined, ariaActivedescendant: family === 'timepicker' && state.open ? 'timepicker-option-0' : undefined }] },
       ...([{ type: 'span' as const, id: `${family}-icon`, class: 'picker-clock', role: 'presentation', textContent: family === 'datepicker' ? '▦' : '◷' }]),
       ...(family === 'timepicker' && state.open ? [{ type: 'div' as const, id: 'timepicker-options', class: 'picker-popup', role: 'listbox', children: ['12:00 AM', '12:30 AM', '1:00 AM', '1:30 AM', '2:00 AM'].map((label, index) => ({ type: 'div' as const, id: `timepicker-option-${index}`, class: `picker-option${index === 0 ? ' selected' : ''}`, role: 'option', ariaSelected: index === 0, textContent: label })) }] : []),
+      ...(family === 'datepicker' && state.open ? [{ type: 'div' as const, id: 'datepicker-popup', class: 'datepicker-popup', role: 'dialog', ariaLabel: 'Choose date', children: [
+        { type: 'div' as const, id: 'datepicker-header', class: 'datepicker-header', children: [
+          { type: 'span' as const, id: 'datepicker-month', class: 'datepicker-month', textContent: 'AUG 2026' },
+          { type: 'span' as const, id: 'datepicker-previous', class: 'datepicker-nav datepicker-previous', textContent: '‹' },
+          { type: 'span' as const, id: 'datepicker-next', class: 'datepicker-nav datepicker-next', textContent: '›' },
+        ] },
+        { type: 'div' as const, id: 'datepicker-grid', class: 'datepicker-grid', children: [
+          ...['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((label, index) => ({ type: 'span' as const, id: `datepicker-weekday-${index}`, class: 'datepicker-cell datepicker-weekday', textContent: label })),
+          { type: 'span' as const, id: 'datepicker-month-marker', class: 'datepicker-cell datepicker-month-marker', textContent: 'AUG' },
+          ...Array.from({ length: 5 }, (_, index) => ({ type: 'span' as const, id: `datepicker-leading-${index}`, class: 'datepicker-cell', textContent: '' })),
+          { type: 'span' as const, id: 'datepicker-day-1', class: 'datepicker-cell', textContent: '1' },
+          ...Array.from({ length: 30 }, (_, index) => index + 2 === 25
+            ? { type: 'span' as const, id: 'datepicker-day-25', class: 'datepicker-cell', children: [{ type: 'span' as const, id: 'datepicker-selected', class: 'datepicker-selected', textContent: '25' }] }
+            : { type: 'span' as const, id: `datepicker-day-${index + 2}`, class: 'datepicker-cell', textContent: String(index + 2) }),
+          ...Array.from({ length: 5 }, (_, index) => ({ type: 'span' as const, id: `datepicker-trailing-${index}`, class: 'datepicker-cell', textContent: '' })),
+        ] },
+      ] }] : []),
     ] }];
     if (family === 'tooltip') return [{ type: 'button', id: 'tooltip-primary', class: 'material-button', value: 'Hover for help', ariaDescribedby: state.open ? 'tooltip-popup' : undefined }, ...(state.open ? [{ type: 'div' as const, id: 'tooltip-popup', role: 'tooltip', textContent: 'Create a project' }] : [])];
     if (family === 'core') {
