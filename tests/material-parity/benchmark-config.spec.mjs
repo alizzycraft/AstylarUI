@@ -40,7 +40,7 @@ test('keeps the app catalog and enforced static matrix complete', () => {
   assert.deepEqual(materialFocusedRasterTargets.sort,
     { element: 'sort-primary', padding: 8, minimumSsim: .80 });
   assert.deepEqual(Object.keys(materialFocusedRasterTargets).sort(),
-    ['button-toggle', 'checkbox', 'chips', 'sort']);
+    ['button-toggle', 'checkbox', 'chips', 'icon', 'sort']);
   assert.ok(Object.keys(materialFocusedRasterTargets).every((family) => materialFamilies.includes(family)));
   assert.equal(materialInteractionViewports.length, 2);
   for (const family of materialFamilies) {

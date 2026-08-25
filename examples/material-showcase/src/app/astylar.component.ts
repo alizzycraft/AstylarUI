@@ -12,6 +12,7 @@ import {
 } from 'astylarui';
 import { FrameSync } from './frame-sync';
 import { MaterialFamily, isMaterialFamily } from './catalog';
+import { MATERIAL_FAVORITE_ICON_DARK, MATERIAL_FAVORITE_ICON_LIGHT } from './material-assets';
 import { ShowcaseStore, type ShowcaseState } from './showcase.store';
 import { mixHex } from './theme';
 import { MaterialRippleController } from './material-plugin/material-ripple.controller';
@@ -418,6 +419,7 @@ export class AstylarShowcaseComponent {
 
   private familyElements(family: MaterialFamily): DOMElement[] {
     const state = this.store.state();
+    const theme = this.store.tokens();
     if (family === 'toolbar') return [{ type: 'div', id: 'toolbar-primary', class: 'toolbar', children: [{ type: 'span', id: 'toolbar-title', class: 'toolbar-title', children: [{ type: 'span', id: 'toolbar-title-text', class: 'toolbar-title-text', textContent: 'Material workspace' }] }, { type: 'button', id: 'toolbar-action', class: 'toolbar-action', value: 'Action' }] }];
     if (family === 'sidenav') return [{ type: 'div', id: 'sidenav-primary', class: 'sidenav-container', children: [{ type: 'aside', id: 'sidenav-nav', class: 'sidenav', textContent: 'Navigation' }, { type: 'main', id: 'sidenav-content', class: 'sidenav-content', textContent: 'Main content' }] }];
     if (family === 'grid-list') return [{ type: 'div', id: 'grid-list-primary', class: 'grid-list', children: [{ type: 'div', id: 'grid-tile-one', class: 'grid-tile', children: [{ type: 'span', id: 'grid-tile-one-label', class: 'grid-tile-label', textContent: 'One' }] }, { type: 'div', id: 'grid-tile-two', class: 'grid-tile', children: [{ type: 'span', id: 'grid-tile-two-label', class: 'grid-tile-label', textContent: 'Two' }] }] }];
@@ -427,7 +429,11 @@ export class AstylarShowcaseComponent {
       ariaLabel: chip, ariaSelected: state.selected,
       children: [...(state.selected ? [this.selectionMark(`chip-${index}-mark`)] : []), { type: 'span' as const, id: `chip-${index}-label`, textContent: chip }],
     })) }];
-    if (family === 'icon') return [{ type: 'img', id: 'icon-primary', class: 'material-icon', src: '/icons/favorite.svg', alt: 'Favorite' }];
+    if (family === 'icon') return [{
+      type: 'img', id: 'icon-primary', class: 'material-icon',
+      src: theme.mode === 'dark' ? MATERIAL_FAVORITE_ICON_DARK : MATERIAL_FAVORITE_ICON_LIGHT,
+      alt: 'Favorite',
+    }];
     if (family === 'list') return [{ type: 'div', id: 'list-primary', class: 'material-list', ariaDisabled: false, children: [{ type: 'div', id: 'list-inbox', class: 'list-item', children: [{ type: 'span', id: 'list-inbox-label', class: 'list-label', textContent: 'Inbox' }] }, { type: 'div', id: 'list-archive', class: 'list-item', children: [{ type: 'span', id: 'list-archive-label', class: 'list-label', textContent: 'Archive' }] }] }];
     if (family === 'sort') return [{ type: 'div', id: 'sort-primary', class: 'sort-header', ariaLabel: 'Sort by name', children: [{
       type: 'div', id: 'sort-trigger', class: 'sort-trigger', role: 'button', tabindex: 0,
