@@ -99,7 +99,7 @@ export const materialTextOnlyTargets = Object.freeze([
 ]);
 export const materialSemanticExcludedTargets = Object.freeze([
   ...materialTextOnlyTargets,
-  'button-toggle-one', 'button-toggle-two',
+  'button-toggle-one', 'button-toggle-two', 'tooltip-popup',
 ]);
 export const materialUniformBackgroundTargets = Object.freeze({
   'grid-list': Object.freeze({ container: 'grid-list-root', surfaces: Object.freeze(['grid-tile-one', 'grid-tile-two']) }),
@@ -126,6 +126,7 @@ export const materialInteractionFocusedRasterTargets = Object.freeze({
   datepicker: Object.freeze({ element: 'datepicker-primary', padding: 8, paddingBottom: 370, minimumSsim: .86 }),
   timepicker: Object.freeze({ element: 'timepicker-primary', padding: 8, paddingBottom: 270, minimumSsim: .88 }),
   menu: Object.freeze({ element: 'menu-primary', padding: 8, paddingBottom: 160, minimumSsim: .86 }),
+  tooltip: Object.freeze({ element: 'tooltip-popup', padding: 4, minimumSsim: .14, states: Object.freeze(['hover', 'held']) }),
 });
 export const materialInteractionTextAlignmentTargets = Object.freeze({
   expansion: Object.freeze(['expansion-content']),

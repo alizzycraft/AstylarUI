@@ -474,7 +474,7 @@ export class AstylarShowcaseComponent {
         { selector: '.snack-surface', position: 'fixed', left: '24px', bottom: '24px', width: '360px', minHeight: '48px', boxSizing: 'border-box', padding: '10px 18px', borderRadius: '4px', background: '#322f35', color: '#ffffff', display: 'flex', justifyContent: 'space-between', alignItems: 'center', zIndex: '1000' },
         { selector: '.overlay-dismiss', width: '88px', height: '40px', borderWidth: '0', background: 'transparent', color: theme.primary, fontWeight: '500' },
         { selector: '.material-button:focus', borderWidth: '0', boxShadow: 'none' },
-        { selector: '#tooltip-popup', position: 'absolute', top: `${28 + densityHeight + 8}px`, left: '48px', minWidth: '112px', height: '30px', boxSizing: 'border-box', padding: '6px 10px', borderRadius: '4px', background: '#322f35', color: '#ffffff', fontSize: '12px', zIndex: '1000' },
+        { selector: '#tooltip-popup', width: '91px', height: '20px', marginTop: '-8px', marginBottom: '-28px', marginLeft: '16px', padding: '0 8px', borderWidth: '0', borderRadius: '4px', background: '#322f35', color: '#ffffff', display: 'flex', alignItems: 'center', alignSelf: 'flex-start', flexShrink: '0', fontSize: '12px', whiteSpace: 'nowrap', transform: 'translate(-183px, -81px)', zIndex: '1000' },
       ],
     };
   }
@@ -507,7 +507,7 @@ export class AstylarShowcaseComponent {
       ariaSort: state.open ? state.sortDirection === 'asc' ? 'ascending' : 'descending' : undefined,
       children: [
         { type: 'span', id: 'sort-label', textContent: 'Sort by name' },
-        ...(state.open ? [{ type: 'span' as const, id: 'sort-arrow', class: 'sort-arrow', textContent: state.sortDirection === 'asc' ? '↑' : '↓' }] : []),
+        { type: 'span' as const, id: 'sort-arrow', class: 'sort-arrow', textContent: state.sortDirection === 'asc' ? '↑' : '↓' },
       ],
     }] }];
     if (family === 'paginator') return [{ type: 'div', id: 'paginator-primary', class: 'paginator', role: 'group', ariaLabel: `Items per page: 10 ${state.pageIndex * 10 + 1} – ${Math.min(100, state.pageIndex * 10 + 10)} of 100`, children: [{ type: 'span', id: 'paginator-size', textContent: 'Items per page:' }, { type: 'span', id: 'paginator-page-size', textContent: '10' }, { type: 'span', id: 'paginator-range', textContent: `${state.pageIndex * 10 + 1} – ${Math.min(100, state.pageIndex * 10 + 10)} of 100` }, { type: 'button', id: 'paginator-previous', class: 'paginator-button', disabled: state.pageIndex === 0, ariaLabel: 'Previous page', value: '‹' }, { type: 'button', id: 'paginator-next', class: 'paginator-button', disabled: state.pageIndex === 9, ariaLabel: 'Next page', value: '›' }] }];

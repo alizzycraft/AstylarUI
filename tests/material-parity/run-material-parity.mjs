@@ -115,6 +115,7 @@ function benchmarkMeasurementIds(family) {
     `${family}-primary`,
     ...textTargets(family), ...interactionTextTargets(family),
     ...(uniformBackground ? [uniformBackground.container, ...uniformBackground.surfaces] : []),
+    ...(family === 'tooltip' ? ['tooltip-popup'] : []),
   ])];
 }
 
@@ -318,7 +319,10 @@ async function captureInteractionCase(benchmarkCase) {
       referenceImage, astylarImage, referenceMeasurement.elements, astylarMeasurement.elements,
       [...textTargets(family), ...interactionTextTargets(family, state)], viewport.deviceScaleFactor, directory,
     );
-    const focusedRasterTarget = materialInteractionFocusedRasterTargets[family];
+    const configuredFocusedRasterTarget = materialInteractionFocusedRasterTargets[family];
+    const focusedRasterTarget = configuredFocusedRasterTarget &&
+      (!configuredFocusedRasterTarget.states || configuredFocusedRasterTarget.states.includes(state))
+      ? configuredFocusedRasterTarget : undefined;
     const focusedRasters = focusedRasterTarget ? [compareFocusedRaster(
       referenceImage, astylarImage, referenceMeasurement.elements,
       focusedRasterTarget, viewport.deviceScaleFactor, directory,
@@ -696,6 +700,7 @@ async function measureReference(page, ids) {
         'badge-count': '#badge-primary .mat-badge-content',
         'paginator-size': '#paginator-primary .mat-mdc-paginator-page-size-label',
         'paginator-range': '#paginator-primary .mat-mdc-paginator-range-label',
+        'tooltip-popup': '.mat-mdc-tooltip-surface',
       };
       return selectors[id] ? document.querySelector(selectors[id]) : null;
     }
