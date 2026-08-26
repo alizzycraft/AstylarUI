@@ -157,7 +157,12 @@ export class AstylarShowcaseComponent {
     if (this.store.state().disabled && ['checkbox-primary', 'radio-solo', 'radio-team', 'slide-toggle-primary'].includes(id)) return;
     if (id === 'radio-team') this.store.patchState({ selected: true });
     if (id === 'radio-solo') this.store.patchState({ selected: false });
-    if (id === 'checkbox-primary' || id.startsWith('chip-')) this.store.patchState({ selected: !this.store.state().selected });
+    if (id === 'checkbox-primary') this.store.patchState({ selected: !this.store.state().selected });
+    const chipIndex = Number((event.targetId ?? id).match(/^chip-(\d+)/)?.[1]);
+    if (Number.isInteger(chipIndex)) this.store.patchState({
+      chipSelections: this.store.state().chipSelections.map((selected, index) =>
+        index === chipIndex ? !selected : selected),
+    });
     if (id === 'sort-primary' || id === 'sort-trigger') this.store.patchState({
       sortDirection: this.store.state().sortDirection === 'asc' ? 'desc' : 'asc',
       open: true,
@@ -384,10 +389,11 @@ export class AstylarShowcaseComponent {
         ...(theme.density <= -5 ? [{ selector: '.badge-label', mediaMaxWidth: '500px', top: '-1px' }] : []),
         { selector: '.badge-bubble', position: 'absolute', top: '-4px', right: '-4px', width: '16px', height: '16px', borderRadius: '8px', background: theme.primary, color: theme.onPrimary, fontSize: '11px', lineHeight: '16px', textAlign: 'center' },
         { selector: '.badge-count-label', position: 'relative', top: '-2.5px', display: 'block', width: '100%', textAlign: 'center' },
-        { selector: '.chip', height: '32px', boxSizing: 'border-box', padding: '0 12px', borderWidth: '0', borderRadius: `${8 * theme.cornerScale}px`, display: 'flex', alignItems: 'center', gap: '8px', background: '#eadef7', color: '#4b4357', fontSize: '14px', cursor: 'pointer' },
+        { selector: '.chip', height: '32px', boxSizing: 'border-box', padding: '0 12px', borderWidth: '1px', borderStyle: 'solid', borderColor: '#79747e', borderRadius: `${8 * theme.cornerScale}px`, display: 'flex', alignItems: 'center', gap: '8px', background: 'transparent', color: theme.onSurface, fontSize: '14px', cursor: 'pointer' },
+        { selector: '.chip.selected', borderWidth: '0', background: '#eadef7', color: '#4b4357' },
         { selector: '#chips-primary', gap: '10px' },
-        { selector: '#chip-0', width: '98px' },
-        { selector: '#chip-1', width: '94px' },
+        { selector: '#chip-0', width: state.chipSelections[0] ? '98px' : '68px' },
+        { selector: '#chip-1', width: state.chipSelections[1] ? '94px' : '64px' },
         { selector: '.selection-mark', width: '16px', height: '16px', flexShrink: '0' },
         { selector: '.checkbox-mark', width: '14px', height: '14px' },
         { selector: '.switch-mark', width: '16px', height: '16px' },
@@ -492,9 +498,9 @@ export class AstylarShowcaseComponent {
     if (family === 'grid-list') return [{ type: 'div', id: 'grid-list-primary', class: 'grid-list', children: [{ type: 'div', id: 'grid-tile-one', class: 'grid-tile', children: [{ type: 'span', id: 'grid-tile-one-label', class: 'grid-tile-label', textContent: 'One' }] }, { type: 'div', id: 'grid-tile-two', class: 'grid-tile', children: [{ type: 'span', id: 'grid-tile-two-label', class: 'grid-tile-label', textContent: 'Two' }] }] }];
     if (family === 'badge') return [{ type: 'span', id: 'badge-primary', class: 'badge-anchor', children: [{ type: 'span', id: 'badge-label', class: 'badge-label', textContent: 'Notifications' }, { type: 'span', id: 'badge-count', class: 'badge-bubble', children: [{ type: 'span', id: 'badge-count-label', class: 'badge-count-label', textContent: '4' }] }] }];
     if (family === 'chips') return [{ type: 'div', id: 'chips-primary', class: 'row', role: 'listbox', ariaLabel: 'Tags', ariaDisabled: false, ariaMultiselectable: true, children: state.chips.map((chip, index) => ({
-      type: 'div' as const, id: `chip-${index}`, class: 'chip', role: 'option', tabindex: 0,
-      ariaLabel: chip, ariaSelected: state.selected,
-      children: [...(state.selected ? [this.selectionMark(`chip-${index}-mark`)] : []), { type: 'span' as const, id: `chip-${index}-label`, textContent: chip }],
+      type: 'div' as const, id: `chip-${index}`, class: `chip${state.chipSelections[index] ? ' selected' : ''}`, role: 'option', tabindex: 0,
+      ariaLabel: chip, ariaSelected: state.chipSelections[index],
+      children: [...(state.chipSelections[index] ? [this.selectionMark(`chip-${index}-mark`)] : []), { type: 'span' as const, id: `chip-${index}-label`, textContent: chip }],
     })) }];
     if (family === 'icon') return [{
       type: 'img', id: 'icon-primary', class: 'material-icon',

@@ -117,6 +117,7 @@ export const materialFocusedRasterTargets = Object.freeze({
   stepper: Object.freeze({ element: 'stepper-primary', padding: 8, minimumSsim: .90 }),
 });
 export const materialInteractionFocusedRasterTargets = Object.freeze({
+  chips: Object.freeze({ element: 'chips-primary', padding: 8, minimumSsim: .70, states: Object.freeze(['activate', 'activate-alternate', 'activate-leave']) }),
   expansion: Object.freeze({ element: 'expansion-root', padding: 8, minimumSsim: .90 }),
   sort: Object.freeze({ element: 'sort-primary', padding: 8, minimumSsim: .80 }),
   'slide-toggle': Object.freeze({ element: 'slide-toggle-primary', padding: 8, minimumSsim: .40 }),
@@ -156,6 +157,7 @@ const disabledFamilies = new Set(['button', 'chips', 'form-field', 'input', 'aut
 export const materialInteractionCases = materialFamilies.flatMap((family) => {
   const states = passiveFamilies.has(family) ? ['inspect'] : ['focus', 'hover', 'held', 'activate', 'activate-leave'];
   if (family === 'sort' || family === 'snack-bar') states.push('activate-twice');
+  if (family === 'chips') states.push('activate-alternate');
   if (disabledFamilies.has(family)) states.push('disabled');
   if (selectableFamilies.has(family)) states.push('selected');
   if (errorFamilies.has(family)) states.push('error');

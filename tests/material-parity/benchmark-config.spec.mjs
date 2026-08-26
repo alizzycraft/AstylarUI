@@ -52,10 +52,13 @@ test('keeps the app catalog and enforced static matrix complete', () => {
     { element: 'expansion-root', padding: 8, minimumSsim: .90 });
   assert.deepEqual(materialInteractionFocusedRasterTargets.datepicker,
     { element: 'datepicker-primary', padding: 8, paddingBottom: 370, minimumSsim: .86 });
+  assert.deepEqual(materialInteractionFocusedRasterTargets.chips,
+    { element: 'chips-primary', padding: 8, minimumSsim: .70, states: ['activate', 'activate-alternate', 'activate-leave'] });
   assert.deepEqual(Object.keys(materialInteractionFocusedRasterTargets).sort(),
-    ['autocomplete', 'button-toggle', 'datepicker', 'expansion', 'menu', 'select', 'slide-toggle', 'sort', 'timepicker', 'tooltip']);
+    ['autocomplete', 'button-toggle', 'chips', 'datepicker', 'expansion', 'menu', 'select', 'slide-toggle', 'sort', 'timepicker', 'tooltip']);
   assert.deepEqual(materialInteractionFocusedRasterTargets.tooltip,
     { element: 'tooltip-popup', padding: 4, minimumSsim: .14, states: ['hover', 'held'] });
+  assert.ok(materialInteractionCases.some(({ family, state }) => family === 'chips' && state === 'activate-alternate'));
   assert.ok(Object.keys(materialInteractionFocusedRasterTargets).every((family) => materialFamilies.includes(family)));
   assert.deepEqual(materialInteractionTextAlignmentTargets.expansion, ['expansion-content']);
   assert.equal(materialInteractionViewports.length, 2);

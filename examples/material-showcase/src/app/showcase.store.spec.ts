@@ -16,6 +16,17 @@ describe('ShowcaseStore', () => {
     expect(state.sliderStart).toBe(40);
     expect(state.pageIndex).toBe(0);
     expect(state.chips).toEqual(['Angular', 'Astylar']);
+    expect(state.chipSelections).toEqual([true, true]);
+  });
+
+  it('tracks chip selections independently while shared selected state resets all chips', () => {
+    const store = TestBed.inject(ShowcaseStore);
+
+    store.patchState({ chipSelections: [false, true] });
+    expect(store.state().chipSelections).toEqual([false, true]);
+
+    store.patchState({ selected: false });
+    expect(store.state().chipSelections).toEqual([false, false]);
   });
 
   it('resets theme, state, and benchmark phase together', () => {

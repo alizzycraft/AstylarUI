@@ -66,7 +66,7 @@ import { DomSanitizer } from '@angular/platform-browser';
           @case ('divider') { <p><span id="divider-above">Above</span></p><mat-divider id="divider-primary"/><p><span id="divider-below">Below</span></p> }
           @case ('badge') { <span id="badge-primary" matBadge="4"><span id="badge-label">Notifications</span></span> }
           @case ('card') { <mat-card id="card-primary"><mat-card-header><mat-card-title id="card-title">Project Atlas</mat-card-title></mat-card-header><mat-card-content id="card-copy">Material surface content.</mat-card-content><mat-card-actions><button id="card-open" mat-button>OPEN</button></mat-card-actions></mat-card> }
-          @case ('chips') { <mat-chip-listbox id="chips-primary" aria-label="Tags" [multiple]="true">@for (chip of store.state().chips; track chip; let index = $index) { <mat-chip-option [id]="'chip-' + index" [selected]="store.state().selected">{{ chip }}</mat-chip-option> }</mat-chip-listbox> }
+          @case ('chips') { <mat-chip-listbox id="chips-primary" aria-label="Tags" [multiple]="true">@for (chip of store.state().chips; track chip; let index = $index) { <mat-chip-option [id]="'chip-' + index" [selected]="store.state().chipSelections[index]" (selectionChange)="$event.isUserInput && toggleChip(index)">{{ chip }}</mat-chip-option> }</mat-chip-listbox> }
           @case ('icon') { <mat-icon id="icon-primary" aria-label="Favorite" svgIcon="favorite"/> }
           @case ('list') { <mat-list id="list-primary"><mat-list-item><span id="list-inbox-label">Inbox</span></mat-list-item><mat-list-item><span id="list-archive-label">Archive</span></mat-list-item></mat-list> }
           @case ('table') { <table id="table-primary" mat-table [dataSource]="rows"><ng-container matColumnDef="name"><th id="table-name-header" mat-header-cell *matHeaderCellDef>Name</th><td mat-cell *matCellDef="let row" [id]="row.name === 'Atlas' ? 'table-atlas' : 'table-northstar'">{{row.name}}</td></ng-container><tr mat-header-row *matHeaderRowDef="['name']"></tr><tr mat-row *matRowDef="let row; columns:['name']"></tr></table> }
@@ -153,6 +153,12 @@ export class ReferenceComponent {
   protected openDialog(): void { const content = this.dialogContent(); if (content && this.dialog.openDialogs.length === 0) this.dialog.open(content, { id: 'material-dialog', restoreFocus: true }); }
   protected openBottomSheet(): void { const content = this.sheetContent(); if (content) this.bottomSheet.open(content, { ariaLabel: 'Sharing options' }); }
   protected openSnackBar(): void { this.snackBar.open('Project saved', 'UNDO', { duration: 5_000 }); }
+  protected toggleChip(index: number): void {
+    this.store.patchState({
+      chipSelections: this.store.state().chipSelections.map((selected, candidate) =>
+        candidate === index ? !selected : selected),
+    });
+  }
 
 }
 

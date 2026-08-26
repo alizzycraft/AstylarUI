@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { provideZonelessChangeDetection } from '@angular/core';
 import { Astylar, type AstylarSurface, type SiteData } from 'astylarui';
-import { provideMaterialShowcasePlugin } from './material-showcase.plugin';
+import { materialCheckMarkPath, provideMaterialShowcasePlugin } from './material-showcase.plugin';
 
 describe('Material showcase application plugin', () => {
   beforeEach(() => {
@@ -11,6 +11,16 @@ describe('Material showcase application plugin', () => {
         provideMaterialShowcasePlugin({ benchmarkMode: true }),
       ],
     });
+  });
+
+  it('authors an upright Material check mark path', () => {
+    const [start, bend, end] = materialCheckMarkPath(1);
+
+    expect(start.asArray()).toEqual([5.5, .4, 0]);
+    expect(bend.asArray()).toEqual([1.8, -3.2, 0]);
+    expect(end.asArray()).toEqual([-5.5, 4.2, 0]);
+    expect(bend.y).toBeLessThan(start.y);
+    expect(bend.y).toBeLessThan(end.y);
   });
 
   it('isolates two surfaces, reaches an update plateau, remounts, and releases all resources', async () => {

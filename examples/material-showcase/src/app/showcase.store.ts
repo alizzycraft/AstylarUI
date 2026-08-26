@@ -12,6 +12,7 @@ export interface ShowcaseState {
   readonly pageIndex: number;
   readonly sortDirection: 'asc' | 'desc';
   readonly chips: readonly string[];
+  readonly chipSelections: readonly boolean[];
 }
 
 export type BenchmarkPhase = 'start' | 'held' | 'settled';
@@ -26,6 +27,7 @@ export const DEFAULT_SHOWCASE_STATE: ShowcaseState = Object.freeze({
   pageIndex: 0,
   sortDirection: 'asc',
   chips: ['Angular', 'Astylar'],
+  chipSelections: [true, true],
 });
 
 @Injectable({ providedIn: 'root' })
@@ -56,7 +58,12 @@ export class ShowcaseStore {
   selectFamily(family: MaterialFamily): void { this.family.set(family); }
   setTheme(theme: MaterialThemeConfig): void { this.theme.set(normalizeTheme(theme)); }
   setState(state: ShowcaseState): void { this.state.set(normalizeShowcaseState(state)); }
-  patchState(patch: Partial<ShowcaseState>): void { this.setState({ ...this.state(), ...patch }); }
+  patchState(patch: Partial<ShowcaseState>): void {
+    const chipSelections = patch.selected !== undefined && patch.chipSelections === undefined
+      ? this.state().chips.map(() => patch.selected === true)
+      : patch.chipSelections;
+    this.setState({ ...this.state(), ...patch, ...(chipSelections ? { chipSelections } : {}) });
+  }
   setBenchmarkPhase(phase: BenchmarkPhase): void { this.benchmarkPhase.set(phase); }
   reset(): void { this.theme.set(MATERIAL_THEME_PROFILES.light); this.state.set(DEFAULT_SHOWCASE_STATE); this.benchmarkPhase.set('settled'); this.revision.update((value) => value + 1); }
 }
@@ -64,6 +71,7 @@ export class ShowcaseStore {
 export function normalizeShowcaseState(state: ShowcaseState): ShowcaseState {
   const sliderValue = normalizeStepValue(state.sliderValue, DEFAULT_SHOWCASE_STATE.sliderValue);
   const sliderStart = Math.min(sliderValue, normalizeStepValue(state.sliderStart, DEFAULT_SHOWCASE_STATE.sliderStart));
+  const chips = [...new Set((state.chips ?? []).map(String).filter(Boolean))];
   return Object.freeze({
     disabled: state.disabled === true,
     selected: state.selected !== false,
@@ -73,8 +81,14 @@ export function normalizeShowcaseState(state: ShowcaseState): ShowcaseState {
     sliderStart,
     pageIndex: normalizeInteger(state.pageIndex, DEFAULT_SHOWCASE_STATE.pageIndex, 0, 9),
     sortDirection: state.sortDirection === 'desc' ? 'desc' : 'asc',
-    chips: [...new Set((state.chips ?? []).map(String).filter(Boolean))],
+    chips,
+    chipSelections: normalizeChipSelections(chips, state.chipSelections, state.selected),
   });
+}
+
+function normalizeChipSelections(chips: readonly string[], selections: readonly boolean[] | undefined, fallback: boolean): boolean[] {
+  const values = Array.isArray(selections) ? selections : [];
+  return chips.map((_chip, index) => values[index] === undefined ? fallback : values[index] === true);
 }
 
 function normalizeStepValue(value: unknown, fallback: number): number {

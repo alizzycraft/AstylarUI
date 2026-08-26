@@ -447,11 +447,19 @@ async function performInteraction(page, mode, benchmarkCase) {
     await page.mouse.down();
     await page.mouse.up();
   }
+  if (state === 'activate-alternate') {
+    await settleInteraction(page, mode);
+    const alternateBox = await interactionTargetBox(page, mode, family, state, true);
+    assert.ok(alternateBox, `${mode} ${family} alternate interaction target is missing.`);
+    await page.mouse.move(alternateBox.x + alternateBox.width / 2, alternateBox.y + alternateBox.height / 2);
+    await page.mouse.down();
+    await page.mouse.up();
+  }
   if (state === 'activate-leave') await page.mouse.move(1, 1);
   return undefined;
 }
 
-async function interactionTargetBox(page, mode, family, state) {
+async function interactionTargetBox(page, mode, family, state, alternate = false) {
   const astylarTargets = {
     toolbar: 'toolbar-action', card: 'card-open', chips: 'chip-0', sort: 'sort-trigger',
     paginator: 'paginator-next', radio: 'radio-team', 'button-toggle': 'button-toggle-two',
@@ -472,7 +480,10 @@ async function interactionTargetBox(page, mode, family, state) {
       return page.locator('#slider-primary').locator('xpath=ancestor::mat-slider')
         .locator('mat-slider-visual-thumb').nth(1).boundingBox();
     }
-    return page.locator(referenceTargets[family] ?? `#${family}-primary`).boundingBox();
+    const selector = family === 'chips' && alternate
+      ? '#chips-primary mat-chip-option:nth-child(2)'
+      : referenceTargets[family] ?? `#${family}-primary`;
+    return page.locator(selector).boundingBox();
   }
   if (family === 'slider' && ['hover', 'held', 'activate-leave'].includes(state)) {
     const result = await page.evaluate(() => ({
@@ -488,7 +499,7 @@ async function interactionTargetBox(page, mode, family, state) {
       height: 1,
     } : undefined;
   }
-  const targetId = astylarTargets[family] ?? `${family}-primary`;
+  const targetId = family === 'chips' && alternate ? 'chip-1' : astylarTargets[family] ?? `${family}-primary`;
   const measurement = await page.evaluate((id) => window.__ASTYLAR_MATERIAL_BENCHMARK__?.measure([id]), targetId);
   const local = measurement?.elements?.[targetId]?.borderBox;
   const canvas = await page.locator('canvas').boundingBox();
@@ -547,7 +558,7 @@ async function focusedIdentity(page, mode, family) {
 }
 
 function compareEvents(reference, candidate, family, state) {
-  if (!['activate', 'activate-twice', 'activate-leave', 'open', 'open-dismiss'].includes(state)) return { matches: true, reference, astylar: candidate };
+  if (!['activate', 'activate-twice', 'activate-alternate', 'activate-leave', 'open', 'open-dismiss'].includes(state)) return { matches: true, reference, astylar: candidate };
   const relevant = (events) => events.filter(({ targetId }) => targetId === `${family}-primary`)
     .map(({ type }) => type).filter((type) => ['pointerdown', 'pointerup', 'click', 'input', 'change'].includes(type))
     .filter((type, index, values) => index === 0 || type !== values[index - 1]);

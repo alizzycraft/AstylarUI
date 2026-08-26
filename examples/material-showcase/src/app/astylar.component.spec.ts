@@ -117,6 +117,21 @@ describe('AstylarShowcaseComponent', () => {
     expect(store.state().sortDirection).toBe('asc');
   });
 
+  it('toggles chips independently from any child hit target', () => {
+    const { component, store } = createComponent('chips');
+    const click = (component as unknown as {
+      handleClick: (id: string, event: AstylarEvent) => void;
+    }).handleClick.bind(component);
+
+    click('chip-0-label', { targetId: 'chip-0-label' } as AstylarEvent);
+    expect(store.state().chipSelections).toEqual([false, true]);
+    expect(find(build(component, 'chips'), 'chip-0-mark')).toBeUndefined();
+    expect(find(build(component, 'chips'), 'chip-1-mark')).toBeDefined();
+
+    click('chip-1', { targetId: 'chip-1' } as AstylarEvent);
+    expect(store.state().chipSelections).toEqual([false, false]);
+  });
+
   it('keeps the left and right range handles mapped to start and end values', () => {
     const { component, store } = createComponent('slider');
     (component as unknown as { surface: { scene: { clearColor?: unknown }; update: () => Promise<void> } }).surface = {
