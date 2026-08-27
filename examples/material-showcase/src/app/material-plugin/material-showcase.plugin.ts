@@ -258,12 +258,17 @@ class MaterialTabPanelRenderer extends MaterialRendererBase implements AstylarPl
     const outgoing = selected ? 'Activity content' : 'Overview content';
     const incoming = selected ? 'Overview content' : 'Activity content';
     const color = this.color(context, 'text-color', '#1d1b20');
+    const authoredFontSize = Number(context.element.data?.['font-size'] ?? 16);
+    const fontSize = Number.isFinite(authoredFontSize) && authoredFontSize > 0 ? authoredFontSize : 16;
     const draw = (phase: number) => {
       const canvas = texture.getContext();
       canvas.clearRect(0, 0, width, height);
       canvas.fillStyle = color;
-      canvas.font = '32px Roboto, Arial, sans-serif';
-      const baseline = Math.min(height - 1, 30.5);
+      const textureFontSize = fontSize * 2;
+      canvas.font = `${textureFontSize}px Roboto, Arial, sans-serif`;
+      // Match a centered CSS line box while retaining the Roboto alphabetic
+      // baseline used by the reference tab body.
+      const baseline = Math.min(height - 1, height / 2 + textureFontSize * .328125);
       if (phase < 1) canvas.fillText(outgoing, -direction * phase * width, baseline);
       if (phase > 0) canvas.fillText(incoming, direction * (1 - phase) * width, baseline);
       texture.update(false);

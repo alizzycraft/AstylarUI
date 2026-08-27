@@ -84,7 +84,7 @@ describe('AstylarShowcaseComponent', () => {
     expect(style(table, '.table-rule')).toEqual(jasmine.objectContaining({ left: '28px', right: '28px', width: 'auto' }));
 
     const chips = build(component, 'chips');
-    expect(style(chips, '#chips-primary')?.['gap']).toBe('10px');
+    expect(style(chips, '#chips-primary')?.['gap']).toBe('8px');
     expect(find(chips, 'chip-0-mark')?.['type']).toBe('showcase.material:check-mark');
 
     const slider = build(component, 'slider');
