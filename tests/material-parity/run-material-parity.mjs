@@ -31,6 +31,7 @@ const interactionStateFilter = new Set((process.env['ASTYLAR_MATERIAL_INTERACTIO
 const staticOnly = process.argv.includes('--static-only');
 const interactionOnly = process.argv.includes('--interaction-only');
 const textAudit = process.env['ASTYLAR_MATERIAL_TEXT_AUDIT'] === '1';
+const browserRestartInterval = Number(process.env['ASTYLAR_MATERIAL_BROWSER_RESTART_INTERVAL'] ?? 200);
 const cases = interactionOnly ? [] : materialStaticCases.filter(({ family, profile, viewport }) =>
   familyFilter.has(family) && profileFilter.has(profile) &&
   (viewportFilter.size === 0 || viewportFilter.has(viewport.id)));
@@ -50,17 +51,19 @@ try {
   if (!skipBuild) buildShowcase();
   server = startStaticServer();
   await waitForServer();
-  browser = await chromium.launch({
-    channel: process.env['ASTYLAR_MATERIAL_BROWSER_CHANNEL'] ?? 'chrome',
-    headless: true,
-  });
+  browser = await launchBrowser();
   const results = [];
-  for (const benchmarkCase of cases) {
+  for (const [index, benchmarkCase] of cases.entries()) {
+    await recycleBrowserIfNeeded(index);
     console.log(`Material parity: ${benchmarkCase.family}@${benchmarkCase.profile}/${benchmarkCase.viewport.id}`);
     results.push(await captureCase(benchmarkCase));
   }
+  if (cases.length > 0 && (interactionCases.length > 0 || mobileFlowCases.length > 0)) {
+    await restartBrowser();
+  }
   const interactions = [];
-  for (const benchmarkCase of [...interactionCases, ...mobileFlowCases]) {
+  for (const [index, benchmarkCase] of [...interactionCases, ...mobileFlowCases].entries()) {
+    await recycleBrowserIfNeeded(index);
     console.log(`Material interaction: ${benchmarkCase.family}@${benchmarkCase.profile}/${benchmarkCase.viewport.id}/${benchmarkCase.state}`);
     interactions.push(await captureInteractionCase(benchmarkCase));
   }
@@ -126,6 +129,8 @@ function validateConfiguration() {
   assert.equal(testRun.status, 0, 'Material benchmark configuration validation failed.');
   assert.ok(cases.length > 0 || interactionCases.length > 0 || mobileFlowCases.length > 0,
     'The Material benchmark filters selected no cases.');
+  assert.ok(Number.isInteger(browserRestartInterval) && browserRestartInterval > 0,
+    'ASTYLAR_MATERIAL_BROWSER_RESTART_INTERVAL must be a positive integer.');
 }
 
 function buildShowcase() {
@@ -625,6 +630,23 @@ function compareEvents(reference, candidate, family, state) {
   const expected = contractEvents(relevant(reference));
   const actual = contractEvents(relevant(candidate));
   return { matches: JSON.stringify(expected) === JSON.stringify(actual), reference: expected, astylar: actual };
+}
+
+async function launchBrowser() {
+  return chromium.launch({
+    channel: process.env['ASTYLAR_MATERIAL_BROWSER_CHANNEL'] ?? 'chrome',
+    headless: true,
+  });
+}
+
+async function recycleBrowserIfNeeded(index) {
+  if (index === 0 || index % browserRestartInterval !== 0) return;
+  await restartBrowser();
+}
+
+async function restartBrowser() {
+  await browser.close();
+  browser = await launchBrowser();
 }
 
 async function popupOptionBox(page, mode, family) {
