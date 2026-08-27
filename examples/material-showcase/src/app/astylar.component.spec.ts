@@ -94,7 +94,9 @@ describe('AstylarShowcaseComponent', () => {
     store.patchState({ open: true });
     const datepicker = build(component, 'datepicker');
     expect(style(datepicker, '.field-label.empty-field-label')).toEqual(jasmine.objectContaining({ fontSize: '16px' }));
-    expect(find(datepicker, 'datepicker-selected-label')?.['textContent']).toBe('25');
+    const selectedDay = find(datepicker, `datepicker-day-${new Date().getDate()}`);
+    expect(selectedDay?.['textContent']).toBe(String(new Date().getDate()));
+    expect(find(datepicker, 'datepicker-selected')).toBeDefined();
 
     const timepicker = build(component, 'timepicker');
     expect(find(timepicker, 'timepicker-options')?.['children']?.length).toBe(48);
@@ -184,9 +186,10 @@ describe('AstylarShowcaseComponent', () => {
     const yearView = build(component, 'datepicker');
     expect(find(yearView, 'datepicker-grid')).toBeUndefined();
     expect(find(yearView, 'datepicker-year-grid')?.['children']?.length).toBe(24);
-    expect(find(yearView, 'datepicker-year-2026')).toEqual(jasmine.objectContaining({ value: '2026' }));
+    const currentYear = new Date().getFullYear();
+    expect(find(yearView, `datepicker-year-${currentYear}`)).toEqual(jasmine.objectContaining({ value: String(currentYear) }));
 
-    click('datepicker-year-2026', { targetId: 'datepicker-year-2026' } as AstylarEvent);
+    click(`datepicker-year-${currentYear}`, { targetId: `datepicker-year-${currentYear}` } as AstylarEvent);
     expect(find(build(component, 'datepicker'), 'datepicker-grid')).toBeDefined();
   });
 
