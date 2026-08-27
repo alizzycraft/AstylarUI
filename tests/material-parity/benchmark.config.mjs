@@ -99,7 +99,7 @@ export const materialTextOnlyTargets = Object.freeze([
 ]);
 export const materialSemanticExcludedTargets = Object.freeze([
   ...materialTextOnlyTargets,
-  'button-toggle-one', 'button-toggle-two', 'tooltip-popup',
+  'button-toggle-one', 'button-toggle-two', 'chip-0', 'chip-1', 'tooltip-popup',
 ]);
 export const materialUniformBackgroundTargets = Object.freeze({
   'grid-list': Object.freeze({ container: 'grid-list-root', surfaces: Object.freeze(['grid-tile-one', 'grid-tile-two']) }),
@@ -124,6 +124,8 @@ export const materialInteractionFocusedRasterTargets = Object.freeze({
   sort: Object.freeze({ element: 'sort-primary', padding: 8, minimumSsim: .80 }),
   'slide-toggle': Object.freeze({ element: 'slide-toggle-primary', padding: 8, minimumSsim: .40 }),
   'button-toggle': Object.freeze({ element: 'button-toggle-primary', padding: 8, minimumSsim: .40 }),
+  tabs: Object.freeze({ element: 'tabs-primary', padding: 8, minimumSsim: .80 }),
+  stepper: Object.freeze({ element: 'stepper-primary', padding: 8, minimumSsim: .90 }),
   autocomplete: Object.freeze({ element: 'autocomplete-primary', padding: 8, paddingBottom: 130, minimumSsim: .85 }),
   select: Object.freeze({ element: 'select-primary', padding: 8, paddingBottom: 130, minimumSsim: .85 }),
   datepicker: Object.freeze({ element: 'datepicker-primary', padding: 8, paddingBottom: 370, minimumSsim: .86 }),
@@ -132,6 +134,7 @@ export const materialInteractionFocusedRasterTargets = Object.freeze({
   tooltip: Object.freeze({ element: 'tooltip-popup', padding: 4, minimumSsim: .14, states: Object.freeze(['hover', 'held']) }),
 });
 export const materialInteractionTextAlignmentTargets = Object.freeze({
+  chips: Object.freeze(['chip-0', 'chip-1']),
   expansion: Object.freeze(['expansion-content']),
 });
 export const materialShadowProfileTargets = Object.freeze({
