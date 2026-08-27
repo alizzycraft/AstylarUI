@@ -299,6 +299,7 @@ async function captureInteractionCase(benchmarkCase) {
     const astylarMeasurement = await astylar.page.evaluate((targetIds) =>
       window.__ASTYLAR_MATERIAL_BENCHMARK__?.measure(targetIds), ids);
     const astylarState = await astylar.page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__?.state());
+    const interactionState = await compareInteractionState(reference.page, astylar.page, family, state, astylarState);
     assert.ok(astylarMeasurement, 'Astylar interaction measurement is missing.');
     const referenceBuffer = await captureInteractionImage(reference.page, 'reference', referenceMeasurement, family, state, directory);
     const astylarBuffer = await captureInteractionImage(astylar.page, 'astylar', astylarMeasurement, family, state, directory);
@@ -337,13 +338,13 @@ async function captureInteractionCase(benchmarkCase) {
         JSON.stringify(resourceCounts(resourceSnapshots.at(-1))));
     const focusMatches = state !== 'focus' || referenceFocus === astylarFocus;
     return {
-      family, profile, viewport, state, screenshotSimilarity, textAlignment, focusedRasters, semantics, eventComparison, statePaint,
+      family, profile, viewport, state, screenshotSimilarity, textAlignment, focusedRasters, semantics, eventComparison, interactionState, statePaint,
       focus: { reference: referenceFocus, astylar: astylarFocus, matches: focusMatches },
       runtimeErrors, resourceSnapshots, resourcesStable, astylarState,
       meetsAcceptance: screenshotSimilarity >= materialThresholds.resultSsim &&
         textAlignment.every((result) => result.matches) &&
         focusedRasters.every((result) => result.matches) &&
-        semantics.every((result) => result.matches) && eventComparison.matches && statePaint.matches && focusMatches &&
+        semantics.every((result) => result.matches) && eventComparison.matches && interactionState.matches && statePaint.matches && focusMatches &&
         runtimeErrors.length === 0 && resourcesStable,
     };
   } finally {
@@ -429,6 +430,15 @@ async function performInteraction(page, mode, benchmarkCase) {
     return undefined;
   }
   if (state === 'hover') { await page.mouse.move(x, y); return undefined; }
+  if (family === 'slider' && (state === 'drag-start' || state === 'drag-end')) {
+    const drag = await sliderDragCoordinates(page, mode, state === 'drag-start' ? 'start' : 'end');
+    assert.ok(drag, `${mode} slider ${state} coordinates are missing.`);
+    await page.mouse.move(drag.from.x, drag.from.y);
+    await page.mouse.down();
+    await page.mouse.move(drag.to.x, drag.to.y, { steps: 8 });
+    await page.mouse.up();
+    return undefined;
+  }
   if (family === 'slider' && state === 'activate') {
     if (mode === 'reference') await page.locator('#slider-primary').focus();
     else await page.evaluate(() => document.querySelector('[data-astylar-id="slider-primary"]')?.focus());
@@ -464,6 +474,12 @@ async function performInteraction(page, mode, benchmarkCase) {
     const contentBox = await popupHoverBox(page, mode, family);
     assert.ok(contentBox, `${mode} ${family} popup hover target is missing.`);
     await page.mouse.move(contentBox.x + contentBox.width / 2, contentBox.y + contentBox.height / 2);
+  }
+  if (state === 'open-secondary') {
+    await settleInteraction(page, mode);
+    const monthBox = await datepickerMonthBox(page, mode);
+    assert.ok(monthBox, `${mode} datepicker month/year control is missing.`);
+    await page.mouse.click(monthBox.x + monthBox.width / 2, monthBox.y + monthBox.height / 2);
   }
   if (state === 'activate-twice') {
     await settleInteraction(page, mode);
@@ -663,6 +679,56 @@ async function popupHoverBox(page, mode, family) {
     return viewport ? { x: viewport.width / 2, y: viewport.height / 2 + 60, width: 1, height: 1 } : undefined;
   }
   return undefined;
+}
+
+async function datepickerMonthBox(page, mode) {
+  if (mode === 'reference') return page.locator('.mat-calendar-period-button').boundingBox();
+  const measurement = await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__?.measure(['datepicker-month']));
+  const local = measurement?.elements?.['datepicker-month']?.borderBox;
+  const canvas = await page.locator('canvas').boundingBox();
+  return local && canvas ? { x: canvas.x + local.left, y: canvas.y + local.top, width: local.width, height: local.height } : undefined;
+}
+
+async function sliderDragCoordinates(page, mode, thumb) {
+  const targetRatio = thumb === 'start' ? .4 : .75;
+  if (mode === 'reference') {
+    const track = await page.locator('mat-slider .mdc-slider__track').boundingBox();
+    const visualThumb = await page.locator('mat-slider mat-slider-visual-thumb').nth(thumb === 'start' ? 0 : 1).boundingBox();
+    if (!track || !visualThumb) return undefined;
+    return {
+      from: { x: visualThumb.x + visualThumb.width / 2, y: visualThumb.y + visualThumb.height / 2 },
+      to: { x: track.x + track.width * targetRatio, y: visualThumb.y + visualThumb.height / 2 },
+    };
+  }
+  const result = await page.evaluate(() => ({
+    measurement: window.__ASTYLAR_MATERIAL_BENCHMARK__?.measure(['slider-material-visual']),
+    state: window.__ASTYLAR_MATERIAL_BENCHMARK__?.state(),
+  }));
+  const local = result.measurement?.elements?.['slider-material-visual']?.borderBox;
+  const canvas = await page.locator('canvas').boundingBox();
+  if (!local || !canvas) return undefined;
+  const startRatio = thumb === 'start' ? result.state.sliderStart / 100 : result.state.sliderValue / 100;
+  return {
+    from: { x: canvas.x + local.left + local.width * startRatio, y: canvas.y + local.top + local.height / 2 },
+    to: { x: canvas.x + local.left + local.width * targetRatio, y: canvas.y + local.top + local.height / 2 },
+  };
+}
+
+async function compareInteractionState(referencePage, astylarPage, family, state, astylarState) {
+  if (family === 'slider' && (state === 'drag-start' || state === 'drag-end')) {
+    const reference = await referencePage.evaluate(() => ({
+      sliderStart: Number(document.querySelector('#slider-start')?.value),
+      sliderValue: Number(document.querySelector('#slider-primary')?.value),
+    }));
+    const astylar = { sliderStart: astylarState?.sliderStart, sliderValue: astylarState?.sliderValue };
+    return { reference, astylar, matches: JSON.stringify(reference) === JSON.stringify(astylar) };
+  }
+  if (family === 'datepicker' && state === 'open-secondary') {
+    const reference = await referencePage.locator('mat-multi-year-view').count() > 0;
+    const candidate = await astylarPage.evaluate(() => !!window.__ASTYLAR_MATERIAL_BENCHMARK__?.measure(['datepicker-year-grid'])?.elements?.['datepicker-year-grid']);
+    return { reference, astylar: candidate, matches: reference === candidate && reference === true };
+  }
+  return { matches: true };
 }
 
 function textTargets(family) {

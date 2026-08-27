@@ -23,6 +23,29 @@ describe('Material showcase application plugin', () => {
     expect(bend.y).toBeLessThan(end.y);
   });
 
+  it('updates the range plugin visual without rebuilding it during a drag', async () => {
+    const astylar = TestBed.inject(Astylar);
+    const surface = astylar.mount(document.createElement('canvas'), rangeSite(.3, .65));
+
+    try {
+      await surface.whenSettled();
+      const range = surface.scene.meshes.find((mesh) =>
+        mesh.metadata?.showcaseMaterialVisual === 'range');
+      const active = range?.getChildMeshes().find((mesh) => mesh.name.endsWith('-active'));
+      const startThumb = range?.getChildMeshes().find((mesh) => mesh.name.endsWith('-start-thumb'));
+      const endThumb = range?.getChildMeshes().find((mesh) => mesh.name.endsWith('-end-thumb'));
+      const updateRange = range?.metadata?.updateRange as ((start: number, end: number) => void) | undefined;
+
+      expect(updateRange).toEqual(jasmine.any(Function));
+      updateRange?.(.4, .75);
+      expect(active?.scaling.x).toBeCloseTo(.35, 6);
+      expect(startThumb!.position.x).toBeLessThan(endThumb!.position.x);
+      expect(range?.metadata?.start).toBe(.3);
+    } finally {
+      surface.dispose();
+    }
+  });
+
   it('isolates two surfaces, reaches an update plateau, remounts, and releases all resources', async () => {
     const astylar = TestBed.inject(Astylar);
     const first = astylar.mount(document.createElement('canvas'), progressSite(.25));
@@ -77,6 +100,18 @@ function progressSite(progress: number): SiteData {
       data: { mode: 'determinate', progress },
     }] },
     styles: [{ selector: '#progress', width: '240px', height: '4px' }],
+  };
+}
+
+function rangeSite(start: number, end: number): SiteData {
+  return {
+    plugins: [{ id: 'showcase.material', versionRange: '^1.0.0', schemaVersion: 1 }],
+    root: { children: [{
+      type: 'showcase.material:range-visual',
+      id: 'range',
+      data: { start, end },
+    }] },
+    styles: [{ selector: '#range', width: '240px', height: '48px' }],
   };
 }
 

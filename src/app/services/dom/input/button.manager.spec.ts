@@ -5,6 +5,34 @@ import { Button } from '../../../types/input-types';
 import { ButtonManager } from './button.manager';
 
 describe('ButtonManager', () => {
+  it('supports aria-labelled icon buttons without inventing a visual label', () => {
+    const engine = new BABYLON.NullEngine();
+    const scene = new BABYLON.Scene(engine);
+    const renderTextToTexture = jasmine.createSpy('renderTextToTexture');
+    const manager = new ButtonManager(
+      { renderTextToTexture } as unknown as TextRenderingService,
+      { parseBorderRadius: () => 0 } as never,
+      {} as BabylonMeshService,
+    );
+    const button = manager.createButton(
+      { type: 'button', id: 'calendar', value: '', ariaLabel: 'Open calendar' },
+      {
+        scene,
+        actions: {
+          camera: { getPixelToWorldScale: () => .01 },
+          mesh: { createPolygon: (name: string) => BABYLON.MeshBuilder.CreatePlane(name, {}, scene) },
+        },
+      } as never,
+      { selector: '#calendar' },
+      { width: 40, height: 40 },
+    );
+
+    expect(button.label).toBe('');
+    expect(button.labelMesh).toBeUndefined();
+    expect(renderTextToTexture).not.toHaveBeenCalled();
+    engine.dispose();
+  });
+
   it('keeps button labels at their CSS size on high-density displays', () => {
     spyOnProperty(window, 'devicePixelRatio', 'get').and.returnValue(2);
     const engine = new BABYLON.NullEngine();

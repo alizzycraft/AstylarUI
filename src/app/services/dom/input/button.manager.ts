@@ -57,8 +57,8 @@ export class ButtonManager {
             element,
             type: InputType.Button,
             style, // Store style
-            value: element.value || element.textContent || '',
-            label: element.value || element.textContent || 'Button',
+            value: element.value ?? element.textContent ?? '',
+            label: element.value ?? element.textContent ?? '',
             state: ButtonState.Normal,
             buttonType,
             focused: false,
@@ -234,7 +234,7 @@ export class ButtonManager {
      * Creates the button label mesh
      */
     private createLabelMesh(button: Button, render: BabylonRender, style: StyleRule): BABYLON.Mesh {
-        const textContent = button.label || 'Button';
+        const textContent = button.label;
 
         const textStyle = { ...style };
         if (!textStyle.fontSize) textStyle.fontSize = '16px';

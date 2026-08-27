@@ -170,6 +170,26 @@ describe('AstylarShowcaseComponent', () => {
     }
   });
 
+  it('opens the datepicker year view from the month and year control', () => {
+    const { component, store } = createComponent('datepicker');
+    const click = (component as unknown as {
+      handleClick: (id: string, event: AstylarEvent) => void;
+    }).handleClick.bind(component);
+
+    click('datepicker-icon', { targetId: 'datepicker-icon' } as AstylarEvent);
+    expect(store.state().open).toBeTrue();
+    expect(find(build(component, 'datepicker'), 'datepicker-grid')).toBeDefined();
+
+    click('datepicker-month', { targetId: 'datepicker-month' } as AstylarEvent);
+    const yearView = build(component, 'datepicker');
+    expect(find(yearView, 'datepicker-grid')).toBeUndefined();
+    expect(find(yearView, 'datepicker-year-grid')?.['children']?.length).toBe(24);
+    expect(find(yearView, 'datepicker-year-2026')).toEqual(jasmine.objectContaining({ value: '2026' }));
+
+    click('datepicker-year-2026', { targetId: 'datepicker-year-2026' } as AstylarEvent);
+    expect(find(build(component, 'datepicker'), 'datepicker-grid')).toBeDefined();
+  });
+
   it('toggles chips independently from any child hit target', () => {
     const { component, store } = createComponent('chips');
     const click = (component as unknown as {
@@ -187,19 +207,29 @@ describe('AstylarShowcaseComponent', () => {
 
   it('keeps the left and right range handles mapped to start and end values', () => {
     const { component, store } = createComponent('slider');
-    (component as unknown as { surface: { scene: { clearColor?: unknown }; update: () => Promise<void> } }).surface = {
-      scene: {},
+    const updateRange = jasmine.createSpy('updateRange');
+    (component as unknown as { surface: { scene: { clearColor?: unknown; meshes: unknown[] }; update: () => Promise<void> } }).surface = {
+      scene: { meshes: [{ metadata: { showcaseMaterialVisual: 'range', updateRange } }] },
       update: () => Promise.resolve(),
     };
     const handlers = (component as unknown as {
-      options: { events: { handlers: Record<string, { input: (event: AstylarEvent) => void }> } };
+      options: { events: { handlers: Record<string, {
+        input: (event: AstylarEvent) => void;
+        change: (event: AstylarEvent) => void;
+      }> } };
     }).options.events.handlers;
 
     handlers['slider-start'].input({ type: 'input', targetId: 'slider-start', currentTargetId: 'slider-start', value: 40 } as unknown as AstylarEvent);
+    expect(updateRange).toHaveBeenCalledWith(.4, .65);
+    expect(store.state().sliderStart).toBe(30);
+    handlers['slider-start'].change({ type: 'change', targetId: 'slider-start', currentTargetId: 'slider-start', value: 40 } as unknown as AstylarEvent);
     expect(store.state().sliderStart).toBe(40);
     expect(store.state().sliderValue).toBe(65);
 
     handlers['slider-primary'].input({ type: 'input', targetId: 'slider-primary', currentTargetId: 'slider-primary', value: 75 } as unknown as AstylarEvent);
+    expect(updateRange).toHaveBeenCalledWith(.4, .75);
+    expect(store.state().sliderValue).toBe(65);
+    handlers['slider-primary'].change({ type: 'change', targetId: 'slider-primary', currentTargetId: 'slider-primary', value: 75 } as unknown as AstylarEvent);
     expect(store.state().sliderStart).toBe(40);
     expect(store.state().sliderValue).toBe(75);
   });

@@ -45,12 +45,13 @@ export class AstylarShowcaseComponent {
   private surface?: AstylarSurface;
   private pendingSurfaceUpdate?: Promise<unknown>;
   private readonly focusedId = signal<string | undefined>(undefined);
+  private readonly datepickerView = signal<'month' | 'years'>('month');
   private readonly fieldValues = signal<Record<'form-field' | 'input' | 'autocomplete', string>>({
     'form-field': 'Atlas',
     input: 'team@example.com',
     autocomplete: '',
   });
-  private readonly eventLog: Array<{ type: string; targetId?: string; value?: unknown }> = [];
+  private readonly eventLog: Array<{ type: string; targetId?: string; value?: unknown; clientX?: number; localX?: number }> = [];
   protected readonly family = computed<MaterialFamily>(() => {
     const value = this.route.snapshot.paramMap.get('family');
     return isMaterialFamily(value) ? value : 'button';
@@ -66,6 +67,7 @@ export class AstylarShowcaseComponent {
             if (!this.benchmarkMode) this.activateRipple(event);
           }),
           pointerup: (event: AstylarEvent) => this.recordEvent(event),
+          pointermove: (event: AstylarEvent) => this.recordEvent(event),
           pointerenter: (event: AstylarEvent) => this.zone.run(() => {
             this.recordEvent(event);
             if (event.targetId === 'tooltip-primary' && (!this.benchmarkMode || ['hover', 'held'].includes(this.benchmarkInteraction ?? ''))) {
@@ -97,13 +99,16 @@ export class AstylarShowcaseComponent {
               const family = targetId.replace('-control', '') as 'form-field' | 'input' | 'autocomplete';
               this.fieldValues.update((values) => ({ ...values, [family]: String(event.value ?? '') }));
             }
-            if (targetId === 'slider-primary') this.store.patchState({ sliderValue: Number(event.value) });
-            if (targetId === 'slider-start') this.store.patchState({ sliderStart: Number(event.value) });
+            if (targetId === 'slider-primary' || targetId === 'slider-start') {
+              const nextStart = targetId === 'slider-start' ? Number(event.value) : this.store.state().sliderStart;
+              const nextEnd = targetId === 'slider-primary' ? Number(event.value) : this.store.state().sliderValue;
+              this.updateSliderVisual(nextStart, nextEnd);
+            }
             if (targetId === 'checkbox-primary') this.store.patchState({ selected: event.checked === true });
             if (targetId === 'select-control') this.store.patchState({ selected: event.selectedValue === 'team' || event.value === 'team' });
             if (targetId === 'radio-team') this.store.patchState({ selected: true });
             if (targetId === 'radio-solo') this.store.patchState({ selected: false });
-            if (targetId && ['slider-primary', 'slider-start', 'checkbox-primary', 'select-control', 'radio-team', 'radio-solo'].includes(targetId)) {
+            if (targetId && ['checkbox-primary', 'select-control', 'radio-team', 'radio-solo'].includes(targetId)) {
               const update = this.surface!.update(this.buildSiteData(this.family()));
               this.pendingSurfaceUpdate = update.catch((error) => {
                 this.failed(error);
@@ -117,7 +122,12 @@ export class AstylarShowcaseComponent {
             }
             this.status.set(`Value ${event.value}`);
           }),
-          change: (event: AstylarEvent) => this.zone.run(() => { this.recordEvent(event); this.status.set(`Committed ${event.value}`); }),
+          change: (event: AstylarEvent) => this.zone.run(() => {
+            this.recordEvent(event);
+            if (event.targetId === 'slider-primary') this.store.patchState({ sliderValue: Number(event.value) });
+            if (event.targetId === 'slider-start') this.store.patchState({ sliderStart: Number(event.value) });
+            this.status.set(`Committed ${event.value}`);
+          }),
           close: (event: AstylarEvent) => this.zone.run(() => {
             this.recordEvent(event);
             this.store.patchState({ open: false });
@@ -158,7 +168,13 @@ export class AstylarShowcaseComponent {
 
   private recordEvent(event: AstylarEvent): void {
     if (event.currentTargetId !== event.targetId) return;
-    this.eventLog.push({ type: event.type, targetId: event.targetId, value: event.value });
+    this.eventLog.push({
+      type: event.type,
+      targetId: event.targetId,
+      value: event.value,
+      clientX: event.clientX,
+      localX: event.localX,
+    });
   }
 
   private handleClick(id: string, event: AstylarEvent): void {
@@ -198,7 +214,18 @@ export class AstylarShowcaseComponent {
     if (id === 'step-details') this.store.patchState({ selected: true });
     if (id === 'select-control') this.store.patchState({ open: !this.store.state().open });
     if (id === 'autocomplete-control') this.store.patchState({ open: true });
-    if (['datepicker-icon', 'timepicker-icon'].includes(id)) {
+    if (id === 'datepicker-icon') {
+      const opening = !this.store.state().open;
+      if (opening) this.datepickerView.set('month');
+      this.store.patchState({ open: opening });
+    }
+    if (id === 'datepicker-month') {
+      this.datepickerView.set('years');
+    }
+    if (targetId.startsWith('datepicker-year-')) {
+      this.datepickerView.set('month');
+    }
+    if (id === 'timepicker-icon') {
       this.store.patchState({ open: !this.store.state().open });
     }
     if (id === 'slide-toggle-primary') this.store.patchState({ selected: !this.store.state().selected });
@@ -226,13 +253,20 @@ export class AstylarShowcaseComponent {
     this.status.set(`Activated ${event.targetId}`);
   }
 
+  private updateSliderVisual(start: number, end: number): void {
+    const range = this.surface?.scene.meshes.find((mesh) =>
+      mesh.metadata?.showcaseMaterialVisual === 'range');
+    const updateRange = range?.metadata?.updateRange;
+    if (typeof updateRange === 'function') updateRange(start / 100, end / 100);
+  }
+
   private dismissPopupForOutsideTarget(targetId: string): void {
     if (!this.store.state().open) return;
     const family = this.family();
     const insidePrefixes: Partial<Record<MaterialFamily, readonly string[]>> = {
       autocomplete: ['autocomplete-control', 'autocomplete-option-', 'field-options'],
       select: ['select-control', 'select-caret', 'select-option-', 'select-options'],
-      datepicker: ['datepicker-icon', 'datepicker-popup', 'datepicker-header', 'datepicker-month', 'datepicker-nav', 'datepicker-previous', 'datepicker-next', 'datepicker-grid', 'datepicker-cell', 'datepicker-day-', 'datepicker-selected'],
+      datepicker: ['datepicker-icon', 'datepicker-popup', 'datepicker-header', 'datepicker-month', 'datepicker-nav', 'datepicker-previous', 'datepicker-next', 'datepicker-grid', 'datepicker-cell', 'datepicker-day-', 'datepicker-selected', 'datepicker-year-grid', 'datepicker-year-'],
       timepicker: ['timepicker-icon', 'timepicker-gap', 'timepicker-active-line', 'timepicker-options', 'timepicker-option-'],
       menu: ['menu-primary', 'menu-popup', 'menu-rename', 'menu-delete'],
       dialog: ['dialog-panel', 'dialog-title', 'dialog-copy', 'dialog-actions', 'dialog-cancel', 'dialog-save'],
@@ -276,7 +310,10 @@ export class AstylarShowcaseComponent {
     if (this.surface) this.surface.scene.clearColor = Color4.FromHexString(`${theme.surface}ff`);
     const rootId = `${family}-root`;
     const densityHeight = materialDensityHeight(theme.density);
-    const emptyFieldActive = this.focusedId() !== undefined || state.error;
+    const emptyFieldActive = state.error || (
+      ['form-field', 'input', 'autocomplete', 'datepicker', 'timepicker'].includes(family) &&
+      this.focusedId() === `${family}-control`
+    );
     const referenceHeight = family === 'button' ? 58 + densityHeight
       : materialReferenceHeight(family, theme.density) + (family === 'expansion' && state.open ? 88 : 0);
     const content = this.familyElements(family);
@@ -368,6 +405,12 @@ export class AstylarShowcaseComponent {
         { selector: '.picker-clock', position: 'absolute', top: `${theme.density === 0 ? 8 : 4}px`, right: '4px', width: '40px', height: '40px', boxSizing: 'border-box', padding: '0', borderWidth: '0', borderRadius: '20px', background: 'transparent', color: theme.mode === 'dark' && state.open ? '#49454f' : theme.onSurface, fontSize: '24px', zIndex: '4' },
         { selector: '.picker-clock:hover', background: mixHex('#e8e0eb', '#49454f', .08) },
         { selector: '.picker-clock:active', background: mixHex('#e8e0eb', '#49454f', .12) },
+        { selector: '.calendar-icon', position: 'absolute', zIndex: '3', top: `${theme.density === 0 ? 21 : 17}px`, right: '12px', width: '18px', height: '18px', boxSizing: 'border-box', borderWidth: '2px', borderStyle: 'solid', borderColor: '#49454f', borderRadius: '2px' },
+        { selector: '.calendar-icon-line', position: 'absolute', top: '4px', left: '0', width: '14px', height: '2px', background: '#49454f' },
+        { selector: '.calendar-icon-day', position: 'absolute', top: '9px', left: '5px', width: '5px', height: '5px', background: '#49454f' },
+        { selector: '.calendar-icon-binding', position: 'absolute', top: '-4px', width: '2px', height: '5px', background: '#49454f' },
+        { selector: '.calendar-icon-binding.first', left: '3px' },
+        { selector: '.calendar-icon-binding.last', right: '3px' },
         { selector: '.picker-popup', position: 'absolute', top: `${theme.density === 0 ? 56 : 48}px`, left: '7px', right: '7px', width: 'auto', height: `${theme.density === 0 ? 312 : 280}px`, boxSizing: 'border-box', paddingTop: '8px', overflow: 'scroll', background: '#f2ecf1', boxShadow: '0 2px 6px rgba(0,0,0,0.24)', zIndex: '60' },
         { selector: '.picker-option', width: '100%', height: `${theme.density === 0 ? 48 : 42}px`, boxSizing: 'border-box', padding: `${theme.density === 0 ? 14 : 11}px 16px`, color: '#1d1b20', fontSize: '16px' },
         { selector: '.picker-option.selected', background: '#d8d2d8' },
@@ -379,21 +422,28 @@ export class AstylarShowcaseComponent {
         { selector: '.timepicker-active-line', position: 'absolute', top: `${theme.density <= -5 ? 32 : theme.density === 0 ? 54 : 46}px`, left: '7px', right: '7px', height: '2px', background: theme.primary, zIndex: '61' },
         { selector: '.timepicker-shell .picker-popup', top: `${theme.density <= -5 ? 42 : theme.density === 0 ? 64 : 56}px`, height: '248px', paddingTop: '0' },
         { selector: '.timepicker-shell .picker-option', height: `${theme.density <= -5 ? 48 : theme.density === 0 ? 48 : 42}px`, padding: `${theme.density <= -5 || theme.density === 0 ? 14 : 11}px 16px` },
-        { selector: '.datepicker-popup', position: 'absolute', top: `${theme.density === 0 ? 59 : 51}px`, left: '7px', width: '291px', height: '349px', boxSizing: 'border-box', background: '#f3edf7', boxShadow: '0 2px 4px rgba(0,0,0,0.24)', zIndex: '60' },
+        { selector: '.datepicker-shell .field-surface', height: `${theme.density <= -5 && state.open ? 36 : theme.density === 0 ? 56 : 48}px` },
+        { selector: '.datepicker-shell .field-label', color: theme.density < 0 && state.open ? '#e8e0eb' : theme.onSurface },
+        { selector: '.datepicker-popup', position: 'absolute', top: `${theme.density <= -5 ? 39 : theme.density === 0 ? 59 : 51}px`, left: '7px', width: '291px', height: '349px', boxSizing: 'border-box', borderRadius: `${16 * theme.cornerScale}px`, background: '#ede6eb', boxShadow: '0 2px 4px rgba(0,0,0,0.24)', zIndex: '60' },
         { selector: '.datepicker-header', position: 'relative', width: '100%', height: '64px', boxSizing: 'border-box', padding: '0 24px', display: 'flex', alignItems: 'center', color: '#1d1b20', fontSize: '14px', fontWeight: '500' },
-        { selector: '.datepicker-month', position: 'absolute', top: '24px', left: '24px', verticalAlign: 'middle' },
+        { selector: '.datepicker-month', position: 'absolute', top: '13px', left: '12px', height: '40px', boxSizing: 'border-box', padding: '0 12px', borderWidth: '0', borderRadius: '20px', background: 'transparent', color: '#1d1b20', fontSize: '14px', fontWeight: '500', verticalAlign: 'middle' },
         { selector: '.datepicker-month:hover', borderRadius: '20px', background: '#e5dfe5' },
         { selector: '.datepicker-month:active', borderRadius: '20px', background: '#d8d2d8' },
         { selector: '.datepicker-nav', position: 'absolute', top: '29px', width: '24px', height: '24px', color: '#49454f', fontSize: '24px', textAlign: 'center', verticalAlign: 'middle' },
         { selector: '.datepicker-previous', right: '52px' },
         { selector: '.datepicker-next', right: '12px' },
         { selector: '.datepicker-grid', position: 'absolute', top: '64px', left: '21px', width: '280px', height: '280px', display: 'grid', gridTemplateColumns: 'repeat(7, 40px)', gridTemplateRows: 'repeat(7, 40px)' },
-        { selector: '.datepicker-cell', width: '40px', height: '40px', boxSizing: 'border-box', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#1d1b20', fontSize: '14px', verticalAlign: 'middle' },
+        { selector: '.datepicker-cell', position: 'relative', width: '40px', height: '40px', boxSizing: 'border-box', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#1d1b20', fontSize: '14px', verticalAlign: 'middle' },
         { selector: '.datepicker-cell:hover', borderRadius: '20px', background: '#e5dfe5' },
         { selector: '.datepicker-cell:active', borderRadius: '20px', background: '#d8d2d8' },
         { selector: '.datepicker-weekday, .datepicker-month-marker', fontWeight: '500' },
-        { selector: '.datepicker-selected', position: 'relative', width: '36px', height: '36px', boxSizing: 'border-box', borderWidth: '1px', borderStyle: 'solid', borderColor: theme.primary, borderRadius: '18px' },
-        { selector: '.datepicker-selected-label', position: 'absolute', top: '8px', left: '0', width: '100%', textAlign: 'center', verticalAlign: 'middle' },
+        { selector: '.datepicker-selected', position: 'absolute', top: '2px', left: '2px', width: '36px', height: '36px', boxSizing: 'border-box', borderWidth: '1px', borderStyle: 'solid', borderColor: theme.mode === 'dark' ? '#d5baff' : '#7d00fa', borderRadius: '18px' },
+        { selector: '.datepicker-selected-label', position: 'relative', zIndex: '2', verticalAlign: 'middle' },
+        { selector: '.datepicker-year-grid', position: 'absolute', top: '84px', left: '8px', width: '280px', height: '240px', display: 'grid', gridTemplateColumns: 'repeat(4, 70px)', gridTemplateRows: 'repeat(6, 40px)' },
+        { selector: '.datepicker-year', width: '60px', height: '40px', marginLeft: '5px', boxSizing: 'border-box', padding: '0', borderWidth: '0', borderRadius: '20px', background: 'transparent', color: '#1d1b20', fontSize: '14px' },
+        { selector: '.datepicker-year:hover', background: '#e5dfe5' },
+        { selector: '.datepicker-year:active', background: '#d8d2d8' },
+        { selector: '.datepicker-year.selected', borderWidth: '1px', borderStyle: 'solid', borderColor: theme.mode === 'dark' ? '#d5baff' : '#7d00fa' },
         { selector: '.field-hint', position: 'absolute', top: `${theme.density === 0 ? 58 : 50}px`, left: '16px', fontSize: '12px', letterSpacing: '.4px', color: theme.onSurface },
         { selector: '.field-error', position: 'absolute', top: `${theme.density === 0 ? 58 : 50}px`, left: '16px', fontSize: '12px', letterSpacing: '.4px', color: theme.error },
         { selector: '.row', display: 'flex', flexWrap: 'wrap', gap: '0', alignItems: 'center' },
@@ -550,7 +600,7 @@ export class AstylarShowcaseComponent {
     const fieldSurface = (controlId: string): DOMElement => ({
       type: 'div',
       id: `${controlId}-surface`,
-      class: `field-surface${this.focusedId() === controlId || state.open || state.error ? ' active' : ''}`,
+      class: `field-surface${this.focusedId() === controlId || state.error ? ' active' : ''}`,
     });
     const autocompleteOption = (label: string, slug: string, value: string): DOMElement => {
       const selected = value === label;
@@ -690,11 +740,19 @@ export class AstylarShowcaseComponent {
         ...(state.open ? [overlay] : []),
       ];
     }
-    if (family === 'datepicker' || family === 'timepicker') return [{ type: 'div', id: `${family}-primary`, class: `field-shell${family === 'timepicker' ? ' timepicker-shell' : ''}`, children: [
+    if (family === 'datepicker' || family === 'timepicker') return [{ type: 'div', id: `${family}-primary`, class: `field-shell ${family}-shell`, children: [
       fieldSurface(`${family}-control`),
       { type: 'label', id: `${family}-label`, class: 'field-label empty-field-label', for: `${family}-control`, textContent: family === 'datepicker' ? 'Due date' : 'Meeting time' },
       { type: 'div', id: `${family}-input-region`, class: 'field-input-region', children: [{ type: 'input', inputType: 'text', id: `${family}-control`, class: `field-control${family === 'timepicker' ? ' picker-control' : ''}${family === 'timepicker' && state.open ? ' open' : ''}`, value: '', disabled: state.disabled, role: family === 'timepicker' ? 'combobox' : undefined, ariaLabel: family === 'datepicker' ? 'Due date' : 'Meeting time', ariaInvalid: state.error, ariaHaspopup: 'dialog', ariaExpanded: family === 'timepicker' ? state.open : undefined, ariaControls: family === 'timepicker' ? 'timepicker-options' : undefined, ariaActivedescendant: family === 'timepicker' && state.open ? 'timepicker-option-0' : undefined }] },
-      { type: 'button', id: `${family}-icon`, class: 'picker-clock', ariaLabel: family === 'datepicker' ? 'Open calendar' : 'Open time options', value: family === 'datepicker' ? '▦' : '◷' },
+      family === 'datepicker'
+        ? { type: 'button' as const, id: 'datepicker-icon', class: 'picker-clock', ariaLabel: 'Open calendar', value: '' }
+        : { type: 'button' as const, id: 'timepicker-icon', class: 'picker-clock', ariaLabel: 'Open time options', value: '◷' },
+      ...(family === 'datepicker' ? [{ type: 'span' as const, id: 'datepicker-calendar-icon', class: 'calendar-icon', children: [
+        { type: 'span' as const, id: 'datepicker-calendar-line', class: 'calendar-icon-line' },
+        { type: 'span' as const, id: 'datepicker-calendar-day', class: 'calendar-icon-day' },
+        { type: 'span' as const, id: 'datepicker-calendar-binding-first', class: 'calendar-icon-binding first' },
+        { type: 'span' as const, id: 'datepicker-calendar-binding-last', class: 'calendar-icon-binding last' },
+      ] }] : []),
        ...(family === 'timepicker' && state.open ? [
         { type: 'div' as const, id: 'timepicker-gap', class: 'timepicker-gap' },
         { type: 'div' as const, id: 'timepicker-active-line', class: 'timepicker-active-line' },
@@ -702,20 +760,23 @@ export class AstylarShowcaseComponent {
        ] : []),
       ...(family === 'datepicker' && state.open ? [{ type: 'div' as const, id: 'datepicker-popup', class: 'datepicker-popup', role: 'dialog', ariaLabel: 'Choose date', children: [
         { type: 'div' as const, id: 'datepicker-header', class: 'datepicker-header', children: [
-          { type: 'span' as const, id: 'datepicker-month', class: 'datepicker-month', textContent: 'AUG 2026' },
+          { type: 'button' as const, id: 'datepicker-month', class: 'datepicker-month', ariaLabel: this.datepickerView() === 'month' ? 'Choose month and year' : 'Choose date', value: this.datepickerView() === 'month' ? 'AUG 2026 ▾' : '2016 – 2039 ▴' },
           { type: 'span' as const, id: 'datepicker-previous', class: 'datepicker-nav datepicker-previous', textContent: '‹' },
           { type: 'span' as const, id: 'datepicker-next', class: 'datepicker-nav datepicker-next', textContent: '›' },
         ] },
-        { type: 'div' as const, id: 'datepicker-grid', class: 'datepicker-grid', children: [
+        ...(this.datepickerView() === 'month' ? [{ type: 'div' as const, id: 'datepicker-grid', class: 'datepicker-grid', children: [
           ...['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((label, index) => ({ type: 'span' as const, id: `datepicker-weekday-${index}`, class: 'datepicker-cell datepicker-weekday', textContent: label })),
           { type: 'span' as const, id: 'datepicker-month-marker', class: 'datepicker-cell datepicker-month-marker', textContent: 'AUG' },
           ...Array.from({ length: 5 }, (_, index) => ({ type: 'span' as const, id: `datepicker-leading-${index}`, class: 'datepicker-cell', textContent: '' })),
           { type: 'span' as const, id: 'datepicker-day-1', class: 'datepicker-cell', textContent: '1' },
           ...Array.from({ length: 30 }, (_, index) => index + 2 === 25
-            ? { type: 'span' as const, id: 'datepicker-day-25', class: 'datepicker-cell', children: [{ type: 'span' as const, id: 'datepicker-selected', class: 'datepicker-selected', children: [{ type: 'span' as const, id: 'datepicker-selected-label', class: 'datepicker-selected-label', textContent: '25' }] }] }
+            ? { type: 'span' as const, id: 'datepicker-day-25', class: 'datepicker-cell', children: [{ type: 'span' as const, id: 'datepicker-selected', class: 'datepicker-selected' }, { type: 'span' as const, id: 'datepicker-selected-label', class: 'datepicker-selected-label', textContent: '25' }] }
             : { type: 'span' as const, id: `datepicker-day-${index + 2}`, class: 'datepicker-cell', textContent: String(index + 2) }),
           ...Array.from({ length: 5 }, (_, index) => ({ type: 'span' as const, id: `datepicker-trailing-${index}`, class: 'datepicker-cell', textContent: '' })),
-        ] },
+        ] }] : [{ type: 'div' as const, id: 'datepicker-year-grid', class: 'datepicker-year-grid', children: Array.from({ length: 24 }, (_, index) => {
+          const year = 2016 + index;
+          return { type: 'button' as const, id: `datepicker-year-${year}`, class: `datepicker-year${year === 2026 ? ' selected' : ''}`, value: String(year) };
+        }) }]),
       ] }] : []),
     ] }];
     if (family === 'tooltip') return [{ type: 'button', id: 'tooltip-primary', class: 'material-button', value: 'Hover for help', ariaDescribedby: state.open ? 'tooltip-popup' : undefined }, ...(state.open ? [{ type: 'div' as const, id: 'tooltip-popup', role: 'tooltip', textContent: 'Create a project' }] : [])];

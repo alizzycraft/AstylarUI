@@ -170,9 +170,8 @@ class MaterialRangeVisualRenderer extends MaterialRendererBase implements Astyla
     track.position.z = .01;
     const active = this.ownChild(context, MeshBuilder.CreatePlane(`${context.meshId}-active`, { width, height: trackHeight }, context.scene), root);
     active.material = this.material(context, 'active-material', this.color(context, 'indicator-color', '#6750a4'));
-    active.scaling.x = Math.max(.001, end - start);
-    active.position.x = -width / 2 + width * (start + end) / 2;
     active.position.z = .02;
+    const thumbs: Partial<Record<'start' | 'end', Mesh>> = {};
     for (const [name, ratio] of [['start', start], ['end', end]] as const) {
       const thumb = this.ownChild(context, MeshBuilder.CreateDisc(`${context.meshId}-${name}-thumb`, {
         radius: 10 * scale, tessellation: this.config.benchmarkMode ? 32 : 48,
@@ -180,8 +179,22 @@ class MaterialRangeVisualRenderer extends MaterialRendererBase implements Astyla
       thumb.material = this.material(context, `${name}-thumb-material`, this.color(context, 'indicator-color', '#6750a4'));
       thumb.position.x = -width / 2 + width * ratio;
       thumb.position.z = .03;
+      thumbs[name] = thumb;
     }
-    root.metadata = { showcaseMaterialVisual: 'range', start, end, benchmarkMode: this.config.benchmarkMode };
+    const updateRange = (nextStart: number, nextEnd: number): void => {
+      const boundedStart = Math.max(0, Math.min(1, nextStart));
+      const boundedEnd = Math.max(boundedStart, Math.min(1, nextEnd));
+      active.scaling.x = Math.max(.001, boundedEnd - boundedStart);
+      active.position.x = -width / 2 + width * (boundedStart + boundedEnd) / 2;
+      if (thumbs.start) thumbs.start.position.x = -width / 2 + width * boundedStart;
+      if (thumbs.end) thumbs.end.position.x = -width / 2 + width * boundedEnd;
+    };
+    updateRange(start, end);
+    root.metadata = {
+      showcaseMaterialVisual: 'range', start, end,
+      benchmarkMode: this.config.benchmarkMode,
+      updateRange,
+    };
     return root;
   }
 }
