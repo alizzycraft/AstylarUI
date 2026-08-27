@@ -116,8 +116,14 @@ describe('AstylarShowcaseComponent', () => {
     const click = (component as unknown as {
       handleClick: (id: string, event: AstylarEvent) => void;
     }).handleClick.bind(component);
+    const handlers = eventHandlers(component);
     const event = { targetId: 'sort-trigger' } as AstylarEvent;
 
+    expect(find(build(component, 'sort'), 'sort-arrow')).toBeUndefined();
+    handlers['sort-primary']['focus']({ targetId: 'sort-primary' } as AstylarEvent);
+    expect(find(build(component, 'sort'), 'sort-arrow')?.['textContent']).toBe('↑');
+    expect(store.state().open).toBeFalse();
+    handlers['sort-primary']['blur']({ targetId: 'sort-primary' } as AstylarEvent);
     expect(find(build(component, 'sort'), 'sort-arrow')).toBeUndefined();
     click('sort-trigger', event);
     expect(store.state().open).toBeTrue();

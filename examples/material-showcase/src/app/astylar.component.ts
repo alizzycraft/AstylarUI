@@ -512,6 +512,7 @@ export class AstylarShowcaseComponent {
         { selector: '.list-item', width: '100%', height: `${theme.density === 0 ? 56 : theme.density <= -5 ? 40 : 48}px`, boxSizing: 'border-box', display: 'flex', alignItems: 'center' },
         { selector: '.list-label', marginLeft: '16px', fontSize: '16px' },
         { selector: '.sort-header', width: '100%', height: `${theme.density === -2 ? 22 : 19}px`, borderWidth: '0', background: 'transparent', color: theme.onSurface, textAlign: 'left', fontWeight: '500' },
+        { selector: '.sort-header.focused', boxShadow: `0 1px 0 ${theme.onSurface}` },
         { selector: '.sort-trigger', width: '132px', height: `${theme.density === -2 ? 22 : 19}px`, display: 'flex', alignItems: 'center', gap: '6px', color: theme.onSurface, fontSize: '17px', fontWeight: '500', cursor: 'pointer' },
         { selector: '.sort-arrow', fontSize: '16px', fontWeight: '700' },
         { selector: '.paginator', position: 'relative', width: '100%', height: '56px', background: theme.surface, fontSize: '13px' },
@@ -637,14 +638,17 @@ export class AstylarShowcaseComponent {
       alt: 'Favorite',
     }];
     if (family === 'list') return [{ type: 'div', id: 'list-primary', class: 'material-list', ariaDisabled: false, children: [{ type: 'div', id: 'list-inbox', class: 'list-item', children: [{ type: 'span', id: 'list-inbox-label', class: 'list-label', textContent: 'Inbox' }] }, { type: 'div', id: 'list-archive', class: 'list-item', children: [{ type: 'span', id: 'list-archive-label', class: 'list-label', textContent: 'Archive' }] }] }];
-    if (family === 'sort') return [{ type: 'div', id: 'sort-primary', class: 'sort-header', ariaLabel: 'Sort by name', children: [{
+    if (family === 'sort') {
+      const focused = this.focusedId() === 'sort-primary' || this.focusedId() === 'sort-trigger';
+      return [{ type: 'div', id: 'sort-primary', class: `sort-header${focused ? ' focused' : ''}`, ariaLabel: 'Sort by name', children: [{
       type: 'div', id: 'sort-trigger', class: 'sort-trigger', role: 'button', tabindex: 0,
       ariaSort: state.open ? state.sortDirection === 'asc' ? 'ascending' : 'descending' : undefined,
       children: [
         { type: 'span', id: 'sort-label', textContent: 'Sort by name' },
-        ...(state.open ? [{ type: 'span' as const, id: 'sort-arrow', class: 'sort-arrow', textContent: state.sortDirection === 'asc' ? '↑' : '↓' }] : []),
+        ...(state.open || focused ? [{ type: 'span' as const, id: 'sort-arrow', class: 'sort-arrow', textContent: state.open && state.sortDirection === 'desc' ? '↓' : '↑' }] : []),
       ],
-    }] }];
+      }] }];
+    }
     if (family === 'paginator') return [{ type: 'div', id: 'paginator-primary', class: 'paginator', role: 'group', ariaLabel: `Items per page: 10 ${state.pageIndex * 10 + 1} – ${Math.min(100, state.pageIndex * 10 + 10)} of 100`, children: [{ type: 'span', id: 'paginator-size', textContent: 'Items per page:' }, { type: 'span', id: 'paginator-page-size', textContent: '10' }, { type: 'span', id: 'paginator-range', textContent: `${state.pageIndex * 10 + 1} – ${Math.min(100, state.pageIndex * 10 + 10)} of 100` }, { type: 'button', id: 'paginator-previous', class: 'paginator-button', disabled: state.pageIndex === 0, ariaLabel: 'Previous page', value: '‹' }, { type: 'button', id: 'paginator-next', class: 'paginator-button', disabled: state.pageIndex === 9, ariaLabel: 'Next page', value: '›' }] }];
     if (family === 'tree') return [{ type: 'div', id: 'tree-primary', class: 'material-tree', role: 'tree', children: ['Documents', 'Projects', 'Archive'].map((label, index) => ({ type: 'div' as const, id: `tree-item-${index}`, class: `tree-item${this.focusedId() === `tree-item-${index}` ? ' focused' : ''}`, role: 'treeitem', tabindex: index === 0 ? 0 : -1, ariaLevel: 1, ariaPosinset: index + 1, ariaSetsize: 3, children: [{ type: 'span' as const, id: `tree-item-${index}-label`, class: 'tree-label', textContent: label }] })) }];
     if (family === 'slider') return [{ type: 'div', id: 'slider-pair', class: 'range-stack', children: [
