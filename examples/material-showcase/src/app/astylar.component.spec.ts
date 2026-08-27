@@ -104,17 +104,70 @@ describe('AstylarShowcaseComponent', () => {
     expect(find(bottomSheet, 'bottom-sheet-copy')?.['value']).toBe('Copy link');
   });
 
-  it('reverses the sort direction on every activation', () => {
+  it('activates sort ascending before alternating its direction', () => {
     const { component, store } = createComponent('sort');
     const click = (component as unknown as {
       handleClick: (id: string, event: AstylarEvent) => void;
     }).handleClick.bind(component);
     const event = { targetId: 'sort-trigger' } as AstylarEvent;
 
+    expect(find(build(component, 'sort'), 'sort-arrow')).toBeUndefined();
+    click('sort-trigger', event);
+    expect(store.state().open).toBeTrue();
     click('sort-trigger', event);
     expect(store.state().sortDirection).toBe('desc');
     click('sort-trigger', event);
     expect(store.state().sortDirection).toBe('asc');
+  });
+
+  it('restores empty field labels and floats them only while focused', () => {
+    const { component } = createComponent('form-field');
+    const handlers = eventHandlers(component);
+    handlers['form-field-control']['input']({ targetId: 'form-field-control', value: '' } as AstylarEvent);
+
+    let site = build(component, 'form-field');
+    expect(find(site, 'form-field-control')?.['value']).toBe('');
+    expect(find(site, 'form-field-label')?.['class']).toContain('empty-field-label');
+    expect(style(site, '.field-label.empty-field-label')?.['fontSize']).toBe('16px');
+
+    handlers['form-field-control']['focus']({ targetId: 'form-field-control' } as AstylarEvent);
+    site = build(component, 'form-field');
+    expect(style(site, '.field-label.empty-field-label')?.['fontSize']).toBe('12px');
+
+    handlers['form-field-control']['blur']({ targetId: 'form-field-control' } as AstylarEvent);
+    expect(style(build(component, 'form-field'), '.field-label.empty-field-label')?.['fontSize']).toBe('16px');
+  });
+
+  it('commits autocomplete and select options and dismisses popup families outside', () => {
+    const { component, store } = createComponent('autocomplete');
+    const click = (component as unknown as {
+      handleClick: (id: string, event: AstylarEvent) => void;
+    }).handleClick.bind(component);
+
+    store.patchState({ open: true });
+    click('autocomplete-option-cape-town', { targetId: 'autocomplete-option-cape-town-label' } as AstylarEvent);
+    expect(find(build(component, 'autocomplete'), 'autocomplete-control')?.['value']).toBe('Cape Town');
+    expect(store.state().open).toBeFalse();
+
+    store.patchState({ open: true });
+    expect(find(build(component, 'autocomplete'), 'autocomplete-option-cape-town-check')).toBeDefined();
+    click('page', { targetId: 'page' } as AstylarEvent);
+    expect(store.state().open).toBeFalse();
+
+    store.patchState({ open: true });
+    click('select-option-solo', { targetId: 'select-option-solo' } as AstylarEvent);
+    expect(store.state()).toEqual(jasmine.objectContaining({ selected: false, open: false }));
+  });
+
+  it('dismisses menus, pickers, and dialogs from an outside target', () => {
+    for (const family of ['menu', 'datepicker', 'timepicker', 'dialog']) {
+      const { component, store } = createComponent(family);
+      store.patchState({ open: true });
+      (component as unknown as { handleClick: (id: string, event: AstylarEvent) => void }).handleClick(
+        'page', { targetId: 'page' } as AstylarEvent,
+      );
+      expect(store.state().open).withContext(family).toBeFalse();
+    }
   });
 
   it('toggles chips independently from any child hit target', () => {
@@ -182,6 +235,12 @@ function createComponent(family: string): { component: AstylarShowcaseComponent;
 
 function build(component: AstylarShowcaseComponent, family: string): SiteData {
   return (component as unknown as { buildSiteData: (value: string) => SiteData }).buildSiteData(family);
+}
+
+function eventHandlers(component: AstylarShowcaseComponent): Record<string, Record<string, (event: AstylarEvent) => void>> {
+  return (component as unknown as {
+    options: { events: { handlers: Record<string, Record<string, (event: AstylarEvent) => void>> } };
+  }).options.events.handlers;
 }
 
 function style(site: SiteData, selector: string): Record<string, unknown> | undefined {

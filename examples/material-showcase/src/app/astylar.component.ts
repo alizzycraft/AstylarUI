@@ -45,6 +45,11 @@ export class AstylarShowcaseComponent {
   private surface?: AstylarSurface;
   private pendingSurfaceUpdate?: Promise<unknown>;
   private readonly focusedId = signal<string | undefined>(undefined);
+  private readonly fieldValues = signal<Record<'form-field' | 'input' | 'autocomplete', string>>({
+    'form-field': 'Atlas',
+    input: 'team@example.com',
+    autocomplete: '',
+  });
   private readonly eventLog: Array<{ type: string; targetId?: string; value?: unknown }> = [];
   protected readonly family = computed<MaterialFamily>(() => {
     const value = this.route.snapshot.paramMap.get('family');
@@ -88,6 +93,10 @@ export class AstylarShowcaseComponent {
           input: (event: AstylarEvent) => this.zone.run(() => {
             this.recordEvent(event);
             const targetId = event.targetId;
+            if (targetId && ['form-field-control', 'input-control', 'autocomplete-control'].includes(targetId)) {
+              const family = targetId.replace('-control', '') as 'form-field' | 'input' | 'autocomplete';
+              this.fieldValues.update((values) => ({ ...values, [family]: String(event.value ?? '') }));
+            }
             if (targetId === 'slider-primary') this.store.patchState({ sliderValue: Number(event.value) });
             if (targetId === 'slider-start') this.store.patchState({ sliderStart: Number(event.value) });
             if (targetId === 'checkbox-primary') this.store.patchState({ selected: event.checked === true });
@@ -154,7 +163,18 @@ export class AstylarShowcaseComponent {
 
   private handleClick(id: string, event: AstylarEvent): void {
     if (this.benchmarkMode && this.benchmarkInteraction === 'held') return;
+    const targetId = event.targetId ?? id;
     if (this.store.state().disabled && ['checkbox-primary', 'radio-solo', 'radio-team', 'slide-toggle-primary'].includes(id)) return;
+    if (targetId.startsWith('autocomplete-option-cape-town') || targetId.startsWith('autocomplete-option-johannesburg')) {
+      this.fieldValues.update((values) => ({
+        ...values,
+        autocomplete: targetId.includes('cape-town') ? 'Cape Town' : 'Johannesburg',
+      }));
+      this.store.patchState({ open: false });
+    }
+    if (targetId === 'select-option-solo' || targetId === 'select-option-team' || targetId === 'select-team-label' || targetId === 'select-check') {
+      this.store.patchState({ selected: targetId !== 'select-option-solo', open: false });
+    }
     if (id === 'radio-team') this.store.patchState({ selected: true });
     if (id === 'radio-solo') this.store.patchState({ selected: false });
     if (id === 'checkbox-primary') this.store.patchState({ selected: !this.store.state().selected });
@@ -163,10 +183,13 @@ export class AstylarShowcaseComponent {
       chipSelections: this.store.state().chipSelections.map((selected, index) =>
         index === chipIndex ? !selected : selected),
     });
-    if (id === 'sort-primary' || id === 'sort-trigger') this.store.patchState({
-      sortDirection: this.store.state().sortDirection === 'asc' ? 'desc' : 'asc',
-      open: true,
-    });
+    if (id === 'sort-primary' || id === 'sort-trigger') {
+      const sortActive = this.store.state().open;
+      this.store.patchState({
+        sortDirection: sortActive && this.store.state().sortDirection === 'asc' ? 'desc' : 'asc',
+        open: true,
+      });
+    }
     if (id === 'paginator-next') this.store.patchState({ pageIndex: Math.min(9, this.store.state().pageIndex + 1) });
     if (id === 'paginator-previous') this.store.patchState({ pageIndex: Math.max(0, this.store.state().pageIndex - 1) });
     if (id === 'button-toggle-one' || id === 'tab-activity') this.store.patchState({ selected: false });
@@ -199,7 +222,25 @@ export class AstylarShowcaseComponent {
       this.store.patchState({ open: false });
       this.surface?.focus('dialog-primary', { focusVisible: true });
     }
+    this.dismissPopupForOutsideTarget(targetId);
     this.status.set(`Activated ${event.targetId}`);
+  }
+
+  private dismissPopupForOutsideTarget(targetId: string): void {
+    if (!this.store.state().open) return;
+    const family = this.family();
+    const insidePrefixes: Partial<Record<MaterialFamily, readonly string[]>> = {
+      autocomplete: ['autocomplete-control', 'autocomplete-option-', 'field-options'],
+      select: ['select-control', 'select-caret', 'select-option-', 'select-options'],
+      datepicker: ['datepicker-icon', 'datepicker-popup', 'datepicker-header', 'datepicker-month', 'datepicker-nav', 'datepicker-previous', 'datepicker-next', 'datepicker-grid', 'datepicker-cell', 'datepicker-day-', 'datepicker-selected'],
+      timepicker: ['timepicker-icon', 'timepicker-gap', 'timepicker-active-line', 'timepicker-options', 'timepicker-option-'],
+      menu: ['menu-primary', 'menu-popup', 'menu-rename', 'menu-delete'],
+      dialog: ['dialog-panel', 'dialog-title', 'dialog-copy', 'dialog-actions', 'dialog-cancel', 'dialog-save'],
+    };
+    const prefixes = insidePrefixes[family];
+    if (!prefixes || prefixes.some((prefix) => targetId.startsWith(prefix))) return;
+    this.store.patchState({ open: false });
+    if (family === 'dialog') this.surface?.focus('dialog-primary', { focusVisible: true });
   }
 
   private activateRipple(event: AstylarEvent): void {
@@ -301,15 +342,15 @@ export class AstylarShowcaseComponent {
         { selector: '.outlined', background: theme.surfaceContainer, color: theme.primary, borderWidth: '1px', borderStyle: 'solid', borderColor: '#79747e' },
         { selector: '.field', width: '100%', height: '56px', padding: '12px 16px', borderWidth: '1px', borderStyle: 'solid', borderColor: '#79747e', borderRadius: `${4 * theme.cornerScale}px`, background: theme.surface, color: theme.mode === 'dark' ? '#e6e1e5' : '#1d1b20' },
         { selector: '.field-shell', position: 'relative', width: '100%', height: `${theme.density === 0 ? 78 : theme.density <= -5 ? 62 : 70}px`, alignSelf: 'flex-start', boxSizing: 'border-box', background: 'transparent' },
-        { selector: '.field-surface', position: 'absolute', top: '0', left: '0', width: '100%', height: `${theme.density === 0 ? 56 : 48}px`, boxSizing: 'border-box', borderRadius: `${4 * theme.cornerScale}px`, background: theme.mode === 'dark' && !state.open ? '#49454f' : '#e8e0eb', boxShadow: `0 1px 0 ${theme.onSurface}` },
+        { selector: '.field-surface', position: 'absolute', top: '0', left: '0', width: '100%', height: `${theme.density === 0 ? 56 : 48}px`, boxSizing: 'border-box', borderRadius: `${4 * theme.cornerScale}px`, background: '#e8e0eb', boxShadow: '0 1px 0 #49454f' },
         { selector: '.field-surface.active', boxShadow: `0 2px 0 ${state.error ? theme.error : theme.primary}` },
-        { selector: '.field-label', position: 'absolute', top: '8px', left: '16px', color: state.error ? theme.error : theme.mode === 'dark' ? '#cac4d0' : theme.density <= -5 ? '#000000' : '#49454f', fontSize: '12px', letterSpacing: '.4px', verticalAlign: 'middle' },
-        { selector: '.field-label.empty-field-label', top: `${emptyFieldActive ? 8 : theme.density === 0 ? 20 : 16}px`, color: state.error ? theme.error : emptyFieldActive ? theme.primary : theme.onSurface, fontSize: emptyFieldActive ? '12px' : '16px', letterSpacing: emptyFieldActive ? '.4px' : '.65px' },
+        { selector: '.field-label', position: 'absolute', top: '8px', left: '16px', color: state.error ? theme.error : theme.density <= -5 ? '#000000' : '#49454f', fontSize: '12px', letterSpacing: '.4px', verticalAlign: 'middle' },
+        { selector: '.field-label.empty-field-label', top: `${emptyFieldActive ? 8 : theme.density === 0 ? 20 : 16}px`, color: state.error ? theme.error : emptyFieldActive ? theme.primary : '#1d1b20', fontSize: emptyFieldActive ? '12px' : '16px', letterSpacing: emptyFieldActive ? '.4px' : '.65px' },
         { selector: '.field-input-region', position: 'absolute', top: `${theme.density === 0 ? 24 : 16}px`, left: '0', width: '100%', height: '24px', boxSizing: 'border-box', padding: '0 16px', background: 'transparent' },
         { selector: '#datepicker-input-region', right: '48px', width: 'auto' },
         { selector: '#timepicker-input-region', right: '48px', width: 'auto' },
-        { selector: '.field-control', position: 'relative', width: '100%', height: '24px', boxSizing: 'border-box', padding: '0', borderWidth: '0', borderRadius: '0', background: 'transparent', boxShadow: 'none', color: theme.mode === 'dark' && state.open ? '#1d1b20' : theme.onSurface, fontSize: '16px' },
-        { selector: '.field-control:focus', borderWidth: '0', color: theme.onSurface, boxShadow: 'none' },
+        { selector: '.field-control', position: 'relative', width: '100%', height: '24px', boxSizing: 'border-box', padding: '0', borderWidth: '0', borderRadius: '0', background: 'transparent', boxShadow: 'none', color: '#1d1b20', fontSize: '16px' },
+        { selector: '.field-control:focus', borderWidth: '0', color: '#1d1b20', boxShadow: 'none' },
         { selector: '.select-control', paddingRight: '32px', cursor: 'pointer', boxShadow: 'none' },
         { selector: '.select-caret', position: 'absolute', top: `${theme.density === 0 ? 20 : 16}px`, right: '16px', color: state.open ? theme.primary : theme.onSurface, fontSize: '14px' },
         { selector: '.select-popup', position: 'absolute', top: `${theme.density === 0 ? 56 : 48}px`, left: '7px', right: '7px', width: 'auto', height: `${theme.density === 0 ? 112 : 104}px`, boxSizing: 'border-box', padding: '8px 0', background: '#f2ecf1', boxShadow: '0 2px 6px rgba(0,0,0,0.24)', zIndex: '60' },
@@ -493,6 +534,17 @@ export class AstylarShowcaseComponent {
       id: `${controlId}-surface`,
       class: `field-surface${this.focusedId() === controlId || state.open || state.error ? ' active' : ''}`,
     });
+    const autocompleteOption = (label: string, slug: string, value: string): DOMElement => {
+      const selected = value === label;
+      return {
+        type: 'div', id: `autocomplete-option-${slug}`, class: `select-option${selected ? ' selected' : ''}`,
+        role: 'option', ariaSelected: selected,
+        children: [
+          { type: 'span', id: `autocomplete-option-${slug}-label`, textContent: label },
+          ...(selected ? [this.selectionMark(`autocomplete-option-${slug}-check`, 'select-check')] : []),
+        ],
+      };
+    };
     if (family === 'toolbar') return [{ type: 'div', id: 'toolbar-primary', class: 'toolbar', children: [{ type: 'span', id: 'toolbar-title', class: 'toolbar-title', children: [{ type: 'span', id: 'toolbar-title-text', class: 'toolbar-title-text', textContent: 'Material workspace' }] }, { type: 'button', id: 'toolbar-action', class: 'toolbar-action', value: 'Action' }] }];
     if (family === 'sidenav') return [{ type: 'div', id: 'sidenav-primary', class: 'sidenav-container', children: [{ type: 'aside', id: 'sidenav-nav', class: 'sidenav', textContent: 'Navigation' }, { type: 'main', id: 'sidenav-content', class: 'sidenav-content', textContent: 'Main content' }] }];
     if (family === 'grid-list') return [{ type: 'div', id: 'grid-list-primary', class: 'grid-list', children: [{ type: 'div', id: 'grid-tile-one', class: 'grid-tile', children: [{ type: 'span', id: 'grid-tile-one-label', class: 'grid-tile-label', textContent: 'One' }] }, { type: 'div', id: 'grid-tile-two', class: 'grid-tile', children: [{ type: 'span', id: 'grid-tile-two-label', class: 'grid-tile-label', textContent: 'Two' }] }] }];
@@ -513,7 +565,7 @@ export class AstylarShowcaseComponent {
       ariaSort: state.open ? state.sortDirection === 'asc' ? 'ascending' : 'descending' : undefined,
       children: [
         { type: 'span', id: 'sort-label', textContent: 'Sort by name' },
-        { type: 'span' as const, id: 'sort-arrow', class: 'sort-arrow', textContent: state.sortDirection === 'asc' ? '↑' : '↓' },
+        ...(state.open ? [{ type: 'span' as const, id: 'sort-arrow', class: 'sort-arrow', textContent: state.sortDirection === 'asc' ? '↑' : '↓' }] : []),
       ],
     }] }];
     if (family === 'paginator') return [{ type: 'div', id: 'paginator-primary', class: 'paginator', role: 'group', ariaLabel: `Items per page: 10 ${state.pageIndex * 10 + 1} – ${Math.min(100, state.pageIndex * 10 + 10)} of 100`, children: [{ type: 'span', id: 'paginator-size', textContent: 'Items per page:' }, { type: 'span', id: 'paginator-page-size', textContent: '10' }, { type: 'span', id: 'paginator-range', textContent: `${state.pageIndex * 10 + 1} – ${Math.min(100, state.pageIndex * 10 + 10)} of 100` }, { type: 'button', id: 'paginator-previous', class: 'paginator-button', disabled: state.pageIndex === 0, ariaLabel: 'Previous page', value: '‹' }, { type: 'button', id: 'paginator-next', class: 'paginator-button', disabled: state.pageIndex === 9, ariaLabel: 'Next page', value: '›' }] }];
@@ -525,17 +577,22 @@ export class AstylarShowcaseComponent {
     ] }];
     if (family === 'progress-bar') return [{ type: 'showcase.material:linear-progress', id: 'progress-bar-primary', class: 'progress', role: 'progressbar', ariaValueMin: 0, ariaValueMax: 100, ariaValueNow: 64, data: { mode: 'determinate', progress: .64, 'indicator-color': this.store.tokens().primary, 'track-color': this.store.tokens().mode === 'dark' ? '#49454f' : '#e7e0ec' } }];
     if (family === 'progress-spinner') return [{ type: 'showcase.material:circular-progress', id: 'progress-spinner-primary', class: 'progress', role: 'progressbar', ariaValueMin: 0, ariaValueMax: 100, ariaValueNow: 64, data: { mode: 'determinate', progress: .64, 'indicator-color': this.store.tokens().primary, 'stroke-width': 10 } }];
-    if (['input', 'form-field', 'autocomplete'].includes(family)) return [{ type: 'div', id: `${family}-primary`, class: 'field-shell', children: [
+    if (['input', 'form-field', 'autocomplete'].includes(family)) {
+      const fieldFamily = family as 'form-field' | 'input' | 'autocomplete';
+      const fieldValue = this.fieldValues()[fieldFamily];
+      const empty = fieldValue.length === 0;
+      return [{ type: 'div', id: `${family}-primary`, class: 'field-shell', children: [
       fieldSurface(`${family}-control`),
-      { type: 'label' as const, id: `${family}-label`, class: `field-label${family === 'autocomplete' ? ' empty-field-label' : ''}`, for: `${family}-control`, textContent: family === 'autocomplete' ? 'City' : family === 'form-field' ? 'Project name' : 'Email' },
-      { type: 'div', id: `${family}-input-region`, class: 'field-input-region', children: [{ type: 'input', inputType: family === 'input' ? 'email' : 'text', id: `${family}-control`, class: 'field-control', value: family === 'autocomplete' ? '' : family === 'input' ? 'team@example.com' : 'Atlas', disabled: state.disabled, ariaLabel: family === 'autocomplete' ? 'City' : family === 'input' ? 'Email' : 'Project name', ariaInvalid: state.error, role: family === 'autocomplete' ? 'combobox' : undefined, ariaExpanded: family === 'autocomplete' ? state.open : undefined, ariaControls: family === 'autocomplete' ? 'field-options' : undefined, ariaAutocomplete: family === 'autocomplete' ? 'list' : undefined }] },
+      { type: 'label' as const, id: `${family}-label`, class: `field-label${empty ? ' empty-field-label' : ''}`, for: `${family}-control`, textContent: family === 'autocomplete' ? 'City' : family === 'form-field' ? 'Project name' : 'Email' },
+      { type: 'div', id: `${family}-input-region`, class: 'field-input-region', children: [{ type: 'input', inputType: family === 'input' ? 'email' : 'text', id: `${family}-control`, class: 'field-control', value: fieldValue, disabled: state.disabled, ariaLabel: family === 'autocomplete' ? 'City' : family === 'input' ? 'Email' : 'Project name', ariaInvalid: state.error, role: family === 'autocomplete' ? 'combobox' : undefined, ariaExpanded: family === 'autocomplete' ? state.open : undefined, ariaControls: family === 'autocomplete' ? 'field-options' : undefined, ariaAutocomplete: family === 'autocomplete' ? 'list' : undefined }] },
       ...(family === 'form-field' && !state.error ? [{ type: 'span' as const, id: 'form-field-hint', class: 'field-hint', textContent: 'Public label' }] : []),
       ...(family === 'form-field' && state.error ? [{ type: 'span' as const, id: 'form-field-error', class: 'field-error', textContent: 'Project name is required' }] : []),
       ...(family === 'autocomplete' && state.open ? [{ type: 'div' as const, id: 'field-options', class: 'select-popup autocomplete-popup', role: 'listbox', children: [
-        { type: 'div' as const, id: 'autocomplete-option-cape-town', class: 'select-option', role: 'option', textContent: 'Cape Town' },
-        { type: 'div' as const, id: 'autocomplete-option-johannesburg', class: 'select-option', role: 'option', textContent: 'Johannesburg' },
+        autocompleteOption('Cape Town', 'cape-town', fieldValue),
+        autocompleteOption('Johannesburg', 'johannesburg', fieldValue),
       ] }] : []),
     ] }];
+    }
     if (family === 'checkbox') return [{
       type: 'div', id: 'checkbox-primary', role: 'checkbox', tabindex: state.disabled ? -1 : 0,
       ariaLabel: 'Include archived', ariaChecked: state.selected, ariaDisabled: state.disabled,

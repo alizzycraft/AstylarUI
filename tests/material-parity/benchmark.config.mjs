@@ -117,6 +117,8 @@ export const materialFocusedRasterTargets = Object.freeze({
   stepper: Object.freeze({ element: 'stepper-primary', padding: 8, minimumSsim: .90 }),
 });
 export const materialInteractionFocusedRasterTargets = Object.freeze({
+  'form-field': Object.freeze({ element: 'form-field-primary', padding: 8, minimumSsim: .80, states: Object.freeze(['edit-empty-blur']) }),
+  input: Object.freeze({ element: 'input-primary', padding: 8, minimumSsim: .80, states: Object.freeze(['edit-empty-blur']) }),
   chips: Object.freeze({ element: 'chips-primary', padding: 8, minimumSsim: .70, states: Object.freeze(['activate', 'activate-alternate', 'activate-leave']) }),
   expansion: Object.freeze({ element: 'expansion-root', padding: 8, minimumSsim: .90 }),
   sort: Object.freeze({ element: 'sort-primary', padding: 8, minimumSsim: .80 }),
@@ -158,6 +160,9 @@ export const materialInteractionCases = materialFamilies.flatMap((family) => {
   const states = passiveFamilies.has(family) ? ['inspect'] : ['focus', 'hover', 'held', 'activate', 'activate-leave'];
   if (family === 'sort' || family === 'snack-bar') states.push('activate-twice');
   if (family === 'chips') states.push('activate-alternate');
+  if (family === 'autocomplete' || family === 'select') states.push('open-commit-reopen');
+  if (family === 'form-field' || family === 'input') states.push('edit-empty-blur');
+  if (['autocomplete', 'datepicker', 'timepicker', 'menu', 'dialog'].includes(family)) states.push('open-dismiss-outside');
   if (disabledFamilies.has(family)) states.push('disabled');
   if (selectableFamilies.has(family)) states.push('selected');
   if (errorFamilies.has(family)) states.push('error');

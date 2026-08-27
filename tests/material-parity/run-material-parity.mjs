@@ -439,6 +439,26 @@ async function performInteraction(page, mode, benchmarkCase) {
   await page.mouse.down();
   if (state === 'held') return async () => { await page.mouse.up(); };
   await page.mouse.up();
+  if (state === 'open-commit-reopen') {
+    await settleInteraction(page, mode);
+    const optionBox = await popupOptionBox(page, mode, family);
+    assert.ok(optionBox, `${mode} ${family} popup option is missing.`);
+    await page.mouse.click(optionBox.x + optionBox.width / 2, optionBox.y + optionBox.height / 2);
+    await settleInteraction(page, mode);
+    const reopenBox = await interactionTargetBox(page, mode, family, state);
+    assert.ok(reopenBox, `${mode} ${family} reopen target is missing.`);
+    await page.mouse.click(reopenBox.x + reopenBox.width / 2, reopenBox.y + reopenBox.height / 2);
+  }
+  if (state === 'edit-empty-blur') {
+    await page.keyboard.press('Control+A');
+    await page.keyboard.press('Backspace');
+    await settleInteraction(page, mode);
+    await page.mouse.click(10, 10);
+  }
+  if (state === 'open-dismiss-outside') {
+    await settleInteraction(page, mode);
+    await page.mouse.click(10, 10);
+  }
   if (state === 'activate-twice') {
     await settleInteraction(page, mode);
     const secondBox = await interactionTargetBox(page, mode, family, state);
@@ -464,6 +484,7 @@ async function interactionTargetBox(page, mode, family, state, alternate = false
     toolbar: 'toolbar-action', card: 'card-open', chips: 'chip-0', sort: 'sort-trigger',
     paginator: 'paginator-next', radio: 'radio-team', 'button-toggle': 'button-toggle-two',
     tabs: 'tab-activity', stepper: 'step-review', datepicker: 'datepicker-icon', timepicker: 'timepicker-icon',
+    'form-field': 'form-field-control', input: 'input-control', autocomplete: 'autocomplete-control', select: 'select-control',
   };
   const referenceTargets = {
     toolbar: '#toolbar-primary button', card: '#card-primary button', chips: '#chips-primary mat-chip-option:first-child',
@@ -474,6 +495,7 @@ async function interactionTargetBox(page, mode, family, state, alternate = false
     stepper: '#stepper-primary .mat-step-header:nth-of-type(2)',
     datepicker: '#datepicker-primary mat-datepicker-toggle button',
     timepicker: '#timepicker-primary mat-timepicker-toggle button',
+    'form-field': '#form-field-control', input: '#input-control', autocomplete: '#autocomplete-control', select: '#select-control',
   };
   if (mode === 'reference') {
     if (family === 'slider' && ['hover', 'held', 'activate-leave'].includes(state)) {
@@ -572,6 +594,20 @@ function compareEvents(reference, candidate, family, state) {
   const expected = contractEvents(relevant(reference));
   const actual = contractEvents(relevant(candidate));
   return { matches: JSON.stringify(expected) === JSON.stringify(actual), reference: expected, astylar: actual };
+}
+
+async function popupOptionBox(page, mode, family) {
+  if (mode === 'reference') {
+    const selector = family === 'autocomplete'
+      ? '.mat-mdc-autocomplete-panel mat-option:first-child'
+      : '.mat-mdc-select-panel mat-option:first-child';
+    return page.locator(selector).boundingBox();
+  }
+  const targetId = family === 'autocomplete' ? 'autocomplete-option-cape-town' : 'select-option-solo';
+  const measurement = await page.evaluate((id) => window.__ASTYLAR_MATERIAL_BENCHMARK__?.measure([id]), targetId);
+  const local = measurement?.elements?.[targetId]?.borderBox;
+  const canvas = await page.locator('canvas').boundingBox();
+  return local && canvas ? { x: canvas.x + local.left, y: canvas.y + local.top, width: local.width, height: local.height } : undefined;
 }
 
 function textTargets(family) {

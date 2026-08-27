@@ -55,10 +55,17 @@ test('keeps the app catalog and enforced static matrix complete', () => {
   assert.deepEqual(materialInteractionFocusedRasterTargets.chips,
     { element: 'chips-primary', padding: 8, minimumSsim: .70, states: ['activate', 'activate-alternate', 'activate-leave'] });
   assert.deepEqual(Object.keys(materialInteractionFocusedRasterTargets).sort(),
-    ['autocomplete', 'button-toggle', 'chips', 'datepicker', 'expansion', 'menu', 'select', 'slide-toggle', 'sort', 'timepicker', 'tooltip']);
+    ['autocomplete', 'button-toggle', 'chips', 'datepicker', 'expansion', 'form-field', 'input', 'menu', 'select', 'slide-toggle', 'sort', 'timepicker', 'tooltip']);
   assert.deepEqual(materialInteractionFocusedRasterTargets.tooltip,
     { element: 'tooltip-popup', padding: 4, minimumSsim: .14, states: ['hover', 'held'] });
   assert.ok(materialInteractionCases.some(({ family, state }) => family === 'chips' && state === 'activate-alternate'));
+  assert.ok(materialInteractionCases.some(({ family, state }) => family === 'autocomplete' && state === 'open-commit-reopen'));
+  assert.ok(materialInteractionCases.some(({ family, state }) => family === 'select' && state === 'open-commit-reopen'));
+  assert.ok(materialInteractionCases.some(({ family, state }) => family === 'form-field' && state === 'edit-empty-blur'));
+  assert.ok(materialInteractionCases.some(({ family, state }) => family === 'input' && state === 'edit-empty-blur'));
+  for (const family of ['autocomplete', 'datepicker', 'timepicker', 'menu', 'dialog']) {
+    assert.ok(materialInteractionCases.some((candidate) => candidate.family === family && candidate.state === 'open-dismiss-outside'));
+  }
   assert.ok(Object.keys(materialInteractionFocusedRasterTargets).every((family) => materialFamilies.includes(family)));
   assert.deepEqual(materialInteractionTextAlignmentTargets.expansion, ['expansion-content']);
   assert.equal(materialInteractionViewports.length, 2);
