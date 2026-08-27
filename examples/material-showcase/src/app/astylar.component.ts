@@ -269,7 +269,7 @@ export class AstylarShowcaseComponent {
       datepicker: ['datepicker-icon', 'datepicker-calendar-', 'datepicker-popup', 'datepicker-header', 'datepicker-month', 'datepicker-nav', 'datepicker-previous', 'datepicker-next', 'datepicker-grid', 'datepicker-cell', 'datepicker-day-', 'datepicker-selected', 'datepicker-year-grid', 'datepicker-year-'],
       timepicker: ['timepicker-icon', 'timepicker-clock-icon', 'timepicker-clock-hand', 'timepicker-gap', 'timepicker-active-line', 'timepicker-options', 'timepicker-option-', 'timepicker-scroll'],
       menu: ['menu-primary', 'menu-popup', 'menu-rename', 'menu-delete'],
-      dialog: ['dialog-panel', 'dialog-title', 'dialog-copy', 'dialog-actions', 'dialog-cancel', 'dialog-save'],
+      dialog: ['dialog-primary', 'dialog-panel', 'dialog-title', 'dialog-copy', 'dialog-actions', 'dialog-cancel', 'dialog-save'],
     };
     const prefixes = insidePrefixes[family];
     if (!prefixes || prefixes.some((prefix) => targetId.startsWith(prefix))) return;
@@ -366,10 +366,10 @@ export class AstylarShowcaseComponent {
         { selector: '#button-toggle-two', width: state.selected ? '80px' : '47px', borderWidth: '0 0 0 1px', borderStyle: 'solid', borderColor: '#79747e', borderRadius: `0 ${20 * theme.cornerScale}px ${20 * theme.cornerScale}px 0`, background: state.selected ? 'transparent' : theme.surfaceContainer },
         { selector: '.button-toggle-option.selected', color: '#4b4357' },
         { selector: '#menu-primary', width: '120px' },
-        { selector: '#menu-popup', position: 'absolute', top: '69px', left: '32px', width: '111px', height: '110px', boxSizing: 'border-box', padding: '8px 0', background: theme.mode === 'dark' ? '#211f26' : '#f3edf7', boxShadow: '0 2px 6px rgba(0,0,0,0.24)', zIndex: '50' },
-        { selector: '#menu-rename, #menu-delete', width: '111px', height: '48px', padding: '0 12px', borderWidth: '0', background: 'transparent', color: theme.onSurface, textAlign: 'left', fontSize: '14px' },
-        { selector: '#menu-rename:hover, #menu-delete:hover', background: mixHex(theme.mode === 'dark' ? '#211f26' : '#f3edf7', theme.onSurface, .08) },
-        { selector: '#menu-rename:active, #menu-delete:active', background: mixHex(theme.mode === 'dark' ? '#211f26' : '#f3edf7', theme.onSurface, .12) },
+        { selector: '#menu-popup', position: 'absolute', top: '69px', left: '32px', width: '111px', height: '112px', boxSizing: 'border-box', padding: '8px 0', borderRadius: '4px', background: '#f3edf7', boxShadow: '0 2px 6px rgba(0,0,0,0.24)', zIndex: '50' },
+        { selector: '#menu-rename, #menu-delete', width: '111px', height: '48px', padding: '0 12px', borderWidth: '0', background: 'transparent', color: '#1d1b20', textAlign: 'left', fontSize: '14px' },
+        { selector: '#menu-rename:hover, #menu-delete:hover', background: mixHex('#f3edf7', '#1d1b20', .08) },
+        { selector: '#menu-rename:active, #menu-delete:active', background: mixHex('#f3edf7', '#1d1b20', .12) },
         { selector: '#bottom-sheet-primary', width: '169px' },
         { selector: '#dialog-primary', width: '124px' },
         { selector: '#snack-bar-primary', width: '145px' },
@@ -579,24 +579,26 @@ export class AstylarShowcaseComponent {
         { selector: '.range-plugin-layer', width: '100%', height: '48px' },
         { selector: '.progress', width: family === 'progress-spinner' ? '100px' : '100%', height: family === 'progress-spinner' ? '100px' : '8px' },
         { selector: '.modal-overlay', position: 'fixed', top: '0', left: '0', width: '100%', height: '100%', boxSizing: 'border-box', padding: '32px', background: 'rgba(0,0,0,0.32)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: '1000' },
-        { selector: '.dialog-panel', width: '280px', minHeight: '160px', boxSizing: 'border-box', padding: '24px', borderRadius: `${28 * theme.cornerScale}px`, background: theme.mode === 'dark' ? '#211f26' : '#fff7ff', color: theme.onSurface, display: 'flex', flexDirection: 'column' },
+        { selector: '.dialog-panel', width: '240px', height: '140px', padding: '24px', borderRadius: `${28 * theme.cornerScale}px`, background: theme.mode === 'dark' ? '#211f26' : '#fff7ff', color: theme.onSurface, display: 'flex', flexDirection: 'column' },
         { selector: '.dialog-title', fontSize: '24px', fontWeight: '400' },
         { selector: '.dialog-copy', marginTop: '16px', fontSize: '14px' },
         { selector: '.dialog-actions', height: '40px', marginTop: '16px', display: 'flex', justifyContent: 'flex-end', gap: '8px' },
-        { selector: '.dialog-action', width: '72px', height: '40px', borderWidth: '0', borderRadius: '20px', background: 'transparent', color: theme.primary, fontWeight: '500' },
-        { selector: '.dialog-action.primary', background: theme.primary, color: theme.onPrimary },
-        { selector: '.dialog-action:hover', background: mixHex(theme.mode === 'dark' ? '#211f26' : '#fff7ff', theme.primary, .08) },
-        { selector: '.dialog-action:active', background: mixHex(theme.mode === 'dark' ? '#211f26' : '#fff7ff', theme.primary, .12) },
-        { selector: '.dialog-action.primary:hover', background: mixHex(theme.primary, theme.onPrimary, .08) },
-        { selector: '.dialog-action.primary:active', background: mixHex(theme.primary, theme.onPrimary, .12) },
+        { selector: '.dialog-action', width: '64px', height: '40px', borderWidth: '0', borderRadius: '20px', background: 'transparent', color: theme.mode === 'dark' ? '#d5baff' : '#7d00fa', fontWeight: '500' },
+        { selector: '.dialog-action.primary', width: '80px', background: theme.mode === 'dark' ? '#d5baff' : '#7d00fa', color: theme.mode === 'dark' ? '#381e72' : '#ffffff' },
+        { selector: '.dialog-action:hover', background: mixHex(theme.mode === 'dark' ? '#211f26' : '#fff7ff', theme.mode === 'dark' ? '#d5baff' : '#7d00fa', .08) },
+        { selector: '.dialog-action:active', background: mixHex(theme.mode === 'dark' ? '#211f26' : '#fff7ff', theme.mode === 'dark' ? '#d5baff' : '#7d00fa', .12) },
+        { selector: '.dialog-action.primary:hover', background: mixHex(theme.mode === 'dark' ? '#d5baff' : '#7d00fa', theme.mode === 'dark' ? '#381e72' : '#ffffff', .08) },
+        { selector: '.dialog-action.primary:active', background: mixHex(theme.mode === 'dark' ? '#d5baff' : '#7d00fa', theme.mode === 'dark' ? '#381e72' : '#ffffff', .12) },
         { selector: '.bottom-sheet-overlay', alignItems: 'flex-end', padding: '0' },
-        { selector: '.bottom-sheet-panel', width: '720px', height: '128px', boxSizing: 'border-box', padding: '16px', borderRadius: `${28 * theme.cornerScale}px ${28 * theme.cornerScale}px 0 0`, background: theme.surface, color: theme.onSurface },
-        { selector: '.bottom-sheet-option', width: '100%', height: '48px', boxSizing: 'border-box', padding: '0 16px', borderWidth: '0', borderRadius: `${28 * theme.cornerScale}px`, background: 'transparent', color: theme.onSurface, textAlign: 'left', fontSize: '14px' },
+        { selector: '.bottom-sheet-panel', width: '438px', height: '110px', padding: '16px', borderRadius: `${28 * theme.cornerScale}px ${28 * theme.cornerScale}px 0 0`, background: theme.surface, color: theme.onSurface, display: 'flex', flexDirection: 'column', transform: 'translate(0, 146px)' },
+        { selector: '.bottom-sheet-option', width: '100%', height: '60px', padding: '0 11px', borderWidth: '0', borderRadius: `${28 * theme.cornerScale}px`, background: 'transparent', color: theme.onSurface, textAlign: 'left', fontSize: '14px' },
+        { selector: '#bottom-sheet-dismiss', background: mixHex(theme.surface, theme.onSurface, .08) },
         { selector: '.bottom-sheet-option:focus', color: theme.onSurface, background: mixHex(theme.surface, theme.onSurface, .12) },
-        { selector: '.snack-surface', position: 'fixed', left: '24px', bottom: '24px', width: '360px', minHeight: '48px', boxSizing: 'border-box', padding: '10px 18px', borderRadius: '4px', background: '#322f35', color: '#ffffff', display: 'flex', justifyContent: 'space-between', alignItems: 'center', zIndex: '1000' },
+        { selector: '.snack-overlay', position: 'fixed', left: '0', bottom: '0', width: '100%', height: '56px', display: 'flex', justifyContent: 'center', alignItems: 'flex-end', paddingBottom: '8px', transform: 'translate(0, 159px)', zIndex: '1000' },
+        { selector: '.snack-surface', width: '294px', height: '41px', padding: '0 18px', borderRadius: '4px', background: '#322f35', color: '#ffffff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' },
         { selector: '.overlay-dismiss', width: '88px', height: '40px', borderWidth: '0', background: 'transparent', color: theme.primary, fontWeight: '500' },
         { selector: '.material-button:focus', borderWidth: '0', boxShadow: 'none' },
-        { selector: '#tooltip-popup', width: '91px', height: '20px', marginTop: '-8px', marginBottom: '-28px', marginLeft: '16px', padding: '0 8px', borderWidth: '0', borderRadius: '4px', background: '#322f35', color: '#ffffff', display: 'flex', alignItems: 'center', alignSelf: 'flex-start', flexShrink: '0', fontSize: '12px', whiteSpace: 'nowrap', transform: 'translate(-183px, -81px)', zIndex: '1000' },
+        { selector: '#tooltip-popup', width: '91px', height: '20px', marginTop: '-10px', marginBottom: '-28px', marginLeft: '17px', padding: '0 8px', borderWidth: '0', borderRadius: '4px', background: '#322f35', color: '#ffffff', display: 'flex', alignItems: 'center', alignSelf: 'flex-start', flexShrink: '0', fontSize: '12px', whiteSpace: 'nowrap', transform: 'translate(-183px, -81px)', zIndex: '1000' },
       ],
     };
   }
@@ -725,15 +727,21 @@ export class AstylarShowcaseComponent {
     if (['dialog', 'bottom-sheet', 'snack-bar'].includes(family)) {
       const label = family === 'dialog' ? 'Open dialog' : family === 'bottom-sheet' ? 'Open bottom sheet' : 'Show snackbar';
       const overlay = family === 'snack-bar'
-        ? { type: 'div' as const, id: `${family}-overlay`, class: 'snack-surface', role: 'status', ariaLive: 'polite' as const, ariaAtomic: true, children: [
-          { type: 'span' as const, id: `${family}-title`, textContent: 'Project saved' },
-          { type: 'button' as const, id: `${family}-dismiss`, class: 'overlay-dismiss', value: 'UNDO' },
+        ? { type: 'div' as const, id: `${family}-overlay`, class: 'snack-overlay', children: [
+          { type: 'div' as const, id: `${family}-surface`, class: 'snack-surface', role: 'status', ariaLive: 'polite' as const, ariaAtomic: true, children: [
+            { type: 'span' as const, id: `${family}-title`, textContent: 'Project saved' },
+            { type: 'button' as const, id: `${family}-dismiss`, class: 'overlay-dismiss', value: 'UNDO' },
+          ] },
         ] }
-        : { type: 'dialog' as const, id: `${family}-overlay`, class: `modal-overlay ${family === 'bottom-sheet' ? 'bottom-sheet-overlay' : ''}`, open: true, modal: true, ariaLabel: label, children: [
-          { type: 'section' as const, id: `${family}-panel`, class: family === 'bottom-sheet' ? 'bottom-sheet-panel' : 'dialog-panel', children: family === 'bottom-sheet' ? [
+        : family === 'bottom-sheet'
+          ? { type: 'div' as const, id: `${family}-overlay`, class: 'modal-overlay bottom-sheet-overlay', role: 'dialog', ariaLabel: label, children: [
+            { type: 'section' as const, id: `${family}-panel`, class: 'bottom-sheet-panel', children: [
             { type: 'button' as const, id: 'bottom-sheet-dismiss', class: 'bottom-sheet-option', autofocus: true, value: 'Share' },
             { type: 'button' as const, id: 'bottom-sheet-copy', class: 'bottom-sheet-option', value: 'Copy link' },
-          ] : [
+            ] },
+          ] }
+          : { type: 'dialog' as const, id: `${family}-overlay`, class: 'modal-overlay', open: true, modal: true, ariaLabel: label, children: [
+          { type: 'section' as const, id: `${family}-panel`, class: 'dialog-panel', children: [
             { type: 'h2' as const, id: `${family}-title`, class: 'dialog-title', textContent: 'Confirm action' },
             { type: 'p' as const, id: `${family}-copy`, class: 'dialog-copy', textContent: 'Save Project Atlas?' },
             { type: 'div' as const, id: 'dialog-actions', class: 'dialog-actions', children: [

@@ -104,6 +104,11 @@ describe('AstylarShowcaseComponent', () => {
 
     const bottomSheet = build(component, 'bottom-sheet');
     expect(find(bottomSheet, 'bottom-sheet-copy')?.['value']).toBe('Copy link');
+    expect(find(bottomSheet, 'bottom-sheet-overlay')).toEqual(jasmine.objectContaining({
+      type: 'div',
+      role: 'dialog',
+    }));
+    expect(find(bottomSheet, 'bottom-sheet-overlay')?.['modal']).toBeUndefined();
   });
 
   it('activates sort ascending before alternating its direction', () => {
@@ -247,6 +252,10 @@ describe('AstylarShowcaseComponent', () => {
     click('snack-bar-primary', event);
     click('snack-bar-primary', event);
     expect(store.state().open).toBeTrue();
+    expect(find(build(component, 'snack-bar'), 'snack-bar-surface')).toEqual(jasmine.objectContaining({
+      role: 'status',
+      ariaLive: 'polite',
+    }));
     expect(find(build(component, 'snack-bar'), 'snack-bar-dismiss')).toBeDefined();
   });
 });
