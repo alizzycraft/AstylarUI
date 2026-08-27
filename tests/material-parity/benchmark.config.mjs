@@ -161,6 +161,7 @@ export const materialInteractionCases = materialFamilies.flatMap((family) => {
   if (family === 'sort' || family === 'snack-bar') states.push('activate-twice');
   if (family === 'chips') states.push('activate-alternate');
   if (family === 'autocomplete' || family === 'select') states.push('open-commit-reopen');
+  if (['autocomplete', 'select', 'datepicker', 'timepicker', 'menu', 'dialog'].includes(family)) states.push('open-hover-content');
   if (family === 'form-field' || family === 'input') states.push('edit-empty-blur');
   if (['autocomplete', 'datepicker', 'timepicker', 'menu', 'dialog'].includes(family)) states.push('open-dismiss-outside');
   if (disabledFamilies.has(family)) states.push('disabled');

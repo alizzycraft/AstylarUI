@@ -457,6 +457,7 @@ export class StyleService {
         element: DOMElement,
         styles: StyleRule[],
         state: 'hover' | 'active' | 'focus',
+        stateElements?: DOMElement | readonly DOMElement[],
     ): StyleRule | undefined {
         const winners = new Map<keyof StyleRule, {
             specificity: number;
@@ -469,19 +470,28 @@ export class StyleService {
             value: unknown;
         }>();
         const pseudo = new RegExp(`:${state}(?![\\w-])`, 'g');
+        const activeStateElements = stateElements
+            ? Array.isArray(stateElements) ? stateElements : [stateElements]
+            : [];
 
         styles.forEach((rule, sourceOrder) => {
             if (!this.matchesMediaConditions(rule)) return;
             rule.selector.split(',').map((selector) => selector.trim()).forEach((selector) => {
-                const targetCompound = selector.split(/[>+~]|\s+/).at(-1) ?? '';
-                if (!pseudo.test(targetCompound)) {
+                const parsed = this.parseRelationalSelector(selector);
+                const pseudoCompoundIndex = parsed?.compounds.findIndex((compound) => pseudo.test(compound)) ?? -1;
+                pseudo.lastIndex = 0;
+                if (pseudoCompoundIndex < 0 || (activeStateElements.length === 0 && pseudoCompoundIndex !== (parsed?.compounds.length ?? 0) - 1)) {
                     pseudo.lastIndex = 0;
                     return;
                 }
-                pseudo.lastIndex = 0;
                 const baseSelector = selector.replace(pseudo, '');
                 pseudo.lastIndex = 0;
-                const baseSpecificity = this.getMatchingSpecificity(element, baseSelector);
+                const sourceSpecificities = activeStateElements.map((stateElement) => this.getMatchingSpecificity(
+                    element, baseSelector, { compoundIndex: pseudoCompoundIndex, element: stateElement },
+                )).filter((specificity): specificity is number => specificity !== null);
+                const baseSpecificity = activeStateElements.length > 0
+                    ? sourceSpecificities.length > 0 ? Math.max(...sourceSpecificities) : null
+                    : this.getMatchingSpecificity(element, baseSelector);
                 if (baseSpecificity === null) return;
                 const specificity = baseSpecificity + 10;
                 for (const [property, value] of Object.entries(rule)) {
@@ -543,7 +553,11 @@ export class StyleService {
         return match[2] === 'em' || match[2] === 'rem' ? amount * 16 : amount;
     }
 
-    private getMatchingSpecificity(element: DOMElement, selector: string): number | null {
+    private getMatchingSpecificity(
+        element: DOMElement,
+        selector: string,
+        requiredMatch?: { compoundIndex: number; element: DOMElement },
+    ): number | null {
         const normalizedSelector = selector.trim();
         if (!normalizedSelector) {
             return null;
@@ -557,6 +571,7 @@ export class StyleService {
 
         const { compounds, combinators } = parsedSelector;
         let matchedElement: DOMElement | undefined = element;
+        if (requiredMatch?.compoundIndex === compounds.length - 1 && requiredMatch.element !== matchedElement) return null;
         let specificity = this.getCompoundSpecificity(matchedElement, compounds[compounds.length - 1]);
         if (specificity === null) return null;
 
@@ -567,16 +582,17 @@ export class StyleService {
 
             if (combinator === 'child') {
                 relatedElement = this.ancestry.getParent(matchedElement);
-                if (relatedElement) {
+                if (relatedElement && (!requiredMatch || requiredMatch.compoundIndex !== index || requiredMatch.element === relatedElement)) {
                     relatedSpecificity = this.getCompoundSpecificity(relatedElement, compounds[index]);
                 }
             } else if (combinator === 'adjacent') {
                 relatedElement = this.getPreviousSibling(matchedElement);
-                if (relatedElement) {
+                if (relatedElement && (!requiredMatch || requiredMatch.compoundIndex !== index || requiredMatch.element === relatedElement)) {
                     relatedSpecificity = this.getCompoundSpecificity(relatedElement, compounds[index]);
                 }
             } else if (combinator === 'general-sibling') {
                 for (const sibling of this.getPreviousSiblings(matchedElement)) {
+                    if (requiredMatch?.compoundIndex === index && requiredMatch.element !== sibling) continue;
                     const siblingSpecificity = this.getCompoundSpecificity(sibling, compounds[index]);
                     if (siblingSpecificity !== null) {
                         relatedElement = sibling;
@@ -587,6 +603,10 @@ export class StyleService {
             } else {
                 relatedElement = this.ancestry.getParent(matchedElement);
                 while (relatedElement) {
+                    if (requiredMatch?.compoundIndex === index && requiredMatch.element !== relatedElement) {
+                        relatedElement = this.ancestry.getParent(relatedElement);
+                        continue;
+                    }
                     relatedSpecificity = this.getCompoundSpecificity(relatedElement, compounds[index]);
                     if (relatedSpecificity !== null) break;
                     relatedElement = this.ancestry.getParent(relatedElement);

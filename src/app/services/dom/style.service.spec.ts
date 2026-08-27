@@ -336,4 +336,21 @@ describe('StyleService cascade', () => {
     }));
     expect(service.findInteractionStyleForElement(element, styles, 'focus')).toBeUndefined();
   });
+
+  it('resolves a live pseudo-state on an ancestor onto the selected descendant', () => {
+    const parent: DOMElement = { type: 'div', id: 'control', class: 'control' };
+    const layer: DOMElement = { type: 'span', id: 'state-layer', class: 'state-layer' };
+    parent.children = [layer];
+    ancestry.setParent(layer, parent);
+    const styles: StyleRule[] = [
+      { selector: '.control:hover .state-layer', background: '#6750a414' },
+      { selector: '.state-layer:hover', color: '#ffffff' },
+    ];
+
+    expect(service.findInteractionStyleForElement(layer, styles, 'hover', parent)).toEqual(jasmine.objectContaining({
+      background: '#6750a414',
+    }));
+    expect(service.findInteractionStyleForElement(layer, styles, 'hover', parent)?.color).toBeUndefined();
+    expect(service.findInteractionStyleForElement(layer, styles, 'hover', layer)?.color).toBe('#ffffff');
+  });
 });

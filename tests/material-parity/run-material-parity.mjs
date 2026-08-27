@@ -459,6 +459,12 @@ async function performInteraction(page, mode, benchmarkCase) {
     await settleInteraction(page, mode);
     await page.mouse.click(10, 10);
   }
+  if (state === 'open-hover-content') {
+    await settleInteraction(page, mode);
+    const contentBox = await popupHoverBox(page, mode, family);
+    assert.ok(contentBox, `${mode} ${family} popup hover target is missing.`);
+    await page.mouse.move(contentBox.x + contentBox.width / 2, contentBox.y + contentBox.height / 2);
+  }
   if (state === 'activate-twice') {
     await settleInteraction(page, mode);
     const secondBox = await interactionTargetBox(page, mode, family, state);
@@ -498,6 +504,9 @@ async function interactionTargetBox(page, mode, family, state, alternate = false
     'form-field': '#form-field-control', input: '#input-control', autocomplete: '#autocomplete-control', select: '#select-control',
   };
   if (mode === 'reference') {
+    if (family === 'checkbox' && ['hover', 'held', 'activate-leave'].includes(state)) {
+      return page.locator('#checkbox-primary .mdc-checkbox').boundingBox();
+    }
     if (family === 'slider' && ['hover', 'held', 'activate-leave'].includes(state)) {
       return page.locator('#slider-primary').locator('xpath=ancestor::mat-slider')
         .locator('mat-slider-visual-thumb').nth(1).boundingBox();
@@ -506,6 +515,12 @@ async function interactionTargetBox(page, mode, family, state, alternate = false
       ? '#chips-primary mat-chip-option:nth-child(2)'
       : referenceTargets[family] ?? `#${family}-primary`;
     return page.locator(selector).boundingBox();
+  }
+  if (family === 'checkbox' && ['hover', 'held', 'activate-leave'].includes(state)) {
+    const measurement = await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__?.measure(['checkbox-box']));
+    const local = measurement?.elements?.['checkbox-box']?.borderBox;
+    const canvas = await page.locator('canvas').boundingBox();
+    return local && canvas ? { x: canvas.x + local.left, y: canvas.y + local.top, width: local.width, height: local.height } : undefined;
   }
   if (family === 'slider' && ['hover', 'held', 'activate-leave'].includes(state)) {
     const result = await page.evaluate(() => ({
@@ -608,6 +623,46 @@ async function popupOptionBox(page, mode, family) {
   const local = measurement?.elements?.[targetId]?.borderBox;
   const canvas = await page.locator('canvas').boundingBox();
   return local && canvas ? { x: canvas.x + local.left, y: canvas.y + local.top, width: local.width, height: local.height } : undefined;
+}
+
+async function popupHoverBox(page, mode, family) {
+  if (mode === 'reference') {
+    const selectors = {
+      autocomplete: '.mat-mdc-autocomplete-panel mat-option:first-child',
+      select: '.mat-mdc-select-panel mat-option:first-child',
+      datepicker: '.mat-calendar-body-cell:not(.mat-calendar-body-disabled)',
+      timepicker: '.mat-timepicker-panel mat-option:first-child',
+      menu: '.mat-mdc-menu-panel button:first-child',
+      dialog: 'mat-dialog-container button:first-child',
+    };
+    return page.locator(selectors[family]).first().boundingBox();
+  }
+  const targetIds = {
+    autocomplete: 'autocomplete-option-cape-town',
+    select: 'select-option-solo',
+    datepicker: 'datepicker-day-2',
+    timepicker: 'timepicker-option-0',
+    menu: 'menu-rename',
+    dialog: 'dialog-panel',
+  };
+  const targetId = targetIds[family];
+  const measurement = await page.evaluate((id) => window.__ASTYLAR_MATERIAL_BENCHMARK__?.measure([id]), targetId);
+  const local = measurement?.elements?.[targetId]?.borderBox;
+  const canvas = await page.locator('canvas').boundingBox();
+  if (local && canvas) {
+    if (family === 'dialog') return {
+      x: canvas.x + local.left + local.width - 140,
+      y: canvas.y + local.top + local.height - 40,
+      width: 1,
+      height: 1,
+    };
+    return { x: canvas.x + local.left, y: canvas.y + local.top, width: local.width, height: local.height };
+  }
+  if (family === 'dialog') {
+    const viewport = page.viewportSize();
+    return viewport ? { x: viewport.width / 2, y: viewport.height / 2 + 60, width: 1, height: 1 } : undefined;
+  }
+  return undefined;
 }
 
 function textTargets(family) {

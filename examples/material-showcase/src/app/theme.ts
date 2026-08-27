@@ -59,6 +59,12 @@ export function mixHex(background: string, foreground: string, foregroundAmount:
   return `#${channel(1)}${channel(3)}${channel(5)}`;
 }
 
+export function alphaHex(color: string, alpha: number): string {
+  const clamped = Math.max(0, Math.min(1, alpha));
+  const channel = (index: number) => Number.parseInt(color.slice(index, index + 2), 16);
+  return `rgba(${channel(1)},${channel(3)},${channel(5)},${clamped})`;
+}
+
 export function contrastRatio(first: string, second: string): number {
   const light = Math.max(relativeLuminance(first), relativeLuminance(second));
   const dark = Math.min(relativeLuminance(first), relativeLuminance(second));

@@ -158,6 +158,11 @@ class AstylarRenderer {
   private readonly semantics = new WeakMap<Scene, AstylarSemanticBridge>();
   private readonly visualReconciliation = new WeakMap<Scene, AstylarVisualReconciler>();
   private readonly surfaceHandles = new WeakMap<Scene, AstylarSurface>();
+  private readonly interactionPseudoSources: Record<'hover' | 'active' | 'focus', Set<string>> = {
+    hover: new Set<string>(),
+    active: new Set<string>(),
+    focus: new Set<string>(),
+  };
   private readonly diagnostics: AstylarDiagnostics = inject(AstylarDiagnostics);
   private readonly documentRecovery = inject(AstylarDocumentRecovery);
   private readonly pluginHost = inject(AstylarPluginHost);
@@ -1011,7 +1016,16 @@ class AstylarRenderer {
     if (candidates.length === 0 && !siteData) return undefined;
 
     const findPseudo = (state: 'hover' | 'active' | 'focus') => siteData
-      ? this.styleService.findInteractionStyleForElement(element, siteData.styles, state)
+      ? this.styleService.findInteractionStyleForElement(
+          element,
+          siteData.styles,
+          state,
+          [...this.interactionPseudoSources[state]].map((sourceId) => {
+            const sourceInput = this.inputElementService.getInputElement(sourceId);
+            const sourceMesh = this.elementManager.elementsMap.get(sourceId);
+            return sourceInput?.element ?? sourceMesh?.metadata?.element as DOMElement | undefined;
+          }).filter((source): source is DOMElement => !!source),
+        )
       : candidates.reduce<import('../app/types/style-rule').StyleRule | undefined>(
           (merged, candidate) => candidate[state] ? { ...merged, ...candidate[state] } : merged,
           undefined,
@@ -1090,14 +1104,27 @@ class AstylarRenderer {
     enabled: boolean,
     siteData?: SiteData,
   ): void {
+    const sources = this.interactionPseudoSources[state];
+    if (enabled) sources.add(elementId);
+    else sources.delete(elementId);
+    for (const candidateId of this.elementManager.elementsMap.keys()) {
+      this.applyElementPseudoState(candidateId, state, siteData);
+    }
+  }
+
+  private applyElementPseudoState(
+    elementId: string,
+    state: 'hover' | 'active' | 'focus',
+    siteData?: SiteData,
+  ): void {
     const mesh = this.elementManager.elementsMap.get(elementId);
     const styles = this.getElementInteractionStyles(elementId, siteData);
-    if (!mesh || !styles?.[state]) return;
+    if (!mesh || !styles) return;
     mesh.metadata = mesh.metadata ?? {};
     const stateKey = state === 'hover'
       ? 'astylarHoverState'
       : state === 'active' ? 'astylarActiveState' : 'astylarFocusState';
-    mesh.metadata[stateKey] = enabled;
+    mesh.metadata[stateKey] = !!styles[state];
     if (!Object.prototype.hasOwnProperty.call(mesh.metadata, 'astylarInteractionBaseMaterial')) {
       mesh.metadata.astylarInteractionBaseMaterial = mesh.material;
     }
