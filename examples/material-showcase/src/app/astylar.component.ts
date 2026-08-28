@@ -403,6 +403,11 @@ export class AstylarShowcaseComponent {
         { selector: '.select-option:active', background: '#d8d2d8' },
         { selector: '.autocomplete-popup', top: `${theme.density === 0 ? 58 : 50}px` },
         { selector: '.autocomplete-popup .select-option', padding: `${theme.density === 0 ? 20 : 16}px 16px` },
+        ...(theme.density <= -5 ? [
+          { selector: '.autocomplete-popup', top: '47px', height: '102px', padding: '0' },
+          { selector: '.autocomplete-popup .select-option', padding: '11px 16px' },
+          { selector: '#autocomplete-label', display: 'none' },
+        ] : []),
         { selector: '.select-check', position: 'absolute', top: '14px', right: '16px', color: '#49454f' },
         { selector: '.picker-control.open', boxShadow: 'none' },
         { selector: '.picker-clock', position: 'absolute', top: `${theme.density === 0 ? 8 : 4}px`, right: '4px', width: '40px', height: '40px', boxSizing: 'border-box', padding: '0', borderWidth: '0', borderRadius: '20px', background: 'transparent', color: theme.mode === 'dark' && state.open ? '#49454f' : theme.onSurface, fontSize: '24px', zIndex: '4' },
