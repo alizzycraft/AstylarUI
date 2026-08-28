@@ -581,6 +581,10 @@ export class AstylarShowcaseComponent {
         { selector: '#checkbox-primary:active .checkbox-state-layer', background: alphaHex(theme.primary, .12) },
         { selector: '.checkbox-box', position: 'relative', zIndex: '2', width: '18px', height: '18px', flexShrink: '0', boxSizing: 'border-box', borderWidth: '2px', borderStyle: 'solid', borderColor: state.selected ? theme.primary : theme.onSurface, borderRadius: '2px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: state.selected ? theme.primary : 'transparent' },
         { selector: '.checkbox-label', position: 'relative', zIndex: '2', whiteSpace: 'nowrap', color: theme.onSurface, fontSize: '14px', verticalAlign: 'middle' },
+        ...(theme.typographyScale > 1 ? [{
+          selector: '.checkbox-label, #button-toggle-one-label',
+          transform: 'translate(0, 1px)',
+        }] : []),
         { selector: '.range', width: '100%', height: '48px', cursor: 'pointer' },
         { selector: '.range-stack', position: 'relative', width: '100%', height: '48px' },
         { selector: '.range-layer', position: 'absolute', top: '0', left: '0', width: '100%', height: '48px' },
