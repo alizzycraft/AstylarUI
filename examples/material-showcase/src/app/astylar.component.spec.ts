@@ -87,6 +87,14 @@ describe('AstylarShowcaseComponent', () => {
     expect(style(chips, '#chips-primary')?.['gap']).toBe('8px');
     expect(find(chips, 'chip-0-mark')?.['type']).toBe('showcase.material:check-mark');
 
+    store.setTheme(MATERIAL_THEME_PROFILES.contrast);
+    const compactChips = build(component, 'chips');
+    expect(style(compactChips, '.chip')?.['height']).toBe('24px');
+    const compactToggle = build(component, 'button-toggle');
+    expect(style(compactToggle, '#button-toggle-primary')?.['height']).toBe('26px');
+    expect(style(compactToggle, '.button-toggle-option')?.['height']).toBe('24px');
+    store.setTheme(MATERIAL_THEME_PROFILES.light);
+
     const slider = build(component, 'slider');
     expect(find(slider, 'slider-start')).toEqual(jasmine.objectContaining({ min: '0', max: '50', value: '30' }));
     expect(find(slider, 'slider-primary')).toEqual(jasmine.objectContaining({ min: '50', max: '100', value: '65' }));
@@ -134,13 +142,20 @@ describe('AstylarShowcaseComponent', () => {
   });
 
   it('restores empty field labels and floats them only while focused', () => {
-    const { component } = createComponent('form-field');
+    const { component, store } = createComponent('form-field');
     const handlers = eventHandlers(component);
-    handlers['form-field-control']['input']({ targetId: 'form-field-control', value: '' } as AstylarEvent);
+    store.setTheme(MATERIAL_THEME_PROFILES.contrast);
 
     let site = build(component, 'form-field');
+    expect(find(site, 'form-field-label')?.['class']).toContain('compact-filled-label');
+    expect(find(site, 'form-field-input-region')?.['class']).toContain('compact-filled-input-region');
+
+    handlers['form-field-control']['input']({ targetId: 'form-field-control', value: '' } as AstylarEvent);
+
+    site = build(component, 'form-field');
     expect(find(site, 'form-field-control')?.['value']).toBe('');
     expect(find(site, 'form-field-label')?.['class']).toContain('empty-field-label');
+    expect(find(site, 'form-field-label')?.['class']).not.toContain('compact-filled-label');
     expect(style(site, '.field-label.empty-field-label')?.['fontSize']).toBe('16px');
 
     handlers['form-field-control']['focus']({ targetId: 'form-field-control' } as AstylarEvent);
