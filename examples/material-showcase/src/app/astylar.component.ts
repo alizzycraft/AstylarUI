@@ -382,7 +382,10 @@ export class AstylarShowcaseComponent {
         { selector: '.outlined', background: theme.surfaceContainer, color: theme.primary, borderWidth: '1px', borderStyle: 'solid', borderColor: '#79747e' },
         { selector: '.field', width: '100%', height: '56px', padding: '12px 16px', borderWidth: '1px', borderStyle: 'solid', borderColor: '#79747e', borderRadius: `${4 * theme.cornerScale}px`, background: theme.surface, color: theme.mode === 'dark' ? '#e6e1e5' : '#1d1b20' },
         { selector: '.field-shell', position: 'relative', width: '100%', height: `${theme.density === 0 ? 78 : theme.density <= -5 ? 62 : 70}px`, alignSelf: 'flex-start', boxSizing: 'border-box', background: 'transparent' },
-        { selector: '.field-surface', position: 'absolute', top: '0', left: '0', width: '100%', height: `${theme.density === 0 ? 56 : theme.density <= -5 ? 35 : 48}px`, boxSizing: 'border-box', borderRadius: `${4 * theme.cornerScale}px`, background: '#e8e0eb', boxShadow: '0 1px 0 #49454f' },
+        { selector: '.field-surface', position: 'absolute', top: '0', left: '0', width: '100%', height: `${theme.density === 0 ? 56 : theme.density <= -5 ? 35 : 48}px`, boxSizing: 'border-box', borderRadius: `${4 * theme.cornerScale}px`, background: theme.mode === 'dark' && state.disabled ? mixHex(theme.surfaceContainer, theme.onSurface, .04) : '#e8e0eb', boxShadow: `0 1px 0 ${theme.mode === 'dark' && state.disabled ? '#938f99' : '#49454f'}` },
+        ...(theme.mode === 'dark' && state.disabled ? [
+          { selector: '.field-label, .picker-clock', color: '#79747e' },
+        ] : []),
         { selector: '.field-surface.active', boxShadow: `0 2px 0 ${state.error ? theme.error : theme.primary}` },
         { selector: '.field-label', position: 'absolute', top: '8px', left: '16px', color: state.error ? theme.error : theme.density <= -5 ? '#000000' : '#49454f', fontSize: '12px', letterSpacing: '.4px', verticalAlign: 'middle' },
         { selector: '.field-label.empty-field-label', top: `${emptyFieldActive ? 8 : theme.density === 0 ? 20 : 16}px`, color: state.error ? theme.error : emptyFieldActive ? theme.primary : '#1d1b20', fontSize: emptyFieldActive ? '12px' : '16px', letterSpacing: emptyFieldActive ? '.4px' : '.65px' },
@@ -393,7 +396,8 @@ export class AstylarShowcaseComponent {
         { selector: '#timepicker-input-region', right: '48px', width: 'auto' },
         { selector: '.field-control', position: 'relative', width: '100%', height: '24px', boxSizing: 'border-box', padding: '0', borderWidth: '0', borderRadius: '0', background: 'transparent', boxShadow: 'none', color: '#1d1b20', fontSize: '16px' },
         { selector: '.field-control:focus', borderWidth: '0', color: '#1d1b20', boxShadow: 'none' },
-        { selector: '.select-control', paddingRight: '32px', cursor: 'pointer', boxShadow: 'none' },
+        { selector: '.select-control, .select-control:focus', paddingRight: '32px', cursor: 'pointer', boxShadow: 'none', color: 'transparent' },
+        { selector: '.select-value', position: 'absolute', top: '0', left: '16px', height: '24px', color: state.disabled ? '#79747e' : '#1d1b20', fontSize: '16px', verticalAlign: 'middle' },
         { selector: '.select-caret', position: 'absolute', top: `${theme.density === 0 ? 18 : 8}px`, right: '15px', color: state.open ? theme.primary : theme.onSurface, fontSize: `${theme.density === 0 ? 12 : 14}px` },
         { selector: '.select-popup', position: 'absolute', top: `${theme.density === 0 ? 56 : 48}px`, left: '0', width: '100%', height: `${theme.density === 0 ? 112 : 104}px`, boxSizing: 'border-box', padding: '8px 0', background: '#f2ecf1', boxShadow: '0 2px 6px rgba(0,0,0,0.24)', zIndex: '60' },
         { selector: '.select-option', position: 'relative', width: '100%', height: '48px', boxSizing: 'border-box', padding: '14px 16px', color: '#1d1b20', fontSize: '16px' },
@@ -403,10 +407,19 @@ export class AstylarShowcaseComponent {
         { selector: '.select-option:active', background: '#d8d2d8' },
         { selector: '.autocomplete-popup', top: `${theme.density === 0 ? 58 : 50}px` },
         { selector: '.autocomplete-popup .select-option', padding: `${theme.density === 0 ? 20 : 16}px 16px` },
+        ...(theme.density === -2 ? [
+          { selector: '.field-input-region.compact-filled-input-region', top: '10px' },
+          { selector: '.select-popup', top: '49px', left: '6px', width: 'calc(100% - 7px)', height: '112px' },
+          { selector: '.select-popup .select-option', padding: '11px 16px' },
+          { selector: '.autocomplete-popup', top: '49px' },
+          { selector: '.autocomplete-popup .select-option', padding: '12px 16px' },
+        ] : []),
+        ...(theme.density < 0 ? [
+          { selector: '#autocomplete-label', display: state.open || this.focusedId() === 'autocomplete-control' ? 'none' : undefined },
+        ] : []),
         ...(theme.density <= -5 ? [
           { selector: '.autocomplete-popup', top: '47px', height: '102px', padding: '0' },
           { selector: '.autocomplete-popup .select-option', padding: '11px 16px' },
-          { selector: '#autocomplete-label', display: 'none' },
         ] : []),
         { selector: '.select-check', position: 'absolute', top: '14px', right: '16px', color: '#49454f' },
         { selector: '.picker-control.open', boxShadow: 'none' },
@@ -429,11 +442,11 @@ export class AstylarShowcaseComponent {
         { selector: '.picker-option:hover', background: '#e5dfe5' },
         { selector: '.picker-option:active', background: '#d8d2d8' },
         { selector: '.timepicker-shell .field-surface', height: `${theme.density <= -5 && state.open ? 39 : theme.density === 0 ? 56 : 48}px` },
-        { selector: '.timepicker-shell .field-label', color: theme.density <= -5 && state.open ? '#e8e0eb' : state.open ? theme.primary : theme.onSurface },
+        { selector: '.timepicker-shell .field-label', display: theme.density < 0 && state.open ? 'none' : undefined, color: state.open ? theme.primary : theme.onSurface },
         { selector: '.timepicker-gap', position: 'absolute', top: `${theme.density <= -5 ? 39 : theme.density === 0 ? 56 : 48}px`, left: '7px', right: '7px', height: '8px', background: '#f2ecf1', zIndex: '60' },
         { selector: '.timepicker-active-line', position: 'absolute', top: `${theme.density <= -5 ? 37 : theme.density === 0 ? 54 : 46}px`, left: '7px', right: '7px', height: '2px', background: theme.primary, zIndex: '61' },
         { selector: '.timepicker-shell .picker-popup', top: `${theme.density <= -5 ? 45 : theme.density === 0 ? 64 : 56}px`, left: '7px', right: 'auto', width: 'calc(100% - 28px)', height: '248px', paddingTop: '0' },
-        { selector: '.timepicker-shell .picker-option', height: `${theme.density <= -5 ? 48 : theme.density === 0 ? 48 : 42}px`, padding: `${theme.density <= -5 || theme.density === 0 ? 14 : 11}px 16px` },
+        { selector: '.timepicker-shell .picker-option', height: '48px', padding: '14px 16px' },
         { selector: '.timepicker-scroll-track', position: 'absolute', top: `${theme.density <= -5 ? 45 : theme.density === 0 ? 64 : 56}px`, right: '0', width: '12px', height: '248px', background: '#f2ecf1', zIndex: '62' },
         { selector: '.timepicker-scroll-thumb', position: 'absolute', top: '4px', right: '1px', width: '10px', height: '32px', borderRadius: '5px', background: '#79747e' },
         { selector: '.datepicker-shell .field-surface', height: `${theme.density <= -5 && state.open ? 36 : theme.density === 0 ? 56 : 48}px` },
@@ -457,6 +470,11 @@ export class AstylarShowcaseComponent {
         { selector: '.datepicker-year:hover', background: '#e5dfe5' },
         { selector: '.datepicker-year:active', background: '#d8d2d8' },
         { selector: '.datepicker-year.selected', borderWidth: '1px', borderStyle: 'solid', borderColor: theme.mode === 'dark' ? '#d5baff' : '#7d00fa' },
+        ...(theme.density === -2 ? [
+          { selector: '.datepicker-popup', top: '49.5px', left: '3px', width: '295px', height: '350.5px' },
+          { selector: '.datepicker-year-grid', top: '83.5px' },
+        ] : []),
+        { selector: '.datepicker-month.year-view', background: '#eadef7' },
         { selector: '.field-hint', position: 'absolute', top: `${theme.density === 0 ? 58 : theme.density <= -5 ? 39 : 50}px`, left: '16px', fontSize: '12px', letterSpacing: '.4px', color: theme.onSurface },
         { selector: '.field-error', position: 'absolute', top: `${theme.density === 0 ? 58 : theme.density <= -5 ? 39 : 50}px`, left: '16px', fontSize: '12px', letterSpacing: '.4px', color: theme.error },
         { selector: '.row', display: 'flex', flexWrap: 'wrap', gap: '0', alignItems: 'center' },
@@ -743,7 +761,7 @@ export class AstylarShowcaseComponent {
         role: 'combobox', ariaLabel: 'Plan', ariaInvalid: state.error, ariaExpanded: state.open,
         ariaControls: 'select-options', ariaActivedescendant: state.open
           ? state.selected ? 'select-option-team' : 'select-option-solo' : undefined,
-      }] },
+      }, { type: 'span', id: 'select-value', class: 'select-value', textContent: state.selected ? 'Team' : 'Solo' }] },
       { type: 'span', id: 'select-caret', class: 'select-caret', role: 'presentation', textContent: '▼' },
       ...(state.open ? [{ type: 'div' as const, id: 'select-options', class: 'select-popup', role: 'listbox', children: [
         { type: 'div' as const, id: 'select-option-solo', class: `select-option${state.selected ? '' : ' selected'}`, role: 'option', ariaSelected: !state.selected, children: [
@@ -842,7 +860,7 @@ export class AstylarShowcaseComponent {
        ] : []),
       ...(family === 'datepicker' && state.open ? [{ type: 'div' as const, id: 'datepicker-popup', class: 'datepicker-popup', role: 'dialog', ariaLabel: 'Choose date', children: [
         { type: 'div' as const, id: 'datepicker-header', class: 'datepicker-header', children: [
-          { type: 'button' as const, id: 'datepicker-month', class: 'datepicker-month', ariaLabel: this.datepickerView() === 'month' ? 'Choose month and year' : 'Choose date', value: this.datepickerView() === 'month' ? `${materialCurrentMonth()} ${materialCurrentYear()} ▾` : `${materialYearStart()} – ${materialYearStart() + 23} ▴` },
+          { type: 'button' as const, id: 'datepicker-month', class: `datepicker-month${this.datepickerView() === 'years' ? ' year-view' : ''}`, ariaLabel: this.datepickerView() === 'month' ? 'Choose month and year' : 'Choose date', value: this.datepickerView() === 'month' ? `${materialCurrentMonth()} ${materialCurrentYear()} ▾` : `${materialYearStart()} – ${materialYearStart() + 23} ▴` },
           { type: 'span' as const, id: 'datepicker-previous', class: 'datepicker-nav datepicker-previous', textContent: '‹' },
           { type: 'span' as const, id: 'datepicker-next', class: 'datepicker-nav datepicker-next', textContent: '›' },
         ] },

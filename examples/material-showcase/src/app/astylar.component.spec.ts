@@ -109,6 +109,37 @@ describe('AstylarShowcaseComponent', () => {
     const timepicker = build(component, 'timepicker');
     expect(find(timepicker, 'timepicker-options')?.['children']?.length).toBe(48);
     expect(style(timepicker, '.picker-popup')).toEqual(jasmine.objectContaining({ width: 'auto', overflow: 'scroll' }));
+    expect(style(timepicker, '.timepicker-shell .picker-option')?.['height']).toBe('48px');
+
+    store.setTheme(MATERIAL_THEME_PROFILES.custom);
+    const compactAutocomplete = build(component, 'autocomplete');
+    expect(style(compactAutocomplete, '#autocomplete-label')?.['display']).toBe('none');
+    const compactTimepicker = build(component, 'timepicker');
+    expect(style(compactTimepicker, '.timepicker-shell .field-label')?.['display']).toBe('none');
+
+    const compactSelect = build(component, 'select');
+    expect(find(compactSelect, 'select-control')).toEqual(jasmine.objectContaining({
+      type: 'input',
+      role: 'combobox',
+      value: 'Team',
+    }));
+    expect(find(compactSelect, 'select-value')?.['textContent']).toBe('Team');
+    expect(style(compactSelect, '.select-control, .select-control:focus')?.['color']).toBe('transparent');
+
+    (component as unknown as { handleClick: (id: string, event: AstylarEvent) => void }).handleClick(
+      'datepicker-month', { targetId: 'datepicker-month' } as AstylarEvent,
+    );
+    const compactYearPicker = build(component, 'datepicker');
+    expect(find(compactYearPicker, 'datepicker-month')?.['class']).toContain('year-view');
+    expect(lastStyle(compactYearPicker, '.datepicker-popup')).toEqual(jasmine.objectContaining({
+      top: '49.5px', left: '3px', width: '295px', height: '350.5px',
+    }));
+
+    store.setTheme(MATERIAL_THEME_PROFILES.dark);
+    store.patchState({ disabled: true });
+    expect(style(build(component, 'autocomplete'), '.field-surface')?.['background']).toBe('#2f2d33');
+    store.patchState({ disabled: false });
+    store.setTheme(MATERIAL_THEME_PROFILES.light);
 
     const slideToggle = build(component, 'slide-toggle');
     expect(find(slideToggle, 'slide-toggle-primary')).toEqual(jasmine.objectContaining({
@@ -339,6 +370,10 @@ function eventHandlers(component: AstylarShowcaseComponent): Record<string, Reco
 
 function style(site: SiteData, selector: string): Record<string, unknown> | undefined {
   return site.styles?.find((candidate) => candidate.selector === selector) as Record<string, unknown> | undefined;
+}
+
+function lastStyle(site: SiteData, selector: string): Record<string, unknown> | undefined {
+  return site.styles?.filter((candidate) => candidate.selector === selector).at(-1) as Record<string, unknown> | undefined;
 }
 
 function find(site: SiteData, id: string): Record<string, any> | undefined {
