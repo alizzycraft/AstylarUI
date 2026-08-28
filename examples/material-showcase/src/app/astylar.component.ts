@@ -394,8 +394,8 @@ export class AstylarShowcaseComponent {
         { selector: '.field-control', position: 'relative', width: '100%', height: '24px', boxSizing: 'border-box', padding: '0', borderWidth: '0', borderRadius: '0', background: 'transparent', boxShadow: 'none', color: '#1d1b20', fontSize: '16px' },
         { selector: '.field-control:focus', borderWidth: '0', color: '#1d1b20', boxShadow: 'none' },
         { selector: '.select-control', paddingRight: '32px', cursor: 'pointer', boxShadow: 'none' },
-        { selector: '.select-caret', position: 'absolute', top: `${theme.density === 0 ? 18 : 14}px`, right: '15px', color: state.open ? theme.primary : theme.onSurface, fontSize: '12px' },
-        { selector: '.select-popup', position: 'absolute', top: `${theme.density === 0 ? 56 : 48}px`, left: '7px', right: '7px', width: 'auto', height: `${theme.density === 0 ? 112 : 104}px`, boxSizing: 'border-box', padding: '8px 0', background: '#f2ecf1', boxShadow: '0 2px 6px rgba(0,0,0,0.24)', zIndex: '60' },
+        { selector: '.select-caret', position: 'absolute', top: `${theme.density === 0 ? 18 : 8}px`, right: '15px', color: state.open ? theme.primary : theme.onSurface, fontSize: `${theme.density === 0 ? 12 : 14}px` },
+        { selector: '.select-popup', position: 'absolute', top: `${theme.density === 0 ? 56 : 48}px`, left: '0', width: '100%', height: `${theme.density === 0 ? 112 : 104}px`, boxSizing: 'border-box', padding: '8px 0', background: '#f2ecf1', boxShadow: '0 2px 6px rgba(0,0,0,0.24)', zIndex: '60' },
         { selector: '.select-option', position: 'relative', width: '100%', height: '48px', boxSizing: 'border-box', padding: '14px 16px', color: '#1d1b20', fontSize: '16px' },
         { selector: '.select-option.selected', background: '#eadef7' },
         { selector: '.select-option:hover', background: '#e5dfe5' },
@@ -720,10 +720,12 @@ export class AstylarShowcaseComponent {
       { type: 'div', id: 'radio-solo', class: 'radio-option', role: 'radio', tabindex: state.selected ? -1 : 0, ariaChecked: !state.selected, ariaDisabled: state.disabled, children: [{ type: 'span', id: 'radio-solo-ring', class: `radio-ring${state.selected ? '' : ' selected'}`, children: state.selected ? [] : [{ type: 'span', id: 'radio-solo-dot', class: 'radio-dot' }] }, { type: 'span', id: 'radio-solo-label', class: 'radio-label', textContent: 'Solo' }] },
       { type: 'div', id: 'radio-team', class: 'radio-option', role: 'radio', tabindex: state.selected ? 0 : -1, ariaChecked: state.selected, ariaDisabled: state.disabled, children: [{ type: 'span', id: 'radio-team-ring', class: `radio-ring${state.selected ? ' selected' : ''}`, children: state.selected ? [{ type: 'span', id: 'radio-team-dot', class: 'radio-dot' }] : [] }, { type: 'span', id: 'radio-team-label', class: 'radio-label', textContent: 'Team' }] },
     ] }];
-    if (family === 'select') return [{ type: 'div', id: 'select-primary', class: 'field-shell', children: [
+    if (family === 'select') {
+      const compactFilled = theme.density < 0;
+      return [{ type: 'div', id: 'select-primary', class: 'field-shell', children: [
       fieldSurface('select-control'),
-      { type: 'label', id: 'select-label', class: 'field-label', for: 'select-control', textContent: 'Plan' },
-      { type: 'div', id: 'select-input-region', class: 'field-input-region', children: [{
+      { type: 'label', id: 'select-label', class: `field-label${compactFilled ? ' compact-filled-label' : ''}`, for: 'select-control', textContent: 'Plan' },
+      { type: 'div', id: 'select-input-region', class: `field-input-region${compactFilled ? ' compact-filled-input-region' : ''}`, children: [{
         type: 'input', inputType: 'text', id: 'select-control', class: 'field-control select-control',
         value: state.selected ? 'Team' : 'Solo', readonly: true, disabled: state.disabled,
         role: 'combobox', ariaLabel: 'Plan', ariaInvalid: state.error, ariaExpanded: state.open,
@@ -732,7 +734,10 @@ export class AstylarShowcaseComponent {
       }] },
       { type: 'span', id: 'select-caret', class: 'select-caret', role: 'presentation', textContent: '▼' },
       ...(state.open ? [{ type: 'div' as const, id: 'select-options', class: 'select-popup', role: 'listbox', children: [
-        { type: 'div' as const, id: 'select-option-solo', class: `select-option${state.selected ? '' : ' selected'}`, role: 'option', ariaSelected: !state.selected, textContent: 'Solo' },
+        { type: 'div' as const, id: 'select-option-solo', class: `select-option${state.selected ? '' : ' selected'}`, role: 'option', ariaSelected: !state.selected, children: [
+          { type: 'span' as const, id: 'select-solo-label', textContent: 'Solo' },
+          ...(!state.selected ? [this.selectionMark('select-check', 'select-check')] : []),
+        ] },
         { type: 'div' as const, id: 'select-option-team', class: `select-option${state.selected ? ' selected' : ''}`, role: 'option', ariaSelected: state.selected, children: [
           { type: 'span' as const, id: 'select-team-label', textContent: 'Team' },
           ...(state.selected ? [this.selectionMark('select-check', 'select-check')] : []),
@@ -744,6 +749,7 @@ export class AstylarShowcaseComponent {
       { type: 'span', id: 'slide-toggle-track', class: 'switch-track', children: [{ type: 'span', id: 'slide-toggle-thumb', class: 'switch-thumb', children: state.selected ? [this.selectionMark('slide-toggle-mark', 'switch-mark')] : [{ type: 'span', id: 'slide-toggle-minus', textContent: '−' }] }] },
       { type: 'span', id: 'slide-toggle-label', class: 'switch-label', textContent: 'Automatic updates' },
     ] }];
+    }
     if (family === 'menu') return [{ type: 'button', id: 'menu-primary', class: 'material-button', ariaHaspopup: 'menu', ariaExpanded: state.open, ariaControls: 'menu-popup', value: 'Open menu' }, ...(state.open ? [{ type: 'div' as const, id: 'menu-popup', role: 'menu', children: [{ type: 'button' as const, id: 'menu-rename', role: 'menuitem', value: 'Rename' }, { type: 'button' as const, id: 'menu-delete', role: 'menuitem', value: 'Delete' }] }] : [])];
     if (family === 'tabs') return [{ type: 'div', id: 'tabs-primary', class: 'tabs', ariaLabel: `OverviewActivity${state.selected ? 'Overview content' : 'Activity content'}`, children: [{ type: 'div', id: 'tabs-list', class: 'tab-list', role: 'tablist', children: [{ type: 'button', id: 'tab-overview', class: 'tab', role: 'tab', ariaSelected: state.selected, tabindex: state.selected ? 0 : -1, ariaControls: 'tab-panel', value: 'Overview' }, { type: 'button', id: 'tab-activity', class: 'tab', role: 'tab', ariaSelected: !state.selected, tabindex: state.selected ? -1 : 0, ariaControls: 'tab-panel', value: 'Activity' }] }, { type: 'div', id: 'tab-baseline', class: 'tab-baseline' }, { type: 'div', id: 'tab-indicator', class: 'tab-indicator' }, { type: 'showcase.material:tab-panel', id: 'tab-panel', class: 'tab-panel', role: 'tabpanel', ariaLabel: state.selected ? 'Overview content' : 'Activity content', data: { selected: state.selected, phase: this.benchmarkMode ? 1 : undefined, 'text-color': theme.onSurface, 'font-size': 16 * theme.typographyScale } }] }];
     if (family === 'stepper') return [{ type: 'div', id: 'stepper-primary', class: 'stepper', role: 'tablist', ariaLabel: 'Project setup', children: [{ type: 'div', id: 'stepper-head', class: 'stepper-head', children: [{ type: 'div', id: 'step-details', class: 'step-tab', role: 'tab', tabindex: state.selected ? 0 : -1, ariaSelected: state.selected, children: [{ type: 'span', id: 'step-details-badge', class: `step-badge${state.selected ? ' selected' : ''}`, textContent: '1' }, { type: 'span', id: 'step-details-text', class: 'step-text', textContent: 'Details' }] }, { type: 'span', id: 'step-connector', class: 'step-connector' }, { type: 'div', id: 'step-review', class: 'step-tab', role: 'tab', tabindex: state.selected ? -1 : 0, ariaSelected: !state.selected, children: [{ type: 'span', id: 'step-review-badge', class: `step-badge${state.selected ? '' : ' selected'}`, textContent: '2' }, { type: 'span', id: 'step-review-text', class: 'step-text', textContent: 'Review' }] }] }, { type: 'div', id: 'stepper-content', role: 'tabpanel', children: [{ type: 'span', class: 'stepper-content-label', textContent: state.selected ? 'Project details' : 'Review changes' }] }] }];
