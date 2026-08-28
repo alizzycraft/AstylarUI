@@ -350,6 +350,7 @@ describe('StyleService cascade', () => {
     expect(service.findInteractionStyleForElement(layer, styles, 'hover', parent)).toEqual(jasmine.objectContaining({
       background: '#6750a414',
     }));
+    expect(service.findInteractionStyleForElement(layer, styles, 'hover', [])).toBeUndefined();
     expect(service.findInteractionStyleForElement(layer, styles, 'hover', parent)?.color).toBeUndefined();
     expect(service.findInteractionStyleForElement(layer, styles, 'hover', layer)?.color).toBe('#ffffff');
   });

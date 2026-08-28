@@ -459,6 +459,9 @@ export class StyleService {
         state: 'hover' | 'active' | 'focus',
         stateElements?: DOMElement | readonly DOMElement[],
     ): StyleRule | undefined {
+        if (Array.isArray(stateElements) && stateElements.length === 0) {
+            return undefined;
+        }
         const winners = new Map<keyof StyleRule, {
             specificity: number;
             sourceOrder: number;
