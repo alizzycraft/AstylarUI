@@ -110,6 +110,16 @@ describe('AstylarShowcaseComponent', () => {
     expect(find(timepicker, 'timepicker-options')?.['children']?.length).toBe(48);
     expect(style(timepicker, '.picker-popup')).toEqual(jasmine.objectContaining({ width: 'auto', overflow: 'scroll' }));
 
+    const slideToggle = build(component, 'slide-toggle');
+    expect(find(slideToggle, 'slide-toggle-primary')).toEqual(jasmine.objectContaining({
+      role: 'switch',
+      ariaLabel: 'Automatic updates',
+      ariaChecked: true,
+    }));
+    expect(find(slideToggle, 'slide-toggle-state-layer')?.['class']).toBe('switch-state-layer');
+    expect(find(slideToggle, 'slide-toggle-track')).toBeDefined();
+    expect(find(slideToggle, 'slide-toggle-label')?.['textContent']).toBe('Automatic updates');
+
     const bottomSheet = build(component, 'bottom-sheet');
     expect(find(bottomSheet, 'bottom-sheet-copy')?.['value']).toBe('Copy link');
     expect(find(bottomSheet, 'bottom-sheet-overlay')).toEqual(jasmine.objectContaining({
