@@ -120,6 +120,27 @@ describe('AstylarShowcaseComponent', () => {
     expect(find(slideToggle, 'slide-toggle-track')).toBeDefined();
     expect(find(slideToggle, 'slide-toggle-label')?.['textContent']).toBe('Automatic updates');
 
+    const tabs = build(component, 'tabs');
+    expect(style(tabs, '.tab:focus')?.['background']).toBeDefined();
+
+    const stepper = build(component, 'stepper');
+    expect(style(stepper, '.step-tab')).toEqual(jasmine.objectContaining({
+      width: '130px',
+      top: '0',
+    }));
+    expect(style(stepper, '#step-details')?.['left']).toBe('-24px');
+    expect(style(stepper, '#step-review')?.['right']).toBe('-24px');
+    expect(style(stepper, '.step-tab-content')).toEqual(jasmine.objectContaining({ left: '24px', display: 'flex' }));
+    expect(style(stepper, '.step-tab:hover, .step-tab:focus')?.['background']).toBeDefined();
+
+    store.patchState({ disabled: true });
+    const expansion = build(component, 'expansion');
+    expect(find(expansion, 'expansion-primary')?.['class']).toContain('disabled');
+    expect(find(expansion, 'expansion-chevron')?.['class']).toContain('disabled');
+    expect(style(expansion, '.expansion-title')?.['fontWeight']).toBe('500');
+    expect(style(expansion, '.expansion-chevron.disabled')?.['display']).toBe('none');
+    store.patchState({ disabled: false });
+
     const bottomSheet = build(component, 'bottom-sheet');
     expect(find(bottomSheet, 'bottom-sheet-copy')?.['value']).toBe('Copy link');
     expect(find(bottomSheet, 'bottom-sheet-overlay')).toEqual(jasmine.objectContaining({
