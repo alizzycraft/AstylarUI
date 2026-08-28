@@ -678,7 +678,7 @@ async function popupHoverBox(page, mode, family) {
   const targetIds = {
     autocomplete: 'autocomplete-option-cape-town',
     select: 'select-option-solo',
-    datepicker: 'datepicker-day-2',
+    datepicker: 'datepicker-day-1',
     timepicker: 'timepicker-option-0',
     menu: 'menu-rename',
     dialog: 'dialog-panel',
