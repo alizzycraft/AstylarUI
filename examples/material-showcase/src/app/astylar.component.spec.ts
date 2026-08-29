@@ -334,6 +334,21 @@ describe('AstylarShowcaseComponent', () => {
     expect(store.state().sliderValue).toBe(75);
   });
 
+  it('does not rebuild authored slider data merely because a range thumb receives focus', () => {
+    const { component } = createComponent('slider');
+    const internal = component as unknown as {
+      siteData: () => SiteData;
+      options: { events: { handlers: Record<string, { focus: (event: AstylarEvent) => void }> } };
+    };
+    const beforeFocus = internal.siteData();
+
+    internal.options.events.handlers['slider-primary'].focus({
+      type: 'focus', targetId: 'slider-primary', currentTargetId: 'slider-primary', value: 65,
+    } as unknown as AstylarEvent);
+
+    expect(internal.siteData()).toBe(beforeFocus);
+  });
+
   it('keeps the snackbar visible when its trigger is activated again', () => {
     const { component, store } = createComponent('snack-bar');
     const click = (component as unknown as {

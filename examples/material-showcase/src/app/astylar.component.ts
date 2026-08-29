@@ -80,7 +80,9 @@ export class AstylarShowcaseComponent {
           }),
           focus: (event: AstylarEvent) => this.zone.run(() => {
             this.recordEvent(event);
-            this.focusedId.set(event.targetId);
+            if (this.authoredTreeDependsOnFocus(event.targetId)) {
+              this.focusedId.set(event.targetId);
+            }
             if (event.targetId === 'autocomplete-control') this.store.patchState({ open: true });
           }),
           blur: (event: AstylarEvent) => this.zone.run(() => {
@@ -301,6 +303,19 @@ export class AstylarShowcaseComponent {
     this.store.patchState({ open: false });
     const family = this.family();
     this.surface?.focus(`${family}-primary`, { focusVisible: true });
+  }
+
+  private authoredTreeDependsOnFocus(elementId: string | undefined): boolean {
+    if (!elementId) return false;
+    return [
+      'form-field-control',
+      'input-control',
+      'autocomplete-control',
+      'datepicker-control',
+      'timepicker-control',
+      'sort-primary',
+      'sort-trigger',
+    ].includes(elementId) || elementId.startsWith('tree-item-');
   }
 
   private buildSiteData(family: MaterialFamily): SiteData {
