@@ -133,6 +133,9 @@ describe('AstylarShowcaseComponent', () => {
     }));
     expect(find(compactSelect, 'select-value')?.['textContent']).toBe('Team');
     expect(style(compactSelect, '.select-control, .select-control:focus')?.['color']).toBe('transparent');
+    expect(lastStyle(compactSelect, '.select-popup')).toEqual(jasmine.objectContaining({
+      left: '0', width: '100%',
+    }));
 
     (component as unknown as { handleClick: (id: string, event: AstylarEvent) => void }).handleClick(
       'datepicker-month', { targetId: 'datepicker-month' } as AstylarEvent,
@@ -166,6 +169,7 @@ describe('AstylarShowcaseComponent', () => {
     expect(style(stepper, '.step-tab')).toEqual(jasmine.objectContaining({
       width: '130px',
       top: '0',
+      zIndex: '2',
     }));
     expect(style(stepper, '#step-details')?.['left']).toBe('-24px');
     expect(style(stepper, '#step-review')?.['right']).toBe('-24px');
@@ -178,6 +182,8 @@ describe('AstylarShowcaseComponent', () => {
     expect(find(expansion, 'expansion-primary')?.['class']).toContain('disabled');
     expect(find(expansion, 'expansion-chevron')?.['class']).toContain('disabled');
     expect(style(expansion, '.expansion-title')?.['fontWeight']).toBe('500');
+    store.setTheme(MATERIAL_THEME_PROFILES.contrast);
+    expect(lastStyle(build(component, 'expansion'), '.expansion-title')?.['transform']).toBe('translate(0, 0.5px)');
     expect(style(expansion, '.expansion-chevron.disabled')?.['display']).toBe('none');
     store.patchState({ disabled: false });
 
