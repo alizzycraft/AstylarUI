@@ -258,6 +258,8 @@ class MaterialTabPanelRenderer extends MaterialRendererBase implements AstylarPl
     const color = this.color(context, 'text-color', '#1d1b20');
     const authoredFontSize = Number(context.element.data?.['font-size'] ?? 16);
     const fontSize = Number.isFinite(authoredFontSize) && authoredFontSize > 0 ? authoredFontSize : 16;
+    const authoredBaselineOffset = Number(context.element.data?.['baseline-offset'] ?? 0);
+    const baselineOffset = Number.isFinite(authoredBaselineOffset) ? authoredBaselineOffset : 0;
     const draw = (phase: number) => {
       const canvas = texture.getContext();
       canvas.clearRect(0, 0, width, height);
@@ -266,7 +268,7 @@ class MaterialTabPanelRenderer extends MaterialRendererBase implements AstylarPl
       canvas.font = `${textureFontSize}px Roboto, Arial, sans-serif`;
       // Match a centered CSS line box while retaining the Roboto alphabetic
       // baseline used by the reference tab body.
-      const baseline = Math.min(height - 1, height / 2 + textureFontSize * .328125);
+      const baseline = Math.min(height - 1, height / 2 + textureFontSize * .328125 + baselineOffset);
       if (phase < 1) canvas.fillText(outgoing, -direction * phase * width, baseline);
       if (phase > 0) canvas.fillText(incoming, direction * (1 - phase) * width, baseline);
       texture.update(false);
@@ -343,5 +345,8 @@ function validateMaterialElement(name: string, data: Readonly<Record<string, unk
   if (mode !== undefined && !modes.includes(String(mode))) return `data.mode must be one of ${modes.join(', ')}.`;
   if (name === 'range-visual' && Number(data?.['start'] ?? 0) > Number(data?.['end'] ?? 1)) return 'data.start must not exceed data.end.';
   if (name === 'tab-panel' && data?.['selected'] !== undefined && typeof data['selected'] !== 'boolean') return 'data.selected must be boolean.';
+  if (name === 'tab-panel' && data?.['baseline-offset'] !== undefined && !Number.isFinite(Number(data['baseline-offset']))) {
+    return 'data.baseline-offset must be a finite number.';
+  }
   return true;
 }

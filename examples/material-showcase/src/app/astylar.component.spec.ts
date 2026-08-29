@@ -137,6 +137,10 @@ describe('AstylarShowcaseComponent', () => {
       left: '0', width: '100%',
     }));
 
+    const customTabs = build(component, 'tabs');
+    expect(lastStyle(customTabs, '.tab-panel')?.['height']).toBe('22px');
+    expect(find(customTabs, 'tab-panel')?.['data']?.['baseline-offset']).toBe(-.2);
+
     (component as unknown as { handleClick: (id: string, event: AstylarEvent) => void }).handleClick(
       'datepicker-month', { targetId: 'datepicker-month' } as AstylarEvent,
     );
