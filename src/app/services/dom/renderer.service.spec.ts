@@ -3,6 +3,16 @@ import { DOMAncestryService } from './dom-ancestry.service';
 import { DOMElement } from '../../types/dom-element';
 
 describe('BabylonDOMRendererService', () => {
+  it('inherits caret and pointer hit-testing styles into rendered descendants', () => {
+    const renderer = Object.create(
+      BabylonDOMRendererService.prototype,
+    ) as BabylonDOMRendererService;
+
+    expect(renderer['pickInheritedTextProperties']({
+      selector: '#parent', caretColor: 'transparent', pointerEvents: 'none',
+    })).toEqual({ caretColor: 'transparent', pointerEvents: 'none' });
+  });
+
   it('accepts text content without an authored element ID', () => {
     const renderer = Object.create(
       BabylonDOMRendererService.prototype,

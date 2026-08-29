@@ -9,6 +9,14 @@ import { DOMAncestryService } from '../dom-ancestry.service';
 import { ImageLayoutService } from './image-layout.service';
 
 describe('ElementDimensionService', () => {
+  it('inherits caret and pointer hit-testing styles with text properties', () => {
+    const service = Object.create(ElementDimensionService.prototype) as ElementDimensionService;
+
+    expect(service['pickInheritedTextProperties']({
+      selector: '#parent', caretColor: 'transparent', pointerEvents: 'none',
+    })).toEqual({ caretColor: 'transparent', pointerEvents: 'none' });
+  });
+
   it('uses loaded image metadata for an un-sized image border box', () => {
     const service = new ElementDimensionService(
       {} as never,

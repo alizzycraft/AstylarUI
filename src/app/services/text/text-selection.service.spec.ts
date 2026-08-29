@@ -34,6 +34,27 @@ describe('TextSelectionService', () => {
     engine.dispose();
   });
 
+  it('hides the caret when caretColor is transparent', () => {
+    const engine = new NullEngine();
+    const scene = new Scene(engine);
+    const parent = MeshBuilder.CreatePlane('readonly-picker', { width: 4, height: 1 }, scene);
+    const service = new TextSelectionService(
+      {} as never,
+      {
+        parseBackgroundColor: (value: string) => ({ type: 'color', color: Color3.FromHexString(value) }),
+      } as never,
+    );
+    const style = { ...textStyle('#1d1b20'), caretColor: 'transparent' };
+
+    const cursor = service.createTextCursor(0, emptyMetrics(), parent, scene, 0.01, style, 0);
+    expect((cursor.material as StandardMaterial).alpha).toBe(0);
+
+    cursor.dispose(false, true);
+    parent.dispose(false, true);
+    scene.dispose();
+    engine.dispose();
+  });
+
   it('positions the caret from the rendered text edge instead of a fixed input inset', () => {
     const engine = new NullEngine();
     const scene = new Scene(engine);

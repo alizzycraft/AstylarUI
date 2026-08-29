@@ -362,6 +362,7 @@ export class ElementCreationService {
         : {}),
       ...(placeholder ? { astylarMissingPlugin: placeholder } : {}),
     };
+    if (style.pointerEvents === 'none') mesh.isPickable = false;
 
     // Calculate position
     const stackingZPosition =

@@ -186,6 +186,10 @@ resources inside the public ownership contract.
 Like browser CSS, `:hover` remains active on an element while the pointer is
 over one of its rendered descendants. Moving from a card surface onto its text
 or icon children does not clear the card's hover style.
+Likewise, a pointer press applies `:active` to the pressed target and its
+authored ancestors until release, while click activation remains owned by the
+original target. `pointerEvents: 'none'` removes an element and its inheriting
+descendants from Astylar pointer hit testing; `auto` is the default.
 
 ## Forms, interaction, selection, and scrolling
 
@@ -198,8 +202,8 @@ caret movement, selection/clipboard commands, textarea navigation and
 autoscroll, radio groups, closed and expanded select workflows, tested
 constraints, invalid focus, submit/reset, and state preservation across
 compatible updates. The default text-control caret follows the resolved text
-color, matching browser `caret-color: auto`; authored `caret-color` is not yet
-part of `StyleRule`.
+color, matching browser `caret-color: auto`. Authored `caretColor` accepts
+`auto`, supported colors, and `transparent` through `StyleRule`.
 
 Direct text in supported non-control elements participates in pointer selection
 with browser-equivalent forward/backward endpoints, selected text, text cursor,

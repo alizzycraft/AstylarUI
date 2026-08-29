@@ -699,9 +699,9 @@ export class ElementDimensionService {
 
     private pickInheritedTextProperties(style: StyleRule): Partial<StyleRule> {
         const properties: Array<keyof StyleRule> = [
-            'color', 'fontFamily', 'fontSize', 'fontWeight', 'fontStyle', 'lineHeight',
+            'color', 'caretColor', 'fontFamily', 'fontSize', 'fontWeight', 'fontStyle', 'lineHeight',
             'letterSpacing', 'wordSpacing', 'textAlign', 'whiteSpace', 'wordWrap',
-            'textTransform', 'cursor'
+            'textTransform', 'cursor', 'pointerEvents'
         ];
         return Object.fromEntries(
             properties

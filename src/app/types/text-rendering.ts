@@ -14,6 +14,7 @@ export interface TextStyleProperties {
   
   // Text appearance
   color: string;
+  caretColor?: string;
   textAlign: 'left' | 'center' | 'right' | 'justify';
   verticalAlign: 'top' | 'middle' | 'bottom' | 'baseline';
   lineHeight: number;

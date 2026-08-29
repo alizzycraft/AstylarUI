@@ -22,4 +22,15 @@ describe('TextStyleParserService', () => {
     expect(style.fontSize).toBe(20);
     expect(style.lineHeight).toBe(1.5);
   });
+
+  it('preserves an authored caret color independently of text color', () => {
+    const style = service.parseTextProperties({
+      selector: '#readonly-picker',
+      color: '#1d1b20',
+      caretColor: 'transparent',
+    });
+
+    expect(style.color).toBe('#1d1b20');
+    expect(style.caretColor).toBe('transparent');
+  });
 });

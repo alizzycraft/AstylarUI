@@ -67,6 +67,8 @@ export interface StyleRule {
 
   // Text properties
   color?: string;
+  /** CSS-like caret color for editable text controls. `auto` follows `color`. */
+  caretColor?: string;
   fontFamily?: string;
   fontSize?: string;
   fontWeight?: string;
@@ -85,6 +87,7 @@ export interface StyleRule {
   textTransform?: string;
   textStroke?: string;
   cursor?: string;
+  pointerEvents?: 'auto' | 'none';
 
   // Flexbox
   display?: string;

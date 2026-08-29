@@ -245,6 +245,10 @@
       "kind": "type"
     },
     {
+      "name": "AstylarPluginRenderCoordinates",
+      "kind": "type"
+    },
+    {
       "name": "AstylarPluginRenderDimensions",
       "kind": "type"
     },

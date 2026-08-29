@@ -60,7 +60,7 @@
         "id": "form-controls",
         "classification": "compatible",
         "names": ["input", "button", "form", "select", "textarea", "label", "option", "fieldset", "legend", "output"],
-        "behavior": "A deliberate control, focus, keyboard, pointer, validation, submit/reset, selection, range, and closed/expanded select subset is supported. Range inputs clamp min/max/step values and support pointer dragging plus Arrow/Page/Home/End keys. Text selection uses full-line highlight geometry and a contrast-selected foreground glyph pass. The default text-control caret follows the resolved text color; authored caret-color is not yet supported.",
+        "behavior": "A deliberate control, focus, keyboard, pointer, validation, submit/reset, selection, range, and closed/expanded select subset is supported. Range inputs clamp min/max/step values and support pointer dragging plus Arrow/Page/Home/End keys. Text selection uses full-line highlight geometry and a contrast-selected foreground glyph pass. Text-control caret paint supports auto/current text color, authored supported colors, and transparent.",
         "defaultStyle": "elementDefaults[name] merged over globalDefaultStyle; checkbox/radio/range use inputType-specific defaults",
         "pluginCanSupply": false,
         "evidence": ["fixture:styled-text-input", "fixture:interaction-form-validation", "fixture:interaction-select-expanded-keyboard", "fixture:interaction-textarea-selection"]
@@ -256,8 +256,8 @@
       {
         "id": "inherited-typography",
         "classification": "compatible",
-        "names": ["color", "fontFamily", "fontSize", "fontWeight", "fontStyle", "textAlign", "lineHeight", "letterSpacing", "wordSpacing", "whiteSpace", "wordWrap", "textTransform", "cursor"],
-        "values": "implemented CSS-like typography keywords, colors, font strings, unitless/length values, and whitespace/wrapping subsets",
+        "names": ["color", "caretColor", "fontFamily", "fontSize", "fontWeight", "fontStyle", "textAlign", "lineHeight", "letterSpacing", "wordSpacing", "whiteSpace", "wordWrap", "textTransform", "cursor"],
+        "values": "implemented CSS-like typography keywords, colors, caret auto/color/transparent, font strings, unitless/length values, and whitespace/wrapping subsets",
         "units": ["px", "em", "rem", "%"],
         "inherits": true,
         "default": "browser-like text defaults; element defaults may override",
@@ -283,6 +283,16 @@
         "default": "visible",
         "behavior": "Owned clip regions and tested wheel/scroll-into-view behavior; not the complete browser scrolling API.",
         "evidence": ["fixture:overflow-hidden", "fixture:overflow-nested-wheel", "fixture:overflow-scrolled-target"]
+      },
+      {
+        "id": "pointer-hit-testing",
+        "classification": "compatible",
+        "names": ["pointerEvents"],
+        "values": ["auto", "none"],
+        "inherits": true,
+        "default": "auto",
+        "behavior": "none removes the styled element and inheriting descendants from Astylar pointer hit testing; active pointer state follows the pressed target's authored ancestor path.",
+        "evidence": ["file:src/app/services/dom/elements/element-creation.service.ts", "file:src/lib/astylar-event.spec.ts"]
       },
       {
         "id": "display",
@@ -329,7 +339,7 @@
     "classification": "compatible",
     "supported": ["type", "#id", ".class", "*", "descendant", "child", "adjacent-sibling", "general-sibling", "comma-list", ":first-child", ":last-child", ":nth-child", ":hover", ":active", ":focus", "supported control-state and requirement pseudos"],
     "cascade": "Element defaults, stylesheet specificity/source order, renderer context overrides, then inline style; extensions cascade by canonical identity.",
-    "differences": "This is a measured selector subset, not querySelector or a complete Selectors Level 4 engine.",
+    "differences": "This is a measured selector subset, not querySelector or a complete Selectors Level 4 engine. Hover and active pseudo states apply through the target's authored ancestor path.",
     "evidence": ["fixture:cascade-specificity", "fixture:descendant-selector", "fixture:structural-pseudo", "fixture:control-state-selectors"]
   },
   "platform": [
@@ -408,11 +418,11 @@
     "authoritativeSources": [
       { "path": "src/lib/astylar-core-capabilities.ts", "sha256": "ab7da6f8fb24ee3370d016f1366b656f2c32e6f1146df19b0a847e9822a7eee0" },
       { "path": "src/app/types/dom-element.ts", "sha256": "72eef2f09d5cdacaab10db7328c40e5b4748c3f22640e2b40f0436a268351e83" },
-      { "path": "src/app/types/style-rule.ts", "sha256": "4750f39b24e39fb9a9d0e0908af853d9d405b21691e5406f5b21209683da7c04" },
+      { "path": "src/app/types/style-rule.ts", "sha256": "e3f45996824145b9653315ba5161c9bc49a4ace1d3dd65160ee0644c98880e01" },
       { "path": "src/app/config/browser-defaults.ts", "sha256": "b80995dc5599df550b9180c313c357c960f27199c6d364f67e778e073116a493" },
-      { "path": "src/app/services/dom/style.service.ts", "sha256": "a81383c44a51d5b458bc6840e4b7c53bcc38dfbce22bf48f710ac96698a881ba" },
-      { "path": "src/app/services/dom/elements/element-creation.service.ts", "sha256": "ff9fa0cbd5bc572942d8f09cca1c2c82e203762acd8e136e44fd5a89a38a5b6e" },
-      { "path": "src/app/services/text/text-style-parser.service.ts", "sha256": "d3f37b6201818f20d195a5d785a5969f970663e294f088e4d6017661bc148f33" }
+      { "path": "src/app/services/dom/style.service.ts", "sha256": "47d332909b10a3d54cef4bacca7dd53573b1339cf9553e0673709ea25c47c1fe" },
+      { "path": "src/app/services/dom/elements/element-creation.service.ts", "sha256": "4b10730ad8c9240a88f2b66e7bd79d57793b633cea5d067482d7c329564c188c" },
+      { "path": "src/app/services/text/text-style-parser.service.ts", "sha256": "3aad0343e4d84739f9ebeb502d8a2c64589228ffb0e618ac26750858ecf00ff9" }
     ]
   }
 }

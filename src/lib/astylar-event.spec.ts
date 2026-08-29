@@ -208,7 +208,7 @@ describe('AstylarInteractionRuntime', () => {
     engine.dispose();
   });
 
-  it('owns one scene pointer observer and emits one activation sequence', () => {
+  it('owns one scene pointer observer and applies active state through the target ancestry', () => {
     const engine = new NullEngine();
     const scene = new Scene(engine);
     const mesh = MeshBuilder.CreatePlane('button-mesh', {}, scene);
@@ -243,7 +243,12 @@ describe('AstylarInteractionRuntime', () => {
 
     expect(events.map((event) => event.type)).toEqual(['pointerdown', 'pointerup', 'click']);
     expect(events.every((event) => event.targetId === 'button')).toBeTrue();
-    expect(activeStates).toEqual([['button', true], ['button', false]]);
+    expect(activeStates).toEqual([
+      ['parent', true],
+      ['button', true],
+      ['button', false],
+      ['parent', false],
+    ]);
     expect(runtime.snapshot.pointerObservers).toBe(1);
 
     runtime.dispose();

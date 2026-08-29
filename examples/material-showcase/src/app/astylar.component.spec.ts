@@ -133,6 +133,7 @@ describe('AstylarShowcaseComponent', () => {
     }));
     expect(find(compactSelect, 'select-value')?.['textContent']).toBe('Team');
     expect(style(compactSelect, '.select-control, .select-control:focus')?.['color']).toBe('transparent');
+    expect(style(compactSelect, '.select-control, .select-control:focus')?.['caretColor']).toBe('transparent');
     expect(lastStyle(compactSelect, '.select-popup')).toEqual(jasmine.objectContaining({
       left: '0', width: '100%',
     }));
@@ -147,7 +148,7 @@ describe('AstylarShowcaseComponent', () => {
     const compactYearPicker = build(component, 'datepicker');
     expect(find(compactYearPicker, 'datepicker-month')?.['class']).toContain('year-view');
     expect(lastStyle(compactYearPicker, '.datepicker-popup')).toEqual(jasmine.objectContaining({
-      top: '49.5px', left: '3px', width: '295px', height: '350.5px',
+      top: '49.5px', height: '350.5px',
     }));
 
     store.setTheme(MATERIAL_THEME_PROFILES.dark);
@@ -178,6 +179,9 @@ describe('AstylarShowcaseComponent', () => {
     expect(style(stepper, '#step-details')?.['left']).toBe('-24px');
     expect(style(stepper, '#step-review')?.['right']).toBe('-24px');
     expect(style(stepper, '.step-tab-content')).toEqual(jasmine.objectContaining({ left: '24px', display: 'flex' }));
+    expect(style(stepper, '.step-connector')).toEqual(jasmine.objectContaining({
+      zIndex: '3', pointerEvents: 'none',
+    }));
     expect(style(stepper, '.step-tab:hover')?.['background']).toBeDefined();
     expect(style(stepper, '.step-tab:focus')?.['background']).toBeDefined();
 

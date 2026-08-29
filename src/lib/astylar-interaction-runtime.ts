@@ -142,6 +142,7 @@ export class AstylarInteractionRuntime {
   private readonly dispatcher: AstylarEventDispatcher;
   private pointerObserver: Observer<PointerInfo> | null;
   private pressedElementId?: string;
+  private pressedElementPath: string[] = [];
   private rangePointerChanged = false;
   private hoveredElementId?: string;
   private hoveredElementPath: string[] = [];
@@ -347,8 +348,14 @@ export class AstylarInteractionRuntime {
       this.pendingModalInitialFocus = true;
     }
     if (this.pressedElementId && !this.dispatcher.hasEnabledTarget(this.pressedElementId)) {
-      this.controls?.setActiveState?.(this.pressedElementId, false);
+      this.clearPressedActiveState();
       this.pressedElementId = undefined;
+    } else if (this.pressedElementId) {
+      const nextPath = [...this.dispatcher.getElementPath(this.pressedElementId)];
+      for (const elementId of this.pressedElementPath) {
+        if (!nextPath.includes(elementId)) this.controls?.setActiveState?.(elementId, false);
+      }
+      this.pressedElementPath = nextPath;
     }
     if (this.hoveredElementId && !this.dispatcher.hasEnabledTarget(this.hoveredElementId)) {
       for (const elementId of this.hoveredElementPath) {
@@ -378,7 +385,9 @@ export class AstylarInteractionRuntime {
       }
     }
     if (this.pressedElementId && this.dispatcher.hasEnabledTarget(this.pressedElementId)) {
-      this.controls?.setActiveState?.(this.pressedElementId, true);
+      for (const elementId of [...this.pressedElementPath].reverse()) {
+        this.controls?.setActiveState?.(elementId, true);
+      }
     }
     if (this.presentedModalDialog?.id !== this.modalDialog?.id) {
       if (this.presentedModalDialog) {
@@ -416,7 +425,7 @@ export class AstylarInteractionRuntime {
     this.canvas?.removeEventListener('keydown', this.handleKeyDown);
     this.canvas?.removeEventListener('keyup', this.handleKeyUp);
     this.canvas?.removeEventListener('wheel', this.handleWheel);
-    if (this.pressedElementId) this.controls?.setActiveState?.(this.pressedElementId, false);
+    this.clearPressedActiveState();
     const focusedElementId = this.getFocusedElementId();
     if (focusedElementId) this.controls?.setFocusState?.(focusedElementId, false);
     this.pressedElementId = undefined;
@@ -490,6 +499,7 @@ export class AstylarInteractionRuntime {
     }
     if (pointerInfo.type === PointerEventTypes.POINTERDOWN) {
       if (!targetId) {
+        this.clearPressedActiveState();
         this.pressedElementId = undefined;
         if (!this.modalDialog) {
           this.canvas?.focus();
@@ -504,14 +514,19 @@ export class AstylarInteractionRuntime {
         return;
       }
       if (!this.dispatcher.hasEnabledTarget(targetId)) {
+        this.clearPressedActiveState();
         this.pressedElementId = undefined;
         this.setFocus(undefined);
         return;
       }
+      this.clearPressedActiveState();
       this.pressedElementId = targetId;
+      this.pressedElementPath = [...this.dispatcher.getElementPath(targetId)];
       this.rangePointerChanged = false;
       const dispatched = this.dispatchPointer('pointerdown', targetId, pointerInfo);
-      this.controls?.setActiveState?.(targetId, true);
+      for (const elementId of [...this.pressedElementPath].reverse()) {
+        this.controls?.setActiveState?.(elementId, true);
+      }
       if (!dispatched?.defaultPrevented) {
         this.canvas?.focus();
         this.setFocus(this.focusOrder.includes(targetId) ? targetId : undefined, false, false);
@@ -540,9 +555,7 @@ export class AstylarInteractionRuntime {
           type: 'input', targetId: pressedElementId, ...this.liveState(pressedElementId),
         });
       }
-      if (this.pressedElementId) {
-        this.controls?.setActiveState?.(this.pressedElementId, false);
-      }
+      this.clearPressedActiveState();
       if (targetId) this.dispatchPointer('pointerup', targetId, pointerInfo);
       if (pressedElementId && this.rangePointerChanged) {
         this.dispatcher.dispatch({
@@ -569,6 +582,13 @@ export class AstylarInteractionRuntime {
         }
       }
     }
+  }
+
+  private clearPressedActiveState(): void {
+    for (const elementId of this.pressedElementPath) {
+      this.controls?.setActiveState?.(elementId, false);
+    }
+    this.pressedElementPath = [];
   }
 
   private updateHover(targetId: string | undefined, pointerInfo: PointerInfo): void {

@@ -32,6 +32,7 @@ export class TextStyleParserService {
     fontWeight: 'normal',
     fontStyle: 'normal',
     color: '#000000',
+    caretColor: 'auto',
     textAlign: 'left',
     verticalAlign: 'baseline',
     lineHeight: 1.15,
@@ -73,6 +74,10 @@ export class TextStyleParserService {
     // Parse text appearance properties
     if (styleRule.color) {
       textStyle.color = this.parseColor(styleRule.color);
+    }
+
+    if (styleRule.caretColor) {
+      textStyle.caretColor = styleRule.caretColor.trim();
     }
 
     if (styleRule.textAlign) {
