@@ -162,7 +162,8 @@ describe('AstylarShowcaseComponent', () => {
     expect(style(stepper, '#step-details')?.['left']).toBe('-24px');
     expect(style(stepper, '#step-review')?.['right']).toBe('-24px');
     expect(style(stepper, '.step-tab-content')).toEqual(jasmine.objectContaining({ left: '24px', display: 'flex' }));
-    expect(style(stepper, '.step-tab:hover, .step-tab:focus')?.['background']).toBeDefined();
+    expect(style(stepper, '.step-tab:hover')?.['background']).toBeDefined();
+    expect(style(stepper, '.step-tab:focus')?.['background']).toBeDefined();
 
     store.patchState({ disabled: true });
     const expansion = build(component, 'expansion');
