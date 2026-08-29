@@ -28,6 +28,7 @@ import { AstylarPluginRuntime } from "../../../../lib/astylar-plugin-runtime";
 import { AstylarCoreCompatibilityRenderer } from "../../../../lib/astylar-core-plugin";
 import { AstylarDocumentRecovery } from "../../../../lib/astylar-document-recovery";
 import { AstylarPluginHost } from "../../../../lib/astylar-plugin-host";
+import { CoordinateTransformService } from "../../coordinate-transform.service";
 
 /**
  * Service responsible for creating DOM elements as Babylon.js meshes
@@ -56,6 +57,7 @@ export class ElementCreationService {
     private diagnostics: AstylarDiagnostics,
     private documentRecovery: AstylarDocumentRecovery,
     private pluginHost: AstylarPluginHost,
+    private coordinateTransform: CoordinateTransformService,
   ) {}
 
   /**
@@ -218,6 +220,14 @@ export class ElementCreationService {
             height: dimensions.height,
             padding: dimensions.padding,
             pixelToWorldScale: scaleFactor,
+          },
+          coordinates: {
+            toLocalPoint: (x, y, z = 0) =>
+              this.coordinateTransform.transformToRenderCoordinates(x, y, z),
+            toLogicalPoint: (point) =>
+              this.coordinateTransform.transformToLogicalCoordinates(
+                new BABYLON.Vector3(point.x, point.y, point.z),
+              ),
           },
           resources,
           requestInvalidation: (target) => this.pluginHost.requestFor(source, target),

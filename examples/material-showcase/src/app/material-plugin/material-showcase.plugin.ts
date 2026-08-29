@@ -204,7 +204,8 @@ class MaterialCheckMarkRenderer extends MaterialRendererBase implements AstylarP
   render(context: AstylarPluginRenderContext): Mesh {
     const root = this.root(context);
     const scale = context.dimensions.pixelToWorldScale;
-    const path = materialCheckMarkPath(scale);
+    const path = materialCheckMarkPath(scale).map((point) =>
+      context.coordinates.toLocalPoint(point.x, point.y, point.z));
     const mark = this.ownChild(context, MeshBuilder.CreateTube(`${context.meshId}-mark`, {
       path,
       radius: Math.max(.6, this.number(context, 'stroke-width', 1.8) / 2) * scale,
@@ -219,11 +220,8 @@ class MaterialCheckMarkRenderer extends MaterialRendererBase implements AstylarP
 }
 
 export function materialCheckMarkPath(scale: number): Vector3[] {
-  // Plugin children use Babylon-local coordinates. Astylar's CSS-logical X
-  // axis is mirrored at the camera boundary, so convert the authored path at
-  // this boundary instead of drawing the Material glyph backwards.
   return [[-5.5, .4], [-1.8, -3.2], [5.5, 4.2]]
-    .map(([logicalX, y]) => new Vector3(-logicalX * scale, y * scale, 0));
+    .map(([logicalX, y]) => new Vector3(logicalX * scale, y * scale, 0));
 }
 
 @Injectable()

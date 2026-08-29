@@ -5,7 +5,7 @@ import {
   Type,
   makeEnvironmentProviders,
 } from '@angular/core';
-import type { Mesh, Scene } from '@babylonjs/core';
+import type { Mesh, Scene, Vector3 } from '@babylonjs/core';
 import type { DOMElement } from '../app/types/dom-element';
 import type { AstylarDocumentPluginRequirement } from '../app/types/site-data';
 import type { StyleRule } from '../app/types/style-rule';
@@ -156,6 +156,18 @@ export interface AstylarPluginResourceSnapshot {
   readonly pending: number;
 }
 
+/**
+ * Converts element-local CSS coordinates into the renderer-local Babylon
+ * coordinate space used by the current Astylar camera projection.
+ *
+ * Plugin renderers should author geometry with positive X pointing right and
+ * use this boundary instead of encoding camera-axis inversions themselves.
+ */
+export interface AstylarPluginRenderCoordinates {
+  toLocalPoint(x: number, y: number, z?: number): Vector3;
+  toLogicalPoint(point: Readonly<Vector3>): { x: number; y: number; z: number };
+}
+
 /** Curated public context supplied to an injectable plugin renderer. */
 export interface AstylarPluginRenderContext {
   readonly scene: Scene;
@@ -165,6 +177,7 @@ export interface AstylarPluginRenderContext {
   readonly style: Readonly<StyleRule>;
   readonly properties: Readonly<Record<string, unknown>>;
   readonly dimensions: AstylarPluginRenderDimensions;
+  readonly coordinates: AstylarPluginRenderCoordinates;
   /** Invalidated and disposed when this render generation is replaced. */
   readonly resources: AstylarPluginResourceOwner;
   /** Automatically attributes the request to this renderer contribution. */

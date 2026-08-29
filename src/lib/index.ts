@@ -114,6 +114,7 @@ export type {
   AstylarPluginPropertyDefinition,
   AstylarPluginRendererDefinition,
   AstylarPluginRenderContext,
+  AstylarPluginRenderCoordinates,
   AstylarPluginRenderDimensions,
   AstylarPluginAsyncResourceOptions,
   AstylarPluginResourceOwner,

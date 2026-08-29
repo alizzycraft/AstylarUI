@@ -37,6 +37,8 @@ class BadgeRenderer implements AstylarPluginElementRenderer {
 
   render(context: AstylarPluginRenderContext): Mesh {
     const depth = context.properties['badgeDepth'] as number;
+    const localProbe = context.coordinates.toLocalPoint(-3, 4, .5);
+    const logicalProbe = context.coordinates.toLogicalPoint(localProbe);
     const mesh = MeshBuilder.CreateBox(context.meshId, {
       width: context.dimensions.width * context.dimensions.pixelToWorldScale,
       height: context.dimensions.height * context.dimensions.pixelToWorldScale,
@@ -47,6 +49,8 @@ class BadgeRenderer implements AstylarPluginElementRenderer {
       pluginDepth: depth,
       pluginLabel: context.element.data?.['label'],
       pluginTone: context.properties['badgeTone'],
+      localProbe: localProbe.asArray(),
+      logicalProbe,
       surfaceId: this.surface.surfaceId,
     };
     return mesh;
@@ -333,6 +337,8 @@ describe('Astylar surface plugin runtime', () => {
         pluginDepth: 0.12,
         pluginLabel: 'Proof',
         pluginTone: 'teal',
+        localProbe: [3, 4, .5],
+        logicalProbe: { x: -3, y: 4, z: .5 },
       }));
       expect(secondBadge.metadata.pluginDepth).toBe(0.2);
       expect(secondBadge.metadata.pluginMarker).toBe('surface-config-2');

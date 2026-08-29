@@ -13,12 +13,14 @@ describe('Material showcase application plugin', () => {
     });
   });
 
-  it('authors an upright Material check mark path', () => {
+  it('authors an upright Material check mark in logical screen coordinates', () => {
     const [start, bend, end] = materialCheckMarkPath(1);
 
-    expect(start.asArray()).toEqual([5.5, .4, 0]);
-    expect(bend.asArray()).toEqual([1.8, -3.2, 0]);
-    expect(end.asArray()).toEqual([-5.5, 4.2, 0]);
+    expect(start.asArray()).toEqual([-5.5, .4, 0]);
+    expect(bend.asArray()).toEqual([-1.8, -3.2, 0]);
+    expect(end.asArray()).toEqual([5.5, 4.2, 0]);
+    expect(start.x).toBeLessThan(bend.x);
+    expect(bend.x).toBeLessThan(end.x);
     expect(bend.y).toBeLessThan(start.y);
     expect(bend.y).toBeLessThan(end.y);
   });
