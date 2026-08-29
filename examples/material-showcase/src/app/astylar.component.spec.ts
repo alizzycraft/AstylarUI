@@ -99,6 +99,14 @@ describe('AstylarShowcaseComponent', () => {
     expect(find(slider, 'slider-start')).toEqual(jasmine.objectContaining({ min: '0', max: '50', value: '30' }));
     expect(find(slider, 'slider-primary')).toEqual(jasmine.objectContaining({ min: '50', max: '100', value: '65' }));
 
+    expect(style(build(component, 'paginator'), '#paginator-range')?.['top']).toBe('20px');
+    store.patchState({ pageIndex: 1 });
+    expect(style(build(component, 'paginator'), '#paginator-range')?.['top']).toBe('20.5px');
+    store.setTheme(MATERIAL_THEME_PROFILES.contrast);
+    expect(style(build(component, 'paginator'), '#paginator-range')?.['top']).toBe('12.49px');
+    store.patchState({ pageIndex: 0 });
+    store.setTheme(MATERIAL_THEME_PROFILES.light);
+
     store.patchState({ open: true });
     const datepicker = build(component, 'datepicker');
     expect(style(datepicker, '.field-label.empty-field-label')).toEqual(jasmine.objectContaining({ fontSize: '16px' }));
