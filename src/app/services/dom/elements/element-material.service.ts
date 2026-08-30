@@ -4,6 +4,8 @@ import { BabylonRender } from "../interfaces/render.types";
 import { DOMElement } from "../../../types/dom-element";
 import { StyleRule } from "../../../types/style-rule";
 import { Mesh, Color3 } from "@babylonjs/core";
+import { TransformData } from "../../../types/transform-data";
+import { cssTranslationToRenderOffset, parseCssTransform } from "./css-transform";
 
 /**
  * Service responsible for applying materials and visual properties to elements
@@ -78,56 +80,34 @@ export class ElementMaterialService {
   /**
    * Parse transform CSS property
    */
-  parseTransform(transform: string | undefined): any {
-    if (!transform) {
-      return null;
-    }
-
-    // Parse various transform functions
-    // This is a simplified version - full CSS transform parsing is complex
-    const result: any = {};
-
-    // Parse translate
-    const translateMatch = transform.match(/translate\(([^,]+),\s*([^)]+)\)/);
-    if (translateMatch) {
-      result.translateX = parseFloat(translateMatch[1]);
-      result.translateY = parseFloat(translateMatch[2]);
-    }
-
-    // Parse rotate
-    const rotateMatch = transform.match(/rotate\(([^)]+)\)/);
-    if (rotateMatch) {
-      result.rotate = parseFloat(rotateMatch[1]);
-    }
-
-    // Parse scale
-    const scaleMatch = transform.match(/scale\(([^)]+)\)/);
-    if (scaleMatch) {
-      result.scale = parseFloat(scaleMatch[1]);
-    }
-
-    return Object.keys(result).length > 0 ? result : null;
+  parseTransform(transform: string | undefined): TransformData | null {
+    return parseCssTransform(transform);
   }
 
   /**
    * Apply transforms to a mesh
    */
-  applyTransforms(mesh: Mesh, transform: any): void {
-    if (
-      transform.translateX !== undefined ||
-      transform.translateY !== undefined
-    ) {
-      mesh.position.x += transform.translateX || 0;
-      mesh.position.y += transform.translateY || 0;
-    }
+  applyTransforms(mesh: Mesh, transform: TransformData, pixelToWorldScale = 1): void {
+    mesh.metadata ||= {};
+    mesh.metadata.originalPosition ||= mesh.position.clone();
+    mesh.metadata.originalRotation ||= mesh.rotation.clone();
+    mesh.metadata.originalScaling ||= mesh.scaling.clone();
 
-    if (transform.rotate !== undefined) {
-      mesh.rotation.z = transform.rotate * (Math.PI / 180); // Convert to radians
-    }
-
-    if (transform.scale !== undefined) {
-      mesh.scaling.x = transform.scale;
-      mesh.scaling.y = transform.scale;
-    }
+    const offset = cssTranslationToRenderOffset(transform, pixelToWorldScale);
+    mesh.position.set(
+      mesh.metadata.originalPosition.x + offset.x,
+      mesh.metadata.originalPosition.y + offset.y,
+      mesh.metadata.originalPosition.z + offset.z,
+    );
+    mesh.rotation.set(
+      mesh.metadata.originalRotation.x + transform.rotate.x,
+      mesh.metadata.originalRotation.y + transform.rotate.y,
+      mesh.metadata.originalRotation.z + transform.rotate.z,
+    );
+    mesh.scaling.set(
+      mesh.metadata.originalScaling.x * transform.scale.x,
+      mesh.metadata.originalScaling.y * transform.scale.y,
+      mesh.metadata.originalScaling.z * transform.scale.z,
+    );
   }
 }

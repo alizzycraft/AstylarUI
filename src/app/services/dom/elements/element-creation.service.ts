@@ -479,7 +479,7 @@ export class ElementCreationService {
     // Apply transforms if present
     const transform = this.materialService.parseTransform(style?.transform);
     if (transform) {
-      this.materialService.applyTransforms(mesh, transform);
+      this.materialService.applyTransforms(mesh, transform, scaleFactor);
     }
 
 

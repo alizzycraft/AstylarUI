@@ -21,6 +21,7 @@ import {
   SELECT_BORDER_Z_OFFSET,
 } from "../render-depth.constants";
 import { parseBoxShadow } from "./box-shadow";
+import { cssTranslationToRenderOffset, parseCssTransform } from "./css-transform";
 
 /**
  * Service responsible for element interaction (mouse events, hover, etc.)
@@ -397,7 +398,7 @@ export class ElementInteractionService {
         // Apply transforms smoothly without recreating geometry
         const transform = this.parseTransform(hoverMergedStyle?.transform);
         if (transform) {
-          this.applyTransformsSmooth(mainMesh, transform, 150); // 150ms smooth animation
+          this.applyTransformsSmooth(mainMesh, transform, 150, pixelToWorldScale); // 150ms smooth animation
 
           // For borders, we want them to inherit position but not scaling
           // Handle single polygon border
@@ -408,7 +409,7 @@ export class ElementInteractionService {
             // Apply only translation and rotation, not scaling
             const borderTransform = { ...transform };
             borderTransform.scale = { x: 1, y: 1, z: 1 }; // Reset scaling for borders
-            this.applyTransformsSmooth(singleBorderMesh, borderTransform, 150);
+            this.applyTransformsSmooth(singleBorderMesh, borderTransform, 150, pixelToWorldScale);
           }
 
           // Handle up to 4 rectangular borders
@@ -420,7 +421,7 @@ export class ElementInteractionService {
               // Apply only translation and rotation, not scaling
               const borderTransform = { ...transform };
               borderTransform.scale = { x: 1, y: 1, z: 1 }; // Reset scaling for borders
-              this.applyTransformsSmooth(borderMesh, borderTransform, 150);
+              this.applyTransformsSmooth(borderMesh, borderTransform, 150, pixelToWorldScale);
             }
 
             // Also check for named rectangular borders
@@ -437,6 +438,7 @@ export class ElementInteractionService {
                   namedBorderMesh,
                   borderTransform,
                   150,
+                  pixelToWorldScale,
                 );
               }
             }
@@ -735,14 +737,14 @@ export class ElementInteractionService {
         // Apply transforms smoothly without recreating geometry
         const transform = this.parseTransform(mergedStyle?.transform);
         if (transform) {
-          this.applyTransformsSmooth(mainMesh, transform, 150); // 150ms smooth animation
+          this.applyTransformsSmooth(mainMesh, transform, 150, pixelToWorldScale); // 150ms smooth animation
           // Also apply to all border meshes and parent them to the main mesh
           // Handle single polygon border
           const singleBorderMesh = dom.context.elements.get(
             `${elementId}-border_border_frame`,
           );
           if (singleBorderMesh) {
-            this.applyTransformsSmooth(singleBorderMesh, transform, 150);
+            this.applyTransformsSmooth(singleBorderMesh, transform, 150, pixelToWorldScale);
             // Parent border mesh to main mesh for transform inheritance
             render.actions.mesh.parentTextMesh(singleBorderMesh, mainMesh);
           }
@@ -753,7 +755,7 @@ export class ElementInteractionService {
               `${elementId}-border-${i}`,
             );
             if (borderMesh) {
-              this.applyTransformsSmooth(borderMesh, transform, 150);
+              this.applyTransformsSmooth(borderMesh, transform, 150, pixelToWorldScale);
               // Parent border mesh to main mesh for transform inheritance
               render.actions.mesh.parentTextMesh(borderMesh, mainMesh);
             }
@@ -765,7 +767,7 @@ export class ElementInteractionService {
                 `${elementId}-border${borderNames[i]}`,
               );
               if (namedBorderMesh) {
-                this.applyTransformsSmooth(namedBorderMesh, transform, 150);
+                this.applyTransformsSmooth(namedBorderMesh, transform, 150, pixelToWorldScale);
                 // Parent border mesh to main mesh for transform inheritance
                 render.actions.mesh.parentTextMesh(namedBorderMesh, mainMesh);
               }
@@ -786,14 +788,14 @@ export class ElementInteractionService {
             scale: { x: 1, y: 1, z: 1 },
           };
 
-          this.applyTransformsSmooth(mainMesh, resetTransform, 150);
+          this.applyTransformsSmooth(mainMesh, resetTransform, 150, pixelToWorldScale);
 
           // Handle single polygon border
           const singleBorderMesh = dom.context.elements.get(
             `${elementId}-border_border_frame`,
           );
           if (singleBorderMesh) {
-            this.applyTransformsSmooth(singleBorderMesh, resetTransform, 150);
+            this.applyTransformsSmooth(singleBorderMesh, resetTransform, 150, pixelToWorldScale);
           }
 
           // Handle up to 4 rectangular borders
@@ -802,7 +804,7 @@ export class ElementInteractionService {
               `${elementId}-border-${i}`,
             );
             if (borderMesh) {
-              this.applyTransformsSmooth(borderMesh, resetTransform, 150);
+              this.applyTransformsSmooth(borderMesh, resetTransform, 150, pixelToWorldScale);
             }
 
             // Also check for named rectangular borders
@@ -816,6 +818,7 @@ export class ElementInteractionService {
                   namedBorderMesh,
                   resetTransform,
                   150,
+                  pixelToWorldScale,
                 );
               }
             }
@@ -940,6 +943,7 @@ export class ElementInteractionService {
     mesh: Mesh,
     transforms: TransformData,
     duration: number = 200,
+    pixelToWorldScale: number = 1,
   ): void {
 
 
@@ -963,10 +967,11 @@ export class ElementInteractionService {
     }
 
     // Calculate target values based on original position + transform
+    const offset = cssTranslationToRenderOffset(transforms, pixelToWorldScale);
     const targetPosition = new Vector3(
-      mesh.metadata.originalPosition.x + transforms.translate.x,
-      mesh.metadata.originalPosition.y - transforms.translate.y, // Y is inverted in BabylonJS
-      mesh.metadata.originalPosition.z + transforms.translate.z,
+      mesh.metadata.originalPosition.x + offset.x,
+      mesh.metadata.originalPosition.y + offset.y,
+      mesh.metadata.originalPosition.z + offset.z,
     );
     const targetRotation = new Vector3(
       transforms.rotate.x,
@@ -1067,43 +1072,7 @@ export class ElementInteractionService {
   private parseTransform(
     transformString: string | undefined,
   ): TransformData | null {
-    if (!transformString) {
-      return null;
-    }
-
-    // Default transform values
-    const result: TransformData = {
-      translate: { x: 0, y: 0, z: 0 },
-      rotate: { x: 0, y: 0, z: 0 },
-      scale: { x: 1, y: 1, z: 1 },
-    };
-
-    // Parse translate
-    const translateMatch = transformString.match(
-      /translate\(([^,]+),\s*([^)]+)\)/,
-    );
-    if (translateMatch) {
-      result.translate.x = parseFloat(translateMatch[1]);
-      result.translate.y = parseFloat(translateMatch[2]);
-    }
-
-    // Parse rotate
-    const rotateMatch = transformString.match(/rotate\(([^)]+)\)/);
-    if (rotateMatch) {
-      const degrees = parseFloat(rotateMatch[1]);
-      result.rotate.z = degrees * (Math.PI / 180); // Convert to radians
-    }
-
-    // Parse scale
-    const scaleMatch = transformString.match(/scale\(([^)]+)\)/);
-    if (scaleMatch) {
-      const scale = parseFloat(scaleMatch[1]);
-      result.scale.x = scale;
-      result.scale.y = scale;
-      result.scale.z = scale;
-    }
-
-    return result;
+    return parseCssTransform(transformString);
   }
 
   /**

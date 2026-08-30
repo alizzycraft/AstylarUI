@@ -321,6 +321,11 @@ export class AstylarShowcaseComponent {
   private buildSiteData(family: MaterialFamily): SiteData {
     const theme = this.store.tokens();
     const state = this.store.state();
+    const devicePixelRatio = typeof window === 'undefined' ? 1 : window.devicePixelRatio || 1;
+    const tooltipTransform = devicePixelRatio >= 1.5
+      ? theme.typographyScale > 1 ? 'translate(47.5px, 11.5px)' : 'translate(50.5px, 20.5px)'
+      : theme.density <= -5 ? 'translate(92px, 26px)'
+        : theme.typographyScale > 1 ? 'translate(92px, 25px)' : 'translate(92px, 39px)';
     const toolbarHeld = family === 'toolbar' && this.store.benchmarkPhase() === 'held';
     if (this.surface) this.surface.scene.clearColor = Color4.FromHexString(`${theme.surface}ff`);
     const rootId = `${family}-root`;
@@ -497,11 +502,10 @@ export class AstylarShowcaseComponent {
         { selector: '.row', display: 'flex', flexWrap: 'wrap', gap: '0', alignItems: 'center' },
         { selector: '.card', padding: '20px', borderRadius: `${16 * theme.cornerScale}px`, background: theme.mode === 'dark' ? '#2b2930' : '#f3edf7', minHeight: '90px' },
         { selector: '.material-card', position: 'relative', width: '100%', height: '120px', boxSizing: 'border-box', borderRadius: `${12 * theme.cornerScale}px`, background: theme.mode === 'dark' ? '#fff7ff' : '#f8f2f6', boxShadow: '0 2px 1px -1px rgba(0,0,0,0.2), 0 1px 1px 0 rgba(0,0,0,0.14), 0 1px 3px 0 rgba(0,0,0,0.12)', zIndex: '2' },
-        { selector: '.card-title', position: 'absolute', top: `${theme.density <= -5 ? 15.5 : 14.75}px`, left: '16px', fontSize: '22px', fontWeight: '400', whiteSpace: 'nowrap', zIndex: '2' },
-        ...(family === 'card' && theme.density <= -5 ? [{ selector: '.card-title', transform: 'translate(0, 1px)' }] : []),
+        { selector: '.card-title', position: 'absolute', top: `${theme.density <= -5 ? devicePixelRatio >= 1.5 ? 15 : 15.5 : 14.75}px`, left: '16px', fontSize: '22px', fontWeight: '400', whiteSpace: 'nowrap', zIndex: '2' },
         ...(family === 'card' && theme.density <= -5 ? [
-          { selector: '.card-title', mediaMaxWidth: '800px', top: '16.25px', transform: 'translate(0, 1px)' },
-          { selector: '.card-title', mediaMaxWidth: '500px', top: '15.5px', transform: 'translate(0, 1px)' },
+          { selector: '.card-title', mediaMaxWidth: '800px', top: '16px' },
+          { selector: '.card-title', mediaMaxWidth: '500px', top: '15.5px' },
         ] : []),
         { selector: '.card-copy', position: 'absolute', top: `${theme.typographyScale > 1 ? 43.5 : 42.75}px`, left: '16px', fontSize: '16px', whiteSpace: 'nowrap', zIndex: '2' },
         { selector: '.text-button', position: 'absolute', top: `${theme.density === 0 ? 71.25 : theme.density <= -5 ? 76 : 78}px`, left: '8px', width: '64px', height: `${densityHeight}px`, padding: '0 8px', borderWidth: '0', borderRadius: `${densityHeight / 2 * theme.cornerScale}px`, background: 'transparent', color: theme.primary, fontSize: '14px', fontWeight: '500', cursor: 'pointer', zIndex: '2' },
@@ -542,8 +546,7 @@ export class AstylarShowcaseComponent {
         { selector: '.sidenav-content', flexGrow: '1', height: '220px', boxSizing: 'border-box', padding: '17px 20px 20px', background: theme.mode === 'dark' ? '#fff7ff' : theme.surface, color: theme.mode === 'dark' ? '#1d1b20' : theme.onSurface },
         { selector: '.grid-list', width: '100%', height: '80px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0' },
         { selector: '.grid-tile', position: 'relative', height: '80px', background: theme.surfaceContainer },
-        { selector: '.grid-tile-label', position: 'absolute', top: `${theme.density <= -5 ? 30 : theme.typographyScale > 1 ? 26 : 28}px`, left: '0', width: '100%', textAlign: 'center', whiteSpace: 'nowrap' },
-        ...(family === 'grid-list' && theme.density <= -5 ? [{ selector: '.grid-tile-label', transform: 'translate(0, 1px)' }] : []),
+        { selector: '.grid-tile-label', position: 'absolute', top: `${theme.density <= -5 ? devicePixelRatio >= 1.5 ? 29.5 : 30 : theme.typographyScale > 1 ? 26 : 28}px`, left: '0', width: '100%', textAlign: 'center', whiteSpace: 'nowrap' },
         ...(family === 'grid-list' && theme.density <= -5 ? [{ selector: '.grid-tile-label', mediaMaxWidth: '500px', top: '29px' }] : []),
         ...(family === 'grid-list' && theme.typographyScale > 1 ? [{ selector: '.grid-tile-label', mediaMaxWidth: '500px', top: '25.5px' }] : []),
         { selector: '.badge-anchor', position: 'relative', width: '120px', height: '21px' },
@@ -554,9 +557,7 @@ export class AstylarShowcaseComponent {
         { selector: '.badge-count-label', position: 'relative', top: '-2.5px', display: 'block', width: '100%', textAlign: 'center' },
         { selector: '.chip', height: `${theme.density === 0 ? 32 : 24}px`, boxSizing: 'border-box', padding: '0 12px', borderWidth: '1px', borderStyle: 'solid', borderColor: '#79747e', borderRadius: `${8 * theme.cornerScale}px`, display: 'flex', alignItems: 'center', gap: '8px', background: 'transparent', color: theme.onSurface, fontSize: '14px', lineHeight: '20px', cursor: 'pointer' },
         { selector: '.chip.selected', borderWidth: '0', background: '#eadef7', color: '#4b4357' },
-        { selector: '.chip-label', verticalAlign: 'middle' },
-        ...(theme.density > -5 ? [{ selector: '.chip-label', transform: 'translate(0, 1px)' }] : []),
-        ...(theme.typographyScale > 1 ? [{ selector: '.chip-label', transform: 'translate(0, 2.5px)' }] : []),
+        { selector: '.chip-label', padding: theme.density <= -5 ? '0' : '0 0 2px', verticalAlign: 'middle' },
         { selector: '#chips-primary', gap: '8px' },
         { selector: '#chip-0', width: state.chipSelections[0] ? '97px' : '68px' },
         { selector: '#chip-1', width: state.chipSelections[1] ? '93px' : '64px' },
@@ -626,10 +627,7 @@ export class AstylarShowcaseComponent {
         { selector: '.stepper-content-label', mediaMaxWidth: '500px', ...(theme.density <= -5 ? { top: '0' } : {}) },
         { selector: '.divider', position: 'absolute', top: `${theme.density === -2 ? 86.785 : theme.density <= -5 ? 74.785 : 80}px`, left: '28px', right: '28px', height: '1px', width: 'auto', background: '#cac4d0' },
         { selector: '.divider-copy', position: 'absolute', left: '28px', right: '28px', width: 'auto', height: `${22 * theme.typographyScale}px` },
-        { selector: '.divider-above', top: `${theme.density === -2 ? 45.290625 : theme.density <= -5 ? 41.890625 : 42.69}px` },
-        ...(family === 'divider' && (theme.density <= -5 || theme.typographyScale > 1)
-          ? [{ selector: '.divider-above', transform: 'translate(0, 1px)' }]
-          : []),
+        { selector: '.divider-above', top: `${theme.density === -2 ? 45.290625 - (devicePixelRatio >= 1.5 ? .5 : 0) : theme.density <= -5 ? 41.890625 - (devicePixelRatio >= 1.5 ? .5 : 0) : 42.69}px` },
         { selector: '.divider-below', top: `${theme.density === -2 ? 105.071875 : theme.density <= -5 ? 89.671875 : 94.69}px` },
         ...(family === 'divider' && theme.density <= -5 ? [
           { selector: '.divider-above', mediaMaxWidth: '500px', top: '41.390625px' },
@@ -647,9 +645,8 @@ export class AstylarShowcaseComponent {
         { selector: '.checkbox-box', position: 'relative', zIndex: '2', width: '18px', height: '18px', flexShrink: '0', boxSizing: 'border-box', borderWidth: '2px', borderStyle: 'solid', borderColor: state.selected ? theme.primary : theme.onSurface, borderRadius: '2px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: state.selected ? theme.primary : 'transparent' },
         { selector: '.checkbox-label', position: 'relative', zIndex: '2', whiteSpace: 'nowrap', color: theme.onSurface, fontSize: '14px', verticalAlign: 'middle' },
         ...(theme.typographyScale > 1 ? [
-          { selector: '.checkbox-label', transform: 'translate(0, 0.6px)' },
-          { selector: '.checkbox-label', mediaMaxWidth: '500px', transform: 'translate(0, 1px)' },
-          { selector: '#button-toggle-one-label', transform: 'translate(0, 1px)' },
+          { selector: '.checkbox-label', mediaMaxWidth: '500px', padding: '0 0 1px' },
+          { selector: '#button-toggle-one-label', padding: '0 0 2px' },
         ] : []),
         { selector: '.range', width: '100%', height: '48px', cursor: 'pointer' },
         { selector: '.range-stack', position: 'relative', width: '100%', height: '48px' },
@@ -682,7 +679,7 @@ export class AstylarShowcaseComponent {
         { selector: '.snack-surface', width: '294px', height: '41px', padding: '0 18px', borderRadius: '4px', background: '#322f35', color: '#ffffff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' },
         { selector: '.overlay-dismiss', width: '88px', height: '40px', borderWidth: '0', background: 'transparent', color: theme.primary, fontWeight: '500' },
         { selector: '.material-button:focus', borderWidth: '0', boxShadow: '0 0 0 1px rgba(0,0,0,0)' },
-        { selector: '#tooltip-popup', width: '91px', height: '24px', marginTop: '-10px', marginBottom: '-32px', marginLeft: '17px', padding: '0 8px', borderWidth: '0', borderRadius: '4px', background: '#322f35', color: '#ffffff', display: 'flex', alignItems: 'center', alignSelf: 'flex-start', flexShrink: '0', fontSize: '10px', whiteSpace: 'nowrap', transform: 'translate(-183px, -81px)', zIndex: '1000' },
+        { selector: '#tooltip-popup', position: 'absolute', top: '76px', left: '44px', width: '91px', height: '24px', padding: '0 8px', borderWidth: '0', borderRadius: '4px', background: '#322f35', color: '#ffffff', display: 'flex', alignItems: 'center', flexShrink: '0', fontSize: '10px', whiteSpace: 'nowrap', transform: tooltipTransform, zIndex: '1000' },
       ],
     };
   }
