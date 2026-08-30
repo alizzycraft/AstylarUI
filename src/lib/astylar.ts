@@ -1044,39 +1044,62 @@ class AstylarRenderer {
     };
   }
 
-  private hasAuthoredFocusPaint(elementId: string): boolean {
-    const styles = this.getElementInteractionStyles(elementId);
-    if (!styles?.focus) return false;
-    const focusBackground = styles.focus.background
-      ? this.styleService.parseBackgroundColor(styles.focus.background)
+  private hasAuthoredFocusPaint(
+    elementId: string,
+    focusOverride?: import('../app/types/style-rule').StyleRule,
+  ): boolean {
+    const focus = focusOverride ?? this.getElementInteractionStyles(elementId)?.focus;
+    if (!focus) return false;
+    const focusBackground = focus.background
+      ? this.styleService.parseBackgroundColor(focus.background)
       : undefined;
-    const focusBorder = styles.focus.borderColor
-      ? this.styleService.parseBackgroundColor(styles.focus.borderColor)
+    const focusBorder = focus.borderColor
+      ? this.styleService.parseBackgroundColor(focus.borderColor)
       : undefined;
     // An explicitly authored focus color remains the control's indicator even
     // when another live class (for example `.playing`) currently resolves to
     // the same color.
-    const hasFocusTextColor = !!styles.focus.color;
+    const hasFocusTextColor = !!focus.color;
     return focusBackground?.type === 'color' ||
       focusBorder?.type === 'color' ||
       hasFocusTextColor;
   }
 
-  private shouldShowDefaultFocusIndicator(elementId: string): boolean {
+  private shouldShowDefaultFocusIndicator(
+    elementId: string,
+    focusOverride?: import('../app/types/style-rule').StyleRule,
+  ): boolean {
     const normal = this.getElementInteractionStyles(elementId)?.normal;
     return this.styleService.parseOpacity(normal?.opacity) > 0 &&
-      !this.hasAuthoredFocusPaint(elementId);
+      !this.hasAuthoredFocusPaint(elementId, focusOverride);
   }
 
   private configureFocusIndicator(elementId: string, siteData: SiteData): void {
     const styles = this.getElementInteractionStyles(elementId, siteData);
-    const focus = styles?.focus;
+    const input = this.inputElementService.getInputElement(elementId);
+    const mesh = this.elementManager.elementsMap.get(elementId);
+    const element = input?.element ?? mesh?.metadata?.element as DOMElement | undefined;
+    // Focus configuration happens before the live :focus source is installed,
+    // so resolve the target's direct authored pseudo rule independently of the
+    // current interaction-source set.
+    const focus = element
+      ? this.styleService.findInteractionStyleForElement(element, siteData.styles, 'focus')
+      : styles?.focus;
     const shadow = focus?.boxShadow?.trim().match(
       /^0(?:px)?\s+0(?:px)?\s+0(?:px)?\s+([\d.]+)px\s+(.+)$/i,
     );
     if (shadow) {
       const paint = this.styleService.parseBackgroundColor(shadow[2]);
       if (paint?.type === 'color') {
+        // An authored transparent focus shadow explicitly opts out of visible
+        // focus paint. Do not create a zero-alpha Babylon material here: some
+        // render paths can still write its opaque emissive edge, which revives
+        // the rectangular fallback ring the author intentionally suppressed.
+        if ((paint.alpha ?? 1) <= 0) {
+          this.inputElementService.setFocusIndicatorAppearance(elementId, undefined);
+          this.inputElementService.setDefaultFocusIndicatorEnabled(elementId, false);
+          return;
+        }
         this.inputElementService.setFocusIndicatorAppearance(elementId, {
           color: paint.color,
           alpha: paint.alpha ?? 1,
@@ -1094,7 +1117,7 @@ class AstylarRenderer {
     this.inputElementService.setFocusIndicatorAppearance(elementId, undefined);
     this.inputElementService.setDefaultFocusIndicatorEnabled(
       elementId,
-      this.shouldShowDefaultFocusIndicator(elementId),
+      this.shouldShowDefaultFocusIndicator(elementId, focus),
     );
   }
 

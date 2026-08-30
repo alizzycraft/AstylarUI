@@ -520,7 +520,7 @@ export class AstylarShowcaseComponent {
         { selector: '.expansion-trigger:active', background: state.open ? 'transparent' : mixHex(theme.surface, theme.onSurface, .08) },
         { selector: '.expansion-trigger.disabled', color: mixHex(theme.surface, theme.onSurface, .38) },
         { selector: '.expansion-title', fontWeight: '500', lineHeight: '20px', verticalAlign: 'middle' },
-        ...(family === 'expansion' && theme.density <= -5 ? [{ selector: '.expansion-title', fontSize: '16px', transform: 'translate(0, 0.5px)' }] : []),
+        ...(family === 'expansion' && theme.density <= -5 ? [{ selector: '.expansion-title', padding: state.open ? '2px 0 0' : '0', fontSize: '16px' }] : []),
         { selector: '.expansion-chevron', position: 'absolute', top: `${state.open ? theme.density <= -5 ? 23 : 28 : 16}px`, right: '24px', width: '8px', height: '8px', boxSizing: 'border-box', borderWidth: '1px 1px 0 0', borderStyle: 'solid', borderColor: theme.onSurface, transform: state.open ? 'rotate(-45deg)' : 'rotate(135deg)' },
         { selector: '.expansion-chevron.disabled', display: 'none' },
         { selector: '#expansion-content', position: 'absolute', display: state.open ? 'block' : 'none', top: `${state.open ? theme.density === 0 ? 80 : theme.density <= -5 ? 65 : 72 : 0}px`, left: '0', width: '100%', boxSizing: 'border-box', padding: '0 24px', margin: '0', textAlign: 'left', verticalAlign: 'middle' },

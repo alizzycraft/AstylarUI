@@ -152,7 +152,7 @@ describe('AstylarShowcaseComponent', () => {
     }));
 
     store.setTheme(MATERIAL_THEME_PROFILES.dark);
-    store.patchState({ disabled: true });
+    store.patchState({ disabled: true, open: false });
     expect(style(build(component, 'autocomplete'), '.field-surface')?.['background']).toBe('#2f2d33');
     store.patchState({ disabled: false });
     store.setTheme(MATERIAL_THEME_PROFILES.light);
@@ -191,7 +191,11 @@ describe('AstylarShowcaseComponent', () => {
     expect(find(expansion, 'expansion-chevron')?.['class']).toContain('disabled');
     expect(style(expansion, '.expansion-title')?.['fontWeight']).toBe('500');
     store.setTheme(MATERIAL_THEME_PROFILES.contrast);
-    expect(lastStyle(build(component, 'expansion'), '.expansion-title')?.['transform']).toBe('translate(0, 0.5px)');
+    expect(lastStyle(build(component, 'expansion'), '.expansion-title')).toEqual(jasmine.objectContaining({
+      padding: '0', fontSize: '16px',
+    }));
+    store.patchState({ open: true });
+    expect(lastStyle(build(component, 'expansion'), '.expansion-title')?.['padding']).toBe('2px 0 0');
     expect(style(expansion, '.expansion-chevron.disabled')?.['display']).toBe('none');
     store.patchState({ disabled: false });
 

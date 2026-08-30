@@ -219,6 +219,37 @@ describe('Astylar simultaneous surface isolation', () => {
       canvas.remove();
     }
   });
+
+  it('suppresses the fallback ring for an authored transparent focus shadow', async () => {
+    const canvas = document.createElement('canvas');
+    document.body.append(canvas);
+    const surface = TestBed.inject(Astylar).mount(canvas, {
+      root: {
+        children: [{ type: 'button', id: 'quiet-focus', value: 'Open menu' }],
+      },
+      styles: [
+        { selector: '#quiet-focus', width: '120px', height: '40px' },
+        { selector: '#quiet-focus:focus', boxShadow: '0 0 0 1px rgba(0,0,0,0)' },
+      ],
+    });
+
+    try {
+      await surface.whenSettled();
+      document.querySelector<HTMLElement>('[data-astylar-id="quiet-focus"]')?.focus();
+      await Promise.resolve();
+      const visibleIndicators = surface.scene.meshes
+        .filter((mesh) => mesh.name.startsWith('focusIndicator_quiet-focus_') && mesh.isVisible)
+        .map((mesh) => ({
+          name: mesh.name,
+          alpha: (mesh.material as { alpha?: number } | null)?.alpha,
+          kind: mesh.metadata?.focusIndicatorKind,
+        }));
+      expect(visibleIndicators).withContext(JSON.stringify(visibleIndicators)).toEqual([]);
+    } finally {
+      surface.dispose();
+      canvas.remove();
+    }
+  });
 });
 
 async function waitUntil(predicate: () => boolean, timeoutMs = 1000): Promise<void> {
