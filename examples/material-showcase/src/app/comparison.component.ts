@@ -1,4 +1,4 @@
-import { Component, ElementRef, computed, inject, signal, viewChildren } from '@angular/core';
+import { Component, ElementRef, HostListener, computed, inject, signal, viewChildren } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MATERIAL_CATALOG, MaterialFamily } from './catalog';
 import { ShowcaseFrameCommand } from './frame-protocol';
@@ -80,6 +80,13 @@ export class ComparisonComponent {
     this.post({ type: 'showcase:family', family: this.store.family() });
     this.post({ type: 'showcase:theme', theme: this.store.theme() });
     this.post({ type: 'showcase:state', state: this.store.state() });
+  }
+  @HostListener('window:message', ['$event'])
+  protected handleFrameReady(event: MessageEvent<unknown>): void {
+    if (event.origin !== window.location.origin ||
+        !event.data || typeof event.data !== 'object' ||
+        (event.data as { type?: unknown }).type !== 'showcase:ready') return;
+    this.syncFrames();
   }
   private post(command: ShowcaseFrameCommand): void {
     for (const frame of this.frames()) frame.nativeElement.contentWindow?.postMessage(command, window.location.origin);

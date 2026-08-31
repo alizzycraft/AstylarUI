@@ -46,6 +46,8 @@ export class AstylarShowcaseComponent {
   private pendingSurfaceUpdate?: Promise<unknown>;
   private readonly focusedId = signal<string | undefined>(undefined);
   private readonly datepickerView = signal<'month' | 'years'>('month');
+  private readonly hoveredSliderId = signal<string | undefined>(undefined);
+  private readonly pressedSliderId = signal<string | undefined>(undefined);
   private readonly fieldValues = signal<Record<'form-field' | 'input' | 'autocomplete', string>>({
     'form-field': 'Atlas',
     input: 'team@example.com',
@@ -64,18 +66,28 @@ export class AstylarShowcaseComponent {
         get: (_target, id: string) => ({
           pointerdown: (event: AstylarEvent) => this.zone.run(() => {
             this.recordEvent(event);
+            if (event.targetId === 'slider-start' || event.targetId === 'slider-primary') {
+              this.pressedSliderId.set(event.targetId);
+            }
             if (!this.benchmarkMode) this.activateRipple(event);
           }),
-          pointerup: (event: AstylarEvent) => this.recordEvent(event),
+          pointerup: (event: AstylarEvent) => this.zone.run(() => {
+            this.recordEvent(event);
+            if (event.targetId === this.pressedSliderId()) this.pressedSliderId.set(undefined);
+          }),
           pointermove: (event: AstylarEvent) => this.recordEvent(event),
           pointerenter: (event: AstylarEvent) => this.zone.run(() => {
             this.recordEvent(event);
+            if (event.targetId === 'slider-start' || event.targetId === 'slider-primary') {
+              this.hoveredSliderId.set(event.targetId);
+            }
             if (event.targetId === 'tooltip-primary' && (!this.benchmarkMode || ['hover', 'held'].includes(this.benchmarkInteraction ?? ''))) {
               this.store.patchState({ open: true });
             }
           }),
           pointerleave: (event: AstylarEvent) => this.zone.run(() => {
             this.recordEvent(event);
+            if (event.targetId === this.hoveredSliderId()) this.hoveredSliderId.set(undefined);
             if (event.targetId === 'tooltip-primary') this.store.patchState({ open: false });
           }),
           focus: (event: AstylarEvent) => this.zone.run(() => {
@@ -149,6 +161,9 @@ export class AstylarShowcaseComponent {
   protected mounted(surface: AstylarSurface): void {
     if (this.surface && this.surface !== surface) this.ripple.dispose();
     this.surface = surface;
+    if (typeof window !== 'undefined' && window.parent !== window) {
+      window.parent.postMessage({ type: 'showcase:ready' }, window.location.origin);
+    }
     if (typeof window !== 'undefined') {
       window.__ASTYLAR_MATERIAL_BENCHMARK__ = {
         waitForSettled: async () => {
@@ -183,25 +198,25 @@ export class AstylarShowcaseComponent {
     if (this.benchmarkMode && this.benchmarkInteraction === 'held') return;
     const targetId = event.targetId ?? id;
     if (this.store.state().disabled && ['checkbox-primary', 'radio-solo', 'radio-team', 'slide-toggle-primary'].includes(id)) return;
-    if (targetId.startsWith('autocomplete-option-cape-town') || targetId.startsWith('autocomplete-option-johannesburg')) {
+    if (id === 'autocomplete-option-cape-town' || id === 'autocomplete-option-johannesburg') {
       this.fieldValues.update((values) => ({
         ...values,
-        autocomplete: targetId.includes('cape-town') ? 'Cape Town' : 'Johannesburg',
+        autocomplete: id.includes('cape-town') ? 'Cape Town' : 'Johannesburg',
       }));
       this.store.patchState({ open: false });
     }
-    if (targetId === 'select-option-solo' || targetId === 'select-option-team' || targetId === 'select-team-label' || targetId === 'select-check') {
-      this.store.patchState({ selected: targetId !== 'select-option-solo', open: false });
+    if (id === 'select-option-solo' || id === 'select-option-team') {
+      this.store.patchState({ selected: id === 'select-option-team', open: false });
     }
     if (id === 'radio-team') this.store.patchState({ selected: true });
     if (id === 'radio-solo') this.store.patchState({ selected: false });
     if (id === 'checkbox-primary') this.store.patchState({ selected: !this.store.state().selected });
-    const chipIndex = Number((event.targetId ?? id).match(/^chip-(\d+)/)?.[1]);
+    const chipIndex = Number(id.match(/^chip-(\d+)$/)?.[1]);
     if (Number.isInteger(chipIndex)) this.store.patchState({
       chipSelections: this.store.state().chipSelections.map((selected, index) =>
         index === chipIndex ? !selected : selected),
     });
-    if (id === 'sort-primary' || id === 'sort-trigger') {
+    if (id === 'sort-trigger') {
       const sortActive = this.store.state().open;
       this.store.patchState({
         sortDirection: sortActive && this.store.state().sortDirection === 'asc' ? 'desc' : 'asc',
@@ -216,7 +231,7 @@ export class AstylarShowcaseComponent {
     if (id === 'step-details') this.store.patchState({ selected: true });
     if (id === 'select-control') this.store.patchState({ open: !this.store.state().open });
     if (id === 'autocomplete-control') this.store.patchState({ open: true });
-    if (id === 'datepicker-icon' || targetId.startsWith('datepicker-icon-visual') || targetId.startsWith('datepicker-calendar-')) {
+    if (id === 'datepicker-icon') {
       const opening = !this.store.state().open;
       if (opening) this.datepickerView.set('month');
       this.store.patchState({ open: opening });
@@ -227,9 +242,10 @@ export class AstylarShowcaseComponent {
     if (targetId.startsWith('datepicker-year-')) {
       this.datepickerView.set('month');
     }
-    if (id === 'timepicker-icon' || targetId.startsWith('timepicker-icon-visual') || targetId.startsWith('timepicker-clock-')) {
+    if (id === 'timepicker-icon') {
       this.store.patchState({ open: !this.store.state().open });
     }
+    if (id === 'timepicker-control') this.store.patchState({ open: true });
     if (id === 'slide-toggle-primary') this.store.patchState({ selected: !this.store.state().selected });
     if (['dialog-primary', 'bottom-sheet-primary'].includes(id)) {
       const wasOpen = this.store.state().open;
@@ -322,15 +338,11 @@ export class AstylarShowcaseComponent {
     const theme = this.store.tokens();
     const state = this.store.state();
     const devicePixelRatio = typeof window === 'undefined' ? 1 : window.devicePixelRatio || 1;
-    const tooltipTransform = devicePixelRatio >= 1.5
-      ? theme.typographyScale > 1 ? 'translate(47.5px, 11.5px)' : 'translate(50.5px, 20.5px)'
-      : theme.density <= -5 ? 'translate(92px, 26px)'
-        : theme.typographyScale > 1 ? 'translate(92px, 25px)' : 'translate(92px, 39px)';
     const toolbarHeld = family === 'toolbar' && this.store.benchmarkPhase() === 'held';
     if (this.surface) this.surface.scene.clearColor = Color4.FromHexString(`${theme.surface}ff`);
     const rootId = `${family}-root`;
     const densityHeight = materialDensityHeight(theme.density);
-    const emptyFieldActive = state.error || (
+    const emptyFieldActive = state.error || (family === 'timepicker' && state.open) || (
       ['form-field', 'input', 'autocomplete', 'datepicker', 'timepicker'].includes(family) &&
       this.focusedId() === `${family}-control`
     );
@@ -365,25 +377,31 @@ export class AstylarShowcaseComponent {
         { selector: `#${family}-secondary`, width: family === 'button' ? '117px' : '110px' },
         { selector: `#${family}-disabled`, width: family === 'button' ? '103px' : '99px', opacity: '1', background: theme.density === -2 ? '#ccd8d8' : mixHex(theme.surfaceContainer, theme.onSurface, .12), color: mixHex(theme.surfaceContainer, theme.onSurface, .38) },
         { selector: '#radio-primary', position: 'relative', width: theme.density <= -5 ? '129px' : theme.density < 0 ? '137px' : '153px', height: `${theme.density <= -5 ? 18 : theme.density < 0 ? 22 : 19}px`, marginTop: theme.density < 0 ? '4px' : '9px', alignSelf: 'flex-start' },
-        { selector: '.radio-option', position: 'absolute', top: '-10px', height: '40px', display: 'flex', alignItems: 'center', color: theme.onSurface },
+        { selector: '.radio-option', position: 'absolute', top: '-10px', height: '40px', display: 'flex', alignItems: 'center', color: theme.onSurface, cursor: 'pointer' },
         { selector: '#radio-solo', left: '0', width: '68px' },
         { selector: '#radio-team', left: '73px', width: '80px' },
-        { selector: '.radio-ring', position: 'relative', width: '20px', height: '20px', boxSizing: 'border-box', borderWidth: '2px', borderStyle: 'solid', borderColor: theme.onSurface, borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center' },
+        { selector: '.radio-state-layer', position: 'absolute', zIndex: '1', top: '0', left: '-10px', width: '40px', height: '40px', borderRadius: '20px', background: 'transparent' },
+        { selector: '.radio-option:hover .radio-state-layer', background: alphaHex(theme.onSurface, .08) },
+        { selector: '.radio-option:active .radio-state-layer', background: alphaHex(theme.onSurface, .12) },
+        { selector: '.radio-option:hover .radio-state-layer.selected', background: alphaHex(theme.primary, .08) },
+        { selector: '.radio-option:active .radio-state-layer.selected', background: alphaHex(theme.primary, .12) },
+        { selector: '.radio-ring', position: 'relative', zIndex: '2', width: '20px', height: '20px', boxSizing: 'border-box', borderWidth: '2px', borderStyle: 'solid', borderColor: theme.onSurface, borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center' },
         { selector: '.radio-ring.selected', borderColor: theme.primary },
         { selector: '.radio-dot', width: '10px', height: '10px', flexShrink: '0', borderRadius: '5px', background: theme.primary },
-        { selector: '.radio-label', marginLeft: '8px', fontSize: '14px', verticalAlign: 'middle' },
+        { selector: '.radio-label', position: 'relative', zIndex: '2', marginLeft: '8px', fontSize: '14px', verticalAlign: 'middle' },
         { selector: '#slide-toggle-primary', position: 'relative', width: '179px', height: '32px', alignSelf: 'flex-start' },
         { selector: '.switch-state-layer', position: 'absolute', zIndex: '3', top: '-4px', left: state.selected ? '16px' : '-6px', width: '40px', height: '40px', borderRadius: '20px', background: 'transparent' },
         { selector: '#slide-toggle-primary:hover .switch-state-layer', background: alphaHex(state.selected ? theme.primary : theme.onSurface, .08) },
         { selector: '#slide-toggle-primary:active .switch-state-layer', background: alphaHex(state.selected ? theme.primary : theme.onSurface, .12) },
         { selector: '.switch-track', position: 'absolute', zIndex: '2', top: '0', left: '0', width: '52px', height: '32px', boxSizing: 'border-box', borderWidth: state.selected ? '0' : '2px', borderStyle: 'solid', borderColor: '#79747e', borderRadius: '16px', background: state.selected ? theme.primary : state.disabled ? mixHex(theme.surfaceContainer, theme.onSurface, .08) : 'transparent' },
         { selector: '.switch-thumb', position: 'absolute', top: '4px', left: state.selected ? '24px' : '4px', width: '24px', height: '24px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: state.selected ? theme.surface : '#79747e', color: state.selected ? theme.primary : theme.surfaceContainer, textAlign: 'center', fontSize: '14px' },
+        { selector: '.switch-minus', position: 'relative', top: '-1.5px', lineHeight: '14px' },
         { selector: '.switch-label', position: 'absolute', zIndex: '2', top: '6px', left: '60px', whiteSpace: 'nowrap', color: theme.onSurface, fontSize: '14px', verticalAlign: 'middle' },
-        { selector: '#button-toggle-primary', width: '130px', height: `${theme.density <= -5 ? 26 : 42}px`, boxSizing: 'border-box', borderWidth: '1px', borderStyle: 'solid', borderColor: '#79747e', borderRadius: `${(theme.density <= -5 ? 13 : 21) * theme.cornerScale}px`, display: 'flex', alignSelf: 'flex-start', overflow: 'hidden', background: '#eadef7' },
+        { selector: '#button-toggle-primary', width: '130px', height: `${theme.density <= -5 ? 26 : 42}px`, boxSizing: 'border-box', borderWidth: '1px', borderStyle: 'solid', borderColor: '#79747e', borderRadius: `${(theme.density <= -5 ? 13 : 21) * theme.cornerScale}px`, display: 'flex', alignSelf: 'flex-start', overflow: 'hidden', background: theme.surfaceContainer },
         { selector: '.button-toggle-option', height: `${theme.density <= -5 ? 24 : 40}px`, boxSizing: 'border-box', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', color: theme.onSurface, fontSize: '14px', cursor: 'pointer' },
         { selector: '#button-toggle-one-label, #button-toggle-two-label', verticalAlign: 'middle' },
-        { selector: '#button-toggle-one', width: state.selected ? '47px' : '81px', borderRadius: `${20 * theme.cornerScale}px 0 0 ${20 * theme.cornerScale}px`, background: state.selected ? theme.surfaceContainer : 'transparent' },
-        { selector: '#button-toggle-two', width: state.selected ? '81px' : '47px', borderWidth: '0 0 0 1px', borderStyle: 'solid', borderColor: '#79747e', borderRadius: `0 ${20 * theme.cornerScale}px ${20 * theme.cornerScale}px 0`, background: state.selected ? 'transparent' : theme.surfaceContainer },
+        { selector: '#button-toggle-one', width: state.selected ? '47px' : '81px', borderRadius: '0', background: state.selected ? 'transparent' : '#eadef7' },
+        { selector: '#button-toggle-two', width: state.selected ? '81px' : '47px', borderWidth: '0 0 0 1px', borderStyle: 'solid', borderColor: '#79747e', borderRadius: '0', background: state.selected ? '#eadef7' : 'transparent' },
         { selector: '.button-toggle-option.selected', color: '#4b4357' },
         { selector: '#menu-primary', width: '120px' },
         { selector: '#menu-popup', position: 'absolute', top: `${theme.density <= -5 ? 54 : theme.density < 0 ? 58 : 69}px`, left: '33px', width: '111px', height: `${theme.density <= -5 ? 111 : theme.density < 0 ? 110 : 112}px`, boxSizing: 'border-box', padding: '8px 0', borderRadius: '4px', background: '#f2ecf1', boxShadow: '0 2px 6px rgba(0,0,0,0.24)', zIndex: '50' },
@@ -420,28 +438,28 @@ export class AstylarShowcaseComponent {
         { selector: '.select-control, .select-control:focus', paddingRight: '32px', cursor: 'pointer', boxShadow: 'none', color: 'transparent', caretColor: 'transparent' },
         { selector: '.select-value', position: 'absolute', top: '0', left: '16px', height: '24px', color: state.disabled ? '#79747e' : '#1d1b20', fontSize: '16px', verticalAlign: 'middle' },
         { selector: '.select-caret', position: 'absolute', top: `${theme.density === 0 ? 18 : 8}px`, right: '15px', color: state.open ? theme.primary : theme.onSurface, fontSize: `${theme.density === 0 ? 12 : 14}px` },
-        { selector: '.select-popup', position: 'absolute', top: `${theme.density === 0 ? 56 : 48}px`, left: '0', width: '100%', height: `${theme.density === 0 ? 112 : 104}px`, boxSizing: 'border-box', padding: '8px 0', background: '#f2ecf1', boxShadow: '0 2px 6px rgba(0,0,0,0.24)', zIndex: '60' },
-        { selector: '.select-option', position: 'relative', width: '100%', height: '48px', boxSizing: 'border-box', padding: '14px 16px', color: '#1d1b20', fontSize: '16px' },
+        { selector: '.select-popup', position: 'absolute', top: `${theme.density === 0 ? 56 : 48}px`, left: '7px', right: '7px', width: 'auto', height: `${theme.density === 0 ? 112 : 104}px`, boxSizing: 'border-box', padding: '8px 0', background: '#f2ecf1', boxShadow: '0 2px 6px rgba(0,0,0,0.24)', zIndex: '60' },
+        { selector: '.select-option', position: 'relative', width: '100%', height: '48px', boxSizing: 'border-box', padding: '0 16px', display: 'flex', alignItems: 'center', color: '#1d1b20', fontSize: '16px' },
         { selector: '.select-option.selected', background: '#eadef7' },
         { selector: '.select-option:hover', background: '#e5dfe5' },
         { selector: '.select-option.selected:hover', background: '#dfd3ef' },
         { selector: '.select-option:active', background: '#d8d2d8' },
         { selector: '.autocomplete-popup', top: `${theme.density === 0 ? 58 : 50}px` },
-        { selector: '.autocomplete-popup .select-option', padding: `${theme.density === 0 ? 20 : 16}px 16px` },
+        { selector: '.autocomplete-popup .select-option', padding: '0 16px' },
         ...(theme.density === -2 ? [
           { selector: '.field-input-region.compact-filled-input-region', top: '10px' },
-          { selector: '.select-popup', top: '49px', left: '0', width: '100%', height: '112px' },
-          { selector: '.select-popup .select-option', padding: '11px 16px' },
+          { selector: '.select-popup', top: '49px', left: '7px', right: '7px', width: 'auto', height: '112px' },
+          { selector: '.select-popup .select-option', padding: '0 16px' },
           { selector: '.autocomplete-popup', top: '49px' },
-          { selector: '.autocomplete-popup .select-option', padding: '12px 16px' },
+          { selector: '.autocomplete-popup .select-option', padding: '0 16px' },
         ] : []),
         ...(theme.density < 0 ? [
           { selector: '#autocomplete-label', display: state.open || this.focusedId() === 'autocomplete-control' ? 'none' : undefined },
         ] : []),
         ...(theme.density <= -5 ? [
-          { selector: '.select-popup', top: '46px', left: '7px', right: 'auto', width: 'calc(100% - 14px)' },
+          { selector: '.select-popup', top: '46px', left: '7px', right: '7px', width: 'auto' },
           { selector: '.autocomplete-popup', top: '47px', height: '102px', padding: '0' },
-          { selector: '.autocomplete-popup .select-option', padding: '11px 16px' },
+          { selector: '.autocomplete-popup .select-option', padding: '0 16px' },
         ] : []),
         { selector: '.select-check', position: 'absolute', top: '14px', right: '16px', color: '#49454f' },
         { selector: '.picker-control.open', boxShadow: 'none' },
@@ -466,14 +484,12 @@ export class AstylarShowcaseComponent {
         { selector: '.timepicker-shell .field-surface', height: `${theme.density <= -5 && state.open ? 39 : theme.density === 0 ? 56 : 48}px` },
         { selector: '.timepicker-shell .field-label', display: theme.density < 0 && state.open ? 'none' : undefined, color: state.open ? theme.primary : theme.onSurface },
         { selector: '.timepicker-gap', position: 'absolute', top: `${theme.density <= -5 ? 39 : theme.density === 0 ? 56 : 48}px`, left: '7px', right: '7px', height: '8px', background: '#f2ecf1', zIndex: '60' },
-        { selector: '.timepicker-active-line', position: 'absolute', top: `${theme.density <= -5 ? 37 : theme.density === 0 ? 54 : 46}px`, left: '7px', right: '7px', height: '2px', background: theme.primary, zIndex: '61' },
-        { selector: '.timepicker-shell .picker-popup', top: `${theme.density <= -5 ? 45 : theme.density === 0 ? 64 : 56}px`, left: '7px', right: 'auto', width: 'calc(100% - 28px)', height: '248px', paddingTop: '0' },
-        { selector: '.timepicker-shell .picker-option', height: '48px', padding: '14px 16px' },
-        { selector: '.timepicker-scroll-track', position: 'absolute', top: `${theme.density <= -5 ? 45 : theme.density === 0 ? 64 : 56}px`, right: '0', width: '12px', height: '248px', background: '#f2ecf1', zIndex: '62' },
-        { selector: '.timepicker-scroll-thumb', position: 'absolute', top: '4px', right: '1px', width: '10px', height: '32px', borderRadius: '5px', background: '#79747e' },
+        { selector: '.timepicker-active-line', position: 'absolute', top: `${theme.density <= -5 ? 37 : theme.density === 0 ? 56 : 46}px`, left: '7px', right: '7px', height: '2px', background: theme.primary, zIndex: '61' },
+        { selector: '.timepicker-shell .picker-popup', top: `${theme.density <= -5 ? 45 : theme.density === 0 ? 65 : 56}px`, left: '7px', right: '7px', width: 'auto', height: '248px', paddingTop: '0' },
+        { selector: '.timepicker-shell .picker-option', height: '48px', padding: '0 16px', display: 'flex', alignItems: 'center' },
         { selector: '.datepicker-shell .field-surface', height: `${theme.density <= -5 && state.open ? 36 : theme.density === 0 ? 56 : 48}px` },
         { selector: '.datepicker-shell .field-label', color: theme.density < 0 && state.open ? '#e8e0eb' : theme.onSurface },
-        { selector: '.datepicker-popup', position: 'absolute', top: `${theme.density <= -5 ? 39 : theme.density === 0 ? 59 : 51}px`, left: '7px', width: '291px', height: '349px', boxSizing: 'border-box', borderRadius: `${16 * theme.cornerScale}px`, background: '#ede6eb', boxShadow: '0 2px 4px rgba(0,0,0,0.24)', zIndex: '60' },
+        { selector: '.datepicker-popup', position: 'absolute', top: `${theme.density <= -5 ? 40 : theme.density === 0 ? 56 : 48}px`, left: '7px', width: '291px', height: '349px', boxSizing: 'border-box', borderRadius: `${16 * theme.cornerScale}px`, background: '#ede6eb', boxShadow: '0 2px 4px rgba(0,0,0,0.24)', zIndex: '60' },
         { selector: '.datepicker-header', position: 'relative', width: '100%', height: '64px', boxSizing: 'border-box', padding: '0 24px', display: 'flex', alignItems: 'center', color: '#1d1b20', fontSize: '14px', fontWeight: '500' },
         { selector: '.datepicker-month', position: 'absolute', top: '13px', left: '12px', height: '40px', boxSizing: 'border-box', padding: '0 12px', borderWidth: '0', borderRadius: '20px', background: 'transparent', color: '#1d1b20', fontSize: '14px', fontWeight: '500', verticalAlign: 'middle' },
         { selector: '.datepicker-month:hover', borderRadius: '20px', background: '#e5dfe5' },
@@ -486,14 +502,14 @@ export class AstylarShowcaseComponent {
         { selector: '.datepicker-cell:hover', borderRadius: '20px', background: '#e5dfe5' },
         { selector: '.datepicker-cell:active', borderRadius: '20px', background: '#d8d2d8' },
         { selector: '.datepicker-weekday, .datepicker-month-marker', fontWeight: '500' },
-        { selector: '.datepicker-selected', position: 'absolute', top: `${64 + materialSelectedDayRow() * 40 + 2}px`, left: `${11 + materialSelectedDayColumn() * 40 + 2}px`, width: '36px', height: '36px', boxSizing: 'border-box', borderWidth: '1px', borderStyle: 'solid', borderColor: theme.mode === 'dark' ? '#d5baff' : '#7d00fa', borderRadius: '18px', zIndex: '61' },
+        { selector: '.datepicker-selected', position: 'absolute', top: `${64 + materialSelectedDayRow() * 40 + .5}px`, left: `${11 + materialSelectedDayColumn() * 40 - 4}px`, width: '36px', height: '36px', boxSizing: 'border-box', borderWidth: '1px', borderStyle: 'solid', borderColor: theme.mode === 'dark' ? '#d5baff' : '#7d00fa', borderRadius: '18px', zIndex: '61', pointerEvents: 'none' },
         { selector: '.datepicker-year-grid', position: 'absolute', top: '84px', left: '8px', width: '280px', height: '240px', display: 'grid', gridTemplateColumns: 'repeat(4, 70px)', gridTemplateRows: 'repeat(6, 40px)' },
         { selector: '.datepicker-year', width: '60px', height: '40px', marginLeft: '5px', boxSizing: 'border-box', padding: '0', borderWidth: '0', borderRadius: '20px', background: 'transparent', color: '#1d1b20', fontSize: '14px' },
         { selector: '.datepicker-year:hover', background: '#e5dfe5' },
         { selector: '.datepicker-year:active', background: '#d8d2d8' },
         { selector: '.datepicker-year.selected', borderWidth: '1px', borderStyle: 'solid', borderColor: theme.mode === 'dark' ? '#d5baff' : '#7d00fa' },
         ...(theme.density === -2 ? [
-          { selector: '.datepicker-popup', top: '49.5px', height: '350.5px' },
+          { selector: '.datepicker-popup', top: '48px', height: '350.5px' },
           { selector: '.datepicker-year-grid', top: '83.5px' },
         ] : []),
         { selector: '.datepicker-month.year-view', background: '#eadef7' },
@@ -555,9 +571,10 @@ export class AstylarShowcaseComponent {
         ...(theme.density <= -5 ? [{ selector: '.badge-label', mediaMaxWidth: '500px', top: '-1px' }] : []),
         { selector: '.badge-bubble', position: 'absolute', top: '-4px', right: '-4px', width: '16px', height: '16px', borderRadius: '8px', background: theme.primary, color: theme.onPrimary, fontSize: '11px', lineHeight: '16px', textAlign: 'center' },
         { selector: '.badge-count-label', position: 'relative', top: '-2.5px', display: 'block', width: '100%', textAlign: 'center' },
-        { selector: '.chip', height: `${theme.density === 0 ? 32 : 24}px`, boxSizing: 'border-box', padding: '0 12px', borderWidth: '1px', borderStyle: 'solid', borderColor: '#79747e', borderRadius: `${8 * theme.cornerScale}px`, display: 'flex', alignItems: 'center', gap: '8px', background: 'transparent', color: theme.onSurface, fontSize: '14px', lineHeight: '20px', cursor: 'pointer' },
-        { selector: '.chip.selected', borderWidth: '0', background: '#eadef7', color: '#4b4357' },
-        { selector: '.chip-label', padding: theme.density <= -5 ? '0' : '0 0 2px', verticalAlign: 'middle' },
+        { selector: '.chip', height: `${theme.density === 0 ? 32 : 24}px`, boxSizing: 'border-box', padding: '0 12px', borderWidth: '1px', borderStyle: 'solid', borderColor: '#79747e', borderRadius: `${8 * theme.cornerScale}px`, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: 'transparent', color: theme.onSurface, fontSize: '14px', lineHeight: '20px', cursor: 'pointer' },
+        { selector: '.chip.selected', justifyContent: 'flex-start', borderWidth: '0', background: '#eadef7', color: '#4b4357' },
+        { selector: '.chip-label', padding: theme.density <= -5 ? '0' : '0 0 2px', verticalAlign: 'middle', transform: 'translateY(0.25px)' },
+        { selector: '.chip.unselected .chip-label', marginRight: '8px' },
         { selector: '#chips-primary', gap: '8px' },
         { selector: '#chip-0', width: state.chipSelections[0] ? '97px' : '68px' },
         { selector: '#chip-1', width: state.chipSelections[1] ? '93px' : '64px' },
@@ -651,7 +668,7 @@ export class AstylarShowcaseComponent {
         { selector: '.range', width: '100%', height: '48px', cursor: 'pointer' },
         { selector: '.range-stack', position: 'relative', width: '100%', height: '48px' },
         { selector: '.range-layer', position: 'absolute', top: '0', left: '0', width: '100%', height: '48px' },
-        { selector: '#slider-start', width: '350px', height: '44px', top: '2px', opacity: '0' },
+        { selector: '#slider-start', width: '350px', height: '44px', top: '2px', left: '0', opacity: '0' },
         { selector: '#slider-primary', width: '399px', height: '44px', top: '2px', left: '350px', opacity: '0' },
         { selector: '#slider-start', mediaMaxWidth: '800px', width: '311px' },
         { selector: '#slider-primary', mediaMaxWidth: '800px', width: '356px', left: '311px' },
@@ -660,7 +677,7 @@ export class AstylarShowcaseComponent {
         { selector: '.range-plugin-layer', width: '100%', height: '48px' },
         { selector: '.progress', width: family === 'progress-spinner' ? '100px' : '100%', height: family === 'progress-spinner' ? '100px' : '8px' },
         { selector: '.modal-overlay', position: 'fixed', top: '0', left: '0', width: '100%', height: '100%', boxSizing: 'border-box', padding: '32px', background: 'rgba(0,0,0,0.32)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: '1000' },
-        { selector: '.dialog-panel', width: '240px', height: '140px', padding: '24px', borderRadius: `${28 * theme.cornerScale}px`, background: theme.mode === 'dark' ? '#211f26' : '#fff7ff', color: theme.onSurface, display: 'flex', flexDirection: 'column' },
+        { selector: '.dialog-panel', width: '224px', height: '124px', padding: '24px', borderRadius: `${28 * theme.cornerScale}px`, background: theme.mode === 'dark' ? '#211f26' : '#fff7ff', color: theme.onSurface, display: 'flex', flexDirection: 'column' },
         { selector: '.dialog-title', fontSize: '24px', fontWeight: '400' },
         { selector: '.dialog-copy', marginTop: '16px', fontSize: '14px' },
         { selector: '.dialog-actions', height: '40px', marginTop: '16px', display: 'flex', justifyContent: 'flex-end', gap: '8px' },
@@ -670,16 +687,18 @@ export class AstylarShowcaseComponent {
         { selector: '.dialog-action:active', background: mixHex(theme.mode === 'dark' ? '#211f26' : '#fff7ff', theme.mode === 'dark' ? '#d5baff' : '#7d00fa', .12) },
         { selector: '.dialog-action.primary:hover', background: mixHex(theme.mode === 'dark' ? '#d5baff' : '#7d00fa', theme.mode === 'dark' ? '#381e72' : '#ffffff', .08) },
         { selector: '.dialog-action.primary:active', background: mixHex(theme.mode === 'dark' ? '#d5baff' : '#7d00fa', theme.mode === 'dark' ? '#381e72' : '#ffffff', .12) },
-        { selector: '.bottom-sheet-overlay', alignItems: 'flex-end', padding: '0' },
-        { selector: '.bottom-sheet-panel', width: '438px', height: '110px', padding: '16px', borderRadius: `${28 * theme.cornerScale}px ${28 * theme.cornerScale}px 0 0`, background: theme.surface, color: theme.onSurface, display: 'flex', flexDirection: 'column', transform: 'translate(0, 146px)' },
+        { selector: '.bottom-sheet-overlay', flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'center', padding: '0' },
+        { selector: '.bottom-sheet-panel', width: '438px', height: '110px', padding: '16px', borderRadius: `${28 * theme.cornerScale}px ${28 * theme.cornerScale}px 0 0`, background: theme.surface, color: theme.onSurface, display: 'flex', flexDirection: 'column' },
         { selector: '.bottom-sheet-option', width: '100%', height: '60px', padding: '0 11px', borderWidth: '0', borderRadius: `${28 * theme.cornerScale}px`, background: 'transparent', color: theme.onSurface, textAlign: 'left', fontSize: '14px' },
         { selector: '#bottom-sheet-dismiss', background: mixHex(theme.surface, theme.onSurface, .08) },
         { selector: '.bottom-sheet-option:focus', color: theme.onSurface, background: mixHex(theme.surface, theme.onSurface, .12) },
-        { selector: '.snack-overlay', position: 'fixed', left: '0', bottom: '0', width: '100%', height: '56px', display: 'flex', justifyContent: 'center', alignItems: 'flex-end', paddingBottom: '8px', transform: 'translate(0, 159px)', zIndex: '1000' },
-        { selector: '.snack-surface', width: '294px', height: '41px', padding: '0 18px', borderRadius: '4px', background: '#322f35', color: '#ffffff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' },
+        { selector: '.snack-overlay', position: 'fixed', top: '0', left: '0', width: '100%', height: '100%', boxSizing: 'border-box', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'center', paddingBottom: '8px', pointerEvents: 'none', zIndex: '1000' },
+        { selector: '.snack-surface', width: '294px', height: '41px', padding: '0 18px', borderRadius: '4px', background: '#322f35', color: '#ffffff', display: 'flex', justifyContent: 'space-between', alignItems: 'center', pointerEvents: 'auto' },
         { selector: '.overlay-dismiss', width: '88px', height: '40px', borderWidth: '0', background: 'transparent', color: theme.primary, fontWeight: '500' },
         { selector: '.material-button:focus', borderWidth: '0', boxShadow: '0 0 0 1px rgba(0,0,0,0)' },
-        { selector: '#tooltip-popup', position: 'absolute', top: '76px', left: '44px', width: '91px', height: '24px', padding: '0 8px', borderWidth: '0', borderRadius: '4px', background: '#322f35', color: '#ffffff', display: 'flex', alignItems: 'center', flexShrink: '0', fontSize: '10px', whiteSpace: 'nowrap', transform: tooltipTransform, zIndex: '1000' },
+        { selector: '.tooltip-anchor', width: '141px', height: '72px', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '8px', flexShrink: '0' },
+        { selector: '.tooltip-anchor .material-button', flexShrink: '0' },
+        { selector: '#tooltip-popup', position: 'relative', width: '91px', height: '24px', marginLeft: '16px', padding: '0 8px', borderWidth: '0', borderRadius: '4px', background: '#322f35', color: '#ffffff', display: 'flex', alignItems: 'center', flexShrink: '0', fontSize: '10px', whiteSpace: 'nowrap', transform: 'translate(93px, 37px)', zIndex: '1000' },
       ],
     };
   }
@@ -708,7 +727,7 @@ export class AstylarShowcaseComponent {
     if (family === 'grid-list') return [{ type: 'div', id: 'grid-list-primary', class: 'grid-list', children: [{ type: 'div', id: 'grid-tile-one', class: 'grid-tile', children: [{ type: 'span', id: 'grid-tile-one-label', class: 'grid-tile-label', textContent: 'One' }] }, { type: 'div', id: 'grid-tile-two', class: 'grid-tile', children: [{ type: 'span', id: 'grid-tile-two-label', class: 'grid-tile-label', textContent: 'Two' }] }] }];
     if (family === 'badge') return [{ type: 'span', id: 'badge-primary', class: 'badge-anchor', children: [{ type: 'span', id: 'badge-label', class: 'badge-label', textContent: 'Notifications' }, { type: 'span', id: 'badge-count', class: 'badge-bubble', children: [{ type: 'span', id: 'badge-count-label', class: 'badge-count-label', textContent: '4' }] }] }];
     if (family === 'chips') return [{ type: 'div', id: 'chips-primary', class: 'row', role: 'listbox', ariaLabel: 'Tags', ariaDisabled: false, ariaMultiselectable: true, children: state.chips.map((chip, index) => ({
-      type: 'div' as const, id: `chip-${index}`, class: `chip${state.chipSelections[index] ? ' selected' : ''}`, role: 'option', tabindex: 0,
+      type: 'div' as const, id: `chip-${index}`, class: `chip ${state.chipSelections[index] ? 'selected' : 'unselected'}`, role: 'option', tabindex: 0,
       ariaLabel: chip, ariaSelected: state.chipSelections[index],
       children: [...(state.chipSelections[index] ? [this.selectionMark(`chip-${index}-mark`)] : []), { type: 'span' as const, id: `chip-${index}-label`, class: 'chip-label', textContent: chip }],
     })) }];
@@ -732,9 +751,9 @@ export class AstylarShowcaseComponent {
     if (family === 'paginator') return [{ type: 'div', id: 'paginator-primary', class: 'paginator', role: 'group', ariaLabel: `Items per page: 10 ${state.pageIndex * 10 + 1} – ${Math.min(100, state.pageIndex * 10 + 10)} of 100`, children: [{ type: 'span', id: 'paginator-size', textContent: 'Items per page:' }, { type: 'span', id: 'paginator-page-size', textContent: '10' }, { type: 'span', id: 'paginator-range', textContent: `${state.pageIndex * 10 + 1} – ${Math.min(100, state.pageIndex * 10 + 10)} of 100` }, { type: 'button', id: 'paginator-previous', class: 'paginator-button', disabled: state.pageIndex === 0, ariaLabel: 'Previous page', value: '‹' }, { type: 'button', id: 'paginator-next', class: 'paginator-button', disabled: state.pageIndex === 9, ariaLabel: 'Next page', value: '›' }] }];
     if (family === 'tree') return [{ type: 'div', id: 'tree-primary', class: 'material-tree', role: 'tree', children: ['Documents', 'Projects', 'Archive'].map((label, index) => ({ type: 'div' as const, id: `tree-item-${index}`, class: `tree-item${this.focusedId() === `tree-item-${index}` ? ' focused' : ''}`, role: 'treeitem', tabindex: index === 0 ? 0 : -1, ariaLevel: 1, ariaPosinset: index + 1, ariaSetsize: 3, children: [{ type: 'span' as const, id: `tree-item-${index}-label`, class: 'tree-label', textContent: label }] })) }];
     if (family === 'slider') return [{ type: 'div', id: 'slider-pair', class: 'range-stack', children: [
-      { type: 'showcase.material:range-visual', id: 'slider-material-visual', class: 'range-plugin-layer', data: { start: state.sliderStart / 100, end: state.sliderValue / 100, 'indicator-color': this.store.tokens().primary, 'track-color': this.store.tokens().mode === 'dark' ? '#49454f' : '#e7e0ec' } },
-      { type: 'input', inputType: 'range', id: 'slider-start', class: 'range-layer', min: '0', max: '50', step: '5', value: String(Math.min(50, state.sliderStart)), disabled: state.disabled, ariaLabel: 'Minimum', ariaValueText: String(state.sliderStart) },
-      { type: 'input', inputType: 'range', id: 'slider-primary', class: 'range-layer', min: '50', max: '100', step: '5', value: String(Math.max(50, state.sliderValue)), disabled: state.disabled, ariaLabel: 'Maximum', ariaValueText: String(state.sliderValue) },
+      { type: 'showcase.material:range-visual', id: 'slider-material-visual', class: 'range-plugin-layer', data: { start: state.sliderStart / 100, end: state.sliderValue / 100, 'indicator-color': this.store.tokens().primary, 'track-color': this.store.tokens().mode === 'dark' ? '#49454f' : '#e7e0ec', 'state-handle': sliderHandleName(this.pressedSliderId() ?? this.hoveredSliderId()), 'state-color': alphaHex(this.store.tokens().primary, this.pressedSliderId() ? .12 : .08) } },
+      { type: 'input', inputType: 'range', id: 'slider-start', class: 'range-layer', min: '0', max: '50', step: '1', value: String(Math.min(50, state.sliderStart)), disabled: state.disabled, ariaLabel: 'Minimum', ariaValueText: String(state.sliderStart) },
+      { type: 'input', inputType: 'range', id: 'slider-primary', class: 'range-layer', min: '50', max: '100', step: '1', value: String(Math.max(50, state.sliderValue)), disabled: state.disabled, ariaLabel: 'Maximum', ariaValueText: String(state.sliderValue) },
     ] }];
     if (family === 'progress-bar') return [{ type: 'showcase.material:linear-progress', id: 'progress-bar-primary', class: 'progress', role: 'progressbar', ariaValueMin: 0, ariaValueMax: 100, ariaValueNow: 64, data: { mode: 'determinate', progress: .64, 'indicator-color': this.store.tokens().primary, 'track-color': this.store.tokens().mode === 'dark' ? '#49454f' : '#e7e0ec' } }];
     if (family === 'progress-spinner') return [{ type: 'showcase.material:circular-progress', id: 'progress-spinner-primary', class: 'progress', role: 'progressbar', ariaValueMin: 0, ariaValueMax: 100, ariaValueNow: 64, data: { mode: 'determinate', progress: .64, 'indicator-color': this.store.tokens().primary, 'stroke-width': 10 } }];
@@ -765,8 +784,8 @@ export class AstylarShowcaseComponent {
       ],
     }];
     if (family === 'radio') return [{ type: 'div', id: 'radio-primary', role: 'radiogroup', children: [
-      { type: 'div', id: 'radio-solo', class: 'radio-option', role: 'radio', tabindex: state.selected ? -1 : 0, ariaChecked: !state.selected, ariaDisabled: state.disabled, children: [{ type: 'span', id: 'radio-solo-ring', class: `radio-ring${state.selected ? '' : ' selected'}`, children: state.selected ? [] : [{ type: 'span', id: 'radio-solo-dot', class: 'radio-dot' }] }, { type: 'span', id: 'radio-solo-label', class: 'radio-label', textContent: 'Solo' }] },
-      { type: 'div', id: 'radio-team', class: 'radio-option', role: 'radio', tabindex: state.selected ? 0 : -1, ariaChecked: state.selected, ariaDisabled: state.disabled, children: [{ type: 'span', id: 'radio-team-ring', class: `radio-ring${state.selected ? ' selected' : ''}`, children: state.selected ? [{ type: 'span', id: 'radio-team-dot', class: 'radio-dot' }] : [] }, { type: 'span', id: 'radio-team-label', class: 'radio-label', textContent: 'Team' }] },
+      { type: 'div', id: 'radio-solo', class: 'radio-option', role: 'radio', tabindex: state.selected ? -1 : 0, ariaChecked: !state.selected, ariaDisabled: state.disabled, children: [{ type: 'span', id: 'radio-solo-state-layer', class: `radio-state-layer${state.selected ? '' : ' selected'}` }, { type: 'span', id: 'radio-solo-ring', class: `radio-ring${state.selected ? '' : ' selected'}`, children: state.selected ? [] : [{ type: 'span', id: 'radio-solo-dot', class: 'radio-dot' }] }, { type: 'span', id: 'radio-solo-label', class: 'radio-label', textContent: 'Solo' }] },
+      { type: 'div', id: 'radio-team', class: 'radio-option', role: 'radio', tabindex: state.selected ? 0 : -1, ariaChecked: state.selected, ariaDisabled: state.disabled, children: [{ type: 'span', id: 'radio-team-state-layer', class: `radio-state-layer${state.selected ? ' selected' : ''}` }, { type: 'span', id: 'radio-team-ring', class: `radio-ring${state.selected ? ' selected' : ''}`, children: state.selected ? [{ type: 'span', id: 'radio-team-dot', class: 'radio-dot' }] : [] }, { type: 'span', id: 'radio-team-label', class: 'radio-label', textContent: 'Team' }] },
     ] }];
     if (family === 'select') {
       const compactFilled = theme.density < 0;
@@ -795,7 +814,7 @@ export class AstylarShowcaseComponent {
     }
     if (family === 'slide-toggle') return [{ type: 'div', id: 'slide-toggle-primary', role: 'switch', tabindex: state.disabled ? -1 : 0, ariaLabel: 'Automatic updates', ariaChecked: state.selected, ariaDisabled: state.disabled, children: [
       { type: 'span', id: 'slide-toggle-state-layer', class: 'switch-state-layer' },
-      { type: 'span', id: 'slide-toggle-track', class: 'switch-track', children: [{ type: 'span', id: 'slide-toggle-thumb', class: 'switch-thumb', children: state.selected ? [this.selectionMark('slide-toggle-mark', 'switch-mark')] : [{ type: 'span', id: 'slide-toggle-minus', textContent: '−' }] }] },
+      { type: 'span', id: 'slide-toggle-track', class: 'switch-track', children: [{ type: 'span', id: 'slide-toggle-thumb', class: 'switch-thumb', children: state.selected ? [this.selectionMark('slide-toggle-mark', 'switch-mark')] : [{ type: 'span', id: 'slide-toggle-minus', class: 'switch-minus', textContent: '−' }] }] },
       { type: 'span', id: 'slide-toggle-label', class: 'switch-label', textContent: 'Automatic updates' },
     ] }];
     if (family === 'menu') return [{ type: 'button', id: 'menu-primary', class: 'material-button', ariaHaspopup: 'menu', ariaExpanded: state.open, ariaControls: 'menu-popup', value: 'Open menu' }, ...(state.open ? [{ type: 'div' as const, id: 'menu-popup', role: 'menu', children: [{ type: 'button' as const, id: 'menu-rename', role: 'menuitem', value: 'Rename' }, { type: 'button' as const, id: 'menu-delete', role: 'menuitem', value: 'Delete' }] }] : [])];
@@ -872,9 +891,6 @@ export class AstylarShowcaseComponent {
         { type: 'div' as const, id: 'timepicker-gap', class: 'timepicker-gap' },
         { type: 'div' as const, id: 'timepicker-active-line', class: 'timepicker-active-line' },
         { type: 'div' as const, id: 'timepicker-options', class: 'picker-popup', role: 'listbox', children: materialTimeOptions().map((label, index) => ({ type: 'div' as const, id: `timepicker-option-${index}`, class: `picker-option${index === 0 ? ' selected' : ''}`, role: 'option', ariaSelected: index === 0, textContent: label })) },
-        { type: 'div' as const, id: 'timepicker-scroll-track', class: 'timepicker-scroll-track', children: [
-          { type: 'span' as const, id: 'timepicker-scroll-thumb', class: 'timepicker-scroll-thumb' },
-        ] },
        ] : []),
       ...(family === 'datepicker' && state.open ? [{ type: 'div' as const, id: 'datepicker-popup', class: 'datepicker-popup', role: 'dialog', ariaLabel: 'Choose date', children: [
         { type: 'div' as const, id: 'datepicker-header', class: 'datepicker-header', children: [
@@ -898,7 +914,10 @@ export class AstylarShowcaseComponent {
         ...(this.datepickerView() === 'month' ? [{ type: 'span' as const, id: 'datepicker-selected', class: 'datepicker-selected' }] : []),
       ] }] : []),
     ] }];
-    if (family === 'tooltip') return [{ type: 'button', id: 'tooltip-primary', class: 'material-button', value: 'Hover for help', ariaDescribedby: state.open ? 'tooltip-popup' : undefined }, ...(state.open ? [{ type: 'div' as const, id: 'tooltip-popup', role: 'tooltip', textContent: 'Create a project' }] : [])];
+    if (family === 'tooltip') return [{ type: 'div', id: 'tooltip-anchor', class: 'tooltip-anchor', children: [
+      { type: 'button', id: 'tooltip-primary', class: 'material-button', value: 'Hover for help', ariaDescribedby: state.open ? 'tooltip-popup' : undefined },
+      ...(state.open ? [{ type: 'div' as const, id: 'tooltip-popup', role: 'tooltip', textContent: 'Create a project' }] : []),
+    ] }];
     if (family === 'core') {
       const phase = this.store.benchmarkPhase() === 'held' ? 1 : this.store.benchmarkPhase() === 'start' ? .35 : state.open ? .45 : 0;
       return [{ type: 'button', id: 'core-primary', class: 'material-button', value: 'Material ripple foundation' }, { type: 'showcase.material:state-layer', id: 'core-state-layer', data: { phase, 'state-layer-color': this.store.tokens().primary } }];
@@ -1057,6 +1076,12 @@ function materialDensityHeight(density: number): number {
   if (density === -1) return 32;
   if (density === -2) return 28;
   return 24;
+}
+
+function sliderHandleName(elementId: string | undefined): '' | 'start' | 'end' {
+  if (elementId === 'slider-start') return 'start';
+  if (elementId === 'slider-primary') return 'end';
+  return '';
 }
 
 function materialTimeOptions(): string[] {

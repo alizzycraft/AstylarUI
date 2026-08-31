@@ -171,6 +171,16 @@ class MaterialRangeVisualRenderer extends MaterialRendererBase implements Astyla
     const active = this.ownChild(context, MeshBuilder.CreatePlane(`${context.meshId}-active`, { width, height: trackHeight }, context.scene), root);
     active.material = this.material(context, 'active-material', this.color(context, 'indicator-color', '#6750a4'));
     active.position.z = .02;
+    const stateHandle = String(context.element.data?.['state-handle'] ?? '');
+    if (stateHandle === 'start' || stateHandle === 'end') {
+      const ratio = stateHandle === 'start' ? start : end;
+      const stateLayer = this.ownChild(context, MeshBuilder.CreateDisc(`${context.meshId}-${stateHandle}-state-layer`, {
+        radius: 24 * scale, tessellation: this.config.benchmarkMode ? 32 : 48,
+      }, context.scene), root);
+      stateLayer.material = this.material(context, `${stateHandle}-state-layer-material`, this.color(context, 'state-color', '#6750a414'));
+      stateLayer.position.x = -width / 2 + width * ratio;
+      stateLayer.position.z = .025;
+    }
     const thumbs: Partial<Record<'start' | 'end', Mesh>> = {};
     for (const [name, ratio] of [['start', start], ['end', end]] as const) {
       const thumb = this.ownChild(context, MeshBuilder.CreateDisc(`${context.meshId}-${name}-thumb`, {

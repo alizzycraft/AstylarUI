@@ -96,8 +96,8 @@ describe('AstylarShowcaseComponent', () => {
     store.setTheme(MATERIAL_THEME_PROFILES.light);
 
     const slider = build(component, 'slider');
-    expect(find(slider, 'slider-start')).toEqual(jasmine.objectContaining({ min: '0', max: '50', value: '30' }));
-    expect(find(slider, 'slider-primary')).toEqual(jasmine.objectContaining({ min: '50', max: '100', value: '65' }));
+    expect(find(slider, 'slider-start')).toEqual(jasmine.objectContaining({ min: '0', max: '50', step: '1', value: '30' }));
+    expect(find(slider, 'slider-primary')).toEqual(jasmine.objectContaining({ min: '50', max: '100', step: '1', value: '65' }));
 
     expect(style(build(component, 'paginator'), '#paginator-range')?.['top']).toBe('20px');
     store.patchState({ pageIndex: 1 });
@@ -135,7 +135,7 @@ describe('AstylarShowcaseComponent', () => {
     expect(style(compactSelect, '.select-control, .select-control:focus')?.['color']).toBe('transparent');
     expect(style(compactSelect, '.select-control, .select-control:focus')?.['caretColor']).toBe('transparent');
     expect(lastStyle(compactSelect, '.select-popup')).toEqual(jasmine.objectContaining({
-      left: '0', width: '100%',
+      left: '7px', right: '7px', width: 'auto',
     }));
 
     const customTabs = build(component, 'tabs');
@@ -148,7 +148,7 @@ describe('AstylarShowcaseComponent', () => {
     const compactYearPicker = build(component, 'datepicker');
     expect(find(compactYearPicker, 'datepicker-month')?.['class']).toContain('year-view');
     expect(lastStyle(compactYearPicker, '.datepicker-popup')).toEqual(jasmine.objectContaining({
-      top: '49.5px', height: '350.5px',
+      top: '48px', height: '350.5px',
     }));
 
     store.setTheme(MATERIAL_THEME_PROFILES.dark);
@@ -206,6 +206,9 @@ describe('AstylarShowcaseComponent', () => {
       role: 'dialog',
     }));
     expect(find(bottomSheet, 'bottom-sheet-overlay')?.['modal']).toBeUndefined();
+    expect(style(bottomSheet, '.bottom-sheet-overlay')).toEqual(jasmine.objectContaining({
+      flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'center',
+    }));
   });
 
   it('activates sort ascending before alternating its direction', () => {
@@ -314,7 +317,7 @@ describe('AstylarShowcaseComponent', () => {
       handleClick: (id: string, event: AstylarEvent) => void;
     }).handleClick.bind(component);
 
-    click('chip-0-label', { targetId: 'chip-0-label' } as AstylarEvent);
+    click('chip-0', { targetId: 'chip-0-label' } as AstylarEvent);
     expect(store.state().chipSelections).toEqual([false, true]);
     expect(find(build(component, 'chips'), 'chip-0-mark')).toBeUndefined();
     expect(find(build(component, 'chips'), 'chip-1-mark')).toBeDefined();
@@ -336,6 +339,9 @@ describe('AstylarShowcaseComponent', () => {
         change: (event: AstylarEvent) => void;
       }> } };
     }).options.events.handlers;
+    const slider = build(component, 'slider');
+    expect(style(slider, '#slider-start')).toEqual(jasmine.objectContaining({ left: '0', width: '350px' }));
+    expect(style(slider, '#slider-primary')).toEqual(jasmine.objectContaining({ left: '350px', width: '399px' }));
 
     handlers['slider-start'].input({ type: 'input', targetId: 'slider-start', currentTargetId: 'slider-start', value: 40 } as unknown as AstylarEvent);
     expect(updateRange).toHaveBeenCalledWith(.4, .65);
