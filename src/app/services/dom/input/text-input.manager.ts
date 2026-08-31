@@ -185,9 +185,10 @@ export class TextInputManager {
             textInput.textMesh.isVisible = false;
         }
 
-        // If the input is empty and a placeholder was shown, recalculate layout
-        // metrics for an empty string so the cursor starts at the left (0)
-        if (!textInput.textContent && textInput.placeholder && render.scene) {
+        // Every focused empty input needs zero-width metrics, not only inputs
+        // that previously displayed a placeholder. Otherwise there is no
+        // texture width from which to create the position-zero caret.
+        if (!textInput.textContent && render.scene) {
             const textStyleProps = this.parseTextStyle(style);
             const pixelScale = render.actions.camera.getPixelToWorldScale();
 
@@ -296,7 +297,6 @@ export class TextInputManager {
         }
 
         const textToRender = this.getDisplayText(textInput);
-        if (!textToRender) return;
 
         // Determine style (placeholder vs normal)
         const textStyle = { ...style };
@@ -324,6 +324,20 @@ export class TextInputManager {
             const maxTextWidth = isTextarea
                 ? Math.max(1, availableWidth / pixelScale)
                 : undefined;
+
+            if (!textToRender) {
+                const storedLayoutMetrics = this.textRenderingService.createStoredLayoutMetrics(
+                    '',
+                    textStyleProps,
+                    pixelScale,
+                    maxTextWidth,
+                );
+                textInput.textLayoutMetrics = storedLayoutMetrics.css;
+                textInput.textureWidth = 0;
+                textInput.textureHeight = 0;
+                textInput.scrollOffset = 0;
+                return;
+            }
 
 
 

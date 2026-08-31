@@ -95,6 +95,26 @@ describe('StyleService cascade', () => {
     expect(service.findStyleForElement(element, styles, context)?.background).toBe('#f97316');
   });
 
+  it('inherits an authored pointer cursor through nested label content', () => {
+    const chip: DOMElement = { type: 'div', id: 'chip', class: 'chip' };
+    const label: DOMElement = { type: 'span', id: 'chip-label' };
+    ancestry.setParent(label, chip);
+
+    expect(service.findStyleForElement(label, [
+      { selector: '.chip', cursor: 'pointer' },
+    ])?.cursor).toBe('pointer');
+  });
+
+  it('keeps a control type cursor instead of inheriting its parent cursor', () => {
+    const parent: DOMElement = { type: 'div', class: 'action' };
+    const input: DOMElement = { type: 'input', inputType: 'text' };
+    ancestry.setParent(input, parent);
+
+    expect(service.findStyleForElement(input, [
+      { selector: '.action', cursor: 'pointer' },
+    ])?.cursor).toBe('text');
+  });
+
   it('cascades plugin extension declarations independently without losing unknown data', () => {
     const element: DOMElement = {
       type: 'example.badges:badge',

@@ -412,9 +412,11 @@ export class StyleService {
 
         // Context overrides are renderer-authored declarations (for example table
         // layout adjustments), so they sit above stylesheet rules but below inline style.
+        let appliedContextOverride: StyleRule | undefined;
         if (element.id) {
             const contextOverride = elementStylesOverride?.get(element.id)?.normal;
             if (contextOverride && !this.parsedAuthorStyles.has(contextOverride)) {
+                appliedContextOverride = contextOverride;
                 mergedStyle = {
                     ...mergedStyle,
                     ...contextOverride,
@@ -445,6 +447,26 @@ export class StyleService {
                 }
             }
             debugSegments.push('inline');
+        }
+
+        // `cursor` is inherited in CSS. Our browser defaults are merged into every
+        // element, so the global `default` value must not mask an authored cursor
+        // on an actionable ancestor (for example a span inside a button or chip).
+        // Keep genuine UA/type defaults such as the text cursor on an input.
+        const globalCursor = this.styleDefaults.getGlobalDefaultStyle().cursor;
+        const hasTypeCursor = typeDefaults.cursor !== globalCursor;
+        const hasOwnCursor = winners.has('cursor') ||
+            appliedContextOverride?.cursor !== undefined ||
+            element.style?.cursor !== undefined;
+        if (!hasOwnCursor && !hasTypeCursor) {
+            const parent = this.ancestry.getParent(element);
+            if (parent) {
+                mergedStyle.cursor = this.findStyleForElement(
+                    parent,
+                    styles,
+                    elementStylesOverride,
+                )?.cursor ?? mergedStyle.cursor;
+            }
         }
 
         this.logStyleResolution(element, mergedStyle, debugSegments);
