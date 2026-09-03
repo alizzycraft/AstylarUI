@@ -373,6 +373,36 @@ describe('AstylarShowcaseComponent', () => {
     expect(internal.siteData()).toBe(beforeFocus);
   });
 
+  it('updates slider interaction paint in place without interrupting pointer capture', () => {
+    const { component } = createComponent('slider');
+    const updateStateLayer = jasmine.createSpy('updateStateLayer');
+    (component as unknown as { surface: { scene: { clearColor?: unknown; meshes: unknown[] }; update: () => Promise<void> } }).surface = {
+      scene: { meshes: [{ metadata: { showcaseMaterialVisual: 'range', updateStateLayer } }] },
+      update: () => Promise.resolve(),
+    };
+    const internal = component as unknown as {
+      siteData: () => SiteData;
+      options: { events: { handlers: Record<string, {
+        pointerenter: (event: AstylarEvent) => void;
+        pointerdown: (event: AstylarEvent) => void;
+        pointerup: (event: AstylarEvent) => void;
+      }> } };
+    };
+    const beforeInteraction = internal.siteData();
+    const event = { targetId: 'slider-start', currentTargetId: 'slider-start' } as AstylarEvent;
+
+    internal.options.events.handlers['slider-start'].pointerenter(event);
+    internal.options.events.handlers['slider-start'].pointerdown(event);
+    internal.options.events.handlers['slider-start'].pointerup(event);
+
+    expect(internal.siteData()).toBe(beforeInteraction);
+    expect(updateStateLayer.calls.allArgs()).toEqual([
+      ['start', .08],
+      ['start', .12],
+      ['start', .08],
+    ]);
+  });
+
   it('keeps the snackbar visible when its trigger is activated again', () => {
     const { component, store } = createComponent('snack-bar');
     const click = (component as unknown as {

@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { provideZonelessChangeDetection } from '@angular/core';
+import { Material } from '@babylonjs/core';
 import { Astylar, type AstylarSurface, type SiteData } from 'astylarui';
 import { materialCheckMarkPath, provideMaterialShowcasePlugin } from './material-showcase.plugin';
 
@@ -25,9 +26,9 @@ describe('Material showcase application plugin', () => {
     expect(bend.y).toBeLessThan(end.y);
   });
 
-  it('updates the range plugin visual without rebuilding it during a drag', async () => {
+  it('keeps range thumbs and state layers ordered in logical screen coordinates', async () => {
     const astylar = TestBed.inject(Astylar);
-    const surface = astylar.mount(document.createElement('canvas'), rangeSite(.3, .65));
+    const surface = astylar.mount(document.createElement('canvas'), rangeSite(.3, .65, 'start'));
 
     try {
       await surface.whenSettled();
@@ -36,12 +37,20 @@ describe('Material showcase application plugin', () => {
       const active = range?.getChildMeshes().find((mesh) => mesh.name.endsWith('-active'));
       const startThumb = range?.getChildMeshes().find((mesh) => mesh.name.endsWith('-start-thumb'));
       const endThumb = range?.getChildMeshes().find((mesh) => mesh.name.endsWith('-end-thumb'));
+      const startStateLayer = range?.getChildMeshes().find((mesh) => mesh.name.endsWith('-start-state-layer'));
       const updateRange = range?.metadata?.updateRange as ((start: number, end: number) => void) | undefined;
 
       expect(updateRange).toEqual(jasmine.any(Function));
+      // The renderer-local X axis is mirrored relative to logical CSS/screen X.
+      // A lower logical ratio must therefore have the greater local X value.
+      expect(startThumb!.position.x).toBeGreaterThan(endThumb!.position.x);
+      expect(startStateLayer!.position.x).toBeCloseTo(startThumb!.position.x, 6);
+      expect(startStateLayer!.material!.alpha).toBeCloseTo(.08, 2);
+      expect(startStateLayer!.material!.transparencyMode).toBe(Material.MATERIAL_ALPHABLEND);
       updateRange?.(.4, .75);
       expect(active?.scaling.x).toBeCloseTo(.35, 6);
-      expect(startThumb!.position.x).toBeLessThan(endThumb!.position.x);
+      expect(startThumb!.position.x).toBeGreaterThan(endThumb!.position.x);
+      expect(startStateLayer!.position.x).toBeCloseTo(startThumb!.position.x, 6);
       expect(range?.metadata?.start).toBe(.3);
     } finally {
       surface.dispose();
@@ -105,13 +114,13 @@ function progressSite(progress: number): SiteData {
   };
 }
 
-function rangeSite(start: number, end: number): SiteData {
+function rangeSite(start: number, end: number, stateHandle = ''): SiteData {
   return {
     plugins: [{ id: 'showcase.material', versionRange: '^1.0.0', schemaVersion: 1 }],
     root: { children: [{
       type: 'showcase.material:range-visual',
       id: 'range',
-      data: { start, end },
+      data: { start, end, 'state-handle': stateHandle, 'state-color': '#6750a414' },
     }] },
     styles: [{ selector: '#range', width: '240px', height: '48px' }],
   };

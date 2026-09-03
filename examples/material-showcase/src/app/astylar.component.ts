@@ -68,18 +68,24 @@ export class AstylarShowcaseComponent {
             this.recordEvent(event);
             if (event.targetId === 'slider-start' || event.targetId === 'slider-primary') {
               this.pressedSliderId.set(event.targetId);
+              this.updateSliderStateLayer(sliderHandleName(event.targetId), .12);
             }
             if (!this.benchmarkMode) this.activateRipple(event);
           }),
           pointerup: (event: AstylarEvent) => this.zone.run(() => {
             this.recordEvent(event);
-            if (event.targetId === this.pressedSliderId()) this.pressedSliderId.set(undefined);
+            if (event.targetId === this.pressedSliderId()) {
+              this.pressedSliderId.set(undefined);
+              this.updateSliderStateLayer(sliderHandleName(this.hoveredSliderId()), .08);
+            }
           }),
           pointermove: (event: AstylarEvent) => this.recordEvent(event),
           pointerenter: (event: AstylarEvent) => this.zone.run(() => {
             this.recordEvent(event);
             if (event.targetId === 'slider-start' || event.targetId === 'slider-primary') {
               this.hoveredSliderId.set(event.targetId);
+              const pressedHandle = sliderHandleName(this.pressedSliderId());
+              this.updateSliderStateLayer(pressedHandle || sliderHandleName(event.targetId), pressedHandle ? .12 : .08);
             }
             if (event.targetId === 'tooltip-primary' && (!this.benchmarkMode || ['hover', 'held'].includes(this.benchmarkInteraction ?? ''))) {
               this.store.patchState({ open: true });
@@ -87,7 +93,11 @@ export class AstylarShowcaseComponent {
           }),
           pointerleave: (event: AstylarEvent) => this.zone.run(() => {
             this.recordEvent(event);
-            if (event.targetId === this.hoveredSliderId()) this.hoveredSliderId.set(undefined);
+            if (event.targetId === this.hoveredSliderId()) {
+              this.hoveredSliderId.set(undefined);
+              const pressedHandle = sliderHandleName(this.pressedSliderId());
+              this.updateSliderStateLayer(pressedHandle, pressedHandle ? .12 : 0);
+            }
             if (event.targetId === 'tooltip-primary') this.store.patchState({ open: false });
           }),
           focus: (event: AstylarEvent) => this.zone.run(() => {
@@ -276,6 +286,13 @@ export class AstylarShowcaseComponent {
       mesh.metadata?.showcaseMaterialVisual === 'range');
     const updateRange = range?.metadata?.updateRange;
     if (typeof updateRange === 'function') updateRange(start / 100, end / 100);
+  }
+
+  private updateSliderStateLayer(handle: '' | 'start' | 'end', alpha: number): void {
+    const range = this.surface?.scene.meshes.find((mesh) =>
+      mesh.metadata?.showcaseMaterialVisual === 'range');
+    const updateStateLayer = range?.metadata?.updateStateLayer;
+    if (typeof updateStateLayer === 'function') updateStateLayer(handle, alpha);
   }
 
   private dismissPopupForOutsideTarget(targetId: string): void {
@@ -751,7 +768,7 @@ export class AstylarShowcaseComponent {
     if (family === 'paginator') return [{ type: 'div', id: 'paginator-primary', class: 'paginator', role: 'group', ariaLabel: `Items per page: 10 ${state.pageIndex * 10 + 1} – ${Math.min(100, state.pageIndex * 10 + 10)} of 100`, children: [{ type: 'span', id: 'paginator-size', textContent: 'Items per page:' }, { type: 'span', id: 'paginator-page-size', textContent: '10' }, { type: 'span', id: 'paginator-range', textContent: `${state.pageIndex * 10 + 1} – ${Math.min(100, state.pageIndex * 10 + 10)} of 100` }, { type: 'button', id: 'paginator-previous', class: 'paginator-button', disabled: state.pageIndex === 0, ariaLabel: 'Previous page', value: '‹' }, { type: 'button', id: 'paginator-next', class: 'paginator-button', disabled: state.pageIndex === 9, ariaLabel: 'Next page', value: '›' }] }];
     if (family === 'tree') return [{ type: 'div', id: 'tree-primary', class: 'material-tree', role: 'tree', children: ['Documents', 'Projects', 'Archive'].map((label, index) => ({ type: 'div' as const, id: `tree-item-${index}`, class: `tree-item${this.focusedId() === `tree-item-${index}` ? ' focused' : ''}`, role: 'treeitem', tabindex: index === 0 ? 0 : -1, ariaLevel: 1, ariaPosinset: index + 1, ariaSetsize: 3, children: [{ type: 'span' as const, id: `tree-item-${index}-label`, class: 'tree-label', textContent: label }] })) }];
     if (family === 'slider') return [{ type: 'div', id: 'slider-pair', class: 'range-stack', children: [
-      { type: 'showcase.material:range-visual', id: 'slider-material-visual', class: 'range-plugin-layer', data: { start: state.sliderStart / 100, end: state.sliderValue / 100, 'indicator-color': this.store.tokens().primary, 'track-color': this.store.tokens().mode === 'dark' ? '#49454f' : '#e7e0ec', 'state-handle': sliderHandleName(this.pressedSliderId() ?? this.hoveredSliderId()), 'state-color': alphaHex(this.store.tokens().primary, this.pressedSliderId() ? .12 : .08) } },
+      { type: 'showcase.material:range-visual', id: 'slider-material-visual', class: 'range-plugin-layer', data: { start: state.sliderStart / 100, end: state.sliderValue / 100, 'indicator-color': this.store.tokens().primary, 'track-color': this.store.tokens().mode === 'dark' ? '#49454f' : '#e7e0ec', 'state-color': this.store.tokens().primary } },
       { type: 'input', inputType: 'range', id: 'slider-start', class: 'range-layer', min: '0', max: '50', step: '1', value: String(Math.min(50, state.sliderStart)), disabled: state.disabled, ariaLabel: 'Minimum', ariaValueText: String(state.sliderStart) },
       { type: 'input', inputType: 'range', id: 'slider-primary', class: 'range-layer', min: '50', max: '100', step: '1', value: String(Math.max(50, state.sliderValue)), disabled: state.disabled, ariaLabel: 'Maximum', ariaValueText: String(state.sliderValue) },
     ] }];

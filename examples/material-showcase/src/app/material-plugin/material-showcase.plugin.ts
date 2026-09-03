@@ -1,5 +1,5 @@
 import { EnvironmentProviders, Injectable, InjectionToken, inject } from '@angular/core';
-import { Color3, DynamicTexture, Mesh, MeshBuilder, StandardMaterial, Texture, Vector3 } from '@babylonjs/core';
+import { Color3, DynamicTexture, Material, Mesh, MeshBuilder, StandardMaterial, Texture, Vector3 } from '@babylonjs/core';
 import {
   ASTYLAR_PLUGIN_API_VERSION,
   defineAstylarPlugin,
@@ -21,7 +21,7 @@ abstract class MaterialRendererBase {
 
   protected color(context: AstylarPluginRenderContext, key: string, fallback: string): string {
     const value = context.element.data?.[key] ?? context.properties[`showcase.material:${key}`];
-    return typeof value === 'string' && /^#[0-9a-f]{6}$/i.test(value) ? value : fallback;
+    return typeof value === 'string' && /^#[0-9a-f]{6}(?:[0-9a-f]{2})?$/i.test(value) ? value : fallback;
   }
 
   protected number(context: AstylarPluginRenderContext, key: string, fallback: number): number {
@@ -31,11 +31,13 @@ abstract class MaterialRendererBase {
 
   protected material(context: AstylarPluginRenderContext, suffix: string, color: string, alpha = 1): StandardMaterial {
     const material = new StandardMaterial(`${context.meshId}-${suffix}`, context.scene);
-    material.diffuseColor = Color3.FromHexString(color);
+    const encodedAlpha = color.length === 9 ? Number.parseInt(color.slice(7, 9), 16) / 255 : 1;
+    material.diffuseColor = Color3.FromHexString(color.slice(0, 7));
     material.emissiveColor = material.diffuseColor;
     material.disableLighting = true;
     material.backFaceCulling = false;
-    material.alpha = alpha;
+    material.alpha = alpha * encodedAlpha;
+    if (material.alpha < 1) material.transparencyMode = Material.MATERIAL_ALPHABLEND;
     return context.resources.own(material);
   }
 
@@ -172,14 +174,17 @@ class MaterialRangeVisualRenderer extends MaterialRendererBase implements Astyla
     active.material = this.material(context, 'active-material', this.color(context, 'indicator-color', '#6750a4'));
     active.position.z = .02;
     const stateHandle = String(context.element.data?.['state-handle'] ?? '');
-    if (stateHandle === 'start' || stateHandle === 'end') {
-      const ratio = stateHandle === 'start' ? start : end;
-      const stateLayer = this.ownChild(context, MeshBuilder.CreateDisc(`${context.meshId}-${stateHandle}-state-layer`, {
+    const stateColor = this.color(context, 'state-color', '#6750a414');
+    const stateLayers: Partial<Record<'start' | 'end', Mesh>> = {};
+    for (const name of ['start', 'end'] as const) {
+      const stateLayer = this.ownChild(context, MeshBuilder.CreateDisc(`${context.meshId}-${name}-state-layer`, {
         radius: 24 * scale, tessellation: this.config.benchmarkMode ? 32 : 48,
       }, context.scene), root);
-      stateLayer.material = this.material(context, `${stateHandle}-state-layer-material`, this.color(context, 'state-color', '#6750a414'));
-      stateLayer.position.x = -width / 2 + width * ratio;
+      stateLayer.material = this.material(
+        context, `${name}-state-layer-material`, stateColor, name === stateHandle ? 1 : 0,
+      );
       stateLayer.position.z = .025;
+      stateLayers[name] = stateLayer;
     }
     const thumbs: Partial<Record<'start' | 'end', Mesh>> = {};
     for (const [name, ratio] of [['start', start], ['end', end]] as const) {
@@ -187,7 +192,7 @@ class MaterialRangeVisualRenderer extends MaterialRendererBase implements Astyla
         radius: 10 * scale, tessellation: this.config.benchmarkMode ? 32 : 48,
       }, context.scene), root);
       thumb.material = this.material(context, `${name}-thumb-material`, this.color(context, 'indicator-color', '#6750a4'));
-      thumb.position.x = -width / 2 + width * ratio;
+      thumb.position.x = context.coordinates.toLocalPoint(-width / 2 + width * ratio, 0).x;
       thumb.position.z = .03;
       thumbs[name] = thumb;
     }
@@ -195,15 +200,32 @@ class MaterialRangeVisualRenderer extends MaterialRendererBase implements Astyla
       const boundedStart = Math.max(0, Math.min(1, nextStart));
       const boundedEnd = Math.max(boundedStart, Math.min(1, nextEnd));
       active.scaling.x = Math.max(.001, boundedEnd - boundedStart);
-      active.position.x = -width / 2 + width * (boundedStart + boundedEnd) / 2;
-      if (thumbs.start) thumbs.start.position.x = -width / 2 + width * boundedStart;
-      if (thumbs.end) thumbs.end.position.x = -width / 2 + width * boundedEnd;
+      active.position.x = context.coordinates.toLocalPoint(
+        -width / 2 + width * (boundedStart + boundedEnd) / 2, 0,
+      ).x;
+      if (thumbs.start) {
+        thumbs.start.position.x = context.coordinates.toLocalPoint(-width / 2 + width * boundedStart, 0).x;
+      }
+      if (thumbs.end) {
+        thumbs.end.position.x = context.coordinates.toLocalPoint(-width / 2 + width * boundedEnd, 0).x;
+      }
+      if (stateLayers.start && thumbs.start) stateLayers.start.position.x = thumbs.start.position.x;
+      if (stateLayers.end && thumbs.end) stateLayers.end.position.x = thumbs.end.position.x;
+    };
+    const updateStateLayer = (nextHandle: '' | 'start' | 'end', alpha: number): void => {
+      for (const name of ['start', 'end'] as const) {
+        const material = stateLayers[name]?.material;
+        if (material instanceof StandardMaterial) {
+          material.alpha = name === nextHandle ? Math.max(0, Math.min(1, alpha)) : 0;
+        }
+      }
     };
     updateRange(start, end);
     root.metadata = {
       showcaseMaterialVisual: 'range', start, end,
       benchmarkMode: this.config.benchmarkMode,
       updateRange,
+      updateStateLayer,
     };
     return root;
   }
