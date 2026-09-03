@@ -4,6 +4,7 @@ import { FlexService } from './flex.service';
 import { BabylonDOM } from '../interfaces/dom.types';
 import { BabylonRender } from '../interfaces/render.types';
 import { Mesh } from '@babylonjs/core';
+import { StyleRule } from '../../../types/style-rule';
 
 describe('GridService', () => {
   const service = new GridService();
@@ -86,6 +87,88 @@ describe('GridService', () => {
 
   it('creates equal implicit tracks when no template is supplied', () => {
     expect(service.resolveTracks(undefined, 220, 10, 2)).toEqual([105, 105]);
+  });
+
+  it('honors an authored grid-column span during auto placement', () => {
+    const dimensions = new Map<string, any>([['grid', {
+      width: 280, height: 80,
+      padding: { top: 0, right: 0, bottom: 0, left: 0 },
+    }]]);
+    const createElement = jasmine.createSpy('createElement').and.callFake(
+      (_dom: unknown, _render: unknown, child: { id?: string }) => {
+        const mesh = { name: child.id, metadata: {} } as Mesh;
+        dimensions.set(child.id!, { width: 40, height: 40 });
+        return mesh;
+      },
+    );
+    const styles = new Map<string, StyleRule>([
+      ['grid', { selector: '#grid', display: 'grid', gridTemplateColumns: 'repeat(7, 40px)', gridTemplateRows: 'repeat(2, 40px)', width: '280px', height: '80px' }],
+      ['marker', { selector: '#marker', width: '40px', height: '40px', gridColumn: '1 / -1' }],
+      ['day', { selector: '#day', width: '40px', height: '40px' }],
+    ]);
+    const dom = {
+      context: { elementStyles: new Map(), elementDimensions: dimensions },
+      actions: { createElement, processChildren: jasmine.createSpy('processChildren') },
+    } as unknown as BabylonDOM;
+    const render = {
+      actions: {
+        style: { findStyleForElement: (element: { id?: string }) => styles.get(element.id ?? '') },
+        camera: { getPixelToWorldScale: () => 1 },
+        mesh: { positionTextMesh: jasmine.createSpy('positionTextMesh') },
+      },
+    } as unknown as BabylonRender;
+
+    service.processGridChildren(
+      dom,
+      render,
+      [{ type: 'span', id: 'marker' }, { type: 'button', id: 'day' }],
+      { name: 'grid' } as Mesh,
+      [],
+      { type: 'div', id: 'grid' },
+    );
+
+    expect(createElement.calls.argsFor(0)[5]).toEqual({ x: 0, y: 20, z: 0.1 });
+    expect(createElement.calls.argsFor(1)[5]).toEqual({ x: -120, y: -20, z: 0.11 });
+  });
+
+  it('honors explicit grid-row and grid-column line placement', () => {
+    const dimensions = new Map<string, any>([['grid', {
+      width: 120, height: 80,
+      padding: { top: 0, right: 0, bottom: 0, left: 0 },
+    }]]);
+    const createElement = jasmine.createSpy('createElement').and.callFake(
+      (_dom: unknown, _render: unknown, child: { id?: string }) => {
+        const mesh = { name: child.id, metadata: {} } as Mesh;
+        dimensions.set(child.id!, { width: 80, height: 40 });
+        return mesh;
+      },
+    );
+    const styles = new Map<string, StyleRule>([
+      ['grid', { selector: '#grid', display: 'grid', gridTemplateColumns: 'repeat(3, 40px)', gridTemplateRows: 'repeat(2, 40px)', width: '120px', height: '80px' }],
+      ['item', { selector: '#item', width: '80px', height: '40px', gridColumn: '2 / span 2', gridRow: '2' }],
+    ]);
+    const dom = {
+      context: { elementStyles: new Map(), elementDimensions: dimensions },
+      actions: { createElement, processChildren: jasmine.createSpy('processChildren') },
+    } as unknown as BabylonDOM;
+    const render = {
+      actions: {
+        style: { findStyleForElement: (element: { id?: string }) => styles.get(element.id ?? '') },
+        camera: { getPixelToWorldScale: () => 1 },
+        mesh: { positionTextMesh: jasmine.createSpy('positionTextMesh') },
+      },
+    } as unknown as BabylonRender;
+
+    service.processGridChildren(
+      dom,
+      render,
+      [{ type: 'div', id: 'item' }],
+      { name: 'grid' } as Mesh,
+      [],
+      { type: 'div', id: 'grid' },
+    );
+
+    expect(createElement.calls.argsFor(0)[5]).toEqual({ x: 20, y: -20, z: 0.1 });
   });
 
   it('marks a grid item track size as definite before nested layout', () => {
