@@ -105,7 +105,9 @@ export class AstylarShowcaseComponent {
             if (this.authoredTreeDependsOnFocus(event.targetId)) {
               this.focusedId.set(event.targetId);
             }
-            if (event.targetId === 'autocomplete-control') this.store.patchState({ open: true });
+            if (event.targetId === 'autocomplete-control' || event.targetId === 'timepicker-control') {
+              this.store.patchState({ open: true });
+            }
           }),
           blur: (event: AstylarEvent) => this.zone.run(() => {
             this.recordEvent(event);

@@ -240,7 +240,7 @@ async function capturePage(context, mode, benchmarkCase, directory) {
   const errors = [];
   page.on('pageerror', (error) => errors.push(error.message));
   page.on('console', (message) => { if (message.type() === 'error') errors.push(message.text()); });
-  await page.goto(`${baseUrl}/${mode}/${benchmarkCase.family}?benchmark=1&profile=${benchmarkCase.profile}`, { waitUntil: 'networkidle' });
+  await page.goto(`${baseUrl}/${mode}/${benchmarkCase.family}?benchmark=1&profile=${benchmarkCase.profile}`, { waitUntil: 'commit' });
   await page.locator('.frame').waitFor({ state: 'visible' });
   const theme = profileTheme(benchmarkCase.profile);
   await sendShowcaseCommand(page, { type: 'showcase:theme', theme });
@@ -380,7 +380,7 @@ async function openInteractionPage(context, mode, benchmarkCase) {
   const errors = [];
   page.on('pageerror', (error) => errors.push(error.message));
   page.on('console', (message) => { if (message.type() === 'error') errors.push(message.text()); });
-  await page.goto(`${baseUrl}/${mode}/${benchmarkCase.family}?benchmark=1&profile=${benchmarkCase.profile}&interaction=${benchmarkCase.state}`, { waitUntil: 'networkidle' });
+  await page.goto(`${baseUrl}/${mode}/${benchmarkCase.family}?benchmark=1&profile=${benchmarkCase.profile}&interaction=${benchmarkCase.state}`, { waitUntil: 'commit' });
   await page.locator('.frame').waitFor({ state: 'visible' });
   const theme = profileTheme(benchmarkCase.profile);
   await sendShowcaseCommand(page, { type: 'showcase:theme', theme });
@@ -433,6 +433,13 @@ async function performInteraction(page, mode, benchmarkCase) {
   const x = box.x + box.width / 2;
   const y = box.y + box.height / 2;
   if (state === 'focus') {
+    // Material's time input opens from the user's focus-producing click rather
+    // than from HTMLElement.focus() alone. Exercise that observable contract
+    // while keeping programmatic focus for the other keyboard-focus fixtures.
+    if (family === 'timepicker') {
+      await page.mouse.click(x, y);
+      return undefined;
+    }
     if (mode === 'reference') {
       await page.evaluate((id) => {
         const host = document.getElementById(id);
@@ -873,6 +880,12 @@ async function compareInteractionState(referencePage, astylarPage, family, state
   if (family === 'datepicker' && state === 'open-secondary') {
     const reference = await referencePage.locator('mat-multi-year-view').count() > 0;
     const candidate = await astylarPage.evaluate(() => !!window.__ASTYLAR_MATERIAL_BENCHMARK__?.measure(['datepicker-year-grid'])?.elements?.['datepicker-year-grid']);
+    return { reference, astylar: candidate, matches: reference === candidate && reference === true };
+  }
+  if (family === 'timepicker' && state === 'focus') {
+    const reference = await referencePage.locator('.mat-timepicker-panel').count() > 0;
+    const candidate = await astylarPage.evaluate(() =>
+      !!window.__ASTYLAR_MATERIAL_BENCHMARK__?.measure(['timepicker-options'])?.elements?.['timepicker-options']);
     return { reference, astylar: candidate, matches: reference === candidate && reference === true };
   }
   return { matches: true };

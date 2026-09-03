@@ -320,6 +320,22 @@ describe('AstylarShowcaseComponent', () => {
     expect(find(build(component, 'datepicker'), 'datepicker-grid')).toBeDefined();
   });
 
+  it('opens time options from input focus without opening the datepicker from input focus', () => {
+    const timepicker = createComponent('timepicker');
+    eventHandlers(timepicker.component)['timepicker-control']['focus']({
+      targetId: 'timepicker-control',
+    } as AstylarEvent);
+    expect(timepicker.store.state().open).toBeTrue();
+    expect(find(build(timepicker.component, 'timepicker'), 'timepicker-options')).toBeDefined();
+
+    const datepicker = createComponent('datepicker');
+    eventHandlers(datepicker.component)['datepicker-control']['focus']({
+      targetId: 'datepicker-control',
+    } as AstylarEvent);
+    expect(datepicker.store.state().open).toBeFalse();
+    expect(find(build(datepicker.component, 'datepicker'), 'datepicker-popup')).toBeUndefined();
+  });
+
   it('toggles chips independently from any child hit target', () => {
     const { component, store } = createComponent('chips');
     const click = (component as unknown as {
