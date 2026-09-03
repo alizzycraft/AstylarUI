@@ -120,6 +120,9 @@ function benchmarkMeasurementIds(family) {
     ...(uniformBackground ? [uniformBackground.container, ...uniformBackground.surfaces] : []),
     ...(family === 'tooltip' ? ['tooltip-popup'] : []),
     ...(family === 'snack-bar' ? ['snack-bar-overlay', 'snack-bar-surface'] : []),
+    ...(family === 'bottom-sheet' ? [
+      'bottom-sheet-overlay', 'bottom-sheet-panel', 'bottom-sheet-dismiss', 'bottom-sheet-copy',
+    ] : []),
   ])];
 }
 
@@ -323,7 +326,9 @@ async function captureInteractionCase(benchmarkCase) {
     const astylarFocus = await focusedIdentity(astylar.page, 'astylar', family);
     const dynamicOverlaySemanticIds = family === 'snack-bar' &&
       ['activate', 'activate-twice', 'open'].includes(state)
-      ? ['snack-bar-overlay', 'snack-bar-surface'] : [];
+      ? ['snack-bar-overlay', 'snack-bar-surface']
+      : family === 'bottom-sheet' && ['activate', 'activate-leave', 'open'].includes(state)
+        ? ['bottom-sheet-overlay', 'bottom-sheet-panel', 'bottom-sheet-dismiss', 'bottom-sheet-copy'] : [];
     const semantics = compareSemantics(
       referenceMeasurement.semantics,
       astylarMeasurement.semantics,
@@ -646,15 +651,18 @@ function compareEvents(reference, candidate, family, state) {
 async function compareOverlayPlacement(referencePage, astylarPage, astylarMeasurement, family, state) {
   const expectedVisible = family === 'snack-bar'
     ? ['activate', 'activate-twice', 'open'].includes(state)
-    : family === 'tooltip' && ['hover', 'held'].includes(state);
+    : family === 'tooltip'
+      ? ['hover', 'held'].includes(state)
+      : family === 'bottom-sheet' && ['activate', 'activate-leave', 'open'].includes(state);
   if (!expectedVisible) return { matches: true };
 
-  const targetId = family === 'snack-bar' ? 'snack-bar-surface' : 'tooltip-popup';
+  const targetId = family === 'snack-bar' ? 'snack-bar-surface'
+    : family === 'bottom-sheet' ? 'bottom-sheet-panel' : 'tooltip-popup';
   const local = astylarMeasurement.elements?.[targetId]?.borderBox;
   const canvas = await astylarPage.locator('canvas').boundingBox();
   const referenceSelector = family === 'snack-bar'
     ? '.mat-mdc-snack-bar-container'
-    : '.mat-mdc-tooltip-surface';
+    : family === 'bottom-sheet' ? '.mat-bottom-sheet-container' : '.mat-mdc-tooltip-surface';
   const reference = await referencePage.locator(referenceSelector).first().boundingBox();
   if (!local || !canvas || !reference) {
     return { matches: false, targetId, local, canvas, reference, reason: 'visible overlay bounds are missing' };
@@ -703,6 +711,30 @@ async function compareOverlayPlacement(referencePage, astylarPage, astylarMeasur
       matches: withinCanvas && Math.abs(astylarBottomGap - referenceBottomGap) <= 2 && semanticsMatch,
       targetId, astylar, reference, overlay, canvas, withinCanvas,
       astylarBottomGap, referenceBottomGap, astylarSemantics, referenceSemantics, semanticsMatch,
+    };
+  }
+  if (family === 'bottom-sheet') {
+    const overlay = astylarMeasurement.elements?.['bottom-sheet-overlay']?.borderBox;
+    const astylarRows = ['bottom-sheet-dismiss', 'bottom-sheet-copy']
+      .map((id) => astylarMeasurement.elements?.[id]?.borderBox);
+    const referenceRows = await referencePage.locator('.mat-mdc-list-item').evaluateAll((elements) =>
+      elements.slice(0, 2).map((element) => element.getBoundingClientRect().toJSON()));
+    const edgeError = Math.max(
+      Math.abs(astylar.x - reference.x),
+      Math.abs(astylar.y - reference.y),
+      Math.abs(astylar.width - reference.width),
+      Math.abs(astylar.height - reference.height),
+      ...astylarRows.flatMap((row, index) => row && referenceRows[index]
+        ? [Math.abs(canvas.x + row.left - referenceRows[index].left),
+          Math.abs(canvas.y + row.top - referenceRows[index].top),
+          Math.abs(row.width - referenceRows[index].width),
+          Math.abs(row.height - referenceRows[index].height)]
+        : [Number.POSITIVE_INFINITY]),
+    );
+    return {
+      matches: withinCanvas && edgeError <= 2,
+      targetId, astylar, reference, overlay, canvas, withinCanvas,
+      astylarRows, referenceRows, edgeError,
     };
   }
 

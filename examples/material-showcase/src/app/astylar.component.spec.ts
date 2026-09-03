@@ -209,6 +209,15 @@ describe('AstylarShowcaseComponent', () => {
     expect(style(bottomSheet, '.bottom-sheet-overlay')).toEqual(jasmine.objectContaining({
       flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'center',
     }));
+    expect(style(bottomSheet, '.bottom-sheet-panel')).toEqual(jasmine.objectContaining({
+      width: '512px', height: '128px', padding: '16px',
+    }));
+    expect(lastStyle(bottomSheet, '.bottom-sheet-panel')).toEqual(jasmine.objectContaining({
+      mediaMaxWidth: '960px', width: '100%',
+    }));
+    expect(style(bottomSheet, '.bottom-sheet-option')).toEqual(jasmine.objectContaining({
+      width: '100%', height: '48px', padding: '0 16px', fontSize: '16px',
+    }));
   });
 
   it('activates sort ascending before alternating its direction', () => {
