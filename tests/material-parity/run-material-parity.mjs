@@ -725,13 +725,19 @@ async function compareOverlayPlacement(referencePage, astylarPage, astylarMeasur
       x: reference.x - referencePrimary.x,
       y: reference.y - referencePrimary.y,
     };
-    const edgeError = Math.max(
+    const edgeErrors = [
       Math.abs(astylarOffset.x - referenceOffset.x),
       Math.abs(astylarOffset.y - referenceOffset.y),
       Math.abs(astylar.width - reference.width),
-      Math.abs(astylar.width - astylarPrimary.width),
-      Math.abs(reference.width - referencePrimary.width),
-    );
+      Math.abs(astylar.height - reference.height),
+    ];
+    if (family === 'timepicker') {
+      edgeErrors.push(
+        Math.abs(astylar.width - astylarPrimary.width),
+        Math.abs(reference.width - referencePrimary.width),
+      );
+    }
+    const edgeError = Math.max(...edgeErrors);
     return {
       matches: withinCanvas && edgeError <= 2,
       targetId, astylar, reference, astylarPrimary, referencePrimary,

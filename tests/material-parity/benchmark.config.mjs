@@ -178,6 +178,16 @@ export const materialInteractionCases = materialFamilies.flatMap((family) => {
     states.map((state) => ({ family, profile, viewport, state }))));
 });
 
+// Material's connected datepicker overlay changes its vertical placement when
+// the viewport cannot fit the panel below its origin. Keep one focused compact
+// case so the collision behavior cannot regress behind desktop-only coverage.
+materialInteractionCases.push({
+  family: 'datepicker',
+  profile: 'light',
+  viewport: { id: 'desktop-short-dpr1', width: 1440, height: 600, deviceScaleFactor: 1 },
+  state: 'activate',
+});
+
 export const materialMobileFlowFamilies = [
   'sidenav', 'autocomplete', 'select', 'datepicker', 'timepicker', 'menu', 'tabs', 'bottom-sheet', 'dialog',
 ];

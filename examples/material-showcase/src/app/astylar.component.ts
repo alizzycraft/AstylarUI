@@ -353,6 +353,23 @@ export class AstylarShowcaseComponent {
     ].includes(elementId) || elementId.startsWith('tree-item-');
   }
 
+  private connectedOverlayTop(
+    anchorId: string,
+    naturalTop: number,
+    panelHeight: number,
+    viewportMargin = 16,
+  ): number {
+    if (!this.surface) return naturalTop;
+    const canvas = this.surface.scene.getEngine().getRenderingCanvas();
+    const anchor = (this.measure(this.surface, [anchorId]).elements[anchorId] as {
+      borderBox?: { top: number };
+    } | undefined)?.borderBox;
+    if (!canvas || !anchor) return naturalTop;
+    const minimumTop = viewportMargin - anchor.top;
+    const maximumTop = canvas.clientHeight - viewportMargin - anchor.top - panelHeight;
+    return Math.round(Math.max(minimumTop, Math.min(naturalTop, maximumTop)) * 1000) / 1000;
+  }
+
   private buildSiteData(family: MaterialFamily): SiteData {
     const theme = this.store.tokens();
     const state = this.store.state();
@@ -361,6 +378,11 @@ export class AstylarShowcaseComponent {
     if (this.surface) this.surface.scene.clearColor = Color4.FromHexString(`${theme.surface}ff`);
     const rootId = `${family}-root`;
     const densityHeight = materialDensityHeight(theme.density);
+    const datepickerPanelHeight = theme.density === -2 ? 350.5 : 354;
+    const datepickerNaturalTop = theme.density <= -5 ? 40 : theme.density === 0 ? 56 : 48;
+    const datepickerPopupTop = family === 'datepicker' && state.open
+      ? this.connectedOverlayTop('datepicker-primary', datepickerNaturalTop, datepickerPanelHeight)
+      : datepickerNaturalTop;
     const emptyFieldActive = state.error || (family === 'timepicker' && state.open) || (
       ['form-field', 'input', 'autocomplete', 'datepicker', 'timepicker'].includes(family) &&
       this.focusedId() === `${family}-control`
@@ -507,27 +529,33 @@ export class AstylarShowcaseComponent {
         { selector: '.timepicker-shell .picker-option', height: '48px', padding: '0 16px', display: 'flex', alignItems: 'center' },
         { selector: '.datepicker-shell .field-surface', height: `${theme.density <= -5 && state.open ? 36 : theme.density === 0 ? 56 : 48}px` },
         { selector: '.datepicker-shell .field-label', color: theme.density < 0 && state.open ? '#e8e0eb' : theme.onSurface },
-        { selector: '.datepicker-popup', position: 'absolute', top: `${theme.density <= -5 ? 40 : theme.density === 0 ? 56 : 48}px`, left: '7px', width: '291px', height: '349px', boxSizing: 'border-box', borderRadius: `${16 * theme.cornerScale}px`, background: '#ede6eb', boxShadow: '0 2px 4px rgba(0,0,0,0.24)', zIndex: '60' },
+        { selector: '.datepicker-popup', position: 'absolute', top: `${datepickerPopupTop}px`, left: '0', width: '296px', height: `${datepickerPanelHeight}px`, boxSizing: 'border-box', borderRadius: `${16 * theme.cornerScale}px`, background: '#ede6eb', boxShadow: '0 2px 4px rgba(0,0,0,0.24)', zIndex: '60' },
         { selector: '.datepicker-header', position: 'relative', width: '100%', height: '64px', boxSizing: 'border-box', padding: '0 24px', display: 'flex', alignItems: 'center', color: '#1d1b20', fontSize: '14px', fontWeight: '500' },
-        { selector: '.datepicker-month', position: 'absolute', top: '13px', left: '12px', height: '40px', boxSizing: 'border-box', padding: '0 12px', borderWidth: '0', borderRadius: '20px', background: 'transparent', color: '#1d1b20', fontSize: '14px', fontWeight: '500', verticalAlign: 'middle' },
+        { selector: '.datepicker-month', position: 'absolute', top: '21px', left: '14px', height: '40px', boxSizing: 'border-box', padding: '0 12px', borderWidth: '0', borderRadius: '20px', background: 'transparent', color: '#1d1b20', fontSize: '14px', fontWeight: '500', verticalAlign: 'middle' },
         { selector: '.datepicker-month:hover', borderRadius: '20px', background: '#e5dfe5' },
         { selector: '.datepicker-month:active', borderRadius: '20px', background: '#d8d2d8' },
-        { selector: '.datepicker-nav', position: 'absolute', top: '29px', width: '24px', height: '24px', color: '#49454f', fontSize: '24px', textAlign: 'center', verticalAlign: 'middle' },
-        { selector: '.datepicker-previous', right: '52px' },
-        { selector: '.datepicker-next', right: '12px' },
-        { selector: '.datepicker-grid', position: 'absolute', top: '64px', left: '4px', width: '280px', height: '280px', display: 'grid', gridTemplateColumns: 'repeat(7, 40px)', gridTemplateRows: 'repeat(7, 40px)' },
-        { selector: '.datepicker-cell', position: 'relative', width: '40px', height: '40px', boxSizing: 'border-box', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '20px', color: '#1d1b20', fontSize: '14px', textAlign: 'center', verticalAlign: 'middle' },
+        { selector: '.datepicker-nav', position: 'absolute', top: '28px', width: '40px', height: '40px', boxSizing: 'border-box', padding: '0', borderWidth: '0', borderRadius: '20px', background: 'transparent', color: '#49454f', fontSize: '24px', textAlign: 'center', verticalAlign: 'middle', cursor: 'pointer' },
+        { selector: '.datepicker-nav:hover', background: '#e5dfe5' },
+        { selector: '.datepicker-nav:active', background: '#d8d2d8' },
+        { selector: '.datepicker-previous', right: '45px' },
+        { selector: '.datepicker-next', right: '5px' },
+        { selector: '.datepicker-grid', position: 'absolute', top: '64px', left: '8px', width: '280px', height: '280px', display: 'grid', gridTemplateColumns: 'repeat(7, 40px)', gridTemplateRows: 'repeat(7, 40px)' },
+        { selector: '.datepicker-cell', position: 'relative', width: '40px', height: '40px', boxSizing: 'border-box', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '20px', color: '#1d1b20', fontSize: '14px', fontWeight: '400', textAlign: 'center', verticalAlign: 'middle' },
         { selector: '.datepicker-cell:hover', borderRadius: '20px', background: '#e5dfe5' },
         { selector: '.datepicker-cell:active', borderRadius: '20px', background: '#d8d2d8' },
+        { selector: '.datepicker-day', padding: '0', borderWidth: '0', background: 'transparent', cursor: 'pointer' },
+        { selector: '.datepicker-day:hover', background: '#e5dfe5' },
+        { selector: '.datepicker-day:active', background: '#d8d2d8' },
         { selector: '.datepicker-weekday, .datepicker-month-marker', fontWeight: '500' },
-        { selector: '.datepicker-selected', position: 'absolute', top: `${64 + materialSelectedDayRow() * 40 + .5}px`, left: `${11 + materialSelectedDayColumn() * 40 - 4}px`, width: '36px', height: '36px', boxSizing: 'border-box', borderWidth: '1px', borderStyle: 'solid', borderColor: theme.mode === 'dark' ? '#d5baff' : '#7d00fa', borderRadius: '18px', zIndex: '61', pointerEvents: 'none' },
+        { selector: '.datepicker-month-marker', gridColumn: '1 / -1', justifyContent: 'flex-start', paddingLeft: '12px' },
+        { selector: '.datepicker-selected', position: 'absolute', top: `${66 + materialSelectedDayRow() * 40}px`, left: `${10 + materialSelectedDayColumn() * 40}px`, width: '36px', height: '36px', boxSizing: 'border-box', borderWidth: '1px', borderStyle: 'solid', borderColor: theme.mode === 'dark' ? '#d5baff' : '#7d00fa', borderRadius: '18px', zIndex: '61', pointerEvents: 'none' },
         { selector: '.datepicker-year-grid', position: 'absolute', top: '84px', left: '8px', width: '280px', height: '240px', display: 'grid', gridTemplateColumns: 'repeat(4, 70px)', gridTemplateRows: 'repeat(6, 40px)' },
         { selector: '.datepicker-year', width: '60px', height: '40px', marginLeft: '5px', boxSizing: 'border-box', padding: '0', borderWidth: '0', borderRadius: '20px', background: 'transparent', color: '#1d1b20', fontSize: '14px' },
         { selector: '.datepicker-year:hover', background: '#e5dfe5' },
         { selector: '.datepicker-year:active', background: '#d8d2d8' },
         { selector: '.datepicker-year.selected', borderWidth: '1px', borderStyle: 'solid', borderColor: theme.mode === 'dark' ? '#d5baff' : '#7d00fa' },
         ...(theme.density === -2 ? [
-          { selector: '.datepicker-popup', top: '48px', height: '350.5px' },
+          { selector: '.datepicker-popup', top: `${datepickerPopupTop}px`, height: '350.5px' },
           { selector: '.datepicker-year-grid', top: '83.5px' },
         ] : []),
         { selector: '.datepicker-month.year-view', background: '#eadef7' },
@@ -913,8 +941,8 @@ export class AstylarShowcaseComponent {
       ...(family === 'datepicker' && state.open ? [{ type: 'div' as const, id: 'datepicker-popup', class: 'datepicker-popup', role: 'dialog', ariaLabel: 'Choose date', children: [
         { type: 'div' as const, id: 'datepicker-header', class: 'datepicker-header', children: [
           { type: 'button' as const, id: 'datepicker-month', class: `datepicker-month${this.datepickerView() === 'years' ? ' year-view' : ''}`, ariaLabel: this.datepickerView() === 'month' ? 'Choose month and year' : 'Choose date', value: this.datepickerView() === 'month' ? `${materialCurrentMonth()} ${materialCurrentYear()} ▾` : `${materialYearStart()} – ${materialYearStart() + 23} ▴` },
-          { type: 'span' as const, id: 'datepicker-previous', class: 'datepicker-nav datepicker-previous', textContent: '‹' },
-          { type: 'span' as const, id: 'datepicker-next', class: 'datepicker-nav datepicker-next', textContent: '›' },
+          { type: 'button' as const, id: 'datepicker-previous', class: 'datepicker-nav datepicker-previous', ariaLabel: 'Previous month', value: '‹' },
+          { type: 'button' as const, id: 'datepicker-next', class: 'datepicker-nav datepicker-next', ariaLabel: 'Next month', value: '›' },
         ] },
         ...(this.datepickerView() === 'month' ? [{ type: 'div' as const, id: 'datepicker-grid', class: 'datepicker-grid', children: [
           ...['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((label, index) => ({ type: 'span' as const, id: `datepicker-weekday-${index}`, class: 'datepicker-cell datepicker-weekday', textContent: label })),
@@ -922,7 +950,7 @@ export class AstylarShowcaseComponent {
           ...Array.from({ length: materialCalendarLeadingDays() }, (_, index) => ({ type: 'span' as const, id: `datepicker-leading-${index}`, class: 'datepicker-cell', textContent: '' })),
           ...Array.from({ length: materialCalendarDayCount() }, (_, index) => {
             const day = index + 1;
-            return { type: 'span' as const, id: `datepicker-day-${day}`, class: 'datepicker-cell', textContent: String(day) };
+            return { type: 'button' as const, id: `datepicker-day-${day}`, class: 'datepicker-cell datepicker-day', ariaLabel: String(day), value: String(day) };
           }),
           ...Array.from({ length: materialCalendarTrailingDays() }, (_, index) => ({ type: 'span' as const, id: `datepicker-trailing-${index}`, class: 'datepicker-cell', textContent: '' })),
         ] }] : [{ type: 'div' as const, id: 'datepicker-year-grid', class: 'datepicker-year-grid', children: Array.from({ length: 24 }, (_, index) => {
@@ -1130,15 +1158,15 @@ function materialYearStart(): number {
 }
 
 function materialSelectedDayColumn(): number {
-  return (1 + materialCalendarLeadingDays() + materialCurrentDay() - 1) % 7;
+  return (materialCalendarLeadingDays() + materialCurrentDay() - 1) % 7;
 }
 
 function materialSelectedDayRow(): number {
-  return 1 + Math.floor((1 + materialCalendarLeadingDays() + materialCurrentDay() - 1) / 7);
+  return 2 + Math.floor((materialCalendarLeadingDays() + materialCurrentDay() - 1) / 7);
 }
 
 function materialCalendarLeadingDays(): number {
-  return Math.max(0, new Date(materialCurrentYear(), new Date().getMonth(), 1).getDay() - 1);
+  return new Date(materialCurrentYear(), new Date().getMonth(), 1).getDay();
 }
 
 function materialCalendarDayCount(): number {
@@ -1146,7 +1174,8 @@ function materialCalendarDayCount(): number {
 }
 
 function materialCalendarTrailingDays(): number {
-  return 42 - 1 - materialCalendarLeadingDays() - materialCalendarDayCount();
+  const occupied = materialCalendarLeadingDays() + materialCalendarDayCount();
+  return (7 - occupied % 7) % 7;
 }
 
 function toolbarActionHeight(density: number): number {

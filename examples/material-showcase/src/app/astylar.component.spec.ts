@@ -110,9 +110,30 @@ describe('AstylarShowcaseComponent', () => {
     store.patchState({ open: true });
     const datepicker = build(component, 'datepicker');
     expect(style(datepicker, '.field-label.empty-field-label')).toEqual(jasmine.objectContaining({ fontSize: '16px' }));
+    expect(lastStyle(datepicker, '.datepicker-popup')).toEqual(jasmine.objectContaining({
+      left: '0', width: '296px', height: '354px',
+    }));
+    expect(find(datepicker, 'datepicker-previous')).toEqual(jasmine.objectContaining({ type: 'button' }));
+    expect(find(datepicker, 'datepicker-next')).toEqual(jasmine.objectContaining({ type: 'button' }));
+    expect(style(datepicker, '.datepicker-nav')).toEqual(jasmine.objectContaining({ cursor: 'pointer' }));
+    expect(style(datepicker, '.datepicker-day')).toEqual(jasmine.objectContaining({ cursor: 'pointer' }));
+    expect(style(datepicker, '.datepicker-nav:hover')?.['background']).toBeDefined();
+    expect(style(datepicker, '.datepicker-day:hover')?.['background']).toBeDefined();
+    expect(style(datepicker, '.datepicker-month-marker')).toEqual(jasmine.objectContaining({ gridColumn: '1 / -1' }));
     const selectedDay = find(datepicker, `datepicker-day-${new Date().getDate()}`);
-    expect(selectedDay?.['textContent']).toBe(String(new Date().getDate()));
+    expect(selectedDay).toEqual(jasmine.objectContaining({
+      type: 'button',
+      value: String(new Date().getDate()),
+    }));
     expect(find(datepicker, 'datepicker-selected')).toBeDefined();
+    const firstWeekday = new Date(new Date().getFullYear(), new Date().getMonth(), 1).getDay();
+    const leadingDays = firstWeekday;
+    const selectedColumn = (leadingDays + new Date().getDate() - 1) % 7;
+    const selectedRow = 2 + Math.floor((leadingDays + new Date().getDate() - 1) / 7);
+    expect(style(datepicker, '.datepicker-selected')).toEqual(jasmine.objectContaining({
+      left: `${10 + selectedColumn * 40}px`,
+      top: `${66 + selectedRow * 40}px`,
+    }));
 
     const timepicker = build(component, 'timepicker');
     expect(find(timepicker, 'timepicker-options')?.['children']?.length).toBe(48);
