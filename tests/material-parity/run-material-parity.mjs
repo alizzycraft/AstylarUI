@@ -473,6 +473,15 @@ async function performInteraction(page, mode, benchmarkCase) {
     await page.keyboard.press('End');
     return undefined;
   }
+  if (family === 'timepicker' && state === 'open-scroll') {
+    await page.mouse.click(x, y);
+    await settleInteraction(page, mode);
+    const panel = await popupScrollBox(page, mode);
+    assert.ok(panel, `${mode} timepicker scroll panel is missing.`);
+    await page.mouse.move(panel.x + panel.width / 2, panel.y + panel.height / 2);
+    await page.mouse.wheel(0, 144);
+    return undefined;
+  }
   await page.mouse.move(x, y);
   await page.mouse.down();
   if (state === 'held') return async () => { await page.mouse.up(); };
@@ -660,16 +669,28 @@ async function compareOverlayPlacement(referencePage, astylarPage, astylarMeasur
     ? ['activate', 'activate-twice', 'open'].includes(state)
     : family === 'tooltip'
       ? ['hover', 'held'].includes(state)
-      : family === 'bottom-sheet' && ['activate', 'activate-leave', 'open'].includes(state);
+      : family === 'bottom-sheet'
+        ? ['activate', 'activate-leave', 'open'].includes(state)
+        : family === 'timepicker'
+          ? ['focus', 'activate', 'open', 'open-hover-content'].includes(state)
+          : family === 'datepicker' && ['activate', 'open', 'open-secondary', 'open-hover-content'].includes(state);
   if (!expectedVisible) return { matches: true };
 
   const targetId = family === 'snack-bar' ? 'snack-bar-surface'
-    : family === 'bottom-sheet' ? 'bottom-sheet-panel' : 'tooltip-popup';
-  const local = astylarMeasurement.elements?.[targetId]?.borderBox;
+    : family === 'bottom-sheet' ? 'bottom-sheet-panel'
+      : family === 'timepicker' ? 'timepicker-options'
+        : family === 'datepicker' ? 'datepicker-popup' : 'tooltip-popup';
+  const local = astylarMeasurement.elements?.[targetId]?.borderBox ??
+    (family === 'timepicker' || family === 'datepicker'
+      ? await astylarPage.evaluate((id) =>
+        window.__ASTYLAR_MATERIAL_BENCHMARK__?.measure([id])?.elements?.[id]?.borderBox, targetId)
+      : undefined);
   const canvas = await astylarPage.locator('canvas').boundingBox();
   const referenceSelector = family === 'snack-bar'
     ? '.mat-mdc-snack-bar-container'
-    : family === 'bottom-sheet' ? '.mat-bottom-sheet-container' : '.mat-mdc-tooltip-surface';
+    : family === 'bottom-sheet' ? '.mat-bottom-sheet-container'
+      : family === 'timepicker' ? '.mat-timepicker-panel'
+        : family === 'datepicker' ? '.mat-datepicker-content' : '.mat-mdc-tooltip-surface';
   const reference = await referencePage.locator(referenceSelector).first().boundingBox();
   if (!local || !canvas || !reference) {
     return { matches: false, targetId, local, canvas, reference, reason: 'visible overlay bounds are missing' };
@@ -686,6 +707,37 @@ async function compareOverlayPlacement(referencePage, astylarPage, astylarMeasur
     astylar.y >= canvas.y - geometryTolerance &&
     astylar.x + astylar.width <= canvas.x + canvas.width + geometryTolerance &&
     astylar.y + astylar.height <= canvas.y + canvas.height + geometryTolerance;
+  if (family === 'timepicker' || family === 'datepicker') {
+    const primaryId = `${family}-primary`;
+    const astylarPrimary = astylarMeasurement.elements?.[primaryId]?.borderBox;
+    const referencePrimary = await referencePage.locator(`#${primaryId}`).boundingBox();
+    if (!astylarPrimary || !referencePrimary) {
+      return {
+        matches: false, targetId, astylar, reference, astylarPrimary, referencePrimary,
+        reason: 'picker anchor bounds are missing',
+      };
+    }
+    const astylarOffset = {
+      x: astylar.x - (canvas.x + astylarPrimary.left),
+      y: astylar.y - (canvas.y + astylarPrimary.top),
+    };
+    const referenceOffset = {
+      x: reference.x - referencePrimary.x,
+      y: reference.y - referencePrimary.y,
+    };
+    const edgeError = Math.max(
+      Math.abs(astylarOffset.x - referenceOffset.x),
+      Math.abs(astylarOffset.y - referenceOffset.y),
+      Math.abs(astylar.width - reference.width),
+      Math.abs(astylar.width - astylarPrimary.width),
+      Math.abs(reference.width - referencePrimary.width),
+    );
+    return {
+      matches: withinCanvas && edgeError <= 2,
+      targetId, astylar, reference, astylarPrimary, referencePrimary,
+      astylarOffset, referenceOffset, canvas, withinCanvas, edgeError,
+    };
+  }
   if (family === 'snack-bar') {
     const overlay = astylarMeasurement.elements?.['snack-bar-overlay']?.borderBox;
     const astylarSemantics = await astylarPage.locator('[data-astylar-id="snack-bar-surface"]').evaluate((element) => ({
@@ -843,6 +895,20 @@ async function datepickerMonthBox(page, mode) {
   return local && canvas ? { x: canvas.x + local.left, y: canvas.y + local.top, width: local.width, height: local.height } : undefined;
 }
 
+async function popupScrollBox(page, mode) {
+  if (mode === 'reference') return page.locator('.mat-timepicker-panel').boundingBox();
+  const measurement = await page.evaluate(() =>
+    window.__ASTYLAR_MATERIAL_BENCHMARK__?.measure(['timepicker-options']));
+  const local = measurement?.elements?.['timepicker-options']?.borderBox;
+  const canvas = await page.locator('canvas').boundingBox();
+  return local && canvas ? {
+    x: canvas.x + local.left,
+    y: canvas.y + local.top,
+    width: local.width,
+    height: local.height,
+  } : undefined;
+}
+
 async function sliderDragCoordinates(page, mode, thumb) {
   const targetRatio = thumb === 'start' ? .4 : .75;
   if (mode === 'reference') {
@@ -887,6 +953,17 @@ async function compareInteractionState(referencePage, astylarPage, family, state
     const candidate = await astylarPage.evaluate(() =>
       !!window.__ASTYLAR_MATERIAL_BENCHMARK__?.measure(['timepicker-options'])?.elements?.['timepicker-options']);
     return { reference, astylar: candidate, matches: reference === candidate && reference === true };
+  }
+  if (family === 'timepicker' && state === 'open-scroll') {
+    const reference = await referencePage.locator('.mat-timepicker-panel').evaluate((panel) => panel.scrollTop);
+    const candidate = await astylarPage.evaluate(() =>
+      window.__ASTYLAR_MATERIAL_BENCHMARK__?.measure(['timepicker-options'])
+        ?.diagnostics?.surface?.scrolling?.containers?.['timepicker-options']?.scrollTop);
+    return {
+      reference,
+      astylar: candidate,
+      matches: Number(reference) > 0 && Number(candidate) > 0,
+    };
   }
   return { matches: true };
 }

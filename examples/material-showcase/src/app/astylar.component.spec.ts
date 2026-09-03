@@ -117,6 +117,9 @@ describe('AstylarShowcaseComponent', () => {
     const timepicker = build(component, 'timepicker');
     expect(find(timepicker, 'timepicker-options')?.['children']?.length).toBe(48);
     expect(style(timepicker, '.picker-popup')).toEqual(jasmine.objectContaining({ width: 'auto', overflow: 'scroll' }));
+    expect(lastStyle(timepicker, '.timepicker-shell .picker-popup')).toEqual(jasmine.objectContaining({
+      top: '56px', left: '0', right: '0', height: '256px', paddingTop: '8px',
+    }));
     expect(style(timepicker, '.timepicker-shell .picker-option')?.['height']).toBe('48px');
 
     store.setTheme(MATERIAL_THEME_PROFILES.custom);

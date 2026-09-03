@@ -163,6 +163,7 @@ export const materialInteractionCases = materialFamilies.flatMap((family) => {
   const states = passiveFamilies.has(family) ? ['inspect'] : ['focus', 'hover', 'held', 'activate', 'activate-leave'];
   if (family === 'sort' || family === 'snack-bar') states.push('activate-twice');
   if (family === 'slider') states.push('drag-start', 'drag-end');
+  if (family === 'timepicker') states.push('open-scroll');
   if (family === 'chips') states.push('activate-alternate');
   if (family === 'autocomplete' || family === 'select') states.push('open-commit-reopen');
   if (family === 'datepicker') states.push('open-secondary');
