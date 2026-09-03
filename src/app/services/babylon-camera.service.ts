@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Scene, FreeCamera, Vector3 } from '@babylonjs/core';
+import { Camera, Scene, FreeCamera, Vector3 } from '@babylonjs/core';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +18,11 @@ export class BabylonCameraService {
 
     this.camera = new FreeCamera('camera', new Vector3(0, 0, cameraDistance), scene);
     this.camera.fov = fov;
+    // DOM layout is planar: z-index changes paint order, not an element's
+    // apparent x/y position or size. A perspective projection made high
+    // z-index overlays grow toward the camera and move beyond the viewport.
+    // Keep depth testing for paint order while projecting the UI orthographically.
+    this.updateViewport(canvas);
     // Astylar content occupies a shallow band around the page plane. Keeping
     // Babylon's broad default clip range wastes depth-buffer precision and can
     // make closely layered parent/child surfaces z-fight at tall viewports.
@@ -46,6 +51,18 @@ export class BabylonCameraService {
     return this.camera;
   }
 
+  updateViewport(canvas: HTMLCanvasElement): void {
+    if (!this.camera || canvas.width <= 0 || canvas.height <= 0) return;
+    const cameraDistance = Math.abs(this.camera.position.z);
+    const visibleHeight = 2 * cameraDistance * Math.tan(this.getFOV() / 2);
+    const visibleWidth = visibleHeight * canvas.width / canvas.height;
+    this.camera.mode = Camera.ORTHOGRAPHIC_CAMERA;
+    this.camera.orthoLeft = -visibleWidth / 2;
+    this.camera.orthoRight = visibleWidth / 2;
+    this.camera.orthoTop = visibleHeight / 2;
+    this.camera.orthoBottom = -visibleHeight / 2;
+  }
+
   getFOV(): number {
     return Math.PI / 3;
   }
@@ -69,6 +86,15 @@ export class BabylonCameraService {
     if (!this.camera) {
       throw new Error('Camera not initialized');
     }
+    if (this.camera.mode === Camera.ORTHOGRAPHIC_CAMERA &&
+        this.camera.orthoLeft !== null && this.camera.orthoRight !== null &&
+        this.camera.orthoTop !== null && this.camera.orthoBottom !== null) {
+      return {
+        width: this.camera.orthoRight - this.camera.orthoLeft,
+        height: this.camera.orthoTop - this.camera.orthoBottom,
+      };
+    }
+
     const cameraDistance = Math.abs(this.camera.position.z);
     const fov = this.getFOV();
 

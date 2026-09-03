@@ -119,6 +119,7 @@ function benchmarkMeasurementIds(family) {
     ...textTargets(family), ...interactionTextTargets(family),
     ...(uniformBackground ? [uniformBackground.container, ...uniformBackground.surfaces] : []),
     ...(family === 'tooltip' ? ['tooltip-popup'] : []),
+    ...(family === 'snack-bar' ? ['snack-bar-overlay', 'snack-bar-surface'] : []),
   ])];
 }
 
@@ -306,6 +307,9 @@ async function captureInteractionCase(benchmarkCase) {
     const astylarState = await astylar.page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__?.state());
     const interactionState = await compareInteractionState(reference.page, astylar.page, family, state, astylarState);
     assert.ok(astylarMeasurement, 'Astylar interaction measurement is missing.');
+    const overlayPlacement = await compareOverlayPlacement(
+      reference.page, astylar.page, astylarMeasurement, family, state,
+    );
     const referenceBuffer = await captureInteractionImage(reference.page, 'reference', referenceMeasurement, family, state, directory);
     const astylarBuffer = await captureInteractionImage(astylar.page, 'astylar', astylarMeasurement, family, state, directory);
     for (const release of heldReleases) await release();
@@ -343,13 +347,13 @@ async function captureInteractionCase(benchmarkCase) {
         JSON.stringify(resourceCounts(resourceSnapshots.at(-1))));
     const focusMatches = state !== 'focus' || referenceFocus === astylarFocus;
     return {
-      family, profile, viewport, state, screenshotSimilarity, textAlignment, focusedRasters, semantics, eventComparison, interactionState, statePaint,
+      family, profile, viewport, state, screenshotSimilarity, textAlignment, focusedRasters, semantics, eventComparison, interactionState, overlayPlacement, statePaint,
       focus: { reference: referenceFocus, astylar: astylarFocus, matches: focusMatches },
       runtimeErrors, resourceSnapshots, resourcesStable, astylarState,
       meetsAcceptance: screenshotSimilarity >= materialThresholds.resultSsim &&
         textAlignment.every((result) => result.matches) &&
         focusedRasters.every((result) => result.matches) &&
-        semantics.every((result) => result.matches) && eventComparison.matches && interactionState.matches && statePaint.matches && focusMatches &&
+        semantics.every((result) => result.matches) && eventComparison.matches && interactionState.matches && overlayPlacement.matches && statePaint.matches && focusMatches &&
         runtimeErrors.length === 0 && resourcesStable,
     };
   } finally {
@@ -630,6 +634,64 @@ function compareEvents(reference, candidate, family, state) {
   const expected = contractEvents(relevant(reference));
   const actual = contractEvents(relevant(candidate));
   return { matches: JSON.stringify(expected) === JSON.stringify(actual), reference: expected, astylar: actual };
+}
+
+async function compareOverlayPlacement(referencePage, astylarPage, astylarMeasurement, family, state) {
+  const expectedVisible = family === 'snack-bar'
+    ? ['activate', 'activate-twice', 'open'].includes(state)
+    : family === 'tooltip' && ['hover', 'held'].includes(state);
+  if (!expectedVisible) return { matches: true };
+
+  const targetId = family === 'snack-bar' ? 'snack-bar-surface' : 'tooltip-popup';
+  const local = astylarMeasurement.elements?.[targetId]?.borderBox;
+  const canvas = await astylarPage.locator('canvas').boundingBox();
+  const referenceSelector = family === 'snack-bar'
+    ? '.mat-mdc-snack-bar-container'
+    : '.mat-mdc-tooltip-surface';
+  const reference = await referencePage.locator(referenceSelector).first().boundingBox();
+  if (!local || !canvas || !reference) {
+    return { matches: false, targetId, local, canvas, reference, reason: 'visible overlay bounds are missing' };
+  }
+
+  const astylar = {
+    x: canvas.x + local.left,
+    y: canvas.y + local.top,
+    width: local.width,
+    height: local.height,
+  };
+  const geometryTolerance = .5;
+  const withinCanvas = astylar.x >= canvas.x - geometryTolerance &&
+    astylar.y >= canvas.y - geometryTolerance &&
+    astylar.x + astylar.width <= canvas.x + canvas.width + geometryTolerance &&
+    astylar.y + astylar.height <= canvas.y + canvas.height + geometryTolerance;
+  if (family === 'snack-bar') {
+    const overlay = astylarMeasurement.elements?.['snack-bar-overlay']?.borderBox;
+    const astylarBottomGap = canvas.y + canvas.height - astylar.y - astylar.height;
+    const referenceBottomGap = canvas.y + canvas.height - reference.y - reference.height;
+    return {
+      matches: withinCanvas && Math.abs(astylarBottomGap - referenceBottomGap) <= 2,
+      targetId, astylar, reference, overlay, canvas, withinCanvas,
+      astylarBottomGap, referenceBottomGap,
+    };
+  }
+
+  const astylarTrigger = astylarMeasurement.elements?.['tooltip-primary']?.borderBox;
+  const referenceTrigger = await referencePage.locator('#tooltip-primary').boundingBox();
+  if (!astylarTrigger || !referenceTrigger) {
+    return { matches: false, targetId, astylar, reference, reason: 'tooltip trigger bounds are missing' };
+  }
+  const astylarCenterDelta = astylar.x + astylar.width / 2 -
+    (canvas.x + astylarTrigger.left + astylarTrigger.width / 2);
+  const referenceCenterDelta = reference.x + reference.width / 2 -
+    (referenceTrigger.x + referenceTrigger.width / 2);
+  const astylarGap = astylar.y - (canvas.y + astylarTrigger.top + astylarTrigger.height);
+  const referenceGap = reference.y - (referenceTrigger.y + referenceTrigger.height);
+  return {
+    matches: withinCanvas && Math.abs(astylarCenterDelta - referenceCenterDelta) <= 2 &&
+      Math.abs(astylarGap - referenceGap) <= 2,
+    targetId, astylar, reference, withinCanvas,
+    astylarCenterDelta, referenceCenterDelta, astylarGap, referenceGap,
+  };
 }
 
 async function launchBrowser() {

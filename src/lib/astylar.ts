@@ -469,6 +469,7 @@ class AstylarRenderer {
             // visible while the rebuilt resources compile.
             if (hasCompletedRender && !scene.isDisposed) scene.render();
           }
+          this.babylonCameraService.updateViewport(canvas);
           this.imageResources.retain(
             scene,
             this.collectImageSources(currentSiteData),
