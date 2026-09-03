@@ -321,7 +321,14 @@ async function captureInteractionCase(benchmarkCase) {
     }), family);
     const referenceFocus = await focusedIdentity(reference.page, 'reference', family);
     const astylarFocus = await focusedIdentity(astylar.page, 'astylar', family);
-    const semantics = compareSemantics(referenceMeasurement.semantics, astylarMeasurement.semantics, materialSemanticExcludedTargets);
+    const dynamicOverlaySemanticIds = family === 'snack-bar' &&
+      ['activate', 'activate-twice', 'open'].includes(state)
+      ? ['snack-bar-overlay', 'snack-bar-surface'] : [];
+    const semantics = compareSemantics(
+      referenceMeasurement.semantics,
+      astylarMeasurement.semantics,
+      [...materialSemanticExcludedTargets, ...dynamicOverlaySemanticIds],
+    );
     const referenceImage = PNG.sync.read(referenceBuffer);
     const astylarImage = PNG.sync.read(astylarBuffer);
     const screenshotSimilarity = comparePng(referenceImage, astylarImage);
@@ -666,12 +673,36 @@ async function compareOverlayPlacement(referencePage, astylarPage, astylarMeasur
     astylar.y + astylar.height <= canvas.y + canvas.height + geometryTolerance;
   if (family === 'snack-bar') {
     const overlay = astylarMeasurement.elements?.['snack-bar-overlay']?.borderBox;
+    const astylarSemantics = await astylarPage.locator('[data-astylar-id="snack-bar-surface"]').evaluate((element) => ({
+      exists: true,
+      role: element.getAttribute('role') ?? undefined,
+      ariaLive: element.getAttribute('aria-live') ?? undefined,
+      name: element.textContent?.replace(/\s+/g, ' ').trim() ?? '',
+    }));
+    const referenceSemantics = await referencePage.locator(referenceSelector).first().evaluate((element) => {
+      const semanticElement = element.matches('[role], [aria-live]')
+        ? element : element.querySelector('[role], [aria-live]');
+      const target = semanticElement ?? element;
+      return {
+        exists: true,
+        role: target.getAttribute('role') ?? undefined,
+        ariaLive: target.getAttribute('aria-live') ?? undefined,
+        name: target.textContent?.replace(/\s+/g, ' ').trim() ?? '',
+      };
+    });
+    const normalizeName = (value) => value?.replace(/\s+/g, '').toLowerCase();
+    const equivalentLiveRole = astylarSemantics.role === referenceSemantics.role ||
+      (astylarSemantics.role === 'status' && referenceSemantics.role === undefined &&
+        referenceSemantics.ariaLive === 'polite');
+    const semanticsMatch = astylarSemantics?.exists === true &&
+      equivalentLiveRole && astylarSemantics.ariaLive === referenceSemantics.ariaLive &&
+      normalizeName(astylarSemantics.name) === normalizeName(referenceSemantics.name);
     const astylarBottomGap = canvas.y + canvas.height - astylar.y - astylar.height;
     const referenceBottomGap = canvas.y + canvas.height - reference.y - reference.height;
     return {
-      matches: withinCanvas && Math.abs(astylarBottomGap - referenceBottomGap) <= 2,
+      matches: withinCanvas && Math.abs(astylarBottomGap - referenceBottomGap) <= 2 && semanticsMatch,
       targetId, astylar, reference, overlay, canvas, withinCanvas,
-      astylarBottomGap, referenceBottomGap,
+      astylarBottomGap, referenceBottomGap, astylarSemantics, referenceSemantics, semanticsMatch,
     };
   }
 

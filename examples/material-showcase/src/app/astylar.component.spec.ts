@@ -418,6 +418,26 @@ describe('AstylarShowcaseComponent', () => {
       ariaLive: 'polite',
     }));
     expect(find(build(component, 'snack-bar'), 'snack-bar-dismiss')).toBeDefined();
+    expect(style(build(component, 'snack-bar'), '.snack-overlay')).toEqual(jasmine.objectContaining({
+      padding: '0 0 8px',
+    }));
+    expect(style(build(component, 'snack-bar'), '.snack-surface')).toEqual(jasmine.objectContaining({
+      width: '344px', height: '48px',
+    }));
+  });
+
+  it('anchors the tooltip below and centered on its trigger without a transform offset', () => {
+    const { component, store } = createComponent('tooltip');
+    store.patchState({ open: true });
+    const site = build(component, 'tooltip');
+
+    expect(style(site, '.tooltip-anchor')).toEqual(jasmine.objectContaining({
+      alignItems: 'center', gap: '8px',
+    }));
+    expect(style(site, '#tooltip-popup')).toEqual(jasmine.objectContaining({
+      width: '107px', height: '24px', justifyContent: 'center',
+    }));
+    expect(style(site, '#tooltip-popup')?.['transform']).toBeUndefined();
   });
 });
 
