@@ -740,7 +740,7 @@ export class AstylarShowcaseComponent {
         ] : []),
         { selector: '.range', width: '100%', height: '48px', cursor: 'pointer' },
         { selector: '.range-stack', position: 'relative', width: '100%', height: '48px' },
-        { selector: '.range-layer', position: 'absolute', top: '0', left: '0', width: '100%', height: '48px' },
+        { selector: '.range-layer', position: 'absolute', top: '0', left: '0', width: '100%', height: '48px', cursor: 'pointer' },
         { selector: '#slider-start', width: '350px', height: '44px', top: '2px', left: '0', opacity: '0' },
         { selector: '#slider-primary', width: '399px', height: '44px', top: '2px', left: '350px', opacity: '0' },
         { selector: '#slider-start', mediaMaxWidth: '800px', width: '311px' },

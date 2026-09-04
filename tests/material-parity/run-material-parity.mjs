@@ -13,6 +13,7 @@ import {
 } from './benchmark.config.mjs';
 import { measureTextInkCenter, textCenterOffsetError } from './text-alignment-metrics.mjs';
 import { compareBottomShadowProfiles } from './shadow-profile-metrics.mjs';
+import { effectiveBrowserCursor } from './cursor-metrics.mjs';
 
 const root = process.cwd();
 const enforce = process.argv.includes('--enforce');
@@ -679,18 +680,69 @@ function compareEvents(reference, candidate, family, state) {
 
 async function compareInteractionCursor(referencePage, astylarPage, family, state) {
   if (state !== 'hover') return { matches: true };
-  const referenceBox = await interactionTargetBox(referencePage, 'reference', family, state);
-  const astylarBox = await interactionTargetBox(astylarPage, 'astylar', family, state);
+  const referenceBox = await cursorTargetBox(referencePage, 'reference', family, state);
+  const astylarBox = await cursorTargetBox(astylarPage, 'astylar', family, state);
   const cursorAt = async (page, box, canvas = false) => {
     if (!box) return undefined;
-    return page.evaluate(({ x, y, canvas }) => {
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+    const observation = await page.evaluate(({ x, y, canvas }) => {
       const element = canvas ? document.querySelector('canvas') : document.elementFromPoint(x, y);
-      return element ? getComputedStyle(element).cursor : undefined;
+      if (!element) return undefined;
+      const authoredCursor = getComputedStyle(element).cursor;
+      if (canvas || authoredCursor !== 'auto') return { authoredCursor, hasSelectableTextAtPoint: false };
+      const caret = typeof document.caretPositionFromPoint === 'function'
+        ? document.caretPositionFromPoint(x, y)
+        : typeof document.caretRangeFromPoint === 'function'
+          ? document.caretRangeFromPoint(x, y)
+          : undefined;
+      const node = caret?.offsetNode ?? caret?.startContainer;
+      const textOwner = node?.nodeType === Node.TEXT_NODE ? node.parentElement : node;
+      const text = node?.nodeType === Node.TEXT_NODE ? node.textContent : undefined;
+      const textRange = node?.nodeType === Node.TEXT_NODE ? document.createRange() : undefined;
+      textRange?.selectNodeContents(node);
+      const pointTouchesText = !!textRange && [...textRange.getClientRects()].some((rect) =>
+        x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom);
+      const hasSelectableTextAtPoint = !!text?.trim() && pointTouchesText &&
+        textOwner instanceof Element && getComputedStyle(textOwner).userSelect !== 'none';
+      return { authoredCursor, hasSelectableTextAtPoint };
     }, { x: box.x + box.width / 2, y: box.y + box.height / 2, canvas });
+    return observation
+      ? effectiveBrowserCursor(observation.authoredCursor, observation.hasSelectableTextAtPoint)
+      : undefined;
   };
   const reference = await cursorAt(referencePage, referenceBox);
   const astylar = await cursorAt(astylarPage, astylarBox, true);
   return { reference, astylar, matches: reference === astylar };
+}
+
+async function cursorTargetBox(page, mode, family, state) {
+  const textTargets = {
+    sidenav: { reference: '#sidenav-primary mat-sidenav-content', astylar: 'sidenav-content' },
+    'grid-list': { reference: '#grid-tile-one', astylar: 'grid-tile-one-label' },
+    badge: { reference: '#badge-label', astylar: 'badge-label' },
+    table: { reference: '#table-primary tbody tr:first-child td', astylar: 'table-atlas' },
+    tree: { reference: '#tree-item-0', astylar: 'tree-item-0-label' },
+  };
+  const target = textTargets[family];
+  if (!target) return interactionTargetBox(page, mode, family, state);
+  if (mode === 'reference') {
+    return page.locator(target.reference).evaluate((element) => {
+      const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
+      let text;
+      while ((text = walker.nextNode()) && !text.textContent?.trim()) { /* find visible copy */ }
+      if (!text) return undefined;
+      const range = document.createRange();
+      range.selectNodeContents(text);
+      return range.getBoundingClientRect().toJSON();
+    });
+  }
+  const measurement = await page.evaluate((id) =>
+    window.__ASTYLAR_MATERIAL_BENCHMARK__?.measure([id]), target.astylar);
+  const local = measurement?.elements?.[target.astylar]?.borderBox;
+  const canvas = await page.locator('canvas').boundingBox();
+  return local && canvas
+    ? { x: canvas.x + local.left, y: canvas.y + local.top, width: local.width, height: local.height }
+    : undefined;
 }
 
 async function compareOverlayPlacement(referencePage, astylarPage, astylarMeasurement, family, state) {

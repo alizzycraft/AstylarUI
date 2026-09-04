@@ -106,6 +106,7 @@ describe('AstylarShowcaseComponent', () => {
     const slider = build(component, 'slider');
     expect(find(slider, 'slider-start')).toEqual(jasmine.objectContaining({ min: '0', max: '50', step: '1', value: '30' }));
     expect(find(slider, 'slider-primary')).toEqual(jasmine.objectContaining({ min: '50', max: '100', step: '1', value: '65' }));
+    expect(style(slider, '.range-layer')).toEqual(jasmine.objectContaining({ cursor: 'pointer' }));
 
     expect(style(build(component, 'paginator'), '#paginator-range')?.['top']).toBe('20px');
     store.patchState({ pageIndex: 1 });
