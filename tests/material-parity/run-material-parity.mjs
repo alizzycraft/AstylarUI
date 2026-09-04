@@ -13,7 +13,7 @@ import {
 } from './benchmark.config.mjs';
 import { measureTextInkCenter, textCenterOffsetError } from './text-alignment-metrics.mjs';
 import { compareBottomShadowProfiles } from './shadow-profile-metrics.mjs';
-import { effectiveBrowserCursor } from './cursor-metrics.mjs';
+import { effectiveBrowserCursor, interactionLayerCursorProbe } from './cursor-metrics.mjs';
 
 const root = process.cwd();
 const enforce = process.argv.includes('--enforce');
@@ -553,6 +553,7 @@ async function performInteraction(page, mode, benchmarkCase) {
 }
 
 async function interactionTargetBox(page, mode, family, state, alternate = false) {
+  const interactionLayerProbe = interactionLayerCursorProbe(family, state);
   const astylarTargets = {
     toolbar: 'toolbar-action', card: 'card-open', chips: 'chip-0', sort: 'sort-trigger',
     paginator: 'paginator-next', radio: 'radio-team', 'button-toggle': 'button-toggle-two',
@@ -571,6 +572,9 @@ async function interactionTargetBox(page, mode, family, state, alternate = false
     'form-field': '#form-field-control', input: '#input-control', autocomplete: '#autocomplete-control', select: '#select-control',
   };
   if (mode === 'reference') {
+    if (interactionLayerProbe) {
+      return page.locator(interactionLayerProbe.referenceSelector).boundingBox();
+    }
     if (family === 'checkbox' && ['hover', 'held', 'activate-leave'].includes(state)) {
       return page.locator('#checkbox-primary .mdc-checkbox').boundingBox();
     }
@@ -582,6 +586,17 @@ async function interactionTargetBox(page, mode, family, state, alternate = false
       ? '#chips-primary mat-chip-option:nth-child(2)'
       : referenceTargets[family] ?? `#${family}-primary`;
     return page.locator(selector).boundingBox();
+  }
+  if (interactionLayerProbe) {
+    const measurement = await page.evaluate(
+      (id) => window.__ASTYLAR_MATERIAL_BENCHMARK__?.measure([id]),
+      interactionLayerProbe.astylarId,
+    );
+    const local = measurement?.elements?.[interactionLayerProbe.astylarId]?.borderBox;
+    const canvas = await page.locator('canvas').boundingBox();
+    return local && canvas
+      ? { x: canvas.x + local.left, y: canvas.y + local.top, width: local.width, height: local.height }
+      : undefined;
   }
   if (family === 'checkbox' && ['hover', 'held', 'activate-leave'].includes(state)) {
     const measurement = await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__?.measure(['checkbox-box']));
