@@ -21,6 +21,12 @@ interface CompiledCompoundSelector {
     tokens: Array<{ prefix: string; value: string }>;
 }
 
+interface StructuralMatchCache {
+    ancestryRevision: number;
+    direct: Map<string, number | null>;
+    required: WeakMap<DOMElement, Map<string, number | null>>;
+}
+
 @Injectable({
     providedIn: 'root'
 })
@@ -31,6 +37,7 @@ export class StyleService {
     private readonly relationalSelectors = new Map<string, ParsedRelationalSelector | null>();
     private readonly compoundSelectors = new Map<string, CompiledCompoundSelector>();
     private readonly mediaLengths = new Map<string, number | null>();
+    private readonly structuralMatches = new WeakMap<DOMElement, StructuralMatchCache>();
 
     constructor(
         private styleDefaults: StyleDefaultsService,
@@ -611,6 +618,44 @@ export class StyleService {
         if (!normalizedSelector) {
             return null;
         }
+        let elementCache = this.structuralMatches.get(element);
+        if (!elementCache || elementCache.ancestryRevision !== this.ancestry.revision) {
+            elementCache = {
+                ancestryRevision: this.ancestry.revision,
+                direct: new Map<string, number | null>(),
+                required: new WeakMap<DOMElement, Map<string, number | null>>(),
+            };
+            this.structuralMatches.set(element, elementCache);
+        }
+        if (!requiredMatch) {
+            if (elementCache.direct.has(normalizedSelector)) {
+                return elementCache.direct.get(normalizedSelector)!;
+            }
+            const specificity = this.calculateMatchingSpecificity(element, normalizedSelector);
+            elementCache.direct.set(normalizedSelector, specificity);
+            return specificity;
+        }
+        let sourceCache = elementCache.required.get(requiredMatch.element);
+        if (!sourceCache) {
+            sourceCache = new Map<string, number | null>();
+            elementCache.required.set(requiredMatch.element, sourceCache);
+        }
+        const cacheKey = `${requiredMatch.compoundIndex}\u0000${normalizedSelector}`;
+        if (sourceCache.has(cacheKey)) return sourceCache.get(cacheKey)!;
+        const specificity = this.calculateMatchingSpecificity(
+            element,
+            normalizedSelector,
+            requiredMatch,
+        );
+        sourceCache.set(cacheKey, specificity);
+        return specificity;
+    }
+
+    private calculateMatchingSpecificity(
+        element: DOMElement,
+        normalizedSelector: string,
+        requiredMatch?: { compoundIndex: number; element: DOMElement },
+    ): number | null {
         // Namespaced plugin element identities contain a colon, which otherwise
         // looks like an unsupported pseudo-class to the compact selector parser.
         if (normalizedSelector === element.type) return 1;

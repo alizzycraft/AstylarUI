@@ -392,4 +392,27 @@ describe('StyleService cascade', () => {
 
     expect(parser).toHaveBeenCalledTimes(1);
   });
+
+  it('reuses structural selector matches until the ancestry changes', () => {
+    const calendar: DOMElement = { type: 'section', class: 'calendar' };
+    const panel: DOMElement = { type: 'section', class: 'panel' };
+    const day: DOMElement = { type: 'button', class: 'day' };
+    calendar.children = [day];
+    ancestry.setParent(day, calendar);
+    const styles: StyleRule[] = [
+      { selector: '.calendar .day', background: '#ede6eb' },
+    ];
+    const matcher = spyOn<any>(service, 'getCompoundSpecificity').and.callThrough();
+
+    expect(service.findStyleForElement(day, styles)?.background).toBe('#ede6eb');
+    expect(service.findStyleForElement(day, styles)?.background).toBe('#ede6eb');
+    expect(matcher).toHaveBeenCalledTimes(2);
+
+    calendar.children = [];
+    panel.children = [day];
+    ancestry.setParent(day, panel);
+
+    expect(service.findStyleForElement(day, styles)?.background).not.toBe('#ede6eb');
+    expect(matcher).toHaveBeenCalledTimes(4);
+  });
 });
