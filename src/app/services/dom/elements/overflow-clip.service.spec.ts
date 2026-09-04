@@ -33,6 +33,26 @@ describe('OverflowClipService', () => {
     expect(child.material.clipPlane4?.asArray()).toEqual([0, 1, 0, -6]);
   });
 
+  it('retains a rounded overflow boundary for descendant fragment clipping', () => {
+    const parent = BABYLON.MeshBuilder.CreatePlane('parent', { width: 4, height: 2 }, scene);
+    parent.position.set(3, 5, 0);
+    parent.metadata = { astylarBorderRadiusWorld: 0.5 };
+    const child = BABYLON.MeshBuilder.CreatePlane('child', { width: 8, height: 8 }, scene);
+    child.parent = parent;
+    child.material = new BABYLON.StandardMaterial('child-material', scene);
+
+    service.apply(parent, { selector: '#parent', overflow: 'hidden', borderRadius: '10px' });
+
+    expect(child.metadata?.['astylarOverflowClipRegions']).toEqual([{
+      minX: 1,
+      maxX: 5,
+      minY: 4,
+      maxY: 6,
+      radius: 0.5,
+    }]);
+    expect(child.material.pluginManager?.getPlugin('AstylarRoundedOverflowClip')).toBeTruthy();
+  });
+
   it('leaves descendants unclipped for visible overflow', () => {
     const parent = BABYLON.MeshBuilder.CreatePlane('parent', { width: 4, height: 2 }, scene);
     const child = BABYLON.MeshBuilder.CreatePlane('child', { width: 8, height: 8 }, scene);

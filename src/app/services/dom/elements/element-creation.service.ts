@@ -356,6 +356,7 @@ export class ElementCreationService {
       cursor: style.cursor,
       elementId: element.id,
       element: element, // Store the element object for hover handling
+      astylarBorderRadiusWorld: borderRadius,
       astylarPluginProperties: pluginProperties,
       ...(pluginRenderer
         ? { astylarPluginRenderer: pluginRenderer.definition.id }
