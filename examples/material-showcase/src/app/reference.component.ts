@@ -98,7 +98,7 @@ import { DomSanitizer } from '@angular/platform-browser';
           @default { <button mat-flat-button color="primary" id="button-primary">Primary action</button> <button id="button-secondary" mat-stroked-button>Secondary</button> <button id="button-disabled" mat-flat-button disabled>Disabled</button> }
         }
       </section>
-      <ng-template #dialogContent><h2 mat-dialog-title>Confirm action</h2><mat-dialog-content>Save Project Atlas?</mat-dialog-content><mat-dialog-actions><button mat-button mat-dialog-close>Cancel</button><button mat-flat-button mat-dialog-close>Save</button></mat-dialog-actions></ng-template>
+      <ng-template #dialogContent><h2 mat-dialog-title data-parity-id="dialog-title">Confirm action</h2><mat-dialog-content data-parity-id="dialog-copy">Save Project Atlas?</mat-dialog-content><mat-dialog-actions data-parity-id="dialog-actions"><button mat-button mat-dialog-close data-parity-id="dialog-cancel">Cancel</button><button mat-flat-button mat-dialog-close data-parity-id="dialog-save">Save</button></mat-dialog-actions></ng-template>
       <ng-template #sheetContent><mat-nav-list><a mat-list-item href="#">Share</a><a mat-list-item href="#">Copy link</a></mat-nav-list></ng-template>
     </main>
   `,

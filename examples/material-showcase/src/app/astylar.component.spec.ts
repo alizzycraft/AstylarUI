@@ -186,7 +186,18 @@ describe('AstylarShowcaseComponent', () => {
     store.setTheme(MATERIAL_THEME_PROFILES.dark);
     store.patchState({ disabled: true, open: false });
     expect(style(build(component, 'autocomplete'), '.field-surface')?.['background']).toBe('#2f2d33');
-    store.patchState({ disabled: false });
+    store.patchState({ disabled: false, open: true });
+    const darkDialog = build(component, 'dialog');
+    expect(style(darkDialog, '.dialog-panel')).toEqual(jasmine.objectContaining({
+      width: '280px', height: '161px', padding: '0', background: '#fef8fc', color: '#1d1b20',
+    }));
+    expect(style(darkDialog, '.dialog-copy')).toEqual(jasmine.objectContaining({
+      color: '#49454f', fontSize: '14px', lineHeight: '20px', verticalAlign: 'middle',
+    }));
+    expect(style(darkDialog, '.dialog-action')).toEqual(jasmine.objectContaining({
+      color: '#7d00fa', fontSize: '14px',
+    }));
+    store.patchState({ disabled: false, open: false });
     store.setTheme(MATERIAL_THEME_PROFILES.light);
 
     const slideToggle = build(component, 'slide-toggle');

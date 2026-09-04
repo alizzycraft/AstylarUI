@@ -123,6 +123,9 @@ function benchmarkMeasurementIds(family) {
     ...(family === 'bottom-sheet' ? [
       'bottom-sheet-overlay', 'bottom-sheet-panel', 'bottom-sheet-dismiss', 'bottom-sheet-copy',
     ] : []),
+    ...(family === 'dialog' ? [
+      'dialog-panel', 'dialog-title', 'dialog-copy', 'dialog-actions', 'dialog-cancel', 'dialog-save',
+    ] : []),
   ])];
 }
 
@@ -690,13 +693,16 @@ async function compareOverlayPlacement(referencePage, astylarPage, astylarMeasur
         ? ['activate', 'activate-leave', 'open'].includes(state)
         : family === 'timepicker'
           ? ['focus', 'activate', 'open', 'open-hover-content'].includes(state)
-          : family === 'datepicker' && ['activate', 'open', 'open-secondary', 'open-hover-content'].includes(state);
+          : family === 'datepicker'
+            ? ['activate', 'open', 'open-secondary', 'open-hover-content'].includes(state)
+            : family === 'dialog' && ['activate', 'activate-leave', 'open', 'open-hover-content'].includes(state);
   if (!expectedVisible) return { matches: true };
 
   const targetId = family === 'snack-bar' ? 'snack-bar-surface'
     : family === 'bottom-sheet' ? 'bottom-sheet-panel'
       : family === 'timepicker' ? 'timepicker-options'
-        : family === 'datepicker' ? 'datepicker-popup' : 'tooltip-popup';
+        : family === 'datepicker' ? 'datepicker-popup'
+          : family === 'dialog' ? 'dialog-panel' : 'tooltip-popup';
   const local = astylarMeasurement.elements?.[targetId]?.borderBox ??
     (family === 'timepicker' || family === 'datepicker'
       ? await astylarPage.evaluate((id) =>
@@ -707,7 +713,8 @@ async function compareOverlayPlacement(referencePage, astylarPage, astylarMeasur
     ? '.mat-mdc-snack-bar-container'
     : family === 'bottom-sheet' ? '.mat-bottom-sheet-container'
       : family === 'timepicker' ? '.mat-timepicker-panel'
-        : family === 'datepicker' ? '.mat-datepicker-content' : '.mat-mdc-tooltip-surface';
+        : family === 'datepicker' ? '.mat-datepicker-content'
+          : family === 'dialog' ? '.mat-mdc-dialog-surface' : '.mat-mdc-tooltip-surface';
   const reference = await referencePage.locator(referenceSelector).first().boundingBox();
   if (!local || !canvas || !reference) {
     return { matches: false, targetId, local, canvas, reference, reason: 'visible overlay bounds are missing' };
@@ -794,6 +801,16 @@ async function compareOverlayPlacement(referencePage, astylarPage, astylarMeasur
       targetId, astylar, reference, overlay, canvas, withinCanvas,
       astylarBottomGap, referenceBottomGap, astylarSemantics, referenceSemantics, semanticsMatch,
     };
+  }
+  if (family === 'dialog') {
+    const edgeErrors = [
+      Math.abs(astylar.x - reference.x),
+      Math.abs(astylar.y - reference.y),
+      Math.abs(astylar.width - reference.width),
+      Math.abs(astylar.height - reference.height),
+    ];
+    const edgeError = Math.max(...edgeErrors);
+    return { matches: withinCanvas && edgeError <= 2, targetId, astylar, reference, canvas, withinCanvas, edgeErrors, edgeError };
   }
   if (family === 'bottom-sheet') {
     const overlay = astylarMeasurement.elements?.['bottom-sheet-overlay']?.borderBox;
@@ -1129,6 +1146,7 @@ async function measureReference(page, ids) {
         'paginator-size': '#paginator-primary .mat-mdc-paginator-page-size-label',
         'paginator-range': '#paginator-primary .mat-mdc-paginator-range-label',
         'tooltip-popup': '.mat-mdc-tooltip-surface',
+        'dialog-panel': '.mat-mdc-dialog-surface',
       };
       return selectors[id] ? document.querySelector(selectors[id]) : null;
     }

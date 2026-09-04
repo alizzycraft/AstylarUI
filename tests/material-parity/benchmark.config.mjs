@@ -131,10 +131,12 @@ export const materialInteractionFocusedRasterTargets = Object.freeze({
   datepicker: Object.freeze({ element: 'datepicker-primary', padding: 8, paddingBottom: 370, minimumSsim: .86 }),
   timepicker: Object.freeze({ element: 'timepicker-primary', padding: 8, paddingBottom: 270, minimumSsim: .88 }),
   menu: Object.freeze({ element: 'menu-primary', padding: 8, paddingBottom: 160, minimumSsim: .86 }),
+  dialog: Object.freeze({ element: 'dialog-panel', padding: 8, minimumSsim: .85, states: Object.freeze(['open', 'open-hover-content']) }),
   tooltip: Object.freeze({ element: 'tooltip-popup', padding: 4, minimumSsim: .14, states: Object.freeze(['hover', 'held']) }),
 });
 export const materialInteractionTextAlignmentTargets = Object.freeze({
   chips: Object.freeze(['chip-0', 'chip-1']),
+  dialog: Object.freeze(['dialog-title', 'dialog-copy', 'dialog-cancel', 'dialog-save']),
   expansion: Object.freeze(['expansion-content']),
 });
 export const materialShadowProfileTargets = Object.freeze({
