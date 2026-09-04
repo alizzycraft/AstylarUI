@@ -374,4 +374,22 @@ describe('StyleService cascade', () => {
     expect(service.findInteractionStyleForElement(layer, styles, 'hover', parent)?.color).toBeUndefined();
     expect(service.findInteractionStyleForElement(layer, styles, 'hover', layer)?.color).toBe('#ffffff');
   });
+
+  it('compiles an unchanged relational selector once across repeated resolutions', () => {
+    const calendar: DOMElement = { type: 'section', class: 'calendar' };
+    const day: DOMElement = { type: 'button', class: 'day' };
+    calendar.children = [day];
+    ancestry.setParent(day, calendar);
+    const styles: StyleRule[] = [
+      { selector: '.calendar .day', background: '#ede6eb' },
+    ];
+    const parser = spyOn<any>(service, 'parseRelationalSelector').and.callThrough();
+
+    expect(service.findStyleForElement(day, styles)?.background).toBe('#ede6eb');
+    expect(service.findStyleForElement(day, styles)?.background).toBe('#ede6eb');
+    expect(service.matchesSelector(day, '.calendar .day')).toBeTrue();
+    expect(service.matchesSelector(day, '.calendar .day')).toBeTrue();
+
+    expect(parser).toHaveBeenCalledTimes(1);
+  });
 });

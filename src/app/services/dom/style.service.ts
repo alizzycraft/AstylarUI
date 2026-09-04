@@ -8,11 +8,29 @@ import { StyleDefaultsService } from './style-defaults.service';
 import { DOMAncestryService } from './dom-ancestry.service';
 import { ViewportService } from './positioning/viewport.service';
 
+interface ParsedRelationalSelector {
+    compounds: string[];
+    combinators: Array<'descendant' | 'child' | 'adjacent' | 'general-sibling'>;
+}
+
+interface CompiledCompoundSelector {
+    valid: boolean;
+    pseudos: string[];
+    baseSelector: string;
+    pseudoSpecificity: number;
+    tokens: Array<{ prefix: string; value: string }>;
+}
+
 @Injectable({
     providedIn: 'root'
 })
 export class StyleService {
     private readonly parsedAuthorStyles = new WeakSet<StyleRule>();
+    /** Selector grammar is immutable; do not repeatedly tokenize it per element/state lookup. */
+    private readonly selectorLists = new Map<string, readonly string[]>();
+    private readonly relationalSelectors = new Map<string, ParsedRelationalSelector | null>();
+    private readonly compoundSelectors = new Map<string, CompiledCompoundSelector>();
+    private readonly mediaLengths = new Map<string, number | null>();
 
     constructor(
         private styleDefaults: StyleDefaultsService,
@@ -252,7 +270,7 @@ export class StyleService {
         styles.forEach((style, index) => {
             if (!this.matchesMediaConditions(style)) return;
 
-            const selectors = style.selector.split(',').map(s => s.trim());
+            const selectors = this.selectorList(style.selector);
 
             selectors.forEach(selector => {
                 if (selector.includes(':hover')) {
@@ -351,7 +369,7 @@ export class StyleService {
         styles.forEach((rule, sourceOrder) => {
             if (!this.matchesMediaConditions(rule)) return;
 
-            rule.selector.split(',').map(selector => selector.trim()).forEach(selector => {
+            this.selectorList(rule.selector).forEach(selector => {
                 const specificity = this.getMatchingSpecificity(element, selector);
                 if (specificity === null) {
                     return;
@@ -501,8 +519,8 @@ export class StyleService {
 
         styles.forEach((rule, sourceOrder) => {
             if (!this.matchesMediaConditions(rule)) return;
-            rule.selector.split(',').map((selector) => selector.trim()).forEach((selector) => {
-                const parsed = this.parseRelationalSelector(selector);
+            this.selectorList(rule.selector).forEach((selector) => {
+                const parsed = this.getRelationalSelector(selector);
                 const pseudoCompoundIndex = parsed?.compounds.findIndex((compound) => pseudo.test(compound)) ?? -1;
                 pseudo.lastIndex = 0;
                 if (pseudoCompoundIndex < 0 || (activeStateElements.length === 0 && pseudoCompoundIndex !== (parsed?.compounds.length ?? 0) - 1)) {
@@ -572,10 +590,16 @@ export class StyleService {
 
     private parseMediaLength(value: string): number | null {
         const normalized = value.trim().toLowerCase();
+        if (this.mediaLengths.has(normalized)) return this.mediaLengths.get(normalized)!;
         const match = normalized.match(/^(-?(?:\d+\.?\d*|\.\d+))(px|em|rem)?$/);
-        if (!match) return null;
+        if (!match) {
+            this.mediaLengths.set(normalized, null);
+            return null;
+        }
         const amount = Number.parseFloat(match[1]);
-        return match[2] === 'em' || match[2] === 'rem' ? amount * 16 : amount;
+        const result = match[2] === 'em' || match[2] === 'rem' ? amount * 16 : amount;
+        this.mediaLengths.set(normalized, result);
+        return result;
     }
 
     private getMatchingSpecificity(
@@ -591,7 +615,7 @@ export class StyleService {
         // looks like an unsupported pseudo-class to the compact selector parser.
         if (normalizedSelector === element.type) return 1;
 
-        const parsedSelector = this.parseRelationalSelector(normalizedSelector);
+        const parsedSelector = this.getRelationalSelector(normalizedSelector);
         if (!parsedSelector) return null;
 
         const { compounds, combinators } = parsedSelector;
@@ -646,10 +670,22 @@ export class StyleService {
         return specificity;
     }
 
-    private parseRelationalSelector(selector: string): {
-        compounds: string[];
-        combinators: Array<'descendant' | 'child' | 'adjacent' | 'general-sibling'>;
-    } | null {
+    private selectorList(selector: string): readonly string[] {
+        const cached = this.selectorLists.get(selector);
+        if (cached) return cached;
+        const parsed = selector.split(',').map((candidate) => candidate.trim());
+        this.selectorLists.set(selector, parsed);
+        return parsed;
+    }
+
+    private getRelationalSelector(selector: string): ParsedRelationalSelector | null {
+        if (this.relationalSelectors.has(selector)) return this.relationalSelectors.get(selector)!;
+        const parsed = this.parseRelationalSelector(selector);
+        this.relationalSelectors.set(selector, parsed);
+        return parsed;
+    }
+
+    private parseRelationalSelector(selector: string): ParsedRelationalSelector | null {
         const normalized = selector.replace(/\s*([>+~])\s*/g, '$1');
         const compounds = normalized.split(/[>+~]|\s+/);
         const combinators = Array.from(normalized.matchAll(/[>+~]|\s+/g), match => {
@@ -683,10 +719,9 @@ export class StyleService {
     }
 
     private getCompoundSpecificity(element: DOMElement, selector: string): number | null {
-        const pseudoPattern = /:(first-child|last-child|disabled|enabled|checked|required|optional|read-only|read-write)/g;
-        const pseudos = Array.from(selector.matchAll(pseudoPattern), match => match[1]);
-        const baseSelector = selector.replace(pseudoPattern, '');
-        if (baseSelector.includes(':')) return null;
+        const compiled = this.getCompiledCompoundSelector(selector);
+        if (!compiled.valid) return null;
+        const { pseudos, baseSelector, tokens, pseudoSpecificity } = compiled;
 
         if (pseudos.includes('first-child') || pseudos.includes('last-child')) {
             const siblings = this.ancestry.getParent(element)?.children;
@@ -708,13 +743,7 @@ export class StyleService {
         if (pseudos.includes('read-only') && (!textEditable || element.readonly !== true)) return null;
         if (pseudos.includes('read-write') && (!textEditable || element.readonly === true || element.disabled === true)) return null;
 
-        const pseudoSpecificity = pseudos.length * 10;
         if (!baseSelector || baseSelector === '*') return pseudoSpecificity;
-
-        const tokens = Array.from(baseSelector.matchAll(/([.#]?)([\w-]+)/g));
-        if (!tokens.length || tokens.map(token => token[0]).join('') !== baseSelector) {
-            return null;
-        }
 
         const classes = new Set((element.class ?? '').split(/\s+/).filter(Boolean));
         let ids = 0;
@@ -722,8 +751,7 @@ export class StyleService {
         let typeCount = 0;
 
         for (const token of tokens) {
-            const prefix = token[1];
-            const value = token[2];
+            const { prefix, value } = token;
             if (prefix === '#') {
                 if (element.id !== value) return null;
                 ids += 1;
@@ -744,6 +772,28 @@ export class StyleService {
         }
 
         return ids * 100 + classCount * 10 + typeCount + pseudoSpecificity;
+    }
+
+    private getCompiledCompoundSelector(selector: string): CompiledCompoundSelector {
+        const cached = this.compoundSelectors.get(selector);
+        if (cached) return cached;
+        const pseudoPattern = /:(first-child|last-child|disabled|enabled|checked|required|optional|read-only|read-write)/g;
+        const pseudos = Array.from(selector.matchAll(pseudoPattern), (match) => match[1]);
+        const baseSelector = selector.replace(pseudoPattern, '');
+        const matches = Array.from(baseSelector.matchAll(/([.#]?)([\w-]+)/g));
+        const valid = !baseSelector.includes(':') && (
+            !baseSelector || baseSelector === '*' ||
+            (matches.length > 0 && matches.map((match) => match[0]).join('') === baseSelector)
+        );
+        const compiled: CompiledCompoundSelector = {
+            valid,
+            pseudos,
+            baseSelector,
+            pseudoSpecificity: pseudos.length * 10,
+            tokens: matches.map((match) => ({ prefix: match[1], value: match[2] })),
+        };
+        this.compoundSelectors.set(selector, compiled);
+        return compiled;
     }
 
     private logStyleResolution(element: DOMElement, style: StyleRule, segments: string[]): void {
