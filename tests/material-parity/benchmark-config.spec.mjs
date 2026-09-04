@@ -72,6 +72,7 @@ test('keeps the app catalog and enforced static matrix complete', () => {
     assert.ok(materialInteractionCases.some((candidate) => candidate.family === family && candidate.state === 'open-hover-content'));
   }
   assert.ok(materialInteractionCases.some((candidate) => candidate.family === 'datepicker' && candidate.state === 'open-secondary'));
+  assert.ok(materialInteractionCases.some((candidate) => candidate.family === 'snack-bar' && candidate.state === 'auto-dismiss'));
   for (const state of ['drag-start', 'drag-end']) {
     assert.ok(materialInteractionCases.some((candidate) => candidate.family === 'slider' && candidate.state === state));
   }

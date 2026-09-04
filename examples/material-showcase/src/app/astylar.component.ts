@@ -48,6 +48,7 @@ export class AstylarShowcaseComponent {
   private readonly datepickerView = signal<'month' | 'years'>('month');
   private readonly hoveredSliderId = signal<string | undefined>(undefined);
   private readonly pressedSliderId = signal<string | undefined>(undefined);
+  private snackbarDismissTimer?: ReturnType<typeof setTimeout>;
   private readonly fieldValues = signal<Record<'form-field' | 'input' | 'autocomplete', string>>({
     'form-field': 'Atlas',
     input: 'team@example.com',
@@ -166,6 +167,7 @@ export class AstylarShowcaseComponent {
 
   constructor() {
     this.destroyRef.onDestroy(() => {
+      this.clearSnackbarDismissTimer();
       if (typeof window !== 'undefined') delete window.__ASTYLAR_MATERIAL_BENCHMARK__;
     });
   }
@@ -265,13 +267,17 @@ export class AstylarShowcaseComponent {
       if (wasOpen) this.surface?.focus(id, { focusVisible: true });
       else void this.surface?.whenSettled().then(() => this.surface?.focus(id.replace('-primary', '-dismiss')));
     }
-    if (id === 'snack-bar-primary') this.store.patchState({ open: true });
+    if (id === 'snack-bar-primary') {
+      this.store.patchState({ open: true });
+      this.restartSnackbarDismissTimer();
+    }
     if (id === 'menu-primary') this.store.patchState({ open: !this.store.state().open });
     if (id === 'tooltip-primary' && this.benchmarkMode && this.benchmarkInteraction === 'open') {
       this.store.patchState({ open: true });
     }
     if (id === 'expansion-primary') this.store.patchState({ open: !this.store.state().open });
     if (id.endsWith('-dismiss')) {
+      if (id === 'snack-bar-dismiss') this.clearSnackbarDismissTimer();
       this.store.patchState({ open: false });
       this.surface?.focus(id.replace('-dismiss', '-primary'), { focusVisible: true });
     }
@@ -281,6 +287,20 @@ export class AstylarShowcaseComponent {
     }
     this.dismissPopupForOutsideTarget(targetId);
     this.status.set(`Activated ${event.targetId}`);
+  }
+
+  private restartSnackbarDismissTimer(): void {
+    this.clearSnackbarDismissTimer();
+    this.snackbarDismissTimer = setTimeout(() => {
+      this.snackbarDismissTimer = undefined;
+      this.zone.run(() => this.store.patchState({ open: false }));
+    }, 5_000);
+  }
+
+  private clearSnackbarDismissTimer(): void {
+    if (this.snackbarDismissTimer === undefined) return;
+    clearTimeout(this.snackbarDismissTimer);
+    this.snackbarDismissTimer = undefined;
   }
 
   private updateSliderVisual(start: number, end: number): void {

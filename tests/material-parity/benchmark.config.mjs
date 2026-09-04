@@ -190,6 +190,15 @@ materialInteractionCases.push({
   state: 'activate',
 });
 
+// Exercise the configured snackbar lifetime once without adding a five-second
+// delay to every theme/DPR permutation.
+materialInteractionCases.push({
+  family: 'snack-bar',
+  profile: 'light',
+  viewport: materialInteractionViewports[0],
+  state: 'auto-dismiss',
+});
+
 export const materialMobileFlowFamilies = [
   'sidenav', 'autocomplete', 'select', 'datepicker', 'timepicker', 'menu', 'tabs', 'bottom-sheet', 'dialog',
 ];

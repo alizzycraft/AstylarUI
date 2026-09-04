@@ -1,4 +1,4 @@
-import { TestBed } from '@angular/core/testing';
+import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import type { AstylarEvent, AstylarSurface } from 'astylarui';
 import type { SiteData } from 'astylarui';
@@ -500,6 +500,23 @@ describe('AstylarShowcaseComponent', () => {
       width: '344px', height: '48px',
     }));
   });
+
+  it('dismisses the snackbar after five seconds and restarts that lifetime on repeat activation', fakeAsync(() => {
+    const { component, store } = createComponent('snack-bar');
+    const click = (component as unknown as {
+      handleClick: (id: string, event: AstylarEvent) => void;
+    }).handleClick.bind(component);
+    const event = { targetId: 'snack-bar-primary' } as AstylarEvent;
+
+    click('snack-bar-primary', event);
+    tick(4_000);
+    click('snack-bar-primary', event);
+    tick(1_001);
+    expect(store.state().open).toBeTrue();
+
+    tick(3_999);
+    expect(store.state().open).toBeFalse();
+  }));
 
   it('anchors the tooltip below and centered on its trigger without a transform offset', () => {
     const { component, store } = createComponent('tooltip');

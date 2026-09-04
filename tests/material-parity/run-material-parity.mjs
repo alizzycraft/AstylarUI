@@ -288,15 +288,19 @@ async function captureInteractionCase(benchmarkCase) {
     for (let cycle = 0; cycle < cycles; cycle += 1) {
       await setBenchmarkPhase(reference.page, 'start');
       await setBenchmarkPhase(astylar.page, 'start');
-      heldReleases = [
-        await performInteraction(reference.page, 'reference', benchmarkCase),
-        await performInteraction(astylar.page, 'astylar', benchmarkCase),
-      ].filter(Boolean);
+      heldReleases = (await Promise.all([
+        performInteraction(reference.page, 'reference', benchmarkCase),
+        performInteraction(astylar.page, 'astylar', benchmarkCase),
+      ])).filter(Boolean);
       const phase = state === 'held' ? 'held' : 'settled';
-      await setBenchmarkPhase(reference.page, phase);
-      await setBenchmarkPhase(astylar.page, phase);
-      await settleInteraction(reference.page, 'reference');
-      await settleInteraction(astylar.page, 'astylar');
+      await Promise.all([
+        setBenchmarkPhase(reference.page, phase),
+        setBenchmarkPhase(astylar.page, phase),
+      ]);
+      await Promise.all([
+        settleInteraction(reference.page, 'reference'),
+        settleInteraction(astylar.page, 'astylar'),
+      ]);
       if (state === 'open-dismiss') {
         await reference.page.keyboard.press('Escape');
         await astylar.page.keyboard.press('Escape');
@@ -316,8 +320,10 @@ async function captureInteractionCase(benchmarkCase) {
     const overlayPlacement = await compareOverlayPlacement(
       reference.page, astylar.page, astylarMeasurement, family, state,
     );
-    const referenceBuffer = await captureInteractionImage(reference.page, 'reference', referenceMeasurement, family, state, directory);
-    const astylarBuffer = await captureInteractionImage(astylar.page, 'astylar', astylarMeasurement, family, state, directory);
+    const [referenceBuffer, astylarBuffer] = await Promise.all([
+      captureInteractionImage(reference.page, 'reference', referenceMeasurement, family, state, directory),
+      captureInteractionImage(astylar.page, 'astylar', astylarMeasurement, family, state, directory),
+    ]);
     for (const release of heldReleases) await release();
     const referenceEvents = await reference.page.evaluate(() => window.__MATERIAL_REFERENCE_EVENTS__ ?? []);
     const astylarEvents = await astylar.page.evaluate((family) => (window.__ASTYLAR_MATERIAL_BENCHMARK__?.events() ?? []).map((event) => {
@@ -329,7 +335,7 @@ async function captureInteractionCase(benchmarkCase) {
     const astylarFocus = await focusedIdentity(astylar.page, 'astylar', family);
     const cursor = await compareInteractionCursor(reference.page, astylar.page, family, state);
     const dynamicOverlaySemanticIds = family === 'snack-bar' &&
-      ['activate', 'activate-twice', 'open'].includes(state)
+      ['activate', 'activate-twice', 'activate-leave', 'open'].includes(state)
       ? ['snack-bar-overlay', 'snack-bar-surface']
       : family === 'bottom-sheet' && ['activate', 'activate-leave', 'open'].includes(state)
         ? ['bottom-sheet-overlay', 'bottom-sheet-panel', 'bottom-sheet-dismiss', 'bottom-sheet-copy'] : [];
@@ -490,6 +496,9 @@ async function performInteraction(page, mode, benchmarkCase) {
   await page.mouse.down();
   if (state === 'held') return async () => { await page.mouse.up(); };
   await page.mouse.up();
+  if (family === 'snack-bar' && state === 'auto-dismiss') {
+    await page.waitForTimeout(5_100);
+  }
   if (state === 'open-commit-reopen') {
     await settleInteraction(page, mode);
     const optionBox = await popupOptionBox(page, mode, family);
@@ -652,7 +661,7 @@ async function focusedIdentity(page, mode, family) {
 }
 
 function compareEvents(reference, candidate, family, state) {
-  if (!['activate', 'activate-twice', 'activate-alternate', 'activate-leave', 'open', 'open-dismiss'].includes(state)) return { matches: true, reference, astylar: candidate };
+  if (!['activate', 'activate-twice', 'activate-alternate', 'activate-leave', 'auto-dismiss', 'open', 'open-dismiss'].includes(state)) return { matches: true, reference, astylar: candidate };
   const relevant = (events) => events.filter(({ targetId }) => targetId === `${family}-primary`)
     .map(({ type }) => type).filter((type) => ['pointerdown', 'pointerup', 'click', 'input', 'change'].includes(type))
     .filter((type, index, values) => index === 0 || type !== values[index - 1]);
@@ -686,7 +695,7 @@ async function compareInteractionCursor(referencePage, astylarPage, family, stat
 
 async function compareOverlayPlacement(referencePage, astylarPage, astylarMeasurement, family, state) {
   const expectedVisible = family === 'snack-bar'
-    ? ['activate', 'activate-twice', 'open'].includes(state)
+    ? ['activate', 'activate-twice', 'activate-leave', 'open'].includes(state)
     : family === 'tooltip'
       ? ['hover', 'held'].includes(state)
       : family === 'bottom-sheet'
