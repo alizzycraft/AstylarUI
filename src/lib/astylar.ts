@@ -96,6 +96,7 @@ import { AstylarPluginHost } from './astylar-plugin-host';
 import { TextSelectionControllerService } from '../app/services/dom/interaction/text-selection-controller.service';
 import { TextInteractionRegistryService } from '../app/services/dom/interaction/text-interaction-registry.service';
 import { TextSelectionKeyboardService } from '../app/services/dom/interaction/text-selection-keyboard.service';
+import { PointerInteractionService } from '../app/services/dom/interaction/pointer-interaction.service';
 
 /**
  * Configuration options for rendering
@@ -145,6 +146,7 @@ class AstylarRenderer {
   private inputElementService = inject(InputElementService);
   private textSelectionController = inject(TextSelectionControllerService);
   private textInteractionRegistry = inject(TextInteractionRegistryService);
+  private pointerInteraction = inject(PointerInteractionService);
   // Instantiation owns the per-surface native keyboard/copy bridge.
   private textSelectionKeyboard = inject(TextSelectionKeyboardService);
   private textRenderingService = inject(TextRenderingService);
@@ -440,6 +442,7 @@ class AstylarRenderer {
               this.inputElementService.isFocusVisible(),
           );
           visualPlan.commit();
+          this.pointerInteraction.refreshCursor(renderContext);
           previousVisualIdentityData = this.snapshotVisualIdentityData(currentSiteData);
           hasCompletedRender = true;
           return;
@@ -543,6 +546,7 @@ class AstylarRenderer {
               scene.autoClear = autoClear;
             }
             scene.render();
+            this.pointerInteraction.refreshCursor(renderContext);
           }
           visualResourceTransaction.commitOwnership();
           visualPlan.commit({ reused: reusedVisualMeshes });

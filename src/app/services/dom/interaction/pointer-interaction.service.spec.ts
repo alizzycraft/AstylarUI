@@ -79,4 +79,24 @@ describe('PointerInteractionService', () => {
 
     expect(resolved).toBe(button);
   });
+
+  it('refreshes the cursor from the current scene pick after a render replaces hovered meshes', () => {
+    const service = new PointerInteractionService(
+      new TextInteractionRegistryService(),
+      new TextSelectionControllerService(),
+    );
+    const button = { uniqueId: 6, metadata: { cursor: 'pointer' } } as unknown as Mesh;
+    const canvas = { style: { cursor: 'default' } };
+    const scene = {
+      pointerX: 24,
+      pointerY: 36,
+      pick: jasmine.createSpy('pick').and.returnValue({ pickedMesh: button }),
+      getEngine: () => ({ getRenderingCanvas: () => canvas }),
+    };
+
+    service.refreshCursor({ scene } as unknown as BabylonRender);
+
+    expect(scene.pick).toHaveBeenCalledOnceWith(24, 36);
+    expect(canvas.style.cursor).toBe('pointer');
+  });
 });

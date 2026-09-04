@@ -49,6 +49,36 @@ export class PointerInteractionService {
     this.textSelectionController.updateSelection(entry, cssPoint);
   }
 
+  /**
+   * Re-resolve the cursor after reconciliation replaces the mesh currently
+   * beneath a stationary pointer. Babylon does not emit another pointer-move
+   * merely because the picked scene object changed.
+   */
+  refreshCursor(render: BabylonRender): void {
+    const scene = render.scene;
+    const canvas = scene?.getEngine().getRenderingCanvas();
+    if (!scene || !canvas) return;
+
+    if (typeof canvas.matches === 'function' && !canvas.matches(':hover')) {
+      canvas.style.cursor = 'default';
+      return;
+    }
+
+    const pointerX = scene.pointerX;
+    const pointerY = scene.pointerY;
+    if (!Number.isFinite(pointerX) || !Number.isFinite(pointerY)) return;
+    if ((canvas.clientWidth > 0 && (pointerX < 0 || pointerX > canvas.clientWidth)) ||
+        (canvas.clientHeight > 0 && (pointerY < 0 || pointerY > canvas.clientHeight))) {
+      canvas.style.cursor = 'default';
+      return;
+    }
+
+    this.updateCursor(
+      { pickInfo: scene.pick(pointerX, pointerY) } as PointerInfo,
+      render,
+    );
+  }
+
   private updateCursor(pointerInfo: PointerInfo, render: BabylonRender): void {
     const canvas = render.scene?.getEngine().getRenderingCanvas();
     if (!canvas) return;
