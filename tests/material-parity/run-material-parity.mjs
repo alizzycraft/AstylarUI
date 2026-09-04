@@ -324,6 +324,7 @@ async function captureInteractionCase(benchmarkCase) {
     }), family);
     const referenceFocus = await focusedIdentity(reference.page, 'reference', family);
     const astylarFocus = await focusedIdentity(astylar.page, 'astylar', family);
+    const cursor = await compareInteractionCursor(reference.page, astylar.page, family, state);
     const dynamicOverlaySemanticIds = family === 'snack-bar' &&
       ['activate', 'activate-twice', 'open'].includes(state)
       ? ['snack-bar-overlay', 'snack-bar-surface']
@@ -359,13 +360,13 @@ async function captureInteractionCase(benchmarkCase) {
         JSON.stringify(resourceCounts(resourceSnapshots.at(-1))));
     const focusMatches = state !== 'focus' || referenceFocus === astylarFocus;
     return {
-      family, profile, viewport, state, screenshotSimilarity, textAlignment, focusedRasters, semantics, eventComparison, interactionState, overlayPlacement, statePaint,
+      family, profile, viewport, state, screenshotSimilarity, textAlignment, focusedRasters, semantics, eventComparison, interactionState, overlayPlacement, statePaint, cursor,
       focus: { reference: referenceFocus, astylar: astylarFocus, matches: focusMatches },
       runtimeErrors, resourceSnapshots, resourcesStable, astylarState,
       meetsAcceptance: screenshotSimilarity >= materialThresholds.resultSsim &&
         textAlignment.every((result) => result.matches) &&
         focusedRasters.every((result) => result.matches) &&
-        semantics.every((result) => result.matches) && eventComparison.matches && interactionState.matches && overlayPlacement.matches && statePaint.matches && focusMatches &&
+        semantics.every((result) => result.matches) && eventComparison.matches && interactionState.matches && overlayPlacement.matches && statePaint.matches && cursor.matches && focusMatches &&
         runtimeErrors.length === 0 && resourcesStable,
     };
   } finally {
@@ -662,6 +663,22 @@ function compareEvents(reference, candidate, family, state) {
   const expected = contractEvents(relevant(reference));
   const actual = contractEvents(relevant(candidate));
   return { matches: JSON.stringify(expected) === JSON.stringify(actual), reference: expected, astylar: actual };
+}
+
+async function compareInteractionCursor(referencePage, astylarPage, family, state) {
+  if (state !== 'hover') return { matches: true };
+  const referenceBox = await interactionTargetBox(referencePage, 'reference', family, state);
+  const astylarBox = await interactionTargetBox(astylarPage, 'astylar', family, state);
+  const cursorAt = async (page, box, canvas = false) => {
+    if (!box) return undefined;
+    return page.evaluate(({ x, y, canvas }) => {
+      const element = canvas ? document.querySelector('canvas') : document.elementFromPoint(x, y);
+      return element ? getComputedStyle(element).cursor : undefined;
+    }, { x: box.x + box.width / 2, y: box.y + box.height / 2, canvas });
+  };
+  const reference = await cursorAt(referencePage, referenceBox);
+  const astylar = await cursorAt(astylarPage, astylarBox, true);
+  return { reference, astylar, matches: reference === astylar };
 }
 
 async function compareOverlayPlacement(referencePage, astylarPage, astylarMeasurement, family, state) {

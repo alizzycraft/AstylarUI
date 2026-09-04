@@ -86,6 +86,10 @@ describe('AstylarShowcaseComponent', () => {
     const chips = build(component, 'chips');
     expect(style(chips, '#chips-primary')?.['gap']).toBe('8px');
     expect(find(chips, 'chip-0-mark')?.['type']).toBe('showcase.material:check-mark');
+    expect(style(chips, '.chip')).toEqual(jasmine.objectContaining({ cursor: 'pointer', justifyContent: 'center' }));
+    expect(style(chips, '.chip:hover')?.['background']).toBeDefined();
+    expect(style(chips, '.chip:active')?.['background']).toBeDefined();
+    expect(style(chips, '.chip.unselected .chip-label')?.['marginRight']).toBeUndefined();
 
     store.setTheme(MATERIAL_THEME_PROFILES.contrast);
     const compactChips = build(component, 'chips');
@@ -93,6 +97,10 @@ describe('AstylarShowcaseComponent', () => {
     const compactToggle = build(component, 'button-toggle');
     expect(style(compactToggle, '#button-toggle-primary')?.['height']).toBe('26px');
     expect(style(compactToggle, '.button-toggle-option')?.['height']).toBe('24px');
+    expect(style(compactToggle, '.button-toggle-option:hover')?.['background']).toBeDefined();
+    expect(style(compactToggle, '.button-toggle-option:active')?.['background']).toBeDefined();
+    expect(style(compactToggle, '.button-toggle-option.selected:hover')?.['background']).toBeDefined();
+    expect(style(compactToggle, '.button-toggle-option.selected:active')?.['background']).toBeDefined();
     store.setTheme(MATERIAL_THEME_PROFILES.light);
 
     const slider = build(component, 'slider');
@@ -182,6 +190,11 @@ describe('AstylarShowcaseComponent', () => {
     store.setTheme(MATERIAL_THEME_PROFILES.light);
 
     const slideToggle = build(component, 'slide-toggle');
+    expect(style(slideToggle, '#slide-toggle-primary')?.['cursor']).toBe('pointer');
+    expect(style(slideToggle, '.switch-minus')).toEqual(jasmine.objectContaining({
+      width: '12px', height: '2px', background: jasmine.any(String),
+    }));
+    expect(find(slideToggle, 'slide-toggle-minus')?.['textContent']).toBeUndefined();
     expect(find(slideToggle, 'slide-toggle-primary')).toEqual(jasmine.objectContaining({
       role: 'switch',
       ariaLabel: 'Automatic updates',
@@ -199,6 +212,7 @@ describe('AstylarShowcaseComponent', () => {
       width: '130px',
       top: '0',
       zIndex: '2',
+      cursor: 'pointer',
     }));
     expect(style(stepper, '#step-details')?.['left']).toBe('-24px');
     expect(style(stepper, '#step-review')?.['right']).toBe('-24px');
@@ -211,6 +225,7 @@ describe('AstylarShowcaseComponent', () => {
 
     store.patchState({ disabled: true });
     const expansion = build(component, 'expansion');
+    expect(style(expansion, '.expansion-trigger')?.['cursor']).toBe('pointer');
     expect(find(expansion, 'expansion-primary')?.['class']).toContain('disabled');
     expect(find(expansion, 'expansion-chevron')?.['class']).toContain('disabled');
     expect(style(expansion, '.expansion-title')?.['fontWeight']).toBe('500');
