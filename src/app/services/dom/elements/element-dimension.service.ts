@@ -170,6 +170,23 @@ export class ElementDimensionService {
             widthSource = isInlineLevel ? 'inline-intrinsic' : 'text-intrinsic';
         }
 
+        // CSS resolves an absolutely/fixed positioned auto width from both
+        // horizontal insets. The containing block is the ancestor padding box
+        // (its border box minus borders), and the resulting margin box must fit
+        // between left and right. Keeping the initial parent width here causes
+        // the right edge to overflow by the left inset.
+        const hasLeftInset = style?.left !== undefined && style.left !== 'auto';
+        const hasRightInset = style?.right !== undefined && style.right !== 'auto';
+        if (usesPositionedContainingBlock &&
+            (widthValue === undefined || widthValue === 'auto') &&
+            hasLeftInset && hasRightInset) {
+            const positionedReferenceWidth = parentWidth - parentBorder.left - parentBorder.right;
+            const left = this.parsePositionLength(style!.left!, positionedReferenceWidth, viewportDims, elementFontSize);
+            const right = this.parsePositionLength(style!.right!, positionedReferenceWidth, viewportDims, elementFontSize);
+            width = Math.max(0, positionedReferenceWidth - left - right - margin.left - margin.right);
+            widthSource = 'positioned-insets';
+        }
+
         if (textMetrics && widthSource.includes('intrinsic')) {
 
         }

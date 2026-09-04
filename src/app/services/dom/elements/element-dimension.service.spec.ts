@@ -526,6 +526,34 @@ describe('ElementDimensionService', () => {
     expect(result.y).toBe(59);
   });
 
+  it('stretches an absolutely positioned auto-width child between left and right insets', () => {
+    const service = new ElementDimensionService({} as never, {} as never, new DOMAncestryService());
+    const parent = { name: 'parent' } as Mesh;
+    const dom = {
+      context: {
+        elementDimensions: new Map([
+          ['parent', { width: 420, height: 300, padding: { top: 0, right: 0, bottom: 0, left: 0 } }],
+        ]),
+        elementStyles: new Map([
+          ['parent', { normal: { selector: '#parent', position: 'relative' } }],
+        ]),
+      },
+    } as unknown as BabylonDOM;
+    const render = {
+      actions: { style: { getElementTypeDefaults: () => ({ display: 'block' }) } },
+    } as unknown as BabylonRender;
+    const element = { id: 'child', type: 'div' } as DOMElement;
+    const style: StyleRule = {
+      selector: '#child', position: 'absolute', left: '7px', right: '7px',
+      width: 'auto', height: '90px', boxSizing: 'border-box'
+    };
+
+    const result = service.calculateDimensions(dom, render, element, style, parent, [style]);
+
+    expect(result.width).toBe(406);
+    expect(result.x).toBe(0);
+  });
+
   it('applies maximum width and height constraints', () => {
     const service = new ElementDimensionService({} as never, {} as never, new DOMAncestryService());
     const parent = { name: 'root-body' } as Mesh;
