@@ -204,6 +204,18 @@ materialInteractionCases.push({
   state: 'activate',
 });
 
+// The side-by-side showcase renders each Astylar surface at the compact pane
+// width. Exercise both range handles there so desktop-only hit regions cannot
+// hide swapped handles or an incorrect screen-to-control coordinate mapping.
+for (const state of ['drag-start', 'drag-end']) {
+  materialInteractionCases.push({
+    family: 'slider',
+    profile: 'light',
+    viewport: materialComparisonViewport,
+    state,
+  });
+}
+
 // Exercise the configured snackbar lifetime once without adding a five-second
 // delay to every theme/DPR permutation.
 materialInteractionCases.push({

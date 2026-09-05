@@ -71,6 +71,12 @@ test('keeps the app catalog and enforced static matrix complete', () => {
   assert.ok(materialInteractionCases.some(({ family, profile, viewport, state }) =>
     family === 'bottom-sheet' && profile === 'light' && viewport.id === 'comparison-pane-dpr1' &&
     viewport.width === 900 && state === 'activate'));
+  for (const state of ['drag-start', 'drag-end']) {
+    assert.ok(materialInteractionCases.some((candidate) =>
+      candidate.family === 'slider' && candidate.profile === 'light' &&
+      candidate.viewport.id === 'comparison' && candidate.viewport.width === 609 &&
+      candidate.state === state));
+  }
   for (const family of ['autocomplete', 'datepicker', 'timepicker', 'menu', 'dialog']) {
     assert.ok(materialInteractionCases.some((candidate) => candidate.family === family && candidate.state === 'open-dismiss-outside'));
   }
