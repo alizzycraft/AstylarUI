@@ -762,7 +762,7 @@ export class AstylarShowcaseComponent {
         { selector: '.dialog-action.primary:active', background: mixHex('#7d00fa', '#ffffff', .12) },
         { selector: '.bottom-sheet-overlay', flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'center', padding: '0' },
         { selector: '.bottom-sheet-panel', width: '512px', height: '128px', padding: '16px', borderRadius: `${28 * theme.cornerScale}px ${28 * theme.cornerScale}px 0 0`, background: theme.mode === 'dark' ? '#211f26' : '#f8f2f6', color: theme.onSurface, display: 'flex', flexDirection: 'column' },
-        { selector: '.bottom-sheet-panel', mediaMaxWidth: '960px', width: '100%' },
+        { selector: '.bottom-sheet-panel', mediaMaxWidth: '960px', width: '100%', borderRadius: '0' },
         { selector: '.bottom-sheet-option', width: '100%', height: '48px', padding: '0 16px', borderWidth: '0', borderRadius: `${24 * theme.cornerScale}px`, background: 'transparent', color: theme.onSurface, textAlign: 'left', fontSize: '16px' },
         { selector: '#bottom-sheet-dismiss', background: mixHex(theme.mode === 'dark' ? '#211f26' : '#f8f2f6', theme.onSurface, .08) },
         { selector: '.bottom-sheet-option:focus', color: theme.onSurface, background: mixHex(theme.mode === 'dark' ? '#211f26' : '#f8f2f6', theme.onSurface, .12) },

@@ -132,6 +132,9 @@ export const materialInteractionFocusedRasterTargets = Object.freeze({
   datepicker: Object.freeze({ element: 'datepicker-primary', padding: 8, paddingBottom: 370, minimumSsim: .86 }),
   timepicker: Object.freeze({ element: 'timepicker-primary', padding: 8, paddingBottom: 270, minimumSsim: .88 }),
   menu: Object.freeze({ element: 'menu-primary', padding: 8, paddingBottom: 160, minimumSsim: .86 }),
+  'bottom-sheet': Object.freeze({ element: 'bottom-sheet-panel', padding: 0, minimumSsim: .975,
+    states: Object.freeze(['activate', 'activate-leave', 'open']),
+    viewports: Object.freeze(['comparison-pane-dpr1']) }),
   dialog: Object.freeze({ element: 'dialog-panel', padding: 8, minimumSsim: .85, states: Object.freeze(['open', 'open-hover-content']) }),
   tooltip: Object.freeze({ element: 'tooltip-popup', padding: 4, minimumSsim: .14, states: Object.freeze(['hover', 'held']) }),
 });
@@ -188,6 +191,16 @@ materialInteractionCases.push({
   family: 'datepicker',
   profile: 'light',
   viewport: { id: 'desktop-short-dpr1', width: 1440, height: 600, deviceScaleFactor: 1 },
+  state: 'activate',
+});
+
+// Angular Material changes bottom-sheet geometry below its 960px breakpoint.
+// Exercise the same compact pane width used by the side-by-side showcase so a
+// desktop-only 512px sheet cannot hide a broken responsive rule.
+materialInteractionCases.push({
+  family: 'bottom-sheet',
+  profile: 'light',
+  viewport: { id: 'comparison-pane-dpr1', width: 900, height: 800, deviceScaleFactor: 1 },
   state: 'activate',
 });
 

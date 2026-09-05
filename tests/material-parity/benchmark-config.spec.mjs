@@ -55,7 +55,10 @@ test('keeps the app catalog and enforced static matrix complete', () => {
   assert.deepEqual(materialInteractionFocusedRasterTargets.chips,
     { element: 'chips-primary', padding: 8, minimumSsim: .70, states: ['activate', 'activate-alternate', 'activate-leave'] });
   assert.deepEqual(Object.keys(materialInteractionFocusedRasterTargets).sort(),
-    ['autocomplete', 'button-toggle', 'chips', 'datepicker', 'dialog', 'expansion', 'form-field', 'input', 'menu', 'select', 'slide-toggle', 'slider', 'sort', 'stepper', 'tabs', 'timepicker', 'tooltip']);
+    ['autocomplete', 'bottom-sheet', 'button-toggle', 'chips', 'datepicker', 'dialog', 'expansion', 'form-field', 'input', 'menu', 'select', 'slide-toggle', 'slider', 'sort', 'stepper', 'tabs', 'timepicker', 'tooltip']);
+  assert.deepEqual(materialInteractionFocusedRasterTargets['bottom-sheet'],
+    { element: 'bottom-sheet-panel', padding: 0, minimumSsim: .975,
+      states: ['activate', 'activate-leave', 'open'], viewports: ['comparison-pane-dpr1'] });
   assert.deepEqual(materialInteractionFocusedRasterTargets.dialog,
     { element: 'dialog-panel', padding: 8, minimumSsim: .85, states: ['open', 'open-hover-content'] });
   assert.deepEqual(materialInteractionFocusedRasterTargets.tooltip,
@@ -65,6 +68,9 @@ test('keeps the app catalog and enforced static matrix complete', () => {
   assert.ok(materialInteractionCases.some(({ family, state }) => family === 'select' && state === 'open-commit-reopen'));
   assert.ok(materialInteractionCases.some(({ family, state }) => family === 'form-field' && state === 'edit-empty-blur'));
   assert.ok(materialInteractionCases.some(({ family, state }) => family === 'input' && state === 'edit-empty-blur'));
+  assert.ok(materialInteractionCases.some(({ family, profile, viewport, state }) =>
+    family === 'bottom-sheet' && profile === 'light' && viewport.id === 'comparison-pane-dpr1' &&
+    viewport.width === 900 && state === 'activate'));
   for (const family of ['autocomplete', 'datepicker', 'timepicker', 'menu', 'dialog']) {
     assert.ok(materialInteractionCases.some((candidate) => candidate.family === family && candidate.state === 'open-dismiss-outside'));
   }

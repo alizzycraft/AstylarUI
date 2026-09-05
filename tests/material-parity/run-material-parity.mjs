@@ -354,7 +354,8 @@ async function captureInteractionCase(benchmarkCase) {
     );
     const configuredFocusedRasterTarget = materialInteractionFocusedRasterTargets[family];
     const focusedRasterTarget = configuredFocusedRasterTarget &&
-      (!configuredFocusedRasterTarget.states || configuredFocusedRasterTarget.states.includes(state))
+      (!configuredFocusedRasterTarget.states || configuredFocusedRasterTarget.states.includes(state)) &&
+      (!configuredFocusedRasterTarget.viewports || configuredFocusedRasterTarget.viewports.includes(viewport.id))
       ? configuredFocusedRasterTarget : undefined;
     const focusedRasters = focusedRasterTarget ? [compareFocusedRaster(
       referenceImage, astylarImage, referenceMeasurement.elements,
@@ -1277,6 +1278,7 @@ async function measureReference(page, ids) {
         'paginator-range': '#paginator-primary .mat-mdc-paginator-range-label',
         'tooltip-popup': '.mat-mdc-tooltip-surface',
         'dialog-panel': '.mat-mdc-dialog-surface',
+        'bottom-sheet-panel': '.mat-bottom-sheet-container',
       };
       return selectors[id] ? document.querySelector(selectors[id]) : null;
     }
