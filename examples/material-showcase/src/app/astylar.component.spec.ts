@@ -168,7 +168,7 @@ describe('AstylarShowcaseComponent', () => {
     expect(style(compactSelect, '.select-control, .select-control:focus')?.['color']).toBe('transparent');
     expect(style(compactSelect, '.select-control, .select-control:focus')?.['caretColor']).toBe('transparent');
     expect(lastStyle(compactSelect, '.select-popup')).toEqual(jasmine.objectContaining({
-      left: '7px', right: '7px', width: 'auto',
+      left: '0', right: '0', width: 'auto',
     }));
 
     const customTabs = build(component, 'tabs');
@@ -272,6 +272,25 @@ describe('AstylarShowcaseComponent', () => {
     expect(style(bottomSheet, '.bottom-sheet-option')).toEqual(jasmine.objectContaining({
       width: '100%', height: '48px', padding: '0 16px', fontSize: '16px',
     }));
+  });
+
+  it('anchors field and menu popups to their owning controls without coordinate compensation', () => {
+    const { component, store } = createComponent('autocomplete');
+    store.patchState({ open: true });
+
+    const autocomplete = build(component, 'autocomplete');
+    expect(style(autocomplete, '.select-popup')).toEqual(jasmine.objectContaining({
+      left: '0', right: '0', width: 'auto',
+    }));
+    expect(style(autocomplete, '.autocomplete-popup')?.['top']).toBe('56px');
+
+    const select = build(component, 'select');
+    expect(style(select, '.select-popup')).toEqual(jasmine.objectContaining({
+      left: '0', right: '0', width: 'auto',
+    }));
+
+    const menu = build(component, 'menu');
+    expect(style(menu, '#menu-popup')?.['left']).toBe('28px');
   });
 
   it('activates sort ascending before alternating its direction', () => {
