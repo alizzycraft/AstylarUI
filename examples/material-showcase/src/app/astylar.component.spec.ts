@@ -373,7 +373,13 @@ describe('AstylarShowcaseComponent', () => {
 
   it('opens time options from input focus without opening the datepicker from input focus', () => {
     const timepicker = createComponent('timepicker');
-    eventHandlers(timepicker.component)['timepicker-control']['focus']({
+    const timepickerHandlers = eventHandlers(timepicker.component)['timepicker-control'];
+    timepickerHandlers['focus']({
+      targetId: 'timepicker-control',
+    } as AstylarEvent);
+    expect(timepicker.store.state().open).toBeTrue();
+    expect(find(build(timepicker.component, 'timepicker'), 'timepicker-options')).toBeDefined();
+    timepickerHandlers['click']({
       targetId: 'timepicker-control',
     } as AstylarEvent);
     expect(timepicker.store.state().open).toBeTrue();

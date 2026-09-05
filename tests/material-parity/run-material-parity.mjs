@@ -565,6 +565,7 @@ async function performInteraction(page, mode, benchmarkCase) {
 
 async function interactionTargetBox(page, mode, family, state, alternate = false) {
   const interactionLayerProbe = interactionLayerCursorProbe(family, state);
+  const timepickerFocus = family === 'timepicker' && state === 'focus';
   const astylarTargets = {
     toolbar: 'toolbar-action', card: 'card-open', chips: 'chip-0', sort: 'sort-trigger',
     paginator: 'paginator-next', radio: 'radio-team', 'button-toggle': 'button-toggle-two',
@@ -593,7 +594,9 @@ async function interactionTargetBox(page, mode, family, state, alternate = false
       return page.locator('#slider-primary').locator('xpath=ancestor::mat-slider')
         .locator('mat-slider-visual-thumb').nth(1).boundingBox();
     }
-    const selector = family === 'chips' && alternate
+    const selector = timepickerFocus
+      ? '#timepicker-control'
+      : family === 'chips' && alternate
       ? '#chips-primary mat-chip-option:nth-child(2)'
       : referenceTargets[family] ?? `#${family}-primary`;
     return page.locator(selector).boundingBox();
@@ -629,7 +632,9 @@ async function interactionTargetBox(page, mode, family, state, alternate = false
       height: 1,
     } : undefined;
   }
-  const targetId = family === 'chips' && alternate ? 'chip-1' : astylarTargets[family] ?? `${family}-primary`;
+  const targetId = timepickerFocus
+    ? 'timepicker-control'
+    : family === 'chips' && alternate ? 'chip-1' : astylarTargets[family] ?? `${family}-primary`;
   const measurement = await page.evaluate((id) => window.__ASTYLAR_MATERIAL_BENCHMARK__?.measure([id]), targetId);
   const local = measurement?.elements?.[targetId]?.borderBox;
   const canvas = await page.locator('canvas').boundingBox();
@@ -1101,6 +1106,15 @@ async function compareInteractionState(referencePage, astylarPage, family, state
     const candidate = await astylarPage.evaluate(() =>
       !!window.__ASTYLAR_MATERIAL_BENCHMARK__?.measure(['timepicker-options'])?.elements?.['timepicker-options']);
     return { reference, astylar: candidate, matches: reference === candidate && reference === true };
+  }
+  if (state === 'open-dismiss-outside') {
+    const reference = await referencePage.evaluate(() =>
+      document.querySelector('[role="listbox"], [role="dialog"], .mat-mdc-menu-panel') !== null);
+    const candidate = await astylarPage.evaluate(() => {
+      const benchmark = window.__ASTYLAR_MATERIAL_BENCHMARK__;
+      return benchmark?.state().open === true;
+    });
+    return { reference, astylar: candidate, matches: reference === false && candidate === false };
   }
   if (family === 'timepicker' && state === 'open-scroll') {
     const reference = await referencePage.locator('.mat-timepicker-panel').evaluate((panel) => panel.scrollTop);

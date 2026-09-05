@@ -324,7 +324,7 @@ export class AstylarShowcaseComponent {
       autocomplete: ['autocomplete-control', 'autocomplete-option-', 'field-options'],
       select: ['select-control', 'select-caret', 'select-option-', 'select-options'],
       datepicker: ['datepicker-icon', 'datepicker-calendar-', 'datepicker-popup', 'datepicker-header', 'datepicker-month', 'datepicker-nav', 'datepicker-previous', 'datepicker-next', 'datepicker-grid', 'datepicker-cell', 'datepicker-day-', 'datepicker-selected', 'datepicker-year-grid', 'datepicker-year-'],
-      timepicker: ['timepicker-icon', 'timepicker-clock-icon', 'timepicker-clock-hand', 'timepicker-gap', 'timepicker-active-line', 'timepicker-options', 'timepicker-option-', 'timepicker-scroll'],
+      timepicker: ['timepicker-control', 'timepicker-icon', 'timepicker-clock-icon', 'timepicker-clock-hand', 'timepicker-gap', 'timepicker-active-line', 'timepicker-options', 'timepicker-option-', 'timepicker-scroll'],
       menu: ['menu-primary', 'menu-popup', 'menu-rename', 'menu-delete'],
       dialog: ['dialog-primary', 'dialog-panel', 'dialog-title', 'dialog-copy', 'dialog-actions', 'dialog-cancel', 'dialog-save'],
     };
