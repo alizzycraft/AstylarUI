@@ -1,4 +1,4 @@
-import { fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { fakeAsync, flushMicrotasks, TestBed, tick } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import type { AstylarEvent, AstylarSurface } from 'astylarui';
 import type { SiteData } from 'astylarui';
@@ -523,6 +523,45 @@ describe('AstylarShowcaseComponent', () => {
 
     tick(3_999);
     expect(store.state().open).toBeFalse();
+  }));
+
+  it('starts the snackbar lifetime only after the rendered surface has settled', fakeAsync(() => {
+    const { component, store } = createComponent('snack-bar');
+    let settleSurface!: () => void;
+    const settled = new Promise<void>((resolve) => { settleSurface = resolve; });
+    (component as unknown as { surface: AstylarSurface }).surface = {
+      whenSettled: () => settled,
+    } as unknown as AstylarSurface;
+    const click = (component as unknown as {
+      handleClick: (id: string, event: AstylarEvent) => void;
+    }).handleClick.bind(component);
+
+    click('snack-bar-primary', { targetId: 'snack-bar-primary' } as AstylarEvent);
+    tick(5_000);
+    expect(store.state().open).toBeTrue();
+
+    settleSurface();
+    flushMicrotasks();
+    tick(4_999);
+    expect(store.state().open).toBeTrue();
+    tick(1);
+    expect(store.state().open).toBeFalse();
+  }));
+
+  it('keeps non-lifetime snackbar benchmarks stable while auto-dismiss remains clocked', fakeAsync(() => {
+    const { component, store } = createComponent('snack-bar');
+    const internals = component as unknown as {
+      benchmarkMode: boolean;
+      benchmarkInteraction: string;
+      handleClick: (id: string, event: AstylarEvent) => void;
+    };
+    internals.benchmarkMode = true;
+    internals.benchmarkInteraction = 'activate-twice';
+
+    internals.handleClick('snack-bar-primary', { targetId: 'snack-bar-primary' } as AstylarEvent);
+    tick(10_000);
+
+    expect(store.state().open).toBeTrue();
   }));
 
   it('anchors the tooltip below and centered on its trigger without a transform offset', () => {

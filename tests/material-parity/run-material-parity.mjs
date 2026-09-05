@@ -807,7 +807,10 @@ async function compareOverlayPlacement(referencePage, astylarPage, astylarMeasur
       : family === 'timepicker' ? '.mat-timepicker-panel'
         : family === 'datepicker' ? '.mat-datepicker-content'
           : family === 'dialog' ? '.mat-mdc-dialog-surface' : '.mat-mdc-tooltip-surface';
-  const reference = await referencePage.locator(referenceSelector).first().boundingBox();
+  const referenceLocator = referencePage.locator(referenceSelector).first();
+  const reference = await referenceLocator.count() === 0
+    ? undefined
+    : await referenceLocator.boundingBox();
   if (!local || !canvas || !reference) {
     return { matches: false, targetId, local, canvas, reference, reason: 'visible overlay bounds are missing' };
   }
@@ -862,12 +865,15 @@ async function compareOverlayPlacement(referencePage, astylarPage, astylarMeasur
   }
   if (family === 'snack-bar') {
     const overlay = astylarMeasurement.elements?.['snack-bar-overlay']?.borderBox;
-    const astylarSemantics = await astylarPage.locator('[data-astylar-id="snack-bar-surface"]').evaluate((element) => ({
-      exists: true,
-      role: element.getAttribute('role') ?? undefined,
-      ariaLive: element.getAttribute('aria-live') ?? undefined,
-      name: element.textContent?.replace(/\s+/g, ' ').trim() ?? '',
-    }));
+    const astylarSemanticLocator = astylarPage.locator('[data-astylar-id="snack-bar-surface"]');
+    const astylarSemantics = await astylarSemanticLocator.count() === 0
+      ? { exists: false }
+      : await astylarSemanticLocator.first().evaluate((element) => ({
+        exists: true,
+        role: element.getAttribute('role') ?? undefined,
+        ariaLive: element.getAttribute('aria-live') ?? undefined,
+        name: element.textContent?.replace(/\s+/g, ' ').trim() ?? '',
+      }));
     const referenceSemantics = await referencePage.locator(referenceSelector).first().evaluate((element) => {
       const semanticElement = element.matches('[role], [aria-live]')
         ? element : element.querySelector('[role], [aria-live]');

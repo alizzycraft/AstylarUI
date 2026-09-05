@@ -49,6 +49,7 @@ export class AstylarShowcaseComponent {
   private readonly hoveredSliderId = signal<string | undefined>(undefined);
   private readonly pressedSliderId = signal<string | undefined>(undefined);
   private snackbarDismissTimer?: ReturnType<typeof setTimeout>;
+  private snackbarDismissGeneration = 0;
   private readonly fieldValues = signal<Record<'form-field' | 'input' | 'autocomplete', string>>({
     'form-field': 'Atlas',
     input: 'team@example.com',
@@ -291,16 +292,46 @@ export class AstylarShowcaseComponent {
 
   private restartSnackbarDismissTimer(): void {
     this.clearSnackbarDismissTimer();
+    // Visual/geometry benchmark cases must not race the intentionally finite
+    // lifetime while collecting screenshots and diagnostics. The dedicated
+    // auto-dismiss case remains clocked and proves the production behavior.
+    if (this.benchmarkMode && this.benchmarkInteraction !== 'auto-dismiss') return;
+    const generation = this.snackbarDismissGeneration;
+    const surface = this.surface;
+    if (surface) {
+      void this.startSnackbarDismissTimerAfterSettled(surface, generation);
+      return;
+    }
+    this.startSnackbarDismissTimer(generation);
+  }
+
+  private async startSnackbarDismissTimerAfterSettled(
+    surface: AstylarSurface,
+    generation: number,
+  ): Promise<void> {
+    // Let Angular deliver the newly-authored open state before observing the
+    // renderer's settlement boundary. Otherwise whenSettled() can describe the
+    // previous, still-closed frame and consume part of the visible lifetime.
+    await new Promise<void>((resolve) => setTimeout(resolve, 0));
+    await surface.whenSettled();
+    this.startSnackbarDismissTimer(generation);
+  }
+
+  private startSnackbarDismissTimer(generation: number): void {
+    if (generation !== this.snackbarDismissGeneration || !this.store.state().open) return;
     this.snackbarDismissTimer = setTimeout(() => {
+      if (generation !== this.snackbarDismissGeneration) return;
       this.snackbarDismissTimer = undefined;
       this.zone.run(() => this.store.patchState({ open: false }));
     }, 5_000);
   }
 
   private clearSnackbarDismissTimer(): void {
-    if (this.snackbarDismissTimer === undefined) return;
-    clearTimeout(this.snackbarDismissTimer);
-    this.snackbarDismissTimer = undefined;
+    this.snackbarDismissGeneration += 1;
+    if (this.snackbarDismissTimer !== undefined) {
+      clearTimeout(this.snackbarDismissTimer);
+      this.snackbarDismissTimer = undefined;
+    }
   }
 
   private updateSliderVisual(start: number, end: number): void {

@@ -109,6 +109,9 @@ import { DomSanitizer } from '@angular/platform-browser';
 export class ReferenceComponent {
   protected readonly store = inject(ShowcaseStore);
   protected readonly benchmarkMode = typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('benchmark') === '1';
+  private readonly benchmarkInteraction = typeof window !== 'undefined'
+    ? new URLSearchParams(window.location.search).get('interaction')
+    : null;
   private readonly route = inject(ActivatedRoute);
   private readonly sync = inject(FrameSync);
   protected readonly rows = [{ name: 'Atlas' }, { name: 'Northstar' }];
@@ -152,7 +155,10 @@ export class ReferenceComponent {
 
   protected openDialog(): void { const content = this.dialogContent(); if (content && this.dialog.openDialogs.length === 0) this.dialog.open(content, { id: 'material-dialog', restoreFocus: true }); }
   protected openBottomSheet(): void { const content = this.sheetContent(); if (content) this.bottomSheet.open(content, { ariaLabel: 'Sharing options' }); }
-  protected openSnackBar(): void { this.snackBar.open('Project saved', 'UNDO', { duration: 5_000 }); }
+  protected openSnackBar(): void {
+    const shouldMeasureLifetime = !this.benchmarkMode || this.benchmarkInteraction === 'auto-dismiss';
+    this.snackBar.open('Project saved', 'UNDO', shouldMeasureLifetime ? { duration: 5_000 } : {});
+  }
   protected toggleChip(index: number): void {
     this.store.patchState({
       chipSelections: this.store.state().chipSelections.map((selected, candidate) =>
