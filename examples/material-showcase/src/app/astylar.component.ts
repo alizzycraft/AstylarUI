@@ -781,7 +781,7 @@ export class AstylarShowcaseComponent {
         { selector: '.range-plugin-layer', width: '100%', height: '48px' },
         { selector: '.progress', width: family === 'progress-spinner' ? '100px' : '100%', height: family === 'progress-spinner' ? '100px' : '8px' },
         { selector: '.modal-overlay', position: 'fixed', top: '0', left: '0', width: '100%', height: '100%', boxSizing: 'border-box', padding: '32px', background: 'rgba(0,0,0,0.32)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: '1000' },
-        { selector: '.dialog-panel', width: '280px', height: '161px', padding: '0', borderRadius: `${28 * theme.cornerScale}px`, background: '#fef8fc', color: '#1d1b20', display: 'flex', flexDirection: 'column' },
+        { selector: '.dialog-panel', width: '280px', height: '161px', padding: '0', borderRadius: '28px', background: '#fef8fc', color: '#1d1b20', display: 'flex', flexDirection: 'column' },
         { selector: '.dialog-title', width: '100%', height: '67px', boxSizing: 'border-box', padding: '21px 24px 1px', color: '#1d1b20', fontSize: '24px', lineHeight: '32px', fontWeight: '400' },
         { selector: '.dialog-copy', width: '100%', height: '20px', boxSizing: 'border-box', marginTop: '1px', padding: '0 24px', display: 'flex', alignItems: 'center', color: '#49454f', fontSize: '14px', lineHeight: '20px', verticalAlign: 'middle' },
         { selector: '.dialog-actions', width: '100%', height: '73px', boxSizing: 'border-box', padding: '16px 24px 17px', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '8px' },
