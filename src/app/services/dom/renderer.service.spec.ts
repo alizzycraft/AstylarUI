@@ -27,36 +27,33 @@ describe('BabylonDOMRendererService', () => {
     expect(validation.errors).toEqual([]);
   });
 
-  it('uses additional baseline leading for compact bold application text', () => {
+  it('does not displace a line box after the text canvas has positioned its baseline', () => {
     const renderer = Object.create(
       BabylonDOMRendererService.prototype,
     ) as BabylonDOMRendererService;
+    const textMesh = {
+      parent: undefined,
+      position: { x: 0, y: 0, z: 0 },
+    };
+    const parentMesh = {
+      getBoundingInfo: () => ({
+        boundingBox: {
+          minimum: { x: -53.5, y: -12 },
+          maximum: { x: 53.5, y: 12 },
+        },
+      }),
+    };
 
-    expect(renderer['getTextBaselineInsetPx']({
-      selector: '.status',
-      fontSize: '12px',
-      fontWeight: '700',
-    })).toBe(3);
-    expect(renderer['getTextBaselineInsetPx']({
-      selector: 'h2',
-      fontSize: '16px',
-      fontWeight: '700',
-    })).toBe(2);
-    expect(renderer['getTextBaselineInsetPx']({
-      selector: '.caption',
-      fontSize: '12px',
-      fontWeight: '400',
-    })).toBe(2);
-    expect(renderer['getTextBaselineInsetPx']({
-      selector: 'td',
-      fontSize: '16px',
-      verticalAlign: 'middle',
-    })).toBe(1);
-    expect(renderer['getTextBaselineInsetPx']({
-      selector: 'h1',
-      fontSize: '28px',
-      fontWeight: '700',
-    })).toBe(1);
+    renderer['positionTextMesh'](
+      textMesh as never,
+      parentMesh as never,
+      { width: 80, height: 16 },
+      { selector: '.tooltip', fontSize: '12px', lineHeight: '16px' },
+      { top: 4, right: 8, bottom: 4, left: 8 },
+      { width: 107, height: 24, padding: { top: 4, right: 8, bottom: 4, left: 8 } },
+    );
+
+    expect(textMesh.position.y).toBe(0);
   });
 
   it('registers complete DOM ancestry before intrinsic pre-layout', () => {

@@ -1166,6 +1166,7 @@ function textTargets(family) {
 function interactionTextTargets(family, state) {
   const targets = materialInteractionTextAlignmentTargets[family] ?? [];
   if (family === 'expansion' && !['activate', 'activate-leave', 'open'].includes(state)) return [];
+  if (family === 'tooltip' && !['hover', 'held'].includes(state)) return [];
   return targets;
 }
 

@@ -844,9 +844,12 @@ export class BabylonDOMRendererService {
     );
 
     // Position text mesh relative to parent (slightly in front to avoid z-fighting)
-    const baselineInsetPx = this.getTextBaselineInsetPx(style);
     textMesh.position.x = offsetXPx * scale;
-    textMesh.position.y = (offsetYPx - baselineInsetPx) * scale;
+    // The text texture already contains the browser-style line box and its
+    // alphabetic baseline. Position the line box itself here; applying a
+    // second font-size/weight-dependent inset shifts the rendered glyph ink
+    // away from the element's authored vertical alignment.
+    textMesh.position.y = offsetYPx * scale;
     textMesh.position.z = 0.001; // Slightly in front of parent element - TODO: TECH-DEBT
 
 
@@ -858,24 +861,6 @@ export class BabylonDOMRendererService {
     this.interactionService.clearAllInteractions();
     this.scene = undefined;
     this.render = undefined;
-  }
-
-  private getTextBaselineInsetPx(style?: StyleRule): number {
-    if (style?.verticalAlign === 'middle') {
-      // Middle-baseline canvas text is already centered inside its line box.
-      // Retain only the one-pixel raster settling inset instead of applying
-      // the alphabetic-baseline correction used by top/baseline text.
-      return 1;
-    }
-    const fontSizePx = Number.parseFloat(style?.fontSize ?? '16');
-    const declaredWeight = style?.fontWeight ?? '400';
-    const fontWeight = declaredWeight === 'bold'
-      ? 700
-      : Number.parseInt(declaredWeight, 10);
-    if (fontSizePx <= 13 && fontWeight >= 600) {
-      return 3;
-    }
-    return fontSizePx <= 20 ? 2 : 1;
   }
 
 }

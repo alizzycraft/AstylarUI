@@ -136,12 +136,13 @@ export const materialInteractionFocusedRasterTargets = Object.freeze({
     states: Object.freeze(['activate', 'activate-leave', 'open']),
     viewports: Object.freeze(['comparison-pane-dpr1']) }),
   dialog: Object.freeze({ element: 'dialog-panel', padding: 8, minimumSsim: .85, states: Object.freeze(['open', 'open-hover-content']) }),
-  tooltip: Object.freeze({ element: 'tooltip-popup', padding: 4, minimumSsim: .14, states: Object.freeze(['hover', 'held']) }),
+  tooltip: Object.freeze({ element: 'tooltip-popup', padding: 4, minimumSsim: .70, states: Object.freeze(['hover', 'held']) }),
 });
 export const materialInteractionTextAlignmentTargets = Object.freeze({
   chips: Object.freeze(['chip-0', 'chip-1']),
   dialog: Object.freeze(['dialog-title', 'dialog-copy', 'dialog-cancel', 'dialog-save']),
   expansion: Object.freeze(['expansion-content']),
+  tooltip: Object.freeze(['tooltip-popup']),
 });
 export const materialShadowProfileTargets = Object.freeze({
   card: Object.freeze({ element: 'card-primary', maximumRowError: 22 }),
@@ -210,6 +211,26 @@ materialInteractionCases.push({
 for (const state of ['drag-start', 'drag-end']) {
   materialInteractionCases.push({
     family: 'slider',
+    profile: 'light',
+    viewport: materialComparisonViewport,
+    state,
+  });
+}
+
+// Overlays are rendered inside a compact comparison pane in the standalone
+// showcase. Exercise their real trigger-relative and viewport-relative
+// geometry there instead of relying only on full-width direct routes.
+for (const state of ['activate', 'activate-twice']) {
+  materialInteractionCases.push({
+    family: 'snack-bar',
+    profile: 'light',
+    viewport: materialComparisonViewport,
+    state,
+  });
+}
+for (const state of ['hover', 'held']) {
+  materialInteractionCases.push({
+    family: 'tooltip',
     profile: 'light',
     viewport: materialComparisonViewport,
     state,

@@ -62,7 +62,7 @@ test('keeps the app catalog and enforced static matrix complete', () => {
   assert.deepEqual(materialInteractionFocusedRasterTargets.dialog,
     { element: 'dialog-panel', padding: 8, minimumSsim: .85, states: ['open', 'open-hover-content'] });
   assert.deepEqual(materialInteractionFocusedRasterTargets.tooltip,
-    { element: 'tooltip-popup', padding: 4, minimumSsim: .14, states: ['hover', 'held'] });
+    { element: 'tooltip-popup', padding: 4, minimumSsim: .70, states: ['hover', 'held'] });
   assert.ok(materialInteractionCases.some(({ family, state }) => family === 'chips' && state === 'activate-alternate'));
   assert.ok(materialInteractionCases.some(({ family, state }) => family === 'autocomplete' && state === 'open-commit-reopen'));
   assert.ok(materialInteractionCases.some(({ family, state }) => family === 'select' && state === 'open-commit-reopen'));
@@ -76,6 +76,14 @@ test('keeps the app catalog and enforced static matrix complete', () => {
       candidate.family === 'slider' && candidate.profile === 'light' &&
       candidate.viewport.id === 'comparison' && candidate.viewport.width === 609 &&
       candidate.state === state));
+  }
+  for (const [family, states] of [['snack-bar', ['activate', 'activate-twice']], ['tooltip', ['hover', 'held']]]) {
+    for (const state of states) {
+      assert.ok(materialInteractionCases.some((candidate) =>
+        candidate.family === family && candidate.profile === 'light' &&
+        candidate.viewport.id === 'comparison' && candidate.viewport.width === 609 &&
+        candidate.state === state));
+    }
   }
   for (const family of ['autocomplete', 'datepicker', 'timepicker', 'menu', 'dialog']) {
     assert.ok(materialInteractionCases.some((candidate) => candidate.family === family && candidate.state === 'open-dismiss-outside'));

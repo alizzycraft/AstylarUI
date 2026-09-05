@@ -592,11 +592,13 @@ describe('AstylarShowcaseComponent', () => {
     const site = build(component, 'tooltip');
 
     expect(style(site, '.tooltip-anchor')).toEqual(jasmine.objectContaining({
-      alignItems: 'center', gap: '8px',
+      width: '138px', alignItems: 'center', gap: '8px',
     }));
     expect(style(site, '#tooltip-popup')).toEqual(jasmine.objectContaining({
-      width: '107px', height: '24px', justifyContent: 'center',
+      height: '24px', justifyContent: 'center',
+      fontSize: '12px', lineHeight: '16px', letterSpacing: '0.4px', color: '#f5eff4', background: '#323033',
     }));
+    expect(style(site, '#tooltip-popup')?.['width']).toBeUndefined();
     expect(style(site, '#tooltip-popup')?.['transform']).toBeUndefined();
   });
 });
