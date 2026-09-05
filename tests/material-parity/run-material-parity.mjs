@@ -472,10 +472,20 @@ async function performInteraction(page, mode, benchmarkCase) {
   if (family === 'slider' && (state === 'drag-start' || state === 'drag-end')) {
     const drag = await sliderDragCoordinates(page, mode, state === 'drag-start' ? 'start' : 'end');
     assert.ok(drag, `${mode} slider ${state} coordinates are missing.`);
+    const trace = [await readSliderValues(page, mode)];
     await page.mouse.move(drag.from.x, drag.from.y);
     await page.mouse.down();
-    await page.mouse.move(drag.to.x, drag.to.y, { steps: 8 });
+    for (let step = 1; step <= 8; step += 1) {
+      const progress = step / 8;
+      await page.mouse.move(
+        drag.from.x + (drag.to.x - drag.from.x) * progress,
+        drag.from.y + (drag.to.y - drag.from.y) * progress,
+      );
+      await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(resolve)));
+      trace.push(await readSliderValues(page, mode));
+    }
     await page.mouse.up();
+    await page.evaluate((samples) => { window.__MATERIAL_SLIDER_DRAG_TRACE__ = samples; }, trace);
     return undefined;
   }
   if (family === 'slider' && state === 'activate') {
@@ -1057,7 +1067,28 @@ async function compareInteractionState(referencePage, astylarPage, family, state
       sliderValue: Number(document.querySelector('#slider-primary')?.value),
     }));
     const astylar = { sliderStart: astylarState?.sliderStart, sliderValue: astylarState?.sliderValue };
-    return { reference, astylar, matches: JSON.stringify(reference) === JSON.stringify(astylar) };
+    const [referenceTrace, astylarTrace] = await Promise.all([
+      referencePage.evaluate(() => window.__MATERIAL_SLIDER_DRAG_TRACE__ ?? []),
+      astylarPage.evaluate(() => window.__MATERIAL_SLIDER_DRAG_TRACE__ ?? []),
+    ]);
+    const movedKey = state === 'drag-start' ? 'sliderStart' : 'sliderValue';
+    const fixedKey = state === 'drag-start' ? 'sliderValue' : 'sliderStart';
+    const traceContract = (samples) => {
+      if (samples.length !== 9) return false;
+      const moved = samples.map((sample) => Number(sample[movedKey]));
+      const fixed = samples.map((sample) => Number(sample[fixedKey]));
+      return moved.every(Number.isFinite) && fixed.every(Number.isFinite) &&
+        fixed.every((value) => value === fixed[0]) &&
+        moved.every((value, index) => index === 0 || value >= moved[index - 1]) &&
+        new Set(moved).size >= 3 && moved.at(-1) > moved[0];
+    };
+    const finalStateMatches = JSON.stringify(reference) === JSON.stringify(astylar);
+    const tracesMatchContract = traceContract(referenceTrace) && traceContract(astylarTrace);
+    return {
+      reference: { ...reference, trace: referenceTrace },
+      astylar: { ...astylar, trace: astylarTrace },
+      matches: finalStateMatches && tracesMatchContract,
+    };
   }
   if (family === 'datepicker' && state === 'open-secondary') {
     const reference = await referencePage.locator('mat-multi-year-view').count() > 0;
@@ -1082,6 +1113,29 @@ async function compareInteractionState(referencePage, astylarPage, family, state
     };
   }
   return { matches: true };
+}
+
+async function readSliderValues(page, mode) {
+  if (mode === 'reference') {
+    return page.evaluate(() => ({
+      sliderStart: Number(document.querySelector('#slider-start')?.value),
+      sliderValue: Number(document.querySelector('#slider-primary')?.value),
+    }));
+  }
+  return page.evaluate(() => {
+    const benchmark = window.__ASTYLAR_MATERIAL_BENCHMARK__;
+    const state = benchmark?.state();
+    const events = benchmark?.events() ?? [];
+    const latestInputValue = (targetId, fallback) => {
+      const input = [...events].reverse().find((event) =>
+        event.type === 'input' && event.targetId === targetId);
+      return Number(input?.value ?? fallback);
+    };
+    return {
+      sliderStart: latestInputValue('slider-start', state?.sliderStart),
+      sliderValue: latestInputValue('slider-primary', state?.sliderValue),
+    };
+  });
 }
 
 function textTargets(family) {

@@ -124,6 +124,7 @@ export const materialInteractionFocusedRasterTargets = Object.freeze({
   sort: Object.freeze({ element: 'sort-primary', padding: 8, minimumSsim: .80 }),
   'slide-toggle': Object.freeze({ element: 'slide-toggle-primary', padding: 8, minimumSsim: .40 }),
   'button-toggle': Object.freeze({ element: 'button-toggle-primary', padding: 8, minimumSsim: .40 }),
+  slider: Object.freeze({ element: 'slider-primary', padding: 28, minimumSsim: .80, states: Object.freeze(['hover', 'held']) }),
   tabs: Object.freeze({ element: 'tabs-primary', padding: 8, minimumSsim: .80 }),
   stepper: Object.freeze({ element: 'stepper-primary', padding: 8, minimumSsim: .90 }),
   autocomplete: Object.freeze({ element: 'autocomplete-primary', padding: 8, paddingBottom: 130, minimumSsim: .85 }),

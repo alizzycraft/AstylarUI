@@ -55,7 +55,7 @@ test('keeps the app catalog and enforced static matrix complete', () => {
   assert.deepEqual(materialInteractionFocusedRasterTargets.chips,
     { element: 'chips-primary', padding: 8, minimumSsim: .70, states: ['activate', 'activate-alternate', 'activate-leave'] });
   assert.deepEqual(Object.keys(materialInteractionFocusedRasterTargets).sort(),
-    ['autocomplete', 'button-toggle', 'chips', 'datepicker', 'dialog', 'expansion', 'form-field', 'input', 'menu', 'select', 'slide-toggle', 'sort', 'stepper', 'tabs', 'timepicker', 'tooltip']);
+    ['autocomplete', 'button-toggle', 'chips', 'datepicker', 'dialog', 'expansion', 'form-field', 'input', 'menu', 'select', 'slide-toggle', 'slider', 'sort', 'stepper', 'tabs', 'timepicker', 'tooltip']);
   assert.deepEqual(materialInteractionFocusedRasterTargets.dialog,
     { element: 'dialog-panel', padding: 8, minimumSsim: .85, states: ['open', 'open-hover-content'] });
   assert.deepEqual(materialInteractionFocusedRasterTargets.tooltip,
@@ -76,6 +76,7 @@ test('keeps the app catalog and enforced static matrix complete', () => {
   for (const state of ['drag-start', 'drag-end']) {
     assert.ok(materialInteractionCases.some((candidate) => candidate.family === 'slider' && candidate.state === state));
   }
+  assert.deepEqual(materialInteractionFocusedRasterTargets.slider.states, ['hover', 'held']);
   assert.ok(Object.keys(materialInteractionFocusedRasterTargets).every((family) => materialFamilies.includes(family)));
   assert.deepEqual(materialInteractionTextAlignmentTargets.chips, ['chip-0', 'chip-1']);
   assert.deepEqual(materialInteractionTextAlignmentTargets.dialog,
