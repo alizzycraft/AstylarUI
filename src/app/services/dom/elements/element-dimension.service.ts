@@ -463,12 +463,13 @@ export class ElementDimensionService {
         style: StyleRule | undefined,
         parentDimensions: { width: number; height: number } | undefined
     ): { top: number; right: number; bottom: number; left: number } {
-        if (!style?.padding) {
+        if (!style) {
             return this.zeroBox();
         }
 
-        // Parse padding shorthand (supports: "10px", "10px 20px", "10px 20px 30px", "10px 20px 30px 40px")
-        const parts = style.padding.split(' ');
+        // Resolve the shorthand first, then let authored longhands replace the
+        // corresponding side, matching the already-resolved CSS cascade.
+        const parts = style.padding?.trim().split(/\s+/) ?? [];
         let top = 0, right = 0, bottom = 0, left = 0;
 
         if (parts.length === 1) {
@@ -485,6 +486,19 @@ export class ElementDimensionService {
             right = this.parseLength(parts[1], parentDimensions?.width);
             bottom = this.parseLength(parts[2], parentDimensions?.height);
             left = this.parseLength(parts[3], parentDimensions?.width);
+        }
+
+        if (style.paddingTop !== undefined) {
+            top = this.parseLength(style.paddingTop, parentDimensions?.height);
+        }
+        if (style.paddingRight !== undefined) {
+            right = this.parseLength(style.paddingRight, parentDimensions?.width);
+        }
+        if (style.paddingBottom !== undefined) {
+            bottom = this.parseLength(style.paddingBottom, parentDimensions?.height);
+        }
+        if (style.paddingLeft !== undefined) {
+            left = this.parseLength(style.paddingLeft, parentDimensions?.width);
         }
 
         return { top, right, bottom, left };

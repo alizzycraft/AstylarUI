@@ -9,6 +9,17 @@ import { DOMAncestryService } from '../dom-ancestry.service';
 import { ImageLayoutService } from './image-layout.service';
 
 describe('ElementDimensionService', () => {
+  it('applies padding longhands over the padding shorthand', () => {
+    const service = new ElementDimensionService({} as never, {} as never, new DOMAncestryService());
+
+    expect(service.parsePadding({} as BabylonRender, {
+      selector: '#top-inset', paddingTop: '8px',
+    }, undefined)).toEqual({ top: 8, right: 0, bottom: 0, left: 0 });
+    expect(service.parsePadding({} as BabylonRender, {
+      selector: '#mixed-insets', padding: '4px 6px', paddingTop: '8px', paddingLeft: '10px',
+    }, undefined)).toEqual({ top: 8, right: 6, bottom: 4, left: 10 });
+  });
+
   it('inherits caret and pointer hit-testing styles with text properties', () => {
     const service = Object.create(ElementDimensionService.prototype) as ElementDimensionService;
 
