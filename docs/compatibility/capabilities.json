@@ -281,8 +281,8 @@
         "values": ["visible", "hidden", "clip", "auto", "scroll"],
         "inherits": false,
         "default": "visible",
-        "behavior": "Owned clip regions and tested wheel/scroll-into-view behavior; not the complete browser scrolling API.",
-        "evidence": ["fixture:overflow-hidden", "fixture:overflow-nested-wheel", "fixture:overflow-scrolled-target"]
+        "behavior": "Owned clip regions and tested wheel/scroll-into-view behavior. Overflowing scroll containers paint owned track/thumb indicators that follow retained scroll offsets; platform-native controls, thumb dragging, and scrollbar styling are not claimed.",
+        "evidence": ["fixture:overflow-hidden", "fixture:overflow-nested-wheel", "fixture:overflow-scrolled-target", "file:src/lib/astylar-scroll-runtime.spec.ts"]
       },
       {
         "id": "pointer-hit-testing",
@@ -420,8 +420,8 @@
       { "path": "src/app/types/dom-element.ts", "sha256": "72eef2f09d5cdacaab10db7328c40e5b4748c3f22640e2b40f0436a268351e83" },
       { "path": "src/app/types/style-rule.ts", "sha256": "e3f45996824145b9653315ba5161c9bc49a4ace1d3dd65160ee0644c98880e01" },
       { "path": "src/app/config/browser-defaults.ts", "sha256": "b80995dc5599df550b9180c313c357c960f27199c6d364f67e778e073116a493" },
-      { "path": "src/app/services/dom/style.service.ts", "sha256": "47d332909b10a3d54cef4bacca7dd53573b1339cf9553e0673709ea25c47c1fe" },
-      { "path": "src/app/services/dom/elements/element-creation.service.ts", "sha256": "4b10730ad8c9240a88f2b66e7bd79d57793b633cea5d067482d7c329564c188c" },
+      { "path": "src/app/services/dom/style.service.ts", "sha256": "8860e77642658626881587f27ee54ec9b6719e9cf71c3b0ff371fc5c267ef3de" },
+      { "path": "src/app/services/dom/elements/element-creation.service.ts", "sha256": "202504b75129fa2110d4b987a0490eaae56c6af27ba6fabc9063f29f964ecc95" },
       { "path": "src/app/services/text/text-style-parser.service.ts", "sha256": "3aad0343e4d84739f9ebeb502d8a2c64589228ffb0e618ac26750858ecf00ff9" }
     ]
   }

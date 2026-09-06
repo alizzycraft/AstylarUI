@@ -237,8 +237,10 @@ target-local CSS-pixel coordinates.
 
 Overflow `hidden`, `clip`, `auto`, and `scroll`, nested clipping, wheel input,
 scroll-into-view, retained offset across compatible updates, and cleanup are
-covered. This does not imply every browser scrollbar, touch, overscroll, or
-scroll-snap behavior.
+covered. Overflowing `scroll` containers paint owned track/thumb indicators
+whose thumbs follow the retained scroll offsets. The indicators do not claim
+platform-native arrow buttons, thumb dragging, scrollbar styling, touch,
+overscroll, or scroll-snap behavior.
 
 ## Semantics and accessibility
 

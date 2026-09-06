@@ -44,6 +44,31 @@ describe('AstylarScrollRuntime', () => {
     expect(meshes.get('one')?.position.y).toBe(90);
   });
 
+  it('paints and moves a vertical scrollbar for overflowing scroll containers', () => {
+    const { runtime, siteData } = createVerticalRuntime(scene, 160, 'scroll');
+
+    runtime.reconcile(siteData);
+
+    const track = scene.getMeshByName('astylar-scrollbar-track-box');
+    const thumb = scene.getMeshByName('astylar-scrollbar-thumb-box');
+    expect(track).not.toBeNull();
+    expect(thumb).not.toBeNull();
+    expect(track!.position.z).toBeGreaterThan(0);
+    expect(thumb!.position.z).toBeGreaterThan(track!.position.z);
+    const initialThumbY = thumb!.position.y;
+    const trackMaterialName = track!.material!.name;
+    const thumbMaterialName = thumb!.material!.name;
+
+    expect(runtime.scrollFrom('one', 0, 70)).toBeTrue();
+    expect(thumb!.position.y).toBeLessThan(initialThumbY);
+
+    runtime.dispose();
+    expect(track!.isDisposed()).toBeTrue();
+    expect(thumb!.isDisposed()).toBeTrue();
+    expect(scene.getMaterialByName(trackMaterialName)).toBeNull();
+    expect(scene.getMaterialByName(thumbMaterialName)).toBeNull();
+  });
+
   it('scrolls destinations to the start and uses nearest focus visibility', () => {
     const { runtime, siteData, meshes } = createVerticalRuntime(scene);
     runtime.reconcile(siteData);
@@ -80,11 +105,15 @@ describe('AstylarScrollRuntime', () => {
         height: 120,
         padding: { top: 0, right: 12, bottom: 0, left: 0 },
       } : undefined,
-      getStyle: (id) => id === 'box' ? { selector: '#box', overflow: 'auto' } : undefined,
+      getStyle: (id) => id === 'box' ? { selector: '#box', overflow: 'scroll' } : undefined,
       getPixelToWorldScale: () => 1,
     });
 
     runtime.reconcile(siteData);
+    const thumb = scene.getMeshByName('astylar-scrollbar-thumb-box-horizontal');
+    expect(thumb).not.toBeNull();
+    expect(thumb!.position.x).toBeGreaterThan(0);
+    const initialThumbX = thumb!.position.x;
     expect(runtime.snapshot.containers['box']).toEqual({
       scrollLeft: 0,
       scrollTop: 0,
@@ -97,6 +126,7 @@ describe('AstylarScrollRuntime', () => {
     expect(runtime.scrollFrom('strip', 65, 0)).toBeTrue();
     expect(runtime.snapshot.containers['box'].scrollLeft).toBe(65);
     expect(strip.position.x).toBe(5);
+    expect(thumb!.position.x).toBeLessThan(initialThumbX);
 
     expect(runtime.scrollFrom('strip', 500, 0)).toBeTrue();
     expect(runtime.snapshot.containers['box'].scrollLeft).toBe(132);
@@ -252,7 +282,11 @@ describe('AstylarScrollRuntime', () => {
   });
 });
 
-function createVerticalRuntime(scene: Scene, clientHeight = 160): {
+function createVerticalRuntime(
+  scene: Scene,
+  clientHeight = 160,
+  overflow: 'auto' | 'scroll' = 'auto',
+): {
   runtime: AstylarScrollRuntime;
   siteData: SiteData;
   meshes: Map<string, Mesh>;
@@ -281,7 +315,7 @@ function createVerticalRuntime(scene: Scene, clientHeight = 160): {
     ['box', { width: 240, height: clientHeight }],
   ]);
   const styles = new Map<string, StyleRule>([
-    ['box', { selector: '#box', overflow: 'auto' }],
+    ['box', { selector: '#box', overflow }],
   ]);
   const runtime = new AstylarScrollRuntime({
     getMesh: (id) => meshes.get(id),
