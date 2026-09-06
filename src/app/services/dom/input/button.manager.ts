@@ -267,9 +267,6 @@ export class ButtonManager {
                 textureHeight
             );
 
-            // Rotate the text mesh 180 degrees around the Z axis to fix horizontal flipping without affecting vertical orientation
-            labelPlane.rotation.z = Math.PI;
-
             labelPlane.parent = button.mesh;
             // Center the rendered line box while compensating for the canvas
             // baseline's asymmetric glyph ink, matching native button labels.

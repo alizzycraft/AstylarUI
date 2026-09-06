@@ -169,7 +169,7 @@ export class TextRenderingService implements TextCacheManager {
         false, // No mipmaps for text
         BABYLON.Texture.NEAREST_SAMPLINGMODE,
         BABYLON.Engine.TEXTUREFORMAT_RGBA,
-        false // Don't invert Y in the texture
+        true // Keep canvas Y aligned with the camera-facing plane
       );
 
       // Get the texture context
@@ -184,7 +184,7 @@ export class TextRenderingService implements TextCacheManager {
       // Update the texture
       texture.hasAlpha = true;
       texture.level = 1;
-      texture.update(false);
+      texture.update(true);
 
       // Ensure proper texture wrapping
       texture.wrapU = BABYLON.Texture.CLAMP_ADDRESSMODE;

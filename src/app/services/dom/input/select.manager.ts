@@ -128,7 +128,6 @@ export class SelectManager {
         );
         const selectWidth = selectElement.mesh.getBoundingInfo().boundingBox.extendSize.x * 2;
         indicator.parent = selectElement.mesh;
-        indicator.rotation.z = Math.PI;
         // Native selects reserve a compact UA-owned indicator gutter rather
         // than positioning the arrow at the authored text padding edge.
         indicator.position.x = -(selectWidth / 2) + (5 * scale) + width / 2;
@@ -384,9 +383,6 @@ export class SelectManager {
             );
 
             displayPlane.parent = selectElement.mesh;
-            // Rotate the text mesh 180 degrees around the Z axis to fix horizontal flipping
-            displayPlane.rotation.z = Math.PI;
-
             // Ensure display text sits IN FRONT of the Select Mesh (Positive Z, assuming Front is Positive)
             displayPlane.position.z = CONTROL_CONTENT_Z_OFFSET;
             displayPlane.isPickable = false;
@@ -454,9 +450,6 @@ export class SelectManager {
                 textureWidth,
                 textureHeight
             );
-
-            // Rotate the text mesh 180 degrees around the Z axis to fix horizontal flipping without affecting vertical orientation
-            displayPlane.rotation.z = Math.PI;
 
             displayPlane.parent = selectElement.mesh;
             // Ensure display text sits IN FRONT of the Select Mesh (Positive Z, assuming Front is Positive)
@@ -702,9 +695,6 @@ export class SelectManager {
                     textureWidth,
                     textureHeight
                 );
-
-                // Rotate the text mesh 180 degrees around the Z axis to fix horizontal flipping without affecting vertical orientation
-                textMesh.rotation.z = Math.PI;
 
                 textMesh.parent = optionMesh;
                 textMesh.isPickable = false;

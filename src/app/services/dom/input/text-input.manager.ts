@@ -406,10 +406,6 @@ export class TextInputManager {
             textMesh.isPickable = true;
             textMesh.renderingGroupId = 0;
 
-            // Rotate the text mesh 180 degrees around the Z axis to fix horizontal flipping without affecting vertical orientation
-            // Only apply this rotation to text input meshes
-            textMesh.rotation.z = Math.PI;
-
             // Store world-space texture width for cursor positioning
             textInput.textureWidth = textureWidth;
             textInput.textureHeight = textureHeight;

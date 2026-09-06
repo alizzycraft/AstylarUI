@@ -166,7 +166,6 @@ export class ListService {
       dimensions.width * scale,
       dimensions.height * scale,
     );
-    marker.rotation.z = Math.PI;
     render.actions.mesh.positionTextMesh(
       marker,
       (contentLeft - 8 - dimensions.width / 2) * scale,

@@ -697,9 +697,6 @@ export class BabylonDOMRendererService {
       dimensions.height,
     );
 
-    // Rotate the text mesh 180 degrees around the Z axis to fix horizontal flipping without affecting vertical orientation
-    textMesh.rotation.z = Math.PI;
-
     // Make text mesh pickable for text selection
     textMesh.isPickable = true;
     textMesh.metadata = {

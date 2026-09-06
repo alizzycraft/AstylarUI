@@ -1,4 +1,4 @@
-import { Color3, DynamicTexture, Mesh, NullEngine, Scene, ShaderMaterial, Vector3, VertexBuffer } from '@babylonjs/core';
+import { Color3, DynamicTexture, Mesh, MeshBuilder, NullEngine, Scene, ShaderMaterial, Vector3, VertexBuffer } from '@babylonjs/core';
 
 import { BabylonMeshService } from './babylon-mesh.service';
 
@@ -37,6 +37,28 @@ describe('BabylonMeshService', () => {
   });
 
   describe('createTextMesh', () => {
+    it('orients camera-facing text through UVs without transforming its local axes', () => {
+      const engine = new NullEngine();
+      const scene = new Scene(engine);
+      const service = new BabylonMeshService();
+      service.initialize(scene);
+      const texture = new DynamicTexture('text-orientation', { width: 16, height: 16 }, scene);
+      const reference = MeshBuilder.CreatePlane('reference-plane', { width: 1, height: 1 }, scene);
+      const referenceUvs = reference.getVerticesData(VertexBuffer.UVKind)!;
+
+      const mesh = service.createTextMesh('oriented-text-plane', texture, 1, 1);
+      const textUvs = mesh.getVerticesData(VertexBuffer.UVKind)!;
+
+      expect(mesh.scaling.x).toBe(1);
+      expect(mesh.scaling.y).toBe(1);
+      expect(mesh.rotation.z).toBe(0);
+      expect(textUvs).toEqual(referenceUvs.map((coordinate, index) =>
+        index % 2 === 0 ? 1 - coordinate : coordinate,
+      ));
+
+      engine.dispose();
+    });
+
     it('keeps text in the depth-tested render group for stacking-context occlusion', () => {
       const engine = new NullEngine();
       const scene = new Scene(engine);

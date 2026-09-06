@@ -14,6 +14,7 @@ import {
   ShaderMaterial,
   Effect,
   Texture,
+  VertexBuffer,
 } from "@babylonjs/core";
 import {
   BorderWidthBox,
@@ -1194,6 +1195,18 @@ export class BabylonMeshService {
 
       // Configure mesh properties for text rendering
       textPlane.billboardMode = Mesh.BILLBOARDMODE_NONE;
+      // The DOM camera observes the plane's back face, which mirrors U. Fix
+      // that texture axis here instead of transforming the mesh, so its local
+      // X/Y axes remain aligned with CSS geometry.
+      const textUvs = textPlane.getVerticesData(VertexBuffer.UVKind);
+      if (textUvs) {
+        textPlane.setVerticesData(
+          VertexBuffer.UVKind,
+          textUvs.map((coordinate, index) =>
+            index % 2 === 0 ? 1 - coordinate : coordinate,
+          ),
+        );
+      }
       // Keep text in the normal render group so depth testing and CSS-like
       // stacking contexts can occlude it (for example, behind a modal).
       // The small local Z offset applied by the caller is sufficient to keep
