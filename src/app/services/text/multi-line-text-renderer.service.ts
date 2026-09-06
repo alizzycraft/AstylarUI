@@ -75,7 +75,8 @@ export class MultiLineTextRendererService {
   calculateLinePositions(
     lines: TextLine[], 
     style: TextStyleProperties, 
-    containerHeight?: number
+    containerHeight?: number,
+    middleBaselineOffset?: number,
   ): TextLine[] {
     if (!lines.length) {
       return lines;
@@ -105,11 +106,8 @@ export class MultiLineTextRendererService {
     // Update each line's Y position
     return lines.map((line, index) => ({
       ...line,
-      // A canvas `middle` baseline is anchored at the glyph run's vertical
-      // center. Using the alphabetic-baseline offset (`fontSize`) placed the
-      // ink in the lower half of its texture before the mesh was centered.
       y: style.verticalAlign === 'middle'
-        ? startY + ((index + 0.5) * lineHeight)
+        ? startY + (index * lineHeight) + (middleBaselineOffset ?? lineHeight / 2)
         : startY + (index * lineHeight) + style.fontSize,
     }));
   }

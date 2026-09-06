@@ -102,7 +102,10 @@ export class TextCanvasRendererService {
     const positionedLines = this.multiLineTextRenderer.calculateLinePositions(
       lines,
       style,
-      logicalHeight
+      logicalHeight,
+      style.verticalAlign === 'middle'
+        ? this.calculateCssLineBoxBaseline(ctx, style)
+        : undefined,
     );
 
     // Render each line of text
@@ -431,6 +434,32 @@ export class TextCanvasRendererService {
   }
 
   /**
+   * Returns the alphabetic baseline used by a browser CSS line box.
+   *
+   * Canvas' `middle` baseline centers the em square rather than reproducing
+   * CSS half-leading. CSS instead centers the font bounding box inside the
+   * resolved line height, then places the alphabetic baseline after the
+   * ascent. Keeping this calculation in CSS pixels also preserves fractional
+   * baselines for DPR-scaled canvases.
+   */
+  private calculateCssLineBoxBaseline(
+    ctx: CanvasRenderingContext2D,
+    style: TextStyleProperties,
+  ): number {
+    const metrics = ctx.measureText('Mg');
+    const measuredAscent = metrics.fontBoundingBoxAscent;
+    const measuredDescent = metrics.fontBoundingBoxDescent;
+    const ascent = Number.isFinite(measuredAscent) && measuredAscent > 0
+      ? measuredAscent
+      : style.fontSize * 0.8;
+    const descent = Number.isFinite(measuredDescent) && measuredDescent >= 0
+      ? measuredDescent
+      : style.fontSize * 0.2;
+    const lineHeight = style.fontSize * style.lineHeight;
+    return (lineHeight - ascent - descent) / 2 + ascent;
+  }
+
+  /**
    * Applies text transformation (uppercase, lowercase, capitalize)
    * @param text - The original text
    * @param transform - Text transformation type
@@ -512,7 +541,7 @@ export class TextCanvasRendererService {
       case 'top':
         return 'top';
       case 'middle':
-        return 'middle';
+        return 'alphabetic';
       case 'bottom':
         return 'bottom';
       case 'baseline':
