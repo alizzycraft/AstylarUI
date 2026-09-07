@@ -406,6 +406,7 @@ describe('AstylarInteractionRuntime', () => {
     mesh.metadata = { elementId: 'child' };
     const canvas = document.createElement('canvas');
     const calls: Array<[string, number, number]> = [];
+    spyOnProperty(window, 'devicePixelRatio', 'get').and.returnValue(1);
     spyOn(scene, 'pick').and.returnValue({
       hit: true,
       pickedMesh: mesh,
@@ -438,6 +439,105 @@ describe('AstylarInteractionRuntime', () => {
     canvas.dispatchEvent(new WheelEvent('wheel', { deltaY: 20, cancelable: true }));
     expect(calls.length).toBe(1);
     expect(runtime.snapshot.wheelHandlers).toBe(0);
+    scene.dispose();
+    engine.dispose();
+  });
+
+  it('normalizes pixel wheel deltas to native CSS scrolling at DPR 2', () => {
+    const engine = new NullEngine();
+    const scene = new Scene(engine);
+    const mesh = MeshBuilder.CreatePlane('scroll-child', {}, scene);
+    mesh.metadata = { elementId: 'child' };
+    const canvas = document.createElement('canvas');
+    const calls: Array<[string, number, number]> = [];
+    spyOnProperty(window, 'devicePixelRatio', 'get').and.returnValue(2);
+    spyOn(scene, 'pick').and.returnValue({
+      hit: true,
+      pickedMesh: mesh,
+      pickedPoint: { x: 0, y: 0, z: 0 },
+    } as never);
+    const runtime = new AstylarInteractionRuntime(
+      scene,
+      { styles: [], root: { children: [{ type: 'div', id: 'child' }] } },
+      {},
+      undefined,
+      undefined,
+      canvas,
+      {
+        scrollFrom: (elementId, deltaX, deltaY) => {
+          calls.push([elementId, deltaX, deltaY]);
+          return true;
+        },
+        isPointVisible: () => true,
+      },
+    );
+
+    canvas.dispatchEvent(new WheelEvent('wheel', {
+      deltaX: 12,
+      deltaY: 70,
+      deltaMode: WheelEvent.DOM_DELTA_PIXEL,
+      cancelable: true,
+    }));
+
+    expect(calls).toEqual([['child', 24, 140]]);
+    runtime.dispose();
+    scene.dispose();
+    engine.dispose();
+  });
+
+  it('repicks hover after wheel scrolling moves content under the pointer', () => {
+    const engine = new NullEngine();
+    const scene = new Scene(engine);
+    const before = MeshBuilder.CreatePlane('before', {}, scene);
+    before.metadata = { elementId: 'before' };
+    const after = MeshBuilder.CreatePlane('after', {}, scene);
+    after.metadata = { elementId: 'after' };
+    const point = { x: 0, y: 0, z: 0 };
+    const canvas = document.createElement('canvas');
+    const hoverStates: Array<[string, boolean]> = [];
+    spyOnProperty(window, 'devicePixelRatio', 'get').and.returnValue(1);
+    spyOn(scene, 'pick').and.returnValues(
+      { hit: true, pickedMesh: before, pickedPoint: point } as never,
+      { hit: true, pickedMesh: after, pickedPoint: point } as never,
+    );
+    const runtime = new AstylarInteractionRuntime(
+      scene,
+      { styles: [], root: { children: [
+        { type: 'button', id: 'before', value: 'Before' },
+        { type: 'button', id: 'after', value: 'After' },
+      ] } },
+      {},
+      undefined,
+      {
+        getFocusedElementId: () => undefined,
+        focus: () => false,
+        blur: () => false,
+        handleKeyDown: () => undefined,
+        commitsValueOnBlur: () => false,
+        setHoverState: (elementId: string, hovered: boolean) =>
+          hoverStates.push([elementId, hovered]),
+      } as never,
+      canvas,
+      {
+        scrollFrom: () => true,
+        isPointVisible: () => true,
+      },
+    );
+    scene.onPointerObservable.notifyObservers({
+      type: PointerEventTypes.POINTERMOVE,
+      event: new MouseEvent('pointermove'),
+      pickInfo: { hit: true, pickedMesh: before, pickedPoint: point },
+    } as unknown as PointerInfo);
+    hoverStates.length = 0;
+
+    canvas.dispatchEvent(new WheelEvent('wheel', { deltaY: 70, cancelable: true }));
+
+    expect(runtime.snapshot.hoveredElementId).toBe('after');
+    expect(hoverStates).toEqual([
+      ['before', false],
+      ['after', true],
+    ]);
+    runtime.dispose();
     scene.dispose();
     engine.dispose();
   });
@@ -715,6 +815,7 @@ describe('AstylarInteractionRuntime', () => {
     const canvas = document.createElement('canvas');
     const textCalls: Array<[string, number, number]> = [];
     const containerCalls: string[] = [];
+    spyOnProperty(window, 'devicePixelRatio', 'get').and.returnValue(1);
     spyOn(scene, 'pick').and.returnValue({
       hit: true,
       pickedMesh: mesh,

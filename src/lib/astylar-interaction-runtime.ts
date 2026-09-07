@@ -944,9 +944,10 @@ export class AstylarInteractionRuntime {
     const pick = this.scene.pick(this.scene.pointerX, this.scene.pointerY);
     const lineScale = 16;
     const pageScale = this.canvas?.clientHeight || 1;
+    const pixelScale = window.devicePixelRatio || 1;
     const factor = event.deltaMode === WheelEvent.DOM_DELTA_LINE
       ? lineScale
-      : event.deltaMode === WheelEvent.DOM_DELTA_PAGE ? pageScale : 1;
+      : event.deltaMode === WheelEvent.DOM_DELTA_PAGE ? pageScale : pixelScale;
     const deltaX = event.deltaX * factor;
     const deltaY = event.deltaY * factor;
     for (const targetId of this.resolveElementIds(pick?.pickedMesh ?? undefined)) {
@@ -955,6 +956,13 @@ export class AstylarInteractionRuntime {
       if (this.controls?.scrollTextControl?.(targetId, deltaX, deltaY) ||
           this.scrolling.scrollFrom(targetId, deltaX, deltaY)) {
         event.preventDefault();
+        const hoverPick = this.scene.pick(this.scene.pointerX, this.scene.pointerY);
+        const hoverPointerInfo = {
+          type: PointerEventTypes.POINTERMOVE,
+          event,
+          pickInfo: hoverPick,
+        } as unknown as PointerInfo;
+        this.updateHover(this.resolvePointerTarget(hoverPointerInfo), hoverPointerInfo);
         return;
       }
     }

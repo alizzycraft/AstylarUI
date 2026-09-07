@@ -1135,10 +1135,12 @@ async function compareInteractionState(referencePage, astylarPage, family, state
     const candidate = await astylarPage.evaluate(() =>
       window.__ASTYLAR_MATERIAL_BENCHMARK__?.measure(['timepicker-options'])
         ?.diagnostics?.surface?.scrolling?.containers?.['timepicker-options']?.scrollTop);
+    const difference = Math.abs(Number(reference) - Number(candidate));
     return {
       reference,
       astylar: candidate,
-      matches: Number(reference) > 0 && Number(candidate) > 0,
+      difference,
+      matches: Number(reference) > 0 && Number(candidate) > 0 && difference <= .5,
     };
   }
   return { matches: true };
