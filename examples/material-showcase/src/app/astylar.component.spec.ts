@@ -315,7 +315,9 @@ describe('AstylarShowcaseComponent', () => {
 
     expect(find(build(component, 'sort'), 'sort-arrow')).toBeUndefined();
     handlers['sort-primary']['focus']({ targetId: 'sort-primary' } as AstylarEvent);
-    expect(find(build(component, 'sort'), 'sort-arrow')?.['textContent']).toBe('↑');
+    const focusedSort = build(component, 'sort');
+    expect(find(focusedSort, 'sort-arrow')?.['textContent']).toBe('↑');
+    expect(style(focusedSort, '.sort-header.focused')?.['boxShadow']).toBeUndefined();
     expect(store.state().open).toBeFalse();
     handlers['sort-primary']['blur']({ targetId: 'sort-primary' } as AstylarEvent);
     expect(find(build(component, 'sort'), 'sort-arrow')).toBeUndefined();

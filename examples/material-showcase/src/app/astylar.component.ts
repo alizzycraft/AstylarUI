@@ -693,7 +693,6 @@ export class AstylarShowcaseComponent {
         { selector: '.list-item', width: '100%', height: `${theme.density === 0 ? 56 : theme.density <= -5 ? 40 : 48}px`, boxSizing: 'border-box', display: 'flex', alignItems: 'center' },
         { selector: '.list-label', marginLeft: '16px', fontSize: '16px' },
         { selector: '.sort-header', width: '100%', height: `${theme.density === -2 ? 22 : 19}px`, borderWidth: '0', background: 'transparent', color: theme.onSurface, textAlign: 'left', fontWeight: theme.density <= -5 ? '400' : '500' },
-        { selector: '.sort-header.focused', boxShadow: `0 1px 0 ${theme.onSurface}` },
         { selector: '.sort-trigger', width: '132px', height: `${theme.density === -2 ? 22 : 19}px`, display: 'flex', alignItems: 'center', gap: '6px', color: theme.onSurface, fontSize: '17px', fontWeight: theme.density <= -5 ? '400' : '500', cursor: 'pointer' },
         { selector: '.sort-arrow', fontSize: '16px', fontWeight: '700' },
         { selector: '.paginator', position: 'relative', width: '100%', height: '56px', background: theme.surface, fontSize: '13px' },
