@@ -9,6 +9,25 @@ import { DEFAULT_SHOWCASE_STATE, ShowcaseStore } from './showcase.store';
 import { MATERIAL_THEME_PROFILES, resolveTheme } from './theme';
 
 describe('AstylarShowcaseComponent', () => {
+  it('authors the shared heading flow with the reference line boxes and relative offsets', () => {
+    const { component, store } = createComponent('expansion');
+
+    let site = build(component, 'expansion');
+    expect(style(site, '#eyebrow')).toEqual(jasmine.objectContaining({
+      position: 'relative', top: '-2px', margin: '16px 0', lineHeight: '19.2px',
+    }));
+    expect(style(site, '#title')).toEqual(jasmine.objectContaining({
+      position: 'relative', top: '-6.5px', margin: '21.44px 0',
+    }));
+
+    store.setTheme(MATERIAL_THEME_PROFILES.custom);
+    site = build(component, 'expansion');
+    expect(style(site, '#eyebrow')).toEqual(jasmine.objectContaining({
+      top: '3px', margin: '18.4px 0', lineHeight: '22.08px',
+    }));
+    expect(style(site, '#title')).toEqual(jasmine.objectContaining({ top: '6.5px', margin: '21.44px 0' }));
+  });
+
   it('activates a primary-color ripple from the toolbar action pointer origin', () => {
     const activate = jasmine.createSpy('activate');
     const tokens = resolveTheme(MATERIAL_THEME_PROFILES.light);
