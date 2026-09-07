@@ -30,6 +30,7 @@ import { MultiLineTextRendererService } from './multi-line-text-renderer.service
 export class TextRenderingService implements TextCacheManager {
   private scene?: BABYLON.Scene;
   private textureCache = new Map<string, TextCache>();
+  private textureCacheKeys = new WeakMap<BABYLON.Texture, string>();
   private options: TextRenderingOptions = {
     enableCaching: true,
     maxCacheSize: 100,
@@ -137,7 +138,7 @@ export class TextRenderingService implements TextCacheManager {
     const textStyle = this.parseElementTextStyle(element, styleRule);
 
     // Generate cache key for texture reuse
-    const cacheKey = this.generateCacheKey(textContent, textStyle);
+    const cacheKey = this.generateCacheKey(textContent, textStyle, maxWidth);
 
     // Check cache first if caching is enabled
     if (this.options.enableCaching) {
@@ -294,7 +295,8 @@ export class TextRenderingService implements TextCacheManager {
     try {
       // Find and remove from cache if present
       const textStyle = this.parseElementTextStyle(textElement);
-      const cacheKey = this.generateCacheKey(textElement.textContent || '', textStyle);
+      const cacheKey = this.textureCacheKeys.get(textElement.textTexture) ??
+        this.generateCacheKey(textElement.textContent || '', textStyle);
 
       if (this.textureCache.has(cacheKey)) {
         const cacheEntry = this.textureCache.get(cacheKey)!;
@@ -357,6 +359,7 @@ export class TextRenderingService implements TextCacheManager {
     };
 
     this.textureCache.set(key, cacheEntry);
+    this.textureCacheKeys.set(texture, key);
 
   }
 
@@ -401,7 +404,7 @@ export class TextRenderingService implements TextCacheManager {
    * @param style - Text styling properties
    * @returns Unique cache key string
    */
-  generateCacheKey(text: string, style: TextStyleProperties): string {
+  generateCacheKey(text: string, style: TextStyleProperties, maxWidth?: number): string {
     // Create a hash-like key from text and critical style properties
     const styleKey = [
       style.fontFamily,
@@ -410,11 +413,16 @@ export class TextRenderingService implements TextCacheManager {
       style.fontStyle,
       style.color,
       style.textAlign,
+      style.verticalAlign,
       style.lineHeight,
       style.letterSpacing,
       style.wordSpacing,
+      style.whiteSpace,
+      style.wordWrap,
+      style.textOverflow,
       style.textTransform,
       style.textDecoration,
+      maxWidth ?? 'intrinsic',
       JSON.stringify(style.textShadow || []),
       JSON.stringify(style.textStroke || {})
     ].join('|');
@@ -523,6 +531,7 @@ export class TextRenderingService implements TextCacheManager {
       cacheEntry.texture.dispose();
     }
     this.textureCache.clear();
+    this.textureCacheKeys = new WeakMap<BABYLON.Texture, string>();
   }
 
   /**
