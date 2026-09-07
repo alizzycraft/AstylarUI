@@ -7,19 +7,6 @@ const browser = await chromium.launch({
   headless: true,
 });
 
-async function openFamily(family) {
-  const page = await browser.newPage({ viewport: { width: 1280, height: 720 } });
-  const errors = [];
-  page.on('pageerror', (error) => errors.push(error.message));
-  page.on('console', (message) => {
-    if (message.type() === 'error') errors.push(message.text());
-  });
-  await page.goto(`${baseUrl}/astylar/${family}`, { waitUntil: 'networkidle' });
-  await page.waitForFunction(() => !!window.__ASTYLAR_MATERIAL_BENCHMARK__, undefined, { timeout: 30_000 });
-  await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
-  return { page, errors };
-}
-
 async function openComparedFamily(family) {
   const page = await browser.newPage({ viewport: { width: 1920, height: 1080 } });
   const errors = [];
@@ -88,17 +75,17 @@ async function dragSliderHandle(page, runtime, visual, fromRatio, toRatio, targe
 }
 
 try {
-  const { page, errors } = await openFamily('snack-bar');
+  const { page, runtime, errors } = await openComparedFamily('snack-bar');
 
-  const trigger = await astylarBox(page, 'snack-bar-primary');
+  const trigger = await astylarBox(runtime, 'snack-bar-primary');
   await page.mouse.click(
     trigger.x + trigger.width / 2,
     trigger.y + trigger.height / 2,
   );
-  await page.waitForFunction(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.state().open === true);
-  await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
+  await runtime.waitForFunction(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.state().open === true);
+  await runtime.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
 
-  const result = await page.evaluate(() => ({
+  const result = await runtime.evaluate(() => ({
     state: window.__ASTYLAR_MATERIAL_BENCHMARK__.state(),
     measurement: window.__ASTYLAR_MATERIAL_BENCHMARK__.measure(['snack-bar-overlay', 'snack-bar-surface']),
   }));
@@ -112,12 +99,12 @@ try {
   await page.waitForTimeout(250);
   await page.mouse.click(trigger.x + trigger.width / 2, trigger.y + trigger.height / 2);
   await page.waitForTimeout(250);
-  assert.equal(await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.state().open), true);
-  await page.waitForFunction(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.state().open === false, undefined, {
+  assert.equal(await runtime.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.state().open), true);
+  await runtime.waitForFunction(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.state().open === false, undefined, {
     timeout: 6_000,
   });
-  await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
-  const cleanup = await page.evaluate(() =>
+  await runtime.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
+  const cleanup = await runtime.evaluate(() =>
     window.__ASTYLAR_MATERIAL_BENCHMARK__.measure(['snack-bar-surface']));
   assert.equal(cleanup.elements['snack-bar-surface']?.exists, false, 'Normal-runtime snackbar did not clean up.');
   assert.equal(cleanup.diagnostics.surface.session.status, 'idle');
@@ -126,15 +113,15 @@ try {
   await page.close();
   console.log('Normal-runtime snackbar activation passed.');
 
-  const tooltip = await openFamily('tooltip');
-  const tooltipTrigger = await astylarBox(tooltip.page, 'tooltip-primary');
+  const tooltip = await openComparedFamily('tooltip');
+  const tooltipTrigger = await astylarBox(tooltip.runtime, 'tooltip-primary');
   await tooltip.page.mouse.move(
     tooltipTrigger.x + tooltipTrigger.width / 2,
     tooltipTrigger.y + tooltipTrigger.height / 2,
   );
-  await tooltip.page.waitForFunction(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.state().open === true);
-  await tooltip.page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
-  const tooltipBox = await astylarBox(tooltip.page, 'tooltip-popup');
+  await tooltip.runtime.waitForFunction(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.state().open === true);
+  await tooltip.runtime.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
+  const tooltipBox = await astylarBox(tooltip.runtime, 'tooltip-popup');
   const triggerCenter = tooltipTrigger.x + tooltipTrigger.width / 2;
   const tooltipCenter = tooltipBox.x + tooltipBox.width / 2;
   assert.ok(Math.abs(triggerCenter - tooltipCenter) <= 2, 'Normal-runtime tooltip is not horizontally centered.');
@@ -142,9 +129,12 @@ try {
     'Normal-runtime tooltip does not have the expected 8 px trigger gap.');
   assert.ok(tooltipBox.y >= tooltipBox.canvas.y && tooltipBox.y + tooltipBox.height <= tooltipBox.canvas.y + tooltipBox.canvas.height,
     'Normal-runtime tooltip is not reachable inside the canvas.');
-  await tooltip.page.mouse.move(2, 2);
-  await tooltip.page.waitForFunction(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.state().open === false);
-  await tooltip.page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
+  await tooltip.page.mouse.move(
+    tooltipBox.canvas.x + tooltipBox.canvas.width - 20,
+    tooltipBox.canvas.y + tooltipBox.canvas.height - 20,
+  );
+  await tooltip.runtime.waitForFunction(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.state().open === false);
+  await tooltip.runtime.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
   assert.deepEqual(tooltip.errors, [], `Normal-runtime tooltip emitted browser errors: ${tooltip.errors.join(' | ')}`);
   await tooltip.page.close();
   console.log('Normal-runtime tooltip hover and cleanup passed.');
