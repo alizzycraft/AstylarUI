@@ -175,6 +175,58 @@ describe('Astylar simultaneous surface isolation', () => {
     }
   });
 
+  it('settles initial rendering after fonts are ready and reflows for later font loads', async () => {
+    let releaseFonts!: () => void;
+    const fontsReady = new Promise<FontFaceSet>((resolve) => {
+      releaseFonts = () => resolve(fonts);
+    });
+    let loadingDone: EventListener | undefined;
+    const fonts = {
+      ready: fontsReady,
+      addEventListener: jasmine.createSpy('addFontListener').and.callFake(
+        (type: string, listener: EventListenerOrEventListenerObject) => {
+          if (type === 'loadingdone' && typeof listener === 'function') loadingDone = listener;
+        },
+      ),
+      removeEventListener: jasmine.createSpy('removeFontListener'),
+    } as unknown as FontFaceSet;
+    spyOnProperty(document, 'fonts', 'get').and.returnValue(fonts);
+
+    const canvas = document.createElement('canvas');
+    document.body.append(canvas);
+    const surface = TestBed.inject(Astylar).mount(canvas, site('Web font'));
+
+    try {
+      let initialSettled = false;
+      const initial = surface.whenSettled().then((snapshot) => {
+        initialSettled = true;
+        return snapshot;
+      });
+      await waitUntil(() => surface.diagnostics.session?.status === 'rendering');
+      await new Promise((resolve) => setTimeout(resolve, 25));
+
+      expect(initialSettled).toBeFalse();
+      expect(surface.diagnostics.session?.revision).toBe(0);
+
+      releaseFonts();
+      await initial;
+      expect(surface.diagnostics.session?.revision).toBe(1);
+      expect(fonts.addEventListener).toHaveBeenCalledWith('loadingdone', jasmine.any(Function));
+
+      loadingDone?.(new Event('loadingdone'));
+      await waitUntil(() => surface.diagnostics.session?.revision === 2);
+      expect(surface.diagnostics.session?.revision).toBe(2);
+    } finally {
+      surface.dispose();
+      canvas.remove();
+    }
+
+    expect(fonts.removeEventListener).toHaveBeenCalledWith(
+      'loadingdone',
+      jasmine.any(Function),
+    );
+  });
+
   it('treats a class-authored focus color as the control focus indicator', async () => {
     const canvas = document.createElement('canvas');
     document.body.append(canvas);

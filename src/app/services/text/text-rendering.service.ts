@@ -60,6 +60,19 @@ export class TextRenderingService implements TextCacheManager {
 
   }
 
+  getLogicalTextureSize(texture: BABYLON.Texture): { width: number; height: number } {
+    const authoredSize = (texture.metadata as {
+      astylarLogicalTextSize?: { width: number; height: number };
+    } | undefined)?.astylarLogicalTextSize;
+    if (authoredSize) return { ...authoredSize };
+    const backingSize = texture.getSize();
+    const devicePixelRatio = window.devicePixelRatio || 1;
+    return {
+      width: backingSize.width / devicePixelRatio,
+      height: backingSize.height / devicePixelRatio,
+    };
+  }
+
   createStoredLayoutMetrics(text: string, style: TextStyleProperties, scale: number, maxWidth?: number): StoredTextLayoutMetrics {
     const cssMetrics = this.textCanvasRenderer.calculateLayoutMetrics(text, style, maxWidth);
     const worldMetrics = this.convertCssMetricsToWorld(cssMetrics, scale);
@@ -172,6 +185,13 @@ export class TextRenderingService implements TextCacheManager {
         BABYLON.Engine.TEXTUREFORMAT_RGBA,
         true // Keep canvas Y aligned with the camera-facing plane
       );
+      texture.metadata = {
+        ...(texture.metadata ?? {}),
+        astylarLogicalTextSize: {
+          width: parseFloat(canvas.style.width) || canvas.width / (window.devicePixelRatio || 1),
+          height: parseFloat(canvas.style.height) || canvas.height / (window.devicePixelRatio || 1),
+        },
+      };
 
       // Get the texture context
       const textureContext = texture.getContext();
@@ -468,23 +488,10 @@ export class TextRenderingService implements TextCacheManager {
     }
 
     // Fallback to default text style
-    return {
+    return this.textStyleParser.parseTextProperties({
+      selector: '__astylar-default-text',
       fontFamily: this.options.fallbackFont || 'Arial, sans-serif',
-      fontSize: 16,
-      fontWeight: 'normal',
-      fontStyle: 'normal',
-      color: '#000000',
-      textAlign: 'left',
-      verticalAlign: 'baseline',
-      lineHeight: 1.15,
-      letterSpacing: 0,
-      wordSpacing: 0,
-      whiteSpace: 'normal',
-      wordWrap: 'normal',
-      textOverflow: 'clip',
-      textDecoration: 'none',
-      textTransform: 'none'
-    };
+    });
   }
 
   /**

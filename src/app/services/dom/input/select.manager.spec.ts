@@ -25,6 +25,7 @@ describe('SelectManager', () => {
   it('places selected text between the select background and border plane', () => {
     const textRendering = {
       renderTextToTexture: () => ({ getSize: () => ({ width: 80, height: 24 }) }),
+      getLogicalTextureSize: () => ({ width: 40, height: 12 }),
     } as unknown as TextRenderingService;
     const meshService = {
       createTextMesh: (name: string, _texture: unknown, width: number, height: number) =>
@@ -57,6 +58,7 @@ describe('SelectManager', () => {
     spyOnProperty(window, 'devicePixelRatio', 'get').and.returnValue(2);
     const textRendering = {
       renderTextToTexture: () => ({ getSize: () => ({ width: 80, height: 24 }) }),
+      getLogicalTextureSize: () => ({ width: 40, height: 12 }),
     } as unknown as TextRenderingService;
     const meshService = {
       createTextMesh: (name: string, _texture: unknown, width: number, height: number) =>
@@ -79,6 +81,7 @@ describe('SelectManager', () => {
   it('commits closed arrow navigation and skips disabled options', () => {
     const textRendering = {
       renderTextToTexture: () => ({ getSize: () => ({ width: 80, height: 24 }) }),
+      getLogicalTextureSize: () => ({ width: 40, height: 12 }),
     } as unknown as TextRenderingService;
     const meshService = {
       createTextMesh: (name: string, _texture: unknown, width: number, height: number) =>
@@ -115,6 +118,7 @@ describe('SelectManager', () => {
         renderedStyles.set(text, style);
         return { getSize: () => ({ width: 80, height: 24 }) };
       },
+      getLogicalTextureSize: () => ({ width: 40, height: 12 }),
     } as unknown as TextRenderingService;
     const meshService = {
       createTextMesh: (name: string, _texture: unknown, width: number, height: number) =>
@@ -168,6 +172,7 @@ describe('SelectManager', () => {
         renderedText.push(text);
         return { getSize: () => ({ width: 80, height: 24 }) };
       },
+      getLogicalTextureSize: () => ({ width: 40, height: 12 }),
     } as unknown as TextRenderingService;
     const meshService = {
       createTextMesh: (name: string, _texture: unknown, width: number, height: number) =>
@@ -241,6 +246,7 @@ describe('SelectManager', () => {
   it('releases popup observers, meshes, and materials when an expanded select is disposed', () => {
     const textRendering = {
       renderTextToTexture: () => ({ getSize: () => ({ width: 80, height: 24 }) }),
+      getLogicalTextureSize: () => ({ width: 40, height: 12 }),
     } as unknown as TextRenderingService;
     const meshService = {
       createTextMesh: (name: string, _texture: unknown, width: number, height: number) =>
@@ -280,6 +286,7 @@ describe('SelectManager', () => {
   it('releases an expanded popup observer after visual reconciliation detaches the select mesh', () => {
     const textRendering = {
       renderTextToTexture: () => ({ getSize: () => ({ width: 80, height: 24 }) }),
+      getLogicalTextureSize: () => ({ width: 40, height: 12 }),
     } as unknown as TextRenderingService;
     const meshService = {
       createTextMesh: (name: string, _texture: unknown, width: number, height: number) =>
@@ -313,6 +320,7 @@ describe('SelectManager', () => {
   it('disposes the replaced display material when selection redraws', () => {
     const textRendering = {
       renderTextToTexture: () => ({ getSize: () => ({ width: 80, height: 24 }) }),
+      getLogicalTextureSize: () => ({ width: 40, height: 12 }),
     } as unknown as TextRenderingService;
     const meshService = {
       createTextMesh: (name: string, _texture: unknown, width: number, height: number) => {

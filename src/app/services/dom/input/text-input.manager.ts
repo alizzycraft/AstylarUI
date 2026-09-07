@@ -362,15 +362,13 @@ export class TextInputManager {
             );
 
             // Get texture dimensions
-            const textureSize = texture.getSize();
+            const textureSize = this.textRenderingService.getLogicalTextureSize(texture);
             const textureWidthPx = textureSize.width;
             const textureHeightPx = textureSize.height;
 
             // Convert to world units using camera's pixel-to-world scale
-            const devicePixelRatio = window.devicePixelRatio || 1;
-            // Normalize by DPR to ensure we use logical CSS pixels for world sizing
-            const textureWidth = (textureWidthPx / devicePixelRatio) * pixelScale;
-            const textureHeight = (textureHeightPx / devicePixelRatio) * pixelScale;
+            const textureWidth = textureWidthPx * pixelScale;
+            const textureHeight = textureHeightPx * pixelScale;
 
             const inputHeight = textInput.mesh.getBoundingInfo().boundingBox.extendSize.y * 2;
             const verticalInsets = this.getVerticalContentInsets(textStyle, pixelScale);

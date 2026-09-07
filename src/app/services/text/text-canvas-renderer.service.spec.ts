@@ -103,33 +103,38 @@ describe('TextCanvasRendererService', () => {
     expect(lineXSpy.calls.mostRecent().args[1]).toBe(100);
   });
 
-  it('centers representative font ink within a middle-aligned line box', () => {
+  it('matches browser integer half-leading for middle-aligned line boxes', () => {
     const service = new TextCanvasRendererService(
       new MultiLineTextRendererService(),
     );
-    const style: TextStyleProperties = {
-      fontFamily: 'Arial, sans-serif', fontSize: 14, fontWeight: '400',
-      fontStyle: 'normal', color: '#000000', textAlign: 'left',
-      verticalAlign: 'middle', lineHeight: 20 / 14, letterSpacing: 0,
-      wordSpacing: 0, whiteSpace: 'nowrap', wordWrap: 'normal',
-      textOverflow: 'clip', textDecoration: 'none', textTransform: 'none',
-    };
-    const canvas = document.createElement('canvas');
-    canvas.width = 200;
-    canvas.height = 20;
-    canvas.style.width = '200px';
-    canvas.style.height = '20px';
-    const context = canvas.getContext('2d')!;
-    context.font = `${style.fontStyle} ${style.fontWeight} ${style.fontSize}px ${style.fontFamily}`;
-    const metrics = context.measureText('Mg');
-    const expectedBaseline = (
-      20 - metrics.actualBoundingBoxAscent - metrics.actualBoundingBoxDescent
-    ) / 2 + metrics.actualBoundingBoxAscent;
-    const fillText = spyOn(context, 'fillText');
+    for (const sample of [
+      { fontSize: 14, lineHeight: 20, text: 'Automatic updates' },
+      { fontSize: 16, lineHeight: 24, text: 'Advanced settings' },
+    ]) {
+      const style: TextStyleProperties = {
+        fontFamily: 'Roboto, Arial, sans-serif', fontSize: sample.fontSize, fontWeight: '500',
+        fontStyle: 'normal', color: '#000000', textAlign: 'left',
+        verticalAlign: 'middle', lineHeight: sample.lineHeight / sample.fontSize, letterSpacing: 0,
+        wordSpacing: 0, whiteSpace: 'nowrap', wordWrap: 'normal',
+        textOverflow: 'clip', textDecoration: 'none', textTransform: 'none',
+      };
+      const canvas = document.createElement('canvas');
+      canvas.width = 200;
+      canvas.height = sample.lineHeight;
+      canvas.style.width = '200px';
+      canvas.style.height = `${sample.lineHeight}px`;
+      const context = canvas.getContext('2d')!;
+      context.font = `${style.fontStyle} ${style.fontWeight} ${style.fontSize}px ${style.fontFamily}`;
+      const metrics = context.measureText('Mg');
+      const expectedBaseline = Math.floor((
+        sample.lineHeight - metrics.fontBoundingBoxAscent - metrics.fontBoundingBoxDescent
+      ) / 2) + metrics.fontBoundingBoxAscent;
+      const fillText = spyOn(context, 'fillText');
 
-    service.renderTextToCanvas(canvas, 'Automatic updates', style);
+      service.renderTextToCanvas(canvas, sample.text, style);
 
-    expect(context.textBaseline).toBe('alphabetic');
-    expect(fillText.calls.mostRecent().args[2]).toBeCloseTo(expectedBaseline, 5);
+      expect(context.textBaseline).toBe('alphabetic');
+      expect(fillText.calls.mostRecent().args[2]).withContext(sample.text).toBe(expectedBaseline);
+    }
   });
 });

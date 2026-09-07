@@ -358,10 +358,9 @@ export class BabylonDOMRendererService {
 
       // Convert text dimensions from CSS pixels to world units
       const textScaleFactor = render.actions.camera.getPixelToWorldScale();
-      const devicePixelRatio = window.devicePixelRatio || 1;
-      const textureSize = textTexture.getSize();
-      const textureWidthPx = textureSize.width / devicePixelRatio;
-      const textureHeightPx = textureSize.height / devicePixelRatio;
+      const textureSize = this.textRenderingService.getLogicalTextureSize(textTexture);
+      const textureWidthPx = textureSize.width;
+      const textureHeightPx = textureSize.height;
       const textureDimensions = {
         width: textureWidthPx * textScaleFactor,
         height: textureHeightPx * textScaleFactor,

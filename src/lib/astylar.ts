@@ -421,10 +421,35 @@ class AstylarRenderer {
 
     let hasCompletedRender = false;
     let presentationSuspended = false;
-    const session = new AstylarRenderSession(
+    const fontSet = typeof document === 'undefined' ? undefined : document.fonts;
+    let initialFontsReady = fontSet?.ready;
+    let fontListenerAttached = false;
+    let session: AstylarRenderSession;
+    const handleFontsLoaded = (): void => {
+      if (session.isDisposed) return;
+      void session.invalidate('font').catch((error) => {
+        if (!session.isDisposed) {
+          this.reportRenderFailure('Font resource reflow failed.', error);
+        }
+      });
+    };
+    session = new AstylarRenderSession(
       scene,
       siteData,
       async (currentSiteData, reasons) => {
+        if (!hasCompletedRender && initialFontsReady) {
+          const readiness = initialFontsReady;
+          initialFontsReady = undefined;
+          await readiness;
+          if (scene.isDisposed) return;
+          // Canvas text is rasterized into textures and therefore cannot update
+          // itself when a web font resolves. Observe subsequent font batches at
+          // the surface lifetime boundary and rebuild those cached textures.
+          if (fontSet && !fontListenerAttached) {
+            fontSet.addEventListener('loadingdone', handleFontsLoaded);
+            fontListenerAttached = true;
+          }
+        }
         const planningReasons = hasCompletedRender && !this.pluginHost.hasActiveGeneration
           ? [...reasons, 'plugin-generation-replaced']
           : reasons;
@@ -708,6 +733,11 @@ class AstylarRenderer {
     if (semanticBridge) session.addCleanup(() => semanticBridge.dispose());
     session.addCleanup(() => sceneResources.dispose());
     session.addCleanup(() => this.pluginHost.invalidateCurrentGeneration());
+    session.addCleanup(() => {
+      if (!fontSet || !fontListenerAttached) return;
+      fontSet.removeEventListener('loadingdone', handleFontsLoaded);
+      fontListenerAttached = false;
+    });
     session.addCleanup(this.imageResources.subscribe((event) => {
       if (event.scene !== scene || session.isDisposed) return;
       if (!this.collectImageSources(session.siteData).has(event.source)) return;

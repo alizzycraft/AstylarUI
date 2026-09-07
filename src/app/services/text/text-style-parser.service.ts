@@ -13,6 +13,7 @@ import { TextStyleProperties, TextShadowEffect } from '../../types/text-renderin
   providedIn: 'root'
 })
 export class TextStyleParserService {
+  private normalLineHeightContext?: CanvasRenderingContext2D | null;
 
   /**
    * Default font families for fallback handling
@@ -93,6 +94,9 @@ export class TextStyleParserService {
         styleRule.lineHeight,
         textStyle.fontSize,
       );
+    }
+    if (!styleRule.lineHeight || styleRule.lineHeight.trim().toLowerCase() === 'normal') {
+      textStyle.lineHeight = this.resolveNormalLineHeight(textStyle);
     }
 
     if (styleRule.letterSpacing) {
@@ -405,6 +409,28 @@ export class TextStyleParserService {
 
     console.warn(`Invalid line-height value: "${lineHeight}". Using default ${this.DEFAULT_TEXT_STYLE.lineHeight}.`);
     return this.DEFAULT_TEXT_STYLE.lineHeight;
+  }
+
+  /**
+   * CSS `normal` is derived from the active font's line box; it is not a
+   * universal multiplier. Retain the numeric representation used by the text
+   * pipeline, but resolve it from the same browser font metrics that rasterize
+   * the glyphs.
+   */
+  private resolveNormalLineHeight(style: TextStyleProperties): number {
+    if (typeof document === 'undefined') return this.DEFAULT_TEXT_STYLE.lineHeight;
+    if (this.normalLineHeightContext === undefined) {
+      this.normalLineHeightContext = document.createElement('canvas').getContext('2d');
+    }
+    const context = this.normalLineHeightContext;
+    if (!context) return this.DEFAULT_TEXT_STYLE.lineHeight;
+
+    context.font = `${style.fontStyle} ${style.fontWeight} ${style.fontSize}px ${style.fontFamily}`;
+    const metrics = context.measureText('Mg');
+    const height = metrics.fontBoundingBoxAscent + metrics.fontBoundingBoxDescent;
+    return Number.isFinite(height) && height > 0
+      ? height / style.fontSize
+      : this.DEFAULT_TEXT_STYLE.lineHeight;
   }
 
   /**

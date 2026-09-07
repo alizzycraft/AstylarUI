@@ -331,7 +331,7 @@ export class CheckboxManager {
             );
 
             // Get texture dimensions
-            const textureSize = texture.getSize();
+            const textureSize = this.textRenderingService.getLogicalTextureSize(texture);
             const textureWidthPx = textureSize.width;
             const textureHeightPx = textureSize.height;
 

@@ -23,6 +23,22 @@ describe('TextStyleParserService', () => {
     expect(style.lineHeight).toBe(1.5);
   });
 
+  it('resolves normal line-height from the active font box', () => {
+    spyOn(CanvasRenderingContext2D.prototype, 'measureText').and.returnValue({
+      fontBoundingBoxAscent: 13,
+      fontBoundingBoxDescent: 4,
+    } as TextMetrics);
+
+    const style = service.parseTextProperties({
+      selector: '#text',
+      fontFamily: 'Arial, sans-serif',
+      fontSize: '14px',
+      fontWeight: '500',
+    });
+
+    expect(style.fontSize * style.lineHeight).toBe(17);
+  });
+
   it('preserves an authored caret color independently of text color', () => {
     const style = service.parseTextProperties({
       selector: '#readonly-picker',

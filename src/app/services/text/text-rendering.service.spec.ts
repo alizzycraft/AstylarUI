@@ -27,4 +27,22 @@ describe('TextRenderingService', () => {
       service.generateCacheKey('Advanced settings', style, 240),
     );
   });
+
+  it('preserves fractional CSS dimensions independently of the rounded backing store', () => {
+    const multiLine = new MultiLineTextRendererService();
+    const service = new TextRenderingService(
+      new TextCanvasRendererService(multiLine),
+      new TextStyleParserService(),
+      multiLine,
+    );
+    const texture = {
+      getSize: () => ({ width: 23, height: 17 }),
+      metadata: { astylarLogicalTextSize: { width: 22.75, height: 16.1 } },
+    };
+
+    expect(service.getLogicalTextureSize(texture as never)).toEqual({
+      width: 22.75,
+      height: 16.1,
+    });
+  });
 });

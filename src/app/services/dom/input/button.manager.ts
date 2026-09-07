@@ -17,7 +17,6 @@ import { CONTROL_CONTENT_Z_OFFSET } from '../render-depth.constants';
 })
 export class ButtonManager {
     private readonly PRESS_OFFSET = 0.05; // Visual press down effect
-    private readonly BUTTON_LABEL_OPTICAL_OFFSET_PX = 0.75;
 
     constructor(
         private textRenderingService: TextRenderingService,
@@ -249,10 +248,9 @@ export class ButtonManager {
             );
 
             // Get texture dimensions
-            const textureSize = texture.getSize();
-            const devicePixelRatio = window.devicePixelRatio || 1;
-            const textureWidthPx = textureSize.width / devicePixelRatio;
-            const textureHeightPx = textureSize.height / devicePixelRatio;
+            const textureSize = this.textRenderingService.getLogicalTextureSize(texture);
+            const textureWidthPx = textureSize.width;
+            const textureHeightPx = textureSize.height;
 
             // Convert to world units using camera's pixel-to-world scale
             const scale = render.actions.camera.getPixelToWorldScale();
@@ -268,9 +266,10 @@ export class ButtonManager {
             );
 
             labelPlane.parent = button.mesh;
-            // Center the rendered line box while compensating for the canvas
-            // baseline's asymmetric glyph ink, matching native button labels.
-            labelPlane.position.y = this.BUTTON_LABEL_OPTICAL_OFFSET_PX * scale;
+            // The texture contains a browser-aligned CSS line box. Keep that
+            // box geometrically centered; glyph-dependent optical offsets
+            // move every button label away from its authored alignment.
+            labelPlane.position.y = 0;
             labelPlane.position.z = CONTROL_CONTENT_Z_OFFSET;
             labelPlane.isPickable = false;
             const textAlign = style.textAlign?.toLowerCase();

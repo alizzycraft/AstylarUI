@@ -434,33 +434,28 @@ export class TextCanvasRendererService {
   }
 
   /**
-   * Returns a stable alphabetic baseline whose representative font ink is
-   * centered within the resolved line box.
+   * Returns the alphabetic baseline used by a browser CSS line box.
    *
-   * Canvas fontBoundingBox metrics are integer-expanded bounds in Chromium;
-   * using them as CSS ascent/descent moves middle-aligned text downward. The
-   * actual bounds of a fixed ascender/descender sample preserve a consistent
-   * baseline for every string while avoiding that expansion.
+   * Chromium centers its integer font box within the resolved line height and
+   * assigns an odd remaining pixel to the lower half-leading. Actual glyph
+   * bounds are content-dependent and therefore cannot model CSS line boxes:
+   * using them moves controls with the same font to different baselines.
    */
   private calculateMiddleAlignedAlphabeticBaseline(
     ctx: CanvasRenderingContext2D,
     style: TextStyleProperties,
   ): number {
     const metrics = ctx.measureText('Mg');
-    const measuredAscent = metrics.actualBoundingBoxAscent;
-    const measuredDescent = metrics.actualBoundingBoxDescent;
+    const measuredAscent = metrics.fontBoundingBoxAscent;
+    const measuredDescent = metrics.fontBoundingBoxDescent;
     const ascent = Number.isFinite(measuredAscent) && measuredAscent > 0
       ? measuredAscent
-      : Number.isFinite(metrics.fontBoundingBoxAscent) && metrics.fontBoundingBoxAscent > 0
-        ? metrics.fontBoundingBoxAscent
-        : style.fontSize * 0.8;
+      : style.fontSize * 0.8;
     const descent = Number.isFinite(measuredDescent) && measuredDescent >= 0
       ? measuredDescent
-      : Number.isFinite(metrics.fontBoundingBoxDescent) && metrics.fontBoundingBoxDescent >= 0
-        ? metrics.fontBoundingBoxDescent
-        : style.fontSize * 0.2;
+      : style.fontSize * 0.2;
     const lineHeight = style.fontSize * style.lineHeight;
-    return (lineHeight - ascent - descent) / 2 + ascent;
+    return Math.floor((lineHeight - ascent - descent) / 2) + ascent;
   }
 
   /**

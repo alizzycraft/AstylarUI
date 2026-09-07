@@ -33,12 +33,13 @@ describe('ButtonManager', () => {
     engine.dispose();
   });
 
-  it('keeps button labels at their CSS size on high-density displays', () => {
+  it('keeps the browser-aligned line box centered without an optical offset', () => {
     spyOnProperty(window, 'devicePixelRatio', 'get').and.returnValue(2);
     const engine = new BABYLON.NullEngine();
     const scene = new BABYLON.Scene(engine);
     const textRendering = {
       renderTextToTexture: () => ({ getSize: () => ({ width: 80, height: 24 }) }),
+      getLogicalTextureSize: () => ({ width: 40, height: 12 }),
     } as unknown as TextRenderingService;
     const meshService = {
       createTextMesh: (name: string, _texture: unknown, width: number, height: number) =>
@@ -65,7 +66,7 @@ describe('ButtonManager', () => {
 
     expect(size.x * 2).toBeCloseTo(0.4, 5);
     expect(size.y * 2).toBeCloseTo(0.12, 5);
-    expect(label.position.y).toBeCloseTo(0.0075, 5);
+    expect(label.position.y).toBe(0);
     engine.dispose();
   });
 });
