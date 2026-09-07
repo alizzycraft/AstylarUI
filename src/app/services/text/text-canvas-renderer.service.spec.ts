@@ -167,4 +167,40 @@ describe('TextCanvasRendererService', () => {
     expect(context.textBaseline).toBe('alphabetic');
     expect(fillText.calls.mostRecent().args[2]).toBe(expectedBaseline);
   });
+
+  it('matches the DOM baseline when a line box has odd half-leading', () => {
+    const service = new TextCanvasRendererService(
+      new MultiLineTextRendererService(),
+    );
+    const style: TextStyleProperties = {
+      fontFamily: 'Roboto, Arial, sans-serif', fontSize: 14, fontWeight: '400',
+      fontStyle: 'normal', color: '#000000', textAlign: 'left',
+      verticalAlign: 'baseline', lineHeight: 20 / 14, letterSpacing: 0,
+      wordSpacing: 0, whiteSpace: 'nowrap', wordWrap: 'normal',
+      textOverflow: 'clip', textDecoration: 'none', textTransform: 'none',
+    };
+    const host = document.createElement('div');
+    host.style.cssText = [
+      'position:absolute', 'left:0', 'top:0', 'margin:0', 'padding:0',
+      'width:200px', 'height:20px', 'font:normal 400 14px/20px Roboto,Arial,sans-serif',
+    ].join(';');
+    const marker = document.createElement('span');
+    marker.style.cssText = 'display:inline-block;width:0;height:0;margin:0;padding:0';
+    host.append('Mg', marker);
+    document.body.append(host);
+    const domBaseline = marker.getBoundingClientRect().top - host.getBoundingClientRect().top;
+
+    const canvas = document.createElement('canvas');
+    canvas.width = 200;
+    canvas.height = 20;
+    canvas.style.width = '200px';
+    canvas.style.height = '20px';
+    const context = canvas.getContext('2d')!;
+    const fillText = spyOn(context, 'fillText');
+
+    service.renderTextToCanvas(canvas, 'Save Project Atlas?', style);
+
+    expect(fillText.calls.mostRecent().args[2]).toBe(domBaseline);
+    host.remove();
+  });
 });
