@@ -8,7 +8,7 @@ import { chromium } from 'playwright-core';
 import { PNG } from 'pngjs';
 import { ssim } from 'ssim.js';
 import {
-  materialAbsoluteTextAlignmentTargets, materialFamilies, materialFocusedRasterTargets, materialInteractionCases, materialInteractionFocusedRasterTargets, materialInteractionTextAlignmentTargets, materialMobileFlowCases, materialProfiles,
+  materialAbsoluteTextAlignmentTargets, materialAdditionalMeasurementTargets, materialFamilies, materialFocusedRasterTargets, materialGeometryExcludedTargets, materialInteractionCases, materialInteractionFocusedRasterTargets, materialInteractionTextAlignmentTargets, materialMobileFlowCases, materialProfiles,
   materialLeftAlignedTextTargets, materialSemanticExcludedTargets, materialShadowProfileTargets, materialStaticCases, materialTextAlignmentTargets, materialTextAlignmentToleranceOverrides, materialTextAuditTargets, materialTextOnlyTargets, materialThresholds, materialUniformBackgroundTargets,
 } from './benchmark.config.mjs';
 import { measureTextInkCenter, textCenterOffsetError } from './text-alignment-metrics.mjs';
@@ -117,6 +117,7 @@ function benchmarkMeasurementIds(family) {
   return [...new Set([
     `${family}-root`,
     `${family}-primary`,
+    ...(materialAdditionalMeasurementTargets[family] ?? []),
     ...textTargets(family), ...interactionTextTargets(family),
     ...(uniformBackground ? [uniformBackground.container, ...uniformBackground.surfaces] : []),
     ...(family === 'tooltip' ? ['tooltip-popup'] : []),
@@ -194,7 +195,8 @@ async function captureCase(benchmarkCase) {
     const reference = await capturePage(context, 'reference', benchmarkCase, directory);
     const astylar = await capturePage(context, 'astylar', benchmarkCase, directory);
     const screenshotSimilarity = comparePng(reference.image, astylar.image);
-    const geometry = compareGeometry(reference.measurement.elements, astylar.measurement.elements, materialTextOnlyTargets);
+    const geometry = compareGeometry(reference.measurement.elements, astylar.measurement.elements,
+      [...materialTextOnlyTargets, ...materialGeometryExcludedTargets]);
     const textAlignment = compareTextAlignment(
       reference.image, astylar.image, reference.measurement.elements, astylar.measurement.elements,
       textTargets(family), viewport.deviceScaleFactor, directory,
@@ -626,10 +628,10 @@ async function interactionTargetBox(page, mode, family, state, alternate = false
   }
   if (family === 'slider' && ['hover', 'held', 'activate-leave'].includes(state)) {
     const result = await page.evaluate(() => ({
-      measurement: window.__ASTYLAR_MATERIAL_BENCHMARK__?.measure(['slider-material-visual']),
+      measurement: window.__ASTYLAR_MATERIAL_BENCHMARK__?.measure(['slider-visual']),
       value: window.__ASTYLAR_MATERIAL_BENCHMARK__?.state().sliderValue,
     }));
-    const local = result.measurement?.elements?.['slider-material-visual']?.borderBox;
+    const local = result.measurement?.elements?.['slider-visual']?.borderBox;
     const canvas = await page.locator('canvas').boundingBox();
     return local && canvas && Number.isFinite(result.value) ? {
       x: canvas.x + local.left + local.width * result.value / 100 - .5,
@@ -1065,10 +1067,10 @@ async function sliderDragCoordinates(page, mode, thumb) {
     };
   }
   const result = await page.evaluate(() => ({
-    measurement: window.__ASTYLAR_MATERIAL_BENCHMARK__?.measure(['slider-material-visual']),
+    measurement: window.__ASTYLAR_MATERIAL_BENCHMARK__?.measure(['slider-visual']),
     state: window.__ASTYLAR_MATERIAL_BENCHMARK__?.state(),
   }));
-  const local = result.measurement?.elements?.['slider-material-visual']?.borderBox;
+  const local = result.measurement?.elements?.['slider-visual']?.borderBox;
   const canvas = await page.locator('canvas').boundingBox();
   if (!local || !canvas) return undefined;
   const startRatio = thumb === 'start' ? result.state.sliderStart / 100 : result.state.sliderValue / 100;

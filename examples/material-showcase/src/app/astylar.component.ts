@@ -773,7 +773,7 @@ export class AstylarShowcaseComponent {
           { selector: '#button-toggle-one-label', padding: '0 0 2px' },
         ] : []),
         { selector: '.range', width: '100%', height: '48px', cursor: 'pointer' },
-        { selector: '.range-stack', position: 'relative', width: '100%', height: '48px' },
+        { selector: '.range-stack', position: 'relative', width: '100%', height: '48px', margin: '0 8px' },
         { selector: '.range-layer', position: 'absolute', top: '0', left: '0', width: '100%', height: '48px', cursor: 'pointer' },
         { selector: '#slider-start', width: '50%', height: '44px', top: '2px', left: '0', opacity: '0' },
         { selector: '#slider-primary', width: '50%', height: '44px', top: '2px', left: '50%', opacity: '0' },
@@ -855,7 +855,7 @@ export class AstylarShowcaseComponent {
     if (family === 'paginator') return [{ type: 'div', id: 'paginator-primary', class: 'paginator', role: 'group', ariaLabel: `Items per page: 10 ${state.pageIndex * 10 + 1} – ${Math.min(100, state.pageIndex * 10 + 10)} of 100`, children: [{ type: 'span', id: 'paginator-size', textContent: 'Items per page:' }, { type: 'span', id: 'paginator-page-size', textContent: '10' }, { type: 'span', id: 'paginator-range', textContent: `${state.pageIndex * 10 + 1} – ${Math.min(100, state.pageIndex * 10 + 10)} of 100` }, { type: 'button', id: 'paginator-previous', class: 'paginator-button', disabled: state.pageIndex === 0, ariaLabel: 'Previous page', value: '‹' }, { type: 'button', id: 'paginator-next', class: 'paginator-button', disabled: state.pageIndex === 9, ariaLabel: 'Next page', value: '›' }] }];
     if (family === 'tree') return [{ type: 'div', id: 'tree-primary', class: 'material-tree', role: 'tree', children: ['Documents', 'Projects', 'Archive'].map((label, index) => ({ type: 'div' as const, id: `tree-item-${index}`, class: `tree-item${this.focusedId() === `tree-item-${index}` ? ' focused' : ''}`, role: 'treeitem', tabindex: index === 0 ? 0 : -1, ariaLevel: 1, ariaPosinset: index + 1, ariaSetsize: 3, children: [{ type: 'span' as const, id: `tree-item-${index}-label`, class: 'tree-label', textContent: label }] })) }];
     if (family === 'slider') return [{ type: 'div', id: 'slider-pair', class: 'range-stack', children: [
-      { type: 'showcase.material:range-visual', id: 'slider-material-visual', class: 'range-plugin-layer', data: { start: state.sliderStart / 100, end: state.sliderValue / 100, 'indicator-color': this.store.tokens().primary, 'track-color': this.store.tokens().mode === 'dark' ? '#49454f' : '#e7e0ec', 'state-color': this.store.tokens().primary } },
+      { type: 'showcase.material:range-visual', id: 'slider-visual', class: 'range-plugin-layer', data: { start: state.sliderStart / 100, end: state.sliderValue / 100, 'indicator-color': this.store.tokens().primary, 'track-color': this.store.tokens().mode === 'dark' ? '#49454f' : '#e7e0ec', 'state-color': this.store.tokens().primary } },
       { type: 'input', inputType: 'range', id: 'slider-start', class: 'range-layer', min: '0', max: '50', step: '1', value: String(Math.min(50, state.sliderStart)), disabled: state.disabled, ariaLabel: 'Minimum', ariaValueText: String(state.sliderStart) },
       { type: 'input', inputType: 'range', id: 'slider-primary', class: 'range-layer', min: '50', max: '100', step: '1', value: String(Math.max(50, state.sliderValue)), disabled: state.disabled, ariaLabel: 'Maximum', ariaValueText: String(state.sliderValue) },
     ] }];

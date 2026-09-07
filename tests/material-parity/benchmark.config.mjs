@@ -97,8 +97,17 @@ export const materialTextOnlyTargets = Object.freeze([
   'tab-overview', 'tab-activity', 'tab-panel', 'step-details-text', 'step-review-text',
   'stepper-content', 'expansion-title', 'expansion-content',
 ]);
+// Angular Material exposes each range thumb as a native half-track input while
+// AstylarUI uses separate transparent half-track hit regions. Those are
+// interaction implementation details, not equivalent rendered geometry. Keep
+// their semantics measured, but compare the full visible slider hosts instead.
+export const materialGeometryExcludedTargets = Object.freeze(['slider-start', 'slider-primary']);
+export const materialAdditionalMeasurementTargets = Object.freeze({
+  slider: Object.freeze(['slider-start', 'slider-visual']),
+});
 export const materialSemanticExcludedTargets = Object.freeze([
   ...materialTextOnlyTargets,
+  'slider-visual',
   'button-toggle-one', 'button-toggle-two', 'chip-0', 'chip-1', 'tooltip-popup',
 ]);
 export const materialUniformBackgroundTargets = Object.freeze({

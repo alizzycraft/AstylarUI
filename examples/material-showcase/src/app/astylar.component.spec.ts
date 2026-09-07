@@ -452,6 +452,7 @@ describe('AstylarShowcaseComponent', () => {
     const slider = build(component, 'slider');
     expect(style(slider, '#slider-start')).toEqual(jasmine.objectContaining({ left: '0', width: '50%' }));
     expect(style(slider, '#slider-primary')).toEqual(jasmine.objectContaining({ left: '50%', width: '50%' }));
+    expect(style(slider, '.range-stack')).toEqual(jasmine.objectContaining({ margin: '0 8px' }));
 
     handlers['slider-start'].input({ type: 'input', targetId: 'slider-start', currentTargetId: 'slider-start', value: 40 } as unknown as AstylarEvent);
     expect(updateRange).toHaveBeenCalledWith(.4, .65);
