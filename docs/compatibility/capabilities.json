@@ -421,7 +421,7 @@
       { "path": "src/app/types/style-rule.ts", "sha256": "e3f45996824145b9653315ba5161c9bc49a4ace1d3dd65160ee0644c98880e01" },
       { "path": "src/app/config/browser-defaults.ts", "sha256": "b80995dc5599df550b9180c313c357c960f27199c6d364f67e778e073116a493" },
       { "path": "src/app/services/dom/style.service.ts", "sha256": "8860e77642658626881587f27ee54ec9b6719e9cf71c3b0ff371fc5c267ef3de" },
-      { "path": "src/app/services/dom/elements/element-creation.service.ts", "sha256": "202504b75129fa2110d4b987a0490eaae56c6af27ba6fabc9063f29f964ecc95" },
+      { "path": "src/app/services/dom/elements/element-creation.service.ts", "sha256": "1ebdc260d0712ce4d483a4117331e84dd6d9a8ac92f261563cfd3c18fd6b1e1b" },
       { "path": "src/app/services/text/text-style-parser.service.ts", "sha256": "3aad0343e4d84739f9ebeb502d8a2c64589228ffb0e618ac26750858ecf00ff9" }
     ]
   }

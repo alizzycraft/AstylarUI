@@ -88,6 +88,9 @@ test('keeps the app catalog and enforced static matrix complete', () => {
   for (const family of ['autocomplete', 'datepicker', 'timepicker', 'menu', 'dialog']) {
     assert.ok(materialInteractionCases.some((candidate) => candidate.family === family && candidate.state === 'open-dismiss-outside'));
   }
+  for (const family of ['autocomplete', 'datepicker', 'timepicker', 'menu']) {
+    assert.ok(materialInteractionCases.some((candidate) => candidate.family === family && candidate.state === 'open-dismiss-canvas'));
+  }
   for (const family of ['autocomplete', 'select', 'datepicker', 'timepicker', 'menu', 'dialog']) {
     assert.ok(materialInteractionCases.some((candidate) => candidate.family === family && candidate.state === 'open-hover-content'));
   }

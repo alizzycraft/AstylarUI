@@ -1107,6 +1107,10 @@ export class ElementCreationService {
             dom.context.elementStyles,
           )
         : undefined;
+      const percentageHeightReference = this.definiteContainingBlockContentHeight(
+        dom,
+        parentElement,
+      );
       const hasExplicitHeight = parentStyle?.height !== undefined &&
         parentStyle.height !== 'auto';
       const borderWidths = this.parseBorderWidthBox(parentStyle);
@@ -1120,10 +1124,11 @@ export class ElementCreationService {
         paddingTop === 0 && borderWidths.top === 0;
       const minimumHeight = parentStyle?.minHeight === undefined
         ? 0
-        : this.parseLengthValue(
+        : this.parseAutoBlockConstraint(
             parentStyle.minHeight,
             this.parseFontSize(parentStyle.fontSize),
-          );
+            percentageHeightReference,
+          ) ?? 0;
       const collapseLastMargin = !establishesFormattingContext &&
         !hasExplicitHeight &&
         !this.hasFlexAssignedHeight(parent) &&
@@ -1143,7 +1148,11 @@ export class ElementCreationService {
         bottom: flow.collapsedMarginBottom,
       };
 
-      const usedAutoHeight = this.clampAutoBlockHeight(flow.height, parentStyle);
+      const usedAutoHeight = this.clampAutoBlockHeight(
+        flow.height,
+        parentStyle,
+        percentageHeightReference,
+      );
       if (
         parentElement &&
         parent.name !== 'root-body' &&
@@ -1301,20 +1310,67 @@ export class ElementCreationService {
     };
   }
 
-  private clampAutoBlockHeight(height: number, style: StyleRule | undefined): number {
+  private clampAutoBlockHeight(
+    height: number,
+    style: StyleRule | undefined,
+    percentageHeightReference?: number,
+  ): number {
     const fontSize = this.parseFontSize(style?.fontSize);
     let result = height;
     if (style?.minHeight !== undefined) {
-      result = Math.max(result, this.parseLengthValue(style.minHeight, fontSize));
+      const minimum = this.parseAutoBlockConstraint(
+        style.minHeight,
+        fontSize,
+        percentageHeightReference,
+      );
+      if (minimum !== undefined) result = Math.max(result, minimum);
     }
     if (style?.maxHeight !== undefined) {
-      const maximum = this.parseLengthValue(style.maxHeight, fontSize);
+      const maximum = this.parseAutoBlockConstraint(
+        style.maxHeight,
+        fontSize,
+        percentageHeightReference,
+      );
       const minimum = style.minHeight !== undefined
-        ? this.parseLengthValue(style.minHeight, fontSize)
+        ? this.parseAutoBlockConstraint(
+            style.minHeight,
+            fontSize,
+            percentageHeightReference,
+          ) ?? 0
         : 0;
-      result = Math.min(result, Math.max(maximum, minimum));
+      if (maximum !== undefined) result = Math.min(result, Math.max(maximum, minimum));
     }
     return result;
+  }
+
+  private definiteContainingBlockContentHeight(
+    dom: BabylonDOM,
+    element: DOMElement | undefined,
+  ): number | undefined {
+    const containingElement = element ? this.ancestry.getParent(element) : undefined;
+    const containingId = containingElement?.id;
+    if (!containingId) return undefined;
+    const dimensions = dom.context.elementDimensions.get(containingId);
+    if (!dimensions) return undefined;
+    const style = dom.context.elementStyles.get(containingId)?.normal;
+    const mesh = dom.context.elements.get(containingId);
+    const hasDefiniteHeight = containingId === 'root-body' ||
+      (style?.height !== undefined && style.height !== 'auto') ||
+      (mesh ? this.hasFlexAssignedHeight(mesh) : false);
+    if (!hasDefiniteHeight) return undefined;
+    return Math.max(0, dimensions.height - dimensions.padding.top - dimensions.padding.bottom);
+  }
+
+  private parseAutoBlockConstraint(
+    value: string | number,
+    fontSize: number,
+    percentageHeightReference?: number,
+  ): number | undefined {
+    if (typeof value === 'string' && value.trim().endsWith('%')) {
+      if (percentageHeightReference === undefined) return undefined;
+      return percentageHeightReference * parseFloat(value) / 100;
+    }
+    return this.parseLengthValue(value, fontSize);
   }
 
   private parseMarginBox(style: StyleRule | undefined): {

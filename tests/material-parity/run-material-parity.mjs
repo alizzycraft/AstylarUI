@@ -531,6 +531,12 @@ async function performInteraction(page, mode, benchmarkCase) {
     await settleInteraction(page, mode);
     await page.mouse.click(10, 10);
   }
+  if (state === 'open-dismiss-canvas') {
+    await settleInteraction(page, mode);
+    const viewport = page.viewportSize();
+    assert.ok(viewport, `${mode} popup dismissal viewport is missing.`);
+    await page.mouse.click(viewport.width * .85, viewport.height * .8);
+  }
   if (state === 'open-hover-content') {
     await settleInteraction(page, mode);
     const contentBox = await popupHoverBox(page, mode, family);
@@ -1113,7 +1119,7 @@ async function compareInteractionState(referencePage, astylarPage, family, state
       !!window.__ASTYLAR_MATERIAL_BENCHMARK__?.measure(['timepicker-options'])?.elements?.['timepicker-options']);
     return { reference, astylar: candidate, matches: reference === candidate && reference === true };
   }
-  if (state === 'open-dismiss-outside') {
+  if (state === 'open-dismiss-outside' || state === 'open-dismiss-canvas') {
     const reference = await referencePage.evaluate(() =>
       document.querySelector('[role="listbox"], [role="dialog"], .mat-mdc-menu-panel') !== null);
     const candidate = await astylarPage.evaluate(() => {

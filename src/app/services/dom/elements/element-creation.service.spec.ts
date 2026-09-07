@@ -1,4 +1,7 @@
 import { ElementCreationService } from './element-creation.service';
+import { DOMAncestryService } from '../dom-ancestry.service';
+import { BabylonDOM } from '../interfaces/dom.types';
+import { DOMElement } from '../../../types/dom-element';
 
 describe('ElementCreationService', () => {
   it('calculates auto block height from padding, children, and collapsed sibling margins', () => {
@@ -62,5 +65,31 @@ describe('ElementCreationService', () => {
     expect(service['clampAutoBlockHeight'](260, {
       selector: '#empty', minHeight: '200px', maxHeight: '220px',
     })).toBe(220);
+  });
+
+  it('preserves percentage min-height against the definite containing block during auto reflow', () => {
+    const service = Object.create(ElementCreationService.prototype) as ElementCreationService;
+    const ancestry = new DOMAncestryService();
+    (service as unknown as { ancestry: DOMAncestryService }).ancestry = ancestry;
+    const root: DOMElement = { type: 'div', id: 'root-body' };
+    const page: DOMElement = { type: 'main', id: 'page' };
+    ancestry.setParent(page, root);
+    const dom = {
+      context: {
+        elementDimensions: new Map([['root-body', {
+          width: 800,
+          height: 600,
+          padding: { top: 0, right: 0, bottom: 0, left: 0 },
+        }]]),
+        elementStyles: new Map(),
+        elements: new Map(),
+      },
+    } as unknown as BabylonDOM;
+
+    const percentageReference = service['definiteContainingBlockContentHeight'](dom, page);
+
+    expect(service['clampAutoBlockHeight'](120, {
+      selector: '#page', minHeight: '100%',
+    }, percentageReference)).toBe(600);
   });
 });

@@ -177,6 +177,7 @@ export const materialInteractionCases = materialFamilies.flatMap((family) => {
   if (['autocomplete', 'select', 'datepicker', 'timepicker', 'menu', 'dialog'].includes(family)) states.push('open-hover-content');
   if (family === 'form-field' || family === 'input') states.push('edit-empty-blur');
   if (['autocomplete', 'datepicker', 'timepicker', 'menu', 'dialog'].includes(family)) states.push('open-dismiss-outside');
+  if (['autocomplete', 'datepicker', 'timepicker', 'menu'].includes(family)) states.push('open-dismiss-canvas');
   if (disabledFamilies.has(family)) states.push('disabled');
   if (selectableFamilies.has(family)) states.push('selected');
   if (errorFamilies.has(family)) states.push('error');
