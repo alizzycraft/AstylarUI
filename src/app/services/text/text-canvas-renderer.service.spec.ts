@@ -103,7 +103,7 @@ describe('TextCanvasRendererService', () => {
     expect(lineXSpy.calls.mostRecent().args[1]).toBe(100);
   });
 
-  it('uses the CSS line-box alphabetic baseline for middle-aligned text', () => {
+  it('centers representative font ink within a middle-aligned line box', () => {
     const service = new TextCanvasRendererService(
       new MultiLineTextRendererService(),
     );
@@ -121,10 +121,10 @@ describe('TextCanvasRendererService', () => {
     canvas.style.height = '20px';
     const context = canvas.getContext('2d')!;
     context.font = `${style.fontStyle} ${style.fontWeight} ${style.fontSize}px ${style.fontFamily}`;
-    const metrics = context.measureText('Automatic updates');
+    const metrics = context.measureText('Mg');
     const expectedBaseline = (
-      20 - metrics.fontBoundingBoxAscent - metrics.fontBoundingBoxDescent
-    ) / 2 + metrics.fontBoundingBoxAscent;
+      20 - metrics.actualBoundingBoxAscent - metrics.actualBoundingBoxDescent
+    ) / 2 + metrics.actualBoundingBoxAscent;
     const fillText = spyOn(context, 'fillText');
 
     service.renderTextToCanvas(canvas, 'Automatic updates', style);

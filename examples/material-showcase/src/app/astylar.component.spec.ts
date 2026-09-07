@@ -253,7 +253,9 @@ describe('AstylarShowcaseComponent', () => {
     expect(style(expansion, '.expansion-trigger')?.['cursor']).toBe('pointer');
     expect(find(expansion, 'expansion-primary')?.['class']).toContain('disabled');
     expect(find(expansion, 'expansion-chevron')?.['class']).toContain('disabled');
-    expect(style(expansion, '.expansion-title')?.['fontWeight']).toBe('500');
+    expect(style(expansion, '.expansion-title')).toEqual(jasmine.objectContaining({
+      fontWeight: '500', lineHeight: '24px',
+    }));
     store.setTheme(MATERIAL_THEME_PROFILES.contrast);
     expect(lastStyle(build(component, 'expansion'), '.expansion-title')).toEqual(jasmine.objectContaining({
       padding: '0', fontSize: '16px',

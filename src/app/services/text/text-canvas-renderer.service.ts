@@ -104,7 +104,7 @@ export class TextCanvasRendererService {
       style,
       logicalHeight,
       style.verticalAlign === 'middle'
-        ? this.calculateCssLineBoxBaseline(ctx, style)
+        ? this.calculateMiddleAlignedAlphabeticBaseline(ctx, style)
         : undefined,
     );
 
@@ -434,27 +434,31 @@ export class TextCanvasRendererService {
   }
 
   /**
-   * Returns the alphabetic baseline used by a browser CSS line box.
+   * Returns a stable alphabetic baseline whose representative font ink is
+   * centered within the resolved line box.
    *
-   * Canvas' `middle` baseline centers the em square rather than reproducing
-   * CSS half-leading. CSS instead centers the font bounding box inside the
-   * resolved line height, then places the alphabetic baseline after the
-   * ascent. Keeping this calculation in CSS pixels also preserves fractional
-   * baselines for DPR-scaled canvases.
+   * Canvas fontBoundingBox metrics are integer-expanded bounds in Chromium;
+   * using them as CSS ascent/descent moves middle-aligned text downward. The
+   * actual bounds of a fixed ascender/descender sample preserve a consistent
+   * baseline for every string while avoiding that expansion.
    */
-  private calculateCssLineBoxBaseline(
+  private calculateMiddleAlignedAlphabeticBaseline(
     ctx: CanvasRenderingContext2D,
     style: TextStyleProperties,
   ): number {
     const metrics = ctx.measureText('Mg');
-    const measuredAscent = metrics.fontBoundingBoxAscent;
-    const measuredDescent = metrics.fontBoundingBoxDescent;
+    const measuredAscent = metrics.actualBoundingBoxAscent;
+    const measuredDescent = metrics.actualBoundingBoxDescent;
     const ascent = Number.isFinite(measuredAscent) && measuredAscent > 0
       ? measuredAscent
-      : style.fontSize * 0.8;
+      : Number.isFinite(metrics.fontBoundingBoxAscent) && metrics.fontBoundingBoxAscent > 0
+        ? metrics.fontBoundingBoxAscent
+        : style.fontSize * 0.8;
     const descent = Number.isFinite(measuredDescent) && measuredDescent >= 0
       ? measuredDescent
-      : style.fontSize * 0.2;
+      : Number.isFinite(metrics.fontBoundingBoxDescent) && metrics.fontBoundingBoxDescent >= 0
+        ? metrics.fontBoundingBoxDescent
+        : style.fontSize * 0.2;
     const lineHeight = style.fontSize * style.lineHeight;
     return (lineHeight - ascent - descent) / 2 + ascent;
   }
