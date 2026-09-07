@@ -38,6 +38,7 @@
     "material-showcase:test": "npm run material-showcase:prepare && npm --prefix examples/material-showcase test -- --watch=false --browsers=ChromeHeadless",
     "material-showcase:serve": "npm run material-showcase:prepare && npm --prefix examples/material-showcase start",
     "material-showcase:check": "node scripts/material-showcase-check.mjs",
+    "material-showcase:runtime:check": "node tests/material-parity/normal-runtime-smoke.mjs",
     "material-parity:report": "node tests/material-parity/run-material-parity.mjs",
     "material-parity:check": "node tests/material-parity/run-material-parity.mjs --enforce",
     "capabilities:check": "node scripts/check-capability-catalog.mjs",
