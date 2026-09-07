@@ -98,6 +98,11 @@ describe('AstylarShowcaseComponent', () => {
     const { component, store } = createComponent('card');
     const card = build(component, 'card');
     expect(style(card, '.card-copy')?.['left']).toBe('16px');
+    expect(style(card, '.card-copy')?.['top']).toBe('44px');
+
+    const toolbar = build(component, 'toolbar');
+    expect(find(toolbar, 'toolbar-title')).toEqual(jasmine.objectContaining({ textContent: 'Material workspace' }));
+    expect(find(toolbar, 'toolbar-title-text')).toBeUndefined();
 
     const table = build(component, 'table');
     expect(style(table, '.table-rule')).toEqual(jasmine.objectContaining({ left: '28px', right: '28px', width: 'auto' }));
@@ -116,11 +121,15 @@ describe('AstylarShowcaseComponent', () => {
     const compactToggle = build(component, 'button-toggle');
     expect(style(compactToggle, '#button-toggle-primary')?.['height']).toBe('26px');
     expect(style(compactToggle, '.button-toggle-option')?.['height']).toBe('24px');
+    expect(style(compactToggle, '#button-toggle-one-label, #button-toggle-two-label')?.['lineHeight']).toBe('24px');
     expect(style(compactToggle, '.button-toggle-option:hover')?.['background']).toBeDefined();
     expect(style(compactToggle, '.button-toggle-option:active')?.['background']).toBeDefined();
     expect(style(compactToggle, '.button-toggle-option.selected:hover')?.['background']).toBeDefined();
     expect(style(compactToggle, '.button-toggle-option.selected:active')?.['background']).toBeDefined();
     store.setTheme(MATERIAL_THEME_PROFILES.light);
+
+    const toggle = build(component, 'button-toggle');
+    expect(style(toggle, '#button-toggle-one-label, #button-toggle-two-label')?.['lineHeight']).toBe('40px');
 
     const slider = build(component, 'slider');
     expect(find(slider, 'slider-start')).toEqual(jasmine.objectContaining({ min: '0', max: '50', step: '1', value: '30' }));

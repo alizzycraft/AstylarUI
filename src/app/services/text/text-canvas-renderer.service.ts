@@ -103,9 +103,7 @@ export class TextCanvasRendererService {
       lines,
       style,
       logicalHeight,
-      style.verticalAlign === 'middle'
-        ? this.calculateMiddleAlignedAlphabeticBaseline(ctx, style)
-        : undefined,
+      this.calculateCssLineBoxAlphabeticBaseline(ctx, style),
     );
 
     // Render each line of text
@@ -426,7 +424,10 @@ export class TextCanvasRendererService {
     // Set text appearance
     ctx.fillStyle = style.color;
     ctx.textAlign = this.mapTextAlign(style.textAlign);
-    ctx.textBaseline = this.mapVerticalAlign(style.verticalAlign);
+    // CSS positions glyphs from an alphabetic baseline within each line box.
+    // vertical-align controls placement of that line box, not the canvas
+    // baseline mode used to paint its glyphs.
+    ctx.textBaseline = 'alphabetic';
     ctx.letterSpacing = `${style.letterSpacing ?? 0}px`;
     ctx.wordSpacing = `${style.wordSpacing ?? 0}px`;
 
@@ -441,7 +442,7 @@ export class TextCanvasRendererService {
    * bounds are content-dependent and therefore cannot model CSS line boxes:
    * using them moves controls with the same font to different baselines.
    */
-  private calculateMiddleAlignedAlphabeticBaseline(
+  private calculateCssLineBoxAlphabeticBaseline(
     ctx: CanvasRenderingContext2D,
     style: TextStyleProperties,
   ): number {
@@ -527,25 +528,6 @@ export class TextCanvasRendererService {
       case 'left':
       default:
         return 'left';
-    }
-  }
-
-  /**
-   * Maps TextStyleProperties verticalAlign to CanvasRenderingContext2D textBaseline
-   * @param verticalAlign - Vertical alignment from style properties
-   * @returns Canvas text baseline value
-   */
-  private mapVerticalAlign(verticalAlign: TextStyleProperties['verticalAlign']): CanvasTextBaseline {
-    switch (verticalAlign) {
-      case 'top':
-        return 'top';
-      case 'middle':
-        return 'alphabetic';
-      case 'bottom':
-        return 'bottom';
-      case 'baseline':
-      default:
-        return 'alphabetic';
     }
   }
 

@@ -490,7 +490,7 @@ export class AstylarShowcaseComponent {
         { selector: '.switch-label', position: 'absolute', zIndex: '2', top: '6px', left: '60px', whiteSpace: 'nowrap', color: theme.onSurface, fontSize: '14px', verticalAlign: 'middle' },
         { selector: '#button-toggle-primary', width: '130px', height: `${theme.density <= -5 ? 26 : 42}px`, boxSizing: 'border-box', borderWidth: '1px', borderStyle: 'solid', borderColor: '#79747e', borderRadius: `${(theme.density <= -5 ? 13 : 21) * theme.cornerScale}px`, display: 'flex', alignSelf: 'flex-start', overflow: 'hidden', background: theme.surfaceContainer },
         { selector: '.button-toggle-option', height: `${theme.density <= -5 ? 24 : 40}px`, boxSizing: 'border-box', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', color: theme.onSurface, fontSize: '14px', cursor: 'pointer' },
-        { selector: '#button-toggle-one-label, #button-toggle-two-label', verticalAlign: 'middle' },
+        { selector: '#button-toggle-one-label, #button-toggle-two-label', lineHeight: `${theme.density <= -5 ? 24 : 40}px` },
         { selector: '#button-toggle-one', width: state.selected ? '47px' : '81px', borderRadius: '0', background: state.selected ? 'transparent' : '#eadef7' },
         { selector: '#button-toggle-two', width: state.selected ? '81px' : '47px', borderWidth: '0 0 0 1px', borderStyle: 'solid', borderColor: '#79747e', borderRadius: '0', background: state.selected ? '#eadef7' : 'transparent' },
         { selector: '.button-toggle-option.selected', color: '#4b4357' },
@@ -623,7 +623,7 @@ export class AstylarShowcaseComponent {
           { selector: '.card-title', mediaMaxWidth: '800px', top: '16px' },
           { selector: '.card-title', mediaMaxWidth: '500px', top: '15.5px' },
         ] : []),
-        { selector: '.card-copy', position: 'absolute', top: `${theme.typographyScale > 1 ? 43.75 : 43}px`, left: '16px', fontSize: '16px', whiteSpace: 'nowrap', zIndex: '2' },
+        { selector: '.card-copy', position: 'absolute', top: '44px', left: '16px', fontSize: '16px', whiteSpace: 'nowrap', zIndex: '2' },
         { selector: '.text-button', position: 'absolute', top: `${theme.density === 0 ? 71.25 : theme.density <= -5 ? 76 : 78}px`, left: '8px', width: '64px', height: `${densityHeight}px`, padding: '0 8px', borderWidth: '0', borderRadius: `${densityHeight / 2 * theme.cornerScale}px`, background: 'transparent', color: theme.primary, fontSize: '14px', fontWeight: '500', cursor: 'pointer', zIndex: '2' },
         { selector: '.text-button:hover', background: mixHex(theme.mode === 'dark' ? '#fff7ff' : '#f8f2f6', theme.primary, .08) },
         { selector: '.text-button:active', background: mixHex(theme.mode === 'dark' ? '#fff7ff' : '#f8f2f6', theme.primary, .12) },
@@ -650,7 +650,6 @@ export class AstylarShowcaseComponent {
         ...(theme.density === -2 ? [{ selector: '.toolbar', mediaMaxWidth: '500px', height: '48px' }] : []),
         ...(theme.density <= -5 ? [{ selector: '.toolbar', mediaMaxWidth: '500px', height: '44px' }] : []),
         { selector: '.toolbar-title', width: '192.15625px', height: '28px', marginLeft: '16px', whiteSpace: 'nowrap', fontSize: '22px', fontWeight: '400', lineHeight: '28px' },
-        { selector: '.toolbar-title-text', position: 'relative', top: `${theme.density <= -5 ? -0.25 : -1.25}px` },
         { selector: '.toolbar-action', position: 'absolute', top: `${theme.density === 0 ? 11 : theme.density <= -5 ? 14 : 12.5}px`, right: '16px', width: '65.140625px', height: `${theme.density === 0 ? 40 : theme.density <= -5 ? 24 : 28}px`, borderWidth: '0', borderRadius: '20px', background: 'transparent', color: theme.onSurface, fontSize: '14px', fontWeight: '500', cursor: 'pointer' },
         { selector: '.toolbar-action', mediaMaxWidth: '500px', top: `${theme.density === 0 ? 7 : 9}px`, right: '-12.15625px', width: '64px' },
         { selector: '.toolbar-action:hover', background: mixHex(theme.surface, theme.primary, .08) },
@@ -823,7 +822,7 @@ export class AstylarShowcaseComponent {
         ],
       };
     };
-    if (family === 'toolbar') return [{ type: 'div', id: 'toolbar-primary', class: 'toolbar', children: [{ type: 'span', id: 'toolbar-title', class: 'toolbar-title', children: [{ type: 'span', id: 'toolbar-title-text', class: 'toolbar-title-text', textContent: 'Material workspace' }] }, { type: 'button', id: 'toolbar-action', class: 'toolbar-action', value: 'Action' }] }];
+    if (family === 'toolbar') return [{ type: 'div', id: 'toolbar-primary', class: 'toolbar', children: [{ type: 'span', id: 'toolbar-title', class: 'toolbar-title', textContent: 'Material workspace' }, { type: 'button', id: 'toolbar-action', class: 'toolbar-action', value: 'Action' }] }];
     if (family === 'sidenav') return [{ type: 'div', id: 'sidenav-primary', class: 'sidenav-container', children: [{ type: 'aside', id: 'sidenav-nav', class: 'sidenav', textContent: 'Navigation' }, { type: 'main', id: 'sidenav-content', class: 'sidenav-content', textContent: 'Main content' }] }];
     if (family === 'grid-list') return [{ type: 'div', id: 'grid-list-primary', class: 'grid-list', children: [{ type: 'div', id: 'grid-tile-one', class: 'grid-tile', children: [{ type: 'span', id: 'grid-tile-one-label', class: 'grid-tile-label', textContent: 'One' }] }, { type: 'div', id: 'grid-tile-two', class: 'grid-tile', children: [{ type: 'span', id: 'grid-tile-two-label', class: 'grid-tile-label', textContent: 'Two' }] }] }];
     if (family === 'badge') return [{ type: 'span', id: 'badge-primary', class: 'badge-anchor', children: [{ type: 'span', id: 'badge-label', class: 'badge-label', textContent: 'Notifications' }, { type: 'span', id: 'badge-count', class: 'badge-bubble', children: [{ type: 'span', id: 'badge-count-label', class: 'badge-count-label', textContent: '4' }] }] }];

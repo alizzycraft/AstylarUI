@@ -76,7 +76,7 @@ export class MultiLineTextRendererService {
     lines: TextLine[], 
     style: TextStyleProperties, 
     containerHeight?: number,
-    middleBaselineOffset?: number,
+    alphabeticBaselineOffset?: number,
   ): TextLine[] {
     if (!lines.length) {
       return lines;
@@ -106,9 +106,9 @@ export class MultiLineTextRendererService {
     // Update each line's Y position
     return lines.map((line, index) => ({
       ...line,
-      y: style.verticalAlign === 'middle'
-        ? startY + (index * lineHeight) + (middleBaselineOffset ?? lineHeight / 2)
-        : startY + (index * lineHeight) + style.fontSize,
+      y: startY + (index * lineHeight) + (alphabeticBaselineOffset ?? (
+        style.verticalAlign === 'middle' ? lineHeight / 2 : style.fontSize
+      )),
     }));
   }
 

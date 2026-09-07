@@ -137,4 +137,34 @@ describe('TextCanvasRendererService', () => {
       expect(fillText.calls.mostRecent().args[2]).withContext(sample.text).toBe(expectedBaseline);
     }
   });
+
+  it('uses the browser line-box alphabetic baseline for normally aligned text', () => {
+    const service = new TextCanvasRendererService(
+      new MultiLineTextRendererService(),
+    );
+    const style: TextStyleProperties = {
+      fontFamily: 'Roboto, Arial, sans-serif', fontSize: 14, fontWeight: '500',
+      fontStyle: 'normal', color: '#000000', textAlign: 'left',
+      verticalAlign: 'baseline', lineHeight: 17 / 14, letterSpacing: 0,
+      wordSpacing: 0, whiteSpace: 'nowrap', wordWrap: 'normal',
+      textOverflow: 'clip', textDecoration: 'none', textTransform: 'none',
+    };
+    const canvas = document.createElement('canvas');
+    canvas.width = 200;
+    canvas.height = 17;
+    canvas.style.width = '200px';
+    canvas.style.height = '17px';
+    const context = canvas.getContext('2d')!;
+    context.font = `${style.fontStyle} ${style.fontWeight} ${style.fontSize}px ${style.fontFamily}`;
+    const metrics = context.measureText('Mg');
+    const expectedBaseline = Math.floor((
+      17 - metrics.fontBoundingBoxAscent - metrics.fontBoundingBoxDescent
+    ) / 2) + metrics.fontBoundingBoxAscent;
+    const fillText = spyOn(context, 'fillText');
+
+    service.renderTextToCanvas(canvas, 'Primary action', style);
+
+    expect(context.textBaseline).toBe('alphabetic');
+    expect(fillText.calls.mostRecent().args[2]).toBe(expectedBaseline);
+  });
 });
