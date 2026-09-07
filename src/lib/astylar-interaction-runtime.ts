@@ -529,7 +529,7 @@ export class AstylarInteractionRuntime {
       }
       if (!dispatched?.defaultPrevented) {
         this.canvas?.focus();
-        this.setFocus(this.focusOrder.includes(targetId) ? targetId : undefined, false, false);
+        this.setFocus(this.nearestFocusableElementId(targetId), false, false);
         const nativeEvent = pointerInfo.event as PointerEvent | undefined;
         if (nativeEvent?.pointerId !== undefined) {
           try {
@@ -589,6 +589,11 @@ export class AstylarInteractionRuntime {
       this.controls?.setActiveState?.(elementId, false);
     }
     this.pressedElementPath = [];
+  }
+
+  private nearestFocusableElementId(targetId: string): string | undefined {
+    return this.dispatcher.getElementPath(targetId)
+      .find((elementId) => this.focusOrder.includes(elementId));
   }
 
   private updateHover(targetId: string | undefined, pointerInfo: PointerInfo): void {

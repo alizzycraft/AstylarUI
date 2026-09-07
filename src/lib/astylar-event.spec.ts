@@ -354,6 +354,51 @@ describe('AstylarInteractionRuntime', () => {
     engine.dispose();
   });
 
+  it('focuses the nearest focusable authored ancestor when a nested child is pressed', () => {
+    const engine = new NullEngine();
+    const scene = new Scene(engine);
+    const tab = MeshBuilder.CreatePlane('tab-mesh', {}, scene);
+    tab.metadata = { elementId: 'tab' };
+    const label = MeshBuilder.CreatePlane('label-mesh', {}, scene);
+    label.metadata = { elementId: 'label' };
+    label.parent = tab;
+    const canvas = document.createElement('canvas');
+    const focusStates: Array<[string, boolean]> = [];
+    const runtime = new AstylarInteractionRuntime(
+      scene,
+      {
+        styles: [],
+        root: { children: [{
+          type: 'div', id: 'tab', role: 'tab', tabindex: 0,
+          children: [{ type: 'span', id: 'label', textContent: 'Review' }],
+        }] },
+      },
+      {},
+      undefined,
+      {
+        getFocusedElementId: () => undefined,
+        focus: () => false,
+        blur: () => false,
+        handleKeyDown: () => undefined,
+        commitsValueOnBlur: () => false,
+        setFocusState: (elementId: string, focused: boolean) => focusStates.push([elementId, focused]),
+      } as never,
+      canvas,
+    );
+
+    scene.onPointerObservable.notifyObservers({
+      type: PointerEventTypes.POINTERDOWN,
+      event: new PointerEvent('pointerdown', { button: 0 }),
+      pickInfo: { hit: true, pickedMesh: label },
+    } as unknown as PointerInfo);
+
+    expect(runtime.snapshot.focusedElementId).toBe('tab');
+    expect(focusStates).toEqual([['tab', true]]);
+    runtime.dispose();
+    scene.dispose();
+    engine.dispose();
+  });
+
   it('owns one non-passive wheel path and removes it on disposal', () => {
     const engine = new NullEngine();
     const scene = new Scene(engine);

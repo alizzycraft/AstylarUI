@@ -238,6 +238,12 @@ describe('AstylarShowcaseComponent', () => {
     expect(style(stepper, '.step-tab:hover')?.['background']).toBeDefined();
     expect(style(stepper, '.step-tab:focus')?.['background']).toBeDefined();
 
+    store.patchState({ selected: false });
+    const completedStepper = build(component, 'stepper');
+    expect(find(completedStepper, 'step-details-badge')?.['class']).toContain('completed');
+    expect(find(completedStepper, 'step-details-complete')?.['type']).toBe('showcase.material:check-mark');
+    store.patchState({ selected: true });
+
     store.patchState({ disabled: true });
     const expansion = build(component, 'expansion');
     expect(style(expansion, '.expansion-trigger')?.['cursor']).toBe('pointer');
