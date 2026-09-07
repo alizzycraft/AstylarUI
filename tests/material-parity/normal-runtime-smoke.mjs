@@ -36,6 +36,38 @@ async function astylarBox(page, id) {
   };
 }
 
+async function dragSliderHandle(page, visual, fromRatio, toRatio, targetId, fixedId) {
+  await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.clearEvents());
+  const samples = [];
+  const readValues = async () => page.evaluate(({ targetId: movingId, fixedId: stationaryId }) => {
+    const benchmark = window.__ASTYLAR_MATERIAL_BENCHMARK__;
+    const state = benchmark.state();
+    const events = benchmark.events();
+    const latest = (id, fallback) => Number(
+      [...events].reverse().find((event) => event.type === 'input' && event.targetId === id)?.value ?? fallback,
+    );
+    return {
+      moving: latest(movingId, movingId === 'slider-start' ? state.sliderStart : state.sliderValue),
+      fixed: latest(stationaryId, stationaryId === 'slider-start' ? state.sliderStart : state.sliderValue),
+      wrongTargetInputs: events.filter((event) => event.type === 'input' && event.targetId === stationaryId).length,
+    };
+  }, { targetId, fixedId });
+  const from = { x: visual.x + visual.width * fromRatio, y: visual.y + visual.height / 2 };
+  const to = { x: visual.x + visual.width * toRatio, y: from.y };
+  await page.mouse.move(from.x, from.y);
+  await page.mouse.down();
+  samples.push(await readValues());
+  for (let step = 1; step <= 12; step += 1) {
+    const progress = step / 12;
+    await page.mouse.move(from.x + (to.x - from.x) * progress, from.y);
+    await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(resolve)));
+    samples.push(await readValues());
+  }
+  await page.mouse.up();
+  await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
+  return samples;
+}
+
 try {
   const { page, errors } = await openFamily('snack-bar');
 
@@ -97,6 +129,38 @@ try {
   assert.deepEqual(tooltip.errors, [], `Normal-runtime tooltip emitted browser errors: ${tooltip.errors.join(' | ')}`);
   await tooltip.page.close();
   console.log('Normal-runtime tooltip hover and cleanup passed.');
+
+  const slider = await openFamily('slider');
+  const visual = await astylarBox(slider.page, 'slider-material-visual');
+  const [startHit, endHit] = await Promise.all([
+    astylarBox(slider.page, 'slider-start'),
+    astylarBox(slider.page, 'slider-primary'),
+  ]);
+  assert.ok(Math.abs(startHit.x - visual.x) <= 1 && Math.abs(startHit.width - visual.width / 2) <= 1,
+    'Normal-runtime start handle does not own the left half of the visual track.');
+  assert.ok(Math.abs(endHit.x - (visual.x + visual.width / 2)) <= 1 && Math.abs(endHit.width - visual.width / 2) <= 1,
+    'Normal-runtime end handle does not own the right half of the visual track.');
+
+  const startTrace = await dragSliderHandle(slider.page, visual, .3, .05, 'slider-start', 'slider-primary');
+  const startValues = startTrace.map(({ moving }) => moving);
+  assert.ok(startValues.every((value, index) => index === 0 || value <= startValues[index - 1]),
+    `Normal-runtime start handle did not move continuously left: ${startValues.join(', ')}.`);
+  assert.ok(new Set(startValues).size >= 8 && startValues.at(-1) === 5,
+    `Normal-runtime start handle did not traverse the requested range: ${startValues.join(', ')}.`);
+  assert.ok(startTrace.every(({ fixed, wrongTargetInputs }) => fixed === 65 && wrongTargetInputs === 0),
+    'Dragging the normal-runtime start handle mutated the end handle.');
+
+  const endTrace = await dragSliderHandle(slider.page, visual, .65, .95, 'slider-primary', 'slider-start');
+  const endValues = endTrace.map(({ moving }) => moving);
+  assert.ok(endValues.every((value, index) => index === 0 || value >= endValues[index - 1]),
+    `Normal-runtime end handle did not move continuously right: ${endValues.join(', ')}.`);
+  assert.ok(new Set(endValues).size >= 8 && endValues.at(-1) === 95,
+    `Normal-runtime end handle did not traverse the requested range: ${endValues.join(', ')}.`);
+  assert.ok(endTrace.every(({ fixed, wrongTargetInputs }) => fixed === 5 && wrongTargetInputs === 0),
+    'Dragging the normal-runtime end handle mutated the start handle.');
+  assert.deepEqual(slider.errors, [], `Normal-runtime slider emitted browser errors: ${slider.errors.join(' | ')}`);
+  await slider.page.close();
+  console.log('Normal-runtime independent slider drag passed.');
 } finally {
   await browser.close();
 }
