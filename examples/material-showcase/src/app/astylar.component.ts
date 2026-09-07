@@ -781,8 +781,8 @@ export class AstylarShowcaseComponent {
         { selector: '.progress', width: family === 'progress-spinner' ? '100px' : '100%', height: family === 'progress-spinner' ? '100px' : '8px' },
         { selector: '.modal-overlay', position: 'fixed', top: '0', left: '0', width: '100%', height: '100%', boxSizing: 'border-box', padding: '32px', background: 'rgba(0,0,0,0.32)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: '1000' },
         { selector: '.dialog-panel', width: '280px', height: '161px', padding: '0', borderRadius: '28px', background: '#fef8fc', color: '#1d1b20', display: 'flex', flexDirection: 'column' },
-        { selector: '.dialog-title', width: '100%', height: '67px', boxSizing: 'border-box', padding: '21px 24px 1px', color: '#1d1b20', fontSize: '24px', lineHeight: '32px', fontWeight: '400' },
-        { selector: '.dialog-copy', width: '100%', height: '20px', boxSizing: 'border-box', marginTop: '1px', padding: '0 24px', display: 'flex', alignItems: 'center', color: '#49454f', fontSize: '14px', lineHeight: '20px', verticalAlign: 'middle' },
+        { selector: '.dialog-title', width: '100%', height: '67px', boxSizing: 'border-box', margin: '0 0 1px', padding: '6px 24px 13px', display: 'flex', alignItems: 'flex-end', color: '#1d1b20', fontSize: '24px', lineHeight: '32px', fontWeight: '400' },
+        { selector: '.dialog-copy', width: '100%', height: '20px', boxSizing: 'border-box', margin: '0', padding: '0 24px', display: 'flex', alignItems: 'center', color: '#49454f', fontSize: '14px', lineHeight: '20px', verticalAlign: 'middle' },
         { selector: '.dialog-actions', width: '100%', height: '73px', boxSizing: 'border-box', padding: '16px 24px 17px', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '8px' },
         { selector: '.dialog-action', width: '67.4375px', height: '40px', borderWidth: '0', borderRadius: '20px', background: 'transparent', color: '#7d00fa', fontSize: '14px', fontWeight: '500' },
         { selector: '.dialog-action.primary', width: '78.671875px', background: '#7d00fa', color: '#ffffff' },
@@ -956,7 +956,9 @@ export class AstylarShowcaseComponent {
           ] }
           : { type: 'dialog' as const, id: `${family}-overlay`, class: 'modal-overlay', open: true, modal: true, ariaLabel: label, children: [
           { type: 'section' as const, id: `${family}-panel`, class: 'dialog-panel', children: [
-            { type: 'h2' as const, id: `${family}-title`, class: 'dialog-title', textContent: 'Confirm action' },
+            { type: 'h2' as const, id: `${family}-title`, class: 'dialog-title', children: [
+              { type: 'span' as const, id: 'dialog-title-label', textContent: 'Confirm action' },
+            ] },
             { type: 'p' as const, id: `${family}-copy`, class: 'dialog-copy', textContent: 'Save Project Atlas?' },
             { type: 'div' as const, id: 'dialog-actions', class: 'dialog-actions', children: [
               { type: 'button' as const, id: 'dialog-cancel', class: 'dialog-action', autofocus: true, value: 'Cancel' },
