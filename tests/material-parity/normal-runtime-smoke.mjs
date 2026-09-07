@@ -20,6 +20,25 @@ async function openFamily(family) {
   return { page, errors };
 }
 
+async function openComparedFamily(family) {
+  const page = await browser.newPage({ viewport: { width: 1920, height: 1080 } });
+  const errors = [];
+  page.on('pageerror', (error) => errors.push(error.message));
+  page.on('console', (message) => {
+    if (message.type() === 'error') errors.push(message.text());
+  });
+  await page.goto(`${baseUrl}/compare`, { waitUntil: 'networkidle' });
+  await page.locator('.comparison-toolbar select').first().selectOption(family);
+  const runtime = await page.waitForEvent('framenavigated', {
+    predicate: (frame) => new URL(frame.url()).pathname === `/astylar/${family}`,
+    timeout: 30_000,
+  }).catch(() => page.frames().find((frame) => new URL(frame.url()).pathname === `/astylar/${family}`));
+  assert.ok(runtime, `Compared Astylar runtime did not navigate to ${family}.`);
+  await runtime.waitForFunction(() => !!window.__ASTYLAR_MATERIAL_BENCHMARK__, undefined, { timeout: 30_000 });
+  await runtime.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
+  return { page, runtime, errors };
+}
+
 async function astylarBox(page, id) {
   const [local, canvas] = await Promise.all([
     page.evaluate((targetId) =>
@@ -36,10 +55,10 @@ async function astylarBox(page, id) {
   };
 }
 
-async function dragSliderHandle(page, visual, fromRatio, toRatio, targetId, fixedId) {
-  await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.clearEvents());
+async function dragSliderHandle(page, runtime, visual, fromRatio, toRatio, targetId, fixedId) {
+  await runtime.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.clearEvents());
   const samples = [];
-  const readValues = async () => page.evaluate(({ targetId: movingId, fixedId: stationaryId }) => {
+  const readValues = async () => runtime.evaluate(({ targetId: movingId, fixedId: stationaryId }) => {
     const benchmark = window.__ASTYLAR_MATERIAL_BENCHMARK__;
     const state = benchmark.state();
     const events = benchmark.events();
@@ -60,11 +79,11 @@ async function dragSliderHandle(page, visual, fromRatio, toRatio, targetId, fixe
   for (let step = 1; step <= 12; step += 1) {
     const progress = step / 12;
     await page.mouse.move(from.x + (to.x - from.x) * progress, from.y);
-    await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(resolve)));
+    await runtime.evaluate(() => new Promise((resolve) => requestAnimationFrame(resolve)));
     samples.push(await readValues());
   }
   await page.mouse.up();
-  await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
+  await runtime.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
   return samples;
 }
 
@@ -130,18 +149,18 @@ try {
   await tooltip.page.close();
   console.log('Normal-runtime tooltip hover and cleanup passed.');
 
-  const slider = await openFamily('slider');
-  const visual = await astylarBox(slider.page, 'slider-material-visual');
+  const slider = await openComparedFamily('slider');
+  const visual = await astylarBox(slider.runtime, 'slider-visual');
   const [startHit, endHit] = await Promise.all([
-    astylarBox(slider.page, 'slider-start'),
-    astylarBox(slider.page, 'slider-primary'),
+    astylarBox(slider.runtime, 'slider-start'),
+    astylarBox(slider.runtime, 'slider-primary'),
   ]);
   assert.ok(Math.abs(startHit.x - visual.x) <= 1 && Math.abs(startHit.width - visual.width / 2) <= 1,
     'Normal-runtime start handle does not own the left half of the visual track.');
   assert.ok(Math.abs(endHit.x - (visual.x + visual.width / 2)) <= 1 && Math.abs(endHit.width - visual.width / 2) <= 1,
     'Normal-runtime end handle does not own the right half of the visual track.');
 
-  const startTrace = await dragSliderHandle(slider.page, visual, .3, .05, 'slider-start', 'slider-primary');
+  const startTrace = await dragSliderHandle(slider.page, slider.runtime, visual, .3, .05, 'slider-start', 'slider-primary');
   const startValues = startTrace.map(({ moving }) => moving);
   assert.ok(startValues.every((value, index) => index === 0 || value <= startValues[index - 1]),
     `Normal-runtime start handle did not move continuously left: ${startValues.join(', ')}.`);
@@ -150,7 +169,7 @@ try {
   assert.ok(startTrace.every(({ fixed, wrongTargetInputs }) => fixed === 65 && wrongTargetInputs === 0),
     'Dragging the normal-runtime start handle mutated the end handle.');
 
-  const endTrace = await dragSliderHandle(slider.page, visual, .65, .95, 'slider-primary', 'slider-start');
+  const endTrace = await dragSliderHandle(slider.page, slider.runtime, visual, .65, .95, 'slider-primary', 'slider-start');
   const endValues = endTrace.map(({ moving }) => moving);
   assert.ok(endValues.every((value, index) => index === 0 || value >= endValues[index - 1]),
     `Normal-runtime end handle did not move continuously right: ${endValues.join(', ')}.`);
