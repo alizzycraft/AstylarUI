@@ -16,10 +16,17 @@ describe('TextInputManager', () => {
       { type: 'input', id: 'title' },
       {
         scene,
-        actions: { camera: { getPixelToWorldScale: () => 0.01 } },
+        actions: {
+          camera: {
+            projectCssSize: ({ width, height }: { width: number; height: number }) => ({
+              width: width * 0.01,
+              height: height * 0.01,
+            }),
+          },
+        },
       },
       { selector: '#title', background: '#0d1117', borderRadius: '6px' },
-      { width: 3.5, height: 0.44 },
+      { width: 350, height: 44 },
     );
 
     expect(mesh.getTotalVertices()).toBeGreaterThan(4);
@@ -44,17 +51,17 @@ describe('TextInputManager', () => {
   it('corrects only a textarea whose content width collapses to one logical pixel', () => {
     const manager = Object.create(TextInputManager.prototype) as TextInputManager;
 
-    expect((manager as any).getCollapsedTextareaInlineCorrection(true, 0, 0.25)).toBe(-0.25);
-    expect((manager as any).getCollapsedTextareaInlineCorrection(true, 0.5, 0.25)).toBe(0);
-    expect((manager as any).getCollapsedTextareaInlineCorrection(false, 0, 0.25)).toBe(0);
+    expect((manager as any).getCollapsedTextareaInlineCorrection(true, 0)).toBe(1);
+    expect((manager as any).getCollapsedTextareaInlineCorrection(true, 2)).toBe(0);
+    expect((manager as any).getCollapsedTextareaInlineCorrection(false, 0)).toBe(0);
   });
 
   it('centers single-line text inside asymmetric vertical padding', () => {
     const manager = Object.create(TextInputManager.prototype) as TextInputManager;
 
-    expect((manager as any).resolveSingleLineTextY({ top: 22, bottom: 8 }, 1)).toBe(-6);
-    expect((manager as any).resolveSingleLineTextY({ top: 8, bottom: 8 }, 1)).toBe(1);
-    expect((manager as any).resolveSingleLineTextY({ top: 4, bottom: 4 }, .5)).toBe(.5);
+    expect((manager as any).resolveSingleLineTextYCss({ top: 22, bottom: 8 })).toBe(6);
+    expect((manager as any).resolveSingleLineTextYCss({ top: 8, bottom: 8 })).toBe(-1);
+    expect((manager as any).resolveSingleLineTextYCss({ top: 4, bottom: 4 })).toBe(-1);
   });
 
   it('masks password display text without changing the stored value', () => {
@@ -267,6 +274,7 @@ function createTextInput(value: string, cursorPosition: number): TextInput {
     validationRules: [],
     validationState: { valid: true, errors: [], touched: false, dirty: false },
     mesh: {} as never,
+    cssSize: { width: 400, height: 100 },
     style: { selector: '#textarea-1' },
     cursorState: {
       position: cursorPosition,

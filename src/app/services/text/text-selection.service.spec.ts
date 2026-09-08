@@ -19,8 +19,9 @@ describe('TextSelectionService', () => {
       emptyMetrics(),
       parent,
       scene,
-      0.01,
+      projection(0.01),
       textStyle('#e6edf3'),
+      { width: 400, height: 100 },
       0,
     );
     const material = cursor.material as StandardMaterial;
@@ -46,7 +47,10 @@ describe('TextSelectionService', () => {
     );
     const style = { ...textStyle('#1d1b20'), caretColor: 'transparent' };
 
-    const cursor = service.createTextCursor(0, emptyMetrics(), parent, scene, 0.01, style, 0);
+    const cursor = service.createTextCursor(
+      0, emptyMetrics(), parent, scene, projection(0.01), style,
+      { width: 400, height: 100 }, 0,
+    );
     expect((cursor.material as StandardMaterial).alpha).toBe(0);
 
     cursor.dispose(false, true);
@@ -76,12 +80,16 @@ describe('TextSelectionService', () => {
     } as unknown as TextLayoutMetrics;
 
     const cursor = service.createTextCursor(
-      2, metrics, parent, scene, 0.01, textStyle('#ffffff'), 0.4, 1, 0, 1.25,
+      2, metrics, parent, scene, projection(0.01), textStyle('#ffffff'),
+      { width: 400, height: 100 }, 40, 1, 0, -175,
     );
-    expect(cursor.position.x).toBeCloseTo(1.05);
+    expect(cursor.position.x).toBeCloseTo(-1.55);
 
-    service.updateCursorPosition(cursor, 3, metrics, 0.01, 0.4, 1, 0, 1.25);
-    expect(cursor.position.x).toBeCloseTo(0.95);
+    service.updateCursorPosition(
+      cursor, 3, metrics, projection(0.01), { width: 400, height: 100 },
+      40, 1, 0, -175,
+    );
+    expect(cursor.position.x).toBeCloseTo(-1.45);
     cursor.dispose(false, true);
     parent.dispose(false, true);
     scene.dispose();
@@ -102,5 +110,16 @@ function textStyle(color: string): TextStyleProperties {
     color, textAlign: 'left', verticalAlign: 'baseline', lineHeight: 1.2,
     letterSpacing: 0, wordSpacing: 0, whiteSpace: 'normal', wordWrap: 'normal',
     textOverflow: 'clip', textDecoration: 'none', textTransform: 'none',
+  };
+}
+
+function projection(scale: number) {
+  return {
+    projectCssLocalPoint: ({ x, y }: { x: number; y: number }, z = 0) => ({
+      x: x * scale, y: -y * scale, z,
+    }),
+    projectCssSize: ({ width, height }: { width: number; height: number }) => ({
+      width: width * scale, height: height * scale,
+    }),
   };
 }

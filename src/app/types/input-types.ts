@@ -106,6 +106,8 @@ export interface InputElement {
  * Text input element with cursor and selection support
  */
 export interface TextInput extends InputElement {
+    /** Authored control geometry retained in CSS pixels. */
+    cssSize: CssSize;
     textContent: string;
     cursorPosition: number;
     selectionStart: number;
@@ -117,8 +119,12 @@ export interface TextInput extends InputElement {
     maxLength?: number;
     cursorState: CursorState;
     textLayoutMetrics?: any; // Will store TextLayoutMetrics from text rendering service
-    textureWidth?: number; // Store world-space texture width for cursor positioning
-    textureHeight?: number; // Store world-space texture height for multiline clipping
+    /** Full logical text texture size in CSS pixels. */
+    textureCssSize?: CssSize;
+    /** Visible text viewport size in CSS pixels after clipping. */
+    visibleTextCssSize?: CssSize;
+    /** Visual left edge of the text viewport in control-local CSS pixels. */
+    visualTextLeftEdgeCss?: number;
     scrollOffset?: number; // Horizontal scroll offset in CSS pixels
     scrollTop?: number; // Vertical scroll offset in CSS pixels for textareas
     /** Native reset keeps a tab-blurred caret but clears a pointer-blurred caret. */

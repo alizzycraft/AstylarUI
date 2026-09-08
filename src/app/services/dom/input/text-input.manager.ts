@@ -14,6 +14,7 @@ import { TextInteractionRegistryService } from '../../dom/interaction/text-inter
 import { TextSelectionControllerService, TextSelectionState } from '../../dom/interaction/text-selection-controller.service';
 import { Subscription } from 'rxjs';
 import { CONTROL_CONTENT_Z_OFFSET } from '../render-depth.constants';
+import type { CssSize } from '../../coordinate-space.types';
 
 export interface TextInputMutableState {
     value: string;
@@ -60,10 +61,10 @@ export class TextInputManager {
         render: BabylonRender,
         parentMesh: BABYLON.Mesh,
         style: StyleRule,
-        worldDimensions: { width: number; height: number }
+        cssDimensions: CssSize
     ): TextInput {
         // Create input field background
-        const inputMesh = this.createInputBackground(element, render, style, worldDimensions);
+        const inputMesh = this.createInputBackground(element, render, style, cssDimensions);
 
         // Interaction is now handled by the global PointerInteractionService
         // and synchronized via setupSelectionSync.
@@ -102,6 +103,7 @@ export class TextInputManager {
             validationRules: [],
             validationState,
             mesh: inputMesh,
+            cssSize: cssDimensions,
             placeholder: element.placeholder,
             maxLength: element.maxLength,
             cursorState,
@@ -116,14 +118,11 @@ export class TextInputManager {
             // Use placeholder or a single space for layout calculation if no content
             const layoutText = this.getDisplayText(textInput) || ' ';
             const textStyleProps = this.parseTextStyle(style);
-            const pixelScale = render.actions.camera.getPixelToWorldScale();
-
-
             // Use text rendering service to create consistent layout metrics
             const storedLayoutMetrics = this.textRenderingService.createStoredLayoutMetrics(
                 layoutText,
                 textStyleProps,
-                pixelScale
+                1
             );
 
             // Extract CSS metrics for cursor positioning (these are in CSS pixels)
@@ -190,10 +189,8 @@ export class TextInputManager {
         // texture width from which to create the position-zero caret.
         if (!textInput.textContent && render.scene) {
             const textStyleProps = this.parseTextStyle(style);
-            const pixelScale = render.actions.camera.getPixelToWorldScale();
-
             // Use text rendering service to create consistent layout metrics
-            const storedLayoutMetrics = this.textRenderingService.createStoredLayoutMetrics('', textStyleProps, pixelScale);
+            const storedLayoutMetrics = this.textRenderingService.createStoredLayoutMetrics('', textStyleProps, 1);
 
             // Extract CSS metrics for cursor positioning (these are in CSS pixels)
             textInput.textLayoutMetrics = storedLayoutMetrics.css;
@@ -201,11 +198,12 @@ export class TextInputManager {
             // Empty content intentionally has no texture; using zero keeps the
             // caret at the left edge without asking the text renderer to create
             // a texture it cannot represent.
-            textInput.textureWidth = 0;
+            textInput.textureCssSize = { width: 0, height: 0 };
+            textInput.visibleTextCssSize = { width: 0, height: 0 };
         }
 
         // Create cursor mesh if it doesn't exist and we have layout metrics
-        if (!textInput.cursorMesh && render.scene && textInput.textLayoutMetrics && textInput.textureWidth !== undefined) {
+        if (!textInput.cursorMesh && render.scene && textInput.textLayoutMetrics && textInput.textureCssSize) {
 
             const textStyle = this.parseTextStyle(style);
             textInput.cursorMesh = this.textSelectionService.createTextCursor(
@@ -213,14 +211,15 @@ export class TextInputManager {
                 textInput.textLayoutMetrics,
                 textInput.mesh,
                 render.scene,
-                render.actions.camera.getPixelToWorldScale(),
+                render.actions.camera,
                 textStyle,
-                textInput.textureWidth,
+                textInput.cssSize,
+                textInput.textureCssSize.width,
                 // Pass width correction ratio to calibrate cursor position to actual texture width
                 textInput.textLayoutMetrics.totalWidth > 0 ?
-                    (textInput.textureWidth / render.actions.camera.getPixelToWorldScale()) / textInput.textLayoutMetrics.totalWidth : 1.0,
+                    textInput.textureCssSize.width / textInput.textLayoutMetrics.totalWidth : 1.0,
                 textInput.scrollOffset || 0,
-                this.resolveVisualTextLeftEdge(textInput)
+                textInput.visualTextLeftEdgeCss
             );
         }
 
@@ -313,28 +312,34 @@ export class TextInputManager {
             // Calculate layout metrics for cursor and selection positioning
             // Use the same service method as text rendering to ensure consistency
             const textStyleProps = this.parseTextStyle(textStyle);
-            const pixelScale = render.actions.camera.getPixelToWorldScale();
             const isTextarea = textInput.type === InputType.Textarea;
-            const inputWidth = textInput.mesh.getBoundingInfo().boundingBox.extendSize.x * 2;
-            const contentInsets = this.getHorizontalContentInsets(textStyle, pixelScale);
+            const inputWidth = textInput.cssSize.width;
+            const inputHeight = textInput.cssSize.height;
+            const contentInsets = this.getHorizontalContentInsets(textStyle);
             const availableWidth = Math.max(0, inputWidth - contentInsets.left - contentInsets.right);
             // Browsers retain a minimal wrapping opportunity when textarea
             // padding consumes the nominal content box. Zero would disable our
             // wrapper entirely and make the value disappear at narrow widths.
             const maxTextWidth = isTextarea
-                ? Math.max(1, availableWidth / pixelScale)
+                ? Math.max(1, availableWidth)
                 : undefined;
 
             if (!textToRender) {
                 const storedLayoutMetrics = this.textRenderingService.createStoredLayoutMetrics(
                     '',
                     textStyleProps,
-                    pixelScale,
+                    1,
                     maxTextWidth,
                 );
                 textInput.textLayoutMetrics = storedLayoutMetrics.css;
-                textInput.textureWidth = 0;
-                textInput.textureHeight = 0;
+                textInput.textureCssSize = { width: 0, height: 0 };
+                textInput.visibleTextCssSize = { width: 0, height: 0 };
+                textInput.visualTextLeftEdgeCss = this.resolveTextLeftEdgeCss(
+                    textInput,
+                    0,
+                    contentInsets,
+                    textStyle.textAlign,
+                );
                 textInput.scrollOffset = 0;
                 return;
             }
@@ -345,7 +350,7 @@ export class TextInputManager {
             const storedLayoutMetrics = this.textRenderingService.createStoredLayoutMetrics(
                 textToRender,
                 textStyleProps,
-                pixelScale,
+                1,
                 maxTextWidth
             );
 
@@ -366,99 +371,69 @@ export class TextInputManager {
             const textureWidthPx = textureSize.width;
             const textureHeightPx = textureSize.height;
 
-            // Convert to world units using camera's pixel-to-world scale
-            const textureWidth = textureWidthPx * pixelScale;
-            const textureHeight = textureHeightPx * pixelScale;
-
-            const inputHeight = textInput.mesh.getBoundingInfo().boundingBox.extendSize.y * 2;
-            const verticalInsets = this.getVerticalContentInsets(textStyle, pixelScale);
-            const borderSize = Math.max(0, this.parseSize(textStyle.borderWidth) || 0) * pixelScale;
+            const verticalInsets = this.getVerticalContentInsets(textStyle);
+            const borderSize = Math.max(0, this.parseSize(textStyle.borderWidth) || 0);
             const verticalOrigin = Math.max(0, verticalInsets.top - borderSize);
             const clientHeight = Math.max(0, inputHeight - (borderSize * 2));
             const contentHeight = Math.max(
                 0,
                 inputHeight - verticalInsets.top - verticalInsets.bottom
             );
-            const paddedTextureHeight = textureHeight + verticalOrigin
+            const paddedTextureHeight = textureHeightPx + verticalOrigin
                 + Math.max(0, verticalInsets.bottom - borderSize);
             const isVerticallyClipped = isTextarea && paddedTextureHeight > clientHeight;
-            const visibleWidth = isTextarea && availableWidth <= pixelScale
-                ? textureWidth
-                : Math.min(textureWidth, availableWidth);
-            const visibleHeight = isVerticallyClipped ? contentHeight : textureHeight;
+            const visibleWidthPx = isTextarea && availableWidth <= 1
+                ? textureWidthPx
+                : Math.min(textureWidthPx, availableWidth);
+            const visibleHeightPx = isVerticallyClipped ? contentHeight : textureHeightPx;
+            const renderedVisibleSize = render.actions.camera.projectCssSize({
+                width: visibleWidthPx,
+                height: visibleHeightPx,
+            });
 
             // A clipped plane is the control's content viewport. UV scaling
             // selects the corresponding portion of the full cached texture.
             const textMesh = this.babylonMeshService.createTextMesh(
                 `text_${textInput.element.id}`,
                 texture,
-                visibleWidth,
-                visibleHeight
+                renderedVisibleSize.width,
+                renderedVisibleSize.height
             );
 
             textMesh.parent = textInput.mesh;
-            textMesh.position.y = isTextarea
-                ? -2 * pixelScale
-                : this.resolveSingleLineTextY(verticalInsets, pixelScale);
+            const textAlign = (textStyle.textAlign || 'left').toLowerCase();
+            const textCenterCss = {
+                x: this.resolveTextCenterXCss(
+                    inputWidth,
+                    visibleWidthPx,
+                    contentInsets,
+                    textAlign,
+                    isTextarea,
+                ),
+                y: isTextarea
+                    ? -inputHeight / 2 + verticalInsets.top + visibleHeightPx / 2
+                    : this.resolveSingleLineTextYCss(verticalInsets),
+            };
+            const renderedTextCenter = render.actions.camera.projectCssLocalPoint(textCenterCss);
+            textMesh.position.x = renderedTextCenter.x;
+            textMesh.position.y = renderedTextCenter.y;
             textMesh.position.z = CONTROL_CONTENT_Z_OFFSET;
             textMesh.isPickable = true;
             textMesh.renderingGroupId = 0;
 
-            // Store world-space texture width for cursor positioning
-            textInput.textureWidth = textureWidth;
-            textInput.textureHeight = textureHeight;
-
-            // Align text mesh based on textAlign style
-            const textAlign = (textStyle.textAlign || 'left').toLowerCase();
-            const insets = contentInsets;
-
-            // Handle clipping if text exceeds available width
-            if (textureWidth > availableWidth) {
-                textMesh.position.x = (insets.right - insets.left) / 2
-                    + this.getCollapsedTextareaInlineCorrection(isTextarea, availableWidth, pixelScale);
-            } else {
-                // No clipping needed
-                textInput.scrollOffset = 0;
-                if (textAlign === 'right') {
-                    textMesh.position.x = -(inputWidth / 2) + (textureWidth / 2) + insets.right;
-                } else if (textAlign === 'center' || textAlign === 'middle') {
-                    textMesh.position.x = (insets.right - insets.left) / 2;
-                } else {
-                    textMesh.position.x = (inputWidth / 2) - (textureWidth / 2) - insets.left;
-                }
-            }
+            textInput.textureCssSize = { width: textureWidthPx, height: textureHeightPx };
+            textInput.visibleTextCssSize = { width: visibleWidthPx, height: visibleHeightPx };
+            textInput.visualTextLeftEdgeCss = textCenterCss.x - visibleWidthPx / 2;
+            if (textureWidthPx <= availableWidth) textInput.scrollOffset = 0;
 
             textInput.textMesh = textMesh;
-            if (isTextarea) {
-                textInput.textMesh.position.y =
-                    inputHeight / 2 - verticalInsets.top - visibleHeight / 2;
-            }
             this.syncScroll(textInput, render);
 
             // Register with text interaction registry for drag selection
             const storedMetrics: StoredTextLayoutMetrics = {
-                scale: pixelScale,
+                scale: 1,
                 css: textInput.textLayoutMetrics,
-                world: {
-                    totalWidth: textureWidth,
-                    totalHeight: textureHeight,
-                    lineHeight: textInput.textLayoutMetrics.lineHeight * (textureHeight / textInput.textLayoutMetrics.totalHeight),
-                    ascent: textInput.textLayoutMetrics.ascent * (textureHeight / textInput.textLayoutMetrics.totalHeight),
-                    descent: textInput.textLayoutMetrics.descent * (textureHeight / textInput.textLayoutMetrics.totalHeight),
-                    lines: textInput.textLayoutMetrics.lines.map((line: any) => ({
-                        ...line,
-                        top: line.top * (textureHeight / textInput.textLayoutMetrics.totalHeight),
-                        bottom: line.bottom * (textureHeight / textInput.textLayoutMetrics.totalHeight),
-                        width: line.width * (textureWidth / textInput.textLayoutMetrics.totalWidth),
-                        height: line.height * (textureHeight / textInput.textLayoutMetrics.totalHeight)
-                    })),
-                    characters: textInput.textLayoutMetrics.characters.map((char: any) => ({
-                        ...char,
-                        x: char.x * (textureWidth / textInput.textLayoutMetrics.totalWidth),
-                        width: char.width * (textureWidth / textInput.textLayoutMetrics.totalWidth),
-                        advance: char.advance * (textureWidth / textInput.textLayoutMetrics.totalWidth)
-                    }))
-                }
+                world: textInput.textLayoutMetrics,
             };
 
             this.textInteractionRegistry.register(
@@ -469,7 +444,7 @@ export class TextInputManager {
                 textToRender,
                 textInput.scrollOffset || 0,
                 textInput.scrollTop || 0,
-                verticalOrigin / pixelScale
+                verticalOrigin
             );
 
         } catch (error) {
@@ -483,28 +458,27 @@ export class TextInputManager {
     private syncScroll(textInput: TextInput, render: BabylonRender): void {
         if (!textInput.textMesh || !textInput.textLayoutMetrics) return;
 
-        const inputWidth = textInput.mesh.getBoundingInfo().boundingBox.extendSize.x * 2;
-        const scale = render.actions.camera.getPixelToWorldScale();
-        const insets = this.getHorizontalContentInsets(textInput.style, scale);
+        const inputWidth = textInput.cssSize.width;
+        const inputHeight = textInput.cssSize.height;
+        const insets = this.getHorizontalContentInsets(textInput.style);
         const availableWidth = Math.max(0, inputWidth - insets.left - insets.right);
-        const vw = availableWidth / scale; // Visible width in CSS pixels
-        const borderWidth = Math.max(0, this.parseSize(textInput.style.borderWidth) || 0) * scale;
-        const paddingLeft = Math.max(0, insets.left - borderWidth) / scale;
-        const paddingRight = Math.max(0, insets.right - borderWidth) / scale;
-        const clientWidth = Math.max(0, inputWidth - (borderWidth * 2)) / scale;
-        const inputHeight = textInput.mesh.getBoundingInfo().boundingBox.extendSize.y * 2;
-        const verticalInsets = this.getVerticalContentInsets(textInput.style, scale);
+        const vw = availableWidth;
+        const borderWidth = Math.max(0, this.parseSize(textInput.style.borderWidth) || 0);
+        const paddingLeft = Math.max(0, insets.left - borderWidth);
+        const paddingRight = Math.max(0, insets.right - borderWidth);
+        const clientWidth = Math.max(0, inputWidth - (borderWidth * 2));
+        const verticalInsets = this.getVerticalContentInsets(textInput.style);
         const borderSize = borderWidth;
-        const paddingTop = Math.max(0, verticalInsets.top - borderSize) / scale;
-        const paddingBottom = Math.max(0, verticalInsets.bottom - borderSize) / scale;
+        const paddingTop = Math.max(0, verticalInsets.top - borderSize);
+        const paddingBottom = Math.max(0, verticalInsets.bottom - borderSize);
         const availableHeight = Math.max(0, inputHeight - (borderSize * 2));
-        const vh = availableHeight / scale;
+        const vh = availableHeight;
 
         // Get actual texture width from stored metrics
-        const fullTextureWidth = textInput.textureWidth || 1;
-        const fullTextureHeight = textInput.textureHeight || 1;
-        const currentMeshWidth = textInput.textMesh.getBoundingInfo().boundingBox.maximum.x - textInput.textMesh.getBoundingInfo().boundingBox.minimum.x;
-        const currentMeshHeight = textInput.textMesh.getBoundingInfo().boundingBox.maximum.y - textInput.textMesh.getBoundingInfo().boundingBox.minimum.y;
+        const fullTextureWidth = textInput.textureCssSize?.width || 1;
+        const fullTextureHeight = textInput.textureCssSize?.height || 1;
+        const currentMeshWidth = textInput.visibleTextCssSize?.width || 0;
+        const currentMeshHeight = textInput.visibleTextCssSize?.height || 0;
 
         const horizontallyWrappedTextarea = this.isHorizontallyWrappedTextarea(textInput);
 
@@ -550,7 +524,7 @@ export class TextInputManager {
         }
 
         // Keep the active textarea line within the vertically clipped viewport.
-        const scrollHeight = (fullTextureHeight / scale) + paddingTop + paddingBottom;
+        const scrollHeight = fullTextureHeight + paddingTop + paddingBottom;
         const isVerticalScrollable = textInput.type === InputType.Textarea && scrollHeight > vh;
         if (!isVerticalScrollable) {
             textInput.scrollTop = 0;
@@ -618,15 +592,12 @@ export class TextInputManager {
 
     private getCollapsedTextareaInlineCorrection(
         isTextarea: boolean,
-        availableWidth: number,
-        pixelScale: number
+        availableWidth: number
     ): number {
         // With no nominal content width, the browser begins the first glyph on
         // the inner border pixel. Centering the fallback texture lands it one
         // logical pixel early because the canvas includes edge padding.
-        // The input plane is rotated by PI, so negative local X advances the
-        // glyph one logical pixel in screen-space inline direction.
-        return isTextarea && availableWidth <= pixelScale ? -pixelScale : 0;
+        return isTextarea && availableWidth <= 1 ? 1 : 0;
     }
 
     /** Applies wheel deltas without snapping the viewport back to the caret. */
@@ -666,30 +637,30 @@ export class TextInputManager {
         element: DOMElement,
         render: BabylonRender,
         style: StyleRule,
-        worldDimensions: { width: number; height: number }
+        cssDimensions: CssSize
     ): BABYLON.Mesh {
-        // Use calculated world dimensions directly
-        const width = worldDimensions.width;
-        const height = worldDimensions.height;
+        const renderedSize = render.actions.camera.projectCssSize(cssDimensions);
 
         const radiusValue = style?.borderRadius?.trim();
         const borderRadius = radiusValue?.endsWith('%')
             ? 0
-            : Math.max(0, this.parseSize(radiusValue) || 0) *
-                render.actions.camera.getPixelToWorldScale();
+            : render.actions.camera.projectCssSize({
+                width: Math.max(0, this.parseSize(radiusValue) || 0),
+                height: Math.max(0, this.parseSize(radiusValue) || 0),
+            }).width;
         // The background owns the control's outer silhouette. A rectangular
         // plane can protrude through a rounded border at the corners and cover
         // an authored focus halo rendered behind the control.
         const inputMesh = borderRadius > 0
             ? this.babylonMeshService.createRoundedRectangle(
                 `input_${element.id}`,
-                width,
-                height,
+                renderedSize.width,
+                renderedSize.height,
                 borderRadius,
             )
             : BABYLON.MeshBuilder.CreatePlane(`input_${element.id}`, {
-                width,
-                height,
+                width: renderedSize.width,
+                height: renderedSize.height,
                 sideOrientation: BABYLON.Mesh.DOUBLESIDE // Ensure visibility from both sides
             }, render.scene);
 
@@ -739,8 +710,10 @@ export class TextInputManager {
      */
     private calculateCursorHeight(style: StyleRule, render: BabylonRender): number {
         const fontSizePx = this.parseSize(style.fontSize) || 16;
-        const scale = render.actions.camera.getPixelToWorldScale();
-        return fontSizePx * scale * 1.2; // Slightly taller than font
+        return render.actions.camera.projectCssSize({
+            width: 0,
+            height: fontSizePx * 1.2,
+        }).height;
     }
 
     /**
@@ -1032,16 +1005,12 @@ export class TextInputManager {
         // Sync scroll and UVs before positioning cursor
         this.syncScroll(textInput, render);
 
-        const pixelScale = render.actions.camera.getPixelToWorldScale();
         // Calculate width correction ratio
-        // textureWidth is in world units (already scaled by pixelToWorldScale)
-        // totalWidth is in CSS pixels (unscaled)
-        // We need to compare them in the same unit (logical CSS pixels) to find any discrepancy
-        const widthCorrectionRatio = (textInput.textLayoutMetrics.totalWidth > 0 && textInput.textureWidth !== undefined)
-            ? (textInput.textureWidth / pixelScale) / textInput.textLayoutMetrics.totalWidth
+        const widthCorrectionRatio = (textInput.textLayoutMetrics.totalWidth > 0 && textInput.textureCssSize)
+            ? textInput.textureCssSize.width / textInput.textLayoutMetrics.totalWidth
             : 1.0;
 
-        // Create cursor if it doesn't exist yet and textureWidth is available
+        // Create cursor if it doesn't exist yet and CSS texture geometry is available
         if (!textInput.cursorMesh && render.scene && textInput.textLayoutMetrics) {
             const textStyle = this.parseTextStyle(style);
             textInput.cursorMesh = this.textSelectionService.createTextCursor(
@@ -1049,12 +1018,13 @@ export class TextInputManager {
                 textInput.textLayoutMetrics,
                 textInput.mesh,
                 render.scene,
-                pixelScale,
+                render.actions.camera,
                 textStyle,
-                textInput.textureWidth,
+                textInput.cssSize,
+                textInput.textureCssSize?.width,
                 widthCorrectionRatio,
                 textInput.scrollOffset || 0,
-                this.resolveVisualTextLeftEdge(textInput)
+                textInput.visualTextLeftEdgeCss
             );
         }
 
@@ -1067,23 +1037,26 @@ export class TextInputManager {
             textInput.cursorMesh,
             textInput.cursorPosition,
             textInput.textLayoutMetrics,
-            pixelScale,
-            textInput.textureWidth,
+            render.actions.camera,
+            textInput.cssSize,
+            textInput.textureCssSize?.width,
             widthCorrectionRatio,
             textInput.scrollOffset || 0,
-            this.resolveVisualTextLeftEdge(textInput)
+            textInput.visualTextLeftEdgeCss
         );
 
         if (textInput.type === InputType.Textarea) {
             const cursorLine = this.findCursorLine(textInput);
             if (cursorLine) {
-                const inputHeight = textInput.mesh.getBoundingInfo().boundingBox.extendSize.y * 2;
-                const verticalInsets = this.getVerticalContentInsets(style, pixelScale);
-                const borderSize = Math.max(0, this.parseSize(style.borderWidth) || 0) * pixelScale;
+                const inputHeight = textInput.cssSize.height;
+                const verticalInsets = this.getVerticalContentInsets(style);
+                const borderSize = Math.max(0, this.parseSize(style.borderWidth) || 0);
                 const paddingTop = Math.max(0, verticalInsets.top - borderSize);
                 const lineCenter = (cursorLine.top + cursorLine.bottom) / 2;
-                textInput.cursorMesh.position.y = inputHeight / 2 - borderSize - paddingTop
-                    - ((lineCenter - (textInput.scrollTop || 0)) * pixelScale);
+                const cssY = -inputHeight / 2 + borderSize + paddingTop
+                    + lineCenter - (textInput.scrollTop || 0);
+                textInput.cursorMesh.position.y = render.actions.camera
+                    .projectCssLocalPoint({ x: 0, y: cssY }).y;
             }
         }
     }
@@ -1175,32 +1148,52 @@ export class TextInputManager {
     }
 
     /** Resolve the CSS content edges used by single-line controls. */
-    private getHorizontalContentInsets(
-        style: StyleRule,
-        scale: number
-    ): { left: number; right: number } {
+    private resolveTextCenterXCss(
+        inputWidth: number,
+        visibleWidth: number,
+        insets: { left: number; right: number },
+        textAlign: string,
+        isTextarea: boolean,
+    ): number {
+        if (textAlign === 'right' || textAlign === 'end') {
+            return inputWidth / 2 - insets.right - visibleWidth / 2;
+        }
+        if (textAlign === 'center' || textAlign === 'middle') {
+            return (insets.left - insets.right) / 2;
+        }
+        const availableWidth = Math.max(0, inputWidth - insets.left - insets.right);
+        return -inputWidth / 2 + insets.left + visibleWidth / 2
+            + this.getCollapsedTextareaInlineCorrection(isTextarea, availableWidth);
+    }
+
+    private resolveTextLeftEdgeCss(
+        textInput: TextInput,
+        visibleWidth: number,
+        insets: { left: number; right: number },
+        textAlign: string | undefined,
+    ): number {
+        return this.resolveTextCenterXCss(
+            textInput.cssSize.width,
+            visibleWidth,
+            insets,
+            (textAlign || 'left').toLowerCase(),
+            textInput.type === InputType.Textarea,
+        ) - visibleWidth / 2;
+    }
+
+    private getHorizontalContentInsets(style: StyleRule): { left: number; right: number } {
         const padding = this.parseBoxShorthand(style.padding);
         const border = Math.max(0, this.parseSize(style.borderWidth) || 0);
         const left = Math.max(0, this.parseSize(style.paddingLeft) ?? padding.left);
         const right = Math.max(0, this.parseSize(style.paddingRight) ?? padding.right);
 
         return {
-            left: (border + left) * scale,
-            right: (border + right) * scale
+            left: border + left,
+            right: border + right
         };
     }
 
-    private resolveVisualTextLeftEdge(textInput: TextInput): number | undefined {
-        const textMesh = textInput.textMesh;
-        if (!textMesh) return undefined;
-        const halfWidth = textMesh.getBoundingInfo().boundingBox.extendSize.x;
-        return textMesh.position.x - halfWidth;
-    }
-
-    private getVerticalContentInsets(
-        style: StyleRule,
-        scale: number
-    ): { top: number; bottom: number } {
+    private getVerticalContentInsets(style: StyleRule): { top: number; bottom: number } {
         const values = style.padding
             ?.trim()
             .split(/\s+/)
@@ -1214,17 +1207,17 @@ export class TextInputManager {
         const bottom = Math.max(0, this.parseSize(style.paddingBottom) ?? shorthandBottom);
 
         return {
-            top: (border + top) * scale,
-            bottom: (border + bottom) * scale
+            top: border + top,
+            bottom: border + bottom
         };
     }
 
-    private resolveSingleLineTextY(insets: { top: number; bottom: number }, pixelScale: number): number {
+    private resolveSingleLineTextYCss(insets: { top: number; bottom: number }): number {
         // CSS padding defines the input's content box. Center the line texture
-        // in that box. The logical-pixel correction compensates for the canvas
+        // in that box. The one-pixel correction compensates for the canvas
         // glyph texture's lower raster bias without discarding asymmetric
         // authored top/bottom padding.
-        return (insets.bottom - insets.top) / 2 + pixelScale;
+        return (insets.top - insets.bottom) / 2 - 1;
     }
 
     private parseBoxShorthand(value: string | undefined): { left: number; right: number } {

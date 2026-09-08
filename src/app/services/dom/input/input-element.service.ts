@@ -99,7 +99,7 @@ export class InputElementService {
                     render,
                     null as any,
                     style,
-                    render.actions.camera.projectCssSize(cssDimensions),
+                    cssDimensions,
                 );
                 break;
 
