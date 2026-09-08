@@ -395,8 +395,24 @@ describe('FlexService', () => {
     const updateMeshWithBorderRadius = jasmine.createSpy('updateMeshWithBorderRadius');
     const render = {
       actions: {
-        camera: { getPixelToWorldScale: () => 0.01 },
-        mesh: { updateMeshWithBorderRadius },
+        camera: {
+          getPixelToWorldScale: () => 0.01,
+          projectCssSize: (size: { width: number; height: number }) => ({
+            width: size.width * 0.01,
+            height: size.height * 0.01,
+          }),
+          projectCssLocalPoint: (point: { x: number; y: number }, z = 0) => ({
+            x: point.x * 0.01,
+            y: -point.y * 0.01,
+            z,
+          }),
+        },
+        mesh: {
+          updateMeshWithBorderRadius,
+          positionTextMesh: (_mesh: Mesh, x: number, y: number, z: number) => {
+            _mesh.position = { x, y, z } as never;
+          },
+        },
         style: { findStyleForElement: (child: DOMElement) => resolved.get(child.id ?? '') },
       },
     } as unknown as BabylonRender;
@@ -407,7 +423,19 @@ describe('FlexService', () => {
     const dom = {
       context: {
         elementStyles: new Map(),
-        elementDimensions: new Map([['standalone', dimensions]]),
+        elementDimensions: new Map([
+          ['root-body', { width: 240, height: 600, padding: { top: 0, right: 0, bottom: 0, left: 0 } }],
+          ['standalone', dimensions],
+        ]),
+        layoutBoxes: new Map([['standalone', {
+          parentId: 'root-body',
+          box: {
+            borderBox: { x: 0, y: 0, width: 240, height: 600 },
+            contentBox: { x: 14, y: 14, width: 212, height: 572 },
+            padding: { top: 14, right: 14, bottom: 14, left: 14 },
+            margin: { top: 0, right: 0, bottom: 0, left: 0 },
+          },
+        }]]),
       },
     } as unknown as BabylonDOM;
     const mesh = {
@@ -415,7 +443,7 @@ describe('FlexService', () => {
     } as unknown as Mesh;
 
     const height = service['resizeStandaloneAutoHeightContainer'](
-      element, style, [], dom, render, mesh, 240, 600, 0.01,
+      element, style, [], dom, render, mesh, 240, 600,
     );
 
     expect(height).toBe(112);

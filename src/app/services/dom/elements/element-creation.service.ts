@@ -30,9 +30,14 @@ import { AstylarDocumentRecovery } from "../../../../lib/astylar-document-recove
 import { AstylarPluginHost } from "../../../../lib/astylar-plugin-host";
 import {
   createCssLayoutBox,
-  cssLocalCenter,
   updateCssLayoutNode,
 } from "../../css-layout-geometry";
+import {
+  positionRenderedCssBox,
+  projectCssLength,
+  projectCssPoint,
+  projectCssSize,
+} from "../../css-render-boundary";
 
 /**
  * Service responsible for creating DOM elements as Babylon.js meshes
@@ -162,14 +167,14 @@ export class ElementCreationService {
         }
       : calculatedDimensions;
 
-    // Parse border radius and scale
+    // Resolve all geometry in CSS pixels, then project only at paint creation.
     const borderRadiusPixels = this.borderService.parseBorderRadius(
       style?.borderRadius,
     );
-    const scaleFactor = render.actions.camera.getPixelToWorldScale();
-    const borderRadius = borderRadiusPixels * scaleFactor;
-    const worldWidth = dimensions.width * scaleFactor;
-    const worldHeight = dimensions.height * scaleFactor;
+    const borderRadius = projectCssLength(render, borderRadiusPixels);
+    const renderedSize = projectCssSize(render, dimensions);
+    const worldWidth = renderedSize.width;
+    const worldHeight = renderedSize.height;
     const pluginProperties = this.resolvePluginProperties(style, layoutParent);
 
     // DEBUG: Log dimensions for troubleshooting
@@ -222,7 +227,7 @@ export class ElementCreationService {
             width: dimensions.width,
             height: dimensions.height,
             padding: dimensions.padding,
-            pixelToWorldScale: scaleFactor,
+            pixelToWorldScale: render.actions.camera.getPixelToWorldScale(),
           },
           coordinates: {
             toLocalPoint: (x, y, z = 0) => {
@@ -314,11 +319,15 @@ export class ElementCreationService {
             imageSize.height,
             style.objectFit,
           );
+          const renderedImageSize = projectCssSize(render, {
+            width: fit.renderedWidth,
+            height: fit.renderedHeight,
+          });
           render.actions.mesh.updateMeshWithBorderRadius(
             imageContent,
             'rectangle',
-            fit.renderedWidth * scaleFactor,
-            fit.renderedHeight * scaleFactor,
+            renderedImageSize.width,
+            renderedImageSize.height,
             0,
           );
           texture.uScale = fit.uScale;
@@ -327,12 +336,17 @@ export class ElementCreationService {
           texture.vOffset = fit.vOffset;
 
           const contentCenterX = -dimensions.width / 2 + insets.left + contentWidth / 2;
-          const contentCenterY = dimensions.height / 2 - insets.top - contentHeight / 2;
+          const contentCenterY = -dimensions.height / 2 + insets.top + contentHeight / 2;
+          const renderedCenter = projectCssPoint(
+            render,
+            { x: contentCenterX, y: contentCenterY },
+            0.1,
+          );
           render.actions.mesh.positionTextMesh(
             imageContent,
-            contentCenterX * scaleFactor,
-            contentCenterY * scaleFactor,
-            0.1,
+            renderedCenter.x,
+            renderedCenter.y,
+            renderedCenter.z,
           );
         };
 
@@ -393,13 +407,8 @@ export class ElementCreationService {
       width: dimensions.width,
       height: dimensions.height,
     };
-    const localCenter = render.actions.camera.projectCssLocalPoint(
-      cssLocalCenter(borderBox, parentDimensions),
-      zPosition,
-    );
-
     // Position and parent the mesh
-    render.actions.mesh.positionTextMesh(mesh, localCenter.x, localCenter.y, localCenter.z);
+    positionRenderedCssBox(render, mesh, borderBox, parentDimensions, zPosition);
     render.actions.mesh.parentTextMesh(mesh, layoutParent);
 
 
@@ -495,7 +504,11 @@ export class ElementCreationService {
     // Apply transforms if present
     const transform = this.materialService.parseTransform(style?.transform);
     if (transform) {
-      this.materialService.applyTransforms(mesh, transform, scaleFactor);
+      this.materialService.applyTransforms(
+        mesh,
+        transform,
+        render.actions.camera.getPixelToWorldScale(),
+      );
     }
 
 
@@ -642,7 +655,12 @@ export class ElementCreationService {
         dom.context.elementStyles,
       );
       if (parentStyle) {
-        this.overflowClip.apply(parent, parentStyle);
+        this.overflowClip.apply(
+          parent,
+          parentStyle,
+          dom.context.layoutBoxes,
+          render.actions.camera.projectCssViewportPoint,
+        );
       }
     }
   }
@@ -734,7 +752,6 @@ export class ElementCreationService {
     }
 
     const padding = parentDims.padding;
-    const scaleFactor = render.actions.camera.getPixelToWorldScale();
     const parentStyle = render.actions.style.findStyleForElement(
       parentElement,
       styles,
@@ -834,14 +851,13 @@ export class ElementCreationService {
       }
 
       const childDims = dom.context.elementDimensions.get(childMesh.name);
-      let childWidth = childDims?.width ?? 0;
-      let childHeight = childDims?.height ?? 0;
-
       if (!childDims) {
-        const bounds = childMesh.getBoundingInfo().boundingBox;
-        childWidth = (bounds.maximum.x - bounds.minimum.x) / scaleFactor;
-        childHeight = (bounds.maximum.y - bounds.minimum.y) / scaleFactor;
+        throw new Error(
+          `Inline layout requires retained CSS dimensions for ${childMesh.name}.`,
+        );
       }
+      const childWidth = childDims.width;
+      const childHeight = childDims.height;
 
       const marginBox = this.parseMarginBox(childStyle);
 
@@ -892,16 +908,18 @@ export class ElementCreationService {
       const borderRadiusPx = this.borderService.parseBorderRadius(
         parentStyle?.borderRadius,
       );
-      const borderRadiusWorld = borderRadiusPx * scaleFactor;
-      const worldWidth = parentDims.width * scaleFactor;
-      const worldHeight = computedHeightPx * scaleFactor;
+      const borderRadiusWorld = projectCssLength(render, borderRadiusPx);
+      const resizedWorld = projectCssSize(render, {
+        width: parentDims.width,
+        height: computedHeightPx,
+      });
 
       try {
         render.actions.mesh.updateMeshWithBorderRadius(
           parent,
           "rectangle",
-          worldWidth,
-          worldHeight,
+          resizedWorld.width,
+          resizedWorld.height,
           borderRadiusWorld,
           parentBorder.width,
         );
@@ -912,12 +930,6 @@ export class ElementCreationService {
         );
       }
 
-      const heightDeltaPx = oldHeightPx - computedHeightPx;
-      if (Math.abs(heightDeltaPx) > 0.1) {
-        const deltaWorld = (heightDeltaPx / 2) * scaleFactor;
-        parent.position.y += deltaWorld;
-      }
-
       parentDims.height = computedHeightPx;
       dom.context.elementDimensions.set(parent.name, {
         ...parentDims,
@@ -925,29 +937,37 @@ export class ElementCreationService {
       });
       const retainedParent = dom.context.layoutBoxes.get(parent.name);
       if (retainedParent) {
-        dom.context.layoutBoxes.set(parent.name, updateCssLayoutNode(
+        const resized = updateCssLayoutNode(
           retainedParent,
           retainedParent.box.borderBox,
           { width: parentDims.width, height: computedHeightPx },
-        ));
+        );
+        dom.context.layoutBoxes.set(parent.name, resized);
+        const containingBlock = resized.parentId
+          ? dom.context.elementDimensions.get(resized.parentId)
+          : undefined;
+        if (containingBlock) {
+          positionRenderedCssBox(
+            render,
+            parent,
+            resized.box.borderBox,
+            containingBlock,
+            parent.position.z,
+          );
+        }
       }
     }
 
     const finalParentHeight =
       dom.context.elementDimensions.get(parent.name)?.height ??
       parentDims.height;
-    const halfParentWidth = parentDims.width / 2;
-    const halfParentHeight = finalParentHeight / 2;
-
     placements.forEach((placement) => {
-      const { mesh: childMesh, width, height, x, y, margin, child } = placement;
-      const childCenterX = -halfParentWidth + x + width / 2;
-      const childCenterY = halfParentHeight - y - height / 2;
-
-      render.actions.mesh.positionTextMesh(
+      const { mesh: childMesh, width, height, x, y, child } = placement;
+      positionRenderedCssBox(
+        render,
         childMesh,
-        childCenterX * scaleFactor,
-        childCenterY * scaleFactor,
+        { x, y, width, height },
+        { width: parentDims.width, height: finalParentHeight },
         childMesh.position.z,
       );
       const retainedChild = dom.context.layoutBoxes.get(childMesh.name);
@@ -993,24 +1013,18 @@ export class ElementCreationService {
       let paddingRight = 0;
       let paddingBottom = 0;
 
-      if (dom.context.elementDimensions.has(parent.name)) {
-        const dims = dom.context.elementDimensions.get(parent.name)!;
-        parentHeight = dims.height;
-        parentWidth = dims.width;
-        paddingTop = dims.padding.top;
-        paddingLeft = dims.padding.left;
-        paddingRight = dims.padding.right;
-        paddingBottom = dims.padding.bottom;
-      } else {
-        const scale = render.actions.camera.getPixelToWorldScale();
-        const bounds = parent.getBoundingInfo().boundingBox;
-        parentHeight = (bounds.maximum.y - bounds.minimum.y) / scale;
-        parentWidth = (bounds.maximum.x - bounds.minimum.x) / scale;
-        paddingTop = 0;
-        paddingLeft = 0;
+      const parentDimensions = dom.context.elementDimensions.get(parent.name);
+      if (!parentDimensions) {
+        throw new Error(
+          `Block layout requires retained CSS dimensions for ${parent.name}.`,
+        );
       }
-
-      const scaleFactor = render.actions.camera.getPixelToWorldScale();
+      parentHeight = parentDimensions.height;
+      parentWidth = parentDimensions.width;
+      paddingTop = parentDimensions.padding.top;
+      paddingLeft = parentDimensions.padding.left;
+      paddingRight = parentDimensions.padding.right;
+      paddingBottom = parentDimensions.padding.bottom;
 
       type BlockPlacement = {
         child: DOMElement;
@@ -1088,19 +1102,14 @@ export class ElementCreationService {
           );
         }
 
-        let childWidth = 0;
-        let childHeight = 0;
-        if (dom.context.elementDimensions.has(childMesh.name)) {
-          const childDimensions = dom.context.elementDimensions.get(
-            childMesh.name,
-          )!;
-          childWidth = childDimensions.width;
-          childHeight = childDimensions.height;
-        } else {
-          const bounds = childMesh.getBoundingInfo().boundingBox;
-          childWidth = (bounds.maximum.x - bounds.minimum.x) / scaleFactor;
-          childHeight = (bounds.maximum.y - bounds.minimum.y) / scaleFactor;
+        const childDimensions = dom.context.elementDimensions.get(childMesh.name);
+        if (!childDimensions) {
+          throw new Error(
+            `Block layout requires retained CSS dimensions for ${childMesh.name}.`,
+          );
         }
+        const childWidth = childDimensions.width;
+        const childHeight = childDimensions.height;
 
         const childResolvedStyle = render.actions.style.findStyleForElement(
           child,
@@ -1197,17 +1206,19 @@ export class ElementCreationService {
       ) {
         const borderRadiusPx = this.borderService.parseBorderRadius(parentStyle?.borderRadius);
         const border = this.borderService.parseBorderProperties(render, parentStyle);
+        const resizedWorld = projectCssSize(render, {
+          width: parentWidth,
+          height: usedAutoHeight,
+        });
         render.actions.mesh.updateMeshWithBorderRadius(
           parent,
           'rectangle',
-          parentWidth * scaleFactor,
-          usedAutoHeight * scaleFactor,
-          borderRadiusPx * scaleFactor,
-            border.widths,
+          resizedWorld.width,
+          resizedWorld.height,
+          projectCssLength(render, borderRadiusPx),
+          border.widths,
         );
 
-        // Preserve the element's top border edge while its auto height changes.
-        parent.position.y += ((parentHeight - usedAutoHeight) / 2) * scaleFactor;
         parentHeight = usedAutoHeight;
         const stored = dom.context.elementDimensions.get(parent.name);
         if (stored) {
@@ -1218,11 +1229,24 @@ export class ElementCreationService {
         }
         const retainedParent = dom.context.layoutBoxes.get(parent.name);
         if (retainedParent) {
-          dom.context.layoutBoxes.set(parent.name, updateCssLayoutNode(
+          const resized = updateCssLayoutNode(
             retainedParent,
             retainedParent.box.borderBox,
             { width: parentWidth, height: usedAutoHeight },
-          ));
+          );
+          dom.context.layoutBoxes.set(parent.name, resized);
+          const containingBlock = resized.parentId
+            ? dom.context.elementDimensions.get(resized.parentId)
+            : undefined;
+          if (containingBlock) {
+            positionRenderedCssBox(
+              render,
+              parent,
+              resized.box.borderBox,
+              containingBlock,
+              parent.position.z,
+            );
+          }
         }
       }
 
@@ -1230,35 +1254,34 @@ export class ElementCreationService {
         const fontSize = this.parseFontSize(placement.style?.fontSize);
         let childLeft = paddingLeft + placement.margin.left;
         let childTop = placement.top;
-        let childCenterX = -parentWidth / 2 + paddingLeft +
-          placement.margin.left + placement.width / 2;
-        let childCenterY = parentHeight / 2 - placement.top - placement.height / 2;
 
         if (placement.style?.position === 'relative') {
           if (placement.style.left !== undefined) {
             const offset = this.parseLengthValue(placement.style.left, fontSize);
-            childCenterX += offset;
             childLeft += offset;
           } else if (placement.style.right !== undefined) {
             const offset = this.parseLengthValue(placement.style.right, fontSize);
-            childCenterX -= offset;
             childLeft -= offset;
           }
           if (placement.style.top !== undefined) {
             const offset = this.parseLengthValue(placement.style.top, fontSize);
-            childCenterY -= offset;
             childTop += offset;
           } else if (placement.style.bottom !== undefined) {
             const offset = this.parseLengthValue(placement.style.bottom, fontSize);
-            childCenterY += offset;
             childTop -= offset;
           }
         }
 
-        render.actions.mesh.positionTextMesh(
+        positionRenderedCssBox(
+          render,
           placement.mesh,
-          childCenterX * scaleFactor,
-          childCenterY * scaleFactor,
+          {
+            x: childLeft,
+            y: childTop,
+            width: placement.width,
+            height: placement.height,
+          },
+          { width: parentWidth, height: parentHeight },
           placement.mesh.position.z,
         );
         const retainedChild = dom.context.layoutBoxes.get(placement.mesh.name);

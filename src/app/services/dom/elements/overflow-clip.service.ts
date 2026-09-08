@@ -1,6 +1,12 @@
 import { Injectable } from '@angular/core';
 import * as BABYLON from '@babylonjs/core';
 import { StyleRule } from '../../../types/style-rule';
+import type {
+  CssLayoutNode,
+  CssPoint,
+  RenderPoint,
+} from '../../coordinate-space.types';
+import { resolveCssViewportRect } from '../../css-layout-geometry';
 
 interface ClipBounds {
   minX: number;
@@ -122,7 +128,11 @@ class RoundedOverflowClipPlugin extends BABYLON.MaterialPluginBase {
 @Injectable({ providedIn: 'root' })
 export class OverflowClipService {
   /** Recomputes world-space clip intersections after the authored layout moves. */
-  refresh(entries: readonly OverflowClipEntry[]): void {
+  refresh(
+    entries: readonly OverflowClipEntry[],
+    layoutBoxes: ReadonlyMap<string, CssLayoutNode>,
+    projectViewportPoint: (point: CssPoint) => RenderPoint,
+  ): void {
     const descendants = new Set<BABYLON.AbstractMesh>();
     for (const { mesh } of entries) {
       mesh.getChildMeshes(false).forEach((descendant) => descendants.add(descendant));
@@ -135,23 +145,35 @@ export class OverflowClipService {
       this.clearClip(descendant.material);
     }
     for (const { mesh, style } of entries) {
-      this.apply(mesh, style);
+      this.apply(mesh, style, layoutBoxes, projectViewportPoint);
     }
   }
 
-  apply(parent: BABYLON.Mesh, style: StyleRule): void {
+  apply(
+    parent: BABYLON.Mesh,
+    style: StyleRule,
+    layoutBoxes: ReadonlyMap<string, CssLayoutNode>,
+    projectViewportPoint: (point: CssPoint) => RenderPoint,
+  ): void {
     if (style.overflow !== 'hidden' && style.overflow !== 'clip' &&
         style.overflow !== 'auto' && style.overflow !== 'scroll') {
       return;
     }
 
-    parent.computeWorldMatrix(true);
-    const box = parent.getBoundingInfo().boundingBox;
+    const cssRect = resolveCssViewportRect(parent.name, layoutBoxes);
+    if (!cssRect) {
+      throw new Error(`Overflow clipping requires retained CSS geometry for ${parent.name}.`);
+    }
+    const firstCorner = projectViewportPoint({ x: cssRect.x, y: cssRect.y });
+    const secondCorner = projectViewportPoint({
+      x: cssRect.x + cssRect.width,
+      y: cssRect.y + cssRect.height,
+    });
     const parentBounds: ClipBounds = {
-      minX: box.minimumWorld.x,
-      maxX: box.maximumWorld.x,
-      minY: box.minimumWorld.y,
-      maxY: box.maximumWorld.y,
+      minX: Math.min(firstCorner.x, secondCorner.x),
+      maxX: Math.max(firstCorner.x, secondCorner.x),
+      minY: Math.min(firstCorner.y, secondCorner.y),
+      maxY: Math.max(firstCorner.y, secondCorner.y),
     };
     const radius = Math.min(
       Number(parent.metadata?.[BORDER_RADIUS_METADATA] ?? 0),

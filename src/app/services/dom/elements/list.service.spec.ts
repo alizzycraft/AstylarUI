@@ -34,7 +34,11 @@ describe('ListService', () => {
     } as unknown as BabylonDOM;
     const render = {
       actions: {
-        camera: { getPixelToWorldScale: () => 1 },
+        camera: {
+          projectCssSize: (size: { width: number; height: number }) => size,
+          projectCssLocalPoint: (point: { x: number; y: number }, z = 0) =>
+            ({ x: point.x, y: -point.y, z }),
+        },
         style: {
           findStyleForElement: () => ({ selector: 'li', display: 'list-item' }),
           parseBackgroundColor: () => null,
@@ -103,7 +107,11 @@ describe('ListService', () => {
     } as unknown as BabylonDOM;
     const render = {
       actions: {
-        camera: { getPixelToWorldScale: () => 1 },
+        camera: {
+          projectCssSize: (size: { width: number; height: number }) => size,
+          projectCssLocalPoint: (point: { x: number; y: number }, z = 0) =>
+            ({ x: point.x, y: -point.y, z }),
+        },
         style: { findStyleForElement: () => ({ selector: 'li' }) },
         mesh: {
           createTextMesh: (name: string) => ({ name, rotation: { z: 0 }, metadata: undefined }) as Mesh,

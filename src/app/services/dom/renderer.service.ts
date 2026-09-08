@@ -25,6 +25,7 @@ import { BabylonInteractionService } from "./interaction.service";
 import { DOMAncestryService } from "./dom-ancestry.service";
 import { InputElementService } from "./input/input-element.service";
 import { resolveComputedFontSize } from "./utils/computed-font-size.util";
+import { projectCssLength, projectCssSize } from "../css-render-boundary";
 
 @Injectable({
   providedIn: "root",
@@ -223,48 +224,12 @@ export class BabylonDOMRendererService {
       // Use mesh name to look up dimensions (all elements stored by mesh ID now)
       const storedDims = this.elementManager.getElementDimensions(mesh.name);
 
-      // Fallback to parent mesh bounding box if we don't have stored dimensions yet
-      let fallbackDims:
-        | {
-            width: number;
-            height: number;
-            padding: {
-              top: number;
-              right: number;
-              bottom: number;
-              left: number;
-            };
-          }
-        | undefined;
-      if (!storedDims && render) {
-        const scale = render.actions.camera.getPixelToWorldScale();
-        const bounds = mesh.getBoundingInfo().boundingBox;
-        const worldWidth = bounds.maximum.x - bounds.minimum.x;
-        const worldHeight = bounds.maximum.y - bounds.minimum.y;
-        const widthPx = worldWidth / scale;
-        const heightPx = worldHeight / scale;
-        fallbackDims = {
-          width: widthPx,
-          height: heightPx,
-          padding: { top: 0, right: 0, bottom: 0, left: 0 },
-        };
-
-      }
-
-      const resolvedDims = storedDims ??
-        fallbackDims ?? {
-          width: 0,
-          height: 0,
-          padding: { top: 0, right: 0, bottom: 0, left: 0 },
-        };
-
-      if (storedDims) {
-
-      } else if (!fallbackDims) {
-        console.warn(
-          `[TEXT DEBUG] ${element.id}: no stored or fallback dimensions available; proceeding with zeros`,
+      if (!storedDims) {
+        throw new Error(
+          `Text layout requires retained CSS dimensions for ${mesh.name}.`,
         );
       }
+      const resolvedDims = storedDims;
 
       const paddingPx = resolvedDims.padding ?? {
         top: 0,
@@ -320,14 +285,10 @@ export class BabylonDOMRendererService {
 
 
       // Convert text dimensions from CSS pixels to world units
-      const textScaleFactor = render.actions.camera.getPixelToWorldScale();
       const textureSize = this.textRenderingService.getLogicalTextureSize(textTexture);
       const textureWidthPx = textureSize.width;
       const textureHeightPx = textureSize.height;
-      const textureDimensions = {
-        width: textureWidthPx * textScaleFactor,
-        height: textureHeightPx * textScaleFactor,
-      };
+      const textureDimensions = projectCssSize(render, textureSize);
 
       // Determine layout dimensions for positioning within the parent box
       const layoutDimensions = {
@@ -368,7 +329,7 @@ export class BabylonDOMRendererService {
       const storedMetrics = this.textRenderingService.createStoredLayoutMetrics(
         element.textContent,
         textStyleProperties,
-        textScaleFactor,
+        projectCssLength(render, 1),
         availableWidthPx,
       );
       this.elementManager.registerTextElement(
@@ -463,11 +424,10 @@ export class BabylonDOMRendererService {
       const textStyleProperties = this.textRenderingService[
         "parseElementTextStyle"
       ](mockElement, textStyle);
-      const pixelToWorldScale = render.actions.camera.getPixelToWorldScale();
       const storedMetrics = this.textRenderingService.createStoredLayoutMetrics(
         newContent,
         textStyleProperties,
-        pixelToWorldScale,
+        projectCssLength(render, 1),
         maxWidth,
       );
       this.elementManager.textMetricsMap.set(elementId, storedMetrics);
@@ -701,14 +661,13 @@ export class BabylonDOMRendererService {
     // Parent text mesh to element mesh
     textMesh.parent = parentMesh;
 
-    const scale = render?.actions.camera.getPixelToWorldScale() || 1;
-
-    const parentBounds = parentMesh.getBoundingInfo().boundingBox;
-    const parentWidthWorld = parentBounds.maximum.x - parentBounds.minimum.x;
-    const parentHeightWorld = parentBounds.maximum.y - parentBounds.minimum.y;
-
-    const parentWidthPx = elementDims?.width ?? parentWidthWorld / scale;
-    const parentHeightPx = elementDims?.height ?? parentHeightWorld / scale;
+    if (!elementDims || !render) {
+      throw new Error(
+        `Text positioning requires retained CSS dimensions for ${parentMesh.name}.`,
+      );
+    }
+    const parentWidthPx = elementDims.width;
+    const parentHeightPx = elementDims.height;
 
 
 
@@ -761,46 +720,50 @@ export class BabylonDOMRendererService {
     );
 
     const verticalAlign = (style?.verticalAlign ?? "top").toLowerCase();
-    let offsetYPx: number;
+    let offsetYCssPx: number;
     switch (verticalAlign) {
       case "bottom":
-        offsetYPx =
-          -parentHeightPx / 2 + effectivePadding.bottom + textHeightPx / 2;
+        offsetYCssPx =
+          parentHeightPx / 2 - effectivePadding.bottom - textHeightPx / 2;
         break;
       case "middle":
       case "center":
-        offsetYPx =
-          parentHeightPx / 2 - effectivePadding.top - contentHeightPx / 2;
+        offsetYCssPx =
+          -parentHeightPx / 2 + effectivePadding.top + contentHeightPx / 2;
         break;
       case "baseline":
         // Approximate baseline as bottom alignment for now
-        offsetYPx =
-          -parentHeightPx / 2 + effectivePadding.bottom + textHeightPx / 2;
+        offsetYCssPx =
+          parentHeightPx / 2 - effectivePadding.bottom - textHeightPx / 2;
         break;
       default: // top alignment
-        offsetYPx =
-          parentHeightPx / 2 - effectivePadding.top - textHeightPx / 2;
+        offsetYCssPx =
+          -parentHeightPx / 2 + effectivePadding.top + textHeightPx / 2;
         break;
     }
 
     // Clamp vertical offset so text stays within content box
     const halfParentHeightPx = parentHeightPx / 2;
-    offsetYPx = Math.max(
-      -halfParentHeightPx + effectivePadding.bottom + textHeightPx / 2,
+    offsetYCssPx = Math.max(
+      -halfParentHeightPx + effectivePadding.top + textHeightPx / 2,
       Math.min(
-        halfParentHeightPx - effectivePadding.top - textHeightPx / 2,
-        offsetYPx,
+        halfParentHeightPx - effectivePadding.bottom - textHeightPx / 2,
+        offsetYCssPx,
       ),
     );
 
     // Position text mesh relative to parent (slightly in front to avoid z-fighting)
-    textMesh.position.x = offsetXPx * scale;
+    const renderedPosition = render.actions.camera.projectCssLocalPoint(
+      { x: offsetXPx, y: offsetYCssPx },
+      0.001,
+    );
+    textMesh.position.x = renderedPosition.x;
     // The text texture already contains the browser-style line box and its
     // alphabetic baseline. Position the line box itself here; applying a
     // second font-size/weight-dependent inset shifts the rendered glyph ink
     // away from the element's authored vertical alignment.
-    textMesh.position.y = offsetYPx * scale;
-    textMesh.position.z = 0.001; // Slightly in front of parent element - TODO: TECH-DEBT
+    textMesh.position.y = renderedPosition.y;
+    textMesh.position.z = renderedPosition.z; // Slightly in front of parent element - TODO: TECH-DEBT
 
 
   }

@@ -8,6 +8,11 @@ import { StyleRule } from '../../../types/style-rule';
 
 describe('GridService', () => {
   const service = new GridService();
+  const cssCamera = {
+    projectCssSize: (size: { width: number; height: number }) => size,
+    projectCssLocalPoint: (point: { x: number; y: number }, z = 0) =>
+      ({ x: point.x, y: -point.y, z }),
+  };
 
   it('allocates remaining track space across fr units after fixed tracks and gaps', () => {
     expect(service.resolveTracks('160px 1fr', 460, 20, 2)).toEqual([160, 280]);
@@ -113,7 +118,11 @@ describe('GridService', () => {
     const render = {
       actions: {
         style: { findStyleForElement: (element: { id?: string }) => styles.get(element.id ?? '') },
-        camera: { getPixelToWorldScale: () => 1 },
+        camera: {
+          projectCssSize: (size: { width: number; height: number }) => size,
+          projectCssLocalPoint: (point: { x: number; y: number }, z = 0) =>
+            ({ x: point.x, y: -point.y, z }),
+        },
         mesh: { positionTextMesh: jasmine.createSpy('positionTextMesh') },
       },
     } as unknown as BabylonRender;
@@ -154,7 +163,11 @@ describe('GridService', () => {
     const render = {
       actions: {
         style: { findStyleForElement: (element: { id?: string }) => styles.get(element.id ?? '') },
-        camera: { getPixelToWorldScale: () => 1 },
+        camera: {
+          projectCssSize: (size: { width: number; height: number }) => size,
+          projectCssLocalPoint: (point: { x: number; y: number }, z = 0) =>
+            ({ x: point.x, y: -point.y, z }),
+        },
         mesh: { positionTextMesh: jasmine.createSpy('positionTextMesh') },
       },
     } as unknown as BabylonRender;
@@ -196,6 +209,8 @@ describe('GridService', () => {
             ? { selector: '#grid', display: 'grid', gridTemplateColumns: '1fr', gridTemplateRows: '120px' }
             : { selector: '#item', display: 'flex' },
         },
+        camera: cssCamera,
+        mesh: { positionTextMesh: jasmine.createSpy('positionTextMesh') },
       },
     } as unknown as BabylonRender;
 
@@ -235,6 +250,8 @@ describe('GridService', () => {
             ? { selector: '#grid', display: 'grid', gridTemplateColumns: '252px', gridTemplateRows: 'auto' }
             : { selector: '#card', display: 'flex', height: 'auto' },
         },
+        camera: cssCamera,
+        mesh: { positionTextMesh: jasmine.createSpy('positionTextMesh') },
       },
     } as unknown as BabylonRender;
 
@@ -257,6 +274,12 @@ describe('GridService', () => {
     } as unknown as FlexService);
     const updateMesh = jasmine.createSpy('updateMeshWithBorderRadius');
     const parent = { name: 'grid', metadata: {}, position: { y: 0 } } as Mesh;
+    const positionMesh = jasmine.createSpy('positionTextMesh').and.callFake(
+      (mesh: Mesh, _x: number, y: number) => {
+        (mesh as unknown as { position: { y: number } }).position ??= { y: 0 };
+        mesh.position.y = y;
+      },
+    );
     const dimensions = {
       width: 280,
       height: 400,
@@ -267,9 +290,19 @@ describe('GridService', () => {
       context: {
         elementStyles: new Map(),
         elementDimensions: new Map<string, any>([
+          ['root-body', { width: 280, height: 400, padding: { top: 0, right: 0, bottom: 0, left: 0 } }],
           ['grid', dimensions],
           ['card', { width: 252, height: 74 }],
         ]),
+        layoutBoxes: new Map([['grid', {
+          parentId: 'root-body',
+          box: {
+            borderBox: { x: 0, y: 0, width: 280, height: 400 },
+            contentBox: { x: 14, y: 14, width: 252, height: 372 },
+            padding: { top: 14, right: 14, bottom: 14, left: 14 },
+            margin: { top: 0, right: 0, bottom: 0, left: 0 },
+          },
+        }]]),
       },
       actions: {
         createElement: () => childMesh,
@@ -283,10 +316,14 @@ describe('GridService', () => {
             ? { selector: '#grid', display: 'grid', gridTemplateColumns: '252px', gridTemplateRows: 'auto', height: 'auto' }
             : { selector: '#card', height: 'auto' },
         },
-        camera: { getPixelToWorldScale: () => 1 },
+        camera: {
+          projectCssSize: (size: { width: number; height: number }) => size,
+          projectCssLocalPoint: (point: { x: number; y: number }, z = 0) =>
+            ({ x: point.x, y: -point.y, z }),
+        },
         mesh: {
           updateMeshWithBorderRadius: updateMesh,
-          positionTextMesh: jasmine.createSpy('positionTextMesh'),
+          positionTextMesh: positionMesh,
         },
       },
     } as unknown as BabylonRender;
@@ -341,7 +378,11 @@ describe('GridService', () => {
     const render = {
       actions: {
         style: { findStyleForElement: (element: { id?: string }) => resolved.get(element.id ?? '') },
-        camera: { getPixelToWorldScale: () => 1 },
+        camera: {
+          projectCssSize: (size: { width: number; height: number }) => size,
+          projectCssLocalPoint: (point: { x: number; y: number }, z = 0) =>
+            ({ x: point.x, y: -point.y, z }),
+        },
         mesh: { positionTextMesh },
       },
     } as unknown as BabylonRender;

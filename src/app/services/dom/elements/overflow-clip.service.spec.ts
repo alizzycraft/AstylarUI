@@ -1,16 +1,25 @@
 import * as BABYLON from '@babylonjs/core';
 import { OverflowClipService } from './overflow-clip.service';
 import type { StyleRule } from '../../../types/style-rule';
+import { createCssLayoutBox } from '../../css-layout-geometry';
+import type { CssLayoutNode, CssPoint } from '../../coordinate-space.types';
 
 describe('OverflowClipService', () => {
   let engine: BABYLON.NullEngine;
   let scene: BABYLON.Scene;
   let service: OverflowClipService;
+  let layoutBoxes: Map<string, CssLayoutNode>;
+  const projectViewportPoint = (point: CssPoint) => ({
+    x: point.x - 5,
+    y: 6 - point.y,
+    z: 0,
+  });
 
   beforeEach(() => {
     engine = new BABYLON.NullEngine();
     scene = new BABYLON.Scene(engine);
     service = new OverflowClipService();
+    layoutBoxes = new Map();
   });
 
   afterEach(() => {
@@ -24,8 +33,13 @@ describe('OverflowClipService', () => {
     const child = BABYLON.MeshBuilder.CreatePlane('child', { width: 8, height: 8 }, scene);
     child.parent = parent;
     child.material = new BABYLON.StandardMaterial('child-material', scene);
+    layoutBoxes.set('parent', {
+      parentId: null,
+      box: createCssLayoutBox({ x: 6, y: 0, width: 4, height: 2 }),
+    });
+    spyOn(parent, 'getBoundingInfo').and.throwError('layout must not read mesh bounds');
 
-    service.apply(parent, { selector: '#parent', overflow: 'hidden' });
+    service.apply(parent, { selector: '#parent', overflow: 'hidden' }, layoutBoxes, projectViewportPoint);
 
     expect(child.material.clipPlane?.asArray()).toEqual([-1, 0, 0, 1]);
     expect(child.material.clipPlane2?.asArray()).toEqual([1, 0, 0, -5]);
@@ -40,8 +54,17 @@ describe('OverflowClipService', () => {
     const child = BABYLON.MeshBuilder.CreatePlane('child', { width: 8, height: 8 }, scene);
     child.parent = parent;
     child.material = new BABYLON.StandardMaterial('child-material', scene);
+    layoutBoxes.set('parent', {
+      parentId: null,
+      box: createCssLayoutBox({ x: 6, y: 0, width: 4, height: 2 }),
+    });
 
-    service.apply(parent, { selector: '#parent', overflow: 'hidden', borderRadius: '10px' });
+    service.apply(
+      parent,
+      { selector: '#parent', overflow: 'hidden', borderRadius: '10px' },
+      layoutBoxes,
+      projectViewportPoint,
+    );
 
     expect(child.metadata?.['astylarOverflowClipRegions']).toEqual([{
       minX: 1,
@@ -59,7 +82,7 @@ describe('OverflowClipService', () => {
     child.parent = parent;
     child.material = new BABYLON.StandardMaterial('child-material', scene);
 
-    service.apply(parent, { selector: '#parent', overflow: 'visible' });
+    service.apply(parent, { selector: '#parent', overflow: 'visible' }, layoutBoxes, projectViewportPoint);
 
     expect(child.material.clipPlane).toBeUndefined();
   });
@@ -69,8 +92,12 @@ describe('OverflowClipService', () => {
     const child = BABYLON.MeshBuilder.CreatePlane('child', { width: 4, height: 6 }, scene);
     child.parent = parent;
     child.material = new BABYLON.StandardMaterial('child-material', scene);
+    layoutBoxes.set('parent', {
+      parentId: null,
+      box: createCssLayoutBox({ x: 3, y: 5, width: 4, height: 2 }),
+    });
 
-    service.apply(parent, { selector: '#parent', overflow: 'auto' });
+    service.apply(parent, { selector: '#parent', overflow: 'auto' }, layoutBoxes, projectViewportPoint);
 
     expect(child.material.clipPlane?.asArray()).toEqual([-1, 0, 0, -2]);
     expect(child.material.clipPlane2?.asArray()).toEqual([1, 0, 0, -2]);
@@ -88,14 +115,25 @@ describe('OverflowClipService', () => {
     child.material = new BABYLON.StandardMaterial('child-material', scene);
     const outerStyle: StyleRule = { selector: '#outer', overflow: 'auto' };
     const innerStyle: StyleRule = { selector: '#inner', overflow: 'auto' };
+    layoutBoxes.set('outer', {
+      parentId: null,
+      box: createCssLayoutBox({ x: 0, y: 1, width: 10, height: 10 }),
+    });
+    layoutBoxes.set('inner', {
+      parentId: 'outer',
+      box: createCssLayoutBox({ x: 2, y: 3, width: 6, height: 4 }),
+    });
 
-    service.apply(outer, outerStyle);
-    service.apply(inner, innerStyle);
-    inner.position.y = 3;
+    service.apply(outer, outerStyle, layoutBoxes, projectViewportPoint);
+    service.apply(inner, innerStyle, layoutBoxes, projectViewportPoint);
+    layoutBoxes.set('inner', {
+      parentId: 'outer',
+      box: createCssLayoutBox({ x: 2, y: 0, width: 6, height: 4 }),
+    });
     service.refresh([
       { mesh: outer, style: outerStyle },
       { mesh: inner, style: innerStyle },
-    ]);
+    ], layoutBoxes, projectViewportPoint);
 
     expect(child.material.clipPlane3?.asArray()).toEqual([0, -1, 0, 1]);
     expect(child.material.clipPlane4?.asArray()).toEqual([0, 1, 0, -5]);

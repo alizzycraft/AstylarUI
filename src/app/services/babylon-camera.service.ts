@@ -151,6 +151,11 @@ export class BabylonCameraService {
     return worldHeight / cssHeight;
   }
 
+  /** Project viewport-relative CSS pixels into Babylon world coordinates. */
+  projectCssViewportPoint(point: CssPoint, renderDepth = 0): RenderPoint {
+    return this.getCssProjection().projectViewportPoint(point, renderDepth);
+  }
+
   /** Project element-local CSS pixels into Babylon world coordinates. */
   projectCssLocalPoint(point: CssPoint, renderDepth = 0): RenderPoint {
     return this.getCssProjection().projectLocalPoint(point, renderDepth);

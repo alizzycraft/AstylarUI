@@ -12,6 +12,11 @@ import {
 } from './grid-track-sizing';
 import { ElementBorderService } from './element-border.service';
 import { updateCssLayoutNode } from '../../css-layout-geometry';
+import {
+  positionRenderedCssBox,
+  projectCssLength,
+  projectCssSize,
+} from '../../css-render-boundary';
 
 interface GridItemPlacement {
   column: number;
@@ -123,29 +128,44 @@ export class GridService {
         rowGap * Math.max(0, rows.length - 1) +
         dimensions.padding.top + dimensions.padding.bottom;
       if (Math.abs(intrinsicHeight - dimensions.height) > 0.1) {
-        const scaleFactor = render.actions.camera.getPixelToWorldScale();
+        const renderedSize = projectCssSize(render, {
+          width: dimensions.width,
+          height: intrinsicHeight,
+        });
         const borderRadius = this.borderService?.parseBorderRadius(style.borderRadius) ??
           (Number.parseFloat(style.borderRadius ?? '0') || 0);
         const borderWidth = this.borderService?.parseBorderProperties(render, style).width ??
-          (Number.parseFloat(style.borderWidth ?? '0') || 0) * scaleFactor;
+          projectCssLength(render, Number.parseFloat(style.borderWidth ?? '0') || 0);
         render.actions.mesh.updateMeshWithBorderRadius(
           parent,
           'rectangle',
-          dimensions.width * scaleFactor,
-          intrinsicHeight * scaleFactor,
-          borderRadius * scaleFactor,
+          renderedSize.width,
+          renderedSize.height,
+          projectCssLength(render, borderRadius),
           borderWidth,
         );
-        parent.position.y += ((dimensions.height - intrinsicHeight) / 2) * scaleFactor;
         dimensions.height = intrinsicHeight;
         dom.context.elementDimensions.set(parent.name, dimensions);
         const retainedParent = dom.context.layoutBoxes?.get(parent.name);
         if (retainedParent) {
-          dom.context.layoutBoxes.set(parent.name, updateCssLayoutNode(
+          const resized = updateCssLayoutNode(
             retainedParent,
             retainedParent.box.borderBox,
             { width: dimensions.width, height: intrinsicHeight },
-          ));
+          );
+          dom.context.layoutBoxes.set(parent.name, resized);
+          const containingBlock = resized.parentId
+            ? dom.context.elementDimensions.get(resized.parentId)
+            : undefined;
+          if (containingBlock) {
+            positionRenderedCssBox(
+              render,
+              parent,
+              resized.box.borderBox,
+              containingBlock,
+              parent.position.z,
+            );
+          }
         }
         contentHeight = Math.max(
           0,
@@ -190,24 +210,31 @@ export class GridService {
         childStyle?.alignSelf ?? style.alignItems,
         hasDefiniteHeight,
       );
-      const scaleFactor = render.actions.camera?.getPixelToWorldScale?.() ?? 1;
-      render.actions.mesh?.positionTextMesh?.(
-        childMesh,
-        (contentLeft + xOffset + this.alignItemWithinTrack(width, usedSize.width, horizontalAlignment)) * scaleFactor,
-        (contentTop - yOffset - this.alignItemWithinTrack(height, usedSize.height, verticalAlignment)) * scaleFactor,
-        0.1 + index * 0.01,
-      );
       const alignedLeft = dimensions.padding.left + xOffset +
         this.itemAlignmentOffset(width, usedSize.width, horizontalAlignment);
       const alignedTop = dimensions.padding.top + yOffset +
         this.itemAlignmentOffset(height, usedSize.height, verticalAlignment);
+      const alignedBorderBox = {
+        x: alignedLeft,
+        y: alignedTop,
+        width: usedSize.width,
+        height: usedSize.height,
+      };
+      positionRenderedCssBox(
+        render,
+        childMesh,
+        alignedBorderBox,
+        dimensions,
+        0.1 + index * 0.01,
+      );
       const retained = dom.context.layoutBoxes?.get(childMesh.name);
       if (retained) {
-        dom.context.layoutBoxes.set(childMesh.name, updateCssLayoutNode(
+        const aligned = updateCssLayoutNode(
           retained,
-          { x: alignedLeft, y: alignedTop },
+          alignedBorderBox,
           usedSize,
-        ));
+        );
+        dom.context.layoutBoxes.set(childMesh.name, aligned);
       }
 
       // Grid track sizing produces a definite used size for the item. Nested

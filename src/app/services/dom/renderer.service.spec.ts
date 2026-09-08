@@ -36,12 +36,19 @@ describe('BabylonDOMRendererService', () => {
       position: { x: 0, y: 0, z: 0 },
     };
     const parentMesh = {
-      getBoundingInfo: () => ({
-        boundingBox: {
-          minimum: { x: -53.5, y: -12 },
-          maximum: { x: 53.5, y: 12 },
+      name: 'tooltip',
+      getBoundingInfo: () => { throw new Error('text layout must not read mesh bounds'); },
+    };
+    const render = {
+      actions: {
+        camera: {
+          projectCssLocalPoint: (point: { x: number; y: number }, z: number) => ({
+            x: point.x,
+            y: -point.y,
+            z,
+          }),
         },
-      }),
+      },
     };
 
     renderer['positionTextMesh'](
@@ -51,6 +58,7 @@ describe('BabylonDOMRendererService', () => {
       { selector: '.tooltip', fontSize: '12px', lineHeight: '16px' },
       { top: 4, right: 8, bottom: 4, left: 8 },
       { width: 107, height: 24, padding: { top: 4, right: 8, bottom: 4, left: 8 } },
+      render as never,
     );
 
     expect(textMesh.position.y).toBe(0);

@@ -391,6 +391,10 @@ class AstylarRenderer {
             this.babylonCameraService.getPixelToWorldScale.bind(
               this.babylonCameraService,
             ),
+          projectCssViewportPoint:
+            this.babylonCameraService.projectCssViewportPoint.bind(
+              this.babylonCameraService,
+            ),
           projectCssLocalPoint:
             this.babylonCameraService.projectCssLocalPoint.bind(
               this.babylonCameraService,
@@ -429,7 +433,11 @@ class AstylarRenderer {
       resolveStyle: (element, currentSiteData) =>
         this.styleService.findStyleForElement(element, currentSiteData.styles),
       getPixelToWorldScale: () => this.babylonCameraService.getPixelToWorldScale(),
-      refreshClipping: (entries) => this.overflowClipService.refresh(entries),
+      refreshClipping: (entries) => this.overflowClipService.refresh(
+        entries,
+        this.elementManager.layoutBoxesMap,
+        (point) => this.babylonCameraService.projectCssViewportPoint(point),
+      ),
     });
     this.scrolling.set(scene, scrollRuntime);
     const semanticBridge = options?.accessibility === false

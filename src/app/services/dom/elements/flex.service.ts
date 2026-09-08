@@ -17,6 +17,11 @@ import {
 import { ImageLayoutService } from './image-layout.service';
 import { ImageResourceService } from './image-resource.service';
 import { DOMAncestryService } from '../dom-ancestry.service';
+import {
+  positionRenderedCssBox,
+  projectCssLength,
+  projectCssSize,
+} from '../../css-render-boundary';
 
 @Injectable({
   providedIn: 'root'
@@ -51,9 +56,6 @@ export class FlexService {
     parentElement: DOMElement
   ): void {
 
-    // Get scale factor for debugging
-    const scaleFactor = render.actions.camera.getPixelToWorldScale();
-
     // Get parent style and dimensions
     const parentStyle = render.actions.style.findStyleForElement(parentElement, styles);
     if (!parentStyle) throw new Error('FlexService: parent style not found');
@@ -75,7 +77,6 @@ export class FlexService {
       parent,
       parentDimensions.width,
       parentDimensions.height,
-      scaleFactor,
     );
 
     const viewportDimensions = dom.context.elementDimensions.get('root-body') ?? {
@@ -430,7 +431,6 @@ export class FlexService {
     mesh: Mesh,
     width: number,
     currentHeight: number,
-    scaleFactor: number,
   ): number {
     const hasExplicitHeight = style.height !== undefined && style.height !== 'auto';
     const hasLayoutAssignedHeight =
@@ -454,20 +454,18 @@ export class FlexService {
 
     const borderRadius = this.borderService?.parseBorderRadius(style.borderRadius) ??
       (Number.parseFloat(style.borderRadius ?? '0') || 0);
+    const renderedSize = projectCssSize(render, { width, height: intrinsicHeight });
     const borderWidth = this.borderService?.parseBorderProperties(render, style).width ??
-      (Number.parseFloat(style.borderWidth ?? '0') || 0) * scaleFactor;
+      projectCssLength(render, Number.parseFloat(style.borderWidth ?? '0') || 0);
     render.actions.mesh.updateMeshWithBorderRadius(
       mesh,
       'rectangle',
-      width * scaleFactor,
-      intrinsicHeight * scaleFactor,
-      borderRadius * scaleFactor,
+      renderedSize.width,
+      renderedSize.height,
+      projectCssLength(render, borderRadius),
       borderWidth,
     );
 
-    // CSS top positioning fixes the top border edge, so changing auto height
-    // moves only the bottom edge and therefore shifts the mesh center upward.
-    mesh.position.y += ((currentHeight - intrinsicHeight) / 2) * scaleFactor;
     const stored = dom.context.elementDimensions.get(mesh.name);
     if (stored) {
       dom.context.elementDimensions.set(mesh.name, {
@@ -477,11 +475,24 @@ export class FlexService {
     }
     const retained = dom.context.layoutBoxes?.get(mesh.name);
     if (retained) {
-      dom.context.layoutBoxes.set(mesh.name, updateCssLayoutNode(
+      const resized = updateCssLayoutNode(
         retained,
         retained.box.borderBox,
         { width, height: intrinsicHeight },
-      ));
+      );
+      dom.context.layoutBoxes.set(mesh.name, resized);
+      const containingBlock = resized.parentId
+        ? dom.context.elementDimensions.get(resized.parentId)
+        : undefined;
+      if (containingBlock) {
+        positionRenderedCssBox(
+          render,
+          mesh,
+          resized.box.borderBox,
+          containingBlock,
+          mesh.position.z,
+        );
+      }
     }
     return intrinsicHeight;
   }
