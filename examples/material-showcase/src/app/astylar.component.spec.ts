@@ -234,11 +234,11 @@ describe('AstylarShowcaseComponent', () => {
       width: '280px', height: '161px', padding: '0', background: '#fef8fc', color: '#1d1b20',
     }));
     expect(style(darkDialog, '.dialog-title')).toEqual(jasmine.objectContaining({
-      margin: '0 0 1px', padding: '6px 24px 13px', display: 'flex', alignItems: 'flex-end',
+      margin: '0 0 1px', padding: '7px 24px 12px', display: 'flex', alignItems: 'flex-end',
     }));
     expect(find(darkDialog, 'dialog-title-label')?.['textContent']).toBe('Confirm action');
     expect(style(darkDialog, '.dialog-copy')).toEqual(jasmine.objectContaining({
-      margin: '0', color: '#49454f', fontSize: '14px', lineHeight: '20px', verticalAlign: 'middle',
+      margin: '0', padding: '2px 24px 0', color: '#49454f', fontSize: '14px', lineHeight: '20px', verticalAlign: 'middle',
     }));
     expect(style(darkDialog, '.dialog-action')).toEqual(jasmine.objectContaining({
       color: '#7d00fa', fontSize: '14px',
