@@ -12,6 +12,9 @@ export const PARITY_VIEWPORTS: Record<string, ParityViewport> = {
   desktop: { id: 'desktop', width: 800, height: 600, deviceScaleFactor: 1 },
   tablet: { id: 'tablet', width: 640, height: 720, deviceScaleFactor: 1 },
   mobile: { id: 'mobile', width: 390, height: 844, deviceScaleFactor: 1 },
+  'tailwind-retina': {
+    id: 'tailwind-retina', width: 700, height: 600, deviceScaleFactor: 2,
+  },
 };
 
 export const PARITY_VIEWPORT = PARITY_VIEWPORTS['desktop'];
@@ -71,6 +74,10 @@ export interface ParityFixture {
   /** Non-control text nodes whose browser/Astylar selection state must match. */
   textSelectionIds?: string[];
   scrollIds?: string[];
+  /** Fixture-specific pixel tolerance for scroll extents/positions; defaults to exact. */
+  scrollStateTolerancePx?: number;
+  /** Regions whose local edge/gradient fidelity must pass the calibrated sharpness metric. */
+  sharpnessIds?: string[];
   /** Authored IDs whose browser accessibility snapshots must match exactly. */
   semanticIds?: string[];
   /** Live-region IDs whose non-empty mutation announcements must match exactly. */

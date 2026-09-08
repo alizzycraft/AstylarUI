@@ -15,6 +15,10 @@ const sources = Object.freeze([
     transform: 'portable-html-css-links',
   },
   {
+    source: 'docs/document-styles.md',
+    destination: 'document-styles.md',
+  },
+  {
     source: 'docs/compatibility/capabilities.json',
     destination: 'capabilities.json',
   },
@@ -96,6 +100,7 @@ function publicRootExports(content, { astylarVersion }) {
 const transforms = Object.freeze({
   'portable-html-css-links': (content) => content
     .replace('(examples/README.md)', '(translation-examples.json)')
+    .replace('(../document-styles.md)', '(document-styles.md)')
     .replace('(../reconciliation.md)', '(reconciliation.md)')
     .replace('(../plugins.md)', '(plugins.md)'),
   'portable-plugin-links': (content) => content.replace(

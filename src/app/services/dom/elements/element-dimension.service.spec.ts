@@ -102,6 +102,30 @@ describe('ElementDimensionService', () => {
     expect(result.padding).toEqual({ top: 11, right: 12, bottom: 13, left: 14 });
   });
 
+  it('lets computed padding and margin longhands override their shorthands', () => {
+    const service = new ElementDimensionService({} as never, {} as never, new DOMAncestryService());
+    const style: StyleRule = {
+      selector: '#computed-box',
+      padding: '4px',
+      paddingTop: '11px',
+      paddingRight: '12px',
+      paddingBottom: '13px',
+      paddingLeft: '14px',
+      margin: '2px',
+      marginTop: '5px',
+      marginRight: '6px',
+      marginBottom: '7px',
+      marginLeft: '8px',
+    };
+
+    expect(service.parsePadding({} as BabylonRender, style, { width: 300, height: 200 })).toEqual({
+      top: 11, right: 12, bottom: 13, left: 14,
+    });
+    expect(service.parseMargin(style)).toEqual({
+      top: 5, right: 6, bottom: 7, left: 8,
+    });
+  });
+
   it('uses the viewport root as the layout parent for fixed elements', () => {
     const service = new ElementDimensionService({} as never, {} as never, new DOMAncestryService());
     const root = { name: 'root-body' } as Mesh;

@@ -7,7 +7,7 @@ uses a different platform pattern.
 
 For exhaustive public-name lookup, accepted value families, defaults,
 inheritance, alternatives, plugin extensibility, and evidence, use the checked
-[`capabilities.json`](capabilities.json). For concrete source pairs, use the ten
+[`capabilities.json`](capabilities.json). For concrete source pairs, use the eleven
 verified [`translation examples`](examples/README.md). A positive support claim
 in this document should be read with those constraints, not as an implementation
 of the complete HTML or CSS standards.
@@ -31,7 +31,7 @@ HTML/CSS knowledge is the starting vocabulary; Astylar is not a browser DOM.
 | An HTML document tree | A serializable `SiteData.root.children` tree of `DOMElement` objects | Different |
 | A tag name | `DOMElement.type`, using a built-in alias such as `section` or a canonical plugin ID such as `example.cards:card` | Direct / Plugin |
 | Attributes and text | Typed camelCase fields such as `id`, `class`, `textContent`, `href`, `required`, and `ariaLabel` | Compatible |
-| A stylesheet | Ordered `SiteData.styles` objects with a `selector` and camelCase declarations | Different |
+| A stylesheet | Either opted-in ordinary global CSS resolved into the supported typed subset, or ordered `SiteData.styles` objects with camelCase declarations | Different |
 | Inline style | `DOMElement.style` | Direct |
 | Browser layout and paint | Measured CSS-like layout converted into owned Babylon meshes, materials, and textures | Compatible / Different |
 | Browser events | Typed handlers supplied separately through `AstylarRenderOptions.events` | Different |
@@ -74,18 +74,24 @@ Astylar supports the measured selector subset used by the parity corpus:
 - the tested structural, control-state, and control-requirement pseudo-classes;
 - authored `:hover`, `:active`, and `:focus` state styles.
 
-The cascade applies element defaults first, then stylesheet specificity and
-source order, renderer context overrides, and finally inline style. Each plugin
+The cascade applies element defaults first, then opted-in loaded document styles,
+ordered `SiteData.styles`, renderer context overrides, and finally inline style.
+Each origin retains normal specificity and source order. Each plugin
 extension declaration cascades independently by canonical property identity.
 This is not a general `querySelector` implementation or all of Selectors Level
 4; absence from the catalog/evidence means unsupported.
 
-Responsive intent transfers, but `@media` syntax does not. Put
+When loaded document styles are disabled, responsive intent transfers but
+`@media` syntax does not: put
 `mediaMinWidth`, `mediaMaxWidth`, `mediaMinHeight`, or `mediaMaxHeight` on the
 individual JSON rule. Bounds participate in normal source order. The Angular
 surface component observes its canvas size; a direct host calls
 `surface.resize()` after changing it. Viewport units resolve against the
-surface, not an unrelated browser page viewport.
+surface, not an unrelated browser page viewport. With
+`provideAstylar({ css: { useDocumentStyles: true } })`, inspectable applicable
+global CSS keeps ordinary `@media` rules and resolves against each Astylar
+surface's dimensions before entering the typed cascade. See
+[`docs/document-styles.md`](../document-styles.md).
 
 ## Values, units, inheritance, and defaults
 
@@ -108,9 +114,12 @@ containers. Author explicit styles when browser/Astylar output must match rather
 than relying on unrelated user-agent defaults. The capability freshness gate
 fingerprints that source so a default change requires compatibility review.
 
-CSS custom properties, `var()`, `calc()`, container queries, arbitrary CSS
-functions, and a general shorthand/parser engine are unsupported. Supply the
-resolved supported value from Angular state instead.
+Direct `StyleRule` authoring does not accept CSS custom-property declarations,
+`var()`, `calc()`, or arbitrary functions. Supply a supported resolved value
+from Angular state, or enable loaded document styles so the browser resolves
+custom properties, `var()`, `calc()`, modern colors, and generated utility
+compositions first. Only final properties and values supported by Astylar enter
+the renderer; container queries and a general CSS engine remain out of scope.
 
 ## Layout
 
@@ -325,7 +334,7 @@ The catalog contains the checked list. The most important boundaries are:
 | Familiar web feature | Current status | Recommended Astylar pattern |
 | --- | --- | --- |
 | CSS transitions, animations, `@keyframes` | Unsupported | Immediate state styles; Angular state plus `update()`; owned plugin/Babylon animation when genuinely 3D |
-| CSS variables and `calc()` | Unsupported | Resolve values in Angular/TypeScript and author supported final values |
+| CSS variables and `calc()` | Different | Enable loaded document styles for browser resolution into supported final values, or resolve values in Angular/TypeScript for direct `StyleRule` authoring |
 | Sticky, floats, columns, subgrid, container queries | Unsupported | Use supported block/Flex/Grid/positioned composition and surface breakpoints |
 | SVG/MathML and browser media/embed behavior | Unsupported as native subsystems | Pre-rendered image, host Angular content, or purpose-built plugin renderer |
 | Browser DOM querying/mutation | Different | Keep application state in Angular and publish replacement `SiteData`; direct hosts explicitly call `surface.update()` for each revision |
@@ -349,8 +358,8 @@ npm run consumer:check
 ```
 
 The catalog gate compares exact public element/field/property coverage and
-tracked semantic source fingerprints. The examples gate validates all ten
-translation sources. Parity measures the seven fixture-backed pairs and broader
+tracked semantic source fingerprints. The examples gate validates all eleven
+translation sources. Parity measures the eight fixture-backed pairs and broader
 browser-equivalence corpus. The packed consumer executes the plugin translation
 across the public package boundary.
 

@@ -25,6 +25,9 @@ import { SiteDataService } from '../services/site-data.service';
               <a routerLink="/" class="site-link home-link">
                 🏠 Home
               </a>
+              <a routerLink="/tailwind-showcase" class="site-link showcase-link">
+                Tailwind comparison
+              </a>
               @for (siteName of availableSites(); track siteName) {
                 <a [routerLink]="['/site', siteName]" 
                    class="site-link demo-link"
@@ -190,6 +193,10 @@ import { SiteDataService } from '../services/site-data.service';
       &.home-link {
         background: linear-gradient(135deg, #10b981 0%, #059669 100%);
         &:hover { box-shadow: 0 6px 15px rgba(16, 185, 129, 0.3); }
+      }
+
+      &.showcase-link {
+        background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
       }
 
       .icon {

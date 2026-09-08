@@ -163,6 +163,8 @@ import { interactionSelectExpandedClickawayFixture } from './interaction-select-
 import { interactionSelectExpandedPlacementFixture } from './interaction-select-expanded-placement.fixture';
 import { interactionSelectExpandedStackingFixture } from './interaction-select-expanded-stacking.fixture';
 import { interactionSelectExpandedCleanupFixture } from './interaction-select-expanded-cleanup.fixture';
+import { tailwindLoadedUtilitiesFixture } from './tailwind-loaded-utilities.fixture';
+import { semanticContainerTransparentDefaultsFixture } from './semantic-container-transparent-defaults.fixture';
 import { ParityFixture } from '../parity.types';
 
 const fixtures: readonly ParityFixture[] = [
@@ -237,6 +239,8 @@ const fixtures: readonly ParityFixture[] = [
   composedDashboardFixture,
   composedResponsiveGalleryFixture,
   composedSettingsFormFixture,
+  tailwindLoadedUtilitiesFixture,
+  semanticContainerTransparentDefaultsFixture,
   composedModalFixture,
   composedPopoverFixture,
   composedArticleFixture,

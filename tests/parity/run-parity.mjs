@@ -5,16 +5,20 @@ import process from 'node:process';
 import { chromium } from 'playwright-core';
 import { PNG } from 'pngjs';
 import { ssim } from 'ssim.js';
+import { compareSharpness, cropRgba, evaluateSharpness } from './sharpness-metrics.mjs';
 
 const ROOT = process.cwd();
 const BASE_URL = process.env['ASTYLAR_PARITY_BASE_URL'] ?? 'http://127.0.0.1:4300';
 const ARTIFACTS_DIR = path.join(ROOT, 'artifacts', 'parity');
 const enforceThresholds = process.argv.includes('--enforce');
+const enforceFocusedThresholds = process.argv.includes('--enforce-focused');
+const fixtureArgument = process.argv.find((argument) => argument.startsWith('--fixture='));
 const shouldStartServer = !process.env['ASTYLAR_PARITY_BASE_URL'];
 const viewportProfiles = {
   desktop: { id: 'desktop', width: 800, height: 600, deviceScaleFactor: 1 },
   tablet: { id: 'tablet', width: 640, height: 720, deviceScaleFactor: 1 },
-  mobile: { id: 'mobile', width: 390, height: 844, deviceScaleFactor: 1 }
+  mobile: { id: 'mobile', width: 390, height: 844, deviceScaleFactor: 1 },
+  'tailwind-retina': { id: 'tailwind-retina', width: 700, height: 600, deviceScaleFactor: 2 }
 };
 
 const thresholds = {
@@ -40,7 +44,8 @@ try {
     throw new Error(`Unable to load fixture manifest: ${manifestResponse.status}`);
   }
   const manifestFixtures = await manifestResponse.json();
-  const requestedFixtureId = process.env['ASTYLAR_PARITY_FIXTURE'];
+  const requestedFixtureId = process.env['ASTYLAR_PARITY_FIXTURE'] ??
+    fixtureArgument?.slice('--fixture='.length);
   const fixtures = requestedFixtureId
     ? manifestFixtures.filter((fixture) => fixture.id === requestedFixtureId)
     : manifestFixtures;
@@ -121,6 +126,8 @@ try {
   if (results.some((result) => result.runtimeErrors.length > 0)) {
     process.exitCode = 1;
   } else if (enforceThresholds && !summary.meetsCompletionThresholds) {
+    process.exitCode = 1;
+  } else if (enforceFocusedThresholds && !summary.meetsFocusedThresholds) {
     process.exitCode = 1;
   }
 } catch (error) {
@@ -225,6 +232,13 @@ async function measureFixture(context, fixture, viewport) {
   const scrolling = compareScrolling(reference.report, astylar.report);
   const text = compareText(reference.report, astylar.report);
   const styles = compareStyles(reference.report, astylar.report, fixture.enforcedStyleProperties);
+  const sharpness = compareSharpnessRegions(
+    reference.screenshot,
+    astylar.screenshot,
+    reference.report,
+    fixture.sharpnessIds ?? [],
+    viewport.deviceScaleFactor,
+  );
   const semanticErrors = compareSemantics(reference.semantics, astylar.semantics);
   const runtimeErrors = [
     ...reference.pageErrors.map((error) => `reference: ${error}`),
@@ -247,6 +261,7 @@ async function measureFixture(context, fixture, viewport) {
     scrolling,
     text,
     styles,
+    sharpness,
     semantics: {
       reference: reference.semantics,
       astylar: astylar.semantics,
@@ -1106,7 +1121,7 @@ function compareInteraction(reference, astylar, fixture) {
   for (const id of scrollIds) {
     const expected = referenceInteraction.scrollContainers?.[id];
     const actual = astylarInteraction.scrollContainers?.[id];
-    if (JSON.stringify(expected) !== JSON.stringify(actual)) {
+    if (!scrollStatesMatch(expected, actual, fixture.scrollStateTolerancePx ?? 0)) {
       errors.push(`scroll state differs for ${id} (${JSON.stringify(expected)} vs ${JSON.stringify(actual)})`);
     }
   }
@@ -1126,6 +1141,19 @@ function compareInteraction(reference, astylar, fixture) {
     }
   }
   return errors;
+}
+
+function scrollStatesMatch(expected, actual, tolerance) {
+  if (!expected || !actual) return expected === actual;
+  const numericKeys = [
+    'scrollLeft', 'scrollTop', 'scrollWidth', 'scrollHeight', 'clientWidth',
+    'clientHeight', 'initialScrollLeft', 'initialScrollTop', 'maxScrollLeft',
+    'maxScrollTop',
+  ];
+  const booleanKeys = ['canReachRight', 'canReachBottom'];
+  return numericKeys.every((key) =>
+    Math.abs(Number(expected[key]) - Number(actual[key])) <= tolerance
+  ) && booleanKeys.every((key) => expected[key] === actual[key]);
 }
 
 /**
@@ -1369,6 +1397,29 @@ function comparePng(referenceBuffer, astylarBuffer) {
   return ssim(reference, astylar, { ssim: 'fast' }).mssim;
 }
 
+function compareSharpnessRegions(referenceBuffer, astylarBuffer, referenceReport, ids, dpr) {
+  const reference = PNG.sync.read(referenceBuffer);
+  const astylar = PNG.sync.read(astylarBuffer);
+  return ids.map((id) => {
+    const box = referenceReport.elements[id]?.borderBox;
+    if (!box) return { id, meetsTarget: false, error: 'missing reference geometry' };
+    const padding = 2 * dpr;
+    const bounds = {
+      left: box.left * dpr - padding,
+      top: box.top * dpr - padding,
+      right: box.right * dpr + padding,
+      bottom: box.bottom * dpr + padding,
+    };
+    return {
+      id,
+      ...evaluateSharpness(compareSharpness(
+        cropRgba(reference, bounds),
+        cropRgba(astylar, bounds),
+      )),
+    };
+  });
+}
+
 function findCatastrophicCapture(referenceStates, astylarStates) {
   return referenceStates.findIndex((reference, index) => {
     const astylar = astylarStates[index];
@@ -1547,12 +1598,14 @@ function normalizeStyleValue(property, value) {
 
 function normalizeColor(value) {
   const source = String(value).trim().toLowerCase();
+  if (source === 'transparent') return 'transparent';
   if (/^#[0-9a-f]{6}$/.test(source)) return source;
   if (/^#[0-9a-f]{3}$/.test(source)) {
     return `#${source[1]}${source[1]}${source[2]}${source[2]}${source[3]}${source[3]}`;
   }
-  const match = source.match(/^rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/);
+  const match = source.match(/^rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)(?:\s*,\s*([\d.]+))?/);
   if (!match) return source;
+  if (match[4] !== undefined && Number.parseFloat(match[4]) === 0) return 'transparent';
   return `#${[match[1], match[2], match[3]]
     .map((component) => Number(component).toString(16).padStart(2, '0'))
     .join('')}`;
@@ -1582,6 +1635,9 @@ function summarize(results) {
   const everyFixtureSsimPasses = results.every(
     (result) => result.screenshotSimilarity >= thresholds.minimumFixtureSsim
   );
+  const allSharpnessMatches = results.every((result) =>
+    (result.sharpness ?? []).every((region) => region.meetsTarget)
+  );
 
   return {
     fixtureCount: new Set(results.map((result) => result.id)).size,
@@ -1593,6 +1649,15 @@ function summarize(results) {
     maximumEdgeError,
     allTextMatches,
     noRuntimeErrors,
+    allSharpnessMatches,
+    meetsFocusedThresholds:
+      everyFixtureSsimPasses &&
+      edgesWithinTolerance >= thresholds.minimumEdgesWithinTolerance &&
+      maximumEdgeError !== null &&
+      maximumEdgeError <= thresholds.maximumEdgeErrorPx &&
+      allTextMatches &&
+      allSharpnessMatches &&
+      noRuntimeErrors,
     meetsCompletionThresholds:
       results.length >= 40 &&
       medianSsim >= thresholds.minimumMedianSsim &&
@@ -1601,6 +1666,7 @@ function summarize(results) {
       maximumEdgeError !== null &&
       maximumEdgeError <= thresholds.maximumEdgeErrorPx &&
       allTextMatches &&
+      allSharpnessMatches &&
       noRuntimeErrors
   };
 }
@@ -1617,6 +1683,8 @@ function printSummary(report) {
   console.log(`Maximum edge error: ${report.summary.maximumEdgeError ?? 'n/a'}px`);
   console.log(`Text matches: ${report.summary.allTextMatches}`);
   console.log(`Runtime clean: ${report.summary.noRuntimeErrors}`);
+  console.log(`Local sharpness matches: ${report.summary.allSharpnessMatches}`);
+  console.log(`Focused thresholds: ${report.summary.meetsFocusedThresholds}`);
   console.log(`Completion thresholds: ${report.summary.meetsCompletionThresholds}`);
 
   for (const fixture of report.fixtures) {

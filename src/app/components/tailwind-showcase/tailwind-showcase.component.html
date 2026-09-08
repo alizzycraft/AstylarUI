@@ -1,0 +1,118 @@
+<main class="showcase-shell">
+  <header class="showcase-header">
+    <div>
+      <p class="tw:m-0 tw:text-xs tw:font-bold tw:uppercase tw:leading-5 tw:tracking-widest tw:text-blue-300">
+        AstylarUI visual workbench
+      </p>
+      <h1 class="tw:m-0 tw:text-3xl tw:font-bold tw:leading-10 tw:text-white">
+        Tailwind side-by-side showcase
+      </h1>
+      <p class="tw:m-0 tw:max-w-3xl tw:text-sm tw:leading-6 tw:text-slate-300">
+        Ordinary browser elements are on the left; the equivalent SiteData rendered through Babylon is on the right.
+        Both consume the same Tailwind v4 stylesheet and complete static utility strings.
+      </p>
+    </div>
+    <a class="back-link" href="/">Back to demos</a>
+  </header>
+
+  <section class="workbench-controls" aria-label="Showcase controls">
+    <div class="control-group">
+      <span class="control-label">Coverage tab</span>
+      <div class="tab-list" role="tablist" aria-label="Tailwind coverage areas">
+        @for (tab of tabs; track tab.id; let index = $index) {
+          <button
+            type="button"
+            role="tab"
+            class="tab-button"
+            [id]="'tailwind-tab-' + tab.id"
+            [attr.aria-controls]="'tailwind-panel-' + tab.id"
+            [attr.aria-selected]="selectedTabId() === tab.id"
+            [tabIndex]="selectedTabId() === tab.id ? 0 : -1"
+            (click)="selectTab(tab.id)"
+            (keydown)="onTabKeydown($event, index)"
+          >
+            {{ tab.label }}
+          </button>
+        }
+      </div>
+    </div>
+
+    <div class="control-group viewport-controls">
+      <span class="control-label">Shared surface viewport</span>
+      <div class="viewport-list" aria-label="Comparison viewport" role="group">
+        @for (viewport of viewports; track viewport.id) {
+          <button
+            type="button"
+            class="viewport-button"
+            [attr.aria-pressed]="selectedViewportId() === viewport.id"
+            (click)="selectViewport(viewport.id)"
+          >
+            {{ viewport.label }}
+          </button>
+        }
+      </div>
+    </div>
+  </section>
+
+  <section
+    class="coverage-summary"
+    role="tabpanel"
+    [id]="'tailwind-panel-' + selectedTab().id"
+    [attr.aria-labelledby]="'tailwind-tab-' + selectedTab().id"
+  >
+    <div>
+      <p class="summary-eyebrow">{{ selectedTab().eyebrow }}</p>
+      <p class="summary-description">{{ selectedTab().description }}</p>
+    </div>
+    <div class="coverage-list" aria-label="Utilities covered">
+      @for (item of selectedTab().coverage; track item) {
+        <code>{{ item }}</code>
+      }
+    </div>
+    <p class="render-status" aria-live="polite">{{ renderStatus() }}</p>
+  </section>
+
+  <div class="comparison-scroll" tabindex="0" aria-label="Side-by-side comparison area">
+    <div
+      class="comparison-grid"
+      [style.--showcase-width.px]="selectedViewport().width"
+      [style.--showcase-height.px]="selectedViewport().height"
+    >
+      <section class="comparison-pane" aria-labelledby="browser-pane-title">
+        <header class="pane-header">
+          <div>
+            <p class="pane-kicker">Reference</p>
+            <h2 id="browser-pane-title">Browser + Tailwind</h2>
+          </div>
+          <span>{{ selectedViewport().width }} × {{ selectedViewport().height }}</span>
+        </header>
+        <div class="demo-viewport">
+          <app-tailwind-reference
+            [nodes]="referenceNodes()"
+            [width]="selectedViewport().width"
+            [height]="selectedViewport().height"
+          />
+        </div>
+      </section>
+
+      <section class="comparison-pane" aria-labelledby="astylar-pane-title">
+        <header class="pane-header">
+          <div>
+            <p class="pane-kicker">Candidate</p>
+            <h2 id="astylar-pane-title">AstylarUI + Tailwind</h2>
+          </div>
+          <span>{{ selectedViewport().width }} × {{ selectedViewport().height }}</span>
+        </header>
+        <div class="demo-viewport">
+          <astylar-surface
+            data-testid="tailwind-showcase-surface"
+            [siteData]="siteData()"
+            [options]="astylarOptions"
+            (mounted)="onMounted($event)"
+            (failed)="onFailed($event)"
+          />
+        </div>
+      </section>
+    </div>
+  </div>
+</main>

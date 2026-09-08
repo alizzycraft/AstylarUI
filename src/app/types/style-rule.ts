@@ -60,6 +60,9 @@ export interface StyleRule {
   src?: string;
   objectFit?: string;
 
+  // Native control presentation
+  appearance?: 'auto' | 'none';
+
   // Anchor/Link
   href?: string;
   target?: string;

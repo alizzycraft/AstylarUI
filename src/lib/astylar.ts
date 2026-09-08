@@ -97,6 +97,8 @@ import { TextSelectionControllerService } from '../app/services/dom/interaction/
 import { TextInteractionRegistryService } from '../app/services/dom/interaction/text-interaction-registry.service';
 import { TextSelectionKeyboardService } from '../app/services/dom/interaction/text-selection-keyboard.service';
 import { PointerInteractionService } from '../app/services/dom/interaction/pointer-interaction.service';
+import { AstylarDocumentStyleSource } from './astylar-document-style-source';
+import { AstylarDocumentStyleResolver } from './astylar-document-style-resolver';
 
 /**
  * Configuration options for rendering
@@ -168,6 +170,8 @@ class AstylarRenderer {
   private readonly diagnostics: AstylarDiagnostics = inject(AstylarDiagnostics);
   private readonly documentRecovery = inject(AstylarDocumentRecovery);
   private readonly pluginHost = inject(AstylarPluginHost);
+  private readonly documentStyleSource = inject(AstylarDocumentStyleSource);
+  private readonly documentStyleResolver = inject(AstylarDocumentStyleResolver);
   private activeSession?: AstylarRenderSession;
 
   /** @internal */
@@ -450,6 +454,15 @@ class AstylarRenderer {
             fontListenerAttached = true;
           }
         }
+        const loadedStyles = this.documentStyleResolver.resolve(
+          canvas.ownerDocument,
+          currentSiteData,
+          {
+            width: canvas.clientWidth || viewportWidth,
+            height: canvas.clientHeight || viewportHeight,
+          },
+        );
+        this.styleService.setLoadedDocumentStyles(loadedStyles.elements);
         const planningReasons = hasCompletedRender && !this.pluginHost.hasActiveGeneration
           ? [...reasons, 'plugin-generation-replaced']
           : reasons;
@@ -587,6 +600,21 @@ class AstylarRenderer {
     );
     this.sessions.set(scene, session);
     this.activeSession = session;
+    if (this.documentStyleSource.enabled) {
+      const stopObservingStyles = this.documentStyleSource.observe(
+        canvas.ownerDocument,
+        () => {
+          if (session.isDisposed) return;
+          void session.invalidate('stylesheet').catch((error) => {
+            if (!session.isDisposed) {
+              this.reportRenderFailure('Loaded stylesheet reflow failed.', error);
+            }
+          });
+        },
+      );
+      session.addCleanup(stopObservingStyles);
+      session.addCleanup(() => this.documentStyleResolver.dispose());
+    }
     this.pluginHost.bindInvalidation((reason) => session.isDisposed
       ? Promise.resolve(session.snapshot)
       : session.invalidate(reason));

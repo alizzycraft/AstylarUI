@@ -1,0 +1,74 @@
+# Phase 22 loaded CSS and Tailwind scorecard
+
+Last updated: 2026-08-24
+
+## Starting baseline
+
+- Branch: `codex/loaded-css-tailwind`, based on `origin/main` at `06535a4`.
+- Package/runtime compatibility version: `0.2.0`.
+- Existing release evidence: 339/339 unit tests; 165 fixtures / 541 general
+  renders; general median SSIM `0.9899`, minimum SSIM `0.9509`; TTS 10/10
+  static scenarios, 36/36 sharpness regions, and 70/70 interaction steps.
+- Existing authoring model: typed `SiteData.styles` and `DOMElement.style` only;
+  no document stylesheet discovery or Tailwind dependency.
+
+## Architecture assessment
+
+The checked contract is in [`../document-styles.md`](../document-styles.md).
+The chosen design is a surface-scoped CSSOM/browser-resolution hybrid feeding
+typed per-element records into the existing `StyleService` origin order. It
+uses a surface-sized offscreen resolution document rather than the semantic
+bridge, performs no remote fetch, and keeps applications unchanged unless they
+opt in through `provideAstylar`.
+
+The Tailwind reference target is version `4.3.3`, selected from the official
+Angular/PostCSS workflow on 2026-08-24. The maintained app must pin the exact
+version and describe only its tested utility subset.
+
+## Increment ledger
+
+| Increment | Invariant | Focused evidence | Commit |
+| --- | --- | --- | --- |
+| 1 | The public workflow and owning architecture are decided before behavior changes. | Documentation and diff checks | `76b52d6` |
+| 2 | Opt-in configuration is additive, and inspectable CSS is discovered in order while inaccessible sheets remain bounded diagnostics. | 16/16 focused provider/discovery tests; library build | `8b4bc20` |
+| 3 | Browser CSS resolution produces typed per-element normal/state records at the surface viewport without importing unrelated UA defaults. | 4/4 resolver tests: layers, variables, calc, modern colors, responsive, escaped classes, state variants, filtering, caching | `491f76d` |
+| 4 | Loaded CSS participates in the existing cascade and box model, stylesheet changes reflow once, unrelated DOM changes do not invalidate, and disposal releases the resolver document. | 46/46 focused style, dimension, source, resolver, and mounted WebGL integration tests | `ab12f41` |
+| 5 | A packed Angular consumer uses the official Tailwind 4.3.3 PostCSS setup, static ordinary class strings, responsive utilities, two isolated surfaces, repeated updates, and disposal without equivalent `StyleRule[]` for the Tailwind region. | 3/3 packed-consumer browser checks; consumer production build | `87c6068` |
+| 6 | The paired native/Astylar benchmark consumes one generated Tailwind stylesheet at DPR 1 and 2; iframe controls retain their real state; `appearance-none` reaches owned controls; loaded and explicit styles agree within parity tolerance. | 17/17 resolver/control tests; 3/3 mounted integration tests; 8 benchmark renders, minimum SSIM `0.9625`, 100% edges within 2 px, maximum edge error `1.9833px`, exact text, clean runtime | `c46a1d7` |
+| 7 | Public docs, the machine catalog, translation examples, the packed-consumer guide, and both repository skills teach one consistent loaded-CSS/Tailwind workflow and its limits; the benchmark enforces local sharpness and scroll-to-bottom reachability. | Catalog: 91 elements / 85 styles / 62 fields; 11 examples; both skill validators; 10 focused renders at DPR 1/2, median SSIM `0.9695`, minimum `0.9640`, 98.9% edges within 2 px, max `2.0480px`, exact text, clean runtime, local sharpness and focused thresholds pass | `42ef157` |
+
+## Final release evidence
+
+- `npm run capabilities:check`, `npm run examples:check`, and
+  `npm run skill:check` pass: 91 elements, 85 style fields, 62 DOM fields,
+  11 translation pairs, 12 synchronized developer-skill sources, and both
+  repository skills valid.
+- `npm test -- --watch=false` passes 356/356 Chrome tests.
+- `npm run build:lib` and `npm run build` pass. Production prerenders two routes;
+  only the existing initial-bundle and `src/app/app.scss` budget warnings remain.
+- `npm run consumer:check` passes with 427 packed files, browser and SSR/prerender
+  output, and all 3 real-Chrome package-boundary tests against independently
+  installed Babylon.js `8.56.2`.
+- `npm run parity:tailwind:check` passes 10 focused renders over DPR 1 and 2 with
+  median SSIM `0.9695`, minimum SSIM `0.9640`, 98.9% of edges within `2px`,
+  maximum edge error `2.0480px`, exact text, clean runtime, local sharpness,
+  scroll-to-bottom reachability, and focused thresholds.
+- `npm run parity:release:check` passes unfiltered. The general corpus has
+  166 fixtures / 551 renders across four viewport/DPR profiles, median SSIM
+  `0.9895540398508561`, minimum SSIM `0.9509030072166931`, edge-tolerance ratio
+  `0.9989050253573075`, maximum edge error `3.99209364194121px`, exact text,
+  clean runtime, local sharpness, and every completion threshold met. The
+  offline TTS benchmark passes 10/10 scenarios, 36/36 sharpness regions, and
+  70/70 interaction steps; minimum static SSIM is `0.967585`, maximum geometry
+  error is `1.978px`, and minimum interaction-local SSIM is `0.526838`.
+- No OpenAI credential was read and no live API request was made.
+
+## Current limitations
+
+The loaded-style path currently translates the supported Astylar style surface.
+Non-uniform border paint and separate `:focus-visible` modality remain bounded
+limitations. The Tailwind overflow proof permits a local `2.1px` scroll-extent
+difference while requiring identical ownership, direction, movement, and bottom
+reachability; existing scrolling fixtures remain exact. The maintained Tailwind
+application and focused benchmark are now present; the complete unfiltered
+release matrix is green.

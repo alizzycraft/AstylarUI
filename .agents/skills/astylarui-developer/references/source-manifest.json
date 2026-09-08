@@ -7,20 +7,26 @@
       "source": "docs/compatibility/html-css.md",
       "destination": "html-css.md",
       "transform": "portable-html-css-links",
-      "sourceSha256": "d747d3016c4bc10400a8aa6b21e7e3ab23d63a5bbe587013a8190da432f30b3f",
-      "bundledSha256": "49a3a3fc91b790b6b71f64740a76a5b462573736423dd95dfbdb75daec8b0d4d"
+      "sourceSha256": "20f60f817071ec95e781f44adc9a3a8d71200f8b3450d44df72c5913285969fd",
+      "bundledSha256": "d9eaf098a1b4a0dac7d605cf7c776ec7bbd66628cda3c1c2522486068149b307"
+    },
+    {
+      "source": "docs/document-styles.md",
+      "destination": "document-styles.md",
+      "sourceSha256": "bccb30543c8c1c2096d0facff7e489f2ac140872853b65795d42f0095b19a333",
+      "bundledSha256": "bccb30543c8c1c2096d0facff7e489f2ac140872853b65795d42f0095b19a333"
     },
     {
       "source": "docs/compatibility/capabilities.json",
       "destination": "capabilities.json",
-      "sourceSha256": "4bfda991f855b2b421114b24cf78365856f7b72b6a46a6ac34c5f491eead414d",
-      "bundledSha256": "4bfda991f855b2b421114b24cf78365856f7b72b6a46a6ac34c5f491eead414d"
+      "sourceSha256": "e4f9389f80c4411615f8efb7774d1688f714fddc30567b388f860a7987c68e2e",
+      "bundledSha256": "e4f9389f80c4411615f8efb7774d1688f714fddc30567b388f860a7987c68e2e"
     },
     {
       "source": "docs/compatibility/examples/manifest.json",
       "destination": "translation-examples.json",
-      "sourceSha256": "dda0e9fa19cee2f5bccc767c484c2f91f8f82c1d7fc4ac404a56eec0cf1c6621",
-      "bundledSha256": "dda0e9fa19cee2f5bccc767c484c2f91f8f82c1d7fc4ac404a56eec0cf1c6621"
+      "sourceSha256": "22370177765b09ba6b6ff21446c9016dc28970f43c494be18f7bafb5bcf3e5b0",
+      "bundledSha256": "22370177765b09ba6b6ff21446c9016dc28970f43c494be18f7bafb5bcf3e5b0"
     },
     {
       "source": "docs/plugins.md",
@@ -38,39 +44,39 @@
     {
       "source": "examples/angular-consumer/src/app/app.config.ts",
       "destination": "consumer-app.config.ts",
-      "sourceSha256": "2b25f639c89794f1c7dfa717eed9c635a2de2c1486c50aac7038a2b0530f8847",
-      "bundledSha256": "2b25f639c89794f1c7dfa717eed9c635a2de2c1486c50aac7038a2b0530f8847"
+      "sourceSha256": "a6d3ad95b226e493a80fcded51b71d5a8b7c1de37757dbc2b6e9d8854a2f2421",
+      "bundledSha256": "a6d3ad95b226e493a80fcded51b71d5a8b7c1de37757dbc2b6e9d8854a2f2421"
     },
     {
       "source": "examples/angular-consumer/src/app/app.ts",
       "destination": "consumer-app.ts",
-      "sourceSha256": "1c20c3836eeb5785a1588a8696ee739c20e986c72d80bf8064ccac6ed1b4aaa7",
-      "bundledSha256": "1c20c3836eeb5785a1588a8696ee739c20e986c72d80bf8064ccac6ed1b4aaa7"
+      "sourceSha256": "a2b981fb264367bbf3683c9984f1ab2b84b3b2956cefdcebd6b502b6dc3460c7",
+      "bundledSha256": "a2b981fb264367bbf3683c9984f1ab2b84b3b2956cefdcebd6b502b6dc3460c7"
     },
     {
       "source": "examples/angular-consumer/src/app/app.html",
       "destination": "consumer-app.html",
-      "sourceSha256": "6907313c09dea88c73876b1dd5886948d31cea9230a64eaf4492feb2593e7e42",
-      "bundledSha256": "6907313c09dea88c73876b1dd5886948d31cea9230a64eaf4492feb2593e7e42"
+      "sourceSha256": "755cd878eef295865c8760a97983c7aa582f2228016c1da2357896bf706ff910",
+      "bundledSha256": "755cd878eef295865c8760a97983c7aa582f2228016c1da2357896bf706ff910"
     },
     {
       "source": "examples/angular-consumer/src/app/consumer-badge.plugin.ts",
       "destination": "consumer-badge.plugin.ts",
-      "sourceSha256": "0b231c682a68f94cd83e256401a3e2c2d504a791daf61822581355c282958d54",
-      "bundledSha256": "0b231c682a68f94cd83e256401a3e2c2d504a791daf61822581355c282958d54"
+      "sourceSha256": "a76bba4ee683ee413c58708afe15ccf57ff279d89056a0bac662427981b3a76a",
+      "bundledSha256": "a76bba4ee683ee413c58708afe15ccf57ff279d89056a0bac662427981b3a76a"
     },
     {
       "source": "examples/angular-consumer/src/app/app.browser.spec.ts",
       "destination": "consumer-app.browser.spec.ts",
-      "sourceSha256": "681d4cbd6fc4a521ecdf6fa612ee861a15ff4454d4bc483319d599bb1cdd001d",
-      "bundledSha256": "681d4cbd6fc4a521ecdf6fa612ee861a15ff4454d4bc483319d599bb1cdd001d"
+      "sourceSha256": "9c03d0442f32e0c3ea52f383ad1e68fb5446e0160f230007bc33995c23675315",
+      "bundledSha256": "9c03d0442f32e0c3ea52f383ad1e68fb5446e0160f230007bc33995c23675315"
     },
     {
       "source": "src/lib/index.ts",
       "destination": "public-api.json",
       "transform": "public-root-exports",
-      "sourceSha256": "92bea02f4d07036bd531d5a15fb4a26655c4281bd4a4010e269b9da80f9a6805",
-      "bundledSha256": "c2a8315883c049e22e01254548df53b119051eab3fa195b84e082d2880c75d6a"
+      "sourceSha256": "ce4202c4d2443664f8c3e17ff071f3d9d7af4ec0f58600bdb318ae59e8804ac8",
+      "bundledSha256": "1bd634c9764e3f424b34b7e86c75515626d8eb698095b123ba65973d5acf9e32"
     }
   ]
 }

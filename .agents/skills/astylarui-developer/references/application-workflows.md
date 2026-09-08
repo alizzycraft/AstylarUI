@@ -8,6 +8,7 @@
 - [Convert HTML and CSS](#convert-html-and-css)
 - [Author SiteData](#author-sitedata)
 - [Translate styles](#translate-styles)
+- [Use loaded global CSS and Tailwind](#use-loaded-global-css-and-tailwind)
 - [Preserve responsive intent](#preserve-responsive-intent)
 - [Handle state, events, and semantics](#handle-state-events-and-semantics)
 - [Report the result](#report-the-result)
@@ -86,8 +87,8 @@ inventory with these columns:
 | --- | --- | --- | --- | --- |
 | Element/attribute | semantic or behavioral purpose | taxonomy value | `DOMElement` field or structure | catalog entry |
 | Selector | affected state/relationship | taxonomy value | supported JSON selector | selector evidence |
-| Declaration/value | layout or paint effect | taxonomy value | camelCase `StyleRule` field | value constraint |
-| Media query | responsive intent | `different` | per-rule media bounds | viewport test |
+| Declaration/value | layout or paint effect | taxonomy value | loaded CSS final value or camelCase `StyleRule` field | value constraint |
+| Media query | responsive intent | `different` | keep in loaded CSS, or use per-rule media bounds | viewport test |
 | Event/script | application behavior | `different` | typed host handler + Angular state | interaction test |
 | Unsupported feature | desired outcome | `unsupported`/`plugin` | redesign or plugin | disclosed limitation |
 
@@ -96,17 +97,21 @@ Then convert:
 1. Preserve semantic nesting and authored order.
 2. Convert supported attributes to typed camelCase fields. Do not copy arbitrary
    browser attributes into `data`; `data` belongs to plugin-owned schemas.
-3. Convert declarations to camelCase fields and supported value grammars.
+3. Keep inspectable global CSS in the loaded document-style path when enabled,
+   or convert declarations to camelCase fields and supported value grammars.
 4. Expand unsupported shorthands or functions into supported final values only
    when doing so preserves the design.
-5. Replace `@media` blocks with ordered rules carrying `mediaMinWidth`,
-   `mediaMaxWidth`, `mediaMinHeight`, or `mediaMaxHeight`.
+5. Keep `@media` blocks when loaded document styles are enabled; otherwise
+   replace them with ordered rules carrying `mediaMinWidth`, `mediaMaxWidth`,
+   `mediaMinHeight`, or `mediaMaxHeight`.
 6. Move executable behavior out of the document and into typed host handlers.
 7. Replace DOM mutation with Angular state and a new `SiteData` value.
 8. Use an explicit node for a visual modal backdrop; Astylar does not synthesize
    `::backdrop` paint.
-9. Do not copy transitions, animations, `@keyframes`, CSS variables, `calc()`,
-   sticky positioning, or other catalogued gaps silently.
+9. Do not copy transitions, animations, `@keyframes`, sticky positioning, or
+   other catalogued gaps silently. Direct typed rules require resolved values;
+   loaded CSS may browser-resolve variables and `calc()` only when the resulting
+   property/value is supported.
 10. Compare the web and Astylar result at the same viewport, device scale,
     loaded fonts, state, and settlement boundary. Exercise initial visibility,
     clipping owner, bottom/right reachability, and responsive overflow where
@@ -164,6 +169,36 @@ snippet, is the exhaustive value contract.
 - Author explicit values when matching a browser reference; Astylar defaults are
   useful approximations, not the complete Chromium user-agent stylesheet.
 - Treat surface viewport units as relative to the Astylar canvas.
+
+## Use loaded global CSS and Tailwind
+
+Use this path when an application already owns ordinary inspectable global CSS
+or a Tailwind build and most required final declarations are in Astylar's
+supported subset:
+
+1. Configure CSS normally in Angular. For the maintained Tailwind 4 workflow,
+   pin the tested version, use `@tailwindcss/postcss`, and put
+   `@import "tailwindcss"` in the global stylesheet.
+2. Enable discovery once with
+   `provideAstylar({ css: { useDocumentStyles: true } })`.
+3. Keep complete static class strings in `DOMElement.class`; do not assemble
+   class names from partial fragments that Tailwind cannot discover.
+4. Keep ordinary rules, pseudo-state variants, and `@media` rules in global CSS.
+   Each surface resolves them against its own viewport.
+5. Use `SiteData.styles` for intentional typed overrides and
+   `DOMElement.style` for the highest-priority inline values. Precedence is
+   defaults, loaded document styles, typed rules, then inline style.
+6. Inspect `surface.diagnostics` for inaccessible or malformed stylesheets and
+   verify paired browser/Astylar output at matching viewport, DPR, state, fonts,
+   settlement, visibility, and scroll reachability.
+
+This bridge uses the browser to resolve CSSOM rules, custom properties,
+`var()`, `calc()`, modern colors, and generated compositions before translation.
+It does not make Astylar a general CSS engine: only supported selectors and
+final typed properties/values render, inaccessible cross-origin sheets are
+diagnosed, and unsupported transitions/animations remain unsupported. There is
+no compile function, stylesheet field, or source-name registration in the
+public workflow.
 
 ## Preserve responsive intent
 

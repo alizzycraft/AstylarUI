@@ -37,6 +37,7 @@ export class App {
     false,
   ));
   protected readonly primaryOptions: AstylarRenderOptions = {
+    diagnostics: { logLevel: 'silent' },
     events: {
       handlers: {
         'add-item': { click: () => this.zone.run(() => this.refreshData()) },
@@ -58,6 +59,7 @@ export class App {
     },
   };
   protected readonly secondaryOptions: AstylarRenderOptions = {
+    diagnostics: { logLevel: 'silent' },
     events: {
       handlers: {
         'add-item': { click: () => this.zone.run(() => this.refreshSecondaryData()) },
@@ -177,6 +179,84 @@ export class App {
                     ],
                   },
                   {
+                    type: 'section',
+                    id: 'tailwind-matrix',
+                    class: 'flex flex-col gap-4 rounded-xl bg-slate-900 p-5 text-slate-100 shadow-lg md:flex-row',
+                    ariaLabel: 'Tailwind utility matrix',
+                    children: [
+                      {
+                        type: 'div',
+                        id: 'tailwind-copy',
+                        class: 'block w-[13rem] min-w-0 max-w-full',
+                        children: [
+                          {
+                            type: 'p', id: 'tailwind-kicker',
+                            class: 'mb-1 text-xs font-bold uppercase tracking-widest text-blue-300',
+                            textContent: 'Loaded global CSS',
+                          },
+                          {
+                            type: 'h2', id: 'tailwind-title',
+                            class: 'm-0 text-xl font-semibold leading-7 text-white',
+                            textContent: `Tailwind revision ${revision}`,
+                          },
+                          {
+                            type: 'p', id: 'tailwind-description',
+                            class: 'mt-2 text-sm leading-5 text-slate-300',
+                            textContent: 'The browser and Astylar consume the same generated utility rules.',
+                          },
+                        ],
+                      },
+                      {
+                        type: 'div',
+                        id: 'tailwind-controls',
+                        class: 'grid min-w-0 flex-1 grid-cols-2 gap-3 md:grid-cols-3',
+                        children: [
+                          {
+                            type: 'button', id: 'tailwind-action', value: 'Preview',
+                            class: 'rounded-lg border border-blue-400 bg-blue-600 px-4 py-2 text-sm font-bold text-white shadow-md hover:bg-blue-500 active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-blue-300 disabled:bg-slate-600',
+                          },
+                          {
+                            type: 'input', id: 'tailwind-input', inputType: 'text', value: '',
+                            placeholder: 'Utility input',
+                            class: 'rounded-lg border border-slate-600 bg-slate-800 px-3 py-2 text-sm text-white focus:border-blue-400',
+                          },
+                          {
+                            type: 'select', id: 'tailwind-select', value: 'ready',
+                            class: 'rounded-lg border border-slate-600 bg-slate-800 px-3 py-2 text-sm text-white',
+                            options: [
+                              { value: 'ready', label: 'Ready' },
+                              { value: 'review', label: 'Review' },
+                            ],
+                          },
+                          {
+                            type: 'label', id: 'tailwind-check-label', for: 'tailwind-check',
+                            class: 'inline-flex items-center gap-2 text-sm text-slate-200',
+                            children: [
+                              {
+                                type: 'input', id: 'tailwind-check', inputType: 'checkbox', checked: true,
+                                class: 'h-4 w-4 opacity-80 checked:opacity-100',
+                              },
+                              { type: 'span', id: 'tailwind-check-copy', textContent: 'Checked' },
+                            ],
+                          },
+                          {
+                            type: 'button', id: 'tailwind-disabled', value: 'Disabled', disabled: true,
+                            class: 'rounded-lg bg-blue-600 px-4 py-2 text-sm font-bold text-white disabled:bg-slate-600 disabled:text-slate-300',
+                          },
+                          {
+                            type: 'div', id: 'tailwind-scroll',
+                            class: 'max-h-20 overflow-auto rounded-lg border border-slate-700 bg-slate-800 p-2 text-xs text-slate-300',
+                            children: [
+                              { type: 'p', id: 'tailwind-line-1', class: 'mb-2', textContent: 'Scrollable line one' },
+                              { type: 'p', id: 'tailwind-line-2', class: 'mb-2', textContent: 'Scrollable line two' },
+                              { type: 'p', id: 'tailwind-line-3', textContent: 'Scrollable line three' },
+                            ],
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                  {
                     type: 'div', id: 'table-scroll', children: [
                       {
                         type: 'table', id: 'inventory-table', children: [
@@ -203,6 +283,20 @@ export class App {
                               { type: 'td', id: 'item-two-status', textContent: 'Low stock' },
                               { type: 'td', id: 'item-two-action-cell', children: [
                                 { type: 'button', id: 'item-two-action', value: 'Inspect' },
+                              ] },
+                            ] },
+                            { type: 'tr', id: 'row-three', children: [
+                              { type: 'td', id: 'item-three', textContent: 'Workshop apron' },
+                              { type: 'td', id: 'item-three-status', textContent: 'Ready' },
+                              { type: 'td', id: 'item-three-action-cell', children: [
+                                { type: 'button', id: 'item-three-action', value: 'Inspect' },
+                              ] },
+                            ] },
+                            { type: 'tr', id: 'row-four', children: [
+                              { type: 'td', id: 'item-four', textContent: 'Desk organizer' },
+                              { type: 'td', id: 'item-four-status', textContent: 'Review' },
+                              { type: 'td', id: 'item-four-action-cell', children: [
+                                { type: 'button', id: 'item-four-action', value: 'Inspect' },
                               ] },
                             ] },
                           ] },
@@ -253,7 +347,7 @@ export class App {
         { selector: '#summary-grid article', padding: '18px', background: '#ffffff', borderRadius: '10px' },
         { selector: '#summary-grid p', margin: '0 0 8px 0', color: '#526079' },
         { selector: '#summary-grid strong', fontSize: '26px' },
-        { selector: '#table-scroll', overflow: 'auto', maxHeight: '80px', background: '#ffffff', borderRadius: '10px' },
+        { selector: '#table-scroll', overflow: 'auto', height: '80px', maxHeight: '80px', background: '#ffffff', borderRadius: '10px' },
         { selector: '#inventory-table', width: '100%', background: '#ffffff' },
         { selector: '#inventory-table th', padding: '12px', textAlign: 'left', background: '#e3eaf4', fontWeight: '700' },
         { selector: '#inventory-table td', padding: '12px', borderWidth: '0 0 1px 0', borderStyle: 'solid', borderColor: '#d9e1ec' },

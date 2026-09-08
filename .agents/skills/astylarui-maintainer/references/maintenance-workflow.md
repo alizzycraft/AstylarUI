@@ -66,6 +66,11 @@ Run a focused parity case with:
 
 `$env:ASTYLAR_PARITY_FIXTURE='<fixture-id>'; npm run parity`
 
+For the maintained loaded-CSS/Tailwind case, use
+`npm run parity:tailwind:check`. It applies focused per-result geometry,
+raster, edge, text, runtime, and interaction gates, but cannot establish the
+full corpus aggregate threshold.
+
 Remove the environment variable before the full run. A focused pass is not
 release acceptance.
 
@@ -103,6 +108,10 @@ the patch narrow enough that every changed line supports that invariant.
 - Stage asynchronous or visual ownership and commit only after success.
 - Report invalid public input and lifecycle misuse through typed diagnostics.
 - Keep browser-only work behind the existing Angular/browser lifecycle.
+- For loaded stylesheet work, keep CSSOM discovery, the surface-sized resolver
+  document, realm-safe mirrored control state, invalidation, and disposal in
+  their existing owners. Do not merge it into the semantic bridge or create a
+  second style/layout pipeline.
 - Add an API only when the consumer cannot solve the requirement through the
   existing public contract.
 
@@ -117,6 +126,7 @@ Use the affected-domain matrix:
 | --- | --- | --- |
 | Document/diagnostic | owning unit specs | full unit suite |
 | Style/default/selector/media | style spec plus focused fixture | catalog/example checks and full parity |
+| Loaded stylesheet/Tailwind bridge | discovery/resolver/style specs plus `parity:tailwind:check` and packed consumer | catalog/example/skill checks, builds, consumer, and full parity |
 | Layout/position/table | calculation spec plus focused fixture | unit suite and full parity |
 | Paint/text/assets/clipping | service spec plus real-browser fixture | unit suite, builds, full parity |
 | Controls/interaction/semantics | manager/runtime spec plus interaction fixture | unit suite and full parity |

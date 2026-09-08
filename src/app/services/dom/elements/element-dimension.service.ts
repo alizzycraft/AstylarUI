@@ -463,7 +463,9 @@ export class ElementDimensionService {
         style: StyleRule | undefined,
         parentDimensions: { width: number; height: number } | undefined
     ): { top: number; right: number; bottom: number; left: number } {
-        if (!style) {
+        if (!style?.padding && style?.paddingTop === undefined &&
+            style?.paddingRight === undefined && style?.paddingBottom === undefined &&
+            style?.paddingLeft === undefined) {
             return this.zeroBox();
         }
 
@@ -508,12 +510,14 @@ export class ElementDimensionService {
      * Parse margin values from style
      */
     parseMargin(style: StyleRule | undefined): { top: number; right: number; bottom: number; left: number } {
-        if (!style?.margin) {
+        if (!style?.margin && style?.marginTop === undefined &&
+            style?.marginRight === undefined && style?.marginBottom === undefined &&
+            style?.marginLeft === undefined) {
             return this.zeroBox();
         }
 
         // Similar logic to parsePadding
-        const parts = style.margin.split(' ');
+        const parts = style.margin?.trim().split(/\s+/) ?? [];
         let top = 0, right = 0, bottom = 0, left = 0;
 
         if (parts.length === 1) {
@@ -531,6 +535,11 @@ export class ElementDimensionService {
             bottom = this.parseLength(parts[2]);
             left = this.parseLength(parts[3]);
         }
+
+        if (style.marginTop !== undefined) top = this.parseLength(style.marginTop);
+        if (style.marginRight !== undefined) right = this.parseLength(style.marginRight);
+        if (style.marginBottom !== undefined) bottom = this.parseLength(style.marginBottom);
+        if (style.marginLeft !== undefined) left = this.parseLength(style.marginLeft);
 
         return { top, right, bottom, left };
     }

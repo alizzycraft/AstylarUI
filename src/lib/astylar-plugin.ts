@@ -273,7 +273,20 @@ export interface AstylarPluginDefinition {
 
 export interface AstylarConfig {
   readonly plugins?: readonly AstylarPluginDefinition[];
+  /** Optional browser stylesheet integration. Existing applications remain opted out. */
+  readonly css?: AstylarCssOptions;
 }
+
+export interface AstylarCssOptions {
+  /** Consume inspectable CSS already loaded by the host document. Defaults to false. */
+  readonly useDocumentStyles?: boolean;
+}
+
+/** @internal Application configuration inherited by every surface injector. */
+export const ASTYLAR_CSS_OPTIONS = new InjectionToken<Readonly<AstylarCssOptions>>(
+  'ASTYLAR_CSS_OPTIONS',
+  { providedIn: 'root', factory: () => Object.freeze({ useDocumentStyles: false }) },
+);
 
 /**
  * Application-level definitions collected by `provideAstylar*` helpers.
@@ -364,11 +377,17 @@ export function defineAstylarPlugin<const T extends AstylarPluginDefinition>(
 /** Installs a complete immutable Astylar configuration at application scope. */
 export function provideAstylar(config: AstylarConfig = {}): EnvironmentProviders {
   return makeEnvironmentProviders(
-    (config.plugins ?? []).map((plugin) => ({
-      provide: ASTYLAR_PLUGIN_DEFINITIONS,
-      multi: true,
-      useValue: defineAstylarPlugin(plugin),
-    })),
+    [
+      ...(config.css ? [{
+        provide: ASTYLAR_CSS_OPTIONS,
+        useValue: Object.freeze({ ...config.css }),
+      }] : []),
+      ...(config.plugins ?? []).map((plugin) => ({
+        provide: ASTYLAR_PLUGIN_DEFINITIONS,
+        multi: true,
+        useValue: defineAstylarPlugin(plugin),
+      })),
+    ],
   );
 }
 

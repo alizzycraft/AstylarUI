@@ -1,6 +1,7 @@
-/* You can add global styles to this file, and also import other style files */
+@import "tailwindcss/theme" layer(theme) prefix(tw);
+@import "tailwindcss/utilities" layer(utilities) prefix(tw);
 
-/* Reset for fullscreen 3D experience */
+/* Keep the host and loaded-style resolver on the same browser box model. */
 html, body {
   margin: 0 !important;
   padding: 0 !important;
@@ -14,14 +15,12 @@ html, body {
   box-sizing: border-box !important;
 }
 
-/* Remove any default Angular router outlet margins */
 router-outlet {
   display: block;
   margin: 0 !important;
   padding: 0 !important;
 }
 
-/* Ensure app root takes full space */
 app-root {
   display: block;
   width: 100% !important;

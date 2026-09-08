@@ -415,4 +415,54 @@ describe('StyleService cascade', () => {
     expect(service.findStyleForElement(day, styles)?.background).not.toBe('#ede6eb');
     expect(matcher).toHaveBeenCalledTimes(4);
   });
+
+  it('places loaded document CSS between defaults and explicit Astylar origins', () => {
+    const element: DOMElement = {
+      type: 'div',
+      id: 'loaded-card',
+      class: 'card',
+      style: { color: '#ffffff', padding: '6px' },
+    };
+    service.setLoadedDocumentStyles(new Map([[element, {
+      normal: {
+        selector: '#loaded-card',
+        display: 'flex',
+        background: '#0f172a',
+        color: '#94a3b8',
+        marginLeft: '18px',
+        paddingLeft: '24px',
+      },
+    }]]));
+
+    const result = service.findStyleForElement(element, [
+      { selector: '.card', background: '#1e293b', margin: '10px' },
+    ]);
+
+    expect(result?.display).toBe('flex');
+    expect(result?.background).toBe('#1e293b');
+    expect(result?.color).toBe('#ffffff');
+    expect(result?.margin).toBe('10px');
+    expect(result?.marginLeft).toBeUndefined();
+    expect(result?.padding).toBe('6px');
+    expect(result?.paddingLeft).toBeUndefined();
+  });
+
+  it('lets explicit Astylar pseudo rules override loaded state deltas', () => {
+    const element: DOMElement = { type: 'button', id: 'loaded-action', class: 'action' };
+    service.setLoadedDocumentStyles(new Map([[element, {
+      normal: { selector: '#loaded-action', background: '#0f172a' },
+      hover: { selector: '#loaded-action:hover', background: '#1e293b', color: '#60a5fa' },
+      focus: { selector: '#loaded-action:focus', borderColor: '#38bdf8' },
+    }]]));
+
+    expect(service.findInteractionStyleForElement(element, [
+      { selector: '.action:hover', color: '#ffffff' },
+    ], 'hover')).toEqual(jasmine.objectContaining({
+      background: '#1e293b',
+      color: '#ffffff',
+    }));
+    expect(service.findInteractionStyleForElement(element, [], 'focus')).toEqual(
+      jasmine.objectContaining({ borderColor: '#38bdf8' }),
+    );
+  });
 });

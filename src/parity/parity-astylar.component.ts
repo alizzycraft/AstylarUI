@@ -443,7 +443,7 @@ export class ParityAstylarComponent {
       const elementType = this.elementManager.elementTypesMap.get(id);
       const inputElement = this.elementManager.inputElementsMap.get(id);
       const style = {
-        ...styles?.normal,
+        ...(mesh.metadata?.astylarResolvedStyle ?? {}),
         ...(this.elementManager.hoverStatesMap.get(id) ? styles?.hover : {}),
         ...(inputElement?.focused ? styles?.focus : {}),
         ...(mesh.metadata?.astylarActiveState ? styles?.active : {}),
@@ -452,6 +452,10 @@ export class ParityAstylarComponent {
         ?? (elementType === 'textarea' ? inputElement?.textLayoutMetrics : undefined);
       const textContent = elementType === 'textarea' ? `${inputElement?.value ?? ''}` : metrics?.text;
       const material = mesh.material instanceof StandardMaterial ? mesh.material : undefined;
+      const resolvedInteractionStyle = mesh.metadata?.astylarResolvedInteractionStyle;
+      if (resolvedInteractionStyle) {
+        Object.assign(style, resolvedInteractionStyle);
+      }
 
       if (!this.isFiniteRect(borderBox)) {
         errors.push(`Non-finite projected geometry for: ${id}`);
@@ -472,8 +476,18 @@ export class ParityAstylarComponent {
         styles: {
           display: style?.display,
           position: style?.position,
+          boxSizing: style?.boxSizing,
+          width: dimensions ? `${dimensions.width}px` : style?.width,
+          height: dimensions ? `${dimensions.height}px` : style?.height,
+          paddingTop: dimensions ? `${dimensions.padding.top}px` : style?.paddingTop,
+          flexDirection: style?.flexDirection,
+          gap: this.resolvedGap(style),
+          gridTemplateColumns: style?.gridTemplateColumns,
+          gridTemplateRows: style?.gridTemplateRows,
+          overflowX: style?.overflow,
+          overflowY: style?.overflow,
           backgroundColor: material?.diffuseColor.toHexString(),
-          opacity: material?.alpha,
+          opacity: style?.opacity ?? 1,
           borderTopWidth: style?.borderWidth,
           borderRightWidth: style?.borderWidth,
           borderBottomWidth: style?.borderWidth,
@@ -566,6 +580,20 @@ export class ParityAstylarComponent {
           }
         : undefined,
     };
+  }
+
+  private resolvedGap(style: {
+    gap?: string;
+    rowGap?: string;
+    columnGap?: string;
+  }): string | undefined {
+    if (typeof style.gap === 'string') return style.gap;
+    const row = style.rowGap;
+    const column = style.columnGap;
+    if (typeof row !== 'string' && typeof column !== 'string') return undefined;
+    if (row === column || column === undefined) return String(row);
+    if (row === undefined) return String(column);
+    return `${row} ${column}`;
   }
 
   private measureVisibility(

@@ -43,6 +43,7 @@
     "title": "Semantic modal dismissal and restoration",
     "category": "accessibility-semantics",
     "expectedBehavior": "Modal Escape dispatches a cancelable cancel event, accepted dismissal closes the dialog and restores its invoker, canceled dismissal remains contained, and application removal releases modal and focus ownership without a synthetic close event.",
+    "dynamicStepCount": 4,
     "interactionStepCount": 9,
     "semanticIds": ["modal-life-invoker", "modal-life-cancel-dialog", "modal-life-cancel-title", "modal-life-cancel-action", "modal-life-close-dialog", "modal-life-close-title", "modal-life-close-action"]
   },
@@ -51,6 +52,7 @@
     "title": "Status and validation announcements",
     "category": "accessibility-semantics",
     "expectedBehavior": "Required-field invalid state and error descriptions stay synchronized while assertive error and polite status regions emit one deterministic non-empty update, ignore unrelated repeated data updates, and cleanly disappear when removed.",
+    "dynamicStepCount": 4,
     "interactionStepCount": 6,
     "semanticIds": ["announce-form", "announce-name", "announce-error", "announce-status", "announce-summary"],
     "announcementIds": ["announce-error", "announce-status"]
@@ -505,7 +507,9 @@
     "responsiveSequence": ["desktop", "tablet", "mobile", "desktop"],
     "dynamicStepCount": 3,
     "interactionStepCount": 11,
-    "visualOwnerReuseStepIndexes": [0, 1, 2]
+    "visualOwnerReuseStepIndexes": [0, 1, 2],
+    "semanticIds": ["pm-nav", "pm-nav-overview", "pm-main", "pm-title", "pm-task-heading", "pm-task-two-check", "pm-status-two"],
+    "announcementIds": ["pm-status-two"]
   },
   {
     "id": "representative-data-management",
@@ -515,7 +519,8 @@
     "viewportIds": ["desktop", "tablet", "mobile"],
     "dynamicStepCount": 2,
     "interactionStepCount": 13,
-    "visualOwnerReuseStepIndexes": [0, 1]
+    "visualOwnerReuseStepIndexes": [0, 1],
+    "semanticIds": ["dm-table", "dm-head-row", "dm-head-item", "dm-head-status", "dm-head-owner", "dm-row-one", "dm-one-item", "dm-one-status", "dm-one-owner", "dm-three-action", "dm-pagination", "dm-page-prev", "dm-page-active", "dm-page-next", "dm-detail-action"]
   },
   {
     "id": "representative-account-settings",
@@ -525,7 +530,9 @@
     "viewportIds": ["desktop", "tablet", "mobile"],
     "dynamicStepCount": 6,
     "interactionStepCount": 22,
-    "visualOwnerReuseStepIndexes": [0, 1, 2, 3, 4, 5]
+    "visualOwnerReuseStepIndexes": [0, 1, 2, 3, 4, 5],
+    "semanticIds": ["as-dialog", "as-dialog-title", "as-dialog-copy", "as-dialog-edit", "as-dialog-confirm", "as-main", "as-form", "as-name", "as-email", "as-bio", "as-region", "as-help", "as-reports", "as-state", "as-save", "as-cancel"],
+    "announcementIds": ["as-help", "as-state"]
   },
   {
     "id": "auto-block-height",
@@ -1101,7 +1108,9 @@
     "title": "Expanded select replacement cleanup",
     "category": "forms-interactive",
     "expectedBehavior": "Removing an expanded single-select closes its popup and releases popup resources and observers; reusing the ID creates a fresh closed control without lifecycle growth.",
-    "interactionStepCount": 9
+    "dynamicStepCount": 2,
+    "interactionStepCount": 9,
+    "interactionCycleLength": 3
   },
   {
     "id": "reconciliation-semantic-reuse",
@@ -1126,5 +1135,36 @@
     "category": "lists-tables-images",
     "expectedBehavior": "A nested visual control is positioned from the padded content origin of its table cell at every representative viewport.",
     "viewportIds": ["desktop", "tablet", "mobile"]
+  },
+  {
+    "id": "tailwind-loaded-utilities",
+    "title": "Loaded Tailwind utilities",
+    "category": "composed-application",
+    "expectedBehavior": "The browser and Astylar consume the same prefixed Tailwind 4.3.3 utility output, including escaped classes, browser-resolved values, responsive variants, controls, states, and overflow.",
+    "viewportIds": ["desktop", "tailwind-retina"],
+    "sharpnessIds": ["tailwind-parity-title", "tailwind-parity-action"],
+    "enforcedStyleProperties": {
+      "tailwind-parity-root": ["display", "flexDirection", "width", "height", "backgroundColor"],
+      "tailwind-parity-content": ["display", "flexDirection", "gap", "width", "height"],
+      "tailwind-parity-copy": ["display", "width", "height", "paddingTop", "backgroundColor"],
+      "tailwind-parity-controls": ["display", "width", "height", "gridTemplateColumns", "gridTemplateRows", "gap"],
+      "tailwind-parity-action": ["width", "height", "backgroundColor", "color", "borderRadius", "borderTopColor"],
+      "tailwind-parity-disabled": ["backgroundColor", "color"],
+      "tailwind-parity-scroll": ["overflowX", "overflowY", "width", "height", "backgroundColor"]
+    },
+    "scrollStateTolerancePx": 2.1,
+    "dynamicStepCount": 1,
+    "interactionStepCount": 7
+  },
+  {
+    "id": "semantic-container-transparent-defaults",
+    "title": "Semantic grouping container transparent defaults",
+    "category": "cascade-defaults",
+    "expectedBehavior": "Unstyled section, article, and header containers remain transparent instead of receiving decorative renderer paint.",
+    "enforcedStyleProperties": {
+      "transparent-default-section": ["backgroundColor"],
+      "transparent-default-article": ["backgroundColor"],
+      "transparent-default-header": ["backgroundColor"]
+    }
   }
 ]

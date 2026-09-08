@@ -138,6 +138,13 @@ to pass exact state/style/control, local raster, cursor/caret/selection,
 dropdown lifecycle, and resource checks. Use `npm run parity:release:check` to
 run the unfiltered fixture corpus and this application gate sequentially.
 
+The loaded global CSS/Tailwind benchmark has a dedicated focused gate:
+`npm run parity:tailwind:check`. It must pass before release when discovery,
+browser CSS resolution, translated values, class/state/media handling, or the
+Tailwind consumer changes. Its focused thresholds apply to each declared render
+and interaction; only the subsequent unfiltered release run can establish the
+suite-wide fixture count and median SSIM.
+
 Never weaken a threshold, delete or hide a fixture, filter the release run,
 change reference truth to match Astylar, omit an error, or broaden a capability
 claim to obtain green output. A legitimate metric change follows from a tested
@@ -155,10 +162,12 @@ project:
 4. `npm run build:lib` and `npm run build`.
 5. `npm run consumer:check` for a fresh packed installation, browser tests, and
    browser plus SSR output.
-6. `npm run parity:release:check` with no diagnostic fixture environment
+6. `npm run parity:tailwind:check` when loaded document styles or their proof
+   are in scope.
+7. `npm run parity:release:check` with no diagnostic fixture environment
    variable. This runs both `parity:check` and `tts-parity:check`; record each
    constituent result separately.
-7. `git diff --check`, documentation review, and `git status --short`.
+8. `git diff --check`, documentation review, and `git status --short`.
 
 Run build/package checks in a sequence that avoids concurrent writers to
 `dist`. Treat new warnings as failures until understood. Record existing

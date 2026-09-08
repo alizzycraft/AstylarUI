@@ -38,7 +38,10 @@ foundation and Babylon.js as the owned rendering substrate.
   tests.
 - For HTML/CSS conversion, inventory structure, selectors, declarations,
   responsive behavior, interactions, assets, and semantics before writing the
-  Astylar equivalent.
+  Astylar equivalent. Prefer opted-in loaded global CSS for an existing
+  inspectable stylesheet or Tailwind build when its final values are inside the
+  supported subset; use typed rules for deliberate overrides and unsupported
+  translations.
 - For integration, prefer `AstylarSurfaceComponent`; use injected
   `Astylar.mount()` when the application must own a canvas directly. Keep SSR,
   settlement, updates, resizing, and disposal explicit.
@@ -60,6 +63,8 @@ foundation and Babylon.js as the owned rendering substrate.
   implementing an application-level plugin.
 - Read [html-css.md](references/html-css.md) for the complete human translation
   model and important browser/Astylar differences.
+- Read [document-styles.md](references/document-styles.md) when using ordinary
+  loaded global CSS or Tailwind classes.
 - Query [capabilities.json](references/capabilities.json) for exact element,
   `DOMElement`, `StyleRule`, selector, unsupported-feature, and plugin-extension
   claims. Prefer targeted search or JSON extraction over loading it all.
@@ -96,6 +101,10 @@ foundation and Babylon.js as the owned rendering substrate.
   authored `onclick` strings.
 - Use unique stable authored IDs for focus, form state, scrolling, events,
   semantics, and reconciliation across updates.
+- When loaded document styles are appropriate, enable them once through
+  `provideAstylar({ css: { useDocumentStyles: true } })`, keep CSS in the normal
+  Angular global pipeline, and author complete static class strings in
+  `DOMElement.class`. Do not invent a compiler call or stylesheet field.
 - Treat plugin code as trusted in-process Angular code. DI scopes lifetime and
   state; it does not create a permissions or security sandbox.
 - Own plugin-created Babylon resources, observers, callbacks, delayed work, and
