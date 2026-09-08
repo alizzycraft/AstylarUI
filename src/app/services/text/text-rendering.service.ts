@@ -8,8 +8,7 @@ import {
   TextCacheManager,
   TextRenderingOptions,
   TextLayoutMetrics,
-  StoredTextLayoutMetrics,
-  TextLayoutWorldMetrics
+  StoredTextLayoutMetrics
 } from '../../types/text-rendering';
 import { DOMElement } from '../../types/dom-element';
 import { StyleRule } from '../../types/style-rule';
@@ -73,15 +72,8 @@ export class TextRenderingService implements TextCacheManager {
     };
   }
 
-  createStoredLayoutMetrics(text: string, style: TextStyleProperties, scale: number, maxWidth?: number): StoredTextLayoutMetrics {
-    const cssMetrics = this.textCanvasRenderer.calculateLayoutMetrics(text, style, maxWidth);
-    const worldMetrics = this.convertCssMetricsToWorld(cssMetrics, scale);
-
-    return {
-      scale,
-      css: cssMetrics,
-      world: worldMetrics
-    };
+  createStoredLayoutMetrics(text: string, style: TextStyleProperties, maxWidth?: number): StoredTextLayoutMetrics {
+    return { css: this.textCanvasRenderer.calculateLayoutMetrics(text, style, maxWidth) };
   }
 
   resolveOverflowText(
@@ -95,40 +87,6 @@ export class TextRenderingService implements TextCacheManager {
       .map(line => line.text)
       .join('\n');
   }
-
-  private convertCssMetricsToWorld(cssMetrics: TextLayoutMetrics, scale: number): TextLayoutWorldMetrics {
-    const toWorld = (value: number) => value * scale;
-
-    return {
-      totalWidth: toWorld(cssMetrics.totalWidth),
-      totalHeight: toWorld(cssMetrics.totalHeight),
-      lineHeight: toWorld(cssMetrics.lineHeight),
-      ascent: toWorld(cssMetrics.ascent),
-      descent: toWorld(cssMetrics.descent),
-      lines: cssMetrics.lines.map(line => ({
-        ...line,
-        width: toWorld(line.width),
-        widthWithSpacing: toWorld(line.widthWithSpacing),
-        height: toWorld(line.height),
-        baseline: toWorld(line.baseline),
-        ascent: toWorld(line.ascent),
-        descent: toWorld(line.descent),
-        top: toWorld(line.top),
-        bottom: toWorld(line.bottom),
-        x: toWorld(line.x),
-        y: toWorld(line.y),
-        actualLeft: toWorld(line.actualLeft),
-        actualRight: toWorld(line.actualRight)
-      })),
-      characters: cssMetrics.characters.map(character => ({
-        ...character,
-        x: toWorld(character.x),
-        width: toWorld(character.width),
-        advance: toWorld(character.advance)
-      }))
-    };
-  }
-
 
   /**
    * Renders text content to a BabylonJS texture using off-screen canvas rendering

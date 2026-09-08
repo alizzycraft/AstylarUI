@@ -122,7 +122,6 @@ export class TextInputManager {
             const storedLayoutMetrics = this.textRenderingService.createStoredLayoutMetrics(
                 layoutText,
                 textStyleProps,
-                1
             );
 
             // Extract CSS metrics for cursor positioning (these are in CSS pixels)
@@ -190,7 +189,7 @@ export class TextInputManager {
         if (!textInput.textContent && render.scene) {
             const textStyleProps = this.parseTextStyle(style);
             // Use text rendering service to create consistent layout metrics
-            const storedLayoutMetrics = this.textRenderingService.createStoredLayoutMetrics('', textStyleProps, 1);
+            const storedLayoutMetrics = this.textRenderingService.createStoredLayoutMetrics('', textStyleProps);
 
             // Extract CSS metrics for cursor positioning (these are in CSS pixels)
             textInput.textLayoutMetrics = storedLayoutMetrics.css;
@@ -328,7 +327,6 @@ export class TextInputManager {
                 const storedLayoutMetrics = this.textRenderingService.createStoredLayoutMetrics(
                     '',
                     textStyleProps,
-                    1,
                     maxTextWidth,
                 );
                 textInput.textLayoutMetrics = storedLayoutMetrics.css;
@@ -350,7 +348,6 @@ export class TextInputManager {
             const storedLayoutMetrics = this.textRenderingService.createStoredLayoutMetrics(
                 textToRender,
                 textStyleProps,
-                1,
                 maxTextWidth
             );
 
@@ -430,11 +427,7 @@ export class TextInputManager {
             this.syncScroll(textInput, render);
 
             // Register with text interaction registry for drag selection
-            const storedMetrics: StoredTextLayoutMetrics = {
-                scale: 1,
-                css: textInput.textLayoutMetrics,
-                world: textInput.textLayoutMetrics,
-            };
+            const storedMetrics: StoredTextLayoutMetrics = { css: textInput.textLayoutMetrics };
 
             this.textInteractionRegistry.register(
                 textInput.element.id!,
@@ -444,7 +437,8 @@ export class TextInputManager {
                 textToRender,
                 textInput.scrollOffset || 0,
                 textInput.scrollTop || 0,
-                verticalOrigin
+                verticalOrigin,
+                textInput.visibleTextCssSize,
             );
 
         } catch (error) {

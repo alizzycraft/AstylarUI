@@ -120,37 +120,9 @@ export interface TextLayoutMetrics {
   characters: TextCharacterMetrics[];
 }
 
-export interface TextLayoutWorldMetrics {
-  totalWidth: number;
-  totalHeight: number;
-  lineHeight: number;
-  ascent: number;
-  descent: number;
-  lines: Array<Omit<TextLineMetrics, 'width' | 'widthWithSpacing' | 'height' | 'baseline' | 'ascent' | 'descent' | 'top' | 'bottom' | 'x' | 'y'> & {
-    width: number;
-    widthWithSpacing: number;
-    height: number;
-    baseline: number;
-    ascent: number;
-    descent: number;
-    top: number;
-    bottom: number;
-    x: number;
-    y: number;
-    actualLeft: number;
-    actualRight: number;
-  }>;
-  characters: Array<Omit<TextCharacterMetrics, 'x' | 'width' | 'advance'> & {
-    x: number;
-    width: number;
-    advance: number;
-  }>;
-}
-
 export interface StoredTextLayoutMetrics {
-  scale: number;
+  /** Authoritative layout metrics in fractional CSS pixels. */
   css: TextLayoutMetrics;
-  world: TextLayoutWorldMetrics;
 }
 
 /**

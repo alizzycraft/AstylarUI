@@ -3,6 +3,7 @@ import { AbstractMesh, Mesh } from '@babylonjs/core';
 import { Observable, Subject } from 'rxjs';
 import { StyleRule } from '../../../types/style-rule';
 import { StoredTextLayoutMetrics } from '../../../types/text-rendering';
+import type { CssSize } from '../../coordinate-space.types';
 
 export interface TextInteractionEntry {
   elementId: string;
@@ -13,6 +14,8 @@ export interface TextInteractionEntry {
   scrollOffset?: number;
   scrollTop?: number;
   verticalOrigin?: number;
+  /** Visible text-plane viewport in CSS pixels. */
+  viewportCssSize?: CssSize;
 }
 
 export type TextInteractionRegistryEvent =
@@ -40,13 +43,15 @@ export class TextInteractionRegistryService {
     text?: string,
     scrollOffset?: number,
     scrollTop?: number,
-    verticalOrigin?: number
+    verticalOrigin?: number,
+    viewportCssSize?: CssSize,
   ): TextInteractionEntry {
     // Ensure previous entry for this element is removed so the latest mesh wins
     this.unregisterByElementId(elementId);
 
     const entry: TextInteractionEntry = {
-      elementId, mesh, style, metrics, text, scrollOffset, scrollTop, verticalOrigin
+      elementId, mesh, style, metrics, text, scrollOffset, scrollTop, verticalOrigin,
+      viewportCssSize,
     };
     this.entriesByMeshId.set(mesh.uniqueId, entry);
     this.entriesByElementId.set(elementId, entry);

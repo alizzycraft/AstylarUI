@@ -23,7 +23,7 @@ export class PointerInteractionService {
       return;
     }
 
-    const cssPoint = this.toCssPoint(pointerInfo, entry) ?? { x: 0, y: 0 };
+    const cssPoint = this.toCssPoint(pointerInfo, entry, render) ?? { x: 0, y: 0 };
     this.textSelectionController.beginSelection(entry, cssPoint);
   }
 
@@ -41,7 +41,7 @@ export class PointerInteractionService {
       return;
     }
 
-    const cssPoint = this.toCssPoint(pointerInfo, entry, false);
+    const cssPoint = this.toCssPoint(pointerInfo, entry, render, false);
     if (!cssPoint) {
       return;
     }
@@ -109,7 +109,7 @@ export class PointerInteractionService {
 
     const entry = this.resolveActiveTextEntry();
     if (entry) {
-      const cssPoint = this.toCssPoint(pointerInfo, entry, false);
+      const cssPoint = this.toCssPoint(pointerInfo, entry, render, false);
       if (cssPoint) {
         this.textSelectionController.updateSelection(entry, cssPoint);
       }
@@ -210,6 +210,7 @@ export class PointerInteractionService {
   private toCssPoint(
     pointerInfo: PointerInfo,
     entry: TextInteractionEntry,
+    render: BabylonRender,
     constrainToViewport = true
   ): CssPoint | undefined {
     const metrics = entry.metrics;
@@ -251,41 +252,30 @@ export class PointerInteractionService {
     const inverse = new Matrix();
     entry.mesh.getWorldMatrix().invertToRef(inverse);
     const localPoint = Vector3.TransformCoordinates(pickedPoint, inverse);
-
-    const bounding = entry.mesh.getBoundingInfo();
-    const width = bounding.maximum.x - bounding.minimum.x;
-    const height = bounding.maximum.y - bounding.minimum.y;
-    if (width === 0 || height === 0) {
+    const viewport = entry.viewportCssSize;
+    if (!viewport || viewport.width === 0 || viewport.height === 0) {
       return undefined;
     }
-
-    const halfWidth = width / 2;
-    const halfHeight = height / 2;
-
-    const rawNormalizedX = (localPoint.x + halfWidth) / width;
-    const normalizedX = constrainToViewport ? clamp(rawNormalizedX, 0, 1) : rawNormalizedX;
-    const rawNormalizedY = (halfHeight - localPoint.y) / height;
-    const normalizedY = constrainToViewport ? clamp(rawNormalizedY, 0, 1) : rawNormalizedY;
+    const localCss = render.actions.camera.unprojectRenderLocalPoint({
+      x: localPoint.x,
+      y: localPoint.y,
+      z: localPoint.z,
+    });
+    const viewportX = localCss.x + viewport.width / 2;
+    const viewportY = localCss.y + viewport.height / 2;
 
     const cssMetrics = entry.metrics?.css;
-    const cssWidth = cssMetrics?.totalWidth ?? 0;
     const cssHeight = cssMetrics?.totalHeight ?? 0;
 
-    // Map normalized coordinates (0-1 across visible mesh) to CSS coordinates
-    // width is availableWidth (world), width/scale is availableWidth (CSS)
-    const scale = metrics.scale ?? 1;
-    const availableWidthCss = width / scale;
     const scrollOffset = entry.scrollOffset || 0;
-    const availableHeightCss = height / scale;
     const scrollTop = entry.scrollTop || 0;
     const verticalOrigin = entry.verticalOrigin || 0;
-
-    // x in CSS pixels = (normalized percentage of visible area * pixels in visible area) + scroll offset
-    let x = (normalizedX * availableWidthCss) + scrollOffset;
+    const rawX = viewportX + scrollOffset;
+    const rawY = viewportY + scrollTop - verticalOrigin;
 
     return {
-      x,
-      y: clamp((normalizedY * availableHeightCss) + scrollTop - verticalOrigin, 0, cssHeight)
+      x: constrainToViewport ? clamp(rawX, scrollOffset, scrollOffset + viewport.width) : rawX,
+      y: constrainToViewport ? clamp(rawY, 0, cssHeight) : rawY,
     };
   }
 

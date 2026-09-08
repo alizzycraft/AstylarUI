@@ -25,7 +25,7 @@ import { BabylonInteractionService } from "./interaction.service";
 import { DOMAncestryService } from "./dom-ancestry.service";
 import { InputElementService } from "./input/input-element.service";
 import { resolveComputedFontSize } from "./utils/computed-font-size.util";
-import { projectCssLength, projectCssSize } from "../css-render-boundary";
+import { projectCssSize } from "../css-render-boundary";
 
 @Injectable({
   providedIn: "root",
@@ -329,7 +329,6 @@ export class BabylonDOMRendererService {
       const storedMetrics = this.textRenderingService.createStoredLayoutMetrics(
         element.textContent,
         textStyleProperties,
-        projectCssLength(render, 1),
         availableWidthPx,
       );
       this.elementManager.registerTextElement(
@@ -339,6 +338,7 @@ export class BabylonDOMRendererService {
         element.textContent,
         storedMetrics,
         textStyle,
+        layoutDimensions,
       );
 
 
@@ -427,7 +427,6 @@ export class BabylonDOMRendererService {
       const storedMetrics = this.textRenderingService.createStoredLayoutMetrics(
         newContent,
         textStyleProperties,
-        projectCssLength(render, 1),
         maxWidth,
       );
       this.elementManager.textMetricsMap.set(elementId, storedMetrics);

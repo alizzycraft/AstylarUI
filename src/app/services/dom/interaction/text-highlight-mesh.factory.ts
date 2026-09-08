@@ -14,6 +14,7 @@ import { TextSelectionControllerService, TextSelectionState } from './text-selec
 import { TextInteractionEntry, TextInteractionRegistryService } from './text-interaction-registry.service';
 import { TextSelectionStore } from '../../../store/text-selection.store';
 import { StyleService } from '../style.service';
+import { BabylonCameraService } from '../../babylon-camera.service';
 
 interface HighlightSegment {
   centerX: number;
@@ -31,8 +32,8 @@ interface HighlightMeshes {
   colors: { background: Color3; foreground: Color3; source: Color3; sourceBackground: Color3 };
 }
 
-const MIN_SEGMENT_WIDTH = 0.002;
-const MIN_SEGMENT_HEIGHT = 0.002;
+const MIN_SEGMENT_WIDTH_CSS = 0.2;
+const MIN_SEGMENT_HEIGHT_CSS = 0.2;
 // The highlight is opaque for reliable contrast, so it must sit immediately
 // behind the glyph plane rather than tinting or covering the rendered text.
 const HIGHLIGHT_Z_OFFSET = -0.0005;
@@ -97,6 +98,7 @@ export class TextHighlightMeshFactory {
   private readonly textSelectionController = inject(TextSelectionControllerService);
   private readonly textInteractionRegistry = inject(TextInteractionRegistryService);
   private readonly styleService = inject(StyleService);
+  private readonly camera = inject(BabylonCameraService);
 
   private readonly highlightRecords = new Map<string, HighlightMeshes>();
   private currentElementId?: string;
@@ -181,42 +183,15 @@ export class TextHighlightMeshFactory {
       }
     }
 
-    const textMesh = entry.mesh;
-    textMesh.computeWorldMatrix(true);
-    textMesh.refreshBoundingInfo();
-    const boundingInfo = textMesh.getBoundingInfo().boundingBox;
-    const textWidth = boundingInfo.maximum.x - boundingInfo.minimum.x;
-    const textHeight = boundingInfo.maximum.y - boundingInfo.minimum.y;
-    const halfWidth = textWidth / 2;
-    const halfHeight = textHeight / 2;
-
-    // Debug logging for text mesh position
-
-
+    const viewport = entry.viewportCssSize;
+    if (!viewport || viewport.width <= 0 || viewport.height <= 0) return [];
+    const halfWidth = viewport.width / 2;
+    const halfHeight = viewport.height / 2;
 
     const minTop = cssMetrics.lines.reduce((acc: number, line: any) => Math.min(acc, line.top), Number.POSITIVE_INFINITY);
 
     const segments: HighlightSegment[] = [];
 
-    // Calculate scale based on the ratio of Mesh Width to CSS Content Width
-    // The text mesh represents the actual text content, not the container
-    // So we divide textWidth by the actual content width (calculated from characters), not the container width
-    let actualContentWidth = 0;
-    if (cssMetrics.characters && cssMetrics.characters.length > 0) {
-      for (const char of cssMetrics.characters) {
-        const charEnd = char.x + char.advance;
-        if (charEnd > actualContentWidth) {
-          actualContentWidth = charEnd;
-        }
-      }
-    } else {
-      actualContentWidth = cssMetrics.lines.reduce((max: number, line: any) => Math.max(max, line.width ?? 0), 0);
-    }
-
-    // If text is clipped/scrolled, textWidth corresponds to the visible window, not the full content width.
-    // In that case, we should rely on the stored scale if available, or derive it carefully.
-    // Using metrics.scale is usually safer if known.
-    const scale = metrics.scale ?? (actualContentWidth > 0 ? textWidth / actualContentWidth : 1);
     const scrollOffset = entry.scrollOffset || 0;
     const scrollTop = entry.scrollTop || 0;
     for (const line of cssMetrics.lines) {
@@ -248,62 +223,36 @@ export class TextHighlightMeshFactory {
         lineOffset = (totalWidth - lineWidth) / 2;
       }
 
-      // Convert to world units, applying scroll offset
-      // Coordinates are relative to the *content* start, scrollOffset shifts the visual window.
-      // visible_x = (absolute_x - scroll_offset)
       const startXCss = lineStartCaret + lineOffset - scrollOffset;
       const endXCss = lineEndCaret + lineOffset - scrollOffset;
-
-      let startXWorld = startXCss * scale;
-      let endXWorld = endXCss * scale;
-
-      // Clamp values to the visible text area [0, textWidth]
-      // This handles cases where parts of the selection are scrolled out of view
-      startXWorld = Math.max(0, Math.min(startXWorld, textWidth));
-      endXWorld = Math.max(0, Math.min(endXWorld, textWidth));
-
-      // Calculate width from clamped world positions
-      const widthWorld = Math.max(endXWorld - startXWorld, 0);
-
-      // If segment is effectively invisible (or reversed due to clamping? shouldn't happen), skip
-      if (widthWorld <= MIN_SEGMENT_WIDTH) {
+      const clippedStartCss = Math.max(0, Math.min(startXCss, viewport.width));
+      const clippedEndCss = Math.max(0, Math.min(endXCss, viewport.width));
+      const widthCss = Math.max(clippedEndCss - clippedStartCss, 0);
+      if (widthCss <= MIN_SEGMENT_WIDTH_CSS) {
         continue;
       }
-
-      // Calculate center position directly from start and end positions
-      // Map from text content coordinate system to text mesh coordinate system
-      // With World X+ being Left and the text mesh rotated 180 degrees on Z,
-      // the local X+ aligns with World Right (Visual Right).
-      // Visual Left is at local -halfWidth, Visual Right is at local +halfWidth.
-      const centerX = ((startXWorld + endXWorld) / 2) - (textWidth / 2);
+      const centerX = (clippedStartCss + clippedEndCss) / 2 - halfWidth;
 
       const topOffsetCss = line.top - minTop;
       const heightCss = Math.max(line.bottom - line.top, line.height ?? 0);
       // The selection planes are children of the text mesh. Padding has already
       // been applied to that mesh's position, so its local origin is the top of
       // the text texture rather than the control's padding box.
-      const unclippedTopWorld = (topOffsetCss - scrollTop) * scale;
-      const unclippedBottomWorld = unclippedTopWorld + (heightCss * scale);
-      const clippedTopWorld = Math.max(0, Math.min(unclippedTopWorld, textHeight));
-      const clippedBottomWorld = Math.max(0, Math.min(unclippedBottomWorld, textHeight));
-      const heightWorld = clippedBottomWorld - clippedTopWorld;
-      if (heightWorld <= MIN_SEGMENT_HEIGHT) {
+      const unclippedTopCss = topOffsetCss - scrollTop;
+      const unclippedBottomCss = unclippedTopCss + heightCss;
+      const clippedTopCss = Math.max(0, Math.min(unclippedTopCss, viewport.height));
+      const clippedBottomCss = Math.max(0, Math.min(unclippedBottomCss, viewport.height));
+      const clippedHeightCss = clippedBottomCss - clippedTopCss;
+      if (clippedHeightCss <= MIN_SEGMENT_HEIGHT_CSS) {
         continue;
       }
-      // Convert from top-left origin (text metrics) to center origin (text mesh)
-      // With 180 degree rotation, local Y+ aligns with World Down (Visual Down).
-      // Visual Top is at local -halfHeight, Visual Bottom is at local +halfHeight.
-      const centerY = ((clippedTopWorld + clippedBottomWorld) / 2) - halfHeight;
-
-      // Debug logging for calculated positions
-
-
+      const centerY = (clippedTopCss + clippedBottomCss) / 2 - halfHeight;
 
       segments.push({
         centerX,
         centerY,
-        width: widthWorld,
-        height: heightWorld
+        width: widthCss,
+        height: clippedHeightCss
       });
     }
 
@@ -384,7 +333,8 @@ export class TextHighlightMeshFactory {
   private syncHighlightMeshes(entry: TextInteractionEntry, segments: HighlightSegment[]): void {
     const existing = this.highlightRecords.get(entry.elementId) ?? this.createHighlightRecord(entry);
     const scene = entry.mesh.getScene();
-    const textSize = this.resolveTextMeshSize(entry.mesh);
+    const textSize = entry.viewportCssSize;
+    if (!textSize) return;
     this.syncForegroundTexture(existing.foregroundMaterial, entry);
 
     if (existing.backgroundMeshes.length && existing.backgroundMeshes[0].parent !== entry.mesh) {
@@ -417,7 +367,7 @@ export class TextHighlightMeshFactory {
         ...backgroundMesh.metadata.highlight,
         width: segment.width,
         height: segment.height,
-        heightCss: segment.height / Math.max(entry.metrics?.scale ?? 1, Number.EPSILON),
+        heightCss: segment.height,
       };
     });
 
@@ -566,10 +516,12 @@ export class TextHighlightMeshFactory {
   }
 
   private positionSelectionMesh(mesh: Mesh, segment: HighlightSegment, z: number): void {
-    mesh.scaling.x = segment.width;
-    mesh.scaling.y = segment.height;
-    mesh.position.x = segment.centerX;
-    mesh.position.y = segment.centerY;
+    const size = this.camera.projectCssSize({ width: segment.width, height: segment.height });
+    const center = this.camera.projectCssLocalPoint({ x: segment.centerX, y: segment.centerY });
+    mesh.scaling.x = size.width;
+    mesh.scaling.y = size.height;
+    mesh.position.x = center.x;
+    mesh.position.y = center.y;
     mesh.position.z = z;
     mesh.isVisible = true;
   }
@@ -615,16 +567,6 @@ export class TextHighlightMeshFactory {
     return textMaterial instanceof StandardMaterial
       ? textMaterial.diffuseTexture ?? textMaterial.emissiveTexture
       : undefined;
-  }
-
-  private resolveTextMeshSize(mesh: Mesh): { width: number; height: number } {
-    mesh.computeWorldMatrix(true);
-    mesh.refreshBoundingInfo();
-    const bounds = mesh.getBoundingInfo().boundingBox;
-    return {
-      width: bounds.maximum.x - bounds.minimum.x,
-      height: bounds.maximum.y - bounds.minimum.y,
-    };
   }
 
   private resolveBackground(entry: TextInteractionEntry): Color3 {

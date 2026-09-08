@@ -2,6 +2,7 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { Mesh } from '@babylonjs/core';
 import { StyleRule } from '../../types/style-rule';
 import { StoredTextLayoutMetrics } from '../../types/text-rendering';
+import type { CssSize } from '../coordinate-space.types';
 import { DOMElement } from '../../types/dom-element';
 import { TextInteractionRegistryService } from './interaction/text-interaction-registry.service';
 import { TextHighlightMeshFactory } from './interaction/text-highlight-mesh.factory';
@@ -123,13 +124,17 @@ export class BabylonElementManagerService implements OnDestroy {
     texture: any,
     content: string,
     metrics: StoredTextLayoutMetrics,
-    style?: StyleRule
+    style?: StyleRule,
+    viewportCssSize?: CssSize,
   ): void {
     this.textMeshes.set(elementId, textMesh);
     this.textTextures.set(elementId, texture);
     this.textContent.set(elementId, content);
     this.textMetrics.set(elementId, metrics);
-    this.textInteractionRegistry.register(elementId, textMesh, style, metrics, content);
+    this.textInteractionRegistry.register(
+      elementId, textMesh, style, metrics, content,
+      undefined, undefined, undefined, viewportCssSize,
+    );
   }
 
   unregisterTextElement(elementId: string): void {

@@ -39,16 +39,15 @@ not part of CSS layout geometry.
 | CSS range geometry | Range width, track, active segment, thumb position, pointer ratio, and value state are retained in CSS pixels; only generated mesh sizes and local centers are projected. | Mesh-bound width recovery during value updates and world-unit constants in range layout. | Focused range and pointer tests, including fractional CSS width, multi-scale projection, independent paired values, and a test that rejects mesh-bound reads. | Choice, text, select, and focus paint still need CSS-local migration; paired Material range hit ownership will be verified with the plugin contract. |
 | CSS button, choice, and focus geometry | Button, checkbox, radio, label, and focus-ring dimensions and local positions remain CSS geometry; managers project only when creating or positioning paint meshes. | Button press position mutation, mesh-bound text/indicator/focus sizing, rotated radio cylinders and their counter-rotation, inverted label placement, raw world-unit focus constants, and raw-unit fallback planes. | Packaged-library build; focused button, checkbox/radio, and focus tests, including fractional projection and checks that reject mesh-bound reads. | Text and select paint, inverse picks, and the plugin API still need boundary isolation. |
 | CSS select and popup geometry | Select, indicator, display text, popup, option rows, popup border, and their local offsets are calculated from retained CSS sizes; a private paint projection is used only when meshes are created or positioned. | Stored camera scale, select/dropdown mesh-bound reconstruction, raw-unit popup constants and fallbacks, and mirrored-X indicator/display/option placement. | Packaged-library build; 12/12 focused select tests, including fractional popup geometry and a mesh-bound-read rejection test. | Text paint, viewport-aware overlay anchoring, inverse picks, and the plugin API still need boundary isolation. |
+| CSS text and inverse-pick geometry | Text metrics, input viewports, carets, selections, highlights, scrolling, and picked text positions remain in CSS pixels. A picked Babylon point is transformed to mesh-local render space and then crosses the camera-owned inverse projection exactly once. | Duplicated world-scaled text metrics, text mesh-bound reconstruction, scale division in caret/highlight logic, and comments/calculations tied to historical mesh rotation. | Application build; 75/75 focused input and interaction tests, including an asymmetric pick-to-CSS regression with retained scroll and vertical-origin state. | Viewport-aware overlay anchoring and the plugin API still need boundary isolation; remaining backend-only compensations require a final audit. |
 
 ## Known convention leaks to migrate
 
 - `ElementCreationService` still exposes `pixelToWorldScale` and Babylon
   `Vector3` through the public plugin contract, although conversion now routes
   through the camera-owned CSS projection.
-- the text-input manager and text-selection service still perform some paint
-  calculations using projected dimensions.
-- reverse Babylon picks still need a single explicit inverse boundary for all
-  consumers beyond range/event-local geometry.
+- reverse Babylon picks outside the normalized text/range/event paths still need
+  review so no component consumes render coordinates directly.
 
 Each migration phase must replace one of these convention leaks with CSS-space
 state and remove its compensation only after a user-facing or boundary-level

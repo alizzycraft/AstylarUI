@@ -148,30 +148,7 @@ function createEntry(elementId: string, text: string): TextInteractionEntry {
     characters
   };
 
-  const worldMetrics: StoredTextLayoutMetrics['world'] = {
-    totalWidth: cssMetrics.totalWidth,
-    totalHeight: cssMetrics.totalHeight,
-    lineHeight: cssMetrics.lineHeight,
-    ascent: cssMetrics.ascent,
-    descent: cssMetrics.descent,
-    lines: cssMetrics.lines.map((line) => ({
-      ...line,
-      actualLeft: line.actualLeft,
-      actualRight: line.actualRight
-    })),
-    characters: cssMetrics.characters.map((character) => ({
-      ...character,
-      x: character.x,
-      width: character.width,
-      advance: character.advance
-    }))
-  };
-
-  const metrics: StoredTextLayoutMetrics = {
-    scale: 1,
-    css: cssMetrics,
-    world: worldMetrics
-  };
+  const metrics: StoredTextLayoutMetrics = { css: cssMetrics };
 
   return {
     elementId,
@@ -241,7 +218,7 @@ function createProportionalMultilineEntry(): TextInteractionEntry {
   return {
     elementId: 'multiline',
     mesh: { sideOrientation: 2 } as unknown as Mesh,
-    metrics: { scale: 1, css, world: css as StoredTextLayoutMetrics['world'] },
+    metrics: { css },
     style: { selector: '.multiline', textAlign: 'left' },
     text,
   };
