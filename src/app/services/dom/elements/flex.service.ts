@@ -8,6 +8,7 @@ import { FlexLayoutService, FlexItem, FlexContainer, FlexLine } from './flex-lay
 import { TextRenderingService } from '../../text/text-rendering.service';
 import { TextStyleParserService } from '../../text/text-style-parser.service';
 import { ElementBorderService } from './element-border.service';
+import { updateCssLayoutNode } from '../../css-layout-geometry';
 import {
   resolveGridTracks,
   resolveIntrinsicGridRows,
@@ -473,6 +474,14 @@ export class FlexService {
         ...stored,
         height: intrinsicHeight,
       });
+    }
+    const retained = dom.context.layoutBoxes?.get(mesh.name);
+    if (retained) {
+      dom.context.layoutBoxes.set(mesh.name, updateCssLayoutNode(
+        retained,
+        retained.box.borderBox,
+        { width, height: intrinsicHeight },
+      ));
     }
     return intrinsicHeight;
   }
@@ -1755,7 +1764,11 @@ export class FlexService {
       }
 
       layout.push({
-        position: { x, y, z: 0.1 + (index * 0.01) },
+        position: {
+          x: containerWidth / 2 + x - item.width / 2,
+          y: containerHeight / 2 - y - item.height / 2,
+          z: 0.1 + (index * 0.01),
+        },
         size: { width: item.width, height: item.height }
       });
     });

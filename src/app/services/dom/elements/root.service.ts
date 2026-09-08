@@ -3,6 +3,7 @@ import { StyleRule } from "../../../types/style-rule";
 import { Color3, Mesh } from "@babylonjs/core";
 import { BabylonDOM } from "../interfaces/dom.types";
 import { BabylonRender } from "../interfaces/render.types";
+import { createCssLayoutBox } from "../../css-layout-geometry";
 
 @Injectable({
   providedIn: "root",
@@ -94,6 +95,13 @@ export class RootService {
       width: cssWidth, // pixels
       height: cssHeight, // pixels
       padding: rootPadding, // pixels
+    });
+    dom.context.layoutBoxes.set("root-body", {
+      parentId: null,
+      box: createCssLayoutBox(
+        { x: 0, y: 0, width: cssWidth, height: cssHeight },
+        rootPadding,
+      ),
     });
 
     return rootBody;

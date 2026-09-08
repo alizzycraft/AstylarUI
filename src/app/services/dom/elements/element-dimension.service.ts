@@ -58,8 +58,8 @@ export class ElementDimensionService {
     ): {
         width: number;
         height: number;
-        x: number;
-        y: number;
+        left: number;
+        top: number;
         padding: { top: number; right: number; bottom: number; left: number };
         margin: { top: number; right: number; bottom: number; left: number };
     } {
@@ -118,8 +118,8 @@ export class ElementDimensionService {
         // Default dimensions - use content area, not full parent dimensions
         let width = contentWidth;
         let height = contentHeight;
-        let x = 0;
-        let y = 0;
+        let left = parentPadding.left;
+        let top = parentPadding.top;
 
         let widthSource = 'parent-content';
         let heightSource = 'parent-content';
@@ -358,30 +358,12 @@ export class ElementDimensionService {
             const positionedReferenceHeight = parentHeight - parentBorder.top - parentBorder.bottom;
 
             if (style.left !== undefined) {
-                if (typeof style.left === 'string' && style.left.endsWith('rem')) {
-                    const leftPixels = parseFloat(style.left) * 16;
-                    x = -(parentWidth / 2) + horizontalOriginInset + leftPixels + (width / 2);
-                } else if (typeof style.left === 'string' && style.left.endsWith('em')) {
-                    const leftPixels = parseFloat(style.left) * elementFontSize;
-                    x = -(parentWidth / 2) + horizontalOriginInset + leftPixels + (width / 2);
-                } else if (typeof style.left === 'string' && style.left.endsWith('vw')) {
-                    const leftPixels = (viewportDims.width * parseFloat(style.left)) / 100;
-                    x = -(parentWidth / 2) + horizontalOriginInset + leftPixels + (width / 2);
-                } else if (typeof style.left === 'string' && style.left.endsWith('vh')) {
-                    const leftPixels = (viewportDims.height * parseFloat(style.left)) / 100;
-                    x = -(parentWidth / 2) + horizontalOriginInset + leftPixels + (width / 2);
-                } else if (typeof style.left === 'string' && style.left.endsWith('px')) {
-                    x = -(parentWidth / 2) + horizontalOriginInset + parseFloat(style.left) + (width / 2);
-
-                } else if (typeof style.left === 'string' && style.left.endsWith('%')) {
-                    const leftPercent = parseFloat(style.left);
-                    const leftPixels = ((usesPositionedContainingBlock ? positionedReferenceWidth : contentWidth) * leftPercent) / 100;
-                    x = -(parentWidth / 2) + horizontalOriginInset + leftPixels + (width / 2);
-
-                } else {
-                    x = -(parentWidth / 2) + horizontalOriginInset + parseFloat(`${style.left}`) + (width / 2);
-
-                }
+                left = horizontalOriginInset + this.parsePositionLength(
+                    style.left,
+                    usesPositionedContainingBlock ? positionedReferenceWidth : contentWidth,
+                    viewportDims,
+                    elementFontSize,
+                );
             } else if (style.right !== undefined) {
                 const rightPixels = this.parsePositionLength(
                     style.right,
@@ -389,34 +371,19 @@ export class ElementDimensionService {
                     viewportDims,
                     elementFontSize,
                 );
-                x = (parentWidth / 2) - parentBorder.right - rightPixels - (width / 2);
+                left = parentWidth - parentBorder.right - rightPixels - width;
             } else {
-                x = -(parentWidth / 2) + parentPadding.left + (contentWidth / 2);
+                left = parentPadding.left + (contentWidth - width) / 2;
 
             }
 
             if (style.top !== undefined) {
-                if (typeof style.top === 'string' && style.top.endsWith('rem')) {
-                    const topPixels = parseFloat(style.top) * 16;
-                    y = (parentHeight / 2) - verticalOriginInset - topPixels - (height / 2);
-                } else if (typeof style.top === 'string' && style.top.endsWith('em')) {
-                    const topPixels = parseFloat(style.top) * elementFontSize;
-                    y = (parentHeight / 2) - verticalOriginInset - topPixels - (height / 2);
-                } else if (typeof style.top === 'string' && style.top.endsWith('vw')) {
-                    const topPixels = (viewportDims.width * parseFloat(style.top)) / 100;
-                    y = (parentHeight / 2) - verticalOriginInset - topPixels - (height / 2);
-                } else if (typeof style.top === 'string' && style.top.endsWith('vh')) {
-                    const topPixels = (viewportDims.height * parseFloat(style.top)) / 100;
-                    y = (parentHeight / 2) - verticalOriginInset - topPixels - (height / 2);
-                } else if (typeof style.top === 'string' && style.top.endsWith('px')) {
-                    y = (parentHeight / 2) - verticalOriginInset - parseFloat(style.top) - (height / 2);
-                } else if (typeof style.top === 'string' && style.top.endsWith('%')) {
-                    const topPercent = parseFloat(style.top);
-                    const topPixels = ((usesPositionedContainingBlock ? positionedReferenceHeight : contentHeight) * topPercent) / 100;
-                    y = (parentHeight / 2) - verticalOriginInset - topPixels - (height / 2);
-                } else {
-                    y = (parentHeight / 2) - verticalOriginInset - parseFloat(`${style.top}`) - (height / 2);
-                }
+                top = verticalOriginInset + this.parsePositionLength(
+                    style.top,
+                    usesPositionedContainingBlock ? positionedReferenceHeight : contentHeight,
+                    viewportDims,
+                    elementFontSize,
+                );
             } else if (style.bottom !== undefined) {
                 const bottomPixels = this.parsePositionLength(
                     style.bottom,
@@ -424,9 +391,9 @@ export class ElementDimensionService {
                     viewportDims,
                     elementFontSize,
                 );
-                y = -(parentHeight / 2) + parentBorder.bottom + bottomPixels + (height / 2);
+                top = parentHeight - parentBorder.bottom - bottomPixels - height;
             } else {
-                y = (parentHeight / 2) - parentPadding.top - (contentHeight / 2);
+                top = parentPadding.top + (contentHeight - height) / 2;
             }
         }
 
@@ -435,7 +402,7 @@ export class ElementDimensionService {
 
 
 
-        return { width, height, x, y, padding: layoutInsets, margin };
+        return { width, height, left, top, padding: layoutInsets, margin };
     }
 
     private parsePositionLength(

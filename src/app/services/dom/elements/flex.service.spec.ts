@@ -485,7 +485,7 @@ describe('FlexService', () => {
     );
 
     expect(result[0].size.width).toBe(50);
-    expect(result[0].position.x).toBe(41);
+    expect(result[0].position.x).toBe(16);
   });
 
   it('derives the minimum border box from padding and per-side borders', () => {
@@ -674,8 +674,7 @@ describe('FlexService', () => {
       {} as BabylonRender,
       container,
     );
-    const top = (index: number) =>
-      container.height / 2 - result[index].position.y - result[index].size.height / 2;
+    const top = (index: number) => result[index].position.y;
 
     expect(top(0)).toBe(6);
     expect(top(1)).toBe(6);
@@ -706,7 +705,7 @@ describe('FlexService', () => {
       flexProps, {} as BabylonRender, container,
     );
 
-    expect(result.position.x).toBe(0);
+    expect(result.position.x).toBe(10);
     expect(result.size.width).toBe(60);
   });
 });

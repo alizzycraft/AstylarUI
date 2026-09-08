@@ -98,6 +98,7 @@ export class BabylonDOMRendererService {
         elementStyles: this.elementManager.elementStylesMap,
         elementTypes: this.elementManager.elementTypesMap,
         elementDimensions: this.elementManager.elementDimensionsMap,
+        layoutBoxes: this.elementManager.layoutBoxesMap,
         // Text rendering context
         textMeshes: this.elementManager.textMeshesMap,
         textTextures: this.elementManager.textTexturesMap,

@@ -6,6 +6,7 @@ import { DOMElement } from '../../types/dom-element';
 import { TextInteractionRegistryService } from './interaction/text-interaction-registry.service';
 import { TextHighlightMeshFactory } from './interaction/text-highlight-mesh.factory';
 import { BabylonRender } from './interfaces/render.types';
+import { CssLayoutNode } from '../coordinate-space.types';
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +22,7 @@ export class BabylonElementManagerService implements OnDestroy {
     height: number;
     padding: { top: number; right: number; bottom: number; left: number }
   }> = new Map();
+  private layoutBoxes: Map<string, CssLayoutNode> = new Map();
 
   // Text rendering context
   private textMeshes: Map<string, Mesh> = new Map();
@@ -61,6 +63,10 @@ export class BabylonElementManagerService implements OnDestroy {
     padding: { top: number; right: number; bottom: number; left: number }
   }> {
     return this.elementDimensions;
+  }
+
+  get layoutBoxesMap(): Map<string, CssLayoutNode> {
+    return this.layoutBoxes;
   }
 
   get textMeshesMap(): Map<string, Mesh> {
@@ -108,6 +114,7 @@ export class BabylonElementManagerService implements OnDestroy {
     this.elementStyles.delete(id);
     this.hoverStates.delete(id);
     this.elementDimensions.delete(id);
+    this.layoutBoxes.delete(id);
   }
 
   registerTextElement(
@@ -164,6 +171,7 @@ export class BabylonElementManagerService implements OnDestroy {
     this.elementStyles.clear();
     this.elementTypes.clear();
     this.elementDimensions.clear();
+    this.layoutBoxes.clear();
 
     // Clear text rendering context
     this.textMeshes.forEach(mesh => {
@@ -202,6 +210,14 @@ export class BabylonElementManagerService implements OnDestroy {
     padding: { top: number; right: number; bottom: number; left: number }
   } | undefined {
     return this.elementDimensions.get(id);
+  }
+
+  setLayoutBox(id: string, node: CssLayoutNode): void {
+    this.layoutBoxes.set(id, node);
+  }
+
+  getLayoutBox(id: string): CssLayoutNode | undefined {
+    return this.layoutBoxes.get(id);
   }
 
   setHoverState(id: string, isHovering: boolean): void {

@@ -6,6 +6,7 @@ import { TextRenderingService } from '../../text/text-rendering.service';
 import { TextStyleParserService } from '../../text/text-style-parser.service';
 import { BabylonDOM } from '../interfaces/dom.types';
 import { BabylonRender } from '../interfaces/render.types';
+import { updateCssLayoutNode } from '../../css-layout-geometry';
 
 @Injectable({
   providedIn: 'root',
@@ -64,6 +65,17 @@ export class ListService {
         childCenterY * scale,
         childMesh.position.z,
       );
+      const retainedChild = dom.context.layoutBoxes?.get(childMesh.name);
+      if (retainedChild) {
+        dom.context.layoutBoxes.set(childMesh.name, updateCssLayoutNode(
+          retainedChild,
+          {
+            x: padding.left,
+            y: parentDimensions.height / 2 - childCenterY - childDimensions.height / 2,
+          },
+          childDimensions,
+        ));
+      }
 
       this.addListMarker(
         dom,

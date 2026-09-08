@@ -1,13 +1,12 @@
 import {
   AbstractMesh,
-  Matrix,
   Observer,
   PointerEventTypes,
   PointerInfo,
   Scene,
-  Vector3,
 } from '@babylonjs/core';
 import type { SiteData } from '../app/types/site-data';
+import type { CssPoint } from '../app/services/coordinate-space.types';
 import {
   AstylarEventDispatcher,
   AstylarEventOptions,
@@ -72,6 +71,21 @@ export function resolveCanvasPointerX(
   return event?.offsetX;
 }
 
+/** Resolves a pointer in canvas CSS pixels, independent of the picked mesh. */
+export function resolveCanvasPointerPoint(
+  event: Pick<PointerEvent, 'clientX' | 'clientY' | 'offsetX' | 'offsetY'> | undefined,
+  canvasRect: Pick<DOMRect, 'left' | 'top'> | undefined,
+): CssPoint | undefined {
+  if (!event) return undefined;
+  const x = canvasRect && Number.isFinite(event.clientX)
+    ? event.clientX - canvasRect.left
+    : event.offsetX;
+  const y = canvasRect && Number.isFinite(event.clientY)
+    ? event.clientY - canvasRect.top
+    : event.offsetY;
+  return Number.isFinite(x) && Number.isFinite(y) ? { x, y } : undefined;
+}
+
 export interface AstylarInteractionFocusOptions {
   focusVisible?: boolean;
   scrollIntoView?: boolean;
@@ -120,8 +134,11 @@ export interface AstylarInteractionControlAdapter {
 
 export interface AstylarInteractionScrollAdapter {
   scrollFrom(elementId: string, deltaX: number, deltaY: number): boolean;
-  isPointVisible(elementId: string, point?: { x: number; y: number }): boolean;
+  isPointVisible(elementId: string, point?: CssPoint): boolean;
   scrollIntoView?(elementId: string, alignment?: 'start' | 'nearest'): boolean;
+  getViewportRect?(
+    elementId: string,
+  ): { x: number; y: number; width: number; height: number } | undefined;
 }
 
 interface AstylarFormDefault {
@@ -459,7 +476,7 @@ export class AstylarInteractionRuntime {
     if (pointerInfo.type === PointerEventTypes.POINTERDOWN && expandedSelectOption) {
       if (!this.scrolling || this.scrolling.isPointVisible(
         expandedSelectOption.elementId,
-        pointerInfo.pickInfo?.pickedPoint ?? undefined,
+        this.pointerCssPoint(pointerInfo),
       )) {
         this.pressedExpandedSelectOption = expandedSelectOption;
         this.canvas?.focus();
@@ -621,7 +638,7 @@ export class AstylarInteractionRuntime {
   }
 
   private resolvePointerTarget(pointerInfo: PointerInfo): string | undefined {
-    const directPoint = pointerInfo.pickInfo?.pickedPoint ?? undefined;
+    const directPoint = this.pointerCssPoint(pointerInfo);
     const directMesh = pointerInfo.pickInfo?.pickedMesh ?? undefined;
     const direct = this.firstEligiblePointerTarget(
       directMesh,
@@ -653,7 +670,7 @@ export class AstylarInteractionRuntime {
     for (const pick of [...picks].sort((left, right) => left.distance - right.distance)) {
       const target = this.firstEligiblePointerTarget(
         pick.pickedMesh ?? undefined,
-        pick.pickedPoint ?? undefined,
+        this.pointerCssPoint(pointerInfo),
       );
       if (target) return target;
     }
@@ -670,11 +687,12 @@ export class AstylarInteractionRuntime {
     const y = Number.isFinite(nativeEvent.offsetY) ? nativeEvent.offsetY : this.scene.pointerY;
     if (!Number.isFinite(x) || !Number.isFinite(y)) return undefined;
     const picks = this.scene.multiPick(x, y, (mesh) => mesh.isPickable) ?? [];
+    const cssPoint = this.pointerCssPoint(pointerInfo);
     let deepest: { id: string; depth: number } | undefined;
     for (const pick of picks) {
       const target = this.firstEligiblePointerTarget(
         pick.pickedMesh ?? undefined,
-        pick.pickedPoint ?? undefined,
+        cssPoint,
       );
       if (!target || target === ancestorId) continue;
       const path = this.dispatcher.getElementPath(target);
@@ -689,7 +707,7 @@ export class AstylarInteractionRuntime {
 
   private firstVisiblePointerElement(
     mesh: AbstractMesh | undefined,
-    point?: { x: number; y: number },
+    point?: CssPoint,
   ): string | undefined {
     for (const elementId of this.resolveElementIds(mesh)) {
       if (!this.isAllowedByModal(elementId)) continue;
@@ -701,7 +719,7 @@ export class AstylarInteractionRuntime {
 
   private firstEligiblePointerTarget(
     mesh: AbstractMesh | undefined,
-    point?: { x: number; y: number },
+    point?: CssPoint,
   ): string | undefined {
     for (const elementId of this.resolveElementIds(mesh)) {
       if (!this.isAllowedByModal(elementId) || !this.dispatcher.hasEnabledTarget(elementId)) continue;
@@ -757,9 +775,10 @@ export class AstylarInteractionRuntime {
       ...this.dispatcher.getElementState(targetId),
       ...this.getLiveState?.(targetId),
     };
-    const canvasX = nativeEvent?.offsetX;
-    const canvasY = nativeEvent?.offsetY;
-    const targetRect = this.projectElementRect(targetId);
+    const canvasPoint = this.pointerCssPoint(pointerInfo);
+    const canvasX = canvasPoint?.x;
+    const canvasY = canvasPoint?.y;
+    const targetRect = this.resolveElementRect(targetId);
     return this.dispatcher.dispatch({
       type,
       targetId,
@@ -779,48 +798,33 @@ export class AstylarInteractionRuntime {
       clientY: nativeEvent?.clientY,
       canvasX,
       canvasY,
-      localX: canvasX !== undefined && targetRect ? canvasX - targetRect.left : undefined,
-      localY: canvasY !== undefined && targetRect ? canvasY - targetRect.top : undefined,
+      localX: canvasX !== undefined && targetRect ? canvasX - targetRect.x : undefined,
+      localY: canvasY !== undefined && targetRect ? canvasY - targetRect.y : undefined,
     });
   }
 
+  private pointerCssPoint(pointerInfo: PointerInfo): CssPoint | undefined {
+    return resolveCanvasPointerPoint(
+      pointerInfo.event as PointerEvent | MouseEvent | undefined,
+      this.canvas?.getBoundingClientRect(),
+    );
+  }
+
   private updateRangeFromPointer(elementId: string, pointerInfo: PointerInfo): boolean {
-    const nativeEvent = pointerInfo.event as PointerEvent | MouseEvent | undefined;
-    const canvasX = resolveCanvasPointerX(nativeEvent, this.canvas?.getBoundingClientRect());
-    const rect = this.projectElementRect(elementId);
-    if (canvasX === undefined || !rect) return false;
+    const point = this.pointerCssPoint(pointerInfo);
+    const rect = this.resolveElementRect(elementId);
+    if (!point || !rect) return false;
     return this.controls?.setRangeFromPointer?.(
       elementId,
-      canvasX - rect.left,
+      point.x - rect.x,
       rect.width,
     ) ?? false;
   }
 
-  private projectElementRect(
+  private resolveElementRect(
     elementId: string,
-  ): { left: number; top: number; width: number; height: number } | undefined {
-    const camera = this.scene.activeCamera;
-    const canvas = this.canvas;
-    if (!camera || !canvas) return undefined;
-    const mesh = selectElementProjectionMesh(this.scene.meshes, elementId);
-    if (!mesh) return undefined;
-    mesh.computeWorldMatrix(true);
-    const engine = this.scene.getEngine();
-    const renderWidth = engine.getRenderWidth();
-    const renderHeight = engine.getRenderHeight();
-    if (!renderWidth || !renderHeight) return undefined;
-    const viewport = camera.viewport.toGlobal(renderWidth, renderHeight);
-    const transform = this.scene.getTransformMatrix();
-    const projected = mesh.getBoundingInfo().boundingBox.vectorsWorld.map((corner) =>
-      Vector3.Project(corner, Matrix.IdentityReadOnly, transform, viewport),
-    );
-    const xScale = canvas.clientWidth / renderWidth;
-    const yScale = canvas.clientHeight / renderHeight;
-    const left = Math.min(...projected.map((point) => point.x)) * xScale;
-    const right = Math.max(...projected.map((point) => point.x)) * xScale;
-    const top = Math.min(...projected.map((point) => point.y)) * yScale;
-    const bottom = Math.max(...projected.map((point) => point.y)) * yScale;
-    return { left, top, width: right - left, height: bottom - top };
+  ): { x: number; y: number; width: number; height: number } | undefined {
+    return this.scrolling?.getViewportRect?.(elementId);
   }
 
   private readonly handleKeyDown = (event: KeyboardEvent): void => {
@@ -944,15 +948,15 @@ export class AstylarInteractionRuntime {
     const pick = this.scene.pick(this.scene.pointerX, this.scene.pointerY);
     const lineScale = 16;
     const pageScale = this.canvas?.clientHeight || 1;
-    const pixelScale = window.devicePixelRatio || 1;
     const factor = event.deltaMode === WheelEvent.DOM_DELTA_LINE
       ? lineScale
-      : event.deltaMode === WheelEvent.DOM_DELTA_PAGE ? pageScale : pixelScale;
+      : event.deltaMode === WheelEvent.DOM_DELTA_PAGE ? pageScale : 1;
     const deltaX = event.deltaX * factor;
     const deltaY = event.deltaY * factor;
+    const pointer = resolveCanvasPointerPoint(event, this.canvas?.getBoundingClientRect());
     for (const targetId of this.resolveElementIds(pick?.pickedMesh ?? undefined)) {
       if (!this.isAllowedByModal(targetId)) continue;
-      if (!this.scrolling.isPointVisible(targetId, pick?.pickedPoint ?? undefined)) continue;
+      if (!this.scrolling.isPointVisible(targetId, pointer)) continue;
       if (this.controls?.scrollTextControl?.(targetId, deltaX, deltaY) ||
           this.scrolling.scrollFrom(targetId, deltaX, deltaY)) {
         event.preventDefault();

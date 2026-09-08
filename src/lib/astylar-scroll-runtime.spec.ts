@@ -2,7 +2,19 @@ import { Mesh, MeshBuilder, NullEngine, Scene } from '@babylonjs/core';
 import type { DOMElement } from '../app/types/dom-element';
 import type { SiteData } from '../app/types/site-data';
 import type { StyleRule } from '../app/types/style-rule';
+import type { CssLayoutNode } from '../app/services/coordinate-space.types';
+import { createCssLayoutBox } from '../app/services/css-layout-geometry';
 import { AstylarScrollRuntime } from './astylar-scroll-runtime';
+
+function layoutNode(
+  parentId: string | null,
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+): CssLayoutNode {
+  return { parentId, box: createCssLayoutBox({ x, y, width, height }) };
+}
 
 describe('AstylarScrollRuntime', () => {
   let engine: NullEngine;
@@ -85,6 +97,27 @@ describe('AstylarScrollRuntime', () => {
     expect(meshes.get('one')?.position.y).toBe(40);
   });
 
+  it('resolves scrolled viewport rectangles from retained CSS boxes', () => {
+    const { runtime, siteData } = createVerticalRuntime(scene);
+    runtime.reconcile(siteData);
+
+    expect(runtime.getViewportRect('three')).toEqual({ x: 0, y: 160, width: 240, height: 80 });
+    expect(runtime.scrollFrom('three', 0, 55.5)).toBeTrue();
+    expect(runtime.getViewportRect('three')).toEqual({ x: 0, y: 104.5, width: 240, height: 80 });
+  });
+
+  it('measures CSS overflow without reading Babylon bounding boxes', () => {
+    const { runtime, siteData, meshes } = createVerticalRuntime(scene);
+    for (const mesh of meshes.values()) {
+      spyOn(mesh, 'getBoundingInfo').and.throwError(
+        'scroll geometry must not be reconstructed from Babylon bounds',
+      );
+    }
+
+    expect(() => runtime.reconcile(siteData)).not.toThrow();
+    expect(runtime.snapshot.containers['box'].scrollHeight).toBe(240);
+  });
+
   it('measures rightward screen overflow and applies horizontal scroll offsets', () => {
     const boxElement: DOMElement = {
       type: 'div', id: 'box', children: [{ type: 'div', id: 'strip' }],
@@ -97,6 +130,10 @@ describe('AstylarScrollRuntime', () => {
     // Content flowing right extends toward positive render X.
     strip.position.x = -60;
     strip.metadata = { element: boxElement.children![0], elementId: 'strip' };
+    const layoutBoxes = new Map<string, CssLayoutNode>([
+      ['box', layoutNode(null, 0, 0, 240, 120)],
+      ['strip', layoutNode('box', 0, 0, 360, 120)],
+    ]);
     const runtime = new AstylarScrollRuntime({
       getMesh: (id) => id === 'box' ? box : id === 'strip' ? strip : undefined,
       getDimensions: (id) => id === 'box' ? {
@@ -104,6 +141,7 @@ describe('AstylarScrollRuntime', () => {
         height: 120,
         padding: { top: 0, right: 12, bottom: 0, left: 0 },
       } : undefined,
+      getLayoutBoxes: () => layoutBoxes,
       getStyle: (id) => id === 'box' ? { selector: '#box', overflow: 'scroll' } : undefined,
       getPixelToWorldScale: () => 1,
     });
@@ -146,12 +184,17 @@ describe('AstylarScrollRuntime', () => {
     contentMesh.parent = box;
     contentMesh.position.y = -56;
     contentMesh.metadata = { element: content, elementId: 'bordered-content' };
+    const layoutBoxes = new Map<string, CssLayoutNode>([
+      ['bordered-box', layoutNode(null, 0, 0, 240, 110)],
+      ['bordered-content', layoutNode('bordered-box', 0, 0, 240, 222)],
+    ]);
     const runtime = new AstylarScrollRuntime({
       getMesh: (id) => id === 'bordered-box' ? box :
         id === 'bordered-content' ? contentMesh : undefined,
       getDimensions: (id) => id === 'bordered-box'
         ? { width: 240, height: 110 }
         : undefined,
+      getLayoutBoxes: () => layoutBoxes,
       getStyle: (id) => id === 'bordered-box' ? {
         selector: '#bordered-box', overflow: 'auto', borderWidth: '1px', borderStyle: 'solid',
       } : undefined,
@@ -218,9 +261,16 @@ describe('AstylarScrollRuntime', () => {
       ['outer', { selector: '#outer', overflow: 'auto' }],
       ['inner', { selector: '#inner', overflow: 'auto' }],
     ]);
+    const layoutBoxes = new Map<string, CssLayoutNode>([
+      ['outer', layoutNode(null, 0, 0, 300, 300)],
+      ['outer-content', layoutNode('outer', 0, 0, 300, 420)],
+      ['inner', layoutNode('outer-content', 0, 0, 220, 120)],
+      ['inner-content', layoutNode('inner', 0, 0, 220, 220)],
+    ]);
     const runtime = new AstylarScrollRuntime({
       getMesh: (id) => meshes.get(id),
       getDimensions: (id) => dimensions.get(id),
+      getLayoutBoxes: () => layoutBoxes,
       getStyle: (id) => styles.get(id),
       getPixelToWorldScale: () => 1,
     });
@@ -267,6 +317,9 @@ describe('AstylarScrollRuntime', () => {
     const disabledRuntime = new AstylarScrollRuntime({
       getMesh: (id) => id === 'box' ? scene.getMeshByName('box') as Mesh : undefined,
       getDimensions: (id) => id === 'box' ? { width: 240, height: 160 } : undefined,
+      getLayoutBoxes: () => new Map([
+        ['box', layoutNode(null, 0, 0, 240, 160)],
+      ]),
       getStyle: () => ({ selector: '#box', overflow: 'auto' }),
       resolveStyle: (element) => ({
         selector: '#box.disabled',
@@ -316,9 +369,16 @@ function createVerticalRuntime(
   const styles = new Map<string, StyleRule>([
     ['box', { selector: '#box', overflow }],
   ]);
+  const layoutBoxes = new Map<string, CssLayoutNode>([
+    ['box', layoutNode(null, 0, 0, 240, clientHeight)],
+    ['one', layoutNode('box', 0, 0, 240, 80)],
+    ['two', layoutNode('box', 0, 80, 240, 80)],
+    ['three', layoutNode('box', 0, 160, 240, 80)],
+  ]);
   const runtime = new AstylarScrollRuntime({
     getMesh: (id) => meshes.get(id),
     getDimensions: (id) => dimensions.get(id),
+    getLayoutBoxes: () => layoutBoxes,
     getStyle: (id) => styles.get(id),
     getPixelToWorldScale: () => 1,
   });

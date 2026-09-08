@@ -161,8 +161,8 @@ describe('ElementDimensionService', () => {
       dom, render, { id: 'fixed', type: 'div' }, style, parent, [style],
     );
 
-    expect(result.x).toBe(363);
-    expect(result.y).toBe(-257);
+    expect(result.left).toBe(688);
+    expect(result.top).toBe(540);
   });
 
   it('fills block width and uses intrinsic text height for auto dimensions', () => {
@@ -529,8 +529,8 @@ describe('ElementDimensionService', () => {
     expect(result.width).toBe(288);
     expect(result.height).toBe(168);
     expect(result.padding).toEqual({ top: 24, right: 24, bottom: 24, left: 24 });
-    expect(result.x).toBe(-156);
-    expect(result.y).toBe(136);
+    expect(result.left).toBe(100);
+    expect(result.top).toBe(80);
   });
 
   it('positions an absolute child from its parent padding-box edge', () => {
@@ -557,8 +557,8 @@ describe('ElementDimensionService', () => {
 
     const result = service.calculateDimensions(dom, render, element, style, parent, [style]);
 
-    expect(result.x).toBe(-80);
-    expect(result.y).toBe(59);
+    expect(result.left).toBe(40);
+    expect(result.top).toBe(46);
   });
 
   it('stretches an absolutely positioned auto-width child between left and right insets', () => {
@@ -586,7 +586,7 @@ describe('ElementDimensionService', () => {
     const result = service.calculateDimensions(dom, render, element, style, parent, [style]);
 
     expect(result.width).toBe(406);
-    expect(result.x).toBe(0);
+    expect(result.left).toBe(7);
   });
 
   it('applies maximum width and height constraints', () => {
@@ -651,8 +651,8 @@ describe('ElementDimensionService', () => {
 
     expect(result.width).toBe(240);
     expect(result.height).toBe(120);
-    expect(result.x).toBe(-200);
-    expect(result.y).toBe(168);
+    expect(result.left).toBe(80);
+    expect(result.top).toBe(72);
   });
 
   it('resolves em and rem dimensions and offsets from their font bases', () => {
@@ -683,11 +683,11 @@ describe('ElementDimensionService', () => {
 
     expect(em.width).toBe(240);
     expect(em.height).toBe(100);
-    expect(em.x).toBe(-240);
-    expect(em.y).toBe(220);
+    expect(em.left).toBe(40);
+    expect(em.top).toBe(30);
     expect(rem.width).toBe(224);
     expect(rem.height).toBe(80);
-    expect(rem.x).toBe(128);
-    expect(rem.y).toBe(68);
+    expect(rem.left).toBe(416);
+    expect(rem.top).toBe(192);
   });
 });

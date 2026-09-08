@@ -11,6 +11,7 @@ import {
   tokenizeGridTrackList,
 } from './grid-track-sizing';
 import { ElementBorderService } from './element-border.service';
+import { updateCssLayoutNode } from '../../css-layout-geometry';
 
 interface GridItemPlacement {
   column: number;
@@ -138,6 +139,14 @@ export class GridService {
         parent.position.y += ((dimensions.height - intrinsicHeight) / 2) * scaleFactor;
         dimensions.height = intrinsicHeight;
         dom.context.elementDimensions.set(parent.name, dimensions);
+        const retainedParent = dom.context.layoutBoxes?.get(parent.name);
+        if (retainedParent) {
+          dom.context.layoutBoxes.set(parent.name, updateCssLayoutNode(
+            retainedParent,
+            retainedParent.box.borderBox,
+            { width: dimensions.width, height: intrinsicHeight },
+          ));
+        }
         contentHeight = Math.max(
           0,
           intrinsicHeight - dimensions.padding.top - dimensions.padding.bottom,
@@ -165,8 +174,8 @@ export class GridService {
         parent,
         styles,
         {
-          x: contentLeft + xOffset + width / 2,
-          y: contentTop - yOffset - height / 2,
+          x: dimensions.padding.left + xOffset,
+          y: dimensions.padding.top + yOffset,
           z: 0.1 + index * 0.01,
         },
         {
@@ -188,6 +197,18 @@ export class GridService {
         (contentTop - yOffset - this.alignItemWithinTrack(height, usedSize.height, verticalAlignment)) * scaleFactor,
         0.1 + index * 0.01,
       );
+      const alignedLeft = dimensions.padding.left + xOffset +
+        this.itemAlignmentOffset(width, usedSize.width, horizontalAlignment);
+      const alignedTop = dimensions.padding.top + yOffset +
+        this.itemAlignmentOffset(height, usedSize.height, verticalAlignment);
+      const retained = dom.context.layoutBoxes?.get(childMesh.name);
+      if (retained) {
+        dom.context.layoutBoxes.set(childMesh.name, updateCssLayoutNode(
+          retained,
+          { x: alignedLeft, y: alignedTop },
+          usedSize,
+        ));
+      }
 
       // Grid track sizing produces a definite used size for the item. Nested
       // flex or block layout must preserve it instead of re-running auto size.
@@ -213,6 +234,12 @@ export class GridService {
   private parseLength(value: string | undefined): number {
     const parsed = Number.parseFloat(value ?? '0');
     return Number.isFinite(parsed) ? Math.max(0, parsed) : 0;
+  }
+
+  private itemAlignmentOffset(trackSize: number, itemSize: number, alignment: string): number {
+    if (alignment === 'end') return trackSize - itemSize;
+    if (alignment === 'center') return (trackSize - itemSize) / 2;
+    return 0;
   }
 
   private resolveGridPlacements(

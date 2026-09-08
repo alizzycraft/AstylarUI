@@ -8,6 +8,11 @@ import {
 import type { DOMElement } from '../app/types/dom-element';
 import type { SiteData } from '../app/types/site-data';
 import type { StyleRule } from '../app/types/style-rule';
+import type { CssLayoutNode, CssPoint, CssRect } from '../app/services/coordinate-space.types';
+import {
+  resolveCssRectRelativeToAncestor,
+  resolveCssViewportRect,
+} from '../app/services/css-layout-geometry';
 
 export interface AstylarScrollState {
   scrollLeft: number;
@@ -27,6 +32,7 @@ interface ScrollContainer extends AstylarScrollState {
   id: string;
   mesh: Mesh;
   roots: Array<{ mesh: Mesh; x: number; y: number }>;
+  borderWidth: number;
   verticalScrollbar?: ScrollbarVisual;
   horizontalScrollbar?: ScrollbarVisual;
 }
@@ -48,6 +54,7 @@ interface ElementDimensions {
 export interface AstylarScrollRuntimeOptions {
   getMesh(elementId: string): Mesh | undefined;
   getDimensions(elementId: string): ElementDimensions | undefined;
+  getLayoutBoxes(): ReadonlyMap<string, CssLayoutNode>;
   getStyle(elementId: string): StyleRule | undefined;
   resolveStyle?(element: DOMElement, siteData: SiteData): StyleRule | undefined;
   getPixelToWorldScale(): number;
@@ -150,16 +157,15 @@ export class AstylarScrollRuntime {
     return false;
   }
 
-  isPointVisible(elementId: string, point?: { x: number; y: number }): boolean {
+  isPointVisible(elementId: string, point?: CssPoint): boolean {
     if (!point) return true;
     let currentId = this.parentIds.get(elementId);
     while (currentId) {
       const container = this.containers.get(currentId);
       if (container) {
-        container.mesh.computeWorldMatrix(true);
-        const bounds = container.mesh.getBoundingInfo().boundingBox;
-        if (point.x < bounds.minimumWorld.x || point.x > bounds.maximumWorld.x ||
-            point.y < bounds.minimumWorld.y || point.y > bounds.maximumWorld.y) {
+        const rect = this.visualViewportRect(currentId);
+        if (!rect || point.x < rect.x || point.x > rect.x + rect.width ||
+            point.y < rect.y || point.y > rect.y + rect.height) {
           return false;
         }
       }
@@ -168,11 +174,28 @@ export class AstylarScrollRuntime {
     return true;
   }
 
+  /** Resolves retained element geometry into the canvas CSS viewport. */
+  getViewportRect(elementId: string): CssRect | undefined {
+    const rect = resolveCssViewportRect(elementId, this.options.getLayoutBoxes());
+    if (!rect) return undefined;
+    let x = rect.x;
+    let y = rect.y;
+    let currentId = this.parentIds.get(elementId);
+    while (currentId) {
+      const ancestor = this.containers.get(currentId);
+      if (ancestor) {
+        x -= ancestor.scrollLeft;
+        y -= ancestor.scrollTop;
+      }
+      currentId = this.parentIds.get(currentId);
+    }
+    return { ...rect, x, y };
+  }
+
   /** Aligns a fragment destination to each scrollable ancestor's start edge. */
   scrollIntoView(elementId: string, alignment: 'start' | 'nearest' = 'start'): boolean {
     if (this.disposed) return false;
-    const target = this.options.getMesh(elementId);
-    if (!target) return false;
+    if (!this.options.getLayoutBoxes().has(elementId)) return false;
     const ancestors: ScrollContainer[] = [];
     let currentId = this.parentIds.get(elementId);
     while (currentId) {
@@ -181,35 +204,30 @@ export class AstylarScrollRuntime {
       currentId = this.parentIds.get(currentId);
     }
     let changed = false;
-    const scale = this.options.getPixelToWorldScale();
     for (const container of ancestors) {
-      target.computeWorldMatrix(true);
-      container.mesh.computeWorldMatrix(true);
-      const targetBounds = target.getBoundingInfo().boundingBox;
-      const containerBounds = container.mesh.getBoundingInfo().boundingBox;
-      const horizontallyVisible = targetBounds.minimumWorld.x >= containerBounds.minimumWorld.x &&
-        targetBounds.maximumWorld.x <= containerBounds.maximumWorld.x;
-      const verticallyVisible = targetBounds.minimumWorld.y >= containerBounds.minimumWorld.y &&
-        targetBounds.maximumWorld.y <= containerBounds.maximumWorld.y;
-      const horizontalDelta = alignment === 'nearest' && !horizontallyVisible
-        ? ((targetBounds.minimumWorld.x + targetBounds.maximumWorld.x) / 2 -
-          (containerBounds.minimumWorld.x + containerBounds.maximumWorld.x) / 2) / scale
-        : (targetBounds.minimumWorld.x - containerBounds.minimumWorld.x) / scale;
-      const verticalDelta = alignment === 'nearest' && !verticallyVisible
-        ? ((containerBounds.minimumWorld.y + containerBounds.maximumWorld.y) / 2 -
-          (targetBounds.minimumWorld.y + targetBounds.maximumWorld.y) / 2) / scale
-        : (containerBounds.maximumWorld.y - targetBounds.maximumWorld.y) / scale;
+      const targetRect = this.rectInScrollableContent(elementId, container.id);
+      if (!targetRect) continue;
+      const viewportLeft = container.borderWidth + container.scrollLeft;
+      const viewportTop = container.borderWidth + container.scrollTop;
+      const viewportRight = viewportLeft + container.clientWidth;
+      const viewportBottom = viewportTop + container.clientHeight;
+      const horizontallyVisible = targetRect.x >= viewportLeft &&
+        targetRect.x + targetRect.width <= viewportRight;
+      const verticallyVisible = targetRect.y >= viewportTop &&
+        targetRect.y + targetRect.height <= viewportBottom;
+      const desiredLeft = alignment === 'start' || targetRect.x < viewportLeft
+        ? targetRect.x - container.borderWidth
+        : targetRect.x + targetRect.width - container.borderWidth - container.clientWidth;
+      const desiredTop = alignment === 'start' || targetRect.y < viewportTop
+        ? targetRect.y - container.borderWidth
+        : targetRect.y + targetRect.height - container.borderWidth - container.clientHeight;
       const nextLeft = this.clamp(
-        alignment === 'nearest' && horizontallyVisible
-          ? container.scrollLeft
-          : container.scrollLeft + horizontalDelta,
+        alignment === 'nearest' && horizontallyVisible ? container.scrollLeft : desiredLeft,
         0,
         Math.max(0, container.scrollWidth - container.clientWidth),
       );
       const nextTop = this.clamp(
-        alignment === 'nearest' && verticallyVisible
-          ? container.scrollTop
-          : container.scrollTop + verticalDelta,
+        alignment === 'nearest' && verticallyVisible ? container.scrollTop : desiredTop,
         0,
         Math.max(0, container.scrollHeight - container.clientHeight),
       );
@@ -237,50 +255,45 @@ export class AstylarScrollRuntime {
     const mesh = this.options.getMesh(id);
     const dimensions = this.options.getDimensions(id);
     if (!mesh || !dimensions) return undefined;
-    const scale = this.options.getPixelToWorldScale();
-    mesh.computeWorldMatrix(true);
-    const containerBounds = mesh.getBoundingInfo().boundingBox;
+    const layoutBoxes = this.options.getLayoutBoxes();
+    if (!layoutBoxes.has(id)) return undefined;
     const roots = (element.children ?? [])
       .map((child) => this.findDirectChildMesh(mesh, child))
       .filter((child): child is Mesh => !!child)
       .map((child) => ({ mesh: child, x: child.position.x, y: child.position.y }));
 
-    let minX = Number.POSITIVE_INFINITY;
-    let maxX = Number.NEGATIVE_INFINITY;
-    let minY = Number.POSITIVE_INFINITY;
-    let maxY = Number.NEGATIVE_INFINITY;
-    for (const root of roots) {
-      const bounds = root.mesh.getHierarchyBoundingVectors(true);
-      minX = Math.min(minX, bounds.min.x);
-      maxX = Math.max(maxX, bounds.max.x);
-      minY = Math.min(minY, bounds.min.y);
-      maxY = Math.max(maxY, bounds.max.y);
+    let maxX = 0;
+    let maxY = 0;
+    for (const candidateId of layoutBoxes.keys()) {
+      const rect = resolveCssRectRelativeToAncestor(candidateId, id, layoutBoxes);
+      if (!rect) continue;
+      maxX = Math.max(maxX, rect.x + rect.width);
+      maxY = Math.max(maxY, rect.y + rect.height);
     }
     const borderWidth = style?.borderStyle && style.borderStyle !== 'none' &&
         style.borderStyle !== 'hidden'
       ? this.parsePixelLength(style.borderWidth)
       : 0;
     const borderBoxAdjustment = borderWidth * 2;
-    const clientWidth = this.round(Math.max(0, dimensions.width - borderBoxAdjustment));
-    const clientHeight = this.round(Math.max(0, dimensions.height - borderBoxAdjustment));
+    const clientWidth = Math.max(0, dimensions.width - borderBoxAdjustment);
+    const clientHeight = Math.max(0, dimensions.height - borderBoxAdjustment);
     const trailingPaddingX = dimensions.padding?.right ?? 0;
     const trailingPaddingY = dimensions.padding?.bottom ?? 0;
-    const contentWidth = roots.length ? Math.max(0, Math.max(
-      maxX - containerBounds.minimumWorld.x,
-      containerBounds.maximumWorld.x - minX,
-    ) / scale + trailingPaddingX - borderBoxAdjustment) : 0;
-    const contentHeight = roots.length ? Math.max(0, Math.max(
-      maxY - containerBounds.minimumWorld.y,
-      containerBounds.maximumWorld.y - minY,
-    ) / scale + trailingPaddingY - borderBoxAdjustment) : 0;
+    const contentWidth = roots.length
+      ? Math.max(0, maxX + trailingPaddingX - borderBoxAdjustment)
+      : 0;
+    const contentHeight = roots.length
+      ? Math.max(0, maxY + trailingPaddingY - borderBoxAdjustment)
+      : 0;
     return {
       id,
       mesh,
       roots,
+      borderWidth,
       scrollLeft: 0,
       scrollTop: 0,
-      scrollWidth: Math.max(clientWidth, this.round(contentWidth)),
-      scrollHeight: Math.max(clientHeight, this.round(contentHeight)),
+      scrollWidth: Math.max(clientWidth, contentWidth),
+      scrollHeight: Math.max(clientHeight, contentHeight),
       clientWidth,
       clientHeight,
     };
@@ -307,6 +320,45 @@ export class AstylarScrollRuntime {
       root.mesh.computeWorldMatrix(true);
     }
     this.updateScrollbars(container);
+  }
+
+  private visualViewportRect(elementId: string): CssRect | undefined {
+    const rect = resolveCssViewportRect(elementId, this.options.getLayoutBoxes());
+    const container = this.containers.get(elementId);
+    if (!rect || !container) return undefined;
+    let x = rect.x + container.borderWidth;
+    let y = rect.y + container.borderWidth;
+    let currentId = this.parentIds.get(elementId);
+    while (currentId) {
+      const ancestor = this.containers.get(currentId);
+      if (ancestor) {
+        x -= ancestor.scrollLeft;
+        y -= ancestor.scrollTop;
+      }
+      currentId = this.parentIds.get(currentId);
+    }
+    return { x, y, width: container.clientWidth, height: container.clientHeight };
+  }
+
+  private rectInScrollableContent(elementId: string, ancestorId: string): CssRect | undefined {
+    const rect = resolveCssRectRelativeToAncestor(
+      elementId,
+      ancestorId,
+      this.options.getLayoutBoxes(),
+    );
+    if (!rect) return undefined;
+    let x = rect.x;
+    let y = rect.y;
+    let currentId = this.parentIds.get(elementId);
+    while (currentId && currentId !== ancestorId) {
+      const nested = this.containers.get(currentId);
+      if (nested) {
+        x -= nested.scrollLeft;
+        y -= nested.scrollTop;
+      }
+      currentId = this.parentIds.get(currentId);
+    }
+    return { ...rect, x, y };
   }
 
   private createScrollbars(container: ScrollContainer): void {

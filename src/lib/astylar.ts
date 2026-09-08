@@ -424,6 +424,7 @@ class AstylarRenderer {
     const scrollRuntime = new AstylarScrollRuntime({
       getMesh: (elementId) => this.elementManager.elementsMap.get(elementId),
       getDimensions: (elementId) => this.elementManager.elementDimensionsMap.get(elementId),
+      getLayoutBoxes: () => this.elementManager.layoutBoxesMap,
       getStyle: (elementId) => this.elementManager.elementStylesMap.get(elementId)?.normal,
       resolveStyle: (element, currentSiteData) =>
         this.styleService.findStyleForElement(element, currentSiteData.styles),

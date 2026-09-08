@@ -127,8 +127,8 @@ describe('GridService', () => {
       { type: 'div', id: 'grid' },
     );
 
-    expect(createElement.calls.argsFor(0)[5]).toEqual({ x: 0, y: 20, z: 0.1 });
-    expect(createElement.calls.argsFor(1)[5]).toEqual({ x: -120, y: -20, z: 0.11 });
+    expect(createElement.calls.argsFor(0)[5]).toEqual({ x: 0, y: 0, z: 0.1 });
+    expect(createElement.calls.argsFor(1)[5]).toEqual({ x: 0, y: 40, z: 0.11 });
   });
 
   it('honors explicit grid-row and grid-column line placement', () => {
@@ -168,7 +168,7 @@ describe('GridService', () => {
       { type: 'div', id: 'grid' },
     );
 
-    expect(createElement.calls.argsFor(0)[5]).toEqual({ x: 20, y: -20, z: 0.1 });
+    expect(createElement.calls.argsFor(0)[5]).toEqual({ x: 40, y: 40, z: 0.1 });
   });
 
   it('marks a grid item track size as definite before nested layout', () => {

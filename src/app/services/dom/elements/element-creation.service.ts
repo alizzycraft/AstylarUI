@@ -28,6 +28,11 @@ import { AstylarPluginRuntime } from "../../../../lib/astylar-plugin-runtime";
 import { AstylarCoreCompatibilityRenderer } from "../../../../lib/astylar-core-plugin";
 import { AstylarDocumentRecovery } from "../../../../lib/astylar-document-recovery";
 import { AstylarPluginHost } from "../../../../lib/astylar-plugin-host";
+import {
+  createCssLayoutBox,
+  cssLocalCenter,
+  updateCssLayoutNode,
+} from "../../css-layout-geometry";
 
 /**
  * Service responsible for creating DOM elements as Babylon.js meshes
@@ -67,7 +72,7 @@ export class ElementCreationService {
     element: DOMElement,
     parent: Mesh,
     styles: StyleRule[],
-    flexPosition?: { x: number; y: number; z: number },
+    layoutPosition?: { x: number; y: number; z: number },
     flexSize?: { width?: number; height?: number },
   ): Mesh {
     const placeholder = this.documentRecovery.placeholderFor(element);
@@ -212,8 +217,8 @@ export class ElementCreationService {
           style,
           properties: pluginProperties,
           dimensions: {
-            x: dimensions.x,
-            y: dimensions.y,
+            x: layoutPosition?.x ?? dimensions.left,
+            y: layoutPosition?.y ?? dimensions.top,
             width: dimensions.width,
             height: dimensions.height,
             padding: dimensions.padding,
@@ -372,21 +377,29 @@ export class ElementCreationService {
       this.stackingContextManager.calculateZPosition(element, style);
     const hasExplicitStackingOrder =
       style.zIndex !== undefined && style.zIndex !== "auto";
-    const zPosition = flexPosition && !hasExplicitStackingOrder
-      ? flexPosition.z
+    const zPosition = layoutPosition && !hasExplicitStackingOrder
+      ? layoutPosition.z
       : stackingZPosition;
 
-    let worldX: number, worldY: number;
-    if (flexPosition) {
-      worldX = flexPosition.x * scaleFactor;
-      worldY = flexPosition.y * scaleFactor;
-    } else {
-      worldX = dimensions.x * scaleFactor;
-      worldY = dimensions.y * scaleFactor;
+    const parentDimensions = dom.context.elementDimensions.get(layoutParent.name);
+    if (!parentDimensions) {
+      throw new Error(`Parent dimensions not found for retained layout box ${layoutParent.name}`);
     }
+    const borderBoxX = layoutPosition?.x ?? dimensions.left;
+    const borderBoxY = layoutPosition?.y ?? dimensions.top;
+    const borderBox = {
+      x: borderBoxX,
+      y: borderBoxY,
+      width: dimensions.width,
+      height: dimensions.height,
+    };
+    const localCenter = render.actions.camera.projectCssLocalPoint(
+      cssLocalCenter(borderBox, parentDimensions),
+      zPosition,
+    );
 
     // Position and parent the mesh
-    render.actions.mesh.positionTextMesh(mesh, worldX, worldY, zPosition);
+    render.actions.mesh.positionTextMesh(mesh, localCenter.x, localCenter.y, localCenter.z);
     render.actions.mesh.parentTextMesh(mesh, layoutParent);
 
 
@@ -506,6 +519,10 @@ export class ElementCreationService {
       width: dimensions.width,
       height: dimensions.height,
       padding: pixelPadding,
+    });
+    dom.context.layoutBoxes.set(meshId, {
+      parentId: layoutParent.name,
+      box: createCssLayoutBox(borderBox, pixelPadding, dimensions.margin),
     });
 
     this.interactionService.syncShadow(
@@ -906,6 +923,14 @@ export class ElementCreationService {
         ...parentDims,
         height: computedHeightPx,
       });
+      const retainedParent = dom.context.layoutBoxes.get(parent.name);
+      if (retainedParent) {
+        dom.context.layoutBoxes.set(parent.name, updateCssLayoutNode(
+          retainedParent,
+          retainedParent.box.borderBox,
+          { width: parentDims.width, height: computedHeightPx },
+        ));
+      }
     }
 
     const finalParentHeight =
@@ -925,6 +950,14 @@ export class ElementCreationService {
         childCenterY * scaleFactor,
         childMesh.position.z,
       );
+      const retainedChild = dom.context.layoutBoxes.get(childMesh.name);
+      if (retainedChild) {
+        dom.context.layoutBoxes.set(childMesh.name, updateCssLayoutNode(
+          retainedChild,
+          { x, y },
+          { width, height },
+        ));
+      }
 
       if (child.children && child.children.length > 0) {
         this.processChildren(
@@ -1183,24 +1216,42 @@ export class ElementCreationService {
             height: usedAutoHeight,
           });
         }
+        const retainedParent = dom.context.layoutBoxes.get(parent.name);
+        if (retainedParent) {
+          dom.context.layoutBoxes.set(parent.name, updateCssLayoutNode(
+            retainedParent,
+            retainedParent.box.borderBox,
+            { width: parentWidth, height: usedAutoHeight },
+          ));
+        }
       }
 
       for (const placement of placements) {
         const fontSize = this.parseFontSize(placement.style?.fontSize);
+        let childLeft = paddingLeft + placement.margin.left;
+        let childTop = placement.top;
         let childCenterX = -parentWidth / 2 + paddingLeft +
           placement.margin.left + placement.width / 2;
         let childCenterY = parentHeight / 2 - placement.top - placement.height / 2;
 
         if (placement.style?.position === 'relative') {
           if (placement.style.left !== undefined) {
-            childCenterX += this.parseLengthValue(placement.style.left, fontSize);
+            const offset = this.parseLengthValue(placement.style.left, fontSize);
+            childCenterX += offset;
+            childLeft += offset;
           } else if (placement.style.right !== undefined) {
-            childCenterX -= this.parseLengthValue(placement.style.right, fontSize);
+            const offset = this.parseLengthValue(placement.style.right, fontSize);
+            childCenterX -= offset;
+            childLeft -= offset;
           }
           if (placement.style.top !== undefined) {
-            childCenterY -= this.parseLengthValue(placement.style.top, fontSize);
+            const offset = this.parseLengthValue(placement.style.top, fontSize);
+            childCenterY -= offset;
+            childTop += offset;
           } else if (placement.style.bottom !== undefined) {
-            childCenterY += this.parseLengthValue(placement.style.bottom, fontSize);
+            const offset = this.parseLengthValue(placement.style.bottom, fontSize);
+            childCenterY += offset;
+            childTop -= offset;
           }
         }
 
@@ -1210,6 +1261,14 @@ export class ElementCreationService {
           childCenterY * scaleFactor,
           placement.mesh.position.z,
         );
+        const retainedChild = dom.context.layoutBoxes.get(placement.mesh.name);
+        if (retainedChild) {
+          dom.context.layoutBoxes.set(placement.mesh.name, updateCssLayoutNode(
+            retainedChild,
+            { x: childLeft, y: childTop },
+            { width: placement.width, height: placement.height },
+          ));
+        }
       }
 
       // Resolve absolute/fixed descendants after the final containing-block

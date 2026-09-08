@@ -46,10 +46,10 @@ export class ElementService {
     element: DOMElement,
     parent: Mesh,
     styles: StyleRule[],
-    flexPosition?: { x: number; y: number; z: number },
+    layoutPosition?: { x: number; y: number; z: number },
     flexSize?: { width?: number; height?: number }
   ): Mesh {
-    return this.creationService.createElement(dom, render, element, parent, styles, flexPosition, flexSize);
+    return this.creationService.createElement(dom, render, element, parent, styles, layoutPosition, flexSize);
   }
 
   /**
@@ -119,6 +119,8 @@ export class ElementService {
     // Remove old main mesh
     const mainMesh = dom.context.elements.get(elementId);
     let parent: Mesh | undefined = undefined;
+    const retainedLayout = dom.context.layoutBoxes.get(elementId);
+    const retainedDepth = mainMesh?.position.z ?? 0;
     if (mainMesh) {
       if (mainMesh.parent && mainMesh.parent instanceof Mesh) {
         parent = mainMesh.parent;
@@ -130,7 +132,17 @@ export class ElementService {
     // Recreate the element (main mesh and borders)
     const dimensions = dom.context.elementDimensions.get(elementId);
     if (parent && dimensions) {
-      const newMesh = this.createElement(dom, render, element, parent, [], undefined, { width: dimensions.width, height: dimensions.height });
+      const retainedPosition = retainedLayout
+        ? {
+            x: retainedLayout.box.borderBox.x,
+            y: retainedLayout.box.borderBox.y,
+            z: retainedDepth,
+          }
+        : undefined;
+      const newMesh = this.createElement(dom, render, element, parent, [], retainedPosition, {
+        width: dimensions.width,
+        height: dimensions.height,
+      });
       dom.context.elements.set(elementId, newMesh);
       // No need to reattach event handlers here; createElement does it
     }

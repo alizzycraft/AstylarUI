@@ -32,6 +32,7 @@ not part of CSS layout geometry.
 | Projection proof | CSS geometry is typed and converted by one pure boundary. | None yet; this phase deliberately records current behavior before migration. | Asymmetric point, rectangle, fractional round-trip, nesting, and real Babylon camera orientation tests. | Camera placement, depth direction, old coordinate service, layout meshes, scrolling, controls, picks, and plugin API still need migration. |
 | Render-axis boundary | Babylon uses a right-handed scene so render positive X is screen-right; CSS positive Y is inverted only by `CssBabylonProjection`. | Global X negation, text-plane U flip, image U flip, text-offset negation, asymmetric-border reversal, and the standalone coordinate transform service. | 419 core tests; focused box, text, and image parity; plugin coordinate round-trip and range ordering. | Layout meshes, scrolling, controls, reverse picks, and the public plugin API still expose or reconstruct world geometry. |
 | Screen-direction consumers | Screen-right is positive X everywhere; horizontal scrolling subtracts CSS `scrollLeft` only when projecting content, and visual offsets retain their CSS X sign. | Horizontal scroll/thumb reversal, scrollbar cross-axis reversal, ripple-origin texture mirroring, and shadow X-offset reversal. | 419 core tests; scroll and mesh unit suites; ripple-origin tests; focused horizontal-overflow parity at 0 edge error. | Scroll measurement still reconstructs geometry from Babylon bounds; retained CSS boxes must become authoritative before scrolling and interaction are fully isolated. |
+| Retained CSS geometry | Every rendered element retains a parent-relative CSS border/content box. Scroll extents, visibility, event-local coordinates, and range pointer mapping resolve from that tree. | Mesh-bound projection in interaction, Babylon-bound scroll measurement, DPR multiplication of CSS-pixel wheel deltas, and hover recreation without retained placement. | 426 core tests; fractional/nested layout-box tests; scroll tests that throw on Babylon bound reads; retained range-pointer test. | Layout still mutates meshes in some auto-size paths; legacy positioning contracts, clipping, control paint helpers, and the plugin API still expose world geometry. |
 
 ## Known convention leaks to migrate
 
@@ -39,10 +40,15 @@ not part of CSS layout geometry.
   `Vector3` through the public plugin contract, although conversion now routes
   through the camera-owned CSS projection.
 - positioning contracts and containing blocks contain Babylon `Vector3` values.
-- flex, grid, list, and auto-height paths position meshes during layout.
-- `AstylarScrollRuntime` stores and mutates mesh positions using camera scale.
+- flex, grid, list, and auto-height paths still project or adjust meshes before a
+  fully separated paint pass, although their authoritative positions are now
+  retained in CSS pixels.
+- `AstylarScrollRuntime` measures and exposes state in CSS pixels, but its final
+  visual translation and scrollbar meshes still need a renderer-owned paint
+  adapter instead of direct camera-scale access.
 - range/control managers perform control calculations using world dimensions.
-- reverse interaction projection derives CSS rectangles from Babylon bounds.
+- reverse Babylon picks still need a single explicit inverse boundary for all
+  consumers beyond range/event-local geometry.
 
 Each migration phase must replace one of these convention leaks with CSS-space
 state and remove its compensation only after a user-facing or boundary-level
