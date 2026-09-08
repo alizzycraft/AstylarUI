@@ -213,11 +213,14 @@ export class FocusManager {
      */
     private createFocusIndicator(inputElement: InputElement): BABYLON.Mesh[] {
         const scene = inputElement.mesh.getScene();
-        const bounds = inputElement.mesh.getBoundingInfo().boundingBox;
-        const width = bounds.extendSize.x * 2;
-        const height = bounds.extendSize.y * 2;
+        const cssSize = inputElement.cssSize;
+        if (!cssSize) {
+            throw new Error(`CSS size is required to paint focus for ${inputElement.element.id || inputElement.mesh.name}.`);
+        }
+        const renderedSize = this.cameraService.projectCssSize(cssSize);
+        const width = renderedSize.width;
+        const height = renderedSize.height;
 
-        const pixelScale = this.cameraService.getPixelToWorldScale();
         const elementId = inputElement.element.id;
         const createRing = (
             suffix: string,
@@ -226,8 +229,14 @@ export class FocusManager {
             color: BABYLON.Color3,
             alpha = 1,
         ): BABYLON.Mesh[] => {
-            const outlineOffset = offsetPx * pixelScale;
-            const outlineWidth = widthPx * pixelScale;
+            const outlineOffset = this.cameraService.projectCssSize({
+                width: offsetPx,
+                height: offsetPx,
+            }).width;
+            const outlineWidth = this.cameraService.projectCssSize({
+                width: widthPx,
+                height: widthPx,
+            }).width;
             const outerWidth = width + 2 * (outlineOffset + outlineWidth);
             const outerHeight = height + 2 * (outlineOffset + outlineWidth);
             const createBar = (edge: string, barWidth: number, barHeight: number): BABYLON.Mesh =>
@@ -239,10 +248,18 @@ export class FocusManager {
             const bottom = createBar('bottom', outerWidth, outlineWidth);
             const left = createBar('left', outlineWidth, outerHeight - 2 * outlineWidth);
             const right = createBar('right', outlineWidth, outerHeight - 2 * outlineWidth);
-            top.position.y = height / 2 + outlineOffset + outlineWidth / 2;
-            bottom.position.y = -top.position.y;
-            left.position.x = width / 2 + outlineOffset + outlineWidth / 2;
-            right.position.x = -left.position.x;
+            const topCenter = this.cameraService.projectCssLocalPoint({
+                x: 0,
+                y: -(cssSize.height / 2 + offsetPx + widthPx / 2),
+            });
+            const leftCenter = this.cameraService.projectCssLocalPoint({
+                x: -(cssSize.width / 2 + offsetPx + widthPx / 2),
+                y: 0,
+            });
+            top.position.y = topCenter.y;
+            bottom.position.y = -topCenter.y;
+            left.position.x = leftCenter.x;
+            right.position.x = -leftCenter.x;
             const material = new BABYLON.StandardMaterial(
                 `focusIndicatorMaterial_${elementId}_${suffix}`,
                 scene,
@@ -265,14 +282,23 @@ export class FocusManager {
         };
         const authored = this.focusIndicatorAppearance.get(elementId || '');
         if (authored) {
-            const outlineOffset = authored.offsetPx * pixelScale;
-            const outlineWidth = authored.widthPx * pixelScale;
+            const outlineOffset = this.cameraService.projectCssSize({
+                width: authored.offsetPx,
+                height: authored.offsetPx,
+            }).width;
+            const outlineWidth = this.cameraService.projectCssSize({
+                width: authored.widthPx,
+                height: authored.widthPx,
+            }).width;
             const outerWidth = width + 2 * (outlineOffset + outlineWidth);
             const outerHeight = height + 2 * (outlineOffset + outlineWidth);
-            const outerRadius = Math.max(
-                0,
-                authored.borderRadiusPx + authored.offsetPx + authored.widthPx,
-            ) * pixelScale;
+            const outerRadius = this.cameraService.projectCssSize({
+                width: Math.max(
+                    0,
+                    authored.borderRadiusPx + authored.offsetPx + authored.widthPx,
+                ),
+                height: 0,
+            }).width;
             // A zero-blur spread shadow is a rounded silhouette behind the
             // opaque control. Rendering the outer silhouette directly avoids
             // the sharp inner-corner artifact produced by a narrow frame.

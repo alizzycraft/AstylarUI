@@ -19,7 +19,12 @@ describe('ButtonManager', () => {
       {
         scene,
         actions: {
-          camera: { getPixelToWorldScale: () => .01 },
+          camera: {
+            projectCssSize: ({ width, height }: { width: number; height: number }) => ({
+              width: width * .01,
+              height: height * .01,
+            }),
+          },
           mesh: { createPolygon: (name: string) => BABYLON.MeshBuilder.CreatePlane(name, {}, scene) },
         },
       } as never,
@@ -55,11 +60,27 @@ describe('ButtonManager', () => {
       label: 'Generate speech',
       element: { type: 'button', id: 'generate', value: 'Generate speech' },
       mesh,
+      cssSize: { width: 200, height: 50 },
     } as Button;
 
     const label = manager['createLabelMesh'](
       button,
-      { scene, actions: { camera: { getPixelToWorldScale: () => 0.01 } } } as never,
+      {
+        scene,
+        actions: {
+          camera: {
+            projectCssSize: ({ width, height }: { width: number; height: number }) => ({
+              width: width * .01,
+              height: height * .01,
+            }),
+            projectCssLocalPoint: ({ x, y }: { x: number; y: number }) => ({
+              x: x * .01,
+              y: -y * .01,
+              z: 0,
+            }),
+          },
+        },
+      } as never,
       { selector: '#generate', fontSize: '14px' },
     );
     const size = label.getBoundingInfo().boundingBox.extendSize;

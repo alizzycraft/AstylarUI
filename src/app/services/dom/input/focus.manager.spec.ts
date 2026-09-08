@@ -13,7 +13,17 @@ describe('FocusManager', () => {
     const manager = new FocusManager(
       { startBlinking: () => undefined, stopBlinking: () => undefined } as never,
       {} as never,
-      { getPixelToWorldScale: () => 0.01 } as never,
+      {
+        projectCssSize: ({ width, height }: { width: number; height: number }) => ({
+          width: width * .01,
+          height: height * .01,
+        }),
+        projectCssLocalPoint: ({ x, y }: { x: number; y: number }) => ({
+          x: x * .01,
+          y: -y * .01,
+          z: 0,
+        }),
+      } as never,
       meshService,
     );
     manager.setFocusIndicatorAppearance('title', {
@@ -30,6 +40,7 @@ describe('FocusManager', () => {
       focused: false,
       disabled: false,
       validationState: { valid: true, errors: [], touched: false, dirty: false },
+      cssSize: { width: 760, height: 44 },
     } as never);
 
     const indicators = scene.meshes.filter((candidate) =>

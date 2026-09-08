@@ -8,6 +8,7 @@ import { TextRenderingService } from '../../text/text-rendering.service';
 import { ElementBorderService } from '../elements/element-border.service';
 import { BabylonMeshService } from '../../babylon-mesh.service';
 import { CONTROL_CONTENT_Z_OFFSET } from '../render-depth.constants';
+import type { CssSize } from '../../coordinate-space.types';
 
 /**
  * Service responsible for managing button elements
@@ -16,8 +17,6 @@ import { CONTROL_CONTENT_Z_OFFSET } from '../render-depth.constants';
     providedIn: 'root'
 })
 export class ButtonManager {
-    private readonly PRESS_OFFSET = 0.05; // Visual press down effect
-
     constructor(
         private textRenderingService: TextRenderingService,
         private borderService: ElementBorderService,
@@ -31,14 +30,14 @@ export class ButtonManager {
         element: DOMElement,
         render: BabylonRender,
         style: StyleRule,
-        worldDimensions: { width: number; height: number }
+        dimensions: CssSize
     ): Button {
         if (!render.scene) {
             throw new Error('Scene is required to create button');
         }
 
         // Create button mesh
-        const buttonMesh = this.createButtonMesh(element, render, style, worldDimensions);
+        const buttonMesh = this.createButtonMesh(element, render, style, dimensions);
 
         // Initialize validation state
         const validationState: ValidationState = {
@@ -65,7 +64,8 @@ export class ButtonManager {
             required: false,
             validationRules: [],
             validationState,
-            mesh: buttonMesh
+            mesh: buttonMesh,
+            cssSize: { ...dimensions },
         };
 
         // Create label mesh
@@ -130,19 +130,10 @@ export class ButtonManager {
      * Updates button visual state
      */
     updateButtonState(button: Button, state: ButtonState): void {
-        const previousState = button.state;
         button.state = state;
 
         const material = button.mesh.material as BABYLON.StandardMaterial;
         if (!material) return;
-
-        // Reset position if coming from pressed state
-        if (previousState === ButtonState.Pressed && state !== ButtonState.Pressed) {
-            button.mesh.position.y += this.PRESS_OFFSET;
-            if (button.labelMesh) {
-                button.labelMesh.position.y += this.PRESS_OFFSET;
-            }
-        }
 
         switch (state) {
             case ButtonState.Normal:
@@ -158,11 +149,6 @@ export class ButtonManager {
             case ButtonState.Pressed:
                 material.diffuseColor = new BABYLON.Color3(0.6, 0.6, 0.6);
                 material.emissiveColor = BABYLON.Color3.Black();
-                // Press down effect
-                button.mesh.position.y -= this.PRESS_OFFSET;
-                if (button.labelMesh) {
-                    button.labelMesh.position.y -= this.PRESS_OFFSET;
-                }
                 break;
 
             case ButtonState.Disabled:
@@ -208,17 +194,24 @@ export class ButtonManager {
         element: DOMElement,
         render: BabylonRender,
         style: StyleRule,
-        worldDimensions: { width: number; height: number }
+        dimensions: CssSize
     ): BABYLON.Mesh {
-        const width = worldDimensions.width;
-        const height = worldDimensions.height;
+        const size = render.actions.camera.projectCssSize(dimensions);
 
         // Parse border radius
         const borderRadiusPixels = this.borderService.parseBorderRadius(style?.borderRadius);
-        const scaleFactor = render.actions.camera.getPixelToWorldScale();
-        const borderRadius = borderRadiusPixels * scaleFactor;
+        const borderRadius = render.actions.camera.projectCssSize({
+            width: borderRadiusPixels,
+            height: borderRadiusPixels,
+        }).width;
 
-        const buttonMesh = render.actions.mesh.createPolygon(`button_${element.id}`, 'rectangle', width, height, borderRadius);
+        const buttonMesh = render.actions.mesh.createPolygon(
+            `button_${element.id}`,
+            'rectangle',
+            size.width,
+            size.height,
+            borderRadius,
+        );
 
         const material = new BABYLON.StandardMaterial(`buttonMaterial_${element.id}`, render.scene);
         material.diffuseColor = new BABYLON.Color3(0.8, 0.8, 0.8);
@@ -252,10 +245,12 @@ export class ButtonManager {
             const textureWidthPx = textureSize.width;
             const textureHeightPx = textureSize.height;
 
-            // Convert to world units using camera's pixel-to-world scale
-            const scale = render.actions.camera.getPixelToWorldScale();
-            const textureWidth = textureWidthPx * scale;
-            const textureHeight = textureHeightPx * scale;
+            const textureSizeWorld = render.actions.camera.projectCssSize({
+                width: textureWidthPx,
+                height: textureHeightPx,
+            });
+            const textureWidth = textureSizeWorld.width;
+            const textureHeight = textureSizeWorld.height;
 
             // Use BabylonMeshService to create text mesh (same as working text elements)
             const labelPlane = this.babylonMeshService.createTextMesh(
@@ -273,11 +268,19 @@ export class ButtonManager {
             labelPlane.position.z = CONTROL_CONTENT_Z_OFFSET;
             labelPlane.isPickable = false;
             const textAlign = style.textAlign?.toLowerCase();
-            const buttonWidth = button.mesh.getBoundingInfo().boundingBox.extendSize.x * 2;
+            const buttonWidth = button.cssSize?.width ?? 0;
             if (textAlign === 'left' || textAlign === 'start') {
-                labelPlane.position.x = buttonWidth / 2 - this.parsePaddingSide(style, 'left') * scale - textureWidth / 2;
+                const point = render.actions.camera.projectCssLocalPoint({
+                    x: -buttonWidth / 2 + this.parsePaddingSide(style, 'left') + textureWidthPx / 2,
+                    y: 0,
+                });
+                labelPlane.position.x = point.x;
             } else if (textAlign === 'right' || textAlign === 'end') {
-                labelPlane.position.x = -buttonWidth / 2 + this.parsePaddingSide(style, 'right') * scale + textureWidth / 2;
+                const point = render.actions.camera.projectCssLocalPoint({
+                    x: buttonWidth / 2 - this.parsePaddingSide(style, 'right') - textureWidthPx / 2,
+                    y: 0,
+                });
+                labelPlane.position.x = point.x;
             }
             if (labelPlane.material) {
                 labelPlane.material.alpha = render.actions.style.parseOpacity(style.opacity);
@@ -286,9 +289,13 @@ export class ButtonManager {
             return labelPlane;
         } catch (error) {
             console.error('Error creating button label:', error);
+            const fallbackSize = render.actions.camera.projectCssSize({
+                width: 120,
+                height: 30,
+            });
             const labelPlane = BABYLON.MeshBuilder.CreatePlane(`buttonLabel_${button.element.id}_fallback`, {
-                width: 1.2,
-                height: 0.3
+                width: fallbackSize.width,
+                height: fallbackSize.height,
             }, render.scene);
 
             labelPlane.parent = button.mesh;
@@ -310,15 +317,6 @@ export class ButtonManager {
         if (type === 'submit') return 'submit';
         if (type === 'reset') return 'reset';
         return 'button';
-    }
-
-    /**
-     * Parses size value from style
-     */
-    private parseSize(value: string | undefined): number | undefined {
-        if (!value) return undefined;
-        const num = parseFloat(value);
-        return isNaN(num) ? undefined : num;
     }
 
     private parsePaddingSide(style: StyleRule, side: 'left' | 'right'): number {

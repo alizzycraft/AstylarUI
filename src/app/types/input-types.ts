@@ -97,6 +97,8 @@ export interface InputElement {
     validationState: ValidationState;
     mesh: BABYLON.Mesh;
     style: StyleRule;
+    /** Resolved border-box size in CSS pixels. */
+    cssSize?: CssSize;
     interactionHandler?: InputInteractionHandler;
 }
 

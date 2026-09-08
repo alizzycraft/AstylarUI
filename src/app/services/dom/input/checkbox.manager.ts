@@ -7,13 +7,13 @@ import { CheckboxInput, RadioInput, InputType, ValidationState } from '../../../
 import { TextRenderingService } from '../../text/text-rendering.service';
 import { BabylonMeshService } from '../../babylon-mesh.service';
 import { CONTROL_CONTENT_Z_OFFSET } from '../render-depth.constants';
+import type { CssSize } from '../../coordinate-space.types';
 
 @Injectable({
     providedIn: 'root'
 })
 export class CheckboxManager {
-    private readonly CHECKBOX_SIZE = 0.5;
-    private readonly CHECK_MARK_SIZE = 0.3;
+    private readonly CHECKBOX_SIZE_PX = 50;
     private radioGroups: Map<string, RadioInput[]> = new Map();
 
     constructor(
@@ -24,12 +24,12 @@ export class CheckboxManager {
     /**
      * Creates a checkbox input
      */
-    createCheckbox(element: DOMElement, render: BabylonRender, style: StyleRule, worldDimensions: { width: number; height: number }): CheckboxInput {
+    createCheckbox(element: DOMElement, render: BabylonRender, style: StyleRule, dimensions: CssSize): CheckboxInput {
         if (!render.scene) {
             throw new Error('Scene is required to create checkbox');
         }
 
-        const mesh = this.createCheckboxMesh(element, render, style, worldDimensions);
+        const mesh = this.createCheckboxMesh(element, render, style, dimensions);
 
         const checkbox: CheckboxInput = {
             type: InputType.Checkbox,
@@ -49,11 +49,12 @@ export class CheckboxManager {
             },
             checked: element.checked || false,
             checkIndicatorMesh: undefined, // Will be created
-            labelMesh: undefined // Will be created
+            labelMesh: undefined, // Will be created
+            cssSize: { ...dimensions },
         };
 
         if (style.appearance !== 'none') {
-            checkbox.checkIndicatorMesh = this.createCheckIndicator(checkbox, render.scene);
+            checkbox.checkIndicatorMesh = this.createCheckIndicator(checkbox, render);
         }
         if (element.value || element.textContent) {
             checkbox.labelMesh = this.createLabelMesh(checkbox, render, style);
@@ -70,12 +71,12 @@ export class CheckboxManager {
     /**
      * Creates a radio button input
      */
-    createRadioButton(element: DOMElement, render: BabylonRender, style: StyleRule, worldDimensions: { width: number; height: number }): RadioInput {
+    createRadioButton(element: DOMElement, render: BabylonRender, style: StyleRule, dimensions: CssSize): RadioInput {
         if (!render.scene) {
             throw new Error('Scene is required to create radio button');
         }
 
-        const mesh = this.createRadioMesh(element, render, style, worldDimensions);
+        const mesh = this.createRadioMesh(element, render, dimensions);
 
         const radio: RadioInput = {
             type: InputType.Radio,
@@ -96,10 +97,11 @@ export class CheckboxManager {
             checked: element.checked || false,
             groupName: element.name || 'default',
             selectionIndicatorMesh: undefined, // Will be created
-            labelMesh: undefined // Will be created
+            labelMesh: undefined, // Will be created
+            cssSize: { ...dimensions },
         };
 
-        radio.selectionIndicatorMesh = this.createSelectionIndicator(radio, render.scene);
+        radio.selectionIndicatorMesh = this.createSelectionIndicator(radio, render);
         if (element.value || element.textContent) {
             radio.labelMesh = this.createLabelMesh(radio, render, style);
         }
@@ -183,17 +185,23 @@ export class CheckboxManager {
     /**
      * Creates the checkbox mesh (square box)
      */
-    private createCheckboxMesh(element: DOMElement, render: BabylonRender, style: StyleRule, worldDimensions: { width: number; height: number }): BABYLON.Mesh {
-        const scale = render.actions.camera.getPixelToWorldScale();
-        const width = worldDimensions.width > 0 ? worldDimensions.width : this.CHECKBOX_SIZE * scale * 100;
-        const height = worldDimensions.height > 0 ? worldDimensions.height : width;
-        const borderRadius = Math.max(0, parseFloat(style.borderRadius || '0')) * scale;
+    private createCheckboxMesh(element: DOMElement, render: BabylonRender, style: StyleRule, dimensions: CssSize): BABYLON.Mesh {
+        const cssSize = {
+            width: dimensions.width > 0 ? dimensions.width : this.CHECKBOX_SIZE_PX,
+            height: dimensions.height > 0 ? dimensions.height :
+                dimensions.width > 0 ? dimensions.width : this.CHECKBOX_SIZE_PX,
+        };
+        const size = render.actions.camera.projectCssSize(cssSize);
+        const borderRadius = render.actions.camera.projectCssSize({
+            width: Math.max(0, parseFloat(style.borderRadius || '0')),
+            height: Math.max(0, parseFloat(style.borderRadius || '0')),
+        }).width;
 
         const checkboxMesh = render.actions.mesh.createPolygon(
             `checkbox_${element.id}`,
             'rectangle',
-            width,
-            height,
+            size.width,
+            size.height,
             borderRadius
         );
 
@@ -216,16 +224,16 @@ export class CheckboxManager {
     /**
      * Creates the radio button mesh (circular)
      */
-    private createRadioMesh(element: DOMElement, render: BabylonRender, style: StyleRule, worldDimensions: { width: number; height: number }): BABYLON.Mesh {
-        const scale = render.actions.camera.getPixelToWorldScale();
-        const radius = (worldDimensions.width > 0 ? worldDimensions.width : this.CHECKBOX_SIZE * scale * 100) / 2;
-
-        const radioMesh = BABYLON.MeshBuilder.CreateCylinder(`radio_${element.id}`, {
-            diameter: radius * 2,
-            height: 0.05 * scale * 100
-        }, render.scene);
-
-        radioMesh.rotation.x = Math.PI / 2; // Rotate to face forward
+    private createRadioMesh(element: DOMElement, render: BabylonRender, dimensions: CssSize): BABYLON.Mesh {
+        const diameter = dimensions.width > 0 ? dimensions.width : this.CHECKBOX_SIZE_PX;
+        const size = render.actions.camera.projectCssSize({ width: diameter, height: diameter });
+        const radioMesh = render.actions.mesh.createPolygon(
+            `radio_${element.id}`,
+            'circle',
+            size.width,
+            size.height,
+            0,
+        );
 
         // Create material
         const material = new BABYLON.StandardMaterial(`radioMaterial_${element.id}`, render.scene);
@@ -241,12 +249,16 @@ export class CheckboxManager {
     /**
      * Creates the check mark indicator for checkbox
      */
-    private createCheckIndicator(checkbox: CheckboxInput, scene: BABYLON.Scene): BABYLON.Mesh {
-        // Calculate size relative to parent mesh
-        const bounds = checkbox.mesh.getBoundingInfo().boundingBox.extendSize;
+    private createCheckIndicator(checkbox: CheckboxInput, render: BabylonRender): BABYLON.Mesh {
+        const scene = render.scene!;
+        const cssSize = checkbox.cssSize ?? { width: this.CHECKBOX_SIZE_PX, height: this.CHECKBOX_SIZE_PX };
+        const size = render.actions.camera.projectCssSize({
+            width: cssSize.width * 0.6,
+            height: cssSize.height * 0.7,
+        });
         const checkMark = BABYLON.MeshBuilder.CreatePlane(`checkMark_${checkbox.element.id}`, {
-            width: bounds.x * 2 * 0.6,
-            height: bounds.y * 2 * 0.7,
+            width: size.width,
+            height: size.height,
             sideOrientation: BABYLON.Mesh.DOUBLESIDE
         }, scene);
 
@@ -275,25 +287,17 @@ export class CheckboxManager {
     /**
      * Creates the selection indicator for radio button
      */
-    private createSelectionIndicator(radio: RadioInput, scene: BABYLON.Scene): BABYLON.Mesh {
-        const bounds = radio.mesh.getBoundingInfo().boundingBox.extendSize;
-        const parentDiameter = bounds.x * 2;
-        const size = parentDiameter * 0.6;
-
-        const indicator = BABYLON.MeshBuilder.CreateCylinder(`radioIndicator_${radio.element.id}`, {
-            diameter: size,
-            height: 0.03
-        }, scene);
-
-        indicator.rotation.x = Math.PI / 2; // Rotate to face forward
-
-        // Fix: Parent already rotated Math.PI/2.
-        // If indicator is cylinder (default Up-aligned), rotating X 90 makes it point Z.
-        // Parent radio mesh is rotated X 90.
-        // So indicator inherits X 90.
-        // If we rotate it another 90, it flips?
-        // Let's try setting rotation to Zero relative to parent, because parent is already facing camera!
-        indicator.rotation.x = 0;
+    private createSelectionIndicator(radio: RadioInput, render: BabylonRender): BABYLON.Mesh {
+        const scene = render.scene!;
+        const diameter = (radio.cssSize?.width ?? this.CHECKBOX_SIZE_PX) * 0.6;
+        const size = render.actions.camera.projectCssSize({ width: diameter, height: diameter });
+        const indicator = render.actions.mesh.createPolygon(
+            `radioIndicator_${radio.element.id}`,
+            'circle',
+            size.width,
+            size.height,
+            0,
+        );
         indicator.parent = radio.mesh;
         indicator.position.z = CONTROL_CONTENT_Z_OFFSET;
 
@@ -337,10 +341,12 @@ export class CheckboxManager {
             const textureWidthPx = textureSize.width;
             const textureHeightPx = textureSize.height;
 
-            // Convert to world units using camera's pixel-to-world scale
-            const scale = render.actions.camera.getPixelToWorldScale();
-            const textureWidth = textureWidthPx * scale;
-            const textureHeight = textureHeightPx * scale;
+            const textureSizeWorld = render.actions.camera.projectCssSize({
+                width: textureWidthPx,
+                height: textureHeightPx,
+            });
+            const textureWidth = textureSizeWorld.width;
+            const textureHeight = textureSizeWorld.height;
 
             // Create text mesh using BabylonMeshService
             const labelPlane = this.babylonMeshService.createTextMesh(
@@ -353,27 +359,13 @@ export class CheckboxManager {
             labelPlane.parent = input.mesh;
             labelPlane.isPickable = true; // Ensure label handles clicks
 
-            // Position to the right of the checkbox/radio (inverted coordinate system)
-            // Use actual mesh bounds for more accurate positioning
-            const inputHalfWidth = input.mesh.getBoundingInfo().boundingBox.extendSize.x;
-
-            // Increase padding to prevent overlap
-            const padding = 0.9;
-
-            // Formula: - (halfWidth + halfTextWidth + padding)
-            // This places the text starting 'padding' distance away from the right edge
-            labelPlane.position.x = -(inputHalfWidth + (textureWidth / 2) + padding);
+            const inputHalfWidth = (input.cssSize?.width ?? this.CHECKBOX_SIZE_PX) / 2;
+            const center = render.actions.camera.projectCssLocalPoint({
+                x: inputHalfWidth + 8 + textureWidthPx / 2,
+                y: 0,
+            });
+            labelPlane.position.x = center.x;
             labelPlane.position.z = 0.0; // Same plane
-
-            // Fix orientation for Radio buttons:
-            // Radio meshes are rotated 90deg on X axis (to show face).
-            // Since label is child, it inherits this rotation. We need to counter-rotate.
-            if (input.type === InputType.Radio) {
-                labelPlane.rotation.x = -Math.PI / 2;
-                // Also need to push it slightly up in Z (which is parent's local Y/Z?) due to rotation?
-                // Actually if counter-rotated, its local Z is aligned with World Z again?
-                // Let's assume counter-rotation is enough for facing.
-            }
 
             labelPlane.isPickable = true; // Allow clicking label
 
@@ -384,8 +376,11 @@ export class CheckboxManager {
 
         } catch (error) {
             console.error('Error creating label mesh:', error);
-            // Fallback
-            return BABYLON.MeshBuilder.CreatePlane('fallback_label', { size: 0.5 }, render.scene);
+            const fallbackSize = render.actions.camera.projectCssSize({ width: 50, height: 50 });
+            return BABYLON.MeshBuilder.CreatePlane('fallback_label', {
+                width: fallbackSize.width,
+                height: fallbackSize.height,
+            }, render.scene);
         }
     }
 

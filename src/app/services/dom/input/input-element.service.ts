@@ -113,7 +113,7 @@ export class InputElementService {
                     element,
                     render,
                     style,
-                    render.actions.camera.projectCssSize(cssDimensions),
+                    cssDimensions,
                 );
                 break;
 
@@ -122,7 +122,7 @@ export class InputElementService {
                     element,
                     render,
                     style,
-                    render.actions.camera.projectCssSize(cssDimensions),
+                    cssDimensions,
                 );
                 break;
 
@@ -131,7 +131,7 @@ export class InputElementService {
                     element,
                     render,
                     style,
-                    render.actions.camera.projectCssSize(cssDimensions),
+                    cssDimensions,
                 );
                 break;
 
@@ -147,6 +147,8 @@ export class InputElementService {
             default:
                 return null;
         }
+
+        inputElement.cssSize = { ...cssDimensions };
 
         // Register input element
         this.registerInput(inputElement);

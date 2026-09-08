@@ -37,14 +37,15 @@ not part of CSS layout geometry.
 | CSS layout and paint boundary | Block, inline, flex, grid, list, text, image, and overflow geometry remain CSS boxes until centralized projection helpers create or position Babylon output. Overflow rectangles resolve from retained CSS ancestry. | Layout fallbacks from mesh bounds, world-space auto-height nudges, scattered size/position scaling in layout, and mesh-bound overflow clipping. | Packaged-library build; 62/62 focused layout, projection, and clipping tests, including fractional projection and tests that reject mesh-bound reads. | Scrollbar paint, control paint helpers, inverse picks, and the plugin API still need boundary isolation. |
 | CSS scroll and paint boundary | Scroll extents, offsets, root placement, and scrollbar rectangles remain CSS geometry; a renderer-owned adapter alone projects content and scrollbar meshes. | Captured mesh-origin scroll state, runtime camera-scale access, direct world-axis offset arithmetic, and scrollbar placement in world space. | Packaged-library build; focused scroll/projection tests, including fractional CSS offsets and tests that reject mesh-bound reads. | Control paint helpers, inverse picks, and the plugin API still need boundary isolation. |
 | CSS range geometry | Range width, track, active segment, thumb position, pointer ratio, and value state are retained in CSS pixels; only generated mesh sizes and local centers are projected. | Mesh-bound width recovery during value updates and world-unit constants in range layout. | Focused range and pointer tests, including fractional CSS width, multi-scale projection, independent paired values, and a test that rejects mesh-bound reads. | Choice, text, select, and focus paint still need CSS-local migration; paired Material range hit ownership will be verified with the plugin contract. |
+| CSS button, choice, and focus geometry | Button, checkbox, radio, label, and focus-ring dimensions and local positions remain CSS geometry; managers project only when creating or positioning paint meshes. | Button press position mutation, mesh-bound text/indicator/focus sizing, rotated radio cylinders and their counter-rotation, inverted label placement, raw world-unit focus constants, and raw-unit fallback planes. | Packaged-library build; focused button, checkbox/radio, and focus tests, including fractional projection and checks that reject mesh-bound reads. | Text and select paint, inverse picks, and the plugin API still need boundary isolation. |
 
 ## Known convention leaks to migrate
 
 - `ElementCreationService` still exposes `pixelToWorldScale` and Babylon
   `Vector3` through the public plugin contract, although conversion now routes
   through the camera-owned CSS projection.
-- choice, text, select, and focus managers still perform some paint calculations
-  using projected dimensions.
+- text and select managers still perform some paint calculations using projected
+  dimensions.
 - reverse Babylon picks still need a single explicit inverse boundary for all
   consumers beyond range/event-local geometry.
 
