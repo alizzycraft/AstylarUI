@@ -11,6 +11,17 @@ import {
 describe('SelectManager', () => {
   let engine: BABYLON.NullEngine;
   let scene: BABYLON.Scene;
+  const projection = {
+    projectCssSize: ({ width, height }: { width: number; height: number }) => ({
+      width: width * 0.01,
+      height: height * 0.01,
+    }),
+    projectCssLocalPoint: ({ x, y }: { x: number; y: number }, z = 0) => ({
+      x: x * 0.01,
+      y: -y * 0.01,
+      z,
+    }),
+  };
 
   beforeEach(() => {
     engine = new BABYLON.NullEngine();
@@ -41,10 +52,10 @@ describe('SelectManager', () => {
       },
       {
         scene,
-        actions: { camera: { getPixelToWorldScale: () => 0.01 } },
+        actions: { camera: projection },
       } as any,
       { selector: '#theme', background: '#ffffff', color: '#000000' },
-      { width: 3, height: 0.5 },
+      { width: 300, height: 50 },
     );
 
     expect(select.displayMesh?.position.z).toBe(CONTROL_CONTENT_Z_OFFSET);
@@ -68,9 +79,9 @@ describe('SelectManager', () => {
 
     const select = manager.createSelectElement(
       { type: 'select', id: 'density', value: 'dark', options: [{ value: 'dark', label: 'Dark' }] },
-      { scene, actions: { camera: { getPixelToWorldScale: () => 0.01 } } } as any,
+      { scene, actions: { camera: projection } } as any,
       { selector: '#density', background: '#ffffff', color: '#000000' },
-      { width: 3, height: 0.5 },
+      { width: 300, height: 50 },
     );
 
     const size = select.displayMesh!.getBoundingInfo().boundingBox.extendSize;
@@ -90,9 +101,9 @@ describe('SelectManager', () => {
 
     const select = manager.createSelectElement(
       { type: 'select', id: 'plain', value: 'dark', options: [{ value: 'dark', label: 'Dark' }] },
-      { scene, actions: { camera: { getPixelToWorldScale: () => 0.01 } } } as any,
+      { scene, actions: { camera: projection } } as any,
       { selector: '#plain', appearance: 'none', background: '#ffffff', color: '#000000' },
-      { width: 3, height: 0.5 },
+      { width: 300, height: 50 },
     );
 
     expect(select.indicatorMesh).toBeUndefined();
@@ -118,10 +129,10 @@ describe('SelectManager', () => {
       },
       {
         scene,
-        actions: { camera: { getPixelToWorldScale: () => 0.01 } },
+        actions: { camera: projection },
       } as any,
       { selector: '#choice', background: '#ffffff', color: '#000000' },
-      { width: 3, height: 0.5 },
+      { width: 300, height: 50 },
     );
 
     manager.navigateOptions(select, 'down');
@@ -155,13 +166,13 @@ describe('SelectManager', () => {
       },
       {
         scene,
-        actions: { camera: { getPixelToWorldScale: () => 0.01 } },
+        actions: { camera: projection },
       } as any,
       {
         selector: '#choice', background: '#0d1117', color: '#e6edf3',
         fontSize: '16px', padding: '12px 14px', borderWidth: '2px',
       },
-      { width: 2.2, height: 0.56 },
+      { width: 220, height: 56 },
     );
 
     manager.openDropdown(select, scene, select.style);
@@ -183,6 +194,34 @@ describe('SelectManager', () => {
     expect(selectedMaterial.diffuseColor.r).toBeCloseTo(25 / 255, 5);
     expect(selectedMaterial.diffuseColor.g).toBeCloseTo(103 / 255, 5);
     expect(selectedMaterial.diffuseColor.b).toBeCloseTo(210 / 255, 5);
+  });
+
+  it('retains fractional CSS popup geometry without reading control mesh bounds', () => {
+    const textRendering = {
+      renderTextToTexture: () => ({ getSize: () => ({ width: 80, height: 24 }) }),
+      getLogicalTextureSize: () => ({ width: 40.25, height: 12.5 }),
+    } as unknown as TextRenderingService;
+    const meshService = {
+      createTextMesh: (name: string, _texture: unknown, width: number, height: number) =>
+        BABYLON.MeshBuilder.CreatePlane(name, { width, height }, scene),
+    } as unknown as BabylonMeshService;
+    const manager = new SelectManager(textRendering, meshService);
+    const select = manager.createSelectElement(
+      {
+        type: 'select', id: 'fractional-choice', value: 'alpha', options: [
+          { value: 'alpha', label: 'Alpha' },
+          { value: 'beta', label: 'Beta' },
+        ],
+      },
+      { scene, actions: { camera: projection } } as any,
+      { selector: '#fractional-choice', background: '#ffffff', color: '#000000', fontSize: '15.5px' },
+      { width: 220.75, height: 55.5 },
+    );
+    spyOn(select.mesh, 'getBoundingInfo').and.throwError('select paint must use retained CSS geometry');
+
+    expect(() => manager.openDropdown(select, scene, select.style)).not.toThrow();
+    expect(select.popupCssSize).toEqual({ width: 218.75, height: 51 });
+    expect(select.dropdownMesh!.position.y).toBeCloseTo(-0.5425, 6);
   });
 
   it('keeps expanded keyboard navigation tentative until the active option is committed', () => {
@@ -209,10 +248,10 @@ describe('SelectManager', () => {
       },
       {
         scene,
-        actions: { camera: { getPixelToWorldScale: () => 0.01 } },
+        actions: { camera: projection },
       } as any,
       { selector: '#choice', background: '#ffffff', color: '#000000' },
-      { width: 3, height: 0.5 },
+      { width: 300, height: 50 },
     );
 
     manager.openDropdown(select, scene, select.style);
@@ -282,10 +321,10 @@ describe('SelectManager', () => {
       },
       {
         scene,
-        actions: { camera: { getPixelToWorldScale: () => 0.01 } },
+        actions: { camera: projection },
       } as any,
       { selector: '#choice', background: '#ffffff', color: '#000000' },
-      { width: 3, height: 0.5 },
+      { width: 300, height: 50 },
     );
     const observerCountBefore = scene.onPointerObservable.observers.length;
     manager.openDropdown(select, scene, select.style);
@@ -322,10 +361,10 @@ describe('SelectManager', () => {
       },
       {
         scene,
-        actions: { camera: { getPixelToWorldScale: () => 0.01 } },
+        actions: { camera: projection },
       } as any,
       { selector: '#choice', background: '#ffffff', color: '#000000' },
-      { width: 3, height: 0.5 },
+      { width: 300, height: 50 },
     );
     manager.openDropdown(select, scene, select.style);
     const removeObserver = spyOn(scene.onPointerObservable, 'remove').and.callThrough();
@@ -359,10 +398,10 @@ describe('SelectManager', () => {
       },
       {
         scene,
-        actions: { camera: { getPixelToWorldScale: () => 0.01 } },
+        actions: { camera: projection },
       } as any,
       { selector: '#choice', background: '#ffffff', color: '#000000' },
-      { width: 3, height: 0.5 },
+      { width: 300, height: 50 },
     );
     const firstMaterial = select.displayMesh?.material as BABYLON.Material;
     const initialMaterialCount = scene.materials.length;

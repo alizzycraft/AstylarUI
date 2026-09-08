@@ -191,7 +191,8 @@ export interface SelectElement extends InputElement {
     optionMeshes: BABYLON.Mesh[];
     displayMesh?: BABYLON.Mesh;
     indicatorMesh?: BABYLON.Mesh;
-    cameraScale?: number; // Store camera scale for consistent text sizing
+    /** Retained popup border-box size in CSS pixels while expanded. */
+    popupCssSize?: CssSize;
 }
 
 /**

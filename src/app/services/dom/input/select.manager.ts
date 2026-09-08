@@ -7,6 +7,12 @@ import { StyleRule } from '../../../types/style-rule';
 import { TextRenderingService } from '../../text/text-rendering.service';
 import { BabylonMeshService } from '../../babylon-mesh.service';
 import { CONTROL_CONTENT_Z_OFFSET } from '../render-depth.constants';
+import type { CssPoint, CssSize, RenderPoint, RenderSize } from '../../coordinate-space.types';
+
+interface SelectPaintProjection {
+    projectCssLocalPoint(point: CssPoint, renderDepth?: number): RenderPoint;
+    projectCssSize(size: CssSize): RenderSize;
+}
 
 /**
  * Service responsible for managing select dropdown elements
@@ -15,9 +21,7 @@ import { CONTROL_CONTENT_Z_OFFSET } from '../render-depth.constants';
     providedIn: 'root'
 })
 export class SelectManager {
-    private readonly SELECT_HEIGHT = 0.5;
-    private readonly OPTION_HEIGHT = 0.4;
-    private readonly DROPDOWN_MAX_HEIGHT = 2.0;
+    private readonly projections = new WeakMap<SelectElement, SelectPaintProjection>();
 
     // Track click-away observers for each open dropdown
     private clickAwayObservers: Map<string, {
@@ -41,14 +45,14 @@ export class SelectManager {
         element: DOMElement,
         render: BabylonRender,
         style: StyleRule,
-        worldDimensions: { width: number; height: number }
+        dimensions: CssSize
     ): SelectElement {
         if (!render.scene) {
             throw new Error('Scene is required to create select element');
         }
 
         // Create select field mesh
-        const selectMesh = this.createSelectMesh(element, render, style, worldDimensions);
+        const selectMesh = this.createSelectMesh(element, render, style, dimensions);
 
         // Initialize validation state
         const validationState: ValidationState = {
@@ -78,17 +82,17 @@ export class SelectManager {
             required: element.required || false,
             validationRules: [],
             validationState,
-            mesh: selectMesh
+            mesh: selectMesh,
+            cssSize: { ...dimensions },
         };
+
+        this.projections.set(selectElement, render.actions.camera);
 
         // Create display mesh for selected value
         selectElement.displayMesh = this.createDisplayMesh(selectElement, render, style);
         if (style.appearance !== 'none') {
             selectElement.indicatorMesh = this.createIndicatorMesh(selectElement, render, style);
         }
-
-        // Store camera scale for consistent text sizing across select and dropdown
-        selectElement.cameraScale = render.actions.camera.getPixelToWorldScale();
 
         // Pointer defaults are owned by the scene interaction runtime.
         if (selectElement.mesh) {
@@ -103,7 +107,6 @@ export class SelectManager {
         render: BabylonRender,
         style: StyleRule,
     ): BABYLON.Mesh {
-        const scale = render.actions.camera.getPixelToWorldScale();
         const indicatorStyle: StyleRule = {
             ...style,
             selector: style.selector,
@@ -119,20 +122,22 @@ export class SelectManager {
             indicatorStyle,
         );
         const textureSize = this.textRenderingService.getLogicalTextureSize(texture);
-        const width = textureSize.width * scale;
-        const height = textureSize.height * scale;
+        const renderedTexture = render.actions.camera.projectCssSize(textureSize);
         const indicator = this.babylonMeshService.createTextMesh(
             `selectIndicator_${selectElement.element.id}`,
             texture,
-            width,
-            height,
+            renderedTexture.width,
+            renderedTexture.height,
         );
-        const selectWidth = selectElement.mesh.getBoundingInfo().boundingBox.extendSize.x * 2;
         indicator.parent = selectElement.mesh;
         // Native selects reserve a compact UA-owned indicator gutter rather
         // than positioning the arrow at the authored text padding edge.
-        indicator.position.x = -(selectWidth / 2) + (5 * scale) + width / 2;
-        indicator.position.y = 2 * scale;
+        const center = render.actions.camera.projectCssLocalPoint({
+            x: (selectElement.cssSize?.width ?? 0) / 2 - 5 - textureSize.width / 2,
+            y: -2,
+        });
+        indicator.position.x = center.x;
+        indicator.position.y = center.y;
         indicator.position.z = CONTROL_CONTENT_Z_OFFSET;
         indicator.isPickable = false;
         return indicator;
@@ -309,14 +314,13 @@ export class SelectManager {
     /**
      * Creates the main select field mesh
      */
-    private createSelectMesh(element: DOMElement, render: BabylonRender, style: StyleRule, worldDimensions: { width: number; height: number }): BABYLON.Mesh {
-        const width = worldDimensions.width;
-        const height = worldDimensions.height;
+    private createSelectMesh(element: DOMElement, render: BabylonRender, style: StyleRule, dimensions: CssSize): BABYLON.Mesh {
+        const size = render.actions.camera.projectCssSize(dimensions);
 
         // Use plane instead of box for 2D consistency
         const selectMesh = BABYLON.MeshBuilder.CreatePlane(`select_${element.id}`, {
-            width,
-            height,
+            width: size.width,
+            height: size.height,
             sideOrientation: BABYLON.Mesh.DOUBLESIDE
         }, render.scene);
 
@@ -369,17 +373,15 @@ export class SelectManager {
             const textureWidthPx = textureSize.width;
             const textureHeightPx = textureSize.height;
 
-            // Use stored camera scale for consistency
-            const scale = selectElement.cameraScale || 0.001;
-            const textureWidth = textureWidthPx * scale;
-            const textureHeight = textureHeightPx * scale;
+            const projection = this.requireProjection(selectElement);
+            const renderedTexture = projection.projectCssSize(textureSize);
 
             // Create text mesh using BabylonMeshService
             const displayPlane = this.babylonMeshService.createTextMesh(
                 `selectDisplay_${selectElement.element.id}`,
                 texture,
-                textureWidth,
-                textureHeight
+                renderedTexture.width,
+                renderedTexture.height,
             );
 
             displayPlane.parent = selectElement.mesh;
@@ -388,20 +390,24 @@ export class SelectManager {
             displayPlane.isPickable = false;
 
             // Align text to the CSS content edge.
-            const selectWidth = selectElement.mesh.getBoundingInfo().boundingBox.extendSize.x * 2;
-            const insets = this.getHorizontalContentInsets(style, scale);
-            displayPlane.position.x = (selectWidth / 2) - (textureWidth / 2) - insets.left - (4 * scale);
-            displayPlane.position.y = -2 * scale;
+            const insets = this.getHorizontalContentInsets(style);
+            const center = projection.projectCssLocalPoint({
+                x: -(selectElement.cssSize?.width ?? 0) / 2 + insets.left + 4 + textureWidthPx / 2,
+                y: 2,
+            });
+            displayPlane.position.x = center.x;
+            displayPlane.position.y = center.y;
 
             return displayPlane;
 
         } catch (error) {
             console.error('Error creating select display:', error);
-            // Fallback
             const scene = selectElement.mesh.getScene();
+            const fallbackSize = this.requireProjection(selectElement)
+                .projectCssSize({ width: 180, height: 30 });
             return BABYLON.MeshBuilder.CreatePlane(`selectDisplay_${selectElement.element.id}_fallback`, {
-                width: 1.8,
-                height: 0.3
+                width: fallbackSize.width,
+                height: fallbackSize.height,
             }, scene);
         }
     }
@@ -437,17 +443,14 @@ export class SelectManager {
             const textureWidthPx = textureSize.width;
             const textureHeightPx = textureSize.height;
 
-            // Convert to world units using camera's pixel-to-world scale (same as button)
-            const scale = render.actions.camera.getPixelToWorldScale();
-            const textureWidth = textureWidthPx * scale;
-            const textureHeight = textureHeightPx * scale;
+            const renderedTexture = render.actions.camera.projectCssSize(textureSize);
 
             // Create text mesh using BabylonMeshService
             const displayPlane = this.babylonMeshService.createTextMesh(
                 `selectDisplay_${selectElement.element.id}`,
                 texture,
-                textureWidth,
-                textureHeight
+                renderedTexture.width,
+                renderedTexture.height,
             );
 
             displayPlane.parent = selectElement.mesh;
@@ -456,19 +459,22 @@ export class SelectManager {
             displayPlane.isPickable = false;
 
             // Align text to the CSS content edge.
-            const selectWidth = selectElement.mesh.getBoundingInfo().boundingBox.extendSize.x * 2;
-            const insets = this.getHorizontalContentInsets(style, scale);
-            displayPlane.position.x = (selectWidth / 2) - (textureWidth / 2) - insets.left - (4 * scale);
-            displayPlane.position.y = -2 * scale;
+            const insets = this.getHorizontalContentInsets(style);
+            const center = render.actions.camera.projectCssLocalPoint({
+                x: -(selectElement.cssSize?.width ?? 0) / 2 + insets.left + 4 + textureWidthPx / 2,
+                y: 2,
+            });
+            displayPlane.position.x = center.x;
+            displayPlane.position.y = center.y;
 
             return displayPlane;
 
         } catch (error) {
             console.error('Error creating select display:', error);
-            // Fallback
+            const fallbackSize = render.actions.camera.projectCssSize({ width: 180, height: 30 });
             return BABYLON.MeshBuilder.CreatePlane(`selectDisplay_${selectElement.element.id}_fallback`, {
-                width: 1.8,
-                height: 0.3
+                width: fallbackSize.width,
+                height: fallbackSize.height,
             }, render.scene);
         }
     }
@@ -501,18 +507,15 @@ export class SelectManager {
             ?.some((pick) => isPopupMesh(pick.pickedMesh)) ?? false;
     }
 
-    private getHorizontalContentInsets(
-        style: StyleRule,
-        scale: number
-    ): { left: number; right: number } {
+    private getHorizontalContentInsets(style: StyleRule): { left: number; right: number } {
         const padding = this.parseHorizontalBoxShorthand(style.padding);
         const border = Math.max(0, this.parseSize(style.borderWidth) || 0);
         const left = Math.max(0, this.parseSize(style.paddingLeft) ?? padding.left);
         const right = Math.max(0, this.parseSize(style.paddingRight) ?? padding.right);
 
         return {
-            left: (border + left) * scale,
-            right: (border + right) * scale
+            left: border + left,
+            right: border + right,
         };
     }
 
@@ -536,19 +539,21 @@ export class SelectManager {
     private createDropdownMesh(selectElement: SelectElement, scene: BABYLON.Scene, style: StyleRule): BABYLON.Mesh {
         // Keep the popup border inside the select's border-box, as native
         // dropdowns do, instead of adding a pixel beyond each control edge.
-        const width = this.getPopupInteriorWidth(selectElement);
+        const width = this.getPopupInteriorWidthCss(selectElement);
 
-        const optionHeight = this.getPopupOptionHeight(selectElement, style);
+        const optionHeight = this.getPopupOptionHeightCss(style);
 
         const optionsCount = selectElement.options.length;
         // Limit max height to e.g. 5 items
         const maxHeight = optionHeight * 5;
         const height = Math.min(optionsCount * optionHeight, maxHeight);
+        selectElement.popupCssSize = { width, height };
+        const renderedSize = this.requireProjection(selectElement).projectCssSize({ width, height });
 
         // Use plane instead of box for better 2D rendering
         const dropdownMesh = BABYLON.MeshBuilder.CreatePlane(`dropdown_${selectElement.element.id}`, {
-            width: width,
-            height: height,
+            width: renderedSize.width,
+            height: renderedSize.height,
             sideOrientation: BABYLON.Mesh.DOUBLESIDE
         }, scene);
 
@@ -577,8 +582,10 @@ export class SelectManager {
      * Creates meshes for each option
      */
     private createOptionMeshes(selectElement: SelectElement, scene: BABYLON.Scene, style: StyleRule): BABYLON.Mesh[] {
-        const width = this.getPopupInteriorWidth(selectElement);
-        const optionHeight = this.getPopupOptionHeight(selectElement, style);
+        const width = this.getPopupInteriorWidthCss(selectElement);
+        const optionHeight = this.getPopupOptionHeightCss(style);
+        const projection = this.requireProjection(selectElement);
+        const renderedOptionSize = projection.projectCssSize({ width, height: optionHeight });
         const inheritedBackground = this.parseColor(style.background);
 
         const optionMeshes: BABYLON.Mesh[] = [];
@@ -590,8 +597,8 @@ export class SelectManager {
         selectElement.options.forEach((option, index) => {
             // Background for option - minimal margin for tighter spacing
             const optionMesh = BABYLON.MeshBuilder.CreatePlane(`option_${selectElement.element.id}_${index}`, {
-                width,
-                height: optionHeight
+                width: renderedOptionSize.width,
+                height: renderedOptionSize.height,
             }, scene);
 
             // Position relative to dropdown
@@ -599,7 +606,11 @@ export class SelectManager {
                 optionMesh.parent = selectElement.dropdownMesh;
             }
             // Position from top down with no extra spacing
-            optionMesh.position.y = (selectElement.options.length * optionHeight / 2) - (index * optionHeight) - (optionHeight / 2);
+            const optionCenter = projection.projectCssLocalPoint({
+                x: 0,
+                y: -(selectElement.popupCssSize?.height ?? 0) / 2 + index * optionHeight + optionHeight / 2,
+            });
+            optionMesh.position.y = optionCenter.y;
             optionMesh.position.z = 0.05; // Slightly in front of dropdown background (assuming positive Z is front)
             optionMesh.renderingGroupId = 2; // Ensure UI layer visibility
 
@@ -681,17 +692,13 @@ export class SelectManager {
 
                 const textureSize = this.textRenderingService.getLogicalTextureSize(texture);
 
-                // Use the same camera scale as the select display for consistency
-                const cameraScale = selectElement.cameraScale || 0.001;
-
-                const textureWidth = textureSize.width * cameraScale;
-                const textureHeight = textureSize.height * cameraScale;
+                const renderedTexture = projection.projectCssSize(textureSize);
 
                 const textMesh = this.babylonMeshService.createTextMesh(
                     `optionText_${selectElement.element.id}_${index}`,
                     texture,
-                    textureWidth,
-                    textureHeight
+                    renderedTexture.width,
+                    renderedTexture.height,
                 );
 
                 textMesh.parent = optionMesh;
@@ -701,8 +708,12 @@ export class SelectManager {
                 textMesh.renderingGroupId = 3; // Higher rendering group to ensure it's on top
 
                 // Align text to left edge - match text-input positioning logic
-                const insets = this.getHorizontalContentInsets(style, cameraScale);
-                textMesh.position.x = (width / 2) - (textureWidth / 2) - insets.left;
+                const insets = this.getHorizontalContentInsets(style);
+                const textCenter = projection.projectCssLocalPoint({
+                    x: -width / 2 + insets.left + textureSize.width / 2,
+                    y: 0,
+                });
+                textMesh.position.x = textCenter.x;
 
             } catch (e) {
                 console.error('Failed to create option text', e);
@@ -720,17 +731,18 @@ export class SelectManager {
     private positionDropdown(selectElement: SelectElement): void {
         if (!selectElement.dropdownMesh) return;
 
-        // Position dropdown below select field
-        // Use actual mesh height instead of hardcoded constant to prevent overlap
-        const selectHeight = selectElement.mesh.getBoundingInfo().boundingBox.extendSize.y * 2;
-        const dropdownHeight = selectElement.dropdownMesh.getBoundingInfo().boundingBox.extendSize.y * 2;
-
-        const nativePopupGap = selectElement.cameraScale || 0.001;
-        const popupOffset = selectHeight / 2 + dropdownHeight / 2 + nativePopupGap;
-        selectElement.dropdownMesh.position.y = this.shouldPlacePopupAbove(
+        const selectHeight = selectElement.cssSize?.height ?? 0;
+        const dropdownHeight = selectElement.popupCssSize?.height ?? 0;
+        const popupOffset = selectHeight / 2 + dropdownHeight / 2 + 1;
+        const above = this.shouldPlacePopupAbove(
             selectElement,
             dropdownHeight
-        ) ? popupOffset : -popupOffset;
+        );
+        const center = this.requireProjection(selectElement).projectCssLocalPoint({
+            x: 0,
+            y: above ? -popupOffset : popupOffset,
+        });
+        selectElement.dropdownMesh.position.y = center.y;
         selectElement.dropdownMesh.position.z = 0.15; // Move forward (Positive Z) to avoid Z-fighting/hiding
 
         // Add border to dropdown for HTML-like appearance
@@ -755,10 +767,8 @@ export class SelectManager {
             scene.getTransformMatrix(),
             viewport
         );
-        const scale = selectElement.cameraScale || 0.001;
-        const selectHeight = selectElement.mesh.getBoundingInfo().boundingBox.extendSize.y * 2;
-        const selectHeightPx = selectHeight / scale;
-        const popupHeightPx = dropdownHeight / scale;
+        const selectHeightPx = selectElement.cssSize?.height ?? 0;
+        const popupHeightPx = dropdownHeight;
         const gapPx = 1;
         const spaceAbove = projectedCenter.y - selectHeightPx / 2;
         const spaceBelow = viewportHeight - (projectedCenter.y + selectHeightPx / 2);
@@ -780,15 +790,17 @@ export class SelectManager {
         if (!selectElement.dropdownMesh) return;
 
         const scene = selectElement.dropdownMesh.getScene();
-        const bounds = selectElement.dropdownMesh.getBoundingInfo().boundingBox.extendSize;
-        const width = bounds.x * 2;
-        const height = bounds.y * 2;
-        const borderWidth = this.getPopupBorderWidth(selectElement);
+        const popupSize = selectElement.popupCssSize ?? { width: 0, height: 0 };
+        const borderWidth = this.getPopupBorderWidthCss();
+        const renderedSize = this.requireProjection(selectElement).projectCssSize({
+            width: popupSize.width + borderWidth * 2,
+            height: popupSize.height + borderWidth * 2,
+        });
 
         // Create border as a slightly larger plane behind the dropdown
         const borderMesh = BABYLON.MeshBuilder.CreatePlane(`dropdownBorder_${selectElement.element.id}`, {
-            width: width + borderWidth * 2,
-            height: height + borderWidth * 2,
+            width: renderedSize.width,
+            height: renderedSize.height,
             sideOrientation: BABYLON.Mesh.DOUBLESIDE
         }, scene);
 
@@ -805,13 +817,12 @@ export class SelectManager {
         borderMesh.renderingGroupId = 2;
     }
 
-    private getPopupInteriorWidth(selectElement: SelectElement): number {
-        const selectWidth = selectElement.mesh.getBoundingInfo().boundingBox.extendSize.x * 2;
-        return Math.max(0, selectWidth - this.getPopupBorderWidth(selectElement) * 2);
+    private getPopupInteriorWidthCss(selectElement: SelectElement): number {
+        return Math.max(0, (selectElement.cssSize?.width ?? 0) - this.getPopupBorderWidthCss() * 2);
     }
 
-    private getPopupBorderWidth(selectElement: SelectElement): number {
-        return selectElement.cameraScale || 0.001;
+    private getPopupBorderWidthCss(): number {
+        return 1;
     }
 
     /**
@@ -887,10 +898,9 @@ export class SelectManager {
         return BABYLON.Color3.White();
     }
 
-    private getPopupOptionHeight(selectElement: SelectElement, style: StyleRule): number {
-        const scale = selectElement.cameraScale || 0.001;
+    private getPopupOptionHeightCss(style: StyleRule): number {
         const fontSize = Math.max(1, this.parseSize(style.fontSize) || 16);
-        return Math.max(18, fontSize + 10) * scale;
+        return Math.max(18, fontSize + 10);
     }
 
     /** Releases a mesh-local material without disposing its cache-owned text texture. */
@@ -960,5 +970,14 @@ export class SelectManager {
         if (selectElement.mesh) {
             selectElement.mesh.dispose();
         }
+        this.projections.delete(selectElement);
+    }
+
+    private requireProjection(selectElement: SelectElement): SelectPaintProjection {
+        const projection = this.projections.get(selectElement);
+        if (!projection) {
+            throw new Error(`Missing CSS paint projection for select ${selectElement.element.id || '<anonymous>'}`);
+        }
+        return projection;
     }
 }
