@@ -28,10 +28,6 @@ export interface BabylonDOMActions {
         tableMeshOverride?: Mesh
     ) => void;
     generateElementId: (parentId: string, type: string, index: number, className?: string) => string;
-    // Positioning delegates
-    calculateElementPosition: (element: DOMElement) => { x: number; y: number; z: number };
-    applyPositioning: (element: DOMElement, mesh: Mesh, render: BabylonRender) => void;
-    updateElementPosition: (elementId: string, newPosition: { x: number; y: number; z: number }) => void;
     // Text rendering delegates
     handleTextContent: (dom: BabylonDOM, render: BabylonRender, element: DOMElement, mesh: Mesh, styles: StyleRule[]) => void;
     updateTextContent: (dom: BabylonDOM, render: BabylonRender, elementId: string, newContent: string) => void;

@@ -14,7 +14,7 @@ import { BabylonRender } from "./interfaces/render.types";
 import { TableService } from "./elements/table.service";
 import { DOMElement } from "../../types/dom-element";
 import { generateElementId } from "./utils/element-id.util";
-import { PositioningIntegrationService } from "./positioning/positioning-integration.service";
+import { ViewportService } from "./positioning/viewport.service";
 import { TextRenderingService } from "../text/text-rendering.service";
 import { StoredTextLayoutMetrics } from "../../types/text-rendering";
 import { TextInteractionRegistryService } from "./interaction/text-interaction-registry.service";
@@ -43,7 +43,7 @@ export class BabylonDOMRendererService {
     private styleService: StyleService,
     private tableService: TableService,
     private styleDefaults: StyleDefaultsService,
-    private positioningIntegration: PositioningIntegrationService,
+    private viewportService: ViewportService,
     private textRenderingService: TextRenderingService,
     private textInteractionRegistry: TextInteractionRegistryService,
     private textHighlightFactory: TextHighlightMeshFactory,
@@ -78,15 +78,6 @@ export class BabylonDOMRendererService {
           ),
         processTable: this.tableService.processTable.bind(this.tableService),
         generateElementId,
-        // Positioning delegates
-        calculateElementPosition:
-          this.positioningIntegration.calculateElementPosition.bind(
-            this.positioningIntegration,
-          ),
-        applyPositioning: this.positioningIntegration.applyPositioning.bind(
-          this.positioningIntegration,
-        ),
-        updateElementPosition: this.updateElementPosition.bind(this),
         // Text rendering delegates
         handleTextContent: this.handleTextContent.bind(this),
         updateTextContent: this.updateTextContent.bind(this),
@@ -124,8 +115,8 @@ export class BabylonDOMRendererService {
       this.textRenderingService.initialize(render.scene);
     }
 
-    // Update viewport service with actual dimensions
-    this.positioningIntegration.updateViewport({
+    // Keep CSS viewport units aligned with the mounted surface dimensions.
+    this.viewportService.updateViewport({
       width: viewportWidth,
       height: viewportHeight,
     });
@@ -192,35 +183,6 @@ export class BabylonDOMRendererService {
         this.registerAncestry(child.children, child);
       }
     }
-  }
-
-  /**
-   * Updates element position using positioning system
-   * Integrates with existing mesh management
-   */
-  private updateElementPosition(
-    elementId: string,
-    newPosition: { x: number; y: number; z: number },
-  ): void {
-    if (!elementId) {
-      throw new Error("Element ID is required for position update");
-    }
-
-    const mesh = this.elementManager.elementsMap.get(elementId);
-    if (!mesh) {
-      throw new Error(`No mesh found for element: ${elementId}`);
-    }
-
-    if (!this.render) {
-      throw new Error("Render context is required for position updates");
-    }
-
-    // Use positioning integration service to update position
-    this.positioningIntegration.updateElementPosition(
-      elementId,
-      mesh,
-      this.render,
-    );
   }
 
   /**

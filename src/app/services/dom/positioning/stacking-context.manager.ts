@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DOMElement } from '../../../types/dom-element';
 import { StackingContext } from '../../../types/positioning';
-import { IStackingContextManager } from './interfaces/positioning.interfaces';
 import { PositioningUtils } from './utils/positioning.utils';
 import { StyleRule } from '../../../types/style-rule';
 import { DOMAncestryService } from '../dom-ancestry.service';
@@ -9,7 +8,7 @@ import { DOMAncestryService } from '../dom-ancestry.service';
 @Injectable({
   providedIn: 'root'
 })
-export class StackingContextManager implements IStackingContextManager {
+export class StackingContextManager {
   private readonly rootContextStep = 0.25;
   private readonly positionedDescendantStep = 0.15;
   private readonly tableDescendantStep = 0.05;

@@ -36,15 +36,8 @@ import { ListService } from '../app/services/dom/elements/list.service';
 import { OverflowClipService } from '../app/services/dom/elements/overflow-clip.service';
 import { RootService } from '../app/services/dom/elements/root.service';
 import { TableService } from '../app/services/dom/elements/table.service';
-import { PositionCalculator } from '../app/services/dom/positioning/position-calculator.service';
 import { ViewportService } from '../app/services/dom/positioning/viewport.service';
-import { PositioningIntegrationService } from '../app/services/dom/positioning/positioning-integration.service';
-import { PositioningService } from '../app/services/dom/positioning/positioning.service';
-import { ContainingBlockManager } from '../app/services/dom/positioning/containing-block.manager';
 import { StackingContextManager } from '../app/services/dom/positioning/stacking-context.manager';
-import { RelativePositioningService } from '../app/services/dom/positioning/modes/relative-positioning.service';
-import { FixedPositioningService } from '../app/services/dom/positioning/modes/fixed-positioning.service';
-import { AbsolutePositioningService } from '../app/services/dom/positioning/modes/absolute-positioning.service';
 import { TextInputManager } from '../app/services/dom/input/text-input.manager';
 import { FocusManager } from '../app/services/dom/input/focus.manager';
 import { ButtonManager } from '../app/services/dom/input/button.manager';
@@ -106,15 +99,8 @@ export const ASTYLAR_SURFACE_SERVICE_PROVIDERS: Provider[] = [
   OverflowClipService,
   RootService,
   TableService,
-  PositionCalculator,
   ViewportService,
-  PositioningIntegrationService,
-  PositioningService,
-  ContainingBlockManager,
   StackingContextManager,
-  RelativePositioningService,
-  FixedPositioningService,
-  AbsolutePositioningService,
   TextInputManager,
   FocusManager,
   ButtonManager,

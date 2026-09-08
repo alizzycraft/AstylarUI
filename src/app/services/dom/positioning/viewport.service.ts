@@ -1,11 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Vector3 } from '@babylonjs/core';
-import { ViewportData, TransformMatrix } from '../../../types/positioning';
-import { PositioningUtils } from './utils/positioning.utils';
+import { ViewportData } from '../../../types/positioning';
 
 /**
- * Service for managing viewport data for positioning calculations
- * Integrates with camera and scene to provide accurate viewport information
+ * CSS viewport dimensions used by layout and unit resolution.
  */
 @Injectable({
   providedIn: 'root'
@@ -15,17 +12,12 @@ export class ViewportService {
 
   /**
    * Gets current viewport data
-   * TODO: Integrate with actual camera/scene service
    */
   getCurrentViewport(): ViewportData {
     if (!this.currentViewport) {
-      // Initialize with default viewport - should be replaced with actual camera data
       this.currentViewport = {
-        width: 1920, // TODO: Get from actual scene/camera
-        height: 1080, // TODO: Get from actual scene/camera
-        position: new Vector3(0, 0, 0), // TODO: Get from camera position
-        cameraTransform: PositioningUtils.createIdentityMatrix(), // TODO: Get from camera transform
-        scale: 1 // TODO: Get from camera scale/zoom
+        width: 1920,
+        height: 1080,
       };
     }
     
@@ -46,15 +38,6 @@ export class ViewportService {
     }
     if (viewport.height !== undefined) {
       this.currentViewport.height = viewport.height;
-    }
-    if (viewport.position !== undefined) {
-      this.currentViewport.position = viewport.position;
-    }
-    if (viewport.cameraTransform !== undefined) {
-      this.currentViewport.cameraTransform = viewport.cameraTransform;
-    }
-    if (viewport.scale !== undefined) {
-      this.currentViewport.scale = viewport.scale;
     }
   }
 
