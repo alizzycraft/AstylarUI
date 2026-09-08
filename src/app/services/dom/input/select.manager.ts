@@ -7,11 +7,16 @@ import { StyleRule } from '../../../types/style-rule';
 import { TextRenderingService } from '../../text/text-rendering.service';
 import { BabylonMeshService } from '../../babylon-mesh.service';
 import { CONTROL_CONTENT_Z_OFFSET } from '../render-depth.constants';
-import type { CssPoint, CssSize, RenderPoint, RenderSize } from '../../coordinate-space.types';
+import type { CssPoint, CssRect, CssSize, RenderPoint, RenderSize } from '../../coordinate-space.types';
 
 interface SelectPaintProjection {
     projectCssLocalPoint(point: CssPoint, renderDepth?: number): RenderPoint;
     projectCssSize(size: CssSize): RenderSize;
+}
+
+export interface SelectCssGeometry {
+    resolveAnchorViewportRect(): CssRect | undefined;
+    resolveViewportSize(): CssSize | undefined;
 }
 
 /**
@@ -22,6 +27,7 @@ interface SelectPaintProjection {
 })
 export class SelectManager {
     private readonly projections = new WeakMap<SelectElement, SelectPaintProjection>();
+    private readonly cssGeometry = new WeakMap<SelectElement, SelectCssGeometry>();
 
     // Track click-away observers for each open dropdown
     private clickAwayObservers: Map<string, {
@@ -45,7 +51,8 @@ export class SelectManager {
         element: DOMElement,
         render: BabylonRender,
         style: StyleRule,
-        dimensions: CssSize
+        dimensions: CssSize,
+        cssGeometry?: SelectCssGeometry,
     ): SelectElement {
         if (!render.scene) {
             throw new Error('Scene is required to create select element');
@@ -87,6 +94,7 @@ export class SelectManager {
         };
 
         this.projections.set(selectElement, render.actions.camera);
+        if (cssGeometry) this.cssGeometry.set(selectElement, cssGeometry);
 
         // Create display mesh for selected value
         selectElement.displayMesh = this.createDisplayMesh(selectElement, render, style);
@@ -753,25 +761,15 @@ export class SelectManager {
         selectElement: SelectElement,
         dropdownHeight: number
     ): boolean {
-        const scene = selectElement.mesh.getScene();
-        const camera = scene.activeCamera;
-        if (!camera) return false;
+        const geometry = this.cssGeometry.get(selectElement);
+        const anchor = geometry?.resolveAnchorViewportRect();
+        const viewport = geometry?.resolveViewportSize();
+        if (!anchor || !viewport) return false;
 
-        const canvas = scene.getEngine().getRenderingCanvas();
-        const viewportWidth = canvas?.clientWidth || scene.getEngine().getRenderWidth();
-        const viewportHeight = canvas?.clientHeight || scene.getEngine().getRenderHeight();
-        const viewport = camera.viewport.toGlobal(viewportWidth, viewportHeight);
-        const projectedCenter = BABYLON.Vector3.Project(
-            selectElement.mesh.getAbsolutePosition(),
-            BABYLON.Matrix.IdentityReadOnly,
-            scene.getTransformMatrix(),
-            viewport
-        );
-        const selectHeightPx = selectElement.cssSize?.height ?? 0;
         const popupHeightPx = dropdownHeight;
         const gapPx = 1;
-        const spaceAbove = projectedCenter.y - selectHeightPx / 2;
-        const spaceBelow = viewportHeight - (projectedCenter.y + selectHeightPx / 2);
+        const spaceAbove = anchor.y;
+        const spaceBelow = viewport.height - (anchor.y + anchor.height);
         return this.choosePopupDirection(spaceAbove, spaceBelow, popupHeightPx + gapPx) === 'above';
     }
 

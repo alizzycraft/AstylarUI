@@ -3,6 +3,7 @@ import { BabylonMeshService } from '../../babylon-mesh.service';
 import { TextRenderingService } from '../../text/text-rendering.service';
 import { SelectManager } from './select.manager';
 import { StyleRule } from '../../../types/style-rule';
+import type { SelectElement } from '../../../types/input-types';
 import {
   CONTROL_CONTENT_Z_OFFSET,
   SELECT_BORDER_Z_OFFSET,
@@ -278,6 +279,29 @@ describe('SelectManager', () => {
     expect(manager['choosePopupDirection'](490, 54, 105)).toBe('above');
     expect(manager['choosePopupDirection'](180, 220, 105)).toBe('below');
     expect(manager['choosePopupDirection'](40, 54, 105)).toBe('below');
+  });
+
+  it('chooses popup direction from retained CSS viewport geometry without reading Babylon position', () => {
+    const manager = new SelectManager({} as TextRenderingService, {} as BabylonMeshService);
+    const select = {
+      mesh: {
+        getAbsolutePosition: () => {
+          throw new Error('popup placement must not reconstruct CSS geometry from a mesh');
+        },
+      },
+    } as unknown as SelectElement;
+    manager['cssGeometry'].set(select, {
+      resolveAnchorViewportRect: () => ({ x: 120.5, y: 500.25, width: 300.5, height: 50.5 }),
+      resolveViewportSize: () => ({ width: 800, height: 600 }),
+    });
+
+    expect(manager['shouldPlacePopupAbove'](select, 105.25)).toBeTrue();
+
+    manager['cssGeometry'].set(select, {
+      resolveAnchorViewportRect: () => ({ x: 120.5, y: 100.25, width: 300.5, height: 50.5 }),
+      resolveViewportSize: () => ({ width: 800, height: 600 }),
+    });
+    expect(manager['shouldPlacePopupAbove'](select, 105.25)).toBeFalse();
   });
 
   it('treats a popup hit behind an authored mesh as inside the expanded select', () => {

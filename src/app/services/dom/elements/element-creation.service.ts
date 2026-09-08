@@ -30,6 +30,7 @@ import { AstylarDocumentRecovery } from "../../../../lib/astylar-document-recove
 import { AstylarPluginHost } from "../../../../lib/astylar-plugin-host";
 import {
   createCssLayoutBox,
+  resolveCssViewportRect,
   updateCssLayoutNode,
 } from "../../css-layout-geometry";
 import {
@@ -200,6 +201,15 @@ export class ElementCreationService {
         ? this.inputElementService.createInputElement(element, render, style, {
             width: dimensions.width,
             height: dimensions.height,
+          }, {
+            resolveAnchorViewportRect: () =>
+              resolveCssViewportRect(meshId, dom.context.layoutBoxes),
+            resolveViewportSize: () => {
+              const viewport = dom.context.layoutBoxes.get("root-body")?.box.borderBox;
+              return viewport
+                ? { width: viewport.width, height: viewport.height }
+                : undefined;
+            },
           })
         : null;
 

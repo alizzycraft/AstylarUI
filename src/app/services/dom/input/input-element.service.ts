@@ -7,7 +7,7 @@ import { StyleRule } from '../../../types/style-rule';
 import { TextInputManager, TextInputMutableState } from './text-input.manager';
 import { ButtonManager } from './button.manager';
 import { CheckboxManager } from './checkbox.manager';
-import { SelectManager } from './select.manager';
+import { SelectCssGeometry, SelectManager } from './select.manager';
 import { KeyboardInputHandler } from './keyboard-input.handler';
 import { FocusManager } from './focus.manager';
 import { FormValidatorService } from './form-validator.service';
@@ -78,7 +78,8 @@ export class InputElementService {
         element: DOMElement,
         render: BabylonRender,
         style: StyleRule,
-        cssDimensions: CssSize
+        cssDimensions: CssSize,
+        selectCssGeometry?: SelectCssGeometry,
     ): InputElement | null {
         const inputType = this.determineInputType(element);
 
@@ -141,6 +142,7 @@ export class InputElementService {
                     render,
                     style,
                     cssDimensions,
+                    selectCssGeometry,
                 );
                 break;
 
