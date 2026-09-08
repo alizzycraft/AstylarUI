@@ -690,9 +690,11 @@ export class AstylarShowcaseComponent {
         { selector: '.material-list', width: '100%', display: 'flex', flexDirection: 'column', fontSize: '16px' },
         { selector: '.list-item', width: '100%', height: `${theme.density === 0 ? 56 : theme.density <= -5 ? 40 : 48}px`, boxSizing: 'border-box', display: 'flex', alignItems: 'center' },
         { selector: '.list-label', marginLeft: '16px', fontSize: '16px' },
-        { selector: '.sort-header', width: '100%', height: `${theme.density === -2 ? 22 : 19}px`, borderWidth: '0', background: 'transparent', color: theme.onSurface, textAlign: 'left', fontWeight: theme.density <= -5 ? '400' : '500' },
-        { selector: '.sort-trigger', width: '132px', height: `${theme.density === -2 ? 22 : 19}px`, display: 'flex', alignItems: 'center', gap: '6px', color: theme.onSurface, fontSize: '17px', fontWeight: theme.density <= -5 ? '400' : '500', cursor: 'pointer' },
-        { selector: '.sort-arrow', fontSize: '16px', fontWeight: '700' },
+        { selector: '.sort-header', width: '100%', height: `${theme.density === -2 ? 22 : 19}px`, borderWidth: '0', background: 'transparent', color: theme.onSurface, textAlign: 'left', fontWeight: '400' },
+        { selector: '.sort-header.focused', height: `${theme.density === -2 ? 23 : 20}px` },
+        { selector: '.sort-trigger', width: '100%', height: `${theme.density === -2 ? 22 : 19}px`, display: 'flex', alignItems: 'center', gap: '6px', color: theme.onSurface, fontSize: '16px', fontWeight: '400', cursor: 'pointer' },
+        { selector: '.sort-trigger.focused', height: `${theme.density === -2 ? 23 : 20}px`, borderWidth: '0 0 1px 0', borderStyle: 'solid', borderColor: theme.onSurface },
+        { selector: '.sort-arrow', width: '12px', height: '12px', flexShrink: '0' },
         { selector: '.paginator', position: 'relative', width: '100%', height: '56px', background: theme.surface, fontSize: '13px' },
         { selector: '#paginator-size', position: 'absolute', top: `${theme.density === 0 ? 20 : theme.density <= -5 ? 12 : 16}px`, right: `${theme.density <= -5 ? 222.75 : 246.75}px`, whiteSpace: 'nowrap', fontSize: '13px', verticalAlign: 'middle' },
         { selector: '#paginator-page-size', position: 'absolute', top: `${theme.density === 0 ? 20 : theme.density <= -5 ? 12 : 16}px`, right: `${theme.density <= -5 ? 206 : 230}px`, whiteSpace: 'nowrap', fontSize: '13px', verticalAlign: 'middle' },
@@ -840,11 +842,21 @@ export class AstylarShowcaseComponent {
     if (family === 'sort') {
       const focused = this.focusedId() === 'sort-primary' || this.focusedId() === 'sort-trigger';
       return [{ type: 'div', id: 'sort-primary', class: `sort-header${focused ? ' focused' : ''}`, ariaLabel: 'Sort by name', children: [{
-      type: 'div', id: 'sort-trigger', class: 'sort-trigger', role: 'button', tabindex: 0,
+      type: 'div', id: 'sort-trigger', class: `sort-trigger${focused ? ' focused' : ''}`, role: 'button', tabindex: 0,
       ariaSort: state.open ? state.sortDirection === 'asc' ? 'ascending' : 'descending' : undefined,
       children: [
         { type: 'span', id: 'sort-label', textContent: 'Sort by name' },
-        ...(state.open || focused ? [{ type: 'span' as const, id: 'sort-arrow', class: 'sort-arrow', textContent: state.open && state.sortDirection === 'desc' ? '↓' : '↑' }] : []),
+        ...(state.open || focused ? [{
+          type: 'showcase.material:sort-arrow' as const,
+          id: 'sort-arrow',
+          class: 'sort-arrow',
+          role: 'presentation',
+          data: {
+            direction: state.open ? state.sortDirection : 'asc',
+            opacity: state.open ? 1 : .54,
+            'indicator-color': theme.onSurface,
+          },
+        }] : []),
       ],
       }] }];
     }

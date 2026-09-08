@@ -1,5 +1,5 @@
 import { EnvironmentProviders, Injectable, InjectionToken, inject } from '@angular/core';
-import { Color3, DynamicTexture, Material, Mesh, MeshBuilder, StandardMaterial, Texture, Vector3 } from '@babylonjs/core';
+import { Color3, DynamicTexture, Material, Mesh, MeshBuilder, StandardMaterial, Texture, Vector3, VertexData } from '@babylonjs/core';
 import {
   ASTYLAR_PLUGIN_API_VERSION,
   defineAstylarPlugin,
@@ -252,8 +252,63 @@ class MaterialCheckMarkRenderer extends MaterialRendererBase implements AstylarP
 }
 
 export function materialCheckMarkPath(scale: number): Vector3[] {
-  return [[-5.5, .4], [-1.8, -3.2], [5.5, 4.2]]
+  return [[-5.5, .4], [-1.8, 3.2], [5.5, -4.2]]
     .map(([logicalX, y]) => new Vector3(logicalX * scale, y * scale, 0));
+}
+
+@Injectable()
+class MaterialSortArrowRenderer extends MaterialRendererBase implements AstylarPluginElementRenderer {
+  render(context: AstylarPluginRenderContext): Mesh {
+    const root = this.root(context);
+    const scale = context.dimensions.pixelToWorldScale;
+    const direction = context.element.data?.['direction'] === 'desc' ? 'desc' : 'asc';
+    const logicalVertices = materialSortArrowTriangles(scale, direction);
+    const vertices = logicalVertices.map((point) => context.coordinates.toLocalPoint(point.x, point.y, point.z));
+    const positions = vertices.flatMap((point) => point.asArray());
+    const indices = vertices.map((_, index) => index);
+    const normals: number[] = [];
+    VertexData.ComputeNormals(positions, indices, normals);
+
+    const arrow = this.ownChild(context, new Mesh(`${context.meshId}-path`, context.scene), root);
+    const geometry = new VertexData();
+    geometry.positions = positions;
+    geometry.indices = indices;
+    geometry.normals = normals;
+    geometry.applyToMesh(arrow);
+    arrow.material = this.material(
+      context,
+      'path-material',
+      this.color(context, 'indicator-color', '#49454f'),
+      Math.max(0, Math.min(1, this.number(context, 'opacity', 1))),
+    );
+    arrow.position.z = .02;
+    root.metadata = { showcaseMaterialVisual: 'sort-arrow', direction, benchmarkMode: this.config.benchmarkMode };
+    return root;
+  }
+}
+
+/** Angular Material's 24px sort-arrow SVG path, centered in its 12px arrow container. */
+export function materialSortArrowTriangles(scale: number, direction: 'asc' | 'desc'): Vector3[] {
+  const points = {
+    stemBottomLeft: [-1, 6],
+    stemTopLeft: [-1, -3.2],
+    leftNotch: [-4.6, .4],
+    leftWing: [-6, -1],
+    tip: [0, -7],
+    rightWing: [6, -1],
+    rightNotch: [4.6, .4],
+    stemTopRight: [1, -3.2],
+    stemBottomRight: [1, 6],
+  } as const;
+  const triangles = [
+    points.tip, points.leftWing, points.rightWing,
+    points.leftWing, points.leftNotch, points.stemTopLeft,
+    points.rightWing, points.stemTopRight, points.rightNotch,
+    points.stemBottomLeft, points.stemTopLeft, points.stemTopRight,
+    points.stemBottomLeft, points.stemTopRight, points.stemBottomRight,
+  ];
+  const rotation = direction === 'desc' ? -1 : 1;
+  return triangles.map(([x, y]) => new Vector3(x * scale * rotation, y * scale * rotation, 0));
 }
 
 @Injectable()
@@ -317,6 +372,7 @@ const elementDefinitions = [
   { name: 'circular-progress', renderer: MaterialCircularProgressRenderer },
   { name: 'range-visual', renderer: MaterialRangeVisualRenderer },
   { name: 'check-mark', renderer: MaterialCheckMarkRenderer },
+  { name: 'sort-arrow', renderer: MaterialSortArrowRenderer },
   { name: 'tab-panel', renderer: MaterialTabPanelRenderer },
 ] as const;
 
@@ -376,6 +432,13 @@ function validateMaterialElement(name: string, data: Readonly<Record<string, unk
   const mode = data?.['mode'];
   if (mode !== undefined && !modes.includes(String(mode))) return `data.mode must be one of ${modes.join(', ')}.`;
   if (name === 'range-visual' && Number(data?.['start'] ?? 0) > Number(data?.['end'] ?? 1)) return 'data.start must not exceed data.end.';
+  if (name === 'sort-arrow' && data?.['direction'] !== undefined && !['asc', 'desc'].includes(String(data['direction']))) {
+    return 'data.direction must be asc or desc.';
+  }
+  if (name === 'sort-arrow' && data?.['opacity'] !== undefined &&
+      (typeof data['opacity'] !== 'number' || data['opacity'] < 0 || data['opacity'] > 1)) {
+    return 'data.opacity must be a number from 0 through 1.';
+  }
   if (name === 'tab-panel' && data?.['selected'] !== undefined && typeof data['selected'] !== 'boolean') return 'data.selected must be boolean.';
   if (name === 'tab-panel' && data?.['baseline-offset'] !== undefined && !Number.isFinite(Number(data['baseline-offset']))) {
     return 'data.baseline-offset must be a finite number.';

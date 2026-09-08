@@ -354,8 +354,26 @@ describe('AstylarShowcaseComponent', () => {
     expect(find(build(component, 'sort'), 'sort-arrow')).toBeUndefined();
     handlers['sort-primary']['focus']({ targetId: 'sort-primary' } as AstylarEvent);
     const focusedSort = build(component, 'sort');
-    expect(find(focusedSort, 'sort-arrow')?.['textContent']).toBe('↑');
-    expect(style(focusedSort, '.sort-header.focused')?.['boxShadow']).toBeUndefined();
+    expect(find(focusedSort, 'sort-arrow')).toEqual(jasmine.objectContaining({
+      type: 'showcase.material:sort-arrow',
+      data: jasmine.objectContaining({ direction: 'asc', opacity: .54 }),
+    }));
+    expect(style(focusedSort, '.sort-trigger')).toEqual(jasmine.objectContaining({
+      width: '100%',
+      fontSize: '16px',
+      fontWeight: '400',
+    }));
+    expect(style(focusedSort, '.sort-trigger.focused')).toEqual(jasmine.objectContaining({
+      height: '20px',
+      borderWidth: '0 0 1px 0',
+      borderStyle: 'solid',
+      borderColor: store.tokens().onSurface,
+    }));
+    expect(style(focusedSort, '.sort-header.focused')?.['height']).toBe('20px');
+    expect(style(focusedSort, '.sort-arrow')).toEqual(jasmine.objectContaining({
+      width: '12px',
+      height: '12px',
+    }));
     expect(store.state().open).toBeFalse();
     handlers['sort-primary']['blur']({ targetId: 'sort-primary' } as AstylarEvent);
     expect(find(build(component, 'sort'), 'sort-arrow')).toBeUndefined();
@@ -363,6 +381,9 @@ describe('AstylarShowcaseComponent', () => {
     expect(store.state().open).toBeTrue();
     click('sort-trigger', event);
     expect(store.state().sortDirection).toBe('desc');
+    expect(find(build(component, 'sort'), 'sort-arrow')?.['data']).toEqual(
+      jasmine.objectContaining({ direction: 'desc', opacity: 1 }),
+    );
     click('sort-trigger', event);
     expect(store.state().sortDirection).toBe('asc');
   });

@@ -337,7 +337,7 @@ describe('Astylar surface plugin runtime', () => {
         pluginDepth: 0.12,
         pluginLabel: 'Proof',
         pluginTone: 'teal',
-        localProbe: [3, 4, .5],
+        localProbe: [3, -4, .5],
         logicalProbe: { x: -3, y: 4, z: .5 },
       }));
       expect(secondBadge.metadata.pluginDepth).toBe(0.2);

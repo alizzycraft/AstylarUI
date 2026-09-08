@@ -160,8 +160,9 @@ export interface AstylarPluginResourceSnapshot {
  * Converts element-local CSS coordinates into the renderer-local Babylon
  * coordinate space used by the current Astylar camera projection.
  *
- * Plugin renderers should author geometry with positive X pointing right and
- * use this boundary instead of encoding camera-axis inversions themselves.
+ * Plugin renderers should author geometry in element-local CSS pixel space,
+ * with positive X pointing right and positive Y pointing down. Use this
+ * boundary instead of encoding camera-axis inversions themselves.
  */
 export interface AstylarPluginRenderCoordinates {
   toLocalPoint(x: number, y: number, z?: number): Vector3;

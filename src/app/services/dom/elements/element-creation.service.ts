@@ -223,11 +223,13 @@ export class ElementCreationService {
           },
           coordinates: {
             toLocalPoint: (x, y, z = 0) =>
-              this.coordinateTransform.transformToRenderCoordinates(x, y, z),
-            toLogicalPoint: (point) =>
-              this.coordinateTransform.transformToLogicalCoordinates(
+              this.coordinateTransform.transformToRenderCoordinates(x, -y, z),
+            toLogicalPoint: (point) => {
+              const logical = this.coordinateTransform.transformToLogicalCoordinates(
                 new BABYLON.Vector3(point.x, point.y, point.z),
-              ),
+              );
+              return { x: logical.x, y: -logical.y, z: logical.z };
+            },
           },
           resources,
           requestInvalidation: (target) => this.pluginHost.requestFor(source, target),

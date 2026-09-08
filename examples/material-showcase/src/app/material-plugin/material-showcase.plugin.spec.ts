@@ -2,7 +2,11 @@ import { TestBed } from '@angular/core/testing';
 import { provideZonelessChangeDetection } from '@angular/core';
 import { Material } from '@babylonjs/core';
 import { Astylar, type AstylarSurface, type SiteData } from 'astylarui';
-import { materialCheckMarkPath, provideMaterialShowcasePlugin } from './material-showcase.plugin';
+import {
+  materialCheckMarkPath,
+  materialSortArrowTriangles,
+  provideMaterialShowcasePlugin,
+} from './material-showcase.plugin';
 
 describe('Material showcase application plugin', () => {
   beforeEach(() => {
@@ -18,12 +22,26 @@ describe('Material showcase application plugin', () => {
     const [start, bend, end] = materialCheckMarkPath(1);
 
     expect(start.asArray()).toEqual([-5.5, .4, 0]);
-    expect(bend.asArray()).toEqual([-1.8, -3.2, 0]);
-    expect(end.asArray()).toEqual([5.5, 4.2, 0]);
+    expect(bend.asArray()).toEqual([-1.8, 3.2, 0]);
+    expect(end.asArray()).toEqual([5.5, -4.2, 0]);
     expect(start.x).toBeLessThan(bend.x);
     expect(bend.x).toBeLessThan(end.x);
-    expect(bend.y).toBeLessThan(start.y);
-    expect(bend.y).toBeLessThan(end.y);
+    expect(bend.y).toBeGreaterThan(start.y);
+    expect(bend.y).toBeGreaterThan(end.y);
+  });
+
+  it('preserves the Material sort-arrow path and reverses it for descending order', () => {
+    const ascending = materialSortArrowTriangles(1, 'asc');
+    const descending = materialSortArrowTriangles(1, 'desc');
+
+    expect(ascending.length).toBe(15);
+    expect(Math.min(...ascending.map(({ x }) => x))).toBe(-6);
+    expect(Math.max(...ascending.map(({ x }) => x))).toBe(6);
+    expect(Math.min(...ascending.map(({ y }) => y))).toBe(-7);
+    expect(Math.max(...ascending.map(({ y }) => y))).toBe(6);
+    expect(descending.map((point) => point.asArray())).toEqual(
+      ascending.map((point) => [-point.x, -point.y, point.z]),
+    );
   });
 
   it('keeps range thumbs and state layers ordered in logical screen coordinates', async () => {
