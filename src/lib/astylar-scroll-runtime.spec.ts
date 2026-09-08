@@ -2,9 +2,28 @@ import { Mesh, MeshBuilder, NullEngine, Scene } from '@babylonjs/core';
 import type { DOMElement } from '../app/types/dom-element';
 import type { SiteData } from '../app/types/site-data';
 import type { StyleRule } from '../app/types/style-rule';
-import type { CssLayoutNode } from '../app/services/coordinate-space.types';
+import type {
+  CssLayoutNode,
+  CssPoint,
+  CssSize,
+} from '../app/services/coordinate-space.types';
 import { createCssLayoutBox } from '../app/services/css-layout-geometry';
+import { BabylonScrollPaintAdapter } from '../app/services/babylon-scroll-paint-adapter';
 import { AstylarScrollRuntime } from './astylar-scroll-runtime';
+
+function createPaintAdapter(scale = 1): BabylonScrollPaintAdapter {
+  return new BabylonScrollPaintAdapter({
+    projectCssSize: ({ width, height }: CssSize) => ({
+      width: width * scale,
+      height: height * scale,
+    }),
+    projectCssLocalPoint: ({ x, y }: CssPoint, z = 0) => ({
+      x: x * scale,
+      y: -y * scale,
+      z,
+    }),
+  } as never);
+}
 
 function layoutNode(
   parentId: string | null,
@@ -106,6 +125,17 @@ describe('AstylarScrollRuntime', () => {
     expect(runtime.getViewportRect('three')).toEqual({ x: 0, y: 104.5, width: 240, height: 80 });
   });
 
+  it('retains fractional CSS scroll offsets until the paint projection boundary', () => {
+    const { runtime, siteData, meshes } = createVerticalRuntime(scene, 160, 'auto', 0.25);
+
+    runtime.reconcile(siteData);
+    expect(meshes.get('one')?.position.y).toBe(10);
+
+    expect(runtime.scrollFrom('one', 0, 55.5)).toBeTrue();
+    expect(runtime.snapshot.containers['box'].scrollTop).toBe(55.5);
+    expect(meshes.get('one')?.position.y).toBe(23.875);
+  });
+
   it('measures CSS overflow without reading Babylon bounding boxes', () => {
     const { runtime, siteData, meshes } = createVerticalRuntime(scene);
     for (const mesh of meshes.values()) {
@@ -127,8 +157,9 @@ describe('AstylarScrollRuntime', () => {
     box.metadata = { element: boxElement, elementId: 'box' };
     const strip = MeshBuilder.CreatePlane('strip', { width: 360, height: 120 }, scene);
     strip.parent = box;
-    // Content flowing right extends toward positive render X.
-    strip.position.x = -60;
+    // A wider child with a CSS left edge of zero is centered to the right of
+    // its narrower parent before scrolling.
+    strip.position.x = 60;
     strip.metadata = { element: boxElement.children![0], elementId: 'strip' };
     const layoutBoxes = new Map<string, CssLayoutNode>([
       ['box', layoutNode(null, 0, 0, 240, 120)],
@@ -143,7 +174,7 @@ describe('AstylarScrollRuntime', () => {
       } : undefined,
       getLayoutBoxes: () => layoutBoxes,
       getStyle: (id) => id === 'box' ? { selector: '#box', overflow: 'scroll' } : undefined,
-      getPixelToWorldScale: () => 1,
+      paint: createPaintAdapter(),
     });
 
     runtime.reconcile(siteData);
@@ -162,12 +193,12 @@ describe('AstylarScrollRuntime', () => {
 
     expect(runtime.scrollFrom('strip', 65, 0)).toBeTrue();
     expect(runtime.snapshot.containers['box'].scrollLeft).toBe(65);
-    expect(strip.position.x).toBe(-125);
+    expect(strip.position.x).toBe(-5);
     expect(thumb!.position.x).toBeGreaterThan(initialThumbX);
 
     expect(runtime.scrollFrom('strip', 500, 0)).toBeTrue();
     expect(runtime.snapshot.containers['box'].scrollLeft).toBe(132);
-    expect(strip.position.x).toBe(-192);
+    expect(strip.position.x).toBe(-72);
   });
 
   it('excludes a rendered border from client and scroll dimensions', () => {
@@ -198,7 +229,7 @@ describe('AstylarScrollRuntime', () => {
       getStyle: (id) => id === 'bordered-box' ? {
         selector: '#bordered-box', overflow: 'auto', borderWidth: '1px', borderStyle: 'solid',
       } : undefined,
-      getPixelToWorldScale: () => 1,
+      paint: createPaintAdapter(),
     });
 
     runtime.reconcile(siteData);
@@ -272,7 +303,7 @@ describe('AstylarScrollRuntime', () => {
       getDimensions: (id) => dimensions.get(id),
       getLayoutBoxes: () => layoutBoxes,
       getStyle: (id) => styles.get(id),
-      getPixelToWorldScale: () => 1,
+      paint: createPaintAdapter(),
     });
 
     runtime.reconcile(siteData);
@@ -325,7 +356,7 @@ describe('AstylarScrollRuntime', () => {
         selector: '#box.disabled',
         overflow: element.class === 'disabled' ? 'hidden' : 'auto',
       }),
-      getPixelToWorldScale: () => 1,
+      paint: createPaintAdapter(),
     });
 
     runtime.dispose();
@@ -338,6 +369,7 @@ function createVerticalRuntime(
   scene: Scene,
   clientHeight = 160,
   overflow: 'auto' | 'scroll' = 'auto',
+  projectionScale = 1,
 ): {
   runtime: AstylarScrollRuntime;
   siteData: SiteData;
@@ -380,7 +412,7 @@ function createVerticalRuntime(
     getDimensions: (id) => dimensions.get(id),
     getLayoutBoxes: () => layoutBoxes,
     getStyle: (id) => styles.get(id),
-    getPixelToWorldScale: () => 1,
+    paint: createPaintAdapter(projectionScale),
   });
   return { runtime, siteData, meshes };
 }

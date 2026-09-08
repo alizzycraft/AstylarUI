@@ -35,15 +35,13 @@ not part of CSS layout geometry.
 | Retained CSS geometry | Every rendered element retains a parent-relative CSS border/content box. Scroll extents, visibility, event-local coordinates, and range pointer mapping resolve from that tree. | Mesh-bound projection in interaction, Babylon-bound scroll measurement, DPR multiplication of CSS-pixel wheel deltas, and hover recreation without retained placement. | 426 core tests; fractional/nested layout-box tests; scroll tests that throw on Babylon bound reads; retained range-pointer test. | Layout still mutates meshes in some auto-size paths; legacy positioning contracts, clipping, control paint helpers, and the plugin API still expose world geometry. |
 | Single positioning engine | Static, relative, absolute, and fixed layout are resolved only by the retained CSS layout path. Viewport state contains CSS dimensions only. | The unused injected positioning facade, mode calculators, containing-block transform matrices, Babylon `Vector3` positioning types, and dormant renderer delegates. | Packaged-library build and 60/60 focused renderer, positioning, viewport-unit, and stacking-context tests; the full run passed 425/426 with only the pre-existing platform-dependent canvas half-leading assertion failing. | Auto-size paint mutation, clipping, scroll paint, controls, inverse picks, and the plugin API still need boundary isolation. |
 | CSS layout and paint boundary | Block, inline, flex, grid, list, text, image, and overflow geometry remain CSS boxes until centralized projection helpers create or position Babylon output. Overflow rectangles resolve from retained CSS ancestry. | Layout fallbacks from mesh bounds, world-space auto-height nudges, scattered size/position scaling in layout, and mesh-bound overflow clipping. | Packaged-library build; 62/62 focused layout, projection, and clipping tests, including fractional projection and tests that reject mesh-bound reads. | Scrollbar paint, control paint helpers, inverse picks, and the plugin API still need boundary isolation. |
+| CSS scroll and paint boundary | Scroll extents, offsets, root placement, and scrollbar rectangles remain CSS geometry; a renderer-owned adapter alone projects content and scrollbar meshes. | Captured mesh-origin scroll state, runtime camera-scale access, direct world-axis offset arithmetic, and scrollbar placement in world space. | Packaged-library build; focused scroll/projection tests, including fractional CSS offsets and tests that reject mesh-bound reads. | Control paint helpers, inverse picks, and the plugin API still need boundary isolation. |
 
 ## Known convention leaks to migrate
 
 - `ElementCreationService` still exposes `pixelToWorldScale` and Babylon
   `Vector3` through the public plugin contract, although conversion now routes
   through the camera-owned CSS projection.
-- `AstylarScrollRuntime` measures and exposes state in CSS pixels, but its final
-  visual translation and scrollbar meshes still need a renderer-owned paint
-  adapter instead of direct camera-scale access.
 - range/control managers perform control calculations using world dimensions.
 - reverse Babylon picks still need a single explicit inverse boundary for all
   consumers beyond range/event-local geometry.

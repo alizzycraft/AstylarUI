@@ -1,9 +1,5 @@
 import {
-  Color3,
   Mesh,
-  MeshBuilder,
-  StandardMaterial,
-  type Scene,
 } from '@babylonjs/core';
 import type { DOMElement } from '../app/types/dom-element';
 import type { SiteData } from '../app/types/site-data';
@@ -31,18 +27,46 @@ export interface AstylarScrollSnapshot {
 interface ScrollContainer extends AstylarScrollState {
   id: string;
   mesh: Mesh;
-  roots: Array<{ mesh: Mesh; x: number; y: number }>;
+  roots: Array<{ mesh: Mesh; borderBox: CssRect }>;
   borderWidth: number;
   verticalScrollbar?: ScrollbarVisual;
   horizontalScrollbar?: ScrollbarVisual;
 }
 
-interface ScrollbarVisual {
+interface ScrollbarVisual extends AstylarScrollbarPaint {
+  trackBox: CssRect;
+  thumbBox: CssRect;
+  containerSize: { width: number; height: number };
+  travel: number;
+}
+
+export interface AstylarScrollbarPaint {
   track: Mesh;
   thumb: Mesh;
   axis: 'horizontal' | 'vertical';
-  length: number;
-  thumbLength: number;
+}
+
+export interface AstylarScrollPaintAdapter {
+  positionContent(
+    mesh: Mesh,
+    borderBox: CssRect,
+    containerSize: { width: number; height: number },
+    scrollOffset: CssPoint,
+  ): void;
+  createScrollbar(
+    container: Mesh,
+    containerId: string,
+    axis: 'horizontal' | 'vertical',
+    trackBox: CssRect,
+    thumbBox: CssRect,
+    containerSize: { width: number; height: number },
+  ): AstylarScrollbarPaint;
+  positionScrollbarThumb(
+    visual: AstylarScrollbarPaint,
+    thumbBox: CssRect,
+    containerSize: { width: number; height: number },
+  ): void;
+  disposeScrollbar(visual: AstylarScrollbarPaint): void;
 }
 
 interface ElementDimensions {
@@ -57,7 +81,7 @@ export interface AstylarScrollRuntimeOptions {
   getLayoutBoxes(): ReadonlyMap<string, CssLayoutNode>;
   getStyle(elementId: string): StyleRule | undefined;
   resolveStyle?(element: DOMElement, siteData: SiteData): StyleRule | undefined;
-  getPixelToWorldScale(): number;
+  paint: AstylarScrollPaintAdapter;
   refreshClipping?(entries: ReadonlyArray<{ mesh: Mesh; style: StyleRule }>): void;
 }
 
@@ -260,7 +284,11 @@ export class AstylarScrollRuntime {
     const roots = (element.children ?? [])
       .map((child) => this.findDirectChildMesh(mesh, child))
       .filter((child): child is Mesh => !!child)
-      .map((child) => ({ mesh: child, x: child.position.x, y: child.position.y }));
+      .map((child) => ({
+        mesh: child,
+        borderBox: layoutBoxes.get(child.name)?.box.borderBox,
+      }))
+      .filter((root): root is { mesh: Mesh; borderBox: CssRect } => !!root.borderBox);
 
     let maxX = 0;
     let maxY = 0;
@@ -310,14 +338,13 @@ export class AstylarScrollRuntime {
   }
 
   private applyOffset(container: ScrollContainer): void {
-    const scale = this.options.getPixelToWorldScale();
     for (const root of container.roots) {
-      // CSS scrollLeft advances rightward through content, so rendered content
-      // moves screen-left. CSS scrollTop advances downward, so content moves
-      // upward in Babylon's positive-up render space.
-      root.mesh.position.x = root.x - container.scrollLeft * scale;
-      root.mesh.position.y = root.y + container.scrollTop * scale;
-      root.mesh.computeWorldMatrix(true);
+      this.options.paint.positionContent(
+        root.mesh,
+        root.borderBox,
+        this.options.getDimensions(container.id)!,
+        { x: container.scrollLeft, y: container.scrollTop },
+      );
     }
     this.updateScrollbars(container);
   }
@@ -386,67 +413,54 @@ export class AstylarScrollRuntime {
     clientLength: number,
     scrollLength: number,
   ): ScrollbarVisual {
-    const scene = container.mesh.getScene();
-    const scale = this.options.getPixelToWorldScale();
     const thickness = Math.min(12, clientLength);
     const thumbLength = Math.min(
       clientLength,
       Math.max(28, clientLength * clientLength / scrollLength),
     );
     const vertical = axis === 'vertical';
-    const suffix = vertical ? '' : '-horizontal';
-    const track = MeshBuilder.CreatePlane(
-      `astylar-scrollbar-track-${container.id}${suffix}`,
-      {
-        width: (vertical ? thickness : clientLength) * scale,
-        height: (vertical ? clientLength : thickness) * scale,
-      },
-      scene,
+    const containerSize = this.options.getDimensions(container.id)!;
+    const trackBox = vertical
+      ? {
+          x: container.borderWidth + container.clientWidth - thickness,
+          y: container.borderWidth,
+          width: thickness,
+          height: clientLength,
+        }
+      : {
+          x: container.borderWidth,
+          y: container.borderWidth + container.clientHeight - thickness,
+          width: clientLength,
+          height: thickness,
+        };
+    const thumbBox = vertical
+      ? {
+          x: trackBox.x + (thickness - Math.max(8, thickness - 4)) / 2,
+          y: trackBox.y,
+          width: Math.max(8, thickness - 4),
+          height: thumbLength,
+        }
+      : {
+          x: trackBox.x,
+          y: trackBox.y + (thickness - Math.max(8, thickness - 4)) / 2,
+          width: thumbLength,
+          height: Math.max(8, thickness - 4),
+        };
+    const paint = this.options.paint.createScrollbar(
+      container.mesh,
+      container.id,
+      axis,
+      trackBox,
+      thumbBox,
+      containerSize,
     );
-    const thumb = MeshBuilder.CreatePlane(
-      `astylar-scrollbar-thumb-${container.id}${suffix}`,
-      {
-        width: (vertical ? Math.max(8, thickness - 4) : thumbLength) * scale,
-        height: (vertical ? thumbLength : Math.max(8, thickness - 4)) * scale,
-      },
-      scene,
-    );
-    track.parent = container.mesh;
-    thumb.parent = container.mesh;
-    const crossOffset = vertical
-      ? (container.clientWidth - thickness) * scale / 2
-      : -(container.clientHeight - thickness) * scale / 2;
-    // Keep scrollbar chrome in front of both the container surface and its
-    // ordinary child content.
-    track.position.set(vertical ? crossOffset : 0, vertical ? 0 : crossOffset, 0.01);
-    thumb.position.set(vertical ? crossOffset : 0, vertical ? 0 : crossOffset, 0.02);
-    track.isPickable = false;
-    thumb.isPickable = false;
-    track.renderingGroupId = container.mesh.renderingGroupId;
-    thumb.renderingGroupId = container.mesh.renderingGroupId;
-    track.material = this.createScrollbarMaterial(
-      `astylar-scrollbar-track-material-${container.id}${suffix}`,
-      '#f1eff1',
-      scene,
-    );
-    thumb.material = this.createScrollbarMaterial(
-      `astylar-scrollbar-thumb-material-${container.id}${suffix}`,
-      '#8b878d',
-      scene,
-    );
-    return { track, thumb, axis, length: clientLength, thumbLength };
-  }
-
-  private createScrollbarMaterial(name: string, color: string, scene: Scene): StandardMaterial {
-    const material = new StandardMaterial(name, scene);
-    const parsed = Color3.FromHexString(color);
-    material.diffuseColor = parsed;
-    material.emissiveColor = parsed;
-    material.specularColor = Color3.Black();
-    material.disableLighting = true;
-    material.disableDepthWrite = true;
-    material.backFaceCulling = false;
-    return material;
+    return {
+      ...paint,
+      trackBox,
+      thumbBox,
+      containerSize,
+      travel: Math.max(0, clientLength - thumbLength),
+    };
   }
 
   private updateScrollbars(container: ScrollContainer): void {
@@ -468,20 +482,24 @@ export class AstylarScrollRuntime {
     maximumOffset: number,
   ): void {
     if (!visual) return;
-    const scale = this.options.getPixelToWorldScale();
-    const travel = Math.max(0, visual.length - visual.thumbLength);
     const ratio = maximumOffset > 0 ? this.clamp(scrollOffset / maximumOffset, 0, 1) : 0;
-    const position = (travel / 2 - travel * ratio) * scale;
-    if (visual.axis === 'vertical') visual.thumb.position.y = position;
-    else visual.thumb.position.x = -position;
-    visual.thumb.computeWorldMatrix(true);
+    const thumbBox = {
+      ...visual.thumbBox,
+      ...(visual.axis === 'vertical'
+        ? { y: visual.trackBox.y + visual.travel * ratio }
+        : { x: visual.trackBox.x + visual.travel * ratio }),
+    };
+    this.options.paint.positionScrollbarThumb(
+      visual,
+      thumbBox,
+      visual.containerSize,
+    );
   }
 
   private disposeScrollbars(container: ScrollContainer): void {
     for (const visual of [container.verticalScrollbar, container.horizontalScrollbar]) {
       if (!visual) continue;
-      if (!visual.track.isDisposed()) visual.track.dispose(false, true);
-      if (!visual.thumb.isDisposed()) visual.thumb.dispose(false, true);
+      this.options.paint.disposeScrollbar(visual);
     }
   }
 

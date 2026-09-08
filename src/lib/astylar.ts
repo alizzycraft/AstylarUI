@@ -49,6 +49,7 @@ import type { Button } from '../app/types/input-types';
 import { TextRenderingService } from '../app/services/text/text-rendering.service';
 import { AstylarScrollRuntime } from './astylar-scroll-runtime';
 import type { AstylarScrollSnapshot } from './astylar-scroll-runtime';
+import { BabylonScrollPaintAdapter } from '../app/services/babylon-scroll-paint-adapter';
 import { OverflowClipService } from '../app/services/dom/elements/overflow-clip.service';
 import {
   AstylarSemanticBridge,
@@ -432,7 +433,7 @@ class AstylarRenderer {
       getStyle: (elementId) => this.elementManager.elementStylesMap.get(elementId)?.normal,
       resolveStyle: (element, currentSiteData) =>
         this.styleService.findStyleForElement(element, currentSiteData.styles),
-      getPixelToWorldScale: () => this.babylonCameraService.getPixelToWorldScale(),
+      paint: new BabylonScrollPaintAdapter(renderContext.actions.camera),
       refreshClipping: (entries) => this.overflowClipService.refresh(
         entries,
         this.elementManager.layoutBoxesMap,
