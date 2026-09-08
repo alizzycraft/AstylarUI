@@ -5,23 +5,33 @@ import { InputType, RangeInput, ValidationState } from '../../../types/input-typ
 import { StyleRule } from '../../../types/style-rule';
 import { BabylonMeshService } from '../../babylon-mesh.service';
 import { BabylonRender } from '../interfaces/render.types';
+import type { CssSize } from '../../coordinate-space.types';
 
 @Injectable({ providedIn: 'root' })
 export class RangeManager {
+    private readonly renders = new WeakMap<RangeInput, BabylonRender>();
+
     constructor(private readonly meshes: BabylonMeshService) {}
 
     createRange(
         element: DOMElement,
         render: BabylonRender,
         style: StyleRule,
-        dimensions: { width: number; height: number },
+        dimensions: CssSize,
     ): RangeInput {
         const min = this.number(element.min, 0);
         const max = Math.max(min, this.number(element.max, 100));
         const step = Math.max(Number.EPSILON, this.number(element.step, 1));
         const value = this.normalize(this.number(element.value, (min + max) / 2), min, max, step);
         const id = element.id || `range-${Date.now()}`;
-        const mesh = this.meshes.createPolygon(`${id}-range`, 'rectangle', dimensions.width, dimensions.height, 0);
+        const renderedSize = render.actions.camera.projectCssSize(dimensions);
+        const mesh = this.meshes.createPolygon(
+            `${id}-range`,
+            'rectangle',
+            renderedSize.width,
+            renderedSize.height,
+            0,
+        );
         const hitMaterial = this.meshes.createMaterial(`${id}-range-hit`, Color3.Black(), 0.001);
         // A range's interaction plane is a hit target, not a painted surface.
         // It must not write depth or it can hide a composed visual layer after
@@ -29,19 +39,42 @@ export class RangeManager {
         hitMaterial.disableDepthWrite = true;
         mesh.material = hitMaterial;
 
-        const trackHeight = Math.max(0.02, Math.min(dimensions.height * 0.16, 0.08));
-        const trackMesh = this.meshes.createPolygon(`${id}-range-track`, 'rectangle', dimensions.width, trackHeight, trackHeight / 2);
+        const trackHeight = Math.max(2, Math.min(dimensions.height * 0.16, 8));
+        const renderedTrack = render.actions.camera.projectCssSize({
+            width: dimensions.width,
+            height: trackHeight,
+        });
+        const trackMesh = this.meshes.createPolygon(
+            `${id}-range-track`,
+            'rectangle',
+            renderedTrack.width,
+            renderedTrack.height,
+            renderedTrack.height / 2,
+        );
         trackMesh.material = this.meshes.createMaterial(`${id}-range-track-material`, Color3.FromHexString('#79747e'));
         trackMesh.isPickable = false;
         this.meshes.parentTextMesh(trackMesh, mesh);
 
-        const activeTrackMesh = this.meshes.createPolygon(`${id}-range-active`, 'rectangle', dimensions.width, trackHeight, trackHeight / 2);
+        const activeTrackMesh = this.meshes.createPolygon(
+            `${id}-range-active`,
+            'rectangle',
+            renderedTrack.width,
+            renderedTrack.height,
+            renderedTrack.height / 2,
+        );
         activeTrackMesh.material = this.meshes.createMaterial(`${id}-range-active-material`, Color3.FromHexString('#386a20'));
         activeTrackMesh.isPickable = false;
         this.meshes.parentTextMesh(activeTrackMesh, mesh);
 
-        const thumbSize = Math.max(trackHeight * 2.5, Math.min(dimensions.height * 0.7, 0.24));
-        const thumbMesh = this.meshes.createPolygon(`${id}-range-thumb`, 'circle', thumbSize, thumbSize, 0);
+        const thumbSize = Math.max(trackHeight * 2.5, Math.min(dimensions.height * 0.7, 24));
+        const renderedThumb = render.actions.camera.projectCssSize({ width: thumbSize, height: thumbSize });
+        const thumbMesh = this.meshes.createPolygon(
+            `${id}-range-thumb`,
+            'circle',
+            renderedThumb.width,
+            renderedThumb.height,
+            0,
+        );
         thumbMesh.material = this.meshes.createMaterial(`${id}-range-thumb-material`, Color3.FromHexString('#386a20'));
         thumbMesh.isPickable = false;
         this.meshes.parentTextMesh(thumbMesh, mesh);
@@ -53,9 +86,10 @@ export class RangeManager {
             element, type: InputType.Range, style, value, min, max, step,
             focused: false, disabled: !!element.disabled, required: false,
             validationRules: [], validationState, mesh,
-            trackMesh, activeTrackMesh, thumbMesh,
+            trackMesh, activeTrackMesh, thumbMesh, cssSize: { ...dimensions },
         };
-        this.updateVisual(range, dimensions.width);
+        this.renders.set(range, render);
+        this.updateVisual(range);
         return range;
     }
 
@@ -64,7 +98,7 @@ export class RangeManager {
         if (Object.is(next, range.value)) return false;
         range.value = next;
         range.validationState.dirty = true;
-        this.updateVisual(range, range.mesh.getBoundingInfo().boundingBox.extendSize.x * 2);
+        this.updateVisual(range);
         return true;
     }
 
@@ -96,15 +130,34 @@ export class RangeManager {
         range.mesh?.dispose();
     }
 
-    private updateVisual(range: RangeInput, width: number): void {
+    private updateVisual(range: RangeInput): void {
+        const render = this.renders.get(range);
+        if (!render) return;
+        const width = range.cssSize.width;
         const ratio = range.max === range.min ? 0 : (range.value - range.min) / (range.max - range.min);
-        const activeWidth = Math.max(0.001, width * ratio);
+        const activeWidth = Math.max(0.1, width * ratio);
+        const trackHeight = Math.max(2, Math.min(range.cssSize.height * 0.16, 8));
         if (range.activeTrackMesh) {
-            range.activeTrackMesh.scaling.x = activeWidth / width;
-            this.meshes.positionTextMesh(range.activeTrackMesh, -width / 2 + activeWidth / 2, 0, -0.02);
+            const size = render.actions.camera.projectCssSize({ width: activeWidth, height: trackHeight });
+            this.meshes.updateMeshWithBorderRadius(
+                range.activeTrackMesh,
+                'rectangle',
+                size.width,
+                size.height,
+                size.height / 2,
+            );
+            const center = render.actions.camera.projectCssLocalPoint(
+                { x: -width / 2 + activeWidth / 2, y: 0 },
+                -0.02,
+            );
+            this.meshes.positionTextMesh(range.activeTrackMesh, center.x, center.y, center.z);
         }
         if (range.thumbMesh) {
-            this.meshes.positionTextMesh(range.thumbMesh, -width / 2 + width * ratio, 0, -0.04);
+            const center = render.actions.camera.projectCssLocalPoint(
+                { x: -width / 2 + width * ratio, y: 0 },
+                -0.04,
+            );
+            this.meshes.positionTextMesh(range.thumbMesh, center.x, center.y, center.z);
         }
     }
 

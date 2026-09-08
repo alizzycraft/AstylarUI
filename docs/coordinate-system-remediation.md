@@ -36,13 +36,15 @@ not part of CSS layout geometry.
 | Single positioning engine | Static, relative, absolute, and fixed layout are resolved only by the retained CSS layout path. Viewport state contains CSS dimensions only. | The unused injected positioning facade, mode calculators, containing-block transform matrices, Babylon `Vector3` positioning types, and dormant renderer delegates. | Packaged-library build and 60/60 focused renderer, positioning, viewport-unit, and stacking-context tests; the full run passed 425/426 with only the pre-existing platform-dependent canvas half-leading assertion failing. | Auto-size paint mutation, clipping, scroll paint, controls, inverse picks, and the plugin API still need boundary isolation. |
 | CSS layout and paint boundary | Block, inline, flex, grid, list, text, image, and overflow geometry remain CSS boxes until centralized projection helpers create or position Babylon output. Overflow rectangles resolve from retained CSS ancestry. | Layout fallbacks from mesh bounds, world-space auto-height nudges, scattered size/position scaling in layout, and mesh-bound overflow clipping. | Packaged-library build; 62/62 focused layout, projection, and clipping tests, including fractional projection and tests that reject mesh-bound reads. | Scrollbar paint, control paint helpers, inverse picks, and the plugin API still need boundary isolation. |
 | CSS scroll and paint boundary | Scroll extents, offsets, root placement, and scrollbar rectangles remain CSS geometry; a renderer-owned adapter alone projects content and scrollbar meshes. | Captured mesh-origin scroll state, runtime camera-scale access, direct world-axis offset arithmetic, and scrollbar placement in world space. | Packaged-library build; focused scroll/projection tests, including fractional CSS offsets and tests that reject mesh-bound reads. | Control paint helpers, inverse picks, and the plugin API still need boundary isolation. |
+| CSS range geometry | Range width, track, active segment, thumb position, pointer ratio, and value state are retained in CSS pixels; only generated mesh sizes and local centers are projected. | Mesh-bound width recovery during value updates and world-unit constants in range layout. | Focused range and pointer tests, including fractional CSS width, multi-scale projection, independent paired values, and a test that rejects mesh-bound reads. | Choice, text, select, and focus paint still need CSS-local migration; paired Material range hit ownership will be verified with the plugin contract. |
 
 ## Known convention leaks to migrate
 
 - `ElementCreationService` still exposes `pixelToWorldScale` and Babylon
   `Vector3` through the public plugin contract, although conversion now routes
   through the camera-owned CSS projection.
-- range/control managers perform control calculations using world dimensions.
+- choice, text, select, and focus managers still perform some paint calculations
+  using projected dimensions.
 - reverse Babylon picks still need a single explicit inverse boundary for all
   consumers beyond range/event-local geometry.
 

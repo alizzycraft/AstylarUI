@@ -14,6 +14,7 @@ import { FormValidatorService } from './form-validator.service';
 import { FormManager } from './form.manager';
 import { BabylonCameraService } from '../../babylon-camera.service';
 import { RangeManager } from './range.manager';
+import type { CssSize } from '../../coordinate-space.types';
 
 export interface TextControlStateSnapshot {
     elementId: string;
@@ -77,7 +78,7 @@ export class InputElementService {
         element: DOMElement,
         render: BabylonRender,
         style: StyleRule,
-        worldDimensions: { width: number; height: number }
+        cssDimensions: CssSize
     ): InputElement | null {
         const inputType = this.determineInputType(element);
 
@@ -93,28 +94,54 @@ export class InputElementService {
             case InputType.Email:
             case InputType.Number:
             case InputType.Textarea:
-                inputElement = this.textInputManager.createTextInput(element, render, null as any, style, worldDimensions);
+                inputElement = this.textInputManager.createTextInput(
+                    element,
+                    render,
+                    null as any,
+                    style,
+                    render.actions.camera.projectCssSize(cssDimensions),
+                );
                 break;
 
             case InputType.Range:
-                inputElement = this.requireRangeManager().createRange(element, render, style, worldDimensions);
+                inputElement = this.requireRangeManager().createRange(element, render, style, cssDimensions);
                 break;
 
             case InputType.Button:
             case InputType.Submit:
-                inputElement = this.buttonManager.createButton(element, render, style, worldDimensions);
+                inputElement = this.buttonManager.createButton(
+                    element,
+                    render,
+                    style,
+                    render.actions.camera.projectCssSize(cssDimensions),
+                );
                 break;
 
             case InputType.Checkbox:
-                inputElement = this.checkboxManager.createCheckbox(element, render, style, worldDimensions);
+                inputElement = this.checkboxManager.createCheckbox(
+                    element,
+                    render,
+                    style,
+                    render.actions.camera.projectCssSize(cssDimensions),
+                );
                 break;
 
             case InputType.Radio:
-                inputElement = this.checkboxManager.createRadioButton(element, render, style, worldDimensions);
+                inputElement = this.checkboxManager.createRadioButton(
+                    element,
+                    render,
+                    style,
+                    render.actions.camera.projectCssSize(cssDimensions),
+                );
                 break;
 
             case InputType.Select:
-                inputElement = this.selectManager.createSelectElement(element, render, style, worldDimensions);
+                inputElement = this.selectManager.createSelectElement(
+                    element,
+                    render,
+                    style,
+                    render.actions.camera.projectCssSize(cssDimensions),
+                );
                 break;
 
             default:

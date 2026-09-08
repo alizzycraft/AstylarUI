@@ -198,8 +198,8 @@ export class ElementCreationService {
         element.type === "select" ||
         element.type === "textarea")
         ? this.inputElementService.createInputElement(element, render, style, {
-            width: worldWidth,
-            height: worldHeight,
+            width: dimensions.width,
+            height: dimensions.height,
           })
         : null;
 

@@ -2,6 +2,25 @@ import { NullEngine, Scene } from '@babylonjs/core';
 import { BabylonMeshService } from '../../babylon-mesh.service';
 import { RangeManager } from './range.manager';
 
+function renderAtScale(scene: Scene, scale = 0.01) {
+  return {
+    scene,
+    actions: {
+      camera: {
+        projectCssSize: ({ width, height }: { width: number; height: number }) => ({
+          width: width * scale,
+          height: height * scale,
+        }),
+        projectCssLocalPoint: ({ x, y }: { x: number; y: number }, z = 0) => ({
+          x: x * scale,
+          y: -y * scale,
+          z,
+        }),
+      },
+    },
+  } as never;
+}
+
 describe('RangeManager', () => {
   it('normalizes values and updates non-pickable presentation meshes', () => {
     const engine = new NullEngine();
@@ -14,9 +33,9 @@ describe('RangeManager', () => {
         type: 'input', inputType: 'range', id: 'volume',
         min: '10', max: '20', step: '2', value: '15',
       },
-      { scene } as never,
+      renderAtScale(scene),
       {} as never,
-      { width: 3, height: 0.4 },
+      { width: 300, height: 40 },
     );
 
     expect(range.value).toBe(16);
@@ -45,9 +64,9 @@ describe('RangeManager', () => {
         type: 'input', inputType: 'range', id: 'density',
         min: '-5', max: '0', step: '1', value: '-2',
       },
-      { scene } as never,
+      renderAtScale(scene),
       {} as never,
-      { width: 3, height: 0.4 },
+      { width: 300, height: 40 },
     );
 
     const right = new KeyboardEvent('keydown', { key: 'ArrowRight', cancelable: true });
@@ -70,8 +89,8 @@ describe('RangeManager', () => {
     const meshes = new BabylonMeshService();
     meshes.initialize(scene);
     const manager = new RangeManager(meshes);
-    const render = { scene } as never;
-    const dimensions = { width: 4, height: .5 };
+    const render = renderAtScale(scene);
+    const dimensions = { width: 400, height: 50 };
     const start = manager.createRange(
       { type: 'input', inputType: 'range', id: 'price-start', min: '0', max: '100', step: '5', value: '30' },
       render, {} as never, dimensions,
@@ -103,7 +122,7 @@ describe('RangeManager', () => {
     const manager = new RangeManager(meshes);
     const range = manager.createRange(
       { type: 'input', inputType: 'range', id: 'reconciled-range', value: '50' },
-      { scene } as never, {} as never, { width: 3, height: .4 },
+      renderAtScale(scene), {} as never, { width: 300, height: 40 },
     );
     const retainedOwner = range.mesh;
     range.mesh = undefined as never;
@@ -112,6 +131,32 @@ describe('RangeManager', () => {
     expect(retainedOwner.isDisposed()).toBeFalse();
 
     retainedOwner.dispose();
+    scene.dispose();
+    engine.dispose();
+  });
+
+  it('updates from retained fractional CSS width without reading Babylon bounds', () => {
+    const engine = new NullEngine();
+    const scene = new Scene(engine);
+    const meshes = new BabylonMeshService();
+    meshes.initialize(scene);
+    const manager = new RangeManager(meshes);
+    const range = manager.createRange(
+      { type: 'input', inputType: 'range', id: 'fractional-range', value: '25' },
+      renderAtScale(scene, 0.25),
+      {} as never,
+      { width: 200.5, height: 24.25 },
+    );
+    spyOn(range.mesh, 'getBoundingInfo').and.throwError(
+      'range geometry must not be reconstructed from Babylon bounds',
+    );
+
+    expect(() => manager.setFromRatio(range, 0.75)).not.toThrow();
+    expect(range.value).toBe(75);
+    expect(range.cssSize).toEqual({ width: 200.5, height: 24.25 });
+    expect(range.thumbMesh?.position.x).toBeCloseTo(12.53125, 6);
+
+    manager.dispose(range);
     scene.dispose();
     engine.dispose();
   });

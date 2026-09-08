@@ -1,5 +1,6 @@
 import { DOMElement } from './dom-element';
 import * as BABYLON from '@babylonjs/core';
+import type { CssSize } from '../services/coordinate-space.types';
 import { StyleRule } from './style-rule';
 
 /**
@@ -159,6 +160,8 @@ export interface RangeInput extends InputElement {
     min: number;
     max: number;
     step: number;
+    /** Authored control geometry retained in CSS pixels. */
+    cssSize: CssSize;
     trackMesh?: BABYLON.Mesh;
     activeTrackMesh?: BABYLON.Mesh;
     thumbMesh?: BABYLON.Mesh;
