@@ -186,7 +186,7 @@
         "The host owns a canvas, camera-facing Babylon scene, lighting callback, and disposable AstylarSurface rather than a browser document viewport.",
         "CSS-like pixels are converted into scene geometry; direct Babylon customization belongs in host setup or a plugin, not arbitrary SiteData fields."
       ],
-      "evidence": ["file:src/lib/astylar.ts", "file:src/app/services/babylon-camera.service.ts", "file:src/app/services/coordinate-transform.service.ts"]
+      "evidence": ["file:src/lib/astylar.ts", "file:src/app/services/babylon-camera.service.ts", "file:src/app/services/css-babylon-projection.ts"]
     },
     {
       "id": "animation-alternative",

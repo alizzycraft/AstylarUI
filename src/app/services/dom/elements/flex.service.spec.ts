@@ -396,6 +396,7 @@ describe('FlexService', () => {
     const render = {
       actions: {
         camera: {
+          projectCssLength: (value: number) => value * 0.01,
           projectCssSize: (size: { width: number; height: number }) => ({
             width: size.width * 0.01,
             height: size.height * 0.01,

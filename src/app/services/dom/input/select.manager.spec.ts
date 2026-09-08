@@ -92,6 +92,7 @@ describe('SelectManager', () => {
   it('suppresses the native-style indicator when appearance is none', () => {
     const textRendering = {
       renderTextToTexture: () => ({ getSize: () => ({ width: 80, height: 24 }) }),
+      getLogicalTextureSize: () => ({ width: 40, height: 12 }),
     } as unknown as TextRenderingService;
     const meshService = {
       createTextMesh: (name: string, _texture: unknown, width: number, height: number) =>

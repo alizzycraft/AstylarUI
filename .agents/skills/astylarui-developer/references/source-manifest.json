@@ -19,14 +19,14 @@
     {
       "source": "docs/compatibility/capabilities.json",
       "destination": "capabilities.json",
-      "sourceSha256": "e4f9389f80c4411615f8efb7774d1688f714fddc30567b388f860a7987c68e2e",
-      "bundledSha256": "e4f9389f80c4411615f8efb7774d1688f714fddc30567b388f860a7987c68e2e"
+      "sourceSha256": "7bde70f23f806570bc3eb8b30a627677f11ef26b134e7d57a4d15f943266c0be",
+      "bundledSha256": "7bde70f23f806570bc3eb8b30a627677f11ef26b134e7d57a4d15f943266c0be"
     },
     {
       "source": "docs/compatibility/examples/manifest.json",
       "destination": "translation-examples.json",
-      "sourceSha256": "22370177765b09ba6b6ff21446c9016dc28970f43c494be18f7bafb5bcf3e5b0",
-      "bundledSha256": "22370177765b09ba6b6ff21446c9016dc28970f43c494be18f7bafb5bcf3e5b0"
+      "sourceSha256": "08e7da1edda254d1ec272e71242b292fe120c1b2f0dc910e82d93ea35b504630",
+      "bundledSha256": "08e7da1edda254d1ec272e71242b292fe120c1b2f0dc910e82d93ea35b504630"
     },
     {
       "source": "docs/plugins.md",

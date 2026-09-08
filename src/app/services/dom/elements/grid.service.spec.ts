@@ -317,6 +317,7 @@ describe('GridService', () => {
             : { selector: '#card', height: 'auto' },
         },
         camera: {
+          projectCssLength: (value: number) => value,
           projectCssSize: (size: { width: number; height: number }) => size,
           projectCssLocalPoint: (point: { x: number; y: number }, z = 0) =>
             ({ x: point.x, y: -point.y, z }),

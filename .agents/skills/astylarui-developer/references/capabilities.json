@@ -380,7 +380,7 @@
       "classification": "different",
       "webConcept": "CSS pixels and browser compositing",
       "astylarPattern": "Layout is authored in CSS-like pixels, projected through pixel-to-world scale into Babylon meshes/materials, camera and scene ownership.",
-      "evidence": ["file:src/app/services/coordinate-transform.service.ts", "file:src/app/services/dom/render-depth.constants.ts"]
+      "evidence": ["file:src/app/services/css-babylon-projection.ts", "file:src/app/services/dom/render-depth.constants.ts"]
     },
     {
       "id": "reconciliation",
@@ -446,7 +446,7 @@
       { "path": "src/app/types/style-rule.ts", "sha256": "0e68380b4f6eb0975f6d72d1aa5cab61179a996bdd30dcdad53159f8707f775f" },
       { "path": "src/app/config/browser-defaults.ts", "sha256": "c429bec0fa047e71148f4ce743868a4c89986fde28cc7d11076bb7afa89993f3" },
       { "path": "src/app/services/dom/style.service.ts", "sha256": "7d27b815442240250d3e9a3b577e8c5eab7d08fad67f7723c6004328a553f083" },
-      { "path": "src/app/services/dom/elements/element-creation.service.ts", "sha256": "52a48da20133f2a220f7468b8835769ed07b340bd99802ba096bc7b464306eab" },
+      { "path": "src/app/services/dom/elements/element-creation.service.ts", "sha256": "2edeb33f4095e3d3bb2be889991473e153df96f6d9a46ec9af94bbc56fa87d24" },
       { "path": "src/app/services/text/text-style-parser.service.ts", "sha256": "93f3f463550a78ca19df16037e4285f51a44730d78423251d87d37ae9d15b9bd" }
     ]
   }
