@@ -16,6 +16,7 @@ describe('CSS render boundary', () => {
     const render = {
       actions: {
         camera: {
+          projectCssLength: (value: number) => projection.projectSize({ width: value, height: 0 }).width,
           projectCssSize: (size: { width: number; height: number }) => projection.projectSize(size),
           projectCssLocalPoint: (point: { x: number; y: number }, depth = 0) =>
             projection.projectLocalPoint(point, depth),

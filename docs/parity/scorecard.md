@@ -41,9 +41,10 @@ assessment passes against the committed 40-fixture suite.
 3. Screenshots are compared without broad masks. Exact antialiasing is out of
    scope, but no tolerance is currently applied to hide it.
 4. Parity routes use client rendering so SSR never creates a WebGL engine.
-5. Logical X coordinates are converted at the central mesh-placement boundary.
-   Babylon's camera looks down the negative Z axis, so this conversion prevents
-   every CSS layout mode from being mirrored horizontally.
+5. CSS geometry uses top-left/+X-right/+Y-down coordinates and retains
+   fractional CSS pixels through layout. A right-handed Babylon scene keeps
+   render positive X screen-right; the central projection boundary converts
+   CSS positive-down Y once when creating final paint geometry.
 6. Solid CSS materials are unlit, emissive, and two-sided. Their color must not
    depend on scene lighting or plane orientation.
 7. Astylar keeps its historical `border-box` sizing default for compatibility,
@@ -84,7 +85,8 @@ assessment passes against the committed 40-fixture suite.
 21. Replaced image content loads on a child plane above the element background.
     Natural dimensions resolve after texture readiness while preserving the
     element's top-left layout anchor; `fill`, `contain`, and `cover` use centered
-    aspect-ratio math and mirrored U coordinates compensate for the render axis.
+    aspect-ratio math with the same unmirrored U convention as text and plugin
+    canvas textures.
 22. Inline formatting contexts with only positioned children do not collapse or
     move their parent while attempting content-driven auto-height calculation.
 23. Single-line text controls position and clip text against the declared CSS

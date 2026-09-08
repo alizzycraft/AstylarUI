@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { BabylonDOM } from "../interfaces/dom.types";
-import { BabylonRender } from "../interfaces/render.types";
+import { BabylonRender, CameraActions } from "../interfaces/render.types";
 import { DOMElement } from "../../../types/dom-element";
 import { StyleRule } from "../../../types/style-rule";
 import { Mesh, Color3 } from "@babylonjs/core";
@@ -87,13 +87,13 @@ export class ElementMaterialService {
   /**
    * Apply transforms to a mesh
    */
-  applyTransforms(mesh: Mesh, transform: TransformData, pixelToWorldScale = 1): void {
+  applyTransforms(mesh: Mesh, transform: TransformData, projection: CameraActions): void {
     mesh.metadata ||= {};
     mesh.metadata.originalPosition ||= mesh.position.clone();
     mesh.metadata.originalRotation ||= mesh.rotation.clone();
     mesh.metadata.originalScaling ||= mesh.scaling.clone();
 
-    const offset = cssTranslationToRenderOffset(transform, pixelToWorldScale);
+    const offset = cssTranslationToRenderOffset(transform, projection);
     mesh.position.set(
       mesh.metadata.originalPosition.x + offset.x,
       mesh.metadata.originalPosition.y + offset.y,

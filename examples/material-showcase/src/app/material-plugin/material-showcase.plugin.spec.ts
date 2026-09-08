@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { provideZonelessChangeDetection } from '@angular/core';
-import { Material } from '@babylonjs/core';
+import { Material, Texture } from '@babylonjs/core';
 import { Astylar, type AstylarSurface, type SiteData } from 'astylarui';
 import {
   materialCheckMarkPath,
@@ -74,6 +74,27 @@ describe('Material showcase application plugin', () => {
     }
   });
 
+  it('uses the same unmirrored texture orientation as core text paint', async () => {
+    const astylar = TestBed.inject(Astylar);
+    const surface = astylar.mount(document.createElement('canvas'), tabSite());
+
+    try {
+      await surface.whenSettled();
+      const panel = surface.scene.meshes.find((mesh) =>
+        mesh.metadata?.showcaseMaterialVisual === 'tab-panel');
+      const content = panel?.getChildMeshes().find((mesh) => mesh.name.endsWith('-content-plane'));
+      const texture = content?.material?.getActiveTextures()[0] as Texture | undefined;
+
+      expect(texture).toBeDefined();
+      expect(texture!.uScale).toBe(1);
+      expect(texture!.uOffset).toBe(0);
+      expect(texture!.vScale).toBe(1);
+      expect(texture!.vOffset).toBe(0);
+    } finally {
+      surface.dispose();
+    }
+  });
+
   it('isolates two surfaces, reaches an update plateau, remounts, and releases all resources', async () => {
     const astylar = TestBed.inject(Astylar);
     const first = astylar.mount(document.createElement('canvas'), progressSite(.25));
@@ -140,6 +161,18 @@ function rangeSite(start: number, end: number, stateHandle = ''): SiteData {
       data: { start, end, 'state-handle': stateHandle, 'state-color': '#6750a414' },
     }] },
     styles: [{ selector: '#range', width: '240px', height: '48px' }],
+  };
+}
+
+function tabSite(): SiteData {
+  return {
+    plugins: [{ id: 'showcase.material', versionRange: '^1.0.0', schemaVersion: 1 }],
+    root: { children: [{
+      type: 'showcase.material:tab-panel',
+      id: 'tab-panel',
+      data: { selected: true, phase: 1 },
+    }] },
+    styles: [{ selector: '#tab-panel', width: '240px', height: '48px' }],
   };
 }
 

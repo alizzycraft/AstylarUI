@@ -49,13 +49,11 @@ export class ElementBorderService {
             } else {
                 widths = { top: first, right: second, bottom: third, left: fourth };
             }
-            // Scale border width to world coordinates
-            const scaleFactor = render.actions.camera.getPixelToWorldScale();
             widths = {
-                top: widths.top * scaleFactor,
-                right: widths.right * scaleFactor,
-                bottom: widths.bottom * scaleFactor,
-                left: widths.left * scaleFactor,
+                top: render.actions.camera.projectCssLength(widths.top),
+                right: render.actions.camera.projectCssLength(widths.right),
+                bottom: render.actions.camera.projectCssLength(widths.bottom),
+                left: render.actions.camera.projectCssLength(widths.left),
             };
         }
         const width = Math.max(widths.top, widths.right, widths.bottom, widths.left);

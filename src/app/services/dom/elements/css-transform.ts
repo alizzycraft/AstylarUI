@@ -6,6 +6,11 @@ export interface RenderTransformOffset {
   z: number;
 }
 
+export interface CssTransformProjection {
+  projectCssLocalPoint(point: { x: number; y: number }, renderDepth?: number): RenderTransformOffset;
+  projectCssLength(cssPixels: number): number;
+}
+
 /** Parse the supported two-dimensional CSS transform functions into CSS-space values. */
 export function parseCssTransform(transform: string | undefined): TransformData | null {
   if (!transform || transform.trim().toLowerCase() === 'none') return null;
@@ -73,13 +78,13 @@ export function parseCssTransform(transform: string | undefined): TransformData 
  */
 export function cssTranslationToRenderOffset(
   transform: TransformData,
-  pixelToWorldScale: number,
+  projection: CssTransformProjection,
 ): RenderTransformOffset {
-  return {
-    x: transform.translate.x * pixelToWorldScale,
-    y: -transform.translate.y * pixelToWorldScale,
-    z: transform.translate.z * pixelToWorldScale,
-  };
+  const projected = projection.projectCssLocalPoint({
+    x: transform.translate.x,
+    y: transform.translate.y,
+  });
+  return { ...projected, z: projection.projectCssLength(transform.translate.z) };
 }
 
 function parseAngle(value: string): number {

@@ -25,6 +25,13 @@ describe('MaterialRippleController', () => {
       .toEqual(jasmine.objectContaining({
         elementId: 'button-primary', originX: 18, originY: 20, textureOriginX: 18,
       }));
+    const firstRipple = scene.meshes.find((mesh): mesh is typeof button =>
+      mesh.metadata?.showcaseMaterialVisual === 'ripple');
+    expect(firstRipple?.geometry).toBe(button.geometry);
+    expect(firstRipple?.parent).toBe(button.parent);
+    expect(firstRipple?.position.x).toBe(button.position.x);
+    expect(firstRipple?.position.y).toBe(button.position.y);
+    expect(firstRipple?.position.z).toBe(button.position.z + .02);
     const resourceCounts = { meshes: scene.meshes.length, materials: scene.materials.length, textures: scene.textures.length };
 
     controller.activate({

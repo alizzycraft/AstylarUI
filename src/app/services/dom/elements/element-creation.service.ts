@@ -510,7 +510,7 @@ export class ElementCreationService {
       this.materialService.applyTransforms(
         mesh,
         transform,
-        render.actions.camera.getPixelToWorldScale(),
+        render.actions.camera,
       );
     }
 

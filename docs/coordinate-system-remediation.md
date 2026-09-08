@@ -41,15 +41,23 @@ not part of CSS layout geometry.
 | CSS select and popup geometry | Select, indicator, display text, popup, option rows, popup border, and their local offsets are calculated from retained CSS sizes; a private paint projection is used only when meshes are created or positioned. | Stored camera scale, select/dropdown mesh-bound reconstruction, raw-unit popup constants and fallbacks, and mirrored-X indicator/display/option placement. | Packaged-library build; 12/12 focused select tests, including fractional popup geometry and a mesh-bound-read rejection test. | Text paint, viewport-aware overlay anchoring, inverse picks, and the plugin API still need boundary isolation. |
 | CSS text and inverse-pick geometry | Text metrics, input viewports, carets, selections, highlights, scrolling, and picked text positions remain in CSS pixels. A picked Babylon point is transformed to mesh-local render space and then crosses the camera-owned inverse projection exactly once. | Duplicated world-scaled text metrics, text mesh-bound reconstruction, scale division in caret/highlight logic, and comments/calculations tied to historical mesh rotation. | Application build; 75/75 focused input and interaction tests, including an asymmetric pick-to-CSS regression with retained scroll and vertical-origin state. | Viewport-aware overlay anchoring and the plugin API still need boundary isolation; remaining backend-only compensations require a final audit. |
 | CSS plugin paint boundary | Plugin API v2 receives resolved CSS dimensions and exposes named final projection operations for points, sizes, and lengths. Plugin geometry stays in CSS pixels until a Babylon primitive or position is supplied. | Public `pixelToWorldScale`, ambiguous `toLocalPoint`/`toLogicalPoint` methods, and manual scale/sign arithmetic in the maintained consumer and Material showcase renderers. | Packaged-library build; 30/30 plugin registry/runtime tests; Material renderer tests covering CSS-sized roots, checkmarks, arrows, tabs, ranges, and circular progress. | Viewport-aware overlay anchoring and the final backend-compensation audit remain. Plugin API v1 renderers must migrate explicitly because preserving their mirrored-axis contract would leak the obsolete convention into v2. |
+| Overlay layout and stable paint identity | Fixed overlays resolve against the CSS viewport; anchored absolute popups resolve against their CSS containing block. Built-in controls retain their authored IDs after their specialized managers create descriptive Babylon mesh names, so overlay descendants reuse the same retained CSS boxes as ordinary elements. | Overlay fallback sizing from provisional parent meshes and the accidental split between authored layout identity and generated control mesh names. | Fractional fixed/anchored overlay layout tests; packed-consumer browser acceptance; real pointer checks for snackbar, tooltip, dialog, and bottom sheet. | None in overlay layout; component-level Material parity remains separate work. |
+| Final paint-boundary audit | Camera scale is private to `CssBabylonProjection`; element transforms, borders, hover paint, and shadows cross named projection operations only. Renderer-only bounds inflation was removed, ripple paint clones already-projected core geometry instead of reconstructing CSS size, and plugin canvas textures use the core's natural UV convention. | Public/raw camera scale helpers, duplicate pixel snapping and border layout helpers, direct scale multiplication in transforms/interactions, mesh-bound ripple sizing, rounded-border bounding-box inflation, and plugin U/V flips. | Focused projection, transform, interaction, overlay, ripple, and plugin-orientation tests plus package/showcase builds. | Full suite, packed-consumer retry, and final parity gates must pass before this phase is accepted. |
 
-## Known convention leaks to migrate
+## Backend-only conventions retained
 
-- Babylon `Vector3` remains only as the output/input type of the plugin paint
-  and inverse-pick boundary; plugin layout dimensions and calculations are CSS
-  geometry.
-- reverse Babylon picks outside the normalized text/range/event paths still need
-  review so no component consumes render coordinates directly.
+- `CssBabylonProjection` privately derives its scale from the active camera and
+  canvas. No layout, control, interaction, scrolling, or plugin contract exposes
+  that scalar.
+- CSS positive-down Y becomes Babylon positive-up Y only in the projection
+  boundary. Already-projected shadow offsets use the corresponding renderer-only
+  sign when positioning the Babylon shadow plane; their shader and layout data
+  remain CSS-directed.
+- Babylon `Vector3` remains only as the output/input type of final paint and
+  inverse-pick boundaries. Plugin layout dimensions and calculations are typed
+  CSS geometry.
+- Render-only animation may change Babylon depth or rotation after geometry is
+  projected, but it cannot feed those values back into layout or interaction.
 
-Each migration phase must replace one of these convention leaks with CSS-space
-state and remove its compensation only after a user-facing or boundary-level
-regression test exists.
+Any future backend compensation requires a projection-level regression test and
+must stay downstream of all CSS geometry decisions.

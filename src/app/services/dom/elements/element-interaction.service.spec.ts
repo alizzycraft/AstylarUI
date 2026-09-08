@@ -24,7 +24,10 @@ describe('ElementInteractionService shadows', () => {
     const render = {
       scene,
       actions: {
-        camera: { getPixelToWorldScale: () => 1 },
+        camera: {
+          projectCssLength: (value: number) => value,
+          projectCssSize: (size: { width: number; height: number }) => size,
+        },
         style: { parseOpacity: () => 1 },
         mesh: {
           createShadow: meshes.createShadow.bind(meshes),

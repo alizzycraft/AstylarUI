@@ -388,10 +388,6 @@ class AstylarRenderer {
             this.babylonCameraService.calculateViewportDimensions.bind(
               this.babylonCameraService,
             ),
-          getPixelToWorldScale:
-            this.babylonCameraService.getPixelToWorldScale.bind(
-              this.babylonCameraService,
-            ),
           projectCssViewportPoint:
             this.babylonCameraService.projectCssViewportPoint.bind(
               this.babylonCameraService,
@@ -406,6 +402,10 @@ class AstylarRenderer {
             ),
           projectCssSize:
             this.babylonCameraService.projectCssSize.bind(
+              this.babylonCameraService,
+            ),
+          projectCssLength:
+            this.babylonCameraService.projectCssLength.bind(
               this.babylonCameraService,
             ),
         },

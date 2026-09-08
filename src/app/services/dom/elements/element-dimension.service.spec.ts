@@ -165,6 +165,67 @@ describe('ElementDimensionService', () => {
     expect(result.top).toBe(540);
   });
 
+  it('keeps a full-viewport fixed overlay in CSS viewport bounds when authored under a nested element', () => {
+    const service = new ElementDimensionService({} as never, {} as never, new DOMAncestryService());
+    const root = { name: 'root-body' } as Mesh;
+    const nestedParent = { name: 'card' } as Mesh;
+    const dom = {
+      context: {
+        elements: new Map([['root-body', root]]),
+        elementDimensions: new Map([['root-body', {
+          width: 800.5, height: 600.25, padding: { top: 0, right: 0, bottom: 0, left: 0 },
+        }]]),
+        elementStyles: new Map(),
+      },
+    } as unknown as BabylonDOM;
+    const render = {
+      actions: { style: { getElementTypeDefaults: () => ({ display: 'block' }) } },
+    } as unknown as BabylonRender;
+    const style: StyleRule = {
+      selector: '#overlay', position: 'fixed', left: '0', top: '0', width: '100%', height: '100%',
+    };
+
+    const layoutParent = service.resolveLayoutParent(dom, style, nestedParent);
+    const result = service.calculateDimensions(
+      dom, render, { id: 'overlay', type: 'div' }, style, layoutParent, [style],
+    );
+
+    expect(layoutParent).toBe(root);
+    expect(result).toEqual(jasmine.objectContaining({
+      left: 0, top: 0, width: 800.5, height: 600.25,
+    }));
+  });
+
+  it('resolves an anchored absolute popup between fractional CSS insets without overflowing', () => {
+    const service = new ElementDimensionService({} as never, {} as never, new DOMAncestryService());
+    const anchor = { name: 'field-shell' } as Mesh;
+    const dom = {
+      context: {
+        elementDimensions: new Map([['field-shell', {
+          width: 360.5, height: 120, padding: { top: 0, right: 0, bottom: 0, left: 0 },
+        }]]),
+        elementStyles: new Map(),
+      },
+    } as unknown as BabylonDOM;
+    const render = {
+      actions: { style: { getElementTypeDefaults: () => ({ display: 'block' }) } },
+    } as unknown as BabylonRender;
+    const style: StyleRule = {
+      selector: '#popup', position: 'absolute', left: '12.25px', right: '7.5px',
+      top: '38.5px', width: 'auto', height: '64.25px',
+    };
+
+    const result = service.calculateDimensions(
+      dom, render, { id: 'popup', type: 'div' }, style, anchor, [style],
+    );
+
+    expect(result.left).toBe(12.25);
+    expect(result.top).toBe(38.5);
+    expect(result.width).toBe(340.75);
+    expect(result.left + result.width).toBe(353);
+    expect(result.left + result.width).toBeLessThanOrEqual(360.5);
+  });
+
   it('fills block width and uses intrinsic text height for auto dimensions', () => {
     const textRendering = {
       calculateTextDimensions: () => ({

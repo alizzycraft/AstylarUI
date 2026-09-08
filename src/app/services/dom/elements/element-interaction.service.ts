@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { BabylonDOM } from "../interfaces/dom.types";
-import { BabylonRender } from "../interfaces/render.types";
+import { BabylonRender, CameraActions } from "../interfaces/render.types";
 import * as BABYLON from "@babylonjs/core";
 import {
   Mesh,
@@ -93,7 +93,6 @@ export class ElementInteractionService {
     parent: Mesh,
     dimensions: { width: number; height: number },
   ): void {
-    const scale = render.actions.camera.getPixelToWorldScale();
     this.updateShadowMesh(
       dom,
       render,
@@ -102,7 +101,7 @@ export class ElementInteractionService {
       parent,
       dimensions,
       mesh.position.z,
-      this.parseBorderRadius(style.borderRadius) * scale,
+      this.parseBorderRadius(style.borderRadius),
       this.parsePolygonType(style.polygonType) || "rectangle",
       this.parseTransform(style.transform) || undefined,
     );
@@ -172,14 +171,13 @@ export class ElementInteractionService {
 
         const safeHoverRadius = isNaN(hoverRadius) ? 0 : hoverRadius;
         const dimensions = dom.context.elementDimensions.get(elementId);
-        const pixelToWorldScale = render.actions.camera.getPixelToWorldScale();
-        const worldWidth = dimensions
-          ? dimensions.width * pixelToWorldScale
-          : 0;
-        const worldHeight = dimensions
-          ? dimensions.height * pixelToWorldScale
-          : 0;
-        const worldBorderRadius = safeHoverRadius * pixelToWorldScale;
+        const renderedSize = render.actions.camera.projectCssSize({
+          width: dimensions?.width ?? 0,
+          height: dimensions?.height ?? 0,
+        });
+        const worldWidth = renderedSize.width;
+        const worldHeight = renderedSize.height;
+        const worldBorderRadius = render.actions.camera.projectCssLength(safeHoverRadius);
         const polygonType = hoverPolygonType;
 
         if (dimensions && needsGeometryUpdate) {
@@ -310,30 +308,10 @@ export class ElementInteractionService {
             borderMesh.material = borderMaterial;
 
 
-            // Refresh bounding info to ensure proper rendering of rounded corners
+            // Geometry replacement invalidates Babylon's cached paint bounds.
             borderMesh.refreshBoundingInfo();
-            // Force bounding box update for rounded corners to prevent clipping
-            if (worldBorderRadius > 0 && borderMeshes.length === 1) {
-              // For rounded border meshes, we need to ensure the bounding box encompasses the rounded corners
-              // The rounded corners extend beyond the basic rectangular bounds
-              // Update the bounding info with extended bounds to prevent clipping
-              const boundingInfo = borderMesh.getBoundingInfo();
-              if (boundingInfo) {
-                // Extend the bounding box to fully encompass the rounded corners by updating the mesh's bounding vectors
-                // We need to extend by both the border radius and a small buffer to ensure no clipping
-                const extendAmount = worldBorderRadius + 0.1; // Adding a small buffer
-                const min = boundingInfo.boundingBox.minimum.clone();
-                const max = boundingInfo.boundingBox.maximum.clone();
-                min.x -= extendAmount;
-                min.y -= extendAmount;
-                max.x += extendAmount;
-                max.y += extendAmount;
-
-                // Update the bounding info with extended bounds
-                borderMesh.setBoundingInfo(new BABYLON.BoundingInfo(min, max));
-              }
-            }
-            // Disable frustum culling for border meshes to prevent clipping issues
+            // Interaction borders are transient paint and should not disappear
+            // because of a stale renderer-side frustum bound.
             borderMesh.alwaysSelectAsActiveMesh = true;
             // Removed zOffset to rely on physical separation
             // Store border meshes with their actual names
@@ -355,7 +333,7 @@ export class ElementInteractionService {
           });
 
           // Calculate worldBorderRadius and polygonType for shadow
-          const shadowBorderRadius = safeHoverRadius * pixelToWorldScale;
+          const shadowBorderRadius = safeHoverRadius;
           const shadowPolygonType = hoverPolygonType;
           // Ensure parent is a Mesh
           const shadowParent =
@@ -398,7 +376,7 @@ export class ElementInteractionService {
         // Apply transforms smoothly without recreating geometry
         const transform = this.parseTransform(hoverMergedStyle?.transform);
         if (transform) {
-          this.applyTransformsSmooth(mainMesh, transform, 150, pixelToWorldScale); // 150ms smooth animation
+          this.applyTransformsSmooth(mainMesh, transform, 150, render.actions.camera); // 150ms smooth animation
 
           // For borders, we want them to inherit position but not scaling
           // Handle single polygon border
@@ -409,7 +387,7 @@ export class ElementInteractionService {
             // Apply only translation and rotation, not scaling
             const borderTransform = { ...transform };
             borderTransform.scale = { x: 1, y: 1, z: 1 }; // Reset scaling for borders
-            this.applyTransformsSmooth(singleBorderMesh, borderTransform, 150, pixelToWorldScale);
+            this.applyTransformsSmooth(singleBorderMesh, borderTransform, 150, render.actions.camera);
           }
 
           // Handle up to 4 rectangular borders
@@ -421,7 +399,7 @@ export class ElementInteractionService {
               // Apply only translation and rotation, not scaling
               const borderTransform = { ...transform };
               borderTransform.scale = { x: 1, y: 1, z: 1 }; // Reset scaling for borders
-              this.applyTransformsSmooth(borderMesh, borderTransform, 150, pixelToWorldScale);
+              this.applyTransformsSmooth(borderMesh, borderTransform, 150, render.actions.camera);
             }
 
             // Also check for named rectangular borders
@@ -438,7 +416,7 @@ export class ElementInteractionService {
                   namedBorderMesh,
                   borderTransform,
                   150,
-                  pixelToWorldScale,
+                  render.actions.camera,
                 );
               }
             }
@@ -454,7 +432,7 @@ export class ElementInteractionService {
 
         // Update shadow for hover state even if geometry doesn't change
         if (dimensions && !needsGeometryUpdate) {
-          const shadowBorderRadius = safeHoverRadius * pixelToWorldScale;
+          const shadowBorderRadius = safeHoverRadius;
           const shadowPolygonType = hoverPolygonType;
           const shadowParent =
             mainMesh.parent && mainMesh.parent instanceof Mesh
@@ -526,12 +504,11 @@ export class ElementInteractionService {
 
         const safeNormalRadius = isNaN(normalRadius) ? 0 : normalRadius;
         const dimensions = dom.context.elementDimensions.get(elementId);
-        const pixelToWorldScale = render.actions.camera.getPixelToWorldScale();
-
         if (dimensions && needsGeometryUpdate) {
-          const worldBorderRadius = safeNormalRadius * pixelToWorldScale;
-          const worldWidth = dimensions.width * pixelToWorldScale;
-          const worldHeight = dimensions.height * pixelToWorldScale;
+          const worldBorderRadius = render.actions.camera.projectCssLength(safeNormalRadius);
+          const renderedSize = render.actions.camera.projectCssSize(dimensions);
+          const worldWidth = renderedSize.width;
+          const worldHeight = renderedSize.height;
           const polygonType = normalPolygonType;
 
           // Update mesh geometry for normal border radius
@@ -649,30 +626,10 @@ export class ElementInteractionService {
 
           borderMeshes.forEach((borderMesh, index) => {
             borderMesh.material = borderMaterial;
-            // Refresh bounding info to ensure proper rendering of rounded corners
+            // Geometry replacement invalidates Babylon's cached paint bounds.
             borderMesh.refreshBoundingInfo();
-            // Force bounding box update for rounded corners to prevent clipping
-            if (worldBorderRadius > 0 && borderMeshes.length === 1) {
-              // For rounded border meshes, we need to ensure the bounding box encompasses the rounded corners
-              // The rounded corners extend beyond the basic rectangular bounds
-              // Update the bounding info with extended bounds to prevent clipping
-              const boundingInfo = borderMesh.getBoundingInfo();
-              if (boundingInfo) {
-                // Extend the bounding box to fully encompass the rounded corners by updating the mesh's bounding vectors
-                // We need to extend by both the border radius and a small buffer to ensure no clipping
-                const extendAmount = worldBorderRadius + 0.1; // Adding a small buffer
-                const min = boundingInfo.boundingBox.minimum.clone();
-                const max = boundingInfo.boundingBox.maximum.clone();
-                min.x -= extendAmount;
-                min.y -= extendAmount;
-                max.x += extendAmount;
-                max.y += extendAmount;
-
-                // Update the bounding info with extended bounds
-                borderMesh.setBoundingInfo(new BABYLON.BoundingInfo(min, max));
-              }
-            }
-            // Disable frustum culling for border meshes to prevent clipping issues
+            // Interaction borders are transient paint and should not disappear
+            // because of a stale renderer-side frustum bound.
             borderMesh.alwaysSelectAsActiveMesh = true;
             // Removed zOffset to rely on physical separation
             // Store border meshes with their actual names
@@ -694,7 +651,7 @@ export class ElementInteractionService {
           });
 
           // Calculate worldBorderRadius and polygonType for shadow
-          const shadowBorderRadius = safeNormalRadius * pixelToWorldScale;
+          const shadowBorderRadius = safeNormalRadius;
           const shadowPolygonType = normalPolygonType;
           // Ensure parent is a Mesh
           const shadowParent =
@@ -737,14 +694,14 @@ export class ElementInteractionService {
         // Apply transforms smoothly without recreating geometry
         const transform = this.parseTransform(mergedStyle?.transform);
         if (transform) {
-          this.applyTransformsSmooth(mainMesh, transform, 150, pixelToWorldScale); // 150ms smooth animation
+          this.applyTransformsSmooth(mainMesh, transform, 150, render.actions.camera); // 150ms smooth animation
           // Also apply to all border meshes and parent them to the main mesh
           // Handle single polygon border
           const singleBorderMesh = dom.context.elements.get(
             `${elementId}-border_border_frame`,
           );
           if (singleBorderMesh) {
-            this.applyTransformsSmooth(singleBorderMesh, transform, 150, pixelToWorldScale);
+            this.applyTransformsSmooth(singleBorderMesh, transform, 150, render.actions.camera);
             // Parent border mesh to main mesh for transform inheritance
             render.actions.mesh.parentTextMesh(singleBorderMesh, mainMesh);
           }
@@ -755,7 +712,7 @@ export class ElementInteractionService {
               `${elementId}-border-${i}`,
             );
             if (borderMesh) {
-              this.applyTransformsSmooth(borderMesh, transform, 150, pixelToWorldScale);
+              this.applyTransformsSmooth(borderMesh, transform, 150, render.actions.camera);
               // Parent border mesh to main mesh for transform inheritance
               render.actions.mesh.parentTextMesh(borderMesh, mainMesh);
             }
@@ -767,7 +724,7 @@ export class ElementInteractionService {
                 `${elementId}-border${borderNames[i]}`,
               );
               if (namedBorderMesh) {
-                this.applyTransformsSmooth(namedBorderMesh, transform, 150, pixelToWorldScale);
+                this.applyTransformsSmooth(namedBorderMesh, transform, 150, render.actions.camera);
                 // Parent border mesh to main mesh for transform inheritance
                 render.actions.mesh.parentTextMesh(namedBorderMesh, mainMesh);
               }
@@ -788,14 +745,14 @@ export class ElementInteractionService {
             scale: { x: 1, y: 1, z: 1 },
           };
 
-          this.applyTransformsSmooth(mainMesh, resetTransform, 150, pixelToWorldScale);
+          this.applyTransformsSmooth(mainMesh, resetTransform, 150, render.actions.camera);
 
           // Handle single polygon border
           const singleBorderMesh = dom.context.elements.get(
             `${elementId}-border_border_frame`,
           );
           if (singleBorderMesh) {
-            this.applyTransformsSmooth(singleBorderMesh, resetTransform, 150, pixelToWorldScale);
+            this.applyTransformsSmooth(singleBorderMesh, resetTransform, 150, render.actions.camera);
           }
 
           // Handle up to 4 rectangular borders
@@ -804,7 +761,7 @@ export class ElementInteractionService {
               `${elementId}-border-${i}`,
             );
             if (borderMesh) {
-              this.applyTransformsSmooth(borderMesh, resetTransform, 150, pixelToWorldScale);
+              this.applyTransformsSmooth(borderMesh, resetTransform, 150, render.actions.camera);
             }
 
             // Also check for named rectangular borders
@@ -818,7 +775,7 @@ export class ElementInteractionService {
                   namedBorderMesh,
                   resetTransform,
                   150,
-                  pixelToWorldScale,
+                  render.actions.camera,
                 );
               }
             }
@@ -836,7 +793,7 @@ export class ElementInteractionService {
 
         // Update shadow for normal state even if geometry doesn't change
         if (dimensions && !needsGeometryUpdate) {
-          const shadowBorderRadius = safeNormalRadius * pixelToWorldScale;
+          const shadowBorderRadius = safeNormalRadius;
           const shadowPolygonType = normalPolygonType;
           const shadowParent =
             mainMesh.parent && mainMesh.parent instanceof Mesh
@@ -943,7 +900,7 @@ export class ElementInteractionService {
     mesh: Mesh,
     transforms: TransformData,
     duration: number = 200,
-    pixelToWorldScale: number = 1,
+    projection: CameraActions,
   ): void {
 
 
@@ -967,7 +924,7 @@ export class ElementInteractionService {
     }
 
     // Calculate target values based on original position + transform
-    const offset = cssTranslationToRenderOffset(transforms, pixelToWorldScale);
+    const offset = cssTranslationToRenderOffset(transforms, projection);
     const targetPosition = new Vector3(
       mesh.metadata.originalPosition.x + offset.x,
       mesh.metadata.originalPosition.y + offset.y,
@@ -1062,8 +1019,7 @@ export class ElementInteractionService {
     // Handle "2px", "0.1", etc. - convert to world units
     const numericValue = parseFloat(width.replace("px", ""));
     // Use camera-calculated scaling factor for accurate conversion
-    const scaleFactor = render.actions.camera.getPixelToWorldScale();
-    return numericValue * scaleFactor;
+    return render.actions.camera.projectCssLength(numericValue);
   }
 
   /**
@@ -1137,15 +1093,16 @@ export class ElementInteractionService {
       return;
     }
 
-    const scaleFactor = render.actions.camera.getPixelToWorldScale();
-    const worldWidth = dimensions.width * scaleFactor;
-    const worldHeight = dimensions.height * scaleFactor;
+    const renderedSize = render.actions.camera.projectCssSize(dimensions);
+    const worldWidth = renderedSize.width;
+    const worldHeight = renderedSize.height;
+    const worldBorderRadius = render.actions.camera.projectCssLength(borderRadius);
     const styleOpacity = render.actions.style.parseOpacity(style.opacity);
     const scaledLayers = boxShadow.map((layer) => ({
-      offsetX: layer.offsetX * scaleFactor,
-      offsetY: layer.offsetY * scaleFactor,
-      blur: layer.blur * scaleFactor,
-      spread: layer.spread * scaleFactor,
+      offsetX: render.actions.camera.projectCssLength(layer.offsetX),
+      offsetY: render.actions.camera.projectCssLength(layer.offsetY),
+      blur: render.actions.camera.projectCssLength(layer.blur),
+      spread: render.actions.camera.projectCssLength(layer.spread),
       color: this.getBoxShadowColorWithOpacity(layer.color, styleOpacity),
     }));
     const layerSignature = JSON.stringify(scaledLayers);
@@ -1167,7 +1124,7 @@ export class ElementInteractionService {
       const heightChanged = Math.abs(lastParams.height - worldHeight) > 0.001;
       const layersChanged = lastParams.layerSignature !== layerSignature;
       const radiusChanged =
-        Math.abs(lastParams.borderRadius - borderRadius) > 0.001;
+        Math.abs(lastParams.borderRadius - worldBorderRadius) > 0.001;
       const typeChanged = lastParams.polygonType !== polygonType;
 
       const paramChanged =
@@ -1213,7 +1170,7 @@ export class ElementInteractionService {
         worldHeight,
         scaledLayers,
         polygonType,
-        borderRadius,
+        worldBorderRadius,
       );
 
       // Store shadow parameters for future comparison
@@ -1222,7 +1179,7 @@ export class ElementInteractionService {
           width: worldWidth,
           height: worldHeight,
           layerSignature,
-          borderRadius: borderRadius,
+          borderRadius: worldBorderRadius,
           polygonType: polygonType,
         },
       };

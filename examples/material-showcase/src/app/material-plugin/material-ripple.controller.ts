@@ -1,5 +1,5 @@
 import { DestroyRef, Injectable, inject } from '@angular/core';
-import { Color3, DynamicTexture, Mesh, MeshBuilder, StandardMaterial } from '@babylonjs/core';
+import { Color3, DynamicTexture, Mesh, StandardMaterial } from '@babylonjs/core';
 import type { AstylarSurface } from 'astylarui';
 
 export interface MaterialRippleActivation {
@@ -39,20 +39,20 @@ export class MaterialRippleController {
     const originX = Math.max(0, Math.min(widthPx, activation.originX));
     const originY = Math.max(0, Math.min(heightPx, activation.originY));
     const textureOriginX = originX;
+    // Reuse the core-projected paint geometry verbatim. The effect knows its
+    // CSS texture size, but it must not reverse-engineer CSS dimensions from a
+    // Babylon bounding box or repeat the CSS-to-render projection itself.
+    const plane = button.clone(`material-ripple-${elementId}`, button.parent, true);
+    if (!plane) return;
+    plane.position.z += .02;
+    plane.isPickable = false;
+    plane.actionManager = null;
+    plane.metadata = { showcaseMaterialVisual: 'ripple', elementId, originX, originY, textureOriginX };
     const texture = new DynamicTexture(`material-ripple-${elementId}`, {
       width: widthPx,
       height: heightPx,
     }, scene, false);
     texture.hasAlpha = true;
-    const bounds = button.getBoundingInfo().boundingBox;
-    const plane = MeshBuilder.CreatePlane(`material-ripple-${elementId}`, {
-      width: bounds.extendSize.x * 2,
-      height: bounds.extendSize.y * 2,
-    }, scene);
-    plane.parent = button;
-    plane.position.z = .02;
-    plane.isPickable = false;
-    plane.metadata = { showcaseMaterialVisual: 'ripple', elementId, originX, originY, textureOriginX };
     const material = new StandardMaterial(`material-ripple-${elementId}-material`, scene);
     material.disableLighting = true;
     material.backFaceCulling = false;

@@ -182,11 +182,11 @@ export interface StyleActions {
 
 export interface CameraActions {
   calculateViewportDimensions: () => { width: number; height: number };
-  getPixelToWorldScale: () => number;
   projectCssViewportPoint: (point: CssPoint, renderDepth?: number) => RenderPoint;
   projectCssLocalPoint: (point: CssPoint, renderDepth?: number) => RenderPoint;
   unprojectRenderLocalPoint: (point: RenderPoint) => CssPoint;
   projectCssSize: (size: CssSize) => RenderSize;
+  projectCssLength: (cssPixels: number) => number;
 }
 
 export interface TextureActions {

@@ -344,10 +344,6 @@ class MaterialTabPanelRenderer extends MaterialRendererBase implements AstylarPl
     texture.hasAlpha = true;
     texture.wrapU = Texture.CLAMP_ADDRESSMODE;
     texture.wrapV = Texture.CLAMP_ADDRESSMODE;
-    texture.uScale = -1;
-    texture.uOffset = 1;
-    texture.vScale = -1;
-    texture.vOffset = 1;
     const material = this.material(context, 'content-material', '#ffffff');
     material.diffuseTexture = texture;
     material.emissiveTexture = texture;

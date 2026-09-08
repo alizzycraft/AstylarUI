@@ -1717,6 +1717,9 @@ export class BabylonMeshService {
       // of the owning surface.
       material.disableDepthWrite = true;
       plane.material = material;
+      // Shadow layers arrive already projected at the paint boundary. Babylon
+      // local Y is positive-up, so this is the single backend-only conversion
+      // from the CSS-positive-down offset used by the shader and layout model.
       plane.position.set(layer.offsetX, -layer.offsetY, -0.00005 * reverseIndex);
       plane.isPickable = false;
       plane.parent = shadowRoot;

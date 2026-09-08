@@ -8,7 +8,7 @@ import { BabylonRender } from './dom/interfaces/render.types';
  * only these helpers project it into Babylon-local coordinates.
  */
 export function projectCssLength(render: BabylonRender, value: number): number {
-  return render.actions.camera.projectCssSize({ width: value, height: value }).width;
+  return render.actions.camera.projectCssLength(value);
 }
 
 export function projectCssSize(render: BabylonRender, size: CssSize): RenderSize {
@@ -37,4 +37,3 @@ export function positionRenderedCssBox(
   );
   render.actions.mesh.positionTextMesh(mesh, center.x, center.y, center.z);
 }
-
