@@ -378,7 +378,10 @@ class MaterialTabPanelRenderer extends MaterialRendererBase implements AstylarPl
       const baseline = Math.min(height - 1, height / 2 + textureFontSize * .328125 + baselineOffset);
       if (phase < 1) canvas.fillText(outgoing, -direction * phase * width, baseline);
       if (phase > 0) canvas.fillText(incoming, direction * (1 - phase) * width, baseline);
-      texture.update(false);
+      // Keep the 2D canvas's CSS-down Y convention aligned with core text at
+      // the Babylon texture-upload boundary. Passing false mirrors glyphs
+      // vertically after the renderer's CSS-space projection.
+      texture.update(true);
     };
     this.animateOnce(context, 320, draw);
     root.metadata = { showcaseMaterialVisual: 'tab-panel', selected, benchmarkMode: this.config.benchmarkMode };

@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { provideZonelessChangeDetection } from '@angular/core';
-import { Material, Texture } from '@babylonjs/core';
+import { DynamicTexture, Material, Texture } from '@babylonjs/core';
 import { Astylar, type AstylarSurface, type SiteData } from 'astylarui';
 import {
   materialCheckMarkPath,
@@ -74,8 +74,9 @@ describe('Material showcase application plugin', () => {
     }
   });
 
-  it('uses the same unmirrored texture orientation as core text paint', async () => {
+  it('uses the same CSS-aligned texture upload orientation as core text paint', async () => {
     const astylar = TestBed.inject(Astylar);
+    const update = spyOn(DynamicTexture.prototype, 'update').and.callThrough();
     const surface = astylar.mount(document.createElement('canvas'), tabSite());
 
     try {
@@ -90,6 +91,8 @@ describe('Material showcase application plugin', () => {
       expect(texture!.uOffset).toBe(0);
       expect(texture!.vScale).toBe(1);
       expect(texture!.vOffset).toBe(0);
+      expect(texture!.invertY).toBeTrue();
+      expect(update.calls.all().some((call) => call.object === texture && call.args[0] === true)).toBeTrue();
     } finally {
       surface.dispose();
     }
