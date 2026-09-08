@@ -115,7 +115,7 @@ try {
     throw new Error(`Installed AstylarUI version ${installedManifest.version} does not match ${manifest.version}.`);
   }
   run(npm, ['run', 'build'], temporaryApp);
-  run(npm, ['test', '--', '--watch=false'], temporaryApp);
+  run(npm, ['test', '--', '--watch=false', '--browsers=ChromeHeadless'], temporaryApp);
 
   const browserOutput = path.join(temporaryApp, 'dist', 'angular-consumer', 'browser', 'index.html');
   const serverOutput = path.join(temporaryApp, 'dist', 'angular-consumer', 'server', 'server.mjs');
