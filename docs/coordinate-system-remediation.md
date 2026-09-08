@@ -18,24 +18,25 @@ placement, image U coordinates, plugin adapters, and control-specific geometry.
 The layout and positioning layers also expose Babylon `Vector3` values, while
 scrolling reconstructs CSS movement from mesh positions and camera scale.
 
-The target camera observes the document from negative Z. At that boundary world
-positive X projects screen-right, so CSS-local X needs no mirror. CSS positive Y
-is converted once to Babylon positive-up Y. Paint depth is renderer-owned and
-is not part of CSS layout geometry.
+The target renderer uses Babylon's right-handed scene while retaining the camera
+at positive Z. At that boundary world positive X projects screen-right without
+turning the camera toward the back of the document, so CSS-local X needs no
+mirror and the existing paint-depth direction remains stable. CSS positive Y is
+converted once to Babylon positive-up Y. Paint depth is renderer-owned and is
+not part of CSS layout geometry.
 
 ## Running migration record
 
 | Phase | Root rule | Compensations removed | Evidence | Remaining debt |
 | --- | --- | --- | --- | --- |
 | Projection proof | CSS geometry is typed and converted by one pure boundary. | None yet; this phase deliberately records current behavior before migration. | Asymmetric point, rectangle, fractional round-trip, nesting, and real Babylon camera orientation tests. | Camera placement, depth direction, old coordinate service, layout meshes, scrolling, controls, picks, and plugin API still need migration. |
+| Render-axis boundary | Babylon uses a right-handed scene so render positive X is screen-right; CSS positive Y is inverted only by `CssBabylonProjection`. | Global X negation, text-plane U flip, image U flip, text-offset negation, asymmetric-border reversal, and the standalone coordinate transform service. | 419 core tests; focused box, text, and image parity; plugin coordinate round-trip and range ordering. | Layout meshes, scrolling, controls, reverse picks, and the public plugin API still expose or reconstruct world geometry. |
 
 ## Known convention leaks to migrate
 
-- `BabylonCameraService` owns scale but not the complete forward/inverse projection.
-- `CoordinateTransformService` encodes the positive-Z camera's X mirror.
-- `ElementCreationService` wraps plugin coordinates with X/Y inversions and
-  exposes `pixelToWorldScale`.
-- text and image paths contain explicit mirrored-X/UV compensation.
+- `ElementCreationService` still exposes `pixelToWorldScale` and Babylon
+  `Vector3` through the public plugin contract, although conversion now routes
+  through the camera-owned CSS projection.
 - positioning contracts and containing blocks contain Babylon `Vector3` values.
 - flex, grid, list, and auto-height paths position meshes during layout.
 - `AstylarScrollRuntime` stores and mutates mesh positions using camera scale.

@@ -1,5 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Camera, Scene, FreeCamera, Vector3 } from '@babylonjs/core';
+import {
+  CssPoint,
+  CssSize,
+  RenderPoint,
+  RenderSize,
+} from './coordinate-space.types';
+import { CssBabylonProjection } from './css-babylon-projection';
 
 @Injectable({
   providedIn: 'root'
@@ -142,6 +149,36 @@ export class BabylonCameraService {
     // Calculate how many world units per CSS pixel
     // This ensures 1 CSS pixel maps to a consistent physical size regardless of DPR
     return worldHeight / cssHeight;
+  }
+
+  /** Project element-local CSS pixels into Babylon world coordinates. */
+  projectCssLocalPoint(point: CssPoint, renderDepth = 0): RenderPoint {
+    return this.getCssProjection().projectLocalPoint(point, renderDepth);
+  }
+
+  /** Convert Babylon world coordinates back to element-local CSS pixels. */
+  unprojectRenderLocalPoint(point: RenderPoint): CssPoint {
+    return this.getCssProjection().unprojectLocalPoint(point);
+  }
+
+  /** Project a CSS pixel size without applying a position or axis translation. */
+  projectCssSize(size: CssSize): RenderSize {
+    return this.getCssProjection().projectSize(size);
+  }
+
+  private getCssProjection(): CssBabylonProjection {
+    if (!this.camera) {
+      throw new Error('Camera not initialized');
+    }
+    const canvas = this.camera.getScene().getEngine().getRenderingCanvas();
+    if (!canvas) {
+      throw new Error('No rendering canvas is available.');
+    }
+    const scale = this.getPixelToWorldScale();
+    return new CssBabylonProjection({
+      width: canvas.clientWidth || this.calculateViewportDimensions().width / scale,
+      height: canvas.clientHeight || this.calculateViewportDimensions().height / scale,
+    }, scale);
   }
 
   /**

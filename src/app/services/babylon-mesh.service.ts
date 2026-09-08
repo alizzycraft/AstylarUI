@@ -14,7 +14,6 @@ import {
   ShaderMaterial,
   Effect,
   Texture,
-  VertexBuffer,
 } from "@babylonjs/core";
 import {
   BorderWidthBox,
@@ -25,7 +24,6 @@ import {
 } from "./dom/interfaces/render.types";
 
 import { BabylonCameraService } from "./babylon-camera.service";
-import { CoordinateTransformService } from "./coordinate-transform.service";
 import roundPolygon, { getSegments } from "round-polygon";
 
 @Injectable({
@@ -34,11 +32,7 @@ import roundPolygon, { getSegments } from "round-polygon";
 export class BabylonMeshService {
   private scene?: Scene;
   private cameraService?: BabylonCameraService;
-  private coordinateTransform: CoordinateTransformService;
-
-  constructor() {
-    this.coordinateTransform = new CoordinateTransformService();
-  }
+  constructor() {}
 
   initialize(scene: Scene, cameraService?: BabylonCameraService): void {
     this.scene = scene;
@@ -633,9 +627,7 @@ export class BabylonMeshService {
       innerHeight,
     );
     if (polygonType === "rectangle") {
-      // The renderer's logical X axis is mirrored at the camera boundary, so
-      // CSS left/right widths map to the opposite local mesh edges.
-      const offsetX = (borderWidths.right - borderWidths.left) / 2;
+      const offsetX = (borderWidths.left - borderWidths.right) / 2;
       const offsetY = (borderWidths.bottom - borderWidths.top) / 2;
       innerPolygonPoints.forEach((point) => {
         point.x += offsetX;
@@ -1195,18 +1187,6 @@ export class BabylonMeshService {
 
       // Configure mesh properties for text rendering
       textPlane.billboardMode = Mesh.BILLBOARDMODE_NONE;
-      // The DOM camera observes the plane's back face, which mirrors U. Fix
-      // that texture axis here instead of transforming the mesh, so its local
-      // X/Y axes remain aligned with CSS geometry.
-      const textUvs = textPlane.getVerticesData(VertexBuffer.UVKind);
-      if (textUvs) {
-        textPlane.setVerticesData(
-          VertexBuffer.UVKind,
-          textUvs.map((coordinate, index) =>
-            index % 2 === 0 ? 1 - coordinate : coordinate,
-          ),
-        );
-      }
       // Keep text in the normal render group so depth testing and CSS-like
       // stacking contexts can occlude it (for example, behind a modal).
       // The small local Z offset applied by the caller is sufficient to keep
@@ -1459,20 +1439,14 @@ export class BabylonMeshService {
   }
 
   /**
-   * Positions a text mesh at the specified coordinates
+   * Positions a mesh at already-projected Babylon coordinates.
    * @param textMesh - The text mesh to position
-   * @param x - X coordinate in world space
+   * @param x - X coordinate in world space (positive right)
    * @param y - Y coordinate in world space
    * @param z - Z coordinate in world space
    */
   positionTextMesh(textMesh: Mesh, x: number, y: number, z: number): void {
-    const renderPosition = this.coordinateTransform.transformToRenderCoordinates(
-      x,
-      y,
-      z,
-    );
-
-    textMesh.position.copyFrom(renderPosition);
+    textMesh.position.copyFromFloats(x, y, z);
 
   }
 

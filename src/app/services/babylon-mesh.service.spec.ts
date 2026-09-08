@@ -4,7 +4,7 @@ import { BabylonMeshService } from './babylon-mesh.service';
 
 describe('BabylonMeshService', () => {
   describe('positionTextMesh', () => {
-    it('converts logical coordinates to Babylon render coordinates', () => {
+    it('preserves already-projected Babylon render coordinates', () => {
       const service = new BabylonMeshService();
       const mesh = {
         name: 'positioned-mesh',
@@ -13,7 +13,7 @@ describe('BabylonMeshService', () => {
 
       service.positionTextMesh(mesh, -180, 220, 0.5);
 
-      expect(mesh.position.asArray()).toEqual([180, 220, 0.5]);
+      expect(mesh.position.asArray()).toEqual([-180, 220, 0.5]);
     });
   });
 
@@ -37,7 +37,7 @@ describe('BabylonMeshService', () => {
   });
 
   describe('createTextMesh', () => {
-    it('orients camera-facing text through UVs without transforming its local axes', () => {
+    it('keeps camera-facing text UVs and local axes untransformed', () => {
       const engine = new NullEngine();
       const scene = new Scene(engine);
       const service = new BabylonMeshService();
@@ -52,9 +52,7 @@ describe('BabylonMeshService', () => {
       expect(mesh.scaling.x).toBe(1);
       expect(mesh.scaling.y).toBe(1);
       expect(mesh.rotation.z).toBe(0);
-      expect(textUvs).toEqual(referenceUvs.map((coordinate, index) =>
-        index % 2 === 0 ? 1 - coordinate : coordinate,
-      ));
+      expect(textUvs).toEqual(referenceUvs);
 
       engine.dispose();
     });
@@ -134,10 +132,10 @@ describe('BabylonMeshService', () => {
       }));
 
       expect(inner).toEqual([
-        { x: -48, y: 24 },
-        { x: 46, y: 24 },
-        { x: 46, y: -22 },
-        { x: -48, y: -22 },
+        { x: -46, y: 24 },
+        { x: 48, y: 24 },
+        { x: 48, y: -22 },
+        { x: -46, y: -22 },
       ]);
 
       engine.dispose();

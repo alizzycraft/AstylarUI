@@ -1174,11 +1174,7 @@ export class TextInputManager {
         }
     }
 
-    /**
-     * Resolve the CSS content edges used by single-line controls. Babylon's
-     * local X axis is mirrored by the parity camera, so callers use these
-     * physical insets when positioning text from the projected left/right.
-     */
+    /** Resolve the CSS content edges used by single-line controls. */
     private getHorizontalContentInsets(
         style: StyleRule,
         scale: number
@@ -1198,7 +1194,7 @@ export class TextInputManager {
         const textMesh = textInput.textMesh;
         if (!textMesh) return undefined;
         const halfWidth = textMesh.getBoundingInfo().boundingBox.extendSize.x;
-        return textMesh.position.x + halfWidth;
+        return textMesh.position.x - halfWidth;
     }
 
     private getVerticalContentInsets(

@@ -74,7 +74,7 @@ describe('CssBabylonProjection', () => {
     expect(nested).toEqual({ x: -230.75, y: 213.25, z: 0 });
   });
 
-  it('keeps CSS +X screen-right when the camera observes from negative Z', () => {
+  it('keeps CSS +X screen-right in the renderer right-handed scene', () => {
     const engine = new NullEngine({
       renderWidth: 800,
       renderHeight: 600,
@@ -83,7 +83,8 @@ describe('CssBabylonProjection', () => {
       lockstepMaxSteps: 4,
     });
     const scene = new Scene(engine);
-    const camera = new FreeCamera('css-camera', new Vector3(0, 0, -600), scene);
+    scene.useRightHandedSystem = true;
+    const camera = new FreeCamera('css-camera', new Vector3(0, 0, 600), scene);
     camera.mode = Camera.ORTHOGRAPHIC_CAMERA;
     camera.orthoLeft = -400;
     camera.orthoRight = 400;

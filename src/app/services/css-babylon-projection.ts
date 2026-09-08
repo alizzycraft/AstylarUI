@@ -11,8 +11,8 @@ import {
  * The authoritative, pure conversion between CSS geometry and Babylon world
  * geometry. Layout code must not reproduce these axis or scale rules.
  *
- * The projection assumes that the Babylon camera observes the document from
- * negative Z, so world +X is screen-right and world +Y is screen-up. Render
+ * The projection assumes Babylon's right-handed scene with the camera at
+ * positive Z, so world +X is screen-right and world +Y is screen-up. Render
  * depth is deliberately supplied by the paint/stacking boundary rather than
  * being represented as a CSS coordinate.
  */

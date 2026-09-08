@@ -7,6 +7,12 @@ import {
 } from "@babylonjs/core";
 import { DOMElement } from "../../../types/dom-element";
 import { StyleRule } from "../../../types/style-rule";
+import type {
+  CssPoint,
+  CssSize,
+  RenderPoint,
+  RenderSize,
+} from "../../coordinate-space.types";
 
 export interface GradientStop {
   offset: number;
@@ -177,6 +183,9 @@ export interface StyleActions {
 export interface CameraActions {
   calculateViewportDimensions: () => { width: number; height: number };
   getPixelToWorldScale: () => number;
+  projectCssLocalPoint: (point: CssPoint, renderDepth?: number) => RenderPoint;
+  unprojectRenderLocalPoint: (point: RenderPoint) => CssPoint;
+  projectCssSize: (size: CssSize) => RenderSize;
 }
 
 export interface TextureActions {

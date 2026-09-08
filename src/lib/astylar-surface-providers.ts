@@ -1,6 +1,5 @@
 import type { Provider } from '@angular/core';
 import { TextSelectionStore } from '../app/store/text-selection.store';
-import { CoordinateTransformService } from '../app/services/coordinate-transform.service';
 import { BabylonCameraService } from '../app/services/babylon-camera.service';
 import { BabylonMeshService } from '../app/services/babylon-mesh.service';
 import { TextureService } from '../app/services/texture.service';
@@ -71,7 +70,6 @@ export const ASTYLAR_SURFACE_SERVICE_PROVIDERS: Provider[] = [
   AstylarDocumentStyleSource,
   AstylarDocumentStyleResolver,
   TextSelectionStore,
-  CoordinateTransformService,
   BabylonCameraService,
   BabylonMeshService,
   TextureService,

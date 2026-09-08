@@ -67,8 +67,8 @@ export function parseCssTransform(transform: string | undefined): TransformData 
 
 /**
  * Convert CSS translation (positive right/down) into Astylar render space.
- * Render X is mirrored and render Y is up-positive, so CSS right/down both
- * map to negative render offsets. CSS pixels are scaled exactly once,
+ * Render X is right-positive and render Y is up-positive, so only CSS Y is
+ * inverted. CSS pixels are scaled exactly once,
  * irrespective of the canvas DPR.
  */
 export function cssTranslationToRenderOffset(
@@ -76,7 +76,7 @@ export function cssTranslationToRenderOffset(
   pixelToWorldScale: number,
 ): RenderTransformOffset {
   return {
-    x: -transform.translate.x * pixelToWorldScale,
+    x: transform.translate.x * pixelToWorldScale,
     y: -transform.translate.y * pixelToWorldScale,
     z: transform.translate.z * pixelToWorldScale,
   };

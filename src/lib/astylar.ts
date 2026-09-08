@@ -248,6 +248,10 @@ class AstylarRenderer {
 
     // Create scene
     const scene = new Scene(engine);
+    // CSS and Babylon must agree that +X points screen-right. The previous
+    // left-handed scene viewed from positive Z reversed that axis and forced
+    // compensating X negations throughout layout, controls, and plugins.
+    scene.useRightHandedSystem = true;
     scene.clearColor = options?.clearColor ?? new Color4(0.05, 0.05, 0.1, 1.0);
 
     // Setup camera
@@ -385,6 +389,18 @@ class AstylarRenderer {
             ),
           getPixelToWorldScale:
             this.babylonCameraService.getPixelToWorldScale.bind(
+              this.babylonCameraService,
+            ),
+          projectCssLocalPoint:
+            this.babylonCameraService.projectCssLocalPoint.bind(
+              this.babylonCameraService,
+            ),
+          unprojectRenderLocalPoint:
+            this.babylonCameraService.unprojectRenderLocalPoint.bind(
+              this.babylonCameraService,
+            ),
+          projectCssSize:
+            this.babylonCameraService.projectCssSize.bind(
               this.babylonCameraService,
             ),
         },

@@ -28,7 +28,6 @@ import { AstylarPluginRuntime } from "../../../../lib/astylar-plugin-runtime";
 import { AstylarCoreCompatibilityRenderer } from "../../../../lib/astylar-core-plugin";
 import { AstylarDocumentRecovery } from "../../../../lib/astylar-document-recovery";
 import { AstylarPluginHost } from "../../../../lib/astylar-plugin-host";
-import { CoordinateTransformService } from "../../coordinate-transform.service";
 
 /**
  * Service responsible for creating DOM elements as Babylon.js meshes
@@ -57,7 +56,6 @@ export class ElementCreationService {
     private diagnostics: AstylarDiagnostics,
     private documentRecovery: AstylarDocumentRecovery,
     private pluginHost: AstylarPluginHost,
-    private coordinateTransform: CoordinateTransformService,
   ) {}
 
   /**
@@ -222,13 +220,13 @@ export class ElementCreationService {
             pixelToWorldScale: scaleFactor,
           },
           coordinates: {
-            toLocalPoint: (x, y, z = 0) =>
-              this.coordinateTransform.transformToRenderCoordinates(x, -y, z),
+            toLocalPoint: (x, y, z = 0) => {
+              const point = render.actions.camera.projectCssLocalPoint({ x, y }, z);
+              return new BABYLON.Vector3(point.x, point.y, point.z);
+            },
             toLogicalPoint: (point) => {
-              const logical = this.coordinateTransform.transformToLogicalCoordinates(
-                new BABYLON.Vector3(point.x, point.y, point.z),
-              );
-              return { x: logical.x, y: -logical.y, z: logical.z };
+              const logical = render.actions.camera.unprojectRenderLocalPoint(point);
+              return { x: logical.x, y: logical.y, z: point.z };
             },
           },
           resources,
@@ -318,11 +316,9 @@ export class ElementCreationService {
             fit.renderedHeight * scaleFactor,
             0,
           );
-          // The renderer's logical X axis is mirrored at the camera boundary;
-          // reverse image U coordinates so replaced content keeps CSS orientation.
-          texture.uScale = -fit.uScale;
+          texture.uScale = fit.uScale;
           texture.vScale = fit.vScale;
-          texture.uOffset = fit.uOffset + fit.uScale;
+          texture.uOffset = fit.uOffset;
           texture.vOffset = fit.vOffset;
 
           const contentCenterX = -dimensions.width / 2 + insets.left + contentWidth / 2;

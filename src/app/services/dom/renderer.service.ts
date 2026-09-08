@@ -787,15 +787,6 @@ export class BabylonDOMRendererService {
         break;
     }
 
-    // FLIP X-AXIS FIX: The project uses a flipped coordinate system where Left is Positive
-    // So we negate the calculated standard offset
-    offsetXPx = -offsetXPx;
-    if (textAlign === "center" && (window.devicePixelRatio || 1) === 1) {
-      // Centered glyph runs otherwise land half a CSS pixel to the left after
-      // the mirrored camera projection and texture rasterization.
-      offsetXPx -= 0.5;
-    }
-
     // Clamp horizontal offset so text stays within content box
     const halfParentWidthPx = parentWidthPx / 2;
     offsetXPx = Math.max(

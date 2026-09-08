@@ -59,15 +59,14 @@ describe('Material showcase application plugin', () => {
       const updateRange = range?.metadata?.updateRange as ((start: number, end: number) => void) | undefined;
 
       expect(updateRange).toEqual(jasmine.any(Function));
-      // The renderer-local X axis is mirrored relative to logical CSS/screen X.
-      // A lower logical ratio must therefore have the greater local X value.
-      expect(startThumb!.position.x).toBeGreaterThan(endThumb!.position.x);
+      // Renderer-local X follows logical CSS/screen X at the projection boundary.
+      expect(startThumb!.position.x).toBeLessThan(endThumb!.position.x);
       expect(startStateLayer!.position.x).toBeCloseTo(startThumb!.position.x, 6);
       expect(startStateLayer!.material!.alpha).toBeCloseTo(.08, 2);
       expect(startStateLayer!.material!.transparencyMode).toBe(Material.MATERIAL_ALPHABLEND);
       updateRange?.(.4, .75);
       expect(active?.scaling.x).toBeCloseTo(.35, 6);
-      expect(startThumb!.position.x).toBeGreaterThan(endThumb!.position.x);
+      expect(startThumb!.position.x).toBeLessThan(endThumb!.position.x);
       expect(startStateLayer!.position.x).toBeCloseTo(startThumb!.position.x, 6);
       expect(range?.metadata?.start).toBe(.3);
     } finally {

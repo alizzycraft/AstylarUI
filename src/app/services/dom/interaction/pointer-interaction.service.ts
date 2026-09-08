@@ -262,15 +262,9 @@ export class PointerInteractionService {
     const halfWidth = width / 2;
     const halfHeight = height / 2;
 
-    // Coordinate transformation to match text rendering coordinate system
-    // With World X+ being Left and the text mesh rotated 180 degrees on Z,
-    // the local X+ aligns with World Right (Visual Right).
-    // So (local.x + halfWidth) / width correctly maps Visual Left to 0 and Visual Right to 1.
     const rawNormalizedX = (localPoint.x + halfWidth) / width;
     const normalizedX = constrainToViewport ? clamp(rawNormalizedX, 0, 1) : rawNormalizedX;
-    // Similarly, with 180 degree rotation, local Y+ aligns with World Down (Visual Down).
-    // So (local.y + halfHeight) / height correctly maps Visual Top to 0 and Visual Bottom to 1.
-    const rawNormalizedY = (localPoint.y + halfHeight) / height;
+    const rawNormalizedY = (halfHeight - localPoint.y) / height;
     const normalizedY = constrainToViewport ? clamp(rawNormalizedY, 0, 1) : rawNormalizedY;
 
     const cssMetrics = entry.metrics?.css;

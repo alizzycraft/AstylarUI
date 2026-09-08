@@ -8,11 +8,11 @@ describe('CSS transform coordinates', () => {
       .toEqual({ x: 1.25, y: -2.5, z: 0 });
   });
 
-  it('maps positive CSS right/down translations onto the mirrored render axes', () => {
+  it('maps positive CSS right/down translations at the render boundary', () => {
     const transform = parseCssTransform('translate(1.5px, 2.5px)')!;
 
-    expect(cssTranslationToRenderOffset(transform, 2)).toEqual({ x: -3, y: -5, z: 0 });
-    expect(cssTranslationToRenderOffset(transform, 4)).toEqual({ x: -6, y: -10, z: 0 });
+    expect(cssTranslationToRenderOffset(transform, 2)).toEqual({ x: 3, y: -5, z: 0 });
+    expect(cssTranslationToRenderOffset(transform, 4)).toEqual({ x: 6, y: -10, z: 0 });
   });
 
   it('preserves the same CSS displacement when projected at different DPR scales', () => {
