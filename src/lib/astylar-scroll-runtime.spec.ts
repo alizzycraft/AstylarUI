@@ -94,8 +94,7 @@ describe('AstylarScrollRuntime', () => {
     box.metadata = { element: boxElement, elementId: 'box' };
     const strip = MeshBuilder.CreatePlane('strip', { width: 360, height: 120 }, scene);
     strip.parent = box;
-    // The rendered camera reverses screen X, so content flowing right extends
-    // toward negative world X while retaining its authored leading edge.
+    // Content flowing right extends toward positive render X.
     strip.position.x = -60;
     strip.metadata = { element: boxElement.children![0], elementId: 'strip' };
     const runtime = new AstylarScrollRuntime({
@@ -112,7 +111,7 @@ describe('AstylarScrollRuntime', () => {
     runtime.reconcile(siteData);
     const thumb = scene.getMeshByName('astylar-scrollbar-thumb-box-horizontal');
     expect(thumb).not.toBeNull();
-    expect(thumb!.position.x).toBeGreaterThan(0);
+    expect(thumb!.position.x).toBeLessThan(0);
     const initialThumbX = thumb!.position.x;
     expect(runtime.snapshot.containers['box']).toEqual({
       scrollLeft: 0,
@@ -125,12 +124,12 @@ describe('AstylarScrollRuntime', () => {
 
     expect(runtime.scrollFrom('strip', 65, 0)).toBeTrue();
     expect(runtime.snapshot.containers['box'].scrollLeft).toBe(65);
-    expect(strip.position.x).toBe(5);
-    expect(thumb!.position.x).toBeLessThan(initialThumbX);
+    expect(strip.position.x).toBe(-125);
+    expect(thumb!.position.x).toBeGreaterThan(initialThumbX);
 
     expect(runtime.scrollFrom('strip', 500, 0)).toBeTrue();
     expect(runtime.snapshot.containers['box'].scrollLeft).toBe(132);
-    expect(strip.position.x).toBe(72);
+    expect(strip.position.x).toBe(-192);
   });
 
   it('excludes a rendered border from client and scroll dimensions', () => {

@@ -97,7 +97,7 @@ describe('BabylonMeshService', () => {
       service.initialize(scene);
 
       const root = service.createShadow('card-shadow', 120, 60, [
-        { offsetX: 0, offsetY: 2, blur: 1, spread: -1, color: 'rgba(0,0,0,.2)' },
+        { offsetX: 4, offsetY: 2, blur: 1, spread: -1, color: 'rgba(0,0,0,.2)' },
         { offsetX: 0, offsetY: 1, blur: 3, spread: 0, color: 'rgba(0,0,0,.12)' },
       ], 'roundedRectangle', 12);
       const layers = root.getChildMeshes(false) as Mesh[];
@@ -108,6 +108,7 @@ describe('BabylonMeshService', () => {
         jasmine.objectContaining({ blur: 1, spread: -1, planeWidth: 122, planeHeight: 62 }),
       ]);
       expect(layers.map((layer) => layer.position.y)).toEqual([-1, -2]);
+      expect(layers.map((layer) => layer.position.x)).toEqual([0, 4]);
       expect(layers.every((layer) => (layer.material as ShaderMaterial).disableDepthWrite)).toBeTrue();
 
       engine.dispose();

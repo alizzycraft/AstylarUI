@@ -1717,8 +1717,7 @@ export class BabylonMeshService {
       // of the owning surface.
       material.disableDepthWrite = true;
       plane.material = material;
-      // Astylar's camera axes are opposite CSS screen axes.
-      plane.position.set(-layer.offsetX, -layer.offsetY, -0.00005 * reverseIndex);
+      plane.position.set(layer.offsetX, -layer.offsetY, -0.00005 * reverseIndex);
       plane.isPickable = false;
       plane.parent = shadowRoot;
       plane.metadata = { shadowLayer: { ...layer, planeWidth, planeHeight } };

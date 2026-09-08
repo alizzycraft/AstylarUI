@@ -38,10 +38,7 @@ export class MaterialRippleController {
     const heightPx = Math.max(1, Math.ceil(activation.height));
     const originX = Math.max(0, Math.min(widthPx, activation.originX));
     const originY = Math.max(0, Math.min(heightPx, activation.originY));
-    // Astylar's button plane faces the camera with its U axis opposite screen X.
-    // Keep public pointer coordinates screen-relative and mirror only at the
-    // texture boundary so left/right activation matches the pointer origin.
-    const textureOriginX = widthPx - originX;
+    const textureOriginX = originX;
     const texture = new DynamicTexture(`material-ripple-${elementId}`, {
       width: widthPx,
       height: heightPx,

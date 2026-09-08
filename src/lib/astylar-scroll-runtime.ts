@@ -192,9 +192,9 @@ export class AstylarScrollRuntime {
       const verticallyVisible = targetBounds.minimumWorld.y >= containerBounds.minimumWorld.y &&
         targetBounds.maximumWorld.y <= containerBounds.maximumWorld.y;
       const horizontalDelta = alignment === 'nearest' && !horizontallyVisible
-        ? ((containerBounds.minimumWorld.x + containerBounds.maximumWorld.x) / 2 -
-          (targetBounds.minimumWorld.x + targetBounds.maximumWorld.x) / 2) / scale
-        : (containerBounds.maximumWorld.x - targetBounds.maximumWorld.x) / scale;
+        ? ((targetBounds.minimumWorld.x + targetBounds.maximumWorld.x) / 2 -
+          (containerBounds.minimumWorld.x + containerBounds.maximumWorld.x) / 2) / scale
+        : (targetBounds.minimumWorld.x - containerBounds.minimumWorld.x) / scale;
       const verticalDelta = alignment === 'nearest' && !verticallyVisible
         ? ((containerBounds.minimumWorld.y + containerBounds.maximumWorld.y) / 2 -
           (targetBounds.minimumWorld.y + targetBounds.maximumWorld.y) / 2) / scale
@@ -299,9 +299,10 @@ export class AstylarScrollRuntime {
   private applyOffset(container: ScrollContainer): void {
     const scale = this.options.getPixelToWorldScale();
     for (const root of container.roots) {
-      // Astylar's camera faces the planes from negative Z, so increasing world X
-      // moves content toward the screen's left edge as browser scrollLeft grows.
-      root.mesh.position.x = root.x + container.scrollLeft * scale;
+      // CSS scrollLeft advances rightward through content, so rendered content
+      // moves screen-left. CSS scrollTop advances downward, so content moves
+      // upward in Babylon's positive-up render space.
+      root.mesh.position.x = root.x - container.scrollLeft * scale;
       root.mesh.position.y = root.y + container.scrollTop * scale;
       root.mesh.computeWorldMatrix(true);
     }
@@ -361,13 +362,10 @@ export class AstylarScrollRuntime {
     track.parent = container.mesh;
     thumb.parent = container.mesh;
     const crossOffset = vertical
-      ? -(container.clientWidth - thickness) * scale / 2
+      ? (container.clientWidth - thickness) * scale / 2
       : -(container.clientHeight - thickness) * scale / 2;
-    // The Astylar camera faces the scene from negative Z after the authored
-    // coordinate transform, while child paint is layered at positive local Z.
     // Keep scrollbar chrome in front of both the container surface and its
-    // ordinary child content; a negative offset leaves valid meshes hidden
-    // behind the opaque container plane.
+    // ordinary child content.
     track.position.set(vertical ? crossOffset : 0, vertical ? 0 : crossOffset, 0.01);
     thumb.position.set(vertical ? crossOffset : 0, vertical ? 0 : crossOffset, 0.02);
     track.isPickable = false;
@@ -423,9 +421,7 @@ export class AstylarScrollRuntime {
     const ratio = maximumOffset > 0 ? this.clamp(scrollOffset / maximumOffset, 0, 1) : 0;
     const position = (travel / 2 - travel * ratio) * scale;
     if (visual.axis === 'vertical') visual.thumb.position.y = position;
-    // Screen X is reversed by the Astylar camera. A positive local X starts at
-    // the visual leading edge, then decreases as scrollLeft advances.
-    else visual.thumb.position.x = position;
+    else visual.thumb.position.x = -position;
     visual.thumb.computeWorldMatrix(true);
   }
 
