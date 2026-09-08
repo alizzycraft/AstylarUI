@@ -39,6 +39,12 @@ export class RangeManager {
         hitMaterial.disableDepthWrite = true;
         mesh.material = hitMaterial;
 
+        // CSS opacity applies to the range's painted contents, while an
+        // opacity-zero control remains pointer-interactive in the browser.
+        // The hit plane therefore stays independently pickable and every
+        // manager-owned presentation material receives the authored opacity.
+        const presentationOpacity = render.actions.style.parseOpacity(style.opacity);
+
         const trackHeight = Math.max(2, Math.min(dimensions.height * 0.16, 8));
         const renderedTrack = render.actions.camera.projectCssSize({
             width: dimensions.width,
@@ -51,7 +57,9 @@ export class RangeManager {
             renderedTrack.height,
             renderedTrack.height / 2,
         );
-        trackMesh.material = this.meshes.createMaterial(`${id}-range-track-material`, Color3.FromHexString('#79747e'));
+        trackMesh.material = this.meshes.createMaterial(
+            `${id}-range-track-material`, Color3.FromHexString('#79747e'), presentationOpacity,
+        );
         trackMesh.isPickable = false;
         this.meshes.parentTextMesh(trackMesh, mesh);
 
@@ -62,7 +70,9 @@ export class RangeManager {
             renderedTrack.height,
             renderedTrack.height / 2,
         );
-        activeTrackMesh.material = this.meshes.createMaterial(`${id}-range-active-material`, Color3.FromHexString('#386a20'));
+        activeTrackMesh.material = this.meshes.createMaterial(
+            `${id}-range-active-material`, Color3.FromHexString('#386a20'), presentationOpacity,
+        );
         activeTrackMesh.isPickable = false;
         this.meshes.parentTextMesh(activeTrackMesh, mesh);
 
@@ -75,7 +85,9 @@ export class RangeManager {
             renderedThumb.height,
             0,
         );
-        thumbMesh.material = this.meshes.createMaterial(`${id}-range-thumb-material`, Color3.FromHexString('#386a20'));
+        thumbMesh.material = this.meshes.createMaterial(
+            `${id}-range-thumb-material`, Color3.FromHexString('#386a20'), presentationOpacity,
+        );
         thumbMesh.isPickable = false;
         this.meshes.parentTextMesh(thumbMesh, mesh);
 

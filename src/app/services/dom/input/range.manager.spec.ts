@@ -17,6 +17,9 @@ function renderAtScale(scene: Scene, scale = 0.01) {
           z,
         }),
       },
+      style: {
+        parseOpacity: (value: string | undefined) => value === undefined ? 1 : Number(value),
+      },
     },
   } as never;
 }
@@ -155,6 +158,29 @@ describe('RangeManager', () => {
     expect(range.value).toBe(75);
     expect(range.cssSize).toEqual({ width: 200.5, height: 24.25 });
     expect(range.thumbMesh?.position.x).toBeCloseTo(12.53125, 6);
+
+    manager.dispose(range);
+    scene.dispose();
+    engine.dispose();
+  });
+
+  it('keeps an opacity-zero range pickable while hiding all manager-owned visuals', () => {
+    const engine = new NullEngine();
+    const scene = new Scene(engine);
+    const meshes = new BabylonMeshService();
+    meshes.initialize(scene);
+    const manager = new RangeManager(meshes);
+    const range = manager.createRange(
+      { type: 'input', inputType: 'range', id: 'composed-range', value: '35' },
+      renderAtScale(scene),
+      { opacity: '0' } as never,
+      { width: 300, height: 40 },
+    );
+
+    expect(range.mesh.isPickable).toBeTrue();
+    expect(range.trackMesh?.material?.alpha).toBe(0);
+    expect(range.activeTrackMesh?.material?.alpha).toBe(0);
+    expect(range.thumbMesh?.material?.alpha).toBe(0);
 
     manager.dispose(range);
     scene.dispose();
