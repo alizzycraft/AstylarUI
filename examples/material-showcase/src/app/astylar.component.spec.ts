@@ -107,6 +107,14 @@ describe('AstylarShowcaseComponent', () => {
     const table = build(component, 'table');
     expect(style(table, '.table-rule')).toEqual(jasmine.objectContaining({ left: '28px', right: '28px', width: 'auto' }));
 
+    const gridList = build(component, 'grid-list');
+    expect(style(gridList, '.grid-tile-label')?.['top']).toBe('31px');
+
+    const divider = build(component, 'divider');
+    expect(style(divider, '.divider')?.['top']).toBe('79px');
+    expect(style(divider, '.divider-above')?.['top']).toBe('43.69px');
+    expect(style(divider, '.divider-below')?.['top']).toBe('95.69px');
+
     const chips = build(component, 'chips');
     expect(style(chips, '#chips-primary')?.['gap']).toBe('8px');
     expect(find(chips, 'chip-0-mark')?.['type']).toBe('showcase.material:check-mark');
@@ -118,6 +126,7 @@ describe('AstylarShowcaseComponent', () => {
     store.setTheme(MATERIAL_THEME_PROFILES.contrast);
     const compactChips = build(component, 'chips');
     expect(style(compactChips, '.chip')?.['height']).toBe('24px');
+    expect(style(build(component, 'grid-list'), '.grid-tile-label')?.['top']).toBe('31px');
     const compactToggle = build(component, 'button-toggle');
     expect(style(compactToggle, '#button-toggle-primary')?.['height']).toBe('26px');
     expect(style(compactToggle, '.button-toggle-option')?.['height']).toBe('24px');
