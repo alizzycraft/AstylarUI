@@ -14,7 +14,7 @@ async function openComparedFamily(family) {
   page.on('console', (message) => {
     if (message.type() === 'error') errors.push(message.text());
   });
-  await page.goto(`${baseUrl}/compare`, { waitUntil: 'networkidle' });
+  await page.goto(`${baseUrl}/compare`, { waitUntil: 'domcontentloaded' });
   await page.locator('.comparison-toolbar select').first().selectOption(family);
   const runtime = await page.waitForEvent('framenavigated', {
     predicate: (frame) => new URL(frame.url()).pathname === `/astylar/${family}`,
