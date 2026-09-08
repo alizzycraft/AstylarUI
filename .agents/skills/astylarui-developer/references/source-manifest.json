@@ -7,8 +7,8 @@
       "source": "docs/compatibility/html-css.md",
       "destination": "html-css.md",
       "transform": "portable-html-css-links",
-      "sourceSha256": "20f60f817071ec95e781f44adc9a3a8d71200f8b3450d44df72c5913285969fd",
-      "bundledSha256": "d9eaf098a1b4a0dac7d605cf7c776ec7bbd66628cda3c1c2522486068149b307"
+      "sourceSha256": "92c3c894bd4161181d21a76f0ed5eee1a56df973eef36bb891b48277e94dbd44",
+      "bundledSha256": "504a27e7006ee43827eba3f0994335402dd6d11bf173228fc28c6cfdb1f606aa"
     },
     {
       "source": "docs/document-styles.md",
@@ -32,8 +32,8 @@
       "source": "docs/plugins.md",
       "destination": "plugins.md",
       "transform": "portable-plugin-links",
-      "sourceSha256": "0d17609263bccdbe3be63169a5d68462270535c168b3df056a7dece878e34985",
-      "bundledSha256": "533c64fd5896dd1ced92cecd4d872869fc346d9587d99750ff251d2a2ab95417"
+      "sourceSha256": "40fe18170642fac03be0e04ace493677703cb145f9574f45c4ee37c9b34c49fd",
+      "bundledSha256": "7bf6de9212bc8ea4e1b8ecef7ae09c70580a443b59d9028a9528d6b46eb2946d"
     },
     {
       "source": "docs/reconciliation.md",
@@ -62,8 +62,8 @@
     {
       "source": "examples/angular-consumer/src/app/consumer-badge.plugin.ts",
       "destination": "consumer-badge.plugin.ts",
-      "sourceSha256": "a76bba4ee683ee413c58708afe15ccf57ff279d89056a0bac662427981b3a76a",
-      "bundledSha256": "a76bba4ee683ee413c58708afe15ccf57ff279d89056a0bac662427981b3a76a"
+      "sourceSha256": "956dec84aaf2664ae79513639aa18c6ab4c1827a99c87956ce80d85ee551c16e",
+      "bundledSha256": "956dec84aaf2664ae79513639aa18c6ab4c1827a99c87956ce80d85ee551c16e"
     },
     {
       "source": "examples/angular-consumer/src/app/app.browser.spec.ts",
@@ -75,8 +75,8 @@
       "source": "src/lib/index.ts",
       "destination": "public-api.json",
       "transform": "public-root-exports",
-      "sourceSha256": "ce4202c4d2443664f8c3e17ff071f3d9d7af4ec0f58600bdb318ae59e8804ac8",
-      "bundledSha256": "1bd634c9764e3f424b34b7e86c75515626d8eb698095b123ba65973d5acf9e32"
+      "sourceSha256": "3cac9c05213c4db8b3279ad29f459afe1cfb38f4ebb92b88c3438d1b2fcd073d",
+      "bundledSha256": "c1734475fb9ba04262dc1a254027b1a125fdab14d31039bc8339c33ccd7acbc4"
     }
   ]
 }

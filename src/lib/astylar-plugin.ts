@@ -6,6 +6,11 @@ import {
   makeEnvironmentProviders,
 } from '@angular/core';
 import type { Mesh, Scene, Vector3 } from '@babylonjs/core';
+import type {
+  CssPoint,
+  CssSize,
+  RenderSize,
+} from '../app/services/coordinate-space.types';
 import type { DOMElement } from '../app/types/dom-element';
 import type { AstylarDocumentPluginRequirement } from '../app/types/site-data';
 import type { StyleRule } from '../app/types/style-rule';
@@ -21,7 +26,7 @@ import {
 } from './astylar-semver';
 
 /** Versioned independently from the Astylar package. */
-export const ASTYLAR_PLUGIN_API_VERSION = 1 as const;
+export const ASTYLAR_PLUGIN_API_VERSION = 2 as const;
 
 export type AstylarPluginApiVersion = typeof ASTYLAR_PLUGIN_API_VERSION;
 export type AstylarPluginContributionKind =
@@ -96,8 +101,10 @@ export interface AstylarPluginPropertyDefinition {
 }
 
 export interface AstylarPluginRenderDimensions {
+  /** Parent-relative CSS border-box offset in CSS pixels. */
   readonly x: number;
   readonly y: number;
+  /** Resolved CSS border-box size in CSS pixels. */
   readonly width: number;
   readonly height: number;
   readonly padding: Readonly<{
@@ -106,7 +113,6 @@ export interface AstylarPluginRenderDimensions {
     bottom: number;
     left: number;
   }>;
-  readonly pixelToWorldScale: number;
 }
 
 export interface AstylarPluginInvalidationTarget {
@@ -157,16 +163,18 @@ export interface AstylarPluginResourceSnapshot {
 }
 
 /**
- * Converts element-local CSS coordinates into the renderer-local Babylon
- * coordinate space used by the current Astylar camera projection.
+ * The only supported boundary between plugin-authored CSS geometry and
+ * renderer-local Babylon geometry.
  *
- * Plugin renderers should author geometry in element-local CSS pixel space,
- * with positive X pointing right and positive Y pointing down. Use this
- * boundary instead of encoding camera-axis inversions themselves.
+ * Plugin renderers must complete geometry calculations in element-local CSS
+ * pixel space, with positive X right and positive Y down. Call these methods
+ * only when supplying final values to Babylon mesh creation or placement.
  */
 export interface AstylarPluginRenderCoordinates {
-  toLocalPoint(x: number, y: number, z?: number): Vector3;
-  toLogicalPoint(point: Readonly<Vector3>): { x: number; y: number; z: number };
+  toRenderPoint(point: CssPoint, renderDepth?: number): Vector3;
+  toRenderSize(size: CssSize): RenderSize;
+  toRenderLength(cssPixels: number): number;
+  toCssPoint(point: Readonly<Vector3>): CssPoint;
 }
 
 /** Curated public context supplied to an injectable plugin renderer. */

@@ -37,11 +37,15 @@ class BadgeRenderer implements AstylarPluginElementRenderer {
 
   render(context: AstylarPluginRenderContext): Mesh {
     const depth = context.properties['badgeDepth'] as number;
-    const localProbe = context.coordinates.toLocalPoint(-3, 4, .5);
-    const logicalProbe = context.coordinates.toLogicalPoint(localProbe);
+    const localProbe = context.coordinates.toRenderPoint({ x: -3, y: 4 }, .5);
+    const cssProbe = context.coordinates.toCssPoint(localProbe);
+    const size = context.coordinates.toRenderSize({
+      width: context.dimensions.width,
+      height: context.dimensions.height,
+    });
     const mesh = MeshBuilder.CreateBox(context.meshId, {
-      width: context.dimensions.width * context.dimensions.pixelToWorldScale,
-      height: context.dimensions.height * context.dimensions.pixelToWorldScale,
+      width: size.width,
+      height: size.height,
       depth,
     }, context.scene);
     mesh.metadata = {
@@ -50,7 +54,9 @@ class BadgeRenderer implements AstylarPluginElementRenderer {
       pluginLabel: context.element.data?.['label'],
       pluginTone: context.properties['badgeTone'],
       localProbe: localProbe.asArray(),
-      logicalProbe,
+      cssProbe,
+      exposesWorldScale: 'pixelToWorldScale' in context.dimensions,
+      renderedSize: size,
       surfaceId: this.surface.surfaceId,
     };
     return mesh;
@@ -74,9 +80,13 @@ class DelayedRenderer implements AstylarPluginElementRenderer {
   }> = [];
 
   render(context: AstylarPluginRenderContext): Mesh {
+    const size = context.coordinates.toRenderSize({
+      width: context.dimensions.width,
+      height: context.dimensions.height,
+    });
     const mesh = MeshBuilder.CreateBox(context.meshId, {
-      width: context.dimensions.width * context.dimensions.pixelToWorldScale,
-      height: context.dimensions.height * context.dimensions.pixelToWorldScale,
+      width: size.width,
+      height: size.height,
       depth: 0.1,
     }, context.scene);
     let resolve!: (probe: DelayedProbe) => void;
@@ -337,8 +347,11 @@ describe('Astylar surface plugin runtime', () => {
         pluginDepth: 0.12,
         pluginLabel: 'Proof',
         pluginTone: 'teal',
-        logicalProbe: { x: -3, y: 4, z: .5 },
+        cssProbe: { x: -3, y: 4 },
+        exposesWorldScale: false,
       }));
+      expect(firstBadge.metadata.renderedSize.width / firstBadge.metadata.renderedSize.height)
+        .toBeCloseTo(3, 8);
       expect(firstBadge.metadata.localProbe[0]).toBeLessThan(0);
       expect(firstBadge.metadata.localProbe[1]).toBeLessThan(0);
       expect(firstBadge.metadata.localProbe[2]).toBe(.5);

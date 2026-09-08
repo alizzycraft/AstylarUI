@@ -309,9 +309,10 @@ canvas lifecycle directly. Each mount creates a child `EnvironmentInjector`, an
 isolated capability registry, a Babylon engine/scene/camera, render/session
 state, and owned cleanup.
 
-CSS-like pixel layout is converted into world-space geometry internally. Plugin
-renderers receive `dimensions.pixelToWorldScale` and size meshes from the
-supplied dimensions. The host can set scene clear color and lighting through
+CSS-like pixel layout is converted into world-space geometry only at the paint
+boundary. Plugin renderers receive resolved CSS dimensions and project final
+Babylon points, sizes, and lengths through `context.coordinates`. The host can
+set scene clear color and lighting through
 public render options and inspect `surface.scene`, but Astylar remains owner of
 the mounted surface. Depth layers, camera orientation, materials, textures,
 observers, and late async completion have no ordinary DOM equivalent.

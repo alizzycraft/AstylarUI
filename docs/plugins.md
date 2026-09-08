@@ -1,13 +1,21 @@
 # Angular-native plugins
 
-Astylar plugin API v1 lets an Angular application add validated JSON element
+Astylar plugin API v2 lets an Angular application add validated JSON element
 types, style extension properties, per-surface lifecycle services, and Babylon.js
 element renderers. Angular is a required foundation of the plugin ecosystem, not
 an implementation detail hidden behind a second container.
 
-The supported platform line is Angular 20, Astylar plugin API `1`, and
+The supported platform line is Angular 20, Astylar plugin API `2`, and
 Babylon.js 8. Plugin API compatibility is checked independently from the npm
 package version.
+
+Plugin API v2 replaces the ambiguous v1 render-coordinate helpers and raw
+`pixelToWorldScale` value with `context.coordinates`. Renderers keep all layout
+and primitive geometry in CSS pixels, then call `toRenderPoint`,
+`toRenderSize`, or `toRenderLength` only when supplying final Babylon values.
+Use `toCssPoint` once at a Babylon pick boundary. A v1 renderer must migrate
+before registration; the registry rejects its version rather than silently
+applying the former mirrored-axis convention.
 
 ## Registration
 
@@ -35,9 +43,13 @@ class BadgeRenderer implements AstylarPluginElementRenderer {
       this.config.minimumDepth,
       context.properties['badgeDepth'] as number,
     );
+    const size = context.coordinates.toRenderSize({
+      width: context.dimensions.width,
+      height: context.dimensions.height,
+    });
     return MeshBuilder.CreateBox(context.meshId, {
-      width: context.dimensions.width * context.dimensions.pixelToWorldScale,
-      height: context.dimensions.height * context.dimensions.pixelToWorldScale,
+      width: size.width,
+      height: size.height,
       depth,
     }, context.scene);
   }
@@ -109,7 +121,7 @@ surface registry. Angular multi-provider order never selects a winner.
   self-referential, and cyclic dependencies fail before activation.
 - `contributes` must exactly describe the non-empty contribution collections.
 - Aliases are optional author-facing names. They must be globally unambiguous.
-- Plugin API v1 does not support renderer replacement. A renderer may claim only
+- Plugin API v2 does not support renderer replacement. A renderer may claim only
   elements contributed by its own plugin, and each contributed element must have
   exactly one renderer.
 - `astylar.core` reserves the supported built-in element aliases. A plugin
@@ -296,7 +308,9 @@ the supported public facilities:
 - current Babylon `Scene` and layout parent `Mesh`;
 - stable `meshId` and resolved element data;
 - resolved core style and plugin property values;
-- pixel layout dimensions, padding, and pixel-to-world scale;
+- resolved parent-relative layout dimensions and padding in CSS pixels;
+- a coordinate boundary that projects final CSS points, sizes, and lengths to
+  renderer-local Babylon values and inversely maps picked local points to CSS;
 - a generation-scoped resource owner and `AbortSignal`;
 - an automatically attributed invalidation requester;
 - a diagnostics reporter.
@@ -305,6 +319,22 @@ It does not expose Astylar's private renderer services. The renderer must return
 a live Babylon `Mesh` created in the supplied scene. Astylar applies its common
 identity, layout parent/position, paint, border, transform, hover, dimension, and
 text bookkeeping to the returned primary mesh.
+
+All plugin geometry is authored in element-local CSS pixels: top-left origin,
+positive X right, and positive Y down. Complete layout and shape calculations in
+that space, preserving fractional values. Only values passed immediately to a
+Babylon constructor or mesh position cross `context.coordinates`:
+
+```ts
+const size = context.coordinates.toRenderSize({ width: 24, height: 16 });
+const center = context.coordinates.toRenderPoint({ x: 12, y: 8 }, 0.02);
+const stroke = context.coordinates.toRenderLength(2);
+```
+
+`toCssPoint(...)` is the inverse boundary for a Babylon point already expressed
+in the plugin root's local render space. Plugins must not derive CSS geometry
+from mesh bounds, multiply by a camera scale, negate an axis, or carry projected
+values back into layout calculations.
 
 Meshes, materials, and textures created synchronously in the renderer participate
 in the same scene transaction as core output. A renderer service persists for

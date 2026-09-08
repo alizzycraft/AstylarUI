@@ -68,7 +68,7 @@ import or an undeclared dependency.
 
 ## Plugin registry and Angular scope
 
-Plugin API v1 is Angular-native. `provideAstylar(...)` and
+Plugin API v2 is Angular-native. `provideAstylar(...)` and
 `provideAstylarPlugin(...)` register frozen definitions and provider recipes.
 Each `Astylar.mount()` builds a child `EnvironmentInjector`, combines configured
 plugins with `astylar.core`, validates dependencies and identities, and seals a
@@ -125,7 +125,7 @@ to the surface. Today every valid plugin domain uses a complete safe reflow; do
 not describe it as dirty-subtree rendering. Reject synchronous invalidation
 from inside `render()` and preserve the recursive invalidation guard.
 
-Plugin API v1 is trusted in-process JavaScript. Angular DI provides scoping and
+Plugin API v2 is trusted in-process JavaScript. Angular DI provides scoping and
 lifetime ownership, not permissions or a security sandbox. Dynamic discovery,
 installation, hot loading, workers/WASM isolation, and marketplaces are outside
 the current contract. Do not imply those properties in documentation or tests.

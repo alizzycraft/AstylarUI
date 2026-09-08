@@ -389,6 +389,30 @@
       "kind": "type"
     },
     {
+      "name": "CssInsets",
+      "kind": "type"
+    },
+    {
+      "name": "CssLayoutBox",
+      "kind": "type"
+    },
+    {
+      "name": "CssLayoutNode",
+      "kind": "type"
+    },
+    {
+      "name": "CssPoint",
+      "kind": "type"
+    },
+    {
+      "name": "CssRect",
+      "kind": "type"
+    },
+    {
+      "name": "CssSize",
+      "kind": "type"
+    },
+    {
       "name": "defineAstylarPlugin",
       "kind": "runtime"
     },
@@ -413,12 +437,24 @@
       "kind": "runtime"
     },
     {
+      "name": "ProjectedCssRect",
+      "kind": "type"
+    },
+    {
       "name": "provideAstylar",
       "kind": "runtime"
     },
     {
       "name": "provideAstylarPlugin",
       "kind": "runtime"
+    },
+    {
+      "name": "RenderPoint",
+      "kind": "type"
+    },
+    {
+      "name": "RenderSize",
+      "kind": "type"
     },
     {
       "name": "SiteData",

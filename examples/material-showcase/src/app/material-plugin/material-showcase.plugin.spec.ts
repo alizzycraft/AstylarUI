@@ -19,11 +19,11 @@ describe('Material showcase application plugin', () => {
   });
 
   it('authors an upright Material check mark in logical screen coordinates', () => {
-    const [start, bend, end] = materialCheckMarkPath(1);
+    const [start, bend, end] = materialCheckMarkPath();
 
-    expect(start.asArray()).toEqual([-5.5, .4, 0]);
-    expect(bend.asArray()).toEqual([-1.8, 3.2, 0]);
-    expect(end.asArray()).toEqual([5.5, -4.2, 0]);
+    expect(start).toEqual({ x: -5.5, y: .4 });
+    expect(bend).toEqual({ x: -1.8, y: 3.2 });
+    expect(end).toEqual({ x: 5.5, y: -4.2 });
     expect(start.x).toBeLessThan(bend.x);
     expect(bend.x).toBeLessThan(end.x);
     expect(bend.y).toBeGreaterThan(start.y);
@@ -31,16 +31,16 @@ describe('Material showcase application plugin', () => {
   });
 
   it('preserves the Material sort-arrow path and reverses it for descending order', () => {
-    const ascending = materialSortArrowTriangles(1, 'asc');
-    const descending = materialSortArrowTriangles(1, 'desc');
+    const ascending = materialSortArrowTriangles('asc');
+    const descending = materialSortArrowTriangles('desc');
 
     expect(ascending.length).toBe(15);
     expect(Math.min(...ascending.map(({ x }) => x))).toBe(-6);
     expect(Math.max(...ascending.map(({ x }) => x))).toBe(6);
     expect(Math.min(...ascending.map(({ y }) => y))).toBe(-7);
     expect(Math.max(...ascending.map(({ y }) => y))).toBe(6);
-    expect(descending.map((point) => point.asArray())).toEqual(
-      ascending.map((point) => [-point.x, -point.y, point.z]),
+    expect(descending).toEqual(
+      ascending.map((point) => ({ x: -point.x, y: -point.y })),
     );
   });
 

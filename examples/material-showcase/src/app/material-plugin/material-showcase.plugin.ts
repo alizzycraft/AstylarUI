@@ -1,11 +1,12 @@
 import { EnvironmentProviders, Injectable, InjectionToken, inject } from '@angular/core';
-import { Color3, DynamicTexture, Material, Mesh, MeshBuilder, StandardMaterial, Texture, Vector3, VertexData } from '@babylonjs/core';
+import { Color3, DynamicTexture, Material, Mesh, MeshBuilder, StandardMaterial, Texture, VertexData } from '@babylonjs/core';
 import {
   ASTYLAR_PLUGIN_API_VERSION,
   defineAstylarPlugin,
   provideAstylarPlugin,
   type AstylarPluginElementRenderer,
   type AstylarPluginRenderContext,
+  type CssPoint,
 } from 'astylarui';
 
 export interface MaterialShowcasePluginConfig {
@@ -42,10 +43,13 @@ abstract class MaterialRendererBase {
   }
 
   protected root(context: AstylarPluginRenderContext): Mesh {
-    const scale = context.dimensions.pixelToWorldScale;
+    const size = context.coordinates.toRenderSize({
+      width: context.dimensions.width,
+      height: context.dimensions.height,
+    });
     const root = MeshBuilder.CreatePlane(context.meshId, {
-      width: Math.max(scale, context.dimensions.width * scale),
-      height: Math.max(scale, context.dimensions.height * scale),
+      width: Math.max(context.coordinates.toRenderLength(1), size.width),
+      height: Math.max(context.coordinates.toRenderLength(1), size.height),
     }, context.scene);
     root.material = this.material(context, 'transparent', '#000000', .001);
     root.isPickable = false;
@@ -99,30 +103,34 @@ class MaterialStateLayerRenderer extends MaterialRendererBase implements Astylar
 class MaterialLinearProgressRenderer extends MaterialRendererBase implements AstylarPluginElementRenderer {
   render(context: AstylarPluginRenderContext): Mesh {
     const root = this.root(context);
-    const scale = context.dimensions.pixelToWorldScale;
-    const width = context.dimensions.width * scale;
-    const height = Math.max(2 * scale, context.dimensions.height * scale);
+    const widthCss = context.dimensions.width;
+    const heightCss = Math.max(2, context.dimensions.height);
+    const size = context.coordinates.toRenderSize({ width: widthCss, height: heightCss });
     const mode = String(context.element.data?.['mode'] ?? 'determinate');
     const progress = Math.max(0, Math.min(1, this.number(context, 'progress', .64)));
     const buffer = Math.max(progress, Math.min(1, this.number(context, 'buffer', .82)));
-    const track = this.ownChild(context, MeshBuilder.CreatePlane(`${context.meshId}-track`, { width, height }, context.scene), root);
+    const track = this.ownChild(context, MeshBuilder.CreatePlane(`${context.meshId}-track`, size, context.scene), root);
     track.material = this.material(context, 'track-material', this.color(context, 'track-color', '#e7e0ec'));
     track.position.z = .01;
-    const bufferMesh = this.ownChild(context, MeshBuilder.CreatePlane(`${context.meshId}-buffer`, { width, height }, context.scene), root);
+    const bufferMesh = this.ownChild(context, MeshBuilder.CreatePlane(`${context.meshId}-buffer`, size, context.scene), root);
     bufferMesh.material = this.material(context, 'buffer-material', this.color(context, 'indicator-color', '#6750a4'), .32);
     bufferMesh.scaling.x = mode === 'buffer' ? buffer : .001;
-    bufferMesh.position.x = width * (1 - bufferMesh.scaling.x) / 2;
+    bufferMesh.position.x = context.coordinates.toRenderPoint({
+      x: widthCss * (1 - bufferMesh.scaling.x) / 2,
+      y: 0,
+    }).x;
     bufferMesh.position.z = .02;
-    const indicator = this.ownChild(context, MeshBuilder.CreatePlane(`${context.meshId}-indicator`, { width, height }, context.scene), root);
+    const indicator = this.ownChild(context, MeshBuilder.CreatePlane(`${context.meshId}-indicator`, size, context.scene), root);
     indicator.material = this.material(context, 'indicator-material', this.color(context, 'indicator-color', '#6750a4'));
     indicator.position.z = .03;
     const update = (phase: number) => {
       const amount = mode === 'determinate' || mode === 'buffer' ? progress : mode === 'query' ? .28 : .34;
       indicator.scaling.x = Math.max(.001, amount);
-      indicator.position.x = mode === 'determinate' || mode === 'buffer'
-        ? width * (1 - amount) / 2
-        : -width / 2 + (width * (1 + amount) * phase) - width * amount / 2;
-      if (mode === 'query') indicator.position.x *= -1;
+      let centerCss = mode === 'determinate' || mode === 'buffer'
+        ? widthCss * (1 - amount) / 2
+        : -widthCss / 2 + (widthCss * (1 + amount) * phase) - widthCss * amount / 2;
+      if (mode === 'query') centerCss *= -1;
+      indicator.position.x = context.coordinates.toRenderPoint({ x: centerCss, y: 0 }).x;
     };
     if (mode === 'determinate' || mode === 'buffer') update(0);
     else this.animate(context, update);
@@ -135,9 +143,8 @@ class MaterialLinearProgressRenderer extends MaterialRendererBase implements Ast
 class MaterialCircularProgressRenderer extends MaterialRendererBase implements AstylarPluginElementRenderer {
   render(context: AstylarPluginRenderContext): Mesh {
     const root = this.root(context);
-    const scale = context.dimensions.pixelToWorldScale;
-    const stroke = Math.max(scale, this.number(context, 'stroke-width', 4) * scale);
-    const radius = Math.max(4 * scale, Math.min(context.dimensions.width, context.dimensions.height) * scale / 2 - stroke / 2);
+    const strokeCss = Math.max(1, this.number(context, 'stroke-width', 4));
+    const radiusCss = Math.max(4, Math.min(context.dimensions.width, context.dimensions.height) / 2 - strokeCss / 2);
     const mode = String(context.element.data?.['mode'] ?? 'determinate');
     const progress = Math.max(.01, Math.min(1, this.number(context, 'progress', .64)));
     const arc = mode === 'determinate' ? progress : .74;
@@ -145,10 +152,16 @@ class MaterialCircularProgressRenderer extends MaterialRendererBase implements A
     const materialStartAngle = -Math.PI / 2 + Math.PI * 13 / 45;
     const points = Array.from({ length: pointCount }, (_, index) => {
       const angle = materialStartAngle - (index / Math.max(1, pointCount - 1)) * Math.PI * 2 * arc;
-      return new Vector3(Math.cos(angle) * radius, Math.sin(angle) * radius, 0);
+      return context.coordinates.toRenderPoint({
+        x: Math.cos(angle) * radiusCss,
+        y: Math.sin(angle) * radiusCss,
+      });
     });
     const indicator = this.ownChild(context, MeshBuilder.CreateTube(`${context.meshId}-indicator`, {
-      path: points, radius: stroke / 2, tessellation: this.config.benchmarkMode ? 12 : 16, cap: Mesh.CAP_ALL,
+      path: points,
+      radius: context.coordinates.toRenderLength(strokeCss / 2),
+      tessellation: this.config.benchmarkMode ? 12 : 16,
+      cap: Mesh.CAP_ALL,
     }, context.scene), root);
     indicator.material = this.material(context, 'indicator-material', this.color(context, 'indicator-color', '#6750a4'));
     indicator.position.z = .02;
@@ -162,15 +175,15 @@ class MaterialCircularProgressRenderer extends MaterialRendererBase implements A
 class MaterialRangeVisualRenderer extends MaterialRendererBase implements AstylarPluginElementRenderer {
   render(context: AstylarPluginRenderContext): Mesh {
     const root = this.root(context);
-    const scale = context.dimensions.pixelToWorldScale;
-    const width = context.dimensions.width * scale;
-    const trackHeight = Math.max(4 * scale, Math.min(16 * scale, context.dimensions.height * scale * .16));
+    const widthCss = context.dimensions.width;
+    const trackHeightCss = Math.max(4, Math.min(16, context.dimensions.height * .16));
+    const trackSize = context.coordinates.toRenderSize({ width: widthCss, height: trackHeightCss });
     const start = Math.max(0, Math.min(1, this.number(context, 'start', 0)));
     const end = Math.max(start, Math.min(1, this.number(context, 'end', .65)));
-    const track = this.ownChild(context, MeshBuilder.CreatePlane(`${context.meshId}-track`, { width, height: trackHeight }, context.scene), root);
+    const track = this.ownChild(context, MeshBuilder.CreatePlane(`${context.meshId}-track`, trackSize, context.scene), root);
     track.material = this.material(context, 'track-material', this.color(context, 'track-color', '#e7e0ec'));
     track.position.z = .01;
-    const active = this.ownChild(context, MeshBuilder.CreatePlane(`${context.meshId}-active`, { width, height: trackHeight }, context.scene), root);
+    const active = this.ownChild(context, MeshBuilder.CreatePlane(`${context.meshId}-active`, trackSize, context.scene), root);
     active.material = this.material(context, 'active-material', this.color(context, 'indicator-color', '#6750a4'));
     active.position.z = .02;
     const stateHandle = String(context.element.data?.['state-handle'] ?? '');
@@ -178,7 +191,7 @@ class MaterialRangeVisualRenderer extends MaterialRendererBase implements Astyla
     const stateLayers: Partial<Record<'start' | 'end', Mesh>> = {};
     for (const name of ['start', 'end'] as const) {
       const stateLayer = this.ownChild(context, MeshBuilder.CreateDisc(`${context.meshId}-${name}-state-layer`, {
-        radius: 24 * scale, tessellation: this.config.benchmarkMode ? 32 : 48,
+        radius: context.coordinates.toRenderLength(24), tessellation: this.config.benchmarkMode ? 32 : 48,
       }, context.scene), root);
       stateLayer.material = this.material(
         context, `${name}-state-layer-material`, stateColor, name === stateHandle ? 1 : 0,
@@ -189,10 +202,13 @@ class MaterialRangeVisualRenderer extends MaterialRendererBase implements Astyla
     const thumbs: Partial<Record<'start' | 'end', Mesh>> = {};
     for (const [name, ratio] of [['start', start], ['end', end]] as const) {
       const thumb = this.ownChild(context, MeshBuilder.CreateDisc(`${context.meshId}-${name}-thumb`, {
-        radius: 10 * scale, tessellation: this.config.benchmarkMode ? 32 : 48,
+        radius: context.coordinates.toRenderLength(10), tessellation: this.config.benchmarkMode ? 32 : 48,
       }, context.scene), root);
       thumb.material = this.material(context, `${name}-thumb-material`, this.color(context, 'indicator-color', '#6750a4'));
-      thumb.position.x = context.coordinates.toLocalPoint(-width / 2 + width * ratio, 0).x;
+      thumb.position.x = context.coordinates.toRenderPoint({
+        x: -widthCss / 2 + widthCss * ratio,
+        y: 0,
+      }).x;
       thumb.position.z = .03;
       thumbs[name] = thumb;
     }
@@ -200,14 +216,21 @@ class MaterialRangeVisualRenderer extends MaterialRendererBase implements Astyla
       const boundedStart = Math.max(0, Math.min(1, nextStart));
       const boundedEnd = Math.max(boundedStart, Math.min(1, nextEnd));
       active.scaling.x = Math.max(.001, boundedEnd - boundedStart);
-      active.position.x = context.coordinates.toLocalPoint(
-        -width / 2 + width * (boundedStart + boundedEnd) / 2, 0,
-      ).x;
+      active.position.x = context.coordinates.toRenderPoint({
+        x: -widthCss / 2 + widthCss * (boundedStart + boundedEnd) / 2,
+        y: 0,
+      }).x;
       if (thumbs.start) {
-        thumbs.start.position.x = context.coordinates.toLocalPoint(-width / 2 + width * boundedStart, 0).x;
+        thumbs.start.position.x = context.coordinates.toRenderPoint({
+          x: -widthCss / 2 + widthCss * boundedStart,
+          y: 0,
+        }).x;
       }
       if (thumbs.end) {
-        thumbs.end.position.x = context.coordinates.toLocalPoint(-width / 2 + width * boundedEnd, 0).x;
+        thumbs.end.position.x = context.coordinates.toRenderPoint({
+          x: -widthCss / 2 + widthCss * boundedEnd,
+          y: 0,
+        }).x;
       }
       if (stateLayers.start && thumbs.start) stateLayers.start.position.x = thumbs.start.position.x;
       if (stateLayers.end && thumbs.end) stateLayers.end.position.x = thumbs.end.position.x;
@@ -235,12 +258,13 @@ class MaterialRangeVisualRenderer extends MaterialRendererBase implements Astyla
 class MaterialCheckMarkRenderer extends MaterialRendererBase implements AstylarPluginElementRenderer {
   render(context: AstylarPluginRenderContext): Mesh {
     const root = this.root(context);
-    const scale = context.dimensions.pixelToWorldScale;
-    const path = materialCheckMarkPath(scale).map((point) =>
-      context.coordinates.toLocalPoint(point.x, point.y, point.z));
+    const path = materialCheckMarkPath().map((point) =>
+      context.coordinates.toRenderPoint(point));
     const mark = this.ownChild(context, MeshBuilder.CreateTube(`${context.meshId}-mark`, {
       path,
-      radius: Math.max(.6, this.number(context, 'stroke-width', 1.8) / 2) * scale,
+      radius: context.coordinates.toRenderLength(
+        Math.max(.6, this.number(context, 'stroke-width', 1.8) / 2),
+      ),
       tessellation: this.config.benchmarkMode ? 8 : 12,
       cap: Mesh.CAP_ALL,
     }, context.scene), root);
@@ -251,19 +275,18 @@ class MaterialCheckMarkRenderer extends MaterialRendererBase implements AstylarP
   }
 }
 
-export function materialCheckMarkPath(scale: number): Vector3[] {
+export function materialCheckMarkPath(): CssPoint[] {
   return [[-5.5, .4], [-1.8, 3.2], [5.5, -4.2]]
-    .map(([logicalX, y]) => new Vector3(logicalX * scale, y * scale, 0));
+    .map(([x, y]) => ({ x, y }));
 }
 
 @Injectable()
 class MaterialSortArrowRenderer extends MaterialRendererBase implements AstylarPluginElementRenderer {
   render(context: AstylarPluginRenderContext): Mesh {
     const root = this.root(context);
-    const scale = context.dimensions.pixelToWorldScale;
     const direction = context.element.data?.['direction'] === 'desc' ? 'desc' : 'asc';
-    const logicalVertices = materialSortArrowTriangles(scale, direction);
-    const vertices = logicalVertices.map((point) => context.coordinates.toLocalPoint(point.x, point.y, point.z));
+    const cssVertices = materialSortArrowTriangles(direction);
+    const vertices = cssVertices.map((point) => context.coordinates.toRenderPoint(point));
     const positions = vertices.flatMap((point) => point.asArray());
     const indices = vertices.map((_, index) => index);
     const normals: number[] = [];
@@ -288,7 +311,7 @@ class MaterialSortArrowRenderer extends MaterialRendererBase implements AstylarP
 }
 
 /** Angular Material's 24px sort-arrow SVG path, centered in its 12px arrow container. */
-export function materialSortArrowTriangles(scale: number, direction: 'asc' | 'desc'): Vector3[] {
+export function materialSortArrowTriangles(direction: 'asc' | 'desc'): CssPoint[] {
   const points = {
     stemBottomLeft: [-1, 6],
     stemTopLeft: [-1, -3.2],
@@ -308,14 +331,13 @@ export function materialSortArrowTriangles(scale: number, direction: 'asc' | 'de
     points.stemBottomLeft, points.stemTopRight, points.stemBottomRight,
   ];
   const rotation = direction === 'desc' ? -1 : 1;
-  return triangles.map(([x, y]) => new Vector3(x * scale * rotation, y * scale * rotation, 0));
+  return triangles.map(([x, y]) => ({ x: x * rotation, y: y * rotation }));
 }
 
 @Injectable()
 class MaterialTabPanelRenderer extends MaterialRendererBase implements AstylarPluginElementRenderer {
   render(context: AstylarPluginRenderContext): Mesh {
     const root = this.root(context);
-    const scale = context.dimensions.pixelToWorldScale;
     const width = Math.max(1, Math.round(context.dimensions.width * 2));
     const height = Math.max(1, Math.round(context.dimensions.height * 2));
     const texture = context.resources.own(new DynamicTexture(`${context.meshId}-content`, { width, height }, context.scene, false));
@@ -332,8 +354,10 @@ class MaterialTabPanelRenderer extends MaterialRendererBase implements AstylarPl
     material.opacityTexture = texture;
     material.useAlphaFromDiffuseTexture = true;
     const content = this.ownChild(context, MeshBuilder.CreatePlane(`${context.meshId}-content-plane`, {
-      width: Math.max(scale, context.dimensions.width * scale),
-      height: Math.max(scale, context.dimensions.height * scale),
+      ...context.coordinates.toRenderSize({
+        width: Math.max(1, context.dimensions.width),
+        height: Math.max(1, context.dimensions.height),
+      }),
     }, context.scene), root);
     content.material = material;
     content.position.z = .02;

@@ -88,9 +88,13 @@ class ConsumerBadgeRenderer implements AstylarPluginElementRenderer {
     this.state.renders.update((count) => count + 1);
     const revision = context.element.data?.['revision'];
     const authoredRevision = typeof revision === 'number' ? revision : 0;
+    const size = context.coordinates.toRenderSize({
+      width: context.dimensions.width,
+      height: context.dimensions.height,
+    });
     const mesh = MeshBuilder.CreateBox(context.meshId, {
-      width: context.dimensions.width * context.dimensions.pixelToWorldScale,
-      height: context.dimensions.height * context.dimensions.pixelToWorldScale,
+      width: size.width,
+      height: size.height,
       depth,
     }, context.scene);
     mesh.metadata = {

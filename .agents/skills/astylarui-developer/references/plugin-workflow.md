@@ -120,12 +120,15 @@ Babylon `Mesh`. Use only its curated fields:
 
 - `scene`, `parent`, and `meshId`;
 - readonly `element`, resolved `style`, and plugin `properties`;
-- measured pixel dimensions and `pixelToWorldScale`;
+- resolved parent-relative dimensions and padding in CSS pixels;
+- `coordinates` as the sole CSS-to-render and render-to-CSS boundary;
 - generation `resources`;
 - attributed `requestInvalidation()` and `report()`.
 
-Size custom geometry using `dimensions.width`, `dimensions.height`, and
-`pixelToWorldScale`. Preserve the supplied `meshId`, scene, and parent
+Calculate custom geometry using `dimensions.width`, `dimensions.height`, and
+other CSS-pixel values. Project only final Babylon inputs with
+`coordinates.toRenderSize()`, `toRenderPoint()`, or `toRenderLength()`.
+Preserve the supplied `meshId`, scene, and parent
 relationship. Do not retain core element meshes or access private services.
 
 Use `context.resources.own(resource)` for a synchronously created disposable

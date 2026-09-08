@@ -4,6 +4,15 @@ import { BabylonDOM } from '../interfaces/dom.types';
 import { DOMElement } from '../../../types/dom-element';
 
 describe('ElementCreationService', () => {
+  it('normalizes a built-in control root to the retained CSS layout identity', () => {
+    const service = Object.create(ElementCreationService.prototype) as ElementCreationService;
+    const controlMesh = { name: 'button_item-one-action' };
+
+    service['normalizeElementMeshIdentity'](controlMesh as never, 'item-one-action');
+
+    expect(controlMesh.name).toBe('item-one-action');
+  });
+
   it('calculates auto block height from padding, children, and collapsed sibling margins', () => {
     const service = Object.create(ElementCreationService.prototype) as ElementCreationService;
 

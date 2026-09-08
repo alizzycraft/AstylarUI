@@ -91,6 +91,17 @@ export {
   provideAstylarPlugin,
 } from './astylar-plugin';
 export type {
+  CssInsets,
+  CssLayoutBox,
+  CssLayoutNode,
+  CssPoint,
+  CssRect,
+  CssSize,
+  ProjectedCssRect,
+  RenderPoint,
+  RenderSize,
+} from '../app/services/coordinate-space.types';
+export type {
   AstylarCapabilityRegistrySnapshot,
   AstylarCssOptions,
   AstylarConfig,

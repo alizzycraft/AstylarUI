@@ -169,7 +169,7 @@ describe('Angular-native Astylar plugin API', () => {
 
   it('rejects incompatible API versions and invalid semantic versions', () => {
     expect(() => new AstylarCapabilityRegistry([
-      plugin('example.future', { pluginApiVersion: 2 }),
+      plugin('example.future', { pluginApiVersion: 3 }),
     ])).toThrowError(/plugin-api-incompatible/);
     expect(() => new AstylarCapabilityRegistry([
       plugin('example.invalid', { version: 'latest' }),

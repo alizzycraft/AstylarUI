@@ -227,17 +227,15 @@ export class ElementCreationService {
             width: dimensions.width,
             height: dimensions.height,
             padding: dimensions.padding,
-            pixelToWorldScale: render.actions.camera.getPixelToWorldScale(),
           },
           coordinates: {
-            toLocalPoint: (x, y, z = 0) => {
-              const point = render.actions.camera.projectCssLocalPoint({ x, y }, z);
+            toRenderPoint: (cssPoint, renderDepth = 0) => {
+              const point = render.actions.camera.projectCssLocalPoint(cssPoint, renderDepth);
               return new BABYLON.Vector3(point.x, point.y, point.z);
             },
-            toLogicalPoint: (point) => {
-              const logical = render.actions.camera.unprojectRenderLocalPoint(point);
-              return { x: logical.x, y: logical.y, z: point.z };
-            },
+            toRenderSize: (cssSize) => render.actions.camera.projectCssSize(cssSize),
+            toRenderLength: (cssPixels) => projectCssLength(render, cssPixels),
+            toCssPoint: (point) => render.actions.camera.unprojectRenderLocalPoint(point),
           },
           resources,
           requestInvalidation: (target) => this.pluginHost.requestFor(source, target),
@@ -249,7 +247,6 @@ export class ElementCreationService {
       } finally {
         exitRenderer();
       }
-      mesh.name = meshId;
     } else if (inputElement) {
       dom.context.inputElements.set(
         element.id || inputElement.mesh.name,
@@ -366,6 +363,12 @@ export class ElementCreationService {
         borderRadius,
       );
     }
+
+    // Retained CSS geometry is keyed by the authored/generated Astylar identity.
+    // Built-in control managers use descriptive Babylon names while constructing
+    // their private meshes; normalize the public root before any layout map uses
+    // mesh.name so nested controls participate in the same layout tree.
+    this.normalizeElementMeshIdentity(mesh, meshId);
 
     // Set metadata
     mesh.metadata = {
@@ -559,6 +562,10 @@ export class ElementCreationService {
     }
 
     return mesh;
+  }
+
+  private normalizeElementMeshIdentity(mesh: Mesh, meshId: string): void {
+    mesh.name = meshId;
   }
 
   /**
