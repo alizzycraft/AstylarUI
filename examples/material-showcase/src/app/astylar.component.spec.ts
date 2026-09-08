@@ -126,6 +126,16 @@ describe('AstylarShowcaseComponent', () => {
     expect(style(compactToggle, '.button-toggle-option:active')?.['background']).toBeDefined();
     expect(style(compactToggle, '.button-toggle-option.selected:hover')?.['background']).toBeDefined();
     expect(style(compactToggle, '.button-toggle-option.selected:active')?.['background']).toBeDefined();
+    store.patchState({ open: true });
+    const contrastDatepicker = build(component, 'datepicker');
+    expect(lastStyle(contrastDatepicker, '.datepicker-popup')).toEqual(jasmine.objectContaining({
+      top: '36px', height: '354px',
+    }));
+    const contrastTimepicker = build(component, 'timepicker');
+    expect(lastStyle(contrastTimepicker, '.timepicker-shell .picker-popup')).toEqual(jasmine.objectContaining({
+      top: '36px', left: '0', right: '0', height: '256px',
+    }));
+    store.patchState({ open: false });
     store.setTheme(MATERIAL_THEME_PROFILES.light);
 
     const toggle = build(component, 'button-toggle');
@@ -212,7 +222,7 @@ describe('AstylarShowcaseComponent', () => {
     const compactYearPicker = build(component, 'datepicker');
     expect(find(compactYearPicker, 'datepicker-month')?.['class']).toContain('year-view');
     expect(lastStyle(compactYearPicker, '.datepicker-popup')).toEqual(jasmine.objectContaining({
-      top: '48px', height: '350.5px',
+      top: '48px', height: '354px',
     }));
 
     store.setTheme(MATERIAL_THEME_PROFILES.dark);

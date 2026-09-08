@@ -429,8 +429,8 @@ export class AstylarShowcaseComponent {
     if (this.surface) this.surface.scene.clearColor = Color4.FromHexString(`${theme.surface}ff`);
     const rootId = `${family}-root`;
     const densityHeight = materialDensityHeight(theme.density);
-    const datepickerPanelHeight = theme.density === -2 ? 350.5 : 354;
-    const datepickerNaturalTop = theme.density <= -5 ? 40 : theme.density === 0 ? 56 : 48;
+    const datepickerPanelHeight = 354;
+    const datepickerNaturalTop = theme.density <= -5 ? 36 : theme.density === 0 ? 56 : 48;
     const datepickerPopupTop = family === 'datepicker' && state.open
       ? this.connectedOverlayTop('datepicker-primary', datepickerNaturalTop, datepickerPanelHeight)
       : datepickerNaturalTop;
@@ -579,7 +579,7 @@ export class AstylarShowcaseComponent {
         { selector: '.timepicker-shell .field-surface', height: `${theme.density <= -5 && state.open ? 39 : theme.density === 0 ? 56 : 48}px` },
         { selector: '.timepicker-shell .field-label', display: theme.density < 0 && state.open ? 'none' : undefined, color: state.open ? theme.primary : theme.onSurface },
         { selector: '.timepicker-active-line', position: 'absolute', top: `${theme.density <= -5 ? 37 : theme.density === 0 ? 56 : 46}px`, left: '0', right: '0', height: '2px', background: theme.primary, zIndex: '61' },
-        { selector: '.timepicker-shell .picker-popup', top: `${theme.density <= -5 ? 39 : theme.density === 0 ? 56 : 48}px`, left: '0', right: '0', width: 'auto', height: '256px', paddingTop: '8px' },
+        { selector: '.timepicker-shell .picker-popup', top: `${theme.density <= -5 ? 36 : theme.density === 0 ? 56 : 48}px`, left: '0', right: '0', width: 'auto', height: '256px', paddingTop: '8px' },
         { selector: '.timepicker-shell .picker-option', height: '48px', padding: '0 16px', display: 'flex', alignItems: 'center' },
         { selector: '.datepicker-shell .field-surface', height: `${theme.density <= -5 && state.open ? 36 : theme.density === 0 ? 56 : 48}px` },
         { selector: '.datepicker-shell .field-label', color: theme.density < 0 && state.open ? '#e8e0eb' : theme.onSurface },
@@ -609,7 +609,7 @@ export class AstylarShowcaseComponent {
         { selector: '.datepicker-year:active', background: '#d8d2d8' },
         { selector: '.datepicker-year.selected', borderWidth: '1px', borderStyle: 'solid', borderColor: theme.mode === 'dark' ? '#d5baff' : '#7d00fa' },
         ...(theme.density === -2 ? [
-          { selector: '.datepicker-popup', top: `${datepickerPopupTop}px`, height: '350.5px' },
+          { selector: '.datepicker-popup', top: `${datepickerPopupTop}px`, height: '354px' },
           { selector: '.datepicker-year-grid', top: '83.5px' },
         ] : []),
         { selector: '.datepicker-month.year-view', background: '#eadef7' },
