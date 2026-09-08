@@ -363,13 +363,8 @@ describe('AstylarShowcaseComponent', () => {
       fontSize: '16px',
       fontWeight: '400',
     }));
-    expect(style(focusedSort, '.sort-trigger.focused')).toEqual(jasmine.objectContaining({
-      height: '20px',
-      borderWidth: '0 0 1px 0',
-      borderStyle: 'solid',
-      borderColor: store.tokens().onSurface,
-    }));
-    expect(style(focusedSort, '.sort-header.focused')?.['height']).toBe('20px');
+    expect(style(focusedSort, '.sort-trigger.focused')).toBeUndefined();
+    expect(style(focusedSort, '.sort-header.focused')).toBeUndefined();
     expect(style(focusedSort, '.sort-arrow')).toEqual(jasmine.objectContaining({
       width: '12px',
       height: '12px',
