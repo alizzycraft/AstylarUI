@@ -42,7 +42,40 @@ not part of CSS layout geometry.
 | CSS text and inverse-pick geometry | Text metrics, input viewports, carets, selections, highlights, scrolling, and picked text positions remain in CSS pixels. A picked Babylon point is transformed to mesh-local render space and then crosses the camera-owned inverse projection exactly once. | Duplicated world-scaled text metrics, text mesh-bound reconstruction, scale division in caret/highlight logic, and comments/calculations tied to historical mesh rotation. | Application build; 75/75 focused input and interaction tests, including an asymmetric pick-to-CSS regression with retained scroll and vertical-origin state. | Viewport-aware overlay anchoring and the plugin API still need boundary isolation; remaining backend-only compensations require a final audit. |
 | CSS plugin paint boundary | Plugin API v2 receives resolved CSS dimensions and exposes named final projection operations for points, sizes, and lengths. Plugin geometry stays in CSS pixels until a Babylon primitive or position is supplied. | Public `pixelToWorldScale`, ambiguous `toLocalPoint`/`toLogicalPoint` methods, and manual scale/sign arithmetic in the maintained consumer and Material showcase renderers. | Packaged-library build; 30/30 plugin registry/runtime tests; Material renderer tests covering CSS-sized roots, checkmarks, arrows, tabs, ranges, and circular progress. | Viewport-aware overlay anchoring and the final backend-compensation audit remain. Plugin API v1 renderers must migrate explicitly because preserving their mirrored-axis contract would leak the obsolete convention into v2. |
 | Overlay layout and stable paint identity | Fixed overlays resolve against the CSS viewport; anchored absolute popups resolve against their CSS containing block. Built-in controls retain their authored IDs after their specialized managers create descriptive Babylon mesh names, so overlay descendants reuse the same retained CSS boxes as ordinary elements. | Overlay fallback sizing from provisional parent meshes and the accidental split between authored layout identity and generated control mesh names. | Fractional fixed/anchored overlay layout tests; packed-consumer browser acceptance; real pointer checks for snackbar, tooltip, dialog, and bottom sheet. | None in overlay layout; component-level Material parity remains separate work. |
-| Final paint-boundary audit | Camera scale is private to `CssBabylonProjection`; element transforms, borders, hover paint, and shadows cross named projection operations only. Renderer-only bounds inflation was removed, ripple paint clones already-projected core geometry instead of reconstructing CSS size, and plugin canvas textures use the core's natural UV convention. | Public/raw camera scale helpers, duplicate pixel snapping and border layout helpers, direct scale multiplication in transforms/interactions, mesh-bound ripple sizing, rounded-border bounding-box inflation, and plugin U/V flips. | Focused projection, transform, interaction, overlay, ripple, and plugin-orientation tests plus package/showcase builds. | Full suite, packed-consumer retry, and final parity gates must pass before this phase is accepted. |
+| Final paint-boundary audit | Camera scale is private to `CssBabylonProjection`; element transforms, borders, hover paint, and shadows cross named projection operations only. Renderer-only bounds inflation was removed, ripple paint clones already-projected core geometry instead of reconstructing CSS size, plugin canvas textures use the core's natural UV convention, and select popup direction uses retained CSS viewport geometry. | Public/raw camera scale helpers, duplicate pixel snapping and border layout helpers, direct scale multiplication in transforms/interactions, mesh-bound ripple sizing, rounded-border bounding-box inflation, plugin U/V flips, and popup placement reconstructed by projecting a mesh back to screen space. | 436/436 core tests; focused projection, transform, interaction, overlay, ripple, popup-direction, and plugin-orientation tests; packed consumer acceptance; package, application, and showcase builds. | None in the coordinate architecture. Existing Material, general, TTS, and Tailwind visual-threshold debt remains in their separate parity workstreams. |
+
+## Final verification record
+
+The remediation was accepted on 2026-09-08 with the following evidence:
+
+- The full core suite passes 436/436 tests. Focused coverage includes asymmetric
+  point and rectangle projection, fractional round trips, multiple scales and
+  DPRs, nested boxes, relative/absolute/fixed containing blocks, grid spans,
+  horizontal and vertical scrolling, pick-to-CSS conversion, independent range
+  handles, plugin/core placement, fixed/anchored overlays, and select popup
+  direction without reading or projecting Babylon mesh position.
+- The clean packed-consumer check passes all 3 browser acceptance tests using
+  Babylon.js 8.56.2 and verifies a package containing 419 files. Its automated
+  browser runner is explicitly headless so background-window throttling cannot
+  turn the first WebGL readiness check into a false timeout.
+- The standalone Material showcase passes 37/37 tests, its production build,
+  normal-runtime snackbar and tooltip checks, independent slider dragging, and
+  its packed-application check. The enforced parity runner completed all 436
+  static and 1,875 interaction captures, including DPR 1 and 2; its aggregate
+  visual gate remains below threshold on the separately tracked Material
+  component-parity backlog (79 static and 296 interaction comparisons).
+- Capability coverage passes for 91 elements, 87 style fields, 82 DOM fields,
+  and 91 evidence references. All 11 example pairs, both maintained skills, and
+  all 33 parity-harness tests pass.
+- The production application build passes. The general, TTS, and focused
+  Tailwind parity runners were also executed as regression evidence. Their
+  existing aggregate visual/runtime thresholds remain unmet, while the TTS
+  visibility, scroll ownership, scroll reachability, and visible-text checks
+  pass 10/10 and the focused Tailwind geometry, text, and sharpness checks pass.
+
+These aggregate parity deficits were not hidden with component offsets or
+baseline rewrites. They remain explicit follow-up work and do not reintroduce a
+second coordinate convention into core or plugins.
 
 ## Backend-only conventions retained
 
