@@ -1274,6 +1274,7 @@ export class TextInputManager {
             fontWeight: parseFontWeight(style.fontWeight),
             fontStyle: parseFontStyle(style.fontStyle),
             color: style.color || '#000000',
+            caretColor: style.caretColor?.trim() || 'auto',
             textAlign: (style.textAlign as any) || 'left',
             verticalAlign: 'baseline',
             lineHeight,

@@ -64,6 +64,16 @@ describe('TextInputManager', () => {
     expect((manager as any).resolveSingleLineTextYCss({ top: 4, bottom: 4 })).toBe(-1);
   });
 
+  it('preserves the authored caret color when adapting input text styles', () => {
+    const manager = Object.create(TextInputManager.prototype) as TextInputManager;
+
+    expect((manager as any).parseTextStyle({
+      selector: '#readonly-select',
+      color: '#1d1b20',
+      caretColor: 'transparent',
+    }).caretColor).toBe('transparent');
+  });
+
   it('masks password display text without changing the stored value', () => {
     const manager = Object.create(TextInputManager.prototype) as TextInputManager;
     const textInput = createTextInput('secret', 6);
