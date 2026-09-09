@@ -453,6 +453,11 @@ export class AstylarShowcaseComponent {
       styles: [
         { selector: 'root', background: theme.surface },
         { selector: '#page', width: '100%', minHeight: '100%', padding: '36px', background: theme.surface, color: theme.onSurface, fontFamily: 'Roboto, Arial, sans-serif', fontSize: `${16 * theme.typographyScale}px` },
+        // Mirrors the reference app's `button, input, select { font: inherit }`
+        // reset. Astylar's browser-compatible control defaults intentionally use
+        // Arial, so consuming applications must explicitly opt controls into
+        // their document typeface just as browser CSS does.
+        { selector: 'button, input, select', fontFamily: 'Roboto, Arial, sans-serif' },
         { selector: '#eyebrow', position: 'relative', top: theme.density === -2 ? '3px' : '-2px', margin: `${16 * theme.typographyScale}px 0`, color: this.benchmarkMode ? theme.surface : theme.primary, fontSize: `${(theme.density === -2 ? 16 : 12) * theme.typographyScale}px`, lineHeight: `${19.2 * theme.typographyScale}px`, fontWeight: '700', textTransform: 'uppercase', letterSpacing: `${(theme.density === -2 ? 1.28 : 1.2) * theme.typographyScale}px` },
         { selector: '#title', position: 'relative', top: theme.density === -2 ? '6.5px' : '-6.5px', margin: '21.44px 0', color: this.benchmarkMode ? theme.surface : theme.onSurface, fontSize: '32px', fontWeight: '700', textTransform: 'capitalize' },
         ...(theme.density === -2 ? [{ selector: '#eyebrow', mediaMaxWidth: '500px', top: '.5px' }, { selector: '#title', mediaMaxWidth: '500px', top: '-16.5px' }] : []),

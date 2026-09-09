@@ -28,6 +28,15 @@ describe('AstylarShowcaseComponent', () => {
     expect(style(site, '#title')).toEqual(jasmine.objectContaining({ top: '6.5px', margin: '21.44px 0' }));
   });
 
+  it('inherits the showcase typeface for native controls like the reference reset', () => {
+    const { component } = createComponent('button');
+    const site = build(component, 'button');
+
+    expect(style(site, 'button, input, select')).toEqual(jasmine.objectContaining({
+      fontFamily: 'Roboto, Arial, sans-serif',
+    }));
+  });
+
   it('activates a primary-color ripple from the toolbar action pointer origin', () => {
     const activate = jasmine.createSpy('activate');
     const tokens = resolveTheme(MATERIAL_THEME_PROFILES.light);
