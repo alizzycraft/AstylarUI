@@ -7,6 +7,7 @@ import process from 'node:process';
 import { chromium } from 'playwright-core';
 import { PNG } from 'pngjs';
 import { ssim } from 'ssim.js';
+import { evaluateFocusedRaster } from './focused-raster-metrics.mjs';
 import {
   materialAbsoluteTextAlignmentTargets, materialAdditionalMeasurementTargets, materialFamilies, materialFocusedRasterTargets, materialGeometryExcludedTargets, materialInteractionCases, materialInteractionFocusedRasterTargets, materialInteractionTextAlignmentTargets, materialMobileFlowCases, materialProfiles,
   materialLeftAlignedTextTargets, materialSemanticExcludedTargets, materialShadowProfileTargets, materialStaticCases, materialTextAlignmentTargets, materialTextAlignmentToleranceOverrides, materialTextAuditTargets, materialTextOnlyTargets, materialThresholds, materialUniformBackgroundTargets,
@@ -1416,10 +1417,10 @@ function compareFocusedRaster(reference, candidate, referenceElements, target, s
   };
   const referenceCrop = cropPng(reference, bounds);
   const astylarCrop = cropPng(candidate, bounds);
-  const similarity = comparePng(referenceCrop, astylarCrop);
+  const comparison = evaluateFocusedRaster(referenceCrop, astylarCrop, target);
   writeFileSync(path.join(directory, `${target.element}-raster-reference.png`), PNG.sync.write(referenceCrop));
   writeFileSync(path.join(directory, `${target.element}-raster-astylar.png`), PNG.sync.write(astylarCrop));
-  return { id: target.element, similarity, minimumSsim: target.minimumSsim, matches: similarity >= target.minimumSsim };
+  return { id: target.element, ...comparison };
 }
 
 function writeAlignmentArtifacts(reference, candidate, box, scale, directory, id) {
