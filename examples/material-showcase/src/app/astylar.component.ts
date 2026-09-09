@@ -45,6 +45,8 @@ export class AstylarShowcaseComponent {
   private surface?: AstylarSurface;
   private pendingSurfaceUpdate?: Promise<unknown>;
   private readonly focusedId = signal<string | undefined>(undefined);
+  private readonly focusVisibleId = signal<string | undefined>(undefined);
+  private pointerDownId?: string;
   private readonly datepickerView = signal<'month' | 'years'>('month');
   private readonly hoveredSliderId = signal<string | undefined>(undefined);
   private readonly pressedSliderId = signal<string | undefined>(undefined);
@@ -68,6 +70,7 @@ export class AstylarShowcaseComponent {
         get: (_target, id: string) => ({
           pointerdown: (event: AstylarEvent) => this.zone.run(() => {
             this.recordEvent(event);
+            this.pointerDownId = this.canonicalFocusTarget(event.targetId);
             if (event.targetId === 'slider-start' || event.targetId === 'slider-primary') {
               this.pressedSliderId.set(event.targetId);
               this.updateSliderStateLayer(sliderHandleName(event.targetId), .12);
@@ -76,6 +79,7 @@ export class AstylarShowcaseComponent {
           }),
           pointerup: (event: AstylarEvent) => this.zone.run(() => {
             this.recordEvent(event);
+            this.pointerDownId = undefined;
             if (event.targetId === this.pressedSliderId()) {
               this.pressedSliderId.set(undefined);
               this.updateSliderStateLayer(sliderHandleName(this.hoveredSliderId()), .08);
@@ -104,8 +108,10 @@ export class AstylarShowcaseComponent {
           }),
           focus: (event: AstylarEvent) => this.zone.run(() => {
             this.recordEvent(event);
-            if (this.authoredTreeDependsOnFocus(event.targetId)) {
-              this.focusedId.set(event.targetId);
+            const focusTarget = this.canonicalFocusTarget(event.targetId);
+            if (this.authoredTreeDependsOnFocus(focusTarget)) {
+              this.focusedId.set(focusTarget);
+              this.focusVisibleId.set(this.pointerDownId === focusTarget ? undefined : focusTarget);
             }
             if (event.targetId === 'autocomplete-control' || event.targetId === 'timepicker-control') {
               this.store.patchState({ open: true });
@@ -113,7 +119,9 @@ export class AstylarShowcaseComponent {
           }),
           blur: (event: AstylarEvent) => this.zone.run(() => {
             this.recordEvent(event);
-            if (this.focusedId() === event.targetId) this.focusedId.set(undefined);
+            const focusTarget = this.canonicalFocusTarget(event.targetId);
+            if (this.focusedId() === focusTarget) this.focusedId.set(undefined);
+            if (this.focusVisibleId() === focusTarget) this.focusVisibleId.set(undefined);
           }),
           keydown: (event: AstylarEvent) => this.zone.run(() => { this.recordEvent(event); this.handleKeydown(id, event); }),
           click: (event: AstylarEvent) => this.zone.run(() => {
@@ -397,11 +405,18 @@ export class AstylarShowcaseComponent {
       'form-field-control',
       'input-control',
       'autocomplete-control',
+      'select-control',
       'datepicker-control',
       'timepicker-control',
       'sort-primary',
       'sort-trigger',
     ].includes(elementId) || elementId.startsWith('tree-item-');
+  }
+
+  private canonicalFocusTarget(elementId: string | undefined): string | undefined {
+    const fieldFamily = ['form-field', 'input', 'autocomplete', 'select', 'datepicker', 'timepicker']
+      .find((family) => elementId === `${family}-primary`);
+    return fieldFamily ? `${fieldFamily}-control` : elementId;
   }
 
   private connectedOverlayTop(
@@ -495,7 +510,7 @@ export class AstylarShowcaseComponent {
         { selector: '.switch-label', position: 'absolute', zIndex: '2', top: '6px', left: '60px', whiteSpace: 'nowrap', color: theme.onSurface, fontSize: '14px', verticalAlign: 'middle' },
         { selector: '#button-toggle-primary', width: '130px', height: `${theme.density <= -5 ? 26 : 42}px`, boxSizing: 'border-box', borderWidth: '1px', borderStyle: 'solid', borderColor: '#79747e', borderRadius: `${(theme.density <= -5 ? 13 : 21) * theme.cornerScale}px`, display: 'flex', alignSelf: 'flex-start', overflow: 'hidden', background: theme.surfaceContainer },
         { selector: '.button-toggle-option', height: `${theme.density <= -5 ? 24 : 40}px`, boxSizing: 'border-box', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', color: theme.onSurface, fontSize: '14px', cursor: 'pointer' },
-        { selector: '#button-toggle-one-label, #button-toggle-two-label', lineHeight: `${theme.density <= -5 ? 24 : 40}px` },
+        { selector: '#button-toggle-one-label, #button-toggle-two-label', lineHeight: `${theme.density <= -5 ? 24 : 40}px`, ...(theme.density <= -5 ? { padding: '.5px 0 0' } : {}) },
         { selector: '#button-toggle-one', width: state.selected ? '47px' : '81px', borderRadius: '0', background: state.selected ? 'transparent' : '#eadef7' },
         { selector: '#button-toggle-two', width: state.selected ? '81px' : '47px', borderWidth: '0 0 0 1px', borderStyle: 'solid', borderColor: '#79747e', borderRadius: '0', background: state.selected ? '#eadef7' : 'transparent' },
         { selector: '.button-toggle-option.selected', color: '#4b4357' },
@@ -504,8 +519,9 @@ export class AstylarShowcaseComponent {
         { selector: '.button-toggle-option.selected:hover', background: mixHex('#eadef7', '#4b4357', .08) },
         { selector: '.button-toggle-option.selected:active', background: mixHex('#eadef7', '#4b4357', .12) },
         { selector: '#menu-primary', width: '120px' },
-        { selector: '#menu-popup', position: 'absolute', top: `${theme.density <= -5 ? 54 : theme.density < 0 ? 58 : 69}px`, left: '28px', width: '111px', height: `${theme.density <= -5 ? 111 : theme.density < 0 ? 110 : 112}px`, boxSizing: 'border-box', padding: '8px 0', borderRadius: '4px', background: '#f2ecf1', boxShadow: '0 2px 6px rgba(0,0,0,0.24)', zIndex: '50' },
-        { selector: '#menu-rename, #menu-delete', width: '111px', height: '48px', padding: '0 12px', borderWidth: '0', background: 'transparent', color: '#1d1b20', textAlign: 'left', fontSize: '14px', fontWeight: '500' },
+        { selector: '#menu-popup', position: 'absolute', top: `${theme.density <= -5 ? 54 : theme.density < 0 ? 58 : 69}px`, left: '28px', width: '112px', height: `${theme.density <= -5 ? 111 : theme.density < 0 ? 110 : 112}px`, boxSizing: 'border-box', padding: '8px 0', borderRadius: '4px', background: '#f2ecf1', boxShadow: '0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px rgba(0,0,0,.14), 0 1px 5px rgba(0,0,0,.12)', zIndex: '50' },
+        { selector: '#menu-rename, #menu-delete', width: '112px', height: '48px', boxSizing: 'border-box', padding: '0 12px', borderWidth: '0', background: 'transparent', color: '#1d1b20', display: 'flex', alignItems: 'center', textAlign: 'left', fontSize: '14px', fontWeight: '500', lineHeight: '20px' },
+        { selector: '.menu-option-label', marginBottom: `${theme.density <= -5 ? 4 : 0}px` },
         { selector: '#menu-rename:hover, #menu-delete:hover', background: mixHex('#f2ecf1', '#1d1b20', .08) },
         { selector: '#menu-rename:active, #menu-delete:active', background: mixHex('#f2ecf1', '#1d1b20', .12) },
         { selector: '#menu-primary:hover', background: state.open ? theme.primary : mixHex(theme.primary, theme.onPrimary, .08) },
@@ -525,7 +541,8 @@ export class AstylarShowcaseComponent {
         ...(theme.mode === 'dark' && state.disabled ? [
           { selector: '.field-label, .picker-clock', color: '#79747e' },
         ] : []),
-        { selector: '.field-surface.active', boxShadow: `0 2px 0 ${state.error ? theme.error : theme.primary}` },
+        { selector: '.field-surface.active', boxShadow: 'none' },
+        { selector: '.field-active-line', position: 'absolute', left: '0', top: `${theme.density === 0 ? 56 : theme.density <= -5 ? 35 : 48}px`, width: '100%', height: '2px', background: state.error ? theme.error : theme.primary, pointerEvents: 'none' },
         { selector: '.field-label', position: 'absolute', top: '8px', left: '16px', color: state.error ? theme.error : theme.density <= -5 ? '#000000' : '#49454f', fontSize: '12px', letterSpacing: '.4px', verticalAlign: 'middle' },
         { selector: '.field-label.empty-field-label', top: `${emptyFieldActive ? 8 : theme.density === 0 ? 20 : 16}px`, color: state.error ? theme.error : emptyFieldActive ? theme.primary : '#1d1b20', fontSize: emptyFieldActive ? '12px' : '16px', letterSpacing: emptyFieldActive ? '.4px' : '.65px' },
         { selector: '.field-label.compact-filled-label', display: 'none' },
@@ -645,7 +662,7 @@ export class AstylarShowcaseComponent {
         { selector: '.expansion-trigger:active', background: state.open ? 'transparent' : mixHex(theme.surface, theme.onSurface, .08) },
         { selector: '.expansion-trigger.disabled', color: mixHex(theme.surface, theme.onSurface, .38) },
         { selector: '.expansion-title', fontWeight: '500', lineHeight: '24px', verticalAlign: 'middle' },
-        ...(family === 'expansion' && theme.density <= -5 ? [{ selector: '.expansion-title', padding: state.open ? '2px 0 0' : '0', fontSize: '16px' }] : []),
+        ...(family === 'expansion' && theme.density <= -5 ? [{ selector: '.expansion-title', padding: '0', fontSize: '16px' }] : []),
         { selector: '.expansion-chevron', position: 'absolute', top: `${state.open ? theme.density <= -5 ? 23 : 28 : 16}px`, right: '24px', width: '8px', height: '8px', boxSizing: 'border-box', borderWidth: '1px 1px 0 0', borderStyle: 'solid', borderColor: theme.onSurface, transform: state.open ? 'rotate(-45deg)' : 'rotate(135deg)' },
         { selector: '.expansion-chevron.disabled', display: 'none' },
         { selector: '#expansion-content', position: 'absolute', display: state.open ? 'block' : 'none', top: `${state.open ? theme.density === 0 ? 80 : theme.density <= -5 ? 65 : 72 : 0}px`, left: '0', width: '100%', boxSizing: 'border-box', padding: '0 24px', margin: '0', textAlign: 'left', verticalAlign: 'middle' },
@@ -695,8 +712,9 @@ export class AstylarShowcaseComponent {
         { selector: '.material-list', width: '100%', display: 'flex', flexDirection: 'column', fontSize: '16px' },
         { selector: '.list-item', width: '100%', height: `${theme.density === 0 ? 56 : theme.density <= -5 ? 40 : 48}px`, boxSizing: 'border-box', display: 'flex', alignItems: 'center' },
         { selector: '.list-label', marginLeft: '16px', fontSize: '16px' },
-        { selector: '.sort-header', width: '100%', height: `${theme.density === -2 ? 22 : 19}px`, borderWidth: '0', background: 'transparent', color: theme.onSurface, textAlign: 'left', fontWeight: '400' },
-        { selector: '.sort-trigger', width: '100%', height: `${theme.density === -2 ? 22 : 19}px`, display: 'flex', alignItems: 'center', gap: '6px', color: theme.onSurface, fontSize: '16px', fontWeight: '400', cursor: 'pointer' },
+        { selector: '.sort-header', position: 'relative', width: '100%', height: `${theme.density === -2 ? 22 : 19}px`, borderWidth: '0', background: 'transparent', color: theme.density <= -5 ? '#000000' : theme.onSurface, textAlign: 'left', fontWeight: '400' },
+        { selector: '.sort-focus-line', position: 'absolute', left: '0', top: `${theme.density === -2 ? 22 : 19}px`, width: '100%', height: '1px', background: theme.density <= -5 ? '#1d1b20' : theme.onSurface, pointerEvents: 'none' },
+        { selector: '.sort-trigger', width: '100%', height: `${theme.density === -2 ? 22 : 19}px`, display: 'flex', alignItems: 'center', gap: '6px', color: theme.density <= -5 ? '#000000' : theme.onSurface, fontSize: '16px', fontWeight: '400', cursor: 'pointer' },
         { selector: '.sort-arrow', width: '12px', height: '12px', flexShrink: '0' },
         { selector: '.paginator', position: 'relative', width: '100%', height: '56px', background: theme.surface, fontSize: '13px' },
         { selector: '#paginator-size', position: 'absolute', top: `${theme.density === 0 ? 20 : theme.density <= -5 ? 12 : 16}px`, right: `${theme.density <= -5 ? 222.75 : 246.75}px`, whiteSpace: 'nowrap', fontSize: '13px', verticalAlign: 'middle' },
@@ -746,10 +764,10 @@ export class AstylarShowcaseComponent {
         { selector: '.step-text', marginLeft: '8px', whiteSpace: 'nowrap', fontWeight: '500', fontSize: '14px', verticalAlign: 'middle' },
         { selector: '.step-connector', position: 'absolute', zIndex: '3', top: `${theme.density === 0 ? 35 : theme.density <= -5 ? 21 : 32}px`, left: '89px', width: '73.2%', height: '1px', background: '#7b757f', pointerEvents: 'none' },
         { selector: '#stepper-content', boxSizing: 'border-box', paddingTop: `${theme.density <= -5 ? 2 : 0}px`, marginTop: `${theme.density <= -5 ? -4 : 1}px`, textAlign: 'left', verticalAlign: 'middle' },
-        { selector: '.stepper-content-label', position: 'relative', top: `${theme.density <= -5 ? 1 : 0}px`, display: 'block', width: '100%', textAlign: 'left', verticalAlign: 'middle' },
+        { selector: '.stepper-content-label', position: 'relative', top: `${theme.density <= -5 ? state.selected ? -2 : -3 : 0}px`, display: 'block', width: '100%', textAlign: 'left', verticalAlign: 'middle' },
         { selector: '.step-connector', mediaMaxWidth: '800px', width: '69.5%' },
         { selector: '.step-connector', mediaMaxWidth: '500px', left: '90px', width: '15.1%' },
-        { selector: '.stepper-content-label', mediaMaxWidth: '500px', ...(theme.density <= -5 ? { top: '0' } : {}) },
+        { selector: '.stepper-content-label', mediaMaxWidth: '500px', ...(theme.density <= -5 ? { top: state.selected ? '-1px' : '-2px' } : {}) },
         { selector: '.divider', position: 'absolute', top: `${theme.density === -2 ? 86.785 : theme.density <= -5 ? 74.785 : 79}px`, left: '28px', right: '28px', height: '1px', width: 'auto', background: '#cac4d0' },
         { selector: '.divider-copy', position: 'absolute', left: '28px', right: '28px', width: 'auto', height: `${22 * theme.typographyScale}px` },
         { selector: '.divider-above', top: `${theme.density === -2 ? 47.290625 - (devicePixelRatio >= 1.5 ? .5 : 0) : theme.density <= -5 ? 42.890625 - (devicePixelRatio >= 1.5 ? .5 : 0) : 43.69}px` },
@@ -771,7 +789,6 @@ export class AstylarShowcaseComponent {
         { selector: '.checkbox-label', position: 'relative', zIndex: '2', whiteSpace: 'nowrap', color: theme.onSurface, fontSize: '14px', verticalAlign: 'middle' },
         ...(theme.typographyScale > 1 ? [
           { selector: '.checkbox-label', mediaMaxWidth: '500px', padding: '0 0 1px' },
-          { selector: '#button-toggle-one-label', padding: '0 0 2px' },
         ] : []),
         { selector: '.range', width: '100%', height: '48px', cursor: 'pointer' },
         { selector: '.range-stack', position: 'relative', width: '100%', height: '48px', margin: '0 8px' },
@@ -816,6 +833,11 @@ export class AstylarShowcaseComponent {
       id: `${controlId}-surface`,
       class: `field-surface${this.focusedId() === controlId || state.error ? ' active' : ''}`,
     });
+    const fieldActiveLine = (controlId: string): DOMElement[] => this.focusedId() === controlId || state.error ? [{
+        type: 'div',
+        id: `${controlId}-active-line`,
+        class: 'field-active-line',
+      }] : [];
     const autocompleteOption = (label: string, slug: string, value: string): DOMElement => {
       const selected = value === label;
       return {
@@ -844,7 +866,8 @@ export class AstylarShowcaseComponent {
     if (family === 'list') return [{ type: 'div', id: 'list-primary', class: 'material-list', ariaDisabled: false, children: [{ type: 'div', id: 'list-inbox', class: 'list-item', children: [{ type: 'span', id: 'list-inbox-label', class: 'list-label', textContent: 'Inbox' }] }, { type: 'div', id: 'list-archive', class: 'list-item', children: [{ type: 'span', id: 'list-archive-label', class: 'list-label', textContent: 'Archive' }] }] }];
     if (family === 'sort') {
       const focused = this.focusedId() === 'sort-primary' || this.focusedId() === 'sort-trigger';
-      return [{ type: 'div', id: 'sort-primary', class: `sort-header${focused ? ' focused' : ''}`, ariaLabel: 'Sort by name', children: [{
+      const focusVisible = this.focusVisibleId() === 'sort-primary' || this.focusVisibleId() === 'sort-trigger';
+      return [{ type: 'div', id: 'sort-primary', class: `sort-header${focused ? ' focused' : ''}${focusVisible ? ' focus-visible' : ''}`, ariaLabel: 'Sort by name', children: [{
       type: 'div', id: 'sort-trigger', class: `sort-trigger${focused ? ' focused' : ''}`, role: 'button', tabindex: 0,
       ariaSort: state.open ? state.sortDirection === 'asc' ? 'ascending' : 'descending' : undefined,
       children: [
@@ -861,7 +884,12 @@ export class AstylarShowcaseComponent {
           },
         }] : []),
       ],
-      }] }];
+      }, ...(focusVisible ? [{
+        type: 'div' as const,
+        id: 'sort-focus-line',
+        class: 'sort-focus-line',
+        role: 'presentation',
+      }] : [])] }];
     }
     if (family === 'paginator') return [{ type: 'div', id: 'paginator-primary', class: 'paginator', role: 'group', ariaLabel: `Items per page: 10 ${state.pageIndex * 10 + 1} – ${Math.min(100, state.pageIndex * 10 + 10)} of 100`, children: [{ type: 'span', id: 'paginator-size', textContent: 'Items per page:' }, { type: 'span', id: 'paginator-page-size', textContent: '10' }, { type: 'span', id: 'paginator-range', textContent: `${state.pageIndex * 10 + 1} – ${Math.min(100, state.pageIndex * 10 + 10)} of 100` }, { type: 'button', id: 'paginator-previous', class: 'paginator-button', disabled: state.pageIndex === 0, ariaLabel: 'Previous page', value: '‹' }, { type: 'button', id: 'paginator-next', class: 'paginator-button', disabled: state.pageIndex === 9, ariaLabel: 'Next page', value: '›' }] }];
     if (family === 'tree') return [{ type: 'div', id: 'tree-primary', class: 'material-tree', role: 'tree', children: ['Documents', 'Projects', 'Archive'].map((label, index) => ({ type: 'div' as const, id: `tree-item-${index}`, class: `tree-item${this.focusedId() === `tree-item-${index}` ? ' focused' : ''}`, role: 'treeitem', tabindex: index === 0 ? 0 : -1, ariaLevel: 1, ariaPosinset: index + 1, ariaSetsize: 3, children: [{ type: 'span' as const, id: `tree-item-${index}-label`, class: 'tree-label', textContent: label }] })) }];
@@ -879,6 +907,7 @@ export class AstylarShowcaseComponent {
       const compactFilled = theme.density < 0 && !empty;
       return [{ type: 'div', id: `${family}-primary`, class: 'field-shell', children: [
       fieldSurface(`${family}-control`),
+      ...fieldActiveLine(`${family}-control`),
       { type: 'label' as const, id: `${family}-label`, class: `field-label${empty ? ' empty-field-label' : ''}${compactFilled ? ' compact-filled-label' : ''}`, for: `${family}-control`, textContent: family === 'autocomplete' ? 'City' : family === 'form-field' ? 'Project name' : 'Email' },
       { type: 'div', id: `${family}-input-region`, class: `field-input-region${compactFilled ? ' compact-filled-input-region' : ''}`, children: [{ type: 'input', inputType: family === 'input' ? 'email' : 'text', id: `${family}-control`, class: 'field-control', value: fieldValue, disabled: state.disabled, ariaLabel: family === 'autocomplete' ? 'City' : family === 'input' ? 'Email' : 'Project name', ariaInvalid: state.error, role: family === 'autocomplete' ? 'combobox' : undefined, ariaExpanded: family === 'autocomplete' ? state.open : undefined, ariaControls: family === 'autocomplete' ? 'field-options' : undefined, ariaAutocomplete: family === 'autocomplete' ? 'list' : undefined }] },
       ...(family === 'form-field' && !state.error ? [{ type: 'span' as const, id: 'form-field-hint', class: 'field-hint', textContent: 'Public label' }] : []),
@@ -906,6 +935,7 @@ export class AstylarShowcaseComponent {
       const compactFilled = theme.density < 0;
       return [{ type: 'div', id: 'select-primary', class: 'field-shell', children: [
       fieldSurface('select-control'),
+      ...fieldActiveLine('select-control'),
       { type: 'label', id: 'select-label', class: `field-label${compactFilled ? ' compact-filled-label' : ''}`, for: 'select-control', textContent: 'Plan' },
       { type: 'div', id: 'select-input-region', class: `field-input-region${compactFilled ? ' compact-filled-input-region' : ''}`, children: [{
         type: 'input', inputType: 'text', id: 'select-control', class: 'field-control select-control',
@@ -932,7 +962,10 @@ export class AstylarShowcaseComponent {
       { type: 'span', id: 'slide-toggle-track', class: 'switch-track', children: [{ type: 'span', id: 'slide-toggle-thumb', class: 'switch-thumb', children: state.selected ? [this.selectionMark('slide-toggle-mark', 'switch-mark')] : [{ type: 'span', id: 'slide-toggle-minus', class: 'switch-minus' }] }] },
       { type: 'span', id: 'slide-toggle-label', class: 'switch-label', textContent: 'Automatic updates' },
     ] }];
-    if (family === 'menu') return [{ type: 'button', id: 'menu-primary', class: 'material-button', ariaHaspopup: 'menu', ariaExpanded: state.open, ariaControls: 'menu-popup', value: 'Open menu' }, ...(state.open ? [{ type: 'div' as const, id: 'menu-popup', role: 'menu', children: [{ type: 'button' as const, id: 'menu-rename', role: 'menuitem', value: 'Rename' }, { type: 'button' as const, id: 'menu-delete', role: 'menuitem', value: 'Delete' }] }] : [])];
+    if (family === 'menu') return [{ type: 'button', id: 'menu-primary', class: 'material-button', ariaHaspopup: 'menu', ariaExpanded: state.open, ariaControls: 'menu-popup', value: 'Open menu' }, ...(state.open ? [{ type: 'div' as const, id: 'menu-popup', role: 'menu', children: [
+      { type: 'button' as const, id: 'menu-rename', role: 'menuitem', ariaLabel: 'Rename', children: [{ type: 'span' as const, id: 'menu-rename-label', class: 'menu-option-label', textContent: 'Rename' }] },
+      { type: 'button' as const, id: 'menu-delete', role: 'menuitem', ariaLabel: 'Delete', children: [{ type: 'span' as const, id: 'menu-delete-label', class: 'menu-option-label', textContent: 'Delete' }] },
+    ] }] : [])];
     if (family === 'tabs') return [{ type: 'div', id: 'tabs-primary', class: 'tabs', ariaLabel: `OverviewActivity${state.selected ? 'Overview content' : 'Activity content'}`, children: [{ type: 'div', id: 'tabs-list', class: 'tab-list', role: 'tablist', children: [{ type: 'button', id: 'tab-overview', class: 'tab', role: 'tab', ariaSelected: state.selected, tabindex: state.selected ? 0 : -1, ariaControls: 'tab-panel', value: 'Overview' }, { type: 'button', id: 'tab-activity', class: 'tab', role: 'tab', ariaSelected: !state.selected, tabindex: state.selected ? -1 : 0, ariaControls: 'tab-panel', value: 'Activity' }] }, { type: 'div', id: 'tab-baseline', class: 'tab-baseline' }, { type: 'div', id: 'tab-indicator', class: 'tab-indicator' }, { type: 'showcase.material:tab-panel', id: 'tab-panel', class: 'tab-panel', role: 'tabpanel', ariaLabel: state.selected ? 'Overview content' : 'Activity content', data: { selected: state.selected, phase: this.benchmarkMode ? 1 : undefined, 'text-color': theme.onSurface, 'font-size': 16 * theme.typographyScale, 'baseline-offset': theme.typographyScale > 1 ? -.2 : 0 } }] }];
     if (family === 'stepper') return [{ type: 'div', id: 'stepper-primary', class: 'stepper', role: 'tablist', ariaLabel: 'Project setup', children: [{ type: 'div', id: 'stepper-head', class: 'stepper-head', children: [{ type: 'div', id: 'step-details', class: 'step-tab', role: 'tab', tabindex: state.selected ? 0 : -1, ariaSelected: state.selected, children: [{ type: 'div', class: 'step-tab-content', children: [{ type: 'span', id: 'step-details-badge', class: `step-badge${state.selected ? ' selected' : ' completed'}`, children: state.selected ? undefined : [this.selectionMark('step-details-complete', 'step-complete-mark')], textContent: state.selected ? '1' : undefined }, { type: 'span', id: 'step-details-text', class: 'step-text', textContent: 'Details' }] }] }, { type: 'span', id: 'step-connector', class: 'step-connector' }, { type: 'div', id: 'step-review', class: 'step-tab', role: 'tab', tabindex: state.selected ? -1 : 0, ariaSelected: !state.selected, children: [{ type: 'div', class: 'step-tab-content', children: [{ type: 'span', id: 'step-review-badge', class: `step-badge${state.selected ? '' : ' selected'}`, textContent: '2' }, { type: 'span', id: 'step-review-text', class: 'step-text', textContent: 'Review' }] }] }] }, { type: 'div', id: 'stepper-content', role: 'tabpanel', children: [{ type: 'span', class: 'stepper-content-label', textContent: state.selected ? 'Project details' : 'Review changes' }] }] }];
     if (family === 'button-toggle') return [{ type: 'div', id: 'button-toggle-primary', role: 'radiogroup', ariaLabel: 'ListGrid', ariaDisabled: false, children: [
@@ -984,6 +1017,7 @@ export class AstylarShowcaseComponent {
     }
     if (family === 'datepicker' || family === 'timepicker') return [{ type: 'div', id: `${family}-primary`, class: `field-shell ${family}-shell`, children: [
       fieldSurface(`${family}-control`),
+      ...fieldActiveLine(`${family}-control`),
       { type: 'label', id: `${family}-label`, class: 'field-label empty-field-label', for: `${family}-control`, textContent: family === 'datepicker' ? 'Due date' : 'Meeting time' },
       { type: 'div', id: `${family}-input-region`, class: 'field-input-region', children: [{ type: 'input', inputType: 'text', id: `${family}-control`, class: `field-control${family === 'timepicker' ? ' picker-control' : ''}${family === 'timepicker' && state.open ? ' open' : ''}`, value: '', disabled: state.disabled, role: family === 'timepicker' ? 'combobox' : undefined, ariaLabel: family === 'datepicker' ? 'Due date' : 'Meeting time', ariaInvalid: state.error, ariaHaspopup: 'dialog', ariaExpanded: family === 'timepicker' ? state.open : undefined, ariaControls: family === 'timepicker' ? 'timepicker-options' : undefined, ariaActivedescendant: family === 'timepicker' && state.open ? 'timepicker-option-0' : undefined }] },
       family === 'datepicker'

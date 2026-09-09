@@ -140,6 +140,7 @@ describe('AstylarShowcaseComponent', () => {
     expect(style(compactToggle, '#button-toggle-primary')?.['height']).toBe('26px');
     expect(style(compactToggle, '.button-toggle-option')?.['height']).toBe('24px');
     expect(style(compactToggle, '#button-toggle-one-label, #button-toggle-two-label')?.['lineHeight']).toBe('24px');
+    expect(lastStyle(compactToggle, '#button-toggle-one-label, #button-toggle-two-label')?.['padding']).toBe('.5px 0 0');
     expect(style(compactToggle, '.button-toggle-option:hover')?.['background']).toBeDefined();
     expect(style(compactToggle, '.button-toggle-option:active')?.['background']).toBeDefined();
     expect(style(compactToggle, '.button-toggle-option.selected:hover')?.['background']).toBeDefined();
@@ -158,6 +159,9 @@ describe('AstylarShowcaseComponent', () => {
 
     const toggle = build(component, 'button-toggle');
     expect(style(toggle, '#button-toggle-one-label, #button-toggle-two-label')?.['lineHeight']).toBe('40px');
+    store.setTheme(MATERIAL_THEME_PROFILES.custom);
+    expect(style(build(component, 'button-toggle'), '#button-toggle-one-label')?.['padding']).toBeUndefined();
+    store.setTheme(MATERIAL_THEME_PROFILES.light);
 
     const slider = build(component, 'slider');
     expect(find(slider, 'slider-start')).toEqual(jasmine.objectContaining({ min: '0', max: '50', step: '1', value: '30' }));
@@ -168,6 +172,7 @@ describe('AstylarShowcaseComponent', () => {
     store.patchState({ pageIndex: 1 });
     expect(style(build(component, 'paginator'), '#paginator-range')?.['top']).toBe('20.5px');
     store.setTheme(MATERIAL_THEME_PROFILES.contrast);
+    expect(style(build(component, 'sort'), '.sort-header')?.['color']).toBe('#000000');
     expect(style(build(component, 'paginator'), '#paginator-range')?.['top']).toBe('12.49px');
     store.patchState({ pageIndex: 0 });
     store.setTheme(MATERIAL_THEME_PROFILES.light);
@@ -313,11 +318,15 @@ describe('AstylarShowcaseComponent', () => {
       fontWeight: '500', lineHeight: '24px',
     }));
     store.setTheme(MATERIAL_THEME_PROFILES.contrast);
+    expect(style(build(component, 'stepper'), '.stepper-content-label')?.['top']).toBe('-2px');
+    store.patchState({ selected: false });
+    expect(style(build(component, 'stepper'), '.stepper-content-label')?.['top']).toBe('-3px');
+    store.patchState({ selected: true });
     expect(lastStyle(build(component, 'expansion'), '.expansion-title')).toEqual(jasmine.objectContaining({
       padding: '0', fontSize: '16px',
     }));
     store.patchState({ open: true });
-    expect(lastStyle(build(component, 'expansion'), '.expansion-title')?.['padding']).toBe('2px 0 0');
+    expect(lastStyle(build(component, 'expansion'), '.expansion-title')?.['padding']).toBe('0');
     expect(style(expansion, '.expansion-chevron.disabled')?.['display']).toBe('none');
     store.patchState({ disabled: false });
 
@@ -358,7 +367,14 @@ describe('AstylarShowcaseComponent', () => {
     }));
 
     const menu = build(component, 'menu');
-    expect(style(menu, '#menu-popup')?.['left']).toBe('28px');
+    expect(style(menu, '#menu-popup')).toEqual(jasmine.objectContaining({
+      left: '28px', width: '112px',
+      boxShadow: '0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px rgba(0,0,0,.14), 0 1px 5px rgba(0,0,0,.12)',
+    }));
+    expect(style(menu, '#menu-rename, #menu-delete')).toEqual(jasmine.objectContaining({
+      display: 'flex', alignItems: 'center', lineHeight: '20px', boxSizing: 'border-box',
+    }));
+    expect(find(menu, 'menu-rename-label')?.['textContent']).toBe('Rename');
   });
 
   it('activates sort ascending before alternating its direction', () => {
@@ -382,7 +398,12 @@ describe('AstylarShowcaseComponent', () => {
       fontWeight: '400',
     }));
     expect(style(focusedSort, '.sort-trigger.focused')).toBeUndefined();
-    expect(style(focusedSort, '.sort-header.focused')).toBeUndefined();
+    expect(style(focusedSort, '.sort-focus-line')).toEqual(jasmine.objectContaining({
+      position: 'absolute',
+      height: '1px',
+    }));
+    expect(find(focusedSort, 'sort-primary')?.['class']).toContain('focus-visible');
+    expect(find(focusedSort, 'sort-focus-line')).toBeDefined();
     expect(style(focusedSort, '.sort-arrow')).toEqual(jasmine.objectContaining({
       width: '12px',
       height: '12px',
@@ -390,6 +411,12 @@ describe('AstylarShowcaseComponent', () => {
     expect(store.state().open).toBeFalse();
     handlers['sort-primary']['blur']({ targetId: 'sort-primary' } as AstylarEvent);
     expect(find(build(component, 'sort'), 'sort-arrow')).toBeUndefined();
+    handlers['sort-primary']['pointerdown']({ targetId: 'sort-primary' } as AstylarEvent);
+    handlers['sort-primary']['focus']({ targetId: 'sort-primary' } as AstylarEvent);
+    expect(find(build(component, 'sort'), 'sort-primary')?.['class']).not.toContain('focus-visible');
+    expect(find(build(component, 'sort'), 'sort-focus-line')).toBeUndefined();
+    handlers['sort-primary']['pointerup']({ targetId: 'sort-primary' } as AstylarEvent);
+    handlers['sort-primary']['blur']({ targetId: 'sort-primary' } as AstylarEvent);
     click('sort-trigger', event);
     expect(store.state().open).toBeTrue();
     click('sort-trigger', event);
@@ -421,9 +448,28 @@ describe('AstylarShowcaseComponent', () => {
     handlers['form-field-control']['focus']({ targetId: 'form-field-control' } as AstylarEvent);
     site = build(component, 'form-field');
     expect(style(site, '.field-label.empty-field-label')?.['fontSize']).toBe('12px');
+    expect(find(site, 'form-field-control-active-line')).toBeDefined();
+    expect(style(site, '.field-active-line')).toEqual(jasmine.objectContaining({
+      top: '35px',
+      height: '2px',
+    }));
 
     handlers['form-field-control']['blur']({ targetId: 'form-field-control' } as AstylarEvent);
-    expect(style(build(component, 'form-field'), '.field-label.empty-field-label')?.['fontSize']).toBe('16px');
+    site = build(component, 'form-field');
+    expect(style(site, '.field-label.empty-field-label')?.['fontSize']).toBe('16px');
+    expect(find(site, 'form-field-control-active-line')).toBeUndefined();
+  });
+
+  it('maps semantic field focus back to the authored control', () => {
+    const { component } = createComponent('select');
+    const handlers = eventHandlers(component);
+
+    handlers['select-primary']['pointerdown']({ targetId: 'select-primary' } as AstylarEvent);
+    handlers['select-primary']['focus']({ targetId: 'select-primary' } as AstylarEvent);
+    expect(find(build(component, 'select'), 'select-control-active-line')).toBeDefined();
+
+    handlers['select-primary']['blur']({ targetId: 'select-primary' } as AstylarEvent);
+    expect(find(build(component, 'select'), 'select-control-active-line')).toBeUndefined();
   });
 
   it('commits autocomplete and select options and dismisses popup families outside', () => {
