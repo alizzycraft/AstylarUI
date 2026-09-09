@@ -15,11 +15,13 @@ describe('BabylonCameraService', () => {
     });
   });
 
-  it('uses an orthographic viewport so stacking depth cannot change CSS geometry', () => {
+  it('uses the CSS viewport for an orthographic camera regardless of backing-store DPR', () => {
     const service = new BabylonCameraService();
     const camera = {
       mode: Camera.PERSPECTIVE_CAMERA,
-      position: { z: 800 / Math.tan(Math.PI / 6) },
+      // This is the distance the old implementation derived from the 2x
+      // backing-store height. Orthographic CSS bounds must not inherit it.
+      position: { z: 1600 / Math.tan(Math.PI / 6) },
       orthoLeft: null,
       orthoRight: null,
       orthoTop: null,
@@ -27,15 +29,20 @@ describe('BabylonCameraService', () => {
     } as unknown as FreeCamera;
     service['camera'] = camera;
 
-    service.updateViewport({ width: 1200, height: 800 } as HTMLCanvasElement);
+    service.updateViewport({
+      width: 2400,
+      height: 1600,
+      clientWidth: 1200,
+      clientHeight: 800,
+    } as HTMLCanvasElement);
 
     expect(camera.mode).toBe(Camera.ORTHOGRAPHIC_CAMERA);
-    expect(camera.orthoLeft).toBeCloseTo(-1200, 8);
-    expect(camera.orthoRight).toBeCloseTo(1200, 8);
-    expect(camera.orthoTop).toBeCloseTo(800, 8);
-    expect(camera.orthoBottom).toBeCloseTo(-800, 8);
+    expect(camera.orthoLeft).toBeCloseTo(-600, 8);
+    expect(camera.orthoRight).toBeCloseTo(600, 8);
+    expect(camera.orthoTop).toBeCloseTo(400, 8);
+    expect(camera.orthoBottom).toBeCloseTo(-400, 8);
     const viewport = service.calculateViewportDimensions();
-    expect(viewport.width).toBeCloseTo(2400, 8);
-    expect(viewport.height).toBeCloseTo(1600, 8);
+    expect(viewport.width).toBeCloseTo(1200, 8);
+    expect(viewport.height).toBeCloseTo(800, 8);
   });
 });

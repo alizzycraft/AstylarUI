@@ -18,9 +18,12 @@ export class BabylonCameraService {
 
   initialize(scene: Scene, canvas: HTMLCanvasElement): FreeCamera {
     const fov = this.getFOV(); // 60 degrees, or your preferred value
+    const cssHeight = canvas.clientHeight || canvas.height;
 
-    // Set camera distance so visible world height == cssHeight
-    const cameraDistance = (canvas.height) / Math.tan(fov / 2);
+    // Keep one world unit equal to one CSS pixel. The backing-store dimensions
+    // may be multiplied by DPR, but they are a raster concern and must not
+    // change the coordinate space used to project resolved CSS geometry.
+    const cameraDistance = cssHeight / (2 * Math.tan(fov / 2));
 
     this.camera = new FreeCamera('camera', new Vector3(0, 0, cameraDistance), scene);
     this.camera.fov = fov;
@@ -34,7 +37,7 @@ export class BabylonCameraService {
     // make closely layered parent/child surfaces z-fight at tall viewports.
     // One viewport height on either side of the page still leaves ample room
     // for authored stacking while keeping ordinary DOM paint layers stable.
-    const clipRange = this.calculateUiClipRange(cameraDistance, canvas.height);
+    const clipRange = this.calculateUiClipRange(cameraDistance, cssHeight);
     this.camera.minZ = clipRange.minZ;
     this.camera.maxZ = clipRange.maxZ;
     this.camera.setTarget(Vector3.Zero());
@@ -49,10 +52,15 @@ export class BabylonCameraService {
   }
 
   updateViewport(canvas: HTMLCanvasElement): void {
-    if (!this.camera || canvas.width <= 0 || canvas.height <= 0) return;
-    const cameraDistance = Math.abs(this.camera.position.z);
-    const visibleHeight = 2 * cameraDistance * Math.tan(this.getFOV() / 2);
-    const visibleWidth = visibleHeight * canvas.width / canvas.height;
+    const cssWidth = canvas.clientWidth || canvas.width;
+    const cssHeight = canvas.clientHeight || canvas.height;
+    if (!this.camera || cssWidth <= 0 || cssHeight <= 0) return;
+
+    // The camera is the final CSS-to-Babylon paint boundary. Its orthographic
+    // bounds therefore describe the CSS viewport directly; DPR only controls
+    // how many backing-store pixels Babylon uses to rasterize that viewport.
+    const visibleWidth = cssWidth;
+    const visibleHeight = cssHeight;
     this.camera.mode = Camera.ORTHOGRAPHIC_CAMERA;
     this.camera.orthoLeft = -visibleWidth / 2;
     this.camera.orthoRight = visibleWidth / 2;
