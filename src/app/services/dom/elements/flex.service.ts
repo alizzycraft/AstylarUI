@@ -1598,10 +1598,10 @@ export class FlexService {
 
               break;
             case 'center':
-              // Center within the available container space
               const availableHeight = containerHeight - padding.top - padding.bottom;
-              const itemCenterOffset = (availableHeight - item.height) / 2;
-              y = (containerHeight / 2) - padding.top - itemCenterOffset - (item.height / 2);
+              const freeCrossSpace = availableHeight - item.height - item.margin.top - item.margin.bottom;
+              const itemTop = padding.top + item.margin.top + freeCrossSpace / 2;
+              y = (containerHeight / 2) - itemTop - (item.height / 2);
 
               break;
             case 'stretch':
@@ -1644,8 +1644,9 @@ export class FlexService {
 
               break;
             case 'center':
-              const centerOffset = (lineCrossSize - item.height) / 2;
-              y = (containerHeight / 2) - baseCrossPos - centerOffset - (item.height / 2);
+              const freeCrossSpace = lineCrossSize - item.height - item.margin.top - item.margin.bottom;
+              const itemTop = baseCrossPos + item.margin.top + freeCrossSpace / 2;
+              y = (containerHeight / 2) - itemTop - (item.height / 2);
 
               break;
             case 'stretch':
@@ -1697,10 +1698,10 @@ export class FlexService {
 
               break;
             case 'center':
-              // Center within the available container space
               const availableWidth = containerWidth - padding.left - padding.right;
-              const itemCenterOffset = (availableWidth - item.width) / 2;
-              x = -(containerWidth / 2) + padding.left + itemCenterOffset + (item.width / 2);
+              const freeCrossSpace = availableWidth - item.width - item.margin.left - item.margin.right;
+              const itemLeft = padding.left + item.margin.left + freeCrossSpace / 2;
+              x = -(containerWidth / 2) + itemLeft + (item.width / 2);
 
               break;
             case 'stretch':
@@ -1743,8 +1744,9 @@ export class FlexService {
 
               break;
             case 'center':
-              const centerOffset = (lineCrossSize - item.width) / 2;
-              x = -(containerWidth / 2) + baseCrossPos + centerOffset + (item.width / 2);
+              const freeCrossSpace = lineCrossSize - item.width - item.margin.left - item.margin.right;
+              const itemLeft = baseCrossPos + item.margin.left + freeCrossSpace / 2;
+              x = -(containerWidth / 2) + itemLeft + (item.width / 2);
 
               break;
             case 'stretch':

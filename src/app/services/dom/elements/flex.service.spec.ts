@@ -736,4 +736,31 @@ describe('FlexService', () => {
     expect(result.position.x).toBe(10);
     expect(result.size.width).toBe(60);
   });
+
+  it('centers a single-line flex item by its cross-axis margin box', () => {
+    const service = new FlexService(new FlexLayoutService(), {} as never, {} as never);
+    const item: FlexItem = {
+      element: { type: 'span', id: 'label' },
+      style: { selector: '#label', marginBottom: '4px' },
+      width: 40, height: 20, baseWidth: 40, baseHeight: 20,
+      margin: { top: 0, right: 0, bottom: 4, left: 0 },
+      flexGrow: 0, flexShrink: 0, flexBasis: 'auto', alignSelf: 'auto', order: 0,
+    };
+    const padding = { top: 0, right: 0, bottom: 0, left: 0 };
+    const flexProps = {
+      flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center',
+      flexWrap: 'nowrap', alignContent: 'stretch',
+    };
+    const container: FlexContainer = {
+      width: 100, height: 48, padding, ...flexProps,
+      gap: 0, rowGap: 0, columnGap: 0,
+    };
+
+    const [result] = service['calculateFlexLayout'](
+      [item], container.width, container.height, padding,
+      flexProps, {} as BabylonRender, container,
+    );
+
+    expect(result.position.y).toBe(12);
+  });
 });
