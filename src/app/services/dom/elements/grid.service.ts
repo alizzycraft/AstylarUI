@@ -30,6 +30,13 @@ interface GridAxisPlacement {
   span: number;
 }
 
+interface GridItemMargins {
+  top: number;
+  right: number;
+  bottom: number;
+  left: number;
+}
+
 @Injectable({ providedIn: 'root' })
 export class GridService {
   constructor(
@@ -93,11 +100,12 @@ export class GridService {
         this.sumTracks(columns, placement.column, placement.columnSpan, columnGap) || contentWidth,
       );
       const childStyle = childStyles[index];
+      const margins = this.resolveItemMargins(childStyle);
       const height = childStyle?.height?.trim();
       const contribution = measured !== null && measured !== undefined
         ? measured
         : height && /^[+-]?(?:\d+\.?\d*|\.\d+)(?:px)?$/i.test(height)
-          ? Math.max(0, Number.parseFloat(height) || 0)
+          ? Math.max(0, Number.parseFloat(height) || 0) + margins.top + margins.bottom
           : null;
       if (placement.rowSpan === 1) {
         rowContributions[placement.row * columnCount + placement.column] = contribution;
@@ -185,6 +193,7 @@ export class GridService {
       const width = this.sumTracks(columns, column, columnSpan, columnGap);
       const height = this.sumTracks(rows, row, rowSpan, rowGap);
       const childStyle = childStyles[index];
+      const margins = this.resolveItemMargins(childStyle);
       const hasDefiniteWidth = this.hasDefiniteItemSize(childStyle?.width);
       const hasDefiniteHeight = this.hasDefiniteItemSize(childStyle?.height);
       const childMesh = dom.actions.createElement(
@@ -199,8 +208,8 @@ export class GridService {
           z: 0.1 + index * 0.01,
         },
         {
-          width: hasDefiniteWidth ? undefined : width,
-          height: hasDefiniteHeight ? undefined : height,
+          width: hasDefiniteWidth ? undefined : Math.max(0, width - margins.left - margins.right),
+          height: hasDefiniteHeight ? undefined : Math.max(0, height - margins.top - margins.bottom),
         },
       );
 
@@ -211,9 +220,17 @@ export class GridService {
         hasDefiniteHeight,
       );
       const alignedLeft = dimensions.padding.left + xOffset +
-        this.itemAlignmentOffset(width, usedSize.width, horizontalAlignment);
+        this.itemAlignmentOffset(
+          width,
+          usedSize.width + margins.left + margins.right,
+          horizontalAlignment,
+        ) + margins.left;
       const alignedTop = dimensions.padding.top + yOffset +
-        this.itemAlignmentOffset(height, usedSize.height, verticalAlignment);
+        this.itemAlignmentOffset(
+          height,
+          usedSize.height + margins.top + margins.bottom,
+          verticalAlignment,
+        ) + margins.top;
       const alignedBorderBox = {
         x: alignedLeft,
         y: alignedTop,
@@ -261,6 +278,31 @@ export class GridService {
   private parseLength(value: string | undefined): number {
     const parsed = Number.parseFloat(value ?? '0');
     return Number.isFinite(parsed) ? Math.max(0, parsed) : 0;
+  }
+
+  private resolveItemMargins(style: StyleRule | undefined): GridItemMargins {
+    const shorthand = style?.margin?.trim().split(/\s+/).filter(Boolean) ?? [];
+    const values = shorthand.map((value) => this.parseSignedLength(value));
+    const expanded = values.length === 1
+      ? [values[0], values[0], values[0], values[0]]
+      : values.length === 2
+        ? [values[0], values[1], values[0], values[1]]
+        : values.length === 3
+          ? [values[0], values[1], values[2], values[1]]
+          : values.length >= 4
+            ? values.slice(0, 4)
+            : [0, 0, 0, 0];
+    return {
+      top: style?.marginTop !== undefined ? this.parseSignedLength(style.marginTop) : expanded[0],
+      right: style?.marginRight !== undefined ? this.parseSignedLength(style.marginRight) : expanded[1],
+      bottom: style?.marginBottom !== undefined ? this.parseSignedLength(style.marginBottom) : expanded[2],
+      left: style?.marginLeft !== undefined ? this.parseSignedLength(style.marginLeft) : expanded[3],
+    };
+  }
+
+  private parseSignedLength(value: string | undefined): number {
+    const parsed = Number.parseFloat(value ?? '0');
+    return Number.isFinite(parsed) ? parsed : 0;
   }
 
   private itemAlignmentOffset(trackSize: number, itemSize: number, alignment: string): number {

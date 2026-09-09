@@ -184,6 +184,57 @@ describe('GridService', () => {
     expect(createElement.calls.argsFor(0)[5]).toEqual({ x: 40, y: 40, z: 0.1 });
   });
 
+  it('positions a definite grid item inside its track after applying margins', () => {
+    const childMesh = { name: 'item', metadata: {} } as Mesh;
+    const dimensions = new Map<string, any>([
+      ['grid', {
+        width: 70, height: 40,
+        padding: { top: 0, right: 0, bottom: 0, left: 0 },
+      }],
+      ['item', {
+        width: 60, height: 30,
+        padding: { top: 0, right: 0, bottom: 0, left: 0 },
+      }],
+    ]);
+    const positionTextMesh = jasmine.createSpy('positionTextMesh');
+    const styles = new Map<string, StyleRule>([
+      ['grid', {
+        selector: '#grid', display: 'grid',
+        gridTemplateColumns: '70px', gridTemplateRows: '40px',
+      }],
+      ['item', {
+        selector: '#item', width: '60px', height: '30px',
+        marginLeft: '5px', marginTop: '4px',
+      }],
+    ]);
+    const dom = {
+      context: { elementStyles: new Map(), elementDimensions: dimensions },
+      actions: {
+        createElement: () => childMesh,
+        processChildren: jasmine.createSpy('processChildren'),
+      },
+    } as unknown as BabylonDOM;
+    const render = {
+      actions: {
+        style: { findStyleForElement: (element: { id?: string }) => styles.get(element.id ?? '') },
+        camera: cssCamera,
+        mesh: { positionTextMesh },
+      },
+    } as unknown as BabylonRender;
+
+    service.processGridChildren(
+      dom,
+      render,
+      [{ type: 'button', id: 'item' }],
+      { name: 'grid' } as Mesh,
+      [],
+      { type: 'div', id: 'grid' },
+    );
+
+    // Border-box center: x = 5 + 30 - 35; y = 4 + 15 - 20.
+    expect(positionTextMesh.calls.mostRecent().args.slice(1, 3)).toEqual([0, 1]);
+  });
+
   it('marks a grid item track size as definite before nested layout', () => {
     const childMesh = { metadata: {} } as Mesh;
     const processChildren = jasmine.createSpy('processChildren').and.callFake(() => {
