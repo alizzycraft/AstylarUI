@@ -166,6 +166,7 @@ export class AstylarInteractionRuntime {
   private disposed = false;
   private readonly canvas: HTMLCanvasElement | null;
   private focusOrder: string[] = [];
+  private focusableElementIds = new Set<string>();
   private controlTypes = new Map<string, string>();
   private labelTargets = new Map<string, string>();
   private formDefaults = new Map<string, AstylarFormDefault>();
@@ -196,6 +197,7 @@ export class AstylarInteractionRuntime {
   ) {
     this.dispatcher = new AstylarEventDispatcher(siteData, options);
     this.focusOrder = this.buildFocusOrder(siteData);
+    this.focusableElementIds = this.buildFocusableElementIds(siteData);
     this.controlTypes = this.buildControlTypes(siteData);
     this.labelTargets = this.buildLabelTargets(siteData);
     this.formDefaults = this.buildFormDefaults(siteData);
@@ -239,7 +241,7 @@ export class AstylarInteractionRuntime {
     options: AstylarInteractionFocusOptions = {},
     preservePreviousSelectionOnReset = false,
   ): boolean {
-    if (this.disposed || !this.focusOrder.includes(elementId) ||
+    if (this.disposed || !this.focusableElementIds.has(elementId) ||
         !this.isAllowedByModal(elementId) ||
         !this.dispatcher.hasEnabledTarget(elementId)) return false;
     this.setFocus(
@@ -282,11 +284,11 @@ export class AstylarInteractionRuntime {
   activateSemanticElement(elementId: string): boolean {
     if (this.disposed || !this.isAllowedByModal(elementId) ||
         !this.dispatcher.hasEnabledTarget(elementId)) return false;
-    if (this.focusOrder.includes(elementId)) this.setFocus(elementId);
+    if (this.focusableElementIds.has(elementId)) this.setFocus(elementId);
     const accepted = this.activateAndClick(elementId);
     const labelTargetId = accepted ? this.labelTargets.get(elementId) : undefined;
     if (labelTargetId && this.dispatcher.hasEnabledTarget(labelTargetId)) {
-      if (this.focusOrder.includes(labelTargetId)) this.setFocus(labelTargetId);
+      if (this.focusableElementIds.has(labelTargetId)) this.setFocus(labelTargetId);
       return this.activateAndClick(labelTargetId);
     }
     return accepted;
@@ -335,6 +337,7 @@ export class AstylarInteractionRuntime {
 
   setSiteData(siteData: SiteData): void {
     const nextFocusOrder = this.buildFocusOrder(siteData);
+    const nextFocusableElementIds = this.buildFocusableElementIds(siteData);
     const nextControlTypes = this.buildControlTypes(siteData);
     const nextModalDialog = this.buildActiveModalDialog(siteData, nextFocusOrder);
     const modalChanged = this.modalDialog?.id !== nextModalDialog?.id;
@@ -348,13 +351,14 @@ export class AstylarInteractionRuntime {
     const modalNeedsFocus = !!nextModalDialog &&
       (!focusedElementId || !nextModalDialog.elementIds.has(focusedElementId));
     if (focusedElementId &&
-        (!nextFocusOrder.includes(focusedElementId) ||
+        (!nextFocusableElementIds.has(focusedElementId) ||
           this.controlTypes.get(focusedElementId) !== nextControlTypes.get(focusedElementId))) {
       // Dispatch commit/blur while the old element and event path are still live.
       this.setFocus(undefined);
     }
     this.dispatcher.setSiteData(siteData);
     this.focusOrder = nextFocusOrder;
+    this.focusableElementIds = nextFocusableElementIds;
     this.controlTypes = nextControlTypes;
     this.labelTargets = this.buildLabelTargets(siteData);
     this.formDefaults = this.buildFormDefaults(siteData);
@@ -405,6 +409,14 @@ export class AstylarInteractionRuntime {
       for (const elementId of [...this.pressedElementPath].reverse()) {
         this.controls?.setActiveState?.(elementId, true);
       }
+    }
+    const focusedElementId = this.getFocusedElementId();
+    if (focusedElementId && this.dispatcher.hasEnabledTarget(focusedElementId)) {
+      // Reconciliation replaces the painted mesh while logical focus remains
+      // on the same control. Reapply :focus to that replacement just as we do
+      // for retained hover and active state; otherwise a state-driven rebuild
+      // silently drops authored focus paint until focus changes again.
+      this.controls?.setFocusState?.(focusedElementId, true);
     }
     if (this.presentedModalDialog?.id !== this.modalDialog?.id) {
       if (this.presentedModalDialog) {
@@ -583,7 +595,7 @@ export class AstylarInteractionRuntime {
         const accepted = this.activateAndClick(targetId, pointerInfo);
         const labelTargetId = accepted ? this.labelTargets.get(targetId) : undefined;
         if (labelTargetId && this.dispatcher.hasEnabledTarget(labelTargetId)) {
-          this.setFocus(this.focusOrder.includes(labelTargetId) ? labelTargetId : undefined, false, false);
+          this.setFocus(this.focusableElementIds.has(labelTargetId) ? labelTargetId : undefined, false, false);
           this.activateAndClick(labelTargetId, pointerInfo);
         }
       }
@@ -610,7 +622,7 @@ export class AstylarInteractionRuntime {
 
   private nearestFocusableElementId(targetId: string): string | undefined {
     return this.dispatcher.getElementPath(targetId)
-      .find((elementId) => this.focusOrder.includes(elementId));
+      .find((elementId) => this.focusableElementIds.has(elementId));
   }
 
   private updateHover(targetId: string | undefined, pointerInfo: PointerInfo): void {
@@ -1019,7 +1031,7 @@ export class AstylarInteractionRuntime {
     this.presentedModalDialog = undefined;
     this.pendingModalInitialFocus = false;
     this.modalInvokerId = undefined;
-    if (invokerId && this.focusOrder.includes(invokerId) &&
+    if (invokerId && this.focusableElementIds.has(invokerId) &&
         this.dispatcher.hasEnabledTarget(invokerId)) {
       this.setFocus(invokerId);
       this.dialogs?.restoreFocus?.(invokerId);
@@ -1113,7 +1125,7 @@ export class AstylarInteractionRuntime {
     }
     const focused = elementId && (this.controlTypes.has(elementId)
       ? this.controls?.focus(elementId, nextFocusVisible)
-      : this.focusOrder.includes(elementId));
+      : this.focusableElementIds.has(elementId));
     if (elementId && focused) {
       this.focusVisible = nextFocusVisible;
       if (!this.controlTypes.has(elementId)) this.focusedNonControlId = elementId;
@@ -1139,6 +1151,21 @@ export class AstylarInteractionRuntime {
 
   private getFocusedElementId(): string | undefined {
     return this.focusedNonControlId ?? this.controls?.getFocusedElementId();
+  }
+
+  private buildFocusableElementIds(siteData: SiteData): Set<string> {
+    const ids = new Set<string>();
+    const visit = (element: SiteData['root']['children'][number]): void => {
+      if (element.hidden) return;
+      const focusable = element.tabindex !== undefined ||
+        element.type === 'input' || element.type === 'button' ||
+        element.type === 'select' || element.type === 'textarea' ||
+        (element.type === 'a' && !!element.href);
+      if (element.id && focusable && !element.disabled) ids.add(element.id);
+      element.children?.forEach(visit);
+    };
+    siteData.root.children.forEach(visit);
+    return ids;
   }
 
   private buildFocusOrder(siteData: SiteData): string[] {

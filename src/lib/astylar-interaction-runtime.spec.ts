@@ -94,3 +94,49 @@ describe('AstylarInteractionRuntime projection geometry', () => {
     }
   });
 });
+
+describe('AstylarInteractionRuntime reconciliation', () => {
+  it('retains pointer-focusable tabindex -1 elements and reapplies their focus paint after replacement', () => {
+    const engine = new NullEngine();
+    const scene = new Scene(engine);
+    const siteData = {
+      styles: [],
+      root: { children: [{ type: 'div' as const, id: 'review', role: 'tab', tabindex: -1 }] },
+    };
+    let focusedElementId: string | undefined;
+    const setFocusState = jasmine.createSpy('setFocusState');
+    const runtime = new AstylarInteractionRuntime(
+      scene,
+      siteData,
+      {},
+      undefined,
+      {
+        getFocusedElementId: () => focusedElementId,
+        focus: (elementId: string) => {
+          focusedElementId = elementId;
+          return true;
+        },
+        blur: () => {
+          focusedElementId = undefined;
+          return true;
+        },
+        handleKeyDown: () => undefined,
+        commitsValueOnBlur: () => false,
+        setFocusState,
+      } as never,
+    );
+    try {
+      expect(runtime.focusElement('review', { focusVisible: false })).toBeTrue();
+      setFocusState.calls.reset();
+
+      runtime.setSiteData(siteData);
+      runtime.reconcileModalState();
+
+      expect(setFocusState).toHaveBeenCalledOnceWith('review', true);
+    } finally {
+      runtime.dispose();
+      scene.dispose();
+      engine.dispose();
+    }
+  });
+});
