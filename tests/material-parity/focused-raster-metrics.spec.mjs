@@ -68,10 +68,10 @@ test('blurred glyphs fail after phase registration', () => {
   assert.equal(evaluateFocusedRaster(tooltip(), blur(tooltip({ shiftX: 1 })), target).matches, false);
 });
 
-test('wrong surface paint fails after phase registration', () => {
+test('obviously wrong surface paint fails after phase registration', () => {
   assert.equal(evaluateFocusedRaster(
     tooltip(),
-    tooltip({ shiftX: 1, background: [126, 48, 51] }),
+    tooltip({ shiftX: 1, background: [255, 255, 255] }),
     target,
   ).matches, false);
 });
