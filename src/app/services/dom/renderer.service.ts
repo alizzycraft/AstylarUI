@@ -691,7 +691,9 @@ export class BabylonDOMRendererService {
 
 
 
-    const textAlign = (style?.textAlign ?? "left").toLowerCase();
+    const anonymousFlexAlignment = this.resolveAnonymousFlexTextAlignment(style);
+    const textAlign = anonymousFlexAlignment.horizontal ??
+      (style?.textAlign ?? "left").toLowerCase();
     let offsetXPx: number;
     switch (textAlign) {
       case "right":
@@ -718,7 +720,8 @@ export class BabylonDOMRendererService {
       ),
     );
 
-    const verticalAlign = (style?.verticalAlign ?? "top").toLowerCase();
+    const verticalAlign = anonymousFlexAlignment.vertical ??
+      (style?.verticalAlign ?? "top").toLowerCase();
     let offsetYCssPx: number;
     switch (verticalAlign) {
       case "bottom":
@@ -765,6 +768,39 @@ export class BabylonDOMRendererService {
     textMesh.position.z = renderedPosition.z; // Slightly in front of parent element - TODO: TECH-DEBT
 
 
+  }
+
+  /**
+   * Browser flex layout wraps direct text in an anonymous flex item. AstylarUI
+   * paints direct text on the element mesh instead, so reproduce the anonymous
+   * item's main/cross-axis placement before the final CSS-to-Babylon projection.
+   */
+  private resolveAnonymousFlexTextAlignment(style?: StyleRule): {
+    horizontal?: 'left' | 'center' | 'right';
+    vertical?: 'top' | 'middle' | 'bottom';
+  } {
+    const display = style?.display?.toLowerCase();
+    if (display !== 'flex' && display !== 'inline-flex') return {};
+
+    const direction = style?.flexDirection?.toLowerCase() ?? 'row';
+    const isRow = direction === 'row' || direction === 'row-reverse';
+    const main = style?.justifyContent?.toLowerCase() ?? 'flex-start';
+    const cross = style?.alignItems?.toLowerCase() ?? 'stretch';
+    const horizontalValue = isRow ? main : cross;
+    const verticalValue = isRow ? cross : main;
+
+    return {
+      horizontal: horizontalValue === 'flex-end' || horizontalValue === 'end'
+        ? 'right'
+        : ['center', 'space-around', 'space-evenly'].includes(horizontalValue)
+          ? 'center'
+          : 'left',
+      vertical: verticalValue === 'flex-end' || verticalValue === 'end'
+        ? 'bottom'
+        : ['center', 'space-around', 'space-evenly'].includes(verticalValue)
+          ? 'middle'
+          : 'top',
+    };
   }
 
   cleanup(): void {

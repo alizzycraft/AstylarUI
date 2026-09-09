@@ -64,6 +64,46 @@ describe('BabylonDOMRendererService', () => {
     expect(textMesh.position.y).toBe(0);
   });
 
+  it('centers direct text as an anonymous item in a centered flex container', () => {
+    const renderer = Object.create(
+      BabylonDOMRendererService.prototype,
+    ) as BabylonDOMRendererService;
+    const textMesh = {
+      parent: undefined,
+      position: { x: 0, y: 0, z: 0 },
+    };
+    const parentMesh = { name: 'option' };
+    const render = {
+      actions: {
+        camera: {
+          projectCssLocalPoint: (point: { x: number; y: number }, z: number) => ({
+            x: point.x,
+            y: -point.y,
+            z,
+          }),
+        },
+      },
+    };
+
+    renderer['positionTextMesh'](
+      textMesh as never,
+      parentMesh as never,
+      { width: 80, height: 20 },
+      {
+        selector: '.option',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      },
+      { top: 0, right: 0, bottom: 0, left: 0 },
+      { width: 200, height: 48, padding: { top: 0, right: 0, bottom: 0, left: 0 } },
+      render as never,
+    );
+
+    expect(textMesh.position.x).toBe(0);
+    expect(textMesh.position.y).toBe(0);
+  });
+
   it('registers complete DOM ancestry before intrinsic pre-layout', () => {
     const renderer = Object.create(
       BabylonDOMRendererService.prototype,
