@@ -948,9 +948,13 @@ export class AstylarInteractionRuntime {
     const pick = this.scene.pick(this.scene.pointerX, this.scene.pointerY);
     const lineScale = 16;
     const pageScale = this.canvas?.clientHeight || 1;
+    // Chromium reports trusted pixel-wheel deltas in backing-store units at high
+    // DPR while its native scroll action advances CSS pixels. Normalize at the
+    // canvas input boundary so the scroll runtime only ever receives CSS units.
+    const pixelScale = window.devicePixelRatio || 1;
     const factor = event.deltaMode === WheelEvent.DOM_DELTA_LINE
       ? lineScale
-      : event.deltaMode === WheelEvent.DOM_DELTA_PAGE ? pageScale : 1;
+      : event.deltaMode === WheelEvent.DOM_DELTA_PAGE ? pageScale : pixelScale;
     const deltaX = event.deltaX * factor;
     const deltaY = event.deltaY * factor;
     const pointer = resolveCanvasPointerPoint(event, this.canvas?.getBoundingClientRect());

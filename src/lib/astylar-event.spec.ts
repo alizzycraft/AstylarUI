@@ -443,7 +443,7 @@ describe('AstylarInteractionRuntime', () => {
     engine.dispose();
   });
 
-  it('keeps CSS-pixel wheel deltas independent of DPR', () => {
+  it('normalizes browser pixel wheel deltas to native CSS scrolling at DPR 2', () => {
     const engine = new NullEngine();
     const scene = new Scene(engine);
     const mesh = MeshBuilder.CreatePlane('scroll-child', {}, scene);
@@ -479,7 +479,7 @@ describe('AstylarInteractionRuntime', () => {
       cancelable: true,
     }));
 
-    expect(calls).toEqual([['child', 12, 70]]);
+    expect(calls).toEqual([['child', 24, 140]]);
     runtime.dispose();
     scene.dispose();
     engine.dispose();
