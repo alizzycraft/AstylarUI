@@ -34,6 +34,28 @@ const staticOnly = process.argv.includes('--static-only');
 const interactionOnly = process.argv.includes('--interaction-only');
 const textAudit = process.env['ASTYLAR_MATERIAL_TEXT_AUDIT'] === '1';
 const browserRestartInterval = Number(process.env['ASTYLAR_MATERIAL_BROWSER_RESTART_INTERVAL'] ?? 200);
+const materialStyleInputProperties = Object.freeze([
+  'position', 'display', 'visibility', 'boxSizing',
+  'width', 'height', 'minWidth', 'maxWidth', 'minHeight', 'maxHeight',
+  'top', 'right', 'bottom', 'left',
+  'padding', 'paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft',
+  'margin', 'marginTop', 'marginRight', 'marginBottom', 'marginLeft',
+  'flex', 'flexDirection', 'flexWrap', 'flexGrow', 'flexShrink', 'flexBasis',
+  'alignSelf', 'alignItems', 'alignContent', 'justifyContent',
+  'gap', 'rowGap', 'columnGap', 'order',
+  'gridTemplateColumns', 'gridTemplateRows', 'gridColumn', 'gridRow',
+  'fontFamily', 'fontSize', 'fontWeight', 'fontStyle', 'lineHeight',
+  'letterSpacing', 'wordSpacing', 'textAlign', 'verticalAlign', 'textTransform',
+  'whiteSpace', 'overflowWrap', 'wordBreak', 'textOverflow', 'textDecoration',
+  'color', 'backgroundColor', 'opacity',
+  'borderTopWidth', 'borderRightWidth', 'borderBottomWidth', 'borderLeftWidth',
+  'borderTopStyle', 'borderRightStyle', 'borderBottomStyle', 'borderLeftStyle',
+  'borderTopColor', 'borderRightColor', 'borderBottomColor', 'borderLeftColor',
+  'borderTopLeftRadius', 'borderTopRightRadius', 'borderBottomRightRadius', 'borderBottomLeftRadius',
+  'boxShadow', 'overflowX', 'overflowY', 'clipPath',
+  'transform', 'transformOrigin', 'perspective', 'zIndex',
+  'cursor', 'pointerEvents', 'caretColor', 'appearance', 'objectFit',
+]);
 const cases = interactionOnly ? [] : materialStaticCases.filter(({ family, profile, viewport }) =>
   familyFilter.has(family) && profileFilter.has(profile) &&
   (viewportFilter.size === 0 || viewportFilter.has(viewport.id)));
@@ -319,6 +341,7 @@ async function captureInteractionCase(benchmarkCase) {
     const referenceMeasurement = await measureReference(reference.page, ids);
     const astylarMeasurement = await astylar.page.evaluate((targetIds) =>
       window.__ASTYLAR_MATERIAL_BENCHMARK__?.measure(targetIds), ids);
+    const styleInputs = compareStyleInputs(referenceMeasurement.elements, astylarMeasurement?.elements ?? {});
     const astylarState = await astylar.page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__?.state());
     const interactionState = await compareInteractionState(reference.page, astylar.page, family, state, astylarState);
     assert.ok(astylarMeasurement, 'Astylar interaction measurement is missing.');
@@ -375,7 +398,7 @@ async function captureInteractionCase(benchmarkCase) {
         JSON.stringify(resourceCounts(resourceSnapshots.at(-1))));
     const focusMatches = state !== 'focus' || referenceFocus === astylarFocus;
     return {
-      family, profile, viewport, state, screenshotSimilarity, textAlignment, focusedRasters, semantics, eventComparison, interactionState, overlayPlacement, statePaint, cursor,
+      family, profile, viewport, state, screenshotSimilarity, styleInputs, textAlignment, focusedRasters, semantics, eventComparison, interactionState, overlayPlacement, statePaint, cursor,
       focus: { reference: referenceFocus, astylar: astylarFocus, matches: focusMatches },
       runtimeErrors, resourceSnapshots, resourcesStable, astylarState,
       meetsAcceptance: screenshotSimilarity >= materialThresholds.resultSsim &&
@@ -1224,7 +1247,7 @@ function resourceCounts(snapshot) {
 }
 
 async function measureReference(page, ids) {
-  return page.evaluate((targetIds) => {
+  return page.evaluate(({ targetIds, styleProperties }) => {
     const roleOf = (element) => {
       const explicit = element.getAttribute('role');
       if (explicit) return explicit;
@@ -1256,11 +1279,8 @@ async function measureReference(page, ids) {
       return [id, { exists: true, borderBox: {
         left: rect.left, top: rect.top, right: rect.right, bottom: rect.bottom,
         width: rect.width, height: rect.height,
-      }, resolvedStyle: Object.fromEntries([
-        'position', 'display', 'boxSizing', 'width', 'height', 'top', 'right', 'bottom', 'left',
-        'padding', 'margin', 'fontFamily', 'fontSize', 'fontWeight', 'lineHeight', 'letterSpacing',
-        'textAlign', 'verticalAlign', 'alignItems', 'justifyContent',
-      ].map((property) => [property, computedStyle[property]])),
+      }, resolvedStyle: Object.fromEntries(styleProperties
+        .map((property) => [property, computedStyle[property]])),
       interactionBackground: computedStyle.backgroundColor }];
     }));
     const semantics = Object.fromEntries(targetIds.map((id) => {
@@ -1329,7 +1349,7 @@ async function measureReference(page, ids) {
       return (labelled || enclosing || element.textContent || '').replace(/\s+/g, ' ').trim();
     }
     return { elements, semantics };
-  }, ids);
+  }, { targetIds: ids, styleProperties: materialStyleInputProperties });
 }
 
 function profileTheme(profile) {

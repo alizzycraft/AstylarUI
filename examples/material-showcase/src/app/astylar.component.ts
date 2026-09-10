@@ -1242,9 +1242,23 @@ function materialDensityHeight(density: number): number {
 }
 
 const MATERIAL_STYLE_SNAPSHOT_PROPERTIES = [
-  'position', 'display', 'boxSizing', 'width', 'height', 'top', 'right', 'bottom', 'left',
-  'padding', 'margin', 'fontFamily', 'fontSize', 'fontWeight', 'lineHeight', 'letterSpacing',
-  'textAlign', 'verticalAlign', 'alignItems', 'justifyContent',
+  'position', 'display', 'visibility', 'boxSizing',
+  'width', 'height', 'minWidth', 'maxWidth', 'minHeight', 'maxHeight',
+  'top', 'right', 'bottom', 'left',
+  'padding', 'paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft',
+  'margin', 'marginTop', 'marginRight', 'marginBottom', 'marginLeft',
+  'flex', 'flexDirection', 'flexWrap', 'flexGrow', 'flexShrink', 'flexBasis',
+  'alignSelf', 'alignItems', 'alignContent', 'justifyContent',
+  'gap', 'rowGap', 'columnGap', 'order',
+  'gridTemplateColumns', 'gridTemplateRows', 'gridColumn', 'gridRow',
+  'fontFamily', 'fontSize', 'fontWeight', 'fontStyle', 'lineHeight',
+  'letterSpacing', 'wordSpacing', 'textAlign', 'verticalAlign', 'textTransform',
+  'whiteSpace', 'wordWrap', 'textOverflow', 'textDecoration',
+  'color', 'background', 'opacity',
+  'borderWidth', 'borderStyle', 'borderColor', 'borderRadius',
+  'boxShadow', 'overflow', 'textShadow',
+  'transform', 'perspective', 'zIndex',
+  'cursor', 'pointerEvents', 'caretColor', 'appearance', 'objectFit',
 ] as const;
 
 function materialStyleSnapshot(style: Record<string, unknown> | undefined): Record<string, string> | undefined {
