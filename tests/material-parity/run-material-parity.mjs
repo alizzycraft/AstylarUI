@@ -196,6 +196,7 @@ async function captureCase(benchmarkCase) {
     const reference = await capturePage(context, 'reference', benchmarkCase, directory);
     const astylar = await capturePage(context, 'astylar', benchmarkCase, directory);
     const screenshotSimilarity = comparePng(reference.image, astylar.image);
+    const styleInputs = compareStyleInputs(reference.measurement.elements, astylar.measurement.elements);
     const geometry = compareGeometry(reference.measurement.elements, astylar.measurement.elements,
       [...materialTextOnlyTargets, ...materialGeometryExcludedTargets]);
     const textAlignment = compareTextAlignment(
@@ -225,7 +226,7 @@ async function captureCase(benchmarkCase) {
     const runtimeErrors = [...reference.errors.map((error) => `reference: ${error}`),
       ...astylar.errors.map((error) => `astylar: ${error}`)];
     return {
-      family, profile, viewport, screenshotSimilarity, geometry, textAlignment, uniformBackgrounds, focusedRasters, shadowProfiles, semantics, runtimeErrors,
+      family, profile, viewport, screenshotSimilarity, styleInputs, geometry, textAlignment, uniformBackgrounds, focusedRasters, shadowProfiles, semantics, runtimeErrors,
       diagnostics: astylar.measurement.diagnostics,
       meetsAcceptance: screenshotSimilarity >= materialThresholds.resultSsim &&
         geometry.maximumEdgeError !== null &&
@@ -1251,10 +1252,16 @@ async function measureReference(page, ids) {
       const element = referenceTarget(id);
       if (!element) return [id, { exists: false }];
       const rect = element.getBoundingClientRect();
+      const computedStyle = getComputedStyle(element);
       return [id, { exists: true, borderBox: {
         left: rect.left, top: rect.top, right: rect.right, bottom: rect.bottom,
         width: rect.width, height: rect.height,
-      }, interactionBackground: getComputedStyle(element).backgroundColor }];
+      }, resolvedStyle: Object.fromEntries([
+        'position', 'display', 'boxSizing', 'width', 'height', 'top', 'right', 'bottom', 'left',
+        'padding', 'margin', 'fontFamily', 'fontSize', 'fontWeight', 'lineHeight', 'letterSpacing',
+        'textAlign', 'verticalAlign', 'alignItems', 'justifyContent',
+      ].map((property) => [property, computedStyle[property]])),
+      interactionBackground: computedStyle.backgroundColor }];
     }));
     const semantics = Object.fromEntries(targetIds.map((id) => {
       const element = referenceTarget(id);
@@ -1361,6 +1368,14 @@ function compareTextAlignment(referenceImage, candidateImage, referenceElements,
       offsetErrorPx,
       matches: offsetErrorPx <= (materialTextAlignmentToleranceOverrides[id] ?? materialThresholds.maximumTextCenterOffsetErrorPx),
     };
+  });
+}
+
+function compareStyleInputs(referenceElements, candidateElements) {
+  return Object.keys(referenceElements).flatMap((id) => {
+    const reference = referenceElements[id]?.resolvedStyle;
+    const astylar = candidateElements[id]?.resolvedStyle;
+    return reference || astylar ? [{ id, reference, astylar }] : [];
   });
 }
 

@@ -27,6 +27,22 @@ describe('BabylonDOMRendererService', () => {
     expect(validation.errors).toEqual([]);
   });
 
+  it('retains the resolved CSS style on text meshes for renderer diagnostics', () => {
+    const renderer = Object.create(
+      BabylonDOMRendererService.prototype,
+    ) as BabylonDOMRendererService;
+    (renderer as unknown as { babylonMeshService: unknown }).babylonMeshService = {
+      createTextMesh: () => ({ metadata: {}, isPickable: false }),
+    };
+    const resolvedStyle = { selector: '#label', fontSize: '12px', lineHeight: '16px' };
+
+    const mesh = renderer['createTextMesh'](
+      'label', {} as never, { width: 40, height: 16 }, resolvedStyle, { scene: {} } as never,
+    );
+
+    expect(mesh.metadata['astylarResolvedStyle']).toEqual(resolvedStyle);
+  });
+
   it('does not displace a line box after the text canvas has positioned its baseline', () => {
     const renderer = Object.create(
       BabylonDOMRendererService.prototype,

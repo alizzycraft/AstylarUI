@@ -1113,6 +1113,8 @@ export class AstylarShowcaseComponent {
       const mesh = meshes.find((candidate) => candidate.name === id) ??
         meshes.find((candidate) => candidate.metadata?.isTextMesh === false) ?? meshes[0];
       if (!mesh) return [id, { exists: false }];
+      const resolvedStyle = meshes.find((candidate) => candidate.metadata?.astylarResolvedStyle)
+        ?.metadata?.astylarResolvedStyle;
       mesh.computeWorldMatrix(true);
       const projected = mesh.getBoundingInfo().boundingBox.vectorsWorld.map((point) =>
         Vector3.Project(point, Matrix.IdentityReadOnly, surface.scene.getTransformMatrix(), viewport));
@@ -1123,6 +1125,7 @@ export class AstylarShowcaseComponent {
       return [id, {
         exists: true,
         borderBox: { left, top, right, bottom, width: right - left, height: bottom - top },
+        resolvedStyle: materialStyleSnapshot(resolvedStyle),
         interactionBackground: mesh.metadata?.astylarResolvedInteractionStyle?.background,
       }];
     }));
@@ -1228,6 +1231,20 @@ function materialDensityHeight(density: number): number {
   if (density === -1) return 32;
   if (density === -2) return 28;
   return 24;
+}
+
+const MATERIAL_STYLE_SNAPSHOT_PROPERTIES = [
+  'position', 'display', 'boxSizing', 'width', 'height', 'top', 'right', 'bottom', 'left',
+  'padding', 'margin', 'fontFamily', 'fontSize', 'fontWeight', 'lineHeight', 'letterSpacing',
+  'textAlign', 'verticalAlign', 'alignItems', 'justifyContent',
+] as const;
+
+function materialStyleSnapshot(style: Record<string, unknown> | undefined): Record<string, string> | undefined {
+  if (!style) return undefined;
+  return Object.fromEntries(MATERIAL_STYLE_SNAPSHOT_PROPERTIES.flatMap((property) => {
+    const value = style[property];
+    return value === undefined || value === null || value === '' ? [] : [[property, String(value)]];
+  }));
 }
 
 function sliderHandleName(elementId: string | undefined): '' | 'start' | 'end' {

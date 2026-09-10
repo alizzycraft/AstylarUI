@@ -310,6 +310,7 @@ export class BabylonDOMRendererService {
         element.id ?? mesh.name,
         textTexture,
         textureDimensions,
+        textStyle,
         render,
       );
 
@@ -602,6 +603,7 @@ export class BabylonDOMRendererService {
     elementId: string,
     texture: BABYLON.Texture,
     dimensions: { width: number; height: number },
+    resolvedStyle: StyleRule,
     render: BabylonRender,
   ): Mesh {
     const scene = render.scene;
@@ -624,6 +626,7 @@ export class BabylonDOMRendererService {
       isTextMesh: true,
       elementId,
       textDimensions: dimensions,
+      astylarResolvedStyle: { ...resolvedStyle },
     };
 
 
