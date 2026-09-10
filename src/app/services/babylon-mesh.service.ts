@@ -1676,7 +1676,7 @@ export class BabylonMeshService {
           // and a tighter falloff than a half-radius Gaussian.
           float sigma = max(blur * 0.4, 0.0001);
           float outside = max(distance, 0.0) / sigma;
-          coverage = distance <= 0.0 ? 0.82 : 0.41 * exp(-0.5 * outside * outside);
+          coverage = distance <= 0.0 ? 0.82 : 0.20 * exp(-0.5 * outside * outside);
         }
         gl_FragColor = vec4(shadowColor.rgb, shadowColor.a * coverage);
       }
