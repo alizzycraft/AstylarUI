@@ -686,12 +686,8 @@ export class AstylarShowcaseComponent {
         { selector: '.grid-tile-label', whiteSpace: 'nowrap' },
         { selector: '.badge-anchor', position: 'relative', width: '120px', height: '21px' },
         { selector: '#badge-primary', width: theme.density <= -5 ? '81.859375px' : theme.typographyScale > 1 ? '104.65625px' : '90.953125px' },
-        { selector: '.badge-label', position: 'relative', top: `${theme.density <= -5 ? '0.5px' : '-0.5px'}`, whiteSpace: 'nowrap' },
-        ...(theme.density <= -5 ? [{ selector: '.badge-label', mediaMaxWidth: '500px', top: '-1px' }] : []),
-        ...(theme.typographyScale > 1 ? [{ selector: '.badge-label', mediaMaxWidth: '500px', top: '-1.5px' }] : []),
-        { selector: '.badge-bubble', position: 'absolute', top: '-4px', right: '-4px', width: '16px', height: '16px', borderRadius: '8px', background: theme.primary, color: theme.onPrimary, fontSize: '11px', lineHeight: '16px', textAlign: 'center' },
-        { selector: '.badge-count-label', position: 'relative', top: `${theme.mode === 'dark' ? -1.5 : theme.density <= -5 ? -1 : theme.typographyScale > 1 ? -1.5 : -2.5}px`, display: 'block', width: '100%', textAlign: 'center' },
-        ...(theme.density <= -5 ? [{ selector: '.badge-count-label', mediaMaxWidth: '500px', top: '-0.125px' }] : []),
+        { selector: '.badge-label', whiteSpace: 'nowrap' },
+        { selector: '.badge-bubble', position: 'absolute', top: '-4px', right: '-4px', width: '16px', height: '16px', boxSizing: 'border-box', padding: '0 4px', borderRadius: '8px', display: 'block', background: theme.primary, color: theme.onPrimary, fontFamily: 'Roboto', fontSize: '11.008px', fontWeight: '500', lineHeight: '16px', textAlign: 'center' },
         { selector: '.chip', height: `${theme.density === 0 ? 32 : 24}px`, boxSizing: 'border-box', padding: '0 12px', borderWidth: '1px', borderStyle: 'solid', borderColor: '#79747e', borderRadius: `${8 * theme.cornerScale}px`, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: 'transparent', color: theme.onSurface, fontSize: '14px', lineHeight: '20px', cursor: 'pointer' },
         { selector: '.chip.selected', justifyContent: 'flex-start', borderWidth: '0', background: '#eadef7', color: '#4b4357' },
         { selector: '.chip:hover', background: mixHex(theme.surfaceContainer, theme.onSurface, .08) },
@@ -848,7 +844,7 @@ export class AstylarShowcaseComponent {
     if (family === 'toolbar') return [{ type: 'div', id: 'toolbar-primary', class: 'toolbar', children: [{ type: 'span', id: 'toolbar-title', class: 'toolbar-title', textContent: 'Material workspace' }, { type: 'button', id: 'toolbar-action', class: 'toolbar-action', value: 'Action' }] }];
     if (family === 'sidenav') return [{ type: 'div', id: 'sidenav-primary', class: 'sidenav-container', children: [{ type: 'aside', id: 'sidenav-nav', class: 'sidenav', textContent: 'Navigation' }, { type: 'main', id: 'sidenav-content', class: 'sidenav-content', textContent: 'Main content' }] }];
     if (family === 'grid-list') return [{ type: 'div', id: 'grid-list-primary', class: 'grid-list', children: [{ type: 'div', id: 'grid-tile-one', class: 'grid-tile', children: [{ type: 'span', id: 'grid-tile-one-label', class: 'grid-tile-label', textContent: 'One' }] }, { type: 'div', id: 'grid-tile-two', class: 'grid-tile', children: [{ type: 'span', id: 'grid-tile-two-label', class: 'grid-tile-label', textContent: 'Two' }] }] }];
-    if (family === 'badge') return [{ type: 'span', id: 'badge-primary', class: 'badge-anchor', children: [{ type: 'span', id: 'badge-label', class: 'badge-label', textContent: 'Notifications' }, { type: 'span', id: 'badge-count', class: 'badge-bubble', children: [{ type: 'span', id: 'badge-count-label', class: 'badge-count-label', textContent: '4' }] }] }];
+    if (family === 'badge') return [{ type: 'span', id: 'badge-primary', class: 'badge-anchor', children: [{ type: 'span', id: 'badge-label', class: 'badge-label', textContent: 'Notifications' }, { type: 'span', id: 'badge-count', class: 'badge-bubble', textContent: '4' }] }];
     if (family === 'chips') return [{ type: 'div', id: 'chips-primary', class: 'row', role: 'listbox', ariaLabel: 'Tags', ariaDisabled: false, ariaMultiselectable: true, children: state.chips.map((chip, index) => ({
       type: 'div' as const, id: `chip-${index}`, class: `chip ${state.chipSelections[index] ? 'selected' : 'unselected'}`, role: 'option', tabindex: 0,
       ariaLabel: chip, ariaSelected: state.chipSelections[index],
