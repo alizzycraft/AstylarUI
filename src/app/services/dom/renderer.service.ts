@@ -131,11 +131,10 @@ export class BabylonDOMRendererService {
 
 
 
-    // Clear existing elements and state. Cached text textures reference the
-    // meshes being replaced and must not survive into the next full rebuild.
-    this.textRenderingService.clearCache();
     this.inputElementService.cleanup();
-    this.elementManager.clearAll();
+    // Textures are surface-scoped cache resources, not mesh-owned resources.
+    // Scene replacement retains them while the old element tree is released.
+    this.elementManager.clearAll({ disposeTextTextures: false });
     this.interactionService.clearAllInteractions();
     this.ancestry.clear();
 
@@ -374,8 +373,8 @@ export class BabylonDOMRendererService {
         return;
       }
 
-      // Dispose old texture
-      existingTexture.dispose();
+      // Release this rendered use while allowing the surface cache to reuse it.
+      this.textRenderingService.releaseTexture(existingTexture);
       dom.context.textTextures.delete(elementId);
 
       // Get element and parent mesh
@@ -805,7 +804,8 @@ export class BabylonDOMRendererService {
 
   cleanup(): void {
     this.inputElementService.cleanup();
-    this.elementManager.clearAll();
+    this.elementManager.clearAll({ disposeTextTextures: false });
+    this.textRenderingService.dispose();
     this.interactionService.clearAllInteractions();
     this.scene = undefined;
     this.render = undefined;

@@ -164,7 +164,7 @@ export class BabylonElementManagerService implements OnDestroy {
     }
   }
 
-  clearAll(): void {
+  clearAll(options: { disposeTextTextures?: boolean } = {}): void {
     // Clear elements
     this.elements.forEach(mesh => {
       if (mesh && !mesh.isDisposed) {
@@ -185,11 +185,13 @@ export class BabylonElementManagerService implements OnDestroy {
       }
     });
     this.textMeshes.clear();
-    this.textTextures.forEach(texture => {
-      if (texture && !texture.isDisposed) {
-        texture.dispose();
-      }
-    });
+    if (options.disposeTextTextures !== false) {
+      this.textTextures.forEach(texture => {
+        if (texture && !texture.isDisposed) {
+          texture.dispose();
+        }
+      });
+    }
     this.textTextures.clear();
     this.textContent.clear();
     this.textMetrics.clear();

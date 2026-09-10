@@ -277,17 +277,7 @@ export class TextRenderingService implements TextCacheManager {
         this.generateCacheKey(textElement.textContent || '', textStyle);
 
       if (this.textureCache.has(cacheKey)) {
-        const cacheEntry = this.textureCache.get(cacheKey)!;
-        cacheEntry.referenceCount--;
-
-        // Only dispose if no other references
-        if (cacheEntry.referenceCount <= 0) {
-          textElement.textTexture.dispose();
-          this.textureCache.delete(cacheKey);
-
-        } else {
-
-        }
+        this.releaseTexture(textElement.textTexture);
       } else {
         // Not in cache, dispose directly
         textElement.textTexture.dispose();
@@ -311,6 +301,11 @@ export class TextRenderingService implements TextCacheManager {
   getTexture(key: string): BABYLON.Texture | null {
     const cacheEntry = this.textureCache.get(key);
     if (cacheEntry) {
+      if (!this.isTextureLive(cacheEntry.texture)) {
+        this.textureCache.delete(key);
+        this.textureCacheKeys.delete(cacheEntry.texture);
+        return null;
+      }
       cacheEntry.lastUsed = Date.now();
       cacheEntry.referenceCount++;
       return cacheEntry.texture;
@@ -348,10 +343,48 @@ export class TextRenderingService implements TextCacheManager {
   removeTexture(key: string): void {
     const cacheEntry = this.textureCache.get(key);
     if (cacheEntry) {
-      cacheEntry.texture.dispose();
+      if (this.isTextureLive(cacheEntry.texture)) cacheEntry.texture.dispose();
       this.textureCache.delete(key);
+      this.textureCacheKeys.delete(cacheEntry.texture);
 
     }
+  }
+
+  /**
+   * Starts a synchronous rendered-DOM replacement. Reference counts describe
+   * the new tree after this point; entries left at zero remain idle cache
+   * candidates rather than being destroyed with the old meshes.
+   */
+  beginRenderCycle(): void {
+    for (const cacheEntry of this.textureCache.values()) {
+      cacheEntry.referenceCount = 0;
+    }
+  }
+
+  /** Textures owned by this surface that scene replacement must preserve. */
+  getRetainedTextures(): ReadonlySet<BABYLON.BaseTexture> {
+    const retained = new Set<BABYLON.BaseTexture>();
+    for (const [key, cacheEntry] of this.textureCache.entries()) {
+      if (!this.isTextureLive(cacheEntry.texture)) {
+        this.textureCache.delete(key);
+        this.textureCacheKeys.delete(cacheEntry.texture);
+        continue;
+      }
+      retained.add(cacheEntry.texture);
+    }
+    return retained;
+  }
+
+  /** Releases one rendered use without defeating the idle texture cache. */
+  releaseTexture(texture: BABYLON.Texture): void {
+    const cacheKey = this.textureCacheKeys.get(texture);
+    const cacheEntry = cacheKey ? this.textureCache.get(cacheKey) : undefined;
+    if (cacheEntry) {
+      cacheEntry.referenceCount = Math.max(0, cacheEntry.referenceCount - 1);
+      cacheEntry.lastUsed = Date.now();
+      return;
+    }
+    if (this.isTextureLive(texture)) texture.dispose();
   }
 
   /**
@@ -365,8 +398,9 @@ export class TextRenderingService implements TextCacheManager {
     for (const [key, cacheEntry] of this.textureCache.entries()) {
       // Remove textures that are old and have no references
       if (cacheEntry.referenceCount <= 0 && (now - cacheEntry.lastUsed) > maxAge) {
-        cacheEntry.texture.dispose();
+        if (this.isTextureLive(cacheEntry.texture)) cacheEntry.texture.dispose();
         this.textureCache.delete(key);
+        this.textureCacheKeys.delete(cacheEntry.texture);
         removedCount++;
       }
     }
@@ -490,10 +524,10 @@ export class TextRenderingService implements TextCacheManager {
     };
   }
 
-  /** Clears cached textures before a full rendered-DOM replacement. */
+  /** Invalidates every cached texture, for example after web-font pixels change. */
   clearCache(): void {
     for (const cacheEntry of this.textureCache.values()) {
-      cacheEntry.texture.dispose();
+      if (this.isTextureLive(cacheEntry.texture)) cacheEntry.texture.dispose();
     }
     this.textureCache.clear();
     this.textureCacheKeys = new WeakMap<BABYLON.Texture, string>();
@@ -506,5 +540,12 @@ export class TextRenderingService implements TextCacheManager {
     this.clearCache();
     this.scene = undefined;
 
+  }
+
+  private isTextureLive(texture: BABYLON.Texture): boolean {
+    const disposed = (texture as unknown as {
+      isDisposed?: boolean | (() => boolean);
+    }).isDisposed;
+    return typeof disposed === 'function' ? !disposed.call(texture) : !disposed;
   }
 }

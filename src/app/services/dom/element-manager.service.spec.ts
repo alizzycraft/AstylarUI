@@ -39,4 +39,33 @@ describe('BabylonElementManagerService text interaction lifecycle', () => {
     expect(registry.getByElementId('copy')).toBeUndefined();
     expect(registry.getByMesh(mesh)).toBeUndefined();
   });
+
+  it('can release a rebuilt element tree without disposing cache-owned text textures', () => {
+    const registry = new TextInteractionRegistryService();
+    const highlightFactory = jasmine.createSpyObj<TextHighlightMeshFactory>(
+      'TextHighlightMeshFactory',
+      ['clearAllHighlights'],
+    );
+    const manager = new BabylonElementManagerService(registry, highlightFactory);
+    const mesh = {
+      uniqueId: 43,
+      metadata: {},
+      isDisposed: false,
+      dispose: jasmine.createSpy('dispose'),
+    } as unknown as Mesh;
+    const texture = { isDisposed: false, dispose: jasmine.createSpy('dispose') };
+
+    manager.registerTextElement(
+      'cached-copy',
+      mesh,
+      texture,
+      'Cached copy',
+      { css: { totalWidth: 80, totalHeight: 20 } } as StoredTextLayoutMetrics,
+    );
+    manager.clearAll({ disposeTextTextures: false });
+
+    expect(mesh.dispose).toHaveBeenCalled();
+    expect(texture.dispose).not.toHaveBeenCalled();
+    expect(manager.textTexturesMap.size).toBe(0);
+  });
 });

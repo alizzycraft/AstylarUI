@@ -131,6 +131,7 @@ export interface AstylarInternalInspection {
   readonly inputElementService: InputElementService;
   readonly textSelectionController: TextSelectionControllerService;
   readonly textInteractionRegistry: TextInteractionRegistryService;
+  readonly textRenderingService: TextRenderingService;
 }
 
 /**
@@ -182,6 +183,7 @@ class AstylarRenderer {
       inputElementService: this.inputElementService,
       textSelectionController: this.textSelectionController,
       textInteractionRegistry: this.textInteractionRegistry,
+      textRenderingService: this.textRenderingService,
     };
   }
 
@@ -553,6 +555,15 @@ class AstylarRenderer {
             sceneResources,
             this.inputElementService,
           );
+          // Font completion changes the pixels represented by an otherwise
+          // identical text cache key. Other visual updates can safely reuse
+          // this surface's idle text textures across the full tree rebuild.
+          if (reasons.includes('font')) this.textRenderingService.clearCache();
+          this.textRenderingService.beginRenderCycle();
+          const retainedTextures = new Set([
+            ...this.imageResources.getSceneTextures(scene),
+            ...this.textRenderingService.getRetainedTextures(),
+          ]);
           let reusedVisualMeshes = 0;
           sceneResources.replace(
             () => {
@@ -582,8 +593,9 @@ class AstylarRenderer {
                   this.inputElementService.isFocusVisible(),
               );
             },
-            this.imageResources.getSceneTextures(scene),
+            retainedTextures,
           );
+          this.textRenderingService.cleanup();
           await generation.whenSettled();
           if (!scene.isDisposed) {
             let disposeObserver: ReturnType<typeof scene.onDisposeObservable.addOnce> | undefined;

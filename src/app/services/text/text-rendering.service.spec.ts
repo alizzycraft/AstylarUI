@@ -45,4 +45,43 @@ describe('TextRenderingService', () => {
       height: 16.1,
     });
   });
+
+  it('retains an unused cached texture across render cycles for later reuse', () => {
+    const multiLine = new MultiLineTextRendererService();
+    const service = new TextRenderingService(
+      new TextCanvasRendererService(multiLine),
+      new TextStyleParserService(),
+      multiLine,
+    );
+    const texture = {
+      isDisposed: false,
+      dispose: jasmine.createSpy('dispose'),
+    };
+
+    service.setTexture('shared-label', texture as never);
+    service.beginRenderCycle();
+
+    expect(service.getRetainedTextures()).toContain(texture as never);
+    expect(service.getTexture('shared-label')).toBe(texture as never);
+    expect(texture.dispose).not.toHaveBeenCalled();
+  });
+
+  it('drops disposed textures instead of returning stale cache entries', () => {
+    const multiLine = new MultiLineTextRendererService();
+    const service = new TextRenderingService(
+      new TextCanvasRendererService(multiLine),
+      new TextStyleParserService(),
+      multiLine,
+    );
+    const texture = {
+      isDisposed: true,
+      dispose: jasmine.createSpy('dispose'),
+    };
+
+    service.setTexture('stale-label', texture as never);
+
+    expect(service.getTexture('stale-label')).toBeNull();
+    expect(service.getRetainedTextures()).not.toContain(texture as never);
+    expect(service.getCacheStats().size).toBe(0);
+  });
 });

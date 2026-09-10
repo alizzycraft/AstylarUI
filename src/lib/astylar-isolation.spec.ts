@@ -1,7 +1,7 @@
 import { provideZonelessChangeDetection } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import type { SiteData } from '../app/types/site-data';
-import { Astylar } from './astylar';
+import { Astylar, ASTYLAR_INTERNAL_INSPECTION } from './astylar';
 import { AstylarDiagnosticError, type AstylarDiagnostic } from './astylar-diagnostics';
 
 describe('Astylar simultaneous surface isolation', () => {
@@ -175,6 +175,34 @@ describe('Astylar simultaneous surface isolation', () => {
     }
   });
 
+  it('reuses surface-scoped text textures across ordinary visual rebuilds', async () => {
+    const canvas = document.createElement('canvas');
+    document.body.append(canvas);
+    const astylar = TestBed.inject(Astylar);
+    const initial = site('Reusable text');
+    const surface = astylar.mount(canvas, initial);
+
+    try {
+      await surface.whenSettled();
+      const inspection = astylar[ASTYLAR_INTERNAL_INSPECTION](surface.scene)!;
+      const previousTextures = new Set(inspection.elementManager.textTexturesMap.values());
+      const updated = site('Reusable text');
+      updated.styles = [
+        ...updated.styles,
+        { selector: '#root', background: '#f4f0f8' },
+      ];
+
+      await surface.update(updated);
+
+      const currentTextures = new Set(inspection.elementManager.textTexturesMap.values());
+      expect([...currentTextures].some((texture) => previousTextures.has(texture))).toBeTrue();
+      expect([...previousTextures].every((texture) => !texture.isDisposed)).toBeTrue();
+    } finally {
+      surface.dispose();
+      canvas.remove();
+    }
+  });
+
   it('settles initial rendering after fonts are ready and reflows for later font loads', async () => {
     let releaseFonts!: () => void;
     const fontsReady = new Promise<FontFaceSet>((resolve) => {
@@ -213,9 +241,17 @@ describe('Astylar simultaneous surface isolation', () => {
       expect(surface.diagnostics.session?.revision).toBe(1);
       expect(fonts.addEventListener).toHaveBeenCalledWith('loadingdone', jasmine.any(Function));
 
+      const astylar = TestBed.inject(Astylar);
+      const inspection = astylar[ASTYLAR_INTERNAL_INSPECTION](surface.scene)!;
+      const preFontTextures = new Set(inspection.elementManager.textTexturesMap.values());
+
       loadingDone?.(new Event('loadingdone'));
       await waitUntil(() => surface.diagnostics.session?.revision === 2);
       expect(surface.diagnostics.session?.revision).toBe(2);
+      const postFontTextures = new Set(inspection.elementManager.textTexturesMap.values());
+      expect([...postFontTextures].some((texture) => preFontTextures.has(texture))).toBeFalse();
+      expect([...preFontTextures].every((texture) =>
+        !surface.scene.textures.includes(texture))).toBeTrue();
     } finally {
       surface.dispose();
       canvas.remove();
