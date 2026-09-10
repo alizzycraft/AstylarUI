@@ -1116,7 +1116,9 @@ export class AstylarShowcaseComponent {
     const viewport = camera.viewport.toGlobal(engine.getRenderWidth(), engine.getRenderHeight());
     const scaleX = canvas.clientWidth / engine.getRenderWidth();
     const scaleY = canvas.clientHeight / engine.getRenderHeight();
-    const authoredStyles = this.siteData().styles;
+    const authoredSiteData = this.siteData();
+    const authoredStyles = authoredSiteData.styles;
+    const authoredStructures = indexAuthoredStructures(authoredSiteData.root);
     const elements = Object.fromEntries(ids.map((id) => {
       const meshes = surface.scene.meshes.filter((mesh) => mesh.metadata?.elementId === id);
       const mesh = meshes.find((candidate) => candidate.name === id) ??
@@ -1139,6 +1141,7 @@ export class AstylarShowcaseComponent {
         exists: true,
         borderBox: { left, top, right, bottom, width: right - left, height: bottom - top },
         authoredStyle,
+        authoredStructure: authoredStructures[id],
         resolvedStyle: materialStyleSnapshot(resolvedStyle),
         interactionBackground: mesh.metadata?.astylarResolvedInteractionStyle?.background,
       }];
@@ -1306,6 +1309,42 @@ interface MaterialAuthoredStyleRule {
   readonly index: number;
   readonly selector: string;
   readonly declarations: Readonly<Record<string, string>>;
+}
+
+interface MaterialAuthoredStructure {
+  readonly type: string;
+  readonly text: string;
+  readonly directChildIds: readonly string[];
+  readonly descendantIds: readonly string[];
+}
+
+function indexAuthoredStructures(root: object): Readonly<Record<string, MaterialAuthoredStructure>> {
+  const structures: Record<string, MaterialAuthoredStructure> = {};
+  const visit = (node: object): readonly string[] => {
+    const record = node as Record<string, unknown>;
+    const children = Array.isArray(record['children']) ? record['children'].filter(isObject) : [];
+    const descendantIds = children.flatMap((child) => visit(child));
+    const id = typeof record['id'] === 'string' ? record['id'] : undefined;
+    if (id) {
+      structures[id] = {
+        type: typeof record['type'] === 'string' ? record['type'] : 'root',
+        text: String(record['textContent'] ?? record['value'] ?? '').replace(/\s+/g, ' ').trim(),
+        directChildIds: children.flatMap((child) => {
+          const childId = (child as Record<string, unknown>)['id'];
+          return typeof childId === 'string' ? [childId] : [];
+        }),
+        descendantIds,
+      };
+      return [id, ...descendantIds];
+    }
+    return descendantIds;
+  };
+  visit(root);
+  return structures;
+}
+
+function isObject(value: unknown): value is object {
+  return typeof value === 'object' && value !== null;
 }
 
 function sliderHandleName(elementId: string | undefined): '' | 'start' | 'end' {

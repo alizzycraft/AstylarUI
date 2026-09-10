@@ -1280,6 +1280,16 @@ async function measureReference(page, ids) {
         left: rect.left, top: rect.top, right: rect.right, bottom: rect.bottom,
         width: rect.width, height: rect.height,
       }, authoredStyle: matchedAuthoredStyles(element, styleProperties),
+      authoredStructure: {
+        type: element.tagName.toLowerCase(),
+        text: (element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement
+          ? element.value : element.textContent ?? '').replace(/\s+/g, ' ').trim(),
+        descendantIds: targetIds.filter((candidateId) => {
+          if (candidateId === id) return false;
+          const candidate = referenceTarget(candidateId);
+          return !!candidate && element.contains(candidate);
+        }),
+      },
       resolvedStyle: Object.fromEntries(styleProperties
         .map((property) => [property, computedStyle[property]])),
       interactionBackground: computedStyle.backgroundColor }];
@@ -1447,6 +1457,8 @@ function compareStyleInputs(referenceElements, candidateElements) {
       id,
       referenceAuthored: referenceElements[id]?.authoredStyle ?? [],
       astylarAuthored: candidateElements[id]?.authoredStyle ?? [],
+      referenceStructure: referenceElements[id]?.authoredStructure,
+      astylarStructure: candidateElements[id]?.authoredStructure,
       reference,
       astylar,
     }] : [];
