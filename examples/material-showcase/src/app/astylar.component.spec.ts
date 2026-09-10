@@ -310,11 +310,14 @@ describe('AstylarShowcaseComponent', () => {
       width: '130px',
       top: '0',
       zIndex: '2',
+      padding: '0 24px',
+      display: 'flex',
+      alignItems: 'center',
       cursor: 'pointer',
     }));
     expect(style(stepper, '#step-details')?.['left']).toBe('-24px');
     expect(style(stepper, '#step-review')?.['right']).toBe('-24px');
-    expect(style(stepper, '.step-tab-content')).toEqual(jasmine.objectContaining({ left: '24px', display: 'flex' }));
+    expect(style(stepper, '.step-tab-content')).toBeUndefined();
     expect(style(stepper, '.step-connector')).toEqual(jasmine.objectContaining({
       zIndex: '3', pointerEvents: 'none',
     }));
@@ -336,9 +339,11 @@ describe('AstylarShowcaseComponent', () => {
       fontWeight: '500', lineHeight: '24px',
     }));
     store.setTheme(MATERIAL_THEME_PROFILES.contrast);
-    expect(style(build(component, 'stepper'), '.stepper-content-label')?.['top']).toBe('-2px');
+    expect(style(build(component, 'stepper'), '.stepper-content-container')).toEqual(jasmine.objectContaining({
+      padding: '0 0 24px', margin: '0', textAlign: 'left',
+    }));
     store.patchState({ selected: false });
-    expect(style(build(component, 'stepper'), '.stepper-content-label')?.['top']).toBe('-3px');
+    expect(style(build(component, 'stepper'), '#stepper-content')?.['textAlign']).toBe('left');
     store.patchState({ selected: true });
     expect(lastStyle(build(component, 'expansion'), '.expansion-title')).toEqual(jasmine.objectContaining({
       padding: '0', fontSize: '16px',
