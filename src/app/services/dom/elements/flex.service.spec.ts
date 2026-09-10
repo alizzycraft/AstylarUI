@@ -209,6 +209,37 @@ describe('FlexService', () => {
     expect(height).toBe(112);
   });
 
+  it('content-sizes an auto-width row flex item from its in-flow descendants', () => {
+    const textRendering = {
+      calculateTextDimensions: (text: string) => ({ width: text.length * 6, height: 16, lineHeight: 16 }),
+    };
+    const textStyleParser = {
+      parseTextProperties: () => ({ fontSize: 12, lineHeight: 16 / 12 }),
+    };
+    const service = new FlexService(
+      new FlexLayoutService(), textRendering as never, textStyleParser as never,
+    );
+    const label: DOMElement = { type: 'span', id: 'label', textContent: 'Items per page:' };
+    const value: DOMElement = { type: 'span', id: 'value', textContent: '10' };
+    const group: DOMElement = { type: 'div', id: 'group', children: [label, value] };
+    const resolved = new Map<string, StyleRule>([
+      ['label', { selector: '#label', display: 'block', margin: '0 4px' }],
+      ['value', { selector: '#value', display: 'block' }],
+    ]);
+    const render = {
+      actions: { style: { findStyleForElement: (element: DOMElement) => resolved.get(element.id ?? '') } },
+    } as unknown as BabylonRender;
+    const dom = { context: { elementStyles: new Map() } } as unknown as BabylonDOM;
+
+    const width = service['calculateIntrinsicContainerWidth'](
+      group,
+      { selector: '#group', display: 'flex', flexDirection: 'row', flexWrap: 'nowrap' },
+      [], dom, render, 704,
+    );
+
+    expect(width).toBe(110);
+  });
+
   it('honors a descendant min-height during intrinsic container sizing', () => {
     const service = new FlexService(new FlexLayoutService(), {} as never, {} as never);
     const child: DOMElement = { type: 'article', id: 'empty', children: [

@@ -218,9 +218,19 @@ export class FlexService {
       } else if (intrinsicImageBox) {
         width = intrinsicImageBox.width;
       } else {
-        // Default width if not specified and not an intrinsic element
-        // In a row, divide space equally. In a column, use full width.
-        width = isRow ? (containerWidth / flowChildren.length) : containerWidth;
+        const intrinsicContainerWidth = this.calculateIntrinsicContainerWidth(
+          child,
+          style,
+          styles,
+          dom,
+          render,
+          Math.max(0, containerWidth - padding.left - padding.right),
+        );
+        // An auto-width flex item uses its content contribution. Falling back
+        // to an equal share made nested flex groups wrap even when their
+        // max-content sizes fit on one line.
+        width = intrinsicContainerWidth ??
+          (isRow ? (containerWidth / flowChildren.length) : containerWidth);
 
       }
 
@@ -542,6 +552,86 @@ export class FlexService {
 
 
     return finalWidth;
+  }
+
+  private calculateIntrinsicContainerWidth(
+    element: DOMElement,
+    style: StyleRule | undefined,
+    styles: StyleRule[],
+    dom: BabylonDOM,
+    render: BabylonRender,
+    availableWidth: number,
+  ): number | null {
+    const children = element.children ?? [];
+    if (children.length === 0) return null;
+
+    const padding = this.parsePadding(style?.padding);
+    const borderWidth = Math.max(0, Number.parseFloat(style?.borderWidth ?? '0') || 0);
+    const contentLimit = Math.max(
+      0,
+      availableWidth - padding.left - padding.right - borderWidth * 2,
+    );
+    const outerWidths = children
+      .map((child) => this.measureIntrinsicFlowChildOuterWidth(
+        child, styles, dom, render, contentLimit,
+      ))
+      .filter((width): width is number => width !== null);
+    if (outerWidths.length === 0) return null;
+
+    const display = style?.display?.toLowerCase() ?? 'block';
+    const flexDirection = style?.flexDirection?.toLowerCase() ?? 'row';
+    const isRowFlex = ['flex', 'inline-flex'].includes(display) &&
+      ['row', 'row-reverse'].includes(flexDirection);
+    const contentWidth = isRowFlex
+      ? outerWidths.reduce((sum, width) => sum + width, 0) +
+        this.parseGapProperties(style!).columnGap * Math.max(0, outerWidths.length - 1)
+      : Math.max(...outerWidths);
+
+    return contentWidth + padding.left + padding.right + borderWidth * 2;
+  }
+
+  private measureIntrinsicFlowChildOuterWidth(
+    child: DOMElement,
+    styles: StyleRule[],
+    dom: BabylonDOM,
+    render: BabylonRender,
+    availableWidth: number,
+  ): number | null {
+    const childStyle = render.actions.style.findStyleForElement(
+      child,
+      styles,
+      dom.context.elementStyles,
+    );
+    if (this.classifyFlexChild(childStyle) !== 'flow') return null;
+
+    const imageBox = this.calculateIntrinsicImageBox(child, childStyle, availableWidth);
+    let width: number;
+    if (childStyle?.width && childStyle.width !== 'auto') {
+      width = this.parseIntrinsicPixelLength(childStyle.width, availableWidth);
+    } else if (imageBox) {
+      width = imageBox.width;
+    } else if (
+      child.textContent ||
+      ['button', 'input', 'select', 'textarea'].includes(child.type) ||
+      childStyle?.display?.toLowerCase().startsWith('inline') === true
+    ) {
+      width = this.calculateIntrinsicWidth(child, childStyle, styles, dom, render);
+    } else {
+      width = this.calculateIntrinsicContainerWidth(
+        child, childStyle, styles, dom, render, availableWidth,
+      ) ?? this.minimumBorderBox(childStyle).width;
+    }
+
+    const definiteFlexBasis = this.parseDefiniteIntrinsicFlexBasis(childStyle, availableWidth);
+    if (definiteFlexBasis !== null) width = definiteFlexBasis;
+    if (childStyle?.minWidth) {
+      width = Math.max(width, this.parseIntrinsicPixelLength(childStyle.minWidth, availableWidth));
+    }
+    if (childStyle?.maxWidth) {
+      width = Math.min(width, this.parseIntrinsicPixelLength(childStyle.maxWidth, availableWidth));
+    }
+    const margin = this.parseMarginBox(childStyle);
+    return margin.left + width + margin.right;
   }
 
   private calculateIntrinsicMinWidth(

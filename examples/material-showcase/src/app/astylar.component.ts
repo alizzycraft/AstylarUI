@@ -716,17 +716,15 @@ export class AstylarShowcaseComponent {
         { selector: '.sort-focus-line', position: 'absolute', left: '0', top: `${theme.density === -2 ? 22 : 19}px`, width: '100%', height: '1px', background: theme.density <= -5 ? '#1d1b20' : theme.onSurface, pointerEvents: 'none' },
         { selector: '.sort-trigger', width: '100%', height: `${theme.density === -2 ? 22 : 19}px`, display: 'flex', alignItems: 'center', gap: '6px', color: theme.density <= -5 ? '#000000' : theme.onSurface, fontSize: '16px', fontWeight: '400', cursor: 'pointer' },
         { selector: '.sort-arrow', width: '12px', height: '12px', flexShrink: '0' },
-        { selector: '.paginator', position: 'relative', width: '100%', height: '56px', background: theme.surface, fontSize: '13px' },
-        { selector: '#paginator-size', position: 'absolute', top: `${theme.density === 0 ? 20 : theme.density <= -5 ? 12 : 16}px`, right: `${theme.density <= -5 ? 222.75 : 246.75}px`, whiteSpace: 'nowrap', fontSize: '13px', verticalAlign: 'middle' },
-        { selector: '#paginator-page-size', position: 'absolute', top: `${theme.density === 0 ? 20 : theme.density <= -5 ? 12 : 16}px`, right: `${theme.density <= -5 ? 206 : 230}px`, whiteSpace: 'nowrap', fontSize: '13px', verticalAlign: 'middle' },
-        { selector: '#paginator-range', position: 'absolute', top: `${theme.density === 0 ? state.pageIndex > 0 ? 20.5 : 20 : theme.density <= -5 ? state.pageIndex > 0 ? 12.49 : 13 : 16}px`, right: `${theme.density <= -5 ? 96 : 120}px`, whiteSpace: 'nowrap', fontSize: '13px', verticalAlign: 'middle', ...(theme.density <= -5 ? { height: '16px', boxSizing: 'border-box' as const } : {}) },
-        { selector: '.paginator-button', position: 'absolute', top: `${theme.density === 0 ? 4 : theme.density <= -5 ? 2 : 4}px`, width: `${theme.density === 0 ? 48 : theme.density <= -5 ? 36 : 40}px`, height: `${theme.density === 0 ? 48 : theme.density <= -5 ? 36 : 40}px`, borderWidth: '0', borderRadius: '24px', background: 'transparent', color: theme.onSurface, fontSize: '20px' },
-        { selector: '#paginator-previous', right: `${theme.density === 0 ? 48 : theme.density <= -5 ? 36 : 40}px` },
-        { selector: '#paginator-next', right: '0' },
-        { selector: '#paginator-size', mediaMaxWidth: '500px', top: '0', right: '34.25px' },
-        { selector: '#paginator-page-size', mediaMaxWidth: '500px', top: '0', right: '17px' },
-        { selector: '#paginator-range', mediaMaxWidth: '500px', top: `${theme.density <= -5 ? 22 : 28}px`, right: `${theme.density <= -5 ? 96 : 120}px`, paddingTop: '0' },
-        { selector: '.paginator-button', mediaMaxWidth: '500px', top: `${theme.density === 0 ? 4 : theme.density <= -5 ? 4 : 8}px` },
+        { selector: '.paginator', width: '100%', height: `${theme.density === 0 ? 56 : theme.density <= -5 ? 40 : 48}px`, display: 'block', background: theme.surface },
+        { selector: '.paginator', mediaMaxWidth: '500px', height: `${theme.density <= -5 ? 44 : 56}px` },
+        { selector: '.paginator-container', width: '100%', height: '100%', boxSizing: 'border-box', display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'flex-end', padding: '0 8px', fontFamily: 'Roboto', fontSize: '12px', fontWeight: '400', lineHeight: '16px', letterSpacing: '.4px', whiteSpace: 'nowrap' },
+        { selector: '.paginator-page-size', display: 'flex', alignItems: 'baseline', margin: '0 8px 0 0' },
+        { selector: '.paginator-range-actions', display: 'flex', alignItems: 'center', height: `${theme.density <= -5 ? 28 : 40}px` },
+        { selector: '#paginator-size, #paginator-page-size, #paginator-range', display: 'block', fontFamily: 'Roboto', fontSize: '12px', fontWeight: '400', lineHeight: '16px', letterSpacing: '.4px', whiteSpace: 'nowrap' },
+        { selector: '#paginator-size', margin: '0 4px' },
+        { selector: '#paginator-range', margin: '0 32px 0 24px' },
+        { selector: '.paginator-button', width: `${theme.density <= -5 ? 28 : 40}px`, height: `${theme.density <= -5 ? 28 : 40}px`, boxSizing: 'border-box', padding: '0', borderWidth: '0', borderRadius: `${theme.density <= -5 ? 14 : 20}px`, background: 'transparent', color: theme.onSurface, fontSize: '20px' },
         { selector: '.material-tree', width: '100%', display: 'flex', flexDirection: 'column', background: theme.surface },
         { selector: '.tree-item', width: '100%', height: `${theme.density < 0 ? 40 : 48}px`, padding: '0', boxSizing: 'border-box', display: 'flex', alignItems: 'center' },
         { selector: '.tree-label', height: '20px', lineHeight: '20px', verticalAlign: 'middle' },
@@ -891,7 +889,24 @@ export class AstylarShowcaseComponent {
         role: 'presentation',
       }] : [])] }];
     }
-    if (family === 'paginator') return [{ type: 'div', id: 'paginator-primary', class: 'paginator', role: 'group', ariaLabel: `Items per page: 10 ${state.pageIndex * 10 + 1} – ${Math.min(100, state.pageIndex * 10 + 10)} of 100`, children: [{ type: 'span', id: 'paginator-size', textContent: 'Items per page:' }, { type: 'span', id: 'paginator-page-size', textContent: '10' }, { type: 'span', id: 'paginator-range', textContent: `${state.pageIndex * 10 + 1} – ${Math.min(100, state.pageIndex * 10 + 10)} of 100` }, { type: 'button', id: 'paginator-previous', class: 'paginator-button', disabled: state.pageIndex === 0, ariaLabel: 'Previous page', value: '‹' }, { type: 'button', id: 'paginator-next', class: 'paginator-button', disabled: state.pageIndex === 9, ariaLabel: 'Next page', value: '›' }] }];
+    if (family === 'paginator') return [{
+      type: 'div', id: 'paginator-primary', class: 'paginator', role: 'group',
+      ariaLabel: `Items per page: 10 ${state.pageIndex * 10 + 1} – ${Math.min(100, state.pageIndex * 10 + 10)} of 100`,
+      children: [{
+        type: 'div', id: 'paginator-container', class: 'paginator-container', children: [{
+          type: 'div', id: 'paginator-page-size-group', class: 'paginator-page-size', children: [
+            { type: 'span', id: 'paginator-size', textContent: 'Items per page:' },
+            { type: 'span', id: 'paginator-page-size', textContent: '10' },
+          ],
+        }, {
+          type: 'div', id: 'paginator-range-actions', class: 'paginator-range-actions', children: [
+            { type: 'span', id: 'paginator-range', textContent: `${state.pageIndex * 10 + 1} – ${Math.min(100, state.pageIndex * 10 + 10)} of 100` },
+            { type: 'button', id: 'paginator-previous', class: 'paginator-button', disabled: state.pageIndex === 0, ariaLabel: 'Previous page', value: '‹' },
+            { type: 'button', id: 'paginator-next', class: 'paginator-button', disabled: state.pageIndex === 9, ariaLabel: 'Next page', value: '›' },
+          ],
+        }],
+      }],
+    }];
     if (family === 'tree') return [{ type: 'div', id: 'tree-primary', class: 'material-tree', role: 'tree', children: ['Documents', 'Projects', 'Archive'].map((label, index) => ({ type: 'div' as const, id: `tree-item-${index}`, class: `tree-item${this.focusedId() === `tree-item-${index}` ? ' focused' : ''}`, role: 'treeitem', tabindex: index === 0 ? 0 : -1, ariaLevel: 1, ariaPosinset: index + 1, ariaSetsize: 3, children: [{ type: 'span' as const, id: `tree-item-${index}-label`, class: 'tree-label', textContent: label }] })) }];
     if (family === 'slider') return [{ type: 'div', id: 'slider-pair', class: 'range-stack', children: [
       { type: 'showcase.material:range-visual', id: 'slider-visual', class: 'range-plugin-layer', data: { start: state.sliderStart / 100, end: state.sliderValue / 100, 'indicator-color': this.store.tokens().primary, 'track-color': this.store.tokens().mode === 'dark' ? '#49454f' : '#e7e0ec', 'state-color': this.store.tokens().primary } },

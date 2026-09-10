@@ -168,12 +168,24 @@ describe('AstylarShowcaseComponent', () => {
     expect(find(slider, 'slider-primary')).toEqual(jasmine.objectContaining({ min: '50', max: '100', step: '1', value: '65' }));
     expect(style(slider, '.range-layer')).toEqual(jasmine.objectContaining({ cursor: 'pointer' }));
 
-    expect(style(build(component, 'paginator'), '#paginator-range')?.['top']).toBe('20px');
+    const paginator = build(component, 'paginator');
+    expect((find(paginator, 'paginator-container')?.['children'] as Array<Record<string, unknown>> | undefined)
+      ?.map((child) => child['id'])).toEqual([
+      'paginator-page-size-group', 'paginator-range-actions',
+    ]);
+    expect(style(paginator, '.paginator-container')).toEqual(jasmine.objectContaining({
+      display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'flex-end', padding: '0 8px',
+    }));
+    expect(style(paginator, '.paginator-page-size')).toEqual(jasmine.objectContaining({
+      display: 'flex', alignItems: 'baseline', margin: '0 8px 0 0',
+    }));
+    expect(style(paginator, '#paginator-size, #paginator-page-size, #paginator-range')).toEqual(jasmine.objectContaining({
+      fontFamily: 'Roboto', fontSize: '12px', lineHeight: '16px', letterSpacing: '.4px',
+    }));
     store.patchState({ pageIndex: 1 });
-    expect(style(build(component, 'paginator'), '#paginator-range')?.['top']).toBe('20.5px');
     store.setTheme(MATERIAL_THEME_PROFILES.contrast);
     expect(style(build(component, 'sort'), '.sort-header')?.['color']).toBe('#000000');
-    expect(style(build(component, 'paginator'), '#paginator-range')?.['top']).toBe('12.49px');
+    expect(style(build(component, 'paginator'), '.paginator-range-actions')?.['height']).toBe('28px');
     store.patchState({ pageIndex: 0 });
     store.setTheme(MATERIAL_THEME_PROFILES.light);
 
