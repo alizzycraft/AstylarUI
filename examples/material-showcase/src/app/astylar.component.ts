@@ -1116,6 +1116,7 @@ export class AstylarShowcaseComponent {
     const viewport = camera.viewport.toGlobal(engine.getRenderWidth(), engine.getRenderHeight());
     const scaleX = canvas.clientWidth / engine.getRenderWidth();
     const scaleY = canvas.clientHeight / engine.getRenderHeight();
+    const authoredStyles = this.siteData().styles;
     const elements = Object.fromEntries(ids.map((id) => {
       const meshes = surface.scene.meshes.filter((mesh) => mesh.metadata?.elementId === id);
       const mesh = meshes.find((candidate) => candidate.name === id) ??
@@ -1123,6 +1124,10 @@ export class AstylarShowcaseComponent {
       if (!mesh) return [id, { exists: false }];
       const resolvedStyle = meshes.find((candidate) => candidate.metadata?.astylarResolvedStyle)
         ?.metadata?.astylarResolvedStyle;
+      const authoredStyle = elementAuthoredStyles(
+        authoredStyles,
+        document.querySelector<HTMLElement>(`[data-astylar-id="${CSS.escape(id)}"]`),
+      );
       mesh.computeWorldMatrix(true);
       const projected = mesh.getBoundingInfo().boundingBox.vectorsWorld.map((point) =>
         Vector3.Project(point, Matrix.IdentityReadOnly, surface.scene.getTransformMatrix(), viewport));
@@ -1133,6 +1138,7 @@ export class AstylarShowcaseComponent {
       return [id, {
         exists: true,
         borderBox: { left, top, right, bottom, width: right - left, height: bottom - top },
+        authoredStyle,
         resolvedStyle: materialStyleSnapshot(resolvedStyle),
         interactionBackground: mesh.metadata?.astylarResolvedInteractionStyle?.background,
       }];
@@ -1267,6 +1273,39 @@ function materialStyleSnapshot(style: Record<string, unknown> | undefined): Reco
     const value = style[property];
     return value === undefined || value === null || value === '' ? [] : [[property, String(value)]];
   }));
+}
+
+function elementAuthoredStyles(
+  styles: readonly object[],
+  element: HTMLElement | null,
+): readonly MaterialAuthoredStyleRule[] {
+  if (!element) return [];
+  return styles.flatMap((rule, index) => {
+    const record = rule as Record<string, unknown>;
+    const selector = typeof record['selector'] === 'string' ? record['selector'] : '';
+    if (!selector || !matchesAuthoredSelector(element, selector)) return [];
+    const declarations = Object.fromEntries(Object.entries(record).flatMap(([property, value]) =>
+      property === 'selector' || property.startsWith('media') || value === undefined || value === null
+        ? [] : [[property, String(value)]]));
+    return [{ index, selector, declarations }];
+  });
+}
+
+function matchesAuthoredSelector(element: HTMLElement, selector: string): boolean {
+  try {
+    // The semantics layer deliberately namespaces DOM ids. Match Astylar's
+    // authored id selectors against the stable data attribute it exposes.
+    const semanticsSelector = selector.replace(/#([_a-zA-Z][\w-]*)/g, '[data-astylar-id="$1"]');
+    return element.matches(semanticsSelector);
+  } catch {
+    return false;
+  }
+}
+
+interface MaterialAuthoredStyleRule {
+  readonly index: number;
+  readonly selector: string;
+  readonly declarations: Readonly<Record<string, string>>;
 }
 
 function sliderHandleName(elementId: string | undefined): '' | 'start' | 'end' {

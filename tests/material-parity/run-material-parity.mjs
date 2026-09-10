@@ -1279,7 +1279,8 @@ async function measureReference(page, ids) {
       return [id, { exists: true, borderBox: {
         left: rect.left, top: rect.top, right: rect.right, bottom: rect.bottom,
         width: rect.width, height: rect.height,
-      }, resolvedStyle: Object.fromEntries(styleProperties
+      }, authoredStyle: matchedAuthoredStyles(element, styleProperties),
+      resolvedStyle: Object.fromEntries(styleProperties
         .map((property) => [property, computedStyle[property]])),
       interactionBackground: computedStyle.backgroundColor }];
     }));
@@ -1348,6 +1349,53 @@ async function measureReference(page, ids) {
       const enclosing = element.closest('label')?.textContent ?? '';
       return (labelled || enclosing || element.textContent || '').replace(/\s+/g, ' ').trim();
     }
+    function matchedAuthoredStyles(element, properties) {
+      const allowed = new Set(properties.map((property) => property.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`)));
+      const matches = [];
+      const visit = (rules, sheetIndex, path = []) => {
+        for (let ruleIndex = 0; ruleIndex < rules.length; ruleIndex += 1) {
+          const rule = rules[ruleIndex];
+          if (rule instanceof CSSMediaRule) {
+            if (matchMedia(rule.conditionText).matches) visit(rule.cssRules, sheetIndex, [...path, ruleIndex]);
+            continue;
+          }
+          if (typeof CSSSupportsRule !== 'undefined' && rule instanceof CSSSupportsRule) {
+            if (CSS.supports(rule.conditionText)) visit(rule.cssRules, sheetIndex, [...path, ruleIndex]);
+            continue;
+          }
+          if (!(rule instanceof CSSStyleRule)) continue;
+          let matched = false;
+          try { matched = element.matches(rule.selectorText); } catch { matched = false; }
+          if (!matched) continue;
+          const declarations = {};
+          for (const property of rule.style) {
+            if (!allowed.has(property)) continue;
+            declarations[property] = {
+              value: rule.style.getPropertyValue(property).trim(),
+              important: rule.style.getPropertyPriority(property) === 'important',
+            };
+          }
+          if (Object.keys(declarations).length > 0) {
+            matches.push({ sheetIndex, rulePath: [...path, ruleIndex], selector: rule.selectorText, declarations });
+          }
+        }
+      };
+      for (let sheetIndex = 0; sheetIndex < document.styleSheets.length; sheetIndex += 1) {
+        try { visit(document.styleSheets[sheetIndex].cssRules, sheetIndex); } catch { /* cross-origin sheets are not audit-readable */ }
+      }
+      const inlineDeclarations = {};
+      for (const property of element.style) {
+        if (!allowed.has(property)) continue;
+        inlineDeclarations[property] = {
+          value: element.style.getPropertyValue(property).trim(),
+          important: element.style.getPropertyPriority(property) === 'important',
+        };
+      }
+      if (Object.keys(inlineDeclarations).length > 0) {
+        matches.push({ sheetIndex: -1, rulePath: [], selector: '<inline>', declarations: inlineDeclarations });
+      }
+      return matches;
+    }
     return { elements, semantics };
   }, { targetIds: ids, styleProperties: materialStyleInputProperties });
 }
@@ -1395,7 +1443,13 @@ function compareStyleInputs(referenceElements, candidateElements) {
   return Object.keys(referenceElements).flatMap((id) => {
     const reference = referenceElements[id]?.resolvedStyle;
     const astylar = candidateElements[id]?.resolvedStyle;
-    return reference || astylar ? [{ id, reference, astylar }] : [];
+    return reference || astylar ? [{
+      id,
+      referenceAuthored: referenceElements[id]?.authoredStyle ?? [],
+      astylarAuthored: candidateElements[id]?.authoredStyle ?? [],
+      reference,
+      astylar,
+    }] : [];
   });
 }
 
