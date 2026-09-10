@@ -639,14 +639,12 @@ export class AstylarShowcaseComponent {
         { selector: '.field-error', position: 'absolute', top: `${theme.density === 0 ? 58 : theme.density <= -5 ? 39 : 50}px`, left: '16px', fontSize: '12px', letterSpacing: '.4px', color: theme.error },
         { selector: '.row', display: 'flex', flexWrap: 'wrap', gap: '0', alignItems: 'center' },
         { selector: '.card', padding: '20px', borderRadius: `${16 * theme.cornerScale}px`, background: theme.mode === 'dark' ? '#2b2930' : '#f3edf7', minHeight: '90px' },
-        { selector: '.material-card', position: 'relative', width: '100%', height: '120px', boxSizing: 'border-box', borderRadius: `${12 * theme.cornerScale}px`, background: theme.mode === 'dark' ? '#fff7ff' : '#f8f2f6', boxShadow: '0 2px 1px -1px rgba(0,0,0,0.2), 0 1px 1px 0 rgba(0,0,0,0.14), 0 1px 3px 0 rgba(0,0,0,0.12)', zIndex: '2' },
-        { selector: '.card-title', position: 'absolute', top: `${theme.density === 0 ? 15.5 : theme.density <= -5 ? devicePixelRatio >= 1.5 ? 15 : 15.5 : 14.75}px`, left: '16px', fontSize: '22px', fontWeight: '400', whiteSpace: 'nowrap', zIndex: '2' },
-        ...(family === 'card' && theme.density <= -5 ? [
-          { selector: '.card-title', mediaMaxWidth: '800px', top: '16px' },
-          { selector: '.card-title', mediaMaxWidth: '500px', top: '15.5px' },
-        ] : []),
-        { selector: '.card-copy', position: 'absolute', top: '44px', left: '16px', fontSize: '16px', whiteSpace: 'nowrap', zIndex: '2' },
-        { selector: '.text-button', position: 'absolute', top: `${theme.density === 0 ? 71.25 : theme.density <= -5 ? 76 : 78}px`, left: '8px', width: '64px', height: `${densityHeight}px`, padding: '0 8px', borderWidth: '0', borderRadius: `${densityHeight / 2 * theme.cornerScale}px`, background: 'transparent', color: theme.primary, fontSize: '14px', fontWeight: '500', cursor: 'pointer', zIndex: '2' },
+        { selector: '.material-card', position: 'relative', width: '100%', boxSizing: 'border-box', borderRadius: `${12 * theme.cornerScale}px`, display: 'flex', flexDirection: 'column', background: theme.mode === 'dark' ? '#fff7ff' : '#f8f2f6', boxShadow: '0 2px 1px -1px rgba(0,0,0,0.2), 0 1px 1px 0 rgba(0,0,0,0.14), 0 1px 3px 0 rgba(0,0,0,0.12)', zIndex: '2' },
+        { selector: '.card-header', display: 'flex', padding: '16px 16px 0' },
+        { selector: '.card-title', margin: '0', fontSize: '22px', lineHeight: '28px', fontWeight: '400', whiteSpace: 'nowrap' },
+        { selector: '.card-copy', margin: '0', padding: '0 16px', whiteSpace: 'nowrap' },
+        { selector: '.card-actions', minHeight: '52px', boxSizing: 'border-box', padding: '8px', display: 'flex', alignItems: 'center' },
+        { selector: '.text-button', position: 'relative', width: '64px', height: `${densityHeight}px`, boxSizing: 'border-box', padding: '0 12px', borderWidth: '0', borderRadius: `${densityHeight / 2 * theme.cornerScale}px`, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'transparent', color: theme.primary, fontSize: '14px', fontWeight: '500', letterSpacing: '.096px', cursor: 'pointer', zIndex: '2' },
         { selector: '.text-button:hover', background: mixHex(theme.mode === 'dark' ? '#fff7ff' : '#f8f2f6', theme.primary, .08) },
         { selector: '.text-button:active', background: mixHex(theme.mode === 'dark' ? '#fff7ff' : '#f8f2f6', theme.primary, .12) },
         { selector: '.material-table', width: '100%', height: `${theme.density === 0 ? 160 : theme.density <= -5 ? 112 : 136}px`, borderWidth: '0', background: theme.surface, fontSize: '16px' },
@@ -982,7 +980,11 @@ export class AstylarShowcaseComponent {
       { type: 'div', id: 'button-toggle-two', class: `button-toggle-option${state.selected ? ' selected' : ''}`, role: 'radio', tabindex: state.selected ? 0 : -1, ariaLabel: 'Grid', ariaChecked: state.selected, children: [...(state.selected ? [this.selectionMark('button-toggle-two-mark')] : []), { type: 'span', id: 'button-toggle-two-label', textContent: 'Grid' }] },
     ] }];
     if (family === 'divider') return [{ type: 'p', id: 'divider-above-row', class: 'divider-copy divider-above', children: [{ type: 'span', id: 'divider-above', textContent: 'Above' }] }, { type: 'div', id: 'divider-primary', class: 'divider', role: 'separator' }, { type: 'p', id: 'divider-below-row', class: 'divider-copy divider-below', children: [{ type: 'span', id: 'divider-below', textContent: 'Below' }] }];
-    if (family === 'card') return [{ type: 'div', id: 'card-primary', class: 'material-card', children: [{ type: 'h2', id: 'card-title', class: 'card-title', textContent: 'Project Atlas' }, { type: 'p', id: 'card-copy', class: 'card-copy', textContent: 'Material surface content.' }, { type: 'button', id: 'card-open', class: 'text-button', value: 'OPEN' }] }];
+    if (family === 'card') return [{ type: 'div', id: 'card-primary', class: 'material-card', children: [
+      { type: 'div', id: 'card-header', class: 'card-header', children: [{ type: 'h2', id: 'card-title', class: 'card-title', textContent: 'Project Atlas' }] },
+      { type: 'p', id: 'card-copy', class: 'card-copy', textContent: 'Material surface content.' },
+      { type: 'div', id: 'card-actions', class: 'card-actions', children: [{ type: 'button', id: 'card-open', class: 'text-button', value: 'OPEN' }] },
+    ] }];
     if (family === 'table') return [{ type: 'table', id: 'table-primary', class: 'material-table', tableProperties: { tableLayout: 'fixed', borderCollapse: 'collapse' }, children: [
       { type: 'thead', id: 'table-head', children: [{ type: 'tr', id: 'table-header-row', children: [{ type: 'th', id: 'table-name-header', scope: 'col', textContent: 'Name' }] }] },
       { type: 'tbody', id: 'table-body', children: [

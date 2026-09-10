@@ -106,8 +106,11 @@ describe('AstylarShowcaseComponent', () => {
   it('authors the reported component fixes through the public document contract', () => {
     const { component, store } = createComponent('card');
     const card = build(component, 'card');
-    expect(style(card, '.card-copy')?.['left']).toBe('16px');
-    expect(style(card, '.card-copy')?.['top']).toBe('44px');
+    expect(style(card, '.material-card')).toEqual(jasmine.objectContaining({ display: 'flex', flexDirection: 'column' }));
+    expect(style(card, '.card-header')?.['padding']).toBe('16px 16px 0');
+    expect(style(card, '.card-copy')).toEqual(jasmine.objectContaining({ margin: '0', padding: '0 16px' }));
+    expect(style(card, '.card-copy')?.['fontSize']).toBeUndefined();
+    expect(style(card, '.card-actions')).toEqual(jasmine.objectContaining({ minHeight: '52px', padding: '8px' }));
 
     const toolbar = build(component, 'toolbar');
     expect(find(toolbar, 'toolbar-title')).toEqual(jasmine.objectContaining({ textContent: 'Material workspace' }));
