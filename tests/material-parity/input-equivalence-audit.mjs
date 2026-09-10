@@ -39,7 +39,6 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
     schemaVersion: materialInputAuditSchemaVersion,
     generatedFrom: {
       paritySchemaVersion: parityReport.schemaVersion,
-      parityGeneratedAt: parityReport.generatedAt,
       mode: parityReport.mode,
       browser: parityReport.browser,
     },
@@ -88,7 +87,7 @@ export function renderMaterialInputAuditMarkdown(report) {
   const lines = [
     '# Material showcase input-equivalence audit',
     '',
-    `Evidence: parity report generated ${report.generatedFrom.parityGeneratedAt} with ${report.generatedFrom.browser?.name ?? 'browser'} ${report.generatedFrom.browser?.version ?? ''}.`,
+    `Evidence: complete enforced parity report with ${report.generatedFrom.browser?.name ?? 'browser'} ${report.generatedFrom.browser?.version ?? ''}.`,
     '',
     '## Verdict',
     '',
@@ -108,10 +107,10 @@ export function renderMaterialInputAuditMarkdown(report) {
     '',
     '## Source-level compensation findings',
     '',
-    '| Finding | Classification | Evidence | Owner |',
-    '| --- | --- | --- | --- |',
+    '| Finding | Classification | Introduced by | Evidence | Owner |',
+    '| --- | --- | --- | --- | --- |',
     ...report.sourceFindings.map((finding) =>
-      `| ${finding.id} | ${finding.classification} | ${finding.locations.map((location) => `${location.file}:${location.line}`).join(', ')} | ${finding.owner} |`),
+      `| ${finding.id} | ${finding.classification} | ${finding.introducedBy} | ${finding.locations.map((location) => `${location.file}:${location.line}`).join(', ')} | ${finding.owner} |`),
     '',
     '## Plugin boundary verdict',
     '',

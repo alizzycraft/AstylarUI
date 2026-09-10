@@ -69,6 +69,7 @@ export const implicitReferenceValues = Object.freeze({
 export const sourceAuditDefinitions = Object.freeze([
   Object.freeze({
     id: 'fixture-fixed-reference-heights',
+    introducedBy: '2f44011 feat(example): add Material component showcase',
     file: 'examples/material-showcase/src/app/astylar.component.ts',
     pattern: String.raw`const MATERIAL_(?:REFERENCE|COMPACT_REFERENCE|CONTRAST_REFERENCE)_HEIGHTS`,
     classification: 'application-plugin-authoring-defect',
@@ -77,6 +78,7 @@ export const sourceAuditDefinitions = Object.freeze([
   }),
   Object.freeze({
     id: 'fixture-heading-position-compensation',
+    introducedBy: '2f44011 feat(example): add Material component showcase',
     file: 'examples/material-showcase/src/app/astylar.component.ts',
     pattern: String.raw`selector: '#(?:eyebrow|title)'[^\n]*\btop:`,
     classification: 'application-plugin-authoring-defect',
@@ -85,6 +87,7 @@ export const sourceAuditDefinitions = Object.freeze([
   }),
   Object.freeze({
     id: 'fixture-responsive-height-compensation',
+    introducedBy: '2f44011 feat(example): add Material component showcase',
     file: 'examples/material-showcase/src/app/astylar.component.ts',
     pattern: String.raw`family === '(?:toolbar|paginator|button)'[^\n]*mediaMaxWidth[^\n]*height`,
     classification: 'application-plugin-authoring-defect',
@@ -93,6 +96,7 @@ export const sourceAuditDefinitions = Object.freeze([
   }),
   Object.freeze({
     id: 'fixture-core-button-absolute-compensation',
+    introducedBy: '2f44011 feat(example): add Material component showcase',
     file: 'examples/material-showcase/src/app/astylar.component.ts',
     pattern: String.raw`selector: '#core-primary'[^\n]*position: 'absolute'`,
     classification: 'application-plugin-authoring-defect',
@@ -101,6 +105,7 @@ export const sourceAuditDefinitions = Object.freeze([
   }),
   Object.freeze({
     id: 'fixture-dpr-position-compensation',
+    introducedBy: '662c179 fix(renderer): normalize css transform coordinates; later extended by visual-parity fixes',
     file: 'examples/material-showcase/src/app/astylar.component.ts',
     pattern: String.raw`devicePixelRatio`,
     classification: 'application-plugin-authoring-defect',
@@ -109,6 +114,7 @@ export const sourceAuditDefinitions = Object.freeze([
   }),
   Object.freeze({
     id: 'fixture-manual-overlay-placement',
+    introducedBy: 'c64397c fix(material): align datepicker overlay and controls',
     file: 'examples/material-showcase/src/app/astylar.component.ts',
     pattern: String.raw`connectedOverlayTop`,
     classification: 'application-plugin-authoring-defect',
@@ -117,6 +123,7 @@ export const sourceAuditDefinitions = Object.freeze([
   }),
   Object.freeze({
     id: 'fixture-hardcoded-ripple-bounds',
+    introducedBy: '7945a42 fix(example): audit Material text and card',
     file: 'examples/material-showcase/src/app/astylar.component.ts',
     pattern: String.raw`width: event\.targetId === 'card-open'`,
     classification: 'application-plugin-authoring-defect',
@@ -125,6 +132,7 @@ export const sourceAuditDefinitions = Object.freeze([
   }),
   Object.freeze({
     id: 'fixture-calendar-selection-ring-coordinates',
+    introducedBy: '87f7f83 fix(example): render Material picker overlays',
     file: 'examples/material-showcase/src/app/astylar.component.ts',
     pattern: String.raw`selector: '\.datepicker-selected'[^\n]*position: 'absolute'`,
     classification: 'application-plugin-authoring-defect',
@@ -133,6 +141,7 @@ export const sourceAuditDefinitions = Object.freeze([
   }),
   Object.freeze({
     id: 'fixture-tab-breakpoint-raster-compensation',
+    introducedBy: '4e58f58/25e1893 compact navigation and interaction parity fixes',
     file: 'examples/material-showcase/src/app/astylar.component.ts',
     pattern: String.raw`selector: '\.tab-(?:indicator|baseline)'[^\n]*mediaMaxWidth: '500px'[^\n]*(?:\.67px|\.33px|51\.9%)`,
     classification: 'application-plugin-authoring-defect',
@@ -141,6 +150,7 @@ export const sourceAuditDefinitions = Object.freeze([
   }),
   Object.freeze({
     id: 'plugin-circular-progress-start-angle',
+    introducedBy: '7159b1d fix(showcase): tighten Material component parity',
     file: 'examples/material-showcase/src/app/material-plugin/material-showcase.plugin.ts',
     pattern: String.raw`const materialStartAngle =`,
     classification: 'application-plugin-authoring-defect',
@@ -149,6 +159,7 @@ export const sourceAuditDefinitions = Object.freeze([
   }),
   Object.freeze({
     id: 'plugin-tab-panel-competing-text-renderer',
+    introducedBy: '7159b1d fix(showcase): tighten Material component parity',
     file: 'examples/material-showcase/src/app/material-plugin/material-showcase.plugin.ts',
     pattern: String.raw`class MaterialTabPanelRenderer`,
     classification: 'application-plugin-authoring-defect',
@@ -157,6 +168,7 @@ export const sourceAuditDefinitions = Object.freeze([
   }),
   Object.freeze({
     id: 'plugin-tab-panel-baseline-offset',
+    introducedBy: '593f81b fix(material): align custom tab typography',
     file: 'examples/material-showcase/src/app/material-plugin/material-showcase.plugin.ts',
     pattern: String.raw`\['baseline-offset'\]`,
     classification: 'application-plugin-authoring-defect',
