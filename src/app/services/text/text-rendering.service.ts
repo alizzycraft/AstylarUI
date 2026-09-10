@@ -416,7 +416,12 @@ export class TextRenderingService implements TextCacheManager {
    * @param style - Text styling properties
    * @returns Unique cache key string
    */
-  generateCacheKey(text: string, style: TextStyleProperties, maxWidth?: number): string {
+  generateCacheKey(
+    text: string,
+    style: TextStyleProperties,
+    maxWidth?: number,
+    rasterScale = window.devicePixelRatio || 1,
+  ): string {
     // Create a hash-like key from text and critical style properties
     const styleKey = [
       style.fontFamily,
@@ -435,6 +440,7 @@ export class TextRenderingService implements TextCacheManager {
       style.textTransform,
       style.textDecoration,
       maxWidth ?? 'intrinsic',
+      rasterScale,
       JSON.stringify(style.textShadow || []),
       JSON.stringify(style.textStroke || {})
     ].join('|');

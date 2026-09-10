@@ -28,6 +28,19 @@ describe('TextRenderingService', () => {
     );
   });
 
+  it('does not reuse a text raster across device pixel ratios', () => {
+    const multiLine = new MultiLineTextRendererService();
+    const service = new TextRenderingService(
+      new TextCanvasRendererService(multiLine),
+      new TextStyleParserService(),
+      multiLine,
+    );
+
+    expect(service.generateCacheKey('Material workspace', style, 240, 1)).not.toBe(
+      service.generateCacheKey('Material workspace', style, 240, 2),
+    );
+  });
+
   it('preserves fractional CSS dimensions independently of the rounded backing store', () => {
     const multiLine = new MultiLineTextRendererService();
     const service = new TextRenderingService(
