@@ -427,7 +427,7 @@ export class AstylarShowcaseComponent {
   ): number {
     if (!this.surface) return naturalTop;
     const canvas = this.surface.scene.getEngine().getRenderingCanvas();
-    const anchor = (this.measure(this.surface, [anchorId]).elements[anchorId] as {
+    const anchor = (this.measure(this.surface, [anchorId], false).elements[anchorId] as {
       borderBox?: { top: number };
     } | undefined)?.borderBox;
     if (!canvas || !anchor) return naturalTop;
@@ -1108,7 +1108,11 @@ export class AstylarShowcaseComponent {
     };
   }
 
-  private measure(surface: AstylarSurface, ids: readonly string[]): MaterialBenchmarkMeasurement {
+  private measure(
+    surface: AstylarSurface,
+    ids: readonly string[],
+    includeAuthoredEvidence = true,
+  ): MaterialBenchmarkMeasurement {
     const engine = surface.scene.getEngine();
     const canvas = engine.getRenderingCanvas();
     const camera = surface.scene.activeCamera;
@@ -1116,9 +1120,11 @@ export class AstylarShowcaseComponent {
     const viewport = camera.viewport.toGlobal(engine.getRenderWidth(), engine.getRenderHeight());
     const scaleX = canvas.clientWidth / engine.getRenderWidth();
     const scaleY = canvas.clientHeight / engine.getRenderHeight();
-    const authoredSiteData = this.siteData();
-    const authoredStyles = authoredSiteData.styles;
-    const authoredStructures = indexAuthoredStructures(authoredSiteData.root);
+    // Runtime geometry consumers can measure while siteData is being computed. Audit-only
+    // authored evidence must not re-enter that computed signal and create a dependency cycle.
+    const authoredSiteData = includeAuthoredEvidence ? this.siteData() : undefined;
+    const authoredStyles = authoredSiteData?.styles ?? [];
+    const authoredStructures = authoredSiteData ? indexAuthoredStructures(authoredSiteData.root) : {};
     const elements = Object.fromEntries(ids.map((id) => {
       const meshes = surface.scene.meshes.filter((mesh) => mesh.metadata?.elementId === id);
       const mesh = meshes.find((candidate) => candidate.name === id) ??
@@ -1126,10 +1132,10 @@ export class AstylarShowcaseComponent {
       if (!mesh) return [id, { exists: false }];
       const resolvedStyle = meshes.find((candidate) => candidate.metadata?.astylarResolvedStyle)
         ?.metadata?.astylarResolvedStyle;
-      const authoredStyle = elementAuthoredStyles(
+      const authoredStyle = includeAuthoredEvidence ? elementAuthoredStyles(
         authoredStyles,
         document.querySelector<HTMLElement>(`[data-astylar-id="${CSS.escape(id)}"]`),
-      );
+      ) : undefined;
       mesh.computeWorldMatrix(true);
       const projected = mesh.getBoundingInfo().boundingBox.vectorsWorld.map((point) =>
         Vector3.Project(point, Matrix.IdentityReadOnly, surface.scene.getTransformMatrix(), viewport));
