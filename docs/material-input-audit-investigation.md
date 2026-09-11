@@ -247,6 +247,37 @@ either a broad core rewrite or retention of fixture compensation.
 
 ## Outstanding acceptance work
 
+Resolved-style completeness review (2026-09-11): the fresh run has written all
+436 static Astylar trees, containing4,384 nodes. Of these,436 are empty SiteData
+root envelopes, not authored elements. A further42 authored nodes lack resolved
+styles: form-field-label6, input-label6, select-label6, expansion-content12, and
+expansion-content-label12. The field labels have the `compact-filled-label`
+display:none rule in contrast/custom themes; expansion content is collapsed.
+`collectAuthoredInputTree` retains these nodes, but the input map comes only from
+scene meshes. The inventory now reports per-element resolved-style gaps and
+rejects complete audit validation when they remain. It must not claim these
+snapshots are fully resolved merely because node enumeration succeeded.
+
+Source tracing also confirms a pseudo-state evidence mismatch: core
+`src/lib/astylar.ts` writes the merged normal/hover/focus/active style into
+`astylarResolvedInteractionStyle`, while showcase `measure` reads
+`astylarResolvedStyle` and only exposes a separate `interactionBackground`.
+The harness `compareStyleInputs` consumes the normal `resolvedStyle` only.
+This does not show that the renderer paints state incorrectly; it shows that
+the audit can compare current browser computed styles with candidate normal
+styles. Before final attribution, capture both base and effective state style
+with provenance. For non-rendered nodes, collect at authoritative style resolution
+before the display:none mesh skip; do not reconstruct CSS values in the report.
+These changes must not feed diagnostic output back into fixture inputs.
+
+Matching mapped text/order is also no longer sufficient to accept differing
+framework host types. Such pairs remain structural-review gaps until wrapper
+styles, generated content, defaults and layout ownership are justified. Equal
+mapped tags/text/order are accepted only for those fields, not for the entire
+anonymous subtree. Focused audit tests22/22 pass. The collector itself and running
+full-matrix bundle have not changed for this reporting increment; completing the
+capture and resolving these gaps remains required.
+
 Context-sensitive normalization correction (2026-09-11): the audit previously
 accepted browser `cursor:auto` as candidate `cursor:default` without examining
 the hit target. The maintained `effectiveBrowserCursor` helper already shows why

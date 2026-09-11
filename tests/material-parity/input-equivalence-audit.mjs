@@ -64,7 +64,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
         supplementalBehavior.missing.length === 0 && supplementalBehavior.errors.length === 0 && supplementalBehavior.mismatches.length === 0 &&
         supplementalOverlays.missing.length === 0 && supplementalOverlays.errors.length === 0 && supplementalOverlays.mismatches.length === 0 &&
         supplementalSlider.missing.length === 0 && supplementalSlider.errors.length === 0 && supplementalSlider.mismatches.length === 0 &&
-        elementInventory.gaps.length === 0 && elementInventory.errors.length === 0 &&
+        elementInventory.gaps.length === 0 && elementInventory.resolvedStyleGaps.length === 0 && elementInventory.errors.length === 0 &&
         coverage.presenceDifferences.length === 0 &&
         sourceFindings.every((entry) => entry.detected && ['equivalent-representation', 'legitimate-public-api-structure'].includes(entry.classification)) &&
         structures.every((entry) => entry.classification === 'legitimate-public-api-structure') &&
@@ -102,6 +102,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
   if (report.coverage.missingInputEvidence.length > 0) errors.push(`${report.coverage.missingInputEvidence.length} cases lack paired root style evidence`);
   if (report.coverage.duplicateCases.length > 0) errors.push(`${report.coverage.duplicateCases.length} duplicate case records`);
   if (requireComplete && report.elementInventory.gaps.length > 0) errors.push(`${report.elementInventory.gaps.length} case sides lack a full element tree`);
+  if (requireComplete && report.elementInventory.resolvedStyleGaps.length > 0) errors.push(`${report.elementInventory.resolvedStyleGaps.length} inventoried elements lack resolved style evidence`);
   if (report.elementInventory.errors.length > 0) errors.push(`${report.elementInventory.errors.length} full-tree collection errors`);
   if (requireComplete && report.supplementalBehavior.missing.length > 0) errors.push(`${report.supplementalBehavior.missing.length} supplemental behavior cases are missing`);
   if (report.supplementalBehavior.errors.length > 0) errors.push(`${report.supplementalBehavior.errors.length} supplemental behavior collection errors`);
@@ -128,7 +129,7 @@ export function renderMaterialInputAuditMarkdown(report) {
     `Coverage is ${report.coverage.complete ? 'complete' : 'incomplete'}: ${report.coverage.executedStatic}/${report.coverage.configuredStatic} static cases and ` +
       `${report.coverage.executedInteractions}/${report.coverage.configuredInteractions} interaction/mobile-flow cases. All ${report.coverage.families.length} component families are inventoried.`,
     '',
-    `Full-element evidence: ${report.elementInventory.cases.length} captured case sides, ${report.elementInventory.variants.length} tree variants; ${report.elementInventory.gaps.length} missing case sides and ${report.elementInventory.errors.length} collection errors. Inventory presence does not establish input equivalence.`,
+    `Full-element evidence: ${report.elementInventory.cases.length} captured case sides, ${report.elementInventory.variants.length} tree variants; ${report.elementInventory.gaps.length} missing case sides, ${report.elementInventory.resolvedStyleGaps.length} elements without resolved styles, and ${report.elementInventory.errors.length} collection errors. Inventory presence does not establish input equivalence.`,
     '',
     `Supplemental picker behavior: ${report.supplementalBehavior.cases.length}/6 cases captured; ${report.supplementalBehavior.missing.length} missing and ${report.supplementalBehavior.mismatches.length} observed mismatches. These cases cover pointer/keyboard commits and previous/next month navigation omitted by the maintained matrix. Classified behavioral failures remain evidence; they are not counted as successful parity.`,
     '',
@@ -414,16 +415,22 @@ function collectStructureEvidence(cases) {
       const sameMappedContent = compatibleEvidence &&
         input.referenceStructure.text === input.astylarStructure.text &&
         JSON.stringify(input.referenceStructure.descendantIds) === JSON.stringify(input.astylarStructure.descendantIds);
+      const sameType = compatibleEvidence && input.referenceStructure.type === input.astylarStructure.type &&
+        typeof input.referenceStructure.type === 'string';
       if (!grouped.has(signature)) grouped.set(signature, {
         family: benchmarkCase.family,
         element: input.id,
         reference: input.referenceStructure,
         astylar: input.astylarStructure,
-        classification: !compatibleEvidence ? 'parity-harness-defect' : sameMappedContent ? 'legitimate-public-api-structure' : 'application-plugin-authoring-defect',
+        classification: !compatibleEvidence ? 'parity-harness-defect' : sameMappedContent
+          ? sameType ? 'legitimate-public-api-structure' : 'parity-harness-defect'
+          : 'application-plugin-authoring-defect',
         justification: !compatibleEvidence
           ? 'Legacy collectors compare reference subtree text and requested-ID order against Astylar own text and all descendant IDs. Recapture with structural schema 2 before attributing this signature to the fixture.'
           : sameMappedContent
-          ? 'Mapped content and descendant order agree. Angular Material host tags may differ from public SiteData tags; this accepts the tag representation only, not layout or paint differences.'
+          ? sameType
+            ? 'Mapped tag, content and descendant order agree. This accepts only those recorded fields; anonymous wrappers, generated content, layout and paint require the separate full-tree and style evidence.'
+            : 'Mapped content and descendant order agree, but differing host types are not proof of equivalent structure. Review wrapper styles, generated content, defaults and layout ownership in the full trees before accepting a public-API representation.'
           : 'Mapped content or containment differs. The mapping/fixture must be reconciled before claiming equivalent structure; framework wrapper differences alone do not justify accepting it.',
         occurrences: 0,
         cases: [],
@@ -437,7 +444,7 @@ function collectStructureEvidence(cases) {
 }
 
 export function collectFullTreeInventory(cases, { root = process.cwd() } = {}) {
-  const styles = [], rules = [], variants = [], mappings = [], gaps = [], errors = [];
+  const styles = [], rules = [], variants = [], mappings = [], gaps = [], resolvedStyleGaps = [], envelopes = [], errors = [];
   const styleIds = new Map(), ruleIds = new Map(), variantIds = new Map();
   const intern = (value, table, index) => {
     const key = JSON.stringify(value);
@@ -465,6 +472,20 @@ export function collectFullTreeInventory(cases, { root = process.cwd() } = {}) {
         gaps.push({ case: key, side }); continue;
       }
       for (const error of tree.errors ?? []) errors.push({ case: key, side, error });
+      for (const node of tree.nodes) {
+        // The SiteData root envelope has children but no element type/identity.
+        // Retain it in the tree; do not confuse it with a missing element mesh.
+        if (side === 'astylar' && node.key === 'root' && node.parent === null &&
+            node.authored && Object.keys(node.authored).length === 0) {
+          envelopes.push({ case: key, node: node.key, justification: 'SiteData structural root envelope, not an authored element.' });
+          continue;
+        }
+        const style = side === 'reference' ? tree.styles?.[node.style] : node.resolvedStyle;
+        if (!style || Object.keys(style).length === 0) resolvedStyleGaps.push({ case: key, side, node: node.key,
+          element: side === 'reference' ? node.attributes?.id : node.authored?.id,
+          classification: 'parity-harness-defect', owner: 'input collector pre-projection style resolution evidence',
+          justification: 'The authored/DOM node is inventoried but has no resolved-style snapshot. Hidden or non-rendered nodes still require style evidence; missing mesh metadata must not count as complete capture.' });
+      }
       const ruleMap = (tree.rules ?? []).map((value) => intern({ side, value }, rules, ruleIds));
       const styleMap = (tree.styles ?? []).map((value) => intern({ side, value }, styles, styleIds));
       const nodes = tree.nodes.map((node) => side === 'reference' ? {
@@ -484,7 +505,7 @@ export function collectFullTreeInventory(cases, { root = process.cwd() } = {}) {
   return {
     schemaVersion: 1,
     scope: 'All authored Astylar nodes, reference frame/overlay DOM descendants, SVG attributes, and before/after pseudo-elements. Tables retain raw inputs; presence in the inventory is not acceptance of equivalence.',
-    styles, rules, variants, cases: mappings, gaps, errors,
+    styles, rules, variants, cases: mappings, gaps, resolvedStyleGaps, envelopes, errors,
   };
 }
 

@@ -68,6 +68,24 @@ export const implicitReferenceValues = Object.freeze({
 
 export const sourceAuditDefinitions = Object.freeze([
   Object.freeze({
+    id: 'harness-mesh-only-resolved-style-capture',
+    introducedBy: '341f549 audit resolved-style capture and a06ef61 full authored-tree collection',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`if \(authoredSiteData\) for \(const mesh of surface\.scene\.meshes\)`,
+    classification: 'parity-harness-defect',
+    owner: 'audit capture at the authoritative pre-projection style-resolution boundary',
+    justification: 'The resolved input map is built exclusively from meshes. The completed436 static tree captures contain42 non-envelope authored nodes without resolved styles: compact hidden labels and collapsed expansion content. A complete tree is not a complete resolved-style capture; collect styles before display:none skips mesh creation rather than manufacturing values in the report.',
+  }),
+  Object.freeze({
+    id: 'harness-normal-versus-interaction-style-capture',
+    introducedBy: '341f549 audit resolved-style capture',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`interactionBackground: mesh\.metadata\?\.astylarResolvedInteractionStyle\?\.background`,
+    classification: 'parity-harness-defect',
+    owner: 'audit effective pseudo-state style capture',
+    justification: 'Core stores merged normal/hover/focus/active declarations in astylarResolvedInteractionStyle, but the comparison collector reads astylarResolvedStyle and extracts only a separate interactionBackground. compareStyleInputs does not incorporate the effective override. State-specific computed browser styles can therefore be compared against candidate normal styles. Capture normal and effective declarations with provenance before attributing those signatures to fixture/core defects.',
+  }),
+  Object.freeze({
     id: 'fixture-bottom-sheet-fixed-constraints',
     introducedBy: '8505c3b fix(material): match bottom sheet overlay geometry',
     file: 'examples/material-showcase/src/app/astylar.component.ts',

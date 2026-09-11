@@ -150,6 +150,16 @@ test('does not waive unequal mapped content as a framework wrapper difference', 
   assert.equal(audit.summary.inputEquivalent, false);
 });
 
+test('matching text and descendant IDs do not waive a different framework host type', () => {
+  const report = parityReport({}, {});
+  const input = report.results[0].styleInputs[0];
+  input.referenceStructure = { schemaVersion: 2, type: 'mat-card', text: 'First', descendantIds: ['first'] };
+  input.astylarStructure = { schemaVersion: 2, type: 'div', text: 'First', descendantIds: ['first'] };
+  assert.equal(buildMaterialInputAudit(report).structureEvidence[0].classification, 'parity-harness-defect');
+  input.referenceStructure.type = 'div';
+  assert.equal(buildMaterialInputAudit(report).structureEvidence[0].classification, 'legitimate-public-api-structure');
+});
+
 test('records source fingerprints and actual visual acceptance fields', () => {
   const report = parityReport({}, {});
   const audit = buildMaterialInputAudit(report);
@@ -259,6 +269,28 @@ test('full-tree inventory retains anonymous nodes and pools identical variants w
   assert.equal(result.gaps.length, 0);
   assert.equal(result.variants[1].nodes[0].authored.type, 'div');
   assert.equal(collectFullTreeInventory([{ ...entry, inputTrees: {} }]).gaps.length, 2);
+});
+
+test('an inventoried hidden or anonymous element still requires resolved style evidence', () => {
+  const entry = { family: 'core', profile: 'light', viewport: { id: 'desktop' }, inputTrees: {
+    astylar: { schemaVersion: 1, nodes: [
+      { key: 'root', parent: null, authored: {} },
+      { key: 'root/0', parent: 'root', authored: { type: 'span', id: 'hidden', style: { display: 'none' } } },
+      { key: 'root/1', parent: 'root', authored: { type: 'div' }, resolvedStyle: {} },
+    ], rules: [], errors: [] },
+    reference: { schemaVersion: 1, nodes: [{ key: 'frame', parent: null, type: 'div', attributes: {}, style: 0, rules: [], pseudoElements: [] }], styles: [{}], rules: [], errors: [] },
+  } };
+  const result = collectFullTreeInventory([entry]);
+  assert.equal(result.gaps.length, 0);
+  assert.equal(result.envelopes.length, 1);
+  assert.equal(result.resolvedStyleGaps.length, 3);
+  assert.ok(result.resolvedStyleGaps.some(({ element }) => element === 'hidden'));
+  assert.ok(result.resolvedStyleGaps.every(({ classification }) => classification === 'parity-harness-defect'));
+  const report = parityReport({ display: 'block' }, { display: 'block' });
+  report.results[0].inputTrees = entry.inputTrees;
+  const audit = buildMaterialInputAudit(report);
+  assert.equal(audit.summary.inputEquivalent, false);
+  assert.ok(validateMaterialInputAudit(audit).some((error) => error.includes('lack resolved style evidence')));
 });
 
 test('full-tree artifact references cannot escape the captured Material artifact directory', () => {
