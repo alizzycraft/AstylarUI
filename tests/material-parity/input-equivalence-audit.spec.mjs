@@ -257,6 +257,32 @@ test('does not attribute legacy incompatible text and descendant collection to a
   assert.equal(audit.summary.inputEquivalent, false);
 });
 
+test('legacy normal-only interaction styles cannot be attributed as authoring defects', () => {
+  const report = parityReport({ backgroundColor: 'purple' }, { backgroundColor: 'white' });
+  report.interactions = [{ ...report.results[0], state: 'hover' }];
+  report.results = [];
+  const legacy = buildMaterialInputAudit(report);
+  assert.equal(legacy.discrepancies[0].classification, 'parity-harness-defect');
+  assert.match(legacy.discrepancies[0].justification, /normal-only/);
+  report.interactions[0].styleInputs[0].astylarResolvedStyleEvidenceVersion = 2;
+  assert.equal(buildMaterialInputAudit(report).discrepancies[0].classification, 'application-plugin-authoring-defect');
+});
+
+test('full-tree state provenance survives pooling and legacy captures stay incomplete', () => {
+  const entry = { family: 'core', profile: 'light', state: 'hover', viewport: { id: 'desktop' }, inputTrees: {
+    astylar: { schemaVersion: 1, nodes: [{ key: 'root/0', parent: 'root', authored: { type: 'button' },
+      resolvedStyle: { background: 'purple' }, normalResolvedStyle: { background: 'white' }, interactionResolvedStyle: { background: 'purple' } }], rules: [], errors: [] },
+  } };
+  assert.equal(collectFullTreeInventory([entry]).stateStyleGaps.length, 1);
+  entry.inputTrees.astylar.resolvedStyleEvidenceVersion = 2;
+  const result = collectFullTreeInventory([entry]);
+  assert.equal(result.stateStyleGaps.length, 0);
+  const node = result.variants[0].nodes[0];
+  assert.equal(result.styles[node.normalStyle].value.background, 'white');
+  assert.equal(result.styles[node.style].value.background, 'purple');
+  assert.equal(result.styles[node.interactionStyle].value.background, 'purple');
+});
+
 test('full-tree inventory retains anonymous nodes and pools identical variants without losing cases', () => {
   const entry = { family: 'core', profile: 'light', viewport: { id: 'desktop' }, inputTrees: {
     astylar: { schemaVersion: 1, nodes: [{ key: 'root/0', parent: 'root', authored: { type: 'div' }, resolvedStyle: { width: '100%' } }], rules: [], errors: [] },

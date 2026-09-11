@@ -64,7 +64,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
         supplementalBehavior.missing.length === 0 && supplementalBehavior.errors.length === 0 && supplementalBehavior.mismatches.length === 0 &&
         supplementalOverlays.missing.length === 0 && supplementalOverlays.errors.length === 0 && supplementalOverlays.mismatches.length === 0 &&
         supplementalSlider.missing.length === 0 && supplementalSlider.errors.length === 0 && supplementalSlider.mismatches.length === 0 &&
-        elementInventory.gaps.length === 0 && elementInventory.resolvedStyleGaps.length === 0 && elementInventory.errors.length === 0 &&
+        elementInventory.gaps.length === 0 && elementInventory.resolvedStyleGaps.length === 0 && elementInventory.stateStyleGaps.length === 0 && elementInventory.errors.length === 0 &&
         coverage.presenceDifferences.length === 0 &&
         sourceFindings.every((entry) => entry.detected && ['equivalent-representation', 'legitimate-public-api-structure'].includes(entry.classification)) &&
         structures.every((entry) => entry.classification === 'legitimate-public-api-structure') &&
@@ -103,6 +103,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
   if (report.coverage.duplicateCases.length > 0) errors.push(`${report.coverage.duplicateCases.length} duplicate case records`);
   if (requireComplete && report.elementInventory.gaps.length > 0) errors.push(`${report.elementInventory.gaps.length} case sides lack a full element tree`);
   if (requireComplete && report.elementInventory.resolvedStyleGaps.length > 0) errors.push(`${report.elementInventory.resolvedStyleGaps.length} inventoried elements lack resolved style evidence`);
+  if (requireComplete && report.elementInventory.stateStyleGaps.length > 0) errors.push(`${report.elementInventory.stateStyleGaps.length} state cases lack effective style provenance`);
   if (report.elementInventory.errors.length > 0) errors.push(`${report.elementInventory.errors.length} full-tree collection errors`);
   if (requireComplete && report.supplementalBehavior.missing.length > 0) errors.push(`${report.supplementalBehavior.missing.length} supplemental behavior cases are missing`);
   if (report.supplementalBehavior.errors.length > 0) errors.push(`${report.supplementalBehavior.errors.length} supplemental behavior collection errors`);
@@ -129,7 +130,7 @@ export function renderMaterialInputAuditMarkdown(report) {
     `Coverage is ${report.coverage.complete ? 'complete' : 'incomplete'}: ${report.coverage.executedStatic}/${report.coverage.configuredStatic} static cases and ` +
       `${report.coverage.executedInteractions}/${report.coverage.configuredInteractions} interaction/mobile-flow cases. All ${report.coverage.families.length} component families are inventoried.`,
     '',
-    `Full-element evidence: ${report.elementInventory.cases.length} captured case sides, ${report.elementInventory.variants.length} tree variants; ${report.elementInventory.gaps.length} missing case sides, ${report.elementInventory.resolvedStyleGaps.length} elements without resolved styles, and ${report.elementInventory.errors.length} collection errors. Inventory presence does not establish input equivalence.`,
+    `Full-element evidence: ${report.elementInventory.cases.length} captured case sides, ${report.elementInventory.variants.length} tree variants; ${report.elementInventory.gaps.length} missing case sides, ${report.elementInventory.resolvedStyleGaps.length} elements without resolved styles, ${report.elementInventory.stateStyleGaps.length} state cases without effective style provenance, and ${report.elementInventory.errors.length} collection errors. Inventory presence does not establish input equivalence.`,
     '',
     `Supplemental picker behavior: ${report.supplementalBehavior.cases.length}/6 cases captured; ${report.supplementalBehavior.missing.length} missing and ${report.supplementalBehavior.mismatches.length} observed mismatches. These cases cover pointer/keyboard commits and previous/next month navigation omitted by the maintained matrix. Classified behavioral failures remain evidence; they are not counted as successful parity.`,
     '',
@@ -188,7 +189,10 @@ function collectStyleDiscrepancies(cases) {
         const referenceValue = reference[property];
         const astylarValue = astylar[property];
         if (equivalentValue(property, referenceValue, astylarValue, reference, astylar)) continue;
-        const classification = classifyStyleDifference(property, referenceValue, astylarValue, reference, astylar);
+        const classification = benchmarkCase.state && input.reference && input.astylar && input.astylarResolvedStyleEvidenceVersion !== 2
+          ? { classification: 'parity-harness-defect', owner: 'audit effective pseudo-state style capture',
+            justification: 'This interaction capture predates effective-style provenance. It can compare browser state styles against candidate normal-only declarations; recapture with evidence version2 before attributing the difference to authoring or core.' }
+          : classifyStyleDifference(property, referenceValue, astylarValue, reference, astylar);
         const signature = JSON.stringify([benchmarkCase.family, input.id, property, referenceValue ?? null, astylarValue ?? null, classification.classification]);
         let entry = grouped.get(signature);
         if (!entry) {
@@ -444,7 +448,7 @@ function collectStructureEvidence(cases) {
 }
 
 export function collectFullTreeInventory(cases, { root = process.cwd() } = {}) {
-  const styles = [], rules = [], variants = [], mappings = [], gaps = [], resolvedStyleGaps = [], envelopes = [], errors = [];
+  const styles = [], rules = [], variants = [], mappings = [], gaps = [], resolvedStyleGaps = [], stateStyleGaps = [], envelopes = [], errors = [];
   const styleIds = new Map(), ruleIds = new Map(), variantIds = new Map();
   const intern = (value, table, index) => {
     const key = JSON.stringify(value);
@@ -472,6 +476,9 @@ export function collectFullTreeInventory(cases, { root = process.cwd() } = {}) {
         gaps.push({ case: key, side }); continue;
       }
       for (const error of tree.errors ?? []) errors.push({ case: key, side, error });
+      if (side === 'astylar' && entry.state && tree.resolvedStyleEvidenceVersion !== 2) stateStyleGaps.push({ case: key, side,
+        classification: 'parity-harness-defect', owner: 'audit effective pseudo-state style capture',
+        justification: 'Tree does not identify normal and effective core state-style provenance. Normal-only legacy snapshots cannot establish complete state input evidence.' });
       for (const node of tree.nodes) {
         // The SiteData root envelope has children but no element type/identity.
         // Retain it in the tree; do not confuse it with a missing element mesh.
@@ -495,17 +502,19 @@ export function collectFullTreeInventory(cases, { root = process.cwd() } = {}) {
           rules: pseudo.rules.map((index) => ruleMap[index]),
         })),
       } : {
-        ...node, resolvedStyle: undefined,
+        ...node, resolvedStyle: undefined, normalResolvedStyle: undefined, interactionResolvedStyle: undefined,
         style: node.resolvedStyle ? intern({ side, value: node.resolvedStyle }, styles, styleIds) : undefined,
+        normalStyle: node.normalResolvedStyle ? intern({ side, value: node.normalResolvedStyle }, styles, styleIds) : undefined,
+        interactionStyle: node.interactionResolvedStyle ? intern({ side, value: node.interactionResolvedStyle }, styles, styleIds) : undefined,
       });
-      const variant = intern({ family: entry.family, side, nodes, rules: ruleMap }, variants, variantIds);
+      const variant = intern({ family: entry.family, side, resolvedStyleEvidenceVersion: tree.resolvedStyleEvidenceVersion, nodes, rules: ruleMap }, variants, variantIds);
       mappings.push({ case: key, side, variant });
     }
   }
   return {
     schemaVersion: 1,
     scope: 'All authored Astylar nodes, reference frame/overlay DOM descendants, SVG attributes, and before/after pseudo-elements. Tables retain raw inputs; presence in the inventory is not acceptance of equivalence.',
-    styles, rules, variants, cases: mappings, gaps, resolvedStyleGaps, envelopes, errors,
+    styles, rules, variants, cases: mappings, gaps, resolvedStyleGaps, stateStyleGaps, envelopes, errors,
   };
 }
 

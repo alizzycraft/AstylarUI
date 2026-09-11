@@ -16,7 +16,7 @@ import { MATERIAL_FAVORITE_ICON_DARK, MATERIAL_FAVORITE_ICON_LIGHT } from './mat
 import { ShowcaseStore, type ShowcaseState } from './showcase.store';
 import { alphaHex, mixHex } from './theme';
 import { MaterialRippleController } from './material-plugin/material-ripple.controller';
-import { collectAuthoredInputTree, indexAuthoredStructures, materialStyleSnapshot } from './material-input-evidence';
+import { collectAuthoredInputTree, collectMaterialResolvedStyles, indexAuthoredStructures, materialStyleSnapshot } from './material-input-evidence';
 
 @Component({
   selector: 'app-astylar-showcase',
@@ -1126,20 +1126,15 @@ export class AstylarShowcaseComponent {
     const authoredSiteData = includeAuthoredEvidence ? this.siteData() : undefined;
     const authoredStyles = authoredSiteData?.styles ?? [];
     const authoredStructures = authoredSiteData ? indexAuthoredStructures(authoredSiteData.root, ids) : {};
-    const resolvedInputs = new Map<string, Record<string, unknown>>();
-    if (authoredSiteData) for (const mesh of surface.scene.meshes) {
-      const id = mesh.metadata?.elementId;
-      if (typeof id === 'string' && mesh.metadata?.astylarResolvedStyle && !resolvedInputs.has(id)) {
-        resolvedInputs.set(id, mesh.metadata.astylarResolvedStyle);
-      }
-    }
+    // The core already owns pseudo-state resolution. Capture its effective
+    // declarations alongside the normal ones, without modifying either.
+    const resolvedInputs = collectMaterialResolvedStyles(surface.scene.meshes);
     const elements = Object.fromEntries(ids.map((id) => {
       const meshes = surface.scene.meshes.filter((mesh) => mesh.metadata?.elementId === id);
       const mesh = meshes.find((candidate) => candidate.name === id) ??
         meshes.find((candidate) => candidate.metadata?.isTextMesh === false) ?? meshes[0];
       if (!mesh) return [id, { exists: false }];
-      const resolvedStyle = meshes.find((candidate) => candidate.metadata?.astylarResolvedStyle)
-        ?.metadata?.astylarResolvedStyle;
+      const resolvedStyle = resolvedInputs.effective.get(id);
       const authoredStyle = includeAuthoredEvidence ? elementAuthoredStyles(
         authoredStyles,
         document.querySelector<HTMLElement>(`[data-astylar-id="${CSS.escape(id)}"]`),
@@ -1157,6 +1152,9 @@ export class AstylarShowcaseComponent {
         authoredStyle,
         authoredStructure: authoredStructures[id],
         resolvedStyle: materialStyleSnapshot(resolvedStyle),
+        normalResolvedStyle: materialStyleSnapshot(resolvedInputs.normal.get(id)),
+        interactionResolvedStyle: materialStyleSnapshot(resolvedInputs.interaction.get(id)),
+        resolvedStyleEvidenceVersion: 2,
         interactionBackground: mesh.metadata?.astylarResolvedInteractionStyle?.background,
       }];
     }));
@@ -1189,7 +1187,7 @@ export class AstylarShowcaseComponent {
     return {
       elements,
       semantics,
-      inputTree: authoredSiteData ? collectAuthoredInputTree(authoredSiteData.root, authoredStyles, resolvedInputs) : undefined,
+      inputTree: authoredSiteData ? collectAuthoredInputTree(authoredSiteData.root, authoredStyles, resolvedInputs.effective, resolvedInputs) : undefined,
       diagnostics: {
         surface: surface.diagnostics,
         clearColor: surface.scene.clearColor.toHexString(),

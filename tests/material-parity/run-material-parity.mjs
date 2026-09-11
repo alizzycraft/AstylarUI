@@ -1474,6 +1474,9 @@ function compareStyleInputs(referenceElements, candidateElements) {
       astylarAuthored: candidateElements[id]?.authoredStyle ?? [],
       referenceStructure: referenceElements[id]?.authoredStructure,
       astylarStructure: candidateElements[id]?.authoredStructure,
+      astylarResolvedStyleEvidenceVersion: candidateElements[id]?.resolvedStyleEvidenceVersion,
+      astylarNormalResolvedStyle: candidateElements[id]?.normalResolvedStyle,
+      astylarInteractionResolvedStyle: candidateElements[id]?.interactionResolvedStyle,
       reference,
       astylar,
     }] : [];

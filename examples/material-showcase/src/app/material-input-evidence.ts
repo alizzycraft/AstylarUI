@@ -1,4 +1,26 @@
 /** Audit-only evidence. Never use these snapshots to compute layout. */
+export function collectMaterialResolvedStyles(meshes: readonly { metadata?: Record<string, unknown> | null }[]) {
+  const normal = new Map<string, Record<string, unknown>>();
+  const interaction = new Map<string, Record<string, unknown>>();
+  const priorities = new Map<string, number>();
+  for (const mesh of meshes) {
+    const metadata = mesh.metadata;
+    const id = metadata?.['elementId'];
+    if (typeof id !== 'string') continue;
+    const base = metadata?.['astylarResolvedStyle'];
+    const active = metadata?.['astylarResolvedInteractionStyle'];
+    const priority = metadata?.['isTextMesh'] === true ? 1 : 2;
+    if (base && typeof base === 'object' && priority > (priorities.get(id) ?? 0)) {
+      normal.set(id, { ...base });
+      priorities.set(id, priority);
+    }
+    if (active && typeof active === 'object') interaction.set(id, { ...active });
+  }
+  const effective = new Map([...new Set([...normal.keys(), ...interaction.keys()])].map((id) =>
+    [id, { ...normal.get(id), ...interaction.get(id) }]));
+  return { normal, interaction, effective };
+}
+
 export function materialStyleSnapshot(style: Record<string, unknown> | undefined): Record<string, string> | undefined {
   if (!style) return undefined;
   return Object.fromEntries(Object.entries(style).flatMap(([property, value]) => {
@@ -8,18 +30,21 @@ export function materialStyleSnapshot(style: Record<string, unknown> | undefined
 }
 
 /** Includes anonymous authored nodes and plugin data, not just benchmark IDs. */
-export function collectAuthoredInputTree(root: object, rules: readonly object[], resolved: ReadonlyMap<string, Record<string, unknown>>) {
+export function collectAuthoredInputTree(root: object, rules: readonly object[], resolved: ReadonlyMap<string, Record<string, unknown>>,
+  provenance?: { normal: ReadonlyMap<string, Record<string, unknown>>; interaction: ReadonlyMap<string, Record<string, unknown>> }) {
   const nodes: object[] = [];
   const visit = (node: object, key: string, parent: string | null) => {
     const { children, ...authored } = node as Record<string, unknown>;
     const id = typeof authored['id'] === 'string' ? authored['id'] : undefined;
-    nodes.push({ key, parent, authored, resolvedStyle: id ? materialStyleSnapshot(resolved.get(id)) : undefined });
+    nodes.push({ key, parent, authored, resolvedStyle: id ? materialStyleSnapshot(resolved.get(id)) : undefined,
+      normalResolvedStyle: id && provenance ? materialStyleSnapshot(provenance.normal.get(id)) : undefined,
+      interactionResolvedStyle: id && provenance ? materialStyleSnapshot(provenance.interaction.get(id)) : undefined });
     if (Array.isArray(children)) children.forEach((child, index) => {
       if (typeof child === 'object' && child !== null) visit(child, `${key}/${index}`, key);
     });
   };
   visit(root, 'root', null);
-  return { schemaVersion: 1, nodes, rules, errors: [] };
+  return { schemaVersion: 1, resolvedStyleEvidenceVersion: provenance ? 2 : 1, nodes, rules, errors: [] };
 }
 
 export interface MaterialAuthoredStructure {

@@ -3,6 +3,35 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Effective-state evidence correction (2026-09-11)
+
+The Material collector previously compared browser computed interaction styles
+with Astylar's normal mesh declarations. Core already publishes its resolved
+normal/hover/focus/active merge as `astylarResolvedInteractionStyle`; the audit
+now captures that result, preserves normal and interaction snapshots separately,
+and labels the evidence version 2. No fixture styles, rendering rules, or visual
+thresholds changed. Legacy state captures remain explicit harness gaps: updating
+the collector source cannot retroactively upgrade their evidence.
+
+Focused real-browser verification used the separate production output
+`examples/material-showcase/dist/material-showcase-effective-audit/browser`, port
+4432, artifacts `artifacts/material-parity/effective-style-smoke`, family `core`,
+profile `light`, interaction viewport `desktop-dpr1`, and states `hover,held`:
+`node tests/material-parity/run-material-parity.mjs --skip-build --interaction-only`.
+Both cases passed their existing visual checks (minimum SSIM 0.999540).
+`core-primary` retained normal background `#6750a4` and captured effective
+background `#735eab` in both states. All four full-tree sidecars passed digest
+and collection validation; neither candidate state retained a provenance gap.
+This is a focused report-only check, not complete enforced acceptance.
+
+Verification also passed 4/4 Material evidence helper tests, 22/22 Material
+component tests, and 62/62 `npm run parity:harness:check` tests. The unfiltered
+matrix already running uses the earlier separate bundle and is being preserved;
+its state captures will still require replacement with version-2 evidence.
+Hidden/non-rendered nodes remain a separate unresolved collection gap. They must
+be observed through core style resolution, not assigned manufactured styles by
+the audit.
+
 ## Rendered geometry feeds layout
 
 `examples/material-showcase/src/app/astylar.component.ts`, `connectedOverlayTop`, calls

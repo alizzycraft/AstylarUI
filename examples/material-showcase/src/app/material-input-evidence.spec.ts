@@ -1,6 +1,25 @@
-import { collectAuthoredInputTree, indexAuthoredStructures, materialStyleSnapshot } from './material-input-evidence';
+import { collectAuthoredInputTree, collectMaterialResolvedStyles, indexAuthoredStructures, materialStyleSnapshot } from './material-input-evidence';
 
 describe('Material input evidence serialization', () => {
+  it('captures core effective state declarations with separate normal provenance', () => {
+    const base = { color: 'black', background: 'white', width: '40px' };
+    const active = { background: 'purple', cursor: 'pointer' };
+    const styles = collectMaterialResolvedStyles([
+      { metadata: { elementId: 'button', isTextMesh: true, astylarResolvedStyle: { color: 'text-only' } } },
+      { metadata: { elementId: 'button', isTextMesh: false, astylarResolvedStyle: base, astylarResolvedInteractionStyle: active } },
+    ]);
+    expect(styles.normal.get('button')).toEqual(base);
+    expect(styles.effective.get('button')).toEqual({ ...base, ...active });
+    expect(base.background).toBe('white');
+    expect(active).toEqual({ background: 'purple', cursor: 'pointer' });
+    const tree = collectAuthoredInputTree({ children: [{ id: 'button', type: 'button' }] }, [], styles.effective, styles);
+    expect(tree.resolvedStyleEvidenceVersion).toBe(2);
+    expect(tree.nodes[1]).toEqual(jasmine.objectContaining({ normalResolvedStyle: base,
+      interactionResolvedStyle: active, resolvedStyle: { ...base, ...active } }));
+    const cleared = collectMaterialResolvedStyles([{ metadata: { elementId: 'button', astylarResolvedStyle: base,
+      astylarResolvedInteractionStyle: base } }]);
+    expect(cleared.effective.get('button')).toEqual(base);
+  });
   it('inventories anonymous nodes and plugin data without deriving geometry', () => {
     const rules = [{ selector: ':hover', background: 'red' }];
     const tree = collectAuthoredInputTree({ children: [{ type: 'div', children: [
