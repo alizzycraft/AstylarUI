@@ -3,6 +3,34 @@ import test from 'node:test';
 import { chromium } from 'playwright-core';
 import { captureBrowserInputTree } from './input-tree-evidence.mjs';
 
+test('browser font-weight keywords resolve to exact numeric aliases but relative weights depend on ancestry', async () => {
+  const browser = await chromium.launch({ channel: 'chrome', headless: true });
+  try {
+    const page = await browser.newPage();
+    const values = await page.evaluate(() => {
+      const read = (weight, parentWeight = '400') => {
+        const parent = document.createElement('div');
+        parent.style.fontWeight = parentWeight;
+        const span = document.createElement('span');
+        span.style.fontWeight = weight;
+        span.textContent = 'Weight';
+        parent.append(span);
+        document.body.append(parent);
+        const result = getComputedStyle(span).fontWeight;
+        parent.remove();
+        return result;
+      };
+      return { normal: read('normal'), numeric400: read('400'), bold: read('bold'), numeric700: read('700'),
+        bolder400: read('bolder', '400'), bolder700: read('bolder', '700') };
+    });
+    assert.equal(values.normal, '400');
+    assert.equal(values.normal, values.numeric400);
+    assert.equal(values.bold, '700');
+    assert.equal(values.bold, values.numeric700);
+    assert.notEqual(values.bolder400, values.bolder700);
+  } finally { await browser.close(); }
+});
+
 test('browser inventory includes anonymous wrappers, SVG, pseudo-elements, and inactive authored rules', async () => {
   const browser = await chromium.launch({ channel: 'chrome', headless: true });
   try {

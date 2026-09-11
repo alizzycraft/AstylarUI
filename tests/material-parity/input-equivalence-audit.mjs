@@ -7,6 +7,7 @@ import {
   inputDifferenceClassifications,
   pluginBoundaryVerdict,
   propertyGroups,
+  reviewedValueNormalizations,
   sourceAuditDefinitions,
 } from './input-equivalence-policy.mjs';
 import {
@@ -79,6 +80,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
     },
     environment: auditEnvironment(root),
     sourceFingerprints: sourceFingerprints(root),
+    reviewedValueNormalizations,
     coverage,
     supplementalBehavior,
     supplementalOverlays,
@@ -526,6 +528,7 @@ function normalizeValue(property, value) {
   let normalized = String(value).trim().replace(/\s+/g, ' ');
   if (property === 'fontFamily') return normalized.replace(/["']/g, '').replace(/\s*,\s*/g, ',').toLowerCase();
   if (property === 'fontWeight' && normalized.toLowerCase() === 'bold') return '700';
+  if (property === 'fontWeight' && normalized.toLowerCase() === 'normal') return '400';
   const color = normalizeColor(normalized);
   if (color) return color;
   normalized = normalized.replace(/(^|[ (,:])(-?\d*\.?\d+)px(?=$|[ ),])/g, (_match, prefix, number) =>

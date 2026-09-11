@@ -127,6 +127,16 @@ test('does not infer an authoring defect from unequal resolved layout values', (
   assert.equal(validateMaterialInputAudit(audit, { requireComplete: false }).length, 0);
 });
 
+test('normalizes explicit font-weight aliases without inventing omitted or relative weights', () => {
+  for (const [named, numeric] of [['normal', '400'], ['bold', '700']]) {
+    assert.equal(buildMaterialInputAudit(parityReport({ fontWeight: numeric }, { fontWeight: named })).discrepancies.length, 0);
+    assert.equal(buildMaterialInputAudit(parityReport({ fontWeight: named }, { fontWeight: numeric })).discrepancies.length, 0);
+  }
+  for (const weight of [undefined, 'bolder', 'lighter', '500', '450']) {
+    assert.equal(buildMaterialInputAudit(parityReport({ fontWeight: '400' }, { fontWeight: weight })).discrepancies.length, 1);
+  }
+});
+
 test('accepts only proven omitted shadow and automatic grid-placement initial values', () => {
   const audit = buildMaterialInputAudit(parityReport({ boxShadow: 'none', gridColumn: 'auto', gridRow: 'auto' }, {}));
   for (const property of ['boxShadow', 'gridColumn', 'gridRow']) {

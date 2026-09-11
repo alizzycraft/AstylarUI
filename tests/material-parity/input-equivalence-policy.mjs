@@ -75,6 +75,19 @@ export const implicitReferenceJustifications = Object.freeze({
   gridRow: 'An omitted Astylar gridRow and explicit CSS auto both request automatic one-track row placement. GridService.parseGridAxisPlacement takes the same span:1 branch for both. This accepts only omitted versus auto, not a changed span/line or grid template.',
 });
 
+export const reviewedValueNormalizations = Object.freeze([
+  {
+    property: 'fontWeight',
+    aliases: { normal: '400', bold: '700' },
+    classification: 'equivalent-representation',
+    justification: 'Explicit CSS normal and bold are exact aliases for 400 and 700. Core TextStyleParserService preserves named or numeric weights and TextCanvasRendererService supplies them to the browser canvas font property. Browser computed-style and core canvas-paint tests establish both aliases. This does not supply an omitted/inherited weight or resolve ancestry-dependent bolder/lighter, and it does not accept different font families.',
+    evidence: [
+      'tests/material-parity/input-tree-evidence.spec.mjs: browser font-weight keywords resolve to exact numeric aliases but relative weights depend on ancestry',
+      'src/app/services/text/text-canvas-renderer.service.spec.ts: renders explicit normal/400 and bold/700 aliases identically through core parsing and canvas paint',
+    ],
+  },
+]);
+
 export const sourceAuditDefinitions = Object.freeze([
   Object.freeze({
     id: 'audit-style-snapshot-precedes-typography-inheritance',

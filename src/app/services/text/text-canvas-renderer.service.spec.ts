@@ -1,8 +1,26 @@
 import { MultiLineTextRendererService } from './multi-line-text-renderer.service';
 import { TextCanvasRendererService } from './text-canvas-renderer.service';
 import { TextStyleProperties } from '../../types/text-rendering';
+import { TextStyleParserService } from './text-style-parser.service';
 
 describe('TextCanvasRendererService', () => {
+  it('renders explicit normal/400 and bold/700 aliases identically through core parsing and canvas paint', () => {
+    const parser = new TextStyleParserService();
+    const service = new TextCanvasRendererService(new MultiLineTextRendererService());
+    const render = (fontWeight: string) => {
+      const style = parser.parseTextProperties({ selector: '#weight-proof', fontFamily: 'Arial, sans-serif',
+        fontSize: '20px', lineHeight: '28px', fontWeight });
+      const canvas = service.createStyledCanvas('Weight proof', style);
+      service.renderTextToCanvas(canvas, 'Weight proof', style);
+      const pixels = Array.from(canvas.getContext('2d')!.getImageData(0, 0, canvas.width, canvas.height).data);
+      expect(pixels.some((value, index) => index % 4 === 3 && value > 0)).toBeTrue();
+      return { width: canvas.width, height: canvas.height, pixels };
+    };
+    expect(render('normal')).toEqual(render('400'));
+    expect(render('bold')).toEqual(render('700'));
+    expect(render('400')).not.toEqual(render('700'));
+  });
+
   it('uses resolved line height for single-line bounds', () => {
     const service = new TextCanvasRendererService(
       new MultiLineTextRendererService(),

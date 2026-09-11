@@ -11,6 +11,39 @@ Argument validation rejects unknown, empty, and repeated options (25/25 audit
 tests pass). A missing selected report fails rather than falling back to older
 evidence; the new run has not yet produced its final report.
 
+## Explicit font-weight aliases (2026-09-12)
+
+The retained-stage comparison exposed 230 observations of browser `400` versus
+core `normal`. This is a representation difference, not a renderer discrepancy.
+The audit now normalizes explicit `normal` to `400`, alongside its existing
+`bold` to `700` mapping. `reviewedValueNormalizations` records the technical
+justification and proofs in the generated machine report. Raw full-tree styles
+are preserved. Omitted weight, `bolder`, `lighter`, other numeric weights, font
+stacks, and normal/zero letter spacing are not collapsed by this rule.
+
+Evidence was added before changing normalization: the new audit regression
+failed (one unexpected discrepancy), while the real-browser test passed for
+both CSS aliases and showed that `bolder` changes with parent weight. A core
+test passes the original values through `TextStyleParserService` and
+`TextCanvasRendererService`, then compares complete canvas dimensions/pixels.
+Both alias pairs match exactly, the raster contains ink, and 400 differs from
+700. This is a narrow text-style/canvas proof, not a WebGL layout or full-scene
+parity claim. No renderer implementation or fixture was modified.
+
+Verification:
+
+- `node --test tests/material-parity/*.spec.mjs`: **57/57 pass**.
+- `npm test -- --watch=false --browsers=ChromeHeadless --include=src/app/services/text/text-canvas-renderer.service.spec.ts`:
+  **8/8 pass**, repeated after adding the nonempty-ink assertion. The known Karma
+  root-proxy warning remains; both commands exited 0.
+- Reanalysis of all 436 static checkpoints: retained unequal-property
+  observations decrease from 1,209 to 979; no weight differences remain in that
+  table. The exact retained-stage attribution now covers 43 mapped signatures/
+  338 occurrences, and the mapped unresolved count is 3,189. Other typography
+  properties and missing mappings remain open; this does not establish complete
+  input equivalence. All ten pinned capture-module hashes still match the live
+  full-matrix manifest.
+
 ## Separate retained-typography review (2026-09-12)
 
 Audit schema 3 now compares the already captured core text-registry stage without
