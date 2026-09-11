@@ -12,6 +12,7 @@ export { Astylar } from "./astylar";
 export type { AstylarRenderOptions } from "./astylar";
 export type {
   AstylarFocusOptions,
+  AstylarResolvedStyleSnapshot,
   AstylarSurface,
   AstylarSurfaceDiagnostics,
 } from './astylar-surface';

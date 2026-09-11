@@ -7,8 +7,8 @@
       "source": "docs/compatibility/html-css.md",
       "destination": "html-css.md",
       "transform": "portable-html-css-links",
-      "sourceSha256": "92c3c894bd4161181d21a76f0ed5eee1a56df973eef36bb891b48277e94dbd44",
-      "bundledSha256": "504a27e7006ee43827eba3f0994335402dd6d11bf173228fc28c6cfdb1f606aa"
+      "sourceSha256": "e782f174ccaf3c1d166662969ff3b0b7e87011e4aec22b5719510a3c5c2d0d8c",
+      "bundledSha256": "49aca691caeebc4b08d5195b3db0412e3edfb13df16d4f00901ddb58c5b3d8e1"
     },
     {
       "source": "docs/document-styles.md",
@@ -75,8 +75,8 @@
       "source": "src/lib/index.ts",
       "destination": "public-api.json",
       "transform": "public-root-exports",
-      "sourceSha256": "3cac9c05213c4db8b3279ad29f459afe1cfb38f4ebb92b88c3438d1b2fcd073d",
-      "bundledSha256": "c1734475fb9ba04262dc1a254027b1a125fdab14d31039bc8339c33ccd7acbc4"
+      "sourceSha256": "35f1531758104885708380dcb6a20e7109d9991e0bd5ff35d11f7b09bfd09201",
+      "bundledSha256": "264fbf60280dba2e1e49f414ab9a2bad0b78301593eff7dc607c316f63cca4c2"
     }
   ]
 }

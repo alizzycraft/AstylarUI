@@ -285,9 +285,22 @@ Build replaceable `SiteData` from application state. A mounted surface provides:
 - `resize()` for a changed canvas viewport;
 - `focus(elementId, options?)` and `blur()` for application-owned composite focus;
 - `whenSettled()` for the current owned generation;
+- `inspectResolvedStyles()` for an on-demand, detached diagnostic snapshot of
+  normal and effective core declarations, including hidden and anonymous nodes;
 - diagnostics for sessions, resources, interaction, scrolling, semantics,
   reconciliation, plugins, and plugin resources;
 - idempotent `dispose()` for the entire surface lifetime.
+
+Call style inspection only after `whenSettled()`; inspection rejects a pending
+render or a disposed surface. Snapshot paths identify the current authored tree,
+and the revision identifies the settled generation. Values are core declarations
+(for example percentages remain percentages), not browser used sizes or Babylon
+coordinates. Inspection allocates no visual resources and does not change the
+document. It is for diagnosis, never an alternative layout or paint pipeline.
+The API is additive for consumers of mounted handles; custom implementations of
+the `AstylarSurface` interface must supply the new diagnostic method. Persisted
+documents and plugin API v2 are unchanged. The packed-consumer style-inspection
+test exercises this contract through the package root.
 
 Compatible uniquely identified elements retain owners and live state according
 to the reconciliation contract. Changing element type or input manager kind is

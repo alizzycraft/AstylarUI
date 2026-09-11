@@ -3,6 +3,36 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Hidden-node inspection boundary (2026-09-11)
+
+Core now exposes the on-demand `AstylarSurface.inspectResolvedStyles()` diagnostic
+snapshot. It traverses the authored tree (including hidden descendants and
+anonymous nodes) through the existing core cascade and interaction resolution.
+Paint and inspection share the same pseudo-state merge order. Snapshots retain
+normal/effective declarations and the settled revision, contain no projected
+geometry, and are detached from authored data. Pending or disposed surfaces are
+rejected. No inspection work runs unless the caller requests it.
+
+This is the narrowly scoped instrumentation addition needed to close the audit's
+mesh-only evidence gap, not a renderer parity fix. The public API compatibility
+decision and usage constraints are recorded in `docs/compatibility/html-css.md`
+and synchronized developer references. No private service is exported to the
+showcase and no plugin/application style resolver was added.
+
+Verification: core style-inspection and surface-handle tests passed 6/6 in Chrome
+152 with Babylon 8.15.1/WebGL2. `npm run consumer:check` passed: a fresh package
+with 419 files, browser/server build and prerender checks, and 4/4 Chrome tests,
+including the package-root hidden-node/focus/two-surface inspection proof. The
+disposal assertion intentionally emits the `surface-disposed` diagnostic.
+`npm run skill:check` and all 11 translation-example checks also pass.
+
+`npm run capabilities:check` reports a pre-existing stale fingerprint for
+`element-creation.service.ts`. HEAD and working source both hash to
+`bf5fd5861c7d1b412520a41abf5bfa0aa1085d9a139a96f3d202dde6cbf8ea3a`, while HEAD's
+catalog still records `2edeb33f4095e3d3bb2be889991473e153df96f6d9a46ec9af94bbc56fa87d24`.
+The last source change is `97e0da0`, retaining CSS select-popup anchor geometry;
+this increment does not touch that source or refresh its acceptance fingerprint.
+
 ## Effective-state evidence correction (2026-09-11)
 
 The Material collector previously compared browser computed interaction styles

@@ -305,6 +305,10 @@
       "kind": "runtime"
     },
     {
+      "name": "AstylarResolvedStyleSnapshot",
+      "kind": "type"
+    },
+    {
       "name": "AstylarSceneResources",
       "kind": "runtime"
     },

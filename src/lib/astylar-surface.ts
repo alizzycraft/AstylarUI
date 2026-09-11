@@ -1,5 +1,6 @@
 import type { Scene } from '@babylonjs/core';
 import type { SiteData } from '../app/types/site-data';
+import type { StyleRule } from '../app/types/style-rule';
 import type { AstylarInteractionSnapshot } from './astylar-interaction-runtime';
 import type { AstylarSceneResourceSnapshot } from './astylar-scene-resources';
 import type { AstylarScrollSnapshot } from './astylar-scroll-runtime';
@@ -37,11 +38,28 @@ export interface AstylarFocusOptions {
   scrollIntoView?: boolean;
 }
 
+/** Detached diagnostic declarations, not used layout boxes or Babylon coordinates. */
+export interface AstylarResolvedStyleSnapshot {
+  readonly revision: number;
+  readonly elements: readonly {
+    /** Stable position in the current authored tree, including anonymous nodes. */
+    readonly path: string;
+    readonly id?: string;
+    readonly type: string;
+    readonly normal: Readonly<StyleRule>;
+    readonly effective: Readonly<StyleRule>;
+  }[];
+}
+
 /** An explicitly owned rendering surface returned by `Astylar.mount()`. */
 export interface AstylarSurface {
   readonly scene: Scene;
   readonly disposed: boolean;
   readonly diagnostics: AstylarSurfaceDiagnostics;
+  /** Inspect core declarations, including hidden descendants, after whenSettled().
+   * On-demand only; never use this diagnostic snapshot to calculate layout.
+   */
+  inspectResolvedStyles(): AstylarResolvedStyleSnapshot;
   update(siteData: SiteData): Promise<AstylarSessionSnapshot>;
   resize(): Promise<AstylarSessionSnapshot>;
   whenSettled(): Promise<AstylarSessionSnapshot>;
@@ -51,6 +69,7 @@ export interface AstylarSurface {
 }
 
 export interface AstylarSurfaceHost {
+  inspectResolvedStyles(scene: Scene): AstylarResolvedStyleSnapshot;
   update(siteData: SiteData, scene: Scene): Promise<AstylarSessionSnapshot>;
   invalidate(
     reason: AstylarInvalidationReason,
@@ -116,6 +135,11 @@ export class AstylarSurfaceHandle implements AstylarSurface {
   whenSettled(): Promise<AstylarSessionSnapshot> {
     this.assertActive('wait for');
     return this.host.whenSettled(this.scene);
+  }
+
+  inspectResolvedStyles(): AstylarResolvedStyleSnapshot {
+    this.assertActive('inspect');
+    return this.host.inspectResolvedStyles(this.scene);
   }
 
   focus(elementId: string, options?: AstylarFocusOptions): boolean {

@@ -19,6 +19,7 @@ describe('AstylarSurfaceHandle', () => {
     } as unknown as Scene;
     const snapshot = { disposed: false } as never;
     const host = {
+      inspectResolvedStyles: jasmine.createSpy('inspectResolvedStyles').and.returnValue({ revision: 1, elements: [] }),
       update: jasmine.createSpy('update').and.resolveTo(snapshot),
       invalidate: jasmine.createSpy('invalidate').and.resolveTo(snapshot),
       whenSettled: jasmine.createSpy('whenSettled').and.resolveTo(snapshot),
@@ -85,6 +86,14 @@ describe('AstylarSurfaceHandle', () => {
     expect(host.blur).toHaveBeenCalledOnceWith(scene);
   });
 
+  it('requests style inspection only on demand and binds it to the owning scene', () => {
+    const { host, scene, surface } = setup();
+    void surface.diagnostics;
+    expect(host.inspectResolvedStyles).not.toHaveBeenCalled();
+    expect(surface.inspectResolvedStyles()).toEqual({ revision: 1, elements: [] });
+    expect(host.inspectResolvedStyles).toHaveBeenCalledOnceWith(scene);
+  });
+
   it('disposes idempotently and rejects later operations', () => {
     const { host, scene, surface } = setup();
 
@@ -97,6 +106,7 @@ describe('AstylarSurfaceHandle', () => {
     expect(() => surface.resize()).toThrowError(/disposed Astylar surface/);
     expect(() => surface.focus('menu')).toThrowError(/disposed Astylar surface/);
     expect(() => surface.blur()).toThrowError(/disposed Astylar surface/);
+    expect(() => surface.inspectResolvedStyles()).toThrowError(/disposed Astylar surface/);
     expect(host.reportDiagnostic).toHaveBeenCalledWith(jasmine.objectContaining({
       code: 'surface-disposed',
       severity: 'error',

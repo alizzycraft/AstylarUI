@@ -27,6 +27,7 @@ import { TextureService } from "../app/services/texture.service";
 import { StyleService } from "../app/services/dom/style.service";
 import { StyleDefaultsService } from "../app/services/dom/style-defaults.service";
 import { SiteData } from "../app/types/site-data";
+import type { StyleRule } from '../app/types/style-rule';
 import { BabylonRender } from "../app/services/dom/interfaces/render.types";
 import { AstylarRenderSession } from "./astylar-render-session";
 import type {
@@ -64,6 +65,7 @@ import {
   AstylarSurfaceHandle,
   type AstylarSurface,
   type AstylarFocusOptions,
+  type AstylarResolvedStyleSnapshot,
 } from './astylar-surface';
 import { ASTYLAR_SURFACE_SERVICE_PROVIDERS } from './astylar-surface-providers';
 import {
@@ -132,6 +134,11 @@ export interface AstylarInternalInspection {
   readonly textSelectionController: TextSelectionControllerService;
   readonly textInteractionRegistry: TextInteractionRegistryService;
   readonly textRenderingService: TextRenderingService;
+}
+
+/** One shared precedence rule for paint and on-demand diagnostic snapshots. */
+function mergeInteractionStyles(styles: { normal: StyleRule; hover?: StyleRule; focus?: StyleRule; active?: StyleRule }): StyleRule {
+  return { ...styles.normal, ...styles.hover, ...styles.focus, ...styles.active };
 }
 
 /**
@@ -885,6 +892,26 @@ class AstylarRenderer {
     return scene ? this.sessions.get(scene) : this.activeSession;
   }
 
+  inspectResolvedStyles(scene: Scene): AstylarResolvedStyleSnapshot {
+    const session = this.sessions.get(scene);
+    if (!session || session.snapshot.status !== 'idle') {
+      throw new Error('Await surface.whenSettled() before inspecting resolved styles.');
+    }
+    const elements: AstylarResolvedStyleSnapshot['elements'][number][] = [];
+    const visit = (element: DOMElement, path: string): void => {
+      // Resolve through the same core cascade and pseudo-state path as painting.
+      // Do not depend on mesh existence: display:none may skip an entire subtree.
+      const styles = this.getElementInteractionStyles(element.id ?? '', session.siteData, element);
+      if (styles) elements.push({ path, id: element.id, type: element.type,
+        normal: structuredClone(styles.normal),
+        effective: structuredClone(mergeInteractionStyles(styles)),
+      });
+      element.children?.forEach((child, index) => visit(child, `${path}/${index}`));
+    };
+    session.siteData.root.children.forEach((element, index) => visit(element, `root/${index}`));
+    return { revision: session.snapshot.revision, elements };
+  }
+
   getResourceSnapshot(scene: Scene): AstylarSceneResourceSnapshot | undefined {
     return this.sceneResources.get(scene)?.snapshot;
   }
@@ -1091,7 +1118,7 @@ class AstylarRenderer {
   }
 
   /** Resolves the pseudo rules registered for an authored ID, type, or simple class. */
-  private getElementInteractionStyles(elementId: string, siteData?: SiteData): {
+  private getElementInteractionStyles(elementId: string, siteData?: SiteData, authoredElement?: DOMElement): {
     normal: import('../app/types/style-rule').StyleRule;
     hover?: import('../app/types/style-rule').StyleRule;
     active?: import('../app/types/style-rule').StyleRule;
@@ -1100,7 +1127,7 @@ class AstylarRenderer {
     const registered = this.elementManager.elementStylesMap.get(elementId);
     const input = this.inputElementService.getInputElement(elementId);
     const mesh = this.elementManager.elementsMap.get(elementId);
-    const element = input?.element ?? mesh?.metadata?.element as DOMElement | undefined;
+    const element = authoredElement ?? input?.element ?? mesh?.metadata?.element as DOMElement | undefined;
     if (!element) return registered;
 
     const candidates = [
@@ -1256,12 +1283,11 @@ class AstylarRenderer {
     const active = !!mesh.metadata.astylarActiveState && !!styles.active;
     const focused = !!mesh.metadata.astylarFocusState && !!styles.focus;
     const hovered = !!mesh.metadata.astylarHoverState && !!styles.hover;
-    const style = {
-      ...styles.normal,
-      ...(hovered ? styles.hover : {}),
-      ...(focused ? styles.focus : {}),
-      ...(active ? styles.active : {}),
-    };
+    const style = mergeInteractionStyles({ normal: styles.normal,
+      hover: hovered ? styles.hover : undefined,
+      focus: focused ? styles.focus : undefined,
+      active: active ? styles.active : undefined,
+    });
     this.inputElementService.setTextControlInteractionStyle(elementId, style);
     // Keep the effective authored declarations alongside the rendered mesh so
     // diagnostic consumers can verify state paint without depending on a
