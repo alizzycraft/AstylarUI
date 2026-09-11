@@ -19,7 +19,7 @@ function parityReport(reference, astylar) {
     summary: { meetsAcceptance: true }, interactionSummary: { meetsAcceptance: true },
     results: [{
       family: 'core', profile: 'light', viewport: { id: 'desktop' },
-      styleInputs: [{ id: 'core-primary', reference, astylar }],
+      styleInputs: [{ id: 'core-root', reference, astylar }],
     }],
     interactions: [],
   };
@@ -112,4 +112,17 @@ test('keeps used-pixel versus unresolved-expression comparisons open as harness 
     assert.equal(audit.discrepancies.find((entry) => entry.property === property)?.classification,
       'parity-harness-defect');
   }
+});
+
+test('rejects empty evidence and duplicate records rather than treating case counts as coverage', () => {
+  const report = parityReport({}, {});
+  report.results.push(report.results[0]);
+  const audit = buildMaterialInputAudit(report);
+  assert.equal(audit.coverage.missingInputEvidence.length, 2);
+  assert.equal(audit.coverage.duplicateCases.length, 1);
+  assert.equal(audit.coverage.complete, false);
+  assert.equal(audit.summary.inputEquivalent, false);
+  const errors = validateMaterialInputAudit(audit, { requireComplete: false });
+  assert.ok(errors.some((error) => error.includes('root style evidence')));
+  assert.ok(errors.some((error) => error.includes('duplicate case')));
 });

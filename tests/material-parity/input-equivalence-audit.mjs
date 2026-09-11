@@ -53,7 +53,9 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
     sourceFingerprints: sourceFingerprints(root),
     coverage,
     summary: {
-      inputEquivalent: coverage.presenceDifferences.length === 0 &&
+      inputEquivalent: coverage.complete && coverage.missingElements.length === 0 &&
+        coverage.presenceDifferences.length === 0 &&
+        sourceFindings.every((entry) => entry.detected && ['equivalent-representation', 'legitimate-public-api-structure'].includes(entry.classification)) &&
         structures.every((entry) => entry.classification === 'legitimate-public-api-structure') &&
         discrepancies.every((entry) => entry.classification === 'equivalent-representation' || entry.classification === 'legitimate-public-api-structure'),
       structureDifferences: structures.filter((entry) => entry.classification !== 'legitimate-public-api-structure').length,
@@ -85,6 +87,8 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
   if (report.summary.unexplainedSourceFindings !== 0) errors.push(`${report.summary.unexplainedSourceFindings} source findings are unexplained`);
   if (report.summary.undetectedSourceDefinitions !== 0) errors.push(`${report.summary.undetectedSourceDefinitions} expected source findings were not detected`);
   if (report.coverage.missingElements.length > 0) errors.push(`${report.coverage.missingElements.length} measured mappings are missing on one side`);
+  if (report.coverage.missingInputEvidence.length > 0) errors.push(`${report.coverage.missingInputEvidence.length} cases lack paired root style evidence`);
+  if (report.coverage.duplicateCases.length > 0) errors.push(`${report.coverage.duplicateCases.length} duplicate case records`);
   return errors;
 }
 
@@ -399,8 +403,17 @@ function buildCoverage(parityReport, cases) {
   const missingElements = oneSidedElements.filter((entry) => !classifiedPresence.has(`${entry.case}:${entry.element}`));
   const missingStatic = [...expectedStatic].filter((key) => !actualStatic.has(key));
   const missingInteractions = [...expectedInteractions].filter((key) => !actualInteractions.has(key));
+  const missingInputEvidence = cases.filter((entry) => {
+    const root = entry.styleInputs?.find((input) => input.id === `${entry.family}-root`);
+    return !root || !Object.keys(root.reference ?? {}).length || !Object.keys(root.astylar ?? {}).length;
+  }).map(caseKey);
+  const occurrences = countBy(cases, caseKey);
+  const duplicateCases = Object.entries(occurrences).filter(([, count]) => count > 1)
+    .map(([key, count]) => ({ case: key, count }));
   return {
-    complete: missingStatic.length === 0 && missingInteractions.length === 0,
+    complete: missingStatic.length === 0 && missingInteractions.length === 0 &&
+      missingInputEvidence.length === 0 && duplicateCases.length === 0,
+    scope: 'Configured matrix and mapped elements; anonymous descendants and pseudo-elements require separate structural review.',
     visualParityGreen: parityReport.summary?.meetsAcceptance === true && parityReport.interactionSummary?.meetsAcceptance === true,
     configuredStatic: expectedStatic.size,
     executedStatic: actualStatic.size,
@@ -413,6 +426,8 @@ function buildCoverage(parityReport, cases) {
     missingStatic,
     missingInteractions,
     missingElements,
+    missingInputEvidence,
+    duplicateCases,
     presenceDifferences,
     caseInventory: {
       static: [...expectedStatic],
