@@ -176,6 +176,32 @@ test('attributes sidenav container flow only with the reviewed paired declaratio
   assert.equal(difference().attribution, 'unresolved');
 });
 
+test('attributes badge paint only with the reviewed paired token and color witnesses', () => {
+  const raw = parityReport({ backgroundColor: 'rgb(179, 38, 30)' }, { background: '#6750a4' });
+  raw.results[0].family = 'badge';
+  const input = raw.results[0].styleInputs[0];
+  input.id = 'badge-count';
+  input.referenceStructure = { schemaVersion: 2, type: 'span' };
+  input.astylarStructure = { schemaVersion: 2, type: 'span' };
+  input.referenceAuthored = [{ selector: '.mat-badge-content', declarations: {
+    'background-color': { value: 'var(--mat-badge-background-color, var(--mat-sys-error))' },
+  } }];
+  input.astylarAuthored = [{ selector: '.badge-bubble', declarations: { background: '#6750a4' } }];
+  const difference = () => buildMaterialInputAudit(raw).discrepancies.find((entry) => entry.property === 'backgroundColor');
+  assert.equal(difference().classification, 'application-plugin-authoring-defect');
+  assert.equal(difference().attribution, 'reviewed-authored-rule');
+  assert.equal(difference().reviewEvidence.referenceRule.selector, '.mat-badge-content');
+  assert.equal(difference().reviewEvidence.candidateRule.declarations.background, '#6750a4');
+  input.referenceAuthored.push({ selector: '#badge-count', declarations: { 'background-color': { value: 'red' } } });
+  assert.equal(difference().attribution, 'unresolved');
+  input.referenceAuthored.pop();
+  input.astylarAuthored[0].declarations.background = '#ffffff';
+  assert.equal(difference().attribution, 'unresolved');
+  input.astylarAuthored[0].declarations.background = '#6750a4';
+  input.astylarStructure.type = 'div';
+  assert.equal(difference().attribution, 'unresolved');
+});
+
 test('source audit has an explicit classification and live location for every policy entry', () => {
   const audit = buildMaterialInputAudit(parityReport({}, {}));
   assert.equal(audit.summary.unclassifiedDifferences, 0);

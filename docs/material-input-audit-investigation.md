@@ -51,6 +51,39 @@ No reference input, fixture style, case, acceptance threshold, or renderer behav
 changed in this increment. Fully resolved style coverage and substantive review
 of every material difference remain separate unfinished requirements.
 
+## Badge theme inputs (2026-09-12)
+
+All twelve badge static captures in `retained-text-complete-audit` retain
+reference `.mat-badge-content` with
+`background-color:var(--mat-badge-background-color, var(--mat-sys-error))`.
+Candidate `.badge-bubble` instead supplies `theme.primary`. Exact resolved pairs:
+
+| Profile | Reference error color | Candidate primary color |
+| --- | --- | --- |
+| light | #b3261e | #6750a4 |
+| dark | #f2b8b5 | #d0bcff |
+| contrast | #8b0000 | #000000 |
+| custom | #ba1a1a | #006a6a |
+
+Each pair occurs at desktop, tablet and mobile. This is an application authoring
+defect, not evidence of incorrect core color conversion. The existing inline
+width table is a separate input discrepancy. Commit `48c994e` retained the
+primary-token choice while changing badge text structure; the first introduction
+of that choice is not claimed here.
+
+The audit now attributes this property only with the exact paired span mapping,
+reference token declaration, candidate color declaration matching its resolved
+color, and no competing background declaration. It retains the exact witness
+rules separately from compact authored examples, which can truncate earlier
+rules. Negative tests leave missing/conflicting witnesses unresolved. Applying
+the classifier to all twelve fresh checkpoint results yields four reviewed
+signatures, three occurrences each, with no input-tree collection errors.
+Their minimum whole-page SSIM is 0.993772 despite the wrong badge color: that
+scalar alone does not establish local paint correctness. `node --test
+tests/material-parity/*.spec.mjs` passes 49/49; `git diff --check` passes.
+Other badge properties and states are not implicitly accepted. The current
+capture graph, fixtures and reference styles are unchanged.
+
 ## Original expressions through core loaded CSS (2026-09-12)
 
 The grid-list reductions now also send the original `calc(80px)`,

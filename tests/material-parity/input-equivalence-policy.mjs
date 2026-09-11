@@ -238,6 +238,15 @@ export const sourceAuditDefinitions = Object.freeze([
     justification: 'The reference badge host is an inline span with auto width, not a theme-indexed width table. The candidate encodes measured text widths for density/typography variants before positioning its badge.',
   }),
   Object.freeze({
+    id: 'fixture-badge-primary-instead-of-error-token',
+    introducedBy: 'current native badge rule retained by 48c994e; original token-choice introduction not yet established',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`selector: '\.badge-bubble'[^\n]*background: theme\.primary, color: theme\.onPrimary`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase badge theme-token translation',
+    justification: 'All twelve fresh static badge captures show reference error-token versus candidate primary-token backgrounds: light #b3261e/#6750a4, dark #f2b8b5/#d0bcff, contrast #8b0000/#000000, custom #ba1a1a/#006a6a. Reference .mat-badge-content authors var(--mat-badge-background-color, var(--mat-sys-error)); candidate .badge-bubble authors theme.primary. This is unequal color input, not a demonstrated core paint defect. Review on-error text color separately rather than assuming theme.onPrimary is equivalent.',
+  }),
+  Object.freeze({
     id: 'fixture-chip-state-measured-widths',
     introducedBy: '00de46c fix(material): align chip labels and spacing',
     file: 'examples/material-showcase/src/app/astylar.component.ts',

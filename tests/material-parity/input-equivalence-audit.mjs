@@ -220,6 +220,7 @@ function collectStyleDiscrepancies(cases) {
             justification: 'This interaction capture predates effective-style provenance. It can compare browser state styles against candidate normal-only declarations; recapture with evidence version2 before attributing the difference to authoring or core.' }
           : classifyReviewedRootInput(benchmarkCase, input, property, referenceValue, astylarValue)
             ?? classifyReviewedContainerInput(benchmarkCase, input, property, referenceValue, astylarValue)
+            ?? classifyReviewedBadgePaint(benchmarkCase, input, property, referenceValue, astylarValue)
             ?? classifyStyleDifference(property, referenceValue, astylarValue, reference, astylar);
         const signature = JSON.stringify([benchmarkCase.family, input.id, property, referenceValue ?? null, astylarValue ?? null,
           classification.classification, classification.attribution ?? null, classification.justification]);
@@ -236,6 +237,7 @@ function collectStyleDiscrepancies(cases) {
             justification: classification.justification,
             recommendedOwner: classification.owner,
             ...(classification.attribution ? { attribution: classification.attribution } : {}),
+            ...(classification.reviewEvidence ? { reviewEvidence: classification.reviewEvidence } : {}),
             occurrences: 0,
             cases: [],
             states: [],
@@ -312,6 +314,28 @@ function classifyReviewedContainerInput(benchmarkCase, input, property, referenc
     attribution: 'reviewed-authored-rule',
     owner: review.owner,
     justification: review.justification,
+  };
+}
+
+function classifyReviewedBadgePaint(benchmarkCase, input, property, reference, astylar) {
+  if (benchmarkCase.family !== 'badge' || input.id !== 'badge-count' || property !== 'backgroundColor' ||
+      input.referenceStructure?.type !== 'span' || input.astylarStructure?.type !== 'span') return;
+  const token = 'var(--mat-badge-background-color, var(--mat-sys-error))';
+  const referenceRule = input.referenceAuthored?.find((rule) => rule.selector === '.mat-badge-content' &&
+    rule.declarations?.['background-color']?.value === token);
+  const candidateRule = input.astylarAuthored?.find((rule) => rule.selector === '.badge-bubble' &&
+    normalizeColor(String(rule.declarations?.background ?? '')) === astylar);
+  if (!referenceRule || !candidateRule || reference === astylar) return;
+  if (input.referenceAuthored.some((rule) => rule.declarations?.background !== undefined ||
+      (rule.declarations?.['background-color'] !== undefined && rule.declarations['background-color'].value !== token)) ||
+      input.astylarAuthored.some((rule) => rule.declarations?.backgroundColor !== undefined ||
+        (rule.declarations?.background !== undefined && normalizeColor(String(rule.declarations.background)) !== astylar))) return;
+  return {
+    classification: 'application-plugin-authoring-defect',
+    attribution: 'reviewed-authored-rule',
+    owner: 'showcase badge theme-token translation',
+    reviewEvidence: { referenceRule, candidateRule },
+    justification: 'The reference badge background uses --mat-badge-background-color with --mat-sys-error fallback. The captured .badge-bubble rule explicitly supplies the different candidate resolved color; source tracing identifies theme.primary rather than the reference error token. This is the reviewed fixture-badge-primary-instead-of-error-token mismatch, not a renderer color-conversion inference. Other badge dimensions, content and state properties remain independently reviewable.',
   };
 }
 
