@@ -68,6 +68,33 @@ export const implicitReferenceValues = Object.freeze({
 
 export const sourceAuditDefinitions = Object.freeze([
   Object.freeze({
+    id: 'fixture-picker-commit-not-implemented',
+    introducedBy: '2f44011 feat(example): add Material component showcase',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`value: '', disabled: state\.disabled, role: family === 'timepicker'`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase picker value/selection state and component interaction logic',
+    justification: 'Both picker inputs are always authored empty; handleClick has no day/time option commit path. Supplemental real-pointer checks deliver the correct option click but leave the candidate input empty and popup open; the reference commits the date/time and closes. This is a fixture state defect before renderer layout or paint.',
+  }),
+  Object.freeze({
+    id: 'harness-picker-commit-coverage-gap',
+    introducedBy: '4d56f86 fix(material): restore field and popup interaction state',
+    file: 'tests/material-parity/benchmark.config.mjs',
+    pattern: String.raw`if \(family === 'autocomplete' \|\| family === 'select'\) states\.push\('open-commit-reopen'\)`,
+    classification: 'parity-harness-defect',
+    owner: 'Material interaction matrix and exact committed-value assertions',
+    justification: 'The maintained matrix has commit/reopen only for autocomplete/select, not datepicker/timepicker. Existing picker opening, hover, scrolling, and dismissal cases do not cover selection commit. The supplemental audit-material-picker-commits script exposes both failures; configured-matrix completeness is not complete behavioral coverage.',
+  }),
+  Object.freeze({
+    id: 'fixture-tooltip-replaces-connected-overlay-with-flow',
+    introducedBy: 'f3c8254 fix(material): complete showcase interaction parity',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`selector: '\.tooltip-anchor', width: '138px', height: '72px'`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase overlay composition and core CSS-space connected placement',
+    justification: 'The reference matTooltip creates a connected CDK overlay outside normal flow. The candidate puts the popup in a fixed-size 138x72px flex column below the trigger. It may align in the current screenshot but does not exercise equivalent containing-block, collision, clipping, or scroll behavior.',
+  }),
+  Object.freeze({
     id: 'fixture-toolbar-measured-intrinsic-widths',
     introducedBy: '92067a1 fix(example): align Material toolbar states',
     file: 'examples/material-showcase/src/app/astylar.component.ts',

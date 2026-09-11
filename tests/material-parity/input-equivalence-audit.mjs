@@ -558,6 +558,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'scripts/audit-material-picker-commits.mjs', /select day 1/,
+      'supplemental diagnostic; known mismatches recorded in investigation', 'Real pointer selection of a date/time reaches the correct candidate target but does not commit a value or close the popup. This case supplements, rather than replaces, the unfiltered maintained matrix.'),
     proof(root, 'examples/material-showcase/src/app/input-equivalence-proof.spec.ts', /describe\('Material audit/,
       'executable browser proof; run evidence in docs/material-input-audit-investigation.md', 'Five single-source CSS reductions cover intrinsic toolbar sizing, a flex stepper connector, content-derived flex height, a full-span calendar marker with a cell-centered ring, and fixed bottom overlay. File presence is not a test result; consult the recorded run. Full Material compositions still require investigation.'),
     proof(root, 'src/app/services/dom/elements/grid.service.spec.ts', /gridColumn:\s*'1 \/ -1'/,

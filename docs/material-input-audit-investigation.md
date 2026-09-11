@@ -82,6 +82,46 @@ shadow representation; it does not waive card typography, wrappers, colors,
 theme variants, or the shared fixed-height table. A literal constant is not by
 itself evidence of compensation.
 
+## Picker commit behavior missing from the configured matrix
+
+`node scripts/audit-material-picker-commits.mjs --base-url=http://127.0.0.1:4431`
+ran against the separately built audit showcase on 2026-09-11 (Chrome
+152.0.7977.76, light, 1440x900). The script opens fresh pages and delivers real
+pointer clicks on each toggle and then a date/time option. Two consecutive runs
+produced the same values, open states, and click targets. It deliberately exits
+1 when committed values or open state differ; it does not bless the defect with
+an inverted passing assertion.
+
+| Action | Reference after settlement | Astylar after settlement |
+| --- | --- | --- |
+| Select day 1 | Input `9/1/2026`; popup closed | Input empty; popup open |
+| Select second time option | Input `12:30 AM`; popup closed | Input empty; popup open |
+
+Both candidate event logs confirm the exact target (`datepicker-day-1` and
+`timepicker-option-1`). Neither side reported a page error. The detailed artifact
+is `artifacts/material-parity/picker-commit-audit/latest-report.json`.
+The diagnostic syntax check and all 52 harness self-tests passed; these do not
+override the two intentionally retained behavioral failures.
+This establishes a fixture interaction defect: the authored inputs always use
+`value:''`, and `handleClick` has no date/time selection commit branch. It does
+not implicate pointer-coordinate conversion or core layout.
+
+The configured matrix includes `open-commit-reopen` for autocomplete/select only.
+It exercises date/time opening, hovering and dismissal without committing an
+option. Thus 1,875/1,875 configured interaction cases cannot establish all
+relevant interaction coverage. Picker commit/reopen, calendar navigation,
+and keyboard selection still need explicit audit coverage and durable maintained
+assertions; retain this honest failing diagnostic meanwhile. The reference's
+committed date string varies with the test date; the script compares actual values rather than
+hard-coding September as the correct future month.
+
+Tooltip structure is another input substitution: `.tooltip-anchor` authors a
+138x72px flex column containing a normal-flow popup, whereas Material's tooltip
+is a connected CDK overlay. Its absence of a transform offset does not establish
+equivalent anchoring. The existing component test checks the candidate's flex
+declarations, not equivalence to the reference containing block. This must be
+addressed with the shared CSS-space overlay work, not another local offset.
+
 ## Minimal browser evidence
 
 `input-equivalence-proof.spec.ts` supplies the same style objects to browser CSS
