@@ -27,6 +27,56 @@ behavior failures. It prevents the raw discrepancy count from being presented as
 a count of proven authoring defects. Focused audit tests pass 24/24; fixture
 inputs, renderer output, and the in-flight matrix are unchanged.
 
+## Divider, sidenav and table source review (2026-09-11)
+
+Fresh light/desktop full-tree evidence in
+`artifacts/material-parity/complete-input-audit/{divider,sidenav,table}` confirms
+three additional unequal-input paths:
+
+- Sidenav reference styles explicitly specify `padding:20px` for both drawer and
+  content. The candidate instead authors `17px 20px 20px`, moving text upward.
+  This difference already existed in the original showcase commit `2f44011`.
+- Divider reference paragraphs participate in normal block flow with 16px
+  vertical margins; the separator is a 1px top border. Commit `fcde1b7` replaced
+  paragraphs with absolutely positioned wrappers. Later `1f2f2aa` and `662c179`
+  adjusted their theme/mobile/DPR-sensitive positions. These are not equivalent
+  layout declarations.
+- Table reference header/first body cells own their bottom borders; the final
+  body cell has none. Candidate cell borders are disabled and two absolutely
+  positioned sibling divs draw their replacements using density-specific row
+  offsets. This also dates to `2f44011`. Reference light/desktop table text is
+  14px with a 20px line height, whereas candidate source rules declare 16px.
+  Table layout creates temporary cell/row style overrides: its captured mesh
+  declarations must not be confused with original authored padding or fonts.
+
+### Confirmed core reduction: empty auto-height block
+
+The new paragraph/divider case in
+`examples/material-showcase/src/app/input-equivalence-proof.spec.ts` generates
+both browser CSS and Astylar styles from the same rule objects. It uses a padded
+block, two ordinary paragraphs, and an empty block carrying a 1px top border.
+There are no absolute coordinates or measured replacement dimensions.
+
+Run twice:
+`npm --prefix examples/material-showcase test -- --watch=false --browsers=ChromeHeadless --include=src/app/input-equivalence-proof.spec.ts`.
+Both Chrome 152/WebGL2 runs report **1 failed, 5 passed**, with the same failure:
+the separator begins at y=81 on both sides, but ends at y=383 in Astylar versus
+y=82 in the browser. The following paragraph begins at y=399 versus y=98, and
+the parent ends at y=464 versus y=163. The five earlier reductions still pass.
+This is retained failing evidence, not a successful verification or skipped test.
+
+Source tracing identifies the owning rule: `ElementDimensionService` initializes
+height from the parent's content height. Its auto/intrinsic replacement is
+limited to inline elements, text-bearing elements, and textareas. The empty
+block retains the provisional 302px height, and `ElementCreationService` only
+recurses into child layout when children exist. This is a CSS used-height defect,
+not a Babylon coordinate-conversion defect. The reduction uses explicit Arial
+16px/20px typography; it proves the empty-block flow failure, not complete Material
+Roboto text/raster parity. Fix the general empty non-replaced auto-height rule
+before removing the divider compensation, protecting explicit constraints,
+flex/grid stretch, replaced elements, padding/borders and nested/resize behavior.
+No renderer fix or showcase input adjustment was made in this audit increment.
+
 ## Hidden-node inspection boundary (2026-09-11)
 
 The complete root suite (`npm test -- --watch=false --browsers=ChromeHeadless`)

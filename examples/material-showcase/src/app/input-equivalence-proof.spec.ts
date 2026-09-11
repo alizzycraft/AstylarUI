@@ -9,6 +9,21 @@ import { Astylar, type DOMElement, type SiteData } from 'astylarui';
 describe('Material audit: equivalent CSS input reductions', () => {
   const cases: Array<{ name: string; site: SiteData; ids: string[] }> = [
     {
+      name: 'paragraph flow places a divider without absolute text or separator offsets',
+      site: {
+        root: { children: [{ type: 'section', id: 'divider-demo', children: [
+          { type: 'p', id: 'above', textContent: 'Above' },
+          { type: 'div', id: 'separator' },
+          { type: 'p', id: 'below', textContent: 'Below' },
+        ] }] },
+        styles: [
+          { selector: '#divider-demo', width: '360px', padding: '28px', borderWidth: '1px', borderStyle: 'solid', borderColor: '#cac4d0', fontFamily: 'Arial', fontSize: '16px', lineHeight: '20px', background: '#eeeeee' },
+          { selector: 'p', margin: '16px 0', background: '#dddddd' },
+          { selector: '#separator', display: 'block', borderWidth: '1px 0 0', borderStyle: 'solid', borderColor: '#79747e' },
+        ],
+      }, ids: ['divider-demo', 'above', 'separator', 'below'],
+    },
+    {
       name: 'toolbar content widths and a flex spacer require no measured constants',
       site: {
         root: { children: [{ type: 'div', id: 'toolbar', children: [
