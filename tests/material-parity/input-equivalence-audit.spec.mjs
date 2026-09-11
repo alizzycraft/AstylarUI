@@ -6,6 +6,7 @@ import {
   collectFullTreeInventory,
   collectRetainedTypographyEvidence,
   parseMaterialInputAuditArguments,
+  reviewedHeadingMappings,
   summarizeSupplementalBehavior,
   summarizeSupplementalOverlays,
   summarizeSupplementalSlider,
@@ -529,6 +530,91 @@ test('retained typography retains missing property fields as gaps instead of acc
   assert.ok(validateMaterialInputAudit(report).some((error) => error.includes('retained typography mappings')));
   delete report.retainedTypography;
   assert.ok(validateMaterialInputAudit(report).includes('missing retained typography stage report'));
+});
+
+function headingTypographyReport() {
+  const raw = retainedTypographyReport();
+  const entry = raw.results[0];
+  entry.styleInputs = [];
+  const reference = entry.inputTrees.reference, astylar = entry.inputTrees.astylar;
+  const refStyle = { ...reference.styles[0], opacity: '0' };
+  const astStyle = { ...refStyle, color: '#ffffff', opacity: '1.0' };
+  reference.styles = [refStyle, { color: '#000000', opacity: '1' }];
+  reference.rules = [{ selector: '.benchmark > .eyebrow, .benchmark > h1', declarations: { opacity: { value: '0' } }, active: true }];
+  reference.nodes = [{ key: 'frame', parent: null, type: 'main', attributes: { class: 'frame benchmark' },
+    ownText: '', style: 1, rules: [], pseudoElements: [] }];
+  const pageStyle = { background: '#ffffff', opacity: '1' };
+  astylar.nodes = [{ key: 'root/0', parent: 'root', authored: { type: 'main', id: 'page' },
+    resolvedStyle: pageStyle, normalResolvedStyle: pageStyle, interactionResolvedStyle: pageStyle }];
+  astylar.rules = [{ selector: '#page', background: '#ffffff' }];
+  for (const [index, id, type, text] of [[0, 'eyebrow', 'p', 'Angular Material 20 reference'], [1, 'title', 'h1', 'core']]) {
+    reference.nodes.push({ key: `frame/${index}`, parent: 'frame', type,
+      attributes: id === 'eyebrow' ? { class: 'eyebrow' } : {}, ownText: text, style: 0, rules: [0], pseudoElements: [] });
+    astylar.nodes.push({ key: `root/0/${index}`, parent: 'root/0', authored: { type, id, textContent: text },
+      resolvedStyle: astStyle, normalResolvedStyle: astStyle, interactionResolvedStyle: astStyle,
+      retainedText: { source: 'core-text-registry', style: astStyle } });
+    astylar.rules.push({ selector: `#${id}`, color: '#ffffff' });
+  }
+  return raw;
+}
+
+test('reviewed heading identity maps anonymous reference headings without accepting their unequal paint', () => {
+  const raw = headingTypographyReport();
+  const report = buildMaterialInputAudit(raw);
+  const evidence = report.retainedTypography;
+  assert.equal(evidence.reviewedMappings.length, 2);
+  assert.equal(evidence.comparisons.length, 2);
+  assert.deepEqual(evidence.gaps, []);
+  assert.equal(evidence.paintMaskDifferences.length, 2);
+  assert.equal(evidence.differences.length, 2);
+  assert.ok(evidence.differences.every((entry) => entry.property === 'color' && entry.attribution === 'reviewed-heading-mask'));
+  assert.ok(evidence.paintMaskDifferences.every((entry) => entry.classification === 'parity-harness-defect' &&
+    entry.reviewEvidence.referenceOpacity === '0' && entry.reviewEvidence.candidateOpacity === '1.0'));
+  assert.equal(report.summary.inputEquivalent, false);
+  assert.equal(raw.results[0].inputTrees.reference.nodes[1].attributes.id, undefined, 'mapping must not rewrite the captured input');
+  assert.ok(!validateMaterialInputAudit(report).some((error) => error.includes('retained typography differences')),
+    'classified audit findings are not unreviewed differences or accepted parity');
+  delete evidence.differences[0].attribution;
+  assert.ok(validateMaterialInputAudit(report).some((error) => error.includes('retained typography differences')));
+});
+
+test('heading aliases require exact unique identity, direct containment, and unchanged text', () => {
+  const mutations = [
+    (ref) => { ref.nodes[0].attributes.class = 'unrelated'; },
+    (ref) => { ref.nodes[1].parent = 'other'; },
+    (ref) => { ref.nodes[1].type = 'span'; },
+    (ref) => { ref.nodes[1].ownText = 'Different'; },
+    (ref) => { ref.nodes[1].attributes.id = 'different'; },
+    (ref) => { ref.nodes.push({ ...ref.nodes[1], key: 'frame/extra' }); },
+    (ref) => { ref.nodes.push({ ...ref.nodes[1], key: 'frame/conflict', type: 'div', attributes: { id: 'eyebrow' } }); },
+    (_ref, ast) => { ast.nodes[1].authored.type = 'span'; },
+    (_ref, ast) => { ast.nodes[1].parent = 'other'; },
+    (_ref, ast) => { ast.nodes.push({ ...ast.nodes[1], key: 'root/0/duplicate' }); },
+  ];
+  for (const mutate of mutations) {
+    const raw = headingTypographyReport();
+    const { reference, astylar } = raw.results[0].inputTrees;
+    mutate(reference, astylar);
+    assert.ok(!reviewedHeadingMappings(reference, astylar).some((entry) => entry.element === 'eyebrow'));
+  }
+});
+
+test('heading paint attribution requires active authored masking and matching page paint evidence', () => {
+  const mutations = [
+    (entry) => { entry.inputTrees.reference.rules[0].active = false; },
+    (entry) => { entry.inputTrees.reference.rules[0].declarations.opacity.value = '.5'; },
+    (entry) => { entry.inputTrees.astylar.rules[1].color = '#000000'; },
+    (entry) => { entry.inputTrees.astylar.rules[0].background = '#000000'; },
+    (entry) => { entry.inputTrees.astylar.nodes[0].interactionResolvedStyle = { background: '#000000' }; },
+    (entry) => { entry.inputTrees.reference.styles[0].opacity = '1'; },
+  ];
+  for (const mutate of mutations) {
+    const raw = headingTypographyReport();
+    mutate(raw.results[0]);
+    const evidence = collectRetainedTypographyEvidence(raw.results, collectFullTreeInventory(raw.results));
+    assert.ok(!evidence.paintMaskDifferences.some((entry) => entry.element === 'eyebrow'));
+    assert.ok(evidence.differences.some((entry) => entry.element === 'eyebrow' && entry.attribution === 'unresolved'));
+  }
 });
 
 test('full-tree state provenance survives pooling and legacy captures stay incomplete', () => {

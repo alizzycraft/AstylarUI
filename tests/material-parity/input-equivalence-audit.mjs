@@ -91,7 +91,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
         supplementalOverlays.missing.length === 0 && supplementalOverlays.errors.length === 0 && supplementalOverlays.mismatches.length === 0 &&
         supplementalSlider.missing.length === 0 && supplementalSlider.errors.length === 0 && supplementalSlider.mismatches.length === 0 &&
         elementInventory.gaps.length === 0 && elementInventory.resolvedStyleGaps.length === 0 && elementInventory.stateStyleGaps.length === 0 && elementInventory.errors.length === 0 &&
-        retainedTypography.gaps.length === 0 && retainedTypography.differences.length === 0 &&
+        retainedTypography.gaps.length === 0 && retainedTypography.differences.length === 0 && retainedTypography.paintMaskDifferences.length === 0 &&
         coverage.presenceDifferences.length === 0 &&
         sourceFindings.every((entry) => entry.detected && ['equivalent-representation', 'legitimate-public-api-structure'].includes(entry.classification)) &&
         structures.every((entry) => entry.classification === 'legitimate-public-api-structure') &&
@@ -137,7 +137,9 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
   if (report.elementInventory.errors.length > 0) errors.push(`${report.elementInventory.errors.length} full-tree collection errors`);
   if (report.retainedTypography?.schemaVersion !== 1) errors.push('missing retained typography stage report');
   if (requireComplete && report.retainedTypography?.gaps.length > 0) errors.push(`${report.retainedTypography.gaps.length} retained typography mappings or stage fields require review`);
-  if (requireComplete && report.retainedTypography?.differences.length > 0) errors.push(`${report.retainedTypography.differences.length} retained typography differences require attribution`);
+  const unresolvedTypography = report.retainedTypography?.differences.filter((entry) =>
+    entry.attribution !== 'reviewed-heading-mask' || entry.classification !== 'parity-harness-defect' || !entry.reviewEvidence) ?? [];
+  if (requireComplete && unresolvedTypography.length > 0) errors.push(`${unresolvedTypography.length} retained typography differences require attribution`);
   if (requireComplete && report.supplementalBehavior.missing.length > 0) errors.push(`${report.supplementalBehavior.missing.length} supplemental behavior cases are missing`);
   if (report.supplementalBehavior.errors.length > 0) errors.push(`${report.supplementalBehavior.errors.length} supplemental behavior collection errors`);
   if (requireComplete && report.supplementalOverlays.missing.length > 0) errors.push(`${report.supplementalOverlays.missing.length} supplemental overlay cases are missing`);
@@ -168,6 +170,8 @@ export function renderMaterialInputAuditMarkdown(report) {
     `Full-element evidence: ${report.elementInventory.cases.length} captured case sides, ${report.elementInventory.variants.length} tree variants; ${report.elementInventory.gaps.length} missing case sides, ${report.elementInventory.resolvedStyleGaps.length} elements without resolved styles, ${report.elementInventory.stateStyleGaps.length} state cases without effective style provenance, and ${report.elementInventory.errors.length} collection errors. Inventory presence does not establish input equivalence.`,
     '',
     `Retained typography: ${report.retainedTypography.comparisons.length} directly mapped text-node observations; ${report.retainedTypography.gaps.length} mapping/stage gaps and ${report.retainedTypography.differences.length} unequal retained-property observations. The registry stage is reported separately from declarations and is not proof of current pseudo-state glyph paint.`,
+    '',
+    `Heading coverage: ${report.retainedTypography.reviewedMappings.length} explicit template-to-SiteData identity mappings; ${report.retainedTypography.paintMaskDifferences.length} captured benchmark paint-mask discrepancies. HTML hides headings with opacity zero while the candidate uses surface-colored ink; the benchmark cannot establish visible heading paint parity.`,
     '',
     `Supplemental picker behavior: ${report.supplementalBehavior.cases.length}/6 cases captured; ${report.supplementalBehavior.missing.length} missing and ${report.supplementalBehavior.mismatches.length} observed mismatches. These cases cover pointer/keyboard commits and previous/next month navigation omitted by the maintained matrix. Classified behavioral failures remain evidence; they are not counted as successful parity.`,
     '',
@@ -620,8 +624,57 @@ const retainedTypographyProperties = Object.freeze([
   'wordSpacing', 'textAlign', 'textTransform', 'textDecoration', 'color',
 ]);
 
+export function reviewedHeadingMappings(referenceTree, astylarTree) {
+  const hasClass = (node, name) => String(node.attributes?.class ?? '').split(/\s+/).includes(name);
+  const referencePages = referenceTree.nodes.filter((node) => node.parent === null && node.type === 'main' && hasClass(node, 'frame'));
+  const candidatePages = astylarTree.nodes.filter((node) => node.authored?.id === 'page' && node.authored.type === 'main' && node.parent === 'root');
+  if (referencePages.length !== 1 || candidatePages.length !== 1) return [];
+  const pairs = [];
+  for (const [id, tag] of [['eyebrow', 'p'], ['title', 'h1']]) {
+    const referenceNodes = referenceTree.nodes.filter((node) => node.parent === referencePages[0].key && node.type === tag &&
+      (id !== 'eyebrow' || hasClass(node, 'eyebrow')));
+    const candidateNodes = astylarTree.nodes.filter((node) => node.authored?.id === id);
+    if (referenceNodes.length !== 1 || candidateNodes.length !== 1) continue;
+    const ref = referenceNodes[0], ast = candidateNodes[0];
+    if (ref.attributes?.id || ast.authored.type !== tag || ast.parent !== candidatePages[0].key ||
+        !ref.ownText?.trim() || ref.ownText.trim() !== ast.authored.textContent?.trim()) continue;
+    // A conflicting authored reference ID must not be hidden by an alias.
+    if (referenceTree.nodes.some((node) => node.attributes?.id === id)) continue;
+    pairs.push({ kind: 'reviewed-showcase-heading', element: id, referenceNode: ref.key, astylarNode: ast.key,
+      referencePage: referencePages[0].key, astylarPage: candidatePages[0].key,
+      justification: 'The reference template authors one direct main.frame > p.eyebrow and one direct main.frame > h1; SiteData authors the corresponding p#eyebrow and h1#title directly in main#page. Matching unique parent/tag/identity and direct text establishes node correspondence only. Styles, opacity, color, offsets and generated content are not accepted by this mapping.' });
+  }
+  return pairs;
+}
+
+function reviewedHeadingMask(mapping, ref, styles, astylarTree, inventory) {
+  if (!mapping || Number(styles.reference.opacity) !== 0 || Number(styles.normal.opacity) !== 1 || Number(styles.effective.opacity) !== 1) return;
+  const referenceRule = ref.rules.map((index) => inventory.rules[index]).find((rule) =>
+    rule?.side === 'reference' && rule.value.active === true &&
+    rule.value.declarations?.opacity?.value === '0' && /\.benchmark\b/.test(rule.value.selector) &&
+    /(?:\.eyebrow|h1)/.test(rule.value.selector));
+  const candidateRules = astylarTree.rules.map((index) => inventory.rules[index]).filter((rule) => rule?.side === 'astylar');
+  const candidateRule = candidateRules.find((rule) => rule.value.selector === `#${mapping.element}` &&
+    normalizeValue('color', rule.value.color) === styles.retained.color);
+  const pageRule = candidateRules.find((rule) => rule.value.selector === '#page' &&
+    normalizeValue('background', rule.value.background) === styles.retained.color);
+  const page = astylarTree.nodes.find((node) => node.key === mapping.astylarPage);
+  const pageStyle = inventory.styles[page?.interactionStyle];
+  if (!referenceRule || !candidateRule || !pageRule || styles.retained.color === undefined ||
+      styles.normal.color !== styles.retained.color || styles.effective.color !== styles.retained.color ||
+      pageStyle?.side !== 'astylar' || canonicalStyle(pageStyle.value).backgroundColor !== styles.retained.color) return;
+  return {
+    classification: 'parity-harness-defect', attribution: 'reviewed-heading-mask',
+    recommendedOwner: 'showcase benchmark heading-paint masking',
+    justification: 'Benchmark HTML explicitly sets heading opacity to zero; the candidate leaves opacity at one and explicitly colors the glyphs to match its page background. These are unequal paint inputs and neither can establish visible heading raster parity. Shared heading offsets are a separate reviewed input, not justification for this masking.',
+    reviewEvidence: { referenceRule: referenceRule.value, candidateRule: candidateRule.value, pageRule: pageRule.value,
+      referenceOpacity: styles.reference.opacity, candidateOpacity: styles.effective.opacity,
+      referenceColor: styles.reference.color, candidateColor: styles.retained.color },
+  };
+}
+
 export function collectRetainedTypographyEvidence(cases, inventory) {
-  const comparisons = [], differences = [], gaps = [];
+  const comparisons = [], differences = [], gaps = [], paintMaskDifferences = [], reviewedMappings = [];
   const mappings = new Map();
   for (const mapping of inventory.cases) {
     const key = JSON.stringify([mapping.case, mapping.side]);
@@ -656,16 +709,24 @@ export function collectRetainedTypographyEvidence(cases, inventory) {
     };
     const referenceNodes = nodesById(referenceTree.nodes, (node) => node.attributes?.id);
     const astylarNodes = nodesById(astylarTree.nodes, (node) => node.authored?.id);
+    const headings = reviewedHeadingMappings(referenceTree, astylarTree);
+    const headingById = new Map(headings.map((mapping) => [mapping.element, mapping]));
+    const mappedReferenceKeys = new Set(headings.map((mapping) => mapping.referenceNode));
+    for (const mapping of headings) {
+      referenceNodes.set(mapping.element, [referenceTree.nodes.find((node) => node.key === mapping.referenceNode)]);
+      reviewedMappings.push({ case: key, ...mapping });
+    }
     const ids = new Set([
       ...referenceTree.nodes.filter((node) => node.ownText?.trim()).map((node) => node.attributes?.id),
       ...astylarTree.nodes.filter((node) => node.authored?.textContent?.trim()).map((node) => node.authored?.id),
     ]);
     // Anonymous/reference-wrapper mappings remain in the full tree; do not
     // fabricate text correspondences from matching strings or descendant order.
-    if (ids.delete(undefined)) gap(key, undefined, 'own-text nodes without an explicit shared ID require structural mapping', {
-      referenceNodes: referenceTree.nodes.filter((node) => node.ownText?.trim() && !node.attributes?.id).map((node) => node.key),
-      astylarNodes: astylarTree.nodes.filter((node) => node.authored?.textContent?.trim() && !node.authored?.id).map((node) => node.key),
-    });
+    ids.delete(undefined);
+    const anonymousReference = referenceTree.nodes.filter((node) => node.ownText?.trim() && !node.attributes?.id && !mappedReferenceKeys.has(node.key)).map((node) => node.key);
+    const anonymousAstylar = astylarTree.nodes.filter((node) => node.authored?.textContent?.trim() && !node.authored?.id).map((node) => node.key);
+    if (anonymousReference.length || anonymousAstylar.length) gap(key, undefined, 'own-text nodes without an explicit shared ID require structural mapping',
+      { referenceNodes: anonymousReference, astylarNodes: anonymousAstylar });
     for (const id of ids) {
       const refNodes = referenceNodes.get(id) ?? [], astNodes = astylarNodes.get(id) ?? [];
       if (refNodes.length !== 1 || astNodes.length !== 1) {
@@ -688,8 +749,12 @@ export function collectRetainedTypographyEvidence(cases, inventory) {
         gap(key, id, 'missing or wrongly attributed pooled typography style'); continue;
       }
       const styles = Object.fromEntries(Object.entries(raw).map(([stage, style]) => [stage, canonicalStyle(style)]));
+      const headingMapping = headingById.get(id);
+      const headingMask = reviewedHeadingMask(headingMapping, ref, styles, astylarTree, inventory);
+      if (headingMask) paintMaskDifferences.push({ case: key, element: id, referenceNode: ref.key, astylarNode: ast.key, ...headingMask });
       const comparison = { case: key, family: entry.family, element: id, text: refText,
         referenceNode: ref.key, astylarNode: ast.key, source: 'core-text-registry',
+        mapping: headingMapping ?? { kind: 'shared-id' },
         revision: astylarMappings[0].resolvedStyleRevision, state: entry.state ?? 'static',
         currentPseudoStatePaintVerified: false, properties: {} };
       for (const property of retainedTypographyProperties) {
@@ -702,15 +767,17 @@ export function collectRetainedTypographyEvidence(cases, inventory) {
             referenceNode: ref.key, astylarNode: ast.key, source: comparison.source, revision: comparison.revision,
             classification: 'parity-harness-defect', attribution: 'unresolved',
             recommendedOwner: 'input audit authored typography and core registry-stage attribution',
-            justification: 'Browser computed and retained core text properties differ on directly mapped own-text nodes. Trace authored rules and resolution before assigning authoring or core fault; this is not proof of current pseudo-state paint.' });
+            justification: 'Browser computed and retained core text properties differ on directly mapped own-text nodes. Trace authored rules and resolution before assigning authoring or core fault; this is not proof of current pseudo-state paint.',
+            ...(property === 'color' && headingMask ? headingMask : {}),
+          });
         }
       }
       comparisons.push(comparison);
     }
   }
   return { schemaVersion: 1,
-    scope: 'Direct own-text nodes joined only by unique shared authored ID and identical trimmed text. All eleven typography properties retain browser computed, core normal/effective declarations, and core retained-text values separately. Missing mappings/fields and unequal retained values remain explicit; no inheritance or font fallback is reconstructed.',
-    comparisons, differences, gaps };
+    scope: 'Direct own-text nodes joined by unique shared authored ID or explicit reviewed heading identity, with identical trimmed text. All eleven typography properties retain browser computed, core normal/effective declarations, and core retained-text values separately. Missing mappings/fields and unequal retained values remain explicit; no inheritance or font fallback is reconstructed. Reviewed mappings establish correspondence, not style equivalence.',
+    comparisons, differences, gaps, paintMaskDifferences, reviewedMappings };
 }
 
 export function collectFullTreeInventory(cases, { root = process.cwd() } = {}) {
@@ -1050,7 +1117,8 @@ function proof(root, file, expression, status, description) {
 
 function implementationPlan() {
   return [
-    { priority: 0, rootCause: 'Diagnostic declarations are not fully resolved typography', action: 'Complete trustworthy input-stage evidence before accepting the audit. The inherited-typography reduction must expose the authoritative core pre-projection font size and line height, with provenance separate from authored declarations and projected geometry. Do not add a competing inheritance algorithm to the showcase; preserve hidden-node, pseudo-state and revision evidence, and recapture affected comparisons once the owning instrumentation is corrected.' },
+    { priority: 0, rootCause: 'Diagnostic declarations are not fully resolved typography', action: 'Complete trustworthy input-stage coverage before accepting the audit. The existing core retained-text stage and inherited-typography reduction now expose font size and line height independently of declarations; preserve that separation and extend missing control/plugin/anonymous-text mappings and current pseudo-state paint provenance. Do not add a competing inheritance algorithm to the showcase or infer resolved values from projected geometry.' },
+    { priority: .5, rootCause: 'Benchmark paint masking hides visible heading coverage', action: 'Preserve the captured baseline but restore visible, equivalent heading inputs in the benchmark before claiming complete paint parity. HTML opacity-zero masking and candidate surface-colored ink are unequal and predate the audit. Test the actual unmasked theme/responsive/DPR inputs, retain resulting failures, and reduce them at the owning core subsystem rather than changing heading colors, opacity, offsets or sizes to recover a screenshot score.' },
     { priority: 1, rootCause: 'Rendered output feeds subsequent layout', action: 'Replace connectedOverlayTop mesh projection with a public read-only query of the authoritative core CSS layout boxes. Verify nested transforms, scroll, resize, DPR, and first-open/update cycles. Diagnostic projection may measure output but must never determine authored input.' },
     { priority: 2, rootCause: 'Range fixture changes reachable values', action: 'Restore the reference 0..100 range and step=5 with inter-thumb constraints. Exercise start=60/end=80 and start=20/end=40, drag both directions across the midpoint, and compare keyboard steps. Remove fixed half-domain clamping; reduce any resulting core interaction failure before implementation.' },
     { priority: 3, rootCause: 'Used-height constraints are replaced by provisional or intrinsic height', action: 'Fix both confirmed general rules: empty blocks must not retain parent height, and auto-height absolute text boxes with top/bottom insets must use the remaining containing-block height. Preserve positioned size ownership through block/flex intrinsic resizing. Keep the divider, literal grid-list and plain opposing-inset reductions unchanged; extend padded/bordered/min-max/nested/resize cases before removing fixture flow substitutions.' },

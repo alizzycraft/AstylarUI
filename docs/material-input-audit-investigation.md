@@ -11,6 +11,52 @@ Argument validation rejects unknown, empty, and repeated options (25/25 audit
 tests pass). A missing selected report fails rather than falling back to older
 evidence; the new run has not yet produced its final report.
 
+## Benchmark heading masking and explicit identity mapping (2026-09-12)
+
+The full trees exposed an additional benchmark defect: the HTML reference uses
+`.benchmark > .eyebrow, .benchmark > h1 { opacity: 0 }`; AstylarUI instead sets
+the same headings' `color` to `theme.surface`, leaving opacity at 1. These are
+unequal paint inputs. Neither establishes visible heading text parity. This is
+separate from the already reviewed matching heading offsets: equal positioning
+declarations do not justify suppressing their paint.
+
+History confirms both masking paths were already present in the initial showcase
+commit `2f44011`. Commit `ee42cb3` changed heading flow but retained the masks.
+The source audit now records both paths as parity-harness defects, with a
+follow-up priority to restore honest visible-input coverage. This audit does not
+change the reference, mask additional content, or retune the candidate.
+
+The report can now map the reference's unnamed headings to `p#eyebrow` and
+`h1#title` through a narrowly reviewed template identity rule. It requires one
+outer `main.frame`, one authored `main#page`, unique direct children of the
+expected tag/class, identical direct text, and no conflicting IDs. It preserves
+the original nodes and style records. The mapping establishes correspondence
+only: it does not accept color, opacity, sizing, offset or generated-content
+differences. Other anonymous descendants remain review gaps.
+
+The paint-mask classification additionally requires the active reference opacity
+rule, the explicit candidate heading color rule, the explicit page background
+rule, and matching core declaration/retained values. A changed rule, missing
+evidence, duplicate identity, different parent/tag/text, or a different page
+background cannot receive that attribution. The report keeps exact node paths,
+rules, values, classification, and owner for each occurrence.
+
+Read-only analysis of the 436 completed static checkpoints confirms all **872**
+heading mappings and **872** unequal paint-mask observations. Direct retained
+text comparisons increase from 302 to 1,174. Previously unmatched shared-ID
+observations decrease from 1,136 to 264, and cases with remaining anonymous text
+decrease from 436 to 216. The larger reviewed text scope exposes 3,159 unequal
+retained-property observations: 872 heading colors are attributed to the masking
+path; 2,287 other observations still require normalization or source attribution.
+These are not counts of confirmed core defects. The 84 differing-own-text and
+18 absent-retained-entry observations remain open. All full-tree hashes passed,
+and all 43 source findings were detected.
+
+Verification: `node --test tests/material-parity/*.spec.mjs` passed **60/60**,
+including three new positive/negative identity and masking tests. The unfiltered
+matrix continues with its unchanged capture modules and served bundle. Final
+coverage, classification, and the checked-in full reports remain incomplete.
+
 ## Explicit font-weight aliases (2026-09-12)
 
 The retained-stage comparison exposed 230 observations of browser `400` versus
