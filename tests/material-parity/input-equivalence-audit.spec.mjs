@@ -115,6 +115,27 @@ test('keeps used-pixel versus unresolved-expression comparisons open as harness 
   }
 });
 
+test('retains unequal flex and elliptical radius shorthands instead of deleting evidence', () => {
+  const audit = buildMaterialInputAudit(parityReport({ flex: '1 1 0%', borderRadius: '8px / 4px' },
+    { flex: '0 0 auto', borderRadius: '8px / 6px' }));
+  for (const property of ['flex', 'borderRadius']) {
+    const difference = audit.discrepancies.find((entry) => entry.property === property);
+    assert.ok(difference, `${property} difference must survive normalization`);
+    assert.equal(difference.classification, 'parity-harness-defect');
+    assert.match(difference.justification, /not been safely expanded/);
+  }
+});
+
+test('normalizes supported shorthands on either side and preserves zero percentage basis', () => {
+  const audit = buildMaterialInputAudit(parityReport({ padding: '0 24px', flexBasis: '0%' },
+    { paddingTop: '0px', paddingRight: '24px', paddingBottom: '0px', paddingLeft: '24px', flexBasis: '0px' }));
+  assert.ok(!audit.discrepancies.some(({ property }) => property.startsWith('padding')));
+  const basis = audit.discrepancies.find(({ property }) => property === 'flexBasis');
+  assert.ok(basis);
+  assert.equal(basis.reference, '0%');
+  assert.equal(basis.astylar, '0');
+});
+
 test('rejects empty evidence and duplicate records rather than treating case counts as coverage', () => {
   const report = parityReport({}, {});
   report.results.push(report.results[0]);

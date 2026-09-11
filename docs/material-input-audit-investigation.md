@@ -69,6 +69,23 @@ either a broad core rewrite or retention of fixture compensation.
 
 ## Outstanding acceptance work
 
+Audit normalization correction (2026-09-11): the old canonicalizer unconditionally
+deleted shorthands, including `flex` without expanding it. It could therefore
+hide unequal declarations. Supported box/gap/overflow shorthands now expand on
+both sides; unexpanded flex and elliptical radius declarations remain explicit
+harness-normalization gaps. Zero percentages are no longer collapsed to absolute
+zero, preserving potentially different flex-basis semantics. Regression tests
+cover differing flex/radius declarations, symmetric shorthand expansion, and
+zero-percentage retention. `node --test tests/material-parity/input-equivalence-audit.spec.mjs`
+passed 14/14; `npm run parity:harness:check` passed 52/52. This changes report
+interpretation only, not captured inputs or fixture output.
+
+The superseded collector run was explicitly stopped after confirming its live
+process. A fresh unfiltered `--enforce --skip-build` run using the separate audit
+build is now collecting complete trees; the previously completed baseline remains
+in `artifacts/material-parity/full-audit-base.json`. Completion of the fresh run
+and final report review are still required.
+
 Collector end-to-end smoke (2026-09-11): a separate production build at
 `examples/material-showcase/dist/material-showcase-audit` succeeded. Using
 `ASTYLAR_MATERIAL_BROWSER_ROOT=examples/material-showcase/dist/material-showcase-audit/browser`,

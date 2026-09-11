@@ -159,8 +159,8 @@ function collectStyleDiscrepancies(cases) {
   for (const benchmarkCase of cases) {
     const key = caseKey(benchmarkCase);
     for (const input of benchmarkCase.styleInputs ?? []) {
-      const reference = canonicalStyle(input.reference ?? {}, 'reference');
-      const astylar = canonicalStyle(input.astylar ?? {}, 'astylar');
+      const reference = canonicalStyle(input.reference ?? {});
+      const astylar = canonicalStyle(input.astylar ?? {});
       const properties = new Set([...Object.keys(reference), ...Object.keys(astylar)]);
       for (const property of [...properties].sort()) {
         const referenceValue = reference[property];
@@ -200,6 +200,13 @@ function collectStyleDiscrepancies(cases) {
 }
 
 function classifyStyleDifference(property, reference, astylar, referenceStyle, astylarStyle) {
+  if (['flex', 'padding', 'margin', 'borderWidth', 'borderStyle', 'borderColor', 'borderRadius', 'gap', 'overflow'].includes(property)) {
+    return {
+      classification: 'parity-harness-defect',
+      justification: `The ${property} shorthand has not been safely expanded into comparable longhands. Retain the declaration (${reference ?? 'omitted'} versus ${astylar ?? 'omitted'}) and resolve its CSS semantics before assigning equivalence or a fixture/core defect.`,
+      owner: 'input audit shorthand canonicalization',
+    };
+  }
   if (astylar === undefined && implicitReferenceValues[property]?.includes(reference)) {
     return {
       classification: 'equivalent-representation',
@@ -248,33 +255,31 @@ function classifyStyleDifference(property, reference, astylar, referenceStyle, a
   };
 }
 
-function canonicalStyle(style, side) {
+function canonicalStyle(style) {
   const result = Object.fromEntries(Object.entries(style).map(([property, value]) =>
     [property === 'background' ? 'backgroundColor' : property === 'wordWrap' ? 'overflowWrap' : property, normalizeValue(property, value)]));
-  if (side === 'astylar') {
-    expandQuad(result, 'padding', ['paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft']);
-    expandQuad(result, 'margin', ['marginTop', 'marginRight', 'marginBottom', 'marginLeft']);
-    expandQuad(result, 'borderWidth', ['borderTopWidth', 'borderRightWidth', 'borderBottomWidth', 'borderLeftWidth']);
-    expandQuad(result, 'borderStyle', ['borderTopStyle', 'borderRightStyle', 'borderBottomStyle', 'borderLeftStyle']);
-    expandQuad(result, 'borderColor', ['borderTopColor', 'borderRightColor', 'borderBottomColor', 'borderLeftColor']);
-    expandQuad(result, 'borderRadius', ['borderTopLeftRadius', 'borderTopRightRadius', 'borderBottomRightRadius', 'borderBottomLeftRadius']);
-    expandPair(result, 'gap', ['rowGap', 'columnGap']);
-    expandPair(result, 'overflow', ['overflowX', 'overflowY']);
-  }
-  for (const shorthand of ['padding', 'margin', 'borderWidth', 'borderStyle', 'borderColor', 'borderRadius', 'gap', 'overflow', 'flex']) delete result[shorthand];
+  expandQuad(result, 'padding', ['paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft']);
+  expandQuad(result, 'margin', ['marginTop', 'marginRight', 'marginBottom', 'marginLeft']);
+  expandQuad(result, 'borderWidth', ['borderTopWidth', 'borderRightWidth', 'borderBottomWidth', 'borderLeftWidth']);
+  expandQuad(result, 'borderStyle', ['borderTopStyle', 'borderRightStyle', 'borderBottomStyle', 'borderLeftStyle']);
+  expandQuad(result, 'borderColor', ['borderTopColor', 'borderRightColor', 'borderBottomColor', 'borderLeftColor']);
+  expandQuad(result, 'borderRadius', ['borderTopLeftRadius', 'borderTopRightRadius', 'borderBottomRightRadius', 'borderBottomLeftRadius']);
+  expandPair(result, 'gap', ['rowGap', 'columnGap']);
+  expandPair(result, 'overflow', ['overflowX', 'overflowY']);
   return result;
 }
 
 function expandQuad(style, shorthand, longhands) {
   if (style[shorthand] === undefined) return;
   const parts = splitCssTerms(style[shorthand]);
-  if (parts.length < 1 || parts.length > 4) return;
+  if (parts.length < 1 || parts.length > 4 || parts.some((part) => part.includes('/'))) return;
   const values = parts.length === 1 ? [parts[0], parts[0], parts[0], parts[0]]
     : parts.length === 2 ? [parts[0], parts[1], parts[0], parts[1]]
       : parts.length === 3 ? [parts[0], parts[1], parts[2], parts[1]] : parts;
   for (let index = 0; index < longhands.length; index += 1) {
     if (style[longhands[index]] === undefined) style[longhands[index]] = values[index];
   }
+  delete style[shorthand];
 }
 
 function expandPair(style, shorthand, longhands) {
@@ -283,6 +288,7 @@ function expandPair(style, shorthand, longhands) {
   if (parts.length === 0 || parts.length > 2) return;
   if (style[longhands[0]] === undefined) style[longhands[0]] = parts[0];
   if (style[longhands[1]] === undefined) style[longhands[1]] = parts[1] ?? parts[0];
+  delete style[shorthand];
 }
 
 function splitCssTerms(value) {
@@ -309,7 +315,9 @@ function normalizeValue(property, value) {
   if (color) return color;
   normalized = normalized.replace(/(^|[ (,:])(-?\d*\.?\d+)px(?=$|[ ),])/g, (_match, prefix, number) =>
     `${prefix}${formatNumber(Number(number))}px`);
-  normalized = normalized.replace(/(^|[ (,:])-?0(?:\.0+)?(?:px|em|rem|%)?(?=$|[ ),])/g, '$10');
+  // A zero percentage can retain a dependency on a definite containing size
+  // (notably flex-basis). It is not universally equivalent to an absolute zero.
+  normalized = normalized.replace(/(^|[ (,:])-?0(?:\.0+)?(?:px|em|rem)?(?=$|[ ),])/g, '$10');
   return normalized.toLowerCase().replace(/,\s+/g, ',');
 }
 
