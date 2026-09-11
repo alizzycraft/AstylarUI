@@ -1,13 +1,13 @@
 import { provideZonelessChangeDetection } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { Matrix, Vector3 } from '@babylonjs/core/Maths/math.vector';
-import { Astylar, type DOMElement, type SiteData } from 'astylarui';
+import { Astylar, provideAstylar, type DOMElement, type SiteData } from 'astylarui';
 
 // Each browser declaration is generated from the very same rule object sent
 // to Astylar. These reductions intentionally contain no Material component,
 // measured height table, DPR correction, or duplicate position calculation.
 describe('Material audit: equivalent CSS input reductions', () => {
-  const cases: Array<{ name: string; site: SiteData; ids: string[]; resolved?: Array<{ id: string; properties: string[]; stage?: 'retainedText' }> }> = [
+  const cases: Array<{ name: string; site: SiteData; ids: string[]; loadedCss?: boolean; resolved?: Array<{ id: string; properties: string[]; stage?: 'retainedText' }> }> = [
     ...(['block', 'flex'] as const).map((display) => ({
       name: `opposing absolute insets determine auto size for a text-bearing ${display} box`,
       site: {
@@ -170,9 +170,28 @@ describe('Material audit: equivalent CSS input reductions', () => {
     },
   ];
 
+  // Exercise the existing core-owned CSS resolver with the original expressions,
+  // not fixture-side arithmetic or browser measurements copied into SiteData.
+  // Keep the direct-style limitation cases above, including their failures.
+  for (const entry of cases.filter((candidate) => candidate.name.endsWith('original calc expressions'))) {
+    cases.push({
+      ...entry,
+      name: `${entry.name} through loaded document CSS`,
+      loadedCss: true,
+      resolved: [
+        { id: 'tile-list', properties: ['width', 'height'] },
+        { id: 'tile-one', properties: ['width', 'height', 'left'] },
+        { id: 'tile-two', properties: ['width', 'height', 'left'] },
+      ],
+    });
+  }
+
   for (const entry of cases) {
     it(entry.name, async () => {
-      TestBed.configureTestingModule({ providers: [provideZonelessChangeDetection()] });
+      TestBed.configureTestingModule({ providers: [
+        provideZonelessChangeDetection(),
+        ...(entry.loadedCss ? [provideAstylar({ css: { useDocumentStyles: true } })] : []),
+      ] });
       const iframe = document.createElement('iframe');
       iframe.style.cssText = 'width:640px;height:360px;border:0';
       const canvas = document.createElement('canvas');
@@ -185,9 +204,28 @@ describe('Material audit: equivalent CSS input reductions', () => {
         ...entry.site.styles,
       ];
       const css = doc.createElement('style');
-      css.textContent = rules.map(({ selector, ...declarations }) => `${selector}{${Object.entries(declarations)
+      const scope = 'material-input-loaded-proof';
+      const selectorFor = (selector: string) => entry.loadedCss
+        ? selector.split(',').map((part) => `${part.trim()}:where(.${scope})`).join(',')
+        : selector;
+      css.textContent = rules.map(({ selector, ...declarations }) => `${selectorFor(selector)}{${Object.entries(declarations)
         .map(([property, value]) => `${property.replace(/[A-Z]/g, (letter) => '-' + letter.toLowerCase())}:${value}`).join(';')}}`).join('\n');
       doc.head.append(css);
+      const loadedStyle = entry.loadedCss ? document.createElement('style') : undefined;
+      if (loadedStyle) {
+        // Both realms receive exactly the same scoped CSS. No wrapper is added,
+        // and the host's Karma controls/canvas are not matched by the reset.
+        loadedStyle.textContent = css.textContent;
+        document.head.append(loadedStyle);
+      }
+      const scopeChildren = (children: readonly DOMElement[]): DOMElement[] => children.map((child) => ({
+        ...child,
+        class: [child.class, scope].filter(Boolean).join(' '),
+        ...(child.children ? { children: scopeChildren(child.children) } : {}),
+      }));
+      const site: SiteData = entry.loadedCss
+        ? { ...entry.site, root: { ...entry.site.root, children: scopeChildren(entry.site.root.children ?? []) }, styles: [] }
+        : { ...entry.site, styles: rules };
       const append = (parent: HTMLElement, children: readonly DOMElement[]) => {
         for (const child of children) {
           const element = doc.createElement(child.type);
@@ -206,8 +244,8 @@ describe('Material audit: equivalent CSS input reductions', () => {
           append(element, child.children ?? []);
         }
       };
-      append(doc.body, entry.site.root.children ?? []);
-      const surface = TestBed.inject(Astylar).mount(canvas, { ...entry.site, styles: rules }, { diagnostics: { logLevel: 'silent' } });
+      append(doc.body, site.root.children ?? []);
+      const surface = TestBed.inject(Astylar).mount(canvas, site, { diagnostics: { logLevel: 'silent' } });
       try {
         await surface.whenSettled();
         if (entry.resolved) {
@@ -247,6 +285,7 @@ describe('Material audit: equivalent CSS input reductions', () => {
         }
       } finally {
         surface.dispose();
+        loadedStyle?.remove();
         iframe.remove();
         canvas.remove();
         TestBed.resetTestingModule();

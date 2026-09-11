@@ -51,6 +51,33 @@ No reference input, fixture style, case, acceptance threshold, or renderer behav
 changed in this increment. Fully resolved style coverage and substantive review
 of every material difference remain separate unfinished requirements.
 
+## Original expressions through core loaded CSS (2026-09-12)
+
+The grid-list reductions now also send the original `calc(80px)`,
+`calc(50% - 0.5px)` and `calc(50% + 0.5px)` declarations through the existing
+public `provideAstylar({css:{useDocumentStyles:true}})` path. Reference and host
+receive identical CSS, scoped to a class on the same authored elements without
+adding a layout wrapper. Candidate `SiteData.styles` is empty in these variants;
+no test-side expression evaluator or measured browser dimensions are injected.
+The temporary stylesheet is removed with the surface.
+
+At both 280px and 480px, public pre-projection `inspectResolvedStyles()` assertions
+match browser width/height/left for the list and both tiles. All three outer
+border boxes and the one-pixel gutter also match. Only the inner content bottoms
+fail: candidate 20px versus browser 80px. Thus the existing core expression path
+handles these specific expressions, while the downstream opposing-inset
+auto-height defect remains. This does not establish arbitrary function support,
+full Material loaded-style integration, text raster quality, or responsiveness
+beyond the two separately mounted widths. No fixture or core behavior changed.
+
+The same focused Chrome command below completed twice with **8 passed, 9 failed**
+across 17 cases. The original fifteen cases are retained unchanged in intent and
+assertions; the two added loaded-CSS cases retain their height failures rather
+than omitting inner content from measurement. All 48 Material harness tests pass
+(`node --test tests/material-parity/*.spec.mjs`); `git diff --check` passes.
+The generated proof inventory and implementation plan now separate
+this bounded resolution evidence from the still-required core height fix.
+
 ## Grid-list: expression boundary and positioned height (2026-09-11)
 
 Fresh static captures retain Material's actual `.mat-grid-list` block container
