@@ -577,12 +577,35 @@ function templateTypographyReport(family) {
     add('reference', 'r/0', 'r', 'span', 'mat-badge-content-472', 'mat-badge-content', '4');
     add('astylar', 'a', 'root', 'span', 'badge-primary', 'badge-anchor');
     add('astylar', 'a/0', 'a', 'span', 'badge-count', 'badge-bubble', '4');
+  } else if (family === 'sort') {
+    add('reference', 'r', null, 'div', 'sort-primary', 'mat-sort');
+    add('reference', 'r/t', 'r', 'div', 'sort-trigger', 'mat-sort-header');
+    add('reference', 'r/t/w', 'r/t', 'div', undefined, 'mat-sort-header-container');
+    add('reference', 'r/t/w/0', 'r/t/w', 'div', undefined, 'mat-sort-header-content', 'Sort by name');
+    add('astylar', 'a', 'root', 'div', 'sort-primary', 'sort-header');
+    add('astylar', 'a/t', 'a', 'div', 'sort-trigger', 'sort-trigger');
+    add('astylar', 'a/t/0', 'a/t', 'span', 'sort-label', undefined, 'Sort by name');
+  } else if (family === 'expansion') {
+    add('reference', 'r', null, 'mat-expansion-panel', 'expansion-primary', 'mat-expansion-panel');
+    add('reference', 'r/w', 'r', 'div', undefined, 'mat-expansion-panel-content-wrapper');
+    add('reference', 'r/w/c', 'r/w', 'div', 'cdk-accordion-child-93', 'mat-expansion-panel-content');
+    add('reference', 'r/w/c/b', 'r/w/c', 'div', undefined, 'mat-expansion-panel-body');
+    add('reference', 'r/w/c/b/0', 'r/w/c/b', 'p', 'expansion-content', undefined, 'Additional options.');
+    add('astylar', 'a', 'root', 'article', 'expansion-shell', 'expansion-panel');
+    add('astylar', 'a/c', 'a', 'p', 'expansion-content');
+    add('astylar', 'a/c/0', 'a/c', 'span', 'expansion-content-label', 'expansion-content-label', 'Additional options.');
+  } else if (family === 'sidenav') {
+    add('reference', 'r', null, 'mat-sidenav-container', 'sidenav-primary', 'mat-sidenav-container');
+    add('reference', 'r/n', 'r', 'mat-sidenav', 'sidenav-nav', 'mat-sidenav');
+    add('reference', 'r/n/0', 'r/n', 'div', undefined, 'mat-drawer-inner-container', 'Navigation');
+    add('astylar', 'a', 'root', 'div', 'sidenav-primary', 'sidenav-container');
+    add('astylar', 'a/n', 'a', 'aside', 'sidenav-nav', 'sidenav', 'Navigation');
   }
   return raw;
 }
 
 test('reviewed template text paths close only identity gaps and retain unequal typography', () => {
-  for (const [family, count] of [['tree', 3], ['grid-list', 2], ['badge', 1]]) {
+  for (const [family, count] of [['tree', 3], ['grid-list', 2], ['badge', 1], ['sort', 1], ['expansion', 1], ['sidenav', 1]]) {
     const raw = templateTypographyReport(family);
     const before = structuredClone(raw);
     const report = buildMaterialInputAudit(raw);
@@ -603,19 +626,25 @@ test('template identity rejects path, uniqueness, text, child and ID conflicts i
     (ref, _ast, leaf) => { leaf.ownText = 'Different'; },
     (ref, _ast, leaf) => { leaf.parent = 'other'; },
     (ref, _ast, leaf) => { leaf.type = 'button'; },
-    (ref, _ast, leaf) => { leaf.attributes.class = 'unrelated'; },
+    (ref, _ast, leaf) => {
+      if (leaf.attributes.class) leaf.attributes.class = 'unrelated';
+      else ref.nodes.find((node) => node.key === leaf.parent).attributes.class = 'unrelated';
+    },
     (ref, _ast, leaf) => { ref.nodes.push({ ...leaf, key: 'duplicate' }); },
     (ref, _ast, leaf, target) => { ref.nodes.push({ key: 'conflict', attributes: { id: target.authored.id } }); },
     (ref, _ast, leaf) => { ref.nodes.push({ key: 'child', parent: leaf.key }); },
     (_ref, ast, _leaf, target) => { target.parent = 'other'; },
     (_ref, ast, _leaf, target) => { target.authored.type = 'button'; },
-    (_ref, ast, _leaf, target) => { target.authored.class = 'unrelated'; },
+    (_ref, ast, _leaf, target) => {
+      if (target.authored.class) target.authored.class = 'unrelated';
+      else ast.nodes.find((node) => node.key === target.parent).authored.class = 'unrelated';
+    },
     (_ref, ast, _leaf, target) => { ast.nodes.push({ ...target, key: 'duplicate' }); },
     (_ref, ast, _leaf, target) => { ast.nodes.push({ key: 'child', parent: target.key }); },
     (ref) => { ref.nodes[0].attributes.id = 'other-anchor'; },
     (_ref, ast) => { ast.nodes[0].authored.id = 'other-anchor'; },
   ];
-  for (const family of ['tree', 'grid-list', 'badge']) {
+  for (const family of ['tree', 'grid-list', 'badge', 'sort', 'expansion', 'sidenav']) {
     for (const mutate of mutations) {
       const { reference, astylar } = templateTypographyReport(family).results[0].inputTrees;
       const mapping = reviewedTemplateTextMappings(family, reference, astylar)[0];
@@ -628,6 +657,21 @@ test('template identity rejects path, uniqueness, text, child and ID conflicts i
   reference.nodes[1].attributes.id = 'unrelated-472';
   assert.deepEqual(reviewedTemplateTextMappings('badge', reference, astylar), []);
   assert.deepEqual(reviewedTemplateTextMappings('unreviewed-family', reference, astylar), []);
+});
+
+test('same-ID wrapper aliases cannot hide their own text or unrelated competing IDs', () => {
+  for (const mutate of [
+    (ref) => { ref.nodes[1].ownText = 'Navigation'; },
+    (ref) => { ref.nodes[1].attributes.id = 'different'; ref.nodes.push({ key: 'elsewhere', attributes: { id: 'sidenav-nav' } }); },
+    (ref) => { ref.nodes.push({ ...ref.nodes[1], key: 'duplicate' }); },
+  ]) {
+    const { reference, astylar } = templateTypographyReport('sidenav').results[0].inputTrees;
+    mutate(reference);
+    assert.deepEqual(reviewedTemplateTextMappings('sidenav', reference, astylar), []);
+  }
+  const { reference, astylar } = templateTypographyReport('expansion').results[0].inputTrees;
+  reference.nodes[2].attributes.id = 'unrelated-93';
+  assert.deepEqual(reviewedTemplateTextMappings('expansion', reference, astylar), []);
 });
 
 function treeFontTypographyReport(size = '14.4px') {

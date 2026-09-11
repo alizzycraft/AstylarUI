@@ -11,6 +11,39 @@ Argument validation rejects unknown, empty, and repeated options (25/25 audit
 tests pass). A missing selected report fails rather than falling back to older
 evidence; the new run has not yet produced its final report.
 
+## Sort, expansion and sidenav wrapper text ownership (2026-09-12)
+
+Three more explicit paired-template paths now identify sort header content,
+expansion body content and sidenav navigation text. In particular, the reference
+`sidenav-nav` ID belongs to a wrapper whose generated inner div owns Navigation;
+the candidate aside owns the text itself. That alias is permitted only when the
+unique same-ID wrapper is on the reviewed path and has no direct text. An
+unrelated same-ID element, an extra text owner or a duplicate path is rejected.
+The generated expansion content ID is checked by its Material ID shape rather
+than a particular runtime counter.
+
+All 36 mappings succeed across the 436 static cases, but only 24 have retained
+core text evidence. The 12 closed expansion labels have no core text registry
+entry; their new mappings expose this fact instead of manufacturing typography
+from the authored styles. Hidden/clipped-state structure and rendering coverage
+still need a separate classification. No glyph-equivalence claim is made for
+these missing entries.
+
+The newly comparable sort/sidenav text adds 69 unequal properties: 36 for
+sidenav (tracking, alignment and color) and 33 for sort (tracking, alignment,
+six font-size and three color observations). These remain unresolved pending
+captured-rule attribution. Totals are now 1,270 retained comparisons, 980 reviewed
+mappings (including headings), 3,450 property differences with 2,506 unresolved,
+and 390 gaps: 180 anonymous-node case gaps, 156 missing/ambiguous IDs, 30 missing
+retained entries and 24 direct-text mismatches. These are static diagnostics,
+not acceptance of the still-running complete interaction matrix.
+
+`node --test tests/material-parity/*.spec.mjs` passes 69/69 tests. The existing
+changed-path/type/class/text and duplicate-ID controls now cover all six reviewed
+template families; new negative controls cover same-ID wrapper ownership and
+generated expansion IDs. No fixture inputs, renderer, capture module, served
+bundle or threshold changed.
+
 ## Reviewed tree, grid-list and badge text ownership (2026-09-12)
 
 The typography audit now follows explicit paired-template paths for tree item

@@ -679,6 +679,21 @@ export function reviewedTemplateTextMappings(family, referenceTree, astylarTree)
     reference: [['span', 'badge-primary', 'mat-badge'], ['span', /^mat-badge-content-\d+$/, 'mat-badge-content']],
     astylar: [['span', 'badge-primary', 'badge-anchor'], ['span', 'badge-count', 'badge-bubble']],
   }] : [];
+  if (family === 'sort') paths.push({
+    element: 'sort-label',
+    reference: [['div', 'sort-primary', 'mat-sort'], ['div', 'sort-trigger', 'mat-sort-header'], ['div', null, 'mat-sort-header-container'], ['div', null, 'mat-sort-header-content']],
+    astylar: [['div', 'sort-primary', 'sort-header'], ['div', 'sort-trigger', 'sort-trigger'], ['span', 'sort-label']],
+  });
+  if (family === 'expansion') paths.push({
+    element: 'expansion-content-label',
+    reference: [['mat-expansion-panel', 'expansion-primary', 'mat-expansion-panel'], ['div', null, 'mat-expansion-panel-content-wrapper'], ['div', /^cdk-accordion-child-\d+$/, 'mat-expansion-panel-content'], ['div', null, 'mat-expansion-panel-body'], ['p', 'expansion-content']],
+    astylar: [['article', 'expansion-shell', 'expansion-panel'], ['p', 'expansion-content'], ['span', 'expansion-content-label', 'expansion-content-label']],
+  });
+  if (family === 'sidenav') paths.push({
+    element: 'sidenav-nav',
+    reference: [['mat-sidenav-container', 'sidenav-primary', 'mat-sidenav-container'], ['mat-sidenav', 'sidenav-nav', 'mat-sidenav'], ['div', null, 'mat-drawer-inner-container']],
+    astylar: [['div', 'sidenav-primary', 'sidenav-container'], ['aside', 'sidenav-nav', 'sidenav']],
+  });
   const follow = (tree, side, steps) => {
     const data = (node) => side === 'reference' ? { ...node.attributes, type: node.type } : node.authored;
     let parent;
@@ -705,13 +720,18 @@ export function reviewedTemplateTextMappings(family, referenceTree, astylarTree)
     const astylar = follow(astylarTree, 'astylar', path.astylar);
     if (!reference || !astylar) continue;
     const ref = reference.at(-1), ast = astylar.at(-1);
+    const referenceAliasOwners = referenceTree.nodes.filter((node) => node.attributes?.id === path.element);
+    // A same-ID wrapper is not a competing text owner when it is on the
+    // reviewed path and has no own text (the sidenav's generated inner div).
+    const wrapperAlias = referenceAliasOwners.length === 1 && reference.slice(0, -1).includes(referenceAliasOwners[0]) &&
+      !referenceAliasOwners[0].ownText?.trim();
     if (!ref.ownText?.trim() || ref.ownText.trim() !== ast.authored.textContent?.trim() ||
-        referenceTree.nodes.some((node) => node.parent === ref.key || node.attributes?.id === path.element) ||
+        (referenceAliasOwners.length && !wrapperAlias) || referenceTree.nodes.some((node) => node.parent === ref.key) ||
         astylarTree.nodes.some((node) => node.parent === ast.key)) continue;
     pairs.push({ kind: 'reviewed-showcase-template-text', element: path.element,
       referenceNode: ref.key, astylarNode: ast.key,
       referencePath: reference.map((node) => node.key), astylarPath: astylar.map((node) => node.key),
-      justification: 'The paired reference.component.ts and astylar.component.ts templates identify this text through a unique component anchor and exact direct-child tag/ID/class path. Both terminal nodes have identical direct own-text and no element children. Generated badge IDs are checked by shape and uniqueness, not their unstable numeric suffix. This establishes text-owner identity only; wrapper, layout, typography, paint and interaction differences remain subject to separate comparison.' });
+      justification: 'The paired reference.component.ts and astylar.component.ts templates identify this text through a unique component anchor and exact direct-child tag/ID/class path. Both terminal nodes have identical direct own-text and no element children. Generated Material IDs are checked by shape and uniqueness, not their unstable numeric suffix. A same-ID reference wrapper is allowed only on that path with no own text. This establishes text-owner identity only; wrapper, layout, typography, paint and interaction differences remain subject to separate comparison.' });
   }
   return pairs;
 }
