@@ -714,16 +714,29 @@ export function reviewedTemplateTextMappings(family, referenceTree, astylarTree)
     reference: [['mat-sidenav-container', 'sidenav-primary', 'mat-sidenav-container'], ['mat-sidenav', 'sidenav-nav', 'mat-sidenav'], ['div', null, 'mat-drawer-inner-container']],
     astylar: [['div', 'sidenav-primary', 'sidenav-container'], ['aside', 'sidenav-nav', 'sidenav']],
   });
+  if (family === 'stepper') {
+    for (const [index, name] of ['details', 'review'].entries()) paths.push({
+      element: `step-${name}-badge`,
+      reference: [['mat-stepper', 'stepper-primary', 'mat-stepper-horizontal'], ['div', null, 'mat-horizontal-stepper-wrapper'], ['div', null, 'mat-horizontal-stepper-header-container'], ['mat-step-header', new RegExp(`^cdk-stepper-\\d+-label-${index}$`), 'mat-step-header'], ['div', null, 'mat-step-icon-state-number'], ['div', null, 'mat-step-icon-content'], ['span']],
+      astylar: [['div', 'stepper-primary', 'stepper'], ['div', 'stepper-head', 'stepper-head'], ['div', `step-${name}`, 'step-tab'], ['span', `step-${name}-badge`, 'step-badge']],
+    });
+    paths.push({
+      element: 'stepper-content',
+      reference: [['mat-stepper', 'stepper-primary', 'mat-stepper-horizontal'], ['div', null, 'mat-horizontal-stepper-wrapper'], ['div', null, 'mat-horizontal-content-container'], ['div', /^cdk-stepper-\d+-content-[01]$/, 'mat-horizontal-stepper-content-current'], ['span', null, null, { 'data-parity-id': 'stepper-content' }]],
+      astylar: [['div', 'stepper-primary', 'stepper'], ['div', 'stepper-content-container', 'stepper-content-container'], ['span', 'stepper-content']],
+    });
+  }
   const follow = (tree, side, steps) => {
     const data = (node) => side === 'reference' ? { ...node.attributes, type: node.type } : node.authored;
     let parent;
     const chain = [];
-    for (const [type, id, className] of steps) {
+    for (const [type, id, className, attributes] of steps) {
       const matches = tree.nodes.filter((node) => {
         const value = data(node);
         return value?.type === type && (!parent || node.parent === parent.key) &&
           (id instanceof RegExp ? id.test(value.id ?? '') : id ? value.id === id : !value.id) &&
-          (!className || String(value.class ?? '').split(/\s+/).includes(className));
+          (!className || String(value.class ?? '').split(/\s+/).includes(className)) &&
+          (!attributes || Object.entries(attributes).every(([key, expected]) => value[key] === expected));
       });
       if (matches.length !== 1) return;
       parent = matches[0];

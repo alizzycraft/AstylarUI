@@ -11,6 +11,28 @@ Argument validation rejects unknown, empty, and repeated options (25/25 audit
 tests pass). A missing selected report fails rather than falling back to older
 evidence; the new run has not yet produced its final report.
 
+## Stepper number and current-panel text ownership (2026-09-12)
+
+The reviewed text mapping now follows the exact Material step-header paths to
+the two numbered icons, and the current content panel's `data-parity-id` to its
+text leaf. It matches their candidate authored identities without changing either
+tree. Generated stepper IDs must have the expected index and unique path; direct
+text must agree. Completed/edit icons are not treated as numbered text. Hidden
+panels remain inventoried and unaccepted rather than being selected by text alone.
+
+Across the 436 static captures this adds 36 mappings and comparisons and exposes
+132 more retained property differences. In particular, both reference step numbers
+compute 16px while candidate retained text is 14px. Font family, tracking and
+alignment also differ. These differences are not waived by establishing identity;
+their ownership still needs attribution. Static diagnostic totals are 1,390
+retained comparisons, 1,100 reviewed mappings, 3,786 property differences (2,770
+unresolved), and 222 typography coverage gaps. This is not complete audit coverage.
+
+Tests reject wrong paths, IDs, attributes, duplicate identities and changed text;
+a focused state test switches the current panel and preserves the hidden-panel
+gap. `npm run parity:harness:check` passes 91/91 tests. No fixture, renderer,
+capture module or served full-matrix bundle changed for this increment.
+
 ## Control-label typography omissions, traced through captured rules (2026-09-12)
 
 The chip/button-toggle weight difference is now attributed to unequal inputs

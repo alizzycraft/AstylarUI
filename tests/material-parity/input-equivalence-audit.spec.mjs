@@ -639,12 +639,32 @@ function templateTypographyReport(family) {
     add('astylar', 'a/c/p/1', 'a/c/p', 'span', 'paginator-page-size', undefined, '10');
     add('astylar', 'a/c/r', 'a/c', 'div', 'paginator-range-actions', 'paginator-range-actions');
     add('astylar', 'a/c/r/0', 'a/c/r', 'span', 'paginator-range', undefined, '1 – 10 of 100');
+  } else if (family === 'stepper') {
+    add('reference', 'r', null, 'mat-stepper', 'stepper-primary', 'mat-stepper-horizontal');
+    add('reference', 'r/w', 'r', 'div', undefined, 'mat-horizontal-stepper-wrapper');
+    add('reference', 'r/w/h', 'r/w', 'div', undefined, 'mat-horizontal-stepper-header-container');
+    add('astylar', 'a', 'root', 'div', 'stepper-primary', 'stepper');
+    add('astylar', 'a/h', 'a', 'div', 'stepper-head', 'stepper-head');
+    for (const [index, name] of ['details', 'review'].entries()) {
+      add('reference', `r/w/h/${index}`, 'r/w/h', 'mat-step-header', `cdk-stepper-38-label-${index}`, 'mat-step-header');
+      add('reference', `r/w/h/${index}/i`, `r/w/h/${index}`, 'div', undefined, 'mat-step-icon-state-number');
+      add('reference', `r/w/h/${index}/i/c`, `r/w/h/${index}/i`, 'div', undefined, 'mat-step-icon-content');
+      add('reference', `r/w/h/${index}/i/c/0`, `r/w/h/${index}/i/c`, 'span', undefined, undefined, String(index + 1));
+      add('astylar', `a/h/${index}`, 'a/h', 'div', `step-${name}`, 'step-tab');
+      add('astylar', `a/h/${index}/0`, `a/h/${index}`, 'span', `step-${name}-badge`, 'step-badge', String(index + 1));
+    }
+    add('reference', 'r/w/c', 'r/w', 'div', undefined, 'mat-horizontal-content-container');
+    add('reference', 'r/w/c/0', 'r/w/c', 'div', 'cdk-stepper-38-content-0', 'mat-horizontal-stepper-content-current');
+    add('reference', 'r/w/c/0/0', 'r/w/c/0', 'span', undefined, undefined, 'Project details');
+    reference.nodes.at(-1).attributes['data-parity-id'] = 'stepper-content';
+    add('astylar', 'a/c', 'a', 'div', 'stepper-content-container', 'stepper-content-container');
+    add('astylar', 'a/c/0', 'a/c', 'span', 'stepper-content', undefined, 'Project details');
   }
   return raw;
 }
 
 test('reviewed template text paths close only identity gaps and retain unequal typography', () => {
-  for (const [family, count] of [['tree', 3], ['grid-list', 2], ['badge', 1], ['sort', 1], ['expansion', 1], ['sidenav', 1], ['button-toggle', 2], ['chips', 2], ['paginator', 3]]) {
+  for (const [family, count] of [['tree', 3], ['grid-list', 2], ['badge', 1], ['sort', 1], ['expansion', 1], ['sidenav', 1], ['button-toggle', 2], ['chips', 2], ['paginator', 3], ['stepper', 3]]) {
     const raw = templateTypographyReport(family);
     const before = structuredClone(raw);
     const report = buildMaterialInputAudit(raw);
@@ -683,7 +703,7 @@ test('template identity rejects path, uniqueness, text, child and ID conflicts i
     (ref) => { ref.nodes[0].attributes.id = 'other-anchor'; },
     (_ref, ast) => { ast.nodes[0].authored.id = 'other-anchor'; },
   ];
-  for (const family of ['tree', 'grid-list', 'badge', 'sort', 'expansion', 'sidenav', 'button-toggle', 'chips', 'paginator']) {
+  for (const family of ['tree', 'grid-list', 'badge', 'sort', 'expansion', 'sidenav', 'button-toggle', 'chips', 'paginator', 'stepper']) {
     for (const mutate of mutations) {
       const { reference, astylar } = templateTypographyReport(family).results[0].inputTrees;
       const mapping = reviewedTemplateTextMappings(family, reference, astylar)[0];
@@ -729,6 +749,27 @@ test('chip text ownership only permits its exact empty focus-indicator leaf', ()
     mutate(reference, reference.nodes.find((node) => node.key === mapping.referenceDecorationNodes[0]));
     assert.ok(!reviewedTemplateTextMappings('chips', reference, astylar).some((entry) => entry.element === mapping.element));
   }
+});
+
+test('stepper mapping distinguishes current content from hidden panels and numbered icons from completed icons', () => {
+  const raw = templateTypographyReport('stepper');
+  const { reference, astylar } = raw.results[0].inputTrees;
+  const panel = reference.nodes.find((node) => node.attributes.id === 'cdk-stepper-38-content-0');
+  const text = reference.nodes.find((node) => node.parent === panel.key);
+  reference.nodes.push({ ...panel, key: 'hidden-panel', attributes: { id: 'cdk-stepper-38-content-1', class: 'mat-horizontal-stepper-content-next' } },
+    { ...text, key: 'hidden-text', parent: 'hidden-panel', ownText: 'Review changes' });
+  assert.equal(reviewedTemplateTextMappings('stepper', reference, astylar).find((entry) => entry.element === 'stepper-content').referenceNode, text.key);
+  const report = buildMaterialInputAudit(raw);
+  assert.ok(report.retainedTypography.gaps.some((gap) => gap.referenceNodes?.includes('hidden-text')), 'unmatched hidden content must remain inventoried');
+  text.attributes['data-parity-id'] = 'other';
+  assert.ok(!reviewedTemplateTextMappings('stepper', reference, astylar).some((entry) => entry.element === 'stepper-content'));
+  text.attributes['data-parity-id'] = 'stepper-content';
+  panel.attributes.class = 'mat-horizontal-stepper-content-previous';
+  reference.nodes.find((node) => node.key === 'hidden-panel').attributes.class = 'mat-horizontal-stepper-content-current';
+  astylar.nodes.find((node) => node.authored.id === 'stepper-content').authored.textContent = 'Review changes';
+  assert.equal(reviewedTemplateTextMappings('stepper', reference, astylar).find((entry) => entry.element === 'stepper-content').referenceNode, 'hidden-text');
+  reference.nodes.find((node) => node.key === 'r/w/h/0/i').attributes.class = 'mat-step-icon-state-edit';
+  assert.ok(!reviewedTemplateTextMappings('stepper', reference, astylar).some((entry) => entry.element === 'step-details-badge'));
 });
 
 function controlLabelTypographyReport(family) {
