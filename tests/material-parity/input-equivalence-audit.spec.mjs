@@ -731,6 +731,71 @@ test('chip text ownership only permits its exact empty focus-indicator leaf', ()
   }
 });
 
+function controlLabelTypographyReport(family) {
+  const raw = templateTypographyReport(family);
+  const { reference, astylar } = raw.results[0].inputTrees;
+  const chip = family === 'chips', component = chip ? 'chip' : 'button-toggle';
+  reference.styles[0] = { ...reference.styles[0], fontWeight: '500', letterSpacing: chip ? '.096px' : 'normal' };
+  reference.rules = [{ active: true,
+    selector: chip ? '.mat-mdc-standard-chip .mdc-evolution-chip__text-label' : '.mat-button-toggle-appearance-standard',
+    declarations: {
+      'font-weight': { value: `var(--mat-${component}-label-text-weight, var(--mat-sys-label-large-weight))` },
+      'letter-spacing': { value: `var(--mat-${component}-label-text-tracking, var(--mat-sys-label-large-tracking))` },
+    } }];
+  for (const node of reference.nodes) {
+    if (chip ? !!node.ownText : node.type === 'mat-button-toggle') node.rules = [0];
+  }
+  for (const node of astylar.nodes) {
+    node.normalResolvedStyle = {};
+    node.interactionResolvedStyle = {};
+    if (node.retainedText) node.retainedText.style = { ...reference.styles[0], fontWeight: 'normal', letterSpacing: '0px' };
+  }
+  astylar.nodes[0].parent = 'page-key';
+  astylar.nodes.push({ key: 'page-key', parent: 'root', authored: { type: 'main', id: 'page' },
+    normalResolvedStyle: {}, interactionResolvedStyle: {}, resolvedStyle: {} });
+  return raw;
+}
+
+test('control label tokens classify missing weight and chip tracking without accepting unequal inputs', () => {
+  for (const family of ['chips', 'button-toggle']) {
+    const report = buildMaterialInputAudit(controlLabelTypographyReport(family));
+    const differences = report.retainedTypography.differences;
+    const attributed = differences.filter((entry) => entry.attribution === 'reviewed-control-label-token-input');
+    assert.equal(attributed.length, family === 'chips' ? 4 : 2);
+    assert.ok(attributed.every((entry) => entry.classification === 'application-plugin-authoring-defect' &&
+      entry.values.normal === undefined && entry.values.effective === undefined && entry.reviewEvidence.candidateChain.length === 4));
+    assert.ok(attributed.filter((entry) => entry.property === 'fontWeight').every((entry) =>
+      entry.values.reference === '500' && entry.values.retained === '400'));
+    assert.equal(report.summary.inputEquivalent, false);
+    if (family === 'button-toggle') assert.ok(differences.filter((entry) => entry.property === 'letterSpacing').every((entry) => entry.attribution === 'unresolved'));
+  }
+});
+
+test('control token attribution rejects absent active rules and incomplete or contradictory ancestry', () => {
+  for (const family of ['chips', 'button-toggle']) {
+    for (const mutate of [
+      (r) => { r.rules[0].active = false; },
+      (r) => { r.rules[0].selector = '.unrelated'; },
+      (r) => { r.rules[0].declarations['font-weight'].value = '500'; },
+      (r) => { r.styles[0].fontWeight = '600'; },
+      (_r, a) => { a.nodes[1].normalResolvedStyle.fontWeight = '500'; },
+      (_r, a) => { a.nodes[1].interactionResolvedStyle.font = '500 14px Roboto'; },
+      (_r, a) => { a.nodes[0].parent = 'missing'; },
+      (_r, a) => { a.nodes[0].parent = a.nodes[0].key; },
+      (_r, a) => { delete a.nodes[0].interactionResolvedStyle; delete a.nodes[0].resolvedStyle; },
+      (_r, a) => { a.nodes.at(-1).normalResolvedStyle.fontWeight = '500'; },
+      (_r, a) => { a.nodes.at(-1).authored.type = 'div'; },
+    ]) {
+      const raw = controlLabelTypographyReport(family);
+      mutate(raw.results[0].inputTrees.reference, raw.results[0].inputTrees.astylar);
+      const report = buildMaterialInputAudit(raw);
+      const element = family === 'chips' ? 'chip-0-label' : 'button-toggle-one-label';
+      assert.ok(!report.retainedTypography.differences.some((entry) => entry.element === element &&
+        entry.property === 'fontWeight' && entry.attribution === 'reviewed-control-label-token-input'));
+    }
+  }
+});
+
 function treeFontTypographyReport(size = '14.4px') {
   const raw = templateTypographyReport('tree');
   const { reference, astylar } = raw.results[0].inputTrees;

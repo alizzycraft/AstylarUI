@@ -140,6 +140,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
   const reviewedTypographyKinds = { 'reviewed-heading-mask': 'parity-harness-defect',
     'reviewed-table-font-input': 'application-plugin-authoring-defect',
     'reviewed-tree-font-input': 'application-plugin-authoring-defect',
+    'reviewed-control-label-token-input': 'application-plugin-authoring-defect',
     'reviewed-floating-label-font-input': 'application-plugin-authoring-defect' };
   const unresolvedTypography = report.retainedTypography?.differences.filter((entry) =>
     !reviewedTypographyKinds[entry.attribution] || entry.classification !== reviewedTypographyKinds[entry.attribution] || !entry.reviewEvidence) ?? [];
@@ -830,6 +831,56 @@ function reviewedTableFontInput(entry, ref, ast, styles, referenceTree, astylarT
   };
 }
 
+function reviewedControlLabelTokenInput(entry, mapping, property, ast, styles, referenceTree, astylarTree, inventory) {
+  if (!['chips', 'button-toggle'].includes(entry.family) || mapping?.kind !== 'reviewed-showcase-template-text') return;
+  const weight = property === 'fontWeight' && styles.reference.fontWeight === '500' && styles.retained.fontWeight === '400';
+  const tracking = entry.family === 'chips' && property === 'letterSpacing' && styles.reference.letterSpacing === '0.096px' && styles.retained.letterSpacing === '0';
+  if (!weight && !tracking) return;
+  const cssProperty = weight ? 'font-weight' : 'letter-spacing';
+  const token = weight ? 'weight' : 'tracking';
+  const referenceSelector = entry.family === 'chips' ? '.mat-mdc-standard-chip .mdc-evolution-chip__text-label' : '.mat-button-toggle-appearance-standard';
+  const component = entry.family === 'chips' ? 'chip' : 'button-toggle';
+  const declaration = `var(--mat-${component}-label-text-${token}, var(--mat-sys-label-large-${token}))`;
+  const referenceChain = [];
+  let referenceRule;
+  for (const key of [...mapping.referencePath].reverse()) {
+    const nodes = referenceTree.nodes.filter((node) => node.key === key);
+    if (nodes.length !== 1) return;
+    const node = nodes[0], style = inventory.styles[node.style];
+    if (style?.side !== 'reference' || canonicalStyle(style.value)[property] !== styles.reference[property]) return;
+    referenceChain.push({ node: key, computed: style.value });
+    const rules = node.rules.map((index) => inventory.rules[index]).filter((rule) => rule?.side === 'reference' &&
+      rule.value.active === true && rule.value.selector === referenceSelector && rule.value.declarations?.[cssProperty]?.value === declaration);
+    if (rules.length > 1) return;
+    if (rules.length === 1) { referenceRule = rules[0].value; break; }
+  }
+  if (!referenceRule) return;
+  const candidateChain = [], seen = new Set();
+  let ancestor = ast;
+  while (ancestor && !seen.has(ancestor.key)) {
+    seen.add(ancestor.key);
+    const normal = inventory.styles[ancestor.normalStyle], effective = inventory.styles[ancestor.interactionStyle];
+    if (normal?.side !== 'astylar' || effective?.side !== 'astylar' || !normal.value || !effective.value ||
+        Array.isArray(normal.value) || Array.isArray(effective.value) ||
+        normal.value[property] !== undefined || effective.value[property] !== undefined ||
+        normal.value.font !== undefined || effective.value.font !== undefined) return;
+    candidateChain.push({ node: ancestor.key, normal: normal.value, effective: effective.value });
+    if (ancestor.authored?.id === 'page') break;
+    const parents = astylarTree.nodes.filter((node) => node.key === ancestor.parent);
+    if (parents.length !== 1) return;
+    ancestor = parents[0];
+  }
+  if (ancestor?.authored?.id !== 'page' || ancestor.authored.type !== 'main' || ancestor.parent !== 'root' ||
+      astylarTree.nodes.filter((node) => node.authored?.id === 'page').length !== 1) return;
+  return {
+    classification: 'application-plugin-authoring-defect', attribution: 'reviewed-control-label-token-input',
+    recommendedOwner: 'showcase chip/button-toggle component label typography translation',
+    justification: 'The reviewed Material label path computes an explicit component typography token. Every captured candidate normal/effective declaration from its text leaf through main#page omits that property, and core retains a different value. This is a missing component input, not an equivalent representation or evidence of incorrect rendering of a shared input. Only font-weight and chip tracking are attributed; button-toggle tracking resets at its button and is intentionally excluded. Restore the original token intent before evaluating core and do not resize labels or adjust offsets to compensate.',
+    reviewEvidence: { property, referenceRule, referenceChain, candidateChain,
+      referenceComputed: styles.reference[property], candidateRetained: styles.retained[property] },
+  };
+}
+
 function reviewedTreeFontInput(entry, mapping, ref, ast, styles, astylarTree, inventory) {
   if (entry.family !== 'tree' || mapping?.kind !== 'reviewed-showcase-template-text' ||
       styles.reference.fontSize !== '16px' || !['14.4px', '18.4px'].includes(styles.retained.fontSize)) return;
@@ -1007,6 +1058,7 @@ export function collectRetainedTypographyEvidence(cases, inventory) {
         if (values.reference === undefined || values.retained === undefined) {
           gap(key, id, 'missing reference or retained typography property', { property, values });
         } else if (values.reference !== values.retained) {
+          const controlLabelToken = reviewedControlLabelTokenInput(entry, textMappingById.get(id), property, ast, styles, referenceTree, astylarTree, inventory);
           differences.push({ case: key, family: entry.family, element: id, property, values,
             referenceNode: ref.key, astylarNode: ast.key, source: comparison.source, revision: comparison.revision,
             classification: 'parity-harness-defect', attribution: 'unresolved',
@@ -1016,6 +1068,7 @@ export function collectRetainedTypographyEvidence(cases, inventory) {
             ...(property === 'fontSize' && tableFont ? tableFont : {}),
             ...(property === 'fontSize' && treeFont ? treeFont : {}),
             ...(property === 'fontSize' && floatingLabel ? floatingLabel : {}),
+            ...(controlLabelToken ?? {}),
           });
         }
       }

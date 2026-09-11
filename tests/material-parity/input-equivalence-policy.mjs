@@ -221,6 +221,16 @@ export const sourceAuditDefinitions = Object.freeze([
     referenceEvidence: { file: 'examples/material-showcase/src/app/reference.component.ts', element: "@case ('table')", selectors: ['.mat-mdc-header-cell', '.mat-mdc-cell'], declarations: { borderBottomWidth: '1px', borderBottomStyle: 'solid' }, exception: 'final body row has no bottom border' },
   }),
   Object.freeze({
+    id: 'fixture-control-label-typography-omitted',
+    introducedBy: '2f44011 initial chip styling; c47d589 button-toggle label composition',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`selector: '\.(?:chip|button-toggle-option)',[^\n]*fontSize: '14px'`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase chip/button-toggle component label typography translation',
+    justification: 'Material chip labels explicitly request label-large weight/tracking; standard button-toggle hosts request weight and their button inherits it. Captured labels compute 500 while the candidate leaf-to-page declarations omit weight and retained core text is normal/400. Chip labels additionally compute .096px tracking versus retained zero. These are omitted component inputs, not a core weight-scaling defect. Attribute occurrences only through exact active token rules, reviewed text paths and complete candidate ancestry. Do not copy button-toggle host tracking onto its label: its intervening button resets tracking to normal. Existing fixed widths and offsets are not substitutes for the missing typography.',
+    focusedProof: 'tests/material-parity/input-equivalence-audit.spec.mjs: control label token provenance and contradictory-ancestry controls',
+  }),
+  Object.freeze({
     id: 'fixture-tree-component-typography-omitted',
     introducedBy: '2f44011 omits component typography; 7159b1d adds fixed-height label wrapper',
     file: 'examples/material-showcase/src/app/astylar.component.ts',

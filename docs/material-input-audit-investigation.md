@@ -11,6 +11,42 @@ Argument validation rejects unknown, empty, and repeated options (25/25 audit
 tests pass). A missing selected report fails rather than falling back to older
 evidence; the new run has not yet produced its final report.
 
+## Control-label typography omissions, traced through captured rules (2026-09-12)
+
+The chip/button-toggle weight difference is now attributed to unequal inputs
+with a guarded rule-and-ancestry proof. Chip labels compute 500 from
+`.mat-mdc-standard-chip .mdc-evolution-chip__text-label` and its Material weight
+token. Button-toggle labels inherit 500 through their button from the
+`.mat-button-toggle-appearance-standard` component token. The candidate's entire
+text-leaf-to-main#page chain omits weight at both core declaration stages and
+retained text is normal/400. The core text parser's default is normal and it
+preserves numeric weights; the existing keyword proof distinguishes 400 from
+500. There is no evidence here that core was given 500 and rendered it as 400.
+
+Chip labels likewise compute .096px from the active Material tracking token,
+while the complete candidate chain omits tracking and core retains zero. The
+audit **does not** apply this conclusion to button-toggle tracking: although its
+host specifies a tracking token, its intervening button computes normal. A fix
+must preserve that actual cascade, not indiscriminately copy host tokens.
+
+The initial chip styling in `2f44011` omitted these component properties;
+`c47d589` introduced the current button-toggle label composition without weight.
+The recommended owner is showcase component typography translation. Restore
+the equivalent declarations before re-evaluating core, without adjusting fixed
+widths, glyph offsets or theme scaling to conceal the input mismatch.
+
+The machine guard requires the exact active token rule, matching computed
+values on the reviewed reference inheritance path, and every normal/effective
+candidate ancestor through a unique main#page. Explicit or competing candidate
+declarations, absent records, wrong roots, cycles or contradictory reference
+values reject attribution. It classifies 72 static observations (24 chip weight,
+24 chip tracking, 24 button-toggle weight) as authoring defects while retaining
+their unequal values. Totals remain 3,654 retained property differences, of which
+2,638 are unresolved. Source inventory has 50 findings. The focused controls
+exercise both families and preserve button-toggle tracking as unresolved;
+full harness verification passes 72/72 tests. No fixture or renderer changes
+were made.
+
 ## Chip, button-toggle and paginator text ownership (2026-09-12)
 
 The retained-typography audit now maps both chip labels, both button-toggle
