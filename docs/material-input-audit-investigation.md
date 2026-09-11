@@ -65,6 +65,27 @@ three additional unequal-input paths:
   Table layout creates temporary cell/row style overrides: its captured mesh
   declarations must not be confused with original authored padding or fonts.
 
+### Table reduction: declarations and geometry without detached borders
+
+The seventh case in `input-equivalence-proof.spec.ts` uses the same two-row
+table, class-descendant cell selector, 16px horizontal cell padding, 14px/20px
+typography, and first-cell bottom border on both sides. Public `tableProperties`
+are translated to the corresponding browser CSS declarations; no sibling rule
+elements or absolute border positions are present. The test compares table,
+row and cell edges and inspects settled core padding, border width, font size
+and line height against browser computed declarations.
+
+Verification on 2026-09-11:
+`npm --prefix examples/material-showcase test -- --watch=false --browsers=ChromeHeadless --include=src/app/input-equivalence-proof.spec.ts`
+reports **6 passed, 1 failed** in Chrome 152/WebGL2. The table case passes;
+only the previously reproduced empty-block case below fails, with the same
+301px edge errors. A repeat with the class-descendant selector gives the same
+result. The six passing cases are scoped geometry/declaration evidence, not
+complete Material acceptance. In particular, this table test does not inspect
+border pixels, glyph rasterization, header semantics, collapsed borders, or
+responsive column allocation. No general table-renderer defect is established
+by the showcase's detached-border workaround alone.
+
 ### Confirmed core reduction: empty auto-height block
 
 The new paragraph/divider case in

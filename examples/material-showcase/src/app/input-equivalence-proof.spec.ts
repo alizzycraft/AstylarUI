@@ -7,7 +7,25 @@ import { Astylar, type DOMElement, type SiteData } from 'astylarui';
 // to Astylar. These reductions intentionally contain no Material component,
 // measured height table, DPR correction, or duplicate position calculation.
 describe('Material audit: equivalent CSS input reductions', () => {
-  const cases: Array<{ name: string; site: SiteData; ids: string[] }> = [
+  const cases: Array<{ name: string; site: SiteData; ids: string[]; resolved?: Array<{ id: string; properties: string[] }> }> = [
+    {
+      name: 'table cells retain authored padding and bottom borders without sibling rules',
+      site: {
+        root: { children: [{ type: 'table', id: 'border-table', class: 'data-table', tableProperties: { tableLayout: 'fixed', borderCollapse: 'separate', borderSpacing: 0 }, children: [
+          { type: 'tbody', id: 'body', children: [
+            { type: 'tr', id: 'first-row', children: [{ type: 'td', id: 'first-cell', textContent: 'Atlas' }] },
+            { type: 'tr', id: 'last-row', children: [{ type: 'td', id: 'last-cell', textContent: 'Northstar' }] },
+          ] },
+        ] }] },
+        styles: [
+          { selector: '#border-table', width: '360px', height: '104px', fontFamily: 'Arial', fontSize: '14px', lineHeight: '20px', background: '#eeeeee' },
+          { selector: 'tr', height: '52px' },
+          { selector: '.data-table td', padding: '0 16px', fontSize: '14px', lineHeight: '20px', verticalAlign: 'middle', background: '#dddddd' },
+          { selector: '#first-cell', borderWidth: '0 0 1px', borderStyle: 'solid', borderColor: '#79747e' },
+        ],
+      }, ids: ['border-table', 'first-row', 'last-row', 'first-cell', 'last-cell'],
+      resolved: [{ id: 'first-cell', properties: ['padding', 'borderWidth', 'fontSize', 'lineHeight'] }],
+    },
     {
       name: 'paragraph flow places a divider without absolute text or separator offsets',
       site: {
@@ -114,6 +132,15 @@ describe('Material audit: equivalent CSS input reductions', () => {
         for (const child of children) {
           const element = doc.createElement(child.type);
           element.id = child.id!;
+          if (child.class) element.className = child.class;
+          if (child.tableProperties) {
+            // Public table options express these CSS declarations separately
+            // from StyleRule. Project the same inputs into the reference DOM.
+            const { tableLayout, borderCollapse, borderSpacing } = child.tableProperties;
+            if (tableLayout) element.style.tableLayout = tableLayout;
+            if (borderCollapse) element.style.borderCollapse = borderCollapse;
+            if (borderSpacing !== undefined) element.style.borderSpacing = `${borderSpacing}px`;
+          }
           if (child.textContent !== undefined) element.textContent = String(child.textContent);
           parent.append(element);
           append(element, child.children ?? []);
@@ -123,6 +150,19 @@ describe('Material audit: equivalent CSS input reductions', () => {
       const surface = TestBed.inject(Astylar).mount(canvas, { ...entry.site, styles: rules }, { diagnostics: { logLevel: 'silent' } });
       try {
         await surface.whenSettled();
+        if (entry.resolved) {
+          const snapshot = surface.inspectResolvedStyles();
+          const normalize = (value: unknown) => String(value ?? '').trim().replace(/\b0px\b/g, '0');
+          for (const { id, properties } of entry.resolved) {
+            const actual = snapshot.elements.find((element) => element.id === id)!.normal;
+            const expected = doc.defaultView!.getComputedStyle(doc.getElementById(id)!);
+            for (const property of properties) {
+              const cssProperty = property.replace(/[A-Z]/g, (letter) => '-' + letter.toLowerCase());
+              expect(normalize((actual as Record<string, unknown>)[property])).withContext(`${id} resolved ${property}`)
+                .toBe(normalize(expected.getPropertyValue(cssProperty)));
+            }
+          }
+        }
         const engine = surface.scene.getEngine();
         const viewport = surface.scene.activeCamera!.viewport.toGlobal(engine.getRenderWidth(), engine.getRenderHeight());
         for (const id of entry.ids) {
