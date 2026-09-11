@@ -1,6 +1,20 @@
 import { collectAuthoredInputTree, collectMaterialCoreResolvedStyles, collectMaterialResolvedStyles, indexAuthoredStructures, materialStyleSnapshot } from './material-input-evidence';
 
 describe('Material input evidence serialization', () => {
+  it('retains text-stage provenance without merging it into cascade or pseudo-state inputs', () => {
+    const styles = collectMaterialCoreResolvedStyles({ revision: 8, elements: [
+      { path: 'root/0', id: 'child', type: 'div', normal: { selector: '#child', color: 'black' },
+        effective: { selector: '#child', color: 'purple' },
+        retainedText: { source: 'core-text-registry', style: { selector: '#child', color: 'black', fontSize: '24px', lineHeight: '32px' } } },
+    ] });
+    const tree = collectAuthoredInputTree({ children: [{ id: 'child', type: 'div', textContent: 'Inherited' }] }, [], styles.effective, styles);
+    expect(tree.nodes[1]).toEqual(jasmine.objectContaining({
+      normalResolvedStyle: { color: 'black' }, resolvedStyle: { color: 'purple' },
+      retainedText: { source: 'core-text-registry', style: { color: 'black', fontSize: '24px', lineHeight: '32px' } },
+    }));
+    expect(styles.normal.get('child')?.['fontSize']).toBeUndefined();
+  });
+
   it('captures hidden and anonymous nodes by core tree path, not mesh existence', () => {
     const styles = collectMaterialCoreResolvedStyles({ revision: 7, elements: [
       { path: 'root/0', id: 'hidden', type: 'div', normal: { selector: '#hidden', display: 'none' }, effective: { selector: '#hidden', display: 'none' } },

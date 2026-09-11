@@ -7,7 +7,7 @@ import { Astylar, type DOMElement, type SiteData } from 'astylarui';
 // to Astylar. These reductions intentionally contain no Material component,
 // measured height table, DPR correction, or duplicate position calculation.
 describe('Material audit: equivalent CSS input reductions', () => {
-  const cases: Array<{ name: string; site: SiteData; ids: string[]; resolved?: Array<{ id: string; properties: string[] }> }> = [
+  const cases: Array<{ name: string; site: SiteData; ids: string[]; resolved?: Array<{ id: string; properties: string[]; stage?: 'retainedText' }> }> = [
     {
       name: 'inherited typography remains observable in pre-projection style evidence',
       site: {
@@ -18,7 +18,7 @@ describe('Material audit: equivalent CSS input reductions', () => {
           { selector: '#type-parent', width: '360px', height: '80px', fontFamily: 'Arial', fontSize: '24px', lineHeight: '32px', color: '#123456' },
         ],
       }, ids: ['type-parent', 'type-child'],
-      resolved: [{ id: 'type-child', properties: ['fontSize', 'lineHeight'] }],
+      resolved: [{ id: 'type-child', properties: ['fontSize', 'lineHeight'], stage: 'retainedText' }],
     },
     {
       name: 'table cells retain authored padding and bottom borders without sibling rules',
@@ -165,12 +165,14 @@ describe('Material audit: equivalent CSS input reductions', () => {
         if (entry.resolved) {
           const snapshot = surface.inspectResolvedStyles();
           const normalize = (value: unknown) => String(value ?? '').trim().replace(/\b0px\b/g, '0');
-          for (const { id, properties } of entry.resolved) {
-            const actual = snapshot.elements.find((element) => element.id === id)!.normal;
+          for (const { id, properties, stage } of entry.resolved) {
+            const inspected = snapshot.elements.find((element) => element.id === id)!;
+            if (stage === 'retainedText') expect(inspected.retainedText?.source).toBe('core-text-registry');
+            const actual = stage === 'retainedText' ? inspected.retainedText?.style : inspected.normal;
             const expected = doc.defaultView!.getComputedStyle(doc.getElementById(id)!);
             for (const property of properties) {
               const cssProperty = property.replace(/[A-Z]/g, (letter) => '-' + letter.toLowerCase());
-              expect(normalize((actual as Record<string, unknown>)[property])).withContext(`${id} resolved ${property}`)
+              expect(normalize((actual as Record<string, unknown> | undefined)?.[property])).withContext(`${id} ${stage ?? 'resolved'} ${property}`)
                 .toBe(normalize(expected.getPropertyValue(cssProperty)));
             }
           }

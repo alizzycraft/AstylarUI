@@ -11,6 +11,58 @@ Argument validation rejects unknown, empty, and repeated options (25/25 audit
 tests pass). A missing selected report fails rather than falling back to older
 evidence; the new run has not yet produced its final report.
 
+## Retained core text-input evidence (2026-09-11)
+
+The diagnostic snapshot now has an additive optional `retainedText` field with
+`source:core-text-registry`. It copies the existing text registry's retained
+style, which the ordinary text-rendering path registers after passing that style
+to texture creation. It neither recomputes inheritance nor reads mesh positions.
+Normal and effective cascade declarations remain separate and unchanged.
+
+This is deliberately a stage-specific field, not a claim of complete computed
+style: hidden nodes with no retained text entry have no such field; anonymous
+nodes without authored IDs are not guessed from mesh names; retained registry
+styles do not necessarily describe later pseudo-state glyph textures. Those
+boundaries still need evidence before the overall fully resolved input requirement
+can pass. No blanket equivalence classification or missing-value waiver was added.
+
+The Material collector preserves the optional text stage in each full-tree node,
+and the audit pools it separately from normal and effective style tables. The
+inherited-typography reduction compares the same browser values to this explicit
+core text-input stage, rather than requiring the earlier cascade stage to contain
+later inherited values. This changes the observation boundary, not either side's
+authored input, layout, expected typography, or tolerance.
+
+Focused core browser verification:
+`npm test -- --watch=false --browsers=ChromeHeadless --include=src/lib/astylar-style-inspection.spec.ts --include=src/lib/astylar-surface.spec.ts`
+passes **7/7**. The new test covers inherited font size/line height, detached
+copies, absence for non-rendered text, update revisions, and unchanged resources.
+`npm run skill:check`, `npm run examples:check`, and the 27 audit tests pass.
+`npm run capabilities:check` still fails only the previously recorded
+`element-creation.service.ts` fingerprint (expected `2edeb33f...`, actual
+`bf5fd586...`); Git confirms that file's worktree content equals HEAD.
+
+The showcase diagnostic dependency replacement initially failed from an incorrect
+relative tarball path, then from the pre-existing Angular animations/common peer
+version mismatch. The explicit workspace tarball path with `--no-save
+--package-lock=false --no-audit --no-fund --legacy-peer-deps` replaced exactly one
+package. No dependency manifest or lockfile changed. The separate clean packed
+consumer check uses its normal installer without that diagnostic override.
+
+With the new packed diagnostic installed, the command
+`npm --prefix examples/material-showcase test -- --watch=false --browsers=ChromeHeadless --include=src/app/input-equivalence-proof.spec.ts --include=src/app/material-input-evidence.spec.ts`
+reports **13 passed, 1 failed**: all six collector tests and seven of eight
+browser reductions pass. Inherited 24px/32px typography now passes through the
+explicit retained-text stage; only the unchanged divider failure remains.
+The proof still uses exactly the same parent/child declarations and geometry
+tolerance. Chrome reports the existing test setup's NG0914 warning (zoneless
+TestBed while the showcase loads Zone.js).
+`npm run consumer:check` passes: 419 packed files, browser and SSR/prerender
+builds, and **4/4** Chrome tests, including inherited text values and isolation
+between two package-root surfaces. Its disposed-surface diagnostic is expected
+by the negative test. The full root unit run is pending; these results are not
+complete audit acceptance.
+
 ## Typography-stage evidence gap (2026-09-11)
 
 The eighth identical-input reduction uses a parent with `font-size:24px` and

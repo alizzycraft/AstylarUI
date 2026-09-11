@@ -575,6 +575,8 @@ export function collectFullTreeInventory(cases, { root = process.cwd() } = {}) {
         style: node.resolvedStyle ? intern({ side, value: node.resolvedStyle }, styles, styleIds) : undefined,
         normalStyle: node.normalResolvedStyle ? intern({ side, value: node.normalResolvedStyle }, styles, styleIds) : undefined,
         interactionStyle: node.interactionResolvedStyle ? intern({ side, value: node.interactionResolvedStyle }, styles, styleIds) : undefined,
+        ...(node.retainedText ? { retainedText: { source: node.retainedText.source,
+          style: intern({ side, value: node.retainedText.style }, styles, styleIds) } } : {}),
       });
       const variant = intern({ family: entry.family, side, resolvedStyleEvidenceVersion: tree.resolvedStyleEvidenceVersion,
         resolvedStyleSource: tree.resolvedStyleSource, nodes, rules: ruleMap }, variants, variantIds);
@@ -831,7 +833,7 @@ function focusedProofInventory(root) {
     proof(root, 'scripts/audit-material-picker-commits.mjs', /select day 1/,
       'supplemental diagnostic; known mismatches recorded in investigation', 'Real pointer selection of a date/time reaches the correct candidate target but does not commit a value or close the popup. This case supplements, rather than replaces, the unfiltered maintained matrix.'),
     proof(root, 'examples/material-showcase/src/app/input-equivalence-proof.spec.ts', /describe\('Material audit/,
-      'eight executable browser reductions; core and diagnostic failures retained', 'Six reductions pass for intrinsic toolbar sizing, a flex stepper connector, content-derived flex height, a full-span calendar marker, fixed bottom overlay, and table cell geometry/resolved declarations without detached borders. The paragraph/divider reduction repeatedly fails because the empty separator retains parent-content height (302px versus1px). The inherited-typography reduction exposes missing snapshot fontSize/lineHeight despite parent authoring. The table test does not establish border raster or full Material composition parity. Consult the investigation for commands and limitations.'),
+      'eight executable browser reductions; one honest core failure retained', 'Seven reductions pass: intrinsic toolbar sizing, flex stepper connector, content-derived flex height, full-span calendar marker, fixed bottom overlay, table cell geometry/declarations without detached borders, and inherited typography observed through retained core text input. The paragraph/divider reduction repeatedly fails because the empty separator retains parent-content height (302px versus1px). Retained text is a separate stage, not a blanket computed-style or current pseudo-paint guarantee; hidden and anonymous text gaps remain. Table geometry does not prove border raster or full Material composition parity. Consult the investigation for commands and limitations.'),
     proof(root, 'src/app/services/dom/elements/grid.service.spec.ts', /gridColumn:\s*'1 \/ -1'/,
       'existing unit evidence', 'Core grid covers browser-style full-span gridColumn; the new browser reduction also passes. This does not prove every calendar composition.'),
     proof(root, 'src/lib/astylar-document-style-integration.spec.ts', /equivalent/,

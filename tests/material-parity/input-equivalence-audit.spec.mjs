@@ -336,6 +336,9 @@ test('full-tree state provenance survives pooling and legacy captures stay incom
   entry.inputTrees.astylar.resolvedStyleEvidenceVersion = 2;
   entry.inputTrees.astylar.resolvedStyleSource = 'core-style-inspection';
   entry.inputTrees.astylar.resolvedStyleRevision = 7;
+  entry.inputTrees.astylar.nodes[0].retainedText = {
+    source: 'core-text-registry', style: { fontSize: '24px', color: 'black' },
+  };
   const result = collectFullTreeInventory([entry]);
   assert.equal(result.stateStyleGaps.length, 0);
   assert.equal(result.variants[0].resolvedStyleSource, 'core-style-inspection');
@@ -344,6 +347,9 @@ test('full-tree state provenance survives pooling and legacy captures stay incom
   assert.equal(result.styles[node.normalStyle].value.background, 'white');
   assert.equal(result.styles[node.style].value.background, 'purple');
   assert.equal(result.styles[node.interactionStyle].value.background, 'purple');
+  assert.equal(node.retainedText.source, 'core-text-registry');
+  assert.equal(result.styles[node.retainedText.style].value.fontSize, '24px');
+  assert.equal(result.styles[node.style].value.fontSize, undefined);
 });
 
 test('full-tree inventory retains anonymous nodes and pools identical variants without losing cases', () => {

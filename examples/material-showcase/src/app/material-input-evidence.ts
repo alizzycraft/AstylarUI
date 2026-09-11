@@ -1,9 +1,15 @@
 import type { AstylarResolvedStyleSnapshot } from 'astylarui';
 
+interface CoreNodeStyles {
+  normal: Record<string, unknown>;
+  effective: Record<string, unknown>;
+  retainedText?: AstylarResolvedStyleSnapshot['elements'][number]['retainedText'];
+}
+
 interface StyleProvenance {
   normal: ReadonlyMap<string, Record<string, unknown>>;
   interaction: ReadonlyMap<string, Record<string, unknown>>;
-  byPath?: ReadonlyMap<string, { normal: Record<string, unknown>; effective: Record<string, unknown> }>;
+  byPath?: ReadonlyMap<string, CoreNodeStyles>;
   source?: string;
   revision?: number;
 }
@@ -12,9 +18,10 @@ interface StyleProvenance {
 export function collectMaterialCoreResolvedStyles(snapshot: AstylarResolvedStyleSnapshot) {
   const normal = new Map<string, Record<string, unknown>>();
   const effective = new Map<string, Record<string, unknown>>();
-  const byPath = new Map<string, { normal: Record<string, unknown>; effective: Record<string, unknown> }>();
+  const byPath = new Map<string, CoreNodeStyles>();
   for (const entry of snapshot.elements) {
-    const styles = { normal: { ...entry.normal }, effective: { ...entry.effective } };
+    const styles: CoreNodeStyles = { normal: { ...entry.normal }, effective: { ...entry.effective },
+      ...(entry.retainedText ? { retainedText: { source: entry.retainedText.source, style: { ...entry.retainedText.style } } } : {}) };
     byPath.set(entry.path, styles);
     if (entry.id) {
       normal.set(entry.id, styles.normal);
@@ -68,6 +75,8 @@ export function collectAuthoredInputTree(root: object, rules: readonly object[],
     nodes.push({ key, parent, authored,
       resolvedStyle: materialStyleSnapshot(inspected?.effective ?? (id ? resolved.get(id) : undefined)),
       normalResolvedStyle: materialStyleSnapshot(inspected?.normal ?? (id ? provenance?.normal.get(id) : undefined)),
+      ...(inspected?.retainedText ? { retainedText: { source: inspected.retainedText.source,
+        style: materialStyleSnapshot(inspected.retainedText.style) } } : {}),
       interactionResolvedStyle: materialStyleSnapshot(inspected?.effective ?? (id ? provenance?.interaction.get(id) : undefined)) });
     if (Array.isArray(children)) children.forEach((child, index) => {
       if (typeof child === 'object' && child !== null) visit(child, `${key}/${index}`, key);
