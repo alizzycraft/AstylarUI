@@ -138,7 +138,8 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
   if (report.retainedTypography?.schemaVersion !== 1) errors.push('missing retained typography stage report');
   if (requireComplete && report.retainedTypography?.gaps.length > 0) errors.push(`${report.retainedTypography.gaps.length} retained typography mappings or stage fields require review`);
   const reviewedTypographyKinds = { 'reviewed-heading-mask': 'parity-harness-defect',
-    'reviewed-table-font-input': 'application-plugin-authoring-defect' };
+    'reviewed-table-font-input': 'application-plugin-authoring-defect',
+    'reviewed-floating-label-font-input': 'application-plugin-authoring-defect' };
   const unresolvedTypography = report.retainedTypography?.differences.filter((entry) =>
     !reviewedTypographyKinds[entry.attribution] || entry.classification !== reviewedTypographyKinds[entry.attribution] || !entry.reviewEvidence) ?? [];
   if (requireComplete && unresolvedTypography.length > 0) errors.push(`${unresolvedTypography.length} retained typography differences require attribution`);
@@ -726,6 +727,49 @@ function reviewedTableFontInput(entry, ref, ast, styles, referenceTree, astylarT
   };
 }
 
+function reviewedFloatingLabelInput(entry, ref, ast, styles, referenceTree, astylarTree, inventory) {
+  if (!['form-field', 'input', 'select'].includes(entry.family) || ref.type !== 'mat-label' ||
+      ref.attributes?.id !== `${entry.family}-label` || ast.authored.type !== 'label' ||
+      !String(ast.authored.class ?? '').split(/\s+/).includes('field-label') ||
+      styles.reference.fontSize !== '16px' || styles.retained.fontSize !== '12px' ||
+      styles.normal.fontSize !== '12px' || styles.effective.fontSize !== '12px') return;
+  const wrapper = referenceTree.nodes.find((node) => node.key === ref.parent);
+  const wrapperStyle = inventory.styles[wrapper?.style];
+  if (wrapper?.type !== 'label' || !String(wrapper.attributes?.class ?? '').split(/\s+/).includes('mdc-floating-label--float-above') ||
+      wrapperStyle?.side !== 'reference' || wrapperStyle.value.fontSize !== '16px' ||
+      wrapperStyle.value.transformOrigin !== '0px 0px' ||
+      !/^matrix\(0\.75,\s*0,\s*0,\s*0\.75,\s*0,\s*-?(?:\d+(?:\.\d+)?|\.\d+)\)$/.test(wrapperStyle.value.transform ?? '')) return;
+  const referenceRule = wrapper.rules.map((index) => inventory.rules[index]).find((rule) => rule?.side === 'reference' &&
+    rule.value.active === true && rule.value.declarations?.transform?.value === 'translateY(-106%) scale(0.75)');
+  const candidateRules = astylarTree.rules.map((index) => inventory.rules[index]).filter((rule) => rule?.side === 'astylar' &&
+    rule.value.selector === '.field-label' && rule.value.fontSize !== undefined);
+  if (!referenceRule || candidateRules.length !== 1) return;
+  const candidateRule = candidateRules[0];
+  if (candidateRule.value.fontSize !== '12px' || candidateRule.value.position !== 'absolute' ||
+      candidateRule.value.top !== '8px' || candidateRule.value.left !== '16px' ||
+      styles.effective.position !== 'absolute' || styles.effective.top !== '8px' || styles.effective.left !== '16px') return;
+  const seen = new Set();
+  let ancestor = ast;
+  while (ancestor && !seen.has(ancestor.key)) {
+    seen.add(ancestor.key);
+    const ancestorStyle = inventory.styles[ancestor.interactionStyle];
+    if (ancestorStyle?.side !== 'astylar') return;
+    const transform = ancestorStyle.value.transform;
+    if (transform !== undefined && transform !== 'none') return;
+    if (ancestor.authored?.id === 'page') break;
+    ancestor = astylarTree.nodes.find((node) => node.key === ancestor.parent);
+  }
+  if (ancestor?.authored?.id !== 'page') return;
+  return {
+    classification: 'application-plugin-authoring-defect', attribution: 'reviewed-floating-label-font-input',
+    recommendedOwner: 'Material field-label structure and core CSS transform support',
+    justification: 'The reference keeps 16px label typography under a captured .75 wrapper transform. The corresponding candidate explicitly authors and retains an untransformed 12px absolute label at fixed insets. Multiplying the reference font size by the scale describes apparent size, not equivalent input: wrapper geometry, glyph rasterization, tracking and transform-origin semantics remain different. Original-input browser reductions expose core transform-subset gaps; do not accept a font-size substitution as their fix.',
+    reviewEvidence: { referenceWrapper: wrapper.key, referenceWrapperStyle: wrapperStyle.value,
+      referenceRule: referenceRule.value, candidateRule: candidateRule.value,
+      referenceComputedFontSize: styles.reference.fontSize, candidateRetainedFontSize: styles.retained.fontSize },
+  };
+}
+
 export function collectRetainedTypographyEvidence(cases, inventory) {
   const comparisons = [], differences = [], gaps = [], paintMaskDifferences = [], reviewedMappings = [];
   const mappings = new Map();
@@ -805,6 +849,7 @@ export function collectRetainedTypographyEvidence(cases, inventory) {
       const headingMapping = headingById.get(id);
       const headingMask = reviewedHeadingMask(headingMapping, ref, styles, astylarTree, inventory);
       const tableFont = reviewedTableFontInput(entry, ref, ast, styles, referenceTree, astylarTree, inventory);
+      const floatingLabel = reviewedFloatingLabelInput(entry, ref, ast, styles, referenceTree, astylarTree, inventory);
       if (headingMask) paintMaskDifferences.push({ case: key, element: id, referenceNode: ref.key, astylarNode: ast.key, ...headingMask });
       const comparison = { case: key, family: entry.family, element: id, text: refText,
         referenceNode: ref.key, astylarNode: ast.key, source: 'core-text-registry',
@@ -824,6 +869,7 @@ export function collectRetainedTypographyEvidence(cases, inventory) {
             justification: 'Browser computed and retained core text properties differ on directly mapped own-text nodes. Trace authored rules and resolution before assigning authoring or core fault; this is not proof of current pseudo-state paint.',
             ...(property === 'color' && headingMask ? headingMask : {}),
             ...(property === 'fontSize' && tableFont ? tableFont : {}),
+            ...(property === 'fontSize' && floatingLabel ? floatingLabel : {}),
           });
         }
       }
@@ -1131,6 +1177,9 @@ function sourceFingerprints(root) {
     'src/app/services/dom/style.service.ts',
     'src/app/services/dom/elements/element-dimension.service.ts',
     'src/app/services/dom/elements/element-creation.service.ts',
+    'src/app/services/dom/elements/css-transform.ts',
+    'src/app/services/dom/elements/element-material.service.ts',
+    'src/app/types/style-rule.ts',
     'examples/material-showcase/src/app/astylar.component.ts',
     'examples/material-showcase/src/app/material-input-evidence.ts',
     'examples/material-showcase/src/app/reference.component.ts',
@@ -1152,7 +1201,7 @@ function focusedProofInventory(root) {
     proof(root, 'scripts/audit-material-picker-commits.mjs', /select day 1/,
       'supplemental diagnostic; known mismatches recorded in investigation', 'Real pointer selection of a date/time reaches the correct candidate target but does not commit a value or close the popup. This case supplements, rather than replaces, the unfiltered maintained matrix.'),
     proof(root, 'examples/material-showcase/src/app/input-equivalence-proof.spec.ts', /describe\('Material audit/,
-      'twenty-three executable browser reductions; eight pass and fifteen diagnostic failures are retained', 'Eight original reductions pass: toolbar, stepper, content-derived flex height, calendar span, bottom overlay, table cells, inherited text stage, and positioned drawer geometry. Fifteen failures remain: the divider empty-block height defect; two direct-calc grid-list limitations; two literal grid-list and two plain opposing-inset height cases; two loaded-CSS grid-list cases with correct expression resolution but wrong inner auto height; four inline/inline-block intrinsic parent-width cases with and without an absolute badge; and two fixed-size positive/negative absolute-margin cases. Inline fragment vertical bounds are not equated to core text planes; badge/frame border boxes retain full-edge checks. Retained text is not a full computed-style/current-paint guarantee. Geometry does not establish text/border raster, scrolling or full Material composition. Consult the investigation for exact commands and limits.'),
+      'twenty-nine executable browser reductions; eleven pass and eighteen diagnostic failures are retained', 'Eight original reductions pass: toolbar, stepper, content-derived flex height, calendar span, bottom overlay, table cells, inherited text stage, and positioned drawer geometry. Floating-label untransformed, literal-translation, and default-origin scaling controls also pass; percentage translation, top-left origin scaling, and their combination fail. Transform-origin is deliberately preserved as original CSS diagnostic input outside the current public StyleRule subset. Fifteen earlier failures remain: divider empty-block height; two direct-calc grid-list limitations; two literal grid-list and two plain opposing-inset height cases; two loaded-CSS grid-list cases with correct expression resolution but wrong inner auto height; four inline/inline-block intrinsic parent-width cases; and two absolute-margin cases. Inline fragment vertical bounds are not equated to core text planes. Retained typography is not current-paint proof; geometry is not glyph/border raster, scrolling, or full Material composition evidence. Consult the investigation for exact commands and limits.'),
     proof(root, 'src/app/services/dom/elements/grid.service.spec.ts', /gridColumn:\s*'1 \/ -1'/,
       'existing unit evidence', 'Core grid covers browser-style full-span gridColumn; the new browser reduction also passes. This does not prove every calendar composition.'),
     proof(root, 'src/lib/astylar-document-style-integration.spec.ts', /equivalent/,
@@ -1175,6 +1224,7 @@ function implementationPlan() {
     { priority: 0, rootCause: 'Diagnostic declarations are not fully resolved typography', action: 'Complete trustworthy input-stage coverage before accepting the audit. The existing core retained-text stage and inherited-typography reduction now expose font size and line height independently of declarations; preserve that separation and extend missing control/plugin/anonymous-text mappings and current pseudo-state paint provenance. Do not add a competing inheritance algorithm to the showcase or infer resolved values from projected geometry.' },
     { priority: .5, rootCause: 'Benchmark paint masking hides visible heading coverage', action: 'Preserve the captured baseline but restore visible, equivalent heading inputs in the benchmark before claiming complete paint parity. HTML opacity-zero masking and candidate surface-colored ink are unequal and predate the audit. Test the actual unmasked theme/responsive/DPR inputs, retain resulting failures, and reduce them at the owning core subsystem rather than changing heading colors, opacity, offsets or sizes to recover a screenshot score.' },
     { priority: 1, rootCause: 'Rendered output feeds subsequent layout', action: 'Replace connectedOverlayTop mesh projection with a public read-only query of the authoritative core CSS layout boxes. Verify nested transforms, scroll, resize, DPR, and first-open/update cycles. Diagnostic projection may measure output but must never determine authored input.' },
+    { priority: 1.1, rootCause: 'CSS transform units and origins are lost before projection', action: 'Extend the incomplete core transform contract: retain translation units, resolve percentages against the CSS transform reference box, and compose transform-origin and ordered transforms in CSS coordinates. Add the public origin field deliberately with compatibility and package tests. The floating-label controls isolate percentage translation and top-left origin gaps while pixel translation and default-origin scaling pass. Preserve 16px label typography and the original wrapper transform instead of substituting a 12px font or new offsets. Do not change Babylon axis mapping to compensate for already incorrect CSS transforms.' },
     { priority: 2, rootCause: 'Range fixture changes reachable values', action: 'Restore the reference 0..100 range and step=5 with inter-thumb constraints. Exercise start=60/end=80 and start=20/end=40, drag both directions across the midpoint, and compare keyboard steps. Remove fixed half-domain clamping; reduce any resulting core interaction failure before implementation.' },
     { priority: 3, rootCause: 'Used-height constraints are replaced by provisional or intrinsic height', action: 'Fix both confirmed general rules: empty blocks must not retain parent height, and auto-height absolute text boxes with top/bottom insets must use the remaining containing-block height. Preserve positioned size ownership through block/flex intrinsic resizing. Keep the divider, literal grid-list and plain opposing-inset reductions unchanged; extend padded/bordered/min-max/nested/resize cases before removing fixture flow substitutions.' },
     { priority: 3.1, rootCause: 'Inline parent intrinsic width ignores in-flow descendants', action: 'Resolve nested inline and inline-block content width before using the parent as a flow item or positioned containing block. Do not simply sum every descendant: exclude out-of-flow content and preserve wrapping, whitespace, padding, min/max and shrink-to-fit constraints. Retain the overlay-free controls and compound badge proofs, then remove measured width tables only after equivalent Material input passes.' },

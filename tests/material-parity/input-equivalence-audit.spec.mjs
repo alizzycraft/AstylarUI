@@ -313,7 +313,11 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   const report = parityReport({}, {});
   const audit = buildMaterialInputAudit(report);
   assert.equal(audit.coverage.visualParityGreen, true);
-  assert.equal(audit.sourceFingerprints.length, 16);
+  assert.equal(audit.sourceFingerprints.length, 19);
+  for (const file of ['src/app/services/dom/elements/css-transform.ts',
+    'src/app/services/dom/elements/element-material.service.ts', 'src/app/types/style-rule.ts']) {
+    assert.ok(audit.sourceFingerprints.some((entry) => entry.file === file));
+  }
   assert.ok(audit.sourceFingerprints.some(({ file }) => file === 'src/lib/astylar.ts'));
   assert.ok(audit.sourceFingerprints.some(({ file }) => file === 'src/app/services/dom/style.service.ts'));
   assert.ok(audit.sourceFingerprints.every(({ sha256 }) => /^[a-f0-9]{64}$/.test(sha256)));
@@ -670,6 +674,65 @@ test('table font attribution fails closed without exact captured intent and corr
   ];
   for (const mutate of mutations) {
     const raw = tableTypographyReport();
+    mutate(raw.results[0]);
+    const evidence = collectRetainedTypographyEvidence(raw.results, collectFullTreeInventory(raw.results));
+    assert.equal(evidence.differences.find((entry) => entry.property === 'fontSize').attribution, 'unresolved');
+  }
+});
+
+function floatingLabelTypographyReport() {
+  const raw = retainedTypographyReport();
+  const entry = raw.results[0];
+  entry.family = 'form-field';
+  const { reference, astylar } = entry.inputTrees;
+  reference.styles[0] = { ...reference.styles[0], fontSize: '16px' };
+  Object.assign(reference.nodes[0], { type: 'mat-label', attributes: { id: 'form-field-label' }, parent: 'floating' });
+  reference.styles.push({ fontSize: '16px', transformOrigin: '0px 0px', transform: 'matrix(0.75, 0, 0, 0.75, 0, -20.14)' });
+  reference.rules.push({ active: true, selector: '.mdc-floating-label--float-above',
+    declarations: { transform: { value: 'translateY(-106%) scale(0.75)' } } });
+  reference.nodes.push({ key: 'floating', parent: null, type: 'label',
+    attributes: { class: 'mdc-floating-label--float-above' }, style: 1, rules: [0], pseudoElements: [] });
+  const node = astylar.nodes[0];
+  node.authored = { ...node.authored, id: 'form-field-label', type: 'label', class: 'field-label' };
+  node.parent = 'page';
+  const declarations = { ...node.resolvedStyle, fontSize: '12px', position: 'absolute', top: '8px', left: '16px' };
+  node.resolvedStyle = node.normalResolvedStyle = node.interactionResolvedStyle = declarations;
+  node.retainedText.style = { ...node.retainedText.style, fontSize: '12px' };
+  astylar.nodes.push({ key: 'page', parent: 'root', authored: { type: 'main', id: 'page' },
+    resolvedStyle: {}, normalResolvedStyle: {}, interactionResolvedStyle: {} });
+  astylar.rules.push({ selector: '.field-label', fontSize: '12px', position: 'absolute', top: '8px', left: '16px' });
+  return raw;
+}
+
+test('attributes floating-label font substitution without equating scaled and smaller text inputs', () => {
+  const raw = floatingLabelTypographyReport();
+  const evidence = collectRetainedTypographyEvidence(raw.results, collectFullTreeInventory(raw.results));
+  const difference = evidence.differences.find((entry) => entry.property === 'fontSize');
+  assert.equal(difference.attribution, 'reviewed-floating-label-font-input');
+  assert.equal(difference.classification, 'application-plugin-authoring-defect');
+  assert.equal(difference.values.reference, '16px');
+  assert.equal(difference.values.retained, '12px');
+  assert.equal(difference.reviewEvidence.referenceWrapperStyle.transform, 'matrix(0.75, 0, 0, 0.75, 0, -20.14)');
+});
+
+test('floating-label attribution rejects absent, competing, or differently transformed evidence', () => {
+  const mutations = [
+    (e) => { e.family = 'card'; },
+    (e) => { e.inputTrees.reference.styles[1].transform = 'none'; },
+    (e) => { e.inputTrees.reference.styles[1].transformOrigin = '50% 50%'; },
+    (e) => { e.inputTrees.reference.styles[1].transform = 'matrix(0.5, 0, 0, 0.5, 0, -20.14)'; },
+    (e) => { e.inputTrees.reference.styles[1].transform = 'matrix(0.75, 0, 0, 0.75, 0, --20..)'; },
+    (e) => { e.inputTrees.reference.rules[0].active = false; },
+    (e) => { e.inputTrees.reference.nodes[1].type = 'div'; },
+    (e) => { e.inputTrees.astylar.nodes[0].authored.class = 'other'; },
+    (e) => { e.inputTrees.astylar.nodes[0].retainedText.style.fontSize = '13px'; },
+    (e) => { e.inputTrees.astylar.nodes[1].interactionResolvedStyle.transform = 'scale(.75)'; },
+    (e) => { delete e.inputTrees.astylar.nodes[1].interactionResolvedStyle; },
+    (e) => { e.inputTrees.astylar.nodes[0].parent = 'missing'; },
+    (e) => { e.inputTrees.astylar.rules.push({ selector: '.field-label', fontSize: '16px' }); },
+  ];
+  for (const mutate of mutations) {
+    const raw = floatingLabelTypographyReport();
     mutate(raw.results[0]);
     const evidence = collectRetainedTypographyEvidence(raw.results, collectFullTreeInventory(raw.results));
     assert.equal(evidence.differences.find((entry) => entry.property === 'fontSize').attribution, 'unresolved');

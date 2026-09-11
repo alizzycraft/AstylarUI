@@ -11,6 +11,76 @@ Argument validation rejects unknown, empty, and repeated options (25/25 audit
 tests pass). A missing selected report fails rather than falling back to older
 evidence; the new run has not yet produced its final report.
 
+## Floating-label substitution exposes transform-subset gaps (2026-09-12)
+
+The 16px/12px field-label difference is not a simple font-scaling diagnosis.
+Material keeps 16px typography inside an absolutely positioned floating label
+with `translateY(-106%) scale(0.75)` and a top-left transform origin. The
+candidate instead authors 12px text directly on an absolute label at `top:8px;
+left:16px`, with different tracking. The substitution was present in `2f44011`;
+`87bc351` added tracking and vertical-alignment overrides. This changes rendering
+inputs even where the apparent glyph size is similar.
+
+The retained-stage audit now attributes **18** static font-size observations
+(form-field, input and select; light/dark; three viewports) to this substitution.
+Each attribution requires the exact reference wrapper/type/class, active scale
+rule, computed .75 matrix and top-left origin, reference 16px text, corresponding
+candidate 12px rule and retained value, fixed insets, and an untransformed
+candidate ancestry reaching the page. Missing/competing rules or changed
+structure/transform evidence are rejected. Hidden/untransformed compact states,
+tracking, colors, font stacks and other properties remain separately reviewable;
+the classifier does not multiply font sizes to declare the inputs equal.
+
+Six new original-input reductions isolate the rendering boundary. Both sides
+receive the same rule objects and unchanged 16px/24px text with 0.496px tracking.
+The label is 160x24px at (16,40) in a 240x80px containing block. Retained font
+size, line height and tracking are asserted independently of projected output.
+Only the inline text fragment's horizontal bounds are compared; wrapper border
+boxes keep all four edge checks.
+
+| Reduction | Observed result |
+| --- | --- |
+| No transform | Pass |
+| `translateY(-12px) scale(1)` | Pass |
+| `scale(.75)` with the default origin | Pass |
+| `translateY(-50%) scale(1)` | Fail: top -10px versus 28px; -50% is treated as -50px rather than -12px |
+| `scale(.75)` with `left top` origin | Fail: left 36px versus 16px; top 43px versus 40px |
+| Percentage translation plus .75 scale, `left top` origin | Fail: left 36px versus 16px; top -7px versus 28px |
+
+Source trace separates these from final world-axis projection:
+
+- `parseCssTransform` strips translation units using `parseFloat` and receives
+  no transform reference-box dimensions. Percentage translation is therefore
+  already wrong before `cssTranslationToRenderOffset` projects it. The pixel
+  translation control passes.
+- `StyleRule` has no `transformOrigin` field. `ElementMaterialService.applyTransforms`
+  receives only translation/rotation/scale plus projection, and scales the mesh
+  about its existing center. The 20px/3px displacement matches the missing
+  top-left-origin adjustment for this 160x24px box. Default-origin scaling passes.
+- The capability catalog already classifies transforms as a **different,
+  incomplete subset**. These are confirmed unsupported-semantics gaps, not a
+  newly claimed regression in a promised complete CSS transform contract.
+  The original `transform-origin` declaration is intentionally retained in the
+  diagnostic payload outside today's typed subset; the test explicitly says so.
+
+Remediation belongs in the core CSS transform parser/reference-box/origin
+composition and its public contract, before final projection. The implementation
+plan now prioritizes it after removal of output-to-layout feedback. Preserve the
+original label typography/wrapper; do not repair these gaps with a smaller font,
+plugin arithmetic, mesh-coordinate feedback, or adjusted Babylon axis signs.
+
+Verification: `node --test tests/material-parity/*.spec.mjs` passes **64/64**,
+including positive/negative label attribution and the expanded source fingerprint
+checks. `npm --prefix examples/material-showcase test -- --watch=false --browsers=ChromeHeadless --include=src/app/input-equivalence-proof.spec.ts`
+now contains **29 cases: 11 pass / 18 fail**.
+The three new failing paths repeat the isolated results; all 15 prior failures
+remain. The three new passing controls distinguish the missing semantics from
+general placement/scaling failure. Full-tree reanalysis of 436 static cases has
+zero collection errors, detects all **47** source findings, and reduces retained
+unresolved property observations from 2,251 to **2,233**. This is not a completed
+audit or a renderer implementation change. The unfiltered matrix remains live
+against its unchanged capture modules and served production bundle.
+
 ## Table font input changed alongside a renderer fix (2026-09-12)
 
 History identifies a concrete unequal-input change: commit `f980edc`

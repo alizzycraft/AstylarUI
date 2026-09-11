@@ -8,6 +8,33 @@ import { Astylar, provideAstylar, type DOMElement, type SiteData } from 'astylar
 // measured height table, DPR correction, or duplicate position calculation.
 describe('Material audit: equivalent CSS input reductions', () => {
   const cases: Array<{ name: string; site: SiteData; ids: string[]; horizontalOnly?: string[]; loadedCss?: boolean; resolved?: Array<{ id: string; properties: string[]; stage?: 'retainedText' }> }> = [
+    ...[
+      { name: '1 parent transform', transform: 'translateY(-50%) scale(1)' },
+      { name: '0.75 parent transform', transform: 'translateY(-50%) scale(.75)' },
+      { name: 'untransformed control', transform: 'none' },
+      { name: 'literal translation control', transform: 'translateY(-12px) scale(1)' },
+      { name: 'scale-only control', transform: 'scale(.75)' },
+      { name: 'default-origin scale control', transform: 'scale(.75)', defaultOrigin: true },
+    ].map(({ name, transform, defaultOrigin }) => ({
+      name: `floating label preserves child typography through a ${name}`,
+      site: {
+        root: { children: [{ type: 'div', id: 'floating-field', children: [
+          { type: 'label', id: 'floating-wrapper', children: [
+            { type: 'span', id: 'floating-text', textContent: 'Project name' },
+          ] },
+        ] }] },
+        styles: [
+          { selector: '#floating-field', position: 'relative', width: '240px', height: '80px', fontFamily: 'Arial', fontSize: '16px', lineHeight: '24px', letterSpacing: '0.496px' },
+          // Original CSS intent includes transform-origin, which is not yet a
+          // public StyleRule field. Retain it in this diagnostic reduction to
+          // expose the gap, not to claim that the current public API supports it.
+          { selector: '#floating-wrapper', position: 'absolute', display: 'block', width: '160px', height: '24px', top: '40px', left: '16px', ...(defaultOrigin ? {} : { transformOrigin: 'left top' }), transform },
+        ],
+      } as SiteData,
+      ids: ['floating-field', 'floating-wrapper', 'floating-text'],
+      horizontalOnly: ['floating-text'],
+      resolved: [{ id: 'floating-text', properties: ['fontSize', 'lineHeight', 'letterSpacing'], stage: 'retainedText' as const }],
+    })),
     ...([-12, 12] as const).map((margin) => ({
       name: `absolute left and bottom insets position the margin box with ${margin}px margins`,
       site: {

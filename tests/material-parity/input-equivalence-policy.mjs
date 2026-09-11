@@ -90,6 +90,36 @@ export const reviewedValueNormalizations = Object.freeze([
 
 export const sourceAuditDefinitions = Object.freeze([
   Object.freeze({
+    id: 'fixture-floating-label-transform-replaced-by-font-size',
+    introducedBy: '2f44011 initial 12px substitution; 87bc351 adds tracking and alignment overrides',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`selector: '\.field-label', position: 'absolute', top: '8px', left: '16px'[^\n]*fontSize: '12px'`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'Material field-label structure and typography translation',
+    justification: 'The filled reference label retains 16px type inside a floating wrapper with translateY(-106%) scale(0.75) and top-left transform origin. The candidate substitutes an absolute 12px label with fixed insets and different tracking. Similar apparent glyph size is not equivalent layout/transform input. Attribute captured occurrences only with the active wrapper transform, computed scale, and matching candidate declaration; compact/hidden/untransformed states need separate review. The original-input reductions expose percentage-translation and transform-origin gaps in core, so remediation must implement the missing CSS transform semantics rather than retain the smaller-font substitution.',
+    focusedProof: 'examples/material-showcase/src/app/input-equivalence-proof.spec.ts: floating label preserves child typography',
+  }),
+  Object.freeze({
+    id: 'core-transform-translation-discards-css-units',
+    introducedBy: 'existing CSS transform subset; confirmed by original floating-label reduction',
+    file: 'src/app/services/dom/elements/css-transform.ts',
+    pattern: String.raw`result\.translate\.y = parseFloat\(values\[0\]\) \|\| 0;`,
+    classification: 'intentional-documented-limitation',
+    owner: 'core CSS transform parsing and reference-box resolution',
+    justification: 'The capability catalog declares an incomplete transform grammar. The parser currently strips translation units with parseFloat and accepts no reference-box dimensions. A 24px-high label translated by -50% moves -50px rather than -12px; the otherwise identical -12px and untransformed controls pass. This is a confirmed unsupported CSS semantics gap, not evidence that final Babylon axis projection is wrong. Preserve units until core resolves them against the CSS transform reference box; do not resolve them in a Material plugin.',
+    focusedProof: 'examples/material-showcase/src/app/input-equivalence-proof.spec.ts: floating label percentage and literal translation controls',
+  }),
+  Object.freeze({
+    id: 'core-transform-origin-not-authored-or-applied',
+    introducedBy: 'existing incomplete transform contract and center-based mesh scaling',
+    file: 'src/app/services/dom/elements/element-material.service.ts',
+    pattern: String.raw`applyTransforms\(mesh: Mesh, transform: TransformData, projection: CameraActions\): void`,
+    classification: 'intentional-documented-limitation',
+    owner: 'core transform public contract and CSS transform-origin composition',
+    justification: 'StyleRule has no transformOrigin field and the material transform application receives only translation/rotation/scale plus projection. The original CSS top-left-origin reduction is explicitly diagnostic input outside that public subset. Scaling a 160x24 label by .75 leaves its center fixed, shifting its left/top by 20px/3px instead of preserving the authored top-left. Add origin/reference-box semantics in core and project the finished CSS transform only at the rendering boundary. This is not a reason for fixture pixel offsets or font-size replacement.',
+    focusedProof: 'examples/material-showcase/src/app/input-equivalence-proof.spec.ts: floating label scale-only control',
+  }),
+  Object.freeze({
     id: 'audit-style-snapshot-precedes-typography-inheritance',
     introducedBy: 'b6dc672 feat(diagnostics): inspect hidden-node core style declarations',
     file: 'src/lib/astylar.ts',
