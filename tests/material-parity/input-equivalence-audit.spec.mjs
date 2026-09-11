@@ -154,6 +154,28 @@ test('normalizes only a fixed max-width constraint across explicit box-sizing mo
   assert.notEqual(buildMaterialInputAudit(parityReport(reference, astylar)).discrepancies.find((entry) => entry.property === 'boxSizing').classification, 'equivalent-representation');
 });
 
+test('attributes sidenav container flow only with the reviewed paired declaration witnesses', () => {
+  const raw = parityReport({ display: 'block' }, { display: 'flex' });
+  raw.results[0].family = 'sidenav';
+  const input = raw.results[0].styleInputs[0];
+  input.id = 'sidenav-primary';
+  input.referenceStructure = { schemaVersion: 2, type: 'mat-sidenav-container' };
+  input.astylarStructure = { schemaVersion: 2, type: 'div' };
+  input.referenceAuthored = [{ selector: '.mat-drawer-container', declarations: { display: { value: 'block' } } }];
+  input.astylarAuthored = [{ selector: '.sidenav-container', declarations: { display: 'flex' } }];
+  const difference = () => buildMaterialInputAudit(raw).discrepancies.find((entry) => entry.property === 'display');
+  assert.equal(difference().classification, 'application-plugin-authoring-defect');
+  assert.equal(difference().attribution, 'reviewed-authored-rule');
+  input.referenceAuthored.push({ selector: '#sidenav-primary', declarations: { display: { value: 'grid' } } });
+  assert.equal(difference().attribution, 'unresolved');
+  input.referenceAuthored.pop();
+  input.astylarAuthored[0].selector = '.another-container';
+  assert.equal(difference().attribution, 'unresolved');
+  input.astylarAuthored[0].selector = '.sidenav-container';
+  input.astylarStructure.type = 'section';
+  assert.equal(difference().attribution, 'unresolved');
+});
+
 test('source audit has an explicit classification and live location for every policy entry', () => {
   const audit = buildMaterialInputAudit(parityReport({}, {}));
   assert.equal(audit.summary.unclassifiedDifferences, 0);

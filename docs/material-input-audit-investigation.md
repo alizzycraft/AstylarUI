@@ -87,6 +87,18 @@ showcase, rather than a later demonstrated core repair. No fixture or renderer
 input was changed by this proof, and the full matrix continues with its original
 pinned served bundle.
 
+The audit now attributes the mapped sidenav container's block-to-flex difference
+only when both captured authored rules, resolved values, family/ID, and paired
+node types match this reviewed path. Conflicting declarations or missing/changed
+selectors leave attribution unresolved. Applying the classifier to all12 fresh
+static sidenav records resolves exactly that display signature with12 occurrences;
+it does not waive other properties or the wrapper/scrolling differences. The
+source finding records the independent scroll wrapper and containing-block
+ownership lost by the fixture substitution. The28 focused audit tests pass,
+including negative witness/conflicting-cascade/type cases. The report's proof
+inventory now lists nine reductions, eight passing and the one retained divider
+failure. This changes audit interpretation only, not the running capture inputs.
+
 ## Retained core text-input evidence (2026-09-11)
 
 The diagnostic snapshot now has an additive optional `retainedText` field with

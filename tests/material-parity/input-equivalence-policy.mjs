@@ -108,6 +108,17 @@ export const sourceAuditDefinitions = Object.freeze([
     referenceEvidence: { file: 'examples/material-showcase/src/app/reference.component.ts', selectors: ['mat-sidenav', 'mat-sidenav-content'], declarations: { padding: '20px' } },
   }),
   Object.freeze({
+    id: 'fixture-sidenav-positioned-flow-replaced',
+    introducedBy: '2f44011 feat(example): add Material component showcase',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`selector: '\.sidenav-container'[^\n]*display: 'flex'`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase drawer containing block, content offset, and independent scrolling',
+    justification: 'Fresh captured .mat-drawer-container rules explicitly specify position:relative, display:block and overflow:hidden. The reference drawer is absolute with top/bottom:0, a160px border-box width and20px padding; its inner scroll wrapper is100% of the content box. The content remains a relatively positioned block with margin-left:160px and content-box height:100% plus padding. Candidate replaces this with a flex row, a fixed220px drawer and a flex-grow content sibling, both with17px top padding, and omits the reference scroll wrapper. This changes containing-block, used-size and scroll ownership rules even when the screenshot matches. Attribute the container display signature only when both captured declaration witnesses and node mappings agree; other signatures and core behavior require separate proof.',
+    referenceEvidence: { file: 'examples/material-showcase/src/app/reference.component.ts', element: "@case ('sidenav')", selector: '.mat-drawer-container', declarations: { position: 'relative', display: 'block', overflow: 'hidden' } },
+    focusedProof: 'examples/material-showcase/src/app/input-equivalence-proof.spec.ts: side drawer uses containing-block insets and content margin without a flex replacement',
+  }),
+  Object.freeze({
     id: 'fixture-divider-replaces-paragraph-flow-with-coordinates',
     introducedBy: 'fcde1b7 fix(example): align Material divider; refined by1f2f2aa and662c179',
     file: 'examples/material-showcase/src/app/astylar.component.ts',

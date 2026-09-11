@@ -219,6 +219,7 @@ function collectStyleDiscrepancies(cases) {
           ? { classification: 'parity-harness-defect', owner: 'audit effective pseudo-state style capture',
             justification: 'This interaction capture predates effective-style provenance. It can compare browser state styles against candidate normal-only declarations; recapture with evidence version2 before attributing the difference to authoring or core.' }
           : classifyReviewedRootInput(benchmarkCase, input, property, referenceValue, astylarValue)
+            ?? classifyReviewedSidenavInput(benchmarkCase, input, property, referenceValue, astylarValue)
             ?? classifyStyleDifference(property, referenceValue, astylarValue, reference, astylar);
         const signature = JSON.stringify([benchmarkCase.family, input.id, property, referenceValue ?? null, astylarValue ?? null,
           classification.classification, classification.attribution ?? null, classification.justification]);
@@ -274,6 +275,27 @@ function classifyReviewedRootInput(benchmarkCase, input, property, reference, as
     attribution: 'reviewed-authored-rule',
     owner: 'showcase demo-section block-flow translation',
     justification: `The mapped section uses reference .demo block flow, while captured candidate rule #${input.id} explicitly authors ${property}:${astylar}. The reference computed ${property}:${reference} agrees with the inspected ReferenceComponent rules. This traced shared-root translation changes formatting/containing-block behavior; it is not inferred from omitted resolved values or screenshot geometry. See fixture-demo-block-flow-replaced in source findings.`,
+  };
+}
+
+function classifyReviewedSidenavInput(benchmarkCase, input, property, reference, astylar) {
+  if (benchmarkCase.family !== 'sidenav' || input.id !== 'sidenav-primary' ||
+      property !== 'display' || reference !== 'block' || astylar !== 'flex' ||
+      input.referenceStructure?.type !== 'mat-sidenav-container' || input.astylarStructure?.type !== 'div') return;
+  const referenceRule = input.referenceAuthored?.find((rule) => rule.selector === '.mat-drawer-container' &&
+    rule.declarations?.display?.value === 'block');
+  const candidateRule = input.astylarAuthored?.find((rule) => rule.selector === '.sidenav-container' &&
+    rule.declarations?.display === 'flex');
+  if (!referenceRule || !candidateRule) return;
+  // Do not resolve a conflicting cascade in the report. The reviewed source
+  // path has no other display declarations with different values.
+  if (input.referenceAuthored.some((rule) => rule.declarations?.display?.value !== undefined && rule.declarations.display.value !== reference) ||
+      input.astylarAuthored.some((rule) => rule.declarations?.display !== undefined && rule.declarations.display !== astylar)) return;
+  return {
+    classification: 'application-plugin-authoring-defect',
+    attribution: 'reviewed-authored-rule',
+    owner: 'showcase drawer containing block, content offset, and independent scrolling',
+    justification: 'Captured .mat-drawer-container explicitly authors display:block, while .sidenav-container explicitly authors display:flex on the corresponding container. The reference absolute drawer, margin-offset content and independent scroll wrapper are replaced by flex siblings. This is the traced fixture-sidenav-positioned-flow-replaced input difference, not a core inference or acceptance of all framework-wrapper differences.',
   };
 }
 
@@ -833,7 +855,7 @@ function focusedProofInventory(root) {
     proof(root, 'scripts/audit-material-picker-commits.mjs', /select day 1/,
       'supplemental diagnostic; known mismatches recorded in investigation', 'Real pointer selection of a date/time reaches the correct candidate target but does not commit a value or close the popup. This case supplements, rather than replaces, the unfiltered maintained matrix.'),
     proof(root, 'examples/material-showcase/src/app/input-equivalence-proof.spec.ts', /describe\('Material audit/,
-      'eight executable browser reductions; one honest core failure retained', 'Seven reductions pass: intrinsic toolbar sizing, flex stepper connector, content-derived flex height, full-span calendar marker, fixed bottom overlay, table cell geometry/declarations without detached borders, and inherited typography observed through retained core text input. The paragraph/divider reduction repeatedly fails because the empty separator retains parent-content height (302px versus1px). Retained text is a separate stage, not a blanket computed-style or current pseudo-paint guarantee; hidden and anonymous text gaps remain. Table geometry does not prove border raster or full Material composition parity. Consult the investigation for commands and limitations.'),
+      'nine executable browser reductions; one honest core failure retained', 'Eight reductions pass: intrinsic toolbar sizing, flex stepper connector, content-derived flex height, full-span calendar marker, fixed bottom overlay, table cell geometry/declarations without detached borders, inherited typography observed through retained core text input, and positioned side-drawer geometry without a flex replacement. The paragraph/divider reduction repeatedly fails because the empty separator retains parent-content height (302px versus1px). Retained text is a separate stage, not a blanket computed-style or current pseudo-paint guarantee; hidden and anonymous text gaps remain. Table/drawer geometry does not prove border/text raster, scrolling or full Material composition parity. Consult the investigation for commands and limitations.'),
     proof(root, 'src/app/services/dom/elements/grid.service.spec.ts', /gridColumn:\s*'1 \/ -1'/,
       'existing unit evidence', 'Core grid covers browser-style full-span gridColumn; the new browser reduction also passes. This does not prove every calendar composition.'),
     proof(root, 'src/lib/astylar-document-style-integration.spec.ts', /equivalent/,
