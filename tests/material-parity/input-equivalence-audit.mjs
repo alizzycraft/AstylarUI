@@ -219,7 +219,7 @@ function collectStyleDiscrepancies(cases) {
           ? { classification: 'parity-harness-defect', owner: 'audit effective pseudo-state style capture',
             justification: 'This interaction capture predates effective-style provenance. It can compare browser state styles against candidate normal-only declarations; recapture with evidence version2 before attributing the difference to authoring or core.' }
           : classifyReviewedRootInput(benchmarkCase, input, property, referenceValue, astylarValue)
-            ?? classifyReviewedSidenavInput(benchmarkCase, input, property, referenceValue, astylarValue)
+            ?? classifyReviewedContainerInput(benchmarkCase, input, property, referenceValue, astylarValue)
             ?? classifyStyleDifference(property, referenceValue, astylarValue, reference, astylar);
         const signature = JSON.stringify([benchmarkCase.family, input.id, property, referenceValue ?? null, astylarValue ?? null,
           classification.classification, classification.attribution ?? null, classification.justification]);
@@ -278,14 +278,30 @@ function classifyReviewedRootInput(benchmarkCase, input, property, reference, as
   };
 }
 
-function classifyReviewedSidenavInput(benchmarkCase, input, property, reference, astylar) {
-  if (benchmarkCase.family !== 'sidenav' || input.id !== 'sidenav-primary' ||
-      property !== 'display' || reference !== 'block' || astylar !== 'flex' ||
-      input.referenceStructure?.type !== 'mat-sidenav-container' || input.astylarStructure?.type !== 'div') return;
-  const referenceRule = input.referenceAuthored?.find((rule) => rule.selector === '.mat-drawer-container' &&
+const reviewedContainerInputs = {
+  sidenav: {
+    referenceType: 'mat-sidenav-container', referenceSelector: '.mat-drawer-container',
+    candidateSelector: '.sidenav-container', candidateDisplay: 'flex',
+    owner: 'showcase drawer containing block, content offset, and independent scrolling',
+    justification: 'Captured .mat-drawer-container explicitly authors display:block, while .sidenav-container explicitly authors display:flex on the corresponding container. The reference absolute drawer, margin-offset content and independent scroll wrapper are replaced by flex siblings. This is the traced fixture-sidenav-positioned-flow-replaced input difference, not a core inference or acceptance of all framework-wrapper differences.',
+  },
+  'grid-list': {
+    referenceType: 'mat-grid-list', referenceSelector: '.mat-grid-list',
+    candidateSelector: '.grid-list', candidateDisplay: 'grid',
+    owner: 'showcase grid-list positioned tile and gutter translation',
+    justification: 'Captured .mat-grid-list explicitly authors display:block, while .grid-list explicitly authors display:grid. The reference positions tiles using percentage calc widths/offsets that leave a1px gutter; candidate instead uses two fractional tracks and gap:0. This is the reviewed fixture-grid-list-missing-reference-gutter authoring path. Different container mechanisms are not accepted merely because current geometry is similar; other properties and wrappers retain their own review requirements.',
+  },
+};
+
+function classifyReviewedContainerInput(benchmarkCase, input, property, reference, astylar) {
+  const review = reviewedContainerInputs[benchmarkCase.family];
+  if (!review || input.id !== `${benchmarkCase.family}-primary` ||
+      property !== 'display' || reference !== 'block' || astylar !== review.candidateDisplay ||
+      input.referenceStructure?.type !== review.referenceType || input.astylarStructure?.type !== 'div') return;
+  const referenceRule = input.referenceAuthored?.find((rule) => rule.selector === review.referenceSelector &&
     rule.declarations?.display?.value === 'block');
-  const candidateRule = input.astylarAuthored?.find((rule) => rule.selector === '.sidenav-container' &&
-    rule.declarations?.display === 'flex');
+  const candidateRule = input.astylarAuthored?.find((rule) => rule.selector === review.candidateSelector &&
+    rule.declarations?.display === review.candidateDisplay);
   if (!referenceRule || !candidateRule) return;
   // Do not resolve a conflicting cascade in the report. The reviewed source
   // path has no other display declarations with different values.
@@ -294,8 +310,8 @@ function classifyReviewedSidenavInput(benchmarkCase, input, property, reference,
   return {
     classification: 'application-plugin-authoring-defect',
     attribution: 'reviewed-authored-rule',
-    owner: 'showcase drawer containing block, content offset, and independent scrolling',
-    justification: 'Captured .mat-drawer-container explicitly authors display:block, while .sidenav-container explicitly authors display:flex on the corresponding container. The reference absolute drawer, margin-offset content and independent scroll wrapper are replaced by flex siblings. This is the traced fixture-sidenav-positioned-flow-replaced input difference, not a core inference or acceptance of all framework-wrapper differences.',
+    owner: review.owner,
+    justification: review.justification,
   };
 }
 
@@ -855,7 +871,7 @@ function focusedProofInventory(root) {
     proof(root, 'scripts/audit-material-picker-commits.mjs', /select day 1/,
       'supplemental diagnostic; known mismatches recorded in investigation', 'Real pointer selection of a date/time reaches the correct candidate target but does not commit a value or close the popup. This case supplements, rather than replaces, the unfiltered maintained matrix.'),
     proof(root, 'examples/material-showcase/src/app/input-equivalence-proof.spec.ts', /describe\('Material audit/,
-      'nine executable browser reductions; one honest core failure retained', 'Eight reductions pass: intrinsic toolbar sizing, flex stepper connector, content-derived flex height, full-span calendar marker, fixed bottom overlay, table cell geometry/declarations without detached borders, inherited typography observed through retained core text input, and positioned side-drawer geometry without a flex replacement. The paragraph/divider reduction repeatedly fails because the empty separator retains parent-content height (302px versus1px). Retained text is a separate stage, not a blanket computed-style or current pseudo-paint guarantee; hidden and anonymous text gaps remain. Table/drawer geometry does not prove border/text raster, scrolling or full Material composition parity. Consult the investigation for commands and limitations.'),
+      'fifteen executable browser reductions; eight pass and seven diagnostic failures are retained', 'Eight original reductions pass: toolbar, stepper, content-derived flex height, calendar span, bottom overlay, table cells, inherited text stage, and positioned drawer geometry. Seven failures remain: the divider empty-block height defect; two original-calc grid-list cases exercising the documented direct-style expression limitation; two literal grid-list controls whose outer geometry/gutter match but content height fails; and two plain block/flex opposing-inset height reductions. The last four isolate a second core used-height defect without calc or Material dependencies. Retained text is not a full computed-style/current-paint guarantee. Passing geometry does not prove text/border raster, scrolling or full Material composition. Consult the investigation for exact commands and limits.'),
     proof(root, 'src/app/services/dom/elements/grid.service.spec.ts', /gridColumn:\s*'1 \/ -1'/,
       'existing unit evidence', 'Core grid covers browser-style full-span gridColumn; the new browser reduction also passes. This does not prove every calendar composition.'),
     proof(root, 'src/lib/astylar-document-style-integration.spec.ts', /equivalent/,
@@ -878,7 +894,8 @@ function implementationPlan() {
     { priority: 0, rootCause: 'Diagnostic declarations are not fully resolved typography', action: 'Complete trustworthy input-stage evidence before accepting the audit. The inherited-typography reduction must expose the authoritative core pre-projection font size and line height, with provenance separate from authored declarations and projected geometry. Do not add a competing inheritance algorithm to the showcase; preserve hidden-node, pseudo-state and revision evidence, and recapture affected comparisons once the owning instrumentation is corrected.' },
     { priority: 1, rootCause: 'Rendered output feeds subsequent layout', action: 'Replace connectedOverlayTop mesh projection with a public read-only query of the authoritative core CSS layout boxes. Verify nested transforms, scroll, resize, DPR, and first-open/update cycles. Diagnostic projection may measure output but must never determine authored input.' },
     { priority: 2, rootCause: 'Range fixture changes reachable values', action: 'Restore the reference 0..100 range and step=5 with inter-thumb constraints. Exercise start=60/end=80 and start=20/end=40, drag both directions across the midpoint, and compare keyboard steps. Remove fixed half-domain clamping; reduce any resulting core interaction failure before implementation.' },
-    { priority: 3, rootCause: 'Empty-block auto height and fixture flow compensation', action: 'First fix the confirmed empty-block parent-height fallback in ElementDimensionService/ElementCreationService; the paragraph/divider reduction must pass unchanged. Preserve explicit constraints, flex/grid stretch and replaced elements, and add padded/bordered/nested/resize cases. Then replace absolute flow placement, fixed family heights and measured dimensions with the reference declarations, reducing any further core discrepancies instead of restoring offsets.' },
+    { priority: 3, rootCause: 'Used-height constraints are replaced by provisional or intrinsic height', action: 'Fix both confirmed general rules: empty blocks must not retain parent height, and auto-height absolute text boxes with top/bottom insets must use the remaining containing-block height. Preserve positioned size ownership through block/flex intrinsic resizing. Keep the divider, literal grid-list and plain opposing-inset reductions unchanged; extend padded/bordered/min-max/nested/resize cases before removing fixture flow substitutions.' },
+    { priority: 3.5, rootCause: 'Reference CSS expressions bypass direct-style support', action: 'Verify the existing core-owned loaded-document-style resolution path with the original grid-list calc declarations. If that path cannot preserve equivalent inputs and constraints, scope a general core value-resolution correction. Do not copy measured pixels or implement per-family expression arithmetic in the fixture/plugin; literal diagnostic controls are not acceptance of the original expressions.' },
     { priority: 4, rootCause: 'Generic overlay composition is duplicated', action: 'Audit existing core primitives before adding APIs for connected anchors, viewport collision, clipping, focus scope, and dismissal. Migrate popup families with equivalent state inputs; retain different datepicker and timepicker focus behavior. Remove the tooltip benchmark-only forced-open handler.' },
     { priority: 5, rootCause: 'Plugin competes with core typography', action: 'Remove DynamicTexture glyph/baseline rendering from MaterialTabPanelRenderer. Keep only Material transition orchestration while composing core-rendered text/content.' },
     { priority: 6, rootCause: 'Interaction geometry duplicated by the application', action: 'Expose resolved CSS-space target bounds and local pointer coordinates in the core event/plugin contract; remove ripple width tables.' },

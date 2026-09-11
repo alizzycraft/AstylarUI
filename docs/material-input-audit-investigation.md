@@ -106,6 +106,16 @@ was changed. The same existing NG0914 and text-bearing-main advisory warnings
 remain. These are intentional retained diagnostic failures, not a green release
 claim. The full capture continues independently against its pinned bundle.
 
+The report separates the calc limitation, the opposing-inset core defect, and
+the fixture's grid substitution into three findings with distinct owners.
+Applying its witness-based container classifier to the twelve fresh static
+grid-list records attributes exactly the block-to-grid display signature;
+conflicting or missing declarations still leave attribution unresolved.
+`node --test tests/material-parity/*.spec.mjs` passes **48/48**. The implementation
+plan now requires both used-height corrections and verification of the existing
+core CSS-expression resolution path before restoring equivalent grid-list input.
+None of these findings waives the remaining full-tree, state, or paint review.
+
 ## Sidenav equivalent-input reduction (2026-09-11)
 
 The freshly checkpointed twelve static sidenav cases show an authored

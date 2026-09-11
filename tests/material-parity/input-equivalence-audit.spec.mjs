@@ -182,6 +182,32 @@ test('source audit has an explicit classification and live location for every po
   assert.equal(audit.summary.unexplainedSourceFindings, 0);
   assert.equal(audit.summary.undetectedSourceDefinitions, 0);
   assert.ok(audit.sourceFindings.every(({ detected, locations }) => detected && locations.length > 0));
+  assert.equal(audit.sourceFindings.find(({ id }) => id === 'direct-style-calc-resolution-limit').classification,
+    'intentional-documented-limitation');
+  assert.equal(audit.sourceFindings.find(({ id }) => id === 'core-opposing-vertical-insets-ignore-auto-height').classification,
+    'confirmed-core-renderer-defect');
+});
+
+test('grid-list display attribution requires its own authored and structural witnesses', () => {
+  const raw = parityReport({ display: 'block', position: 'relative' }, { display: 'grid', position: 'static' });
+  raw.results[0].family = 'grid-list';
+  const input = raw.results[0].styleInputs[0];
+  input.id = 'grid-list-primary';
+  input.referenceStructure = { schemaVersion: 2, type: 'mat-grid-list' };
+  input.astylarStructure = { schemaVersion: 2, type: 'div' };
+  input.referenceAuthored = [{ selector: '.mat-grid-list', declarations: { display: { value: 'block' } } }];
+  input.astylarAuthored = [{ selector: '.grid-list', declarations: { display: 'grid' } }];
+  const difference = (property = 'display') => buildMaterialInputAudit(raw).discrepancies.find((entry) => entry.property === property);
+  assert.equal(difference().attribution, 'reviewed-authored-rule');
+  assert.equal(difference('position').attribution, 'unresolved');
+  input.astylarAuthored.push({ selector: '#grid-list-primary', declarations: { display: 'flex' } });
+  assert.equal(difference().attribution, 'unresolved');
+  input.astylarAuthored.pop();
+  input.referenceAuthored[0].selector = '.mat-drawer-container';
+  assert.equal(difference().attribution, 'unresolved');
+  input.referenceAuthored[0].selector = '.mat-grid-list';
+  input.referenceStructure.type = 'div';
+  assert.equal(difference().attribution, 'unresolved');
 });
 
 test('retains tooltip click-state divergence but rejects missing hover evidence', () => {
