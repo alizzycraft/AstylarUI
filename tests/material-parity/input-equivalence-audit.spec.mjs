@@ -5,6 +5,7 @@ import {
   collectFullTreeInventory,
   summarizeSupplementalBehavior,
   summarizeSupplementalOverlays,
+  summarizeSupplementalSlider,
   validateMaterialInputAudit,
 } from './input-equivalence-audit.mjs';
 
@@ -12,6 +13,27 @@ const browserDefaults = {
   visibility: 'visible', minWidth: '0px', maxWidth: 'none', minHeight: '0px', maxHeight: 'none',
   fontStyle: 'normal', transform: 'none', pointerEvents: 'auto',
 };
+
+test('slider supplement requires all full-domain cases and does not trust endpoint claims', () => {
+  const control = (value) => ({ value: String(value), min: '0', max: '100', step: '5' });
+  const side = { trace: [30, 35, 40, 45, 50, 55, 60].map((value) => ({ start: control(value), end: control(65) })), errors: [] };
+  const raw = { viewport: { width: 1440, height: 900 }, profile: 'light', deviceScaleFactor: 1,
+    results: [{ family: 'slider', method: 'keyboard', thumb: 'start', state: 'keyboard-start-full-domain',
+      reference: side, astylar: side, matches: false }] };
+  assert.equal(summarizeSupplementalSlider(raw).cases[0].matches, true);
+  assert.equal(summarizeSupplementalSlider(raw).missing.length, 3);
+  const wrong = { ...raw, results: [{ ...raw.results[0], matches: true, astylar: { ...side,
+    trace: side.trace.map((sample) => ({ ...sample, start: { ...sample.start, step: '1' } })) } }] };
+  assert.equal(summarizeSupplementalSlider(wrong).mismatches.length, 1);
+  const skipped = { ...raw, results: [{ ...raw.results[0], astylar: { ...side,
+    trace: side.trace.map((sample, index) => index === 1 ? { ...sample, start: control(30) } : sample) } }] };
+  assert.equal(summarizeSupplementalSlider(skipped).mismatches.length, 1);
+  const absent = { ...raw, results: [{ ...raw.results[0], astylar: {} }] };
+  assert.ok(summarizeSupplementalSlider(absent).errors.length > 0);
+  assert.equal(summarizeSupplementalSlider(absent).mismatches.length, 0);
+  assert.ok(summarizeSupplementalSlider({ ...raw, results: [...raw.results, ...raw.results] }).errors.some(({ error }) => error.includes('duplicate')));
+  assert.equal(summarizeSupplementalSlider({}).missing.length, 4);
+});
 
 test('supplemental overlay evidence requires the medium breakpoint and recomputes geometry', () => {
   const side = { box: { left: 320, top: 772, width: 384, height: 128 }, errors: [] };

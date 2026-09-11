@@ -34,7 +34,8 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const coverage = buildCoverage(parityReport, cases);
   const supplementalBehavior = collectSupplementalBehavior(root);
   const supplementalOverlays = collectSupplementalOverlays(root);
-  const elementInventory = collectFullTreeInventory([...cases, ...supplementalBehavior.cases, ...supplementalOverlays.cases], { root });
+  const supplementalSlider = collectSupplementalSlider(root);
+  const elementInventory = collectFullTreeInventory([...cases, ...supplementalBehavior.cases, ...supplementalOverlays.cases, ...supplementalSlider.cases], { root });
   const classifications = countBy(discrepancies, (entry) => entry.classification);
   const propertyGroupCounts = countBy(discrepancies, (entry) => entry.propertyGroup);
   const familyCounts = countBy(discrepancies, (entry) => entry.family);
@@ -57,10 +58,12 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
     coverage,
     supplementalBehavior,
     supplementalOverlays,
+    supplementalSlider,
     summary: {
       inputEquivalent: coverage.complete && coverage.missingElements.length === 0 &&
         supplementalBehavior.missing.length === 0 && supplementalBehavior.errors.length === 0 && supplementalBehavior.mismatches.length === 0 &&
         supplementalOverlays.missing.length === 0 && supplementalOverlays.errors.length === 0 && supplementalOverlays.mismatches.length === 0 &&
+        supplementalSlider.missing.length === 0 && supplementalSlider.errors.length === 0 && supplementalSlider.mismatches.length === 0 &&
         elementInventory.gaps.length === 0 && elementInventory.errors.length === 0 &&
         coverage.presenceDifferences.length === 0 &&
         sourceFindings.every((entry) => entry.detected && ['equivalent-representation', 'legitimate-public-api-structure'].includes(entry.classification)) &&
@@ -104,6 +107,8 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
   if (report.supplementalBehavior.errors.length > 0) errors.push(`${report.supplementalBehavior.errors.length} supplemental behavior collection errors`);
   if (requireComplete && report.supplementalOverlays.missing.length > 0) errors.push(`${report.supplementalOverlays.missing.length} supplemental overlay cases are missing`);
   if (report.supplementalOverlays.errors.length > 0) errors.push(`${report.supplementalOverlays.errors.length} supplemental overlay collection errors`);
+  if (requireComplete && report.supplementalSlider.missing.length > 0) errors.push(`${report.supplementalSlider.missing.length} supplemental slider cases are missing`);
+  if (report.supplementalSlider.errors.length > 0) errors.push(`${report.supplementalSlider.errors.length} supplemental slider collection errors`);
   return errors;
 }
 
@@ -128,6 +133,8 @@ export function renderMaterialInputAuditMarkdown(report) {
     `Supplemental picker behavior: ${report.supplementalBehavior.cases.length}/6 cases captured; ${report.supplementalBehavior.missing.length} missing and ${report.supplementalBehavior.mismatches.length} observed mismatches. These cases cover pointer/keyboard commits and previous/next month navigation omitted by the maintained matrix. Classified behavioral failures remain evidence; they are not counted as successful parity.`,
     '',
     `Supplemental bottom-sheet breakpoints: ${report.supplementalOverlays.cases.length}/3 cases captured; ${report.supplementalOverlays.missing.length} missing and ${report.supplementalOverlays.mismatches.length} observed mismatches. This checks settled geometry at 900, 1024, and 1440 CSS px; the medium breakpoint is absent from the maintained matrix.`,
+    '',
+    `Supplemental slider full-domain behavior: ${report.supplementalSlider.cases.length}/4 cases captured; ${report.supplementalSlider.missing.length} missing and ${report.supplementalSlider.mismatches.length} observed mismatches. Keyboard stepping and pointer dragging exercise start=60/end=65 and start=30/end=40 without injected state.`,
     '',
     ...report.coverage.presenceDifferences.map((entry) => `- Presence discrepancy: ${entry.case}, ${entry.element}: ${entry.justification}`),
     '',
@@ -493,6 +500,59 @@ export function collectSupplementalOverlays(root) {
   if (!existsSync(path.resolve(root, file))) return { file, ...summarizeSupplementalOverlays({}) };
   const contents = readFileSync(path.resolve(root, file));
   return { file, sha256: createHash('sha256').update(contents).digest('hex'), ...summarizeSupplementalOverlays(JSON.parse(contents)) };
+}
+
+export function collectSupplementalSlider(root) {
+  const file = 'artifacts/material-parity/slider-domain-audit/latest-report.json';
+  if (!existsSync(path.resolve(root, file))) return { file, ...summarizeSupplementalSlider({}) };
+  const contents = readFileSync(path.resolve(root, file));
+  return { file, sha256: createHash('sha256').update(contents).digest('hex'), ...summarizeSupplementalSlider(JSON.parse(contents)) };
+}
+
+export function summarizeSupplementalSlider(raw) {
+  const required = ['keyboard', 'pointer'].flatMap((method) => ['start', 'end'].map((thumb) => `${method}-${thumb}-full-domain`));
+  const errors = [];
+  const cases = (raw.results ?? []).map((entry) => {
+    const key = entry.state;
+    if (!required.includes(key) || entry.family !== 'slider' || key !== `${entry.method}-${entry.thumb}-full-domain` ||
+        raw.profile !== 'light' || raw.deviceScaleFactor !== 1 || raw.viewport?.width !== 1440 || raw.viewport?.height !== 900) {
+      errors.push({ case: key, error: 'unexpected slider case or environment' });
+    }
+    const expected = entry.thumb === 'start' ? { start: 60, end: 65 } : { start: 30, end: 40 };
+    const count = entry.method === 'pointer' ? 14 : entry.thumb === 'start' ? 7 : 6;
+    const reached = {};
+    for (const side of ['reference', 'astylar']) {
+      const trace = entry[side]?.trace;
+      const valid = Array.isArray(trace) && trace.length === count && trace.every((sample) => ['start', 'end'].every((thumb) =>
+        ['value', 'min', 'max', 'step'].every((property) => sample[thumb]?.[property] !== undefined &&
+          sample[thumb][property] !== '' && Number.isFinite(Number(sample[thumb][property])))));
+      if (!valid) errors.push({ case: key, side, error: 'missing or invalid slider trace' });
+      for (const error of entry[side]?.errors ?? ['missing side errors']) errors.push({ case: key, side, error });
+      reached[side] = valid && ['start', 'end'].every((thumb) => Number(trace.at(-1)[thumb].value) === expected[thumb]) &&
+        trace.every((sample, index) => ['start', 'end'].every((thumb) => {
+          const value = Number(sample[thumb].value);
+          const initial = thumb === 'start' ? 30 : 65;
+          if (Number(sample[thumb].step) !== 5 || value % 5 !== 0) return false;
+          if (thumb !== entry.thumb || index === 0) return value === initial;
+          const direction = thumb === 'start' ? 1 : -1;
+          if (entry.method === 'keyboard') return value === initial + direction * index * 5;
+          const delta = (value - Number(trace[index - 1][thumb].value)) * direction;
+          return delta >= 0 && delta <= 5;
+        }));
+      if (side === 'reference' && valid && !reached[side]) errors.push({ case: key, side, error: 'reference did not establish the expected full-domain action' });
+    }
+    return { ...entry, expected, kind: 'supplemental', profile: raw.profile,
+      viewport: { ...raw.viewport, deviceScaleFactor: raw.deviceScaleFactor, id: 'supplemental-desktop-dpr1' },
+      matches: reached.reference && reached.astylar && !errors.some((error) => error.case === key),
+      inputTrees: { reference: entry.reference?.inputTree, astylar: entry.astylar?.inputTree } };
+  });
+  const keys = cases.map((entry) => entry.state);
+  if (new Set(keys).size !== keys.length) errors.push({ error: 'duplicate supplemental slider case' });
+  return { browser: raw.browser, cases, errors, missing: required.filter((key) => !keys.includes(key)),
+    mismatches: cases.filter((entry) => !entry.matches && !errors.some((error) => !error.case || error.case === entry.state))
+      .map((entry) => ({ family: entry.family, state: entry.state,
+        classification: 'application-plugin-authoring-defect', owner: 'showcase range domain and step/state normalization',
+        justification: 'Equivalent real actions expose the candidate fixed half-domains and step1 inputs versus reference step5 and peer-constrained full-domain thumbs. Candidate shared-state rounding adds discontinuities. Native attributes, intermediate values, and full input trees retain the evidence; no core targeting defect is inferred from unequal inputs.' })) };
 }
 
 export function summarizeSupplementalOverlays(raw) {

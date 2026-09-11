@@ -44,6 +44,41 @@ disprove the defect. Restore equivalent domains and step semantics, then add
 cross-midpoint drags in both directions, full-range reachable values, and
 keyboard increments. Reduce any remaining hit-testing failure independently.
 
+Supplemental real-action proof (2026-09-11):
+`node scripts/audit-material-slider-domain.mjs --base-url=http://127.0.0.1:4431`
+opens the unchanged production fixtures at light/1440x900/DPR1 and records native
+range attributes and values at each action boundary. No state is injected.
+
+| Action from start30/end65 | Reference final values | Astylar final native values |
+| --- | --- | --- |
+| Start: six ArrowRight presses | 60 / 65 | 40 / 65 |
+| End: five ArrowLeft presses | 30 / 40 | 30 / 58 |
+| Start: drag to60% | 60 / 65 | 50 / 65 |
+| End: drag to40% | 30 / 40 | 30 / 50 |
+
+Start keyboard traces are reference30,35,40,45,50,55,60 versus
+candidate30,31,32,35,36,37,40. End keyboard traces are reference
+65,60,55,50,45,40 versus candidate65,64,63,60,59,58. These demonstrate
+step1/round-to5 discontinuities as well as the pointer half-domain clamp.
+Reference native bounds are peer-constrained (initially start0..65/end30..100);
+candidate bounds stay0..50/50..100. The correct authoring contract is the
+component's full range with peer constraints, not two independent unrestricted
+thumbs and not two fixed halves.
+
+The diagnostic waits for renderer settlement plus two animation frames between
+actions on both sides. An initial exploratory rapid-key sequence dropped some
+reference updates; it is not used as deterministic evidence. The settled run
+captures all expected reference transitions. Two full diagnostic runs reproduced
+the same outcomes. All four supplementary cases fail
+parity honestly (exit1), with eight verified full input trees and no page or
+collection errors. Artifact references and SHA-256 digests are under
+`artifacts/material-parity/slider-domain-audit`. The audit loader requires all
+four cases, verifies trace lengths, native step/value quantization, unchanged
+peer values, expected keyboard increments and monotonic pointer samples, and
+recomputes outcomes rather than trusting `matches`. Collection/reference-action
+failures are reported separately from confirmed candidate mismatches.
+Audit unit tests20/20 and `npm run parity:harness:check`58/58 pass.
+
 ## Plugin typography ownership
 
 `MaterialTabPanelRenderer` in `material-showcase.plugin.ts` allocates a
