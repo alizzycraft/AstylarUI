@@ -51,7 +51,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
     environment: auditEnvironment(root),
     coverage,
     summary: {
-      inputEquivalent: discrepancies.every((entry) => entry.classification === 'equivalent-representation' || entry.classification === 'legitimate-public-api-structure'),
+      inputEquivalent: coverage.presenceDifferences.length === 0 && discrepancies.every((entry) => entry.classification === 'equivalent-representation' || entry.classification === 'legitimate-public-api-structure'),
       uniqueStyleDifferences: discrepancies.length,
       totalStyleDifferenceOccurrences: discrepancies.reduce((sum, entry) => sum + entry.occurrences, 0),
       classifications,
@@ -96,6 +96,8 @@ export function renderMaterialInputAuditMarkdown(report) {
     '',
     `Coverage is ${report.coverage.complete ? 'complete' : 'incomplete'}: ${report.coverage.executedStatic}/${report.coverage.configuredStatic} static cases and ` +
       `${report.coverage.executedInteractions}/${report.coverage.configuredInteractions} interaction/mobile-flow cases. All ${report.coverage.families.length} component families are inventoried.`,
+    '',
+    ...report.coverage.presenceDifferences.map((entry) => `- Presence discrepancy: ${entry.case}, ${entry.element}: ${entry.justification}`),
     '',
     'This means the existing screenshot score cannot be used as evidence that the renderer produced parity from equivalent inputs. The classified Astylar-only compensations must be removed through root-cause work; the reference side remains the input truth.',
     '',
@@ -146,7 +148,7 @@ function collectStyleDiscrepancies(cases) {
         const referenceValue = reference[property];
         const astylarValue = astylar[property];
         if (equivalentValue(property, referenceValue, astylarValue, reference, astylar)) continue;
-        const classification = classifyStyleDifference(property, referenceValue, astylarValue);
+        const classification = classifyStyleDifference(property, referenceValue, astylarValue, reference, astylar);
         const signature = JSON.stringify([benchmarkCase.family, input.id, property, referenceValue ?? null, astylarValue ?? null, classification.classification]);
         let entry = grouped.get(signature);
         if (!entry) {
@@ -179,7 +181,7 @@ function collectStyleDiscrepancies(cases) {
     a.family.localeCompare(b.family) || a.element.localeCompare(b.element) || a.property.localeCompare(b.property));
 }
 
-function classifyStyleDifference(property, reference, astylar) {
+function classifyStyleDifference(property, reference, astylar, referenceStyle, astylarStyle) {
   if (astylar === undefined && implicitReferenceValues[property]?.includes(reference)) {
     return {
       classification: 'equivalent-representation',
@@ -187,14 +189,16 @@ function classifyStyleDifference(property, reference, astylar) {
       owner: 'none',
     };
   }
-  if (property === 'transformOrigin' && astylar === undefined) {
+  if (property === 'transformOrigin' && astylar === undefined &&
+      (!referenceStyle.transform || ['none', 'matrix(1,0,0,1,0,0)'].includes(referenceStyle.transform)) &&
+      (!astylarStyle.transform || ['none', 'matrix(1,0,0,1,0,0)'].includes(astylarStyle.transform))) {
     return {
       classification: 'equivalent-representation',
       justification: 'Browser transform-origin is a derived used value; Astylar has no transform, so omission carries the same rendering intent.',
       owner: 'none',
     };
   }
-  if (property === 'caretColor' && astylar === undefined) {
+  if (property === 'caretColor' && astylar === undefined && reference === astylarStyle.color) {
     return {
       classification: 'equivalent-representation',
       justification: 'An omitted Astylar caret color follows the resolved text color, matching CSS caret-color:auto semantics.',
@@ -353,10 +357,25 @@ function buildCoverage(parityReport, cases) {
   const elementMappings = Object.fromEntries(materialFamilies.map((family) => [family,
     [...new Set(cases.filter((entry) => entry.family === family)
       .flatMap((entry) => (entry.styleInputs ?? []).map((input) => input.id)))].sort()]));
-  const missingElements = cases.flatMap((entry) => (entry.styleInputs ?? []).flatMap((input) =>
+  const oneSidedElements = cases.flatMap((entry) => (entry.styleInputs ?? []).flatMap((input) =>
     input.reference === undefined || input.astylar === undefined
       ? [{ case: caseKey(entry), element: input.id, referencePresent: input.reference !== undefined, astylarPresent: input.astylar !== undefined }]
       : []));
+  // This is observed state divergence, not a selector waiver: the reference
+  // tooltip closes on click, while the benchmark-only Astylar click handler
+  // forces state.open=true. Keep the case and its unequal input in the audit.
+  const presenceDifferences = oneSidedElements.filter((entry) =>
+    /^interaction:tooltip@[^/]+\/[^/]+\/open$/.test(entry.case) &&
+    entry.element === 'tooltip-popup' && !entry.referencePresent && entry.astylarPresent)
+    .map((entry) => ({ ...entry,
+      classification: 'application-plugin-authoring-defect',
+      file: 'examples/material-showcase/src/app/astylar.component.ts',
+      symbol: 'handleClick: tooltip-primary benchmarkInteraction === open',
+      recommendedOwner: 'showcase tooltip state adapter',
+      justification: 'The identical click dismisses Angular Material tooltip, but the Astylar benchmark-only click handler forces it open. The popup exists on only one side; hover/held mappings remain mandatory.',
+    }));
+  const classifiedPresence = new Set(presenceDifferences.map((entry) => `${entry.case}:${entry.element}`));
+  const missingElements = oneSidedElements.filter((entry) => !classifiedPresence.has(`${entry.case}:${entry.element}`));
   const missingStatic = [...expectedStatic].filter((key) => !actualStatic.has(key));
   const missingInteractions = [...expectedInteractions].filter((key) => !actualInteractions.has(key));
   return {
@@ -373,6 +392,7 @@ function buildCoverage(parityReport, cases) {
     missingStatic,
     missingInteractions,
     missingElements,
+    presenceDifferences,
     caseInventory: {
       static: [...expectedStatic],
       interaction: [...expectedInteractions],

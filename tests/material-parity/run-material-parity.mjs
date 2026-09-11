@@ -1348,7 +1348,12 @@ async function measureReference(page, ids) {
         'paginator-range': '#paginator-primary .mat-mdc-paginator-range-label',
         'tooltip-popup': '.mat-mdc-tooltip-surface',
         'dialog-panel': '.mat-mdc-dialog-surface',
+        'bottom-sheet-overlay': '.cdk-global-overlay-wrapper',
         'bottom-sheet-panel': '.mat-bottom-sheet-container',
+        'bottom-sheet-dismiss': '.mat-bottom-sheet-container .mat-mdc-list-item:nth-of-type(1)',
+        'bottom-sheet-copy': '.mat-bottom-sheet-container .mat-mdc-list-item:nth-of-type(2)',
+        'snack-bar-overlay': '.cdk-global-overlay-wrapper',
+        'snack-bar-surface': '.mdc-snackbar__surface',
       };
       return selectors[id] ? document.querySelector(selectors[id]) : null;
     }

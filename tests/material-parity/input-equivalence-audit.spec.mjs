@@ -57,3 +57,29 @@ test('source audit has an explicit classification and live location for every po
   assert.equal(audit.summary.undetectedSourceDefinitions, 0);
   assert.ok(audit.sourceFindings.every(({ detected, locations }) => detected && locations.length > 0));
 });
+
+test('retains tooltip click-state divergence but rejects missing hover evidence', () => {
+  const report = parityReport({}, {});
+  report.interactions = ['open', 'hover'].map((state) => ({
+    family: 'tooltip', profile: 'light', viewport: { id: 'desktop-dpr1' }, state,
+    styleInputs: [{ id: 'tooltip-popup', astylar: { display: 'flex' } }],
+  }));
+  const audit = buildMaterialInputAudit(report);
+  assert.equal(audit.coverage.presenceDifferences.length, 1);
+  assert.match(audit.coverage.presenceDifferences[0].case, /\/open$/);
+  assert.equal(audit.coverage.missingElements.length, 1);
+  assert.match(audit.coverage.missingElements[0].case, /\/hover$/);
+  assert.equal(audit.summary.inputEquivalent, false);
+  assert.ok(validateMaterialInputAudit(audit, { requireComplete: false })
+    .some((error) => error.includes('measured mappings')));
+});
+
+test('does not accept a missing origin for a transformed element or zero inset as auto', () => {
+  const audit = buildMaterialInputAudit(parityReport({
+    transform: 'matrix(0,-1,1,0,0,0)', transformOrigin: '20px 10px', left: '0px',
+  }, { transform: 'rotate(-90deg)' }));
+  for (const property of ['transformOrigin', 'left']) {
+    assert.equal(audit.discrepancies.find((entry) => entry.property === property)?.classification,
+      'application-plugin-authoring-defect');
+  }
+});
