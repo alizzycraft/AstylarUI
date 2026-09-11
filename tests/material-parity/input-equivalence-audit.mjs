@@ -1,4 +1,5 @@
 import { readFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import path from 'node:path';
 import {
   implicitReferenceValues,
@@ -49,9 +50,13 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
       verdictRule: 'Equal authored/resolved inputs with different output is a core defect; unequal Astylar inputs are never a valid parity fix.',
     },
     environment: auditEnvironment(root),
+    sourceFingerprints: sourceFingerprints(root),
     coverage,
     summary: {
-      inputEquivalent: coverage.presenceDifferences.length === 0 && discrepancies.every((entry) => entry.classification === 'equivalent-representation' || entry.classification === 'legitimate-public-api-structure'),
+      inputEquivalent: coverage.presenceDifferences.length === 0 &&
+        structures.every((entry) => entry.classification === 'legitimate-public-api-structure') &&
+        discrepancies.every((entry) => entry.classification === 'equivalent-representation' || entry.classification === 'legitimate-public-api-structure'),
+      structureDifferences: structures.filter((entry) => entry.classification !== 'legitimate-public-api-structure').length,
       uniqueStyleDifferences: discrepancies.length,
       totalStyleDifferenceOccurrences: discrepancies.reduce((sum, entry) => sum + entry.occurrences, 0),
       classifications,
@@ -87,6 +92,8 @@ export function renderMaterialInputAuditMarkdown(report) {
   const lines = [
     '# Material showcase input-equivalence audit',
     '',
+    'Counts are review signatures, not counts of confirmed renderer bugs. Browser computed styles include used pixel values, while Astylar resolved styles can retain percentages, auto sizes, and track expressions. Those unresolved comparisons are reported as harness normalization gaps, not accepted equivalence.',
+    '',
     `Evidence: complete enforced parity report with ${report.generatedFrom.browser?.name ?? 'browser'} ${report.generatedFrom.browser?.version ?? ''}.`,
     '',
     '## Verdict',
@@ -118,7 +125,7 @@ export function renderMaterialInputAuditMarkdown(report) {
     '',
     `Status: **${report.pluginBoundary.status}**. ${report.pluginBoundary.coordinateFinding}`,
     '',
-    'The Material-specific state layers, ripples, progress/range visuals, checkmark, and sort-arrow paint are legitimate plugin work. The tab-panel renderer is not: it rasterizes and positions text through its own DynamicTexture and baseline calculation, which competes with core typography. Connected-overlay placement and ripple bounds are also duplicated in the application because generic core APIs are missing.',
+    'The Material-specific state layers, ripples, progress/range visuals, checkmark, and sort-arrow paint are legitimate plugin work. The tab-panel renderer is not: it rasterizes and positions text through its own DynamicTexture and baseline calculation, which competes with core typography. Connected-overlay placement and ripple bounds are also duplicated in the application. Inspect existing public APIs before deciding whether a new API is necessary.',
     '',
     '## Root-cause implementation order',
     '',
@@ -206,6 +213,15 @@ function classifyStyleDifference(property, reference, astylar, referenceStyle, a
     };
   }
   const group = propertyGroupByName.get(property) ?? 'other';
+  if (group === 'layout' && reference !== undefined && astylar !== undefined &&
+      /(?:-?\d+(?:\.\d+)?px)/.test(reference) &&
+      /(?:%|\bauto\b|\bfr\b|\b(?:repeat|minmax|calc|var)\()/.test(astylar)) {
+    return {
+      classification: 'parity-harness-defect',
+      justification: `The reference exposes a used pixel value (${reference}) while Astylar retains a layout expression (${astylar}). The harness must compare equivalent authored expressions or authoritative CSS used values before deciding equivalence or assigning an authoring/core defect.`,
+      owner: 'input audit canonicalization and core pre-projection CSS layout evidence',
+    };
+  }
   return {
     classification: 'application-plugin-authoring-defect',
     justification: astylar === undefined
@@ -330,13 +346,18 @@ function collectStructureEvidence(cases) {
     for (const input of benchmarkCase.styleInputs ?? []) {
       if (!input.referenceStructure && !input.astylarStructure) continue;
       const signature = JSON.stringify([benchmarkCase.family, input.id, input.referenceStructure, input.astylarStructure]);
+      const sameMappedContent = !!input.referenceStructure && !!input.astylarStructure &&
+        input.referenceStructure.text === input.astylarStructure.text &&
+        JSON.stringify(input.referenceStructure.descendantIds) === JSON.stringify(input.astylarStructure.descendantIds);
       if (!grouped.has(signature)) grouped.set(signature, {
         family: benchmarkCase.family,
         element: input.id,
         reference: input.referenceStructure,
         astylar: input.astylarStructure,
-        classification: 'legitimate-public-api-structure',
-        justification: 'Angular Material expands components into framework-private DOM while Astylar uses public SiteData nodes. Text, semantic state, mapped descendant order, and measured geometry remain separately enforced.',
+        classification: sameMappedContent ? 'legitimate-public-api-structure' : 'application-plugin-authoring-defect',
+        justification: sameMappedContent
+          ? 'Mapped content and descendant order agree. Angular Material host tags may differ from public SiteData tags; this accepts the tag representation only, not layout or paint differences.'
+          : 'Mapped content or containment differs. The mapping/fixture must be reconciled before claiming equivalent structure; framework wrapper differences alone do not justify accepting it.',
         occurrences: 0,
         cases: [],
       });
@@ -380,7 +401,7 @@ function buildCoverage(parityReport, cases) {
   const missingInteractions = [...expectedInteractions].filter((key) => !actualInteractions.has(key));
   return {
     complete: missingStatic.length === 0 && missingInteractions.length === 0,
-    visualParityGreen: parityReport.summary?.failing === 0 && parityReport.interactionSummary?.failing === 0,
+    visualParityGreen: parityReport.summary?.meetsAcceptance === true && parityReport.interactionSummary?.meetsAcceptance === true,
     configuredStatic: expectedStatic.size,
     executedStatic: actualStatic.size,
     configuredInteractions: expectedInteractions.size,
@@ -416,9 +437,10 @@ function scanMaterialSources(root) {
 
 function auditEnvironment(root) {
   const packageJson = JSON.parse(readFileSync(path.resolve(root, 'package.json'), 'utf8'));
-  const materialPackage = JSON.parse(readFileSync(path.resolve(root, 'node_modules/@angular/material/package.json'), 'utf8'));
-  const angularPackage = JSON.parse(readFileSync(path.resolve(root, 'node_modules/@angular/core/package.json'), 'utf8'));
-  const babylonPackage = JSON.parse(readFileSync(path.resolve(root, 'node_modules/@babylonjs/core/package.json'), 'utf8'));
+  const consumerRoot = path.resolve(root, 'examples/material-showcase');
+  const materialPackage = JSON.parse(readFileSync(path.resolve(consumerRoot, 'node_modules/@angular/material/package.json'), 'utf8'));
+  const angularPackage = JSON.parse(readFileSync(path.resolve(consumerRoot, 'node_modules/@angular/core/package.json'), 'utf8'));
+  const babylonPackage = JSON.parse(readFileSync(path.resolve(consumerRoot, 'node_modules/@babylonjs/core/package.json'), 'utf8'));
   return {
     package: `${packageJson.name}@${packageJson.version}`,
     angular: angularPackage.version,
@@ -431,10 +453,27 @@ function auditEnvironment(root) {
   };
 }
 
+function sourceFingerprints(root) {
+  const files = [
+    'examples/material-showcase/src/app/astylar.component.ts',
+    'examples/material-showcase/src/app/reference.component.ts',
+    'examples/material-showcase/src/app/theme.ts',
+    'examples/material-showcase/src/app/showcase.store.ts',
+    'examples/material-showcase/src/styles.scss',
+    'examples/material-showcase/src/app/material-plugin/material-showcase.plugin.ts',
+    'examples/material-showcase/src/app/material-plugin/material-ripple.controller.ts',
+    'tests/material-parity/benchmark.config.mjs',
+  ];
+  return files.map((file) => ({ file, sha256: createHash('sha256')
+    .update(readFileSync(path.resolve(root, file), 'utf8').replace(/\r\n/g, '\n')).digest('hex') }));
+}
+
 function focusedProofInventory(root) {
   return [
+    proof(root, 'examples/material-showcase/src/app/input-equivalence-proof.spec.ts', /describe\('Material audit/,
+      'passed (3 Chrome/WebGL cases)', 'Single-source CSS declarations match browser geometry within 0.5px for content-derived flex height, full-span calendar marker with a cell-centered ring, and fixed bottom overlay. These reductions did not reproduce a core layout defect; full Material compositions still require investigation.'),
     proof(root, 'src/app/services/dom/elements/grid.service.spec.ts', /gridColumn:\s*'1 \/ -1'/,
-      'covered', 'Core grid explicitly covers browser-style full-span gridColumn; calendar explicit-cell code is not justified by a missing span primitive.'),
+      'existing unit evidence', 'Core grid covers browser-style full-span gridColumn; the new browser reduction also passes. This does not prove every calendar composition.'),
     proof(root, 'src/lib/astylar-document-style-integration.spec.ts', /equivalent/,
       'covered', 'Document-style integration has an equivalent-input integration fixture before projection.'),
     proof(root, 'examples/material-showcase/src/app/material-plugin/material-showcase.plugin.spec.ts', /logical CSS\/screen X/,
@@ -452,12 +491,14 @@ function proof(root, file, expression, status, description) {
 
 function implementationPlan() {
   return [
-    { priority: 1, rootCause: 'Fixture outcome compensation', action: 'Replace fixed family heights, absolute flow placement, responsive/DPR offsets, and duplicated measured dimensions with the same layout declarations and structure used by the reference. Let newly honest parity failures identify the owning core subsystem.' },
-    { priority: 2, rootCause: 'Missing generic overlay geometry API', action: 'Add a core CSS-space connected-overlay primitive for anchor rectangles, viewport collision, clipping, focus scope, and dismissal. Migrate autocomplete, select, date/time pickers, menu, tooltip, snackbar, dialog, and bottom sheet without per-component coordinate arithmetic.' },
-    { priority: 3, rootCause: 'Plugin competes with core typography', action: 'Remove DynamicTexture glyph/baseline rendering from MaterialTabPanelRenderer. Keep only Material transition orchestration while composing core-rendered text/content.' },
-    { priority: 4, rootCause: 'Interaction geometry duplicated by the application', action: 'Expose resolved CSS-space target bounds and local pointer coordinates in the core event/plugin contract; remove ripple width tables and half-track value remapping.' },
-    { priority: 5, rootCause: 'Material paint calibration constants', action: 'Express progress angles, state layers, checkmarks, selection rings, and indicators from documented Material geometry in CSS space; remove screenshot-derived angle and fractional-position constants.' },
-    { priority: 6, rootCause: 'Regression gate permits unequal inputs', action: 'Run this audit in CI after the full parity matrix, require complete coverage and zero unclassified differences, and review any new Astylar-only authored rule before updating the checked-in report.' },
+    { priority: 1, rootCause: 'Rendered output feeds subsequent layout', action: 'Replace connectedOverlayTop mesh projection with a public read-only query of the authoritative core CSS layout boxes. Verify nested transforms, scroll, resize, DPR, and first-open/update cycles. Diagnostic projection may measure output but must never determine authored input.' },
+    { priority: 2, rootCause: 'Range fixture changes reachable values', action: 'Restore the reference 0..100 range and step=5 with inter-thumb constraints. Exercise start=60/end=80 and start=20/end=40, drag both directions across the midpoint, and compare keyboard steps. Remove fixed half-domain clamping; reduce any resulting core interaction failure before implementation.' },
+    { priority: 3, rootCause: 'Fixture outcome compensation', action: 'Replace fixed family heights, absolute flow placement, responsive/DPR offsets, and duplicated measured dimensions with the same layout declarations and structure used by the reference. The three minimal browser reductions already pass. Let newly honest composition failures identify the owning core subsystem.' },
+    { priority: 4, rootCause: 'Generic overlay composition is duplicated', action: 'Audit existing core primitives before adding APIs for connected anchors, viewport collision, clipping, focus scope, and dismissal. Migrate popup families with equivalent state inputs; retain different datepicker and timepicker focus behavior. Remove the tooltip benchmark-only forced-open handler.' },
+    { priority: 5, rootCause: 'Plugin competes with core typography', action: 'Remove DynamicTexture glyph/baseline rendering from MaterialTabPanelRenderer. Keep only Material transition orchestration while composing core-rendered text/content.' },
+    { priority: 6, rootCause: 'Interaction geometry duplicated by the application', action: 'Expose resolved CSS-space target bounds and local pointer coordinates in the core event/plugin contract; remove ripple width tables.' },
+    { priority: 7, rootCause: 'Material paint calibration constants', action: 'Express progress angles, state layers, checkmarks, selection rings, and indicators from reference Material geometry in CSS space; remove screenshot-derived angle and fractional-position constants.' },
+    { priority: 8, rootCause: 'Regression gate permits unequal inputs', action: 'Run this audit in CI after the full parity matrix, require complete coverage and zero unclassified differences, and review any new Astylar-only authored rule before updating the checked-in report.' },
   ];
 }
 

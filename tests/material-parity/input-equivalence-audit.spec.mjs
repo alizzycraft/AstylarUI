@@ -16,7 +16,7 @@ function parityReport(reference, astylar) {
     generatedAt: '2026-09-10T00:00:00.000Z',
     mode: 'report-only',
     browser: { name: 'Chromium', version: 'test' },
-    summary: { failing: 0 }, interactionSummary: { failing: 0 },
+    summary: { meetsAcceptance: true }, interactionSummary: { meetsAcceptance: true },
     results: [{
       family: 'core', profile: 'light', viewport: { id: 'desktop' },
       styleInputs: [{ id: 'core-primary', reference, astylar }],
@@ -81,5 +81,35 @@ test('does not accept a missing origin for a transformed element or zero inset a
   for (const property of ['transformOrigin', 'left']) {
     assert.equal(audit.discrepancies.find((entry) => entry.property === property)?.classification,
       'application-plugin-authoring-defect');
+  }
+});
+
+test('does not waive unequal mapped content as a framework wrapper difference', () => {
+  const report = parityReport({}, {});
+  const input = report.results[0].styleInputs[0];
+  input.referenceStructure = { tag: 'mat-card', text: 'First Second', descendantIds: ['first', 'second'] };
+  input.astylarStructure = { tag: 'div', text: 'First', descendantIds: ['first'] };
+  const audit = buildMaterialInputAudit(report);
+  assert.equal(audit.summary.structureDifferences, 1);
+  assert.equal(audit.summary.inputEquivalent, false);
+});
+
+test('records source fingerprints and actual visual acceptance fields', () => {
+  const report = parityReport({}, {});
+  const audit = buildMaterialInputAudit(report);
+  assert.equal(audit.coverage.visualParityGreen, true);
+  assert.equal(audit.sourceFingerprints.length, 8);
+  assert.ok(audit.sourceFingerprints.every(({ sha256 }) => /^[a-f0-9]{64}$/.test(sha256)));
+  report.interactionSummary.meetsAcceptance = false;
+  assert.equal(buildMaterialInputAudit(report).coverage.visualParityGreen, false);
+});
+
+test('keeps used-pixel versus unresolved-expression comparisons open as harness gaps', () => {
+  const audit = buildMaterialInputAudit(parityReport({ width: '640px', height: '48px' },
+    { width: '100%', height: 'auto' }));
+  assert.equal(audit.summary.inputEquivalent, false);
+  for (const property of ['width', 'height']) {
+    assert.equal(audit.discrepancies.find((entry) => entry.property === property)?.classification,
+      'parity-harness-defect');
   }
 });

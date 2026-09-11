@@ -81,9 +81,9 @@ export const sourceAuditDefinitions = Object.freeze([
     introducedBy: '2f44011 feat(example): add Material component showcase',
     file: 'examples/material-showcase/src/app/astylar.component.ts',
     pattern: String.raw`selector: '#(?:eyebrow|title)'[^\n]*\btop:`,
-    classification: 'application-plugin-authoring-defect',
+    classification: 'equivalent-representation',
     owner: 'showcase fixture and core block-flow/typography verification',
-    justification: 'Both fixtures contain relative heading offsets. Compare their actual authored values and responsive branches; the reference also contains top:-2px and top:-6.5px plus density corrections. These offsets are suspicious calibration on both sides, not evidence that the reference uses unadjusted flow.',
+    justification: 'Both fixtures author the same relative heading offsets: top:-2px and top:-6.5px, with corresponding density corrections. The existing heading-flow component spec asserts these values. Accept the shared offsets as reference input; any additional unequal responsive values remain separately reported.',
   }),
   Object.freeze({
     id: 'fixture-responsive-height-compensation',
@@ -131,6 +131,24 @@ export const sourceAuditDefinitions = Object.freeze([
     justification: 'Ripple bounds are copied per target instead of using resolved CSS-space hit geometry supplied by core.',
   }),
   Object.freeze({
+    id: 'fixture-rendered-geometry-feeds-layout',
+    introducedBy: 'c64397c connected-overlay placement; audit measurement cycle isolated in d6a3158',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`this\.measure\(this\.surface, \[anchorId\], false\)`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'core CSS layout-box query API and showcase overlay authoring',
+    justification: 'connectedOverlayTop calls measure, which projects mesh vectorsWorld through Vector3.Project. It then feeds the resulting anchor.top into new authored CSS top. Diagnostic projection is valid for measuring output, but using it to compute the next layout creates a rendered-output-to-input dependency contrary to the CSS-first contract.',
+  }),
+  Object.freeze({
+    id: 'fixture-slider-fixed-half-domains',
+    introducedBy: 'range interaction parity changes; current min/max/step declarations are the direct evidence',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`id: 'slider-(?:start|primary)'[^\n]*min: '(?:0|50)'[^\n]*step: '1'`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase range authoring and core two-thumb control composition',
+    justification: 'The reference mat-slider declares min=0, max=100, step=5; Astylar gives the start input 0..50 and end input 50..100 with step=1, and clamps their authored values at 50. This changes reachable values and quantization regardless of pointer rendering. A start value above 50 or end below 50 cannot be represented by the current Astylar inputs.',
+  }),
+  Object.freeze({
     id: 'fixture-calendar-selection-ring-coordinates',
     introducedBy: '87f7f83 fix(example): render Material picker overlays',
     file: 'examples/material-showcase/src/app/astylar.component.ts',
@@ -155,7 +173,7 @@ export const sourceAuditDefinitions = Object.freeze([
     pattern: String.raw`const materialStartAngle =`,
     classification: 'application-plugin-authoring-defect',
     owner: 'Material plugin circular-progress paint',
-    justification: 'The unexplained 13/45-turn offset is output calibration; Material-specific arc paint is legitimate, but its CSS-space start angle should be the documented Material angle.',
+    justification: 'The unexplained 52-degree offset (PI * 13 / 45 radians) is output calibration; Material-specific arc paint is legitimate, but its CSS-space start angle should follow the reference geometry.',
   }),
   Object.freeze({
     id: 'plugin-tab-panel-competing-text-renderer',
@@ -179,7 +197,7 @@ export const sourceAuditDefinitions = Object.freeze([
 
 export const pluginBoundaryVerdict = Object.freeze({
   status: 'violation-found',
-  cssSpaceContract: 'mostly-conforming',
+  cssSpaceContract: 'plugin-projection-conforms; application-feedback-violation',
   legitimatePluginResponsibilities: Object.freeze([
     'Material state-layer and ripple paint',
     'Material determinate/indeterminate progress paint',
@@ -192,6 +210,7 @@ export const pluginBoundaryVerdict = Object.freeze({
   applicationWorkThatNeedsCoreApi: Object.freeze([
     'Connected-overlay anchor/collision placement is duplicated in AstylarShowcaseComponent.',
     'Ripple callers duplicate target dimensions rather than receiving resolved CSS-space event bounds.',
+    'connectedOverlayTop feeds projected mesh output back into authored CSS top instead of querying the authoritative pre-projection layout box.',
   ]),
-  coordinateFinding: 'Plugin geometry is generally computed in CSS coordinates and projected only through context.coordinates at mesh creation/placement. No reverse world-to-layout conversion was found. The remaining issues are duplicated layout/text systems and output-calibration constants, not a second global coordinate convention.',
+  coordinateFinding: 'Plugin geometry generally uses context.coordinates at mesh creation/placement. However, the application connectedOverlayTop -> measure -> vectorsWorld/Vector3.Project -> anchor.top -> authored top path feeds rendered geometry back into layout. This is a concrete violation of the final-projection-only contract even though the returned number is expressed in CSS pixels. Core layout boxes must be authoritative.',
 });
