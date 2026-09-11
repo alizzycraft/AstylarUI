@@ -9,6 +9,18 @@ import { Astylar, type DOMElement, type SiteData } from 'astylarui';
 describe('Material audit: equivalent CSS input reductions', () => {
   const cases: Array<{ name: string; site: SiteData; ids: string[]; resolved?: Array<{ id: string; properties: string[] }> }> = [
     {
+      name: 'inherited typography remains observable in pre-projection style evidence',
+      site: {
+        root: { children: [{ type: 'div', id: 'type-parent', children: [
+          { type: 'div', id: 'type-child', textContent: 'Inherited type' },
+        ] }] },
+        styles: [
+          { selector: '#type-parent', width: '360px', height: '80px', fontFamily: 'Arial', fontSize: '24px', lineHeight: '32px', color: '#123456' },
+        ],
+      }, ids: ['type-parent', 'type-child'],
+      resolved: [{ id: 'type-child', properties: ['fontSize', 'lineHeight'] }],
+    },
+    {
       name: 'table cells retain authored padding and bottom borders without sibling rules',
       site: {
         root: { children: [{ type: 'table', id: 'border-table', class: 'data-table', tableProperties: { tableLayout: 'fixed', borderCollapse: 'separate', borderSpacing: 0 }, children: [

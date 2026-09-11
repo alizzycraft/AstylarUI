@@ -11,6 +11,40 @@ Argument validation rejects unknown, empty, and repeated options (25/25 audit
 tests pass). A missing selected report fails rather than falling back to older
 evidence; the new run has not yet produced its final report.
 
+## Typography-stage evidence gap (2026-09-11)
+
+The eighth identical-input reduction uses a parent with `font-size:24px` and
+`line-height:32px`, containing a text-bearing block with no own typography rules.
+Browser computed child values are 24px and 32px. The settled public core style
+snapshot omits both fields. Parent and child border-box geometry nevertheless
+passes the existing 0.5px comparison. This is a diagnostic-stage gap, not proof
+of missing authored intent or broken rendered inheritance.
+
+The same focused Chrome command recorded below now reports **6 passed, 2 failed**:
+the new snapshot assertions fail (`''` versus `24px` and `32px`), and the divider
+retains its earlier 301px failures. An initial inline-span version also exposed
+the omitted fields, but compared a browser inline fragment with a candidate
+line box; changing the reproduction to an ordinary block removes that unrelated
+measurement ambiguity without adding typography declarations or changing the
+expected inherited values. No text pixel-parity claim is made by either probe.
+
+Source trace: `Astylar.inspectResolvedStyles` calls `getElementInteractionStyles`,
+whose normal branch resolves `StyleService.findStyleForElement`. That stage
+explicitly handles cursor inheritance but does not supply inherited typography.
+`BabylonDOMRendererService`, `ElementDimensionService`, and `FlexService` each
+contain a later `getInheritedTextStyle` path. Their declarations must not be
+conflated with the earlier diagnostic snapshot. The public snapshot is documented
+as diagnostic declarations, not used layout boxes; treating it as fully resolved
+typography in this audit is the defect.
+
+The report records `audit-style-snapshot-precedes-typography-inheritance` as a
+parity-harness defect and puts trustworthy stage capture ahead of repair-plan
+acceptance. The next instrumentation change must expose authoritative core
+pre-projection typography with provenance, preserving authored and pseudo-state
+evidence. It must not reproduce inheritance logic in the showcase or blanket-waive
+missing values. The active full matrix remains useful outcome/declaration
+evidence, but cannot by itself close this fully resolved input requirement.
+
 ## Attribution is not inferred from unequal resolved values (2026-09-11)
 
 The shared demo root now has a bounded reviewed rule: only mapped section nodes

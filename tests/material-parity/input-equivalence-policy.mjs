@@ -68,6 +68,16 @@ export const implicitReferenceValues = Object.freeze({
 
 export const sourceAuditDefinitions = Object.freeze([
   Object.freeze({
+    id: 'audit-style-snapshot-precedes-typography-inheritance',
+    introducedBy: 'b6dc672 feat(diagnostics): inspect hidden-node core style declarations',
+    file: 'src/lib/astylar.ts',
+    pattern: String.raw`const styles = this\.getElementInteractionStyles\(element\.id \?\? '', session\.siteData, element\);`,
+    classification: 'parity-harness-defect',
+    owner: 'core diagnostic style-stage provenance and Material input evidence collector',
+    justification: 'The snapshot exposes core cascade/pseudo-state declarations, not every subsequent typography resolution stage. A minimal parent with fontSize:24px and lineHeight:32px gives its child those browser computed values, while candidate snapshot fields are omitted. Renderer, dimension and flex services separately resolve inherited typography. Missing snapshot fields therefore do not prove missing authoring or broken rendered inheritance. Capture the authoritative pre-projection typography stage with explicit provenance; do not reconstruct a second inheritance resolver in the showcase or waive these differences as equivalent.',
+    focusedProof: 'examples/material-showcase/src/app/input-equivalence-proof.spec.ts: inherited typography remains observable in pre-projection style evidence',
+  }),
+  Object.freeze({
     id: 'fixture-demo-block-flow-replaced',
     introducedBy: '2f44011 feat(example): add Material component showcase',
     file: 'examples/material-showcase/src/app/astylar.component.ts',
