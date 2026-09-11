@@ -7,6 +7,21 @@ export function materialStyleSnapshot(style: Record<string, unknown> | undefined
   }));
 }
 
+/** Includes anonymous authored nodes and plugin data, not just benchmark IDs. */
+export function collectAuthoredInputTree(root: object, rules: readonly object[], resolved: ReadonlyMap<string, Record<string, unknown>>) {
+  const nodes: object[] = [];
+  const visit = (node: object, key: string, parent: string | null) => {
+    const { children, ...authored } = node as Record<string, unknown>;
+    const id = typeof authored['id'] === 'string' ? authored['id'] : undefined;
+    nodes.push({ key, parent, authored, resolvedStyle: id ? materialStyleSnapshot(resolved.get(id)) : undefined });
+    if (Array.isArray(children)) children.forEach((child, index) => {
+      if (typeof child === 'object' && child !== null) visit(child, `${key}/${index}`, key);
+    });
+  };
+  visit(root, 'root', null);
+  return { schemaVersion: 1, nodes, rules, errors: [] };
+}
+
 export interface MaterialAuthoredStructure {
   readonly schemaVersion: 2;
   readonly type: string;

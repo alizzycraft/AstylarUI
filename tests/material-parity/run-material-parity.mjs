@@ -4,6 +4,7 @@ import { spawnSync } from 'node:child_process';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
+import { createHash } from 'node:crypto';
 import { chromium } from 'playwright-core';
 import { PNG } from 'pngjs';
 import { ssim } from 'ssim.js';
@@ -15,6 +16,7 @@ import {
 import { measureTextInkCenter, textCenterOffsetError } from './text-alignment-metrics.mjs';
 import { compareBottomShadowProfiles } from './shadow-profile-metrics.mjs';
 import { effectiveBrowserCursor, interactionLayerCursorProbe } from './cursor-metrics.mjs';
+import { captureBrowserInputTree } from './input-tree-evidence.mjs';
 
 const root = process.cwd();
 const enforce = process.argv.includes('--enforce');
@@ -249,6 +251,7 @@ async function captureCase(benchmarkCase) {
       ...astylar.errors.map((error) => `astylar: ${error}`)];
     return {
       family, profile, viewport, screenshotSimilarity, styleInputs, geometry, textAlignment, uniformBackgrounds, focusedRasters, shadowProfiles, semantics, runtimeErrors,
+      inputTrees: persistInputTrees(directory, reference.measurement.inputTree, astylar.measurement.inputTree),
       diagnostics: astylar.measurement.diagnostics,
       meetsAcceptance: screenshotSimilarity >= materialThresholds.resultSsim &&
         geometry.maximumEdgeError !== null &&
@@ -399,6 +402,7 @@ async function captureInteractionCase(benchmarkCase) {
     const focusMatches = state !== 'focus' || referenceFocus === astylarFocus;
     return {
       family, profile, viewport, state, screenshotSimilarity, styleInputs, textAlignment, focusedRasters, semantics, eventComparison, interactionState, overlayPlacement, statePaint, cursor,
+      inputTrees: persistInputTrees(directory, referenceMeasurement.inputTree, astylarMeasurement.inputTree),
       focus: { reference: referenceFocus, astylar: astylarFocus, matches: focusMatches },
       runtimeErrors, resourceSnapshots, resourcesStable, astylarState,
       meetsAcceptance: screenshotSimilarity >= materialThresholds.resultSsim &&
@@ -1247,7 +1251,7 @@ function resourceCounts(snapshot) {
 }
 
 async function measureReference(page, ids) {
-  return page.evaluate(({ targetIds, styleProperties }) => {
+  const measurement = await page.evaluate(({ targetIds, styleProperties }) => {
     const roleOf = (element) => {
       const explicit = element.getAttribute('role');
       if (explicit) return explicit;
@@ -1416,6 +1420,7 @@ async function measureReference(page, ids) {
     }
     return { elements, semantics };
   }, { targetIds: ids, styleProperties: materialStyleInputProperties });
+  return { ...measurement, inputTree: await page.evaluate(captureBrowserInputTree, { styleProperties: materialStyleInputProperties }) };
 }
 
 function profileTheme(profile) {
@@ -1471,6 +1476,16 @@ function compareStyleInputs(referenceElements, candidateElements) {
       astylar,
     }] : [];
   });
+}
+
+function persistInputTrees(directory, reference, astylar) {
+  return Object.fromEntries(Object.entries({ reference, astylar }).map(([side, tree]) => {
+    assert.ok(tree?.nodes?.length, `${side} full input tree is missing`);
+    const file = path.join(directory, `${side}-input-tree.json`);
+    const contents = JSON.stringify(tree);
+    writeFileSync(file, contents);
+    return [side, { file: path.relative(root, file).replaceAll('\\', '/'), sha256: createHash('sha256').update(contents).digest('hex') }];
+  }));
 }
 
 function compareUniformBackgrounds(referenceImage, candidateImage, referenceElements, candidateElements, target, scale) {

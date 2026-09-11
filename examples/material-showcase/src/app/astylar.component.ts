@@ -16,7 +16,7 @@ import { MATERIAL_FAVORITE_ICON_DARK, MATERIAL_FAVORITE_ICON_LIGHT } from './mat
 import { ShowcaseStore, type ShowcaseState } from './showcase.store';
 import { alphaHex, mixHex } from './theme';
 import { MaterialRippleController } from './material-plugin/material-ripple.controller';
-import { indexAuthoredStructures, materialStyleSnapshot } from './material-input-evidence';
+import { collectAuthoredInputTree, indexAuthoredStructures, materialStyleSnapshot } from './material-input-evidence';
 
 @Component({
   selector: 'app-astylar-showcase',
@@ -1126,6 +1126,13 @@ export class AstylarShowcaseComponent {
     const authoredSiteData = includeAuthoredEvidence ? this.siteData() : undefined;
     const authoredStyles = authoredSiteData?.styles ?? [];
     const authoredStructures = authoredSiteData ? indexAuthoredStructures(authoredSiteData.root, ids) : {};
+    const resolvedInputs = new Map<string, Record<string, unknown>>();
+    if (authoredSiteData) for (const mesh of surface.scene.meshes) {
+      const id = mesh.metadata?.elementId;
+      if (typeof id === 'string' && mesh.metadata?.astylarResolvedStyle && !resolvedInputs.has(id)) {
+        resolvedInputs.set(id, mesh.metadata.astylarResolvedStyle);
+      }
+    }
     const elements = Object.fromEntries(ids.map((id) => {
       const meshes = surface.scene.meshes.filter((mesh) => mesh.metadata?.elementId === id);
       const mesh = meshes.find((candidate) => candidate.name === id) ??
@@ -1182,6 +1189,7 @@ export class AstylarShowcaseComponent {
     return {
       elements,
       semantics,
+      inputTree: authoredSiteData ? collectAuthoredInputTree(authoredSiteData.root, authoredStyles, resolvedInputs) : undefined,
       diagnostics: {
         surface: surface.diagnostics,
         clearColor: surface.scene.clearColor.toHexString(),
@@ -1202,6 +1210,7 @@ interface MaterialBenchmarkMeasurement {
   readonly elements: Record<string, unknown>;
   readonly semantics: Record<string, unknown>;
   readonly diagnostics: unknown;
+  readonly inputTree?: ReturnType<typeof collectAuthoredInputTree>;
 }
 
 function semanticRole(element: HTMLElement): string | undefined {

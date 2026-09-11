@@ -1,6 +1,18 @@
-import { indexAuthoredStructures, materialStyleSnapshot } from './material-input-evidence';
+import { collectAuthoredInputTree, indexAuthoredStructures, materialStyleSnapshot } from './material-input-evidence';
 
 describe('Material input evidence serialization', () => {
+  it('inventories anonymous nodes and plugin data without deriving geometry', () => {
+    const rules = [{ selector: ':hover', background: 'red' }];
+    const tree = collectAuthoredInputTree({ children: [{ type: 'div', children: [
+      { id: 'icon', type: 'plugin:icon', data: { path: 'M0 0' } },
+    ] }] }, rules, new Map([['icon', { width: '24px' }]]));
+    expect(tree.nodes.length).toBe(3);
+    expect(tree.nodes[1]).toEqual(jasmine.objectContaining({ key: 'root/0', parent: 'root' }));
+    expect(tree.nodes[2]).toEqual(jasmine.objectContaining({
+      authored: { id: 'icon', type: 'plugin:icon', data: { path: 'M0 0' } }, resolvedStyle: { width: '24px' },
+    }));
+    expect(tree.rules).toBe(rules);
+  });
   it('retains resolved longhands and future scalar properties without an allowlist', () => {
     expect(materialStyleSnapshot({ selector: '#x', mediaMaxWidth: '500px', transformOrigin: '20px 10px',
       clipPath: 'inset(2px)', borderLeftWidth: '1px', overflowX: 'hidden', wordBreak: 'break-all',

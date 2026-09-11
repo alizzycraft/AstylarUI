@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
   buildMaterialInputAudit,
+  collectFullTreeInventory,
   validateMaterialInputAudit,
 } from './input-equivalence-audit.mjs';
 
@@ -98,7 +99,7 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   const report = parityReport({}, {});
   const audit = buildMaterialInputAudit(report);
   assert.equal(audit.coverage.visualParityGreen, true);
-  assert.equal(audit.sourceFingerprints.length, 10);
+  assert.equal(audit.sourceFingerprints.length, 11);
   assert.ok(audit.sourceFingerprints.every(({ sha256 }) => /^[a-f0-9]{64}$/.test(sha256)));
   report.interactionSummary.meetsAcceptance = false;
   assert.equal(buildMaterialInputAudit(report).coverage.visualParityGreen, false);
@@ -134,4 +135,27 @@ test('does not attribute legacy incompatible text and descendant collection to a
   const audit = buildMaterialInputAudit(report);
   assert.equal(audit.structureEvidence[0].classification, 'parity-harness-defect');
   assert.equal(audit.summary.inputEquivalent, false);
+});
+
+test('full-tree inventory retains anonymous nodes and pools identical variants without losing cases', () => {
+  const entry = { family: 'core', profile: 'light', viewport: { id: 'desktop' }, inputTrees: {
+    astylar: { schemaVersion: 1, nodes: [{ key: 'root/0', parent: 'root', authored: { type: 'div' }, resolvedStyle: { width: '100%' } }], rules: [], errors: [] },
+    reference: { schemaVersion: 1, nodes: [{ key: 'frame/0', parent: 'frame', type: 'div', attributes: {}, style: 0, rules: [], pseudoElements: [] }], styles: [{ width: '640px' }], rules: [], errors: [] },
+  } };
+  const result = collectFullTreeInventory([entry, { ...entry, state: 'hover' }]);
+  assert.equal(result.variants.length, 2);
+  assert.equal(result.cases.length, 4);
+  assert.equal(result.styles.length, 2);
+  assert.equal(result.gaps.length, 0);
+  assert.equal(result.variants[1].nodes[0].authored.type, 'div');
+  assert.equal(collectFullTreeInventory([{ ...entry, inputTrees: {} }]).gaps.length, 2);
+});
+
+test('full-tree artifact references cannot escape the captured Material artifact directory', () => {
+  const result = collectFullTreeInventory([{ family: 'core', profile: 'light', viewport: { id: 'desktop' },
+    inputTrees: { reference: { file: 'package.json', sha256: 'irrelevant' } },
+  }]);
+  assert.equal(result.errors.length, 1);
+  assert.match(result.errors[0].error, /outside Material artifacts/);
+  assert.equal(result.gaps.length, 2);
 });

@@ -81,8 +81,13 @@ uses its original bundle and cannot verify these later collector changes.
 
 - Finish the unfiltered enforced matrix and regenerate both audit reports.
 - Reconcile every one-sided mapping and preserve genuine state divergence.
-- Extend mapped-node evidence to the relevant anonymous wrappers, generated
-  icons, and pseudo-elements; configured case counts alone do not prove this.
+- Capture and review the new full-tree inventory for every case, including
+  anonymous wrappers, generated icons, and pseudo-elements. The browser collector
+  has a real-Chrome regression test covering these plus inactive media rules and
+  CSS layers (`node --test tests/material-parity/input-tree-evidence.spec.mjs`).
+  Reference captures are stored with SHA-256 digests so a later focused run
+  cannot silently replace evidence referenced by the full report. The generated
+  audit pools identical styles/rules/trees while retaining every case association.
 - Resolve used-value versus authored-expression normalization gaps before
   treating automatic difference counts as confirmed authoring defects.
 - Complete minimal equivalent-input investigations for remaining suspicious

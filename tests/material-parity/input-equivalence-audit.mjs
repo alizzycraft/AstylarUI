@@ -32,6 +32,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const structures = collectStructureEvidence(cases);
   const sourceFindings = scanMaterialSources(root);
   const coverage = buildCoverage(parityReport, cases);
+  const elementInventory = collectFullTreeInventory(cases, { root });
   const classifications = countBy(discrepancies, (entry) => entry.classification);
   const propertyGroupCounts = countBy(discrepancies, (entry) => entry.propertyGroup);
   const familyCounts = countBy(discrepancies, (entry) => entry.family);
@@ -54,6 +55,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
     coverage,
     summary: {
       inputEquivalent: coverage.complete && coverage.missingElements.length === 0 &&
+        elementInventory.gaps.length === 0 && elementInventory.errors.length === 0 &&
         coverage.presenceDifferences.length === 0 &&
         sourceFindings.every((entry) => entry.detected && ['equivalent-representation', 'legitimate-public-api-structure'].includes(entry.classification)) &&
         structures.every((entry) => entry.classification === 'legitimate-public-api-structure') &&
@@ -71,6 +73,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
     },
     discrepancies,
     structureEvidence: structures,
+    elementInventory,
     sourceFindings,
     pluginBoundary: pluginBoundaryVerdict,
     focusedProofs: focusedProofInventory(root),
@@ -89,6 +92,8 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
   if (report.coverage.missingElements.length > 0) errors.push(`${report.coverage.missingElements.length} measured mappings are missing on one side`);
   if (report.coverage.missingInputEvidence.length > 0) errors.push(`${report.coverage.missingInputEvidence.length} cases lack paired root style evidence`);
   if (report.coverage.duplicateCases.length > 0) errors.push(`${report.coverage.duplicateCases.length} duplicate case records`);
+  if (requireComplete && report.elementInventory.gaps.length > 0) errors.push(`${report.elementInventory.gaps.length} case sides lack a full element tree`);
+  if (report.elementInventory.errors.length > 0) errors.push(`${report.elementInventory.errors.length} full-tree collection errors`);
   return errors;
 }
 
@@ -107,6 +112,8 @@ export function renderMaterialInputAuditMarkdown(report) {
     '',
     `Coverage is ${report.coverage.complete ? 'complete' : 'incomplete'}: ${report.coverage.executedStatic}/${report.coverage.configuredStatic} static cases and ` +
       `${report.coverage.executedInteractions}/${report.coverage.configuredInteractions} interaction/mobile-flow cases. All ${report.coverage.families.length} component families are inventoried.`,
+    '',
+    `Full-element evidence: ${report.elementInventory.cases.length} captured case sides, ${report.elementInventory.variants.length} tree variants; ${report.elementInventory.gaps.length} missing case sides and ${report.elementInventory.errors.length} collection errors. Inventory presence does not establish input equivalence.`,
     '',
     ...report.coverage.presenceDifferences.map((entry) => `- Presence discrepancy: ${entry.case}, ${entry.element}: ${entry.justification}`),
     '',
@@ -141,7 +148,7 @@ export function renderMaterialInputAuditMarkdown(report) {
     '',
     '## Reading the machine report',
     '',
-    'The adjacent JSON report contains every normalized discrepancy signature, occurrence count, representative cases, exact element/property values, classification, justification, authored-rule evidence, coverage case keys, structural mappings, and source locations. A check fails if a future difference or source scan result has no classification, or if the complete configured matrix was not executed.',
+    'The adjacent JSON report contains normalized discrepancy signatures, occurrence counts, representative cases, exact element/property values, classifications, justifications, authored-rule evidence, coverage case keys, structural mappings, and source locations. elementInventory retains full reference/Astylar trees, including anonymous nodes and generated content, with pooled style/rule tables. Each case side points to a tree variant; reference node and pseudo-element rule/style indices resolve into the shared tables. A check fails for missing full trees, collection errors, unclassified findings, or an incomplete configured matrix.',
     '',
   ];
   return lines.join('\n');
@@ -376,6 +383,58 @@ function collectStructureEvidence(cases) {
   return [...grouped.values()];
 }
 
+export function collectFullTreeInventory(cases, { root = process.cwd() } = {}) {
+  const styles = [], rules = [], variants = [], mappings = [], gaps = [], errors = [];
+  const styleIds = new Map(), ruleIds = new Map(), variantIds = new Map();
+  const intern = (value, table, index) => {
+    const key = JSON.stringify(value);
+    if (!index.has(key)) { index.set(key, table.length); table.push(value); }
+    return index.get(key);
+  };
+  for (const entry of cases) {
+    const key = caseKey(entry);
+    for (const side of ['reference', 'astylar']) {
+      let tree = entry.inputTrees?.[side];
+      if (tree?.file) {
+        try {
+          const file = path.resolve(root, tree.file);
+          const allowed = path.resolve(root, 'artifacts/material-parity') + path.sep;
+          if (!file.startsWith(allowed)) throw new Error('tree path is outside Material artifacts');
+          const contents = readFileSync(file, 'utf8');
+          if (createHash('sha256').update(contents).digest('hex') !== tree.sha256) throw new Error('tree digest changed since capture');
+          tree = JSON.parse(contents);
+        } catch (error) {
+          errors.push({ case: key, side, error: String(error) });
+          tree = undefined;
+        }
+      }
+      if (tree?.schemaVersion !== 1 || !Array.isArray(tree.nodes) || tree.nodes.length === 0) {
+        gaps.push({ case: key, side }); continue;
+      }
+      for (const error of tree.errors ?? []) errors.push({ case: key, side, error });
+      const ruleMap = (tree.rules ?? []).map((value) => intern({ side, value }, rules, ruleIds));
+      const styleMap = (tree.styles ?? []).map((value) => intern({ side, value }, styles, styleIds));
+      const nodes = tree.nodes.map((node) => side === 'reference' ? {
+        ...node, style: styleMap[node.style], rules: node.rules.map((index) => ruleMap[index]),
+        pseudoElements: node.pseudoElements.map((pseudo) => ({ ...pseudo,
+          style: pseudo.style === undefined ? undefined : styleMap[pseudo.style],
+          rules: pseudo.rules.map((index) => ruleMap[index]),
+        })),
+      } : {
+        ...node, resolvedStyle: undefined,
+        style: node.resolvedStyle ? intern({ side, value: node.resolvedStyle }, styles, styleIds) : undefined,
+      });
+      const variant = intern({ family: entry.family, side, nodes, rules: ruleMap }, variants, variantIds);
+      mappings.push({ case: key, side, variant });
+    }
+  }
+  return {
+    schemaVersion: 1,
+    scope: 'All authored Astylar nodes, reference frame/overlay DOM descendants, SVG attributes, and before/after pseudo-elements. Tables retain raw inputs; presence in the inventory is not acceptance of equivalence.',
+    styles, rules, variants, cases: mappings, gaps, errors,
+  };
+}
+
 function buildCoverage(parityReport, cases) {
   const expectedStatic = new Set(materialStaticCases.map((entry) => caseKey({ ...entry, kind: 'static' })));
   const expectedInteractions = new Set([...materialInteractionCases, ...materialMobileFlowCases]
@@ -483,6 +542,7 @@ function sourceFingerprints(root) {
     'examples/material-showcase/src/app/material-plugin/material-ripple.controller.ts',
     'tests/material-parity/benchmark.config.mjs',
     'tests/material-parity/run-material-parity.mjs',
+    'tests/material-parity/input-tree-evidence.mjs',
   ];
   return files.map((file) => ({ file, sha256: createHash('sha256')
     .update(readFileSync(path.resolve(root, file), 'utf8').replace(/\r\n/g, '\n')).digest('hex') }));
