@@ -11,6 +11,46 @@ Argument validation rejects unknown, empty, and repeated options (25/25 audit
 tests pass). A missing selected report fails rather than falling back to older
 evidence; the new run has not yet produced its final report.
 
+## Durable full-matrix capture (2026-09-11)
+
+The earlier `complete-input-audit` process is no longer running: its terminal
+handle was missing and the Windows process inventory contained no matching
+capture process. Its partial artifacts are preserved, but no aggregate report
+was produced. This is not full-matrix verification and was not inferred from
+an observation timeout. The subsequent separate production build completed
+successfully at `examples/material-showcase/dist/material-showcase-retained-text-audit`.
+
+The harness now checkpoints each fully captured case, including failing results.
+Explicit `--resume` verifies exact browser/runtime identity, installed dependency
+lock digest, served build files, transitive local harness imports, and selected
+case matrices before reuse. Each result and its captured files are hash-checked;
+partial writes do not count as completed evidence. Changed provenance or altered
+artifacts fail closed. A fresh run refuses an existing checkpoint manifest; use
+a new artifact directory for changed inputs. Do not run concurrent writers against
+the same artifact directory. Checkpoints are local interruption recovery, not
+an assertion that a subset meets the full gate.
+
+Verification: `node --test tests/material-parity/*.spec.mjs` passed **46/46**,
+including four checkpoint tests for failure retention, provenance/artifact/result
+changes, partial writes, path boundaries, and transitive import fingerprints.
+The one-case `core/light/desktop` capture in
+`artifacts/material-parity/retained-text-checkpoint-smoke` completed with SSIM
+0.999770 and two text-bearing nodes carrying `source:core-text-registry` evidence.
+Repeating the exact command with `--resume` logged `Material resumed`, retained
+the same input-tree hashes and metrics, and correctly reported full acceptance
+as false (1/436 static, 0 interactions). The command used `--skip-build
+--static-only`, the new browser output root, port4432, and those explicit filters.
+
+The next full run uses no filters, `--enforce --skip-build`, the rebuilt browser
+output, and the new directory
+`artifacts/material-parity/retained-text-complete-audit`. If externally interrupted,
+first confirm that its process is stopped, then repeat exactly with `--resume`.
+The aggregate report is still written only after all configured cases complete;
+checkpoint presence or passing smoke results must not be reported as completion.
+No reference input, fixture style, case, acceptance threshold, or renderer behavior
+changed in this increment. Fully resolved style coverage and substantive review
+of every material difference remain separate unfinished requirements.
+
 ## Retained core text-input evidence (2026-09-11)
 
 The diagnostic snapshot now has an additive optional `retainedText` field with

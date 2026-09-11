@@ -17,6 +17,7 @@ import { measureTextInkCenter, textCenterOffsetError } from './text-alignment-me
 import { compareBottomShadowProfiles } from './shadow-profile-metrics.mjs';
 import { effectiveBrowserCursor, interactionLayerCursorProbe } from './cursor-metrics.mjs';
 import { captureBrowserInputTree } from './input-tree-evidence.mjs';
+import { fingerprintDirectory, fingerprintModuleGraph, materialCaseKey, openMaterialCheckpoint } from './run-checkpoint.mjs';
 
 const root = process.cwd();
 const enforce = process.argv.includes('--enforce');
@@ -80,20 +81,37 @@ try {
   server = startStaticServer();
   await waitForServer();
   browser = await launchBrowser();
+  const checkpoint = openMaterialCheckpoint({ directory: artifacts, resume: process.argv.includes('--resume'), provenance: {
+    browser: await browser.version(), platform: process.platform, architecture: process.arch, node: process.version,
+    browserFiles: fingerprintDirectory(browserRoot),
+    harnessFiles: fingerprintModuleGraph(root, 'tests/material-parity/run-material-parity.mjs'),
+    installedDependencies: createHash('sha256').update(readFileSync(path.join(root, 'node_modules/.package-lock.json'))).digest('hex'),
+    cases, interactionCases, mobileFlowCases, enforce, textAudit, browserRestartInterval,
+  } });
   const results = [];
   for (const [index, benchmarkCase] of cases.entries()) {
+    const key = materialCaseKey('static', benchmarkCase);
+    const completed = checkpoint.load(key);
+    if (completed) { results.push(completed); console.log(`Material resumed: ${key}`); continue; }
     await recycleBrowserIfNeeded(index);
     console.log(`Material parity: ${benchmarkCase.family}@${benchmarkCase.profile}/${benchmarkCase.viewport.id}`);
-    results.push(await captureCase(benchmarkCase));
+    const result = await captureCase(benchmarkCase);
+    checkpoint.save(key, result, path.dirname(path.resolve(root, result.inputTrees.reference.file)));
+    results.push(result);
   }
   if (cases.length > 0 && (interactionCases.length > 0 || mobileFlowCases.length > 0)) {
     await restartBrowser();
   }
   const interactions = [];
   for (const [index, benchmarkCase] of [...interactionCases, ...mobileFlowCases].entries()) {
+    const key = materialCaseKey('interaction', benchmarkCase);
+    const completed = checkpoint.load(key);
+    if (completed) { interactions.push(completed); console.log(`Material resumed: ${key}`); continue; }
     await recycleBrowserIfNeeded(index);
     console.log(`Material interaction: ${benchmarkCase.family}@${benchmarkCase.profile}/${benchmarkCase.viewport.id}/${benchmarkCase.state}`);
-    interactions.push(await captureInteractionCase(benchmarkCase));
+    const result = await captureInteractionCase(benchmarkCase);
+    checkpoint.save(key, result, path.dirname(path.resolve(root, result.inputTrees.reference.file)));
+    interactions.push(result);
   }
   const summary = summarize(results);
   const interactionSummary = summarizeInteractions(interactions);
@@ -102,6 +120,7 @@ try {
     generatedAt: new Date().toISOString(),
     mode: enforce ? 'enforced' : 'report-only',
     browser: { name: 'Chromium', version: await browser.version() },
+    captureProvenance: checkpoint.provenance,
     thresholds: materialThresholds,
     configuredCases: materialStaticCases.length,
     executedCases: results.length,
