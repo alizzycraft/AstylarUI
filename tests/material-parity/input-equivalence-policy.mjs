@@ -181,6 +181,16 @@ export const sourceAuditDefinitions = Object.freeze([
     referenceEvidence: { file: 'examples/material-showcase/src/app/reference.component.ts', element: "@case ('table')", selectors: ['.mat-mdc-header-cell', '.mat-mdc-cell'], declarations: { borderBottomWidth: '1px', borderBottomStyle: 'solid' }, exception: 'final body row has no bottom border' },
   }),
   Object.freeze({
+    id: 'fixture-table-font-increased-during-renderer-fix',
+    introducedBy: 'f980edc fix(renderer): honor Material table row sizing',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`selector: '\.material-table(?: th| td)?'[^\n]*fontSize: '16px'`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase Material table typography input translation',
+    justification: 'The initial showcase authored 14px table/cell text. Commit f980edc changed the table, th and td declarations to 16px while modifying core row sizing and text code. Current reference rows/cells compute 14px through Material row typography tokens, while core retains the candidate 16px input. This is an unequal fixture input introduced alongside a renderer change, not proof that core needs a two-pixel font compensation. Preserve the reference 14px/20px intent; the existing equal-input cell proof now also checks retained font size and line height.',
+    focusedProof: 'examples/material-showcase/src/app/input-equivalence-proof.spec.ts: table cells retain authored padding and bottom borders without sibling rules',
+  }),
+  Object.freeze({
     id: 'harness-mesh-only-resolved-style-capture',
     introducedBy: '341f549 audit resolved-style capture and a06ef61 full authored-tree collection',
     file: 'examples/material-showcase/src/app/astylar.component.ts',

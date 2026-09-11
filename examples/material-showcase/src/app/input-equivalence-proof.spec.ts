@@ -118,7 +118,11 @@ describe('Material audit: equivalent CSS input reductions', () => {
           { selector: '#first-cell', borderWidth: '0 0 1px', borderStyle: 'solid', borderColor: '#79747e' },
         ],
       }, ids: ['border-table', 'first-row', 'last-row', 'first-cell', 'last-cell'],
-      resolved: [{ id: 'first-cell', properties: ['padding', 'borderWidth', 'fontSize', 'lineHeight'] }],
+      resolved: [
+        { id: 'first-cell', properties: ['padding', 'borderWidth', 'fontSize', 'lineHeight'] },
+        { id: 'first-cell', properties: ['fontSize', 'lineHeight'], stage: 'retainedText' },
+        { id: 'last-cell', properties: ['fontSize', 'lineHeight'], stage: 'retainedText' },
+      ],
     },
     {
       name: 'paragraph flow places a divider without absolute text or separator offsets',

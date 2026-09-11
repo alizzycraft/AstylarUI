@@ -11,6 +11,53 @@ Argument validation rejects unknown, empty, and repeated options (25/25 audit
 tests pass). A missing selected report fails rather than falling back to older
 evidence; the new run has not yet produced its final report.
 
+## Table font input changed alongside a renderer fix (2026-09-12)
+
+History identifies a concrete unequal-input change: commit `f980edc`
+(`fix(renderer): honor Material table row sizing`) changed `.material-table`,
+`.material-table th`, and `.material-table td` from **14px to 16px**. It also
+changed renderer code, row heights and positional adjustments. The initial
+showcase commit `2f44011` used 14px. The commit's grouping is evidence of when
+the input changed, not proof of the author's motive or a core font-scaling bug.
+
+All 12 current static table captures show the reference header/body cells at
+14px and the candidate's retained core text at 16px: **36 attributed cell-font
+observations**. The reference row's captured active Material typography token
+and computed 14px value, the corresponding candidate cell's explicit 16px rule,
+matching table/row/cell structure, and retained 16px value are recorded together.
+The audit rejects this attribution if those witnesses change or the candidate
+cell selector has competing font-size declarations. Normal/effective cell
+records can omit font size; the audit preserves those earlier stages rather
+than replacing them with reconstructed inheritance.
+
+The existing equal-input table reduction now additionally asserts retained
+14px font size and 20px line height on both cells. It passes together with its
+existing padding, border, and row/cell geometry assertions. This proves that
+this reduced case needs no 16px fixture compensation; it does not establish
+complete Material table typography, transformed text, or pseudo-state parity.
+The actual showcase inputs and renderer implementation remain unchanged.
+
+Verification:
+
+- `node --test tests/material-parity/*.spec.mjs`: **62/62 pass**, including
+  positive and negative attribution tests.
+- `npm --prefix examples/material-showcase test -- --watch=false --browsers=ChromeHeadless --include=src/app/input-equivalence-proof.spec.ts`:
+  **8 pass / 15 intentionally exposed failures**, repeated with the failure
+  names inspected. The table test passes; the same existing intrinsic-width,
+  positioned-margin, auto-height, grid-content, calc, and divider reductions
+  still fail. Neither failing cases nor thresholds were changed. The existing
+  zoneless/Zone.js warning remains.
+- Reanalysis of all 436 static checkpoints: **44/44 source findings detected**;
+  retained unresolved observations decrease from 2,287 to **2,251**. The legacy
+  mapped-style list does not include these cell font observations and remains
+  at **3,189 unresolved attributions**. These are different evidence scopes,
+  not alternative pass counts. The full matrix remains in progress.
+
+Follow-up owner: Material table input translation, coordinated with the already
+recorded table border/flow findings. Restore the reference typography intent
+when undertaking remediation; if equal inputs then expose another discrepancy,
+reduce and fix its core owner rather than increasing the fixture's font size.
+
 ## Benchmark heading masking and explicit identity mapping (2026-09-12)
 
 The full trees exposed an additional benchmark defect: the HTML reference uses

@@ -617,6 +617,65 @@ test('heading paint attribution requires active authored masking and matching pa
   }
 });
 
+function tableTypographyReport() {
+  const raw = retainedTypographyReport();
+  const entry = raw.results[0], input = entry.styleInputs[0];
+  entry.family = 'table';
+  input.id = 'table-atlas';
+  input.reference.fontSize = '14px';
+  input.referenceStructure.type = 'td';
+  input.astylarStructure.type = 'td';
+  const { reference, astylar } = entry.inputTrees;
+  const refCell = reference.nodes[0], astCell = astylar.nodes[0];
+  refCell.type = 'td'; refCell.attributes.id = 'table-atlas'; refCell.parent = 'ref-row';
+  astCell.authored.type = 'td'; astCell.authored.id = 'table-atlas'; astCell.parent = 'ast-row';
+  astCell.retainedText.style = { ...astCell.retainedText.style, fontSize: '16px' };
+  reference.rules = [{ selector: '.mat-mdc-row', active: true, declarations: { 'font-size': {
+    value: 'var(--mat-table-row-item-label-text-size, var(--mat-sys-body-medium-size, 14px))' } } }];
+  reference.nodes.push({ key: 'ref-row', parent: 'ref-table', type: 'tr', attributes: {}, ownText: '',
+    style: 0, rules: [0], pseudoElements: [] },
+  { key: 'ref-table', parent: null, type: 'table', attributes: { id: 'table-primary' }, ownText: '',
+    style: 0, rules: [], pseudoElements: [] });
+  astylar.rules = [{ selector: '.material-table td', fontSize: '16px' }];
+  astylar.nodes.push({ key: 'ast-row', parent: 'ast-table', authored: { type: 'tr' }, resolvedStyle: { display: 'table-row' } },
+    { key: 'ast-table', parent: 'root', authored: { type: 'table', id: 'table-primary', class: 'material-table' }, resolvedStyle: { display: 'table' } });
+  return raw;
+}
+
+test('attributes the table font change through captured row tokens, cell declarations, and retained core text', () => {
+  const report = buildMaterialInputAudit(tableTypographyReport());
+  const difference = report.retainedTypography.differences.find((entry) => entry.property === 'fontSize');
+  assert.equal(difference.attribution, 'reviewed-table-font-input');
+  assert.equal(difference.classification, 'application-plugin-authoring-defect');
+  assert.equal(difference.reviewEvidence.referenceRule.declarations['font-size'].value,
+    'var(--mat-table-row-item-label-text-size, var(--mat-sys-body-medium-size, 14px))');
+  assert.equal(difference.reviewEvidence.candidateRule.fontSize, '16px');
+  const declarationDifference = report.discrepancies.find((entry) => entry.property === 'fontSize');
+  assert.equal(declarationDifference.attribution, 'reviewed-table-font-input');
+  assert.equal(declarationDifference.astylar, undefined, 'do not replace missing table snapshot fields with retained styles');
+  assert.equal(report.summary.inputEquivalent, false);
+});
+
+test('table font attribution fails closed without exact captured intent and corresponding table structure', () => {
+  const mutations = [
+    (entry) => { entry.family = 'card'; },
+    (entry) => { entry.inputTrees.astylar.rules[0].fontSize = '14px'; },
+    (entry) => { entry.inputTrees.astylar.rules[0].selector = '.unrelated td'; },
+    (entry) => { entry.inputTrees.astylar.rules.push({ selector: '.material-table td', fontSize: '18px' }); },
+    (entry) => { entry.inputTrees.reference.rules[0].active = false; },
+    (entry) => { entry.inputTrees.reference.rules[0].declarations['font-size'].value = '16px'; },
+    (entry) => { entry.inputTrees.astylar.nodes[1].authored.type = 'div'; },
+    (entry) => { entry.inputTrees.astylar.nodes[2].authored.class = 'other'; },
+    (entry) => { entry.inputTrees.astylar.nodes[0].retainedText.style.fontSize = '20px'; },
+  ];
+  for (const mutate of mutations) {
+    const raw = tableTypographyReport();
+    mutate(raw.results[0]);
+    const evidence = collectRetainedTypographyEvidence(raw.results, collectFullTreeInventory(raw.results));
+    assert.equal(evidence.differences.find((entry) => entry.property === 'fontSize').attribution, 'unresolved');
+  }
+});
+
 test('full-tree state provenance survives pooling and legacy captures stay incomplete', () => {
   const entry = { family: 'core', profile: 'light', state: 'hover', viewport: { id: 'desktop' }, inputTrees: {
     astylar: { schemaVersion: 1, nodes: [{ key: 'root/0', parent: 'root', authored: { type: 'button' },

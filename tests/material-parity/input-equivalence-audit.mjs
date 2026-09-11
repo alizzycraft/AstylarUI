@@ -137,8 +137,10 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
   if (report.elementInventory.errors.length > 0) errors.push(`${report.elementInventory.errors.length} full-tree collection errors`);
   if (report.retainedTypography?.schemaVersion !== 1) errors.push('missing retained typography stage report');
   if (requireComplete && report.retainedTypography?.gaps.length > 0) errors.push(`${report.retainedTypography.gaps.length} retained typography mappings or stage fields require review`);
+  const reviewedTypographyKinds = { 'reviewed-heading-mask': 'parity-harness-defect',
+    'reviewed-table-font-input': 'application-plugin-authoring-defect' };
   const unresolvedTypography = report.retainedTypography?.differences.filter((entry) =>
-    entry.attribution !== 'reviewed-heading-mask' || entry.classification !== 'parity-harness-defect' || !entry.reviewEvidence) ?? [];
+    !reviewedTypographyKinds[entry.attribution] || entry.classification !== reviewedTypographyKinds[entry.attribution] || !entry.reviewEvidence) ?? [];
   if (requireComplete && unresolvedTypography.length > 0) errors.push(`${unresolvedTypography.length} retained typography differences require attribution`);
   if (requireComplete && report.supplementalBehavior.missing.length > 0) errors.push(`${report.supplementalBehavior.missing.length} supplemental behavior cases are missing`);
   if (report.supplementalBehavior.errors.length > 0) errors.push(`${report.supplementalBehavior.errors.length} supplemental behavior collection errors`);
@@ -222,6 +224,8 @@ function collectStyleDiscrepancies(cases, retainedTypography) {
   const grouped = new Map();
   const typographyByCaseAndId = new Map(retainedTypography.comparisons.map((entry) =>
     [JSON.stringify([entry.case, entry.element]), entry]));
+  const reviewedTableFonts = new Map(retainedTypography.differences.filter((entry) => entry.attribution === 'reviewed-table-font-input')
+    .map((entry) => [JSON.stringify([entry.case, entry.element]), entry]));
   for (const benchmarkCase of cases) {
     const key = caseKey(benchmarkCase);
     for (const input of benchmarkCase.styleInputs ?? []) {
@@ -238,6 +242,8 @@ function collectStyleDiscrepancies(cases, retainedTypography) {
           : classifyReviewedRootInput(benchmarkCase, input, property, referenceValue, astylarValue)
             ?? classifyReviewedContainerInput(benchmarkCase, input, property, referenceValue, astylarValue)
             ?? classifyReviewedBadgePaint(benchmarkCase, input, property, referenceValue, astylarValue)
+            ?? classifyReviewedTableFontSnapshot(input, property, referenceValue, astylarValue,
+              reviewedTableFonts.get(JSON.stringify([key, input.id])))
             ?? classifyReviewedTypographyStage(benchmarkCase, input, property, referenceValue, astylarValue,
               typographyByCaseAndId.get(JSON.stringify([key, input.id])))
             ?? classifyStyleDifference(property, referenceValue, astylarValue, reference, astylar);
@@ -377,6 +383,14 @@ function classifyReviewedTypographyStage(benchmarkCase, input, property, referen
       source: evidence.source, revision: evidence.revision, property, values },
     justification: 'The directly mapped own-text nodes agree, and the captured core text-registry value equals the browser computed value while both candidate declaration stages omit this property. This attributes the missing scalar to a diagnostic-stage comparison, not a missing authored font or a renderer defect. Keep both stages; it does not accept other properties, substitute inherited calculations, or prove current pseudo-state glyph paint.',
   };
+}
+
+function classifyReviewedTableFontSnapshot(input, property, reference, astylar, finding) {
+  if (property !== 'fontSize' || !finding || reference !== finding.values.reference || astylar !== finding.values.effective ||
+      input.astylarResolvedStyleEvidenceVersion !== 2 || input.referenceStructure?.schemaVersion !== 2 ||
+      input.astylarStructure?.schemaVersion !== 2 || input.referenceStructure.text !== input.astylarStructure.ownText) return;
+  return { classification: finding.classification, attribution: finding.attribution, owner: finding.recommendedOwner,
+    justification: finding.justification, reviewEvidence: finding.reviewEvidence };
 }
 
 function classifyStyleDifference(property, reference, astylar, referenceStyle, astylarStyle) {
@@ -673,6 +687,45 @@ function reviewedHeadingMask(mapping, ref, styles, astylarTree, inventory) {
   };
 }
 
+function reviewedTableFontInput(entry, ref, ast, styles, referenceTree, astylarTree, inventory) {
+  if (entry.family !== 'table' || !['th', 'td'].includes(ref.type) || ast.authored.type !== ref.type ||
+      styles.reference.fontSize !== '14px' || styles.retained.fontSize !== '16px') return;
+  const refRow = referenceTree.nodes.find((node) => node.key === ref.parent);
+  const astRow = astylarTree.nodes.find((node) => node.key === ast.parent);
+  if (refRow?.type !== 'tr' || astRow?.authored?.type !== 'tr') return;
+  const containingTable = (tree, start, side) => {
+    const seen = new Set();
+    let node = start;
+    while (node && !seen.has(node.key)) {
+      seen.add(node.key);
+      if ((side === 'reference' ? node.type : node.authored?.type) === 'table') return node;
+      node = tree.nodes.find((parent) => parent.key === node.parent);
+    }
+  };
+  const refTable = containingTable(referenceTree, refRow, 'reference');
+  const astTable = containingTable(astylarTree, astRow, 'astylar');
+  if (refTable?.attributes?.id !== 'table-primary' || astTable?.authored?.id !== 'table-primary' ||
+      !String(astTable.authored.class ?? '').split(/\s+/).includes('material-table')) return;
+  const rowStyle = inventory.styles[refRow.style];
+  const fontToken = ref.type === 'th'
+    ? 'var(--mat-table-header-headline-size, var(--mat-sys-title-small-size, 14px))'
+    : 'var(--mat-table-row-item-label-text-size, var(--mat-sys-body-medium-size, 14px))';
+  const rowRule = refRow.rules.map((index) => inventory.rules[index]).find((rule) => rule?.side === 'reference' &&
+    rule.value.active === true && rule.value.declarations?.['font-size']?.value === fontToken);
+  const candidateRules = astylarTree.rules.map((index) => inventory.rules[index]).filter((rule) => rule?.side === 'astylar' &&
+    rule.value.selector === `.material-table ${ref.type}` && rule.value.fontSize !== undefined);
+  if (!rowRule || candidateRules.length !== 1 || candidateRules[0].value.fontSize !== '16px' ||
+      rowStyle?.side !== 'reference' || rowStyle.value.fontSize !== '14px') return;
+  const candidateRule = candidateRules[0];
+  return {
+    classification: 'application-plugin-authoring-defect', attribution: 'reviewed-table-font-input',
+    recommendedOwner: 'showcase Material table typography input translation',
+    justification: 'The matched reference row/cell computes 14px from its captured Material row typography token. The candidate explicitly authors 16px on the corresponding table-cell selector and core retains 16px. Commit f980edc changed that input from 14px while modifying renderer row sizing. This is the reviewed unequal fixture font input, not a renderer font-scaling inference. The normal/effective table-cell records may omit the size; retained text and authored rules supply separate evidence without rewriting those diagnostic stages.',
+    reviewEvidence: { referenceRow: refRow.key, candidateRow: astRow.key, referenceRule: rowRule.value,
+      candidateRule: candidateRule.value, referenceComputedFontSize: styles.reference.fontSize, candidateRetainedFontSize: styles.retained.fontSize },
+  };
+}
+
 export function collectRetainedTypographyEvidence(cases, inventory) {
   const comparisons = [], differences = [], gaps = [], paintMaskDifferences = [], reviewedMappings = [];
   const mappings = new Map();
@@ -751,6 +804,7 @@ export function collectRetainedTypographyEvidence(cases, inventory) {
       const styles = Object.fromEntries(Object.entries(raw).map(([stage, style]) => [stage, canonicalStyle(style)]));
       const headingMapping = headingById.get(id);
       const headingMask = reviewedHeadingMask(headingMapping, ref, styles, astylarTree, inventory);
+      const tableFont = reviewedTableFontInput(entry, ref, ast, styles, referenceTree, astylarTree, inventory);
       if (headingMask) paintMaskDifferences.push({ case: key, element: id, referenceNode: ref.key, astylarNode: ast.key, ...headingMask });
       const comparison = { case: key, family: entry.family, element: id, text: refText,
         referenceNode: ref.key, astylarNode: ast.key, source: 'core-text-registry',
@@ -769,6 +823,7 @@ export function collectRetainedTypographyEvidence(cases, inventory) {
             recommendedOwner: 'input audit authored typography and core registry-stage attribution',
             justification: 'Browser computed and retained core text properties differ on directly mapped own-text nodes. Trace authored rules and resolution before assigning authoring or core fault; this is not proof of current pseudo-state paint.',
             ...(property === 'color' && headingMask ? headingMask : {}),
+            ...(property === 'fontSize' && tableFont ? tableFont : {}),
           });
         }
       }
