@@ -140,6 +140,59 @@ equivalent anchoring. The existing component test checks the candidate's flex
 declarations, not equivalence to the reference containing block. This must be
 addressed with the shared CSS-space overlay work, not another local offset.
 
+## Overlay constraint substitution and an omitted breakpoint
+
+The settled bottom-sheet diagnostic now preserves a concrete failure outside
+the maintained viewport matrix. Run:
+`node scripts/audit-material-overlay-breakpoints.mjs --base-url=http://127.0.0.1:4431`
+against the already-built audit showcase server. On Chrome 152.0.7977.76,
+light theme, DPR1, height900, the unmodified fixtures produce:
+
+| Viewport width | Reference left / width | Astylar left / width | Result |
+| ---: | --- | --- | --- |
+| 900 | 0 / 900 | 0 / 900 | geometry matches |
+| 1024 | 320 / 384 | 256 / 512 | width differs by128px |
+| 1440 | 464 / 512 | 464 / 512 | geometry matches |
+
+All three have top772 and height128 (candidate floating-point noise below
+0.000001px). All six input trees captured without collection/page errors.
+The command exits1 deliberately because the medium case fails unchanged
+geometry expectations; it is not a passing parity test. The script waits for
+finite reference animations to finish before measuring. Earlier exploratory
+measurements taken during entry animation are not used as settled evidence.
+Artifacts and SHA-256 tree references are under
+`artifacts/material-parity/overlay-breakpoint-audit`; the audit loader includes
+all three supplemental cases and recomputes geometry errors rather than trusting
+their claimed `matches` fields. These cases do not inflate configured-matrix
+coverage. Missing cases, invalid geometry, duplicate keys, wrong environments,
+and missing tree evidence cannot establish complete audit coverage.
+
+The immediate owner is fixture authoring, not a demonstrated core layout bug:
+`.bottom-sheet-panel` fixes width512/height128 with one max960 full-width rule.
+Installed Material `fesm2022/bottom-sheet.mjs` instead uses content flow,
+max-height80vh, and full-viewport/medium384/large512 minimum widths. Its outer
+padding8px16px plus the list's vertical8px padding is flattened into candidate
+padding16px; current two-row geometry alone does not prove equivalent layout.
+The fixed height was introduced in `8505c3b`.
+
+Two related source findings are classified separately:
+
+- Dialog (`bc0e449`): fixed panel/title/content/actions heights161/67/20/73
+  reproduce current used heights. Reference
+  `fesm2022/module-Ce6F7TNm.mjs` derives them from flow, a title `::before`
+  inline40px spacer, title padding6px24px13px, and wrapping actions with
+  min-height52px, padding16px24px, and a transparent1px top border. Candidate
+  uses flex-end title alignment, padding7px24px12px, and action padding
+  16px24px17px instead. These are unequal rules even when the box sizes match.
+- Snackbar (`899c741`): candidate fixed width344px and space-between replace
+  the reference surface's min-width344/max-width672 and flexing label with
+  separate action padding (`fesm2022/snack-bar.mjs`). This is an intrinsic-size
+  input mismatch, not evidence that another fixed width would fix the renderer.
+
+Verification for this increment: audit unit tests16/16 and
+`npm run parity:harness:check`54/54 pass. No fixture, production renderer,
+reference styling, or visual threshold was changed.
+
 ## Minimal browser evidence
 
 `input-equivalence-proof.spec.ts` supplies the same style objects to browser CSS

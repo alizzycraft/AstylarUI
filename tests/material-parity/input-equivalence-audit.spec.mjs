@@ -4,6 +4,7 @@ import {
   buildMaterialInputAudit,
   collectFullTreeInventory,
   summarizeSupplementalBehavior,
+  summarizeSupplementalOverlays,
   validateMaterialInputAudit,
 } from './input-equivalence-audit.mjs';
 
@@ -11,6 +12,23 @@ const browserDefaults = {
   visibility: 'visible', minWidth: '0px', maxWidth: 'none', minHeight: '0px', maxHeight: 'none',
   fontStyle: 'normal', transform: 'none', pointerEvents: 'auto',
 };
+
+test('supplemental overlay evidence requires the medium breakpoint and recomputes geometry', () => {
+  const side = { box: { left: 320, top: 772, width: 384, height: 128 }, errors: [] };
+  const raw = { profile: 'light', deviceScaleFactor: 1, results: [{ family: 'bottom-sheet', state: 'open',
+    viewport: { width: 1024, height: 900 }, reference: side,
+    astylar: { ...side, box: { ...side.box, left: 256, width: 512 } }, matches: true, geometryError: 0 }] };
+  const result = summarizeSupplementalOverlays(raw);
+  assert.equal(result.missing.length, 2);
+  assert.equal(result.cases[0].matches, false);
+  assert.equal(result.cases[0].geometryError, 128);
+  assert.equal(result.mismatches.length, 1);
+  assert.equal(summarizeSupplementalOverlays({}).missing.length, 3);
+  assert.ok(summarizeSupplementalOverlays({ ...raw, results: [...raw.results, ...raw.results] }).errors.some(({ error }) => error.includes('duplicate')));
+  assert.ok(summarizeSupplementalOverlays({ ...raw, results: [{ ...raw.results[0], reference: {} }] }).errors.length > 0);
+  assert.equal(summarizeSupplementalOverlays({ ...raw, results: [{ ...raw.results[0], reference: {} }] }).mismatches.length, 0);
+  assert.ok(summarizeSupplementalOverlays({ ...raw, deviceScaleFactor: 2 }).errors.length > 0);
+});
 
 test('supplemental coverage requires all six behavior cases and recomputes claimed parity', () => {
   const entry = { family: 'timepicker', state: 'open-commit-pointer', matches: true,

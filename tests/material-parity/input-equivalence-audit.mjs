@@ -33,7 +33,8 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const sourceFindings = scanMaterialSources(root);
   const coverage = buildCoverage(parityReport, cases);
   const supplementalBehavior = collectSupplementalBehavior(root);
-  const elementInventory = collectFullTreeInventory([...cases, ...supplementalBehavior.cases], { root });
+  const supplementalOverlays = collectSupplementalOverlays(root);
+  const elementInventory = collectFullTreeInventory([...cases, ...supplementalBehavior.cases, ...supplementalOverlays.cases], { root });
   const classifications = countBy(discrepancies, (entry) => entry.classification);
   const propertyGroupCounts = countBy(discrepancies, (entry) => entry.propertyGroup);
   const familyCounts = countBy(discrepancies, (entry) => entry.family);
@@ -55,9 +56,11 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
     sourceFingerprints: sourceFingerprints(root),
     coverage,
     supplementalBehavior,
+    supplementalOverlays,
     summary: {
       inputEquivalent: coverage.complete && coverage.missingElements.length === 0 &&
         supplementalBehavior.missing.length === 0 && supplementalBehavior.errors.length === 0 && supplementalBehavior.mismatches.length === 0 &&
+        supplementalOverlays.missing.length === 0 && supplementalOverlays.errors.length === 0 && supplementalOverlays.mismatches.length === 0 &&
         elementInventory.gaps.length === 0 && elementInventory.errors.length === 0 &&
         coverage.presenceDifferences.length === 0 &&
         sourceFindings.every((entry) => entry.detected && ['equivalent-representation', 'legitimate-public-api-structure'].includes(entry.classification)) &&
@@ -99,6 +102,8 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
   if (report.elementInventory.errors.length > 0) errors.push(`${report.elementInventory.errors.length} full-tree collection errors`);
   if (requireComplete && report.supplementalBehavior.missing.length > 0) errors.push(`${report.supplementalBehavior.missing.length} supplemental behavior cases are missing`);
   if (report.supplementalBehavior.errors.length > 0) errors.push(`${report.supplementalBehavior.errors.length} supplemental behavior collection errors`);
+  if (requireComplete && report.supplementalOverlays.missing.length > 0) errors.push(`${report.supplementalOverlays.missing.length} supplemental overlay cases are missing`);
+  if (report.supplementalOverlays.errors.length > 0) errors.push(`${report.supplementalOverlays.errors.length} supplemental overlay collection errors`);
   return errors;
 }
 
@@ -121,6 +126,8 @@ export function renderMaterialInputAuditMarkdown(report) {
     `Full-element evidence: ${report.elementInventory.cases.length} captured case sides, ${report.elementInventory.variants.length} tree variants; ${report.elementInventory.gaps.length} missing case sides and ${report.elementInventory.errors.length} collection errors. Inventory presence does not establish input equivalence.`,
     '',
     `Supplemental picker behavior: ${report.supplementalBehavior.cases.length}/6 cases captured; ${report.supplementalBehavior.missing.length} missing and ${report.supplementalBehavior.mismatches.length} observed mismatches. These cases cover pointer/keyboard commits and previous/next month navigation omitted by the maintained matrix. Classified behavioral failures remain evidence; they are not counted as successful parity.`,
+    '',
+    `Supplemental bottom-sheet breakpoints: ${report.supplementalOverlays.cases.length}/3 cases captured; ${report.supplementalOverlays.missing.length} missing and ${report.supplementalOverlays.mismatches.length} observed mismatches. This checks settled geometry at 900, 1024, and 1440 CSS px; the medium breakpoint is absent from the maintained matrix.`,
     '',
     ...report.coverage.presenceDifferences.map((entry) => `- Presence discrepancy: ${entry.case}, ${entry.element}: ${entry.justification}`),
     '',
@@ -455,6 +462,43 @@ export function collectSupplementalBehavior(root) {
   if (!existsSync(path.resolve(root, file))) return { file, ...summarizeSupplementalBehavior({}) };
   const contents = readFileSync(path.resolve(root, file));
   return { file, sha256: createHash('sha256').update(contents).digest('hex'), ...summarizeSupplementalBehavior(JSON.parse(contents)) };
+}
+
+export function collectSupplementalOverlays(root) {
+  const file = 'artifacts/material-parity/overlay-breakpoint-audit/latest-report.json';
+  if (!existsSync(path.resolve(root, file))) return { file, ...summarizeSupplementalOverlays({}) };
+  const contents = readFileSync(path.resolve(root, file));
+  return { file, sha256: createHash('sha256').update(contents).digest('hex'), ...summarizeSupplementalOverlays(JSON.parse(contents)) };
+}
+
+export function summarizeSupplementalOverlays(raw) {
+  const required = [900, 1024, 1440].map((width) => `bottom-sheet/open/${width}x900`);
+  const errors = [];
+  const cases = (raw.results ?? []).map((entry) => {
+    const key = `${entry.family}/${entry.state}/${entry.viewport?.width}x${entry.viewport?.height}`;
+    if (!required.includes(key) || raw.profile !== 'light' || raw.deviceScaleFactor !== 1) {
+      errors.push({ case: key, error: 'unexpected overlay case or environment' });
+    }
+    const boxes = ['reference', 'astylar'].map((side) => entry[side]?.box);
+    const valid = boxes.every((box) => box && ['left', 'top', 'width', 'height'].every((property) => Number.isFinite(box[property])) && box.width > 0 && box.height > 0);
+    if (!valid) errors.push({ case: key, error: 'missing or invalid overlay geometry' });
+    for (const side of ['reference', 'astylar']) {
+      for (const error of entry[side]?.errors ?? ['missing side errors']) errors.push({ case: key, side, error });
+    }
+    const geometryError = valid ? Math.max(...['left', 'top', 'width', 'height'].map((property) => Math.abs(boxes[0][property] - boxes[1][property]))) : null;
+    return { ...entry, kind: 'supplemental', profile: raw.profile,
+      viewport: { ...entry.viewport, deviceScaleFactor: raw.deviceScaleFactor, id: `supplemental-${entry.viewport?.width}-dpr1` },
+      geometryError, matches: valid && geometryError <= 0.5 && !errors.some((error) => error.case === key),
+      inputTrees: { reference: entry.reference?.inputTree, astylar: entry.astylar?.inputTree } };
+  });
+  const keys = cases.map((entry) => `${entry.family}/${entry.state}/${entry.viewport.width}x${entry.viewport.height}`);
+  if (new Set(keys).size !== keys.length) errors.push({ error: 'duplicate supplemental overlay case' });
+  return { browser: raw.browser, cases, errors, missing: required.filter((key) => !keys.includes(key)),
+    mismatches: cases.filter((entry) => entry.geometryError !== null && entry.geometryError > 0.5 &&
+      !errors.some((error) => !error.case || error.case === `${entry.family}/${entry.state}/${entry.viewport.width}x${entry.viewport.height}`))
+      .map((entry) => ({ family: entry.family, state: entry.state, viewport: entry.viewport,
+      classification: 'application-plugin-authoring-defect', owner: 'showcase bottom-sheet responsive constraints',
+      justification: 'Reference responsive minimum widths and content flow are replaced by fixed candidate dimensions. The medium breakpoint width differs after settling; inspect full input trees. Collection errors remain separate audit failures, not confirmed rendering defects.' })) };
 }
 
 export function summarizeSupplementalBehavior(raw) {

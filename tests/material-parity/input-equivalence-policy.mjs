@@ -68,6 +68,33 @@ export const implicitReferenceValues = Object.freeze({
 
 export const sourceAuditDefinitions = Object.freeze([
   Object.freeze({
+    id: 'fixture-bottom-sheet-fixed-constraints',
+    introducedBy: '8505c3b fix(material): match bottom sheet overlay geometry',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`selector: '\.bottom-sheet-panel', width: '512px', height: '128px'`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase bottom-sheet responsive constraints and content flow',
+    justification: 'The reference uses content height, max-height:80vh, and responsive minimum widths (full viewport, medium 384px, large 512px), not a fixed 512x128px box. Candidate has only a max-960px full-width override. A settled 1024px browser proof measures reference width384 and candidate width512, while 900/1440px match. Preserve the reference constraints rather than adding another measured-size patch.',
+  }),
+  Object.freeze({
+    id: 'fixture-dialog-fixed-content-boxes',
+    introducedBy: 'bc0e449 fix(material): match dialog content geometry',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`selector: '\.dialog-(?:panel|title|copy|actions)'[^\n]*height: '(?:161|67|20|73)px'`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase dialog flow, generated title spacer, and action wrapping',
+    justification: 'Candidate fixes panel/title/content/actions to the reference used heights161/67/20/73px. Material derives these from title padding6px24px13px plus a40px inline pseudo-element, content flow, and wrapping actions with min-height52px, padding16px24px and a1px transparent top border. Candidate title padding7px24px12px, flex-end alignment and action padding16px24px17px reproduce current geometry through different rules. Equal used heights do not establish equivalent inputs.',
+  }),
+  Object.freeze({
+    id: 'fixture-snackbar-fixed-width',
+    introducedBy: '899c741 fix(material): anchor snackbar and tooltip overlays',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`selector: '\.snack-surface', width: '344px'`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase snackbar intrinsic sizing and label/action flex composition',
+    justification: 'Reference surface uses min-width344px and max-width672px with a flexing label and separate action padding. Candidate fixes width344px with padding0 18px and space-between. Matching this short label does not prove the same intrinsic sizing or wrapping constraints; no core defect follows from these unequal authored inputs.',
+  }),
+  Object.freeze({
     id: 'fixture-calendar-navigation-frozen-to-current-date',
     introducedBy: 'd1fc52a fix(material): refine picker icons and calendar alignment',
     file: 'examples/material-showcase/src/app/astylar.component.ts',
