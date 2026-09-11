@@ -218,7 +218,8 @@ function collectStyleDiscrepancies(cases) {
         const classification = benchmarkCase.state && input.reference && input.astylar && input.astylarResolvedStyleEvidenceVersion !== 2
           ? { classification: 'parity-harness-defect', owner: 'audit effective pseudo-state style capture',
             justification: 'This interaction capture predates effective-style provenance. It can compare browser state styles against candidate normal-only declarations; recapture with evidence version2 before attributing the difference to authoring or core.' }
-          : classifyStyleDifference(property, referenceValue, astylarValue, reference, astylar);
+          : classifyReviewedRootInput(benchmarkCase, input, property, referenceValue, astylarValue)
+            ?? classifyStyleDifference(property, referenceValue, astylarValue, reference, astylar);
         const signature = JSON.stringify([benchmarkCase.family, input.id, property, referenceValue ?? null, astylarValue ?? null,
           classification.classification, classification.attribution ?? null, classification.justification]);
         let entry = grouped.get(signature);
@@ -251,6 +252,29 @@ function collectStyleDiscrepancies(cases) {
   }
   return [...grouped.values()].sort((a, b) =>
     a.family.localeCompare(b.family) || a.element.localeCompare(b.element) || a.property.localeCompare(b.property));
+}
+
+function classifyReviewedRootInput(benchmarkCase, input, property, reference, astylar) {
+  // A narrowly reviewed authoring path, not a default inference from unequal
+  // computed values. Require the captured node mapping and declaration witness.
+  if (input.id !== `${benchmarkCase.family}-root` ||
+      input.referenceStructure?.type !== 'section' || input.astylarStructure?.type !== 'section') return;
+  const pairs = { position: ['static', 'relative'], display: ['block', 'flex'] };
+  const pair = pairs[property];
+  if (!pair || reference !== pair[0] || astylar !== pair[1]) return;
+  const declaration = input.astylarAuthored?.find((rule) =>
+    rule.selector === `#${input.id}` && rule.declarations?.[property] === astylar);
+  if (!declaration || !input.referenceAuthored?.some((rule) => /^\.demo(?:\[|$)/.test(rule.selector))) return;
+  if (input.referenceAuthored.some((rule) => {
+    const value = rule.declarations?.[property]?.value;
+    return value !== undefined && value !== reference;
+  })) return;
+  return {
+    classification: 'application-plugin-authoring-defect',
+    attribution: 'reviewed-authored-rule',
+    owner: 'showcase demo-section block-flow translation',
+    justification: `The mapped section uses reference .demo block flow, while captured candidate rule #${input.id} explicitly authors ${property}:${astylar}. The reference computed ${property}:${reference} agrees with the inspected ReferenceComponent rules. This traced shared-root translation changes formatting/containing-block behavior; it is not inferred from omitted resolved values or screenshot geometry. See fixture-demo-block-flow-replaced in source findings.`,
+  };
 }
 
 function classifyStyleDifference(property, reference, astylar, referenceStyle, astylarStyle) {
@@ -298,6 +322,13 @@ function classifyStyleDifference(property, reference, astylar, referenceStyle, a
       owner: 'none',
     };
   }
+  if (property === 'maxWidth' && equivalentFixedMaxWidth(reference, astylar, referenceStyle, astylarStyle)) {
+    return {
+      classification: 'equivalent-representation',
+      justification: 'These finite max-width declarations specify the same maximum border-box width after adding fixed CSS-pixel padding and borders to the content-box side. This accepts only the maximum-width constraint, not the different box-sizing mode or other width/height declarations. Percentage, auto, intrinsic and unresolved insets are not converted.',
+      owner: 'none',
+    };
+  }
   const group = propertyGroupByName.get(property) ?? 'other';
   if (group === 'layout' && reference !== undefined && astylar !== undefined &&
       /(?:-?\d+(?:\.\d+)?px)/.test(reference) &&
@@ -314,6 +345,23 @@ function classifyStyleDifference(property, reference, astylar, referenceStyle, a
     justification: `The captured ${group} values differ (${reference ?? 'omitted'} versus ${astylar ?? 'omitted'}). Resolved values alone do not distinguish unequal authored declarations from default/cascade resolution, mismapped wrappers, or non-comparable used values. Trace the winning authored rules and corresponding semantic boxes before attributing this signature to the application/plugin or core. Omission is not proof that the fixture omitted the CSS intent.`,
     owner: `input audit ${group} authored-rule and resolution provenance`,
   };
+}
+
+function equivalentFixedMaxWidth(reference, astylar, referenceStyle, astylarStyle) {
+  if (referenceStyle.boxSizing === astylarStyle.boxSizing) return false;
+  const pixels = (value) => /^(?:0|\d+(?:\.\d+)?px)$/.test(String(value)) ? parseFloat(value) : undefined;
+  const borderBoxLimit = (value, style) => {
+    const limit = pixels(value);
+    if (limit === undefined) return;
+    if (style.boxSizing === 'border-box') return limit;
+    if (style.boxSizing !== 'content-box') return;
+    const insets = ['paddingLeft', 'paddingRight', 'borderLeftWidth', 'borderRightWidth'].map((key) => pixels(style[key]));
+    if (insets.some((inset) => inset === undefined)) return;
+    return limit + insets.reduce((sum, inset) => sum + inset, 0);
+  };
+  const left = borderBoxLimit(reference, referenceStyle);
+  const right = borderBoxLimit(astylar, astylarStyle);
+  return left !== undefined && right !== undefined && Math.abs(left - right) < .001;
 }
 
 function canonicalStyle(style) {

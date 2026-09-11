@@ -126,6 +126,34 @@ test('does not infer an authoring defect from unequal resolved layout values', (
   assert.equal(validateMaterialInputAudit(audit, { requireComplete: false }).length, 0);
 });
 
+test('attributes the reviewed shared root only with matching captured authoring evidence', () => {
+  const raw = parityReport({ display: 'block', position: 'static' }, { display: 'flex', position: 'relative' });
+  const input = raw.results[0].styleInputs[0];
+  input.referenceStructure = { schemaVersion: 2, type: 'section' };
+  input.astylarStructure = { schemaVersion: 2, type: 'section' };
+  input.referenceAuthored = [{ selector: '.demo[_ngcontent-test]', declarations: { 'max-width': { value: '720px' } } }];
+  input.astylarAuthored = [{ selector: '#core-root', declarations: { display: 'flex', position: 'relative' } }];
+  const audit = buildMaterialInputAudit(raw);
+  assert.equal(audit.summary.unresolvedAttributions, 0);
+  assert.ok(audit.discrepancies.every((entry) => entry.attribution === 'reviewed-authored-rule'));
+  input.astylarAuthored[0].declarations.display = 'block';
+  assert.equal(buildMaterialInputAudit(raw).discrepancies.find((entry) => entry.property === 'display').attribution, 'unresolved');
+  input.astylarStructure.type = 'div';
+  assert.equal(buildMaterialInputAudit(raw).summary.unresolvedAttributions, 2);
+});
+
+test('normalizes only a fixed max-width constraint across explicit box-sizing modes', () => {
+  const reference = { boxSizing: 'content-box', maxWidth: '720px', padding: '28px', borderWidth: '1px' };
+  const astylar = { boxSizing: 'border-box', maxWidth: '778px', padding: '28px', borderWidth: '1px' };
+  const difference = (left, right) => buildMaterialInputAudit(parityReport(left, right)).discrepancies.find((entry) => entry.property === 'maxWidth');
+  assert.equal(difference(reference, astylar).classification, 'equivalent-representation');
+  assert.equal(difference(astylar, reference).classification, 'equivalent-representation');
+  assert.notEqual(difference(reference, { ...astylar, maxWidth: '777px' }).classification, 'equivalent-representation');
+  assert.notEqual(difference({ ...reference, padding: '5%' }, astylar).classification, 'equivalent-representation');
+  assert.notEqual(difference({ boxSizing: 'content-box', maxWidth: '720px' }, astylar).classification, 'equivalent-representation');
+  assert.notEqual(buildMaterialInputAudit(parityReport(reference, astylar)).discrepancies.find((entry) => entry.property === 'boxSizing').classification, 'equivalent-representation');
+});
+
 test('source audit has an explicit classification and live location for every policy entry', () => {
   const audit = buildMaterialInputAudit(parityReport({}, {}));
   assert.equal(audit.summary.unclassifiedDifferences, 0);

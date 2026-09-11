@@ -68,6 +68,16 @@ export const implicitReferenceValues = Object.freeze({
 
 export const sourceAuditDefinitions = Object.freeze([
   Object.freeze({
+    id: 'fixture-demo-block-flow-replaced',
+    introducedBy: '2f44011 feat(example): add Material component showcase',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`selector: \x60#\$\{rootId\}\x60, position: 'relative'[^\n]*display: 'flex'`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase demo-section block-flow translation',
+    justification: 'Every reference .demo section is an ordinary static block. The shared candidate root rule instead makes it a relatively positioned column flex container, with a fixed height and16px gap. This changes margin collapsing, child sizing and containing-block behavior. Captured mapped section types and explicit authored position/display declarations allow those particular signatures to be attributed to the fixture. Width/typography/paint differences still need their own evidence; the maximum border-box width alone can be an equivalent720px content box plus58px of fixed insets.',
+    referenceEvidence: { file: 'examples/material-showcase/src/app/reference.component.ts', selector: '.demo', computed: { display: 'block', position: 'static' } },
+  }),
+  Object.freeze({
     id: 'core-empty-block-retains-parent-content-height',
     introducedBy: '93ba2e7 fix root padding; current empty-block flow path reproduced independently',
     file: 'src/app/services/dom/elements/element-dimension.service.ts',

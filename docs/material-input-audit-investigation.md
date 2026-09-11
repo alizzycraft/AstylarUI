@@ -13,6 +13,22 @@ evidence; the new run has not yet produced its final report.
 
 ## Attribution is not inferred from unequal resolved values (2026-09-11)
 
+The shared demo root now has a bounded reviewed rule: only mapped section nodes
+with captured `.demo` reference evidence and an explicit matching candidate
+`#<family>-root` declaration can attribute `static -> relative` and
+`block -> flex` to fixture authoring. Missing evidence, different semantic tags,
+or a candidate declaration that disagrees with its resolved value retain their
+attribution gap. This separates a source-proven compensation from a hypothetical
+cascade defect. The live source pattern is checked alongside the report.
+
+A different root discrepancy is representational: reference `max-width:720px`
+on a content box plus 28px padding and 1px border on each side equals a 778px
+border-box maximum. Normalization now accepts that constraint only when both
+box-sizing modes and every inset are explicit fixed pixel values. It does not
+waive the box-sizing difference, other dimensions, or percentage/auto/intrinsic
+constraints. Tests include unequal limits, unresolved insets and reversed sides.
+All 27 audit tests pass; no fixture input was changed.
+
 The automatic style classifier previously labelled every unmatched scalar pair
 an application/plugin authoring defect. That was too strong: a resolved value
 may differ because of defaults/cascade, wrapper mapping, used-value serialization,
