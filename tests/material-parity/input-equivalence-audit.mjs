@@ -139,6 +139,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
   if (requireComplete && report.retainedTypography?.gaps.length > 0) errors.push(`${report.retainedTypography.gaps.length} retained typography mappings or stage fields require review`);
   const reviewedTypographyKinds = { 'reviewed-heading-mask': 'parity-harness-defect',
     'reviewed-table-font-input': 'application-plugin-authoring-defect',
+    'reviewed-tree-font-input': 'application-plugin-authoring-defect',
     'reviewed-floating-label-font-input': 'application-plugin-authoring-defect' };
   const unresolvedTypography = report.retainedTypography?.differences.filter((entry) =>
     !reviewedTypographyKinds[entry.attribution] || entry.classification !== reviewedTypographyKinds[entry.attribution] || !entry.reviewEvidence) ?? [];
@@ -780,6 +781,45 @@ function reviewedTableFontInput(entry, ref, ast, styles, referenceTree, astylarT
   };
 }
 
+function reviewedTreeFontInput(entry, mapping, ref, ast, styles, astylarTree, inventory) {
+  if (entry.family !== 'tree' || mapping?.kind !== 'reviewed-showcase-template-text' ||
+      styles.reference.fontSize !== '16px' || !['14.4px', '18.4px'].includes(styles.retained.fontSize)) return;
+  const referenceRules = ref.rules.map((index) => inventory.rules[index]).filter((rule) => rule?.side === 'reference' &&
+    rule.value.active === true && rule.value.selector === '.mat-tree-node, .mat-nested-tree-node' &&
+    rule.value.declarations?.['font-size']?.value === 'var(--mat-tree-node-text-size, var(--mat-sys-body-large-size))');
+  if (referenceRules.length !== 1) return;
+  const candidateChain = [];
+  const seen = new Set();
+  let ancestor = ast;
+  while (ancestor && !seen.has(ancestor.key)) {
+    seen.add(ancestor.key);
+    const normal = inventory.styles[ancestor.normalStyle], effective = inventory.styles[ancestor.interactionStyle];
+    if (normal?.side !== 'astylar' || effective?.side !== 'astylar' ||
+        !normal.value || !effective.value || Array.isArray(normal.value) || Array.isArray(effective.value)) return;
+    candidateChain.push({ node: ancestor.key, normal: normal.value, effective: effective.value });
+    if (ancestor.authored?.id === 'page') break;
+    if (normal.value.fontSize !== undefined || effective.value.fontSize !== undefined ||
+        normal.value.font !== undefined || effective.value.font !== undefined) return;
+    const parents = astylarTree.nodes.filter((node) => node.key === ancestor.parent);
+    if (parents.length !== 1) return;
+    ancestor = parents[0];
+  }
+  if (ancestor?.authored?.id !== 'page' || ancestor.authored.type !== 'main' || ancestor.parent !== 'root' ||
+      astylarTree.nodes.filter((node) => node.authored?.id === 'page').length !== 1) return;
+  const page = candidateChain.at(-1);
+  const candidateRules = astylarTree.rules.map((index) => inventory.rules[index]).filter((rule) => rule?.side === 'astylar' &&
+    rule.value.selector === '#page' && rule.value.fontSize !== undefined);
+  if (candidateRules.length !== 1 || candidateRules[0].value.fontSize !== styles.retained.fontSize ||
+      page.normal.fontSize !== styles.retained.fontSize || page.effective.fontSize !== styles.retained.fontSize) return;
+  return {
+    classification: 'application-plugin-authoring-defect', attribution: 'reviewed-tree-font-input',
+    recommendedOwner: 'showcase Material tree component typography input translation',
+    justification: 'Material explicitly authors its tree-node font-size token and computes 16px. The candidate has no font-size declaration on the complete leaf-to-page chain until #page, which explicitly authors the same 14.4px or 18.4px size retained by core. This is the missing component typography override present since initial showcase commit 2f44011, not proof of a renderer scaling defect. The later 7159b1d fixed-height label wrapper does not supply the missing font input. No inherited value is substituted into captured declaration stages; other typography and wrapper differences remain separate.',
+    reviewEvidence: { referenceRule: referenceRules[0].value, candidateRule: candidateRules[0].value,
+      candidateChain, referenceComputedFontSize: styles.reference.fontSize, candidateRetainedFontSize: styles.retained.fontSize },
+  };
+}
+
 function reviewedFloatingLabelInput(entry, ref, ast, styles, referenceTree, astylarTree, inventory) {
   if (!['form-field', 'input', 'select'].includes(entry.family) || ref.type !== 'mat-label' ||
       ref.attributes?.id !== `${entry.family}-label` || ast.authored.type !== 'label' ||
@@ -904,6 +944,7 @@ export function collectRetainedTypographyEvidence(cases, inventory) {
       const headingMapping = headingById.get(id);
       const headingMask = reviewedHeadingMask(headingMapping, ref, styles, astylarTree, inventory);
       const tableFont = reviewedTableFontInput(entry, ref, ast, styles, referenceTree, astylarTree, inventory);
+      const treeFont = reviewedTreeFontInput(entry, textMappingById.get(id), ref, ast, styles, astylarTree, inventory);
       const floatingLabel = reviewedFloatingLabelInput(entry, ref, ast, styles, referenceTree, astylarTree, inventory);
       if (headingMask) paintMaskDifferences.push({ case: key, element: id, referenceNode: ref.key, astylarNode: ast.key, ...headingMask });
       const comparison = { case: key, family: entry.family, element: id, text: refText,
@@ -924,6 +965,7 @@ export function collectRetainedTypographyEvidence(cases, inventory) {
             justification: 'Browser computed and retained core text properties differ on directly mapped own-text nodes. Trace authored rules and resolution before assigning authoring or core fault; this is not proof of current pseudo-state paint.',
             ...(property === 'color' && headingMask ? headingMask : {}),
             ...(property === 'fontSize' && tableFont ? tableFont : {}),
+            ...(property === 'fontSize' && treeFont ? treeFont : {}),
             ...(property === 'fontSize' && floatingLabel ? floatingLabel : {}),
           });
         }

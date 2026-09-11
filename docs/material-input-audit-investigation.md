@@ -68,10 +68,18 @@ test those equal inputs through core. Do not add inverse theme scale factors or
 resize the rendered text to match screenshots. The 20px-versus-normal line-height
 and wrapper differences require their own proof and are not accepted here.
 
-The automated retained-property rows remain unresolved until a fail-closed
-attribution guard checks the captured active token rule and the complete
-candidate inheritance chain. This source/history finding does not waive those
-machine-report checks or establish full tree rendering parity.
+The automated attribution now requires that exact active token rule, the
+reviewed tree text identity, every candidate normal/effective ancestor record,
+no intervening font-size/font shorthand declaration, and a unique main#page
+whose authored, normal and effective sizes match the retained leaf size. It
+does not reconstruct inherited values in the declaration records. Missing,
+cyclic, contradictory or duplicate evidence leaves the difference unresolved.
+Across the 436 static checkpoints the guard classifies nine contrast and nine
+custom font-size observations as input-authoring defects. All 3,381 property
+differences remain visible; 2,437 still require attribution. Source inventory
+now contains 49 findings. The full harness suite passes 68/68 tests, including
+positive controls for both theme sizes and negative controls for incomplete or
+conflicting evidence. This does not establish full tree rendering parity.
 
 ## Ordered transform composition is also lost (2026-09-12)
 

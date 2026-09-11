@@ -221,6 +221,16 @@ export const sourceAuditDefinitions = Object.freeze([
     referenceEvidence: { file: 'examples/material-showcase/src/app/reference.component.ts', element: "@case ('table')", selectors: ['.mat-mdc-header-cell', '.mat-mdc-cell'], declarations: { borderBottomWidth: '1px', borderBottomStyle: 'solid' }, exception: 'final body row has no bottom border' },
   }),
   Object.freeze({
+    id: 'fixture-tree-component-typography-omitted',
+    introducedBy: '2f44011 omits component typography; 7159b1d adds fixed-height label wrapper',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`selector: '\.tree-label', height: '20px', lineHeight: '20px', verticalAlign: 'middle'`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase Material tree component typography input translation',
+    justification: 'Material tree nodes explicitly use their component font-size token and compute 16px across the captured themes. Candidate tree labels instead inherit the theme-scaled page size: 14.4px in contrast and 18.4px in custom. Initial showcase code omitted the component typography; 7159b1d moved the text into fixed-20px-height/line-height spans without adding it. Captured occurrence attribution requires the active reference token rule and every candidate normal/effective ancestor up to the authored page font. Restore the original component typography inputs before assessing core; do not inverse-scale rendered text or treat 20px and normal line height as equivalent.',
+    focusedProof: 'tests/material-parity/input-equivalence-audit.spec.mjs: tree token/complete inheritance attribution and contradictory-evidence controls',
+  }),
+  Object.freeze({
     id: 'fixture-table-font-increased-during-renderer-fix',
     introducedBy: 'f980edc fix(renderer): honor Material table row sizing',
     file: 'examples/material-showcase/src/app/astylar.component.ts',

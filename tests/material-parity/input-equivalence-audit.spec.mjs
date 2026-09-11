@@ -630,6 +630,64 @@ test('template identity rejects path, uniqueness, text, child and ID conflicts i
   assert.deepEqual(reviewedTemplateTextMappings('unreviewed-family', reference, astylar), []);
 });
 
+function treeFontTypographyReport(size = '14.4px') {
+  const raw = templateTypographyReport('tree');
+  const { reference, astylar } = raw.results[0].inputTrees;
+  reference.styles[0] = { ...reference.styles[0], fontSize: '16px' };
+  reference.rules = [{ active: true, selector: '.mat-tree-node, .mat-nested-tree-node',
+    declarations: { 'font-size': { value: 'var(--mat-tree-node-text-size, var(--mat-sys-body-large-size))' } } }];
+  for (const node of reference.nodes.filter((node) => node.ownText)) node.rules = [0];
+  for (const node of astylar.nodes) {
+    node.normalResolvedStyle = {};
+    node.interactionResolvedStyle = {};
+    if (node.retainedText) node.retainedText.style = { ...reference.styles[0], fontSize: size };
+  }
+  astylar.nodes[0].parent = 'page-key';
+  astylar.nodes.push({ key: 'page-key', parent: 'root', authored: { type: 'main', id: 'page' },
+    normalResolvedStyle: { fontSize: size }, interactionResolvedStyle: { fontSize: size }, resolvedStyle: { fontSize: size } });
+  astylar.rules = [{ selector: '#page', fontSize: size }];
+  return raw;
+}
+
+test('tree font attribution requires explicit Material token and complete candidate inheritance evidence', () => {
+  for (const size of ['14.4px', '18.4px']) {
+    const raw = treeFontTypographyReport(size);
+    const report = buildMaterialInputAudit(raw);
+    const differences = report.retainedTypography.differences;
+    assert.equal(differences.length, 3);
+    assert.ok(differences.every((entry) => entry.attribution === 'reviewed-tree-font-input' &&
+      entry.classification === 'application-plugin-authoring-defect' && entry.values.normal === undefined &&
+      entry.values.effective === undefined && entry.values.retained === size && entry.reviewEvidence.candidateChain.length === 4));
+    assert.equal(report.summary.inputEquivalent, false);
+    assert.ok(!validateMaterialInputAudit(report).some((error) => error.includes('retained typography differences')));
+  }
+});
+
+test('tree attribution rejects missing stages, interrupted chains and competing font evidence', () => {
+  const mutations = [
+    (r) => { r.rules[0].active = false; },
+    (r) => { r.rules[0].declarations['font-size'].value = '14.4px'; },
+    (r) => { r.rules[0].selector = '.unrelated'; },
+    (r) => { r.styles[0].fontSize = '17px'; },
+    (_r, a) => { a.nodes[1].normalResolvedStyle = { fontSize: '14.4px' }; },
+    (_r, a) => { a.nodes[1].interactionResolvedStyle = { fontSize: '14.4px' }; },
+    (_r, a) => { a.nodes[1].normalResolvedStyle = { font: '14.4px Roboto' }; },
+    (_r, a) => { delete a.nodes[1].interactionResolvedStyle; },
+    (_r, a) => { a.nodes[0].parent = 'missing'; },
+    (_r, a) => { a.nodes.at(-1).parent = 'different-root'; },
+    (_r, a) => { a.nodes.at(-1).interactionResolvedStyle.fontSize = '16px'; },
+    (_r, a) => { a.rules[0].fontSize = '16px'; },
+    (_r, a) => { a.rules.push({ selector: '#page', fontSize: '18.4px' }); },
+    (_r, a) => { a.nodes.push({ ...a.nodes.at(-1), key: 'another-page' }); },
+  ];
+  for (const mutate of mutations) {
+    const raw = treeFontTypographyReport();
+    mutate(raw.results[0].inputTrees.reference, raw.results[0].inputTrees.astylar);
+    const report = buildMaterialInputAudit(raw);
+    assert.ok(!report.retainedTypography.differences.some((entry) => entry.element === 'tree-item-0-label' && entry.attribution === 'reviewed-tree-font-input'));
+  }
+});
+
 function headingTypographyReport() {
   const raw = retainedTypographyReport();
   const entry = raw.results[0];
