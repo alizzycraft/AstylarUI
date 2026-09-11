@@ -51,6 +51,62 @@ No reference input, fixture style, case, acceptance threshold, or renderer behav
 changed in this increment. Fully resolved style coverage and substantive review
 of every material difference remain separate unfinished requirements.
 
+## Badge reduction: intrinsic parent width and positioned margins (2026-09-12)
+
+Six new equivalent-input cases separate the badge's measured width and changed
+anchor offsets from the core rules they can conceal. They use the same rule
+objects for browser CSS and public `SiteData` and the existing 640x360px test
+surfaces. Text-bearing cases use Arial 16px/20px. No Material plugin, measured
+width or DPR correction is involved.
+
+Both inline and inline-block content-sized spans containing the label
+`Notifications` stay **zero-width** in Astylar instead of the browser's
+87.15625px. The label's horizontal edges match. The parent starts at x20 on both
+sides, but its right edge is x20 instead of x107.15625. Removing the positioned
+badge child reproduces precisely that parent-width error in both display modes.
+This is a confirmed **core descendant-intrinsic-width defect**, not a font-width
+or Babylon projection discrepancy. `ElementDimensionService.measureTextContent`
+measures own text, `calculateIntrinsicWidth` falls back to zero without own text,
+and `ElementCreationService.layoutInlineChildren` subsequently updates height
+while retaining that zero parent width. The missing descendant contribution must
+be resolved before parent flow placement and descendant containing-block use.
+
+The compound badge cases retain all four positioned-badge edge checks. They
+also expose placement errors; these are not all declared explained merely by
+the parent width. Inline text fragments and core text planes are different
+vertical measurement objects, so the new proof compares only their horizontal
+contribution; the frame, inline-block host and positioned badge use full edge
+checks. This scope does not claim inline ink-height or text raster parity and
+does not change assertions in any pre-existing reduction.
+
+A second control removes text, inline flow and percentages entirely. In a
+180x100px relative parent, a fixed 16x16px absolute child with left:40px and
+bottom:20px has these border-box origins:
+
+| Margin | Browser (x,y) | Astylar (x,y) |
+| --- | --- | --- |
+| -12px | (28,76) | (40,64) |
+| +12px | (52,52) | (40,64) |
+
+Its size matches. This confirms **core positioned offsets ignore the margin
+box** in this left/bottom case. The dimension service returns parsed margins
+but its left/bottom offset branches omit them from the border-box origin, which
+is passed to final rendering. The positive/negative controls must remain while
+extending top/right, auto-margin and over-constrained coverage before a fix.
+The original badge's remaining compound vertical placement still requires
+reverification after the independently established rules are corrected.
+
+The first bad revision is not established for either defect; blame dates on
+individual formulas are not a historical reproduction. No renderer or showcase
+implementation was modified. The focused command
+`npm --prefix examples/material-showcase test -- --watch=false --browsers=ChromeHeadless --include=src/app/input-equivalence-proof.spec.ts`
+ran twice with **8 passed, 15 failed across 23 cases**. The six added failures
+are retained alongside the earlier nine. Existing Zone.js/zoneless NG0914
+warnings remain; runtime is Chrome Headless 152, Babylon 8.56.2/WebGL2.
+`node --test tests/material-parity/*.spec.mjs` passes **49/49** and
+`git diff --check` passes. The unfiltered full Material capture continues using
+its pinned, unchanged served build and capture modules.
+
 ## Badge theme inputs (2026-09-12)
 
 All twelve badge static captures in `retained-text-complete-audit` retain

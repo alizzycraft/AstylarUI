@@ -7,7 +7,41 @@ import { Astylar, provideAstylar, type DOMElement, type SiteData } from 'astylar
 // to Astylar. These reductions intentionally contain no Material component,
 // measured height table, DPR correction, or duplicate position calculation.
 describe('Material audit: equivalent CSS input reductions', () => {
-  const cases: Array<{ name: string; site: SiteData; ids: string[]; loadedCss?: boolean; resolved?: Array<{ id: string; properties: string[]; stage?: 'retainedText' }> }> = [
+  const cases: Array<{ name: string; site: SiteData; ids: string[]; horizontalOnly?: string[]; loadedCss?: boolean; resolved?: Array<{ id: string; properties: string[]; stage?: 'retainedText' }> }> = [
+    ...([-12, 12] as const).map((margin) => ({
+      name: `absolute left and bottom insets position the margin box with ${margin}px margins`,
+      site: {
+        root: { children: [{ type: 'div', id: 'margin-parent', children: [
+          { type: 'div', id: 'margin-child' },
+        ] }] },
+        styles: [
+          { selector: '#margin-parent', position: 'relative', width: '180px', height: '100px' },
+          { selector: '#margin-child', position: 'absolute', left: '40px', bottom: '20px', width: '16px', height: '16px', margin: `${margin}px`, background: '#6750a4' },
+        ],
+      } as SiteData,
+      ids: ['margin-parent', 'margin-child'],
+    })),
+    ...(['inline', 'inline-block'] as const).map((display) => ({
+      name: `content-sized ${display} badge host anchors a positioned child without measured width`,
+      site: {
+        root: { children: [{ type: 'div', id: 'badge-frame', children: [
+          { type: 'span', id: 'badge-anchor', children: [
+            { type: 'span', id: 'badge-label', textContent: 'Notifications' },
+            { type: 'span', id: 'badge-bubble', textContent: '4' },
+          ] },
+        ] }] },
+        styles: [
+          { selector: '#badge-frame', width: '280px', height: '80px', padding: '20px', fontFamily: 'Arial', fontSize: '16px', lineHeight: '20px' },
+          { selector: '#badge-anchor', display, position: 'relative', overflow: 'visible' },
+          { selector: '#badge-bubble', position: 'absolute', left: '100%', bottom: '100%', minWidth: '16px', minHeight: '16px', margin: '-12px', padding: '0 4px', fontSize: '11px', lineHeight: '16px', textAlign: 'center', whiteSpace: 'nowrap', background: '#b3261e', color: '#ffffff', borderRadius: '9999px' },
+        ],
+      } as SiteData,
+      ids: ['badge-frame', 'badge-anchor', 'badge-label', 'badge-bubble'],
+      // Inline text fragments and core text planes are not the same vertical
+      // measurement object. This proof checks their horizontal contribution,
+      // then all four edges of the positioned badge; it makes no ink-box claim.
+      horizontalOnly: display === 'inline' ? ['badge-anchor', 'badge-label'] : ['badge-label'],
+    })),
     ...(['block', 'flex'] as const).map((display) => ({
       name: `opposing absolute insets determine auto size for a text-bearing ${display} box`,
       site: {
@@ -170,6 +204,24 @@ describe('Material audit: equivalent CSS input reductions', () => {
     },
   ];
 
+  for (const entry of cases.filter((candidate) => candidate.name.startsWith('content-sized '))) {
+    cases.push({
+      ...entry,
+      name: entry.name.replace('badge host anchors a positioned child without measured width', 'host derives width from an in-flow child without an overlay'),
+      site: {
+        ...entry.site,
+        root: { children: entry.site.root.children!.map((frame) => ({
+          ...frame,
+          children: frame.children!.map((anchor) => ({
+            ...anchor, children: anchor.children!.filter((child) => child.id !== 'badge-bubble'),
+          })),
+        })) },
+        styles: entry.site.styles.filter((rule) => rule.selector !== '#badge-bubble'),
+      },
+      ids: entry.ids.filter((id) => id !== 'badge-bubble'),
+    });
+  }
+
   // Exercise the existing core-owned CSS resolver with the original expressions,
   // not fixture-side arithmetic or browser measurements copied into SiteData.
   // Keep the direct-style limitation cases above, including their failures.
@@ -279,7 +331,8 @@ describe('Material audit: equivalent CSS input reductions', () => {
             bottom: Math.max(...points.map((point) => point.y)) * canvas.clientHeight / engine.getRenderHeight(),
           };
           const expected = doc.getElementById(id)!.getBoundingClientRect();
-          for (const edge of ['left', 'right', 'top', 'bottom'] as const) {
+          const edges = entry.horizontalOnly?.includes(id) ? ['left', 'right'] as const : ['left', 'right', 'top', 'bottom'] as const;
+          for (const edge of edges) {
             expect(Math.abs(actual[edge] - expected[edge])).withContext(`${id}.${edge}: Astylar=${actual[edge]}, browser=${expected[edge]}`).toBeLessThan(.5);
           }
         }
