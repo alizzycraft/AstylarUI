@@ -87,8 +87,8 @@ test('does not accept a missing origin for a transformed element or zero inset a
 test('does not waive unequal mapped content as a framework wrapper difference', () => {
   const report = parityReport({}, {});
   const input = report.results[0].styleInputs[0];
-  input.referenceStructure = { tag: 'mat-card', text: 'First Second', descendantIds: ['first', 'second'] };
-  input.astylarStructure = { tag: 'div', text: 'First', descendantIds: ['first'] };
+  input.referenceStructure = { schemaVersion: 2, tag: 'mat-card', text: 'First Second', descendantIds: ['first', 'second'] };
+  input.astylarStructure = { schemaVersion: 2, tag: 'div', text: 'First', descendantIds: ['first'] };
   const audit = buildMaterialInputAudit(report);
   assert.equal(audit.summary.structureDifferences, 1);
   assert.equal(audit.summary.inputEquivalent, false);
@@ -98,7 +98,7 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   const report = parityReport({}, {});
   const audit = buildMaterialInputAudit(report);
   assert.equal(audit.coverage.visualParityGreen, true);
-  assert.equal(audit.sourceFingerprints.length, 8);
+  assert.equal(audit.sourceFingerprints.length, 10);
   assert.ok(audit.sourceFingerprints.every(({ sha256 }) => /^[a-f0-9]{64}$/.test(sha256)));
   report.interactionSummary.meetsAcceptance = false;
   assert.equal(buildMaterialInputAudit(report).coverage.visualParityGreen, false);
@@ -125,4 +125,13 @@ test('rejects empty evidence and duplicate records rather than treating case cou
   const errors = validateMaterialInputAudit(audit, { requireComplete: false });
   assert.ok(errors.some((error) => error.includes('root style evidence')));
   assert.ok(errors.some((error) => error.includes('duplicate case')));
+});
+
+test('does not attribute legacy incompatible text and descendant collection to authoring', () => {
+  const report = parityReport({ display: 'block' }, { display: 'block' });
+  report.results[0].styleInputs[0].referenceStructure = { text: 'First', descendantIds: ['first'] };
+  report.results[0].styleInputs[0].astylarStructure = { text: '', descendantIds: ['wrapper', 'first'] };
+  const audit = buildMaterialInputAudit(report);
+  assert.equal(audit.structureEvidence[0].classification, 'parity-harness-defect');
+  assert.equal(audit.summary.inputEquivalent, false);
 });

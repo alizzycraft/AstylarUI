@@ -69,6 +69,16 @@ either a broad core rewrite or retention of fixture compensation.
 
 ## Outstanding acceptance work
 
+The initial structural collectors were not comparable: reference text included
+the subtree, candidate text included only the node's own value; reference
+descendant order followed requested IDs, while candidate IDs included unmapped
+descendants. Structural schema 2 aligns subtree text and mapped document order.
+The candidate style collector now retains all scalar resolved properties instead
+of dropping longhands through an allowlist. Legacy evidence must be recaptured;
+it must not be reported as a confirmed fixture discrepancy. These changes affect
+audit collection only, not the rendered fixture. The matrix already in flight
+uses its original bundle and cannot verify these later collector changes.
+
 - Finish the unfiltered enforced matrix and regenerate both audit reports.
 - Reconcile every one-sided mapping and preserve genuine state divergence.
 - Extend mapped-node evidence to the relevant anonymous wrappers, generated

@@ -17,7 +17,7 @@ import {
   materialViewports,
 } from './benchmark.config.mjs';
 
-export const materialInputAuditSchemaVersion = 1;
+export const materialInputAuditSchemaVersion = 2;
 
 const propertyGroupByName = new Map(Object.entries(propertyGroups)
   .flatMap(([group, properties]) => properties.map((property) => [property, group])));
@@ -350,7 +350,8 @@ function collectStructureEvidence(cases) {
     for (const input of benchmarkCase.styleInputs ?? []) {
       if (!input.referenceStructure && !input.astylarStructure) continue;
       const signature = JSON.stringify([benchmarkCase.family, input.id, input.referenceStructure, input.astylarStructure]);
-      const sameMappedContent = !!input.referenceStructure && !!input.astylarStructure &&
+      const compatibleEvidence = input.referenceStructure?.schemaVersion === 2 && input.astylarStructure?.schemaVersion === 2;
+      const sameMappedContent = compatibleEvidence &&
         input.referenceStructure.text === input.astylarStructure.text &&
         JSON.stringify(input.referenceStructure.descendantIds) === JSON.stringify(input.astylarStructure.descendantIds);
       if (!grouped.has(signature)) grouped.set(signature, {
@@ -358,8 +359,10 @@ function collectStructureEvidence(cases) {
         element: input.id,
         reference: input.referenceStructure,
         astylar: input.astylarStructure,
-        classification: sameMappedContent ? 'legitimate-public-api-structure' : 'application-plugin-authoring-defect',
-        justification: sameMappedContent
+        classification: !compatibleEvidence ? 'parity-harness-defect' : sameMappedContent ? 'legitimate-public-api-structure' : 'application-plugin-authoring-defect',
+        justification: !compatibleEvidence
+          ? 'Legacy collectors compare reference subtree text and requested-ID order against Astylar own text and all descendant IDs. Recapture with structural schema 2 before attributing this signature to the fixture.'
+          : sameMappedContent
           ? 'Mapped content and descendant order agree. Angular Material host tags may differ from public SiteData tags; this accepts the tag representation only, not layout or paint differences.'
           : 'Mapped content or containment differs. The mapping/fixture must be reconciled before claiming equivalent structure; framework wrapper differences alone do not justify accepting it.',
         occurrences: 0,
@@ -471,6 +474,7 @@ function auditEnvironment(root) {
 function sourceFingerprints(root) {
   const files = [
     'examples/material-showcase/src/app/astylar.component.ts',
+    'examples/material-showcase/src/app/material-input-evidence.ts',
     'examples/material-showcase/src/app/reference.component.ts',
     'examples/material-showcase/src/app/theme.ts',
     'examples/material-showcase/src/app/showcase.store.ts',
@@ -478,6 +482,7 @@ function sourceFingerprints(root) {
     'examples/material-showcase/src/app/material-plugin/material-showcase.plugin.ts',
     'examples/material-showcase/src/app/material-plugin/material-ripple.controller.ts',
     'tests/material-parity/benchmark.config.mjs',
+    'tests/material-parity/run-material-parity.mjs',
   ];
   return files.map((file) => ({ file, sha256: createHash('sha256')
     .update(readFileSync(path.resolve(root, file), 'utf8').replace(/\r\n/g, '\n')).digest('hex') }));

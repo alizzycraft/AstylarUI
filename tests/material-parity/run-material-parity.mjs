@@ -1279,8 +1279,9 @@ async function measureReference(page, ids) {
       return [id, { exists: true, borderBox: {
         left: rect.left, top: rect.top, right: rect.right, bottom: rect.bottom,
         width: rect.width, height: rect.height,
-      }, authoredStyle: matchedAuthoredStyles(element, styleProperties),
+      }, authoredStyle: matchedAuthoredStyles(element),
       authoredStructure: {
+        schemaVersion: 2,
         type: element.tagName.toLowerCase(),
         text: (element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement
           ? element.value : element.textContent ?? '').replace(/\s+/g, ' ').trim(),
@@ -1288,6 +1289,11 @@ async function measureReference(page, ids) {
           if (candidateId === id) return false;
           const candidate = referenceTarget(candidateId);
           return !!candidate && element.contains(candidate);
+        }).sort((left, right) => {
+          const leftElement = referenceTarget(left);
+          const rightElement = referenceTarget(right);
+          if (leftElement === rightElement) return 0;
+          return leftElement.compareDocumentPosition(rightElement) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1;
         }),
       },
       resolvedStyle: Object.fromEntries(styleProperties
@@ -1364,8 +1370,7 @@ async function measureReference(page, ids) {
       const enclosing = element.closest('label')?.textContent ?? '';
       return (labelled || enclosing || element.textContent || '').replace(/\s+/g, ' ').trim();
     }
-    function matchedAuthoredStyles(element, properties) {
-      const allowed = new Set(properties.map((property) => property.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`)));
+    function matchedAuthoredStyles(element) {
       const matches = [];
       const visit = (rules, sheetIndex, path = []) => {
         for (let ruleIndex = 0; ruleIndex < rules.length; ruleIndex += 1) {
@@ -1384,7 +1389,6 @@ async function measureReference(page, ids) {
           if (!matched) continue;
           const declarations = {};
           for (const property of rule.style) {
-            if (!allowed.has(property)) continue;
             declarations[property] = {
               value: rule.style.getPropertyValue(property).trim(),
               important: rule.style.getPropertyPriority(property) === 'important',
@@ -1400,7 +1404,6 @@ async function measureReference(page, ids) {
       }
       const inlineDeclarations = {};
       for (const property of element.style) {
-        if (!allowed.has(property)) continue;
         inlineDeclarations[property] = {
           value: element.style.getPropertyValue(property).trim(),
           important: element.style.getPropertyPriority(property) === 'important',

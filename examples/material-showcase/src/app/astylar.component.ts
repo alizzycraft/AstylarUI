@@ -16,6 +16,7 @@ import { MATERIAL_FAVORITE_ICON_DARK, MATERIAL_FAVORITE_ICON_LIGHT } from './mat
 import { ShowcaseStore, type ShowcaseState } from './showcase.store';
 import { alphaHex, mixHex } from './theme';
 import { MaterialRippleController } from './material-plugin/material-ripple.controller';
+import { indexAuthoredStructures, materialStyleSnapshot } from './material-input-evidence';
 
 @Component({
   selector: 'app-astylar-showcase',
@@ -1124,7 +1125,7 @@ export class AstylarShowcaseComponent {
     // authored evidence must not re-enter that computed signal and create a dependency cycle.
     const authoredSiteData = includeAuthoredEvidence ? this.siteData() : undefined;
     const authoredStyles = authoredSiteData?.styles ?? [];
-    const authoredStructures = authoredSiteData ? indexAuthoredStructures(authoredSiteData.root) : {};
+    const authoredStructures = authoredSiteData ? indexAuthoredStructures(authoredSiteData.root, ids) : {};
     const elements = Object.fromEntries(ids.map((id) => {
       const meshes = surface.scene.meshes.filter((mesh) => mesh.metadata?.elementId === id);
       const mesh = meshes.find((candidate) => candidate.name === id) ??
@@ -1256,34 +1257,6 @@ function materialDensityHeight(density: number): number {
   return 24;
 }
 
-const MATERIAL_STYLE_SNAPSHOT_PROPERTIES = [
-  'position', 'display', 'visibility', 'boxSizing',
-  'width', 'height', 'minWidth', 'maxWidth', 'minHeight', 'maxHeight',
-  'top', 'right', 'bottom', 'left',
-  'padding', 'paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft',
-  'margin', 'marginTop', 'marginRight', 'marginBottom', 'marginLeft',
-  'flex', 'flexDirection', 'flexWrap', 'flexGrow', 'flexShrink', 'flexBasis',
-  'alignSelf', 'alignItems', 'alignContent', 'justifyContent',
-  'gap', 'rowGap', 'columnGap', 'order',
-  'gridTemplateColumns', 'gridTemplateRows', 'gridColumn', 'gridRow',
-  'fontFamily', 'fontSize', 'fontWeight', 'fontStyle', 'lineHeight',
-  'letterSpacing', 'wordSpacing', 'textAlign', 'verticalAlign', 'textTransform',
-  'whiteSpace', 'wordWrap', 'textOverflow', 'textDecoration',
-  'color', 'background', 'opacity',
-  'borderWidth', 'borderStyle', 'borderColor', 'borderRadius',
-  'boxShadow', 'overflow', 'textShadow',
-  'transform', 'perspective', 'zIndex',
-  'cursor', 'pointerEvents', 'caretColor', 'appearance', 'objectFit',
-] as const;
-
-function materialStyleSnapshot(style: Record<string, unknown> | undefined): Record<string, string> | undefined {
-  if (!style) return undefined;
-  return Object.fromEntries(MATERIAL_STYLE_SNAPSHOT_PROPERTIES.flatMap((property) => {
-    const value = style[property];
-    return value === undefined || value === null || value === '' ? [] : [[property, String(value)]];
-  }));
-}
-
 function elementAuthoredStyles(
   styles: readonly object[],
   element: HTMLElement | null,
@@ -1315,42 +1288,6 @@ interface MaterialAuthoredStyleRule {
   readonly index: number;
   readonly selector: string;
   readonly declarations: Readonly<Record<string, string>>;
-}
-
-interface MaterialAuthoredStructure {
-  readonly type: string;
-  readonly text: string;
-  readonly directChildIds: readonly string[];
-  readonly descendantIds: readonly string[];
-}
-
-function indexAuthoredStructures(root: object): Readonly<Record<string, MaterialAuthoredStructure>> {
-  const structures: Record<string, MaterialAuthoredStructure> = {};
-  const visit = (node: object): readonly string[] => {
-    const record = node as Record<string, unknown>;
-    const children = Array.isArray(record['children']) ? record['children'].filter(isObject) : [];
-    const descendantIds = children.flatMap((child) => visit(child));
-    const id = typeof record['id'] === 'string' ? record['id'] : undefined;
-    if (id) {
-      structures[id] = {
-        type: typeof record['type'] === 'string' ? record['type'] : 'root',
-        text: String(record['textContent'] ?? record['value'] ?? '').replace(/\s+/g, ' ').trim(),
-        directChildIds: children.flatMap((child) => {
-          const childId = (child as Record<string, unknown>)['id'];
-          return typeof childId === 'string' ? [childId] : [];
-        }),
-        descendantIds,
-      };
-      return [id, ...descendantIds];
-    }
-    return descendantIds;
-  };
-  visit(root);
-  return structures;
-}
-
-function isObject(value: unknown): value is object {
-  return typeof value === 'object' && value !== null;
 }
 
 function sliderHandleName(elementId: string | undefined): '' | 'start' | 'end' {
