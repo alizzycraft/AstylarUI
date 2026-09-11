@@ -662,6 +662,59 @@ export function reviewedHeadingMappings(referenceTree, astylarTree) {
   return pairs;
 }
 
+export function reviewedTemplateTextMappings(family, referenceTree, astylarTree) {
+  // These paths come from the paired showcase templates and captured Material
+  // wrappers. They identify text owners, not equivalent layout structures.
+  const paths = family === 'tree' ? [0, 1, 2].map((index) => ({
+    element: `tree-item-${index}-label`,
+    reference: [['mat-tree', 'tree-primary', 'mat-tree'], ['mat-tree-node', `tree-item-${index}`, 'mat-tree-node']],
+    astylar: [['div', 'tree-primary', 'material-tree'], ['div', `tree-item-${index}`, 'tree-item'], ['span', `tree-item-${index}-label`, 'tree-label']],
+  })) : family === 'grid-list' ? ['one', 'two'].map((name) => ({
+    element: `grid-tile-${name}-label`,
+    reference: [['mat-grid-list', 'grid-list-primary', 'mat-grid-list'], ['div'], ['mat-grid-tile', `grid-tile-${name}`, 'mat-grid-tile'], ['div', null, 'mat-grid-tile-content']],
+    astylar: [['div', 'grid-list-primary', 'grid-list'], ['div', `grid-tile-${name}`, 'grid-tile'], ['span', `grid-tile-${name}-label`, 'grid-tile-label']],
+  })) : family === 'badge' ? [{
+    element: 'badge-count',
+    reference: [['span', 'badge-primary', 'mat-badge'], ['span', /^mat-badge-content-\d+$/, 'mat-badge-content']],
+    astylar: [['span', 'badge-primary', 'badge-anchor'], ['span', 'badge-count', 'badge-bubble']],
+  }] : [];
+  const follow = (tree, side, steps) => {
+    const data = (node) => side === 'reference' ? { ...node.attributes, type: node.type } : node.authored;
+    let parent;
+    const chain = [];
+    for (const [type, id, className] of steps) {
+      const matches = tree.nodes.filter((node) => {
+        const value = data(node);
+        return value?.type === type && (!parent || node.parent === parent.key) &&
+          (id instanceof RegExp ? id.test(value.id ?? '') : id ? value.id === id : !value.id) &&
+          (!className || String(value.class ?? '').split(/\s+/).includes(className));
+      });
+      if (matches.length !== 1) return;
+      parent = matches[0];
+      const value = data(parent);
+      if (tree.nodes.filter((node) => node.key === parent.key).length !== 1 ||
+          (value.id && tree.nodes.filter((node) => data(node)?.id === value.id).length !== 1)) return;
+      chain.push(parent);
+    }
+    return chain;
+  };
+  const pairs = [];
+  for (const path of paths) {
+    const reference = follow(referenceTree, 'reference', path.reference);
+    const astylar = follow(astylarTree, 'astylar', path.astylar);
+    if (!reference || !astylar) continue;
+    const ref = reference.at(-1), ast = astylar.at(-1);
+    if (!ref.ownText?.trim() || ref.ownText.trim() !== ast.authored.textContent?.trim() ||
+        referenceTree.nodes.some((node) => node.parent === ref.key || node.attributes?.id === path.element) ||
+        astylarTree.nodes.some((node) => node.parent === ast.key)) continue;
+    pairs.push({ kind: 'reviewed-showcase-template-text', element: path.element,
+      referenceNode: ref.key, astylarNode: ast.key,
+      referencePath: reference.map((node) => node.key), astylarPath: astylar.map((node) => node.key),
+      justification: 'The paired reference.component.ts and astylar.component.ts templates identify this text through a unique component anchor and exact direct-child tag/ID/class path. Both terminal nodes have identical direct own-text and no element children. Generated badge IDs are checked by shape and uniqueness, not their unstable numeric suffix. This establishes text-owner identity only; wrapper, layout, typography, paint and interaction differences remain subject to separate comparison.' });
+  }
+  return pairs;
+}
+
 function reviewedHeadingMask(mapping, ref, styles, astylarTree, inventory) {
   if (!mapping || Number(styles.reference.opacity) !== 0 || Number(styles.normal.opacity) !== 1 || Number(styles.effective.opacity) !== 1) return;
   const referenceRule = ref.rules.map((index) => inventory.rules[index]).find((rule) =>
@@ -808,13 +861,15 @@ export function collectRetainedTypographyEvidence(cases, inventory) {
     const astylarNodes = nodesById(astylarTree.nodes, (node) => node.authored?.id);
     const headings = reviewedHeadingMappings(referenceTree, astylarTree);
     const headingById = new Map(headings.map((mapping) => [mapping.element, mapping]));
-    const mappedReferenceKeys = new Set(headings.map((mapping) => mapping.referenceNode));
-    for (const mapping of headings) {
+    const textMappings = [...headings, ...reviewedTemplateTextMappings(entry.family, referenceTree, astylarTree)];
+    const textMappingById = new Map(textMappings.map((mapping) => [mapping.element, mapping]));
+    const mappedReferenceKeys = new Set(textMappings.map((mapping) => mapping.referenceNode));
+    for (const mapping of textMappings) {
       referenceNodes.set(mapping.element, [referenceTree.nodes.find((node) => node.key === mapping.referenceNode)]);
       reviewedMappings.push({ case: key, ...mapping });
     }
     const ids = new Set([
-      ...referenceTree.nodes.filter((node) => node.ownText?.trim()).map((node) => node.attributes?.id),
+      ...referenceTree.nodes.filter((node) => node.ownText?.trim() && !mappedReferenceKeys.has(node.key)).map((node) => node.attributes?.id),
       ...astylarTree.nodes.filter((node) => node.authored?.textContent?.trim()).map((node) => node.authored?.id),
     ]);
     // Anonymous/reference-wrapper mappings remain in the full tree; do not
@@ -853,7 +908,7 @@ export function collectRetainedTypographyEvidence(cases, inventory) {
       if (headingMask) paintMaskDifferences.push({ case: key, element: id, referenceNode: ref.key, astylarNode: ast.key, ...headingMask });
       const comparison = { case: key, family: entry.family, element: id, text: refText,
         referenceNode: ref.key, astylarNode: ast.key, source: 'core-text-registry',
-        mapping: headingMapping ?? { kind: 'shared-id' },
+        mapping: textMappingById.get(id) ?? { kind: 'shared-id' },
         revision: astylarMappings[0].resolvedStyleRevision, state: entry.state ?? 'static',
         currentPseudoStatePaintVerified: false, properties: {} };
       for (const property of retainedTypographyProperties) {
@@ -877,7 +932,7 @@ export function collectRetainedTypographyEvidence(cases, inventory) {
     }
   }
   return { schemaVersion: 1,
-    scope: 'Direct own-text nodes joined by unique shared authored ID or explicit reviewed heading identity, with identical trimmed text. All eleven typography properties retain browser computed, core normal/effective declarations, and core retained-text values separately. Missing mappings/fields and unequal retained values remain explicit; no inheritance or font fallback is reconstructed. Reviewed mappings establish correspondence, not style equivalence.',
+    scope: 'Direct own-text nodes joined by unique shared authored ID or explicit reviewed heading/template identity, with identical trimmed text. All eleven typography properties retain browser computed, core normal/effective declarations, and core retained-text values separately. Missing mappings/fields and unequal retained values remain explicit; no inheritance or font fallback is reconstructed. Reviewed mappings establish correspondence, not style equivalence.',
     comparisons, differences, gaps, paintMaskDifferences, reviewedMappings };
 }
 

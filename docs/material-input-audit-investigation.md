@@ -11,6 +11,41 @@ Argument validation rejects unknown, empty, and repeated options (25/25 audit
 tests pass). A missing selected report fails rather than falling back to older
 evidence; the new run has not yet produced its final report.
 
+## Reviewed tree, grid-list and badge text ownership (2026-09-12)
+
+The typography audit now follows explicit paired-template paths for tree item
+labels, grid tile content, and badge counts. Material owns the text directly on
+`mat-tree-node`, a generated `div.mat-grid-tile-content`, or a generated
+`span.mat-badge-content`; the candidate owns it on its corresponding authored
+label/count span. Unique anchor IDs, each direct-child tag/ID/class, unique
+generated badge ID shape, identical direct text, and terminal leaf structure
+are required. Matching strings alone are insufficient. Original reference IDs
+and all wrappers remain intact in the captured inventory; an alias only chooses
+the text owner for the separate retained-typography comparison.
+
+Across the existing 436 static checkpoints this adds 72 reviewed mappings and
+raises retained text comparisons from 1,174 to 1,246. It exposes 222 additional
+property differences, **none accepted by the mapping**: grid-list tracking and
+alignment (48), badge tracking (12), and tree font family, line height, tracking,
+alignment and font size (162). In 18 tree observations browser computed size is
+16px while retained core size is 14.4px. Attribution of these new differences
+still requires authored/resolution evidence; `normal` tracking, `start`
+alignment and font stacks are not silently normalized into equivalent inputs.
+
+There are now 3,381 retained property differences, including 2,455 unresolved,
+and 450 mapping/provenance gaps: 204 anonymous-node case gaps, 180 missing or
+ambiguous IDs, 48 direct-text mismatches and 18 missing retained text entries.
+These figures are a static diagnostic, not complete matrix acceptance.
+
+Verification: `node --test tests/material-parity/*.spec.mjs` passes 66/66 tests.
+New negative controls reject moved/retyped/reclassified nodes, duplicate IDs,
+duplicate matching paths, conflicting aliases, changed text, non-leaf text
+owners, unrelated component anchors, and invalid generated badge IDs. Positive
+controls deliberately retain unequal font sizes and verify that the audit gate
+still rejects them. No showcase fixture, renderer, capture module, served bundle,
+visual threshold or interaction case changed. The unfiltered enforced matrix
+continues against its previously fingerprinted production build.
+
 ## Ordered transform composition is also lost (2026-09-12)
 
 The transform follow-up now includes three controls using only pixel units and

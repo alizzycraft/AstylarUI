@@ -7,6 +7,7 @@ import {
   collectRetainedTypographyEvidence,
   parseMaterialInputAuditArguments,
   reviewedHeadingMappings,
+  reviewedTemplateTextMappings,
   summarizeSupplementalBehavior,
   summarizeSupplementalOverlays,
   summarizeSupplementalSlider,
@@ -534,6 +535,99 @@ test('retained typography retains missing property fields as gaps instead of acc
   assert.ok(validateMaterialInputAudit(report).some((error) => error.includes('retained typography mappings')));
   delete report.retainedTypography;
   assert.ok(validateMaterialInputAudit(report).includes('missing retained typography stage report'));
+});
+
+function templateTypographyReport(family) {
+  const raw = retainedTypographyReport();
+  const entry = raw.results[0];
+  entry.family = family;
+  entry.styleInputs = [];
+  const { reference, astylar } = entry.inputTrees;
+  const style = { ...reference.styles[0] };
+  reference.nodes = [];
+  astylar.nodes = [];
+  const add = (side, key, parent, type, id, className, text) => {
+    if (side === 'reference') reference.nodes.push({ key, parent, type,
+      attributes: { ...(id ? { id } : {}), ...(className ? { class: className } : {}) },
+      ownText: text ?? '', style: 0, rules: [], pseudoElements: [] });
+    else astylar.nodes.push({ key, parent, authored: { type, id, class: className, ...(text ? { textContent: text } : {}) },
+      resolvedStyle: style, normalResolvedStyle: style, interactionResolvedStyle: style,
+      ...(text ? { retainedText: { source: 'core-text-registry', style: { ...style, fontSize: '99px' } } } : {}) });
+  };
+  if (family === 'tree') {
+    add('reference', 'r', null, 'mat-tree', 'tree-primary', 'mat-tree');
+    add('astylar', 'a', 'root', 'div', 'tree-primary', 'material-tree');
+    for (const [index, text] of ['Documents', 'Projects', 'Archive'].entries()) {
+      add('reference', `r/${index}`, 'r', 'mat-tree-node', `tree-item-${index}`, 'mat-tree-node', text);
+      add('astylar', `a/${index}`, 'a', 'div', `tree-item-${index}`, 'tree-item');
+      add('astylar', `a/${index}/0`, `a/${index}`, 'span', `tree-item-${index}-label`, 'tree-label', text);
+    }
+  } else if (family === 'grid-list') {
+    add('reference', 'r', null, 'mat-grid-list', 'grid-list-primary', 'mat-grid-list');
+    add('reference', 'r/w', 'r', 'div');
+    add('astylar', 'a', 'root', 'div', 'grid-list-primary', 'grid-list');
+    for (const [name, text] of [['one', 'One'], ['two', 'Two']]) {
+      add('reference', `r/w/${name}`, 'r/w', 'mat-grid-tile', `grid-tile-${name}`, 'mat-grid-tile');
+      add('reference', `r/w/${name}/0`, `r/w/${name}`, 'div', undefined, 'mat-grid-tile-content', text);
+      add('astylar', `a/${name}`, 'a', 'div', `grid-tile-${name}`, 'grid-tile');
+      add('astylar', `a/${name}/0`, `a/${name}`, 'span', `grid-tile-${name}-label`, 'grid-tile-label', text);
+    }
+  } else if (family === 'badge') {
+    add('reference', 'r', null, 'span', 'badge-primary', 'mat-badge');
+    add('reference', 'r/0', 'r', 'span', 'mat-badge-content-472', 'mat-badge-content', '4');
+    add('astylar', 'a', 'root', 'span', 'badge-primary', 'badge-anchor');
+    add('astylar', 'a/0', 'a', 'span', 'badge-count', 'badge-bubble', '4');
+  }
+  return raw;
+}
+
+test('reviewed template text paths close only identity gaps and retain unequal typography', () => {
+  for (const [family, count] of [['tree', 3], ['grid-list', 2], ['badge', 1]]) {
+    const raw = templateTypographyReport(family);
+    const before = structuredClone(raw);
+    const report = buildMaterialInputAudit(raw);
+    const evidence = report.retainedTypography;
+    assert.equal(evidence.reviewedMappings.length, count, family);
+    assert.equal(evidence.comparisons.length, count, family);
+    assert.deepEqual(evidence.gaps, [], family);
+    assert.equal(evidence.differences.length, count, family);
+    assert.ok(evidence.comparisons.every((entry) => entry.mapping.kind === 'reviewed-showcase-template-text'));
+    assert.ok(evidence.differences.every((entry) => entry.property === 'fontSize' && entry.attribution === 'unresolved'));
+    assert.ok(validateMaterialInputAudit(report).some((error) => error.includes('retained typography differences')));
+    assert.deepEqual(raw, before, 'mapping must not rewrite reference IDs or captured structure');
+  }
+});
+
+test('template identity rejects path, uniqueness, text, child and ID conflicts instead of string matching', () => {
+  const mutations = [
+    (ref, _ast, leaf) => { leaf.ownText = 'Different'; },
+    (ref, _ast, leaf) => { leaf.parent = 'other'; },
+    (ref, _ast, leaf) => { leaf.type = 'button'; },
+    (ref, _ast, leaf) => { leaf.attributes.class = 'unrelated'; },
+    (ref, _ast, leaf) => { ref.nodes.push({ ...leaf, key: 'duplicate' }); },
+    (ref, _ast, leaf, target) => { ref.nodes.push({ key: 'conflict', attributes: { id: target.authored.id } }); },
+    (ref, _ast, leaf) => { ref.nodes.push({ key: 'child', parent: leaf.key }); },
+    (_ref, ast, _leaf, target) => { target.parent = 'other'; },
+    (_ref, ast, _leaf, target) => { target.authored.type = 'button'; },
+    (_ref, ast, _leaf, target) => { target.authored.class = 'unrelated'; },
+    (_ref, ast, _leaf, target) => { ast.nodes.push({ ...target, key: 'duplicate' }); },
+    (_ref, ast, _leaf, target) => { ast.nodes.push({ key: 'child', parent: target.key }); },
+    (ref) => { ref.nodes[0].attributes.id = 'other-anchor'; },
+    (_ref, ast) => { ast.nodes[0].authored.id = 'other-anchor'; },
+  ];
+  for (const family of ['tree', 'grid-list', 'badge']) {
+    for (const mutate of mutations) {
+      const { reference, astylar } = templateTypographyReport(family).results[0].inputTrees;
+      const mapping = reviewedTemplateTextMappings(family, reference, astylar)[0];
+      mutate(reference, astylar, reference.nodes.find((node) => node.key === mapping.referenceNode),
+        astylar.nodes.find((node) => node.key === mapping.astylarNode));
+      assert.ok(!reviewedTemplateTextMappings(family, reference, astylar).some((entry) => entry.element === mapping.element), family);
+    }
+  }
+  const { reference, astylar } = templateTypographyReport('badge').results[0].inputTrees;
+  reference.nodes[1].attributes.id = 'unrelated-472';
+  assert.deepEqual(reviewedTemplateTextMappings('badge', reference, astylar), []);
+  assert.deepEqual(reviewedTemplateTextMappings('unreviewed-family', reference, astylar), []);
 });
 
 function headingTypographyReport() {
