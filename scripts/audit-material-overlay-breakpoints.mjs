@@ -47,12 +47,15 @@ try {
           await page.waitForFunction(() => !!window.__ASTYLAR_MATERIAL_BENCHMARK__);
           await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
           const trigger = await page.evaluate(() =>
-            window.__ASTYLAR_MATERIAL_BENCHMARK__.measure(['bottom-sheet-primary']).elements['bottom-sheet-primary'].borderBox);
+            window.__ASTYLAR_MATERIAL_BENCHMARK__.measure(['bottom-sheet-primary'], false).elements['bottom-sheet-primary'].borderBox);
           const canvas = await page.locator('canvas').boundingBox();
           assert.ok(trigger && canvas, 'Missing trigger geometry');
           await page.mouse.click(canvas.x + trigger.left + trigger.width / 2, canvas.y + trigger.top + trigger.height / 2);
           await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
-          const measurement = await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.measure(['bottom-sheet-panel']));
+          const measurement = await page.evaluate(async () => {
+            await window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled();
+            return window.__ASTYLAR_MATERIAL_BENCHMARK__.measure(['bottom-sheet-panel']);
+          });
           const box = measurement.elements['bottom-sheet-panel']?.borderBox;
           assert.ok(box, 'Missing opened bottom sheet');
           sides[mode] = { box: { left: canvas.x + box.left, top: canvas.y + box.top, width: box.width, height: box.height },

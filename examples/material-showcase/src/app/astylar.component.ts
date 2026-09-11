@@ -16,7 +16,7 @@ import { MATERIAL_FAVORITE_ICON_DARK, MATERIAL_FAVORITE_ICON_LIGHT } from './mat
 import { ShowcaseStore, type ShowcaseState } from './showcase.store';
 import { alphaHex, mixHex } from './theme';
 import { MaterialRippleController } from './material-plugin/material-ripple.controller';
-import { collectAuthoredInputTree, collectMaterialResolvedStyles, indexAuthoredStructures, materialStyleSnapshot } from './material-input-evidence';
+import { collectAuthoredInputTree, collectMaterialCoreResolvedStyles, collectMaterialResolvedStyles, indexAuthoredStructures, materialStyleSnapshot } from './material-input-evidence';
 
 @Component({
   selector: 'app-astylar-showcase',
@@ -197,7 +197,7 @@ export class AstylarShowcaseComponent {
           await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
           await surface.whenSettled();
         },
-        measure: (ids) => this.measure(surface, ids),
+        measure: (ids, includeAuthoredEvidence = true) => this.measure(surface, ids, includeAuthoredEvidence),
         state: () => ({ ...this.store.state(), chips: [...this.store.state().chips] }),
         clearEvents: () => { this.eventLog.length = 0; },
         events: () => this.eventLog.map((event) => ({ ...event })),
@@ -1128,7 +1128,9 @@ export class AstylarShowcaseComponent {
     const authoredStructures = authoredSiteData ? indexAuthoredStructures(authoredSiteData.root, ids) : {};
     // The core already owns pseudo-state resolution. Capture its effective
     // declarations alongside the normal ones, without modifying either.
-    const resolvedInputs = collectMaterialResolvedStyles(surface.scene.meshes);
+    const resolvedInputs = includeAuthoredEvidence
+      ? collectMaterialCoreResolvedStyles(surface.inspectResolvedStyles())
+      : collectMaterialResolvedStyles(surface.scene.meshes);
     const elements = Object.fromEntries(ids.map((id) => {
       const meshes = surface.scene.meshes.filter((mesh) => mesh.metadata?.elementId === id);
       const mesh = meshes.find((candidate) => candidate.name === id) ??
@@ -1397,7 +1399,7 @@ declare global {
   interface Window {
     __ASTYLAR_MATERIAL_BENCHMARK__?: {
       waitForSettled(): Promise<void>;
-      measure(ids: readonly string[]): MaterialBenchmarkMeasurement;
+      measure(ids: readonly string[], includeAuthoredEvidence?: boolean): MaterialBenchmarkMeasurement;
       state(): ShowcaseState;
       clearEvents(): void;
       events(): ReadonlyArray<{ type: string; targetId?: string; value?: unknown }>;

@@ -507,8 +507,9 @@ export function collectFullTreeInventory(cases, { root = process.cwd() } = {}) {
         normalStyle: node.normalResolvedStyle ? intern({ side, value: node.normalResolvedStyle }, styles, styleIds) : undefined,
         interactionStyle: node.interactionResolvedStyle ? intern({ side, value: node.interactionResolvedStyle }, styles, styleIds) : undefined,
       });
-      const variant = intern({ family: entry.family, side, resolvedStyleEvidenceVersion: tree.resolvedStyleEvidenceVersion, nodes, rules: ruleMap }, variants, variantIds);
-      mappings.push({ case: key, side, variant });
+      const variant = intern({ family: entry.family, side, resolvedStyleEvidenceVersion: tree.resolvedStyleEvidenceVersion,
+        resolvedStyleSource: tree.resolvedStyleSource, nodes, rules: ruleMap }, variants, variantIds);
+      mappings.push({ case: key, side, variant, resolvedStyleRevision: tree.resolvedStyleRevision });
     }
   }
   return {
@@ -735,6 +736,9 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    'src/lib/astylar.ts',
+    'src/lib/astylar-surface.ts',
+    'src/app/services/dom/style.service.ts',
     'examples/material-showcase/src/app/astylar.component.ts',
     'examples/material-showcase/src/app/material-input-evidence.ts',
     'examples/material-showcase/src/app/reference.component.ts',

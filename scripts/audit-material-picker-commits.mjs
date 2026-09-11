@@ -93,7 +93,7 @@ try {
           await page.waitForFunction(() => !!window.__ASTYLAR_MATERIAL_BENCHMARK__);
           await settle(page);
           await clickCandidate(page, 'datepicker-icon');
-          const month = () => page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.measure(['datepicker-month'])
+          const month = () => page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.measure(['datepicker-month'], false)
             .inputTree.nodes.find((node) => node.authored.id === 'datepicker-month').authored.value.replace(/[▾▴]/g, '').trim());
           const before = await month();
           await clickCandidate(page, `datepicker-${direction}`);
@@ -123,7 +123,10 @@ async function settle(page) {
 async function captureInputs(page, mode, key) {
   const tree = mode === 'reference'
     ? await page.evaluate(captureBrowserInputTree, { styleProperties: Object.values(propertyGroups).flat() })
-    : await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.measure([]).inputTree);
+    : await page.evaluate(async () => {
+      await window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled();
+      return window.__ASTYLAR_MATERIAL_BENCHMARK__.measure([]).inputTree;
+    });
   assert.ok(tree.nodes.length > 0 && tree.errors.length === 0, `Incomplete ${mode} input tree for ${key}`);
   const contents = JSON.stringify(tree);
   const file = `${artifactDirectory}/${key}-${mode}-input-tree.json`;
@@ -132,7 +135,7 @@ async function captureInputs(page, mode, key) {
 }
 
 async function clickCandidate(page, id) {
-  const measurement = await page.evaluate((id) => window.__ASTYLAR_MATERIAL_BENCHMARK__.measure([id]), id);
+  const measurement = await page.evaluate((id) => window.__ASTYLAR_MATERIAL_BENCHMARK__.measure([id], false), id);
   const bounds = measurement.elements[id]?.borderBox;
   const canvas = await page.locator('canvas').boundingBox();
   assert.ok(bounds && canvas, `Missing click geometry for ${id}`);

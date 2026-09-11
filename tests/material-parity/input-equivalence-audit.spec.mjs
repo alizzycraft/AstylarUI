@@ -164,7 +164,9 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   const report = parityReport({}, {});
   const audit = buildMaterialInputAudit(report);
   assert.equal(audit.coverage.visualParityGreen, true);
-  assert.equal(audit.sourceFingerprints.length, 11);
+  assert.equal(audit.sourceFingerprints.length, 14);
+  assert.ok(audit.sourceFingerprints.some(({ file }) => file === 'src/lib/astylar.ts'));
+  assert.ok(audit.sourceFingerprints.some(({ file }) => file === 'src/app/services/dom/style.service.ts'));
   assert.ok(audit.sourceFingerprints.every(({ sha256 }) => /^[a-f0-9]{64}$/.test(sha256)));
   report.interactionSummary.meetsAcceptance = false;
   assert.equal(buildMaterialInputAudit(report).coverage.visualParityGreen, false);
@@ -275,8 +277,12 @@ test('full-tree state provenance survives pooling and legacy captures stay incom
   } };
   assert.equal(collectFullTreeInventory([entry]).stateStyleGaps.length, 1);
   entry.inputTrees.astylar.resolvedStyleEvidenceVersion = 2;
+  entry.inputTrees.astylar.resolvedStyleSource = 'core-style-inspection';
+  entry.inputTrees.astylar.resolvedStyleRevision = 7;
   const result = collectFullTreeInventory([entry]);
   assert.equal(result.stateStyleGaps.length, 0);
+  assert.equal(result.variants[0].resolvedStyleSource, 'core-style-inspection');
+  assert.equal(result.cases[0].resolvedStyleRevision, 7);
   const node = result.variants[0].nodes[0];
   assert.equal(result.styles[node.normalStyle].value.background, 'white');
   assert.equal(result.styles[node.style].value.background, 'purple');

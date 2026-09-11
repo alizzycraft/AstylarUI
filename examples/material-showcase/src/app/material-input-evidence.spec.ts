@@ -1,6 +1,17 @@
-import { collectAuthoredInputTree, collectMaterialResolvedStyles, indexAuthoredStructures, materialStyleSnapshot } from './material-input-evidence';
+import { collectAuthoredInputTree, collectMaterialCoreResolvedStyles, collectMaterialResolvedStyles, indexAuthoredStructures, materialStyleSnapshot } from './material-input-evidence';
 
 describe('Material input evidence serialization', () => {
+  it('captures hidden and anonymous nodes by core tree path, not mesh existence', () => {
+    const styles = collectMaterialCoreResolvedStyles({ revision: 7, elements: [
+      { path: 'root/0', id: 'hidden', type: 'div', normal: { selector: '#hidden', display: 'none' }, effective: { selector: '#hidden', display: 'none' } },
+      { path: 'root/0/0', type: 'span', normal: { selector: 'span', color: 'black' }, effective: { selector: 'span', color: 'purple' } },
+    ] });
+    const tree = collectAuthoredInputTree({ children: [{ id: 'hidden', type: 'div', children: [{ type: 'span' }] }] }, [], styles.effective, styles);
+    expect(tree.resolvedStyleSource).toBe('core-style-inspection');
+    expect(tree.resolvedStyleRevision).toBe(7);
+    expect(tree.nodes[1]).toEqual(jasmine.objectContaining({ resolvedStyle: { display: 'none' } }));
+    expect(tree.nodes[2]).toEqual(jasmine.objectContaining({ resolvedStyle: { color: 'purple' }, normalResolvedStyle: { color: 'black' } }));
+  });
   it('captures core effective state declarations with separate normal provenance', () => {
     const base = { color: 'black', background: 'white', width: '40px' };
     const active = { background: 'purple', cursor: 'pointer' };

@@ -5,6 +5,27 @@ The machine report is generated separately from the full benchmark output.
 
 ## Hidden-node inspection boundary (2026-09-11)
 
+The showcase collector now consumes this snapshot by authored tree path and
+retains its source and revision through report pooling. Geometry-only action
+targeting explicitly skips input inspection; final input capture awaits settlement
+and measures in the same browser evaluation. A first hover smoke correctly
+rejected an unsettled targeting-time inspection; separating these two purposes
+fixed the harness call site without weakening the core snapshot's guard.
+
+Focused production-build checks after integration:
+
+- `form-field,expansion`, contrast/desktop, static report mode: 2/2 pass, minimum
+  SSIM 0.996178 and maximum edge error 0.013px. `form-field-label` and
+  `expansion-content` now retain `display:none` resolved declarations; the hidden
+  expansion label also has its own resolved styles. Both candidate trees have
+  source `core-style-inspection`, revision 3, and no missing resolved nodes.
+- `core`, light/desktop-dpr1, hover and held report mode: 2/2 pass, minimum SSIM
+  0.999540. Normal `#6750a4` and effective `#735eab` backgrounds are retained at
+  revisions 5 and 6. These are focused checks, not complete enforced acceptance.
+- 27/27 showcase component/helper tests and 62/62 harness tests pass. The separate
+  browser/server production build at `dist/material-showcase-inspection-audit`
+  succeeds. It does not replace either of the older served bundles.
+
 Core now exposes the on-demand `AstylarSurface.inspectResolvedStyles()` diagnostic
 snapshot. It traverses the authored tree (including hidden descendants and
 anonymous nodes) through the existing core cascade and interaction resolution.

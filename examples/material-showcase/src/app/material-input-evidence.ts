@@ -1,4 +1,32 @@
+import type { AstylarResolvedStyleSnapshot } from 'astylarui';
+
+interface StyleProvenance {
+  normal: ReadonlyMap<string, Record<string, unknown>>;
+  interaction: ReadonlyMap<string, Record<string, unknown>>;
+  byPath?: ReadonlyMap<string, { normal: Record<string, unknown>; effective: Record<string, unknown> }>;
+  source?: string;
+  revision?: number;
+}
+
 /** Audit-only evidence. Never use these snapshots to compute layout. */
+export function collectMaterialCoreResolvedStyles(snapshot: AstylarResolvedStyleSnapshot) {
+  const normal = new Map<string, Record<string, unknown>>();
+  const effective = new Map<string, Record<string, unknown>>();
+  const byPath = new Map<string, { normal: Record<string, unknown>; effective: Record<string, unknown> }>();
+  for (const entry of snapshot.elements) {
+    const styles = { normal: { ...entry.normal }, effective: { ...entry.effective } };
+    byPath.set(entry.path, styles);
+    if (entry.id) {
+      normal.set(entry.id, styles.normal);
+      effective.set(entry.id, styles.effective);
+    }
+  }
+  // Core's effective snapshot is already merged, just like its interaction
+  // metadata. Keep that provenance; never resolve selectors or states here.
+  return { normal, interaction: effective, effective, byPath,
+    source: 'core-style-inspection', revision: snapshot.revision };
+}
+
 export function collectMaterialResolvedStyles(meshes: readonly { metadata?: Record<string, unknown> | null }[]) {
   const normal = new Map<string, Record<string, unknown>>();
   const interaction = new Map<string, Record<string, unknown>>();
@@ -18,7 +46,7 @@ export function collectMaterialResolvedStyles(meshes: readonly { metadata?: Reco
   }
   const effective = new Map([...new Set([...normal.keys(), ...interaction.keys()])].map((id) =>
     [id, { ...normal.get(id), ...interaction.get(id) }]));
-  return { normal, interaction, effective };
+  return { normal, interaction, effective, source: 'mesh-metadata' };
 }
 
 export function materialStyleSnapshot(style: Record<string, unknown> | undefined): Record<string, string> | undefined {
@@ -31,20 +59,23 @@ export function materialStyleSnapshot(style: Record<string, unknown> | undefined
 
 /** Includes anonymous authored nodes and plugin data, not just benchmark IDs. */
 export function collectAuthoredInputTree(root: object, rules: readonly object[], resolved: ReadonlyMap<string, Record<string, unknown>>,
-  provenance?: { normal: ReadonlyMap<string, Record<string, unknown>>; interaction: ReadonlyMap<string, Record<string, unknown>> }) {
+  provenance?: StyleProvenance) {
   const nodes: object[] = [];
   const visit = (node: object, key: string, parent: string | null) => {
     const { children, ...authored } = node as Record<string, unknown>;
     const id = typeof authored['id'] === 'string' ? authored['id'] : undefined;
-    nodes.push({ key, parent, authored, resolvedStyle: id ? materialStyleSnapshot(resolved.get(id)) : undefined,
-      normalResolvedStyle: id && provenance ? materialStyleSnapshot(provenance.normal.get(id)) : undefined,
-      interactionResolvedStyle: id && provenance ? materialStyleSnapshot(provenance.interaction.get(id)) : undefined });
+    const inspected = provenance?.byPath?.get(key);
+    nodes.push({ key, parent, authored,
+      resolvedStyle: materialStyleSnapshot(inspected?.effective ?? (id ? resolved.get(id) : undefined)),
+      normalResolvedStyle: materialStyleSnapshot(inspected?.normal ?? (id ? provenance?.normal.get(id) : undefined)),
+      interactionResolvedStyle: materialStyleSnapshot(inspected?.effective ?? (id ? provenance?.interaction.get(id) : undefined)) });
     if (Array.isArray(children)) children.forEach((child, index) => {
       if (typeof child === 'object' && child !== null) visit(child, `${key}/${index}`, key);
     });
   };
   visit(root, 'root', null);
-  return { schemaVersion: 1, resolvedStyleEvidenceVersion: provenance ? 2 : 1, nodes, rules, errors: [] };
+  return { schemaVersion: 1, resolvedStyleEvidenceVersion: provenance ? 2 : 1,
+    resolvedStyleSource: provenance?.source, resolvedStyleRevision: provenance?.revision, nodes, rules, errors: [] };
 }
 
 export interface MaterialAuthoredStructure {

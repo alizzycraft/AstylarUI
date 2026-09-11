@@ -71,10 +71,10 @@ export const sourceAuditDefinitions = Object.freeze([
     id: 'harness-mesh-only-resolved-style-capture',
     introducedBy: '341f549 audit resolved-style capture and a06ef61 full authored-tree collection',
     file: 'examples/material-showcase/src/app/astylar.component.ts',
-    pattern: String.raw`collectMaterialResolvedStyles\(surface\.scene\.meshes\)`,
-    classification: 'parity-harness-defect',
+    pattern: String.raw`collectMaterialCoreResolvedStyles\(surface\.inspectResolvedStyles\(\)\)`,
+    classification: 'equivalent-representation',
     owner: 'audit capture at the authoritative pre-projection style-resolution boundary',
-    justification: 'The resolved input map is built exclusively from meshes. The completed436 static tree captures contain42 non-envelope authored nodes without resolved styles: compact hidden labels and collapsed expansion content. A complete tree is not a complete resolved-style capture; collect styles before display:none skips mesh creation rather than manufacturing values in the report.',
+    justification: 'The collector now consumes the public on-demand core style snapshot, including hidden descendants and anonymous paths. The earlier436 static captures lacked42 non-envelope resolved styles because they relied on mesh existence. Those legacy gaps remain until recapture; no values are manufactured by the report, and no new layout/style resolver exists in the showcase.',
   }),
   Object.freeze({
     id: 'harness-normal-versus-interaction-style-capture',

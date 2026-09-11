@@ -47,7 +47,7 @@ try {
             from = { x: handle.x + handle.width / 2, y: handle.y + handle.height / 2 };
             to = { x: track.x + track.width * ratio, y: from.y };
           } else {
-            const box = await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.measure(['slider-visual']).elements['slider-visual'].borderBox);
+            const box = await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.measure(['slider-visual'], false).elements['slider-visual'].borderBox);
             const canvas = await page.locator('canvas').boundingBox();
             assert.ok(box && canvas, 'Missing candidate drag geometry');
             from = { x: canvas.x + box.left + box.width * Number(trace[0][thumb].value) / 100, y: canvas.y + box.top + box.height / 2 };
@@ -67,7 +67,10 @@ try {
         }
         const tree = mode === 'reference'
           ? await page.evaluate(captureBrowserInputTree, { styleProperties: Object.values(propertyGroups).flat() })
-          : await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.measure([]).inputTree);
+          : await page.evaluate(async () => {
+            await window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled();
+            return window.__ASTYLAR_MATERIAL_BENCHMARK__.measure([]).inputTree;
+          });
         assert.ok(tree?.nodes.length && tree.errors.length === 0, 'Incomplete slider input tree');
         const contents = JSON.stringify(tree);
         const file = `${directory}/${method}-${thumb}-${mode}-input-tree.json`;
