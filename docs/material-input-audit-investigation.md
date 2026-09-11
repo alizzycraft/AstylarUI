@@ -54,6 +54,34 @@ Material-specific; ordinary text layout and rasterization should use core.
 The general plugin coordinate adapter is not itself evidence of a violation:
 final CSS-to-render projection is its intended responsibility.
 
+## Intrinsic sizing and layout substitutions
+
+Reviewed the reference declarations in `reference.component.ts`, installed
+Angular Material styles, and fresh light/desktop full-tree captures against
+`astylar.component.ts`. These are input discrepancies, not yet confirmed core
+failures. Source policy entries retain exact candidate locations and history.
+
+| Component | Reference input | Candidate substitution | History / owner |
+| --- | --- | --- | --- |
+| Toolbar | Title has no width declaration; action has min-width:64px, content and padding; a flex spacer fills remaining space. | Title width 192.15625px and action width 65.140625px, both non-shrinking; action becomes 64px at the mobile breakpoint. Reference used widths in the capture are 192.156px and 65.1406px, exposing the measured-value substitution. | `92067a1`; fixture intrinsic sizing, then core flex/text if equivalent composition fails. |
+| Badge | Inline relative span with auto width around Notifications. | Width table 81.859375/104.65625/90.953125px selected by density/typography. | `2f44011`; fixture inline sizing and core text/inline layout investigation. |
+| Chips | Content and graphic/padding determine chip width. | ID/state tables 97/68px and 93/64px. Selected reference chips measure 97.4219px and 92.75px in this capture. Rounding their output into authored widths is not equivalent input. | `00de46c`; fixture composition and intrinsic flex sizing. |
+| Stepper | `.mat-horizontal-stepper-header-container` is flex; `.mat-stepper-horizontal-line` uses flex:auto, height:0, min-width:32px, margin:0 -16px and a 1px top border. | Absolute headers and connector, with connector widths 73.2%, 69.5%, and 15.1% at breakpoints. | `4e58f58` connector changes; `bc4d442` header width changes; fixture flex composition first. |
+| Grid list | Two absolute tiles emitted by Material; widths calc(50% - 0.5px), second left calc(50% + 0.5px), giving a 1px gutter. | Two CSS grid tracks with gap:0. | `2f44011`; fixture translation, not evidence of a grid-engine defect. |
+
+The fresh reference trees are under
+`artifacts/material-parity/<family>/light/desktop/reference-input-tree.json`.
+Their authored-rule records include media/support conditions; merely matching a
+selector is not proof that an inactive rule applies. The values above were
+cross-checked against computed styles and current source, not inactive rules.
+
+Card shadow counterexample: the reference's light/desktop `card-primary` uses
+three layers (0 2px 1px -1px at .2 alpha, 0 1px 1px at .14, 0 1px 3px at .12).
+The candidate `.material-card` supplies those same layers. Accept this specific
+shadow representation; it does not waive card typography, wrappers, colors,
+theme variants, or the shared fixed-height table. A literal constant is not by
+itself evidence of compensation.
+
 ## Minimal browser evidence
 
 `input-equivalence-proof.spec.ts` supplies the same style objects to browser CSS
