@@ -1,8 +1,10 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
+import path from 'node:path';
 import {
   buildMaterialInputAudit,
   collectFullTreeInventory,
+  parseMaterialInputAuditArguments,
   summarizeSupplementalBehavior,
   summarizeSupplementalOverlays,
   summarizeSupplementalSlider,
@@ -13,6 +15,21 @@ const browserDefaults = {
   visibility: 'visible', minWidth: '0px', maxWidth: 'none', minHeight: '0px', maxHeight: 'none',
   fontStyle: 'normal', transform: 'none', pointerEvents: 'auto',
 };
+
+test('audit CLI selects isolated full-matrix evidence without silently accepting misspelled flags', () => {
+  const root = process.cwd();
+  const defaultOptions = parseMaterialInputAuditArguments([], root);
+  assert.deepEqual(defaultOptions, { check: false, allowPartial: false,
+    parityPath: path.resolve(root, 'artifacts/material-parity/latest-report.json') });
+  const report = 'artifacts/material-parity/complete-input-audit/latest-report.json';
+  assert.deepEqual(parseMaterialInputAuditArguments(['--check', `--parity-report=${report}`], root),
+    { check: true, allowPartial: false, parityPath: path.resolve(root, report) });
+  assert.equal(parseMaterialInputAuditArguments(['--allow-partial'], root).allowPartial, true);
+  assert.throws(() => parseMaterialInputAuditArguments(['--allow-partal']), /Unknown audit option/);
+  assert.throws(() => parseMaterialInputAuditArguments(['--parity-report=']), /requires a path/);
+  assert.throws(() => parseMaterialInputAuditArguments(['--parity-report=a', '--parity-report=b']), /Repeated audit option/);
+  assert.throws(() => parseMaterialInputAuditArguments(['--check', '--check']), /Repeated audit option/);
+});
 
 test('slider supplement requires all full-domain cases and does not trust endpoint claims', () => {
   const control = (value) => ({ value: String(value), min: '0', max: '100', step: '5' });

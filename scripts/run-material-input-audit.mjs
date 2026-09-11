@@ -4,14 +4,13 @@ import path from 'node:path';
 import process from 'node:process';
 import {
   buildMaterialInputAudit,
+  parseMaterialInputAuditArguments,
   renderMaterialInputAuditMarkdown,
   validateMaterialInputAudit,
 } from '../tests/material-parity/input-equivalence-audit.mjs';
 
 const root = process.cwd();
-const check = process.argv.includes('--check');
-const allowPartial = process.argv.includes('--allow-partial');
-const parityPath = path.resolve(root, 'artifacts/material-parity/latest-report.json');
+const { check, allowPartial, parityPath } = parseMaterialInputAuditArguments(process.argv.slice(2), root);
 const jsonPath = path.resolve(root, 'docs/material-input-equivalence-audit.json');
 const markdownPath = path.resolve(root, 'docs/material-input-equivalence-audit.md');
 
@@ -31,6 +30,7 @@ if (check) {
 }
 
 console.log(`# Material input-equivalence audit`);
+console.log(`- Parity evidence: ${path.relative(root, parityPath)}`);
 console.log(`- Coverage: ${audit.coverage.executedStatic}/${audit.coverage.configuredStatic} static, ${audit.coverage.executedInteractions}/${audit.coverage.configuredInteractions} interaction`);
 console.log(`- Unique differences: ${audit.summary.uniqueStyleDifferences}`);
 console.log(`- Occurrences: ${audit.summary.totalStyleDifferenceOccurrences}`);

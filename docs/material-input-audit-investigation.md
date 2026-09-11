@@ -3,6 +3,14 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+The report generator accepts an explicit evidence path so the fresh full run
+does not have to overwrite the preserved baseline. After that run completes,
+use `node scripts/run-material-input-audit.mjs --parity-report=artifacts/material-parity/complete-input-audit/latest-report.json`,
+then the same command with `--check`. Do not use `--allow-partial` for acceptance.
+Argument validation rejects unknown, empty, and repeated options (25/25 audit
+tests pass). A missing selected report fails rather than falling back to older
+evidence; the new run has not yet produced its final report.
+
 ## Attribution is not inferred from unequal resolved values (2026-09-11)
 
 The automatic style classifier previously labelled every unmatched scalar pair

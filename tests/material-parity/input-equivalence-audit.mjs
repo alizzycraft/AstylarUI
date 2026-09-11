@@ -22,6 +22,28 @@ export const materialInputAuditSchemaVersion = 2;
 const propertyGroupByName = new Map(Object.entries(propertyGroups)
   .flatMap(([group, properties]) => properties.map((property) => [property, group])));
 
+export function parseMaterialInputAuditArguments(args, root = process.cwd()) {
+  let parityReport;
+  const flags = new Set();
+  for (const arg of args) {
+    if (arg === '--check' || arg === '--allow-partial') {
+      if (flags.has(arg)) throw new Error(`Repeated audit option: ${arg}`);
+      flags.add(arg);
+    } else if (arg.startsWith('--parity-report=')) {
+      if (parityReport !== undefined) throw new Error('Repeated audit option: --parity-report');
+      parityReport = arg.slice('--parity-report='.length);
+      if (!parityReport.trim()) throw new Error('--parity-report requires a path');
+    } else {
+      throw new Error(`Unknown audit option: ${arg}`);
+    }
+  }
+  return {
+    check: flags.has('--check'),
+    allowPartial: flags.has('--allow-partial'),
+    parityPath: path.resolve(root, parityReport ?? 'artifacts/material-parity/latest-report.json'),
+  };
+}
+
 export function buildMaterialInputAudit(parityReport, options = {}) {
   const root = options.root ?? process.cwd();
   const cases = [
