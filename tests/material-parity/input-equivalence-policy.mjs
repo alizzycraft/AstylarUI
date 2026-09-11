@@ -90,6 +90,16 @@ export const reviewedValueNormalizations = Object.freeze([
 
 export const sourceAuditDefinitions = Object.freeze([
   Object.freeze({
+    id: 'core-transform-list-loses-order-and-repeated-functions',
+    introducedBy: '662c179 extracts the shared transform parser with one mutable translation/rotation/scale tuple',
+    file: 'src/app/services/dom/elements/css-transform.ts',
+    pattern: String.raw`case 'translatex':\s*result\.translate\.x = parseFloat\(values\[0\]\) \|\| 0;`,
+    classification: 'confirmed-core-renderer-defect',
+    owner: 'core ordered CSS transform composition before final projection',
+    justification: 'For already parsed translateX/scale functions, the parser overwrites one tuple instead of composing the ordered CSS list. Browser reductions with default origin and pixel units isolate this from unsupported percentages/origins: translateX(10px) scale(.5) passes, but the reversed list is displaced by 5px; translateX(4px) translateX(6px) retains only 6px and is displaced by 4px. These are confirmed mismatches in composition of accepted functions, not a claim that the catalog supports all CSS transform grammar. Preserve the ordered CSS-space affine transform, including repeated functions, until final rendering conversion; do not reorder or precompute fixture-specific inputs.',
+    focusedProof: 'examples/material-showcase/src/app/input-equivalence-proof.spec.ts: translate-then-scale, scale-then-translate and repeated-translation composition controls',
+  }),
+  Object.freeze({
     id: 'fixture-floating-label-transform-replaced-by-font-size',
     introducedBy: '2f44011 initial 12px substitution; 87bc351 adds tracking and alignment overrides',
     file: 'examples/material-showcase/src/app/astylar.component.ts',

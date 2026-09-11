@@ -15,6 +15,9 @@ describe('Material audit: equivalent CSS input reductions', () => {
       { name: 'literal translation control', transform: 'translateY(-12px) scale(1)' },
       { name: 'scale-only control', transform: 'scale(.75)' },
       { name: 'default-origin scale control', transform: 'scale(.75)', defaultOrigin: true },
+      { name: 'translate-then-scale order control', transform: 'translateX(10px) scale(.5)', defaultOrigin: true },
+      { name: 'scale-then-translate order control', transform: 'scale(.5) translateX(10px)', defaultOrigin: true },
+      { name: 'repeated-translation composition control', transform: 'translateX(4px) translateX(6px)', defaultOrigin: true },
     ].map(({ name, transform, defaultOrigin }) => ({
       name: `floating label preserves child typography through a ${name}`,
       site: {

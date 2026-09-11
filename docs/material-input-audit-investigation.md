@@ -11,6 +11,45 @@ Argument validation rejects unknown, empty, and repeated options (25/25 audit
 tests pass). A missing selected report fails rather than falling back to older
 evidence; the new run has not yet produced its final report.
 
+## Ordered transform composition is also lost (2026-09-12)
+
+The transform follow-up now includes three controls using only pixel units and
+the default transform origin. They reuse the exact same containing block,
+label, text and retained-typography assertions as the preceding reduction, so
+the percentage and unsupported-origin gaps cannot explain these differences.
+
+| CSS input on both sides | Browser label left | Astylar label left | Result |
+| --- | ---: | ---: | --- |
+| `translateX(10px) scale(.5)` | 66px | 66px | Pass |
+| `scale(.5) translateX(10px)` | 61px | 66px | Fail: 5px |
+| `translateX(4px) translateX(6px)` | 26px | 22px | Fail: 4px |
+
+The parser introduced in shared form by `662c179` stores a single mutable
+`translate`/`rotate`/`scale` tuple. It assigns the latest value for each function
+instead of composing an ordered CSS transform. The material service then
+applies the tuple in one fixed arrangement. This loses both noncommutative
+function order and earlier repeated functions **before** final projection.
+The inline text moves with the same error; its retained font size, line height
+and tracking remain correct in all three controls.
+
+The source inventory records a confirmed core composition defect for these
+accepted functions. That narrow finding does not expand the catalog's declared
+incomplete CSS transform grammar, nor does it relabel the absent public
+`transformOrigin` field as a supported feature. Remediation must retain and
+compose the ordered CSS-space affine transform, including repeated functions,
+alongside percentage/reference-box/origin work. Merely fixing percent parsing
+and origin offsets would leave this independently reproduced error intact.
+Do not reorder, combine, or calculate equivalent transforms in the showcase to
+compensate for it.
+
+Verification: `node --test tests/material-parity/*.spec.mjs` passes **64/64**.
+`npm --prefix examples/material-showcase test -- --watch=false --browsers=ChromeHeadless --include=src/app/input-equivalence-proof.spec.ts`
+now runs **32 cases: 12 pass / 20 fail**. The new passing order control and the
+two new failing composition controls retain the existing threshold; all prior
+29 cases remain. The inventory now has **48** detected source findings. No
+renderer implementation, showcase input, capture module, or production bundle
+was changed. The full audit and running unfiltered matrix remain incomplete.
+
 ## Floating-label substitution exposes transform-subset gaps (2026-09-12)
 
 The 16px/12px field-label difference is not a simple font-scaling diagnosis.
