@@ -60,8 +60,13 @@ TestBed while the showcase loads Zone.js).
 `npm run consumer:check` passes: 419 packed files, browser and SSR/prerender
 builds, and **4/4** Chrome tests, including inherited text values and isolation
 between two package-root surfaces. Its disposed-surface diagnostic is expected
-by the negative test. The full root unit run is pending; these results are not
-complete audit acceptance.
+by the negative test. The complete root command
+`npm test -- --watch=false --browsers=ChromeHeadless` also passes **452/452**.
+These results are not complete audit acceptance. The existing full Material
+matrix continues against its unchanged `material-showcase-inspection-audit`
+bundle. A separate `material-showcase-retained-text-audit` production bundle is
+being built for the next diagnostic capture; do not overwrite the served bundle
+or describe the older captures as containing the new text-stage field.
 
 ## Typography-stage evidence gap (2026-09-11)
 
