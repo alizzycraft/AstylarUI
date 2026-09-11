@@ -3,6 +3,7 @@ import { createHash } from 'node:crypto';
 import path from 'node:path';
 import {
   implicitReferenceValues,
+  implicitReferenceJustifications,
   inputDifferenceClassifications,
   pluginBoundaryVerdict,
   propertyGroups,
@@ -364,7 +365,7 @@ function classifyStyleDifference(property, reference, astylar, referenceStyle, a
   if (astylar === undefined && implicitReferenceValues[property]?.includes(reference)) {
     return {
       classification: 'equivalent-representation',
-      justification: `The browser serializes its implicit ${property} used value; Astylar omits the equivalent initial declaration.`,
+      justification: implicitReferenceJustifications[property] ?? `The browser serializes its implicit ${property} used value; Astylar omits the equivalent initial declaration.`,
       owner: 'none',
     };
   }

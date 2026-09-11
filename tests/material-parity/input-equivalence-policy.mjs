@@ -64,6 +64,15 @@ export const implicitReferenceValues = Object.freeze({
   zIndex: Object.freeze(['auto']),
   pointerEvents: Object.freeze(['auto']),
   objectFit: Object.freeze(['fill']),
+  boxShadow: Object.freeze(['none']),
+  gridColumn: Object.freeze(['auto']),
+  gridRow: Object.freeze(['auto']),
+});
+
+export const implicitReferenceJustifications = Object.freeze({
+  boxShadow: 'An omitted Astylar boxShadow and explicit CSS none both request no shadow layers. Core parseBoxShadow returns the same empty layer list for these two inputs; this does not waive a nonempty shadow or plugin-authored paint.',
+  gridColumn: 'An omitted Astylar gridColumn and explicit CSS auto both request automatic one-track column placement. GridService.parseGridAxisPlacement takes the same span:1 branch for both. This accepts only omitted versus auto, not a changed span/line or grid template.',
+  gridRow: 'An omitted Astylar gridRow and explicit CSS auto both request automatic one-track row placement. GridService.parseGridAxisPlacement takes the same span:1 branch for both. This accepts only omitted versus auto, not a changed span/line or grid template.',
 });
 
 export const sourceAuditDefinitions = Object.freeze([

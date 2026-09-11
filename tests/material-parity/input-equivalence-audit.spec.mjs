@@ -126,6 +126,17 @@ test('does not infer an authoring defect from unequal resolved layout values', (
   assert.equal(validateMaterialInputAudit(audit, { requireComplete: false }).length, 0);
 });
 
+test('accepts only proven omitted shadow and automatic grid-placement initial values', () => {
+  const audit = buildMaterialInputAudit(parityReport({ boxShadow: 'none', gridColumn: 'auto', gridRow: 'auto' }, {}));
+  for (const property of ['boxShadow', 'gridColumn', 'gridRow']) {
+    const entry = audit.discrepancies.find((entry) => entry.property === property);
+    assert.equal(entry.classification, 'equivalent-representation');
+    assert.match(entry.justification, /parseBoxShadow|parseGridAxisPlacement/);
+  }
+  const changed = buildMaterialInputAudit(parityReport({ boxShadow: '0 1px 2px #000', gridColumn: 'span 2', gridRow: '2' }, {}));
+  assert.ok(changed.discrepancies.every((entry) => entry.attribution === 'unresolved'));
+});
+
 test('attributes the reviewed shared root only with matching captured authoring evidence', () => {
   const raw = parityReport({ display: 'block', position: 'static' }, { display: 'flex', position: 'relative' });
   const input = raw.results[0].styleInputs[0];

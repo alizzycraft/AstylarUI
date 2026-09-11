@@ -51,6 +51,40 @@ No reference input, fixture style, case, acceptance threshold, or renderer behav
 changed in this increment. Fully resolved style coverage and substantive review
 of every material difference remain separate unfinished requirements.
 
+## Static review inventory and proven initial values (2026-09-12)
+
+All 436 configured static checkpoint results are now available. Loading that
+complete static subset through `buildMaterialInputAudit` reports zero missing
+full trees, resolved-node gaps, state-provenance gaps or tree collection errors.
+This establishes collection coverage, not completed semantic/style attribution.
+The interaction run remains live; no aggregate full-matrix acceptance is claimed.
+
+The static-only report contains 7,030 difference signatures and 68,933
+occurrences. Before this increment, 3,505 signatures remained unattributed.
+Three narrow initial-value equivalences are now justified by core implementation
+and focused tests:
+
+- `boxShadow` omitted versus `none`: `parseBoxShadow` returns the same empty
+  layer list. Nonempty shadows are not accepted by this rule.
+- `gridColumn` or `gridRow` omitted versus `auto`: the grid axis parser uses the
+  same automatic single-track placement branch. Explicit lines, spans and
+  template differences are not accepted by this rule.
+
+The audit retains those entries with explicit technical justifications instead
+of deleting their evidence. In the static subset this classifies 804 no-shadow,
+1,264 automatic-column and 1,264 automatic-row occurrences, reducing unresolved
+signatures to **3,231**. This is review progress, not 3,332 fixed rendering bugs.
+Appearance, clipping, inheritance, used sizing and other unresolved inputs still
+need their own evidence; the initial-value list is not a blanket defaults waiver.
+
+The core tests are in `box-shadow.spec.ts` and `grid.service.spec.ts` beside the
+owning implementations. The report regression verifies these accepted pairs and
+rejects nonempty shadows/explicit placement. `node --test
+tests/material-parity/*.spec.mjs` passes 50/50. The focused core command
+`npm test -- --watch=false --browsers=ChromeHeadless --include=src/app/services/dom/elements/box-shadow.spec.ts --include=src/app/services/dom/elements/grid.service.spec.ts`
+passes **24/24** in Chrome Headless 152. No implementation, fixture,
+capture module or running served build changed.
+
 ## Badge reduction: intrinsic parent width and positioned margins (2026-09-12)
 
 Six new equivalent-input cases separate the badge's measured width and changed

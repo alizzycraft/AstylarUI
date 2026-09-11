@@ -14,6 +14,17 @@ describe('GridService', () => {
       ({ x: point.x, y: -point.y, z }),
   };
 
+  it('treats omitted and explicit auto grid-axis placement identically', () => {
+    const parser = service as unknown as {
+      parseGridAxisPlacement(value: string | undefined, tracks: number): { line?: number; span: number };
+    };
+    for (const tracks of [1, 3, 7]) {
+      expect(parser.parseGridAxisPlacement(undefined, tracks)).toEqual({ span: 1 });
+      expect(parser.parseGridAxisPlacement('auto', tracks)).toEqual(parser.parseGridAxisPlacement(undefined, tracks));
+      expect(parser.parseGridAxisPlacement('span 2', tracks)).not.toEqual(parser.parseGridAxisPlacement(undefined, tracks));
+    }
+  });
+
   it('allocates remaining track space across fr units after fixed tracks and gaps', () => {
     expect(service.resolveTracks('160px 1fr', 460, 20, 2)).toEqual([160, 280]);
     expect(service.resolveTracks('1fr 2fr', 320, 20, 2)).toEqual([100, 200]);
