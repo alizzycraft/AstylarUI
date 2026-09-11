@@ -21,9 +21,11 @@ import { captureBrowserInputTree } from './input-tree-evidence.mjs';
 const root = process.cwd();
 const enforce = process.argv.includes('--enforce');
 const skipBuild = process.argv.includes('--skip-build');
-const artifacts = path.join(root, 'artifacts', 'material-parity');
+const artifacts = path.resolve(root, process.env['ASTYLAR_MATERIAL_ARTIFACTS'] ?? 'artifacts/material-parity');
 const showcaseRoot = path.join(root, 'examples', 'material-showcase');
-const browserRoot = path.join(showcaseRoot, 'dist', 'material-showcase', 'browser');
+const browserRoot = process.env['ASTYLAR_MATERIAL_BROWSER_ROOT']
+  ? path.resolve(root, process.env['ASTYLAR_MATERIAL_BROWSER_ROOT'])
+  : path.join(showcaseRoot, 'dist', 'material-showcase', 'browser');
 const port = Number(process.env['ASTYLAR_MATERIAL_PARITY_PORT'] ?? 4431);
 const baseUrl = `http://127.0.0.1:${port}`;
 const npm = process.platform === 'win32' ? 'npm.cmd' : 'npm';

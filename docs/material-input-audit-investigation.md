@@ -69,6 +69,20 @@ either a broad core rewrite or retention of fixture compensation.
 
 ## Outstanding acceptance work
 
+Collector end-to-end smoke (2026-09-11): a separate production build at
+`examples/material-showcase/dist/material-showcase-audit` succeeded. Using
+`ASTYLAR_MATERIAL_BROWSER_ROOT=examples/material-showcase/dist/material-showcase-audit/browser`,
+`ASTYLAR_MATERIAL_ARTIFACTS=artifacts/material-parity/collector-smoke`, port 4432,
+families `core,datepicker`, profile `light`, and viewport `desktop`, the command
+`node tests/material-parity/run-material-parity.mjs --enforce --skip-build --static-only`
+captured two passing cases (minimum SSIM 0.998795, maximum edge error 0.002px).
+It correctly exited 1 because enforced acceptance requires all 436 static and
+1,875 interaction cases. This is focused diagnostic evidence, not a green full
+gate. Loading the resulting tree artifacts through `buildMaterialInputAudit`
+verified all four case sides, valid digests, no collection gaps/errors, and
+structural schema 2 throughout. Partial audit validation returned no errors.
+The existing unfiltered run's bundle and artifacts were not replaced.
+
 The initial structural collectors were not comparable: reference text included
 the subtree, candidate text included only the node's own value; reference
 descendant order followed requested IDs, while candidate IDs included unmapped
