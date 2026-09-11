@@ -76,6 +76,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
       propertyGroups: propertyGroupCounts,
       affectedFamilies: familyCounts,
       unclassifiedDifferences: unclassified.length,
+      unresolvedAttributions: discrepancies.filter((entry) => entry.attribution === 'unresolved').length,
       sourceFindings: sourceFindings.length,
       unexplainedSourceFindings: sourceFindings.filter((entry) => !entry.classification).length,
       undetectedSourceDefinitions: sourceFindings.filter((entry) => !entry.detected).length,
@@ -96,6 +97,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
   if (report.schemaVersion !== materialInputAuditSchemaVersion) errors.push('unexpected audit schema version');
   if (requireComplete && !report.coverage.complete) errors.push('parity evidence does not cover the complete configured matrix');
   if (report.summary.unclassifiedDifferences !== 0) errors.push(`${report.summary.unclassifiedDifferences} style differences are unclassified`);
+  if (requireComplete && report.summary.unresolvedAttributions > 0) errors.push(`${report.summary.unresolvedAttributions} resolved-style differences still lack root-cause attribution`);
   if (report.summary.unexplainedSourceFindings !== 0) errors.push(`${report.summary.unexplainedSourceFindings} source findings are unexplained`);
   if (report.summary.undetectedSourceDefinitions !== 0) errors.push(`${report.summary.undetectedSourceDefinitions} expected source findings were not detected`);
   if (report.coverage.missingElements.length > 0) errors.push(`${report.coverage.missingElements.length} measured mappings are missing on one side`);
@@ -126,6 +128,8 @@ export function renderMaterialInputAuditMarkdown(report) {
     '',
     `Visual parity is ${report.coverage.visualParityGreen ? 'green' : 'not green'}, but input equivalence is **${report.summary.inputEquivalent ? 'established' : 'not established'}**. ` +
       `The audit found ${report.summary.uniqueStyleDifferences} unique normalized input differences across ${report.summary.totalStyleDifferenceOccurrences} occurrences.`,
+    '',
+    `${report.summary.unresolvedAttributions} signatures still require authored-rule/cascade/structure attribution. These are evidence gaps, not confirmed authoring or renderer defects; complete audit acceptance rejects them. Source-level findings below carry their own traced evidence.`,
     '',
     `Coverage is ${report.coverage.complete ? 'complete' : 'incomplete'}: ${report.coverage.executedStatic}/${report.coverage.configuredStatic} static cases and ` +
       `${report.coverage.executedInteractions}/${report.coverage.configuredInteractions} interaction/mobile-flow cases. All ${report.coverage.families.length} component families are inventoried.`,
@@ -193,7 +197,8 @@ function collectStyleDiscrepancies(cases) {
           ? { classification: 'parity-harness-defect', owner: 'audit effective pseudo-state style capture',
             justification: 'This interaction capture predates effective-style provenance. It can compare browser state styles against candidate normal-only declarations; recapture with evidence version2 before attributing the difference to authoring or core.' }
           : classifyStyleDifference(property, referenceValue, astylarValue, reference, astylar);
-        const signature = JSON.stringify([benchmarkCase.family, input.id, property, referenceValue ?? null, astylarValue ?? null, classification.classification]);
+        const signature = JSON.stringify([benchmarkCase.family, input.id, property, referenceValue ?? null, astylarValue ?? null,
+          classification.classification, classification.attribution ?? null, classification.justification]);
         let entry = grouped.get(signature);
         if (!entry) {
           entry = {
@@ -206,6 +211,7 @@ function collectStyleDiscrepancies(cases) {
             classification: classification.classification,
             justification: classification.justification,
             recommendedOwner: classification.owner,
+            ...(classification.attribution ? { attribution: classification.attribution } : {}),
             occurrences: 0,
             cases: [],
             states: [],
@@ -281,17 +287,10 @@ function classifyStyleDifference(property, reference, astylar, referenceStyle, a
     };
   }
   return {
-    classification: 'application-plugin-authoring-defect',
-    justification: astylar === undefined
-      ? `The reference resolves ${property}=${reference}, but the Astylar input does not express an equivalent ${group} value.`
-      : reference === undefined
-        ? `The Astylar fixture adds ${property}=${astylar} without a corresponding reference input.`
-        : `The two fixtures resolve different ${group} inputs (${reference} versus ${astylar}); matching output therefore cannot prove renderer parity.`,
-    owner: group === 'interaction' ? 'showcase fixture and core interaction defaults'
-      : group === 'typography' ? 'showcase fixture and core typography'
-        : group === 'layout' || group === 'transform' ? 'showcase fixture and core CSS layout'
-          : group === 'paint' ? 'showcase fixture or Material-specific paint adapter'
-            : 'showcase fixture',
+    classification: 'parity-harness-defect',
+    attribution: 'unresolved',
+    justification: `The captured ${group} values differ (${reference ?? 'omitted'} versus ${astylar ?? 'omitted'}). Resolved values alone do not distinguish unequal authored declarations from default/cascade resolution, mismapped wrappers, or non-comparable used values. Trace the winning authored rules and corresponding semantic boxes before attributing this signature to the application/plugin or core. Omission is not proof that the fixture omitted the CSS intent.`,
+    owner: `input audit ${group} authored-rule and resolution provenance`,
   };
 }
 

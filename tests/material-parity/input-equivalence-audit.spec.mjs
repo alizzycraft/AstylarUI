@@ -94,7 +94,7 @@ test('normalizes shorthand, colors, numeric precision, and implicit browser valu
     ['paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft', 'backgroundColor', 'opacity', 'width'].includes(property)));
 });
 
-test('classifies unequal authored layout input even when visual parity is green', () => {
+test('does not infer an authoring defect from unequal resolved layout values', () => {
   const audit = buildMaterialInputAudit(parityReport({
     ...browserDefaults, position: 'relative', display: 'inline-flex', width: '212px',
   }, {
@@ -102,7 +102,10 @@ test('classifies unequal authored layout input even when visual parity is green'
   }));
   assert.equal(audit.summary.inputEquivalent, false);
   assert.ok(audit.discrepancies.some(({ property, classification }) =>
-    property === 'position' && classification === 'application-plugin-authoring-defect'));
+    property === 'position' && classification === 'parity-harness-defect'));
+  assert.ok(audit.summary.unresolvedAttributions > 0);
+  assert.equal(audit.discrepancies.find(({ property }) => property === 'position').attribution, 'unresolved');
+  assert.ok(validateMaterialInputAudit(audit).some((error) => error.includes('root-cause attribution')));
   assert.equal(validateMaterialInputAudit(audit, { requireComplete: false }).length, 0);
 });
 
@@ -136,7 +139,8 @@ test('does not accept a missing origin for a transformed element or zero inset a
   }, { transform: 'rotate(-90deg)' }));
   for (const property of ['transformOrigin', 'left']) {
     assert.equal(audit.discrepancies.find((entry) => entry.property === property)?.classification,
-      'application-plugin-authoring-defect');
+      'parity-harness-defect');
+    assert.equal(audit.discrepancies.find((entry) => entry.property === property)?.attribution, 'unresolved');
   }
 });
 
@@ -267,7 +271,15 @@ test('legacy normal-only interaction styles cannot be attributed as authoring de
   assert.equal(legacy.discrepancies[0].classification, 'parity-harness-defect');
   assert.match(legacy.discrepancies[0].justification, /normal-only/);
   report.interactions[0].styleInputs[0].astylarResolvedStyleEvidenceVersion = 2;
-  assert.equal(buildMaterialInputAudit(report).discrepancies[0].classification, 'application-plugin-authoring-defect');
+  const current = buildMaterialInputAudit(report);
+  assert.equal(current.discrepancies[0].classification, 'parity-harness-defect');
+  assert.equal(current.discrepancies[0].attribution, 'unresolved');
+  assert.doesNotMatch(current.discrepancies[0].justification, /normal-only/);
+  report.interactions.push({ ...report.interactions[0], state: 'held',
+    styleInputs: [{ ...report.interactions[0].styleInputs[0], astylarResolvedStyleEvidenceVersion: undefined }] });
+  const mixed = buildMaterialInputAudit(report);
+  assert.equal(mixed.discrepancies.length, 2, 'different attribution evidence must not be pooled together');
+  assert.equal(mixed.summary.unresolvedAttributions, 1);
 });
 
 test('full-tree state provenance survives pooling and legacy captures stay incomplete', () => {

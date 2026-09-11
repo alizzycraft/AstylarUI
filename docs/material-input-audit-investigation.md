@@ -3,6 +3,22 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Attribution is not inferred from unequal resolved values (2026-09-11)
+
+The automatic style classifier previously labelled every unmatched scalar pair
+an application/plugin authoring defect. That was too strong: a resolved value
+may differ because of defaults/cascade, wrapper mapping, used-value serialization,
+or genuinely unequal authored rules. An omitted resolved property also does not
+prove missing authored intent. These signatures now remain explicit harness
+attribution gaps until their authored-rule and semantic-box evidence is traced.
+The report counts unresolved attributions and rejects complete acceptance while
+they remain. Distinct attribution evidence cannot collapse into a shared signature.
+
+This does not retract separately traced source findings or observed supplemental
+behavior failures. It prevents the raw discrepancy count from being presented as
+a count of proven authoring defects. Focused audit tests pass 24/24; fixture
+inputs, renderer output, and the in-flight matrix are unchanged.
+
 ## Hidden-node inspection boundary (2026-09-11)
 
 The complete root suite (`npm test -- --watch=false --browsers=ChromeHeadless`)
