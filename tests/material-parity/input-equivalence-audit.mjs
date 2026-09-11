@@ -18,7 +18,7 @@ import {
   materialViewports,
 } from './benchmark.config.mjs';
 
-export const materialInputAuditSchemaVersion = 2;
+export const materialInputAuditSchemaVersion = 3;
 
 const propertyGroupByName = new Map(Object.entries(propertyGroups)
   .flatMap(([group, properties]) => properties.map((property) => [property, group])));
@@ -51,7 +51,6 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
     ...(parityReport.results ?? []).map((entry) => ({ ...entry, kind: 'static' })),
     ...(parityReport.interactions ?? []).map((entry) => ({ ...entry, kind: 'interaction' })),
   ];
-  const discrepancies = collectStyleDiscrepancies(cases);
   const structures = collectStructureEvidence(cases);
   const sourceFindings = scanMaterialSources(root);
   const coverage = buildCoverage(parityReport, cases);
@@ -59,6 +58,8 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const supplementalOverlays = collectSupplementalOverlays(root);
   const supplementalSlider = collectSupplementalSlider(root);
   const elementInventory = collectFullTreeInventory([...cases, ...supplementalBehavior.cases, ...supplementalOverlays.cases, ...supplementalSlider.cases], { root });
+  const retainedTypography = collectRetainedTypographyEvidence(cases, elementInventory);
+  const discrepancies = collectStyleDiscrepancies(cases, retainedTypography);
   const classifications = countBy(discrepancies, (entry) => entry.classification);
   const propertyGroupCounts = countBy(discrepancies, (entry) => entry.propertyGroup);
   const familyCounts = countBy(discrepancies, (entry) => entry.family);
@@ -88,6 +89,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
         supplementalOverlays.missing.length === 0 && supplementalOverlays.errors.length === 0 && supplementalOverlays.mismatches.length === 0 &&
         supplementalSlider.missing.length === 0 && supplementalSlider.errors.length === 0 && supplementalSlider.mismatches.length === 0 &&
         elementInventory.gaps.length === 0 && elementInventory.resolvedStyleGaps.length === 0 && elementInventory.stateStyleGaps.length === 0 && elementInventory.errors.length === 0 &&
+        retainedTypography.gaps.length === 0 && retainedTypography.differences.length === 0 &&
         coverage.presenceDifferences.length === 0 &&
         sourceFindings.every((entry) => entry.detected && ['equivalent-representation', 'legitimate-public-api-structure'].includes(entry.classification)) &&
         structures.every((entry) => entry.classification === 'legitimate-public-api-structure') &&
@@ -107,6 +109,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
     discrepancies,
     structureEvidence: structures,
     elementInventory,
+    retainedTypography,
     sourceFindings,
     pluginBoundary: pluginBoundaryVerdict,
     focusedProofs: focusedProofInventory(root),
@@ -130,6 +133,9 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
   if (requireComplete && report.elementInventory.resolvedStyleGaps.length > 0) errors.push(`${report.elementInventory.resolvedStyleGaps.length} inventoried elements lack resolved style evidence`);
   if (requireComplete && report.elementInventory.stateStyleGaps.length > 0) errors.push(`${report.elementInventory.stateStyleGaps.length} state cases lack effective style provenance`);
   if (report.elementInventory.errors.length > 0) errors.push(`${report.elementInventory.errors.length} full-tree collection errors`);
+  if (report.retainedTypography?.schemaVersion !== 1) errors.push('missing retained typography stage report');
+  if (requireComplete && report.retainedTypography?.gaps.length > 0) errors.push(`${report.retainedTypography.gaps.length} retained typography mappings or stage fields require review`);
+  if (requireComplete && report.retainedTypography?.differences.length > 0) errors.push(`${report.retainedTypography.differences.length} retained typography differences require attribution`);
   if (requireComplete && report.supplementalBehavior.missing.length > 0) errors.push(`${report.supplementalBehavior.missing.length} supplemental behavior cases are missing`);
   if (report.supplementalBehavior.errors.length > 0) errors.push(`${report.supplementalBehavior.errors.length} supplemental behavior collection errors`);
   if (requireComplete && report.supplementalOverlays.missing.length > 0) errors.push(`${report.supplementalOverlays.missing.length} supplemental overlay cases are missing`);
@@ -158,6 +164,8 @@ export function renderMaterialInputAuditMarkdown(report) {
       `${report.coverage.executedInteractions}/${report.coverage.configuredInteractions} interaction/mobile-flow cases. All ${report.coverage.families.length} component families are inventoried.`,
     '',
     `Full-element evidence: ${report.elementInventory.cases.length} captured case sides, ${report.elementInventory.variants.length} tree variants; ${report.elementInventory.gaps.length} missing case sides, ${report.elementInventory.resolvedStyleGaps.length} elements without resolved styles, ${report.elementInventory.stateStyleGaps.length} state cases without effective style provenance, and ${report.elementInventory.errors.length} collection errors. Inventory presence does not establish input equivalence.`,
+    '',
+    `Retained typography: ${report.retainedTypography.comparisons.length} directly mapped text-node observations; ${report.retainedTypography.gaps.length} mapping/stage gaps and ${report.retainedTypography.differences.length} unequal retained-property observations. The registry stage is reported separately from declarations and is not proof of current pseudo-state glyph paint.`,
     '',
     `Supplemental picker behavior: ${report.supplementalBehavior.cases.length}/6 cases captured; ${report.supplementalBehavior.missing.length} missing and ${report.supplementalBehavior.mismatches.length} observed mismatches. These cases cover pointer/keyboard commits and previous/next month navigation omitted by the maintained matrix. Classified behavioral failures remain evidence; they are not counted as successful parity.`,
     '',
@@ -204,8 +212,10 @@ export function renderMaterialInputAuditMarkdown(report) {
   return lines.join('\n');
 }
 
-function collectStyleDiscrepancies(cases) {
+function collectStyleDiscrepancies(cases, retainedTypography) {
   const grouped = new Map();
+  const typographyByCaseAndId = new Map(retainedTypography.comparisons.map((entry) =>
+    [JSON.stringify([entry.case, entry.element]), entry]));
   for (const benchmarkCase of cases) {
     const key = caseKey(benchmarkCase);
     for (const input of benchmarkCase.styleInputs ?? []) {
@@ -222,6 +232,8 @@ function collectStyleDiscrepancies(cases) {
           : classifyReviewedRootInput(benchmarkCase, input, property, referenceValue, astylarValue)
             ?? classifyReviewedContainerInput(benchmarkCase, input, property, referenceValue, astylarValue)
             ?? classifyReviewedBadgePaint(benchmarkCase, input, property, referenceValue, astylarValue)
+            ?? classifyReviewedTypographyStage(benchmarkCase, input, property, referenceValue, astylarValue,
+              typographyByCaseAndId.get(JSON.stringify([key, input.id])))
             ?? classifyStyleDifference(property, referenceValue, astylarValue, reference, astylar);
         const signature = JSON.stringify([benchmarkCase.family, input.id, property, referenceValue ?? null, astylarValue ?? null,
           classification.classification, classification.attribution ?? null, classification.justification]);
@@ -337,6 +349,27 @@ function classifyReviewedBadgePaint(benchmarkCase, input, property, reference, a
     owner: 'showcase badge theme-token translation',
     reviewEvidence: { referenceRule, candidateRule },
     justification: 'The reference badge background uses --mat-badge-background-color with --mat-sys-error fallback. The captured .badge-bubble rule explicitly supplies the different candidate resolved color; source tracing identifies theme.primary rather than the reference error token. This is the reviewed fixture-badge-primary-instead-of-error-token mismatch, not a renderer color-conversion inference. Other badge dimensions, content and state properties remain independently reviewable.',
+  };
+}
+
+function classifyReviewedTypographyStage(benchmarkCase, input, property, reference, astylar, evidence) {
+  // Only attribute the demonstrated missing-declaration stage mismatch. Never
+  // replace declarations with retained paint values or infer inheritance here.
+  const values = evidence?.properties[property];
+  if (benchmarkCase.state || astylar !== undefined || !values || reference === undefined ||
+      implicitReferenceValues[property]?.includes(reference) ||
+      input.astylarResolvedStyleEvidenceVersion !== 2 ||
+      input.referenceStructure?.schemaVersion !== 2 || input.astylarStructure?.schemaVersion !== 2 ||
+      input.referenceStructure.text !== evidence.text || input.astylarStructure.ownText !== evidence.text ||
+      values.reference !== reference || values.normal !== undefined || values.effective !== undefined ||
+      values.retained !== reference) return;
+  return {
+    classification: 'parity-harness-defect',
+    attribution: 'reviewed-stage-mismatch',
+    owner: 'input audit declaration versus core retained-typography stage comparison',
+    reviewEvidence: { case: evidence.case, referenceNode: evidence.referenceNode, astylarNode: evidence.astylarNode,
+      source: evidence.source, revision: evidence.revision, property, values },
+    justification: 'The directly mapped own-text nodes agree, and the captured core text-registry value equals the browser computed value while both candidate declaration stages omit this property. This attributes the missing scalar to a diagnostic-stage comparison, not a missing authored font or a renderer defect. Keep both stages; it does not accept other properties, substitute inherited calculations, or prove current pseudo-state glyph paint.',
   };
 }
 
@@ -577,6 +610,104 @@ function collectStructureEvidence(cases) {
     }
   }
   return [...grouped.values()];
+}
+
+const retainedTypographyProperties = Object.freeze([
+  'fontFamily', 'fontSize', 'fontWeight', 'fontStyle', 'lineHeight', 'letterSpacing',
+  'wordSpacing', 'textAlign', 'textTransform', 'textDecoration', 'color',
+]);
+
+export function collectRetainedTypographyEvidence(cases, inventory) {
+  const comparisons = [], differences = [], gaps = [];
+  const mappings = new Map();
+  for (const mapping of inventory.cases) {
+    const key = JSON.stringify([mapping.case, mapping.side]);
+    if (!mappings.has(key)) mappings.set(key, []);
+    mappings.get(key).push(mapping);
+  }
+  const gap = (key, element, reason, evidence = {}) => gaps.push({ case: key, element, reason, ...evidence,
+    classification: 'parity-harness-defect', attribution: 'unresolved',
+    recommendedOwner: 'input audit direct text-node mapping and retained typography provenance' });
+  for (const entry of cases) {
+    const key = caseKey(entry);
+    const referenceMappings = mappings.get(JSON.stringify([key, 'reference'])) ?? [];
+    const astylarMappings = mappings.get(JSON.stringify([key, 'astylar'])) ?? [];
+    if (referenceMappings.length !== 1 || astylarMappings.length !== 1 || inventory.errors.some((error) => error.case === key)) {
+      gap(key, undefined, 'missing, ambiguous, or invalid full-tree capture'); continue;
+    }
+    const referenceTree = inventory.variants[referenceMappings[0].variant];
+    const astylarTree = inventory.variants[astylarMappings[0].variant];
+    if (astylarTree.resolvedStyleEvidenceVersion !== 2 || astylarTree.resolvedStyleSource !== 'core-style-inspection' ||
+        !Number.isInteger(astylarMappings[0].resolvedStyleRevision)) {
+      gap(key, undefined, 'missing core style-inspection version, source, or revision'); continue;
+    }
+    const nodesById = (nodes, idOf) => {
+      const index = new Map();
+      for (const node of nodes) {
+        const id = idOf(node);
+        if (!id) continue;
+        if (!index.has(id)) index.set(id, []);
+        index.get(id).push(node);
+      }
+      return index;
+    };
+    const referenceNodes = nodesById(referenceTree.nodes, (node) => node.attributes?.id);
+    const astylarNodes = nodesById(astylarTree.nodes, (node) => node.authored?.id);
+    const ids = new Set([
+      ...referenceTree.nodes.filter((node) => node.ownText?.trim()).map((node) => node.attributes?.id),
+      ...astylarTree.nodes.filter((node) => node.authored?.textContent?.trim()).map((node) => node.authored?.id),
+    ]);
+    // Anonymous/reference-wrapper mappings remain in the full tree; do not
+    // fabricate text correspondences from matching strings or descendant order.
+    if (ids.delete(undefined)) gap(key, undefined, 'own-text nodes without an explicit shared ID require structural mapping', {
+      referenceNodes: referenceTree.nodes.filter((node) => node.ownText?.trim() && !node.attributes?.id).map((node) => node.key),
+      astylarNodes: astylarTree.nodes.filter((node) => node.authored?.textContent?.trim() && !node.authored?.id).map((node) => node.key),
+    });
+    for (const id of ids) {
+      const refNodes = referenceNodes.get(id) ?? [], astNodes = astylarNodes.get(id) ?? [];
+      if (refNodes.length !== 1 || astNodes.length !== 1) {
+        gap(key, id, 'own-text ID is missing or duplicated on one side',
+          { referenceNodes: refNodes.map((node) => node.key), astylarNodes: astNodes.map((node) => node.key) }); continue;
+      }
+      const ref = refNodes[0], ast = astNodes[0];
+      const refText = ref.ownText?.trim(), astText = ast.authored?.textContent?.trim();
+      if (!refText || refText !== astText) {
+        gap(key, id, 'direct own-text differs; subtree or transformed text is not an automatic mapping',
+          { reference: refText, astylar: astText }); continue;
+      }
+      if (ast.retainedText?.source !== 'core-text-registry') {
+        gap(key, id, 'no authoritative retained core text entry for this authored text node'); continue;
+      }
+      const styleAt = (index, side) => inventory.styles[index]?.side === side ? inventory.styles[index].value : undefined;
+      const raw = { reference: styleAt(ref.style, 'reference'), normal: styleAt(ast.normalStyle, 'astylar'),
+        effective: styleAt(ast.interactionStyle, 'astylar'), retained: styleAt(ast.retainedText.style, 'astylar') };
+      if (Object.values(raw).some((style) => !style || typeof style !== 'object' || Array.isArray(style))) {
+        gap(key, id, 'missing or wrongly attributed pooled typography style'); continue;
+      }
+      const styles = Object.fromEntries(Object.entries(raw).map(([stage, style]) => [stage, canonicalStyle(style)]));
+      const comparison = { case: key, family: entry.family, element: id, text: refText,
+        referenceNode: ref.key, astylarNode: ast.key, source: 'core-text-registry',
+        revision: astylarMappings[0].resolvedStyleRevision, state: entry.state ?? 'static',
+        currentPseudoStatePaintVerified: false, properties: {} };
+      for (const property of retainedTypographyProperties) {
+        const values = Object.fromEntries(Object.entries(styles).map(([stage, style]) => [stage, style[property]]));
+        comparison.properties[property] = values;
+        if (values.reference === undefined || values.retained === undefined) {
+          gap(key, id, 'missing reference or retained typography property', { property, values });
+        } else if (values.reference !== values.retained) {
+          differences.push({ case: key, family: entry.family, element: id, property, values,
+            referenceNode: ref.key, astylarNode: ast.key, source: comparison.source, revision: comparison.revision,
+            classification: 'parity-harness-defect', attribution: 'unresolved',
+            recommendedOwner: 'input audit authored typography and core registry-stage attribution',
+            justification: 'Browser computed and retained core text properties differ on directly mapped own-text nodes. Trace authored rules and resolution before assigning authoring or core fault; this is not proof of current pseudo-state paint.' });
+        }
+      }
+      comparisons.push(comparison);
+    }
+  }
+  return { schemaVersion: 1,
+    scope: 'Direct own-text nodes joined only by unique shared authored ID and identical trimmed text. All eleven typography properties retain browser computed, core normal/effective declarations, and core retained-text values separately. Missing mappings/fields and unequal retained values remain explicit; no inheritance or font fallback is reconstructed.',
+    comparisons, differences, gaps };
 }
 
 export function collectFullTreeInventory(cases, { root = process.cwd() } = {}) {

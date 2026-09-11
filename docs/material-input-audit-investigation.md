@@ -5,11 +5,58 @@ The machine report is generated separately from the full benchmark output.
 
 The report generator accepts an explicit evidence path so the fresh full run
 does not have to overwrite the preserved baseline. After that run completes,
-use `node scripts/run-material-input-audit.mjs --parity-report=artifacts/material-parity/complete-input-audit/latest-report.json`,
+use `node scripts/run-material-input-audit.mjs --parity-report=artifacts/material-parity/retained-text-complete-audit/latest-report.json`,
 then the same command with `--check`. Do not use `--allow-partial` for acceptance.
 Argument validation rejects unknown, empty, and repeated options (25/25 audit
 tests pass). A missing selected report fails rather than falling back to older
 evidence; the new run has not yet produced its final report.
+
+## Separate retained-typography review (2026-09-12)
+
+Audit schema 3 now compares the already captured core text-registry stage without
+merging it into normal/effective declaration snapshots. It consumes hash-verified,
+pooled full-tree evidence and joins only unique shared IDs with identical direct
+own-text. Eleven text properties retain all four values separately: browser
+computed, candidate normal, candidate effective, and candidate retained text.
+This also finds different retained values when declaration snapshots agree.
+
+The narrow new attribution covers static mapped properties omitted in both
+candidate declaration stages but present in the core registry and equal to the
+browser computed value. It requires matching mapped text, evidence version 2,
+core-source provenance and a revision. It classifies a demonstrated diagnostic
+stage mismatch, **not** a font authoring defect or overall input equivalence.
+Existing proven initial-value equivalents keep their classifications. Explicit
+unequal declarations, hover/current-state paint, unshared or duplicated IDs,
+different text, missing fields, and missing registry entries are not waived.
+No inheritance, font fallback, transformed text, or world coordinates are
+calculated in this report. Anonymous wrappers and plugin/control text still need
+their own mappings/stage evidence; missing entries are explicit acceptance gaps.
+
+Applied read-only to all 436 completed static checkpoints from
+`retained-text-complete-audit`, this attributes 35 signatures/234 occurrences;
+34 were previously unresolved. The mapped-style unresolved count is now 3,197
+(previously 3,231). The separate retained-text table contains 302 direct text-node
+observations and 1,209 unequal-property observations (111 unique family/element/
+property/value pairs). These are **not** 1,209 confirmed renderer defects: they
+include unreviewed normal/400 weight, start/left alignment, normal/zero spacing,
+font-stack representation, and genuinely different sizes/colors. For example,
+table text retains 16px while browser computed text is 14px; floating-label
+font-size comparisons still require reference-transform context.
+
+The new mapping/stage gaps are 436 cases with anonymous own-text, 1,136 missing or
+ambiguous shared text IDs, 84 different direct-text observations, and 18 absent
+core registry entries. Exact node paths remain in the report/inventory. These
+counts reveal incomplete attribution rather than claim new regressions; the
+full audit must review them before acceptance. Existing full-tree hashes passed
+with zero collection errors. No fixture, renderer, capture graph, served bundle,
+or threshold changed; the unfiltered full matrix continues using its pinned build.
+
+Focused audit tests 36/36 pass, including five new cases covering separate
+stages, hidden retained differences, rejected interaction/explicit overrides,
+mapping/provenance failures, and missing property evidence. The full harness
+command `node --test tests/material-parity/*.spec.mjs` passes **55/55**.
+The checked-in final
+JSON/Markdown deliverables remain pending complete capture and review.
 
 ## Durable full-matrix capture (2026-09-11)
 

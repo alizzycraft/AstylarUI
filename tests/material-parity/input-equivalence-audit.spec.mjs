@@ -4,6 +4,7 @@ import path from 'node:path';
 import {
   buildMaterialInputAudit,
   collectFullTreeInventory,
+  collectRetainedTypographyEvidence,
   parseMaterialInputAuditArguments,
   summarizeSupplementalBehavior,
   summarizeSupplementalOverlays,
@@ -413,6 +414,111 @@ test('legacy normal-only interaction styles cannot be attributed as authoring de
   const mixed = buildMaterialInputAudit(report);
   assert.equal(mixed.discrepancies.length, 2, 'different attribution evidence must not be pooled together');
   assert.equal(mixed.summary.unresolvedAttributions, 1);
+});
+
+function retainedTypographyReport() {
+  const typography = { fontFamily: 'Arial', fontSize: '24px', fontWeight: '400', fontStyle: 'normal',
+    lineHeight: '32px', letterSpacing: '0px', wordSpacing: '0px', textAlign: 'left',
+    textTransform: 'none', textDecoration: 'none', color: '#000000' };
+  const declarations = { ...typography };
+  delete declarations.fontSize;
+  delete declarations.lineHeight;
+  const raw = parityReport(typography, declarations);
+  const entry = raw.results[0], input = entry.styleInputs[0];
+  input.referenceStructure = { schemaVersion: 2, type: 'span', text: 'Inherited copy' };
+  input.astylarStructure = { schemaVersion: 2, type: 'span', ownText: 'Inherited copy', text: 'Inherited copy' };
+  input.astylarResolvedStyleEvidenceVersion = 2;
+  entry.inputTrees = {
+    reference: { schemaVersion: 1, styles: [typography], rules: [], errors: [], nodes: [
+      { key: 'frame/0', parent: 'frame', type: 'span', attributes: { id: 'core-root' }, ownText: 'Inherited copy',
+        style: 0, rules: [], pseudoElements: [] },
+    ] },
+    astylar: { schemaVersion: 1, resolvedStyleEvidenceVersion: 2, resolvedStyleSource: 'core-style-inspection',
+      resolvedStyleRevision: 4, rules: [], errors: [], nodes: [
+        { key: 'root/0', parent: 'root', authored: { id: 'core-root', type: 'span', textContent: 'Inherited copy' },
+          resolvedStyle: declarations, normalResolvedStyle: declarations, interactionResolvedStyle: declarations,
+          retainedText: { source: 'core-text-registry', style: typography } },
+      ] },
+  };
+  return raw;
+}
+
+test('attributes inherited typography only to the demonstrated diagnostic-stage mismatch', () => {
+  const report = buildMaterialInputAudit(retainedTypographyReport());
+  assert.equal(report.retainedTypography.comparisons.length, 1);
+  assert.deepEqual(report.retainedTypography.differences, []);
+  assert.deepEqual(report.retainedTypography.gaps, []);
+  for (const property of ['fontSize', 'lineHeight']) {
+    const finding = report.discrepancies.find((entry) => entry.property === property);
+    assert.equal(finding.classification, 'parity-harness-defect');
+    assert.equal(finding.attribution, 'reviewed-stage-mismatch');
+    assert.equal(finding.astylar, undefined, 'must not substitute the retained value into declarations');
+    assert.equal(finding.reviewEvidence.source, 'core-text-registry');
+    assert.equal(finding.reviewEvidence.values.retained, finding.reference);
+  }
+  const comparison = report.retainedTypography.comparisons[0];
+  assert.equal(comparison.properties.fontSize.normal, undefined);
+  assert.equal(comparison.properties.fontSize.retained, '24px');
+  assert.equal(comparison.revision, 4);
+  assert.equal(comparison.currentPseudoStatePaintVerified, false);
+});
+
+test('retained typography also exposes mismatches concealed by matching declarations', () => {
+  const raw = retainedTypographyReport();
+  const node = raw.results[0].inputTrees.astylar.nodes[0];
+  node.retainedText.style = { ...node.retainedText.style, fontFamily: 'Arial, sans-serif', fontSize: '20px' };
+  const report = buildMaterialInputAudit(raw);
+  assert.deepEqual(report.retainedTypography.differences.map((entry) => entry.property), ['fontFamily', 'fontSize']);
+  assert.ok(report.retainedTypography.differences.every((entry) => entry.attribution === 'unresolved'));
+  assert.equal(report.discrepancies.find((entry) => entry.property === 'fontSize').attribution, 'unresolved');
+  assert.ok(validateMaterialInputAudit(report).some((error) => error.includes('retained typography differences')));
+});
+
+test('typography stage attribution cannot waive interaction, mismapped, or explicit declaration differences', () => {
+  const mutations = [
+    (entry) => { entry.state = 'hover'; },
+    (entry) => { entry.styleInputs[0].astylarResolvedStyleEvidenceVersion = 1; },
+    (entry) => { entry.styleInputs[0].astylarStructure.ownText = 'Another copy'; },
+    (entry) => { entry.styleInputs[0].astylar.fontSize = '18px'; },
+  ];
+  for (const mutate of mutations) {
+    const raw = retainedTypographyReport();
+    mutate(raw.results[0]);
+    assert.notEqual(buildMaterialInputAudit(raw).discrepancies.find((entry) => entry.property === 'fontSize').attribution,
+      'reviewed-stage-mismatch');
+  }
+});
+
+test('retained typography rejects missing or ambiguous text mapping and untrusted stage provenance', () => {
+  const mutations = [
+    (entry) => { entry.inputTrees.astylar.resolvedStyleEvidenceVersion = 1; },
+    (entry) => { entry.inputTrees.astylar.resolvedStyleSource = 'projected-mesh'; },
+    (entry) => { delete entry.inputTrees.astylar.resolvedStyleRevision; },
+    (entry) => { entry.inputTrees.astylar.nodes[0].retainedText.source = 'fixture-inheritance'; },
+    (entry) => { delete entry.inputTrees.astylar.nodes[0].retainedText; },
+    (entry) => { entry.inputTrees.astylar.nodes.push(entry.inputTrees.astylar.nodes[0]); },
+    (entry) => { entry.inputTrees.reference.nodes[0].ownText = ''; },
+    (entry) => { entry.inputTrees.reference.nodes[0].ownText = 'INHERITED COPY'; },
+    (entry) => { delete entry.inputTrees.reference.nodes[0].attributes.id; },
+    (entry) => { entry.inputTrees.astylar.errors.push('capture failed'); },
+  ];
+  for (const mutate of mutations) {
+    const raw = retainedTypographyReport();
+    mutate(raw.results[0]);
+    const evidence = collectRetainedTypographyEvidence(raw.results, collectFullTreeInventory(raw.results));
+    assert.equal(evidence.comparisons.length, 0);
+    assert.ok(evidence.gaps.length > 0);
+  }
+});
+
+test('retained typography retains missing property fields as gaps instead of accepting omitted defaults', () => {
+  const raw = retainedTypographyReport();
+  raw.results[0].inputTrees.astylar.nodes[0].retainedText.style = { fontSize: '24px' };
+  const report = buildMaterialInputAudit(raw);
+  assert.equal(report.retainedTypography.gaps.length, 10);
+  assert.ok(validateMaterialInputAudit(report).some((error) => error.includes('retained typography mappings')));
+  delete report.retainedTypography;
+  assert.ok(validateMaterialInputAudit(report).includes('missing retained typography stage report'));
 });
 
 test('full-tree state provenance survives pooling and legacy captures stay incomplete', () => {
