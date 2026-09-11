@@ -684,6 +684,25 @@ export function reviewedTemplateTextMappings(family, referenceTree, astylarTree)
     reference: [['div', 'sort-primary', 'mat-sort'], ['div', 'sort-trigger', 'mat-sort-header'], ['div', null, 'mat-sort-header-container'], ['div', null, 'mat-sort-header-content']],
     astylar: [['div', 'sort-primary', 'sort-header'], ['div', 'sort-trigger', 'sort-trigger'], ['span', 'sort-label']],
   });
+  if (family === 'button-toggle') paths.push(...['one', 'two'].map((name) => ({
+    element: `button-toggle-${name}-label`,
+    reference: [['mat-button-toggle-group', 'button-toggle-primary', 'mat-button-toggle-group'], ['mat-button-toggle', `button-toggle-${name}`, 'mat-button-toggle'], ['button', `button-toggle-${name}-button`, 'mat-button-toggle-button'], ['span', null, 'mat-button-toggle-label-content']],
+    astylar: [['div', 'button-toggle-primary'], ['div', `button-toggle-${name}`, 'button-toggle-option'], ['span', `button-toggle-${name}-label`]],
+  })));
+  if (family === 'chips') paths.push(...[0, 1].map((index) => ({
+    element: `chip-${index}-label`, referenceEmptyFocusChild: true,
+    reference: [['mat-chip-listbox', 'chips-primary', 'mat-mdc-chip-listbox'], ['div', null, 'mdc-evolution-chip-set__chips'], ['mat-chip-option', `chip-${index}`, 'mat-mdc-chip-option'], ['span', null, 'mdc-evolution-chip__cell--primary'], ['button', null, 'mdc-evolution-chip__action--primary'], ['span', null, 'mdc-evolution-chip__text-label']],
+    astylar: [['div', 'chips-primary', 'row'], ['div', `chip-${index}`, 'chip'], ['span', `chip-${index}-label`, 'chip-label']],
+  })));
+  if (family === 'paginator') paths.push(...[
+    ['paginator-size', 'page-size', 'page-size-label', /^mat-paginator-page-size-label-\d+$/],
+    ['paginator-page-size', 'page-size', 'page-size-value', null],
+    ['paginator-range', 'range-actions', 'range-label', null],
+  ].map(([element, group, label, id]) => ({
+    element,
+    reference: [['mat-paginator', 'paginator-primary', 'mat-mdc-paginator'], ['div', null, 'mat-mdc-paginator-outer-container'], ['div', null, 'mat-mdc-paginator-container'], ['div', null, `mat-mdc-paginator-${group}`], ['div', id, `mat-mdc-paginator-${label}`]],
+    astylar: [['div', 'paginator-primary', 'paginator'], ['div', 'paginator-container', 'paginator-container'], ['div', group === 'page-size' ? 'paginator-page-size-group' : 'paginator-range-actions', `paginator-${group}`], ['span', element]],
+  })));
   if (family === 'expansion') paths.push({
     element: 'expansion-content-label',
     reference: [['mat-expansion-panel', 'expansion-primary', 'mat-expansion-panel'], ['div', null, 'mat-expansion-panel-content-wrapper'], ['div', /^cdk-accordion-child-\d+$/, 'mat-expansion-panel-content'], ['div', null, 'mat-expansion-panel-body'], ['p', 'expansion-content']],
@@ -725,13 +744,23 @@ export function reviewedTemplateTextMappings(family, referenceTree, astylarTree)
     // reviewed path and has no own text (the sidenav's generated inner div).
     const wrapperAlias = referenceAliasOwners.length === 1 && reference.slice(0, -1).includes(referenceAliasOwners[0]) &&
       !referenceAliasOwners[0].ownText?.trim();
+    const referenceChildren = referenceTree.nodes.filter((node) => node.parent === ref.key);
+    const focusChild = referenceChildren[0];
+    const knownEmptyFocusChild = path.referenceEmptyFocusChild && referenceChildren.length === 1 &&
+      focusChild.type === 'span' && !focusChild.attributes?.id && !focusChild.ownText?.trim() &&
+      String(focusChild.attributes?.class ?? '').split(/\s+/).filter(Boolean).sort().join(' ') ===
+        'mat-focus-indicator mat-mdc-chip-primary-focus-indicator' &&
+      referenceTree.nodes.filter((node) => node.key === focusChild.key).length === 1 &&
+      !referenceTree.nodes.some((node) => node.parent === focusChild.key);
     if (!ref.ownText?.trim() || ref.ownText.trim() !== ast.authored.textContent?.trim() ||
-        (referenceAliasOwners.length && !wrapperAlias) || referenceTree.nodes.some((node) => node.parent === ref.key) ||
+        (referenceAliasOwners.length && !wrapperAlias) ||
+        (path.referenceEmptyFocusChild ? !knownEmptyFocusChild : referenceChildren.length > 0) ||
         astylarTree.nodes.some((node) => node.parent === ast.key)) continue;
     pairs.push({ kind: 'reviewed-showcase-template-text', element: path.element,
       referenceNode: ref.key, astylarNode: ast.key,
       referencePath: reference.map((node) => node.key), astylarPath: astylar.map((node) => node.key),
-      justification: 'The paired reference.component.ts and astylar.component.ts templates identify this text through a unique component anchor and exact direct-child tag/ID/class path. Both terminal nodes have identical direct own-text and no element children. Generated Material IDs are checked by shape and uniqueness, not their unstable numeric suffix. A same-ID reference wrapper is allowed only on that path with no own text. This establishes text-owner identity only; wrapper, layout, typography, paint and interaction differences remain subject to separate comparison.' });
+      referenceDecorationNodes: knownEmptyFocusChild ? [focusChild.key] : [],
+      justification: 'The paired reference.component.ts and astylar.component.ts templates identify this text through a unique component anchor and exact direct-child tag/ID/class path. Both text owners have identical direct own-text. They have no element children except the explicitly identified, unique, text-free chip focus-indicator leaf when required by that reviewed template. Generated Material IDs are checked by shape and uniqueness, not their unstable numeric suffix. A same-ID reference wrapper is allowed only on that path with no own text. This establishes text-owner identity only; wrapper, decoration, layout, typography, paint and interaction differences remain subject to separate comparison.' });
   }
   return pairs;
 }

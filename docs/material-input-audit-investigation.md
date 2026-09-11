@@ -11,6 +11,39 @@ Argument validation rejects unknown, empty, and repeated options (25/25 audit
 tests pass). A missing selected report fails rather than falling back to older
 evidence; the new run has not yet produced its final report.
 
+## Chip, button-toggle and paginator text ownership (2026-09-12)
+
+The retained-typography audit now maps both chip labels, both button-toggle
+labels, and the paginator's page-size caption, value and range. The paths use
+the paired template IDs and exact Material wrapper classes. The paginator's
+generated caption ID is checked by shape and uniqueness; direct text is compared
+after trimming, as in the existing identity contract. This does not accept
+whitespace-layout differences.
+
+Material chip labels contain one empty focus-indicator span. The chip-only
+mapping requires exactly that span, its exact two classes, no ID, no direct
+text and no descendants. Its node remains in the full inventory and is recorded
+as `referenceDecorationNodes` on the mapping. Allowing this known text-free
+decoration establishes only the parent text's identity; it does not accept the
+indicator's paint, layout or focus behavior. Unknown, duplicated, nonempty or
+nested children are rejected, as is an absent required focus indicator.
+
+Across all 436 static cases this adds 84 mappings and comparisons, exposing 204
+additional property differences: chip font family/weight/tracking (72),
+button-toggle font family/weight/tracking/alignment (96), and paginator alignment
+(36). Both chip and button-toggle reference labels compute weight 500 while the
+candidate retains 400. Chip tracking computes .096px versus retained zero. These
+differences remain unresolved until their authored and resolution evidence is
+attributed; visual similarity does not excuse them.
+
+Static diagnostic totals: 1,354 retained comparisons, 1,064 reviewed mappings,
+3,654 property differences with 2,710 unresolved, and 258 gaps (144 anonymous-node
+case gaps, 60 missing/ambiguous IDs, 30 missing retained entries, 24 direct-text
+mismatches). The full matrix remains in progress. `node --test
+tests/material-parity/*.spec.mjs` passes 70/70 tests, including changed identity
+and ownership controls across all nine reviewed families. No fixture, renderer,
+capture module, production bundle or threshold was modified.
+
 ## Sort, expansion and sidenav wrapper text ownership (2026-09-12)
 
 Three more explicit paired-template paths now identify sort header content,

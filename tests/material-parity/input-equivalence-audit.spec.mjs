@@ -600,12 +600,51 @@ function templateTypographyReport(family) {
     add('reference', 'r/n/0', 'r/n', 'div', undefined, 'mat-drawer-inner-container', 'Navigation');
     add('astylar', 'a', 'root', 'div', 'sidenav-primary', 'sidenav-container');
     add('astylar', 'a/n', 'a', 'aside', 'sidenav-nav', 'sidenav', 'Navigation');
+  } else if (family === 'button-toggle') {
+    add('reference', 'r', null, 'mat-button-toggle-group', 'button-toggle-primary', 'mat-button-toggle-group');
+    add('astylar', 'a', 'root', 'div', 'button-toggle-primary');
+    for (const [name, text] of [['one', 'List'], ['two', 'Grid']]) {
+      add('reference', `r/${name}`, 'r', 'mat-button-toggle', `button-toggle-${name}`, 'mat-button-toggle');
+      add('reference', `r/${name}/b`, `r/${name}`, 'button', `button-toggle-${name}-button`, 'mat-button-toggle-button');
+      add('reference', `r/${name}/b/0`, `r/${name}/b`, 'span', undefined, 'mat-button-toggle-label-content', text);
+      add('astylar', `a/${name}`, 'a', 'div', `button-toggle-${name}`, 'button-toggle-option');
+      add('astylar', `a/${name}/0`, `a/${name}`, 'span', `button-toggle-${name}-label`, undefined, text);
+    }
+  } else if (family === 'chips') {
+    add('reference', 'r', null, 'mat-chip-listbox', 'chips-primary', 'mat-mdc-chip-listbox');
+    add('reference', 'r/w', 'r', 'div', undefined, 'mdc-evolution-chip-set__chips');
+    add('astylar', 'a', 'root', 'div', 'chips-primary', 'row');
+    for (const [index, text] of ['Angular', 'Astylar'].entries()) {
+      add('reference', `r/w/${index}`, 'r/w', 'mat-chip-option', `chip-${index}`, 'mat-mdc-chip-option');
+      add('reference', `r/w/${index}/c`, `r/w/${index}`, 'span', undefined, 'mdc-evolution-chip__cell--primary');
+      add('reference', `r/w/${index}/c/b`, `r/w/${index}/c`, 'button', undefined, 'mdc-evolution-chip__action--primary');
+      add('reference', `r/w/${index}/c/b/0`, `r/w/${index}/c/b`, 'span', undefined, 'mdc-evolution-chip__text-label', text);
+      add('reference', `r/w/${index}/c/b/0/f`, `r/w/${index}/c/b/0`, 'span', undefined, 'mat-mdc-chip-primary-focus-indicator mat-focus-indicator');
+      add('astylar', `a/${index}`, 'a', 'div', `chip-${index}`, 'chip');
+      add('astylar', `a/${index}/0`, `a/${index}`, 'span', `chip-${index}-label`, 'chip-label', text);
+    }
+  } else if (family === 'paginator') {
+    add('reference', 'r', null, 'mat-paginator', 'paginator-primary', 'mat-mdc-paginator');
+    add('reference', 'r/w', 'r', 'div', undefined, 'mat-mdc-paginator-outer-container');
+    add('reference', 'r/w/c', 'r/w', 'div', undefined, 'mat-mdc-paginator-container');
+    add('reference', 'r/w/c/p', 'r/w/c', 'div', undefined, 'mat-mdc-paginator-page-size');
+    add('reference', 'r/w/c/p/0', 'r/w/c/p', 'div', 'mat-paginator-page-size-label-73', 'mat-mdc-paginator-page-size-label', ' Items per page: ');
+    add('reference', 'r/w/c/p/1', 'r/w/c/p', 'div', undefined, 'mat-mdc-paginator-page-size-value', '10');
+    add('reference', 'r/w/c/r', 'r/w/c', 'div', undefined, 'mat-mdc-paginator-range-actions');
+    add('reference', 'r/w/c/r/0', 'r/w/c/r', 'div', undefined, 'mat-mdc-paginator-range-label', ' 1 – 10 of 100 ');
+    add('astylar', 'a', 'root', 'div', 'paginator-primary', 'paginator');
+    add('astylar', 'a/c', 'a', 'div', 'paginator-container', 'paginator-container');
+    add('astylar', 'a/c/p', 'a/c', 'div', 'paginator-page-size-group', 'paginator-page-size');
+    add('astylar', 'a/c/p/0', 'a/c/p', 'span', 'paginator-size', undefined, 'Items per page:');
+    add('astylar', 'a/c/p/1', 'a/c/p', 'span', 'paginator-page-size', undefined, '10');
+    add('astylar', 'a/c/r', 'a/c', 'div', 'paginator-range-actions', 'paginator-range-actions');
+    add('astylar', 'a/c/r/0', 'a/c/r', 'span', 'paginator-range', undefined, '1 – 10 of 100');
   }
   return raw;
 }
 
 test('reviewed template text paths close only identity gaps and retain unequal typography', () => {
-  for (const [family, count] of [['tree', 3], ['grid-list', 2], ['badge', 1], ['sort', 1], ['expansion', 1], ['sidenav', 1]]) {
+  for (const [family, count] of [['tree', 3], ['grid-list', 2], ['badge', 1], ['sort', 1], ['expansion', 1], ['sidenav', 1], ['button-toggle', 2], ['chips', 2], ['paginator', 3]]) {
     const raw = templateTypographyReport(family);
     const before = structuredClone(raw);
     const report = buildMaterialInputAudit(raw);
@@ -644,7 +683,7 @@ test('template identity rejects path, uniqueness, text, child and ID conflicts i
     (ref) => { ref.nodes[0].attributes.id = 'other-anchor'; },
     (_ref, ast) => { ast.nodes[0].authored.id = 'other-anchor'; },
   ];
-  for (const family of ['tree', 'grid-list', 'badge', 'sort', 'expansion', 'sidenav']) {
+  for (const family of ['tree', 'grid-list', 'badge', 'sort', 'expansion', 'sidenav', 'button-toggle', 'chips', 'paginator']) {
     for (const mutate of mutations) {
       const { reference, astylar } = templateTypographyReport(family).results[0].inputTrees;
       const mapping = reviewedTemplateTextMappings(family, reference, astylar)[0];
@@ -672,6 +711,24 @@ test('same-ID wrapper aliases cannot hide their own text or unrelated competing 
   const { reference, astylar } = templateTypographyReport('expansion').results[0].inputTrees;
   reference.nodes[2].attributes.id = 'unrelated-93';
   assert.deepEqual(reviewedTemplateTextMappings('expansion', reference, astylar), []);
+});
+
+test('chip text ownership only permits its exact empty focus-indicator leaf', () => {
+  for (const mutate of [
+    (ref, child) => { child.ownText = 'Additional text'; },
+    (ref, child) => { child.attributes.id = 'other'; },
+    (ref, child) => { child.attributes.class += ' unknown'; },
+    (ref, child) => { child.type = 'button'; },
+    (ref, child) => { ref.nodes.push({ ...child, key: 'another-child' }); },
+    (ref, child) => { ref.nodes.push({ key: 'nested', parent: child.key, type: 'span', attributes: {}, ownText: '' }); },
+    (ref, child) => { ref.nodes = ref.nodes.filter((node) => node !== child); },
+  ]) {
+    const { reference, astylar } = templateTypographyReport('chips').results[0].inputTrees;
+    const mapping = reviewedTemplateTextMappings('chips', reference, astylar)[0];
+    assert.equal(mapping.referenceDecorationNodes.length, 1);
+    mutate(reference, reference.nodes.find((node) => node.key === mapping.referenceDecorationNodes[0]));
+    assert.ok(!reviewedTemplateTextMappings('chips', reference, astylar).some((entry) => entry.element === mapping.element));
+  }
 });
 
 function treeFontTypographyReport(size = '14.4px') {
