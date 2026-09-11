@@ -140,6 +140,16 @@ export const sourceAuditDefinitions = Object.freeze([
     focusedProof: 'examples/material-showcase/src/app/input-equivalence-proof.spec.ts: inherited typography remains observable in pre-projection style evidence',
   }),
   Object.freeze({
+    id: 'audit-control-value-label-typography-unobserved',
+    introducedBy: '7de0f26 retained-text inspection reads the ordinary text registry only',
+    file: 'src/lib/astylar.ts',
+    pattern: String.raw`this\.textInteractionRegistry\.getByElementId\(element\.id\)\?\.style`,
+    classification: 'parity-harness-defect',
+    owner: 'core control/text paint inspection and Material input evidence collector',
+    justification: 'A package-root browser reduction creates an enabled button label mesh with value:Action but inspectResolvedStyles has no retainedText entry. The same styles and visible text authored with textContent have an ordinary registry entry and pass the existing typography assertions. ButtonManager creates its label texture through TextRenderingService, while ordinary text registration is conditional on textContent. Capture the actual parsed control texture inputs at their core owner with provenance; never substitute declarations, infer values from projected meshes, or change fixture value to textContent to satisfy the audit. The passing textContent control does not prove that its registry entry describes every control texture.',
+    focusedProof: 'examples/material-showcase/src/app/input-equivalence-proof.spec.ts: rendered button labels authored with value / textContent',
+  }),
+  Object.freeze({
     id: 'fixture-demo-block-flow-replaced',
     introducedBy: '2f44011 feat(example): add Material component showcase',
     file: 'examples/material-showcase/src/app/astylar.component.ts',

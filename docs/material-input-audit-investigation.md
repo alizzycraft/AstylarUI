@@ -11,6 +11,43 @@ Argument validation rejects unknown, empty, and repeated options (25/25 audit
 tests pass). A missing selected report fails rather than falling back to older
 evidence; the new run has not yet produced its final report.
 
+## Control-value labels are outside the retained typography snapshot (2026-09-12)
+
+A new package-root browser reduction isolates an inspection gap: a button
+authored with `value: 'Action'` creates an enabled, nonzero-visibility label mesh
+and has matching button-box geometry, but `inspectResolvedStyles()` returns no
+retained text inputs. The missing values are font-size 16px, line-height 24px and
+tracking .5px. The control using `textContent: 'Action'` with the same styles and
+visible content passes these assertions. The reference uses button text because
+HTML button `value` denotes submission data, whereas the current Astylar button
+manager uses it as its label. This is disclosed semantic translation, not a
+different visual input.
+
+Source trace: `ButtonManager.createButton` chooses value before textContent and
+`createLabelMesh` calls `TextRenderingService.renderTextToTexture`. That service
+parses the actual text style before painting, but the snapshot only consults
+`TextInteractionRegistry`. Ordinary element text creation is conditional on
+textContent and registers there; the value-only control texture does not. Thus
+the passing textContent control must not be read as proof of complete texture
+inspection. Neither missing snapshot data nor registry presence alone proves a
+glyph-rendering failure or success.
+
+The narrow audit-instrumentation owner is core text/control paint: retain the
+actual parsed texture inputs with an explicit source, expose detached evidence
+after settlement, and verify cache reuse, updates and disposal. Do not manufacture
+inherited values in the collector, inspect projected sizes as inputs, or replace
+fixture values with textContent. The source inventory records this as a
+parity-harness coverage defect, bringing the source-finding count to 51.
+
+`npm --prefix examples/material-showcase test -- --watch=false --browsers=ChromeHeadless --include=src/app/input-equivalence-proof.spec.ts`
+repeatedly executes 34 cases: 13 pass and 21 fail, including the new missing-evidence proof
+and the 20 previously documented equal-input failures. This remains honest
+failing diagnostic evidence, not an accepted parity run. The initial textContent-
+only control passed (33 cases, 13 pass/20 fail), which prompted the value-path
+reduction rather than an incorrect blanket conclusion about all button labels.
+`npm run parity:harness:check` passes 91/91 tests. No core implementation or
+showcase fixture was changed.
+
 ## Stepper number and current-panel text ownership (2026-09-12)
 
 The reviewed text mapping now follows the exact Material step-header paths to

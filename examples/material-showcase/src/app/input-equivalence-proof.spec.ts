@@ -7,7 +7,17 @@ import { Astylar, provideAstylar, type DOMElement, type SiteData } from 'astylar
 // to Astylar. These reductions intentionally contain no Material component,
 // measured height table, DPR correction, or duplicate position calculation.
 describe('Material audit: equivalent CSS input reductions', () => {
-  const cases: Array<{ name: string; site: SiteData; ids: string[]; horizontalOnly?: string[]; loadedCss?: boolean; resolved?: Array<{ id: string; properties: string[]; stage?: 'retainedText' }> }> = [
+  const cases: Array<{ name: string; site: SiteData; ids: string[]; horizontalOnly?: string[]; loadedCss?: boolean; controlLabels?: string[]; resolved?: Array<{ id: string; properties: string[]; stage?: 'retainedText' }> }> = [
+    ...(['value', 'textContent'] as const).map((textField) => ({
+      name: `rendered button labels authored with ${textField} expose pre-paint typography in core inspection`,
+      site: {
+        root: { children: [{ type: 'button', id: 'inspected-button', [textField]: 'Action' }] },
+        styles: [{ selector: '#inspected-button', display: 'block', width: '160px', height: '48px', fontFamily: 'Arial', fontSize: '16px', lineHeight: '24px', letterSpacing: '0.5px', color: '#123456', background: '#eeeeee', textAlign: 'center' }],
+      } as SiteData,
+      ids: ['inspected-button'],
+      controlLabels: ['inspected-button'],
+      resolved: [{ id: 'inspected-button', properties: ['fontSize', 'lineHeight', 'letterSpacing'], stage: 'retainedText' as const }],
+    })),
     ...[
       { name: '1 parent transform', transform: 'translateY(-50%) scale(1)' },
       { name: '0.75 parent transform', transform: 'translateY(-50%) scale(.75)' },
@@ -326,6 +336,9 @@ describe('Material audit: equivalent CSS input reductions', () => {
             if (borderSpacing !== undefined) element.style.borderSpacing = `${borderSpacing}px`;
           }
           if (child.textContent !== undefined) element.textContent = String(child.textContent);
+          // Astylar's button value is its visible label, whereas HTML button
+          // value is submission data. Express the same visible content in DOM.
+          if (child.type === 'button' && child.textContent === undefined && child.value !== undefined) element.textContent = String(child.value);
           parent.append(element);
           append(element, child.children ?? []);
         }
@@ -334,12 +347,25 @@ describe('Material audit: equivalent CSS input reductions', () => {
       const surface = TestBed.inject(Astylar).mount(canvas, site, { diagnostics: { logLevel: 'silent' } });
       try {
         await surface.whenSettled();
+        for (const id of entry.controlLabels ?? []) {
+          // Output presence distinguishes missing inspection evidence from a
+          // control that never created a label. Never use its projected size
+          // or the authored rule as a substitute for the actual paint inputs.
+          const label = surface.scene.getMeshByName(`buttonLabel_${id}`);
+          expect(label).withContext(`${id} rendered control label`).not.toBeNull();
+          expect(label?.isEnabled()).withContext(`${id} enabled control label`).toBeTrue();
+          expect(label?.visibility).withContext(`${id} control label visibility`).toBeGreaterThan(0);
+        }
         if (entry.resolved) {
           const snapshot = surface.inspectResolvedStyles();
           const normalize = (value: unknown) => String(value ?? '').trim().replace(/\b0px\b/g, '0');
           for (const { id, properties, stage } of entry.resolved) {
             const inspected = snapshot.elements.find((element) => element.id === id)!;
-            if (stage === 'retainedText') expect(inspected.retainedText?.source).toBe('core-text-registry');
+            if (stage === 'retainedText') {
+              if (entry.controlLabels?.includes(id)) {
+                expect(inspected.retainedText).withContext(`${id} actual control text paint inputs`).toBeDefined();
+              } else expect(inspected.retainedText?.source).toBe('core-text-registry');
+            }
             const actual = stage === 'retainedText' ? inspected.retainedText?.style : inspected.normal;
             const expected = doc.defaultView!.getComputedStyle(doc.getElementById(id)!);
             for (const property of properties) {
