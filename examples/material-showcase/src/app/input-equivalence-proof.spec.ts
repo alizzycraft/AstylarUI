@@ -8,6 +8,39 @@ import { Astylar, type DOMElement, type SiteData } from 'astylarui';
 // measured height table, DPR correction, or duplicate position calculation.
 describe('Material audit: equivalent CSS input reductions', () => {
   const cases: Array<{ name: string; site: SiteData; ids: string[]; resolved?: Array<{ id: string; properties: string[]; stage?: 'retainedText' }> }> = [
+    ...(['block', 'flex'] as const).map((display) => ({
+      name: `opposing absolute insets determine auto size for a text-bearing ${display} box`,
+      site: {
+        root: { children: [{ type: 'div', id: 'inset-parent', children: [
+          { type: 'div', id: 'inset-child', textContent: 'Inset text' },
+        ] }] },
+        styles: [
+          { selector: '#inset-parent', position: 'relative', width: '280px', height: '100px', fontFamily: 'Arial', fontSize: '16px', lineHeight: '20px' },
+          { selector: '#inset-child', position: 'absolute', display, top: '10px', bottom: '15px', left: '12px', right: '18px', background: '#dddddd' },
+        ],
+      } as SiteData,
+      ids: ['inset-parent', 'inset-child'],
+    })),
+    // Retain the expression cases even if the independent literal controls pass.
+    // Direct StyleRule calc() is a documented limitation; these controls isolate
+    // the downstream positioning path, not a proposed fixture-side resolver.
+    ...[280, 480].flatMap((width) => [false, true].map((literal) => ({
+      name: `positioned grid-list tiles preserve a one-pixel gutter at ${width}px with ${literal ? 'literal control values' : 'original calc expressions'}`,
+      site: {
+        root: { children: [{ type: 'div', id: 'tile-list', children: [
+          { type: 'div', id: 'tile-one', class: 'tile', children: [{ type: 'div', id: 'tile-one-content', class: 'tile-content', textContent: 'One' }] },
+          { type: 'div', id: 'tile-two', class: 'tile', children: [{ type: 'div', id: 'tile-two-content', class: 'tile-content', textContent: 'Two' }] },
+        ] }] },
+        styles: [
+          { selector: '#tile-list', position: 'relative', display: 'block', width: `${width}px`, height: literal ? '80px' : 'calc(80px)', fontFamily: 'Arial', fontSize: '16px', lineHeight: '20px' },
+          { selector: '.tile', position: 'absolute', display: 'block', top: '0', width: literal ? `${width / 2 - .5}px` : 'calc(50% - 0.5px)', height: literal ? '80px' : 'calc(80px)', overflow: 'hidden', background: '#dddddd' },
+          { selector: '#tile-one', left: '0' },
+          { selector: '#tile-two', left: literal ? `${width / 2 + .5}px` : 'calc(50% + 0.5px)' },
+          { selector: '.tile-content', position: 'absolute', top: '0', bottom: '0', left: '0', right: '0', display: 'flex', alignItems: 'center', justifyContent: 'center' },
+        ],
+      } as SiteData,
+      ids: ['tile-list', 'tile-one', 'tile-two', 'tile-one-content', 'tile-two-content'],
+    }))),
     {
       name: 'side drawer uses containing-block insets and content margin without a flex replacement',
       site: {

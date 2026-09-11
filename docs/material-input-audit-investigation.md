@@ -51,6 +51,61 @@ No reference input, fixture style, case, acceptance threshold, or renderer behav
 changed in this increment. Fully resolved style coverage and substantive review
 of every material difference remain separate unfinished requirements.
 
+## Grid-list: expression boundary and positioned height (2026-09-11)
+
+Fresh static captures retain Material's actual `.mat-grid-list` block container
+and absolute tiles. Tile one has width `calc(50% - 0.5px)` and left `0`; tile two
+has the same width and left `calc(50% + 0.5px)`. Height is `calc(80px)`. These
+inputs produce a 1px gutter. The candidate instead authors `display:grid`,
+`gridTemplateColumns:'1fr 1fr'`, `gap:'0'`, and relatively positioned flex tiles.
+The substitution dates to initial showcase commit `2f44011`.
+
+New identical-input reductions retain those expressions at 280px and 480px
+container widths. Both fail: candidate height is 360px rather than 80px, each
+tile takes the full container width, and the second starts at zero. This is the
+documented **direct StyleRule calc-resolution limitation**, not automatically a
+defect in claimed function support. `docs/compatibility/html-css.md` and the
+capability catalog distinguish direct authoring from the opt-in loaded-document
+CSS resolver. `ElementDimensionService` leaves dimensions at their provisional
+parent values when `parseFloat('calc(...)')` is NaN. Any eventual solution must
+use a verified core-owned resolution path or general expression support, not
+fixture-specific arithmetic.
+
+Separate literal controls use the mathematically corresponding lengths on both
+sides. They are diagnostic controls, not replacements for the expression cases
+or proposed showcase changes. The list and both outer tile border boxes now
+match, including the 1px gutter. However, the text-bearing content with absolute
+top/bottom/left/right zero is only 20px high instead of 80px on Astylar.
+
+A further reduction removes Material and calc entirely. A text-bearing absolute
+box inside a 280x100px parent has top:10px, bottom:15px, left:12px, right:18px.
+Both ordinary block and flex variants correctly match the horizontal edges and
+top, but their bottom is 30px instead of 85px: intrinsic text height 20px is used
+instead of the 75px opposing-inset height. This confirms a separate **core
+positioned auto-height defect**. The dimension service has a horizontal
+`positioned-insets` width branch, but no equivalent vertical branch before its
+intrinsic-text fallback and min/max constraints. Subsequent block/flex intrinsic
+resizing must also preserve positioned used-height ownership; merely patching
+the initial mesh size would be insufficient. All of this arithmetic precedes
+Babylon projection. The audit does not assert the first revision that introduced
+the missing vertical rule.
+
+The existing zero-inset empty drawer proof remains valid for its measured boxes,
+but cannot establish general opposing-inset support: provisional parent height
+can coincidentally match an empty, zero-inset box. The nonzero-inset text-bearing
+reduction exposes that distinction. Keep both, with their different scopes.
+
+Verification command:
+`npm --prefix examples/material-showcase test -- --watch=false --browsers=ChromeHeadless --include=src/app/input-equivalence-proof.spec.ts`.
+The completed fifteen-case suite ran twice with **8 passed, 7 failed**. The seven
+failures are the two original-expression grid-list cases, two literal controls
+with incorrect content height, two opposing-inset reductions, and the previously
+recorded divider defect. Earlier eight passing reductions remain passing.
+No tolerance, reference expression, authored fixture, or core implementation
+was changed. The same existing NG0914 and text-bearing-main advisory warnings
+remain. These are intentional retained diagnostic failures, not a green release
+claim. The full capture continues independently against its pinned bundle.
+
 ## Sidenav equivalent-input reduction (2026-09-11)
 
 The freshly checkpointed twelve static sidenav cases show an authored
