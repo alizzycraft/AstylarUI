@@ -9,6 +9,35 @@ import { Astylar, type DOMElement, type SiteData } from 'astylarui';
 describe('Material audit: equivalent CSS input reductions', () => {
   const cases: Array<{ name: string; site: SiteData; ids: string[] }> = [
     {
+      name: 'toolbar content widths and a flex spacer require no measured constants',
+      site: {
+        root: { children: [{ type: 'div', id: 'toolbar', children: [
+          { type: 'span', id: 'title', textContent: 'Material workspace' },
+          { type: 'div', id: 'spacer' },
+          { type: 'span', id: 'action', textContent: 'Action' },
+        ] }] },
+        styles: [
+          { selector: '#toolbar', width: '360px', height: '56px', padding: '0 16px', display: 'flex', alignItems: 'center', fontFamily: 'Arial', fontSize: '16px', lineHeight: '24px', whiteSpace: 'nowrap', background: '#eeeeee' },
+          { selector: '#title, #action', display: 'block', flexShrink: '0', background: '#cccccc' },
+          { selector: '#spacer', flexGrow: '1', height: '1px', background: '#aaaaaa' },
+          { selector: '#action', padding: '0 12px' },
+        ],
+      }, ids: ['toolbar', 'title', 'action'],
+    },
+    {
+      name: 'stepper connector flexes between headers without breakpoint percentages',
+      site: {
+        root: { children: [{ type: 'div', id: 'header', children: [
+          { type: 'div', id: 'first-step' }, { type: 'div', id: 'connector' }, { type: 'div', id: 'last-step' },
+        ] }] },
+        styles: [
+          { selector: '#header', width: '360px', display: 'flex', alignItems: 'center', background: '#eeeeee' },
+          { selector: '#first-step, #last-step', width: '100px', height: '72px', flexShrink: '0', background: '#cccccc' },
+          { selector: '#connector', flex: 'auto', height: '0', minWidth: '32px', margin: '0 -16px', borderWidth: '1px 0 0', borderStyle: 'solid', borderColor: '#6750a4' },
+        ],
+      }, ids: ['header', 'first-step', 'connector', 'last-step'],
+    },
+    {
       name: 'content determines a padded flex container height',
       site: {
         root: { children: [{ type: 'div', id: 'flow', children: [
@@ -70,6 +99,7 @@ describe('Material audit: equivalent CSS input reductions', () => {
         for (const child of children) {
           const element = doc.createElement(child.type);
           element.id = child.id!;
+          if (child.textContent !== undefined) element.textContent = String(child.textContent);
           parent.append(element);
           append(element, child.children ?? []);
         }

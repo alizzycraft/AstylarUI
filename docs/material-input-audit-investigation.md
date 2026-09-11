@@ -57,9 +57,13 @@ final CSS-to-render projection is its intended responsibility.
 ## Minimal browser evidence
 
 `input-equivalence-proof.spec.ts` supplies the same style objects to browser CSS
-and public Astylar `SiteData`. All three Chrome/WebGL tests passed on 2026-09-11:
-content-derived padded flex height, a full-span grid marker with a cell-centered
-ring, and a fixed bottom-aligned overlay. Every measured edge is within 0.5 CSS px.
+and public Astylar `SiteData`. All five Chrome/WebGL tests passed on 2026-09-11:
+intrinsic toolbar content sizing with a flex spacer, a stepper-like flex connector
+with negative margins, content-derived padded flex height, a full-span grid marker
+with a cell-centered ring, and a fixed bottom-aligned overlay. Every measured edge
+is within 0.5 CSS px. The toolbar reduction uses shared Arial declarations rather
+than the full Material/Roboto typography; the connector reduction uses fixed-size
+header boxes to isolate flex allocation. Neither proves full component parity.
 
 Command: `npm --prefix examples/material-showcase test -- --watch=false --browsers=ChromeHeadless --include=src/app/input-equivalence-proof.spec.ts`.
 Runtime: Chrome Headless 152, Babylon 8.56.2, WebGL2. The existing NG0914
