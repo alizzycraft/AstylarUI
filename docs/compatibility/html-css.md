@@ -297,6 +297,14 @@ and the revision identifies the settled generation. Values are core declarations
 (for example percentages remain percentages), not browser used sizes or Babylon
 coordinates. Inspection allocates no visual resources and does not change the
 document. It is for diagnosis, never an alternative layout or paint pipeline.
+An optional `retainedText` entry separately exposes the last style retained by
+the core text registry for an authored ID. Its `source` is `core-text-registry`;
+the detached `style` can include typography inherited by the text renderer but
+absent from the earlier `normal` declarations. This is retained text input, not
+a recalculated CSS computed style or a guarantee of current pseudo-state pixels.
+It is absent for hidden/non-text nodes without a retained entry and does not
+replace normal/effective declaration evidence. No registry mesh, metrics, or
+world-space values are exposed. This optional field is backward compatible.
 The API is additive for consumers of mounted handles; custom implementations of
 the `AstylarSurface` interface must supply the new diagnostic method. Persisted
 documents and plugin API v2 are unchanged. The packed-consumer style-inspection

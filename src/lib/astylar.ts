@@ -902,9 +902,14 @@ class AstylarRenderer {
       // Resolve through the same core cascade and pseudo-state path as painting.
       // Do not depend on mesh existence: display:none may skip an entire subtree.
       const styles = this.getElementInteractionStyles(element.id ?? '', session.siteData, element);
+      const retainedTextStyle = element.id
+        ? this.textInteractionRegistry.getByElementId(element.id)?.style : undefined;
       if (styles) elements.push({ path, id: element.id, type: element.type,
         normal: structuredClone(styles.normal),
         effective: structuredClone(mergeInteractionStyles(styles)),
+        ...(retainedTextStyle ? { retainedText: {
+          source: 'core-text-registry' as const, style: structuredClone(retainedTextStyle),
+        } } : {}),
       });
       element.children?.forEach((child, index) => visit(child, `${path}/${index}`));
     };

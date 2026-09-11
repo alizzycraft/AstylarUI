@@ -4,6 +4,45 @@ import { Astylar } from './astylar';
 import type { SiteData } from '../app/types/site-data';
 
 describe('on-demand core style inspection', () => {
+  it('separates retained inherited text input from cascade declarations', async () => {
+    TestBed.configureTestingModule({ providers: [provideZonelessChangeDetection()] });
+    const canvas = document.createElement('canvas');
+    canvas.width = 360;
+    canvas.height = 180;
+    document.body.appendChild(canvas);
+    const data: SiteData = { root: { children: [
+      { id: 'parent', type: 'div', children: [
+        { id: 'child', type: 'div', textContent: 'Inherited type' },
+        { id: 'hidden', type: 'div', textContent: 'Hidden type' },
+      ] },
+    ] }, styles: [
+      { selector: '#parent', width: '360px', height: '80px', fontFamily: 'Arial', fontSize: '24px', lineHeight: '32px' },
+      { selector: '#hidden', display: 'none' },
+    ] };
+    const surface = TestBed.inject(Astylar).mount(canvas, data, { diagnostics: { logLevel: 'silent' } });
+    try {
+      await surface.whenSettled();
+      const resources = surface.diagnostics.resources;
+      const snapshot = surface.inspectResolvedStyles();
+      const child = snapshot.elements.find((entry) => entry.id === 'child')!;
+      expect(child.normal.fontSize).toBeUndefined();
+      expect(child.retainedText?.source).toBe('core-text-registry');
+      expect(child.retainedText?.style.fontSize).toBe('24px');
+      expect(child.retainedText?.style.lineHeight).toBe('32px');
+      expect(snapshot.elements.find((entry) => entry.id === 'hidden')?.retainedText).toBeUndefined();
+      (child.retainedText!.style as { fontSize: string }).fontSize = '999px';
+      expect(surface.inspectResolvedStyles().elements.find((entry) => entry.id === 'child')?.retainedText?.style.fontSize).toBe('24px');
+      expect(surface.diagnostics.resources).toEqual(resources);
+      await surface.update({ ...data, styles: data.styles.map((style) => style.selector === '#parent' ? { ...style, fontSize: '20px' } : style) });
+      const updated = surface.inspectResolvedStyles();
+      expect(updated.revision).toBeGreaterThan(snapshot.revision);
+      expect(updated.elements.find((entry) => entry.id === 'child')?.retainedText?.style.fontSize).toBe('20px');
+    } finally {
+      surface.dispose();
+      canvas.remove();
+    }
+  }, 30000);
+
   it('resolves hidden and anonymous descendants without creating meshes or mutating authored input', async () => {
     TestBed.configureTestingModule({ providers: [provideZonelessChangeDetection()] });
     const canvas = document.createElement('canvas');

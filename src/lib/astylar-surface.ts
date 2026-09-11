@@ -48,6 +48,14 @@ export interface AstylarResolvedStyleSnapshot {
     readonly type: string;
     readonly normal: Readonly<StyleRule>;
     readonly effective: Readonly<StyleRule>;
+    /** Last style retained by the core text registry, before projection.
+     * Separate from cascade/pseudo declarations; not a guarantee of current
+     * pseudo-state paint. Absent when no authored-ID text entry is retained.
+     */
+    readonly retainedText?: {
+      readonly source: 'core-text-registry';
+      readonly style: Readonly<StyleRule>;
+    };
   }[];
 }
 
