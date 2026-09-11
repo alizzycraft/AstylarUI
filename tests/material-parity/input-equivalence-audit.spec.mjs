@@ -169,6 +169,40 @@ test('normalizes supported shorthands on either side and preserves zero percenta
   assert.equal(basis.astylar, '0');
 });
 
+test('does not erase background image layers when a color longhand is also present', () => {
+  const audit = buildMaterialInputAudit(parityReport({ background: 'url("A.png") center / cover', backgroundColor: '#fff' },
+    { background: 'url("B.png") center / cover', backgroundColor: '#fff' }));
+  const difference = audit.discrepancies.find(({ property }) => property === 'background');
+  assert.ok(difference);
+  assert.equal(difference.classification, 'parity-harness-defect');
+  assert.match(difference.reference, /A\.png/);
+  assert.match(difference.astylar, /B\.png/);
+});
+
+test('preserves case-sensitive CSS token contents and string whitespace', () => {
+  const audit = buildMaterialInputAudit(parityReport({ backgroundImage: 'url("Images/Mark.png")', width: 'var(--Size)', content: '"A  B"' },
+    { backgroundImage: 'url("images/mark.png")', width: 'var(--size)', content: '"A B"' }));
+  for (const property of ['backgroundImage', 'width', 'content']) {
+    const difference = audit.discrepancies.find((entry) => entry.property === property);
+    assert.ok(difference, `${property} token difference must survive`);
+    assert.notEqual(difference.reference, difference.astylar);
+  }
+});
+
+test('requires layout and hit-target context for alignment and auto cursor equivalence', () => {
+  const values = { alignItems: 'normal', alignContent: 'normal', justifyContent: 'normal', cursor: 'auto' };
+  const candidate = { alignItems: 'stretch', alignContent: 'stretch', justifyContent: 'flex-start', cursor: 'default' };
+  const unknown = buildMaterialInputAudit(parityReport(values, candidate));
+  for (const property of Object.keys(values)) {
+    assert.equal(unknown.discrepancies.find((entry) => entry.property === property)?.classification, 'parity-harness-defect');
+  }
+  const flex = buildMaterialInputAudit(parityReport({ ...values, display: 'flex' }, { ...candidate, display: 'flex' }));
+  assert.ok(!flex.discrepancies.some(({ property }) => ['alignItems', 'alignContent', 'justifyContent'].includes(property)));
+  assert.ok(flex.discrepancies.some(({ property }) => property === 'cursor'));
+  const grid = buildMaterialInputAudit(parityReport({ ...values, display: 'grid' }, { ...candidate, display: 'grid' }));
+  assert.ok(grid.discrepancies.some(({ property }) => property === 'alignItems'));
+});
+
 test('rejects empty evidence and duplicate records rather than treating case counts as coverage', () => {
   const report = parityReport({}, {});
   report.results.push(report.results[0]);

@@ -212,6 +212,29 @@ either a broad core rewrite or retention of fixture compensation.
 
 ## Outstanding acceptance work
 
+Context-sensitive normalization correction (2026-09-11): the audit previously
+accepted browser `cursor:auto` as candidate `cursor:default` without examining
+the hit target. The maintained `effectiveBrowserCursor` helper already shows why
+that is unsafe: auto can resolve to a text cursor over selectable text. These
+pairs now remain harness evidence gaps until the same-point/state cursor probe
+is linked. Alignment normal/stretch/start equivalence is restricted to paired
+flex containers; other contexts remain explicit gaps rather than silent waivers.
+Scanning the preserved full baseline finds4,693 auto/default pairs across all36
+families and16,359 normal-alignment pairs without paired flex context. These are
+potential evidence gaps, not confirmed interaction/layout defects. Fresh complete
+tree evidence still requires review.
+
+The canonicalizer also no longer overwrites a complex background shorthand with
+its color longhand or lowercases case-sensitive URL/custom-property/string
+tokens. The preserved baseline has no complex gradient/image background entries
+in its mapped styles; this is preventive harness coverage, not a newly confirmed
+showcase paint defect. Regression tests retain image-layer differences alongside
+equal background colors, differently cased asset/variable names, and quoted
+whitespace. Single recognized color backgrounds remain comparable to color
+longhands. Audit unit tests19/19 and `npm run parity:harness:check`57/57 pass.
+Only audit normalization changed; the running full collector and rendered
+fixtures remain unchanged.
+
 Audit normalization correction (2026-09-11): the old canonicalizer unconditionally
 deleted shorthands, including `flex` without expanding it. It could therefore
 hide unequal declarations. Supported box/gap/overflow shorthands now expand on

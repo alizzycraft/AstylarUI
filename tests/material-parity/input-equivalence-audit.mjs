@@ -214,11 +214,25 @@ function collectStyleDiscrepancies(cases) {
 }
 
 function classifyStyleDifference(property, reference, astylar, referenceStyle, astylarStyle) {
-  if (['flex', 'padding', 'margin', 'borderWidth', 'borderStyle', 'borderColor', 'borderRadius', 'gap', 'overflow'].includes(property)) {
+  if (['background', 'flex', 'padding', 'margin', 'borderWidth', 'borderStyle', 'borderColor', 'borderRadius', 'gap', 'overflow'].includes(property)) {
     return {
       classification: 'parity-harness-defect',
       justification: `The ${property} shorthand has not been safely expanded into comparable longhands. Retain the declaration (${reference ?? 'omitted'} versus ${astylar ?? 'omitted'}) and resolve its CSS semantics before assigning equivalence or a fixture/core defect.`,
       owner: 'input audit shorthand canonicalization',
+    };
+  }
+  if (property === 'cursor' && [reference, astylar].includes('auto')) {
+    return {
+      classification: 'parity-harness-defect',
+      justification: 'cursor:auto depends on the actual hit target (for example selectable text versus an empty box). These scalar styles cannot establish equivalence to an explicit cursor; compare the maintained effective-cursor probe at the same point and state.',
+      owner: 'input audit hit-target context and effective cursor evidence',
+    };
+  }
+  if (['alignItems', 'alignContent', 'justifyContent'].includes(property) && [reference, astylar].includes('normal')) {
+    return {
+      classification: 'parity-harness-defect',
+      justification: 'Alignment normal has layout-dependent semantics. This pair is not a proven flex-context equivalent; preserve the difference until container and item constraints establish its meaning.',
+      owner: 'input audit layout-context canonicalization',
     };
   }
   if (astylar === undefined && implicitReferenceValues[property]?.includes(reference)) {
@@ -271,7 +285,14 @@ function classifyStyleDifference(property, reference, astylar, referenceStyle, a
 
 function canonicalStyle(style) {
   const result = Object.fromEntries(Object.entries(style).map(([property, value]) =>
-    [property === 'background' ? 'backgroundColor' : property === 'wordWrap' ? 'overflowWrap' : property, normalizeValue(property, value)]));
+    [property === 'wordWrap' ? 'overflowWrap' : property, normalizeValue(property, value)]));
+  // Only a single recognized color can be represented by backgroundColor here.
+  // Preserve image/layer/position/reset declarations and ambiguous shorthand +
+  // longhand pairs; object insertion order is not a CSS cascade proof.
+  if (result.background !== undefined && result.backgroundColor === undefined && normalizeColor(result.background)) {
+    result.backgroundColor = result.background;
+    delete result.background;
+  }
   expandQuad(result, 'padding', ['paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft']);
   expandQuad(result, 'margin', ['marginTop', 'marginRight', 'marginBottom', 'marginLeft']);
   expandQuad(result, 'borderWidth', ['borderTopWidth', 'borderRightWidth', 'borderBottomWidth', 'borderLeftWidth']);
@@ -322,6 +343,9 @@ function splitCssTerms(value) {
 
 function normalizeValue(property, value) {
   if (value === undefined || value === null || value === '') return undefined;
+  // URL paths, custom property names, and string contents can be case-sensitive.
+  // Do not lowercase or collapse whitespace inside these token streams.
+  if (property !== 'fontFamily' && /\b(?:url|var|env)\s*\(|["']/i.test(String(value))) return String(value).trim();
   let normalized = String(value).trim().replace(/\s+/g, ' ');
   if (property === 'fontFamily') return normalized.replace(/["']/g, '').replace(/\s*,\s*/g, ',').toLowerCase();
   if (property === 'fontWeight' && normalized.toLowerCase() === 'bold') return '700';
@@ -365,10 +389,10 @@ function equivalentValue(property, reference, astylar, referenceStyle, astylarSt
   if (reference === astylar) return true;
   if (property === 'caretColor' && astylar === undefined && reference === astylarStyle.color) return true;
   if (property === 'lineHeight' && reference === 'normal' && astylar === undefined) return true;
-  if (property === 'alignItems' && reference === 'normal' && astylar === 'stretch') return true;
-  if (property === 'alignContent' && reference === 'normal' && astylar === 'stretch') return true;
-  if (property === 'justifyContent' && reference === 'normal' && astylar === 'flex-start') return true;
-  if (property === 'cursor' && reference === 'auto' && astylar === 'default') return true;
+  const bothFlex = [referenceStyle.display, astylarStyle.display].every((display) => ['flex', 'inline-flex'].includes(display));
+  if (bothFlex && reference === 'normal' && (
+    (['alignItems', 'alignContent'].includes(property) && astylar === 'stretch') ||
+    (property === 'justifyContent' && astylar === 'flex-start'))) return true;
   if (property === 'opacity' && Number(reference) === Number(astylar)) return true;
   return false;
 }
