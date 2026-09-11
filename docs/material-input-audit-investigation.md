@@ -5,6 +5,25 @@ The machine report is generated separately from the full benchmark output.
 
 ## Hidden-node inspection boundary (2026-09-11)
 
+The complete root suite (`npm test -- --watch=false --browsers=ChromeHeadless`)
+passed 451/451 after the snapshot integration. The earlier mesh-only collector
+run was deliberately superseded, not abandoned on a timeout. Its captured
+artifacts and the completed original baseline remain intact. The new unfiltered
+`node tests/material-parity/run-material-parity.mjs --enforce --skip-build` uses
+`ASTYLAR_MATERIAL_BROWSER_ROOT=examples/material-showcase/dist/material-showcase-inspection-audit/browser`
+and `ASTYLAR_MATERIAL_ARTIFACTS=artifacts/material-parity/complete-input-audit`.
+It is still running; no complete result is claimed here.
+
+All three supplemental probes were rerun against this build on port 4431:
+`audit-material-picker-commits.mjs`, `audit-material-overlay-breakpoints.mjs`,
+and `audit-material-slider-domain.mjs` in `scripts/`. They retain the previously
+observed six picker failures, one medium-width bottom-sheet failure, and four
+slider-domain failures, with no page errors. The picker month's first recapture
+attempt exposed a harness mistake: a geometry-only measurement was asked for
+its omitted input tree. The corrected probe requests settled input evidence;
+its successful recapture still reports all six behavioral mismatches rather
+than changing application behavior or masking the failures.
+
 The showcase collector now consumes this snapshot by authored tree path and
 retains its source and revision through report pooling. Geometry-only action
 targeting explicitly skips input inspection; final input capture awaits settlement

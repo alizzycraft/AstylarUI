@@ -93,8 +93,11 @@ try {
           await page.waitForFunction(() => !!window.__ASTYLAR_MATERIAL_BENCHMARK__);
           await settle(page);
           await clickCandidate(page, 'datepicker-icon');
-          const month = () => page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.measure(['datepicker-month'], false)
-            .inputTree.nodes.find((node) => node.authored.id === 'datepicker-month').authored.value.replace(/[▾▴]/g, '').trim());
+          const month = () => page.evaluate(async () => {
+            await window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled();
+            return window.__ASTYLAR_MATERIAL_BENCHMARK__.measure(['datepicker-month'])
+              .inputTree.nodes.find((node) => node.authored.id === 'datepicker-month').authored.value.replace(/[▾▴]/g, '').trim();
+          });
           const before = await month();
           await clickCandidate(page, `datepicker-${direction}`);
           sides[mode] = { before, after: await month(), errors,
