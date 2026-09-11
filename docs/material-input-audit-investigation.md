@@ -51,6 +51,42 @@ No reference input, fixture style, case, acceptance threshold, or renderer behav
 changed in this increment. Fully resolved style coverage and substantive review
 of every material difference remain separate unfinished requirements.
 
+## Sidenav equivalent-input reduction (2026-09-11)
+
+The freshly checkpointed twelve static sidenav cases show an authored
+`display:block` reference container and an authored `display:flex` candidate.
+The light/desktop full tree additionally locates the reference's absolute drawer
+at `frame/2/0/1`, its independent scroll wrapper at `frame/2/0/1/0`, and its
+margin-offset content at `frame/2/0/3`. The corresponding candidate at
+`root/0/2/0` is a flex container with two direct text-bearing siblings. These
+trees are under `artifacts/material-parity/retained-text-complete-audit/sidenav`;
+their recorded hashes are preserved by the case checkpoints.
+
+The ninth browser reduction uses one shared set of declarations for both sides:
+a relative 360x220px block with hidden overflow, an absolute 160px border-box
+drawer stretched by top/bottom:0, 20px padding and a1px right border, a100% inner
+scroll wrapper, and content-box content with margin-left:160px, height:100% and
+20px padding. All four border boxes pass the unchanged0.5px geometry tolerance.
+The reference content's padding may extend its border box below the container;
+the proof preserves that constraint rather than fixing both boxes to220px.
+
+`npm --prefix examples/material-showcase test -- --watch=false --browsers=ChromeHeadless --include=src/app/input-equivalence-proof.spec.ts`
+ran twice with **8 passed, 1 failed**. Only the pre-existing paragraph/divider
+reduction fails: separator bottom383 versus82, following paragraph top399 versus98,
+and parent bottom464 versus163 (all301px errors). The new drawer composition
+passes without the candidate flex replacement or17px top-padding adjustment.
+This proves those substitutions are not required by the tested geometry path;
+it does not prove text raster, scrolling/reachability, animated drawers, responsive
+Material behavior, or all anonymous-wrapper equivalence. Those remain separate
+coverage requirements. Warnings include the existing NG0914 Zone.js setup warning
+and the core advisory that a text-bearing `main` may not be optimal; the latter
+does not reject the public element or fail its geometry test.
+
+Git history places the `.sidenav-container` flex rule in `2f44011`, the initial
+showcase, rather than a later demonstrated core repair. No fixture or renderer
+input was changed by this proof, and the full matrix continues with its original
+pinned served bundle.
+
 ## Retained core text-input evidence (2026-09-11)
 
 The diagnostic snapshot now has an additive optional `retainedText` field with

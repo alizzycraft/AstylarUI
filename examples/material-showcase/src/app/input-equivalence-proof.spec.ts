@@ -9,6 +9,21 @@ import { Astylar, type DOMElement, type SiteData } from 'astylarui';
 describe('Material audit: equivalent CSS input reductions', () => {
   const cases: Array<{ name: string; site: SiteData; ids: string[]; resolved?: Array<{ id: string; properties: string[]; stage?: 'retainedText' }> }> = [
     {
+      name: 'side drawer uses containing-block insets and content margin without a flex replacement',
+      site: {
+        root: { children: [{ type: 'div', id: 'drawer-container', children: [
+          { type: 'aside', id: 'drawer', children: [{ type: 'div', id: 'drawer-inner', textContent: 'Navigation' }] },
+          { type: 'main', id: 'drawer-content', textContent: 'Main content' },
+        ] }] },
+        styles: [
+          { selector: '#drawer-container', position: 'relative', display: 'block', width: '360px', height: '220px', overflow: 'hidden', fontFamily: 'Arial', fontSize: '16px', lineHeight: '20px', background: '#eeeeee' },
+          { selector: '#drawer', position: 'absolute', top: '0', bottom: '0', left: '0', width: '160px', padding: '20px', borderWidth: '0 1px 0 0', borderStyle: 'solid', borderColor: 'transparent', overflow: 'auto', background: '#dddddd' },
+          { selector: '#drawer-inner', boxSizing: 'content-box', width: '100%', height: '100%', overflow: 'auto' },
+          { selector: '#drawer-content', position: 'relative', display: 'block', boxSizing: 'content-box', height: '100%', marginLeft: '160px', padding: '20px', overflow: 'auto', background: '#cccccc' },
+        ],
+      }, ids: ['drawer-container', 'drawer', 'drawer-inner', 'drawer-content'],
+    },
+    {
       name: 'inherited typography remains observable in pre-projection style evidence',
       site: {
         root: { children: [{ type: 'div', id: 'type-parent', children: [
