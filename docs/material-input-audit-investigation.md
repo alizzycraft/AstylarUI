@@ -28,7 +28,8 @@ raises retained text comparisons from 1,174 to 1,246. It exposes 222 additional
 property differences, **none accepted by the mapping**: grid-list tracking and
 alignment (48), badge tracking (12), and tree font family, line height, tracking,
 alignment and font size (162). In 18 tree observations browser computed size is
-16px while retained core size is 14.4px. Attribution of these new differences
+16px while retained core size is 14.4px (contrast) or 18.4px (custom).
+Attribution of these new differences
 still requires authored/resolution evidence; `normal` tracking, `start`
 alignment and font stacks are not silently normalized into equivalent inputs.
 
@@ -45,6 +46,32 @@ controls deliberately retain unequal font sizes and verify that the audit gate
 still rejects them. No showcase fixture, renderer, capture module, served bundle,
 visual threshold or interaction case changed. The unfiltered enforced matrix
 continues against its previously fingerprinted production build.
+
+### Tree font-size follow-up: missing component token, not proven core scaling
+
+The captured `.mat-tree-node, .mat-nested-tree-node` rule explicitly authors
+`font-size: var(--mat-tree-node-text-size, var(--mat-sys-body-large-size))` and
+`font-family: var(--mat-tree-node-text-font, var(--mat-sys-body-large-font))`.
+Its computed size is 16px even when the reference frame computes 14.4px in
+contrast or 18.4px in custom. The candidate's `#page` correctly has those same
+theme-scaled page sizes, but `.material-tree`, `.tree-item` and `.tree-label`
+do not author a component font-size override. Their core declaration records
+omit the size and the leaf's retained text records the page size instead.
+
+This is evidence of an application/plugin **input-authoring defect**, not
+evidence that core miscalculates a shared font-size input. The missing override
+was present in initial showcase commit `2f44011`. Commit `7159b1d` subsequently
+moved direct tree item text into `.tree-label` spans with fixed 20px height and
+line-height; it did not restore the Material component typography declaration.
+The narrow follow-up is to restore equivalent component typography inputs, then
+test those equal inputs through core. Do not add inverse theme scale factors or
+resize the rendered text to match screenshots. The 20px-versus-normal line-height
+and wrapper differences require their own proof and are not accepted here.
+
+The automated retained-property rows remain unresolved until a fail-closed
+attribution guard checks the captured active token rule and the complete
+candidate inheritance chain. This source/history finding does not waive those
+machine-report checks or establish full tree rendering parity.
 
 ## Ordered transform composition is also lost (2026-09-12)
 
