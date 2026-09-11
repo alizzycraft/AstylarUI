@@ -149,6 +149,15 @@ export const sourceAuditDefinitions = Object.freeze([
     justification: 'The reference mat-slider declares min=0, max=100, step=5; Astylar gives the start input 0..50 and end input 50..100 with step=1, and clamps their authored values at 50. This changes reachable values and quantization regardless of pointer rendering. A start value above 50 or end below 50 cannot be represented by the current Astylar inputs.',
   }),
   Object.freeze({
+    id: 'harness-slider-drag-stays-in-half-domains',
+    introducedBy: 'existing sliderDragCoordinates diagnostic action contract',
+    file: 'tests/material-parity/run-material-parity.mjs',
+    pattern: String.raw`const targetRatio = thumb === 'start' \? \.4 : \.75`,
+    classification: 'parity-harness-defect',
+    owner: 'Material slider interaction matrix',
+    justification: 'The start drag ends at 40 and the end drag at 75. Both remain inside the incorrectly restricted Astylar half-domains, so these tests cannot expose the missing ability to move start above 50 or end below 50. Add full-domain and keyboard-step evidence; retain the existing cases.',
+  }),
+  Object.freeze({
     id: 'fixture-calendar-selection-ring-coordinates',
     introducedBy: '87f7f83 fix(example): render Material picker overlays',
     file: 'examples/material-showcase/src/app/astylar.component.ts',
