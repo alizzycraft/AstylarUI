@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
 import {
@@ -32,7 +32,8 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const structures = collectStructureEvidence(cases);
   const sourceFindings = scanMaterialSources(root);
   const coverage = buildCoverage(parityReport, cases);
-  const elementInventory = collectFullTreeInventory(cases, { root });
+  const supplementalBehavior = collectSupplementalBehavior(root);
+  const elementInventory = collectFullTreeInventory([...cases, ...supplementalBehavior.cases], { root });
   const classifications = countBy(discrepancies, (entry) => entry.classification);
   const propertyGroupCounts = countBy(discrepancies, (entry) => entry.propertyGroup);
   const familyCounts = countBy(discrepancies, (entry) => entry.family);
@@ -53,8 +54,10 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
     environment: auditEnvironment(root),
     sourceFingerprints: sourceFingerprints(root),
     coverage,
+    supplementalBehavior,
     summary: {
       inputEquivalent: coverage.complete && coverage.missingElements.length === 0 &&
+        supplementalBehavior.missing.length === 0 && supplementalBehavior.errors.length === 0 && supplementalBehavior.mismatches.length === 0 &&
         elementInventory.gaps.length === 0 && elementInventory.errors.length === 0 &&
         coverage.presenceDifferences.length === 0 &&
         sourceFindings.every((entry) => entry.detected && ['equivalent-representation', 'legitimate-public-api-structure'].includes(entry.classification)) &&
@@ -94,6 +97,8 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
   if (report.coverage.duplicateCases.length > 0) errors.push(`${report.coverage.duplicateCases.length} duplicate case records`);
   if (requireComplete && report.elementInventory.gaps.length > 0) errors.push(`${report.elementInventory.gaps.length} case sides lack a full element tree`);
   if (report.elementInventory.errors.length > 0) errors.push(`${report.elementInventory.errors.length} full-tree collection errors`);
+  if (requireComplete && report.supplementalBehavior.missing.length > 0) errors.push(`${report.supplementalBehavior.missing.length} supplemental behavior cases are missing`);
+  if (report.supplementalBehavior.errors.length > 0) errors.push(`${report.supplementalBehavior.errors.length} supplemental behavior collection errors`);
   return errors;
 }
 
@@ -114,6 +119,8 @@ export function renderMaterialInputAuditMarkdown(report) {
       `${report.coverage.executedInteractions}/${report.coverage.configuredInteractions} interaction/mobile-flow cases. All ${report.coverage.families.length} component families are inventoried.`,
     '',
     `Full-element evidence: ${report.elementInventory.cases.length} captured case sides, ${report.elementInventory.variants.length} tree variants; ${report.elementInventory.gaps.length} missing case sides and ${report.elementInventory.errors.length} collection errors. Inventory presence does not establish input equivalence.`,
+    '',
+    `Supplemental picker behavior: ${report.supplementalBehavior.cases.length}/6 cases captured; ${report.supplementalBehavior.missing.length} missing and ${report.supplementalBehavior.mismatches.length} observed mismatches. These cases cover pointer/keyboard commits and previous/next month navigation omitted by the maintained matrix. Classified behavioral failures remain evidence; they are not counted as successful parity.`,
     '',
     ...report.coverage.presenceDifferences.map((entry) => `- Presence discrepancy: ${entry.case}, ${entry.element}: ${entry.justification}`),
     '',
@@ -441,6 +448,36 @@ export function collectFullTreeInventory(cases, { root = process.cwd() } = {}) {
     scope: 'All authored Astylar nodes, reference frame/overlay DOM descendants, SVG attributes, and before/after pseudo-elements. Tables retain raw inputs; presence in the inventory is not acceptance of equivalence.',
     styles, rules, variants, cases: mappings, gaps, errors,
   };
+}
+
+export function collectSupplementalBehavior(root) {
+  const file = 'artifacts/material-parity/picker-commit-audit/latest-report.json';
+  if (!existsSync(path.resolve(root, file))) return { file, ...summarizeSupplementalBehavior({}) };
+  const contents = readFileSync(path.resolve(root, file));
+  return { file, sha256: createHash('sha256').update(contents).digest('hex'), ...summarizeSupplementalBehavior(JSON.parse(contents)) };
+}
+
+export function summarizeSupplementalBehavior(raw) {
+  const required = ['datepicker/open-commit-pointer', 'datepicker/open-commit-keyboard',
+    'timepicker/open-commit-pointer', 'timepicker/open-commit-keyboard',
+    'datepicker/open-previous-month', 'datepicker/open-next-month'];
+  const cases = (raw.results ?? []).map((entry) => ({ ...entry, kind: 'supplemental', profile: raw.profile,
+    matches: entry.state.includes('commit')
+      ? typeof entry.reference?.value === 'string' && entry.reference.value.length > 0 && entry.reference?.open === false &&
+        entry.reference.value === entry.astylar?.value && entry.reference.open === entry.astylar?.open
+      : typeof entry.reference?.before === 'string' && typeof entry.reference?.after === 'string' && entry.reference.before !== entry.reference.after &&
+        entry.reference.before === entry.astylar?.before && entry.reference.after === entry.astylar?.after,
+    viewport: { ...raw.viewport, id: 'supplemental-desktop-dpr1' },
+    inputTrees: { reference: entry.reference?.inputTree, astylar: entry.astylar?.inputTree } }));
+  const keys = cases.map((entry) => `${entry.family}/${entry.state}`);
+  const errors = cases.flatMap((entry) => ['reference', 'astylar'].flatMap((side) =>
+    (entry[side]?.errors ?? ['missing side']).map((error) => ({ case: `${entry.family}/${entry.state}`, side, error }))));
+  if (new Set(keys).size !== keys.length) errors.push({ error: 'duplicate supplemental behavior case' });
+  return { browser: raw.browser, cases,
+    missing: required.filter((key) => !keys.includes(key)), errors,
+    mismatches: cases.filter((entry) => !entry.matches).map((entry) => ({ family: entry.family, state: entry.state,
+      classification: 'application-plugin-authoring-defect', owner: 'showcase picker state and interaction logic',
+      justification: 'Reference value/open state or displayed month differs after the same delivered input. Inspect the per-side event and input-tree evidence; current source has no picker commit/navigation state handler.' })) };
 }
 
 function buildCoverage(parityReport, cases) {

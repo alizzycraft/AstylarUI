@@ -3,6 +3,7 @@ import test from 'node:test';
 import {
   buildMaterialInputAudit,
   collectFullTreeInventory,
+  summarizeSupplementalBehavior,
   validateMaterialInputAudit,
 } from './input-equivalence-audit.mjs';
 
@@ -10,6 +11,20 @@ const browserDefaults = {
   visibility: 'visible', minWidth: '0px', maxWidth: 'none', minHeight: '0px', maxHeight: 'none',
   fontStyle: 'normal', transform: 'none', pointerEvents: 'auto',
 };
+
+test('supplemental coverage requires all six behavior cases and recomputes claimed parity', () => {
+  const entry = { family: 'timepicker', state: 'open-commit-pointer', matches: true,
+    reference: { value: '12:30 AM', open: false, errors: [] },
+    astylar: { value: '', open: true, errors: [] } };
+  const result = summarizeSupplementalBehavior({ results: [entry] });
+  assert.equal(result.missing.length, 5);
+  assert.equal(result.mismatches.length, 1);
+  assert.equal(result.cases[0].matches, false);
+  assert.equal(summarizeSupplementalBehavior({}).missing.length, 6);
+  assert.ok(summarizeSupplementalBehavior({ results: [entry, entry] }).errors.some(({ error }) => error.includes('duplicate')));
+  const unchanged = { value: '', open: false, errors: [] };
+  assert.equal(summarizeSupplementalBehavior({ results: [{ ...entry, reference: unchanged, astylar: unchanged }] }).cases[0].matches, false);
+});
 
 function parityReport(reference, astylar) {
   return {

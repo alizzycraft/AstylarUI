@@ -68,6 +68,15 @@ export const implicitReferenceValues = Object.freeze({
 
 export const sourceAuditDefinitions = Object.freeze([
   Object.freeze({
+    id: 'fixture-calendar-navigation-frozen-to-current-date',
+    introducedBy: 'd1fc52a fix(material): refine picker icons and calendar alignment',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`function materialCurrent(?:Day|Month|Year)\(`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase calendar displayed-month/selected-date state',
+    justification: 'Calendar labels/cells derive from new Date() and handleClick has no previous/next month transition. Real previous/next clicks reach their targets but leave SEP 2026 unchanged while the reference changes to AUG/OCT 2026. Keyboard selection likewise leaves candidate value empty. These failures precede renderer layout or paint.',
+  }),
+  Object.freeze({
     id: 'fixture-picker-commit-not-implemented',
     introducedBy: '2f44011 feat(example): add Material component showcase',
     file: 'examples/material-showcase/src/app/astylar.component.ts',

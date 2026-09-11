@@ -115,6 +115,24 @@ assertions; retain this honest failing diagnostic meanwhile. The reference's
 committed date string varies with the test date; the script compares actual values rather than
 hard-coding September as the correct future month.
 
+The supplemental script now covers six cases and captures both complete input
+trees after each action, referenced by SHA-256 digests. Two expanded runs on
+2026-09-11 also confirmed keyboard selection failures (reference commits
+`9/2/2026` or `12:30 AM`; candidate remains empty/open), previous-month failure
+(reference AUG 2026; candidate SEP 2026), and next-month failure (reference OCT
+2026; candidate SEP 2026). Candidate logs contain the corresponding key/click
+targets. Calendar helpers derive their month from `new Date()` rather than
+displayed-month state; previous/next transitions are absent from `handleClick`.
+
+An initial keyboard probe timed out on the reference because it sent keys during
+the calendar's focus-managing opening animation. Waiting for the reference
+animation to finish corrected the diagnostic, without changing either fixture.
+The final input-tree run completed all six cases with no page or collection
+errors and six retained behavior mismatches. The report builder now includes
+these supplemental cases and their trees, requires their presence for a complete
+audit, and recomputes value/month equivalence instead of trusting a stored
+`matches:true`. Configured-matrix coverage is reported separately.
+
 Tooltip structure is another input substitution: `.tooltip-anchor` authors a
 138x72px flex column containing a normal-flow popup, whereas Material's tooltip
 is a connected CDK overlay. Its absence of a transform offset does not establish
