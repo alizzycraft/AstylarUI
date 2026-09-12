@@ -315,7 +315,9 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   const report = parityReport({}, {});
   const audit = buildMaterialInputAudit(report);
   assert.equal(audit.coverage.visualParityGreen, true);
-  assert.equal(audit.sourceFingerprints.length, 19);
+  assert.equal(audit.sourceFingerprints.length, 21);
+  assert.ok(audit.sourceFingerprints.some(({ file }) => file === 'src/app/services/dom/input/button.manager.ts'));
+  assert.ok(audit.sourceFingerprints.some(({ file }) => file === 'src/app/services/text/text-style-parser.service.ts'));
   for (const file of ['src/app/services/dom/elements/css-transform.ts',
     'src/app/services/dom/elements/element-material.service.ts', 'src/app/types/style-rule.ts']) {
     assert.ok(audit.sourceFingerprints.some((entry) => entry.file === file));

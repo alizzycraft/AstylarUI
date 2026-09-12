@@ -12,6 +12,42 @@ tests pass). A missing selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Explicit font lists are rewritten inside core (2026-09-12)
+
+The new frozen-bundle toolbar capture separates another root cause from fixture
+token omissions: browser computed and candidate normal/effective font-family
+are all `Roboto`, but actual current control paint uses
+`Roboto, Arial, Helvetica, sans-serif`. `TextStyleParserService.resolveFontFamily`
+appends its default list when an authored list has no recognized generic. Git
+history places that behavior in `2ec3152`, before the Material showcase.
+
+Two package-root equivalent-input reductions now isolate the boundary. Both
+author one fixed-size button and generate the browser declarations from the
+same StyleRule. With `fontFamily: 'Arial'`, normal inspection agrees with the
+browser, but the actual texture is painted with
+`Arial, Arial, Helvetica, sans-serif`; the preservation assertion fails. With
+`Arial, sans-serif`, both stages and geometry pass. No fixture input was changed
+to avoid the parser branch. The collector serializes each current texture in
+the same proof, independently from normal declarations.
+
+Command: `npm --prefix examples/material-showcase test -- --watch=false
+--browsers=ChromeHeadless --include=src/app/input-equivalence-proof.spec.ts`.
+Two runs give 36 cases, 15 passes and 21 diagnostic failures: one new font-list
+failure plus the previous twenty layout/transform failures. The assertion is
+`font-list-button paintedControlText fontFamily: Expected 'Arial, Arial,
+Helvetica, sans-serif' to be 'Arial'`. The existing zoneless/Zone.js warning
+remains; there is no renderer implementation change.
+
+The pre-paint mutation is proven; a changed glyph raster is **not**. Keep this
+as a suspected core semantic defect, not a confirmed missing-glyph rendering
+defect. Next reduction: an unavailable family or missing-glyph fallback case
+under identical CSS, measuring actual chosen/rasterized glyph behavior. Its
+owner is core font-list parsing/fallback semantics, not the Material plugin or
+fixture. The source audit now has 55 findings and fingerprints both the button
+manager and text parser (21 source fingerprints). After updating the fingerprint
+inventory assertions, `npm run parity:harness:check` passes 100/100. Full input
+review remains incomplete.
+
 ## Current control texture comparison, not just collection (2026-09-12)
 
 ### Captured button inputs now receive guarded attribution

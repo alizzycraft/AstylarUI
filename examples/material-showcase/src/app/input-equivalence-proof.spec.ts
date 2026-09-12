@@ -9,6 +9,20 @@ import { collectAuthoredInputTree, collectMaterialCoreResolvedStyles } from './m
 // measured height table, DPR correction, or duplicate position calculation.
 describe('Material audit: equivalent CSS input reductions', () => {
   const cases: Array<{ name: string; site: SiteData; ids: string[]; horizontalOnly?: string[]; loadedCss?: boolean; controlLabels?: string[]; resolved?: Array<{ id: string; properties: string[]; stage?: 'retainedText' | 'paintedControlText' }> }> = [
+    ...['Arial', 'Arial, sans-serif'].map((fontFamily) => ({
+      name: `control texture preserves the authored font-family list ${fontFamily}`,
+      site: {
+        root: { children: [{ type: 'button', id: 'font-list-button', value: 'Action' }] },
+        styles: [{ selector: '#font-list-button', display: 'block', width: '160px', height: '48px', fontFamily,
+          fontSize: '16px', lineHeight: '24px', color: '#123456', background: '#eeeeee', textAlign: 'center' }],
+      } as SiteData,
+      ids: ['font-list-button'],
+      controlLabels: ['font-list-button'],
+      resolved: [
+        { id: 'font-list-button', properties: ['fontFamily'] },
+        { id: 'font-list-button', properties: ['fontFamily'], stage: 'paintedControlText' as const },
+      ],
+    })),
     ...(['value', 'textContent'] as const).map((textField) => ({
       name: `rendered button labels authored with ${textField} expose pre-paint typography in core inspection`,
       site: {

@@ -150,6 +150,16 @@ export const sourceAuditDefinitions = Object.freeze([
     focusedProof: 'examples/material-showcase/src/app/input-equivalence-proof.spec.ts: rendered button labels authored with value / textContent',
   }),
   Object.freeze({
+    id: 'core-explicit-font-list-appends-default-fallbacks',
+    introducedBy: '2ec3152 start if text implementation',
+    file: 'src/app/services/text/text-style-parser.service.ts',
+    pattern: String.raw`processedFonts\.push\(\.\.\.this\.DEFAULT_FONT_FAMILIES\)`,
+    classification: 'suspected-core-renderer-defect',
+    owner: 'TextStyleParserService explicit font-family parsing and fallback semantics',
+    justification: 'A fresh toolbar capture has Roboto in both browser computed and candidate normal/effective declarations, but actual control paint receives Roboto, Arial, Helvetica, sans-serif. resolveFontFamily appends the default list whenever no recognized generic is present. A package-root equal-input button reduction confirms Arial survives normal inspection but becomes Arial, Arial, Helvetica, sans-serif in current texture inputs; an Arial, sans-serif control passes. The pre-paint mutation is proven and predates the showcase, but these installed-font cases do not prove different glyph raster or fallback selection. Keep the semantic core defect suspected until an unavailable-font or missing-glyph equal-input proof establishes its observable effect. Do not classify it as missing fixture authoring or add a generic to fixture inputs to hide it.',
+    focusedProof: 'examples/material-showcase/src/app/input-equivalence-proof.spec.ts: control texture preserves the authored font-family list',
+  }),
+  Object.freeze({
     id: 'fixture-button-document-font-replaces-component-token',
     introducedBy: 'af04845 fix controls to use document font; material-button token omission dates to 2f44011',
     file: 'examples/material-showcase/src/app/astylar.component.ts',
