@@ -654,6 +654,7 @@ export const sourceAuditDefinitions = Object.freeze([
   }),
   Object.freeze({
     id: 'plugin-tab-panel-competing-text-renderer',
+    focusedProof: 'examples/material-showcase/src/app/material-plugin/tab-panel-input-audit.spec.ts: actual bound-texture fillText observations with independent CSS/data changes',
     introducedBy: '7159b1d fix(showcase): tighten Material component parity',
     file: 'examples/material-showcase/src/app/material-plugin/material-showcase.plugin.ts',
     pattern: String.raw`class MaterialTabPanelRenderer`,
@@ -663,6 +664,7 @@ export const sourceAuditDefinitions = Object.freeze([
   }),
   Object.freeze({
     id: 'plugin-tab-panel-baseline-offset',
+    focusedProof: 'examples/material-showcase/src/app/material-plugin/tab-panel-input-audit.spec.ts: observed private baseline with baseline-offset zero',
     introducedBy: '593f81b fix(material): align custom tab typography',
     file: 'examples/material-showcase/src/app/material-plugin/material-showcase.plugin.ts',
     pattern: String.raw`\['baseline-offset'\]`,

@@ -2172,6 +2172,7 @@ function sourceFingerprints(root) {
     'examples/material-showcase/src/app/showcase.store.ts',
     'examples/material-showcase/src/styles.scss',
     'examples/material-showcase/src/app/material-plugin/material-showcase.plugin.ts',
+    'examples/material-showcase/src/app/material-plugin/tab-panel-input-audit.spec.ts',
     'examples/material-showcase/src/app/material-plugin/material-ripple.controller.ts',
     'tests/material-parity/benchmark.config.mjs',
     'tests/material-parity/run-material-parity.mjs',
@@ -2188,6 +2189,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'examples/material-showcase/src/app/material-plugin/tab-panel-input-audit.spec.ts', /describe\('Material input audit/,
+      'one real-browser characterization passes across three independent surface mounts', 'Actual fillText calls are observed only on the texture bound to the private tab-panel content plane. CSS font sizes 24px and 30px both paint with a 32px texture font when plugin font-size is 16; changing only plugin font-size to 20 paints at 40px. The 2x backing texture stays 480 by 96, ink follows data #ff0000 instead of CSS #123456, and the baseline follows the plugin formula. This confirms competing plugin typography, not a core equal-input failure. Font asset warnings prevent any claim about the selected physical font; glyph sharpness, final baseline alignment and complete matrix paint provenance remain separate obligations.'),
     proof(root, 'scripts/audit-material-normal-line-boxes.mjs', /const targets =/,
       '120 validated static natural-line-box observations across 96 cases; scope-limited stage evidence', 'Pinned browser assets, text, typography, viewport/DPR and paired checkpoint trees bind a supplemental natural reference line box to each mapped static label. The measured scalar matches current core paint for these observations; font-list, tracking and disabled-ink substitutions remain independently classified. No universal normal-line-height rule, input-equivalence or final raster claim is inferred.'),
     proof(root, 'examples/material-showcase/src/app/normal-line-height-audit.spec.ts', /describe\('Material audit/,

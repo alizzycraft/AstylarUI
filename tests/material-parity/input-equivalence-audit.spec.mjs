@@ -326,7 +326,10 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   const report = parityReport({}, {});
   const audit = buildMaterialInputAudit(report);
   assert.equal(audit.coverage.visualParityGreen, true);
-  assert.equal(audit.sourceFingerprints.length, 28);
+  assert.equal(audit.sourceFingerprints.length, 29);
+  const tabProof = 'examples/material-showcase/src/app/material-plugin/tab-panel-input-audit.spec.ts';
+  assert.ok(audit.sourceFingerprints.some(({ file }) => file === tabProof));
+  assert.ok(audit.focusedProofs.some(({ file, line, status }) => file === tabProof && line > 0 && status !== 'missing'));
   for (const file of ['tests/material-parity/input-equivalence-audit.mjs', 'tests/material-parity/input-equivalence-policy.mjs',
     'tests/material-parity/normal-line-box-report.mjs', 'tests/material-parity/normal-line-box-evidence.mjs',
     'scripts/audit-material-normal-line-boxes.mjs']) assert.ok(audit.sourceFingerprints.some((item) => item.file === file));

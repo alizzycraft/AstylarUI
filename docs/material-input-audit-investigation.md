@@ -12,6 +12,54 @@ tests pass). A missing selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Private tab text paint observed independently of CSS (2026-09-12)
+
+New diagnostic `material-plugin/tab-panel-input-audit.spec.ts` mounts the public
+packed Astylar surface with the actual Material plugin three times. A delegating
+spy records actual `fillText` state, then selects only calls belonging to the
+texture bound to the tab content plane. It does not infer paint from plugin data
+or manufacture a core retained-text entry.
+
+With CSS serif/700, 32px line-height, 2px tracking and #123456 ink, changing CSS
+font-size from 24px to 30px leaves private paint at `32px Roboto, Arial,
+sans-serif`. Keeping CSS 24px but changing data font-size from 16 to 20 changes
+private paint to 40px. All three 240 by 48 CSS boxes bind a 480 by 96 texture;
+ink remains data-driven #ff0000, x remains zero, and baseline y is respectively
+58.5, 58.5 and 61.125 backing pixels. These backing observations are **not CSS
+layout inputs**. Surface disposal reports zero meshes, materials and textures.
+
+This runtime evidence supports existing source findings
+`plugin-tab-panel-competing-text-renderer` and `plugin-tab-panel-baseline-offset`.
+The plugin owns glyph/font/baseline decisions that should belong to core text
+paint; transition orchestration can remain plugin functionality. This is an
+authoring/ownership defect, not evidence that core fails equivalent text input.
+The characterization deliberately asserts current unequal behavior to identify
+its owner; a later implementation must replace it with equal-input acceptance.
+No renderer or showcase fixture was changed. Matrix tab paint gaps remain open;
+this bounded test does not supply per-case current-paint capture.
+
+Verification: `npm --prefix examples/material-showcase test -- --watch=false
+--browsers=ChromeHeadless --include=src/app/material-plugin/tab-panel-input-audit.spec.ts`
+passes **1/1** on Chrome Headless 152 / Babylon 8.56.2 WebGL2. The initial failure
+was a test comparing Babylon Size's prototype with an object literal; explicit
+width/height assertions correct that test without changing expected dimensions.
+Karma reports the existing Zone.js/zoneless warning and missing global Roboto
+URLs. Assertions observe font instructions, not the physical fallback font,
+glyph raster, text advance, or final baseline alignment; those claims are not
+made from this run.
+
+`npm run parity:harness:check` passes **182/182** after adding the proof to the
+report inventory and source fingerprints. No classification gap was waived.
+
+The fresh, unfiltered enforced control-text matrix also completed with exit 0:
+**436/436 static and 1,875/1,875 interactions pass**, including all configured
+mobile interactions. Evidence is
+`artifacts/material-parity/control-text-complete-audit/latest-report.json`.
+Static minimum SSIM 0.965296, maximum edge error 0.984px, text 428/428;
+interaction minimum SSIM 0.954514, text 2,116/2,116 and focused rasters 880/880.
+These are output gates, not input-equivalence acceptance. Remaining anonymous
+text, style and structure differences still require classification.
+
 ## Stepper panel omission is now classified per captured state (2026-09-12)
 
 Source finding `fixture-stepper-inactive-panel-omitted` traces the one-panel
