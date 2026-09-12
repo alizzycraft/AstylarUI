@@ -23,6 +23,120 @@ selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Autocomplete/select option-domain correspondence (2026-09-13)
+
+The complete captured interaction cohort now maps **192** previously unmatched
+option labels: **112** across 56 autocomplete open states and **80** across 40
+select open states. The domains are the original two city values and solo/team
+values from `reference.component.ts:78,81`, not a text-similarity guess. Both
+unselected and selected/commit-reopen cases are included. Closed cases remain
+closed; no synthetic options are inserted into either capture.
+
+The reference uses `mat-option` with a direct primary-text span, a distinct
+empty ripple owner, and a conditional minimal `mat-pseudo-checkbox`. Candidate
+options use div/span and a conditional `showcase.material:check-mark` instead.
+The new correspondence records preserve both sets of owners, original rules
+and style indices, field/input/listbox links, full value domain, independent
+selected states and conditional indicators. They are explicitly classified as
+unequal authoring, with `inputEquivalent:false` and `finalRasterVerified:false`.
+Text correspondence is not equivalent wrapper behavior, indicator geometry,
+state styling, accessibility, scrolling, anchoring or commit behavior.
+
+History and current sources:
+
+- `4d56f862e560ffbdf18779f802e35eaacf363664` (`fix(material): restore field and
+  popup interaction state`) introduced `autocompleteOption` and its replacement
+  label/check children, now at `astylar.component.ts:829-838`.
+- `6647a8758be4f056e5209cebc4d8c4291108fbf7` (`fix(material): align select popup
+  state`) introduced the select label spans and conditional custom checks, now
+  at `astylar.component.ts:953-962`.
+- The original shared option composition/declarations remain in the already
+  fingerprinted installed `@angular/material/fesm2022/option-BzhYL_xC.mjs`.
+
+The machine source findings are
+`fixture-autocomplete-option-composition-substitution` and
+`fixture-select-option-composition-substitution`. These historical changes are
+evidence of replacement authoring, not proof that every line was introduced
+to conceal a specific renderer failure. No equivalent-input core failure is
+claimed from these unequal fixtures.
+
+Mapping exposes **960 raw typography differences**, rather than accepting the
+previous mapping gaps as harmless. Across all 192 labels:
+
+- Font stack: reference `Roboto`, candidate `Roboto, Arial, sans-serif`.
+- Line height: reference `20px`, candidate retained `normal`.
+- Letter spacing: reference `0.096px`, candidate `0`.
+- Alignment: reference `start`, candidate `left`, with separately captured LTR
+  context required by the existing representational-equivalence proof.
+- Color: candidate retained `rgba(29,27,32,1)` throughout; reference
+  `rgba(29,27,30,1)` for 144 unselected labels and `rgba(75,67,87,1)` for 48
+  selected labels. These **192 color differences remain unresolved** in this
+  increment, pending original selected-color/token/inheritance provenance.
+
+Existing declaration/ancestry proofs independently attribute the first three
+properties as omitted component inputs. The alignment proof does not equate
+the surrounding layouts. No typography value, tolerance, capture, fixture,
+plugin or renderer was changed.
+
+`reviewedMaterialOptionMappings` requires unique keys/IDs, linked expanded
+combobox/listbox and field ancestry, complete ordered values, direct text and
+ripple ownership, plus correct conditional indicator topology independently
+on each side. Missing, additional, reordered or ambiguous nodes prevent mapping.
+The two families retain distinct reference input and panel associations.
+Independent inventory replay checks all mapping/comparison/difference/gap
+records, rejecting deleted or fabricated records and equivalence claims.
+
+Four tests cover eight accepted family/selection combinations, **74 shared
+negative capture controls**, six family-specific association controls and
+**22 report mutations**. Focused verification:
+
+`node --test --test-name-pattern='material option|records source fingerprints' tests/material-parity/input-equivalence-audit.spec.mjs`
+
+**5/5 pass**, zero failed/skipped/cancelled/todo, **2.104 seconds**, terminal exit 0.
+`npm run parity:harness:check`: **372/372 pass**, zero failed/skipped/cancelled/
+todo, **147.588 seconds**, terminal exit 0. `git diff --check` passes.
+All ten original visual-harness file hashes still match the frozen
+`current-ancestry-audit/checkpoint/manifest.json`.
+
+Full replay completed with terminal exit 0 (the command prints the strict
+validator errors rather than converting them to an exit status):
+
+```powershell
+node --input-type=module -e "import {readFileSync} from 'node:fs';import {buildMaterialInputAudit,validateMaterialInputAudit} from './tests/material-parity/input-equivalence-audit.mjs';const p=JSON.parse(readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json'));const a=buildMaterialInputAudit(p,{root:process.cwd(),normalLineBoxPath:'artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json',supplementalRoot:'artifacts/material-parity/supplemental-current-ancestry-audit'});console.log('SUMMARY '+JSON.stringify({coverage:a.coverage.complete,summary:a.summary,mappings:a.retainedTypography.reviewedMappings.filter(m=>m.kind==='reviewed-material-option-text').length,retainedGaps:a.retainedTypography.gaps.filter(g=>g.attribution==='unresolved').length,retainedDifferences:a.retainedTypography.differences.filter(g=>g.attribution==='unresolved').length}));console.log('DIAGNOSTIC '+JSON.stringify(validateMaterialInputAudit(a,{requireComplete:false})));console.log('STRICT '+JSON.stringify(validateMaterialInputAudit(a)));"
+```
+
+The current report has complete measured coverage, **100** detected source
+findings, zero undetected definitions and **192** new option mappings.
+Unresolved retained mapping/stage gaps fall from **673 to 385**, because 192
+missing-label records and 96 anonymous reference groups are replaced with
+explicit correspondence and independent typography comparisons. Unresolved
+retained differences rise from **354 to 546**, preserving the newly visible
+192 ink discrepancies rather than suppressing them. Diagnostic validation
+returns `[]`. Strict validation still rejects completion:
+
+- **3,309** resolved-style differences lack root-cause attribution.
+- **849** control texture typography differences require attribution.
+- **385** retained mapping/stage gaps require review.
+- **546** retained typography differences require attribution.
+
+This replay does not replace the required final unfiltered visual matrix run.
+The audit remains incomplete; no final machine-report artifact is published yet.
+
+A subsequent source spot check of light/DPR1 autocomplete `open-commit-reopen`
+and select `activate` explains why selected ink needs a separate proof: the
+reference option stays `rgb(29,27,30)`, but its primary-text child has an active
+`.mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled):not(.mat-mdc-option-multiple) .mdc-list-item__primary-text`
+rule declaring
+`color:var(--mat-option-selected-state-label-text-color, var(--mat-sys-on-secondary-container))`.
+The candidate `.select-option.selected` rule changes background only. This is
+a source lead for cohort-wide attribution, not a new accepted color waiver or
+a claim that all possible competing declarations have already been excluded.
+
+The implementation plan now explicitly restores original option/text/ripple/
+minimal-checkbox inputs and component tokens before evaluating residual core
+layout or paint. Selected ink, overlay token scope, custom checkmark paint and
+the existing anchored-overlay compensation remain independent audit work.
+
 ## Timepicker option ink provenance (2026-09-13)
 
 The **2,304** newly exposed option-color differences now have source and stage

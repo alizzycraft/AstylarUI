@@ -1392,6 +1392,155 @@ test('timepicker option replay rejects deleted forged or transplanted evidence',
   }
 });
 
+function materialOptionReport(family, referenceSelected = -1, candidateSelected = referenceSelected) {
+  const raw = timepickerOptionReport(), entry = raw.results[0];
+  entry.family = family;
+  const { reference: r, astylar: a } = entry.inputTrees, auto = family === 'autocomplete';
+  r.nodes = r.nodes.filter(n => ['field', 'infix', 'label', 'input', 'panel'].includes(n.key));
+  a.nodes = a.nodes.filter(n => ['field', 'region', 'input', 'panel'].includes(n.key));
+  const rn = key => r.nodes.find(n => n.key === key), an = key => a.nodes.find(n => n.key === key);
+  rn('field').attributes.id = `${family}-primary`;
+  rn('label').attributes.for = auto ? `${family}-control` : undefined;
+  rn('input').type = auto ? 'input' : 'mat-select';
+  rn('input').attributes = { id: `${family}-control`, role: 'combobox', 'aria-expanded': 'true',
+    'aria-controls': auto ? 'mat-autocomplete-0' : 'select-control-panel', 'aria-label': auto ? 'City' : 'Plan',
+    ...(auto ? { 'aria-autocomplete': 'list' } : { 'aria-activedescendant': `mat-option-${Math.max(0, referenceSelected)}` }) };
+  rn('panel').attributes = { id: rn('input').attributes['aria-controls'], role: 'listbox', class: `mat-mdc-${family}-panel`,
+    ...(auto ? { 'aria-labelledby': 'label-0' } : { 'aria-multiselectable': 'false', 'aria-label': 'Plan' }) };
+  an('field').authored.id = `${family}-primary`;
+  an('region').authored = { type: 'div', id: `${family}-input-region`, class: 'field-input-region' };
+  an('input').authored = { type: 'input', id: `${family}-control`, role: 'combobox', ariaExpanded: true,
+    ariaControls: auto ? 'field-options' : 'select-options', ...(auto ? { ariaAutocomplete: 'list' } : {}) };
+  an('panel').authored = { type: 'div', id: an('input').authored.ariaControls, role: 'listbox', class: 'select-popup' };
+  const domains = auto ? [['cape-town', 'Cape Town', 'Cape Town'], ['johannesburg', 'Johannesburg', 'Johannesburg']]
+    : [['solo', 'Solo', 'solo'], ['team', 'Team', 'team']];
+  const ref = (key, parent, type, attributes, ownText = '') => r.nodes.push({ ...structuredClone(rn('field')), key, parent, type, attributes, ownText });
+  const ast = (key, parent, authored) => a.nodes.push({ ...structuredClone(an('field')), key, parent, authored,
+    ...(authored.textContent ? { retainedText: { source: 'core-text-registry', style: an('field').resolvedStyle } } : {}) });
+  for (const [index, [slug, text, value]] of domains.entries()) {
+    ref(`o${index}`, 'panel', 'mat-option', { id: `mat-option-${index}`, role: 'option', value, class: 'mat-mdc-option',
+      'aria-selected': String(index === referenceSelected), 'aria-disabled': 'false' });
+    ref(`t${index}`, `o${index}`, 'span', { class: 'mdc-list-item__primary-text' }, text);
+    if (index === referenceSelected) ref(`c${index}`, `o${index}`, 'mat-pseudo-checkbox', { state: 'checked', appearance: 'minimal',
+      'aria-hidden': 'true', class: 'mat-mdc-option-pseudo-checkbox' });
+    ref(`r${index}`, `o${index}`, 'div', { class: 'mat-mdc-option-ripple', 'aria-hidden': 'true' });
+    const id = `${family}-option-${slug}`;
+    ast(`o${index}`, 'panel', { type: 'div', id, class: 'select-option', role: 'option', ariaSelected: index === candidateSelected });
+    ast(`t${index}`, `o${index}`, { type: 'span', id: auto ? `${id}-label` : `select-${slug}-label`, textContent: text });
+    if (index === candidateSelected) ast(`c${index}`, `o${index}`, { type: 'showcase.material:check-mark',
+      id: auto ? `${id}-check` : 'select-check', class: 'selection-mark select-check', role: 'presentation', data: { 'stroke-width': 1.8 } });
+  }
+  return raw;
+}
+
+test('material option mapping preserves complete domains and independent selection/indicator owners', () => {
+  for (const family of ['autocomplete', 'select']) for (const [refSelected, astSelected] of [[-1, -1], [0, 0], [1, 1], [0, 1]]) {
+    const raw = materialOptionReport(family, refSelected, astSelected), original = structuredClone(raw);
+    const cases = raw.results.map(e => ({ ...e, kind: 'static' }));
+    const result = collectRetainedTypographyEvidence(cases, collectFullTreeInventory(cases));
+    assert.equal(result.reviewedMappings.length, 2);
+    assert.equal(result.comparisons.length, 2);
+    assert.equal(result.differences.length, 8, 'raw typography differences are not waived by a correspondence');
+    assert.equal(result.gaps.length, 0);
+    for (const [index, mapping] of result.reviewedMappings.entries()) {
+      assert.equal(mapping.kind, 'reviewed-material-option-text');
+      assert.equal(mapping.inputEquivalent, false);
+      assert.equal(mapping.finalRasterVerified, false);
+      assert.equal(mapping.classification, 'application-plugin-authoring-defect');
+      assert.equal(mapping.reviewEvidence.referenceSelection, String(index === refSelected));
+      assert.equal(mapping.reviewEvidence.candidateSelection, index === astSelected);
+      assert.equal(Boolean(mapping.reviewEvidence.referenceCheck), index === refSelected);
+      assert.equal(Boolean(mapping.reviewEvidence.candidateCheck), index === astSelected);
+    }
+    assert.deepEqual(raw, original);
+  }
+});
+
+test('material option mapping rejects incomplete ambiguous or detached input domains and indicator paths', () => {
+  const controls = [
+    (r, a) => { r.nodes.find(n => n.key === 'input').attributes['aria-controls'] = 'other'; },
+    (r, a) => { a.nodes.find(n => n.key === 'input').authored.ariaControls = 'other'; },
+    (r, a) => { r.nodes.find(n => n.key === 'input').attributes['aria-expanded'] = 'false'; },
+    (r, a) => { a.nodes.find(n => n.key === 'input').authored.ariaExpanded = false; },
+    (r, a) => { r.nodes.find(n => n.key === 'input').parent = 'missing'; },
+    (r, a) => { a.nodes.find(n => n.key === 'input').parent = 'field'; },
+    (r, a) => { r.nodes.find(n => n.key === 'label').parent = 'missing'; },
+    (r, a) => { a.nodes.find(n => n.key === 'panel').parent = 'missing'; },
+    (r, a) => { r.nodes = r.nodes.filter(n => n.key !== 'o1'); },
+    (r, a) => { a.nodes = a.nodes.filter(n => n.key !== 'o1'); },
+    (r, a) => { r.nodes.find(n => n.key === 't1').ownText = 'Other'; },
+    (r, a) => { a.nodes.find(n => n.key === 't1').authored.textContent = 'Other'; },
+    (r, a) => { r.nodes.find(n => n.key === 'o1').attributes.id = 'mat-option-0'; },
+    (r, a) => { a.nodes.find(n => n.key === 'o1').authored.id = a.nodes.find(n => n.key === 'o0').authored.id; },
+    (r, a) => { r.nodes.push(structuredClone(r.nodes.at(-1))); },
+    (r, a) => { a.nodes.push(structuredClone(a.nodes.at(-1))); },
+    (r, a) => { r.nodes.find(n => n.key === 'r0').ownText = 'extra'; },
+    (r, a) => { r.nodes.find(n => n.key === 'r0').attributes['aria-hidden'] = 'false'; },
+    (r, a) => { r.nodes.find(n => n.key === 'input').attributes['aria-activedescendant'] = 'missing'; },
+    (r, a) => { a.nodes.find(n => n.key === 'input').authored.ariaActivedescendant = 'missing'; },
+    (r, a) => { r.nodes.find(n => n.key === 't0').attributes.id = a.nodes.find(n => n.key === 't0').authored.id; },
+    (r, a) => { a.nodes.find(n => n.key === 'o0').authored.role = 'button'; },
+    (r, a) => { const i = r.nodes.findIndex(n => n.key === 'o0'), j = r.nodes.findIndex(n => n.key === 'o1'); [r.nodes[i], r.nodes[j]] = [r.nodes[j], r.nodes[i]]; },
+    (r, a) => { const i = a.nodes.findIndex(n => n.key === 'o0'), j = a.nodes.findIndex(n => n.key === 'o1'); [a.nodes[i], a.nodes[j]] = [a.nodes[j], a.nodes[i]]; },
+    (r, a) => { r.nodes.find(n => n.key === 'o0').attributes.value = 'other'; },
+    (r, a) => { r.nodes.find(n => n.key === 'o0').attributes['aria-selected'] = 'false'; },
+    (r, a) => { a.nodes.find(n => n.key === 'o0').authored.ariaSelected = false; },
+    (r, a) => { r.nodes.find(n => n.key === 'c0').attributes.appearance = 'full'; },
+    (r, a) => { r.nodes.find(n => n.key === 'c0').attributes['aria-hidden'] = 'false'; },
+    (r, a) => { r.nodes.find(n => n.key === 'c0').ownText = 'check'; },
+    (r, a) => { a.nodes.find(n => n.key === 'c0').authored.type = 'span'; },
+    (r, a) => { a.nodes.find(n => n.key === 'c0').authored.role = 'button'; },
+    (r, a) => { a.nodes.find(n => n.key === 'c0').parent = 'panel'; },
+    (r, a) => { a.nodes.find(n => n.key === 't0').parent = 'c0'; },
+    (r, a) => { r.nodes.find(n => n.key === 'r0').parent = 't0'; },
+    (r, a) => { r.nodes.find(n => n.key === 'panel').ownText = 'extra'; },
+    (r, a) => { a.nodes.find(n => n.key === 'panel').authored.textContent = 'extra'; },
+  ];
+  for (const family of ['autocomplete', 'select']) for (const [index, mutate] of controls.entries()) {
+    const raw = materialOptionReport(family, 0), { reference: r, astylar: a } = raw.results[0].inputTrees;
+    mutate(r, a);
+    assert.deepEqual(reviewedTemplateTextMappings(family, r, a), [], `${family} control ${index}`);
+  }
+});
+
+test('material option mapping enforces each family association rather than substituting picker behavior', () => {
+  for (const [family, mutate] of [
+    ['autocomplete', r => { r.nodes.find(n => n.key === 'input').attributes['aria-autocomplete'] = 'none'; }],
+    ['autocomplete', r => { r.nodes.find(n => n.key === 'label').attributes.for = 'other'; }],
+    ['autocomplete', r => { r.nodes.find(n => n.key === 'panel').attributes['aria-labelledby'] = 'missing'; }],
+    ['select', r => { r.nodes.find(n => n.key === 'panel').attributes['aria-multiselectable'] = 'true'; }],
+    ['select', r => { r.nodes.find(n => n.key === 'panel').attributes['aria-label'] = 'Other'; }],
+    ['select', r => { r.nodes.find(n => n.key === 'input').type = 'input'; }],
+  ]) {
+    const { reference, astylar } = materialOptionReport(family).results[0].inputTrees;
+    mutate(reference);
+    assert.deepEqual(reviewedTemplateTextMappings(family, reference, astylar), []);
+  }
+});
+
+test('material option replay rejects dropped forged or transplanted mappings and typography', () => {
+  for (const family of ['autocomplete', 'select']) {
+    const original = buildMaterialInputAudit(materialOptionReport(family, 0));
+    assert.ok(!validateMaterialInputAudit(original, { requireComplete: false }).some(e => e.includes('material option')));
+    for (const mutate of [
+      r => { r.retainedTypography.reviewedMappings.pop(); },
+      r => { r.retainedTypography.reviewedMappings.push(r.retainedTypography.reviewedMappings[0]); },
+      r => { r.retainedTypography.reviewedMappings[0].inputEquivalent = true; },
+      r => { r.retainedTypography.reviewedMappings[0].finalRasterVerified = true; },
+      r => { r.retainedTypography.reviewedMappings[0].classification = 'equivalent-representation'; },
+      r => { r.retainedTypography.reviewedMappings[0].reviewEvidence.referenceCheck = null; },
+      r => { r.retainedTypography.reviewedMappings[0].case = 'static:menu@light/desktop'; },
+      r => { r.retainedTypography.comparisons[0].revision++; },
+      r => { r.retainedTypography.comparisons[0].properties.lineHeight.retained = '24px'; },
+      r => { r.retainedTypography.differences.pop(); },
+      r => { r.retainedTypography.differences[0].attribution = 'equivalent-representation'; },
+    ]) {
+      const report = structuredClone(original); mutate(report);
+      assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('material option')));
+    }
+  }
+});
+
 function timepickerOptionInkReport() {
   const raw = timepickerOptionReport(), { reference: r, astylar: a } = raw.results[0].inputTrees;
   r.rules = [{ source: 'sheet:11/0', selector: '.mat-mdc-option', active: true, conditions: [],

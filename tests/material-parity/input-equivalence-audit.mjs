@@ -451,6 +451,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
   if (requireComplete && unresolvedTypography.length > 0) errors.push(`${unresolvedTypography.length} retained typography differences require attribution`);
   validateCalendarWeekdayEvidence(report, errors);
   validateTimepickerOptionEvidence(report, errors);
+  validateMaterialOptionEvidence(report, errors);
   validateHorizontalStartAlignment(report, errors);
   validateInheritedComponentFontStack(report, errors);
   validateOmittedComponentTextMetrics(report, errors);
@@ -581,6 +582,7 @@ export function renderMaterialInputAuditMarkdown(report) {
     `Calendar close control: ${report.controlTypography.gaps.filter(gap => isReviewedCalendarCloseGap(gap, report.elementInventory)).length} preserved gap records identify a reference close-button/label path omitted from the candidate popup. The retained stage preserves the same omission separately from remaining anonymous labels. These are unequal authored controls, not invented paint entries, harmless hidden text or equivalent Escape/outside dismissal. Computed clipping and focus-to-reveal behavior remain unverified by these structural captures.`,
     `Calendar weekday headers: ${report.retainedTypography.reviewedMappings.filter(m => m.kind === 'reviewed-calendar-weekday-text').length} abbreviated labels have exact ordered-header/date-context correspondence. Their separate full-name omissions remain explicit gap records, and replacing column headers with spans is classified as unequal authoring. Font/ink substitutions, unresolved tracking, original divider structure and unknown clipping remain independent; no glyph raster is inferred from retained text.`,
     `Calendar month markers: ${report.retainedTypography.reviewedMappings.filter(m => m.kind === 'reviewed-calendar-month-marker-text').length} labels have complete dated-row and replacement-grid correspondence. Conditional reference colspans, empty leading cells and candidate blank spans are preserved as unequal structural inputs; all mapped typography differences remain independently reportable. The fixed captured month is not all-month rendering evidence.`,
+    `Autocomplete/select options: ${report.retainedTypography.reviewedMappings.filter(m => m.kind === 'reviewed-material-option-text').length} labels have complete ordered input-linked domain correspondence. Separate Material ripple and conditional pseudo-checkbox owners differ from candidate div/span/plugin-check composition; both sides selection and indicator inputs are retained independently. Mapping does not waive typography, structure, state, placement, scrolling or raster differences.`,
     `Timepicker options: ${report.retainedTypography.reviewedMappings.filter(m => m.kind === 'reviewed-timepicker-option-text').length} labels have complete input-linked half-hour-domain correspondence. Material primary-text/ripple owners are replaced by direct-text div options; active and selected states remain separate raw evidence. This maps text owners, not equivalent wrappers, scrolling, commit behavior, placement or raster. Newly exposed typography differences remain enforced.`,
     `Timepicker option ink: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-timepicker-option-ink-input').length} unequal colors trace from the reference option token through direct label inheritance versus the candidate literal preserved in normal/effective/retained stages. Competing or missing declarations prevent attribution. No token fallback-origin, theme-scope, compositing or final-raster equivalence is inferred.`,
     `Calendar month-label typography: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-calendar-month-marker-typography-input').length} records trace the omitted explicit zero line-height or substituted center alignment/literal ink to original declarations and captured core stages. Possible competing rules prevent attribution. These are unequal inputs, not a claim that the core misrendered zero, start or the original color token.`,
@@ -1438,6 +1440,108 @@ function reviewedTimepickerOptionMappings(reference, candidate) {
   }));
 }
 
+function reviewedMaterialOptionMappings(family, reference, candidate) {
+  // Fixed domains are authored in the reference template. Do not pair options
+  // by text alone, projected order, or a shared visual position.
+  if (!['autocomplete', 'select'].includes(family)) return [];
+  const one = nodes => nodes.length === 1 ? nodes[0] : undefined;
+  const cls = (node, name, side) => String((side === 'reference' ? node?.attributes : node?.authored)?.class ?? '').split(/\s+/).includes(name);
+  for (const tree of [reference, candidate]) {
+    if (!Array.isArray(tree?.nodes) || new Set(tree.nodes.map(n => n.key)).size !== tree.nodes.length) return [];
+  }
+  const children = (tree, node) => tree.nodes.filter(n => n.parent === node.key);
+  const rid = id => one(reference.nodes.filter(n => n.attributes?.id === id));
+  const aid = id => one(candidate.nodes.filter(n => n.authored?.id === id));
+  const auto = family === 'autocomplete', controlId = `${family}-control`, panelId = auto ? 'field-options' : 'select-options';
+  const input = rid(controlId), field = rid(`${family}-primary`), astInput = aid(controlId), astField = aid(`${family}-primary`);
+  const region = aid(`${family}-input-region`), panel = aid(panelId);
+  const refPanel = one(reference.nodes.filter(n => cls(n, `mat-mdc-${family}-panel`, 'reference')));
+  if (input?.type !== (auto ? 'input' : 'mat-select') || input.attributes.role !== 'combobox' ||
+      input.attributes['aria-expanded'] !== 'true' || field?.type !== 'mat-form-field' || !cls(field, 'mat-mdc-form-field', 'reference') ||
+      refPanel?.type !== 'div' || refPanel.attributes.role !== 'listbox' || rid(refPanel.attributes.id) !== refPanel ||
+      !(auto ? /^mat-autocomplete-\d+$/.test(refPanel.attributes.id ?? '') : refPanel.attributes.id === 'select-control-panel') ||
+      input.attributes['aria-controls'] !== refPanel.attributes.id ||
+      astInput?.authored.type !== 'input' || astInput.authored.role !== 'combobox' || astInput.authored.ariaExpanded !== true ||
+      astInput.authored.ariaControls !== panelId || astField?.authored.type !== 'div' || !cls(astField, 'field-shell') ||
+      region?.authored.type !== 'div' || !cls(region, 'field-input-region') || region.parent !== astField.key || astInput.parent !== region.key ||
+      panel?.authored.type !== 'div' || panel.authored.role !== 'listbox' || !cls(panel, 'select-popup') || panel.parent !== astField.key) return [];
+  const inputPath = [input];
+  while (inputPath.at(-1) !== field) {
+    const parent = one(reference.nodes.filter(n => n.key === inputPath.at(-1).parent));
+    if (!parent || inputPath.includes(parent)) return [];
+    inputPath.push(parent);
+  }
+  const label = auto ? rid(refPanel.attributes['aria-labelledby']) : one(reference.nodes.filter(n =>
+    n.parent === input.parent && n.type === 'label' && cls(n, 'mat-mdc-floating-label', 'reference')));
+  if (label?.type !== 'label' || label.parent !== input.parent || !cls(label, 'mat-mdc-floating-label', 'reference') ||
+      (auto ? label.attributes.for !== controlId || input.attributes['aria-autocomplete'] !== 'list' || astInput.authored.ariaAutocomplete !== 'list'
+        : refPanel.attributes['aria-multiselectable'] !== 'false' || refPanel.attributes['aria-label'] !== 'Plan' || input.attributes['aria-label'] !== 'Plan')) return [];
+  const domains = auto ? [['cape-town', 'Cape Town', 'Cape Town'], ['johannesburg', 'Johannesburg', 'Johannesburg']]
+    : [['solo', 'Solo', 'solo'], ['team', 'Team', 'team']];
+  const options = children(reference, refPanel), astOptions = children(candidate, panel);
+  if (options.length !== domains.length || astOptions.length !== domains.length || refPanel.ownText?.trim() || panel.authored.textContent?.trim()) return [];
+  const rows = [];
+  for (const [index, [slug, text, value]] of domains.entries()) {
+    const option = options[index], ast = astOptions[index], parts = children(reference, option), astParts = children(candidate, ast);
+    const selected = option.attributes?.['aria-selected'], astSelected = ast.authored?.ariaSelected;
+    const [leaf] = parts, ripple = parts.at(-1), [astLeaf] = astParts;
+    const optionId = `${family}-option-${slug}`, element = auto ? `${optionId}-label` : `select-${slug}-label`;
+    if (option.type !== 'mat-option' || option.attributes?.role !== 'option' || !cls(option, 'mat-mdc-option', 'reference') ||
+        !/^mat-option-\d+$/.test(option.attributes.id ?? '') || rid(option.attributes.id) !== option || option.attributes.value !== value || option.ownText?.trim() ||
+        !['true', 'false'].includes(selected) || !['true', 'false'].includes(option.attributes['aria-disabled']) ||
+        parts.length !== (selected === 'true' ? 3 : 2) || leaf?.type !== 'span' || !cls(leaf, 'mdc-list-item__primary-text', 'reference') ||
+        leaf.attributes?.id || leaf.ownText?.trim() !== text || children(reference, leaf).length ||
+        ripple?.type !== 'div' || !cls(ripple, 'mat-mdc-option-ripple', 'reference') || ripple.attributes?.['aria-hidden'] !== 'true' ||
+        ripple.ownText?.trim() || children(reference, ripple).length ||
+        ast.authored?.type !== 'div' || ast.authored.id !== optionId || aid(optionId) !== ast || !cls(ast, 'select-option') ||
+        ast.authored.role !== 'option' || typeof astSelected !== 'boolean' || ast.authored.textContent?.trim() ||
+        astParts.length !== (astSelected ? 2 : 1) || astLeaf?.authored.type !== 'span' || astLeaf.authored.id !== element || aid(element) !== astLeaf ||
+        reference.nodes.some(n => n.attributes?.id === element) || astLeaf.authored.textContent?.trim() !== text || children(candidate, astLeaf).length) return [];
+    const check = selected === 'true' ? parts[1] : undefined, astCheck = astSelected ? astParts[1] : undefined;
+    if (check && (check.type !== 'mat-pseudo-checkbox' || check.attributes?.state !== 'checked' || check.attributes.appearance !== 'minimal' ||
+        check.attributes['aria-hidden'] !== 'true' || !cls(check, 'mat-mdc-option-pseudo-checkbox', 'reference') ||
+        check.ownText?.trim() || children(reference, check).length)) return [];
+    if (astCheck && (astCheck.authored?.type !== 'showcase.material:check-mark' || astCheck.authored.id !== (auto ? `${optionId}-check` : 'select-check') ||
+        aid(astCheck.authored.id) !== astCheck || astCheck.authored.role !== 'presentation' || !cls(astCheck, 'select-check') ||
+        astCheck.authored.textContent?.trim() || children(candidate, astCheck).length)) return [];
+    rows.push({ index, text, value, element, option, ast, leaf, astLeaf, ripple, check, astCheck });
+  }
+  if (input.attributes['aria-activedescendant'] && !options.some(n => n.attributes.id === input.attributes['aria-activedescendant'])) return [];
+  if (astInput.authored.ariaActivedescendant && !astOptions.some(n => n.authored.id === astInput.authored.ariaActivedescendant)) return [];
+  const snapshot = (node, side) => node ? { key: node.key, parent: node.parent,
+    ...(side === 'reference' ? { type: node.type, attributes: node.attributes, ownText: node.ownText, style: node.style, rules: node.rules,
+      inline: node.inline, pseudoElements: node.pseudoElements } : { authored: node.authored, normalStyle: node.normalStyle,
+      interactionStyle: node.interactionStyle, style: node.style }) } : null;
+  return rows.map(({ index, text, value, element, option, ast, leaf, astLeaf, ripple, check, astCheck }) => ({
+    kind: 'reviewed-material-option-text', element, referenceNode: leaf.key, astylarNode: astLeaf.key,
+    inputEquivalent: false, finalRasterVerified: false, classification: 'application-plugin-authoring-defect',
+    reviewEvidence: { family, index, text, value, domain: domains, referenceInputPath: inputPath.map(n => snapshot(n, 'reference')),
+      referenceLabel: snapshot(label, 'reference'), referencePanel: snapshot(refPanel, 'reference'), referenceOption: snapshot(option, 'reference'),
+      referenceText: snapshot(leaf, 'reference'), referenceRipple: snapshot(ripple, 'reference'), referenceCheck: snapshot(check, 'reference'),
+      candidateField: snapshot(astField), candidateRegion: snapshot(region), candidateInput: snapshot(astInput), candidatePanel: snapshot(panel),
+      candidateOption: snapshot(ast), candidateText: snapshot(astLeaf), candidateCheck: snapshot(astCheck),
+      referenceSelection: option.attributes['aria-selected'], candidateSelection: ast.authored.ariaSelected },
+    justification: 'The complete ordered reference value domain and linked open listbox establish these direct text owners. Material option/text/ripple and conditional minimal pseudo-checkbox are replaced by div/span and a conditional plugin checkmark. This is text correspondence, not equivalent structure, styling, selected/active state, accessibility, interaction, scrolling, coordinates or raster. Selection and every captured wrapper/indicator input remain independent evidence, not an equivalence waiver.',
+  }));
+}
+
+function validateMaterialOptionEvidence(report, errors) {
+  if (!report.retainedTypography) return;
+  const keys = [...new Set(report.elementInventory.cases.map(c => c.case))];
+  const cases = keys.flatMap(key => ['autocomplete', 'select'].flatMap(family => {
+    const match = parseReviewedCase(key, family);
+    return match ? [{ kind: match[1], family, profile: match[2], viewport: { id: match[3] },
+      ...(match[4] ? { state: match[4] } : {}) }] : [];
+  }));
+  const replay = collectRetainedTypographyEvidence(cases, report.elementInventory);
+  const predicate = value => value.kind === 'reviewed-material-option-text' || value.mapping?.kind === 'reviewed-material-option-text' ||
+    /^(autocomplete-option-(cape-town|johannesburg)|select-(solo|team))-label$/.test(value.element ?? '');
+  for (const list of ['reviewedMappings', 'comparisons', 'differences', 'gaps']) {
+    if (JSON.stringify(report.retainedTypography[list].filter(predicate)) !== JSON.stringify(replay[list].filter(predicate)))
+      errors.push(`material option ${list} lack complete replayed input evidence`);
+  }
+}
+
 function validateTimepickerOptionEvidence(report, errors) {
   if (!report.retainedTypography) return;
   const keys = [...new Set(report.elementInventory.cases.map(c => c.case))];
@@ -1547,6 +1651,7 @@ export function reviewedTemplateTextMappings(family, referenceTree, astylarTree)
   const pairs = family === 'datepicker' ? reviewedCalendarWeekdayMappings(referenceTree, astylarTree) : [];
   if (family === 'datepicker') pairs.push(...reviewedCalendarMonthMarkerMappings(referenceTree, astylarTree, pairs[0]));
   if (family === 'timepicker') pairs.push(...reviewedTimepickerOptionMappings(referenceTree, astylarTree));
+  if (family === 'autocomplete' || family === 'select') pairs.push(...reviewedMaterialOptionMappings(family, referenceTree, astylarTree));
   for (const path of paths) {
     const reference = follow(referenceTree, 'reference', path.reference);
     const astylar = follow(astylarTree, 'astylar', path.astylar);
@@ -5274,6 +5379,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('material option mapping preserves/,
+      'autocomplete/select complete-domain text correspondence retains unequal composition', 'Unique expanded input/listbox associations and ordered value domains map primary-text leaves. Conditional reference pseudo-checkbox/ripple and candidate plugin checks are preserved independently for selected and unselected options. Negative topology/domain/association controls and independent replay reject omitted or forged evidence; correspondence never equates typography, wrapper behavior, state or raster.'),
     proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('timepicker option ink attributes/,
       'timepicker option token inheritance versus authored literal ink', 'The complete-domain mapping anchors direct reference label inheritance from the original option token and candidate literal ink unchanged through three core stages. Missing/competing rules, inline overrides, incomplete owner styles and changed stages prevent attribution. Independent replay rejects fabricated core-fault, equivalence, source or raster claims. This proves unequal input provenance, not token fallback origin or physical paint.'),
     proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('timepicker options map/,
@@ -5394,6 +5501,7 @@ function implementationPlan() {
     { priority: 5.97, rootCause: 'Calendar month-label text declarations are replaced by generic date-cell inputs', action: 'Restore the original explicit line-height:0, text-align:start and calendar-body-label ink token with the original table-cell composition. The full captured chain proves candidate line-height omission, while center alignment and #1d1b20 reach retained text unchanged. Do not replace these declarations with a natural-line-height approximation, baseline nudge, flex-start justification or near-color match. Only an equivalent-input reproduction can establish any remaining core line-box, alignment or color failure.' },
     { priority: 5.98, rootCause: 'Timepicker options flatten label/ripple composition and conflate activity with selection', action: 'Restore the original option, primary-text and ripple ownership plus original typography declarations. Derive selected state from committed time independently of the active descendant, rather than permanently marking midnight selected. The complete 48-option domain establishes text correspondence only; retain the existing commit failure proof and separately verify wheel/keyboard scrolling, active option visibility and commit/dismissal at each action boundary. Do not use fixed line heights, offsets or manually moved text to conceal remaining equal-input layout or paint defects.' },
     { priority: 5.99, rootCause: 'Timepicker option ink replaces the component color token with a near-color literal', action: 'Restore the original option-label color token and its label inheritance with the original overlay theme scope. Candidate #1d1b20 survives normal/effective/retained stages unchanged while the reference option and label compute RGB(29,27,30). Do not merely replace the literal with sampled RGB or widen a color tolerance: that would still omit the authored token and state/theme behavior. Token fallback provenance, theme containment and composited state layers must be reviewed independently before asserting equal-input paint parity.' },
+    { priority: 5.995, rootCause: 'Autocomplete/select options substitute div/span/plugin-check composition for original Material owners', action: 'Restore the original option primary-text, ripple and conditional minimal-checkbox rendering inputs plus inherited component typography tokens. The complete two-option domains now map all captured open and commit/reopen states, preserving selected/active inputs independently and exposing remaining ink differences. Investigate original selected-color declarations, overlay theme containment and pseudo-checkbox styling before core paint claims. Keep each component focus/commit/dismissal behavior distinct; never fix residual sizing or alignment with option-specific offsets or sampled computed values.' },
     { priority: 6, rootCause: 'Interaction geometry duplicated by the application', action: 'Expose resolved CSS-space target bounds and local pointer coordinates in the core event/plugin contract; remove ripple width tables.' },
     { priority: 7, rootCause: 'Material paint inputs are substituted or calibrated', action: 'Supply paginator and calendar navigation reference SVG paths and their CSS/state paint through core vector/image rendering instead of font-character approximations. Preserve calendar navigation accessible names for the active month or multi-year view; do not copy month labels into the year view. Express progress angles, state layers, checkmarks, selection rings, and indicators from reference Material geometry in CSS space; remove screenshot-derived angle and fractional-position constants. Diagnose core only after the actual same geometry is supplied.' },
     { priority: 8, rootCause: 'Regression gate permits unequal inputs', action: 'Run this audit in CI after the full parity matrix, require complete coverage and zero unclassified differences, and review any new Astylar-only authored rule before updating the checked-in report.' },
