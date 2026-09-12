@@ -3,14 +3,73 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
-The report generator accepts an explicit evidence path so the fresh full run
-does not have to overwrite the preserved baseline. After the new control-text
-run completes, use `node scripts/run-material-input-audit.mjs --parity-report=artifacts/material-parity/control-text-complete-audit/latest-report.json --normal-line-box-report=artifacts/material-parity/normal-line-box-static-audit-v2/latest-report.json`,
-then the same command with `--check`. Do not use `--allow-partial` for acceptance.
+The report generator accepts an explicit evidence path so fresh full runs
+do not overwrite preserved baselines. The current in-progress full run is
+`artifacts/material-parity/context-complete-audit`. After it completes, use
+`node scripts/run-material-input-audit.mjs --parity-report=artifacts/material-parity/context-complete-audit/latest-report.json --normal-line-box-report=artifacts/material-parity/normal-line-box-context-audit/latest-report.json`,
+then the same command with `--check`. Its fresh natural-line-box supplement
+is complete and bound to that run. The older control-text baseline and its
+`normal-line-box-static-audit-v2` supplement remain preserved separately;
+never combine supplements and captures from different runs.
+Do not use `--allow-partial` for acceptance.
 Argument validation rejects unknown, empty, and repeated options (25/25 audit
 tests pass). A missing selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
+
+## Retained component fonts versus inherited page defaults (2026-09-12)
+
+A second repeated font-input category is now separated from the independently
+confirmed core font-list rewriting defect. The reference frame and candidate
+`main#page` legitimately share `Roboto, Arial, sans-serif`. Material components
+override that frame default with their own font-family tokens. Several
+candidate labels instead omit the override and retain the page stack.
+
+The new attribution requires a unique active reference Material font token
+computing `Roboto`, traced from the text leaf without intervening overrides,
+ambiguous declarations, missing ancestors or cycles. The candidate must have
+complete normal/effective declaration ancestry through the unique `main#page`:
+no intervening font-family or shorthand, an explicit matching page rule, and
+the same longer list retained by core. More specific select and calendar
+weekday attributions remain intact. Literal/unreviewed reference font rules,
+intervening candidate overrides and parser-appended Helvetica lists do not
+qualify for this category.
+
+The finding is **unequal component authoring**, not a font-list normalization,
+a renderer font-selection verdict or proof of current glyph paint. Restoring
+component font intent must precede testing equal-input fallback/shaping. Do not
+change the legitimate page reset globally to hide the omissions. The source
+inventory and root-cause plan record this distinction. Git history confirms
+the page stack and representative chip/card-title omissions in initial
+showcase commit `2f44011`; later geometry edits did not supply those tokens.
+
+Three new audit tests cover direct/inherited component tokens, 23 unsafe or
+ambiguous input mutations, and 11 changes/deletions/duplications of report
+claims. Validation reconstructs exact token, inheritance and retained-value
+evidence from the pooled capture rather than trusting classification labels.
+The focused audit suite passes **138/138** tests. The complete
+`npm run parity:harness:check` suite passes **231/231**, with no skipped tests;
+`git diff --check` is clean. No source styles, rendering, font assets,
+thresholds or frozen runtime were changed.
+
+A verified **491-record capture prefix**, including all **436 static cases**,
+attributes **204** retained font-list differences: radio 24, expansion 12,
+form-field 12, chips 24, tree 36, checkbox 12, card 12, slide-toggle 12 and
+stepper 60. Another **138** retained font-list differences in that prefix
+remain unresolved. All checkpoint result and paired tree digests validate;
+partial-schema validation reports no errors. Neither full coverage nor input
+equivalence is claimed while the remaining interaction cases are running.
+
+With all static records present, the unchanged supplemental script was run:
+
+`node scripts/audit-material-normal-line-boxes.mjs --base-url=http://127.0.0.1:4431 --checkpoint=artifacts/material-parity/context-complete-audit/checkpoint --output=artifacts/material-parity/normal-line-box-context-audit`
+
+It completed **120 observations across 96 cases**, exit 0. A subsequent
+**507-record** prefix audit loaded the new supplement against this run's exact
+provenance with **zero missing observations, zero supplemental errors and zero
+partial-schema validation errors**. This is fresh capture evidence, not reuse
+of the older run's normal-line-box values or a claim that normal is universally
+17px. The full unfiltered matrix continues in its original process.
 
 ## Context-qualified start/left alignment interpretation (2026-09-12)
 

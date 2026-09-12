@@ -610,6 +610,107 @@ test('retained typography retains missing property fields as gaps instead of acc
   assert.ok(validateMaterialInputAudit(report).includes('missing retained typography stage report'));
 });
 
+function inheritedComponentFontReport(direct = false) {
+  const raw = retainedTypographyReport(), { reference: ref, astylar: ast } = raw.results[0].inputTrees;
+  ref.styles = ref.styles.map(style => ({ ...style, fontFamily: 'Roboto' }));
+  ref.rules = [{ active: true, selector: '.mat-mdc-card-title', declarations: {
+    'font-family': { value: 'var(--mat-card-title-text-font, var(--mat-sys-title-large-font))' },
+  } }, { active: true, selector: '.label', declarations: { 'font-family': { value: 'inherit' } } }];
+  ref.nodes[0].rules = [direct ? 0 : 1];
+  ref.nodes.push({ key: 'frame', parent: null, type: 'div', attributes: {}, ownText: '', style: 0,
+    rules: [0], pseudoElements: [] });
+  const stack = { fontFamily: 'Roboto, Arial, sans-serif' };
+  ast.rules = [{ selector: '#page', ...stack }];
+  const leaf = ast.nodes[0];
+  leaf.parent = 'page-key';
+  for (const field of ['normalResolvedStyle', 'interactionResolvedStyle', 'resolvedStyle']) {
+    leaf[field] = { ...leaf[field] };
+    delete leaf[field].fontFamily;
+  }
+  leaf.retainedText.style = { ...leaf.retainedText.style, ...stack };
+  ast.nodes.push({ key: 'page-key', parent: 'root', authored: { id: 'page', type: 'main' },
+    resolvedStyle: { ...stack }, normalResolvedStyle: { ...stack }, interactionResolvedStyle: { ...stack } });
+  return raw;
+}
+
+test('retained font-stack attribution proves missing component input separately from core list rewriting', () => {
+  for (const direct of [false, true]) {
+    const raw = inheritedComponentFontReport(direct), before = structuredClone(raw);
+    const report = buildMaterialInputAudit(raw);
+    const findings = report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-inherited-component-font-stack');
+    assert.equal(findings.length, 1);
+    const finding = findings[0];
+    assert.equal(finding.classification, 'application-plugin-authoring-defect');
+    assert.equal(finding.inputEquivalent, false);
+    assert.equal(finding.currentPseudoStatePaintVerified, false);
+    assert.deepEqual(finding.values, { reference: 'roboto', normal: undefined, effective: undefined, retained: 'roboto,arial,sans-serif' });
+    assert.equal(finding.reviewEvidence.referenceChain.length, direct ? 1 : 2);
+    assert.equal(finding.reviewEvidence.candidateChain.length, 2);
+    assert.equal(finding.reviewEvidence.candidatePageRule.fontFamily, 'Roboto, Arial, sans-serif');
+    assert.ok(report.sourceFindings.find(f => f.id === finding.reviewEvidence.sourceFinding)?.detected);
+    assert.ok(!validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('font-stack attributions')));
+    assert.equal(report.summary.inputEquivalent, false);
+    assert.deepEqual(raw, before);
+  }
+});
+
+test('component font attribution rejects ambiguous tokens, intervening declarations and unproven inheritance', () => {
+  const mutations = [
+    (ref) => { ref.rules[0].active = false; },
+    (ref) => { ref.rules[0].selector = '.unrelated'; },
+    (ref) => { ref.rules[0].declarations['font-family'].value = 'Roboto'; },
+    (ref) => { ref.rules[0].declarations.font = { value: '14px Roboto' }; },
+    (ref) => { ref.rules[1].declarations['font-family'].value = 'Arial'; },
+    (ref) => { ref.nodes[1].rules.push(0); },
+    (ref) => { ref.nodes[0].inline = { 'font-family': { value: 'Roboto' } }; },
+    (ref) => { ref.nodes[0].attributes.style = 'font: 14px Roboto'; },
+    (ref) => { ref.nodes[0].parent = 'missing'; },
+    (ref) => { ref.nodes[0].parent = ref.nodes[0].key; },
+    (ref) => { ref.nodes.push(structuredClone(ref.nodes[0])); },
+    (_ref, ast) => { ast.nodes[0].normalResolvedStyle.fontFamily = 'Roboto'; },
+    (_ref, ast) => { ast.nodes[0].interactionResolvedStyle.fontFamily = 'Roboto'; },
+    (_ref, ast) => { ast.nodes[0].interactionResolvedStyle.font = '14px Roboto'; },
+    (_ref, ast) => { ast.nodes[0].normalResolvedStyle = []; },
+    (_ref, ast) => { ast.nodes[0].parent = 'missing'; },
+    (_ref, ast) => { ast.nodes[0].parent = ast.nodes[0].key; },
+    (_ref, ast) => { ast.nodes[1].authored.type = 'div'; },
+    (_ref, ast) => { ast.nodes[1].normalResolvedStyle.fontFamily = 'Arial'; },
+    (_ref, ast) => { ast.nodes[1].interactionResolvedStyle.fontFamily = 'Arial'; },
+    (_ref, ast) => { ast.rules[0].fontFamily = 'Arial'; },
+    (_ref, ast) => { ast.rules.push(structuredClone(ast.rules[0])); },
+    (_ref, ast) => { ast.nodes[0].retainedText.style.fontFamily = 'Roboto, Arial, Helvetica, sans-serif'; },
+  ];
+  for (const mutate of mutations) {
+    const raw = inheritedComponentFontReport();
+    mutate(raw.results[0].inputTrees.reference, raw.results[0].inputTrees.astylar);
+    const inventory = collectFullTreeInventory(raw.results);
+    const section = collectRetainedTypographyEvidence(raw.results, inventory);
+    assert.equal(section.differences.filter(d => d.attribution === 'reviewed-inherited-component-font-stack').length, 0, String(mutate));
+  }
+});
+
+test('component font claims replay exact reference tokens, candidate inherited styles and attribution scope', () => {
+  const baseline = buildMaterialInputAudit(inheritedComponentFontReport());
+  const mutations = [
+    (report, finding) => { finding.reviewEvidence.referenceChain.pop(); },
+    (report, finding) => { finding.reviewEvidence.candidateChain.pop(); },
+    (report, finding) => { finding.values.normal = 'roboto'; },
+    (report, finding) => { finding.inputEquivalent = true; },
+    (report, finding) => { finding.currentPseudoStatePaintVerified = true; },
+    (report, finding) => { finding.classification = 'confirmed-core-renderer-defect'; },
+    (report, finding) => { report.retainedTypography.differences.push(structuredClone(finding)); },
+    report => { report.retainedTypography.differences = []; },
+    report => { report.retainedTypography.comparisons[0].properties.fontFamily.retained = 'roboto'; },
+    report => { report.elementInventory.rules.find(r => r.side === 'reference' && r.value.selector === '.mat-mdc-card-title').value.active = false; },
+    report => { report.elementInventory.styles.find(s => s.side === 'astylar' && s.value.fontFamily === 'Roboto, Arial, sans-serif').value.fontFamily = 'Roboto'; },
+  ];
+  for (const mutate of mutations) {
+    const report = structuredClone(baseline), finding = report.retainedTypography.differences.find(d => d.attribution === 'reviewed-inherited-component-font-stack');
+    mutate(report, finding);
+    assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('font-stack attributions')), String(mutate));
+  }
+});
+
 function hiddenRetainedTypographyReport(referenceMechanism = 'display-none') {
   const raw = retainedTypographyReport();
   const { reference, astylar } = raw.results[0].inputTrees;

@@ -200,6 +200,15 @@ export const sourceAuditDefinitions = Object.freeze([
     justification: 'The reference filled/outlined/text button overrides the document font reset with its Material component font token, computing Roboto. Commit af04845 added a candidate button,input,select reset to Roboto, Arial, sans-serif, but material-button and text-button lack the component font override. The card flow correction in 1d74a0f retained that omission. The production control texture captures the longer stack unchanged. Similar glyphs do not make different fallback inputs equivalent; attribute only with the captured active reference token for the corresponding button kind, candidate reset and missing component override plus matching normal/effective/current paint stages. This does not demonstrate a renderer font-selection defect.',
   }),
   Object.freeze({
+    id: 'fixture-retained-component-font-tokens-omitted',
+    introducedBy: '2f44011 initial showcase page font stack and component token omissions; later component layout rewrites preserve omissions',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`selector: '\.(?:chip|card-title)',(?![^\n]*fontFamily:)[^\n]*fontSize:`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase Material component font-family token translation',
+    justification: 'The page reset to Roboto, Arial, sans-serif is legitimate and matches the reference frame; individual Material components then override it with component font-family tokens. Representative chip and card-title rules copy sizes but omit that override. Attribute each retained text occurrence only when its actual reference ancestor chain reaches a unique active Material font token computing Roboto, while every candidate normal/effective declaration up to main#page omits font-family and core retains the authored page stack unchanged. Do not infer this from equal glyphs, component names or source-pattern matches alone. Different fallback lists are unequal inputs even when installed Roboto supplies the current characters. This differs from the separately confirmed core parser bug that appends fallback families to an explicit single-family input. Preserve component font intent and nested structure before testing font fallback, shaping or placement.',
+  }),
+  Object.freeze({
     id: 'fixture-material-button-tracking-token-omitted',
     introducedBy: '2f44011 feat(example): add Material component showcase',
     file: 'examples/material-showcase/src/app/astylar.component.ts',

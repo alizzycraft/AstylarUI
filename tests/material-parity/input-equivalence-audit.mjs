@@ -320,6 +320,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
   if (requireComplete && unresolvedRetainedGaps.length > 0) errors.push(`${unresolvedRetainedGaps.length} retained typography mappings or stage fields require review`);
   const reviewedTypographyKinds = { 'reviewed-heading-mask': 'parity-harness-defect',
     'reviewed-horizontal-start-alignment': 'equivalent-representation',
+    'reviewed-inherited-component-font-stack': 'application-plugin-authoring-defect',
     'reviewed-table-font-input': 'application-plugin-authoring-defect',
     'reviewed-tree-font-input': 'application-plugin-authoring-defect',
     'reviewed-control-label-token-input': 'application-plugin-authoring-defect',
@@ -331,6 +332,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
   if (requireComplete && unresolvedTypography.length > 0) errors.push(`${unresolvedTypography.length} retained typography differences require attribution`);
   validateCalendarWeekdayEvidence(report, errors);
   validateHorizontalStartAlignment(report, errors);
+  validateInheritedComponentFontStack(report, errors);
   if (requireComplete && report.supplementalBehavior.missing.length > 0) errors.push(`${report.supplementalBehavior.missing.length} supplemental behavior cases are missing`);
   if (report.supplementalBehavior.errors.length > 0) errors.push(`${report.supplementalBehavior.errors.length} supplemental behavior collection errors`);
   if (requireComplete && report.supplementalOverlays.missing.length > 0) errors.push(`${report.supplementalOverlays.missing.length} supplemental overlay cases are missing`);
@@ -368,6 +370,8 @@ export function renderMaterialInputAuditMarkdown(report) {
     `Reference computed context: ${report.elementInventory.referenceContextGaps.length} missing capture declarations or node/pseudo-element fields for direction, writing mode, bidi, last-line alignment, shaping and clipping. Legacy captures remain readable but cannot establish these inputs. A full new capture is required; no direction or clip value is inferred from class names, defaults or screenshots.`,
     '',
     `Retained typography: ${report.retainedTypography.comparisons.length} directly mapped text-node observations; ${report.retainedTypography.gaps.length} mapping/stage gaps and ${report.retainedTypography.differences.length} unequal retained-property observations. The registry stage is reported separately from declarations and is not proof of current pseudo-state glyph paint.`,
+    '',
+    `Inherited component font inputs: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-inherited-component-font-stack').length} records trace an active reference Material font token to Roboto, while complete candidate declaration ancestry omits that component override and retains the page fallback stack. These are unequal authored inputs, not equivalent font lists or proof of current physical font selection. The independent core single-family rewrite finding remains separate.`,
     '',
     `Contextual start/left alignment: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-horizontal-start-alignment').length} retained and ${report.controlTypography.differences.filter(d => d.attribution === 'reviewed-horizontal-start-alignment').length} current-control observations have a complete captured horizontal-LTR ancestor chain with normal/isolate bidi and automatic last-line alignment. These records preserve the raw start/left values and justify only their physical alignment meaning. Other contexts remain unresolved; equal line containers, structure, typography, placement and raster are not inferred.`,
     '',
@@ -1379,6 +1383,101 @@ function reviewedCalendarWeekdayTypography(entry, mapping, property, ast, styles
       currentPseudoStatePaintVerified: false } };
 }
 
+function reviewedInheritedComponentFontStack(mapping, ref, ast, styles, referenceTree, astylarTree, inventory) {
+  // More specific select/weekday investigations already preserve their token,
+  // structure and declaration evidence together. Do not replace those records.
+  if (mapping?.kind === 'reviewed-calendar-weekday-text' || mapping?.element === 'select-value' ||
+      styles.reference.fontFamily !== 'roboto' || styles.retained.fontFamily !== 'roboto,arial,sans-serif' ||
+      ast.retainedText?.source !== 'core-text-registry') return;
+  const referenceChain = [], candidateChain = [], seen = new Set();
+  let node = ref, referenceRule;
+  while (node) {
+    if (seen.has(node.key) || referenceTree.nodes.filter(n => n.key === node.key).length !== 1) return;
+    seen.add(node.key);
+    const pooled = inventory.styles[node.style];
+    if (pooled?.side !== 'reference' || !pooled.value || canonicalStyle(pooled.value).fontFamily !== 'roboto' ||
+        node.inline?.['font-family'] || node.inline?.font ||
+        /(?:^|;)\s*(?:font-family|font)\s*:/i.test(node.attributes?.style ?? '')) return;
+    const rules = node.rules.map(i => inventory.rules[i]);
+    if (rules.some(r => r?.side !== 'reference')) return;
+    const declarations = rules.map(r => r.value).filter(r => r.active === true &&
+      (r.declarations?.['font-family'] || r.declarations?.font));
+    referenceChain.push({ node: node.key, computed: pooled.value, fontRules: declarations });
+    const explicit = declarations.filter(r => r.declarations?.font || r.declarations['font-family'].value !== 'inherit');
+    if (explicit.length) {
+      if (explicit.length !== 1 || declarations.length !== 1 || explicit[0].declarations.font ||
+          !explicit[0].selector.includes('.mat-') ||
+          !/^var\(--mat-[a-z0-9-]+-font, var\(--mat-sys-[a-z0-9-]+-font\)\)$/.test(explicit[0].declarations['font-family']?.value ?? '')) return;
+      referenceRule = explicit[0];
+      break;
+    }
+    const parents = referenceTree.nodes.filter(n => n.key === node.parent);
+    if (parents.length !== 1) return;
+    node = parents[0];
+  }
+  if (!referenceRule) return;
+  seen.clear();
+  node = ast;
+  while (node) {
+    if (seen.has(node.key) || astylarTree.nodes.filter(n => n.key === node.key).length !== 1) return;
+    seen.add(node.key);
+    const normal = inventory.styles[node.normalStyle], effective = inventory.styles[node.interactionStyle];
+    if (normal?.side !== 'astylar' || effective?.side !== 'astylar' || !normal.value || !effective.value ||
+        typeof normal.value !== 'object' || typeof effective.value !== 'object' ||
+        Array.isArray(normal.value) || Array.isArray(effective.value) ||
+        normal.value.font !== undefined || effective.value.font !== undefined) return;
+    candidateChain.push({ node: node.key, normal: normal.value, effective: effective.value });
+    if (node.authored?.id === 'page') break;
+    if (normal.value.fontFamily !== undefined || effective.value.fontFamily !== undefined) return;
+    const parents = astylarTree.nodes.filter(n => n.key === node.parent);
+    if (parents.length !== 1) return;
+    node = parents[0];
+  }
+  if (node?.authored?.id !== 'page' || node.authored.type !== 'main' || node.parent !== 'root' ||
+      astylarTree.nodes.filter(n => n.authored?.id === 'page').length !== 1 ||
+      ['normal', 'effective'].some(stage => canonicalStyle(candidateChain.at(-1)[stage]).fontFamily !== styles.retained.fontFamily)) return;
+  const rules = astylarTree.rules.map(i => inventory.rules[i]);
+  if (rules.some(r => r?.side !== 'astylar')) return;
+  const pageRules = rules.map(r => r.value).filter(r => r.selector === '#page' && r.fontFamily !== undefined);
+  if (pageRules.length !== 1 || pageRules[0].font !== undefined ||
+      canonicalStyle(pageRules[0]).fontFamily !== styles.retained.fontFamily) return;
+  return { attribution: 'reviewed-inherited-component-font-stack', classification: 'application-plugin-authoring-defect',
+    inputEquivalent: false, currentPseudoStatePaintVerified: false,
+    recommendedOwner: 'showcase Material component font-token translation and reference structure',
+    justification: 'The captured reference text inherits or directly applies a unique active Material component font-family token, computing Roboto with no intervening override. The candidate normal/effective declarations omit font-family through the complete leaf-to-page chain and core retains the explicit page stack Roboto, Arial, sans-serif. The page reset itself is legitimate; omitting the component override is unequal authoring. This is separate from core appending fallback fonts to an explicit single-family input. Preserve the component font intent before assessing fallback selection, shaping, geometry or current glyph paint; matching installed Roboto glyphs would not equate the fallback lists.',
+    reviewEvidence: { sourceFinding: 'fixture-retained-component-font-tokens-omitted', referenceRule, referenceChain,
+      candidatePageRule: pageRules[0], candidateChain, referenceComputed: styles.reference.fontFamily,
+      candidateRetained: styles.retained.fontFamily } };
+}
+
+function validateInheritedComponentFontStack(report, errors) {
+  const expected = [];
+  for (const comparison of report.retainedTypography?.comparisons ?? []) {
+    const refs = report.elementInventory.cases.filter(c => c.case === comparison.case && c.side === 'reference');
+    const asts = report.elementInventory.cases.filter(c => c.case === comparison.case && c.side === 'astylar');
+    if (refs.length !== 1 || asts.length !== 1) continue;
+    const refTree = report.elementInventory.variants[refs[0].variant], astTree = report.elementInventory.variants[asts[0].variant];
+    const refsByKey = refTree.nodes.filter(n => n.key === comparison.referenceNode);
+    const astsByKey = astTree.nodes.filter(n => n.key === comparison.astylarNode);
+    if (refsByKey.length !== 1 || astsByKey.length !== 1) continue;
+    const ref = refsByKey[0], ast = astsByKey[0];
+    const indices = { reference: ref.style, normal: ast.normalStyle, effective: ast.interactionStyle, retained: ast.retainedText?.style };
+    const pooled = Object.fromEntries(Object.entries(indices).map(([key, i]) => [key, report.elementInventory.styles[i]]));
+    if (Object.entries(pooled).some(([key, value]) => value?.side !== (key === 'reference' ? 'reference' : 'astylar') || !value.value)) continue;
+    const styles = Object.fromEntries(Object.entries(pooled).map(([key, value]) => [key, canonicalStyle(value.value)]));
+    const review = reviewedInheritedComponentFontStack(comparison.mapping, ref, ast, styles, refTree, astTree, report.elementInventory);
+    if (review) expected.push({ comparison, review, values: Object.fromEntries(Object.entries(styles).map(([key, style]) => [key, style.fontFamily])) });
+  }
+  const claimed = report.retainedTypography?.differences.filter(d => d.attribution === 'reviewed-inherited-component-font-stack') ?? [];
+  if (expected.length !== claimed.length || expected.some(({ comparison, review, values }) => {
+    const matches = claimed.filter(d => d.case === comparison.case && d.element === comparison.element && d.property === 'fontFamily' &&
+      d.referenceNode === comparison.referenceNode && d.astylarNode === comparison.astylarNode);
+    return matches.length !== 1 || JSON.stringify(matches[0].values) !== JSON.stringify(values) ||
+      JSON.stringify(comparison.properties.fontFamily) !== JSON.stringify(values) ||
+      Object.entries(review).some(([key, value]) => JSON.stringify(matches[0][key]) !== JSON.stringify(value));
+  })) errors.push('retained component font-stack attributions do not replay from captured component tokens and page inheritance');
+}
+
 function reviewedTreeFontInput(entry, mapping, ref, ast, styles, astylarTree, inventory) {
   if (entry.family !== 'tree' || mapping?.kind !== 'reviewed-showcase-template-text' ||
       styles.reference.fontSize !== '16px' || !['14.4px', '18.4px'].includes(styles.retained.fontSize)) return;
@@ -1823,6 +1922,7 @@ export function collectRetainedTypographyEvidence(cases, inventory, controlTypog
       const tableFont = reviewedTableFontInput(entry, ref, ast, styles, referenceTree, astylarTree, inventory);
       const treeFont = reviewedTreeFontInput(entry, textMappingById.get(id), ref, ast, styles, astylarTree, inventory);
       const floatingLabel = reviewedFloatingLabelInput(entry, ref, ast, styles, referenceTree, astylarTree, inventory);
+      const inheritedFontStack = reviewedInheritedComponentFontStack(textMappingById.get(id), ref, ast, styles, referenceTree, astylarTree, inventory);
       if (headingMask) paintMaskDifferences.push({ case: key, element: id, referenceNode: ref.key, astylarNode: ast.key, ...headingMask });
       const comparison = { case: key, family: entry.family, element: id, text: refText,
         referenceNode: ref.key, astylarNode: ast.key, source: 'core-text-registry',
@@ -1850,6 +1950,7 @@ export function collectRetainedTypographyEvidence(cases, inventory, controlTypog
             ...(controlLabelToken ?? {}),
             ...(selectValueToken ?? {}),
             ...(weekdayToken ?? {}),
+            ...(property === 'fontFamily' && inheritedFontStack ? inheritedFontStack : {}),
             ...(reviewedHorizontalStartAlignment(property, values, referenceTree, ref, inventory) ?? {}),
           });
         }
@@ -3333,6 +3434,7 @@ function implementationPlan() {
     { priority: 5.1, rootCause: 'Core rewrites an explicit font-family list before paint', action: 'The parser appends Arial, Helvetica, sans-serif to explicit lists without a recognized generic. Preserve this as distinct from missing Material font-token authoring. The equal-input unavailable-family proof now confirms changed text advance, while both explicit-generic controls pass. Preserve authored family ordering/quoting and browser fallback semantics at the core parser boundary; verify available/unavailable and missing-glyph cases without assuming a particular platform font. Do not add a generic family to the showcase merely to avoid the parser branch. Final raster verification remains separate from the measured advance proof.' },
     { priority: 5.15, rootCause: 'Canvas default shaping does not reproduce CSS text advance', action: 'Trace font-kerning and text-rendering semantics through the core text parser, single/multiline measurement, actual canvas paint and caret/selection metrics. The Arial office AV reduction proves a 0.882825px bound-texture advance difference with identical normal or zero tracking; a separate canvas probe isolates auto-versus-normal kerning behavior. Extend fonts, sizes, explicit kerning modes, retained text and wrapping before implementing a shared CSS-to-canvas rule. Do not force a showcase font, alter tracking or calibrate label widths; normal/zero representation equivalence is not proof of shaping or final raster parity.' },
     { priority: 5.2, rootCause: 'Material control typography tokens and nested line boxes are replaced by fixture defaults', action: 'Translate the original filled/outlined/text button and tab font/tracking tokens instead of inheriting the document control stack or omitting tracking. Restore toolbar button line-height inheritance instead of copying the density-specific container height. Preserve the tab text-label line-height:1 inside its independently sized content/control rather than applying the outer line-height to a flattened value label. Preserve alpha ink as a distinct authored input. Then investigate any core API or equal-input text mismatch; do not adjust font size, baseline, or offsets to recover screenshot similarity.' },
+    { priority: 5.21, rootCause: 'Retained labels inherit the page fallback stack instead of component font tokens', action: 'Preserve the legitimate page font reset but restore each captured Material component font-family override and its inheritance path. Complete normal/effective candidate ancestry plus retained text distinguish this omission from the separate core font-list rewrite. Do not declare fallback lists equivalent because the installed Roboto renders current characters similarly, and do not change the page reset globally to hide missing component declarations. Re-run equal-input fallback, shaping, line-box and state-paint proofs after input restoration.' },
     { priority: 5.3, rootCause: 'Core normal line-height is approximated by a fixed Mg font-box probe', action: 'Resolve browser normal line-box metrics and actual fallback runs in core. The equal-input Arial/serif cases expose one-pixel texture-height errors; Roboto plus emoji/CJK exposes two-pixel errors while plain Roboto and explicit line heights pass. Preserve those controls, extend multiline/baseline/DPR verification and avoid a universal multiplier, constant pixel addition, or fixed Material line-height compensation. Current-texture evidence must remain separate from declared normal and from final glyph raster.' },
     { priority: 5.4, rootCause: 'Calendar cell text tokens and inner line boxes were flattened away', action: 'Restore the reference calendar font and date-text ink tokens and its inner line-height:1 label inside both day and year controls. Keep reference cell/container sizing, state and selection structure instead of copying a normal-metric result or tuning the baseline. Separate date/range-context proofs isolate 990 day and 192 year occurrences each of missing font-token, omitted inner line-height and fixed-ink inputs; core metric defects must be assessed only after those inputs are equivalent. Independently resolve normal-versus-zero tracking and the still-unmapped header/icon owners.' },
     { priority: 5.5, rootCause: 'Snackbar action inherits generic control inputs instead of Material action tokens', action: 'Restore the original text-button font, size and tracking declarations and the snackbar inverse-primary ink, keeping the reference label/action wrapper intent. The exact overlay/message mapping isolates 34 current action textures and source-traces font-stack, tracking and ink substitutions. Trace the remaining 14px-versus-16px and normal-line-box observations through the core defaults/inheritance and metric stages before assigning core ownership; do not calibrate a baseline or line height. Retain the separate intrinsic-width, live-region, visibility, lifetime and placement obligations.' },
