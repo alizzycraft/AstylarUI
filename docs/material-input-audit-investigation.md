@@ -17,6 +17,107 @@ tests pass). A missing selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Anonymous flex text: single-item success versus composed-flow failure (2026-09-12)
+
+The equal-input reduction now separates two mechanisms that the tree wrapper
+could otherwise obscure. **Direct text alone is centered correctly without a
+wrapper** in 48px and 80px rows, with both explicit 20px and `normal` line-height.
+The current bound text-plane centers are exactly 24px and 40px. This proves the
+single-item line-box placement invariant only: it does not equate the observed
+17px normal texture height to a browser used line-height or establish glyph
+sharpness/baseline fidelity. The separate normal-line-height findings remain.
+
+**Direct text followed by an element is not included in the shared flex item
+flow.** Both browser and candidate receive the same `Documents` text, a 20x10px
+marker child, Arial/sans-serif 16px text, explicit 20px line-height, 8px gap,
+320x96px container, and centered cross-axis alignment. The marker's browser DOM
+box—not a synthetic text-width formula—provides the expected flow result:
+
+| Direction / justification | Marker edge | Browser CSS px | Astylar CSS px |
+| --- | --- | ---: | ---: |
+| Row / flex-start | left | 88.921875 | 0 |
+| Row / center | left | 194.453125 | 150 |
+| Column / flex-start | top | 28 | 0 |
+| Column / center | top | 57 | 43 |
+
+All four mixed anonymous-text cases fail unchanged geometry assertions. Four
+otherwise corresponding explicit-span cases pass. Those span cases are
+separate equal-input controls, not recommended substitutions for the original
+anonymous-text inputs. All four single-direct-text centering controls also pass.
+The shared case builder generates browser CSS from the exact candidate rule
+objects and creates browser DOM from the same `SiteData`; no Material plugin,
+measured width, positional adjustment or CSS-to-world input is involved.
+
+The owning paths are:
+
+- `ElementCreationService.createElement` paints an element's own `textContent`
+  independently via `handleTextContent` before processing its child elements.
+- `FlexService.processFlexChildren` filters only the supplied element children
+  and constructs `childItems` from that array. The parent's direct text is not
+  an item, so it contributes neither intrinsic main-axis size nor the inter-item
+  gap to the marker's placement.
+- `BabylonDOMRendererService.resolveAnonymousFlexTextAlignment`, introduced by
+  `59883a0`, aligns the separately painted text in the parent box. That handles
+  the single-item control but does not allocate an item in composed flex flow.
+  History attributes the current children-only filtering/mapping to `4620654`.
+
+Source finding **`core-anonymous-flex-text-excluded-from-item-flow`** and plan
+item **3.3** retain the failing proof. The correction belongs in core CSS-space
+flex item generation and shared text placement, before projection. It must not
+insert application wrappers or tune child offsets. Wrapping, whitespace,
+reversed axes, padding and updates need follow-up coverage before implementation.
+The compatibility catalog claims the tested flex keyword/length subset, but
+does not promise every anonymous-box nuance; this proof records the exact
+composed behavior that fails rather than broadening that claim.
+
+The complete browser reduction command was run twice:
+`npm --prefix examples/material-showcase test -- --watch=false --browsers=ChromeHeadless --include=src/app/input-equivalence-proof.spec.ts`.
+Both runs report **51 executed: 25 passed, 26 intentionally failing**, including
+the same four new anonymous-flow failures and the previous 22 core/capability
+diagnostic failures. These failures are preserved, not converted to expected
+passes. These reductions establish that core can center direct text without a
+fixed wrapper; they do not establish full tree typography or paint equivalence.
+
+Runtime: Chrome Headless **152.0.0.0**, Windows, Angular **20.3.29**, AstylarUI
+**0.2.0**, Babylon **8.56.2**, public package-root imports and a 640x360 CSS-pixel
+surface. The installed core JavaScript fingerprints are
+`renderer.service.js: 93048da6ea6186d59b60755b13c6bec56283d6f2fde23d5ffcd82b9d9a322c6c`
+and
+`flex.service.js: 1c587dbb1b2386dc176984cfc0ae725ae6d92a2be4a7605a92598bfdb14b13dd`.
+The unchanged NG0914 Zone.js/zoneless warning does not explain the deterministic
+marker errors. No dependency was replaced or renderer code changed.
+
+The production browser/server build also passes:
+`npm --prefix examples/material-showcase run build -- --output-path=dist/material-showcase-anonymous-flex-audit`
+(95.2 seconds). Its separate output directory leaves the live full-matrix
+browser build untouched. This build is compile evidence, not acceptance of the
+deliberately failing browser reductions.
+
+The final strengthened browser rerun has the same **25 pass / 26 fail** result.
+The added assertions also verify that mounting preserves the authored input,
+the relevant core-resolved flex/marker declarations equal browser computed
+values, settled flex cases have no error diagnostics, and disposal leaves zero
+scene meshes, materials and textures. A test-only optional-string type error
+was corrected before this successful compilation and execution; no assertion
+or expected geometry was weakened.
+
+`npm run parity:harness:check` passes **250/250**, none skipped (94.4 seconds).
+All ten live capture-harness source hashes remain unchanged. The complete
+unfiltered matrix and the broader input-equivalence audit are still incomplete.
+
+A fresh **1,362-result prefix (436 static + 926 interaction)** verifies every
+checkpoint result digest and includes all **75** source findings. The new flex
+finding resolves to `flex.service.ts:140`; full-tree collection, selected
+natural-line-box evidence and partial validation have zero errors. Complete
+coverage and input equivalence remain false. No captured input difference is
+silently accepted by adding this core finding.
+
+After updating the report's focused-proof inventory and root-cause ordering,
+the final `npm run parity:harness:check` rerun passes **250/250**, none skipped
+(138.9 seconds). `git diff --check` passes. The browser diagnostic suite remains
+honestly failing on the unchanged 26 assertions/cases described above; harness
+validation is not a claim that those renderer defects have been fixed.
+
 ## Tree direct-text ownership and fixed line-box substitution (2026-09-12)
 
 The reference `mat-tree-node` owns its text directly in a flex container. Its
@@ -53,10 +154,11 @@ observations or validation errors. Coverage and input equivalence remain
 
 Plan item **5.24** calls for restoring original direct text ownership and
 `normal` line-height together with the original component typography before
-assessing core anonymous flex-item sizing, centering or line metrics. A focused
-equal-input anonymous-flex-text reproduction is still required before claiming
-that the wrapper concealed a particular core defect. Neither a natural used
-height nor current glyph-paint equivalence is inferred from `normal`.
+assessing core anonymous flex-item sizing, centering or line metrics. The later
+equal-input reproduction above passes single-item centering but fails mixed
+text/element flow; it must not be summarized as every tree text placement being
+broken. Neither a natural used height nor current glyph-paint equivalence is
+inferred from `normal`.
 
 Focused verification:
 `node --test tests/material-parity/input-equivalence-audit.spec.mjs` passes

@@ -8,7 +8,50 @@ import { collectAuthoredInputTree, collectMaterialCoreResolvedStyles } from './m
 // to Astylar. These reductions intentionally contain no Material component,
 // measured height table, DPR correction, or duplicate position calculation.
 describe('Material audit: equivalent CSS input reductions', () => {
-  const cases: Array<{ name: string; site: SiteData; ids: string[]; horizontalOnly?: string[]; loadedCss?: boolean; controlLabels?: string[]; controlTextWidths?: string[]; resolved?: Array<{ id: string; properties: string[]; stage?: 'retainedText' | 'paintedControlText' }> }> = [
+  const cases: Array<{ name: string; site: SiteData; ids: string[]; horizontalOnly?: string[]; flexTextProof?: boolean; centeredFlexText?: string[]; loadedCss?: boolean; controlLabels?: string[]; controlTextWidths?: string[]; resolved?: Array<{ id: string; properties: string[]; stage?: 'retainedText' | 'paintedControlText' }> }> = [
+    ...['48px', '80px'].flatMap(height => ['normal', '20px'].map(lineHeight => ({
+      name: `direct flex text line box is centered without a wrapper in ${height}/${lineHeight}`,
+      site: {
+        root: { children: [{ type: 'div', id: 'direct-flex-text', textContent: 'Documents' }] },
+        styles: [{ selector: '#direct-flex-text', display: 'flex', width: '320px', height,
+          alignItems: 'center', justifyContent: 'flex-start', fontFamily: 'Arial, sans-serif',
+          fontSize: '16px', fontWeight: '400', lineHeight, letterSpacing: '0px', wordSpacing: '0px',
+          whiteSpace: 'nowrap', textAlign: 'left', color: '#123456' }],
+      } as SiteData,
+      ids: ['direct-flex-text'],
+      flexTextProof: true,
+      centeredFlexText: ['direct-flex-text'],
+      resolved: [{ id: 'direct-flex-text', properties: ['fontSize', 'lineHeight'], stage: 'retainedText' as const }],
+    }))),
+    ...(['row', 'column'] as const).flatMap(flexDirection => ['flex-start', 'center'].flatMap(justifyContent => [false, true].map(wrapped => ({
+      name: `${wrapped ? 'explicit' : 'anonymous'} flex text participates in ${flexDirection}/${justifyContent} flow before a marker`,
+      site: {
+        root: { children: [{ type: 'div', id: 'flex-text-flow',
+          ...(wrapped ? {} : { textContent: 'Documents' }),
+          children: [
+            ...(wrapped ? [{ type: 'span', id: 'flex-text-label', textContent: 'Documents' }] : []),
+            { type: 'div', id: 'flex-text-marker' },
+          ],
+        }] },
+        styles: [
+          { selector: '#flex-text-flow', display: 'flex', flexDirection, justifyContent,
+            alignItems: 'center', gap: '8px', width: '320px', height: '96px',
+            fontFamily: 'Arial, sans-serif', fontSize: '16px', fontWeight: '400', lineHeight: '20px',
+            letterSpacing: '0px', wordSpacing: '0px', whiteSpace: 'nowrap', color: '#123456' },
+          { selector: '#flex-text-marker', width: '20px', height: '10px', flexShrink: '0', background: '#6750a4' },
+        ],
+      } as SiteData,
+      // The marker's browser box measures the anonymous item's contribution
+      // without replacing browser text by a synthetic expected width/height.
+      // Explicit-span cases use equal inputs on both sides as distinct controls;
+      // they are not proposed replacements for the anonymous-item fixtures.
+      ids: ['flex-text-flow', 'flex-text-marker'],
+      flexTextProof: true,
+      resolved: [
+        { id: 'flex-text-flow', properties: ['display', 'flexDirection', 'justifyContent', 'alignItems', 'gap', 'fontSize', 'lineHeight'] },
+        { id: 'flex-text-marker', properties: ['width', 'height', 'flexShrink'] },
+      ],
+    })))),
     ...['MaterialAuditUnavailableFont_8c176e', 'MaterialAuditUnavailableFont_8c176e, serif', 'MaterialAuditUnavailableFont_8c176e, sans-serif'].map((fontFamily) => ({
       name: `control texture text advance matches browser fallback for ${fontFamily}`,
       site: {
@@ -371,9 +414,15 @@ describe('Material audit: equivalent CSS input reductions', () => {
         }
       };
       append(doc.body, site.root.children ?? []);
+      const authoredBeforeMount = JSON.stringify(site);
       const surface = TestBed.inject(Astylar).mount(canvas, site, { diagnostics: { logLevel: 'silent' } });
       try {
         await surface.whenSettled();
+        if (entry.flexTextProof) {
+          expect(JSON.stringify(site)).withContext('mount preserves authored flex inputs').toBe(authoredBeforeMount);
+          expect(surface.diagnostics.messages.filter(message => message.severity === 'error'))
+            .withContext('valid settled flex input has no diagnostic errors').toEqual([]);
+        }
         for (const id of entry.controlLabels ?? []) {
           // Output presence distinguishes missing inspection evidence from a
           // control that never created a label. Never use its projected size
@@ -443,6 +492,35 @@ describe('Material audit: equivalent CSS input reductions', () => {
         }
         const engine = surface.scene.getEngine();
         const viewport = surface.scene.activeCamera!.viewport.toGlobal(engine.getRenderWidth(), engine.getRenderHeight());
+        for (const id of entry.centeredFlexText ?? []) {
+          const textMesh = surface.scene.getMeshByName(`${id}_text`)!;
+          expect(textMesh).withContext(`${id} current text plane`).not.toBeNull();
+          expect(textMesh.isEnabled()).toBeTrue();
+          const textures = [...new Set(textMesh.material!.getActiveTextures())]
+            .filter(texture => texture.metadata?.astylarLogicalTextSize);
+          expect(textures.length).withContext(`${id} unique current text texture`).toBe(1);
+          expect(textures[0].metadata.astylarLogicalTextSize.height).toBeGreaterThan(0);
+          textMesh.computeWorldMatrix(true);
+          const projected = textMesh.getBoundingInfo().boundingBox.vectorsWorld.map(point =>
+            Vector3.Project(point, Matrix.IdentityReadOnly, surface.scene.getTransformMatrix(), viewport));
+          const actualCenter = (Math.min(...projected.map(p => p.y)) + Math.max(...projected.map(p => p.y))) / 2 * canvas.clientHeight / engine.getRenderHeight();
+          const reference = doc.getElementById(id)!;
+          const computed = doc.defaultView!.getComputedStyle(reference);
+          expect(computed.display).toBe('flex');
+          expect(computed.alignItems).toBe('center');
+          expect(reference.childNodes.length).toBe(1);
+          expect(reference.firstChild!.nodeType).toBe(Node.TEXT_NODE);
+          const box = reference.getBoundingClientRect();
+          // For this single unpadded row item, align-items:center centers its
+          // line box on the container. This assertion does not compare glyph
+          // ink, natural normal height, raster sharpness or mixed-item flow.
+          const expectedCenter = (box.top + box.bottom) / 2;
+          expect(Math.abs(actualCenter - expectedCenter))
+            .withContext(`${id} line-box center: Astylar=${actualCenter}, browser flex center=${expectedCenter}`)
+            .toBeLessThan(.5);
+          console.info('MATERIAL_DIRECT_FLEX_TEXT_PROOF', JSON.stringify({ case: entry.name,
+            actualCenter, expectedCenter, textureHeight: textures[0].metadata.astylarLogicalTextSize.height }));
+        }
         for (const id of entry.ids) {
           const mesh = surface.scene.meshes.find((candidate) => candidate.name === id);
           expect(mesh).withContext(id).toBeDefined();
@@ -464,6 +542,12 @@ describe('Material audit: equivalent CSS input reductions', () => {
         }
       } finally {
         surface.dispose();
+        if (entry.flexTextProof) {
+          expect(surface.disposed).toBeTrue();
+          expect(surface.scene.meshes.length).toBe(0);
+          expect(surface.scene.materials.length).toBe(0);
+          expect(surface.scene.textures.length).toBe(0);
+        }
         loadedStyle?.remove();
         iframe.remove();
         canvas.remove();

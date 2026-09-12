@@ -101,6 +101,16 @@ export const reviewedValueNormalizations = Object.freeze([
 
 export const sourceAuditDefinitions = Object.freeze([
   Object.freeze({
+    id: 'core-anonymous-flex-text-excluded-from-item-flow',
+    introducedBy: '4620654 filters element children for flex flow; 59883a0 later aligns direct text independently without adding it to the item sequence',
+    file: 'src/app/services/dom/elements/flex.service.ts',
+    pattern: String.raw`const childItems: FlexItem\[\] = flowChildren\.map\(child =>`,
+    classification: 'confirmed-core-renderer-defect',
+    owner: 'core flex item generation, intrinsic sizing and shared text placement',
+    justification: 'Equal-input browser reductions with direct Documents text followed by a 20x10px marker, 20px line-height and 8px gap fail in row/column and start/center layouts. Core marker starts at x0 instead of x88.921875 (row/start), x150 instead of x194.453125 (row/center), y0 instead of y28 (column/start), and y43 instead of y57 (column/center). Four otherwise equivalent explicit-span controls pass, as do four single-direct-text centering controls. ElementCreationService paints parent text separately; FlexService creates its item list only from element children. RendererService anonymous alignment positions that separate text but cannot allocate its intrinsic size or gap in the shared sequence. This is a core composed-layout defect, not proof that the tree needs its fixed-height wrapper or that all direct text placement fails. Generate anonymous text items in core CSS-space layout and use their boxes for paint; do not rewrite authored content into application spans or add marker offsets. The direct centering controls make no claim about normal used height or glyph raster.',
+    focusedProof: 'examples/material-showcase/src/app/input-equivalence-proof.spec.ts: anonymous/explicit row and column text-flow reductions and single-direct-text centering controls',
+  }),
+  Object.freeze({
     id: 'core-canvas-default-shaping-differs-from-css-text',
     introducedBy: '2ec3152 establishes the canvas font/default-context styling path; the present browser reduction exposes its remaining shaping discrepancy',
     file: 'src/app/services/text/text-canvas-renderer.service.ts',
