@@ -323,9 +323,11 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
     !isReviewedStepperPanelGap(gap, report.elementInventory));
   if (invalidStepperGaps.length) errors.push(`${invalidStepperGaps.length} stepper panel substitutions lack captured structural evidence`);
   validateSelectArrowSubstitutions(report, errors);
+  validatePluginTabPanelSubstitutions(report, errors);
   const unresolvedRetainedGaps = retainedGaps.filter((gap) => !isReviewedHiddenRetainedGap(gap, report.elementInventory) &&
     !isReviewedStepperPanelGap(gap, report.elementInventory) && !isReviewedCalendarCloseGap(gap, report.elementInventory) &&
-    !isReviewedCalendarWeekdayNameGap(gap, report.elementInventory) && !isReviewedSelectArrowGap(gap, report.elementInventory));
+    !isReviewedCalendarWeekdayNameGap(gap, report.elementInventory) && !isReviewedSelectArrowGap(gap, report.elementInventory) &&
+    !isReviewedPluginTabPanelGap(gap, report.elementInventory));
   if (requireComplete && unresolvedRetainedGaps.length > 0) errors.push(`${unresolvedRetainedGaps.length} retained typography mappings or stage fields require review`);
   const reviewedTypographyKinds = { 'reviewed-heading-mask': 'parity-harness-defect',
     'reviewed-horizontal-start-alignment': 'equivalent-representation',
@@ -2776,6 +2778,97 @@ function isReviewedHiddenRetainedGap(gap, inventory) {
   return !!evidence && JSON.stringify(evidence) === JSON.stringify(gap.reviewEvidence);
 }
 
+function reviewedPluginTabPanelGap(key, inventory) {
+  if (inventory.errors.some(e => e.case === key)) return;
+  const mappings = side => inventory.cases.filter(c => c.case === key && c.side === side);
+  const rm = mappings('reference'), am = mappings('astylar');
+  if (rm.length !== 1 || am.length !== 1) return;
+  const ref = inventory.variants[rm[0].variant], ast = inventory.variants[am[0].variant];
+  if (ref?.family !== 'tabs' || ast?.family !== 'tabs' || ast.resolvedStyleEvidenceVersion !== 2 ||
+      ast.resolvedStyleSource !== 'core-style-inspection' || !Number.isInteger(am[0].resolvedStyleRevision) || am[0].resolvedStyleRevision < 0) return;
+  const unique = nodes => nodes.length === 1 ? nodes[0] : undefined;
+  const cls = (n, name) => String(n?.attributes?.class ?? '').split(/\s+/).includes(name);
+  if ([ref, ast].some(t => new Set(t.nodes.map(n => n.key)).size !== t.nodes.length)) return;
+  const leaf = unique(ref.nodes.filter(n => n.attributes?.['data-parity-id'] === 'tab-panel'));
+  const parent = n => n && unique(ref.nodes.filter(p => p.key === n.parent));
+  const content = parent(leaf), body = parent(content), wrapper = parent(body), group = parent(wrapper);
+  if (leaf?.type !== 'span' || leaf.attributes.id || ref.nodes.some(n => n.parent === leaf.key) ||
+      content?.type !== 'div' || !cls(content, 'mat-mdc-tab-body-content') ||
+      body?.type !== 'mat-tab-body' || !cls(body, 'mat-mdc-tab-body-active') || body.attributes.role !== 'tabpanel' ||
+      body.attributes['aria-hidden'] !== 'false' || wrapper?.type !== 'div' || !cls(wrapper, 'mat-mdc-tab-body-wrapper') ||
+      group?.type !== 'mat-tab-group' || group.attributes.id !== 'tabs-primary' ||
+      ref.nodes.filter(n => n.attributes?.id === 'tabs-primary').length !== 1) return;
+  const identity = body.attributes.id?.match(/^mat-tab-group-(\d+)-content-([01])$/);
+  if (!identity || body.attributes['aria-labelledby'] !== `mat-tab-group-${identity[1]}-label-${identity[2]}`) return;
+  const selected = identity[2] === '0', text = selected ? 'Overview content' : 'Activity content';
+  if (leaf.ownText !== text || [content, body, wrapper, group].some(n => n.ownText?.trim())) return;
+  const header = unique(ref.nodes.filter(n => n.attributes?.id === body.attributes['aria-labelledby']));
+  const descendsFrom = (tree, node, ancestor) => {
+    const seen = new Set();
+    while (node && node.key !== ancestor.key) {
+      if (seen.has(node.key)) return false;
+      seen.add(node.key); node = unique(tree.nodes.filter(p => p.key === node.parent));
+    }
+    return !!node;
+  };
+  if (header?.attributes.role !== 'tab' || header.attributes['aria-selected'] !== 'true' ||
+      header.attributes['aria-controls'] !== body.attributes.id || !descendsFrom(ref, header, group)) return;
+  const panel = unique(ast.nodes.filter(n => n.authored?.id === 'tab-panel'));
+  const ag = unique(ast.nodes.filter(n => n.authored?.id === 'tabs-primary'));
+  if (panel?.authored.type !== 'showcase.material:tab-panel' || panel.authored.class !== 'tab-panel' ||
+      panel.authored.role !== 'tabpanel' || panel.authored.ariaLabel !== text || panel.authored.textContent !== undefined ||
+      panel.retainedText || panel.paintedControlText || ast.nodes.some(n => n.parent === panel.key) ||
+      ag?.authored.type !== 'div' || ag.authored.class !== 'tabs' || panel.parent !== ag.key) return;
+  const data = panel.authored.data;
+  if (!data || data.selected !== selected || data.phase !== 1 ||
+      typeof data['font-size'] !== 'number' || !Number.isFinite(data['font-size']) || data['font-size'] <= 0 ||
+      typeof data['baseline-offset'] !== 'number' || !Number.isFinite(data['baseline-offset']) ||
+      !/^#[0-9a-f]{6}(?:[0-9a-f]{2})?$/i.test(data['text-color'] ?? '')) return;
+  const buttons = ['tab-overview', 'tab-activity'].map(id => unique(ast.nodes.filter(n => n.authored?.id === id)));
+  if (buttons.some((n, i) => n?.authored.type !== 'button' || n.authored.role !== 'tab' ||
+      n.authored.ariaSelected !== (i === 0 ? selected : !selected) || n.authored.ariaControls !== 'tab-panel' ||
+      n.authored.value !== (i === 0 ? 'Overview' : 'Activity') || !descendsFrom(ast, n, ag))) return;
+  const readStyle = (index, side) => inventory.styles[index]?.side === side ? inventory.styles[index].value : undefined;
+  const object = v => v && typeof v === 'object' && !Array.isArray(v);
+  const reference = [leaf, content, body, wrapper, group, header].map(n => ({ node: n.key, parent: n.parent, type: n.type,
+    attributes: n.attributes, ownText: n.ownText, computed: readStyle(n.style, 'reference'), inline: n.inline,
+    rules: (n.rules ?? []).map(index => inventory.rules[index]) }));
+  const candidate = [panel, ag, ...buttons].map(n => ({ node: n.key, parent: n.parent, authored: n.authored,
+    normal: readStyle(n.normalStyle, 'astylar'), effective: readStyle(n.interactionStyle, 'astylar') }));
+  if (reference.some(n => !object(n.computed) || n.rules.some(r => r?.side !== 'reference' || !object(r.value))) ||
+      candidate.some(n => !object(n.normal) || !object(n.effective))) return;
+  return { case: key, family: 'tabs', element: undefined,
+    reason: 'own-text nodes without an explicit shared ID require structural mapping',
+    referenceNodes: [leaf.key], astylarNodes: [], attribution: 'reviewed-plugin-tab-panel-text-substitution',
+    classification: 'application-plugin-authoring-defect', inputEquivalent: false, finalRasterVerified: false,
+    currentPluginPaintCaptured: false,
+    recommendedOwner: 'core text composition and paint; Material plugin transition orchestration only',
+    justification: 'The reference active panel contains an ordinary text span. The candidate instead authors a childless custom tab-panel with selected/font/color/baseline data and no textContent. Matching panel/tab identities and state identify the substitution; ariaLabel is not treated as painted text. MaterialTabPanelRenderer chooses literal content and rasterizes its own font/baseline through DynamicTexture, as independently characterized by the bound-texture test. This explains the missing core text stage and records unequal inputs, not equivalent structure, current plugin paint, glyph raster, or a core equal-input failure. Transition orchestration can remain in the plugin; text must be submitted to core.',
+    reviewEvidence: structuredClone({ source: 'captured-plugin-authored-input', revision: am[0].resolvedStyleRevision,
+      sourceFindings: ['plugin-tab-panel-competing-text-renderer', 'plugin-tab-panel-baseline-offset'],
+      proof: 'examples/material-showcase/src/app/material-plugin/tab-panel-input-audit.spec.ts',
+      selected, referenceText: text, reference, candidate,
+      missingCoreTextStage: { textContentAbsent: true, retainedTextAbsent: true, controlTextureAbsent: true },
+      currentPluginPaintCaptured: false }) };
+}
+
+function isReviewedPluginTabPanelGap(gap, inventory) {
+  if (gap.attribution !== 'reviewed-plugin-tab-panel-text-substitution') return false;
+  const expected = reviewedPluginTabPanelGap(gap.case, inventory);
+  return !!expected && Object.entries(expected).every(([k, v]) => JSON.stringify(gap[k]) === JSON.stringify(v));
+}
+
+function validatePluginTabPanelSubstitutions(report, errors) {
+  const inventory = report.elementInventory;
+  const expected = [...new Set(inventory.cases.filter(c => c.side === 'astylar').map(c => c.case))]
+    .map(key => reviewedPluginTabPanelGap(key, inventory)).filter(Boolean);
+  const claimed = report.retainedTypography?.gaps.filter(g => g.attribution === 'reviewed-plugin-tab-panel-text-substitution') ?? [];
+  if (expected.length !== claimed.length || expected.some(e => {
+    const matches = claimed.filter(g => g.case === e.case);
+    return matches.length !== 1 || !isReviewedPluginTabPanelGap(matches[0], inventory);
+  })) errors.push('plugin tab-panel substitutions do not replay from captured structure, state and style inputs');
+}
+
 function reviewedSelectArrowGap(key, inventory) {
   const mappings = side => inventory.cases.filter(c => c.case === key && c.side === side);
   const rm = mappings('reference'), am = mappings('astylar');
@@ -2937,6 +3030,8 @@ export function collectRetainedTypographyEvidence(cases, inventory, controlTypog
       const remainingReference = [];
       for (const referenceNode of anonymousReference) {
         const identity = { family: entry.family, referenceNodes: [referenceNode], astylarNodes: anonymousAstylar };
+        const tabPanel = entry.family === 'tabs' && anonymousAstylar.length === 0 && reviewedPluginTabPanelGap(key, inventory);
+        if (tabPanel && tabPanel.referenceNodes[0] === referenceNode) { gaps.push(tabPanel); continue; }
         const weekday = entry.family === 'datepicker' && anonymousAstylar.length === 0 && textMappings.find(m =>
           m.kind === 'reviewed-calendar-weekday-text' && m.reviewEvidence.omittedFullNameNode === referenceNode);
         if (weekday) {

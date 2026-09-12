@@ -887,10 +887,10 @@ export const sourceAuditDefinitions = Object.freeze([
     focusedProof: 'examples/material-showcase/src/app/material-plugin/tab-panel-input-audit.spec.ts: actual bound-texture fillText observations with independent CSS/data changes',
     introducedBy: '7159b1d fix(showcase): tighten Material component parity',
     file: 'examples/material-showcase/src/app/material-plugin/material-showcase.plugin.ts',
-    pattern: String.raw`class MaterialTabPanelRenderer`,
+    pattern: String.raw`class MaterialTabPanelRenderer(?:(?!\r?\n\})[\s\S])*?new DynamicTexture(?:(?!\r?\n\})[\s\S])*?canvas\.font\s*=(?:(?!\r?\n\})[\s\S])*?canvas\.fillText\(`,
     classification: 'application-plugin-authoring-defect',
     owner: 'core text paint plus plugin-owned transition orchestration',
-    justification: 'The plugin creates a DynamicTexture and draws glyphs/baselines itself, duplicating core text paint instead of composing core-rendered content.',
+    justification: 'The plugin creates a DynamicTexture and draws glyphs/baselines itself, duplicating core text paint instead of composing core-rendered content. Captured active-panel/header linkage maps the reference ordinary text span to a childless custom element with selected/font/color/baseline data and no core text entry. That correspondence explains a stage absence, not actual per-case private paint: the separate bound-texture diagnostic proves CSS-independent font and ink ownership. A matching ariaLabel is not painted-text evidence. Preserve the distinction and replace private text rendering with core composition.',
   }),
   Object.freeze({
     id: 'plugin-tab-panel-baseline-offset',

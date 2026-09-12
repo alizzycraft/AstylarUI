@@ -22,6 +22,64 @@ selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Tab-panel correspondence identifies plugin-owned text, not missing core text (2026-09-12)
+
+All 12 corrected static tab cases map the reference's ordinary content span
+through its content/body/wrapper/group chain and active header's linked IDs to
+the candidate custom `showcase.material:tab-panel`. Both candidate tab buttons,
+the selected data value and the reference active panel must agree. The candidate
+is childless and has no authored `textContent`, retained core text or core-control
+texture entry. Its accessible label is recorded for identity only, never used
+as proof that text was painted.
+
+The resulting gap classification is `reviewed-plugin-tab-panel-text-substitution`.
+It retains the complete mapped reference node styles/rules and candidate
+authored data plus normal/effective styles. It does not invent inherited text
+properties, convert backing-texture coordinates into CSS inputs, or manufacture
+a core text record. Independent validation reconstructs every occurrence and
+rejects deleted/duplicated findings and altered input or paint claims.
+`currentPluginPaintCaptured`, `inputEquivalent` and `finalRasterVerified` are
+explicitly false: source ownership and the separate bound-texture diagnostic
+explain the path, but are not per-case live paint or final-raster evidence.
+
+History confirms `7159b1d` introduced `MaterialTabPanelRenderer` with a private
+DynamicTexture and font/baseline paint. `593f81b` added the custom-theme 22px
+panel and -0.2 baseline-offset knob. Current static data uses font sizes
+16/14.4/18.4 and heights 20/22px; the reference is an ordinary CSS text span.
+The earlier bound-texture characterization proves that changing CSS size/ink
+does not control the plugin's font/ink, while changing its data does. The
+existing implementation plan therefore keeps transitions in the plugin but
+returns text composition and typography to core, rather than calibrating this
+private texture. Source detection now requires texture creation, font assignment
+and fillText within the same class; a class name alone is insufficient.
+
+- `node --test --test-name-pattern='plugin tab-panel|source audit|source fingerprints' tests/material-parity/input-equivalence-audit.spec.mjs`:
+  6/6 passing. Mapping controls cover both selected states and both panel-size
+  variants, 24 contradictory-input controls and 12 report/inventory mutations;
+  source detection additionally rejects four incomplete/foreign paint paths.
+- `npm run parity:harness:check`: 318/318 passing, zero skipped/cancelled
+  (176.721 seconds).
+- Actual 12-case diagnostic report: 12 classifications, zero tree errors and
+  zero validation errors with `requireComplete:false` (diagnostic only).
+- Recollection of all 436 static cases has zero unresolved retained mappings
+  and zero unresolved mapped retained-property differences. The 12 plugin
+  records remain unequal-input findings, not accepted text-rendering parity.
+  Raw control-text collection still has 120 normal-line-height differences
+  before applying the separately captured natural-line-box evidence.
+- A whole-static diagnostic build with the fresh natural-line-box report and
+  freshly bound picker/overlay/slider supplements validates all 120 natural
+  observations (zero missing/errors) and leaves no unresolved control-text
+  differences. However, the broader shared-ID style stage still contains
+  **3,174 unresolved signatures out of 7,026**, plus 44 structure differences.
+  Its 68,928 style occurrences are not certified by closing the text mappings.
+  `requireComplete:false` reports no instrumentation validation errors; full
+  acceptance is not claimed. The remaining declaration, box/layout, paint and
+  structure attribution is a separate substantial audit obligation.
+
+No production renderer, plugin, comparison fixture or visual gate changed.
+Full interaction, plugin current-paint and other input-category obligations
+remain distinct from this completed mapping classification.
+
 ## Select arrow substitutes a tuned font glyph for the original SVG (2026-09-12)
 
 All 12 corrected static select cases contain the same structural substitution:

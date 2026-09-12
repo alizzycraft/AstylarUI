@@ -1639,6 +1639,127 @@ test('select value mapping follows the combobox and generated value owner withou
   }
 });
 
+function pluginTabPanelReport(selected = true, custom = false) {
+  const raw = retainedTypographyReport(), e = raw.results[0];
+  e.family = 'tabs'; e.styleInputs = [];
+  const { reference: r, astylar: a } = e.inputTrees;
+  const index = selected ? 0 : 1, text = selected ? 'Overview content' : 'Activity content';
+  r.nodes = [
+    { key: 'group', parent: null, type: 'mat-tab-group', attributes: { id: 'tabs-primary' } },
+    { key: 'wrapper', parent: 'group', type: 'div', attributes: { class: 'mat-mdc-tab-body-wrapper' } },
+    { key: 'body', parent: 'wrapper', type: 'mat-tab-body', attributes: {
+      id: `mat-tab-group-17-content-${index}`, role: 'tabpanel', class: 'mat-mdc-tab-body mat-mdc-tab-body-active',
+      'aria-labelledby': `mat-tab-group-17-label-${index}`, 'aria-hidden': 'false' } },
+    { key: 'content', parent: 'body', type: 'div', attributes: { class: 'mat-mdc-tab-body-content' } },
+    { key: 'leaf', parent: 'content', type: 'span', attributes: { 'data-parity-id': 'tab-panel' }, ownText: text },
+    { key: 'header', parent: 'group', type: 'div', attributes: { id: `mat-tab-group-17-label-${index}`,
+      role: 'tab', 'aria-selected': 'true', 'aria-controls': `mat-tab-group-17-content-${index}` } },
+  ].map(n => ({ ownText: '', style: 0, rules: [], inline: {}, pseudoElements: [], ...n }));
+  const style = { display: 'block', width: '100%', height: custom ? '22px' : '20px' };
+  a.nodes = [
+    { key: 'a', parent: 'root', authored: { type: 'div', id: 'tabs-primary', class: 'tabs' } },
+    { key: 'a/panel', parent: 'a', authored: { type: 'showcase.material:tab-panel', id: 'tab-panel', class: 'tab-panel',
+      role: 'tabpanel', ariaLabel: text, data: { selected, phase: 1, 'text-color': '#1d1b20',
+        'font-size': custom ? 18.4 : 16, 'baseline-offset': custom ? -.2 : 0 } } },
+    ...['overview', 'activity'].map((name, i) => ({ key: `a/${name}`, parent: 'a', authored: { type: 'button',
+      id: `tab-${name}`, role: 'tab', value: i === 0 ? 'Overview' : 'Activity',
+      ariaControls: 'tab-panel', ariaSelected: i === 0 ? selected : !selected } })),
+  ].map(n => ({ ...n, resolvedStyle: { ...style }, normalResolvedStyle: { ...style }, interactionResolvedStyle: { ...style } }));
+  return raw;
+}
+
+test('plugin tab-panel mapping records unequal structure and data without inventing current text paint', () => {
+  for (const selected of [false, true]) for (const custom of [false, true]) {
+    const raw = pluginTabPanelReport(selected, custom), before = structuredClone(raw), report = buildMaterialInputAudit(raw);
+    assert.deepEqual(raw, before);
+    const gap = report.retainedTypography.gaps.find(g => g.attribution === 'reviewed-plugin-tab-panel-text-substitution');
+    assert.ok(gap);
+    assert.equal(gap.inputEquivalent, false);
+    assert.equal(gap.finalRasterVerified, false);
+    assert.equal(gap.currentPluginPaintCaptured, false);
+    assert.equal(gap.reviewEvidence.source, 'captured-plugin-authored-input');
+    assert.equal(gap.reviewEvidence.selected, selected);
+    assert.equal(gap.reviewEvidence.referenceText, selected ? 'Overview content' : 'Activity content');
+    assert.equal(gap.reviewEvidence.candidate[0].authored.data['baseline-offset'], custom ? -.2 : 0);
+    assert.equal(gap.reviewEvidence.candidate[0].normal.fontSize, undefined);
+    assert.deepEqual(gap.astylarNodes, []);
+    assert.ok(!report.retainedTypography.comparisons.some(c => c.element === 'tab-panel'));
+    assert.ok(!report.retainedTypography.controlTextMappings.some(c => c.element === 'tab-panel'));
+    assert.ok(!validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('plugin tab-panel')));
+  }
+});
+
+test('plugin tab-panel source detection requires private texture font and paint in the same class', () => {
+  const report = buildMaterialInputAudit(parityReport({}, {}));
+  const finding = report.sourceFindings.find(f => f.id === 'plugin-tab-panel-competing-text-renderer');
+  assert.equal(finding.detected, true);
+  const expression = new RegExp(finding.pattern);
+  assert.ok(expression.test('class MaterialTabPanelRenderer {\n  new DynamicTexture();\n  canvas.font = font;\n  canvas.fillText(text);\n}'));
+  for (const source of [
+    'class MaterialTabPanelRenderer {}',
+    'class MaterialTabPanelRenderer {\n  core.renderText();\n}\nclass Other {\n new DynamicTexture();\n canvas.font = font;\n canvas.fillText(text);\n}',
+    'class MaterialTabPanelRenderer {\n  new DynamicTexture();\n  canvas.fillText(text);\n}',
+    'class MaterialTabPanelRenderer {\n  new DynamicTexture();\n  canvas.font = font;\n}',
+  ]) assert.equal(expression.test(source), false, source);
+});
+
+test('plugin tab-panel mapping rejects state contradictions, foreign ownership and invented core text', () => {
+  const mutations = [
+    (r) => { r.nodes.find(n => n.key === 'leaf').ownText = 'Other content'; },
+    (r) => { r.nodes.find(n => n.key === 'leaf').attributes['data-parity-id'] = 'wrong'; },
+    (r) => { r.nodes.find(n => n.key === 'leaf').attributes.id = 'tab-panel'; },
+    (r) => { r.nodes.find(n => n.key === 'content').parent = 'group'; },
+    (r) => { r.nodes.find(n => n.key === 'body').attributes['aria-hidden'] = 'true'; },
+    (r) => { r.nodes.find(n => n.key === 'body').attributes['aria-labelledby'] = 'mat-tab-group-18-label-0'; },
+    (r) => { r.nodes.find(n => n.key === 'header').attributes['aria-selected'] = 'false'; },
+    (r) => { r.nodes.find(n => n.key === 'header').attributes['aria-controls'] = 'mat-tab-group-17-content-1'; },
+    (r) => { r.nodes.find(n => n.key === 'header').parent = 'foreign'; },
+    (r) => { r.nodes.push({ ...structuredClone(r.nodes.find(n => n.key === 'leaf')), key: 'other-leaf' }); },
+    (_r, a) => { a.nodes[1].authored.type = 'div'; },
+    (_r, a) => { a.nodes[1].authored.ariaLabel = 'Activity content'; },
+    (_r, a) => { a.nodes[1].authored.data.selected = false; },
+    (_r, a) => { a.nodes[1].authored.data.phase = .5; },
+    (_r, a) => { delete a.nodes[1].authored.data['font-size']; },
+    (_r, a) => { a.nodes[1].authored.data['baseline-offset'] = '0'; },
+    (_r, a) => { a.nodes[1].authored.textContent = 'Overview content'; },
+    (_r, a) => { a.nodes[1].retainedText = { source: 'core-text-registry', style: {} }; },
+    (_r, a) => { a.nodes[1].paintedControlText = { source: 'core-control-texture', style: {} }; },
+    (_r, a) => { a.nodes[2].authored.ariaSelected = false; },
+    (_r, a) => { a.nodes[3].authored.ariaControls = 'other-panel'; },
+    (_r, a) => { a.nodes[1].parent = 'root'; },
+    (_r, a) => { a.nodes.push({ ...structuredClone(a.nodes[1]), key: 'duplicate' }); },
+    (_r, a) => { delete a.nodes[1].normalResolvedStyle; },
+  ];
+  for (const mutate of mutations) {
+    const raw = pluginTabPanelReport(), { reference, astylar } = raw.results[0].inputTrees;
+    mutate(reference, astylar);
+    const evidence = collectRetainedTypographyEvidence(raw.results, collectFullTreeInventory(raw.results));
+    assert.ok(!evidence.gaps.some(g => g.attribution === 'reviewed-plugin-tab-panel-text-substitution'), String(mutate));
+  }
+});
+
+test('plugin tab-panel findings replay captured evidence rather than trusting declared equivalence or paint', () => {
+  const baseline = buildMaterialInputAudit(pluginTabPanelReport());
+  for (const mutate of [
+    (_r, g) => { g.inputEquivalent = true; },
+    (_r, g) => { g.finalRasterVerified = true; },
+    (_r, g) => { g.currentPluginPaintCaptured = true; },
+    (_r, g) => { g.classification = 'confirmed-core-renderer-defect'; },
+    (_r, g) => { g.reviewEvidence.source = 'core-text-registry'; },
+    (_r, g) => { g.reviewEvidence.reference[0].computed.fontSize = '99px'; },
+    (_r, g) => { g.reviewEvidence.candidate[0].authored.data['font-size'] = 99; },
+    (_r, g) => { g.reviewEvidence.revision++; },
+    (r, g) => { r.retainedTypography.gaps.push(structuredClone(g)); },
+    r => { r.retainedTypography.gaps = []; },
+    r => { r.elementInventory.variants.find(v => v.side === 'astylar').nodes[1].authored.data.phase = .5; },
+    r => { r.elementInventory.styles.find(s => s.side === 'reference').value.color = '#abcdef'; },
+  ]) {
+    const report = structuredClone(baseline), gap = report.retainedTypography.gaps.find(g => g.attribution === 'reviewed-plugin-tab-panel-text-substitution');
+    mutate(report, gap);
+    assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('plugin tab-panel')), String(mutate));
+  }
+});
+
 function selectArrowReport(compact = false) {
   const raw = templateTypographyReport('select'), { reference: r, astylar: a } = raw.results[0].inputTrees;
   const control = r.nodes.find(n => n.type === 'mat-select');
