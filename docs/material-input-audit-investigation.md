@@ -22,6 +22,79 @@ selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Outline-token findings now have per-case declaration proofs (2026-09-12)
+
+The source findings from `d27400c` are now connected to captured cases through
+`outlineTokenInputs`, without changing either surface. The collector requires
+unique shared-ID/type correspondence, complete side-correct rule collections,
+current core inspection provenance and revision, and the exact active
+serialized token declaration. Pending empty color longhands must accompany
+that declaration; they cannot stand in for it. Native outlined buttons also
+require the independently reviewed reset and important no-animation rules.
+
+The complete candidate author-rule collection must contain the expected
+literal and no other possibly applicable color/reset input. Unknown selectors,
+nested declarations, state/media conflicts, inline colors, missing styles and
+duplicate mappings reject attribution. Reference and all three candidate
+style stages must show the relevant 1px solid sides, with reference token
+color versus the retained literal. The shared-ID measurement snapshot is
+checked separately against the full-tree declaration witness. The second
+toggle remains explicitly limited to `borderLeftColor`; its other sides are
+not silently assigned the same cause.
+
+Each report entry keeps its source finding, exact reference rule and candidate
+literal, raw rule indices, excluded candidate-rule indices, resolved revision,
+proved properties and all reviewed case keys. Independent validation rebuilds
+the proof inventory and verifies each occurrence, including cases beyond the
+twelve display samples. The classification is an authoring defect with
+`inputEquivalent:false` and `finalRasterVerified:false`, never a near-color
+alias or equal-input renderer-paint verdict.
+
+Replay of all **436 corrected static cases**, with their selected current-run
+normal-line-box and behavior/overlay/slider supplements, proves **36** node
+observations and attributes **nine** color signatures / **108** occurrences:
+four sides each on the outlined button and toggle group, and the second
+toggle's left divider. Unresolved static border-color signatures fall from
+151 to **142**; all unresolved static signatures fall from 2,664 to **2,655**.
+Diagnostic validation reports zero errors. Existing ordinary-default and
+button-reset findings remain distinct.
+
+Replaying the same complete static set plus the **104 captured button and
+button-toggle interaction cases** yields **196** paired node proofs and
+**580** attributed color occurrences, with all 580 reviewed case keys retained
+and zero diagnostic validation errors. Each outlined-button side has 60
+occurrences; each group side and the second option's left divider has 68.
+Covered case labels include hover, held, focus, activate, activate-leave,
+disabled and selected where configured. A case label does not imply every
+mapped target itself is disabled or selected: the exact matched declarations
+and styles decide attribution. This remains a selected-family diagnostic,
+not acceptance of the unfinished full interaction matrix. The first
+two-family-only replay rejected the full static natural-line-box supplement
+because its other case mappings were absent; retaining all 436 static cases
+preserves that binding without relaxing validation.
+
+Focused verification:
+
+- `node --test --test-name-pattern='outline token attribution|outline token evidence' tests/material-parity/input-equivalence-audit.spec.mjs`
+  — **4/4 pass**, 19.468 seconds. This covers all three target shapes,
+  **36** conflicting/incomplete capture mutations, **12** altered-report
+  rejection checks, fourteen reviewed states with twelve displayed samples,
+  and preservation of raw input data.
+- `npm run parity:harness:check` — **336/336 pass**, zero failures, skipped,
+  cancelled or todo tests, 264.185 seconds.
+
+The full browser run subsequently stopped at the snack-bar dark interaction
+sequence with a 30-second `.frame` visibility timeout in `openInteractionPage`.
+It left **436 static and 1,747 interaction checkpoints**; independent checking
+found zero result-hash mismatches and zero changes to the ten frozen capture
+imports. This is an incomplete run, not accepted parity. Preserve its evidence
+and resume through the checkpoint mechanism without changing thresholds,
+skipping the timed-out case or replacing the served build.
+
+No production code, plugin, fixture, reference or live capture module was
+modified. Other border sides, typography, geometry, actual border raster and
+the remaining input differences are still separate audit obligations.
+
 ## Explicit Material outline tokens are replaced by a palette literal (2026-09-12)
 
 Read-only inspection separates three explicit authoring mismatches from the

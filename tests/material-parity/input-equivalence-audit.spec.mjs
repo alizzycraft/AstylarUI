@@ -341,6 +341,139 @@ function buttonBorderResetReport(selector = '.material-button') {
   return raw;
 }
 
+function outlineTokenReport(kind = 'button') {
+  const raw = kind === 'button' ? buttonBorderResetReport() : borderInitialReport();
+  const entry = raw.results[0], input = entry.styleInputs[0], left = kind === 'divider';
+  const id = kind === 'button' ? 'core-root' : left ? 'button-toggle-two' : 'button-toggle-primary';
+  const selector = kind === 'button' ? '.outlined' : `#${id}`;
+  const referenceType = kind === 'button' ? 'button' : left ? 'mat-button-toggle' : 'mat-button-toggle-group';
+  const sides = left ? ['Left'] : ['Top', 'Right', 'Bottom', 'Left'];
+  const reference = { borderColor: '#7b757f', borderWidth: '1px', borderStyle: 'solid' };
+  const candidate = { borderColor: '#79747e', borderWidth: '1px', borderStyle: 'solid' };
+  if (left) {
+    Object.assign(reference, { borderColor: '#123456', borderLeftColor: '#7b757f', borderWidth: '0 0 0 1px', borderStyle: 'none none none solid' });
+    candidate.borderWidth = '0 0 0 1px';
+  }
+  Object.assign(input, { id, reference, astylar: candidate,
+    referenceStructure: { schemaVersion: 2, type: referenceType }, astylarStructure: { schemaVersion: 2, type: kind === 'button' ? 'button' : 'div' },
+    astylarNormalResolvedStyle: { ...candidate }, astylarInteractionResolvedStyle: { ...candidate } });
+  const refNode = entry.inputTrees.reference.nodes[0], astNode = entry.inputTrees.astylar.nodes[0];
+  Object.assign(refNode, { type: referenceType, attributes: { id }, inline: {} });
+  Object.assign(astNode, { authored: { id, type: kind === 'button' ? 'button' : 'div', class: kind === 'button' ? 'material-button outlined' : '' },
+    resolvedStyle: { ...candidate }, normalResolvedStyle: { ...candidate }, interactionResolvedStyle: { ...candidate } });
+  entry.inputTrees.reference.styles = [{ ...reference }];
+  const token = { selector: kind === 'button' ? '.mat-mdc-outlined-button:not(:disabled)' : left
+    ? '.mat-button-toggle-group-appearance-standard .mat-button-toggle-appearance-standard + .mat-button-toggle-appearance-standard'
+    : '.mat-button-toggle-standalone.mat-button-toggle-appearance-standard, .mat-button-toggle-group-appearance-standard',
+    cssText: kind === 'button' ? 'border-color: var(--mat-button-outlined-outline-color, var(--mat-sys-outline));'
+      : `${left ? 'border-left' : 'border'}: solid 1px var(--mat-button-toggle-divider-color, var(--mat-sys-outline));`,
+    declarations: Object.fromEntries(sides.map(side => [`border-${side.toLowerCase()}-color`, { value: '', important: false }])), active: true, conditions: [] };
+  entry.inputTrees.reference.rules = [...entry.inputTrees.reference.rules, token].map(rule => ({ ...rule, active: true, conditions: [] }));
+  refNode.rules = entry.inputTrees.reference.rules.map((_, index) => index);
+  input.referenceAuthored = structuredClone(entry.inputTrees.reference.rules);
+  const literal = { selector, ...candidate };
+  entry.inputTrees.astylar.rules.push(literal);
+  input.astylarAuthored = [...(input.astylarAuthored ?? []), { selector, declarations: { ...candidate } }];
+  return raw;
+}
+
+test('outline token attribution requires exact authored shorthand and covers only the proved border sides', () => {
+  for (const kind of ['button', 'group', 'divider']) {
+    const raw = outlineTokenReport(kind), before = JSON.stringify(raw), audit = buildMaterialInputAudit(raw);
+    assert.equal(audit.outlineTokenInputs.length, 1, kind);
+    const proof = audit.outlineTokenInputs[0];
+    assert.equal(proof.inputEquivalent, false);
+    assert.equal(proof.finalRasterVerified, false);
+    assert.ok(proof.referenceWitness.token.cssText.includes('var(--mat-'));
+    const differences = audit.discrepancies.filter(entry => entry.attribution === 'reviewed-material-outline-token-substitution');
+    assert.equal(differences.length, kind === 'divider' ? 1 : 4, kind);
+    assert.ok(differences.every(entry => entry.classification === 'application-plugin-authoring-defect'));
+    if (kind === 'divider') assert.deepEqual(proof.properties, ['borderLeftColor']);
+    assert.ok(!validateMaterialInputAudit(audit, { requireComplete: false }).some(error => error.includes('outline token')));
+    assert.equal(JSON.stringify(raw), before);
+  }
+});
+
+test('outline token attribution rejects incomplete, conflicting and mismapped declarations or styles', () => {
+  const mutations = [
+    e => { delete e.inputTrees.reference.rules.at(-1).cssText; },
+    e => { e.inputTrees.reference.rules.at(-1).cssText = 'border-color: red;'; },
+    e => { e.inputTrees.reference.rules.at(-1).active = false; },
+    e => { delete e.inputTrees.reference.rules.at(-1).active; },
+    e => { e.inputTrees.reference.rules.at(-1).declarations['border-top-color'].value = '#7b757f'; },
+    e => { e.inputTrees.reference.rules.at(-1).declarations['border-top-color'].important = true; },
+    e => { e.inputTrees.reference.rules.at(-1).declarations.all = { value: 'unset' }; },
+    e => { e.inputTrees.reference.rules[1].declarations['animation-name'].important = false; },
+    e => { e.inputTrees.reference.rules.push(structuredClone(e.inputTrees.reference.rules.at(-1))); e.inputTrees.reference.nodes[0].rules.push(3); },
+    e => { e.inputTrees.reference.nodes[0].inline = { 'border-color': { value: 'red' } }; },
+    e => { e.inputTrees.reference.nodes[0].type = 'span'; },
+    e => { e.inputTrees.reference.nodes.push(structuredClone(e.inputTrees.reference.nodes[0])); },
+    e => { e.inputTrees.astylar.nodes.push(structuredClone(e.inputTrees.astylar.nodes[0])); },
+    e => { e.inputTrees.astylar.nodes[0].authored.id = 'unrelated'; },
+    e => { e.inputTrees.astylar.nodes[0].authored.class = 'material-button'; },
+    e => { e.inputTrees.astylar.nodes[0].authored.style = { borderColor: '#79747e' }; },
+    e => { e.inputTrees.astylar.rules.push({ selector: '.outlined:focus', borderColor: 'red', mediaMaxWidth: '1px' }); },
+    e => { e.inputTrees.astylar.rules.push({ selector: ':is(.outlined)', all: 'initial' }); },
+    e => { e.inputTrees.astylar.rules.push({ selector: '.outlined', nested: { borderColor: 'red' } }); },
+    e => { e.inputTrees.astylar.rules.at(-1).borderColor = 'transparent'; },
+    e => { e.inputTrees.astylar.nodes[0].normalResolvedStyle.borderColor = 'red'; },
+    e => { e.inputTrees.astylar.nodes[0].resolvedStyle.borderLeftWidth = '2px'; },
+    e => { e.inputTrees.astylar.nodes[0].interactionResolvedStyle.borderStyle = 'none'; },
+    e => { e.inputTrees.astylar.nodes[0].resolvedStyle.borderInlineColor = 'red'; },
+    e => { e.inputTrees.astylar.resolvedStyleEvidenceVersion = 1; },
+    e => { e.inputTrees.astylar.resolvedStyleSource = 'mesh-metadata'; },
+    e => { delete e.inputTrees.astylar.nodes[0].normalResolvedStyle; },
+    e => { delete e.inputTrees.astylar.resolvedStyleRevision; },
+    e => { delete e.inputTrees.astylar.rules; },
+    e => { e.inputTrees.astylar.errors.push('missing rules'); },
+    e => { e.inputTrees.reference.styles[0].borderColor = '#79747e'; },
+    e => { e.styleInputs[0].referenceAuthored = []; },
+    e => { e.styleInputs[0].astylarAuthored = []; },
+    e => { e.styleInputs[0].referenceAuthored.at(-1).declarations['border-left-color'].value = 'red'; },
+    e => { e.styleInputs[0].astylarInteractionResolvedStyle.borderColor = 'red'; },
+    e => { e.styleInputs[0].referenceStructure.type = 'span'; },
+  ];
+  for (const change of mutations) {
+    const raw = outlineTokenReport(); change(raw.results[0]);
+    assert.ok(buildMaterialInputAudit(raw).discrepancies.every(entry => entry.attribution !== 'reviewed-material-outline-token-substitution'), String(change));
+  }
+});
+
+test('outline token evidence and side-specific classifications must independently replay', () => {
+  const original = buildMaterialInputAudit(outlineTokenReport());
+  for (const change of [
+    a => { delete a.outlineTokenInputs; },
+    a => { a.outlineTokenInputs = []; },
+    a => { a.outlineTokenInputs[0].inputEquivalent = true; },
+    a => { a.outlineTokenInputs[0].referenceWitness.token.cssText = 'border-color: red;'; },
+    a => { a.outlineTokenInputs[0].properties = ['borderLeftColor']; },
+    a => { a.outlineTokenInputs[0].revision++; },
+    a => { a.elementInventory.variants.find(tree => tree.side === 'astylar').ruleEvidenceComplete = false; },
+    a => { a.discrepancies[0].classification = 'equivalent-representation'; },
+    a => { a.discrepancies[0].property = 'borderTopWidth'; },
+    a => { a.discrepancies[0].reference = 'rgba(121,116,126,1)'; },
+    a => { a.discrepancies[0].reviewedCases = []; },
+    a => { a.discrepancies[0].reviewedCases.push('uncaptured-case'); },
+  ]) {
+    const changed = structuredClone(original); change(changed);
+    assert.ok(validateMaterialInputAudit(changed, { requireComplete: false }).some(error => error.includes('outline token')), String(change));
+  }
+});
+
+test('outline token attribution retains every reviewed case beyond the twelve displayed samples', () => {
+  const raw = outlineTokenReport();
+  raw.results = Array.from({ length: 14 }, (_, index) => ({ ...structuredClone(raw.results[0]), state: `state-${index}` }));
+  const audit = buildMaterialInputAudit(raw);
+  assert.equal(audit.outlineTokenInputs.length, 14);
+  for (const difference of audit.discrepancies) {
+    assert.equal(difference.attribution, 'reviewed-material-outline-token-substitution');
+    assert.equal(difference.cases.length, 12);
+    assert.equal(difference.reviewedCases.length, 14);
+    assert.equal(difference.occurrences, 14);
+  }
+  assert.ok(!validateMaterialInputAudit(audit, { requireComplete: false }).some(error => error.includes('outline token')));
+});
+
 test('button border-reset attribution preserves the explicit reset rather than claiming an omitted reference color', () => {
   for (const selector of ['.material-button', '.text-button', '.toolbar-action']) {
     const raw = buttonBorderResetReport(selector), before = JSON.stringify(raw), audit = buildMaterialInputAudit(raw);

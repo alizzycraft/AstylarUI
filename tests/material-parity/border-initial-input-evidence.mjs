@@ -5,6 +5,7 @@ const ordinaryTypes = new Set(['div', 'section', 'article', 'header', 'footer', 
 export const borderColorProperties = ['borderTopColor', 'borderRightColor', 'borderBottomColor', 'borderLeftColor'];
 export const borderInitialAttribution = 'reviewed-border-initial-color-divergence';
 export const buttonBorderResetAttribution = 'reviewed-material-button-border-reset-omission';
+export const outlineTokenAttribution = 'reviewed-material-outline-token-substitution';
 const object = value => value !== null && typeof value === 'object' && !Array.isArray(value);
 const colorOrResetKey = key => {
   const normalized = key.replaceAll('-', '').toLowerCase().replace(/^(webkit|moz)/, '');
@@ -156,4 +157,125 @@ export function classifyButtonBorderResetInput(input, property, reference, astyl
   return { classification: proof.classification, attribution: buttonBorderResetAttribution, reviewEvidence: structuredClone(proof),
     owner: 'showcase Material button border-reset translation; core currentColor support separately',
     justification: 'The captured .mdc-button rule explicitly resets every border side to medium none currentColor, with matched important no-animation declarations. The mapped core button instead authors only zero border width in its Material button rule; complete candidate rules and inline inputs omit border color/reset, and all three resolved stages retain transparent. This is incomplete authored reset semantics, not a native-UA guess, accepted zero-width equivalence or evidence that a shared color input was misrendered. The source omission exists in initial showcase commit 2f44011. Restore equivalent reset/color intent when the separate core contextual-color gap is addressed; do not sample a literal color or retune the fixture.' };
+}
+
+const outlineTargets = [
+  { candidate: '.outlined', referenceType: 'button', candidateType: 'button',
+    reference: '.mat-mdc-outlined-button:not(:disabled)',
+    declaration: 'border-color: var(--mat-button-outlined-outline-color, var(--mat-sys-outline))',
+    sides: ['Top', 'Right', 'Bottom', 'Left'], sourceFinding: 'fixture-outlined-button-literal-replaces-outline-token' },
+  { candidate: '#button-toggle-primary', referenceType: 'mat-button-toggle-group', candidateType: 'div',
+    reference: '.mat-button-toggle-standalone.mat-button-toggle-appearance-standard, .mat-button-toggle-group-appearance-standard',
+    declaration: 'border: solid 1px var(--mat-button-toggle-divider-color, var(--mat-sys-outline))',
+    sides: ['Top', 'Right', 'Bottom', 'Left'], sourceFinding: 'fixture-toggle-group-literal-replaces-divider-token' },
+  { candidate: '#button-toggle-two', referenceType: 'mat-button-toggle', candidateType: 'div',
+    reference: '.mat-button-toggle-group-appearance-standard .mat-button-toggle-appearance-standard + .mat-button-toggle-appearance-standard',
+    declaration: 'border-left: solid 1px var(--mat-button-toggle-divider-color, var(--mat-sys-outline))',
+    sides: ['Left'], sourceFinding: 'fixture-toggle-divider-literal-replaces-divider-token' },
+];
+
+// A deliberately finite authored-expression witness, not a CSS parser. The
+// browser keeps these pending variable shorthands in cssText while serializing
+// expanded longhands as empty. Empty values alone never prove token authorship.
+function outlineReference(rules, target, requireSerialized) {
+  if (!Array.isArray(rules) || rules.some(rule => !object(rule?.declarations))) return;
+  const tokens = rules.filter(rule => rule.selector === target.reference);
+  if (tokens.length !== 1) return;
+  const token = tokens[0], colorKeys = target.sides.map(side => `border-${side.toLowerCase()}-color`);
+  if (requireSerialized && (typeof token.cssText !== 'string' ||
+      token.cssText.split(';').filter(part => part.trim() === target.declaration).length !== 1)) return;
+  if (colorKeys.some(key => token.declarations[key]?.value !== '' || token.declarations[key]?.important !== false) ||
+      Object.keys(token.declarations).some(key => colorOrResetKey(key) && !colorKeys.includes(key))) return;
+  const rest = rules.filter(rule => rule !== token);
+  const reset = target.referenceType === 'button' ? materialButtonReset(rest) : undefined;
+  if (target.referenceType === 'button' ? !reset : rest.some(rule => !noColorOrReset(rule.declarations))) return;
+  return { token, ...(reset ? { reset } : {}) };
+}
+
+function outlineStyles(referenceRaw, stages, sides, canonicalStyle) {
+  if (!object(referenceRaw) || stages.some(stage => !object(stage) ||
+      Object.keys(stage).some(key => colorOrResetKey(key) && key !== 'borderColor'))) return;
+  const reference = canonicalStyle(referenceRaw), candidate = stages.map(canonicalStyle);
+  const color = reference[`border${sides[0]}Color`];
+  if (!/^rgba\(\d+,\d+,\d+,1\)$/.test(color ?? '') || color === 'rgba(121,116,126,1)' ||
+      sides.some(side => reference[`border${side}Color`] !== color || reference[`border${side}Width`] !== '1px' ||
+        reference[`border${side}Style`] !== 'solid') ||
+      candidate.some(style => borderColorProperties.some(key => style[key] !== 'rgba(121,116,126,1)') ||
+        sides.some(side => style[`border${side}Width`] !== '1px' || style[`border${side}Style`] !== 'solid'))) return;
+  return { referenceColor: color, candidateBorderColor: 'rgba(121,116,126,1)' };
+}
+
+export function collectOutlineTokenInputs(inventory, canonicalStyle) {
+  const result = [], cases = new Map();
+  for (const entry of inventory.cases) {
+    if (!cases.has(entry.case)) cases.set(entry.case, []);
+    cases.get(entry.case).push(entry);
+  }
+  const styleAt = (index, side) => inventory.styles[index]?.side === side ? inventory.styles[index].value : undefined;
+  const ruleAt = (index, side) => inventory.rules[index]?.side === side ? inventory.rules[index].value : undefined;
+  const idOf = node => node.attributes?.['data-parity-id'] ?? node.attributes?.id;
+  for (const [key, entries] of cases) {
+    const refs = entries.filter(entry => entry.side === 'reference'), asts = entries.filter(entry => entry.side === 'astylar');
+    if (refs.length !== 1 || asts.length !== 1 || !Number.isInteger(asts[0].resolvedStyleRevision) || asts[0].resolvedStyleRevision < 0 ||
+        inventory.errors.some(error => error.case === key)) continue;
+    const ref = inventory.variants[refs[0].variant], ast = inventory.variants[asts[0].variant];
+    if (ref?.side !== 'reference' || ast?.side !== 'astylar' || !ref.ruleEvidenceComplete || !ast.ruleEvidenceComplete ||
+        ast.resolvedStyleEvidenceVersion !== 2 || ast.resolvedStyleSource !== 'core-style-inspection') continue;
+    const rules = ast.rules.map(index => ruleAt(index, 'astylar'));
+    if (rules.some(rule => !object(rule) || Object.values(rule).some(value => object(value) || Array.isArray(value)))) continue;
+    for (const candidate of ast.nodes) for (const target of outlineTargets) {
+      const authored = candidate.authored, id = authored?.id;
+      if (!id || authored.type !== target.candidateType || (authored.class !== undefined && typeof authored.class !== 'string') ||
+          !selectorCanApply(target.candidate, authored) || !noColorOrReset(authored.style ?? {}) ||
+          ast.nodes.filter(node => node.authored?.id === id).length !== 1) continue;
+      const refNodes = ref.nodes.filter(node => idOf(node) === id);
+      if (refNodes.length !== 1 || refNodes[0].type !== target.referenceType || !noColorOrReset(refNodes[0].inline)) continue;
+      const node = refNodes[0], refRules = node.rules.map(index => ruleAt(index, 'reference'));
+      if (refRules.some(rule => !object(rule) || typeof rule.active !== 'boolean')) continue;
+      const referenceWitness = outlineReference(refRules.filter(rule => rule.active), target, true);
+      if (!referenceWitness) continue;
+      const literals = rules.filter(rule => rule.selector === target.candidate);
+      if (literals.length !== 1 || literals[0].borderColor !== '#79747e' ||
+          Object.keys(literals[0]).some(key => colorOrResetKey(key) && key !== 'borderColor')) continue;
+      const excluded = [];
+      let conflict = false;
+      for (const [index, rule] of rules.entries()) {
+        if (rule === literals[0] || noColorOrReset(rule)) continue;
+        if (selectorCanApply(rule.selector, authored)) { conflict = true; break; }
+        excluded.push(ast.rules[index]);
+      }
+      if (conflict) continue;
+      const colors = outlineStyles(styleAt(node.style, 'reference'),
+        [candidate.normalStyle, candidate.style, candidate.interactionStyle].map(index => styleAt(index, 'astylar')), target.sides, canonicalStyle);
+      if (!colors) continue;
+      result.push({ case: key, element: id, referenceNode: node.key, astylarNode: candidate.key,
+        referenceType: node.type, astylarType: authored.type, source: ast.resolvedStyleSource, revision: asts[0].resolvedStyleRevision,
+        ...colors, properties: target.sides.map(side => `border${side}Color`), referenceWitness,
+        candidateRule: literals[0], referenceRules: [...node.rules], excludedCandidateRules: excluded, candidateRuleCount: ast.rules.length,
+        classification: 'application-plugin-authoring-defect', attribution: outlineTokenAttribution, sourceFinding: target.sourceFinding,
+        inputEquivalent: false, finalRasterVerified: false,
+        scope: 'Captured explicit token versus literal border-color input only; no other-side, shape, typography, animation paint or final-raster equivalence claim.' });
+    }
+  }
+  return result;
+}
+
+export function classifyOutlineTokenInput(input, property, reference, astylar, proof, canonicalStyle) {
+  const target = outlineTargets.find(target => target.sourceFinding === proof?.sourceFinding);
+  if (!target || proof.attribution !== outlineTokenAttribution || input.id !== proof.element ||
+      !proof.properties.includes(property) || reference !== proof.referenceColor || astylar !== proof.candidateBorderColor ||
+      input.astylarResolvedStyleEvidenceVersion !== 2 || input.referenceStructure?.schemaVersion !== 2 || input.astylarStructure?.schemaVersion !== 2 ||
+      input.referenceStructure.type !== proof.referenceType || input.astylarStructure.type !== proof.astylarType) return;
+  const witness = outlineReference(input.referenceAuthored, target, false);
+  if (!witness || JSON.stringify(witness.token.declarations) !== JSON.stringify(proof.referenceWitness.token.declarations) ||
+      JSON.stringify(witness.reset) !== JSON.stringify(proof.referenceWitness.reset)) return;
+  const colors = outlineStyles(input.reference, [input.astylarNormalResolvedStyle, input.astylar, input.astylarInteractionResolvedStyle], target.sides, canonicalStyle);
+  if (!colors || colors.referenceColor !== reference || colors.candidateBorderColor !== astylar || !Array.isArray(input.astylarAuthored)) return;
+  const literals = input.astylarAuthored.filter(rule => rule.selector === target.candidate);
+  if (literals.length !== 1 || literals[0].declarations?.borderColor !== '#79747e' ||
+      input.astylarAuthored.some(rule => !object(rule.declarations) || Object.keys(rule.declarations).some(key =>
+        colorOrResetKey(key) && !(rule === literals[0] && key === 'borderColor')))) return;
+  return { classification: proof.classification, attribution: outlineTokenAttribution, reviewEvidence: structuredClone(proof),
+    owner: 'showcase Material outline/divider token and side-specific border input translation',
+    justification: 'The uniquely mapped reference has the exact active serialized Material token shorthand and pending expanded color declarations. Its computed relevant border colors differ from the explicit candidate #79747e rule retained at all three current core style stages. Complete candidate rules exclude other possibly applicable color/reset inputs; duplicate, unknown, incomplete or conflicting witnesses reject attribution. Reference button reset/no-animation evidence is checked separately, and the second toggle covers only its left divider. This is source-traced unequal color authoring, not an accepted palette alias or equal-input core paint failure. Preserve the original token/side intent rather than sampling the observed color; shape, other sides and final raster remain separate.' };
 }

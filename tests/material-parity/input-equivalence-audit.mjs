@@ -4,7 +4,8 @@ import path from 'node:path';
 import { loadNormalLineBoxReport } from './normal-line-box-report.mjs';
 import { validateSupplementalCapture } from './supplemental-capture-evidence.mjs';
 import { borderColorProperties, borderInitialAttribution, collectBorderInitialInputs, classifyBorderInitialInput,
-  buttonBorderResetAttribution, collectButtonBorderResetInputs, classifyButtonBorderResetInput } from './border-initial-input-evidence.mjs';
+  buttonBorderResetAttribution, collectButtonBorderResetInputs, classifyButtonBorderResetInput,
+  outlineTokenAttribution, collectOutlineTokenInputs, classifyOutlineTokenInput } from './border-initial-input-evidence.mjs';
 import {
   implicitReferenceValues,
   implicitReferenceJustifications,
@@ -77,6 +78,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const visibleOverflowInputs = collectVisibleOverflowInputs(elementInventory);
   const borderInitialInputs = collectBorderInitialInputs(elementInventory, canonicalStyle);
   const buttonBorderResetInputs = collectButtonBorderResetInputs(elementInventory, canonicalStyle);
+  const outlineTokenInputs = collectOutlineTokenInputs(elementInventory, canonicalStyle);
   const rawControlTypography = collectControlTypographyEvidence(cases, elementInventory);
   const retainedTypography = collectRetainedTypographyEvidence(cases, elementInventory, rawControlTypography);
   const normalLineBoxes = options.normalLineBoxPath
@@ -87,7 +89,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
       .map((item) => ({ case: item.case, element: item.element, referenceNode: item.referenceNode })),
       scope: 'No supplemental static natural-line-box report selected. No line-height equivalence inferred.' };
   const controlTypography = attributeObservedNormalLineBoxes(rawControlTypography, elementInventory, normalLineBoxes);
-  const discrepancies = collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs);
+  const discrepancies = collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs);
   const classifications = countBy(discrepancies, (entry) => entry.classification);
   const propertyGroupCounts = countBy(discrepancies, (entry) => entry.propertyGroup);
   const familyCounts = countBy(discrepancies, (entry) => entry.family);
@@ -145,6 +147,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
     visibleOverflowInputs,
     borderInitialInputs,
     buttonBorderResetInputs,
+    outlineTokenInputs,
     retainedTypography,
     controlTypography,
     sourceFindings,
@@ -173,6 +176,20 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
   if (requireComplete && report.elementInventory.resolvedStyleGaps.length > 0) errors.push(`${report.elementInventory.resolvedStyleGaps.length} inventoried elements lack resolved style evidence`);
   if (requireComplete && report.elementInventory.stateStyleGaps.length > 0) errors.push(`${report.elementInventory.stateStyleGaps.length} state cases lack effective style provenance`);
   if (report.elementInventory.errors.length > 0) errors.push(`${report.elementInventory.errors.length} full-tree collection errors`);
+  if (JSON.stringify(report.outlineTokenInputs) !== JSON.stringify(collectOutlineTokenInputs(report.elementInventory, canonicalStyle))) {
+    errors.push('outline token evidence does not replay from the captured inventory');
+  }
+  for (const entry of report.discrepancies.filter(entry => entry.attribution === outlineTokenAttribution)) {
+    const proof = report.outlineTokenInputs?.find(proof => proof.case === entry.reviewEvidence?.case && proof.element === entry.element);
+    if (!proof || !proof.properties.includes(entry.property) || entry.reference !== proof.referenceColor ||
+        entry.astylar !== proof.candidateBorderColor || entry.classification !== 'application-plugin-authoring-defect' ||
+        JSON.stringify(proof) !== JSON.stringify(entry.reviewEvidence) || !Array.isArray(entry.reviewedCases) ||
+        entry.reviewedCases.length !== entry.occurrences || new Set(entry.reviewedCases).size !== entry.occurrences ||
+        entry.reviewedCases.some(key => !report.outlineTokenInputs?.some(item => item.case === key && item.element === entry.element &&
+          item.properties.includes(entry.property) && item.referenceColor === entry.reference && item.candidateBorderColor === entry.astylar))) {
+      errors.push('outline token classification lacks exact captured declaration and style evidence');
+    }
+  }
   if (JSON.stringify(report.buttonBorderResetInputs) !== JSON.stringify(collectButtonBorderResetInputs(report.elementInventory, canonicalStyle))) {
     errors.push('button border-reset evidence does not replay from the captured inventory');
   }
@@ -447,6 +464,8 @@ export function renderMaterialInputAuditMarkdown(report) {
     '',
     `Material button border-reset evidence: ${report.buttonBorderResetInputs.length} uniquely paired nodes have the explicit reference medium/none/currentColor reset but candidate width-only authoring. These remain authoring defects, not accepted initial-value aliases or equal-input paint failures.`,
     '',
+    `Material outline-token evidence: ${report.outlineTokenInputs.length} uniquely paired nodes have the exact active serialized reference token shorthand versus a captured candidate literal at all three resolved stages. Only their explicitly proved border-color sides are attributed; no token is reconstructed from an empty expanded longhand or substituted into fixture paint.`,
+    '',
     'Reviewed tracking representation: CSS Text 3 defines letter-spacing normal as computed zero, serialized by CSSOM as normal. Only that alias is canonicalized; raw pooled values remain available. The independent Arial equal-input advance failure remains a core finding. Numeric precision preserves tiny nonzero tracking rather than rounding it to normal. This accepts neither different fonts nor missing paint, line-height, shaping, alignment or final raster.',
     '',
     `Coverage is ${report.coverage.complete ? 'complete' : 'incomplete'}: ${report.coverage.executedStatic}/${report.coverage.configuredStatic} static cases and ` +
@@ -537,10 +556,11 @@ export function renderMaterialInputAuditMarkdown(report) {
   return lines.join('\n');
 }
 
-function collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs) {
+function collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs) {
   const grouped = new Map();
   const borderInitialByCaseAndId = new Map(borderInitialInputs.map(entry => [JSON.stringify([entry.case, entry.element]), entry]));
   const buttonBorderResetByCaseAndId = new Map(buttonBorderResetInputs.map(entry => [JSON.stringify([entry.case, entry.element]), entry]));
+  const outlineTokenByCaseAndId = new Map(outlineTokenInputs.map(entry => [JSON.stringify([entry.case, entry.element]), entry]));
   const visibleOverflowByCaseAndId = new Map(visibleOverflowInputs.map(entry => [JSON.stringify([entry.case, entry.element]), entry]));
   const typographyByCaseAndId = new Map(retainedTypography.comparisons.map((entry) =>
     [JSON.stringify([entry.case, entry.element]), entry]));
@@ -565,6 +585,8 @@ function collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInp
               borderInitialByCaseAndId.get(JSON.stringify([key, input.id])), canonicalStyle)
             ?? classifyButtonBorderResetInput(input, property, referenceValue, astylarValue,
               buttonBorderResetByCaseAndId.get(JSON.stringify([key, input.id])), canonicalStyle)
+            ?? classifyOutlineTokenInput(input, property, referenceValue, astylarValue,
+              outlineTokenByCaseAndId.get(JSON.stringify([key, input.id])), canonicalStyle)
             ?? classifyReviewedRootInput(benchmarkCase, input, property, referenceValue, astylarValue)
             ?? classifyReviewedContainerInput(benchmarkCase, input, property, referenceValue, astylarValue)
             ?? classifyReviewedBadgePaint(benchmarkCase, input, property, referenceValue, astylarValue)
@@ -589,7 +611,7 @@ function collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInp
             recommendedOwner: classification.owner,
             ...(classification.attribution ? { attribution: classification.attribution } : {}),
             ...(classification.reviewEvidence ? { reviewEvidence: classification.reviewEvidence } : {}),
-            ...([borderInitialAttribution, buttonBorderResetAttribution].includes(classification.attribution) ? { reviewedCases: [] } : {}),
+            ...([borderInitialAttribution, buttonBorderResetAttribution, outlineTokenAttribution].includes(classification.attribution) ? { reviewedCases: [] } : {}),
             occurrences: 0,
             cases: [],
             states: [],
@@ -4711,6 +4733,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('outline token attribution requires/,
+      'capture-backed outline token attribution with side, conflict and replay guards', 'The exact active serialized token declaration must agree with its pending longhands and the separately captured shared-ID snapshot. Complete candidate author rules must contain the literal without any possibly applicable competing color/reset; all three current core stages and relevant 1px solid border sides must agree. Tests reject 36 conflicting or incomplete captures, forged report evidence and the use of only twelve displayed samples for fourteen reviewed states. This is classified unequal input, not a core paint or whole-component equivalence claim.'),
     proof(root, 'scripts/audit-material-outline-inputs.mjs', /const targets =/,
       'twelve unchanged Material outline/divider observations in eight paired pages', 'All four profiles compute RGB 123,117,127 from the active original token rule; the component token is absent and its fallback remains light-dark(#7b757f, #958e99). Candidate outlined-button, toggle-group and second-toggle rules explicitly supply #79747e at normal/effective/interaction stages. Separate source findings account for the three locations and history. This supplemental producer binds actual served bytes and full trees to the selected checkpoint; it does not automatically attribute every matrix state or prove equal-input core paint.'),
     proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('browser outline token/,
