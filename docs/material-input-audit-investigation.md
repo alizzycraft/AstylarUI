@@ -22,6 +22,50 @@ selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Sort replaces inherited typography before rendering (2026-09-12)
+
+The 12 corrected static sort cases expose nine retained-text input differences:
+three contrast and three custom font sizes, plus three contrast colors.
+Every reference ancestor from `.mat-sort-header-content` to the frame computes
+the same relevant value, without an intervening override. The frame rule
+authors `font-size: calc(16px * var(--scale))` and `color: rgb(29, 27, 32)`.
+Reference sizes are 14.4px in contrast and 18.4px in custom. Candidate
+`.sort-trigger` instead explicitly supplies 16px and contrast `#000000`.
+Its text leaf omits these declarations, and core retains the parent values.
+Missing leaf values remain omitted in the audit; they are not filled with
+invented inherited resolved values.
+
+History distinguishes the changes: `705cf58` ("match Material sort header")
+introduced a separate fixed-size trigger at 17px. `5b74d1b` ("align plugin
+indicator coordinates") changed the trigger to 16px. `994da86b` ("complete
+shared control parity") explicitly replaced the contrast trigger/header
+colors with black while retaining 16px.
+Current source is `astylar.component.ts:710`. These are unequal fixture inputs,
+not demonstrated core font-scaling or color-conversion defects. The correction
+plan restores the reference inheritance mechanism, not sampled output sizes.
+
+The classifier and independent report replay retain complete reference
+ancestry, the original frame rule, candidate leaf/parent declarations, exact
+mapping and retained values. Conditional or competing inputs, inline overrides,
+broken ancestry and contradictory stage values prevent attribution.
+
+- `node --test --test-name-pattern='sort typography|source audit|source fingerprints' tests/material-parity/input-equivalence-audit.spec.mjs`:
+  5/5 passing, including three positive combinations, 40 contradictory-input
+  controls and 20 report-tampering controls.
+- Actual 12-case diagnostic report: nine classifications, zero unresolved
+  retained typography differences for sort and zero validation errors with
+  `requireComplete:false` (diagnostic subset only).
+- `npm run parity:harness:check`: 308/308 passing, zero skipped/cancelled
+  (117.108 seconds). No renderer, fixture, reference or frozen capture import
+  changed in this increment.
+
+Expansion remains separate: the custom reference title inherits the 16px
+`--mat-expansion-header-text-size`/`--mat-sys-title-medium-size` token from
+its header. Candidate title/trigger/panel omit that size and reach the 18.4px
+page declaration. Three static occurrences still need durable per-occurrence
+attribution. Select-caret and tabs text mappings also remain open; no claim of
+complete input coverage follows from the finished sort subset.
+
 ## Sidenav color tokens and refreshed natural-line-box evidence (2026-09-12)
 
 All 12 corrected static sidenav captures (four profiles, three viewports)

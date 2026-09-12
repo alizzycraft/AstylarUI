@@ -101,6 +101,16 @@ export const reviewedValueNormalizations = Object.freeze([
 
 export const sourceAuditDefinitions = Object.freeze([
   Object.freeze({
+    id: 'fixture-sort-typography-substitution',
+    introducedBy: '705cf58 adds fixed 17px; 5b74d1b changes it to 16px; 994da86b changes contrast ink to black',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`selector: '\.sort-trigger'[^\n]*color: theme\.density <= -5 \? '#000000'[^\n]*fontSize: '16px'`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase sort typography inheritance and contrast styling',
+    justification: 'The browser sort text inherits frame font-size calc(16px * var(--scale)) and frame color. Candidate .sort-trigger explicitly supplies 16px and, in contrast, #000000. Captured complete reference ancestry and candidate leaf/trigger stages preserve the unequal inputs. Commit 705cf58 introduced fixed 17px, 5b74d1b changed it to 16px, and 994da86b, titled fix(material): complete shared control parity, introduced the black contrast branch. Restore inherited reference intent before assigning any core scaling/color defect. No screenshot-derived correction is implemented by this audit.',
+    focusedProof: 'tests/material-parity/input-equivalence-audit.spec.mjs: sort typography attribution preserves inherited frame inputs and explicit trigger substitutions',
+  }),
+  Object.freeze({
     id: 'fixture-sidenav-color-token-substitution',
     introducedBy: '2f440115',
     file: 'examples/material-showcase/src/app/astylar.component.ts',

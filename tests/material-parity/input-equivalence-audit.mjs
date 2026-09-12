@@ -333,6 +333,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
     'reviewed-field-label-tracking-substitution': 'application-plugin-authoring-defect',
     'reviewed-field-label-color-substitution': 'application-plugin-authoring-defect',
     'reviewed-sidenav-color-substitution': 'application-plugin-authoring-defect',
+    'reviewed-sort-typography-substitution': 'application-plugin-authoring-defect',
     'reviewed-table-font-input': 'application-plugin-authoring-defect',
     'reviewed-tree-font-input': 'application-plugin-authoring-defect',
     'reviewed-tree-label-line-box-substitution': 'application-plugin-authoring-defect',
@@ -353,6 +354,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
   validateFieldLabelTracking(report, errors);
   validateFieldLabelColors(report, errors);
   validateSidenavColors(report, errors);
+  validateSortTypography(report, errors);
   validateTreeLabelLineBoxes(report, errors);
   validateStepperNumberAlignment(report, errors);
   validateToggleButtonAlignment(report, errors);
@@ -408,6 +410,7 @@ export function renderMaterialInputAuditMarkdown(report) {
     `Field-label tracking substitutions: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-field-label-tracking-substitution').length} records preserve the reference filled-label tracking token and wrapper styles alongside the explicit candidate base/empty-state rules. The 0.4px or 0.65px candidate input is not accepted as equivalent to 0.496px reference tracking, including when the reference wrapper is scaled. Current glyph paint and the separate core transform defects remain independently unproven or investigated.`,
     `Field-label colors: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-field-label-color-substitution').length} records preserve the reference filled-label color token and the candidate base/empty/picker-shell declarations in source order. Attribution requires the selected literal to agree across normal, effective and retained stages; stale ancestry or unexplained state divergence is not waived. These unequal color inputs are not a core color-conversion or raster-equivalence claim.`,
     `Sidenav colors: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-sidenav-color-substitution').length} records preserve distinct reference drawer/content token inheritance and candidate literal declarations. These are classified unequal authored inputs, not RGB tolerances or evidence of equivalent paint. Competing declarations, incomplete chains and disagreement between candidate stages prevent attribution.`,
+    `Sort typography: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-sort-typography-substitution').length} records preserve complete reference frame inheritance against candidate fixed trigger font size or contrast ink. Missing leaf declarations remain missing in the evidence; parent declarations and retained values are recorded independently rather than synthesized as equivalent resolved input.`,
     '',
     `Tree label line-box substitutions: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-tree-label-line-box-substitution').length} records preserve complete reference normal-line-height ancestry and direct flex text ownership alongside the candidate fixed-20px label wrapper. This is unequal structure and line-box input, not a normal-to-20px normalization. Natural line-box height, anonymous flex-item behavior and current glyph paint require separate equal-input proof.`,
     '',
@@ -2054,6 +2057,100 @@ function reviewedTreeFontInput(entry, mapping, ref, ast, styles, astylarTree, in
   };
 }
 
+function reviewedSortTypographyInput(entry, mapping, property, ref, ast, styles, referenceTree, astylarTree, inventory) {
+  if (entry.family !== 'sort' || !['fontSize', 'color'].includes(property) ||
+      mapping?.kind !== 'reviewed-showcase-template-text' || mapping.element !== 'sort-label' ||
+      ast.retainedText?.source !== 'core-text-registry' || !styles.reference[property] ||
+      styles.reference[property] === styles.retained[property]) return;
+  const mappings = reviewedTemplateTextMappings('sort', referenceTree, astylarTree).filter(m => m.element === mapping.element);
+  if (mappings.length !== 1 || JSON.stringify(mappings[0]) !== JSON.stringify(mapping) ||
+      ref.key !== mapping.referenceNode || ast.key !== mapping.astylarNode) return;
+  const cssProperty = property === 'fontSize' ? 'font-size' : 'color', referenceChain = [], seen = new Set();
+  let node = ref;
+  while (node) {
+    if (seen.has(node.key) || referenceTree.nodes.filter(n => n.key === node.key).length !== 1) return;
+    seen.add(node.key);
+    const pooled = inventory.styles[node.style];
+    if (pooled?.side !== 'reference' || !pooled.value || canonicalStyle(pooled.value)[property] !== styles.reference[property] ||
+        node.inline?.[cssProperty] || node.inline?.all || (property === 'fontSize' && node.inline?.font) ||
+        new RegExp(`(?:^|;)\\s*(?:${cssProperty}|all${property === 'fontSize' ? '|font' : ''})\\s*:`, 'i').test(node.attributes?.style ?? '')) return;
+    const rules = node.rules.map(i => inventory.rules[i]);
+    if (rules.some(r => r?.side !== 'reference')) return;
+    const declarations = rules.map(r => r.value).filter(r => r.active === true &&
+      (r.declarations?.[cssProperty] || r.declarations?.all || (property === 'fontSize' && r.declarations?.font)));
+    if (declarations.some(r => r.declarations.all || (property === 'fontSize' && r.declarations.font))) return;
+    referenceChain.push({ node: node.key, parent: node.parent, type: node.type, computed: pooled.value, propertyRules: declarations });
+    if (node.key === 'frame') break;
+    if (declarations.some(r => r.declarations[cssProperty]?.value !== 'inherit')) return;
+    const parents = referenceTree.nodes.filter(n => n.key === node.parent);
+    if (parents.length !== 1) return;
+    node = parents[0];
+  }
+  const ownerRules = referenceChain.at(-1)?.propertyRules ?? [];
+  if (node?.key !== 'frame' || node.type !== 'main' || node.parent !== null ||
+      !String(node.attributes?.class ?? '').split(/\s+/).includes('frame') || ownerRules.length !== 1 ||
+      !/^\.frame\[_ngcontent-[\w-]+\]$/.test(ownerRules[0].selector ?? '') ||
+      ownerRules[0].declarations[cssProperty]?.value !== (property === 'fontSize' ? 'calc(16px * var(--scale))' : 'rgb(29, 27, 32)') ||
+      ownerRules[0].declarations[cssProperty].important !== false || !Array.isArray(ownerRules[0].conditions) || ownerRules[0].conditions.length) return;
+  const parent = astylarTree.nodes.find(n => n.key === ast.parent), candidateChain = [];
+  if (parent?.authored?.id !== 'sort-trigger' || ast.authored?.style !== undefined || parent.authored.style !== undefined) return;
+  for (const current of [ast, parent]) {
+    if (astylarTree.nodes.filter(n => n.key === current.key).length !== 1) return;
+    const normal = inventory.styles[current.normalStyle], effective = inventory.styles[current.interactionStyle];
+    if (normal?.side !== 'astylar' || effective?.side !== 'astylar' || !normal.value || !effective.value ||
+        [normal.value, effective.value].some(s => s.all !== undefined || (property === 'fontSize' && s.font !== undefined))) return;
+    if (current === ast ? [normal.value, effective.value].some(s => s[property] !== undefined)
+      : [normal.value, effective.value].some(s => canonicalStyle(s)[property] !== styles.retained[property])) return;
+    candidateChain.push({ node: current.key, authored: current.authored, normal: normal.value, effective: effective.value });
+  }
+  const rules = astylarTree.rules.map(i => inventory.rules[i]);
+  if (rules.some(r => r?.side !== 'astylar')) return;
+  const candidateRules = rules.map((r, order) => ({ order, rule: r.value })).filter(({ rule }) =>
+    (rule[property] !== undefined || rule.all !== undefined || (property === 'fontSize' && rule.font !== undefined)) &&
+    (rule.all !== undefined || rule.selector?.includes('.sort-trigger') || rule.selector?.includes('#sort-trigger') ||
+      rule.selector?.includes('#sort-label') || /(?:^|[\s>+~,])(?:span|div|\*)(?:$|[\s.#[:>+~,])/.test(rule.selector ?? '')));
+  if (candidateRules.length !== 1 || candidateRules[0].rule.selector !== '.sort-trigger' ||
+      Object.keys(candidateRules[0].rule).some(k => k.startsWith('media')) ||
+      candidateRules[0].rule[property] !== (property === 'fontSize' ? '16px' : '#000000') ||
+      canonicalStyle(candidateRules[0].rule)[property] !== styles.retained[property]) return;
+  return { attribution: 'reviewed-sort-typography-substitution', classification: 'application-plugin-authoring-defect',
+    inputEquivalent: false, currentPseudoStatePaintVerified: false,
+    recommendedOwner: 'showcase sort typography inheritance and contrast styling',
+    justification: 'The reference sort text inherits the frame font-size or color through its complete captured ancestry without an intervening override. The candidate leaf omits that property, but its immediate sort-trigger explicitly supplies the retained fixed 16px size or black ink instead. These are unequal authored inputs, not a core font-scaling or color-conversion defect. Preserve the reference inheritance and structure before evaluating shaping, paint or placement; do not normalize the differing theme values or add offsets.',
+    reviewEvidence: { sourceFinding: 'fixture-sort-typography-substitution', property, mapping: mappings[0], referenceChain,
+      referenceScale: node.inline?.['--scale'], candidateChain, candidateRule: candidateRules[0],
+      referenceComputed: styles.reference[property], candidateRetained: styles.retained[property] } };
+}
+
+function validateSortTypography(report, errors) {
+  const expected = [];
+  for (const comparison of report.retainedTypography?.comparisons ?? []) {
+    if (comparison.family !== 'sort') continue;
+    const refs = report.elementInventory.cases.filter(c => c.case === comparison.case && c.side === 'reference');
+    const asts = report.elementInventory.cases.filter(c => c.case === comparison.case && c.side === 'astylar');
+    if (refs.length !== 1 || asts.length !== 1) continue;
+    const refTree = report.elementInventory.variants[refs[0].variant], astTree = report.elementInventory.variants[asts[0].variant];
+    const ref = refTree.nodes.find(n => n.key === comparison.referenceNode), ast = astTree.nodes.find(n => n.key === comparison.astylarNode);
+    if (!ref || !ast) continue;
+    const indices = { reference: ref.style, normal: ast.normalStyle, effective: ast.interactionStyle, retained: ast.retainedText?.style };
+    const pooled = Object.fromEntries(Object.entries(indices).map(([key, i]) => [key, report.elementInventory.styles[i]]));
+    if (Object.entries(pooled).some(([key, value]) => value?.side !== (key === 'reference' ? 'reference' : 'astylar') || !value.value)) continue;
+    const styles = Object.fromEntries(Object.entries(pooled).map(([key, value]) => [key, canonicalStyle(value.value)]));
+    for (const property of ['fontSize', 'color']) {
+      const review = reviewedSortTypographyInput(comparison, comparison.mapping, property, ref, ast, styles, refTree, astTree, report.elementInventory);
+      if (review) expected.push({ comparison, property, review, values: Object.fromEntries(Object.entries(styles).map(([key, style]) => [key, style[property]])) });
+    }
+  }
+  const claimed = report.retainedTypography?.differences.filter(d => d.attribution === 'reviewed-sort-typography-substitution') ?? [];
+  if (expected.length !== claimed.length || expected.some(({ comparison, property, review, values }) => {
+    const matches = claimed.filter(d => d.case === comparison.case && d.element === comparison.element && d.property === property &&
+      d.referenceNode === comparison.referenceNode && d.astylarNode === comparison.astylarNode);
+    return matches.length !== 1 || JSON.stringify(matches[0].values) !== JSON.stringify(values) ||
+      JSON.stringify(comparison.properties[property]) !== JSON.stringify(values) ||
+      Object.entries(review).some(([key, value]) => JSON.stringify(matches[0][key]) !== JSON.stringify(value));
+  })) errors.push('sort typography attributions do not replay from frame inheritance and candidate trigger declarations');
+}
+
 function reviewedSidenavColorInput(entry, ref, ast, styles, referenceTree, astylarTree, inventory) {
   if (entry.family !== 'sidenav' || !['sidenav-nav', 'sidenav-content'].includes(ast.authored?.id) ||
       ast.retainedText?.source !== 'core-text-registry' || !styles.reference.color ||
@@ -2746,6 +2843,7 @@ export function collectRetainedTypographyEvidence(cases, inventory, controlTypog
             ...(property === 'letterSpacing' ? reviewedFieldLabelTrackingInput(entry, ref, ast, styles, referenceTree, astylarTree, inventory) ?? {} : {}),
             ...(property === 'color' ? reviewedFieldLabelColorInput(entry, ref, ast, styles, referenceTree, astylarTree, inventory) ?? {} : {}),
             ...(property === 'color' ? reviewedSidenavColorInput(entry, ref, ast, styles, referenceTree, astylarTree, inventory) ?? {} : {}),
+            ...(['fontSize', 'color'].includes(property) ? reviewedSortTypographyInput(entry, textMappingById.get(id), property, ref, ast, styles, referenceTree, astylarTree, inventory) ?? {} : {}),
             ...(controlLabelToken ?? {}),
             ...(selectValueToken ?? {}),
             ...(weekdayToken ?? {}),
@@ -4264,6 +4362,7 @@ function implementationPlan() {
     { priority: 5.27, rootCause: 'Stepper numeral font and label-color inheritance are replaced or omitted', action: 'Keep the original frame-scaled inherited numeral font with the icon-content wrapper instead of fixed 14px step-badge text. Restore the Material active-label color token and inner label inheritance instead of accepting the page on-surface fallback. Preserve actual reference theme inputs; do not retune the dark reference or calibrate text to the circle. Verify core inheritance, transforms and glyph paint only after equivalent authoring is restored.' },
     { priority: 5.28, rootCause: 'Filled-label component color tokens are replaced by independent literal state rules', action: 'Restore the captured reference label-color token, wrapper inheritance and state semantics rather than adjusting candidate colors to sampled pixels. Base/empty/picker-shell declarations currently supply different inputs, independently of the repaired inspection ancestry bug. Preserve normal/effective/retained stages and original rule order; investigate core cascade or current paint only when equivalent authored inputs still diverge. Do not normalize small RGB differences away or reuse pre-repair inconsistent captures as proof.' },
     { priority: 5.29, rootCause: 'Sidenav component text-color tokens are replaced by fixture theme literals', action: 'Restore the distinct drawer and content token semantics together with the separately identified sidenav structure/padding inputs. Reference color ownership is the drawer or container, while candidate aside/main rules directly set theme.onSurface or dark-mode literals. Preserve exact channels and captured inheritance; only an equal-input reproduction can establish a core color defect. The initial implementation introduced these substitutions, so do not describe them as confirmed later compensating fixes.' },
+    { priority: 5.295, rootCause: 'Sort typography replaces inherited frame inputs with fixed trigger declarations', action: 'Restore the reference frame-scaled font-size inheritance and actual frame color through the original sort text structure. The candidate fixed 16px trigger and contrast-only black declaration differ before rendering. Keep the history of screenshot-oriented changes and complete per-case ancestor evidence. Evaluate core inheritance or font scaling only after inputs agree; no inverse scale, font-size calibration or theme-specific ink override is an acceptable renderer fix.' },
     { priority: 5.3, rootCause: 'Core normal line-height is approximated by a fixed Mg font-box probe', action: 'Resolve browser normal line-box metrics and actual fallback runs in core. The equal-input Arial/serif cases expose one-pixel texture-height errors; Roboto plus emoji/CJK exposes two-pixel errors while plain Roboto and explicit line heights pass. Preserve those controls, extend multiline/baseline/DPR verification and avoid a universal multiplier, constant pixel addition, or fixed Material line-height compensation. Current-texture evidence must remain separate from declared normal and from final glyph raster.' },
     { priority: 5.4, rootCause: 'Calendar cell text tokens and inner line boxes were flattened away', action: 'Restore the reference calendar font and date-text ink tokens and its inner line-height:1 label inside both day and year controls. Keep reference cell/container sizing, state and selection structure instead of copying a normal-metric result or tuning the baseline. Separate date/range-context proofs isolate 990 day and 192 year occurrences each of missing font-token, omitted inner line-height and fixed-ink inputs; core metric defects must be assessed only after those inputs are equivalent. Independently resolve normal-versus-zero tracking and the still-unmapped header/icon owners.' },
     { priority: 5.5, rootCause: 'Snackbar action inherits generic control inputs instead of Material action tokens', action: 'Restore the original text-button font, size and tracking declarations and the snackbar inverse-primary ink, keeping the reference label/action wrapper intent. The exact overlay/message mapping isolates 34 current action textures and source-traces font-stack, tracking and ink substitutions. Trace the remaining 14px-versus-16px and normal-line-box observations through the core defaults/inheritance and metric stages before assigning core ownership; do not calibrate a baseline or line height. Retain the separate intrinsic-width, live-region, visibility, lifetime and placement obligations.' },

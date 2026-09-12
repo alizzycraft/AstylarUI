@@ -2198,6 +2198,104 @@ function floatingLabelTypographyReport() {
   return raw;
 }
 
+function sortTypographyReport(property = 'fontSize', referenceSize = '18.4px') {
+  const raw = templateTypographyReport('sort'), { reference: ref, astylar: ast } = raw.results[0].inputTrees;
+  const cssProperty = property === 'fontSize' ? 'font-size' : 'color';
+  const referenceValue = property === 'fontSize' ? referenceSize : '#1d1b20';
+  const candidateValue = property === 'fontSize' ? '16px' : '#000000';
+  ref.styles[0] = { ...ref.styles[0], [property]: referenceValue };
+  ref.nodes[0].parent = 'frame';
+  ref.nodes.push({ key: 'frame', parent: null, type: 'main', attributes: { class: 'frame' },
+    ownText: '', style: 0, rules: [0], pseudoElements: [], inline: { '--scale': { value: '1.15' } } });
+  ref.rules = [{ active: true, conditions: [], selector: '.frame[_ngcontent-test]', declarations: {
+    [cssProperty]: { value: property === 'fontSize' ? 'calc(16px * var(--scale))' : 'rgb(29, 27, 32)', important: false } } }];
+  const leaf = ast.nodes.at(-1), parent = ast.nodes.at(-2);
+  for (const node of ast.nodes) for (const stage of ['resolvedStyle', 'normalResolvedStyle', 'interactionResolvedStyle']) {
+    node[stage] = { ...node[stage] };
+    delete node[stage][property];
+  }
+  for (const stage of ['resolvedStyle', 'normalResolvedStyle', 'interactionResolvedStyle']) parent[stage][property] = candidateValue;
+  leaf.retainedText.style = { ...ref.styles[0], [property]: candidateValue };
+  ast.rules = [{ selector: '.sort-trigger', [property]: candidateValue }];
+  return raw;
+}
+
+test('sort typography attribution preserves inherited frame inputs and explicit trigger substitutions', () => {
+  for (const [property, size] of [['fontSize', '14.4px'], ['fontSize', '18.4px'], ['color', '16px']]) {
+    const raw = sortTypographyReport(property, size), before = structuredClone(raw), report = buildMaterialInputAudit(raw);
+    const findings = report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-sort-typography-substitution');
+    assert.equal(findings.length, 1);
+    const f = findings[0];
+    assert.equal(f.property, property);
+    assert.equal(f.inputEquivalent, false);
+    assert.equal(f.currentPseudoStatePaintVerified, false);
+    assert.equal(f.classification, 'application-plugin-authoring-defect');
+    assert.equal(f.values.reference, property === 'fontSize' ? size : 'rgba(29,27,32,1)');
+    assert.equal(f.values.retained, property === 'fontSize' ? '16px' : 'rgba(0,0,0,1)');
+    assert.equal(f.values.normal, undefined);
+    assert.equal(f.values.effective, undefined);
+    assert.equal(f.reviewEvidence.referenceChain.at(-1).node, 'frame');
+    assert.equal(f.reviewEvidence.candidateChain.length, 2);
+    assert.ok(report.sourceFindings.find(f => f.id === 'fixture-sort-typography-substitution')?.detected);
+    assert.ok(!validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('sort typography attributions')));
+    assert.deepEqual(raw, before);
+  }
+});
+
+test('sort typography attribution rejects broken inheritance, conditional inputs and retained disagreement', () => {
+  const mutations = [
+    (r) => { r.family = 'tree'; },
+    (r) => { r.inputTrees.reference.nodes[0].parent = 'missing'; },
+    (r) => { r.inputTrees.reference.nodes.at(-1).attributes.class = 'other'; },
+    (r) => { r.inputTrees.reference.nodes[2].rules.push(0); },
+    (r) => { r.inputTrees.reference.rules[0].active = false; },
+    (r) => { r.inputTrees.reference.rules[0].conditions = ['@layer other']; },
+    (r, p, css) => { r.inputTrees.reference.rules[0].declarations[css].important = true; },
+    (r, p, css) => { r.inputTrees.reference.rules[0].declarations[css].value = 'inherit'; },
+    (r, p, css) => { r.inputTrees.reference.nodes[1].inline = { [css]: { value: 'inherit' } }; },
+    (r) => { r.inputTrees.reference.nodes.at(-1).parent = 'frame'; },
+    (r) => { r.inputTrees.astylar.nodes.at(-1).authored.style = {}; },
+    (r, p) => { r.inputTrees.astylar.nodes.at(-1).normalResolvedStyle[p] = 'inherit'; },
+    (r, p) => { r.inputTrees.astylar.nodes.at(-2).normalResolvedStyle[p] = 'inherit'; },
+    (r, p) => { r.inputTrees.astylar.nodes.at(-2).interactionResolvedStyle[p] = 'inherit'; },
+    (r, p) => { r.inputTrees.astylar.nodes.at(-1).retainedText.style[p] = 'inherit'; },
+    (r) => { r.inputTrees.astylar.rules[0].mediaMaxWidth = '500px'; },
+    (r) => { r.inputTrees.astylar.rules.push({ ...r.inputTrees.astylar.rules[0] }); },
+    (r, p) => { r.inputTrees.astylar.rules.push({ selector: '#sort-label', [p]: 'inherit' }); },
+    (r, p) => { r.inputTrees.astylar.rules.push({ selector: 'span', [p]: 'inherit' }); },
+    (r) => { r.inputTrees.astylar.rules.push({ selector: '*', all: 'initial' }); },
+  ];
+  for (const property of ['fontSize', 'color']) for (const mutate of mutations) {
+    const raw = sortTypographyReport(property);
+    mutate(raw.results[0], property, property === 'fontSize' ? 'font-size' : 'color');
+    const e = collectRetainedTypographyEvidence(raw.results, collectFullTreeInventory(raw.results));
+    assert.ok(!e.differences.some(d => d.attribution === 'reviewed-sort-typography-substitution'), `${property}: ${mutate}`);
+  }
+});
+
+test('sort typography report claims independently replay exact ancestry and candidate stages', () => {
+  for (const property of ['fontSize', 'color']) {
+    const baseline = buildMaterialInputAudit(sortTypographyReport(property));
+    const mutations = [
+      (_r, f) => { f.reviewEvidence.referenceChain.pop(); },
+      (_r, f) => { f.reviewEvidence.candidateChain.pop(); },
+      (_r, f) => { f.inputEquivalent = true; },
+      (_r, f) => { f.currentPseudoStatePaintVerified = true; },
+      (_r, f) => { f.values.normal = f.values.retained; },
+      (r, f) => { r.retainedTypography.differences.push(structuredClone(f)); },
+      r => { r.retainedTypography.differences = []; },
+      r => { r.retainedTypography.comparisons[0].properties[property].effective = 'inherit'; },
+      r => { r.elementInventory.rules.find(x => x.side === 'reference').value.active = false; },
+      r => { r.elementInventory.rules.find(x => x.side === 'astylar' && x.value.selector === '.sort-trigger').value[property] = 'inherit'; },
+    ];
+    for (const mutate of mutations) {
+      const report = structuredClone(baseline);
+      mutate(report, report.retainedTypography.differences.find(d => d.attribution === 'reviewed-sort-typography-substitution'));
+      assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('sort typography attributions')), `${property}: ${mutate}`);
+    }
+  }
+});
+
 function sidenavColorReport(content = false, dark = false) {
   const raw = templateTypographyReport('sidenav'), { reference: ref, astylar: ast } = raw.results[0].inputTrees;
   const color = content ? '#1d1b1e' : '#49454e', candidateColor = dark && !content ? '#49454f' : '#1d1b20';
