@@ -201,6 +201,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
     'reviewed-table-font-input': 'application-plugin-authoring-defect',
     'reviewed-tree-font-input': 'application-plugin-authoring-defect',
     'reviewed-control-label-token-input': 'application-plugin-authoring-defect',
+    'reviewed-select-value-token-input': 'application-plugin-authoring-defect',
     'reviewed-floating-label-font-input': 'application-plugin-authoring-defect' };
   const unresolvedTypography = report.retainedTypography?.differences.filter((entry) =>
     !reviewedTypographyKinds[entry.attribution] || entry.classification !== reviewedTypographyKinds[entry.attribution] || !entry.reviewEvidence) ?? [];
@@ -971,6 +972,77 @@ function reviewedControlLabelTokenInput(entry, mapping, property, ast, styles, r
   };
 }
 
+function reviewedSelectValueInput(entry, mapping, property, ast, styles, referenceTree, astylarTree, inventory) {
+  if (entry.family !== 'select' || mapping?.element !== 'select-value' || mapping.kind !== 'reviewed-showcase-template-text') return;
+  const specs = {
+    fontFamily: ['font-family', 'var(--mat-select-trigger-text-font, var(--mat-sys-body-large-font))', 'roboto', 'roboto,arial,sans-serif'],
+    lineHeight: ['line-height', 'var(--mat-select-trigger-text-line-height, var(--mat-sys-body-large-line-height))', '24px', 'normal'],
+    letterSpacing: ['letter-spacing', 'var(--mat-select-trigger-text-tracking, var(--mat-sys-body-large-tracking))', '0.496px', '0'],
+    color: ['color', 'var(--mat-select-enabled-trigger-text-color, var(--mat-sys-on-surface))', undefined, 'rgba(29,27,32,1)'],
+  };
+  const spec = specs[property];
+  if (!spec || styles.retained[property] !== spec[3] || (spec[2] && styles.reference[property] !== spec[2])) return;
+  const [cssProperty, token] = spec, referenceChain = [];
+  let referenceRule;
+  for (const key of [...mapping.referencePath].reverse()) {
+    const nodes = referenceTree.nodes.filter((node) => node.key === key);
+    if (nodes.length !== 1) return;
+    const node = nodes[0], pooled = inventory.styles[node.style];
+    if (pooled?.side !== 'reference' || canonicalStyle(pooled.value)[property] !== styles.reference[property] ||
+        node.inline?.[cssProperty] || (property !== 'color' && node.inline?.font)) return;
+    referenceChain.push({ node: key, computed: pooled.value });
+    const rules = node.rules.map((index) => inventory.rules[index]).filter((rule) => rule?.side === 'reference' &&
+      rule.value.active === true && (rule.value.declarations?.[cssProperty] || (property !== 'color' && rule.value.declarations?.font)));
+    if (node.type === 'mat-select' && node.attributes?.id === 'select-control') {
+      if (rules.length !== 1 || rules[0].value.selector !== '.mat-mdc-select' || rules[0].value.declarations[cssProperty]?.value !== token) return;
+      referenceRule = rules[0].value; break;
+    }
+    if (rules.length) return;
+  }
+  if (!referenceRule) return;
+  const candidateRules = astylarTree.rules.map((index) => inventory.rules[index]).filter((rule) => rule?.side === 'astylar').map((rule) => rule.value);
+  const valueRules = candidateRules.filter((rule) => rule.selector === '.select-value');
+  if (valueRules.length !== 1) return;
+  let candidateChain, candidateRule = valueRules[0];
+  if (property === 'color') {
+    if (canonicalStyle(candidateRule).color !== styles.retained.color || styles.normal.color !== styles.retained.color ||
+        styles.effective.color !== styles.retained.color || styles.reference.color === styles.retained.color) return;
+    candidateChain = [{ node: ast.key, normal: inventory.styles[ast.normalStyle].value, effective: inventory.styles[ast.interactionStyle].value }];
+  } else if (property === 'fontFamily') {
+    candidateChain = [];
+    const seen = new Set();
+    let node = ast;
+    while (node && !seen.has(node.key)) {
+      seen.add(node.key);
+      const normal = inventory.styles[node.normalStyle], effective = inventory.styles[node.interactionStyle];
+      if (normal?.side !== 'astylar' || effective?.side !== 'astylar' || !normal.value || !effective.value ||
+          normal.value.font !== undefined || effective.value.font !== undefined) return;
+      candidateChain.push({ node: node.key, normal: normal.value, effective: effective.value });
+      if (node.authored?.id === 'page') break;
+      if (normal.value.fontFamily !== undefined || effective.value.fontFamily !== undefined) return;
+      const parents = astylarTree.nodes.filter((item) => item.key === node.parent);
+      if (parents.length !== 1) return;
+      node = parents[0];
+    }
+    const pages = candidateRules.filter((rule) => rule.selector === '#page' && rule.fontFamily !== undefined);
+    if (node?.authored?.id !== 'page' || node.authored.type !== 'main' || node.parent !== 'root' ||
+        astylarTree.nodes.filter((item) => item.authored?.id === 'page').length !== 1 || pages.length !== 1 ||
+        canonicalStyle(pages[0]).fontFamily !== styles.retained.fontFamily ||
+        ['normal', 'effective'].some((stage) => canonicalStyle(candidateChain.at(-1)[stage]).fontFamily !== styles.retained.fontFamily)) return;
+    candidateRule = pages[0];
+  } else {
+    candidateChain = candidateTypographyOmissionChain(ast, astylarTree, inventory, property);
+    if (!candidateChain) return;
+  }
+  if (property !== 'color' && (valueRules[0][property] !== undefined || valueRules[0].font !== undefined)) return;
+  return { classification: 'application-plugin-authoring-defect', attribution: 'reviewed-select-value-token-input',
+    recommendedOwner: 'showcase Material select trigger typography and theme input translation',
+    justification: 'The exact select-value reference path inherits an active Material trigger token with no intervening property override. Candidate declaration evidence instead shows a missing component override (page font stack or omitted line-height/tracking), or the explicitly hard-coded enabled ink retained unchanged by core. The replacement label was introduced in f286fb1. This attributes unequal authored inputs, not wrapper equivalence or a core rendering defect. Fixed label height and offsets do not replace the missing CSS inputs; restore component intent before an equal-input renderer proof.',
+    reviewEvidence: { sourceFinding: 'fixture-select-value-typography-substitution', property, referenceRule, referenceChain,
+      candidateRule, candidateValueRule: valueRules[0], candidateChain,
+      referenceComputed: styles.reference[property], candidateRetained: styles.retained[property] } };
+}
+
 function reviewedTreeFontInput(entry, mapping, ref, ast, styles, astylarTree, inventory) {
   if (entry.family !== 'tree' || mapping?.kind !== 'reviewed-showcase-template-text' ||
       styles.reference.fontSize !== '16px' || !['14.4px', '18.4px'].includes(styles.retained.fontSize)) return;
@@ -1246,6 +1318,7 @@ export function collectRetainedTypographyEvidence(cases, inventory, controlTypog
           gap(key, id, 'missing reference or retained typography property', { property, values });
         } else if (values.reference !== values.retained) {
           const controlLabelToken = reviewedControlLabelTokenInput(entry, textMappingById.get(id), property, ast, styles, referenceTree, astylarTree, inventory);
+          const selectValueToken = reviewedSelectValueInput(entry, textMappingById.get(id), property, ast, styles, referenceTree, astylarTree, inventory);
           differences.push({ case: key, family: entry.family, element: id, property, values,
             referenceNode: ref.key, astylarNode: ast.key, source: comparison.source, revision: comparison.revision,
             classification: 'parity-harness-defect', attribution: 'unresolved',
@@ -1256,6 +1329,7 @@ export function collectRetainedTypographyEvidence(cases, inventory, controlTypog
             ...(property === 'fontSize' && treeFont ? treeFont : {}),
             ...(property === 'fontSize' && floatingLabel ? floatingLabel : {}),
             ...(controlLabelToken ?? {}),
+            ...(selectValueToken ?? {}),
           });
         }
       }

@@ -12,6 +12,38 @@ tests pass). A missing selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Select value differences traced to omitted trigger tokens and fixed ink (2026-09-12)
+
+Commit `f286fb1` introduced the replacement `span#select-value` while making
+`.select-control` text transparent. The added value rule fixes its position,
+height, font size and enabled/disabled ink, but does not translate Material's
+font-family, line-height or tracking tokens. New source finding
+`fixture-select-value-typography-substitution` records this as an application/
+plugin authoring defect, not a demonstrated renderer defect.
+
+All **39 static select-value differences** now have
+`reviewed-select-value-token-input` attribution. Each of the 12 exact text paths
+inherits `.mat-mdc-select` component tokens and computes Roboto, 24px line-height
+and 0.496px tracking. The candidate's full normal/effective ancestry instead
+shows the page font stack (Roboto, Arial, sans-serif) or omits line-height and
+tracking; retained core text has that font stack, normal line-height and zero
+tracking. The 3 dark-theme observations also inherit reference on-surface ink
+`rgb(230, 225, 229)` while the candidate explicitly authors and retains
+`#1d1b20`. A 24px element height is not a 24px line-height declaration.
+
+Attribution requires the captured token rule, unchanged computed property on
+each intervening reference wrapper, no intervening authored override, and
+candidate declarations/retained values supporting the identified omission or
+fixed ink. Missing evidence, contradictory ancestry or altered token rules
+leave the difference unresolved. No computed value is inserted into a missing
+candidate declaration. The raw **3,825** retained-property differences remain;
+39 additional records are now classified rather than silently normalized.
+
+Verification: **436** static checkpoint result hashes checked, zero paired-tree
+inventory errors; focused audit tests **89/89** and
+`npm run parity:harness:check` **178/178** pass. The full interaction matrix is
+still running independently. No renderer, fixture or visual threshold changed.
+
 ## Select value text now has an exact wrapper-path mapping (2026-09-12)
 
 The reference template's `mat-select#select-control` owns a generated

@@ -288,6 +288,15 @@ export const sourceAuditDefinitions = Object.freeze([
     focusedProof: 'tests/material-parity/input-equivalence-audit.spec.mjs: control label token provenance and contradictory-ancestry controls',
   }),
   Object.freeze({
+    id: 'fixture-select-value-typography-substitution',
+    introducedBy: 'f286fb1 fix(material): align field popup parity',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`selector: '\.select-value', position: 'absolute'[^\n]*color: state\.disabled \? '#79747e' : '#1d1b20'`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase select value composition and Material trigger typography translation',
+    justification: 'Commit f286fb1 hides native select-control text and adds an absolutely positioned select-value span with a fixed 24px height, 16px font size and hard-coded enabled/disabled ink. The reference value inherits Material trigger font, line-height, tracking and theme ink tokens. Current static candidate labels omit those font/line-height/tracking overrides and retain the page font stack, normal line-height and zero tracking; dark theme also retains the fixed light-theme ink. These are unequal authored inputs before rendering. Occurrence attribution requires the unique select text-owner path, inherited active reference token rule, candidate declarations and retained-stage agreement. Restore component inputs and investigate equal-input control rendering before retaining a replacement label or adjusting its offsets.',
+  }),
+  Object.freeze({
     id: 'fixture-tree-component-typography-omitted',
     introducedBy: '2f44011 omits component typography; 7159b1d adds fixed-height label wrapper',
     file: 'examples/material-showcase/src/app/astylar.component.ts',

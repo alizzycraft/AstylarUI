@@ -850,6 +850,77 @@ test('select value mapping follows the combobox and generated value owner withou
   }
 });
 
+function selectValueTokenReport() {
+  const raw = templateTypographyReport('select'), { reference, astylar } = raw.results[0].inputTrees;
+  const computed = { ...reference.styles[0], fontFamily: 'Roboto', fontSize: '16px', lineHeight: '24px',
+    letterSpacing: '0.496px', color: '#e6e1e5' };
+  reference.styles = [computed];
+  reference.rules = [{ selector: '.mat-mdc-select', active: true, declarations: {
+    'font-family': { value: 'var(--mat-select-trigger-text-font, var(--mat-sys-body-large-font))' },
+    'line-height': { value: 'var(--mat-select-trigger-text-line-height, var(--mat-sys-body-large-line-height))' },
+    'letter-spacing': { value: 'var(--mat-select-trigger-text-tracking, var(--mat-sys-body-large-tracking))' },
+    color: { value: 'var(--mat-select-enabled-trigger-text-color, var(--mat-sys-on-surface))' },
+  } }];
+  reference.nodes.find((node) => node.type === 'mat-select').rules = [0];
+  const leaf = astylar.nodes.at(-1);
+  for (const node of astylar.nodes) for (const stage of ['resolvedStyle', 'normalResolvedStyle', 'interactionResolvedStyle']) {
+    node[stage] = { display: 'block', ...(node === leaf ? { color: '#1d1b20', fontSize: '16px' } : {}) };
+  }
+  leaf.retainedText.style = { ...computed, fontFamily: 'Roboto, Arial, sans-serif', lineHeight: 'normal', letterSpacing: '0px', color: '#1d1b20' };
+  astylar.nodes[0].parent = 'root/page';
+  astylar.nodes.unshift({ key: 'root/page', parent: 'root', authored: { type: 'main', id: 'page' },
+    resolvedStyle: { fontFamily: 'Roboto, Arial, sans-serif' }, normalResolvedStyle: { fontFamily: 'Roboto, Arial, sans-serif' },
+    interactionResolvedStyle: { fontFamily: 'Roboto, Arial, sans-serif' } });
+  astylar.rules = [{ selector: '#page', fontFamily: 'Roboto, Arial, sans-serif' },
+    { selector: '.select-value', fontSize: '16px', color: '#1d1b20' }];
+  return raw;
+}
+
+test('select typography attribution follows original component tokens and candidate omission or fixed-ink evidence', () => {
+  const raw = selectValueTokenReport(), before = structuredClone(raw), report = buildMaterialInputAudit(raw);
+  const differences = report.retainedTypography.differences;
+  assert.equal(differences.length, 4);
+  assert.deepEqual(differences.map((entry) => entry.property).sort(), ['color', 'fontFamily', 'letterSpacing', 'lineHeight']);
+  for (const entry of differences) {
+    assert.equal(entry.attribution, 'reviewed-select-value-token-input');
+    assert.equal(entry.classification, 'application-plugin-authoring-defect');
+    assert.equal(entry.reviewEvidence.referenceChain.length, 5);
+    assert.equal(entry.reviewEvidence.sourceFinding, 'fixture-select-value-typography-substitution');
+  }
+  assert.equal(report.summary.inputEquivalent, false);
+  assert.ok(!validateMaterialInputAudit(report).some((error) => error.includes('retained typography differences')));
+  assert.deepEqual(raw, before);
+  assert.equal(report.sourceFindings.find((entry) => entry.id === 'fixture-select-value-typography-substitution').detected, true);
+});
+
+test('select token attribution rejects contradictory inheritance, authored rules and retained values', () => {
+  const mutations = [
+    ['lineHeight', (r, a) => { r.rules[0].declarations['line-height'].value = '23px'; }],
+    ['lineHeight', (r, a) => { r.rules[0].active = false; }],
+    ['lineHeight', (r, a) => { r.nodes.at(-1).inline = { 'line-height': { value: '24px' } }; }],
+    ['lineHeight', (r, a) => { a.nodes[1].normalResolvedStyle.lineHeight = '24px'; }],
+    ['lineHeight', (r, a) => { a.nodes[1].interactionResolvedStyle.lineHeight = '24px'; }],
+    ['lineHeight', (r, a) => { a.rules[1].lineHeight = '24px'; }],
+    ['lineHeight', (r, a) => { a.nodes.at(-1).retainedText.style.lineHeight = '25px'; }],
+    ['fontFamily', (r, a) => { a.nodes[2].normalResolvedStyle.fontFamily = 'Roboto'; }],
+    ['fontFamily', (r, a) => { a.rules[0].fontFamily = 'Arial'; }],
+    ['fontFamily', (r, a) => { a.nodes[0].interactionResolvedStyle.fontFamily = 'Arial'; }],
+    ['fontFamily', (r, a) => { a.nodes[1].parent = 'missing'; }],
+    ['letterSpacing', (r, a) => { a.nodes[0].normalResolvedStyle.font = '16px Roboto'; }],
+    ['letterSpacing', (r, a) => { a.nodes[0].interactionResolvedStyle.letterSpacing = '0px'; }],
+    ['color', (r, a) => { a.rules[1].color = '#000000'; }],
+    ['color', (r, a) => { a.nodes.at(-1).interactionResolvedStyle.color = '#000000'; }],
+    ['color', (r, a) => { r.rules.push({ selector: '.override', active: true, declarations: { color: { value: '#e6e1e5' } } }); r.nodes.at(-1).rules = [1]; }],
+  ];
+  for (const [property, mutate] of mutations) {
+    const raw = selectValueTokenReport(), { reference, astylar } = raw.results[0].inputTrees;
+    mutate(reference, astylar);
+    const difference = buildMaterialInputAudit(raw).retainedTypography.differences.find((entry) => entry.property === property);
+    assert.ok(difference, property);
+    assert.equal(difference.attribution, 'unresolved', property);
+  }
+});
+
 test('template identity rejects path, uniqueness, text, child and ID conflicts instead of string matching', () => {
   const mutations = [
     (ref, _ast, leaf) => { leaf.ownText = 'Different'; },
