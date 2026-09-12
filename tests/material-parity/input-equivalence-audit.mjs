@@ -147,6 +147,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
     'reviewed-button-font-token-input': 'application-plugin-authoring-defect',
     'reviewed-core-font-list-rewrite': 'confirmed-core-renderer-defect',
     'reviewed-toolbar-button-line-height-input': 'application-plugin-authoring-defect',
+    'reviewed-tab-label-typography-input': 'application-plugin-authoring-defect',
   };
   const unresolvedControlTypography = report.controlTypography?.differences.filter((entry) =>
     !reviewedControlKinds[entry.attribution] || entry.classification !== reviewedControlKinds[entry.attribution] || !entry.reviewEvidence) ?? [];
@@ -1110,6 +1111,26 @@ export function collectRetainedTypographyEvidence(cases, inventory) {
     comparisons, differences, gaps, paintMaskDifferences, reviewedMappings };
 }
 
+function candidateTypographyOmissionChain(ast, tree, inventory, property) {
+  const chain = [], seen = new Set();
+  let ancestor = ast;
+  while (ancestor && !seen.has(ancestor.key)) {
+    seen.add(ancestor.key);
+    const normal = inventory.styles[ancestor.normalStyle], effective = inventory.styles[ancestor.interactionStyle];
+    if (normal?.side !== 'astylar' || effective?.side !== 'astylar' || !normal.value || !effective.value ||
+        normal.value[property] !== undefined || effective.value[property] !== undefined ||
+        normal.value.font !== undefined || effective.value.font !== undefined) return;
+    chain.push({ node: ancestor.key, normal: normal.value, effective: effective.value });
+    if (ancestor.authored?.id === 'page') break;
+    const parents = tree.nodes.filter((node) => node.key === ancestor.parent);
+    if (parents.length !== 1) return;
+    ancestor = parents[0];
+  }
+  if (ancestor?.authored?.id !== 'page' || ancestor.authored.type !== 'main' || ancestor.parent !== 'root' ||
+      tree.nodes.filter((node) => node.authored?.id === 'page').length !== 1) return;
+  return chain;
+}
+
 function reviewedButtonPaintInput(entry, property, ref, parent, ast, stages, referenceTree, astylarTree, inventory) {
   const rulesAt = (node, side) => (node.rules ?? []).map((index) => inventory.rules[index])
     .filter((rule) => rule?.side === side).map((rule) => rule.value);
@@ -1194,22 +1215,8 @@ function reviewedButtonPaintInput(entry, property, ref, parent, ast, stages, ref
         rule.declarations?.['letter-spacing']?.value && rule.declarations['letter-spacing'].value !== 'inherit')) return;
     const materialRules = candidateRules.filter((rule) => rule.selector === '.material-button');
     if (materialRules.length !== 1 || materialRules[0].letterSpacing !== undefined || materialRules[0].font !== undefined) return;
-    const candidateChain = [], seen = new Set();
-    let ancestor = ast;
-    while (ancestor && !seen.has(ancestor.key)) {
-      seen.add(ancestor.key);
-      const normal = inventory.styles[ancestor.normalStyle], effective = inventory.styles[ancestor.interactionStyle];
-      if (normal?.side !== 'astylar' || effective?.side !== 'astylar' || !normal.value || !effective.value ||
-          normal.value.letterSpacing !== undefined || effective.value.letterSpacing !== undefined ||
-          normal.value.font !== undefined || effective.value.font !== undefined) return;
-      candidateChain.push({ node: ancestor.key, normal: normal.value, effective: effective.value });
-      if (ancestor.authored?.id === 'page') break;
-      const parents = astylarTree.nodes.filter((node) => node.key === ancestor.parent);
-      if (parents.length !== 1) return;
-      ancestor = parents[0];
-    }
-    if (ancestor?.authored?.id !== 'page' || ancestor.authored.type !== 'main' || ancestor.parent !== 'root' ||
-        astylarTree.nodes.filter((node) => node.authored?.id === 'page').length !== 1) return;
+    const candidateChain = candidateTypographyOmissionChain(ast, astylarTree, inventory, 'letterSpacing');
+    if (!candidateChain) return;
     return { classification: 'application-plugin-authoring-defect', attribution: 'reviewed-button-tracking-input',
       recommendedOwner: 'showcase Material filled/outlined button typography input translation',
       justification: 'The reference button and direct label compute .096px from a captured active Material tracking-token rule. The candidate material-button rule and complete normal/effective control-to-page chain omit tracking, while its current core texture receives zero. This is the missing component input traced to 2f44011, not a renderer spacing defect. Other properties and final paint remain separate.',
@@ -1249,6 +1256,65 @@ function reviewedTabLabelControl(ref, tree) {
   }
   if (child.attributes?.role !== 'tab') return;
   return child;
+}
+
+function reviewedTabPaintInput(entry, property, ref, parent, ast, stages, referenceTree, astylarTree, inventory) {
+  if (entry.family !== 'tabs' || !['fontFamily', 'letterSpacing', 'lineHeight'].includes(property) ||
+      reviewedTabLabelControl(ref, referenceTree) !== parent || ast.authored.role !== 'tab' ||
+      !String(ast.authored.class ?? '').split(/\s+/).includes('tab')) return;
+  const rulesAt = (node) => (node.rules ?? []).map((index) => inventory.rules[index])
+    .filter((rule) => rule?.side === 'reference' && rule.value.active === true).map((rule) => rule.value);
+  const textLabel = referenceTree.nodes.find((node) => node.key === ref.parent);
+  const content = referenceTree.nodes.find((node) => node.key === textLabel.parent);
+  const chain = [ref, textLabel, content, parent];
+  const referenceChain = chain.map((node) => ({ node: node.key, style: inventory.styles[node.style] }));
+  if (referenceChain.some(({ style }) => style?.side !== 'reference')) return;
+  const styles = referenceChain.map(({ style }) => canonicalStyle(style.value));
+  const candidateRules = astylarTree.rules.map((index) => inventory.rules[index])
+    .filter((rule) => rule?.side === 'astylar').map((rule) => rule.value);
+  const tabRules = candidateRules.filter((rule) => rule.selector === '.tab');
+  if (tabRules.length !== 1 || tabRules[0].font !== undefined) return;
+  const candidateRule = tabRules[0];
+  const cssProperty = property.replace(/[A-Z]/g, (letter) => '-' + letter.toLowerCase());
+  const descendantOverride = (nodes) => nodes.some((node) => rulesAt(node).some((rule) =>
+    (rule.declarations?.[cssProperty]?.value && rule.declarations[cssProperty].value !== 'inherit') || rule.declarations?.font));
+  const evidence = { sourceFinding: 'fixture-tab-label-typography-flattened', candidateRule,
+    referenceChain: referenceChain.map(({ node, style }) => ({ node, style: style.value })),
+    candidateNormal: stages.normal[property], candidateEffective: stages.effective[property], candidatePainted: stages.painted[property] };
+  let reason;
+  if (property === 'fontFamily' && styles.every((style) => style.fontFamily === 'roboto') &&
+      stages.normal.fontFamily === 'roboto,arial,sans-serif' && stages.effective.fontFamily === stages.normal.fontFamily &&
+      stages.painted.fontFamily === stages.normal.fontFamily && candidateRule.fontFamily === undefined && !descendantOverride(chain.slice(0, 3))) {
+    const tokens = rulesAt(parent).filter((rule) => rule.selector === '.mat-mdc-tab' &&
+      rule.declarations?.['font-family']?.value === 'var(--mat-tab-label-text-font, var(--mat-sys-title-small-font))');
+    const resets = candidateRules.filter((rule) => rule.selector === 'button, input, select' &&
+      canonicalStyle(rule).fontFamily === stages.normal.fontFamily);
+    if (tokens.length !== 1 || resets.length !== 1) return;
+    Object.assign(evidence, { referenceRule: tokens[0], candidateResetRule: resets[0] });
+    reason = 'The tab component font token overrides the reference document stack, but the candidate tab omits that token and passes its longer document control stack unchanged into actual paint.';
+  } else if (property === 'letterSpacing' && styles.every((style) => style.letterSpacing === '0.096px') &&
+      stages.painted.letterSpacing === '0' && candidateRule.letterSpacing === undefined && !descendantOverride(chain.slice(0, 3))) {
+    const tokens = rulesAt(parent).filter((rule) => rule.selector === '.mat-mdc-tab' &&
+      rule.declarations?.['letter-spacing']?.value === 'var(--mat-tab-label-text-tracking, var(--mat-sys-title-small-tracking))');
+    const candidateChain = candidateTypographyOmissionChain(ast, astylarTree, inventory, 'letterSpacing');
+    if (tokens.length !== 1 || !candidateChain) return;
+    Object.assign(evidence, { referenceRule: tokens[0], candidateChain });
+    reason = 'The reference tab tracking token reaches its label; the candidate tab rule and complete normal/effective ancestry omit tracking and actual paint receives zero.';
+  } else if (property === 'lineHeight' && styles.every((style) => style.fontSize === '14px') &&
+      styles[0].lineHeight === '14px' && styles[1].lineHeight === '14px' && styles[2].lineHeight === '20px' && styles[3].lineHeight === '20px' &&
+      canonicalStyle(candidateRule).lineHeight === '20px' && stages.normal.lineHeight === '20px' &&
+      stages.effective.lineHeight === '20px' && stages.painted.lineHeight === '20px' &&
+      stages.normal.fontSize === '14px' && stages.effective.fontSize === '14px' && stages.painted.fontSize === '14px' && !descendantOverride([ref])) {
+    const labelRules = rulesAt(textLabel).filter((rule) => rule.selector === '.mdc-tab__text-label' &&
+      rule.declarations?.['line-height']?.value === '1');
+    if (labelRules.length !== 1) return;
+    evidence.referenceRule = labelRules[0];
+    reason = 'The reference text-label wrapper applies line-height:1 inside a separately sized 20px content/control line box. The candidate flattens the label into a control value and explicitly applies the outer 20px line-height to the actual text texture.';
+  } else return;
+  return { classification: 'application-plugin-authoring-defect', attribution: 'reviewed-tab-label-typography-input',
+    recommendedOwner: 'showcase Material tab content/label structure and typography input translation',
+    justification: `${reason} This is unequal authored intent, not proof of a core text defect or permission to compensate with a glyph offset. Other properties, structure and final raster remain independent.`,
+    reviewEvidence: evidence };
 }
 
 // These paths describe Material's actual button and explicit template tab
@@ -1343,7 +1409,8 @@ export function collectControlTypographyEvidence(cases, inventory) {
             classification: 'parity-harness-defect', attribution: 'unresolved',
             recommendedOwner: 'input audit control authored-token and core paint-input attribution',
             justification: 'Browser computed and actual control texture paint inputs differ. Attribute authored tokens and parser/runtime behavior before assigning fault. CSS normal line-height, font fallback and composited colors are not automatically equivalent to numeric or opaque substitutes.',
-            ...(reviewedButtonPaintInput(entry, property, ref, parent, ast, stages, referenceTree, astylarTree, inventory) ?? {}) });
+            ...(reviewedButtonPaintInput(entry, property, ref, parent, ast, stages, referenceTree, astylarTree, inventory) ??
+              reviewedTabPaintInput(entry, property, ref, parent, ast, stages, referenceTree, astylarTree, inventory) ?? {}) });
         }
       }
       comparisons.push(comparison);

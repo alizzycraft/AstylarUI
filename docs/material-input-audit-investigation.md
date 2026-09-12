@@ -12,6 +12,31 @@ tests pass). A missing selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Tab typography now has guarded occurrence attribution (2026-09-12)
+
+All 72 current-texture differences across the 12 static tab cases now have
+captured authoring evidence, without declaring the inputs equivalent:
+
+- Font family requires the active `.mat-mdc-tab` font token, matching browser
+  label/ancestor values, the candidate control reset and missing `.tab` override,
+  and matching candidate normal/effective/current-paint stack values.
+- Tracking requires the active tab tracking token and the complete candidate
+  control-to-page normal/effective ancestry omitting tracking. The existing
+  button omission check now uses the same strictly validated ancestry helper.
+- Line-height requires the actual `.mdc-tab__text-label { line-height: 1 }` rule,
+  14px font/label line-height, the distinct 20px reference content/control line
+  boxes, and the candidate `.tab` 20px declaration in all three core stages.
+
+Every finding preserves its reference chain and specific rule witnesses; the
+tracking finding also retains the candidate ancestry. Missing tokens, explicit
+overrides, wrong line-box values, duplicate rules and conflicting state inputs
+remain unresolved. Focused audit tests pass **68/68**; the complete
+`npm run parity:harness:check` suite passes **106/106**. The 12 production result
+hashes and input-tree digests validate; there are 24 mapped labels, 72 attributed
+differences and no remaining current-texture collection/mapping gaps for these
+static tabs. This does not complete retained-text, structure, raster or state
+review, and no fixture or renderer implementation changed.
+
 ## Tab and paginator input substitutions traced to source (2026-09-12)
 
 The tab differences have source-level authoring causes, recorded separately

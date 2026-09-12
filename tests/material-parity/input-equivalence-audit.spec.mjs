@@ -1220,6 +1220,79 @@ test('control text maps explicit tab template leaves without equating their wrap
   assert.equal(buildMaterialInputAudit(raw).summary.inputEquivalent, false);
 });
 
+function tabTypographyAttributionReport() {
+  const raw = tabControlTypographyReport(), trees = raw.results[0].inputTrees;
+  Object.assign(trees.reference.styles[0], { fontFamily: 'Roboto', fontSize: '14px', fontWeight: '500', lineHeight: '20px', letterSpacing: '.096px' });
+  trees.reference.styles.push({ ...trees.reference.styles[0], lineHeight: '14px' });
+  trees.reference.nodes[1].style = trees.reference.nodes[2].style = 1;
+  trees.reference.rules = [
+    { selector: '.mat-mdc-tab', active: true, declarations: {
+      'font-family': { value: 'var(--mat-tab-label-text-font, var(--mat-sys-title-small-font))' },
+      'letter-spacing': { value: 'var(--mat-tab-label-text-tracking, var(--mat-sys-title-small-tracking))' },
+    } },
+    { selector: '.mdc-tab__text-label', active: true, declarations: { 'line-height': { value: '1' } } },
+  ];
+  trees.reference.nodes[0].rules = [0];
+  trees.reference.nodes[2].rules = [1];
+  const node = trees.astylar.nodes[0];
+  Object.assign(node.normalResolvedStyle, { fontFamily: 'Roboto, Arial, sans-serif', fontSize: '14px', fontWeight: '500', lineHeight: '20px' });
+  Object.assign(node.interactionResolvedStyle, node.normalResolvedStyle);
+  delete node.normalResolvedStyle.letterSpacing;
+  delete node.interactionResolvedStyle.letterSpacing;
+  Object.assign(node.paintedControlText.style, { fontFamily: 'Roboto, Arial, sans-serif', fontSize: 14, fontWeight: '500', lineHeight: 20 / 14 });
+  node.parent = 'page';
+  trees.astylar.nodes.push({ key: 'page', parent: 'root', authored: { id: 'page', type: 'main' },
+    resolvedStyle: {}, normalResolvedStyle: {}, interactionResolvedStyle: {} });
+  trees.astylar.rules = [{ selector: '.tab', fontSize: '14px', fontWeight: '500', lineHeight: '20px' },
+    { selector: 'button, input, select', fontFamily: 'Roboto, Arial, sans-serif' }];
+  return raw;
+}
+
+test('tab typography attribution distinguishes token omissions from the nested label line-height rule', () => {
+  const raw = tabTypographyAttributionReport(), evidence = controlEvidence(raw);
+  assert.deepEqual(evidence.gaps, []);
+  assert.equal(evidence.differences.length, 3);
+  for (const finding of evidence.differences) {
+    assert.equal(finding.classification, 'application-plugin-authoring-defect');
+    assert.equal(finding.attribution, 'reviewed-tab-label-typography-input');
+    assert.equal(finding.reviewEvidence.referenceChain.length, 4);
+    assert.equal(finding.reviewEvidence.sourceFinding, 'fixture-tab-label-typography-flattened');
+  }
+  assert.equal(evidence.differences.find((entry) => entry.property === 'letterSpacing').reviewEvidence.candidateChain.length, 2);
+  assert.equal(evidence.differences.find((entry) => entry.property === 'lineHeight').reviewEvidence.referenceRule.declarations['line-height'].value, '1');
+  const report = buildMaterialInputAudit(raw);
+  assert.equal(report.summary.inputEquivalent, false);
+  assert.ok(!validateMaterialInputAudit(report).some((error) => error.includes('control texture typography differences')));
+  delete report.controlTypography.differences[0].reviewEvidence;
+  assert.ok(validateMaterialInputAudit(report).some((error) => error.includes('control texture typography differences')));
+});
+
+test('tab typography attribution rejects missing, conflicting and duplicate declaration witnesses', () => {
+  const mutations = [
+    ['fontFamily', (ref) => { ref.rules[0].declarations['font-family'].value = 'Roboto'; }],
+    ['fontFamily', (ref, ast) => { ast.rules[0].fontFamily = 'Roboto, Arial, sans-serif'; }],
+    ['fontFamily', (ref, ast) => { ast.rules[1].fontFamily = 'Arial'; }],
+    ['fontFamily', (ref, ast) => { ast.nodes[0].interactionResolvedStyle.fontFamily = 'Roboto'; }],
+    ['fontFamily', (ref) => { ref.rules.push({ active: true, declarations: { 'font-family': { value: 'Roboto' } } }); ref.nodes[1].rules = [2]; }],
+    ['letterSpacing', (ref) => { ref.rules[0].active = false; }],
+    ['letterSpacing', (ref, ast) => { ast.nodes[1].normalResolvedStyle.letterSpacing = '0px'; }],
+    ['letterSpacing', (ref, ast) => { ast.nodes[0].parent = 'missing'; }],
+    ['letterSpacing', (ref, ast) => { ast.rules[0].letterSpacing = '0px'; }],
+    ['lineHeight', (ref) => { ref.rules[1].declarations['line-height'].value = '14px'; }],
+    ['lineHeight', (ref) => { ref.styles[0].lineHeight = '14px'; }],
+    ['lineHeight', (ref, ast) => { ast.nodes[0].normalResolvedStyle.lineHeight = '21px'; }],
+    ['lineHeight', (ref, ast) => { ast.rules[0].lineHeight = '21px'; }],
+    ['lineHeight', (ref) => { ref.rules.push({ active: true, declarations: { 'line-height': { value: '14px' } } }); ref.nodes[1].rules = [2]; }],
+    ['lineHeight', (ref, ast) => { ast.rules.push({ ...ast.rules[0] }); }],
+  ];
+  for (const [property, mutate] of mutations) {
+    const raw = tabTypographyAttributionReport();
+    mutate(raw.results[0].inputTrees.reference, raw.results[0].inputTrees.astylar);
+    const finding = controlEvidence(raw).differences.find((entry) => entry.property === property);
+    assert.equal(finding?.attribution, 'unresolved', `${property}: ${mutate}`);
+  }
+});
+
 test('tab label mapping rejects wrong wrapper paths, roles, text, identities and nested content', () => {
   const mutations = [
     (ref) => { ref.nodes[2].attributes.class = 'other'; },
