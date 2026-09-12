@@ -22,6 +22,49 @@ selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Expansion header size token is missing outside the compact override (2026-09-12)
+
+All 12 corrected static expansion captures were reviewed. The three custom
+viewport cases retain candidate 18.4px versus reference 16px. The reference
+`mat-panel-title#expansion-title` inherits through `span.mat-content` from
+the unique active `.mat-expansion-panel-header` rule:
+`var(--mat-expansion-header-text-size, var(--mat-sys-title-medium-size))`.
+All three reference nodes compute 16px with no intervening size declaration.
+The entire candidate title/trigger/panel/section/page chain omits font-size
+until `#page`, which explicitly supplies the same 18.4px retained by core.
+This proves unequal inputs, not a renderer scaling failure.
+
+The current general title rule at `astylar.component.ts:663` has no size;
+the following branch supplies 16px only when density is at most -5. History
+shows `25e1893` added that compact-only 16px while changing a translation from
+-0.85px to -0.5px. Later commits changed the positional treatment; the current
+compact-only condition remains. This audit neither restores those offsets nor
+treats the branch as an equivalent translation of the general Material token.
+
+Per-occurrence attribution keeps the exact reference chain and token,
+candidate normal/effective ancestry and page rule, and retained size. Missing
+or competing reference tokens, inline overrides, conditional rules, broken
+ancestry, intervening candidate size declarations and inconsistent retained
+values prevent attribution. Independent validation replays those inputs.
+
+- `node --test --test-name-pattern='expansion font|source audit|source fingerprints' tests/material-parity/input-equivalence-audit.spec.mjs`:
+  5/5 passing, including two scaled-page controls, 25 contradictory-input
+  controls and ten report-tampering controls.
+- Actual 12-case diagnostic report: three classifications, zero unresolved
+  retained-typography differences for expansion and zero validation errors
+  with `requireComplete:false` (diagnostic only).
+- Re-running retained-text collection over all 436 corrected static cases
+  finds zero unresolved mapped-property differences and zero tree collection
+  errors. There are still 24 unresolved text gaps: 12 select-caret and 12 tabs
+  occurrences. This count does not cover other input categories or interactions.
+- `npm run parity:harness:check`: 311/311 passing, zero skipped/cancelled
+  (129.123 seconds). No production renderer or comparison input was changed.
+
+The original component token and wrapper intent must be restored before
+testing renderer scaling, glyph placement or paint. Selected/disabled/open
+states, select-caret and tabs mappings, control-text stages, the full matrix
+and final report still require completion; this subsection is not acceptance.
+
 ## Sort replaces inherited typography before rendering (2026-09-12)
 
 The 12 corrected static sort cases expose nine retained-text input differences:

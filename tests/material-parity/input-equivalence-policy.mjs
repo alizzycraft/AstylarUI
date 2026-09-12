@@ -101,6 +101,16 @@ export const reviewedValueNormalizations = Object.freeze([
 
 export const sourceAuditDefinitions = Object.freeze([
   Object.freeze({
+    id: 'fixture-expansion-font-size-token-omitted',
+    introducedBy: '25e1893 adds compact-only size override; current omission persists outside that branch',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`family === 'expansion' && theme\.density <= -5 \? \[\{ selector: '\.expansion-title'[^\n]*fontSize: '16px'`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase expansion header font-size token and inheritance',
+    justification: 'The reference header has an explicit Material font-size token that computes 16px independently of the page scale. Candidate title/trigger/panel omit that token and inherit the page size unless the compact-only fixture branch inserts 16px. Exact three-node reference inheritance and complete candidate normal/effective ancestry attribute the observed 18.4px custom title to unequal inputs. Preserve the component token for all equivalent states rather than treating the compact patch, fixed panel geometry or screenshot agreement as renderer proof.',
+    focusedProof: 'tests/material-parity/input-equivalence-audit.spec.mjs: expansion font omission preserves component token and scaled page inheritance',
+  }),
+  Object.freeze({
     id: 'fixture-sort-typography-substitution',
     introducedBy: '705cf58 adds fixed 17px; 5b74d1b changes it to 16px; 994da86b changes contrast ink to black',
     file: 'examples/material-showcase/src/app/astylar.component.ts',

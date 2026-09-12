@@ -2198,6 +2198,109 @@ function floatingLabelTypographyReport() {
   return raw;
 }
 
+function expansionFontReport(size = '18.4px') {
+  const raw = retainedTypographyReport(), entry = raw.results[0];
+  entry.family = 'expansion'; entry.styleInputs = [];
+  const { reference: ref, astylar: ast } = entry.inputTrees;
+  ref.styles[0] = { ...ref.styles[0], fontSize: '16px' };
+  ref.rules = [{ active: true, conditions: [], selector: '.mat-expansion-panel-header', declarations: {
+    'font-size': { value: 'var(--mat-expansion-header-text-size, var(--mat-sys-title-medium-size))', important: false } } }];
+  ref.nodes = [
+    { key: 'title', parent: 'content', type: 'mat-panel-title', attributes: { id: 'expansion-title', class: 'mat-expansion-panel-header-title' }, ownText: 'Advanced settings', style: 0, rules: [], pseudoElements: [] },
+    { key: 'content', parent: 'header', type: 'span', attributes: { class: 'mat-content' }, ownText: '', style: 0, rules: [], pseudoElements: [] },
+    { key: 'header', parent: null, type: 'mat-expansion-panel-header', attributes: { class: 'mat-expansion-panel-header' }, ownText: '', style: 0, rules: [0], pseudoElements: [] },
+  ];
+  ast.nodes = [
+    ['title', 'trigger', 'span', 'expansion-title', 'expansion-title'],
+    ['trigger', 'panel', 'div', 'expansion-primary', 'expansion-trigger'],
+    ['panel', 'section', 'article', 'expansion-shell', 'expansion-panel'],
+    ['section', 'page', 'section', 'expansion-root', undefined],
+    ['page', 'root', 'main', 'page', undefined],
+  ].map(([key, parent, type, id, className]) => ({ key, parent, authored: { type, id, class: className,
+    ...(key === 'title' ? { textContent: 'Advanced settings' } : {}) },
+    resolvedStyle: key === 'page' ? { fontSize: size } : {},
+    normalResolvedStyle: key === 'page' ? { fontSize: size } : {},
+    interactionResolvedStyle: key === 'page' ? { fontSize: size } : {},
+    ...(key === 'title' ? { retainedText: { source: 'core-text-registry', style: { ...ref.styles[0], fontSize: size } } } : {}) }));
+  ast.rules = [{ selector: '#page', fontSize: size }];
+  return raw;
+}
+
+test('expansion font omission preserves component token and scaled page inheritance', () => {
+  for (const size of ['14.4px', '18.4px']) {
+    const raw = expansionFontReport(size), before = structuredClone(raw), report = buildMaterialInputAudit(raw);
+    const findings = report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-expansion-font-token-omission');
+    assert.equal(findings.length, 1);
+    const f = findings[0];
+    assert.equal(f.inputEquivalent, false);
+    assert.equal(f.currentPseudoStatePaintVerified, false);
+    assert.equal(f.classification, 'application-plugin-authoring-defect');
+    assert.deepEqual(f.values, { reference: '16px', normal: undefined, effective: undefined, retained: size });
+    assert.equal(f.reviewEvidence.referenceChain.length, 3);
+    assert.equal(f.reviewEvidence.candidateChain.length, 5);
+    assert.equal(f.reviewEvidence.candidatePageRule.fontSize, size);
+    assert.ok(report.sourceFindings.find(f => f.id === 'fixture-expansion-font-size-token-omitted')?.detected);
+    assert.ok(!validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('expansion font attributions')));
+    assert.deepEqual(raw, before);
+  }
+});
+
+test('expansion font omission rejects incomplete tokens, overridden ancestors and unverified page values', () => {
+  const mutations = [
+    e => { e.family = 'tree'; },
+    e => { e.inputTrees.reference.nodes[0].attributes.id = 'wrong'; },
+    e => { e.inputTrees.reference.nodes[1].attributes.class = 'wrong'; },
+    e => { e.inputTrees.reference.nodes[0].parent = 'missing'; },
+    e => { e.inputTrees.reference.nodes[1].rules = [0]; },
+    e => { e.inputTrees.reference.rules[0].active = false; },
+    e => { e.inputTrees.reference.rules[0].conditions = ['@media other']; },
+    e => { e.inputTrees.reference.rules[0].declarations['font-size'].important = true; },
+    e => { e.inputTrees.reference.rules[0].declarations['font-size'].value = '16px'; },
+    e => { e.inputTrees.reference.nodes[0].inline = { 'font-size': { value: '16px' } }; },
+    e => { e.inputTrees.reference.nodes[0].attributes.style = 'font: 16px Arial'; },
+    e => { e.inputTrees.reference.nodes[2].rules.push(0); },
+    e => { e.inputTrees.astylar.nodes[0].authored.class = 'wrong'; },
+    e => { e.inputTrees.astylar.nodes[0].parent = 'missing'; },
+    e => { e.inputTrees.astylar.nodes[2].parent = 'panel'; },
+    e => { e.inputTrees.astylar.nodes[1].authored.style = { fontSize: '16px' }; },
+    e => { e.inputTrees.astylar.nodes[1].normalResolvedStyle.fontSize = '16px'; },
+    e => { e.inputTrees.astylar.nodes[2].interactionResolvedStyle.fontSize = '16px'; },
+    e => { e.inputTrees.astylar.nodes[2].normalResolvedStyle.all = 'initial'; },
+    e => { e.inputTrees.astylar.nodes[4].authored.type = 'div'; },
+    e => { e.inputTrees.astylar.nodes[4].normalResolvedStyle.fontSize = '16px'; },
+    e => { e.inputTrees.astylar.nodes[0].retainedText.style.fontSize = '16px'; },
+    e => { e.inputTrees.astylar.rules[0].fontSize = '16px'; },
+    e => { e.inputTrees.astylar.rules[0].mediaMaxWidth = '500px'; },
+    e => { e.inputTrees.astylar.rules.push({ ...e.inputTrees.astylar.rules[0] }); },
+  ];
+  for (const mutate of mutations) {
+    const raw = expansionFontReport(); mutate(raw.results[0]);
+    const e = collectRetainedTypographyEvidence(raw.results, collectFullTreeInventory(raw.results));
+    assert.ok(!e.differences.some(d => d.attribution === 'reviewed-expansion-font-token-omission'), String(mutate));
+  }
+});
+
+test('expansion font claims replay exact component token and omission chain', () => {
+  const baseline = buildMaterialInputAudit(expansionFontReport());
+  const mutations = [
+    (_r, f) => { f.reviewEvidence.referenceChain.pop(); },
+    (_r, f) => { f.reviewEvidence.candidateChain.pop(); },
+    (_r, f) => { f.inputEquivalent = true; },
+    (_r, f) => { f.currentPseudoStatePaintVerified = true; },
+    (_r, f) => { f.values.normal = '18.4px'; },
+    (r, f) => { r.retainedTypography.differences.push(structuredClone(f)); },
+    r => { r.retainedTypography.differences = []; },
+    r => { r.retainedTypography.comparisons[0].properties.fontSize.effective = '18.4px'; },
+    r => { r.elementInventory.rules.find(x => x.side === 'reference').value.active = false; },
+    r => { r.elementInventory.rules.find(x => x.side === 'astylar').value.fontSize = '16px'; },
+  ];
+  for (const mutate of mutations) {
+    const report = structuredClone(baseline);
+    mutate(report, report.retainedTypography.differences.find(d => d.attribution === 'reviewed-expansion-font-token-omission'));
+    assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('expansion font attributions')), String(mutate));
+  }
+});
+
 function sortTypographyReport(property = 'fontSize', referenceSize = '18.4px') {
   const raw = templateTypographyReport('sort'), { reference: ref, astylar: ast } = raw.results[0].inputTrees;
   const cssProperty = property === 'fontSize' ? 'font-size' : 'color';
