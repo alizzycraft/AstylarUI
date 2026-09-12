@@ -12,6 +12,53 @@ tests pass). A missing selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Context-qualified start/left alignment interpretation (2026-09-12)
+
+The audit now explains a reference `text-align:start` versus retained/current
+control `left` difference only when the captured reference leaf-to-root chain
+proves a horizontal LTR context. Every node must have `normal` or `isolate`
+bidi, `start`/`left` alignment, automatic last-line alignment and a reviewed
+display type. The chain must reach the actual captured frame/overlay block
+root, without missing or duplicate identities or cycles. An inline subtree is
+not accepted as a containing-block boundary. No default direction is invented.
+
+This is an observation-specific property interpretation, **not** a global
+normalization or renderer fix. The original `start` and `left` values remain in
+each difference, together with the entire computed ancestor chain. Records
+explicitly retain `inputEquivalent:false` and `finalRasterVerified:false`:
+equivalent physical alignment meaning does not certify equal line containers,
+structure, other typography, location, bidi support or paint. RTL, plaintext,
+vertical writing, non-auto last-line alignment, hidden and unknown contexts
+remain unresolved. The existing real-browser counterexample is extended to
+prove that LTR `isolate`, unlike `plaintext`, keeps Hebrew text's start edge
+equivalent to physical left.
+
+Validation independently rebuilds the interpretation from pooled reference
+and candidate styles and captured ancestry. Deleting/duplicating a claim,
+changing its values or scope, or changing ancestor bidi evidence is rejected,
+even in partial-report validation. Three new audit tests exercise retained and
+current-control text, 24 unsafe/missing-context mutations on both paths and 12
+report mutations on both paths. Raw capture inputs are unchanged.
+
+Verification:
+
+- `node --test tests/material-parity/input-equivalence-audit.spec.mjs`:
+  **135/135 passed**.
+- `npm run parity:harness:check`: **228/228 passed**, including the real-browser
+  normal/isolate/plaintext alignment proof; no skipped tests.
+- A read-only **353-record prefix** of the running context capture was checked
+  against checkpoint result SHA-256 values and paired input-tree digests. Its
+  in-memory audit has **1,023** context-qualified retained alignment records,
+  zero current-control alignment records at this stage, and no partial-schema
+  validation errors. Coverage and input-equivalence verdicts both remain false.
+  This prefix is not the complete enforced matrix or an acceptance report.
+- `git diff --check`: clean.
+
+The full unfiltered context capture continues in its original process. These
+changes do not alter its imported capture-module graph, frozen browser build,
+fixtures, renderer, reference styles or thresholds. Complete regenerated audit
+reports and fresh supplemental evidence still await the complete capture.
+
 ## Capturing the missing computed text and clipping context (2026-09-12)
 
 The prior capture cannot establish whether reference `text-align:start` is

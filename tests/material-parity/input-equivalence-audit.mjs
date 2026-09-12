@@ -247,6 +247,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
     }
   }
   const reviewedControlKinds = {
+    'reviewed-horizontal-start-alignment': 'equivalent-representation',
     'reviewed-button-tracking-input': 'application-plugin-authoring-defect',
     'reviewed-disabled-button-ink': 'application-plugin-authoring-defect',
     'reviewed-button-font-token-input': 'application-plugin-authoring-defect',
@@ -318,6 +319,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
     !isReviewedCalendarWeekdayNameGap(gap, report.elementInventory));
   if (requireComplete && unresolvedRetainedGaps.length > 0) errors.push(`${unresolvedRetainedGaps.length} retained typography mappings or stage fields require review`);
   const reviewedTypographyKinds = { 'reviewed-heading-mask': 'parity-harness-defect',
+    'reviewed-horizontal-start-alignment': 'equivalent-representation',
     'reviewed-table-font-input': 'application-plugin-authoring-defect',
     'reviewed-tree-font-input': 'application-plugin-authoring-defect',
     'reviewed-control-label-token-input': 'application-plugin-authoring-defect',
@@ -328,6 +330,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
     !reviewedTypographyKinds[entry.attribution] || entry.classification !== reviewedTypographyKinds[entry.attribution] || !entry.reviewEvidence) ?? [];
   if (requireComplete && unresolvedTypography.length > 0) errors.push(`${unresolvedTypography.length} retained typography differences require attribution`);
   validateCalendarWeekdayEvidence(report, errors);
+  validateHorizontalStartAlignment(report, errors);
   if (requireComplete && report.supplementalBehavior.missing.length > 0) errors.push(`${report.supplementalBehavior.missing.length} supplemental behavior cases are missing`);
   if (report.supplementalBehavior.errors.length > 0) errors.push(`${report.supplementalBehavior.errors.length} supplemental behavior collection errors`);
   if (requireComplete && report.supplementalOverlays.missing.length > 0) errors.push(`${report.supplementalOverlays.missing.length} supplemental overlay cases are missing`);
@@ -365,6 +368,8 @@ export function renderMaterialInputAuditMarkdown(report) {
     `Reference computed context: ${report.elementInventory.referenceContextGaps.length} missing capture declarations or node/pseudo-element fields for direction, writing mode, bidi, last-line alignment, shaping and clipping. Legacy captures remain readable but cannot establish these inputs. A full new capture is required; no direction or clip value is inferred from class names, defaults or screenshots.`,
     '',
     `Retained typography: ${report.retainedTypography.comparisons.length} directly mapped text-node observations; ${report.retainedTypography.gaps.length} mapping/stage gaps and ${report.retainedTypography.differences.length} unequal retained-property observations. The registry stage is reported separately from declarations and is not proof of current pseudo-state glyph paint.`,
+    '',
+    `Contextual start/left alignment: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-horizontal-start-alignment').length} retained and ${report.controlTypography.differences.filter(d => d.attribution === 'reviewed-horizontal-start-alignment').length} current-control observations have a complete captured horizontal-LTR ancestor chain with normal/isolate bidi and automatic last-line alignment. These records preserve the raw start/left values and justify only their physical alignment meaning. Other contexts remain unresolved; equal line containers, structure, typography, placement and raster are not inferred.`,
     '',
     `Control-owned text routing: ${report.retainedTypography.controlTextMappings.length} reviewed text-owner correspondences use the current core-control-texture stage, not invented registry entries. Composite calendar headers preserve different reference and candidate strings plus original vector inputs. Independent input differences and any current-paint gaps remain enforced; this is not wrapper or input equivalence.`,
     `Hidden retained-text stage: ${report.retainedTypography.gaps.filter((gap) => isReviewedHiddenRetainedGap(gap, report.elementInventory)).length} gap records have complete captured ancestry explaining why core creates no text entry below display:none. The records and raw styles remain; reference display:none and visibility:hidden mechanisms are distinguished, not normalized into equivalent inputs.`,
@@ -1595,6 +1600,92 @@ function reviewedHiddenRetainedEvidence(gap, inventory) {
     inputEquivalent: false, currentPseudoStatePaintVerified: false };
 }
 
+function reviewedHorizontalStartAlignment(property, values, referenceTree, ref, inventory) {
+  // This is a contextual interpretation, never a global start -> left alias.
+  // In particular, unicode-bidi is not inherited: an innocent-looking inline
+  // leaf can belong to a plaintext paragraph with a different base direction.
+  const stage = Object.hasOwn(values, 'painted') ? 'painted' : 'retained';
+  if (property !== 'textAlign' || values.reference !== 'start' || values[stage] !== 'left' ||
+      referenceTree?.contextStyleEvidenceVersion !== 1 ||
+      JSON.stringify(referenceTree.contextStyleProperties) !== JSON.stringify(referenceContextProperties)) return;
+  if (inventory.styles[ref?.style]?.value?.textAlign !== 'start') return;
+  const chain = [], seen = new Set();
+  let node = ref;
+  while (node) {
+    if (seen.has(node.key)) return;
+    seen.add(node.key);
+    const duplicates = referenceTree.nodes.filter(n => n.key === node.key);
+    if (duplicates.length !== 1) return;
+    const pooled = inventory.styles[node.style], style = pooled?.value;
+    if (pooled?.side !== 'reference' || !style || style.direction !== 'ltr' ||
+        style.writingMode !== 'horizontal-tb' || !['normal', 'isolate'].includes(style.unicodeBidi) ||
+        !['start', 'left'].includes(style.textAlign) || style.textAlignLast !== 'auto' ||
+        !['inline', 'block', 'inline-block', 'flow-root', 'flex', 'inline-flex', 'grid', 'inline-grid',
+          'table', 'inline-table', 'table-row-group', 'table-header-group', 'table-footer-group',
+          'table-row', 'table-cell', 'table-caption', 'list-item'].includes(style.display)) return;
+    chain.push({ node: node.key, parent: node.parent, type: node.type, style: node.style,
+      computed: Object.fromEntries(['display', 'direction', 'writingMode', 'unicodeBidi', 'textAlign', 'textAlignLast']
+        .map(p => [p, style[p]])) });
+    if (node.parent === null) {
+      // Do not treat a truncated inline subtree as a containing-block boundary.
+      if (!/^(frame|overlay:\d+)$/.test(node.key) ||
+          !['block', 'flow-root', 'flex', 'grid'].includes(style.display)) return;
+      break;
+    }
+    const parents = referenceTree.nodes.filter(n => n.key === node.parent);
+    if (parents.length !== 1) return;
+    node = parents[0];
+  }
+  if (!chain.length || chain.at(-1).parent !== null) return;
+  return { attribution: 'reviewed-horizontal-start-alignment', classification: 'equivalent-representation',
+    inputEquivalent: false, propertyEquivalent: true, finalRasterVerified: false,
+    recommendedOwner: 'input audit contextual CSS logical-to-physical alignment interpretation',
+    justification: 'Only the alignment value is equivalent in this captured context: the complete reference leaf-to-block-root chain is horizontal LTR with normal/isolate bidi, start/left alignment and automatic last-line alignment. Start therefore denotes the physical left edge. Raw values and ancestry remain recorded. This does not certify matching line containers, structure, placement, bidi support, other styles or final raster; plaintext, RTL, vertical, missing, hidden and unreviewed contexts are not accepted.',
+    reviewEvidence: { source: 'browser-computed-ancestry', contextStyleEvidenceVersion: 1,
+      referenceValue: 'start', physicalValue: 'left', comparedStage: stage, chain,
+      specification: 'https://www.w3.org/TR/2026/CRD-css-text-3-20260814/#bidi-linebox',
+      proof: 'tests/material-parity/input-tree-evidence.spec.mjs: start alignment requires the line-container context' } };
+}
+
+function validateHorizontalStartAlignment(report, errors) {
+  for (const [name, stage] of [['retainedTypography', 'retained'], ['controlTypography', 'painted']]) {
+    const section = report[name];
+    const expected = [];
+    for (const comparison of section?.comparisons ?? []) {
+      const refs = report.elementInventory.cases.filter(c => c.case === comparison.case && c.side === 'reference');
+      if (refs.length !== 1) continue;
+      const tree = report.elementInventory.variants[refs[0].variant];
+      const nodes = tree?.nodes.filter(n => n.key === comparison.referenceNode) ?? [];
+      if (nodes.length !== 1) continue;
+      const asts = report.elementInventory.cases.filter(c => c.case === comparison.case && c.side === 'astylar');
+      const astNodes = asts.length === 1 ? report.elementInventory.variants[asts[0].variant]?.nodes
+        .filter(n => n.key === comparison.astylarNode) ?? [] : [];
+      if (astNodes.length !== 1) continue;
+      const ast = astNodes[0], indices = { reference: nodes[0].style,
+        normal: ast.normalStyle, effective: ast.interactionStyle,
+        ...(stage === 'painted' ? { painted: ast.paintedControlText?.style } : {}),
+        ...(ast.retainedText ? { retained: ast.retainedText.style } : {}) };
+      const values = Object.fromEntries(Object.entries(indices).map(([key, index]) => {
+        const pooled = report.elementInventory.styles[index];
+        return [key, pooled?.side === (key === 'reference' ? 'reference' : 'astylar')
+          ? canonicalStyle(pooled.value).textAlign : undefined];
+      }));
+      const review = reviewedHorizontalStartAlignment('textAlign', values, tree, nodes[0], report.elementInventory);
+      if (review) expected.push({ comparison, review, values });
+    }
+    const claimed = section?.differences.filter(d => d.attribution === 'reviewed-horizontal-start-alignment') ?? [];
+    const valid = expected.length === claimed.length && expected.every(({ comparison, review, values }) => {
+      const matches = claimed.filter(d => d.case === comparison.case && d.element === comparison.element &&
+        d.referenceNode === comparison.referenceNode && d.astylarNode === comparison.astylarNode && d.property === 'textAlign');
+      const difference = matches[0];
+      return matches.length === 1 && JSON.stringify(difference.values) === JSON.stringify(values) &&
+        JSON.stringify(comparison.properties.textAlign) === JSON.stringify(values) &&
+        Object.entries(review).every(([key, value]) => JSON.stringify(difference[key]) === JSON.stringify(value));
+    });
+    if (!valid) errors.push(`${name} horizontal start alignment attributions do not replay from complete captured ancestry`);
+  }
+}
+
 function isReviewedHiddenRetainedGap(gap, inventory) {
   if (gap.attribution !== 'reviewed-display-none-text-stage' || gap.classification !== 'parity-harness-defect' ||
       gap.inputEquivalent !== false || !gap.justification || !gap.reviewEvidence) return false;
@@ -1759,6 +1850,7 @@ export function collectRetainedTypographyEvidence(cases, inventory, controlTypog
             ...(controlLabelToken ?? {}),
             ...(selectValueToken ?? {}),
             ...(weekdayToken ?? {}),
+            ...(reviewedHorizontalStartAlignment(property, values, referenceTree, ref, inventory) ?? {}),
           });
         }
       }
@@ -2814,7 +2906,8 @@ export function collectControlTypographyEvidence(cases, inventory) {
               reviewedSnackbarActionPaintInput(entry, property, ref, parent, ast, stages, referenceTree, astylarTree, inventory) ??
               reviewedBottomSheetItemPaintInput(entry, property, ref, parent, ast, stages, referenceTree, astylarTree, inventory) ??
               reviewedCalendarPeriodPaintInput(entry, property, ref, parent, ast, stages, referenceTree, astylarTree, inventory) ??
-              reviewedCalendarCellPaintInput(entry, property, ref, parent, ast, stages, referenceTree, astylarTree, inventory) ?? {}) });
+              reviewedCalendarCellPaintInput(entry, property, ref, parent, ast, stages, referenceTree, astylarTree, inventory) ?? {}),
+            ...(reviewedHorizontalStartAlignment(property, values, referenceTree, ref, inventory) ?? {}) });
         }
       }
       comparisons.push(comparison);

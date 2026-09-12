@@ -85,10 +85,13 @@ test('start alignment requires the line-container context, not just a leaf direc
         start: measure(direction, unicodeBidi, 'start', text), physical: measure(direction, unicodeBidi, physical, text),
       });
       return { ltr: pair('ltr', 'normal', 'left'), rtlRight: pair('rtl', 'normal', 'right'),
-        rtlLeft: pair('rtl', 'normal', 'left'), plaintext: pair('ltr', 'plaintext', 'left', 'שלום') };
+        rtlLeft: pair('rtl', 'normal', 'left'), isolate: pair('ltr', 'isolate', 'left', 'שלום'),
+        plaintext: pair('ltr', 'plaintext', 'left', 'שלום') };
     });
     assert.equal(result.ltr.start.offset, result.ltr.physical.offset);
     assert.equal(result.rtlRight.start.offset, result.rtlRight.physical.offset);
+    assert.equal(result.isolate.start.offset, result.isolate.physical.offset,
+      'isolate keeps the specified LTR paragraph direction; it is not plaintext auto direction');
     assert.ok(result.rtlLeft.start.offset - result.rtlLeft.physical.offset > 100);
     assert.equal(result.plaintext.start.leaf.direction, 'ltr');
     assert.equal(result.plaintext.start.leaf.unicodeBidi, 'normal');

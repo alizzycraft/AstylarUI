@@ -1631,6 +1631,109 @@ function controlEvidence(raw) {
   return collectControlTypographyEvidence(raw.results, collectFullTreeInventory(raw.results));
 }
 
+function horizontalAlignmentReport(control = false) {
+  const raw = control ? controlTypographyReport() : retainedTypographyReport();
+  const ref = raw.results[0].inputTrees.reference;
+  ref.contextStyleEvidenceVersion = 1;
+  ref.contextStyleProperties = [...contextProperties];
+  ref.styles = ref.styles.map(style => ({ ...style, ...contextStyle, display: 'inline', direction: 'ltr',
+    writingMode: 'horizontal-tb', unicodeBidi: 'normal', textAlignLast: 'auto' }));
+  ref.styles.push({ ...ref.styles[0], display: 'block', unicodeBidi: 'isolate' });
+  ref.nodes.push({ key: 'frame', parent: null, type: 'main', attributes: {}, ownText: '',
+    style: 1, rules: [], pseudoElements: [] });
+  return raw;
+}
+
+test('horizontal start/left interpretation requires complete captured context and preserves raw unequal inputs', () => {
+  for (const control of [false, true]) {
+    const raw = horizontalAlignmentReport(control), before = structuredClone(raw);
+    const report = buildMaterialInputAudit(raw);
+    const section = report[control ? 'controlTypography' : 'retainedTypography'];
+    const findings = section.differences.filter(d => d.attribution === 'reviewed-horizontal-start-alignment');
+    assert.equal(findings.length, 1);
+    const finding = findings[0];
+    assert.equal(finding.property, 'textAlign');
+    assert.equal(finding.values.reference, 'start');
+    assert.equal(finding.values[control ? 'painted' : 'retained'], 'left');
+    assert.equal(finding.classification, 'equivalent-representation');
+    assert.equal(finding.propertyEquivalent, true);
+    assert.equal(finding.inputEquivalent, false);
+    assert.equal(finding.finalRasterVerified, false);
+    assert.equal(finding.reviewEvidence.chain.at(-1).node, 'frame');
+    assert.equal(finding.reviewEvidence.chain.at(-1).computed.unicodeBidi, 'isolate');
+    assert.ok(!validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('horizontal start')));
+    assert.deepEqual(raw, before);
+    assert.equal(report.summary.inputEquivalent, false);
+  }
+});
+
+test('alignment attribution rejects unsafe or incomplete ancestors rather than guessing browser defaults', () => {
+  const mutations = [
+    ref => { delete ref.contextStyleEvidenceVersion; },
+    ref => { ref.contextStyleProperties.pop(); },
+    ref => { ref.styles[0].direction = 'rtl'; },
+    ref => { ref.styles[1].direction = 'rtl'; },
+    ref => { ref.styles[1].unicodeBidi = 'plaintext'; },
+    ref => { ref.styles[1].unicodeBidi = 'bidi-override'; },
+    ref => { ref.styles[1].unicodeBidi = 'isolate-override'; },
+    ref => { ref.styles[1].unicodeBidi = 'embed'; },
+    ref => { delete ref.styles[1].unicodeBidi; },
+    ref => { ref.styles[1].writingMode = 'vertical-rl'; },
+    ref => { ref.styles[0].writingMode = 'vertical-lr'; },
+    ref => { ref.styles[1].textAlignLast = 'justify'; },
+    ref => { ref.styles[0].textAlignLast = 'right'; },
+    ref => { ref.styles[1].textAlign = 'center'; },
+    ref => { ref.styles[1].textAlign = 'end'; },
+    ref => { ref.styles[1].display = 'contents'; },
+    ref => { ref.styles[1].display = 'inline'; },
+    ref => { ref.styles[0].display = 'none'; },
+    ref => { ref.nodes.pop(); },
+    ref => { ref.nodes.push(structuredClone(ref.nodes.at(-1))); },
+    ref => { ref.nodes.at(-1).parent = ref.nodes[0].key; },
+    ref => { ref.nodes.at(-1).parent = 'missing'; },
+    ref => { ref.nodes[0].parent = undefined; },
+    ref => { ref.nodes.at(-1).key = 'arbitrary-boundary'; ref.nodes[0].parent = 'arbitrary-boundary'; },
+  ];
+  for (const control of [false, true]) for (const mutate of mutations) {
+    const raw = horizontalAlignmentReport(control);
+    mutate(raw.results[0].inputTrees.reference);
+    const inventory = collectFullTreeInventory(raw.results);
+    const section = control ? collectControlTypographyEvidence(raw.results, inventory)
+      : collectRetainedTypographyEvidence(raw.results, inventory);
+    assert.equal(section.differences.filter(d => d.attribution === 'reviewed-horizontal-start-alignment').length, 0,
+      `${control ? 'control' : 'retained'}: ${mutate}`);
+    assert.ok(section.differences.some(d => d.property === 'textAlign' && d.attribution === 'unresolved'));
+  }
+});
+
+test('alignment claims replay their actual captured styles, ancestry, scope and unique difference records', () => {
+  for (const control of [false, true]) {
+    const baseline = buildMaterialInputAudit(horizontalAlignmentReport(control));
+    const sectionName = control ? 'controlTypography' : 'retainedTypography';
+    const mutations = [
+      (report, finding) => { finding.reviewEvidence.chain.pop(); },
+      (report, finding) => { finding.inputEquivalent = true; },
+      (report, finding) => { finding.propertyEquivalent = false; },
+      (report, finding) => { finding.finalRasterVerified = true; },
+      (report, finding) => { finding.classification = 'application-plugin-authoring-defect'; },
+      (report, finding) => { finding.reviewEvidence.comparedStage = 'authored'; },
+      (report, finding) => { finding.values.reference = 'left'; },
+      (report, finding) => { report[sectionName].differences.push(structuredClone(finding)); },
+      report => { report[sectionName].differences = []; },
+      report => { report[sectionName].comparisons[0].properties.textAlign.reference = 'left'; },
+      report => { report.elementInventory.styles.find(s => s.side === 'reference' && s.value.display === 'block').value.unicodeBidi = 'plaintext'; },
+      report => { report.elementInventory.styles.find(s => s.side === 'astylar' && s.value.textAlign === 'left').value.textAlign = 'right'; },
+    ];
+    for (const mutate of mutations) {
+      const report = structuredClone(baseline);
+      const finding = report[sectionName].differences.find(d => d.attribution === 'reviewed-horizontal-start-alignment');
+      mutate(report, finding);
+      assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('horizontal start')),
+        `${sectionName}: ${mutate}`);
+    }
+  }
+});
+
 function snackbarActionTypographyReport() {
   const raw = controlTypographyReport(), entry = raw.results[0], { reference: ref, astylar: ast } = entry.inputTrees;
   entry.family = 'snack-bar';
