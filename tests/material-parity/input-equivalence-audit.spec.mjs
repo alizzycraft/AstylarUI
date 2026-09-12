@@ -501,7 +501,7 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   const report = parityReport({}, {});
   const audit = buildMaterialInputAudit(report);
   assert.equal(audit.coverage.visualParityGreen, true);
-  assert.equal(audit.sourceFingerprints.length, 41);
+  assert.equal(audit.sourceFingerprints.length, 44);
   assert.equal(audit.sourceFingerprints.filter(({ file }) => file === 'src/app/services/dom/dom-ancestry.service.ts').length, 1);
   const cascadeProof = 'examples/material-showcase/src/app/label-cascade-input-audit.spec.ts';
   assert.equal(audit.sourceFingerprints.filter(({ file }) => file === cascadeProof).length, 1);
@@ -532,6 +532,34 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   assert.ok(audit.sourceFingerprints.every(({ sha256 }) => /^[a-f0-9]{64}$/.test(sha256)));
   report.interactionSummary.meetsAcceptance = false;
   assert.equal(buildMaterialInputAudit(report).coverage.visualParityGreen, false);
+});
+
+test('border proof records separate default and paint causes without blanket scalar attribution', () => {
+  const audit = buildMaterialInputAudit(parityReport({ borderColor: 'rgb(18, 52, 86)', borderWidth: '0px' },
+    { borderColor: 'transparent', borderWidth: '0px' }));
+  for (const [id, classification] of [
+    ['core-border-initial-color-differs-from-css', 'intentional-documented-limitation'],
+    ['core-border-paint-discards-color-alpha', 'confirmed-core-renderer-defect'],
+    ['core-border-currentcolor-has-no-color-context', 'confirmed-core-renderer-defect'],
+  ]) {
+    const finding = audit.sourceFindings.find(entry => entry.id === id);
+    assert.equal(finding.classification, classification);
+    assert.equal(finding.detected, true);
+    assert.ok(finding.locations.every(location => location.line > 0));
+    assert.match(finding.focusedProof, /border-color-input-audit\.spec\.ts/);
+  }
+  const proof = audit.focusedProofs.find(entry => entry.file.endsWith('/border-color-input-audit.spec.ts'));
+  assert.ok(proof.line > 0);
+  assert.match(proof.status, /two pass and eight honest failures/);
+  for (const file of ['src/app/services/dom/elements/element-border.service.ts',
+    'src/app/services/babylon-mesh.service.ts', 'examples/material-showcase/src/app/border-color-input-audit.spec.ts']) {
+    assert.equal(audit.sourceFingerprints.filter(entry => entry.file === file).length, 1);
+  }
+  const borders = audit.discrepancies.filter(entry => /^border.*Color$/.test(entry.property));
+  assert.equal(borders.length, 4);
+  assert.ok(borders.every(entry => entry.attribution === 'unresolved'));
+  assert.ok(borders.every(entry => entry.classification !== 'equivalent-representation'));
+  assert.ok(audit.implementationPlan.some(entry => entry.rootCause.includes('Border initial values')));
 });
 
 test('keeps used-pixel versus unresolved-expression comparisons open as harness gaps', () => {

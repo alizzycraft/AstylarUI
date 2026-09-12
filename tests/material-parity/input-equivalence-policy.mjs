@@ -113,6 +113,35 @@ export const reviewedValueNormalizations = Object.freeze([
 
 export const sourceAuditDefinitions = Object.freeze([
   Object.freeze({
+    id: 'core-border-initial-color-differs-from-css',
+    introducedBy: '2c16e14 extracts the already-existing transparent default; not established as a Material workaround',
+    file: 'src/app/config/browser-defaults.ts',
+    pattern: String.raw`export const globalDefaultStyle:[\s\S]*?borderColor: "transparent"`,
+    classification: 'intentional-documented-limitation',
+    owner: 'core browser-compatible border initial-value contract and style defaults',
+    justification: 'CSS Backgrounds 3 section 3.1 gives border colors the initial currentColor value. The catalog instead documents transparent background/border defaults, and public equal-input reductions resolve omitted candidate borderColor to transparent while the browser uses its authored color. This is a documented input-contract difference, not an equivalent representation or a new fixture compensation. The separate border-paint defect turns that transparent input into opaque black. Explicit-color controls pass for two colors. Reconcile the default contract at core before claiming equal omitted-input behavior; do not insert fixture-only border colors or waive differences because current border width is zero.',
+    focusedProof: 'examples/material-showcase/src/app/border-color-input-audit.spec.ts: omitted and explicit border colors in two independent colors',
+  }),
+  Object.freeze({
+    id: 'core-border-paint-discards-color-alpha',
+    introducedBy: '36f44de already parses only RGB; a83ead8 assigns border material alpha from element opacity',
+    file: 'src/app/services/dom/elements/element-border.service.ts',
+    pattern: String.raw`const colorData = render\.actions\.style\.parseBackgroundColor\(style\.borderColor\);[\s\S]*?color = colorData\.color;`,
+    classification: 'confirmed-core-renderer-defect',
+    owner: 'ElementBorderService color parsing and ElementCreationService border material alpha',
+    justification: 'Identical transparent and rgba(...,0.5) border inputs survive normal/effective inspection but the actually bound border material has alpha 1. Transparent parses null and falls back to black; RGBA parses alpha but parseBorderProperties returns only color. Creation assigns only element opacity to the material. Both colors produce 1376 opaque incorrect framebuffer pixels; explicit opaque-color controls pass. Preserve color alpha through core border paint and compose it correctly with element/ancestor opacity and state updates. This is actual equal-input paint failure, not evidence that a plugin or fixture must manufacture a replacement border.',
+    focusedProof: 'examples/material-showcase/src/app/border-color-input-audit.spec.ts: transparent and half-alpha borders retain browser expectations and framebuffer evidence',
+  }),
+  Object.freeze({
+    id: 'core-border-currentcolor-has-no-color-context',
+    file: 'src/app/services/dom/elements/element-border.service.ts',
+    pattern: String.raw`parseBackgroundColor\(style\.borderColor\)`,
+    classification: 'confirmed-core-renderer-defect',
+    owner: 'core contextual CSS color resolution before border paint',
+    justification: 'The equal-input currentColor reductions preserve that keyword in normal/effective styles, but border parsing calls the background parser without the element color. Its unrecognized-value fallback paints RGB 51,51,77 for both authored colors instead of RGB 18,52,86 or 192,74,32. Bound material and framebuffer agree, while explicit-color controls pass. This confirms a CSS color-resolution capability gap; the catalog does not explicitly promise currentColor support, so this is not a claim that all CSS color syntax was previously supported. Implement contextual color resolution in core with inheritance and state/update tests, not fixture-side keyword substitution or a changed default fallback color.',
+    focusedProof: 'examples/material-showcase/src/app/border-color-input-audit.spec.ts: currentColor versus explicit opaque color controls',
+  }),
+  Object.freeze({
     id: 'fixture-select-arrow-vector-to-glyph-substitution',
     introducedBy: '2f44011 substitutes a glyph; 3d0d5ce7 changes its shape/offset/size; 6647a875 retunes compact offset/size',
     file: 'examples/material-showcase/src/app/astylar.component.ts',

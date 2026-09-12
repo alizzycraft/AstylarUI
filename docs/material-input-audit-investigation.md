@@ -22,6 +22,113 @@ selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Border colors: documented default divergence and two independent core paint gaps (2026-09-12)
+
+`examples/material-showcase/src/app/border-color-input-audit.spec.ts` adds ten
+public-package browser reductions. The same declaration map creates CSS inside
+an isolated iframe and Astylar `SiteData`; there is no Material plugin, text,
+icon, transform, calibration offset or alternate fixture structure. Each mount
+has a 200x120 CSS viewport and a 120x60 border-box with a 4px solid border.
+Two distinct colors (`#123456` and `#c04a20`) guard against a coincidental fixed
+fallback matching the expected color. Original authored input, normal/effective
+styles, actual bound border material, framebuffer bytes, and final zero owned
+resources are checked separately.
+
+Observed results for **each** color:
+
+| Authored border color | Browser used color/alpha | Core resolved input | Bound material / framebuffer | Result |
+| --- | --- | --- | --- | --- |
+| omitted | element color / 1 | `transparent` | black / 1; 1,376 black pixels | fail |
+| explicit matching hex | element color / 1 | original hex | matching RGB / 1; 1,376 matching pixels | pass |
+| `currentColor` | element color / 1 | `currentColor` | RGB 51,51,77 / 1; 1,376 fallback pixels | fail |
+| `transparent` | transparent / 0 | `transparent` | black / 1; 1,376 black pixels | fail |
+| `rgba(...,0.5)` | element RGB / 0.5 | original RGBA | element RGB / 1; 1,376 opaque pixels, zero expected half-alpha composite pixels | fail |
+
+These are distinct causal findings:
+
+1. **Documented initial-value difference, not equivalence.**
+   [CSS Backgrounds 3 §3.1](https://www.w3.org/TR/2024/CRD-css-backgrounds-3-20240311/#border-color)
+   specifies `currentColor`. `src/app/config/browser-defaults.ts` instead sets
+   `globalDefaultStyle.borderColor` to `transparent`, and the compatibility
+   catalog's `paint` entry documents that default. Commit `2c16e14` extracted an
+   already-existing value from `StyleDefaultsService`; it did not establish a
+   new Material-specific workaround. Record this as an intentional documented
+   limitation that must be reconciled with the requested CSS contract, not as a
+   harmless serialization alias. A zero-width border does not erase its input.
+2. **Confirmed core alpha-paint defect.**
+   `ElementBorderService.parseBorderProperties` initializes black, passes the
+   border string to `StyleService.parseBackgroundColor`, and retains only RGB.
+   `transparent` returns null; RGBA returns alpha which is then discarded.
+   `ElementCreationService` creates the border material and sets alpha solely
+   from element opacity. Consequently even explicit, correctly resolved
+   transparent/half-alpha inputs paint incorrectly. History `36f44de` already
+   retained only RGB; `a83ead8` assigns material alpha from element opacity.
+3. **Confirmed contextual-color capability gap.**
+   `currentColor` survives style inspection, but the background parser receives
+   no element color and uses its unrecognized-value fallback `(0.2,0.2,0.3)`.
+   Both authored colors therefore paint the same fallback. The catalog does not
+   explicitly promise `currentColor`, so this is not evidence of previously
+   complete CSS-color support. It identifies a core-owned resolution gap; a
+   plugin or fixture should not replace the keyword with a sampled literal.
+
+The existing `border-box-basic` fixture explicitly supplies `#7c3aed`; its green
+result cannot verify omission, contextual color or alpha. The new controls show
+the same distinction without modifying that fixture. Framebuffer counts prove
+the observed material color reaches the canvas, but do not establish paired
+screen-raster geometry, clipping, border-radius or compositing conformance.
+Transparent paint may legitimately omit its meshes; the proof does not require
+otherwise or constrain invisible RGB channels.
+
+The machine audit now records these three source findings, the public proof,
+source fingerprints and a root-cause plan. It does **not** automatically assign
+them to every Material border discrepancy. A harness control preserves all four
+unresolved color longhands even when border widths are zero. Per-case attribution
+still needs the actual authored and resolved witnesses; the broader 3,028
+unresolved static signatures are not declared resolved by this proof.
+
+Verification:
+
+- Public proof command:
+  `npm --prefix examples/material-showcase test -- --watch=false --browsers=ChromeHeadless --include=src/app/border-color-input-audit.spec.ts`
+  — both browser runs: **2 pass / 8 retained failures**, Chrome Headless
+  152.0.0.0, DPR 1, Angular 20.3.29, Babylon 8.56.2 WebGL2, AstylarUI 0.2.0.
+  The first compile exposed a test-only literal-type inference error, corrected
+  before browser execution. The existing Zone.js/zoneless warning remains;
+  no surface error diagnostics or resource-disposal failures occurred. The
+  final run permits omitted paint meshes for fully transparent borders and
+  does not constrain their invisible RGB; all ten captured observations remain
+  identical to the first run. Final browser execution: 2.234 seconds.
+- `npm --prefix examples/material-showcase run build -- --output-path=dist/material-border-color-input-audit`
+  — browser/server build and two prerendered routes pass, 108.446 seconds.
+  This isolated output does not overwrite the active full-matrix build.
+- `node --test --test-name-pattern='border proof|source audit has|source fingerprints' tests/material-parity/input-equivalence-audit.spec.mjs`
+  — **3/3 pass**. All three new live source findings and their proof/fingerprint
+  entries are present; scalar border differences remain unwaived.
+- `npm run parity:harness:check` — **323/323 pass**, zero failures, skips or
+  cancellations, 258.371 seconds. The three focused harness tests were repeated
+  after the final plan edit and pass. `git diff --check` passes.
+- Rebuilding the 436 corrected static cases with their fresh supplements yields
+  **88 source findings**, zero undetected sources, and zero validation errors
+  with `requireComplete:false` (diagnostic only). Still unresolved: **3,028**
+  style signatures, including **515 border-color signatures / 3,312 occurrences
+  across 36 families**. These counts are coverage leads, not blanket attribution.
+- Live full-capture integrity at this checkpoint: **436 static / 1,059 interaction
+  records**, all record SHA-256 values valid; all ten frozen harness file hashes
+  match the current files. The full capture is not finished.
+
+Installed evidence hashes (SHA-256, paths relative to
+`examples/material-showcase/node_modules/astylarui/dist/lib/`):
+
+- `app/config/browser-defaults.js`: `5a0f4ced0db345b5a26b3b8606d5198c3462dfcfbd3ed842105d697bfde8530b`
+- `app/services/dom/elements/element-border.service.js`: `6fe2b92397efb7268932195f2100c91c56daf8b473a0c95338a0516033803a15`
+- `app/services/dom/elements/element-creation.service.js`: `68e45ca7b851ddeac40f6f55d3e2f176768b47dd6ad8e0d8eefa5c2a77d28ef3`
+
+No renderer, plugin, reference, showcase fixture or dependency was changed.
+Next: complete capture-backed border attribution, then continue the remaining
+style/structure inventory and final full-matrix validation. Any implementation
+must address contextual color, alpha and state/update paint at their core owners
+before removing compensations; it must not retune fixture colors or border meshes.
+
 ## Paired visible overflow is a proven initial input, not a clipping waiver (2026-09-12)
 
 The broader corrected static audit initially contained 3,174 unresolved shared-ID
