@@ -191,7 +191,12 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
     !entry.reviewEvidence?.referencePath?.attributes?.d || !entry.reviewEvidence?.candidatePaintedStyle ||
     !entry.justification || entry.inputEquivalent !== false) ?? [];
   if (requireComplete && unresolvedIcons.length > 0) errors.push(`${unresolvedIcons.length} control icon substitutions require attribution`);
-  if (requireComplete && report.retainedTypography?.gaps.length > 0) errors.push(`${report.retainedTypography.gaps.length} retained typography mappings or stage fields require review`);
+  const retainedGaps = report.retainedTypography?.gaps ?? [];
+  const invalidHiddenGaps = retainedGaps.filter((gap) => gap.attribution === 'reviewed-display-none-text-stage' &&
+    !isReviewedHiddenRetainedGap(gap, report.elementInventory));
+  if (invalidHiddenGaps.length) errors.push(`${invalidHiddenGaps.length} hidden retained-text stage attributions lack captured ancestry evidence`);
+  const unresolvedRetainedGaps = retainedGaps.filter((gap) => !isReviewedHiddenRetainedGap(gap, report.elementInventory));
+  if (requireComplete && unresolvedRetainedGaps.length > 0) errors.push(`${unresolvedRetainedGaps.length} retained typography mappings or stage fields require review`);
   const reviewedTypographyKinds = { 'reviewed-heading-mask': 'parity-harness-defect',
     'reviewed-table-font-input': 'application-plugin-authoring-defect',
     'reviewed-tree-font-input': 'application-plugin-authoring-defect',
@@ -235,6 +240,7 @@ export function renderMaterialInputAuditMarkdown(report) {
     `Retained typography: ${report.retainedTypography.comparisons.length} directly mapped text-node observations; ${report.retainedTypography.gaps.length} mapping/stage gaps and ${report.retainedTypography.differences.length} unequal retained-property observations. The registry stage is reported separately from declarations and is not proof of current pseudo-state glyph paint.`,
     '',
     `Control-owned text routing: ${report.retainedTypography.controlTextMappings.length} exact label mappings are reviewed in the current core-control-texture stage, not treated as missing registry entries. Their independent input differences and any current-paint gaps remain enforced; this is not wrapper or input equivalence.`,
+    `Hidden retained-text stage: ${report.retainedTypography.gaps.filter((gap) => isReviewedHiddenRetainedGap(gap, report.elementInventory)).length} gap records have complete captured ancestry explaining why core creates no text entry below display:none. The records and raw styles remain; reference display:none and visibility:hidden mechanisms are distinguished, not normalized into equivalent inputs.`,
     '',
     `Control texture typography: ${report.controlTypography.comparisons.length} mapped current-texture observations; ${report.controlTypography.gaps.length} mapping/stage gaps and ${report.controlTypography.differences.length} raw computed-to-paint property differences, including individually reviewed stage-representation differences. Parsed CSS lengths and line-height multipliers are normalized independently of declarations. This does not prove final material effects, placement, visibility or raster parity.`,
     '',
@@ -1042,6 +1048,84 @@ function reviewedFloatingLabelInput(entry, ref, ast, styles, referenceTree, asty
   };
 }
 
+function reviewedHiddenRetainedEvidence(gap, inventory) {
+  if (gap.reason !== 'no authoritative retained core text entry for this authored text node' ||
+      inventory.errors.some((error) => error.case === gap.case)) return;
+  const trees = {}, revisions = {};
+  for (const side of ['reference', 'astylar']) {
+    const matches = inventory.cases.filter((item) => item.case === gap.case && item.side === side);
+    if (matches.length !== 1) return;
+    const tree = inventory.variants[matches[0].variant];
+    if (!tree || tree.side !== side || tree.family !== gap.family) return;
+    trees[side] = tree;
+    revisions[side] = matches[0].resolvedStyleRevision;
+  }
+  const { reference, astylar } = trees;
+  if (astylar.resolvedStyleEvidenceVersion !== 2 || astylar.resolvedStyleSource !== 'core-style-inspection' ||
+      !Number.isInteger(revisions.astylar) || revisions.astylar < 0) return;
+  const astNodes = astylar.nodes.filter((node) => node.authored?.id === gap.element);
+  const templateMappings = [...reviewedHeadingMappings(reference, astylar),
+    ...reviewedTemplateTextMappings(gap.family, reference, astylar)].filter((item) => item.element === gap.element);
+  if (templateMappings.length > 1) return;
+  const refs = reference.nodes.filter((node) => templateMappings.length === 1
+    ? node.key === templateMappings[0].referenceNode : node.attributes?.id === gap.element);
+  if (astNodes.length !== 1 || refs.length !== 1) return;
+  const ast = astNodes[0], ref = refs[0];
+  if (ast.key !== gap.astylarNode || ref.key !== gap.referenceNode || ast.retainedText || ast.paintedControlText ||
+      !ref.ownText?.trim() || ref.ownText.trim() !== ast.authored.textContent?.trim()) return;
+  const chain = (tree, leaf, side) => {
+    const result = [], seen = new Set();
+    let node = leaf;
+    while (node) {
+      if (seen.has(node.key) || tree.nodes.filter((item) => item.key === node.key).length !== 1) return;
+      seen.add(node.key);
+      const indexes = side === 'reference' ? { computed: node.style }
+        : { normal: node.normalStyle, effective: node.interactionStyle };
+      const styles = {};
+      for (const [stage, index] of Object.entries(indexes)) {
+        const pooled = inventory.styles[index];
+        if (pooled?.side !== side || !pooled.value || typeof pooled.value !== 'object' || Array.isArray(pooled.value) ||
+            typeof pooled.value.display !== 'string' || !pooled.value.display.trim() ||
+            (side === 'reference' && typeof pooled.value.visibility !== 'string')) return;
+        styles[stage] = structuredClone(pooled.value);
+      }
+      result.push({ node: node.key, ...styles });
+      if (side === 'reference' && node.key === 'frame' && node.parent === null && node.type === 'main') return result;
+      if (side === 'astylar' && node.authored?.id === 'page' && node.authored.type === 'main' && node.parent === 'root') {
+        const roots = tree.nodes.filter((item) => item.key === 'root');
+        if (roots.length !== 1 || roots[0].parent !== null || !roots[0].authored || Object.keys(roots[0].authored).length ||
+            tree.nodes.filter((item) => item.authored?.id === 'page').length !== 1) return;
+        return result;
+      }
+      const parents = tree.nodes.filter((item) => item.key === node.parent);
+      if (parents.length !== 1) return;
+      node = parents[0];
+    }
+  };
+  const referenceChain = chain(reference, ref, 'reference'), candidateChain = chain(astylar, ast, 'astylar');
+  if (!referenceChain || !candidateChain) return;
+  const none = (value) => typeof value === 'string' && value.trim().toLowerCase() === 'none';
+  const candidateDisplayNoneNodes = candidateChain.filter((item) => none(item.normal.display) && none(item.effective.display)).map((item) => item.node);
+  const referenceDisplayNoneNodes = referenceChain.filter((item) => none(item.computed.display)).map((item) => item.node);
+  // Computed leaf visibility accounts for overrides; a hidden ancestor alone
+  // does not prove that its descendant text is hidden. Opacity is not display.
+  const leafHidden = referenceChain[0].computed.visibility === 'hidden';
+  if (!candidateDisplayNoneNodes.length || (!referenceDisplayNoneNodes.length && !leafHidden)) return;
+  return { source: 'core-style-inspection', revision: revisions.astylar,
+    referenceNode: ref.key, astylarNode: ast.key, text: ref.ownText.trim(),
+    referenceMechanism: referenceDisplayNoneNodes.length ? 'display-none' : 'computed-leaf-visibility-hidden',
+    referenceDisplayNoneNodes, candidateDisplayNoneNodes, referenceChain, candidateChain,
+    coreOwner: 'ElementCreationService child creation skips display:none before allocating text',
+    inputEquivalent: false, currentPseudoStatePaintVerified: false };
+}
+
+function isReviewedHiddenRetainedGap(gap, inventory) {
+  if (gap.attribution !== 'reviewed-display-none-text-stage' || gap.classification !== 'parity-harness-defect' ||
+      gap.inputEquivalent !== false || !gap.justification || !gap.reviewEvidence) return false;
+  const evidence = reviewedHiddenRetainedEvidence(gap, inventory);
+  return !!evidence && JSON.stringify(evidence) === JSON.stringify(gap.reviewEvidence);
+}
+
 export function collectRetainedTypographyEvidence(cases, inventory, controlTypography = collectControlTypographyEvidence(cases, inventory)) {
   const comparisons = [], differences = [], gaps = [], paintMaskDifferences = [], reviewedMappings = [], controlTextMappings = [];
   const mappings = new Map();
@@ -1050,9 +1134,9 @@ export function collectRetainedTypographyEvidence(cases, inventory, controlTypog
     if (!mappings.has(key)) mappings.set(key, []);
     mappings.get(key).push(mapping);
   }
-  const gap = (key, element, reason, evidence = {}) => gaps.push({ case: key, element, reason, ...evidence,
+  const gap = (key, element, reason, evidence = {}) => gaps.push({ case: key, element, reason,
     classification: 'parity-harness-defect', attribution: 'unresolved',
-    recommendedOwner: 'input audit direct text-node mapping and retained typography provenance' });
+    recommendedOwner: 'input audit direct text-node mapping and retained typography provenance', ...evidence });
   for (const entry of cases) {
     const key = caseKey(entry);
     const referenceMappings = mappings.get(JSON.stringify([key, 'reference'])) ?? [];
@@ -1124,7 +1208,13 @@ export function collectRetainedTypographyEvidence(cases, inventory, controlTypog
           { reference: refText, astylar: astText }); continue;
       }
       if (ast.retainedText?.source !== 'core-text-registry') {
-        gap(key, id, 'no authoritative retained core text entry for this authored text node'); continue;
+        const reason = 'no authoritative retained core text entry for this authored text node';
+        const identity = { family: entry.family, referenceNode: ref.key, astylarNode: ast.key };
+        const reviewEvidence = reviewedHiddenRetainedEvidence({ case: key, element: id, reason, ...identity }, inventory);
+        gap(key, id, reason, { ...identity, ...(reviewEvidence ? {
+          attribution: 'reviewed-display-none-text-stage', inputEquivalent: false, reviewEvidence,
+          justification: 'Complete captured ancestry shows candidate display:none in both normal and effective core inputs, so child creation intentionally creates no retained text entry. Reference text is also unpainted according to ancestor display:none or computed leaf visibility:hidden. This explains only registry-stage absence: all raw ancestor styles and the distinct visibility mechanisms are retained, not accepted as equivalent structure, typography, layout or paint.',
+        } : {}) }); continue;
       }
       const styleAt = (index, side) => inventory.styles[index]?.side === side ? inventory.styles[index].value : undefined;
       const raw = { reference: styleAt(ref.style, 'reference'), normal: styleAt(ast.normalStyle, 'astylar'),

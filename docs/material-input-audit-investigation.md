@@ -12,6 +12,40 @@ tests pass). A missing selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Hidden retained-text absence now has provenance-bound attribution (2026-09-12)
+
+The audit keeps the original missing-registry gap record but can attribute it
+as `reviewed-display-none-text-stage` when complete, unique captured ancestry
+proves candidate `display: none` in both normal and effective inputs. Reference
+text must independently be unpainted through ancestor `display: none` or the
+leaf's computed `visibility: hidden`; ancestor visibility alone is insufficient
+because descendants can override it. Opacity, missing styles, incomplete roots,
+ambiguous identities and invalid core provenance cannot supply this explanation.
+
+Each annotated record retains both full style chains, the hiding nodes,
+reference mechanism, exact text mapping and core revision. Validation recomputes
+the evidence against the pooled full-tree inventory, including in partial mode.
+Detached or edited explanations fail; copies of the chain styles prevent an
+annotation edit from mutating the source inventory. This explains stage absence
+only and explicitly keeps `inputEquivalent: false`. Independent declared-input,
+typography, collapse and structural discrepancies are not waived.
+
+All **436 current static checkpoint hashes and filenames** were checked before
+loading their paired tree artifacts. With zero inventory errors, **30 of 90**
+retained-text gap records now carry the explanation: 12 expansion labels use
+reference leaf visibility; 6 each of form-field, input and select labels use
+reference ancestor display. All 90 records remain. The **60 unresolved** records
+are select (36), stepper (12) and tabs (12). The **1,390 comparisons** and
+**3,786 retained-property differences** are unchanged. This is static evidence,
+not completion of the full interaction audit.
+
+Verification: focused audit tests **86/86** and
+`npm run parity:harness:check` **175/175** pass. Tests cover visibility overrides,
+opacity-only hiding, normal/effective disagreement, incomplete/duplicated/cyclic
+ancestry, missing fields, invalid source/revision, different text, detached
+evidence and false equivalence claims. No renderer, fixture, capture runtime,
+reference style or benchmark threshold changed.
+
 ## Expansion collapse and flow substitution traced to fixture history (2026-09-12)
 
 Source finding `fixture-expansion-flow-and-collapse-substitution` records an

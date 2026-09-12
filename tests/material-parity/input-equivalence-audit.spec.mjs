@@ -556,6 +556,117 @@ test('retained typography retains missing property fields as gaps instead of acc
   assert.ok(validateMaterialInputAudit(report).includes('missing retained typography stage report'));
 });
 
+function hiddenRetainedTypographyReport(referenceMechanism = 'display-none') {
+  const raw = retainedTypographyReport();
+  const { reference, astylar } = raw.results[0].inputTrees;
+  reference.styles = [
+    { ...reference.styles[0], display: 'inline', visibility: referenceMechanism === 'leaf-hidden' ? 'hidden' : 'visible' },
+    { display: referenceMechanism === 'display-none' ? 'none' : 'block', visibility: 'visible' },
+  ];
+  reference.nodes.unshift({ key: 'frame', parent: null, type: 'main', attributes: {}, ownText: '', style: 1, rules: [], pseudoElements: [] });
+  const leaf = astylar.nodes[0];
+  leaf.parent = 'root/page';
+  for (const stage of ['resolvedStyle', 'normalResolvedStyle', 'interactionResolvedStyle']) leaf[stage] = { ...leaf[stage], display: 'inline' };
+  delete leaf.retainedText;
+  astylar.nodes.unshift({ key: 'root', parent: null, authored: {} }, {
+    key: 'root/page', parent: 'root', authored: { type: 'main', id: 'page' },
+    resolvedStyle: { display: 'none' }, normalResolvedStyle: { display: 'none' }, interactionResolvedStyle: { display: 'none' },
+  });
+  // Use distinct node keys, just as the real tree does.
+  leaf.key = 'root/page/label';
+  return raw;
+}
+
+test('hidden retained-text attribution preserves complete declaration chains and does not claim input equivalence', () => {
+  for (const mechanism of ['display-none', 'leaf-hidden']) {
+    const raw = hiddenRetainedTypographyReport(mechanism), before = JSON.stringify(raw);
+    const report = buildMaterialInputAudit(raw), [gap] = report.retainedTypography.gaps;
+    assert.equal(report.retainedTypography.gaps.length, 1, 'the original gap record is not deleted');
+    assert.equal(gap.attribution, 'reviewed-display-none-text-stage');
+    assert.equal(gap.inputEquivalent, false);
+    assert.equal(gap.reviewEvidence.inputEquivalent, false);
+    assert.equal(gap.reviewEvidence.referenceChain.length, 2);
+    assert.equal(gap.reviewEvidence.candidateChain.length, 2);
+    assert.deepEqual(gap.reviewEvidence.candidateDisplayNoneNodes, ['root/page']);
+    assert.equal(gap.reviewEvidence.referenceMechanism, mechanism === 'display-none' ? mechanism : 'computed-leaf-visibility-hidden');
+    assert.equal(gap.reviewEvidence.referenceChain[0].computed.fontSize, '24px');
+    assert.equal(gap.reviewEvidence.candidateChain[0].normal.fontSize, undefined);
+    assert.equal(report.summary.inputEquivalent, false);
+    assert.ok(!validateMaterialInputAudit(report).some((error) => /retained typography mappings|hidden retained-text/.test(error)));
+    assert.equal(JSON.stringify(raw), before);
+  }
+});
+
+test('hidden retained-text attribution rejects visible text, visibility overrides, opacity and incomplete current state', () => {
+  const mutations = [
+    (r, a) => { r.styles[1].display = 'block'; },
+    (r, a) => { r.styles[1].display = 'block'; r.styles[1].visibility = 'hidden'; },
+    (r, a) => { r.styles[1].display = 'block'; r.styles[0].opacity = '0'; },
+    (r, a) => { a.nodes[1].normalResolvedStyle.display = 'block'; },
+    (r, a) => { a.nodes[1].interactionResolvedStyle.display = 'block'; },
+    (r, a) => { a.nodes[1].normalResolvedStyle = { visibility: 'hidden', opacity: '0' }; a.nodes[1].interactionResolvedStyle = { ...a.nodes[1].normalResolvedStyle }; },
+    (r, a) => { a.resolvedStyleSource = 'mesh'; },
+    (r, a) => { a.resolvedStyleEvidenceVersion = 1; },
+    (r, a) => { delete a.resolvedStyleRevision; },
+    (r, a) => { a.resolvedStyleRevision = -1; },
+    (r, a) => { delete r.styles[0].display; },
+    (r, a) => { delete r.styles[1].visibility; },
+    (r, a) => { a.nodes[2].authored.textContent = 'Other text'; },
+    (r, a) => { a.nodes[2].retainedText = { source: 'not-core', style: {} }; },
+  ];
+  for (const mutate of mutations) {
+    const raw = hiddenRetainedTypographyReport(), { reference, astylar } = raw.results[0].inputTrees;
+    mutate(reference, astylar);
+    const gaps = buildMaterialInputAudit(raw).retainedTypography.gaps;
+    assert.ok(gaps.length > 0);
+    assert.ok(gaps.every((gap) => gap.attribution === 'unresolved'));
+  }
+});
+
+test('hidden retained-text attribution requires unique complete ancestry to the captured surface roots', () => {
+  const mutations = [
+    (r, a) => { r.nodes.shift(); },
+    (r, a) => { r.nodes.push(structuredClone(r.nodes[0])); },
+    (r, a) => { r.nodes[0].parent = r.nodes[1].key; },
+    (r, a) => { r.nodes[1].parent = 'missing'; },
+    (r, a) => { a.nodes[2].parent = a.nodes[2].key; },
+    (r, a) => { a.nodes.push(structuredClone(a.nodes[1])); },
+    (r, a) => { a.nodes.shift(); },
+    (r, a) => { a.nodes[0].authored = { type: 'div' }; },
+    (r, a) => { a.nodes[1].parent = 'missing'; },
+    (r, a) => { delete a.nodes[2].interactionResolvedStyle; },
+    (r, a) => { a.nodes[2].interactionResolvedStyle = {}; },
+  ];
+  for (const mutate of mutations) {
+    const raw = hiddenRetainedTypographyReport(), { reference, astylar } = raw.results[0].inputTrees;
+    mutate(reference, astylar);
+    const gaps = buildMaterialInputAudit(raw).retainedTypography.gaps;
+    assert.ok(gaps.length > 0);
+    assert.ok(gaps.every((gap) => gap.attribution === 'unresolved'));
+  }
+});
+
+test('hidden retained-text evidence is recomputed during validation and cannot waive a tampered gap', () => {
+  const original = buildMaterialInputAudit(hiddenRetainedTypographyReport());
+  const mutations = [
+    (report, gap) => { gap.inputEquivalent = true; },
+    (report, gap) => { gap.reviewEvidence.candidateChain[0].normal.fontSize = '24px'; },
+    (report, gap) => { gap.reviewEvidence.referenceMechanism = 'equivalent'; },
+    (report, gap) => { gap.reviewEvidence.revision++; },
+    (report, gap) => { gap.referenceNode = 'unrelated'; },
+    (report, gap) => { gap.family = 'expansion'; },
+    (report, gap) => { report.elementInventory.cases.push(structuredClone(report.elementInventory.cases[0])); },
+    (report, gap) => { const tree = report.elementInventory.variants.find((t) => t.side === 'astylar');
+      report.elementInventory.styles[tree.nodes[1].interactionStyle].value.display = 'block'; },
+  ];
+  for (const [index, mutate] of mutations.entries()) {
+    const report = structuredClone(original), gap = report.retainedTypography.gaps[0];
+    mutate(report, gap);
+    assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some((error) => error.includes('hidden retained-text stage attributions')), `mutation ${index}`);
+    assert.ok(validateMaterialInputAudit(report).some((error) => error.includes('retained typography mappings')));
+  }
+});
+
 function templateTypographyReport(family) {
   const raw = retainedTypographyReport();
   const entry = raw.results[0];
