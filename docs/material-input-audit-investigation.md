@@ -17,6 +17,55 @@ selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Button-toggle native defaults are lost with the button wrapper (2026-09-12)
+
+A read-only Chrome DevTools Protocol probe now identifies the previously unknown
+source of the reference label's `text-align: center`. In both original light
+desktop buttons, the Material host computes `start`, the nested native `button`
+computes `center`, and its inline-block label span inherits `center`. The matched
+alignment declarations have **user-agent** origin, not author origin. Chrome
+reports both its generic control `text-align: start` rule and its button-default
+`text-align: center` rule. No matched author alignment rule is present.
+
+The original candidate input instead contains two `div.button-toggle-option`
+parents with `display: flex; justify-content: center` and ordinary child spans.
+The spans omit alignment from normal/effective styles and retain core `left`.
+The div/label composition is traced to `c47d589`, lines 976–978 of
+`examples/material-showcase/src/app/astylar.component.ts`. Changing native
+button/inline-block layout into flex centering changes the input mechanism,
+even if its current labels appear centered. This is application authoring
+divergence, not evidence that equivalent native-button inputs fail in core.
+
+The probe also runs **eight isolated browser controls** in separate blank
+documents, leaving both original showcase surfaces unchanged. With parent
+alignment `start` and `right`, a native button and its label compute `center`.
+An ordinary div, a div with `role="button"`, and a native button explicitly
+declaring `text-align: inherit` instead follow the respective parent alignment.
+These controls distinguish the tag default from inheritance, ARIA role and
+explicit author overrides. They do not establish core default handling or
+glyph/raster parity; those require equivalent Astylar button inputs.
+
+Reproduction (use a new output directory for another capture):
+
+```powershell
+node scripts/audit-material-button-defaults.mjs --base-url=http://127.0.0.1:4431 --checkpoint=artifacts/material-parity/context-complete-audit/checkpoint --output=artifacts/material-parity/button-default-context-audit
+```
+
+The command exits zero: two original reference buttons, two candidate labels,
+and all eight controls pass their evidence assertions in Chrome
+`152.0.7977.76`, light profile, 1440x900 CSS pixels, DPR 1. The complete input
+trees and runtime asset hashes are preserved alongside the report. Independent
+`validateSupplementalCapture` returns `checkpoint-bound` with zero errors.
+The report SHA-256 is
+`b8d0465158358232d35643f949e8b32c81e7604484d828fe49ec0b07fdfa823e`.
+
+Next: bind this native-default/structure evidence to matching observations in
+the full audit, preserving every raw center/left difference. Do not grant blanket
+equivalence to center/left or infer UA rules for unrelated elements. Restore the
+original native-button wrapper and CSS layout intent in the later implementation
+pass, then test any remaining discrepancy in core defaults and inline layout.
+No reference, fixture, renderer, live capture module or visual gate was changed.
+
 ## Stepper numeric icons replace the original positioning mechanism (2026-09-12)
 
 All **24 numeric-icon alignment differences in the 12 fresh static stepper
