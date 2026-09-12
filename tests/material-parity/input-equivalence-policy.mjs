@@ -113,6 +113,36 @@ export const reviewedValueNormalizations = Object.freeze([
 
 export const sourceAuditDefinitions = Object.freeze([
   Object.freeze({
+    id: 'fixture-outlined-button-literal-replaces-outline-token',
+    introducedBy: '2f44011 authors the outlined button border as #79747e; the literal persists',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`selector: '\.outlined'[^\n]*borderColor: '#79747e'`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase Material outlined-button color-token input translation',
+    justification: 'The unchanged reference explicitly authors border-color:var(--mat-button-outlined-outline-color, var(--mat-sys-outline)). In all four captured profiles the component override is absent, the fallback remains light-dark(#7b757f, #958e99), and the browser computes RGB 123,117,127. Candidate .outlined instead authors #79747e (RGB 121,116,126), retained by normal/effective/interaction inspection. This is a different authored color input, not a renderer color-parser failure or acceptable near-color alias. The border shorthand is preserved in captured cssText even though variable-containing expanded longhands serialize empty. Restore the equivalent theme/token path rather than sample the currently used reference color. No active/disabled border paint or whole-component equivalence claim is made.',
+    focusedProof: 'scripts/audit-material-outline-inputs.mjs: unchanged four-profile paired capture; browser outline-token controls in input-equivalence-audit.spec.mjs',
+  }),
+  Object.freeze({
+    id: 'fixture-toggle-group-literal-replaces-divider-token',
+    introducedBy: 'c47d589 adds the toggle group border with literal #79747e',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`selector: '#button-toggle-primary'[^\n]*borderColor: '#79747e'`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase Material toggle-group border token input translation',
+    justification: 'The reference group authors a solid 1px border using var(--mat-button-toggle-divider-color, var(--mat-sys-outline)), not the candidate literal #79747e. The checkpoint-bound four-profile capture observes the same live token fallback and RGB 123,117,127 on every reference border, versus candidate RGB 121,116,126 at all three core style stages. An inactive forced-colors rule shares the reference selector but declares only outline:0; it is recorded separately and cannot be mistaken for the active border rule. This identifies unequal color authoring, independently of the group sizing, clipping and native-button structure findings. It does not establish an intentional historical workaround or a core equal-input paint defect.',
+    focusedProof: 'scripts/audit-material-outline-inputs.mjs: toggle-group border token and complete paired input trees',
+  }),
+  Object.freeze({
+    id: 'fixture-toggle-divider-literal-replaces-divider-token',
+    introducedBy: 'c47d589 adds the second toggle border with literal #79747e',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`selector: '#button-toggle-two'[^\n]*borderColor: '#79747e'`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase Material toggle divider side-specific color-token input translation',
+    justification: 'The reference second toggle authors only border-left:solid 1px var(--mat-button-toggle-divider-color, var(--mat-sys-outline)); the candidate sets borderWidth:0 0 0 1px with a four-side literal color #79747e. The four-profile capture proves the painted-side input differs: browser left-border RGB 123,117,127 versus candidate RGB 121,116,126 at every inspected stage. Other reference sides retain their own initial color/style semantics and are not covered by this token attribution. Restore the side-specific authored border intent, not a sampled global color, custom border mesh or rounded overlay. Shape, clipping and actual final border raster remain separate.',
+    focusedProof: 'scripts/audit-material-outline-inputs.mjs: left-divider-only token witness; no other-side equivalence inference',
+  }),
+  Object.freeze({
     id: 'fixture-button-border-reset-reduced-to-width',
     introducedBy: '2f44011 authors only zero border width in the initial material-button rule; the omission persists',
     file: 'examples/material-showcase/src/app/astylar.component.ts',

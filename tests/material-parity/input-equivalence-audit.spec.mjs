@@ -21,6 +21,46 @@ const browserDefaults = {
   fontStyle: 'normal', transform: 'none', pointerEvents: 'auto',
 };
 
+test('browser outline token shorthands retain authored variables when expanded color fields are empty', async () => {
+  const { chromium } = await import('playwright-core');
+  const { captureBrowserInputTree } = await import('./input-tree-evidence.mjs');
+  const browser = await chromium.launch({ channel: 'chrome', headless: true });
+  try {
+    const page = await browser.newPage();
+    for (const scheme of ['light', 'dark']) for (const property of ['border-color', 'border', 'border-left']) {
+      for (const mode of ['fallback', 'override', 'literal']) {
+        const color = mode === 'literal' ? '#79747e' : 'var(--component-outline, var(--system-outline))';
+        const expression = property === 'border-color' ? color : `solid 1px ${color}`;
+        await page.setContent(`<style>
+          html { color-scheme:${scheme}; --system-outline:light-dark(#123456, #c04a20); ${mode === 'override' ? '--component-outline:#abcdef;' : ''} }
+          #target { border:1px solid; ${property}:${expression}; }
+        </style><app-reference><main class="frame"><div id="target"></div></main></app-reference>`);
+        const actual = await page.locator('#target').evaluate((node, property) => {
+          const rule = [...document.styleSheets[0].cssRules].find(rule => rule.selectorText === '#target');
+          return { color: getComputedStyle(node).borderLeftColor, serialized: rule.style.cssText,
+            shorthand: rule.style.getPropertyValue(property), expanded: rule.style.borderLeftColor };
+        }, property);
+        const expected = mode === 'literal' ? 'rgb(121, 116, 126)' : mode === 'override' ? 'rgb(171, 205, 239)'
+          : scheme === 'light' ? 'rgb(18, 52, 86)' : 'rgb(192, 74, 32)';
+        assert.equal(actual.color, expected, `${scheme}/${property}/${mode}`);
+        if (mode !== 'literal') {
+          assert.equal(actual.shorthand, expression);
+          assert.equal(actual.expanded, '', 'A pending shorthand is not an omitted color declaration.');
+          assert.ok(actual.serialized.includes(expression));
+        }
+        const tree = await page.evaluate(captureBrowserInputTree, { styleProperties: ['borderLeftColor'] });
+        assert.deepEqual(tree.errors, []);
+        const node = tree.nodes.find(node => node.attributes?.id === 'target');
+        assert.equal(tree.styles[node.style].borderLeftColor, expected);
+        const rules = node.rules.map(index => tree.rules[index]);
+        assert.equal(rules.length, 1);
+        assert.equal(rules[0].cssText, actual.serialized);
+        assert.equal(rules[0].declarations['border-left-color'].value, actual.expanded);
+      }
+    }
+  } finally { await browser.close(); }
+});
+
 test('browser border reset changes color and style while width-only retains them', async () => {
   const { chromium } = await import('playwright-core');
   const browser = await chromium.launch({ channel: 'chrome', headless: true });
@@ -744,7 +784,15 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   const report = parityReport({}, {});
   const audit = buildMaterialInputAudit(report);
   assert.equal(audit.coverage.visualParityGreen, true);
-  assert.equal(audit.sourceFingerprints.length, 46);
+  assert.equal(audit.sourceFingerprints.length, 47);
+  assert.equal(audit.sourceFingerprints.filter(({ file }) => file === 'scripts/audit-material-outline-inputs.mjs').length, 1);
+  for (const id of ['fixture-outlined-button-literal-replaces-outline-token',
+    'fixture-toggle-group-literal-replaces-divider-token', 'fixture-toggle-divider-literal-replaces-divider-token']) {
+    const findings = audit.sourceFindings.filter(finding => finding.id === id);
+    assert.equal(findings.length, 1);
+    assert.equal(findings[0].detected, true);
+    assert.equal(findings[0].classification, 'application-plugin-authoring-defect');
+  }
   assert.equal(audit.sourceFingerprints.filter(({ file }) => file === 'src/app/services/dom/dom-ancestry.service.ts').length, 1);
   const cascadeProof = 'examples/material-showcase/src/app/label-cascade-input-audit.spec.ts';
   assert.equal(audit.sourceFingerprints.filter(({ file }) => file === cascadeProof).length, 1);

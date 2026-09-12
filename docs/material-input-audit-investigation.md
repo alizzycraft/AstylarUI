@@ -22,6 +22,101 @@ selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Explicit Material outline tokens are replaced by a palette literal (2026-09-12)
+
+Read-only inspection separates three explicit authoring mismatches from the
+previously proved core border defaults, currentColor and alpha defects:
+
+| Target | Original reference input | Candidate input | First source evidence |
+| --- | --- | --- | --- |
+| `button-secondary` | `border-color:var(--mat-button-outlined-outline-color, var(--mat-sys-outline))` | `.outlined` supplies `borderColor:'#79747e'` | `2f44011` |
+| `button-toggle-primary` | `border:solid 1px var(--mat-button-toggle-divider-color, var(--mat-sys-outline))` | Group rule supplies a solid 1px border with `#79747e` | `c47d589` |
+| `button-toggle-two` | `border-left:solid 1px var(--mat-button-toggle-divider-color, var(--mat-sys-outline))` | Second option supplies four-side `#79747e` with widths `0 0 0 1px` | `c47d589` |
+
+`git show` confirms these declarations at the named commits; it does not prove
+the author's intention was to compensate for a renderer defect. The findings
+are classified as `application-plugin-authoring-defect`, with separate source
+IDs for the three rules. The second option's top/right/bottom initial colors
+are **not** attributed to its left-divider token.
+
+The new `scripts/audit-material-outline-inputs.mjs` opens the unchanged,
+checkpoint-bound browser application at 1440×900 CSS pixels, DPR 1, for light,
+dark, contrast and custom profiles. It captures eight paired pages / twelve
+target observations, their active CSSOM rule and serialized shorthand,
+computed component/fallback tokens and color scheme, exact computed border
+color/width/style, complete input trees, current core normal/effective/
+interaction styles, runtime assets and source/checkpoint digests. No reference,
+fixture, plugin, production renderer or live full-matrix collector is changed.
+
+All twelve observations show:
+
+- The component-specific outline/divider token is absent. Its actual inherited
+  fallback is `light-dark(#7b757f, #958e99)`, not a guessed literal.
+- The browser reports `color-scheme:normal`, no dark preference, and computes
+  RGB **123,117,127** for the relevant 1px solid border in **every** named
+  profile, including the profile called dark. The reference theme supplies
+  selected custom properties but does not make its name a color-scheme input.
+  This audit does not change that reference behavior.
+- Candidate author rules and all three inspected core style stages retain
+  `#79747e`, RGB **121,116,126**. The unequal inputs already explain the color
+  discrepancy before paint; this is not evidence of a core parsing defect.
+- The group selector also occurs inside an inactive forced-colors rule with
+  `outline:0px`. That rule is preserved with its condition and activity rather
+  than confused with the active border declaration.
+
+The successful report is
+`artifacts/material-parity/outline-input-current-ancestry-audit-v3/latest-report.json`,
+SHA-256 `2ae7edc1d6107be6526dcd9c9ee2296d5c5ebc210d329b4c42a6ffdcf7cc4237`.
+Independent `validateSupplementalCapture` replay reports `checkpoint-bound`
+with zero errors. All sixteen tree digests and served runtime assets match
+the selected run. An additional replay matches all twelve reported observations
+against those trees, including side-specific border values, candidate rules
+and all three style stages. Runtime errors are empty. Earlier diagnostic
+attempts remain separate: the first correctly rejected an assumed hex token;
+the second rejected an assumed unique selector before accounting for the
+inactive forced-colors rule. Neither incomplete attempt is acceptance evidence.
+
+The CSSOM capture has an important interpretation boundary: a shorthand
+containing `var()` can retain its authored expression in `cssText` while its
+expanded color fields serialize as empty strings. The existing collector
+already preserves both. Empty expanded values must **not** be called omitted
+author inputs. Eighteen blank-document browser controls now exercise all three
+shorthand forms with light/dark schemes and fallback/override/literal variants.
+Computed borders follow the inherited token or override; the literal remains
+unchanged. The full-tree recorder preserves the exact serialized rule and
+computed value. This is browser input/capture evidence, not a new JS cascade,
+core variable-support claim or final-raster proof.
+
+The implementation plan restores the reference token and side-specific border
+intent through the shared CSS/theme path. It must not sample RGB 123,117,127
+into the fixture, change the reference theme to fit its profile name, replace
+the border with plugin paint, or consider near colors equivalent. Actual border
+raster, shape, disabled/hover/held states and the full per-case classification
+remain separate work. This increment adds source findings and focused evidence;
+it does not prematurely reclassify the full matrix from twelve observations.
+
+Verification:
+
+- `node scripts/audit-material-outline-inputs.mjs --base-url=http://127.0.0.1:4431 --checkpoint=artifacts/material-parity/current-ancestry-audit/checkpoint --output=artifacts/material-parity/outline-input-current-ancestry-audit-v3`
+  — passes all twelve paired observations on Chrome 152.0.7977.76, with the
+  corrected running consumer unchanged.
+- `node --test --test-name-pattern='browser outline token|source audit has|source fingerprints' tests/material-parity/input-equivalence-audit.spec.mjs`
+  — **3/3 pass**, 4.251 seconds, including all eighteen browser controls and
+  exact presence/classification checks for the three new source findings.
+- Diagnostic replay of all **436** corrected static cases with the selected
+  current-run normal-line-box and behavior/overlay/slider supplements finds
+  **92** source findings, none undetected, and zero diagnostic validation
+  errors. The **2,664** unresolved per-case signatures remain explicit; this
+  source-evidence increment does not count them as automatically resolved.
+- `npm run parity:harness:check` — **332/332 pass**, zero failures, skips or
+  cancellations, 267.082 seconds. The full scoped diff and new producer were
+  reviewed; `git diff --check` passes. This verifies audit infrastructure, not
+  completion of the Material rendering matrix or the input-equivalence audit.
+- Full-capture integrity at **436 static / 1,567 interaction** checkpoint
+  records: all result digests validate and all ten launch-fingerprinted live
+  harness modules are unchanged. The still-running capture is not represented
+  as complete acceptance.
+
 ## Material button border resets are not width-only declarations (2026-09-12)
 
 The remaining border-color cases were partitioned by actual node type and
