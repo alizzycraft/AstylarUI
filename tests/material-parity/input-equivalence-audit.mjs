@@ -336,6 +336,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
     'reviewed-tree-label-line-box-substitution': 'application-plugin-authoring-defect',
     'reviewed-stepper-number-wrapper-substitution': 'application-plugin-authoring-defect',
     'reviewed-toggle-button-wrapper-substitution': 'application-plugin-authoring-defect',
+    'reviewed-stepper-text-input': 'application-plugin-authoring-defect',
     'reviewed-control-label-token-input': 'application-plugin-authoring-defect',
     'reviewed-select-value-token-input': 'application-plugin-authoring-defect',
     'reviewed-calendar-weekday-typography-input': 'application-plugin-authoring-defect',
@@ -351,6 +352,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
   validateTreeLabelLineBoxes(report, errors);
   validateStepperNumberAlignment(report, errors);
   validateToggleButtonAlignment(report, errors);
+  validateStepperTextInputs(report, errors);
   if (requireComplete && report.supplementalBehavior.missing.length > 0) errors.push(`${report.supplementalBehavior.missing.length} supplemental behavior cases are missing`);
   if (report.supplementalBehavior.errors.length > 0) errors.push(`${report.supplementalBehavior.errors.length} supplemental behavior collection errors`);
   if (requireComplete && report.supplementalOverlays.missing.length > 0) errors.push(`${report.supplementalOverlays.missing.length} supplemental overlay cases are missing`);
@@ -411,6 +413,7 @@ export function renderMaterialInputAuditMarkdown(report) {
     '',
     `Stepper number positioning: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-stepper-number-wrapper-substitution').length} records preserve the reference start-aligned numeral inside a separate percentage-positioned/transformed wrapper versus the candidate fixed centered span. This is unequal authored structure and alignment, not equivalent start/center values or proof of a core text-alignment defect.`,
     `Button-toggle alignment: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-toggle-button-wrapper-substitution').length} records retain native-button/inline-block center versus substituted flex-div/span left. Exact structure and complete captured ancestry establish unequal inputs, not equivalent alignment or a core default-style failure.`,
+    `Stepper typography: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-stepper-text-input').length} records retain fixed 14px numeral substitution or omitted Material label-color inheritance. Raw computed, normal/effective and retained inputs stay distinct; no core scale/color or current raster claim follows from these unequal inputs.`,
     `Calendar close control: ${report.controlTypography.gaps.filter(gap => isReviewedCalendarCloseGap(gap, report.elementInventory)).length} preserved gap records identify a reference close-button/label path omitted from the candidate popup. The retained stage preserves the same omission separately from remaining anonymous labels. These are unequal authored controls, not invented paint entries, harmless hidden text or equivalent Escape/outside dismissal. Computed clipping and focus-to-reveal behavior remain unverified by these structural captures.`,
     `Calendar weekday headers: ${report.retainedTypography.reviewedMappings.filter(m => m.kind === 'reviewed-calendar-weekday-text').length} abbreviated labels have exact ordered-header/date-context correspondence. Their separate full-name omissions remain explicit gap records, and replacing column headers with spans is classified as unequal authoring. Font/ink substitutions, unresolved tracking, original divider structure and unknown clipping remain independent; no glyph raster is inferred from retained text.`,
     '',
@@ -1676,6 +1679,141 @@ function reviewedTreeLabelLineBox(entry, mapping, ref, ast, styles, referenceTre
       referenceComputed: styles.reference.lineHeight, candidateRetained: styles.retained.lineHeight } };
 }
 
+function reviewedStepperTextInput(entry, mapping, property, ref, ast, styles, referenceTree, astylarTree, inventory) {
+  const badge = property === 'fontSize' && /^step-(details|review)-badge$/.test(mapping?.element ?? '');
+  const label = property === 'color' && /^step-(details|review)-text$/.test(ast.authored?.id ?? '');
+  if (entry.family !== 'stepper' || (!badge && !label) ||
+      ast.retainedText?.source !== 'core-text-registry' || ast.authored?.style !== undefined) return;
+  let reviewedMapping;
+  if (badge) {
+    const mappings = reviewedTemplateTextMappings('stepper', referenceTree, astylarTree).filter(m => m.element === mapping.element);
+    if (mapping?.kind !== 'reviewed-showcase-template-text' || mappings.length !== 1 || JSON.stringify(mappings[0]) !== JSON.stringify(mapping)) return;
+    reviewedMapping = mappings[0];
+  } else {
+    const id = ast.authored.id, details = id === 'step-details-text', text = details ? 'Details' : 'Review';
+    const wrapper = referenceTree.nodes.find(n => n.key === ref.parent), owner = referenceTree.nodes.find(n => n.key === wrapper?.parent);
+    const header = referenceTree.nodes.find(n => n.key === owner?.parent), parent = astylarTree.nodes.find(n => n.key === ast.parent);
+    if (JSON.stringify(mapping ?? { kind: 'shared-id' }) !== JSON.stringify({ kind: 'shared-id' }) ||
+        ref.attributes?.id !== id || ref.type !== 'span' || ast.authored.type !== 'span' || ref.ownText !== text || ast.authored.textContent !== text ||
+        referenceTree.nodes.filter(n => n.attributes?.id === id).length !== 1 || astylarTree.nodes.filter(n => n.authored?.id === id).length !== 1 ||
+        wrapper?.type !== 'div' || !String(wrapper.attributes?.class ?? '').split(/\s+/).includes('mat-step-text-label') ||
+        header?.type !== 'mat-step-header' || !new RegExp(`^cdk-stepper-\\d+-label-${details ? 0 : 1}$`).test(header.attributes?.id ?? '') ||
+        referenceTree.nodes.filter(n => n.key === header.key || n.attributes?.id === header.attributes.id).length !== 1 ||
+        parent?.authored.type !== 'div' || parent.authored.id !== (details ? 'step-details' : 'step-review')) return;
+    reviewedMapping = { kind: 'shared-id', element: id, referenceNode: ref.key, astylarNode: ast.key,
+      referenceTextWrapper: wrapper.key, referenceHeader: header.key, candidateParent: parent.key };
+  }
+  if (referenceTree.nodes.some(n => n.parent === ref.key) || astylarTree.nodes.some(n => n.parent === ast.key)) return;
+  const cssProperty = badge ? 'font-size' : 'color', referenceChain = [], seen = new Set();
+  let node = ref;
+  while (node) {
+    if (seen.has(node.key) || referenceTree.nodes.filter(n => n.key === node.key).length !== 1) return;
+    seen.add(node.key);
+    const pooled = inventory.styles[node.style];
+    if (pooled?.side !== 'reference' || canonicalStyle(pooled.value)[property] !== styles.reference[property] ||
+        node.inline?.[cssProperty] || node.inline?.all || (badge && node.inline?.font) ||
+        new RegExp(`(?:^|;)\\s*(?:${cssProperty}|all${badge ? '|font' : ''})\\s*:`, 'i').test(node.attributes?.style ?? '')) return;
+    const rules = node.rules.map(i => inventory.rules[i]);
+    if (rules.some(r => r?.side !== 'reference')) return;
+    const propertyRules = rules.map(r => r.value).filter(r => r.active === true &&
+      (r.declarations?.[cssProperty] || r.declarations?.all || (badge && r.declarations?.font)));
+    if (propertyRules.some(r => r.declarations.all || (badge && r.declarations.font))) return;
+    referenceChain.push({ node: node.key, parent: node.parent, type: node.type,
+      computed: styles.reference[property], propertyRules });
+    if (badge ? node.key === 'frame' : String(node.attributes?.class ?? '').split(/\s+/).includes('mat-step-label')) break;
+    if (propertyRules.some(r => r.declarations[cssProperty]?.value !== 'inherit')) return;
+    const parents = referenceTree.nodes.filter(n => n.key === node.parent);
+    if (parents.length !== 1) return;
+    node = parents[0];
+  }
+  const ownerRules = referenceChain.at(-1)?.propertyRules ?? [], candidateRules = astylarTree.rules.map(i => inventory.rules[i]);
+  if (candidateRules.some(r => r?.side !== 'astylar')) return;
+  let evidence;
+  if (badge) {
+    if (node?.key !== 'frame' || node.parent !== null || node.type !== 'main' ||
+        !String(node.attributes?.class ?? '').split(/\s+/).includes('frame') ||
+        !/^\d+(?:\.\d+)?px$/.test(styles.reference.fontSize ?? '') ||
+        ['normal', 'effective', 'retained'].some(s => styles[s].fontSize !== '14px') ||
+        ['normal', 'effective'].some(s => styles[s].font !== undefined || styles[s].all !== undefined) ||
+        ownerRules.length !== 1 || !/^\.frame\[_ngcontent-[\w-]+\]$/.test(ownerRules[0].selector ?? '') ||
+        ownerRules[0].declarations['font-size']?.value !== 'calc(16px * var(--scale))' ||
+        ownerRules[0].declarations['font-size'].important !== false ||
+        !Array.isArray(ownerRules[0].conditions) || ownerRules[0].conditions.length) return;
+    const rules = candidateRules.map(r => r.value).filter(r => r.selector?.includes('.step-badge') && r.fontSize !== undefined);
+    if (rules.length !== 1 || rules[0].selector !== '.step-badge' || rules[0].fontSize !== '14px' ||
+        rules[0].font !== undefined || rules[0].all !== undefined || Object.keys(rules[0]).some(k => k.startsWith('media'))) return;
+    evidence = { candidateRule: rules[0], candidateNormal: styles.normal, candidateEffective: styles.effective,
+      referenceScale: node.inline?.['--scale'], sourceFinding: 'fixture-stepper-number-font-substitution' };
+  } else {
+    const classes = String(node?.attributes?.class ?? '').split(/\s+/);
+    const tokens = { '.mat-step-label': 'var(--mat-stepper-header-label-text-color, var(--mat-sys-on-surface-variant))',
+      '.mat-step-label.mat-step-label-active': 'var(--mat-stepper-header-selected-state-label-text-color, var(--mat-sys-on-surface-variant))' };
+    if (referenceChain.length !== 3 || node?.type !== 'div' || !classes.includes('mat-step-label-active') || ownerRules.length !== 2 ||
+        new Set(ownerRules.map(r => r.selector)).size !== 2 || ownerRules.some(r =>
+          !tokens[r.selector] || r.declarations.color?.value !== tokens[r.selector] || r.declarations.color.important !== false ||
+          !Array.isArray(r.conditions) || r.conditions.length)) return;
+    const candidateChain = [], visited = new Set();
+    let current = ast;
+    while (current) {
+      if (visited.has(current.key) || astylarTree.nodes.filter(n => n.key === current.key).length !== 1 || current.authored?.style !== undefined) return;
+      visited.add(current.key);
+      const normal = inventory.styles[current.normalStyle], effective = inventory.styles[current.interactionStyle];
+      if (normal?.side !== 'astylar' || effective?.side !== 'astylar' ||
+          normal.value.all !== undefined || effective.value.all !== undefined) return;
+      candidateChain.push({ node: current.key, normal: normal.value, effective: effective.value });
+      if (current.authored?.id === 'page') break;
+      if (normal.value.color !== undefined || effective.value.color !== undefined) return;
+      const parents = astylarTree.nodes.filter(n => n.key === current.parent);
+      if (parents.length !== 1) return;
+      current = parents[0];
+    }
+    if (current?.authored?.id !== 'page' || current.authored.type !== 'main' || current.parent !== 'root' ||
+        astylarTree.nodes.filter(n => n.authored?.id === 'page').length !== 1 ||
+        ['normal', 'effective'].some(s => canonicalStyle(candidateChain.at(-1)[s]).color !== styles.retained.color)) return;
+    const pageRules = candidateRules.map(r => r.value).filter(r => r.selector === '#page' && r.color !== undefined);
+    if (pageRules.length !== 1 || canonicalStyle(pageRules[0]).color !== styles.retained.color ||
+        pageRules[0].all !== undefined || Object.keys(pageRules[0]).some(k => k.startsWith('media'))) return;
+    evidence = { candidateChain, candidatePageRule: pageRules[0], sourceFinding: 'fixture-stepper-label-color-omitted' };
+  }
+  return { attribution: 'reviewed-stepper-text-input', classification: 'application-plugin-authoring-defect',
+    inputEquivalent: false, currentPseudoStatePaintVerified: false,
+    recommendedOwner: 'showcase stepper typography and token inheritance',
+    justification: badge
+      ? 'The reference numeral inherits its frame font size through the complete captured path; the frame authors calc(16px * var(--scale)). Candidate step-badge explicitly declares and retains 14px. This is a fixed-size input substitution, not a core font-scaling or raster defect. Preserve the original inherited font together with its original icon wrapper; do not calibrate the number to its circle.'
+      : 'The reference label inherits the captured active Material on-surface-variant color token through its inner wrappers. The candidate omits color through its full normal/effective path until the page and retains that page color. These are unequal token/inheritance inputs, not a core color conversion failure. Restore the reference component token and wrappers without retuning theme colors or changing reference truth. Actual state paint remains independently unverified by retained text.',
+    reviewEvidence: { property, mapping: reviewedMapping, referenceChain, ...evidence } };
+}
+
+function validateStepperTextInputs(report, errors) {
+  const expected = [];
+  for (const comparison of report.retainedTypography?.comparisons ?? []) {
+    if (comparison.family !== 'stepper') continue;
+    const refs = report.elementInventory.cases.filter(c => c.case === comparison.case && c.side === 'reference');
+    const asts = report.elementInventory.cases.filter(c => c.case === comparison.case && c.side === 'astylar');
+    if (refs.length !== 1 || asts.length !== 1) continue;
+    const refTree = report.elementInventory.variants[refs[0].variant], astTree = report.elementInventory.variants[asts[0].variant];
+    const ref = refTree.nodes.find(n => n.key === comparison.referenceNode), ast = astTree.nodes.find(n => n.key === comparison.astylarNode);
+    if (!ref || !ast) continue;
+    const indices = { reference: ref.style, normal: ast.normalStyle, effective: ast.interactionStyle, retained: ast.retainedText?.style };
+    const pooled = Object.fromEntries(Object.entries(indices).map(([k, i]) => [k, report.elementInventory.styles[i]]));
+    if (Object.entries(pooled).some(([k, p]) => p?.side !== (k === 'reference' ? 'reference' : 'astylar') || !p.value)) continue;
+    const styles = Object.fromEntries(Object.entries(pooled).map(([k, p]) => [k, canonicalStyle(p.value)]));
+    for (const property of ['fontSize', 'color']) {
+      if (styles.reference[property] === styles.retained[property]) continue;
+      const review = reviewedStepperTextInput(comparison, comparison.mapping, property, ref, ast, styles, refTree, astTree, report.elementInventory);
+      if (review) expected.push({ comparison, property, review, values: Object.fromEntries(Object.entries(styles).map(([k, s]) => [k, s[property]])) });
+    }
+  }
+  const claimed = report.retainedTypography?.differences.filter(d => d.attribution === 'reviewed-stepper-text-input') ?? [];
+  if (expected.length !== claimed.length || expected.some(({ comparison, property, review, values }) => {
+    const matches = claimed.filter(d => d.case === comparison.case && d.element === comparison.element && d.property === property &&
+      d.referenceNode === comparison.referenceNode && d.astylarNode === comparison.astylarNode);
+    return matches.length !== 1 || JSON.stringify(matches[0].values) !== JSON.stringify(values) ||
+      JSON.stringify(comparison.properties[property]) !== JSON.stringify(values) ||
+      Object.entries(review).some(([k, v]) => JSON.stringify(matches[0][k]) !== JSON.stringify(v));
+  })) errors.push('stepper typography attributions do not replay from inherited reference and substituted candidate inputs');
+}
+
 function reviewedToggleButtonAlignment(entry, mapping, ref, ast, styles, referenceTree, astylarTree, inventory) {
   if (entry.family !== 'button-toggle' || mapping?.kind !== 'reviewed-showcase-template-text' ||
       !/^button-toggle-(one|two)-label$/.test(mapping.element) || styles.reference.textAlign !== 'center' ||
@@ -2418,6 +2556,7 @@ export function collectRetainedTypographyEvidence(cases, inventory, controlTypog
             ...(property === 'lineHeight' ? reviewedTreeLabelLineBox(entry, textMappingById.get(id), ref, ast, styles, referenceTree, astylarTree, inventory) ?? {} : {}),
             ...(property === 'textAlign' ? reviewedStepperNumberAlignment(entry, textMappingById.get(id), ref, ast, styles, referenceTree, astylarTree, inventory) ?? {} : {}),
             ...(property === 'textAlign' ? reviewedToggleButtonAlignment(entry, textMappingById.get(id), ref, ast, styles, referenceTree, astylarTree, inventory) ?? {} : {}),
+            ...(reviewedStepperTextInput(entry, textMappingById.get(id), property, ref, ast, styles, referenceTree, astylarTree, inventory) ?? {}),
             ...(property === 'fontSize' && floatingLabel ? floatingLabel : {}),
             ...(property === 'letterSpacing' ? reviewedFieldLabelTrackingInput(entry, ref, ast, styles, referenceTree, astylarTree, inventory) ?? {} : {}),
             ...(controlLabelToken ?? {}),
@@ -3930,6 +4069,7 @@ function implementationPlan() {
     { priority: 5.24, rootCause: 'Tree direct flex text is replaced by a fixed-height label wrapper', action: 'Restore original direct text ownership and normal line-height together with the reference component font tokens. The explicit 20px height/line-height wrapper introduced in 7159b1d is not equivalent to the original anonymous flex text item. Reduce any remaining discrepancy through equal-input anonymous flex-item sizing, natural line metrics and centering tests; do not preserve or recalibrate a fixed wrapper to match a screenshot. Keep the separate font-stack, font-size and core normal-line-box findings visible.' },
     { priority: 5.25, rootCause: 'Stepper numeric icon positioning is replaced by centered text in a fixed span', action: 'Restore the original numeric span, separate icon-content wrapper, top/left 50% and translate(-50%, -50%) inputs. The current step-badge textAlign:center substitution does not exercise those semantics. Address the independently proven core percentage-transform defect first, then verify the original wrapper under varied digit widths, fonts, density, themes and state changes. Do not move the number with fixture-specific offsets or claim start/center alignment equivalent merely because both screenshots look centered.' },
     { priority: 5.26, rootCause: 'Native button/inline-block input is replaced by flex-div centering', action: 'Restore the original button wrapper and inline label layout, preserving CSS defaults, inheritance and Material rules. The candidate flex div omits native button defaults; adding label offsets or textAlign:center to that substitute would not test the original mechanism. Verify native-button default resolution and inline formatting through equivalent core inputs after removing the authoring divergence. Keep the separate CDP default controls and per-case captured center/left mismatch evidence.' },
+    { priority: 5.27, rootCause: 'Stepper numeral font and label-color inheritance are replaced or omitted', action: 'Keep the original frame-scaled inherited numeral font with the icon-content wrapper instead of fixed 14px step-badge text. Restore the Material active-label color token and inner label inheritance instead of accepting the page on-surface fallback. Preserve actual reference theme inputs; do not retune the dark reference or calibrate text to the circle. Verify core inheritance, transforms and glyph paint only after equivalent authoring is restored.' },
     { priority: 5.3, rootCause: 'Core normal line-height is approximated by a fixed Mg font-box probe', action: 'Resolve browser normal line-box metrics and actual fallback runs in core. The equal-input Arial/serif cases expose one-pixel texture-height errors; Roboto plus emoji/CJK exposes two-pixel errors while plain Roboto and explicit line heights pass. Preserve those controls, extend multiline/baseline/DPR verification and avoid a universal multiplier, constant pixel addition, or fixed Material line-height compensation. Current-texture evidence must remain separate from declared normal and from final glyph raster.' },
     { priority: 5.4, rootCause: 'Calendar cell text tokens and inner line boxes were flattened away', action: 'Restore the reference calendar font and date-text ink tokens and its inner line-height:1 label inside both day and year controls. Keep reference cell/container sizing, state and selection structure instead of copying a normal-metric result or tuning the baseline. Separate date/range-context proofs isolate 990 day and 192 year occurrences each of missing font-token, omitted inner line-height and fixed-ink inputs; core metric defects must be assessed only after those inputs are equivalent. Independently resolve normal-versus-zero tracking and the still-unmapped header/icon owners.' },
     { priority: 5.5, rootCause: 'Snackbar action inherits generic control inputs instead of Material action tokens', action: 'Restore the original text-button font, size and tracking declarations and the snackbar inverse-primary ink, keeping the reference label/action wrapper intent. The exact overlay/message mapping isolates 34 current action textures and source-traces font-stack, tracking and ink substitutions. Trace the remaining 14px-versus-16px and normal-line-box observations through the core defaults/inheritance and metric stages before assigning core ownership; do not calibrate a baseline or line height. Retain the separate intrinsic-width, live-region, visibility, lifetime and placement obligations.' },

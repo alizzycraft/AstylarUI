@@ -17,6 +17,66 @@ selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Stepper numeral font and label color use different inherited inputs (2026-09-12)
+
+Two remaining typography differences now have independent input attribution:
+
+- Numeric badges: the reference numeral inherits font size through its original
+  icon/header ancestors to the frame, whose active rule is
+  `font-size: calc(16px * var(--scale))`. The captured sizes are 16px in light/dark,
+  14.4px in contrast and 18.4px in custom. Candidate `.step-badge` explicitly
+  authors 14px, and normal/effective/retained sizes agree with that different
+  input. This fixed size already appears in `2f44011`; `2f14e60` later modifies
+  badge styling. Restore inheritance with the original percentage-positioned
+  wrapper, not a number-to-circle size adjustment.
+- Details/Review labels: the reference span and `.mat-step-text-label` wrapper
+  inherit color from the active `.mat-step-label` rules, using the component's
+  `on-surface-variant` token fallback. Candidate `.step-text` omits color all the
+  way to `#page`, where normal/effective and retained color agree with the page
+  color. In the captured static cases the reference is `#49454e`, versus
+  candidate `#1d1b20` or dark `#e6e1e5`. The omission exists in `2f44011`;
+  `354084e` adds vertical alignment without restoring the color token. Preserve
+  reference truth, including its captured dark value, rather than retuning it.
+
+Source findings `fixture-stepper-number-font-substitution` and
+`fixture-stepper-label-color-omitted`, and plan **5.27**, separate these authoring
+differences from core font scaling, color conversion and final glyph paint.
+All raw values remain in the report. No fixture, renderer or reference styling
+was changed, and this attribution is not a screenshot-equivalence claim.
+
+The numeral review requires the exact original text mapping, a unique complete
+inheritance path, the active frame calculation and explicit candidate 14px rule.
+The label review requires unique shared text IDs, the original inner wrappers
+and header, both active Material color rules, and a complete candidate path with
+no color declaration until the page. Unknown rule contexts, inline overrides,
+shorthand conflicts, missing/duplicate/cyclic ownership and inconsistent state
+inputs are rejected. Three focused test groups pass across four font/palette
+combinations, **29 contradictory-input mutations and 14 report-tampering
+controls**. An independent validator replays both property attributions from
+captured inputs instead of trusting report labels.
+
+The full harness initially caught the source-fingerprint count left at 32 after
+the previous increment added the native-button probe. The expectation is now 33,
+with an explicit uniqueness assertion for that probe. This is audit inventory
+maintenance, not a changed rendering threshold or excluded test.
+
+Final verification for this increment:
+
+- All **12 static and 56 interaction stepper cases** are captured. The new review
+  attributes **120 numeral font-size and 136 label-color differences**, with no
+  unresolved stepper differences in those two categories. Completed-step vector
+  icons are not miscounted as numerals. The earlier number-positioning review
+  also replays successfully across all **120 remaining numeral observations**.
+- `npm run parity:harness:check`: **299/299 pass**, zero failures or skipped tests
+  (140.1 seconds), including the corrected fingerprint assertion.
+- A verified broader prefix contains **436 static and 1,564 interaction cases**.
+  Result digests, partial-report validation, tree inventory, reference context
+  and natural-line-box checks return zero errors. All 79 source findings are
+  detected and all ten live capture-module hashes match the manifest.
+
+The main matrix remains in progress, other audit differences remain open, and
+the report still correctly states `inputEquivalent: false`.
+
 ## Button-toggle native defaults are lost with the button wrapper (2026-09-12)
 
 The main audit now attributes all **136 label-alignment observations across

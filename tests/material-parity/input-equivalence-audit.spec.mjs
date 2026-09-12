@@ -399,7 +399,8 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   const report = parityReport({}, {});
   const audit = buildMaterialInputAudit(report);
   assert.equal(audit.coverage.visualParityGreen, true);
-  assert.equal(audit.sourceFingerprints.length, 32);
+  assert.equal(audit.sourceFingerprints.length, 33);
+  assert.equal(audit.sourceFingerprints.filter(entry => entry.file === 'scripts/audit-material-button-defaults.mjs').length, 1);
   assert.ok(audit.sourceFingerprints.some(({ file }) => file === 'src/app/services/text/text-canvas-renderer.service.ts'));
   const trackingProof = 'examples/material-showcase/src/app/normal-letter-spacing-audit.spec.ts';
   assert.ok(audit.sourceFingerprints.some(({ file }) => file === trackingProof));
@@ -1209,6 +1210,125 @@ function omittedStepperPanelReport(selected = true) {
   });
   return raw;
 }
+
+function stepperTextInputReport(fontSize = '16px', pageColor = '#1d1b20') {
+  const raw = stepperNumberAlignmentReport(), { reference: r, astylar: a } = raw.results[0].inputTrees;
+  r.styles[0].fontSize = r.styles[1].fontSize = fontSize;
+  r.styles.push({ ...r.styles[0], fontSize: '14px', color: '#49454e' });
+  r.rules.push({ selector: '.frame[_ngcontent-test]', active: true, conditions: [],
+    declarations: { 'font-size': { value: 'calc(16px * var(--scale))', important: false } } });
+  const frame = r.nodes.find(n => n.key === 'frame');
+  frame.rules = [1];
+  frame.inline = { '--scale': { value: String(Number.parseFloat(fontSize) / 16), important: false } };
+  for (const [selector, value] of [
+    ['.mat-step-label', 'var(--mat-stepper-header-label-text-color, var(--mat-sys-on-surface-variant))'],
+    ['.mat-step-label.mat-step-label-active', 'var(--mat-stepper-header-selected-state-label-text-color, var(--mat-sys-on-surface-variant))'],
+  ]) r.rules.push({ selector, active: true, conditions: [], declarations: { color: { value, important: false } } });
+  for (const [index, name] of ['details', 'review'].entries()) {
+    const base = `r/w/h/${index}/l`, text = index ? 'Review' : 'Details';
+    for (const [key, parent, type, attributes, ownText, rules] of [
+      [base, `r/w/h/${index}`, 'div', { class: 'mat-step-label mat-step-label-active' }, '', [2, 3]],
+      [`${base}/w`, base, 'div', { class: 'mat-step-text-label' }, '', []],
+      [`${base}/w/0`, `${base}/w`, 'span', { id: `step-${name}-text` }, text, []],
+    ]) r.nodes.push({ key, parent, type, attributes, ownText, rules, style: 2, pseudoElements: [] });
+    a.nodes.push({ key: `a/h/${index}/1`, parent: `a/h/${index}`, authored: { type: 'span', id: `step-${name}-text`, class: 'step-text', textContent: text },
+      retainedText: { source: 'core-text-registry', style: { color: pageColor, fontSize: '14px' } } });
+  }
+  a.nodes[0].parent = 'page';
+  a.nodes.push({ key: 'page', parent: 'root', authored: { type: 'main', id: 'page' } });
+  a.rules[0].fontSize = '14px';
+  a.rules.push({ selector: '#page', color: pageColor, fontSize });
+  for (const n of a.nodes) {
+    n.normalResolvedStyle = n.authored.class === 'step-badge' ? { width: '24px', height: '24px', textAlign: 'center', fontSize: '14px' }
+      : n.authored.id === 'page' ? { color: pageColor, fontSize } : {};
+    n.interactionResolvedStyle = { ...n.normalResolvedStyle };
+    n.resolvedStyle = { ...n.normalResolvedStyle };
+    if (n.authored.class === 'step-badge') n.retainedText.style.fontSize = '14px';
+  }
+  return raw;
+}
+
+test('stepper typography retains frame font inheritance and omitted component color as unequal inputs', () => {
+  for (const [fontSize, pageColor] of [['16px', '#1d1b20'], ['14.4px', '#1d1b20'], ['18.4px', '#1d1b20'], ['16px', '#e6e1e5']]) {
+    const raw = stepperTextInputReport(fontSize, pageColor), before = structuredClone(raw), report = buildMaterialInputAudit(raw);
+    const findings = report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-stepper-text-input');
+    assert.equal(findings.length, 4);
+    for (const f of findings) {
+      assert.equal(f.inputEquivalent, false);
+      assert.equal(f.currentPseudoStatePaintVerified, false);
+      assert.equal(f.classification, 'application-plugin-authoring-defect');
+      assert.ok(report.sourceFindings.find(s => s.id === f.reviewEvidence.sourceFinding)?.detected);
+      if (f.property === 'fontSize') {
+        assert.deepEqual(f.values, { reference: fontSize, normal: '14px', effective: '14px', retained: '14px' });
+        assert.equal(f.reviewEvidence.referenceChain.at(-1).node, 'frame');
+      } else {
+        assert.equal(f.values.normal, undefined);
+        assert.equal(f.values.effective, undefined);
+        assert.equal(f.reviewEvidence.candidateChain.at(-1).node, 'page');
+        assert.equal(f.reviewEvidence.referenceChain.at(-1).propertyRules.length, 2);
+      }
+    }
+    assert.ok(!validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('stepper typography')));
+    assert.deepEqual(raw, before);
+  }
+});
+
+test('stepper typography attribution rejects altered inheritance, tokens and explicit overrides', () => {
+  const mutations = [
+    ['fontSize', r => { r.nodes[0].parent = 'missing'; }],
+    ['fontSize', r => { r.nodes[0].parent = r.nodes[0].key; }],
+    ['fontSize', r => { r.nodes.find(n => n.key === 'frame').type = 'div'; }],
+    ['fontSize', r => { r.styles[1].fontSize = '18px'; }],
+    ['fontSize', r => { r.rules[1].declarations['font-size'].value = '14px'; }],
+    ['fontSize', r => { r.rules[1].declarations['font-size'].important = true; }],
+    ['fontSize', r => { r.rules[1].conditions = ['@layer unknown']; }],
+    ['fontSize', r => { r.nodes.find(n => n.key === 'frame').inline.font = '16px serif'; }],
+    ['fontSize', (_r, a) => { a.rules[0].fontSize = '15px'; }],
+    ['fontSize', (_r, a) => { a.rules[0].mediaMaxWidth = '500px'; }],
+    ['fontSize', (_r, a) => { a.rules.push({ ...a.rules[0] }); }],
+    ['fontSize', (_r, a) => { for (const n of a.nodes.filter(n => n.authored.class === 'step-badge')) n.interactionResolvedStyle.font = '16px serif'; }],
+    ['fontSize', (_r, a) => { for (const n of a.nodes.filter(n => n.authored.class === 'step-badge')) n.normalResolvedStyle.all = 'initial'; }],
+    ['fontSize', (_r, a) => { for (const n of a.nodes.filter(n => n.authored.class === 'step-badge')) n.interactionResolvedStyle.fontSize = '16px'; }],
+    ['color', r => { r.rules[3].declarations.color.value = 'red'; }],
+    ['color', r => { r.rules[3].active = false; }],
+    ['color', r => { r.rules[3].declarations.color.important = true; }],
+    ['color', r => { r.rules[3].conditions = ['@layer unknown']; }],
+    ['color', r => { for (const n of r.nodes.filter(n => n.attributes.class?.includes('mat-step-label'))) n.attributes.class = 'mat-step-label'; }],
+    ['color', r => { for (const n of r.nodes.filter(n => n.attributes.class === 'mat-step-text-label')) n.type = 'span'; }],
+    ['color', r => { for (const n of r.nodes.filter(n => n.type === 'mat-step-header')) n.attributes.id = 'cdk-stepper-wrong'; }],
+    ['color', r => { r.nodes.push(...r.nodes.filter(n => n.type === 'mat-step-header').map(n => structuredClone(n))); }],
+    ['color', r => { for (const n of r.nodes.filter(n => /^step-.*-text$/.test(n.attributes.id ?? ''))) n.ownText = 'Other'; }],
+    ['color', (_r, a) => { a.nodes.find(n => n.key === 'page').normalResolvedStyle.color = '#abcdef'; }],
+    ['color', (_r, a) => { a.nodes.find(n => n.key === 'page').parent = 'missing'; }],
+    ['color', (_r, a) => { a.nodes.push(structuredClone(a.nodes.find(n => n.key === 'page'))); }],
+    ['color', (_r, a) => { a.nodes.find(n => n.key === 'page').authored.style = { color: 'red' }; }],
+    ['color', (_r, a) => { for (const n of a.nodes.filter(n => n.authored.class === 'step-text')) n.interactionResolvedStyle.color = 'red'; }],
+    ['color', (_r, a) => { a.rules.find(r => r.selector === '#page').color = '#abcdef'; }],
+  ];
+  for (const [property, mutate] of mutations) {
+    const raw = stepperTextInputReport();
+    mutate(raw.results[0].inputTrees.reference, raw.results[0].inputTrees.astylar);
+    const evidence = collectRetainedTypographyEvidence(raw.results, collectFullTreeInventory(raw.results));
+    assert.ok(!evidence.differences.some(d => d.property === property && d.attribution === 'reviewed-stepper-text-input'), String(mutate));
+  }
+});
+
+test('stepper typography claims replay original evidence for both font and color', () => {
+  const baseline = buildMaterialInputAudit(stepperTextInputReport());
+  for (const property of ['fontSize', 'color']) for (const mutate of [
+    (_r, f) => { f.inputEquivalent = true; },
+    (_r, f) => { f.currentPseudoStatePaintVerified = true; },
+    (_r, f) => { f.reviewEvidence.referenceChain.pop(); },
+    (_r, f) => { f.values.reference = 'invented'; },
+    (_r, f) => { f.classification = 'confirmed-core-renderer-defect'; },
+    (r, f) => { r.retainedTypography.differences.push(structuredClone(f)); },
+    r => { r.retainedTypography.differences = r.retainedTypography.differences.filter(d => d.property !== property); },
+  ]) {
+    const report = structuredClone(baseline);
+    mutate(report, report.retainedTypography.differences.find(d => d.property === property && d.attribution === 'reviewed-stepper-text-input'));
+    assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('stepper typography')), String(mutate));
+  }
+});
 
 function toggleButtonAlignmentReport() {
   const raw = templateTypographyReport('button-toggle'), { reference: r, astylar: a } = raw.results[0].inputTrees;
