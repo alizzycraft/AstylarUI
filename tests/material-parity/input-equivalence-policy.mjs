@@ -379,6 +379,15 @@ export const sourceAuditDefinitions = Object.freeze([
     justification: 'The reference matTooltip creates a connected CDK overlay outside normal flow. The candidate puts the popup in a fixed-size 138x72px flex column below the trigger. It may align in the current screenshot but does not exercise equivalent containing-block, collision, clipping, or scroll behavior.',
   }),
   Object.freeze({
+    id: 'fixture-toolbar-button-height-replaces-inherited-line-height',
+    introducedBy: '3bf5b4d toolbar typography and density alignment',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`selector: '\.toolbar-action'[^\n]*lineHeight:`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase toolbar button inherited typography inputs',
+    justification: 'The browser toolbar action inherits its line-height from the Material toolbar title token, computing 28px independently of the button container height. The candidate toolbar-action rule instead assigns lineHeight from the same density branch as height (40, 24 or 28px), introduced in 3bf5b4d. Captured normal/effective/current-paint stages retain that explicit substitution. Restore the inherited typography intent rather than using container height as a text alignment correction; equivalent input must precede any core baseline investigation.',
+  }),
+  Object.freeze({
     id: 'fixture-toolbar-measured-intrinsic-widths',
     introducedBy: '92067a1 fix(example): align Material toolbar states',
     file: 'examples/material-showcase/src/app/astylar.component.ts',

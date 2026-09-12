@@ -146,6 +146,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
     'reviewed-disabled-button-ink': 'application-plugin-authoring-defect',
     'reviewed-button-font-token-input': 'application-plugin-authoring-defect',
     'reviewed-core-font-list-rewrite': 'confirmed-core-renderer-defect',
+    'reviewed-toolbar-button-line-height-input': 'application-plugin-authoring-defect',
   };
   const unresolvedControlTypography = report.controlTypography?.differences.filter((entry) =>
     !reviewedControlKinds[entry.attribution] || entry.classification !== reviewedControlKinds[entry.attribution] || !entry.reviewEvidence) ?? [];
@@ -1109,7 +1110,7 @@ export function collectRetainedTypographyEvidence(cases, inventory) {
     comparisons, differences, gaps, paintMaskDifferences, reviewedMappings };
 }
 
-function reviewedButtonPaintInput(entry, property, ref, parent, ast, stages, astylarTree, inventory) {
+function reviewedButtonPaintInput(entry, property, ref, parent, ast, stages, referenceTree, astylarTree, inventory) {
   const rulesAt = (node, side) => (node.rules ?? []).map((index) => inventory.rules[index])
     .filter((rule) => rule?.side === side).map((rule) => rule.value);
   const parentStyle = inventory.styles[parent.style];
@@ -1117,6 +1118,32 @@ function reviewedButtonPaintInput(entry, property, ref, parent, ast, stages, ast
   const referenceParent = canonicalStyle(parentStyle.value);
   const candidateRules = astylarTree.rules.map((index) => inventory.rules[index])
     .filter((rule) => rule?.side === 'astylar').map((rule) => rule.value);
+  if (property === 'lineHeight' && entry.family === 'toolbar' && stages.reference.lineHeight === '28px' &&
+      referenceParent.lineHeight === stages.reference.lineHeight && ['40px', '24px'].includes(stages.normal.lineHeight) &&
+      stages.effective.lineHeight === stages.normal.lineHeight && stages.painted.lineHeight === stages.normal.lineHeight &&
+      String(ast.authored.class ?? '').split(/\s+/).includes('toolbar-action')) {
+    const toolbars = referenceTree.nodes.filter((node) => node.key === parent.parent && node.type === 'mat-toolbar');
+    if (toolbars.length !== 1) return;
+    const toolbar = toolbars[0], toolbarStyle = inventory.styles[toolbar.style];
+    if (toolbarStyle?.side !== 'reference' || canonicalStyle(toolbarStyle.value).lineHeight !== stages.reference.lineHeight) return;
+    const toolbarRules = rulesAt(toolbar, 'reference').filter((rule) => rule.active === true &&
+      rule.selector === '.mat-toolbar, .mat-toolbar h1, .mat-toolbar h2, .mat-toolbar h3, .mat-toolbar h4, .mat-toolbar h5, .mat-toolbar h6' &&
+      rule.declarations?.['line-height']?.value === 'var(--mat-toolbar-title-text-line-height, var(--mat-sys-title-large-line-height))');
+    const inheritRules = rulesAt(parent, 'reference').filter((rule) => rule.active === true &&
+      rule.selector === '.mdc-button' && rule.declarations?.['line-height']?.value === 'inherit');
+    const candidateHeightRules = candidateRules.filter((rule) => rule.selector === '.toolbar-action' &&
+      canonicalStyle(rule).lineHeight === stages.normal.lineHeight && canonicalStyle(rule).height === stages.normal.lineHeight);
+    if (toolbarRules.length !== 1 || inheritRules.length !== 1 || candidateHeightRules.length !== 1 ||
+        rulesAt(ref, 'reference').some((rule) => rule.active === true &&
+          ((rule.declarations?.['line-height']?.value && rule.declarations['line-height'].value !== 'inherit') || rule.declarations?.font))) return;
+    return { classification: 'application-plugin-authoring-defect', attribution: 'reviewed-toolbar-button-line-height-input',
+      recommendedOwner: 'showcase toolbar button inherited typography inputs',
+      justification: 'The captured button inherits the toolbar title line-height token and its direct label computes the same 28px. The candidate toolbar-action explicitly substitutes its density-specific container height for line-height and supplies that value unchanged to normal/effective/current paint. This source-traced input substitution is not a demonstrated core line-box defect. The 28px density variant happens to agree and does not justify the other authored values.',
+      reviewEvidence: { sourceFinding: 'fixture-toolbar-button-height-replaces-inherited-line-height',
+        referenceToolbar: toolbar.key, referenceToolbarRule: toolbarRules[0], referenceButtonRule: inheritRules[0],
+        referenceComputed: stages.reference.lineHeight, candidateRule: candidateHeightRules[0],
+        candidateNormal: stages.normal.lineHeight, candidateEffective: stages.effective.lineHeight, candidatePainted: stages.painted.lineHeight } };
+  }
   if (property === 'fontFamily' && ['roboto', 'arial'].includes(stages.reference.fontFamily) &&
       referenceParent.fontFamily === stages.reference.fontFamily &&
       stages.normal.fontFamily === stages.reference.fontFamily && stages.effective.fontFamily === stages.normal.fontFamily &&
@@ -1292,7 +1319,7 @@ export function collectControlTypographyEvidence(cases, inventory) {
             classification: 'parity-harness-defect', attribution: 'unresolved',
             recommendedOwner: 'input audit control authored-token and core paint-input attribution',
             justification: 'Browser computed and actual control texture paint inputs differ. Attribute authored tokens and parser/runtime behavior before assigning fault. CSS normal line-height, font fallback and composited colors are not automatically equivalent to numeric or opaque substitutes.',
-            ...(reviewedButtonPaintInput(entry, property, ref, parent, ast, stages, astylarTree, inventory) ?? {}) });
+            ...(reviewedButtonPaintInput(entry, property, ref, parent, ast, stages, referenceTree, astylarTree, inventory) ?? {}) });
         }
       }
       comparisons.push(comparison);
@@ -1661,6 +1688,7 @@ function implementationPlan() {
     { priority: 4, rootCause: 'Generic overlay composition is duplicated', action: 'Audit existing core primitives before adding APIs for connected anchors, viewport collision, clipping, focus scope, and dismissal. Migrate popup families with equivalent state inputs; retain different datepicker and timepicker focus behavior. Remove the tooltip benchmark-only forced-open handler.' },
     { priority: 5, rootCause: 'Plugin competes with core typography', action: 'Remove DynamicTexture glyph/baseline rendering from MaterialTabPanelRenderer. Keep only Material transition orchestration while composing core-rendered text/content.' },
     { priority: 5.1, rootCause: 'Core rewrites an explicit font-family list before paint', action: 'The parser appends Arial, Helvetica, sans-serif to explicit lists without a recognized generic. Preserve this as distinct from missing Material font-token authoring. The equal-input unavailable-family proof now confirms changed text advance, while both explicit-generic controls pass. Preserve authored family ordering/quoting and browser fallback semantics at the core parser boundary; verify available/unavailable and missing-glyph cases without assuming a particular platform font. Do not add a generic family to the showcase merely to avoid the parser branch. Final raster verification remains separate from the measured advance proof.' },
+    { priority: 5.2, rootCause: 'Material button typography tokens and inheritance are replaced by fixture defaults', action: 'Translate the original filled/outlined/text button font tokens instead of inheriting the longer document control stack. Restore toolbar button line-height inheritance from its toolbar instead of copying the density-specific container height. Preserve tracking and alpha ink as distinct authored inputs. Then investigate any remaining equal-input core text mismatch; do not adjust font size, baseline, or offsets to recover screenshot similarity.' },
     { priority: 6, rootCause: 'Interaction geometry duplicated by the application', action: 'Expose resolved CSS-space target bounds and local pointer coordinates in the core event/plugin contract; remove ripple width tables.' },
     { priority: 7, rootCause: 'Material paint calibration constants', action: 'Express progress angles, state layers, checkmarks, selection rings, and indicators from reference Material geometry in CSS space; remove screenshot-derived angle and fractional-position constants.' },
     { priority: 8, rootCause: 'Regression gate permits unequal inputs', action: 'Run this audit in CI after the full parity matrix, require complete coverage and zero unclassified differences, and review any new Astylar-only authored rule before updating the checked-in report.' },

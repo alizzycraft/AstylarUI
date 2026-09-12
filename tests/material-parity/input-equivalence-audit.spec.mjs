@@ -1361,6 +1361,57 @@ test('core font-list rewrite attribution requires matching browser and resolved 
   assert.equal(controlEvidence(fixture('serif')).differences[0].attribution, 'unresolved', 'do not extend the reviewed spelling scope');
 });
 
+test('toolbar line-height substitution requires its inherited token and explicit density-height witnesses', () => {
+  function fixture(height = 40) {
+    const raw = controlTypographyReport(), entry = raw.results[0], trees = entry.inputTrees;
+    entry.family = 'toolbar';
+    trees.reference.styles[0].lineHeight = '28px';
+    trees.reference.nodes[0].parent = 'toolbar';
+    trees.reference.nodes[0].rules = [0];
+    trees.reference.nodes.push({ key: 'toolbar', parent: 'frame', type: 'mat-toolbar', attributes: {}, ownText: '', style: 0, rules: [1], pseudoElements: [] });
+    trees.reference.rules = [
+      { selector: '.mdc-button', active: true, declarations: { 'line-height': { value: 'inherit' } } },
+      { selector: '.mat-toolbar, .mat-toolbar h1, .mat-toolbar h2, .mat-toolbar h3, .mat-toolbar h4, .mat-toolbar h5, .mat-toolbar h6',
+        active: true, declarations: { 'line-height': { value: 'var(--mat-toolbar-title-text-line-height, var(--mat-sys-title-large-line-height))' } } },
+    ];
+    const node = trees.astylar.nodes[0];
+    node.authored.class = 'toolbar-action';
+    node.normalResolvedStyle.lineHeight = node.interactionResolvedStyle.lineHeight = `${height}px`;
+    node.paintedControlText.style.lineHeight = height / node.paintedControlText.style.fontSize;
+    trees.astylar.rules = [{ selector: '.toolbar-action', height: `${height}px`, lineHeight: `${height}px` }];
+    return raw;
+  }
+  for (const height of [24, 40]) {
+    const raw = fixture(height), evidence = controlEvidence(raw);
+    assert.deepEqual(evidence.gaps, []);
+    assert.equal(evidence.differences.length, 1);
+    const finding = evidence.differences[0];
+    assert.equal(finding.attribution, 'reviewed-toolbar-button-line-height-input');
+    assert.equal(finding.classification, 'application-plugin-authoring-defect');
+    assert.equal(finding.reviewEvidence.candidatePainted, `${height}px`);
+    const report = buildMaterialInputAudit(raw);
+    assert.equal(report.summary.inputEquivalent, false);
+    assert.ok(!validateMaterialInputAudit(report).some((error) => error.includes('control texture typography differences')));
+  }
+  assert.deepEqual(controlEvidence(fixture(28)).differences, [], 'the matching density does not authorize unequal inputs elsewhere');
+  const mutations = [
+    (ref) => { ref.nodes[2].type = 'div'; },
+    (ref) => { ref.rules[1].active = false; },
+    (ref) => { ref.rules[1].declarations['line-height'].value = '28px'; },
+    (ref) => { ref.rules[0].declarations['line-height'].value = 'normal'; },
+    (ref) => { ref.rules.push({ active: true, declarations: { 'line-height': { value: '28px' } } }); ref.nodes[1].rules = [2]; },
+    (ref, ast) => { ast.rules[0].height = '48px'; },
+    (ref, ast) => { ast.rules.push({ ...ast.rules[0] }); },
+    (ref, ast) => { ast.nodes[0].interactionResolvedStyle.lineHeight = '28px'; },
+    (ref, ast) => { ast.nodes[0].authored.class = 'other'; },
+  ];
+  for (const mutate of mutations) {
+    const raw = fixture();
+    mutate(raw.results[0].inputTrees.reference, raw.results[0].inputTrees.astylar);
+    assert.equal(controlEvidence(raw).differences[0].attribution, 'unresolved', String(mutate));
+  }
+});
+
 test('disabled ink attribution is limited to the reviewed alpha rule and explicit opaque candidate paint', () => {
   const raw = disabledButtonInkReport(), evidence = controlEvidence(raw);
   assert.equal(evidence.differences.length, 1);

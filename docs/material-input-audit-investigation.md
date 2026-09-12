@@ -12,6 +12,33 @@ tests pass). A missing selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Toolbar substitutes button height for inherited line-height (2026-09-12)
+
+The reference `.mdc-button` inherits line-height from its immediate
+`mat-toolbar`, whose title line-height token computes 28px in all 12 captured
+static variants. The candidate `.toolbar-action` instead assigns the same
+density branch to `height` and `lineHeight`: 40px for light/dark, 24px for
+contrast and 28px for custom. Git blame traces the current rule to `3bf5b4d`.
+This is an authored substitution; core's normal, effective and current-paint
+stages agree on the supplied value. Do not fix it with another text offset or
+by assuming the container's height is the text line-height.
+
+All nine unequal static occurrences now receive a guarded authoring
+classification, retaining the active toolbar token rule, button inheritance
+rule, browser computed values and explicit candidate rule as evidence. The
+three custom-profile values agree, but do not authorize the other values.
+The toolbar's 12 font-family mutations are separately classified as core
+defects. These 21 current-texture differences have attribution; that does not
+complete review of the toolbar's other nodes, geometry, paint or interactions.
+
+The source audit now has 56 findings. Focused audit tests pass **64/64**, with
+both unequal density cases, the equal-value control, and negative token,
+inheritance, ancestor, duplicate-rule and effective-state witnesses. All 12
+production checkpoint result hashes and input-tree digests validate; current
+control-texture comparison reports no collection or mapping gaps for toolbar.
+The original fixture and renderer remain unchanged.
+`npm run parity:harness:check` passes **102/102** at this increment.
+
 ## Card text-button font token is an authored omission (2026-09-12)
 
 The remaining 12 static card font-family differences are now attributed with
