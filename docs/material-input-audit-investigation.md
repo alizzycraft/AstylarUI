@@ -73,6 +73,15 @@ Implementation-plan item 5.28 restores the reference color token and state/
 inheritance mechanism before testing remaining core color or paint behavior.
 It does not recommend choosing new constants from screenshot samples.
 
+The corrected run has now completed 436/436 static cases, all with
+`meetsAcceptance:true` and no runtime errors. Every static checkpoint result
+hash validates, and all ten live harness-source hashes still match the frozen
+manifest. The 1,875-case interaction run has begun and is not yet complete.
+Natural line-box collection is running with
+`node scripts/audit-material-normal-line-boxes.mjs --base-url=http://127.0.0.1:4431 --checkpoint=artifacts/material-parity/current-ancestry-audit/checkpoint --output=artifacts/material-parity/normal-line-box-current-ancestry-audit`.
+Do not treat this static visual pass or the pending supplement as final audit
+acceptance; further classifications and the complete report remain required.
+
 ## Fresh supplements after the inspection repair (2026-09-12)
 
 Commit `8d3a974` is pushed to `codex/material-ui-showcase`. The following
