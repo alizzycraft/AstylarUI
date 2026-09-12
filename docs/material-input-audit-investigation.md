@@ -14,6 +14,33 @@ new control-text texture instrumentation.
 
 ## Current control texture comparison, not just collection (2026-09-12)
 
+### Attribution follow-up
+
+Two button paint-input differences trace to initial showcase commit `2f44011`,
+not a recent renderer regression. The source audit now has 53 findings:
+
+- `.material-button` copies size 14px and weight 500 but omits tracking. In the
+  production light/desktop capture, active `.mat-mdc-unelevated-button` and
+  `.mat-mdc-outlined-button` rules explicitly declare their label tracking
+  tokens; reference labels compute .096px while candidate declarations omit it
+  and actual textures receive zero. Classify this captured omission as an
+  application authoring defect. Restore the component token, not a label offset
+  or fixed-width adjustment. Other states still need captured attribution.
+- The disabled candidate authors `mixHex(theme.surfaceContainer,
+  theme.onSurface, .38)`, producing opaque #a4a0a7. The active reference disabled
+  rule uses on-surface ink mixed with transparent, retaining .38 alpha and
+  computing rgba(29,27,32,.38). Classify this as precomposited fixture paint,
+  not equivalent input or proof of a core alpha defect. Background layers and
+  glyph-edge coverage must remain part of a future equal-alpha compositing proof.
+
+ButtonManager forwards copied control styles to TextRenderingService; it does
+not inject tracking. The text parser defaults omitted tracking to zero. Its
+numeric `normal` line-height instead comes from `measureText('Mg')` font bounding
+ascent plus descent divided by font size. Thus `normal` versus 17px is a stage
+representation question, not yet a proved authored height mismatch. Font-family
+fallback lists likewise still require an explicit equivalence assessment. These
+source findings do not blanket-attribute every controlTypography occurrence.
+
 The audit now reports `controlTypography` separately from registry-retained
 typography. Reviewed mappings require one direct leaf `span.mdc-button__label`
 under a unique reference button, joined to a unique candidate button by shared
