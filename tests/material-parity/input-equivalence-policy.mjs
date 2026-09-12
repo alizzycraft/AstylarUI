@@ -160,6 +160,16 @@ export const sourceAuditDefinitions = Object.freeze([
     focusedProof: 'examples/material-showcase/src/app/input-equivalence-proof.spec.ts: control texture preserves the authored font-family list / text advance matches browser fallback',
   }),
   Object.freeze({
+    id: 'core-normal-line-height-samples-mg-font-box',
+    introducedBy: '8870fc5 resolves normal line-height using fontBoundingBox metrics for Mg',
+    file: 'src/app/services/text/text-style-parser.service.ts',
+    pattern: String.raw`const metrics = context\.measureText\('Mg'\);\s*const height = metrics\.fontBoundingBoxAscent \+ metrics\.fontBoundingBoxDescent`,
+    classification: 'confirmed-core-renderer-defect',
+    owner: 'core normal line-box metrics and fallback-run typography',
+    justification: 'resolveNormalLineHeight uses the ascent plus descent of a fixed Mg probe. The equal-typography package-root browser proof confirms this is not universally the natural CSS normal line box: Arial 16px yields 17px current paint/texture versus 18px DOM, serif 20px yields 22px versus 23px, and locally loaded Roboto 14px with emoji or CJK fallback text yields 17px versus 19px. Plain Roboto 14px/17.5px and explicit 21px/1.5 line-height controls pass. Both current paint inputs and the currently bound texture logical height are observed without projecting geometry. Preserve browser normal semantics, including font line metrics and actual fallback runs, in core; do not insert a constant pixel correction or hard-code 17px in Material. These reductions do not prove every Material normal-versus-numeric occurrence is faulty, and final glyph raster remains separate.',
+    focusedProof: 'examples/material-showcase/src/app/normal-line-height-audit.spec.ts',
+  }),
+  Object.freeze({
     id: 'fixture-button-document-font-replaces-component-token',
     introducedBy: 'af04845 fix controls to use document font; material-button token omission dates to 2f44011; text-button omission persists through 1d74a0f',
     file: 'examples/material-showcase/src/app/astylar.component.ts',

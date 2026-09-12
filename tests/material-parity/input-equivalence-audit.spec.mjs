@@ -237,7 +237,7 @@ test('source audit has an explicit classification and live location for every po
     'intentional-documented-limitation');
   assert.equal(audit.sourceFindings.find(({ id }) => id === 'core-opposing-vertical-insets-ignore-auto-height').classification,
     'confirmed-core-renderer-defect');
-  for (const id of ['core-inline-parent-ignores-descendant-intrinsic-width', 'core-absolute-insets-ignore-margin-box', 'core-explicit-font-list-appends-default-fallbacks']) {
+  for (const id of ['core-inline-parent-ignores-descendant-intrinsic-width', 'core-absolute-insets-ignore-margin-box', 'core-explicit-font-list-appends-default-fallbacks', 'core-normal-line-height-samples-mg-font-box']) {
     assert.equal(audit.sourceFindings.find((finding) => finding.id === id).classification, 'confirmed-core-renderer-defect');
   }
 });
@@ -315,7 +315,9 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   const report = parityReport({}, {});
   const audit = buildMaterialInputAudit(report);
   assert.equal(audit.coverage.visualParityGreen, true);
-  assert.equal(audit.sourceFingerprints.length, 21);
+  assert.equal(audit.sourceFingerprints.length, 23);
+  assert.ok(audit.sourceFingerprints.some(({ file }) => file === 'examples/material-showcase/src/app/normal-line-height-audit.spec.ts'));
+  assert.ok(audit.sourceFingerprints.some(({ file }) => file === 'examples/material-showcase/angular.json'));
   assert.ok(audit.sourceFingerprints.some(({ file }) => file === 'src/app/services/dom/input/button.manager.ts'));
   assert.ok(audit.sourceFingerprints.some(({ file }) => file === 'src/app/services/text/text-style-parser.service.ts'));
   for (const file of ['src/app/services/dom/elements/css-transform.ts',

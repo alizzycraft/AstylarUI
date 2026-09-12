@@ -12,6 +12,60 @@ tests pass). A missing selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## CSS normal line-height exposes a core font-metrics defect (2026-09-12)
+
+The new `normal-line-height-audit.spec.ts` package-root proof compares identical
+typography/content with a natural one-line DOM block. It observes the actual
+core control paint inputs and the unique currently bound texture's logical CSS
+height. It does not use the fixed 48px button container as a text-height oracle,
+infer input from world-space output, or replace `normal` with an assumed number.
+
+Repeated browser results in Chrome Headless 152 on Windows:
+
+| Typography/content | Browser line box | Current paint and texture height | Result |
+| --- | ---: | ---: | --- |
+| Roboto 14px/500, Latin, explicit `normal` | 17px | 17px | pass |
+| Same, omitted line-height | 17px | 17px | pass |
+| Roboto 17.5px/400, `Mg` | 21px | 21px | pass |
+| Arial 16px/400, `Mg` | 18px | 17px | fail |
+| Serif 20px/400, `Mg` | 23px | 22px | fail |
+| Roboto 14px/500, `A😀` | 19px | 17px | fail |
+| Roboto 14px/500, `A漢` | 19px | 17px | fail |
+| Roboto 14px/500, explicit `21px` | 21px | 21px | pass |
+| Roboto 14px/500, explicit `1.5` | 21px | 21px | pass |
+
+`TextStyleParserService.resolveNormalLineHeight`, introduced in `8870fc5`,
+measures a fixed `Mg` string and uses only its font bounding-box ascent/descent.
+That is not universally the browser normal line box, and the fixed string
+cannot account for the actual text's fallback runs. This is a **confirmed core
+renderer defect**, owned by normal line-box metrics/fallback-run resolution.
+The passing controls rule out a universal one-pixel adjustment. No renderer
+implementation or Material inputs were changed. The 120 static Material
+`normal`/17px comparisons remain unresolved individually: these new reductions
+are not a blanket waiver or proof that all such occurrences are defective.
+
+Command: `npm --prefix examples/material-showcase test -- --watch=false
+--browsers=ChromeHeadless --include=src/app/normal-line-height-audit.spec.ts`.
+After correcting font availability, four browser runs report **5 passed / 4 diagnostic
+failures**, exit 1; the final three also assert the bound texture height, and the
+last additionally checks actual weight/style/spacing/white-space inputs. The initial
+attempt had seven Roboto font-loading errors and is not rendering evidence.
+Karma's test-only asset mapping now serves local Fontsource files; production
+build settings and the ongoing frozen full-matrix bundle are unchanged.
+Roboto is loaded explicitly under the isolated `MaterialAuditRoboto` family on
+both sides. SHA-256 of the original local Latin-normal files:
+
+- 400: `425c0713a8176f92273d378599c7eac57de7fafabd4bd0ed457b70eb8f80d371`
+- 500: `5bcc3aa180e7f26f643cd5b2621cd7c2de193d0661d913a94afd3d4881a7a34b`
+
+Final glyph raster, baseline placement, mixed inline fragments and multiline
+layout still require separate proof. The implementation plan now explicitly
+groups this defect under core typography, not per-component positioning.
+The installed packed consumer contains the same `Mg` metrics branch as source.
+`npm run parity:harness:check` passes **108/108**, including source-finding and
+fingerprint coverage. A transient TypeScript assertion-inference error while
+adding the extra paint checks was corrected before the final browser run.
+
 ## Paginator icon replacements are classified content differences (2026-09-12)
 
 The current-texture audit now records paginator icons in a separate

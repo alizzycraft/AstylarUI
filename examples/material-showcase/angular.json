@@ -91,6 +91,11 @@
             "inlineStyleLanguage": "scss",
             "assets": [
               {
+                "glob": "roboto-latin-*-normal.woff2",
+                "input": "node_modules/@fontsource/roboto/files",
+                "output": "audit-fonts"
+              },
+              {
                 "glob": "**/*",
                 "input": "public"
               }
