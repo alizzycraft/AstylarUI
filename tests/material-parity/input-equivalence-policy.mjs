@@ -643,6 +643,15 @@ export const sourceAuditDefinitions = Object.freeze([
     justification: 'The pinned Material calendar header authors a clipped aria-live=polite period label and references it from the period button with aria-describedby. The calendar body authors four range-description spans, including two nonempty Comparison range labels hidden by display:none in this single-date example. The candidate popup omits those nodes and description relationships rather than submitting equivalent input to core. Per-case full-tree evidence must verify the date/year context, original rule and computed clipping/display, and absence of candidate counterparts. Hidden or currently unreferenced labels are not accepted as equivalent structure, missing core paint or proven accessibility parity.',
   }),
   Object.freeze({
+    id: 'fixture-calendar-month-marker-table-grid-substitution',
+    introducedBy: '87f7f83 introduces the table-to-grid replacement; c64397c adds unconditional full-span marker and a fixed extra row in selected-day calculation',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`selector: '\.datepicker-month-marker', gridColumn: '1 / -1', justifyContent: 'flex-start', paddingLeft: '12px'`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase calendar conditional label/week table structure and CSS input translation',
+    justification: 'Material month view supplies labelMinRequiredCells=3. Its body creates a full seven-column label row only when the first-week offset is less than three; otherwise the label occupies that offset in the first week. Candidate always authors a month span followed by individual leading blanks and gives the span a full grid row. Its cell width/height40px, padding-left12px and flex alignment also replace the original zero-height/zero-line-height table cell with percentage padding. SEP 2026 has offset2 and does not expose the conditional row-count difference; a same-looking September screenshot cannot establish all-month equivalence. Captured full rows and typography remain independently reviewed. The existing equal-input core full-span browser proof passes, so this substitution is not evidence of a core span failure and must not be defended as a renderer workaround.',
+  }),
+  Object.freeze({
     id: 'fixture-calendar-weekday-structure-and-token-substitution',
     introducedBy: '87f7f83 fix(example): render Material picker overlays',
     file: 'examples/material-showcase/src/app/astylar.component.ts',

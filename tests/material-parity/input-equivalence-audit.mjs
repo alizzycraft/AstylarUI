@@ -577,6 +577,7 @@ export function renderMaterialInputAuditMarkdown(report) {
     `Stepper typography: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-stepper-text-input').length} records retain fixed 14px numeral substitution or omitted Material label-color inheritance. Raw computed, normal/effective and retained inputs stay distinct; no core scale/color or current raster claim follows from these unequal inputs.`,
     `Calendar close control: ${report.controlTypography.gaps.filter(gap => isReviewedCalendarCloseGap(gap, report.elementInventory)).length} preserved gap records identify a reference close-button/label path omitted from the candidate popup. The retained stage preserves the same omission separately from remaining anonymous labels. These are unequal authored controls, not invented paint entries, harmless hidden text or equivalent Escape/outside dismissal. Computed clipping and focus-to-reveal behavior remain unverified by these structural captures.`,
     `Calendar weekday headers: ${report.retainedTypography.reviewedMappings.filter(m => m.kind === 'reviewed-calendar-weekday-text').length} abbreviated labels have exact ordered-header/date-context correspondence. Their separate full-name omissions remain explicit gap records, and replacing column headers with spans is classified as unequal authoring. Font/ink substitutions, unresolved tracking, original divider structure and unknown clipping remain independent; no glyph raster is inferred from retained text.`,
+    `Calendar month markers: ${report.retainedTypography.reviewedMappings.filter(m => m.kind === 'reviewed-calendar-month-marker-text').length} labels have complete dated-row and replacement-grid correspondence. Conditional reference colspans, empty leading cells and candidate blank spans are preserved as unequal structural inputs; all mapped typography differences remain independently reportable. The fixed captured month is not all-month rendering evidence.`,
     '',
     `Control texture typography: ${report.controlTypography.comparisons.length} mapped current-texture observations; ${report.controlTypography.gaps.length} mapping/stage gaps and ${report.controlTypography.differences.length} raw computed-to-paint property differences, including individually reviewed stage-representation differences. Parsed CSS lengths and line-height multipliers are normalized independently of declarations. This does not prove final material effects, placement, visibility or raster parity.`,
     '',
@@ -1214,6 +1215,84 @@ function reviewedCalendarWeekdayMappings(referenceTree, astylarTree) {
   return structuredClone(pairs);
 }
 
+function reviewedCalendarMonthMarkerMappings(referenceTree, astylarTree, weekday) {
+  if (!weekday) return [];
+  const rn = referenceTree.nodes, an = astylarTree.nodes, context = weekday.reviewEvidence.context;
+  const children = (nodes, parent) => nodes.filter(n => n.parent === parent);
+  const cls = (n, name) => String(n?.attributes?.class ?? '').split(/\s+/).includes(name);
+  const body = rn.find(n => n.key === context.referenceChain[4]);
+  const grid = an.find(n => n.key === context.candidateChain[1]);
+  const marker = an.find(n => n.key === context.candidateMonthMarker);
+  const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  const date = /^(\w+) \d+, (\d{4})$/.exec(context.accessibleDate);
+  const month = months.indexOf(date?.[1]), year = Number(date?.[2]);
+  if (!body || !grid || !marker || month < 0 || !Number.isInteger(year) || year < 100) return [];
+  const leading = new Date(Date.UTC(year, month, 1)).getUTCDay();
+  const days = new Date(Date.UTC(year, month + 1, 0)).getUTCDate();
+  const trailing = (7 - (leading + days) % 7) % 7, separate = leading < 3;
+  const rows = children(rn, body.key).filter(n => n.type === 'tr');
+  if (rows.length !== Math.ceil((leading + days) / 7) + Number(separate)) return [];
+  const labels = [], rowEvidence = [];
+  let nextDay = 1;
+  for (const [index, row] of rows.entries()) {
+    const cells = children(rn, row.key), week = index - Number(separate);
+    if (row.ownText?.trim() || row.attributes?.role !== (week < 0 ? undefined : 'row') ||
+        (week < 0 && row.attributes?.['aria-hidden'] !== 'true')) return [];
+    const span = week < 0 ? 7 : week === 0 ? leading : 0;
+    let first = 0;
+    if (span) {
+      const label = cells[0], text = week < 0 || !separate ? context.period.slice(0, 3) : '';
+      if (!label || label.type !== 'td' || !cls(label, 'mat-calendar-body-label') ||
+          label.attributes?.colspan !== String(span) || label.ownText?.trim() !== text ||
+          label.attributes?.id || children(rn, label.key).length) return [];
+      labels.push(label); first = 1;
+    }
+    const count = week < 0 ? 0 : Math.min(7 - (week === 0 ? leading : 0), days - nextDay + 1);
+    if (cells.length !== first + count) return [];
+    for (const [column, cell] of cells.slice(first).entries()) {
+      const buttons = children(rn, cell.key).filter(n => n.type === 'button' && cls(n, 'mat-calendar-body-cell'));
+      const button = buttons[0], text = button && children(rn, button.key).filter(n => cls(n, 'mat-calendar-body-cell-content'));
+      if (cell.type !== 'td' || !cls(cell, 'mat-calendar-body-cell-container') || cell.attributes?.role !== 'gridcell' ||
+          cell.attributes?.['data-mat-row'] !== String(week) || cell.attributes?.['data-mat-col'] !== String(column) ||
+          cell.ownText?.trim() || buttons.length !== 1 || button.attributes?.['aria-label'] !== `${months[month]} ${nextDay}, ${year}` ||
+          !text || text.length !== 1 || text[0].type !== 'span' || text[0].ownText?.trim() !== String(nextDay) ||
+          children(rn, text[0].key).length) return [];
+      nextDay++;
+    }
+    rowEvidence.push({ key: row.key, attributes: row.attributes, cells: cells.map(n => ({ key: n.key, type: n.type,
+      attributes: n.attributes, ownText: n.ownText, style: n.style, rules: n.rules })) });
+  }
+  const nonempty = labels.filter(n => n.ownText?.trim());
+  const candidate = children(an, grid.key);
+  if (nextDay !== days + 1 || nonempty.length !== 1 || candidate.length !== 8 + leading + days + trailing ||
+      candidate[7] !== marker || marker.authored?.type !== 'span' || marker.authored.class !== 'datepicker-cell datepicker-month-marker' ||
+      marker.authored.textContent !== context.period.slice(0, 3) || marker.authored.role !== undefined ||
+      marker.authored.ariaHidden !== undefined || marker.authored.ariaLabel !== undefined || children(an, marker.key).length ||
+      rn.some(n => n.attributes?.id === 'datepicker-month-marker')) return [];
+  let position = 8;
+  for (const [kind, count] of [['leading', leading], ['day', days], ['trailing', trailing]]) {
+    for (let i = 0; i < count; i++) {
+      const node = candidate[position++], value = node?.authored, day = kind === 'day';
+      if (!value || value.id !== `datepicker-${kind}-${day ? i + 1 : i}` || value.type !== (day ? 'button' : 'span') ||
+          value.class !== (day ? 'datepicker-cell datepicker-day' : 'datepicker-cell') || children(an, node.key).length ||
+          (day ? value.value !== String(i + 1) || value.ariaLabel !== String(i + 1) : value.textContent !== '')) return [];
+    }
+  }
+  const reference = nonempty[0];
+  return [structuredClone({ kind: 'reviewed-calendar-month-marker-text', element: 'datepicker-month-marker',
+    referenceNode: reference.key, astylarNode: marker.key,
+    referencePath: [reference.key, reference.parent, ...context.referenceChain.slice(4)],
+    astylarPath: [marker.key, ...context.candidateChain.slice(1)], referenceDecorationNodes: [],
+    classification: 'application-plugin-authoring-defect', inputEquivalent: false,
+    reviewEvidence: { sourceFinding: 'fixture-calendar-month-marker-table-grid-substitution', context,
+      leading, days, trailing, referencePlacement: separate ? 'separate-label-row' : 'first-week-leading-cell',
+      referenceLabelColspan: Number(reference.attributes.colspan), referenceRows: rowEvidence,
+      candidateGridChildren: candidate.map(n => ({ key: n.key, parent: n.parent, authored: n.authored,
+        style: n.style, normalStyle: n.normalStyle, interactionStyle: n.interactionStyle })),
+      inputEquivalent: false, finalRasterVerified: false },
+    justification: 'The exact period, complete dated week rows and seven weekday headers identify the reference month marker, including its conditional colspan and any empty leading cell. The candidate has one month span followed by individual leading blanks, all dates and trailing blanks in a different grid structure. This establishes text correspondence only and retains the unequal table/grid inputs. It does not accept a full-span row as equivalent to the conditional table label, attribute a core span failure, waive typography, or infer final raster geometry.' })];
+}
+
 function calendarWeekdayNameGap(mapping) {
   return { family: 'datepicker', referenceNodes: [mapping.reviewEvidence.omittedFullNameNode], astylarNodes: [],
     classification: 'application-plugin-authoring-defect', attribution: 'reviewed-calendar-weekday-name-omission',
@@ -1252,25 +1331,28 @@ function validateCalendarWeekdayEvidence(report, errors) {
     }
     return replays.get(key);
   };
-  for (const [list, predicate] of [
+  for (const [list, predicate, label = 'calendar weekday'] of [
     ['reviewedMappings', m => m.kind === 'reviewed-calendar-weekday-text'],
     ['comparisons', m => m.mapping?.kind === 'reviewed-calendar-weekday-text'],
     ['differences', d => d.attribution === 'reviewed-calendar-weekday-typography-input'],
     ['gaps', g => g.attribution === 'reviewed-calendar-weekday-name-omission'],
+    ['reviewedMappings', m => m.kind === 'reviewed-calendar-month-marker-text', 'calendar month marker'],
+    ['comparisons', m => m.element === 'datepicker-month-marker', 'calendar month marker'],
+    ['differences', d => d.element === 'datepicker-month-marker', 'calendar month marker'],
   ]) {
     const reviewed = retained[list].filter(predicate), ids = new Set();
     for (const value of reviewed) {
       const id = JSON.stringify([value.case, value.element, value.referenceNode ?? value.referenceNodes, value.property]);
-      if (ids.has(id)) errors.push(`duplicate calendar weekday ${list} record`);
+      if (ids.has(id)) errors.push(`duplicate ${label} ${list} record`);
       ids.add(id);
       if (!replay(value.case)?.[list].some(expected => JSON.stringify(expected) === JSON.stringify(value)))
-        errors.push(`calendar weekday ${list} record lacks replayed input evidence`);
+        errors.push(`${label} ${list} record lacks replayed input evidence`);
     }
     // Preserve the full ordered header and omitted names: deleting a record
     // cannot make this structural replacement appear equivalent.
     for (const item of inventory.cases.filter(c => c.side === 'reference' && parseReviewedCase(c.case, 'datepicker'))) {
       for (const expected of replay(item.case)?.[list].filter(predicate) ?? []) {
-        if (!reviewed.some(value => JSON.stringify(value) === JSON.stringify(expected))) errors.push(`missing calendar weekday ${list} record: ${item.case}`);
+        if (!reviewed.some(value => JSON.stringify(value) === JSON.stringify(expected))) errors.push(`missing ${label} ${list} record: ${item.case}`);
       }
     }
   }
@@ -1365,6 +1447,7 @@ export function reviewedTemplateTextMappings(family, referenceTree, astylarTree)
     return chain;
   };
   const pairs = family === 'datepicker' ? reviewedCalendarWeekdayMappings(referenceTree, astylarTree) : [];
+  if (family === 'datepicker') pairs.push(...reviewedCalendarMonthMarkerMappings(referenceTree, astylarTree, pairs[0]));
   for (const path of paths) {
     const reference = follow(referenceTree, 'reference', path.reference);
     const astylar = follow(astylarTree, 'astylar', path.astylar);
@@ -5006,6 +5089,8 @@ function focusedProofInventory(root) {
       'fifty-one executable browser reductions; twenty-five pass and twenty-six diagnostic failures are retained', 'Twelve flex-text extensions add four passing single-item line-box-centering controls, four passing explicit-span flow controls, and four failing anonymous-text row/column start/center flows; exact case evidence is recorded separately below. Eight original reductions pass: toolbar, stepper, content-derived flex height, calendar span, bottom overlay, table cells, inherited text stage, and positioned drawer geometry. Floating-label untransformed, literal-translation, default-origin scaling, and translate-then-scale controls also pass. Both value/textContent control texture inspections, the Arial explicit-generic font-list control, and unavailable-family serif/sans-serif text-width controls pass. The single-family Arial paint-input preservation case fails because core appends Arial, Helvetica, sans-serif. An unavailable single family also fails actual bound-texture CSS advance versus browser Range width by 3.734875px, confirming observable fallback semantics without claiming final glyph raster or the exact chosen font. Percentage translation, top-left origin scaling, their combination, reversed scale/translate order, and repeated-translation composition fail. Transform-origin is deliberately preserved as original CSS diagnostic input outside the current public StyleRule subset; order/repetition controls use only existing functions and default origin. Fifteen earlier failures remain: divider empty-block height; two direct-calc grid-list limitations; two literal grid-list and two plain opposing-inset height cases; two loaded-CSS grid-list cases with correct expression resolution but wrong inner auto height; four inline/inline-block intrinsic parent-width cases; and two absolute-margin cases. Inline fragment vertical bounds are not equated to core text planes. Retained typography is not current-paint proof; geometry is not glyph/border raster, scrolling, or full Material composition evidence. Consult the investigation for exact commands and limits.'),
     proof(root, 'examples/material-showcase/src/app/input-equivalence-proof.spec.ts', /direct flex text line box is centered without a wrapper/,
       'twelve flex-text reductions; eight pass and four equal-input failures are retained', 'Single direct text centers correctly in 48px/80px rows with normal/20px line-height; this observes current text-plane placement, not natural used height or glyph raster. Mixed direct text plus a marker fails in both row/column and start/center flow, while explicit-span controls pass. Browser marker DOM boxes expose missing anonymous-item size and gap contributions: 88.921875px/44.453125px horizontal errors and 28px/14px vertical errors. Authored input preservation, core-resolved flex properties, error-free settlement and zero final scene meshes/materials/textures are asserted. The core item-generation boundary, not application wrappers or projected offsets, owns the correction.'),
+    proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('calendar month marker maps complete/,
+      'complete calendar row correspondence across all seven offsets and leap February', 'Synthetic tree controls cover all twelve 2026 months and February 2024, preserving conditional reference label colspan and the candidate replacement grid. Installed template/source witnesses bind the differing branch rules. Negative input and report-mutation tests reject incomplete dates, changed spans/order, deleted comparisons and false equivalence. This is structural/input audit proof, not a live multi-month renderer or raster proof; the current month and frozen navigation remain separate coverage limits.'),
     proof(root, 'src/app/services/dom/elements/grid.service.spec.ts', /gridColumn:\s*'1 \/ -1'/,
       'existing unit evidence', 'Core grid covers browser-style full-span gridColumn; the new browser reduction also passes. This does not prove every calendar composition.'),
     proof(root, 'src/lib/astylar-document-style-integration.spec.ts', /equivalent/,
@@ -5064,6 +5149,7 @@ function implementationPlan() {
     { priority: 5.8, rootCause: 'Calendar close control and its focus-reveal interaction were omitted', action: 'Restore the reference close-button/label, original unfocused clipping and focus-to-reveal declarations, focus order and close activation through core APIs. The source template binds focus/blur and datepicker.close(); the candidate popup never authors that control. Preserve each omission as unequal structure, not a missing paint sample or harmless hidden element. The checkpoint-bound calendar-close diagnostic proves Tab reveal, Shift+Tab hiding, Enter dismissal and opener focus restoration in both reference views at DPR 1 and 2, while the candidate lacks the control and remains open. All twenty paired action boundaries are integrated and independently replayed in the consolidated inventory, including candidate controls remaining after reference dismissal. Do not extrapolate their focused scope to all themes or claim equal-input core failure. Investigate core only against restored equal declarations; outside-click and Escape dismissal are not replacements for the missing control.' },
     { priority: 5.9, rootCause: 'Calendar weekday header structure and tokens are flattened into date-cell spans', action: 'Restore the seven column headers, separate full/narrow weekday labels, original aria-hidden and visually-hidden declarations, and spanning divider row. Preserve the calendar font and header ink tokens instead of inheriting the page fallback stack and fixed cell ink. Repeated initials require ordered full-name context, not text-only pairing. The source-authored omissions and typography substitutions precede core rendering; restore equal structure and styles before reducing table/grid, clipping, fallback, tracking or baseline discrepancies.' },
     { priority: 5.95, rootCause: 'Calendar live-period and range-description nodes are omitted', action: 'Restore the separate aria-live period span and its period-button description relationship, and retain the original calendar-body range-description spans and CSS display/clip declarations. The current single-date fixture has nonempty comparison labels even while their display is none. Preserve that authored structure through core; do not invent retained paint for absent or display:none nodes, alias the live region to the visible header string, or claim screen-reader behavior from screenshots. Then verify equivalent descriptions, changing-period announcements and applicable range states with suitable semantic/interaction evidence.' },
+    { priority: 5.96, rootCause: 'Calendar conditional table labels are replaced with an unconditional grid row', action: 'Restore the reference table/week/colspan inputs and original percentage-padding label declarations rather than calculating replacement grid coordinates. Cover all seven first-week offsets and leap/short/long months after repairing displayed-month state. Preserve the separate-row rule only when fewer than three leading cells are available; otherwise the label shares the first week. Reuse the passing equal-input span control and add a minimal original-table composition proof before assigning any core failure. Do not treat the current September row count or separately positioned selection ring as all-month parity.' },
     { priority: 6, rootCause: 'Interaction geometry duplicated by the application', action: 'Expose resolved CSS-space target bounds and local pointer coordinates in the core event/plugin contract; remove ripple width tables.' },
     { priority: 7, rootCause: 'Material paint inputs are substituted or calibrated', action: 'Supply paginator and calendar navigation reference SVG paths and their CSS/state paint through core vector/image rendering instead of font-character approximations. Preserve calendar navigation accessible names for the active month or multi-year view; do not copy month labels into the year view. Express progress angles, state layers, checkmarks, selection rings, and indicators from reference Material geometry in CSS space; remove screenshot-derived angle and fractional-position constants. Diagnose core only after the actual same geometry is supplied.' },
     { priority: 8, rootCause: 'Regression gate permits unequal inputs', action: 'Run this audit in CI after the full parity matrix, require complete coverage and zero unclassified differences, and review any new Astylar-only authored rule before updating the checked-in report.' },

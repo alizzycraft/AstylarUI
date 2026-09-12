@@ -4599,6 +4599,143 @@ function calendarWeekdayReport() {
 
 const weekdayEvidence = raw => collectRetainedTypographyEvidence(raw.results, collectFullTreeInventory(raw.results));
 
+function calendarMonthMarkerReport(year = 2026, month = 8) {
+  const raw = calendarWeekdayReport(), { reference: ref, astylar: ast } = raw.results[0].inputTrees;
+  const names = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  const label = names[month].slice(0, 3).toUpperCase(), leading = new Date(Date.UTC(year, month, 1)).getUTCDay();
+  const days = new Date(Date.UTC(year, month + 1, 0)).getUTCDate(), trailing = (7 - (leading + days) % 7) % 7;
+  const sourceDay = structuredClone(ast.nodes.find(n => n.key === 'ast-day'));
+  const sourceText = structuredClone(ast.nodes.find(n => n.key === 'ast-weekday-0'));
+  ref.nodes = ref.nodes.filter(n => !['row', 'cell', 'day', 'day-label'].includes(n.key));
+  ast.nodes = ast.nodes.filter(n => n.parent !== 'ast-grid' || n.authored.id.startsWith('datepicker-weekday-'));
+  ref.nodes.find(n => n.key === 'period').ownText = `${label} ${year}`;
+  ast.nodes.find(n => n.key === 'ast-period').authored.value = `${label} ${year} ▾`;
+  const node = (key, parent, type, attributes = {}, ownText = '') => ({ key, parent, type, attributes, ownText,
+    style: 0, rules: [], pseudoElements: [] });
+  if (leading < 3) ref.nodes.push(node('label-row', 'body', 'tr', { 'aria-hidden': 'true' }),
+    node('month-label', 'label-row', 'td', { class: 'mat-calendar-body-label', colspan: '7' }, ` ${label} `));
+  let day = 1;
+  for (let week = 0; day <= days; week++) {
+    const row = `week-${week}`;
+    ref.nodes.push(node(row, 'body', 'tr', { role: 'row' }));
+    if (week === 0 && leading) ref.nodes.push(node('leading-label', row, 'td',
+      { class: 'mat-calendar-body-label', colspan: String(leading) }, leading < 3 ? ' ' : label));
+    for (let column = 0; column < 7 - (week === 0 ? leading : 0) && day <= days; column++, day++) {
+      ref.nodes.push(node(`cell-${day}`, row, 'td', { class: 'mat-calendar-body-cell-container', role: 'gridcell',
+        'data-mat-row': String(week), 'data-mat-col': String(column) }),
+      node(`day-${day}`, `cell-${day}`, 'button', { class: 'mat-calendar-body-cell', 'aria-label': `${names[month]} ${day}, ${year}` }),
+      node(`day-label-${day}`, `day-${day}`, 'span', { class: 'mat-calendar-body-cell-content' }, ` ${day} `));
+    }
+  }
+  ref.styles.push({ ...ref.styles[0], lineHeight: '0px', textAlign: 'start', color: '#1d1b1e' });
+  for (const n of ref.nodes.filter(n => n.type === 'td' && n.attributes.class === 'mat-calendar-body-label')) n.style = ref.styles.length - 1;
+  ast.nodes.push({ ...sourceText, key: 'ast-marker', authored: { type: 'span', id: 'datepicker-month-marker',
+    class: 'datepicker-cell datepicker-month-marker', textContent: label } });
+  for (const [kind, count] of [['leading', leading], ['day', days], ['trailing', trailing]]) {
+    for (let i = 0; i < count; i++) {
+      const isDay = kind === 'day', key = `ast-${kind}-${i}`;
+      const n = structuredClone(isDay ? sourceDay : sourceText);
+      Object.assign(n, { key, parent: 'ast-grid', authored: isDay
+        ? { type: 'button', id: `datepicker-day-${i + 1}`, class: 'datepicker-cell datepicker-day', ariaLabel: String(i + 1), value: String(i + 1) }
+        : { type: 'span', id: `datepicker-${kind}-${i}`, class: 'datepicker-cell', textContent: '' } });
+      if (isDay) n.paintedControlText.text = String(i + 1);
+      ast.nodes.push(n);
+    }
+  }
+  return raw;
+}
+
+test('calendar month marker maps complete conditional table rows without accepting the replacement grid', () => {
+  const offsets = new Set();
+  for (const [year, month] of [...Array.from({ length: 12 }, (_, i) => [2026, i]), [2024, 1]]) {
+    const raw = calendarMonthMarkerReport(year, month), before = structuredClone(raw);
+    const evidence = weekdayEvidence(raw), maps = evidence.reviewedMappings.filter(m => m.kind === 'reviewed-calendar-month-marker-text');
+    assert.equal(maps.length, 1, `${year}-${month + 1}`);
+    const m = maps[0], detail = m.reviewEvidence; offsets.add(detail.leading);
+    assert.equal(detail.referencePlacement, detail.leading < 3 ? 'separate-label-row' : 'first-week-leading-cell');
+    assert.equal(detail.referenceLabelColspan, detail.leading < 3 ? 7 : detail.leading);
+    assert.equal(detail.days, new Date(Date.UTC(year, month + 1, 0)).getUTCDate());
+    assert.equal(detail.referenceRows.length, Math.ceil((detail.leading + detail.days) / 7) + Number(detail.leading < 3));
+    assert.equal(detail.candidateGridChildren.length, 8 + detail.leading + detail.days + detail.trailing);
+    assert.equal(m.classification, 'application-plugin-authoring-defect');
+    assert.equal(m.inputEquivalent, false); assert.equal(detail.finalRasterVerified, false);
+    assert.ok(evidence.comparisons.some(c => c.element === m.element && c.properties.lineHeight.reference === '0'));
+    assert.ok(evidence.differences.some(d => d.element === m.element && d.property === 'lineHeight' && d.attribution === 'unresolved'));
+    assert.ok(!evidence.gaps.some(g => g.element === m.element));
+    assert.deepEqual(raw, before);
+  }
+  assert.deepEqual([...offsets].sort(), [0, 1, 2, 3, 4, 5, 6]);
+});
+
+test('calendar month marker refuses incomplete dates changed spans or reordered replacement cells', () => {
+  for (const mutate of [
+    r => { r.nodes.find(n => n.key === 'month-label').attributes.colspan = '2'; },
+    r => { r.nodes.find(n => n.key === 'month-label').ownText = 'OCT'; },
+    r => { r.nodes.find(n => n.key === 'label-row').attributes['aria-hidden'] = 'false'; },
+    r => { r.nodes.find(n => n.key === 'leading-label').ownText = 'SEP'; },
+    r => { r.nodes.find(n => n.key === 'leading-label').attributes.colspan = '3'; },
+    r => { r.nodes.find(n => n.key === 'day-30').attributes['aria-label'] = 'October 30, 2026'; },
+    r => { r.nodes.find(n => n.key === 'cell-8').attributes['data-mat-col'] = '6'; },
+    r => { r.nodes = r.nodes.filter(n => n.key !== 'day-label-30'); },
+    r => { r.nodes.find(n => n.key === 'cell-8').parent = 'week-0'; },
+    r => { r.nodes.push({ ...r.nodes.find(n => n.key === 'month-label') }); },
+    r => { r.nodes.find(n => n.key === 'period').ownText = 'AUG 2026'; },
+    r => { r.nodes.find(n => n.key === 'full-0').ownText = 'Saturday'; },
+    (_r, a) => { a.nodes.find(n => n.key === 'ast-marker').parent = 'ast-popup'; },
+    (_r, a) => { a.nodes.find(n => n.key === 'ast-marker').authored.role = 'gridcell'; },
+    (_r, a) => { a.nodes.find(n => n.key === 'ast-marker').authored.textContent = 'OCT'; },
+    (_r, a) => { a.nodes = a.nodes.filter(n => n.authored?.id !== 'datepicker-trailing-0'); },
+    (_r, a) => { a.nodes.find(n => n.authored?.id === 'datepicker-leading-0').authored.textContent = ' '; },
+    (_r, a) => { a.nodes.find(n => n.authored?.id === 'datepicker-day-30').authored.value = '31'; },
+    (_r, a) => { const i = a.nodes.findIndex(n => n.key === 'ast-marker'); [a.nodes[i], a.nodes[i + 1]] = [a.nodes[i + 1], a.nodes[i]]; },
+  ]) {
+    const raw = calendarMonthMarkerReport(), t = raw.results[0].inputTrees; mutate(t.reference, t.astylar);
+    assert.equal(weekdayEvidence(raw).reviewedMappings.filter(m => m.kind === 'reviewed-calendar-month-marker-text').length, 0, String(mutate));
+  }
+});
+
+test('calendar month marker source witnesses retain conditional table spans and unconditional candidate row', async () => {
+  const { readFileSync } = await import('node:fs');
+  const reference = readFileSync('examples/material-showcase/node_modules/@angular/material/fesm2022/datepicker.mjs', 'utf8');
+  const candidate = readFileSync('examples/material-showcase/src/app/astylar.component.ts', 'utf8');
+  const template = type => {
+    const start = reference.indexOf(`type: ${type},`);
+    assert.ok(start >= 0);
+    const match = /template: ("(?:\\.|[^"\\])*")/.exec(reference.slice(start));
+    assert.ok(match); return JSON.parse(match[1]);
+  };
+  const body = template('MatCalendarBody'), month = template('MatMonthView');
+  assert.ok(month.includes('[labelMinRequiredCells]="3"'));
+  assert.match(body, /@if \(_firstRowOffset < labelMinRequiredCells\)\s*\{/);
+  assert.ok(body.includes('[attr.colspan]="numCols"'));
+  assert.match(body, /@if \(rowIndex === 0 && _firstRowOffset\)\s*\{/);
+  assert.ok(body.includes('[attr.colspan]="_firstRowOffset"'));
+  assert.ok(body.includes("{{_firstRowOffset >= labelMinRequiredCells ? label : ''}}"));
+  assert.match(candidate, /selector: '\.datepicker-month-marker', gridColumn: '1 \/ -1'/);
+  assert.match(candidate, /function materialSelectedDayRow\(\): number \{\s*return 2 \+ Math\.floor\(\(materialCalendarLeadingDays\(\) \+ materialCurrentDay\(\) - 1\) \/ 7\);\s*\}/);
+  const report = buildMaterialInputAudit(calendarMonthMarkerReport());
+  assert.equal(report.sourceFindings.find(f => f.id === 'fixture-calendar-month-marker-table-grid-substitution')?.detected, true);
+  assert.equal(report.summary.inputEquivalent, false);
+});
+
+test('calendar month marker validation rejects deleted and forged correspondence or typography', () => {
+  for (const mutate of [
+    t => { t.reviewedMappings = t.reviewedMappings.filter(m => m.kind !== 'reviewed-calendar-month-marker-text'); },
+    t => { t.reviewedMappings.push(structuredClone(t.reviewedMappings.find(m => m.kind === 'reviewed-calendar-month-marker-text'))); },
+    t => { t.reviewedMappings.find(m => m.kind === 'reviewed-calendar-month-marker-text').inputEquivalent = true; },
+    t => { t.reviewedMappings.find(m => m.kind === 'reviewed-calendar-month-marker-text').reviewEvidence.referenceLabelColspan = 2; },
+    t => { t.comparisons = t.comparisons.filter(c => c.element !== 'datepicker-month-marker'); },
+    t => { t.comparisons.find(c => c.element === 'datepicker-month-marker').revision++; },
+    t => { t.differences = t.differences.filter(d => d.element !== 'datepicker-month-marker'); },
+    t => { t.differences.find(d => d.element === 'datepicker-month-marker').attribution = 'equivalent'; },
+  ]) {
+    const report = buildMaterialInputAudit(calendarMonthMarkerReport());
+    assert.ok(!validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('calendar month marker')));
+    mutate(report.retainedTypography);
+    assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('calendar month marker')), String(mutate));
+  }
+});
+
 test('calendar weekday audit preserves seven ordered abbreviations and seven omitted full names', () => {
   const raw = calendarWeekdayReport(), before = structuredClone(raw), evidence = weekdayEvidence(raw);
   const maps = evidence.reviewedMappings.filter(m => m.kind === 'reviewed-calendar-weekday-text');

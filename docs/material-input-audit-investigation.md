@@ -23,6 +23,94 @@ selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Calendar month-marker table/grid correspondence (2026-09-13)
+
+The reference month marker is not an unconditional full-width row. The installed
+`@angular/material/fesm2022/datepicker.mjs` month-view template supplies
+`labelMinRequiredCells=3`. Its calendar-body template at line 555 creates a
+seven-column, aria-hidden label row only when `_firstRowOffset < 3`. Otherwise
+the nonempty label occupies a cell with `colspan=_firstRowOffset` in the first
+week. When a separate label row is needed and the offset is nonzero, the first
+week still retains an **empty** leading cell with that offset as its colspan.
+These empty cells are inputs too, not disposable text-less noise.
+
+The candidate in `examples/material-showcase/src/app/astylar.component.ts:1062`
+always authors the marker before individual leading blanks and all the dates.
+Its rule at line 627 specifies `gridColumn: '1 / -1'`, `paddingLeft: '12px'`
+and flex-start justification on a fixed 40x40 cell. This differs from the
+reference table cell's zero height/line-height, start text alignment and
+percentage padding. Reading **87f7f83** confirms the initial table-to-grid
+replacement; **c64397c** added the unconditional full-span rule and changed
+`materialSelectedDayRow()` to an unconditional two-row offset. That historical
+change does not establish equivalent conditional month layout.
+
+The new source finding is
+`fixture-calendar-month-marker-table-grid-substitution`, classified as
+application/plugin authoring. The existing minimal equal-input full-grid-span
+browser proof passes; do not cite this unequal table/grid comparison as proof
+that core does not honor spans. Restoring the original table composition and
+then reducing any remaining failure is the appropriate implementation boundary.
+
+The audit now maps the text only after verifying the original calendar/period
+ancestry, complete seven-column weekday header, every dated cell and week row,
+the exact conditional label/empty-cell spans, and the entire candidate grid
+child sequence including leading and trailing blanks. The mapping preserves
+both structures with `inputEquivalent:false` and `finalRasterVerified:false`.
+It neither moves text/rings nor waives a style difference.
+
+The corrected full matrix and its bound calendar-close supplement produce
+**41 mappings**: 33 main interaction states and eight supplemental boundaries.
+All captured months are SEP 2026, whose offset is two; thus their separate-row
+branch does not prove the first-week-sharing branch works in the application.
+The unit controls cover all twelve 2026 months (all seven offsets, short and
+long months) and leap February 2024, with source witnesses for both actual
+reference branches. These synthetic input-tree controls are not live multi-month
+rendering evidence. Candidate displayed-month navigation remains independently
+broken as documented in the picker-commit investigation.
+
+This correspondence removes **82 unresolved text-owner gaps** while exposing
+**164 actual retained typography differences**. The existing exact ancestor
+font-stack review attributes 41. The remaining 123 are line-height (`0` versus
+`normal`), text alignment (`start` versus `center`), and ink
+(`rgb(29,27,30)` versus `rgb(29,27,32)`), 41 each. They remain unresolved pending
+their own original-declaration/stage attribution; mapping the text is not a
+typography fix. Overall unresolved retained mapping/stage gaps decrease from
+3,107 to **3,025**, while unresolved retained differences increase from 354 to
+**477**. This is more complete evidence, not a visual regression or acceptance.
+
+Focused command:
+
+`node --test --test-name-pattern='calendar month marker|calendar weekday|records source fingerprints' tests/material-parity/input-equivalence-audit.spec.mjs`
+
+Result: **9/9 pass**, zero failed/skipped/cancelled/todo tests, **6.760 seconds**.
+The first run had one test expectation error (`0px` instead of the audit's
+canonical `0`); correcting that test leaves the captured input and normalization
+unchanged. Nineteen contradictory-input controls reject missing/reordered dates,
+wrong context/spans/blank cells and changed marker ownership. Eight report
+mutations reject removed/duplicated mappings, false equivalence, altered revision
+or span evidence, and deleted/reclassified typography differences.
+
+`npm run parity:harness:check` passes **357/357**, zero failed/skipped/cancelled/
+todo tests, **149.536 seconds**, terminal exit 0. The full audit replay used:
+
+```powershell
+node --input-type=module -e "import {readFileSync} from 'node:fs'; import {buildMaterialInputAudit,validateMaterialInputAudit} from './tests/material-parity/input-equivalence-audit.mjs'; const p=JSON.parse(readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json')); const a=buildMaterialInputAudit(p,{root:process.cwd(),normalLineBoxPath:'artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json',supplementalRoot:'artifacts/material-parity/supplemental-current-ancestry-audit'}); console.log('DIAGNOSTIC '+JSON.stringify(validateMaterialInputAudit(a,{requireComplete:false}))); console.log('STRICT '+JSON.stringify(validateMaterialInputAudit(a)));"
+```
+
+The diagnostic result is `[]`; strict validation retains four honest incomplete
+categories: 3,309 unresolved resolved-style differences, 849 control-texture
+typography differences, 3,025 retained mapping/stage gaps and 477 retained
+typography differences. Inventory remains 4,688 side/case records and 2,158 tree
+variants with zero inventory errors; all **95** source findings are detected.
+This command intentionally prints strict validation errors rather than using
+its shell exit code as an acceptance claim. No partial report replaces the
+final checked-in deliverable.
+
+All ten harness-file hashes bound to the current visual checkpoint still match;
+no renderer, plugin, showcase, reference or visual threshold changed. The final
+unfiltered enforced matrix and complete classified report remain acceptance
+requirements, not claims made by this bounded audit increment.
+
 ## Calendar live-period and range-description omissions (2026-09-12)
 
 The remaining calendar text-owner gaps include authored accessibility labels,
