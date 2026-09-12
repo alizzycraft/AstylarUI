@@ -12,6 +12,48 @@ tests pass). A missing selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Static natural line boxes now have provenance-bound supplemental captures (2026-09-12)
+
+`scripts/audit-material-normal-line-boxes.mjs` completed **120 observations in
+96 static cases**, covering all currently mapped normal-line-height labels
+across eight families, four profiles and three static viewports. The immutable
+local result is
+`artifacts/material-parity/normal-line-box-static-audit-v2/latest-report.json`.
+Every observed natural line box was **17 CSS pixels**. This remains a scoped
+measurement, not a global normalization or completed input-equivalence claim.
+
+The driver uses the frozen matrix server and rejects changed browser versions,
+served document/script/style/font bytes, original typography, text, element
+identity, viewport or DPR. The browser helper copies natural single-line
+typography into a temporary offscreen observer, rejects unsupported structure,
+writing modes and generated observer content, verifies the reference rectangle
+is unchanged, and removes the observer on success or failure. No fixture input
+or renderer implementation was changed. The first attempt rejected an incorrect
+document filename expectation (`index.html` versus the served `index.csr.html`);
+it produced no usable observations and was preserved separately.
+
+An independent post-capture check validated all **436 static checkpoint result
+digests**, checkpoint key/filename identities, the manifest and both capture
+source hashes, all 96 supplemental file hashes, paired input-tree digests, exact
+measurement-to-control mappings and typography, and **49,824 served-asset hash
+references**. It found exactly the expected 120 unique observations, with no
+inventory or recorded runtime errors. The result is static-only; it does not
+cover interaction states, baselines, wrapper layout or final glyph rasters.
+
+Reproduction command while the matching frozen server is available:
+`node scripts/audit-material-normal-line-boxes.mjs --base-url=http://127.0.0.1:4431
+--checkpoint=artifacts/material-parity/control-text-complete-audit/checkpoint
+--output=artifacts/material-parity/normal-line-box-static-audit-v2`.
+The output directory must be new for another capture. Browser-helper tests:
+`npm run material-input-audit:line-box:test` (**4/4 passed**, repeated).
+
+The next increment must add a tested fail-closed evidence loader and join these
+observations to their exact report occurrences. Until then the comparator
+intentionally leaves the 120 `normal`/17px differences unresolved. Separate
+font-list, tracking and disabled-ink differences remain unequal inputs; the
+Arial, serif and fallback-glyph core failures below remain valid. The full
+matrix continues independently and has not been restarted or narrowed.
+
 ## Production normal line-box spot-check narrows the next capture step (2026-09-12)
 
 A separate Chrome context loaded the frozen full-matrix server's actual

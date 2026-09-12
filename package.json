@@ -44,6 +44,7 @@
     "material-parity:check": "node tests/material-parity/run-material-parity.mjs --enforce",
     "material-input-audit": "node scripts/run-material-input-audit.mjs",
     "material-input-audit:check": "node scripts/run-material-input-audit.mjs --check",
+    "material-input-audit:line-box:test": "node --test tests/material-parity/normal-line-box-evidence.spec.mjs",
     "capabilities:check": "node scripts/check-capability-catalog.mjs",
     "examples:check": "node scripts/check-translation-examples.mjs",
     "skill:references:sync": "npm run skill:developer:references:sync",
