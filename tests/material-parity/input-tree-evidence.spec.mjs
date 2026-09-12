@@ -101,6 +101,45 @@ test('start alignment requires the line-container context, not just a leaf direc
   } finally { await browser.close(); }
 });
 
+test('component font tokens preserve nested fallback lists and source-order exceptions', async () => {
+  const browser = await chromium.launch({ channel: 'chrome', headless: true });
+  try {
+    const page = await browser.newPage();
+    const result = await page.evaluate(() => {
+      const inspect = (rules, properties = {}) => {
+        const wrapper = document.createElement('div'), style = document.createElement('style');
+        const owner = document.createElement('mat-button-toggle'), button = document.createElement('button');
+        const label = document.createElement('span');
+        wrapper.style.fontFamily = 'serif';
+        for (const [key, value] of Object.entries(properties)) wrapper.style.setProperty(key, value);
+        owner.className = 'mat-button-toggle mat-button-toggle-appearance-standard';
+        label.textContent = 'Label';
+        button.style.fontFamily = 'inherit';
+        button.append(label); owner.append(button); wrapper.append(style, owner);
+        style.textContent = rules; document.body.append(wrapper);
+        const fonts = [owner, button, label].map(n => getComputedStyle(n).fontFamily);
+        wrapper.remove();
+        return fonts;
+      };
+      const legacy = '.mat-button-toggle { font-family: var(--mat-button-toggle-legacy-label-text-font) }';
+      const standard = '.mat-button-toggle-appearance-standard { font-family: var(--mat-button-toggle-label-text-font, var(--mat-sys-label-large-font)) }';
+      const vars = { '--mat-button-toggle-legacy-label-text-font': 'Arial', '--mat-sys-label-large-font': 'Roboto' };
+      const table = '.mat-button-toggle { font-family: var(--mat-table-header-headline-font, var(--mat-sys-title-small-font, Roboto, sans-serif)) }';
+      return { standardWins: inspect(legacy + standard, vars), laterLegacyWins: inspect(standard + legacy, vars),
+        importantLegacyWins: inspect(legacy.replace(') }', ') !important }') + standard, vars),
+        unlayeredLegacyWins: inspect(legacy + '@layer component {' + standard + '}', vars),
+        tableSystem: inspect(table, { '--mat-sys-title-small-font': 'Roboto' }),
+        tableFallback: inspect(table), tableComponent: inspect(table, { '--mat-table-header-headline-font': 'Arial', '--mat-sys-title-small-font': 'Roboto' }) };
+    });
+    assert.deepEqual(result.standardWins, ['Roboto', 'Roboto', 'Roboto']);
+    for (const name of ['laterLegacyWins', 'importantLegacyWins', 'unlayeredLegacyWins', 'tableComponent']) {
+      assert.deepEqual(result[name], ['Arial', 'Arial', 'Arial'], name);
+    }
+    assert.deepEqual(result.tableSystem, ['Roboto', 'Roboto', 'Roboto']);
+    assert.deepEqual(result.tableFallback, ['Roboto, sans-serif', 'Roboto, sans-serif', 'Roboto, sans-serif']);
+  } finally { await browser.close(); }
+});
+
 test('browser font-weight keywords resolve to exact numeric aliases but relative weights depend on ancestry', async () => {
   const browser = await chromium.launch({ channel: 'chrome', headless: true });
   try {

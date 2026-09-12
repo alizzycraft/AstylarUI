@@ -711,6 +711,96 @@ test('component font claims replay exact reference tokens, candidate inherited s
   }
 });
 
+function componentFontVariant(kind) {
+  const raw = inheritedComponentFontReport(), ref = raw.results[0].inputTrees.reference;
+  const rules = {
+    'mdc-list': ['.mdc-list-item__primary-text', 'var(--mat-list-list-item-label-text-font, var(--mat-sys-body-large-font))'],
+    'mdc-field': ['.mdc-text-field--filled .mdc-floating-label', 'var(--mat-form-field-filled-label-text-font, var(--mat-sys-body-large-font))'],
+    'table-header': ['.mat-mdc-header-row', 'var(--mat-table-header-headline-font, var(--mat-sys-title-small-font, Roboto, sans-serif))'],
+    'table-row': ['.mat-mdc-row, .mdc-data-table__content', 'var(--mat-table-row-item-label-text-font, var(--mat-sys-body-medium-font, Roboto, sans-serif))'],
+    toggle: ['.mat-button-toggle-appearance-standard', 'var(--mat-button-toggle-label-text-font, var(--mat-sys-label-large-font))'],
+  };
+  const [selector, value] = rules[kind];
+  ref.rules[0] = { active: true, selector, source: 'sheet:4/23', conditions: [], declarations: { 'font-family': { value, important: false } } };
+  if (kind === 'toggle') {
+    ref.rules.push({ active: true, selector: '.mat-button-toggle', source: 'sheet:4/9', conditions: [],
+      declarations: { 'font-family': { value: 'var(--mat-button-toggle-legacy-label-text-font)', important: false } } });
+    ref.nodes[1].type = 'mat-button-toggle';
+    ref.nodes[1].attributes.class = 'mat-button-toggle mat-button-toggle-appearance-standard';
+    ref.nodes[1].rules = [2, 0];
+  }
+  return raw;
+}
+
+test('font attribution recognizes captured MDC rules, nested table fallback tokens and the guarded standard toggle cascade', () => {
+  for (const kind of ['mdc-list', 'mdc-field', 'table-header', 'table-row', 'toggle']) {
+    const raw = componentFontVariant(kind), before = structuredClone(raw);
+    const section = collectRetainedTypographyEvidence(raw.results, collectFullTreeInventory(raw.results));
+    const findings = section.differences.filter(d => d.attribution === 'reviewed-inherited-component-font-stack');
+    assert.equal(findings.length, 1, kind);
+    assert.deepEqual(findings[0].reviewEvidence.referenceRule, raw.results[0].inputTrees.reference.rules[0]);
+    assert.equal(findings[0].reviewEvidence.referenceChain.at(-1).fontRules.length, kind === 'toggle' ? 2 : 1);
+    assert.equal(findings[0].classification, 'application-plugin-authoring-defect');
+    assert.deepEqual(raw, before);
+  }
+});
+
+test('toggle font winner is not guessed across importance, layers, specificity, unknown order or extra declarations', () => {
+  const mutations = [
+    ref => { ref.rules[2].source = 'sheet:4/24'; },
+    ref => { ref.rules[2].source = 'sheet:4/23'; },
+    ref => { ref.rules[2].source = 'sheet:5/9'; },
+    ref => { ref.rules[2].source = 'sheet:4/8/0'; },
+    ref => { ref.rules[0].source = 'sheet:4/25/0'; },
+    ref => { ref.rules[0].source = 'sheet:4/999999999999999999999999'; },
+    ref => { delete ref.rules[0].source; },
+    ref => { ref.rules[2].declarations['font-family'].important = true; },
+    ref => { ref.rules[0].declarations['font-family'].important = true; },
+    ref => { delete ref.rules[2].declarations['font-family'].important; },
+    ref => { delete ref.rules[0].conditions; },
+    ref => { ref.rules[2].conditions = ['(min-width: 1px)']; },
+    ref => { ref.rules[0].selector += '.extra-specificity'; },
+    ref => { ref.rules[2].declarations['font-family'].value = 'Arial'; },
+    ref => { ref.rules[0].declarations['font-family'].value = 'var(--other-font)'; },
+    ref => { ref.nodes[1].type = 'div'; },
+    ref => { ref.nodes[1].attributes.class = 'mat-button-toggle'; },
+    ref => { ref.nodes[1].rules.push(0); },
+    ref => { ref.rules[2].declarations.font = { value: '14px Arial' }; },
+  ];
+  for (const mutate of mutations) {
+    const raw = componentFontVariant('toggle');
+    mutate(raw.results[0].inputTrees.reference);
+    const section = collectRetainedTypographyEvidence(raw.results, collectFullTreeInventory(raw.results));
+    assert.ok(!section.differences.some(d => d.attribution === 'reviewed-inherited-component-font-stack'), String(mutate));
+  }
+  for (const kind of ['mdc-list', 'mdc-field', 'table-header', 'table-row']) {
+    for (const mutate of [
+      ref => { ref.rules[0].declarations['font-family'].value = undefined; },
+      ref => { ref.styles[0].fontFamily = 'Roboto, sans-serif'; },
+      ref => { ref.rules[0].selector = '.unreviewed-mdc-label'; },
+    ]) {
+      const raw = componentFontVariant(kind);
+      mutate(raw.results[0].inputTrees.reference);
+      const section = collectRetainedTypographyEvidence(raw.results, collectFullTreeInventory(raw.results));
+      assert.ok(!section.differences.some(d => d.attribution === 'reviewed-inherited-component-font-stack'), `${kind}: ${mutate}`);
+    }
+  }
+});
+
+test('toggle font cascade review replays both competing declarations and their actual provenance', () => {
+  const baseline = buildMaterialInputAudit(componentFontVariant('toggle'));
+  assert.ok(!validateMaterialInputAudit(baseline, { requireComplete: false }).some(e => e.includes('font-stack attributions')));
+  for (const mutate of [
+    report => { report.elementInventory.rules.find(r => r.value.selector === '.mat-button-toggle').value.source = 'sheet:4/24'; },
+    report => { report.elementInventory.rules.find(r => r.value.selector === '.mat-button-toggle').value.declarations['font-family'].important = true; },
+    report => { report.retainedTypography.differences.find(d => d.attribution === 'reviewed-inherited-component-font-stack').reviewEvidence.referenceChain.at(-1).fontRules.shift(); },
+  ]) {
+    const report = structuredClone(baseline);
+    mutate(report);
+    assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('font-stack attributions')), String(mutate));
+  }
+});
+
 function hiddenRetainedTypographyReport(referenceMechanism = 'display-none') {
   const raw = retainedTypographyReport();
   const { reference, astylar } = raw.results[0].inputTrees;

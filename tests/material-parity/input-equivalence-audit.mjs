@@ -1383,6 +1383,36 @@ function reviewedCalendarWeekdayTypography(entry, mapping, property, ast, styles
       currentPseudoStatePaintVerified: false } };
 }
 
+function reviewedReferenceComponentFontRule(node, declarations) {
+  if (declarations.some(r => r.declarations.font)) return;
+  if (declarations.length === 1) {
+    const rule = declarations[0], token = rule.declarations['font-family']?.value;
+    const standardToken = /^var\(--mat-[a-z0-9-]+-font, var\(--mat-sys-[a-z0-9-]+-font\)\)$/.test(token ?? '');
+    const mdcLabel = ['.mdc-list-item__primary-text', '.mdc-text-field--filled .mdc-floating-label'].includes(rule.selector);
+    const tableTokens = {
+      '.mat-mdc-header-row': 'var(--mat-table-header-headline-font, var(--mat-sys-title-small-font, Roboto, sans-serif))',
+      '.mat-mdc-row, .mdc-data-table__content': 'var(--mat-table-row-item-label-text-font, var(--mat-sys-body-medium-font, Roboto, sans-serif))',
+    };
+    if ((standardToken && (rule.selector.includes('.mat-') || mdcLabel)) ||
+        (Object.hasOwn(tableTokens, rule.selector) && tableTokens[rule.selector] === token)) return rule;
+    return;
+  }
+  // Both selectors have specificity 0,1,0. Only this exact pair of ordinary
+  // same-sheet, top-level, non-important author rules has a reviewed winner.
+  // Nested/layered rules cannot be ordered by their numeric source suffix.
+  if (declarations.length !== 2 || node.type !== 'mat-button-toggle' ||
+      !['mat-button-toggle', 'mat-button-toggle-appearance-standard'].every(c =>
+        String(node.attributes?.class ?? '').split(/\s+/).includes(c))) return;
+  const legacy = declarations.find(r => r.selector === '.mat-button-toggle');
+  const standard = declarations.find(r => r.selector === '.mat-button-toggle-appearance-standard');
+  if (!legacy || !standard || legacy.declarations['font-family']?.value !== 'var(--mat-button-toggle-legacy-label-text-font)' ||
+      standard.declarations['font-family']?.value !== 'var(--mat-button-toggle-label-text-font, var(--mat-sys-label-large-font))' ||
+      declarations.some(r => r.declarations['font-family'].important !== false || !Array.isArray(r.conditions) || r.conditions.length)) return;
+  const a = /^sheet:(\d+)\/(\d+)$/.exec(legacy.source ?? ''), b = /^sheet:(\d+)\/(\d+)$/.exec(standard.source ?? '');
+  if (a && b && [...a.slice(1), ...b.slice(1)].every(value => Number.isSafeInteger(Number(value))) &&
+      a[1] === b[1] && Number(b[2]) > Number(a[2])) return standard;
+}
+
 function reviewedInheritedComponentFontStack(mapping, ref, ast, styles, referenceTree, astylarTree, inventory) {
   // More specific select/weekday investigations already preserve their token,
   // structure and declaration evidence together. Do not replace those records.
@@ -1405,10 +1435,8 @@ function reviewedInheritedComponentFontStack(mapping, ref, ast, styles, referenc
     referenceChain.push({ node: node.key, computed: pooled.value, fontRules: declarations });
     const explicit = declarations.filter(r => r.declarations?.font || r.declarations['font-family'].value !== 'inherit');
     if (explicit.length) {
-      if (explicit.length !== 1 || declarations.length !== 1 || explicit[0].declarations.font ||
-          !explicit[0].selector.includes('.mat-') ||
-          !/^var\(--mat-[a-z0-9-]+-font, var\(--mat-sys-[a-z0-9-]+-font\)\)$/.test(explicit[0].declarations['font-family']?.value ?? '')) return;
-      referenceRule = explicit[0];
+      referenceRule = reviewedReferenceComponentFontRule(node, declarations);
+      if (!referenceRule) return;
       break;
     }
     const parents = referenceTree.nodes.filter(n => n.key === node.parent);
@@ -1444,7 +1472,7 @@ function reviewedInheritedComponentFontStack(mapping, ref, ast, styles, referenc
   return { attribution: 'reviewed-inherited-component-font-stack', classification: 'application-plugin-authoring-defect',
     inputEquivalent: false, currentPseudoStatePaintVerified: false,
     recommendedOwner: 'showcase Material component font-token translation and reference structure',
-    justification: 'The captured reference text inherits or directly applies a unique active Material component font-family token, computing Roboto with no intervening override. The candidate normal/effective declarations omit font-family through the complete leaf-to-page chain and core retains the explicit page stack Roboto, Arial, sans-serif. The page reset itself is legitimate; omitting the component override is unequal authoring. This is separate from core appending fallback fonts to an explicit single-family input. Preserve the component font intent before assessing fallback selection, shaping, geometry or current glyph paint; matching installed Roboto glyphs would not equate the fallback lists.',
+    justification: 'The captured reference text inherits or directly applies a reviewed winning Material component font-family token, computing Roboto with no intervening override. Unique active token rules are accepted directly; the exact standard/legacy button-toggle pair additionally requires equal-specificity, same-sheet, top-level, non-important source-order evidence. Both competing declarations remain in the reference chain. The candidate normal/effective declarations omit font-family through the complete leaf-to-page chain and core retains the explicit page stack Roboto, Arial, sans-serif. The page reset itself is legitimate; omitting the component override is unequal authoring. This is separate from core appending fallback fonts to an explicit single-family input. Preserve the component font intent before assessing fallback selection, shaping, geometry or current glyph paint; matching installed Roboto glyphs would not equate the fallback lists.',
     reviewEvidence: { sourceFinding: 'fixture-retained-component-font-tokens-omitted', referenceRule, referenceChain,
       candidatePageRule: pageRules[0], candidateChain, referenceComputed: styles.reference.fontFamily,
       candidateRetained: styles.retained.fontFamily } };

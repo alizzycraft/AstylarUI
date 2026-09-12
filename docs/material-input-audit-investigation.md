@@ -17,6 +17,53 @@ tests pass). A missing selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## MDC, table fallback and button-toggle font cascade evidence (2026-09-12)
+
+The remaining **138 static retained-font differences** were inspected through
+their actual captured declaration chains, not assumed to share the earlier
+case. They comprise three additional reference patterns:
+
+- Filled-field floating labels and list labels use `.mdc-*` selectors with
+  Material font tokens. The audit now recognizes those exact two selectors.
+- Table header and body rows have nested system-token fallbacks ending in
+  `Roboto, sans-serif`. Their complete token expressions remain recorded;
+  the computed `Roboto` input is not replaced with the fallback list.
+- Standard button toggles match both the legacy font rule and the later
+  standard rule. Both have specificity 0,1,0. The reviewed standard winner
+  requires the exact host type/classes and token pair, same stylesheet,
+  top-level rules, non-important declarations, no conditional/layer context,
+  and strictly later safe-integer source order. Both declarations remain in
+  the evidence. Other competing rules and unknown precedence remain gaps.
+
+The browser proof confirms why these restrictions matter: reversing rule order,
+making the legacy declaration important, or putting only the standard rule in
+a cascade layer changes the inherited family from Roboto to Arial. A system
+table font token yields Roboto; removing that token exposes the actual
+Roboto/sans-serif fallback list; a component-level override yields Arial.
+These seven cases inspect computed families through the owner, button and
+label. They do not assert physical font selection, glyph metrics or raster.
+
+Three audit tests cover the five newly reviewed patterns, 19 unsafe toggle
+cascade mutations, 12 MDC/table mutations and three tampered report/provenance
+cases. The focused audit plus browser-collector command passes **146/146**:
+`node --test tests/material-parity/input-equivalence-audit.spec.mjs tests/material-parity/input-tree-evidence.spec.mjs`.
+The final complete `npm run parity:harness:check` run passes **235/235**, with
+no skipped tests; it also covers the safe-integer source-order guard.
+`git diff --check` is clean.
+
+A SHA-validated **631-record** prefix of the live capture now has **zero
+unresolved font-family differences among its 354 mapped static retained-text
+observations**: 342 are the page/component-token omission category, and 12 keep
+the earlier exact select-value attribution. All remain unequal inputs, not
+accepted font-list equivalence. Partial-schema validation and the fresh
+normal-line-box loader report no errors. Other text properties, unmapped
+owners, current-control text, missing behaviors and the rest of the interaction
+matrix are not covered by this bounded result; overall audit completion and
+input equivalence remain false.
+
+No renderer, fixture, font asset, capture module or threshold was changed.
+The existing full unfiltered interaction capture is still running.
+
 ## Retained component fonts versus inherited page defaults (2026-09-12)
 
 A second repeated font-input category is now separated from the independently
