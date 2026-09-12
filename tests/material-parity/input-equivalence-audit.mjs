@@ -3,7 +3,8 @@ import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { loadNormalLineBoxReport } from './normal-line-box-report.mjs';
 import { validateSupplementalCapture } from './supplemental-capture-evidence.mjs';
-import { borderColorProperties, borderInitialAttribution, collectBorderInitialInputs, classifyBorderInitialInput } from './border-initial-input-evidence.mjs';
+import { borderColorProperties, borderInitialAttribution, collectBorderInitialInputs, classifyBorderInitialInput,
+  buttonBorderResetAttribution, collectButtonBorderResetInputs, classifyButtonBorderResetInput } from './border-initial-input-evidence.mjs';
 import {
   implicitReferenceValues,
   implicitReferenceJustifications,
@@ -75,6 +76,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const elementInventory = collectFullTreeInventory([...cases, ...supplementalBehavior.cases, ...supplementalOverlays.cases, ...supplementalSlider.cases], { root });
   const visibleOverflowInputs = collectVisibleOverflowInputs(elementInventory);
   const borderInitialInputs = collectBorderInitialInputs(elementInventory, canonicalStyle);
+  const buttonBorderResetInputs = collectButtonBorderResetInputs(elementInventory, canonicalStyle);
   const rawControlTypography = collectControlTypographyEvidence(cases, elementInventory);
   const retainedTypography = collectRetainedTypographyEvidence(cases, elementInventory, rawControlTypography);
   const normalLineBoxes = options.normalLineBoxPath
@@ -85,7 +87,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
       .map((item) => ({ case: item.case, element: item.element, referenceNode: item.referenceNode })),
       scope: 'No supplemental static natural-line-box report selected. No line-height equivalence inferred.' };
   const controlTypography = attributeObservedNormalLineBoxes(rawControlTypography, elementInventory, normalLineBoxes);
-  const discrepancies = collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInputs, borderInitialInputs);
+  const discrepancies = collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs);
   const classifications = countBy(discrepancies, (entry) => entry.classification);
   const propertyGroupCounts = countBy(discrepancies, (entry) => entry.propertyGroup);
   const familyCounts = countBy(discrepancies, (entry) => entry.family);
@@ -142,6 +144,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
     elementInventory,
     visibleOverflowInputs,
     borderInitialInputs,
+    buttonBorderResetInputs,
     retainedTypography,
     controlTypography,
     sourceFindings,
@@ -170,6 +173,20 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
   if (requireComplete && report.elementInventory.resolvedStyleGaps.length > 0) errors.push(`${report.elementInventory.resolvedStyleGaps.length} inventoried elements lack resolved style evidence`);
   if (requireComplete && report.elementInventory.stateStyleGaps.length > 0) errors.push(`${report.elementInventory.stateStyleGaps.length} state cases lack effective style provenance`);
   if (report.elementInventory.errors.length > 0) errors.push(`${report.elementInventory.errors.length} full-tree collection errors`);
+  if (JSON.stringify(report.buttonBorderResetInputs) !== JSON.stringify(collectButtonBorderResetInputs(report.elementInventory, canonicalStyle))) {
+    errors.push('button border-reset evidence does not replay from the captured inventory');
+  }
+  for (const entry of report.discrepancies.filter(entry => entry.attribution === buttonBorderResetAttribution)) {
+    const proof = report.buttonBorderResetInputs?.find(proof => proof.case === entry.reviewEvidence?.case && proof.element === entry.element);
+    if (!proof || !borderColorProperties.includes(entry.property) || entry.reference !== proof.referenceColor ||
+        entry.astylar !== proof.candidateBorderColor || entry.classification !== 'application-plugin-authoring-defect' ||
+        JSON.stringify(proof) !== JSON.stringify(entry.reviewEvidence) || !Array.isArray(entry.reviewedCases) ||
+        entry.reviewedCases.length !== entry.occurrences || new Set(entry.reviewedCases).size !== entry.occurrences ||
+        entry.reviewedCases.some(key => !report.buttonBorderResetInputs?.some(item => item.case === key && item.element === entry.element &&
+          item.referenceColor === entry.reference && item.candidateBorderColor === entry.astylar))) {
+      errors.push('button border-reset classification lacks exact captured reset and omission evidence');
+    }
+  }
   if (JSON.stringify(report.borderInitialInputs) !== JSON.stringify(collectBorderInitialInputs(report.elementInventory, canonicalStyle))) {
     errors.push('border initial-color evidence does not replay from the captured inventory');
   }
@@ -428,6 +445,8 @@ export function renderMaterialInputAuditMarkdown(report) {
     '',
     `Border initial-color evidence: ${report.borderInitialInputs.length} uniquely paired node observations prove omitted author/inline color inputs with browser currentColor versus core transparent defaults. Attribution rejects possibly applicable state/media/reset rules and unknown selectors, and is not an equivalence waiver. Alpha paint, contextual-color paint, structure and final raster require separate evidence.`,
     '',
+    `Material button border-reset evidence: ${report.buttonBorderResetInputs.length} uniquely paired nodes have the explicit reference medium/none/currentColor reset but candidate width-only authoring. These remain authoring defects, not accepted initial-value aliases or equal-input paint failures.`,
+    '',
     'Reviewed tracking representation: CSS Text 3 defines letter-spacing normal as computed zero, serialized by CSSOM as normal. Only that alias is canonicalized; raw pooled values remain available. The independent Arial equal-input advance failure remains a core finding. Numeric precision preserves tiny nonzero tracking rather than rounding it to normal. This accepts neither different fonts nor missing paint, line-height, shaping, alignment or final raster.',
     '',
     `Coverage is ${report.coverage.complete ? 'complete' : 'incomplete'}: ${report.coverage.executedStatic}/${report.coverage.configuredStatic} static cases and ` +
@@ -518,9 +537,10 @@ export function renderMaterialInputAuditMarkdown(report) {
   return lines.join('\n');
 }
 
-function collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInputs, borderInitialInputs) {
+function collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs) {
   const grouped = new Map();
   const borderInitialByCaseAndId = new Map(borderInitialInputs.map(entry => [JSON.stringify([entry.case, entry.element]), entry]));
+  const buttonBorderResetByCaseAndId = new Map(buttonBorderResetInputs.map(entry => [JSON.stringify([entry.case, entry.element]), entry]));
   const visibleOverflowByCaseAndId = new Map(visibleOverflowInputs.map(entry => [JSON.stringify([entry.case, entry.element]), entry]));
   const typographyByCaseAndId = new Map(retainedTypography.comparisons.map((entry) =>
     [JSON.stringify([entry.case, entry.element]), entry]));
@@ -543,6 +563,8 @@ function collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInp
               visibleOverflowByCaseAndId.get(JSON.stringify([key, input.id])))
             ?? classifyBorderInitialInput(input, property, referenceValue, astylarValue,
               borderInitialByCaseAndId.get(JSON.stringify([key, input.id])), canonicalStyle)
+            ?? classifyButtonBorderResetInput(input, property, referenceValue, astylarValue,
+              buttonBorderResetByCaseAndId.get(JSON.stringify([key, input.id])), canonicalStyle)
             ?? classifyReviewedRootInput(benchmarkCase, input, property, referenceValue, astylarValue)
             ?? classifyReviewedContainerInput(benchmarkCase, input, property, referenceValue, astylarValue)
             ?? classifyReviewedBadgePaint(benchmarkCase, input, property, referenceValue, astylarValue)
@@ -567,7 +589,7 @@ function collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInp
             recommendedOwner: classification.owner,
             ...(classification.attribution ? { attribution: classification.attribution } : {}),
             ...(classification.reviewEvidence ? { reviewEvidence: classification.reviewEvidence } : {}),
-            ...(classification.attribution === borderInitialAttribution ? { reviewedCases: [] } : {}),
+            ...([borderInitialAttribution, buttonBorderResetAttribution].includes(classification.attribution) ? { reviewedCases: [] } : {}),
             occurrences: 0,
             cases: [],
             states: [],
@@ -4674,6 +4696,7 @@ function sourceFingerprints(root) {
     'tests/material-parity/input-tree-evidence.mjs',
     'tests/material-parity/input-tree-evidence.spec.mjs',
     'tests/material-parity/input-equivalence-audit.mjs',
+    'tests/material-parity/input-equivalence-audit.spec.mjs',
     'tests/material-parity/input-equivalence-policy.mjs',
     'tests/material-parity/border-initial-input-evidence.mjs',
     'tests/material-parity/normal-line-box-report.mjs',
@@ -4687,6 +4710,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('browser border reset/,
+      'twelve browser border-reset sensitivity controls', 'Two authored colors and ordinary div/native button controls distinguish border:none from border-width:0 after a preexisting colored solid border. The reset changes style and color to none/currentColor while width-only preserves both; explicit equivalent longhands reproduce the reset. This establishes input semantics, not a core or final-raster pass. Captured Material button classifications additionally require their complete author/reset, no-animation and three core style-stage witnesses.'),
     proof(root, 'examples/material-showcase/src/app/border-color-input-audit.spec.ts', /describe\('Material input audit/,
       'ten equal-input browser reductions; two pass and eight honest failures are retained', 'Two explicit opaque-color controls pass. Omitted border color resolves to transparent rather than browser currentColor and paints black. Explicit currentColor paints fixed fallback RGB 51,51,77. Transparent and half-alpha inputs reach the bound border material with alpha 1 and incorrect framebuffer pixels. Ten independent mounts preserve authored inputs and dispose all owned resources. This separates the documented default difference from core contextual-color and alpha-paint gaps; it does not automatically classify showcase occurrences, prove geometry or claim a paired full-screen raster comparison.'),
     proof(root, 'tests/material-parity/input-tree-evidence.spec.mjs', /test\('browser omitted overflow/,
@@ -4744,7 +4769,7 @@ function implementationPlan() {
     { priority: 3.3, rootCause: 'Direct flex text is painted separately from the shared item flow', action: 'Generate anonymous text items at the core CSS-space flex layout boundary so text and element children share intrinsic sizing, gaps, main/cross-axis placement and subsequent paint boxes. The four mixed-text row/column start/center reductions fail while explicit-span and single-direct-text centering controls pass. Extend wrapping, whitespace, reversed axes, padding and update cases before implementing; preserve authored direct text and do not solve the failure with application wrappers, fixed line heights or position offsets. Single-item centering success does not prove composed layout or normal-line-height raster fidelity.' },
     { priority: 3.5, rootCause: 'Reference CSS expressions bypass direct-style support', action: 'The existing core loaded-document-style path now has a bounded proof: original grid-list calc declarations resolve correct width/height/left at 280px and 480px without fixture arithmetic, while the independent inner used-height defect remains. Verify full Material cascade/state/responsive integration before adopting this path; scope general core corrections for any further unsupported expression or constraint. Do not copy measured pixels or implement per-family arithmetic; literal controls are not acceptance of the original expressions.' },
     { priority: 4, rootCause: 'Generic overlay composition is duplicated', action: 'Audit existing core primitives before adding APIs for connected anchors, viewport collision, clipping, focus scope, and dismissal. Migrate popup families with equivalent state inputs; retain different datepicker and timepicker focus behavior. Remove the tooltip benchmark-only forced-open handler.' },
-    { priority: 4.5, rootCause: 'Border initial values, contextual colors and paint alpha diverge at separate core stages', action: 'Reconcile the documented transparent border default with CSS currentColor semantics, resolve contextual colors using the element computed color, and preserve color alpha through border material creation and state updates. The two opaque controls pass while omission, currentColor, transparent and half-alpha each fail for two colors. Keep these equal-input proofs, extend inheritance, opacity composition and hover/update behavior, and compare actual paired border rasters before claiming full paint parity. Do not inject explicit showcase colors, replace borders with sibling meshes or waive zero-width input differences. Attribute captured Material cases only after verifying each authored/resolved witness.' },
+    { priority: 4.5, rootCause: 'Border initial values, contextual colors and paint alpha diverge at separate core stages', action: 'Reconcile the documented transparent border default with CSS currentColor semantics, resolve contextual colors using the element computed color, and preserve color alpha through border material creation and state updates. The two opaque controls pass while omission, currentColor, transparent and half-alpha each fail for two colors. Keep these equal-input proofs, extend inheritance, opacity composition and hover/update behavior, and compare actual paired border rasters before claiming full paint parity. Then restore the missing Material button border-reset semantics, preserving currentColor rather than sampling literal colors; the captured width-only rules are a separate authoring defect. Do not inject explicit showcase colors, replace borders with sibling meshes or waive zero-width input differences. Attribute captured Material cases only after verifying each authored/resolved witness.' },
     { priority: 5, rootCause: 'Plugin competes with core typography', action: 'Remove DynamicTexture glyph/baseline rendering from MaterialTabPanelRenderer. Keep only Material transition orchestration while composing core-rendered text/content.' },
     { priority: 5.1, rootCause: 'Core rewrites an explicit font-family list before paint', action: 'The parser appends Arial, Helvetica, sans-serif to explicit lists without a recognized generic. Preserve this as distinct from missing Material font-token authoring. The equal-input unavailable-family proof now confirms changed text advance, while both explicit-generic controls pass. Preserve authored family ordering/quoting and browser fallback semantics at the core parser boundary; verify available/unavailable and missing-glyph cases without assuming a particular platform font. Do not add a generic family to the showcase merely to avoid the parser branch. Final raster verification remains separate from the measured advance proof.' },
     { priority: 5.15, rootCause: 'Canvas default shaping does not reproduce CSS text advance', action: 'Trace font-kerning and text-rendering semantics through the core text parser, single/multiline measurement, actual canvas paint and caret/selection metrics. The Arial office AV reduction proves a 0.882825px bound-texture advance difference with identical normal or zero tracking; a separate canvas probe isolates auto-versus-normal kerning behavior. Extend fonts, sizes, explicit kerning modes, retained text and wrapping before implementing a shared CSS-to-canvas rule. Do not force a showcase font, alter tracking or calibrate label widths; normal/zero representation equivalence is not proof of shaping or final raster parity.' },

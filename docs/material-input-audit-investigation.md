@@ -22,6 +22,93 @@ selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Material button border resets are not width-only declarations (2026-09-12)
+
+The remaining border-color cases were partitioned by actual node type and
+matched declarations before extending attribution. Native Material buttons
+have a different cause from the omitted ordinary-element defaults below:
+their captured `.mdc-button` rule explicitly resets all four sides to
+`medium none currentColor`. Candidate `.material-button`, `.text-button` and
+`.toolbar-action` rules instead supply `borderWidth:'0'` and omit border color
+and the full reset. All three width-only declarations are present in initial
+showcase commit `2f44011` and remain in current source. This establishes an
+incomplete translation, not an inference about the original author's intent.
+
+[CSS Backgrounds 3 §3.4](https://www.w3.org/TR/2024/CRD-css-backgrounds-3-20240311/#border-shorthands)
+defines the reset semantics. A new browser test in
+`tests/material-parity/input-equivalence-audit.spec.mjs` independently checks
+twelve controls: two element colors, `div` and native `button`, and full reset,
+width-only, and explicit equivalent longhands. Starting from a colored solid
+border, both reset variants compute zero used widths, none styles and the
+element's current color. Width-only also computes zero width but retains the
+previous solid style and RGB 171,205,239 border color. CSSOM exposes the reset's
+authored medium/none/currentcolor longhands. Equal zero widths are therefore
+not proof of equal border input. This is a browser input-semantics proof, not
+an equal-input core or final-raster pass.
+
+Capture-backed button attribution requires:
+
+- Unique native-button/core-button correspondence and the exact four-side
+  reference reset; it does not guess native UA colors.
+- Actual matched important `animation-name:none` and
+  `transition-property:none` declarations from the benchmark's Material
+  no-animation rule. Conflicting important motion rules reject attribution.
+- A matching captured width-only Material button rule, no possibly applicable
+  candidate color/reset declaration anywhere in its complete rule collection,
+  and no inline color/reset. Unknown selectors remain unproved.
+- Side-correct pooled evidence, current core inspection revision, all three
+  normal/effective/interaction style stages, and matching shared-ID snapshots.
+  All sides must retain zero width and none style; candidate colors must remain
+  transparent and reference colors must equal the reference element color.
+
+The report records this as `application-plugin-authoring-defect`, linked to
+`fixture-button-border-reset-reduced-to-width`. It retains the explicit
+reference reset witness separately from the ordinary default-omission proof,
+and keeps `inputEquivalent:false` and `finalRasterVerified:false`. Restoring
+the same color/reset intent depends on addressing the separately proved core
+currentColor capability gap; sampling literal colors into the fixture is not
+the proposed solution. Typography, disabled-color preblending and border paint
+remain separate findings.
+
+Diagnostic replay of the **436 corrected static cases**, with the current-run
+normal-line-box and supplemental reports, adds **88** attributed border-color
+signatures / **480** occurrences across **nine** families: bottom-sheet, button,
+card, core, dialog, menu, snack-bar, toolbar and tooltip. The full-tree evidence
+contains **120** qualifying paired button observations, including supplemental
+nodes. The previous **276** default-divergence signatures are unchanged.
+Unresolved border-color signatures fall from 239 to **151**; all unresolved
+static signatures fall from 2,752 to **2,664**. There are **89** source findings,
+none undetected, and zero diagnostic validation errors. No complete-audit
+acceptance or renderer repair is claimed.
+
+The new proof shares only conservative exclusion and mapped-stage checks with
+the previous collector. Tests distinguish the explicit reset from omission,
+reject conflicting/reset/animation rules, missing capture stages, changed node
+types and contradictory snapshots, and replay every attributed case and raw
+declaration witness. The implementation plan now places restoration of button
+reset intent after core contextual-color correction, not after a screenshot
+calibration pass. No production source, plugin, fixture or live capture module
+was modified.
+
+Verification for this increment:
+
+- `node --test --test-name-pattern='browser border reset|button border-reset|border initial-color|source audit has|source fingerprints' tests/material-parity/input-equivalence-audit.spec.mjs`
+  — **10/10 pass**, 22.295 seconds, including all twelve browser controls and
+  twenty capture-rejection mutations. The previous default attribution guards
+  continue to pass after sharing the conservative rule-exclusion code.
+- `npm run parity:harness:check` — **331/331 pass**, zero failures, skips or
+  cancellations, 194.338 seconds. This includes the final implementation-plan
+  update. Scoped diff review and `git diff --check` pass.
+- Static replay uses `buildMaterialInputAudit` with all 436 static checkpoint
+  results and their launch provenance, plus the explicitly selected
+  `normal-line-box-current-ancestry-audit/latest-report.json` and
+  `supplemental-current-ancestry-audit`. Validation with
+  `requireComplete:false` has zero errors; this is diagnostic only.
+- Live-matrix integrity checkpoint: **436 static / 1,324 interaction records**,
+  all ten loaded capture-harness hashes unchanged and every result digest
+  valid. The same live process advanced through timepicker into button; it was
+  not restarted or pointed at a different build.
+
 ## Captured border initial-color attribution, without an equivalence waiver (2026-09-12)
 
 The existing public-package border proof is now connected to individual

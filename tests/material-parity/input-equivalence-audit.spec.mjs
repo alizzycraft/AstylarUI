@@ -21,6 +21,42 @@ const browserDefaults = {
   fontStyle: 'normal', transform: 'none', pointerEvents: 'auto',
 };
 
+test('browser border reset changes color and style while width-only retains them', async () => {
+  const { chromium } = await import('playwright-core');
+  const browser = await chromium.launch({ channel: 'chrome', headless: true });
+  try {
+    const page = await browser.newPage({ viewport: { width: 640, height: 360 } });
+    const observations = await page.evaluate(() => {
+      const results = [];
+      for (const color of ['#123456', '#c04a20']) for (const tag of ['div', 'button']) {
+        for (const kind of ['reset', 'width-only', 'longhands']) {
+          const node = document.createElement(tag);
+          Object.assign(node.style, { color, border: '4px solid #abcdef' });
+          if (kind === 'reset') node.style.border = 'none';
+          if (kind === 'width-only') node.style.borderWidth = '0';
+          if (kind === 'longhands') Object.assign(node.style, { borderWidth: 'medium', borderStyle: 'none', borderColor: 'currentColor' });
+          document.body.append(node);
+          const computed = getComputedStyle(node);
+          results.push({ color, tag, kind, computedColor: computed.color,
+            colors: ['Top', 'Right', 'Bottom', 'Left'].map(side => computed[`border${side}Color`]),
+            styles: ['Top', 'Right', 'Bottom', 'Left'].map(side => computed[`border${side}Style`]),
+            widths: ['Top', 'Right', 'Bottom', 'Left'].map(side => computed[`border${side}Width`]),
+            authored: { width: node.style.borderTopWidth, style: node.style.borderTopStyle, color: node.style.borderTopColor } });
+          node.remove();
+        }
+      }
+      return results;
+    });
+    assert.equal(observations.length, 12);
+    for (const entry of observations) {
+      assert.deepEqual(entry.widths, Array(4).fill('0px'));
+      assert.deepEqual(entry.styles, Array(4).fill(entry.kind === 'width-only' ? 'solid' : 'none'));
+      assert.deepEqual(entry.colors, Array(4).fill(entry.kind === 'width-only' ? 'rgb(171, 205, 239)' : entry.computedColor));
+      if (entry.kind !== 'width-only') assert.deepEqual(entry.authored, { width: 'medium', style: 'none', color: 'currentcolor' });
+    }
+  } finally { await browser.close(); }
+});
+
 test('audit CLI selects isolated full-matrix evidence without silently accepting misspelled flags', () => {
   const root = process.cwd();
   const defaultOptions = parseMaterialInputAuditArguments([], root);
@@ -247,6 +283,85 @@ function borderInitialReport() {
   ];
   return raw;
 }
+
+function buttonBorderResetReport(selector = '.material-button') {
+  const raw = borderInitialReport(), entry = raw.results[0], input = entry.styleInputs[0];
+  input.referenceStructure.type = input.astylarStructure.type = 'button';
+  entry.inputTrees.reference.nodes[0].type = 'button';
+  Object.assign(entry.inputTrees.astylar.nodes[0].authored, { type: 'button', class: selector.slice(1) });
+  const declarations = Object.fromEntries(['top', 'right', 'bottom', 'left'].flatMap(side =>
+    [['color', 'currentcolor'], ['style', 'none'], ['width', 'medium']].map(([key, value]) => [`border-${side}-${key}`, { value, important: false }])));
+  input.referenceAuthored = [{ selector: '.mdc-button', declarations },
+    { selector: '.mat-mdc-button._mat-animation-noopable', declarations: {
+      'animation-name': { value: 'none', important: true }, 'transition-property': { value: 'none', important: true } } }];
+  entry.inputTrees.reference.rules = structuredClone(input.referenceAuthored);
+  entry.inputTrees.reference.nodes[0].rules = [0, 1];
+  input.astylarAuthored = [{ selector, declarations: { borderWidth: '0' } }];
+  entry.inputTrees.astylar.rules.push({ selector, borderWidth: '0' });
+  return raw;
+}
+
+test('button border-reset attribution preserves the explicit reset rather than claiming an omitted reference color', () => {
+  for (const selector of ['.material-button', '.text-button', '.toolbar-action']) {
+    const raw = buttonBorderResetReport(selector), before = JSON.stringify(raw), audit = buildMaterialInputAudit(raw);
+    const proofs = audit.buttonBorderResetInputs.filter(entry => entry.element === 'core-root');
+    assert.equal(proofs.length, 1);
+    assert.equal(proofs[0].referenceReset.reset, 'medium none currentColor');
+    assert.equal(proofs[0].candidateWidthRule, selector);
+    assert.equal(proofs[0].inputEquivalent, false);
+    assert.equal(proofs[0].finalRasterVerified, false);
+    assert.equal(audit.discrepancies.length, 4);
+    assert.ok(audit.discrepancies.every(entry => entry.attribution === 'reviewed-material-button-border-reset-omission' &&
+      entry.classification === 'application-plugin-authoring-defect'));
+    assert.equal(audit.borderInitialInputs.filter(entry => entry.element === 'core-root').length, 0);
+    assert.equal(validateMaterialInputAudit(audit, { requireComplete: false }).length, 0);
+    assert.equal(JSON.stringify(raw), before);
+  }
+});
+
+test('button border-reset attribution rejects conflicting rules, styles, native-default guesses and absent stages', () => {
+  for (const change of [
+    e => { e.inputTrees.reference.rules[0].selector = '.unreviewed'; },
+    e => { e.inputTrees.reference.rules[0].declarations['border-top-color'].value = 'transparent'; },
+    e => { e.inputTrees.reference.rules[0].declarations['border-left-width'].value = '0px'; },
+    e => { e.inputTrees.reference.rules[0].declarations.all = { value: 'initial' }; },
+    e => { e.inputTrees.reference.rules[1].declarations['animation-name'].important = false; },
+    e => { e.inputTrees.reference.rules[1].declarations['transition-property'].value = 'all'; },
+    e => { e.inputTrees.reference.rules.push({ selector: '.other', declarations: { 'animation-name': { value: 'pulse', important: true } } }); e.inputTrees.reference.nodes[0].rules.push(2); },
+    e => { e.inputTrees.reference.nodes[0].type = 'span'; },
+    e => { e.inputTrees.astylar.nodes[0].authored.type = 'div'; },
+    e => { e.inputTrees.astylar.nodes[0].authored.class = 'unrelated'; },
+    e => { e.inputTrees.astylar.nodes[0].normalResolvedStyle.borderStyle = 'solid'; },
+    e => { e.inputTrees.astylar.nodes[0].interactionResolvedStyle.borderWidth = '1px'; },
+    e => { e.inputTrees.astylar.nodes[0].authored.style = { borderColor: 'transparent' }; },
+    e => { e.inputTrees.astylar.rules.push({ selector: '.material-button:focus', borderColor: 'red' }); },
+    e => { delete e.inputTrees.astylar.nodes[0].normalResolvedStyle; },
+    e => { delete e.inputTrees.astylar.rules; },
+    e => { e.inputTrees.astylar.resolvedStyleSource = 'mesh-metadata'; },
+    e => { e.styleInputs[0].referenceAuthored = []; },
+    e => { e.styleInputs[0].astylarAuthored = []; },
+    e => { e.styleInputs[0].astylarNormalResolvedStyle.borderWidth = '1px'; },
+  ]) {
+    const raw = buttonBorderResetReport(); change(raw.results[0]);
+    assert.ok(buildMaterialInputAudit(raw).discrepancies.every(entry => entry.attribution !== 'reviewed-material-button-border-reset-omission'), String(change));
+  }
+});
+
+test('button border-reset evidence and per-case classification cannot be forged', () => {
+  const original = buildMaterialInputAudit(buttonBorderResetReport());
+  for (const change of [
+    a => { delete a.buttonBorderResetInputs; },
+    a => { a.buttonBorderResetInputs[0].referenceReset.reset = 'none'; },
+    a => { a.buttonBorderResetInputs[0].inputEquivalent = true; },
+    a => { a.elementInventory.rules.find(rule => rule.side === 'reference').value.declarations['border-top-color'].value = 'red'; },
+    a => { a.discrepancies[0].classification = 'intentional-documented-limitation'; },
+    a => { a.discrepancies[0].reviewedCases = []; },
+    a => { a.discrepancies[0].reference = 'rgba(0,0,0,0)'; },
+  ]) {
+    const changed = structuredClone(original); change(changed);
+    assert.ok(validateMaterialInputAudit(changed, { requireComplete: false }).some(error => error.includes('button border-reset')), String(change));
+  }
+});
 
 test('border initial-color attribution checks complete authored rules and never waives the unequal input', () => {
   for (const state of [undefined, 'hover']) {
@@ -629,7 +744,7 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   const report = parityReport({}, {});
   const audit = buildMaterialInputAudit(report);
   assert.equal(audit.coverage.visualParityGreen, true);
-  assert.equal(audit.sourceFingerprints.length, 45);
+  assert.equal(audit.sourceFingerprints.length, 46);
   assert.equal(audit.sourceFingerprints.filter(({ file }) => file === 'src/app/services/dom/dom-ancestry.service.ts').length, 1);
   const cascadeProof = 'examples/material-showcase/src/app/label-cascade-input-audit.spec.ts';
   assert.equal(audit.sourceFingerprints.filter(({ file }) => file === cascadeProof).length, 1);

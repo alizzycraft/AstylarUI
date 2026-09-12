@@ -113,6 +113,16 @@ export const reviewedValueNormalizations = Object.freeze([
 
 export const sourceAuditDefinitions = Object.freeze([
   Object.freeze({
+    id: 'fixture-button-border-reset-reduced-to-width',
+    introducedBy: '2f44011 authors only zero border width in the initial material-button rule; the omission persists',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`selector: '\.material-button'[^\n]*borderWidth: '0'[^\n]*background: theme\.primary`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase Material button border-reset input translation and core contextual color support',
+    justification: 'The captured reference .mdc-button border:none expands to medium width, none style and currentColor on all four sides. The candidate material-button, text-button and toolbar-action rules set only borderWidth:0 and retain the core transparent color default. Browser controls show that width-only does not reset preexisting style or color, even though both cases currently have zero used border width. This is incomplete translation of authored reset semantics, not equivalent inputs or proof of equal-input renderer failure. Preserve the existing separate core currentColor and alpha-paint findings; do not replace the keyword with a sampled color or hide this difference because no border currently paints.',
+    focusedProof: 'tests/material-parity/input-equivalence-audit.spec.mjs: browser border reset and capture-backed Material button attribution',
+  }),
+  Object.freeze({
     id: 'core-border-initial-color-differs-from-css',
     introducedBy: '2c16e14 extracts the already-existing transparent default; not established as a Material workaround',
     file: 'src/app/config/browser-defaults.ts',
