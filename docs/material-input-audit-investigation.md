@@ -12,6 +12,54 @@ tests pass). A missing selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Calendar day text now has date-and-context correspondence (2026-09-12)
+
+The full matrix's datepicker controls use generated reference nodes without
+shared day IDs. The new `reviewed-material-calendar-day-label` mapping requires
+a unique full accessible date, the exact month-view table/cell/button/leaf path,
+matching reference month/year live label, and the candidate popup/grid/header/
+month-marker context plus unique day ID, accessible day, authored text and
+actual core texture text. It rejects ambiguous identities, wrong month/year,
+impossible dates, year-view ancestry, broken wrappers and stale texture text.
+Date validation is not frozen to the capture date; leap-year controls are tested.
+
+Across all **99** captured datepicker interaction cases, the mapping exposes
+**990** day text comparisons in **33** month-view states. Each reveals four raw
+differences: reference Roboto versus candidate Roboto/Arial/sans-serif; reference
+14px line-height versus actual control texture 17px; reference normal tracking
+versus numeric zero; and reference rgb(29,27,30) versus candidate #1d1b20 ink.
+All **3,960** differences remain explicitly unresolved pending per-property
+attribution. Correspondence is not equal input, selected-state/accessibility
+equivalence, table/grid equivalence, or raster acceptance.
+
+The retained-text report routes these exact day owners to their actual core
+control-texture stage rather than inventing text-registry entries. Anonymous
+weekday/header/marker, accessibility and icon owners remain independently open.
+Year-view labels are now also explicit unmatched reference control candidates,
+not silently mistaken for month days. Hence the overall mapping-gap count drops
+from **1,505 to 707** rather than by the full 990 mapped days. Full current-texture
+comparisons increase from **908 to 1,898**; unresolved control typography rises
+from **724 to 4,684**, honestly exposing previously unexamined differences.
+
+Source tracing already narrows the next attribution work: captured
+`.mat-calendar-body-cell-content` supplies `line-height:1` and the date ink token;
+`.mat-calendar-body-cell` supplies the calendar font token. Candidate
+`.datepicker-cell` hardcodes ink and omits both line-height and font family.
+Commit `c64397c` changed the day from a span to a button without the reference's
+inner text wrapper, and the current texture uses the document control font
+stack. This points to unequal authored typography before any claim of a core
+text defect. Preserve the original reference inner line box when planning the
+fix; do not tune its replacement control's baseline to match output.
+
+Verification: `npm run parity:harness:check` passes **186/186** (97 focused audit
+tests), including 18 contradictory/malformed mapping variants, leap-year cases,
+and tampered report evidence. The validator recomputes the calendar mapping from
+captured inventory even in partial mode. The full-report generator using the
+explicit control-text and normal-line-box paths completes with the intended
+exit 1: input-equivalence acceptance remains unmet. It validates all paired
+trees and reports 436/436 static and 1,875/1,875 interaction coverage. No fixture,
+renderer, capture runtime, input style or visual gate changed.
+
 ## Private tab text paint observed independently of CSS (2026-09-12)
 
 New diagnostic `material-plugin/tab-panel-input-audit.spec.ts` mounts the public

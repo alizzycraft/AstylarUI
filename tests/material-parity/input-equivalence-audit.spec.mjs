@@ -1501,6 +1501,127 @@ function controlEvidence(raw) {
   return collectControlTypographyEvidence(raw.results, collectFullTreeInventory(raw.results));
 }
 
+function calendarDayTypographyReport() {
+  const raw = controlTypographyReport(), entry = raw.results[0];
+  entry.family = 'datepicker';
+  const ref = entry.inputTrees.reference, ast = entry.inputTrees.astylar;
+  const node = (key, parent, type, attributes = {}, ownText = '') => ({ key, parent, type, attributes, ownText,
+    style: 0, rules: [], pseudoElements: [] });
+  ref.nodes = [
+    node('dialog', null, 'div', { class: 'mat-datepicker-content-container', role: 'dialog' }),
+    node('calendar', 'dialog', 'mat-calendar', { class: 'mat-calendar' }),
+    node('header', 'calendar', 'mat-calendar-header'),
+    node('header-box', 'header', 'div', { class: 'mat-calendar-header' }),
+    node('controls', 'header-box', 'div', { class: 'mat-calendar-controls' }),
+    node('period', 'controls', 'span', { id: 'mat-calendar-period-label-0', class: 'cdk-visually-hidden', 'aria-live': 'polite' }, 'SEP 2026'),
+    node('content', 'calendar', 'div', { class: 'mat-calendar-content' }),
+    node('month', 'content', 'mat-month-view'),
+    node('table', 'month', 'table', { class: 'mat-calendar-table', role: 'grid' }),
+    node('body', 'table', 'tbody', { class: 'mat-calendar-body' }),
+    node('row', 'body', 'tr', { role: 'row' }),
+    node('cell', 'row', 'td', { class: 'mat-calendar-body-cell-container', role: 'gridcell' }),
+    node('day', 'cell', 'button', { class: 'mat-calendar-body-cell', 'aria-label': 'September 1, 2026', 'aria-pressed': 'false' }),
+    node('day-label', 'day', 'span', { class: 'mat-calendar-body-cell-content mat-focus-indicator' }, ' 1 '),
+  ];
+  const day = ast.nodes[0];
+  day.key = 'ast-day'; day.parent = 'ast-grid';
+  day.authored = { type: 'button', id: 'datepicker-day-1', class: 'datepicker-cell datepicker-day', ariaLabel: '1', value: '1' };
+  day.paintedControlText.text = '1';
+  delete day.retainedText;
+  const extra = (key, parent, authored) => ({ key, parent, authored, resolvedStyle: {}, normalResolvedStyle: {}, interactionResolvedStyle: {} });
+  ast.nodes = [day,
+    extra('ast-popup', null, { type: 'div', id: 'datepicker-popup', class: 'datepicker-popup', role: 'dialog' }),
+    extra('ast-grid', 'ast-popup', { type: 'div', id: 'datepicker-grid', class: 'datepicker-grid' }),
+    extra('ast-header', 'ast-popup', { type: 'div', id: 'datepicker-header' }),
+    extra('ast-period', 'ast-header', { type: 'button', id: 'datepicker-month', ariaLabel: 'Choose month and year', value: 'SEP 2026 ▾' }),
+    extra('ast-marker', 'ast-grid', { type: 'span', id: 'datepicker-month-marker', textContent: 'SEP' }),
+  ];
+  return raw;
+}
+
+test('calendar day ownership requires full accessible date, month context and both structural paths', () => {
+  const raw = calendarDayTypographyReport(), entry = raw.results[0];
+  const inventory = collectFullTreeInventory(raw.results);
+  const controls = collectControlTypographyEvidence(raw.results, inventory);
+  assert.equal(controls.comparisons.length, 1);
+  const comparison = controls.comparisons[0];
+  assert.equal(comparison.element, 'datepicker-day-1');
+  assert.equal(comparison.mapping.kind, 'reviewed-material-calendar-day-label');
+  assert.equal(comparison.mapping.reviewEvidence.accessibleDate, 'September 1, 2026');
+  assert.equal(comparison.mapping.reviewEvidence.referencePeriodLabel, 'period');
+  assert.equal(comparison.mapping.reviewEvidence.referenceChain.length, 10);
+  assert.equal(comparison.finalRasterVerified, false);
+  const retained = collectRetainedTypographyEvidence(raw.results, inventory, controls);
+  assert.equal(retained.controlTextMappings.length, 1);
+  assert.equal(retained.controlTextMappings[0].inputEquivalent, false);
+  assert.ok(retained.gaps.some((gap) => gap.element === 'datepicker-month-marker'));
+  // Equal current text is not permission to waive a newly exposed property.
+  entry.inputTrees.astylar.nodes[0].paintedControlText.style.fontSize = 30;
+  assert.ok(controlEvidence(raw).differences.some((difference) => difference.element === 'datepicker-day-1' &&
+    difference.property === 'fontSize' && difference.attribution === 'unresolved'));
+});
+
+test('calendar mapping rejects contradictory dates, broken ancestry, duplicates and stale paint', () => {
+  const mutations = [
+    (r, a) => { r.find(n => n.key === 'day').attributes['aria-label'] = 'October 1, 2026'; },
+    (r, a) => { r.find(n => n.key === 'day').attributes['aria-label'] = 'September 31, 2026'; },
+    (r, a) => { r.find(n => n.key === 'day-label').ownText = '2'; },
+    (r, a) => { r.find(n => n.key === 'period').ownText = 'SEP 2027'; },
+    (r, a) => { r.find(n => n.key === 'period').attributes['aria-live'] = 'off'; },
+    (r, a) => { r.find(n => n.key === 'table').attributes.role = 'presentation'; },
+    (r, a) => { r.find(n => n.key === 'month').type = 'mat-multi-year-view'; },
+    (r, a) => { r.find(n => n.key === 'day-label').parent = 'cell'; },
+    (r, a) => { r.push({ ...r.find(n => n.key === 'day'), key: 'duplicate-day' }); },
+    (r, a) => { r.push({ ...r.find(n => n.key === 'day-label'), key: 'nested', parent: 'day-label' }); },
+    (r, a) => { a.find(n => n.key === 'ast-period').authored.value = 'OCT 2026 ▾'; },
+    (r, a) => { a.find(n => n.key === 'ast-marker').authored.textContent = 'OCT'; },
+    (r, a) => { a.find(n => n.key === 'ast-grid').parent = null; },
+    (r, a) => { a.find(n => n.key === 'ast-popup').authored.role = 'group'; },
+    (r, a) => { a[0].authored.ariaLabel = '2'; },
+    (r, a) => { a[0].paintedControlText.text = '2'; },
+    (r, a) => { a[0].paintedControlText.source = 'plugin-guess'; },
+    (r, a) => { a.push({ ...a[0], key: 'duplicate-ast' }); },
+  ];
+  for (const [index, mutate] of mutations.entries()) {
+    const raw = calendarDayTypographyReport(), trees = raw.results[0].inputTrees;
+    mutate(trees.reference.nodes, trees.astylar.nodes);
+    const result = controlEvidence(raw);
+    assert.equal(result.comparisons.length, 0, `mutation ${index}`);
+    assert.ok(result.gaps.length > 0, `mutation ${index} must remain visible`);
+  }
+});
+
+test('calendar date correspondence handles month length and leap years without a frozen current date', () => {
+  for (const [month, day, year, valid] of [['January', 31, 2027, true], ['February', 29, 2028, true],
+    ['February', 29, 2027, false], ['April', 31, 2027, false]]) {
+    const raw = calendarDayTypographyReport(), { reference: ref, astylar: ast } = raw.results[0].inputTrees;
+    const label = String(day), period = `${month.slice(0, 3).toUpperCase()} ${year}`;
+    ref.nodes.find(n => n.key === 'day').attributes['aria-label'] = `${month} ${day}, ${year}`;
+    ref.nodes.find(n => n.key === 'day-label').ownText = label;
+    ref.nodes.find(n => n.key === 'period').ownText = period;
+    Object.assign(ast.nodes[0].authored, { id: `datepicker-day-${day}`, ariaLabel: label, value: label });
+    ast.nodes[0].paintedControlText.text = label;
+    ast.nodes.find(n => n.key === 'ast-period').authored.value = `${period} ▾`;
+    ast.nodes.find(n => n.key === 'ast-marker').authored.textContent = period.slice(0, 3);
+    assert.equal(controlEvidence(raw).comparisons.length, valid ? 1 : 0, `${month} ${day}, ${year}`);
+  }
+});
+
+test('calendar correspondence evidence is revalidated even when partial audit coverage is allowed', () => {
+  const raw = calendarDayTypographyReport(), audit = buildMaterialInputAudit(raw);
+  assert.ok(!validateMaterialInputAudit(audit, { requireComplete: false }).some(error => error.includes('calendar day mappings')));
+  for (const mutate of [
+    report => { report.controlTypography.comparisons[0].mapping.reviewEvidence.period = 'OCT 2026'; },
+    report => { report.controlTypography.comparisons[0].referenceControl = 'other'; },
+    report => { report.controlTypography.comparisons[0].text = '2'; },
+    report => { report.controlTypography.comparisons[0].revision += 1; },
+    report => { report.controlTypography.comparisons[0].finalRasterVerified = true; },
+  ]) {
+    const changed = structuredClone(audit); mutate(changed);
+    assert.ok(validateMaterialInputAudit(changed, { requireComplete: false }).some(error => error.includes('calendar day mappings')));
+  }
+});
+
 test('registry audit routes an exact core control label to its actual texture stage without fabricating retained text', () => {
   const raw = controlTypographyReport();
   delete raw.results[0].inputTrees.astylar.nodes[0].retainedText;
