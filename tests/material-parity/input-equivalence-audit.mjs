@@ -93,7 +93,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
         supplementalSlider.missing.length === 0 && supplementalSlider.errors.length === 0 && supplementalSlider.mismatches.length === 0 &&
         elementInventory.gaps.length === 0 && elementInventory.resolvedStyleGaps.length === 0 && elementInventory.stateStyleGaps.length === 0 && elementInventory.errors.length === 0 &&
         retainedTypography.gaps.length === 0 && retainedTypography.differences.length === 0 && retainedTypography.paintMaskDifferences.length === 0 &&
-        controlTypography.gaps.length === 0 && controlTypography.differences.length === 0 &&
+        controlTypography.gaps.length === 0 && controlTypography.differences.length === 0 && controlTypography.iconSubstitutions.length === 0 &&
         coverage.presenceDifferences.length === 0 &&
         sourceFindings.every((entry) => entry.detected && ['equivalent-representation', 'legitimate-public-api-structure'].includes(entry.classification)) &&
         structures.every((entry) => entry.classification === 'legitimate-public-api-structure') &&
@@ -152,6 +152,12 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
   const unresolvedControlTypography = report.controlTypography?.differences.filter((entry) =>
     !reviewedControlKinds[entry.attribution] || entry.classification !== reviewedControlKinds[entry.attribution] || !entry.reviewEvidence) ?? [];
   if (requireComplete && unresolvedControlTypography.length > 0) errors.push(`${unresolvedControlTypography.length} control texture typography differences require attribution`);
+  if (!Array.isArray(report.controlTypography?.iconSubstitutions)) errors.push('missing control icon substitution inventory');
+  const unresolvedIcons = report.controlTypography?.iconSubstitutions?.filter((entry) =>
+    entry.attribution !== 'reviewed-paginator-svg-to-glyph-input' || entry.classification !== 'application-plugin-authoring-defect' ||
+    !entry.reviewEvidence?.referencePath?.attributes?.d || !entry.reviewEvidence?.candidatePaintedStyle ||
+    !entry.justification || entry.inputEquivalent !== false) ?? [];
+  if (requireComplete && unresolvedIcons.length > 0) errors.push(`${unresolvedIcons.length} control icon substitutions require attribution`);
   if (requireComplete && report.retainedTypography?.gaps.length > 0) errors.push(`${report.retainedTypography.gaps.length} retained typography mappings or stage fields require review`);
   const reviewedTypographyKinds = { 'reviewed-heading-mask': 'parity-harness-defect',
     'reviewed-table-font-input': 'application-plugin-authoring-defect',
@@ -193,6 +199,8 @@ export function renderMaterialInputAuditMarkdown(report) {
     `Retained typography: ${report.retainedTypography.comparisons.length} directly mapped text-node observations; ${report.retainedTypography.gaps.length} mapping/stage gaps and ${report.retainedTypography.differences.length} unequal retained-property observations. The registry stage is reported separately from declarations and is not proof of current pseudo-state glyph paint.`,
     '',
     `Control texture typography: ${report.controlTypography.comparisons.length} mapped current-texture observations; ${report.controlTypography.gaps.length} mapping/stage gaps and ${report.controlTypography.differences.length} unequal paint-input properties. Parsed CSS lengths and line-height multipliers are normalized independently of declarations. This does not prove final material effects, placement, visibility or raster parity.`,
+    '',
+    `Control icon substitutions: ${report.controlTypography.iconSubstitutions.length} captured SVG-to-text input replacements. These are unequal content/geometry inputs, not accepted text-owner mappings or font comparisons. Their actual glyph paint inputs remain recorded separately from the reference vector path.`,
     '',
     `Heading coverage: ${report.retainedTypography.reviewedMappings.length} explicit template-to-SiteData identity mappings; ${report.retainedTypography.paintMaskDifferences.length} captured benchmark paint-mask discrepancies. HTML hides headings with opacity zero while the candidate uses surface-colored ink; the benchmark cannot establish visible heading paint parity.`,
     '',
@@ -1317,10 +1325,64 @@ function reviewedTabPaintInput(entry, property, ref, parent, ast, stages, refere
     reviewEvidence: evidence };
 }
 
+function reviewedPaginatorIconInput(entry, ast, referenceTree, astylarTree, inventory, revision) {
+  if (entry.family !== 'paginator') return;
+  const definitions = {
+    'paginator-previous': { direction: 'previous', label: 'Previous page', glyph: '‹', path: 'M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z' },
+    'paginator-next': { direction: 'next', label: 'Next page', glyph: '›', path: 'M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z' },
+  };
+  const definition = definitions[ast.authored?.id];
+  const hasClass = (node, value) => String(node.attributes?.class ?? '').split(/\s+/).includes(value);
+  if (!definition || ast.authored.type !== 'button' || ast.authored.ariaLabel !== definition.label ||
+      !String(ast.authored.class ?? '').split(/\s+/).includes('paginator-button') || ast.authored.value !== definition.glyph ||
+      (ast.authored.textContent !== undefined && ast.authored.textContent !== definition.glyph) ||
+      ast.paintedControlText?.source !== 'core-control-texture' || ast.paintedControlText.text !== definition.glyph ||
+      astylarTree.nodes.filter((node) => node.authored?.id === ast.authored.id).length !== 1 ||
+      astylarTree.nodes.some((node) => node.parent === ast.key)) return;
+  const controls = referenceTree.nodes.filter((node) => hasClass(node, `mat-mdc-paginator-navigation-${definition.direction}`));
+  if (controls.length !== 1 || controls[0].type !== 'button' || controls[0].attributes['aria-label'] !== definition.label || controls[0].ownText?.trim()) return;
+  const control = controls[0];
+  const icons = referenceTree.nodes.filter((node) => node.parent === control.key && node.type === 'svg');
+  if (icons.length !== 1 || !hasClass(icons[0], 'mat-mdc-paginator-icon') || icons[0].attributes.viewBox !== '0 0 24 24' ||
+      icons[0].attributes['aria-hidden'] !== 'true' || icons[0].attributes.focusable !== 'false' || icons[0].ownText?.trim()) return;
+  const icon = icons[0], paths = referenceTree.nodes.filter((node) => node.parent === icon.key);
+  if (paths.length !== 1 || paths[0].type !== 'path' || paths[0].attributes?.d !== definition.path || paths[0].ownText?.trim() ||
+      referenceTree.nodes.some((node) => node.parent === paths[0].key)) return;
+  const pathNode = paths[0];
+  // No other descendant may silently supply text or another vector icon.
+  const descendants = new Set([control.key]);
+  for (let changed = true; changed;) {
+    changed = false;
+    for (const node of referenceTree.nodes) if (descendants.has(node.parent) && !descendants.has(node.key)) {
+      descendants.add(node.key); changed = true;
+    }
+  }
+  if (referenceTree.nodes.some((node) => descendants.has(node.key) &&
+      (node.ownText?.trim() || (['svg', 'path'].includes(node.type) && node !== icon && node !== pathNode)))) return;
+  const styleAt = (index, side) => inventory.styles[index]?.side === side ? inventory.styles[index].value : undefined;
+  const referenceNodes = [control, icon, pathNode].map((node) => ({ node: node.key, type: node.type,
+    attributes: node.attributes, style: styleAt(node.style, 'reference') }));
+  const normal = styleAt(ast.normalStyle, 'astylar'), effective = styleAt(ast.interactionStyle, 'astylar');
+  const painted = styleAt(ast.paintedControlText.style, 'astylar');
+  if (referenceNodes.some((node) => !node.style) || !normal || !effective || !painted ||
+      typeof painted.fontFamily !== 'string' || !painted.fontFamily || !Number.isFinite(painted.fontSize) || painted.fontSize <= 0) return;
+  return { case: caseKey(entry), family: entry.family, state: entry.state ?? 'static', element: ast.authored.id,
+    referenceNode: control.key, astylarNode: ast.key, source: ast.paintedControlText.source, revision,
+    reference: { kind: 'svg-path', viewBox: icon.attributes.viewBox, path: definition.path },
+    astylar: { kind: 'text-glyph', authored: definition.glyph, painted: ast.paintedControlText.text },
+    classification: 'application-plugin-authoring-defect', attribution: 'reviewed-paginator-svg-to-glyph-input',
+    recommendedOwner: 'showcase Material paginator icon authoring through core vector/image APIs',
+    inputEquivalent: false, finalRasterVerified: false,
+    justification: 'The unique previous/next navigation control and matching accessible label identify the corresponding controls. The reference authors an explicit SVG path; the candidate authors and currently paints a font glyph instead. This is a content/geometry input substitution traced to the initial fixture, not equivalent icon geometry, a reference text label, or proof of a core SVG/font defect. State, wrapper layout, vector support and final raster require independent review.',
+    reviewEvidence: { sourceFinding: 'fixture-paginator-svg-icons-replaced-by-text-glyphs',
+      referenceControl: referenceNodes[0], referenceSvg: referenceNodes[1], referencePath: referenceNodes[2],
+      candidateAuthored: ast.authored, candidateNormal: normal, candidateEffective: effective, candidatePaintedStyle: painted } };
+}
+
 // These paths describe Material's actual button and explicit template tab
 // labels, not an inferred text match. Other texture owners stay visible gaps.
 export function collectControlTypographyEvidence(cases, inventory) {
-  const comparisons = [], differences = [], gaps = [];
+  const comparisons = [], differences = [], gaps = [], iconSubstitutions = [];
   const gap = (key, element, reason, evidence = {}) => gaps.push({ case: key, element, reason, ...evidence,
     classification: 'parity-harness-defect', attribution: 'unresolved',
     recommendedOwner: 'input audit control text identity and actual paint-input provenance' });
@@ -1416,10 +1478,12 @@ export function collectControlTypographyEvidence(cases, inventory) {
       comparisons.push(comparison);
     }
     for (const node of paintedNodes) if (!mapped.has(node.key)) {
-      gap(key, node.authored?.id, 'current control texture has no reviewed reference text-owner mapping', { astylarNode: node.key });
+      const substitution = reviewedPaginatorIconInput(entry, node, referenceTree, astylarTree, inventory, asts[0].resolvedStyleRevision);
+      if (substitution) iconSubstitutions.push(substitution);
+      else gap(key, node.authored?.id, 'current control texture has no reviewed reference text-owner mapping', { astylarNode: node.key });
     }
   }
-  return { schemaVersion: 1, scope: 'Current core-owned control texture inputs, separately from normal/effective declarations and registry-retained text. Exact direct Material button labels and explicit template tab-label paths are reviewed; other observed control owners remain gaps. Numeric parsed CSS lengths and line-height multipliers are normalized without authored or projected fallbacks. Other effects remain in the full inventory and are not certified by these eleven typography comparisons.', comparisons, differences, gaps };
+  return { schemaVersion: 1, scope: 'Current core-owned control texture inputs, separately from normal/effective declarations and registry-retained text. Exact direct Material button labels and explicit template tab-label paths are reviewed. Paginator SVG-to-glyph substitutions are separately classified unequal content, never typography equivalence; other observed control owners remain gaps. Numeric parsed CSS lengths and line-height multipliers are normalized without authored or projected fallbacks. Other effects remain in the full inventory and are not certified by these eleven typography comparisons.', comparisons, differences, gaps, iconSubstitutions };
 }
 
 export function collectFullTreeInventory(cases, { root = process.cwd() } = {}) {

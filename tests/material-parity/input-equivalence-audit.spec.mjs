@@ -1162,6 +1162,75 @@ function controlEvidence(raw) {
   return collectControlTypographyEvidence(raw.results, collectFullTreeInventory(raw.results));
 }
 
+function paginatorIconReport(direction = 'previous') {
+  const raw = controlTypographyReport(), entry = raw.results[0];
+  entry.family = 'paginator';
+  const ref = entry.inputTrees.reference, ast = entry.inputTrees.astylar;
+  const previous = direction === 'previous', label = previous ? 'Previous page' : 'Next page', glyph = previous ? '‹' : '›';
+  ref.nodes = [
+    { key: 'button', parent: 'frame', type: 'button', attributes: { class: `mat-mdc-paginator-navigation-${direction}`, 'aria-label': label }, ownText: '', style: 0, rules: [], pseudoElements: [] },
+    { key: 'svg', parent: 'button', type: 'svg', attributes: { class: 'mat-mdc-paginator-icon', viewBox: '0 0 24 24', focusable: 'false', 'aria-hidden': 'true' }, ownText: '', style: 0, rules: [], pseudoElements: [] },
+    { key: 'path', parent: 'svg', type: 'path', attributes: { d: previous ? 'M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z' : 'M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z' }, ownText: '', style: 0, rules: [], pseudoElements: [] },
+  ];
+  ast.nodes[0].authored = { id: `paginator-${direction}`, type: 'button', class: 'paginator-button', ariaLabel: label, value: glyph };
+  ast.nodes[0].paintedControlText.text = glyph;
+  return raw;
+}
+
+test('paginator vector-to-glyph replacements remain unequal content, not fabricated typography comparisons', () => {
+  for (const direction of ['previous', 'next']) {
+    const raw = paginatorIconReport(direction), before = structuredClone(raw), evidence = controlEvidence(raw);
+    assert.deepEqual(evidence.gaps, []);
+    assert.deepEqual(evidence.comparisons, []);
+    assert.deepEqual(evidence.differences, []);
+    assert.equal(evidence.iconSubstitutions.length, 1);
+    const finding = evidence.iconSubstitutions[0];
+    assert.equal(finding.classification, 'application-plugin-authoring-defect');
+    assert.equal(finding.attribution, 'reviewed-paginator-svg-to-glyph-input');
+    assert.equal(finding.inputEquivalent, false);
+    assert.equal(finding.finalRasterVerified, false);
+    assert.equal(finding.reviewEvidence.referencePath.attributes.d, finding.reference.path);
+    assert.equal(finding.astylar.painted, finding.astylar.authored);
+    assert.equal(finding.reviewEvidence.candidatePaintedStyle.fontSize, 24);
+    assert.deepEqual(raw, before);
+    const report = buildMaterialInputAudit(raw);
+    assert.equal(report.summary.inputEquivalent, false);
+    assert.ok(!validateMaterialInputAudit(report).some((error) => error.includes('control icon substitutions')));
+    delete report.controlTypography.iconSubstitutions[0].reviewEvidence.referencePath;
+    assert.ok(validateMaterialInputAudit(report).some((error) => error.includes('control icon substitutions')));
+  }
+});
+
+test('paginator icon substitution attribution rejects conflicting identities, geometry and texture provenance', () => {
+  const mutations = [
+    (ref) => { ref.nodes[0].attributes['aria-label'] = 'Other'; },
+    (ref) => { ref.nodes[0].type = 'span'; },
+    (ref) => { ref.nodes.push({ ...ref.nodes[0], key: 'duplicate' }); },
+    (ref) => { ref.nodes[1].parent = 'other'; },
+    (ref) => { ref.nodes[1].attributes.viewBox = '0 0 20 20'; },
+    (ref) => { ref.nodes[1].attributes['aria-hidden'] = 'false'; },
+    (ref) => { ref.nodes[2].attributes.d = 'M0 0L1 1'; },
+    (ref) => { ref.nodes.push({ ...ref.nodes[2], key: 'extra' }); },
+    (ref) => { ref.nodes.push({ ...ref.nodes[2], key: 'extra', parent: 'button', type: 'span', ownText: 'Text' }); },
+    (ref) => { ref.nodes[2].ownText = 'Text'; },
+    (_ref, ast) => { ast.nodes[0].authored.value = '›'; },
+    (_ref, ast) => { ast.nodes[0].authored.ariaLabel = 'Next page'; },
+    (_ref, ast) => { ast.nodes[0].paintedControlText.text = '›'; },
+    (_ref, ast) => { ast.nodes[0].paintedControlText.source = 'core-text-registry'; },
+    (_ref, ast) => { ast.nodes[0].paintedControlText.style.fontSize = '24px'; },
+    (_ref, ast) => { ast.nodes.push({ ...ast.nodes[0], key: 'duplicate' }); },
+    (_ref, ast) => { ast.nodes.push({ key: 'child', parent: ast.nodes[0].key, authored: { type: 'span' }, resolvedStyle: {} }); },
+    (_ref, ast) => { ast.paintedControlTextEvidenceVersion = 0; },
+  ];
+  for (const mutate of mutations) {
+    const raw = paginatorIconReport();
+    mutate(raw.results[0].inputTrees.reference, raw.results[0].inputTrees.astylar);
+    const evidence = controlEvidence(raw);
+    assert.deepEqual(evidence.iconSubstitutions, [], String(mutate));
+    assert.ok(evidence.gaps.length > 0, String(mutate));
+  }
+});
+
 test('control typography compares current texture inputs separately from declarations and registry text', () => {
   const raw = controlTypographyReport(), node = raw.results[0].inputTrees.astylar.nodes[0];
   node.normalResolvedStyle.fontSize = '16px';

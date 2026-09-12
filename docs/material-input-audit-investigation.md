@@ -12,6 +12,30 @@ tests pass). A missing selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Paginator icon replacements are classified content differences (2026-09-12)
+
+The current-texture audit now records paginator icons in a separate
+`controlTypography.iconSubstitutions` inventory. The reference inputs are
+specific SVG paths in a `0 0 24 24` viewBox; the candidate authors and paints
+`‹` / `›` as text. Matching previous/next control classes and accessible labels
+establish correspondence, not icon equivalence. Each observation retains the
+reference control/SVG/path attributes and computed styles, candidate authored
+content and normal/effective/current-paint inputs, and core capture revision.
+
+The attribution requires unique controls, exact path geometry, no additional
+text/vector content and valid current core texture provenance. Conflicting or
+missing witnesses remain collection/mapping gaps. No reference font comparison
+is fabricated for a path, and classified substitutions explicitly keep the
+input-equivalence verdict false. This does not certify state, wrapper geometry,
+core vector support or final raster.
+
+Checkpoint verification covers **52 paginator cases** (12 static and 40
+interaction), with valid result and tree digests, no tree errors, and **104
+classified SVG-to-glyph substitutions**. There are no current-texture owner
+gaps for those cases; retained-text and broader structure review are separate.
+Focused audit tests pass **70/70**; `npm run parity:harness:check` passes
+**108/108**. No capture runtime, fixture or renderer implementation changed.
+
 ## Tab typography now has guarded occurrence attribution (2026-09-12)
 
 All 72 current-texture differences across the 12 static tab cases now have
