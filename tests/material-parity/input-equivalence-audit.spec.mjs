@@ -4,6 +4,7 @@ import path from 'node:path';
 import {
   buildMaterialInputAudit,
   collectFullTreeInventory,
+  collectControlTypographyEvidence,
   collectRetainedTypographyEvidence,
   parseMaterialInputAuditArguments,
   reviewedHeadingMappings,
@@ -1135,6 +1136,114 @@ test('full-tree inventory retains anonymous nodes and pools identical variants w
   assert.equal(result.gaps.length, 0);
   assert.equal(result.variants[1].nodes[0].authored.type, 'div');
   assert.equal(collectFullTreeInventory([{ ...entry, inputTrees: {} }]).gaps.length, 2);
+});
+
+function controlTypographyReport() {
+  const raw = retainedTypographyReport(), entry = raw.results[0];
+  entry.family = 'button';
+  const ref = entry.inputTrees.reference, ast = entry.inputTrees.astylar;
+  ref.nodes = [
+    { key: 'button', parent: 'frame', type: 'button', attributes: { id: 'action' }, ownText: '', style: 0, rules: [], pseudoElements: [] },
+    { key: 'label', parent: 'button', type: 'span', attributes: { class: 'mdc-button__label' }, ownText: 'Action', style: 0, rules: [], pseudoElements: [] },
+  ];
+  ast.paintedControlTextEvidenceVersion = 1;
+  ast.nodes[0].authored = { id: 'action', type: 'button', value: 'Action' };
+  ast.nodes[0].normalResolvedStyle = { ...ast.nodes[0].normalResolvedStyle };
+  ast.nodes[0].interactionResolvedStyle = { ...ast.nodes[0].interactionResolvedStyle };
+  ast.nodes[0].retainedText.style = { ...ast.nodes[0].retainedText.style };
+  ast.nodes[0].paintedControlText = { source: 'core-control-texture', text: 'Action', maxWidth: 120,
+    style: { ...ref.styles[0], fontSize: 24, lineHeight: 32 / 24, letterSpacing: 0, wordSpacing: 0 } };
+  return raw;
+}
+
+function controlEvidence(raw) {
+  return collectControlTypographyEvidence(raw.results, collectFullTreeInventory(raw.results));
+}
+
+test('control typography compares current texture inputs separately from declarations and registry text', () => {
+  const raw = controlTypographyReport(), node = raw.results[0].inputTrees.astylar.nodes[0];
+  node.normalResolvedStyle.fontSize = '16px';
+  node.interactionResolvedStyle.fontSize = '18px';
+  node.retainedText.style.fontSize = '20px';
+  const before = structuredClone(raw), evidence = controlEvidence(raw);
+  assert.equal(evidence.comparisons.length, 1);
+  assert.deepEqual(evidence.gaps, []);
+  assert.deepEqual(evidence.differences, []);
+  const comparison = evidence.comparisons[0];
+  assert.deepEqual(comparison.properties.fontSize, { reference: '24px', normal: '16px', effective: '18px', retained: '20px', painted: '24px' });
+  assert.equal(comparison.properties.lineHeight.painted, '32px');
+  assert.equal(comparison.source, 'core-control-texture');
+  assert.equal(comparison.finalRasterVerified, false);
+  assert.equal(comparison.mapping.kind, 'reviewed-material-button-label');
+  assert.equal(comparison.maxWidth, 120);
+  assert.deepEqual(raw, before);
+  delete node.retainedText;
+  assert.deepEqual(controlEvidence(raw).gaps, [], 'a control need not also have a registry text entry');
+  assert.equal(controlEvidence(raw).comparisons[0].properties.fontSize.retained, undefined);
+  const ref = raw.results[0].inputTrees.reference.nodes[0];
+  ref.attributes = { 'data-parity-id': 'action' };
+  assert.equal(controlEvidence(raw).comparisons.length, 1, 'reviewed dialog-style identity is explicit');
+});
+
+test('control typography does not waive font fallback, CSS normal line-height, tracking or composited ink', () => {
+  const raw = controlTypographyReport();
+  const refStyle = raw.results[0].inputTrees.reference.styles[0];
+  Object.assign(refStyle, { lineHeight: 'normal', letterSpacing: '.096px', color: 'rgba(0,0,0,.38)' });
+  raw.results[0].inputTrees.astylar.nodes[0].paintedControlText.style.fontFamily = 'Arial, sans-serif';
+  const evidence = controlEvidence(raw);
+  assert.deepEqual(evidence.differences.map((entry) => entry.property), ['fontFamily', 'lineHeight', 'letterSpacing', 'color']);
+  assert.ok(evidence.differences.every((entry) => entry.attribution === 'unresolved'));
+  const report = buildMaterialInputAudit(raw);
+  assert.equal(report.controlTypography.differences.length, 4);
+  assert.equal(report.summary.inputEquivalent, false);
+  assert.ok(validateMaterialInputAudit(report).some((error) => error.includes('control texture typography differences')));
+  delete report.controlTypography;
+  assert.ok(validateMaterialInputAudit(report).includes('missing control texture typography stage report'));
+});
+
+test('control typography rejects stale provenance, wrong text, nested labels and ambiguous owners', () => {
+  const mutations = [
+    (ref, ast) => { delete ast.paintedControlTextEvidenceVersion; },
+    (ref, ast) => { ast.resolvedStyleSource = 'mesh-metadata'; },
+    (ref, ast) => { delete ast.resolvedStyleRevision; },
+    (ref, ast) => { delete ast.nodes[0].paintedControlText; },
+    (ref, ast) => { ast.nodes[0].paintedControlText.source = 'core-text-registry'; },
+    (ref, ast) => { ast.nodes[0].paintedControlText.text = 'Wrong'; },
+    (ref, ast) => { ast.nodes[0].authored.value = 'Wrong'; },
+    (ref, ast) => { ast.nodes.push(structuredClone(ast.nodes[0])); },
+    (ref) => { ref.nodes.push({ ...ref.nodes[0], key: 'duplicate-owner' }); },
+    (ref) => { ref.nodes.push({ ...ref.nodes[1], key: 'duplicate-label' }); },
+    (ref) => { ref.nodes.push({ key: 'child', parent: 'label', type: 'span', attributes: {}, ownText: '', style: 0, rules: [], pseudoElements: [] }); },
+    (ref) => { ref.nodes[1].parent = 'unknown'; },
+    (ref) => { ref.nodes[0].ownText = 'Extra'; },
+  ];
+  for (const mutate of mutations) {
+    const raw = controlTypographyReport();
+    mutate(raw.results[0].inputTrees.reference, raw.results[0].inputTrees.astylar);
+    const evidence = controlEvidence(raw);
+    assert.equal(evidence.comparisons.length, 0, String(mutate));
+    assert.ok(evidence.gaps.length > 0, String(mutate));
+  }
+});
+
+test('control typography never fills missing or invalid parsed lengths from declarations or retained text', () => {
+  for (const [property, value] of [['fontSize', '24px'], ['lineHeight', '1.333333'], ['letterSpacing', undefined], ['wordSpacing', null]]) {
+    const raw = controlTypographyReport();
+    raw.results[0].inputTrees.astylar.nodes[0].paintedControlText.style[property] = value;
+    const evidence = controlEvidence(raw);
+    assert.ok(evidence.gaps.some((entry) => entry.property === property));
+    assert.equal(evidence.comparisons[0].properties[property].painted, undefined);
+    assert.ok(validateMaterialInputAudit(buildMaterialInputAudit(raw)).some((error) => error.includes('control texture mappings')));
+  }
+});
+
+test('observed non-button texture owners remain explicit mapping gaps', () => {
+  const raw = controlTypographyReport();
+  raw.results[0].inputTrees.reference.nodes = [{ key: 'frame', parent: null, type: 'main', attributes: {}, ownText: '', style: 0, rules: [], pseudoElements: [] }];
+  raw.results[0].inputTrees.astylar.nodes[0].authored.type = 'input';
+  const evidence = controlEvidence(raw);
+  assert.equal(evidence.comparisons.length, 0);
+  assert.ok(evidence.gaps.some((entry) => entry.reason.includes('no reviewed reference')));
 });
 
 test('full-tree pooling preserves control paint units, source, content and effects without laundering legacy evidence', () => {

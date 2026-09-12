@@ -4,12 +4,73 @@ This is an investigation record, not a declaration of completed parity or a rend
 The machine report is generated separately from the full benchmark output.
 
 The report generator accepts an explicit evidence path so the fresh full run
-does not have to overwrite the preserved baseline. After that run completes,
-use `node scripts/run-material-input-audit.mjs --parity-report=artifacts/material-parity/retained-text-complete-audit/latest-report.json`,
+does not have to overwrite the preserved baseline. After the new control-text
+run completes, use `node scripts/run-material-input-audit.mjs --parity-report=artifacts/material-parity/control-text-complete-audit/latest-report.json`,
 then the same command with `--check`. Do not use `--allow-partial` for acceptance.
 Argument validation rejects unknown, empty, and repeated options (25/25 audit
 tests pass). A missing selected report fails rather than falling back to older
-evidence; the new run has not yet produced its final report.
+evidence. The retained-text baseline is now complete; it does not contain the
+new control-text texture instrumentation.
+
+## Current control texture comparison, not just collection (2026-09-12)
+
+The audit now reports `controlTypography` separately from registry-retained
+typography. Reviewed mappings require one direct leaf `span.mdc-button__label`
+under a unique reference button, joined to a unique candidate button by shared
+ID or explicit reference `data-parity-id`. Reference direct text, candidate
+authored label and actual current texture text must agree. This also supports
+the explicit dialog-action identity without guessing correspondence from text.
+Nested/duplicate labels, stale source/version/revision, mismatched content,
+missing parsed fields and observed unmapped control textures remain gaps.
+
+Every comparison preserves browser-computed, normal/effective declaration,
+optional registry-retained and current texture stages independently. Numeric
+parsed font/spacing lengths become CSS px; parsed line-height multiplies only
+the captured parsed font size. CSS `normal`, font fallback lists and alpha ink
+are not waived as equivalent to numeric heights, shorter font lists or opaque
+colors. The original raw paint style and wrapping width remain inventoried.
+Other effects and final placement/material/raster behavior are not certified by
+these eleven-property comparisons. Existing retained-text gaps are not removed.
+
+The digest-checked production button smoke has three mapped textures, no
+control-stage gaps and ten differences: three font-family lists, three
+`normal` versus 17px line heights, three .096px versus zero tracking values,
+and disabled rgba(29,27,32,.38) versus opaque #a4a0a7. These differences still
+need attribution; the visually passing smoke does not justify accepting them.
+`npm run parity:harness:check` passes 97/97, including five new tests for stage
+separation, numeric normalization, missing/invalid evidence, ambiguous identity,
+and explicit non-button mapping gaps. No fixture, renderer, threshold or
+reference input changes accompany this comparison increment.
+
+## Complete retained-text visual baseline (2026-09-12)
+
+The unfiltered enforced run at
+`artifacts/material-parity/retained-text-complete-audit/latest-report.json`
+completed with exit 0 against frozen
+`examples/material-showcase/dist/material-showcase-retained-text-audit/browser`
+on port 4431, Chromium 152.0.7977.76. Command: `node
+tests/material-parity/run-material-parity.mjs --enforce --skip-build`, with
+`ASTYLAR_MATERIAL_BROWSER_ROOT`, `ASTYLAR_MATERIAL_ARTIFACTS` and
+`ASTYLAR_MATERIAL_PARITY_PORT` set to those isolated paths/port and no filters.
+
+- Static: 436/436 pass, minimum/median SSIM .965296/.996382, maximum edge
+  error .984px; text 428/428, backgrounds 24/24, rasters 120/120, shadows 12/12.
+- Interactions/mobile: 1875/1875 pass, minimum/median SSIM .954514/.997463,
+  text 2116/2116, focused rasters 880/880.
+- Current audit loading verifies all 36 families and full configured coverage.
+  Including supplemental captures, 4648 case sides yield 2311 tree variants,
+  no collection errors, and no missing full-tree/resolved/state-style evidence.
+- Input equivalence remains unproven: 8133 unique style differences across
+  380407 occurrences; 3890 signatures still need attribution. There are 88
+  structural differences, 7245 retained typography observations, 4634 retained
+  mapping/stage gaps and 20028 unequal retained properties (14616 unresolved).
+  All 51 source findings are still detected. The new control comparison
+  correctly reports 625 missing-stage case gaps and zero control comparisons
+  because this older frozen bundle has no `paintedControlText` evidence.
+
+These are complete baseline captures, not a complete reviewed input audit.
+Do not attribute current diagnostic API coverage to the older served bundle.
+Preserve this report and capture the new instrumentation in a separate full run.
 
 ## Control texture evidence reaches the Material collector (2026-09-12)
 

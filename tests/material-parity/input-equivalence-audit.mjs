@@ -60,6 +60,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const supplementalSlider = collectSupplementalSlider(root);
   const elementInventory = collectFullTreeInventory([...cases, ...supplementalBehavior.cases, ...supplementalOverlays.cases, ...supplementalSlider.cases], { root });
   const retainedTypography = collectRetainedTypographyEvidence(cases, elementInventory);
+  const controlTypography = collectControlTypographyEvidence(cases, elementInventory);
   const discrepancies = collectStyleDiscrepancies(cases, retainedTypography);
   const classifications = countBy(discrepancies, (entry) => entry.classification);
   const propertyGroupCounts = countBy(discrepancies, (entry) => entry.propertyGroup);
@@ -92,6 +93,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
         supplementalSlider.missing.length === 0 && supplementalSlider.errors.length === 0 && supplementalSlider.mismatches.length === 0 &&
         elementInventory.gaps.length === 0 && elementInventory.resolvedStyleGaps.length === 0 && elementInventory.stateStyleGaps.length === 0 && elementInventory.errors.length === 0 &&
         retainedTypography.gaps.length === 0 && retainedTypography.differences.length === 0 && retainedTypography.paintMaskDifferences.length === 0 &&
+        controlTypography.gaps.length === 0 && controlTypography.differences.length === 0 &&
         coverage.presenceDifferences.length === 0 &&
         sourceFindings.every((entry) => entry.detected && ['equivalent-representation', 'legitimate-public-api-structure'].includes(entry.classification)) &&
         structures.every((entry) => entry.classification === 'legitimate-public-api-structure') &&
@@ -112,6 +114,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
     structureEvidence: structures,
     elementInventory,
     retainedTypography,
+    controlTypography,
     sourceFindings,
     pluginBoundary: pluginBoundaryVerdict,
     focusedProofs: focusedProofInventory(root),
@@ -136,6 +139,9 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
   if (requireComplete && report.elementInventory.stateStyleGaps.length > 0) errors.push(`${report.elementInventory.stateStyleGaps.length} state cases lack effective style provenance`);
   if (report.elementInventory.errors.length > 0) errors.push(`${report.elementInventory.errors.length} full-tree collection errors`);
   if (report.retainedTypography?.schemaVersion !== 1) errors.push('missing retained typography stage report');
+  if (report.controlTypography?.schemaVersion !== 1) errors.push('missing control texture typography stage report');
+  if (requireComplete && report.controlTypography?.gaps.length > 0) errors.push(`${report.controlTypography.gaps.length} control texture mappings or stage fields require review`);
+  if (requireComplete && report.controlTypography?.differences.length > 0) errors.push(`${report.controlTypography.differences.length} control texture typography differences require attribution`);
   if (requireComplete && report.retainedTypography?.gaps.length > 0) errors.push(`${report.retainedTypography.gaps.length} retained typography mappings or stage fields require review`);
   const reviewedTypographyKinds = { 'reviewed-heading-mask': 'parity-harness-defect',
     'reviewed-table-font-input': 'application-plugin-authoring-defect',
@@ -175,6 +181,8 @@ export function renderMaterialInputAuditMarkdown(report) {
     `Full-element evidence: ${report.elementInventory.cases.length} captured case sides, ${report.elementInventory.variants.length} tree variants; ${report.elementInventory.gaps.length} missing case sides, ${report.elementInventory.resolvedStyleGaps.length} elements without resolved styles, ${report.elementInventory.stateStyleGaps.length} state cases without effective style provenance, and ${report.elementInventory.errors.length} collection errors. Inventory presence does not establish input equivalence.`,
     '',
     `Retained typography: ${report.retainedTypography.comparisons.length} directly mapped text-node observations; ${report.retainedTypography.gaps.length} mapping/stage gaps and ${report.retainedTypography.differences.length} unequal retained-property observations. The registry stage is reported separately from declarations and is not proof of current pseudo-state glyph paint.`,
+    '',
+    `Control texture typography: ${report.controlTypography.comparisons.length} mapped current-texture observations; ${report.controlTypography.gaps.length} mapping/stage gaps and ${report.controlTypography.differences.length} unequal paint-input properties. Parsed CSS lengths and line-height multipliers are normalized independently of declarations. This does not prove final material effects, placement, visibility or raster parity.`,
     '',
     `Heading coverage: ${report.retainedTypography.reviewedMappings.length} explicit template-to-SiteData identity mappings; ${report.retainedTypography.paintMaskDifferences.length} captured benchmark paint-mask discrepancies. HTML hides headings with opacity zero while the candidate uses surface-colored ink; the benchmark cannot establish visible heading paint parity.`,
     '',
@@ -1091,6 +1099,101 @@ export function collectRetainedTypographyEvidence(cases, inventory) {
   return { schemaVersion: 1,
     scope: 'Direct own-text nodes joined by unique shared authored ID or explicit reviewed heading/template identity, with identical trimmed text. All eleven typography properties retain browser computed, core normal/effective declarations, and core retained-text values separately. Missing mappings/fields and unequal retained values remain explicit; no inheritance or font fallback is reconstructed. Reviewed mappings establish correspondence, not style equivalence.',
     comparisons, differences, gaps, paintMaskDifferences, reviewedMappings };
+}
+
+// These paths describe Material's actual button label, not an inferred text
+// match. Unmapped control textures stay explicit, including non-button owners.
+export function collectControlTypographyEvidence(cases, inventory) {
+  const comparisons = [], differences = [], gaps = [];
+  const gap = (key, element, reason, evidence = {}) => gaps.push({ case: key, element, reason, ...evidence,
+    classification: 'parity-harness-defect', attribution: 'unresolved',
+    recommendedOwner: 'input audit control text identity and actual paint-input provenance' });
+  const styleAt = (index, side) => inventory.styles[index]?.side === side ? inventory.styles[index].value : undefined;
+  for (const entry of cases) {
+    const key = caseKey(entry);
+    const refs = inventory.cases.filter((item) => item.case === key && item.side === 'reference');
+    const asts = inventory.cases.filter((item) => item.case === key && item.side === 'astylar');
+    if (refs.length !== 1 || asts.length !== 1 || inventory.errors.some((error) => error.case === key)) {
+      gap(key, undefined, 'missing, ambiguous, or invalid full-tree capture'); continue;
+    }
+    const referenceTree = inventory.variants[refs[0].variant], astylarTree = inventory.variants[asts[0].variant];
+    const labelNodes = referenceTree.nodes.filter((node) => node.type === 'span' &&
+      String(node.attributes?.class ?? '').split(/\s+/).includes('mdc-button__label'));
+    const paintedNodes = astylarTree.nodes.filter((node) => node.paintedControlText);
+    if (!labelNodes.length && !paintedNodes.length) continue;
+    if (astylarTree.resolvedStyleEvidenceVersion !== 2 || astylarTree.resolvedStyleSource !== 'core-style-inspection' ||
+        !Number.isInteger(asts[0].resolvedStyleRevision) || astylarTree.paintedControlTextEvidenceVersion !== 1) {
+      gap(key, undefined, 'missing control texture evidence version, core source, or revision'); continue;
+    }
+    const mapped = new Set();
+    for (const ref of labelNodes) {
+      const parents = referenceTree.nodes.filter((node) => node.key === ref.parent && node.type === 'button');
+      const parent = parents.length === 1 ? parents[0] : undefined;
+      const id = parent?.attributes?.id || parent?.attributes?.['data-parity-id'];
+      const astNodes = astylarTree.nodes.filter((node) => id && node.authored?.id === id);
+      const referenceOwners = referenceTree.nodes.filter((node) => id &&
+        (node.attributes?.id === id || node.attributes?.['data-parity-id'] === id));
+      if (!id || referenceOwners.length !== 1 || astNodes.length !== 1 || astNodes[0].authored.type !== 'button' ||
+          referenceTree.nodes.filter((node) => node.key === ref.key).length !== 1 ||
+          labelNodes.filter((node) => node.parent === parent.key).length !== 1 ||
+          referenceTree.nodes.some((node) => node.parent === ref.key) || parent.ownText?.trim()) {
+        gap(key, id, 'Material button label lacks a unique direct leaf and shared control identity', { referenceNode: ref.key }); continue;
+      }
+      const ast = astNodes[0], paint = ast.paintedControlText;
+      if (mapped.has(ast.key)) { gap(key, id, 'multiple labels map to the same control'); continue; }
+      mapped.add(ast.key);
+      const authoredText = ast.authored.value ?? ast.authored.textContent;
+      if (!ref.ownText?.trim() || ref.ownText.trim() !== String(authoredText ?? '').trim() ||
+          ref.ownText.trim() !== paint?.text?.trim()) {
+        gap(key, id, 'reference, authored control label and current texture text are not identical',
+          { reference: ref.ownText, authored: authoredText, painted: paint?.text }); continue;
+      }
+      if (paint.source !== 'core-control-texture') {
+        gap(key, id, 'control label has no authoritative current texture source'); continue;
+      }
+      const raw = { reference: styleAt(ref.style, 'reference'), normal: styleAt(ast.normalStyle, 'astylar'),
+        effective: styleAt(ast.interactionStyle, 'astylar'), painted: styleAt(paint.style, 'astylar') };
+      if (Object.values(raw).some((style) => !style || typeof style !== 'object' || Array.isArray(style))) {
+        gap(key, id, 'missing or wrongly attributed pooled control text style'); continue;
+      }
+      if (ast.retainedText?.source === 'core-text-registry') raw.retained = styleAt(ast.retainedText.style, 'astylar');
+      const parsed = { ...raw.painted };
+      for (const property of ['fontSize', 'letterSpacing', 'wordSpacing']) {
+        parsed[property] = typeof raw.painted[property] === 'number' && Number.isFinite(raw.painted[property])
+          ? `${raw.painted[property]}px` : undefined;
+      }
+      parsed.lineHeight = Number.isFinite(raw.painted.lineHeight) && typeof raw.painted.lineHeight === 'number' &&
+        Number.isFinite(raw.painted.fontSize) && typeof raw.painted.fontSize === 'number' && raw.painted.fontSize > 0
+        ? `${raw.painted.lineHeight * raw.painted.fontSize}px` : undefined;
+      const stages = Object.fromEntries(Object.entries(raw).filter(([, style]) => style)
+        .map(([stage, style]) => [stage, canonicalStyle(stage === 'painted'
+          ? Object.fromEntries(Object.entries(parsed).filter(([, value]) => value !== undefined)) : style)]));
+      const comparison = { case: key, family: entry.family, element: id, state: entry.state ?? 'static',
+        referenceNode: ref.key, referenceControl: parent.key, astylarNode: ast.key, text: paint.text,
+        source: paint.source, revision: asts[0].resolvedStyleRevision, rawPaintedStyle: paint.style,
+        maxWidth: paint.maxWidth, finalRasterVerified: false,
+        mapping: { kind: 'reviewed-material-button-label',
+          justification: 'A unique shared button ID or reference data-parity-id anchors one direct span.mdc-button__label leaf. Its direct text matches both the authored candidate control label and current core-owned texture text. This establishes text-owner identity only, not layout, style, state, material or raster equivalence.' }, properties: {} };
+      for (const property of retainedTypographyProperties) {
+        const values = Object.fromEntries(Object.entries(stages).map(([stage, style]) => [stage, style[property]]));
+        comparison.properties[property] = values;
+        if (values.reference === undefined || values.painted === undefined) {
+          gap(key, id, 'missing reference or valid parsed control typography property', { property, values });
+        } else if (values.reference !== values.painted) {
+          differences.push({ case: key, family: entry.family, element: id, property, values,
+            referenceNode: ref.key, astylarNode: ast.key, source: paint.source, revision: comparison.revision,
+            classification: 'parity-harness-defect', attribution: 'unresolved',
+            recommendedOwner: 'input audit control authored-token and core paint-input attribution',
+            justification: 'Browser computed and actual control texture paint inputs differ. Attribute authored tokens and parser/runtime behavior before assigning fault. CSS normal line-height, font fallback and composited colors are not automatically equivalent to numeric or opaque substitutes.' });
+        }
+      }
+      comparisons.push(comparison);
+    }
+    for (const node of paintedNodes) if (!mapped.has(node.key)) {
+      gap(key, node.authored?.id, 'current control texture has no reviewed reference text-owner mapping', { astylarNode: node.key });
+    }
+  }
+  return { schemaVersion: 1, scope: 'Current core-owned control texture inputs, separately from normal/effective declarations and registry-retained text. Only exact direct Material button label paths are reviewed; other observed control owners remain gaps. Numeric parsed CSS lengths and line-height multipliers are normalized without authored or projected fallbacks. Other effects remain in the full inventory and are not certified by these eleven typography comparisons.', comparisons, differences, gaps };
 }
 
 export function collectFullTreeInventory(cases, { root = process.cwd() } = {}) {
