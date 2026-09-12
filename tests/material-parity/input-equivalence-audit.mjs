@@ -3,6 +3,7 @@ import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { loadNormalLineBoxReport } from './normal-line-box-report.mjs';
 import { validateSupplementalCapture } from './supplemental-capture-evidence.mjs';
+import { borderColorProperties, borderInitialAttribution, collectBorderInitialInputs, classifyBorderInitialInput } from './border-initial-input-evidence.mjs';
 import {
   implicitReferenceValues,
   implicitReferenceJustifications,
@@ -73,6 +74,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const supplementalSlider = collectSupplementalSlider(root, supplementalOptions);
   const elementInventory = collectFullTreeInventory([...cases, ...supplementalBehavior.cases, ...supplementalOverlays.cases, ...supplementalSlider.cases], { root });
   const visibleOverflowInputs = collectVisibleOverflowInputs(elementInventory);
+  const borderInitialInputs = collectBorderInitialInputs(elementInventory, canonicalStyle);
   const rawControlTypography = collectControlTypographyEvidence(cases, elementInventory);
   const retainedTypography = collectRetainedTypographyEvidence(cases, elementInventory, rawControlTypography);
   const normalLineBoxes = options.normalLineBoxPath
@@ -83,7 +85,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
       .map((item) => ({ case: item.case, element: item.element, referenceNode: item.referenceNode })),
       scope: 'No supplemental static natural-line-box report selected. No line-height equivalence inferred.' };
   const controlTypography = attributeObservedNormalLineBoxes(rawControlTypography, elementInventory, normalLineBoxes);
-  const discrepancies = collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInputs);
+  const discrepancies = collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInputs, borderInitialInputs);
   const classifications = countBy(discrepancies, (entry) => entry.classification);
   const propertyGroupCounts = countBy(discrepancies, (entry) => entry.propertyGroup);
   const familyCounts = countBy(discrepancies, (entry) => entry.family);
@@ -139,6 +141,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
     structureEvidence: structures,
     elementInventory,
     visibleOverflowInputs,
+    borderInitialInputs,
     retainedTypography,
     controlTypography,
     sourceFindings,
@@ -167,6 +170,20 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
   if (requireComplete && report.elementInventory.resolvedStyleGaps.length > 0) errors.push(`${report.elementInventory.resolvedStyleGaps.length} inventoried elements lack resolved style evidence`);
   if (requireComplete && report.elementInventory.stateStyleGaps.length > 0) errors.push(`${report.elementInventory.stateStyleGaps.length} state cases lack effective style provenance`);
   if (report.elementInventory.errors.length > 0) errors.push(`${report.elementInventory.errors.length} full-tree collection errors`);
+  if (JSON.stringify(report.borderInitialInputs) !== JSON.stringify(collectBorderInitialInputs(report.elementInventory, canonicalStyle))) {
+    errors.push('border initial-color evidence does not replay from the captured inventory');
+  }
+  for (const entry of report.discrepancies.filter(entry => entry.attribution === borderInitialAttribution)) {
+    const proof = report.borderInitialInputs?.find(proof => proof.case === entry.reviewEvidence?.case && proof.element === entry.element);
+    if (!proof || !borderColorProperties.includes(entry.property) || entry.reference !== proof.referenceColor ||
+        entry.astylar !== proof.candidateBorderColor || entry.classification !== 'intentional-documented-limitation' ||
+        JSON.stringify(proof) !== JSON.stringify(entry.reviewEvidence) || !Array.isArray(entry.reviewedCases) ||
+        entry.reviewedCases.length !== entry.occurrences || new Set(entry.reviewedCases).size !== entry.occurrences ||
+        entry.reviewedCases.some(key => !report.borderInitialInputs?.some(item => item.case === key && item.element === entry.element &&
+          item.referenceColor === entry.reference && item.candidateBorderColor === entry.astylar))) {
+      errors.push('border initial-color classification lacks exact captured omission evidence');
+    }
+  }
   if (JSON.stringify(report.visibleOverflowInputs) !== JSON.stringify(collectVisibleOverflowInputs(report.elementInventory))) {
     errors.push('visible overflow initial-value evidence does not replay from the captured inventory');
   }
@@ -409,6 +426,8 @@ export function renderMaterialInputAuditMarkdown(report) {
     '',
     `${report.summary.unresolvedAttributions} signatures still require authored-rule/cascade/structure attribution. These are evidence gaps, not confirmed authoring or renderer defects; complete audit acceptance rejects them. Source-level findings below carry their own traced evidence.`,
     '',
+    `Border initial-color evidence: ${report.borderInitialInputs.length} uniquely paired node observations prove omitted author/inline color inputs with browser currentColor versus core transparent defaults. Attribution rejects possibly applicable state/media/reset rules and unknown selectors, and is not an equivalence waiver. Alpha paint, contextual-color paint, structure and final raster require separate evidence.`,
+    '',
     'Reviewed tracking representation: CSS Text 3 defines letter-spacing normal as computed zero, serialized by CSSOM as normal. Only that alias is canonicalized; raw pooled values remain available. The independent Arial equal-input advance failure remains a core finding. Numeric precision preserves tiny nonzero tracking rather than rounding it to normal. This accepts neither different fonts nor missing paint, line-height, shaping, alignment or final raster.',
     '',
     `Coverage is ${report.coverage.complete ? 'complete' : 'incomplete'}: ${report.coverage.executedStatic}/${report.coverage.configuredStatic} static cases and ` +
@@ -499,8 +518,9 @@ export function renderMaterialInputAuditMarkdown(report) {
   return lines.join('\n');
 }
 
-function collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInputs) {
+function collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInputs, borderInitialInputs) {
   const grouped = new Map();
+  const borderInitialByCaseAndId = new Map(borderInitialInputs.map(entry => [JSON.stringify([entry.case, entry.element]), entry]));
   const visibleOverflowByCaseAndId = new Map(visibleOverflowInputs.map(entry => [JSON.stringify([entry.case, entry.element]), entry]));
   const typographyByCaseAndId = new Map(retainedTypography.comparisons.map((entry) =>
     [JSON.stringify([entry.case, entry.element]), entry]));
@@ -521,6 +541,8 @@ function collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInp
             justification: 'This interaction capture predates effective-style provenance. It can compare browser state styles against candidate normal-only declarations; recapture with evidence version2 before attributing the difference to authoring or core.' }
           : classifyReviewedVisibleOverflow(input, property, referenceValue, astylarValue,
               visibleOverflowByCaseAndId.get(JSON.stringify([key, input.id])))
+            ?? classifyBorderInitialInput(input, property, referenceValue, astylarValue,
+              borderInitialByCaseAndId.get(JSON.stringify([key, input.id])), canonicalStyle)
             ?? classifyReviewedRootInput(benchmarkCase, input, property, referenceValue, astylarValue)
             ?? classifyReviewedContainerInput(benchmarkCase, input, property, referenceValue, astylarValue)
             ?? classifyReviewedBadgePaint(benchmarkCase, input, property, referenceValue, astylarValue)
@@ -545,6 +567,7 @@ function collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInp
             recommendedOwner: classification.owner,
             ...(classification.attribution ? { attribution: classification.attribution } : {}),
             ...(classification.reviewEvidence ? { reviewEvidence: classification.reviewEvidence } : {}),
+            ...(classification.attribution === borderInitialAttribution ? { reviewedCases: [] } : {}),
             occurrences: 0,
             cases: [],
             states: [],
@@ -554,6 +577,7 @@ function collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInp
           grouped.set(signature, entry);
         }
         entry.occurrences += 1;
+        if (entry.reviewedCases) entry.reviewedCases.push(key);
         if (entry.cases.length < 12) entry.cases.push(key);
         const state = benchmarkCase.state ?? 'static';
         if (!entry.states.includes(state)) entry.states.push(state);
@@ -4369,6 +4393,7 @@ export function collectFullTreeInventory(cases, { root = process.cwd() } = {}) {
           style: intern({ side, value: node.paintedControlText.style }, styles, styleIds) } } : {}),
       });
       const variant = intern({ family: entry.family, side, resolvedStyleEvidenceVersion: tree.resolvedStyleEvidenceVersion,
+        ruleEvidenceComplete: Array.isArray(tree.rules) && Array.isArray(tree.errors),
         resolvedStyleSource: tree.resolvedStyleSource,
         ...(side === 'reference' ? { contextStyleEvidenceVersion: tree.contextStyleEvidenceVersion,
           contextStyleProperties: tree.contextStyleProperties } : {}),
@@ -4650,6 +4675,7 @@ function sourceFingerprints(root) {
     'tests/material-parity/input-tree-evidence.spec.mjs',
     'tests/material-parity/input-equivalence-audit.mjs',
     'tests/material-parity/input-equivalence-policy.mjs',
+    'tests/material-parity/border-initial-input-evidence.mjs',
     'tests/material-parity/normal-line-box-report.mjs',
     'tests/material-parity/normal-line-box-evidence.mjs',
     'scripts/audit-material-normal-line-boxes.mjs',

@@ -22,6 +22,91 @@ selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Captured border initial-color attribution, without an equivalence waiver (2026-09-12)
+
+The existing public-package border proof is now connected to individual
+captured showcase inputs through
+`tests/material-parity/border-initial-input-evidence.mjs`. This changes audit
+reporting only: no renderer, plugin, fixture, reference, threshold or live
+capture implementation was edited.
+
+An important evidence boundary was checked first:
+`elementAuthoredStyles` in `astylar.component.ts` matches selectors against the
+semantic DOM, translating authored IDs to `data-astylar-id`. An empty result
+from that helper is not sufficient evidence of an omitted declaration in the
+authored Astylar tree. The new proof examines **all captured candidate rules**,
+not just those returned by semantic-DOM matching. It does not introduce a
+second cascade or compute winning declarations. It only excludes a rule when
+its unescaped compound type/ID/class selector demonstrably cannot apply.
+State suffixes are treated as potentially active; media conditions are not
+used to discard rules. Unsupported selector syntax, nested declarations,
+possibly applicable color/reset rules, animation/transition declarations,
+vendor border-color aliases and missing capture provenance prevent attribution.
+
+Each proof requires unique reference/candidate IDs, an ordinary core candidate
+type, current core inspection provenance and revision, all three normal/
+effective/interaction style stages, explicit reference rule/inline evidence,
+and side-correct pooled values. Native browser controls, SVG and private plugin
+nodes are not inferred to share ordinary border defaults. The reference must
+compute all four border colors to its computed element color while its captured
+matched/inline declarations omit border color and resets. The candidate must
+omit those declarations in inline and every potentially applicable authored
+rule, while all three stages resolve transparent. Contradictory shared-ID
+snapshots also prevent scalar attribution.
+
+Classification remains **intentional documented limitation**, tied to
+`core-border-initial-color-differs-from-css`, with `inputEquivalent:false` and
+`finalRasterVerified:false`. Documented does not mean accepted CSS parity:
+core's transparent default still differs from CSS currentColor. Zero-width
+borders are not waived, and the separate currentColor and alpha-paint failures
+remain open. Different element structure, dimensions and final paint receive
+no equivalence claim from this property-specific evidence.
+
+Replaying all **436 corrected static cases** with their fresh normal-line-box
+and supplemental evidence yields:
+
+- **620** qualifying full-tree paired node observations, including supplemental
+  and unmeasured nodes. This is not the number of classified scalar differences.
+- **276** newly attributed static difference signatures, **1,760** occurrences,
+  across **24** component families.
+- Border-color signatures still unresolved: **239** (previously 515).
+- All unresolved static signatures: **2,752** (previously 3,028).
+- Diagnostic `validateMaterialInputAudit(..., {requireComplete:false})`:
+  zero errors; this is not complete-matrix or input-equivalence acceptance.
+
+Each grouped classification retains every reviewed case key, independently of
+the 12-case display sample. Validation replays the proof from the captured
+inventory, rejects altered pooled sides/declarations/provenance, and checks
+every claimed occurrence. Tests retain missing rules, matching inactive rules,
+unknown selectors, resets, native controls, duplicate IDs, missing stages and
+contradictory snapshots as unproved. A 14-state control verifies that evidence
+is not silently truncated to the display sample.
+
+The active unfiltered matrix was revalidated through its live process handle;
+at the integrity checkpoint it had **436 static / 1,189 interaction records**.
+All ten loaded capture-harness file hashes still matched the launch manifest,
+and every recorded result digest matched. The process subsequently advanced
+through datepicker into timepicker. It remains running; its final report and
+full acceptance are not claimed by this increment.
+
+Verification for this increment:
+
+- `npm run parity:harness:check` — **327/327 pass**, zero failures, skips or
+  cancellations; 178.268 seconds.
+- `node --test --test-name-pattern='border initial-color|border proof|source fingerprints' tests/material-parity/input-equivalence-audit.spec.mjs`
+  — final **6/6 pass**, 17.955 seconds, after adding vendor-alias and
+  animation/transition guards. The first focused run exposed a test assumption
+  that ignored automatically loaded supplemental cases; the test now selects
+  its own mapped node. No production behavior was changed to satisfy it.
+- The final static replay uses `buildMaterialInputAudit` with all 436 static
+  checkpoint results and the launch manifest's provenance, explicitly selecting
+  `normal-line-box-current-ancestry-audit/latest-report.json` and
+  `supplemental-current-ancestry-audit`. Counts above are unchanged after the
+  final guards; diagnostic validation has zero errors.
+- Scoped diff review and `git diff --check` pass. The generated final machine
+  report is still deferred until complete current-run evidence and remaining
+  classifications are available; stale untracked reports are not committed.
+
 ## Border colors: documented default divergence and two independent core paint gaps (2026-09-12)
 
 `examples/material-showcase/src/app/border-color-input-audit.spec.ts` adds ten

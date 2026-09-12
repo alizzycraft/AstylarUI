@@ -230,6 +230,134 @@ test('accepts only proven omitted shadow and automatic grid-placement initial va
   assert.ok(changed.discrepancies.every((entry) => entry.attribution === 'unresolved'));
 });
 
+function borderInitialReport() {
+  const raw = visibleOverflowReport(), entry = raw.results[0], input = entry.styleInputs[0];
+  const reference = { color: '#123456', borderColor: '#123456', borderWidth: '0px', borderStyle: 'none' };
+  const candidate = { color: '#123456', borderColor: 'transparent', borderWidth: '0px', borderStyle: 'none' };
+  Object.assign(input, { reference, astylar: candidate, referenceAuthored: [],
+    astylarNormalResolvedStyle: { ...candidate }, astylarInteractionResolvedStyle: { ...candidate } });
+  entry.inputTrees.reference.styles = [{ ...reference }];
+  entry.inputTrees.reference.nodes[0].inline = {};
+  Object.assign(entry.inputTrees.astylar.nodes[0], { resolvedStyle: { ...candidate },
+    normalResolvedStyle: { ...candidate }, interactionResolvedStyle: { ...candidate } });
+  entry.inputTrees.astylar.rules = [
+    { selector: '#other:focus, .unrelated.selected', borderColor: 'red' },
+    { selector: '.unrelated', all: 'initial', mediaMaxWidth: '500px' },
+    { selector: '#core-root', borderWidth: '0', borderStyle: 'none', borderRadius: '4px' },
+  ];
+  return raw;
+}
+
+test('border initial-color attribution checks complete authored rules and never waives the unequal input', () => {
+  for (const state of [undefined, 'hover']) {
+    const raw = borderInitialReport();
+    raw.results[0].state = state;
+    const before = JSON.stringify(raw), audit = buildMaterialInputAudit(raw);
+    assert.equal(audit.borderInitialInputs.filter(entry => entry.element === 'core-root').length, 1);
+    const proof = audit.borderInitialInputs.find(entry => entry.element === 'core-root');
+    assert.equal(proof.excludedCandidateRules.length, 2);
+    assert.equal(proof.candidateRuleCount, 3);
+    assert.equal(proof.inputEquivalent, false);
+    assert.equal(proof.finalRasterVerified, false);
+    assert.equal(audit.discrepancies.length, 4);
+    for (const difference of audit.discrepancies) {
+      assert.equal(difference.attribution, 'reviewed-border-initial-color-divergence');
+      assert.equal(difference.classification, 'intentional-documented-limitation');
+      assert.equal(difference.reviewedCases.length, difference.occurrences);
+      assert.equal(difference.reviewEvidence.revision, 7);
+    }
+    assert.equal(audit.summary.inputEquivalent, false);
+    assert.equal(validateMaterialInputAudit(audit, { requireComplete: false }).length, 0);
+    assert.equal(JSON.stringify(raw), before);
+  }
+});
+
+test('border initial-color attribution fails closed on selectors, declarations and missing provenance', () => {
+  const changes = [
+    e => { delete e.inputTrees.astylar.rules; },
+    e => { delete e.inputTrees.astylar.errors; },
+    e => { e.inputTrees.astylar.rules.push({ selector: '#core-root:disabled', borderColor: 'red' }); },
+    e => { e.inputTrees.astylar.rules.push({ selector: '#core-root', borderColor: 'transparent', mediaMaxWidth: '1px' }); },
+    e => { e.inputTrees.astylar.rules.push({ selector: ':not(.unrelated)', borderColor: 'red' }); },
+    e => { e.inputTrees.astylar.rules.push({ selector: '.parent > #other', borderColor: 'red' }); },
+    e => { e.inputTrees.astylar.rules.push({ borderColor: 'red' }); },
+    e => { e.inputTrees.astylar.rules.push({ selector: '#other', media: { borderColor: 'red' } }); },
+    e => { e.inputTrees.astylar.nodes[0].authored.style = { border: '1px solid' }; },
+    e => { e.inputTrees.astylar.nodes[0].authored.style = { 'border-inline-start': 'solid' }; },
+    e => { e.inputTrees.astylar.nodes[0].authored.style = { all: 'unset' }; },
+    e => { e.inputTrees.astylar.nodes[0].authored.style = { '-webkit-border-before-color': 'red' }; },
+    e => { e.inputTrees.astylar.rules.push({ selector: '#core-root', animationName: 'border-pulse' }); },
+    e => { e.inputTrees.astylar.nodes[0].authored.style = 'border-color: red'; },
+    e => { e.inputTrees.astylar.nodes[0].authored.class = ['unrelated']; },
+    e => { e.inputTrees.astylar.nodes[0].authored.type = 'input'; },
+    e => { e.inputTrees.astylar.nodes[0].authored.type = 'showcase.material:panel'; },
+    e => { e.inputTrees.astylar.nodes[0].normalResolvedStyle.borderColor = '#123456'; },
+    e => { e.inputTrees.astylar.nodes[0].resolvedStyle.borderTopColor = 'transparent'; },
+    e => { delete e.inputTrees.astylar.nodes[0].interactionResolvedStyle; },
+    e => { e.inputTrees.astylar.resolvedStyleSource = 'mesh-metadata'; },
+    e => { e.inputTrees.astylar.resolvedStyleEvidenceVersion = 1; },
+    e => { e.inputTrees.astylar.resolvedStyleRevision = -1; },
+    e => { e.inputTrees.astylar.nodes.push(structuredClone(e.inputTrees.astylar.nodes[0])); },
+    e => { e.inputTrees.reference.nodes.push(structuredClone(e.inputTrees.reference.nodes[0])); },
+    e => { e.inputTrees.reference.nodes[0].type = 'button'; },
+    e => { delete e.inputTrees.reference.nodes[0].inline; },
+    e => { e.inputTrees.reference.nodes[0].inline = { 'border-color': { value: 'currentColor' } }; },
+    e => { e.inputTrees.reference.nodes[0].inline = { transition: { value: 'all 1s' } }; },
+    e => { e.inputTrees.reference.rules.push({ selector: '*', declarations: { border: { value: '0' } } }); e.inputTrees.reference.nodes[0].rules = [0]; },
+    e => { delete e.inputTrees.reference.styles[0].color; },
+    e => { e.inputTrees.reference.styles[0].borderLeftColor = 'red'; },
+    e => { e.inputTrees.reference.errors.push('missing sheet'); },
+    e => { e.styleInputs[0].astylarAuthored = [{ selector: '#core-root', declarations: { borderColor: 'red' } }]; },
+    e => { delete e.styleInputs[0].referenceAuthored; },
+    e => { delete e.styleInputs[0].astylarNormalResolvedStyle; },
+    e => { e.styleInputs[0].astylarStructure.type = 'span'; },
+    e => { e.styleInputs[0].reference = { color: 'blue', borderColor: 'blue' }; },
+    e => { e.styleInputs[0].astylarResolvedStyleEvidenceVersion = 1; },
+  ];
+  for (const change of changes) {
+    const raw = borderInitialReport();
+    change(raw.results[0]);
+    assert.ok(buildMaterialInputAudit(raw).discrepancies.every(entry => entry.attribution !== 'reviewed-border-initial-color-divergence'), String(change));
+  }
+});
+
+test('border initial-color validation replays declarations, pooled sides and every occurrence', () => {
+  const original = buildMaterialInputAudit(borderInitialReport());
+  for (const change of [
+    a => { delete a.borderInitialInputs; },
+    a => { a.borderInitialInputs = []; },
+    a => { a.borderInitialInputs[0].inputEquivalent = true; },
+    a => { a.borderInitialInputs[0].excludedCandidateRules = []; },
+    a => { a.borderInitialInputs[0].revision++; },
+    a => { a.elementInventory.rules.find(rule => rule.side === 'astylar').value.selector = '#core-root'; },
+    a => { a.elementInventory.rules.find(rule => rule.side === 'astylar').side = 'reference'; },
+    a => { a.elementInventory.variants.find(tree => tree.side === 'astylar').ruleEvidenceComplete = false; },
+    a => { a.discrepancies[0].classification = 'equivalent-representation'; },
+    a => { a.discrepancies[0].property = 'borderTopWidth'; },
+    a => { a.discrepancies[0].occurrences++; },
+    a => { a.discrepancies[0].reviewedCases.push('uncaptured-case'); },
+    a => { a.discrepancies[0].reviewEvidence.astylarNode = 'wrong'; },
+  ]) {
+    const changed = structuredClone(original);
+    change(changed);
+    assert.ok(validateMaterialInputAudit(changed, { requireComplete: false }).some(error => error.includes('border initial-color')), String(change));
+  }
+});
+
+test('border initial-color keeps all reviewed state cases beyond the display sample limit', () => {
+  const raw = borderInitialReport();
+  raw.results = Array.from({ length: 14 }, (_, index) => ({ ...structuredClone(raw.results[0]), state: `state-${index}` }));
+  const audit = buildMaterialInputAudit(raw);
+  assert.equal(audit.borderInitialInputs.filter(entry => entry.element === 'core-root').length, 14);
+  for (const difference of audit.discrepancies) {
+    assert.equal(difference.attribution, 'reviewed-border-initial-color-divergence');
+    assert.equal(difference.cases.length, 12);
+    assert.equal(difference.reviewedCases.length, 14);
+    assert.equal(difference.occurrences, 14);
+  }
+  assert.ok(!validateMaterialInputAudit(audit, { requireComplete: false }).some(error => error.includes('border initial-color')));
+});
+
 function visibleOverflowReport() {
   const reference = { display: 'block', overflowX: 'visible', overflowY: 'visible' };
   const candidate = { display: 'block' };
@@ -501,7 +629,7 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   const report = parityReport({}, {});
   const audit = buildMaterialInputAudit(report);
   assert.equal(audit.coverage.visualParityGreen, true);
-  assert.equal(audit.sourceFingerprints.length, 44);
+  assert.equal(audit.sourceFingerprints.length, 45);
   assert.equal(audit.sourceFingerprints.filter(({ file }) => file === 'src/app/services/dom/dom-ancestry.service.ts').length, 1);
   const cascadeProof = 'examples/material-showcase/src/app/label-cascade-input-audit.spec.ts';
   assert.equal(audit.sourceFingerprints.filter(({ file }) => file === cascadeProof).length, 1);
