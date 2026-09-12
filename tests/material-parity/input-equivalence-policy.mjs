@@ -335,6 +335,15 @@ export const sourceAuditDefinitions = Object.freeze([
     justification: 'The reference uses content height, max-height:80vh, and responsive minimum widths (full viewport, medium 384px, large 512px), not a fixed 512x128px box. Candidate has only a max-960px full-width override. A settled 1024px browser proof measures reference width384 and candidate width512, while 900/1440px match. Preserve the reference constraints rather than adding another measured-size patch.',
   }),
   Object.freeze({
+    id: 'fixture-expansion-flow-and-collapse-substitution',
+    introducedBy: '6e1c156 replaces expansion flow with absolute content; a0f3328 adds a -1px nested text offset',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`selector: '#expansion-content', position: 'absolute', display: state\.open \? 'block' : 'none'`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase expansion content flow, collapse structure, and typography translation',
+    justification: 'The reference paragraph remains in normal flow inside a padded body, flex content region and grid collapse wrapper. Closed-state captures retain its block display and margins while visibility is hidden and the wrapper uses grid-template-rows:0fr. Candidate substitutes absolute content, display:none when closed, density-specific open top offsets, zero paragraph margin, and a nested absolutely positioned label at top:-1px/left:24px. History traces the flow substitution to 6e1c156 and the compensating text wrapper to a0f3328. Absence of a retained text entry below candidate display:none is not evidence of missing renderer text. Nor does both sides being unpainted establish equivalent collapse/layout inputs. Restore the reference structure and declarations in a minimal proof before assigning any remaining discrepancy to core grid, intrinsic layout or typography; do not add another offset.',
+  }),
+  Object.freeze({
     id: 'fixture-dialog-fixed-content-boxes',
     introducedBy: 'bc0e449 fix(material): match dialog content geometry',
     file: 'examples/material-showcase/src/app/astylar.component.ts',

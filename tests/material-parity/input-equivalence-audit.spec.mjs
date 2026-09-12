@@ -239,6 +239,11 @@ test('source audit has an explicit classification and live location for every po
   assert.equal(audit.summary.unexplainedSourceFindings, 0);
   assert.equal(audit.summary.undetectedSourceDefinitions, 0);
   assert.ok(audit.sourceFindings.every(({ detected, locations }) => detected && locations.length > 0));
+  const expansion = audit.sourceFindings.find(({ id }) => id === 'fixture-expansion-flow-and-collapse-substitution');
+  assert.equal(expansion.classification, 'application-plugin-authoring-defect');
+  assert.match(expansion.justification, /grid-template-rows:0fr/);
+  assert.match(expansion.justification, /not evidence of missing renderer text/);
+  assert.match(expansion.introducedBy, /6e1c156.*a0f3328/);
   assert.equal(audit.sourceFindings.find(({ id }) => id === 'direct-style-calc-resolution-limit').classification,
     'intentional-documented-limitation');
   assert.equal(audit.sourceFindings.find(({ id }) => id === 'core-opposing-vertical-insets-ignore-auto-height').classification,

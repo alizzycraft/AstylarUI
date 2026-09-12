@@ -12,6 +12,47 @@ tests pass). A missing selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Expansion collapse and flow substitution traced to fixture history (2026-09-12)
+
+Source finding `fixture-expansion-flow-and-collapse-substitution` records an
+application/plugin authoring defect, not a confirmed core defect. Commit
+`6e1c156` replaced expansion content flow with an absolutely positioned paragraph,
+state-dependent display and density-specific vertical offsets. Commit `a0f3328`
+introduced the nested text wrapper with `top: -1px`. Current source retains that
+offset and makes the label absolute at `left: 24px`.
+
+The fresh `control-text-complete-audit/expansion/light/desktop` input trees show
+the reference paragraph as `position: static`, `display: block`,
+`visibility: hidden`, height 24px and margin 16px 0. Its body has padding
+0 24px 16px; the flex content region is hidden, while its grid wrapper authors
+`grid-template-rows: 0fr` and computes a zero-height row. Candidate paragraph
+inputs instead contain `position: absolute`, `display: none`, margin 0 and
+padding 0 24px. Its nested label retains the -1px/24px offset. These are different
+layout and collapse inputs even though neither closed panel paints the text.
+
+All 30 static missing-retained-entry gaps inspected have a candidate
+`display: none` on the label or an ancestor: 12 expansion labels and 6 each for
+form-field, input and select compact labels. Core child creation explicitly
+skips display-none children in `element-creation.service.ts` before allocating
+their elements. This explains the absent entries; it does not excuse unequal
+declared styles. The compact reference labels have a display-none parent,
+whereas expansion uses visibility and collapsed layout. A future visibility
+attribution must preserve that distinction, inspect complete ancestry and
+retain all independent typography/structure differences. These 30 gaps have
+not yet been waived or removed from the report.
+
+Next proof: translate the reference expansion wrapper, normal-flow paragraph,
+padding/margins and collapse declarations without measured-size replacements;
+then test open/closed and density variants before assigning any residual failure
+to core grid sizing, intrinsic flow or text placement. No fixture or renderer
+implementation was changed for this finding.
+
+Verification: `node --test tests/material-parity/input-equivalence-audit.spec.mjs`
+passes 82/82, including the new source-classification/history assertions;
+`npm run parity:harness:check` passes 171/171. `git diff --check` passes.
+The unfiltered control-text matrix remains in progress; these focused results
+do not establish final full-matrix or input-equivalence acceptance.
+
 ## Retained-text gaps now route exact control labels to the authoritative stage (2026-09-12)
 
 The registry audit now records `controlTextMappings` for exact reviewed Material
