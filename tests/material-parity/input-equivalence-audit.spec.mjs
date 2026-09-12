@@ -1673,6 +1673,174 @@ test('snackbar action typography validation rejects detached or changed witnesse
   }
 });
 
+function bottomSheetItemTypographyReport() {
+  const raw = controlTypographyReport(), entry = raw.results[0], { reference: ref, astylar: ast } = entry.inputTrees;
+  entry.family = 'bottom-sheet';
+  const node = (key, parent, type, attributes = {}, ownText = '') => ({ key, parent, type, attributes, ownText,
+    style: 0, rules: [], pseudoElements: [] });
+  const labels = ['Share', 'Copy link'];
+  ref.nodes = labels.flatMap((label, index) => [
+    node(`anchor-${index}`, 'list', 'a', { class: 'mat-mdc-list-item', 'mat-list-item': '', href: '#', 'aria-disabled': 'false' }),
+    node(`content-${index}`, `anchor-${index}`, 'span', { class: 'mdc-list-item__content' }),
+    node(`label-${index}`, `content-${index}`, 'span', { class: 'mat-mdc-list-item-unscoped-content mdc-list-item__primary-text' }, label),
+  ]);
+  ref.nodes.push(node('list', 'container', 'mat-nav-list', { class: 'mat-mdc-nav-list', role: 'navigation', 'aria-disabled': 'false' }),
+    node('container', 'pane', 'mat-bottom-sheet-container', { class: 'mat-bottom-sheet-container', role: 'dialog', 'aria-label': 'Sharing options' }),
+    node('pane', 'global', 'div', { class: 'cdk-overlay-pane' }),
+    node('global', 'overlay', 'div', { class: 'cdk-global-overlay-wrapper', dir: 'ltr' }),
+    node('overlay', null, 'div', { class: 'cdk-overlay-container' }));
+  Object.assign(ref.styles[0], { fontFamily: 'Roboto', fontSize: '16px', fontWeight: '400', lineHeight: '24px',
+    letterSpacing: '.496px', color: '#1d1b1e', textAlign: 'start', whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflowX: 'hidden' });
+  ref.rules = [{ selector: '.mdc-list-item__primary-text', active: true, declarations: {
+    'font-family': { value: 'var(--mat-list-list-item-label-text-font, var(--mat-sys-body-large-font))' },
+    'line-height': { value: 'var(--mat-list-list-item-label-text-line-height, var(--mat-sys-body-large-line-height))' },
+    'letter-spacing': { value: 'var(--mat-list-list-item-label-text-tracking, var(--mat-sys-body-large-tracking))' },
+    color: { value: 'var(--mat-list-list-item-label-text-color, var(--mat-sys-on-surface))' },
+  } }, { selector: '.mdc-list-item:focus .mdc-list-item__primary-text', active: true,
+    declarations: { color: { value: 'var(--mat-list-list-item-focus-label-text-color, var(--mat-sys-on-surface))' } } }];
+  ref.nodes[2].rules = [0, 1]; ref.nodes[5].rules = [0];
+  const action = ast.nodes[0];
+  const candidates = labels.map((label, index) => {
+    const n = structuredClone(action);
+    n.key = `action-${index}`; n.parent = 'panel';
+    n.authored = { id: index ? 'bottom-sheet-copy' : 'bottom-sheet-dismiss', type: 'button', class: 'bottom-sheet-option',
+      value: label, ...(index ? {} : { autofocus: true }) };
+    Object.assign(n.normalResolvedStyle, { fontFamily: 'Roboto, Arial, sans-serif', fontSize: '16px', color: '#1d1b20', textAlign: 'left' });
+    delete n.normalResolvedStyle.lineHeight; delete n.normalResolvedStyle.letterSpacing;
+    n.interactionResolvedStyle = { ...n.normalResolvedStyle };
+    delete n.retainedText;
+    n.paintedControlText.text = label;
+    Object.assign(n.paintedControlText.style, { fontFamily: 'Roboto, Arial, sans-serif', fontSize: 16, fontWeight: 'normal',
+      lineHeight: 19 / 16, letterSpacing: 0, textAlign: 'left', color: '#1d1b20', whiteSpace: 'normal' });
+    return n;
+  });
+  const candidateNode = (key, parent, authored) => ({ key, parent, authored,
+    resolvedStyle: {}, normalResolvedStyle: {}, interactionResolvedStyle: {} });
+  ast.nodes = [...candidates,
+    candidateNode('panel', 'candidate-overlay', { id: 'bottom-sheet-panel', type: 'section', class: 'bottom-sheet-panel' }),
+    candidateNode('candidate-overlay', 'section', { id: 'bottom-sheet-overlay', type: 'div', class: 'modal-overlay bottom-sheet-overlay', role: 'dialog', ariaLabel: 'Open bottom sheet' }),
+    candidateNode('section', 'page', { id: 'bottom-sheet-root', type: 'section' }),
+    candidateNode('page', 'root', { id: 'page', type: 'main' }),
+  ];
+  ast.rules = [{ selector: '.bottom-sheet-option', fontSize: '16px', color: '#1d1b20', textAlign: 'left' },
+    { selector: 'button, input, select', fontFamily: 'Roboto, Arial, sans-serif' }];
+  return raw;
+}
+
+test('bottom-sheet item text maps the ordered anchor/list and value-button paths without equating them', () => {
+  const raw = bottomSheetItemTypographyReport(), before = structuredClone(raw), evidence = controlEvidence(raw);
+  assert.deepEqual(evidence.gaps, []);
+  assert.equal(evidence.comparisons.length, 2);
+  assert.equal(evidence.differences.length, 10);
+  for (const [index, comparison] of evidence.comparisons.entries()) {
+    assert.equal(comparison.mapping.kind, 'reviewed-material-bottom-sheet-item-label');
+    const review = comparison.mapping.reviewEvidence;
+    assert.equal(review.itemIndex, index);
+    assert.equal(review.referenceChain.length, 8);
+    assert.equal(review.candidateChain.length, 5);
+    assert.deepEqual(review.referenceItems.map(i => i.href), ['#', '#']);
+    assert.deepEqual(review.candidateItems.map(i => i.authored.type), ['button', 'button']);
+    assert.deepEqual(review.accessibleNames, { reference: 'Sharing options', candidate: 'Open bottom sheet', inputEquivalent: false });
+    assert.equal(review.inputEquivalent, false);
+    assert.equal(comparison.finalRasterVerified, false);
+    for (const property of ['fontFamily', 'lineHeight', 'letterSpacing', 'color']) {
+      const d = evidence.differences.find(d => d.element === comparison.element && d.property === property);
+      assert.equal(d.attribution, 'reviewed-bottom-sheet-item-typography-input');
+      assert.equal(d.classification, 'application-plugin-authoring-defect');
+    }
+    assert.equal(evidence.differences.find(d => d.element === comparison.element && d.property === 'textAlign').attribution, 'unresolved');
+  }
+  assert.deepEqual(raw, before);
+  const report = buildMaterialInputAudit(raw);
+  assert.equal(report.retainedTypography.controlTextMappings.length, 2);
+  assert.ok(report.retainedTypography.controlTextMappings.every(m => m.inputEquivalent === false));
+  assert.equal(report.summary.inputEquivalent, false);
+  assert.ok(!validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('bottom-sheet item')));
+});
+
+test('bottom-sheet item mapping rejects altered order, missing siblings, links, ancestry and current text', () => {
+  const mutations = [
+    ref => { ref.nodes[0].attributes.href = '/other'; },
+    ref => { ref.nodes[0].type = 'button'; },
+    ref => { ref.nodes[0].attributes['aria-disabled'] = 'true'; },
+    ref => { delete ref.nodes[0].attributes['mat-list-item']; },
+    ref => { ref.nodes[1].attributes.class = 'unrelated'; },
+    ref => { ref.nodes[2].parent = 'anchor-0'; },
+    ref => { ref.nodes[2].ownText = 'Copy link'; ref.nodes[5].ownText = 'Share'; },
+    ref => { ref.nodes[5].ownText = 'Different'; },
+    ref => { ref.nodes[6].attributes.role = 'list'; },
+    ref => { ref.nodes[7].attributes['aria-label'] = 'Other'; },
+    ref => { ref.nodes[10].parent = 'missing'; },
+    ref => { ref.nodes[3].parent = 'missing'; },
+    ref => { ref.nodes.push({ ...ref.nodes[0], key: 'extra-item' }); },
+    ref => { ref.nodes.push({ ...ref.nodes[2], key: 'extra-label' }); },
+    ref => { ref.nodes.push({ ...ref.nodes[7], key: 'second-container' }); },
+    ref => { ref.nodes.push({ ...ref.nodes[2], key: 'nested-label', parent: 'label-0' }); },
+    (_ref, ast) => { ast.nodes.reverse(); },
+    (_ref, ast) => { ast.nodes[1].parent = 'missing'; },
+    (_ref, ast) => { ast.nodes[1].authored.value = 'Other'; },
+    (_ref, ast) => { ast.nodes[0].authored.type = 'a'; },
+    (_ref, ast) => { ast.nodes[2].authored.class = 'unrelated'; },
+    (_ref, ast) => { ast.nodes[3].authored.role = 'navigation'; },
+    (_ref, ast) => { ast.nodes.push({ ...ast.nodes[0], key: 'duplicate' }); },
+    (_ref, ast) => { ast.nodes.push({ ...ast.nodes[1], key: 'child', parent: 'action-0' }); },
+    (_ref, ast) => { ast.nodes[5].parent = 'missing'; },
+    (_ref, ast) => { ast.nodes[0].paintedControlText.text = 'Other'; },
+    (_ref, ast) => { ast.nodes[0].paintedControlText.source = 'core-text-registry'; },
+    (_ref, ast) => { ast.paintedControlTextEvidenceVersion = 0; },
+  ];
+  for (const mutate of mutations) {
+    const raw = bottomSheetItemTypographyReport(), trees = raw.results[0].inputTrees;
+    mutate(trees.reference, trees.astylar);
+    const evidence = controlEvidence(raw);
+    assert.ok(!evidence.comparisons.some(c => c.element === 'bottom-sheet-dismiss'), String(mutate));
+    assert.ok(evidence.gaps.length > 0, String(mutate));
+  }
+});
+
+test('bottom-sheet item typography attribution requires token rules and complete omission/current-paint witnesses', () => {
+  const mutations = [
+    ['fontFamily', ref => { ref.rules[0].declarations['font-family'].value = 'Roboto'; }],
+    ['fontFamily', (_ref, ast) => { ast.rules[1].fontFamily = 'Arial'; }],
+    ['fontFamily', (_ref, ast) => { ast.rules[0].fontFamily = 'Roboto'; }],
+    ['fontFamily', (_ref, ast) => { ast.nodes[0].interactionResolvedStyle.fontFamily = 'Arial'; }],
+    ['lineHeight', ref => { ref.rules[0].declarations['line-height'].value = 'normal'; }],
+    ['lineHeight', (_ref, ast) => { ast.nodes[2].normalResolvedStyle.lineHeight = '19px'; }],
+    ['lineHeight', (_ref, ast) => { ast.rules[0].lineHeight = '19px'; }],
+    ['lineHeight', (_ref, ast) => { ast.nodes[0].paintedControlText.style.fontSize = 17; }],
+    ['letterSpacing', ref => { ref.rules[0].active = false; }],
+    ['letterSpacing', (_ref, ast) => { ast.nodes[4].interactionResolvedStyle.letterSpacing = '0'; }],
+    ['letterSpacing', (_ref, ast) => { ast.rules[0].letterSpacing = '0'; }],
+    ['color', ref => { ref.rules[1].declarations.color.value = 'red'; }],
+    ['color', (_ref, ast) => { ast.rules[0].color = 'red'; }],
+    ['color', (_ref, ast) => { ast.nodes[0].paintedControlText.style.color = 'red'; }],
+    ['color', (_ref, ast) => { ast.rules.push({ ...ast.rules[0] }); }],
+    ['color', ref => { ref.nodes[2].attributes.style = 'color: #1d1b1e'; }],
+  ];
+  for (const [property, mutate] of mutations) {
+    const raw = bottomSheetItemTypographyReport(), trees = raw.results[0].inputTrees;
+    mutate(trees.reference, trees.astylar);
+    assert.equal(controlEvidence(raw).differences.find(d => d.element === 'bottom-sheet-dismiss' && d.property === property)?.attribution,
+      'unresolved', `${property}: ${mutate}`);
+  }
+});
+
+test('bottom-sheet item mapping and attribution validation replay evidence rather than trusting review labels', () => {
+  for (const mutation of ['names', 'order', 'equivalence', 'revision', 'raster', 'token', 'paint', 'omission']) {
+    const report = buildMaterialInputAudit(bottomSheetItemTypographyReport()), c = report.controlTypography.comparisons[0];
+    const d = report.controlTypography.differences.find(d => d.element === c.element && d.property === 'lineHeight');
+    if (mutation === 'names') c.mapping.reviewEvidence.accessibleNames.candidate = 'Sharing options';
+    if (mutation === 'order') c.mapping.reviewEvidence.referenceItems.reverse();
+    if (mutation === 'equivalence') c.mapping.reviewEvidence.inputEquivalent = true;
+    if (mutation === 'revision') c.revision++;
+    if (mutation === 'raster') c.finalRasterVerified = true;
+    if (mutation === 'token') d.reviewEvidence.referenceRule.declarations['line-height'].value = 'normal';
+    if (mutation === 'paint') d.values.painted = '24px';
+    if (mutation === 'omission') d.reviewEvidence.candidateChain.pop();
+    assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('bottom-sheet item')), mutation);
+  }
+});
+
 function calendarDayTypographyReport() {
   const raw = controlTypographyReport(), entry = raw.results[0];
   entry.family = 'datepicker';

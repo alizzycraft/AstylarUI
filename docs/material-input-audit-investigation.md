@@ -12,6 +12,67 @@ tests pass). A missing selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Bottom-sheet list structure and label token substitutions traced (2026-09-12)
+
+The two bottom-sheet labels now have exact reference-to-control mappings in
+all **25** captured open states (**50** current textures). Mapping requires the
+ordered Share/Copy link anchor/content/primary-label paths, a unique Material
+navigation list and bottom-sheet overlay chain, and the matching ordered
+candidate value buttons inside their panel/overlay/page chain. A missing or
+reordered sibling, different link, altered ancestry or stale paint cannot be
+accepted merely because some text elsewhere matches.
+
+This is explicitly **unequal structure**, not an approved flattening. The
+reference `sheetContent` in `reference.component.ts` contains two `href="#"`
+anchors inside `mat-nav-list`; the candidate uses buttons and drops the nested
+content/label wrappers. The generated reference label rules include nowrap,
+ellipsis and hidden overflow, unlike the candidate's normal control text.
+The reference dialog name is "Sharing options" while the candidate authors
+"Open bottom sheet"; both names and their unequal flag are retained. Source
+also shows Share routed through the candidate's generic `-dismiss` close
+handler, whereas the reference authors an anchor, not a dismiss action.
+This establishes an authored behavior difference, not a new live-click proof.
+
+Source finding `fixture-bottom-sheet-list-structure-and-token-substitution`
+traces the flattening and option rule to `2f44011`, with the generic control
+font reset added in `af04845`. Exact captured declaration/normal/effective/
+current-texture witnesses attribute **200** differences: 50 each for font
+family, line-height, tracking and ink. The reference supplies Material's
+Roboto, explicit 24px line-height, .496px tracking and on-surface label tokens;
+the candidate supplies a generic stack, omits line-height/tracking and uses
+the page's `theme.onSurface`. At the same 16px font size, actual candidate
+paint receives a 19px normal line box. This is not an equal-input test of core
+normal metrics: the explicit reference line-height was removed first.
+
+All **50 `start` versus `left` alignment differences remain unresolved**.
+The mapping does not silently normalize direction-sensitive alignment. Other
+geometry, overflow, semantics, navigation/dismissal, live paint and responsive
+constraints remain separate audit obligations. The implementation plan now
+requires original list/anchor/label structure and component tokens before any
+core diagnosis or removal of the existing fixed-size compensations.
+
+The report now contains **2,174** current control-text comparisons and **7,815**
+raw typography differences. Control mapping/stage gaps fall **173 to 123**;
+unresolved retained-text mapping/stage gaps fall **3,641 to 3,616** by routing
+these exact labels to actual control paint rather than inventing registry
+entries. Unresolved control typography rises **1,974 to 2,024** because the new
+alignment differences remain enforced. All 436 static and 1,875 interaction
+cases and **67** detected source findings are retained. Full report generation
+still correctly exits 1 for the remaining 3,896 resolved-style attributions,
+123 control mappings/stages, 2,024 control typography differences, 3,616 retained
+mappings/stages and 14,624 retained typography differences.
+
+`node --test --test-name-pattern='bottom-sheet item|snackbar action'
+tests/material-parity/input-equivalence-audit.spec.mjs` passes **9/9**. The four
+new bottom-sheet tests include 28 contradictory mapping/paint cases, 16
+declaration-witness cases and eight report mutations. Shared overlay validation
+replays both families' exact mapping and typography evidence even in partial
+coverage mode. `npm run parity:harness:check` passes **203/203** (114 focused
+audit tests). No fixture, reference, renderer, capture runtime or visual gate
+changed. Calendar header text/icon correspondence is the remaining current
+control mapping investigation; the old supplemental captures still need their
+separate freshness/provenance work.
+
 ## Snackbar action identity and token substitutions traced (2026-09-12)
 
 The action is no longer an anonymous label/current-texture mapping gap. A new

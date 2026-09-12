@@ -344,6 +344,15 @@ export const sourceAuditDefinitions = Object.freeze([
     justification: 'The reference uses content height, max-height:80vh, and responsive minimum widths (full viewport, medium 384px, large 512px), not a fixed 512x128px box. Candidate has only a max-960px full-width override. A settled 1024px browser proof measures reference width384 and candidate width512, while 900/1440px match. Preserve the reference constraints rather than adding another measured-size patch.',
   }),
   Object.freeze({
+    id: 'fixture-bottom-sheet-list-structure-and-token-substitution',
+    introducedBy: '2f44011 feat(example): add Material component showcase; af04845 adds generic control font reset',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`selector: '\.bottom-sheet-option', width: '100%'[^\n]*color: theme\.onSurface, textAlign: 'left', fontSize: '16px'`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase bottom-sheet navigation-list structure, behavior and Material text tokens',
+    justification: 'Reference sheetContent supplies two href="#" anchors inside mat-nav-list with generated content/primary-label spans. Candidate flattens them to Share/Copy link value buttons and replaces the inner label font/24px line-height/.496px tracking/on-surface tokens with a generic control font stack, omitted line-height/tracking and page theme.onSurface. The nested nowrap/ellipsis/overflow rules are also absent. Share is authored as a -dismiss button handled by the generic close branch rather than reference anchor navigation; mapping corresponding text does not certify equal semantics or behavior. Preserve the original structures and declarations before diagnosing renderer failures, rather than tuning normal metrics, colors or fixed dimensions.',
+  }),
+  Object.freeze({
     id: 'fixture-stepper-inactive-panel-omitted',
     introducedBy: '2f44011 feat(example): add Material component showcase',
     file: 'examples/material-showcase/src/app/astylar.component.ts',
