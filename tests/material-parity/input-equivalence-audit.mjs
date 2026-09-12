@@ -65,8 +65,8 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const supplementalOverlays = collectSupplementalOverlays(root);
   const supplementalSlider = collectSupplementalSlider(root);
   const elementInventory = collectFullTreeInventory([...cases, ...supplementalBehavior.cases, ...supplementalOverlays.cases, ...supplementalSlider.cases], { root });
-  const retainedTypography = collectRetainedTypographyEvidence(cases, elementInventory);
   const rawControlTypography = collectControlTypographyEvidence(cases, elementInventory);
+  const retainedTypography = collectRetainedTypographyEvidence(cases, elementInventory, rawControlTypography);
   const normalLineBoxes = options.normalLineBoxPath
     ? loadNormalLineBoxReport({ root, reportPath: path.relative(root, path.resolve(root, options.normalLineBoxPath)).replaceAll('\\', '/'), cases, inventory: elementInventory,
       controlTypography: rawControlTypography, expectedProvenance: parityReport.captureProvenance })
@@ -155,6 +155,20 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
   if (requireComplete && report.elementInventory.stateStyleGaps.length > 0) errors.push(`${report.elementInventory.stateStyleGaps.length} state cases lack effective style provenance`);
   if (report.elementInventory.errors.length > 0) errors.push(`${report.elementInventory.errors.length} full-tree collection errors`);
   if (report.retainedTypography?.schemaVersion !== 1) errors.push('missing retained typography stage report');
+  if (!Array.isArray(report.retainedTypography?.controlTextMappings)) errors.push('missing retained-to-control text stage inventory');
+  const controlTextMappingKeys = report.retainedTypography?.controlTextMappings?.map((mapping) =>
+    JSON.stringify([mapping.case, mapping.element, mapping.referenceNode, mapping.astylarNode])) ?? [];
+  if (new Set(controlTextMappingKeys).size !== controlTextMappingKeys.length) errors.push('duplicate retained-to-control text stage mappings');
+  const invalidControlTextMappings = report.retainedTypography?.controlTextMappings?.filter((mapping) => {
+    const matches = report.controlTypography?.comparisons.filter((comparison) => comparison.case === mapping.case &&
+      comparison.element === mapping.element && comparison.referenceNode === mapping.referenceNode &&
+      comparison.astylarNode === mapping.astylarNode && comparison.text === mapping.text &&
+      comparison.source === mapping.source && comparison.revision === mapping.revision) ?? [];
+    return mapping.source !== 'core-control-texture' || mapping.attribution !== 'reviewed-control-text-stage-ownership' ||
+      mapping.classification !== 'parity-harness-defect' || mapping.inputEquivalent !== false ||
+      !mapping.justification || matches.length !== 1;
+  }) ?? [];
+  if (invalidControlTextMappings.length > 0) errors.push(`${invalidControlTextMappings.length} retained-to-control text stage mappings lack authoritative comparison evidence`);
   if (report.controlTypography?.schemaVersion !== 1) errors.push('missing control texture typography stage report');
   if (requireComplete && report.controlTypography?.gaps.length > 0) errors.push(`${report.controlTypography.gaps.length} control texture mappings or stage fields require review`);
   const reviewedControlKinds = {
@@ -219,6 +233,8 @@ export function renderMaterialInputAuditMarkdown(report) {
     `Full-element evidence: ${report.elementInventory.cases.length} captured case sides, ${report.elementInventory.variants.length} tree variants; ${report.elementInventory.gaps.length} missing case sides, ${report.elementInventory.resolvedStyleGaps.length} elements without resolved styles, ${report.elementInventory.stateStyleGaps.length} state cases without effective style provenance, and ${report.elementInventory.errors.length} collection errors. Inventory presence does not establish input equivalence.`,
     '',
     `Retained typography: ${report.retainedTypography.comparisons.length} directly mapped text-node observations; ${report.retainedTypography.gaps.length} mapping/stage gaps and ${report.retainedTypography.differences.length} unequal retained-property observations. The registry stage is reported separately from declarations and is not proof of current pseudo-state glyph paint.`,
+    '',
+    `Control-owned text routing: ${report.retainedTypography.controlTextMappings.length} exact label mappings are reviewed in the current core-control-texture stage, not treated as missing registry entries. Their independent input differences and any current-paint gaps remain enforced; this is not wrapper or input equivalence.`,
     '',
     `Control texture typography: ${report.controlTypography.comparisons.length} mapped current-texture observations; ${report.controlTypography.gaps.length} mapping/stage gaps and ${report.controlTypography.differences.length} raw computed-to-paint property differences, including individually reviewed stage-representation differences. Parsed CSS lengths and line-height multipliers are normalized independently of declarations. This does not prove final material effects, placement, visibility or raster parity.`,
     '',
@@ -1026,8 +1042,8 @@ function reviewedFloatingLabelInput(entry, ref, ast, styles, referenceTree, asty
   };
 }
 
-export function collectRetainedTypographyEvidence(cases, inventory) {
-  const comparisons = [], differences = [], gaps = [], paintMaskDifferences = [], reviewedMappings = [];
+export function collectRetainedTypographyEvidence(cases, inventory, controlTypography = collectControlTypographyEvidence(cases, inventory)) {
+  const comparisons = [], differences = [], gaps = [], paintMaskDifferences = [], reviewedMappings = [], controlTextMappings = [];
   const mappings = new Map();
   for (const mapping of inventory.cases) {
     const key = JSON.stringify([mapping.case, mapping.side]);
@@ -1062,6 +1078,19 @@ export function collectRetainedTypographyEvidence(cases, inventory) {
     };
     const referenceNodes = nodesById(referenceTree.nodes, (node) => node.attributes?.id);
     const astylarNodes = nodesById(astylarTree.nodes, (node) => node.authored?.id);
+    // Exact core-owned control labels have a different authoritative text
+    // stage, already compared above. Do not invent registry entries for them.
+    // Preserve the routing explicitly so removing their paint evidence fails.
+    const controlMappings = controlTypography.comparisons.filter((item) => item.case === key &&
+      item.source === 'core-control-texture' &&
+      ['reviewed-material-button-label', 'reviewed-material-tab-label'].includes(item.mapping?.kind));
+    const controlReferenceKeys = new Set(controlMappings.map((item) => item.referenceNode));
+    const controlAstylarKeys = new Set(controlMappings.map((item) => item.astylarNode));
+    controlTextMappings.push(...controlMappings.map((item) => ({ case: key, element: item.element,
+      referenceNode: item.referenceNode, astylarNode: item.astylarNode, text: item.text,
+      source: item.source, revision: item.revision, classification: 'parity-harness-defect',
+      attribution: 'reviewed-control-text-stage-ownership', inputEquivalent: false,
+      justification: 'The reviewed explicit control identity and reference label path map to current core-owned control texture text. Its normal/effective/current paint properties are independently compared in controlTypography, including any optional retained registry snapshot. A missing registry entry is not missing text evidence for this owner. This routes the audit stage only; all control-property, structure and raster discrepancies remain independent.' })));
     const headings = reviewedHeadingMappings(referenceTree, astylarTree);
     const headingById = new Map(headings.map((mapping) => [mapping.element, mapping]));
     const textMappings = [...headings, ...reviewedTemplateTextMappings(entry.family, referenceTree, astylarTree)];
@@ -1072,14 +1101,14 @@ export function collectRetainedTypographyEvidence(cases, inventory) {
       reviewedMappings.push({ case: key, ...mapping });
     }
     const ids = new Set([
-      ...referenceTree.nodes.filter((node) => node.ownText?.trim() && !mappedReferenceKeys.has(node.key)).map((node) => node.attributes?.id),
-      ...astylarTree.nodes.filter((node) => node.authored?.textContent?.trim()).map((node) => node.authored?.id),
+      ...referenceTree.nodes.filter((node) => node.ownText?.trim() && !mappedReferenceKeys.has(node.key) && !controlReferenceKeys.has(node.key)).map((node) => node.attributes?.id),
+      ...astylarTree.nodes.filter((node) => node.authored?.textContent?.trim() && !controlAstylarKeys.has(node.key)).map((node) => node.authored?.id),
     ]);
     // Anonymous/reference-wrapper mappings remain in the full tree; do not
     // fabricate text correspondences from matching strings or descendant order.
     ids.delete(undefined);
-    const anonymousReference = referenceTree.nodes.filter((node) => node.ownText?.trim() && !node.attributes?.id && !mappedReferenceKeys.has(node.key)).map((node) => node.key);
-    const anonymousAstylar = astylarTree.nodes.filter((node) => node.authored?.textContent?.trim() && !node.authored?.id).map((node) => node.key);
+    const anonymousReference = referenceTree.nodes.filter((node) => node.ownText?.trim() && !node.attributes?.id && !mappedReferenceKeys.has(node.key) && !controlReferenceKeys.has(node.key)).map((node) => node.key);
+    const anonymousAstylar = astylarTree.nodes.filter((node) => node.authored?.textContent?.trim() && !node.authored?.id && !controlAstylarKeys.has(node.key)).map((node) => node.key);
     if (anonymousReference.length || anonymousAstylar.length) gap(key, undefined, 'own-text nodes without an explicit shared ID require structural mapping',
       { referenceNodes: anonymousReference, astylarNodes: anonymousAstylar });
     for (const id of ids) {
@@ -1140,7 +1169,7 @@ export function collectRetainedTypographyEvidence(cases, inventory) {
   }
   return { schemaVersion: 1,
     scope: 'Direct own-text nodes joined by unique shared authored ID or explicit reviewed heading/template identity, with identical trimmed text. All eleven typography properties retain browser computed, core normal/effective declarations, and core retained-text values separately. Missing mappings/fields and unequal retained values remain explicit; no inheritance or font fallback is reconstructed. Reviewed mappings establish correspondence, not style equivalence.',
-    comparisons, differences, gaps, paintMaskDifferences, reviewedMappings };
+    comparisons, differences, gaps, paintMaskDifferences, reviewedMappings, controlTextMappings };
 }
 
 function isReviewedNormalLineBoxDifference(entry, supplemental) {

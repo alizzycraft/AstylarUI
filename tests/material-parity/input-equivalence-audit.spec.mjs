@@ -1173,6 +1173,72 @@ function controlEvidence(raw) {
   return collectControlTypographyEvidence(raw.results, collectFullTreeInventory(raw.results));
 }
 
+test('registry audit routes an exact core control label to its actual texture stage without fabricating retained text', () => {
+  const raw = controlTypographyReport();
+  delete raw.results[0].inputTrees.astylar.nodes[0].retainedText;
+  const before = structuredClone(raw), inventory = collectFullTreeInventory(raw.results);
+  const retained = collectRetainedTypographyEvidence(raw.results, inventory);
+  assert.deepEqual(retained.gaps, []);
+  assert.deepEqual(retained.comparisons, []);
+  assert.equal(retained.controlTextMappings.length, 1);
+  assert.equal(retained.controlTextMappings[0].source, 'core-control-texture');
+  assert.equal(retained.controlTextMappings[0].inputEquivalent, false);
+  assert.equal(retained.controlTextMappings[0].referenceNode, 'label');
+  assert.deepEqual(raw, before);
+  const report = buildMaterialInputAudit(raw);
+  assert.equal(report.controlTypography.comparisons.length, 1);
+  assert.ok(!validateMaterialInputAudit(report).some((error) => error.includes('retained-to-control')));
+});
+
+test('control-stage routing cannot suppress unrelated anonymous reference text', () => {
+  const raw = controlTypographyReport();
+  raw.results[0].inputTrees.reference.nodes.push({ key: 'another-label', parent: 'frame', type: 'span',
+    ownText: 'Unmapped text', style: 0, rules: [], pseudoElements: [] });
+  const retained = collectRetainedTypographyEvidence(raw.results, collectFullTreeInventory(raw.results));
+  assert.equal(retained.controlTextMappings.length, 1);
+  assert.equal(retained.gaps.length, 1);
+  assert.deepEqual(retained.gaps[0].referenceNodes, ['another-label']);
+});
+
+test('control-stage routing requires current authoritative source, structure and identity', () => {
+  const mutations = [
+    (tree) => { delete tree.nodes[0].paintedControlText; },
+    (tree) => { tree.nodes[0].paintedControlText.source = 'core-text-registry'; },
+    (tree) => { tree.paintedControlTextEvidenceVersion = 0; },
+    (tree) => { delete tree.resolvedStyleRevision; },
+    (tree) => { tree.nodes[0].paintedControlText.text = 'Other text'; },
+    (tree) => { tree.nodes.push({ ...tree.nodes[0], key: 'duplicate-control' }); },
+  ];
+  for (const mutate of mutations) {
+    const raw = controlTypographyReport(); mutate(raw.results[0].inputTrees.astylar);
+    const retained = collectRetainedTypographyEvidence(raw.results, collectFullTreeInventory(raw.results));
+    assert.deepEqual(retained.controlTextMappings, [], String(mutate));
+    assert.ok(retained.gaps.length > 0, String(mutate));
+  }
+});
+
+test('routing to current control text still enforces missing paint-property evidence', () => {
+  const raw = controlTypographyReport();
+  delete raw.results[0].inputTrees.astylar.nodes[0].paintedControlText.style.fontSize;
+  const report = buildMaterialInputAudit(raw);
+  assert.equal(report.retainedTypography.controlTextMappings.length, 1);
+  assert.deepEqual(report.retainedTypography.gaps, []);
+  assert.ok(report.controlTypography.gaps.length > 0);
+  assert.ok(validateMaterialInputAudit(report).some((error) => error.includes('control texture mappings')));
+});
+
+test('retained-to-control stage claims are rejected when detached, duplicated or presented as input equivalence', () => {
+  for (const mutation of ['missing control', 'different revision', 'different text', 'duplicate mapping', 'input equivalent']) {
+    const report = buildMaterialInputAudit(controlTypographyReport());
+    if (mutation === 'missing control') report.controlTypography.comparisons = [];
+    if (mutation === 'different revision') report.retainedTypography.controlTextMappings[0].revision++;
+    if (mutation === 'different text') report.retainedTypography.controlTextMappings[0].text = 'Other';
+    if (mutation === 'duplicate mapping') report.retainedTypography.controlTextMappings.push(report.retainedTypography.controlTextMappings[0]);
+    if (mutation === 'input equivalent') report.retainedTypography.controlTextMappings[0].inputEquivalent = true;
+    assert.ok(validateMaterialInputAudit(report).some((error) => error.includes('retained-to-control')), mutation);
+  }
+});
+
 function observedNormalLineBoxFixture() {
   const raw = controlTypographyReport(), trees = raw.results[0].inputTrees;
   trees.reference.styles[0].lineHeight = 'normal';
@@ -1390,6 +1456,16 @@ function tabControlTypographyReport() {
   node.paintedControlText.text = 'Overview';
   return raw;
 }
+
+test('explicit tab value labels route to the texture stage while unequal typography remains visible', () => {
+  const raw = tabControlTypographyReport();
+  raw.results[0].inputTrees.astylar.nodes[0].paintedControlText.style.fontSize = 30;
+  const report = buildMaterialInputAudit(raw);
+  assert.equal(report.retainedTypography.controlTextMappings.length, 1);
+  assert.deepEqual(report.retainedTypography.gaps, []);
+  assert.ok(report.controlTypography.differences.some((item) => item.property === 'fontSize' && item.attribution === 'unresolved'));
+  assert.ok(validateMaterialInputAudit(report).some((error) => error.includes('control texture typography differences')));
+});
 
 test('control text maps explicit tab template leaves without equating their wrappers or typography', () => {
   const raw = tabControlTypographyReport(), trees = raw.results[0].inputTrees;

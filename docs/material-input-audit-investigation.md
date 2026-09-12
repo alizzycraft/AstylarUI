@@ -12,6 +12,32 @@ tests pass). A missing selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Retained-text gaps now route exact control labels to the authoritative stage (2026-09-12)
+
+The registry audit now records `controlTextMappings` for exact reviewed Material
+button and tab labels whose current text is already compared by the core
+control-texture audit. This does not fabricate a registry entry, merge style
+stages or infer a mapping from matching strings. Each routing record retains
+the shared control identity, reference and candidate node, text, source and
+revision; validation requires the corresponding unique control comparison.
+Missing paint fields and unequal paint inputs remain enforced in that stage.
+
+On the **436 current static cases**, **156 labels** are routed explicitly. This
+removes **132 redundant registry-stage gap records**, reducing retained gaps
+from **222 to 90**. The retained comparisons (**1,390**) and retained-property
+differences (**3,786**) are unchanged. Remaining gaps include anonymous noncontrol
+text, missing field/expansion label entries, and select value/caret structures;
+none was suppressed by this change. Paginator vector substitutions remain in
+their separate inventory.
+
+Focused audit tests pass **82/82** and `npm run parity:harness:check` passes
+**171/171**. They cover absent registry entries with
+valid current control paint, unrelated anonymous text, missing/stale/ambiguous
+control identity and source, incomplete current-paint fields, tab value labels,
+detached/duplicated routing records and false input-equivalence claims. Original
+input records are unchanged, and routing cannot make an input difference pass.
+No fixture, renderer, runtime capture or full-matrix configuration changed.
+
 ## Static normal-line-height stage differences are now individually attributed (2026-09-12)
 
 The report builder now accepts an explicit `--normal-line-box-report` path and
