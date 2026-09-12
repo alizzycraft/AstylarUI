@@ -1,24 +1,28 @@
 import assert from 'node:assert/strict';
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { writeFileSync } from 'node:fs';
 import { chromium } from 'playwright-core';
 import { createHash } from 'node:crypto';
 import { captureBrowserInputTree } from '../tests/material-parity/input-tree-evidence.mjs';
 import { propertyGroups } from '../tests/material-parity/input-equivalence-policy.mjs';
+import { openSupplementalCapture, parseSupplementalCaptureArguments } from '../tests/material-parity/supplemental-capture-evidence.mjs';
 
 // Diagnostic supplement to the maintained matrix. Use its already-built server
 // or a separately served production showcase. Never alter either fixture.
-const baseUrl = process.argv.find((arg) => arg.startsWith('--base-url='))?.slice(11);
-assert.ok(baseUrl, 'Supply --base-url=http://127.0.0.1:<showcase-port>');
+const options = parseSupplementalCaptureArguments(process.argv.slice(2));
+const { baseUrl } = options;
 const browser = await chromium.launch({ channel: 'chrome', headless: true });
 const results = [];
-const artifactDirectory = 'artifacts/material-parity/picker-commit-audit';
-mkdirSync(artifactDirectory, { recursive: true });
+let artifactDirectory;
 try {
+  const evidence = openSupplementalCapture({ options, browser, script: 'scripts/audit-material-picker-commits.mjs',
+    styleProperties: Object.values(propertyGroups).flat() });
+  artifactDirectory = evidence.directory;
   for (const { family, method } of ['datepicker', 'timepicker'].flatMap((family) =>
     ['pointer', 'keyboard'].map((method) => ({ family, method })))) {
     const sides = {};
     for (const mode of ['reference', 'astylar']) {
-      const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+      const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 });
+      const finishRuntime = evidence.observe(page);
       const errors = [];
       page.on('pageerror', (error) => errors.push(error.message));
       try {
@@ -64,6 +68,7 @@ try {
           sides[mode] = { value: await page.locator(`#${family}-control`).inputValue(), open: false, errors };
         }
         sides[mode].inputTree = await captureInputs(page, mode, `${family}-commit-${method}`);
+        sides[mode].runtime = await finishRuntime();
       } finally {
         await page.close();
       }
@@ -77,7 +82,8 @@ try {
   for (const direction of ['previous', 'next']) {
     const sides = {};
     for (const mode of ['reference', 'astylar']) {
-      const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+      const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 });
+      const finishRuntime = evidence.observe(page);
       const errors = [];
       page.on('pageerror', (error) => errors.push(error.message));
       try {
@@ -104,16 +110,19 @@ try {
             events: await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.events().filter((event) => event.type === 'click')) };
         }
         sides[mode].inputTree = await captureInputs(page, mode, `datepicker-${direction}`);
+        sides[mode].runtime = await finishRuntime();
       } finally { await page.close(); }
     }
     results.push({ family: 'datepicker', state: `open-${direction}-month`, ...sides,
       matches: sides.reference.before === sides.astylar.before && sides.reference.after === sides.astylar.after &&
         sides.reference.errors.length === 0 && sides.astylar.errors.length === 0 });
   }
-  const report = { browser: browser.version(), viewport: { width: 1440, height: 900 }, profile: 'light',
+  const report = { browser: browser.version(), capture: evidence.capture, viewport: { width: 1440, height: 900 }, profile: 'light', deviceScaleFactor: 1,
     scope: 'Supplemental real-pointer/keyboard picker commit and navigation checks; not full parity acceptance', results };
-  writeFileSync(`${artifactDirectory}/latest-report.json`, JSON.stringify(report, null, 2) + '\n');
-  console.log(JSON.stringify(report, null, 2));
+  writeFileSync(`${artifactDirectory}/latest-report.json`, JSON.stringify(report, null, 2) + '\n', { flag: 'wx' });
+  console.log(JSON.stringify({ directory: artifactDirectory, results: results.map(({ family, state, reference, astylar, matches }) =>
+    ({ family, state, matches, reference: { value: reference.value, before: reference.before, after: reference.after },
+      astylar: { value: astylar.value, before: astylar.before, after: astylar.after } })) }, null, 2));
   if (results.some((entry) => !entry.matches)) process.exitCode = 1;
 } finally {
   await browser.close();
@@ -133,7 +142,7 @@ async function captureInputs(page, mode, key) {
   assert.ok(tree.nodes.length > 0 && tree.errors.length === 0, `Incomplete ${mode} input tree for ${key}`);
   const contents = JSON.stringify(tree);
   const file = `${artifactDirectory}/${key}-${mode}-input-tree.json`;
-  writeFileSync(file, contents);
+  writeFileSync(file, contents, { flag: 'wx' });
   return { file, sha256: createHash('sha256').update(contents).digest('hex') };
 }
 

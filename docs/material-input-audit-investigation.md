@@ -6,16 +6,100 @@ The machine report is generated separately from the full benchmark output.
 The report generator accepts an explicit evidence path so fresh full runs
 do not overwrite preserved baselines. The current in-progress full run is
 `artifacts/material-parity/context-complete-audit`. After it completes, use
-`node scripts/run-material-input-audit.mjs --parity-report=artifacts/material-parity/context-complete-audit/latest-report.json --normal-line-box-report=artifacts/material-parity/normal-line-box-context-audit/latest-report.json`,
+`node scripts/run-material-input-audit.mjs --parity-report=artifacts/material-parity/context-complete-audit/latest-report.json --normal-line-box-report=artifacts/material-parity/normal-line-box-context-audit/latest-report.json --supplemental-root=artifacts/material-parity/supplemental-context-audit`,
 then the same command with `--check`. Its fresh natural-line-box supplement
 is complete and bound to that run. The older control-text baseline and its
 `normal-line-box-static-audit-v2` supplement remain preserved separately;
 never combine supplements and captures from different runs.
 Do not use `--allow-partial` for acceptance.
-Argument validation rejects unknown, empty, and repeated options (25/25 audit
-tests pass). A missing selected report fails rather than falling back to older
+Argument validation rejects unknown, empty, and repeated options. A missing
+selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
+
+## Fresh supplemental evidence bound to the current run (2026-09-12)
+
+The thirteen picker, bottom-sheet and slider diagnostic cases now have fresh
+captures under `artifacts/material-parity/supplemental-context-audit`, using the
+unchanged frozen showcase served by the running full matrix on port 4431.
+This replaces neither the earlier supplemental artifacts nor the full matrix.
+The new captures include the current reference-context collector, resolving the
+old supplements' missing context fields without reconstructing their values.
+
+The shared `supplemental-capture-evidence.mjs` producer requires explicit
+`--base-url`, `--checkpoint`, and a previously nonexistent `--output` directory.
+It records the selected manifest digest, capture-script/helper/collector source
+digests, and exact requested style-property set. Each page records observed
+document, script, stylesheet and font response bytes and checks their hashes
+against that manifest's browser assets. Browser mismatch, changed bytes, missing
+asset categories, or runtime errors fail collection. Existing output directories
+are rejected; tree and report writes are exclusive.
+
+The independent report reader rechecks manifest provenance, current capture
+source bytes, all observed per-side asset digests, and each complete tree's
+bytes, directory and collection errors. The audit CLI's `--supplemental-root`
+selects all three reports from one explicit parent without falling back to the
+old paths. Legacy reports remain readable for diagnosis but cannot satisfy
+complete audit acceptance or support an input-equivalence verdict. Captured
+metadata is retained in the machine report, not reduced to a passing flag.
+
+Capture commands (each completed with exit 1 because of retained behavioral or
+geometry mismatches, not collection failure):
+
+```powershell
+node scripts/audit-material-picker-commits.mjs --base-url=http://127.0.0.1:4431 --checkpoint=artifacts/material-parity/context-complete-audit/checkpoint --output=artifacts/material-parity/supplemental-context-audit/picker-commit-audit
+node scripts/audit-material-overlay-breakpoints.mjs --base-url=http://127.0.0.1:4431 --checkpoint=artifacts/material-parity/context-complete-audit/checkpoint --output=artifacts/material-parity/supplemental-context-audit/overlay-breakpoint-audit
+node scripts/audit-material-slider-domain.mjs --base-url=http://127.0.0.1:4431 --checkpoint=artifacts/material-parity/context-complete-audit/checkpoint --output=artifacts/material-parity/supplemental-context-audit/slider-domain-audit
+```
+
+All three reader results are **checkpoint-bound**, with zero collection errors
+and zero missing cases. The combined inventory has **26 case sides, 25 distinct
+tree variants, zero input-tree errors and zero reference-context gaps**. These
+captures reproduce the earlier eleven mismatches:
+
+| Diagnostic | Reference | Astylar | Result |
+| --- | --- | --- | --- |
+| Date commit, pointer / keyboard | `9/1/2026` / `9/2/2026` | empty / empty | 2 mismatches |
+| Time commit, pointer / keyboard | `12:30 AM` / `12:30 AM` | empty / empty | 2 mismatches |
+| Previous / next month | SEP → AUG / SEP → OCT | SEP → SEP / SEP → SEP | 2 mismatches |
+| Sheet width, viewport 900 / 1024 / 1440 | 900 / 384 / 512 | 900 / 512 / 512 | 1 mismatch |
+| Keyboard start / end thumb final values | 60,65 / 30,40 | 40,65 / 30,58 | 2 mismatches |
+| Pointer start / end thumb final values | 60,65 / 30,40 | 50,65 / 30,50 | 2 mismatches |
+
+The slider traces retain all intermediate values and native range attributes;
+the candidate still takes non-reference keyboard steps and both dragged thumbs
+stop at 50. These observations corroborate the previously classified unequal
+range domains/steps/state normalization and missing picker state handlers. They
+do not prove a new core hit-testing defect or imply those inputs are equivalent.
+The current `astylar.component.ts` range definitions at lines 903–904 explicitly
+author 0–50 and 50–100 domains with `step: '1'`; `showcase.store.ts` line 96 rounds
+shared values to multiples of five. The picker input at `astylar.component.ts`
+line 1031 is authored with an empty value. These are concrete unequal-input
+paths, not conclusions drawn from the screenshot score alone.
+The medium sheet has a 128px width discrepancy, while its 900px and 1440px
+geometry controls match within the existing 0.5px diagnostic tolerance.
+
+Report digests:
+
+- Picker: `55713527d10f461bea2695792c65118471389576b638ddff545ad2436e36e984`.
+- Bottom-sheet: `fabcc9cc3748a5e32b91904474b415be1901921059363f46ef40b33b19b33e13`.
+- Slider: `353b72524ce9adbfac5693168c0cd65334a87fc708a87bc6aa3c985a79d32683`.
+
+Verification: `node --test tests/material-parity/supplemental-capture-evidence.spec.mjs`
+passes **39/39** producer/reader/selection tests. Focused CLI/environment/complete-
+acceptance checks pass **3/3**. Final `npm run parity:harness:check` passes
+**290/290**, with no failures, skips or cancellations (109.6 seconds).
+
+A fresh checkpoint-prefix audit verifies **436 static + 1,118 interaction**
+records, all result digests intact, with zero partial-validator errors, zero
+inventory/reference-context errors, and zero natural-line-box errors/missing
+observations. All three fresh supplements are included. The 75 source findings
+remain detected, but **3,330 style attributions remain unresolved** in this
+prefix; `inputEquivalent` remains false. A separate hash check confirms all ten
+live full-matrix harness files are unchanged. The full matrix is still running,
+and complete classification, final reports and acceptance remain outstanding.
+No fixture, renderer, package dependency, visual threshold or live matrix
+collector was changed for this increment.
 
 ## Anonymous flex text: single-item success versus composed-flow failure (2026-09-12)
 

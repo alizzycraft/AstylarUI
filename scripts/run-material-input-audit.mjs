@@ -15,14 +15,14 @@ import {
 } from '../tests/material-parity/input-audit-report-codec.mjs';
 
 const root = process.cwd();
-const { check, allowPartial, parityPath, normalLineBoxPath } = parseMaterialInputAuditArguments(process.argv.slice(2), root);
+const { check, allowPartial, parityPath, normalLineBoxPath, supplementalRoot } = parseMaterialInputAuditArguments(process.argv.slice(2), root);
 const jsonPath = path.resolve(root, 'docs/material-input-equivalence-audit.json');
 const payloadPath = path.resolve(root, 'docs', materialInputAuditPayloadFile);
 const markdownPath = path.resolve(root, 'docs/material-input-equivalence-audit.md');
 
 assert.ok(existsSync(parityPath), `Run material parity first; missing ${parityPath}`);
 const parityReport = JSON.parse(readFileSync(parityPath, 'utf8'));
-const audit = buildMaterialInputAudit(parityReport, { root, normalLineBoxPath });
+const audit = buildMaterialInputAudit(parityReport, { root, normalLineBoxPath, supplementalRoot });
 const markdown = renderMaterialInputAuditMarkdown(audit);
 const errors = validateMaterialInputAudit(audit, { requireComplete: !allowPartial });
 

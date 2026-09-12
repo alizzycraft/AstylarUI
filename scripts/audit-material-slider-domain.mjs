@@ -1,23 +1,26 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { writeFileSync } from 'node:fs';
 import { chromium } from 'playwright-core';
 import { captureBrowserInputTree } from '../tests/material-parity/input-tree-evidence.mjs';
 import { propertyGroups } from '../tests/material-parity/input-equivalence-policy.mjs';
+import { openSupplementalCapture, parseSupplementalCaptureArguments } from '../tests/material-parity/supplemental-capture-evidence.mjs';
 
 // Observe the full shared domain without changing fixtures or injecting state.
-const baseUrl = process.argv.find((arg) => arg.startsWith('--base-url='))?.slice(11);
-assert.ok(baseUrl, 'Supply --base-url=http://127.0.0.1:<showcase-port>');
-const directory = 'artifacts/material-parity/slider-domain-audit';
-mkdirSync(directory, { recursive: true });
+const options = parseSupplementalCaptureArguments(process.argv.slice(2));
+const { baseUrl } = options;
 const viewport = { width: 1440, height: 900 };
 const browser = await chromium.launch({ channel: 'chrome', headless: true });
 const results = [];
 try {
+  const evidence = openSupplementalCapture({ options, browser, script: 'scripts/audit-material-slider-domain.mjs',
+    styleProperties: Object.values(propertyGroups).flat() });
+  const directory = evidence.directory;
   for (const method of ['keyboard', 'pointer']) for (const thumb of ['start', 'end']) {
     const sides = {};
     for (const mode of ['reference', 'astylar']) {
       const page = await browser.newPage({ viewport, deviceScaleFactor: 1 });
+      const finishRuntime = evidence.observe(page);
       const errors = [];
       page.on('pageerror', (error) => errors.push(error.message));
       try {
@@ -74,10 +77,11 @@ try {
         assert.ok(tree?.nodes.length && tree.errors.length === 0, 'Incomplete slider input tree');
         const contents = JSON.stringify(tree);
         const file = `${directory}/${method}-${thumb}-${mode}-input-tree.json`;
-        writeFileSync(file, contents);
+        writeFileSync(file, contents, { flag: 'wx' });
         sides[mode] = { trace, errors, inputTree: { file, sha256: createHash('sha256').update(contents).digest('hex') } };
         if (mode === 'astylar') sides[mode].events = await page.evaluate(() =>
           window.__ASTYLAR_MATERIAL_BENCHMARK__.events().filter((event) => ['input', 'change', 'keydown', 'pointerdown', 'pointerup'].includes(event.type)));
+        sides[mode].runtime = await finishRuntime();
       } finally { await page.close(); }
     }
     const expected = thumb === 'start' ? { start: 60, end: 65 } : { start: 30, end: 40 };
@@ -85,9 +89,9 @@ try {
     results.push({ family: 'slider', state: `${method}-${thumb}-full-domain`, method, thumb, expected, ...sides,
       matches: reached('reference') && reached('astylar') && !sides.reference.errors.length && !sides.astylar.errors.length });
   }
-  const report = { browser: browser.version(), viewport, profile: 'light', deviceScaleFactor: 1,
+  const report = { browser: browser.version(), capture: evidence.capture, viewport, profile: 'light', deviceScaleFactor: 1,
     scope: 'Supplemental real keyboard/pointer full-domain slider checks, including native attributes and intermediate values', results };
-  writeFileSync(`${directory}/latest-report.json`, JSON.stringify(report, null, 2) + '\n');
+  writeFileSync(`${directory}/latest-report.json`, JSON.stringify(report, null, 2) + '\n', { flag: 'wx' });
   console.log(JSON.stringify(results.map(({ state, reference, astylar, matches }) => ({ state, matches,
     reference: reference.trace.map(({ start, end }) => [start.value, end.value]),
     astylar: astylar.trace.map(({ start, end }) => [start.value, end.value]) })), null, 2));

@@ -39,6 +39,10 @@ test('audit CLI selects isolated full-matrix evidence without silently accepting
     path.resolve(root, lineBoxReport));
   assert.throws(() => parseMaterialInputAuditArguments(['--normal-line-box-report=']), /requires a path/);
   assert.throws(() => parseMaterialInputAuditArguments(['--normal-line-box-report=a', '--normal-line-box-report=b']), /Repeated audit option/);
+  assert.equal(parseMaterialInputAuditArguments(['--supplemental-root=artifacts/material-parity/fresh'], root).supplementalRoot,
+    path.resolve(root, 'artifacts/material-parity/fresh'));
+  assert.throws(() => parseMaterialInputAuditArguments(['--supplemental-root=']), /requires a path/);
+  assert.throws(() => parseMaterialInputAuditArguments(['--supplemental-root=a', '--supplemental-root=b']), /Repeated audit option/);
 });
 
 test('slider supplement requires all full-domain cases and does not trust endpoint claims', () => {
@@ -91,6 +95,17 @@ test('supplemental coverage requires all six behavior cases and recomputes claim
   assert.ok(summarizeSupplementalBehavior({ results: [entry, entry] }).errors.some(({ error }) => error.includes('duplicate')));
   const unchanged = { value: '', open: false, errors: [] };
   assert.equal(summarizeSupplementalBehavior({ results: [{ ...entry, reference: unchanged, astylar: unchanged }] }).cases[0].matches, false);
+  const captured = { capture: { schemaVersion: 1 }, profile: 'light', deviceScaleFactor: 1,
+    viewport: { width: 1440, height: 900 }, results: [entry] };
+  assert.equal(summarizeSupplementalBehavior(captured).mismatches.length, 1);
+  for (const patch of [{ profile: 'dark' }, { deviceScaleFactor: 2 }, { viewport: { width: 900, height: 900 } }]) {
+    const result = summarizeSupplementalBehavior({ ...captured, ...patch });
+    assert.ok(result.errors.length > 0);
+    assert.equal(result.mismatches.length, 0, 'Bad capture metadata is not a confirmed behavioral defect');
+  }
+  const unknown = summarizeSupplementalBehavior({ ...captured, results: [{ ...entry, state: 'open-commit-unknown' }] });
+  assert.ok(unknown.errors.some(({ error }) => error.includes('unexpected')));
+  assert.equal(unknown.mismatches.length, 0);
 });
 
 function parityReport(reference, astylar) {
@@ -107,6 +122,18 @@ function parityReport(reference, astylar) {
     interactions: [],
   };
 }
+
+test('complete audit acceptance rejects legacy supplements even when their case summaries load', () => {
+  const report = buildMaterialInputAudit(parityReport({}, {}));
+  for (const [name, key] of [['picker', 'supplementalBehavior'], ['bottom-sheet', 'supplementalOverlays'], ['slider', 'supplementalSlider']]) {
+    const message = `${name} supplemental evidence is not bound to the selected capture run`;
+    report[key].binding = { status: 'legacy-unbound', errors: [] };
+    assert.ok(validateMaterialInputAudit(report).includes(message));
+    assert.ok(!validateMaterialInputAudit(report, { requireComplete: false }).includes(message));
+    report[key].binding = { status: 'checkpoint-bound', errors: [] };
+    assert.ok(!validateMaterialInputAudit(report).includes(message));
+  }
+});
 
 test('normalizes shorthand, colors, numeric precision, and implicit browser values', () => {
   const audit = buildMaterialInputAudit(parityReport({

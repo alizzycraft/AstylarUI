@@ -2,6 +2,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { loadNormalLineBoxReport } from './normal-line-box-report.mjs';
+import { validateSupplementalCapture } from './supplemental-capture-evidence.mjs';
 import {
   implicitReferenceValues,
   implicitReferenceJustifications,
@@ -26,7 +27,7 @@ const propertyGroupByName = new Map(Object.entries(propertyGroups)
   .flatMap(([group, properties]) => properties.map((property) => [property, group])));
 
 export function parseMaterialInputAuditArguments(args, root = process.cwd()) {
-  let parityReport, normalLineBoxReport;
+  let parityReport, normalLineBoxReport, supplementalRoot;
   const flags = new Set();
   for (const arg of args) {
     if (arg === '--check' || arg === '--allow-partial') {
@@ -40,6 +41,10 @@ export function parseMaterialInputAuditArguments(args, root = process.cwd()) {
       if (normalLineBoxReport !== undefined) throw new Error('Repeated audit option: --normal-line-box-report');
       normalLineBoxReport = arg.slice('--normal-line-box-report='.length);
       if (!normalLineBoxReport.trim()) throw new Error('--normal-line-box-report requires a path');
+    } else if (arg.startsWith('--supplemental-root=')) {
+      if (supplementalRoot !== undefined) throw new Error('Repeated audit option: --supplemental-root');
+      supplementalRoot = arg.slice('--supplemental-root='.length);
+      if (!supplementalRoot.trim()) throw new Error('--supplemental-root requires a path');
     } else {
       throw new Error(`Unknown audit option: ${arg}`);
     }
@@ -49,6 +54,7 @@ export function parseMaterialInputAuditArguments(args, root = process.cwd()) {
     allowPartial: flags.has('--allow-partial'),
     parityPath: path.resolve(root, parityReport ?? 'artifacts/material-parity/latest-report.json'),
     ...(normalLineBoxReport === undefined ? {} : { normalLineBoxPath: path.resolve(root, normalLineBoxReport) }),
+    ...(supplementalRoot === undefined ? {} : { supplementalRoot: path.resolve(root, supplementalRoot) }),
   };
 }
 
@@ -61,9 +67,10 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const structures = collectStructureEvidence(cases);
   const sourceFindings = scanMaterialSources(root);
   const coverage = buildCoverage(parityReport, cases);
-  const supplementalBehavior = collectSupplementalBehavior(root);
-  const supplementalOverlays = collectSupplementalOverlays(root);
-  const supplementalSlider = collectSupplementalSlider(root);
+  const supplementalOptions = { supplementalRoot: options.supplementalRoot, expectedProvenance: parityReport.captureProvenance };
+  const supplementalBehavior = collectSupplementalBehavior(root, supplementalOptions);
+  const supplementalOverlays = collectSupplementalOverlays(root, supplementalOptions);
+  const supplementalSlider = collectSupplementalSlider(root, supplementalOptions);
   const elementInventory = collectFullTreeInventory([...cases, ...supplementalBehavior.cases, ...supplementalOverlays.cases, ...supplementalSlider.cases], { root });
   const rawControlTypography = collectControlTypographyEvidence(cases, elementInventory);
   const retainedTypography = collectRetainedTypographyEvidence(cases, elementInventory, rawControlTypography);
@@ -103,6 +110,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
     normalLineBoxes,
     summary: {
       inputEquivalent: coverage.complete && coverage.missingElements.length === 0 &&
+        [supplementalBehavior, supplementalOverlays, supplementalSlider].every(entry => entry.binding?.status === 'checkpoint-bound') &&
         supplementalBehavior.missing.length === 0 && supplementalBehavior.errors.length === 0 && supplementalBehavior.mismatches.length === 0 &&
         supplementalOverlays.missing.length === 0 && supplementalOverlays.errors.length === 0 && supplementalOverlays.mismatches.length === 0 &&
         supplementalSlider.missing.length === 0 && supplementalSlider.errors.length === 0 && supplementalSlider.mismatches.length === 0 &&
@@ -345,6 +353,10 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
   if (report.supplementalOverlays.errors.length > 0) errors.push(`${report.supplementalOverlays.errors.length} supplemental overlay collection errors`);
   if (requireComplete && report.supplementalSlider.missing.length > 0) errors.push(`${report.supplementalSlider.missing.length} supplemental slider cases are missing`);
   if (report.supplementalSlider.errors.length > 0) errors.push(`${report.supplementalSlider.errors.length} supplemental slider collection errors`);
+  if (requireComplete) for (const [name, evidence] of [['picker', report.supplementalBehavior],
+    ['bottom-sheet', report.supplementalOverlays], ['slider', report.supplementalSlider]]) {
+    if (evidence.binding?.status !== 'checkpoint-bound') errors.push(`${name} supplemental evidence is not bound to the selected capture run`);
+  }
   if (report.normalLineBoxes?.schemaVersion !== 1) errors.push('missing natural-line-box evidence stage');
   if (requireComplete && report.normalLineBoxes?.missing.length > 0) errors.push(`${report.normalLineBoxes.missing.length} static normal-line-box observations are missing`);
   if (report.normalLineBoxes?.errors.length > 0) errors.push(`${report.normalLineBoxes.errors.length} natural-line-box evidence errors`);
@@ -408,6 +420,8 @@ export function renderMaterialInputAuditMarkdown(report) {
     `Supplemental bottom-sheet breakpoints: ${report.supplementalOverlays.cases.length}/3 cases captured; ${report.supplementalOverlays.missing.length} missing and ${report.supplementalOverlays.mismatches.length} observed mismatches. This checks settled geometry at 900, 1024, and 1440 CSS px; the medium breakpoint is absent from the maintained matrix.`,
     '',
     `Supplemental slider full-domain behavior: ${report.supplementalSlider.cases.length}/4 cases captured; ${report.supplementalSlider.missing.length} missing and ${report.supplementalSlider.mismatches.length} observed mismatches. Keyboard stepping and pointer dragging exercise start=60/end=65 and start=30/end=40 without injected state.`,
+    '',
+    `Supplemental provenance: picker=${report.supplementalBehavior.binding?.status ?? 'unavailable'}, bottom-sheet=${report.supplementalOverlays.binding?.status ?? 'unavailable'}, slider=${report.supplementalSlider.binding?.status ?? 'unavailable'}. Checkpoint-bound evidence independently verifies the selected manifest, collector sources, served document/scripts/styles/fonts, and each side's complete input-tree digest. Legacy captures do not establish current-run provenance.`,
     '',
     ...report.coverage.presenceDifferences.map((entry) => `- Presence discrepancy: ${entry.case}, ${entry.element}: ${entry.justification}`),
     '',
@@ -3417,25 +3431,29 @@ export function collectFullTreeInventory(cases, { root = process.cwd() } = {}) {
   return { ...inventory, referenceContextGaps: collectReferenceContextGaps(inventory) };
 }
 
-export function collectSupplementalBehavior(root) {
-  const file = 'artifacts/material-parity/picker-commit-audit/latest-report.json';
-  if (!existsSync(path.resolve(root, file))) return { file, ...summarizeSupplementalBehavior({}) };
-  const contents = readFileSync(path.resolve(root, file));
-  return { file, sha256: createHash('sha256').update(contents).digest('hex'), ...summarizeSupplementalBehavior(JSON.parse(contents)) };
+export function collectSupplementalBehavior(root, options = {}) {
+  return collectSupplementalReport(root, options, 'picker-commit-audit', 'scripts/audit-material-picker-commits.mjs', summarizeSupplementalBehavior);
 }
 
-export function collectSupplementalOverlays(root) {
-  const file = 'artifacts/material-parity/overlay-breakpoint-audit/latest-report.json';
-  if (!existsSync(path.resolve(root, file))) return { file, ...summarizeSupplementalOverlays({}) };
-  const contents = readFileSync(path.resolve(root, file));
-  return { file, sha256: createHash('sha256').update(contents).digest('hex'), ...summarizeSupplementalOverlays(JSON.parse(contents)) };
+export function collectSupplementalOverlays(root, options = {}) {
+  return collectSupplementalReport(root, options, 'overlay-breakpoint-audit', 'scripts/audit-material-overlay-breakpoints.mjs', summarizeSupplementalOverlays);
 }
 
-export function collectSupplementalSlider(root) {
-  const file = 'artifacts/material-parity/slider-domain-audit/latest-report.json';
-  if (!existsSync(path.resolve(root, file))) return { file, ...summarizeSupplementalSlider({}) };
-  const contents = readFileSync(path.resolve(root, file));
-  return { file, sha256: createHash('sha256').update(contents).digest('hex'), ...summarizeSupplementalSlider(JSON.parse(contents)) };
+export function collectSupplementalSlider(root, options = {}) {
+  return collectSupplementalReport(root, options, 'slider-domain-audit', 'scripts/audit-material-slider-domain.mjs', summarizeSupplementalSlider);
+}
+
+function collectSupplementalReport(root, options, directory, script, summarize) {
+  const absolute = path.resolve(root, options.supplementalRoot ?? 'artifacts/material-parity', directory, 'latest-report.json');
+  const file = path.relative(root, absolute).replaceAll('\\', '/');
+  if (!existsSync(absolute)) return { file, binding: { status: 'missing', errors: [] }, ...summarize({}) };
+  const contents = readFileSync(absolute), raw = JSON.parse(contents);
+  const summary = summarize(raw);
+  const binding = validateSupplementalCapture(raw, { root, reportFile: file, expectedProvenance: options.expectedProvenance,
+    script, styleProperties: Object.values(propertyGroups).flat() });
+  return { file, sha256: createHash('sha256').update(contents).digest('hex'), ...summary, binding,
+    ...(raw.capture ? { capture: raw.capture } : {}),
+    errors: [...summary.errors, ...binding.errors] };
 }
 
 export function summarizeSupplementalSlider(raw) {
@@ -3524,15 +3542,20 @@ export function summarizeSupplementalBehavior(raw) {
         entry.reference.value === entry.astylar?.value && entry.reference.open === entry.astylar?.open
       : typeof entry.reference?.before === 'string' && typeof entry.reference?.after === 'string' && entry.reference.before !== entry.reference.after &&
         entry.reference.before === entry.astylar?.before && entry.reference.after === entry.astylar?.after,
-    viewport: { ...raw.viewport, id: 'supplemental-desktop-dpr1' },
+    viewport: { ...raw.viewport, deviceScaleFactor: raw.deviceScaleFactor, id: 'supplemental-desktop-dpr1' },
     inputTrees: { reference: entry.reference?.inputTree, astylar: entry.astylar?.inputTree } }));
   const keys = cases.map((entry) => `${entry.family}/${entry.state}`);
   const errors = cases.flatMap((entry) => ['reference', 'astylar'].flatMap((side) =>
     (entry[side]?.errors ?? ['missing side']).map((error) => ({ case: `${entry.family}/${entry.state}`, side, error }))));
+  for (const key of keys) if (!required.includes(key)) errors.push({ case: key, error: 'unexpected supplemental behavior case' });
+  if (raw.capture && (raw.profile !== 'light' || raw.deviceScaleFactor !== 1 || raw.viewport?.width !== 1440 || raw.viewport?.height !== 900)) {
+    errors.push({ error: 'unexpected captured picker environment' });
+  }
   if (new Set(keys).size !== keys.length) errors.push({ error: 'duplicate supplemental behavior case' });
   return { browser: raw.browser, cases,
     missing: required.filter((key) => !keys.includes(key)), errors,
-    mismatches: cases.filter((entry) => !entry.matches).map((entry) => ({ family: entry.family, state: entry.state,
+    mismatches: cases.filter((entry) => !entry.matches && !errors.some(error => !error.case || error.case === `${entry.family}/${entry.state}`))
+      .map((entry) => ({ family: entry.family, state: entry.state,
       classification: 'application-plugin-authoring-defect', owner: 'showcase picker state and interaction logic',
       justification: 'Reference value/open state or displayed month differs after the same delivered input. Inspect the per-side event and input-tree evidence; current source has no picker commit/navigation state handler.' })) };
 }

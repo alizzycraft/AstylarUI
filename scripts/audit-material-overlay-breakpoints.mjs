@@ -1,25 +1,28 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { writeFileSync } from 'node:fs';
 import { chromium } from 'playwright-core';
 import { captureBrowserInputTree } from '../tests/material-parity/input-tree-evidence.mjs';
 import { propertyGroups } from '../tests/material-parity/input-equivalence-policy.mjs';
+import { openSupplementalCapture, parseSupplementalCaptureArguments } from '../tests/material-parity/supplemental-capture-evidence.mjs';
 
 // Supplemental evidence, not a substitute for the maintained full matrix.
 // Open unmodified fixtures with real pointer input; never feed measured output
 // into layout. The 1024px case exercises Material's medium sheet breakpoint.
-const baseUrl = process.argv.find((arg) => arg.startsWith('--base-url='))?.slice(11);
-assert.ok(baseUrl, 'Supply --base-url=http://127.0.0.1:<showcase-port>');
-const directory = 'artifacts/material-parity/overlay-breakpoint-audit';
-mkdirSync(directory, { recursive: true });
+const options = parseSupplementalCaptureArguments(process.argv.slice(2));
+const { baseUrl } = options;
 const browser = await chromium.launch({ channel: 'chrome', headless: true });
 const results = [];
 try {
+  const evidence = openSupplementalCapture({ options, browser, script: 'scripts/audit-material-overlay-breakpoints.mjs',
+    styleProperties: Object.values(propertyGroups).flat() });
+  const directory = evidence.directory;
   for (const width of [900, 1024, 1440]) {
     const viewport = { width, height: 900 };
     const sides = {};
     for (const mode of ['reference', 'astylar']) {
       const page = await browser.newPage({ viewport, deviceScaleFactor: 1 });
+      const finishRuntime = evidence.observe(page);
       const errors = [];
       page.on('pageerror', (error) => errors.push(error.message));
       try {
@@ -65,9 +68,10 @@ try {
         assert.ok(tree?.nodes.length && tree.errors.length === 0, `Incomplete ${mode} input tree`);
         const contents = JSON.stringify(tree);
         const file = `${directory}/bottom-sheet-${width}-${mode}-input-tree.json`;
-        writeFileSync(file, contents);
+        writeFileSync(file, contents, { flag: 'wx' });
         sides[mode].inputTree = { file, sha256: createHash('sha256').update(contents).digest('hex') };
         sides[mode].errors = errors;
+        sides[mode].runtime = await finishRuntime();
       } finally { await page.close(); }
     }
     const geometryError = Math.max(...['left', 'top', 'width', 'height'].map((property) =>
@@ -75,9 +79,10 @@ try {
     results.push({ family: 'bottom-sheet', state: 'open', viewport, ...sides, geometryError,
       matches: geometryError <= 0.5 && !sides.reference.errors.length && !sides.astylar.errors.length });
   }
-  const report = { browser: browser.version(), profile: 'light', deviceScaleFactor: 1,
+  const report = { browser: browser.version(), capture: evidence.capture, profile: 'light', deviceScaleFactor: 1,
     scope: 'Supplemental settled bottom-sheet breakpoint geometry and full input trees', results };
-  writeFileSync(`${directory}/latest-report.json`, JSON.stringify(report, null, 2) + '\n');
-  console.log(JSON.stringify(report, null, 2));
+  writeFileSync(`${directory}/latest-report.json`, JSON.stringify(report, null, 2) + '\n', { flag: 'wx' });
+  console.log(JSON.stringify({ directory, results: results.map(({ viewport, reference, astylar, geometryError, matches }) =>
+    ({ viewport, reference: reference.box, astylar: astylar.box, geometryError, matches })) }, null, 2));
   if (results.some((entry) => !entry.matches)) process.exitCode = 1;
 } finally { await browser.close(); }
