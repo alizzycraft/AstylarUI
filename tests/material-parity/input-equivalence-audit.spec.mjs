@@ -1541,6 +1541,185 @@ test('material option replay rejects dropped forged or transplanted mappings and
   }
 });
 
+function materialOptionInkReport(family = 'autocomplete', selected = 0) {
+  const raw = materialOptionReport(family, selected), { reference: r, astylar: a } = raw.results[0].inputTrees;
+  r.rules = [
+    { source: 'sheet:11/0', selector: '.mat-mdc-option', active: true, conditions: [],
+      cssText: 'color:var(--mat-option-label-text-color, var(--mat-sys-on-surface));',
+      declarations: { color: { value: 'var(--mat-option-label-text-color, var(--mat-sys-on-surface))', important: false } } },
+    { source: 'sheet:11/1', selector: '.mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled):not(.mat-mdc-option-multiple) .mdc-list-item__primary-text',
+      active: true, conditions: [], cssText: 'color:var(--mat-option-selected-state-label-text-color, var(--mat-sys-on-secondary-container));',
+      declarations: { color: { value: 'var(--mat-option-selected-state-label-text-color, var(--mat-sys-on-secondary-container))', important: false } } },
+  ];
+  r.styles.push({ ...r.styles[0], color: '#4b4357' });
+  for (const node of r.nodes.filter(n => n.type === 'mat-option')) {
+    node.rules = [0];
+    if (node.attributes['aria-selected'] === 'true') {
+      node.attributes.class += ' mdc-list-item--selected';
+      const leaf = r.nodes.find(n => n.parent === node.key && n.type === 'span');
+      leaf.rules = [1]; leaf.style = 1;
+    }
+  }
+  for (const node of a.nodes.filter(n => n.authored.type === 'span')) {
+    for (const stage of ['normalResolvedStyle', 'interactionResolvedStyle', 'resolvedStyle']) {
+      node[stage] = { ...node[stage] }; delete node[stage].color;
+    }
+  }
+  a.rules = [{ selector: '.select-option', color: '#1d1b20' }, { selector: '.select-option.selected', background: '#eadef7' },
+    { selector: '.select-option:hover', background: '#e5dfe5' }];
+  return raw;
+}
+
+test('material option ink distinguishes inherited base and selected leaf tokens without inventing own styles', () => {
+  for (const family of ['autocomplete', 'select']) {
+    const raw = materialOptionInkReport(family), original = structuredClone(raw), report = buildMaterialInputAudit(raw);
+    const ink = report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-material-option-ink-input');
+    assert.equal(ink.length, 2);
+    assert.equal(ink[0].reviewEvidence.selected, true);
+    assert.equal(ink[1].reviewEvidence.selected, false);
+    assert.deepEqual(ink[0].reviewEvidence.referenceRules.map(r => r.node), ['t0', 'o0']);
+    assert.deepEqual(ink[1].reviewEvidence.referenceRules.map(r => r.node), ['o1']);
+    assert.equal(ink[0].values.reference, 'rgba(75,67,87,1)');
+    assert.equal(ink[1].values.reference, 'rgba(29,27,30,1)');
+    for (const d of ink) {
+      assert.equal(d.classification, 'application-plugin-authoring-defect');
+      assert.equal(d.inputEquivalent, false);
+      assert.equal(d.finalRasterVerified, false);
+      assert.equal(d.values.normal, undefined);
+      assert.equal(d.values.effective, undefined);
+      assert.equal(d.values.retained, 'rgba(29,27,32,1)');
+      const [leaf, owner] = d.reviewEvidence.candidateChain;
+      assert.equal(leaf.normal.color, undefined);
+      assert.equal(leaf.effective.color, undefined);
+      assert.equal(owner.normal.color, '#1d1b20');
+      assert.equal(owner.effective.color, '#1d1b20');
+    }
+    assert.ok(report.sourceFindings.find(f => f.id === 'fixture-material-option-ink-substitution').detected);
+    assert.ok(!validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('material option')));
+    assert.deepEqual(raw, original);
+  }
+});
+
+test('material option ink rejects competing declarations missing inheritance and changed stages', () => {
+  const controls = [
+    (r, a) => { r.rules[0].active = false; },
+    (r, a) => { delete r.rules[0].active; },
+    (r, a) => { r.rules[0].selector = '.other'; },
+    (r, a) => { r.rules[0].conditions = ['@media (min-width:1px)']; },
+    (r, a) => { r.rules[0].declarations.color.important = true; },
+    (r, a) => { r.rules[0].declarations.color.value = '#1d1b1e'; },
+    (r, a) => { r.rules[0].declarations.all = { value: 'initial' }; },
+    (r, a) => { r.rules[0].declarations.transition = { value: 'color 1s' }; },
+    (r, a) => { r.nodes.find(n => n.key === 't0').inline.color = { value: 'inherit' }; },
+    (r, a) => { r.nodes.find(n => n.key === 'o0').inline.all = { value: 'unset' }; },
+    (r, a) => { r.nodes.find(n => n.key === 't0').attributes.style = 'color:inherit'; },
+    (r, a) => { r.nodes.find(n => n.key === 'o0').attributes.style = 'animation: ink 1s'; },
+    (r, a) => { r.nodes.find(n => n.key === 'o0').style = 999; },
+    (r, a) => { r.rules.push(structuredClone(r.rules[0])); r.nodes.find(n => n.key === 'o0').rules.push(2); },
+    (r, a) => { a.rules[0].color = '#000000'; },
+    (r, a) => { a.rules[0].selector = '.other'; },
+    (r, a) => { a.rules[0].all = 'initial'; },
+    (r, a) => { a.rules.push({ selector: '.select-option', color: '#1d1b20' }); },
+    (r, a) => { a.rules.push({ selector: '.field-shell .select-option:hover', color: '#1d1b20' }); },
+    (r, a) => { a.rules.push({ selector: '[role=option]', color: '#1d1b20' }); },
+    (r, a) => { a.rules.push({ selector: '', color: '#1d1b20' }); },
+    (r, a) => { a.rules.push({ selector: '.select-option', transition: 'color 1s' }); },
+    (r, a) => { a.rules.push({ selector: '.select-option span', color: '#1d1b20' }); },
+    (r, a) => { a.rules.push({ selector: 'span:hover', '-webkit-text-fill-color': '#1d1b20' }); },
+    ...['t0', 'o0'].flatMap(key => [
+      (r, a) => { a.nodes.find(n => n.key === key).authored.style = { color: '#1d1b20' }; },
+      (r, a) => { a.nodes.find(n => n.key === key).authored.style = 'color:#1d1b20'; },
+      (r, a) => { a.nodes.find(n => n.key === key).authored.style = null; },
+    ]),
+    ...['normalResolvedStyle', 'interactionResolvedStyle'].flatMap(stage => [
+      (r, a) => { const n = a.nodes.find(n => n.key === 'o0'); n[stage] = { ...n[stage], color: '#000000' }; },
+      (r, a) => { const n = a.nodes.find(n => n.key === 't0'); n[stage] = { ...n[stage], color: '#1d1b20' }; },
+      (r, a) => { const n = a.nodes.find(n => n.key === 't0'); n[stage] = { ...n[stage], all: 'initial' }; },
+    ]),
+    (r, a) => { const n = a.nodes.find(n => n.key === 't0'); n.retainedText = { ...n.retainedText, style: { ...n.retainedText.style, color: '#000000' } }; },
+    (r, a) => { a.nodes.find(n => n.key === 'o0').normalResolvedStyle = undefined; },
+    (r, a) => { a.nodes.find(n => n.key === 'o0').interactionResolvedStyle = undefined; },
+  ];
+  for (const family of ['autocomplete', 'select']) for (const selected of [-1, 0]) for (const [index, mutate] of controls.entries()) {
+    const raw = materialOptionInkReport(family, selected), { reference: r, astylar: a } = raw.results[0].inputTrees;
+    mutate(r, a);
+    const cases = raw.results.map(e => ({ ...e, kind: 'static' }));
+    const result = collectRetainedTypographyEvidence(cases, collectFullTreeInventory(cases));
+    assert.ok(!result.differences.some(d => d.astylarNode === 't0' && d.attribution === 'reviewed-material-option-ink-input'), `${family}/${selected}/${index}`);
+  }
+});
+
+test('material option ink checks the selected leaf rule separately from inherited unselected color', () => {
+  const controls = [
+    r => { r.rules[1].active = false; },
+    r => { delete r.rules[1].active; },
+    r => { r.rules[1].selector = '.mdc-list-item__primary-text'; },
+    r => { r.rules[1].declarations.color.value = '#4b4357'; },
+    r => { r.rules[1].declarations.color.important = true; },
+    r => { r.rules[1].conditions = ['@media (min-width:1px)']; },
+    r => { r.rules[1].declarations.all = { value: 'initial' }; },
+    r => { r.rules[1].declarations['-webkit-text-fill-color'] = { value: '#4b4357' }; },
+    r => { r.nodes.find(n => n.key === 't0').rules = []; },
+    r => { r.nodes.find(n => n.key === 't0').rules.push(0); },
+    r => { r.nodes.find(n => n.key === 'o0').attributes.class = 'mat-mdc-option'; },
+    r => { r.nodes.find(n => n.key === 'o0').attributes.class += ' mat-mdc-option-multiple'; },
+    r => { r.nodes.find(n => n.key === 'o0').attributes.class += ' mdc-list-item--disabled'; },
+    r => { r.nodes.find(n => n.key === 'o0').attributes['aria-disabled'] = 'true'; },
+  ];
+  for (const family of ['autocomplete', 'select']) for (const [index, mutate] of controls.entries()) {
+    const raw = materialOptionInkReport(family), { reference: r } = raw.results[0].inputTrees;
+    mutate(r);
+    const cases = raw.results.map(e => ({ ...e, kind: 'static' }));
+    const result = collectRetainedTypographyEvidence(cases, collectFullTreeInventory(cases));
+    assert.ok(!result.differences.some(d => d.astylarNode === 't0' && d.attribution === 'reviewed-material-option-ink-input'), `${family}/${index}`);
+  }
+  for (const mutate of [
+    r => { r.nodes.find(n => n.key === 't1').rules = [1]; },
+    r => { r.nodes.find(n => n.key === 'o1').style = 1; },
+  ]) {
+    const raw = materialOptionInkReport(), { reference: r } = raw.results[0].inputTrees; mutate(r);
+    const cases = raw.results.map(e => ({ ...e, kind: 'static' }));
+    const result = collectRetainedTypographyEvidence(cases, collectFullTreeInventory(cases));
+    assert.ok(!result.differences.some(d => d.astylarNode === 't1' && d.attribution === 'reviewed-material-option-ink-input'));
+  }
+});
+
+test('material option ink accepts different token results and excludes only unrelated candidate rules', () => {
+  for (const family of ['autocomplete', 'select']) {
+    const raw = materialOptionInkReport(family), { reference: r, astylar: a } = raw.results[0].inputTrees;
+    r.styles[0].color = '#123456'; r.styles[1].color = '#abcdef';
+    r.rules.push({ selector: '.mat-mdc-option:hover', active: false, conditions: [], declarations: { color: { value: '#abcdef', important: false } } });
+    r.nodes.find(n => n.key === 'o0').rules.push(2);
+    a.rules.push({ selector: '.unrelated:hover', color: '#abcdef' }, { selector: '#page', color: '#abcdef' });
+    const report = buildMaterialInputAudit(raw);
+    assert.equal(report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-material-option-ink-input').length, 2);
+    assert.ok(!validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('material option')));
+  }
+});
+
+test('material option ink replay rejects invented own colors token evidence and renderer claims', () => {
+  for (const family of ['autocomplete', 'select']) {
+    const original = buildMaterialInputAudit(materialOptionInkReport(family));
+    for (const mutate of [
+      d => { d.classification = 'confirmed-core-renderer-defect'; },
+      d => { d.element = 'menu-rename-label'; d.case = 'static:menu@light/desktop'; },
+      d => { d.inputEquivalent = true; },
+      d => { d.finalRasterVerified = true; },
+      d => { d.reviewEvidence.referenceRules[0].rule.declarations.color.value = '#4b4357'; },
+      d => { d.reviewEvidence.referenceChain.pop(); },
+      d => { d.reviewEvidence.checkedCandidateRules = []; },
+      d => { d.reviewEvidence.candidateChain[0].normal.color = '#1d1b20'; },
+      d => { d.reviewEvidence.candidateChain[1].effective.color = '#4b4357'; },
+      d => { d.reviewEvidence.candidateRetained.color = '#4b4357'; },
+      d => { d.reviewEvidence.sourceFinding = 'unknown'; },
+    ]) {
+      const report = structuredClone(original), d = report.retainedTypography.differences.find(d => d.attribution === 'reviewed-material-option-ink-input');
+      mutate(d);
+      assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('material option')));
+    }
+  }
+});
+
 function timepickerOptionInkReport() {
   const raw = timepickerOptionReport(), { reference: r, astylar: a } = raw.results[0].inputTrees;
   r.rules = [{ source: 'sheet:11/0', selector: '.mat-mdc-option', active: true, conditions: [],

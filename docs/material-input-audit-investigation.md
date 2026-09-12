@@ -23,6 +23,93 @@ selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Autocomplete/select base and selected label ink (2026-09-13)
+
+All **192** option-color differences exposed by the preceding domain audit now
+have declaration/ownership/stage attribution, without changing or accepting
+the unequal colors:
+
+- **144 unselected labels** (104 autocomplete, 40 select) inherit
+  `var(--mat-option-label-text-color, var(--mat-sys-on-surface))` from their
+  unique reference option parent. Both compute `rgb(29,27,30)`.
+- **48 selected labels** (8 autocomplete, 40 select) instead receive
+  `var(--mat-option-selected-state-label-text-color, var(--mat-sys-on-secondary-container))`
+  directly from the original selected primary-text selector, computing
+  `rgb(75,67,87)`. Their option parents retain the base color. These are not
+  interchangeable inheritance paths.
+- Candidate `.select-option` declares literal `#1d1b20`. Its normal/effective
+  owner inputs retain that literal. The direct label has **no own color** in
+  either inspection stage, and retained core text inherits the literal. The
+  audit preserves these absent leaf values instead of fabricating a fully
+  inherited color in the own-style captures. Selected candidate rules change
+  background, not label ink.
+
+The original two reference declarations are in the already fingerprinted
+installed `examples/material-showcase/node_modules/@angular/material/fesm2022/option-BzhYL_xC.mjs:269`.
+The candidate literal is at `astylar.component.ts:560`. `git show
+2f44011:examples/material-showcase/src/app/astylar.component.ts` confirms that
+the initial showcase already declared this literal on `.select-option`,
+before the later label/check structure revisions recorded below.
+`src/app/services/dom/renderer.service.ts:543` independently explains the
+retained-stage path: `getInheritedTextStyle` recursively picks parent text
+properties, including color, before merging own styles at line 573. No
+Babylon color-space or coordinate calculation is needed to explain this
+captured input mismatch; no equal-input core color defect is claimed.
+
+New source finding: `fixture-material-option-ink-substitution`.
+New observation attribution: `reviewed-material-option-ink-input`.
+`reviewedMaterialOptionInk` requires the complete paired option mapping,
+consistent reference selected/disabled/multiple state, exact original active
+ordinary declarations, complete parent/leaf computed inputs, no intervening
+inline/reset/animation ink and no competing applicable candidate ink rules.
+It checks candidate owner normal/effective color, absent own leaf color and
+retained inherited color independently. Unselected parent/leaf computed ink
+must agree; selected text is explicitly allowed to differ from its parent.
+Unknown/ambiguous selectors are treated as possible competitors, not ignored.
+
+Five tests include **156 shared negative capture controls**, **30 selected/
+unselected-specific controls**, independent base/selected token-value variants,
+and **22 report mutations**. Replay rejects invented own-stage inheritance,
+removed source/ancestry witnesses and fabricated core/equivalence/raster claims.
+All new attributions remain `application-plugin-authoring-defect`,
+`inputEquivalent:false`, `currentPseudoStatePaintVerified:false` and
+`finalRasterVerified:false`. This does not prove variable fallback provenance,
+overlay theme containment, state-layer compositing, indicator paint or physical
+glyph raster. Those remain separate obligations.
+
+Focused command:
+
+`node --test --test-name-pattern='material option ink|records source fingerprints' tests/material-parity/input-equivalence-audit.spec.mjs`
+
+**6/6 pass**, zero failed/skipped/cancelled/todo, **2.459 seconds**, terminal exit 0.
+`npm run parity:harness:check`: **377/377 pass**, zero failed/skipped/cancelled/
+todo, **130.448 seconds**, terminal exit 0. `git diff --check` passes; all ten
+original visual-harness raw hashes match the frozen current-ancestry manifest.
+
+Full audit replay command:
+
+```powershell
+node --input-type=module -e "import {readFileSync} from 'node:fs';import {buildMaterialInputAudit,validateMaterialInputAudit} from './tests/material-parity/input-equivalence-audit.mjs';const p=JSON.parse(readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json'));const a=buildMaterialInputAudit(p,{root:process.cwd(),normalLineBoxPath:'artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json',supplementalRoot:'artifacts/material-parity/supplemental-current-ancestry-audit'});console.log('SUMMARY '+JSON.stringify({coverage:a.coverage.complete,summary:a.summary,ink:a.retainedTypography.differences.filter(d=>d.attribution==='reviewed-material-option-ink-input').length,retainedGaps:a.retainedTypography.gaps.filter(g=>g.attribution==='unresolved').length,retainedDifferences:a.retainedTypography.differences.filter(g=>g.attribution==='unresolved').length}));console.log('DIAGNOSTIC '+JSON.stringify(validateMaterialInputAudit(a,{requireComplete:false})));console.log('STRICT '+JSON.stringify(validateMaterialInputAudit(a)));"
+```
+
+Terminal exit 0; this command prints strict errors, not a strict success exit.
+Measured coverage remains complete, with **101** detected source findings and
+zero undetected source definitions. All **192** option inks are attributed;
+unresolved retained typography differences fall from **546 to 354**.
+Diagnostic validation returns `[]`. Strict validation still rejects completion:
+
+- **3,309** resolved-style differences lack root-cause attribution.
+- **849** control texture typography differences require attribution.
+- **385** retained mapping/stage gaps require review.
+- **354** retained typography differences require attribution.
+
+The audit remains incomplete. This attribution replay does not replace the
+required final unfiltered visual matrix run or the final checked-in report.
+
+The proposed correction is to preserve the original base and selected token
+declarations and their text ownership, not substitute sampled RGB values.
+No fixture, plugin, renderer, captured tree or visual threshold changed.
+
 ## Autocomplete/select option-domain correspondence (2026-09-13)
 
 The complete captured interaction cohort now maps **192** previously unmatched

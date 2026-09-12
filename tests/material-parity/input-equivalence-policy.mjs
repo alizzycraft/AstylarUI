@@ -670,6 +670,15 @@ export const sourceAuditDefinitions = Object.freeze([
     justification: 'The reference month-view template has seven th scope=col cells, each containing a full weekday name in a cdk-visually-hidden span and a separate aria-hidden narrow label; its header also contains a spanning divider row. Candidate replaces the header with seven single-letter spans in the date grid, omitting full names and column-header semantics. Those spans inherit the generic page font stack instead of the calendar font token and use the fixed cell ink instead of the header on-surface-variant token. The complete ordered header and matching date context establish narrow-label correspondence, not equivalent text, semantics, clipping or table/grid layout. Restore original structure and CSS inputs before investigating core; do not tune single letters or offsets.',
   }),
   Object.freeze({
+    id: 'fixture-material-option-ink-substitution',
+    introducedBy: '2f44011 feat(example): add Material component showcase',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`selector: '\.select-option',[^\n]*color: '#1d1b20'`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase autocomplete/select base and selected-label color-token translation',
+    justification: 'The option literal #1d1b20 is present in the initial showcase and still feeds replacement label text. Original unselected labels inherit the Material option token; selected primary-text spans receive their own selected-state-label token. The candidate selected rule changes background only. Per-case attribution requires complete linked option mapping, original active token rules, direct inheritance/selected ownership, candidate rule exclusions, explicit owner normal/effective ink, absent own leaf color and agreeing retained ink. Preserve raw omitted stages and unequal colors; this is authoring provenance, not a core conversion defect, variable-fallback origin or final-raster equivalence.',
+  }),
+  Object.freeze({
     id: 'fixture-autocomplete-option-composition-substitution',
     introducedBy: '4d56f86 fix(material): restore field and popup interaction state',
     file: 'examples/material-showcase/src/app/astylar.component.ts',
