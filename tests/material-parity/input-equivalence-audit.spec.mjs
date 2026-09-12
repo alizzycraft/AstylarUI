@@ -4736,6 +4736,106 @@ test('calendar month marker validation rejects deleted and forged correspondence
   }
 });
 
+function calendarMonthMarkerTypographyReport() {
+  const raw = calendarMonthMarkerReport(), { reference: ref, astylar: ast } = raw.results[0].inputTrees;
+  const declarations = { height: '0px', 'line-height': '0', 'text-align': 'start',
+    color: 'var(--mat-datepicker-calendar-body-label-text-color, var(--mat-sys-on-surface))' };
+  ref.rules.push({ selector: '.mat-calendar-body-label', active: true, conditions: [],
+    declarations: Object.fromEntries(Object.entries(declarations).map(([key, value]) => [key, { value, important: false }])) });
+  for (const n of ref.nodes.filter(n => n.type === 'td' && n.attributes.class === 'mat-calendar-body-label')) n.rules = [ref.rules.length - 1];
+  ast.rules.find(r => r.selector === '.datepicker-cell').textAlign = 'center';
+  return raw;
+}
+
+const monthTypography = raw => weekdayEvidence(raw).differences.filter(d => d.element === 'datepicker-month-marker');
+
+test('calendar month marker typography traces omitted zero line-height and authored alignment and ink', () => {
+  const raw = calendarMonthMarkerTypographyReport(), before = structuredClone(raw), ds = monthTypography(raw);
+  const reviewed = ds.filter(d => d.attribution === 'reviewed-calendar-month-marker-typography-input');
+  assert.deepEqual(reviewed.map(d => d.property), ['lineHeight', 'textAlign', 'color']);
+  assert.ok(reviewed.every(d => d.classification === 'application-plugin-authoring-defect' && d.inputEquivalent === false &&
+    d.currentPseudoStatePaintVerified === false && d.reviewEvidence.finalRasterVerified === false));
+  const line = reviewed[0];
+  assert.equal(line.values.reference, '0'); assert.equal(line.values.retained, 'normal');
+  assert.equal(line.values.normal, undefined); assert.equal(line.values.effective, undefined);
+  assert.equal(line.reviewEvidence.candidateChain.at(-1).node, 'page');
+  assert.equal(line.reviewEvidence.referenceRule.declarations['line-height'].value, '0');
+  assert.equal(reviewed[1].reviewEvidence.candidateRule.textAlign, 'center');
+  assert.equal(reviewed[2].reviewEvidence.candidateRule.color, '#1d1b20');
+  assert.ok(reviewed[2].reviewEvidence.referenceRule.declarations.color.value.startsWith('var(--mat-datepicker-calendar-body-label-text-color'));
+  assert.deepEqual(raw, before);
+  const report = buildMaterialInputAudit(raw);
+  assert.equal(report.sourceFindings.find(f => f.id === 'fixture-calendar-month-marker-typography-substitution')?.detected, true);
+  assert.ok(!validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('calendar month marker')));
+});
+
+test('calendar month marker typography rejects conflicting declarations missing ancestry and changed stages', () => {
+  const cases = [
+    ['lineHeight', r => { r.rules.at(-1).active = false; }],
+    ['lineHeight', r => { r.rules.at(-1).selector = '.other'; }],
+    ['lineHeight', r => { r.rules.at(-1).declarations['line-height'].important = true; }],
+    ['lineHeight', r => { r.rules.at(-1).conditions = ['media screen']; }],
+    ['lineHeight', r => { r.rules.at(-1).declarations['line-height'].value = 'normal'; }],
+    ['textAlign', r => { r.rules.at(-1).declarations['text-align'].value = 'left'; }],
+    ['color', r => { r.rules.at(-1).declarations.color.value = '#1d1b1e'; }],
+    ['color', r => { r.rules.at(-1).declarations.all = { value: 'initial', important: false }; }],
+    ['lineHeight', r => { r.nodes.find(n => n.key === 'month-label').inline = { 'line-height': { value: '0' } }; }],
+    ['textAlign', r => { r.nodes.find(n => n.key === 'month-label').attributes.style = 'text-align:start'; }],
+    ['color', r => { r.rules.push({ selector: 'td', active: true, declarations: { color: { value: 'red' } } }); r.nodes.find(n => n.key === 'month-label').rules.push(r.rules.length - 1); }],
+    ['lineHeight', (_r, a) => { a.nodes.find(n => n.key === 'ast-grid').parent = 'missing'; }],
+    ['lineHeight', (_r, a) => { a.nodes.find(n => n.key === 'page').normalResolvedStyle.lineHeight = 'normal'; }],
+    ['lineHeight', (_r, a) => { a.nodes.find(n => n.key === 'ast-popup').interactionResolvedStyle.lineHeight = '0'; }],
+    ['lineHeight', (_r, a) => { a.nodes.find(n => n.key === 'ast-marker').authored.style = { lineHeight: '0' }; }],
+    ['color', (_r, a) => { a.nodes.find(n => n.key === 'ast-marker').authored.style = 'color:red'; }],
+    ['textAlign', (_r, a) => { a.rules.find(r => r.selector === '.datepicker-cell').textAlign = 'left'; }],
+    ['color', (_r, a) => { a.rules.find(r => r.selector === '.datepicker-cell').color = 'red'; }],
+    ['color', (_r, a) => { a.rules.find(r => r.selector === '.datepicker-cell').all = 'initial'; }],
+    ['textAlign', (_r, a) => { a.rules.push({ ...a.rules.find(r => r.selector === '.datepicker-cell') }); }],
+    ['lineHeight', (_r, a) => { a.rules.push({ selector: '.datepicker-popup .datepicker-month-marker', lineHeight: '0' }); }],
+    ['lineHeight', (_r, a) => { a.rules.push({ selector: '.datepicker-month-marker:hover', lineHeight: '0' }); }],
+    ['color', (_r, a) => { a.rules.push({ selector: '.unrelated > .datepicker-cell', color: 'red', minWidth: '9000px' }); }],
+    ['color', (_r, a) => { a.rules.push({ selector: ':is(.unrelated)', color: 'red' }); }],
+    ['lineHeight', (_r, a) => { a.rules.push({ selector: '*', font: '14px Roboto' }); }],
+    ['lineHeight', (_r, a) => { a.rules.push({ selector: '#page', animationName: 'unknown' }); }],
+    ['color', (_r, a) => { a.rules.push({ selector: '', color: 'red' }); }],
+  ];
+  for (const property of ['lineHeight', 'textAlign', 'color']) for (const stage of ['normalResolvedStyle', 'interactionResolvedStyle', 'retainedText']) {
+    cases.push([property, (_r, a) => {
+      const n = a.nodes.find(n => n.key === 'ast-marker'), style = stage === 'retainedText' ? n.retainedText.style : n[stage];
+      style[property] = property === 'color' ? 'red' : property === 'textAlign' ? 'right' : '20px';
+    }]);
+  }
+  for (const [property, mutate] of cases) {
+    const raw = calendarMonthMarkerTypographyReport(), t = raw.results[0].inputTrees; mutate(t.reference, t.astylar);
+    assert.ok(!monthTypography(raw).some(d => d.property === property && d.attribution === 'reviewed-calendar-month-marker-typography-input'), `${property}: ${mutate}`);
+  }
+});
+
+test('calendar month marker typography excludes only definitely unrelated rule targets', () => {
+  const raw = calendarMonthMarkerTypographyReport(), ast = raw.results[0].inputTrees.astylar;
+  for (const selector of ['.unrelated > .other:hover', '#other + .other', '.datepicker-popup .other', '.other ~ p', 'button:focus, .other']) {
+    ast.rules.push({ selector, lineHeight: '0', color: 'red', textAlign: 'right' });
+  }
+  assert.equal(monthTypography(raw).filter(d => d.attribution === 'reviewed-calendar-month-marker-typography-input').length, 3);
+});
+
+test('calendar month marker typography replay rejects forged scope rules and stage evidence', () => {
+  for (const mutate of [
+    d => { d.classification = 'equivalent-representation'; },
+    d => { d.element = 'unrelated'; },
+    d => { d.case = 'interaction:timepicker@light/desktop-dpr1/open'; },
+    d => { d.reviewEvidence.referenceRule.declarations['line-height'].value = 'normal'; },
+    d => { d.reviewEvidence.candidateChain.pop(); },
+    d => { d.reviewEvidence.checkedCandidateRules.push({ selector: '*', lineHeight: '0' }); },
+    d => { d.values.normal = '0'; },
+    d => { d.reviewEvidence.finalRasterVerified = true; },
+  ]) {
+    const report = buildMaterialInputAudit(calendarMonthMarkerTypographyReport());
+    mutate(report.retainedTypography.differences.find(d => d.element === 'datepicker-month-marker' && d.property === 'lineHeight'));
+    assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('calendar month marker')), String(mutate));
+  }
+});
+
 test('calendar weekday audit preserves seven ordered abbreviations and seven omitted full names', () => {
   const raw = calendarWeekdayReport(), before = structuredClone(raw), evidence = weekdayEvidence(raw);
   const maps = evidence.reviewedMappings.filter(m => m.kind === 'reviewed-calendar-weekday-text');

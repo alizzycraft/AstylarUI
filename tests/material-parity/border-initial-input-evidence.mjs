@@ -15,7 +15,7 @@ const colorOrResetKey = key => {
 };
 const noColorOrReset = declarations => object(declarations) && !Object.keys(declarations).some(colorOrResetKey);
 
-function selectorCanApply(selector, authored) {
+export function selectorCanApply(selector, authored) {
   if (typeof selector !== 'string' || !selector.trim()) return true;
   return selector.split(',').some(part => {
     // Only unescaped compound type/id/class selectors and these state suffixes

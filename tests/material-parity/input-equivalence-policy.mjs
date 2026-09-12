@@ -652,6 +652,15 @@ export const sourceAuditDefinitions = Object.freeze([
     justification: 'Material month view supplies labelMinRequiredCells=3. Its body creates a full seven-column label row only when the first-week offset is less than three; otherwise the label occupies that offset in the first week. Candidate always authors a month span followed by individual leading blanks and gives the span a full grid row. Its cell width/height40px, padding-left12px and flex alignment also replace the original zero-height/zero-line-height table cell with percentage padding. SEP 2026 has offset2 and does not expose the conditional row-count difference; a same-looking September screenshot cannot establish all-month equivalence. Captured full rows and typography remain independently reviewed. The existing equal-input core full-span browser proof passes, so this substitution is not evidence of a core span failure and must not be defended as a renderer workaround.',
   }),
   Object.freeze({
+    id: 'fixture-calendar-month-marker-typography-substitution',
+    introducedBy: '87f7f83 introduces fixed calendar cell ink and omits label line-height; 4a330e2 adds generic centered cell text alignment',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`selector: '\.datepicker-cell',(?![^\n]*lineHeight:)[^\n]*color: '#1d1b20'[^\n]*textAlign: 'center'`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase calendar month-label typography declarations and table-cell structure',
+    justification: 'The original mat-calendar-body-label rule explicitly supplies line-height:0, text-align:start and the calendar-body-label color token. Candidate uses the generic date-cell center alignment and fixed #1d1b20 ink, while omitting line-height through the captured leaf-to-page chain. Those unequal inputs survive into retained text; flex-start justification and a fixed cell height do not replace the original declarations. Per-case attribution requires the actual active reference rule, complete candidate rule exclusions and normal/effective/retained witnesses, without claiming equal-input core failure or glyph raster parity.',
+  }),
+  Object.freeze({
     id: 'fixture-calendar-weekday-structure-and-token-substitution',
     introducedBy: '87f7f83 fix(example): render Material picker overlays',
     file: 'examples/material-showcase/src/app/astylar.component.ts',

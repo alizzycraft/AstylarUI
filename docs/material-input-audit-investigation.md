@@ -23,6 +23,82 @@ selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Calendar month-label typography provenance (2026-09-13)
+
+The 123 month-marker typography differences exposed by the preceding increment
+are now attributed from their declarations, not normalized away. The original
+active `.mat-calendar-body-label` rule in the captured reference supplies:
+
+| Property | Reference input / computed value | Candidate input / retained value |
+| --- | --- | --- |
+| Line height | Explicit `line-height:0`, computed `0px` | Omitted through the text-to-page chain; retained `normal` |
+| Text alignment | Explicit `text-align:start`, computed `start` | `.datepicker-cell { textAlign:'center' }`, retained `center` |
+| Ink | Calendar-body-label color token, computed `rgb(29,27,30)` | Literal `#1d1b20`, retained `rgb(29,27,32)` |
+
+The source rule is in the installed Material calendar-body declarations at
+`examples/material-showcase/node_modules/@angular/material/fesm2022/datepicker.mjs:555`.
+The candidate generic cell is authored at
+`examples/material-showcase/src/app/astylar.component.ts:620`. Reading history
+confirms **87f7f83** initially omitted the label line-height and supplied fixed
+ink; **4a330e2** added centered cell text alignment. These are fixture inputs,
+not Babylon projection or renderer changes.
+
+For the omitted property, the captured normal/effective chain runs from marker
+through grid, popup, field shell and sample container to the page; none declares
+line-height. `RendererService.getInheritedTextStyle` in
+`src/app/services/dom/renderer.service.ts:543` supplies fallback `normal` and
+merges inherited and own text inputs in that order. Thus the observed retained
+`normal` is not evidence that core converted an explicit zero into normal.
+For alignment and ink, the literal rule agrees with normal, effective and
+retained values. `justifyContent:'flex-start'` on a replacement grid/flex cell
+does not make `textAlign:'center'` equivalent to the reference table-cell input.
+No natural line-box, glyph placement, physical font selection or final raster
+claim is made by this attribution.
+
+The new source finding and per-case attribution are
+`fixture-calendar-month-marker-typography-substitution` and
+`reviewed-calendar-month-marker-typography-input`. They preserve **123 records
+across 41 paired states**, 41 per property, as unequal application/plugin
+authoring. The original reference rule must be active, ordinary and unique for
+the property, with no inline override or reset. Candidate rule checks reuse the
+existing conservative compound-selector exclusion helper. A known mismatching
+terminal compound can rule out a target; unknown syntax, possible state/media
+rules and competing declarations prevent attribution. This is an audit
+exclusion proof, not a new renderer selector/cascade implementation.
+
+Thirty-six negative capture controls reject changed declarations, missing
+ancestry, inline overrides, possible competing rules and altered normal,
+effective or retained stages. Five definitely unrelated selector controls
+remain attributable. Eight report mutations reject forged scope, rules, chain,
+stage values and raster/equivalence claims. The earlier full-row correspondence
+and its independent report replay remain prerequisites.
+
+Focused command:
+
+`node --test --test-name-pattern='calendar month marker|calendar weekday|records source fingerprints' tests/material-parity/input-equivalence-audit.spec.mjs`
+
+Result: **13/13 pass**, zero failed/skipped/cancelled/todo tests, **9.329 seconds**.
+The full audit replay uses the exact selected main/normal-line-box/supplemental
+paths and diagnostic/strict command recorded in the next section. It still has
+4,688 side/case inventory records, 2,158 variants and zero inventory errors;
+all **96 source findings** are detected. The new classifications do not change
+the captured inputs, remove differences, alter fixtures, or close the audit.
+
+`npm run parity:harness:check` passes **361/361**, zero failed/skipped/cancelled/
+todo tests, **142.664 seconds**, terminal exit 0. The full replay's diagnostic
+validation returns `[]`. All ten original visual-harness hashes still match the
+checkpoint; the export of its existing conservative selector helper is confined
+to audit evidence code and does not change the helper's behavior or any runtime
+selector implementation.
+
+Strict validation still reports **3,309 unresolved resolved-style differences,
+849 control-texture typography differences, 3,025 retained mapping/stage gaps,
+and 354 retained typography differences**. The last count decreases from 477
+because the 123 records are now explained, not deleted. The full replay reached
+terminal exit 0 after printing these expected incomplete categories; its exit
+code is not an acceptance result. The final complete audit report and unfiltered
+enforced parity run remain outstanding.
+
 ## Calendar month-marker table/grid correspondence (2026-09-13)
 
 The reference month marker is not an unconditional full-width row. The installed
