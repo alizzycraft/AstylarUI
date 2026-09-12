@@ -399,7 +399,8 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   const report = parityReport({}, {});
   const audit = buildMaterialInputAudit(report);
   assert.equal(audit.coverage.visualParityGreen, true);
-  assert.equal(audit.sourceFingerprints.length, 34);
+  assert.equal(audit.sourceFingerprints.length, 35);
+  assert.equal(audit.sourceFingerprints.filter(({ file }) => file === 'src/app/services/dom/dom-ancestry.service.ts').length, 1);
   const cascadeProof = 'examples/material-showcase/src/app/label-cascade-input-audit.spec.ts';
   assert.equal(audit.sourceFingerprints.filter(({ file }) => file === cascadeProof).length, 1);
   assert.ok(audit.focusedProofs.some(({ file, line, status }) => file === cascadeProof && line > 0 && status !== 'missing'));

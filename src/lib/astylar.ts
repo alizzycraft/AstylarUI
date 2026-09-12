@@ -26,6 +26,7 @@ import { BabylonCameraService } from "../app/services/babylon-camera.service";
 import { BabylonMeshService } from "../app/services/babylon-mesh.service";
 import { TextureService } from "../app/services/texture.service";
 import { StyleService } from "../app/services/dom/style.service";
+import { DOMAncestryService } from "../app/services/dom/dom-ancestry.service";
 import { StyleDefaultsService } from "../app/services/dom/style-defaults.service";
 import { SiteData } from "../app/types/site-data";
 import type { StyleRule } from '../app/types/style-rule';
@@ -152,6 +153,7 @@ class AstylarRenderer {
   private babylonMeshService = inject(BabylonMeshService);
   private textureService = inject(TextureService);
   private styleService = inject(StyleService);
+  private ancestry = inject(DOMAncestryService);
   private styleDefaultsService = inject(StyleDefaultsService);
   private imageResources = inject(ImageResourceService);
   private elementManager = inject(BabylonElementManagerService);
@@ -898,11 +900,26 @@ class AstylarRenderer {
     if (!session || session.snapshot.status !== 'idle') {
       throw new Error('Await surface.whenSettled() before inspecting resolved styles.');
     }
+    // Equivalent updates may retain meshes whose metadata refers to an older
+    // object tree. Inspection must resolve the current document, including
+    // hidden nodes, without replacing the live renderer's ancestry or paint.
+    return this.ancestry.withTree({ id: 'root-body', type: 'div', children: session.siteData.root.children },
+      () => this.inspectCurrentDocumentStyles(session));
+  }
+
+  private inspectCurrentDocumentStyles(session: AstylarRenderSession): AstylarResolvedStyleSnapshot {
+    const authoredById = new Map<string, DOMElement | undefined>();
+    const index = (element: DOMElement): void => {
+      if (element.id) authoredById.set(element.id, authoredById.has(element.id) ? undefined : element);
+      element.children?.forEach(index);
+    };
+    session.siteData.root.children.forEach(index);
     const elements: AstylarResolvedStyleSnapshot['elements'][number][] = [];
     const visit = (element: DOMElement, path: string): void => {
       // Resolve through the same core cascade and pseudo-state path as painting.
       // Do not depend on mesh existence: display:none may skip an entire subtree.
-      const styles = this.getElementInteractionStyles(element.id ?? '', session.siteData, element);
+      const styles = this.getElementInteractionStyles(element.id ?? '', session.siteData, element,
+        (id) => authoredById.get(id));
       const retainedTextStyle = element.id
         ? this.textInteractionRegistry.getByElementId(element.id)?.style : undefined;
       const input = element.id ? this.inputElementService.getInputElement(element.id) as Button | undefined : undefined;
@@ -1132,7 +1149,8 @@ class AstylarRenderer {
   }
 
   /** Resolves the pseudo rules registered for an authored ID, type, or simple class. */
-  private getElementInteractionStyles(elementId: string, siteData?: SiteData, authoredElement?: DOMElement): {
+  private getElementInteractionStyles(elementId: string, siteData?: SiteData, authoredElement?: DOMElement,
+    stateElementForId?: (id: string) => DOMElement | undefined): {
     normal: import('../app/types/style-rule').StyleRule;
     hover?: import('../app/types/style-rule').StyleRule;
     active?: import('../app/types/style-rule').StyleRule;
@@ -1163,6 +1181,7 @@ class AstylarRenderer {
           siteData.styles,
           state,
           [...this.interactionPseudoSources[state]].map((sourceId) => {
+            if (stateElementForId) return stateElementForId(sourceId);
             const sourceInput = this.inputElementService.getInputElement(sourceId);
             const sourceMesh = this.elementManager.elementsMap.get(sourceId);
             return sourceInput?.element ?? sourceMesh?.metadata?.element as DOMElement | undefined;

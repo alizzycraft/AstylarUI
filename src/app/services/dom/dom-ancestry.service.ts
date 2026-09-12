@@ -26,6 +26,27 @@ export class DOMAncestryService {
     return this.parents.get(element);
   }
 
+  /** Resolve a synchronous query against its document, without changing live ancestry. */
+  withTree<T>(root: DOMElement, query: () => T): T {
+    const previous = this.parents;
+    this.parents = new WeakMap<DOMElement, DOMElement>();
+    this.mutationRevision += 1;
+    const visit = (parent: DOMElement): void => {
+      for (const child of parent.children ?? []) {
+        this.parents.set(child, parent);
+        visit(child);
+      }
+    };
+    try {
+      visit(root);
+      return query();
+    } finally {
+      this.parents = previous;
+      // Keep revisions monotonic: selector caches from either context are stale.
+      this.mutationRevision += 1;
+    }
+  }
+
   clear(): void {
     this.parents = new WeakMap<DOMElement, DOMElement>();
     this.mutationRevision += 1;

@@ -76,6 +76,7 @@ export interface AstylarSurface {
   readonly disposed: boolean;
   readonly diagnostics: AstylarSurfaceDiagnostics;
   /** Inspect core declarations, including hidden descendants, after whenSettled().
+   * Uses current document ancestry even when an update reuses existing visuals.
    * On-demand only; never use this diagnostic snapshot to calculate layout.
    */
   inspectResolvedStyles(): AstylarResolvedStyleSnapshot;

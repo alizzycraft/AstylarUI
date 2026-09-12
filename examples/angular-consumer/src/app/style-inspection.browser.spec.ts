@@ -47,6 +47,20 @@ describe('packed style inspection API', () => {
       expect(text.retainedText?.style.lineHeight).toBe('32px');
       expect(text.retainedText?.style.color).toBe('#112233');
       expect(second.inspectResolvedStyles().elements.find((entry) => entry.id === 'child')?.retainedText?.style.color).toBe('#445566');
+      // Replacing serializable objects may reuse the visual tree. Hidden-node
+      // selectors must still resolve against the newly submitted ancestry.
+      const mesh = first.scene.getMeshByName('action');
+      const next = makeData('#112233');
+      next.root.children[0].ariaLabel = 'Updated action';
+      const before = JSON.stringify(next);
+      await first.update(next);
+      await first.whenSettled();
+      expect(first.diagnostics.reconciliation?.strategy).toBe('reuse');
+      expect(first.scene.getMeshByName('action')).toBe(mesh);
+      expect(first.inspectResolvedStyles().elements[2].normal.color).toBe('#112233');
+      expect(first.inspectResolvedStyles().elements[2].normal.width).toBe('50%');
+      expect(second.inspectResolvedStyles().elements[2].normal.color).toBe('#445566');
+      expect(JSON.stringify(next)).toBe(before);
       expect(first.focus('action', { scrollIntoView: false })).toBeTrue();
       expect(first.inspectResolvedStyles().elements[0].effective.background).toBe('#abcdef');
       expect(first.inspectResolvedStyles().elements[0].paintedControlText?.style.color).toBe('#fedcba');

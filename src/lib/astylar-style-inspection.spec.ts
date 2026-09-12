@@ -4,6 +4,57 @@ import { Astylar } from './astylar';
 import type { SiteData } from '../app/types/site-data';
 
 describe('on-demand core style inspection', () => {
+  it('resolves replacement-document ancestry and live pseudo sources after visual reuse', async () => {
+    TestBed.configureTestingModule({ providers: [provideZonelessChangeDetection()] });
+    const canvas = document.createElement('canvas');
+    canvas.width = 360; canvas.height = 180;
+    document.body.append(canvas);
+    const data: SiteData = { root: { children: [{ type: 'div', id: 'host', class: 'shell', tabindex: 0, children: [
+      { type: 'label', id: 'caption', class: 'caption empty', textContent: 'Caption' },
+      { type: 'span', id: 'sibling', textContent: 'Sibling' },
+      { type: 'div', id: 'hidden', children: [{ type: 'span', textContent: 'Hidden' }] },
+    ] }] }, styles: [
+      { selector: '#host', width: '320px', height: '120px', cursor: 'pointer' },
+      { selector: '.caption.empty', color: '#1d1b20' },
+      { selector: '.shell .caption', color: '#e6e1e5' },
+      { selector: '.shell > .caption + span', color: '#123456' },
+      { selector: '#hidden', display: 'none' },
+      { selector: '#hidden > span:first-child', color: '#abcdef' },
+      { selector: '.shell:focus > .caption', color: '#654321' },
+    ] };
+    const surface = TestBed.inject(Astylar).mount(canvas, data, { diagnostics: { logLevel: 'silent' } });
+    try {
+      await surface.whenSettled();
+      const mesh = surface.scene.getMeshByName('caption');
+      for (const semanticChange of [false, true]) {
+        const next = structuredClone(data);
+        if (semanticChange) next.root.children[0].ariaLabel = 'Current semantic label';
+        const before = JSON.stringify(next);
+        await surface.update(next);
+        await surface.whenSettled();
+        expect(surface.diagnostics.reconciliation?.strategy).toBe('reuse');
+        expect(surface.scene.getMeshByName('caption')).toBe(mesh);
+        const resources = surface.diagnostics.resources;
+        const inspect = () => surface.inspectResolvedStyles().elements;
+        const entries = inspect();
+        expect(entries.find(entry => entry.id === 'caption')?.normal.color).toBe('#e6e1e5');
+        expect(entries.find(entry => entry.id === 'caption')?.normal.cursor).toBe('pointer');
+        expect(entries.find(entry => entry.id === 'sibling')?.normal.color).toBe('#123456');
+        expect(entries.find(entry => entry.path === 'root/0/2/0')?.normal.color).toBe('#abcdef');
+        expect(entries.find(entry => entry.path === 'root/0/2/0')?.retainedText).toBeUndefined();
+        expect(surface.focus('host', { scrollIntoView: false })).toBeTrue();
+        expect(inspect().find(entry => entry.id === 'caption')?.effective.color).toBe('#654321');
+        surface.blur();
+        expect(inspect().find(entry => entry.id === 'caption')?.effective.color).toBe('#e6e1e5');
+        expect(surface.diagnostics.resources).toEqual(resources);
+        expect(JSON.stringify(next)).toBe(before);
+      }
+      expect(surface.diagnostics.messages.filter(message => message.severity === 'error')).toEqual([]);
+    } finally {
+      surface.dispose(); canvas.remove();
+    }
+  }, 30000);
+
   it('observes the current value-label texture across focus, update and replacement', async () => {
     TestBed.configureTestingModule({ providers: [provideZonelessChangeDetection()] });
     const canvas = document.createElement('canvas');

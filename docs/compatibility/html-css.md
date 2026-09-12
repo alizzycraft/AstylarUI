@@ -297,6 +297,11 @@ and the revision identifies the settled generation. Values are core declarations
 (for example percentages remain percentages), not browser used sizes or Babylon
 coordinates. Inspection allocates no visual resources and does not change the
 document. It is for diagnosis, never an alternative layout or paint pipeline.
+After an equivalent or semantic-only update reuses visuals, inspection resolves
+the current authored tree in a synchronous core ancestry context. Descendant,
+child and sibling selectors and live pseudo-state sources use that same tree;
+the live renderer ancestry is restored before the query returns. Retained paint
+remains separate evidence rather than a substitute for those declarations.
 An optional `retainedText` entry separately exposes the last style retained by
 the core text registry for an authored ID. Its `source` is `core-text-registry`;
 the detached `style` can include typography inherited by the text renderer but

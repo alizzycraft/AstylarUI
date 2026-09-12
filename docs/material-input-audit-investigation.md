@@ -3,12 +3,17 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
-The report generator accepts an explicit evidence path so fresh full runs
-do not overwrite preserved baselines. The current in-progress full run is
-`artifacts/material-parity/context-complete-audit`. After it completes, use
-`node scripts/run-material-input-audit.mjs --parity-report=artifacts/material-parity/context-complete-audit/latest-report.json --normal-line-box-report=artifacts/material-parity/normal-line-box-context-audit/latest-report.json --supplemental-root=artifacts/material-parity/supplemental-context-audit`,
-then the same command with `--check`. Its fresh natural-line-box supplement
-is complete and bound to that run. The older control-text baseline and its
+The report generator accepts explicit evidence paths so fresh full runs do not
+overwrite preserved baselines. `artifacts/material-parity/context-complete-audit`
+is now complete (436 static / 1,875 interaction cases, all visually passing),
+but contains the subsequently reproduced ancestry-inspection defect below.
+Its `normal-line-box-context-audit` and `supplemental-context-audit` supplements
+remain bound to that frozen run, not to the corrected implementation.
+The new unfiltered run is `artifacts/material-parity/current-ancestry-audit`,
+using `dist/material-showcase-current-ancestry-audit/browser`. Its complete
+report and freshly bound supplements are required before final regeneration
+and `--check`; do not reuse the old supplements or rewrite old captured values.
+The older control-text baseline and its
 `normal-line-box-static-audit-v2` supplement remain preserved separately;
 never combine supplements and captures from different runs.
 Do not use `--allow-partial` for acceptance.
@@ -16,6 +21,79 @@ Argument validation rejects unknown, empty, and repeated options. A missing
 selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
+
+## Core inspection now scopes resolution to the current document (2026-09-12)
+
+The goal permits a small core repair when required to make instrumentation
+trustworthy. This increment corrects the reproduced query-context defect only;
+it does not change Material fixture inputs, render placement, visual-reuse
+decisions, or text paint.
+
+`DOMAncestryService.withTree` provides a synchronous query scope for the existing
+core resolver. It installs the current document relationships, including hidden
+nodes, and restores the live renderer's WeakMap in `finally`. Both transitions
+advance the revision so cached selector matches cannot leak between contexts.
+`inspectResolvedStyles` runs in that scope and resolves each live pseudo-state
+source ID to its unique current authored node. Duplicate IDs are not assigned
+an arbitrary source. Rendering and interaction outside the query continue with
+their existing live objects. There is no fixture-side selector evaluator,
+world-space feedback, forced rebuild, or substitution of retained paint into
+normal/effective declarations.
+
+This is a backward-compatible correction to the existing on-demand diagnostic
+API, with no document, plugin, or public-type shape change. The compatibility
+documentation and synchronized developer reference explain the current-tree
+contract. It is not a claim that all runtime reconciliation paths or every
+captured property are now proven correct.
+
+Verified so far:
+
+- `npm test -- --watch=false --browsers=ChromeHeadless --include=src/lib/astylar-style-inspection.spec.ts --include=src/app/services/dom/dom-ancestry.service.spec.ts`:
+  5/5 passing. Covers current descendant/adjacent/hidden structural selectors,
+  inherited cursor, semantic-only reuse, focus/blur sources, retained mesh and
+  resource identity, plus nested/error query restoration and cache invalidation.
+- `npm test -- --watch=false --browsers=ChromeHeadless`: 460/460 passing.
+- `npm run material-showcase:prepare`: freshly rebuilt and packed dependency,
+  installed one package and cleared the example's dev cache.
+- The unchanged package-root `label-cascade-input-audit.spec.ts` now passes 4/4,
+  including both previously failing equivalent-update phases. All fresh and
+  update normal/effective/retained colors match the equal-input browser rules.
+- `npm run build:lib`, the isolated showcase build at
+  `dist/material-showcase-current-ancestry-audit`, and root build at
+  `dist/current-ancestry-audit` pass. Root build reports the existing budget
+  categories: initial bundle 6.83 MB versus 2.00 MB, app.scss 4.59 kB versus
+  4.00 kB; thresholds were not changed.
+- `npm run examples:check` and `npm run skill:check` pass.
+  `npm run capabilities:check` still reports only the previously recorded
+  untouched element-creation fingerprint mismatch (`2edeb33f...` / `bf5fd586...`).
+- `npm run consumer:check`: passes with 419 packed files, a clean installed
+  consumer browser/SSR build, and 4/4 Chrome browser tests. The logged
+  `surface-disposed` diagnostic is the deliberate disposed-inspection rejection
+  assertion, not a failed live-surface query.
+- Final `npm run parity:harness:check`: 299/299 passing, zero skipped or
+  cancelled tests (186.862 seconds). The prior process was confirmed absent
+  before this final run; no live runner was restarted on an observation timeout.
+- Installed package `dist/lib/lib/astylar.js` SHA-256 is
+  `6ad4f51ca47a9e1956a66b6e724105a66aaff582c53b0b30374fb6051723f5f8`;
+  `dist/lib/app/services/dom/dom-ancestry.service.js` is
+  `4f8280644fa256cfcd2a6a6d7cf06ba7310b883680b89f514b3b3ecf941bed84`.
+  Both contain the new query-context implementation.
+
+The first audit-harness rerun passed 297/299: an older source-audit definition
+still matched the pre-repair method call signature. Updating that exact source
+match, without changing its classification or dropping the finding, makes the
+three affected source/fingerprint/layout-attribution tests pass. A separate
+showcase invocation rejected `--port` before running tests; the successful
+invocation used the supported command after the root runner exited.
+
+Packed-consumer and audit-harness verification are complete; the new full
+capture remains in progress. The frozen pre-repair matrix finished with
+minimum/median static SSIM 0.965296/0.996382, maximum edge error 0.984px,
+428/428 static text checks, 1,875/1,875 interaction cases, minimum interaction
+SSIM 0.954514 and 2,116/2,116 interaction text checks. Those green visual results
+do not repair its defective input-stage evidence. Final audit completion still
+requires corrected captures, fresh supplements, full classification and report
+validation.
 
 ## Equivalent updates detach inspected nodes from renderer ancestry (2026-09-12)
 
