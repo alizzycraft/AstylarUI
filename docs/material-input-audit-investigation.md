@@ -12,6 +12,26 @@ tests pass). A missing selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Natural-line-box reader rejects mismatched evidence before attribution (2026-09-12)
+
+`loadNormalLineBoxReport` now independently validates the supplemental capture
+against the selected run's complete capture provenance and exact static case
+results. It checks the manifest and reviewed producer source hashes, case and
+checkpoint filename identities, paired tree hashes, observed asset hashes/types,
+unique control/reference mappings, original text and typography, font readiness,
+viewport/DPR and measurement dimensions. Artifact paths are confined to Material
+artifacts, including real-path checks when reading disk. Missing observations
+stay missing; any malformed capture returns no partially validated observations.
+
+The reader accepts all **120 observations / 96 cases** from the v2 capture with
+zero missing entries and errors against the 436 current static checkpoint cases.
+Its focused tests pass **51/51**, covering positive evidence, missing coverage,
+corruption, stale sources/results/trees, duplicate identities and altered text,
+typography, assets, dimensions, readiness and DPR. These tests are also included
+in `npm run parity:harness:check` (**160/160 passed**). This is an evidence-loading increment only:
+the main comparator does not yet consume it or normalize any differences, and
+no fixture, renderer, capture runtime or full-matrix input has changed.
+
 ## Static natural line boxes now have provenance-bound supplemental captures (2026-09-12)
 
 `scripts/audit-material-normal-line-boxes.mjs` completed **120 observations in
