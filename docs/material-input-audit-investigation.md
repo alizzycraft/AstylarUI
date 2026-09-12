@@ -17,6 +17,60 @@ tests pass). A missing selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Tree direct-text ownership and fixed line-box substitution (2026-09-12)
+
+The reference `mat-tree-node` owns its text directly in a flex container. Its
+complete captured ancestry through the tree, section and `main.frame` computes
+`line-height: normal`. The candidate instead inserts a `.tree-label` span with
+explicit `height: 20px`, `line-height: 20px`, and `vertical-align: middle` into
+the centered flex row. Candidate normal/effective styles and the core text
+registry agree with that explicit line-height. This is a structural and
+authored-input difference, not evidence that core converted a shared input
+incorrectly, and not an accepted `normal`-to-20px normalization.
+
+`git show 7159b1d -- examples/material-showcase/src/app/astylar.component.ts`
+shows both the added `.tree-label` rule and the replacement of the tree row's
+direct `textContent` by a child span. This extends the existing
+`fixture-tree-component-typography-omitted` source finding; the missing component
+font-size and font-family inputs remain separate properties, not explanations
+for every line-box or placement difference.
+
+The `reviewed-tree-label-line-box-substitution` attribution requires exact
+reviewed text-owner paths, complete unique reference ancestry with no conflicting
+line-height/shorthand/inline declarations, one explicit candidate wrapper rule,
+a single-child centered flex parent, and agreeing normal/effective/retained
+values. An independent validator replays the finding from raw pooled styles,
+rules, structure and comparison values. The tests reject missing or cyclic
+ancestry, changed structure, ambiguous or media-conditional rules, altered
+declarations, and missing, duplicated or fabricated report evidence.
+
+A SHA-256-checked **1,195-result prefix (436 static + 759 interaction)** yields
+**156** line-box substitutions: **36 static + 120 interaction**. All observed
+reference chains have four nodes. Full-tree collection and partial validation
+have zero errors; the fresh natural-line-box supplement has zero missing
+observations or validation errors. Coverage and input equivalence remain
+**false**. This is a diagnostic prefix, not full-matrix acceptance.
+
+Plan item **5.24** calls for restoring original direct text ownership and
+`normal` line-height together with the original component typography before
+assessing core anonymous flex-item sizing, centering or line metrics. A focused
+equal-input anonymous-flex-text reproduction is still required before claiming
+that the wrapper concealed a particular core defect. Neither a natural used
+height nor current glyph-paint equivalence is inferred from `normal`.
+
+Focused verification:
+`node --test tests/material-parity/input-equivalence-audit.spec.mjs` passes
+**150/150**, none skipped (105.0 seconds). The three added tests exercise six
+positive font-size/inheritance combinations, 23 contradictory-input mutations
+and 11 report-tampering mutations. All ten live capture-harness files still
+match their recorded digests. No renderer, fixture input, reference, state
+driver or threshold was changed.
+
+Final verification: `npm run parity:harness:check` passes **250/250**, none
+skipped (108.1 seconds), and `git diff --check` passes. The complete unfiltered
+capture is still running; these passing attribution tests do not establish full
+audit completion or equivalent-input rendering.
+
 ## Explicit field-label tracking substitutions (2026-09-12)
 
 All **54 remaining static field-label tracking differences** are now attributed

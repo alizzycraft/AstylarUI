@@ -1552,6 +1552,111 @@ function treeFontTypographyReport(size = '14.4px') {
   return raw;
 }
 
+function treeLineBoxReport(size = '16px', inherited = false) {
+  const raw = treeFontTypographyReport(size), { reference: ref, astylar: ast } = raw.results[0].inputTrees;
+  ref.styles[0] = { ...ref.styles[0], lineHeight: 'normal', display: 'flex' };
+  ref.nodes[0].parent = 'frame';
+  ref.nodes.push({ key: 'frame', parent: null, type: 'main', attributes: { class: 'frame benchmark' },
+    ownText: '', style: 0, rules: [], pseudoElements: [] });
+  if (inherited) {
+    ref.rules.push({ active: true, selector: '.mat-tree-node', declarations: { 'line-height': { value: 'inherit' } } });
+    for (const n of ref.nodes.filter(n => n.ownText)) n.rules.push(1);
+  }
+  const rule = { selector: '.tree-label', height: '20px', lineHeight: '20px', verticalAlign: 'middle' };
+  ast.rules.push(rule);
+  for (const n of ast.nodes.filter(n => n.retainedText)) {
+    const style = { height: '20px', lineHeight: '20px', verticalAlign: 'middle' };
+    n.normalResolvedStyle = { ...style };
+    n.interactionResolvedStyle = { ...style };
+    n.resolvedStyle = { ...style };
+    n.retainedText.style.lineHeight = '20px';
+    const parent = ast.nodes.find(p => p.key === n.parent);
+    parent.normalResolvedStyle = { display: 'flex', alignItems: 'center' };
+    parent.interactionResolvedStyle = { display: 'flex', alignItems: 'center' };
+    parent.resolvedStyle = { display: 'flex', alignItems: 'center' };
+  }
+  return raw;
+}
+
+test('tree line-box substitution preserves normal reference ancestry and fixed candidate wrapper inputs', () => {
+  for (const size of ['16px', '14.4px', '18.4px']) for (const inherited of [false, true]) {
+    const raw = treeLineBoxReport(size, inherited), before = structuredClone(raw);
+    const report = buildMaterialInputAudit(raw);
+    const findings = report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-tree-label-line-box-substitution');
+    assert.equal(findings.length, 3);
+    for (const f of findings) {
+      assert.equal(f.classification, 'application-plugin-authoring-defect');
+      assert.equal(f.inputEquivalent, false);
+      assert.equal(f.currentPseudoStatePaintVerified, false);
+      assert.deepEqual(f.values, { reference: 'normal', normal: '20px', effective: '20px', retained: '20px' });
+      assert.equal(f.reviewEvidence.referenceChain.length, 3);
+      assert.equal(f.reviewEvidence.referenceChain.at(-1).node, 'frame');
+      assert.equal(f.reviewEvidence.candidateParent.normal.alignItems, 'center');
+      assert.equal(f.reviewEvidence.candidateRule.height, '20px');
+      assert.ok(report.sourceFindings.find(s => s.id === f.reviewEvidence.sourceFinding)?.detected);
+    }
+    assert.ok(!validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('tree label line-box attributions')));
+    assert.equal(report.summary.inputEquivalent, false);
+    assert.deepEqual(raw, before);
+  }
+});
+
+test('tree line-box attribution rejects changed structure, ambiguous rules and incomplete normal ancestry', () => {
+  const mutations = [
+    (r) => { r.nodes[0].parent = 'missing'; },
+    (r) => { r.nodes[0].parent = r.nodes[0].key; },
+    (r) => { r.nodes.at(-1).type = 'div'; },
+    (r) => { r.nodes.at(-1).parent = 'outer'; },
+    (r) => { r.nodes.at(-1).attributes.class = 'other'; },
+    (r) => { r.nodes.push(structuredClone(r.nodes.at(-1))); },
+    (r) => { r.styles[0].lineHeight = '20px'; },
+    (r) => { r.styles[0].display = 'block'; },
+    (r) => { r.rules[0].declarations['line-height'] = { value: '20px' }; },
+    (r) => { r.rules[0].declarations.font = { value: '16px/20px Roboto' }; },
+    (r) => { r.rules[0].declarations.all = { value: 'revert' }; },
+    (r) => { r.nodes.at(-1).attributes.style = 'line-height: normal'; },
+    (r) => { r.nodes.at(-1).inline = { 'line-height': { value: 'normal' } }; },
+    (_r, a) => { a.rules[1].height = '21px'; },
+    (_r, a) => { a.rules[1].lineHeight = '21px'; },
+    (_r, a) => { a.rules[1].verticalAlign = 'baseline'; },
+    (_r, a) => { a.rules.push({ ...a.rules[1] }); },
+    (_r, a) => { a.rules[1].mediaMaxWidth = '500px'; },
+    (_r, a) => { a.rules[1].font = '16px/20px Roboto'; },
+    (_r, a) => { for (const n of a.nodes.filter(n => n.retainedText)) n.normalResolvedStyle.lineHeight = '21px'; },
+    (_r, a) => { for (const n of a.nodes.filter(n => n.retainedText)) n.interactionResolvedStyle.height = '21px'; },
+    (_r, a) => { for (const n of a.nodes.filter(n => n.retainedText)) n.retainedText.style.lineHeight = 'normal'; },
+    (_r, a) => { for (const n of a.nodes.filter(n => n.authored?.class === 'tree-item')) n.interactionResolvedStyle.alignItems = 'start'; },
+  ];
+  for (const mutate of mutations) {
+    const raw = treeLineBoxReport();
+    mutate(raw.results[0].inputTrees.reference, raw.results[0].inputTrees.astylar);
+    const evidence = collectRetainedTypographyEvidence(raw.results, collectFullTreeInventory(raw.results));
+    assert.ok(!evidence.differences.some(d => d.attribution === 'reviewed-tree-label-line-box-substitution'), String(mutate));
+  }
+});
+
+test('tree line-box attribution replays structure, ancestry, declarations and retained values', () => {
+  const baseline = buildMaterialInputAudit(treeLineBoxReport());
+  const mutations = [
+    (_r, f) => { f.reviewEvidence.referenceChain.pop(); },
+    (_r, f) => { f.reviewEvidence.candidateRule.height = '21px'; },
+    (_r, f) => { f.reviewEvidence.candidateParent.normal.alignItems = 'start'; },
+    (_r, f) => { f.values.retained = 'normal'; },
+    (_r, f) => { f.inputEquivalent = true; },
+    (_r, f) => { f.classification = 'confirmed-core-renderer-defect'; },
+    (r, f) => { r.retainedTypography.differences.push(structuredClone(f)); },
+    r => { r.retainedTypography.differences = []; },
+    r => { r.retainedTypography.comparisons[0].properties.lineHeight.normal = 'normal'; },
+    r => { r.elementInventory.rules.find(s => s.side === 'astylar' && s.value.selector === '.tree-label').value.lineHeight = '21px'; },
+    r => { r.elementInventory.variants.find(v => v.side === 'reference').nodes.find(n => n.key === 'frame').parent = 'missing'; },
+  ];
+  for (const mutate of mutations) {
+    const report = structuredClone(baseline);
+    mutate(report, report.retainedTypography.differences.find(d => d.attribution === 'reviewed-tree-label-line-box-substitution'));
+    assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('tree label line-box attributions')), String(mutate));
+  }
+});
+
 test('tree font attribution requires explicit Material token and complete candidate inheritance evidence', () => {
   for (const size of ['14.4px', '18.4px']) {
     const raw = treeFontTypographyReport(size);
