@@ -1137,20 +1137,23 @@ function reviewedButtonPaintInput(entry, property, ref, parent, ast, stages, ast
   }
   if (property === 'fontFamily' && stages.reference.fontFamily === 'roboto' && referenceParent.fontFamily === 'roboto' &&
       stages.normal.fontFamily === 'roboto,arial,sans-serif' && stages.effective.fontFamily === stages.normal.fontFamily &&
-      stages.painted.fontFamily === stages.normal.fontFamily && String(ast.authored.class ?? '').split(/\s+/).includes('material-button')) {
+      stages.painted.fontFamily === stages.normal.fontFamily &&
+      ['material-button', 'text-button'].some((name) => String(ast.authored.class ?? '').split(/\s+/).includes(name))) {
+    const componentSelector = String(ast.authored.class ?? '').split(/\s+/).includes('text-button') ? '.text-button' : '.material-button';
+    const kinds = componentSelector === '.text-button' ? ['text'] : ['filled', 'outlined'];
     const componentRules = rulesAt(parent, 'reference').filter((rule) => rule.active === true &&
-      ['filled', 'outlined'].some((kind) => rule.selector === (kind === 'filled' ? '.mat-mdc-unelevated-button' : '.mat-mdc-outlined-button') &&
+      kinds.some((kind) => rule.selector === ({ filled: '.mat-mdc-unelevated-button', outlined: '.mat-mdc-outlined-button', text: '.mat-mdc-button' })[kind] &&
         rule.declarations?.['font-family']?.value === `var(--mat-button-${kind}-label-text-font, var(--mat-sys-label-large-font))`));
     const resetRules = candidateRules.filter((rule) => rule.selector === 'button, input, select' &&
       canonicalStyle(rule).fontFamily === stages.painted.fontFamily);
-    const materialRules = candidateRules.filter((rule) => rule.selector === '.material-button');
+    const materialRules = candidateRules.filter((rule) => rule.selector === componentSelector);
     if (componentRules.length !== 1 || resetRules.length !== 1 || materialRules.length !== 1 ||
         materialRules[0].fontFamily !== undefined || materialRules[0].font !== undefined ||
         rulesAt(ref, 'reference').some((rule) => rule.active === true &&
           ((rule.declarations?.['font-family']?.value && rule.declarations['font-family'].value !== 'inherit') || rule.declarations?.font))) return;
     return { classification: 'application-plugin-authoring-defect', attribution: 'reviewed-button-font-token-input',
       recommendedOwner: 'showcase Material button component font-token translation',
-      justification: 'The reference button and label compute Roboto from an active Material component font token, overriding the document reset. The candidate copies the document font stack onto controls but has no font override in material-button and supplies Roboto, Arial, sans-serif to actual texture paint. The control reset was added in af04845; it does not supply the missing component token. These font-family inputs differ even if current glyphs happen to use Roboto. This is authoring inequality, not a demonstrated renderer font-selection error.',
+      justification: 'The reference button and label compute Roboto from an active Material component font token, overriding the document reset. The candidate copies the document font stack onto controls but has no font override in the corresponding material-button or text-button rule and supplies Roboto, Arial, sans-serif to actual texture paint. The control reset was added in af04845; it does not supply the missing component token. These font-family inputs differ even if current glyphs happen to use Roboto. This is authoring inequality, not a demonstrated renderer font-selection error.',
       reviewEvidence: { referenceRule: componentRules[0], referenceParent: parent.key, referenceComputed: stages.reference.fontFamily,
         candidateResetRule: resetRules[0], candidateMaterialRule: materialRules[0], candidatePainted: stages.painted.fontFamily } };
   }

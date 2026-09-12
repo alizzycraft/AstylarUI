@@ -1276,20 +1276,21 @@ test('button font-family attribution requires the missing component override, no
   function fixture(kind = 'filled') {
     const raw = controlTypographyReport(), trees = raw.results[0].inputTrees;
     trees.reference.styles[0].fontFamily = 'Roboto';
-    trees.reference.rules = [{ active: true, selector: kind === 'filled' ? '.mat-mdc-unelevated-button' : '.mat-mdc-outlined-button',
+    trees.reference.rules = [{ active: true, selector: ({ filled: '.mat-mdc-unelevated-button', outlined: '.mat-mdc-outlined-button', text: '.mat-mdc-button' })[kind],
       declarations: { 'font-family': { value: `var(--mat-button-${kind}-label-text-font, var(--mat-sys-label-large-font))` } } }];
     trees.reference.nodes[0].rules = [0];
     const node = trees.astylar.nodes[0];
-    node.authored.class = 'material-button';
+    node.authored.class = kind === 'text' ? 'text-button' : 'material-button';
     node.normalResolvedStyle.fontFamily = node.interactionResolvedStyle.fontFamily = node.paintedControlText.style.fontFamily = 'Roboto, Arial, sans-serif';
-    trees.astylar.rules = [{ selector: 'button, input, select', fontFamily: 'Roboto, Arial, sans-serif' }, { selector: '.material-button', fontSize: '14px' }];
+    trees.astylar.rules = [{ selector: 'button, input, select', fontFamily: 'Roboto, Arial, sans-serif' }, { selector: `.${node.authored.class}`, fontSize: '14px' }];
     return raw;
   }
-  for (const kind of ['filled', 'outlined']) {
+  for (const kind of ['filled', 'outlined', 'text']) {
     const raw = fixture(kind), evidence = controlEvidence(raw);
     assert.equal(evidence.differences.length, 1);
     assert.equal(evidence.differences[0].attribution, 'reviewed-button-font-token-input');
     assert.equal(evidence.differences[0].reviewEvidence.referenceComputed, 'roboto');
+    assert.equal(evidence.differences[0].reviewEvidence.candidateMaterialRule.selector, kind === 'text' ? '.text-button' : '.material-button');
     const report = buildMaterialInputAudit(raw);
     assert.equal(report.summary.inputEquivalent, false);
     assert.ok(!validateMaterialInputAudit(report).some((error) => error.includes('control texture typography differences')));
@@ -1300,13 +1301,21 @@ test('button font-family attribution requires the missing component override, no
     (ref, ast) => { ast.rules[1].fontFamily = 'Roboto, Arial, sans-serif'; },
     (ref, ast) => { ast.rules[0].fontFamily = 'Arial'; },
     (ref, ast) => { ast.nodes[0].interactionResolvedStyle.fontFamily = 'Arial'; },
+    (ref, ast) => { ast.nodes[0].authored.class = 'unreviewed-button'; },
+    (ref, ast) => { ast.rules.push({ ...ast.rules[1] }); },
     (ref) => { ref.rules.push({ active: true, declarations: { font: { value: '14px Roboto' } } }); ref.nodes[1].rules = [1]; },
   ];
-  for (const mutate of mutations) {
-    const raw = fixture();
-    mutate(raw.results[0].inputTrees.reference, raw.results[0].inputTrees.astylar);
-    assert.equal(controlEvidence(raw).differences[0].attribution, 'unresolved', String(mutate));
+  for (const kind of ['filled', 'outlined', 'text']) {
+    for (const mutate of mutations) {
+      const raw = fixture(kind);
+      mutate(raw.results[0].inputTrees.reference, raw.results[0].inputTrees.astylar);
+      assert.equal(controlEvidence(raw).differences[0].attribution, 'unresolved', `${kind}: ${mutate}`);
+    }
   }
+  const wrongKind = fixture('text');
+  wrongKind.results[0].inputTrees.astylar.nodes[0].authored.class = 'material-button';
+  wrongKind.results[0].inputTrees.astylar.rules[1].selector = '.material-button';
+  assert.equal(controlEvidence(wrongKind).differences[0].attribution, 'unresolved', 'text token cannot attribute a filled/outlined candidate');
 });
 
 test('core font-list rewrite attribution requires matching browser and resolved inputs before current paint diverges', () => {

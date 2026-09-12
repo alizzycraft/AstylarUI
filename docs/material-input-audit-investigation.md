@@ -12,6 +12,25 @@ tests pass). A missing selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Card text-button font token is an authored omission (2026-09-12)
+
+The remaining 12 static card font-family differences are now attributed with
+their own witnesses. Reference `.mat-mdc-button` supplies
+`var(--mat-button-text-label-text-font, var(--mat-sys-label-large-font))`,
+computing `Roboto` on button and label. Candidate `.text-button` omits the font
+override, so the document control reset supplies `Roboto, Arial, sans-serif`
+unchanged through normal, effective and current-paint stages. The card flow
+change in `1d74a0f` retained this earlier omission; it did not introduce the
+core parser mutation established separately for toolbar.
+
+The guarded component-token attribution now covers filled, outlined and text
+button kinds, requiring the corresponding active reference token and candidate
+class/rule. It rejects cross-kind substitutions, duplicate rules, explicit
+font overrides, and conflicting stage evidence. All 12 SHA-256-checked card
+captures receive the authoring classification; their 12 `normal` versus numeric
+line-height observations remain unresolved. Focused audit tests pass 63/63 and
+the full harness unit command passes 101/101. No fixture or runtime was changed.
+
 ## Current-paint attribution across the complete static capture (2026-09-12)
 
 All **436 static checkpoint records** now exist in the new control-text run.
