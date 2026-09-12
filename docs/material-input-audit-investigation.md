@@ -12,6 +12,51 @@ tests pass). A missing selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Calendar navigation replaces vectors and retains wrong year-view names (2026-09-12)
+
+New source finding `fixture-calendar-navigation-svg-icons-replaced-by-text-glyphs`
+traces the previous/next glyph controls to `87f7f83`. The reference supplies
+explicit 24 by 24 SVG chevrons; the candidate supplies `‹` and `›` to a text
+control. These are different geometric inputs even if screenshots look close.
+Core should receive the original vector geometry; glyph size/offset calibration
+would not fix that input inequality.
+
+The shared navigation-icon inspector now recognizes calendar controls only with
+the independently reviewed month/range context and exact header ancestry. It
+requires a unique SVG and exact path, no extra text/vector descendants, one
+authored control and its current core-owned glyph texture, and captured styles
+for the reference control/vector and candidate normal/effective/paint stages.
+The raw vector and glyph inputs are preserved as an explicit substitution, not
+invented reference text or a typography comparison.
+
+The full matrix has **82** such substitutions in **41** open calendar states.
+In **16** year-view observations the reference labels also say "Previous/Next
+24 years" while the candidate still says "Previous/Next month". Both names and
+the unequal-name flag remain in the report. This naming defect is separate from
+the existing frozen navigation-state finding and does not establish functional
+navigation parity. The root-cause implementation plan now names both vector
+input restoration and view-dependent accessible naming.
+
+Control mapping/stage gaps fall from **323 to 241**; all prior typography gaps
+remain. Month/range header text and dropdown-arrow substitutions are still open.
+Validation replays each calendar icon attribution from the captured inventory,
+including vector geometry, calendar context and names, even in partial mode.
+`node --test --test-name-pattern='calendar (navigation|icon|vector)'
+tests/material-parity/input-equivalence-audit.spec.mjs` passes **3/3**, covering
+both directions/views, 24 contradictory mapping/paint cases and six evidence
+mutations. An initial test-only failure came from omitting the capture schema's
+`pseudoElements` array on a deliberately added extra label; adding that required
+empty array lets the intended extra-text rejection be tested.
+
+`npm run parity:harness:check` passes **194/194** (105 focused audit tests),
+including the existing paginator and calendar day/year attribution coverage.
+
+Full report regeneration still returns the intended exit 1: 3,896 resolved-style
+attributions, 241 control mappings/stages, 1,906 control typography differences,
+3,641 retained mappings/stages and 14,624 retained typography differences remain
+unresolved. It covers all 436 static and 1,875 interaction cases and detects 65
+source findings. No fixture, renderer, capture runtime or visual gate changed.
+
 ## Calendar multi-year text correspondence and typography traced (2026-09-12)
 
 The shared calendar cell correspondence checker now also recognizes the exact

@@ -645,6 +645,16 @@ export const sourceAuditDefinitions = Object.freeze([
     justification: 'The reference day label has an inner line-height:1 box, calendar font token and date-text color token. The candidate flat day control inherits the longer document font stack, omits the inner line-height and fixes #1d1b20. Full-date/context mapping exposes these unequal normal/effective/current texture inputs without claiming a core defect or compensating baseline fix.',
   }),
   Object.freeze({
+    id: 'fixture-calendar-navigation-svg-icons-replaced-by-text-glyphs',
+    introducedBy: '87f7f83 fix(example): render Material picker overlays',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`id: 'datepicker-(?:previous|next)'[^\n]*value: '[‹›]'`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase calendar vector icon inputs and navigation accessible state',
+    focusedProof: 'tests/material-parity/input-equivalence-audit.spec.mjs: calendar navigation SVG-to-glyph substitution witnesses',
+    justification: 'Calendar navigation replaces the reference explicit SVG chevrons with font glyphs. The candidate also retains Previous/Next month accessible names in year view, where the reference names a 24-year range. Preserve both the geometry and naming inequality; do not tune glyph position/size to compensate for using different icon input.',
+  }),
+  Object.freeze({
     id: 'fixture-calendar-year-typography-substitution',
     introducedBy: 'd973f84 fix(material): complete picker and range interactions',
     file: 'examples/material-showcase/src/app/astylar.component.ts',

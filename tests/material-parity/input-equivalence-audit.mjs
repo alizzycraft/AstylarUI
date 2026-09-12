@@ -208,10 +208,24 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
   if (requireComplete && unresolvedControlTypography.length > 0) errors.push(`${unresolvedControlTypography.length} control texture typography differences require attribution`);
   if (!Array.isArray(report.controlTypography?.iconSubstitutions)) errors.push('missing control icon substitution inventory');
   const unresolvedIcons = report.controlTypography?.iconSubstitutions?.filter((entry) =>
-    entry.attribution !== 'reviewed-paginator-svg-to-glyph-input' || entry.classification !== 'application-plugin-authoring-defect' ||
+    !['reviewed-paginator-svg-to-glyph-input', 'reviewed-calendar-navigation-svg-to-glyph-input'].includes(entry.attribution) || entry.classification !== 'application-plugin-authoring-defect' ||
     !entry.reviewEvidence?.referencePath?.attributes?.d || !entry.reviewEvidence?.candidatePaintedStyle ||
     !entry.justification || entry.inputEquivalent !== false) ?? [];
   if (requireComplete && unresolvedIcons.length > 0) errors.push(`${unresolvedIcons.length} control icon substitutions require attribution`);
+  const invalidCalendarIcons = report.controlTypography?.iconSubstitutions?.filter(entry => {
+    if (entry.attribution !== 'reviewed-calendar-navigation-svg-to-glyph-input') return false;
+    const inventory = report.elementInventory;
+    const refs = inventory.cases.filter(c => c.case === entry.case && c.side === 'reference');
+    const asts = inventory.cases.filter(c => c.case === entry.case && c.side === 'astylar');
+    if (entry.family !== 'datepicker' || refs.length !== 1 || asts.length !== 1 || entry.revision !== asts[0].resolvedStyleRevision) return true;
+    const ref = inventory.variants[refs[0].variant], ast = inventory.variants[asts[0].variant];
+    const controls = ast.nodes.filter(n => n.key === entry.astylarNode && n.authored?.id === entry.element);
+    const replay = controls.length === 1 && reviewedNavigationIconInput({ family: 'datepicker' }, controls[0], ref, ast, inventory, entry.revision);
+    return !replay || entry.inputEquivalent !== false || entry.finalRasterVerified !== false ||
+      entry.classification !== replay.classification || entry.source !== replay.source || entry.referenceNode !== replay.referenceNode ||
+      JSON.stringify([entry.reference, entry.astylar, entry.reviewEvidence]) !== JSON.stringify([replay.reference, replay.astylar, replay.reviewEvidence]);
+  }) ?? [];
+  if (invalidCalendarIcons.length) errors.push(`${invalidCalendarIcons.length} calendar navigation substitutions lack captured vector/context evidence`);
   const retainedGaps = report.retainedTypography?.gaps ?? [];
   const invalidHiddenGaps = retainedGaps.filter((gap) => gap.attribution === 'reviewed-display-none-text-stage' &&
     !isReviewedHiddenRetainedGap(gap, report.elementInventory));
@@ -1719,25 +1733,46 @@ function reviewedTabPaintInput(entry, property, ref, parent, ast, stages, refere
     reviewEvidence: evidence };
 }
 
-function reviewedPaginatorIconInput(entry, ast, referenceTree, astylarTree, inventory, revision) {
-  if (entry.family !== 'paginator') return;
+function reviewedNavigationIconInput(entry, ast, referenceTree, astylarTree, inventory, revision) {
+  if (!['paginator', 'datepicker'].includes(entry.family)) return;
+  const calendar = entry.family === 'datepicker';
+  let calendarContext, yearView = false;
+  if (calendar) {
+    for (const leaf of referenceTree.nodes.filter(node => node.type === 'span' &&
+        String(node.attributes?.class ?? '').split(/\s+/).includes('mat-calendar-body-cell-content'))) {
+      calendarContext = reviewedCalendarCellControl(leaf, referenceTree, astylarTree);
+      if (calendarContext) break;
+      calendarContext = reviewedCalendarCellControl(leaf, referenceTree, astylarTree, 'year');
+      if (calendarContext) { yearView = true; break; }
+    }
+    if (!calendarContext) return;
+  }
   const definitions = {
     'paginator-previous': { direction: 'previous', label: 'Previous page', glyph: '‹', path: 'M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z' },
     'paginator-next': { direction: 'next', label: 'Next page', glyph: '›', path: 'M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z' },
+    'datepicker-previous': { direction: 'previous', label: 'Previous month', glyph: '‹', path: 'M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z' },
+    'datepicker-next': { direction: 'next', label: 'Next month', glyph: '›', path: 'M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z' },
   };
   const definition = definitions[ast.authored?.id];
   const hasClass = (node, value) => String(node.attributes?.class ?? '').split(/\s+/).includes(value);
-  if (!definition || ast.authored.type !== 'button' || ast.authored.ariaLabel !== definition.label ||
-      !String(ast.authored.class ?? '').split(/\s+/).includes('paginator-button') || ast.authored.value !== definition.glyph ||
+  if (!definition || !ast.authored.id.startsWith(calendar ? 'datepicker-' : 'paginator-') || ast.authored.type !== 'button' || ast.authored.ariaLabel !== definition.label ||
+      !String(ast.authored.class ?? '').split(/\s+/).includes(calendar ? 'datepicker-nav' : 'paginator-button') || ast.authored.value !== definition.glyph ||
       (ast.authored.textContent !== undefined && ast.authored.textContent !== definition.glyph) ||
       ast.paintedControlText?.source !== 'core-control-texture' || ast.paintedControlText.text !== definition.glyph ||
       astylarTree.nodes.filter((node) => node.authored?.id === ast.authored.id).length !== 1 ||
       astylarTree.nodes.some((node) => node.parent === ast.key)) return;
-  const controls = referenceTree.nodes.filter((node) => hasClass(node, `mat-mdc-paginator-navigation-${definition.direction}`));
-  if (controls.length !== 1 || controls[0].type !== 'button' || controls[0].attributes['aria-label'] !== definition.label || controls[0].ownText?.trim()) return;
+  const controls = referenceTree.nodes.filter((node) => hasClass(node, calendar ? `mat-calendar-${definition.direction}-button` : `mat-mdc-paginator-navigation-${definition.direction}`));
+  const referenceLabel = calendar && yearView ? definition.label.replace('month', '24 years') : definition.label;
+  if (controls.length !== 1 || controls[0].type !== 'button' || controls[0].attributes['aria-label'] !== referenceLabel || controls[0].ownText?.trim()) return;
   const control = controls[0];
+  if (calendar) {
+    const period = referenceTree.nodes.filter(node => node.key === calendarContext.evidence.referencePeriodLabel);
+    const header = astylarTree.nodes.filter(node => node.authored?.id === 'datepicker-header');
+    if (period.length !== 1 || control.parent !== period[0].parent || header.length !== 1 || ast.parent !== header[0].key ||
+        header[0].parent !== calendarContext.evidence.candidateChain.at(-1)) return;
+  }
   const icons = referenceTree.nodes.filter((node) => node.parent === control.key && node.type === 'svg');
-  if (icons.length !== 1 || !hasClass(icons[0], 'mat-mdc-paginator-icon') || icons[0].attributes.viewBox !== '0 0 24 24' ||
+  if (icons.length !== 1 || (!calendar && !hasClass(icons[0], 'mat-mdc-paginator-icon')) || icons[0].attributes.viewBox !== '0 0 24 24' ||
       icons[0].attributes['aria-hidden'] !== 'true' || icons[0].attributes.focusable !== 'false' || icons[0].ownText?.trim()) return;
   const icon = icons[0], paths = referenceTree.nodes.filter((node) => node.parent === icon.key);
   if (paths.length !== 1 || paths[0].type !== 'path' || paths[0].attributes?.d !== definition.path || paths[0].ownText?.trim() ||
@@ -1764,11 +1799,15 @@ function reviewedPaginatorIconInput(entry, ast, referenceTree, astylarTree, inve
     referenceNode: control.key, astylarNode: ast.key, source: ast.paintedControlText.source, revision,
     reference: { kind: 'svg-path', viewBox: icon.attributes.viewBox, path: definition.path },
     astylar: { kind: 'text-glyph', authored: definition.glyph, painted: ast.paintedControlText.text },
-    classification: 'application-plugin-authoring-defect', attribution: 'reviewed-paginator-svg-to-glyph-input',
-    recommendedOwner: 'showcase Material paginator icon authoring through core vector/image APIs',
+    classification: 'application-plugin-authoring-defect', attribution: calendar ? 'reviewed-calendar-navigation-svg-to-glyph-input' : 'reviewed-paginator-svg-to-glyph-input',
+    recommendedOwner: `showcase Material ${calendar ? 'calendar navigation' : 'paginator'} icon authoring through core vector/image APIs`,
     inputEquivalent: false, finalRasterVerified: false,
-    justification: 'The unique previous/next navigation control and matching accessible label identify the corresponding controls. The reference authors an explicit SVG path; the candidate authors and currently paints a font glyph instead. This is a content/geometry input substitution traced to the initial fixture, not equivalent icon geometry, a reference text label, or proof of a core SVG/font defect. State, wrapper layout, vector support and final raster require independent review.',
-    reviewEvidence: { sourceFinding: 'fixture-paginator-svg-icons-replaced-by-text-glyphs',
+    justification: calendar
+      ? 'The unique previous/next controls are anchored to the independently reviewed calendar date/range context and header ancestry. The reference authors an explicit SVG path; the candidate authors and currently paints a font glyph instead. This is unequal geometry/content, not a missing text mapping or a core SVG/font defect. In year view the reference accessible name also says 24 years while the candidate still says month; both names are retained without treating them as equivalent. Navigation behavior, state, placement and final raster remain independent.'
+      : 'The unique previous/next navigation control and matching accessible label identify the corresponding controls. The reference authors an explicit SVG path; the candidate authors and currently paints a font glyph instead. This is a content/geometry input substitution traced to the initial fixture, not equivalent icon geometry, a reference text label, or proof of a core SVG/font defect. State, wrapper layout, vector support and final raster require independent review.',
+    reviewEvidence: { sourceFinding: calendar ? 'fixture-calendar-navigation-svg-icons-replaced-by-text-glyphs' : 'fixture-paginator-svg-icons-replaced-by-text-glyphs',
+      ...(calendar ? { calendarContext: calendarContext.evidence, yearView,
+        accessibleNames: { reference: referenceLabel, candidate: definition.label, inputEquivalent: referenceLabel === definition.label } } : {}),
       referenceControl: referenceNodes[0], referenceSvg: referenceNodes[1], referencePath: referenceNodes[2],
       candidateAuthored: ast.authored, candidateNormal: normal, candidateEffective: effective, candidatePaintedStyle: painted } };
 }
@@ -2016,12 +2055,12 @@ export function collectControlTypographyEvidence(cases, inventory) {
       comparisons.push(comparison);
     }
     for (const node of paintedNodes) if (!mapped.has(node.key)) {
-      const substitution = reviewedPaginatorIconInput(entry, node, referenceTree, astylarTree, inventory, asts[0].resolvedStyleRevision);
+      const substitution = reviewedNavigationIconInput(entry, node, referenceTree, astylarTree, inventory, asts[0].resolvedStyleRevision);
       if (substitution) iconSubstitutions.push(substitution);
       else gap(key, node.authored?.id, 'current control texture has no reviewed reference text-owner mapping', { astylarNode: node.key });
     }
   }
-  return { schemaVersion: 1, scope: 'Current core-owned control texture inputs, separately from normal/effective declarations and registry-retained text. Exact direct Material button labels, explicit template tab-label paths, month-view day paths with full date context, and multi-year table paths with matching year-range context are reviewed. Paginator SVG-to-glyph substitutions are separately classified unequal content, never typography equivalence; other observed control owners remain gaps. Numeric parsed CSS lengths and line-height multipliers are normalized without authored or projected fallbacks. Other effects remain in the full inventory and are not certified by these eleven typography comparisons.', comparisons, differences, gaps, iconSubstitutions };
+  return { schemaVersion: 1, scope: 'Current core-owned control texture inputs, separately from normal/effective declarations and registry-retained text. Exact direct Material button labels, explicit template tab-label paths, month-view day paths with full date context, and multi-year table paths with matching year-range context are reviewed. Paginator and calendar navigation SVG-to-glyph substitutions are separately classified unequal content, never typography equivalence; calendar year-view accessible-name mismatches remain explicit. Other observed control owners remain gaps. Numeric parsed CSS lengths and line-height multipliers are normalized without authored or projected fallbacks. Other effects remain in the full inventory and are not certified by these eleven typography comparisons.', comparisons, differences, gaps, iconSubstitutions };
 }
 
 export function collectFullTreeInventory(cases, { root = process.cwd() } = {}) {
@@ -2399,7 +2438,7 @@ function implementationPlan() {
     { priority: 5.3, rootCause: 'Core normal line-height is approximated by a fixed Mg font-box probe', action: 'Resolve browser normal line-box metrics and actual fallback runs in core. The equal-input Arial/serif cases expose one-pixel texture-height errors; Roboto plus emoji/CJK exposes two-pixel errors while plain Roboto and explicit line heights pass. Preserve those controls, extend multiline/baseline/DPR verification and avoid a universal multiplier, constant pixel addition, or fixed Material line-height compensation. Current-texture evidence must remain separate from declared normal and from final glyph raster.' },
     { priority: 5.4, rootCause: 'Calendar cell text tokens and inner line boxes were flattened away', action: 'Restore the reference calendar font and date-text ink tokens and its inner line-height:1 label inside both day and year controls. Keep reference cell/container sizing, state and selection structure instead of copying a normal-metric result or tuning the baseline. Separate date/range-context proofs isolate 990 day and 192 year occurrences each of missing font-token, omitted inner line-height and fixed-ink inputs; core metric defects must be assessed only after those inputs are equivalent. Independently resolve normal-versus-zero tracking and the still-unmapped header/icon owners.' },
     { priority: 6, rootCause: 'Interaction geometry duplicated by the application', action: 'Expose resolved CSS-space target bounds and local pointer coordinates in the core event/plugin contract; remove ripple width tables.' },
-    { priority: 7, rootCause: 'Material paint inputs are substituted or calibrated', action: 'Supply the paginator reference SVG paths and their CSS/state paint through core vector/image rendering instead of font-character approximations. Express progress angles, state layers, checkmarks, selection rings, and indicators from reference Material geometry in CSS space; remove screenshot-derived angle and fractional-position constants. Diagnose core only after the actual same geometry is supplied.' },
+    { priority: 7, rootCause: 'Material paint inputs are substituted or calibrated', action: 'Supply paginator and calendar navigation reference SVG paths and their CSS/state paint through core vector/image rendering instead of font-character approximations. Preserve calendar navigation accessible names for the active month or multi-year view; do not copy month labels into the year view. Express progress angles, state layers, checkmarks, selection rings, and indicators from reference Material geometry in CSS space; remove screenshot-derived angle and fractional-position constants. Diagnose core only after the actual same geometry is supplied.' },
     { priority: 8, rootCause: 'Regression gate permits unequal inputs', action: 'Run this audit in CI after the full parity matrix, require complete coverage and zero unclassified differences, and review any new Astylar-only authored rule before updating the checked-in report.' },
   ];
 }

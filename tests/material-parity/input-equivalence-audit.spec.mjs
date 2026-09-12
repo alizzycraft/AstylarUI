@@ -1746,6 +1746,85 @@ test('calendar year typography uses its own captured component declarations, not
   }
 });
 
+function calendarNavigationReport(direction = 'previous', yearView = false) {
+  const raw = yearView ? calendarYearTypographyReport() : calendarDayTypographyReport();
+  const { reference: ref, astylar: ast } = raw.results[0].inputTrees;
+  const glyph = direction === 'previous' ? '‹' : '›';
+  const label = direction === 'previous' ? 'Previous month' : 'Next month';
+  const path = direction === 'previous' ? 'M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z' : 'M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z';
+  const node = (key, parent, type, attributes) => ({ key, parent, type, attributes, ownText: '', style: 0, rules: [], pseudoElements: [] });
+  ref.nodes.push(
+    node('nav', 'controls', 'button', { class: `mat-calendar-${direction}-button`, 'aria-label': yearView ? label.replace('month', '24 years') : label }),
+    node('nav-svg', 'nav', 'svg', { viewBox: '0 0 24 24', 'aria-hidden': 'true', focusable: 'false' }),
+    node('nav-path', 'nav-svg', 'path', { d: path }),
+  );
+  const candidate = structuredClone(ast.nodes[0]);
+  Object.assign(candidate, { key: 'ast-nav', parent: 'ast-header',
+    authored: { id: `datepicker-${direction}`, type: 'button', class: `datepicker-nav datepicker-${direction}`, ariaLabel: label, value: glyph } });
+  candidate.paintedControlText.text = glyph;
+  ast.nodes.push(candidate);
+  return raw;
+}
+
+test('calendar navigation SVG-to-glyph substitution witnesses retain distinct year-view accessible names', () => {
+  for (const yearView of [false, true]) for (const direction of ['previous', 'next']) {
+    const raw = calendarNavigationReport(direction, yearView), before = structuredClone(raw), report = buildMaterialInputAudit(raw);
+    const substitutions = report.controlTypography.iconSubstitutions;
+    assert.equal(substitutions.length, 1);
+    const finding = substitutions[0];
+    assert.equal(finding.attribution, 'reviewed-calendar-navigation-svg-to-glyph-input');
+    assert.equal(finding.inputEquivalent, false);
+    assert.equal(finding.finalRasterVerified, false);
+    assert.equal(finding.reviewEvidence.yearView, yearView);
+    assert.equal(finding.reviewEvidence.accessibleNames.inputEquivalent, !yearView);
+    assert.ok(finding.reviewEvidence.referencePath.attributes.d.length > 0);
+    assert.equal(finding.reviewEvidence.sourceFinding, 'fixture-calendar-navigation-svg-icons-replaced-by-text-glyphs');
+    assert.ok(!report.controlTypography.comparisons.some(c => c.element === `datepicker-${direction}`));
+    assert.ok(!validateMaterialInputAudit(report).some(e => e.includes('control icon substitutions')));
+    assert.deepEqual(raw, before);
+  }
+});
+
+test('calendar icon attribution requires exact vectors, control identity, period context and current glyph paint', () => {
+  for (const yearView of [false, true]) for (const mutate of [
+    (r, a) => { r.nodes.find(n => n.key === 'nav-path').attributes.d = 'M0 0L1 1'; },
+    (r, a) => { r.nodes.find(n => n.key === 'nav-svg').attributes.viewBox = '0 0 12 12'; },
+    (r, a) => { r.nodes.find(n => n.key === 'nav-svg').attributes['aria-hidden'] = 'false'; },
+    (r, a) => { r.nodes.find(n => n.key === 'nav').parent = 'calendar'; },
+    (r, a) => { r.nodes.find(n => n.key === 'nav').attributes['aria-label'] = 'Other'; },
+    (r, a) => { r.nodes.find(n => n.key === 'period').ownText = 'wrong'; },
+    (r, a) => { r.nodes.push({ ...r.nodes.find(n => n.key === 'nav-svg'), key: 'second-svg' }); },
+    (r, a) => { r.nodes.push({ key: 'extra-label', parent: 'nav', type: 'span', ownText: 'Extra', style: 0, rules: [], pseudoElements: [] }); },
+    (r, a) => { a.nodes.find(n => n.key === 'ast-nav').parent = 'ast-popup'; },
+    (r, a) => { a.nodes.find(n => n.key === 'ast-nav').authored.value = '<'; },
+    (r, a) => { a.nodes.find(n => n.key === 'ast-nav').paintedControlText.text = '<'; },
+    (r, a) => { a.nodes.find(n => n.key === 'ast-nav').paintedControlText.source = 'inferred'; },
+  ]) {
+    const raw = calendarNavigationReport('previous', yearView), trees = raw.results[0].inputTrees;
+    mutate(trees.reference, trees.astylar);
+    const result = controlEvidence(raw);
+    assert.equal(result.iconSubstitutions.length, 0, `${yearView}: ${mutate}`);
+    assert.ok(result.gaps.some(g => g.element === 'datepicker-previous'));
+  }
+});
+
+test('calendar vector substitution evidence is revalidated against the captured inventory', () => {
+  const report = buildMaterialInputAudit(calendarNavigationReport('next', true));
+  assert.ok(!validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('calendar navigation substitutions')));
+  for (const mutate of [
+    x => { x.reviewEvidence.accessibleNames.candidate = 'Next 24 years'; },
+    x => { x.reviewEvidence.referencePath.attributes.d = 'M0 0L1 1'; },
+    x => { x.reviewEvidence.calendarContext.period = 'wrong'; },
+    x => { x.reference.path = 'M0 0L1 1'; },
+    x => { x.revision += 1; },
+    x => { x.inputEquivalent = true; },
+  ]) {
+    const changed = structuredClone(report);
+    mutate(changed.controlTypography.iconSubstitutions[0]);
+    assert.ok(validateMaterialInputAudit(changed, { requireComplete: false }).some(e => e.includes('calendar navigation substitutions')));
+  }
+});
+
 test('calendar day typography attributes captured font tokens, omitted inner line-height and fixed ink', () => {
   const raw = calendarDayTypographyAttributionReport(), before = structuredClone(raw);
   const report = buildMaterialInputAudit(raw);
