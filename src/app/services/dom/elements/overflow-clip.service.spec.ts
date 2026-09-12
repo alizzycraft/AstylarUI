@@ -2,6 +2,7 @@ import * as BABYLON from '@babylonjs/core';
 import { OverflowClipService } from './overflow-clip.service';
 import type { StyleRule } from '../../../types/style-rule';
 import { createCssLayoutBox } from '../../css-layout-geometry';
+import { StyleDefaultsService } from '../style-defaults.service';
 import type { CssLayoutNode, CssPoint } from '../../coordinate-space.types';
 
 describe('OverflowClipService', () => {
@@ -85,6 +86,29 @@ describe('OverflowClipService', () => {
     service.apply(parent, { selector: '#parent', overflow: 'visible' }, layoutBoxes, projectViewportPoint);
 
     expect(child.material.clipPlane).toBeUndefined();
+  });
+
+  it('omitted and visible overflow take the same unclipped branch without projecting geometry', () => {
+    const defaults = new StyleDefaultsService();
+    for (const type of ['div', 'section', 'article', 'header', 'footer', 'nav', 'main', 'aside', 'span', 'p', 'label']) {
+      expect(defaults.getElementTypeDefaults(type).overflow).toBeUndefined();
+    }
+    for (const overflow of [undefined, 'visible'] as const) {
+      const parent = BABYLON.MeshBuilder.CreatePlane(`parent-${overflow}`, { width: 4, height: 2 }, scene);
+      const child = BABYLON.MeshBuilder.CreatePlane(`child-${overflow}`, { width: 8, height: 8 }, scene);
+      child.parent = parent;
+      child.material = new BABYLON.StandardMaterial(`material-${overflow}`, scene);
+      const project = jasmine.createSpy('project').and.throwError('visible overflow must not project a clipping boundary');
+      const style: StyleRule = { ...defaults.getElementTypeDefaults('div'), selector: '#parent',
+        ...(overflow ? { overflow } : {}) };
+      service.apply(parent, style, layoutBoxes, project);
+      expect(project).not.toHaveBeenCalled();
+      expect(child.material.clipPlane).toBeUndefined();
+      expect(child.material.clipPlane2).toBeUndefined();
+      expect(child.material.clipPlane3).toBeUndefined();
+      expect(child.material.clipPlane4).toBeUndefined();
+      expect(child.metadata?.['astylarOverflowClipRegions']).toBeUndefined();
+    }
   });
 
   it('clips scroll-container descendants to the stable viewport bounds', () => {

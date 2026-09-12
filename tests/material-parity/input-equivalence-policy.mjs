@@ -77,6 +77,18 @@ export const implicitReferenceJustifications = Object.freeze({
 
 export const reviewedValueNormalizations = Object.freeze([
   {
+    property: 'overflowX/overflowY',
+    aliases: { 'visible/visible': 'omitted/omitted only with captured paired-axis proof' },
+    classification: 'equivalent-representation',
+    justification: 'CSS Overflow 3 section 3.1 gives both axes the non-inherited initial visible value. Core ordinary element defaults omit overflow; clipping and scroll registration treat omission and visible identically. The audit requires unique ordinary-node correspondence and all captured declaration stages, rejects explicit candidate overflow/reset inputs, controls, plugins and viewport nodes, and independently replays inventory evidence. Missing or mixed-axis observations are not normalized. This is a property-input representation, not proof of equivalent layout, ancestor clipping, reachability or final raster.',
+    evidence: [
+      'https://www.w3.org/TR/2025/WD-css-overflow-3-20251007/#overflow-properties',
+      'tests/material-parity/input-tree-evidence.spec.mjs: browser omitted overflow equals visible only when both axes retain their initial values',
+      'src/app/services/dom/elements/overflow-clip.service.spec.ts: omitted and visible overflow take the same unclipped branch without projecting geometry',
+      'src/lib/astylar-scroll-runtime.spec.ts: omitted and visible overflow do not create or consume a scroll container',
+    ],
+  },
+  {
     property: 'letterSpacing',
     aliases: { normal: '0' },
     classification: 'equivalent-representation',

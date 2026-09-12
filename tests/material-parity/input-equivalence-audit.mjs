@@ -72,6 +72,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const supplementalOverlays = collectSupplementalOverlays(root, supplementalOptions);
   const supplementalSlider = collectSupplementalSlider(root, supplementalOptions);
   const elementInventory = collectFullTreeInventory([...cases, ...supplementalBehavior.cases, ...supplementalOverlays.cases, ...supplementalSlider.cases], { root });
+  const visibleOverflowInputs = collectVisibleOverflowInputs(elementInventory);
   const rawControlTypography = collectControlTypographyEvidence(cases, elementInventory);
   const retainedTypography = collectRetainedTypographyEvidence(cases, elementInventory, rawControlTypography);
   const normalLineBoxes = options.normalLineBoxPath
@@ -82,7 +83,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
       .map((item) => ({ case: item.case, element: item.element, referenceNode: item.referenceNode })),
       scope: 'No supplemental static natural-line-box report selected. No line-height equivalence inferred.' };
   const controlTypography = attributeObservedNormalLineBoxes(rawControlTypography, elementInventory, normalLineBoxes);
-  const discrepancies = collectStyleDiscrepancies(cases, retainedTypography);
+  const discrepancies = collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInputs);
   const classifications = countBy(discrepancies, (entry) => entry.classification);
   const propertyGroupCounts = countBy(discrepancies, (entry) => entry.propertyGroup);
   const familyCounts = countBy(discrepancies, (entry) => entry.family);
@@ -137,6 +138,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
     discrepancies,
     structureEvidence: structures,
     elementInventory,
+    visibleOverflowInputs,
     retainedTypography,
     controlTypography,
     sourceFindings,
@@ -165,6 +167,16 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
   if (requireComplete && report.elementInventory.resolvedStyleGaps.length > 0) errors.push(`${report.elementInventory.resolvedStyleGaps.length} inventoried elements lack resolved style evidence`);
   if (requireComplete && report.elementInventory.stateStyleGaps.length > 0) errors.push(`${report.elementInventory.stateStyleGaps.length} state cases lack effective style provenance`);
   if (report.elementInventory.errors.length > 0) errors.push(`${report.elementInventory.errors.length} full-tree collection errors`);
+  if (JSON.stringify(report.visibleOverflowInputs) !== JSON.stringify(collectVisibleOverflowInputs(report.elementInventory))) {
+    errors.push('visible overflow initial-value evidence does not replay from the captured inventory');
+  }
+  for (const entry of report.discrepancies.filter(entry => entry.attribution === 'reviewed-visible-overflow-initial-value')) {
+    const proof = report.visibleOverflowInputs?.find(proof => proof.case === entry.reviewEvidence?.case && proof.element === entry.element);
+    if (!proof || !['overflowX', 'overflowY'].includes(entry.property) || entry.reference !== 'visible' || entry.astylar !== undefined ||
+        entry.classification !== 'equivalent-representation' || JSON.stringify(proof) !== JSON.stringify(entry.reviewEvidence)) {
+      errors.push('visible overflow classification lacks exact paired-axis initial-value evidence');
+    }
+  }
   const contextGaps = collectReferenceContextGaps(report.elementInventory);
   if (JSON.stringify(report.elementInventory.referenceContextGaps) !== JSON.stringify(contextGaps)) {
     errors.push('reference computed-context gaps do not replay from the captured inventory');
@@ -487,8 +499,9 @@ export function renderMaterialInputAuditMarkdown(report) {
   return lines.join('\n');
 }
 
-function collectStyleDiscrepancies(cases, retainedTypography) {
+function collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInputs) {
   const grouped = new Map();
+  const visibleOverflowByCaseAndId = new Map(visibleOverflowInputs.map(entry => [JSON.stringify([entry.case, entry.element]), entry]));
   const typographyByCaseAndId = new Map(retainedTypography.comparisons.map((entry) =>
     [JSON.stringify([entry.case, entry.element]), entry]));
   const reviewedTableFonts = new Map(retainedTypography.differences.filter((entry) => entry.attribution === 'reviewed-table-font-input')
@@ -506,7 +519,9 @@ function collectStyleDiscrepancies(cases, retainedTypography) {
         const classification = benchmarkCase.state && input.reference && input.astylar && input.astylarResolvedStyleEvidenceVersion !== 2
           ? { classification: 'parity-harness-defect', owner: 'audit effective pseudo-state style capture',
             justification: 'This interaction capture predates effective-style provenance. It can compare browser state styles against candidate normal-only declarations; recapture with evidence version2 before attributing the difference to authoring or core.' }
-          : classifyReviewedRootInput(benchmarkCase, input, property, referenceValue, astylarValue)
+          : classifyReviewedVisibleOverflow(input, property, referenceValue, astylarValue,
+              visibleOverflowByCaseAndId.get(JSON.stringify([key, input.id])))
+            ?? classifyReviewedRootInput(benchmarkCase, input, property, referenceValue, astylarValue)
             ?? classifyReviewedContainerInput(benchmarkCase, input, property, referenceValue, astylarValue)
             ?? classifyReviewedBadgePaint(benchmarkCase, input, property, referenceValue, astylarValue)
             ?? classifyReviewedTableFontSnapshot(input, property, referenceValue, astylarValue,
@@ -547,6 +562,62 @@ function collectStyleDiscrepancies(cases, retainedTypography) {
   }
   return [...grouped.values()].sort((a, b) =>
     a.family.localeCompare(b.family) || a.element.localeCompare(b.element) || a.property.localeCompare(b.property));
+}
+
+// Only the initial no-clipping/no-scroll-container request is represented here.
+// Mixed axes, controls, plugins, viewport propagation and an explicit candidate
+// longhand are deliberately outside this proof. Never fill missing style stages.
+function collectVisibleOverflowInputs(inventory) {
+  const result = [];
+  const ordinaryTypes = new Set(['div', 'section', 'article', 'header', 'footer', 'nav', 'main', 'aside', 'span', 'p', 'label']);
+  const hasOverflowInput = value => !value || typeof value !== 'object' || Array.isArray(value) ||
+    Object.keys(value).some(key => key.replaceAll('-', '').toLowerCase().startsWith('overflow') || key === 'all');
+  const styleAt = (index, side) => inventory.styles[index]?.side === side ? inventory.styles[index].value : undefined;
+  for (const refCase of inventory.cases.filter(entry => entry.side === 'reference')) {
+    if (inventory.cases.filter(entry => entry.case === refCase.case && entry.side === 'reference').length !== 1) continue;
+    const astCases = inventory.cases.filter(entry => entry.case === refCase.case && entry.side === 'astylar');
+    if (astCases.length !== 1 || !Number.isInteger(astCases[0].resolvedStyleRevision) || astCases[0].resolvedStyleRevision < 0) continue;
+    if (inventory.errors.some(entry => entry.case === refCase.case)) continue;
+    const referenceTree = inventory.variants[refCase.variant], astylarTree = inventory.variants[astCases[0].variant];
+    if (!referenceTree || !astylarTree || astylarTree.resolvedStyleEvidenceVersion !== 2 || astylarTree.resolvedStyleSource !== 'core-style-inspection') continue;
+    const idOf = node => node.attributes?.['data-parity-id'] ?? node.attributes?.id;
+    for (const referenceNode of referenceTree.nodes) {
+      const id = idOf(referenceNode);
+      if (!id || ['html', 'body', 'input', 'textarea', 'select', 'button', 'img', 'svg'].includes(referenceNode.type) ||
+          referenceTree.nodes.filter(node => idOf(node) === id).length !== 1) continue;
+      const candidates = astylarTree.nodes.filter(node => node.authored?.id === id);
+      if (candidates.length !== 1 || !ordinaryTypes.has(candidates[0].authored.type)) continue;
+      const candidate = candidates[0], referenceStyle = styleAt(referenceNode.style, 'reference');
+      if (referenceStyle?.overflowX !== 'visible' || referenceStyle?.overflowY !== 'visible') continue;
+      if ([candidate.style, candidate.normalStyle, candidate.interactionStyle].some(index => hasOverflowInput(styleAt(index, 'astylar'))) ||
+          hasOverflowInput(candidate.authored.style ?? {})) continue;
+      result.push({ case: refCase.case, element: id, referenceNode: referenceNode.key, astylarNode: candidate.key,
+        referenceType: referenceNode.type, astylarType: candidate.authored.type,
+        source: astylarTree.resolvedStyleSource, revision: astCases[0].resolvedStyleRevision,
+        referenceAxes: { overflowX: 'visible', overflowY: 'visible' },
+        candidateAxes: 'omitted in normal, effective, interaction and inline inputs',
+        scope: 'initial overflow declaration only; no container, clipping, reachability or final-raster equivalence claim' });
+    }
+  }
+  return result;
+}
+
+function classifyReviewedVisibleOverflow(input, property, reference, astylar, proof) {
+  if (!proof || !['overflowX', 'overflowY'].includes(property) || reference !== 'visible' || astylar !== undefined ||
+      input.astylarResolvedStyleEvidenceVersion !== 2 || input.referenceStructure?.schemaVersion !== 2 ||
+      input.astylarStructure?.schemaVersion !== 2 || input.referenceStructure.type !== proof.referenceType ||
+      input.astylarStructure.type !== proof.astylarType || input.reference?.overflowX !== 'visible' || input.reference?.overflowY !== 'visible') return;
+  const stages = [input.astylar, input.astylarNormalResolvedStyle, input.astylarInteractionResolvedStyle];
+  if (stages.some(style => !style || Object.keys(style).some(key => key.replaceAll('-', '').toLowerCase().startsWith('overflow') || key === 'all'))) return;
+  // A dropped authored declaration would be a resolution defect, not an
+  // implicit initial value. The matching-rule capture is a separate witness;
+  // do not accept even an inactive/overridden overflow rule without more proof.
+  if (!Array.isArray(input.astylarAuthored) || input.astylarAuthored.some(rule =>
+    !rule.declarations || typeof rule.declarations !== 'object' || Object.keys(rule.declarations).some(key =>
+      key.replaceAll('-', '').toLowerCase().startsWith('overflow') || key === 'all'))) return;
+  return { classification: 'equivalent-representation', attribution: 'reviewed-visible-overflow-initial-value',
+    owner: 'none', reviewEvidence: structuredClone(proof),
+    justification: 'Both browser axes compute to the non-inherited initial visible value. The uniquely mapped ordinary candidate node has no overflow/reset declaration in any captured core stage or inline style. Core defaults omit overflow; OverflowClipService.apply and AstylarScrollRuntime.reconcile take the same no-clipping/no-scroll-container branch for omission and visible. Browser and core sensitivity tests retain hidden/clip/auto/scroll as distinct. This accepts only the initial overflow request: mixed axes, missing stages, controls, custom plugins, viewport propagation, inherited ancestor clipping, layout differences and final raster remain outside the claim. See CSS Overflow 3 section 3.1 and the focused omitted-overflow proofs.' };
 }
 
 function classifyReviewedRootInput(benchmarkCase, input, property, reference, astylar) {
@@ -4543,6 +4614,11 @@ function sourceFingerprints(root) {
     'src/lib/astylar-surface.ts',
     'src/app/services/dom/style.service.ts',
     'src/app/services/dom/dom-ancestry.service.ts',
+    'src/app/config/browser-defaults.ts',
+    'src/app/services/dom/elements/overflow-clip.service.ts',
+    'src/app/services/dom/elements/overflow-clip.service.spec.ts',
+    'src/lib/astylar-scroll-runtime.ts',
+    'src/lib/astylar-scroll-runtime.spec.ts',
     'src/app/services/dom/elements/element-dimension.service.ts',
     'src/app/services/dom/elements/element-creation.service.ts',
     'src/app/services/dom/elements/css-transform.ts',
@@ -4568,6 +4644,7 @@ function sourceFingerprints(root) {
     'tests/material-parity/benchmark.config.mjs',
     'tests/material-parity/run-material-parity.mjs',
     'tests/material-parity/input-tree-evidence.mjs',
+    'tests/material-parity/input-tree-evidence.spec.mjs',
     'tests/material-parity/input-equivalence-audit.mjs',
     'tests/material-parity/input-equivalence-policy.mjs',
     'tests/material-parity/normal-line-box-report.mjs',
@@ -4581,6 +4658,12 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/input-tree-evidence.spec.mjs', /test\('browser omitted overflow/,
+      'nine browser initial, mixed-axis and ancestor-clipping observations', 'Omitted and visible overflow have the same visible/visible computed axes, outside-box hit reachability and zero programmatic scroll. Hidden/clip/auto/scroll remain distinct. A visible axis computes auto beside hidden; a visible child can still be clipped by its ancestor. These controls justify only paired-axis initial-value representation, never whole-node visibility or mixed-axis equivalence.'),
+    proof(root, 'src/app/services/dom/elements/overflow-clip.service.spec.ts', /it\('omitted and visible overflow/,
+      'core omitted/visible clipping branch and eleven ordinary element defaults', 'Both inputs bypass clip-plane creation and CSS-to-render projection. Core ordinary element defaults actually omit overflow. This is a NullEngine owner-boundary proof, not final WebGL raster or general overflow conformance.'),
+    proof(root, 'src/lib/astylar-scroll-runtime.spec.ts', /it\('omitted and visible overflow/,
+      'core omitted/visible/auto/scroll registration and consumption controls', 'Omitted and visible inputs create no scroll container and do not consume scroll; auto/scroll create a container and consume scroll, with scrollbar meshes only for scroll. This does not accept hidden as clip or infer full browser scrolling conformance.'),
     proof(root, 'examples/material-showcase/src/app/label-cascade-input-audit.spec.ts', /describe\('Material input audit/,
       'four browser reductions preserve the a1968ed update-only failure contract', 'Identical color declarations and label/span trees pass on fresh mounts in both source orders. The original equivalent-update run failed two cases because normal/effective inspection lost descendant rules while retained text stayed browser-correct. The core query-context repair must pass the unchanged assertions after repacking; original capture evidence is not rewritten. Core tests additionally cover hidden descendants, sibling rules, inherited cursor, semantic-only reuse, active pseudo sources, resource stability, and nested/error context restoration. This is inspection evidence, not a final glyph-raster claim.'),
     proof(root, 'scripts/audit-material-button-defaults.mjs', /CSS.getMatchedStylesForNode/,

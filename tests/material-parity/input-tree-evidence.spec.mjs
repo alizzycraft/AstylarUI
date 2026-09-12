@@ -3,6 +3,46 @@ import test from 'node:test';
 import { chromium } from 'playwright-core';
 import { captureBrowserInputTree } from './input-tree-evidence.mjs';
 
+test('browser omitted overflow equals visible only when both axes retain their initial values', async () => {
+  const browser = await chromium.launch({ channel: 'chrome', headless: true });
+  try {
+    const page = await browser.newPage({ viewport: { width: 640, height: 360 } });
+    const observations = await page.evaluate(() => {
+      const observe = (overflow, parentClips = false) => {
+        const parent = document.createElement('div'), box = document.createElement('div'), child = document.createElement('div');
+        Object.assign(parent.style, { position: 'absolute', left: '20px', top: '20px', width: '60px', height: '40px',
+          overflow: parentClips ? 'hidden' : 'visible' });
+        Object.assign(box.style, { width: '60px', height: '40px', ...overflow });
+        Object.assign(child.style, { width: '120px', height: '120px', background: 'red' });
+        box.append(child); parent.append(box); document.body.append(parent);
+        const style = getComputedStyle(box);
+        const result = { x: style.overflowX, y: style.overflowY,
+          hitOutsideX: document.elementFromPoint(100, 30) === child,
+          hitOutsideY: document.elementFromPoint(30, 90) === child };
+        box.scrollTop = 20; box.scrollLeft = 20;
+        Object.assign(result, { scrollTop: box.scrollTop, scrollLeft: box.scrollLeft });
+        parent.remove();
+        return result;
+      };
+      return { omitted: observe({}), visible: observe({ overflow: 'visible' }),
+        hidden: observe({ overflow: 'hidden' }), clip: observe({ overflow: 'clip' }),
+        auto: observe({ overflow: 'auto' }), scroll: observe({ overflow: 'scroll' }),
+        mixedX: observe({ overflowX: 'visible', overflowY: 'hidden' }),
+        mixedY: observe({ overflowX: 'hidden', overflowY: 'visible' }),
+        ancestorClips: observe({}, true) };
+    });
+    assert.deepEqual(observations.omitted, { x: 'visible', y: 'visible', hitOutsideX: true, hitOutsideY: true, scrollTop: 0, scrollLeft: 0 });
+    assert.deepEqual(observations.visible, observations.omitted);
+    for (const mode of ['hidden', 'auto', 'scroll']) {
+      assert.deepEqual(observations[mode], { x: mode, y: mode, hitOutsideX: false, hitOutsideY: false, scrollTop: 20, scrollLeft: 20 });
+    }
+    assert.deepEqual(observations.clip, { x: 'clip', y: 'clip', hitOutsideX: false, hitOutsideY: false, scrollTop: 0, scrollLeft: 0 });
+    assert.equal(observations.mixedX.x, 'auto');
+    assert.equal(observations.mixedY.y, 'auto');
+    assert.deepEqual(observations.ancestorClips, { x: 'visible', y: 'visible', hitOutsideX: false, hitOutsideY: false, scrollTop: 0, scrollLeft: 0 });
+  } finally { await browser.close(); }
+});
+
 test('browser context capture distinguishes inherited RTL, vertical writing, last-line alignment and actual clipping', async () => {
   const browser = await chromium.launch({ channel: 'chrome', headless: true });
   try {

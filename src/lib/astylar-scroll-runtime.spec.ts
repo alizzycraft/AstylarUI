@@ -75,6 +75,33 @@ describe('AstylarScrollRuntime', () => {
     expect(meshes.get('one')?.position.y).toBe(90);
   });
 
+  it('omitted and visible overflow do not create or consume a scroll container', () => {
+    for (const mode of ['omitted', 'visible', 'auto', 'scroll'] as const) {
+      const { runtime, siteData } = createVerticalRuntime(scene);
+      const element = siteData.root.children[0];
+      // Inline inputs override the helper's normal auto style. For omission,
+      // use an independent runtime with an actually absent overflow property.
+      if (mode !== 'omitted') element.style = { overflow: mode };
+      const active = mode === 'omitted' ? new AstylarScrollRuntime({
+        getMesh: id => scene.getMeshByName(id) as Mesh | undefined,
+        getDimensions: () => ({ width: 240, height: 160 }),
+        getLayoutBoxes: () => new Map(),
+        getStyle: () => ({ selector: '*', display: 'block' }),
+        paint: createPaintAdapter(),
+      }) : runtime;
+      active.reconcile(siteData);
+      const scrollable = mode === 'auto' || mode === 'scroll';
+      expect(Object.keys(active.snapshot.containers).length).toBe(scrollable ? 1 : 0);
+      expect(active.scrollFrom('one', 0, 30)).toBe(scrollable);
+      expect(scene.getMeshByName('astylar-scrollbar-track-box') !== null).toBe(mode === 'scroll');
+      active.dispose();
+      if (active !== runtime) runtime.dispose();
+      // Each case owns its independent mesh set; no previous scrollbar can
+      // satisfy the next case's assertions.
+      [...scene.meshes].forEach(mesh => mesh.dispose());
+    }
+  });
+
   it('paints and moves a vertical scrollbar for overflowing scroll containers', () => {
     const { runtime, siteData } = createVerticalRuntime(scene, 160, 'scroll');
 

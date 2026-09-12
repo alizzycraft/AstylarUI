@@ -22,6 +22,80 @@ selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Paired visible overflow is a proven initial input, not a clipping waiver (2026-09-12)
+
+The broader corrected static audit initially contained 3,174 unresolved shared-ID
+style signatures. One recurring pair was reference `overflow-x: visible` /
+`overflow-y: visible` against omitted candidate declarations. This is now a
+narrow, evidence-backed representation classification, not a fixture adjustment.
+
+The [CSS Overflow 3 initial-value contract](https://www.w3.org/TR/2025/WD-css-overflow-3-20251007/#overflow-properties)
+specifies non-inherited `visible` axes. Current core `browser-defaults.ts` omits
+overflow for the eleven ordinary element types admitted by the review.
+`OverflowClipService.apply` exits before geometry/projection for both omission
+and `visible`; `AstylarScrollRuntime.reconcile` registers neither a clip entry nor
+a scroll container for either. No production code was changed.
+
+Evidence and exclusions:
+
+- Nine browser observations compare omission, visible, hidden, clip, auto,
+  scroll, two mixed-axis cases and ancestor clipping. Omission and visible agree
+  in computed axes, outside-box hit testing and zero programmatic scroll. A
+  visible axis beside hidden computes auto, so a one-axis initial-value waiver
+  would be unsafe. Visible children can still be clipped by their ancestors.
+- Core focused tests exercise omitted/visible clipping without projection and
+  scroll registration/consumption with auto/scroll sensitivity controls. These
+  are owner-boundary NullEngine tests, not WebGL raster equivalence claims.
+- Classification requires unique paired node identity, an ordinary candidate
+  type, both reference axes explicitly captured as visible, trusted core-style
+  inspection/revision, and all three candidate snapshots. Candidate overflow
+  longhands, logical overflow declarations, resets, inline overrides, missing
+  stages, controls, plugin nodes and reference viewport nodes are not accepted.
+  Missing matching-rule evidence or any captured authored overflow/reset rule
+  also rejects classification, so a dropped declaration cannot pass as a default.
+  The shared-ID snapshots must independently agree with the full-tree evidence.
+- The report retains the original raw styles and an independently replayable
+  `visibleOverflowInputs` inventory. Deleting, duplicating or altering the review
+  inventory, or forging the corresponding classification, fails validation.
+  This does not accept different layout, clipping ancestors, scroll reachability,
+  scrollbar behavior or final pixels.
+
+Verification so far:
+
+- Focused audit/browser command:
+  `node --test --test-name-pattern='visible overflow|browser omitted overflow|source fingerprints|normalizations' tests/material-parity/input-equivalence-audit.spec.mjs tests/material-parity/input-tree-evidence.spec.mjs`
+  — 5/5 pass. Includes two state-positive cases, 30 contradictory-input controls
+  and ten report/inventory tamper controls.
+- Core command:
+  `npm test -- --watch=false --browsers=ChromeHeadless --include=src/app/services/dom/elements/overflow-clip.service.spec.ts --include=src/lib/astylar-scroll-runtime.spec.ts`
+  — 19/19 pass in Chrome Headless 152.0.0.0. The root test installation is Angular
+  20.0.6 / Babylon 8.15.1; it is distinct from the frozen showcase installation
+  Angular 20.3.29 / Babylon 8.56.2. No dependency version was changed, and these
+  unit results are not presented as a rebuilt showcase capture.
+- Full harness command: `npm run parity:harness:check` — **322/322 pass**,
+  zero failures/skips/cancellations, 138.934 seconds after the authored-rule
+  rejection controls were added. `git diff --check` passes.
+- Recollection of all 436 corrected static cases and their freshly bound
+  supplements: **146 signatures / 1,784 occurrences across 36 families** receive
+  this classification; **3,028 signatures remain unresolved**. The full-tree
+  initial-value inventory has 1,085 qualifying node observations, including
+  nodes not used by shared-ID style comparisons. Validation with
+  `requireComplete:false` has zero errors; this is diagnostic, not acceptance.
+- A separate scan of all 1,144 static shared-ID visible-axis/omitted-shorthand
+  candidates found no captured matching authored rule with an overflow/reset
+  declaration. The broader scan is not an equivalence claim for excluded nodes.
+
+The complete enforced interaction capture remains live. The complete audit is
+not finished, and hidden/auto overflow discrepancies remain open rather than
+being normalized to the newly reviewed initial-value case.
+
+Next shared-default lead: core `browser-defaults.ts` explicitly supplies
+`borderColor: "transparent"`, while `ElementBorderService.parseBorderProperties`
+reads that value rather than resolving a CSS current-color default. The many
+zero-width border-color differences must not be waived merely because they
+currently paint no border. A minimal equal-input visible-border proof is still
+needed before classifying that separate root cause.
+
 ## Tab-panel correspondence identifies plugin-owned text, not missing core text (2026-09-12)
 
 All 12 corrected static tab cases map the reference's ordinary content span

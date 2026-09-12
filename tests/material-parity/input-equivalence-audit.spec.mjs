@@ -230,6 +230,108 @@ test('accepts only proven omitted shadow and automatic grid-placement initial va
   assert.ok(changed.discrepancies.every((entry) => entry.attribution === 'unresolved'));
 });
 
+function visibleOverflowReport() {
+  const reference = { display: 'block', overflowX: 'visible', overflowY: 'visible' };
+  const candidate = { display: 'block' };
+  const raw = parityReport(reference, candidate), entry = raw.results[0], input = entry.styleInputs[0];
+  Object.assign(input, { referenceStructure: { schemaVersion: 2, type: 'div' },
+    astylarStructure: { schemaVersion: 2, type: 'div' }, astylarResolvedStyleEvidenceVersion: 2,
+    astylarAuthored: [],
+    astylarNormalResolvedStyle: { ...candidate }, astylarInteractionResolvedStyle: { ...candidate } });
+  entry.inputTrees = {
+    reference: { schemaVersion: 1, styles: [{ ...reference }], rules: [], errors: [], nodes: [
+      { key: 'frame/0', parent: 'frame', type: 'div', attributes: { id: 'core-root' }, ownText: '',
+        style: 0, rules: [], pseudoElements: [] },
+    ] },
+    astylar: { schemaVersion: 1, resolvedStyleEvidenceVersion: 2, resolvedStyleSource: 'core-style-inspection',
+      resolvedStyleRevision: 7, rules: [], errors: [], nodes: [
+        { key: 'root/0', parent: 'root', authored: { id: 'core-root', type: 'div' },
+          resolvedStyle: { ...candidate }, normalResolvedStyle: { ...candidate }, interactionResolvedStyle: { ...candidate } },
+      ] },
+  };
+  return raw;
+}
+
+test('visible overflow omission requires both axes and independently captured core stages', () => {
+  for (const state of [undefined, 'hover']) {
+    const raw = visibleOverflowReport();
+    if (state) raw.results[0].state = state;
+    const before = JSON.stringify(raw), audit = buildMaterialInputAudit(raw);
+    assert.equal(audit.visibleOverflowInputs.filter(entry => entry.element === 'core-root').length, 1);
+    assert.equal(audit.discrepancies.length, 2);
+    for (const entry of audit.discrepancies) {
+      assert.equal(entry.attribution, 'reviewed-visible-overflow-initial-value');
+      assert.equal(entry.classification, 'equivalent-representation');
+      assert.equal(entry.astylar, undefined);
+      assert.equal(entry.reviewEvidence.revision, 7);
+      assert.match(entry.reviewEvidence.scope, /no container, clipping, reachability or final-raster equivalence claim/);
+    }
+    assert.equal(validateMaterialInputAudit(audit, { requireComplete: false }).length, 0);
+    assert.equal(JSON.stringify(raw), before);
+  }
+});
+
+test('visible overflow omission fails closed for mixed axes, controls, authored overrides and missing evidence', () => {
+  const mutations = [
+    e => { e.inputTrees.reference.styles[0].overflowY = 'auto'; },
+    e => { delete e.inputTrees.reference.styles[0].overflowY; },
+    e => { e.inputTrees.astylar.nodes[0].normalResolvedStyle.overflow = 'hidden'; },
+    e => { e.inputTrees.astylar.nodes[0].interactionResolvedStyle.overflow = 'scroll'; },
+    e => { e.inputTrees.astylar.nodes[0].resolvedStyle.overflowX = 'visible'; },
+    e => { e.inputTrees.astylar.nodes[0].resolvedStyle.overflowInline = 'clip'; },
+    e => { e.inputTrees.astylar.nodes[0].resolvedStyle.all = 'unset'; },
+    e => { e.inputTrees.astylar.nodes[0].authored.style = { overflow: 'hidden' }; },
+    e => { e.inputTrees.astylar.nodes[0].authored.style = 'overflow: hidden'; },
+    e => { delete e.inputTrees.astylar.nodes[0].normalResolvedStyle; },
+    e => { delete e.inputTrees.astylar.nodes[0].interactionResolvedStyle; },
+    e => { e.inputTrees.astylar.resolvedStyleEvidenceVersion = 1; },
+    e => { e.inputTrees.astylar.resolvedStyleSource = 'mesh-metadata'; },
+    e => { delete e.inputTrees.astylar.resolvedStyleRevision; },
+    e => { e.inputTrees.astylar.nodes.push(structuredClone(e.inputTrees.astylar.nodes[0])); },
+    e => { e.inputTrees.reference.nodes.push(structuredClone(e.inputTrees.reference.nodes[0])); },
+    e => { e.inputTrees.astylar.errors.push('incomplete capture'); },
+    e => { e.inputTrees.reference.nodes[0].type = 'body'; },
+    e => { e.inputTrees.reference.nodes[0].type = 'button'; },
+    e => { e.inputTrees.astylar.nodes[0].authored.type = 'showcase.material:panel'; },
+    e => { e.styleInputs[0].astylarResolvedStyleEvidenceVersion = 1; },
+    e => { e.styleInputs[0].astylarStructure.type = 'span'; },
+    e => { delete e.styleInputs[0].astylarNormalResolvedStyle; },
+    e => { e.styleInputs[0].astylarNormalResolvedStyle.overflow = 'hidden'; },
+    e => { e.styleInputs[0].reference.overflowY = 'scroll'; },
+    e => { delete e.styleInputs[0].astylarAuthored; },
+    e => { e.styleInputs[0].astylarAuthored = [{ selector: '#core-root', declarations: { overflow: 'hidden' } }]; },
+    e => { e.styleInputs[0].astylarAuthored = [{ selector: '#core-root', declarations: { 'overflow-y': 'auto' } }]; },
+    e => { e.styleInputs[0].astylarAuthored = [{ selector: '#core-root', declarations: { all: 'initial' } }]; },
+    e => { e.styleInputs[0].astylarAuthored = [{ selector: '#core-root' }]; },
+  ];
+  for (const mutate of mutations) {
+    const raw = visibleOverflowReport();
+    mutate(raw.results[0]);
+    assert.ok(buildMaterialInputAudit(raw).discrepancies.every(entry => entry.attribution !== 'reviewed-visible-overflow-initial-value'), String(mutate));
+  }
+});
+
+test('visible overflow validation replays inventory and rejects forged classification evidence', () => {
+  const original = buildMaterialInputAudit(visibleOverflowReport());
+  const mutations = [
+    a => { delete a.visibleOverflowInputs; },
+    a => { a.visibleOverflowInputs = []; },
+    a => { a.visibleOverflowInputs.push(structuredClone(a.visibleOverflowInputs[0])); },
+    a => { a.visibleOverflowInputs[0].revision++; },
+    a => { a.discrepancies[0].reference = 'hidden'; },
+    a => { a.discrepancies[0].astylar = 'auto'; },
+    a => { a.discrepancies[0].property = 'width'; },
+    a => { a.discrepancies[0].reviewEvidence.referenceNode = 'wrong'; },
+    a => { a.discrepancies[0].classification = 'confirmed-core-renderer-defect'; },
+    a => { a.elementInventory.styles.find(s => s.side === 'astylar').value.overflow = 'hidden'; },
+  ];
+  for (const mutate of mutations) {
+    const changed = structuredClone(original);
+    mutate(changed);
+    assert.ok(validateMaterialInputAudit(changed, { requireComplete: false }).some(error => error.includes('visible overflow')), String(mutate));
+  }
+});
+
 test('attributes the reviewed shared root only with matching captured authoring evidence', () => {
   const raw = parityReport({ display: 'block', position: 'static' }, { display: 'flex', position: 'relative' });
   const input = raw.results[0].styleInputs[0];
@@ -399,7 +501,7 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   const report = parityReport({}, {});
   const audit = buildMaterialInputAudit(report);
   assert.equal(audit.coverage.visualParityGreen, true);
-  assert.equal(audit.sourceFingerprints.length, 35);
+  assert.equal(audit.sourceFingerprints.length, 41);
   assert.equal(audit.sourceFingerprints.filter(({ file }) => file === 'src/app/services/dom/dom-ancestry.service.ts').length, 1);
   const cascadeProof = 'examples/material-showcase/src/app/label-cascade-input-audit.spec.ts';
   assert.equal(audit.sourceFingerprints.filter(({ file }) => file === cascadeProof).length, 1);
