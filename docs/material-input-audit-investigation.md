@@ -12,6 +12,36 @@ tests pass). A missing selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Tab and paginator input substitutions traced to source (2026-09-12)
+
+The tab differences have source-level authoring causes, recorded separately
+from their still-pending per-occurrence attribution. Reference `.mat-mdc-tab`
+declares the component font/tracking tokens. Nested `.mdc-tab__text-label`
+declares `line-height: 1`, producing 14px at the captured 14px font size; the
+surrounding content/control remains 20px. The candidate `.tab` omits font and
+tracking, uses one button value label, and supplies 20px line-height. Initial
+commit `2f44011` already omitted those tokens. Commit `bc4d442` retained the
+20px value while introducing a 1px density-specific top padding. Do not replace
+this with another baseline correction: preserve the distinct content/label
+inputs, and investigate any core authoring or rendering gap they expose.
+
+Paginator's remaining current-texture gaps are not ordinary missing label
+identities. The reference controls contain SVGs with `viewBox="0 0 24 24"`:
+
+- Previous path: `M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z`.
+- Next path: `M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z`.
+
+The candidate authors `value: '‹'` / `value: '›'`, and the current core textures
+contain those glyphs at 20px. Both substitutions occur in `2f44011`. Matching
+the semantic previous/next action does not make font outlines equal to these
+SVG paths. The recommended owner is the fixture's icon input translation,
+using core vector/image paint; no equal-SVG-input core defect has been shown.
+The next reporting step must retain this as a classified structural/content
+substitution, not fabricate reference typography or silently discard the
+observed text textures. The source audit now has 58 findings.
+`npm run parity:harness:check` passes **104/104**, including live source-pattern
+detection. No fixture inputs or renderer implementation changed.
+
 ## Tab template labels now map to current control textures (2026-09-12)
 
 The tab label is not a direct Material button-label span. Its explicit template
