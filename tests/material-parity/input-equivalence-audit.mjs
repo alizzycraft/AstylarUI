@@ -163,6 +163,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
     const matches = report.controlTypography?.comparisons.filter((comparison) => comparison.case === mapping.case &&
       comparison.element === mapping.element && comparison.referenceNode === mapping.referenceNode &&
       comparison.astylarNode === mapping.astylarNode && comparison.text === mapping.text &&
+      comparison.referenceText === mapping.referenceText &&
       comparison.source === mapping.source && comparison.revision === mapping.revision) ?? [];
     return mapping.source !== 'core-control-texture' || mapping.attribution !== 'reviewed-control-text-stage-ownership' ||
       mapping.classification !== 'parity-harness-defect' || mapping.inputEquivalent !== false ||
@@ -192,6 +193,10 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
   for (const [family, kind, inspect, label] of [
     ['snack-bar', 'reviewed-material-snackbar-action-label', reviewedSnackbarActionControl, 'snackbar action'],
     ['bottom-sheet', 'reviewed-material-bottom-sheet-item-label', reviewedBottomSheetItemControl, 'bottom-sheet item'],
+    ['datepicker', 'reviewed-material-calendar-period-composition', (leaf, ref, ast, inventory) => {
+      const mapping = reviewedCalendarPeriodControl(ref, ast, inventory);
+      return mapping?.ref === leaf ? mapping : undefined;
+    }, 'calendar period'],
   ]) {
     const invalidMappings = report.controlTypography?.comparisons.filter((comparison) => {
       if (comparison.mapping?.kind !== kind) return false;
@@ -201,11 +206,14 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
       if (comparison.family !== family || refs.length !== 1 || asts.length !== 1) return true;
       const ref = inventory.variants[refs[0].variant], ast = inventory.variants[asts[0].variant];
       const leaves = ref.nodes.filter(n => n.key === comparison.referenceNode);
-      const mapping = leaves.length === 1 && inspect(leaves[0], ref, ast);
+      const mapping = leaves.length === 1 && inspect(leaves[0], ref, ast, inventory);
       const candidates = ast.nodes.filter(n => n.key === comparison.astylarNode && n.authored?.id === comparison.element);
       return !mapping || mapping.id !== comparison.element || mapping.parent.key !== comparison.referenceControl ||
         candidates.length !== 1 || candidates[0].paintedControlText?.source !== 'core-control-texture' ||
-        candidates[0].paintedControlText.text !== comparison.text || leaves[0].ownText.trim() !== comparison.text.trim() ||
+        candidates[0].paintedControlText.text !== comparison.text ||
+        (kind === 'reviewed-material-calendar-period-composition'
+          ? mapping.candidateText !== comparison.text || mapping.referenceText !== comparison.referenceText
+          : leaves[0].ownText.trim() !== comparison.text.trim()) ||
         comparison.source !== 'core-control-texture' || comparison.revision !== asts[0].resolvedStyleRevision ||
         comparison.finalRasterVerified !== false ||
         JSON.stringify(mapping.evidence) !== JSON.stringify(comparison.mapping.reviewEvidence);
@@ -224,6 +232,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
     'reviewed-calendar-year-typography-input': 'application-plugin-authoring-defect',
     'reviewed-snackbar-action-typography-input': 'application-plugin-authoring-defect',
     'reviewed-bottom-sheet-item-typography-input': 'application-plugin-authoring-defect',
+    'reviewed-calendar-period-typography-input': 'application-plugin-authoring-defect',
     'reviewed-normal-line-box-stage-comparison': 'parity-harness-defect',
   };
   const unresolvedControlTypography = report.controlTypography?.differences.filter((entry) =>
@@ -234,6 +243,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
   for (const [family, attribution, label] of [
     ['snack-bar', 'reviewed-snackbar-action-typography-input', 'snackbar action'],
     ['bottom-sheet', 'reviewed-bottom-sheet-item-typography-input', 'bottom-sheet item'],
+    ['datepicker', 'reviewed-calendar-period-typography-input', 'calendar period'],
   ]) {
     const replays = new Map();
     const invalidTypography = report.controlTypography?.differences.filter(difference => {
@@ -324,7 +334,7 @@ export function renderMaterialInputAuditMarkdown(report) {
     '',
     `Retained typography: ${report.retainedTypography.comparisons.length} directly mapped text-node observations; ${report.retainedTypography.gaps.length} mapping/stage gaps and ${report.retainedTypography.differences.length} unequal retained-property observations. The registry stage is reported separately from declarations and is not proof of current pseudo-state glyph paint.`,
     '',
-    `Control-owned text routing: ${report.retainedTypography.controlTextMappings.length} exact label mappings are reviewed in the current core-control-texture stage, not treated as missing registry entries. Their independent input differences and any current-paint gaps remain enforced; this is not wrapper or input equivalence.`,
+    `Control-owned text routing: ${report.retainedTypography.controlTextMappings.length} reviewed text-owner correspondences use the current core-control-texture stage, not invented registry entries. Composite calendar headers preserve different reference and candidate strings plus original vector inputs. Independent input differences and any current-paint gaps remain enforced; this is not wrapper or input equivalence.`,
     `Hidden retained-text stage: ${report.retainedTypography.gaps.filter((gap) => isReviewedHiddenRetainedGap(gap, report.elementInventory)).length} gap records have complete captured ancestry explaining why core creates no text entry below display:none. The records and raw styles remain; reference display:none and visibility:hidden mechanisms are distinguished, not normalized into equivalent inputs.`,
     `Stepper structure: ${report.retainedTypography.gaps.filter((gap) => isReviewedStepperPanelGap(gap, report.elementInventory)).length} gap records document an omitted inactive reference panel, classified as unequal fixture structure rather than missing core text. Active-panel typography remains independently compared.`,
     '',
@@ -1397,11 +1407,12 @@ export function collectRetainedTypographyEvidence(cases, inventory, controlTypog
     // Preserve the routing explicitly so removing their paint evidence fails.
     const controlMappings = controlTypography.comparisons.filter((item) => item.case === key &&
       item.source === 'core-control-texture' &&
-      ['reviewed-material-button-label', 'reviewed-material-tab-label', 'reviewed-material-calendar-day-label', 'reviewed-material-calendar-year-label', 'reviewed-material-snackbar-action-label', 'reviewed-material-bottom-sheet-item-label'].includes(item.mapping?.kind));
+      ['reviewed-material-button-label', 'reviewed-material-tab-label', 'reviewed-material-calendar-day-label', 'reviewed-material-calendar-year-label', 'reviewed-material-snackbar-action-label', 'reviewed-material-bottom-sheet-item-label', 'reviewed-material-calendar-period-composition'].includes(item.mapping?.kind));
     const controlReferenceKeys = new Set(controlMappings.map((item) => item.referenceNode));
     const controlAstylarKeys = new Set(controlMappings.map((item) => item.astylarNode));
     controlTextMappings.push(...controlMappings.map((item) => ({ case: key, element: item.element,
       referenceNode: item.referenceNode, astylarNode: item.astylarNode, text: item.text,
+      ...(item.referenceText !== undefined ? { referenceText: item.referenceText } : {}),
       source: item.source, revision: item.revision, classification: 'parity-harness-defect',
       attribution: 'reviewed-control-text-stage-ownership', inputEquivalent: false,
       justification: 'The reviewed explicit control identity and reference label path map to current core-owned control texture text. Its normal/effective/current paint properties are independently compared in controlTypography, including any optional retained registry snapshot. A missing registry entry is not missing text evidence for this owner. This routes the audit stage only; all control-property, structure and raster discrepancies remain independent.' })));
@@ -2047,6 +2058,117 @@ function reviewedSnackbarActionControl(ref, referenceTree, astylarTree) {
   } };
 }
 
+function reviewedCalendarPeriodControl(referenceTree, astylarTree, inventory) {
+  const rn = referenceTree.nodes, an = astylarTree.nodes;
+  const cls = (n, name) => String(n?.attributes?.class ?? '').split(/\s+/).includes(name);
+  const unique = nodes => nodes.length === 1 ? nodes[0] : undefined;
+  let context, yearView = false;
+  for (const leaf of rn.filter(n => n.type === 'span' && cls(n, 'mat-calendar-body-cell-content'))) {
+    context = reviewedCalendarCellControl(leaf, referenceTree, astylarTree);
+    if (context) break;
+    context = reviewedCalendarCellControl(leaf, referenceTree, astylarTree, 'year');
+    if (context) { yearView = true; break; }
+  }
+  if (!context) return;
+  const live = unique(rn.filter(n => n.key === context.evidence.referencePeriodLabel));
+  const parent = unique(rn.filter(n => n.type === 'button' && cls(n, 'mat-calendar-period-button')));
+  const label = parent && unique(rn.filter(n => n.parent === parent.key && n.type === 'span' && cls(n, 'mdc-button__label')));
+  const ref = label && unique(rn.filter(n => n.parent === label.key && n.type === 'span' && n.attributes?.['aria-hidden'] === 'true'));
+  const svg = label && unique(rn.filter(n => n.parent === label.key && n.type === 'svg' && cls(n, 'mat-calendar-arrow')));
+  const polygon = svg && unique(rn.filter(n => n.parent === svg.key));
+  const period = yearView ? context.evidence.period.replace(' to ', ' – ') : context.evidence.period;
+  const glyph = yearView ? '▴' : '▾', candidateText = `${period} ${glyph}`;
+  const accessibleName = yearView ? 'Choose date' : 'Choose month and year';
+  if (!live || !parent || !label || !ref || !svg || !polygon || parent.parent !== live.parent ||
+      parent.attributes['aria-label'] !== accessibleName || parent.attributes['aria-describedby'] !== live.attributes.id ||
+      parent.ownText?.trim() || label.ownText?.trim() || ref.ownText?.trim() !== period ||
+      rn.some(n => n.parent === ref.key) || rn.filter(n => n.parent === label.key).length !== 2 ||
+      svg.attributes.viewBox !== '0 0 10 5' || svg.attributes['aria-hidden'] !== 'true' || svg.attributes.focusable !== 'false' ||
+      cls(svg, 'mat-calendar-invert') !== yearView || svg.ownText?.trim() || polygon.type !== 'polygon' ||
+      polygon.attributes?.points !== '0,0 5,5 10,0' || polygon.ownText?.trim() || rn.some(n => n.parent === polygon.key)) return;
+  const descendants = new Set([parent.key]);
+  for (let changed = true; changed;) {
+    changed = false;
+    for (const n of rn) if (descendants.has(n.parent) && !descendants.has(n.key)) { descendants.add(n.key); changed = true; }
+  }
+  if (rn.some(n => descendants.has(n.key) && n !== ref &&
+      (n.ownText?.trim() || (['svg', 'polygon', 'path'].includes(n.type) && n !== svg && n !== polygon)))) return;
+  const id = 'datepicker-month', ast = unique(an.filter(n => n.authored?.id === id));
+  const header = unique(an.filter(n => n.authored?.id === 'datepicker-header'));
+  if (!ast || !header || ast.parent !== header.key || header.parent !== context.evidence.candidateChain.at(-1) ||
+      ast.authored.type !== 'button' || ast.authored.class !== `datepicker-month${yearView ? ' year-view' : ''}` ||
+      ast.authored.ariaLabel !== accessibleName || ast.authored.ariaDescribedBy !== undefined || ast.authored.value !== candidateText ||
+      an.some(n => n.parent === ast.key) || ast.paintedControlText?.source !== 'core-control-texture' ||
+      ast.paintedControlText.text !== candidateText) return;
+  const styleAt = (index, side) => inventory.styles[index]?.side === side ? inventory.styles[index].value : undefined;
+  const referenceNodes = [parent, label, ref, svg, polygon, live].map(n => ({ key: n.key, parent: n.parent, type: n.type,
+    attributes: structuredClone(n.attributes), text: n.ownText, style: styleAt(n.style, 'reference') }));
+  const normal = styleAt(ast.normalStyle, 'astylar'), effective = styleAt(ast.interactionStyle, 'astylar');
+  const painted = styleAt(ast.paintedControlText.style, 'astylar');
+  if (referenceNodes.some(n => !n.style) || !normal || !effective || !painted || typeof painted.fontFamily !== 'string' ||
+      !Number.isFinite(painted.fontSize) || painted.fontSize <= 0 ||
+      canonicalStyle(referenceNodes[3].style).transform !== (yearView ? 'matrix(-1,0,0,-1,0,0)' : 'none')) return;
+  return { parent, label, ref, id, candidateText, referenceText: period, evidence: structuredClone({
+    sourceFinding: 'fixture-calendar-period-vector-flattened-into-text', context: context.evidence, yearView,
+    referenceNodes, candidateNode: ast.key, candidateAuthored: ast.authored, candidateNormal: normal,
+    candidateEffective: effective, candidatePaintedStyle: painted,
+    content: { referenceText: period, referenceSvg: { viewBox: svg.attributes.viewBox, points: polygon.attributes.points,
+      transform: referenceNodes[3].style.transform }, candidateText, appendedGlyph: glyph, inputEquivalent: false },
+    accessibility: { referenceName: parent.attributes['aria-label'], candidateName: ast.authored.ariaLabel,
+      referenceDescriptionId: parent.attributes['aria-describedby'], referenceDescription: live.ownText,
+      candidateDescriptionId: ast.authored.ariaDescribedBy ?? null, descriptionInputsEquivalent: false },
+  }) };
+}
+
+function reviewedCalendarPeriodPaintInput(entry, property, ref, parent, ast, stages, referenceTree, astylarTree, inventory) {
+  if (entry.family !== 'datepicker' || ast.authored.id !== 'datepicker-month' ||
+      !['fontFamily', 'letterSpacing', 'color'].includes(property)) return;
+  const mapping = reviewedCalendarPeriodControl(referenceTree, astylarTree, inventory);
+  if (!mapping || mapping.ref !== ref || mapping.parent !== parent) return;
+  const cssProperty = { fontFamily: 'font-family', letterSpacing: 'letter-spacing', color: 'color' }[property];
+  const ruleAt = node => (node.rules ?? []).map(i => inventory.rules[i]).filter(r => r?.side === 'reference').map(r => r.value);
+  const selector = property === 'color' ? '.mat-mdc-button:not(:disabled)' : '.mat-mdc-button';
+  const token = property === 'color' ? 'var(--mat-button-text-label-text-color, var(--mat-sys-primary))'
+    : property === 'fontFamily' ? 'var(--mat-button-text-label-text-font, var(--mat-sys-label-large-font))'
+      : 'var(--mat-button-text-label-text-tracking, var(--mat-sys-label-large-tracking))';
+  const referenceRules = ruleAt(parent).filter(r => r.active === true && r.selector === selector && r.declarations?.[cssProperty]?.value === token);
+  const parents = [mapping.label, parent];
+  if (referenceRules.length !== 1 || parents.some(n => canonicalStyle(inventory.styles[n.style].value)[property] !== stages.reference[property]) ||
+      [ref, mapping.label].some(n => ruleAt(n).some(r => r.active === true && (r.declarations?.font || r.declarations?.[cssProperty])) ||
+        new RegExp(`(?:^|;)\\s*(?:font|${cssProperty})\\s*:`, 'i').test(n.attributes?.style ?? ''))) return;
+  const candidateRules = astylarTree.rules.map(i => inventory.rules[i]).filter(r => r?.side === 'astylar').map(r => r.value);
+  const headerRules = candidateRules.filter(r => r.selector === '.datepicker-month');
+  if (headerRules.length !== 1 || headerRules[0].font !== undefined) return;
+  const evidence = { sourceFinding: 'fixture-calendar-period-vector-flattened-into-text', referenceRule: referenceRules[0],
+    referenceComputed: stages.reference[property], candidateRule: headerRules[0], candidateNormal: stages.normal[property] ?? null,
+    candidateEffective: stages.effective[property] ?? null, candidatePainted: stages.painted[property] };
+  let reason;
+  if (property === 'fontFamily') {
+    const resets = candidateRules.filter(r => r.selector === 'button, input, select' && canonicalStyle(r).fontFamily === stages.normal.fontFamily);
+    if (resets.length !== 1 || headerRules[0].fontFamily !== undefined || stages.reference.fontFamily !== 'roboto' ||
+        stages.normal.fontFamily !== 'roboto,arial,sans-serif' || stages.effective.fontFamily !== stages.normal.fontFamily ||
+        stages.painted.fontFamily !== stages.normal.fontFamily) return;
+    evidence.candidateResetRule = resets[0];
+    reason = 'The reference period text inherits the Material text-button font token through its label wrapper. The candidate period-plus-triangle string instead uses the generic control font stack unchanged at paint. Text-owner correspondence does not make these font inputs or the appended glyph equivalent to the original text/vector composition.';
+  } else if (property === 'letterSpacing') {
+    const chain = candidateTypographyOmissionChain(ast, astylarTree, inventory, property);
+    if (!chain || headerRules[0].letterSpacing !== undefined || stages.reference.letterSpacing !== '0.096px' || stages.painted.letterSpacing !== '0') return;
+    evidence.candidateChain = chain;
+    reason = 'The reference period text inherits .096px tracking from the Material text-button token. The candidate header rule and complete normal/effective ancestry omit tracking and the actual composite text texture receives zero. This is missing authored input, not an equal-input core tracking defect.';
+  } else {
+    const overrides = ruleAt(parent).filter(r => r.active === true && r.selector === '.mat-calendar-period-button' &&
+      r.declarations?.['--mat-button-text-label-text-color']?.value === 'var(--mat-datepicker-calendar-period-button-text-color, var(--mat-sys-on-surface-variant))');
+    if (overrides.length !== 1) return;
+    evidence.referenceTokenOverride = overrides[0];
+    if (canonicalStyle(headerRules[0]).color !== stages.normal.color || stages.effective.color !== stages.normal.color ||
+        stages.painted.color !== stages.normal.color || stages.reference.color === stages.normal.color) return;
+    reason = 'The reference period text inherits the calendar period-button on-surface-variant token; the candidate header explicitly substitutes fixed ink and supplies it unchanged to current text paint. This is unequal authored color, not a core conversion defect. SVG fill and glyph geometry remain distinct inputs in the composition evidence.';
+  }
+  return { classification: 'application-plugin-authoring-defect', attribution: 'reviewed-calendar-period-typography-input',
+    recommendedOwner: 'showcase calendar period text/vector structure and Material tokens', justification: reason,
+    reviewEvidence: structuredClone(evidence) };
+}
+
 function reviewedBottomSheetItemControl(ref, referenceTree, astylarTree) {
   const cls = (node, name) => String(node?.attributes?.class ?? '').split(/\s+/).includes(name);
   const unique = nodes => nodes.length === 1 ? nodes[0] : undefined;
@@ -2230,15 +2352,17 @@ export function collectControlTypographyEvidence(cases, inventory) {
       gap(key, undefined, 'missing, ambiguous, or invalid full-tree capture'); continue;
     }
     const referenceTree = inventory.variants[refs[0].variant], astylarTree = inventory.variants[asts[0].variant];
+    const calendarPeriod = entry.family === 'datepicker' ? reviewedCalendarPeriodControl(referenceTree, astylarTree, inventory) : undefined;
     const buttonLabelNodes = referenceTree.nodes.filter((node) => node.type === 'span' &&
-      String(node.attributes?.class ?? '').split(/\s+/).includes('mdc-button__label'));
+      String(node.attributes?.class ?? '').split(/\s+/).includes('mdc-button__label') && node !== calendarPeriod?.label);
     const tabLabelNodes = entry.family === 'tabs' ? referenceTree.nodes.filter((node) => node.type === 'span' &&
       ['tab-overview', 'tab-activity'].includes(node.attributes?.id)) : [];
     const calendarLabelNodes = entry.family === 'datepicker' ? referenceTree.nodes.filter((node) => node.type === 'span' &&
       String(node.attributes?.class ?? '').split(/\s+/).includes('mat-calendar-body-cell-content')) : [];
     const bottomSheetLabelNodes = entry.family === 'bottom-sheet' ? referenceTree.nodes.filter(node => node.type === 'span' &&
       String(node.attributes?.class ?? '').split(/\s+/).includes('mat-mdc-list-item-unscoped-content')) : [];
-    const labelNodes = [...buttonLabelNodes, ...tabLabelNodes, ...calendarLabelNodes, ...bottomSheetLabelNodes];
+    const labelNodes = [...buttonLabelNodes, ...tabLabelNodes, ...calendarLabelNodes, ...bottomSheetLabelNodes,
+      ...(calendarPeriod ? [calendarPeriod.ref] : [])];
     const paintedNodes = astylarTree.nodes.filter((node) => node.paintedControlText);
     if (!labelNodes.length && !paintedNodes.length) continue;
     if (astylarTree.resolvedStyleEvidenceVersion !== 2 || astylarTree.resolvedStyleSource !== 'core-style-inspection' ||
@@ -2255,17 +2379,18 @@ export function collectControlTypographyEvidence(cases, inventory) {
       const snackbar = entry.family === 'snack-bar' ? reviewedSnackbarActionControl(ref, referenceTree, astylarTree) : undefined;
       const bottomSheetLabel = bottomSheetLabelNodes.includes(ref);
       const bottomSheet = bottomSheetLabel ? reviewedBottomSheetItemControl(ref, referenceTree, astylarTree) : undefined;
-      const parents = bottomSheetLabel ? [bottomSheet?.parent].filter(Boolean) : calendarLabel ? [calendar?.parent].filter(Boolean) : tabLabel ? [reviewedTabLabelControl(ref, referenceTree)].filter(Boolean)
+      const periodLabel = calendarPeriod?.ref === ref;
+      const parents = periodLabel ? [calendarPeriod.parent] : bottomSheetLabel ? [bottomSheet?.parent].filter(Boolean) : calendarLabel ? [calendar?.parent].filter(Boolean) : tabLabel ? [reviewedTabLabelControl(ref, referenceTree)].filter(Boolean)
         : referenceTree.nodes.filter((node) => node.key === ref.parent && node.type === 'button');
       const parent = parents.length === 1 ? parents[0] : undefined;
-      const id = bottomSheetLabel ? bottomSheet?.id : calendarLabel ? calendar?.id : tabLabel ? ref.attributes.id : snackbar?.id || parent?.attributes?.id || parent?.attributes?.['data-parity-id'];
+      const id = periodLabel ? calendarPeriod.id : bottomSheetLabel ? bottomSheet?.id : calendarLabel ? calendar?.id : tabLabel ? ref.attributes.id : snackbar?.id || parent?.attributes?.id || parent?.attributes?.['data-parity-id'];
       const astNodes = astylarTree.nodes.filter((node) => id && node.authored?.id === id);
       const referenceOwners = referenceTree.nodes.filter((node) => id &&
         (node.attributes?.id === id || node.attributes?.['data-parity-id'] === id));
-      if (!parent || !id || (!calendarLabel && !snackbar && !bottomSheet && referenceOwners.length !== 1) || astNodes.length !== 1 || astNodes[0].authored.type !== 'button' ||
+      if (!parent || !id || (!periodLabel && !calendarLabel && !snackbar && !bottomSheet && referenceOwners.length !== 1) || astNodes.length !== 1 || astNodes[0].authored.type !== 'button' ||
           (tabLabel && (astNodes[0].authored.role !== 'tab' || !String(astNodes[0].authored.class ?? '').split(/\s+/).includes('tab'))) ||
           referenceTree.nodes.filter((node) => node.key === ref.key).length !== 1 ||
-          (!tabLabel && !calendarLabel && !bottomSheetLabel && buttonLabelNodes.filter((node) => node.parent === parent.key).length !== 1) ||
+          (!periodLabel && !tabLabel && !calendarLabel && !bottomSheetLabel && buttonLabelNodes.filter((node) => node.parent === parent.key).length !== 1) ||
           referenceTree.nodes.some((node) => node.parent === ref.key) || parent.ownText?.trim()) {
         gap(key, id, 'Material control label lacks a unique reviewed leaf path and shared control identity', { referenceNode: ref.key }); continue;
       }
@@ -2273,8 +2398,9 @@ export function collectControlTypographyEvidence(cases, inventory) {
       if (mapped.has(ast.key)) { gap(key, id, 'multiple labels map to the same control'); continue; }
       mapped.add(ast.key);
       const authoredText = ast.authored.value ?? ast.authored.textContent;
-      if (!ref.ownText?.trim() || ref.ownText.trim() !== String(authoredText ?? '').trim() ||
-          ref.ownText.trim() !== paint?.text?.trim()) {
+      const expectedPaintText = periodLabel ? calendarPeriod.candidateText : ref.ownText?.trim();
+      if (!ref.ownText?.trim() || expectedPaintText !== String(authoredText ?? '').trim() ||
+          expectedPaintText !== paint?.text?.trim()) {
         gap(key, id, 'reference, authored control label and current texture text are not identical',
           { reference: ref.ownText, authored: authoredText, painted: paint?.text }); continue;
       }
@@ -2302,7 +2428,10 @@ export function collectControlTypographyEvidence(cases, inventory) {
         referenceNode: ref.key, referenceControl: parent.key, astylarNode: ast.key, text: paint.text,
         source: paint.source, revision: asts[0].resolvedStyleRevision, rawPaintedStyle: paint.style,
         maxWidth: paint.maxWidth, finalRasterVerified: false,
-        mapping: bottomSheet ? { kind: 'reviewed-material-bottom-sheet-item-label', reviewEvidence: bottomSheet.evidence,
+        ...(periodLabel ? { referenceText: calendarPeriod.referenceText } : {}),
+        mapping: periodLabel ? { kind: 'reviewed-material-calendar-period-composition', reviewEvidence: calendarPeriod.evidence,
+          justification: 'The reviewed date/range context anchors the period text and its adjacent explicit SVG triangle. The candidate paints the same period prefix plus an appended triangle glyph in one control texture. The full candidate text is preserved, not stripped or equated to reference text; the text/vector substitution and accessibility-description inputs remain explicit. Typography compares the common period text using the actual single-font texture inputs, without claiming equal glyph geometry, run width, wrappers, state, placement or raster.' }
+          : bottomSheet ? { kind: 'reviewed-material-bottom-sheet-item-label', reviewEvidence: bottomSheet.evidence,
           justification: 'A unique two-item Material navigation list in the bottom-sheet overlay contains the ordered Share/Copy link anchor/content/label paths. The unique candidate panel contains corresponding ordered value buttons. This maps text owners only; replacing anchors and nested wrappers with buttons is unequal input, and dialog names, navigation/dismissal behavior, overflow, typography, placement and raster remain independent audit obligations.' }
           : snackbar ? { kind: 'reviewed-material-snackbar-action-label', reviewEvidence: snackbar.evidence,
           justification: 'The unique snackbar action/label path is anchored to the captured Material overlay and its sibling message; the unique candidate action is anchored to its surface, overlay and matching sibling message. This establishes current text-owner correspondence only. Wrapper composition, live-region semantics, styles, state, placement and raster are not certified equivalent.' }
@@ -2329,6 +2458,7 @@ export function collectControlTypographyEvidence(cases, inventory) {
               reviewedTabPaintInput(entry, property, ref, parent, ast, stages, referenceTree, astylarTree, inventory) ??
               reviewedSnackbarActionPaintInput(entry, property, ref, parent, ast, stages, referenceTree, astylarTree, inventory) ??
               reviewedBottomSheetItemPaintInput(entry, property, ref, parent, ast, stages, referenceTree, astylarTree, inventory) ??
+              reviewedCalendarPeriodPaintInput(entry, property, ref, parent, ast, stages, referenceTree, astylarTree, inventory) ??
               reviewedCalendarCellPaintInput(entry, property, ref, parent, ast, stages, referenceTree, astylarTree, inventory) ?? {}) });
         }
       }
@@ -2340,7 +2470,7 @@ export function collectControlTypographyEvidence(cases, inventory) {
       else gap(key, node.authored?.id, 'current control texture has no reviewed reference text-owner mapping', { astylarNode: node.key });
     }
   }
-  return { schemaVersion: 1, scope: 'Current core-owned control texture inputs, separately from normal/effective declarations and registry-retained text. Exact direct Material button labels, explicit template tab-label paths, month-view day paths with full date context, multi-year table paths with matching year-range context, snackbar action paths anchored by overlay/message context, and ordered bottom-sheet list-label/value-button correspondence are reviewed. The bottom-sheet anchor/button structures and accessible names remain explicitly unequal. Paginator and calendar navigation SVG-to-glyph substitutions are separately classified unequal content, never typography equivalence; calendar year-view accessible-name mismatches remain explicit. Other observed control owners remain gaps. Numeric parsed CSS lengths and line-height multipliers are normalized without authored or projected fallbacks. Other effects remain in the full inventory and are not certified by these eleven typography comparisons.', comparisons, differences, gaps, iconSubstitutions };
+  return { schemaVersion: 1, scope: 'Current core-owned control texture inputs, separately from normal/effective declarations and registry-retained text. Exact direct Material button labels, explicit template tab-label paths, month-view day paths with full date context, multi-year table paths with matching year-range context, snackbar action paths anchored by overlay/message context, and ordered bottom-sheet list-label/value-button correspondence are reviewed. The bottom-sheet anchor/button structures and accessible names remain explicitly unequal. Calendar period typography compares the shared text prefix in a single-font texture while preserving the full unequal text-plus-glyph string, original adjacent SVG geometry, and accessibility-description inputs. Paginator and calendar navigation SVG-to-glyph substitutions are separately classified unequal content, never typography equivalence; calendar year-view accessible-name mismatches remain explicit. Other observed control owners remain gaps. Numeric parsed CSS lengths and line-height multipliers are normalized without authored or projected fallbacks. Other effects remain in the full inventory and are not certified by these eleven typography comparisons.', comparisons, differences, gaps, iconSubstitutions };
 }
 
 export function collectFullTreeInventory(cases, { root = process.cwd() } = {}) {
@@ -2719,6 +2849,7 @@ function implementationPlan() {
     { priority: 5.4, rootCause: 'Calendar cell text tokens and inner line boxes were flattened away', action: 'Restore the reference calendar font and date-text ink tokens and its inner line-height:1 label inside both day and year controls. Keep reference cell/container sizing, state and selection structure instead of copying a normal-metric result or tuning the baseline. Separate date/range-context proofs isolate 990 day and 192 year occurrences each of missing font-token, omitted inner line-height and fixed-ink inputs; core metric defects must be assessed only after those inputs are equivalent. Independently resolve normal-versus-zero tracking and the still-unmapped header/icon owners.' },
     { priority: 5.5, rootCause: 'Snackbar action inherits generic control inputs instead of Material action tokens', action: 'Restore the original text-button font, size and tracking declarations and the snackbar inverse-primary ink, keeping the reference label/action wrapper intent. The exact overlay/message mapping isolates 34 current action textures and source-traces font-stack, tracking and ink substitutions. Trace the remaining 14px-versus-16px and normal-line-box observations through the core defaults/inheritance and metric stages before assigning core ownership; do not calibrate a baseline or line height. Retain the separate intrinsic-width, live-region, visibility, lifetime and placement obligations.' },
     { priority: 5.6, rootCause: 'Nested list inputs are replaced by generic value buttons', action: 'Restore bottom-sheet navigation/list/anchor/content/label structure and the original label font, explicit line-height, tracking, ink and overflow declarations. Preserve the actual reference overlay token scope and accessible name instead of borrowing page theme colors or calling the opener text the dialog name. Restore reference navigation behavior rather than generic dismiss handling, then reduce any equal-input core failure. Do not infer start/left alignment equivalence without direction evidence. Keep the separate fixed-width/content-height and responsive-constraint findings.' },
+    { priority: 5.7, rootCause: 'Calendar period text and vector inputs are collapsed into a glyph string', action: 'Restore the reference period text span beside the 10x5 polygon SVG, using the original year-view CSS inversion, text-button font/tracking tokens and calendar period color-token override. Preserve the live-period description relationship. Do not strip the candidate triangle during comparison, substitute another font character or tune offsets. The current 41 texture witnesses compare common period text inputs while retaining both unequal full compositions; normal-line-height, wrapper layout and glyph/vector raster still need independent proof.' },
     { priority: 6, rootCause: 'Interaction geometry duplicated by the application', action: 'Expose resolved CSS-space target bounds and local pointer coordinates in the core event/plugin contract; remove ripple width tables.' },
     { priority: 7, rootCause: 'Material paint inputs are substituted or calibrated', action: 'Supply paginator and calendar navigation reference SVG paths and their CSS/state paint through core vector/image rendering instead of font-character approximations. Preserve calendar navigation accessible names for the active month or multi-year view; do not copy month labels into the year view. Express progress angles, state layers, checkmarks, selection rings, and indicators from reference Material geometry in CSS space; remove screenshot-derived angle and fractional-position constants. Diagnose core only after the actual same geometry is supplied.' },
     { priority: 8, rootCause: 'Regression gate permits unequal inputs', action: 'Run this audit in CI after the full parity matrix, require complete coverage and zero unclassified differences, and review any new Astylar-only authored rule before updating the checked-in report.' },

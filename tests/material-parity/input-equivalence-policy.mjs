@@ -407,6 +407,15 @@ export const sourceAuditDefinitions = Object.freeze([
     justification: 'Calendar labels/cells derive from new Date() and handleClick has no previous/next month transition. Real previous/next clicks reach their targets but leave SEP 2026 unchanged while the reference changes to AUG/OCT 2026. Keyboard selection likewise leaves candidate value empty. These failures precede renderer layout or paint.',
   }),
   Object.freeze({
+    id: 'fixture-calendar-period-vector-flattened-into-text',
+    introducedBy: 'd973f84 fix(material): complete picker and range interactions',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`id: 'datepicker-month', class: [^\n]*value: this\.datepickerView\(\) === 'month'[^\n]*▾[^\n]*▴`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase calendar period text/vector composition, tokens and accessible description',
+    justification: 'The reference period control contains a text span beside a 10x5 SVG triangle, inverted with a CSS transform in year view, and describes itself through the calendar live-period label. Candidate replaces the composition with one value string ending in a triangle font glyph and omits the description relationship. The full candidate string is not equivalent to the original text/vector input. The header rule also omits component font/tracking tokens and fixes ink instead of using the Material period text-color token chain. Keep these unequal inputs explicit; restore original geometry, structure and declarations through core rather than tuning glyphs, offsets or baseline metrics.',
+  }),
+  Object.freeze({
     id: 'fixture-picker-commit-not-implemented',
     introducedBy: '2f44011 feat(example): add Material component showcase',
     file: 'examples/material-showcase/src/app/astylar.component.ts',

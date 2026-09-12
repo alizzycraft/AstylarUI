@@ -2106,6 +2106,147 @@ function calendarNavigationReport(direction = 'previous', yearView = false) {
   return raw;
 }
 
+function calendarPeriodTypographyReport(yearView = false) {
+  const raw = yearView ? calendarYearTypographyReport() : calendarDayTypographyReport();
+  const { reference: ref, astylar: ast } = raw.results[0].inputTrees;
+  const text = yearView ? '2016 – 2039' : 'SEP 2026';
+  ref.styles.push({ ...ref.styles[0], fontFamily: 'Roboto', fontSize: '14px', fontWeight: '500',
+    lineHeight: 'normal', letterSpacing: '.096px', color: '#49454e', transform: 'none' });
+  ref.styles.push({ ...ref.styles[1], transform: yearView ? 'matrix(-1, 0, 0, -1, 0, 0)' : 'none', fill: '#49454e' });
+  const node = (key, parent, type, attributes, ownText = '') => ({ key, parent, type, attributes, ownText,
+    style: 1, rules: [], pseudoElements: [] });
+  ref.nodes.push(
+    node('period-button', 'controls', 'button', { class: 'mat-calendar-period-button mat-mdc-button',
+      'aria-label': yearView ? 'Choose date' : 'Choose month and year', 'aria-describedby': 'mat-calendar-period-label-0' }),
+    node('period-wrapper', 'period-button', 'span', { class: 'mdc-button__label' }),
+    node('period-text', 'period-wrapper', 'span', { 'aria-hidden': 'true' }, text),
+    node('period-svg', 'period-wrapper', 'svg', { class: `mat-calendar-arrow${yearView ? ' mat-calendar-invert' : ''}`,
+      viewBox: '0 0 10 5', 'aria-hidden': 'true', focusable: 'false' }),
+    node('period-polygon', 'period-svg', 'polygon', { points: '0,0 5,5 10,0' }),
+  );
+  ref.nodes.find(n => n.key === 'period-svg').style = 2;
+  ref.rules = [{ selector: '.mat-mdc-button', active: true, declarations: {
+    'font-family': { value: 'var(--mat-button-text-label-text-font, var(--mat-sys-label-large-font))' },
+    'letter-spacing': { value: 'var(--mat-button-text-label-text-tracking, var(--mat-sys-label-large-tracking))' },
+  } }, { selector: '.mat-mdc-button:not(:disabled)', active: true,
+    declarations: { color: { value: 'var(--mat-button-text-label-text-color, var(--mat-sys-primary))' } } },
+  { selector: '.mat-calendar-period-button', active: true,
+    declarations: { '--mat-button-text-label-text-color': { value: 'var(--mat-datepicker-calendar-period-button-text-color, var(--mat-sys-on-surface-variant))' } } }];
+  ref.nodes.find(n => n.key === 'period-button').rules = [0, 1, 2];
+  const candidate = ast.nodes.find(n => n.key === 'ast-period');
+  candidate.authored.class = `datepicker-month${yearView ? ' year-view' : ''}`;
+  candidate.normalResolvedStyle = { fontFamily: 'Roboto, Arial, sans-serif', fontSize: '14px', fontWeight: '500', color: '#1d1b20' };
+  candidate.interactionResolvedStyle = { ...candidate.normalResolvedStyle };
+  candidate.paintedControlText = { source: 'core-control-texture', text: candidate.authored.value,
+    style: { ...ast.nodes[0].paintedControlText.style, fontFamily: 'Roboto, Arial, sans-serif',
+      fontSize: 14, fontWeight: '500', lineHeight: 17 / 14, letterSpacing: 0, color: '#1d1b20' } };
+  ast.nodes.find(n => n.key === 'ast-popup').parent = 'page';
+  ast.nodes.push({ key: 'page', parent: 'root', authored: { type: 'main', id: 'page' },
+    resolvedStyle: {}, normalResolvedStyle: {}, interactionResolvedStyle: {} });
+  ast.rules = [{ selector: '.datepicker-month', color: '#1d1b20', fontSize: '14px', fontWeight: '500' },
+    { selector: 'button, input, select', fontFamily: 'Roboto, Arial, sans-serif' }];
+  return raw;
+}
+
+test('calendar period composition preserves the full candidate string and original text plus SVG inputs', () => {
+  for (const yearView of [false, true]) {
+    const raw = calendarPeriodTypographyReport(yearView), before = structuredClone(raw), evidence = controlEvidence(raw);
+    const comparison = evidence.comparisons.find(c => c.element === 'datepicker-month');
+    assert.ok(comparison);
+    assert.deepEqual(evidence.gaps, []);
+    assert.equal(comparison.mapping.kind, 'reviewed-material-calendar-period-composition');
+    assert.equal(comparison.referenceText, yearView ? '2016 – 2039' : 'SEP 2026');
+    assert.equal(comparison.text, comparison.referenceText + (yearView ? ' ▴' : ' ▾'));
+    assert.equal(comparison.finalRasterVerified, false);
+    const review = comparison.mapping.reviewEvidence;
+    assert.equal(review.yearView, yearView);
+    assert.equal(review.content.inputEquivalent, false);
+    assert.equal(review.content.referenceSvg.points, '0,0 5,5 10,0');
+    assert.equal(review.accessibility.referenceDescription, yearView ? '2016 to 2039' : 'SEP 2026');
+    assert.equal(review.accessibility.candidateDescriptionId, null);
+    assert.equal(review.accessibility.descriptionInputsEquivalent, false);
+    assert.equal(evidence.differences.filter(d => d.element === 'datepicker-month').length, 4);
+    for (const property of ['fontFamily', 'letterSpacing', 'color']) assert.equal(evidence.differences.find(d =>
+      d.element === 'datepicker-month' && d.property === property).attribution, 'reviewed-calendar-period-typography-input');
+    assert.equal(evidence.differences.find(d => d.element === 'datepicker-month' && d.property === 'lineHeight').attribution, 'unresolved');
+    assert.deepEqual(raw, before);
+    const report = buildMaterialInputAudit(raw);
+    assert.ok(report.retainedTypography.controlTextMappings.some(m => m.element === 'datepicker-month' && m.inputEquivalent === false));
+    assert.equal(report.summary.inputEquivalent, false);
+    assert.ok(!validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('calendar period')));
+  }
+});
+
+test('calendar period composition mapping rejects mismatched context, vectors, prefix, suffix and current paint', () => {
+  for (const yearView of [false, true]) for (const mutate of [
+    (ref, ast) => { ref.nodes.find(n => n.key === 'period-text').ownText = 'Other'; },
+    (ref, ast) => { ref.nodes.find(n => n.key === 'period-button').attributes['aria-describedby'] = 'other'; },
+    (ref, ast) => { ref.nodes.find(n => n.key === 'period-button').parent = 'calendar'; },
+    (ref, ast) => { ref.nodes.find(n => n.key === 'period-wrapper').ownText = 'Extra'; },
+    (ref, ast) => { ref.nodes.find(n => n.key === 'period-svg').attributes.viewBox = '0 0 20 10'; },
+    (ref, ast) => { ref.nodes.find(n => n.key === 'period-svg').attributes.class = 'other'; },
+    (ref, ast) => { ref.nodes.find(n => n.key === 'period-polygon').attributes.points = '0,0 0,10 10,10'; },
+    (ref, ast) => { ref.nodes.push({ ...ref.nodes.find(n => n.key === 'period-text'), key: 'extra-text', parent: 'period-button' }); },
+    (ref, ast) => { ref.nodes.push({ ...ref.nodes.find(n => n.key === 'period-polygon'), key: 'extra-vector' }); },
+    (ref, ast) => { ref.styles[2].transform = 'matrix(1,0,0,1,3,0)'; },
+    (ref, ast) => { ref.nodes.find(n => n.key === 'period').ownText = 'Other range'; },
+    (ref, ast) => { ast.nodes.find(n => n.key === 'ast-period').authored.value += ' extra'; },
+    (ref, ast) => { ast.nodes.find(n => n.key === 'ast-period').authored.class = 'other'; },
+    (ref, ast) => { ast.nodes.find(n => n.key === 'ast-period').authored.ariaDescribedBy = 'other'; },
+    (ref, ast) => { ast.nodes.find(n => n.key === 'ast-period').paintedControlText.text = 'Other'; },
+    (ref, ast) => { ast.nodes.find(n => n.key === 'ast-period').paintedControlText.source = 'core-text-registry'; },
+    (ref, ast) => { delete ast.nodes.find(n => n.key === 'ast-period').paintedControlText; },
+    (ref, ast) => { ast.nodes.find(n => n.key === 'ast-period').paintedControlText.style.fontSize = '14px'; },
+    (ref, ast) => { ast.nodes.push({ ...ast.nodes.find(n => n.key === 'ast-period'), key: 'duplicate' }); },
+    (ref, ast) => { ast.nodes.find(n => n.key === 'ast-header').parent = 'other'; },
+  ]) {
+    const raw = calendarPeriodTypographyReport(yearView), trees = raw.results[0].inputTrees;
+    mutate(trees.reference, trees.astylar);
+    const evidence = controlEvidence(raw);
+    assert.ok(!evidence.comparisons.some(c => c.element === 'datepicker-month'), `${yearView}: ${mutate}`);
+    assert.ok(evidence.gaps.length > 0, `${yearView}: ${mutate}`);
+  }
+});
+
+test('calendar period typography attribution requires nested token and omission witnesses', () => {
+  for (const [property, mutate] of [
+    ['fontFamily', (r, a) => { r.rules[0].active = false; }],
+    ['fontFamily', (r, a) => { a.rules[0].fontFamily = 'Roboto'; }],
+    ['fontFamily', (r, a) => { a.rules[1].fontFamily = 'Arial'; }],
+    ['letterSpacing', (r, a) => { a.nodes.find(n => n.key === 'page').normalResolvedStyle.letterSpacing = '0'; }],
+    ['letterSpacing', (r, a) => { a.rules[0].letterSpacing = '0'; }],
+    ['letterSpacing', (r, a) => { r.nodes.find(n => n.key === 'period-text').attributes.style = 'letter-spacing: .096px'; }],
+    ['color', (r, a) => { r.rules[2].declarations['--mat-button-text-label-text-color'].value = 'red'; }],
+    ['color', (r, a) => { r.rules[1].declarations.color.value = 'red'; }],
+    ['color', (r, a) => { a.rules[0].color = 'red'; }],
+    ['color', (r, a) => { a.nodes.find(n => n.key === 'ast-period').paintedControlText.style.color = 'red'; }],
+  ]) {
+    const raw = calendarPeriodTypographyReport(), trees = raw.results[0].inputTrees;
+    mutate(trees.reference, trees.astylar);
+    assert.equal(controlEvidence(raw).differences.find(d => d.element === 'datepicker-month' && d.property === property)?.attribution,
+      'unresolved', `${property}: ${mutate}`);
+  }
+});
+
+test('calendar period validation rejects altered composition, descriptions and typography review evidence', () => {
+  for (const mutation of ['text', 'reference text', 'vector', 'description', 'glyph', 'equivalence', 'raster', 'revision', 'token', 'paint']) {
+    const report = buildMaterialInputAudit(calendarPeriodTypographyReport(true));
+    const c = report.controlTypography.comparisons.find(c => c.element === 'datepicker-month');
+    const d = report.controlTypography.differences.find(d => d.element === c.element && d.property === 'color');
+    if (mutation === 'text') c.text = c.referenceText;
+    if (mutation === 'reference text') c.referenceText = c.text;
+    if (mutation === 'vector') c.mapping.reviewEvidence.content.referenceSvg.points = '0,0';
+    if (mutation === 'description') c.mapping.reviewEvidence.accessibility.candidateDescriptionId = 'period';
+    if (mutation === 'glyph') c.mapping.reviewEvidence.content.appendedGlyph = '▼';
+    if (mutation === 'equivalence') c.mapping.reviewEvidence.content.inputEquivalent = true;
+    if (mutation === 'raster') c.finalRasterVerified = true;
+    if (mutation === 'revision') c.revision++;
+    if (mutation === 'token') d.reviewEvidence.referenceTokenOverride.declarations['--mat-button-text-label-text-color'].value = 'red';
+    if (mutation === 'paint') d.values.painted = 'red';
+    assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('calendar period')), mutation);
+  }
+});
+
 test('calendar navigation SVG-to-glyph substitution witnesses retain distinct year-view accessible names', () => {
   for (const yearView of [false, true]) for (const direction of ['previous', 'next']) {
     const raw = calendarNavigationReport(direction, yearView), before = structuredClone(raw), report = buildMaterialInputAudit(raw);

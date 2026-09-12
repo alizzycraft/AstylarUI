@@ -12,6 +12,58 @@ tests pass). A missing selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Calendar period text/vector composition is explicitly unequal (2026-09-12)
+
+Source finding `fixture-calendar-period-vector-flattened-into-text` traces the
+period header change to `d973f84`: a text span beside an SVG triangle became a
+single value string ending in `▾` or `▴`. The reference authors a 10 by 5 SVG
+with polygon points `0,0 5,5 10,0`; year view inverts that vector with a CSS
+transform. It also supplies a description relationship to the live-period
+label, which the candidate omits. The original vector geometry, transform,
+period text, complete candidate string, and both accessibility inputs now
+remain explicit evidence rather than an unexplained control-text mapping gap.
+
+The mapping requires the independently reviewed day/year context, exact
+period-button/label/text/vector ancestry, original polygon and viewBox, expected
+view-dependent transform, live-label reference, and unique current candidate
+control. It covers **41** open states: **33** month and **8** year views. It
+never strips the appended glyph or claims the full strings match. Typography
+compares the common period prefix using the actual single-font control texture
+inputs; the compound text/vector substitution remains `inputEquivalent:false`.
+The retained-to-control routing likewise carries both reference and candidate
+strings instead of manufacturing a text-registry entry.
+
+This exposes **164** raw typography differences. **123** are source-attributed:
+41 each for font family, tracking and ink. Reference period text inherits the
+text-button font/tracking tokens. Its ink is a two-step declaration chain:
+the text-button color reads `--mat-button-text-label-text-color`, and the
+period-button rule overrides that variable with the calendar on-surface-variant
+token. The candidate header omits component font/tracking and supplies fixed
+ink. Both original token rules are required evidence; a direct color rule on
+the period button must not be invented. The **41 normal-line-height differences
+remain unresolved**, separate from the known unequal vector/text composition.
+
+The report now contains **2,215** current control-text comparisons, **7,979**
+raw typography differences and **68** detected source findings. Current-control
+mapping/stage gaps fall **123 to 41**: the remaining reference controls are
+"Close calendar", not the period header. Unresolved control typography rises
+**2,024 to 2,065** because newly exposed normal-line-height observations stay
+enforced. Full regeneration still correctly exits 1 for 3,896 resolved-style
+attributions, 41 control mappings/stages, 2,065 control typography differences,
+3,616 retained mappings/stages and 14,624 retained typography differences. All
+436 static and 1,875 interaction cases remain inventoried; this is not audit
+completion or proof of equivalent rendering.
+
+`node --test --test-name-pattern='calendar period'
+tests/material-parity/input-equivalence-audit.spec.mjs` passes **4/4**, covering
+both views, 40 contradictory mapping/vector/paint variants, ten typography
+witness mutations and ten altered report records. Validation replays the
+composition and typography witnesses even with partial coverage. The full
+`npm run parity:harness:check` passes **207/207** (118 focused audit tests).
+No fixture, reference, renderer, capture runtime or visual gate changed. The
+implementation plan requires restoring the original span/vector, CSS inversion,
+tokens and accessible description, not adjusting a replacement glyph or offset.
+
 ## Bottom-sheet list structure and label token substitutions traced (2026-09-12)
 
 The two bottom-sheet labels now have exact reference-to-control mappings in
