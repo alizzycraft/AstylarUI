@@ -196,6 +196,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
     'reviewed-core-font-list-rewrite': 'confirmed-core-renderer-defect',
     'reviewed-toolbar-button-line-height-input': 'application-plugin-authoring-defect',
     'reviewed-tab-label-typography-input': 'application-plugin-authoring-defect',
+    'reviewed-calendar-day-typography-input': 'application-plugin-authoring-defect',
     'reviewed-normal-line-box-stage-comparison': 'parity-harness-defect',
   };
   const unresolvedControlTypography = report.controlTypography?.differences.filter((entry) =>
@@ -1828,6 +1829,62 @@ function reviewedCalendarDayControl(ref, referenceTree, astylarTree) {
     candidateChain: [ast.key, grid.key, popup.key], candidatePeriod: astPeriod.key, candidateMonthMarker: marker.key } };
 }
 
+function reviewedCalendarDayPaintInput(entry, property, ref, parent, ast, stages, referenceTree, astylarTree, inventory) {
+  if (entry.family !== 'datepicker' || !['fontFamily', 'lineHeight', 'color'].includes(property) ||
+      !reviewedCalendarDayControl(ref, referenceTree, astylarTree)) return;
+  const referenceRules = (node) => (node.rules ?? []).map(index => inventory.rules[index])
+    .filter(rule => rule?.side === 'reference' && rule.value.active === true).map(rule => rule.value);
+  const candidateRules = astylarTree.rules.map(index => inventory.rules[index])
+    .filter(rule => rule?.side === 'astylar').map(rule => rule.value);
+  const cells = candidateRules.filter(rule => rule.selector === '.datepicker-cell');
+  const days = candidateRules.filter(rule => rule.selector === '.datepicker-day');
+  if (cells.length !== 1 || days.length !== 1 || cells[0].font !== undefined || days[0].font !== undefined) return;
+  const cssProperty = property.replace(/[A-Z]/g, letter => '-' + letter.toLowerCase());
+  // Do not attribute through conflicting leaf declarations or an inline override.
+  if (ref.inline?.[cssProperty] || ref.inline?.font) return;
+  const evidence = { sourceFinding: 'fixture-calendar-day-typography-substitution',
+    referenceNode: ref.key, referenceControl: parent.key, referenceComputed: stages.reference[property],
+    candidateCellRule: cells[0], candidateDayRule: days[0], candidateNormal: stages.normal[property],
+    candidateEffective: stages.effective[property], candidatePainted: stages.painted[property] };
+  let reason;
+  if (property === 'fontFamily') {
+    const parentStyle = inventory.styles[parent.style];
+    const tokens = referenceRules(parent).filter(rule => rule.selector === '.mat-calendar-body-cell' &&
+      rule.declarations?.['font-family']?.value === 'var(--mat-datepicker-calendar-text-font, var(--mat-sys-body-medium-font))');
+    const resets = candidateRules.filter(rule => rule.selector === 'button, input, select' &&
+      canonicalStyle(rule).fontFamily === stages.normal.fontFamily);
+    if (tokens.length !== 1 || resets.length !== 1 || parentStyle?.side !== 'reference' ||
+        canonicalStyle(parentStyle.value).fontFamily !== stages.reference.fontFamily || stages.reference.fontFamily !== 'roboto' ||
+        stages.normal.fontFamily !== 'roboto,arial,sans-serif' || stages.effective.fontFamily !== stages.normal.fontFamily ||
+        stages.painted.fontFamily !== stages.normal.fontFamily || cells[0].fontFamily !== undefined || days[0].fontFamily !== undefined ||
+        parent.inline?.['font-family'] || parent.inline?.font || referenceRules(ref).some(rule => rule.declarations?.font ||
+          (rule.declarations?.['font-family']?.value && rule.declarations['font-family'].value !== 'inherit'))) return;
+    Object.assign(evidence, { referenceRule: tokens[0], candidateResetRule: resets[0], referenceParentComputed: stages.reference.fontFamily });
+    reason = 'The captured calendar font token reaches the reference day label. The replacement day button omits that component font and passes the longer document control stack unchanged through normal, effective and actual texture paint. This is unequal authoring, not evidence that core selected a wrong font for equal inputs.';
+  } else {
+    const tokens = referenceRules(ref).filter(rule => rule.selector === '.mat-calendar-body-cell-content' &&
+      rule.declarations?.[cssProperty]?.value === (property === 'lineHeight' ? '1' : 'var(--mat-datepicker-calendar-date-text-color, var(--mat-sys-on-surface))'));
+    if (tokens.length !== 1 || referenceRules(ref).some(rule => rule !== tokens[0] &&
+        (rule.declarations?.font || (rule.declarations?.[cssProperty]?.value && rule.declarations[cssProperty].value !== 'inherit')))) return;
+    evidence.referenceRule = tokens[0];
+    if (property === 'lineHeight') {
+      const chain = candidateTypographyOmissionChain(ast, astylarTree, inventory, 'lineHeight');
+      if (!chain || cells[0].lineHeight !== undefined || days[0].lineHeight !== undefined ||
+          stages.reference.lineHeight !== stages.reference.fontSize || stages.painted.fontSize !== stages.reference.fontSize ||
+          !/^\d+(?:\.\d+)?px$/.test(stages.painted.lineHeight ?? '')) return;
+      evidence.candidateOmissionChain = chain;
+      reason = 'The inner reference date label explicitly declares line-height:1, but the flattened candidate button and its entire normal/effective ancestry omit line-height. Actual control paint consequently uses a different line height. Restore the reference inner line-box input before assessing any remaining core metric defect; a fixed container height or baseline adjustment is not an equivalent input.';
+    } else {
+      if (canonicalStyle(cells[0]).color !== stages.normal.color || stages.normal.color !== 'rgba(29,27,32,1)' ||
+          stages.effective.color !== stages.normal.color || stages.painted.color !== stages.normal.color || days[0].color !== undefined) return;
+      reason = 'The reference day label uses the captured date-text/on-surface token, while the candidate cell fixes #1d1b20 and retains it unchanged in normal, effective and actual texture paint. The fixed ink dates to 87f7f83 and is not equivalent to the observed token result. No color-distance tolerance or screenshot similarity waives this input difference.';
+    }
+  }
+  return { classification: 'application-plugin-authoring-defect', attribution: 'reviewed-calendar-day-typography-input',
+    recommendedOwner: 'showcase calendar token translation and core-composed inner text structure',
+    justification: reason, reviewEvidence: evidence };
+}
+
 // These paths describe Material's actual button and explicit template tab
 // labels, not an inferred text match. Other texture owners stay visible gaps.
 export function collectControlTypographyEvidence(cases, inventory) {
@@ -1927,7 +1984,8 @@ export function collectControlTypographyEvidence(cases, inventory) {
             recommendedOwner: 'input audit control authored-token and core paint-input attribution',
             justification: 'Browser computed and actual control texture paint inputs differ. Attribute authored tokens and parser/runtime behavior before assigning fault. CSS normal line-height, font fallback and composited colors are not automatically equivalent to numeric or opaque substitutes.',
             ...(reviewedButtonPaintInput(entry, property, ref, parent, ast, stages, referenceTree, astylarTree, inventory) ??
-              reviewedTabPaintInput(entry, property, ref, parent, ast, stages, referenceTree, astylarTree, inventory) ?? {}) });
+              reviewedTabPaintInput(entry, property, ref, parent, ast, stages, referenceTree, astylarTree, inventory) ??
+              reviewedCalendarDayPaintInput(entry, property, ref, parent, ast, stages, referenceTree, astylarTree, inventory) ?? {}) });
         }
       }
       comparisons.push(comparison);
@@ -2314,6 +2372,7 @@ function implementationPlan() {
     { priority: 5.1, rootCause: 'Core rewrites an explicit font-family list before paint', action: 'The parser appends Arial, Helvetica, sans-serif to explicit lists without a recognized generic. Preserve this as distinct from missing Material font-token authoring. The equal-input unavailable-family proof now confirms changed text advance, while both explicit-generic controls pass. Preserve authored family ordering/quoting and browser fallback semantics at the core parser boundary; verify available/unavailable and missing-glyph cases without assuming a particular platform font. Do not add a generic family to the showcase merely to avoid the parser branch. Final raster verification remains separate from the measured advance proof.' },
     { priority: 5.2, rootCause: 'Material control typography tokens and nested line boxes are replaced by fixture defaults', action: 'Translate the original filled/outlined/text button and tab font/tracking tokens instead of inheriting the document control stack or omitting tracking. Restore toolbar button line-height inheritance instead of copying the density-specific container height. Preserve the tab text-label line-height:1 inside its independently sized content/control rather than applying the outer line-height to a flattened value label. Preserve alpha ink as a distinct authored input. Then investigate any core API or equal-input text mismatch; do not adjust font size, baseline, or offsets to recover screenshot similarity.' },
     { priority: 5.3, rootCause: 'Core normal line-height is approximated by a fixed Mg font-box probe', action: 'Resolve browser normal line-box metrics and actual fallback runs in core. The equal-input Arial/serif cases expose one-pixel texture-height errors; Roboto plus emoji/CJK exposes two-pixel errors while plain Roboto and explicit line heights pass. Preserve those controls, extend multiline/baseline/DPR verification and avoid a universal multiplier, constant pixel addition, or fixed Material line-height compensation. Current-texture evidence must remain separate from declared normal and from final glyph raster.' },
+    { priority: 5.4, rootCause: 'Calendar date text tokens and inner line boxes were flattened away', action: 'Restore the reference calendar font and date-text ink tokens and its inner line-height:1 label inside the day control. Keep the reference cell/container sizing, state and selection structure instead of copying a normal-metric result or tuning the baseline. The full-date/context audit now isolates 990 occurrences each of missing font-token, omitted inner line-height and fixed-ink inputs; core metric defects must be assessed only after those inputs are equivalent. Independently resolve normal-versus-zero tracking and the still-unmapped year/header/icon owners.' },
     { priority: 6, rootCause: 'Interaction geometry duplicated by the application', action: 'Expose resolved CSS-space target bounds and local pointer coordinates in the core event/plugin contract; remove ripple width tables.' },
     { priority: 7, rootCause: 'Material paint inputs are substituted or calibrated', action: 'Supply the paginator reference SVG paths and their CSS/state paint through core vector/image rendering instead of font-character approximations. Express progress angles, state layers, checkmarks, selection rings, and indicators from reference Material geometry in CSS space; remove screenshot-derived angle and fractional-position constants. Diagnose core only after the actual same geometry is supplied.' },
     { priority: 8, rootCause: 'Regression gate permits unequal inputs', action: 'Run this audit in CI after the full parity matrix, require complete coverage and zero unclassified differences, and review any new Astylar-only authored rule before updating the checked-in report.' },

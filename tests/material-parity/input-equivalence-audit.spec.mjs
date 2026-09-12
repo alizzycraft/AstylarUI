@@ -1622,6 +1622,77 @@ test('calendar correspondence evidence is revalidated even when partial audit co
   }
 });
 
+function calendarDayTypographyAttributionReport() {
+  const raw = calendarDayTypographyReport(), { reference: ref, astylar: ast } = raw.results[0].inputTrees;
+  Object.assign(ref.styles[0], { fontFamily: 'Roboto', fontSize: '14px', lineHeight: '14px', color: '#1d1b1e' });
+  ref.rules = [
+    { active: true, selector: '.mat-calendar-body-cell', declarations: {
+      'font-family': { value: 'var(--mat-datepicker-calendar-text-font, var(--mat-sys-body-medium-font))' } } },
+    { active: true, selector: '.mat-calendar-body-cell-content', declarations: {
+      'line-height': { value: '1' }, color: { value: 'var(--mat-datepicker-calendar-date-text-color, var(--mat-sys-on-surface))' } } },
+  ];
+  ref.nodes.find(n => n.key === 'day').rules = [0];
+  ref.nodes.find(n => n.key === 'day-label').rules = [1];
+  ast.nodes.find(n => n.key === 'ast-popup').parent = 'page';
+  ast.nodes.push({ key: 'page', parent: 'root', authored: { type: 'main', id: 'page' },
+    resolvedStyle: {}, normalResolvedStyle: {}, interactionResolvedStyle: {} });
+  const day = ast.nodes[0];
+  for (const style of [day.normalResolvedStyle, day.interactionResolvedStyle]) {
+    Object.assign(style, { fontFamily: 'Roboto, Arial, sans-serif', fontSize: '14px', color: '#1d1b20' });
+    delete style.lineHeight;
+  }
+  Object.assign(day.paintedControlText.style, { fontFamily: 'Roboto, Arial, sans-serif', fontSize: 14, lineHeight: 17 / 14, color: '#1d1b20' });
+  ast.rules = [
+    { selector: 'button, input, select', fontFamily: 'Roboto, Arial, sans-serif' },
+    { selector: '.datepicker-cell', fontSize: '14px', color: '#1d1b20' },
+    { selector: '.datepicker-day', padding: '0' },
+  ];
+  return raw;
+}
+
+test('calendar day typography attributes captured font tokens, omitted inner line-height and fixed ink', () => {
+  const raw = calendarDayTypographyAttributionReport(), before = structuredClone(raw);
+  const report = buildMaterialInputAudit(raw);
+  const differences = report.controlTypography.differences;
+  assert.equal(differences.length, 3);
+  assert.deepEqual(differences.map(d => d.property).sort(), ['color', 'fontFamily', 'lineHeight']);
+  assert.ok(differences.every(d => d.attribution === 'reviewed-calendar-day-typography-input' &&
+    d.classification === 'application-plugin-authoring-defect' && d.reviewEvidence.sourceFinding === 'fixture-calendar-day-typography-substitution'));
+  assert.equal(differences.find(d => d.property === 'lineHeight').reviewEvidence.candidateOmissionChain.at(-1).node, 'page');
+  assert.equal(report.summary.inputEquivalent, false);
+  assert.ok(!validateMaterialInputAudit(report).some(error => error.includes('control texture typography differences')));
+  assert.deepEqual(raw, before);
+});
+
+test('calendar typography does not attribute through missing tokens, overrides, or a changed paint stage', () => {
+  const mutations = [
+    ['fontFamily', (r, a) => { r.rules[0].active = false; }],
+    ['fontFamily', (r, a) => { r.rules[0].declarations['font-family'].value = 'Roboto'; }],
+    ['fontFamily', (r, a) => { a.rules[0].fontFamily = 'Arial'; }],
+    ['fontFamily', (r, a) => { a.rules[1].fontFamily = 'Roboto, Arial, sans-serif'; }],
+    ['fontFamily', (r, a) => { a.nodes[0].paintedControlText.style.fontFamily = 'Arial'; }],
+    ['fontFamily', (r, a) => { r.nodes.find(n => n.key === 'day-label').inline = { 'font-family': { value: 'Roboto' } }; }],
+    ['lineHeight', (r, a) => { r.rules[1].declarations['line-height'].value = '14px'; }],
+    ['lineHeight', (r, a) => { a.nodes.find(n => n.key === 'page').interactionResolvedStyle.lineHeight = 'normal'; }],
+    ['lineHeight', (r, a) => { a.nodes.find(n => n.key === 'ast-popup').parent = 'missing'; }],
+    ['lineHeight', (r, a) => { a.rules[2].lineHeight = 'normal'; }],
+    ['lineHeight', (r, a) => { r.styles[0].lineHeight = '20px'; }],
+    ['lineHeight', (r, a) => { a.nodes[0].paintedControlText.style.fontSize = 15; }],
+    ['color', (r, a) => { r.rules[1].declarations.color.value = '#1d1b1e'; }],
+    ['color', (r, a) => { a.rules[1].color = '#111111'; }],
+    ['color', (r, a) => { a.nodes[0].interactionResolvedStyle.color = '#111111'; }],
+    ['color', (r, a) => { a.nodes[0].paintedControlText.style.color = '#111111'; }],
+    ['color', (r, a) => { r.rules.push({ active: true, selector: '.selected', declarations: { color: { value: 'red' } } }); r.nodes.find(n => n.key === 'day-label').rules.push(2); }],
+    ['color', (r, a) => { a.rules.push({ ...a.rules[1] }); }],
+  ];
+  for (const [property, mutate] of mutations) {
+    const raw = calendarDayTypographyAttributionReport(), trees = raw.results[0].inputTrees;
+    mutate(trees.reference, trees.astylar);
+    const difference = controlEvidence(raw).differences.find(d => d.property === property);
+    assert.equal(difference?.attribution, 'unresolved', `${property}: ${mutate}`);
+  }
+});
+
 test('registry audit routes an exact core control label to its actual texture stage without fabricating retained text', () => {
   const raw = controlTypographyReport();
   delete raw.results[0].inputTrees.astylar.nodes[0].retainedText;

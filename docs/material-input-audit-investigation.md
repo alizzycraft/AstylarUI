@@ -12,6 +12,44 @@ tests pass). A missing selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Calendar typography differences traced to authored substitutions (2026-09-12)
+
+The new source finding `fixture-calendar-day-typography-substitution` and
+`reviewed-calendar-day-typography-input` attribution explain **2,970** captured
+differences: **990 each** in font family, line-height and ink. They remain unequal
+inputs; no values or raw differences are normalized away.
+
+The attribution requires the exact reviewed full-date/context mapping, unique
+captured component rules and normal/effective/actual texture evidence. For font
+family it checks the reference calendar token and label inheritance, plus the
+candidate document reset and missing calendar font override. For line-height it
+requires the reference inner `line-height:1`, matching font size and a complete
+candidate normal/effective omission chain to the page. For ink it requires the
+reference date-text token and the candidate's explicit #1d1b20 reaching actual
+paint unchanged. Conflicting leaf/inline declarations, missing tokens, duplicate
+rules, intervening line-height, broken ancestry and changed paint inputs leave
+the property unresolved.
+
+History confirms that `87f7f83` introduced the fixed cell ink and omitted
+typography; `c64397c` changed the day span into a button while retaining the flat
+text representation. The reference retains a distinct inner label with its own
+line-height and ink. The root-cause plan now explicitly calls for restoring
+those original inputs and structure through core composition, not translating
+the observed 17px texture height into a fixture rule or moving a baseline.
+This does not exonerate core text metrics: existing equal-input metric failures
+remain separate, and any remaining discrepancy after input restoration needs
+its own core proof.
+
+`npm run parity:harness:check` passes **188/188** (99 focused audit tests), with
+18 additional contradictory-input controls and an assertion that the source
+capture is not mutated. Full report regeneration validates the same 436 static /
+1,875 interaction cases and detects **63** source findings. It correctly exits 1:
+**1,714** control typography differences remain unresolved, including the 990
+calendar normal-versus-zero tracking comparisons. The other current gaps remain
+3,896 resolved-style attributions, 707 control mappings/stages, 3,641 retained
+mapping/stage gaps and 14,624 retained typography differences. No fixture,
+renderer, capture runtime or acceptance threshold changed.
+
 ## Calendar day text now has date-and-context correspondence (2026-09-12)
 
 The full matrix's datepicker controls use generated reference nodes without

@@ -635,6 +635,16 @@ export const sourceAuditDefinitions = Object.freeze([
     justification: 'A separate ring is positioned from duplicated row/column arithmetic instead of being centered by the selected grid cell.',
   }),
   Object.freeze({
+    id: 'fixture-calendar-day-typography-substitution',
+    introducedBy: '87f7f83 fixed cell ink/omitted typography; c64397c flattened day span into control',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`selector: '\.datepicker-cell'[^\n]*color: '#1d1b20'[^\n]*fontSize: '14px'`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase calendar component token translation and inner text structure',
+    focusedProof: 'tests/material-parity/input-equivalence-audit.spec.mjs: calendar day typography declaration witnesses and contradictory-input controls',
+    justification: 'The reference day label has an inner line-height:1 box, calendar font token and date-text color token. The candidate flat day control inherits the longer document font stack, omits the inner line-height and fixes #1d1b20. Full-date/context mapping exposes these unequal normal/effective/current texture inputs without claiming a core defect or compensating baseline fix.',
+  }),
+  Object.freeze({
     id: 'fixture-tab-breakpoint-raster-compensation',
     introducedBy: '4e58f58/25e1893 compact navigation and interaction parity fixes',
     file: 'examples/material-showcase/src/app/astylar.component.ts',
