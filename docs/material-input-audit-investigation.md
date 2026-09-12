@@ -12,6 +12,54 @@ tests pass). A missing selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Snackbar action identity and token substitutions traced (2026-09-12)
+
+The action is no longer an anonymous label/current-texture mapping gap. A new
+exact correspondence requires the complete Material label/action/actions/
+simple-snackbar/live-region/container/overlay chain, a unique sibling message,
+and the candidate action/surface/overlay/page chain with that same message.
+This identifies **34** current `UNDO` textures across the captured open states.
+It does not certify equal wrapper layout, live-region semantics, visibility,
+placement, lifetime, interaction, or final raster. The message itself still has
+separate retained-text audit obligations; no registry entry is fabricated for
+the action's core-owned control texture.
+
+New source finding `fixture-snackbar-action-typography-substitution` traces the
+shared `.overlay-dismiss` rule to `2f44011` and the generic control font reset
+to `af04845`. The reference action computes Roboto, 14px, .096px tracking and
+snackbar inverse-primary ink; the candidate texture receives the generic
+Roboto/Arial/sans-serif stack, 16px, zero tracking and `theme.primary` ink.
+The captured token/reset/rule/normal/effective/current-paint witnesses attribute
+**102 differences**: 34 each in font family, tracking and color. These remain
+unequal inputs, not accepted representational differences or core paint faults.
+
+The **34 font-size and 34 normal-line-height differences remain unresolved**
+pending their defaults/inheritance and actual metric trace. In these captures
+the candidate paints a 19px line box; the reference declaration is `normal`.
+That keyword cannot simply be equated to an observed candidate number, and the
+earlier static 14px normal-line-box supplement does not cover these overlay
+states. The implementation plan explicitly preserves this distinction and the
+separate snackbar intrinsic-width/placement/behavior work.
+
+The report now has **2,124** control-text comparisons, **7,565** raw control
+typography differences and **173** remaining control mapping/stage gaps (down
+from 241). The unresolved control-typography count rises from 1,906 to **1,974**
+because the newly mapped size/line-height differences are honestly exposed.
+All 436 static and 1,875 interaction cases remain inventoried; all **66** source
+findings are detected. The full report regeneration intentionally exits 1 for
+the remaining 3,896 resolved-style attributions, 173 control mappings/stages,
+1,974 control typography differences, 3,641 retained mappings/stages and 14,624
+retained typography differences. This is not audit acceptance.
+
+`node --test --test-name-pattern='snackbar action'
+tests/material-parity/input-equivalence-audit.spec.mjs` passes **5/5**, including
+25 contradictory mapping/paint cases, 14 declaration-witness cases and 12
+report mutations. Mapping and typography witnesses are replayed from captured
+inputs even under partial-coverage validation; detached claims do not pass.
+`npm run parity:harness:check` passes **199/199** (110 focused audit tests).
+No renderer, fixture, reference, capture runtime or visual threshold changed.
+The bottom-sheet action mappings remain the next overlay-control investigation.
+
 ## Calendar navigation replaces vectors and retains wrong year-view names (2026-09-12)
 
 New source finding `fixture-calendar-navigation-svg-icons-replaced-by-text-glyphs`

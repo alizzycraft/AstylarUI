@@ -189,6 +189,24 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
       JSON.stringify(mapped.evidence) !== JSON.stringify(comparison.mapping.reviewEvidence);
   }) ?? [];
   if (invalidCalendarMappings.length) errors.push(`${invalidCalendarMappings.length} calendar cell mappings lack exact captured date/range context evidence`);
+  const invalidSnackbarMappings = report.controlTypography?.comparisons.filter((comparison) => {
+    if (comparison.mapping?.kind !== 'reviewed-material-snackbar-action-label') return false;
+    const inventory = report.elementInventory;
+    const refs = inventory.cases.filter(c => c.case === comparison.case && c.side === 'reference');
+    const asts = inventory.cases.filter(c => c.case === comparison.case && c.side === 'astylar');
+    if (comparison.family !== 'snack-bar' || refs.length !== 1 || asts.length !== 1) return true;
+    const ref = inventory.variants[refs[0].variant], ast = inventory.variants[asts[0].variant];
+    const leaves = ref.nodes.filter(n => n.key === comparison.referenceNode);
+    const mapping = leaves.length === 1 && reviewedSnackbarActionControl(leaves[0], ref, ast);
+    const candidates = ast.nodes.filter(n => n.key === comparison.astylarNode && n.authored?.id === comparison.element);
+    return !mapping || mapping.id !== comparison.element || mapping.parent.key !== comparison.referenceControl ||
+      candidates.length !== 1 || candidates[0].paintedControlText?.source !== 'core-control-texture' ||
+      candidates[0].paintedControlText.text !== comparison.text || leaves[0].ownText.trim() !== comparison.text.trim() ||
+      comparison.source !== 'core-control-texture' || comparison.revision !== asts[0].resolvedStyleRevision ||
+      comparison.finalRasterVerified !== false ||
+      JSON.stringify(mapping.evidence) !== JSON.stringify(comparison.mapping.reviewEvidence);
+  }) ?? [];
+  if (invalidSnackbarMappings.length) errors.push(`${invalidSnackbarMappings.length} snackbar action mappings lack captured overlay/message context evidence`);
   if (requireComplete && report.controlTypography?.gaps.length > 0) errors.push(`${report.controlTypography.gaps.length} control texture mappings or stage fields require review`);
   const reviewedControlKinds = {
     'reviewed-button-tracking-input': 'application-plugin-authoring-defect',
@@ -199,6 +217,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
     'reviewed-tab-label-typography-input': 'application-plugin-authoring-defect',
     'reviewed-calendar-day-typography-input': 'application-plugin-authoring-defect',
     'reviewed-calendar-year-typography-input': 'application-plugin-authoring-defect',
+    'reviewed-snackbar-action-typography-input': 'application-plugin-authoring-defect',
     'reviewed-normal-line-box-stage-comparison': 'parity-harness-defect',
   };
   const unresolvedControlTypography = report.controlTypography?.differences.filter((entry) =>
@@ -206,6 +225,21 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
     (entry.attribution === 'reviewed-normal-line-box-stage-comparison' &&
       !isReviewedNormalLineBoxDifference(entry, report.normalLineBoxes))) ?? [];
   if (requireComplete && unresolvedControlTypography.length > 0) errors.push(`${unresolvedControlTypography.length} control texture typography differences require attribution`);
+  const snackbarReplays = new Map();
+  const invalidSnackbarTypography = report.controlTypography?.differences.filter(difference => {
+    if (difference.attribution !== 'reviewed-snackbar-action-typography-input') return false;
+    if (difference.family !== 'snack-bar') return true;
+    if (!snackbarReplays.has(difference.case)) {
+      const comparison = report.controlTypography.comparisons.find(c => c.case === difference.case && c.element === difference.element);
+      const match = /^(static|interaction):snack-bar@([^/]+)\/([^/]+)(?:\/(.+))?$/.exec(difference.case);
+      const replay = comparison && match ? collectControlTypographyEvidence([{ kind: match[1], family: 'snack-bar',
+        profile: match[2], viewport: { id: match[3] }, ...(match[4] ? { state: match[4] } : {}) }], report.elementInventory) : undefined;
+      snackbarReplays.set(difference.case, replay);
+    }
+    const matches = snackbarReplays.get(difference.case)?.differences.filter(d => d.element === difference.element && d.property === difference.property) ?? [];
+    return matches.length !== 1 || JSON.stringify(matches[0]) !== JSON.stringify(difference);
+  }) ?? [];
+  if (invalidSnackbarTypography.length) errors.push(`${invalidSnackbarTypography.length} snackbar action typography attributions lack replayable captured input evidence`);
   if (!Array.isArray(report.controlTypography?.iconSubstitutions)) errors.push('missing control icon substitution inventory');
   const unresolvedIcons = report.controlTypography?.iconSubstitutions?.filter((entry) =>
     !['reviewed-paginator-svg-to-glyph-input', 'reviewed-calendar-navigation-svg-to-glyph-input'].includes(entry.attribution) || entry.classification !== 'application-plugin-authoring-defect' ||
@@ -1352,7 +1386,7 @@ export function collectRetainedTypographyEvidence(cases, inventory, controlTypog
     // Preserve the routing explicitly so removing their paint evidence fails.
     const controlMappings = controlTypography.comparisons.filter((item) => item.case === key &&
       item.source === 'core-control-texture' &&
-      ['reviewed-material-button-label', 'reviewed-material-tab-label', 'reviewed-material-calendar-day-label', 'reviewed-material-calendar-year-label'].includes(item.mapping?.kind));
+      ['reviewed-material-button-label', 'reviewed-material-tab-label', 'reviewed-material-calendar-day-label', 'reviewed-material-calendar-year-label', 'reviewed-material-snackbar-action-label'].includes(item.mapping?.kind));
     const controlReferenceKeys = new Set(controlMappings.map((item) => item.referenceNode));
     const controlAstylarKeys = new Set(controlMappings.map((item) => item.astylarNode));
     controlTextMappings.push(...controlMappings.map((item) => ({ case: key, element: item.element,
@@ -1945,6 +1979,114 @@ function reviewedCalendarCellPaintInput(entry, property, ref, parent, ast, stage
     justification: reason, reviewEvidence: evidence };
 }
 
+function reviewedSnackbarActionControl(ref, referenceTree, astylarTree) {
+  const hasClass = (node, name) => String(node?.attributes?.class ?? '').split(/\s+/).includes(name);
+  const unique = nodes => nodes.length === 1 ? nodes[0] : undefined;
+  if (ref.type !== 'span' || !hasClass(ref, 'mdc-button__label') ||
+      referenceTree.nodes.some(n => n.parent === ref.key) ||
+      referenceTree.nodes.filter(n => n.key === ref.key).length !== 1) return;
+  const chain = [ref];
+  for (const [type, className] of [['button', 'mat-mdc-snack-bar-action'], ['div', 'mat-mdc-snack-bar-actions'],
+    ['simple-snack-bar', 'mat-mdc-simple-snack-bar'], ['div'], ['div'], ['div', 'mat-mdc-snack-bar-label'],
+    ['div', 'mat-mdc-snackbar-surface'], ['mat-snack-bar-container', 'mat-mdc-snack-bar-container'],
+    ['div', 'cdk-overlay-pane'], ['div', 'cdk-global-overlay-wrapper'], ['div', 'cdk-overlay-container']]) {
+    const node = unique(referenceTree.nodes.filter(n => n.key === chain.at(-1).parent));
+    if (!node || node.type !== type || (className && !hasClass(node, className)) || node.ownText?.trim()) return;
+    chain.push(node);
+  }
+  const [, parent, actions, simple, , live, , , container] = chain;
+  if (chain.at(-1).parent !== null || !Object.hasOwn(parent.attributes, 'matsnackbaraction') ||
+      !Object.hasOwn(actions.attributes, 'matsnackbaractions') || live.attributes?.['aria-live'] !== 'polite' ||
+      !/^mat-snack-bar-container-live-\d+$/.test(live.attributes?.id ?? '') ||
+      referenceTree.nodes.filter(n => n.type === 'mat-snack-bar-container').length !== 1 ||
+      referenceTree.nodes.filter(n => n.type === 'simple-snack-bar').length !== 1 ||
+      referenceTree.nodes.filter(n => hasClass(n, 'mat-mdc-snack-bar-action')).length !== 1 ||
+      referenceTree.nodes.filter(n => n.parent === parent.key && hasClass(n, 'mdc-button__label')).length !== 1 ||
+      referenceTree.nodes.filter(n => n.parent === actions.key).length !== 1) return;
+  const message = unique(referenceTree.nodes.filter(n => n.parent === simple.key && n.type === 'div' &&
+    hasClass(n, 'mat-mdc-snack-bar-label') && hasClass(n, 'mdc-snackbar__label') && Object.hasOwn(n.attributes, 'matsnackbarlabel')));
+  if (!message?.ownText?.trim() || referenceTree.nodes.some(n => n.parent === message.key) ||
+      referenceTree.nodes.filter(n => n.parent === simple.key).length !== 2) return;
+  // State/message and component ancestry establish identity, not matching text
+  // somewhere else in the page. Keep the replaced wrappers/roles as evidence.
+  const id = 'snack-bar-dismiss';
+  const candidate = unique(astylarTree.nodes.filter(n => n.authored?.id === id));
+  if (!candidate || candidate.authored.type !== 'button' || candidate.authored.class !== 'overlay-dismiss' ||
+      candidate.authored.value !== 'UNDO' || ref.ownText.trim() !== 'UNDO' ||
+      astylarTree.nodes.some(n => n.parent === candidate.key)) return;
+  const candidateChain = [candidate];
+  for (const [type, nodeId] of [['div', 'snack-bar-surface'], ['div', 'snack-bar-overlay'], ['section', 'snack-bar-root'], ['main', 'page']]) {
+    const node = unique(astylarTree.nodes.filter(n => n.authored?.id === nodeId));
+    if (!node || node.authored.type !== type || node.key !== candidateChain.at(-1).parent) return;
+    candidateChain.push(node);
+  }
+  const surface = candidateChain[1], overlay = candidateChain[2];
+  const title = unique(astylarTree.nodes.filter(n => n.authored?.id === 'snack-bar-title'));
+  if (candidateChain.at(-1).parent !== 'root' || surface.authored.class !== 'snack-surface' ||
+      surface.authored.role !== 'status' || surface.authored.ariaLive !== 'polite' || surface.authored.ariaAtomic !== true ||
+      overlay.authored.class !== 'snack-overlay' || !title || title.parent !== surface.key || title.authored.type !== 'span' ||
+      message.ownText.trim() !== title.authored.textContent?.trim() ||
+      astylarTree.nodes.some(n => n.parent === title.key) || astylarTree.nodes.filter(n => n.parent === surface.key).length !== 2) return;
+  return { id, parent, evidence: {
+    referenceChain: chain.map(n => ({ key: n.key, parent: n.parent, type: n.type, attributes: structuredClone(n.attributes) })),
+    referenceContainer: container.key,
+    referenceMessage: { key: message.key, parent: message.parent, text: message.ownText },
+    candidateChain: candidateChain.map(n => ({ key: n.key, parent: n.parent, authored: structuredClone(n.authored) })),
+    candidateMessage: { key: title.key, parent: title.parent, text: title.authored.textContent },
+  } };
+}
+
+function reviewedSnackbarActionPaintInput(entry, property, ref, parent, ast, stages, referenceTree, astylarTree, inventory) {
+  if (entry.family !== 'snack-bar' || !reviewedSnackbarActionControl(ref, referenceTree, astylarTree) ||
+      !['fontFamily', 'letterSpacing', 'color'].includes(property)) return;
+  const referenceParent = inventory.styles[parent.style];
+  if (referenceParent?.side !== 'reference' || canonicalStyle(referenceParent.value)[property] !== stages.reference[property]) return;
+  const cssProperty = { fontFamily: 'font-family', letterSpacing: 'letter-spacing', color: 'color' }[property];
+  const rulesAt = node => (node.rules ?? []).map(index => inventory.rules[index])
+    .filter(rule => rule?.side === 'reference').map(rule => rule.value);
+  if (rulesAt(ref).some(rule => rule.active === true && (rule.declarations?.font ||
+      (rule.declarations?.[cssProperty]?.value && rule.declarations[cssProperty].value !== 'inherit'))) ||
+      new RegExp(`(?:^|;)\\s*(?:font|${cssProperty})\\s*:`, 'i').test(ref.attributes?.style ?? '')) return;
+  const selector = property === 'color'
+    ? '.mat-mdc-snack-bar-container .mat-mdc-button.mat-mdc-snack-bar-action:not(:disabled).mat-unthemed' : '.mat-mdc-button';
+  const token = property === 'color' ? 'var(--mat-snack-bar-button-color, var(--mat-sys-inverse-primary))'
+    : property === 'fontFamily' ? 'var(--mat-button-text-label-text-font, var(--mat-sys-label-large-font))'
+      : 'var(--mat-button-text-label-text-tracking, var(--mat-sys-label-large-tracking))';
+  const referenceRules = rulesAt(parent).filter(rule => rule.active === true && rule.selector === selector &&
+    rule.declarations?.[cssProperty]?.value === token);
+  const candidateRules = astylarTree.rules.map(index => inventory.rules[index])
+    .filter(rule => rule?.side === 'astylar').map(rule => rule.value);
+  const controlRules = candidateRules.filter(rule => rule.selector === '.overlay-dismiss');
+  if (referenceRules.length !== 1 || controlRules.length !== 1 || controlRules[0].font !== undefined) return;
+  const evidence = { sourceFinding: 'fixture-snackbar-action-typography-substitution',
+    referenceRule: referenceRules[0], referenceParent: parent.key, referenceComputed: stages.reference[property],
+    candidateRule: controlRules[0], candidateNormal: stages.normal[property] ?? null,
+    candidateEffective: stages.effective[property] ?? null, candidatePainted: stages.painted[property] };
+  let reason;
+  if (property === 'fontFamily') {
+    const resets = candidateRules.filter(rule => rule.selector === 'button, input, select' &&
+      canonicalStyle(rule).fontFamily === stages.normal.fontFamily);
+    if (resets.length !== 1 || controlRules[0].fontFamily !== undefined || stages.reference.fontFamily !== 'roboto' ||
+        stages.normal.fontFamily !== 'roboto,arial,sans-serif' || stages.effective.fontFamily !== stages.normal.fontFamily ||
+        stages.painted.fontFamily !== stages.normal.fontFamily) return;
+    evidence.candidateResetRule = resets[0];
+    reason = 'The reference action uses the Material text-button font token; the candidate overlay-dismiss leaves it out and supplies the generic control reset stack unchanged to current texture paint. This is unequal authored font input, not proof of different physical glyphs or a core font-selection defect.';
+  } else if (property === 'letterSpacing') {
+    const chain = candidateTypographyOmissionChain(ast, astylarTree, inventory, property);
+    if (!chain || controlRules[0].letterSpacing !== undefined || stages.reference.letterSpacing !== '0.096px' ||
+        stages.painted.letterSpacing !== '0') return;
+    evidence.candidateChain = chain;
+    reason = 'The reference action and label compute .096px from the Material tracking token. The candidate control rule and complete normal/effective ancestry omit tracking and actual texture paint receives zero. The missing component input is not a demonstrated core tracking defect.';
+  } else {
+    if (canonicalStyle(controlRules[0]).color !== stages.normal.color || stages.effective.color !== stages.normal.color ||
+        stages.painted.color !== stages.normal.color || stages.reference.color === stages.normal.color) return;
+    reason = 'The reference action uses the snackbar inverse-primary token. The candidate overlay-dismiss explicitly substitutes theme.primary and supplies that unequal ink unchanged to normal/effective/current paint. The captured declaration and values establish authoring inequality, not a renderer color-conversion defect; no theme-specific RGB value is assumed.';
+  }
+  return { classification: 'application-plugin-authoring-defect', attribution: 'reviewed-snackbar-action-typography-input',
+    recommendedOwner: 'showcase snackbar action Material token translation', justification: reason,
+    reviewEvidence: structuredClone(evidence) };
+}
+
 // These paths describe Material's actual button and explicit template tab
 // labels, not an inferred text match. Other texture owners stay visible gaps.
 export function collectControlTypographyEvidence(cases, inventory) {
@@ -1981,14 +2123,15 @@ export function collectControlTypographyEvidence(cases, inventory) {
       const calendarDay = calendarLabel ? reviewedCalendarCellControl(ref, referenceTree, astylarTree) : undefined;
       const calendarYear = calendarLabel && !calendarDay ? reviewedCalendarCellControl(ref, referenceTree, astylarTree, 'year') : undefined;
       const calendar = calendarDay ?? calendarYear;
+      const snackbar = entry.family === 'snack-bar' ? reviewedSnackbarActionControl(ref, referenceTree, astylarTree) : undefined;
       const parents = calendarLabel ? [calendar?.parent].filter(Boolean) : tabLabel ? [reviewedTabLabelControl(ref, referenceTree)].filter(Boolean)
         : referenceTree.nodes.filter((node) => node.key === ref.parent && node.type === 'button');
       const parent = parents.length === 1 ? parents[0] : undefined;
-      const id = calendarLabel ? calendar?.id : tabLabel ? ref.attributes.id : parent?.attributes?.id || parent?.attributes?.['data-parity-id'];
+      const id = calendarLabel ? calendar?.id : tabLabel ? ref.attributes.id : snackbar?.id || parent?.attributes?.id || parent?.attributes?.['data-parity-id'];
       const astNodes = astylarTree.nodes.filter((node) => id && node.authored?.id === id);
       const referenceOwners = referenceTree.nodes.filter((node) => id &&
         (node.attributes?.id === id || node.attributes?.['data-parity-id'] === id));
-      if (!parent || !id || (!calendarLabel && referenceOwners.length !== 1) || astNodes.length !== 1 || astNodes[0].authored.type !== 'button' ||
+      if (!parent || !id || (!calendarLabel && !snackbar && referenceOwners.length !== 1) || astNodes.length !== 1 || astNodes[0].authored.type !== 'button' ||
           (tabLabel && (astNodes[0].authored.role !== 'tab' || !String(astNodes[0].authored.class ?? '').split(/\s+/).includes('tab'))) ||
           referenceTree.nodes.filter((node) => node.key === ref.key).length !== 1 ||
           (!tabLabel && !calendarLabel && buttonLabelNodes.filter((node) => node.parent === parent.key).length !== 1) ||
@@ -2028,7 +2171,9 @@ export function collectControlTypographyEvidence(cases, inventory) {
         referenceNode: ref.key, referenceControl: parent.key, astylarNode: ast.key, text: paint.text,
         source: paint.source, revision: asts[0].resolvedStyleRevision, rawPaintedStyle: paint.style,
         maxWidth: paint.maxWidth, finalRasterVerified: false,
-        mapping: calendarYear ? { kind: 'reviewed-material-calendar-year-label', reviewEvidence: calendar.evidence,
+        mapping: snackbar ? { kind: 'reviewed-material-snackbar-action-label', reviewEvidence: snackbar.evidence,
+          justification: 'The unique snackbar action/label path is anchored to the captured Material overlay and its sibling message; the unique candidate action is anchored to its surface, overlay and matching sibling message. This establishes current text-owner correspondence only. Wrapper composition, live-region semantics, styles, state, placement and raster are not certified equivalent.' }
+          : calendarYear ? { kind: 'reviewed-material-calendar-year-label', reviewEvidence: calendar.evidence,
           justification: 'A unique accessible year in the multi-year-view table maps to one authored year button only when the reference 24-year live-label range and candidate header range agree and contain that year, and both exact ancestry paths are present. This establishes year text correspondence only, not equal table/grid geometry, selected state, header icon/content, typography or final raster.' }
           : calendarLabel ? { kind: 'reviewed-material-calendar-day-label', reviewEvidence: calendar.evidence,
           justification: 'A unique full accessible date in the month-view table maps to one authored day button only when the reference period and candidate month/year context agree and both exact ancestry paths are present. Numeric text alone is insufficient. This establishes text-owner correspondence, not equal table/grid layout, accessibility, selected state, typography, placement or final raster.' }
@@ -2049,6 +2194,7 @@ export function collectControlTypographyEvidence(cases, inventory) {
             justification: 'Browser computed and actual control texture paint inputs differ. Attribute authored tokens and parser/runtime behavior before assigning fault. CSS normal line-height, font fallback and composited colors are not automatically equivalent to numeric or opaque substitutes.',
             ...(reviewedButtonPaintInput(entry, property, ref, parent, ast, stages, referenceTree, astylarTree, inventory) ??
               reviewedTabPaintInput(entry, property, ref, parent, ast, stages, referenceTree, astylarTree, inventory) ??
+              reviewedSnackbarActionPaintInput(entry, property, ref, parent, ast, stages, referenceTree, astylarTree, inventory) ??
               reviewedCalendarCellPaintInput(entry, property, ref, parent, ast, stages, referenceTree, astylarTree, inventory) ?? {}) });
         }
       }
@@ -2060,7 +2206,7 @@ export function collectControlTypographyEvidence(cases, inventory) {
       else gap(key, node.authored?.id, 'current control texture has no reviewed reference text-owner mapping', { astylarNode: node.key });
     }
   }
-  return { schemaVersion: 1, scope: 'Current core-owned control texture inputs, separately from normal/effective declarations and registry-retained text. Exact direct Material button labels, explicit template tab-label paths, month-view day paths with full date context, and multi-year table paths with matching year-range context are reviewed. Paginator and calendar navigation SVG-to-glyph substitutions are separately classified unequal content, never typography equivalence; calendar year-view accessible-name mismatches remain explicit. Other observed control owners remain gaps. Numeric parsed CSS lengths and line-height multipliers are normalized without authored or projected fallbacks. Other effects remain in the full inventory and are not certified by these eleven typography comparisons.', comparisons, differences, gaps, iconSubstitutions };
+  return { schemaVersion: 1, scope: 'Current core-owned control texture inputs, separately from normal/effective declarations and registry-retained text. Exact direct Material button labels, explicit template tab-label paths, month-view day paths with full date context, multi-year table paths with matching year-range context, and snackbar action paths anchored by overlay/message context are reviewed. Paginator and calendar navigation SVG-to-glyph substitutions are separately classified unequal content, never typography equivalence; calendar year-view accessible-name mismatches remain explicit. Other observed control owners remain gaps. Numeric parsed CSS lengths and line-height multipliers are normalized without authored or projected fallbacks. Other effects remain in the full inventory and are not certified by these eleven typography comparisons.', comparisons, differences, gaps, iconSubstitutions };
 }
 
 export function collectFullTreeInventory(cases, { root = process.cwd() } = {}) {
@@ -2437,6 +2583,7 @@ function implementationPlan() {
     { priority: 5.2, rootCause: 'Material control typography tokens and nested line boxes are replaced by fixture defaults', action: 'Translate the original filled/outlined/text button and tab font/tracking tokens instead of inheriting the document control stack or omitting tracking. Restore toolbar button line-height inheritance instead of copying the density-specific container height. Preserve the tab text-label line-height:1 inside its independently sized content/control rather than applying the outer line-height to a flattened value label. Preserve alpha ink as a distinct authored input. Then investigate any core API or equal-input text mismatch; do not adjust font size, baseline, or offsets to recover screenshot similarity.' },
     { priority: 5.3, rootCause: 'Core normal line-height is approximated by a fixed Mg font-box probe', action: 'Resolve browser normal line-box metrics and actual fallback runs in core. The equal-input Arial/serif cases expose one-pixel texture-height errors; Roboto plus emoji/CJK exposes two-pixel errors while plain Roboto and explicit line heights pass. Preserve those controls, extend multiline/baseline/DPR verification and avoid a universal multiplier, constant pixel addition, or fixed Material line-height compensation. Current-texture evidence must remain separate from declared normal and from final glyph raster.' },
     { priority: 5.4, rootCause: 'Calendar cell text tokens and inner line boxes were flattened away', action: 'Restore the reference calendar font and date-text ink tokens and its inner line-height:1 label inside both day and year controls. Keep reference cell/container sizing, state and selection structure instead of copying a normal-metric result or tuning the baseline. Separate date/range-context proofs isolate 990 day and 192 year occurrences each of missing font-token, omitted inner line-height and fixed-ink inputs; core metric defects must be assessed only after those inputs are equivalent. Independently resolve normal-versus-zero tracking and the still-unmapped header/icon owners.' },
+    { priority: 5.5, rootCause: 'Snackbar action inherits generic control inputs instead of Material action tokens', action: 'Restore the original text-button font, size and tracking declarations and the snackbar inverse-primary ink, keeping the reference label/action wrapper intent. The exact overlay/message mapping isolates 34 current action textures and source-traces font-stack, tracking and ink substitutions. Trace the remaining 14px-versus-16px and normal-line-box observations through the core defaults/inheritance and metric stages before assigning core ownership; do not calibrate a baseline or line height. Retain the separate intrinsic-width, live-region, visibility, lifetime and placement obligations.' },
     { priority: 6, rootCause: 'Interaction geometry duplicated by the application', action: 'Expose resolved CSS-space target bounds and local pointer coordinates in the core event/plugin contract; remove ripple width tables.' },
     { priority: 7, rootCause: 'Material paint inputs are substituted or calibrated', action: 'Supply paginator and calendar navigation reference SVG paths and their CSS/state paint through core vector/image rendering instead of font-character approximations. Preserve calendar navigation accessible names for the active month or multi-year view; do not copy month labels into the year view. Express progress angles, state layers, checkmarks, selection rings, and indicators from reference Material geometry in CSS space; remove screenshot-derived angle and fractional-position constants. Diagnose core only after the actual same geometry is supplied.' },
     { priority: 8, rootCause: 'Regression gate permits unequal inputs', action: 'Run this audit in CI after the full parity matrix, require complete coverage and zero unclassified differences, and review any new Astylar-only authored rule before updating the checked-in report.' },

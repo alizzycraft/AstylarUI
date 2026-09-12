@@ -380,6 +380,15 @@ export const sourceAuditDefinitions = Object.freeze([
     justification: 'Reference surface uses min-width344px and max-width672px with a flexing label and separate action padding. Candidate fixes width344px with padding0 18px and space-between. Matching this short label does not prove the same intrinsic sizing or wrapping constraints; no core defect follows from these unequal authored inputs.',
   }),
   Object.freeze({
+    id: 'fixture-snackbar-action-typography-substitution',
+    introducedBy: '2f44011 feat(example): add Material component showcase; af04845 adds generic control font reset',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`selector: '\.overlay-dismiss', width: '88px'[^\n]*color: theme\.primary, fontWeight: '500'`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase snackbar Material text-button tokens and action composition',
+    justification: 'The snackbar value button uses a shared overlay-dismiss rule that supplies theme.primary and omits Material text-button font, size and tracking tokens. Captured reference action text uses the component Roboto/14px/.096px inputs and the snackbar inverse-primary ink; candidate current texture receives the generic control font stack,16px,zero tracking and primary ink. The exact overlay/action/message mapping separates these observed unequal inputs from unresolved line-box metrics and geometry. Restore original component declarations and wrapper intent before diagnosing core; do not calibrate text size, baseline or ink to a screenshot.',
+  }),
+  Object.freeze({
     id: 'fixture-calendar-navigation-frozen-to-current-date',
     introducedBy: 'd1fc52a fix(material): refine picker icons and calendar alignment',
     file: 'examples/material-showcase/src/app/astylar.component.ts',

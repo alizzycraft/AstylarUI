@@ -1501,6 +1501,178 @@ function controlEvidence(raw) {
   return collectControlTypographyEvidence(raw.results, collectFullTreeInventory(raw.results));
 }
 
+function snackbarActionTypographyReport() {
+  const raw = controlTypographyReport(), entry = raw.results[0], { reference: ref, astylar: ast } = entry.inputTrees;
+  entry.family = 'snack-bar';
+  const node = (key, parent, type, attributes = {}, ownText = '') => ({ key, parent, type, attributes, ownText,
+    style: 0, rules: [], pseudoElements: [] });
+  ref.nodes = [
+    node('label', 'button', 'span', { class: 'mdc-button__label' }, ' UNDO '),
+    node('button', 'actions', 'button', { class: 'mat-mdc-snack-bar-action mat-mdc-button mat-unthemed', matsnackbaraction: '' }),
+    node('actions', 'simple', 'div', { class: 'mat-mdc-snack-bar-actions', matsnackbaractions: '' }),
+    node('simple', 'wrapper', 'simple-snack-bar', { class: 'mat-mdc-simple-snack-bar' }),
+    node('wrapper', 'live', 'div'),
+    node('live', 'outer-label', 'div', { id: 'mat-snack-bar-container-live-13', 'aria-live': 'polite' }),
+    node('outer-label', 'surface', 'div', { class: 'mat-mdc-snack-bar-label' }),
+    node('surface', 'container', 'div', { class: 'mat-mdc-snackbar-surface' }),
+    node('container', 'pane', 'mat-snack-bar-container', { class: 'mat-mdc-snack-bar-container' }),
+    node('pane', 'global', 'div', { class: 'cdk-overlay-pane' }),
+    node('global', 'overlay', 'div', { class: 'cdk-global-overlay-wrapper' }),
+    node('overlay', null, 'div', { class: 'cdk-overlay-container' }),
+    node('message', 'simple', 'div', { class: 'mat-mdc-snack-bar-label mdc-snackbar__label', matsnackbarlabel: '' }, ' Project saved\n'),
+  ];
+  Object.assign(ref.styles[0], { fontFamily: 'Roboto', fontSize: '14px', fontWeight: '500',
+    lineHeight: 'normal', letterSpacing: '.096px', color: '#d5baff' });
+  ref.rules = [
+    { selector: '.mat-mdc-button', active: true, declarations: {
+      'font-family': { value: 'var(--mat-button-text-label-text-font, var(--mat-sys-label-large-font))' },
+      'letter-spacing': { value: 'var(--mat-button-text-label-text-tracking, var(--mat-sys-label-large-tracking))' },
+    } },
+    { selector: '.mat-mdc-snack-bar-container .mat-mdc-button.mat-mdc-snack-bar-action:not(:disabled).mat-unthemed', active: true,
+      declarations: { color: { value: 'var(--mat-snack-bar-button-color, var(--mat-sys-inverse-primary))' } } },
+  ];
+  ref.nodes[1].rules = [0, 1];
+  const action = ast.nodes[0];
+  action.key = 'action'; action.parent = 'candidate-surface';
+  action.authored = { id: 'snack-bar-dismiss', type: 'button', class: 'overlay-dismiss', value: 'UNDO' };
+  Object.assign(action.normalResolvedStyle, { fontFamily: 'Roboto, Arial, sans-serif', fontSize: '16px', fontWeight: '500', color: '#6750a4' });
+  delete action.normalResolvedStyle.letterSpacing;
+  delete action.normalResolvedStyle.lineHeight;
+  action.interactionResolvedStyle = { ...action.normalResolvedStyle };
+  delete action.retainedText;
+  action.paintedControlText.text = 'UNDO';
+  Object.assign(action.paintedControlText.style, { fontFamily: 'Roboto, Arial, sans-serif', fontSize: 16, fontWeight: '500',
+    lineHeight: 19 / 16, letterSpacing: 0, color: '#6750a4' });
+  const candidateNode = (key, parent, authored) => ({ key, parent, authored,
+    resolvedStyle: {}, normalResolvedStyle: {}, interactionResolvedStyle: {} });
+  ast.nodes = [action,
+    candidateNode('candidate-surface', 'candidate-overlay', { id: 'snack-bar-surface', type: 'div', class: 'snack-surface', role: 'status', ariaLive: 'polite', ariaAtomic: true }),
+    candidateNode('candidate-overlay', 'section', { id: 'snack-bar-overlay', type: 'div', class: 'snack-overlay' }),
+    candidateNode('section', 'page', { id: 'snack-bar-root', type: 'section' }),
+    candidateNode('page', 'root', { id: 'page', type: 'main' }),
+    candidateNode('candidate-message', 'candidate-surface', { id: 'snack-bar-title', type: 'span', textContent: 'Project saved' }),
+  ];
+  ast.rules = [{ selector: '.overlay-dismiss', color: '#6750a4', fontWeight: '500' },
+    { selector: 'button, input, select', fontFamily: 'Roboto, Arial, sans-serif' }];
+  return raw;
+}
+
+test('snackbar action text maps by exact overlay and sibling message context, preserving unequal typography', () => {
+  const raw = snackbarActionTypographyReport(), before = structuredClone(raw), evidence = controlEvidence(raw);
+  assert.deepEqual(evidence.gaps, []);
+  assert.equal(evidence.comparisons.length, 1);
+  const comparison = evidence.comparisons[0];
+  assert.equal(comparison.mapping.kind, 'reviewed-material-snackbar-action-label');
+  assert.equal(comparison.mapping.reviewEvidence.referenceChain.length, 12);
+  assert.equal(comparison.mapping.reviewEvidence.candidateChain.length, 5);
+  assert.equal(comparison.element, 'snack-bar-dismiss');
+  assert.equal(comparison.finalRasterVerified, false);
+  assert.equal(evidence.differences.length, 5);
+  for (const property of ['fontFamily', 'letterSpacing', 'color']) {
+    const finding = evidence.differences.find(d => d.property === property);
+    assert.equal(finding.attribution, 'reviewed-snackbar-action-typography-input');
+    assert.equal(finding.classification, 'application-plugin-authoring-defect');
+    assert.equal(finding.reviewEvidence.sourceFinding, 'fixture-snackbar-action-typography-substitution');
+  }
+  for (const property of ['fontSize', 'lineHeight']) assert.equal(evidence.differences.find(d => d.property === property).attribution, 'unresolved');
+  assert.deepEqual(raw, before);
+  const report = buildMaterialInputAudit(raw);
+  assert.equal(report.retainedTypography.controlTextMappings.length, 1);
+  assert.equal(report.retainedTypography.controlTextMappings[0].inputEquivalent, false);
+  assert.equal(report.summary.inputEquivalent, false);
+  assert.ok(!validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('snackbar action')));
+  assert.ok(validateMaterialInputAudit(report).some(e => e.includes('control texture typography differences')));
+});
+
+test('snackbar action mapping rejects contradictory structure, message, owner and paint evidence', () => {
+  const mutations = [
+    ref => { ref.nodes[1].attributes.class = 'unrelated'; },
+    ref => { delete ref.nodes[1].attributes.matsnackbaraction; },
+    ref => { ref.nodes[0].parent = 'actions'; },
+    ref => { ref.nodes[3].type = 'div'; },
+    ref => { ref.nodes[5].attributes['aria-live'] = 'assertive'; },
+    ref => { ref.nodes[5].attributes.id = 'different'; },
+    ref => { ref.nodes[8].parent = 'missing'; },
+    ref => { ref.nodes[11].parent = 'page'; },
+    ref => { ref.nodes[12].ownText = 'Other message'; },
+    ref => { ref.nodes.push({ ...ref.nodes[8], key: 'second-container' }); },
+    ref => { ref.nodes.push({ ...ref.nodes[0], key: 'second-label' }); },
+    ref => { ref.nodes.push({ ...ref.nodes[0], key: 'nested-label', parent: 'label' }); },
+    ref => { ref.nodes[1].ownText = 'Additional text'; },
+    (_ref, ast) => { ast.nodes[0].parent = 'section'; },
+    (_ref, ast) => { ast.nodes[0].authored.value = 'CLOSE'; },
+    (_ref, ast) => { ast.nodes[0].authored.type = 'a'; },
+    (_ref, ast) => { ast.nodes[1].authored.role = 'dialog'; },
+    (_ref, ast) => { ast.nodes[4].parent = 'missing'; },
+    (_ref, ast) => { ast.nodes[5].authored.textContent = 'Other'; },
+    (_ref, ast) => { ast.nodes.push({ ...ast.nodes[0], key: 'duplicate' }); },
+    (_ref, ast) => { ast.nodes.push({ ...ast.nodes[5], key: 'extra', parent: 'action' }); },
+    (_ref, ast) => { ast.nodes[0].paintedControlText.text = 'CLOSE'; },
+    (_ref, ast) => { ast.nodes[0].paintedControlText.source = 'core-text-registry'; },
+    (_ref, ast) => { delete ast.nodes[0].paintedControlText; },
+    (_ref, ast) => { ast.paintedControlTextEvidenceVersion = 0; },
+  ];
+  for (const mutate of mutations) {
+    const raw = snackbarActionTypographyReport(), trees = raw.results[0].inputTrees;
+    mutate(trees.reference, trees.astylar);
+    const evidence = controlEvidence(raw);
+    assert.deepEqual(evidence.comparisons, [], String(mutate));
+    assert.ok(evidence.gaps.length > 0, String(mutate));
+    assert.deepEqual(buildMaterialInputAudit(raw).retainedTypography.controlTextMappings, [], String(mutate));
+  }
+});
+
+test('snackbar action typography attribution requires actual token, omission and unchanged paint witnesses', () => {
+  const mutations = [
+    ['fontFamily', ref => { ref.rules[0].active = false; }],
+    ['fontFamily', ref => { ref.rules[0].declarations['font-family'].value = 'Roboto'; }],
+    ['fontFamily', (_ref, ast) => { ast.rules[0].fontFamily = 'Roboto'; }],
+    ['fontFamily', (_ref, ast) => { ast.rules[1].fontFamily = 'Arial'; }],
+    ['fontFamily', (_ref, ast) => { ast.nodes[0].interactionResolvedStyle.fontFamily = 'Arial'; }],
+    ['fontFamily', ref => { ref.nodes[0].attributes.style = 'font-family: Roboto'; }],
+    ['letterSpacing', (_ref, ast) => { ast.nodes[1].normalResolvedStyle.letterSpacing = '0'; }],
+    ['letterSpacing', (_ref, ast) => { ast.rules[0].letterSpacing = '0'; }],
+    ['letterSpacing', ref => { ref.rules[0].declarations['letter-spacing'].value = '0.096px'; }],
+    ['color', ref => { ref.rules[1].declarations.color.value = 'var(--mat-sys-primary)'; }],
+    ['color', (_ref, ast) => { ast.rules[0].color = '#123456'; }],
+    ['color', (_ref, ast) => { ast.nodes[0].paintedControlText.style.color = '#123456'; }],
+    ['color', (_ref, ast) => { ast.rules.push({ ...ast.rules[0] }); }],
+    ['color', ref => { ref.rules.push({ active: true, declarations: { color: { value: 'red' } } }); ref.nodes[0].rules = [2]; }],
+  ];
+  for (const [property, mutate] of mutations) {
+    const raw = snackbarActionTypographyReport(), trees = raw.results[0].inputTrees;
+    mutate(trees.reference, trees.astylar);
+    assert.equal(controlEvidence(raw).differences.find(d => d.property === property)?.attribution, 'unresolved', `${property}: ${mutate}`);
+  }
+});
+
+test('snackbar action mapping validation replays captured context even with partial coverage', () => {
+  for (const mutation of ['message', 'chain', 'candidate role', 'revision', 'raster', 'text']) {
+    const report = buildMaterialInputAudit(snackbarActionTypographyReport()), comparison = report.controlTypography.comparisons[0];
+    if (mutation === 'message') comparison.mapping.reviewEvidence.referenceMessage.text = 'Another';
+    if (mutation === 'chain') comparison.mapping.reviewEvidence.referenceChain.pop();
+    if (mutation === 'candidate role') comparison.mapping.reviewEvidence.candidateChain[1].authored.role = 'dialog';
+    if (mutation === 'revision') comparison.revision++;
+    if (mutation === 'raster') comparison.finalRasterVerified = true;
+    if (mutation === 'text') comparison.text = 'Another';
+    assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('snackbar action mappings')), mutation);
+  }
+});
+
+test('snackbar action typography validation rejects detached or changed witnesses even in partial reports', () => {
+  for (const mutation of ['token', 'paint', 'classification', 'omission', 'property', 'revision']) {
+    const report = buildMaterialInputAudit(snackbarActionTypographyReport());
+    const difference = report.controlTypography.differences.find(d => d.property === 'letterSpacing');
+    if (mutation === 'token') difference.reviewEvidence.referenceRule.declarations['letter-spacing'].value = '0';
+    if (mutation === 'paint') difference.values.painted = '0.096px';
+    if (mutation === 'classification') difference.classification = 'equivalent-representation';
+    if (mutation === 'omission') difference.reviewEvidence.candidateChain.pop();
+    if (mutation === 'property') difference.property = 'fontSize';
+    if (mutation === 'revision') difference.revision++;
+    assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('snackbar action typography')), mutation);
+  }
+});
+
 function calendarDayTypographyReport() {
   const raw = controlTypographyReport(), entry = raw.results[0];
   entry.family = 'datepicker';
