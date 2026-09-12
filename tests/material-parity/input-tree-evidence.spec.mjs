@@ -3,6 +3,62 @@ import test from 'node:test';
 import { chromium } from 'playwright-core';
 import { captureBrowserInputTree } from './input-tree-evidence.mjs';
 
+test('browser context capture distinguishes inherited RTL, vertical writing, last-line alignment and actual clipping', async () => {
+  const browser = await chromium.launch({ channel: 'chrome', headless: true });
+  try {
+    const page = await browser.newPage({ viewport: { width: 640, height: 360 } });
+    await page.setContent(`<style>
+      body { direction: rtl; }
+      .frame { text-align: start; }
+      .vertical { writing-mode: vertical-rl; text-align-last: justify; text-justify: inter-character; }
+      .override { direction: ltr; unicode-bidi: isolate; font-kerning: none; text-rendering: optimizeLegibility;
+        font-variant-ligatures: none; font-feature-settings: "kern" 0; font-variation-settings: "wght" 450; }
+      .override::before { content: "mark"; direction: rtl; text-align: end; font-kerning: normal; }
+      .clipped { position: absolute; clip: rect(0px, 0px, 0px, 0px); width: 1px; height: 1px; }
+    </style><app-reference><main class="frame"><div class="vertical"><span>Vertical</span></div>
+      <div class="override">Override</div><button class="clipped">Close calendar</button>
+    </main></app-reference><div class="cdk-overlay-container"><div>Overlay</div></div>`);
+    const before = await page.evaluate(() => ({ html: document.documentElement.outerHTML,
+      focus: document.activeElement.tagName, width: document.querySelector('.frame').getBoundingClientRect().width }));
+    const tree = await page.evaluate(captureBrowserInputTree, { styleProperties: ['width', 'height'] });
+    assert.equal(tree.contextStyleEvidenceVersion, 1);
+    assert.deepEqual(tree.contextStyleProperties, ['direction', 'writingMode', 'unicodeBidi', 'textAlign',
+      'textAlignLast', 'textJustify', 'clip', 'fontKerning', 'textRendering',
+      'fontVariantLigatures', 'fontFeatureSettings', 'fontVariationSettings']);
+    assert.deepEqual(tree.errors, []);
+    for (const style of tree.styles) for (const property of tree.contextStyleProperties) {
+      assert.equal(typeof style[property], 'string', property);
+      assert.notEqual(style[property], '', property);
+    }
+    const node = name => tree.nodes.find(n => n.attributes.class === name);
+    const style = name => tree.styles[node(name).style];
+    assert.equal(style('frame').direction, 'rtl');
+    assert.equal(style('frame').writingMode, 'horizontal-tb');
+    assert.equal(style('frame').textAlign, 'start');
+    assert.equal(style('frame').textAlignLast, 'auto');
+    assert.equal(style('vertical').direction, 'rtl');
+    assert.equal(style('vertical').writingMode, 'vertical-rl');
+    assert.equal(style('vertical').textAlignLast, 'justify');
+    assert.equal(style('vertical').textJustify, 'inter-character');
+    assert.equal(style('override').direction, 'ltr');
+    assert.equal(style('override').unicodeBidi, 'isolate');
+    assert.equal(style('override').fontKerning, 'none');
+    assert.equal(style('override').textRendering, 'optimizelegibility');
+    assert.equal(style('override').fontVariantLigatures, 'none');
+    assert.equal(style('override').fontFeatureSettings, '"kern" 0');
+    assert.equal(style('override').fontVariationSettings, '"wght" 450');
+    assert.equal(style('clipped').clip, 'rect(0px, 0px, 0px, 0px)');
+    const pseudo = node('override').pseudoElements.find(p => p.pseudo === '::before');
+    assert.equal(tree.styles[pseudo.style].direction, 'rtl');
+    assert.equal(tree.styles[pseudo.style].textAlign, 'end');
+    assert.equal(tree.styles[pseudo.style].fontKerning, 'normal');
+    assert.equal(tree.styles[tree.nodes.find(n => n.key === 'overlay:0').style].direction, 'rtl');
+    const after = await page.evaluate(() => ({ html: document.documentElement.outerHTML,
+      focus: document.activeElement.tagName, width: document.querySelector('.frame').getBoundingClientRect().width }));
+    assert.deepEqual(after, before, 'capture must not change DOM, focus or layout');
+  } finally { await browser.close(); }
+});
+
 test('browser font-weight keywords resolve to exact numeric aliases but relative weights depend on ancestry', async () => {
   const browser = await chromium.launch({ channel: 'chrome', headless: true });
   try {

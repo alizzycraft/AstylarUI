@@ -1530,6 +1530,85 @@ test('full-tree inventory retains anonymous nodes and pools identical variants w
   assert.equal(collectFullTreeInventory([{ ...entry, inputTrees: {} }]).gaps.length, 2);
 });
 
+const contextProperties = ['direction', 'writingMode', 'unicodeBidi', 'textAlign', 'textAlignLast',
+  'textJustify', 'clip', 'fontKerning', 'textRendering', 'fontVariantLigatures', 'fontFeatureSettings', 'fontVariationSettings'];
+const contextStyle = { direction: 'rtl', writingMode: 'vertical-rl', unicodeBidi: 'isolate', textAlign: 'start',
+  textAlignLast: 'justify', textJustify: 'inter-character', clip: 'auto', fontKerning: 'none',
+  textRendering: 'optimizelegibility', fontVariantLigatures: 'none', fontFeatureSettings: '"kern" 0',
+  fontVariationSettings: '"wght" 450' };
+function contextCaptureReport() {
+  const raw = parityReport({}, {});
+  raw.results[0].inputTrees = { reference: { schemaVersion: 1, contextStyleEvidenceVersion: 1,
+    contextStyleProperties: [...contextProperties], nodes: [{ key: 'frame', parent: null, type: 'main',
+      attributes: { class: 'frame' }, ownText: 'Context', style: 0, rules: [], inline: {},
+      pseudoElements: [{ pseudo: '::before', generated: true, style: 1, rules: [] }] }],
+    styles: [{ ...contextStyle }, { ...contextStyle, clip: 'rect(0px, 0px, 0px, 0px)' }], rules: [], errors: [] },
+    astylar: { schemaVersion: 1, nodes: [{ key: 'root', parent: null, authored: {} }], rules: [], errors: [] } };
+  return raw;
+}
+
+test('computed browser context survives pooling and old captures remain explicitly incomplete', () => {
+  const raw = contextCaptureReport(), entry = raw.results[0], before = structuredClone(raw);
+  const result = collectFullTreeInventory([entry, { ...entry, state: 'hover' }]);
+  assert.equal(result.referenceContextGaps.length, 0);
+  const reference = result.variants.find(v => v.side === 'reference');
+  assert.equal(reference.contextStyleEvidenceVersion, 1);
+  assert.deepEqual(reference.contextStyleProperties, contextProperties);
+  assert.deepEqual(result.styles[reference.nodes[0].style].value, contextStyle);
+  assert.equal(result.styles[reference.nodes[0].pseudoElements[0].style].value.clip, 'rect(0px, 0px, 0px, 0px)');
+  assert.deepEqual(raw, before);
+  delete entry.inputTrees.reference.contextStyleEvidenceVersion;
+  const legacy = collectFullTreeInventory([entry, { ...entry, state: 'hover' }]);
+  assert.equal(legacy.referenceContextGaps.length, 2);
+  assert.ok(legacy.referenceContextGaps.every(g => g.classification === 'parity-harness-defect'));
+  assert.equal(new Set(legacy.referenceContextGaps.map(g => g.case)).size, 2);
+  assert.ok(validateMaterialInputAudit(buildMaterialInputAudit(raw)).some(error => error.includes('computed-context observations')));
+});
+
+test('computed context requires exact metadata and every node and generated-pseudo field', () => {
+  for (const mutate of [
+    ref => { ref.contextStyleEvidenceVersion = 2; },
+    ref => { delete ref.contextStyleProperties; },
+    ref => { ref.contextStyleProperties.pop(); },
+    ref => { ref.contextStyleProperties.push('direction'); },
+    ref => { delete ref.styles[0].direction; },
+    ref => { ref.styles[0].writingMode = ''; },
+    ref => { ref.styles[0].fontKerning = null; },
+    ref => { ref.styles[0].unicodeBidi = 0; },
+    ref => { delete ref.styles[1].clip; },
+    ref => { delete ref.nodes[0].pseudoElements[0].style; },
+  ]) {
+    const raw = contextCaptureReport();
+    mutate(raw.results[0].inputTrees.reference);
+    assert.ok(collectFullTreeInventory(raw.results).referenceContextGaps.length > 0);
+  }
+  const raw = contextCaptureReport();
+  delete raw.results[0].inputTrees.reference.styles[1].clip;
+  const gaps = collectFullTreeInventory(raw.results).referenceContextGaps;
+  assert.equal(gaps.length, 1);
+  assert.equal(gaps[0].node, 'frame');
+  assert.equal(gaps[0].pseudo, '::before');
+  assert.equal(gaps[0].property, 'clip');
+});
+
+test('computed-context completeness is replayed rather than trusting a report claim', () => {
+  const audit = buildMaterialInputAudit(contextCaptureReport());
+  assert.ok(!validateMaterialInputAudit(audit, { requireComplete: false }).some(e => e.includes('computed-context')));
+  for (const mutate of [
+    report => { delete report.elementInventory.referenceContextGaps; },
+    report => { report.elementInventory.referenceContextGaps.push({ case: 'invented' }); },
+    report => { delete report.elementInventory.variants.find(v => v.side === 'reference').contextStyleEvidenceVersion; },
+    report => { const node = report.elementInventory.variants.find(v => v.side === 'reference').nodes[0];
+      delete report.elementInventory.styles[node.style].value.direction; },
+    report => { const node = report.elementInventory.variants.find(v => v.side === 'reference').nodes[0];
+      report.elementInventory.styles[node.pseudoElements[0].style].side = 'astylar'; },
+  ]) {
+    const changed = structuredClone(audit);
+    mutate(changed);
+    assert.ok(validateMaterialInputAudit(changed, { requireComplete: false }).some(e => e.includes('computed-context gaps do not replay')));
+  }
+});
+
 function controlTypographyReport() {
   const raw = retainedTypographyReport(), entry = raw.results[0];
   entry.family = 'button';

@@ -107,7 +107,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
         supplementalOverlays.missing.length === 0 && supplementalOverlays.errors.length === 0 && supplementalOverlays.mismatches.length === 0 &&
         supplementalSlider.missing.length === 0 && supplementalSlider.errors.length === 0 && supplementalSlider.mismatches.length === 0 &&
         normalLineBoxes.missing.length === 0 && normalLineBoxes.errors.length === 0 &&
-        elementInventory.gaps.length === 0 && elementInventory.resolvedStyleGaps.length === 0 && elementInventory.stateStyleGaps.length === 0 && elementInventory.errors.length === 0 &&
+        elementInventory.gaps.length === 0 && elementInventory.resolvedStyleGaps.length === 0 && elementInventory.stateStyleGaps.length === 0 && elementInventory.referenceContextGaps.length === 0 && elementInventory.errors.length === 0 &&
         retainedTypography.gaps.length === 0 && retainedTypography.differences.length === 0 && retainedTypography.paintMaskDifferences.length === 0 &&
         controlTypography.gaps.length === 0 && controlTypography.differences.length === 0 && controlTypography.iconSubstitutions.length === 0 &&
         coverage.presenceDifferences.length === 0 &&
@@ -157,6 +157,11 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
   if (requireComplete && report.elementInventory.resolvedStyleGaps.length > 0) errors.push(`${report.elementInventory.resolvedStyleGaps.length} inventoried elements lack resolved style evidence`);
   if (requireComplete && report.elementInventory.stateStyleGaps.length > 0) errors.push(`${report.elementInventory.stateStyleGaps.length} state cases lack effective style provenance`);
   if (report.elementInventory.errors.length > 0) errors.push(`${report.elementInventory.errors.length} full-tree collection errors`);
+  const contextGaps = collectReferenceContextGaps(report.elementInventory);
+  if (JSON.stringify(report.elementInventory.referenceContextGaps) !== JSON.stringify(contextGaps)) {
+    errors.push('reference computed-context gaps do not replay from the captured inventory');
+  }
+  if (requireComplete && contextGaps.length) errors.push(`${contextGaps.length} reference computed-context observations are missing`);
   if (report.retainedTypography?.schemaVersion !== 1) errors.push('missing retained typography stage report');
   if (!Array.isArray(report.retainedTypography?.controlTextMappings)) errors.push('missing retained-to-control text stage inventory');
   const controlTextMappingKeys = report.retainedTypography?.controlTextMappings?.map((mapping) =>
@@ -356,6 +361,8 @@ export function renderMaterialInputAuditMarkdown(report) {
       `${report.coverage.executedInteractions}/${report.coverage.configuredInteractions} interaction/mobile-flow cases. All ${report.coverage.families.length} component families are inventoried.`,
     '',
     `Full-element evidence: ${report.elementInventory.cases.length} captured case sides, ${report.elementInventory.variants.length} tree variants; ${report.elementInventory.gaps.length} missing case sides, ${report.elementInventory.resolvedStyleGaps.length} elements without resolved styles, ${report.elementInventory.stateStyleGaps.length} state cases without effective style provenance, and ${report.elementInventory.errors.length} collection errors. Inventory presence does not establish input equivalence.`,
+    '',
+    `Reference computed context: ${report.elementInventory.referenceContextGaps.length} missing capture declarations or node/pseudo-element fields for direction, writing mode, bidi, last-line alignment, shaping and clipping. Legacy captures remain readable but cannot establish these inputs. A full new capture is required; no direction or clip value is inferred from class names, defaults or screenshots.`,
     '',
     `Retained typography: ${report.retainedTypography.comparisons.length} directly mapped text-node observations; ${report.retainedTypography.gaps.length} mapping/stage gaps and ${report.retainedTypography.differences.length} unequal retained-property observations. The registry stage is reported separately from declarations and is not proof of current pseudo-state glyph paint.`,
     '',
@@ -2821,6 +2828,37 @@ export function collectControlTypographyEvidence(cases, inventory) {
   return { schemaVersion: 1, scope: 'Current core-owned control texture inputs, separately from normal/effective declarations and registry-retained text. Exact direct Material button labels, explicit template tab-label paths, month-view day paths with full date context, multi-year table paths with matching year-range context, snackbar action paths anchored by overlay/message context, and ordered bottom-sheet list-label/value-button correspondence are reviewed. The bottom-sheet anchor/button structures and accessible names remain explicitly unequal. Calendar period typography compares the shared text prefix in a single-font texture while preserving the full unequal text-plus-glyph string, original adjacent SVG geometry, and accessibility-description inputs. Paginator and calendar navigation SVG-to-glyph substitutions are separately classified unequal content, never typography equivalence; calendar year-view accessible-name mismatches remain explicit. Other observed control owners remain gaps. Numeric parsed CSS lengths and line-height multipliers are normalized without authored or projected fallbacks. Other effects remain in the full inventory and are not certified by these eleven typography comparisons.', comparisons, differences, gaps, iconSubstitutions };
 }
 
+const referenceContextProperties = Object.freeze(['direction', 'writingMode', 'unicodeBidi', 'textAlign',
+  'textAlignLast', 'textJustify', 'clip', 'fontKerning', 'textRendering',
+  'fontVariantLigatures', 'fontFeatureSettings', 'fontVariationSettings']);
+
+function collectReferenceContextGaps(inventory) {
+  const gaps = [];
+  for (const mapping of inventory.cases.filter(entry => entry.side === 'reference')) {
+    const tree = inventory.variants[mapping.variant];
+    const gap = (reason, detail = {}) => gaps.push({ case: mapping.case, side: 'reference', ...detail, reason,
+      classification: 'parity-harness-defect', owner: 'browser computed text-context and clipping capture' });
+    if (tree?.contextStyleEvidenceVersion !== 1 ||
+        JSON.stringify(tree.contextStyleProperties) !== JSON.stringify(referenceContextProperties)) {
+      gap('capture lacks the exact computed-context property/version declaration');
+      continue;
+    }
+    for (const node of tree.nodes) {
+      const observations = [{ style: node.style }, ...(node.pseudoElements ?? []).filter(p => p.generated)];
+      for (const observation of observations) {
+        const pooled = inventory.styles[observation.style];
+        for (const property of referenceContextProperties) {
+          if (pooled?.side !== 'reference' || typeof pooled.value?.[property] !== 'string' || !pooled.value[property].trim()) {
+            gap('computed context field was not observed', { node: node.key, property,
+              ...(observation.pseudo ? { pseudo: observation.pseudo } : {}) });
+          }
+        }
+      }
+    }
+  }
+  return gaps;
+}
+
 export function collectFullTreeInventory(cases, { root = process.cwd() } = {}) {
   const styles = [], rules = [], variants = [], mappings = [], gaps = [], resolvedStyleGaps = [], stateStyleGaps = [], envelopes = [], errors = [];
   const styleIds = new Map(), ruleIds = new Map(), variantIds = new Map();
@@ -2887,15 +2925,18 @@ export function collectFullTreeInventory(cases, { root = process.cwd() } = {}) {
       });
       const variant = intern({ family: entry.family, side, resolvedStyleEvidenceVersion: tree.resolvedStyleEvidenceVersion,
         resolvedStyleSource: tree.resolvedStyleSource,
+        ...(side === 'reference' ? { contextStyleEvidenceVersion: tree.contextStyleEvidenceVersion,
+          contextStyleProperties: tree.contextStyleProperties } : {}),
         paintedControlTextEvidenceVersion: tree.paintedControlTextEvidenceVersion, nodes, rules: ruleMap }, variants, variantIds);
       mappings.push({ case: key, side, variant, resolvedStyleRevision: tree.resolvedStyleRevision });
     }
   }
-  return {
+  const inventory = {
     schemaVersion: 1,
     scope: 'All authored Astylar nodes, reference frame/overlay DOM descendants, SVG attributes, and before/after pseudo-elements. Tables retain raw inputs; presence in the inventory is not acceptance of equivalence.',
     styles, rules, variants, cases: mappings, gaps, resolvedStyleGaps, stateStyleGaps, envelopes, errors,
   };
+  return { ...inventory, referenceContextGaps: collectReferenceContextGaps(inventory) };
 }
 
 export function collectSupplementalBehavior(root) {

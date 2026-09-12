@@ -12,6 +12,58 @@ tests pass). A missing selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Capturing the missing computed text and clipping context (2026-09-12)
+
+The prior capture cannot establish whether reference `text-align:start` is
+physically equivalent to the candidate's `left`: it did not record computed
+direction, writing mode or last-line alignment. The same capture omitted
+kerning/shaping fields needed by the new Arial investigation and computed
+`clip` needed by the calendar close-button investigation. Those values must
+not be inferred from defaults, authored class names or screenshots.
+
+`captureBrowserInputTree` now records twelve context properties for every
+reference node and generated before/after pseudo-element: direction, writing
+mode, bidi isolation, text alignment and last-line alignment, justification,
+clip, kerning, text rendering, ligature mode, font features and font variations.
+The returned tree declares `contextStyleEvidenceVersion:1` and the exact field
+list. This is read-only capture outside the renderer; it changes no DOM,
+fixtures, layout, state, typography, visual metric or gate threshold.
+
+The real-browser collector test independently verifies inherited RTL from
+outside the captured frame, vertical writing, local LTR override, last-line
+justification, explicit shaping fields, pseudo-element overrides, overlay
+inheritance and an actual zero-rectangle clip. DOM serialization, focused
+element and frame width are unchanged by collection. All **3/3** browser
+collector tests pass; they are now included in `parity:harness:check` rather
+than relying on a separately remembered command.
+
+The inventory preserves these declarations through pooling and reports legacy,
+missing, empty or wrongly attributed node/pseudo-element fields separately as
+`referenceContextGaps`. Complete acceptance requires none. Validation rebuilds
+the gap list from pooled capture data and rejects changed/deleted gap claims.
+Three focused context tests cover legacy/static/hover records, ten metadata or
+field mutations and five report mutations. The complete harness passes
+**224/224**: the previous 218, three new audit tests and three newly included
+browser-collector tests. `git diff --check` is clean.
+
+Regeneration against the preserved control-text baseline still inventories
+**436/436 static + 1,875/1,875 interaction** cases. It correctly adds **2,324**
+missing-context records (the main matrix plus 13 older supplemental cases).
+All previous unresolved groups remain: **3,896** resolved-style attributions,
+**883** current-control typography differences, **3,377** retained mappings or
+stage fields and **11,101** retained typography differences. Generation exits
+1; `--check` exits 1 for the same five groups without a stale-report mismatch.
+This is stricter evidence accounting, not a new renderer regression.
+No start/left equivalence or clipping verdict has been granted yet.
+
+The next full capture uses the same frozen control-text browser runtime with
+the enhanced collector, a new `artifacts/material-parity/context-complete-audit`
+directory and the original unfiltered `--enforce --skip-build` matrix. Preserve
+the old directory. After completion, collect fresh natural-line-box evidence
+against the new checkpoint; the loader correctly rejects reusing that
+supplement from another run. The thirteen older behavior/overlay/slider
+supplemental cases also still need renewed context evidence.
+
 ## Normal tracking is a representation alias; shaping remains unequal (2026-09-12)
 
 The largest repeated tracking group is now distinguished from genuine unequal

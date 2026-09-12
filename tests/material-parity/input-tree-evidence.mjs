@@ -1,7 +1,14 @@
 // Self-contained so Playwright can evaluate it in the reference document.
 // Collects inputs only; no measurements are fed back into layout.
 export function captureBrowserInputTree({ styleProperties }) {
-  const properties = [...new Set([...styleProperties, 'content', 'fill', 'stroke', 'strokeWidth'])];
+  // These computed fields are required to interpret physical/logical alignment,
+  // shaping defaults and hidden-control clipping. A class name, omitted author
+  // declaration or a left-looking screenshot cannot substitute for them.
+  // Keep this list inside the self-contained page evaluator.
+  const contextStyleProperties = ['direction', 'writingMode', 'unicodeBidi', 'textAlign',
+    'textAlignLast', 'textJustify', 'clip', 'fontKerning', 'textRendering',
+    'fontVariantLigatures', 'fontFeatureSettings', 'fontVariationSettings'];
+  const properties = [...new Set([...styleProperties, ...contextStyleProperties, 'content', 'fill', 'stroke', 'strokeWidth'])];
   const nodes = [], styles = [], rules = [], errors = [];
   const styleIds = new Map(), ruleIds = new Map(), candidates = [];
   const declarations = (style) => Object.fromEntries([...style].map((property) => [property, {
@@ -57,5 +64,5 @@ export function captureBrowserInputTree({ styleProperties }) {
   const frame = document.querySelector('app-reference .frame');
   if (frame) walk(frame, 'frame', null); else errors.push('Reference frame is missing');
   [...document.querySelectorAll('.cdk-overlay-container')].forEach((element, index) => walk(element, `overlay:${index}`, null));
-  return { schemaVersion: 1, nodes, styles, rules, errors };
+  return { schemaVersion: 1, contextStyleEvidenceVersion: 1, contextStyleProperties, nodes, styles, rules, errors };
 }
