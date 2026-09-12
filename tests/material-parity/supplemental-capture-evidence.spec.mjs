@@ -7,6 +7,8 @@ import path from 'node:path';
 import test from 'node:test';
 import { openSupplementalCapture, parseSupplementalCaptureArguments, validateSupplementalCapture } from './supplemental-capture-evidence.mjs';
 import { collectSupplementalBehavior, collectSupplementalOverlays, collectSupplementalSlider } from './input-equivalence-audit.mjs';
+import { validateCalendarCloseCapture } from './calendar-close-evidence.mjs';
+import { propertyGroups } from './input-equivalence-policy.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const script = 'scripts/audit-material-picker-commits.mjs';
@@ -16,6 +18,134 @@ const assetTypes = ['document', 'script', 'stylesheet', 'font'];
 const assetFiles = ['index.csr.html', 'main.js', 'styles.css', 'media/font.woff2'];
 const args = ['--base-url=http://127.0.0.1:4431', '--checkpoint=artifacts/material-parity/run/checkpoint',
   '--output=artifacts/material-parity/fresh/picker-commit-audit'];
+
+function calendarFixture() {
+  const f = fixture();
+  const raw = f.raw;
+  raw.schemaVersion = 1;
+  raw.profile = 'light';
+  raw.viewport = { width: 1440, height: 900 };
+  raw.capture.styleProperties = Object.values(propertyGroups).flat();
+  raw.capture.sources = ['scripts/audit-material-calendar-close.mjs', ...sourceFiles.slice(1)].map(file => f.put(file, file));
+  const runtime = structuredClone(raw.results[0].reference.runtime);
+  raw.results = [1, 2].flatMap(deviceScaleFactor => ['month', 'multi-year'].map(view => {
+    const sides = {};
+    for (const side of ['reference', 'astylar']) {
+      const events = [{ type: 'click', trusted: true, close: false }];
+      const samples = ['opened', 'tab-close', 'blur-close', 'refocus-close', 'activate-close'].map((state, i) => {
+        const isRef = side === 'reference', focused = isRef && (i === 1 || i === 3), closed = isRef && i === 4;
+        const key = [null, 'Tab', 'Shift+Tab', 'Tab', 'Enter'][i];
+        if (i) events.push({ type: 'keydown', key: i === 4 ? 'Enter' : 'Tab', trusted: true, close: isRef && i === 4 });
+        if (focused) events.push({ type: 'focusin', trusted: true, close: true });
+        if (isRef && i === 2) events.push({ type: 'focusout', trusted: true, close: true });
+        if (closed) events.push({ type: 'click', trusted: true, close: true });
+        const clip = focused ? 'auto' : 'rect(0px, 0px, 0px, 0px)';
+        const tree = { nodes: [{ key: 'root', parent: null }], errors: [], styles: [{ clip }] };
+        if (isRef && !closed) tree.nodes.push(
+          { key: 'dialog', parent: 'root', type: 'div', attributes: { role: 'dialog', 'aria-modal': 'true', class: 'mat-datepicker-content-container' } },
+          { key: 'view', parent: 'dialog', type: view === 'month' ? 'mat-month-view' : 'mat-multi-year-view' },
+          { key: 'close', parent: 'dialog', type: 'button', attributes: { type: 'button',
+            class: `mat-datepicker-close-button${focused ? '' : ' cdk-visually-hidden'}` }, style: 0 },
+          { key: 'label', parent: 'close', type: 'span', attributes: { class: 'mdc-button__label' }, ownText: 'Close calendar' });
+        if (!isRef) {
+          Object.assign(tree, { resolvedStyleEvidenceVersion: 2, resolvedStyleSource: 'core-style-inspection', resolvedStyleRevision: 0 });
+          tree.nodes.push({ key: 'popup', parent: 'root', authored: { id: 'datepicker-popup', role: 'dialog' } });
+          for (const id of ['datepicker-icon', 'datepicker-header', 'datepicker-month', 'datepicker-previous', 'datepicker-next']) {
+            tree.nodes.push({ key: id, parent: 'popup', authored: { id } });
+          }
+          tree.nodes.push({ key: 'grid', parent: 'popup', authored: { id: view === 'month' ? 'datepicker-grid' : 'datepicker-year-grid' } });
+          for (let n = 0; n < (view === 'month' ? 30 : 24); n++) tree.nodes.push({ key: `cell${n}`, parent: 'grid', authored: { type: 'button' } });
+        }
+        const stem = `artifacts/material-parity/fresh/picker-commit-audit/${view}-${deviceScaleFactor}-${side}-${state}`;
+        const png = Buffer.alloc(24);
+        Buffer.from('89504e470d0a1a0a', 'hex').copy(png);
+        png.writeUInt32BE(1440 * deviceScaleFactor, 16);
+        png.writeUInt32BE(900 * deviceScaleFactor, 20);
+        f.bytes.set(path.resolve(f.options.root, `${stem}.png`), png);
+        return { state, key, open: !closed, openerFocused: closed, activeIsClose: focused,
+          active: { tag: 'button', text: focused ? 'Close calendar' : '12', label: closed ? 'Open calendar' : null,
+            class: 'mat-calendar-body-cell' }, controls: [], events: structuredClone(events),
+          close: isRef && !closed ? { text: 'Close calendar', clip, clipPath: 'none', position: 'absolute', display: 'flex',
+            visibility: 'visible', opacity: '1', box: { left: 65, top: 599, width: 142, height: 40 } } : null,
+          inputTree: f.put(`${stem}.json`, tree), screenshot: { file: `${stem}.png`, sha256: hash(png) } };
+      });
+      sides[side] = { samples, runtime: structuredClone(runtime) };
+    }
+    return { family: 'datepicker', view, deviceScaleFactor, sides };
+  }));
+  return f;
+}
+
+test('calendar close live evidence requires both views, DPRs, all action boundaries and bound artifacts', () => {
+  const { raw, options } = calendarFixture();
+  const before = JSON.stringify(raw);
+  const result = validateCalendarCloseCapture(raw, options);
+  assert.deepEqual(result.errors, []);
+  assert.equal(result.binding.status, 'checkpoint-bound');
+  assert.equal(result.complete, true);
+  assert.equal(result.cases.length, 4);
+  assert.ok(result.cases.every(c => c.referenceFocusRevealBlurAndCloseVerified && c.referenceFocusRestorationVerified &&
+    c.candidateAuthoredCloseControlAbsent && !c.inputEquivalent && !c.finalRasterVerified));
+  assert.equal(JSON.stringify(raw), before);
+});
+
+test('calendar close evidence rejects incomplete, mismapped, fabricated or changed action records', () => {
+  const mutations = [
+    f => f.raw.results.pop(),
+    f => { f.raw.results[1].view = 'month'; },
+    f => { f.raw.profile = 'dark'; },
+    f => { f.raw.results[0].sides.reference.samples.pop(); },
+    f => { f.raw.results[0].sides.reference.samples[1].key = 'Enter'; },
+    f => { f.raw.results[0].sides.reference.samples[1].activeIsClose = false; },
+    f => { f.raw.results[0].sides.reference.samples[1].close.clip = 'rect(0px, 0px, 0px, 0px)'; },
+    f => { f.raw.results[0].sides.reference.samples[1].close.box.top = 1000; },
+    f => { f.raw.results[0].sides.reference.samples[1].close.opacity = '0'; },
+    f => { f.raw.results[0].sides.reference.samples[4].open = true; },
+    f => { f.raw.results[0].sides.reference.samples[4].openerFocused = false; },
+    f => { f.raw.results[0].sides.reference.samples[4].events.at(-1).trusted = false; },
+    f => { f.raw.results[0].sides.reference.samples[2].events.at(-1).close = false; },
+    f => { f.raw.results[0].sides.reference.samples[1].events = []; },
+    f => { f.raw.results[0].sides.astylar.samples[0].controls.push({ text: 'Close calendar' }); },
+    f => { f.raw.results[0].sides.astylar.samples[4].open = false; },
+    f => { f.raw.results[0].sides.astylar.runtime.errors.push('bad runtime'); },
+    f => { f.raw.capture.sources.pop(); },
+    f => { f.raw.results[0].sides.reference.samples[1].screenshot = f.raw.results[0].sides.reference.samples[0].screenshot; },
+    f => { const s = f.raw.results[0].sides.reference.samples[1]; f.bytes.get(path.resolve(f.options.root, s.screenshot.file))[0] = 0; },
+    f => { f.raw.results[0].sides.reference.samples[1].inputTree.sha256 = '0'.repeat(64); },
+  ];
+  for (const mutate of mutations) {
+    const f = calendarFixture(); mutate(f);
+    const result = validateCalendarCloseCapture(f.raw, f.options);
+    assert.ok(result.errors.length, String(mutate));
+    assert.equal(result.complete, false);
+    assert.deepEqual(result.cases, [], 'An invalid capture must not retain partial accepted cases');
+  }
+});
+
+test('calendar close evidence replays current trees instead of trusting scalar absence and clipping claims', () => {
+  const mutations = [
+    ['reference', tree => { tree.styles[0].clip = 'auto'; }],
+    ['reference', tree => { tree.nodes.find(n => n.key === 'close').parent = 'root'; }],
+    ['reference', tree => { tree.nodes.find(n => n.key === 'view').type = 'mat-multi-year-view'; }],
+    ['reference', tree => { tree.nodes.find(n => n.key === 'label').ownText = 'Other action'; }],
+    ['astylar', tree => { tree.resolvedStyleEvidenceVersion = 1; }],
+    ['astylar', tree => { tree.resolvedStyleSource = 'fixture'; }],
+    ['astylar', tree => { tree.resolvedStyleRevision = -1; }],
+    ['astylar', tree => { tree.nodes.push({ key: 'missing', authored: { type: 'button', ariaLabel: 'Close calendar' } }); }],
+    ['astylar', tree => { tree.nodes = tree.nodes.filter(n => n.key !== 'grid'); }],
+    ['astylar', tree => { tree.nodes = tree.nodes.filter(n => !n.key.startsWith('cell')); }],
+    ['astylar', tree => { tree.nodes.push(structuredClone(tree.nodes[0])); }],
+  ];
+  for (const [side, mutate] of mutations) {
+    const f = calendarFixture(), sample = f.raw.results[0].sides[side].samples[0];
+    const tree = JSON.parse(f.options.readBytes(path.resolve(f.options.root, sample.inputTree.file)));
+    mutate(tree);
+    sample.inputTree = f.put(sample.inputTree.file, tree);
+    const result = validateCalendarCloseCapture(f.raw, f.options);
+    assert.ok(result.errors.length, String(mutate));
+    assert.equal(result.complete, false);
+  }
+});
 
 test('supplemental capture requires explicit local run and new artifact destination', () => {
   const root = path.resolve('virtual-capture-root');

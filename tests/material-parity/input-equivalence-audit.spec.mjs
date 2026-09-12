@@ -1098,7 +1098,14 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   const report = parityReport({}, {});
   const audit = buildMaterialInputAudit(report);
   assert.equal(audit.coverage.visualParityGreen, true);
-  assert.equal(audit.sourceFingerprints.length, 48);
+  assert.equal(audit.sourceFingerprints.length, 51);
+  for (const file of ['scripts/audit-material-calendar-close.mjs', 'tests/material-parity/calendar-close-evidence.mjs',
+    'tests/material-parity/supplemental-capture-evidence.spec.mjs']) {
+    assert.equal(audit.sourceFingerprints.filter(entry => entry.file === file).length, 1);
+  }
+  for (const file of ['scripts/audit-material-calendar-close.mjs', 'tests/material-parity/supplemental-capture-evidence.spec.mjs']) {
+    assert.ok(audit.focusedProofs.some(proof => proof.file === file && proof.line > 0 && proof.status !== 'missing'));
+  }
   assert.equal(audit.sourceFingerprints.filter(({ file }) => file === 'scripts/audit-material-chip-inputs.mjs').length, 1);
   assert.equal(audit.sourceFingerprints.filter(({ file }) => file === 'scripts/audit-material-outline-inputs.mjs').length, 1);
   for (const id of ['fixture-outlined-button-literal-replaces-outline-token',

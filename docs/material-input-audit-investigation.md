@@ -23,6 +23,129 @@ selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Calendar close control: live keyboard evidence, not just a hidden class (2026-09-12)
+
+The previous structural finding correctly stopped short of claiming that the
+hidden reference control was visible or operable. The new read-only producer
+`scripts/audit-material-calendar-close.mjs` now exercises the actual frozen
+application with a pointer-open followed by **Tab, Shift+Tab, Tab, Enter**.
+It does not call `focus()`, inject a missing control, modify state, or feed
+measured output geometry back into layout. The year-view preparation uses the
+real period button on both sides.
+
+Command:
+
+`node scripts/audit-material-calendar-close.mjs --base-url=http://127.0.0.1:4431 --checkpoint=artifacts/material-parity/current-ancestry-audit/checkpoint --output=artifacts/material-parity/calendar-close-current-ancestry-audit`
+
+The completed capture contains **four paired cases** (month and multi-year at
+DPR 1 and 2, light profile, 1440x900 CSS px), **40 action-boundary input trees**
+and **40 screenshots**. Each side's actual served document, scripts, styles and
+fonts matches the selected checkpoint. Report:
+
+`artifacts/material-parity/calendar-close-current-ancestry-audit/latest-report.json`
+
+SHA-256: `6946ed820ecf83e98c20f3fd99c4327b700a768b7a4d064ecec086a41b2bb889`.
+
+A second fresh capture used the same command with output
+`artifacts/material-parity/supplemental-current-ancestry-audit/calendar-close-audit`.
+Its report SHA-256 is
+`d09a946563651c389ad73db8be96bab5c129f7068513aaec9cc6cfa26d003f00`.
+Both reports independently validate against the checkpoint with zero errors.
+All **40** focus identity, open state, clip, close-box geometry and opener-focus
+snapshots repeat exactly. The second capture is located beside the other
+current-run supplements for subsequent consolidated-inventory integration;
+the first remains preserved. Both diagnostic processes completed with exit 1
+for the expected candidate mismatch, not a collection error.
+
+In every reference case:
+
+- Opening focuses the active day or year. The close button remains in the
+  dialog with computed `clip: rect(0px, 0px, 0px, 0px)`.
+- Tab focuses **Close calendar**, removes the visually-hidden class and
+  changes computed clip to `auto`. Its 142.28125x40 CSS-pixel box is within
+  the viewport. Absolute positioning blockifies the authored inline-flex
+  display to computed `flex`; the audit preserves that distinction.
+- Shift+Tab restores focus to the active cell and reapplies clipping.
+- Tab reveals the control again. Enter delivers a trusted key and click,
+  closes the popup, and restores focus to the opener.
+
+In every candidate case, the authored popup and semantic controls contain no
+close counterpart. Month-view opening leaves focus on the opener; Tab reaches
+the period button, not a close action. Year-view preparation leaves focus on
+the period button; Tab reaches previous navigation. After the same complete
+key sequence the candidate popup remains open. This producer intentionally
+exits **1** for the unequal outcome, rather than calling it a passing parity
+check. It is an **application/plugin authoring omission**, not evidence that
+core failed to render or activate an authored close button.
+
+`tests/material-parity/calendar-close-evidence.mjs` independently checks all
+four cases, action order, trusted event histories, current core inspection,
+dialog/label ownership, actual view and grid presence, computed clipping,
+viewport reachability, dismissal and focus restoration. It replays full tree
+bytes and validates screenshot digests/dimensions, source hashes and runtime
+binding. Invalid evidence yields no accepted partial cases. Pixel appearance
+is not inferred from these metadata checks: month/DPR1 reference and candidate
+focused screenshots were also inspected, while `finalRasterVerified` remains
+false rather than claiming full-state visual parity.
+
+Focused command:
+
+`node --test --test-name-pattern='calendar close' tests/material-parity/supplemental-capture-evidence.spec.mjs`
+
+Result: **3/3 pass**, zero failed/skipped/cancelled tests, **0.250 seconds**.
+The tests include **21** action/artifact mutation rejections and **11**
+independently rehashed tree mutations. The real capture replays with zero
+validation errors and all four cases checkpoint-bound.
+
+The expanded focused command
+`node --test --test-name-pattern='records source fingerprints|calendar close' tests/material-parity/input-equivalence-audit.spec.mjs tests/material-parity/supplemental-capture-evidence.spec.mjs`
+passes **8/8** in **5.235 seconds**, including the existing structural guards.
+The first full harness run passed 342/343 and correctly rejected the old
+expected fingerprint count (48 versus the new 51). That expectation now names
+and checks the three added files as well as their proof records; no visual or
+behavioral gate was weakened.
+The repeated full `npm run parity:harness:check` passes **343/343** with zero
+failed/skipped/cancelled/todo tests in **133.817 seconds**. Syntax checks for
+the new producer and validator pass. All ten frozen live-capture harness files
+still match their checkpoint SHA-256 values, preserving the completed full
+visual matrix's provenance.
+
+The main audit's proof inventory and source fingerprints now include this
+producer, validator and tests. Its existing per-matrix structural witnesses
+remain explicitly non-live evidence: this focused capture must not retroactively
+assert focus or raster verification for other themes/states. Integrating these
+additional action-boundary trees into the final consolidated inventory remains
+required. No fixture, renderer, plugin, browser reference, live matrix collector,
+visual threshold or configured matrix state changed in this increment.
+
+## Complete corrected-capture input analysis (2026-09-12)
+
+The complete 436-static / 1,875-interaction report was independently reloaded
+and analyzed at `5bdf7b7`; the prior diagnostic process handle was missing, so
+analysis was rerun against the preserved bytes, not recaptured or resumed from
+an assumed live process. Full visual report SHA-256:
+
+`b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a`.
+
+Using the current-ancestry normal-line-box and supplemental roots, the analysis
+contains **4,648 side/case records**, **2,147 tree variants**, zero tree errors,
+zero missing-tree, resolved-stage, state-stage or reference-context gaps, and
+zero missing measured element mappings. It retains **8,140** unique style
+differences / **380,520** occurrences, **88** structural differences and all
+**93** source findings. There are still **3,309 unresolved style attributions**;
+a syntactically assigned classification is not a root-cause explanation.
+
+Diagnostic `validateMaterialInputAudit(audit, { requireComplete: false })`
+returns no errors. Strict validation correctly rejects completion with:
+
+- 3,309 resolved-style differences lacking root-cause attribution;
+- 833 control texture typography differences requiring attribution;
+- 3,214 retained typography mappings or stage fields requiring review;
+- 352 retained typography differences requiring attribution.
+
+These are full-matrix results, superseding static-only gap counts for planning.
+The input audit remains incomplete despite the completed green visual matrix.
+
 ## Chip host-border differences now retain per-case outline ownership (2026-09-12)
 
 The source finding from `ab333d3` now has a guarded `chipOutlineInputs`
