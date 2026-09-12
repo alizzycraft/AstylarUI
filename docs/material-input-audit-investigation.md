@@ -64,6 +64,28 @@ against the new checkpoint; the loader correctly rejects reusing that
 supplement from another run. The thirteen older behavior/overlay/slider
 supplemental cases also still need renewed context evidence.
 
+The new unfiltered run has now started with
+`node tests/material-parity/run-material-parity.mjs --enforce --skip-build`,
+the frozen control-text browser root, the new context artifact directory,
+port 4431, all family/profile/viewport/state filters cleared and restart interval
+200. Its manifest declares all 436 static and 1,875 interaction cases with
+enforcement enabled. An independent read of its first **47 completed checkpoint
+records** verified result digests and paired tree digests; those observations
+have **zero context gaps and zero inventory errors**. This is capture-prefix
+validation only, not completion or visual acceptance of the whole run.
+
+A further real-browser proof prevents an unsafe leaf-only alignment shortcut.
+Horizontal LTR `start` matches `left`, RTL `start` matches `right`, and RTL
+`start` differs from `left`. Crucially, an LTR leaf whose own `unicode-bidi` is
+`normal` still aligns more than 100px away from `left` when its line container
+uses `plaintext` and the text establishes RTL paragraph direction. This is
+consistent with [CSS Text 3 section 8.3](https://www.w3.org/TR/2026/CRD-css-text-3-20260814/#bidi-linebox).
+Any future accepted alignment representation must inspect the containing-line
+ancestor context, not just the text leaf. No alignment normalization has been
+added. All **4/4** standalone browser input-tree tests and the complete
+**225/225** `npm run parity:harness:check` suite pass. The running matrix's
+capture-module graph was not changed by this separate test/document increment.
+
 ## Normal tracking is a representation alias; shaping remains unequal (2026-09-12)
 
 The largest repeated tracking group is now distinguished from genuine unequal

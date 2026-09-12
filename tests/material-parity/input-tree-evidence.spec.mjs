@@ -59,6 +59,45 @@ test('browser context capture distinguishes inherited RTL, vertical writing, las
   } finally { await browser.close(); }
 });
 
+test('start alignment requires the line-container context, not just a leaf direction or default', async () => {
+  const browser = await chromium.launch({ channel: 'chrome', headless: true });
+  try {
+    const page = await browser.newPage();
+    const result = await page.evaluate(() => {
+      const measure = (direction, unicodeBidi, textAlign, text) => {
+        const container = document.createElement('div'), leaf = document.createElement('span');
+        Object.assign(container.style, { display: 'block', width: '240px', height: '48px',
+          padding: '0px', border: '0px', margin: '0px', font: '16px/24px Arial',
+          writingMode: 'horizontal-tb', direction, unicodeBidi, textAlign, textAlignLast: 'auto' });
+        leaf.textContent = text;
+        container.append(leaf);
+        document.body.append(container);
+        const range = document.createRange();
+        range.selectNodeContents(leaf);
+        const parentStyle = getComputedStyle(container), leafStyle = getComputedStyle(leaf);
+        const snapshot = { offset: range.getBoundingClientRect().left - container.getBoundingClientRect().left,
+          parent: { direction: parentStyle.direction, unicodeBidi: parentStyle.unicodeBidi, textAlign: parentStyle.textAlign },
+          leaf: { direction: leafStyle.direction, unicodeBidi: leafStyle.unicodeBidi, textAlign: leafStyle.textAlign } };
+        container.remove();
+        return snapshot;
+      };
+      const pair = (direction, unicodeBidi, physical, text = 'ABC') => ({
+        start: measure(direction, unicodeBidi, 'start', text), physical: measure(direction, unicodeBidi, physical, text),
+      });
+      return { ltr: pair('ltr', 'normal', 'left'), rtlRight: pair('rtl', 'normal', 'right'),
+        rtlLeft: pair('rtl', 'normal', 'left'), plaintext: pair('ltr', 'plaintext', 'left', 'שלום') };
+    });
+    assert.equal(result.ltr.start.offset, result.ltr.physical.offset);
+    assert.equal(result.rtlRight.start.offset, result.rtlRight.physical.offset);
+    assert.ok(result.rtlLeft.start.offset - result.rtlLeft.physical.offset > 100);
+    assert.equal(result.plaintext.start.leaf.direction, 'ltr');
+    assert.equal(result.plaintext.start.leaf.unicodeBidi, 'normal');
+    assert.equal(result.plaintext.start.parent.unicodeBidi, 'plaintext');
+    assert.ok(result.plaintext.start.offset - result.plaintext.physical.offset > 100,
+      'an LTR leaf with normal unicode-bidi does not authorize start/left equivalence when the line container is plaintext');
+  } finally { await browser.close(); }
+});
+
 test('browser font-weight keywords resolve to exact numeric aliases but relative weights depend on ancestry', async () => {
   const browser = await chromium.launch({ channel: 'chrome', headless: true });
   try {
