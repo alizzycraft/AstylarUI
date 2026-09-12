@@ -10,6 +10,43 @@ const states = ['opened', 'tab-close', 'blur-close', 'refocus-close', 'activate-
 const keys = [null, 'Tab', 'Shift+Tab', 'Tab', 'Enter'];
 const hasClass = (node, name) => String(node?.attributes?.class ?? '').split(/\s+/).includes(name);
 const closeText = value => typeof value === 'string' && /close\s+calendar/i.test(value);
+const requiredCases = ['month/1', 'month/2', 'multi-year/1', 'multi-year/2'];
+
+export function collectCalendarCloseEvidence(root, options = {}) {
+  const absolute = path.resolve(root, options.reportPath ?? path.join(options.supplementalRoot ??
+    'artifacts/material-parity', 'calendar-close-audit', 'latest-report.json'));
+  const file = path.relative(root, absolute).replaceAll('\\', '/');
+  const missing = { file, binding: { status: 'missing', errors: [] }, complete: false,
+    cases: [], reviews: [], mismatches: [], missing: [...requiredCases], errors: [] };
+  try {
+    const boundary = path.resolve(root, 'artifacts/material-parity');
+    const inside = (base, target) => {
+      const relative = path.relative(base, target);
+      return relative && relative !== '..' && !relative.startsWith(`..${path.sep}`) && !path.isAbsolute(relative);
+    };
+    assert.ok(inside(boundary, absolute), 'Calendar evidence must remain inside Material artifacts');
+    if (!options.readBytes) assert.ok(inside(realpathSync(boundary), realpathSync(absolute)), 'Calendar report symlink escapes artifacts');
+    const bytes = (options.readBytes ?? readFileSync)(absolute), raw = JSON.parse(bytes);
+    const validation = validateCalendarCloseCapture(raw, { ...options, root, reportFile: file });
+    const cases = validation.complete ? raw.results.flatMap(entry => entry.sides.reference.samples.map((reference, index) => {
+      const astylar = entry.sides.astylar.samples[index];
+      return { kind: 'supplemental', family: 'datepicker', profile: raw.profile,
+        viewport: { ...raw.viewport, deviceScaleFactor: entry.deviceScaleFactor, id: `calendar-close-desktop-dpr${entry.deviceScaleFactor}` },
+        state: `calendar-close-${entry.view}-${reference.state}`, view: entry.view, action: reference.key,
+        reference, astylar, inputTrees: { reference: reference.inputTree, astylar: astylar.inputTree },
+        inputEquivalent: false, finalRasterVerified: false };
+    })) : [];
+    return { file, sha256: createHash('sha256').update(bytes).digest('hex'), browser: raw.browser,
+      capture: raw.capture, binding: validation.binding ?? { status: 'invalid', errors: [] },
+      complete: validation.complete, cases, reviews: validation.cases,
+      mismatches: validation.cases.map(review => ({ ...review,
+        justification: 'The reference keyboard close control is authored, revealed on focus, hidden on blur and activated with Enter; the candidate does not author its counterpart and remains open after the same sequence. This is unequal control input, not an equal-input core rendering failure.' })),
+      missing: validation.complete ? [] : [...requiredCases], errors: validation.errors };
+  } catch (error) {
+    if (error.code === 'ENOENT') return missing;
+    return { ...missing, binding: { status: 'invalid', errors: [{ error: String(error.message) }] }, errors: [String(error.message)] };
+  }
+}
 
 // Deliberately validates the observed omission, not hypothetical fixed behavior.
 // A changed fixture or trace must be investigated rather than accepted by a
@@ -22,7 +59,7 @@ export function validateCalendarCloseCapture(raw, options) {
     assert.equal(raw.profile, 'light');
     assert.deepEqual(raw.viewport, { width: 1440, height: 900 });
     assert.equal(raw.results?.length, 4, 'Require both views at DPR 1 and 2');
-    const expected = new Set(['month/1', 'month/2', 'multi-year/1', 'multi-year/2']);
+    const expected = new Set(requiredCases);
     const flattened = [];
     for (const entry of raw.results) {
       const key = `${entry.view}/${entry.deviceScaleFactor}`;

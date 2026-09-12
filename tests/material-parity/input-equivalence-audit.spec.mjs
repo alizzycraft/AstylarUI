@@ -4788,6 +4788,127 @@ test('calendar close omission classification does not assume a hidden class prov
   assert.equal(omission.inputEquivalent, false);
 });
 
+test('calendar close supplemental owner replay is restricted to the declared view DPR and action scope', () => {
+  for (const yearView of [false, true]) for (const dpr of [1, 2]) {
+    for (const action of ['opened', 'tab-close', 'blur-close', 'refocus-close']) {
+      const raw = calendarCloseOmissionReport(yearView), entry = raw.results[0];
+      Object.assign(entry, { kind: 'supplemental', profile: 'light', viewport: { id: `calendar-close-desktop-dpr${dpr}` },
+        state: `calendar-close-${yearView ? 'multi-year' : 'month'}-${action}` });
+      const control = controlEvidence(raw);
+      const retained = collectRetainedTypographyEvidence(raw.results, collectFullTreeInventory(raw.results), control);
+      for (const evidence of [control, retained]) {
+        const gaps = evidence.gaps.filter(gap => gap.attribution === 'reviewed-calendar-close-control-omission');
+        assert.equal(gaps.length, 1);
+        assert.equal(gaps[0].reviewEvidence.focusRevealAndDismissalVerified, false,
+          'Structural ownership must not turn into a live-focus claim');
+      }
+    }
+  }
+  for (const mutate of [
+    entry => { entry.profile = 'dark'; },
+    entry => { entry.viewport.id = 'calendar-close-desktop-dpr3'; },
+    entry => { entry.state = 'calendar-close-year-opened'; },
+    entry => { entry.state = 'calendar-close-month-unreviewed'; },
+    entry => { entry.state = 'hover'; },
+    entry => { entry.kind = 'unknown'; },
+  ]) {
+    const raw = calendarCloseOmissionReport(), entry = raw.results[0];
+    Object.assign(entry, { kind: 'supplemental', profile: 'light', viewport: { id: 'calendar-close-desktop-dpr1' },
+      state: 'calendar-close-month-opened' });
+    mutate(entry);
+    assert.ok(!controlEvidence(raw).gaps.some(gap => gap.attribution === 'reviewed-calendar-close-control-omission'), String(mutate));
+  }
+});
+
+function calendarCloseStateReport(view = 'month', dpr = 1) {
+  const raw = calendarYearTypographyReport(), entry = raw.results[0];
+  Object.assign(entry, { kind: 'supplemental', profile: 'light', viewport: { id: `calendar-close-desktop-dpr${dpr}` },
+    state: `calendar-close-${view}-activate-close`, action: 'Enter', inputEquivalent: false, finalRasterVerified: false,
+    reference: { open: false, close: null, openerFocused: true, events: [
+      { type: 'keydown', key: 'Enter', close: true, trusted: true }, { type: 'click', close: true, trusted: true }] },
+    astylar: { open: true, close: null } });
+  entry.inputTrees.reference.nodes = [{ key: 'frame', parent: null, type: 'main', attributes: {},
+    ownText: '', style: 0, rules: [], pseudoElements: [] }];
+  return raw;
+}
+
+test('calendar close state divergence preserves current candidate controls without inventing reference typography', () => {
+  for (const view of ['month', 'multi-year']) for (const dpr of [1, 2]) {
+    const raw = calendarCloseStateReport(view, dpr), before = structuredClone(raw), result = controlEvidence(raw);
+    assert.equal(result.comparisons.length, 0);
+    assert.equal(result.differences.length, 0);
+    assert.equal(result.gaps.length, 1);
+    const gap = result.gaps[0];
+    assert.equal(gap.attribution, 'reviewed-calendar-close-state-divergence');
+    assert.equal(gap.classification, 'application-plugin-authoring-defect');
+    assert.equal(gap.inputEquivalent, false);
+    assert.equal(gap.finalRasterVerified, false);
+    assert.equal(gap.element, 'datepicker-year-2016');
+    assert.equal(gap.reviewEvidence.currentText, '2016');
+    assert.equal(gap.reviewEvidence.candidatePath.at(-1), 'ast-popup');
+    assert.deepEqual(raw, before);
+  }
+});
+
+test('calendar close state divergence rejects unproven actions states paint and popup ownership', () => {
+  const mutations = [
+    e => { e.kind = 'static'; },
+    e => { e.profile = 'dark'; },
+    e => { e.viewport.id = 'calendar-close-desktop-dpr3'; },
+    e => { e.state = 'calendar-close-year-activate-close'; },
+    e => { e.state = 'calendar-close-month-refocus-close'; },
+    e => { e.action = 'Escape'; },
+    e => { e.reference.open = true; },
+    e => { e.reference.close = {}; },
+    e => { e.reference.openerFocused = false; },
+    e => { e.reference.events[0].trusted = false; },
+    e => { e.reference.events[1].close = false; },
+    e => { e.astylar.open = false; },
+    e => { e.astylar.close = {}; },
+    e => { e.inputEquivalent = true; },
+    e => { e.finalRasterVerified = true; },
+    e => { e.inputTrees.reference.nodes.push({ key: 'calendar', parent: 'frame', type: 'mat-calendar', attributes: {},
+      ownText: '', style: 0, rules: [], pseudoElements: [] }); },
+    e => { e.inputTrees.astylar.resolvedStyleSource = 'projected-mesh'; },
+    e => { e.inputTrees.astylar.nodes[0].authored.type = 'span'; },
+    e => { e.inputTrees.astylar.nodes[0].authored.id = 'another-control'; },
+    e => { e.inputTrees.astylar.nodes[0].paintedControlText.source = 'plugin-guess'; },
+    e => { e.inputTrees.astylar.nodes[0].paintedControlText.text = '2017'; },
+    e => { e.inputTrees.astylar.nodes[0].parent = 'missing'; },
+    e => { e.inputTrees.astylar.nodes.find(n => n.key === 'ast-grid').parent = 'ast-grid'; },
+    e => { e.inputTrees.astylar.nodes.find(n => n.key === 'ast-popup').authored.role = 'presentation'; },
+    e => { e.inputTrees.astylar.nodes.push(structuredClone(e.inputTrees.astylar.nodes[0])); },
+    e => { e.inputTrees.astylar.nodes.push({ key: 'other', parent: 'ast-popup', authored: { type: 'button', value: 'Close calendar' } }); },
+  ];
+  for (const mutate of mutations) {
+    const raw = calendarCloseStateReport(); mutate(raw.results[0]);
+    assert.ok(!controlEvidence(raw).gaps.some(g => g.attribution === 'reviewed-calendar-close-state-divergence'), String(mutate));
+  }
+});
+
+test('calendar close state divergence validation replays rather than trusting classification labels', () => {
+  const raw = calendarCloseStateReport(), report = buildMaterialInputAudit(parityReport({}, {}));
+  report.elementInventory = collectFullTreeInventory(raw.results);
+  report.controlTypography = collectControlTypographyEvidence(raw.results, report.elementInventory);
+  report.retainedTypography = collectRetainedTypographyEvidence(raw.results, report.elementInventory, report.controlTypography);
+  report.supplementalCalendarClose.cases = raw.results;
+  const errors = value => validateMaterialInputAudit(value, { requireComplete: false }).filter(e => e.includes('state-divergence controls'));
+  assert.deepEqual(errors(report), []);
+  for (const mutate of [
+    r => { r.controlTypography.gaps = []; },
+    r => { r.controlTypography.gaps.push(structuredClone(r.controlTypography.gaps[0])); },
+    r => { r.controlTypography.gaps[0].reviewEvidence.candidatePath = []; },
+    r => { r.controlTypography.gaps[0].reviewEvidence.currentText = '2017'; },
+    r => { r.controlTypography.gaps[0].inputEquivalent = true; },
+    r => { r.controlTypography.gaps[0].finalRasterVerified = true; },
+    r => { r.controlTypography.gaps[0].classification = 'equivalent-representation'; },
+    r => { r.supplementalCalendarClose.cases[0].reference.events = []; },
+  ]) {
+    const changed = structuredClone(report); mutate(changed);
+    assert.ok(errors(changed).length, String(mutate));
+  }
+});
+
 test('calendar close omission validation replays evidence and rejects deleted or fabricated records', () => {
   for (const stage of ['controlTypography', 'retainedTypography']) for (const mutation of
     ['delete', 'duplicate', 'context', 'reference', 'candidate', 'revision', 'equivalent', 'raster', 'focused', 'computed-clip']) {

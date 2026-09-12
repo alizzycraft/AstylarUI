@@ -23,6 +23,74 @@ selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Calendar close action boundaries integrated into the full inventory (2026-09-12)
+
+The main report now consumes the selected current-run `calendar-close-audit`
+capture alongside the other supplements. All **20 paired boundaries / 40 input
+trees** are retained, including the candidate popup after the reference has
+closed. The validator independently reopens the bound report and source trees,
+then compares the expanded inventory values rather than trusting pooled indices
+or the report's own classification labels. Invalid or missing selected evidence
+never falls back to an older capture.
+
+The integrated full replay contains **4,688 side/case records** and **2,158 tree
+variants**, with zero tree errors, missing-tree, resolved-stage, state-stage or
+reference-context gaps. The source visual report remains SHA-256
+`b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a`;
+the calendar supplement remains SHA-256
+`d09a946563651c389ad73db8be96bab5c129f7068513aaec9cc6cfa26d003f00`.
+
+The calendar supplement contributes 448 current-control comparisons and 116
+retained-text comparisons. Its **108 unmatched current-control records** after
+Enter are now attributed to the independently verified unequal dismissal state:
+the reference calendar is removed while the candidate's 27 header/year controls
+remain, in each of four sequences. This is not missing core paint and cannot be
+treated as typography equivalence. Every candidate subtree stays in the report.
+The 16 pre-dismissal close-control omissions remain separately classified;
+other newly captured typography differences and mapping gaps remain unresolved.
+
+Focused verification:
+
+`node --test --test-name-pattern='calendar close' tests/material-parity/input-equivalence-audit.spec.mjs tests/material-parity/supplemental-capture-evidence.spec.mjs`
+
+**14/14 pass**, zero failed/skipped/cancelled/todo tests, **4.614 seconds**.
+The additions test all declared supplemental view/DPR/action scopes, 14 altered
+summary/inventory cases, 26 contradictory action/state/paint/ancestry inputs,
+and eight deleted or forged state-attribution records. The initial new unit
+fixture incorrectly removed the whole reference page instead of only its popup;
+the collector rejected it as missing-tree evidence. The fixture now retains the
+page, and no collector check was relaxed.
+
+`npm run parity:harness:check` passes **350/350**, zero failed/skipped/cancelled/
+todo tests, **142.778 seconds**. The Markdown generator was also checked with
+missing calendar evidence and reports 0/4 sequences and zero attributed controls,
+not a fabricated complete capture.
+
+The full report was rebuilt using `buildMaterialInputAudit` with
+`artifacts/material-parity/current-ancestry-audit/latest-report.json`,
+`normalLineBoxPath: 'artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json'`
+and `supplementalRoot: 'artifacts/material-parity/supplemental-current-ancestry-audit'`.
+Diagnostic `validateMaterialInputAudit(audit, { requireComplete: false })`
+returns `[]`. Strict `validateMaterialInputAudit(audit)` still rejects completion:
+
+- **3,309** resolved-style differences lack root-cause attribution.
+- **849** current-control typography differences require attribution.
+- **3,278** retained typography mappings or stage fields require review.
+- **354** retained typography differences require attribution.
+
+The 108 unequal-close-state controls are not unexplained mapping gaps, but their
+attribution does not suppress the other new observations. The added retained
+mapping gaps include the reference live-period and comparison-range labels and
+the month marker; these need their own source/ownership review. This replay
+leaves all **8,140** main style differences / **380,520** occurrences, **88**
+structural differences and **93** detected source findings intact.
+
+All ten live-capture harness files still match the frozen checkpoint hashes.
+This increment changes audit collection, attribution, validation, tests and
+documentation only; it does not modify production, plugins, showcase inputs,
+the reference, visual gates or the configured capture matrix. Integration is
+not completion of the wider root-cause audit.
+
 ## Calendar close control: live keyboard evidence, not just a hidden class (2026-09-12)
 
 The previous structural finding correctly stopped short of claiming that the
@@ -113,9 +181,9 @@ visual matrix's provenance.
 The main audit's proof inventory and source fingerprints now include this
 producer, validator and tests. Its existing per-matrix structural witnesses
 remain explicitly non-live evidence: this focused capture must not retroactively
-assert focus or raster verification for other themes/states. Integrating these
-additional action-boundary trees into the final consolidated inventory remains
-required. No fixture, renderer, plugin, browser reference, live matrix collector,
+assert focus or raster verification for other themes/states. At that increment,
+consolidated action-boundary integration remained required; the subsequent
+integration is recorded above. No fixture, renderer, plugin, browser reference, live matrix collector,
 visual threshold or configured matrix state changed in this increment.
 
 ## Complete corrected-capture input analysis (2026-09-12)

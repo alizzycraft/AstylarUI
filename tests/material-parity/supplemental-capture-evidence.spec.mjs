@@ -6,8 +6,9 @@ import os from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
 import { openSupplementalCapture, parseSupplementalCaptureArguments, validateSupplementalCapture } from './supplemental-capture-evidence.mjs';
-import { collectSupplementalBehavior, collectSupplementalOverlays, collectSupplementalSlider } from './input-equivalence-audit.mjs';
-import { validateCalendarCloseCapture } from './calendar-close-evidence.mjs';
+import { collectSupplementalBehavior, collectSupplementalOverlays, collectSupplementalSlider,
+  collectFullTreeInventory, validateCalendarCloseInventory } from './input-equivalence-audit.mjs';
+import { validateCalendarCloseCapture, collectCalendarCloseEvidence } from './calendar-close-evidence.mjs';
 import { propertyGroups } from './input-equivalence-policy.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -40,7 +41,7 @@ function calendarFixture() {
         if (isRef && i === 2) events.push({ type: 'focusout', trusted: true, close: true });
         if (closed) events.push({ type: 'click', trusted: true, close: true });
         const clip = focused ? 'auto' : 'rect(0px, 0px, 0px, 0px)';
-        const tree = { nodes: [{ key: 'root', parent: null }], errors: [], styles: [{ clip }] };
+        const tree = { schemaVersion: 1, nodes: [{ key: 'root', parent: null }], rules: [], errors: [], styles: [{ clip }] };
         if (isRef && !closed) tree.nodes.push(
           { key: 'dialog', parent: 'root', type: 'div', attributes: { role: 'dialog', 'aria-modal': 'true', class: 'mat-datepicker-content-container' } },
           { key: 'view', parent: 'dialog', type: view === 'month' ? 'mat-month-view' : 'mat-multi-year-view' },
@@ -55,6 +56,14 @@ function calendarFixture() {
           }
           tree.nodes.push({ key: 'grid', parent: 'popup', authored: { id: view === 'month' ? 'datepicker-grid' : 'datepicker-year-grid' } });
           for (let n = 0; n < (view === 'month' ? 30 : 24); n++) tree.nodes.push({ key: `cell${n}`, parent: 'grid', authored: { type: 'button' } });
+        }
+        for (const node of tree.nodes) {
+          if (isRef) Object.assign(node, { rules: [], pseudoElements: [], style: 0 });
+          else {
+            node.authored ??= {};
+            Object.assign(node, { resolvedStyle: { color: '#123456' }, normalResolvedStyle: { color: '#123456' },
+              interactionResolvedStyle: { color: '#123456' } });
+          }
         }
         const stem = `artifacts/material-parity/fresh/picker-commit-audit/${view}-${deviceScaleFactor}-${side}-${state}`;
         const png = Buffer.alloc(24);
@@ -145,6 +154,95 @@ test('calendar close evidence replays current trees instead of trusting scalar a
     assert.ok(result.errors.length, String(mutate));
     assert.equal(result.complete, false);
   }
+});
+
+function collectedCalendarFixture() {
+  const f = calendarFixture();
+  f.put(f.options.reportFile, f.raw);
+  const supplemental = collectCalendarCloseEvidence(f.options.root, { ...f.options, reportPath: f.options.reportFile });
+  assert.deepEqual(supplemental.errors, []);
+  const inputCases = supplemental.cases.map(entry => ({ ...entry, inputTrees: Object.fromEntries(['reference', 'astylar'].map(side =>
+    [side, JSON.parse(f.options.readBytes(path.resolve(f.options.root, entry.inputTrees[side].file)))])) }));
+  const report = { generatedFrom: { captureProvenance: f.options.expectedProvenance },
+    supplementalCalendarClose: supplemental, elementInventory: collectFullTreeInventory(inputCases, { root: f.options.root }) };
+  return { ...f, report };
+}
+
+test('calendar close collector keeps all twenty paired boundaries and every source snapshot in the inventory', () => {
+  const f = collectedCalendarFixture(), evidence = f.report.supplementalCalendarClose;
+  assert.equal(evidence.cases.length, 20);
+  assert.equal(evidence.reviews.length, 4);
+  assert.equal(evidence.mismatches.length, 4);
+  assert.equal(evidence.complete, true);
+  assert.deepEqual(evidence.missing, []);
+  assert.equal(new Set(evidence.cases.map(c => `${c.viewport.id}/${c.state}`)).size, 20);
+  assert.equal(f.report.elementInventory.cases.length, 40);
+  const before = JSON.stringify(f.report), errors = [];
+  validateCalendarCloseInventory(f.report, errors, f.options);
+  assert.deepEqual(errors, []);
+  assert.equal(JSON.stringify(f.report), before);
+  for (const entry of evidence.cases) {
+    assert.equal(entry.inputEquivalent, false);
+    assert.equal(entry.finalRasterVerified, false);
+    for (const side of ['reference', 'astylar']) assert.equal(entry[side].inputTree.file, entry.inputTrees[side].file);
+  }
+});
+
+test('calendar close consolidated validation rejects altered summaries, missing boundaries and wrong interned values', () => {
+  const mutations = [
+    f => { delete f.report.supplementalCalendarClose; },
+    f => { f.report.supplementalCalendarClose.cases.pop(); },
+    f => { f.report.supplementalCalendarClose.reviews[0].inputEquivalent = true; },
+    f => { f.report.supplementalCalendarClose.mismatches = []; },
+    f => { f.report.supplementalCalendarClose.cases[0].reference.active.text = 'Another control'; },
+    f => { f.report.supplementalCalendarClose.cases[0].inputTrees.reference.sha256 = '0'.repeat(64); },
+    f => { f.report.generatedFrom.captureProvenance.browser = 'another browser'; },
+    f => { delete f.report.elementInventory; },
+    f => { f.report.elementInventory.cases.pop(); },
+    f => { f.report.elementInventory.cases.push(structuredClone(f.report.elementInventory.cases[0])); },
+    f => { f.report.elementInventory.cases[1].resolvedStyleRevision = 99; },
+    f => { f.report.elementInventory.styles[0].value.clip = 'fake'; },
+    f => { f.report.elementInventory.variants[0].nodes[0].parent = 'wrong-parent'; },
+    f => { f.report.elementInventory.variants[0].side = 'astylar'; },
+  ];
+  for (const mutate of mutations) {
+    const f = collectedCalendarFixture();
+    mutate(f);
+    const errors = [];
+    validateCalendarCloseInventory(f.report, errors, f.options);
+    assert.ok(errors.length, String(mutate));
+  }
+});
+
+test('calendar close collector does not fall back from missing, invalid or unbound selected evidence', () => {
+  const f = collectedCalendarFixture();
+  const readBytes = absolute => {
+    const bytes = f.bytes.get(absolute);
+    if (!bytes) throw Object.assign(new Error('missing'), { code: 'ENOENT' });
+    return bytes;
+  };
+  const options = { ...f.options, readBytes, supplementalRoot: 'artifacts/material-parity/selected' };
+  const missing = collectCalendarCloseEvidence(f.options.root, options);
+  assert.equal(missing.binding.status, 'missing');
+  assert.equal(missing.missing.length, 4);
+  assert.deepEqual(missing.cases, []);
+  const partial = { ...f.report, supplementalCalendarClose: missing,
+    elementInventory: collectFullTreeInventory([]) };
+  const errors = [];
+  validateCalendarCloseInventory(partial, errors, { ...options, requireComplete: false });
+  assert.deepEqual(errors, []);
+  validateCalendarCloseInventory(partial, errors, options);
+  assert.ok(errors.some(error => error.includes('incomplete or unbound')));
+  for (const input of ['broken JSON', { ...f.raw, schemaVersion: 999 }]) {
+    f.put(missing.file, input);
+    const result = collectCalendarCloseEvidence(f.options.root, options);
+    assert.ok(result.errors.length);
+    assert.equal(result.complete, false);
+    assert.deepEqual(result.cases, []);
+  }
+  const escaped = collectCalendarCloseEvidence(f.options.root, { ...options, reportPath: '../outside.json' });
+  assert.equal(escaped.binding.status, 'invalid');
+  assert.ok(escaped.errors.length);
 });
 
 test('supplemental capture requires explicit local run and new artifact destination', () => {
