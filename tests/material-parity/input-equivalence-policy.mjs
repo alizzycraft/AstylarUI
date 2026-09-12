@@ -645,6 +645,16 @@ export const sourceAuditDefinitions = Object.freeze([
     justification: 'The reference day label has an inner line-height:1 box, calendar font token and date-text color token. The candidate flat day control inherits the longer document font stack, omits the inner line-height and fixes #1d1b20. Full-date/context mapping exposes these unequal normal/effective/current texture inputs without claiming a core defect or compensating baseline fix.',
   }),
   Object.freeze({
+    id: 'fixture-calendar-year-typography-substitution',
+    introducedBy: 'd973f84 fix(material): complete picker and range interactions',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`selector: '\.datepicker-year'[^\n]*color: '#1d1b20'[^\n]*fontSize: '14px'`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase calendar year token translation and inner text structure',
+    focusedProof: 'tests/material-parity/input-equivalence-audit.spec.mjs: calendar year typography declaration witnesses',
+    justification: 'The reference multi-year cells use the calendar font token and an inner line-height:1/date-text-token label. The replacement year buttons omit that font/line box and fix #1d1b20. Range/ancestry correspondence does not make these typography inputs equivalent or prove a core defect.',
+  }),
+  Object.freeze({
     id: 'fixture-tab-breakpoint-raster-compensation',
     introducedBy: '4e58f58/25e1893 compact navigation and interaction parity fixes',
     file: 'examples/material-showcase/src/app/astylar.component.ts',

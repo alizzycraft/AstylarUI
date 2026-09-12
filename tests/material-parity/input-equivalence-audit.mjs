@@ -171,14 +171,15 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
   if (invalidControlTextMappings.length > 0) errors.push(`${invalidControlTextMappings.length} retained-to-control text stage mappings lack authoritative comparison evidence`);
   if (report.controlTypography?.schemaVersion !== 1) errors.push('missing control texture typography stage report');
   const invalidCalendarMappings = report.controlTypography?.comparisons.filter((comparison) => {
-    if (comparison.mapping?.kind !== 'reviewed-material-calendar-day-label') return false;
+    if (!['reviewed-material-calendar-day-label', 'reviewed-material-calendar-year-label'].includes(comparison.mapping?.kind)) return false;
     const inventory = report.elementInventory;
     const refs = inventory.cases.filter((entry) => entry.case === comparison.case && entry.side === 'reference');
     const asts = inventory.cases.filter((entry) => entry.case === comparison.case && entry.side === 'astylar');
     if (refs.length !== 1 || asts.length !== 1 || comparison.family !== 'datepicker') return true;
     const referenceTree = inventory.variants[refs[0].variant], astylarTree = inventory.variants[asts[0].variant];
     const nodes = referenceTree.nodes.filter((node) => node.key === comparison.referenceNode);
-    const mapped = nodes.length === 1 && reviewedCalendarDayControl(nodes[0], referenceTree, astylarTree);
+    const mapped = nodes.length === 1 && reviewedCalendarCellControl(nodes[0], referenceTree, astylarTree,
+      comparison.mapping.kind === 'reviewed-material-calendar-year-label' ? 'year' : 'day');
     const candidate = astylarTree.nodes.filter((node) => node.authored?.id === comparison.element);
     return !mapped || mapped.id !== comparison.element || mapped.parent.key !== comparison.referenceControl ||
       candidate.length !== 1 || candidate[0].key !== comparison.astylarNode ||
@@ -187,7 +188,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
       comparison.revision !== asts[0].resolvedStyleRevision || comparison.finalRasterVerified !== false ||
       JSON.stringify(mapped.evidence) !== JSON.stringify(comparison.mapping.reviewEvidence);
   }) ?? [];
-  if (invalidCalendarMappings.length) errors.push(`${invalidCalendarMappings.length} calendar day mappings lack exact captured date/context evidence`);
+  if (invalidCalendarMappings.length) errors.push(`${invalidCalendarMappings.length} calendar cell mappings lack exact captured date/range context evidence`);
   if (requireComplete && report.controlTypography?.gaps.length > 0) errors.push(`${report.controlTypography.gaps.length} control texture mappings or stage fields require review`);
   const reviewedControlKinds = {
     'reviewed-button-tracking-input': 'application-plugin-authoring-defect',
@@ -197,6 +198,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
     'reviewed-toolbar-button-line-height-input': 'application-plugin-authoring-defect',
     'reviewed-tab-label-typography-input': 'application-plugin-authoring-defect',
     'reviewed-calendar-day-typography-input': 'application-plugin-authoring-defect',
+    'reviewed-calendar-year-typography-input': 'application-plugin-authoring-defect',
     'reviewed-normal-line-box-stage-comparison': 'parity-harness-defect',
   };
   const unresolvedControlTypography = report.controlTypography?.differences.filter((entry) =>
@@ -1336,7 +1338,7 @@ export function collectRetainedTypographyEvidence(cases, inventory, controlTypog
     // Preserve the routing explicitly so removing their paint evidence fails.
     const controlMappings = controlTypography.comparisons.filter((item) => item.case === key &&
       item.source === 'core-control-texture' &&
-      ['reviewed-material-button-label', 'reviewed-material-tab-label', 'reviewed-material-calendar-day-label'].includes(item.mapping?.kind));
+      ['reviewed-material-button-label', 'reviewed-material-tab-label', 'reviewed-material-calendar-day-label', 'reviewed-material-calendar-year-label'].includes(item.mapping?.kind));
     const controlReferenceKeys = new Set(controlMappings.map((item) => item.referenceNode));
     const controlAstylarKeys = new Set(controlMappings.map((item) => item.astylarNode));
     controlTextMappings.push(...controlMappings.map((item) => ({ case: key, element: item.element,
@@ -1771,8 +1773,9 @@ function reviewedPaginatorIconInput(entry, ast, referenceTree, astylarTree, inve
       candidateAuthored: ast.authored, candidateNormal: normal, candidateEffective: effective, candidatePaintedStyle: painted } };
 }
 
-// Match full accessible dates plus month context, never bare numeric text.
-function reviewedCalendarDayControl(ref, referenceTree, astylarTree) {
+// Match accessible dates/years plus month/range context, never bare numeric text.
+function reviewedCalendarCellControl(ref, referenceTree, astylarTree, kind = 'day') {
+  const isYear = kind === 'year', viewType = isYear ? 'mat-multi-year-view' : 'mat-month-view';
   const unique = (nodes, predicate) => { const matches = nodes.filter(predicate); return matches.length === 1 ? matches[0] : undefined; };
   const cls = (node, name) => String(node?.attributes?.class ?? '').split(/\s+/).includes(name);
   const astCls = (node, name) => String(node?.authored?.class ?? '').split(/\s+/).includes(name);
@@ -1783,7 +1786,7 @@ function reviewedCalendarDayControl(ref, referenceTree, astylarTree) {
   for (const [type, className, role] of [
     ['button', 'mat-calendar-body-cell'], ['td', 'mat-calendar-body-cell-container', 'gridcell'],
     ['tr', undefined, 'row'], ['tbody', 'mat-calendar-body'], ['table', 'mat-calendar-table', 'grid'],
-    ['mat-month-view'], ['div', 'mat-calendar-content'], ['mat-calendar', 'mat-calendar'],
+    [viewType], ['div', 'mat-calendar-content'], ['mat-calendar', 'mat-calendar'],
     ['div', 'mat-datepicker-content-container', 'dialog'],
   ]) {
     const parent = unique(rn, (node) => node.key === chain.at(-1).parent);
@@ -1792,59 +1795,77 @@ function reviewedCalendarDayControl(ref, referenceTree, astylarTree) {
     chain.push(parent);
   }
   const parent = chain[1], calendar = chain[8];
-  if (rn.filter((node) => node.type === 'mat-month-view').length !== 1 ||
+  if (rn.filter((node) => node.type === viewType).length !== 1 ||
+      rn.some((node) => node.type === (isYear ? 'mat-month-view' : 'mat-multi-year-view')) ||
       rn.filter((node) => node.type === 'mat-calendar').length !== 1 ||
       unique(rn, (node) => node.parent === parent.key && cls(node, 'mat-calendar-body-cell-content')) !== ref) return;
   const date = /^(January|February|March|April|May|June|July|August|September|October|November|December) ([1-9]|[12]\d|3[01]), (\d{4})$/.exec(parent.attributes?.['aria-label'] ?? '');
-  if (!date || ref.ownText?.trim() !== date[2] ||
+  const yearLabel = /^\d{4}$/.test(parent.attributes?.['aria-label'] ?? '') ? parent.attributes['aria-label'] : undefined;
+  const numericLabel = isYear ? yearLabel : date?.[2];
+  if (!numericLabel || ref.ownText?.trim() !== numericLabel ||
       rn.filter((node) => node.type === 'button' && cls(node, 'mat-calendar-body-cell') &&
         node.attributes?.['aria-label'] === parent.attributes['aria-label']).length !== 1) return;
   const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-  const year = Number(date[3]), month = monthNames.indexOf(date[1]), day = Number(date[2]);
-  if (year < 100 || day > new Date(Date.UTC(year, month + 1, 0)).getUTCDate()) return;
-  const period = `${date[1].slice(0, 3).toUpperCase()} ${date[3]}`;
+  if (!isYear) {
+    const year = Number(date[3]), month = monthNames.indexOf(date[1]), day = Number(date[2]);
+    if (year < 100 || day > new Date(Date.UTC(year, month + 1, 0)).getUTCDate()) return;
+  }
   const header = unique(rn, (node) => node.parent === calendar.key && node.type === 'mat-calendar-header');
   const headerBox = header && unique(rn, (node) => node.parent === header.key && node.type === 'div' && cls(node, 'mat-calendar-header'));
   const controls = headerBox && unique(rn, (node) => node.parent === headerBox.key && node.type === 'div' && cls(node, 'mat-calendar-controls'));
   const periodLabel = controls && unique(rn, (node) => node.parent === controls.key && node.type === 'span' &&
     cls(node, 'cdk-visually-hidden') && node.attributes?.['aria-live'] === 'polite' && /^mat-calendar-period-label-\d+$/.test(node.attributes?.id));
-  if (!periodLabel || periodLabel.ownText?.trim() !== period || rn.some((node) => node.parent === periodLabel.key)) return;
-  const id = `datepicker-day-${day}`;
+  if (!periodLabel || rn.some((node) => node.parent === periodLabel.key)) return;
+  let period, candidatePeriod;
+  if (isYear) {
+    const range = /^(\d{4}) to (\d{4})$/.exec(periodLabel.ownText?.trim() ?? '');
+    if (!range || Number(range[2]) - Number(range[1]) !== 23 ||
+        Number(yearLabel) < Number(range[1]) || Number(yearLabel) > Number(range[2])) return;
+    period = range[0]; candidatePeriod = `${range[1]} – ${range[2]} ▴`;
+  } else {
+    period = `${date[1].slice(0, 3).toUpperCase()} ${date[3]}`;
+    if (periodLabel.ownText?.trim() !== period) return;
+    candidatePeriod = `${period} ▾`;
+  }
+  const id = `datepicker-${kind}-${numericLabel}`, gridId = isYear ? 'datepicker-year-grid' : 'datepicker-grid';
   const ast = unique(an, (node) => node.authored?.id === id);
-  const grid = unique(an, (node) => node.authored?.id === 'datepicker-grid');
+  const grid = unique(an, (node) => node.authored?.id === gridId);
   const popup = unique(an, (node) => node.authored?.id === 'datepicker-popup');
   const astHeader = unique(an, (node) => node.authored?.id === 'datepicker-header');
   const astPeriod = unique(an, (node) => node.authored?.id === 'datepicker-month');
   const marker = unique(an, (node) => node.authored?.id === 'datepicker-month-marker');
-  if (!ast || ast.authored.type !== 'button' || !astCls(ast, 'datepicker-day') ||
-      ast.authored.ariaLabel !== date[2] || ast.authored.value !== date[2] || an.some((node) => node.parent === ast.key) ||
-      !grid || grid.authored.type !== 'div' || !astCls(grid, 'datepicker-grid') || ast.parent !== grid.key ||
+  if (!ast || ast.authored.type !== 'button' || !astCls(ast, `datepicker-${kind}`) ||
+      (!isYear && ast.authored.ariaLabel !== numericLabel) || ast.authored.value !== numericLabel || an.some((node) => node.parent === ast.key) ||
+      !grid || grid.authored.type !== 'div' || !astCls(grid, gridId) || ast.parent !== grid.key ||
+      an.some(node => node.authored?.id === (isYear ? 'datepicker-grid' : 'datepicker-year-grid')) ||
       !popup || popup.authored.type !== 'div' || popup.authored.role !== 'dialog' || !astCls(popup, 'datepicker-popup') || grid.parent !== popup.key ||
       !astHeader || astHeader.authored.type !== 'div' || astHeader.parent !== popup.key ||
       !astPeriod || astPeriod.authored.type !== 'button' || astPeriod.parent !== astHeader.key ||
-      astPeriod.authored.ariaLabel !== 'Choose month and year' || astPeriod.authored.value !== `${period} ▾` ||
-      !marker || marker.authored.type !== 'span' || marker.parent !== grid.key || marker.authored.textContent !== period.slice(0, 3)) return;
-  return { parent, id, evidence: { accessibleDate: parent.attributes['aria-label'], period,
+      astPeriod.authored.ariaLabel !== (isYear ? 'Choose date' : 'Choose month and year') || astPeriod.authored.value !== candidatePeriod ||
+      (!isYear && (!marker || marker.authored.type !== 'span' || marker.parent !== grid.key || marker.authored.textContent !== period.slice(0, 3)))) return;
+  return { parent, id, evidence: { ...(isYear ? { accessibleYear: yearLabel } : { accessibleDate: parent.attributes['aria-label'] }), period,
     referenceChain: chain.map((node) => node.key), referencePeriodLabel: periodLabel.key,
-    candidateChain: [ast.key, grid.key, popup.key], candidatePeriod: astPeriod.key, candidateMonthMarker: marker.key } };
+    candidateChain: [ast.key, grid.key, popup.key], candidatePeriod: astPeriod.key, ...(!isYear ? { candidateMonthMarker: marker.key } : {}) } };
 }
 
-function reviewedCalendarDayPaintInput(entry, property, ref, parent, ast, stages, referenceTree, astylarTree, inventory) {
-  if (entry.family !== 'datepicker' || !['fontFamily', 'lineHeight', 'color'].includes(property) ||
-      !reviewedCalendarDayControl(ref, referenceTree, astylarTree)) return;
+function reviewedCalendarCellPaintInput(entry, property, ref, parent, ast, stages, referenceTree, astylarTree, inventory) {
+  if (entry.family !== 'datepicker' || !['fontFamily', 'lineHeight', 'color'].includes(property)) return;
+  const kind = reviewedCalendarCellControl(ref, referenceTree, astylarTree) ? 'day'
+    : reviewedCalendarCellControl(ref, referenceTree, astylarTree, 'year') ? 'year' : undefined;
+  if (!kind) return;
   const referenceRules = (node) => (node.rules ?? []).map(index => inventory.rules[index])
     .filter(rule => rule?.side === 'reference' && rule.value.active === true).map(rule => rule.value);
   const candidateRules = astylarTree.rules.map(index => inventory.rules[index])
     .filter(rule => rule?.side === 'astylar').map(rule => rule.value);
-  const cells = candidateRules.filter(rule => rule.selector === '.datepicker-cell');
-  const days = candidateRules.filter(rule => rule.selector === '.datepicker-day');
+  const cells = candidateRules.filter(rule => rule.selector === (kind === 'year' ? '.datepicker-year' : '.datepicker-cell'));
+  const days = kind === 'year' ? cells : candidateRules.filter(rule => rule.selector === '.datepicker-day');
   if (cells.length !== 1 || days.length !== 1 || cells[0].font !== undefined || days[0].font !== undefined) return;
   const cssProperty = property.replace(/[A-Z]/g, letter => '-' + letter.toLowerCase());
   // Do not attribute through conflicting leaf declarations or an inline override.
   if (ref.inline?.[cssProperty] || ref.inline?.font) return;
-  const evidence = { sourceFinding: 'fixture-calendar-day-typography-substitution',
+  const evidence = { sourceFinding: `fixture-calendar-${kind}-typography-substitution`,
     referenceNode: ref.key, referenceControl: parent.key, referenceComputed: stages.reference[property],
-    candidateCellRule: cells[0], candidateDayRule: days[0], candidateNormal: stages.normal[property],
+    candidateCellRule: cells[0], candidateControlRule: days[0], candidateNormal: stages.normal[property],
     candidateEffective: stages.effective[property], candidatePainted: stages.painted[property] };
   let reason;
   if (property === 'fontFamily') {
@@ -1860,7 +1881,7 @@ function reviewedCalendarDayPaintInput(entry, property, ref, parent, ast, stages
         parent.inline?.['font-family'] || parent.inline?.font || referenceRules(ref).some(rule => rule.declarations?.font ||
           (rule.declarations?.['font-family']?.value && rule.declarations['font-family'].value !== 'inherit'))) return;
     Object.assign(evidence, { referenceRule: tokens[0], candidateResetRule: resets[0], referenceParentComputed: stages.reference.fontFamily });
-    reason = 'The captured calendar font token reaches the reference day label. The replacement day button omits that component font and passes the longer document control stack unchanged through normal, effective and actual texture paint. This is unequal authoring, not evidence that core selected a wrong font for equal inputs.';
+    reason = `The captured calendar font token reaches the reference ${kind} label. The replacement button omits that component font and passes the longer document control stack unchanged through normal, effective and actual texture paint. This is unequal authoring, not evidence that core selected a wrong font for equal inputs.`;
   } else {
     const tokens = referenceRules(ref).filter(rule => rule.selector === '.mat-calendar-body-cell-content' &&
       rule.declarations?.[cssProperty]?.value === (property === 'lineHeight' ? '1' : 'var(--mat-datepicker-calendar-date-text-color, var(--mat-sys-on-surface))'));
@@ -1876,11 +1897,11 @@ function reviewedCalendarDayPaintInput(entry, property, ref, parent, ast, stages
       reason = 'The inner reference date label explicitly declares line-height:1, but the flattened candidate button and its entire normal/effective ancestry omit line-height. Actual control paint consequently uses a different line height. Restore the reference inner line-box input before assessing any remaining core metric defect; a fixed container height or baseline adjustment is not an equivalent input.';
     } else {
       if (canonicalStyle(cells[0]).color !== stages.normal.color || stages.normal.color !== 'rgba(29,27,32,1)' ||
-          stages.effective.color !== stages.normal.color || stages.painted.color !== stages.normal.color || days[0].color !== undefined) return;
-      reason = 'The reference day label uses the captured date-text/on-surface token, while the candidate cell fixes #1d1b20 and retains it unchanged in normal, effective and actual texture paint. The fixed ink dates to 87f7f83 and is not equivalent to the observed token result. No color-distance tolerance or screenshot similarity waives this input difference.';
+          stages.effective.color !== stages.normal.color || stages.painted.color !== stages.normal.color || (kind === 'day' && days[0].color !== undefined)) return;
+      reason = `The reference ${kind} label uses the captured date-text/on-surface token, while the candidate cell fixes #1d1b20 and retains it unchanged in normal, effective and actual texture paint. The fixed ink dates to ${kind === 'year' ? 'd973f84' : '87f7f83'} and is not equivalent to the observed token result. No color-distance tolerance or screenshot similarity waives this input difference.`;
     }
   }
-  return { classification: 'application-plugin-authoring-defect', attribution: 'reviewed-calendar-day-typography-input',
+  return { classification: 'application-plugin-authoring-defect', attribution: `reviewed-calendar-${kind}-typography-input`,
     recommendedOwner: 'showcase calendar token translation and core-composed inner text structure',
     justification: reason, reviewEvidence: evidence };
 }
@@ -1918,7 +1939,9 @@ export function collectControlTypographyEvidence(cases, inventory) {
     for (const ref of labelNodes) {
       const tabLabel = tabLabelNodes.includes(ref);
       const calendarLabel = calendarLabelNodes.includes(ref);
-      const calendar = calendarLabel ? reviewedCalendarDayControl(ref, referenceTree, astylarTree) : undefined;
+      const calendarDay = calendarLabel ? reviewedCalendarCellControl(ref, referenceTree, astylarTree) : undefined;
+      const calendarYear = calendarLabel && !calendarDay ? reviewedCalendarCellControl(ref, referenceTree, astylarTree, 'year') : undefined;
+      const calendar = calendarDay ?? calendarYear;
       const parents = calendarLabel ? [calendar?.parent].filter(Boolean) : tabLabel ? [reviewedTabLabelControl(ref, referenceTree)].filter(Boolean)
         : referenceTree.nodes.filter((node) => node.key === ref.parent && node.type === 'button');
       const parent = parents.length === 1 ? parents[0] : undefined;
@@ -1966,7 +1989,9 @@ export function collectControlTypographyEvidence(cases, inventory) {
         referenceNode: ref.key, referenceControl: parent.key, astylarNode: ast.key, text: paint.text,
         source: paint.source, revision: asts[0].resolvedStyleRevision, rawPaintedStyle: paint.style,
         maxWidth: paint.maxWidth, finalRasterVerified: false,
-        mapping: calendarLabel ? { kind: 'reviewed-material-calendar-day-label', reviewEvidence: calendar.evidence,
+        mapping: calendarYear ? { kind: 'reviewed-material-calendar-year-label', reviewEvidence: calendar.evidence,
+          justification: 'A unique accessible year in the multi-year-view table maps to one authored year button only when the reference 24-year live-label range and candidate header range agree and contain that year, and both exact ancestry paths are present. This establishes year text correspondence only, not equal table/grid geometry, selected state, header icon/content, typography or final raster.' }
+          : calendarLabel ? { kind: 'reviewed-material-calendar-day-label', reviewEvidence: calendar.evidence,
           justification: 'A unique full accessible date in the month-view table maps to one authored day button only when the reference period and candidate month/year context agree and both exact ancestry paths are present. Numeric text alone is insufficient. This establishes text-owner correspondence, not equal table/grid layout, accessibility, selected state, typography, placement or final raster.' }
           : tabLabel ? { kind: 'reviewed-material-tab-label',
           justification: 'The explicit template span ID identifies one leaf inside span.mdc-tab__text-label, span.mdc-tab__content and a div.mdc-tab with role tab. It matches a unique candidate button with role tab and the same authored label/current texture text. This establishes label correspondence only; replacing the reference wrappers with one control does not establish equivalent line boxes, typography, state, structure or raster.' }
@@ -1985,7 +2010,7 @@ export function collectControlTypographyEvidence(cases, inventory) {
             justification: 'Browser computed and actual control texture paint inputs differ. Attribute authored tokens and parser/runtime behavior before assigning fault. CSS normal line-height, font fallback and composited colors are not automatically equivalent to numeric or opaque substitutes.',
             ...(reviewedButtonPaintInput(entry, property, ref, parent, ast, stages, referenceTree, astylarTree, inventory) ??
               reviewedTabPaintInput(entry, property, ref, parent, ast, stages, referenceTree, astylarTree, inventory) ??
-              reviewedCalendarDayPaintInput(entry, property, ref, parent, ast, stages, referenceTree, astylarTree, inventory) ?? {}) });
+              reviewedCalendarCellPaintInput(entry, property, ref, parent, ast, stages, referenceTree, astylarTree, inventory) ?? {}) });
         }
       }
       comparisons.push(comparison);
@@ -1996,7 +2021,7 @@ export function collectControlTypographyEvidence(cases, inventory) {
       else gap(key, node.authored?.id, 'current control texture has no reviewed reference text-owner mapping', { astylarNode: node.key });
     }
   }
-  return { schemaVersion: 1, scope: 'Current core-owned control texture inputs, separately from normal/effective declarations and registry-retained text. Exact direct Material button labels, explicit template tab-label paths and month-view day paths with full accessible-date/month-context identity are reviewed. Paginator SVG-to-glyph substitutions are separately classified unequal content, never typography equivalence; other observed control owners remain gaps. Numeric parsed CSS lengths and line-height multipliers are normalized without authored or projected fallbacks. Other effects remain in the full inventory and are not certified by these eleven typography comparisons.', comparisons, differences, gaps, iconSubstitutions };
+  return { schemaVersion: 1, scope: 'Current core-owned control texture inputs, separately from normal/effective declarations and registry-retained text. Exact direct Material button labels, explicit template tab-label paths, month-view day paths with full date context, and multi-year table paths with matching year-range context are reviewed. Paginator SVG-to-glyph substitutions are separately classified unequal content, never typography equivalence; other observed control owners remain gaps. Numeric parsed CSS lengths and line-height multipliers are normalized without authored or projected fallbacks. Other effects remain in the full inventory and are not certified by these eleven typography comparisons.', comparisons, differences, gaps, iconSubstitutions };
 }
 
 export function collectFullTreeInventory(cases, { root = process.cwd() } = {}) {
@@ -2372,7 +2397,7 @@ function implementationPlan() {
     { priority: 5.1, rootCause: 'Core rewrites an explicit font-family list before paint', action: 'The parser appends Arial, Helvetica, sans-serif to explicit lists without a recognized generic. Preserve this as distinct from missing Material font-token authoring. The equal-input unavailable-family proof now confirms changed text advance, while both explicit-generic controls pass. Preserve authored family ordering/quoting and browser fallback semantics at the core parser boundary; verify available/unavailable and missing-glyph cases without assuming a particular platform font. Do not add a generic family to the showcase merely to avoid the parser branch. Final raster verification remains separate from the measured advance proof.' },
     { priority: 5.2, rootCause: 'Material control typography tokens and nested line boxes are replaced by fixture defaults', action: 'Translate the original filled/outlined/text button and tab font/tracking tokens instead of inheriting the document control stack or omitting tracking. Restore toolbar button line-height inheritance instead of copying the density-specific container height. Preserve the tab text-label line-height:1 inside its independently sized content/control rather than applying the outer line-height to a flattened value label. Preserve alpha ink as a distinct authored input. Then investigate any core API or equal-input text mismatch; do not adjust font size, baseline, or offsets to recover screenshot similarity.' },
     { priority: 5.3, rootCause: 'Core normal line-height is approximated by a fixed Mg font-box probe', action: 'Resolve browser normal line-box metrics and actual fallback runs in core. The equal-input Arial/serif cases expose one-pixel texture-height errors; Roboto plus emoji/CJK exposes two-pixel errors while plain Roboto and explicit line heights pass. Preserve those controls, extend multiline/baseline/DPR verification and avoid a universal multiplier, constant pixel addition, or fixed Material line-height compensation. Current-texture evidence must remain separate from declared normal and from final glyph raster.' },
-    { priority: 5.4, rootCause: 'Calendar date text tokens and inner line boxes were flattened away', action: 'Restore the reference calendar font and date-text ink tokens and its inner line-height:1 label inside the day control. Keep the reference cell/container sizing, state and selection structure instead of copying a normal-metric result or tuning the baseline. The full-date/context audit now isolates 990 occurrences each of missing font-token, omitted inner line-height and fixed-ink inputs; core metric defects must be assessed only after those inputs are equivalent. Independently resolve normal-versus-zero tracking and the still-unmapped year/header/icon owners.' },
+    { priority: 5.4, rootCause: 'Calendar cell text tokens and inner line boxes were flattened away', action: 'Restore the reference calendar font and date-text ink tokens and its inner line-height:1 label inside both day and year controls. Keep reference cell/container sizing, state and selection structure instead of copying a normal-metric result or tuning the baseline. Separate date/range-context proofs isolate 990 day and 192 year occurrences each of missing font-token, omitted inner line-height and fixed-ink inputs; core metric defects must be assessed only after those inputs are equivalent. Independently resolve normal-versus-zero tracking and the still-unmapped header/icon owners.' },
     { priority: 6, rootCause: 'Interaction geometry duplicated by the application', action: 'Expose resolved CSS-space target bounds and local pointer coordinates in the core event/plugin contract; remove ripple width tables.' },
     { priority: 7, rootCause: 'Material paint inputs are substituted or calibrated', action: 'Supply the paginator reference SVG paths and their CSS/state paint through core vector/image rendering instead of font-character approximations. Express progress angles, state layers, checkmarks, selection rings, and indicators from reference Material geometry in CSS space; remove screenshot-derived angle and fractional-position constants. Diagnose core only after the actual same geometry is supplied.' },
     { priority: 8, rootCause: 'Regression gate permits unequal inputs', action: 'Run this audit in CI after the full parity matrix, require complete coverage and zero unclassified differences, and review any new Astylar-only authored rule before updating the checked-in report.' },

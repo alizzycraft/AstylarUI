@@ -1609,7 +1609,7 @@ test('calendar date correspondence handles month length and leap years without a
 
 test('calendar correspondence evidence is revalidated even when partial audit coverage is allowed', () => {
   const raw = calendarDayTypographyReport(), audit = buildMaterialInputAudit(raw);
-  assert.ok(!validateMaterialInputAudit(audit, { requireComplete: false }).some(error => error.includes('calendar day mappings')));
+  assert.ok(!validateMaterialInputAudit(audit, { requireComplete: false }).some(error => error.includes('calendar cell mappings')));
   for (const mutate of [
     report => { report.controlTypography.comparisons[0].mapping.reviewEvidence.period = 'OCT 2026'; },
     report => { report.controlTypography.comparisons[0].referenceControl = 'other'; },
@@ -1618,7 +1618,7 @@ test('calendar correspondence evidence is revalidated even when partial audit co
     report => { report.controlTypography.comparisons[0].finalRasterVerified = true; },
   ]) {
     const changed = structuredClone(audit); mutate(changed);
-    assert.ok(validateMaterialInputAudit(changed, { requireComplete: false }).some(error => error.includes('calendar day mappings')));
+    assert.ok(validateMaterialInputAudit(changed, { requireComplete: false }).some(error => error.includes('calendar cell mappings')));
   }
 });
 
@@ -1649,6 +1649,102 @@ function calendarDayTypographyAttributionReport() {
   ];
   return raw;
 }
+
+function calendarYearTypographyReport() {
+  const raw = calendarDayTypographyReport(), { reference: ref, astylar: ast } = raw.results[0].inputTrees;
+  ref.nodes.find(n => n.key === 'month').type = 'mat-multi-year-view';
+  ref.nodes.find(n => n.key === 'period').ownText = '2016 to 2039';
+  ref.nodes.find(n => n.key === 'day').attributes['aria-label'] = '2016';
+  ref.nodes.find(n => n.key === 'day-label').ownText = ' 2016 ';
+  Object.assign(ast.nodes[0].authored, { id: 'datepicker-year-2016', class: 'datepicker-year', value: '2016' });
+  delete ast.nodes[0].authored.ariaLabel;
+  ast.nodes[0].paintedControlText.text = '2016';
+  Object.assign(ast.nodes.find(n => n.key === 'ast-grid').authored, { id: 'datepicker-year-grid', class: 'datepicker-year-grid' });
+  Object.assign(ast.nodes.find(n => n.key === 'ast-period').authored, { ariaLabel: 'Choose date', value: '2016 – 2039 ▴' });
+  ast.nodes = ast.nodes.filter(n => n.key !== 'ast-marker');
+  return raw;
+}
+
+test('calendar year labels require matching range context and multi-year table ancestry', () => {
+  const raw = calendarYearTypographyReport(), before = structuredClone(raw), report = buildMaterialInputAudit(raw);
+  assert.equal(report.controlTypography.comparisons.length, 1);
+  const comparison = report.controlTypography.comparisons[0];
+  assert.equal(comparison.mapping.kind, 'reviewed-material-calendar-year-label');
+  assert.equal(comparison.mapping.reviewEvidence.accessibleYear, '2016');
+  assert.equal(comparison.mapping.reviewEvidence.period, '2016 to 2039');
+  assert.equal(comparison.element, 'datepicker-year-2016');
+  assert.equal(report.retainedTypography.controlTextMappings.length, 1);
+  assert.equal(report.retainedTypography.controlTextMappings[0].inputEquivalent, false);
+  assert.ok(!validateMaterialInputAudit(report, { requireComplete: false }).some(error => error.includes('calendar cell mappings')));
+  assert.deepEqual(raw, before);
+  comparison.mapping.reviewEvidence.period = '2017 to 2040';
+  assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(error => error.includes('calendar cell mappings')));
+  raw.results[0].inputTrees.astylar.nodes[0].paintedControlText.style.fontSize = 30;
+  assert.ok(controlEvidence(raw).differences.some(d => d.property === 'fontSize' && d.attribution === 'unresolved'));
+});
+
+test('calendar year mappings reject false range correspondence, day views and ambiguous controls', () => {
+  const mutations = [
+    (r, a) => { r.nodes.find(n => n.key === 'period').ownText = '2016 to 2040'; },
+    (r, a) => { r.nodes.find(n => n.key === 'period').ownText = '2017 to 2040'; },
+    (r, a) => { a.nodes.find(n => n.key === 'ast-period').authored.value = '2017 – 2040 ▴'; },
+    (r, a) => { r.nodes.find(n => n.key === 'day').attributes['aria-label'] = '2017'; },
+    (r, a) => { r.nodes.find(n => n.key === 'month').type = 'mat-month-view'; },
+    (r, a) => { r.nodes.find(n => n.key === 'day-label').parent = 'row'; },
+    (r, a) => { a.nodes.find(n => n.key === 'ast-grid').parent = null; },
+    (r, a) => { a.nodes.find(n => n.key === 'ast-period').authored.ariaLabel = 'Choose month and year'; },
+    (r, a) => { a.nodes[0].authored.class = 'datepicker-day'; },
+    (r, a) => { a.nodes.push({ ...a.nodes[0], key: 'another' }); },
+    (r, a) => { r.nodes.push({ ...r.nodes.find(n => n.key === 'day'), key: 'another' }); },
+    (r, a) => { a.nodes[0].paintedControlText.text = '2017'; },
+  ];
+  for (const mutate of mutations) {
+    const raw = calendarYearTypographyReport(), trees = raw.results[0].inputTrees;
+    mutate(trees.reference, trees.astylar);
+    const result = controlEvidence(raw);
+    assert.equal(result.comparisons.length, 0, String(mutate));
+    assert.ok(result.gaps.length > 0);
+  }
+});
+
+function calendarYearTypographyAttributionReport() {
+  const raw = calendarDayTypographyAttributionReport(), trees = raw.results[0].inputTrees;
+  const year = calendarYearTypographyReport().results[0].inputTrees;
+  trees.reference.nodes = year.reference.nodes;
+  trees.reference.nodes.find(n => n.key === 'day').rules = [0];
+  trees.reference.nodes.find(n => n.key === 'day-label').rules = [1];
+  const day = trees.astylar.nodes[0], page = trees.astylar.nodes.at(-1);
+  day.authored = year.astylar.nodes[0].authored;
+  day.paintedControlText.text = '2016';
+  trees.astylar.nodes = [day, ...year.astylar.nodes.slice(1), page];
+  trees.astylar.nodes.find(n => n.key === 'ast-popup').parent = 'page';
+  trees.astylar.rules = [trees.astylar.rules[0], { selector: '.datepicker-year', fontSize: '14px', color: '#1d1b20' }];
+  return raw;
+}
+
+test('calendar year typography uses its own captured component declarations, not day attribution', () => {
+  const raw = calendarYearTypographyAttributionReport(), report = buildMaterialInputAudit(raw);
+  assert.equal(report.controlTypography.comparisons[0].mapping.kind, 'reviewed-material-calendar-year-label');
+  const differences = report.controlTypography.differences;
+  assert.equal(differences.length, 3);
+  assert.ok(differences.every(d => d.attribution === 'reviewed-calendar-year-typography-input' &&
+    d.reviewEvidence.sourceFinding === 'fixture-calendar-year-typography-substitution' &&
+    d.reviewEvidence.candidateCellRule.selector === '.datepicker-year'));
+  assert.equal(report.summary.inputEquivalent, false);
+  assert.ok(!validateMaterialInputAudit(report).some(error => error.includes('control texture typography differences')));
+  for (const [property, mutate] of [
+    ['fontFamily', (r, a) => { a.rules[1].fontFamily = 'Roboto'; }],
+    ['fontFamily', (r, a) => { r.rules[0].active = false; }],
+    ['lineHeight', (r, a) => { a.nodes.at(-1).normalResolvedStyle.lineHeight = 'normal'; }],
+    ['lineHeight', (r, a) => { r.rules[1].declarations['line-height'].value = 'normal'; }],
+    ['color', (r, a) => { a.rules[1].color = '#abcdef'; }],
+    ['color', (r, a) => { a.nodes[0].paintedControlText.style.color = '#abcdef'; }],
+  ]) {
+    const altered = calendarYearTypographyAttributionReport(), trees = altered.results[0].inputTrees;
+    mutate(trees.reference, trees.astylar);
+    assert.equal(controlEvidence(altered).differences.find(d => d.property === property)?.attribution, 'unresolved', String(mutate));
+  }
+});
 
 test('calendar day typography attributes captured font tokens, omitted inner line-height and fixed ink', () => {
   const raw = calendarDayTypographyAttributionReport(), before = structuredClone(raw);

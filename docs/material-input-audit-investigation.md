@@ -12,6 +12,42 @@ tests pass). A missing selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Calendar multi-year text correspondence and typography traced (2026-09-12)
+
+The shared calendar cell correspondence checker now also recognizes the exact
+multi-year-view table/cell/button/leaf ancestry. A year maps only when its unique
+accessible year agrees with its leaf text and the authored/current candidate
+label, the captured live-label range spans 24 years and contains that year, and
+the candidate header names the same range. A day view, wrong range or duplicate
+owner cannot be matched by its numeric text. The reference accessibility label
+uses "2016 to 2039" while the candidate button uses "2016 – 2039 ▴"; comparing
+the range endpoints here establishes context only, not equivalent header text,
+icon geometry or accessible naming. Those remain separate audit obligations.
+
+This adds **192** year text comparisons across **8** captured interaction cases.
+There are **768** new raw typography differences: 192 each for font family,
+line-height, tracking and ink. Source finding
+`fixture-calendar-year-typography-substitution` traces `.datepicker-year` to
+`d973f84`. Separate year declaration witnesses classify **576** font/line-height/
+ink differences as unequal authored inputs. They do not reuse the day-specific
+cell rule or claim the renderer caused the inequality. The root-cause plan now
+requires restoring the inner text structure and original tokens in both views.
+
+The audit contains **2,090** actual control-text comparisons and **323** remaining
+control mapping/stage gaps (down from 707). It preserves all **7,395** raw control
+typography differences, of which **1,906** still need attribution. The 192 year
+tracking differences remain open alongside the existing 990 day tracking cases.
+The mapping is revalidated against captured ancestry/range evidence even when
+partial coverage is allowed. No registry text entry is fabricated.
+
+`npm run parity:harness:check` passes **191/191** (102 focused audit tests),
+including 12 malformed/contradictory year-mapping variants, six independent
+typography witness contradictions and tampered range evidence. Existing day
+mapping/typography tests still pass. Full report regeneration validates the
+436 static / 1,875 interaction cases and detects **64** source findings; it
+correctly returns exit 1 for the remaining audit gaps. No fixture, renderer,
+capture runtime or visual gate changed.
+
 ## Calendar typography differences traced to authored substitutions (2026-09-12)
 
 The new source finding `fixture-calendar-day-typography-substitution` and
