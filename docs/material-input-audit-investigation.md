@@ -12,6 +12,69 @@ tests pass). A missing selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Calendar weekday headers lose structure, full names and tokens (2026-09-12)
+
+Source finding `fixture-calendar-weekday-structure-and-token-substitution`
+traces the single-letter candidate spans to `87f7f83`. The packaged Material
+month-view template authors a table header with seven `th scope="col"` cells.
+Each contains a full weekday name in a `cdk-visually-hidden` span and a separate
+`aria-hidden="true"` abbreviated label. A second header row contains the
+seven-column divider. The candidate authors only seven single-text spans in
+its date grid. This changes the original content, column-header semantics and
+layout inputs before any renderer calculation.
+
+The report now maps **231** abbreviated labels across **33** month-view states
+using the complete ordered header and independently checked date/month context.
+Both S entries and both T entries are disambiguated by the exact full-name and
+column paths, not by matching text somewhere in the popup. Altered order,
+missing sibling names, a different divider span, competing candidate names,
+extra children, duplicate nodes or mismatched calendar context reject the
+mapping. The same **231** omitted full names are preserved as individual,
+classified gap records. Their hidden class is not treated as evidence of
+harmlessness or computed clipping; no hidden-name paint sample is fabricated.
+
+The abbreviated labels expose **693** raw retained-typography differences.
+**462** have source and captured-stage attribution: 231 font-stack and 231 ink
+substitutions. Reference labels inherit the calendar font token through the
+table/header/span chain; candidate descendants omit that override until the
+explicit generic page font stack. Reference column headers supply the calendar
+header on-surface-variant ink token; candidate cells fix `#1d1b20`. Attribution
+requires the original active rules, complete inheritance/omission chains and
+matching normal/effective/retained values. These are retained registry inputs,
+not proof of current glyph paint or physical font selection. The **231**
+`normal` versus zero tracking differences remain unresolved.
+
+The four focused `calendar weekday` tests cover the seven identities and
+omissions, 18 contradictory structural variants, 14 token/ancestry mutations
+and 13 modified/deleted/duplicated report variants. Validation replays mappings,
+comparisons, omission records and attributed properties from the inventory,
+including expected records so deletion cannot silently remove a discrepancy.
+The first full harness run exposed a missing-stage robustness bug in the new
+validator: deleting the retained section caused a throw. The new subset check
+now defers to the enclosing validator's existing missing-stage error instead.
+All five focused weekday/missing-stage tests pass after that correction.
+The complete `npm run parity:harness:check` rerun passes **215/215**, including
+**126** focused audit tests.
+
+Full generation still inventories **436 static + 1,875 interaction cases**.
+There are now **70** detected source findings, **7,570** retained comparisons
+and **21,033** raw retained property differences. Unresolved retained
+mapping/stage gaps fall **3,608 to 3,377**; unresolved retained property
+differences rise **14,624 to 14,855** because tracking is newly exposed, not
+silently normalized. The complete audit continues to fail for those two groups,
+**3,896** resolved-style attributions and **2,065** current-control typography
+differences. Input equivalence and audit completion remain false.
+Regeneration and the explicit full-evidence `--check` command both exit 1 for
+those same four unresolved groups, with no stale-report mismatch. The prior
+complete enforced visual run is unchanged and was not rerun for these
+report-only edits.
+
+The implementation plan requires restoring original header/label/divider
+structure and typography tokens before investigating any equal-input table,
+clipping, fallback, tracking or baseline defect. This increment changes only
+audit infrastructure, tests, findings and the plan; no fixture, reference,
+renderer, capture runtime or visual gate was changed.
+
 ## Calendar close control is omitted, not a missing core paint sample (2026-09-12)
 
 Source finding `fixture-calendar-close-control-omitted` identifies the omitted

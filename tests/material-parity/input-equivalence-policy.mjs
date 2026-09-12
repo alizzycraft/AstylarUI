@@ -425,6 +425,15 @@ export const sourceAuditDefinitions = Object.freeze([
     justification: 'The authored popup branch contains header, day/year grids and a selection marker but no close control. The captured reference dialog retains a raised Close calendar button and its label in both views. The pinned Material datepicker template applies cdk-visually-hidden until focus, toggles that state on focus/blur, and calls datepicker.close() on click. That authored control and transition are missing before core layout or paint. Captured rules retain clip:rect(0px,0px,0px,0px), but computed clip and live focus behavior are not captured here; the button must not be declared harmless, non-rendered or equivalent to Escape/outside dismissal. Restore equivalent structure and declarations before evaluating core behavior.',
   }),
   Object.freeze({
+    id: 'fixture-calendar-weekday-structure-and-token-substitution',
+    introducedBy: '87f7f83 fix(example): render Material picker overlays',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`id: .datepicker-weekday-\$\{index\}., class: 'datepicker-cell datepicker-weekday', textContent: label`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase calendar weekday table-header structure, full names and typography tokens',
+    justification: 'The reference month-view template has seven th scope=col cells, each containing a full weekday name in a cdk-visually-hidden span and a separate aria-hidden narrow label; its header also contains a spanning divider row. Candidate replaces the header with seven single-letter spans in the date grid, omitting full names and column-header semantics. Those spans inherit the generic page font stack instead of the calendar font token and use the fixed cell ink instead of the header on-surface-variant token. The complete ordered header and matching date context establish narrow-label correspondence, not equivalent text, semantics, clipping or table/grid layout. Restore original structure and CSS inputs before investigating core; do not tune single letters or offsets.',
+  }),
+  Object.freeze({
     id: 'fixture-picker-commit-not-implemented',
     introducedBy: '2f44011 feat(example): add Material component showcase',
     file: 'examples/material-showcase/src/app/astylar.component.ts',

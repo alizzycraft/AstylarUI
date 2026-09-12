@@ -2107,6 +2107,143 @@ function calendarNavigationReport(direction = 'previous', yearView = false) {
   return raw;
 }
 
+function calendarWeekdayReport() {
+  const raw = calendarDayTypographyReport(), { reference: ref, astylar: ast } = raw.results[0].inputTrees;
+  ref.styles[0] = { ...ref.styles[0], fontFamily: 'Roboto', fontSize: '14px', fontWeight: '500',
+    lineHeight: 'normal', letterSpacing: 'normal', color: '#49454e', textAlign: 'center' };
+  const node = (key, parent, type, attributes = {}, ownText = '') => ({ key, parent, type, attributes, ownText,
+    style: 0, rules: [], pseudoElements: [] });
+  const headers = [node('weekday-head', 'table', 'thead', { class: 'mat-calendar-table-header' }),
+    node('weekday-row', 'weekday-head', 'tr'), node('divider-row', 'weekday-head', 'tr', { 'aria-hidden': 'true' }),
+    node('divider', 'divider-row', 'th', { class: 'mat-calendar-table-header-divider', colspan: '7' })];
+  ref.rules = [{ selector: '.mat-calendar', active: true,
+    declarations: { 'font-family': { value: 'var(--mat-datepicker-calendar-text-font, var(--mat-sys-body-medium-font))' } } },
+  { selector: '.mat-calendar-table-header th', active: true,
+    declarations: { color: { value: 'var(--mat-datepicker-calendar-header-text-color, var(--mat-sys-on-surface-variant))' } } }];
+  ref.nodes.find(n => n.key === 'calendar').rules = [0];
+  const weekdays = [];
+  for (const [index, [long, short]] of [['Sunday', 'S'], ['Monday', 'M'], ['Tuesday', 'T'], ['Wednesday', 'W'],
+    ['Thursday', 'T'], ['Friday', 'F'], ['Saturday', 'S']].entries()) {
+    headers.push({ ...node(`weekday-${index}`, 'weekday-row', 'th', { scope: 'col' }), rules: [1] },
+      node(`full-${index}`, `weekday-${index}`, 'span', { class: 'cdk-visually-hidden' }, long),
+      node(`narrow-${index}`, `weekday-${index}`, 'span', { 'aria-hidden': 'true' }, short));
+    const style = { fontSize: '14px', fontWeight: '500', color: '#1d1b20', textAlign: 'center' };
+    weekdays.push({ key: `ast-weekday-${index}`, parent: 'ast-grid',
+      authored: { type: 'span', id: `datepicker-weekday-${index}`, class: 'datepicker-cell datepicker-weekday', textContent: short },
+      resolvedStyle: { ...style }, normalResolvedStyle: { ...style }, interactionResolvedStyle: { ...style },
+      retainedText: { source: 'core-text-registry', style: { ...ref.styles[0], fontFamily: 'Roboto, Arial, sans-serif',
+        letterSpacing: '0px', color: '#1d1b20' } } });
+  }
+  ref.nodes.splice(ref.nodes.findIndex(n => n.key === 'body'), 0, ...headers);
+  ast.nodes.unshift(...weekdays);
+  ast.nodes.find(n => n.key === 'ast-popup').parent = 'page';
+  ast.nodes.push({ key: 'page', parent: 'root', authored: { type: 'main', id: 'page' }, resolvedStyle: {},
+    normalResolvedStyle: { fontFamily: 'Roboto, Arial, sans-serif' }, interactionResolvedStyle: { fontFamily: 'Roboto, Arial, sans-serif' } });
+  ast.rules = [{ selector: '#page', fontFamily: 'Roboto, Arial, sans-serif' },
+    { selector: '.datepicker-cell', color: '#1d1b20', fontSize: '14px', fontWeight: '400' },
+    { selector: '.datepicker-weekday, .datepicker-month-marker', fontWeight: '500' }];
+  return raw;
+}
+
+const weekdayEvidence = raw => collectRetainedTypographyEvidence(raw.results, collectFullTreeInventory(raw.results));
+
+test('calendar weekday audit preserves seven ordered abbreviations and seven omitted full names', () => {
+  const raw = calendarWeekdayReport(), before = structuredClone(raw), evidence = weekdayEvidence(raw);
+  const maps = evidence.reviewedMappings.filter(m => m.kind === 'reviewed-calendar-weekday-text');
+  assert.equal(maps.length, 7);
+  assert.deepEqual(maps.map(m => m.reviewEvidence.fullName), ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']);
+  assert.equal(maps[2].reviewEvidence.narrowText, maps[4].reviewEvidence.narrowText);
+  assert.notEqual(maps[2].referenceNode, maps[4].referenceNode);
+  assert.equal(evidence.gaps.filter(g => g.attribution === 'reviewed-calendar-weekday-name-omission').length, 7);
+  assert.ok(maps.every(m => m.inputEquivalent === false && m.reviewEvidence.finalRasterVerified === false &&
+    m.reviewEvidence.computedClippingVerified === false));
+  const differences = evidence.differences.filter(d => d.element.startsWith('datepicker-weekday-'));
+  assert.equal(differences.length, 21);
+  assert.equal(differences.filter(d => d.attribution === 'reviewed-calendar-weekday-typography-input').length, 14);
+  assert.equal(differences.filter(d => d.attribution === 'unresolved' && d.property === 'letterSpacing').length, 7);
+  assert.ok(!evidence.comparisons.some(c => c.text === 'Sunday'));
+  assert.deepEqual(raw, before);
+  const report = buildMaterialInputAudit(raw);
+  assert.equal(report.summary.inputEquivalent, false);
+  assert.ok(!validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('calendar weekday')));
+});
+
+test('calendar weekday mappings reject ambiguous initials, altered order and missing header context', () => {
+  for (const mutate of [
+    ref => { ref.nodes.find(n => n.key === 'full-2').ownText = 'Thursday'; },
+    ref => { ref.nodes.find(n => n.key === 'narrow-2').ownText = 'Q'; },
+    ref => { ref.nodes.find(n => n.key === 'weekday-0').attributes.scope = 'row'; },
+    ref => { ref.nodes.find(n => n.key === 'narrow-0').attributes['aria-hidden'] = 'false'; },
+    ref => { ref.nodes.find(n => n.key === 'full-0').attributes.class = 'unrelated'; },
+    ref => { ref.nodes.find(n => n.key === 'full-0').parent = 'weekday-1'; },
+    ref => { ref.nodes.find(n => n.key === 'divider').attributes.colspan = '6'; },
+    ref => { ref.nodes.find(n => n.key === 'divider-row').attributes['aria-hidden'] = 'false'; },
+    ref => { ref.nodes.find(n => n.key === 'weekday-head').parent = 'unrelated-table'; },
+    ref => { ref.nodes.push({ ...ref.nodes.find(n => n.key === 'narrow-0') }); },
+    ref => { ref.nodes.find(n => n.key === 'period').ownText = 'OCT 2026'; },
+    (_ref, ast) => { ast.nodes[0].authored.textContent = 'Sunday'; },
+    (_ref, ast) => { ast.nodes[0].authored.ariaLabel = 'Sunday'; },
+    (_ref, ast) => { ast.nodes[0].authored.role = 'columnheader'; },
+    (_ref, ast) => { ast.nodes[0].authored.ariaHidden = true; },
+    (_ref, ast) => { [ast.nodes[2], ast.nodes[4]] = [ast.nodes[4], ast.nodes[2]]; },
+    (_ref, ast) => { ast.nodes[0].parent = 'ast-popup'; },
+    (_ref, ast) => { ast.nodes.push({ key: 'extra', parent: 'ast-weekday-0', authored: { type: 'span', textContent: 'S' } }); },
+  ]) {
+    const raw = calendarWeekdayReport(), t = raw.results[0].inputTrees;
+    mutate(t.reference, t.astylar);
+    assert.equal(weekdayEvidence(raw).reviewedMappings.filter(m => m.kind === 'reviewed-calendar-weekday-text').length, 0, String(mutate));
+  }
+});
+
+test('calendar weekday typography requires original tokens, inheritance and retained input witnesses', () => {
+  for (const [property, mutate] of [
+    ['fontFamily', ref => { ref.rules[0].declarations['font-family'].value = 'Roboto'; }],
+    ['fontFamily', ref => { ref.nodes.find(n => n.key === 'weekday-0').attributes.style = 'font-family:Roboto'; }],
+    ['fontFamily', ref => { ref.styles.push({ ...ref.styles[0], fontFamily: 'Arial' }); ref.nodes.find(n => n.key === 'table').style = 1; }],
+    ['fontFamily', (_ref, ast) => { ast.nodes.find(n => n.key === 'ast-grid').normalResolvedStyle.fontFamily = 'Roboto'; }],
+    ['fontFamily', (_ref, ast) => { ast.nodes.find(n => n.key === 'page').interactionResolvedStyle.fontFamily = 'serif'; }],
+    ['fontFamily', (_ref, ast) => { ast.rules.push({ ...ast.rules[0] }); }],
+    ['fontFamily', (_ref, ast) => { ast.nodes[0].retainedText.style.fontFamily = 'Arial'; }],
+    ['color', ref => { ref.rules[1].active = false; }],
+    ['color', ref => { ref.rules[1].declarations.color.value = '#49454e'; }],
+    ['color', ref => { ref.nodes.find(n => n.key === 'narrow-0').attributes.style = 'color:#49454e'; }],
+    ['color', (_ref, ast) => { ast.rules[2].color = '#1d1b20'; }],
+    ['color', (_ref, ast) => { ast.nodes[0].interactionResolvedStyle.color = 'red'; }],
+    ['color', (_ref, ast) => { ast.nodes[0].retainedText.style.color = 'red'; }],
+    ['color', (_ref, ast) => { ast.rules.push({ ...ast.rules[1] }); }],
+  ]) {
+    const raw = calendarWeekdayReport(), t = raw.results[0].inputTrees;
+    mutate(t.reference, t.astylar);
+    assert.equal(weekdayEvidence(raw).differences.find(d => d.element === 'datepicker-weekday-0' && d.property === property)?.attribution,
+      'unresolved', `${property}: ${mutate}`);
+  }
+});
+
+test('calendar weekday validation replays mapping, omissions and typography and rejects deleted evidence', () => {
+  for (const mutation of ['mapping', 'map-delete', 'map-duplicate', 'name', 'gap-delete', 'gap-duplicate', 'comparison',
+    'comparison-delete', 'token', 'difference-delete', 'retained', 'equivalence', 'raster']) {
+    const report = buildMaterialInputAudit(calendarWeekdayReport()), retained = report.retainedTypography;
+    const m = retained.reviewedMappings.find(m => m.kind === 'reviewed-calendar-weekday-text');
+    const g = retained.gaps.find(g => g.attribution === 'reviewed-calendar-weekday-name-omission');
+    const c = retained.comparisons.find(c => c.element === 'datepicker-weekday-0');
+    const d = retained.differences.find(d => d.element === c.element && d.property === 'fontFamily');
+    if (mutation === 'mapping') m.reviewEvidence.referenceHeaderCells.reverse();
+    if (mutation === 'map-delete') retained.reviewedMappings = retained.reviewedMappings.filter(x => x !== m);
+    if (mutation === 'map-duplicate') retained.reviewedMappings.push(structuredClone(m));
+    if (mutation === 'name') g.reviewEvidence.reviewEvidence.fullName = 'Thursday';
+    if (mutation === 'gap-delete') retained.gaps = retained.gaps.filter(x => x !== g);
+    if (mutation === 'gap-duplicate') retained.gaps.push(structuredClone(g));
+    if (mutation === 'comparison') c.revision++;
+    if (mutation === 'comparison-delete') retained.comparisons = retained.comparisons.filter(x => x !== c);
+    if (mutation === 'token') d.reviewEvidence.referenceRule.declarations['font-family'].value = 'Arial';
+    if (mutation === 'difference-delete') retained.differences = retained.differences.filter(x => x !== d);
+    if (mutation === 'retained') d.values.retained = 'Roboto';
+    if (mutation === 'equivalence') g.inputEquivalent = true;
+    if (mutation === 'raster') m.reviewEvidence.finalRasterVerified = true;
+    assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('calendar weekday')), mutation);
+  }
+});
+
 function calendarCloseOmissionReport(yearView = false) {
   const raw = yearView ? calendarYearTypographyReport() : calendarDayTypographyReport();
   const { reference: ref, astylar: ast } = raw.results[0].inputTrees;

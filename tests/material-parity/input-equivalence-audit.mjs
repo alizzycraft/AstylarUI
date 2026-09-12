@@ -306,17 +306,20 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
     !isReviewedStepperPanelGap(gap, report.elementInventory));
   if (invalidStepperGaps.length) errors.push(`${invalidStepperGaps.length} stepper panel substitutions lack captured structural evidence`);
   const unresolvedRetainedGaps = retainedGaps.filter((gap) => !isReviewedHiddenRetainedGap(gap, report.elementInventory) &&
-    !isReviewedStepperPanelGap(gap, report.elementInventory) && !isReviewedCalendarCloseGap(gap, report.elementInventory));
+    !isReviewedStepperPanelGap(gap, report.elementInventory) && !isReviewedCalendarCloseGap(gap, report.elementInventory) &&
+    !isReviewedCalendarWeekdayNameGap(gap, report.elementInventory));
   if (requireComplete && unresolvedRetainedGaps.length > 0) errors.push(`${unresolvedRetainedGaps.length} retained typography mappings or stage fields require review`);
   const reviewedTypographyKinds = { 'reviewed-heading-mask': 'parity-harness-defect',
     'reviewed-table-font-input': 'application-plugin-authoring-defect',
     'reviewed-tree-font-input': 'application-plugin-authoring-defect',
     'reviewed-control-label-token-input': 'application-plugin-authoring-defect',
     'reviewed-select-value-token-input': 'application-plugin-authoring-defect',
+    'reviewed-calendar-weekday-typography-input': 'application-plugin-authoring-defect',
     'reviewed-floating-label-font-input': 'application-plugin-authoring-defect' };
   const unresolvedTypography = report.retainedTypography?.differences.filter((entry) =>
     !reviewedTypographyKinds[entry.attribution] || entry.classification !== reviewedTypographyKinds[entry.attribution] || !entry.reviewEvidence) ?? [];
   if (requireComplete && unresolvedTypography.length > 0) errors.push(`${unresolvedTypography.length} retained typography differences require attribution`);
+  validateCalendarWeekdayEvidence(report, errors);
   if (requireComplete && report.supplementalBehavior.missing.length > 0) errors.push(`${report.supplementalBehavior.missing.length} supplemental behavior cases are missing`);
   if (report.supplementalBehavior.errors.length > 0) errors.push(`${report.supplementalBehavior.errors.length} supplemental behavior collection errors`);
   if (requireComplete && report.supplementalOverlays.missing.length > 0) errors.push(`${report.supplementalOverlays.missing.length} supplemental overlay cases are missing`);
@@ -355,6 +358,7 @@ export function renderMaterialInputAuditMarkdown(report) {
     `Hidden retained-text stage: ${report.retainedTypography.gaps.filter((gap) => isReviewedHiddenRetainedGap(gap, report.elementInventory)).length} gap records have complete captured ancestry explaining why core creates no text entry below display:none. The records and raw styles remain; reference display:none and visibility:hidden mechanisms are distinguished, not normalized into equivalent inputs.`,
     `Stepper structure: ${report.retainedTypography.gaps.filter((gap) => isReviewedStepperPanelGap(gap, report.elementInventory)).length} gap records document an omitted inactive reference panel, classified as unequal fixture structure rather than missing core text. Active-panel typography remains independently compared.`,
     `Calendar close control: ${report.controlTypography.gaps.filter(gap => isReviewedCalendarCloseGap(gap, report.elementInventory)).length} preserved gap records identify a reference close-button/label path omitted from the candidate popup. The retained stage preserves the same omission separately from remaining anonymous labels. These are unequal authored controls, not invented paint entries, harmless hidden text or equivalent Escape/outside dismissal. Computed clipping and focus-to-reveal behavior remain unverified by these structural captures.`,
+    `Calendar weekday headers: ${report.retainedTypography.reviewedMappings.filter(m => m.kind === 'reviewed-calendar-weekday-text').length} abbreviated labels have exact ordered-header/date-context correspondence. Their separate full-name omissions remain explicit gap records, and replacing column headers with spans is classified as unequal authoring. Font/ink substitutions, unresolved tracking, original divider structure and unknown clipping remain independent; no glyph raster is inferred from retained text.`,
     '',
     `Control texture typography: ${report.controlTypography.comparisons.length} mapped current-texture observations; ${report.controlTypography.gaps.length} mapping/stage gaps and ${report.controlTypography.differences.length} raw computed-to-paint property differences, including individually reviewed stage-representation differences. Parsed CSS lengths and line-height multipliers are normalized independently of declarations. This does not prove final material effects, placement, visibility or raster parity.`,
     '',
@@ -850,6 +854,121 @@ export function reviewedHeadingMappings(referenceTree, astylarTree) {
   return pairs;
 }
 
+function reviewedCalendarWeekdayMappings(referenceTree, astylarTree) {
+  const rn = referenceTree.nodes, an = astylarTree.nodes, unique = nodes => nodes.length === 1 ? nodes[0] : undefined;
+  const cls = (n, name) => String(n?.attributes?.class ?? '').split(/\s+/).includes(name);
+  if (new Set(rn.map(n => n.key)).size !== rn.length || new Set(an.map(n => n.key)).size !== an.length) return [];
+  let context;
+  for (const leaf of rn.filter(n => n.type === 'span' && cls(n, 'mat-calendar-body-cell-content'))) {
+    context = reviewedCalendarCellControl(leaf, referenceTree, astylarTree);
+    if (context) break;
+  }
+  if (!context) return [];
+  const contextChain = context.evidence.referenceChain.map(key => rn.find(n => n.key === key));
+  const tableIndex = contextChain.findIndex(n => n.type === 'table');
+  const table = contextChain[tableIndex];
+  const head = unique(rn.filter(n => n.parent === table.key && n.type === 'thead' && cls(n, 'mat-calendar-table-header')));
+  const rows = head && rn.filter(n => n.parent === head.key);
+  if (!rows || rows.length !== 2 || rows.some(n => n.type !== 'tr' || n.ownText?.trim()) || rows[1].attributes?.['aria-hidden'] !== 'true') return [];
+  const cells = rn.filter(n => n.parent === rows[0].key);
+  const divider = unique(rn.filter(n => n.parent === rows[1].key));
+  if (head.ownText?.trim() || cells.length !== 7 || cells.some(n => n.type !== 'th' || n.attributes?.scope !== 'col' || n.ownText?.trim()) ||
+      !divider || divider.type !== 'th' || !cls(divider, 'mat-calendar-table-header-divider') || divider.attributes?.colspan !== '7' ||
+      divider.ownText?.trim() || rn.some(n => n.parent === divider.key)) return [];
+  const days = [['Sunday', 'S'], ['Monday', 'M'], ['Tuesday', 'T'], ['Wednesday', 'W'], ['Thursday', 'T'], ['Friday', 'F'], ['Saturday', 'S']];
+  const grid = unique(an.filter(n => n.key === context.evidence.candidateChain[1]));
+  const gridChildren = grid && an.filter(n => n.parent === grid.key);
+  if (!gridChildren || gridChildren.length < 7 || an.some(n => [n.authored?.textContent, n.authored?.value, n.authored?.ariaLabel]
+      .some(text => days.some(([long]) => typeof text === 'string' && text.trim() === long)))) return [];
+  const pairs = [];
+  for (const [index, [long, short]] of days.entries()) {
+    const children = rn.filter(n => n.parent === cells[index].key), [full, narrow] = children;
+    const element = `datepicker-weekday-${index}`, ast = gridChildren[index];
+    if (children.length !== 2 || children.some(n => n.type !== 'span' || rn.some(c => c.parent === n.key)) ||
+        !cls(full, 'cdk-visually-hidden') || full.ownText?.trim() !== long || narrow.ownText?.trim() !== short ||
+        narrow.attributes?.['aria-hidden'] !== 'true' || cls(narrow, 'cdk-visually-hidden') ||
+        rn.some(n => n.attributes?.id === element) || ast.authored?.id !== element || ast.authored.type !== 'span' ||
+        ast.authored.class !== 'datepicker-cell datepicker-weekday' || ast.authored.textContent !== short ||
+        ast.authored.ariaLabel !== undefined || ast.authored.ariaHidden !== undefined || ast.authored.role !== undefined ||
+        an.filter(n => n.authored?.id === element).length !== 1 || an.some(n => n.parent === ast.key)) return [];
+    const referencePath = [narrow, cells[index], rows[0], head, ...contextChain.slice(tableIndex)].map(n => n.key);
+    pairs.push({ kind: 'reviewed-calendar-weekday-text', element, referenceNode: narrow.key, astylarNode: ast.key,
+      referencePath, astylarPath: [ast.key, ...context.evidence.candidateChain.slice(1)],
+      referenceDecorationNodes: [], classification: 'application-plugin-authoring-defect', inputEquivalent: false,
+      reviewEvidence: { sourceFinding: 'fixture-calendar-weekday-structure-and-token-substitution', context: context.evidence,
+        index, fullName: long, narrowText: short, omittedFullNameNode: full.key,
+        referenceHeaderCells: cells.map(n => n.key), candidateWeekdayOrder: gridChildren.slice(0, 7).map(n => n.key),
+        referenceFullName: { key: full.key, parent: full.parent, attributes: full.attributes, text: full.ownText },
+        referenceNarrowLabel: { key: narrow.key, parent: narrow.parent, attributes: narrow.attributes, text: narrow.ownText },
+        referenceDivider: { key: divider.key, attributes: divider.attributes }, candidateAuthored: ast.authored,
+        inputEquivalent: false, finalRasterVerified: false, computedClippingVerified: false },
+      justification: 'The complete ordered seven-column month-view header identifies both full and abbreviated weekday labels, including repeated S/T abbreviations. The candidate authors ordered single-text spans in the matching calendar grid. This maps only the abbreviated text owners; full weekday names, column-header semantics, divider and table/span structure are not equivalent or silently removed. Captured typography is compared separately; no clipping, layout or final raster equivalence is inferred.' });
+  }
+  return structuredClone(pairs);
+}
+
+function calendarWeekdayNameGap(mapping) {
+  return { family: 'datepicker', referenceNodes: [mapping.reviewEvidence.omittedFullNameNode], astylarNodes: [],
+    classification: 'application-plugin-authoring-defect', attribution: 'reviewed-calendar-weekday-name-omission',
+    inputEquivalent: false, finalRasterVerified: false,
+    recommendedOwner: 'showcase calendar full weekday names and column-header semantics',
+    reviewEvidence: structuredClone(mapping),
+    justification: 'The reference column header includes this full weekday name separately from its aria-hidden abbreviated label. The candidate replacement span contains only the abbreviation and no full-name counterpart. The captured ordered header/calendar context establishes this source-authored omission; a hidden class or a similar screenshot does not make the omitted text, semantics or structure equivalent.' };
+}
+
+function isReviewedCalendarWeekdayNameGap(gap, inventory) {
+  if (gap.attribution !== 'reviewed-calendar-weekday-name-omission' || gap.classification !== 'application-plugin-authoring-defect' ||
+      gap.family !== 'datepicker' || gap.element !== undefined || gap.referenceNodes?.length !== 1 || gap.astylarNodes?.length !== 0 ||
+      gap.reason !== 'own-text nodes without an explicit shared ID require structural mapping' || !gap.justification ||
+      gap.inputEquivalent !== false || gap.finalRasterVerified !== false || inventory.errors.some(e => e.case === gap.case)) return false;
+  const refs = inventory.cases.filter(c => c.case === gap.case && c.side === 'reference');
+  const asts = inventory.cases.filter(c => c.case === gap.case && c.side === 'astylar');
+  if (refs.length !== 1 || asts.length !== 1) return false;
+  const maps = reviewedCalendarWeekdayMappings(inventory.variants[refs[0].variant], inventory.variants[asts[0].variant]);
+  return maps.some(mapping => mapping.reviewEvidence.omittedFullNameNode === gap.referenceNodes[0] &&
+    JSON.stringify(mapping) === JSON.stringify(gap.reviewEvidence));
+}
+
+function validateCalendarWeekdayEvidence(report, errors) {
+  const inventory = report.elementInventory, retained = report.retainedTypography;
+  // The enclosing validator already reports a missing retained stage. Keep
+  // that diagnostic intact instead of throwing while replaying a subset.
+  if (!retained) return;
+  const gaps = retained.gaps.filter(g => g.attribution === 'reviewed-calendar-weekday-name-omission');
+  if (gaps.some(g => !isReviewedCalendarWeekdayNameGap(g, inventory))) errors.push('calendar weekday omissions lack exact captured header evidence');
+  const replays = new Map();
+  const replay = key => {
+    if (!replays.has(key)) {
+      const match = /^(static|interaction):datepicker@([^/]+)\/([^/]+)(?:\/(.+))?$/.exec(key);
+      replays.set(key, match ? collectRetainedTypographyEvidence([{ kind: match[1], family: 'datepicker', profile: match[2],
+        viewport: { id: match[3] }, ...(match[4] ? { state: match[4] } : {}) }], inventory) : undefined);
+    }
+    return replays.get(key);
+  };
+  for (const [list, predicate] of [
+    ['reviewedMappings', m => m.kind === 'reviewed-calendar-weekday-text'],
+    ['comparisons', m => m.mapping?.kind === 'reviewed-calendar-weekday-text'],
+    ['differences', d => d.attribution === 'reviewed-calendar-weekday-typography-input'],
+    ['gaps', g => g.attribution === 'reviewed-calendar-weekday-name-omission'],
+  ]) {
+    const reviewed = retained[list].filter(predicate), ids = new Set();
+    for (const value of reviewed) {
+      const id = JSON.stringify([value.case, value.element, value.referenceNode ?? value.referenceNodes, value.property]);
+      if (ids.has(id)) errors.push(`duplicate calendar weekday ${list} record`);
+      ids.add(id);
+      if (!replay(value.case)?.[list].some(expected => JSON.stringify(expected) === JSON.stringify(value)))
+        errors.push(`calendar weekday ${list} record lacks replayed input evidence`);
+    }
+    // Preserve the full ordered header and omitted names: deleting a record
+    // cannot make this structural replacement appear equivalent.
+    for (const item of inventory.cases.filter(c => c.side === 'reference' && /^(static|interaction):datepicker@/.test(c.case))) {
+      for (const expected of replay(item.case)?.[list].filter(predicate) ?? []) {
+        if (!reviewed.some(value => JSON.stringify(value) === JSON.stringify(expected))) errors.push(`missing calendar weekday ${list} record: ${item.case}`);
+      }
+    }
+  }
+}
+
 export function reviewedTemplateTextMappings(family, referenceTree, astylarTree) {
   // These paths come from the paired showcase templates and captured Material
   // wrappers. They identify text owners, not equivalent layout structures.
@@ -938,7 +1057,7 @@ export function reviewedTemplateTextMappings(family, referenceTree, astylarTree)
     }
     return chain;
   };
-  const pairs = [];
+  const pairs = family === 'datepicker' ? reviewedCalendarWeekdayMappings(referenceTree, astylarTree) : [];
   for (const path of paths) {
     const reference = follow(referenceTree, 'reference', path.reference);
     const astylar = follow(astylarTree, 'astylar', path.astylar);
@@ -1154,6 +1273,83 @@ function reviewedSelectValueInput(entry, mapping, property, ast, styles, referen
     reviewEvidence: { sourceFinding: 'fixture-select-value-typography-substitution', property, referenceRule, referenceChain,
       candidateRule, candidateValueRule: valueRules[0], candidateChain,
       referenceComputed: styles.reference[property], candidateRetained: styles.retained[property] } };
+}
+
+function reviewedCalendarWeekdayTypography(entry, mapping, property, ast, styles, referenceTree, astylarTree, inventory) {
+  if (entry.family !== 'datepicker' || mapping?.kind !== 'reviewed-calendar-weekday-text' ||
+      !['fontFamily', 'color'].includes(property)) return;
+  const replay = reviewedCalendarWeekdayMappings(referenceTree, astylarTree).find(m => m.element === mapping.element);
+  if (!replay || JSON.stringify(replay) !== JSON.stringify(mapping)) return;
+  const cssProperty = property === 'fontFamily' ? 'font-family' : 'color';
+  const refNodes = mapping.referencePath.map(key => referenceTree.nodes.find(n => n.key === key));
+  const ownerIndex = property === 'fontFamily' ? refNodes.findIndex(n => n.type === 'mat-calendar') : 1;
+  const owner = refNodes[ownerIndex];
+  const styleAt = (index, side) => inventory.styles[index]?.side === side ? inventory.styles[index].value : undefined;
+  const referenceChain = [];
+  let referenceRule;
+  for (const node of refNodes.slice(0, ownerIndex + 1)) {
+    const computed = styleAt(node.style, 'reference');
+    const rules = (node.rules ?? []).map(i => inventory.rules[i]);
+    if (!computed || canonicalStyle(computed)[property] !== styles.reference[property] || rules.some(r => r?.side !== 'reference') ||
+        new RegExp(`(?:^|;)\\s*(?:${cssProperty}|font)\\s*:`, 'i').test(node.attributes?.style ?? '') ||
+        node.inline?.[cssProperty] || node.inline?.font) return;
+    const declarations = rules.map(r => r.value).filter(r => r.active === true &&
+      (r.declarations?.[cssProperty] !== undefined || r.declarations?.font !== undefined));
+    if (node === owner) {
+      const selector = property === 'fontFamily' ? '.mat-calendar' : '.mat-calendar-table-header th';
+      const token = property === 'fontFamily'
+        ? 'var(--mat-datepicker-calendar-text-font, var(--mat-sys-body-medium-font))'
+        : 'var(--mat-datepicker-calendar-header-text-color, var(--mat-sys-on-surface-variant))';
+      if (declarations.length !== 1 || declarations[0].selector !== selector ||
+          declarations[0].declarations[cssProperty]?.value !== token || declarations[0].declarations.font !== undefined) return;
+      referenceRule = declarations[0];
+    } else if (declarations.some(r => r.declarations.font || r.declarations[cssProperty]?.value !== 'inherit')) return;
+    referenceChain.push({ key: node.key, computed, rules: rules.map(r => r.value) });
+  }
+  if (!referenceRule) return;
+  const candidateRules = astylarTree.rules.map(i => inventory.rules[i]).filter(r => r?.side === 'astylar').map(r => r.value);
+  const cells = candidateRules.filter(r => r.selector === '.datepicker-cell');
+  const weekdays = candidateRules.filter(r => r.selector === '.datepicker-weekday, .datepicker-month-marker');
+  if (cells.length !== 1 || weekdays.length !== 1 || cells[0].font !== undefined || weekdays[0].font !== undefined ||
+      weekdays[0][property] !== undefined) return;
+  const candidateChain = [];
+  let candidateRule;
+  if (property === 'color') {
+    if (styles.normal.color !== 'rgba(29,27,32,1)' || styles.effective.color !== styles.normal.color ||
+        styles.retained.color !== styles.normal.color || canonicalStyle(cells[0]).color !== styles.normal.color) return;
+    candidateRule = cells[0];
+    candidateChain.push({ key: ast.key, normal: styleAt(ast.normalStyle, 'astylar'), effective: styleAt(ast.interactionStyle, 'astylar') });
+  } else {
+    if (styles.reference.fontFamily !== 'roboto' || styles.retained.fontFamily !== 'roboto,arial,sans-serif' || cells[0].fontFamily !== undefined) return;
+    let node = ast;
+    const seen = new Set();
+    while (node && !seen.has(node.key)) {
+      seen.add(node.key);
+      const normal = styleAt(node.normalStyle, 'astylar'), effective = styleAt(node.interactionStyle, 'astylar');
+      if (!normal || !effective || normal.font !== undefined || effective.font !== undefined) return;
+      candidateChain.push({ key: node.key, normal, effective });
+      if (node.authored?.id === 'page') break;
+      if (normal.fontFamily !== undefined || effective.fontFamily !== undefined) return;
+      const parents = astylarTree.nodes.filter(n => n.key === node.parent);
+      if (parents.length !== 1) return;
+      node = parents[0];
+    }
+    const pages = candidateRules.filter(r => r.selector === '#page' && r.fontFamily !== undefined);
+    if (node?.authored?.id !== 'page' || node.authored.type !== 'main' || node.parent !== 'root' ||
+        astylarTree.nodes.filter(n => n.authored?.id === 'page').length !== 1 || pages.length !== 1 ||
+        canonicalStyle(pages[0]).fontFamily !== styles.retained.fontFamily ||
+        ['normal', 'effective'].some(stage => canonicalStyle(candidateChain.at(-1)[stage]).fontFamily !== styles.retained.fontFamily)) return;
+    candidateRule = pages[0];
+  }
+  return { classification: 'application-plugin-authoring-defect', attribution: 'reviewed-calendar-weekday-typography-input',
+    recommendedOwner: 'showcase calendar weekday component tokens and header structure',
+    justification: property === 'fontFamily'
+      ? 'The reference abbreviated weekday inherits the calendar font token through the exact table/header/span chain. Candidate declarations omit that token through the complete leaf-to-page chain and retain the explicitly authored page font stack. This is unequal component authoring, not a core font defect for equal inputs; registry evidence is not proof of current glyph paint or physical font selection.'
+      : 'The reference abbreviated weekday inherits the calendar header on-surface-variant color token from its column header. The replacement candidate cell fixes #1d1b20 in authored, normal, effective and retained inputs. Restore the original component token and header structure before assigning any equal-input color/paint discrepancy to core; screenshot similarity does not equate these inks.',
+    reviewEvidence: { sourceFinding: 'fixture-calendar-weekday-structure-and-token-substitution', property,
+      referenceRule, referenceChain, candidateRule, candidateCellRule: cells[0], candidateWeekdayRule: weekdays[0], candidateChain,
+      referenceComputed: styles.reference[property], candidateRetained: styles.retained[property], inputEquivalent: false,
+      currentPseudoStatePaintVerified: false } };
 }
 
 function reviewedTreeFontInput(entry, mapping, ref, ast, styles, astylarTree, inventory) {
@@ -1457,6 +1653,12 @@ export function collectRetainedTypographyEvidence(cases, inventory, controlTypog
       const remainingReference = [];
       for (const referenceNode of anonymousReference) {
         const identity = { family: entry.family, referenceNodes: [referenceNode], astylarNodes: anonymousAstylar };
+        const weekday = entry.family === 'datepicker' && anonymousAstylar.length === 0 && textMappings.find(m =>
+          m.kind === 'reviewed-calendar-weekday-text' && m.reviewEvidence.omittedFullNameNode === referenceNode);
+        if (weekday) {
+          gap(key, undefined, reason, calendarWeekdayNameGap(weekday));
+          continue;
+        }
         const closeOmission = entry.family === 'datepicker' && anonymousAstylar.length === 0 &&
           reviewedCalendarCloseOmission(key, referenceNode, inventory);
         if (closeOmission) {
@@ -1522,6 +1724,7 @@ export function collectRetainedTypographyEvidence(cases, inventory, controlTypog
         } else if (values.reference !== values.retained) {
           const controlLabelToken = reviewedControlLabelTokenInput(entry, textMappingById.get(id), property, ast, styles, referenceTree, astylarTree, inventory);
           const selectValueToken = reviewedSelectValueInput(entry, textMappingById.get(id), property, ast, styles, referenceTree, astylarTree, inventory);
+          const weekdayToken = reviewedCalendarWeekdayTypography(entry, textMappingById.get(id), property, ast, styles, referenceTree, astylarTree, inventory);
           differences.push({ case: key, family: entry.family, element: id, property, values,
             referenceNode: ref.key, astylarNode: ast.key, source: comparison.source, revision: comparison.revision,
             classification: 'parity-harness-defect', attribution: 'unresolved',
@@ -1533,6 +1736,7 @@ export function collectRetainedTypographyEvidence(cases, inventory, controlTypog
             ...(property === 'fontSize' && floatingLabel ? floatingLabel : {}),
             ...(controlLabelToken ?? {}),
             ...(selectValueToken ?? {}),
+            ...(weekdayToken ?? {}),
           });
         }
       }
@@ -2981,6 +3185,7 @@ function implementationPlan() {
     { priority: 5.6, rootCause: 'Nested list inputs are replaced by generic value buttons', action: 'Restore bottom-sheet navigation/list/anchor/content/label structure and the original label font, explicit line-height, tracking, ink and overflow declarations. Preserve the actual reference overlay token scope and accessible name instead of borrowing page theme colors or calling the opener text the dialog name. Restore reference navigation behavior rather than generic dismiss handling, then reduce any equal-input core failure. Do not infer start/left alignment equivalence without direction evidence. Keep the separate fixed-width/content-height and responsive-constraint findings.' },
     { priority: 5.7, rootCause: 'Calendar period text and vector inputs are collapsed into a glyph string', action: 'Restore the reference period text span beside the 10x5 polygon SVG, using the original year-view CSS inversion, text-button font/tracking tokens and calendar period color-token override. Preserve the live-period description relationship. Do not strip the candidate triangle during comparison, substitute another font character or tune offsets. The current 41 texture witnesses compare common period text inputs while retaining both unequal full compositions; normal-line-height, wrapper layout and glyph/vector raster still need independent proof.' },
     { priority: 5.8, rootCause: 'Calendar close control and its focus-reveal interaction were omitted', action: 'Restore the reference close-button/label, original unfocused clipping and focus-to-reveal declarations, focus order and close activation through core APIs. The source template binds focus/blur and datepicker.close(); the candidate popup never authors that control. Preserve each omission as unequal structure, not a missing paint sample or harmless hidden element. Add live keyboard traversal, focused visibility, activation, focus restoration and computed clip evidence in both views. Investigate core only against those restored equal declarations; outside-click and Escape dismissal are not replacements for the missing control.' },
+    { priority: 5.9, rootCause: 'Calendar weekday header structure and tokens are flattened into date-cell spans', action: 'Restore the seven column headers, separate full/narrow weekday labels, original aria-hidden and visually-hidden declarations, and spanning divider row. Preserve the calendar font and header ink tokens instead of inheriting the page fallback stack and fixed cell ink. Repeated initials require ordered full-name context, not text-only pairing. The source-authored omissions and typography substitutions precede core rendering; restore equal structure and styles before reducing table/grid, clipping, fallback, tracking or baseline discrepancies.' },
     { priority: 6, rootCause: 'Interaction geometry duplicated by the application', action: 'Expose resolved CSS-space target bounds and local pointer coordinates in the core event/plugin contract; remove ripple width tables.' },
     { priority: 7, rootCause: 'Material paint inputs are substituted or calibrated', action: 'Supply paginator and calendar navigation reference SVG paths and their CSS/state paint through core vector/image rendering instead of font-character approximations. Preserve calendar navigation accessible names for the active month or multi-year view; do not copy month labels into the year view. Express progress angles, state layers, checkmarks, selection rings, and indicators from reference Material geometry in CSS space; remove screenshot-derived angle and fractional-position constants. Diagnose core only after the actual same geometry is supplied.' },
     { priority: 8, rootCause: 'Regression gate permits unequal inputs', action: 'Run this audit in CI after the full parity matrix, require complete coverage and zero unclassified differences, and review any new Astylar-only authored rule before updating the checked-in report.' },
