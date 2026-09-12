@@ -12,6 +12,31 @@ tests pass). A missing selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Select value text now has an exact wrapper-path mapping (2026-09-12)
+
+The reference template's `mat-select#select-control` owns a generated
+`mat-select-value-N > .mat-mdc-select-value-text > .mat-mdc-select-min-line`
+chain. The candidate explicitly authors `#select-primary >
+#select-input-region > span#select-value`. The audit now joins these text owners
+only through their unique tag/ID/class ancestry, combobox role, generated-ID
+shape and identical direct text. It does not equate the wrappers or look up
+arbitrary nodes by the string "Team".
+
+Across the 436 current static cases, this adds **12** retained-text comparisons,
+removes **24** identity gap records and exposes **39** previously uncompared
+property differences: 12 each in font family, line height and letter spacing,
+plus 3 in color. These remain unattributed pending declaration/history review.
+Total retained comparisons are **1,402**, property differences **3,825**, and
+gap records **66**, of which 30 have hidden-stage attribution and 36 remain
+unresolved (select caret, inactive stepper content and tab-panel text).
+
+Focused audit tests **87/87** and `npm run parity:harness:check` **176/176** pass.
+The tests exercise Team/Solo content, generated-ID and combobox-role failures,
+duplicate owners, invalid ancestry, nested children and text mismatches. The
+candidate caret remains a separate gap, not consumed as selected-value text.
+Neither inputs nor the runtime collector changed; input equivalence remains
+unproven and the complete interaction audit is still in progress.
+
 ## Hidden retained-text absence now has provenance-bound attribution (2026-09-12)
 
 The audit keeps the original missing-registry gap record but can attribute it

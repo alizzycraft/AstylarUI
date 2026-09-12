@@ -769,6 +769,20 @@ function templateTypographyReport(family) {
     add('astylar', 'a/c/p/1', 'a/c/p', 'span', 'paginator-page-size', undefined, '10');
     add('astylar', 'a/c/r', 'a/c', 'div', 'paginator-range-actions', 'paginator-range-actions');
     add('astylar', 'a/c/r/0', 'a/c/r', 'span', 'paginator-range', undefined, '1 – 10 of 100');
+  } else if (family === 'select') {
+    add('reference', 'r', null, 'mat-form-field', 'select-primary', 'mat-mdc-form-field');
+    add('reference', 'r/w', 'r', 'div', undefined, 'mat-mdc-text-field-wrapper');
+    add('reference', 'r/w/f', 'r/w', 'div', undefined, 'mat-mdc-form-field-flex');
+    add('reference', 'r/w/f/i', 'r/w/f', 'div', undefined, 'mat-mdc-form-field-infix');
+    add('reference', 'r/w/f/i/s', 'r/w/f/i', 'mat-select', 'select-control', 'mat-mdc-select');
+    reference.nodes.at(-1).attributes.role = 'combobox';
+    add('reference', 'r/w/f/i/s/t', 'r/w/f/i/s', 'div', undefined, 'mat-mdc-select-trigger');
+    add('reference', 'r/w/f/i/s/t/v', 'r/w/f/i/s/t', 'div', 'mat-select-value-93', 'mat-mdc-select-value');
+    add('reference', 'r/w/f/i/s/t/v/t', 'r/w/f/i/s/t/v', 'span', undefined, 'mat-mdc-select-value-text');
+    add('reference', 'r/w/f/i/s/t/v/t/l', 'r/w/f/i/s/t/v/t', 'span', undefined, 'mat-mdc-select-min-line', 'Team');
+    add('astylar', 'a', 'root', 'div', 'select-primary', 'field-shell');
+    add('astylar', 'a/i', 'a', 'div', 'select-input-region', 'field-input-region');
+    add('astylar', 'a/i/v', 'a/i', 'span', 'select-value', 'select-value', 'Team');
   } else if (family === 'stepper') {
     add('reference', 'r', null, 'mat-stepper', 'stepper-primary', 'mat-stepper-horizontal');
     add('reference', 'r/w', 'r', 'div', undefined, 'mat-horizontal-stepper-wrapper');
@@ -794,7 +808,7 @@ function templateTypographyReport(family) {
 }
 
 test('reviewed template text paths close only identity gaps and retain unequal typography', () => {
-  for (const [family, count] of [['tree', 3], ['grid-list', 2], ['badge', 1], ['sort', 1], ['expansion', 1], ['sidenav', 1], ['button-toggle', 2], ['chips', 2], ['paginator', 3], ['stepper', 3]]) {
+  for (const [family, count] of [['tree', 3], ['grid-list', 2], ['badge', 1], ['sort', 1], ['expansion', 1], ['sidenav', 1], ['button-toggle', 2], ['chips', 2], ['paginator', 3], ['stepper', 3], ['select', 1]]) {
     const raw = templateTypographyReport(family);
     const before = structuredClone(raw);
     const report = buildMaterialInputAudit(raw);
@@ -807,6 +821,32 @@ test('reviewed template text paths close only identity gaps and retain unequal t
     assert.ok(evidence.differences.every((entry) => entry.property === 'fontSize' && entry.attribution === 'unresolved'));
     assert.ok(validateMaterialInputAudit(report).some((error) => error.includes('retained typography differences')));
     assert.deepEqual(raw, before, 'mapping must not rewrite reference IDs or captured structure');
+  }
+});
+
+test('select value mapping follows the combobox and generated value owner without absorbing caret text', () => {
+  for (const text of ['Team', 'Solo']) {
+    const raw = templateTypographyReport('select'), { reference, astylar } = raw.results[0].inputTrees;
+    reference.nodes.at(-1).ownText = text;
+    astylar.nodes.at(-1).authored.textContent = text;
+    const value = astylar.nodes.at(-1);
+    astylar.nodes.push({ ...structuredClone(value), key: 'a/caret', parent: 'a',
+      authored: { type: 'span', id: 'select-caret', class: 'select-caret', textContent: '▼' } });
+    const evidence = buildMaterialInputAudit(raw).retainedTypography;
+    assert.equal(evidence.comparisons.length, 1);
+    assert.equal(evidence.comparisons[0].text, text);
+    assert.equal(evidence.differences[0].attribution, 'unresolved');
+    assert.equal(evidence.gaps.length, 1);
+    assert.equal(evidence.gaps[0].element, 'select-caret');
+  }
+  for (const mutate of [
+    (r) => { r.nodes.find((n) => n.type === 'mat-select').attributes.role = 'button'; },
+    (r) => { r.nodes.find((n) => n.attributes.id === 'mat-select-value-93').attributes.id = 'other-value'; },
+    (r) => { const value = r.nodes.find((n) => n.attributes.id === 'mat-select-value-93'); r.nodes.push({ ...value, key: 'duplicate-owner', parent: 'other' }); },
+  ]) {
+    const { reference, astylar } = templateTypographyReport('select').results[0].inputTrees;
+    mutate(reference);
+    assert.deepEqual(reviewedTemplateTextMappings('select', reference, astylar), []);
   }
 });
 
@@ -833,7 +873,7 @@ test('template identity rejects path, uniqueness, text, child and ID conflicts i
     (ref) => { ref.nodes[0].attributes.id = 'other-anchor'; },
     (_ref, ast) => { ast.nodes[0].authored.id = 'other-anchor'; },
   ];
-  for (const family of ['tree', 'grid-list', 'badge', 'sort', 'expansion', 'sidenav', 'button-toggle', 'chips', 'paginator', 'stepper']) {
+  for (const family of ['tree', 'grid-list', 'badge', 'sort', 'expansion', 'sidenav', 'button-toggle', 'chips', 'paginator', 'stepper', 'select']) {
     for (const mutate of mutations) {
       const { reference, astylar } = templateTypographyReport(family).results[0].inputTrees;
       const mapping = reviewedTemplateTextMappings(family, reference, astylar)[0];

@@ -757,6 +757,11 @@ export function reviewedTemplateTextMappings(family, referenceTree, astylarTree)
     reference: [['div', 'sort-primary', 'mat-sort'], ['div', 'sort-trigger', 'mat-sort-header'], ['div', null, 'mat-sort-header-container'], ['div', null, 'mat-sort-header-content']],
     astylar: [['div', 'sort-primary', 'sort-header'], ['div', 'sort-trigger', 'sort-trigger'], ['span', 'sort-label']],
   });
+  if (family === 'select') paths.push({
+    element: 'select-value',
+    reference: [['mat-form-field', 'select-primary', 'mat-mdc-form-field'], ['div', null, 'mat-mdc-text-field-wrapper'], ['div', null, 'mat-mdc-form-field-flex'], ['div', null, 'mat-mdc-form-field-infix'], ['mat-select', 'select-control', 'mat-mdc-select', { role: 'combobox' }], ['div', null, 'mat-mdc-select-trigger'], ['div', /^mat-select-value-\d+$/, 'mat-mdc-select-value'], ['span', null, 'mat-mdc-select-value-text'], ['span', null, 'mat-mdc-select-min-line']],
+    astylar: [['div', 'select-primary', 'field-shell'], ['div', 'select-input-region', 'field-input-region'], ['span', 'select-value', 'select-value']],
+  });
   if (family === 'button-toggle') paths.push(...['one', 'two'].map((name) => ({
     element: `button-toggle-${name}-label`,
     reference: [['mat-button-toggle-group', 'button-toggle-primary', 'mat-button-toggle-group'], ['mat-button-toggle', `button-toggle-${name}`, 'mat-button-toggle'], ['button', `button-toggle-${name}-button`, 'mat-button-toggle-button'], ['span', null, 'mat-button-toggle-label-content']],
