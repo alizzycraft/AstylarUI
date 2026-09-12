@@ -2198,6 +2198,109 @@ function floatingLabelTypographyReport() {
   return raw;
 }
 
+function fieldLabelColorReport(family = 'form-field', empty = false) {
+  const raw = fieldLabelTrackingReport(family, empty ? 'empty' : 'base'), entry = raw.results[0];
+  const { reference: ref, astylar: ast } = entry.inputTrees;
+  ref.styles = ref.styles.map(style => ({ ...style, color: '#49454e' }));
+  ref.rules.push({ active: true, conditions: [],
+    selector: '.mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-floating-label',
+    declarations: { color: { value: 'var(--mat-form-field-filled-label-text-color, var(--mat-sys-on-surface-variant))', important: false } } });
+  ref.nodes[1].rules.push(ref.rules.length - 1);
+  ast.nodes[0].parent = 'shell';
+  ast.nodes.push({ key: 'shell', parent: 'page', authored: { type: 'div', id: `${family}-primary`,
+    class: `field-shell${['datepicker', 'timepicker'].includes(family) ? ` ${family}-shell` : ''}` },
+    resolvedStyle: {}, normalResolvedStyle: {}, interactionResolvedStyle: {} });
+  ast.rules.find(r => r.selector === '.field-label').color = '#49454f';
+  ast.rules.find(r => r.selector === '.field-label.empty-field-label').color = '#1d1b20';
+  ast.rules.push({ selector: '.timepicker-shell .field-label', color: '#e6e1e5' },
+    { selector: '.datepicker-shell .field-label', color: '#e6e1e5' });
+  const color = ['datepicker', 'timepicker'].includes(family) ? '#e6e1e5' : empty ? '#1d1b20' : '#49454f';
+  for (const key of ['resolvedStyle', 'normalResolvedStyle', 'interactionResolvedStyle']) ast.nodes[0][key].color = color;
+  ast.nodes[0].retainedText.style.color = color;
+  return raw;
+}
+
+test('field color token and candidate cascade provenance retain unequal pre-render inputs', () => {
+  for (const family of ['form-field', 'input', 'select', 'autocomplete', 'datepicker', 'timepicker']) for (const empty of [false, true]) {
+    const raw = fieldLabelColorReport(family, empty), before = structuredClone(raw);
+    const evidence = collectRetainedTypographyEvidence(raw.results, collectFullTreeInventory(raw.results));
+    const findings = evidence.differences.filter(d => d.attribution === 'reviewed-field-label-color-substitution');
+    assert.equal(findings.length, 1, `${family}/${empty}`);
+    const f = findings[0];
+    assert.equal(f.classification, 'application-plugin-authoring-defect');
+    assert.equal(f.inputEquivalent, false);
+    assert.equal(f.currentPseudoStatePaintVerified, false);
+    assert.equal(f.values.reference, 'rgba(73,69,78,1)');
+    assert.equal(f.values.normal, f.values.retained);
+    assert.equal(f.values.effective, f.values.retained);
+    assert.equal(f.reviewEvidence.selectedRule.rule.selector, ['datepicker', 'timepicker'].includes(family)
+      ? `.${family}-shell .field-label` : empty ? '.field-label.empty-field-label' : '.field-label');
+    assert.equal(f.reviewEvidence.candidateRules.length, 4);
+    assert.deepEqual(raw, before);
+  }
+  const report = buildMaterialInputAudit(fieldLabelColorReport('datepicker', true));
+  assert.ok(report.sourceFindings.find(f => f.id === 'fixture-field-label-color-substitution')?.detected);
+  assert.ok(!validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('field-label color attributions')));
+});
+
+test('field color attribution rejects stale ancestry, unexplained states and incomplete token evidence', () => {
+  const mutations = [
+    e => { e.family = 'card'; },
+    e => { e.inputTrees.reference.nodes[0].type = 'span'; },
+    e => { e.inputTrees.reference.nodes[0].parent = 'missing'; },
+    e => { e.inputTrees.reference.nodes[0].inline = { color: { value: 'inherit' } }; },
+    e => { e.inputTrees.reference.nodes[1].attributes.style = 'color: #49454e'; },
+    e => { e.inputTrees.reference.styles[1].color = '#000000'; },
+    e => { e.inputTrees.reference.rules.at(-1).active = false; },
+    e => { e.inputTrees.reference.rules.at(-1).declarations.color.important = true; },
+    e => { e.inputTrees.reference.rules.at(-1).conditions = ['@layer unreviewed']; },
+    e => { e.inputTrees.reference.rules.at(-1).declarations.color.value = '#49454e'; },
+    e => { e.inputTrees.reference.nodes[1].rules.push(e.inputTrees.reference.rules.length - 1); },
+    e => { e.inputTrees.astylar.nodes[0].authored.style = { color: '#e6e1e5' }; },
+    e => { e.inputTrees.astylar.nodes.at(-1).authored.class = 'field-shell'; },
+    e => { e.inputTrees.astylar.nodes.at(-1).authored.id = 'other'; },
+    e => { e.inputTrees.astylar.nodes[0].normalResolvedStyle = { ...e.inputTrees.astylar.nodes[0].normalResolvedStyle, color: '#1d1b20' }; },
+    e => { e.inputTrees.astylar.nodes[0].interactionResolvedStyle = { ...e.inputTrees.astylar.nodes[0].interactionResolvedStyle, color: '#000000' }; },
+    e => { e.inputTrees.astylar.nodes[0].retainedText.style.color = '#1d1b20'; },
+    e => { e.inputTrees.astylar.rules.at(-1).color = '#000000'; },
+    e => { e.inputTrees.astylar.rules.at(-1).mediaMaxWidth = '500px'; },
+    e => { e.inputTrees.astylar.rules.push({ selector: '.field-label:hover', color: '#e6e1e5' }); },
+    e => { e.inputTrees.astylar.rules.push({ selector: '.field-label', color: '#49454f' }); },
+    e => { e.inputTrees.astylar.rules.push({ selector: '#datepicker-label', color: '#e6e1e5' }); },
+    e => { e.inputTrees.astylar.rules.push({ selector: '.field-shell label', color: '#e6e1e5' }); },
+    e => { e.inputTrees.astylar.rules.push({ selector: '*', all: 'initial' }); },
+    e => { e.inputTrees.astylar.rules.reverse(); },
+  ];
+  for (const mutate of mutations) {
+    const raw = fieldLabelColorReport('datepicker', true);
+    mutate(raw.results[0]);
+    const evidence = collectRetainedTypographyEvidence(raw.results, collectFullTreeInventory(raw.results));
+    assert.ok(!evidence.differences.some(d => d.attribution === 'reviewed-field-label-color-substitution'), String(mutate));
+  }
+});
+
+test('field color claims independently replay rule order, reference inheritance and raw stages', () => {
+  const baseline = buildMaterialInputAudit(fieldLabelColorReport('timepicker', true));
+  const mutations = [
+    (_r, f) => { f.reviewEvidence.referenceChain.pop(); },
+    (_r, f) => { f.reviewEvidence.selectedRule.order = -1; },
+    (_r, f) => { f.values.normal = '#1d1b20'; },
+    (_r, f) => { f.inputEquivalent = true; },
+    (_r, f) => { f.classification = 'confirmed-core-renderer-defect'; },
+    (_r, f) => { f.currentPseudoStatePaintVerified = true; },
+    (r, f) => { r.retainedTypography.differences.push(structuredClone(f)); },
+    r => { r.retainedTypography.differences = []; },
+    r => { r.retainedTypography.comparisons[0].properties.color.effective = '#123456'; },
+    r => { r.elementInventory.rules.find(x => x.side === 'reference' && x.value.declarations?.color).value.active = false; },
+    r => { r.elementInventory.rules.find(x => x.side === 'astylar' && x.value.selector === '.timepicker-shell .field-label').value.color = '#1d1b20'; },
+  ];
+  for (const mutate of mutations) {
+    const report = structuredClone(baseline);
+    mutate(report, report.retainedTypography.differences.find(d => d.attribution === 'reviewed-field-label-color-substitution'));
+    assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('field-label color attributions')), String(mutate));
+  }
+});
+
 function fieldLabelTrackingReport(family = 'form-field', kind = 'base') {
   const raw = floatingLabelTypographyReport(), entry = raw.results[0];
   entry.family = family;

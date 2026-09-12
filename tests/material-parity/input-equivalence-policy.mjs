@@ -101,6 +101,16 @@ export const reviewedValueNormalizations = Object.freeze([
 
 export const sourceAuditDefinitions = Object.freeze([
   Object.freeze({
+    id: 'fixture-field-label-color-substitution',
+    introducedBy: '4d56f862 base/empty colors; f286fb17 timepicker shell; d973f847 datepicker shell',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`selector: '(?:\.field-label(?:\.empty-field-label)?|\.(?:timepicker|datepicker)-shell \.field-label)',[^\n]*color:`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase filled-label color tokens and state-rule translation',
+    justification: 'Reference mat-label inherits its filled-label color token from the native floating-label wrapper. Candidate base/empty/picker rules author different literal colors, including #49454f, #1d1b20 and theme.onSurface. The full captured rule order and parent classes distinguish equal-specificity empty versus picker overrides. Per-occurrence attribution requires the selected declaration to agree with normal/effective/retained stages, so pre-repair ancestry-inspection disagreement is not silently reclassified. These unequal inputs must be restored before evaluating a core color/raster defect; no fixture tuning is performed by the audit.',
+    focusedProof: 'tests/material-parity/input-equivalence-audit.spec.mjs: field color token and candidate cascade provenance',
+  }),
+  Object.freeze({
     id: 'core-inspection-reuse-detaches-authored-ancestry',
     introducedBy: 'b6dc672 inspection walks session.siteData; d48028f visual reuse retains renderer ancestry',
     file: 'src/lib/astylar.ts',

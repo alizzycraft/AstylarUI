@@ -331,6 +331,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
     'reviewed-inherited-component-font-stack': 'application-plugin-authoring-defect',
     'reviewed-omitted-component-text-metric': 'application-plugin-authoring-defect',
     'reviewed-field-label-tracking-substitution': 'application-plugin-authoring-defect',
+    'reviewed-field-label-color-substitution': 'application-plugin-authoring-defect',
     'reviewed-table-font-input': 'application-plugin-authoring-defect',
     'reviewed-tree-font-input': 'application-plugin-authoring-defect',
     'reviewed-tree-label-line-box-substitution': 'application-plugin-authoring-defect',
@@ -349,6 +350,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
   validateInheritedComponentFontStack(report, errors);
   validateOmittedComponentTextMetrics(report, errors);
   validateFieldLabelTracking(report, errors);
+  validateFieldLabelColors(report, errors);
   validateTreeLabelLineBoxes(report, errors);
   validateStepperNumberAlignment(report, errors);
   validateToggleButtonAlignment(report, errors);
@@ -402,6 +404,7 @@ export function renderMaterialInputAuditMarkdown(report) {
     `Omitted component text metrics: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-omitted-component-text-metric').length} records trace explicit reference line-height/tracking tokens through captured inheritance while the candidate text-to-page declaration chain omits them and retains normal/zero. This is unequal input, not a normal-to-pixel normalization or proof of current line placement and glyph paint. Fixed label/container dimensions do not replace the missing metrics.`,
     '',
     `Field-label tracking substitutions: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-field-label-tracking-substitution').length} records preserve the reference filled-label tracking token and wrapper styles alongside the explicit candidate base/empty-state rules. The 0.4px or 0.65px candidate input is not accepted as equivalent to 0.496px reference tracking, including when the reference wrapper is scaled. Current glyph paint and the separate core transform defects remain independently unproven or investigated.`,
+    `Field-label colors: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-field-label-color-substitution').length} records preserve the reference filled-label color token and the candidate base/empty/picker-shell declarations in source order. Attribution requires the selected literal to agree across normal, effective and retained stages; stale ancestry or unexplained state divergence is not waived. These unequal color inputs are not a core color-conversion or raster-equivalence claim.`,
     '',
     `Tree label line-box substitutions: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-tree-label-line-box-substitution').length} records preserve complete reference normal-line-height ancestry and direct flex text ownership alongside the candidate fixed-20px label wrapper. This is unequal structure and line-box input, not a normal-to-20px normalization. Natural line-box height, anonymous flex-item behavior and current glyph paint require separate equal-input proof.`,
     '',
@@ -2048,6 +2051,95 @@ function reviewedTreeFontInput(entry, mapping, ref, ast, styles, astylarTree, in
   };
 }
 
+function reviewedFieldLabelColorInput(entry, ref, ast, styles, referenceTree, astylarTree, inventory) {
+  if (!['form-field', 'input', 'select', 'autocomplete', 'datepicker', 'timepicker'].includes(entry.family) ||
+      ref.type !== 'mat-label' || ref.attributes?.id !== `${entry.family}-label` ||
+      ast.authored?.type !== 'label' || ast.authored.id !== ref.attributes.id ||
+      ast.retainedText?.source !== 'core-text-registry' || !styles.reference.color ||
+      styles.reference.color === styles.retained.color ||
+      ['normal', 'effective'].some(stage => styles[stage].color !== styles.retained.color)) return;
+  const classes = String(ast.authored.class ?? '').split(/\s+/);
+  if (!classes.includes('field-label') || ast.authored.style?.color !== undefined || ast.authored.style?.all !== undefined) return;
+  const wrappers = referenceTree.nodes.filter(n => n.key === ref.parent);
+  const parents = astylarTree.nodes.filter(n => n.key === ast.parent);
+  if (wrappers.length !== 1 || parents.length !== 1 || referenceTree.nodes.filter(n => n.key === ref.key).length !== 1) return;
+  const wrapper = wrappers[0], parent = parents[0];
+  const parentClasses = String(parent.authored?.class ?? '').split(/\s+/);
+  if (wrapper.type !== 'label' || !String(wrapper.attributes?.class ?? '').split(/\s+/).includes('mdc-floating-label') ||
+      parent.authored?.type !== 'div' || parent.authored.id !== `${entry.family}-primary` || !parentClasses.includes('field-shell')) return;
+  const referenceChain = [];
+  for (const node of [ref, wrapper]) {
+    const pooled = inventory.styles[node.style];
+    if (pooled?.side !== 'reference' || !pooled.value || canonicalStyle(pooled.value).color !== styles.reference.color ||
+        node.inline?.color || node.inline?.all || /(?:^|;)\s*(?:color|all)\s*:/i.test(node.attributes?.style ?? '')) return;
+    const rules = node.rules.map(i => inventory.rules[i]);
+    if (rules.some(r => r?.side !== 'reference')) return;
+    const declarations = rules.map(r => r.value).filter(r => r.active === true && (r.declarations?.color || r.declarations?.all));
+    if (node === ref && declarations.length) return;
+    if (node === wrapper && (declarations.length !== 1 || declarations[0].declarations.all ||
+        declarations[0].selector !== '.mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-floating-label' ||
+        declarations[0].declarations.color?.value !== 'var(--mat-form-field-filled-label-text-color, var(--mat-sys-on-surface-variant))' ||
+        declarations[0].declarations.color.important !== false || !Array.isArray(declarations[0].conditions) || declarations[0].conditions.length)) return;
+    referenceChain.push({ node: node.key, computed: pooled.value, colorRules: declarations });
+  }
+  const rules = astylarTree.rules.map(i => inventory.rules[i]);
+  if (rules.some(r => r?.side !== 'astylar')) return;
+  const selectors = ['.field-label', '.field-label.empty-field-label', '.timepicker-shell .field-label', '.datepicker-shell .field-label'];
+  if (rules.some(({ value: rule }) => (rule.color !== undefined || rule.all !== undefined) &&
+      !selectors.includes(rule.selector) && (rule.selector?.includes(`#${ast.authored.id}`) ||
+        /(?:^|[\s>+~,])label(?:$|[\s.#[:>+~,])/.test(rule.selector ?? '') || rule.all !== undefined))) return;
+  const candidateRules = rules.map((r, order) => ({ order, rule: r.value })).filter(({ rule }) =>
+    rule.selector?.includes('.field-label') && (rule.color !== undefined || rule.all !== undefined));
+  if (candidateRules.length !== 4 || selectors.some(selector => candidateRules.filter(r => r.rule.selector === selector).length !== 1) ||
+      candidateRules.some(({ rule }) => rule.all !== undefined || Object.keys(rule).some(key => key.startsWith('media')) ||
+        !/^#[a-f\d]{6}$/i.test(rule.color ?? ''))) return;
+  // Only these four inspected declarations and this explicit parent/class
+  // relationship are reviewed. This is not a second general CSS cascade.
+  const matchingRules = candidateRules.filter(({ rule }) => rule.selector === '.field-label' ||
+    (rule.selector === '.field-label.empty-field-label' && classes.includes('empty-field-label')) ||
+    (rule.selector === '.timepicker-shell .field-label' && parentClasses.includes('timepicker-shell')) ||
+    (rule.selector === '.datepicker-shell .field-label' && parentClasses.includes('datepicker-shell')));
+  if (parentClasses.includes('timepicker-shell') !== (entry.family === 'timepicker') ||
+      parentClasses.includes('datepicker-shell') !== (entry.family === 'datepicker')) return;
+  const selectedRule = matchingRules.filter(r => r.rule.selector !== '.field-label').at(-1) ?? matchingRules[0];
+  if (!selectedRule || canonicalStyle(selectedRule.rule).color !== styles.retained.color) return;
+  return { attribution: 'reviewed-field-label-color-substitution', classification: 'application-plugin-authoring-defect',
+    inputEquivalent: false, currentPseudoStatePaintVerified: false,
+    recommendedOwner: 'showcase filled-label color tokens and state-rule translation',
+    justification: 'The reference mat-label inherits the unique active filled-label color token from its floating-label wrapper. The candidate supplies literal base, empty-state and picker-shell colors instead. Captured classes and original rule order select the reviewed declaration, whose color agrees with normal, effective and retained values. Thus these color inputs differ before rendering; no core color-conversion defect or equivalent glyph paint is inferred. A disagreement between inspected and retained stages, competing reference rules, or unreviewed state/media rules prevents this attribution. Preserve wrapper and state inputs before evaluating rendering.',
+    reviewEvidence: { sourceFinding: 'fixture-field-label-color-substitution', referenceChain, candidateRules, matchingRules, selectedRule,
+      candidateParent: { key: parent.key, authored: parent.authored }, candidateAuthored: ast.authored,
+      candidateNormal: inventory.styles[ast.normalStyle].value, candidateEffective: inventory.styles[ast.interactionStyle].value,
+      referenceComputed: styles.reference.color, candidateRetained: styles.retained.color } };
+}
+
+function validateFieldLabelColors(report, errors) {
+  const expected = [];
+  for (const comparison of report.retainedTypography?.comparisons ?? []) {
+    const refs = report.elementInventory.cases.filter(c => c.case === comparison.case && c.side === 'reference');
+    const asts = report.elementInventory.cases.filter(c => c.case === comparison.case && c.side === 'astylar');
+    if (refs.length !== 1 || asts.length !== 1) continue;
+    const refTree = report.elementInventory.variants[refs[0].variant], astTree = report.elementInventory.variants[asts[0].variant];
+    const refsByKey = refTree.nodes.filter(n => n.key === comparison.referenceNode), astsByKey = astTree.nodes.filter(n => n.key === comparison.astylarNode);
+    if (refsByKey.length !== 1 || astsByKey.length !== 1) continue;
+    const ref = refsByKey[0], ast = astsByKey[0];
+    const indices = { reference: ref.style, normal: ast.normalStyle, effective: ast.interactionStyle, retained: ast.retainedText?.style };
+    const pooled = Object.fromEntries(Object.entries(indices).map(([key, i]) => [key, report.elementInventory.styles[i]]));
+    if (Object.entries(pooled).some(([key, value]) => value?.side !== (key === 'reference' ? 'reference' : 'astylar') || !value.value)) continue;
+    const styles = Object.fromEntries(Object.entries(pooled).map(([key, value]) => [key, canonicalStyle(value.value)]));
+    const review = reviewedFieldLabelColorInput(comparison, ref, ast, styles, refTree, astTree, report.elementInventory);
+    if (review) expected.push({ comparison, review, values: Object.fromEntries(Object.entries(styles).map(([key, style]) => [key, style.color])) });
+  }
+  const claimed = report.retainedTypography?.differences.filter(d => d.attribution === 'reviewed-field-label-color-substitution') ?? [];
+  if (expected.length !== claimed.length || expected.some(({ comparison, review, values }) => {
+    const matches = claimed.filter(d => d.case === comparison.case && d.element === comparison.element && d.property === 'color' &&
+      d.referenceNode === comparison.referenceNode && d.astylarNode === comparison.astylarNode);
+    return matches.length !== 1 || JSON.stringify(matches[0].values) !== JSON.stringify(values) ||
+      JSON.stringify(comparison.properties.color) !== JSON.stringify(values) ||
+      Object.entries(review).some(([key, value]) => JSON.stringify(matches[0][key]) !== JSON.stringify(value));
+  })) errors.push('field-label color attributions do not replay from captured wrapper token and candidate rule order');
+}
+
 function reviewedFieldLabelTrackingInput(entry, ref, ast, styles, referenceTree, astylarTree, inventory) {
   if (!['form-field', 'input', 'select', 'autocomplete', 'datepicker', 'timepicker'].includes(entry.family) ||
       ref.type !== 'mat-label' || ref.attributes?.id !== `${entry.family}-label` || ast.authored.type !== 'label' ||
@@ -2559,6 +2651,7 @@ export function collectRetainedTypographyEvidence(cases, inventory, controlTypog
             ...(reviewedStepperTextInput(entry, textMappingById.get(id), property, ref, ast, styles, referenceTree, astylarTree, inventory) ?? {}),
             ...(property === 'fontSize' && floatingLabel ? floatingLabel : {}),
             ...(property === 'letterSpacing' ? reviewedFieldLabelTrackingInput(entry, ref, ast, styles, referenceTree, astylarTree, inventory) ?? {} : {}),
+            ...(property === 'color' ? reviewedFieldLabelColorInput(entry, ref, ast, styles, referenceTree, astylarTree, inventory) ?? {} : {}),
             ...(controlLabelToken ?? {}),
             ...(selectValueToken ?? {}),
             ...(weekdayToken ?? {}),
@@ -4075,6 +4168,7 @@ function implementationPlan() {
     { priority: 5.25, rootCause: 'Stepper numeric icon positioning is replaced by centered text in a fixed span', action: 'Restore the original numeric span, separate icon-content wrapper, top/left 50% and translate(-50%, -50%) inputs. The current step-badge textAlign:center substitution does not exercise those semantics. Address the independently proven core percentage-transform defect first, then verify the original wrapper under varied digit widths, fonts, density, themes and state changes. Do not move the number with fixture-specific offsets or claim start/center alignment equivalent merely because both screenshots look centered.' },
     { priority: 5.26, rootCause: 'Native button/inline-block input is replaced by flex-div centering', action: 'Restore the original button wrapper and inline label layout, preserving CSS defaults, inheritance and Material rules. The candidate flex div omits native button defaults; adding label offsets or textAlign:center to that substitute would not test the original mechanism. Verify native-button default resolution and inline formatting through equivalent core inputs after removing the authoring divergence. Keep the separate CDP default controls and per-case captured center/left mismatch evidence.' },
     { priority: 5.27, rootCause: 'Stepper numeral font and label-color inheritance are replaced or omitted', action: 'Keep the original frame-scaled inherited numeral font with the icon-content wrapper instead of fixed 14px step-badge text. Restore the Material active-label color token and inner label inheritance instead of accepting the page on-surface fallback. Preserve actual reference theme inputs; do not retune the dark reference or calibrate text to the circle. Verify core inheritance, transforms and glyph paint only after equivalent authoring is restored.' },
+    { priority: 5.28, rootCause: 'Filled-label component color tokens are replaced by independent literal state rules', action: 'Restore the captured reference label-color token, wrapper inheritance and state semantics rather than adjusting candidate colors to sampled pixels. Base/empty/picker-shell declarations currently supply different inputs, independently of the repaired inspection ancestry bug. Preserve normal/effective/retained stages and original rule order; investigate core cascade or current paint only when equivalent authored inputs still diverge. Do not normalize small RGB differences away or reuse pre-repair inconsistent captures as proof.' },
     { priority: 5.3, rootCause: 'Core normal line-height is approximated by a fixed Mg font-box probe', action: 'Resolve browser normal line-box metrics and actual fallback runs in core. The equal-input Arial/serif cases expose one-pixel texture-height errors; Roboto plus emoji/CJK exposes two-pixel errors while plain Roboto and explicit line heights pass. Preserve those controls, extend multiline/baseline/DPR verification and avoid a universal multiplier, constant pixel addition, or fixed Material line-height compensation. Current-texture evidence must remain separate from declared normal and from final glyph raster.' },
     { priority: 5.4, rootCause: 'Calendar cell text tokens and inner line boxes were flattened away', action: 'Restore the reference calendar font and date-text ink tokens and its inner line-height:1 label inside both day and year controls. Keep reference cell/container sizing, state and selection structure instead of copying a normal-metric result or tuning the baseline. Separate date/range-context proofs isolate 990 day and 192 year occurrences each of missing font-token, omitted inner line-height and fixed-ink inputs; core metric defects must be assessed only after those inputs are equivalent. Independently resolve normal-versus-zero tracking and the still-unmapped header/icon owners.' },
     { priority: 5.5, rootCause: 'Snackbar action inherits generic control inputs instead of Material action tokens', action: 'Restore the original text-button font, size and tracking declarations and the snackbar inverse-primary ink, keeping the reference label/action wrapper intent. The exact overlay/message mapping isolates 34 current action textures and source-traces font-stack, tracking and ink substitutions. Trace the remaining 14px-versus-16px and normal-line-box observations through the core defaults/inheritance and metric stages before assigning core ownership; do not calibrate a baseline or line height. Retain the separate intrinsic-width, live-region, visibility, lifetime and placement obligations.' },

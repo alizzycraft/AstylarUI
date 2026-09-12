@@ -22,6 +22,57 @@ selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Filled-label color inputs now have replayable attribution (2026-09-12)
+
+The corrected capture contains all 72 static cases for form-field, input,
+select, autocomplete, datepicker and timepicker. Their full-tree read has no
+collection errors. There are 54 color differences: 12 each for autocomplete,
+datepicker and timepicker, and six each for form-field, input and select.
+Every one now has explicit authored-input attribution; zero field-color
+differences remain unresolved in this static group. This does not establish
+complete interaction coverage or eliminate other typography differences.
+
+The reference `mat-label` has no intervening color declaration. Its native
+floating-label parent owns the unique active, ordinary rule
+`.mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-floating-label`,
+whose color is
+`var(--mat-form-field-filled-label-text-color, var(--mat-sys-on-surface-variant))`.
+These captures compute `rgb(73, 69, 78)` on both wrapper and label. Candidate
+`.field-label`, `.field-label.empty-field-label`, and the two picker-shell
+rules instead declare literals. History identifies `4d56f862` for the
+base/empty colors, `f286fb17` for the timepicker rule and `d973f847` for the
+datepicker rule. The live declarations are at `astylar.component.ts:547`,
+`:548`, `:603`, and `:608`.
+
+The audit retains the exact reference chain, candidate parent/classes, all four
+candidate declarations in source order, matching declarations and selected
+declaration, plus independent normal/effective/retained values. It accepts this
+attribution only when all three candidate stages agree with the reviewed
+selected literal. In particular, corrected dark picker captures now agree on
+`#e6e1e5`; old inspection snapshots with normal `#1d1b20` and retained
+`#e6e1e5` fail this attribution instead of being disguised as equivalent inputs.
+The `#49454e` versus `#49454f` difference also remains a real input difference,
+not a color tolerance or normalization.
+
+Verification:
+
+- `node --test --test-name-pattern='field color|source audit|source fingerprints' tests/material-parity/input-equivalence-audit.spec.mjs`:
+  5/5 passing. Includes all six families with base/empty forms, 25 contradictory
+  input controls, and 11 report-tampering controls. Missing/competing reference
+  tokens, inline overrides, unknown selectors, media conditions, wrong parent
+  identity, reordered candidate rules and stale stage values prevent attribution.
+- Building and independently validating a diagnostic report from the 72 actual
+  captured static cases yields all 54 classifications and zero validation
+  errors with `requireComplete:false`. This flag is used only to review this
+  bounded subset, never for full-audit acceptance.
+- `npm run parity:harness:check`: 302/302 passing, zero skipped/cancelled
+  (121.334 seconds). No production renderer, fixture, reference or live capture
+  import was changed by this increment.
+
+Implementation-plan item 5.28 restores the reference color token and state/
+inheritance mechanism before testing remaining core color or paint behavior.
+It does not recommend choosing new constants from screenshot samples.
+
 ## Fresh supplements after the inspection repair (2026-09-12)
 
 Commit `8d3a974` is pushed to `codex/material-ui-showcase`. The following
