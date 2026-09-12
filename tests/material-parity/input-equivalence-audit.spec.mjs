@@ -1621,18 +1621,44 @@ test('disabled ink attribution is limited to the reviewed alpha rule and explici
   assert.equal(evidence.differences[0].reviewEvidence.candidatePainted, 'rgba(164,160,167,1)');
   assert.ok(!validateMaterialInputAudit(buildMaterialInputAudit(raw)).some((error) => error.includes('control texture typography differences')));
   const mutations = [
-    (entry) => { entry.profile = 'dark'; },
+    (entry) => { entry.family = 'other'; },
     (entry) => { entry.inputTrees.reference.rules[0].active = false; },
     (entry) => { delete entry.inputTrees.reference.nodes[0].attributes.disabled; },
     (entry) => { entry.inputTrees.astylar.nodes[0].authored.disabled = false; },
     (entry) => { entry.inputTrees.astylar.nodes[0].interactionResolvedStyle.color = '#ffffff'; },
     (entry) => { entry.inputTrees.astylar.rules[0].color = '#ffffff'; },
     (entry) => { entry.inputTrees.reference.rules[0].declarations.color.value = 'rgba(29,27,32,.38)'; },
+    (entry) => { entry.inputTrees.reference.styles[0].color = 'rgba(29,27,32,.5)'; },
+    (entry) => { entry.inputTrees.astylar.nodes[0].normalResolvedStyle.color = 'rgba(164,160,167,.38)'; },
+    (entry) => { entry.inputTrees.astylar.rules.push({ ...entry.inputTrees.astylar.rules[0] }); },
   ];
   for (const mutate of mutations) {
     const candidate = disabledButtonInkReport();
     mutate(candidate.results[0]);
     assert.equal(controlEvidence(candidate).differences[0].attribution, 'unresolved', String(mutate));
+  }
+});
+
+test('disabled ink attribution follows captured alpha/opaque input witnesses across themes', () => {
+  for (const [profile, reference, candidateColor] of [
+    ['light', 'rgba(29,27,32,.38)', '#a4a0a7'],
+    ['dark', 'rgba(230,225,229,.38)', '#706c72'],
+    ['contrast', 'rgba(29,27,32,.38)', '#a09fa1'],
+    ['custom', 'rgba(29,27,32,.38)', '#99a0a2'],
+  ]) {
+    const raw = disabledButtonInkReport(), entry = raw.results[0];
+    entry.profile = profile;
+    entry.inputTrees.reference.styles[0].color = reference;
+    const node = entry.inputTrees.astylar.nodes[0];
+    node.normalResolvedStyle.color = node.interactionResolvedStyle.color = node.paintedControlText.style.color = candidateColor;
+    entry.inputTrees.astylar.rules[0].color = candidateColor;
+    const evidence = controlEvidence(raw), finding = evidence.differences[0];
+    assert.deepEqual(evidence.gaps, []);
+    assert.equal(finding.attribution, 'reviewed-disabled-button-ink', profile);
+    assert.equal(finding.reviewEvidence.sourceFinding, 'fixture-disabled-button-ink-precomposited');
+    assert.equal(finding.reviewEvidence.candidatePainted, finding.reviewEvidence.candidateEffective);
+    assert.equal(finding.reviewEvidence.candidateEffective, finding.reviewEvidence.candidateNormal);
+    assert.equal(buildMaterialInputAudit(raw).summary.inputEquivalent, false);
   }
 });
 

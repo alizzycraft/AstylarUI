@@ -1231,10 +1231,10 @@ function reviewedButtonPaintInput(entry, property, ref, parent, ast, stages, ref
       reviewEvidence: { referenceRule: componentRules[0], referenceParent: parent.key, referenceComputed: stages.reference.letterSpacing,
         candidateRule: materialRules[0], candidateChain, candidatePainted: stages.painted.letterSpacing } };
   }
-  if (property === 'color' && entry.family === 'button' && entry.profile === 'light' && ast.authored.id === 'button-disabled' &&
+  if (property === 'color' && entry.family === 'button' && ast.authored.id === 'button-disabled' &&
       ast.authored.disabled === true && Object.hasOwn(parent.attributes ?? {}, 'disabled') &&
-      stages.reference.color === 'rgba(29,27,32,0.38)' && referenceParent.color === stages.reference.color &&
-      stages.normal.color === 'rgba(164,160,167,1)' && stages.effective.color === stages.normal.color && stages.painted.color === stages.normal.color) {
+      /^rgba\(\d+,\d+,\d+,0\.38\)$/.test(stages.reference.color) && referenceParent.color === stages.reference.color &&
+      /^rgba\(\d+,\d+,\d+,1\)$/.test(stages.normal.color) && stages.effective.color === stages.normal.color && stages.painted.color === stages.normal.color) {
     const refRules = rulesAt(parent, 'reference').filter((rule) => rule.active === true &&
       rule.selector === '.mat-mdc-unelevated-button[disabled], .mat-mdc-unelevated-button.mat-mdc-button-disabled' &&
       rule.declarations?.color?.value === 'var(--mat-button-filled-disabled-label-text-color, color-mix(in srgb, var(--mat-sys-on-surface) 38%, transparent))');
@@ -1244,9 +1244,11 @@ function reviewedButtonPaintInput(entry, property, ref, parent, ast, stages, ref
         rule.declarations?.color?.value && rule.declarations.color.value !== 'inherit')) return;
     return { classification: 'application-plugin-authoring-defect', attribution: 'reviewed-disabled-button-ink',
       recommendedOwner: 'showcase disabled-button alpha paint input translation',
-      justification: 'This light-profile disabled button retains the captured reference on-surface ink at .38 alpha, but explicitly authors opaque #a4a0a7 on the candidate and supplies it unchanged to current texture paint. The source rule preblends against surfaceContainer (introduced in 2f44011). This is unequal fixture paint, not proof of a core alpha bug or an accepted equivalence. Other profiles and colors require their own attribution.',
-      reviewEvidence: { referenceRule: refRules[0], referenceParent: parent.key, referenceComputed: stages.reference.color,
-        candidateRule: astRules[0], candidatePainted: stages.painted.color } };
+      justification: 'The disabled reference button and label retain captured .38-alpha ink under the active Material disabled-label token rule. The candidate explicitly authors opaque ink and supplies that same value unchanged through normal/effective/current texture paint. The source rule preblends against surfaceContainer (introduced in 2f44011). This is unequal fixture paint, not a core alpha defect or accepted compositing equivalence; no theme-specific RGB value is assumed. Backgrounds, glyph-edge compositing and other state properties remain separate.',
+      reviewEvidence: { sourceFinding: 'fixture-disabled-button-ink-precomposited', referenceRule: refRules[0],
+        referenceParent: parent.key, referenceComputed: stages.reference.color,
+        candidateRule: astRules[0], candidateNormal: stages.normal.color, candidateEffective: stages.effective.color,
+        candidatePainted: stages.painted.color } };
   }
 }
 

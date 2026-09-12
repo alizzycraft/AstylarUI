@@ -12,6 +12,28 @@ tests pass). A missing selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Disabled-button alpha substitution is attributed across themes (2026-09-12)
+
+All twelve static button cases now carry occurrence-level evidence for the
+disabled label's alpha-to-opaque authoring substitution, including the nine
+dark/contrast/custom cases previously left unresolved. The reference button
+and label retain 38%-alpha on-surface ink. The explicit candidate rule and
+normal/effective/current texture stages instead agree on an opaque color:
+light `#a4a0a7`, dark `#706c72`, contrast `#a09fa1`, custom `#99a0a2`.
+
+The attribution checks the captured active Material disabled-label token rule,
+both controls' disabled state, reference parent/label agreement, and the
+candidate's explicit rule plus all three paint-input stages. It no longer
+depends on one profile name or light-theme RGB constants. Wrong alpha, inactive
+rules, duplicate candidate rules and conflicting states remain unresolved.
+This classifies unequal fixture paint; it does not certify alpha compositing
+or permit preblending as an equivalent representation.
+
+All twelve result/tree digests validate with no inventory errors or current
+control mapping gaps. Focused audit tests pass **71/71** and
+`npm run parity:harness:check` passes **109/109**. No fixture, renderer,
+capture runtime or ongoing matrix input changed.
+
 ## CSS normal line-height exposes a core font-metrics defect (2026-09-12)
 
 The new `normal-line-height-audit.spec.ts` package-root proof compares identical
