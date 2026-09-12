@@ -6,6 +6,7 @@ export const borderColorProperties = ['borderTopColor', 'borderRightColor', 'bor
 export const borderInitialAttribution = 'reviewed-border-initial-color-divergence';
 export const buttonBorderResetAttribution = 'reviewed-material-button-border-reset-omission';
 export const outlineTokenAttribution = 'reviewed-material-outline-token-substitution';
+export const chipOutlineAttribution = 'reviewed-chip-outline-owner-substitution';
 const object = value => value !== null && typeof value === 'object' && !Array.isArray(value);
 const colorOrResetKey = key => {
   const normalized = key.replaceAll('-', '').toLowerCase().replace(/^(webkit|moz)/, '');
@@ -278,4 +279,164 @@ export function classifyOutlineTokenInput(input, property, reference, astylar, p
   return { classification: proof.classification, attribution: outlineTokenAttribution, reviewEvidence: structuredClone(proof),
     owner: 'showcase Material outline/divider token and side-specific border input translation',
     justification: 'The uniquely mapped reference has the exact active serialized Material token shorthand and pending expanded color declarations. Its computed relevant border colors differ from the explicit candidate #79747e rule retained at all three current core style stages. Complete candidate rules exclude other possibly applicable color/reset inputs; duplicate, unknown, incomplete or conflicting witnesses reject attribution. Reference button reset/no-animation evidence is checked separately, and the second toggle covers only its left divider. This is source-traced unequal color authoring, not an accepted palette alias or equal-input core paint failure. Preserve the original token/side intent rather than sampling the observed color; shape, other sides and final raster remain separate.' };
+}
+
+const chipSides = ['Top', 'Right', 'Bottom', 'Left'];
+const chipProperties = chipSides.flatMap(side => [`border${side}Color`, `border${side}Style`, `border${side}Width`]);
+const chipBorderKey = key => {
+  const k = key.replaceAll('-', '').toLowerCase().replace(/^(webkit|moz)/, '');
+  return k === 'all' || /^(animation|transition)/.test(k) || (k.startsWith('border') && !k.endsWith('radius'));
+};
+const chipNoBorder = declarations => object(declarations) && !Object.keys(declarations).some(chipBorderKey);
+function chipSelectorCanApply(selector, authored) {
+  if (typeof selector !== 'string') return true;
+  return selector.split(',').some(part => {
+    // A finite descendant selector ending in a different element type cannot
+    // target this host, regardless of its ancestors. Unknown syntax stays possible.
+    const terminal = part.trim().match(/^(?:[.#][_a-zA-Z][\w-]*\s+)+([a-zA-Z][\w-]*)$/)?.[1];
+    if (terminal && terminal.toLowerCase() !== authored.type) return false;
+    return selectorCanApply(part, authored);
+  });
+}
+function chipHostRules(rules) {
+  return Array.isArray(rules) && rules.every(rule => object(rule?.declarations) && Object.entries(rule.declarations).every(([key, value]) =>
+    !chipBorderKey(key) || (['animation-duration', 'transition-duration'].includes(key) &&
+      rule.selector === '.mat-mdc-standard-chip._mat-animation-noopable, .mat-mdc-standard-chip._mat-animation-noopable .mdc-evolution-chip__graphic, .mat-mdc-standard-chip._mat-animation-noopable .mdc-evolution-chip__checkmark, .mat-mdc-standard-chip._mat-animation-noopable .mdc-evolution-chip__checkmark-path' &&
+      value?.value === '1ms' && value?.important === false)));
+}
+const chipPseudoBase = '.mat-mdc-standard-chip .mdc-evolution-chip__action--primary::before';
+const chipPseudoColor = '.mat-mdc-standard-chip:not(.mdc-evolution-chip--disabled) .mdc-evolution-chip__action--primary::before';
+const chipPseudoSelected = '.mat-mdc-standard-chip.mdc-evolution-chip--selected .mdc-evolution-chip__action--primary::before';
+const chipPseudoFocus = '.mdc-evolution-chip__action--primary:not(.mdc-evolution-chip__action--presentational):not(.mdc-ripple-upgraded):focus::before';
+function chipPseudoRules(rules, selected) {
+  const expected = new Map([
+    [chipPseudoBase, 'border-width: var(--mat-chip-outline-width, 1px); border-radius: var(--mat-chip-container-shape-radius, 8px); box-sizing: border-box; content: ""; height: 100%; left: 0px; position: absolute; pointer-events: none; top: 0px; width: 100%; z-index: 1; border-style: solid;'],
+    [chipPseudoColor, 'border-color: var(--mat-chip-outline-color, var(--mat-sys-outline));'],
+    [chipPseudoSelected, 'border-width: var(--mat-chip-flat-selected-outline-width, 0);'],
+    [chipPseudoFocus, 'border-color: var(--mat-chip-focus-outline-color, var(--mat-sys-on-surface-variant));'],
+  ]);
+  if (!Array.isArray(rules) || rules.some(rule => !object(rule?.declarations) ||
+      expected.get(rule.selector) !== rule.cssText || Object.values(rule.declarations).some(d => d?.important !== false)) ||
+      new Set(rules.map(rule => rule.selector)).size !== rules.length) return false;
+  for (const selector of [chipPseudoBase, chipPseudoColor, ...(selected ? [chipPseudoSelected] : [])]) {
+    if (!rules.some(rule => rule.selector === selector)) return false;
+  }
+  if (!selected && rules.some(rule => rule.selector === chipPseudoSelected)) return false;
+  return rules.every(rule => {
+    const expected = {};
+    if (rule.selector === chipPseudoBase) {
+      Object.assign(expected, { 'box-sizing': 'border-box', content: '""', height: '100%', left: '0px', position: 'absolute',
+        'pointer-events': 'none', top: '0px', width: '100%', 'z-index': '1' });
+      for (const corner of ['top-left', 'top-right', 'bottom-right', 'bottom-left']) expected[`border-${corner}-radius`] = '';
+      for (const side of chipSides) { expected[`border-${side.toLowerCase()}-width`] = ''; expected[`border-${side.toLowerCase()}-style`] = 'solid'; }
+    } else for (const side of chipSides) expected[`border-${side.toLowerCase()}-${rule.selector === chipPseudoSelected ? 'width' : 'color'}`] = '';
+    return Object.keys(rule.declarations).length === Object.keys(expected).length &&
+      Object.entries(expected).every(([k, value]) => rule.declarations[k]?.value === value);
+  });
+}
+function chipStyles(referenceRaw, stages, selected, canonicalStyle) {
+  if (!object(referenceRaw) || stages.some(s => !object(s) || Object.keys(s).some(k =>
+    chipBorderKey(k) && !['borderWidth', 'borderStyle', 'borderColor'].includes(k)))) return;
+  const reference = canonicalStyle(referenceRaw), candidate = stages.map(canonicalStyle);
+  if (!/^rgba\(\d+,\d+,\d+,1\)$/.test(reference.color ?? '') || chipSides.some(side =>
+      reference[`border${side}Width`] !== '0' || reference[`border${side}Style`] !== 'none' || reference[`border${side}Color`] !== reference.color) ||
+      candidate.some(style => chipSides.some(side => style[`border${side}Width`] !== (selected ? '0' : '1px') ||
+        style[`border${side}Style`] !== 'solid' || style[`border${side}Color`] !== 'rgba(121,116,126,1)'))) return;
+  return { reference: Object.fromEntries(chipProperties.map(p => [p, reference[p]])),
+    candidate: Object.fromEntries(chipProperties.map(p => [p, candidate[0][p]])) };
+}
+
+export function collectChipOutlineInputs(inventory, canonicalStyle) {
+  const result = [], cases = new Map();
+  for (const entry of inventory.cases) { if (!cases.has(entry.case)) cases.set(entry.case, []); cases.get(entry.case).push(entry); }
+  const valueAt = (pool, index, side) => pool[index]?.side === side ? pool[index].value : undefined;
+  const classes = value => typeof value === 'string' ? value.split(/\s+/) : [];
+  for (const [key, entries] of cases) {
+    const refs = entries.filter(e => e.side === 'reference'), asts = entries.filter(e => e.side === 'astylar');
+    if (refs.length !== 1 || asts.length !== 1 || !Number.isInteger(asts[0].resolvedStyleRevision) || asts[0].resolvedStyleRevision < 0 ||
+        inventory.errors.some(e => e.case === key)) continue;
+    const ref = inventory.variants[refs[0].variant], ast = inventory.variants[asts[0].variant];
+    if (ref?.side !== 'reference' || ast?.side !== 'astylar' || !ref.ruleEvidenceComplete || !ast.ruleEvidenceComplete ||
+        ast.resolvedStyleEvidenceVersion !== 2 || ast.resolvedStyleSource !== 'core-style-inspection' ||
+        new Set(ref.nodes.map(n => n.key)).size !== ref.nodes.length || new Set(ast.nodes.map(n => n.key)).size !== ast.nodes.length) continue;
+    const rules = ast.rules.map(i => valueAt(inventory.rules, i, 'astylar'));
+    if (rules.some(rule => !object(rule) || Object.values(rule).some(v => object(v) || Array.isArray(v)))) continue;
+    for (const id of ['chip-0', 'chip-1']) {
+      const hosts = ref.nodes.filter(n => (n.attributes?.['data-parity-id'] ?? n.attributes?.id) === id);
+      const candidates = ast.nodes.filter(n => n.authored?.id === id);
+      if (hosts.length !== 1 || candidates.length !== 1) continue;
+      const host = hosts[0], candidate = candidates[0], authored = candidate.authored;
+      if (host.type !== 'mat-chip-option' || authored.type !== 'div' || !classes(authored.class).includes('chip') ||
+          typeof authored.ariaSelected !== 'boolean' || !chipNoBorder(host.inline) || !chipNoBorder(authored.style ?? {})) continue;
+      const selected = authored.ariaSelected;
+      if (!classes(authored.class).includes(selected ? 'selected' : 'unselected') ||
+          classes(authored.class).includes(selected ? 'unselected' : 'selected') ||
+          !classes(host.attributes?.class).includes('mat-mdc-standard-chip') ||
+          classes(host.attributes?.class).includes('mdc-evolution-chip--selected') !== selected) continue;
+      const actions = ref.nodes.filter(n => {
+        if (n.type !== 'button' || !classes(n.attributes?.class).includes('mdc-evolution-chip__action--primary')) return false;
+        const seen = new Set(); let parent = n.parent;
+        while (parent !== null && !seen.has(parent)) { if (parent === host.key) return true; seen.add(parent); parent = ref.nodes.find(n => n.key === parent)?.parent; }
+        return false;
+      });
+      if (actions.length !== 1 || actions[0].attributes?.['aria-selected'] !== String(selected) ||
+          actions[0].attributes?.['aria-disabled'] !== 'false') continue;
+      const action = actions[0], pseudos = action.pseudoElements?.filter(p => p.pseudo === '::before' && p.generated);
+      if (pseudos?.length !== 1) continue;
+      const pseudo = pseudos[0], refRules = host.rules.map(i => valueAt(inventory.rules, i, 'reference'));
+      const pseudoRules = pseudo.rules.map(i => valueAt(inventory.rules, i, 'reference'));
+      if ([...refRules, ...pseudoRules].some(rule => !object(rule) || typeof rule.active !== 'boolean') ||
+          !chipHostRules(refRules.filter(r => r.active)) || !chipPseudoRules(pseudoRules.filter(r => r.active), selected)) continue;
+      const outline = valueAt(inventory.styles, pseudo.style, 'reference');
+      if (!object(outline) || outline.position !== 'absolute' || outline.boxSizing !== 'border-box' || outline.pointerEvents !== 'none' ||
+          outline.content !== '""' || chipSides.some(side => outline[`border${side}Width`] !== (selected ? '0px' : '1px') ||
+            outline[`border${side}Style`] !== 'solid')) continue;
+      const outlineColors = canonicalStyle(outline);
+      if (!/^rgba\(\d+,\d+,\d+,1\)$/.test(outlineColors.borderTopColor ?? '') ||
+          chipSides.some(side => outlineColors[`border${side}Color`] !== outlineColors.borderTopColor)) continue;
+      const bases = rules.filter(r => r.selector === '.chip'), selections = rules.filter(r => r.selector === '.chip.selected');
+      if (bases.length !== 1 || selections.length !== 1 || bases[0].borderWidth !== '1px' || bases[0].borderStyle !== 'solid' ||
+          bases[0].borderColor !== '#79747e' || selections[0].borderWidth !== '0' ||
+          Object.keys(bases[0]).some(k => chipBorderKey(k) && !['borderWidth', 'borderStyle', 'borderColor'].includes(k)) ||
+          Object.keys(selections[0]).some(k => chipBorderKey(k) && k !== 'borderWidth')) continue;
+      const excluded = []; let conflict = false;
+      for (const [index, rule] of rules.entries()) {
+        if (rule === bases[0] || rule === selections[0] || chipNoBorder(rule)) continue;
+        if (chipSelectorCanApply(rule.selector, authored)) { conflict = true; break; }
+        excluded.push(ast.rules[index]);
+      }
+      if (conflict) continue;
+      const styles = chipStyles(valueAt(inventory.styles, host.style, 'reference'),
+        [candidate.normalStyle, candidate.style, candidate.interactionStyle].map(i => valueAt(inventory.styles, i, 'astylar')), selected, canonicalStyle);
+      if (!styles) continue;
+      result.push({ case: key, element: id, selected, referenceNode: host.key, astylarNode: candidate.key, actionNode: action.key,
+        source: ast.resolvedStyleSource, revision: asts[0].resolvedStyleRevision, ...styles,
+        referenceHostRules: refRules.filter(r => r.active), referenceOutline: { owner: action.key, pseudo: pseudo.pseudo,
+          style: outline, rules: pseudoRules.filter(r => r.active) },
+        candidateRules: [bases[0], selections[0]], excludedCandidateRules: excluded, candidateRuleCount: ast.rules.length,
+        classification: 'application-plugin-authoring-defect', attribution: chipOutlineAttribution,
+        sourceFinding: 'fixture-chip-outline-pseudo-replaced-by-host-border', inputEquivalent: false, finalRasterVerified: false });
+    }
+  }
+  return result;
+}
+
+export function classifyChipOutlineInput(input, property, reference, astylar, proof, canonicalStyle) {
+  if (!proof || proof.attribution !== chipOutlineAttribution || !chipProperties.includes(property) || input.id !== proof.element ||
+      input.referenceStructure?.schemaVersion !== 2 || input.astylarStructure?.schemaVersion !== 2 ||
+      input.referenceStructure.type !== 'mat-chip-option' || input.astylarStructure.type !== 'div' ||
+      input.astylarResolvedStyleEvidenceVersion !== 2 || reference !== proof.reference[property] || astylar !== proof.candidate[property] ||
+      !chipHostRules(input.referenceAuthored)) return;
+  const styles = chipStyles(input.reference, [input.astylarNormalResolvedStyle, input.astylar, input.astylarInteractionResolvedStyle], proof.selected, canonicalStyle);
+  if (!styles || JSON.stringify(styles.reference) !== JSON.stringify(proof.reference) || JSON.stringify(styles.candidate) !== JSON.stringify(proof.candidate) ||
+      !Array.isArray(input.astylarAuthored)) return;
+  const base = input.astylarAuthored.filter(r => r.selector === '.chip'), selected = input.astylarAuthored.filter(r => r.selector === '.chip.selected');
+  if (base.length !== 1 || selected.length !== (proof.selected ? 1 : 0) ||
+      base[0].declarations?.borderWidth !== '1px' || base[0].declarations?.borderStyle !== 'solid' || base[0].declarations?.borderColor !== '#79747e' ||
+      input.astylarAuthored.some(rule => !object(rule.declarations) || Object.keys(rule.declarations).some(k => chipBorderKey(k) &&
+        !(rule === base[0] && ['borderWidth', 'borderStyle', 'borderColor'].includes(k)) &&
+        !(rule === selected[0] && k === 'borderWidth' && rule.declarations[k] === '0')))) return;
+  return { classification: proof.classification, attribution: chipOutlineAttribution, reviewEvidence: structuredClone(proof),
+    owner: 'showcase chip outline owner, state and token translation',
+    justification: 'The captured zero-border reference host contains a separate action-button generated outline; the candidate instead authors the border on the chip host. Exact selected state, active pseudo declarations, parent-chain ownership, all three core stages and complete candidate rule exclusions are proved. The scalar host border remains distinct from the recorded pseudo border; neither its color nor box-model effect is an equivalent alias or a demonstrated core failure. Restore original outline/token/state ownership before reducing remaining renderer differences; do not shift labels, subtract padding or tune widths. Other styling, accessibility, hit regions and final raster remain separate.' };
 }

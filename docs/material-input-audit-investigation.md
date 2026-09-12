@@ -9,10 +9,11 @@ is now complete (436 static / 1,875 interaction cases, all visually passing),
 but contains the subsequently reproduced ancestry-inspection defect below.
 Its `normal-line-box-context-audit` and `supplemental-context-audit` supplements
 remain bound to that frozen run, not to the corrected implementation.
-The new unfiltered run is `artifacts/material-parity/current-ancestry-audit`,
-using `dist/material-showcase-current-ancestry-audit/browser`. Its complete
-report and freshly bound supplements are required before final regeneration
-and `--check`; do not reuse the old supplements or rewrite old captured values.
+The corrected unfiltered run is `artifacts/material-parity/current-ancestry-audit`,
+using `dist/material-showcase-current-ancestry-audit/browser`. It completed
+436 static and 1,875 interaction cases with all visual gates passing on
+2026-09-12. Use its complete report and freshly bound supplements for final
+regeneration and `--check`; do not reuse old supplements or rewrite captured values.
 The older control-text baseline and its
 `normal-line-box-static-audit-v2` supplement remain preserved separately;
 never combine supplements and captures from different runs.
@@ -21,6 +22,83 @@ Argument validation rejects unknown, empty, and repeated options. A missing
 selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
+
+## Chip host-border differences now retain per-case outline ownership (2026-09-12)
+
+The source finding from `ab333d3` now has a guarded `chipOutlineInputs`
+inventory and independently replayed scalar attribution. This preserves the
+actual reference **host** colors/styles/widths and stores the descendant
+action-button pseudo outline separately. In particular, reference pseudo
+RGB 123,117,127 or 73,69,78 is never substituted for the host's inherited
+border color to make a comparison look closer.
+
+Proof requires unique shared IDs and node keys, current complete side-correct
+core inspection, a real parent chain from action to host, consistent selected
+state, the exact active serialized generated-box/token rules and their expanded
+declarations, separate outline styles, and candidate base/selection border
+rules. Every other candidate border/reset/animation rule is checked; unknown
+selectors or nested declarations prevent attribution. The finite descendant
+exclusion only establishes that a terminal `th`/`td` (or other unequal type)
+cannot target a `div`; it does not infer ancestor matches or emulate cascade.
+The exact Material 1ms duration declarations do not author border values;
+other animation or transition declarations remain disqualifying.
+
+Reference measurement snapshots and all three candidate core stages are
+checked independently of full-tree collection. Selected zero-width sides do
+not waive their unequal style/color inputs. Each grouped signature keeps
+**every** reviewed case key, not merely the twelve display samples. Validation
+rebuilds the owner/state proof inventory and rejects changed owners, values,
+selection state, classifications, absent properties and missing occurrences.
+
+Replay of all 436 static cases plus all **64 chip interaction cases** yields
+**152** paired chip proofs, **32** grouped border signatures and **1,344**
+attributed property occurrences with all 1,344 reviewed keys retained.
+Diagnostic validation reports zero errors. The width differences cover
+24 unselected chip-0 and eight unselected chip-1 observations; style and
+host-color differences remain attributed in both selection states. These
+are unequal authored inputs, not accepted equivalence or confirmed core
+rendering defects. No other chip property is cleared by this proof.
+
+The static-only replay attributes **24** signatures / **192** occurrences
+from 24 paired hosts. Unresolved static style signatures fall from 2,655 to
+**2,631**, and unresolved static border-color signatures from 142 to **126**.
+This diagnostic replay also has zero validation errors; it is not acceptance
+of the remaining unclassified inputs.
+
+Focused verification:
+
+`node --test --test-name-pattern='chip outline attribution|chip outline evidence' tests/material-parity/input-equivalence-audit.spec.mjs`
+
+Result: **3/3 pass**, zero failed/skipped tests, **10.655 seconds**. The tests
+cover both selection states, distinct host/pseudo colors, **42** incomplete,
+conflicting or mismapped capture mutations, **nine** altered-report rejection
+checks, fourteen-state review retention and raw-input preservation.
+Full `npm run parity:harness:check`: **340/340 pass**, zero failed, skipped,
+cancelled or todo tests, **135.391 seconds**.
+
+The implementation plan now explicitly orders original chip outline/state
+ownership ahead of equal-input generated-box investigation. No reference,
+fixture, plugin, renderer or live-capture module was changed.
+
+The corrected full capture completed successfully with the original enforced
+command and checkpoint recovery (`node tests/material-parity/run-material-parity.mjs
+--enforce --skip-build --resume`, same browser-root/artifact paths, port 4431,
+no family/profile/viewport/state filters and browser restart interval 200).
+The transient page/screenshot timeouts recorded below remain in the history;
+their cases were rerun, not omitted. Final results:
+
+- Static: **436/436 pass**; minimum/median SSIM **0.965296 / 0.996382**;
+  maximum edge error **0.984px**; text alignment **428/428**, maximum error
+  **0.722px**; uniform backgrounds **24/24**; focused rasters **120/120**;
+  shadow profiles **12/12**.
+- Interaction: **1,875/1,875 pass**; minimum SSIM **0.954514**;
+  text alignment **2,116/2,116**, maximum error **0.722px**;
+  focused rasters **880/880**.
+
+Both enforced acceptance summaries are true. This closes the corrected
+visual-capture requirement, not the input-equivalence audit. Remaining
+authorship, structural, typography and private-paint findings must still be
+fully attributed and the final machine/human reports checked in.
 
 ## Chip outline ownership changes the input box model (2026-09-12)
 

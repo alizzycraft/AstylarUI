@@ -388,6 +388,140 @@ function buttonBorderResetReport(selector = '.material-button') {
   return raw;
 }
 
+function chipOutlineReport(selected = false) {
+  const raw = borderInitialReport(), e = raw.results[0], input = e.styleInputs[0];
+  e.family = 'chips'; input.id = 'chip-0';
+  input.referenceStructure.type = 'mat-chip-option';
+  const host = e.inputTrees.reference.nodes[0], ast = e.inputTrees.astylar.nodes[0];
+  Object.assign(host, { type: 'mat-chip-option', attributes: { id: 'chip-0', class: `mat-mdc-standard-chip ${selected ? 'mdc-evolution-chip--selected' : ''}` } });
+  Object.assign(ast.authored, { id: 'chip-0', class: `chip ${selected ? 'selected' : 'unselected'}`, ariaSelected: selected });
+  const style = { color: '#123456', borderColor: '#79747e', borderWidth: selected ? '0' : '1px', borderStyle: 'solid' };
+  Object.assign(input, { astylar: { ...style }, astylarNormalResolvedStyle: { ...style }, astylarInteractionResolvedStyle: { ...style } });
+  Object.assign(ast, { resolvedStyle: { ...style }, normalResolvedStyle: { ...style }, interactionResolvedStyle: { ...style } });
+  const base = { selector: '.chip', borderWidth: '1px', borderStyle: 'solid', borderColor: '#79747e' };
+  const selectedRule = { selector: '.chip.selected', borderWidth: '0' };
+  e.inputTrees.astylar.rules = [base, selectedRule, { selector: '.unrelated th', borderWidth: '2px' }];
+  input.astylarAuthored = [base, ...(selected ? [selectedRule] : [])].map(({ selector, ...declarations }) => ({ selector, declarations }));
+  const declarations = values => Object.fromEntries(Object.entries(values).map(([key, value]) => [key, { value, important: false }]));
+  const baseValues = { 'box-sizing': 'border-box', content: '""', height: '100%', left: '0px', position: 'absolute',
+    'pointer-events': 'none', top: '0px', width: '100%', 'z-index': '1' };
+  const widths = {}, colors = {}, outline = { position: 'absolute', boxSizing: 'border-box', pointerEvents: 'none', content: '""' };
+  for (const corner of ['top-left', 'top-right', 'bottom-right', 'bottom-left']) baseValues[`border-${corner}-radius`] = '';
+  for (const side of ['Top', 'Right', 'Bottom', 'Left']) {
+    baseValues[`border-${side.toLowerCase()}-width`] = ''; baseValues[`border-${side.toLowerCase()}-style`] = 'solid';
+    widths[`border-${side.toLowerCase()}-width`] = ''; colors[`border-${side.toLowerCase()}-color`] = '';
+    outline[`border${side}Width`] = selected ? '0px' : '1px'; outline[`border${side}Style`] = 'solid'; outline[`border${side}Color`] = 'rgb(123, 117, 127)';
+  }
+  const rules = [
+    { selector: '.mat-mdc-standard-chip .mdc-evolution-chip__action--primary::before',
+      cssText: 'border-width: var(--mat-chip-outline-width, 1px); border-radius: var(--mat-chip-container-shape-radius, 8px); box-sizing: border-box; content: ""; height: 100%; left: 0px; position: absolute; pointer-events: none; top: 0px; width: 100%; z-index: 1; border-style: solid;', declarations: declarations(baseValues) },
+    { selector: '.mat-mdc-standard-chip:not(.mdc-evolution-chip--disabled) .mdc-evolution-chip__action--primary::before',
+      cssText: 'border-color: var(--mat-chip-outline-color, var(--mat-sys-outline));', declarations: declarations(colors) },
+    ...(selected ? [{ selector: '.mat-mdc-standard-chip.mdc-evolution-chip--selected .mdc-evolution-chip__action--primary::before',
+      cssText: 'border-width: var(--mat-chip-flat-selected-outline-width, 0);', declarations: declarations(widths) }] : []),
+  ].map(r => ({ ...r, active: true, conditions: [] }));
+  e.inputTrees.reference.rules = rules;
+  e.inputTrees.reference.styles.push(outline);
+  e.inputTrees.reference.nodes.push({ key: 'frame/0/action', parent: host.key, type: 'button',
+    attributes: { class: 'mdc-evolution-chip__action--primary', 'aria-selected': String(selected), 'aria-disabled': 'false' },
+    ownText: '', style: 0, rules: [], inline: {}, pseudoElements: [{ pseudo: '::before', generated: true, style: 1, rules: rules.map((_, i) => i) }] });
+  return raw;
+}
+
+test('chip outline attribution preserves host and generated owners in both selection states', () => {
+  for (const selected of [false, true]) {
+    const raw = chipOutlineReport(selected), before = JSON.stringify(raw), audit = buildMaterialInputAudit(raw);
+    assert.equal(audit.chipOutlineInputs.length, 1);
+    const proof = audit.chipOutlineInputs[0];
+    assert.equal(proof.selected, selected);
+    assert.notEqual(proof.referenceNode, proof.actionNode);
+    assert.equal(proof.referenceOutline.owner, proof.actionNode);
+    assert.equal(proof.reference.borderLeftColor, 'rgba(18,52,86,1)');
+    assert.equal(proof.referenceOutline.style.borderLeftColor, 'rgb(123, 117, 127)');
+    assert.equal(proof.inputEquivalent, false); assert.equal(proof.finalRasterVerified, false);
+    const differences = audit.discrepancies.filter(d => d.attribution === 'reviewed-chip-outline-owner-substitution');
+    assert.equal(differences.length, selected ? 8 : 12);
+    assert.ok(differences.every(d => d.classification === 'application-plugin-authoring-defect'));
+    assert.ok(!validateMaterialInputAudit(audit, { requireComplete: false }).some(e => e.includes('chip outline')));
+    assert.equal(JSON.stringify(raw), before);
+  }
+});
+
+test('chip outline attribution rejects missing owners, state mismatches and competing border inputs', () => {
+  const mutations = [
+    e => { e.inputTrees.reference.nodes[1].parent = 'missing'; },
+    e => { e.inputTrees.reference.nodes[1].parent = e.inputTrees.reference.nodes[1].key; },
+    e => { e.inputTrees.reference.nodes.push(structuredClone(e.inputTrees.reference.nodes[1])); },
+    e => { e.inputTrees.reference.nodes[1].attributes['aria-selected'] = 'true'; },
+    e => { e.inputTrees.reference.nodes[1].attributes['aria-disabled'] = 'true'; },
+    e => { e.inputTrees.reference.nodes[0].attributes.class = ''; },
+    e => { e.inputTrees.reference.nodes[0].type = 'div'; },
+    e => { e.inputTrees.reference.nodes[0].inline = { border: { value: 'none' } }; },
+    e => { e.inputTrees.reference.nodes[1].pseudoElements = []; },
+    e => { e.inputTrees.reference.nodes[1].pseudoElements[0].generated = false; },
+    e => { e.inputTrees.reference.nodes[1].pseudoElements[0].pseudo = '::after'; },
+    e => { e.inputTrees.reference.rules[0].active = false; },
+    e => { e.inputTrees.reference.rules[0].cssText = 'border:1px solid red;'; },
+    e => { e.inputTrees.reference.rules[0].declarations.position.value = 'static'; },
+    e => { e.inputTrees.reference.rules[1].declarations['border-left-color'].value = 'red'; },
+    e => { e.inputTrees.reference.rules[1].declarations['border-left-color'].important = true; },
+    e => { e.inputTrees.reference.styles[1].pointerEvents = 'auto'; },
+    e => { e.inputTrees.reference.styles[1].borderTopWidth = '0px'; },
+    e => { delete e.inputTrees.reference.styles[1].borderTopColor; },
+    e => { e.inputTrees.reference.styles[1].borderLeftColor = 'red'; },
+    e => { e.inputTrees.reference.styles[0].borderWidth = '1px'; },
+    e => { e.inputTrees.astylar.nodes[0].authored.ariaSelected = true; },
+    e => { e.inputTrees.astylar.nodes[0].authored.class = 'chip selected'; },
+    e => { e.inputTrees.astylar.nodes[0].authored.style = { borderWidth: '1px' }; },
+    e => { e.inputTrees.astylar.rules[0].borderColor = '#123456'; },
+    e => { e.inputTrees.astylar.rules[1].borderWidth = '1px'; },
+    e => { e.inputTrees.astylar.rules.push({ selector: '.chip:hover', borderWidth: '2px' }); },
+    e => { e.inputTrees.astylar.rules.push({ selector: '.unrelated div', borderWidth: '2px' }); },
+    e => { e.inputTrees.astylar.rules.push({ selector: '.unrelated th, .chip', borderWidth: '2px' }); },
+    e => { e.inputTrees.astylar.rules.push({ selector: ':is(.chip)', borderWidth: '2px' }); },
+    e => { e.inputTrees.astylar.rules.push({ selector: '.chip', nested: { borderWidth: '2px' } }); },
+    e => { e.inputTrees.astylar.nodes[0].interactionResolvedStyle.borderWidth = '2px'; },
+    e => { delete e.inputTrees.astylar.nodes[0].normalResolvedStyle; },
+    e => { e.inputTrees.astylar.resolvedStyleEvidenceVersion = 1; },
+    e => { e.inputTrees.astylar.resolvedStyleSource = 'mesh-metadata'; },
+    e => { delete e.inputTrees.astylar.resolvedStyleRevision; },
+    e => { delete e.inputTrees.astylar.rules; },
+    e => { e.inputTrees.reference.errors.push('missing owner'); },
+    e => { e.styleInputs[0].referenceStructure.type = 'span'; },
+    e => { e.styleInputs[0].referenceAuthored = undefined; },
+    e => { e.styleInputs[0].astylarAuthored = []; },
+    e => { e.styleInputs[0].astylarNormalResolvedStyle.borderStyle = 'none'; },
+  ];
+  for (const change of mutations) {
+    const raw = chipOutlineReport(); change(raw.results[0]);
+    assert.ok(buildMaterialInputAudit(raw).discrepancies.every(d => d.attribution !== 'reviewed-chip-outline-owner-substitution'), String(change));
+  }
+});
+
+test('chip outline evidence must replay and retain every reviewed case beyond display samples', () => {
+  const raw = chipOutlineReport();
+  raw.results = Array.from({ length: 14 }, (_, i) => ({ ...structuredClone(raw.results[0]), state: `state-${i}` }));
+  const audit = buildMaterialInputAudit(raw);
+  assert.equal(audit.chipOutlineInputs.length, 14);
+  for (const d of audit.discrepancies.filter(d => d.attribution === 'reviewed-chip-outline-owner-substitution')) {
+    assert.equal(d.cases.length, 12); assert.equal(d.reviewedCases.length, 14); assert.equal(d.occurrences, 14);
+  }
+  for (const change of [
+    a => { delete a.chipOutlineInputs; },
+    a => { a.chipOutlineInputs[0].referenceOutline.owner = 'wrong-owner'; },
+    a => { a.chipOutlineInputs[0].selected = true; },
+    a => { a.chipOutlineInputs[0].inputEquivalent = true; },
+    a => { a.elementInventory.variants.find(v => v.side === 'astylar').ruleEvidenceComplete = false; },
+    a => { a.discrepancies.find(d => d.attribution === 'reviewed-chip-outline-owner-substitution').reviewedCases.pop(); },
+    a => { a.discrepancies.find(d => d.attribution === 'reviewed-chip-outline-owner-substitution').reference = 'rgba(123,117,127,1)'; },
+    a => { a.discrepancies.find(d => d.attribution === 'reviewed-chip-outline-owner-substitution').classification = 'equivalent-representation'; },
+    a => { const d = a.discrepancies.find(d => d.attribution === 'reviewed-chip-outline-owner-substitution'); d.property = 'unproved'; delete d.reference; delete d.astylar; },
+  ]) {
+    const altered = structuredClone(audit); change(altered);
+    assert.ok(validateMaterialInputAudit(altered, { requireComplete: false }).some(e => e.includes('chip outline')), String(change));
+  }
+});
+
 function outlineTokenReport(kind = 'button') {
   const raw = kind === 'button' ? buttonBorderResetReport() : borderInitialReport();
   const entry = raw.results[0], input = entry.styleInputs[0], left = kind === 'divider';
