@@ -17,6 +17,68 @@ tests pass). A missing selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Explicit field-label tracking substitutions (2026-09-12)
+
+All **54 remaining static field-label tracking differences** are now attributed
+from their actual reference and candidate inputs. The reference `mat-label`
+inherits **0.496px** from its direct `.mdc-floating-label` wrapper's active
+`.mdc-text-field--filled .mdc-floating-label` rule:
+`var(--mat-form-field-filled-label-text-tracking, var(--mat-sys-body-large-tracking))`.
+The base candidate `.field-label` explicitly supplies **0.4px**; its
+more-specific `.field-label.empty-field-label` rule supplies **0.4px or 0.65px**
+according to state. Normal, effective and core-retained tracking agree with
+the selected candidate declaration. This is an authored substitution, not
+evidence that core changed the requested spacing.
+
+History identifies **87bc351** as adding `.4px` tracking to the base label
+alongside its field layout changes. **354084e** adds the empty-label
+`.4px`/`.65px` split; **7159b1d** changes its predicate to `emptyFieldActive`;
+**4d56f86** later changes colors/state composition without removing the tracking
+substitution. The existing floating-label font/transform finding remains
+separate: reference wrapper styles retain the transform and 16px type, while
+the candidate uses smaller untransformed type in floated states. Multiplying
+reference tracking by wrapper scale does not make different CSS inputs equal.
+This increment does not claim that removing the tracking substitution alone
+would fix a screenshot or a core transform defect.
+
+The new `reviewed-field-label-tracking-substitution` attribution requires the
+exact family label IDs/types, a unique reference wrapper and token declaration,
+no intervening tracking override, explicit candidate base/empty-state rules,
+and matching normal/effective/retained values. Unknown, duplicated or
+media-conditional field-tracking rules remain unreviewed; the attribution does
+not invent their cascade winner. Raw wrapper computed styles are retained,
+including transforms, rather than converting them into an apparent glyph-width
+correction. Validation independently replays each claim from pooled raw styles
+and rules, rejecting missing, duplicate, changed or fabricated evidence.
+
+A digest-checked **1,039-result prefix (436 static + 603 interaction)** contains
+**93** attributed observations: 12 static each for autocomplete, datepicker
+and timepicker; six static each for input, form-field and select; and 39
+interactions captured so far (36 form-field, three input). All records remain
+`application-plugin-authoring-defect`, `inputEquivalent: false`, and
+`currentPseudoStatePaintVerified: false`. The source register now contains
+**74** findings. Inventory, natural-line-box and partial-validation errors are
+zero, but full coverage and input equivalence remain **false**; this prefix is
+diagnostic evidence only.
+
+Implementation-plan item **5.23** restores the reference tracking token and
+wrapper typography/transform as a unit before evaluating residual core
+transform/shaping/placement defects. No renderer, fixture input, state driver,
+reference, threshold or active capture-harness source was changed.
+
+Focused verification: `node --test tests/material-parity/input-equivalence-audit.spec.mjs`
+passes **147/147** (117.5 seconds). The new tests cover all six field families
+in base, empty and active-empty forms (18 positive combinations), 24
+contradictory-input cases and 11 report-tampering cases. They preserve raw
+transformed/untransformed wrapper evidence rather than treating either form as
+an equivalent font/spacing representation.
+
+Final verification: `npm run parity:harness:check` passes **247/247**, with no
+skipped tests (114.2 seconds), and `git diff --check` passes. All ten live
+capture-harness files still match their recorded SHA-256 digests. The complete
+unfiltered matrix remains in progress; the new attribution and passing harness
+suite are not full audit acceptance.
+
 ## Omitted inherited component line-height and tracking (2026-09-12)
 
 Fresh captured reference ancestry distinguishes missing component inputs from

@@ -131,6 +131,15 @@ export const sourceAuditDefinitions = Object.freeze([
     focusedProof: 'examples/material-showcase/src/app/input-equivalence-proof.spec.ts: floating label preserves child typography',
   }),
   Object.freeze({
+    id: 'fixture-field-label-tracking-substitution',
+    introducedBy: '87bc351 adds base .4px tracking; 354084e adds empty-field .4/.65px split',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`selector: '\.field-label(?:\.empty-field-label)?'[^\n]*letterSpacing:`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'Material field-label typography and transform input translation',
+    justification: 'The captured filled floating-label token computes .496px on both the reference wrapper and its mat-label. The candidate explicitly substitutes .4px for its base label and .4/.65px for its higher-specificity empty-state label. Commit 87bc351 adds the base tracking alongside field-layout changes; 354084e introduces the state split and 7159b1d later changes the state predicate. Attribution requires exact label identity, active token evidence, captured wrapper context, selected candidate declaration and matching normal/effective/retained tracking. It does not multiply tracking by the reference wrapper scale or declare smaller untransformed type equivalent. Restore the reference typography and transform structure, then test the separately confirmed core transform and shaping defects with equal inputs.',
+  }),
+  Object.freeze({
     id: 'core-transform-translation-discards-css-units',
     introducedBy: 'existing CSS transform subset; confirmed by original floating-label reduction',
     file: 'src/app/services/dom/elements/css-transform.ts',

@@ -1759,6 +1759,110 @@ function floatingLabelTypographyReport() {
   return raw;
 }
 
+function fieldLabelTrackingReport(family = 'form-field', kind = 'base') {
+  const raw = floatingLabelTypographyReport(), entry = raw.results[0];
+  entry.family = family;
+  const { reference: ref, astylar: ast } = entry.inputTrees;
+  ref.nodes[0].attributes.id = `${family}-label`;
+  ref.styles = ref.styles.map(style => ({ ...style, letterSpacing: '0.496px' }));
+  ref.nodes[1].attributes.class = 'mdc-floating-label mdc-floating-label--float-above';
+  ref.rules.push({ active: true, selector: '.mdc-text-field--filled .mdc-floating-label', declarations: {
+    'letter-spacing': { value: 'var(--mat-form-field-filled-label-text-tracking, var(--mat-sys-body-large-tracking))' },
+  } });
+  ref.nodes[1].rules.push(1);
+  ast.nodes[0].authored.id = `${family}-label`;
+  ast.nodes[0].authored.class = kind === 'base' ? 'field-label' : 'field-label empty-field-label';
+  const tracking = kind === 'empty' ? '.65px' : '.4px';
+  ast.rules.find(r => r.selector === '.field-label').letterSpacing = '.4px';
+  ast.rules.push({ selector: '.field-label.empty-field-label', letterSpacing: tracking });
+  for (const field of ['resolvedStyle', 'normalResolvedStyle', 'interactionResolvedStyle']) ast.nodes[0][field].letterSpacing = tracking;
+  ast.nodes[0].retainedText.style.letterSpacing = tracking;
+  if (kind === 'empty') ref.styles[1].transform = 'matrix(1, 0, 0, 1, 0, -9.5)';
+  return raw;
+}
+
+test('field tracking substitution keeps reference wrapper and explicit state-rule inputs distinct', () => {
+  for (const family of ['form-field', 'input', 'select', 'autocomplete', 'datepicker', 'timepicker']) {
+    for (const kind of ['base', 'empty', 'active-empty']) {
+      const raw = fieldLabelTrackingReport(family, kind), before = structuredClone(raw);
+      const report = buildMaterialInputAudit(raw);
+      const findings = report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-field-label-tracking-substitution');
+      assert.equal(findings.length, 1, `${family}/${kind}`);
+      const finding = findings[0];
+      assert.equal(finding.property, 'letterSpacing');
+      assert.equal(finding.classification, 'application-plugin-authoring-defect');
+      assert.equal(finding.inputEquivalent, false);
+      assert.equal(finding.currentPseudoStatePaintVerified, false);
+      assert.equal(finding.values.reference, '0.496px');
+      assert.equal(finding.values.retained, kind === 'empty' ? '0.65px' : '0.4px');
+      assert.equal(finding.reviewEvidence.referenceChain[1].computed.transform,
+        kind === 'empty' ? 'matrix(1, 0, 0, 1, 0, -9.5)' : 'matrix(0.75, 0, 0, 0.75, 0, -20.14)');
+      assert.equal(finding.reviewEvidence.selectedRule.selector, kind === 'base' ? '.field-label' : '.field-label.empty-field-label');
+      assert.ok(report.sourceFindings.find(f => f.id === finding.reviewEvidence.sourceFinding)?.detected);
+      assert.ok(!validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('field-label tracking attributions')));
+      assert.equal(report.summary.inputEquivalent, false);
+      assert.deepEqual(raw, before);
+    }
+  }
+});
+
+test('field tracking substitution rejects unproven identity, token inheritance, cascade and retained input', () => {
+  const mutations = [
+    e => { e.family = 'card'; },
+    e => { e.inputTrees.reference.nodes[0].type = 'span'; },
+    e => { e.inputTrees.reference.nodes[0].attributes.id = 'other'; },
+    e => { e.inputTrees.reference.nodes[0].parent = 'missing'; },
+    e => { e.inputTrees.reference.nodes[1].type = 'div'; },
+    e => { e.inputTrees.reference.nodes[1].attributes.class = 'other'; },
+    e => { e.inputTrees.reference.nodes.push(structuredClone(e.inputTrees.reference.nodes[1])); },
+    e => { e.inputTrees.reference.nodes[0].rules.push(1); },
+    e => { e.inputTrees.reference.nodes[1].rules.push(1); },
+    e => { e.inputTrees.reference.rules[1].active = false; },
+    e => { e.inputTrees.reference.rules[1].selector = '.unrelated'; },
+    e => { e.inputTrees.reference.rules[1].declarations['letter-spacing'].value = '0.496px'; },
+    e => { e.inputTrees.reference.rules[1].declarations.font = { value: '14px Roboto' }; },
+    e => { e.inputTrees.reference.nodes[0].inline = { 'letter-spacing': { value: 'inherit' } }; },
+    e => { e.inputTrees.reference.nodes[1].attributes.style = 'letter-spacing: .496px'; },
+    e => { e.inputTrees.reference.styles[1].letterSpacing = '.372px'; },
+    e => { e.inputTrees.astylar.nodes[0].authored.class = 'other'; },
+    e => { e.inputTrees.astylar.nodes[0].retainedText.style.letterSpacing = '.372px'; },
+    e => { e.inputTrees.astylar.nodes[0].interactionResolvedStyle = { ...e.inputTrees.astylar.nodes[0].interactionResolvedStyle, letterSpacing: '.7px' }; },
+    e => { e.inputTrees.astylar.rules.find(r => r.selector === '.field-label').letterSpacing = '.5px'; },
+    e => { e.inputTrees.astylar.rules.push({ selector: '.field-label', letterSpacing: '.4px' }); },
+    e => { e.inputTrees.astylar.rules.push({ selector: '.field-label:hover', letterSpacing: '.4px' }); },
+    e => { e.inputTrees.astylar.rules.find(r => r.selector === '.field-label').mediaMaxWidth = '500px'; },
+    e => { e.inputTrees.astylar.rules.find(r => r.selector === '.field-label.empty-field-label').letterSpacing = '.8px'; },
+  ];
+  for (const mutate of mutations) {
+    const raw = fieldLabelTrackingReport('timepicker', 'empty');
+    mutate(raw.results[0]);
+    const evidence = collectRetainedTypographyEvidence(raw.results, collectFullTreeInventory(raw.results));
+    assert.ok(!evidence.differences.some(d => d.attribution === 'reviewed-field-label-tracking-substitution'), String(mutate));
+  }
+});
+
+test('field tracking claims replay exact token, state rule and pooled values', () => {
+  const baseline = buildMaterialInputAudit(fieldLabelTrackingReport('autocomplete', 'empty'));
+  const mutations = [
+    (_r, f) => { f.reviewEvidence.referenceChain.pop(); },
+    (_r, f) => { f.reviewEvidence.selectedRule.letterSpacing = '.4px'; },
+    (_r, f) => { f.values.retained = '.496px'; },
+    (_r, f) => { f.inputEquivalent = true; },
+    (_r, f) => { f.currentPseudoStatePaintVerified = true; },
+    (_r, f) => { f.classification = 'confirmed-core-renderer-defect'; },
+    (r, f) => { r.retainedTypography.differences.push(structuredClone(f)); },
+    r => { r.retainedTypography.differences = []; },
+    r => { r.retainedTypography.comparisons[0].properties.letterSpacing.normal = '.7px'; },
+    r => { r.elementInventory.rules.find(x => x.side === 'reference' && x.value.declarations?.['letter-spacing']).value.active = false; },
+    r => { r.elementInventory.rules.find(x => x.side === 'astylar' && x.value.selector === '.field-label.empty-field-label').value.letterSpacing = '.4px'; },
+  ];
+  for (const mutate of mutations) {
+    const report = structuredClone(baseline);
+    mutate(report, report.retainedTypography.differences.find(d => d.attribution === 'reviewed-field-label-tracking-substitution'));
+    assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('field-label tracking attributions')), String(mutate));
+  }
+});
+
 test('attributes floating-label font substitution without equating scaled and smaller text inputs', () => {
   const raw = floatingLabelTypographyReport();
   const evidence = collectRetainedTypographyEvidence(raw.results, collectFullTreeInventory(raw.results));
