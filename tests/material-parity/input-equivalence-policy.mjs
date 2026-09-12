@@ -591,6 +591,15 @@ export const sourceAuditDefinitions = Object.freeze([
     justification: 'Material uses a flex header row and a flex:auto connector with min-width:32px and horizontal negative margins. The candidate uses absolute headers and a connector with hand-selected breakpoint widths/offsets. Translate the actual flex constraints before diagnosing any remaining core defect.',
   }),
   Object.freeze({
+    id: 'fixture-stepper-number-wrapper-substitution',
+    introducedBy: '2f44011 initial fixed centered badge; 2f14e60 later stepper row styling',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`selector: '\.step-badge',[^\n]*width: '24px', height: '24px'[^\n]*textAlign: 'center'`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase stepper numeric-icon structure; core CSS percentage transforms',
+    justification: 'Reference numeric icons keep start-aligned text inside a separate absolutely positioned mat-step-icon-content wrapper, with top/left 50% and translate(-50%, -50%). Candidate step-badge spans combine the circle and number into a fixed 24px square with textAlign:center. Attribute alignment occurrences only when the exact text mapping, complete horizontal-LTR reference ancestry, active positioning rule and candidate normal/effective/retained inputs agree. This substitutes a different layout mechanism, not equivalent inputs or proof of a core text-alignment defect. The independently failing percentage-transform reduction explains why retaining a centered-span workaround would conceal the unsupported/incorrect original path; restore the original wrapper after the owning core fix, without compensating offsets.',
+  }),
+  Object.freeze({
     id: 'fixture-grid-list-missing-reference-gutter',
     introducedBy: '2f44011 feat(example): add Material component showcase',
     file: 'examples/material-showcase/src/app/astylar.component.ts',

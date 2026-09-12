@@ -17,6 +17,70 @@ selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Stepper numeric icons replace the original positioning mechanism (2026-09-12)
+
+All **24 numeric-icon alignment differences in the 12 fresh static stepper
+cases** now have captured-rule/structure attribution. The reference number
+computes `text-align: start` throughout its horizontal-LTR ancestor chain. It
+is centered by a separate `.mat-step-icon-content` wrapper authored as:
+
+```css
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+display: flex;
+```
+
+In the light desktop capture the wrapper's computed top/left are 12px and its
+transform is `matrix(1, 0, 0, 1, -4.5, -9.5)`. The numeric span itself is 9x19px.
+The candidate instead puts the number directly in a 24x24px `.step-badge` span
+with explicit `textAlign: 'center'`; its normal, effective and retained alignment
+all agree with that different authored input. This fixed centered badge already
+exists in `2f44011`; `2f14e60` later adjusts stepper row styling.
+
+Source finding `fixture-stepper-number-wrapper-substitution` and plan item
+**5.25** preserve this distinction. The correction is not to shift the number
+or accept start/center as equivalent because both screenshots look centered.
+Restore the original numeric span and separate positioning wrapper after
+correcting the independently reproduced core percentage-transform semantics.
+The existing equal-input transform reduction is the core proof; this finding
+does not infer another core text-alignment defect from unequal structures.
+Font size, ink, line metrics, current glyph paint and other stepper composition
+differences remain separately attributed or unresolved.
+
+The reader requires the exact reviewed text paths, unique complete reference
+ancestry through the frame, horizontal LTR/normal-or-isolate bidi, automatic
+last-line alignment, and unambiguous active wrapper positioning declarations.
+It checks the explicit candidate rule plus normal/effective/retained values.
+Conflicting positioning declarations, inline overrides, missing/cyclic ancestry,
+duplicate rules, changed dimensions or alignment, and unsupported rule contexts
+cannot receive the attribution. An independent replay also rejects removal,
+duplication or alteration of the resulting report claims. Raw inputs remain
+unchanged, and the classification is explicitly not input equivalence or paint
+verification.
+
+The three focused regression groups pass, including **22 malformed-input
+mutations and eight report-tampering controls**. Fresh static inventory inspection
+returns 24 attributed observations, no remaining unresolved stepper text-alignment
+observations, zero tree errors and zero reference-context gaps. Stepper interaction
+captures have not reached this part of the live matrix yet; their attribution
+must be verified when available. The source inventory now has 76 findings.
+
+Button-toggle labels were also inspected: their reference spans inherit center
+alignment from native buttons, while candidate labels sit in centered flex divs
+and retain left alignment. The captured author rules do not declare that native
+button alignment. Those records remain unresolved pending an explicit browser
+default/structure proof; they were not folded into the stepper classification.
+`npm run parity:harness:check` passes **293/293**, with no failures or skipped
+tests (129.4 seconds). A verified live prefix contains **436 static and 1,222
+interaction cases**: result digests, partial-report validation, tree inventory,
+reference context and natural-line-box supplement checks all return zero errors.
+All 76 source findings are detected, and all ten live capture-module hashes still
+match the manifest. The prefix retains 3,330 unresolved typography observations
+and explicitly reports `inputEquivalent: false`; it is not full-audit acceptance.
+No renderer, fixture, reference or live capture-module change was made.
+
 ## Fresh supplemental evidence bound to the current run (2026-09-12)
 
 The thirteen picker, bottom-sheet and slider diagnostic cases now have fresh

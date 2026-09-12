@@ -1210,6 +1210,96 @@ function omittedStepperPanelReport(selected = true) {
   return raw;
 }
 
+function stepperNumberAlignmentReport() {
+  const raw = templateTypographyReport('stepper'), { reference: r, astylar: a } = raw.results[0].inputTrees;
+  r.styles[0] = { ...r.styles[0], textAlign: 'start', direction: 'ltr', writingMode: 'horizontal-tb', unicodeBidi: 'normal', textAlignLast: 'auto', display: 'block' };
+  r.nodes[0].parent = 'frame';
+  r.nodes.push({ key: 'frame', parent: null, type: 'main', attributes: { class: 'frame' }, ownText: '', style: 0, rules: [], pseudoElements: [] });
+  r.styles.push({ ...r.styles[0], position: 'absolute', top: '12px', left: '12px', display: 'flex', transform: 'matrix(1, 0, 0, 1, -4.5, -9.5)' });
+  r.rules = [{ selector: '.mat-step-icon-content', active: true, conditions: [], declarations: Object.fromEntries(Object.entries({
+    position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', display: 'flex',
+  }).map(([key, value]) => [key, { value, important: false }])) }];
+  for (const n of r.nodes.filter(n => n.attributes?.class === 'mat-step-icon-content')) { n.style = 1; n.rules = [0]; }
+  a.rules = [{ selector: '.step-badge', width: '24px', height: '24px', textAlign: 'center' }];
+  for (const n of a.nodes.filter(n => n.authored?.class === 'step-badge')) {
+    n.normalResolvedStyle = { width: '24px', height: '24px', textAlign: 'center' };
+    n.interactionResolvedStyle = { ...n.normalResolvedStyle };
+    n.resolvedStyle = { ...n.normalResolvedStyle };
+    n.retainedText.style.textAlign = 'center';
+  }
+  return raw;
+}
+
+test('stepper numeric alignment retains the original percentage wrapper and unequal centered-span input', () => {
+  const raw = stepperNumberAlignmentReport(), before = structuredClone(raw), report = buildMaterialInputAudit(raw);
+  const findings = report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-stepper-number-wrapper-substitution');
+  assert.equal(findings.length, 2);
+  for (const f of findings) {
+    assert.deepEqual(f.values, { reference: 'start', normal: 'center', effective: 'center', retained: 'center' });
+    assert.equal(f.inputEquivalent, false);
+    assert.equal(f.currentPseudoStatePaintVerified, false);
+    assert.equal(f.classification, 'application-plugin-authoring-defect');
+    assert.equal(f.reviewEvidence.referenceChain.at(-1).node, 'frame');
+    assert.equal(f.reviewEvidence.referenceContentRule.declarations.transform.value, 'translate(-50%, -50%)');
+    assert.ok(report.sourceFindings.find(s => s.id === f.reviewEvidence.sourceFinding)?.detected);
+  }
+  assert.ok(!validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('stepper number alignment')));
+  assert.deepEqual(raw, before);
+});
+
+test('stepper alignment attribution rejects incomplete or contradictory layout and alignment evidence', () => {
+  const mutations = [
+    r => { r.nodes[0].parent = 'missing'; },
+    r => { r.nodes[0].parent = r.nodes[0].key; },
+    r => { r.nodes.at(-1).attributes.class = 'other'; },
+    r => { r.nodes.push(structuredClone(r.nodes.at(-1))); },
+    r => { r.styles[0].direction = 'rtl'; },
+    r => { r.styles[0].textAlignLast = 'center'; },
+    r => { r.styles[0].unicodeBidi = 'plaintext'; },
+    r => { r.nodes.at(-1).inline = { all: 'revert' }; },
+    r => { r.styles[1].position = 'relative'; },
+    r => { r.rules[0].active = false; },
+    r => { r.rules[0].conditions = ['@layer unknown']; },
+    r => { r.rules[0].declarations.transform.value = 'translate(-12px, -12px)'; },
+    r => { for (const n of r.nodes.filter(n => n.attributes?.class === 'mat-step-icon-content')) n.inline = { transform: 'none' }; },
+    r => { r.rules.push({ active: true, selector: '.override', declarations: { transform: { value: 'none' } } });
+      for (const n of r.nodes.filter(n => n.attributes?.class === 'mat-step-icon-content')) n.rules.push(1); },
+    r => { r.rules[0].declarations.top.important = true; },
+    r => { r.rules[0].declarations['text-align'] = { value: 'center' }; },
+    (_r, a) => { a.rules[0].textAlign = 'left'; },
+    (_r, a) => { a.rules[0].mediaMaxWidth = '500px'; },
+    (_r, a) => { a.rules.push({ ...a.rules[0] }); },
+    (_r, a) => { for (const n of a.nodes.filter(n => n.authored?.class === 'step-badge')) n.interactionResolvedStyle.textAlign = 'left'; },
+    (_r, a) => { for (const n of a.nodes.filter(n => n.authored?.class === 'step-badge')) n.normalResolvedStyle.width = '25px'; },
+    (_r, a) => { for (const n of a.nodes.filter(n => n.authored?.class === 'step-badge')) n.authored.style = { textAlign: 'center' }; },
+  ];
+  for (const mutate of mutations) {
+    const raw = stepperNumberAlignmentReport();
+    mutate(raw.results[0].inputTrees.reference, raw.results[0].inputTrees.astylar);
+    const evidence = collectRetainedTypographyEvidence(raw.results, collectFullTreeInventory(raw.results));
+    assert.ok(!evidence.differences.some(d => d.attribution === 'reviewed-stepper-number-wrapper-substitution'), String(mutate));
+  }
+});
+
+test('stepper alignment claims replay from captured structure rather than report flags', () => {
+  const baseline = buildMaterialInputAudit(stepperNumberAlignmentReport());
+  const mutations = [
+    (_r, f) => { f.inputEquivalent = true; },
+    (_r, f) => { f.reviewEvidence.referenceChain.pop(); },
+    (_r, f) => { f.values.reference = 'center'; },
+    (_r, f) => { f.classification = 'confirmed-core-renderer-defect'; },
+    (r, f) => { r.retainedTypography.differences.push(structuredClone(f)); },
+    r => { r.retainedTypography.differences = []; },
+    r => { r.elementInventory.rules.find(p => p.side === 'astylar' && p.value.selector === '.step-badge').value.width = '25px'; },
+    r => { r.elementInventory.variants.find(v => v.side === 'reference').nodes.find(n => n.key === 'frame').parent = 'missing'; },
+  ];
+  for (const mutate of mutations) {
+    const report = structuredClone(baseline);
+    mutate(report, report.retainedTypography.differences.find(d => d.attribution === 'reviewed-stepper-number-wrapper-substitution'));
+    assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('stepper number alignment')), String(mutate));
+  }
+});
+
 test('stepper inactive-panel omission is an unequal structural input, not an absent core text entry', () => {
   for (const selected of [true, false]) {
     const raw = omittedStepperPanelReport(selected), before = structuredClone(raw), report = buildMaterialInputAudit(raw);
