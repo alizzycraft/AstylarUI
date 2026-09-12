@@ -326,7 +326,8 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   const report = parityReport({}, {});
   const audit = buildMaterialInputAudit(report);
   assert.equal(audit.coverage.visualParityGreen, true);
-  assert.equal(audit.sourceFingerprints.length, 29);
+  assert.equal(audit.sourceFingerprints.length, 30);
+  assert.ok(audit.sourceFingerprints.some(({ file }) => file === 'examples/material-showcase/node_modules/@angular/material/fesm2022/datepicker.mjs'));
   const tabProof = 'examples/material-showcase/src/app/material-plugin/tab-panel-input-audit.spec.ts';
   assert.ok(audit.sourceFingerprints.some(({ file }) => file === tabProof));
   assert.ok(audit.focusedProofs.some(({ file, line, status }) => file === tabProof && line > 0 && status !== 'missing'));
@@ -2105,6 +2106,115 @@ function calendarNavigationReport(direction = 'previous', yearView = false) {
   ast.nodes.push(candidate);
   return raw;
 }
+
+function calendarCloseOmissionReport(yearView = false) {
+  const raw = yearView ? calendarYearTypographyReport() : calendarDayTypographyReport();
+  const { reference: ref, astylar: ast } = raw.results[0].inputTrees;
+  const node = (key, parent, type, attributes = {}, ownText = '') => ({ key, parent, type, attributes, ownText,
+    style: 0, rules: [], pseudoElements: [] });
+  const dialog = ref.nodes.find(n => n.key === 'dialog');
+  dialog.parent = 'datepicker-content';
+  Object.assign(dialog.attributes, { cdktrapfocus: '', 'aria-modal': 'true' });
+  ref.nodes.push(node('datepicker-content', null, 'mat-datepicker-content', { class: 'mat-datepicker-content' }),
+    node('close', 'dialog', 'button', { type: 'button', matbutton: 'elevated',
+      class: 'mat-datepicker-close-button mat-mdc-raised-button cdk-visually-hidden' }),
+    node('close-label', 'close', 'span', { class: 'mdc-button__label' }, 'Close calendar'));
+  ref.rules = [{ selector: '.cdk-visually-hidden', active: true,
+    declarations: { clip: { value: 'rect(0px, 0px, 0px, 0px)' }, height: { value: '1px' } } }];
+  ref.nodes.find(n => n.key === 'close').rules = [0];
+  // Deliberately capture a non-1px used size and omit computed clip. Neither
+  // the class nor its authored rule proves actual hidden/focused rendering.
+  ref.styles.push({ ...ref.styles[0], display: 'flex', position: 'absolute', visibility: 'visible', width: '64px', height: '40px' });
+  ref.nodes.find(n => n.key === 'close').style = ref.styles.length - 1;
+  return raw;
+}
+
+test('calendar close omission preserves unequal controls in current and retained stages for both views', () => {
+  for (const yearView of [false, true]) {
+    const raw = calendarCloseOmissionReport(yearView), before = structuredClone(raw), evidence = controlEvidence(raw);
+    const omitted = evidence.gaps.filter(g => g.attribution === 'reviewed-calendar-close-control-omission');
+    assert.equal(omitted.length, 1);
+    assert.equal(omitted[0].referenceNode, 'close-label');
+    assert.equal(omitted[0].classification, 'application-plugin-authoring-defect');
+    assert.equal(omitted[0].inputEquivalent, false);
+    assert.equal(omitted[0].finalRasterVerified, false);
+    assert.deepEqual(omitted[0].reviewEvidence.referenceDialogChildOrder, ['calendar', 'close']);
+    assert.deepEqual(omitted[0].reviewEvidence.candidateMatchingControls, []);
+    assert.equal(omitted[0].reviewEvidence.computedClip, null);
+    assert.equal(omitted[0].reviewEvidence.focusRevealAndDismissalVerified, false);
+    assert.equal(omitted[0].reviewEvidence.visibilityVerdict, 'not-established-by-structural-audit');
+    assert.ok(!evidence.comparisons.some(c => c.referenceNode === 'close-label'));
+    assert.deepEqual(raw, before);
+    const report = buildMaterialInputAudit(raw);
+    const retained = report.retainedTypography.gaps.find(g => g.attribution === 'reviewed-calendar-close-control-omission');
+    assert.deepEqual(retained.referenceNodes, ['close-label']);
+    assert.deepEqual(retained.astylarNodes, []);
+    assert.deepEqual(retained.reviewEvidence, omitted[0].reviewEvidence);
+    assert.ok(!report.retainedTypography.controlTextMappings.some(m => m.referenceNode === 'close-label'));
+    assert.equal(report.summary.inputEquivalent, false);
+    assert.ok(report.sourceFindings.find(s => s.id === 'fixture-calendar-close-control-omitted')?.detected);
+    assert.ok(!validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('calendar close')));
+  }
+});
+
+test('calendar close omission rejects changed control paths, contexts and candidate counterparts', () => {
+  for (const yearView of [false, true]) for (const mutate of [
+    ref => { ref.nodes.find(n => n.key === 'close-label').ownText = 'Close something else'; },
+    ref => { ref.nodes.find(n => n.key === 'close-label').parent = 'calendar'; },
+    ref => { ref.nodes.push({ ...ref.nodes.find(n => n.key === 'close-label') }); },
+    ref => { ref.nodes.push({ ...ref.nodes.find(n => n.key === 'close'), key: 'other-close' }); },
+    ref => { ref.nodes.find(n => n.key === 'close').attributes.matbutton = 'text'; },
+    ref => { ref.nodes.find(n => n.key === 'close').attributes.disabled = ''; },
+    ref => { ref.nodes.find(n => n.key === 'dialog').attributes['aria-modal'] = 'false'; },
+    ref => { delete ref.nodes.find(n => n.key === 'dialog').attributes.cdktrapfocus; },
+    ref => { ref.nodes.find(n => n.key === 'dialog').parent = 'unrelated-overlay'; },
+    ref => { ref.nodes.find(n => n.key === 'period').ownText = 'OCT 2050'; },
+    ref => { ref.nodes.find(n => n.key === 'close').style = 999; },
+    ref => { ref.nodes.find(n => n.key === 'close').rules = [999]; },
+    (_ref, ast) => { ast.resolvedStyleSource = 'projected-mesh'; },
+    (_ref, ast) => { ast.nodes.find(n => n.key === 'ast-header').parent = 'unrelated-popup'; },
+    (_ref, ast) => { ast.nodes.find(n => n.key === 'ast-popup').authored.role = 'presentation'; },
+    (_ref, ast) => { ast.nodes.find(n => n.key === 'ast-period').authored.value = 'Close calendar'; },
+    (_ref, ast) => { ast.nodes[0].paintedControlText.text = 'Close calendar'; },
+    (_ref, ast) => { ast.nodes.push({ key: 'extra', parent: 'ast-popup', authored: { type: 'button', id: 'dismiss', value: 'Dismiss' } }); },
+    (_ref, ast) => { ast.nodes.push({ key: 'extra', parent: 'ast-popup', authored: { type: 'span', id: 'dismiss', role: 'button', textContent: 'Dismiss' } }); },
+    (_ref, ast) => { ast.nodes.push({ key: 'extra', parent: 'ast-popup', authored: { type: 'input', id: 'close-input' } }); },
+  ]) {
+    const raw = calendarCloseOmissionReport(yearView), trees = raw.results[0].inputTrees;
+    mutate(trees.reference, trees.astylar);
+    assert.ok(!controlEvidence(raw).gaps.some(g => g.attribution === 'reviewed-calendar-close-control-omission'), String(mutate));
+  }
+});
+
+test('calendar close omission classification does not assume a hidden class proves visibility', () => {
+  const raw = calendarCloseOmissionReport(), ref = raw.results[0].inputTrees.reference;
+  ref.nodes.find(n => n.key === 'close').attributes.class = 'mat-datepicker-close-button mat-mdc-raised-button';
+  const omission = controlEvidence(raw).gaps.find(g => g.attribution === 'reviewed-calendar-close-control-omission');
+  assert.ok(omission);
+  assert.equal(omission.reviewEvidence.visibilityVerdict, 'not-established-by-structural-audit');
+  assert.equal(omission.reviewEvidence.focusRevealAndDismissalVerified, false);
+  assert.equal(omission.inputEquivalent, false);
+});
+
+test('calendar close omission validation replays evidence and rejects deleted or fabricated records', () => {
+  for (const stage of ['controlTypography', 'retainedTypography']) for (const mutation of
+    ['delete', 'duplicate', 'context', 'reference', 'candidate', 'revision', 'equivalent', 'raster', 'focused', 'computed-clip']) {
+    const report = buildMaterialInputAudit(calendarCloseOmissionReport());
+    const gap = report[stage].gaps.find(g => g.attribution === 'reviewed-calendar-close-control-omission');
+    assert.ok(gap);
+    if (mutation === 'delete') report[stage].gaps = report[stage].gaps.filter(g => g !== gap);
+    if (mutation === 'duplicate') report[stage].gaps.push(structuredClone(gap));
+    if (mutation === 'context') gap.reviewEvidence.context.period = 'OCT 2026';
+    if (mutation === 'reference') gap.reviewEvidence.referenceNodes[0].text = 'Dismiss';
+    if (mutation === 'candidate') gap.reviewEvidence.candidateSubtree.pop();
+    if (mutation === 'revision') gap.reviewEvidence.revision++;
+    if (mutation === 'equivalent') gap.inputEquivalent = true;
+    if (mutation === 'raster') gap.finalRasterVerified = true;
+    if (mutation === 'focused') gap.reviewEvidence.focusRevealAndDismissalVerified = true;
+    if (mutation === 'computed-clip') gap.reviewEvidence.computedClip = 'rect(0px, 0px, 0px, 0px)';
+    assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('calendar close')), `${stage}:${mutation}`);
+  }
+});
 
 function calendarPeriodTypographyReport(yearView = false) {
   const raw = yearView ? calendarYearTypographyReport() : calendarDayTypographyReport();

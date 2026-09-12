@@ -12,6 +12,67 @@ tests pass). A missing selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Calendar close control is omitted, not a missing core paint sample (2026-09-12)
+
+Source finding `fixture-calendar-close-control-omitted` identifies the omitted
+control in the candidate popup introduced by `87f7f83`. The current authored
+branch at `astylar.component.ts:1054` constructs a header, date/year grid and
+selection marker but no close button. The packaged Material template in
+`@angular/material/fesm2022/datepicker.mjs` contains a raised close button,
+binds `cdk-visually-hidden` to the inverse of `_closeButtonFocused`, updates that
+flag on focus/blur, and invokes `datepicker.close()` on click. That package
+file is now included in the audit's source fingerprints (30 files total).
+The source declares these behaviors; this increment does not claim to have
+executed a new live focus/activation test.
+
+All **41** previously unexplained current-control mapping gaps are this
+omission: **33 month-view** and **8 year-view** states. Each gap is retained
+with `application-plugin-authoring-defect`, `inputEquivalent:false` and
+`finalRasterVerified:false`. Exact evidence includes the close label/button,
+dialog and content ancestry, sibling calendar/order, matching date/range
+context, complete authored candidate popup subtree, and core capture revision.
+Unknown candidate controls, duplicate nodes, mismatched context, changed
+reference controls, missing styles/rules or a candidate counterpart prevent
+the reviewed attribution. No candidate paint or typography is fabricated.
+
+The retained-text stage now splits these same **41** omissions out of its
+anonymous-reference groups. Other anonymous text remains unresolved. Eight
+year-view groups contained only the missing close label, so unresolved retained
+mapping/stage gaps fall **3,616 to 3,608**; this does not remove any reference
+node. Both stages replay the structural proof during validation, including in
+partial mode. Removing, duplicating or altering an omission record fails.
+
+Do not treat `cdk-visually-hidden` as proof of harmless/non-rendered text. In
+the captured light desktop activation, the button has computed width **64px**
+and height **40px**, despite the hidden rule's authored 1px dimensions. The
+rule also declares `clip:rect(0px,0px,0px,0px)`, but the existing tree capture
+does not include computed `clip`. All 41 omission records therefore preserve
+`computedClip:null`, an unknown visibility verdict and unverified focus/reveal
+behavior. The implementation plan requires the original control, clipping,
+focus transitions, activation and focus restoration, tested live in both
+views. Escape and outside-click dismissal are not equivalent substitutes.
+
+The focused `calendar close omission` tests pass **4/4**, including both
+views, 40 contradictory input variants, a no-hidden-class control and 20
+deleted/duplicated/tampered report variants. The first full harness run had
+**210/211** passing: its fingerprint-count assertion still expected 29 files.
+That assertion was updated to 30 and explicitly checks the packaged datepicker
+source. The rerun of `npm run parity:harness:check` passes **211/211** (122
+focused audit tests). No renderer, reference, fixture, capture runtime or
+visual threshold changed in this increment.
+
+Full report regeneration inventories **436 static + 1,875 interaction cases**,
+with **69** detected source findings and **2,215** current control-text
+comparisons. The 41 control gaps are now explained omissions, not equivalence.
+The complete audit still correctly exits 1 for **3,896** resolved-style
+attributions, **2,065** control typography differences, **3,608** retained
+mapping/stage gaps and **14,624** retained typography differences. This is
+bounded attribution progress, not completion of the input-equivalence audit.
+The generator and the same full-evidence command with `--check` produce those
+same four remaining failure groups; no stale-report mismatch was reported.
+The existing complete enforced visual run remains the runtime baseline; it
+was not rerun for this audit-report-only increment.
+
 ## Calendar period text/vector composition is explicitly unequal (2026-09-12)
 
 Source finding `fixture-calendar-period-vector-flattened-into-text` traces the

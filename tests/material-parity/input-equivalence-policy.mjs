@@ -416,6 +416,15 @@ export const sourceAuditDefinitions = Object.freeze([
     justification: 'The reference period control contains a text span beside a 10x5 SVG triangle, inverted with a CSS transform in year view, and describes itself through the calendar live-period label. Candidate replaces the composition with one value string ending in a triangle font glyph and omits the description relationship. The full candidate string is not equivalent to the original text/vector input. The header rule also omits component font/tracking tokens and fixes ink instead of using the Material period text-color token chain. Keep these unequal inputs explicit; restore original geometry, structure and declarations through core rather than tuning glyphs, offsets or baseline metrics.',
   }),
   Object.freeze({
+    id: 'fixture-calendar-close-control-omitted',
+    introducedBy: '87f7f83 fix(example): render Material picker overlays',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`family === 'datepicker' && state\.open \? \[\{ type: 'div' as const, id: 'datepicker-popup'(?:(?!Close calendar|datepicker-close)[\s\S])*?\n      \] \}\] : \[\]\),`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase calendar close control, focus reveal and dismissal semantics',
+    justification: 'The authored popup branch contains header, day/year grids and a selection marker but no close control. The captured reference dialog retains a raised Close calendar button and its label in both views. The pinned Material datepicker template applies cdk-visually-hidden until focus, toggles that state on focus/blur, and calls datepicker.close() on click. That authored control and transition are missing before core layout or paint. Captured rules retain clip:rect(0px,0px,0px,0px), but computed clip and live focus behavior are not captured here; the button must not be declared harmless, non-rendered or equivalent to Escape/outside dismissal. Restore equivalent structure and declarations before evaluating core behavior.',
+  }),
+  Object.freeze({
     id: 'fixture-picker-commit-not-implemented',
     introducedBy: '2f44011 feat(example): add Material component showcase',
     file: 'examples/material-showcase/src/app/astylar.component.ts',

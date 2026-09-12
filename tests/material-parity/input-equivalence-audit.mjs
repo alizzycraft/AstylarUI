@@ -220,7 +220,24 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
     }) ?? [];
     if (invalidMappings.length) errors.push(`${invalidMappings.length} ${label} mappings lack captured overlay/content context evidence`);
   }
-  if (requireComplete && report.controlTypography?.gaps.length > 0) errors.push(`${report.controlTypography.gaps.length} control texture mappings or stage fields require review`);
+  const unresolvedControlGaps = report.controlTypography?.gaps.filter(gap => !isReviewedCalendarCloseGap(gap, report.elementInventory)) ?? [];
+  if (requireComplete && unresolvedControlGaps.length > 0) errors.push(`${unresolvedControlGaps.length} control texture mappings or stage fields require review`);
+  for (const [stage, gaps] of [['control', report.controlTypography?.gaps ?? []], ['retained', report.retainedTypography?.gaps ?? []]]) {
+    const omissions = gaps.filter(gap => gap.attribution === 'reviewed-calendar-close-control-omission');
+    if (omissions.some(gap => !isReviewedCalendarCloseGap(gap, report.elementInventory))) {
+      errors.push(`${stage} calendar close omissions lack exact captured structural evidence`);
+    }
+    const identities = omissions.map(gap => JSON.stringify([gap.case, gap.referenceNode ?? gap.referenceNodes?.[0]]));
+    if (new Set(identities).size !== identities.length) errors.push(`duplicate ${stage} calendar close omissions`);
+    // Replay expected omissions too: deleting the reviewed record must not turn
+    // the absent control into a green/missing typography observation.
+    for (const item of report.elementInventory.cases.filter(c => c.side === 'reference' && /^(static|interaction):datepicker@/.test(c.case))) {
+      for (const node of report.elementInventory.variants[item.variant].nodes.filter(n => n.ownText?.trim() === 'Close calendar')) {
+        if (reviewedCalendarCloseOmission(item.case, node.key, report.elementInventory) &&
+            !identities.includes(JSON.stringify([item.case, node.key]))) errors.push(`missing ${stage} calendar close omission: ${item.case}`);
+      }
+    }
+  }
   const reviewedControlKinds = {
     'reviewed-button-tracking-input': 'application-plugin-authoring-defect',
     'reviewed-disabled-button-ink': 'application-plugin-authoring-defect',
@@ -289,7 +306,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
     !isReviewedStepperPanelGap(gap, report.elementInventory));
   if (invalidStepperGaps.length) errors.push(`${invalidStepperGaps.length} stepper panel substitutions lack captured structural evidence`);
   const unresolvedRetainedGaps = retainedGaps.filter((gap) => !isReviewedHiddenRetainedGap(gap, report.elementInventory) &&
-    !isReviewedStepperPanelGap(gap, report.elementInventory));
+    !isReviewedStepperPanelGap(gap, report.elementInventory) && !isReviewedCalendarCloseGap(gap, report.elementInventory));
   if (requireComplete && unresolvedRetainedGaps.length > 0) errors.push(`${unresolvedRetainedGaps.length} retained typography mappings or stage fields require review`);
   const reviewedTypographyKinds = { 'reviewed-heading-mask': 'parity-harness-defect',
     'reviewed-table-font-input': 'application-plugin-authoring-defect',
@@ -337,6 +354,7 @@ export function renderMaterialInputAuditMarkdown(report) {
     `Control-owned text routing: ${report.retainedTypography.controlTextMappings.length} reviewed text-owner correspondences use the current core-control-texture stage, not invented registry entries. Composite calendar headers preserve different reference and candidate strings plus original vector inputs. Independent input differences and any current-paint gaps remain enforced; this is not wrapper or input equivalence.`,
     `Hidden retained-text stage: ${report.retainedTypography.gaps.filter((gap) => isReviewedHiddenRetainedGap(gap, report.elementInventory)).length} gap records have complete captured ancestry explaining why core creates no text entry below display:none. The records and raw styles remain; reference display:none and visibility:hidden mechanisms are distinguished, not normalized into equivalent inputs.`,
     `Stepper structure: ${report.retainedTypography.gaps.filter((gap) => isReviewedStepperPanelGap(gap, report.elementInventory)).length} gap records document an omitted inactive reference panel, classified as unequal fixture structure rather than missing core text. Active-panel typography remains independently compared.`,
+    `Calendar close control: ${report.controlTypography.gaps.filter(gap => isReviewedCalendarCloseGap(gap, report.elementInventory)).length} preserved gap records identify a reference close-button/label path omitted from the candidate popup. The retained stage preserves the same omission separately from remaining anonymous labels. These are unequal authored controls, not invented paint entries, harmless hidden text or equivalent Escape/outside dismissal. Computed clipping and focus-to-reveal behavior remain unverified by these structural captures.`,
     '',
     `Control texture typography: ${report.controlTypography.comparisons.length} mapped current-texture observations; ${report.controlTypography.gaps.length} mapping/stage gaps and ${report.controlTypography.differences.length} raw computed-to-paint property differences, including individually reviewed stage-representation differences. Parsed CSS lengths and line-height multipliers are normalized independently of declarations. This does not prove final material effects, placement, visibility or raster parity.`,
     '',
@@ -1439,6 +1457,12 @@ export function collectRetainedTypographyEvidence(cases, inventory, controlTypog
       const remainingReference = [];
       for (const referenceNode of anonymousReference) {
         const identity = { family: entry.family, referenceNodes: [referenceNode], astylarNodes: anonymousAstylar };
+        const closeOmission = entry.family === 'datepicker' && anonymousAstylar.length === 0 &&
+          reviewedCalendarCloseOmission(key, referenceNode, inventory);
+        if (closeOmission) {
+          gap(key, undefined, reason, { ...identity, ...calendarCloseGapAttribution(closeOmission) });
+          continue;
+        }
         const reviewEvidence = reviewedStepperPanelEvidence({ case: key, reason, ...identity }, inventory);
         if (!reviewEvidence) { remainingReference.push(referenceNode); continue; }
         gap(key, undefined, reason, { ...identity,
@@ -2058,6 +2082,104 @@ function reviewedSnackbarActionControl(ref, referenceTree, astylarTree) {
   } };
 }
 
+function reviewedCalendarCloseOmission(key, referenceNode, inventory) {
+  if (!/^(static|interaction):datepicker@/.test(key) || inventory.errors.some(e => e.case === key)) return;
+  const unique = nodes => nodes.length === 1 ? nodes[0] : undefined;
+  const refCase = unique(inventory.cases.filter(c => c.case === key && c.side === 'reference'));
+  const astCase = unique(inventory.cases.filter(c => c.case === key && c.side === 'astylar'));
+  if (!refCase || !astCase || !Number.isInteger(astCase.resolvedStyleRevision)) return;
+  const referenceTree = inventory.variants[refCase.variant], astylarTree = inventory.variants[astCase.variant];
+  if (referenceTree.family !== 'datepicker' || astylarTree.family !== 'datepicker' ||
+      astylarTree.resolvedStyleEvidenceVersion !== 2 || astylarTree.resolvedStyleSource !== 'core-style-inspection') return;
+  const rn = referenceTree.nodes, an = astylarTree.nodes;
+  if (new Set(rn.map(n => n.key)).size !== rn.length || new Set(an.map(n => n.key)).size !== an.length) return;
+  const cls = (n, name) => String(n?.attributes?.class ?? '').split(/\s+/).includes(name);
+  const leaf = unique(rn.filter(n => n.key === referenceNode));
+  const button = unique(rn.filter(n => n.type === 'button' && cls(n, 'mat-datepicker-close-button')));
+  const dialog = button && unique(rn.filter(n => n.key === button.parent && n.type === 'div' && cls(n, 'mat-datepicker-content-container')));
+  const content = dialog && unique(rn.filter(n => n.key === dialog.parent && n.type === 'mat-datepicker-content' && cls(n, 'mat-datepicker-content')));
+  const calendar = dialog && unique(rn.filter(n => n.parent === dialog.key && n.type === 'mat-calendar' && cls(n, 'mat-calendar')));
+  if (!leaf || !button || !dialog || !content || !calendar || leaf.parent !== button.key || leaf.type !== 'span' ||
+      !cls(leaf, 'mdc-button__label') || leaf.ownText?.trim() !== 'Close calendar' || rn.some(n => n.parent === leaf.key) ||
+      button.attributes?.type !== 'button' || button.attributes.matbutton !== 'elevated' || !cls(button, 'mat-mdc-raised-button') ||
+      button.attributes.disabled !== undefined || button.attributes['aria-hidden'] === 'true' || button.ownText?.trim() ||
+      dialog.attributes.role !== 'dialog' || dialog.attributes['aria-modal'] !== 'true' || dialog.attributes.cdktrapfocus === undefined ||
+      dialog.ownText?.trim() || content.ownText?.trim() ||
+      JSON.stringify(rn.filter(n => n.parent === dialog.key).map(n => n.key)) !== JSON.stringify([calendar.key, button.key])) return;
+  const descendants = (nodes, parent) => {
+    const keys = new Set([parent]);
+    for (let changed = true; changed;) {
+      changed = false;
+      for (const n of nodes) if (keys.has(n.parent) && !keys.has(n.key)) { keys.add(n.key); changed = true; }
+    }
+    return nodes.filter(n => keys.has(n.key));
+  };
+  const buttonTree = descendants(rn, button.key);
+  if (buttonTree.some(n => n !== leaf && n.ownText?.trim()) ||
+      buttonTree.filter(n => cls(n, 'mdc-button__label')).length !== 1) return;
+  let context;
+  for (const n of rn.filter(n => n.type === 'span' && cls(n, 'mat-calendar-body-cell-content'))) {
+    context = reviewedCalendarCellControl(n, referenceTree, astylarTree) ?? reviewedCalendarCellControl(n, referenceTree, astylarTree, 'year');
+    if (context) break;
+  }
+  if (!context || context.evidence.referenceChain.at(-1) !== dialog.key) return;
+  const popup = unique(an.filter(n => n.authored?.id === 'datepicker-popup'));
+  const header = unique(an.filter(n => n.authored?.id === 'datepicker-header'));
+  const grid = unique(an.filter(n => n.key === context.evidence.candidateChain[1]));
+  if (!popup || !header || !grid || popup.key !== context.evidence.candidateChain.at(-1) ||
+      popup.authored.type !== 'div' || popup.authored.role !== 'dialog' || popup.authored.class !== 'datepicker-popup' ||
+      header.parent !== popup.key || header.authored.type !== 'div' || grid.parent !== popup.key) return;
+  const candidateTree = descendants(an, popup.key);
+  const candidateIds = candidateTree.map(n => n.authored?.id);
+  if (candidateIds.some(id => !id) || new Set(candidateIds).size !== candidateIds.length ||
+      an.some(n => [n.authored?.value, n.authored?.textContent, n.authored?.ariaLabel, n.paintedControlText?.text]
+        .some(text => typeof text === 'string' && /close\s+calendar/i.test(text)))) return;
+  // Unknown controls are not silently declared absent or equivalent. Restrict
+  // the observed popup to its original header, date/year buttons and spans.
+  for (const n of candidateTree) {
+    const a = n.authored;
+    if (!['div', 'span', 'button'].includes(a.type) ||
+        (a.role && !(n === popup && a.role === 'dialog'))) return;
+    if (a.type !== 'button') continue;
+    if (n.parent === header.key && ['datepicker-month', 'datepicker-previous', 'datepicker-next'].includes(a.id)) continue;
+    if (n.parent === grid.key && /^datepicker-(?:day|year)-\d+$/.test(a.id) && /^\d+$/.test(a.value)) continue;
+    return;
+  }
+  const styleAt = (index, side) => inventory.styles[index]?.side === side ? inventory.styles[index].value : undefined;
+  const referenceNodes = [leaf, ...buttonTree.filter(n => n !== leaf), dialog, content].map(n => ({
+    key: n.key, parent: n.parent, type: n.type, attributes: n.attributes, text: n.ownText,
+    computed: styleAt(n.style, 'reference'), rules: (n.rules ?? []).map(index => inventory.rules[index]),
+  }));
+  if (referenceNodes.some(n => !n.computed || n.rules.some(r => r?.side !== 'reference'))) return;
+  return structuredClone({ sourceFinding: 'fixture-calendar-close-control-omitted', source: 'core-style-inspection',
+    revision: astCase.resolvedStyleRevision, referenceNode, referenceControl: button.key, context: context.evidence,
+    referenceNodes, referenceDialogChildOrder: [calendar.key, button.key],
+    candidatePopup: popup.key, candidateSubtree: candidateTree.map(n => ({ key: n.key, parent: n.parent, authored: n.authored })),
+    candidateMatchingControls: [], inputEquivalent: false, finalRasterVerified: false,
+    computedClip: styleAt(button.style, 'reference').clip ?? null,
+    focusRevealAndDismissalVerified: false,
+    visibilityVerdict: 'not-established-by-structural-audit',
+  });
+}
+
+function calendarCloseGapAttribution(reviewEvidence) {
+  return { family: 'datepicker', classification: 'application-plugin-authoring-defect',
+    attribution: 'reviewed-calendar-close-control-omission', inputEquivalent: false, finalRasterVerified: false,
+    recommendedOwner: 'showcase calendar close control, focus reveal and dismissal semantics', reviewEvidence,
+    justification: 'The reference close-button label belongs to the same captured calendar dialog and date/range context as the candidate popup. Its authored candidate subtree contains only header/date/year controls and no close counterpart. This omission is present in the fixture, not a core failure to paint an authored button. Material source exposes the close control on focus and closes on click; those transitions and computed clipping require separate live evidence. Escape/outside dismissal and an unfocused screenshot cannot establish equivalent controls, accessibility or rendering.' };
+}
+
+function isReviewedCalendarCloseGap(gap, inventory) {
+  const control = gap.reason === 'Material control label lacks a unique reviewed leaf path and shared control identity';
+  const retained = gap.reason === 'own-text nodes without an explicit shared ID require structural mapping';
+  if ((!control && !retained) || (retained && (gap.referenceNodes?.length !== 1 || gap.astylarNodes?.length !== 0)) ||
+      gap.family !== 'datepicker' || gap.element !== undefined ||
+      gap.attribution !== 'reviewed-calendar-close-control-omission' || gap.classification !== 'application-plugin-authoring-defect' ||
+      gap.inputEquivalent !== false || gap.finalRasterVerified !== false || !gap.justification || !gap.reviewEvidence) return false;
+  const evidence = reviewedCalendarCloseOmission(gap.case, control ? gap.referenceNode : gap.referenceNodes[0], inventory);
+  return !!evidence && JSON.stringify(evidence) === JSON.stringify(gap.reviewEvidence);
+}
+
 function reviewedCalendarPeriodControl(referenceTree, astylarTree, inventory) {
   const rn = referenceTree.nodes, an = astylarTree.nodes;
   const cls = (n, name) => String(n?.attributes?.class ?? '').split(/\s+/).includes(name);
@@ -2380,6 +2502,13 @@ export function collectControlTypographyEvidence(cases, inventory) {
       const bottomSheetLabel = bottomSheetLabelNodes.includes(ref);
       const bottomSheet = bottomSheetLabel ? reviewedBottomSheetItemControl(ref, referenceTree, astylarTree) : undefined;
       const periodLabel = calendarPeriod?.ref === ref;
+      const closeOmission = entry.family === 'datepicker' && reviewedCalendarCloseOmission(key, ref.key, inventory);
+      if (closeOmission) {
+        gaps.push({ case: key, referenceNode: ref.key,
+          reason: 'Material control label lacks a unique reviewed leaf path and shared control identity',
+          ...calendarCloseGapAttribution(closeOmission) });
+        continue;
+      }
       const parents = periodLabel ? [calendarPeriod.parent] : bottomSheetLabel ? [bottomSheet?.parent].filter(Boolean) : calendarLabel ? [calendar?.parent].filter(Boolean) : tabLabel ? [reviewedTabLabelControl(ref, referenceTree)].filter(Boolean)
         : referenceTree.nodes.filter((node) => node.key === ref.parent && node.type === 'button');
       const parent = parents.length === 1 ? parents[0] : undefined;
@@ -2782,6 +2911,7 @@ function sourceFingerprints(root) {
     'examples/material-showcase/src/app/normal-line-height-audit.spec.ts',
     'examples/material-showcase/angular.json',
     'examples/material-showcase/src/app/reference.component.ts',
+    'examples/material-showcase/node_modules/@angular/material/fesm2022/datepicker.mjs',
     'examples/material-showcase/src/app/theme.ts',
     'examples/material-showcase/src/app/showcase.store.ts',
     'examples/material-showcase/src/styles.scss',
@@ -2850,6 +2980,7 @@ function implementationPlan() {
     { priority: 5.5, rootCause: 'Snackbar action inherits generic control inputs instead of Material action tokens', action: 'Restore the original text-button font, size and tracking declarations and the snackbar inverse-primary ink, keeping the reference label/action wrapper intent. The exact overlay/message mapping isolates 34 current action textures and source-traces font-stack, tracking and ink substitutions. Trace the remaining 14px-versus-16px and normal-line-box observations through the core defaults/inheritance and metric stages before assigning core ownership; do not calibrate a baseline or line height. Retain the separate intrinsic-width, live-region, visibility, lifetime and placement obligations.' },
     { priority: 5.6, rootCause: 'Nested list inputs are replaced by generic value buttons', action: 'Restore bottom-sheet navigation/list/anchor/content/label structure and the original label font, explicit line-height, tracking, ink and overflow declarations. Preserve the actual reference overlay token scope and accessible name instead of borrowing page theme colors or calling the opener text the dialog name. Restore reference navigation behavior rather than generic dismiss handling, then reduce any equal-input core failure. Do not infer start/left alignment equivalence without direction evidence. Keep the separate fixed-width/content-height and responsive-constraint findings.' },
     { priority: 5.7, rootCause: 'Calendar period text and vector inputs are collapsed into a glyph string', action: 'Restore the reference period text span beside the 10x5 polygon SVG, using the original year-view CSS inversion, text-button font/tracking tokens and calendar period color-token override. Preserve the live-period description relationship. Do not strip the candidate triangle during comparison, substitute another font character or tune offsets. The current 41 texture witnesses compare common period text inputs while retaining both unequal full compositions; normal-line-height, wrapper layout and glyph/vector raster still need independent proof.' },
+    { priority: 5.8, rootCause: 'Calendar close control and its focus-reveal interaction were omitted', action: 'Restore the reference close-button/label, original unfocused clipping and focus-to-reveal declarations, focus order and close activation through core APIs. The source template binds focus/blur and datepicker.close(); the candidate popup never authors that control. Preserve each omission as unequal structure, not a missing paint sample or harmless hidden element. Add live keyboard traversal, focused visibility, activation, focus restoration and computed clip evidence in both views. Investigate core only against those restored equal declarations; outside-click and Escape dismissal are not replacements for the missing control.' },
     { priority: 6, rootCause: 'Interaction geometry duplicated by the application', action: 'Expose resolved CSS-space target bounds and local pointer coordinates in the core event/plugin contract; remove ripple width tables.' },
     { priority: 7, rootCause: 'Material paint inputs are substituted or calibrated', action: 'Supply paginator and calendar navigation reference SVG paths and their CSS/state paint through core vector/image rendering instead of font-character approximations. Preserve calendar navigation accessible names for the active month or multi-year view; do not copy month labels into the year view. Express progress angles, state layers, checkmarks, selection rings, and indicators from reference Material geometry in CSS space; remove screenshot-derived angle and fractional-position constants. Diagnose core only after the actual same geometry is supplied.' },
     { priority: 8, rootCause: 'Regression gate permits unequal inputs', action: 'Run this audit in CI after the full parity matrix, require complete coverage and zero unclassified differences, and review any new Astylar-only authored rule before updating the checked-in report.' },
