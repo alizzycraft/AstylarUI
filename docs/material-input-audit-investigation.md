@@ -12,6 +12,33 @@ tests pass). A missing selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Production normal line-box spot-check narrows the next capture step (2026-09-12)
+
+A separate Chrome context loaded the frozen full-matrix server's actual
+`reference/button` pages at 1440x1000, DPR 1, applied each maintained theme
+through `__MATERIAL_SHOWCASE_COMMAND__`, and waited for fonts and two frames.
+For each of the three direct `.mdc-button__label` leaves, a temporary offscreen
+natural block copied the computed font family/size/weight/style/stretch,
+kerning, features, variations, variant, spacing, line-height, text-transform,
+text-rendering, direction and writing mode, with the same text. The probe was
+removed immediately; the reference fixture was not changed and no resulting
+measurement was fed to Astylar layout.
+
+All **12 observed labels** (three per light/dark/contrast/custom theme) computed
+Roboto 14px/500, `line-height:normal`, .096px tracking, and measured **17px**
+natural height with fonts ready. That agrees with the current 17px candidate
+paint value for these labels. It does not make their font-list/tracking/alpha
+inputs equivalent, establish every normal line box, or invalidate the separate
+Arial/serif/fallback-glyph core failures.
+
+This is a diagnostic spot-check, **not yet an accepted normalization rule**.
+The next harness step must retain per-case natural-line-box evidence tied to
+the original result/tree digests, exact text/computed typography, viewport/DPR,
+loaded font assets and runtime provenance. Missing/mismatched evidence must
+stay unresolved; a global `normal = 17px` rule would hide the reproduced defect.
+Do not alter or restart the ongoing full-matrix capture just to add this
+supplemental observation.
+
 ## Disabled-button alpha substitution is attributed across themes (2026-09-12)
 
 All twelve static button cases now carry occurrence-level evidence for the
