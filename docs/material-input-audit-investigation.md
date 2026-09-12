@@ -12,6 +12,31 @@ tests pass). A missing selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Tab template labels now map to current control textures (2026-09-12)
+
+The tab label is not a direct Material button-label span. Its explicit template
+ID is inside `span.mdc-tab__text-label`, `span.mdc-tab__content`, and a
+`div.mdc-tab` with `role=tab`. The corresponding candidate is a button with
+the same template ID and `role=tab`. The new reviewed path requires unique
+identities, leaf content, wrapper/control roles and matching authored/current
+texture text. It does not declare the flattened structure equivalent.
+
+All 12 SHA-256-checked static tab captures now yield 24 current-texture
+comparisons with no collection or mapping gaps. They expose **72 unequal
+typography inputs**: 24 `Roboto` versus `Roboto, Arial, sans-serif` font lists,
+24 `.096px` versus zero tracking values, and 24 reference label line-heights of
+14px versus candidate control texture line-heights of 20px. These remain
+unattributed pending their captured rule and history review. In particular,
+the reference tab control/content wrapper computes 20px, but its actual text
+label computes 14px; comparing only control boxes would miss that distinction.
+
+Focused audit tests pass 66/66, including malformed/nested/duplicate paths,
+wrong roles and text, stale provenance and deliberately unequal typography.
+The remaining static current-control mapping gaps are the 24 paginator icon
+controls, whose SVG-versus-text substitution must not be treated as a matched
+text label. Ordinary retained-text coverage remains a separate review.
+`npm run parity:harness:check` passes **104/104**.
+
 ## Toolbar substitutes button height for inherited line-height (2026-09-12)
 
 The reference `.mdc-button` inherits line-height from its immediate

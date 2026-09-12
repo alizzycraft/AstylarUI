@@ -1235,8 +1235,24 @@ function reviewedButtonPaintInput(entry, property, ref, parent, ast, stages, ref
   }
 }
 
-// These paths describe Material's actual button label, not an inferred text
-// match. Unmapped control textures stay explicit, including non-button owners.
+function reviewedTabLabelControl(ref, tree) {
+  let child = ref;
+  for (const [type, className] of [['span', 'mdc-tab__text-label'], ['span', 'mdc-tab__content'], ['div', 'mdc-tab']]) {
+    const parents = tree.nodes.filter((node) => node.key === child.parent && node.type === type &&
+      String(node.attributes?.class ?? '').split(/\s+/).includes(className));
+    if (parents.length !== 1 || parents[0].ownText?.trim()) return;
+    const parent = parents[0];
+    if (className !== 'mdc-tab' && tree.nodes.filter((node) => node.parent === parent.key).length !== 1) return;
+    if (className === 'mdc-tab' && tree.nodes.filter((node) => node.parent === parent.key &&
+        String(node.attributes?.class ?? '').split(/\s+/).includes('mdc-tab__content')).length !== 1) return;
+    child = parent;
+  }
+  if (child.attributes?.role !== 'tab') return;
+  return child;
+}
+
+// These paths describe Material's actual button and explicit template tab
+// labels, not an inferred text match. Other texture owners stay visible gaps.
 export function collectControlTypographyEvidence(cases, inventory) {
   const comparisons = [], differences = [], gaps = [];
   const gap = (key, element, reason, evidence = {}) => gaps.push({ case: key, element, reason, ...evidence,
@@ -1251,8 +1267,11 @@ export function collectControlTypographyEvidence(cases, inventory) {
       gap(key, undefined, 'missing, ambiguous, or invalid full-tree capture'); continue;
     }
     const referenceTree = inventory.variants[refs[0].variant], astylarTree = inventory.variants[asts[0].variant];
-    const labelNodes = referenceTree.nodes.filter((node) => node.type === 'span' &&
+    const buttonLabelNodes = referenceTree.nodes.filter((node) => node.type === 'span' &&
       String(node.attributes?.class ?? '').split(/\s+/).includes('mdc-button__label'));
+    const tabLabelNodes = entry.family === 'tabs' ? referenceTree.nodes.filter((node) => node.type === 'span' &&
+      ['tab-overview', 'tab-activity'].includes(node.attributes?.id)) : [];
+    const labelNodes = [...buttonLabelNodes, ...tabLabelNodes];
     const paintedNodes = astylarTree.nodes.filter((node) => node.paintedControlText);
     if (!labelNodes.length && !paintedNodes.length) continue;
     if (astylarTree.resolvedStyleEvidenceVersion !== 2 || astylarTree.resolvedStyleSource !== 'core-style-inspection' ||
@@ -1261,17 +1280,20 @@ export function collectControlTypographyEvidence(cases, inventory) {
     }
     const mapped = new Set();
     for (const ref of labelNodes) {
-      const parents = referenceTree.nodes.filter((node) => node.key === ref.parent && node.type === 'button');
+      const tabLabel = tabLabelNodes.includes(ref);
+      const parents = tabLabel ? [reviewedTabLabelControl(ref, referenceTree)].filter(Boolean)
+        : referenceTree.nodes.filter((node) => node.key === ref.parent && node.type === 'button');
       const parent = parents.length === 1 ? parents[0] : undefined;
-      const id = parent?.attributes?.id || parent?.attributes?.['data-parity-id'];
+      const id = tabLabel ? ref.attributes.id : parent?.attributes?.id || parent?.attributes?.['data-parity-id'];
       const astNodes = astylarTree.nodes.filter((node) => id && node.authored?.id === id);
       const referenceOwners = referenceTree.nodes.filter((node) => id &&
         (node.attributes?.id === id || node.attributes?.['data-parity-id'] === id));
-      if (!id || referenceOwners.length !== 1 || astNodes.length !== 1 || astNodes[0].authored.type !== 'button' ||
+      if (!parent || !id || referenceOwners.length !== 1 || astNodes.length !== 1 || astNodes[0].authored.type !== 'button' ||
+          (tabLabel && (astNodes[0].authored.role !== 'tab' || !String(astNodes[0].authored.class ?? '').split(/\s+/).includes('tab'))) ||
           referenceTree.nodes.filter((node) => node.key === ref.key).length !== 1 ||
-          labelNodes.filter((node) => node.parent === parent.key).length !== 1 ||
+          (!tabLabel && buttonLabelNodes.filter((node) => node.parent === parent.key).length !== 1) ||
           referenceTree.nodes.some((node) => node.parent === ref.key) || parent.ownText?.trim()) {
-        gap(key, id, 'Material button label lacks a unique direct leaf and shared control identity', { referenceNode: ref.key }); continue;
+        gap(key, id, 'Material control label lacks a unique reviewed leaf path and shared control identity', { referenceNode: ref.key }); continue;
       }
       const ast = astNodes[0], paint = ast.paintedControlText;
       if (mapped.has(ast.key)) { gap(key, id, 'multiple labels map to the same control'); continue; }
@@ -1306,8 +1328,10 @@ export function collectControlTypographyEvidence(cases, inventory) {
         referenceNode: ref.key, referenceControl: parent.key, astylarNode: ast.key, text: paint.text,
         source: paint.source, revision: asts[0].resolvedStyleRevision, rawPaintedStyle: paint.style,
         maxWidth: paint.maxWidth, finalRasterVerified: false,
-        mapping: { kind: 'reviewed-material-button-label',
-          justification: 'A unique shared button ID or reference data-parity-id anchors one direct span.mdc-button__label leaf. Its direct text matches both the authored candidate control label and current core-owned texture text. This establishes text-owner identity only, not layout, style, state, material or raster equivalence.' }, properties: {} };
+        mapping: tabLabel ? { kind: 'reviewed-material-tab-label',
+          justification: 'The explicit template span ID identifies one leaf inside span.mdc-tab__text-label, span.mdc-tab__content and a div.mdc-tab with role tab. It matches a unique candidate button with role tab and the same authored label/current texture text. This establishes label correspondence only; replacing the reference wrappers with one control does not establish equivalent line boxes, typography, state, structure or raster.' }
+          : { kind: 'reviewed-material-button-label',
+            justification: 'A unique shared button ID or reference data-parity-id anchors one direct span.mdc-button__label leaf. Its direct text matches both the authored candidate control label and current core-owned texture text. This establishes text-owner identity only, not layout, style, state, material or raster equivalence.' }, properties: {} };
       for (const property of retainedTypographyProperties) {
         const values = Object.fromEntries(Object.entries(stages).map(([stage, style]) => [stage, style[property]]));
         comparison.properties[property] = values;
@@ -1328,7 +1352,7 @@ export function collectControlTypographyEvidence(cases, inventory) {
       gap(key, node.authored?.id, 'current control texture has no reviewed reference text-owner mapping', { astylarNode: node.key });
     }
   }
-  return { schemaVersion: 1, scope: 'Current core-owned control texture inputs, separately from normal/effective declarations and registry-retained text. Only exact direct Material button label paths are reviewed; other observed control owners remain gaps. Numeric parsed CSS lengths and line-height multipliers are normalized without authored or projected fallbacks. Other effects remain in the full inventory and are not certified by these eleven typography comparisons.', comparisons, differences, gaps };
+  return { schemaVersion: 1, scope: 'Current core-owned control texture inputs, separately from normal/effective declarations and registry-retained text. Exact direct Material button labels and explicit template tab-label paths are reviewed; other observed control owners remain gaps. Numeric parsed CSS lengths and line-height multipliers are normalized without authored or projected fallbacks. Other effects remain in the full inventory and are not certified by these eleven typography comparisons.', comparisons, differences, gaps };
 }
 
 export function collectFullTreeInventory(cases, { root = process.cwd() } = {}) {

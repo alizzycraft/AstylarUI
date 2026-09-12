@@ -1187,6 +1187,64 @@ test('control typography compares current texture inputs separately from declara
   assert.equal(controlEvidence(raw).comparisons.length, 1, 'reviewed dialog-style identity is explicit');
 });
 
+function tabControlTypographyReport() {
+  const raw = controlTypographyReport(), entry = raw.results[0], trees = entry.inputTrees;
+  entry.family = 'tabs';
+  trees.reference.nodes[0].type = 'div';
+  trees.reference.nodes[0].attributes = { id: 'generated-tab-control', role: 'tab', class: 'mdc-tab mat-mdc-tab' };
+  trees.reference.nodes[1].parent = 'tab-text';
+  trees.reference.nodes[1].attributes = { id: 'tab-overview' };
+  trees.reference.nodes[1].ownText = 'Overview';
+  trees.reference.nodes.push(
+    { key: 'tab-text', parent: 'tab-content', type: 'span', attributes: { class: 'mdc-tab__text-label' }, ownText: '', style: 0, rules: [], pseudoElements: [] },
+    { key: 'tab-content', parent: 'button', type: 'span', attributes: { class: 'mdc-tab__content' }, ownText: '', style: 0, rules: [], pseudoElements: [] },
+  );
+  const node = trees.astylar.nodes[0];
+  Object.assign(node.authored, { id: 'tab-overview', value: 'Overview', role: 'tab', class: 'tab' });
+  node.paintedControlText.text = 'Overview';
+  return raw;
+}
+
+test('control text maps explicit tab template leaves without equating their wrappers or typography', () => {
+  const raw = tabControlTypographyReport(), trees = raw.results[0].inputTrees;
+  Object.assign(trees.reference.styles[0], { fontFamily: 'Roboto', lineHeight: '14px', letterSpacing: '.096px' });
+  Object.assign(trees.astylar.nodes[0].paintedControlText.style, { fontFamily: 'Roboto, Arial, sans-serif', lineHeight: 20 / 24 });
+  const evidence = controlEvidence(raw);
+  assert.deepEqual(evidence.gaps, []);
+  assert.equal(evidence.comparisons.length, 1);
+  assert.equal(evidence.comparisons[0].mapping.kind, 'reviewed-material-tab-label');
+  assert.equal(evidence.comparisons[0].referenceControl, 'button');
+  assert.equal(evidence.comparisons[0].referenceNode, 'label');
+  assert.deepEqual(evidence.differences.map((finding) => finding.property), ['fontFamily', 'lineHeight', 'letterSpacing']);
+  assert.ok(evidence.differences.every((finding) => finding.attribution === 'unresolved'));
+  assert.equal(buildMaterialInputAudit(raw).summary.inputEquivalent, false);
+});
+
+test('tab label mapping rejects wrong wrapper paths, roles, text, identities and nested content', () => {
+  const mutations = [
+    (ref) => { ref.nodes[2].attributes.class = 'other'; },
+    (ref) => { ref.nodes[3].attributes.class = 'other'; },
+    (ref) => { ref.nodes[0].attributes.role = 'button'; },
+    (ref) => { ref.nodes[0].type = 'button'; },
+    (ref) => { ref.nodes[2].ownText = 'Additional label'; },
+    (ref) => { ref.nodes.push({ ...ref.nodes[3], key: 'duplicate-content' }); },
+    (ref) => { ref.nodes.push({ ...ref.nodes[1], key: 'nested', parent: 'label', attributes: {} }); },
+    (ref) => { ref.nodes.push({ ...ref.nodes[1], key: 'duplicate' }); },
+    (ref) => { ref.nodes[1].attributes.id = 'other'; },
+    (ref, ast) => { ast.nodes[0].authored.role = 'button'; },
+    (ref, ast) => { ast.nodes[0].paintedControlText.text = 'Activity'; },
+    (ref, ast) => { ast.nodes.push({ ...ast.nodes[0], key: 'duplicate' }); },
+    (ref, ast) => { delete ast.paintedControlTextEvidenceVersion; },
+  ];
+  for (const mutate of mutations) {
+    const raw = tabControlTypographyReport();
+    mutate(raw.results[0].inputTrees.reference, raw.results[0].inputTrees.astylar);
+    const evidence = controlEvidence(raw);
+    assert.equal(evidence.comparisons.length, 0, String(mutate));
+    assert.ok(evidence.gaps.length > 0, String(mutate));
+  }
+});
+
 test('control typography does not waive font fallback, CSS normal line-height, tracking or composited ink', () => {
   const raw = controlTypographyReport();
   const refStyle = raw.results[0].inputTrees.reference.styles[0];
