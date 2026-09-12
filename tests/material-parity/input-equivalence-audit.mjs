@@ -1154,9 +1154,12 @@ export function collectFullTreeInventory(cases, { root = process.cwd() } = {}) {
         interactionStyle: node.interactionResolvedStyle ? intern({ side, value: node.interactionResolvedStyle }, styles, styleIds) : undefined,
         ...(node.retainedText ? { retainedText: { source: node.retainedText.source,
           style: intern({ side, value: node.retainedText.style }, styles, styleIds) } } : {}),
+        ...(node.paintedControlText ? { paintedControlText: { ...node.paintedControlText,
+          style: intern({ side, value: node.paintedControlText.style }, styles, styleIds) } } : {}),
       });
       const variant = intern({ family: entry.family, side, resolvedStyleEvidenceVersion: tree.resolvedStyleEvidenceVersion,
-        resolvedStyleSource: tree.resolvedStyleSource, nodes, rules: ruleMap }, variants, variantIds);
+        resolvedStyleSource: tree.resolvedStyleSource,
+        paintedControlTextEvidenceVersion: tree.paintedControlTextEvidenceVersion, nodes, rules: ruleMap }, variants, variantIds);
       mappings.push({ case: key, side, variant, resolvedStyleRevision: tree.resolvedStyleRevision });
     }
   }

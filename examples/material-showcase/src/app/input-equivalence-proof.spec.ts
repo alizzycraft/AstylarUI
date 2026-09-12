@@ -2,12 +2,13 @@ import { provideZonelessChangeDetection } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { Matrix, Vector3 } from '@babylonjs/core/Maths/math.vector';
 import { Astylar, provideAstylar, type DOMElement, type SiteData } from 'astylarui';
+import { collectAuthoredInputTree, collectMaterialCoreResolvedStyles } from './material-input-evidence';
 
 // Each browser declaration is generated from the very same rule object sent
 // to Astylar. These reductions intentionally contain no Material component,
 // measured height table, DPR correction, or duplicate position calculation.
 describe('Material audit: equivalent CSS input reductions', () => {
-  const cases: Array<{ name: string; site: SiteData; ids: string[]; horizontalOnly?: string[]; loadedCss?: boolean; controlLabels?: string[]; resolved?: Array<{ id: string; properties: string[]; stage?: 'retainedText' }> }> = [
+  const cases: Array<{ name: string; site: SiteData; ids: string[]; horizontalOnly?: string[]; loadedCss?: boolean; controlLabels?: string[]; resolved?: Array<{ id: string; properties: string[]; stage?: 'retainedText' | 'paintedControlText' }> }> = [
     ...(['value', 'textContent'] as const).map((textField) => ({
       name: `rendered button labels authored with ${textField} expose pre-paint typography in core inspection`,
       site: {
@@ -16,7 +17,7 @@ describe('Material audit: equivalent CSS input reductions', () => {
       } as SiteData,
       ids: ['inspected-button'],
       controlLabels: ['inspected-button'],
-      resolved: [{ id: 'inspected-button', properties: ['fontSize', 'lineHeight', 'letterSpacing'], stage: 'retainedText' as const }],
+      resolved: [{ id: 'inspected-button', properties: ['fontSize', 'lineHeight', 'letterSpacing'], stage: 'paintedControlText' as const }],
     })),
     ...[
       { name: '1 parent transform', transform: 'translateY(-50%) scale(1)' },
@@ -358,19 +359,34 @@ describe('Material audit: equivalent CSS input reductions', () => {
         }
         if (entry.resolved) {
           const snapshot = surface.inspectResolvedStyles();
+          if (entry.controlLabels) {
+            const provenance = collectMaterialCoreResolvedStyles(snapshot);
+            const tree = collectAuthoredInputTree(site.root, site.styles, provenance.effective, provenance);
+            expect(tree.paintedControlTextEvidenceVersion).toBe(1);
+            for (const id of entry.controlLabels) {
+              const inspected = snapshot.elements.find((element) => element.id === id)!;
+              expect(tree.nodes).toContain(jasmine.objectContaining({ key: inspected.path,
+                paintedControlText: inspected.paintedControlText }));
+            }
+          }
           const normalize = (value: unknown) => String(value ?? '').trim().replace(/\b0px\b/g, '0');
           for (const { id, properties, stage } of entry.resolved) {
             const inspected = snapshot.elements.find((element) => element.id === id)!;
-            if (stage === 'retainedText') {
-              if (entry.controlLabels?.includes(id)) {
-                expect(inspected.retainedText).withContext(`${id} actual control text paint inputs`).toBeDefined();
-              } else expect(inspected.retainedText?.source).toBe('core-text-registry');
-            }
-            const actual = stage === 'retainedText' ? inspected.retainedText?.style : inspected.normal;
+            if (stage === 'retainedText') expect(inspected.retainedText?.source).toBe('core-text-registry');
+            if (stage === 'paintedControlText') expect(inspected.paintedControlText?.source).toBe('core-control-texture');
+            const actual = stage === 'paintedControlText' ? inspected.paintedControlText?.style
+              : stage === 'retainedText' ? inspected.retainedText?.style : inspected.normal;
             const expected = doc.defaultView!.getComputedStyle(doc.getElementById(id)!);
             for (const property of properties) {
               const cssProperty = property.replace(/[A-Z]/g, (letter) => '-' + letter.toLowerCase());
-              expect(normalize((actual as Record<string, unknown> | undefined)?.[property])).withContext(`${id} ${stage ?? 'resolved'} ${property}`)
+              let value = (actual as Record<string, unknown> | undefined)?.[property];
+              // Normalize the documented parsed units only for comparison.
+              // Neither declarations nor rendered dimensions supply a fallback.
+              if (stage === 'paintedControlText' && typeof value === 'number') {
+                if (property === 'lineHeight' && typeof actual?.fontSize === 'number') value = `${value * actual.fontSize}px`;
+                else if (['fontSize', 'letterSpacing', 'wordSpacing'].includes(property)) value = `${value}px`;
+              }
+              expect(normalize(value)).withContext(`${id} ${stage ?? 'resolved'} ${property}`)
                 .toBe(normalize(expected.getPropertyValue(cssProperty)));
             }
           }

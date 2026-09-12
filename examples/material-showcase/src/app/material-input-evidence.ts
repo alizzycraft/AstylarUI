@@ -4,6 +4,7 @@ interface CoreNodeStyles {
   normal: Record<string, unknown>;
   effective: Record<string, unknown>;
   retainedText?: AstylarResolvedStyleSnapshot['elements'][number]['retainedText'];
+  paintedControlText?: AstylarResolvedStyleSnapshot['elements'][number]['paintedControlText'];
 }
 
 interface StyleProvenance {
@@ -12,6 +13,7 @@ interface StyleProvenance {
   byPath?: ReadonlyMap<string, CoreNodeStyles>;
   source?: string;
   revision?: number;
+  paintedControlTextEvidenceVersion?: 1;
 }
 
 /** Audit-only evidence. Never use these snapshots to compute layout. */
@@ -21,7 +23,8 @@ export function collectMaterialCoreResolvedStyles(snapshot: AstylarResolvedStyle
   const byPath = new Map<string, CoreNodeStyles>();
   for (const entry of snapshot.elements) {
     const styles: CoreNodeStyles = { normal: { ...entry.normal }, effective: { ...entry.effective },
-      ...(entry.retainedText ? { retainedText: { source: entry.retainedText.source, style: { ...entry.retainedText.style } } } : {}) };
+      ...(entry.retainedText ? { retainedText: { source: entry.retainedText.source, style: { ...entry.retainedText.style } } } : {}),
+      ...(entry.paintedControlText ? { paintedControlText: structuredClone(entry.paintedControlText) } : {}) };
     byPath.set(entry.path, styles);
     if (entry.id) {
       normal.set(entry.id, styles.normal);
@@ -31,7 +34,7 @@ export function collectMaterialCoreResolvedStyles(snapshot: AstylarResolvedStyle
   // Core's effective snapshot is already merged, just like its interaction
   // metadata. Keep that provenance; never resolve selectors or states here.
   return { normal, interaction: effective, effective, byPath,
-    source: 'core-style-inspection', revision: snapshot.revision };
+    source: 'core-style-inspection', revision: snapshot.revision, paintedControlTextEvidenceVersion: 1 as const };
 }
 
 export function collectMaterialResolvedStyles(meshes: readonly { metadata?: Record<string, unknown> | null }[]) {
@@ -77,6 +80,9 @@ export function collectAuthoredInputTree(root: object, rules: readonly object[],
       normalResolvedStyle: materialStyleSnapshot(inspected?.normal ?? (id ? provenance?.normal.get(id) : undefined)),
       ...(inspected?.retainedText ? { retainedText: { source: inspected.retainedText.source,
         style: materialStyleSnapshot(inspected.retainedText.style) } } : {}),
+      // Preserve parsed units and nested effects verbatim. This is actual
+      // texture evidence, not a declaration fallback or a computed style.
+      ...(inspected?.paintedControlText ? { paintedControlText: structuredClone(inspected.paintedControlText) } : {}),
       interactionResolvedStyle: materialStyleSnapshot(inspected?.effective ?? (id ? provenance?.interaction.get(id) : undefined)) });
     if (Array.isArray(children)) children.forEach((child, index) => {
       if (typeof child === 'object' && child !== null) visit(child, `${key}/${index}`, key);
@@ -84,7 +90,8 @@ export function collectAuthoredInputTree(root: object, rules: readonly object[],
   };
   visit(root, 'root', null);
   return { schemaVersion: 1, resolvedStyleEvidenceVersion: provenance ? 2 : 1,
-    resolvedStyleSource: provenance?.source, resolvedStyleRevision: provenance?.revision, nodes, rules, errors: [] };
+    resolvedStyleSource: provenance?.source, resolvedStyleRevision: provenance?.revision,
+    paintedControlTextEvidenceVersion: provenance?.paintedControlTextEvidenceVersion, nodes, rules, errors: [] };
 }
 
 export interface MaterialAuthoredStructure {

@@ -1,6 +1,42 @@
 import { collectAuthoredInputTree, collectMaterialCoreResolvedStyles, collectMaterialResolvedStyles, indexAuthoredStructures, materialStyleSnapshot } from './material-input-evidence';
 
 describe('Material input evidence serialization', () => {
+  it('preserves actual control texture inputs and parsed units independently of other style stages', () => {
+    const paintedControlText = {
+      source: 'core-control-texture' as const, text: 'Action', maxWidth: 120,
+      style: { fontFamily: 'Arial', fontSize: 16, fontWeight: '500' as const, fontStyle: 'normal' as const,
+        color: '#abcdef', textAlign: 'center' as const, verticalAlign: 'baseline' as const,
+        lineHeight: 1.5, letterSpacing: .5, wordSpacing: 0, whiteSpace: 'normal' as const,
+        wordWrap: 'normal' as const, textOverflow: 'clip' as const, textDecoration: 'none' as const,
+        textTransform: 'none' as const, textShadow: [{ offsetX: 1, offsetY: 2, blurRadius: 3, color: '#123456' }] },
+    };
+    const before = structuredClone(paintedControlText);
+    const styles = collectMaterialCoreResolvedStyles({ revision: 9, elements: [
+      { path: 'root/0', id: 'action', type: 'button', normal: { selector: '#action', color: 'black' },
+        effective: { selector: '#action', color: 'purple' },
+        retainedText: { source: 'core-text-registry', style: { selector: '#action', color: 'blue', fontSize: '20px' } },
+        paintedControlText },
+      { path: 'root/1', id: 'empty', type: 'button', normal: { selector: '#empty' }, effective: { selector: '#empty' } },
+    ] });
+    const root = { children: [{ id: 'action', type: 'button', value: 'Action' }, { id: 'empty', type: 'button' }] };
+    const tree = collectAuthoredInputTree(root, [], styles.effective, styles);
+    expect(tree.paintedControlTextEvidenceVersion).toBe(1);
+    expect(tree.nodes[1]).toEqual(jasmine.objectContaining({
+      normalResolvedStyle: { color: 'black' }, resolvedStyle: { color: 'purple' },
+      retainedText: { source: 'core-text-registry', style: { color: 'blue', fontSize: '20px' } },
+      paintedControlText: before,
+    }));
+    expect(tree.nodes[2]).not.toEqual(jasmine.objectContaining({ paintedControlText: jasmine.anything() }));
+    expect(styles.normal.get('action')?.['fontSize']).toBeUndefined();
+    paintedControlText.style.textShadow[0].offsetX = 99;
+    expect(styles.byPath.get('root/0')?.paintedControlText).toEqual(before);
+    (tree.nodes[1] as { paintedControlText: typeof paintedControlText }).paintedControlText.style.fontSize = 999;
+    const again = collectAuthoredInputTree(root, [], styles.effective, styles);
+    expect(again.nodes[1]).toEqual(jasmine.objectContaining({ paintedControlText: before }));
+    const legacy = collectMaterialResolvedStyles([{ metadata: { elementId: 'action', astylarResolvedStyle: { fontSize: '16px' } } }]);
+    expect(collectAuthoredInputTree(root, [], legacy.effective, legacy).paintedControlTextEvidenceVersion).toBeUndefined();
+  });
+
   it('retains text-stage provenance without merging it into cascade or pseudo-state inputs', () => {
     const styles = collectMaterialCoreResolvedStyles({ revision: 8, elements: [
       { path: 'root/0', id: 'child', type: 'div', normal: { selector: '#child', color: 'black' },

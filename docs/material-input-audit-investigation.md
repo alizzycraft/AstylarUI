@@ -11,6 +11,54 @@ Argument validation rejects unknown, empty, and repeated options (25/25 audit
 tests pass). A missing selected report fails rather than falling back to older
 evidence; the new run has not yet produced its final report.
 
+## Control texture evidence reaches the Material collector (2026-09-12)
+
+The showcase collector now preserves `paintedControlText` as its own raw parsed
+stage, including text, source, wrapping width, numeric CSS units and nested
+effects. `paintedControlTextEvidenceVersion: 1` identifies collector support;
+it is not a claim that every node has a texture. Older/mesh-only captures do not
+gain this marker or fabricated entries. Normal/effective declarations and the
+ordinary retained-text registry remain unchanged and separate.
+
+Full-tree pooling retains the marker and all control-texture fields, interns its
+style independently and does not coalesce legacy variants with newly observed
+ones. Regression tests use deliberately different declaration, retained and
+painted font sizes, and verify nested-effect preservation and detached snapshots.
+
+The package-root button reductions now check the actual `paintedControlText`
+source and its end-to-end serialization through the collector. Both value and
+textContent labels pass. Only their documented parsed units are normalized for
+comparison with browser computed values: font/spacing lengths become px strings,
+and the recorded line-height multiplier is multiplied by the recorded font size.
+No authored or rendered value supplies a fallback, and neither fixture changes.
+
+After fresh `npm run material-showcase:prepare`, the combined proof/collector
+command (`npm --prefix examples/material-showcase test -- --watch=false
+--browsers=ChromeHeadless --include=src/app/input-equivalence-proof.spec.ts
+--include=src/app/material-input-evidence.spec.ts`) runs 41 cases: 21 pass and the
+20 previously exposed geometry/transform failures remain. The missing button
+inspection proof now passes using actual texture evidence rather than a changed
+assertion about the meaning of `retainedText`. `npm run parity:harness:check`
+passes 92/92 tests; the collector-only browser command also passes 7/7. The
+separate production build at
+`examples/material-showcase/dist/material-showcase-control-text-audit` succeeds.
+
+A real production capture (`control-text-collector-smoke`, port 4433,
+button/light/desktop, `--enforce --skip-build --static-only` against that new
+browser output) captures one passing case: SSIM .999773, maximum edge error
+.219px, and text alignment 3/3. Enforcement correctly exits 1 because this is
+only 1/436 static cases and no interactions, not full acceptance. Digest-checked
+full-tree loading has no errors and finds all three button label textures with
+the new evidence marker and source. Their actual parsed font size is 14 and
+weight 500; tracking is zero versus the reference labels' .096px. Reference
+line-height remains `normal`, not an inferred pixel value; candidate parsed
+line-height is 1.2142857142857142. These observations need input attribution, not
+automatic equivalence based on similar pixels.
+
+Property comparison and attribution for the newly observable showcase control
+labels still require reviewed reference-text mappings and fresh captures. Merely
+pooling this evidence does not waive any existing mapping or typography gap.
+
 ## Core-owned control texture inspection (2026-09-12)
 
 The instrumentation now retains a detached copy of the parsed inputs actually

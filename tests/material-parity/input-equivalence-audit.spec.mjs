@@ -1137,6 +1137,39 @@ test('full-tree inventory retains anonymous nodes and pools identical variants w
   assert.equal(collectFullTreeInventory([{ ...entry, inputTrees: {} }]).gaps.length, 2);
 });
 
+test('full-tree pooling preserves control paint units, source, content and effects without laundering legacy evidence', () => {
+  const entry = { family: 'button', profile: 'light', viewport: { id: 'desktop' }, inputTrees: {
+    astylar: { schemaVersion: 1, resolvedStyleEvidenceVersion: 2, resolvedStyleSource: 'core-style-inspection',
+      resolvedStyleRevision: 9, paintedControlTextEvidenceVersion: 1, nodes: [{ key: 'root/0', parent: 'root',
+        authored: { type: 'button', id: 'action', value: 'Action' }, resolvedStyle: { fontSize: '24px' },
+        retainedText: { source: 'core-text-registry', style: { fontSize: '20px' } },
+        paintedControlText: { source: 'core-control-texture', text: 'Action', maxWidth: 120,
+          style: { fontSize: 16, lineHeight: 1.5, letterSpacing: .5,
+            textShadow: [{ offsetX: 1, offsetY: 2, blurRadius: 3, color: '#123456' }] } },
+      }], rules: [], errors: [] },
+  } };
+  const before = structuredClone(entry);
+  const result = collectFullTreeInventory([entry, { ...entry, state: 'hover' }]);
+  assert.deepEqual(entry, before);
+  assert.equal(result.variants.length, 1);
+  assert.equal(result.cases.length, 2);
+  const variant = result.variants[0], node = variant.nodes[0];
+  assert.equal(variant.paintedControlTextEvidenceVersion, 1);
+  assert.equal(node.paintedControlText.source, 'core-control-texture');
+  assert.equal(node.paintedControlText.text, 'Action');
+  assert.equal(node.paintedControlText.maxWidth, 120);
+  assert.deepEqual(result.styles[node.paintedControlText.style].value, entry.inputTrees.astylar.nodes[0].paintedControlText.style);
+  assert.equal(result.styles[node.retainedText.style].value.fontSize, '20px');
+  assert.equal(result.styles[node.style].value.fontSize, '24px');
+  const legacy = structuredClone(entry);
+  delete legacy.inputTrees.astylar.paintedControlTextEvidenceVersion;
+  delete legacy.inputTrees.astylar.nodes[0].paintedControlText;
+  const mixed = collectFullTreeInventory([entry, { ...legacy, state: 'hover' }]);
+  assert.equal(mixed.variants.length, 2);
+  assert.equal(mixed.variants[1].paintedControlTextEvidenceVersion, undefined);
+  assert.equal(mixed.variants[1].nodes[0].paintedControlText, undefined);
+});
+
 test('an inventoried hidden or anonymous element still requires resolved style evidence', () => {
   const entry = { family: 'core', profile: 'light', viewport: { id: 'desktop' }, inputTrees: {
     astylar: { schemaVersion: 1, nodes: [
