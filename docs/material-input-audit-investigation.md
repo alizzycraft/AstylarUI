@@ -22,6 +22,53 @@ selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Fresh supplements after the inspection repair (2026-09-12)
+
+Commit `8d3a974` is pushed to `codex/material-ui-showcase`. The following
+unchanged capture producers were rerun against the frozen corrected bundle at
+`http://127.0.0.1:4431`, with
+`--checkpoint=artifacts/material-parity/current-ancestry-audit/checkpoint`.
+Each command uses a new output directory; previous failing evidence is intact.
+
+| Producer (`node scripts/…`) | `--output=artifacts/material-parity/…` | Cases / mismatches | Report SHA-256 |
+| --- | --- | --- | --- |
+| `audit-material-picker-commits.mjs` | `supplemental-current-ancestry-audit/picker-commit-audit` | 6 / 6 | `2ec850bfcf782048630a4ec4bef0bb7885576263ab7a0c47fab39495e327f39b` |
+| `audit-material-overlay-breakpoints.mjs` | `supplemental-current-ancestry-audit/overlay-breakpoint-audit` | 3 / 1 | `476498ca3c6f68d09afda41dc9e0ae68fdd0359b44048d9866a415c5969453d9` |
+| `audit-material-slider-domain.mjs` | `supplemental-current-ancestry-audit/slider-domain-audit` | 4 / 4 | `00b1972bfc7e53eaada48e8c418bff35cc07f42209f328e1779c45014c54addf` |
+
+All three producers intentionally exit 1 for observed mismatches. Independent
+`collectSupplementalBehavior`, `collectSupplementalOverlays`, and
+`collectSupplementalSlider` reads, supplied with the selected checkpoint
+provenance and new supplemental root, validate all three as `checkpoint-bound`:
+zero missing cases, zero runtime/provenance errors. `collectFullTreeInventory`
+loads 26 per-side case mappings and 25 variants with zero tree or reference
+context gaps. These are not legacy reports relabeled as fresh evidence.
+
+The six picker checks still leave candidate values empty or the month at
+`SEP 2026`, while reference commits yield `9/1/2026`, `9/2/2026`, or `12:30 AM`
+and navigation yields `AUG 2026` / `OCT 2026`. Slider keyboard steps remain
+non-equivalent: the start sequence reaches 40 instead of 60; the end reaches
+58 instead of 40. Real pointer drags stop at 50 on both candidate half-domains,
+instead of reaching reference endpoints 60 / 40. The bottom sheet matches at
+900 and 1440 CSS pixels, but at 1024 its width is 512 rather than 384 and its
+left edge is 256 rather than 320. These reproduce the previously documented
+unequal authoring/state rules; the diagnostic repair does not fix or waive them.
+
+The unchanged `audit-material-button-defaults.mjs` also passes freshly with
+`--output=artifacts/material-parity/button-default-current-ancestry-audit`.
+It observes two original native buttons, two candidate labels, and eight
+isolated browser controls. Report SHA-256 is
+`4d25b2df0dfb0123b95677a9ebd9263d867b4cac05db7f781e68118250f7bb33`;
+independent `validateSupplementalCapture` returns `checkpoint-bound` with no
+errors. Native button UA alignment remains center while the replacement
+candidate flex-div label retains left. This corroborates the existing input
+classification, not an assertion that all text alignment is renderer-correct.
+
+The full matrix is still running. Collect the natural-line-box supplement only
+after all static checkpoints exist, then regenerate the complete report with
+the new evidence paths. Final all-difference classification and acceptance
+remain incomplete.
+
 ## Core inspection now scopes resolution to the current document (2026-09-12)
 
 The goal permits a small core repair when required to make instrumentation
