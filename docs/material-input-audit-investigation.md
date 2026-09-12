@@ -5,12 +5,47 @@ The machine report is generated separately from the full benchmark output.
 
 The report generator accepts an explicit evidence path so the fresh full run
 does not have to overwrite the preserved baseline. After the new control-text
-run completes, use `node scripts/run-material-input-audit.mjs --parity-report=artifacts/material-parity/control-text-complete-audit/latest-report.json`,
+run completes, use `node scripts/run-material-input-audit.mjs --parity-report=artifacts/material-parity/control-text-complete-audit/latest-report.json --normal-line-box-report=artifacts/material-parity/normal-line-box-static-audit-v2/latest-report.json`,
 then the same command with `--check`. Do not use `--allow-partial` for acceptance.
 Argument validation rejects unknown, empty, and repeated options (25/25 audit
 tests pass). A missing selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
+
+## Static normal-line-height stage differences are now individually attributed (2026-09-12)
+
+The report builder now accepts an explicit `--normal-line-box-report` path and
+uses the independently validated observations in its control-typography stage.
+Unknown, empty or repeated CLI options fail. Missing observations remain
+visible, and a selected invalid report is an evidence error even in partial
+diagnostic mode. No older report is used as a fallback.
+
+Across all **436 current static cases**, **120** raw `normal`/17px differences
+now have `reviewed-normal-line-box-stage-comparison` attribution, classified as
+an audit stage-comparison defect rather than a renderer defect or accepted
+fixture substitution. Each original browser value, normal/effective declaration
+and current paint value remains intact. The report retains the exact natural
+measurement and its hashes, plus the unique candidate ancestry proving that
+no explicit line-height or font shorthand supplied a substitute value. A
+different observed height remains an unresolved comparison, not an automatic
+core-defect verdict when other typography inputs may differ.
+
+The result is **156 static control observations / 453 raw property differences,
+zero unresolved control-property attributions**, with 24 static paginator
+SVG-to-glyph substitutions still separately recorded. This is not overall input
+equivalence: font-list, tracking, disabled-ink and tab/toolbar line-height input
+substitutions remain classified independently. The confirmed Arial, serif and
+fallback-glyph normal-metrics failures are not waived by these 120 observations.
+Broader retained-text, layout, structure, state and plugin ownership work remains.
+
+Focused audit tests pass **76/76**, including 23 rejection mutations for the
+occurrence-level join, preservation of unrelated typography differences and a
+32px synthetic observation that prevents a hidden `normal = 17px` rule. The
+validator also rejects detached, changed or falsely equivalent review claims
+that do not match the report's exact retained observation. The combined audit
+and loader suite passes **127/127**, and `npm run parity:harness:check` passes
+**165/165**. The report and Markdown now include the supplemental coverage explicitly. No
+production input, renderer implementation or running full-matrix capture changed.
 
 ## Natural-line-box reader rejects mismatched evidence before attribution (2026-09-12)
 

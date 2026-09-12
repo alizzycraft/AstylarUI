@@ -1,6 +1,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
+import { loadNormalLineBoxReport } from './normal-line-box-report.mjs';
 import {
   implicitReferenceValues,
   implicitReferenceJustifications,
@@ -25,7 +26,7 @@ const propertyGroupByName = new Map(Object.entries(propertyGroups)
   .flatMap(([group, properties]) => properties.map((property) => [property, group])));
 
 export function parseMaterialInputAuditArguments(args, root = process.cwd()) {
-  let parityReport;
+  let parityReport, normalLineBoxReport;
   const flags = new Set();
   for (const arg of args) {
     if (arg === '--check' || arg === '--allow-partial') {
@@ -35,6 +36,10 @@ export function parseMaterialInputAuditArguments(args, root = process.cwd()) {
       if (parityReport !== undefined) throw new Error('Repeated audit option: --parity-report');
       parityReport = arg.slice('--parity-report='.length);
       if (!parityReport.trim()) throw new Error('--parity-report requires a path');
+    } else if (arg.startsWith('--normal-line-box-report=')) {
+      if (normalLineBoxReport !== undefined) throw new Error('Repeated audit option: --normal-line-box-report');
+      normalLineBoxReport = arg.slice('--normal-line-box-report='.length);
+      if (!normalLineBoxReport.trim()) throw new Error('--normal-line-box-report requires a path');
     } else {
       throw new Error(`Unknown audit option: ${arg}`);
     }
@@ -43,6 +48,7 @@ export function parseMaterialInputAuditArguments(args, root = process.cwd()) {
     check: flags.has('--check'),
     allowPartial: flags.has('--allow-partial'),
     parityPath: path.resolve(root, parityReport ?? 'artifacts/material-parity/latest-report.json'),
+    ...(normalLineBoxReport === undefined ? {} : { normalLineBoxPath: path.resolve(root, normalLineBoxReport) }),
   };
 }
 
@@ -60,7 +66,15 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const supplementalSlider = collectSupplementalSlider(root);
   const elementInventory = collectFullTreeInventory([...cases, ...supplementalBehavior.cases, ...supplementalOverlays.cases, ...supplementalSlider.cases], { root });
   const retainedTypography = collectRetainedTypographyEvidence(cases, elementInventory);
-  const controlTypography = collectControlTypographyEvidence(cases, elementInventory);
+  const rawControlTypography = collectControlTypographyEvidence(cases, elementInventory);
+  const normalLineBoxes = options.normalLineBoxPath
+    ? loadNormalLineBoxReport({ root, reportPath: path.relative(root, path.resolve(root, options.normalLineBoxPath)).replaceAll('\\', '/'), cases, inventory: elementInventory,
+      controlTypography: rawControlTypography, expectedProvenance: parityReport.captureProvenance })
+    : { schemaVersion: 1, observations: [], errors: [], missing: rawControlTypography.comparisons
+      .filter((item) => item.case.startsWith('static:') && item.properties.lineHeight.reference === 'normal')
+      .map((item) => ({ case: item.case, element: item.element, referenceNode: item.referenceNode })),
+      scope: 'No supplemental static natural-line-box report selected. No line-height equivalence inferred.' };
+  const controlTypography = attributeObservedNormalLineBoxes(rawControlTypography, elementInventory, normalLineBoxes);
   const discrepancies = collectStyleDiscrepancies(cases, retainedTypography);
   const classifications = countBy(discrepancies, (entry) => entry.classification);
   const propertyGroupCounts = countBy(discrepancies, (entry) => entry.propertyGroup);
@@ -86,11 +100,13 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
     supplementalBehavior,
     supplementalOverlays,
     supplementalSlider,
+    normalLineBoxes,
     summary: {
       inputEquivalent: coverage.complete && coverage.missingElements.length === 0 &&
         supplementalBehavior.missing.length === 0 && supplementalBehavior.errors.length === 0 && supplementalBehavior.mismatches.length === 0 &&
         supplementalOverlays.missing.length === 0 && supplementalOverlays.errors.length === 0 && supplementalOverlays.mismatches.length === 0 &&
         supplementalSlider.missing.length === 0 && supplementalSlider.errors.length === 0 && supplementalSlider.mismatches.length === 0 &&
+        normalLineBoxes.missing.length === 0 && normalLineBoxes.errors.length === 0 &&
         elementInventory.gaps.length === 0 && elementInventory.resolvedStyleGaps.length === 0 && elementInventory.stateStyleGaps.length === 0 && elementInventory.errors.length === 0 &&
         retainedTypography.gaps.length === 0 && retainedTypography.differences.length === 0 && retainedTypography.paintMaskDifferences.length === 0 &&
         controlTypography.gaps.length === 0 && controlTypography.differences.length === 0 && controlTypography.iconSubstitutions.length === 0 &&
@@ -148,9 +164,12 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
     'reviewed-core-font-list-rewrite': 'confirmed-core-renderer-defect',
     'reviewed-toolbar-button-line-height-input': 'application-plugin-authoring-defect',
     'reviewed-tab-label-typography-input': 'application-plugin-authoring-defect',
+    'reviewed-normal-line-box-stage-comparison': 'parity-harness-defect',
   };
   const unresolvedControlTypography = report.controlTypography?.differences.filter((entry) =>
-    !reviewedControlKinds[entry.attribution] || entry.classification !== reviewedControlKinds[entry.attribution] || !entry.reviewEvidence) ?? [];
+    !reviewedControlKinds[entry.attribution] || entry.classification !== reviewedControlKinds[entry.attribution] || !entry.reviewEvidence ||
+    (entry.attribution === 'reviewed-normal-line-box-stage-comparison' &&
+      !isReviewedNormalLineBoxDifference(entry, report.normalLineBoxes))) ?? [];
   if (requireComplete && unresolvedControlTypography.length > 0) errors.push(`${unresolvedControlTypography.length} control texture typography differences require attribution`);
   if (!Array.isArray(report.controlTypography?.iconSubstitutions)) errors.push('missing control icon substitution inventory');
   const unresolvedIcons = report.controlTypography?.iconSubstitutions?.filter((entry) =>
@@ -173,6 +192,9 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
   if (report.supplementalOverlays.errors.length > 0) errors.push(`${report.supplementalOverlays.errors.length} supplemental overlay collection errors`);
   if (requireComplete && report.supplementalSlider.missing.length > 0) errors.push(`${report.supplementalSlider.missing.length} supplemental slider cases are missing`);
   if (report.supplementalSlider.errors.length > 0) errors.push(`${report.supplementalSlider.errors.length} supplemental slider collection errors`);
+  if (report.normalLineBoxes?.schemaVersion !== 1) errors.push('missing natural-line-box evidence stage');
+  if (requireComplete && report.normalLineBoxes?.missing.length > 0) errors.push(`${report.normalLineBoxes.missing.length} static normal-line-box observations are missing`);
+  if (report.normalLineBoxes?.errors.length > 0) errors.push(`${report.normalLineBoxes.errors.length} natural-line-box evidence errors`);
   return errors;
 }
 
@@ -198,7 +220,9 @@ export function renderMaterialInputAuditMarkdown(report) {
     '',
     `Retained typography: ${report.retainedTypography.comparisons.length} directly mapped text-node observations; ${report.retainedTypography.gaps.length} mapping/stage gaps and ${report.retainedTypography.differences.length} unequal retained-property observations. The registry stage is reported separately from declarations and is not proof of current pseudo-state glyph paint.`,
     '',
-    `Control texture typography: ${report.controlTypography.comparisons.length} mapped current-texture observations; ${report.controlTypography.gaps.length} mapping/stage gaps and ${report.controlTypography.differences.length} unequal paint-input properties. Parsed CSS lengths and line-height multipliers are normalized independently of declarations. This does not prove final material effects, placement, visibility or raster parity.`,
+    `Control texture typography: ${report.controlTypography.comparisons.length} mapped current-texture observations; ${report.controlTypography.gaps.length} mapping/stage gaps and ${report.controlTypography.differences.length} raw computed-to-paint property differences, including individually reviewed stage-representation differences. Parsed CSS lengths and line-height multipliers are normalized independently of declarations. This does not prove final material effects, placement, visibility or raster parity.`,
+    '',
+    `Static natural line boxes: ${report.normalLineBoxes.observations.length} validated browser observations, ${report.normalLineBoxes.missing.length} missing and ${report.normalLineBoxes.errors.length} evidence errors. Matching observed heights explain only the raw normal-to-numeric stage comparison; other typography inputs, baseline, wrapping and final raster remain independent questions. No global normal-to-pixel substitution is accepted.`,
     '',
     `Control icon substitutions: ${report.controlTypography.iconSubstitutions.length} captured SVG-to-text input replacements. These are unequal content/geometry inputs, not accepted text-owner mappings or font comparisons. Their actual glyph paint inputs remain recorded separately from the reference vector path.`,
     '',
@@ -1119,6 +1143,67 @@ export function collectRetainedTypographyEvidence(cases, inventory) {
     comparisons, differences, gaps, paintMaskDifferences, reviewedMappings };
 }
 
+function isReviewedNormalLineBoxDifference(entry, supplemental) {
+  const evidence = entry.reviewEvidence, observation = evidence?.observation;
+  if (entry.property !== 'lineHeight' || entry.values.reference !== 'normal' ||
+      !entry.case.startsWith('static:') || entry.values.painted !== `${observation?.naturalHeight}px` ||
+      !/^[a-f0-9]{64}$/.test(observation?.evidence?.sha256 ?? '') || !evidence?.candidateOmissionChain?.length ||
+      evidence.inputEquivalent !== false || supplemental?.errors?.length !== 0 ||
+      !/^[a-f0-9]{64}$/.test(supplemental.sha256 ?? '') ||
+      evidence.supplementalReport?.sha256 !== supplemental.sha256 || evidence.supplementalReport?.file !== supplemental.file) return false;
+  const matches = supplemental.observations?.filter((item) => item.case === entry.case &&
+    item.element === entry.element && item.referenceNode === entry.referenceNode) ?? [];
+  return matches.length === 1 && JSON.stringify(matches[0]) === JSON.stringify(observation);
+}
+
+export function attributeObservedNormalLineBoxes(controlTypography, inventory, supplemental) {
+  const result = structuredClone(controlTypography);
+  if (supplemental?.schemaVersion !== 1 || supplemental.errors?.length !== 0 ||
+      !/^[a-f0-9]{64}$/.test(supplemental.sha256 ?? '') || !Array.isArray(supplemental.observations)) return result;
+  for (const comparison of result.comparisons) {
+    if (!comparison.case.startsWith('static:') || comparison.state !== 'static' ||
+        comparison.mapping?.kind !== 'reviewed-material-button-label' || comparison.source !== 'core-control-texture' ||
+        comparison.properties.lineHeight.reference !== 'normal') continue;
+    const measurements = supplemental.observations.filter((item) => item.case === comparison.case &&
+      item.element === comparison.element && item.referenceNode === comparison.referenceNode);
+    if (measurements.length !== 1) continue;
+    const observation = measurements[0];
+    if (observation.schemaVersion !== 1 || observation.source !== 'browser-natural-single-line-box' ||
+        observation.fontReady !== true || typeof observation.text !== 'string' || typeof comparison.text !== 'string' ||
+        observation.text.trim() !== comparison.text.trim() ||
+        !/^[a-f0-9]{64}$/.test(observation.evidence?.sha256 ?? '') ||
+        !Number.isFinite(observation.naturalHeight) || observation.naturalHeight <= 0) continue;
+    // Record the observed scalar even when it disagrees; do not classify a
+    // core defect from this scalar alone when other typography inputs differ.
+    comparison.observedNormalLineBox = observation;
+    if (comparison.properties.lineHeight.painted !== `${observation.naturalHeight}px` ||
+        ['fontSize', 'fontWeight', 'fontStyle'].some((property) =>
+          comparison.properties[property].reference === undefined ||
+          comparison.properties[property].reference !== comparison.properties[property].painted)) continue;
+    const mappings = inventory.cases.filter((item) => item.case === comparison.case && item.side === 'astylar');
+    if (mappings.length !== 1 || inventory.errors.some((item) => item.case === comparison.case)) continue;
+    const tree = inventory.variants[mappings[0].variant];
+    const nodes = tree.nodes.filter((node) => node.key === comparison.astylarNode);
+    if (nodes.length !== 1) continue;
+    const candidateOmissionChain = candidateTypographyOmissionChain(nodes[0], tree, inventory, 'lineHeight');
+    if (!candidateOmissionChain) continue;
+    const differences = result.differences.filter((item) => item.case === comparison.case &&
+      item.element === comparison.element && item.referenceNode === comparison.referenceNode &&
+      item.astylarNode === comparison.astylarNode && item.property === 'lineHeight');
+    if (differences.length !== 1 || differences[0].attribution !== 'unresolved') continue;
+    Object.assign(differences[0], {
+      classification: 'parity-harness-defect', attribution: 'reviewed-normal-line-box-stage-comparison',
+      recommendedOwner: 'input audit browser-used line-height observation and stage comparison',
+      justification: 'The raw comparison mixed browser computed normal with a core numeric paint metric. A provenance-bound measurement of this exact reference label gives the same natural single-line height as current paint; candidate normal/effective ancestry contains no explicit line-height or font shorthand substitution. This explains the scalar comparison only, not equivalent font fallback, tracking, baseline, wrapping, glyph raster or overall inputs. Other typography differences remain independently classified; no blanket normal-to-pixel rule is accepted.',
+      reviewEvidence: { supplementalReport: { file: supplemental.file, sha256: supplemental.sha256 },
+        observation, candidateOmissionChain, currentPaintedLineHeight: comparison.properties.lineHeight.painted,
+        coreDefaultOwner: 'TextStyleParserService.parseTextProperties -> resolveNormalLineHeight',
+        inputEquivalent: false, finalRasterVerified: false },
+    });
+  }
+  return result;
+}
+
 function candidateTypographyOmissionChain(ast, tree, inventory, property) {
   const chain = [], seen = new Set();
   let ancestor = ast;
@@ -1805,6 +1890,11 @@ function sourceFingerprints(root) {
     'tests/material-parity/benchmark.config.mjs',
     'tests/material-parity/run-material-parity.mjs',
     'tests/material-parity/input-tree-evidence.mjs',
+    'tests/material-parity/input-equivalence-audit.mjs',
+    'tests/material-parity/input-equivalence-policy.mjs',
+    'tests/material-parity/normal-line-box-report.mjs',
+    'tests/material-parity/normal-line-box-evidence.mjs',
+    'scripts/audit-material-normal-line-boxes.mjs',
   ];
   return files.map((file) => ({ file, sha256: createHash('sha256')
     .update(readFileSync(path.resolve(root, file), 'utf8').replace(/\r\n/g, '\n')).digest('hex') }));
@@ -1812,6 +1902,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'scripts/audit-material-normal-line-boxes.mjs', /const targets =/,
+      '120 validated static natural-line-box observations across 96 cases; scope-limited stage evidence', 'Pinned browser assets, text, typography, viewport/DPR and paired checkpoint trees bind a supplemental natural reference line box to each mapped static label. The measured scalar matches current core paint for these observations; font-list, tracking and disabled-ink substitutions remain independently classified. No universal normal-line-height rule, input-equivalence or final raster claim is inferred.'),
     proof(root, 'examples/material-showcase/src/app/normal-line-height-audit.spec.ts', /describe\('Material audit/,
       'nine browser reductions; five pass and four diagnostic failures are retained', 'Equal typography compares actual core control paint and bound-texture CSS height with a natural single-line DOM block, not the fixed button container or a guessed normal multiplier. Local Roboto 14px normal/omitted, 17.5px normal, and explicit 21px/1.5 controls pass. Arial 16px and serif 20px normal are one pixel too short; Roboto 14px containing emoji or CJK fallback glyphs is two pixels too short. Repeated after fixing test-only local font asset serving. This confirms a core normal-metrics defect without assigning it to every Material occurrence or claiming final glyph raster parity.'),
     proof(root, 'scripts/audit-material-picker-commits.mjs', /select day 1/,

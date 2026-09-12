@@ -3,6 +3,7 @@ import test from 'node:test';
 import path from 'node:path';
 import {
   buildMaterialInputAudit,
+  attributeObservedNormalLineBoxes,
   collectFullTreeInventory,
   collectControlTypographyEvidence,
   collectRetainedTypographyEvidence,
@@ -33,6 +34,11 @@ test('audit CLI selects isolated full-matrix evidence without silently accepting
   assert.throws(() => parseMaterialInputAuditArguments(['--parity-report=']), /requires a path/);
   assert.throws(() => parseMaterialInputAuditArguments(['--parity-report=a', '--parity-report=b']), /Repeated audit option/);
   assert.throws(() => parseMaterialInputAuditArguments(['--check', '--check']), /Repeated audit option/);
+  const lineBoxReport = 'artifacts/material-parity/normal-line-box-static-audit-v2/latest-report.json';
+  assert.equal(parseMaterialInputAuditArguments([`--normal-line-box-report=${lineBoxReport}`], root).normalLineBoxPath,
+    path.resolve(root, lineBoxReport));
+  assert.throws(() => parseMaterialInputAuditArguments(['--normal-line-box-report=']), /requires a path/);
+  assert.throws(() => parseMaterialInputAuditArguments(['--normal-line-box-report=a', '--normal-line-box-report=b']), /Repeated audit option/);
 });
 
 test('slider supplement requires all full-domain cases and does not trust endpoint claims', () => {
@@ -315,7 +321,10 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   const report = parityReport({}, {});
   const audit = buildMaterialInputAudit(report);
   assert.equal(audit.coverage.visualParityGreen, true);
-  assert.equal(audit.sourceFingerprints.length, 23);
+  assert.equal(audit.sourceFingerprints.length, 28);
+  for (const file of ['tests/material-parity/input-equivalence-audit.mjs', 'tests/material-parity/input-equivalence-policy.mjs',
+    'tests/material-parity/normal-line-box-report.mjs', 'tests/material-parity/normal-line-box-evidence.mjs',
+    'scripts/audit-material-normal-line-boxes.mjs']) assert.ok(audit.sourceFingerprints.some((item) => item.file === file));
   assert.ok(audit.sourceFingerprints.some(({ file }) => file === 'examples/material-showcase/src/app/normal-line-height-audit.spec.ts'));
   assert.ok(audit.sourceFingerprints.some(({ file }) => file === 'examples/material-showcase/angular.json'));
   assert.ok(audit.sourceFingerprints.some(({ file }) => file === 'src/app/services/dom/input/button.manager.ts'));
@@ -1163,6 +1172,112 @@ function controlTypographyReport() {
 function controlEvidence(raw) {
   return collectControlTypographyEvidence(raw.results, collectFullTreeInventory(raw.results));
 }
+
+function observedNormalLineBoxFixture() {
+  const raw = controlTypographyReport(), trees = raw.results[0].inputTrees;
+  trees.reference.styles[0].lineHeight = 'normal';
+  const node = trees.astylar.nodes[0];
+  node.parent = 'page';
+  trees.astylar.nodes.push({ key: 'page', parent: 'root', authored: { type: 'main', id: 'page' },
+    resolvedStyle: {}, normalResolvedStyle: {}, interactionResolvedStyle: {} });
+  const inventory = collectFullTreeInventory(raw.results), control = collectControlTypographyEvidence(raw.results, inventory);
+  const comparison = control.comparisons[0];
+  const supplemental = { schemaVersion: 1, file: 'test-report.json', sha256: 'a'.repeat(64), errors: [], missing: [],
+    observations: [{ schemaVersion: 1, case: comparison.case, element: comparison.element,
+      referenceNode: comparison.referenceNode, text: comparison.text, fontReady: true,
+      source: 'browser-natural-single-line-box', naturalHeight: 32, evidence: { file: 'test-observation.json', sha256: 'b'.repeat(64) } }] };
+  return { raw, inventory, control, supplemental };
+}
+
+test('observed normal line box attributes the exact stage mismatch without rewriting inputs', () => {
+  const f = observedNormalLineBoxFixture(), before = structuredClone(f);
+  const result = attributeObservedNormalLineBoxes(f.control, f.inventory, f.supplemental);
+  const line = result.differences.find((item) => item.property === 'lineHeight');
+  assert.equal(line.attribution, 'reviewed-normal-line-box-stage-comparison');
+  assert.equal(line.classification, 'parity-harness-defect');
+  assert.equal(line.values.reference, 'normal');
+  assert.equal(line.values.painted, '32px');
+  assert.equal(line.values.normal, undefined);
+  assert.equal(line.reviewEvidence.observation.naturalHeight, 32, 'not a hard-coded normal equals 17 rule');
+  assert.equal(line.reviewEvidence.candidateOmissionChain.length, 2);
+  assert.equal(line.reviewEvidence.inputEquivalent, false);
+  assert.equal(result.comparisons[0].finalRasterVerified, false);
+  assert.deepEqual(f, before, 'neither inputs nor unreviewed raw differences are changed');
+  const report = buildMaterialInputAudit(f.raw);
+  report.controlTypography = result;
+  report.normalLineBoxes = structuredClone(f.supplemental);
+  assert.ok(!validateMaterialInputAudit(report).some((error) => error.includes('control texture typography differences')));
+  delete line.reviewEvidence.observation.evidence.sha256;
+  assert.ok(validateMaterialInputAudit(report).some((error) => error.includes('control texture typography differences')));
+});
+
+test('report validation requires the same joined normal observation, not a detached review claim', () => {
+  for (const mutation of ['missing observation', 'other hash', 'changed observation', 'false equivalence']) {
+    const f = observedNormalLineBoxFixture(), report = buildMaterialInputAudit(f.raw);
+    report.controlTypography = attributeObservedNormalLineBoxes(f.control, f.inventory, f.supplemental);
+    report.normalLineBoxes = structuredClone(f.supplemental);
+    if (mutation === 'missing observation') report.normalLineBoxes.observations = [];
+    if (mutation === 'other hash') report.normalLineBoxes.sha256 = 'c'.repeat(64);
+    if (mutation === 'changed observation') report.normalLineBoxes.observations[0].naturalHeight = 33;
+    if (mutation === 'false equivalence') report.controlTypography.differences.find((item) => item.property === 'lineHeight').reviewEvidence.inputEquivalent = true;
+    assert.ok(validateMaterialInputAudit(report).some((error) => error.includes('control texture typography differences')), mutation);
+  }
+});
+
+test('observed line-box agreement never excuses other typography input differences', () => {
+  const f = observedNormalLineBoxFixture();
+  const node = f.raw.results[0].inputTrees.astylar.nodes[0];
+  node.paintedControlText.style.fontFamily = 'Arial, sans-serif';
+  node.paintedControlText.style.letterSpacing = 1;
+  const inventory = collectFullTreeInventory(f.raw.results), control = collectControlTypographyEvidence(f.raw.results, inventory);
+  const result = attributeObservedNormalLineBoxes(control, inventory, f.supplemental);
+  assert.equal(result.differences.find((item) => item.property === 'lineHeight').attribution, 'reviewed-normal-line-box-stage-comparison');
+  for (const property of ['fontFamily', 'letterSpacing']) assert.deepEqual(result.differences.find((item) => item.property === property),
+    control.differences.find((item) => item.property === property));
+});
+
+test('observed normal attribution rejects incomplete, ambiguous, conflicting or substituted inputs', () => {
+  const mutations = [
+    (f) => { f.supplemental.errors.push('bad capture'); },
+    (f) => { delete f.supplemental.sha256; },
+    (f) => { f.supplemental.observations = []; },
+    (f) => { f.supplemental.observations.push(f.supplemental.observations[0]); },
+    (f) => { f.supplemental.observations[0].case = 'another case'; },
+    (f) => { f.supplemental.observations[0].element = 'another control'; },
+    (f) => { f.supplemental.observations[0].referenceNode = 'another node'; },
+    (f) => { f.supplemental.observations[0].text = 'Other'; },
+    (f) => { f.supplemental.observations[0].fontReady = false; },
+    (f) => { delete f.supplemental.observations[0].evidence.sha256; },
+    (f) => { f.supplemental.observations[0].naturalHeight = 33; },
+    (f) => { f.control.comparisons[0].state = 'hover'; },
+    (f) => { f.control.comparisons[0].properties.fontSize.painted = '25px'; },
+    (f) => { f.control.comparisons[0].properties.fontWeight.painted = '700'; },
+    (f) => { f.control.comparisons[0].properties.fontStyle.painted = 'italic'; },
+    (f) => { f.control.comparisons[0].mapping.kind = 'inferred-text'; },
+    (f) => { f.inventory.errors.push({ case: f.control.comparisons[0].case }); },
+    (f) => { const tree = f.inventory.variants.find((item) => item.side === 'astylar'); tree.nodes[0].parent = 'missing'; },
+    (f) => { const tree = f.inventory.variants.find((item) => item.side === 'astylar'); tree.nodes[0].parent = tree.nodes[0].key; },
+    (f) => { const tree = f.inventory.variants.find((item) => item.side === 'astylar'); f.inventory.styles[tree.nodes[0].normalStyle].value.lineHeight = '32px'; },
+    (f) => { const tree = f.inventory.variants.find((item) => item.side === 'astylar'); f.inventory.styles[tree.nodes[1].interactionStyle].value.lineHeight = '32px'; },
+    (f) => { const tree = f.inventory.variants.find((item) => item.side === 'astylar'); f.inventory.styles[tree.nodes[1].normalStyle].value.font = '24px/32px Arial'; },
+    (f) => { f.control.differences.push({ ...f.control.differences.find((item) => item.property === 'lineHeight') }); },
+  ];
+  for (const mutate of mutations) {
+    const f = observedNormalLineBoxFixture(); mutate(f);
+    const result = attributeObservedNormalLineBoxes(f.control, f.inventory, f.supplemental);
+    assert.ok(result.differences.filter((item) => item.property === 'lineHeight').every((item) => item.attribution === 'unresolved'), String(mutate));
+  }
+});
+
+test('normal observations remain required and a selected missing report cannot silently authorize attribution', () => {
+  const f = observedNormalLineBoxFixture(), report = buildMaterialInputAudit(f.raw);
+  assert.equal(report.normalLineBoxes.missing.length, 1);
+  assert.ok(validateMaterialInputAudit(report).some((error) => error.includes('normal-line-box observations are missing')));
+  const missing = buildMaterialInputAudit(f.raw, { normalLineBoxPath: 'artifacts/material-parity/no-such-normal-report.json' });
+  assert.equal(missing.normalLineBoxes.errors.length, 1);
+  assert.ok(validateMaterialInputAudit(missing, { requireComplete: false }).some((error) => error.includes('natural-line-box evidence errors')));
+  assert.equal(missing.controlTypography.differences.find((item) => item.property === 'lineHeight').attribution, 'unresolved');
+});
 
 function paginatorIconReport(direction = 'previous') {
   const raw = controlTypographyReport(), entry = raw.results[0];
