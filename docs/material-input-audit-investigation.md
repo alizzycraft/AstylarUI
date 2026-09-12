@@ -19,6 +19,34 @@ new control-text texture instrumentation.
 
 ## Button-toggle native defaults are lost with the button wrapper (2026-09-12)
 
+The main audit now attributes all **136 label-alignment observations across
+12 static and 56 interaction button-toggle cases**. Each occurrence must retain
+the exact native-button/inline-block reference path and centered flex-div/span
+candidate path, with complete reference and candidate ancestry. Reference
+computed center and candidate omitted normal/effective alignment plus retained
+left remain raw differences, classified as application authoring divergence.
+The attribution does not assert a user-agent rule for every state: the separate
+CDP probe below establishes that rule only for its captured light reference.
+
+New source finding `fixture-toggle-native-button-substitution`, focused proof
+inventory and implementation plan **5.26** preserve that ownership distinction.
+Three regression groups pass, including **21 contradictory-input mutations and
+eight report-tampering controls**. Missing/cyclic/duplicate ancestry, a changed
+element type, different display/alignment, unsupported bidi context, inline
+overrides or contradictory state styles cannot receive this attribution. Report
+claims are independently replayed; removing or altering them fails validation.
+`npm run parity:harness:check` passes **296/296**, zero skipped (133.6 seconds).
+The 68-case family inspection has zero inventory errors and reference-context
+gaps. Other properties and overall input equivalence remain independently open.
+
+A broader verified prefix contains **436 static and 1,420 interaction cases**.
+Checkpoint result digests, partial-report validation, tree inventory, reference
+context and natural-line-box checks return zero errors; all 77 source findings
+are detected and all ten live capture-module hashes remain unchanged. The native
+button supplement still independently validates as `checkpoint-bound`. This is
+partial evidence only: the remaining interaction capture and audit classification
+work are not complete, and `inputEquivalent` remains false.
+
 A read-only Chrome DevTools Protocol probe now identifies the previously unknown
 source of the reference label's `text-align: center`. In both original light
 desktop buttons, the Material host computes `start`, the nested native `button`
@@ -59,9 +87,8 @@ trees and runtime asset hashes are preserved alongside the report. Independent
 The report SHA-256 is
 `b8d0465158358232d35643f949e8b32c81e7604484d828fe49ec0b07fdfa823e`.
 
-Next: bind this native-default/structure evidence to matching observations in
-the full audit, preserving every raw center/left difference. Do not grant blanket
-equivalence to center/left or infer UA rules for unrelated elements. Restore the
+The per-case review above preserves every raw center/left difference. Do not grant
+blanket equivalence to center/left or infer UA rules for unrelated elements. Restore the
 original native-button wrapper and CSS layout intent in the later implementation
 pass, then test any remaining discrepancy in core defaults and inline layout.
 No reference, fixture, renderer, live capture module or visual gate was changed.

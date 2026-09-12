@@ -336,6 +336,16 @@ export const sourceAuditDefinitions = Object.freeze([
     referenceEvidence: { file: 'examples/material-showcase/src/app/reference.component.ts', element: "@case ('table')", selectors: ['.mat-mdc-header-cell', '.mat-mdc-cell'], declarations: { borderBottomWidth: '1px', borderBottomStyle: 'solid' }, exception: 'final body row has no bottom border' },
   }),
   Object.freeze({
+    id: 'fixture-toggle-native-button-substitution',
+    introducedBy: 'c47d589 button-toggle label composition',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`type: 'div', id: 'button-toggle-one', class:`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase native-button structure; core defaults and inline layout verification',
+    justification: 'The reference has native inline-block buttons with inline-block labels, while the candidate replaces them with centered flex divs and ordinary spans. Captured reference center versus candidate omitted normal/effective alignment and retained left is unequal structure/default-style input. A separate read-only CDP probe confirms user-agent button centering in the light reference, with eight browser controls separating tag defaults, inheritance, role and explicit override. Per-occurrence attribution requires exact structure and complete captured ancestry; it does not assume the UA rule across other states, equate center/left, or infer a core defect from unequal inputs. Restore the original mechanism before assessing core defaults or inline layout.',
+    focusedProof: 'scripts/audit-material-button-defaults.mjs',
+  }),
+  Object.freeze({
     id: 'fixture-control-label-typography-omitted',
     introducedBy: '2f44011 initial chip styling; c47d589 button-toggle label composition',
     file: 'examples/material-showcase/src/app/astylar.component.ts',

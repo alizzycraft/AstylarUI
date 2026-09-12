@@ -335,6 +335,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
     'reviewed-tree-font-input': 'application-plugin-authoring-defect',
     'reviewed-tree-label-line-box-substitution': 'application-plugin-authoring-defect',
     'reviewed-stepper-number-wrapper-substitution': 'application-plugin-authoring-defect',
+    'reviewed-toggle-button-wrapper-substitution': 'application-plugin-authoring-defect',
     'reviewed-control-label-token-input': 'application-plugin-authoring-defect',
     'reviewed-select-value-token-input': 'application-plugin-authoring-defect',
     'reviewed-calendar-weekday-typography-input': 'application-plugin-authoring-defect',
@@ -349,6 +350,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
   validateFieldLabelTracking(report, errors);
   validateTreeLabelLineBoxes(report, errors);
   validateStepperNumberAlignment(report, errors);
+  validateToggleButtonAlignment(report, errors);
   if (requireComplete && report.supplementalBehavior.missing.length > 0) errors.push(`${report.supplementalBehavior.missing.length} supplemental behavior cases are missing`);
   if (report.supplementalBehavior.errors.length > 0) errors.push(`${report.supplementalBehavior.errors.length} supplemental behavior collection errors`);
   if (requireComplete && report.supplementalOverlays.missing.length > 0) errors.push(`${report.supplementalOverlays.missing.length} supplemental overlay cases are missing`);
@@ -408,6 +410,7 @@ export function renderMaterialInputAuditMarkdown(report) {
     `Stepper structure: ${report.retainedTypography.gaps.filter((gap) => isReviewedStepperPanelGap(gap, report.elementInventory)).length} gap records document an omitted inactive reference panel, classified as unequal fixture structure rather than missing core text. Active-panel typography remains independently compared.`,
     '',
     `Stepper number positioning: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-stepper-number-wrapper-substitution').length} records preserve the reference start-aligned numeral inside a separate percentage-positioned/transformed wrapper versus the candidate fixed centered span. This is unequal authored structure and alignment, not equivalent start/center values or proof of a core text-alignment defect.`,
+    `Button-toggle alignment: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-toggle-button-wrapper-substitution').length} records retain native-button/inline-block center versus substituted flex-div/span left. Exact structure and complete captured ancestry establish unequal inputs, not equivalent alignment or a core default-style failure.`,
     `Calendar close control: ${report.controlTypography.gaps.filter(gap => isReviewedCalendarCloseGap(gap, report.elementInventory)).length} preserved gap records identify a reference close-button/label path omitted from the candidate popup. The retained stage preserves the same omission separately from remaining anonymous labels. These are unequal authored controls, not invented paint entries, harmless hidden text or equivalent Escape/outside dismissal. Computed clipping and focus-to-reveal behavior remain unverified by these structural captures.`,
     `Calendar weekday headers: ${report.retainedTypography.reviewedMappings.filter(m => m.kind === 'reviewed-calendar-weekday-text').length} abbreviated labels have exact ordered-header/date-context correspondence. Their separate full-name omissions remain explicit gap records, and replacing column headers with spans is classified as unequal authoring. Font/ink substitutions, unresolved tracking, original divider structure and unknown clipping remain independent; no glyph raster is inferred from retained text.`,
     '',
@@ -1673,6 +1676,89 @@ function reviewedTreeLabelLineBox(entry, mapping, ref, ast, styles, referenceTre
       referenceComputed: styles.reference.lineHeight, candidateRetained: styles.retained.lineHeight } };
 }
 
+function reviewedToggleButtonAlignment(entry, mapping, ref, ast, styles, referenceTree, astylarTree, inventory) {
+  if (entry.family !== 'button-toggle' || mapping?.kind !== 'reviewed-showcase-template-text' ||
+      !/^button-toggle-(one|two)-label$/.test(mapping.element) || styles.reference.textAlign !== 'center' ||
+      styles.retained.textAlign !== 'left' || ast.retainedText?.source !== 'core-text-registry') return;
+  const mappings = reviewedTemplateTextMappings('button-toggle', referenceTree, astylarTree).filter(m => m.element === mapping.element);
+  if (mappings.length !== 1 || JSON.stringify(mappings[0]) !== JSON.stringify(mapping) ||
+      referenceTree.nodes.some(n => n.parent === ref.key) || astylarTree.nodes.some(n => n.parent === ast.key)) return;
+  const referenceChain = [], seen = new Set();
+  let node = ref;
+  while (node) {
+    if (seen.has(node.key) || referenceTree.nodes.filter(n => n.key === node.key).length !== 1) return;
+    seen.add(node.key);
+    const pooled = inventory.styles[node.style], value = pooled?.value, depth = referenceChain.length;
+    if (pooled?.side !== 'reference' || value?.textAlign !== (depth < 2 ? 'center' : 'start') ||
+        value.direction !== 'ltr' || value.writingMode !== 'horizontal-tb' ||
+        !['normal', 'isolate'].includes(value.unicodeBidi) || value.textAlignLast !== 'auto' ||
+        (depth < 2 && value.display !== 'inline-block') ||
+        node.inline?.['text-align'] || node.inline?.all || /(?:^|;)\s*(?:text-align|all)\s*:/i.test(node.attributes?.style ?? '')) return;
+    const rules = node.rules.map(i => inventory.rules[i]);
+    if (rules.some(r => r?.side !== 'reference')) return;
+    const alignmentRules = rules.map(r => r.value).filter(r => r.active === true && (r.declarations?.['text-align'] || r.declarations?.all));
+    if (alignmentRules.some(r => r.declarations.all || !['inherit', ...(depth < 2 ? [] : ['start'])].includes(r.declarations['text-align']?.value))) return;
+    referenceChain.push({ node: node.key, parent: node.parent, type: node.type, alignmentRules,
+      computed: Object.fromEntries(['textAlign', 'textAlignLast', 'direction', 'writingMode', 'unicodeBidi', 'display'].map(p => [p, value[p]])) });
+    if (node.key === 'frame') break;
+    const parents = referenceTree.nodes.filter(n => n.key === node.parent);
+    if (parents.length !== 1) return;
+    node = parents[0];
+  }
+  if (node?.key !== 'frame' || node.parent !== null || node.type !== 'main' ||
+      !String(node.attributes?.class ?? '').split(/\s+/).includes('frame')) return;
+  const candidateChain = candidateTypographyOmissionChain(ast, astylarTree, inventory, 'textAlign');
+  if (!candidateChain || candidateChain.some(c => astylarTree.nodes.filter(n => n.key === c.node).length !== 1 ||
+      ['normal', 'effective'].some(s => c[s].all !== undefined) ||
+      astylarTree.nodes.find(n => n.key === c.node).authored?.style !== undefined)) return;
+  const parent = astylarTree.nodes.find(n => n.key === ast.parent);
+  if (parent?.authored.type !== 'div' || ['normalStyle', 'interactionStyle'].some(stage => {
+    const value = inventory.styles[parent[stage]]?.value;
+    return value?.display !== 'flex' || value.justifyContent !== 'center';
+  })) return;
+  const pooledRules = astylarTree.rules.map(i => inventory.rules[i]);
+  if (pooledRules.some(r => r?.side !== 'astylar')) return;
+  const candidateRules = pooledRules.map(r => r.value).filter(r => r.selector === '.button-toggle-option' && r.display !== undefined);
+  if (candidateRules.length !== 1 || candidateRules[0].display !== 'flex' || candidateRules[0].justifyContent !== 'center' ||
+      candidateRules[0].textAlign !== undefined || candidateRules[0].all !== undefined ||
+      Object.keys(candidateRules[0]).some(k => k.startsWith('media'))) return;
+  return { attribution: 'reviewed-toggle-button-wrapper-substitution', classification: 'application-plugin-authoring-defect',
+    inputEquivalent: false, currentPseudoStatePaintVerified: false,
+    recommendedOwner: 'showcase native-button structure and core defaults/inline layout verification',
+    justification: 'The captured reference retains an inline-block native button and inline-block label computing center, inside start-aligned ancestry. The candidate substitutes a centered flex div and ordinary span, omits alignment through its complete normal/effective ancestry and retains left. These are different layout and default-style inputs, not equivalent center/left values or proof of a core alignment bug. The separate browser-default probe identifies user-agent button centering in the light reference; this per-case attribution rests on captured structure and computed/resolved inputs, not an assumed user-agent rule in every state. Restore the native wrapper and original CSS mechanism before testing core defaults or inline layout; do not tune label offsets.',
+    reviewEvidence: { sourceFinding: 'fixture-toggle-native-button-substitution', mapping: mappings[0], referenceChain,
+      candidateChain, candidateRule: candidateRules[0], candidateAuthored: ast.authored,
+      candidateParent: { node: parent.key, authored: parent.authored },
+      nativeDefaultProbe: 'scripts/audit-material-button-defaults.mjs' } };
+}
+
+function validateToggleButtonAlignment(report, errors) {
+  const expected = [];
+  for (const comparison of report.retainedTypography?.comparisons ?? []) {
+    if (comparison.family !== 'button-toggle') continue;
+    const refs = report.elementInventory.cases.filter(c => c.case === comparison.case && c.side === 'reference');
+    const asts = report.elementInventory.cases.filter(c => c.case === comparison.case && c.side === 'astylar');
+    if (refs.length !== 1 || asts.length !== 1) continue;
+    const refTree = report.elementInventory.variants[refs[0].variant], astTree = report.elementInventory.variants[asts[0].variant];
+    const ref = refTree.nodes.find(n => n.key === comparison.referenceNode), ast = astTree.nodes.find(n => n.key === comparison.astylarNode);
+    if (!ref || !ast) continue;
+    const indices = { reference: ref.style, normal: ast.normalStyle, effective: ast.interactionStyle, retained: ast.retainedText?.style };
+    const pooled = Object.fromEntries(Object.entries(indices).map(([k, i]) => [k, report.elementInventory.styles[i]]));
+    if (Object.entries(pooled).some(([k, p]) => p?.side !== (k === 'reference' ? 'reference' : 'astylar') || !p.value)) continue;
+    const styles = Object.fromEntries(Object.entries(pooled).map(([k, p]) => [k, canonicalStyle(p.value)]));
+    const review = reviewedToggleButtonAlignment(comparison, comparison.mapping, ref, ast, styles, refTree, astTree, report.elementInventory);
+    if (review) expected.push({ comparison, review, values: Object.fromEntries(Object.entries(styles).map(([k, s]) => [k, s.textAlign])) });
+  }
+  const claimed = report.retainedTypography?.differences.filter(d => d.attribution === 'reviewed-toggle-button-wrapper-substitution') ?? [];
+  if (expected.length !== claimed.length || expected.some(({ comparison, review, values }) => {
+    const matches = claimed.filter(d => d.case === comparison.case && d.element === comparison.element && d.property === 'textAlign' &&
+      d.referenceNode === comparison.referenceNode && d.astylarNode === comparison.astylarNode);
+    return matches.length !== 1 || JSON.stringify(matches[0].values) !== JSON.stringify(values) ||
+      JSON.stringify(comparison.properties.textAlign) !== JSON.stringify(values) ||
+      Object.entries(review).some(([k, v]) => JSON.stringify(matches[0][k]) !== JSON.stringify(v));
+  })) errors.push('toggle button alignment attributions do not replay from native-wrapper and flex-span inputs');
+}
+
 function reviewedStepperNumberAlignment(entry, mapping, ref, ast, styles, referenceTree, astylarTree, inventory) {
   if (entry.family !== 'stepper' || mapping?.kind !== 'reviewed-showcase-template-text' ||
       !/^step-(details|review)-badge$/.test(mapping.element) || styles.reference.textAlign !== 'start' ||
@@ -2331,6 +2417,7 @@ export function collectRetainedTypographyEvidence(cases, inventory, controlTypog
             ...(property === 'fontSize' && treeFont ? treeFont : {}),
             ...(property === 'lineHeight' ? reviewedTreeLabelLineBox(entry, textMappingById.get(id), ref, ast, styles, referenceTree, astylarTree, inventory) ?? {} : {}),
             ...(property === 'textAlign' ? reviewedStepperNumberAlignment(entry, textMappingById.get(id), ref, ast, styles, referenceTree, astylarTree, inventory) ?? {} : {}),
+            ...(property === 'textAlign' ? reviewedToggleButtonAlignment(entry, textMappingById.get(id), ref, ast, styles, referenceTree, astylarTree, inventory) ?? {} : {}),
             ...(property === 'fontSize' && floatingLabel ? floatingLabel : {}),
             ...(property === 'letterSpacing' ? reviewedFieldLabelTrackingInput(entry, ref, ast, styles, referenceTree, astylarTree, inventory) ?? {} : {}),
             ...(controlLabelToken ?? {}),
@@ -3779,6 +3866,7 @@ function sourceFingerprints(root) {
     'tests/material-parity/normal-line-box-report.mjs',
     'tests/material-parity/normal-line-box-evidence.mjs',
     'scripts/audit-material-normal-line-boxes.mjs',
+    'scripts/audit-material-button-defaults.mjs',
   ];
   return files.map((file) => ({ file, sha256: createHash('sha256')
     .update(readFileSync(path.resolve(root, file), 'utf8').replace(/\r\n/g, '\n')).digest('hex') }));
@@ -3786,6 +3874,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'scripts/audit-material-button-defaults.mjs', /CSS.getMatchedStylesForNode/,
+      'two reference/candidate label pairs and eight browser default controls pass', 'Read-only CDP identifies user-agent text-align:center on the original light-profile native buttons, inherited by inline-block labels. Candidate flex divs replace those buttons and their spans retain left. Blank-document button/div/role-button/button-inherit controls distinguish tag defaults from inheritance and author overrides. This is evidence of different inputs, not a core or raster equivalence proof; the full per-case classification separately requires its captured structure, styles and ancestry.'),
     proof(root, 'examples/material-showcase/src/app/normal-letter-spacing-audit.spec.ts', /describe\('Material audit/,
       'six real-browser reductions; five pass and one independent advance failure is retained', 'All six normal/zero pairs have identical DOM Range widths, parsed core tracking zero, CSS texture dimensions and actual bound texture bytes. Explicit 2px increases both widths. Local Roboto and Arial numeric/action controls pass. Arial office AV fails equal-input advance by 0.882825px under both normal and zero: DOM 61.671875px, bound texture 62.5547px. An independent canvas probe reproduces the core width with fontKerning:auto and the DOM width with fontKerning:normal; none yields 64.03125px. This isolates an additional shaping/default-context discrepancy, not a tracking-alias defect or permission to change fixture tracking. No final screen raster claim or universal forced-kerning remedy is inferred.'),
     proof(root, 'examples/material-showcase/src/app/material-plugin/tab-panel-input-audit.spec.ts', /describe\('Material input audit/,
@@ -3839,6 +3929,7 @@ function implementationPlan() {
     { priority: 5.23, rootCause: 'Field-label tracking is tuned separately from the reference typography and transform', action: 'Restore the captured filled-label tracking token together with the reference wrapper typography and transform. The explicit .4/.65px state-dependent substitutions are not the reference .496px CSS input and must not be justified by scaling or calibrating apparent glyph widths. Preserve the independent core transform-order, percentage-translation, origin and text-shaping proofs; verify equivalent inputs before assessing any remaining label placement or raster mismatch.' },
     { priority: 5.24, rootCause: 'Tree direct flex text is replaced by a fixed-height label wrapper', action: 'Restore original direct text ownership and normal line-height together with the reference component font tokens. The explicit 20px height/line-height wrapper introduced in 7159b1d is not equivalent to the original anonymous flex text item. Reduce any remaining discrepancy through equal-input anonymous flex-item sizing, natural line metrics and centering tests; do not preserve or recalibrate a fixed wrapper to match a screenshot. Keep the separate font-stack, font-size and core normal-line-box findings visible.' },
     { priority: 5.25, rootCause: 'Stepper numeric icon positioning is replaced by centered text in a fixed span', action: 'Restore the original numeric span, separate icon-content wrapper, top/left 50% and translate(-50%, -50%) inputs. The current step-badge textAlign:center substitution does not exercise those semantics. Address the independently proven core percentage-transform defect first, then verify the original wrapper under varied digit widths, fonts, density, themes and state changes. Do not move the number with fixture-specific offsets or claim start/center alignment equivalent merely because both screenshots look centered.' },
+    { priority: 5.26, rootCause: 'Native button/inline-block input is replaced by flex-div centering', action: 'Restore the original button wrapper and inline label layout, preserving CSS defaults, inheritance and Material rules. The candidate flex div omits native button defaults; adding label offsets or textAlign:center to that substitute would not test the original mechanism. Verify native-button default resolution and inline formatting through equivalent core inputs after removing the authoring divergence. Keep the separate CDP default controls and per-case captured center/left mismatch evidence.' },
     { priority: 5.3, rootCause: 'Core normal line-height is approximated by a fixed Mg font-box probe', action: 'Resolve browser normal line-box metrics and actual fallback runs in core. The equal-input Arial/serif cases expose one-pixel texture-height errors; Roboto plus emoji/CJK exposes two-pixel errors while plain Roboto and explicit line heights pass. Preserve those controls, extend multiline/baseline/DPR verification and avoid a universal multiplier, constant pixel addition, or fixed Material line-height compensation. Current-texture evidence must remain separate from declared normal and from final glyph raster.' },
     { priority: 5.4, rootCause: 'Calendar cell text tokens and inner line boxes were flattened away', action: 'Restore the reference calendar font and date-text ink tokens and its inner line-height:1 label inside both day and year controls. Keep reference cell/container sizing, state and selection structure instead of copying a normal-metric result or tuning the baseline. Separate date/range-context proofs isolate 990 day and 192 year occurrences each of missing font-token, omitted inner line-height and fixed-ink inputs; core metric defects must be assessed only after those inputs are equivalent. Independently resolve normal-versus-zero tracking and the still-unmapped header/icon owners.' },
     { priority: 5.5, rootCause: 'Snackbar action inherits generic control inputs instead of Material action tokens', action: 'Restore the original text-button font, size and tracking declarations and the snackbar inverse-primary ink, keeping the reference label/action wrapper intent. The exact overlay/message mapping isolates 34 current action textures and source-traces font-stack, tracking and ink substitutions. Trace the remaining 14px-versus-16px and normal-line-box observations through the core defaults/inheritance and metric stages before assigning core ownership; do not calibrate a baseline or line height. Retain the separate intrinsic-width, live-region, visibility, lifetime and placement obligations.' },

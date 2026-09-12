@@ -1210,6 +1210,98 @@ function omittedStepperPanelReport(selected = true) {
   return raw;
 }
 
+function toggleButtonAlignmentReport() {
+  const raw = templateTypographyReport('button-toggle'), { reference: r, astylar: a } = raw.results[0].inputTrees;
+  r.styles[0] = { ...r.styles[0], textAlign: 'start', direction: 'ltr', writingMode: 'horizontal-tb', unicodeBidi: 'normal', textAlignLast: 'auto', display: 'block' };
+  r.styles.push({ ...r.styles[0], textAlign: 'center', display: 'inline-block' });
+  r.nodes[0].parent = 'frame';
+  r.nodes.push({ key: 'frame', parent: null, type: 'main', attributes: { class: 'frame' }, ownText: '', style: 0, rules: [], pseudoElements: [] });
+  for (const n of r.nodes.filter(n => ['mat-button-toggle-button', 'mat-button-toggle-label-content'].includes(n.attributes?.class))) n.style = 1;
+  a.nodes[0].parent = 'page';
+  a.nodes.push({ key: 'page', parent: 'root', authored: { id: 'page', type: 'main' } });
+  a.rules = [{ selector: '.button-toggle-option', display: 'flex', justifyContent: 'center' }];
+  for (const n of a.nodes) {
+    n.normalResolvedStyle = n.authored.class === 'button-toggle-option' ? { display: 'flex', justifyContent: 'center' } : {};
+    n.interactionResolvedStyle = { ...n.normalResolvedStyle };
+    n.resolvedStyle = { ...n.normalResolvedStyle };
+    if (n.retainedText) n.retainedText.style.textAlign = 'left';
+  }
+  return raw;
+}
+
+test('toggle alignment attributes native-wrapper substitution without equating center and left', () => {
+  const raw = toggleButtonAlignmentReport(), before = structuredClone(raw), report = buildMaterialInputAudit(raw);
+  const findings = report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-toggle-button-wrapper-substitution');
+  assert.equal(findings.length, 2);
+  for (const f of findings) {
+    assert.equal(f.values.reference, 'center');
+    assert.equal(f.values.normal, undefined);
+    assert.equal(f.values.effective, undefined);
+    assert.equal(f.values.retained, 'left');
+    assert.equal(f.inputEquivalent, false);
+    assert.equal(f.currentPseudoStatePaintVerified, false);
+    assert.equal(f.classification, 'application-plugin-authoring-defect');
+    assert.equal(f.reviewEvidence.referenceChain[1].type, 'button');
+    assert.equal(f.reviewEvidence.referenceChain.at(-1).node, 'frame');
+    assert.equal(f.reviewEvidence.candidateChain.at(-1).node, 'page');
+    assert.ok(report.sourceFindings.find(s => s.id === f.reviewEvidence.sourceFinding)?.detected);
+  }
+  assert.ok(!validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('toggle button alignment')));
+  assert.deepEqual(raw, before);
+});
+
+test('toggle alignment attribution rejects broken structure, ancestry or contradicted style evidence', () => {
+  const mutations = [
+    r => { r.nodes[0].parent = 'missing'; },
+    r => { r.nodes[0].parent = r.nodes[0].key; },
+    r => { r.nodes.at(-1).attributes.class = 'other'; },
+    r => { r.nodes.push(structuredClone(r.nodes.at(-1))); },
+    r => { r.styles[0].direction = 'rtl'; },
+    r => { r.styles[1].display = 'flex'; },
+    r => { r.styles[1].textAlign = 'left'; },
+    r => { r.styles[1].textAlignLast = 'center'; },
+    r => { r.styles[1].unicodeBidi = 'plaintext'; },
+    r => { for (const n of r.nodes.filter(n => n.type === 'button')) n.type = 'div'; },
+    r => { r.nodes.at(-1).inline = { all: 'revert' }; },
+    r => { r.rules = [{ active: true, declarations: { 'text-align': { value: 'center' } } }];
+      for (const n of r.nodes.filter(n => n.type === 'button')) n.rules = [0]; },
+    (_r, a) => { a.nodes.at(-1).parent = 'missing'; },
+    (_r, a) => { a.nodes.push(structuredClone(a.nodes.at(-1))); },
+    (_r, a) => { a.nodes.at(-1).normalResolvedStyle.textAlign = 'right'; },
+    (_r, a) => { a.nodes.at(-1).interactionResolvedStyle.all = 'initial'; },
+    (_r, a) => { a.nodes.at(-1).authored.style = { textAlign: 'right' }; },
+    (_r, a) => { a.rules.push({ ...a.rules[0] }); },
+    (_r, a) => { a.rules[0].mediaMinWidth = '500px'; },
+    (_r, a) => { for (const n of a.nodes.filter(n => n.authored.class === 'button-toggle-option')) n.interactionResolvedStyle.justifyContent = 'flex-start'; },
+    (_r, a) => { for (const n of a.nodes.filter(n => n.retainedText)) n.retainedText.style.textAlign = 'center'; },
+  ];
+  for (const mutate of mutations) {
+    const raw = toggleButtonAlignmentReport();
+    mutate(raw.results[0].inputTrees.reference, raw.results[0].inputTrees.astylar);
+    const evidence = collectRetainedTypographyEvidence(raw.results, collectFullTreeInventory(raw.results));
+    assert.ok(!evidence.differences.some(d => d.attribution === 'reviewed-toggle-button-wrapper-substitution'), String(mutate));
+  }
+});
+
+test('toggle alignment report claims independently replay from captured inputs', () => {
+  const baseline = buildMaterialInputAudit(toggleButtonAlignmentReport());
+  const mutations = [
+    (_r, f) => { f.inputEquivalent = true; },
+    (_r, f) => { f.currentPseudoStatePaintVerified = true; },
+    (_r, f) => { f.reviewEvidence.referenceChain.pop(); },
+    (_r, f) => { f.values.reference = 'left'; },
+    (_r, f) => { f.classification = 'confirmed-core-renderer-defect'; },
+    (r, f) => { r.retainedTypography.differences.push(structuredClone(f)); },
+    r => { r.retainedTypography.differences = []; },
+    r => { r.elementInventory.rules.find(p => p.side === 'astylar' && p.value.selector === '.button-toggle-option').value.justifyContent = 'flex-start'; },
+  ];
+  for (const mutate of mutations) {
+    const report = structuredClone(baseline);
+    mutate(report, report.retainedTypography.differences.find(d => d.attribution === 'reviewed-toggle-button-wrapper-substitution'));
+    assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('toggle button alignment')), String(mutate));
+  }
+});
+
 function stepperNumberAlignmentReport() {
   const raw = templateTypographyReport('stepper'), { reference: r, astylar: a } = raw.results[0].inputTrees;
   r.styles[0] = { ...r.styles[0], textAlign: 'start', direction: 'ltr', writingMode: 'horizontal-tb', unicodeBidi: 'normal', textAlignLast: 'auto', display: 'block' };
