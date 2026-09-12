@@ -12,7 +12,38 @@ tests pass). A missing selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
-## Explicit font lists are rewritten inside core (2026-09-12)
+## Font fallback rewrite changes actual text advance (2026-09-12)
+
+The follow-up equal-input proof confirms an observable core defect. A button
+with `font-family: MaterialAuditUnavailableFont_8c176e`, text
+`WWWWiiiiMMMMmmmm`, size 20px, weight 400, zero tracking/word spacing and no
+wrapping has browser Range width **230.296875px**. The currently bound Astylar
+label texture records CSS width **226.562px**, a **3.734875px** difference;
+actual paint inspection shows the parser-appended `Arial, Helvetica, sans-serif`.
+Both explicit-generic controls (the same unavailable family followed by `serif`
+or `sans-serif`) pass the same width assertion. Browser and candidate styles
+come from the identical declaration object; there is no fixture correction.
+
+The measurement uses the current label material's unique texture identity and
+its core-recorded logical CSS size, compared with a DOM text Range. A material
+can bind one texture in multiple slots, so the proof deduplicates identities.
+It does not build a replacement candidate canvas from declarations, use world
+coordinates as inputs, or equate the button's fixed width with its text width.
+It establishes text-advance inequality, not the exact fallback font identity,
+missing-glyph coverage, or final glyph raster/sharpness. The installed Roboto
+showcase mutation still does not by itself imply different visible glyphs.
+
+The focused command below now executes **39 cases: 17 pass, 22 fail**. The two
+new explicit-generic controls pass; the single-family fallback case is the one
+new diagnostic failure, in addition to the previous 21. Retain these honest
+failures during this audit. Source finding
+`core-explicit-font-list-appends-default-fallbacks` is now confirmed, owned by
+core font-list parsing/fallback semantics. No renderer implementation changed.
+`npm run parity:harness:check` passes **100/100**. The full frozen-bundle capture
+has completed its static traversal and is still running interaction cases;
+neither this focused proof nor the harness unit suite completes the audit.
+
+## Initial explicit-font-list input proof (2026-09-12)
 
 The new frozen-bundle toolbar capture separates another root cause from fixture
 token omissions: browser computed and candidate normal/effective font-family
@@ -38,10 +69,9 @@ failure plus the previous twenty layout/transform failures. The assertion is
 Helvetica, sans-serif' to be 'Arial'`. The existing zoneless/Zone.js warning
 remains; there is no renderer implementation change.
 
-The pre-paint mutation is proven; a changed glyph raster is **not**. Keep this
-as a suspected core semantic defect, not a confirmed missing-glyph rendering
-defect. Next reduction: an unavailable family or missing-glyph fallback case
-under identical CSS, measuring actual chosen/rasterized glyph behavior. Its
+At this initial stage the pre-paint mutation was proven; a changed glyph raster
+was **not**. The follow-up above now proves changed text advance for an
+unavailable family, while missing-glyph and final-raster claims remain unproven. Its
 owner is core font-list parsing/fallback semantics, not the Material plugin or
 fixture. The source audit now has 55 findings and fingerprints both the button
 manager and text parser (21 source fingerprints). After updating the fingerprint

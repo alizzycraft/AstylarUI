@@ -154,10 +154,10 @@ export const sourceAuditDefinitions = Object.freeze([
     introducedBy: '2ec3152 start if text implementation',
     file: 'src/app/services/text/text-style-parser.service.ts',
     pattern: String.raw`processedFonts\.push\(\.\.\.this\.DEFAULT_FONT_FAMILIES\)`,
-    classification: 'suspected-core-renderer-defect',
+    classification: 'confirmed-core-renderer-defect',
     owner: 'TextStyleParserService explicit font-family parsing and fallback semantics',
-    justification: 'A fresh toolbar capture has Roboto in both browser computed and candidate normal/effective declarations, but actual control paint receives Roboto, Arial, Helvetica, sans-serif. resolveFontFamily appends the default list whenever no recognized generic is present. A package-root equal-input button reduction confirms Arial survives normal inspection but becomes Arial, Arial, Helvetica, sans-serif in current texture inputs; an Arial, sans-serif control passes. The pre-paint mutation is proven and predates the showcase, but these installed-font cases do not prove different glyph raster or fallback selection. Keep the semantic core defect suspected until an unavailable-font or missing-glyph equal-input proof establishes its observable effect. Do not classify it as missing fixture authoring or add a generic to fixture inputs to hide it.',
-    focusedProof: 'examples/material-showcase/src/app/input-equivalence-proof.spec.ts: control texture preserves the authored font-family list',
+    justification: 'A fresh toolbar capture has Roboto in both browser computed and candidate normal/effective declarations, but actual control paint receives Roboto, Arial, Helvetica, sans-serif. resolveFontFamily appends the default list whenever no recognized generic is present. Equal-input package-root proofs isolate both mutation and observable fallback text advance: Arial becomes Arial, Arial, Helvetica, sans-serif; an unavailable single family yields a bound control texture CSS width of 226.562px versus browser Range width 230.296875px for WWWWiiiiMMMMmmmm at 20px. The same unavailable-family case with explicit serif or sans-serif passes, as does the earlier Arial, sans-serif control. This confirms a core fallback-semantics defect, not only an unequal diagnostic string. It does not identify the exact selected font or establish a final glyph-raster difference for the installed Roboto showcase case. Do not add a generic to fixture inputs to hide it.',
+    focusedProof: 'examples/material-showcase/src/app/input-equivalence-proof.spec.ts: control texture preserves the authored font-family list / text advance matches browser fallback',
   }),
   Object.freeze({
     id: 'fixture-button-document-font-replaces-component-token',

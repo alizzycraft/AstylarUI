@@ -8,7 +8,19 @@ import { collectAuthoredInputTree, collectMaterialCoreResolvedStyles } from './m
 // to Astylar. These reductions intentionally contain no Material component,
 // measured height table, DPR correction, or duplicate position calculation.
 describe('Material audit: equivalent CSS input reductions', () => {
-  const cases: Array<{ name: string; site: SiteData; ids: string[]; horizontalOnly?: string[]; loadedCss?: boolean; controlLabels?: string[]; resolved?: Array<{ id: string; properties: string[]; stage?: 'retainedText' | 'paintedControlText' }> }> = [
+  const cases: Array<{ name: string; site: SiteData; ids: string[]; horizontalOnly?: string[]; loadedCss?: boolean; controlLabels?: string[]; controlTextWidths?: string[]; resolved?: Array<{ id: string; properties: string[]; stage?: 'retainedText' | 'paintedControlText' }> }> = [
+    ...['MaterialAuditUnavailableFont_8c176e', 'MaterialAuditUnavailableFont_8c176e, serif', 'MaterialAuditUnavailableFont_8c176e, sans-serif'].map((fontFamily) => ({
+      name: `control texture text advance matches browser fallback for ${fontFamily}`,
+      site: {
+        root: { children: [{ type: 'button', id: 'fallback-button', value: 'WWWWiiiiMMMMmmmm' }] },
+        styles: [{ selector: '#fallback-button', display: 'block', width: '320px', height: '48px', fontFamily,
+          fontSize: '20px', lineHeight: '24px', fontWeight: '400', letterSpacing: '0px', wordSpacing: '0px',
+          whiteSpace: 'nowrap', color: '#123456', background: '#eeeeee', textAlign: 'center' }],
+      } as SiteData,
+      ids: ['fallback-button'],
+      controlLabels: ['fallback-button'],
+      controlTextWidths: ['fallback-button'],
+    })),
     ...['Arial', 'Arial, sans-serif'].map((fontFamily) => ({
       name: `control texture preserves the authored font-family list ${fontFamily}`,
       site: {
@@ -370,6 +382,30 @@ describe('Material audit: equivalent CSS input reductions', () => {
           expect(label).withContext(`${id} rendered control label`).not.toBeNull();
           expect(label?.isEnabled()).withContext(`${id} enabled control label`).toBeTrue();
           expect(label?.visibility).withContext(`${id} control label visibility`).toBeGreaterThan(0);
+        }
+        for (const id of entry.controlTextWidths ?? []) {
+          // Measure output from the currently bound label texture, not a new
+          // canvas configured from fixture declarations or registry styles.
+          // Core records the logical CSS advance used to size this texture,
+          // separately from its integer physical-pixel backing dimensions.
+          // The reference Range measures the same single-line text advance.
+          // This deliberately makes no assertion about final glyph raster ink.
+          const label = surface.scene.getMeshByName(`buttonLabel_${id}`)!;
+          // A material can bind the same texture in both diffuse and emissive
+          // slots. Count texture identities, not material slot references.
+          const textures = [...new Set(label.material!.getActiveTextures())].filter((texture) => texture.metadata?.astylarLogicalTextSize);
+          expect(textures.length).withContext(`${id} unique bound text texture`).toBe(1);
+          const actual = textures[0].metadata.astylarLogicalTextSize.width as number;
+          expect(Number.isFinite(actual)).withContext(`${id} CSS texture width`).toBeTrue();
+          expect(actual).withContext(`${id} nonempty texture width`).toBeGreaterThan(0);
+          const range = doc.createRange();
+          range.selectNodeContents(doc.getElementById(id)!);
+          const expected = range.getBoundingClientRect().width;
+          const paint = surface.inspectResolvedStyles().elements.find((element) => element.id === id)!.paintedControlText;
+          expect(paint?.source).toBe('core-control-texture');
+          expect(Math.abs(actual - expected))
+            .withContext(`${id} text advance: Astylar=${actual}, browser=${expected}, painted font=${paint?.style.fontFamily}`)
+            .toBeLessThan(.1);
         }
         if (entry.resolved) {
           const snapshot = surface.inspectResolvedStyles();
