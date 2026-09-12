@@ -30,6 +30,9 @@ export class TextRenderingService implements TextCacheManager {
   private scene?: BABYLON.Scene;
   private textureCache = new Map<string, TextCache>();
   private textureCacheKeys = new WeakMap<BABYLON.Texture, string>();
+  private texturePaintInputs = new WeakMap<BABYLON.Texture, {
+    text: string; style: TextStyleProperties; maxWidth?: number;
+  }>();
   private options: TextRenderingOptions = {
     enableCaching: true,
     maxCacheSize: 100,
@@ -70,6 +73,18 @@ export class TextRenderingService implements TextCacheManager {
       width: backingSize.width / devicePixelRatio,
       height: backingSize.height / devicePixelRatio,
     };
+  }
+
+  /** Detached inputs actually supplied to a live texture's canvas paint path.
+   * Numeric lengths are CSS pixels except lineHeight, the parser's multiplier.
+   * Not a cascade snapshot, projected geometry, or a promise about later material
+   * effects. Textures from other renderers intentionally have no evidence here.
+   */
+  inspectTexturePaintInputs(texture: BABYLON.Texture): {
+    text: string; style: TextStyleProperties; maxWidth?: number;
+  } | undefined {
+    const inputs = this.isTextureLive(texture) ? this.texturePaintInputs.get(texture) : undefined;
+    return inputs ? structuredClone(inputs) : undefined;
   }
 
   createStoredLayoutMetrics(text: string, style: TextStyleProperties, maxWidth?: number): StoredTextLayoutMetrics {
@@ -164,6 +179,12 @@ export class TextRenderingService implements TextCacheManager {
       texture.hasAlpha = true;
       texture.level = 1;
       texture.update(true);
+
+      // Associate evidence with the raster owner, not an element ID: labels can
+      // share cached textures or swap them for pseudo states. Weak ownership
+      // neither keeps replaced textures alive nor exposes mutable paint inputs.
+      this.texturePaintInputs.set(texture, structuredClone({ text: textContent, style: textStyle, maxWidth }));
+      texture.onDisposeObservable.addOnce(() => this.texturePaintInputs.delete(texture));
 
       // Ensure proper texture wrapping
       texture.wrapU = BABYLON.Texture.CLAMP_ADDRESSMODE;
@@ -544,6 +565,7 @@ export class TextRenderingService implements TextCacheManager {
    */
   dispose(): void {
     this.clearCache();
+    this.texturePaintInputs = new WeakMap();
     this.scene = undefined;
 
   }

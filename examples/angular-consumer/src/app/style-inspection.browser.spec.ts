@@ -12,12 +12,12 @@ describe('packed style inspection API', () => {
     };
     const firstCanvas = makeCanvas(), secondCanvas = makeCanvas();
     const makeData = (color: string): SiteData => ({ root: { children: [
-      { type: 'button', id: 'action', textContent: 'Action' },
+      { type: 'button', id: 'action', value: 'Action' },
       { type: 'div', id: 'hidden', children: [{ type: 'span', textContent: 'Hidden' }] },
       { type: 'div', id: 'parent', children: [{ type: 'div', id: 'child', textContent: 'Inherited type' }] },
     ] }, styles: [
-      { selector: '#action', width: '100px', height: '40px', background: color },
-      { selector: '#action:focus', background: '#abcdef' },
+      { selector: '#action', width: '100px', height: '40px', background: color, color, fontSize: '16px', lineHeight: '24px' },
+      { selector: '#action:focus', background: '#abcdef', color: '#fedcba' },
       { selector: '#hidden', display: 'none' },
       { selector: '#hidden > span', color, width: '50%' },
       { selector: '#parent', width: '200px', height: '50px', fontSize: '24px', lineHeight: '32px', color },
@@ -33,6 +33,14 @@ describe('packed style inspection API', () => {
       expect(snapshot.elements[2].normal.color).toBe('#112233');
       expect(snapshot.elements[2].normal.width).toBe('50%');
       expect(second.inspectResolvedStyles().elements[2].normal.color).toBe('#445566');
+      const control = snapshot.elements[0];
+      expect(control.retainedText).toBeUndefined();
+      expect(control.paintedControlText?.source).toBe('core-control-texture');
+      expect(control.paintedControlText?.text).toBe('Action');
+      expect(control.paintedControlText?.style.fontSize).toBe(16);
+      expect(control.paintedControlText?.style.lineHeight).toBe(1.5);
+      expect(control.paintedControlText?.style.color).toBe('#112233');
+      expect(second.inspectResolvedStyles().elements[0].paintedControlText?.style.color).toBe('#445566');
       const text = snapshot.elements.find((entry) => entry.id === 'child')!;
       expect(text.retainedText?.source).toBe('core-text-registry');
       expect(text.retainedText?.style.fontSize).toBe('24px');
@@ -41,6 +49,8 @@ describe('packed style inspection API', () => {
       expect(second.inspectResolvedStyles().elements.find((entry) => entry.id === 'child')?.retainedText?.style.color).toBe('#445566');
       expect(first.focus('action', { scrollIntoView: false })).toBeTrue();
       expect(first.inspectResolvedStyles().elements[0].effective.background).toBe('#abcdef');
+      expect(first.inspectResolvedStyles().elements[0].paintedControlText?.style.color).toBe('#fedcba');
+      expect(second.inspectResolvedStyles().elements[0].paintedControlText?.style.color).toBe('#445566');
       expect(second.inspectResolvedStyles().elements[0].effective.background).toBe('#445566');
       first.dispose();
       expect(() => first.inspectResolvedStyles()).toThrowError(/disposed/);

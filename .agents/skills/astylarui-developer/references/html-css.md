@@ -305,6 +305,16 @@ a recalculated CSS computed style or a guarantee of current pseudo-state pixels.
 It is absent for hidden/non-text nodes without a retained entry and does not
 replace normal/effective declaration evidence. No registry mesh, metrics, or
 world-space values are exposed. This optional field is backward compatible.
+An independent optional `paintedControlText` entry observes the currently bound
+core control-label texture. Its source is `core-control-texture`, with detached
+text, parsed style and optional wrapping width captured when that texture was
+painted. Parsed lengths are CSS pixels, except `lineHeight`, which is a font-size
+multiplier. Evidence follows cached texture reuse and control pseudo-state texture
+swaps; foreign textures and disposed owners have no entry. This is not inferred
+from authored declarations or projected geometry and does not describe material
+effects, clipping, placement or final raster visibility. It complements rather
+than replaces `retainedText`. Adding this optional field is backward compatible;
+no persisted document or plugin schema changes.
 The API is additive for consumers of mounted handles; custom implementations of
 the `AstylarSurface` interface must supply the new diagnostic method. Persisted
 documents and plugin API v2 are unchanged. The packed-consumer style-inspection

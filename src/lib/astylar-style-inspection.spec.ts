@@ -4,6 +4,53 @@ import { Astylar } from './astylar';
 import type { SiteData } from '../app/types/site-data';
 
 describe('on-demand core style inspection', () => {
+  it('observes the current value-label texture across focus, update and replacement', async () => {
+    TestBed.configureTestingModule({ providers: [provideZonelessChangeDetection()] });
+    const canvas = document.createElement('canvas');
+    canvas.width = 360; canvas.height = 180;
+    document.body.appendChild(canvas);
+    const data: SiteData = { root: { children: [
+      { id: 'action', type: 'button', value: 'Action' },
+    ] }, styles: [
+      { selector: '#action', width: '160px', height: '48px', fontFamily: 'Arial', fontSize: '16px', lineHeight: '24px', letterSpacing: '.5px', color: '#123456' },
+      { selector: '#action:focus', color: '#abcdef' },
+    ] };
+    const before = JSON.stringify(data);
+    const surface = TestBed.inject(Astylar).mount(canvas, data, { diagnostics: { logLevel: 'silent' } });
+    try {
+      await surface.whenSettled();
+      const inspect = () => surface.inspectResolvedStyles().elements[0];
+      const resources = surface.diagnostics.resources;
+      expect(inspect().retainedText).toBeUndefined();
+      const painted = inspect().paintedControlText!;
+      expect(painted.source).toBe('core-control-texture');
+      expect(painted.text).toBe('Action');
+      expect(painted.style.fontSize).toBe(16);
+      expect(painted.style.lineHeight).toBe(1.5);
+      expect(painted.style.letterSpacing).toBe(.5);
+      expect(painted.style.color).toBe('#123456');
+      (painted.style as { fontSize: number }).fontSize = 999;
+      expect(inspect().paintedControlText?.style.fontSize).toBe(16);
+      expect(surface.diagnostics.resources).toEqual(resources);
+      expect(surface.focus('action', { scrollIntoView: false })).toBeTrue();
+      expect(inspect().paintedControlText?.style.color).toBe('#abcdef');
+      surface.blur();
+      expect(inspect().paintedControlText?.style.color).toBe('#123456');
+      await surface.update({ ...data, styles: data.styles.map((rule) => rule.selector === '#action' ? { ...rule, fontSize: '20px' } : rule) });
+      expect(inspect().paintedControlText?.style.fontSize).toBe(20);
+      expect(inspect().paintedControlText?.style.lineHeight).toBe(1.2);
+      expect(JSON.stringify(data)).toBe(before);
+      await surface.update({ ...data, styles: [...data.styles, { selector: '#action', display: 'none' }] });
+      expect(inspect().paintedControlText).toBeUndefined();
+      await surface.update({ ...data, root: { children: [{ type: 'div', id: 'replacement' }] } });
+      expect(inspect().paintedControlText).toBeUndefined();
+    } finally {
+      surface.dispose();
+      canvas.remove();
+    }
+    expect(() => surface.inspectResolvedStyles()).toThrowError(/disposed/);
+  }, 30000);
+
   it('separates retained inherited text input from cascade declarations', async () => {
     TestBed.configureTestingModule({ providers: [provideZonelessChangeDetection()] });
     const canvas = document.createElement('canvas');

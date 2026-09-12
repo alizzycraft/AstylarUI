@@ -56,6 +56,17 @@ export interface AstylarResolvedStyleSnapshot {
       readonly source: 'core-text-registry';
       readonly style: Readonly<StyleRule>;
     };
+    /** Inputs of the currently bound core control-label texture, not inferred
+     * declarations. Lengths are CSS pixels; lineHeight is a font-size multiplier.
+     * Absent for unobserved/foreign textures. Does not describe clipping,
+     * material effects, placement, or prove final raster visibility.
+     */
+    readonly paintedControlText?: {
+      readonly source: 'core-control-texture';
+      readonly text: string;
+      readonly style: Readonly<import('../app/types/text-rendering').TextStyleProperties>;
+      readonly maxWidth?: number;
+    };
   }[];
 }
 

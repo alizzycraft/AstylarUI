@@ -11,6 +11,46 @@ Argument validation rejects unknown, empty, and repeated options (25/25 audit
 tests pass). A missing selected report fails rather than falling back to older
 evidence; the new run has not yet produced its final report.
 
+## Core-owned control texture inspection (2026-09-12)
+
+The instrumentation now retains a detached copy of the parsed inputs actually
+supplied to `TextRenderingService`'s canvas paint path. Evidence is weakly keyed
+by texture, survives legitimate cache reuse, is removed on texture disposal, and
+is discarded when the service owner is disposed. Inspection cannot invent an
+entry for another renderer's texture and allocates no visual resource.
+
+`inspectResolvedStyles()` adds optional `paintedControlText` with source
+`core-control-texture`, current bound texture text/style and wrapping width. It
+reads the actual control label material, including focus-color texture swaps;
+it does not search output geometry or reconstruct inheritance. This is separate
+from `retainedText`, whose existing registry-only meaning remains intact. Parsed
+lengths are CSS pixels except lineHeight, which is the parser's multiplier. The
+field describes paint inputs, not final clipping, material effects or visibility.
+This is an additive diagnostic API, not a layout/paint fix or a document/plugin
+schema change. Compatibility documentation and its generated skill copy agree.
+
+Verification so far: the combined text-service/core-inspection tests pass 10/10;
+the complete root browser suite passes 458/458 (with the existing launcher forced-
+termination warning after successful tests); harness tests pass 91/91. Examples
+and both skill validators pass. Capability validation still fails only the
+previously documented stale element-creation fingerprint; that source is unchanged.
+`npm run consumer:check` passes: fresh package installation (419 packed files),
+browser and SSR builds, and 4/4 browser tests including surface-isolated control
+texture inspection. The focused inspection suite also passes 3/3 after adding
+the hidden-control assertion.
+
+Commands: `npm test -- --watch=false --browsers=ChromeHeadless
+--include=src/app/services/text/text-rendering.service.spec.ts
+--include=src/lib/astylar-style-inspection.spec.ts` (10/10), the same root test
+command without includes (458/458), and the inspection-only include (3/3).
+`npm run parity:harness:check`, `npm run examples:check` and `npm run skill:check`
+pass; `npm run capabilities:check` retains the known fingerprint failure.
+
+Material collector integration and new-bundle captures are still required. The
+frozen in-flight full matrix and current schema-2 tree captures do not contain
+this new evidence. Their control-label gaps must remain visible; this change
+alone cannot certify those comparisons or complete the audit.
+
 ## Control-value labels are outside the retained typography snapshot (2026-09-12)
 
 A new package-root browser reduction isolates an inspection gap: a button

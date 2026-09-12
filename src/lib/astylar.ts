@@ -19,6 +19,7 @@ import {
   Color3,
   Mesh,
   StandardMaterial,
+  Texture,
 } from "@babylonjs/core";
 import { BabylonDOMRendererService } from "../app/services/dom/renderer.service";
 import { BabylonCameraService } from "../app/services/babylon-camera.service";
@@ -904,11 +905,19 @@ class AstylarRenderer {
       const styles = this.getElementInteractionStyles(element.id ?? '', session.siteData, element);
       const retainedTextStyle = element.id
         ? this.textInteractionRegistry.getByElementId(element.id)?.style : undefined;
+      const input = element.id ? this.inputElementService.getInputElement(element.id) as Button | undefined : undefined;
+      const labelMaterial = input?.labelMesh?.material;
+      const labelTexture = labelMaterial instanceof StandardMaterial ? labelMaterial.diffuseTexture : undefined;
+      const paintedControlText = labelTexture instanceof Texture
+        ? this.textRenderingService.inspectTexturePaintInputs(labelTexture) : undefined;
       if (styles) elements.push({ path, id: element.id, type: element.type,
         normal: structuredClone(styles.normal),
         effective: structuredClone(mergeInteractionStyles(styles)),
         ...(retainedTextStyle ? { retainedText: {
           source: 'core-text-registry' as const, style: structuredClone(retainedTextStyle),
+        } } : {}),
+        ...(paintedControlText ? { paintedControlText: {
+          source: 'core-control-texture' as const, ...paintedControlText,
         } } : {}),
       });
       element.children?.forEach((child, index) => visit(child, `${path}/${index}`));
