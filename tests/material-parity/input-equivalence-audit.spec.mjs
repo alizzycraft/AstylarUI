@@ -146,6 +146,52 @@ test('normalizes explicit font-weight aliases without inventing omitted or relat
   }
 });
 
+test('normalizes CSSOM normal tracking to explicit zero without changing captured inputs', () => {
+  for (const zero of ['0', '0px', '-0px', '0.0em', '0rem']) {
+    for (const [reference, astylar] of [['normal', zero], [zero, 'NORMAL']]) {
+      const raw = parityReport({ letterSpacing: reference }, { letterSpacing: astylar });
+      const before = JSON.stringify(raw);
+      const audit = buildMaterialInputAudit(raw);
+      assert.equal(audit.discrepancies.length, 0, `${reference} / ${astylar}`);
+      assert.equal(JSON.stringify(raw), before);
+      const normalization = audit.reviewedValueNormalizations.find((entry) => entry.property === 'letterSpacing');
+      assert.deepEqual(normalization.aliases, { normal: '0' });
+      assert.match(normalization.justification, /CSS Text 3 section 7.2/);
+    }
+  }
+});
+
+test('tracking normalization does not erase nonzero, relative, invalid or other-property differences', () => {
+  for (const value of ['1px', '-1px', '0.0001px', 'var(--tracking)', 'inherit', 'initial', '0%', 'normal extra']) {
+    for (const [reference, astylar] of [['normal', value], [value, 'normal']]) {
+      assert.equal(buildMaterialInputAudit(parityReport({ letterSpacing: reference }, { letterSpacing: astylar }))
+        .discrepancies.length, 1, `${reference} / ${astylar}`);
+    }
+  }
+  for (const property of ['lineHeight', 'wordSpacing', 'fontStyle', 'textAlign', 'rowGap', 'columnGap']) {
+    assert.equal(buildMaterialInputAudit(parityReport({ [property]: 'normal' }, { [property]: '0px' }))
+      .discrepancies.length, 1, property);
+  }
+});
+
+test('reviewed normalization scope and evidence cannot be replaced or removed from the audit', () => {
+  const audit = buildMaterialInputAudit(parityReport({ letterSpacing: 'normal' }, { letterSpacing: '0px' }));
+  assert.ok(!validateMaterialInputAudit(audit, { requireComplete: false }).some(error => error.includes('normalizations')));
+  for (const mutate of [
+    report => { delete report.reviewedValueNormalizations; },
+    report => { report.reviewedValueNormalizations.shift(); },
+    report => { report.reviewedValueNormalizations[0].aliases.normal = '1px'; },
+    report => { report.reviewedValueNormalizations[0].property = 'lineHeight'; },
+    report => { report.reviewedValueNormalizations[0].evidence = []; },
+    report => { report.reviewedValueNormalizations[0].justification = 'Looks similar'; },
+    report => { report.reviewedValueNormalizations.push(report.reviewedValueNormalizations[0]); },
+  ]) {
+    const changed = structuredClone(audit);
+    mutate(changed);
+    assert.ok(validateMaterialInputAudit(changed, { requireComplete: false }).some(error => error.includes('normalizations')));
+  }
+});
+
 test('accepts only proven omitted shadow and automatic grid-placement initial values', () => {
   const audit = buildMaterialInputAudit(parityReport({ boxShadow: 'none', gridColumn: 'auto', gridRow: 'auto' }, {}));
   for (const property of ['boxShadow', 'gridColumn', 'gridRow']) {
@@ -326,7 +372,11 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   const report = parityReport({}, {});
   const audit = buildMaterialInputAudit(report);
   assert.equal(audit.coverage.visualParityGreen, true);
-  assert.equal(audit.sourceFingerprints.length, 30);
+  assert.equal(audit.sourceFingerprints.length, 32);
+  assert.ok(audit.sourceFingerprints.some(({ file }) => file === 'src/app/services/text/text-canvas-renderer.service.ts'));
+  const trackingProof = 'examples/material-showcase/src/app/normal-letter-spacing-audit.spec.ts';
+  assert.ok(audit.sourceFingerprints.some(({ file }) => file === trackingProof));
+  assert.ok(audit.focusedProofs.some(({ file, line, status }) => file === trackingProof && line > 0 && status !== 'missing'));
   assert.ok(audit.sourceFingerprints.some(({ file }) => file === 'examples/material-showcase/node_modules/@angular/material/fesm2022/datepicker.mjs'));
   const tabProof = 'examples/material-showcase/src/app/material-plugin/tab-panel-input-audit.spec.ts';
   assert.ok(audit.sourceFingerprints.some(({ file }) => file === tabProof));
@@ -2158,9 +2208,12 @@ test('calendar weekday audit preserves seven ordered abbreviations and seven omi
   assert.ok(maps.every(m => m.inputEquivalent === false && m.reviewEvidence.finalRasterVerified === false &&
     m.reviewEvidence.computedClippingVerified === false));
   const differences = evidence.differences.filter(d => d.element.startsWith('datepicker-weekday-'));
-  assert.equal(differences.length, 21);
+  assert.equal(differences.length, 14);
   assert.equal(differences.filter(d => d.attribution === 'reviewed-calendar-weekday-typography-input').length, 14);
-  assert.equal(differences.filter(d => d.attribution === 'unresolved' && d.property === 'letterSpacing').length, 7);
+  assert.equal(differences.filter(d => d.property === 'letterSpacing').length, 0);
+  const tracking = evidence.comparisons.filter(c => c.element.startsWith('datepicker-weekday-'));
+  assert.equal(tracking.length, 7);
+  assert.ok(tracking.every(c => c.properties.letterSpacing.reference === '0' && c.properties.letterSpacing.retained === '0'));
   assert.ok(!evidence.comparisons.some(c => c.text === 'Sunday'));
   assert.deepEqual(raw, before);
   const report = buildMaterialInputAudit(raw);

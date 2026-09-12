@@ -12,6 +12,83 @@ tests pass). A missing selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Normal tracking is a representation alias; shaping remains unequal (2026-09-12)
+
+The largest repeated tracking group is now distinguished from genuine unequal
+typography. [CSS Text 3, section 7.2](https://www.w3.org/TR/2026/CRD-css-text-3-20260814/#letter-spacing-property)
+defines `letter-spacing: normal` as computed zero and describes the legacy
+CSSOM serialization of zero as `normal`. Core `TextStyleParserService.parseSpacing`
+also resolves both forms to numeric zero. This is a property-specific semantic
+equivalence, not a screenshot-based waiver or an assumption about line-height,
+font selection, alignment, glyph shaping or justification quality.
+
+The new package-root browser proof is
+`examples/material-showcase/src/app/normal-letter-spacing-audit.spec.ts`.
+Six cases use local Roboto and Arial with `31`, `Primary action` and `office AV`;
+each mounts independent surfaces with the same DOM/SiteData rules for `normal`,
+`0px` and a `2px` sensitivity control. All six normal/zero pairs have identical
+DOM Range widths, parsed core tracking zero, logical texture dimensions and
+actual currently bound texture bytes. Each nonzero control increases both
+widths. Every surface disposes to zero tracked meshes/materials/textures.
+No final projected screen-raster or all-script shaping claim is made.
+
+The extra equal-input advance assertion deliberately exposes an independent
+failure: **Arial `office AV` is 61.671875 CSS pixels wide in the DOM but
+62.5547 in the bound core texture**, under both normal and zero tracking.
+Five cases pass; this sixth case retains its two failing `<0.1px` assertions.
+The result repeated on all four runs, including the final cleanup-adjusted
+test. The browser reports `font-kerning:auto` and `text-rendering:auto`.
+A separate diagnostic canvas with the same font and tracking measures
+62.5546875 with kerning auto, 61.671875 with normal, and 64.03125 with none.
+The core canvas styling method sets the font and tracking but leaves kerning
+at its default. This localizes a CSS-text/canvas-default shaping discrepancy;
+it does **not** justify globally forcing normal kerning or adjusting fixtures.
+
+Source finding `core-canvas-default-shaping-differs-from-css-text` records the
+confirmed equal-input advance failure and the owning core text subsystem.
+History traces the original canvas styling method to `2ec3152`; the finding
+does not claim the current platform-specific measurement was observed then.
+Implementation priority **5.15** requires explicit kerning/size/font controls,
+retained text, wrapping, caret metrics and common measurement/paint semantics
+before choosing the general correction. Neither renderer nor showcase input
+was modified by this audit increment.
+
+The audit now canonicalizes only the exact letter-spacing alias, while keeping
+the original pooled styles untouched. Missing retained/current-paint values
+remain gaps. The already-existing omitted-initial tracking rule now uses the
+canonical zero form; no new inherited value is fabricated. Tiny nonzero pixel
+tracking is preserved without the generic geometry rounding: an adversarial
+`0.0001px` test initially caught that rounding issue. Other `normal` properties,
+nonzero values, relative tokens, invalid strings and percentages stay distinct.
+The documented normalization scope/evidence is also validated against the exact
+policy, rejecting missing, altered and duplicated metadata.
+
+On the unchanged complete **436 static + 1,875 interaction** capture, this
+explains **3,754** retained and **1,182** current-control tracking comparisons.
+Retained unequal-property observations fall **21,033 to 17,279** and unresolved
+ones **14,855 to 11,101**. Control unequal-property observations fall
+**7,979 to 6,797** and unresolved ones **2,065 to 883**. Mapping coverage remains
+**7,570 retained / 2,215 current-control** comparisons; the unresolved retained
+mapping/stage count remains **3,377**. There are **71** source findings.
+The **3,896** unresolved resolved-style signatures also remain. These are
+reporting/classification advances, not repaired rendering or completed input
+equivalence. The existing green visual matrix was not rerun for report-only
+and isolated diagnostic-test changes; final full-matrix acceptance remains due.
+
+Verification command for the real browser reduction:
+`npm --prefix examples/material-showcase test -- --watch=false --browsers=ChromeHeadless --include=src/app/normal-letter-spacing-audit.spec.ts`.
+Chrome Headless 152 / Babylon 8.56.2 WebGL2 yields **5 pass / 1 diagnostic fail**,
+exit 1. The known zoneless/Zone.js and global stylesheet font warnings do not
+substitute for the proof's explicitly loaded local font. The new font alias is
+loaded before mounting and removed after the suite.
+
+`npm run parity:harness:check` passes **218/218** (129 focused audit tests plus
+89 other harness tests). The focused normalization/source/weekday checks also
+pass **7/7**. Full report generation exits 1 for the four unresolved groups
+listed above; it preserves complete case coverage and does not use a partial
+acceptance flag. The same full-evidence command with `--check` exits 1 for those
+same four groups, with no stale-report mismatch. `git diff --check` is clean.
+
 ## Calendar weekday headers lose structure, full names and tokens (2026-09-12)
 
 Source finding `fixture-calendar-weekday-structure-and-token-substitution`

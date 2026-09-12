@@ -50,7 +50,7 @@ export const implicitReferenceValues = Object.freeze({
   bottom: Object.freeze(['auto']),
   left: Object.freeze(['auto']),
   fontStyle: Object.freeze(['normal']),
-  letterSpacing: Object.freeze(['normal']),
+  letterSpacing: Object.freeze(['0']),
   wordSpacing: Object.freeze(['0']),
   textTransform: Object.freeze(['none']),
   whiteSpace: Object.freeze(['normal']),
@@ -77,6 +77,17 @@ export const implicitReferenceJustifications = Object.freeze({
 
 export const reviewedValueNormalizations = Object.freeze([
   {
+    property: 'letterSpacing',
+    aliases: { normal: '0' },
+    classification: 'equivalent-representation',
+    justification: 'CSS Text 3 section 7.2 defines normal as computed zero and specifies that getComputedStyle serializes zero as normal. Core TextStyleParserService.parseSpacing maps normal and explicit zero to the same numeric tracking input. This accepts only that property representation, not font choice, shaping, line-height, alignment, inherited token resolution, missing paint provenance or final raster. Raw pooled reference/core styles remain unchanged. The existing omitted initial-value rule uses core default tracking zero; no missing retained or painted value is synthesized.',
+    evidence: [
+      'https://www.w3.org/TR/2026/CRD-css-text-3-20260814/#letter-spacing-property',
+      'src/app/services/text/text-style-parser.service.ts: parseSpacing and DEFAULT_TEXT_STYLE.letterSpacing',
+      'examples/material-showcase/src/app/normal-letter-spacing-audit.spec.ts: normal/zero browser widths and bound texture bytes, with nonzero sensitivity controls',
+    ],
+  },
+  {
     property: 'fontWeight',
     aliases: { normal: '400', bold: '700' },
     classification: 'equivalent-representation',
@@ -89,6 +100,16 @@ export const reviewedValueNormalizations = Object.freeze([
 ]);
 
 export const sourceAuditDefinitions = Object.freeze([
+  Object.freeze({
+    id: 'core-canvas-default-shaping-differs-from-css-text',
+    introducedBy: '2ec3152 establishes the canvas font/default-context styling path; the present browser reduction exposes its remaining shaping discrepancy',
+    file: 'src/app/services/text/text-canvas-renderer.service.ts',
+    pattern: String.raw`private applyTextStylingToContext\((?!(?:(?!\n  \})[\s\S])*ctx\.fontKerning)(?:(?!\n  \})[\s\S])*ctx\.font =`,
+    classification: 'confirmed-core-renderer-defect',
+    owner: 'core CSS text shaping and measurement-to-canvas default resolution',
+    justification: 'Identical Arial, sans-serif 16px/24px inputs and office AV content yield DOM Range width 61.671875px but actual bound control texture CSS width 62.5547px. The mismatch repeats under normal and explicit zero tracking while each normal/zero pair has identical DOM widths and identical core texture bytes. The independently configured browser canvas gives 62.5546875px with fontKerning:auto, 61.671875px with normal, and 64.03125px with none. Core assigns the font but leaves canvas kerning at its default. This confirms a core equal-input advance discrepancy and localizes the shaping/default-context boundary; it does not prove that forcing normal globally is correct or that all Material typography failures have this cause. Preserve original fixture font/tracking; extend explicit kerning, font/size, retained text and wrapping evidence before fixing the general rule.',
+    focusedProof: 'examples/material-showcase/src/app/normal-letter-spacing-audit.spec.ts: Arial office AV remains a failing equal-input advance assertion',
+  }),
   Object.freeze({
     id: 'core-transform-list-loses-order-and-repeated-functions',
     introducedBy: '662c179 extracts the shared transform parser with one mutable translation/rotation/scale tuple',

@@ -142,6 +142,9 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
 export function validateMaterialInputAudit(report, { requireComplete = true } = {}) {
   const errors = [];
   if (report.schemaVersion !== materialInputAuditSchemaVersion) errors.push('unexpected audit schema version');
+  if (JSON.stringify(report.reviewedValueNormalizations) !== JSON.stringify(reviewedValueNormalizations)) {
+    errors.push('reviewed value normalizations lack the current exact property, scope and evidence policy');
+  }
   if (requireComplete && !report.coverage.complete) errors.push('parity evidence does not cover the complete configured matrix');
   if (report.summary.unclassifiedDifferences !== 0) errors.push(`${report.summary.unclassifiedDifferences} style differences are unclassified`);
   if (requireComplete && report.summary.unresolvedAttributions > 0) errors.push(`${report.summary.unresolvedAttributions} resolved-style differences still lack root-cause attribution`);
@@ -346,6 +349,8 @@ export function renderMaterialInputAuditMarkdown(report) {
       `The audit found ${report.summary.uniqueStyleDifferences} unique normalized input differences across ${report.summary.totalStyleDifferenceOccurrences} occurrences.`,
     '',
     `${report.summary.unresolvedAttributions} signatures still require authored-rule/cascade/structure attribution. These are evidence gaps, not confirmed authoring or renderer defects; complete audit acceptance rejects them. Source-level findings below carry their own traced evidence.`,
+    '',
+    'Reviewed tracking representation: CSS Text 3 defines letter-spacing normal as computed zero, serialized by CSSOM as normal. Only that alias is canonicalized; raw pooled values remain available. The independent Arial equal-input advance failure remains a core finding. Numeric precision preserves tiny nonzero tracking rather than rounding it to normal. This accepts neither different fonts nor missing paint, line-height, shaping, alignment or final raster.',
     '',
     `Coverage is ${report.coverage.complete ? 'complete' : 'incomplete'}: ${report.coverage.executedStatic}/${report.coverage.configuredStatic} static cases and ` +
       `${report.coverage.executedInteractions}/${report.coverage.configuredInteractions} interaction/mobile-flow cases. All ${report.coverage.families.length} component families are inventoried.`,
@@ -740,6 +745,16 @@ function normalizeValue(property, value) {
   if (property === 'fontFamily') return normalized.replace(/["']/g, '').replace(/\s*,\s*/g, ',').toLowerCase();
   if (property === 'fontWeight' && normalized.toLowerCase() === 'bold') return '700';
   if (property === 'fontWeight' && normalized.toLowerCase() === 'normal') return '400';
+  // CSS Text 3 7.2: normal computes to zero; CSSOM serializes zero as
+  // normal. This is specific to letter-spacing, not line-height or alignment.
+  // Preserve raw pooled inputs and keep missing/relative/token values distinct.
+  if (property === 'letterSpacing' && normalized.toLowerCase() === 'normal') return '0';
+  if (property === 'letterSpacing' && /^-?\d*\.?\d+px$/i.test(normalized)) {
+    const pixels = Number(normalized.slice(0, -2));
+    // Unlike box-coordinate tolerances, tiny tracking is still nonzero and
+    // can accumulate over a run. Do not round it into the normal/zero alias.
+    return pixels === 0 ? '0' : `${pixels}px`;
+  }
   const color = normalizeColor(normalized);
   if (color) return color;
   normalized = normalized.replace(/(^|[ (,:])(-?\d*\.?\d+)px(?=$|[ ),])/g, (_match, prefix, number) =>
@@ -3109,10 +3124,12 @@ function sourceFingerprints(root) {
     'src/app/services/dom/elements/element-material.service.ts',
     'src/app/services/dom/input/button.manager.ts',
     'src/app/services/text/text-style-parser.service.ts',
+    'src/app/services/text/text-canvas-renderer.service.ts',
     'src/app/types/style-rule.ts',
     'examples/material-showcase/src/app/astylar.component.ts',
     'examples/material-showcase/src/app/material-input-evidence.ts',
     'examples/material-showcase/src/app/normal-line-height-audit.spec.ts',
+    'examples/material-showcase/src/app/normal-letter-spacing-audit.spec.ts',
     'examples/material-showcase/angular.json',
     'examples/material-showcase/src/app/reference.component.ts',
     'examples/material-showcase/node_modules/@angular/material/fesm2022/datepicker.mjs',
@@ -3137,6 +3154,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'examples/material-showcase/src/app/normal-letter-spacing-audit.spec.ts', /describe\('Material audit/,
+      'six real-browser reductions; five pass and one independent advance failure is retained', 'All six normal/zero pairs have identical DOM Range widths, parsed core tracking zero, CSS texture dimensions and actual bound texture bytes. Explicit 2px increases both widths. Local Roboto and Arial numeric/action controls pass. Arial office AV fails equal-input advance by 0.882825px under both normal and zero: DOM 61.671875px, bound texture 62.5547px. An independent canvas probe reproduces the core width with fontKerning:auto and the DOM width with fontKerning:normal; none yields 64.03125px. This isolates an additional shaping/default-context discrepancy, not a tracking-alias defect or permission to change fixture tracking. No final screen raster claim or universal forced-kerning remedy is inferred.'),
     proof(root, 'examples/material-showcase/src/app/material-plugin/tab-panel-input-audit.spec.ts', /describe\('Material input audit/,
       'one real-browser characterization passes across three independent surface mounts', 'Actual fillText calls are observed only on the texture bound to the private tab-panel content plane. CSS font sizes 24px and 30px both paint with a 32px texture font when plugin font-size is 16; changing only plugin font-size to 20 paints at 40px. The 2x backing texture stays 480 by 96, ink follows data #ff0000 instead of CSS #123456, and the baseline follows the plugin formula. This confirms competing plugin typography, not a core equal-input failure. Font asset warnings prevent any claim about the selected physical font; glyph sharpness, final baseline alignment and complete matrix paint provenance remain separate obligations.'),
     proof(root, 'scripts/audit-material-normal-line-boxes.mjs', /const targets =/,
@@ -3178,6 +3197,7 @@ function implementationPlan() {
     { priority: 4, rootCause: 'Generic overlay composition is duplicated', action: 'Audit existing core primitives before adding APIs for connected anchors, viewport collision, clipping, focus scope, and dismissal. Migrate popup families with equivalent state inputs; retain different datepicker and timepicker focus behavior. Remove the tooltip benchmark-only forced-open handler.' },
     { priority: 5, rootCause: 'Plugin competes with core typography', action: 'Remove DynamicTexture glyph/baseline rendering from MaterialTabPanelRenderer. Keep only Material transition orchestration while composing core-rendered text/content.' },
     { priority: 5.1, rootCause: 'Core rewrites an explicit font-family list before paint', action: 'The parser appends Arial, Helvetica, sans-serif to explicit lists without a recognized generic. Preserve this as distinct from missing Material font-token authoring. The equal-input unavailable-family proof now confirms changed text advance, while both explicit-generic controls pass. Preserve authored family ordering/quoting and browser fallback semantics at the core parser boundary; verify available/unavailable and missing-glyph cases without assuming a particular platform font. Do not add a generic family to the showcase merely to avoid the parser branch. Final raster verification remains separate from the measured advance proof.' },
+    { priority: 5.15, rootCause: 'Canvas default shaping does not reproduce CSS text advance', action: 'Trace font-kerning and text-rendering semantics through the core text parser, single/multiline measurement, actual canvas paint and caret/selection metrics. The Arial office AV reduction proves a 0.882825px bound-texture advance difference with identical normal or zero tracking; a separate canvas probe isolates auto-versus-normal kerning behavior. Extend fonts, sizes, explicit kerning modes, retained text and wrapping before implementing a shared CSS-to-canvas rule. Do not force a showcase font, alter tracking or calibrate label widths; normal/zero representation equivalence is not proof of shaping or final raster parity.' },
     { priority: 5.2, rootCause: 'Material control typography tokens and nested line boxes are replaced by fixture defaults', action: 'Translate the original filled/outlined/text button and tab font/tracking tokens instead of inheriting the document control stack or omitting tracking. Restore toolbar button line-height inheritance instead of copying the density-specific container height. Preserve the tab text-label line-height:1 inside its independently sized content/control rather than applying the outer line-height to a flattened value label. Preserve alpha ink as a distinct authored input. Then investigate any core API or equal-input text mismatch; do not adjust font size, baseline, or offsets to recover screenshot similarity.' },
     { priority: 5.3, rootCause: 'Core normal line-height is approximated by a fixed Mg font-box probe', action: 'Resolve browser normal line-box metrics and actual fallback runs in core. The equal-input Arial/serif cases expose one-pixel texture-height errors; Roboto plus emoji/CJK exposes two-pixel errors while plain Roboto and explicit line heights pass. Preserve those controls, extend multiline/baseline/DPR verification and avoid a universal multiplier, constant pixel addition, or fixed Material line-height compensation. Current-texture evidence must remain separate from declared normal and from final glyph raster.' },
     { priority: 5.4, rootCause: 'Calendar cell text tokens and inner line boxes were flattened away', action: 'Restore the reference calendar font and date-text ink tokens and its inner line-height:1 label inside both day and year controls. Keep reference cell/container sizing, state and selection structure instead of copying a normal-metric result or tuning the baseline. Separate date/range-context proofs isolate 990 day and 192 year occurrences each of missing font-token, omitted inner line-height and fixed-ink inputs; core metric defects must be assessed only after those inputs are equivalent. Independently resolve normal-versus-zero tracking and the still-unmapped header/icon owners.' },
