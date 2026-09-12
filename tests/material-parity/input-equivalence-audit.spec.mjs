@@ -1098,7 +1098,7 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   const report = parityReport({}, {});
   const audit = buildMaterialInputAudit(report);
   assert.equal(audit.coverage.visualParityGreen, true);
-  assert.equal(audit.sourceFingerprints.length, 51);
+  assert.equal(audit.sourceFingerprints.length, 52);
   for (const file of ['scripts/audit-material-calendar-close.mjs', 'tests/material-parity/calendar-close-evidence.mjs',
     'tests/material-parity/supplemental-capture-evidence.spec.mjs']) {
     assert.equal(audit.sourceFingerprints.filter(entry => entry.file === file).length, 1);
@@ -1280,6 +1280,116 @@ test('legacy normal-only interaction styles cannot be attributed as authoring de
   const mixed = buildMaterialInputAudit(report);
   assert.equal(mixed.discrepancies.length, 2, 'different attribution evidence must not be pooled together');
   assert.equal(mixed.summary.unresolvedAttributions, 1);
+});
+
+function timepickerOptionReport() {
+  const raw = retainedTypographyReport(), entry = raw.results[0];
+  entry.family = 'timepicker';
+  const { reference: r, astylar: a } = entry.inputTrees;
+  const referenceStyle = { fontFamily: 'Roboto', fontSize: '16px', fontWeight: '400', fontStyle: 'normal',
+    lineHeight: '24px', letterSpacing: '.496px', wordSpacing: '0px', textAlign: 'left',
+    textTransform: 'none', textDecoration: 'none', color: '#1d1b1e' };
+  const candidateStyle = { ...referenceStyle, fontFamily: 'Roboto, Arial, sans-serif', lineHeight: 'normal',
+    letterSpacing: '0px', color: '#1d1b20' };
+  r.nodes = []; r.styles = [referenceStyle]; a.nodes = [];
+  const ref = (key, parent, type, attributes, text = '') => r.nodes.push({ key, parent, type, attributes,
+    ownText: text, style: 0, rules: [], inline: {}, pseudoElements: [] });
+  const ast = (key, parent, authored) => a.nodes.push({ key, parent, authored,
+    resolvedStyle: candidateStyle, normalResolvedStyle: candidateStyle, interactionResolvedStyle: candidateStyle,
+    ...(authored.textContent ? { retainedText: { source: 'core-text-registry', style: candidateStyle } } : {}) });
+  ref('field', null, 'mat-form-field', { id: 'timepicker-primary', class: 'mat-mdc-form-field' });
+  ref('infix', 'field', 'div', {});
+  ref('label', 'infix', 'label', { id: 'label-0', for: 'timepicker-control', class: 'mat-mdc-floating-label' });
+  ref('input', 'infix', 'input', { id: 'timepicker-control', role: 'combobox', 'aria-expanded': 'true',
+    'aria-controls': 'mat-timepicker-panel-0', 'mat-timepicker-id': 'mat-timepicker-panel-0', 'aria-activedescendant': 'mat-option-0' });
+  ref('panel', null, 'div', { id: 'mat-timepicker-panel-0', role: 'listbox', class: 'mat-timepicker-panel', 'aria-labelledby': 'label-0' });
+  ast('field', null, { type: 'div', id: 'timepicker-primary', class: 'field-shell' });
+  ast('region', 'field', { type: 'div', id: 'timepicker-input-region' });
+  ast('input', 'region', { type: 'input', id: 'timepicker-control', role: 'combobox', ariaExpanded: true,
+    ariaControls: 'timepicker-options', ariaHaspopup: 'dialog', ariaActivedescendant: 'timepicker-option-0' });
+  ast('panel', 'field', { type: 'div', id: 'timepicker-options', class: 'picker-popup', role: 'listbox' });
+  for (let index = 0; index < 48; index++) {
+    const h = Math.floor(index / 2), text = `${h % 12 || 12}:${index % 2 ? '30' : '00'} ${h < 12 ? 'AM' : 'PM'}`;
+    ref(`o${index}`, 'panel', 'mat-option', { id: `mat-option-${index}`, role: 'option', class: 'mat-mdc-option',
+      'aria-selected': 'false', 'aria-disabled': 'false' });
+    ref(`t${index}`, `o${index}`, 'span', { class: 'mdc-list-item__primary-text' }, text);
+    ref(`r${index}`, `o${index}`, 'div', { class: 'mat-mdc-option-ripple', 'aria-hidden': 'true' });
+    ast(`o${index}`, 'panel', { type: 'div', id: `timepicker-option-${index}`, class: 'picker-option', role: 'option',
+      ariaSelected: index === 0, textContent: text });
+  }
+  return raw;
+}
+
+test('timepicker options map the complete linked half-hour domain without equating wrappers or selection', () => {
+  const raw = timepickerOptionReport(), original = structuredClone(raw), cases = raw.results.map(e => ({ ...e, kind: 'static' }));
+  const inventory = collectFullTreeInventory(cases), result = collectRetainedTypographyEvidence(cases, inventory);
+  assert.equal(result.reviewedMappings.length, 48);
+  assert.equal(result.comparisons.length, 48);
+  assert.equal(result.differences.length, 192);
+  assert.equal(result.gaps.length, 0);
+  const [first] = result.reviewedMappings, last = result.reviewedMappings.at(-1);
+  assert.equal(first.kind, 'reviewed-timepicker-option-text');
+  assert.equal(first.inputEquivalent, false);
+  assert.equal(first.finalRasterVerified, false);
+  assert.equal(first.classification, 'application-plugin-authoring-defect');
+  assert.equal(first.reviewEvidence.referenceSelection, 'false');
+  assert.equal(first.reviewEvidence.candidateSelection, true);
+  assert.equal(last.reviewEvidence.minutes, 1410);
+  assert.equal(last.reviewEvidence.text, '11:30 PM');
+  assert.deepEqual(raw, original);
+});
+
+test('timepicker option correspondence rejects incomplete reordered ambiguous or unlinked lists', () => {
+  const controls = [
+    (r, a) => { r.nodes.find(n => n.key === 'input').attributes['aria-controls'] = 'other'; },
+    (r, a) => { a.nodes.find(n => n.key === 'input').authored.ariaControls = 'other'; },
+    (r, a) => { r.nodes.find(n => n.key === 'input').attributes['aria-expanded'] = 'false'; },
+    (r, a) => { a.nodes.find(n => n.key === 'input').authored.ariaExpanded = false; },
+    (r, a) => { r.nodes.find(n => n.key === 'input').attributes['mat-timepicker-id'] = 'other'; },
+    (r, a) => { r.nodes.find(n => n.key === 'label').attributes.for = 'other'; },
+    (r, a) => { r.nodes.find(n => n.key === 'label').parent = 'other'; },
+    (r, a) => { a.nodes.find(n => n.key === 'panel').parent = 'other'; },
+    (r, a) => { r.nodes = r.nodes.filter(n => n.key !== 'o47'); },
+    (r, a) => { a.nodes = a.nodes.filter(n => n.key !== 'o47'); },
+    (r, a) => { r.nodes.find(n => n.key === 't47').ownText = '11:00 PM'; },
+    (r, a) => { a.nodes.find(n => n.key === 'o0').authored.textContent = '12:30 AM'; },
+    (r, a) => { r.nodes.find(n => n.key === 'o1').attributes.id = 'mat-option-0'; },
+    (r, a) => { a.nodes.find(n => n.key === 'o1').authored.id = 'timepicker-option-0'; },
+    (r, a) => { r.nodes.push(structuredClone(r.nodes.at(-1))); },
+    (r, a) => { a.nodes.push(structuredClone(a.nodes.at(-1))); },
+    (r, a) => { r.nodes.find(n => n.key === 'r0').ownText = 'extra text'; },
+    (r, a) => { r.nodes.find(n => n.key === 'r0').attributes['aria-hidden'] = 'false'; },
+    (r, a) => { r.nodes.find(n => n.key === 'input').attributes['aria-activedescendant'] = 'missing'; },
+    (r, a) => { a.nodes.find(n => n.key === 'input').authored.ariaActivedescendant = 'missing'; },
+    (r, a) => { r.nodes.find(n => n.key === 't0').attributes.id = 'timepicker-option-0'; },
+    (r, a) => { a.nodes.find(n => n.key === 'o0').authored.role = 'button'; },
+    (r, a) => { const i = r.nodes.findIndex(n => n.key === 'o0'), j = r.nodes.findIndex(n => n.key === 'o1'); [r.nodes[i], r.nodes[j]] = [r.nodes[j], r.nodes[i]]; },
+    (r, a) => { const i = a.nodes.findIndex(n => n.key === 'o0'), j = a.nodes.findIndex(n => n.key === 'o1'); [a.nodes[i], a.nodes[j]] = [a.nodes[j], a.nodes[i]]; },
+  ];
+  for (const [index, mutate] of controls.entries()) {
+    const raw = timepickerOptionReport(), { reference, astylar } = raw.results[0].inputTrees;
+    mutate(reference, astylar);
+    assert.deepEqual(reviewedTemplateTextMappings('timepicker', reference, astylar), [], `control ${index}`);
+  }
+});
+
+test('timepicker option replay rejects deleted forged or transplanted evidence', () => {
+  const original = buildMaterialInputAudit(timepickerOptionReport());
+  assert.ok(!validateMaterialInputAudit(original, { requireComplete: false }).some(e => e.includes('timepicker option')));
+  for (const mutate of [
+    r => { r.retainedTypography.reviewedMappings.pop(); },
+    r => { r.retainedTypography.reviewedMappings.push(r.retainedTypography.reviewedMappings[0]); },
+    r => { r.retainedTypography.reviewedMappings[0].inputEquivalent = true; },
+    r => { r.retainedTypography.reviewedMappings[0].reviewEvidence.referenceSelection = 'true'; },
+    r => { r.retainedTypography.reviewedMappings[0].case = 'static:menu@light/desktop'; },
+    r => { r.retainedTypography.comparisons[0].revision++; },
+    r => { r.retainedTypography.comparisons[0].properties.lineHeight.retained = '24px'; },
+    r => { r.retainedTypography.differences.pop(); },
+    r => { r.retainedTypography.differences[0].attribution = 'equivalent-representation'; },
+  ]) {
+    const report = structuredClone(original); mutate(report);
+    assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('timepicker option')));
+  }
 });
 
 function retainedTypographyReport() {

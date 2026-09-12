@@ -23,6 +23,99 @@ selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Timepicker complete option-domain correspondence (2026-09-13)
+
+Reviewing remaining gaps across all components identified the largest unmapped
+text population: **2,304 timepicker option IDs** plus **48 anonymous reference
+list records**. Those were missing audit correspondences, not missing rendered
+options. The complete captured main matrix has **110 timepicker cases**; **48**
+contain paired open lists, each with all **48 half-hour values** from midnight
+through 11:30 PM. The new mapping accounts for all 2,304 labels without using
+screen positions, generated ID suffix equality, or text equality alone.
+
+`reviewed-timepicker-option-text` requires unique expanded combobox/listbox
+associations, the reference floating-label relationship, candidate field/input
+region containment, a complete ordered domain, and the exact direct-child
+Material option/primary-text/ripple versus candidate direct-text option paths.
+It preserves each owner's attributes, styles, rules, state and decoration
+evidence. Correspondence is explicitly **not input equivalence or raster proof**.
+The original trees are unchanged. Different list sizes, missing/reordered
+entries, duplicate IDs/keys, broken associations, extra content and unknown
+active descendants prevent this mapping rather than disappearing from review.
+
+The reference at
+`examples/material-showcase/src/app/reference.component.ts:85` supplies no custom
+time interval. The installed Material `_generateOptions` implementation at
+`examples/material-showcase/node_modules/@angular/material/fesm2022/timepicker.mjs:325`
+defaults to 30-minute intervals from 00:00 through 23:59. Candidate
+`materialTimeOptions` at `examples/material-showcase/src/app/astylar.component.ts:1308`
+generates the corresponding 48 labels. The installed Material module is now
+included in the audit's source fingerprints.
+
+The structural mapping exposes the following additional typography comparisons
+in every option record:
+
+| Property | Reference | Candidate retained input | Audit disposition |
+| --- | --- | --- | --- |
+| Font family | `Roboto` | `Roboto, Arial, sans-serif` | Existing declaration/ancestry proof attributes unequal font-stack authoring |
+| Line height | `20px` | `normal` | Existing original-token/omission proof attributes unequal authoring |
+| Letter spacing | `0.096px` | `0px` | Existing original-token/omission proof attributes unequal authoring |
+| Text alignment | `start` | `left` | Existing complete horizontal-LTR context proves equivalent alignment meaning only |
+| Ink | `rgb(29,27,30)` | `rgb(29,27,32)` | Remains unresolved pending exact color-token/cascade attribution |
+
+Each row represents **2,304 observations**, or **11,520 newly inspectable raw
+differences**. The alignment review does not certify equal line containers,
+glyph positioning or pixels. The existing generic attribution validators still
+apply independently to the font, line-height and tracking evidence.
+
+The mapping also exposes a source-authored state mismatch: in all **48** open
+lists the empty reference input has an active first option but no selected
+option; the candidate permanently sets `ariaSelected: index === 0`. The remaining
+**2,256** option records have false selection on both sides. Material's
+`_syncSelectedState` at `timepicker.mjs:352` explicitly distinguishes active
+fallback from a selected time. `git log -S 'ariaSelected: index === 0'` and
+`git show 2f44011:examples/material-showcase/src/app/astylar.component.ts`
+confirm the direct-text/first-selected substitution existed in the initial
+showcase (which then authored only five labels). It is not evidence that core
+turned correct selection input into an incorrect state.
+
+The new source finding is
+`fixture-timepicker-option-structure-and-selection-substitution`. The proposed
+implementation order restores original option/label/ripple composition and
+typography, separates active from committed selection, and retains the existing
+honest commit-failure proof before testing equal-input scrolling and rendering.
+No showcase, plugin or renderer behavior was changed in this increment.
+
+Focused command:
+
+`node --test --test-name-pattern='timepicker option|records source fingerprints' tests/material-parity/input-equivalence-audit.spec.mjs`
+
+Result: **4/4 pass**, zero failed/skipped/cancelled/todo, **1.739 seconds**.
+The tests include **24 negative capture controls** and **nine report mutations**
+rejecting missing, duplicated, forged or transplanted evidence. Independent
+report replay includes all option mappings, comparisons, differences and gaps;
+deleting unfavorable typography cannot make this mapping pass validation.
+
+`npm run parity:harness:check` passes **364/364**, zero failed/skipped/cancelled/
+todo, **149.106 seconds**, terminal exit 0. All ten frozen visual-harness file
+hashes still match the selected checkpoint. No thresholds or capture inputs
+changed. The complete audit replay used:
+
+```powershell
+node --input-type=module -e "import {readFileSync} from 'node:fs';import {buildMaterialInputAudit,validateMaterialInputAudit} from './tests/material-parity/input-equivalence-audit.mjs';const p=JSON.parse(readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json'));const a=buildMaterialInputAudit(p,{root:process.cwd(),normalLineBoxPath:'artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json',supplementalRoot:'artifacts/material-parity/supplemental-current-ancestry-audit'});console.log('SUMMARY '+JSON.stringify({coverage:a.coverage.complete,sourceFindings:a.summary.sourceFindings,undetected:a.summary.undetectedSourceDefinitions,mappings:a.retainedTypography.reviewedMappings.filter(m=>m.kind==='reviewed-timepicker-option-text').length,retainedGaps:a.retainedTypography.gaps.filter(g=>g.attribution==='unresolved').length}));console.log('DIAGNOSTIC '+JSON.stringify(validateMaterialInputAudit(a,{requireComplete:false})));console.log('STRICT '+JSON.stringify(validateMaterialInputAudit(a)));"
+```
+
+The process reached terminal exit 0: complete configured coverage, **97/97**
+source findings detected, **2,304** option mappings and diagnostic validation
+`[]`. Strict validation honestly remains incomplete: **3,309** unresolved
+resolved-style differences, **849** control-texture differences, **673** retained
+mapping/stage gaps, and **2,658** retained typography differences. The mapping
+gap reduction from 3,025 to 673 is the 2,304 option IDs plus 48 anonymous list
+records; the unresolved typography increase from 354 to 2,658 is the newly
+visible option ink differences. A successful diagnostic process is not audit
+acceptance. Final report generation and the final unfiltered enforced parity
+matrix remain outstanding.
+
 ## Calendar month-label typography provenance (2026-09-13)
 
 The 123 month-marker typography differences exposed by the preceding increment

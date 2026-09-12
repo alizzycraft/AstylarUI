@@ -670,6 +670,15 @@ export const sourceAuditDefinitions = Object.freeze([
     justification: 'The reference month-view template has seven th scope=col cells, each containing a full weekday name in a cdk-visually-hidden span and a separate aria-hidden narrow label; its header also contains a spanning divider row. Candidate replaces the header with seven single-letter spans in the date grid, omitting full names and column-header semantics. Those spans inherit the generic page font stack instead of the calendar font token and use the fixed cell ink instead of the header on-surface-variant token. The complete ordered header and matching date context establish narrow-label correspondence, not equivalent text, semantics, clipping or table/grid layout. Restore original structure and CSS inputs before investigating core; do not tune single letters or offsets.',
   }),
   Object.freeze({
+    id: 'fixture-timepicker-option-structure-and-selection-substitution',
+    introducedBy: '2f44011 feat(example): add Material component showcase',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`role: 'option', ariaSelected: index === 0, textContent: label`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase timepicker option structure, active/selected state and token declarations',
+    justification: 'The complete captured input-linked half-hour list maps Material option/primary-text/ripple nodes to direct-text div options. The candidate always selects the first option although the empty reference input has an active descendant and no selected value. This source substitution dates to the initial showcase, not a core selection failure. Captured owner/label styles and selected states remain unequal inputs; restore reference composition and distinguish keyboard activity from committed selection before investigating rendering or interaction defects with equivalent inputs.',
+  }),
+  Object.freeze({
     id: 'fixture-picker-commit-not-implemented',
     introducedBy: '2f44011 feat(example): add Material component showcase',
     file: 'examples/material-showcase/src/app/astylar.component.ts',
