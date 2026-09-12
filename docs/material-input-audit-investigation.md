@@ -12,6 +12,33 @@ tests pass). A missing selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Current-paint attribution across the complete static capture (2026-09-12)
+
+All **436 static checkpoint records** now exist in the new control-text run.
+Their result SHA-256 values and referenced input-tree digests validate, with
+zero inventory errors. This is checkpoint evidence, not the still-running
+matrix's final enforced verdict. Current-texture comparison yields **132
+mapped labels and 48 explicit gaps** (paginator icon controls and tab labels).
+
+The confirmed parser rewrite now receives guarded occurrence attribution in
+all **12 toolbar static variants**. This requires the browser button and label,
+core normal input, and core effective input to agree on the reviewed single
+family (`Roboto` or `Arial`), while actual current paint adds exactly the
+source-traced fallback suffix. Other font lists, missing or conflicting stages,
+and unmatched controls remain unresolved. The report records all four stage
+values and links the source finding and equal-input proof. It does not equate
+the two lists or imply a raster mismatch for an installed font. Validation
+requires the core classification rather than treating this as fixture authoring.
+
+Focused audit tests pass **63/63**, including positive cases for both reviewed
+families and rejection of conflicting normal/effective/browser-parent inputs,
+different suffixes, missing evidence, and a wrong classification. The other
+static control-font differences include 108 captured component-token omissions
+and 12 unresolved card text-button cases. Line heights and non-light disabled
+ink remain independently unresolved. No runtime or fixture input changed.
+The complete harness unit command, `npm run parity:harness:check`, passes
+**101/101**.
+
 ## Font fallback rewrite changes actual text advance (2026-09-12)
 
 The follow-up equal-input proof confirms an observable core defect. A button

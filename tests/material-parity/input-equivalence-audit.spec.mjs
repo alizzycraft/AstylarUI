@@ -1309,6 +1309,49 @@ test('button font-family attribution requires the missing component override, no
   }
 });
 
+test('core font-list rewrite attribution requires matching browser and resolved inputs before current paint diverges', () => {
+  function fixture(fontFamily = 'Roboto') {
+    const raw = controlTypographyReport(), trees = raw.results[0].inputTrees;
+    trees.reference.styles[0].fontFamily = fontFamily;
+    const node = trees.astylar.nodes[0];
+    node.normalResolvedStyle.fontFamily = node.interactionResolvedStyle.fontFamily = fontFamily;
+    node.paintedControlText.style.fontFamily = `${fontFamily}, Arial, Helvetica, sans-serif`;
+    return raw;
+  }
+  for (const family of ['Roboto', 'Arial']) {
+    const raw = fixture(family), evidence = controlEvidence(raw);
+    assert.deepEqual(evidence.gaps, []);
+    assert.equal(evidence.differences.length, 1);
+    const finding = evidence.differences[0];
+    assert.equal(finding.attribution, 'reviewed-core-font-list-rewrite');
+    assert.equal(finding.classification, 'confirmed-core-renderer-defect');
+    assert.equal(finding.reviewEvidence.candidateNormal, family.toLowerCase());
+    assert.equal(finding.reviewEvidence.candidateEffective, family.toLowerCase());
+    assert.equal(finding.reviewEvidence.sourceFinding, 'core-explicit-font-list-appends-default-fallbacks');
+    const report = buildMaterialInputAudit(raw);
+    assert.equal(report.summary.inputEquivalent, false);
+    assert.ok(!validateMaterialInputAudit(report).some((error) => error.includes('control texture typography differences')));
+    report.controlTypography.differences[0].classification = 'application-plugin-authoring-defect';
+    assert.ok(validateMaterialInputAudit(report).some((error) => error.includes('control texture typography differences')));
+    report.controlTypography.differences[0].classification = 'confirmed-core-renderer-defect';
+    delete report.controlTypography.differences[0].reviewEvidence;
+    assert.ok(validateMaterialInputAudit(report).some((error) => error.includes('control texture typography differences')));
+  }
+  const mutations = [
+    (ref, ast) => { ast.nodes[0].normalResolvedStyle.fontFamily = 'Arial'; },
+    (ref, ast) => { delete ast.nodes[0].interactionResolvedStyle.fontFamily; },
+    (ref, ast) => { ast.nodes[0].interactionResolvedStyle.fontFamily = 'Roboto, Arial, sans-serif'; },
+    (ref, ast) => { ast.nodes[0].paintedControlText.style.fontFamily = 'Roboto, Arial, sans-serif'; },
+    (ref) => { ref.styles.push({ ...ref.styles[0], fontFamily: 'Arial' }); ref.nodes[0].style = 1; },
+  ];
+  for (const mutate of mutations) {
+    const raw = fixture();
+    mutate(raw.results[0].inputTrees.reference, raw.results[0].inputTrees.astylar);
+    assert.equal(controlEvidence(raw).differences[0].attribution, 'unresolved', String(mutate));
+  }
+  assert.equal(controlEvidence(fixture('serif')).differences[0].attribution, 'unresolved', 'do not extend the reviewed spelling scope');
+});
+
 test('disabled ink attribution is limited to the reviewed alpha rule and explicit opaque candidate paint', () => {
   const raw = disabledButtonInkReport(), evidence = controlEvidence(raw);
   assert.equal(evidence.differences.length, 1);

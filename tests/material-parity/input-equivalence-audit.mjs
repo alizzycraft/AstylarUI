@@ -141,9 +141,14 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
   if (report.retainedTypography?.schemaVersion !== 1) errors.push('missing retained typography stage report');
   if (report.controlTypography?.schemaVersion !== 1) errors.push('missing control texture typography stage report');
   if (requireComplete && report.controlTypography?.gaps.length > 0) errors.push(`${report.controlTypography.gaps.length} control texture mappings or stage fields require review`);
-  const reviewedControlKinds = new Set(['reviewed-button-tracking-input', 'reviewed-disabled-button-ink', 'reviewed-button-font-token-input']);
+  const reviewedControlKinds = {
+    'reviewed-button-tracking-input': 'application-plugin-authoring-defect',
+    'reviewed-disabled-button-ink': 'application-plugin-authoring-defect',
+    'reviewed-button-font-token-input': 'application-plugin-authoring-defect',
+    'reviewed-core-font-list-rewrite': 'confirmed-core-renderer-defect',
+  };
   const unresolvedControlTypography = report.controlTypography?.differences.filter((entry) =>
-    !reviewedControlKinds.has(entry.attribution) || entry.classification !== 'application-plugin-authoring-defect' || !entry.reviewEvidence) ?? [];
+    !reviewedControlKinds[entry.attribution] || entry.classification !== reviewedControlKinds[entry.attribution] || !entry.reviewEvidence) ?? [];
   if (requireComplete && unresolvedControlTypography.length > 0) errors.push(`${unresolvedControlTypography.length} control texture typography differences require attribution`);
   if (requireComplete && report.retainedTypography?.gaps.length > 0) errors.push(`${report.retainedTypography.gaps.length} retained typography mappings or stage fields require review`);
   const reviewedTypographyKinds = { 'reviewed-heading-mask': 'parity-harness-defect',
@@ -1112,6 +1117,24 @@ function reviewedButtonPaintInput(entry, property, ref, parent, ast, stages, ast
   const referenceParent = canonicalStyle(parentStyle.value);
   const candidateRules = astylarTree.rules.map((index) => inventory.rules[index])
     .filter((rule) => rule?.side === 'astylar').map((rule) => rule.value);
+  if (property === 'fontFamily' && ['roboto', 'arial'].includes(stages.reference.fontFamily) &&
+      referenceParent.fontFamily === stages.reference.fontFamily &&
+      stages.normal.fontFamily === stages.reference.fontFamily && stages.effective.fontFamily === stages.normal.fontFamily &&
+      stages.painted.fontFamily === `${stages.normal.fontFamily},arial,helvetica,sans-serif`) {
+    // These authoritative pre-paint stages isolate a core mutation. Unlike a
+    // missing component token, the resolved input already matches the browser.
+    // Limit attribution to the captured/proven single-family spellings; do not
+    // reimplement CSS font-list parsing or waive arbitrary fallback lists.
+    return { classification: 'confirmed-core-renderer-defect', attribution: 'reviewed-core-font-list-rewrite',
+      recommendedOwner: 'TextStyleParserService explicit font-family parsing and fallback semantics',
+      justification: 'Browser button/label computed font-family and both core normal/effective inputs agree. Only the currently bound control texture adds Arial, Helvetica, sans-serif, matching the source-traced parser branch. The equal-input unavailable-family proof confirms that this rewrite can change text advance; it does not prove changed glyph raster for this installed font. This is classified core input mutation, not accepted font-list equivalence or a missing fixture token.',
+      reviewEvidence: { sourceFinding: 'core-explicit-font-list-appends-default-fallbacks',
+        sourceFile: 'src/app/services/text/text-style-parser.service.ts',
+        focusedProof: 'examples/material-showcase/src/app/input-equivalence-proof.spec.ts',
+        referenceParent: parent.key, referenceComputed: stages.reference.fontFamily,
+        candidateNormal: stages.normal.fontFamily, candidateEffective: stages.effective.fontFamily,
+        candidatePainted: stages.painted.fontFamily } };
+  }
   if (property === 'fontFamily' && stages.reference.fontFamily === 'roboto' && referenceParent.fontFamily === 'roboto' &&
       stages.normal.fontFamily === 'roboto,arial,sans-serif' && stages.effective.fontFamily === stages.normal.fontFamily &&
       stages.painted.fontFamily === stages.normal.fontFamily && String(ast.authored.class ?? '').split(/\s+/).includes('material-button')) {
