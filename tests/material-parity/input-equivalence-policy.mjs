@@ -670,6 +670,15 @@ export const sourceAuditDefinitions = Object.freeze([
     justification: 'The reference month-view template has seven th scope=col cells, each containing a full weekday name in a cdk-visually-hidden span and a separate aria-hidden narrow label; its header also contains a spanning divider row. Candidate replaces the header with seven single-letter spans in the date grid, omitting full names and column-header semantics. Those spans inherit the generic page font stack instead of the calendar font token and use the fixed cell ink instead of the header on-surface-variant token. The complete ordered header and matching date context establish narrow-label correspondence, not equivalent text, semantics, clipping or table/grid layout. Restore original structure and CSS inputs before investigating core; do not tune single letters or offsets.',
   }),
   Object.freeze({
+    id: 'fixture-timepicker-option-ink-substitution',
+    introducedBy: '2f44011 feat(example): add Material component showcase',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`selector: '\.picker-option',[^\n]*color: '#1d1b20'`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase option color-token translation and label ownership',
+    justification: 'The Material time option label inherits its parent option color token; candidate direct text instead receives fixed #1d1b20 from picker-option. The source literal predates later alignment changes. Per-case attribution requires the unique complete list mapping, original active reference token, direct inheritance, candidate rule exclusions and agreeing normal/effective/retained color. The captured RGB mismatch is unequal authoring, not an equal-input core paint defect or accepted approximate color. Preserve original tokens and theme scope before assessing rendering.',
+  }),
+  Object.freeze({
     id: 'fixture-timepicker-option-structure-and-selection-substitution',
     introducedBy: '2f44011 feat(example): add Material component showcase',
     file: 'examples/material-showcase/src/app/astylar.component.ts',

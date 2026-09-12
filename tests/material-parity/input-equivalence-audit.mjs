@@ -444,6 +444,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
     'reviewed-select-value-token-input': 'application-plugin-authoring-defect',
     'reviewed-calendar-weekday-typography-input': 'application-plugin-authoring-defect',
     'reviewed-calendar-month-marker-typography-input': 'application-plugin-authoring-defect',
+    'reviewed-timepicker-option-ink-input': 'application-plugin-authoring-defect',
     'reviewed-floating-label-font-input': 'application-plugin-authoring-defect' };
   const unresolvedTypography = report.retainedTypography?.differences.filter((entry) =>
     !reviewedTypographyKinds[entry.attribution] || entry.classification !== reviewedTypographyKinds[entry.attribution] || !entry.reviewEvidence) ?? [];
@@ -581,6 +582,7 @@ export function renderMaterialInputAuditMarkdown(report) {
     `Calendar weekday headers: ${report.retainedTypography.reviewedMappings.filter(m => m.kind === 'reviewed-calendar-weekday-text').length} abbreviated labels have exact ordered-header/date-context correspondence. Their separate full-name omissions remain explicit gap records, and replacing column headers with spans is classified as unequal authoring. Font/ink substitutions, unresolved tracking, original divider structure and unknown clipping remain independent; no glyph raster is inferred from retained text.`,
     `Calendar month markers: ${report.retainedTypography.reviewedMappings.filter(m => m.kind === 'reviewed-calendar-month-marker-text').length} labels have complete dated-row and replacement-grid correspondence. Conditional reference colspans, empty leading cells and candidate blank spans are preserved as unequal structural inputs; all mapped typography differences remain independently reportable. The fixed captured month is not all-month rendering evidence.`,
     `Timepicker options: ${report.retainedTypography.reviewedMappings.filter(m => m.kind === 'reviewed-timepicker-option-text').length} labels have complete input-linked half-hour-domain correspondence. Material primary-text/ripple owners are replaced by direct-text div options; active and selected states remain separate raw evidence. This maps text owners, not equivalent wrappers, scrolling, commit behavior, placement or raster. Newly exposed typography differences remain enforced.`,
+    `Timepicker option ink: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-timepicker-option-ink-input').length} unequal colors trace from the reference option token through direct label inheritance versus the candidate literal preserved in normal/effective/retained stages. Competing or missing declarations prevent attribution. No token fallback-origin, theme-scope, compositing or final-raster equivalence is inferred.`,
     `Calendar month-label typography: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-calendar-month-marker-typography-input').length} records trace the omitted explicit zero line-height or substituted center alignment/literal ink to original declarations and captured core stages. Possible competing rules prevent attribution. These are unequal inputs, not a claim that the core misrendered zero, start or the original color token.`,
     '',
     `Control texture typography: ${report.controlTypography.comparisons.length} mapped current-texture observations; ${report.controlTypography.gaps.length} mapping/stage gaps and ${report.controlTypography.differences.length} raw computed-to-paint property differences, including individually reviewed stage-representation differences. Parsed CSS lengths and line-height multipliers are normalized independently of declarations. This does not prove final material effects, placement, visibility or raster parity.`,
@@ -1446,6 +1448,7 @@ function validateTimepickerOptionEvidence(report, errors) {
   });
   const replay = collectRetainedTypographyEvidence(cases, report.elementInventory);
   const predicate = value => value.kind === 'reviewed-timepicker-option-text' || value.mapping?.kind === 'reviewed-timepicker-option-text' ||
+    value.attribution === 'reviewed-timepicker-option-ink-input' ||
     /^timepicker-option-\d+$/.test(value.element ?? '');
   for (const list of ['reviewedMappings', 'comparisons', 'differences', 'gaps']) {
     if (JSON.stringify(report.retainedTypography[list].filter(predicate)) !== JSON.stringify(replay[list].filter(predicate)))
@@ -1849,6 +1852,64 @@ function typographySelectorCanApply(selector, authored) {
     if (!tokens.length || tokens.some(token => !token || !compound.test(token))) return true;
     return selectorCanApply(tokens.at(-1), authored);
   });
+}
+
+function reviewedTimepickerOptionInk(entry, mapping, property, ast, styles, referenceTree, astylarTree, inventory) {
+  if (entry.family !== 'timepicker' || property !== 'color' || mapping?.kind !== 'reviewed-timepicker-option-text' ||
+      mapping.astylarNode !== ast.key || ast.retainedText?.source !== 'core-text-registry' || referenceTree.ruleEvidenceComplete !== true) return;
+  const one = nodes => nodes.length === 1 ? nodes[0] : undefined;
+  const leaf = one(referenceTree.nodes.filter(n => n.key === mapping.referenceNode));
+  const owner = one(referenceTree.nodes.filter(n => n.key === mapping.reviewEvidence.referenceOption.key));
+  if (!leaf || !owner || leaf.parent !== owner.key) return;
+  const changesInk = declarations => Object.keys(declarations ?? {}).some(key => {
+    const name = key.replaceAll('-', '').toLowerCase();
+    return ['color', 'all', 'webkittextfillcolor'].includes(name) || /^(animation|transition)/.test(name);
+  });
+  const unsafeInline = value => value !== undefined && (value === null || typeof value !== 'object' || Array.isArray(value) || changesInk(value));
+  const referenceChain = [];
+  let referenceRule;
+  for (const node of [leaf, owner]) {
+    const pooled = inventory.styles[node.style];
+    if (pooled?.side !== 'reference' || !pooled.value || typeof pooled.value !== 'object' || Array.isArray(pooled.value) ||
+        canonicalStyle(pooled.value).color !== styles.reference.color ||
+        unsafeInline(node.inline) || /(?:^|;)\s*(?:color|all|-webkit-text-fill-color|animation[^:]*|transition[^:]*)\s*:/i.test(node.attributes?.style ?? '')) return;
+    const rules = node.rules.map(i => inventory.rules[i]);
+    if (rules.some(r => r?.side !== 'reference' || !r.value || typeof r.value !== 'object' || Array.isArray(r.value) ||
+        typeof r.value.active !== 'boolean')) return;
+    const inkRules = rules.map(r => r.value).filter(r => r.active && changesInk(r.declarations));
+    if (node === leaf) {
+      // This label has no color declaration: inheritance is from its unique
+      // direct option parent, whose actual computed value must agree.
+      if (inkRules.length) return;
+    } else {
+      const rule = inkRules[0];
+      if (inkRules.length !== 1 || rule.selector !== '.mat-mdc-option' || rule.conditions?.length !== 0 ||
+          rule.declarations?.color?.value !== 'var(--mat-option-label-text-color, var(--mat-sys-on-surface))' ||
+          rule.declarations.color.important !== false ||
+          Object.keys(rule.declarations).some(k => k !== 'color' && changesInk({ [k]: true }))) return;
+      referenceRule = rule;
+    }
+    referenceChain.push({ node: node.key, parent: node.parent, attributes: node.attributes, inline: node.inline,
+      computed: pooled.value, rules: rules.map(r => r.value) });
+  }
+  const pooledRules = astylarTree.rules.map(i => inventory.rules[i]);
+  if (pooledRules.some(r => r?.side !== 'astylar' || !r.value || typeof r.value !== 'object' || Array.isArray(r.value))) return;
+  const candidateRules = pooledRules.map(r => r.value).filter(r => changesInk(r));
+  const applicable = candidateRules.filter(rule => typographySelectorCanApply(rule.selector, ast.authored));
+  const ink = 'rgba(29,27,32,1)';
+  if (unsafeInline(ast.authored.style) || applicable.length !== 1 || applicable[0].selector !== '.picker-option' ||
+      applicable[0].color !== '#1d1b20' || Object.keys(applicable[0]).some(k => k !== 'color' && changesInk({ [k]: true })) ||
+      !/^rgba\(/.test(styles.reference.color ?? '') || styles.reference.color === ink ||
+      ['normal', 'effective', 'retained'].some(stage => styles[stage].color !== ink)) return;
+  return { attribution: 'reviewed-timepicker-option-ink-input', classification: 'application-plugin-authoring-defect',
+    inputEquivalent: false, currentPseudoStatePaintVerified: false, finalRasterVerified: false,
+    recommendedOwner: 'showcase timepicker option color-token translation and reference text ownership',
+    justification: 'The reference label inherits color from its unique Material option parent, whose original active color-token declaration and computed ink are captured with no intervening or competing ink declaration. The replacement direct-text candidate option authors literal #1d1b20, unchanged in normal, effective and retained inputs. This is an unequal authored color input, not a core color conversion or an acceptable near-color substitution. Restore the original token and ownership before testing equal-input color/paint; the token fallback origin, theme scope, state-layer compositing and final raster remain separate obligations.',
+    reviewEvidence: { sourceFinding: 'fixture-timepicker-option-ink-substitution', referenceRule, referenceChain,
+      candidateRule: applicable[0], checkedCandidateRules: candidateRules,
+      candidateAuthored: ast.authored, candidateNormal: inventory.styles[ast.normalStyle].value,
+      candidateEffective: inventory.styles[ast.interactionStyle].value, candidateRetained: inventory.styles[ast.retainedText.style].value,
+      referenceComputed: styles.reference.color, candidateColor: ink, inputEquivalent: false, finalRasterVerified: false } };
 }
 
 function reviewedCalendarMonthMarkerTypography(entry, mapping, property, ast, styles, referenceTree, astylarTree, inventory) {
@@ -3608,6 +3669,7 @@ export function collectRetainedTypographyEvidence(cases, inventory, controlTypog
             ...(selectValueToken ?? {}),
             ...(weekdayToken ?? {}),
             ...(monthMarkerToken ?? {}),
+            ...(reviewedTimepickerOptionInk(entry, textMappingById.get(id), property, ast, styles, referenceTree, astylarTree, inventory) ?? {}),
             ...(!controlLabelToken && !selectValueToken && !weekdayToken && !monthMarkerToken ?
               reviewedOmittedComponentTextMetric(textMappingById.get(id), property, ref, ast, styles, referenceTree, astylarTree, inventory) ?? {} : {}),
             ...(property === 'fontFamily' && inheritedFontStack ? inheritedFontStack : {}),
@@ -5181,6 +5243,7 @@ function sourceFingerprints(root) {
     'examples/material-showcase/src/app/reference.component.ts',
     'examples/material-showcase/node_modules/@angular/material/fesm2022/datepicker.mjs',
     'examples/material-showcase/node_modules/@angular/material/fesm2022/timepicker.mjs',
+    'examples/material-showcase/node_modules/@angular/material/fesm2022/option-BzhYL_xC.mjs',
     'examples/material-showcase/src/app/theme.ts',
     'examples/material-showcase/src/app/showcase.store.ts',
     'examples/material-showcase/src/styles.scss',
@@ -5211,6 +5274,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('timepicker option ink attributes/,
+      'timepicker option token inheritance versus authored literal ink', 'The complete-domain mapping anchors direct reference label inheritance from the original option token and candidate literal ink unchanged through three core stages. Missing/competing rules, inline overrides, incomplete owner styles and changed stages prevent attribution. Independent replay rejects fabricated core-fault, equivalence, source or raster claims. This proves unequal input provenance, not token fallback origin or physical paint.'),
     proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('timepicker options map/,
       'complete linked timepicker option domain and retained text-owner evidence', 'All 48 half-hour entries require unique input/listbox associations and ordered Material option/text/ripple versus direct-text candidate paths. Negative captures reject partial, reordered, ambiguous or unrelated lists; independent replay rejects deleted, forged or transplanted mapping and typography records. This retains unequal selected state, wrapper composition and text inputs rather than certifying visual or interaction parity.'),
     proof(root, 'scripts/audit-material-calendar-close.mjs', /const results =/,
@@ -5328,6 +5393,7 @@ function implementationPlan() {
     { priority: 5.96, rootCause: 'Calendar conditional table labels are replaced with an unconditional grid row', action: 'Restore the reference table/week/colspan inputs and original percentage-padding label declarations rather than calculating replacement grid coordinates. Cover all seven first-week offsets and leap/short/long months after repairing displayed-month state. Preserve the separate-row rule only when fewer than three leading cells are available; otherwise the label shares the first week. Reuse the passing equal-input span control and add a minimal original-table composition proof before assigning any core failure. Do not treat the current September row count or separately positioned selection ring as all-month parity.' },
     { priority: 5.97, rootCause: 'Calendar month-label text declarations are replaced by generic date-cell inputs', action: 'Restore the original explicit line-height:0, text-align:start and calendar-body-label ink token with the original table-cell composition. The full captured chain proves candidate line-height omission, while center alignment and #1d1b20 reach retained text unchanged. Do not replace these declarations with a natural-line-height approximation, baseline nudge, flex-start justification or near-color match. Only an equivalent-input reproduction can establish any remaining core line-box, alignment or color failure.' },
     { priority: 5.98, rootCause: 'Timepicker options flatten label/ripple composition and conflate activity with selection', action: 'Restore the original option, primary-text and ripple ownership plus original typography declarations. Derive selected state from committed time independently of the active descendant, rather than permanently marking midnight selected. The complete 48-option domain establishes text correspondence only; retain the existing commit failure proof and separately verify wheel/keyboard scrolling, active option visibility and commit/dismissal at each action boundary. Do not use fixed line heights, offsets or manually moved text to conceal remaining equal-input layout or paint defects.' },
+    { priority: 5.99, rootCause: 'Timepicker option ink replaces the component color token with a near-color literal', action: 'Restore the original option-label color token and its label inheritance with the original overlay theme scope. Candidate #1d1b20 survives normal/effective/retained stages unchanged while the reference option and label compute RGB(29,27,30). Do not merely replace the literal with sampled RGB or widen a color tolerance: that would still omit the authored token and state/theme behavior. Token fallback provenance, theme containment and composited state layers must be reviewed independently before asserting equal-input paint parity.' },
     { priority: 6, rootCause: 'Interaction geometry duplicated by the application', action: 'Expose resolved CSS-space target bounds and local pointer coordinates in the core event/plugin contract; remove ripple width tables.' },
     { priority: 7, rootCause: 'Material paint inputs are substituted or calibrated', action: 'Supply paginator and calendar navigation reference SVG paths and their CSS/state paint through core vector/image rendering instead of font-character approximations. Preserve calendar navigation accessible names for the active month or multi-year view; do not copy month labels into the year view. Express progress angles, state layers, checkmarks, selection rings, and indicators from reference Material geometry in CSS space; remove screenshot-derived angle and fractional-position constants. Diagnose core only after the actual same geometry is supplied.' },
     { priority: 8, rootCause: 'Regression gate permits unequal inputs', action: 'Run this audit in CI after the full parity matrix, require complete coverage and zero unclassified differences, and review any new Astylar-only authored rule before updating the checked-in report.' },

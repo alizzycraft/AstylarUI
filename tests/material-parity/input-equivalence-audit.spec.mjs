@@ -1098,7 +1098,7 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   const report = parityReport({}, {});
   const audit = buildMaterialInputAudit(report);
   assert.equal(audit.coverage.visualParityGreen, true);
-  assert.equal(audit.sourceFingerprints.length, 52);
+  assert.equal(audit.sourceFingerprints.length, 53);
   for (const file of ['scripts/audit-material-calendar-close.mjs', 'tests/material-parity/calendar-close-evidence.mjs',
     'tests/material-parity/supplemental-capture-evidence.spec.mjs']) {
     assert.equal(audit.sourceFingerprints.filter(entry => entry.file === file).length, 1);
@@ -1388,6 +1388,110 @@ test('timepicker option replay rejects deleted forged or transplanted evidence',
     r => { r.retainedTypography.differences[0].attribution = 'equivalent-representation'; },
   ]) {
     const report = structuredClone(original); mutate(report);
+    assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('timepicker option')));
+  }
+});
+
+function timepickerOptionInkReport() {
+  const raw = timepickerOptionReport(), { reference: r, astylar: a } = raw.results[0].inputTrees;
+  r.rules = [{ source: 'sheet:11/0', selector: '.mat-mdc-option', active: true, conditions: [],
+    cssText: 'color: var(--mat-option-label-text-color, var(--mat-sys-on-surface));',
+    declarations: { color: { value: 'var(--mat-option-label-text-color, var(--mat-sys-on-surface))', important: false } } }];
+  for (const node of r.nodes.filter(n => n.type === 'mat-option')) node.rules = [0];
+  a.rules = [{ selector: '.picker-option', color: '#1d1b20' },
+    { selector: '.picker-option:hover', background: '#e5dfe5' },
+    { selector: '.picker-option.selected', background: '#d8d2d8' }];
+  return raw;
+}
+
+test('timepicker option ink attributes the inherited token and unchanged candidate literal', () => {
+  const raw = timepickerOptionInkReport(), copy = structuredClone(raw), report = buildMaterialInputAudit(raw);
+  const ink = report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-timepicker-option-ink-input');
+  assert.equal(ink.length, 48);
+  assert.equal(ink[0].classification, 'application-plugin-authoring-defect');
+  assert.equal(ink[0].inputEquivalent, false);
+  assert.equal(ink[0].finalRasterVerified, false);
+  assert.deepEqual(ink[0].reviewEvidence.referenceChain.map(n => n.node), ['t0', 'o0']);
+  assert.equal(ink[0].reviewEvidence.referenceRule.declarations.color.value, 'var(--mat-option-label-text-color, var(--mat-sys-on-surface))');
+  assert.equal(ink[0].reviewEvidence.candidateRule.color, '#1d1b20');
+  assert.equal(ink[0].values.reference, 'rgba(29,27,30,1)');
+  for (const stage of ['normal', 'effective', 'retained']) assert.equal(ink[0].values[stage], 'rgba(29,27,32,1)');
+  assert.equal(report.sourceFindings.find(f => f.id === 'fixture-timepicker-option-ink-substitution').detected, true);
+  assert.ok(!validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('timepicker option')));
+  assert.deepEqual(raw, copy);
+});
+
+test('timepicker option ink refuses competing rules incomplete provenance and changed stages', () => {
+  const controls = [
+    (r, a) => { r.rules[0].active = false; },
+    (r, a) => { delete r.rules[0].active; },
+    (r, a) => { r.rules[0].selector = '.other'; },
+    (r, a) => { r.rules[0].conditions = ['@media (min-width:1px)']; },
+    (r, a) => { r.rules[0].declarations.color.important = true; },
+    (r, a) => { r.rules[0].declarations.color.value = '#1d1b1e'; },
+    (r, a) => { r.rules[0].declarations.all = { value: 'initial' }; },
+    (r, a) => { r.rules[0].declarations.transition = { value: 'color 1s' }; },
+    (r, a) => { r.nodes.find(n => n.key === 't0').rules = [0]; },
+    (r, a) => { r.nodes.find(n => n.key === 't0').inline.color = { value: '#1d1b1e' }; },
+    (r, a) => { r.nodes.find(n => n.key === 'o0').inline.all = { value: 'unset' }; },
+    (r, a) => { r.nodes.find(n => n.key === 't0').attributes.style = 'color: inherit'; },
+    (r, a) => { r.nodes.find(n => n.key === 'o0').attributes.style = 'animation: ink 1s'; },
+    (r, a) => { r.styles.push({ ...r.styles[0], color: '#000000' }); r.nodes.find(n => n.key === 'o0').style = 1; },
+    (r, a) => { r.nodes.find(n => n.key === 'o0').style = 999; },
+    (r, a) => { r.rules.push(structuredClone(r.rules[0])); r.nodes.find(n => n.key === 'o0').rules.push(1); },
+    (r, a) => { a.rules[0].color = '#000000'; },
+    (r, a) => { a.rules[0].selector = '.other'; },
+    (r, a) => { a.rules[0].all = 'initial'; },
+    (r, a) => { a.rules.push({ selector: '.picker-option', color: '#1d1b20' }); },
+    (r, a) => { a.rules.push({ selector: '.field-shell .picker-option:hover', color: '#1d1b20' }); },
+    (r, a) => { a.rules.push({ selector: '[role=option]', color: '#1d1b20' }); },
+    (r, a) => { a.rules.push({ selector: '', color: '#1d1b20' }); },
+    (r, a) => { a.rules.push({ selector: '.picker-option', transition: 'color 1s' }); },
+    (r, a) => { a.nodes.find(n => n.key === 'o0').authored.style = { color: '#1d1b20' }; },
+    (r, a) => { a.nodes.find(n => n.key === 'o0').authored.style = 'color:#1d1b20'; },
+    (r, a) => { a.nodes.find(n => n.key === 'o0').authored.style = null; },
+    ...['normalResolvedStyle', 'interactionResolvedStyle'].map(stage => (r, a) => {
+      const node = a.nodes.find(n => n.key === 'o0'); node[stage] = { ...node[stage], color: '#000000' };
+    }),
+    (r, a) => { const node = a.nodes.find(n => n.key === 'o0'); node.retainedText = { ...node.retainedText, style: { ...node.retainedText.style, color: '#000000' } }; },
+  ];
+  for (const [index, mutate] of controls.entries()) {
+    const raw = timepickerOptionInkReport(), trees = raw.results[0].inputTrees;
+    mutate(trees.reference, trees.astylar);
+    const cases = raw.results.map(e => ({ ...e, kind: 'static' }));
+    const result = collectRetainedTypographyEvidence(cases, collectFullTreeInventory(cases));
+    assert.ok(!result.differences.some(d => d.element === 'timepicker-option-0' && d.attribution === 'reviewed-timepicker-option-ink-input'), `control ${index}`);
+  }
+});
+
+test('timepicker option ink excludes only irrelevant rules and does not assume a fixed reference token value', () => {
+  for (const color of ['#1d1b1e', '#123456']) {
+    const raw = timepickerOptionInkReport(), { reference: r, astylar: a } = raw.results[0].inputTrees;
+    r.styles[0].color = color;
+    r.rules.push({ selector: '.mat-mdc-option:hover', active: false, conditions: [], declarations: { color: { value: '#abcdef', important: false } } });
+    r.nodes.find(n => n.key === 'o0').rules.push(1);
+    a.rules.push({ selector: '.unrelated:hover', color: '#abcdef' }, { selector: '#page', color: '#abcdef' });
+    const cases = raw.results.map(e => ({ ...e, kind: 'static' }));
+    const result = collectRetainedTypographyEvidence(cases, collectFullTreeInventory(cases));
+    assert.equal(result.differences.filter(d => d.attribution === 'reviewed-timepicker-option-ink-input').length, 48);
+  }
+});
+
+test('timepicker option ink replay rejects fabricated classifications source and stage witnesses', () => {
+  const original = buildMaterialInputAudit(timepickerOptionInkReport());
+  for (const mutate of [
+    (r, d) => { d.classification = 'confirmed-core-renderer-defect'; },
+    (r, d) => { d.element = 'menu-rename-label'; d.case = 'static:menu@light/desktop'; },
+    (r, d) => { d.inputEquivalent = true; },
+    (r, d) => { d.finalRasterVerified = true; },
+    (r, d) => { d.reviewEvidence.referenceRule.declarations.color.value = '#1d1b1e'; },
+    (r, d) => { d.reviewEvidence.referenceChain.pop(); },
+    (r, d) => { d.reviewEvidence.checkedCandidateRules = []; },
+    (r, d) => { d.reviewEvidence.candidateEffective.color = '#1d1b1e'; },
+    (r, d) => { d.reviewEvidence.sourceFinding = 'unknown'; },
+  ]) {
+    const report = structuredClone(original), d = report.retainedTypography.differences.find(d => d.attribution === 'reviewed-timepicker-option-ink-input');
+    mutate(report, d);
     assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('timepicker option')));
   }
 });

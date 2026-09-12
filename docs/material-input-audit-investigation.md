@@ -23,6 +23,75 @@ selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Timepicker option ink provenance (2026-09-13)
+
+The **2,304** newly exposed option-color differences now have source and stage
+attribution. The original `.mat-mdc-option` rule declares
+`color:var(--mat-option-label-text-color, var(--mat-sys-on-surface))`. Its direct
+primary-text child has no intervening color declaration. Both the option and
+label compute `rgb(29,27,30)` in all captured open cases. The replacement
+candidate option declares literal `#1d1b20`, which stays `rgb(29,27,32)` in its
+normal, effective and retained style stages. The unequal color originates in
+the fixture inputs; this is not evidence of a renderer conversion error.
+
+Source witnesses:
+
+- `examples/material-showcase/node_modules/@angular/material/fesm2022/option-BzhYL_xC.mjs:269`
+  contains the original option color-token declaration. This installed module
+  is now included in the report's source fingerprints.
+- `examples/material-showcase/src/app/astylar.component.ts:598` contains the
+  generic picker-option literal. `git show 2f44011:examples/material-showcase/src/app/astylar.component.ts`
+  confirms that exact ink was present in the initial showcase, before later
+  timepicker alignment/state adjustments.
+
+The source finding is `fixture-timepicker-option-ink-substitution`; the
+per-observation attribution is `reviewed-timepicker-option-ink-input`.
+It requires the complete linked option-domain mapping, a unique direct
+reference option/text path, original active token rule, complete computed
+owner/leaf values, no intervening ink override, and the literal candidate rule
+matching normal/effective/retained stages. Missing rules/styles, competing
+declarations, reset/animation declarations and uncertain candidate selector
+matches prevent attribution. The existing conservative selector helper is used
+only to exclude definitely unrelated targets, not to implement a new cascade.
+
+The classification preserves the raw difference as unequal authoring, with
+`inputEquivalent:false` and no final-raster claim. It does not infer the variable
+fallback's origin, prove equivalent overlay theme scope, or certify composited
+hover/selection paint. Those remain separate audit obligations. The proposed
+fix restores the reference token and text ownership rather than replacing one
+literal with sampled RGB or widening a color tolerance.
+
+Four added tests include **30 negative capture controls**, two accepted
+reference-token-value variants with irrelevant/inactive rules, and **nine
+report mutations**. Independent option replay rejects fabricated classification,
+scope, source, stage, equivalence and raster claims; the previously committed
+complete-domain tests also continue to protect all option records.
+No showcase, plugin, renderer or visual-harness behavior changes are included.
+
+Verification:
+
+- `node --test --test-name-pattern='timepicker option ink|timepicker option replay|records source fingerprints' tests/material-parity/input-equivalence-audit.spec.mjs`:
+  **6/6 pass**, zero failed/skipped/cancelled/todo, **4.001 seconds**, terminal exit 0.
+- `npm run parity:harness:check`: **368/368 pass**, zero failed/skipped/cancelled/
+  todo, **154.386 seconds**, terminal exit 0.
+- `git diff --check`: pass. All ten original visual-harness raw hashes still
+  match `current-ancestry-audit/checkpoint/manifest.json`.
+
+Full audit replay command:
+
+```powershell
+node --input-type=module -e "import {readFileSync} from 'node:fs';import {buildMaterialInputAudit,validateMaterialInputAudit} from './tests/material-parity/input-equivalence-audit.mjs';const p=JSON.parse(readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json'));const a=buildMaterialInputAudit(p,{root:process.cwd(),normalLineBoxPath:'artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json',supplementalRoot:'artifacts/material-parity/supplemental-current-ancestry-audit'});console.log('SUMMARY '+JSON.stringify({coverage:a.coverage.complete,sourceFindings:a.summary.sourceFindings,undetected:a.summary.undetectedSourceDefinitions,ink:a.retainedTypography.differences.filter(d=>d.attribution==='reviewed-timepicker-option-ink-input').length,retainedGaps:a.retainedTypography.gaps.filter(g=>g.attribution==='unresolved').length}));console.log('DIAGNOSTIC '+JSON.stringify(validateMaterialInputAudit(a,{requireComplete:false})));console.log('STRICT '+JSON.stringify(validateMaterialInputAudit(a)));"
+```
+
+The replay reached terminal exit 0 with complete configured coverage, **98/98**
+source findings detected, **2,304** ink attributions and diagnostic validation
+`[]`. Strict validation retains **3,309** unresolved resolved-style differences,
+**849** control-texture differences, **673** retained mapping/stage gaps and
+**354** other retained typography differences. No raw difference was removed;
+the last count decreases from 2,658 solely because the 2,304 option colors are
+now explained. Final complete audit reports and the unfiltered enforced visual
+matrix remain outstanding; this diagnostic exit code does not mean acceptance.
+
 ## Timepicker complete option-domain correspondence (2026-09-13)
 
 Reviewing remaining gaps across all components identified the largest unmapped
