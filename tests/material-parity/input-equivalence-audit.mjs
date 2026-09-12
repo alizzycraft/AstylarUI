@@ -195,7 +195,11 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
   const invalidHiddenGaps = retainedGaps.filter((gap) => gap.attribution === 'reviewed-display-none-text-stage' &&
     !isReviewedHiddenRetainedGap(gap, report.elementInventory));
   if (invalidHiddenGaps.length) errors.push(`${invalidHiddenGaps.length} hidden retained-text stage attributions lack captured ancestry evidence`);
-  const unresolvedRetainedGaps = retainedGaps.filter((gap) => !isReviewedHiddenRetainedGap(gap, report.elementInventory));
+  const invalidStepperGaps = retainedGaps.filter((gap) => gap.attribution === 'reviewed-stepper-panel-substitution' &&
+    !isReviewedStepperPanelGap(gap, report.elementInventory));
+  if (invalidStepperGaps.length) errors.push(`${invalidStepperGaps.length} stepper panel substitutions lack captured structural evidence`);
+  const unresolvedRetainedGaps = retainedGaps.filter((gap) => !isReviewedHiddenRetainedGap(gap, report.elementInventory) &&
+    !isReviewedStepperPanelGap(gap, report.elementInventory));
   if (requireComplete && unresolvedRetainedGaps.length > 0) errors.push(`${unresolvedRetainedGaps.length} retained typography mappings or stage fields require review`);
   const reviewedTypographyKinds = { 'reviewed-heading-mask': 'parity-harness-defect',
     'reviewed-table-font-input': 'application-plugin-authoring-defect',
@@ -242,6 +246,7 @@ export function renderMaterialInputAuditMarkdown(report) {
     '',
     `Control-owned text routing: ${report.retainedTypography.controlTextMappings.length} exact label mappings are reviewed in the current core-control-texture stage, not treated as missing registry entries. Their independent input differences and any current-paint gaps remain enforced; this is not wrapper or input equivalence.`,
     `Hidden retained-text stage: ${report.retainedTypography.gaps.filter((gap) => isReviewedHiddenRetainedGap(gap, report.elementInventory)).length} gap records have complete captured ancestry explaining why core creates no text entry below display:none. The records and raw styles remain; reference display:none and visibility:hidden mechanisms are distinguished, not normalized into equivalent inputs.`,
+    `Stepper structure: ${report.retainedTypography.gaps.filter((gap) => isReviewedStepperPanelGap(gap, report.elementInventory)).length} gap records document an omitted inactive reference panel, classified as unequal fixture structure rather than missing core text. Active-panel typography remains independently compared.`,
     '',
     `Control texture typography: ${report.controlTypography.comparisons.length} mapped current-texture observations; ${report.controlTypography.gaps.length} mapping/stage gaps and ${report.controlTypography.differences.length} raw computed-to-paint property differences, including individually reviewed stage-representation differences. Parsed CSS lengths and line-height multipliers are normalized independently of declarations. This does not prove final material effects, placement, visibility or raster parity.`,
     '',
@@ -1125,6 +1130,74 @@ function reviewedFloatingLabelInput(entry, ref, ast, styles, referenceTree, asty
   };
 }
 
+function reviewedStepperPanelEvidence(gap, inventory) {
+  if (gap.family !== 'stepper' || gap.reason !== 'own-text nodes without an explicit shared ID require structural mapping' ||
+      gap.referenceNodes?.length !== 1 || gap.astylarNodes?.length !== 0 || inventory.errors.some((error) => error.case === gap.case)) return;
+  const trees = {}, records = {};
+  for (const side of ['reference', 'astylar']) {
+    const matches = inventory.cases.filter((entry) => entry.case === gap.case && entry.side === side);
+    if (matches.length !== 1) return;
+    records[side] = matches[0];
+    trees[side] = inventory.variants[matches[0].variant];
+    if (trees[side]?.side !== side || trees[side].family !== 'stepper') return;
+  }
+  const { reference, astylar } = trees;
+  if (astylar.resolvedStyleEvidenceVersion !== 2 || astylar.resolvedStyleSource !== 'core-style-inspection' ||
+      !Number.isInteger(records.astylar.resolvedStyleRevision) || records.astylar.resolvedStyleRevision < 0) return;
+  const mappings = reviewedTemplateTextMappings('stepper', reference, astylar).filter((entry) => entry.element === 'stepper-content');
+  if (mappings.length !== 1) return;
+  const mapping = mappings[0], active = reference.nodes.find((node) => node.key === mapping.referenceNode);
+  const activePanel = reference.nodes.find((node) => node.key === active.parent);
+  const candidates = astylar.nodes.filter((node) => node.key === mapping.astylarNode);
+  const inactiveNodes = reference.nodes.filter((node) => node.key === gap.referenceNodes[0]);
+  if (candidates.length !== 1 || inactiveNodes.length !== 1) return;
+  const candidate = candidates[0], inactive = inactiveNodes[0];
+  const panels = reference.nodes.filter((node) => node.key === inactive.parent);
+  if (panels.length !== 1) return;
+  const panel = panels[0], index = activePanel.attributes?.id?.match(/^cdk-stepper-(\d+)-content-([01])$/);
+  const activeText = active.ownText?.trim(), expectedActive = index?.[2] === '0' ? 'Project details' : 'Review changes';
+  const inactiveText = index?.[2] === '0' ? 'Review changes' : 'Project details';
+  const classes = String(panel.attributes?.class ?? '').split(/\s+/);
+  if (!index || activeText !== expectedActive || candidate.authored?.role !== 'tabpanel' ||
+      candidate.authored.textContent?.trim() !== activeText || panel.parent !== activePanel.parent ||
+      panel.attributes?.id !== `cdk-stepper-${index[1]}-content-${1 - Number(index[2])}` ||
+      reference.nodes.filter((node) => node.attributes?.id === panel.attributes.id).length !== 1 ||
+      panel.attributes.role !== 'tabpanel' || activePanel.attributes.role !== 'tabpanel' ||
+      !Object.hasOwn(panel.attributes, 'inert') || !classes.includes('mat-horizontal-stepper-content') ||
+      !classes.includes(index[2] === '0' ? 'mat-horizontal-stepper-content-next' : 'mat-horizontal-stepper-content-previous') ||
+      classes.includes('mat-horizontal-stepper-content-current') || inactive.type !== 'span' || inactive.attributes?.id ||
+      inactive.attributes?.['data-parity-id'] !== 'stepper-content' || inactive.ownText?.trim() !== inactiveText ||
+      reference.nodes.filter((node) => node.parent === panel.key).length !== 1 ||
+      reference.nodes.filter((node) => node.parent === activePanel.parent).length !== 2 ||
+      reference.nodes.some((node) => node.parent === inactive.key) ||
+      astylar.nodes.filter((node) => node.authored?.role === 'tabpanel').length !== 1 ||
+      astylar.nodes.filter((node) => node.parent === candidate.parent).length !== 1 ||
+      astylar.nodes.some((node) => node.authored?.textContent?.trim() === inactiveText)) return;
+  const observations = [];
+  for (const [side, node] of [['reference', activePanel], ['reference', active], ['reference', panel], ['reference', inactive], ['astylar', candidate]]) {
+    const indexes = side === 'reference' ? { computed: node.style } : { normal: node.normalStyle, effective: node.interactionStyle };
+    const styles = {};
+    for (const [stage, index] of Object.entries(indexes)) {
+      const pooled = inventory.styles[index];
+      if (pooled?.side !== side || !pooled.value || typeof pooled.value !== 'object' || Array.isArray(pooled.value)) return;
+      styles[stage] = pooled.value;
+    }
+    observations.push({ side, node: node.key, parent: node.parent, identity: side === 'reference' ? node.attributes : node.authored, ...styles });
+  }
+  if (observations[2].computed.visibility !== 'hidden' || observations[2].computed.height !== '0px' ||
+      observations[3].computed.visibility !== 'hidden') return;
+  return structuredClone({ sourceFinding: 'fixture-stepper-inactive-panel-omitted', source: 'core-style-inspection',
+    revision: records.astylar.resolvedStyleRevision, activeMapping: mapping, inactiveReferenceNode: inactive.key,
+    activeText, inactiveText, observations, inputEquivalent: false, currentPseudoStatePaintVerified: false });
+}
+
+function isReviewedStepperPanelGap(gap, inventory) {
+  if (gap.attribution !== 'reviewed-stepper-panel-substitution' || gap.classification !== 'application-plugin-authoring-defect' ||
+      gap.inputEquivalent !== false || !gap.justification || !gap.reviewEvidence) return false;
+  const evidence = reviewedStepperPanelEvidence(gap, inventory);
+  return !!evidence && JSON.stringify(evidence) === JSON.stringify(gap.reviewEvidence);
+}
+
 function reviewedHiddenRetainedEvidence(gap, inventory) {
   if (gap.reason !== 'no authoritative retained core text entry for this authored text node' ||
       inventory.errors.some((error) => error.case === gap.case)) return;
@@ -1270,8 +1343,23 @@ export function collectRetainedTypographyEvidence(cases, inventory, controlTypog
     ids.delete(undefined);
     const anonymousReference = referenceTree.nodes.filter((node) => node.ownText?.trim() && !node.attributes?.id && !mappedReferenceKeys.has(node.key) && !controlReferenceKeys.has(node.key)).map((node) => node.key);
     const anonymousAstylar = astylarTree.nodes.filter((node) => node.authored?.textContent?.trim() && !node.authored?.id && !controlAstylarKeys.has(node.key)).map((node) => node.key);
-    if (anonymousReference.length || anonymousAstylar.length) gap(key, undefined, 'own-text nodes without an explicit shared ID require structural mapping',
-      { referenceNodes: anonymousReference, astylarNodes: anonymousAstylar });
+    if (anonymousReference.length || anonymousAstylar.length) {
+      const reason = 'own-text nodes without an explicit shared ID require structural mapping';
+      const remainingReference = [];
+      for (const referenceNode of anonymousReference) {
+        const identity = { family: entry.family, referenceNodes: [referenceNode], astylarNodes: anonymousAstylar };
+        const reviewEvidence = reviewedStepperPanelEvidence({ case: key, reason, ...identity }, inventory);
+        if (!reviewEvidence) { remainingReference.push(referenceNode); continue; }
+        gap(key, undefined, reason, { ...identity,
+          classification: 'application-plugin-authoring-defect', attribution: 'reviewed-stepper-panel-substitution',
+          inputEquivalent: false, reviewEvidence,
+          recommendedOwner: 'showcase stepper retained panel structure and transition state',
+          justification: 'The reference retains both step panels, with the inactive content hidden and inert. The candidate authors a single panel containing only the active text; no corresponding inactive content exists in its captured tree. This is the structural substitution present since 2f44011, not equivalent public-API structure or a core failure to render authored text. Both panel states and captured styles remain explicit, while active-panel typography is compared separately.',
+        });
+      }
+      if (remainingReference.length || anonymousAstylar.length) gap(key, undefined, reason,
+        { family: entry.family, referenceNodes: remainingReference, astylarNodes: anonymousAstylar });
+    }
     for (const id of ids) {
       const refNodes = referenceNodes.get(id) ?? [], astNodes = astylarNodes.get(id) ?? [];
       if (refNodes.length !== 1 || astNodes.length !== 1) {

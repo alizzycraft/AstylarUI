@@ -12,6 +12,39 @@ tests pass). A missing selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Stepper panel omission is now classified per captured state (2026-09-12)
+
+Source finding `fixture-stepper-inactive-panel-omitted` traces the one-panel
+candidate to the initial showcase commit `2f44011`. Material instantiates both
+panels; the inactive panel remains inert, hidden, zero-height and translated.
+Candidate source instead changes the text of a single `#stepper-content` node.
+This is unequal authored structure, not a public-API-required representation or
+a core failure to paint the active text.
+
+The audit records `reviewed-stepper-panel-substitution` only after checking the
+exact active text-owner mapping, both unique reference panel identities,
+inactive direction/state/visibility and candidate single-panel structure. Each
+record retains both texts, active mapping, reference panel/leaf styles and
+candidate normal/effective styles. Validation recomputes this evidence from the
+captured inventory; false equivalence claims or altered records fail even in
+partial mode. The current panel's typography remains separately compared.
+
+Checked **492** checkpoint result hashes and filenames (436 static plus all
+56 stepper interactions), with zero paired-tree errors. The omission is
+classified in **12 static and 56 interaction cases**. Static gap records remain
+66: 30 hidden-stage explanations, 12 stepper omissions and 24 unresolved
+select-caret/tab-panel records. In the 16 stepper activate/activate-leave cases,
+the original grouped gap is split so that reference "Editable" accessibility
+text and "create" icon text remain unresolved independently of the omitted
+panel. No text owner is dropped or mapped by string alone.
+
+Focused audit tests **93/93** and `npm run parity:harness:check` **182/182** pass,
+including both selected panel directions,
+contradictory/missing state, duplicate identities, incomplete styles, extra
+candidate panels, tampered evidence and unrelated anonymous text. No fixture,
+renderer, capture runtime or visual threshold changed. The complete matrix
+and remaining structural/typography review are still in progress.
+
 ## Select value differences traced to omitted trigger tokens and fixed ink (2026-09-12)
 
 Commit `f286fb1` introduced the replacement `span#select-value` while making

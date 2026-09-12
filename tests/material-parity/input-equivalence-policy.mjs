@@ -344,6 +344,15 @@ export const sourceAuditDefinitions = Object.freeze([
     justification: 'The reference uses content height, max-height:80vh, and responsive minimum widths (full viewport, medium 384px, large 512px), not a fixed 512x128px box. Candidate has only a max-960px full-width override. A settled 1024px browser proof measures reference width384 and candidate width512, while 900/1440px match. Preserve the reference constraints rather than adding another measured-size patch.',
   }),
   Object.freeze({
+    id: 'fixture-stepper-inactive-panel-omitted',
+    introducedBy: '2f44011 feat(example): add Material component showcase',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`id: 'stepper-content', role: 'tabpanel', textContent: state\.selected \? 'Project details' : 'Review changes'`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase stepper panel structure, state retention and transition translation',
+    justification: 'The initial candidate renders only one panel and replaces its text according to selected state. The reference instantiates both step panels, retaining the inactive panel as inert, visibility:hidden, zero-height and horizontally translated. Matching the current panel text cannot establish equivalent inputs for hidden layout, panel identity, preserved content state or transitions. The missing inactive text is an authored structural omission before core creates any element, not a renderer failure to paint the current text. Preserve the reference panel structure and state styles in an equal-input proof; do not add spacing or position compensation.',
+  }),
+  Object.freeze({
     id: 'fixture-expansion-flow-and-collapse-substitution',
     introducedBy: '6e1c156 replaces expansion flow with absolute content; a0f3328 adds a -1px nested text offset',
     file: 'examples/material-showcase/src/app/astylar.component.ts',

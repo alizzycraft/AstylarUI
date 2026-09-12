@@ -807,6 +807,104 @@ function templateTypographyReport(family) {
   return raw;
 }
 
+function omittedStepperPanelReport(selected = true) {
+  const raw = templateTypographyReport('stepper'), { reference, astylar } = raw.results[0].inputTrees;
+  const panel = reference.nodes.find((node) => node.key === 'r/w/c/0');
+  panel.attributes.id = `cdk-stepper-38-content-${selected ? 0 : 1}`;
+  panel.attributes.role = 'tabpanel';
+  reference.nodes.at(-1).ownText = selected ? 'Project details' : 'Review changes';
+  astylar.nodes.at(-1).authored.textContent = reference.nodes.at(-1).ownText;
+  astylar.nodes.at(-1).authored.role = 'tabpanel';
+  reference.styles.push({ ...reference.styles[0], display: 'block', visibility: 'hidden', height: '0px', transform: 'matrix(1, 0, 0, 1, 672, 0)' });
+  reference.nodes.push({ key: 'r/w/c/inactive', parent: 'r/w/c', type: 'div', attributes: {
+    id: `cdk-stepper-38-content-${selected ? 1 : 0}`, role: 'tabpanel', inert: '',
+    class: `mat-horizontal-stepper-content mat-horizontal-stepper-content-${selected ? 'next' : 'previous'}`,
+  }, ownText: '', style: 1, rules: [], pseudoElements: [] }, {
+    key: 'r/w/c/inactive/0', parent: 'r/w/c/inactive', type: 'span', attributes: { 'data-parity-id': 'stepper-content' },
+    ownText: selected ? 'Review changes' : 'Project details', style: 1, rules: [], pseudoElements: [],
+  });
+  return raw;
+}
+
+test('stepper inactive-panel omission is an unequal structural input, not an absent core text entry', () => {
+  for (const selected of [true, false]) {
+    const raw = omittedStepperPanelReport(selected), before = structuredClone(raw), report = buildMaterialInputAudit(raw);
+    const [gap] = report.retainedTypography.gaps;
+    assert.equal(report.retainedTypography.gaps.length, 1);
+    assert.equal(gap.attribution, 'reviewed-stepper-panel-substitution');
+    assert.equal(gap.classification, 'application-plugin-authoring-defect');
+    assert.equal(gap.inputEquivalent, false);
+    assert.equal(gap.reviewEvidence.inactiveText, selected ? 'Review changes' : 'Project details');
+    assert.equal(gap.reviewEvidence.observations.length, 5);
+    assert.equal(report.retainedTypography.comparisons.length, 3);
+    assert.equal(report.retainedTypography.differences.length, 3, 'active text differences remain independently unresolved');
+    const errors = validateMaterialInputAudit(report);
+    assert.ok(!errors.some((error) => /stepper panel substitutions|retained typography mappings/.test(error)));
+    assert.ok(errors.some((error) => error.includes('retained typography differences')));
+    assert.equal(report.summary.inputEquivalent, false);
+    assert.deepEqual(raw, before);
+  }
+});
+
+test('stepper structural attribution rejects incomplete, contradictory and ambiguous panel evidence', () => {
+  const mutations = [
+    (r, a) => { delete r.nodes.at(-2).attributes.inert; },
+    (r, a) => { r.nodes.at(-2).attributes.role = 'region'; },
+    (r, a) => { r.nodes.at(-2).attributes.class = 'mat-horizontal-stepper-content mat-horizontal-stepper-content-current'; },
+    (r, a) => { r.nodes.at(-2).attributes.id = 'cdk-stepper-38-content-0'; },
+    (r, a) => { r.nodes.at(-2).parent = 'other'; },
+    (r, a) => { r.styles[1].visibility = 'visible'; },
+    (r, a) => { r.styles[1].height = '20px'; },
+    (r, a) => { r.nodes.at(-1).ownText = 'Unknown panel'; },
+    (r, a) => { r.nodes.at(-1).attributes['data-parity-id'] = 'other'; },
+    (r, a) => { r.nodes.push({ ...structuredClone(r.nodes.at(-2)), key: 'duplicate', parent: 'elsewhere' }); },
+    (r, a) => { a.nodes.at(-1).authored.role = 'region'; },
+    (r, a) => { a.nodes.push({ key: 'a/c/extra', parent: 'a/c', authored: { type: 'span', textContent: 'Review changes' } }); },
+    (r, a) => { a.nodes.at(-1).authored.textContent = 'Other current text'; },
+    (r, a) => { delete a.nodes.at(-1).normalResolvedStyle; },
+    (r, a) => { a.resolvedStyleSource = 'mesh'; },
+  ];
+  for (const [index, mutate] of mutations.entries()) {
+    const raw = omittedStepperPanelReport(), { reference, astylar } = raw.results[0].inputTrees;
+    mutate(reference, astylar);
+    const gaps = buildMaterialInputAudit(raw).retainedTypography.gaps;
+    assert.ok(gaps.length > 0);
+    assert.ok(gaps.every((gap) => gap.attribution !== 'reviewed-stepper-panel-substitution'), `mutation ${index}`);
+  }
+});
+
+test('stepper panel omission validation recomputes the captured structural evidence', () => {
+  const original = buildMaterialInputAudit(omittedStepperPanelReport());
+  for (const mutate of [
+    (report, gap) => { gap.inputEquivalent = true; },
+    (report, gap) => { gap.reviewEvidence.inactiveText = 'Other text'; },
+    (report, gap) => { gap.reviewEvidence.observations[2].computed.visibility = 'visible'; },
+    (report, gap) => { gap.reviewEvidence.revision++; },
+    (report, gap) => { gap.referenceNodes = ['unknown']; },
+    (report, gap) => { report.elementInventory.cases.push(structuredClone(report.elementInventory.cases[0])); },
+  ]) {
+    const report = structuredClone(original), gap = report.retainedTypography.gaps[0];
+    mutate(report, gap);
+    assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some((error) => error.includes('stepper panel substitutions')));
+    assert.ok(validateMaterialInputAudit(report).some((error) => error.includes('retained typography mappings')));
+  }
+});
+
+test('stepper omitted panel attribution does not consume other anonymous icon or accessibility text', () => {
+  const raw = omittedStepperPanelReport(false), { reference } = raw.results[0].inputTrees;
+  for (const [index, text] of ['Editable', 'create'].entries()) reference.nodes.push({
+    key: `unmapped/${index}`, parent: 'r/w/h/0', type: 'span', attributes: {},
+    ownText: text, style: 0, rules: [], pseudoElements: [],
+  });
+  const report = buildMaterialInputAudit(raw), gaps = report.retainedTypography.gaps;
+  assert.equal(gaps.length, 2);
+  assert.equal(gaps[0].attribution, 'reviewed-stepper-panel-substitution');
+  assert.deepEqual(gaps[0].referenceNodes, ['r/w/c/inactive/0']);
+  assert.equal(gaps[1].attribution, 'unresolved');
+  assert.deepEqual(gaps[1].referenceNodes, ['unmapped/0', 'unmapped/1']);
+  assert.ok(validateMaterialInputAudit(report).some((error) => error.includes('1 retained typography mappings')));
+});
+
 test('reviewed template text paths close only identity gaps and retain unequal typography', () => {
   for (const [family, count] of [['tree', 3], ['grid-list', 2], ['badge', 1], ['sort', 1], ['expansion', 1], ['sidenav', 1], ['button-toggle', 2], ['chips', 2], ['paginator', 3], ['stepper', 3], ['select', 1]]) {
     const raw = templateTypographyReport(family);
