@@ -17,6 +17,86 @@ selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Equivalent updates detach inspected nodes from renderer ancestry (2026-09-12)
+
+This is a newly reproduced core inspection defect and a prerequisite to final
+audit acceptance. It is not a Material label-color fix.
+
+The complete 436-case static inventory has zero tree-reading errors. Its dark
+datepicker/timepicker labels nevertheless report normal/effective color
+`#1d1b20` and retained text color `#e6e1e5` across all three static viewports.
+Both reference labels inherit `rgb(73, 69, 78)` from the floating-label rule
+`var(--mat-form-field-filled-label-text-color, var(--mat-sys-on-surface-variant))`.
+The candidate authors `.field-label.empty-field-label { color: #1d1b20 }`
+and a later, equally specific `.datepicker-shell .field-label` or
+`.timepicker-shell .field-label { color: #e6e1e5 }`. Thus there are two distinct
+issues: unequal reference/candidate ink inputs, and disagreement between the
+candidate's inspected and retained stages. Neither is normalized away.
+
+The package-root reproduction is
+`examples/material-showcase/src/app/label-cascade-input-audit.spec.ts`.
+It generates HTML CSS and SiteData from identical rules, uses no Material
+plugin, mounts a 320x120 CSS-pixel surface, and tests both `label` and `span`
+with the compound and descendant rules in both source orders. All four fresh
+mounts agree with Chrome. After `surface.update(structuredClone(site))` and
+settlement, both descendant-last cases report the earlier compound color in
+normal/effective inspection; retained text still matches the browser. The two
+compound-last controls pass. The proof additionally checks visual strategy
+`reuse`, retained mesh identity, input immutability, and error-free settlement.
+
+Owning path:
+
+- `AstylarRenderSession.update` replaces `currentSiteData` with the new objects.
+- `AstylarRenderer`'s `!visualPlan.rebuild` branch reconciles semantic state and
+  returns without rebuilding ancestry.
+- `DOMAncestryService` stores relationships in a WeakMap keyed by object identity.
+  The renderer registers that ancestry during tree construction.
+- `inspectResolvedStyles` walks the new session tree and explicitly passes those
+  new authored objects into `getElementInteractionStyles`/`findStyleForElement`.
+  Compound selectors match locally, but the new objects lack the retained
+  parent relationships needed by descendant selectors.
+- Retained text still describes the correctly rendered earlier tree.
+
+History: `b6dc672` introduced the inspection traversal, `d48028f` introduced
+visual reuse, and `875f1b18` contains the session document replacement. The
+initial suspicion that `input?.style` caused this label discrepancy was rejected:
+ordinary labels/spans are not managed inputs and both fail after equivalent
+updates. Fresh static cascade controls alone would have missed the defect.
+
+Prioritize the core inspection/reconciliation identity contract before further
+acceptance claims. Do not fix it by matching selectors in the fixture, rewriting
+old captures, substituting retained paint for resolved declarations, or forcing
+all equivalent updates to rebuild. Extend proof to inherited/structural rules,
+semantic-only updates, hidden descendants and interaction consumers. Repair the
+owning core boundary, verify it, then recapture affected evidence. The current
+full matrix remains useful frozen evidence and must not be restarted merely
+because this independent reduction found a defect. Existing per-property
+attributions must be revalidated against trustworthy captures before completion.
+
+Verification commands and provenance:
+
+- `npm --prefix examples/material-showcase test -- --watch=false --browsers=ChromeHeadless --include=src/app/label-cascade-input-audit.spec.ts`
+  initially passed all four fresh-only controls; with equivalent-update phases,
+  it deliberately exits 1 with two failures and two successes. Each failure is
+  normal/effective color after update, not retained text color.
+- `npm --prefix examples/material-showcase run build -- --output-path=dist/material-showcase-label-cascade-audit`
+  passed, with browser/server output isolated from the running capture bundle.
+- Installed Angular 20.3.29, Babylon 8.56.2, AstylarUI 0.2.0; Chrome Headless 152.
+  The existing test-runner NG0914 warning (Zone.js loaded with zoneless providers)
+  remains; it is not a renderer diagnostic failure.
+- Installed `dist/lib/lib/astylar.js` SHA-256:
+  `9d77358cb2d375a6760e51f304511f10cf22381cfa22fc1cb8ed9c89ad80060a`;
+  installed `dist/lib/app/services/dom/style.service.js`:
+  `b0a9baa39da07df8a15cd34d508b3988b88d26d294f0f40f03e0c7e20be4d52e`.
+- A first diagnostic compile rejected `Array.toReversed` under the project's
+  current lib target; the test now uses a copied array with `reverse`. No
+  dependency, target, production behavior or fixture changed.
+- The final browser proof was repeated with visual-reuse/mesh-identity assertions:
+  two intentional failures and two successes, with the same update-only colors.
+  `npm run parity:harness:check` passed 299/299 (zero skipped), and the final
+  source-policy/fingerprint checks passed 2/2 after adding the finding. All ten
+  live-matrix harness-file hashes still match its frozen checkpoint manifest.
+
 ## Stepper numeral font and label color use different inherited inputs (2026-09-12)
 
 Two remaining typography differences now have independent input attribution:

@@ -3988,6 +3988,7 @@ function sourceFingerprints(root) {
     'examples/material-showcase/src/app/material-input-evidence.ts',
     'examples/material-showcase/src/app/normal-line-height-audit.spec.ts',
     'examples/material-showcase/src/app/normal-letter-spacing-audit.spec.ts',
+    'examples/material-showcase/src/app/label-cascade-input-audit.spec.ts',
     'examples/material-showcase/angular.json',
     'examples/material-showcase/src/app/reference.component.ts',
     'examples/material-showcase/node_modules/@angular/material/fesm2022/datepicker.mjs',
@@ -4013,6 +4014,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'examples/material-showcase/src/app/label-cascade-input-audit.spec.ts', /describe\('Material input audit/,
+      'four browser reductions; two pass and two update-only diagnostic failures are retained', 'Identical color declarations and label/span trees pass on fresh mounts in both source orders. After structuredClone document update with visual reuse, the later descendant rule disappears from normal/effective inspection while retained text preserves the browser-correct color. Compound-rule-last controls pass. This isolates ancestry/identity divergence in the core inspection/reconciliation path; it does not prove incorrect fresh text paint or authorize rewriting the captured resolved values.'),
     proof(root, 'scripts/audit-material-button-defaults.mjs', /CSS.getMatchedStylesForNode/,
       'two reference/candidate label pairs and eight browser default controls pass', 'Read-only CDP identifies user-agent text-align:center on the original light-profile native buttons, inherited by inline-block labels. Candidate flex divs replace those buttons and their spans retain left. Blank-document button/div/role-button/button-inherit controls distinguish tag defaults from inheritance and author overrides. This is evidence of different inputs, not a core or raster equivalence proof; the full per-case classification separately requires its captured structure, styles and ancestry.'),
     proof(root, 'examples/material-showcase/src/app/normal-letter-spacing-audit.spec.ts', /describe\('Material audit/,
@@ -4048,6 +4051,7 @@ function proof(root, file, expression, status, description) {
 
 function implementationPlan() {
   return [
+    { priority: -.1, rootCause: 'Equivalent document updates detach inspected nodes from retained renderer ancestry', action: 'Repair the core style-inspection/reconciliation identity boundary before accepting resolved-style evidence. Session updates replace authored objects while visual reuse retains the old WeakMap ancestry; inspection walks the new objects and can miss descendant rules. Preserve visual reuse and CSS cascade semantics, add fresh/update/semantic-only/structural-selector tests, and recapture affected evidence after verifying the fix. Do not repair this by fixture-side matching, rewriting old captures, forcing all updates to rebuild, or preferring retained glyph color as a substitute for resolved inputs. Verify interaction consumers separately.' },
     { priority: 0, rootCause: 'Diagnostic declarations are not fully resolved typography', action: 'Complete trustworthy input-stage coverage before accepting the audit. The existing core retained-text stage and inherited-typography reduction now expose font size and line height independently of declarations; preserve that separation and extend missing control/plugin/anonymous-text mappings and current pseudo-state paint provenance. Do not add a competing inheritance algorithm to the showcase or infer resolved values from projected geometry.' },
     { priority: .5, rootCause: 'Benchmark paint masking hides visible heading coverage', action: 'Preserve the captured baseline but restore visible, equivalent heading inputs in the benchmark before claiming complete paint parity. HTML opacity-zero masking and candidate surface-colored ink are unequal and predate the audit. Test the actual unmasked theme/responsive/DPR inputs, retain resulting failures, and reduce them at the owning core subsystem rather than changing heading colors, opacity, offsets or sizes to recover a screenshot score.' },
     { priority: 1, rootCause: 'Rendered output feeds subsequent layout', action: 'Replace connectedOverlayTop mesh projection with a public read-only query of the authoritative core CSS layout boxes. Verify nested transforms, scroll, resize, DPR, and first-open/update cycles. Diagnostic projection may measure output but must never determine authored input.' },

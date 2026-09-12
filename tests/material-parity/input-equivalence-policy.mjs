@@ -101,6 +101,16 @@ export const reviewedValueNormalizations = Object.freeze([
 
 export const sourceAuditDefinitions = Object.freeze([
   Object.freeze({
+    id: 'core-inspection-reuse-detaches-authored-ancestry',
+    introducedBy: 'b6dc672 inspection walks session.siteData; d48028f visual reuse retains renderer ancestry',
+    file: 'src/lib/astylar.ts',
+    pattern: String.raw`this\.getElementInteractionStyles\(element\.id \?\? '', session\.siteData, element\)`,
+    classification: 'confirmed-core-renderer-defect',
+    owner: 'core resolved-style inspection and reconciliation identity/ancestry',
+    focusedProof: 'examples/material-showcase/src/app/label-cascade-input-audit.spec.ts: descendant rule last after equivalent-update',
+    justification: 'Equal-input label/span reductions pass fresh mounts in both rule orders. A structuredClone document update reuses visuals but normal/effective inspection loses a later equal-specificity descendant color rule, while retained text preserves the browser-correct value. Session.update replaces authored object identities; DOMAncestryService uses a WeakMap of rendered objects, and the visual reuse branch returns without registering the replacement ancestry. Inspection then walks replacement objects. Compound-rule-last controls pass and both element types fail only after update. This confirms a core diagnostic/cascade-context defect, not incorrect fresh text paint. Preserve raw captured stages; do not silently substitute retained color or claim complete trustworthy resolved-input coverage until the owning identity boundary is repaired and affected captures are repeated.',
+  }),
+  Object.freeze({
     id: 'core-anonymous-flex-text-excluded-from-item-flow',
     introducedBy: '4620654 filters element children for flex flow; 59883a0 later aligns direct text independently without adding it to the item sequence',
     file: 'src/app/services/dom/elements/flex.service.ts',

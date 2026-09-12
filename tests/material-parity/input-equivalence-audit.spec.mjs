@@ -399,7 +399,11 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   const report = parityReport({}, {});
   const audit = buildMaterialInputAudit(report);
   assert.equal(audit.coverage.visualParityGreen, true);
-  assert.equal(audit.sourceFingerprints.length, 33);
+  assert.equal(audit.sourceFingerprints.length, 34);
+  const cascadeProof = 'examples/material-showcase/src/app/label-cascade-input-audit.spec.ts';
+  assert.equal(audit.sourceFingerprints.filter(({ file }) => file === cascadeProof).length, 1);
+  assert.ok(audit.focusedProofs.some(({ file, line, status }) => file === cascadeProof && line > 0 && status !== 'missing'));
+  assert.ok(audit.implementationPlan.some(({ rootCause, priority }) => priority < 0 && rootCause.includes('renderer ancestry')));
   assert.equal(audit.sourceFingerprints.filter(entry => entry.file === 'scripts/audit-material-button-defaults.mjs').length, 1);
   assert.ok(audit.sourceFingerprints.some(({ file }) => file === 'src/app/services/text/text-canvas-renderer.service.ts'));
   const trackingProof = 'examples/material-showcase/src/app/normal-letter-spacing-audit.spec.ts';
