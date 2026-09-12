@@ -17,6 +17,56 @@ tests pass). A missing selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Lossless full-report packaging (2026-09-12)
+
+The generated working report had reached **286,977,383 bytes** of formatted
+JSON before the newest context attributions. Removing inventory, rule chains,
+raw values or repeated observations to make the deliverable smaller would
+weaken the audit. The generator now writes a readable package manifest at
+`docs/material-input-equivalence-audit.json` and the **entire** compact JSON
+document as `docs/material-input-equivalence-audit.json.gz`. Both files and the
+human summary belong in the eventual completed audit commit. This increment
+does not commit the stale working report as a completed deliverable.
+
+The manifest contains the format version, audit schema version, fixed payload
+basename, compressed/uncompressed byte lengths and SHA-256 digests. The payload
+is ordinary UTF-8 JSON after standard gzip decompression. Programmatic readers
+can use `decodeMaterialInputAudit(manifest, payload)` from
+`tests/material-parity/input-audit-report-codec.mjs`; it returns both the report
+object and exact compact JSON after integrity validation. The package reader
+rejects unknown formats/paths, corrupt or truncated data, mismatched lengths,
+invalid UTF-8, duplicate JSON fields and schema mismatches. Decompression is
+bounded by the declared length and the runtime's JSON string limit; excess
+evidence fails explicitly rather than being truncated.
+
+`--check` compares the **complete decoded document** against regenerated audit
+evidence, not just a self-consistent manifest or matching summary counts. The
+existing complete-coverage and classification validators, failure exit status,
+human-report freshness check and prohibition on partial acceptance are unchanged.
+Seven detailed-evidence mutation cases demonstrate that unchanged summary
+counts cannot hide a stale rule, raw value, node text, case, classification or
+evidence list. Additional tests cover deterministic round trips, repeated full
+observations, Unicode, invalid manifests and corrupted gzip data.
+
+A read-only round trip of the actual working report preserved every serialized
+JSON value: **170,987,037 compact UTF-8 bytes** became **4,384,847 gzip bytes**.
+The original file remained byte-for-byte unchanged. Its SHA-256 was
+`ffdc530d75aa7faffab6c4fdc242e8f60a7f869c58d3bb76ef8c0ff3ca42ded6`;
+the compact JSON SHA-256 was
+`ee28f33824dac3af9d36e1580953e511015f5e0fa16d66b84ce756868d9c802f`.
+This proves lossless packaging of that working report, **not** its completeness
+or input equivalence. The new full matrix and remaining classifications are
+still pending. All ten files in the active capture's harness provenance remain
+byte-identical; the report codec is outside that live capture graph. No renderer,
+fixture, reference, threshold, coordinate calculation or classification changed.
+
+Verification: `node --test tests/material-parity/input-audit-report-codec.spec.mjs`
+passes **6/6**; the complete `npm run parity:harness:check` suite, now including
+the codec tests, passes **241/241**, with no skipped tests (107.5 seconds).
+`git diff --check` passes. At the accompanying live checkpoint inspection,
+**436 static + 389 interaction results** were present with zero result-digest
+mismatches; the 1,875-interaction matrix was still running, not accepted complete.
+
 ## MDC, table fallback and button-toggle font cascade evidence (2026-09-12)
 
 The remaining **138 static retained-font differences** were inspected through

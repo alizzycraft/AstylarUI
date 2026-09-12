@@ -349,6 +349,8 @@ export function renderMaterialInputAuditMarkdown(report) {
   const lines = [
     '# Material showcase input-equivalence audit',
     '',
+    'Full machine evidence is stored losslessly in [the gzip JSON payload](material-input-equivalence-audit.json.gz). The [readable manifest](material-input-equivalence-audit.json) records its format, schema version, byte lengths and SHA-256 digests. Decompressing the payload yields the entire ordinary JSON audit, not a summary. The audit command with --check validates package integrity and compares every decoded value with freshly generated evidence; packaging does not establish audit acceptance.',
+    '',
     'Counts are review signatures, not counts of confirmed renderer bugs. Browser computed styles include used pixel values, while Astylar resolved styles can retain percentages, auto sizes, and track expressions. Those unresolved comparisons are reported as harness normalization gaps, not accepted equivalence.',
     '',
     `Evidence: complete enforced parity report with ${report.generatedFrom.browser?.name ?? 'browser'} ${report.generatedFrom.browser?.version ?? ''}.`,
