@@ -60,6 +60,20 @@ interaction minimum SSIM 0.954514, text 2,116/2,116 and focused rasters 880/880.
 These are output gates, not input-equivalence acceptance. Remaining anonymous
 text, style and structure differences still require classification.
 
+Regenerated the machine/human report using the explicit full control-text and
+normal-line-box evidence paths above, then ran the identical command with
+`--check`. Both return exit 1 for the same honest incomplete-audit gates; the
+check reports no stale-file mismatch. There are **8,139** unique style
+differences / **380,428** occurrences and **62** source findings. Remaining
+root-cause attributions: **3,896** resolved-style differences, **1,505** control
+text mapping/stage gaps, **724** control typography differences, **3,641**
+retained-text mapping/stage gaps and **14,624** retained typography differences.
+The generated reports remain working audit artifacts, not accepted deliverables.
+The full inventory now has 908 control-text and 7,339 retained-text comparisons.
+Next coverage work must include interaction-only generated text/control owners
+(particularly calendar and popup entries); the static mapping work alone does
+not cover those paths. No raw difference or failing acceptance gate is removed.
+
 ## Stepper panel omission is now classified per captured state (2026-09-12)
 
 Source finding `fixture-stepper-inactive-panel-omitted` traces the one-panel
