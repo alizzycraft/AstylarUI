@@ -209,6 +209,15 @@ export const sourceAuditDefinitions = Object.freeze([
     justification: 'The page reset to Roboto, Arial, sans-serif is legitimate and matches the reference frame; individual Material components then override it with component font-family tokens. Representative chip and card-title rules copy sizes but omit that override. Attribute each retained text occurrence only when its actual reference ancestor chain reaches a reviewed winning Material font token computing Roboto, while every candidate normal/effective declaration up to main#page omits font-family and core retains the authored page stack unchanged. Preserve nested table fallbacks and MDC label tokens. The standard/legacy button-toggle pair needs explicit same-sheet, top-level, equal-specificity, non-important source-order evidence; layered, important, unknown or reversed precedence is not guessed. Do not infer missing tokens from equal glyphs, component names or source-pattern matches alone. Different fallback lists are unequal inputs even when installed Roboto supplies the current characters. This differs from the separately confirmed core parser bug that appends fallback families to an explicit single-family input. Preserve component font intent and nested structure before testing font fallback, shaping or placement.',
   }),
   Object.freeze({
+    id: 'fixture-retained-component-text-metrics-omitted',
+    introducedBy: '2f44011 feat(example): add Material component showcase; original radio and switch label rules omit both metrics',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`selector: '\.(?:radio-label|switch-label|checkbox-label)',(?![^\n]*(?:lineHeight|letterSpacing):)[^\n]*fontSize:`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase component line-height/tracking token translation and inherited text structure',
+    justification: 'Reference Material internal form-field labels declare body-medium line-height and tracking tokens; radio, switch and checkbox candidate labels copy font size but omit those metrics. The original radio/switch omissions persist alongside later positional and vertical-align changes. Occurrence attribution must independently trace an active reference token, computed inheritance and a complete candidate normal/effective omission chain, with core retaining normal line-height or zero tracking. This also identifies the same proven omission mechanism in other component text paths, without assuming their source-history date. Fixed container heights, padding and label offsets are not equivalent text-metric inputs. Restore the actual token and structure before testing core line boxes, wrapping and shaping; do not equate CSS normal with a guessed numeric height or claim current glyph paint from retained text.',
+  }),
+  Object.freeze({
     id: 'fixture-material-button-tracking-token-omitted',
     introducedBy: '2f44011 feat(example): add Material component showcase',
     file: 'examples/material-showcase/src/app/astylar.component.ts',

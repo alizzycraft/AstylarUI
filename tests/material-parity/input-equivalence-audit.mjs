@@ -321,6 +321,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
   const reviewedTypographyKinds = { 'reviewed-heading-mask': 'parity-harness-defect',
     'reviewed-horizontal-start-alignment': 'equivalent-representation',
     'reviewed-inherited-component-font-stack': 'application-plugin-authoring-defect',
+    'reviewed-omitted-component-text-metric': 'application-plugin-authoring-defect',
     'reviewed-table-font-input': 'application-plugin-authoring-defect',
     'reviewed-tree-font-input': 'application-plugin-authoring-defect',
     'reviewed-control-label-token-input': 'application-plugin-authoring-defect',
@@ -333,6 +334,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
   validateCalendarWeekdayEvidence(report, errors);
   validateHorizontalStartAlignment(report, errors);
   validateInheritedComponentFontStack(report, errors);
+  validateOmittedComponentTextMetrics(report, errors);
   if (requireComplete && report.supplementalBehavior.missing.length > 0) errors.push(`${report.supplementalBehavior.missing.length} supplemental behavior cases are missing`);
   if (report.supplementalBehavior.errors.length > 0) errors.push(`${report.supplementalBehavior.errors.length} supplemental behavior collection errors`);
   if (requireComplete && report.supplementalOverlays.missing.length > 0) errors.push(`${report.supplementalOverlays.missing.length} supplemental overlay cases are missing`);
@@ -374,6 +376,8 @@ export function renderMaterialInputAuditMarkdown(report) {
     `Retained typography: ${report.retainedTypography.comparisons.length} directly mapped text-node observations; ${report.retainedTypography.gaps.length} mapping/stage gaps and ${report.retainedTypography.differences.length} unequal retained-property observations. The registry stage is reported separately from declarations and is not proof of current pseudo-state glyph paint.`,
     '',
     `Inherited component font inputs: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-inherited-component-font-stack').length} records trace an active reference Material font token to Roboto, while complete candidate declaration ancestry omits that component override and retains the page fallback stack. These are unequal authored inputs, not equivalent font lists or proof of current physical font selection. The independent core single-family rewrite finding remains separate.`,
+    '',
+    `Omitted component text metrics: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-omitted-component-text-metric').length} records trace explicit reference line-height/tracking tokens through captured inheritance while the candidate text-to-page declaration chain omits them and retains normal/zero. This is unequal input, not a normal-to-pixel normalization or proof of current line placement and glyph paint. Fixed label/container dimensions do not replace the missing metrics.`,
     '',
     `Contextual start/left alignment: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-horizontal-start-alignment').length} retained and ${report.controlTypography.differences.filter(d => d.attribution === 'reviewed-horizontal-start-alignment').length} current-control observations have a complete captured horizontal-LTR ancestor chain with normal/isolate bidi and automatic last-line alignment. These records preserve the raw start/left values and justify only their physical alignment meaning. Other contexts remain unresolved; equal line containers, structure, typography, placement and raster are not inferred.`,
     '',
@@ -1508,6 +1512,85 @@ function validateInheritedComponentFontStack(report, errors) {
   })) errors.push('retained component font-stack attributions do not replay from captured component tokens and page inheritance');
 }
 
+function reviewedOmittedComponentTextMetric(mapping, property, ref, ast, styles, referenceTree, astylarTree, inventory) {
+  // Keep the previously reviewed select/chip/calendar records and their more
+  // specific structural evidence. This path attributes omissions, never equality.
+  if (mapping?.element === 'select-value' || mapping?.kind === 'reviewed-calendar-weekday-text' ||
+      ast.retainedText?.source !== 'core-text-registry') return;
+  const spec = { lineHeight: ['line-height', 'line-height', 'normal'], letterSpacing: ['letter-spacing', 'tracking', '0'] }[property];
+  if (!spec || styles.retained[property] !== spec[2] || styles.reference[property] === styles.retained[property] ||
+      !/^-?(?:\d+(?:\.\d+)?|\.\d+)px$/.test(styles.reference[property] ?? '') ||
+      (property === 'lineHeight' && parseFloat(styles.reference[property]) < 0)) return;
+  const [cssProperty, tokenSuffix] = spec, referenceChain = [], seen = new Set();
+  let node = ref, referenceRule;
+  while (node) {
+    if (seen.has(node.key) || referenceTree.nodes.filter(n => n.key === node.key).length !== 1) return;
+    seen.add(node.key);
+    const pooled = inventory.styles[node.style];
+    if (pooled?.side !== 'reference' || !pooled.value || canonicalStyle(pooled.value)[property] !== styles.reference[property] ||
+        node.inline?.[cssProperty] || node.inline?.font || node.inline?.all ||
+        new RegExp(`(?:^|;)\\s*(?:${cssProperty}|font|all)\\s*:`, 'i').test(node.attributes?.style ?? '')) return;
+    const rules = node.rules.map(i => inventory.rules[i]);
+    if (rules.some(r => r?.side !== 'reference')) return;
+    const declarations = rules.map(r => r.value).filter(r => r.active === true &&
+      (r.declarations?.[cssProperty] || r.declarations?.font || r.declarations?.all));
+    if (declarations.some(r => r.declarations?.font || r.declarations?.all)) return;
+    referenceChain.push({ node: node.key, computed: pooled.value, metricRules: declarations });
+    if (declarations.some(r => r.declarations[cssProperty].value !== 'inherit')) {
+      if (declarations.length !== 1) return;
+      const rule = declarations[0];
+      if (!(rule.selector.includes('.mat-') || rule.selector === '.mdc-list-item__primary-text') ||
+          !new RegExp(`^var\\(--mat-[a-z0-9-]+-${tokenSuffix}, var\\(--mat-sys-[a-z0-9-]+-${tokenSuffix}\\)\\)$`).test(rule.declarations[cssProperty].value)) return;
+      referenceRule = rule;
+      break;
+    }
+    const parents = referenceTree.nodes.filter(n => n.key === node.parent);
+    if (parents.length !== 1) return;
+    node = parents[0];
+  }
+  if (!referenceRule) return;
+  const candidateChain = candidateTypographyOmissionChain(ast, astylarTree, inventory, property);
+  if (!candidateChain || candidateChain.some(c => astylarTree.nodes.filter(n => n.key === c.node).length !== 1 ||
+      ['normal', 'effective'].some(stage => typeof c[stage] !== 'object' || Array.isArray(c[stage]) || c[stage].all !== undefined))) return;
+  return { attribution: 'reviewed-omitted-component-text-metric', classification: 'application-plugin-authoring-defect',
+    inputEquivalent: false, currentPseudoStatePaintVerified: false,
+    recommendedOwner: 'showcase Material component line-height/tracking token translation and inherited text structure',
+    justification: 'The exact captured reference text reaches a unique active Material line-height or tracking token through a property-consistent ancestor chain, with no intervening override or ambiguous cascade. The entire candidate normal/effective text-to-page chain omits that property and core retains normal line-height or zero tracking. This identifies unequal component inputs, not an equivalent representation or proof that core misrenders an explicit shared value. Fixed heights, vertical alignment, padding and positioned labels do not replace inherited text metrics. Restore the reference token and structure before testing natural line metrics, shaping, wrapping, placement or current glyph paint; no normal-to-pixel conversion is inferred.',
+    reviewEvidence: { sourceFinding: 'fixture-retained-component-text-metrics-omitted', property, referenceRule, referenceChain,
+      candidateChain, referenceComputed: styles.reference[property], candidateRetained: styles.retained[property] } };
+}
+
+function validateOmittedComponentTextMetrics(report, errors) {
+  const expected = [];
+  for (const comparison of report.retainedTypography?.comparisons ?? []) {
+    const refs = report.elementInventory.cases.filter(c => c.case === comparison.case && c.side === 'reference');
+    const asts = report.elementInventory.cases.filter(c => c.case === comparison.case && c.side === 'astylar');
+    if (refs.length !== 1 || asts.length !== 1) continue;
+    const refTree = report.elementInventory.variants[refs[0].variant], astTree = report.elementInventory.variants[asts[0].variant];
+    const refsByKey = refTree.nodes.filter(n => n.key === comparison.referenceNode), astsByKey = astTree.nodes.filter(n => n.key === comparison.astylarNode);
+    if (refsByKey.length !== 1 || astsByKey.length !== 1) continue;
+    const ref = refsByKey[0], ast = astsByKey[0];
+    const indices = { reference: ref.style, normal: ast.normalStyle, effective: ast.interactionStyle, retained: ast.retainedText?.style };
+    const pooled = Object.fromEntries(Object.entries(indices).map(([key, i]) => [key, report.elementInventory.styles[i]]));
+    if (Object.entries(pooled).some(([key, value]) => value?.side !== (key === 'reference' ? 'reference' : 'astylar') || !value.value)) continue;
+    const styles = Object.fromEntries(Object.entries(pooled).map(([key, value]) => [key, canonicalStyle(value.value)]));
+    for (const property of ['lineHeight', 'letterSpacing']) {
+      // The chip-specific tracking attribution takes precedence in collection.
+      if (reviewedControlLabelTokenInput(comparison, comparison.mapping, property, ast, styles, refTree, astTree, report.elementInventory)) continue;
+      const review = reviewedOmittedComponentTextMetric(comparison.mapping, property, ref, ast, styles, refTree, astTree, report.elementInventory);
+      if (review) expected.push({ comparison, property, review, values: Object.fromEntries(Object.entries(styles).map(([key, style]) => [key, style[property]])) });
+    }
+  }
+  const claimed = report.retainedTypography?.differences.filter(d => d.attribution === 'reviewed-omitted-component-text-metric') ?? [];
+  if (expected.length !== claimed.length || expected.some(({ comparison, property, review, values }) => {
+    const matches = claimed.filter(d => d.case === comparison.case && d.element === comparison.element && d.property === property &&
+      d.referenceNode === comparison.referenceNode && d.astylarNode === comparison.astylarNode);
+    return matches.length !== 1 || JSON.stringify(matches[0].values) !== JSON.stringify(values) ||
+      JSON.stringify(comparison.properties[property]) !== JSON.stringify(values) ||
+      Object.entries(review).some(([key, value]) => JSON.stringify(matches[0][key]) !== JSON.stringify(value));
+  })) errors.push('retained component text-metric attributions do not replay from captured tokens and complete omission ancestry');
+}
+
 function reviewedTreeFontInput(entry, mapping, ref, ast, styles, astylarTree, inventory) {
   if (entry.family !== 'tree' || mapping?.kind !== 'reviewed-showcase-template-text' ||
       styles.reference.fontSize !== '16px' || !['14.4px', '18.4px'].includes(styles.retained.fontSize)) return;
@@ -1980,6 +2063,8 @@ export function collectRetainedTypographyEvidence(cases, inventory, controlTypog
             ...(controlLabelToken ?? {}),
             ...(selectValueToken ?? {}),
             ...(weekdayToken ?? {}),
+            ...(!controlLabelToken && !selectValueToken && !weekdayToken ?
+              reviewedOmittedComponentTextMetric(textMappingById.get(id), property, ref, ast, styles, referenceTree, astylarTree, inventory) ?? {} : {}),
             ...(property === 'fontFamily' && inheritedFontStack ? inheritedFontStack : {}),
             ...(reviewedHorizontalStartAlignment(property, values, referenceTree, ref, inventory) ?? {}),
           });
@@ -3465,6 +3550,7 @@ function implementationPlan() {
     { priority: 5.15, rootCause: 'Canvas default shaping does not reproduce CSS text advance', action: 'Trace font-kerning and text-rendering semantics through the core text parser, single/multiline measurement, actual canvas paint and caret/selection metrics. The Arial office AV reduction proves a 0.882825px bound-texture advance difference with identical normal or zero tracking; a separate canvas probe isolates auto-versus-normal kerning behavior. Extend fonts, sizes, explicit kerning modes, retained text and wrapping before implementing a shared CSS-to-canvas rule. Do not force a showcase font, alter tracking or calibrate label widths; normal/zero representation equivalence is not proof of shaping or final raster parity.' },
     { priority: 5.2, rootCause: 'Material control typography tokens and nested line boxes are replaced by fixture defaults', action: 'Translate the original filled/outlined/text button and tab font/tracking tokens instead of inheriting the document control stack or omitting tracking. Restore toolbar button line-height inheritance instead of copying the density-specific container height. Preserve the tab text-label line-height:1 inside its independently sized content/control rather than applying the outer line-height to a flattened value label. Preserve alpha ink as a distinct authored input. Then investigate any core API or equal-input text mismatch; do not adjust font size, baseline, or offsets to recover screenshot similarity.' },
     { priority: 5.21, rootCause: 'Retained labels inherit the page fallback stack instead of component font tokens', action: 'Preserve the legitimate page font reset but restore each captured Material component font-family override and its inheritance path. Complete normal/effective candidate ancestry plus retained text distinguish this omission from the separate core font-list rewrite. Do not declare fallback lists equivalent because the installed Roboto renders current characters similarly, and do not change the page reset globally to hide missing component declarations. Re-run equal-input fallback, shaping, line-box and state-paint proofs after input restoration.' },
+    { priority: 5.22, rootCause: 'Retained labels omit inherited component line-height and tracking tokens', action: 'Restore the captured reference text-metric tokens and inheritance structure instead of substituting fixed label heights, padding, vertical alignment or offsets. Complete normal/effective ancestry separates missing input from core metric defects. Preserve independent equal-input natural-line-height and shaping failures, and verify wrapping, placement and state paint only after equivalent inputs are supplied.' },
     { priority: 5.3, rootCause: 'Core normal line-height is approximated by a fixed Mg font-box probe', action: 'Resolve browser normal line-box metrics and actual fallback runs in core. The equal-input Arial/serif cases expose one-pixel texture-height errors; Roboto plus emoji/CJK exposes two-pixel errors while plain Roboto and explicit line heights pass. Preserve those controls, extend multiline/baseline/DPR verification and avoid a universal multiplier, constant pixel addition, or fixed Material line-height compensation. Current-texture evidence must remain separate from declared normal and from final glyph raster.' },
     { priority: 5.4, rootCause: 'Calendar cell text tokens and inner line boxes were flattened away', action: 'Restore the reference calendar font and date-text ink tokens and its inner line-height:1 label inside both day and year controls. Keep reference cell/container sizing, state and selection structure instead of copying a normal-metric result or tuning the baseline. Separate date/range-context proofs isolate 990 day and 192 year occurrences each of missing font-token, omitted inner line-height and fixed-ink inputs; core metric defects must be assessed only after those inputs are equivalent. Independently resolve normal-versus-zero tracking and the still-unmapped header/icon owners.' },
     { priority: 5.5, rootCause: 'Snackbar action inherits generic control inputs instead of Material action tokens', action: 'Restore the original text-button font, size and tracking declarations and the snackbar inverse-primary ink, keeping the reference label/action wrapper intent. The exact overlay/message mapping isolates 34 current action textures and source-traces font-stack, tracking and ink substitutions. Trace the remaining 14px-versus-16px and normal-line-box observations through the core defaults/inheritance and metric stages before assigning core ownership; do not calibrate a baseline or line height. Retain the separate intrinsic-width, live-region, visibility, lifetime and placement obligations.' },

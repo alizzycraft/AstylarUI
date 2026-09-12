@@ -17,6 +17,82 @@ tests pass). A missing selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Omitted inherited component line-height and tracking (2026-09-12)
+
+Fresh captured reference ancestry distinguishes missing component inputs from
+core text-metric errors. In the radio, checkbox and slide-toggle references,
+the directly mapped text span inherits through `.mdc-label` from
+`.mat-internal-form-field`. The active Material rule supplies the component's
+`label-text-line-height` / `label-text-tracking` tokens with body-medium
+fallbacks, computing **20px / 0.256px**. Every candidate normal/effective
+declaration from the matching text leaf through `main#page` omits both
+properties; the core text registry retains **normal / 0px**. Copying 14px font
+size does not supply those missing text-metric inputs.
+
+The original `.radio-label` and `.switch-label` declarations in `2f44011`
+already omitted both metrics. Current radio-label positioning/vertical-align
+comes from `f3c8254`; switch-label positioning/vertical-align from `f566f80`.
+The checkbox-label rule is attributed to `88d1090`, with the separate narrow
+viewport bottom-padding adjustment in `662c179`. These histories establish
+coexisting omissions and later adjustments, **not** that every adjustment was
+caused by a line-height defect. That causal claim still needs an equal-input
+layout/paint reproduction; this audit does not remove or tune those styles.
+
+The new `reviewed-omitted-component-text-metric` attribution requires a unique
+active reference token and a complete, property-consistent ancestor chain.
+Intervening overrides, ambiguous declarations, inline replacements, font/all
+shorthands, missing/cyclic/duplicate identities, wrong stage provenance and
+candidate explicit metrics are rejected. Reference `inherit` declarations are
+preserved along the path. Candidate omission is checked in both normal and
+effective declarations through the unique page owner, and retained normal/zero
+is kept as a separate stage. Existing chip/select/calendar-specific evidence
+takes precedence. The report validator independently reconstructs the expected
+records from the raw pooled evidence, rejecting fabricated, deleted, duplicate
+or changed claims even in diagnostic partial-coverage mode.
+
+A digest-checked **917-result prefix (436 static + 481 interaction)** yields
+**640 newly attributed unequal metric observations**: 240 static and 400
+interaction observations. Static findings cover radio (48), checkbox (24),
+slide-toggle (24), table (72), list (48), expansion (12) and form-field (12).
+These include list **24px / 0.496px**, table **20px** with header/body tracking
+**0.096px / 0.256px**, expansion-header **0.144px** tracking and form-field
+supporting-text **16px** line-height. Values come from each captured chain, not
+from a table of assumed theme defaults. The interaction prefix currently adds
+list (160) and table (240); other interaction families are still being captured.
+
+All new records remain `application-plugin-authoring-defect` with
+`inputEquivalent: false` and `currentPseudoStatePaintVerified: false`. Neither
+normal-to-numeric line-height equivalence nor final baseline, wrapping,
+placement or raster correctness is inferred. The existing independent
+equal-input normal-line-height and Canvas-shaping failures remain unchanged.
+Implementation-plan item **5.22** requires restoring component tokens and
+inheritance structure before investigating residual core geometry or paint;
+fixed heights, vertical alignment and offsets cannot replace those inputs.
+
+The prefix has zero inventory, natural-line-box supplement or partial-validation
+errors, while coverage completeness and input equivalence remain **false**.
+Ninety retained line-height/tracking differences still need attribution in
+that prefix, alongside other unresolved properties and mappings. The new source
+finding brings the source register to 73 entries. The focused audit suite
+passes **144/144** tests, including 24 direct/inherited positive combinations,
+46 input-mutation cases and 22 report-tampering cases for this mechanism.
+
+A separate static-only inventory inspection localizes the remaining 90 metric
+differences: autocomplete, timepicker and datepicker have 12 each of reference
+`0.496px` tracking versus explicit candidate `0.65px`; input, form-field and
+select have six each versus explicit `0.4px`; tree has 36 reference `normal`
+line heights versus explicit `20px`. These are **not** accepted by the omission
+rule. Their explicit substitutions and inherited reference paths need separate
+attribution; the existing tree source finding already records the fixed-20px
+label introduced in `7159b1d`.
+
+Final verification for this increment: `npm run parity:harness:check` passes
+**244/244**, with no skipped tests (116.5 seconds), and `git diff --check` passes.
+All ten active capture-harness provenance files remain byte-identical. The
+unfiltered full matrix is still live and has progressed into tree interactions;
+this is a findings/reporting change, not completed parity acceptance or a
+renderer/fixture implementation change.
+
 ## Lossless full-report packaging (2026-09-12)
 
 The generated working report had reached **286,977,383 bytes** of formatted

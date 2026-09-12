@@ -711,6 +711,118 @@ test('component font claims replay exact reference tokens, candidate inherited s
   }
 });
 
+function omittedComponentMetricReport(property = 'lineHeight', direct = false, kind = 'radio') {
+  const raw = inheritedComponentFontReport(direct), { reference: ref, astylar: ast } = raw.results[0].inputTrees;
+  const cssProperty = property === 'lineHeight' ? 'line-height' : 'letter-spacing';
+  const suffix = property === 'lineHeight' ? 'line-height' : 'tracking';
+  const selectors = {
+    radio: ['.mat-mdc-radio-button .mat-internal-form-field', 'radio-label-text', 'body-medium'],
+    checkbox: ['.mat-mdc-checkbox .mat-internal-form-field', 'checkbox-label-text', 'body-medium'],
+    switch: ['.mat-mdc-slide-toggle .mat-internal-form-field', 'slide-toggle-label-text', 'body-medium'],
+    list: ['.mdc-list-item__primary-text', 'list-list-item-label-text', 'body-large'],
+    table: ['.mat-mdc-header-row', 'table-header-headline', 'title-small'],
+    expansion: ['.mat-expansion-panel-header', 'expansion-header-text', 'title-medium'],
+  };
+  const [selector, component, system] = selectors[kind];
+  ref.rules = [{ active: true, selector, declarations: { [cssProperty]: {
+    value: `var(--mat-${component}-${suffix}, var(--mat-sys-${system}-${suffix}))`,
+  } } }, { active: true, selector: '.label', declarations: { [cssProperty]: { value: 'inherit' } } }];
+  ref.styles = ref.styles.map(style => ({ ...style, [property]: property === 'lineHeight' ? '20px' : '0.256px' }));
+  for (const node of ast.nodes) {
+    for (const field of ['resolvedStyle', 'normalResolvedStyle', 'interactionResolvedStyle']) delete node[field][property];
+  }
+  ast.nodes[0].retainedText.style[property] = property === 'lineHeight' ? 'normal' : '0px';
+  return raw;
+}
+
+test('component text-metric omissions retain explicit reference tokens and complete candidate ancestry', () => {
+  for (const property of ['lineHeight', 'letterSpacing']) {
+    for (const kind of ['radio', 'checkbox', 'switch', 'list', 'table', 'expansion']) {
+      for (const direct of [false, true]) {
+        const raw = omittedComponentMetricReport(property, direct, kind), before = structuredClone(raw);
+        const report = buildMaterialInputAudit(raw);
+        const findings = report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-omitted-component-text-metric');
+        assert.equal(findings.length, 1, `${kind}/${property}/${direct}`);
+        const finding = findings[0];
+        assert.equal(finding.property, property);
+        assert.equal(finding.classification, 'application-plugin-authoring-defect');
+        assert.equal(finding.inputEquivalent, false);
+        assert.equal(finding.currentPseudoStatePaintVerified, false);
+        assert.equal(finding.reviewEvidence.referenceChain.length, direct ? 1 : 2);
+        assert.equal(finding.reviewEvidence.candidateChain.length, 2);
+        assert.deepEqual(finding.values, { reference: property === 'lineHeight' ? '20px' : '0.256px',
+          normal: undefined, effective: undefined, retained: property === 'lineHeight' ? 'normal' : '0' });
+        assert.ok(report.sourceFindings.find(f => f.id === finding.reviewEvidence.sourceFinding)?.detected);
+        assert.ok(!validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('text-metric attributions')));
+        assert.equal(report.summary.inputEquivalent, false);
+        assert.deepEqual(raw, before);
+      }
+    }
+  }
+});
+
+test('component metric attribution rejects overrides, ambiguous rules, missing ancestry and different retained values', () => {
+  const mutations = [
+    (ref) => { ref.rules[0].active = false; },
+    (ref) => { ref.rules[0].selector = '.unrelated'; },
+    (ref, _ast, css) => { ref.rules[0].declarations[css].value = '20px'; },
+    (ref) => { ref.rules[0].declarations.font = { value: '14px Roboto' }; },
+    (ref) => { ref.rules[1].declarations.all = { value: 'revert' }; },
+    (ref, _ast, css) => { ref.rules[1].declarations[css].value = 'initial'; },
+    (ref) => { ref.nodes[1].rules.push(0); },
+    (ref, _ast, css) => { ref.nodes[0].inline = { [css]: { value: 'inherit' } }; },
+    (ref, _ast, css) => { ref.nodes[0].attributes.style = `${css}: inherit`; },
+    (ref) => { ref.nodes[0].parent = 'missing'; },
+    (ref) => { ref.nodes[0].parent = ref.nodes[0].key; },
+    (ref) => { ref.nodes.push(structuredClone(ref.nodes[1])); },
+    (ref, _ast, _css, prop) => { ref.styles[0][prop] = 'normal'; },
+    (_ref, ast, _css, prop) => { ast.nodes[0].normalResolvedStyle[prop] = 'inherit'; },
+    (_ref, ast, _css, prop) => { ast.nodes[1].interactionResolvedStyle[prop] = '20px'; },
+    (_ref, ast) => { ast.nodes[0].interactionResolvedStyle.font = '14px Roboto'; },
+    (_ref, ast) => { ast.nodes[0].normalResolvedStyle = []; },
+    (_ref, ast) => { ast.nodes[0].interactionResolvedStyle.all = 'revert'; },
+    (_ref, ast) => { ast.nodes[0].parent = 'missing'; },
+    (_ref, ast) => { ast.nodes[0].parent = ast.nodes[0].key; },
+    (_ref, ast) => { ast.nodes[1].authored.type = 'div'; },
+    (_ref, ast) => { ast.nodes.push(structuredClone(ast.nodes[1])); },
+    (_ref, ast, _css, prop) => { ast.nodes[0].retainedText.style[prop] = '22px'; },
+  ];
+  for (const property of ['lineHeight', 'letterSpacing']) {
+    for (const mutate of mutations) {
+      const raw = omittedComponentMetricReport(property);
+      mutate(raw.results[0].inputTrees.reference, raw.results[0].inputTrees.astylar,
+        property === 'lineHeight' ? 'line-height' : 'letter-spacing', property);
+      const evidence = collectRetainedTypographyEvidence(raw.results, collectFullTreeInventory(raw.results));
+      assert.ok(!evidence.differences.some(d => d.attribution === 'reviewed-omitted-component-text-metric'), `${property}: ${mutate}`);
+    }
+  }
+});
+
+test('component metric claims replay raw token, omission and retained-stage evidence instead of trusting classification', () => {
+  const mutations = [
+    (_report, finding) => { finding.reviewEvidence.referenceChain.pop(); },
+    (_report, finding) => { finding.reviewEvidence.candidateChain.pop(); },
+    (_report, finding) => { finding.values.normal = 'normal'; },
+    (_report, finding) => { finding.inputEquivalent = true; },
+    (_report, finding) => { finding.currentPseudoStatePaintVerified = true; },
+    (_report, finding) => { finding.classification = 'confirmed-core-renderer-defect'; },
+    (report, finding) => { report.retainedTypography.differences.push(structuredClone(finding)); },
+    report => { report.retainedTypography.differences = []; },
+    (report, finding) => { report.retainedTypography.comparisons[0].properties[finding.property].retained = '22px'; },
+    report => { report.elementInventory.rules.find(r => r.side === 'reference' && r.value.selector.includes('.mat-mdc-radio')).value.active = false; },
+    (report, finding) => { const ast = report.elementInventory.variants.find(v => v.side === 'astylar').nodes[0];
+      report.elementInventory.styles[ast.normalStyle].value[finding.property] = '20px'; },
+  ];
+  for (const property of ['lineHeight', 'letterSpacing']) {
+    const baseline = buildMaterialInputAudit(omittedComponentMetricReport(property));
+    for (const mutate of mutations) {
+      const report = structuredClone(baseline);
+      mutate(report, report.retainedTypography.differences.find(d => d.attribution === 'reviewed-omitted-component-text-metric'));
+      assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('text-metric attributions')), `${property}: ${mutate}`);
+    }
+  }
+});
+
 function componentFontVariant(kind) {
   const raw = inheritedComponentFontReport(), ref = raw.results[0].inputTrees.reference;
   const rules = {
