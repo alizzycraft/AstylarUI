@@ -14,6 +14,38 @@ new control-text texture instrumentation.
 
 ## Current control texture comparison, not just collection (2026-09-12)
 
+### Captured button inputs now receive guarded attribution
+
+The report now attributes a tracking omission only with a unique active
+filled/outlined reference token rule, equal button/leaf computed tracking,
+the candidate `.material-button` rule and a complete candidate control-to-page
+normal/effective ancestry omitting tracking. The disabled-ink attribution is
+limited to the observed light-profile disabled button, its exact alpha rule,
+explicit opaque candidate rule and matching declaration/current texture values.
+Missing, conflicting or stale witnesses remain unresolved.
+
+A third authored-input finding identifies the omitted component font override.
+The reference filled/outlined token computes `Roboto`, while the candidate's
+`button, input, select` reset (added by `af04845`) supplies the document stack
+`Roboto, Arial, sans-serif` and `.material-button` lacks the component override.
+Classification requires those exact captured rules and matching normal,
+effective and painted candidate values. This is not a blanket rule that treats
+all fallback-list differences as authoring; a parser-added list is distinct.
+The source audit has 54 findings at this increment.
+
+The production smoke's ten differences now have seven attributed authoring
+occurrences (three tracking, three component fonts, one disabled ink) and three
+unresolved line-height stage differences. All remain unequal inputs; attribution
+does not make `inputEquivalent` true. `npm run parity:harness:check` passes
+100/100, including negative-witness tests for all three classifications.
+
+Separately, SHA-256-checked checkpoints from the live new-instrumentation matrix
+provide 36 core/toolbar/card static cases and 36 current-texture mappings, with
+no collection or mapping gaps. Twelve core font-token and twelve core tracking
+observations receive the guarded authoring classification. The other 57
+observations (24 font-family and 33 line-height) remain for their own review;
+this partial diagnostic is not full-run acceptance.
+
 ### Attribution follow-up
 
 Two button paint-input differences trace to initial showcase commit `2f44011`,

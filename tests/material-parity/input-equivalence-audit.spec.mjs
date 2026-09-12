@@ -1201,6 +1201,134 @@ test('control typography does not waive font fallback, CSS normal line-height, t
   assert.ok(validateMaterialInputAudit(report).includes('missing control texture typography stage report'));
 });
 
+function buttonTrackingReport(kind = 'filled') {
+  const raw = controlTypographyReport(), trees = raw.results[0].inputTrees;
+  trees.reference.styles[0].letterSpacing = '.096px';
+  trees.reference.rules = [{ selector: kind === 'filled' ? '.mat-mdc-unelevated-button' : '.mat-mdc-outlined-button',
+    active: true, declarations: { 'letter-spacing': { value: `var(--mat-button-${kind}-label-text-tracking, var(--mat-sys-label-large-tracking))` } } }];
+  trees.reference.nodes[0].rules = [0];
+  const node = trees.astylar.nodes[0];
+  node.authored.class = 'material-button';
+  delete node.normalResolvedStyle.letterSpacing;
+  delete node.interactionResolvedStyle.letterSpacing;
+  node.parent = 'page';
+  trees.astylar.nodes.push({ key: 'page', parent: 'root', authored: { id: 'page', type: 'main' },
+    resolvedStyle: {}, normalResolvedStyle: {}, interactionResolvedStyle: {} });
+  trees.astylar.rules = [{ selector: '.material-button', fontSize: '14px', fontWeight: '500' }];
+  return raw;
+}
+
+test('button tracking attribution requires captured token and complete candidate omission witnesses', () => {
+  for (const kind of ['filled', 'outlined']) {
+    const raw = buttonTrackingReport(kind), evidence = controlEvidence(raw);
+    assert.deepEqual(evidence.gaps, []);
+    assert.equal(evidence.differences.length, 1);
+    const finding = evidence.differences[0];
+    assert.equal(finding.attribution, 'reviewed-button-tracking-input');
+    assert.equal(finding.classification, 'application-plugin-authoring-defect');
+    assert.equal(finding.reviewEvidence.candidateChain.length, 2);
+    assert.equal(finding.reviewEvidence.referenceComputed, '0.096px');
+    assert.equal(finding.reviewEvidence.candidatePainted, '0');
+    const report = buildMaterialInputAudit(raw);
+    assert.equal(report.summary.inputEquivalent, false, 'classified inequality is not accepted equivalence');
+    assert.ok(!validateMaterialInputAudit(report).some((error) => error.includes('control texture typography differences')));
+    delete report.controlTypography.differences[0].reviewEvidence;
+    assert.ok(validateMaterialInputAudit(report).some((error) => error.includes('control texture typography differences')));
+  }
+  const mutations = [
+    (ref) => { ref.rules[0].active = false; },
+    (ref) => { ref.rules[0].selector = '.other'; },
+    (ref) => { ref.rules[0].declarations['letter-spacing'].value = '.096px'; },
+    (ref) => { ref.rules.push({ active: true, declarations: { 'letter-spacing': { value: 'normal' } } }); ref.nodes[1].rules = [1]; },
+    (ref, ast) => { ast.nodes[0].normalResolvedStyle.letterSpacing = '0px'; },
+    (ref, ast) => { ast.nodes[1].interactionResolvedStyle.letterSpacing = '.1px'; },
+    (ref, ast) => { ast.nodes[0].parent = 'absent'; },
+    (ref, ast) => { ast.nodes[1].parent = 'not-root'; },
+    (ref, ast) => { ast.rules[0].letterSpacing = '0'; },
+    (ref, ast) => { ast.rules.push({ ...ast.rules[0] }); },
+    (ref, ast) => { ast.nodes[0].authored.class = 'different'; },
+  ];
+  for (const mutate of mutations) {
+    const raw = buttonTrackingReport();
+    mutate(raw.results[0].inputTrees.reference, raw.results[0].inputTrees.astylar);
+    assert.equal(controlEvidence(raw).differences[0].attribution, 'unresolved', String(mutate));
+  }
+});
+
+function disabledButtonInkReport() {
+  const raw = controlTypographyReport(), trees = raw.results[0].inputTrees;
+  trees.reference.nodes[0].attributes = { id: 'button-disabled', disabled: '' };
+  trees.reference.styles[0].color = 'rgba(29,27,32,.38)';
+  trees.reference.rules = [{ active: true,
+    selector: '.mat-mdc-unelevated-button[disabled], .mat-mdc-unelevated-button.mat-mdc-button-disabled',
+    declarations: { color: { value: 'var(--mat-button-filled-disabled-label-text-color, color-mix(in srgb, var(--mat-sys-on-surface) 38%, transparent))' } } }];
+  trees.reference.nodes[0].rules = [0];
+  const node = trees.astylar.nodes[0];
+  Object.assign(node.authored, { id: 'button-disabled', disabled: true });
+  node.normalResolvedStyle.color = node.interactionResolvedStyle.color = node.paintedControlText.style.color = '#a4a0a7';
+  trees.astylar.rules = [{ selector: '#button-disabled', color: '#a4a0a7' }];
+  return raw;
+}
+
+test('button font-family attribution requires the missing component override, not merely a common first font', () => {
+  function fixture(kind = 'filled') {
+    const raw = controlTypographyReport(), trees = raw.results[0].inputTrees;
+    trees.reference.styles[0].fontFamily = 'Roboto';
+    trees.reference.rules = [{ active: true, selector: kind === 'filled' ? '.mat-mdc-unelevated-button' : '.mat-mdc-outlined-button',
+      declarations: { 'font-family': { value: `var(--mat-button-${kind}-label-text-font, var(--mat-sys-label-large-font))` } } }];
+    trees.reference.nodes[0].rules = [0];
+    const node = trees.astylar.nodes[0];
+    node.authored.class = 'material-button';
+    node.normalResolvedStyle.fontFamily = node.interactionResolvedStyle.fontFamily = node.paintedControlText.style.fontFamily = 'Roboto, Arial, sans-serif';
+    trees.astylar.rules = [{ selector: 'button, input, select', fontFamily: 'Roboto, Arial, sans-serif' }, { selector: '.material-button', fontSize: '14px' }];
+    return raw;
+  }
+  for (const kind of ['filled', 'outlined']) {
+    const raw = fixture(kind), evidence = controlEvidence(raw);
+    assert.equal(evidence.differences.length, 1);
+    assert.equal(evidence.differences[0].attribution, 'reviewed-button-font-token-input');
+    assert.equal(evidence.differences[0].reviewEvidence.referenceComputed, 'roboto');
+    const report = buildMaterialInputAudit(raw);
+    assert.equal(report.summary.inputEquivalent, false);
+    assert.ok(!validateMaterialInputAudit(report).some((error) => error.includes('control texture typography differences')));
+  }
+  const mutations = [
+    (ref) => { ref.rules[0].active = false; },
+    (ref) => { ref.rules[0].declarations['font-family'].value = 'Roboto'; },
+    (ref, ast) => { ast.rules[1].fontFamily = 'Roboto, Arial, sans-serif'; },
+    (ref, ast) => { ast.rules[0].fontFamily = 'Arial'; },
+    (ref, ast) => { ast.nodes[0].interactionResolvedStyle.fontFamily = 'Arial'; },
+    (ref) => { ref.rules.push({ active: true, declarations: { font: { value: '14px Roboto' } } }); ref.nodes[1].rules = [1]; },
+  ];
+  for (const mutate of mutations) {
+    const raw = fixture();
+    mutate(raw.results[0].inputTrees.reference, raw.results[0].inputTrees.astylar);
+    assert.equal(controlEvidence(raw).differences[0].attribution, 'unresolved', String(mutate));
+  }
+});
+
+test('disabled ink attribution is limited to the reviewed alpha rule and explicit opaque candidate paint', () => {
+  const raw = disabledButtonInkReport(), evidence = controlEvidence(raw);
+  assert.equal(evidence.differences.length, 1);
+  assert.equal(evidence.differences[0].attribution, 'reviewed-disabled-button-ink');
+  assert.equal(evidence.differences[0].reviewEvidence.candidatePainted, 'rgba(164,160,167,1)');
+  assert.ok(!validateMaterialInputAudit(buildMaterialInputAudit(raw)).some((error) => error.includes('control texture typography differences')));
+  const mutations = [
+    (entry) => { entry.profile = 'dark'; },
+    (entry) => { entry.inputTrees.reference.rules[0].active = false; },
+    (entry) => { delete entry.inputTrees.reference.nodes[0].attributes.disabled; },
+    (entry) => { entry.inputTrees.astylar.nodes[0].authored.disabled = false; },
+    (entry) => { entry.inputTrees.astylar.nodes[0].interactionResolvedStyle.color = '#ffffff'; },
+    (entry) => { entry.inputTrees.astylar.rules[0].color = '#ffffff'; },
+    (entry) => { entry.inputTrees.reference.rules[0].declarations.color.value = 'rgba(29,27,32,.38)'; },
+  ];
+  for (const mutate of mutations) {
+    const candidate = disabledButtonInkReport();
+    mutate(candidate.results[0]);
+    assert.equal(controlEvidence(candidate).differences[0].attribution, 'unresolved', String(mutate));
+  }
+});
+
 test('control typography rejects stale provenance, wrong text, nested labels and ambiguous owners', () => {
   const mutations = [
     (ref, ast) => { delete ast.paintedControlTextEvidenceVersion; },

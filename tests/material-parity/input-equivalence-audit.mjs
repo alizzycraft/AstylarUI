@@ -141,7 +141,10 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
   if (report.retainedTypography?.schemaVersion !== 1) errors.push('missing retained typography stage report');
   if (report.controlTypography?.schemaVersion !== 1) errors.push('missing control texture typography stage report');
   if (requireComplete && report.controlTypography?.gaps.length > 0) errors.push(`${report.controlTypography.gaps.length} control texture mappings or stage fields require review`);
-  if (requireComplete && report.controlTypography?.differences.length > 0) errors.push(`${report.controlTypography.differences.length} control texture typography differences require attribution`);
+  const reviewedControlKinds = new Set(['reviewed-button-tracking-input', 'reviewed-disabled-button-ink', 'reviewed-button-font-token-input']);
+  const unresolvedControlTypography = report.controlTypography?.differences.filter((entry) =>
+    !reviewedControlKinds.has(entry.attribution) || entry.classification !== 'application-plugin-authoring-defect' || !entry.reviewEvidence) ?? [];
+  if (requireComplete && unresolvedControlTypography.length > 0) errors.push(`${unresolvedControlTypography.length} control texture typography differences require attribution`);
   if (requireComplete && report.retainedTypography?.gaps.length > 0) errors.push(`${report.retainedTypography.gaps.length} retained typography mappings or stage fields require review`);
   const reviewedTypographyKinds = { 'reviewed-heading-mask': 'parity-harness-defect',
     'reviewed-table-font-input': 'application-plugin-authoring-defect',
@@ -1101,6 +1104,84 @@ export function collectRetainedTypographyEvidence(cases, inventory) {
     comparisons, differences, gaps, paintMaskDifferences, reviewedMappings };
 }
 
+function reviewedButtonPaintInput(entry, property, ref, parent, ast, stages, astylarTree, inventory) {
+  const rulesAt = (node, side) => (node.rules ?? []).map((index) => inventory.rules[index])
+    .filter((rule) => rule?.side === side).map((rule) => rule.value);
+  const parentStyle = inventory.styles[parent.style];
+  if (parentStyle?.side !== 'reference') return;
+  const referenceParent = canonicalStyle(parentStyle.value);
+  const candidateRules = astylarTree.rules.map((index) => inventory.rules[index])
+    .filter((rule) => rule?.side === 'astylar').map((rule) => rule.value);
+  if (property === 'fontFamily' && stages.reference.fontFamily === 'roboto' && referenceParent.fontFamily === 'roboto' &&
+      stages.normal.fontFamily === 'roboto,arial,sans-serif' && stages.effective.fontFamily === stages.normal.fontFamily &&
+      stages.painted.fontFamily === stages.normal.fontFamily && String(ast.authored.class ?? '').split(/\s+/).includes('material-button')) {
+    const componentRules = rulesAt(parent, 'reference').filter((rule) => rule.active === true &&
+      ['filled', 'outlined'].some((kind) => rule.selector === (kind === 'filled' ? '.mat-mdc-unelevated-button' : '.mat-mdc-outlined-button') &&
+        rule.declarations?.['font-family']?.value === `var(--mat-button-${kind}-label-text-font, var(--mat-sys-label-large-font))`));
+    const resetRules = candidateRules.filter((rule) => rule.selector === 'button, input, select' &&
+      canonicalStyle(rule).fontFamily === stages.painted.fontFamily);
+    const materialRules = candidateRules.filter((rule) => rule.selector === '.material-button');
+    if (componentRules.length !== 1 || resetRules.length !== 1 || materialRules.length !== 1 ||
+        materialRules[0].fontFamily !== undefined || materialRules[0].font !== undefined ||
+        rulesAt(ref, 'reference').some((rule) => rule.active === true &&
+          ((rule.declarations?.['font-family']?.value && rule.declarations['font-family'].value !== 'inherit') || rule.declarations?.font))) return;
+    return { classification: 'application-plugin-authoring-defect', attribution: 'reviewed-button-font-token-input',
+      recommendedOwner: 'showcase Material button component font-token translation',
+      justification: 'The reference button and label compute Roboto from an active Material component font token, overriding the document reset. The candidate copies the document font stack onto controls but has no font override in material-button and supplies Roboto, Arial, sans-serif to actual texture paint. The control reset was added in af04845; it does not supply the missing component token. These font-family inputs differ even if current glyphs happen to use Roboto. This is authoring inequality, not a demonstrated renderer font-selection error.',
+      reviewEvidence: { referenceRule: componentRules[0], referenceParent: parent.key, referenceComputed: stages.reference.fontFamily,
+        candidateResetRule: resetRules[0], candidateMaterialRule: materialRules[0], candidatePainted: stages.painted.fontFamily } };
+  }
+  if (property === 'letterSpacing' && stages.reference.letterSpacing === '0.096px' &&
+      referenceParent.letterSpacing === '0.096px' && stages.painted.letterSpacing === '0' &&
+      String(ast.authored.class ?? '').split(/\s+/).includes('material-button')) {
+    const componentRules = rulesAt(parent, 'reference').filter((rule) => rule.active === true &&
+      ['filled', 'outlined'].some((kind) => rule.selector === (kind === 'filled' ? '.mat-mdc-unelevated-button' : '.mat-mdc-outlined-button') &&
+        rule.declarations?.['letter-spacing']?.value === `var(--mat-button-${kind}-label-text-tracking, var(--mat-sys-label-large-tracking))`));
+    if (componentRules.length !== 1 || rulesAt(ref, 'reference').some((rule) => rule.active === true &&
+        rule.declarations?.['letter-spacing']?.value && rule.declarations['letter-spacing'].value !== 'inherit')) return;
+    const materialRules = candidateRules.filter((rule) => rule.selector === '.material-button');
+    if (materialRules.length !== 1 || materialRules[0].letterSpacing !== undefined || materialRules[0].font !== undefined) return;
+    const candidateChain = [], seen = new Set();
+    let ancestor = ast;
+    while (ancestor && !seen.has(ancestor.key)) {
+      seen.add(ancestor.key);
+      const normal = inventory.styles[ancestor.normalStyle], effective = inventory.styles[ancestor.interactionStyle];
+      if (normal?.side !== 'astylar' || effective?.side !== 'astylar' || !normal.value || !effective.value ||
+          normal.value.letterSpacing !== undefined || effective.value.letterSpacing !== undefined ||
+          normal.value.font !== undefined || effective.value.font !== undefined) return;
+      candidateChain.push({ node: ancestor.key, normal: normal.value, effective: effective.value });
+      if (ancestor.authored?.id === 'page') break;
+      const parents = astylarTree.nodes.filter((node) => node.key === ancestor.parent);
+      if (parents.length !== 1) return;
+      ancestor = parents[0];
+    }
+    if (ancestor?.authored?.id !== 'page' || ancestor.authored.type !== 'main' || ancestor.parent !== 'root' ||
+        astylarTree.nodes.filter((node) => node.authored?.id === 'page').length !== 1) return;
+    return { classification: 'application-plugin-authoring-defect', attribution: 'reviewed-button-tracking-input',
+      recommendedOwner: 'showcase Material filled/outlined button typography input translation',
+      justification: 'The reference button and direct label compute .096px from a captured active Material tracking-token rule. The candidate material-button rule and complete normal/effective control-to-page chain omit tracking, while its current core texture receives zero. This is the missing component input traced to 2f44011, not a renderer spacing defect. Other properties and final paint remain separate.',
+      reviewEvidence: { referenceRule: componentRules[0], referenceParent: parent.key, referenceComputed: stages.reference.letterSpacing,
+        candidateRule: materialRules[0], candidateChain, candidatePainted: stages.painted.letterSpacing } };
+  }
+  if (property === 'color' && entry.family === 'button' && entry.profile === 'light' && ast.authored.id === 'button-disabled' &&
+      ast.authored.disabled === true && Object.hasOwn(parent.attributes ?? {}, 'disabled') &&
+      stages.reference.color === 'rgba(29,27,32,0.38)' && referenceParent.color === stages.reference.color &&
+      stages.normal.color === 'rgba(164,160,167,1)' && stages.effective.color === stages.normal.color && stages.painted.color === stages.normal.color) {
+    const refRules = rulesAt(parent, 'reference').filter((rule) => rule.active === true &&
+      rule.selector === '.mat-mdc-unelevated-button[disabled], .mat-mdc-unelevated-button.mat-mdc-button-disabled' &&
+      rule.declarations?.color?.value === 'var(--mat-button-filled-disabled-label-text-color, color-mix(in srgb, var(--mat-sys-on-surface) 38%, transparent))');
+    const astRules = candidateRules.filter((rule) => rule.selector === '#button-disabled' &&
+      canonicalStyle(rule).color === stages.painted.color);
+    if (refRules.length !== 1 || astRules.length !== 1 || rulesAt(ref, 'reference').some((rule) => rule.active === true &&
+        rule.declarations?.color?.value && rule.declarations.color.value !== 'inherit')) return;
+    return { classification: 'application-plugin-authoring-defect', attribution: 'reviewed-disabled-button-ink',
+      recommendedOwner: 'showcase disabled-button alpha paint input translation',
+      justification: 'This light-profile disabled button retains the captured reference on-surface ink at .38 alpha, but explicitly authors opaque #a4a0a7 on the candidate and supplies it unchanged to current texture paint. The source rule preblends against surfaceContainer (introduced in 2f44011). This is unequal fixture paint, not proof of a core alpha bug or an accepted equivalence. Other profiles and colors require their own attribution.',
+      reviewEvidence: { referenceRule: refRules[0], referenceParent: parent.key, referenceComputed: stages.reference.color,
+        candidateRule: astRules[0], candidatePainted: stages.painted.color } };
+  }
+}
+
 // These paths describe Material's actual button label, not an inferred text
 // match. Unmapped control textures stay explicit, including non-button owners.
 export function collectControlTypographyEvidence(cases, inventory) {
@@ -1184,7 +1265,8 @@ export function collectControlTypographyEvidence(cases, inventory) {
             referenceNode: ref.key, astylarNode: ast.key, source: paint.source, revision: comparison.revision,
             classification: 'parity-harness-defect', attribution: 'unresolved',
             recommendedOwner: 'input audit control authored-token and core paint-input attribution',
-            justification: 'Browser computed and actual control texture paint inputs differ. Attribute authored tokens and parser/runtime behavior before assigning fault. CSS normal line-height, font fallback and composited colors are not automatically equivalent to numeric or opaque substitutes.' });
+            justification: 'Browser computed and actual control texture paint inputs differ. Attribute authored tokens and parser/runtime behavior before assigning fault. CSS normal line-height, font fallback and composited colors are not automatically equivalent to numeric or opaque substitutes.',
+            ...(reviewedButtonPaintInput(entry, property, ref, parent, ast, stages, astylarTree, inventory) ?? {}) });
         }
       }
       comparisons.push(comparison);

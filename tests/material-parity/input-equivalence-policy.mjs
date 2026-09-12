@@ -150,6 +150,15 @@ export const sourceAuditDefinitions = Object.freeze([
     focusedProof: 'examples/material-showcase/src/app/input-equivalence-proof.spec.ts: rendered button labels authored with value / textContent',
   }),
   Object.freeze({
+    id: 'fixture-button-document-font-replaces-component-token',
+    introducedBy: 'af04845 fix controls to use document font; material-button token omission dates to 2f44011',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`selector: '\.material-button',(?![^\n]*fontFamily:)[^\n]*fontWeight: '500'`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase Material button component font-token translation',
+    justification: 'The reference filled/outlined button overrides the document font reset with its Material component font token, computing Roboto. Commit af04845 added a candidate button,input,select reset to Roboto, Arial, sans-serif, but material-button still lacks the component font override. The production control texture captures that longer stack unchanged. Similar glyphs do not make different fallback inputs equivalent; attribute only with the captured active reference token, candidate reset and missing component override plus matching normal/effective/current paint stages. This does not demonstrate a renderer font-selection defect.',
+  }),
+  Object.freeze({
     id: 'fixture-material-button-tracking-token-omitted',
     introducedBy: '2f44011 feat(example): add Material component showcase',
     file: 'examples/material-showcase/src/app/astylar.component.ts',
