@@ -2198,6 +2198,112 @@ function floatingLabelTypographyReport() {
   return raw;
 }
 
+function sidenavColorReport(content = false, dark = false) {
+  const raw = templateTypographyReport('sidenav'), { reference: ref, astylar: ast } = raw.results[0].inputTrees;
+  const color = content ? '#1d1b1e' : '#49454e', candidateColor = dark && !content ? '#49454f' : '#1d1b20';
+  ref.styles[0] = { ...ref.styles[0], color };
+  ref.nodes[0].attributes.class += ' mat-drawer-container';
+  ref.nodes[1].attributes.class += ' mat-drawer';
+  if (content) {
+    ref.nodes = [ref.nodes[0], { ...ref.nodes[2], key: 'r/c', parent: 'r', type: 'mat-sidenav-content',
+      attributes: { id: 'sidenav-content', class: 'mat-drawer-content mat-sidenav-content' }, ownText: 'Main content' }];
+    ast.nodes[1].key = 'a/c';
+    ast.nodes[1].authored = { type: 'main', id: 'sidenav-content', class: 'sidenav-content', textContent: 'Main content' };
+  }
+  ref.rules = [{ active: true, conditions: [], selector: content ? '.mat-drawer-container' : '.mat-drawer',
+    declarations: { color: { value: content ? 'var(--mat-sidenav-content-text-color, var(--mat-sys-on-background))'
+      : 'var(--mat-sidenav-container-text-color, var(--mat-sys-on-surface-variant))', important: false } } }];
+  ref.nodes[content ? 0 : 1].rules = [0];
+  ast.rules = [{ selector: content ? '.sidenav-content' : '.sidenav', color: candidateColor }];
+  const leaf = ast.nodes[1], style = { ...ref.styles[0], color: candidateColor };
+  leaf.resolvedStyle = { ...style }; leaf.normalResolvedStyle = { ...style }; leaf.interactionResolvedStyle = { ...style };
+  leaf.retainedText.style = { ...style };
+  return raw;
+}
+
+test('sidenav color tokens preserve distinct reference inheritance and literal substitutions', () => {
+  for (const content of [false, true]) for (const dark of [false, true]) {
+    const raw = sidenavColorReport(content, dark), before = structuredClone(raw);
+    const evidence = collectRetainedTypographyEvidence(raw.results, collectFullTreeInventory(raw.results));
+    const findings = evidence.differences.filter(d => d.attribution === 'reviewed-sidenav-color-substitution');
+    assert.equal(findings.length, 1, `${content}/${dark}`);
+    const f = findings[0];
+    assert.equal(f.inputEquivalent, false);
+    assert.equal(f.currentPseudoStatePaintVerified, false);
+    assert.equal(f.classification, 'application-plugin-authoring-defect');
+    assert.equal(f.values.reference, content ? 'rgba(29,27,30,1)' : 'rgba(73,69,78,1)');
+    assert.equal(f.values.retained, dark && !content ? 'rgba(73,69,79,1)' : 'rgba(29,27,32,1)');
+    assert.equal(f.values.normal, f.values.retained);
+    assert.equal(f.values.effective, f.values.retained);
+    assert.equal(f.reviewEvidence.referenceChain[1].colorRules[0].selector, content ? '.mat-drawer-container' : '.mat-drawer');
+    assert.equal(f.reviewEvidence.candidateRule.rule.selector, content ? '.sidenav-content' : '.sidenav');
+    assert.deepEqual(raw, before);
+    const report = buildMaterialInputAudit(raw);
+    assert.ok(report.sourceFindings.find(f => f.id === 'fixture-sidenav-color-token-substitution')?.detected);
+    assert.ok(!validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('sidenav color attributions')));
+  }
+});
+
+test('sidenav color attribution rejects incomplete token chains and competing candidate inputs', () => {
+  const mutations = [
+    e => { e.family = 'card'; },
+    e => { e.inputTrees.reference.nodes.at(-1).parent = 'missing'; },
+    e => { e.inputTrees.reference.nodes.at(-1).attributes.style = 'color: #49454e'; },
+    e => { e.inputTrees.reference.nodes.at(-1).rules = [0]; },
+    e => { e.inputTrees.reference.nodes[0].attributes.class = 'wrong'; },
+    e => { e.inputTrees.reference.rules[0].active = false; },
+    e => { e.inputTrees.reference.rules[0].conditions = ['@media unreviewed']; },
+    e => { e.inputTrees.reference.rules[0].declarations.color.important = true; },
+    e => { e.inputTrees.reference.rules[0].declarations.color.value = '#49454e'; },
+    e => { e.inputTrees.reference.rules[0].declarations.all = { value: 'initial' }; },
+    e => { e.inputTrees.reference.nodes.at(-2).rules.push(0); },
+    e => { e.inputTrees.astylar.nodes[0].authored.id = 'wrong'; },
+    e => { e.inputTrees.astylar.nodes[1].authored.type = 'span'; },
+    e => { e.inputTrees.astylar.nodes[1].authored.class = 'other'; },
+    e => { e.inputTrees.astylar.nodes[1].authored.style = { color: '#1d1b20' }; },
+    e => { e.inputTrees.astylar.nodes[1].normalResolvedStyle.color = '#000000'; },
+    e => { e.inputTrees.astylar.nodes[1].interactionResolvedStyle.color = '#000000'; },
+    e => { e.inputTrees.astylar.nodes[1].retainedText.style.color = '#000000'; },
+    e => { e.inputTrees.astylar.rules[0].color = '#000000'; },
+    e => { e.inputTrees.astylar.rules[0].mediaMaxWidth = '500px'; },
+    e => { e.inputTrees.astylar.rules.push({ ...e.inputTrees.astylar.rules[0] }); },
+    e => { e.inputTrees.astylar.rules.push({ selector: '.sidenav:hover, .sidenav-content:hover', color: '#1d1b20' }); },
+    e => { e.inputTrees.astylar.rules.push({ selector: 'aside, main', color: '#1d1b20' }); },
+    e => { e.inputTrees.astylar.rules.push({ selector: '#sidenav-nav, #sidenav-content', color: '#1d1b20' }); },
+    e => { e.inputTrees.astylar.rules.push({ selector: '*', all: 'initial' }); },
+  ];
+  for (const content of [false, true]) for (const mutate of mutations) {
+    const raw = sidenavColorReport(content);
+    mutate(raw.results[0]);
+    const evidence = collectRetainedTypographyEvidence(raw.results, collectFullTreeInventory(raw.results));
+    assert.ok(!evidence.differences.some(d => d.attribution === 'reviewed-sidenav-color-substitution'), `${content}: ${mutate}`);
+  }
+});
+
+test('sidenav color claims independently replay captured tokens, identity and retained stages', () => {
+  for (const content of [false, true]) {
+    const baseline = buildMaterialInputAudit(sidenavColorReport(content));
+    const mutations = [
+      (_r, f) => { f.reviewEvidence.referenceChain.pop(); },
+      (_r, f) => { f.reviewEvidence.candidateRule.order = -1; },
+      (_r, f) => { f.values.normal = '#000000'; },
+      (_r, f) => { f.inputEquivalent = true; },
+      (_r, f) => { f.classification = 'confirmed-core-renderer-defect'; },
+      (_r, f) => { f.currentPseudoStatePaintVerified = true; },
+      (r, f) => { r.retainedTypography.differences.push(structuredClone(f)); },
+      r => { r.retainedTypography.differences = []; },
+      r => { r.retainedTypography.comparisons[0].properties.color.effective = '#123456'; },
+      r => { r.elementInventory.rules.find(x => x.side === 'reference' && x.value.declarations?.color).value.active = false; },
+      r => { r.elementInventory.rules.find(x => x.side === 'astylar' && x.value.color).value.color = '#000000'; },
+    ];
+    for (const mutate of mutations) {
+      const report = structuredClone(baseline);
+      mutate(report, report.retainedTypography.differences.find(d => d.attribution === 'reviewed-sidenav-color-substitution'));
+      assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('sidenav color attributions')), `${content}: ${mutate}`);
+    }
+  }
+});
+
 function fieldLabelColorReport(family = 'form-field', empty = false) {
   const raw = fieldLabelTrackingReport(family, empty ? 'empty' : 'base'), entry = raw.results[0];
   const { reference: ref, astylar: ast } = entry.inputTrees;

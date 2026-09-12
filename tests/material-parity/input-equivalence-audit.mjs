@@ -332,6 +332,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
     'reviewed-omitted-component-text-metric': 'application-plugin-authoring-defect',
     'reviewed-field-label-tracking-substitution': 'application-plugin-authoring-defect',
     'reviewed-field-label-color-substitution': 'application-plugin-authoring-defect',
+    'reviewed-sidenav-color-substitution': 'application-plugin-authoring-defect',
     'reviewed-table-font-input': 'application-plugin-authoring-defect',
     'reviewed-tree-font-input': 'application-plugin-authoring-defect',
     'reviewed-tree-label-line-box-substitution': 'application-plugin-authoring-defect',
@@ -351,6 +352,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
   validateOmittedComponentTextMetrics(report, errors);
   validateFieldLabelTracking(report, errors);
   validateFieldLabelColors(report, errors);
+  validateSidenavColors(report, errors);
   validateTreeLabelLineBoxes(report, errors);
   validateStepperNumberAlignment(report, errors);
   validateToggleButtonAlignment(report, errors);
@@ -405,6 +407,7 @@ export function renderMaterialInputAuditMarkdown(report) {
     '',
     `Field-label tracking substitutions: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-field-label-tracking-substitution').length} records preserve the reference filled-label tracking token and wrapper styles alongside the explicit candidate base/empty-state rules. The 0.4px or 0.65px candidate input is not accepted as equivalent to 0.496px reference tracking, including when the reference wrapper is scaled. Current glyph paint and the separate core transform defects remain independently unproven or investigated.`,
     `Field-label colors: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-field-label-color-substitution').length} records preserve the reference filled-label color token and the candidate base/empty/picker-shell declarations in source order. Attribution requires the selected literal to agree across normal, effective and retained stages; stale ancestry or unexplained state divergence is not waived. These unequal color inputs are not a core color-conversion or raster-equivalence claim.`,
+    `Sidenav colors: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-sidenav-color-substitution').length} records preserve distinct reference drawer/content token inheritance and candidate literal declarations. These are classified unequal authored inputs, not RGB tolerances or evidence of equivalent paint. Competing declarations, incomplete chains and disagreement between candidate stages prevent attribution.`,
     '',
     `Tree label line-box substitutions: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-tree-label-line-box-substitution').length} records preserve complete reference normal-line-height ancestry and direct flex text ownership alongside the candidate fixed-20px label wrapper. This is unequal structure and line-box input, not a normal-to-20px normalization. Natural line-box height, anonymous flex-item behavior and current glyph paint require separate equal-input proof.`,
     '',
@@ -2051,6 +2054,96 @@ function reviewedTreeFontInput(entry, mapping, ref, ast, styles, astylarTree, in
   };
 }
 
+function reviewedSidenavColorInput(entry, ref, ast, styles, referenceTree, astylarTree, inventory) {
+  if (entry.family !== 'sidenav' || !['sidenav-nav', 'sidenav-content'].includes(ast.authored?.id) ||
+      ast.retainedText?.source !== 'core-text-registry' || !styles.reference.color ||
+      styles.reference.color === styles.retained.color ||
+      ['normal', 'effective'].some(stage => styles[stage].color !== styles.retained.color)) return;
+  const nav = ast.authored.id === 'sidenav-nav', selector = nav ? '.sidenav' : '.sidenav-content';
+  const classes = String(ast.authored.class ?? '').split(/\s+/);
+  if (ast.authored.type !== (nav ? 'aside' : 'main') || !classes.includes(selector.slice(1)) ||
+      ast.authored.style?.color !== undefined || ast.authored.style?.all !== undefined) return;
+  const parents = astylarTree.nodes.filter(n => n.key === ast.parent);
+  if (parents.length !== 1 || parents[0].authored?.type !== 'div' || parents[0].authored.id !== 'sidenav-primary' ||
+      !String(parents[0].authored.class ?? '').split(/\s+/).includes('sidenav-container')) return;
+  const wrappers = referenceTree.nodes.filter(n => n.key === ref.parent);
+  if (wrappers.length !== 1) return;
+  const wrapper = wrappers[0];
+  if (nav) {
+    const mappings = reviewedTemplateTextMappings('sidenav', referenceTree, astylarTree).filter(m =>
+      m.element === 'sidenav-nav' && m.referenceNode === ref.key && m.astylarNode === ast.key);
+    if (mappings.length !== 1 || !String(wrapper.attributes?.class ?? '').split(/\s+/).includes('mat-drawer')) return;
+  } else if (ref.type !== 'mat-sidenav-content' || ref.attributes?.id !== 'sidenav-content' ||
+      !String(ref.attributes.class ?? '').split(/\s+/).includes('mat-sidenav-content') ||
+      wrapper.type !== 'mat-sidenav-container' || wrapper.attributes?.id !== 'sidenav-primary' ||
+      !String(wrapper.attributes.class ?? '').split(/\s+/).includes('mat-drawer-container')) return;
+  const referenceSelector = nav ? '.mat-drawer' : '.mat-drawer-container';
+  const referenceToken = nav ? 'var(--mat-sidenav-container-text-color, var(--mat-sys-on-surface-variant))'
+    : 'var(--mat-sidenav-content-text-color, var(--mat-sys-on-background))';
+  const referenceChain = [];
+  for (const node of [ref, wrapper]) {
+    if (referenceTree.nodes.filter(n => n.key === node.key).length !== 1) return;
+    const pooled = inventory.styles[node.style];
+    if (pooled?.side !== 'reference' || !pooled.value || canonicalStyle(pooled.value).color !== styles.reference.color ||
+        node.inline?.color || node.inline?.all || /(?:^|;)\s*(?:color|all)\s*:/i.test(node.attributes?.style ?? '')) return;
+    const rules = node.rules.map(i => inventory.rules[i]);
+    if (rules.some(r => r?.side !== 'reference')) return;
+    const declarations = rules.map(r => r.value).filter(r => r.active === true && (r.declarations?.color || r.declarations?.all));
+    if (node === ref && declarations.length) return;
+    if (node === wrapper && (declarations.length !== 1 || declarations[0].declarations.all ||
+        declarations[0].selector !== referenceSelector || declarations[0].declarations.color?.value !== referenceToken ||
+        declarations[0].declarations.color.important !== false || !Array.isArray(declarations[0].conditions) || declarations[0].conditions.length)) return;
+    referenceChain.push({ node: node.key, computed: pooled.value, colorRules: declarations });
+  }
+  const rules = astylarTree.rules.map(i => inventory.rules[i]);
+  if (rules.some(r => r?.side !== 'astylar')) return;
+  const ownTag = new RegExp(`(?:^|[\\s>+~,])${ast.authored.type}(?:$|[\\s.#[:>+~,])`);
+  const escapedClasses = classes.filter(Boolean).map(c => c.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+  const candidates = rules.map((r, order) => ({ order, rule: r.value })).filter(({ rule }) =>
+    (rule.color !== undefined || rule.all !== undefined) && (rule.all !== undefined ||
+      rule.selector === '*' || rule.selector?.includes(`#${ast.authored.id}`) || ownTag.test(rule.selector ?? '') ||
+      escapedClasses.some(c => new RegExp(`\\.${c}(?:$|[\\s.#[:>+~,])`).test(rule.selector ?? ''))));
+  if (candidates.length !== 1 || candidates[0].rule.selector !== selector || candidates[0].rule.all !== undefined ||
+      Object.keys(candidates[0].rule).some(key => key.startsWith('media')) || !/^#[a-f\d]{6}$/i.test(candidates[0].rule.color ?? '') ||
+      canonicalStyle(candidates[0].rule).color !== styles.retained.color) return;
+  return { attribution: 'reviewed-sidenav-color-substitution', classification: 'application-plugin-authoring-defect',
+    inputEquivalent: false, currentPseudoStatePaintVerified: false,
+    recommendedOwner: 'showcase sidenav component color-token translation',
+    justification: 'The reference text inherits a component-specific Material color token from its drawer or container, without an intervening color declaration. The candidate supplies a different literal on the text owner; that declaration agrees with normal, effective and retained stages. This is an authored-input substitution, including one-channel RGB differences, not evidence of a core color-conversion defect or equivalent paint. Restore the component token semantics before judging renderer output. Separate sidenav structure and padding findings remain unchanged.',
+    reviewEvidence: { sourceFinding: 'fixture-sidenav-color-token-substitution', referenceChain, candidateRule: candidates[0],
+      candidateParent: { key: parents[0].key, authored: parents[0].authored }, candidateAuthored: ast.authored,
+      candidateNormal: inventory.styles[ast.normalStyle].value, candidateEffective: inventory.styles[ast.interactionStyle].value,
+      referenceComputed: styles.reference.color, candidateRetained: styles.retained.color } };
+}
+
+function validateSidenavColors(report, errors) {
+  const expected = [];
+  for (const comparison of report.retainedTypography?.comparisons ?? []) {
+    if (comparison.family !== 'sidenav') continue;
+    const refs = report.elementInventory.cases.filter(c => c.case === comparison.case && c.side === 'reference');
+    const asts = report.elementInventory.cases.filter(c => c.case === comparison.case && c.side === 'astylar');
+    if (refs.length !== 1 || asts.length !== 1) continue;
+    const refTree = report.elementInventory.variants[refs[0].variant], astTree = report.elementInventory.variants[asts[0].variant];
+    const refsByKey = refTree.nodes.filter(n => n.key === comparison.referenceNode), astsByKey = astTree.nodes.filter(n => n.key === comparison.astylarNode);
+    if (refsByKey.length !== 1 || astsByKey.length !== 1) continue;
+    const ref = refsByKey[0], ast = astsByKey[0];
+    const indices = { reference: ref.style, normal: ast.normalStyle, effective: ast.interactionStyle, retained: ast.retainedText?.style };
+    const pooled = Object.fromEntries(Object.entries(indices).map(([key, i]) => [key, report.elementInventory.styles[i]]));
+    if (Object.entries(pooled).some(([key, value]) => value?.side !== (key === 'reference' ? 'reference' : 'astylar') || !value.value)) continue;
+    const styles = Object.fromEntries(Object.entries(pooled).map(([key, value]) => [key, canonicalStyle(value.value)]));
+    const review = reviewedSidenavColorInput(comparison, ref, ast, styles, refTree, astTree, report.elementInventory);
+    if (review) expected.push({ comparison, review, values: Object.fromEntries(Object.entries(styles).map(([key, style]) => [key, style.color])) });
+  }
+  const claimed = report.retainedTypography?.differences.filter(d => d.attribution === 'reviewed-sidenav-color-substitution') ?? [];
+  if (expected.length !== claimed.length || expected.some(({ comparison, review, values }) => {
+    const matches = claimed.filter(d => d.case === comparison.case && d.element === comparison.element && d.property === 'color' &&
+      d.referenceNode === comparison.referenceNode && d.astylarNode === comparison.astylarNode);
+    return matches.length !== 1 || JSON.stringify(matches[0].values) !== JSON.stringify(values) ||
+      JSON.stringify(comparison.properties.color) !== JSON.stringify(values) ||
+      Object.entries(review).some(([key, value]) => JSON.stringify(matches[0][key]) !== JSON.stringify(value));
+  })) errors.push('sidenav color attributions do not replay from captured component tokens and candidate declarations');
+}
+
 function reviewedFieldLabelColorInput(entry, ref, ast, styles, referenceTree, astylarTree, inventory) {
   if (!['form-field', 'input', 'select', 'autocomplete', 'datepicker', 'timepicker'].includes(entry.family) ||
       ref.type !== 'mat-label' || ref.attributes?.id !== `${entry.family}-label` ||
@@ -2652,6 +2745,7 @@ export function collectRetainedTypographyEvidence(cases, inventory, controlTypog
             ...(property === 'fontSize' && floatingLabel ? floatingLabel : {}),
             ...(property === 'letterSpacing' ? reviewedFieldLabelTrackingInput(entry, ref, ast, styles, referenceTree, astylarTree, inventory) ?? {} : {}),
             ...(property === 'color' ? reviewedFieldLabelColorInput(entry, ref, ast, styles, referenceTree, astylarTree, inventory) ?? {} : {}),
+            ...(property === 'color' ? reviewedSidenavColorInput(entry, ref, ast, styles, referenceTree, astylarTree, inventory) ?? {} : {}),
             ...(controlLabelToken ?? {}),
             ...(selectValueToken ?? {}),
             ...(weekdayToken ?? {}),
@@ -4169,6 +4263,7 @@ function implementationPlan() {
     { priority: 5.26, rootCause: 'Native button/inline-block input is replaced by flex-div centering', action: 'Restore the original button wrapper and inline label layout, preserving CSS defaults, inheritance and Material rules. The candidate flex div omits native button defaults; adding label offsets or textAlign:center to that substitute would not test the original mechanism. Verify native-button default resolution and inline formatting through equivalent core inputs after removing the authoring divergence. Keep the separate CDP default controls and per-case captured center/left mismatch evidence.' },
     { priority: 5.27, rootCause: 'Stepper numeral font and label-color inheritance are replaced or omitted', action: 'Keep the original frame-scaled inherited numeral font with the icon-content wrapper instead of fixed 14px step-badge text. Restore the Material active-label color token and inner label inheritance instead of accepting the page on-surface fallback. Preserve actual reference theme inputs; do not retune the dark reference or calibrate text to the circle. Verify core inheritance, transforms and glyph paint only after equivalent authoring is restored.' },
     { priority: 5.28, rootCause: 'Filled-label component color tokens are replaced by independent literal state rules', action: 'Restore the captured reference label-color token, wrapper inheritance and state semantics rather than adjusting candidate colors to sampled pixels. Base/empty/picker-shell declarations currently supply different inputs, independently of the repaired inspection ancestry bug. Preserve normal/effective/retained stages and original rule order; investigate core cascade or current paint only when equivalent authored inputs still diverge. Do not normalize small RGB differences away or reuse pre-repair inconsistent captures as proof.' },
+    { priority: 5.29, rootCause: 'Sidenav component text-color tokens are replaced by fixture theme literals', action: 'Restore the distinct drawer and content token semantics together with the separately identified sidenav structure/padding inputs. Reference color ownership is the drawer or container, while candidate aside/main rules directly set theme.onSurface or dark-mode literals. Preserve exact channels and captured inheritance; only an equal-input reproduction can establish a core color defect. The initial implementation introduced these substitutions, so do not describe them as confirmed later compensating fixes.' },
     { priority: 5.3, rootCause: 'Core normal line-height is approximated by a fixed Mg font-box probe', action: 'Resolve browser normal line-box metrics and actual fallback runs in core. The equal-input Arial/serif cases expose one-pixel texture-height errors; Roboto plus emoji/CJK exposes two-pixel errors while plain Roboto and explicit line heights pass. Preserve those controls, extend multiline/baseline/DPR verification and avoid a universal multiplier, constant pixel addition, or fixed Material line-height compensation. Current-texture evidence must remain separate from declared normal and from final glyph raster.' },
     { priority: 5.4, rootCause: 'Calendar cell text tokens and inner line boxes were flattened away', action: 'Restore the reference calendar font and date-text ink tokens and its inner line-height:1 label inside both day and year controls. Keep reference cell/container sizing, state and selection structure instead of copying a normal-metric result or tuning the baseline. Separate date/range-context proofs isolate 990 day and 192 year occurrences each of missing font-token, omitted inner line-height and fixed-ink inputs; core metric defects must be assessed only after those inputs are equivalent. Independently resolve normal-versus-zero tracking and the still-unmapped header/icon owners.' },
     { priority: 5.5, rootCause: 'Snackbar action inherits generic control inputs instead of Material action tokens', action: 'Restore the original text-button font, size and tracking declarations and the snackbar inverse-primary ink, keeping the reference label/action wrapper intent. The exact overlay/message mapping isolates 34 current action textures and source-traces font-stack, tracking and ink substitutions. Trace the remaining 14px-versus-16px and normal-line-box observations through the core defaults/inheritance and metric stages before assigning core ownership; do not calibrate a baseline or line height. Retain the separate intrinsic-width, live-region, visibility, lifetime and placement obligations.' },

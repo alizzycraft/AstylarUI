@@ -22,6 +22,56 @@ selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Sidenav color tokens and refreshed natural-line-box evidence (2026-09-12)
+
+All 12 corrected static sidenav captures (four profiles, three viewports)
+contain two unequal color inputs each. The reference drawer text inherits
+`var(--mat-sidenav-container-text-color, var(--mat-sys-on-surface-variant))`
+from `.mat-drawer`, computing `rgb(73, 69, 78)`. Content inherits
+`var(--mat-sidenav-content-text-color, var(--mat-sys-on-background))` from
+`.mat-drawer-container`, computing `rgb(29, 27, 30)`. Neither text owner has
+an intervening color declaration.
+
+Candidate `.sidenav` and `.sidenav-content` directly supply literals via
+`theme.onSurface` or dark-mode branches. The drawer is `#1d1b20` in nine
+cases and `#49454f` in three dark cases; content is `#1d1b20` in all 12.
+Normal, effective and retained stages agree. The exact RGB-channel
+differences are retained, not normalized into equivalence. Both source
+declarations at `astylar.component.ts:681–682` originate in `2f440115`, the
+initial implementation: history does not establish a later compensating fix.
+These are application-authoring mismatches, independently of the existing
+sidenav padding and positioned-flow substitutions, not demonstrated core
+color-conversion defects.
+
+The new per-occurrence attribution preserves each reference token chain,
+candidate parent/identity and declaration, and all observed stages. Independent
+report validation replays the evidence. Missing/competing tokens, conditional
+rules, inline colors, wrong identity, unknown matching candidate declarations,
+or divergent normal/effective/retained colors prevent attribution.
+
+Verification:
+
+- `node --test --test-name-pattern='sidenav color|source audit|source fingerprints' tests/material-parity/input-equivalence-audit.spec.mjs`:
+  5/5 passing, including four positive input combinations, 50 contradictory-input
+  controls and 22 report-tampering controls.
+- The actual 12-case diagnostic report produces 24 classifications, zero
+  unresolved retained-typography differences in this group and zero validation
+  errors with `requireComplete:false`. This is not full-audit acceptance.
+- `npm run parity:harness:check`: 305/305 passing, zero skipped/cancelled
+  (125.187 seconds).
+- Natural-line-box capture process completed with exit 0: 120 observations
+  across 96 cases in `normal-line-box-current-ancestry-audit`. Independent
+  `loadNormalLineBoxReport` validation against all 436 current static cases
+  confirms zero missing observations, zero evidence errors, matching frozen
+  checkpoint/build/source provenance, and observed natural height 17px for
+  these specific labels. This does not authorize globally replacing `normal`
+  with 17px or establish baseline/raster equivalence.
+  Report SHA-256:
+  `e1eb3f65f84a8f9e9e1cb3fafa35bfada72a111a453ce0439626a5ac24b24477`.
+
+The full current-ancestry interaction capture remains running. No renderer,
+comparison fixture, reference input, or frozen capture import changed here.
+
 ## Filled-label color inputs now have replayable attribution (2026-09-12)
 
 The corrected capture contains all 72 static cases for form-field, input,

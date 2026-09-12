@@ -101,6 +101,16 @@ export const reviewedValueNormalizations = Object.freeze([
 
 export const sourceAuditDefinitions = Object.freeze([
   Object.freeze({
+    id: 'fixture-sidenav-color-token-substitution',
+    introducedBy: '2f440115',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`selector: '\.sidenav(?:-content)?'[^\n]*color: theme\.mode === 'dark'`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase sidenav component color-token translation',
+    justification: 'The reference drawer and content inherit distinct Material component tokens: container-text-color/on-surface-variant and content-text-color/on-background. Candidate aside and main instead declare dark-mode literals or theme.onSurface. Captured reference token inheritance and candidate normal/effective/retained stages prove these unequal inputs independently of the previously recorded padding and positioned-flow substitutions. History places both declarations in the initial showcase implementation, not a later renderer repair. Restore component semantics before testing core color behavior; do not normalize small channel differences away.',
+    focusedProof: 'tests/material-parity/input-equivalence-audit.spec.mjs: sidenav color tokens preserve distinct reference inheritance and literal substitutions',
+  }),
+  Object.freeze({
     id: 'fixture-field-label-color-substitution',
     introducedBy: '4d56f862 base/empty colors; f286fb17 timepicker shell; d973f847 datepicker shell',
     file: 'examples/material-showcase/src/app/astylar.component.ts',
