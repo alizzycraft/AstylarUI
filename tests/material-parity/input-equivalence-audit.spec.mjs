@@ -21,6 +21,53 @@ const browserDefaults = {
   fontStyle: 'normal', transform: 'none', pointerEvents: 'auto',
 };
 
+test('browser pseudo outline does not consume host content width like a host border', async () => {
+  const { chromium } = await import('playwright-core');
+  const { captureBrowserInputTree } = await import('./input-tree-evidence.mjs');
+  const browser = await chromium.launch({ channel: 'chrome', headless: true });
+  try {
+    for (const dpr of [1, 2]) {
+      const page = await browser.newPage({ viewport: { width: 640, height: 360 }, deviceScaleFactor: dpr });
+      for (const selected of [false, true]) {
+        const width = selected ? 0 : 1;
+        await page.setContent(`<style>
+          .chip { position:relative; display:flex; width:100px; height:32px; box-sizing:border-box; padding:0 12px; }
+          .content { flex:1; min-width:0; height:10px; }
+          #pseudo-owner::before { content:""; position:absolute; inset:0; box-sizing:border-box; border:${width}px solid #123456; pointer-events:none; }
+          #border-owner { border:${width}px solid #123456; }
+        </style><app-reference><main class="frame">
+          <div class="chip" id="pseudo-owner"><div class="content" id="pseudo-content"></div></div>
+          <div class="chip" id="border-owner"><div class="content" id="border-content"></div></div>
+        </main></app-reference>`);
+        const geometry = await page.evaluate(() => Object.fromEntries(['pseudo-owner', 'border-owner', 'pseudo-content', 'border-content'].map(id => {
+          const r = document.getElementById(id).getBoundingClientRect(); return [id, { x: r.x, width: r.width, height: r.height }];
+        })));
+        assert.equal(geometry['pseudo-owner'].width, 100);
+        assert.equal(geometry['border-owner'].width, 100);
+        assert.equal(geometry['pseudo-owner'].height, geometry['border-owner'].height);
+        assert.equal(geometry['pseudo-content'].width, 76);
+        assert.equal(geometry['border-content'].width, 76 - 2 * width);
+        assert.equal(geometry['border-content'].x - geometry['pseudo-content'].x, width);
+        const tree = await page.evaluate(captureBrowserInputTree, {
+          styleProperties: ['position', 'borderLeftWidth', 'borderLeftColor', 'boxSizing', 'width', 'content'],
+        });
+        assert.deepEqual(tree.errors, []);
+        const host = tree.nodes.find(n => n.attributes?.id === 'pseudo-owner');
+        const border = tree.nodes.find(n => n.attributes?.id === 'border-owner');
+        const pseudo = host.pseudoElements.find(p => p.pseudo === '::before');
+        assert.equal(pseudo.generated, true);
+        assert.equal(tree.styles[host.style].borderLeftWidth, '0px');
+        assert.equal(tree.styles[pseudo.style].borderLeftWidth, `${width}px`);
+        assert.equal(tree.styles[border.style].borderLeftWidth, `${width}px`);
+        assert.equal(tree.styles[pseudo.style].position, 'absolute');
+        assert.ok(pseudo.rules.some(i => tree.rules[i].selector === '#pseudo-owner::before'));
+        assert.ok(host.rules.every(i => tree.rules[i].selector !== '#pseudo-owner::before'));
+      }
+      await page.close();
+    }
+  } finally { await browser.close(); }
+});
+
 test('browser outline token shorthands retain authored variables when expanded color fields are empty', async () => {
   const { chromium } = await import('playwright-core');
   const { captureBrowserInputTree } = await import('./input-tree-evidence.mjs');
@@ -917,10 +964,12 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   const report = parityReport({}, {});
   const audit = buildMaterialInputAudit(report);
   assert.equal(audit.coverage.visualParityGreen, true);
-  assert.equal(audit.sourceFingerprints.length, 47);
+  assert.equal(audit.sourceFingerprints.length, 48);
+  assert.equal(audit.sourceFingerprints.filter(({ file }) => file === 'scripts/audit-material-chip-inputs.mjs').length, 1);
   assert.equal(audit.sourceFingerprints.filter(({ file }) => file === 'scripts/audit-material-outline-inputs.mjs').length, 1);
   for (const id of ['fixture-outlined-button-literal-replaces-outline-token',
-    'fixture-toggle-group-literal-replaces-divider-token', 'fixture-toggle-divider-literal-replaces-divider-token']) {
+    'fixture-toggle-group-literal-replaces-divider-token', 'fixture-toggle-divider-literal-replaces-divider-token',
+    'fixture-chip-outline-pseudo-replaced-by-host-border']) {
     const findings = audit.sourceFindings.filter(finding => finding.id === id);
     assert.equal(findings.length, 1);
     assert.equal(findings[0].detected, true);

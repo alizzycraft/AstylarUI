@@ -22,6 +22,81 @@ selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Chip outline ownership changes the input box model (2026-09-12)
+
+The full configured chip subset contains **76 cases / 152 chip hosts**: twelve
+static and sixty-four interaction cases across all four profiles, configured
+viewports, DPRs and eight interaction state labels. The read-only producer
+`scripts/audit-material-chip-inputs.mjs` requires every configured chip case
+from the selected checkpoint manifest, verifies result and full-tree digests,
+and records the distinct reference host, descendant action button and its
+generated `::before` outline. Candidate authored rules and all three current
+core style stages remain separate evidence. It neither changes a surface nor
+turns this ownership difference into an equivalent-value alias.
+
+Command:
+
+`node scripts/audit-material-chip-inputs.mjs artifacts/material-parity/current-ancestry-audit/checkpoint artifacts/material-parity/chip-outline-current-ancestry-audit-v2.json`
+
+The resulting report SHA-256 is
+`8fff4be83c2e3138155c484e1ea3649f4fbcfec3c2c374aeaab4688948c16d83`.
+The first diagnostic report is preserved; v2 additionally asserts the exact
+candidate base border declaration and all four zero-width reference host
+borders. Both cover the same unchanged 152 observations.
+
+Every reference host has a zero-width border. Its action button's generated
+outline is absolutely positioned, border-box sized and pointer-events:none.
+For **32 unselected observations**, that outline is 1px while the candidate
+authors 1px on the **host**. For **120 selected observations**, both reported
+widths are zero, but their ownership and authored rules remain different.
+The candidate retains `#79747e` across normal/effective/interaction stages.
+Reference pseudo border color is RGB **123,117,127** in 112 observations and
+**73,69,78** in forty. The latter uses the focus-outline token rule, including
+focus retained after activation; it is not a theme-name inference.
+The original expressions are preserved:
+
+- `var(--mat-chip-outline-color, var(--mat-sys-outline))`
+- `var(--mat-chip-focus-outline-color, var(--mat-sys-on-surface-variant))`
+
+History shows that initial showcase commit `2f44011` already put the border
+and palette literal on `.chip`. This finding does not establish that a later
+renderer regression caused that choice. The separately recorded measured
+selected/unselected widths remain a distinct compensation.
+
+A browser-only reduction at **DPR 1 and 2**, in both selected states, holds
+the outer box at **100x32 CSS px**. Moving a 1px pseudo outline onto the
+border-box host changes the content width from **76 to 74px** and its x
+position by **1px**. At zero border width both controls retain 76px content.
+The actual capture helper must preserve the pseudo styles/rules separately
+from the host in every control. This proves unequal box-model inputs, not an
+equal-input Astylar defect or final chip raster equivalence.
+
+Focused command:
+
+`node --test --test-name-pattern='browser pseudo outline|records source fingerprints' tests/material-parity/input-equivalence-audit.spec.mjs`
+
+Result: **2/2 pass**, zero skipped/failing tests, **2.551 seconds**.
+Full `npm run parity:harness:check`: **337/337 pass**, zero failed, skipped,
+cancelled or todo tests, **115.519 seconds**. Replay of all 436 static cases
+with the current bound supplements retains zero diagnostic validation errors,
+**93** detected source findings and **2,655** unresolved style signatures.
+Those unresolved signatures are not silently waived by the new source finding.
+
+Implementation order: restore the original outline owner, token and state
+inputs together with the chip action/label structure before investigating
+remaining core differences. If generated-box rendering is unsupported or
+wrong, reduce that exact CSS input at the core boundary; do not move the
+border onto the host, subtract padding, shift the label or tune fixed widths
+to make the same screenshot. The source finding is now tracked separately;
+per-case scalar border signatures are not automatically reclassified by this
+structural evidence.
+
+The resumed full browser run passed the previous snack-bar dark timeout case,
+then stopped later during a contrast `activate-leave` screenshot with a
+30-second screenshot timeout after fonts had loaded. This remains incomplete
+capture evidence; no case or threshold was removed. Resume only after
+verifying the checkpoint and preserving the same served build/imports.
+
 ## Outline-token findings now have per-case declaration proofs (2026-09-12)
 
 The source findings from `d27400c` are now connected to captured cases through

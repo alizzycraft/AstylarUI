@@ -4726,6 +4726,7 @@ function sourceFingerprints(root) {
     'scripts/audit-material-normal-line-boxes.mjs',
     'scripts/audit-material-button-defaults.mjs',
     'scripts/audit-material-outline-inputs.mjs',
+    'scripts/audit-material-chip-inputs.mjs',
   ];
   return files.map((file) => ({ file, sha256: createHash('sha256')
     .update(readFileSync(path.resolve(root, file), 'utf8').replace(/\r\n/g, '\n')).digest('hex') }));
@@ -4733,6 +4734,10 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('browser pseudo outline/,
+      'pseudo outline versus host border keeps distinct box-model ownership', 'At DPR 1 and 2, selected and unselected browser controls retain the same 100x32 outer box. Moving the unselected 1px pseudo outline onto the border-box host shrinks its child by 2px and shifts it 1px. The full-tree collector must keep generated styles/rules on the pseudo rather than on the host. This isolates unequal browser inputs, not a core rendering failure or full chip parity.'),
+    proof(root, 'scripts/audit-material-chip-inputs.mjs', /const expected =/,
+      'all checkpoint-bound chip outline owners and states', 'Requires every configured chip case, verifies record/tree digests, and preserves reference host, action and generated-outline styles plus actual pseudo rules and all three candidate core style stages. The 152 observations demonstrate structural outline relocation and token substitution; no host/pseudo alias or visual equality is inferred.'),
     proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('outline token attribution requires/,
       'capture-backed outline token attribution with side, conflict and replay guards', 'The exact active serialized token declaration must agree with its pending longhands and the separately captured shared-ID snapshot. Complete candidate author rules must contain the literal without any possibly applicable competing color/reset; all three current core stages and relevant 1px solid border sides must agree. Tests reject 36 conflicting or incomplete captures, forged report evidence and the use of only twelve displayed samples for fourteen reviewed states. This is classified unequal input, not a core paint or whole-component equivalence claim.'),
     proof(root, 'scripts/audit-material-outline-inputs.mjs', /const targets =/,

@@ -733,6 +733,16 @@ export const sourceAuditDefinitions = Object.freeze([
     justification: 'Reference chip widths derive from label, graphic, padding, and selected-state structure. Candidate IDs select fixed 97/68px and 93/64px widths. This substitutes outcomes for content-dependent inputs and cannot validate other labels or typography.',
   }),
   Object.freeze({
+    id: 'fixture-chip-outline-pseudo-replaced-by-host-border',
+    introducedBy: '2f44011 initial showcase .chip host border; current selected-state removal retained separately',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`selector: '\.chip'[^\n]*borderWidth: '1px', borderStyle: 'solid', borderColor: '#79747e'`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase chip outline ownership and token translation; core generated-box support if independently reproduced',
+    justification: 'All 76 checkpoint-bound chip cases (152 hosts) retain a zero-width reference host border and an absolutely positioned descendant-button ::before outline. The candidate moves that outline onto the chip host and authors literal #79747e. Thirty-two unselected observations have a 1px reference pseudo outline versus 1px candidate host border; 120 selected observations have zero widths. Reference pseudo colors include RGB 123,117,127 and 73,69,78, not the candidate literal. Browser controls show that moving a 1px outline onto a fixed border-box host shrinks its content width by 2px and moves content 1px, despite equal outer geometry. This is unequal input, not a renderer border-placement defect or a reason to subtract padding/add label offsets. Host and pseudo styles, token declarations, state and hit ownership must be preserved separately; no final raster or whole-chip equivalence is claimed.',
+    focusedProof: 'scripts/audit-material-chip-inputs.mjs; browser pseudo outline controls in input-equivalence-audit.spec.mjs',
+  }),
+  Object.freeze({
     id: 'fixture-stepper-breakpoint-connector',
     introducedBy: '4e58f58 fix(material): align compact navigation surfaces',
     file: 'examples/material-showcase/src/app/astylar.component.ts',
