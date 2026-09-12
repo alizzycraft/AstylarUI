@@ -1639,6 +1639,105 @@ test('select value mapping follows the combobox and generated value owner withou
   }
 });
 
+function selectArrowReport(compact = false) {
+  const raw = templateTypographyReport('select'), { reference: r, astylar: a } = raw.results[0].inputTrees;
+  const control = r.nodes.find(n => n.type === 'mat-select');
+  control.attributes['aria-label'] = 'Plan';
+  let parent = r.nodes.find(n => n.attributes?.class === 'mat-mdc-select-trigger').key;
+  for (const [key, type, attributes] of [
+    ['arrow-wrapper', 'div', { class: 'mat-mdc-select-arrow-wrapper' }],
+    ['arrow', 'div', { class: 'mat-mdc-select-arrow' }],
+    ['svg', 'svg', { viewBox: '0 0 24 24', width: '24px', height: '24px', focusable: 'false', 'aria-hidden': 'true' }],
+    ['path', 'path', { d: 'M7 10l5 5 5-5z' }],
+  ]) {
+    r.nodes.push({ key, parent, type, attributes, ownText: '', style: 0, rules: [], inline: {}, pseudoElements: [] });
+    parent = key;
+  }
+  const rule = { selector: '.select-caret', position: 'absolute', top: compact ? '8px' : '18px',
+    right: '15px', fontSize: compact ? '14px' : '12px', color: '#1d1b20' };
+  a.rules = [rule];
+  const { selector, ...style } = rule;
+  a.nodes.push({ key: 'a/i/control', parent: 'a/i', authored: { type: 'input', id: 'select-control', role: 'combobox', ariaLabel: 'Plan' },
+    resolvedStyle: {}, normalResolvedStyle: {}, interactionResolvedStyle: {} },
+  { key: 'a/caret', parent: 'a', authored: { type: 'span', id: 'select-caret', class: 'select-caret', role: 'presentation', textContent: '▼' },
+    resolvedStyle: { ...style }, normalResolvedStyle: { ...style }, interactionResolvedStyle: { ...style },
+    retainedText: { source: 'core-text-registry', style: { ...r.styles[0], ...style } } });
+  return raw;
+}
+
+test('select arrow substitution preserves SVG and glyph inputs without inventing text correspondence', () => {
+  for (const compact of [false, true]) {
+    const raw = selectArrowReport(compact), before = structuredClone(raw), report = buildMaterialInputAudit(raw);
+    assert.deepEqual(raw, before);
+    const gap = report.retainedTypography.gaps.find(g => g.element === 'select-caret');
+    assert.equal(gap.attribution, 'reviewed-select-vector-to-glyph-substitution');
+    assert.equal(gap.inputEquivalent, false);
+    assert.equal(gap.finalRasterVerified, false);
+    assert.equal(gap.classification, 'application-plugin-authoring-defect');
+    assert.deepEqual(gap.referenceNodes, []);
+    assert.equal(gap.reviewEvidence.referenceChain.at(-1).attributes.d, 'M7 10l5 5 5-5z');
+    assert.equal(gap.reviewEvidence.candidate.authored.textContent, '▼');
+    assert.equal(gap.reviewEvidence.candidate.retained.fontSize, compact ? '14px' : '12px');
+    assert.ok(!report.retainedTypography.comparisons.some(c => c.element === 'select-caret'));
+    assert.ok(report.sourceFindings.find(f => f.id === 'fixture-select-arrow-vector-to-glyph-substitution').detected);
+    assert.ok(!validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('select vector-to-glyph')));
+  }
+});
+
+test('select arrow substitution refuses ambiguous content, broken ownership and inconsistent stages', () => {
+  const mutations = [
+    (r) => { r.nodes.find(n => n.type === 'path').attributes.d = 'M0 0'; },
+    (r) => { r.nodes.find(n => n.type === 'svg').attributes.viewBox = '0 0 12 12'; },
+    (r) => { r.nodes.find(n => n.type === 'svg').attributes.focusable = 'true'; },
+    (r) => { r.nodes.find(n => n.type === 'svg').attributes.width = '12px'; },
+    (r) => { r.nodes.find(n => n.type === 'path').parent = 'arrow'; },
+    (r) => { r.nodes.find(n => n.key === 'arrow').attributes.class = 'unrelated'; },
+    (r) => { r.nodes.find(n => n.type === 'path').ownText = 'text'; },
+    (r) => { r.nodes.push({ ...structuredClone(r.nodes.at(-1)), key: 'extra-path' }); },
+    (r) => { r.nodes.push(structuredClone(r.nodes.at(-1))); },
+    (r) => { r.nodes.find(n => n.type === 'mat-select').attributes.role = 'button'; },
+    (_r, a) => { a.nodes.at(-1).authored.textContent = '▾'; },
+    (_r, a) => { a.nodes.at(-1).authored.role = 'button'; },
+    (_r, a) => { a.nodes.at(-1).parent = 'a/i'; },
+    (_r, a) => { a.nodes.find(n => n.authored.id === 'select-control').parent = 'missing'; },
+    (_r, a) => { a.nodes.find(n => n.authored.id === 'select-control').authored.ariaLabel = 'Other'; },
+    (_r, a) => { delete a.nodes.at(-1).retainedText; },
+    (_r, a) => { a.nodes.at(-1).retainedText.style.fontSize = '99px'; },
+    (_r, a) => { a.nodes.at(-1).interactionResolvedStyle.top = '99px'; },
+    (_r, a) => { a.rules.push(structuredClone(a.rules[0])); },
+    (_r, a) => { a.rules[0].mediaMaxWidth = '500px'; },
+    (_r, a) => { a.nodes.push({ ...structuredClone(a.nodes.at(-1)), key: 'other-caret' }); },
+  ];
+  for (const mutate of mutations) {
+    const raw = selectArrowReport(), { reference, astylar } = raw.results[0].inputTrees;
+    mutate(reference, astylar);
+    const e = collectRetainedTypographyEvidence(raw.results, collectFullTreeInventory(raw.results));
+    assert.ok(!e.gaps.some(g => g.attribution === 'reviewed-select-vector-to-glyph-substitution'), String(mutate));
+  }
+});
+
+test('select arrow claims are independently replayed including deleted and duplicated findings', () => {
+  const baseline = buildMaterialInputAudit(selectArrowReport());
+  for (const mutate of [
+    (_r, g) => { g.inputEquivalent = true; },
+    (_r, g) => { g.finalRasterVerified = true; },
+    (_r, g) => { g.classification = 'equivalent-representation'; },
+    (_r, g) => { g.reviewEvidence.referenceChain.at(-1).attributes.d = 'invented'; },
+    (_r, g) => { g.reviewEvidence.referenceChain.at(-1).computed.fill = '#abcdef'; },
+    (_r, g) => { g.reviewEvidence.candidate.retained.fontSize = '99px'; },
+    (_r, g) => { g.reviewEvidence.revision++; },
+    (r, g) => { r.retainedTypography.gaps.push(structuredClone(g)); },
+    r => { r.retainedTypography.gaps = r.retainedTypography.gaps.filter(g => g.element !== 'select-caret'); },
+    r => { r.elementInventory.variants.find(v => v.side === 'reference').nodes.find(n => n.type === 'path').attributes.d = 'changed'; },
+    r => { r.elementInventory.styles.find(s => s.side === 'reference').value.fill = '#abcdef'; },
+    r => { r.elementInventory.styles.find(s => s.side === 'astylar' && s.value.fontSize === '12px').value.top = '99px'; },
+  ]) {
+    const report = structuredClone(baseline), gap = report.retainedTypography.gaps.find(g => g.element === 'select-caret');
+    mutate(report, gap);
+    assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('select vector-to-glyph')), String(mutate));
+  }
+});
+
 function selectValueTokenReport() {
   const raw = templateTypographyReport('select'), { reference, astylar } = raw.results[0].inputTrees;
   const computed = { ...reference.styles[0], fontFamily: 'Roboto', fontSize: '16px', lineHeight: '24px',

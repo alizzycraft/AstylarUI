@@ -22,6 +22,53 @@ selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Select arrow substitutes a tuned font glyph for the original SVG (2026-09-12)
+
+All 12 corrected static select cases contain the same structural substitution:
+the reference `mat-select#select-control` owns a trigger, arrow wrapper, arrow
+container and 24px SVG with `viewBox="0 0 24 24"` and path
+`M7 10l5 5 5-5z`. Candidate `span#select-caret.select-caret` instead contains
+U+25BC (`▼`) with `role: presentation`, absolute positioning and a density-based
+font size. These are different content/layout inputs, not a core text mapping
+failure or evidence of a core SVG defect. SVG font properties are not compared
+as if the original arrow were a text character.
+
+History makes the progression explicit. `2f44011` initially used U+25BE (`▾`).
+`3d0d5ce7` replaced it with U+25BC, changed top 20/16px to 18/14px, right 16px
+to 15px, and font size 14px to 12px. `6647a875` subsequently changed compact
+top 14px to 8px and compact font size 12px to 14px. The current declarations
+remain at `astylar.component.ts:558`, with the glyph node at line 952.
+
+The audit now retains a classified gap for each occurrence, including the
+complete reference control-to-path chain, vector attributes, computed styles,
+matched rules and inline declarations; candidate authored identity, owning
+control ancestry, normal/effective/retained styles and the original glyph rule.
+Independent validation reconstructs these records from captured inventory and
+rejects deleted, duplicated or altered findings. Evidence snapshots do not
+alias the inventory objects. The finding explicitly sets input equivalence and
+final raster verification to false.
+
+- `node --test --test-name-pattern='select arrow|source audit|source fingerprints' tests/material-parity/input-equivalence-audit.spec.mjs`:
+  5/5 passing, with two density variants, 21 contradictory-input controls and
+  12 report/inventory-tampering controls.
+- `npm run parity:harness:check`: final run 314/314 passing, zero
+  skipped/cancelled (164.454 seconds), after evidence-snapshot hardening.
+- Actual 12-case select diagnostic report: 12 arrow classifications, zero
+  unresolved retained mappings and zero inventory/validation errors using
+  `requireComplete:false` (not complete-audit acceptance).
+- All 436 static captures: zero inventory errors, zero unresolved mapped
+  retained-property differences and 12 remaining unresolved retained mappings,
+  all tabs. The arrow findings remain in the report; nothing is excluded.
+- At this checkpoint, 492 interaction records were present. Every recorded
+  result hash verified; the full interaction process was still live. This is
+  not a completed interaction audit or acceptance claim.
+
+The implementation plan calls for restoring the original vector and wrapper
+inputs, then reducing any unsupported rendering behavior to equal-input core
+proof. Further glyph offsets, density corrections or font-size tuning would
+preserve the wrong inputs. This increment changes audit code and documentation
+only, not the fixture, reference, plugin or renderer.
+
 ## Expansion header size token is missing outside the compact override (2026-09-12)
 
 All 12 corrected static expansion captures were reviewed. The three custom

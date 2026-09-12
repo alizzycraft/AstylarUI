@@ -322,9 +322,10 @@ export function validateMaterialInputAudit(report, { requireComplete = true } = 
   const invalidStepperGaps = retainedGaps.filter((gap) => gap.attribution === 'reviewed-stepper-panel-substitution' &&
     !isReviewedStepperPanelGap(gap, report.elementInventory));
   if (invalidStepperGaps.length) errors.push(`${invalidStepperGaps.length} stepper panel substitutions lack captured structural evidence`);
+  validateSelectArrowSubstitutions(report, errors);
   const unresolvedRetainedGaps = retainedGaps.filter((gap) => !isReviewedHiddenRetainedGap(gap, report.elementInventory) &&
     !isReviewedStepperPanelGap(gap, report.elementInventory) && !isReviewedCalendarCloseGap(gap, report.elementInventory) &&
-    !isReviewedCalendarWeekdayNameGap(gap, report.elementInventory));
+    !isReviewedCalendarWeekdayNameGap(gap, report.elementInventory) && !isReviewedSelectArrowGap(gap, report.elementInventory));
   if (requireComplete && unresolvedRetainedGaps.length > 0) errors.push(`${unresolvedRetainedGaps.length} retained typography mappings or stage fields require review`);
   const reviewedTypographyKinds = { 'reviewed-heading-mask': 'parity-harness-defect',
     'reviewed-horizontal-start-alignment': 'equivalent-representation',
@@ -2775,6 +2776,94 @@ function isReviewedHiddenRetainedGap(gap, inventory) {
   return !!evidence && JSON.stringify(evidence) === JSON.stringify(gap.reviewEvidence);
 }
 
+function reviewedSelectArrowGap(key, inventory) {
+  const mappings = side => inventory.cases.filter(c => c.case === key && c.side === side);
+  const rm = mappings('reference'), am = mappings('astylar');
+  if (rm.length !== 1 || am.length !== 1) return;
+  const ref = inventory.variants[rm[0].variant], ast = inventory.variants[am[0].variant];
+  if (ref?.family !== 'select' || ast?.family !== 'select' || ast.resolvedStyleEvidenceVersion !== 2 ||
+      ast.resolvedStyleSource !== 'core-style-inspection' || !Number.isInteger(am[0].resolvedStyleRevision) || am[0].resolvedStyleRevision < 0) return;
+  const unique = nodes => nodes.length === 1 ? nodes[0] : undefined;
+  const cls = (n, name) => String(n?.attributes?.class ?? '').split(/\s+/).includes(name);
+  if ([ref, ast].some(t => new Set(t.nodes.map(n => n.key)).size !== t.nodes.length)) return;
+  const control = unique(ref.nodes.filter(n => n.attributes?.id === 'select-control'));
+  if (control?.type !== 'mat-select' || !cls(control, 'mat-mdc-select') || control.attributes.role !== 'combobox' ||
+      !control.attributes['aria-label']?.trim()) return;
+  const child = (n, type, name) => n && unique(ref.nodes.filter(c => c.parent === n.key && c.type === type && (!name || cls(c, name))));
+  const trigger = child(control, 'div', 'mat-mdc-select-trigger');
+  const wrapper = child(trigger, 'div', 'mat-mdc-select-arrow-wrapper');
+  const arrow = child(wrapper, 'div', 'mat-mdc-select-arrow');
+  const svg = child(arrow, 'svg'), path = child(svg, 'path');
+  const chain = [control, trigger, wrapper, arrow, svg, path];
+  if (chain.some(n => !n || n.ownText?.trim()) ||
+      [wrapper, arrow, svg].some(n => ref.nodes.filter(c => c.parent === n.key).length !== 1) ||
+      ref.nodes.some(n => n.parent === path.key) || svg.attributes.viewBox !== '0 0 24 24' ||
+      svg.attributes.width !== '24px' || svg.attributes.height !== '24px' ||
+      svg.attributes.focusable !== 'false' || svg.attributes['aria-hidden'] !== 'true' ||
+      path.attributes.d !== 'M7 10l5 5 5-5z' || ref.nodes.some(n => n.attributes?.id === 'select-caret')) return;
+  const caret = unique(ast.nodes.filter(n => n.authored?.id === 'select-caret'));
+  const shell = unique(ast.nodes.filter(n => n.authored?.id === 'select-primary'));
+  const ac = unique(ast.nodes.filter(n => n.authored?.id === 'select-control'));
+  if (caret?.authored.type !== 'span' || caret.authored.class !== 'select-caret' ||
+      caret.authored.role !== 'presentation' || caret.authored.textContent !== '▼' ||
+      shell?.authored.type !== 'div' || shell.authored.class !== 'field-shell' || caret.parent !== shell.key ||
+      ac?.authored.role !== 'combobox' || ac.authored.ariaLabel !== control.attributes['aria-label'] ||
+      ast.nodes.some(n => n.parent === caret.key) || caret.retainedText?.source !== 'core-text-registry' || caret.paintedControlText) return;
+  const ancestry = [], seen = new Set();
+  let n = ac;
+  while (n && n.key !== shell.key) {
+    if (seen.has(n.key)) return;
+    seen.add(n.key); ancestry.push(n.key);
+    n = unique(ast.nodes.filter(p => p.key === n.parent));
+  }
+  if (!n) return;
+  const style = (index, side) => inventory.styles[index]?.side === side ? inventory.styles[index].value : undefined;
+  const object = v => v && typeof v === 'object' && !Array.isArray(v);
+  const referenceChain = chain.map(n => ({ node: n.key, parent: n.parent, type: n.type,
+    attributes: n.attributes, computed: style(n.style, 'reference'), inline: n.inline,
+    rules: (n.rules ?? []).map(index => inventory.rules[index]) }));
+  const stages = { normal: style(caret.normalStyle, 'astylar'), effective: style(caret.interactionStyle, 'astylar'),
+    retained: style(caret.retainedText.style, 'astylar') };
+  if (referenceChain.some(n => !object(n.computed) || n.rules.some(r => r?.side !== 'reference' || !object(r.value))) ||
+      Object.values(stages).some(s => !object(s))) return;
+  const rules = (ast.rules ?? []).map(index => inventory.rules[index]);
+  const caretRules = rules.filter(r => r?.side === 'astylar' && r.value?.selector === '.select-caret');
+  if (caretRules.length !== 1) return;
+  const rule = caretRules[0].value;
+  if (rule.position !== 'absolute' || !rule.top || !rule.right || !rule.fontSize || !rule.color || rule.media ||
+      rule.mediaMinWidth || rule.mediaMaxWidth) return;
+  for (const p of ['position', 'top', 'right', 'fontSize', 'color']) {
+    const value = canonicalStyle(rule)[p];
+    if (Object.values(stages).some(s => canonicalStyle(s)[p] !== value)) return;
+  }
+  return { case: key, family: 'select', element: 'select-caret',
+    reason: 'own-text ID is missing or duplicated on one side', referenceNodes: [], astylarNodes: [caret.key],
+    attribution: 'reviewed-select-vector-to-glyph-substitution', classification: 'application-plugin-authoring-defect',
+    inputEquivalent: false, finalRasterVerified: false,
+    recommendedOwner: 'showcase select arrow content and vector/layout input translation',
+    justification: 'The unique Material select arrow is a 24px SVG containing M7 10l5 5 5-5z under trigger/arrow wrappers. The candidate instead authors a presentation span containing U+25BC with an absolute-positioned font-size-dependent glyph. These are different content and layout inputs, not equivalent typography or evidence that core misrenders the original vector. Preserve both input paths and restore the vector/composition before assessing equal-input rendering; no screenshot or glyph font metrics can certify vector equivalence.',
+    reviewEvidence: structuredClone({ sourceFinding: 'fixture-select-arrow-vector-to-glyph-substitution', revision: am[0].resolvedStyleRevision,
+      referenceChain, candidate: { node: caret.key, parent: caret.parent, authored: caret.authored,
+        shell: shell.authored, control: ac.authored, controlAncestry: ancestry, ...stages, rule } }) };
+}
+
+function isReviewedSelectArrowGap(gap, inventory) {
+  if (gap.attribution !== 'reviewed-select-vector-to-glyph-substitution') return false;
+  const expected = reviewedSelectArrowGap(gap.case, inventory);
+  return !!expected && Object.entries(expected).every(([k, v]) => JSON.stringify(gap[k]) === JSON.stringify(v));
+}
+
+function validateSelectArrowSubstitutions(report, errors) {
+  const inventory = report.elementInventory;
+  const expected = [...new Set(inventory.cases.filter(c => c.side === 'astylar').map(c => c.case))]
+    .map(key => reviewedSelectArrowGap(key, inventory)).filter(Boolean);
+  const claimed = report.retainedTypography?.gaps.filter(g => g.attribution === 'reviewed-select-vector-to-glyph-substitution') ?? [];
+  if (expected.length !== claimed.length || expected.some(e => {
+    const matches = claimed.filter(g => g.case === e.case);
+    return matches.length !== 1 || !isReviewedSelectArrowGap(matches[0], inventory);
+  })) errors.push('select vector-to-glyph substitutions do not replay from captured content and style stages');
+}
+
 export function collectRetainedTypographyEvidence(cases, inventory, controlTypography = collectControlTypographyEvidence(cases, inventory)) {
   const comparisons = [], differences = [], gaps = [], paintMaskDifferences = [], reviewedMappings = [], controlTextMappings = [];
   const mappings = new Map();
@@ -2875,6 +2964,8 @@ export function collectRetainedTypographyEvidence(cases, inventory, controlTypog
     for (const id of ids) {
       const refNodes = referenceNodes.get(id) ?? [], astNodes = astylarNodes.get(id) ?? [];
       if (refNodes.length !== 1 || astNodes.length !== 1) {
+        const arrow = id === 'select-caret' && reviewedSelectArrowGap(key, inventory);
+        if (arrow) { gaps.push(arrow); continue; }
         gap(key, id, 'own-text ID is missing or duplicated on one side',
           { referenceNodes: refNodes.map((node) => node.key), astylarNodes: astNodes.map((node) => node.key) }); continue;
       }
@@ -4459,6 +4550,7 @@ function implementationPlan() {
     { priority: 5.29, rootCause: 'Sidenav component text-color tokens are replaced by fixture theme literals', action: 'Restore the distinct drawer and content token semantics together with the separately identified sidenav structure/padding inputs. Reference color ownership is the drawer or container, while candidate aside/main rules directly set theme.onSurface or dark-mode literals. Preserve exact channels and captured inheritance; only an equal-input reproduction can establish a core color defect. The initial implementation introduced these substitutions, so do not describe them as confirmed later compensating fixes.' },
     { priority: 5.295, rootCause: 'Sort typography replaces inherited frame inputs with fixed trigger declarations', action: 'Restore the reference frame-scaled font-size inheritance and actual frame color through the original sort text structure. The candidate fixed 16px trigger and contrast-only black declaration differ before rendering. Keep the history of screenshot-oriented changes and complete per-case ancestor evidence. Evaluate core inheritance or font scaling only after inputs agree; no inverse scale, font-size calibration or theme-specific ink override is an acceptable renderer fix.' },
     { priority: 5.296, rootCause: 'Expansion header font-size token is omitted outside a compact fixture override', action: 'Restore the reference component header font-size token and its inheritance through mat-content/title equivalents across all states. A compact-only fixed 16px branch does not translate the general component rule; custom titles inherit a different page size. Keep the independent layout/transform findings and assess core scaling or text placement only with equivalent inputs, not new font-size or baseline corrections.' },
+    { priority: 5.297, rootCause: 'Select arrow vector/composition replaced by a density-tuned font glyph', action: 'Restore the original Material SVG path, viewBox, arrow wrappers and CSS positioning through the shared rendering path. Do not resize or reposition U+25BC to approximate the vector. Reduce any unsupported SVG/layout behavior to equal-input core proof, and keep the separate select value/control, popup and interaction findings explicit.' },
     { priority: 5.3, rootCause: 'Core normal line-height is approximated by a fixed Mg font-box probe', action: 'Resolve browser normal line-box metrics and actual fallback runs in core. The equal-input Arial/serif cases expose one-pixel texture-height errors; Roboto plus emoji/CJK exposes two-pixel errors while plain Roboto and explicit line heights pass. Preserve those controls, extend multiline/baseline/DPR verification and avoid a universal multiplier, constant pixel addition, or fixed Material line-height compensation. Current-texture evidence must remain separate from declared normal and from final glyph raster.' },
     { priority: 5.4, rootCause: 'Calendar cell text tokens and inner line boxes were flattened away', action: 'Restore the reference calendar font and date-text ink tokens and its inner line-height:1 label inside both day and year controls. Keep reference cell/container sizing, state and selection structure instead of copying a normal-metric result or tuning the baseline. Separate date/range-context proofs isolate 990 day and 192 year occurrences each of missing font-token, omitted inner line-height and fixed-ink inputs; core metric defects must be assessed only after those inputs are equivalent. Independently resolve normal-versus-zero tracking and the still-unmapped header/icon owners.' },
     { priority: 5.5, rootCause: 'Snackbar action inherits generic control inputs instead of Material action tokens', action: 'Restore the original text-button font, size and tracking declarations and the snackbar inverse-primary ink, keeping the reference label/action wrapper intent. The exact overlay/message mapping isolates 34 current action textures and source-traces font-stack, tracking and ink substitutions. Trace the remaining 14px-versus-16px and normal-line-box observations through the core defaults/inheritance and metric stages before assigning core ownership; do not calibrate a baseline or line height. Retain the separate intrinsic-width, live-region, visibility, lifetime and placement obligations.' },

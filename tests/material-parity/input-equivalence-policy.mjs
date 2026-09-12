@@ -101,6 +101,16 @@ export const reviewedValueNormalizations = Object.freeze([
 
 export const sourceAuditDefinitions = Object.freeze([
   Object.freeze({
+    id: 'fixture-select-arrow-vector-to-glyph-substitution',
+    introducedBy: '2f44011 substitutes a glyph; 3d0d5ce7 changes its shape/offset/size; 6647a875 retunes compact offset/size',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`selector: '\.select-caret', position: 'absolute'[^\n]*top:[^\n]*theme\.density[^\n]*right: '15px'[^\n]*fontSize:`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase select arrow content, Material wrapper layout and vector input translation',
+    justification: 'The reference authors a 24px SVG with path M7 10l5 5 5-5z inside flex/relative arrow wrappers. The candidate authors U+25BC as font-dependent text, absolutely positions it, and branches its size/offset by density. The initial implementation used U+25BE; 3d0d5ce7 changed the glyph and adjusted top/right/font size, and 6647a875 retuned compact top 14px to 8px and size 12px to 14px. Capture-backed correspondence preserves original vector and candidate text/style inputs without comparing SVG font properties as if they were glyph inputs. This is unequal authoring, not proof of core vector failure. Restore equivalent vector/composition inputs before diagnosing rendering.',
+    focusedProof: 'tests/material-parity/input-equivalence-audit.spec.mjs: select arrow substitution preserves SVG and glyph inputs without inventing text correspondence',
+  }),
+  Object.freeze({
     id: 'fixture-expansion-font-size-token-omitted',
     introducedBy: '25e1893 adds compact-only size override; current omission persists outside that branch',
     file: 'examples/material-showcase/src/app/astylar.component.ts',
