@@ -418,10 +418,12 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
   if (invalidStepperGaps.length) errors.push(`${invalidStepperGaps.length} stepper panel substitutions lack captured structural evidence`);
   validateSelectArrowSubstitutions(report, errors);
   validatePluginTabPanelSubstitutions(report, errors);
+  validateCalendarAuxiliaryOmissions(report, errors);
   const unresolvedRetainedGaps = retainedGaps.filter((gap) => !isReviewedHiddenRetainedGap(gap, report.elementInventory) &&
     !isReviewedStepperPanelGap(gap, report.elementInventory) && !isReviewedCalendarCloseGap(gap, report.elementInventory) &&
     !isReviewedCalendarWeekdayNameGap(gap, report.elementInventory) && !isReviewedSelectArrowGap(gap, report.elementInventory) &&
-    !isReviewedPluginTabPanelGap(gap, report.elementInventory));
+    !isReviewedPluginTabPanelGap(gap, report.elementInventory) &&
+    gap.attribution !== 'reviewed-calendar-auxiliary-label-omission');
   if (requireComplete && unresolvedRetainedGaps.length > 0) errors.push(`${unresolvedRetainedGaps.length} retained typography mappings or stage fields require review`);
   const reviewedTypographyKinds = { 'reviewed-heading-mask': 'parity-harness-defect',
     'reviewed-horizontal-start-alignment': 'equivalent-representation',
@@ -3282,6 +3284,9 @@ export function collectRetainedTypographyEvidence(cases, inventory, controlTypog
       if (refNodes.length !== 1 || astNodes.length !== 1) {
         const arrow = id === 'select-caret' && reviewedSelectArrowGap(key, inventory);
         if (arrow) { gaps.push(arrow); continue; }
+        const auxiliary = entry.family === 'datepicker' && refNodes.length === 1 && astNodes.length === 0 &&
+          reviewedCalendarAuxiliaryGap(key, refNodes[0].key, inventory);
+        if (auxiliary) { gaps.push(auxiliary); continue; }
         gap(key, id, 'own-text ID is missing or duplicated on one side',
           { referenceNodes: refNodes.map((node) => node.key), astylarNodes: astNodes.map((node) => node.key) }); continue;
       }
@@ -3900,6 +3905,98 @@ function reviewedSnackbarActionControl(ref, referenceTree, astylarTree) {
     candidateChain: candidateChain.map(n => ({ key: n.key, parent: n.parent, authored: structuredClone(n.authored) })),
     candidateMessage: { key: title.key, parent: title.parent, text: title.authored.textContent },
   } };
+}
+
+function reviewedCalendarAuxiliaryGap(key, referenceNode, inventory) {
+  if (!parseReviewedCase(key, 'datepicker') || inventory.errors.some(e => e.case === key)) return;
+  const unique = nodes => nodes.length === 1 ? nodes[0] : undefined;
+  const r = unique(inventory.cases.filter(c => c.case === key && c.side === 'reference'));
+  const a = unique(inventory.cases.filter(c => c.case === key && c.side === 'astylar'));
+  if (!r || !a || !Number.isInteger(a.resolvedStyleRevision)) return;
+  const rt = inventory.variants[r.variant], at = inventory.variants[a.variant], rn = rt.nodes, an = at.nodes;
+  if (rt.family !== 'datepicker' || at.family !== 'datepicker' || at.resolvedStyleEvidenceVersion !== 2 ||
+      at.resolvedStyleSource !== 'core-style-inspection' || !rt.ruleEvidenceComplete ||
+      new Set(rn.map(n => n.key)).size !== rn.length || new Set(an.map(n => n.key)).size !== an.length) return;
+  const leaf = unique(rn.filter(n => n.key === referenceNode)), id = leaf?.attributes?.id;
+  const live = /^mat-calendar-period-label-\d+$/.test(id ?? '');
+  if (!live && !/^mat-calendar-body-comparison-(?:start|end)-\d+$/.test(id ?? '')) return;
+  if (leaf.type !== 'span' || !leaf.ownText?.trim() || rn.some(n => n.parent === leaf.key) ||
+      rn.filter(n => n.attributes?.id === id).length !== 1 || an.some(n => n.authored?.id === id)) return;
+  let context;
+  for (const cell of rn.filter(n => n.type === 'span' && String(n.attributes?.class).split(/\s+/).includes('mat-calendar-body-cell-content'))) {
+    context = reviewedCalendarCellControl(cell, rt, at) ?? reviewedCalendarCellControl(cell, rt, at, 'year');
+    if (context) break;
+  }
+  if (!context) return;
+  const css = index => inventory.styles[index]?.side === 'reference' ? inventory.styles[index].value : undefined;
+  const rules = node => node.rules.map(i => inventory.rules[i]);
+  const style = css(leaf.style), declarations = rules(leaf);
+  if (!style || declarations.some(rule => rule?.side !== 'reference')) return;
+  const active = declarations.filter(rule => rule.value.active === true).map(rule => rule.value);
+  let referenceOwners, descriptionReferences;
+  if (live) {
+    if (leaf.key !== context.evidence.referencePeriodLabel || leaf.attributes['aria-live'] !== 'polite' ||
+        leaf.attributes.class !== 'cdk-visually-hidden' || style.position !== 'absolute' || style.display !== 'block' ||
+        style.clip !== 'rect(0px, 0px, 0px, 0px)' || style.width !== '1px' || style.height !== '1px' ||
+        !active.some(rule => rule.selector === '.cdk-visually-hidden' && rule.declarations?.clip?.value === style.clip)) return;
+    const button = unique(rn.filter(n => n.parent === leaf.parent && n.type === 'button' &&
+      String(n.attributes?.class).split(/\s+/).includes('mat-calendar-period-button')));
+    const candidate = unique(an.filter(n => n.key === context.evidence.candidatePeriod));
+    if (!button || button.attributes['aria-describedby'] !== id || !candidate || candidate.authored.ariaDescribedBy !== undefined) return;
+    referenceOwners = [leaf, button];
+    descriptionReferences = [button.key];
+  } else {
+    const body = unique(rn.filter(n => n.key === context.evidence.referenceChain[4]));
+    const suffix = /-(\d+)$/.exec(id)[1];
+    const expectedIds = ['start', 'end', 'comparison-start', 'comparison-end'].map(role => `mat-calendar-body-${role}-${suffix}`);
+    const labels = expectedIds.map(labelId => unique(rn.filter(n => n.attributes?.id === labelId)));
+    if (!body || labels.some((n, index) => !n || n.type !== 'span' || n.parent !== body.key ||
+        n.attributes.class !== 'mat-calendar-body-hidden-label' || rn.some(child => child.parent === n.key) ||
+        n.ownText?.trim() !== (index < 2 ? '' : 'Comparison range') || css(n.style)?.display !== 'none' ||
+        !rules(n).some(rule => rule?.side === 'reference' && rule.value.active === true &&
+          rule.value.selector === '.mat-calendar-body-hidden-label' && rule.value.declarations?.display?.value === 'none'))) return;
+    if (!labels.includes(leaf)) return;
+    referenceOwners = [...labels, body];
+    descriptionReferences = rn.filter(n => String(n.attributes?.['aria-describedby'] ?? '').split(/\s+/).includes(id)).map(n => n.key);
+  }
+  // A candidate counterpart, including a differently named live region, means
+  // this observed omission no longer applies and requires a new mapping review.
+  if (an.some(n => Object.values(n.authored ?? {}).some(value => typeof value === 'string' &&
+      (/mat-calendar-(?:period-label|body-(?:comparison-)?(?:start|end))|Comparison range/.test(value) || value === leaf.ownText.trim())) ||
+      n.authored?.ariaLive !== undefined || ['status', 'log', 'alert', 'marquee', 'timer'].includes(n.authored?.role))) return;
+  if (referenceOwners.some(n => !css(n.style) || rules(n).some(rule => rule?.side !== 'reference'))) return;
+  const popup = unique(an.filter(n => n.key === context.evidence.candidateChain.at(-1)));
+  const descendants = new Set([popup.key]);
+  for (let changed = true; changed;) {
+    changed = false;
+    for (const n of an) if (descendants.has(n.parent) && !descendants.has(n.key)) { descendants.add(n.key); changed = true; }
+  }
+  return { case: key, element: id, reason: 'own-text ID is missing or duplicated on one side',
+    referenceNodes: [leaf.key], astylarNodes: [], family: 'datepicker',
+    classification: 'application-plugin-authoring-defect', attribution: 'reviewed-calendar-auxiliary-label-omission',
+    inputEquivalent: false, finalRasterVerified: false,
+    recommendedOwner: 'showcase calendar live-period and range-description authoring',
+    reviewEvidence: { sourceFinding: 'fixture-calendar-accessibility-labels-omitted', kind: live ? 'live-period' : 'comparison-range',
+      revision: a.resolvedStyleRevision, context: context.evidence, referenceDescriptionUsers: descriptionReferences,
+      referenceOwners: referenceOwners.map(n => ({ key: n.key, parent: n.parent, type: n.type, attributes: n.attributes,
+        ownText: n.ownText, computed: css(n.style), rules: rules(n) })),
+      candidatePopup: popup.key, candidateSubtree: an.filter(n => descendants.has(n.key)).map(n => ({ key: n.key, parent: n.parent, authored: n.authored })) },
+    justification: live
+      ? 'The reference authors a clipped live-period span and describes its period button through that span. The candidate supplies only a value-button string and omits the live region and description relationship. Clipping does not make these unequal authored semantics equivalent. No missing candidate text-registry entry or equal-input core defect is inferred.'
+      : 'The reference authors four range-description spans under its calendar body; this nonempty comparison label has display:none from the captured original rule. The candidate omits the range-label structure entirely. This explains why there is no candidate text owner, not why core would fail to render equal declarations. Unused description relationships in this single-date state do not justify dropping the source inputs or claiming range accessibility parity.' };
+}
+
+function validateCalendarAuxiliaryOmissions(report, errors) {
+  const actual = report.retainedTypography?.gaps.filter(g => g.attribution === 'reviewed-calendar-auxiliary-label-omission') ?? [];
+  const expected = [];
+  for (const item of report.elementInventory.cases.filter(c => c.side === 'reference' && parseReviewedCase(c.case, 'datepicker'))) {
+    for (const node of report.elementInventory.variants[item.variant].nodes.filter(n => n.ownText?.trim() &&
+        /^mat-calendar-(?:period-label|body-comparison-(?:start|end))-\d+$/.test(n.attributes?.id ?? ''))) {
+      const gap = reviewedCalendarAuxiliaryGap(item.case, node.key, report.elementInventory);
+      if (gap) expected.push(gap);
+    }
+  }
+  if (JSON.stringify(actual) !== JSON.stringify(expected)) errors.push('calendar auxiliary label omissions lack complete replayed source ownership');
 }
 
 function reviewedCalendarCloseOmission(key, referenceNode, inventory) {
@@ -4867,6 +4964,8 @@ function focusedProofInventory(root) {
       'calendar close consolidated inventory independently replays all twenty paired action boundaries', 'The main audit includes all forty source trees and re-reads the selected bound report, checking its summary and expanded interned tree/style/rule values. Missing boundaries, duplicate cases, altered source digests, claimed equivalence and changed ancestry are rejected. No invalid selected capture falls back to another run.'),
     proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('calendar close state divergence preserves/,
       'remaining candidate calendar controls retain unequal close-state ownership', 'After trusted reference Enter dismissal, each unmatched candidate control must be a unique current core texture under the still-open authored calendar popup. This is explicitly unequal interaction/state rather than missing reference typography. Guards reject unreviewed action scope, contradictory state, stale paint and broken ancestry; report validation independently replays each record and rejects deleted or fabricated ownership.'),
+    proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('calendar auxiliary labels preserve/,
+      'calendar live-period and range-label omissions retain original source owners', 'Exact date/year context, header description linkage, body label quartet, original clipping/display rules and absent candidate counterparts identify unequal authoring. Full computed inputs and ancestry remain in the report; hidden text is not accepted as equivalent omission. Negative source/context and report-forgery tests prevent a general hidden-label waiver.'),
     proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('chip outline attribution preserves/,
       'captured chip border owner/state attribution with independent replay', 'Host border values are never replaced by pseudo values. Unique host/action ancestry, selected state, exact active generated declarations, complete candidate border-rule exclusions and all three core stages are required. Negative capture and report-mutation tests retain unexplained cases, and fourteen-state evidence keeps all reviewed keys beyond twelve display samples. The result is unequal authoring, not a renderer defect or accepted whole-chip equivalence.'),
     proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('browser pseudo outline/,
@@ -4964,6 +5063,7 @@ function implementationPlan() {
     { priority: 5.7, rootCause: 'Calendar period text and vector inputs are collapsed into a glyph string', action: 'Restore the reference period text span beside the 10x5 polygon SVG, using the original year-view CSS inversion, text-button font/tracking tokens and calendar period color-token override. Preserve the live-period description relationship. Do not strip the candidate triangle during comparison, substitute another font character or tune offsets. The current 41 texture witnesses compare common period text inputs while retaining both unequal full compositions; normal-line-height, wrapper layout and glyph/vector raster still need independent proof.' },
     { priority: 5.8, rootCause: 'Calendar close control and its focus-reveal interaction were omitted', action: 'Restore the reference close-button/label, original unfocused clipping and focus-to-reveal declarations, focus order and close activation through core APIs. The source template binds focus/blur and datepicker.close(); the candidate popup never authors that control. Preserve each omission as unequal structure, not a missing paint sample or harmless hidden element. The checkpoint-bound calendar-close diagnostic proves Tab reveal, Shift+Tab hiding, Enter dismissal and opener focus restoration in both reference views at DPR 1 and 2, while the candidate lacks the control and remains open. All twenty paired action boundaries are integrated and independently replayed in the consolidated inventory, including candidate controls remaining after reference dismissal. Do not extrapolate their focused scope to all themes or claim equal-input core failure. Investigate core only against restored equal declarations; outside-click and Escape dismissal are not replacements for the missing control.' },
     { priority: 5.9, rootCause: 'Calendar weekday header structure and tokens are flattened into date-cell spans', action: 'Restore the seven column headers, separate full/narrow weekday labels, original aria-hidden and visually-hidden declarations, and spanning divider row. Preserve the calendar font and header ink tokens instead of inheriting the page fallback stack and fixed cell ink. Repeated initials require ordered full-name context, not text-only pairing. The source-authored omissions and typography substitutions precede core rendering; restore equal structure and styles before reducing table/grid, clipping, fallback, tracking or baseline discrepancies.' },
+    { priority: 5.95, rootCause: 'Calendar live-period and range-description nodes are omitted', action: 'Restore the separate aria-live period span and its period-button description relationship, and retain the original calendar-body range-description spans and CSS display/clip declarations. The current single-date fixture has nonempty comparison labels even while their display is none. Preserve that authored structure through core; do not invent retained paint for absent or display:none nodes, alias the live region to the visible header string, or claim screen-reader behavior from screenshots. Then verify equivalent descriptions, changing-period announcements and applicable range states with suitable semantic/interaction evidence.' },
     { priority: 6, rootCause: 'Interaction geometry duplicated by the application', action: 'Expose resolved CSS-space target bounds and local pointer coordinates in the core event/plugin contract; remove ripple width tables.' },
     { priority: 7, rootCause: 'Material paint inputs are substituted or calibrated', action: 'Supply paginator and calendar navigation reference SVG paths and their CSS/state paint through core vector/image rendering instead of font-character approximations. Preserve calendar navigation accessible names for the active month or multi-year view; do not copy month labels into the year view. Express progress angles, state layers, checkmarks, selection rings, and indicators from reference Material geometry in CSS space; remove screenshot-derived angle and fractional-position constants. Diagnose core only after the actual same geometry is supplied.' },
     { priority: 8, rootCause: 'Regression gate permits unequal inputs', action: 'Run this audit in CI after the full parity matrix, require complete coverage and zero unclassified differences, and review any new Astylar-only authored rule before updating the checked-in report.' },

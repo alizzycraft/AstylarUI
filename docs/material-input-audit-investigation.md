@@ -23,6 +23,74 @@ selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Calendar live-period and range-description omissions (2026-09-12)
+
+The remaining calendar text-owner gaps include authored accessibility labels,
+not only painted text. The installed reference source
+`examples/material-showcase/node_modules/@angular/material/fesm2022/datepicker.mjs`
+declares the body label IDs at line 233 and their template at line 555; the header
+period-label ID is declared at line 2190, followed by its template. The body has
+four description spans. In this single-date showcase, start/end text is empty
+and both comparison spans contain **Comparison range**, with the original
+`.mat-calendar-body-hidden-label { display: none; }` rule. The header has a
+separate `.cdk-visually-hidden` span with `aria-live="polite"`; the period button
+references it through `aria-describedby`.
+
+The candidate branch in
+`examples/material-showcase/src/app/astylar.component.ts:1054` supplies a header
+value button and day/year grid but none of these labels or description links.
+Reading the introducing commit **87f7f83** confirms their omission already existed
+when the picker popup was added. This is new audit attribution of old unequal
+authoring, not a newly introduced renderer regression.
+
+The new source finding `fixture-calendar-accessibility-labels-omitted` and
+per-case retained-stage attribution preserve both mechanisms explicitly:
+
+- **57 live-period records** retain exact date/year context, header ancestry,
+  description linkage, original clip rule and computed 1x1 clipped box.
+- **114 comparison-label records** retain the full four-label body ownership,
+  empty as well as nonempty source text, original display rule and computed
+  `display:none`, and any captured description users.
+
+These cover 57 paired states: 41 in the full matrix and 16 pre-dismissal
+supplemental boundaries. The latter contribute 16 live-period and 32 comparison
+records. Their candidate subtrees remain inventoried. No candidate registry or
+paint entry is invented, no visually hidden content is declared equivalent to
+omission, and no screen-reader announcement behavior is inferred from pixels.
+The month-marker mapping/layout discrepancy remains separate and unresolved.
+
+Validation independently reconstructs all expected omission records from the
+captured trees and rejects deletion, duplication, altered evidence, equivalence
+claims or replacement candidate owners. A differently named live region also
+forces renewed review rather than satisfying the omission guard. It does not
+broaden this finding to arbitrary hidden labels, different range text, missing
+rules, stale core inspection or unrelated calendar states.
+
+Focused command:
+
+`node --test --test-name-pattern='calendar auxiliary|records source fingerprints' tests/material-parity/input-equivalence-audit.spec.mjs`
+
+Result: **4/4 pass**, zero failed/skipped/cancelled/todo tests, **1.450 seconds**.
+The tests preserve both views without mutating inputs and reject 22 changed
+source/context/state cases plus nine removed or forged report records.
+
+`npm run parity:harness:check` passes **353/353**, zero failed/skipped/cancelled/
+todo tests, **137.104 seconds**. The complete audit was rebuilt using the same
+current-ancestry visual report, natural-line-box report and supplemental root
+documented below. Diagnostic `validateMaterialInputAudit(audit,
+{ requireComplete: false })` returns `[]`. Strict validation still rejects
+completion with **3,309** unresolved resolved-style differences, **849**
+current-control typography differences, **3,107** retained mapping/stage gaps
+(down from 3,278), and **354** retained typography differences. This reduction
+is source-backed classification, not repaired rendering or a weakened gate.
+
+The full replay preserves 4,688 side/case records, 2,158 variants, 8,140 main
+style differences / 380,520 occurrences, and 88 structural differences. All
+**94** source findings are detected. The 171 newly attributed omissions remain
+unequal inputs; they are not removed from the report. No production, showcase,
+plugin, live-capture harness or visual threshold changed, and all ten frozen
+live-capture harness hashes still match the current-ancestry checkpoint.
+
 ## Calendar close action boundaries integrated into the full inventory (2026-09-12)
 
 The main report now consumes the selected current-run `calendar-close-audit`

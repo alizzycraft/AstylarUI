@@ -634,6 +634,15 @@ export const sourceAuditDefinitions = Object.freeze([
     justification: 'The authored popup branch contains header, day/year grids and a selection marker but no close control. The captured reference dialog retains a raised Close calendar button and its label in both views. The pinned Material datepicker template applies cdk-visually-hidden until focus, toggles that state on focus/blur, and calls datepicker.close() on click. That authored control and transition are missing before core layout or paint. Captured rules retain clip:rect(0px,0px,0px,0px), but computed clip and live focus behavior are not captured here; the button must not be declared harmless, non-rendered or equivalent to Escape/outside dismissal. Restore equivalent structure and declarations before evaluating core behavior.',
   }),
   Object.freeze({
+    id: 'fixture-calendar-accessibility-labels-omitted',
+    introducedBy: '87f7f83 fix(example): render Material picker overlays',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`family === 'datepicker' && state\.open \? \[\{ type: 'div' as const, id: 'datepicker-popup'(?:(?!ariaLive|ariaDescribedBy|Comparison range|mat-calendar-body-comparison)[\s\S])*?\n      \] \}\] : \[\]\),`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase calendar live-period and range-description authoring',
+    justification: 'The pinned Material calendar header authors a clipped aria-live=polite period label and references it from the period button with aria-describedby. The calendar body authors four range-description spans, including two nonempty Comparison range labels hidden by display:none in this single-date example. The candidate popup omits those nodes and description relationships rather than submitting equivalent input to core. Per-case full-tree evidence must verify the date/year context, original rule and computed clipping/display, and absence of candidate counterparts. Hidden or currently unreferenced labels are not accepted as equivalent structure, missing core paint or proven accessibility parity.',
+  }),
+  Object.freeze({
     id: 'fixture-calendar-weekday-structure-and-token-substitution',
     introducedBy: '87f7f83 fix(example): render Material picker overlays',
     file: 'examples/material-showcase/src/app/astylar.component.ts',

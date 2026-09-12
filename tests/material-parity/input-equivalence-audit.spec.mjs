@@ -4929,6 +4929,108 @@ test('calendar close omission validation replays evidence and rejects deleted or
   }
 });
 
+function calendarAuxiliaryReport(yearView = false) {
+  const raw = calendarPeriodTypographyReport(yearView), ref = raw.results[0].inputTrees.reference;
+  const liveStyle = ref.styles.push({ ...ref.styles[0], position: 'absolute', display: 'block', width: '1px', height: '1px',
+    clip: 'rect(0px, 0px, 0px, 0px)' }) - 1;
+  const hiddenStyle = ref.styles.push({ ...ref.styles[0], display: 'none' }) - 1;
+  const liveRule = ref.rules.push({ selector: '.cdk-visually-hidden', active: true,
+    declarations: { clip: { value: 'rect(0px, 0px, 0px, 0px)' } } }) - 1;
+  const hiddenRule = ref.rules.push({ selector: '.mat-calendar-body-hidden-label', active: true,
+    declarations: { display: { value: 'none' } } }) - 1;
+  Object.assign(ref.nodes.find(n => n.key === 'period'), { style: liveStyle, rules: [liveRule] });
+  for (const [index, role] of ['start', 'end', 'comparison-start', 'comparison-end'].entries()) {
+    ref.nodes.push({ key: `range-${role}`, parent: 'body', type: 'span',
+      attributes: { id: `mat-calendar-body-${role}-0`, class: 'mat-calendar-body-hidden-label' },
+      ownText: index < 2 ? '' : ' Comparison range ', style: hiddenStyle, rules: [hiddenRule], pseudoElements: [] });
+  }
+  return raw;
+}
+
+function calendarAuxiliaryGaps(raw) {
+  return collectRetainedTypographyEvidence(raw.results, collectFullTreeInventory(raw.results)).gaps
+    .filter(g => g.attribution === 'reviewed-calendar-auxiliary-label-omission');
+}
+
+test('calendar auxiliary labels preserve live-region and display-none source inputs without inventing candidate paint', () => {
+  for (const yearView of [false, true]) {
+    const raw = calendarAuxiliaryReport(yearView), before = structuredClone(raw), gaps = calendarAuxiliaryGaps(raw);
+    assert.equal(gaps.length, 3);
+    assert.deepEqual(gaps.map(g => g.reviewEvidence.kind), ['live-period', 'comparison-range', 'comparison-range']);
+    for (const gap of gaps) {
+      assert.equal(gap.classification, 'application-plugin-authoring-defect');
+      assert.equal(gap.inputEquivalent, false);
+      assert.equal(gap.finalRasterVerified, false);
+      assert.deepEqual(gap.astylarNodes, []);
+      assert.equal(gap.reviewEvidence.candidatePopup, 'ast-popup');
+    }
+    assert.deepEqual(gaps[0].reviewEvidence.referenceDescriptionUsers, ['period-button']);
+    assert.equal(gaps[0].reviewEvidence.referenceOwners[0].computed.clip, 'rect(0px, 0px, 0px, 0px)');
+    assert.equal(gaps[1].reviewEvidence.referenceOwners.length, 5);
+    assert.deepEqual(gaps[1].reviewEvidence.referenceDescriptionUsers, []);
+    assert.equal(gaps[1].reviewEvidence.referenceOwners[2].computed.display, 'none');
+    assert.deepEqual(raw, before);
+    const report = buildMaterialInputAudit(raw);
+    assert.equal(report.summary.inputEquivalent, false);
+    assert.ok(report.sourceFindings.find(f => f.id === 'fixture-calendar-accessibility-labels-omitted')?.detected);
+    assert.ok(!validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('auxiliary label')));
+  }
+});
+
+test('calendar auxiliary label attribution rejects changed scope context clipping and replacement owners', () => {
+  for (const mutate of [
+    e => { e.family = 'menu'; },
+    e => { e.state = 'calendar-close-month-opened'; e.kind = 'supplemental'; e.profile = 'dark'; },
+    e => { e.inputTrees.astylar.resolvedStyleSource = 'projected-mesh'; },
+    e => { e.inputTrees.reference.nodes.find(n => n.key === 'period').ownText = 'OCT 2026'; },
+    e => { e.inputTrees.reference.nodes.find(n => n.key === 'body').parent = 'unrelated'; },
+    e => { e.inputTrees.reference.nodes.push(structuredClone(e.inputTrees.reference.nodes[0])); },
+    e => { e.inputTrees.astylar.nodes.find(n => n.key === 'ast-grid').parent = null; },
+    e => { e.inputTrees.astylar.nodes.push({ key: 'replacement', authored: { type: 'span', textContent: 'Comparison range' } }); },
+    e => { e.inputTrees.astylar.nodes.push({ key: 'replacement', authored: { type: 'span', ariaLive: 'polite' } }); },
+    e => { e.inputTrees.astylar.nodes.push({ key: 'replacement', authored: { type: 'span', role: 'status' } }); },
+  ]) {
+    const raw = calendarAuxiliaryReport(); mutate(raw.results[0]);
+    assert.deepEqual(calendarAuxiliaryGaps(raw), [], String(mutate));
+  }
+  for (const [kind, mutate] of [
+    ['live-period', (r, a) => { r.nodes.find(n => n.key === 'period').attributes['aria-live'] = 'off'; }],
+    ['live-period', (r, a) => { r.nodes.find(n => n.key === 'period-button').attributes['aria-describedby'] = 'other'; }],
+    ['live-period', (r, a) => { r.styles[r.nodes.find(n => n.key === 'period').style].clip = 'auto'; }],
+    ['live-period', (r, a) => { r.styles[r.nodes.find(n => n.key === 'period').style].width = '100px'; }],
+    ['live-period', (r, a) => { r.rules[r.nodes.find(n => n.key === 'period').rules[0]].active = false; }],
+    ['live-period', (r, a) => { a.nodes.find(n => n.key === 'ast-period').authored.ariaDescribedBy = 'another-live'; }],
+    ['comparison-range', (r, a) => { r.nodes.find(n => n.key === 'range-start').ownText = 'Start date'; }],
+    ['comparison-range', (r, a) => { r.nodes = r.nodes.filter(n => n.key !== 'range-end'); }],
+    ['comparison-range', (r, a) => { r.nodes.find(n => n.key === 'range-comparison-start').parent = 'calendar'; }],
+    ['comparison-range', (r, a) => { r.nodes.find(n => n.key === 'range-comparison-end').attributes.id = 'mat-calendar-body-comparison-end-7'; }],
+    ['comparison-range', (r, a) => { r.styles[r.nodes.find(n => n.key === 'range-start').style].display = 'block'; }],
+    ['comparison-range', (r, a) => { r.rules[r.nodes.find(n => n.key === 'range-start').rules[0]].declarations.display.value = 'block'; }],
+  ]) {
+    const raw = calendarAuxiliaryReport(), t = raw.results[0].inputTrees; mutate(t.reference, t.astylar);
+    assert.ok(!calendarAuxiliaryGaps(raw).some(g => g.reviewEvidence.kind === kind), String(mutate));
+  }
+});
+
+test('calendar auxiliary label validation rejects removed forged and reclassified report records', () => {
+  const report = buildMaterialInputAudit(calendarAuxiliaryReport());
+  for (const mutate of [
+    (r, g) => { r.retainedTypography.gaps = r.retainedTypography.gaps.filter(x => x !== g); },
+    (r, g) => { r.retainedTypography.gaps.push(structuredClone(g)); },
+    (r, g) => { g.attribution = 'unresolved'; },
+    (r, g) => { g.classification = 'equivalent-representation'; },
+    (r, g) => { g.inputEquivalent = true; },
+    (r, g) => { g.finalRasterVerified = true; },
+    (r, g) => { g.reviewEvidence.referenceDescriptionUsers = []; },
+    (r, g) => { g.reviewEvidence.referenceOwners[0].computed.clip = 'auto'; },
+    (r, g) => { g.reviewEvidence.candidateSubtree = []; },
+  ]) {
+    const changed = structuredClone(report), gap = changed.retainedTypography.gaps.find(g => g.reviewEvidence?.kind === 'live-period');
+    assert.ok(gap); mutate(changed, gap);
+    assert.ok(validateMaterialInputAudit(changed, { requireComplete: false }).some(e => e.includes('auxiliary label')), String(mutate));
+  }
+});
+
 function calendarPeriodTypographyReport(yearView = false) {
   const raw = yearView ? calendarYearTypographyReport() : calendarDayTypographyReport();
   const { reference: ref, astylar: ast } = raw.results[0].inputTrees;
