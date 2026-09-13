@@ -459,6 +459,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
     'reviewed-material-option-ink-input': 'application-plugin-authoring-defect',
     'reviewed-snackbar-message-token-input': 'application-plugin-authoring-defect',
     'reviewed-menu-label-ink-input': 'application-plugin-authoring-defect',
+    'reviewed-chip-label-ink-input': 'application-plugin-authoring-defect',
     'reviewed-menu-label-font-input': 'application-plugin-authoring-defect',
     'reviewed-dialog-text-ink-input': 'application-plugin-authoring-defect',
     'reviewed-dialog-text-metric-omission': 'application-plugin-authoring-defect',
@@ -473,6 +474,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
   validateSnackbarMessageEvidence(report, errors);
   validateTooltipTextEvidence(report, errors);
   validateMenuTextEvidence(report, errors);
+  validateChipLabelInk(report, errors);
   validateDialogTextEvidence(report, errors);
   validateFieldErrorEvidence(report, errors);
   validateHorizontalStartAlignment(report, errors);
@@ -651,6 +653,7 @@ export function renderMaterialInputAuditMarkdown(report) {
     `Snackbar messages: ${report.retainedTypography.reviewedMappings.filter(m => m.kind === 'reviewed-snackbar-message-text').length} labels map through unique overlay, live-region and sibling-action context. Original padded flex-message and nested action/live owners are replaced by a span inside a status surface. This establishes text identity only; unequal composition, typography, announcement behavior, placement and visibility remain independent obligations.`,
     `Snackbar message tokens: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-snackbar-message-token-input').length} size/color differences trace the direct component size token or inherited surface inverse-text token against omitted component size/page inheritance or literal surface white. Separate declaration, normal/effective and retained stages remain evidence. This is unequal authoring, not a core scaling/color defect or proof of current raster, visibility or theme-token fallback provenance.`,
     `Menu label ink: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-menu-label-ink-input').length} unequal colors preserve the original ordered inherit/token declarations and direct label inheritance against the candidate item literal. Complete rule and normal/effective/retained evidence is required; typography, token fallback origin, overlay theme scope and final paint are not certified.`,
+    `Unselected chip label ink: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-chip-label-ink-input').length} unequal colors retain the enabled reference label token against candidate host-literal inheritance. Exact owner paths and unselected/enabled state are required. Selected/disabled chips, token fallback origin, other typography, generated outline ownership and final raster are not certified by this attribution.`,
     `Menu label font: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-menu-label-font-input').length} original direct component-family tokens contrast with candidate label omission and inheritance from the explicit generic control-family rule. The two fallback lists remain unequal; installed-glyph coincidence, font selection, shaping and final raster are not certified.`,
     `Dialog title/content: ${report.retainedTypography.reviewedMappings.filter(m => m.kind === 'reviewed-dialog-content-text').length} owners have exact generated-title linkage, direct-content and action/overlay/focus-trap correspondence. Original heading pseudo-spacer, labelled dialog and content wrappers remain distinct from candidate nested text, fixed flex boxes and separately labelled modal. Mapped text does not establish equivalent structure, typography, semantics, placement or raster.`,
     `Dialog text ink: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-dialog-text-ink-input').length} original direct title/content color tokens contrast with explicit candidate literals. Nested title inheritance and direct paragraph declarations are separately traced through normal/effective and retained stages. Token fallback origin, overlay theme scope and final raster remain unverified.`,
@@ -2457,6 +2460,88 @@ function reviewedTableFontInput(entry, ref, ast, styles, referenceTree, astylarT
     reviewEvidence: { referenceRow: refRow.key, candidateRow: astRow.key, referenceRule: rowRule.value,
       candidateRule: candidateRule.value, referenceComputedFontSize: styles.reference.fontSize, candidateRetainedFontSize: styles.retained.fontSize },
   };
+}
+
+function reviewedChipLabelInk(entry, mapping, property, ast, styles, referenceTree, astylarTree, inventory) {
+  if (entry.family !== 'chips' || property !== 'color' || mapping?.kind !== 'reviewed-showcase-template-text' ||
+      !/^chip-[01]-label$/.test(mapping.element) || mapping.astylarNode !== ast.key ||
+      ast.retainedText?.source !== 'core-text-registry' || referenceTree.ruleEvidenceComplete !== true ||
+      astylarTree.ruleEvidenceComplete !== true || styles.reference.color === styles.retained.color) return;
+  const one = nodes => nodes.length === 1 ? nodes[0] : undefined;
+  const current = reviewedTemplateTextMappings('chips', referenceTree, astylarTree).filter(m => m.element === mapping.element);
+  if (current.length !== 1 || JSON.stringify(current[0]) !== JSON.stringify(mapping)) return;
+  const referencePath = mapping.referencePath.map(key => one(referenceTree.nodes.filter(n => n.key === key)));
+  const candidatePath = mapping.astylarPath.map(key => one(astylarTree.nodes.filter(n => n.key === key)));
+  if (referencePath.length !== 6 || candidatePath.length !== 3 || referencePath.some(n => !n) || candidatePath.some(n => !n)) return;
+  const [,, host,, action, leaf] = referencePath, [, owner] = candidatePath;
+  const hasClass = (node, name) => String((node.attributes ?? node.authored)?.class ?? '').split(/\s+/).includes(name);
+  if (!hasClass(host, 'mat-mdc-standard-chip') || hasClass(host, 'mdc-evolution-chip--selected') ||
+      hasClass(host, 'mdc-evolution-chip--disabled') || action.attributes?.role !== 'option' ||
+      action.attributes['aria-selected'] !== 'false' || action.attributes['aria-disabled'] !== 'false' ||
+      Object.hasOwn(action.attributes, 'disabled') || owner.authored.role !== 'option' || owner.authored.ariaSelected !== false ||
+      !hasClass(owner, 'unselected') || hasClass(owner, 'selected') ||
+      ![undefined, false].includes(owner.authored.disabled) || ![undefined, false].includes(owner.authored.ariaDisabled)) return;
+  const affects = declarations => Object.keys(declarations ?? {}).some(key =>
+    ['color', 'all', 'webkittextfillcolor'].includes(key.replaceAll('-', '').toLowerCase()) || /^(animation|transition)/i.test(key));
+  const unsafeInline = value => value !== undefined && (value === null || typeof value !== 'object' || Array.isArray(value) || affects(value));
+  const styleAt = (index, side) => {
+    const item = inventory.styles[index];
+    return item?.side === side && item.value && typeof item.value === 'object' && !Array.isArray(item.value) ? item.value : undefined;
+  };
+  const referenceStyles = referencePath.map(n => styleAt(n.style, 'reference'));
+  if (referenceStyles.some(s => !s) || unsafeInline(leaf.inline) ||
+      /(?:^|;)\s*(?:color|all|-webkit-text-fill-color|animation[^:]*|transition[^:]*)\s*:/i.test(leaf.attributes?.style ?? '')) return;
+  const pooled = leaf.rules.map(i => inventory.rules[i]);
+  if (pooled.some(r => r?.side !== 'reference' || !r.value || typeof r.value.active !== 'boolean')) return;
+  const referenceRules = pooled.map(r => r.value), inkRules = referenceRules.filter(r => affects(r.declarations));
+  const token = inkRules[0];
+  if (inkRules.length !== 1 || token.active !== true || !Array.isArray(token.conditions) || token.conditions.length ||
+      token.selector !== '.mat-mdc-standard-chip:not(.mdc-evolution-chip--disabled) .mdc-evolution-chip__text-label' ||
+      token.declarations?.color?.value !== 'var(--mat-chip-label-text-color, var(--mat-sys-on-surface-variant))' ||
+      token.declarations.color.important !== false || Object.keys(token.declarations).some(k => k !== 'color' && affects({ [k]: true })) ||
+      canonicalStyle(referenceStyles.at(-1)).color !== styles.reference.color) return;
+  const candidatePool = astylarTree.rules.map(i => inventory.rules[i]);
+  if (candidatePool.some(r => r?.side !== 'astylar' || !r.value || typeof r.value !== 'object' || Array.isArray(r.value))) return;
+  const candidateRules = candidatePool.map(r => r.value).filter(affects), candidateChain = [];
+  let candidateRule;
+  for (const node of [ast, owner]) {
+    const normal = styleAt(node.normalStyle, 'astylar'), effective = styleAt(node.interactionStyle, 'astylar');
+    if (!normal || !effective || unsafeInline(node.authored.style)) return;
+    const applicable = candidateRules.filter(r => typographySelectorCanApply(r.selector, node.authored));
+    if (node === ast) {
+      if (applicable.length || affects(normal) || affects(effective)) return;
+    } else {
+      if (applicable.length !== 1 || applicable[0].selector !== '.chip' || !/^#[a-f\d]{6}$/i.test(applicable[0].color ?? '') ||
+          Object.keys(applicable[0]).some(k => k.startsWith('media') || (k !== 'color' && affects({ [k]: true }))) ||
+          canonicalStyle(applicable[0]).color !== styles.retained.color ||
+          [normal, effective].some(s => canonicalStyle(s).color !== styles.retained.color || Object.keys(s).some(k => k !== 'color' && affects({ [k]: true })))) return;
+      candidateRule = applicable[0];
+    }
+    candidateChain.push({ key: node.key, parent: node.parent, authored: node.authored, normal, effective });
+  }
+  return { attribution: 'reviewed-chip-label-ink-input', classification: 'application-plugin-authoring-defect',
+    inputEquivalent: false, currentPseudoStatePaintVerified: false, finalRasterVerified: false,
+    recommendedOwner: 'showcase chip label color-token translation and inheritance',
+    justification: 'The enabled unselected reference chip owns its on-surface-variant label token directly on the text span. The candidate text span omits color and inherits the chip container literal, authored from theme.onSurface. Host normal/effective colors and retained text agree with that literal. This proves unequal inputs, not an equivalent color representation or a core conversion failure. Exact owner paths and unselected/enabled states are preserved; selected or disabled colors, token fallback origin, outline composition, placement and final raster remain separate obligations.',
+    reviewEvidence: structuredClone({ sourceFinding: 'fixture-chip-label-ink-substitution', mapping,
+      referencePath: referencePath.map((n, i) => ({ ...n, computed: referenceStyles[i] })), referenceRules, referenceToken: token,
+      candidateChain, candidateRule, checkedCandidateRules: candidateRules,
+      candidateRetained: styleAt(ast.retainedText.style, 'astylar'), referenceComputed: styles.reference.color, candidateColor: styles.retained.color }) };
+}
+
+function validateChipLabelInk(report, errors) {
+  if (!report.retainedTypography) return;
+  const cases = [...new Set(report.elementInventory.cases.map(c => c.case))].flatMap(key => {
+    const match = parseReviewedCase(key, 'chips');
+    return match ? [{ kind: match[1], family: 'chips', profile: match[2], viewport: { id: match[3] }, ...(match[4] ? { state: match[4] } : {}) }] : [];
+  });
+  const replay = collectRetainedTypographyEvidence(cases, report.elementInventory);
+  const predicate = value => value.attribution === 'reviewed-chip-label-ink-input' || /^chip-[01]-label$/.test(value.element ?? '') ||
+    (value.family === 'chips' && value.reason === 'own-text nodes without an explicit shared ID require structural mapping');
+  for (const list of ['reviewedMappings', 'comparisons', 'differences', 'gaps']) {
+    if (JSON.stringify(report.retainedTypography[list].filter(predicate)) !== JSON.stringify(replay[list].filter(predicate)))
+      errors.push(`chip label ink ${list} lack complete replayed input evidence`);
+  }
 }
 
 function reviewedControlLabelTokenInput(entry, mapping, property, ast, styles, referenceTree, astylarTree, inventory) {
@@ -5119,6 +5204,7 @@ export function collectRetainedTypographyEvidence(cases, inventory, controlTypog
             ...(reviewedMaterialOptionInk(entry, textMappingById.get(id), property, ast, styles, referenceTree, astylarTree, inventory) ?? {}),
             ...(reviewedSnackbarMessageToken(entry, textMappingById.get(id), property, ast, styles, referenceTree, astylarTree, inventory) ?? {}),
             ...(reviewedMenuLabelInk(entry, textMappingById.get(id), property, ast, styles, referenceTree, astylarTree, inventory) ?? {}),
+            ...(reviewedChipLabelInk(entry, textMappingById.get(id), property, ast, styles, referenceTree, astylarTree, inventory) ?? {}),
             ...(reviewedMenuLabelFont(entry, textMappingById.get(id), property, ast, styles, referenceTree, astylarTree, inventory) ?? {}),
             ...(reviewedDialogTextInk(entry, textMappingById.get(id), property, ast, styles, referenceTree, astylarTree, inventory) ?? {}),
             ...(reviewedDialogTextMetric(entry, textMappingById.get(id), property, ast, styles, referenceTree, astylarTree, inventory) ?? {}),
@@ -6874,6 +6960,7 @@ function implementationPlan() {
     { priority: 5.27, rootCause: 'Stepper numeral font and label-color inheritance are replaced or omitted', action: 'Keep the original frame-scaled inherited numeral font with the icon-content wrapper instead of fixed 14px step-badge text. Restore the Material active-label color token and inner label inheritance instead of accepting the page on-surface fallback. Preserve actual reference theme inputs; do not retune the dark reference or calibrate text to the circle. Verify core inheritance, transforms and glyph paint only after equivalent authoring is restored.' },
     { priority: 5.28, rootCause: 'Filled-label component color tokens are replaced by independent literal state rules', action: 'Restore the captured reference label-color token, wrapper inheritance and state semantics rather than adjusting candidate colors to sampled pixels. Base/empty/picker-shell declarations currently supply different inputs, independently of the repaired inspection ancestry bug. Preserve normal/effective/retained stages and original rule order; investigate core cascade or current paint only when equivalent authored inputs still diverge. Do not normalize small RGB differences away or reuse pre-repair inconsistent captures as proof.' },
     { priority: 5.29, rootCause: 'Sidenav component text-color tokens are replaced by fixture theme literals', action: 'Restore the distinct drawer and content token semantics together with the separately identified sidenav structure/padding inputs. Reference color ownership is the drawer or container, while candidate aside/main rules directly set theme.onSurface or dark-mode literals. Preserve exact channels and captured inheritance; only an equal-input reproduction can establish a core color defect. The initial implementation introduced these substitutions, so do not describe them as confirmed later compensating fixes.' },
+    { priority: 5.295, rootCause: 'Chip label color tokens are replaced by container theme-color inheritance', action: 'Restore the enabled unselected label-text-color/on-surface-variant token on its original text owner instead of inheriting theme.onSurface from the replacement chip container. Current captures prove 32 unequal color inputs through exact selection state, reference token and candidate normal/effective/retained stages. The substitution predates later parity repairs. Keep selected/disabled states, generated outlines, intrinsic sizing and final paint independently covered; do not repair this by sampling screenshot colors or changing core color conversion.' },
     { priority: 5.295, rootCause: 'Sort typography replaces inherited frame inputs with fixed trigger declarations', action: 'Restore the reference frame-scaled font-size inheritance and actual frame color through the original sort text structure. The candidate fixed 16px trigger and contrast-only black declaration differ before rendering. Keep the history of screenshot-oriented changes and complete per-case ancestor evidence. Evaluate core inheritance or font scaling only after inputs agree; no inverse scale, font-size calibration or theme-specific ink override is an acceptable renderer fix.' },
     { priority: 5.296, rootCause: 'Expansion header font-size token is omitted outside a compact fixture override', action: 'Restore the reference component header font-size token and its inheritance through mat-content/title equivalents across all states. A compact-only fixed 16px branch does not translate the general component rule; custom titles inherit a different page size. Keep the independent layout/transform findings and assess core scaling or text placement only with equivalent inputs, not new font-size or baseline corrections.' },
     { priority: 5.297, rootCause: 'Select arrow vector/composition replaced by a density-tuned font glyph', action: 'Restore the original Material SVG path, viewBox, arrow wrappers and CSS positioning through the shared rendering path. Do not resize or reposition U+25BC to approximate the vector. Reduce any unsupported SVG/layout behavior to equal-input core proof, and keep the separate select value/control, popup and interaction findings explicit.' },

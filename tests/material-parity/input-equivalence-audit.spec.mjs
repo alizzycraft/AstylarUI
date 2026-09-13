@@ -4229,6 +4229,123 @@ test('sidenav color claims independently replay captured tokens, identity and re
   }
 });
 
+function chipLabelInkReport(color = '#1d1b20') {
+  const raw = templateTypographyReport('chips'), entry = raw.results[0];
+  const { reference: ref, astylar: ast } = entry.inputTrees;
+  ref.styles[0] = { ...ref.styles[0], color: '#49454e' };
+  ref.rules = [{ source: 'sheet:5/36', active: true, conditions: [],
+    selector: '.mat-mdc-standard-chip:not(.mdc-evolution-chip--disabled) .mdc-evolution-chip__text-label',
+    declarations: { color: { value: 'var(--mat-chip-label-text-color, var(--mat-sys-on-surface-variant))', important: false } } }];
+  for (const n of ref.nodes) {
+    if (n.type === 'mat-chip-option') n.attributes.class += ' mat-mdc-standard-chip';
+    if (n.type === 'button') Object.assign(n.attributes, { role: 'option', 'aria-selected': 'false', 'aria-disabled': 'false' });
+    if (String(n.attributes.class).includes('mdc-evolution-chip__text-label')) n.rules = [0];
+  }
+  ast.rules = [{ selector: '.chip', color }, { selector: '.chip.selected', color: '#4b4357' }];
+  for (const n of ast.nodes) {
+    if (/^chip-[01]$/.test(n.authored.id)) Object.assign(n.authored, { class: 'chip unselected', role: 'option', ariaSelected: false });
+    for (const stage of ['resolvedStyle', 'normalResolvedStyle', 'interactionResolvedStyle']) {
+      n[stage] = { ...n[stage] };
+      delete n[stage].color;
+      if (/^chip-[01]$/.test(n.authored.id)) n[stage].color = color;
+    }
+    if (n.retainedText) n.retainedText.style = { ...n.retainedText.style, color };
+  }
+  return raw;
+}
+
+test('unselected chip ink preserves direct reference token and candidate host inheritance', () => {
+  for (const color of ['#1d1b20', '#e6e1e5']) {
+    const raw = chipLabelInkReport(color), before = structuredClone(raw);
+    const r = collectRetainedTypographyEvidence(raw.results, collectFullTreeInventory(raw.results));
+    const findings = r.differences.filter(d => d.attribution === 'reviewed-chip-label-ink-input');
+    assert.equal(findings.length, 2);
+    for (const f of findings) {
+      assert.equal(f.inputEquivalent, false);
+      assert.equal(f.finalRasterVerified, false);
+      assert.equal(f.currentPseudoStatePaintVerified, false);
+      assert.equal(f.classification, 'application-plugin-authoring-defect');
+      assert.equal(f.values.normal, undefined);
+      assert.equal(f.values.effective, undefined);
+      assert.equal(f.values.reference, 'rgba(73,69,78,1)');
+      assert.equal(f.reviewEvidence.candidateRule.color, color);
+      assert.equal(f.reviewEvidence.referencePath.length, 6);
+      assert.equal(f.reviewEvidence.candidateChain.length, 2);
+      assert.equal(f.reviewEvidence.candidateChain[1].normal.color, color);
+    }
+    assert.deepEqual(raw, before);
+  }
+  const report = buildMaterialInputAudit(chipLabelInkReport());
+  assert.ok(report.sourceFindings.find(f => f.id === 'fixture-chip-label-ink-substitution')?.detected);
+  assert.ok(!validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('chip label ink')));
+});
+
+test('unselected chip ink refuses altered state incomplete ownership and competing paint input', () => {
+  const mutations = [
+    e => { delete e.inputTrees.reference.errors; },
+    e => { delete e.inputTrees.astylar.errors; },
+    e => { e.inputTrees.reference.nodes.find(n => n.type === 'mat-chip-option').attributes.class += ' mdc-evolution-chip--selected'; },
+    e => { e.inputTrees.reference.nodes.find(n => n.type === 'mat-chip-option').attributes.class += ' mdc-evolution-chip--disabled'; },
+    e => { e.inputTrees.reference.nodes.find(n => n.type === 'button').attributes['aria-selected'] = 'true'; },
+    e => { e.inputTrees.reference.nodes.find(n => n.type === 'button').attributes['aria-disabled'] = 'true'; },
+    e => { e.inputTrees.reference.nodes.find(n => n.type === 'button').attributes.disabled = ''; },
+    e => { e.inputTrees.reference.nodes.find(n => n.type === 'button').parent = 'missing'; },
+    e => { e.inputTrees.reference.nodes.find(n => n.ownText === 'Angular').inline = { color: { value: 'inherit' } }; },
+    e => { e.inputTrees.reference.nodes.find(n => n.ownText === 'Angular').attributes.style = '-webkit-text-fill-color: red'; },
+    e => { e.inputTrees.reference.rules[0].active = false; },
+    e => { e.inputTrees.reference.rules[0].conditions = ['@media print']; },
+    e => { e.inputTrees.reference.rules[0].conditions = ''; },
+    e => { e.inputTrees.reference.rules[0].declarations.color.value = '#49454e'; },
+    e => { e.inputTrees.reference.rules[0].declarations.color.important = true; },
+    e => { e.inputTrees.reference.rules[0].declarations.transition = { value: 'color 1s' }; },
+    e => { e.inputTrees.reference.nodes.find(n => n.ownText === 'Angular').rules.push(0); },
+    e => { e.inputTrees.reference.nodes.find(n => n.ownText === 'Angular').style = 999; },
+    e => { e.inputTrees.astylar.nodes.find(n => n.authored.id === 'chip-0').authored.ariaSelected = true; },
+    e => { e.inputTrees.astylar.nodes.find(n => n.authored.id === 'chip-0').authored.class += ' selected'; },
+    e => { e.inputTrees.astylar.nodes.find(n => n.authored.id === 'chip-0').authored.ariaDisabled = true; },
+    e => { e.inputTrees.astylar.nodes.find(n => n.authored.id === 'chip-0').authored.style = { color: '#1d1b20' }; },
+    e => { e.inputTrees.astylar.nodes.find(n => n.authored.id === 'chip-0-label').authored.style = { color: 'inherit' }; },
+    e => { e.inputTrees.astylar.nodes.find(n => n.authored.id === 'chip-0-label').normalResolvedStyle.color = '#1d1b20'; },
+    e => { e.inputTrees.astylar.nodes.find(n => n.authored.id === 'chip-0').normalResolvedStyle.color = '#000000'; },
+    e => { e.inputTrees.astylar.nodes.find(n => n.authored.id === 'chip-0').interactionResolvedStyle.color = '#000000'; },
+    e => { e.inputTrees.astylar.nodes.find(n => n.authored.id === 'chip-0-label').retainedText.style.color = '#000000'; },
+    e => { e.inputTrees.astylar.rules.push({ selector: '*', color: '#1d1b20' }); },
+    e => { e.inputTrees.astylar.rules.push({ selector: '.chip:focus', color: '#1d1b20' }); },
+    e => { e.inputTrees.astylar.rules.push({ selector: '.chip-label', color: '#1d1b20' }); },
+    e => { e.inputTrees.astylar.rules[0].mediaMinWidth = '500px'; },
+    e => { e.inputTrees.astylar.rules[0].transition = 'color 1s'; },
+    e => { e.inputTrees.astylar.rules.push(structuredClone(e.inputTrees.astylar.rules[0])); },
+  ];
+  for (const mutate of mutations) {
+    const raw = chipLabelInkReport(); mutate(raw.results[0]);
+    const r = collectRetainedTypographyEvidence(raw.results, collectFullTreeInventory(raw.results));
+    assert.ok(!r.differences.some(d => d.element === 'chip-0-label' && d.attribution === 'reviewed-chip-label-ink-input'), String(mutate));
+  }
+});
+
+test('unselected chip ink claims independently replay token state inheritance and all report lists', () => {
+  const baseline = buildMaterialInputAudit(chipLabelInkReport());
+  for (const mutate of [
+    (_r, f) => { f.inputEquivalent = true; },
+    (_r, f) => { f.classification = 'confirmed-core-renderer-defect'; },
+    (_r, f) => { f.finalRasterVerified = true; },
+    (_r, f) => { f.reviewEvidence.referencePath.pop(); },
+    (_r, f) => { f.reviewEvidence.referenceToken.declarations.color.value = '#49454e'; },
+    (_r, f) => { f.reviewEvidence.candidateChain[1].normal.color = '#000000'; },
+    (_r, f) => { f.reviewEvidence.candidateRule.color = '#000000'; },
+    (r, f) => { r.retainedTypography.differences.push(structuredClone(f)); },
+    r => { r.retainedTypography.differences = []; },
+    r => { r.retainedTypography.reviewedMappings = []; },
+    r => { r.retainedTypography.comparisons[0].properties.color.normal = '#1d1b20'; },
+    r => { r.elementInventory.rules.find(x => x.side === 'astylar' && x.value.selector === '.chip').value.color = '#000000'; },
+    r => { r.elementInventory.variants.find(v => v.side === 'reference').nodes.find(n => n.type === 'button').attributes['aria-selected'] = 'true'; },
+  ]) {
+    const report = structuredClone(baseline);
+    mutate(report, report.retainedTypography.differences.find(d => d.attribution === 'reviewed-chip-label-ink-input'));
+    assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('chip label ink')), String(mutate));
+  }
+});
+
 function fieldLabelColorReport(family = 'form-field', empty = false) {
   const raw = fieldLabelTrackingReport(family, empty ? 'empty' : 'base'), entry = raw.results[0];
   const { reference: ref, astylar: ast } = entry.inputTrees;

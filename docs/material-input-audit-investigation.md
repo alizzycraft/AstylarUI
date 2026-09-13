@@ -23,6 +23,65 @@ selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Unselected chip labels inherit the wrong component color input (2026-09-13)
+
+All **32 remaining chip retained-color differences** in the 76 captured chip
+cases have a direct input cause. Reference enabled unselected labels declare
+`var(--mat-chip-label-text-color, var(--mat-sys-on-surface-variant))` on their
+`mdc-evolution-chip__text-label` span. Candidate `.chip-label` spans omit color
+in both normal and effective inspection; they inherit their `.chip` container's
+`theme.onSurface` literal. The container's normal/effective color agrees with
+the retained text color, so the renderer is not changing a shared color input.
+
+For `interactions/chips/light/desktop-dpr1/activate`, the reference Angular
+label computes `rgb(73,69,78)` while the unselected candidate container and
+retained label use `#1d1b20`. The dark counterpart uses candidate `#e6e1e5`.
+The reference action button owns `role=option`, `aria-selected=false` and
+`aria-disabled=false`; the candidate places option/selection semantics on its
+replacement container. The audit checks those states and the existing exact
+six-node reference/three-node candidate text mapping before attributing ink.
+It does not infer whole-chip semantic or paint equivalence from that mapping.
+
+`git show 2f44011:examples/material-showcase/src/app/astylar.component.ts`
+shows `.chip { color: theme.onSurface }` in the initial showcase. Current
+source is `astylar.component.ts:690`, with the nested label at `:847`.
+This is an original authoring substitution, not proven evidence of a later
+renderer workaround. The separately documented state-specific widths,
+generated-outline replacement and checkmark paint remain independent findings.
+
+`reviewed-chip-label-ink-input` retains the exact token, complete reference
+owner path/styles, candidate leaf/host declarations, relevant candidate rules
+and retained paint style. A competing color, animation, transition, text-fill
+or inline override prevents attribution. Selected/disabled states, missing or
+ambiguous owners, incomplete rule evidence and stage disagreement are not
+waived. Validation replays chip mappings, comparisons, differences and gaps;
+it rejects removed, duplicated and fabricated claims.
+
+The repair is to restore the original component-token and text-owner inputs,
+then test core behavior under equal inputs. It is not a request to tune color
+literals to screenshots. Token fallback origin, other typography and final
+raster remain separate obligations. No production or reference input changes
+are included in this audit increment.
+
+Verification:
+
+- `node --test --test-name-pattern='unselected chip ink|source audit|source fingerprints' tests/material-parity/input-equivalence-audit.spec.mjs`:
+  **5/5 pass**, 2.492 seconds. Includes both chip labels with light/dark host
+  literals, 33 contradictory-input controls and 13 report-mutation controls.
+- `npm run parity:harness:check`: **437/437 pass**, zero failures, skips or
+  cancellations, 256.823 seconds.
+- Complete `buildMaterialInputAudit` replay against
+  `current-ancestry-audit/latest-report.json`,
+  `normal-line-box-current-ancestry-audit/latest-report.json` and
+  `supplemental-current-ancestry-audit`: **32 chip ink attributions**,
+  **118 detected source findings**, diagnostic validation empty. Strict
+  validation honestly retains **3,309 resolved-style**, **879 control-text**
+  and **154 retained-typography** differences requiring attribution (down
+  from 186 retained differences before this increment).
+- All ten frozen harness source hashes match the checkpoint manifest.
+  `git diff --check` passes. This is not a new visual matrix run or a completed
+  input-equivalence audit; the required final unfiltered run remains outstanding.
+
 ## Filled-label state colors are different inputs, not a paint conversion failure (2026-09-13)
 
 The captured reference floating labels apply separate base, focus, hover and

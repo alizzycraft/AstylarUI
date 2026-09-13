@@ -487,6 +487,16 @@ export const sourceAuditDefinitions = Object.freeze([
     focusedProof: 'scripts/audit-material-button-defaults.mjs',
   }),
   Object.freeze({
+    id: 'fixture-chip-label-ink-substitution',
+    introducedBy: '2f44011 initial chip styling',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`selector: '\.chip',[^\n]*color: theme\.onSurface`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase chip label color-token translation and inheritance',
+    justification: 'The reference enabled unselected chip text span explicitly owns the label-text-color/on-surface-variant token. Candidate chip labels omit color and inherit the parent .chip literal authored from theme.onSurface, already present in the initial showcase. This is an original input substitution, not evidence of a later color workaround or core conversion failure. Exact component/action/label paths, enabled/unselected state, token declarations, complete candidate rule exclusions and normal/effective/retained inheritance are required per occurrence. Selected/disabled chips, generated outline composition, token fallback origin and final raster are not certified. Restore the original component color semantics before investigating core with equal inputs.',
+    focusedProof: 'tests/material-parity/input-equivalence-audit.spec.mjs: unselected chip ink preserves direct reference token and candidate host inheritance',
+  }),
+  Object.freeze({
     id: 'fixture-control-label-typography-omitted',
     introducedBy: '2f44011 initial chip styling; c47d589 button-toggle label composition',
     file: 'examples/material-showcase/src/app/astylar.component.ts',
