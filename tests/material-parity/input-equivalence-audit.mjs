@@ -461,6 +461,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
     'reviewed-menu-label-ink-input': 'application-plugin-authoring-defect',
     'reviewed-chip-label-ink-input': 'application-plugin-authoring-defect',
     'reviewed-disabled-choice-label-ink-input': 'application-plugin-authoring-defect',
+    'reviewed-disabled-component-opaque-ink-input': 'application-plugin-authoring-defect',
     'reviewed-menu-label-font-input': 'application-plugin-authoring-defect',
     'reviewed-dialog-text-ink-input': 'application-plugin-authoring-defect',
     'reviewed-dialog-text-metric-omission': 'application-plugin-authoring-defect',
@@ -478,6 +479,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
   validateMenuTextEvidence(report, errors);
   validateChipLabelInk(report, errors);
   validateDisabledChoiceLabelInk(report, errors);
+  validateDisabledComponentInk(report, errors);
   validateFloatingLabelFontInput(report, errors);
   validateDialogTextEvidence(report, errors);
   validateFieldErrorEvidence(report, errors);
@@ -634,7 +636,8 @@ export function renderMaterialInputAuditMarkdown(report) {
     `Field-label colors: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-field-label-color-substitution').length} records preserve reference base/focus/hover/disabled tokens and candidate base/empty/picker-shell declarations in source order. State attributions retain the actual filled-field ancestor path and v2 inspection revision; the earlier disabled literal must remain overridden by the later base rule. Attribution requires the selected literal to agree across normal, effective and retained stages. Stale ancestry or unexplained state divergence is not waived, and unequal color inputs are not a core color-conversion or raster-equivalence claim.`,
     `Sidenav colors: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-sidenav-color-substitution').length} records preserve distinct reference drawer/content token inheritance and candidate literal declarations. These are classified unequal authored inputs, not RGB tolerances or evidence of equivalent paint. Competing declarations, incomplete chains and disagreement between candidate stages prevent attribution.`,
     `Sort typography: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-sort-typography-substitution').length} records preserve complete reference frame inheritance against candidate fixed trigger font size or contrast ink. Missing leaf declarations remain missing in the evidence; parent declarations and retained values are recorded independently rather than synthesized as equivalent resolved input.`,
-    `Expansion title size: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-expansion-font-token-omission').length} records preserve the reference header size token and complete candidate title-to-page omission chain. The candidate page scale is not accepted as the component font input; the compact-only override and separate positional corrections remain independent authoring differences.`,
+    `Expansion header/body size: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-expansion-font-token-omission').length} records preserve the distinct reference header/body size tokens and complete candidate text-to-page omission chains. The candidate page scale is not accepted as the component font input; the compact-only override and separate positional corrections remain independent authoring differences.`,
+    `Disabled select/expansion ink: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-disabled-component-opaque-ink-input').length} records preserve the reference translucent token cascade and candidate fixed or preblended opaque ink. Disabled state, inheritance and declaration stages are proven separately from compositing and final paint.`,
     '',
     `Tree label line-box substitutions: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-tree-label-line-box-substitution').length} records preserve complete reference normal-line-height ancestry and direct flex text ownership alongside the candidate fixed-20px label wrapper. This is unequal structure and line-box input, not a normal-to-20px normalization. Natural line-box height, anonymous flex-item behavior and current glyph paint require separate equal-input proof.`,
     '',
@@ -2690,6 +2693,104 @@ function reviewedControlLabelTokenInput(entry, mapping, property, ast, styles, r
   };
 }
 
+function reviewedDisabledComponentInk(entry, property, ref, ast, styles, referenceTree, astylarTree, inventory) {
+  const select = entry.family === 'select', id = select ? 'select-value' : 'expansion-title';
+  if ((!select && entry.family !== 'expansion') || property !== 'color' || ast.authored?.id !== id || ast.authored.type !== 'span' ||
+      ref.ownText !== ast.authored.textContent || ast.retainedText?.source !== 'core-text-registry' ||
+      referenceTree.ruleEvidenceComplete !== true || astylarTree.ruleEvidenceComplete !== true ||
+      astylarTree.resolvedStyleEvidenceVersion !== 2 || astylarTree.resolvedStyleSource !== 'core-style-inspection' ||
+      styles.reference.color === styles.retained.color) return;
+  const one = list => list.length === 1 ? list[0] : undefined;
+  const parent = (tree, node) => one(tree.nodes.filter(n => n.key === node?.parent));
+  const hasClass = (node, name) => String((node?.attributes ?? node?.authored)?.class ?? '').split(/\s+/).includes(name);
+  const record = one(inventory.cases.filter(c => c.case === (entry.case ?? caseKey(entry)) && c.side === 'astylar'));
+  if (!record || !Number.isInteger(record.resolvedStyleRevision) || record.resolvedStyleRevision < 0 ||
+      !one(astylarTree.nodes.filter(n => n.authored?.id === id)) || !hasClass(ast, id)) return;
+  const affects = value => Object.keys(value ?? {}).some(k => ['color', 'all', 'webkittextfillcolor'].includes(k.replaceAll('-', '').toLowerCase()) || /^(animation|transition)/i.test(k));
+  const unsafeInline = node => {
+    const inline = node.inline ?? node.authored?.style;
+    return (inline !== undefined && (!inline || typeof inline !== 'object' || Array.isArray(inline) || affects(inline))) ||
+      /(?:^|;)\s*(?:color|all|-webkit-text-fill-color|animation[^:]*|transition[^:]*)\s*:/i.test(node.attributes?.style ?? '');
+  };
+  const styleAt = (index, side) => {
+    const item = inventory.styles[index];
+    return item?.side === side && item.value && typeof item.value === 'object' && !Array.isArray(item.value) ? item.value : undefined;
+  };
+  const path = select ? [['span', 'mat-mdc-select-min-line'], ['span', 'mat-mdc-select-value-text'],
+    ['div', 'mat-mdc-select-value'], ['div', 'mat-mdc-select-trigger'], ['mat-select', 'mat-mdc-select']] :
+    [['mat-panel-title', 'mat-expansion-panel-header-title'], ['span', 'mat-content'], ['mat-expansion-panel-header', 'mat-expansion-panel-header']];
+  const referenceChain = [];
+  let node = ref;
+  for (const [index, [type, className]] of path.entries()) {
+    if (!node || !one(referenceTree.nodes.filter(n => n.key === node.key)) || referenceChain.some(n => n.key === node.key) ||
+        node.type !== type || !hasClass(node, className) || unsafeInline(node)) return;
+    const computed = styleAt(node.style, 'reference'), pool = node.rules.map(i => inventory.rules[i]);
+    if (!computed || canonicalStyle(computed).color !== styles.reference.color || pool.some(r => r?.side !== 'reference' || !r.value ||
+        !r.value.declarations || typeof r.value.declarations !== 'object' || Array.isArray(r.value.declarations))) return;
+    const ink = pool.map(r => r.value).filter(r => affects(r.declarations));
+    const expected = select ? (index === path.length - 1 ? [
+      ['.mat-mdc-select', 'var(--mat-select-enabled-trigger-text-color, var(--mat-sys-on-surface))'],
+      ['.mat-mdc-select-disabled', 'var(--mat-select-disabled-trigger-text-color, color-mix(in srgb, var(--mat-sys-on-surface) 38%, transparent))'],
+    ] : []) : index === 0 ? [
+      ['.mat-expansion-panel-header-title', 'var(--mat-expansion-header-text-color, var(--mat-sys-on-surface))'],
+      ['.mat-expansion-panel-header[aria-disabled="true"] .mat-expansion-panel-header-title, .mat-expansion-panel-header[aria-disabled="true"] .mat-expansion-panel-header-description', 'inherit'],
+    ] : index === 2 ? [['.mat-expansion-panel-header[aria-disabled="true"]', 'var(--mat-expansion-header-disabled-state-text-color, color-mix(in srgb, var(--mat-sys-on-surface) 38%, transparent))']] : [];
+    if (ink.length !== expected.length || ink.some((r, i) => r.selector !== expected[i][0] || r.active !== true ||
+        !Array.isArray(r.conditions) || r.conditions.length || r.declarations.color?.value !== expected[i][1] ||
+        r.declarations.color.important !== false || Object.keys(r.declarations).some(k => k !== 'color' && affects({ [k]: true })))) return;
+    referenceChain.push({ ...node, computed, ink });
+    if (index < path.length - 1) node = parent(referenceTree, node);
+  }
+  const host = node;
+  if (host.attributes?.['aria-disabled'] !== 'true' || host.attributes.role !== (select ? 'combobox' : 'button') ||
+      (select ? host.attributes.id !== 'select-control' || !hasClass(host, 'mat-mdc-select-disabled') : ref.attributes.id !== 'expansion-title')) return;
+  const candidateOwner = select ? ast : parent(astylarTree, ast);
+  const control = select ? one(astylarTree.nodes.filter(n => n.authored?.id === 'select-control')) : candidateOwner;
+  if (select ? control?.authored?.type !== 'input' || control.authored.role !== 'combobox' || control.authored.disabled !== true ||
+      control.parent !== ast.parent || control.authored.value !== ast.authored.textContent :
+      control?.authored?.type !== 'div' || control.authored.id !== 'expansion-primary' || control.authored.role !== 'button' ||
+      control.authored.ariaDisabled !== true || !hasClass(control, 'expansion-trigger') || !hasClass(control, 'disabled')) return;
+  const pool = astylarTree.rules.map(i => inventory.rules[i]);
+  if (pool.some(r => r?.side !== 'astylar' || !r.value || typeof r.value !== 'object' || Array.isArray(r.value))) return;
+  const candidateInkRules = pool.map(r => r.value).filter(affects), candidateChain = [];
+  for (const current of select ? [ast] : [ast, candidateOwner]) {
+    const normal = styleAt(current.normalStyle, 'astylar'), effective = styleAt(current.interactionStyle, 'astylar');
+    const rules = candidateInkRules.filter(r => typographySelectorCanApply(r.selector, current.authored));
+    if (!normal || !effective || unsafeInline(current)) return;
+    if (current !== candidateOwner) {
+      if (rules.length || affects(normal) || affects(effective)) return;
+    } else {
+      const selectors = select ? ['.select-value'] : ['.expansion-trigger', '.expansion-trigger.disabled'];
+      if (rules.length !== selectors.length || rules.some((r, i) => r.selector !== selectors[i] ||
+          !/^#[a-f\d]{6}$/i.test(r.color ?? '') || Object.keys(r).some(k => k.startsWith('media') || (k !== 'color' && affects({ [k]: true })))) ||
+          (select && rules[0].color.toLowerCase() !== '#79747e') || canonicalStyle(rules.at(-1)).color !== styles.retained.color ||
+          [normal, effective].some(s => canonicalStyle(s).color !== styles.retained.color || Object.keys(s).some(k => k !== 'color' && affects({ [k]: true })))) return;
+    }
+    candidateChain.push({ ...current, normal, effective, ink: rules });
+  }
+  return { attribution: 'reviewed-disabled-component-opaque-ink-input', classification: 'application-plugin-authoring-defect',
+    inputEquivalent: false, currentPseudoStatePaintVerified: false, finalRasterVerified: false,
+    recommendedOwner: 'showcase disabled select and expansion color-token translation',
+    justification: 'The disabled reference component preserves its translucent disabled-text token through the exact captured cascade and text-owner ancestry. Candidate disabled select supplies fixed opaque #79747e; candidate expansion supplies a surface-preblended opaque color inherited from its trigger. Captured declarations and normal/effective/retained stages agree. These are unequal authored color inputs, not proof of core alpha failure or equivalent composited pixels. Preserve tokens and transparency before testing core compositing; disabled interaction and final raster remain separate obligations.',
+    reviewEvidence: structuredClone({ sourceFinding: select ? 'fixture-select-value-typography-substitution' : 'fixture-expansion-disabled-ink-preblended',
+      revision: record.resolvedStyleRevision, referenceChain, candidateChain, control, candidateInkRules,
+      referenceComputed: styles.reference.color, candidateRetained: styles.retained.color }) };
+}
+
+function validateDisabledComponentInk(report, errors) {
+  if (!report.retainedTypography) return;
+  const cases = [...new Set(report.elementInventory.cases.map(c => c.case))].flatMap(key => ['select', 'expansion'].flatMap(family => {
+    const m = parseReviewedCase(key, family);
+    return m ? [{ kind: m[1], family, profile: m[2], viewport: { id: m[3] }, ...(m[4] ? { state: m[4] } : {}) }] : [];
+  }));
+  const replay = collectRetainedTypographyEvidence(cases, report.elementInventory);
+  const predicate = d => d.attribution === 'reviewed-disabled-component-opaque-ink-input' || ['select-value', 'expansion-title'].includes(d.element);
+  for (const list of ['reviewedMappings', 'comparisons', 'differences', 'gaps']) {
+    if (JSON.stringify(report.retainedTypography[list].filter(predicate)) !== JSON.stringify(replay[list].filter(predicate)))
+      errors.push(`disabled component ink ${list} lack complete replayed input evidence`);
+  }
+}
+
 function reviewedSelectValueInput(entry, mapping, property, ast, styles, referenceTree, astylarTree, inventory) {
   if (entry.family !== 'select' || mapping?.element !== 'select-value' || mapping.kind !== 'reviewed-showcase-template-text') return;
   const specs = {
@@ -4064,17 +4165,26 @@ function reviewedTreeFontInput(entry, mapping, ref, ast, styles, astylarTree, in
 }
 
 function reviewedExpansionFontInput(entry, ref, ast, styles, referenceTree, astylarTree, inventory) {
-  if (entry.family !== 'expansion' || ref.type !== 'mat-panel-title' || ref.attributes?.id !== 'expansion-title' ||
-      ast.authored?.type !== 'span' || ast.authored.id !== 'expansion-title' ||
-      !String(ast.authored.class ?? '').split(/\s+/).includes('expansion-title') ||
+  const body = ast.authored?.id === 'expansion-content-label', id = body ? 'expansion-content-label' : 'expansion-title';
+  if (entry.family !== 'expansion' || ref.type !== (body ? 'p' : 'mat-panel-title') || ref.attributes?.id !== (body ? 'expansion-content' : id) ||
+      ast.authored?.type !== 'span' || ast.authored.id !== id || ref.ownText !== ast.authored.textContent ||
+      !String(ast.authored.class ?? '').split(/\s+/).includes(id) ||
       ast.retainedText?.source !== 'core-text-registry' || styles.reference.fontSize !== '16px' ||
-      !['14.4px', '18.4px'].includes(styles.retained.fontSize)) return;
+      !['14.4px', '18.4px'].includes(styles.retained.fontSize) || referenceTree.ruleEvidenceComplete !== true ||
+      astylarTree.ruleEvidenceComplete !== true || astylarTree.resolvedStyleEvidenceVersion !== 2 ||
+      astylarTree.resolvedStyleSource !== 'core-style-inspection') return;
+  const records = inventory.cases.filter(c => c.case === (entry.case ?? caseKey(entry)) && c.side === 'astylar');
+  if (records.length !== 1 || !Number.isInteger(records[0].resolvedStyleRevision) || records[0].resolvedStyleRevision < 0) return;
+  const path = body ? [['p', undefined], ['div', 'mat-expansion-panel-body'], ['div', 'mat-expansion-panel-content']] :
+    [['mat-panel-title', 'mat-expansion-panel-header-title'], ['span', 'mat-content'], ['mat-expansion-panel-header', 'mat-expansion-panel-header']];
+  const ownerSelector = body ? '.mat-expansion-panel-content' : '.mat-expansion-panel-header';
+  const token = body ? 'var(--mat-expansion-container-text-size, var(--mat-sys-body-large-size))' :
+    'var(--mat-expansion-header-text-size, var(--mat-sys-title-medium-size))';
   const referenceChain = [], seen = new Set();
   let node = ref;
-  for (const [type, className] of [['mat-panel-title', 'mat-expansion-panel-header-title'], ['span', 'mat-content'],
-    ['mat-expansion-panel-header', 'mat-expansion-panel-header']]) {
+  for (const [index, [type, className]] of path.entries()) {
     if (!node || seen.has(node.key) || referenceTree.nodes.filter(n => n.key === node.key).length !== 1 ||
-        node.type !== type || !String(node.attributes?.class ?? '').split(/\s+/).includes(className)) return;
+        node.type !== type || (className && !String(node.attributes?.class ?? '').split(/\s+/).includes(className))) return;
     seen.add(node.key);
     const pooled = inventory.styles[node.style];
     if (pooled?.side !== 'reference' || !pooled.value || canonicalStyle(pooled.value).fontSize !== '16px' ||
@@ -4084,13 +4194,13 @@ function reviewedExpansionFontInput(entry, ref, ast, styles, referenceTree, asty
     if (rules.some(r => r?.side !== 'reference')) return;
     const declarations = rules.map(r => r.value).filter(r => r.active === true &&
       (r.declarations?.['font-size'] || r.declarations?.font || r.declarations?.all));
-    if (type !== 'mat-expansion-panel-header' && declarations.length) return;
-    if (type === 'mat-expansion-panel-header' && (declarations.length !== 1 ||
-        declarations[0].selector !== '.mat-expansion-panel-header' || declarations[0].declarations.font || declarations[0].declarations.all ||
-        declarations[0].declarations['font-size']?.value !== 'var(--mat-expansion-header-text-size, var(--mat-sys-title-medium-size))' ||
+    if (index !== path.length - 1 && declarations.length) return;
+    if (index === path.length - 1 && (declarations.length !== 1 ||
+        declarations[0].selector !== ownerSelector || declarations[0].declarations.font || declarations[0].declarations.all ||
+        declarations[0].declarations['font-size']?.value !== token ||
         declarations[0].declarations['font-size'].important !== false || !Array.isArray(declarations[0].conditions) || declarations[0].conditions.length)) return;
     referenceChain.push({ node: node.key, parent: node.parent, computed: pooled.value, fontSizeRules: declarations });
-    if (type !== 'mat-expansion-panel-header') {
+    if (index !== path.length - 1) {
       const parents = referenceTree.nodes.filter(n => n.key === node.parent);
       if (parents.length !== 1) return;
       node = parents[0];
@@ -4115,43 +4225,35 @@ function reviewedExpansionFontInput(entry, ref, ast, styles, referenceTree, asty
       astylarTree.nodes.filter(n => n.authored?.id === 'page').length !== 1 ||
       ['normal', 'effective'].some(stage => canonicalStyle(candidateChain.at(-1)[stage]).fontSize !== styles.retained.fontSize)) return;
   const rules = astylarTree.rules.map(i => inventory.rules[i]);
-  if (rules.some(r => r?.side !== 'astylar')) return;
+  if (rules.some(r => r?.side !== 'astylar' || !r.value || typeof r.value !== 'object' || Array.isArray(r.value))) return;
+  const affectsSize = r => Object.keys(r).some(k => /^(?:fontSize|font-size|font|all|animation.*|transition.*)$/.test(k));
+  for (const item of candidateChain.slice(0, -1)) {
+    if (rules.some(r => affectsSize(r.value) && typographySelectorCanApply(r.value.selector, item.authored))) return;
+  }
   const pageRules = rules.map(r => r.value).filter(r => r.selector === '#page' && (r.fontSize !== undefined || r.font !== undefined || r.all !== undefined));
   if (pageRules.length !== 1 || pageRules[0].fontSize !== styles.retained.fontSize || pageRules[0].font !== undefined ||
       pageRules[0].all !== undefined || Object.keys(pageRules[0]).some(k => k.startsWith('media'))) return;
   return { attribution: 'reviewed-expansion-font-token-omission', classification: 'application-plugin-authoring-defect',
     inputEquivalent: false, currentPseudoStatePaintVerified: false,
-    recommendedOwner: 'showcase expansion header font-size token and inheritance',
-    justification: 'The reference title inherits its unique active 16px Material header font-size token through the captured mat-content wrapper. The entire candidate title-to-page normal/effective chain omits that component size and core retains the explicitly scaled page size. This is a missing component typography input, not a core font-scaling defect or an accepted inverse-scale adjustment. Restore the reference header token and wrapper intent before evaluating renderer shaping, placement and paint. The separate compact-only 16px fixture override is not evidence that other states supply the token.',
-    reviewEvidence: { sourceFinding: 'fixture-expansion-font-size-token-omitted', referenceChain, candidateChain,
+    recommendedOwner: 'showcase expansion header/body font-size tokens and inheritance',
+    justification: 'The reference text inherits its unique active 16px Material header or container font-size token through the captured component wrapper. The entire candidate text-to-page normal/effective chain omits that component size and core retains the explicitly scaled page size. This is a missing component typography input, not a core font-scaling defect or an accepted inverse-scale adjustment. Restore the original component token and wrapper intent before evaluating renderer shaping, placement and paint. The separate compact-only header 16px override does not restore body typography.',
+    reviewEvidence: { sourceFinding: body ? 'fixture-expansion-body-font-size-token-omitted' : 'fixture-expansion-font-size-token-omitted',
+      revision: records[0].resolvedStyleRevision, referenceChain, candidateChain,
       candidatePageRule: pageRules[0], referenceComputed: styles.reference.fontSize, candidateRetained: styles.retained.fontSize } };
 }
 
 function validateExpansionFont(report, errors) {
-  const expected = [];
-  for (const comparison of report.retainedTypography?.comparisons ?? []) {
-    if (comparison.family !== 'expansion') continue;
-    const refs = report.elementInventory.cases.filter(c => c.case === comparison.case && c.side === 'reference');
-    const asts = report.elementInventory.cases.filter(c => c.case === comparison.case && c.side === 'astylar');
-    if (refs.length !== 1 || asts.length !== 1) continue;
-    const refTree = report.elementInventory.variants[refs[0].variant], astTree = report.elementInventory.variants[asts[0].variant];
-    const ref = refTree.nodes.find(n => n.key === comparison.referenceNode), ast = astTree.nodes.find(n => n.key === comparison.astylarNode);
-    if (!ref || !ast) continue;
-    const indices = { reference: ref.style, normal: ast.normalStyle, effective: ast.interactionStyle, retained: ast.retainedText?.style };
-    const pooled = Object.fromEntries(Object.entries(indices).map(([key, i]) => [key, report.elementInventory.styles[i]]));
-    if (Object.entries(pooled).some(([key, value]) => value?.side !== (key === 'reference' ? 'reference' : 'astylar') || !value.value)) continue;
-    const styles = Object.fromEntries(Object.entries(pooled).map(([key, value]) => [key, canonicalStyle(value.value)]));
-    const review = reviewedExpansionFontInput(comparison, ref, ast, styles, refTree, astTree, report.elementInventory);
-    if (review) expected.push({ comparison, review, values: Object.fromEntries(Object.entries(styles).map(([key, style]) => [key, style.fontSize])) });
+  if (!report.retainedTypography) return;
+  const cases = [...new Set(report.elementInventory.cases.map(c => c.case))].flatMap(key => {
+    const m = parseReviewedCase(key, 'expansion');
+    return m ? [{ kind: m[1], family: 'expansion', profile: m[2], viewport: { id: m[3] }, ...(m[4] ? { state: m[4] } : {}) }] : [];
+  });
+  const replay = collectRetainedTypographyEvidence(cases, report.elementInventory);
+  const predicate = d => d.attribution === 'reviewed-expansion-font-token-omission' || ['expansion-title', 'expansion-content-label'].includes(d.element);
+  for (const list of ['reviewedMappings', 'comparisons', 'differences', 'gaps']) {
+    if (JSON.stringify(report.retainedTypography[list].filter(predicate)) !== JSON.stringify(replay[list].filter(predicate)))
+      errors.push(`expansion font attributions ${list} lack complete replayed input evidence`);
   }
-  const claimed = report.retainedTypography?.differences.filter(d => d.attribution === 'reviewed-expansion-font-token-omission') ?? [];
-  if (expected.length !== claimed.length || expected.some(({ comparison, review, values }) => {
-    const matches = claimed.filter(d => d.case === comparison.case && d.element === comparison.element && d.property === 'fontSize' &&
-      d.referenceNode === comparison.referenceNode && d.astylarNode === comparison.astylarNode);
-    return matches.length !== 1 || JSON.stringify(matches[0].values) !== JSON.stringify(values) ||
-      JSON.stringify(comparison.properties.fontSize) !== JSON.stringify(values) ||
-      Object.entries(review).some(([key, value]) => JSON.stringify(matches[0][key]) !== JSON.stringify(value));
-  })) errors.push('expansion font attributions do not replay from component token and complete candidate inheritance');
 }
 
 function reviewedSortTypographyInput(entry, mapping, property, ref, ast, styles, referenceTree, astylarTree, inventory) {
@@ -5396,6 +5498,7 @@ export function collectRetainedTypographyEvidence(cases, inventory, controlTypog
             ...(reviewedMenuLabelInk(entry, textMappingById.get(id), property, ast, styles, referenceTree, astylarTree, inventory) ?? {}),
             ...(reviewedChipLabelInk(entry, textMappingById.get(id), property, ast, styles, referenceTree, astylarTree, inventory) ?? {}),
             ...(reviewedDisabledChoiceLabelInk(entry, property, ref, ast, styles, referenceTree, astylarTree, inventory) ?? {}),
+            ...(reviewedDisabledComponentInk(entry, property, ref, ast, styles, referenceTree, astylarTree, inventory) ?? {}),
             ...(reviewedMenuLabelFont(entry, textMappingById.get(id), property, ast, styles, referenceTree, astylarTree, inventory) ?? {}),
             ...(reviewedDialogTextInk(entry, textMappingById.get(id), property, ast, styles, referenceTree, astylarTree, inventory) ?? {}),
             ...(reviewedDialogTextMetric(entry, textMappingById.get(id), property, ast, styles, referenceTree, astylarTree, inventory) ?? {}),
@@ -7155,7 +7258,8 @@ function implementationPlan() {
     { priority: 5.294, rootCause: 'Disabled choice label color tokens are omitted from custom checkbox/radio authoring', action: 'Restore component disabled-label-color token intent on the original associated text owner instead of the unconditional theme.onSurface label/option literal. Current captures prove native disabled label association and differing candidate disabled-state inputs. Preserve transparent color semantics rather than preblending against a screenshot background. Test enabled/disabled and checked/unchecked states independently of cursor and event suppression; only investigate core alpha handling after equivalent color inputs are supplied.' },
     { priority: 5.295, rootCause: 'Chip label color tokens are replaced by container theme-color inheritance', action: 'Restore the enabled unselected label-text-color/on-surface-variant token on its original text owner instead of inheriting theme.onSurface from the replacement chip container. Current captures prove 32 unequal color inputs through exact selection state, reference token and candidate normal/effective/retained stages. The substitution predates later parity repairs. Keep selected/disabled states, generated outlines, intrinsic sizing and final paint independently covered; do not repair this by sampling screenshot colors or changing core color conversion.' },
     { priority: 5.295, rootCause: 'Sort typography replaces inherited frame inputs with fixed trigger declarations', action: 'Restore the reference frame-scaled font-size inheritance and actual frame color through the original sort text structure. The candidate fixed 16px trigger and contrast-only black declaration differ before rendering. Keep the history of screenshot-oriented changes and complete per-case ancestor evidence. Evaluate core inheritance or font scaling only after inputs agree; no inverse scale, font-size calibration or theme-specific ink override is an acceptable renderer fix.' },
-    { priority: 5.296, rootCause: 'Expansion header font-size token is omitted outside a compact fixture override', action: 'Restore the reference component header font-size token and its inheritance through mat-content/title equivalents across all states. A compact-only fixed 16px branch does not translate the general component rule; custom titles inherit a different page size. Keep the independent layout/transform findings and assess core scaling or text placement only with equivalent inputs, not new font-size or baseline corrections.' },
+    { priority: 5.296, rootCause: 'Expansion header and body font-size tokens are omitted in replacement text owners', action: 'Restore the distinct component header and container font-size tokens through their original wrapper inheritance across all states. A compact-only fixed header 16px branch does not translate the general component rule or restore body type; contrast/custom body labels inherit a different page size. Keep layout/transform findings independent. A matching authored font-size rule missing from resolved styles must route to core investigation, not an omission waiver. Assess scaling, text placement and paint only with equivalent inputs, not new font-size or baseline corrections.' },
+    { priority: 5.2961, rootCause: 'Disabled select and expansion replace translucent text tokens with opaque literals', action: 'Restore the disabled select trigger token and the disabled expansion header token with title inherit override. Preserve alpha as an input; remove fixed gray and surface preblending rather than calibrating them to pixels. Verify enabled/disabled state and exact color ownership before evaluating core alpha compositing on changing backgrounds. Keep disabled hit behavior, focus and final raster separate from token equivalence.' },
     { priority: 5.297, rootCause: 'Select arrow vector/composition replaced by a density-tuned font glyph', action: 'Restore the original Material SVG path, viewBox, arrow wrappers and CSS positioning through the shared rendering path. Do not resize or reposition U+25BC to approximate the vector. Reduce any unsupported SVG/layout behavior to equal-input core proof, and keep the separate select value/control, popup and interaction findings explicit.' },
     { priority: 5.3, rootCause: 'Core normal line-height is approximated by a fixed Mg font-box probe', action: 'Resolve browser normal line-box metrics and actual fallback runs in core. The equal-input Arial/serif cases expose one-pixel texture-height errors; Roboto plus emoji/CJK exposes two-pixel errors while plain Roboto and explicit line heights pass. Preserve those controls, extend multiline/baseline/DPR verification and avoid a universal multiplier, constant pixel addition, or fixed Material line-height compensation. Current-texture evidence must remain separate from declared normal and from final glyph raster.' },
     { priority: 5.4, rootCause: 'Calendar cell text tokens and inner line boxes were flattened away', action: 'Restore the reference calendar font and date-text ink tokens and its inner line-height:1 label inside both day and year controls. Keep reference cell/container sizing, state and selection structure instead of copying a normal-metric result or tuning the baseline. Separate date/range-context proofs isolate 990 day and 192 year occurrences each of missing font-token, omitted inner line-height and fixed-ink inputs; core metric defects must be assessed only after those inputs are equivalent. Independently resolve normal-versus-zero tracking and the still-unmapped header/icon owners.' },

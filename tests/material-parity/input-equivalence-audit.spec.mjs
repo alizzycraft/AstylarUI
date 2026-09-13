@@ -3363,6 +3363,108 @@ test('select arrow claims are independently replayed including deleted and dupli
   }
 });
 
+function disabledComponentInkReport(family = 'select', dark = false) {
+  const select = family === 'select', raw = select ? selectValueTokenReport() : expansionFontReport('16px');
+  const { reference: r, astylar: a } = raw.results[0].inputTrees;
+  const color = dark ? 'rgba(230,225,229,0.38)' : 'rgba(29,27,32,0.38)';
+  const opaque = select ? '#79747e' : dark ? '#69666a' : '#a9a6aa';
+  r.styles = r.styles.map(s => ({ ...s, color }));
+  const rule = (selector, value) => ({ selector, active: true, conditions: [], declarations: { color: { value, important: false } } });
+  if (select) {
+    r.rules = [rule('.mat-mdc-select', 'var(--mat-select-enabled-trigger-text-color, var(--mat-sys-on-surface))'),
+      rule('.mat-mdc-select-disabled', 'var(--mat-select-disabled-trigger-text-color, color-mix(in srgb, var(--mat-sys-on-surface) 38%, transparent))')];
+    const host = r.nodes.find(n => n.type === 'mat-select');
+    host.rules = [0, 1]; host.attributes['aria-disabled'] = 'true'; host.attributes.class += ' mat-mdc-select-disabled';
+    const leaf = a.nodes.find(n => n.authored.id === 'select-value');
+    a.nodes.push({ key: 'control', parent: leaf.parent, authored: { type: 'input', id: 'select-control', role: 'combobox', disabled: true, value: 'Team' },
+      resolvedStyle: {}, normalResolvedStyle: {}, interactionResolvedStyle: {} });
+    for (const stage of ['resolvedStyle', 'normalResolvedStyle', 'interactionResolvedStyle']) leaf[stage].color = opaque;
+    leaf.retainedText.style.color = opaque;
+    a.rules.find(r => r.selector === '.select-value').color = opaque;
+  } else {
+    r.rules = [rule('.mat-expansion-panel-header-title', 'var(--mat-expansion-header-text-color, var(--mat-sys-on-surface))'),
+      rule('.mat-expansion-panel-header[aria-disabled="true"] .mat-expansion-panel-header-title, .mat-expansion-panel-header[aria-disabled="true"] .mat-expansion-panel-header-description', 'inherit'),
+      rule('.mat-expansion-panel-header[aria-disabled="true"]', 'var(--mat-expansion-header-disabled-state-text-color, color-mix(in srgb, var(--mat-sys-on-surface) 38%, transparent))')];
+    r.nodes[0].rules = [0, 1]; r.nodes[2].rules = [2];
+    Object.assign(r.nodes[2].attributes, { role: 'button', 'aria-disabled': 'true' });
+    const trigger = a.nodes.find(n => n.authored.id === 'expansion-primary');
+    Object.assign(trigger.authored, { role: 'button', ariaDisabled: true, class: 'expansion-trigger disabled' });
+    for (const stage of ['resolvedStyle', 'normalResolvedStyle', 'interactionResolvedStyle']) trigger[stage].color = opaque;
+    a.nodes[0].retainedText.style.color = opaque;
+    a.rules.push({ selector: '.expansion-trigger', color: dark ? '#e6e1e5' : '#1d1b20' }, { selector: '.expansion-trigger.disabled', color: opaque });
+  }
+  return raw;
+}
+
+test('disabled component ink preserves translucent tokens and opaque candidate cascade', () => {
+  for (const family of ['select', 'expansion']) for (const dark of [false, true]) {
+    const raw = disabledComponentInkReport(family, dark), before = structuredClone(raw), report = buildMaterialInputAudit(raw);
+    const f = report.retainedTypography.differences.find(d => d.attribution === 'reviewed-disabled-component-opaque-ink-input');
+    assert.ok(f, `${family}/${dark}`);
+    assert.equal(f.inputEquivalent, false); assert.equal(f.finalRasterVerified, false);
+    assert.equal(f.reviewEvidence.referenceChain.length, family === 'select' ? 5 : 3);
+    assert.equal(f.reviewEvidence.candidateChain.length, family === 'select' ? 1 : 2);
+    assert.equal(f.reviewEvidence.referenceChain.at(-1).attributes['aria-disabled'], 'true');
+    assert.ok(!validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('disabled component ink')));
+    assert.deepEqual(raw, before);
+  }
+});
+
+test('disabled component ink refuses missing state cascade inheritance and stage evidence', () => {
+  const controls = [
+    (r, a, ref, leaf) => { delete r.errors; },
+    (r, a, ref, leaf) => { a.resolvedStyleEvidenceVersion = 1; },
+    (r, a, ref, leaf) => { a.resolvedStyleSource = 'paint'; },
+    (r, a, ref, leaf) => { ref.parent = 'missing'; },
+    (r, a, ref, leaf) => { ref.inline = { color: { value: 'red' } }; },
+    (r, a, ref, leaf) => { ref.attributes.style = 'all: initial'; },
+    (r, a, ref, leaf) => { r.rules.at(-1).active = false; },
+    (r, a, ref, leaf) => { r.rules.at(-1).conditions = ['@media print']; },
+    (r, a, ref, leaf) => { r.rules.at(-1).declarations.color.important = true; },
+    (r, a, ref, leaf) => { r.rules.at(-1).declarations.color.value = 'rgba(29,27,32,.38)'; },
+    (r, a, ref, leaf) => { r.rules.at(-1).declarations.all = { value: 'initial' }; },
+    (r, a, ref, leaf) => { r.nodes.find(n => n.attributes?.['aria-disabled']).attributes['aria-disabled'] = 'false'; },
+    (r, a, ref, leaf) => { r.nodes.find(n => n.attributes?.['aria-disabled']).attributes.role = 'link'; },
+    (r, a, ref, leaf) => { const control = a.nodes.find(n => n.authored?.disabled || n.authored?.ariaDisabled); control.authored.disabled = false; control.authored.ariaDisabled = false; },
+    (r, a, ref, leaf) => { leaf.authored.style = { color: 'red' }; },
+    (r, a, ref, leaf) => { leaf.authored.class = 'other'; },
+    (r, a, ref, leaf) => { leaf.authored.textContent = 'Other'; },
+    (r, a, ref, leaf) => { leaf.retainedText.style.color = '#112233'; },
+    (r, a, ref, leaf) => { leaf.interactionResolvedStyle.color = '#112233'; },
+    (r, a, ref, leaf) => { a.rules.push({ selector: `#${leaf.authored.id}`, color: '#112233' }); },
+    (r, a, ref, leaf) => { a.rules.push({ selector: `#${leaf.authored.id}`, transition: 'color 1s' }); },
+    (r, a, ref, leaf) => { a.rules.at(-1).mediaMaxWidth = '500px'; },
+    (r, a, ref, leaf) => { a.rules.push(structuredClone(a.rules.at(-1))); },
+    (r, a, ref, leaf) => { a.nodes.push(structuredClone(leaf)); },
+  ];
+  for (const family of ['select', 'expansion']) for (const [index, mutate] of controls.entries()) {
+    const raw = disabledComponentInkReport(family), { reference: r, astylar: a } = raw.results[0].inputTrees;
+    const leaf = a.nodes.find(n => n.authored?.id === (family === 'select' ? 'select-value' : 'expansion-title'));
+    const ref = r.nodes.find(n => n.ownText === leaf.authored.textContent);
+    mutate(r, a, ref, leaf);
+    const evidence = collectRetainedTypographyEvidence(raw.results, collectFullTreeInventory(raw.results));
+    assert.ok(!evidence.differences.some(d => d.attribution === 'reviewed-disabled-component-opaque-ink-input'), `${family}/${index}`);
+  }
+});
+
+test('disabled component ink claims replay whole inventory and reject removed or altered reports', () => {
+  for (const family of ['select', 'expansion']) {
+    const baseline = buildMaterialInputAudit(disabledComponentInkReport(family));
+    for (const [index, mutate] of [
+      (r, f) => { f.inputEquivalent = true; }, (r, f) => { f.finalRasterVerified = true; },
+      (r, f) => { f.reviewEvidence.referenceChain.pop(); }, (r, f) => { f.reviewEvidence.candidateChain.pop(); },
+      (r, f) => { f.reviewEvidence.revision++; }, (r, f) => { f.reviewEvidence.control.authored.role = 'link'; },
+      (r, f) => { f.values.retained = '#000000'; }, (r, f) => { f.family = 'chips'; },
+      (r, f) => { r.retainedTypography.differences = []; }, (r, f) => { r.retainedTypography.comparisons = []; },
+      (r, f) => { r.retainedTypography.differences.push(structuredClone(f)); },
+    ].entries()) {
+      const report = structuredClone(baseline), f = report.retainedTypography.differences.find(d => d.attribution === 'reviewed-disabled-component-opaque-ink-input');
+      mutate(report, f);
+      assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('disabled component ink')), `${family}/${index}`);
+    }
+  }
+});
+
 function selectValueTokenReport() {
   const raw = templateTypographyReport('select'), { reference, astylar } = raw.results[0].inputTrees;
   const computed = { ...reference.styles[0], fontFamily: 'Roboto', fontSize: '16px', lineHeight: '24px',
@@ -3949,6 +4051,78 @@ function expansionFontReport(size = '18.4px') {
   ast.rules = [{ selector: '#page', fontSize: size }];
   return raw;
 }
+
+function expansionBodyFontReport(size = '18.4px') {
+  const raw = templateTypographyReport('expansion'), { reference: r, astylar: a } = raw.results[0].inputTrees;
+  r.styles[0].fontSize = '16px';
+  r.rules = [{ active: true, conditions: [], selector: '.mat-expansion-panel-content', declarations: {
+    'font-size': { value: 'var(--mat-expansion-container-text-size, var(--mat-sys-body-large-size))', important: false } } }];
+  r.nodes.find(n => n.attributes.class === 'mat-expansion-panel-content').rules = [0];
+  for (const node of a.nodes) {
+    for (const stage of ['resolvedStyle', 'normalResolvedStyle', 'interactionResolvedStyle']) node[stage] = {};
+    if (node.retainedText) node.retainedText.style = { ...r.styles[0], fontSize: size };
+  }
+  a.nodes[0].parent = 'section';
+  a.nodes.push(...[
+    ['section', 'page', { type: 'section', id: 'expansion-root' }, {}],
+    ['page', 'root', { type: 'main', id: 'page' }, { fontSize: size }],
+  ].map(([key, parent, authored, style]) => ({ key, parent, authored, resolvedStyle: { ...style }, normalResolvedStyle: { ...style }, interactionResolvedStyle: { ...style } })));
+  a.rules = [{ selector: '#page', fontSize: size }];
+  return raw;
+}
+
+test('expansion body size preserves its own component token and complete omission chain', () => {
+  for (const size of ['14.4px', '18.4px']) {
+    const raw = expansionBodyFontReport(size), before = structuredClone(raw), report = buildMaterialInputAudit(raw);
+    const f = report.retainedTypography.differences.find(d => d.attribution === 'reviewed-expansion-font-token-omission');
+    assert.ok(f); assert.equal(f.element, 'expansion-content-label'); assert.equal(f.inputEquivalent, false);
+    assert.equal(f.reviewEvidence.sourceFinding, 'fixture-expansion-body-font-size-token-omitted');
+    assert.equal(f.reviewEvidence.referenceChain.length, 3); assert.equal(f.reviewEvidence.candidateChain.length, 5);
+    assert.equal(f.reviewEvidence.candidatePageRule.fontSize, size);
+    assert.ok(!validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('expansion font attributions')));
+    assert.deepEqual(raw, before);
+  }
+});
+
+test('expansion body size refuses missing wrappers tokens and ignored candidate declarations', () => {
+  const controls = [
+    (r, a) => { delete r.errors; }, (r, a) => { a.resolvedStyleEvidenceVersion = 1; },
+    (r, a) => { r.nodes.at(-1).attributes.id = 'wrong'; }, (r, a) => { r.nodes.at(-2).attributes.class = 'other'; },
+    (r, a) => { r.nodes.at(-1).parent = 'r'; }, (r, a) => { r.rules[0].active = false; },
+    (r, a) => { r.rules[0].conditions = ['@media print']; }, (r, a) => { r.rules[0].declarations['font-size'].important = true; },
+    (r, a) => { r.rules[0].declarations['font-size'].value = 'var(--mat-expansion-header-text-size, var(--mat-sys-title-medium-size))'; },
+    (r, a) => { r.nodes.at(-1).inline = { font: { value: '16px Arial' } }; },
+    (r, a) => { a.nodes[2].authored.textContent = 'Other'; }, (r, a) => { a.nodes[1].parent = 'missing'; },
+    (r, a) => { a.nodes[1].normalResolvedStyle.fontSize = '16px'; }, (r, a) => { a.nodes[1].interactionResolvedStyle.fontSize = '16px'; },
+    (r, a) => { a.nodes[2].retainedText.style.fontSize = '19px'; },
+    (r, a) => { a.rules.push({ selector: '.expansion-content-label', fontSize: '16px' }); },
+    (r, a) => { a.rules.push({ selector: '.expansion-panel', fontSize: '16px' }); },
+    (r, a) => { a.rules.push({ selector: '#expansion-content', font: '16px Arial' }); },
+    (r, a) => { a.rules.push({ selector: '.expansion-content-label', transition: 'font-size 1s' }); },
+    (r, a) => { a.rules[0].fontSize = '20px'; },
+  ];
+  for (const [index, mutate] of controls.entries()) {
+    const raw = expansionBodyFontReport(), { reference: r, astylar: a } = raw.results[0].inputTrees;
+    mutate(r, a);
+    const evidence = collectRetainedTypographyEvidence(raw.results, collectFullTreeInventory(raw.results));
+    assert.ok(!evidence.differences.some(d => d.attribution === 'reviewed-expansion-font-token-omission'), `control ${index}`);
+  }
+});
+
+test('expansion body size independently replays findings and removed comparisons', () => {
+  const baseline = buildMaterialInputAudit(expansionBodyFontReport());
+  for (const [index, mutate] of [
+    (r, f) => { f.inputEquivalent = true; }, (r, f) => { f.currentPseudoStatePaintVerified = true; },
+    (r, f) => { f.reviewEvidence.referenceChain.pop(); }, (r, f) => { f.reviewEvidence.candidateChain.pop(); },
+    (r, f) => { f.reviewEvidence.revision++; }, (r, f) => { f.values.normal = '16px'; },
+    (r, f) => { r.retainedTypography.differences = []; }, (r, f) => { r.retainedTypography.comparisons = []; },
+    (r, f) => { r.retainedTypography.differences.push(structuredClone(f)); },
+  ].entries()) {
+    const report = structuredClone(baseline), f = report.retainedTypography.differences.find(d => d.attribution === 'reviewed-expansion-font-token-omission');
+    mutate(report, f);
+    assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('expansion font attributions')), `mutation ${index}`);
+  }
+});
 
 test('expansion font omission preserves component token and scaled page inheritance', () => {
   for (const size of ['14.4px', '18.4px']) {

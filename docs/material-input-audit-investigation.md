@@ -23,6 +23,79 @@ selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Disabled component ink and expansion body size preserve unequal inputs (2026-09-13)
+
+This increment attributes **28 further retained-text differences** without
+changing either rendering input: eight disabled select colors, eight disabled
+expansion title colors, and twelve expansion body font sizes. They share the
+missing/replaced component-token category, but their mechanisms remain distinct.
+
+For disabled select, the text owner inherits the ordered `.mat-mdc-select`
+enabled token followed by `.mat-mdc-select-disabled` and its
+`--mat-select-disabled-trigger-text-color` token. The fallback retains 38%
+on-surface alpha against transparent. Candidate `.select-value` directly authors
+opaque `#79747e`, regardless of theme. The replacement label and fixed ink were
+introduced in `f286fb1`; the existing source finding now includes disabled-state
+evidence rather than silently treating its enabled-state proof as sufficient.
+
+For disabled expansion, the title's normal component color is overridden by
+`color:inherit`; the header supplies
+`--mat-expansion-header-disabled-state-text-color`, again with the translucent
+38% on-surface fallback. Commit `bc4d442` instead added
+`.expansion-trigger.disabled { color: mixHex(theme.surface, theme.onSurface, .38) }`.
+The title inherits that preblended opaque literal. Light/dark captures retain
+`#a9a6aa`/`#69666a`; contrast/custom retain `#a9a8aa`/`#a2a6a7`.
+Preblending on one chosen surface is not equivalent to preserving alpha, even
+when a particular screenshot happens to look similar. These are authored-input
+defects, not evidence that core misconverted an identical translucent color.
+
+The shared disabled-ink attribution requires unique text identity, exact
+reference text-to-control paths, ordered active/unconditional token and inherit
+rules, native and candidate disabled state, candidate control identity, and
+explicit candidate normal/effective/retained agreement. It rejects competing
+ink/animation declarations, unexpected inline overrides, changed text, missing
+state and ambiguous owners. The select proof also checks that the disabled
+candidate input is the label's sibling and carries its displayed value.
+Twenty-four negative controls run for each family, and eleven report mutations
+per family verify independent replay of mappings, comparisons, differences and
+gaps. Neither current disabled hit behavior nor final compositing/raster is
+certified by this typography evidence.
+
+The expansion body has a different typography owner from its header. The
+reference paragraph inherits
+`var(--mat-expansion-container-text-size, var(--mat-sys-body-large-size))`
+through `.mat-expansion-panel-body` and `.mat-expansion-panel-content`, computing
+16px. The candidate content label, paragraph and panel omit this component size,
+so core retains the page's 14.4px contrast or 18.4px custom size. Six occurrences
+per profile cover activate, activate-leave and open at DPR 1 and 2. The omission
+predates the replacement label: `2f44011` supplied no body-size token,
+`a0f3328` introduced the extra label with a -1px top adjustment, and `ac06193`
+retuned its inset without restoring component type.
+
+The header/body font collector now selects the correct original token and
+three-node reference inheritance chain, retaining the entire candidate chain
+through the page. It also excludes matching authored size/shorthand/animation
+rules: a supplied rule missing from resolved styles cannot be classified as an
+authoring omission. Such evidence requires core investigation. Body proof adds
+twenty negative controls and nine report mutations, including removal of both
+findings and comparisons; the existing header proofs remain intact.
+
+Implementation order: restore the original disabled color tokens and alpha
+semantics, then the distinct header/body typography tokens and original text
+ownership. Test enabled/disabled and theme/background transitions with those
+inputs. Only then assess core inheritance, compositing, layout and glyph paint.
+Do not replace these inputs with sampled opaque colors, inverse font scaling or
+new label offsets. The machine implementation plan includes these owners and
+keeps the existing equal-input core defects separate.
+
+Verification for this increment:
+
+- `node --test --test-name-pattern='disabled component ink|expansion body size|expansion font|select typography attribution|select token attribution' tests/material-parity/input-equivalence-audit.spec.mjs`: **11/11 pass**, zero failures/skips/cancellations, 10.108 seconds.
+- `npm run parity:harness:check`: **453/453 pass**, zero failures/skips/cancellations, 272.733 seconds, exit code 0.
+- Full collection against the corrected `current-ancestry-audit` report and its bound supplements finds **16 disabled-ink and 12 body-size occurrences**, **122 detected source findings**, and zero unexplained or undetected source definitions. Four retained-text differences remain unattributed: datepicker focus in contrast/custom at both DPRs. This is not completion of the broader input audit.
+- `validateMaterialInputAudit(a, { requireComplete: false })` returns `[]`. Strict validation reports **3,309 resolved-style, 879 control-text typography, and four retained-text typography differences** requiring attribution. The audit command completed with exit code 0 after printing those incomplete-acceptance results. All ten frozen visual-harness files match their checkpoint SHA-256 hashes; `git diff --check` passes.
+- No renderer, fixture, reference or frozen visual-harness input changed. Final packaged reports, complete relevant-state coverage, private control-text attribution, and the final complete enforced visual matrix remain required.
+
 ## Empty error labels are shrunk independently of the reference float state (2026-09-13)
 
 The 24 error-state font differences left separate by the preceding floating-label
