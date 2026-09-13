@@ -4521,6 +4521,119 @@ function tooltipTextReport() {
   return raw;
 }
 
+function unmatchedTooltipCase(side, { kind = 'supplemental', cohort = 'benchmark-open', action = side === 'reference' ? 'hover' : 'release', dpr = 1 } = {}) {
+  const raw = tooltipTextReport(), entry = raw.results[0], { reference: r, astylar: a } = entry.inputTrees;
+  if (side === 'reference') {
+    a.nodes = a.nodes.filter(n => n.key !== 'popup');
+    delete a.nodes.find(n => n.key === 'button').authored.ariaDescribedby;
+  } else r.nodes = r.nodes.filter(n => !['bounds', 'pane', 'component', 'wrapper', 'message'].includes(n.key));
+  Object.assign(entry, { kind, state: kind === 'interaction' ? 'open' : `tooltip-state-${cohort}-${action}`,
+    profile: 'light', viewport: { id: kind === 'interaction' ? 'desktop' : `tooltip-state-desktop-dpr${dpr}` } });
+  raw.results = []; raw.interactions = kind === 'interaction' ? [entry] : [];
+  return { raw, entry, r, a };
+}
+
+function unmatchedTooltipEvidence(entry) {
+  return collectRetainedTypographyEvidence([entry], collectFullTreeInventory([entry])).gaps
+    .filter(g => g.attribution === 'reviewed-tooltip-unmatched-state-input');
+}
+
+test('tooltip unmatched state inputs preserve the sole authored text owner without creating a counterpart', () => {
+  const contexts = [unmatchedTooltipCase('astylar', { kind: 'interaction' }),
+    ...[1, 2].flatMap(dpr => [
+      ...['hover', 'press'].map(action => unmatchedTooltipCase('reference', { action, dpr })),
+      ...['benchmark-open', 'benchmark-hover', 'ordinary'].map(cohort => unmatchedTooltipCase('astylar', { cohort, dpr })),
+    ])];
+  for (const { entry } of contexts) {
+    const before = structuredClone(entry), gaps = unmatchedTooltipEvidence(entry);
+    assert.equal(gaps.length, 1, entry.state);
+    const g = gaps[0], e = g.reviewEvidence;
+    assert.equal(g.classification, 'application-plugin-authoring-defect');
+    assert.equal(g.inputEquivalent, false); assert.equal(g.finalRasterVerified, false);
+    assert.equal(g.referenceNodes.length + g.astylarNodes.length, 1);
+    assert.equal(e.referencePopupAuthored, g.referenceNodes.length === 1);
+    assert.equal(e.candidatePopupAuthored, g.astylarNodes.length === 1);
+    assert.equal(e.source, 'core-style-inspection'); assert.equal(e.revision, 4);
+    assert.equal(e.referenceNodeIdentities.length, entry.inputTrees.reference.nodes.length);
+    assert.equal(e.candidateNodeIdentities.length, entry.inputTrees.astylar.nodes.length);
+    assert.ok(e.referenceContext.every(n => n.style && Array.isArray(n.rules)));
+    assert.ok(e.candidateContext.every(n => n.style && n.normalStyle && n.interactionStyle));
+    assert.deepEqual(entry, before);
+  }
+});
+
+test('tooltip unmatched state inputs reject ambiguous absent contradictory and foreign-scope evidence', () => {
+  const common = [
+    f => { f.entry.family = 'menu'; },
+    f => { f.entry.kind = 'static'; },
+    f => { f.entry.state = 'tooltip-state-ordinary-initial'; },
+    f => { f.entry.viewport.id = 'unknown'; },
+    f => { delete f.r.errors; },
+    f => { delete f.a.errors; },
+    f => { delete f.a.resolvedStyleRevision; },
+    f => { f.a.resolvedStyleSource = 'other'; },
+    f => { f.r.nodes.push(structuredClone(f.r.nodes[0])); },
+    f => { f.a.nodes.push({ ...structuredClone(f.a.nodes[0]), key: 'duplicate-id' }); },
+    f => { f.r.nodes.find(n => n.key === 'trigger').attributes.mattooltip = 'Other'; },
+    f => { delete f.r.nodes.find(n => n.key === 'trigger').attributes['aria-describedby']; },
+    f => { f.r.nodes.find(n => n.key === 'trigger').parent = 'frame'; },
+    f => { f.r.nodes.find(n => n.key === 'label').ownText = 'Other'; },
+    f => { f.r.nodes.find(n => n.key === 'overlay').parent = 'frame'; },
+    f => { f.a.nodes.find(n => n.key === 'button').authored.value = 'Other'; },
+    f => { f.a.nodes.find(n => n.key === 'anchor').parent = 'page'; },
+    f => { delete f.a.nodes.find(n => n.key === 'anchor').normalResolvedStyle; },
+    f => { f.r.nodes.find(n => n.key === 'label').style = 1000; },
+    f => { f.a.nodes.push({ ...structuredClone(f.a.nodes[0]), key: 'foreign', parent: 'page', authored: { type: 'div', textContent: 'Create a project' } }); },
+  ];
+  const reference = [
+    f => { f.r.nodes.find(n => n.key === 'message').ownText = 'Other'; },
+    f => { f.r.nodes.find(n => n.key === 'message').parent = 'pane'; },
+    f => { f.r.nodes.find(n => n.key === 'wrapper').attributes.class = 'mat-mdc-tooltip-hide'; },
+    f => { f.r.nodes.find(n => n.key === 'component').attributes['aria-hidden'] = 'false'; },
+    f => { f.a.nodes.find(n => n.key === 'button').authored.ariaDescribedby = 'tooltip-popup'; },
+    f => { f.a.nodes.push({ ...structuredClone(f.a.nodes[0]), key: 'unexpected', parent: 'anchor', authored: { id: 'other', role: 'tooltip' } }); },
+  ];
+  const candidate = [
+    f => { f.r.nodes.push({ ...structuredClone(f.r.nodes[0]), key: 'unexpected', parent: 'overlay', type: 'mat-tooltip-component' }); },
+    f => { f.a.nodes.find(n => n.key === 'popup').authored.role = 'status'; },
+    f => { f.a.nodes.find(n => n.key === 'popup').authored.textContent = 'Other'; },
+    f => { f.a.nodes.find(n => n.key === 'popup').parent = 'section'; },
+    f => { f.a.nodes.find(n => n.key === 'popup').retainedText.source = 'other'; },
+    f => { delete f.a.nodes.find(n => n.key === 'popup').retainedText.style; },
+    f => { f.a.nodes.find(n => n.key === 'button').authored.ariaDescribedby = 'other'; },
+  ];
+  for (const [side, controls] of [['reference', reference], ['astylar', candidate]]) for (const [i, mutate] of [...common, ...controls].entries()) {
+    const f = unmatchedTooltipCase(side); mutate(f);
+    assert.equal(unmatchedTooltipEvidence(f.entry).length, 0, `${side} control ${i}`);
+  }
+});
+
+test('tooltip unmatched state replay rejects deleted altered duplicated and falsely accepted owner gaps', () => {
+  const { raw } = unmatchedTooltipCase('astylar', { kind: 'interaction' });
+  const original = buildMaterialInputAudit(raw), attribution = 'reviewed-tooltip-unmatched-state-input';
+  assert.equal(original.retainedTypography.gaps.filter(g => g.attribution === attribution).length, 1);
+  assert.ok(!validateMaterialInputAudit(original, { requireComplete: false }).some(e => /tooltip (text|state gaps)/.test(e)));
+  for (const mutate of [
+    (r, g) => { r.retainedTypography.gaps = r.retainedTypography.gaps.filter(item => item !== g); },
+    (r, g) => { r.retainedTypography.gaps.push(structuredClone(g)); },
+    (r, g) => { g.inputEquivalent = true; },
+    (r, g) => { g.finalRasterVerified = true; },
+    (r, g) => { g.classification = 'confirmed-core-defect'; },
+    (r, g) => { g.referenceNodes = ['invented']; },
+    (r, g) => { g.reviewEvidence.referencePopupAuthored = true; },
+    (r, g) => { g.reviewEvidence.candidateContext.pop(); },
+    (r, g) => { g.reviewEvidence.referenceContext[0].style.color = 'fake'; },
+    (r, g) => { g.reviewEvidence.referenceNodeIdentities.pop(); },
+    (r, g) => { g.reviewEvidence.candidateNodeIdentities.at(-1).authored.role = 'other'; },
+    (r, g) => { g.reviewEvidence.revision++; },
+    (r, g) => { g.reviewEvidence.sourceFinding = 'other'; },
+    (r, g) => { g.case = 'static:menu@light/desktop'; g.family = 'menu'; g.element = 'other'; },
+  ]) {
+    const report = structuredClone(original), gap = report.retainedTypography.gaps.find(g => g.attribution === attribution); mutate(report, gap);
+    assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => /tooltip (text|state gaps)/.test(e)));
+  }
+});
+
 function tooltipAlignmentReport() {
   const raw = tooltipTextReport(), { reference: r, astylar: a } = raw.results[0].inputTrees;
   r.rules.push({ selector: '.mat-mdc-tooltip-surface', active: true, conditions: [],

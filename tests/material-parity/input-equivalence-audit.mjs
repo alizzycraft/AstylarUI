@@ -420,13 +420,16 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
   const invalidStepperGaps = retainedGaps.filter((gap) => gap.attribution === 'reviewed-stepper-panel-substitution' &&
     !isReviewedStepperPanelGap(gap, report.elementInventory));
   if (invalidStepperGaps.length) errors.push(`${invalidStepperGaps.length} stepper panel substitutions lack captured structural evidence`);
+  const invalidTooltipStateGaps = retainedGaps.filter(gap => gap.attribution === 'reviewed-tooltip-unmatched-state-input' &&
+    !isReviewedTooltipStateGap(gap, report.elementInventory));
+  if (invalidTooltipStateGaps.length) errors.push(`${invalidTooltipStateGaps.length} tooltip state gaps lack exact authored presence evidence`);
   validateSelectArrowSubstitutions(report, errors);
   validatePluginTabPanelSubstitutions(report, errors);
   validateCalendarAuxiliaryOmissions(report, errors);
   const unresolvedRetainedGaps = retainedGaps.filter((gap) => !isReviewedHiddenRetainedGap(gap, report.elementInventory) &&
     !isReviewedStepperPanelGap(gap, report.elementInventory) && !isReviewedCalendarCloseGap(gap, report.elementInventory) &&
     !isReviewedCalendarWeekdayNameGap(gap, report.elementInventory) && !isReviewedSelectArrowGap(gap, report.elementInventory) &&
-    !isReviewedPluginTabPanelGap(gap, report.elementInventory) &&
+    !isReviewedPluginTabPanelGap(gap, report.elementInventory) && !isReviewedTooltipStateGap(gap, report.elementInventory) &&
     gap.attribution !== 'reviewed-calendar-auxiliary-label-omission');
   if (requireComplete && unresolvedRetainedGaps.length > 0) errors.push(`${unresolvedRetainedGaps.length} retained typography mappings or stage fields require review`);
   const reviewedTypographyKinds = { 'reviewed-heading-mask': 'parity-harness-defect',
@@ -656,6 +659,7 @@ export function renderMaterialInputAuditMarkdown(report) {
     '',
     `Supplemental calendar close behavior: ${report.supplementalCalendarClose.reviews.length}/4 view/DPR sequences and ${report.supplementalCalendarClose.cases.length}/20 paired action boundaries captured; ${report.supplementalCalendarClose.missing.length} sequences missing. Binding=${report.supplementalCalendarClose.binding.status}. Each verified sequence retains the reference close control's focus reveal, blur clipping, Enter dismissal and opener-focus restoration, alongside the candidate's missing authored control. All boundary trees are included below; this is unequal authoring, not equal-input renderer failure or visual acceptance.`,
     `Supplemental tooltip state: ${report.supplementalTooltipState.cases.length}/30 paired boundaries across benchmark-open, benchmark-hover and ordinary cohorts at DPR 1 and 2. Binding=${report.supplementalTooltipState.binding.status}; ${report.supplementalTooltipState.mismatches.length} presence mismatches remain. Every tree, authored/resolved style and retained/control text owner is included, including reference-only and candidate-only popup states. State correspondence is not glyph, placement, visibility or semantic equivalence.`,
+    `Unmatched tooltip text owners: ${report.retainedTypography.gaps.filter(gap => gap.attribution === 'reviewed-tooltip-unmatched-state-input').length} state-input discrepancies retain their complete captured trigger, overlay/anchor, style-stage and absent-counterpart evidence. They are unequal authoring, not missing renderer text or accepted typography/placement.`,
     '',
     `Calendar controls remaining after reference dismissal: ${report.controlTypography.gaps.filter(gap => gap.attribution === 'reviewed-calendar-close-state-divergence').length} current texture owners are attributed to the verified unequal close state. Their full candidate input trees remain present; no reference typography is invented for the closed popup, and other unreviewed typography differences remain unresolved.`,
     '',
@@ -1554,6 +1558,107 @@ function reviewedTooltipTextMappings(reference, candidate) {
   }];
 }
 
+function reviewedTooltipStateGap(key, inventory) {
+  const match = parseReviewedCase(key, 'tooltip');
+  const referenceOnly = match?.[1] === 'supplemental' && /^tooltip-state-benchmark-open-(hover|press)$/.test(match[4]);
+  const candidateOnly = (match?.[1] === 'interaction' && match[4] === 'open') ||
+    (match?.[1] === 'supplemental' && /^tooltip-state-(benchmark-open|benchmark-hover|ordinary)-release$/.test(match[4]));
+  if (!referenceOnly && !candidateOnly) return;
+  const one = nodes => nodes.length === 1 ? nodes[0] : undefined;
+  const refCase = one(inventory.cases.filter(c => c.case === key && c.side === 'reference'));
+  const astCase = one(inventory.cases.filter(c => c.case === key && c.side === 'astylar'));
+  if (!refCase || !astCase || inventory.errors.some(e => e.case === key) ||
+      !Number.isInteger(astCase.resolvedStyleRevision) || astCase.resolvedStyleRevision < 0) return;
+  const reference = inventory.variants[refCase.variant], candidate = inventory.variants[astCase.variant];
+  if (reference?.side !== 'reference' || candidate?.side !== 'astylar' || !reference.ruleEvidenceComplete || !candidate.ruleEvidenceComplete ||
+      candidate.resolvedStyleEvidenceVersion !== 2 || candidate.resolvedStyleSource !== 'core-style-inspection') return;
+  for (const tree of [reference, candidate]) {
+    if (!Array.isArray(tree.nodes) || new Set(tree.nodes.map(n => n.key)).size !== tree.nodes.length) return;
+    const ids = tree.nodes.map(n => (n.attributes ?? n.authored)?.id).filter(Boolean);
+    if (new Set(ids).size !== ids.length) return;
+  }
+  const hasClass = (n, value) => String(n?.attributes?.class ?? '').split(/\s+/).includes(value);
+  const trigger = one(reference.nodes.filter(n => n.attributes?.id === 'tooltip-primary'));
+  const section = one(reference.nodes.filter(n => n.attributes?.id === 'tooltip-root'));
+  const frame = one(reference.nodes.filter(n => n.key === section?.parent));
+  const label = one(reference.nodes.filter(n => n.parent === trigger?.key && hasClass(n, 'mdc-button__label')));
+  if (!trigger || trigger.type !== 'button' || trigger.attributes.mattooltip !== 'Create a project' ||
+      !hasClass(trigger, 'mat-mdc-tooltip-trigger') || !/^cdk-describedby-message-[\w-]+$/.test(trigger.attributes['aria-describedby'] ?? '') ||
+      !section || section.type !== 'section' || trigger.parent !== section.key || !frame || frame.type !== 'main' ||
+      frame.parent !== null || !hasClass(frame, 'frame') || !label || label.ownText?.trim() !== 'Hover for help' ||
+      reference.nodes.some(n => n.parent === label.key || n.attributes?.id === 'tooltip-popup')) return;
+  const overlay = one(reference.nodes.filter(n => hasClass(n, 'cdk-overlay-container')));
+  if (!overlay || overlay.type !== 'div' || overlay.parent !== null || overlay.ownText?.trim()) return;
+  const leaves = reference.nodes.filter(n => hasClass(n, 'mat-mdc-tooltip-surface') || hasClass(n, 'mdc-tooltip__surface'));
+  const referencePath = [];
+  if (referenceOnly) {
+    const leaf = one(leaves);
+    if (!leaf || leaf.type !== 'div' || leaf.attributes?.id || leaf.ownText?.trim() !== trigger.attributes.mattooltip ||
+        !hasClass(leaf, 'mat-mdc-tooltip-surface') || !hasClass(leaf, 'mdc-tooltip__surface') || reference.nodes.some(n => n.parent === leaf.key)) return;
+    referencePath.push(leaf);
+    for (const [type, cls] of [['div', 'mat-mdc-tooltip'], ['mat-tooltip-component'], ['div', 'mat-mdc-tooltip-panel'],
+      ['div', 'cdk-overlay-connected-position-bounding-box'], ['div', 'cdk-overlay-container']]) {
+      const node = one(reference.nodes.filter(n => n.key === referencePath.at(-1).parent));
+      if (!node || node.type !== type || (cls && !hasClass(node, cls)) || node.ownText?.trim() ||
+          reference.nodes.filter(n => n.parent === node.key).length !== 1) return;
+      referencePath.push(node);
+    }
+    if (referencePath.at(-1) !== overlay || !hasClass(referencePath[1], 'mat-mdc-tooltip-show') ||
+        referencePath[2].attributes['aria-hidden'] !== 'true' || !hasClass(referencePath[3], 'cdk-overlay-pane') ||
+        !hasClass(referencePath[3], 'mat-mdc-tooltip-panel-below') || !/^cdk-overlay-\d+$/.test(referencePath[3].attributes.id ?? '') ||
+        reference.nodes.filter(n => n.type === 'mat-tooltip-component').length !== 1) return;
+  } else if (leaves.length || reference.nodes.some(n => n.parent === overlay.key || n.type === 'mat-tooltip-component')) return;
+  const button = one(candidate.nodes.filter(n => n.authored?.id === 'tooltip-primary'));
+  const anchor = one(candidate.nodes.filter(n => n.authored?.id === 'tooltip-anchor'));
+  const astSection = one(candidate.nodes.filter(n => n.authored?.id === 'tooltip-root'));
+  const page = one(candidate.nodes.filter(n => n.authored?.id === 'page'));
+  if (!button || button.authored.type !== 'button' || button.authored.class !== 'material-button' || button.authored.value !== 'Hover for help' ||
+      !anchor || anchor.authored.type !== 'div' || anchor.authored.class !== 'tooltip-anchor' || button.parent !== anchor.key ||
+      !astSection || astSection.authored.type !== 'section' || anchor.parent !== astSection.key ||
+      !page || page.authored.type !== 'main' || astSection.parent !== page.key || page.parent !== 'root' ||
+      candidate.nodes.some(n => n.parent === button.key)) return;
+  const popups = candidate.nodes.filter(n => n.authored?.id === 'tooltip-popup' || n.authored?.role === 'tooltip');
+  const popup = one(popups);
+  if (candidateOnly) {
+    if (!popup || popup.authored.id !== 'tooltip-popup' || popup.authored.type !== 'div' || popup.authored.role !== 'tooltip' ||
+        popup.authored.textContent !== 'Create a project' || popup.parent !== anchor.key || button.authored.ariaDescribedby !== 'tooltip-popup' ||
+        popup.retainedText?.source !== 'core-text-registry' || candidate.nodes.some(n => n.parent === popup.key)) return;
+  } else if (popups.length || button.authored.ariaDescribedby !== undefined) return;
+  if (candidate.nodes.filter(n => n.parent === anchor.key).length !== (candidateOnly ? 2 : 1) ||
+      reference.nodes.some(n => n.ownText?.trim() === 'Create a project' && n !== referencePath[0]) ||
+      candidate.nodes.some(n => n.authored?.textContent?.trim() === 'Create a project' && n !== popup)) return;
+  const refNodes = [frame, section, trigger, label, ...(referenceOnly ? referencePath : [overlay])];
+  const astNodes = [page, astSection, anchor, button, ...(candidateOnly ? [popup] : [])];
+  const styleAt = (index, side) => inventory.styles[index]?.side === side ? inventory.styles[index].value : undefined;
+  const valid = style => style && typeof style === 'object' && !Array.isArray(style);
+  if (refNodes.some(n => !valid(styleAt(n.style, 'reference')) || !Array.isArray(n.rules) || n.rules.some(i => !inventory.rules[i])) ||
+      astNodes.some(n => [n.style, n.normalStyle, n.interactionStyle].some(i => !valid(styleAt(i, 'astylar')))) ||
+      (candidateOnly && !valid(styleAt(popup.retainedText.style, 'astylar')))) return;
+  const snapshot = (node, side) => ({ ...node, style: styleAt(node.style, side),
+    ...(side === 'reference' ? { rules: node.rules.map(i => inventory.rules[i]) } : {
+      normalStyle: styleAt(node.normalStyle, side), interactionStyle: styleAt(node.interactionStyle, side),
+      ...(node.retainedText ? { retainedText: { ...node.retainedText, style: styleAt(node.retainedText.style, side) } } : {}) }) });
+  return { case: key, family: 'tooltip', element: candidateOnly ? 'tooltip-popup' : undefined,
+    referenceNodes: referenceOnly ? [referencePath[0].key] : [], astylarNodes: candidateOnly ? [popup.key] : [],
+    reason: candidateOnly ? 'own-text ID is missing or duplicated on one side' : 'own-text nodes without an explicit shared ID require structural mapping',
+    classification: 'application-plugin-authoring-defect', attribution: 'reviewed-tooltip-unmatched-state-input',
+    inputEquivalent: false, finalRasterVerified: false,
+    recommendedOwner: 'showcase tooltip state authoring through shared core interaction and overlay APIs',
+    reviewEvidence: structuredClone({ sourceFinding: 'fixture-tooltip-replaces-connected-overlay-with-flow',
+      referencePopupAuthored: referenceOnly, candidatePopupAuthored: candidateOnly, revision: astCase.resolvedStyleRevision,
+      source: candidate.resolvedStyleSource, referenceContext: refNodes.map(n => snapshot(n, 'reference')),
+      candidateContext: astNodes.map(n => snapshot(n, 'astylar')),
+      referenceNodeIdentities: reference.nodes.map(n => ({ key: n.key, parent: n.parent, type: n.type, attributes: n.attributes, ownText: n.ownText })),
+      candidateNodeIdentities: candidate.nodes.map(n => ({ key: n.key, parent: n.parent, authored: n.authored })) }),
+    justification: 'The captured trigger/message identity and complete connected-overlay versus candidate-anchor context contain a tooltip text owner on exactly one side. The opposite tree does not author a popup counterpart; it is not a missing renderer text entry or an equivalent hidden representation. The separate bound pointer-state proof distinguishes benchmark hover suppression, forced-open click and ordinary dismissal omission. This attribution explains the unmatched owner only: no absent-side style, glyph, placement, accessibility or visual equivalence is invented, and every actual node and style remains captured.' };
+}
+
+function isReviewedTooltipStateGap(gap, inventory) {
+  if (gap.attribution !== 'reviewed-tooltip-unmatched-state-input') return false;
+  const expected = reviewedTooltipStateGap(gap.case, inventory);
+  return expected !== undefined && JSON.stringify(gap) === JSON.stringify(expected);
+}
+
 function validateTooltipTextEvidence(report, errors) {
   if (!report.retainedTypography) return;
   const cases = [...new Set(report.elementInventory.cases.map(c => c.case))].flatMap(key => {
@@ -1561,7 +1666,7 @@ function validateTooltipTextEvidence(report, errors) {
     return match ? [{ kind: match[1], family: 'tooltip', profile: match[2], viewport: { id: match[3] }, ...(match[4] ? { state: match[4] } : {}) }] : [];
   });
   const replay = collectRetainedTypographyEvidence(cases, report.elementInventory);
-  const predicate = value => value.attribution === 'reviewed-tooltip-text-alignment-input' || value.kind === 'reviewed-tooltip-overlay-text' || value.mapping?.kind === 'reviewed-tooltip-overlay-text' ||
+  const predicate = value => ['reviewed-tooltip-text-alignment-input', 'reviewed-tooltip-unmatched-state-input'].includes(value.attribution) || value.kind === 'reviewed-tooltip-overlay-text' || value.mapping?.kind === 'reviewed-tooltip-overlay-text' ||
     value.element === 'tooltip-popup' || (value.family === 'tooltip' && value.reason === 'own-text nodes without an explicit shared ID require structural mapping');
   for (const list of ['reviewedMappings', 'comparisons', 'differences', 'gaps']) {
     if (JSON.stringify(report.retainedTypography[list].filter(predicate)) !== JSON.stringify(replay[list].filter(predicate)))
@@ -4048,11 +4153,15 @@ export function collectRetainedTypographyEvidence(cases, inventory, controlTypog
     ids.delete(undefined);
     const anonymousReference = referenceTree.nodes.filter((node) => node.ownText?.trim() && !node.attributes?.id && !mappedReferenceKeys.has(node.key) && !controlReferenceKeys.has(node.key)).map((node) => node.key);
     const anonymousAstylar = astylarTree.nodes.filter((node) => node.authored?.textContent?.trim() && !node.authored?.id && !controlAstylarKeys.has(node.key)).map((node) => node.key);
+    const tooltipStateGap = entry.family === 'tooltip' ? reviewedTooltipStateGap(key, inventory) : undefined;
     if (anonymousReference.length || anonymousAstylar.length) {
       const reason = 'own-text nodes without an explicit shared ID require structural mapping';
       const remainingReference = [];
       for (const referenceNode of anonymousReference) {
         const identity = { family: entry.family, referenceNodes: [referenceNode], astylarNodes: anonymousAstylar };
+        if (anonymousAstylar.length === 0 && tooltipStateGap?.referenceNodes[0] === referenceNode) {
+          gaps.push(tooltipStateGap); continue;
+        }
         const tabPanel = entry.family === 'tabs' && anonymousAstylar.length === 0 && reviewedPluginTabPanelGap(key, inventory);
         if (tabPanel && tabPanel.referenceNodes[0] === referenceNode) { gaps.push(tabPanel); continue; }
         const weekday = entry.family === 'datepicker' && anonymousAstylar.length === 0 && textMappings.find(m =>
@@ -4082,6 +4191,8 @@ export function collectRetainedTypographyEvidence(cases, inventory, controlTypog
     for (const id of ids) {
       const refNodes = referenceNodes.get(id) ?? [], astNodes = astylarNodes.get(id) ?? [];
       if (refNodes.length !== 1 || astNodes.length !== 1) {
+        if (id === 'tooltip-popup' && tooltipStateGap?.astylarNodes.length === 1 && refNodes.length === 0 &&
+            astNodes.length === 1 && astNodes[0].key === tooltipStateGap.astylarNodes[0]) { gaps.push(tooltipStateGap); continue; }
         const arrow = id === 'select-caret' && reviewedSelectArrowGap(key, inventory);
         if (arrow) { gaps.push(arrow); continue; }
         const auxiliary = entry.family === 'datepicker' && refNodes.length === 1 && astNodes.length === 0 &&
@@ -5768,6 +5879,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('tooltip unmatched state inputs preserve/,
+      'tooltip one-sided authored popup context and state-input attribution', 'Exact trigger/message identities, complete source paths, empty counterpart context, unique node identities and independent style stages distinguish a genuinely unpaired authored popup from missing core text. Both reference-only and candidate-only observations remain unequal; negative and report-mutation controls reject invented counterparts, missing stages and foreign states. Existing paired typography and raster obligations are unchanged.'),
     proof(root, 'tests/material-parity/supplemental-capture-evidence.spec.mjs', /test\('tooltip state collector keeps/,
       'tooltip action-boundary capture and consolidated inventory provenance', 'All three state-input cohorts and both DPRs retain all thirty paired boundaries, including presence mismatches. Independent replay compares complete source trees with dereferenced inventory styles, rules and text stages; missing cases and changed evidence cannot be accepted through summary counts. This does not classify away absent counterparts or establish visual equivalence.'),
     proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('tooltip text alignment traces/,

@@ -23,6 +23,82 @@ selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Tooltip unmatched text owners are unequal state inputs (2026-09-13)
+
+The new `reviewed-tooltip-unmatched-state-input` attribution explains a missing
+text counterpart only when the captured tree proves that the opposite side
+does not author that popup. It does not manufacture a paired text mapping or
+classify a renderer as failing to paint a node that was never authored.
+
+The reviewed cases are the frozen tooltip `open` interaction, supplemental
+benchmark-open hover/press, and supplemental release in all three cohorts.
+The exact case scope, unique trigger/message identities, reference external
+described-by token, direct label, section/frame, complete connected-overlay
+path or empty overlay container, and candidate page/section/anchor/button path
+must all agree. Candidate popup presence also requires the authoritative core
+retained-text owner. Missing rule capture, style stage, revision, duplicate
+identity, unrelated message, alternate popup or unsupported state refuses the
+attribution. Reference-only states have no candidate description link; open
+candidate states link the trigger to the actual popup.
+
+The evidence retains all node identities and the complete relevant authored,
+computed, normal/effective and retained context. No absent-side typography is
+invented. The independent validator recomputes the gap from inventory, and the
+tooltip replay verifies that no gap was deleted, duplicated or moved to a
+foreign case. Evidence snapshots are detached from inventory values: a negative
+test exposed shared object references in the initial implementation, which
+could let an in-memory finding mutation change its verification source too.
+That aliasing was removed before acceptance.
+
+Three new tests cover eleven positive state/DPR contexts, **53 negative input
+controls** and **14 report-mutation controls**. The focused command, including
+the existing paired tooltip text tests, passes **10/10**, zero failed/skipped/
+cancelled/todo, **2.244 seconds**, terminal exit 0:
+
+```powershell
+node --test --test-name-pattern='tooltip unmatched|tooltip text' tests/material-parity/input-equivalence-audit.spec.mjs
+```
+
+The initial focused run was 9/10 because it detected the snapshot aliasing above;
+it is not passing evidence. The corrected run includes that same negative
+control without weakening its assertion.
+
+This is application/plugin state-input attribution, not an equal-input core
+defect, a typography-equivalence claim or a visual fix. The separately bound
+pointer proof below distinguishes benchmark hover suppression, forced-open
+click and missing ordinary dismissal. Repair ordinary state behavior through
+the shared core interaction/overlay contract, remove scenario-dependent
+authoring, then test both popup presence and absence at every action boundary.
+Only genuinely paired popup states can establish typography/placement parity.
+
+Full inventory generation finds **18** exact one-sided owner attributions:
+eight original open-state cases (four profiles x two DPRs), four supplemental
+reference-only hover/press cases and six supplemental candidate-only release
+cases. The inventory remains **4,748 side-specific cases**. Retained gaps still
+requiring review decrease from **291 to 273**, by explaining these eighteen
+state-input differences rather than deleting them. Main style counts remain
+8,140 unique differences / 380,520 occurrences, with **3,309 unresolved
+attributions**. All **107 source findings** remain detected.
+
+Audit command:
+
+```powershell
+node --input-type=module -e "import {readFileSync} from 'node:fs';import {buildMaterialInputAudit,validateMaterialInputAudit} from './tests/material-parity/input-equivalence-audit.mjs';const p=JSON.parse(readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json'));const a=buildMaterialInputAudit(p,{root:process.cwd(),normalLineBoxPath:'artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json',supplementalRoot:'artifacts/material-parity/supplemental-current-ancestry-audit'});console.log('SUMMARY '+JSON.stringify({coverage:a.coverage.complete,summary:a.summary,inventory:a.elementInventory.cases.length,unmatchedTooltip:a.retainedTypography.gaps.filter(g=>g.attribution==='reviewed-tooltip-unmatched-state-input').map(g=>({case:g.case,reference:g.referenceNodes,candidate:g.astylarNodes})),retainedUnresolved:a.retainedTypography.gaps.filter(g=>g.attribution==='unresolved').length}));console.log('DIAGNOSTIC '+JSON.stringify(validateMaterialInputAudit(a,{requireComplete:false})));console.log('STRICT '+JSON.stringify(validateMaterialInputAudit(a)));"
+```
+
+No renderer, application, reference, matrix or visual-threshold change is made.
+All ten frozen visual-harness hashes match. The final full enforced visual
+matrix remains a separate completion requirement, not replaced by this audit.
+
+`npm run parity:harness:check`: **400/400 pass**, zero failed/skipped/cancelled/
+todo, **150.636 seconds**, terminal exit 0. Independent diagnostic replay
+returns `[]`.
+Full audit replay terminates with exit 0 while printing the honest strict
+failures: **3,309 resolved-style attributions, 879 control typography
+differences, 273 retained mapping/stage gaps and 354 retained typography
+differences** remain. This is successful evidence validation, not completed
+input-equivalence acceptance. The goal remains incomplete.
+
 ## Tooltip action-boundary inventory integration (2026-09-13)
 
 The checkpoint-bound `tooltip-state-audit-v2` evidence now feeds the consolidated
