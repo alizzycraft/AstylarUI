@@ -23,6 +23,78 @@ selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Captured snackbar line-box attribution (2026-09-13)
+
+The interactive line-box join now classifies the 34 original snackbar action
+observations as `reviewed-snackbar-normal-line-box-size-dependency`, owned by
+the application/plugin action-size token translation. The raw reference
+`normal`, measured natural 17px line box and candidate numeric 19px paint value
+remain unchanged and unequal. This is not an equivalent-representation waiver.
+
+Attribution requires the independently validated supplement, exact checkpoint
+and text-owner bindings, loaded fonts and unchanged original typography. It
+then rederives the entire Material 14px token versus omitted candidate token /
+core-default 16px provenance from the captured rule and ancestor inventory;
+an existing finding's classification or review metadata is not trusted. The
+complete candidate normal/effective chain must still omit line-height and font
+shorthand. Only the measured `UNDO`, Roboto/500, 14px/16px and 17px/19px reduction
+is covered. These observed constants constrain evidence admission; they are
+not authored fixture values or a universal CSS-normal conversion rule.
+
+The earlier 18-case package-root proof supplies independent equal-input size
+controls. The raw font-family-list, tracking, ink and size differences are
+preserved separately. This attribution does not certify browser-correct core
+button defaults, general normal-line-height metrics, glyph baseline/sharpness,
+snackbar visibility or placement. The four honest equal-input normal-metrics
+failures remain independent core defects, not consequences waived by this join.
+
+Report validation independently reloads the checkpoint-bound observer evidence,
+rebuilds raw comparisons and rederives the new attribution. Its replay filter
+also catches the new attribution moved to a different case. Removed scalars,
+altered raw comparisons, changed evidence and false acceptance cannot pass by
+supplying a classification string alone.
+
+Focused tests cover 18 synthetic parent-size/state combinations, 26 negative
+controls and seven unbound-report mutations. Changed metrics, font properties, source
+tokens, default stages, ancestry, missing/duplicate observations and explicit
+candidate sizing all refuse this classification. All other differences and
+every raw comparison are asserted unchanged. Synthetic states test the guard's
+logic; they do not claim new live interaction coverage.
+
+The complete-data build reports 671 validated observations, no observer errors,
+34 new snackbar attributions and **46 remaining control typography differences**:
+16 supplemental calendar line heights and 30 supplemental tooltip line heights.
+It retains 124 classified source findings and 68 source fingerprints. Independent
+diagnostic validation returns `[]`; this is not strict audit acceptance.
+
+Verification on the final code:
+
+- `node --test --test-name-pattern='snackbar observed|interactive line-box|snackbar action size' tests/material-parity/input-equivalence-audit.spec.mjs`:
+  **10/10 passed**, no skips or cancellations, terminal exit 0, **7.4592419 seconds**.
+- `npm run parity:harness:check`: **522/522 passed**, no failures, skips or
+  cancellations, terminal exit 0, **337.6869515 seconds**.
+- The complete-data inspection uses `buildMaterialInputAudit` with the frozen
+  current-ancestry report, static normal-line-box supplement, interactive
+  control-line-box V3 supplement and current-ancestry supplemental root. It
+  independently validates that report in diagnostic and strict modes; its
+  printed validation results, rather than process exit alone, determine audit
+  acceptance. It completed with terminal exit 0 after printing the expected
+  strict failures: `3309 resolved-style differences still lack root-cause attribution`
+  and `46 control texture typography differences require attribution`. This is
+  deliberately **not** a passing strict audit.
+- Syntax and `git diff --check` pass. All ten frozen capture-harness hashes
+  still match; no fresh reference input or selected metric was substituted.
+
+Exact complete-data read-only verification command:
+
+```powershell
+node --input-type=module -e "import{readFileSync}from'node:fs';import{buildMaterialInputAudit,validateMaterialInputAudit}from'./tests/material-parity/input-equivalence-audit.mjs';const p=JSON.parse(readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json'));const a=buildMaterialInputAudit(p,{root:process.cwd(),normalLineBoxPath:'artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json',controlLineBoxPath:'artifacts/material-parity/control-line-box-current-ancestry-audit-v3/latest-report.json',supplementalRoot:'artifacts/material-parity/supplemental-current-ancestry-audit'});const d=a.controlTypography.differences;console.log('SUMMARY '+JSON.stringify({coverage:a.coverage.complete,sources:a.summary.sourceFindings,sourceFingerprints:a.sourceFingerprints.length,observations:a.controlLineBoxes.observations.length,evidenceErrors:a.controlLineBoxes.errors,snackbarLineBoxes:d.filter(x=>x.attribution==='reviewed-snackbar-normal-line-box-size-dependency').length,remaining:d.filter(x=>x.attribution==='unresolved').length,remainingGroups:d.filter(x=>x.attribution==='unresolved').reduce((m,x)=>{const k=x.case.split(':')[0]+'/'+x.family+'/'+x.property;m[k]=(m[k]||0)+1;return m;},{})}));console.log('DIAGNOSTIC '+JSON.stringify(validateMaterialInputAudit(a,{requireComplete:false})));console.log('STRICT '+JSON.stringify(validateMaterialInputAudit(a)));"
+```
+
+No reference, Material fixture, renderer or visual threshold changed. Complete
+state coverage, the remaining style/typography attribution, final report artifacts
+and the final unfiltered enforced parity matrix remain required.
+
 ## Snackbar action line-box input-dependency proof (2026-09-13)
 
 The new package-root browser reduction

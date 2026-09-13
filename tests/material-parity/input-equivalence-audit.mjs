@@ -377,6 +377,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
     'reviewed-calendar-year-typography-input': 'application-plugin-authoring-defect',
     'reviewed-snackbar-action-typography-input': 'application-plugin-authoring-defect',
     'reviewed-snackbar-action-size-token-omission': 'application-plugin-authoring-defect',
+    'reviewed-snackbar-normal-line-box-size-dependency': 'application-plugin-authoring-defect',
     'reviewed-dialog-action-typography-input': 'application-plugin-authoring-defect',
     'reviewed-bottom-sheet-item-typography-input': 'application-plugin-authoring-defect',
     'reviewed-calendar-period-typography-input': 'application-plugin-authoring-defect',
@@ -574,6 +575,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
       JSON.stringify(rawInteractiveControl.comparisons.filter(interactiveComparison)))
     errors.push('interactive normal-line-box comparisons lack complete replayed raw typography');
   const interactiveLine = d => d.attribution === 'reviewed-interactive-normal-line-box-stage-comparison' ||
+    d.attribution === 'reviewed-snackbar-normal-line-box-size-dependency' ||
     (d.property === 'lineHeight' && interactiveTargets.has(JSON.stringify([d.case, d.element])));
   if (JSON.stringify(report.controlTypography?.differences?.filter(interactiveLine)) !==
       JSON.stringify(replayedInteractiveControl.differences.filter(interactiveLine)))
@@ -749,6 +751,7 @@ export function renderMaterialInputAuditMarkdown(report) {
     '',
     `Static natural line boxes: ${report.normalLineBoxes.observations.length} validated browser observations, ${report.normalLineBoxes.missing.length} missing and ${report.normalLineBoxes.errors.length} evidence errors. Matching observed heights explain only the raw normal-to-numeric stage comparison; other typography inputs, baseline, wrapping and final raster remain independent questions. No global normal-to-pixel substitution is accepted.`,
     `Interactive natural line boxes: ${report.controlLineBoxes.observations.length} validated observations, ${report.controlLineBoxes.missing.length} missing and ${report.controlLineBoxes.errors.length} evidence errors; ${report.controlTypography.differences.filter(d => d.attribution === 'reviewed-interactive-normal-line-box-stage-comparison').length} reviewed scalar stage comparisons. Source/checkpoint files are independently replayed during validation. This is not input-equivalence or final-raster acceptance.`,
+    `Snackbar natural line boxes: ${report.controlTypography.differences.filter(d => d.attribution === 'reviewed-snackbar-normal-line-box-size-dependency').length} observed 17px/19px differences are bound to the independently rederived 14px-token/16px-default input mismatch and the separate equal-input size controls. Original scalars remain unequal; no correct-defaults, visibility, placement or general normal-metrics claim is inferred.`,
     '',
     `Control icon substitutions: ${report.controlTypography.iconSubstitutions.length} captured SVG-to-text input replacements. These are unequal content/geometry inputs, not accepted text-owner mappings or font comparisons. Their actual glyph paint inputs remain recorded separately from the reference vector path.`,
     '',
@@ -5739,10 +5742,7 @@ export function attributeObservedControlLineBoxes(controlTypography, inventory, 
         JSON.stringify(observation.checkpointTypography) !== JSON.stringify(comparison.properties) ||
         observation.checkpointPaint !== comparison.properties.lineHeight.painted ||
         observation.inputEquivalent !== undefined || observation.finalRasterVerified !== undefined ||
-        !Number.isFinite(observation.naturalHeight) || observation.naturalHeight <= 0 ||
-        comparison.properties.lineHeight.painted !== `${observation.naturalHeight}px` ||
-        ['fontSize', 'fontWeight', 'fontStyle'].some(property => comparison.properties[property]?.reference === undefined ||
-          comparison.properties[property].reference !== comparison.properties[property].painted)) continue;
+        !Number.isFinite(observation.naturalHeight) || observation.naturalHeight <= 0) continue;
     const maps = inventory.cases.filter(c => c.case === comparison.case && c.side === 'astylar');
     if (maps.length !== 1 || inventory.errors.some(e => e.case === comparison.case)) continue;
     const tree = inventory.variants[maps[0].variant], nodes = tree.nodes.filter(n => n.key === comparison.astylarNode);
@@ -5752,6 +5752,18 @@ export function attributeObservedControlLineBoxes(controlTypography, inventory, 
     const differences = result.differences.filter(d => d.case === comparison.case && d.element === comparison.element &&
       d.referenceNode === comparison.referenceNode && d.astylarNode === comparison.astylarNode && d.property === 'lineHeight');
     if (differences.length !== 1 || differences[0].attribution !== 'unresolved') continue;
+    const sizeDependency = reviewedSnackbarObservedLineBox(comparison, observation, nodes[0], tree, inventory);
+    if (sizeDependency) {
+      Object.assign(differences[0], sizeDependency, {
+        reviewEvidence: { ...sizeDependency.reviewEvidence,
+          supplementalReport: { file: supplemental.file, sha256: supplemental.sha256 },
+          observation, candidateOmissionChain },
+      });
+      continue;
+    }
+    if (comparison.properties.lineHeight.painted !== `${observation.naturalHeight}px` ||
+        ['fontSize', 'fontWeight', 'fontStyle'].some(property => comparison.properties[property]?.reference === undefined ||
+          comparison.properties[property].reference !== comparison.properties[property].painted)) continue;
     Object.assign(differences[0], {
       classification: 'parity-harness-defect', attribution: 'reviewed-interactive-normal-line-box-stage-comparison',
       recommendedOwner: 'input audit interactive browser-used line-height observation and stage comparison',
@@ -5763,6 +5775,41 @@ export function attributeObservedControlLineBoxes(controlTypography, inventory, 
     });
   }
   return result;
+}
+
+function reviewedSnackbarObservedLineBox(comparison, observation, ast, astylarTree, inventory) {
+  if (comparison.family !== 'snack-bar' || comparison.mapping?.kind !== 'reviewed-material-snackbar-action-label' ||
+      comparison.text !== 'UNDO' || observation.naturalHeight !== 17 || comparison.properties.lineHeight.painted !== '19px') return;
+  // These are the measured reduction's bounds, not a normal-to-pixels rule.
+  // Different fonts, sizes, text or observed metrics need their own evidence.
+  const stages = Object.fromEntries(['reference', 'normal', 'effective', 'painted'].map(stage =>
+    [stage, Object.fromEntries(Object.entries(comparison.properties).map(([property, values]) => [property, values[stage]]))]));
+  if (stages.reference.fontFamily !== 'roboto' ||
+      [stages.normal, stages.effective, stages.painted].some(s => s.fontFamily !== 'roboto,arial,sans-serif') ||
+      Object.values(stages).some(s => s.fontWeight !== '500') ||
+      stages.reference.fontStyle !== 'normal' || stages.painted.fontStyle !== 'normal') return;
+  const maps = inventory.cases.filter(c => c.case === comparison.case && c.side === 'reference');
+  if (maps.length !== 1) return;
+  const referenceTree = inventory.variants[maps[0].variant];
+  const refs = referenceTree.nodes.filter(n => n.key === comparison.referenceNode);
+  if (refs.length !== 1) return;
+  const parents = referenceTree.nodes.filter(n => n.key === refs[0].parent);
+  if (parents.length !== 1) return;
+  // Re-derive the complete token/default provenance from inventory. Never
+  // trust an existing difference's classification or detached review metadata.
+  const sizeInput = reviewedSnackbarActionSize(comparison, 'fontSize', refs[0], parents[0], ast,
+    stages, referenceTree, astylarTree, inventory);
+  if (!sizeInput) return;
+  return { classification: 'application-plugin-authoring-defect',
+    attribution: 'reviewed-snackbar-normal-line-box-size-dependency', inputEquivalent: false, finalRasterVerified: false,
+    recommendedOwner: 'showcase snackbar action size-token translation; core normal-line-box metrics remain separately audited',
+    justification: 'The exact state-bound reference UNDO observer measures 17px while candidate paint remains 19px. Independently rederived source/rule/ancestry evidence proves the reference Material 14px token is omitted by the candidate, which already resolves to core-default 16px before paint. Separate equal-input Roboto controls reproduce 17px at 14px and 19px at 16px under all three captured parent sizes. This explains the measured size dependency, not equal inputs, browser-correct button defaults, general normal-metrics correctness, font-list/tracking equivalence, baseline, visibility, placement or final raster.',
+    reviewEvidence: { sizeInput, measuredReferenceHeight: observation.naturalHeight,
+      currentPaintedLineHeight: comparison.properties.lineHeight.painted,
+      focusedProof: 'examples/material-showcase/src/app/snackbar-action-line-box-audit.spec.ts',
+      coreMetricOwner: 'TextStyleParserService.parseTextProperties -> resolveNormalLineHeight',
+      inputEquivalent: false, finalRasterVerified: false },
+  };
 }
 
 function candidateTypographyOmissionChain(ast, tree, inventory, property) {

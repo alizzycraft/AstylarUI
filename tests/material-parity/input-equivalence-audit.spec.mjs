@@ -8824,6 +8824,96 @@ function observedInteractiveLineBoxFixture(state = 'hover') {
   return f;
 }
 
+function observedSnackbarLineBoxFixture(parentSize = '16px', state = 'activate') {
+  const raw = snackbarActionSizeReport(parentSize), entry = raw.results[0];
+  Object.assign(entry, { kind: 'interaction', state }); raw.results = []; raw.interactions = [entry];
+  const inventory = collectFullTreeInventory(raw.interactions), control = collectControlTypographyEvidence(raw.interactions, inventory);
+  const comparison = control.comparisons[0], supplemental = observedInteractiveLineBoxFixture(state).supplemental;
+  Object.assign(supplemental.observations[0], { case: comparison.case, element: comparison.element,
+    referenceNode: comparison.referenceNode, checkpointReferenceNode: comparison.referenceNode,
+    checkpointCandidateNode: comparison.astylarNode, text: comparison.text, naturalHeight: 17,
+    checkpointPaint: comparison.properties.lineHeight.painted,
+    checkpointTypography: JSON.parse(JSON.stringify(comparison.properties)) });
+  return { raw, inventory, control, supplemental };
+}
+
+test('snackbar observed line-box size dependency joins measured state and original token/default provenance', () => {
+  for (const size of ['14.4px', '16px', '18.4px']) for (const state of ['activate', 'open', 'hover', 'held', 'focus', 'open-dismiss']) {
+    const f = observedSnackbarLineBoxFixture(size, state), before = structuredClone(f);
+    const result = attributeObservedControlLineBoxes(f.control, f.inventory, f.supplemental);
+    const line = result.differences.find(d => d.property === 'lineHeight');
+    assert.equal(line.attribution, 'reviewed-snackbar-normal-line-box-size-dependency', `${size}/${state}`);
+    assert.equal(line.classification, 'application-plugin-authoring-defect');
+    assert.equal(line.inputEquivalent, false); assert.equal(line.finalRasterVerified, false);
+    assert.equal(line.reviewEvidence.sizeInput.attribution, 'reviewed-snackbar-action-size-token-omission');
+    assert.equal(line.reviewEvidence.sizeInput.reviewEvidence.candidateChain.at(-1).normal.fontSize, size);
+    assert.equal(line.reviewEvidence.candidateOmissionChain.length, 5);
+    assert.equal(line.reviewEvidence.observation.naturalHeight, 17);
+    assert.equal(line.values.reference, 'normal'); assert.equal(line.values.painted, '19px');
+    assert.deepEqual(result.comparisons, f.control.comparisons);
+    assert.deepEqual(result.differences.filter(d => d.property !== 'lineHeight'), f.control.differences.filter(d => d.property !== 'lineHeight'));
+    assert.deepEqual(f, before);
+  }
+});
+
+test('snackbar observed line-box size dependency rejects changed metrics fonts or detached provenance', () => {
+  const referenceTree = f => f.inventory.variants.find(t => t.side === 'reference');
+  const candidateTree = f => f.inventory.variants.find(t => t.side === 'astylar');
+  const controls = [
+    f => { f.supplemental.errors.push('bad capture'); },
+    f => { f.supplemental.observations = []; },
+    f => { f.supplemental.observations.push(f.supplemental.observations[0]); },
+    f => { f.supplemental.observations[0].naturalHeight = 18; },
+    f => { f.supplemental.observations[0].fontReady = false; },
+    f => { f.supplemental.observations[0].checkpointCandidateNode = 'other'; },
+    f => { f.supplemental.observations[0].checkpointPaint = '20px'; },
+    f => { f.supplemental.observations[0].checkpointTypography.fontSize.painted = '18px'; },
+    f => { f.control.comparisons[0].family = 'menu'; },
+    f => { f.control.comparisons[0].mapping.kind = 'reviewed-material-button-label'; },
+    f => { f.control.comparisons[0].text = f.supplemental.observations[0].text = 'Other'; },
+    f => { f.control.comparisons[0].properties.lineHeight.painted = f.supplemental.observations[0].checkpointPaint = '20px'; },
+    f => { f.control.comparisons[0].properties.fontSize.painted = '18px'; },
+    f => { f.control.comparisons[0].properties.fontWeight.painted = '700'; },
+    f => { f.control.comparisons[0].properties.fontStyle.painted = 'italic'; },
+    f => { f.control.comparisons[0].properties.fontFamily.painted = 'arial,sans-serif'; },
+    f => { f.inventory.cases = f.inventory.cases.filter(c => c.side !== 'reference'); },
+    f => { referenceTree(f).ruleEvidenceComplete = false; },
+    f => { candidateTree(f).ruleEvidenceComplete = false; },
+    f => { referenceTree(f).nodes.find(n => n.key === 'label').parent = 'other'; },
+    f => { referenceTree(f).nodes.find(n => n.key === 'label').inline = { fontSize: '14px' }; },
+    f => { f.inventory.rules.find(r => r.side === 'reference' && r.value.declarations?.['font-size']?.value?.startsWith('var(')).value.declarations['font-size'].value = '14px'; },
+    f => { f.inventory.rules.find(r => r.side === 'astylar' && r.value.selector === '.overlay-dismiss').value.fontSize = '16px'; },
+    f => { f.inventory.styles[candidateTree(f).nodes.find(n => n.key === 'page').normalStyle].value.fontSize = '30px'; },
+    f => { f.inventory.styles[candidateTree(f).nodes[0].interactionStyle].value.lineHeight = '19px'; },
+    f => { f.control.differences.push(structuredClone(f.control.differences.find(d => d.property === 'lineHeight'))); },
+  ];
+  for (const [index, mutate] of controls.entries()) {
+    const f = observedSnackbarLineBoxFixture(); mutate(f);
+    // Keep the recorded typography consistent for comparison mutations, so
+    // they must fail the root-cause guard, not just a stale JSON witness.
+    if (index >= 8) f.supplemental.observations[0].checkpointTypography = JSON.parse(JSON.stringify(f.control.comparisons[0].properties));
+    const result = attributeObservedControlLineBoxes(f.control, f.inventory, f.supplemental);
+    assert.ok(result.differences.filter(d => d.property === 'lineHeight').every(d => d.attribution === 'unresolved'), `control ${index}`);
+  }
+});
+
+test('snackbar observed line-box report replay rejects missing observations forged acceptance and removed scalars', () => {
+  for (const mutation of ['unbound supplement', 'removed difference', 'removed comparison', 'changed scalar', 'false equivalence', 'wrong classification', 'changed case']) {
+    const f = observedSnackbarLineBoxFixture(), report = buildMaterialInputAudit(f.raw);
+    const result = attributeObservedControlLineBoxes(f.control, f.inventory, f.supplemental);
+    const line = result.differences.find(d => d.property === 'lineHeight');
+    if (mutation === 'unbound supplement') report.controlLineBoxes = f.supplemental;
+    if (mutation === 'removed difference') result.differences = result.differences.filter(d => d !== line);
+    if (mutation === 'removed comparison') result.comparisons = [];
+    if (mutation === 'changed scalar') line.values.painted = '17px';
+    if (mutation === 'false equivalence') line.inputEquivalent = line.reviewEvidence.inputEquivalent = true;
+    if (mutation === 'wrong classification') line.classification = 'equivalent-representation';
+    if (mutation === 'changed case') line.case = 'static:snack-bar@light/desktop';
+    report.controlTypography = result;
+    assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => /interactive (?:natural|normal)-line-box/.test(e)), mutation);
+  }
+});
+
 test('interactive line-box attribution explains only the exact scalar stage difference in each observed state', () => {
   for (const state of ['hover', 'held', 'focus', 'activate', 'open', 'open-dismiss']) {
     const f = observedInteractiveLineBoxFixture(state), before = structuredClone(f);
