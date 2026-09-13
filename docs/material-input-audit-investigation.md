@@ -23,6 +23,99 @@ selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Snackbar message correspondence and unequal composition (2026-09-13)
+
+The audit now maps **34 snackbar message labels** in all captured paired open
+states through the unique overlay, live-region and sibling `UNDO` action path.
+The 59 snackbar interaction cases also include 25 closed/dismissed states;
+they are not supplied with fabricated text entries. The action retains its
+independent core-control-texture mapping; the message uses core registry text.
+
+The installed `@angular/material/fesm2022/snack-bar.mjs:204` defines a
+`simple-snack-bar` flex container with a `div[matSnackBarLabel]` and a separate
+conditional action wrapper/button. Its original message has `flex:1 1 auto`
+and captured padding `14px 8px 14px 16px`. The captured overlay contains the
+original label, live-region and surface wrappers. The candidate instead authors
+a direct span and value button inside one fixed-width, shared-padding status
+surface (`examples/material-showcase/src/app/astylar.component.ts:994`).
+The original component explicitly uses `aria-live` rather than a status role
+except for its Firefox-specific branch (`snack-bar.mjs:265`); the current
+candidate supplies `role:status`, `ariaLive:polite`, and `ariaAtomic:true` on
+the surface. Captured attributes are preserved; no screen-reader equivalence
+or announcement failure is inferred from this structural finding.
+
+`git log -S "textContent: 'Project saved'"` identifies initial showcase commit
+`2f44011`, not a later coordinate repair, as the origin of the message span.
+New source finding `fixture-snackbar-message-composition-substitution` records
+the replacement as unequal authoring. The installed snackbar component source
+is now included among **54 source fingerprints**. The already recorded fixed
+surface width and action typography findings remain separate obligations.
+
+`reviewed-snackbar-message-text` preserves both raw strings, the ten-node
+reference message-to-overlay path and the five-node candidate message-to-page
+path, including original style/rule indices. It proves identity, not equivalent
+layout, wrapping, live-region behavior, placement, visibility or raster. A
+missing shared ID is not evidence that the snackbar failed to render.
+
+Mapping exposes **170 typography differences** (five per open state):
+
+- 34 component `Roboto` versus inherited `Roboto, Arial, sans-serif` stacks;
+- 34 explicit `20px` versus omitted/retained `normal` line heights;
+- 34 horizontal `start` versus `left` alignments, accepted only by the existing
+  captured-direction equivalence guard;
+- 34 fixed reference `14px` versus candidate sizes: 18 at `16px`, eight at
+  `14.4px`, and eight at `18.4px`;
+- 34 reference `rgba(245,239,244,1)` versus retained white colors.
+
+Existing declaration-backed rules explain the first three cohorts. The **68
+size/color observations remain unresolved** pending their exact declaration
+and inheritance traces. This increment does not label them renderer defects
+or conceal them with sampled font sizes/colors. Overall retained mapping/stage
+gaps decrease from **385 to 317**, while unresolved retained typography
+differences increase from **354 to 422** because the new mapping exposes inputs
+that were previously unpaired.
+
+Four new tests cover correspondence, **28 negative topology/identity controls**,
+missing retained-stage evidence, and **11 report mutations**. Independent replay
+rejects removed/fabricated mappings, changed ownership paths, altered typography
+and equivalence/raster claims, even in diagnostic partial reports. Source trees
+remain unchanged by collection.
+
+Focused command:
+
+`node --test --test-name-pattern='snackbar message|snackbar action|records source fingerprints' tests/material-parity/input-equivalence-audit.spec.mjs`
+
+**10/10 pass**, zero failed/skipped/cancelled/todo, **7.169 seconds**, terminal
+exit 0. `npm run parity:harness:check`: **381/381 pass**, zero failed/skipped/
+cancelled/todo, **139.708 seconds**, terminal exit 0. All ten original visual-harness raw hashes
+still match the frozen current-ancestry manifest. No production fixture,
+renderer, plugin, browser reference or visual threshold changed. This is not a
+new visual matrix run; the final unfiltered enforced run remains required when
+the complete input audit is ready.
+
+Full audit replay command (the preliminary `messageBreakdown` projection uses
+absent top-level value fields; the exact `values` counts above were verified
+separately from the retained observations, not inferred from that projection):
+
+```powershell
+node --input-type=module -e "import {readFileSync} from 'node:fs';import {buildMaterialInputAudit,validateMaterialInputAudit} from './tests/material-parity/input-equivalence-audit.mjs';const p=JSON.parse(readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json'));const a=buildMaterialInputAudit(p,{root:process.cwd(),normalLineBoxPath:'artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json',supplementalRoot:'artifacts/material-parity/supplemental-current-ancestry-audit'});const message=a.retainedTypography.differences.filter(d=>d.element==='snack-bar-title');console.log('SUMMARY '+JSON.stringify({coverage:a.coverage.complete,summary:a.summary,messageMaps:a.retainedTypography.reviewedMappings.filter(m=>m.kind==='reviewed-snackbar-message-text').length,messageDifferences:message.length,messageBreakdown:Object.fromEntries([...new Set(message.map(d=>d.property))].map(k=>[k,message.filter(d=>d.property===k).map(d=>({reference:d.reference,astylar:d.astylar,attribution:d.attribution})).filter((v,i,all)=>all.findIndex(w=>JSON.stringify(w)===JSON.stringify(v))===i)])),retainedGaps:a.retainedTypography.gaps.filter(g=>g.attribution==='unresolved').length,retainedDifferences:a.retainedTypography.differences.filter(g=>g.attribution==='unresolved').length}));console.log('DIAGNOSTIC '+JSON.stringify(validateMaterialInputAudit(a,{requireComplete:false})));console.log('STRICT '+JSON.stringify(validateMaterialInputAudit(a)));"
+```
+
+Terminal exit 0; this command prints strict errors rather than returning a
+strict-success exit. Coverage remains complete, with 8,140 unique main style
+differences / 380,520 occurrences and 88 structural differences. All **102**
+source findings are detected. Diagnostic validation returns `[]`; strict
+validation honestly retains:
+
+```text
+3309 resolved-style differences still lack root-cause attribution
+849 control texture typography differences require attribution
+317 retained typography mappings or stage fields require review
+422 retained typography differences require attribution
+```
+
+These are outstanding audit requirements, not accepted input equivalence.
+
 ## Autocomplete/select base and selected label ink (2026-09-13)
 
 All **192** option-color differences exposed by the preceding domain audit now

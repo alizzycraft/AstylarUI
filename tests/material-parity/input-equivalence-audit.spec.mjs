@@ -1098,7 +1098,7 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   const report = parityReport({}, {});
   const audit = buildMaterialInputAudit(report);
   assert.equal(audit.coverage.visualParityGreen, true);
-  assert.equal(audit.sourceFingerprints.length, 53);
+  assert.equal(audit.sourceFingerprints.length, 54);
   for (const file of ['scripts/audit-material-calendar-close.mjs', 'tests/material-parity/calendar-close-evidence.mjs',
     'tests/material-parity/supplemental-capture-evidence.spec.mjs']) {
     assert.equal(audit.sourceFingerprints.filter(entry => entry.file === file).length, 1);
@@ -4551,6 +4551,110 @@ function snackbarActionTypographyReport() {
     { selector: 'button, input, select', fontFamily: 'Roboto, Arial, sans-serif' }];
   return raw;
 }
+
+function snackbarMessageReport() {
+  const raw = snackbarActionTypographyReport(), { reference: r, astylar: a } = raw.results[0].inputTrees;
+  const style = { fontFamily: 'Roboto', fontSize: '14px', fontWeight: '400', fontStyle: 'normal', lineHeight: '20px',
+    letterSpacing: 'normal', wordSpacing: '0px', textAlign: 'start', textTransform: 'none', textDecoration: 'none', color: '#f5eff4' };
+  r.styles.push(style); r.nodes.find(n => n.key === 'message').style = r.styles.length - 1;
+  a.nodes.find(n => n.key === 'candidate-message').retainedText = { source: 'core-text-registry', style: {
+    ...style, fontFamily: 'Roboto, Arial, sans-serif', fontSize: '16px', lineHeight: 'normal', textAlign: 'left', color: '#ffffff' } };
+  return raw;
+}
+
+test('snackbar message mapping preserves live-region and action context without equating layout or typography', () => {
+  const raw = snackbarMessageReport(), original = structuredClone(raw), cases = raw.results.map(e => ({ ...e, kind: 'static' }));
+  const result = collectRetainedTypographyEvidence(cases, collectFullTreeInventory(cases));
+  const maps = result.reviewedMappings.filter(m => m.kind === 'reviewed-snackbar-message-text');
+  assert.equal(maps.length, 1);
+  assert.equal(maps[0].referenceNode, 'message');
+  assert.equal(maps[0].astylarNode, 'candidate-message');
+  assert.equal(maps[0].classification, 'application-plugin-authoring-defect');
+  assert.equal(maps[0].inputEquivalent, false);
+  assert.equal(maps[0].finalRasterVerified, false);
+  assert.equal(maps[0].reviewEvidence.referenceText, ' Project saved\n');
+  assert.equal(maps[0].reviewEvidence.candidateText, 'Project saved');
+  assert.equal(maps[0].reviewEvidence.referencePath.length, 10);
+  assert.equal(maps[0].reviewEvidence.candidatePath.length, 5);
+  assert.equal(result.comparisons.filter(c => c.element === 'snack-bar-title').length, 1);
+  assert.equal(result.differences.filter(c => c.element === 'snack-bar-title').length, 5);
+  assert.ok(!result.gaps.some(g => g.element === 'snack-bar-title' || g.referenceNodes?.includes('message')));
+  assert.equal(result.controlTextMappings.length, 1, 'UNDO retains its independent control-texture owner');
+  assert.deepEqual(raw, original);
+});
+
+test('snackbar message mapping rejects ambiguous broken or contradictory overlay paths', () => {
+  const controls = [
+    (r, a) => { r.nodes.find(n => n.key === 'message').ownText = 'Other'; },
+    (r, a) => { a.nodes.find(n => n.key === 'candidate-message').authored.textContent = 'Other'; },
+    (r, a) => { r.nodes.find(n => n.key === 'message').attributes.id = 'snack-bar-title'; },
+    (r, a) => { r.nodes.find(n => n.key === 'message').parent = 'surface'; },
+    (r, a) => { a.nodes.find(n => n.key === 'candidate-message').parent = 'candidate-overlay'; },
+    (r, a) => { r.nodes.find(n => n.key === 'label').ownText = 'Cancel'; },
+    (r, a) => { a.nodes.find(n => n.key === 'action').authored.value = 'Cancel'; },
+    (r, a) => { r.nodes.find(n => n.key === 'actions').parent = 'surface'; },
+    (r, a) => { delete r.nodes.find(n => n.key === 'actions').attributes.matsnackbaractions; },
+    (r, a) => { delete r.nodes.find(n => n.key === 'message').attributes.matsnackbarlabel; },
+    (r, a) => { r.nodes.find(n => n.key === 'simple').type = 'div'; },
+    (r, a) => { r.nodes.find(n => n.key === 'live').attributes['aria-live'] = 'assertive'; },
+    (r, a) => { r.nodes.find(n => n.key === 'live').attributes.id = 'other'; },
+    (r, a) => { r.nodes.find(n => n.key === 'surface').attributes.class = 'other'; },
+    (r, a) => { r.nodes.find(n => n.key === 'overlay').parent = 'page'; },
+    (r, a) => { a.nodes.find(n => n.key === 'candidate-surface').authored.role = 'dialog'; },
+    (r, a) => { a.nodes.find(n => n.key === 'candidate-surface').authored.ariaLive = 'assertive'; },
+    (r, a) => { a.nodes.find(n => n.key === 'candidate-surface').authored.ariaAtomic = false; },
+    (r, a) => { a.nodes.find(n => n.key === 'candidate-overlay').authored.class = 'other'; },
+    (r, a) => { a.nodes.find(n => n.key === 'page').parent = 'other'; },
+    (r, a) => { r.nodes.push(structuredClone(r.nodes[0])); },
+    (r, a) => { a.nodes.push(structuredClone(a.nodes[0])); },
+    (r, a) => { r.nodes.push({ key: 'duplicate-id', parent: null, type: 'div', attributes: { id: 'mat-snack-bar-container-live-13' } }); },
+    (r, a) => { a.nodes.push({ key: 'duplicate-id', parent: null, authored: { id: 'snack-bar-title', type: 'span', textContent: 'Project saved' } }); },
+    (r, a) => { r.nodes.push({ key: 'extra-text', parent: 'message', type: 'span', attributes: {}, ownText: 'extra' }); },
+    (r, a) => { a.nodes.push({ key: 'extra-text', parent: 'candidate-message', authored: { type: 'span', textContent: 'extra' } }); },
+    (r, a) => { r.nodes.push({ key: 'extra-message', parent: 'simple', type: 'div', attributes: {}, ownText: 'extra' }); },
+    (r, a) => { a.nodes.push({ key: 'extra-message', parent: 'candidate-surface', authored: { type: 'span', textContent: 'extra' } }); },
+  ];
+  for (const [index, mutate] of controls.entries()) {
+    const raw = snackbarMessageReport(), { reference, astylar } = raw.results[0].inputTrees;
+    mutate(reference, astylar);
+    assert.deepEqual(reviewedTemplateTextMappings('snack-bar', reference, astylar), [], `control ${index}`);
+  }
+});
+
+test('snackbar message correspondence never invents retained text or hides stage gaps', () => {
+  const raw = snackbarMessageReport(), { astylar } = raw.results[0].inputTrees;
+  delete astylar.nodes.find(n => n.key === 'candidate-message').retainedText;
+  const report = buildMaterialInputAudit(raw);
+  assert.equal(report.retainedTypography.reviewedMappings.filter(m => m.kind === 'reviewed-snackbar-message-text').length, 1);
+  const gap = report.retainedTypography.gaps.find(g => g.element === 'snack-bar-title');
+  assert.match(gap.reason, /no authoritative retained core text entry/);
+  assert.equal(gap.attribution, 'unresolved');
+  assert.ok(!validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('snackbar message')));
+  report.retainedTypography.gaps = report.retainedTypography.gaps.filter(g => g !== gap);
+  assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('snackbar message')));
+});
+
+test('snackbar message replay rejects removed or fabricated correspondence and typography evidence', () => {
+  const original = buildMaterialInputAudit(snackbarMessageReport());
+  assert.ok(original.sourceFindings.find(f => f.id === 'fixture-snackbar-message-composition-substitution').detected);
+  assert.ok(!validateMaterialInputAudit(original, { requireComplete: false }).some(e => e.includes('snackbar message')));
+  for (const mutate of [
+    r => { r.retainedTypography.reviewedMappings.pop(); },
+    r => { r.retainedTypography.reviewedMappings.push(r.retainedTypography.reviewedMappings[0]); },
+    r => { r.retainedTypography.reviewedMappings[0].inputEquivalent = true; },
+    r => { r.retainedTypography.reviewedMappings[0].finalRasterVerified = true; },
+    r => { r.retainedTypography.reviewedMappings[0].case = 'static:menu@light/desktop'; },
+    r => { r.retainedTypography.reviewedMappings[0].reviewEvidence.context.referenceChain.pop(); },
+    r => { r.retainedTypography.reviewedMappings[0].reviewEvidence.referencePath[0].style = 999; },
+    r => { r.retainedTypography.comparisons[0].revision++; },
+    r => { r.retainedTypography.comparisons[0].properties.fontSize.retained = '14px'; },
+    r => { r.retainedTypography.differences.pop(); },
+    r => { r.retainedTypography.differences[0].attribution = 'equivalent-representation'; },
+  ]) {
+    const report = structuredClone(original); mutate(report);
+    assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('snackbar message')));
+  }
+});
 
 test('snackbar action text maps by exact overlay and sibling message context, preserving unequal typography', () => {
   const raw = snackbarActionTypographyReport(), before = structuredClone(raw), evidence = controlEvidence(raw);

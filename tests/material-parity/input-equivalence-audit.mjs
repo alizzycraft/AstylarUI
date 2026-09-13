@@ -453,6 +453,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
   validateCalendarWeekdayEvidence(report, errors);
   validateTimepickerOptionEvidence(report, errors);
   validateMaterialOptionEvidence(report, errors);
+  validateSnackbarMessageEvidence(report, errors);
   validateHorizontalStartAlignment(report, errors);
   validateInheritedComponentFontStack(report, errors);
   validateOmittedComponentTextMetrics(report, errors);
@@ -585,6 +586,7 @@ export function renderMaterialInputAuditMarkdown(report) {
     `Calendar month markers: ${report.retainedTypography.reviewedMappings.filter(m => m.kind === 'reviewed-calendar-month-marker-text').length} labels have complete dated-row and replacement-grid correspondence. Conditional reference colspans, empty leading cells and candidate blank spans are preserved as unequal structural inputs; all mapped typography differences remain independently reportable. The fixed captured month is not all-month rendering evidence.`,
     `Autocomplete/select options: ${report.retainedTypography.reviewedMappings.filter(m => m.kind === 'reviewed-material-option-text').length} labels have complete ordered input-linked domain correspondence. Separate Material ripple and conditional pseudo-checkbox owners differ from candidate div/span/plugin-check composition; both sides selection and indicator inputs are retained independently. Mapping does not waive typography, structure, state, placement, scrolling or raster differences.`,
     `Autocomplete/select option ink: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-material-option-ink-input').length} unequal colors trace either base-token inheritance or the selected primary-text token against a candidate inherited literal. Own label color remains absent in normal/effective inspection, with the option owner and retained text captured separately. Missing or competing declarations prevent attribution; variable fallback origin, theme scope and composited/raster output remain independent.`,
+    `Snackbar messages: ${report.retainedTypography.reviewedMappings.filter(m => m.kind === 'reviewed-snackbar-message-text').length} labels map through unique overlay, live-region and sibling-action context. Original padded flex-message and nested action/live owners are replaced by a span inside a status surface. This establishes text identity only; unequal composition, typography, announcement behavior, placement and visibility remain independent obligations.`,
     `Timepicker options: ${report.retainedTypography.reviewedMappings.filter(m => m.kind === 'reviewed-timepicker-option-text').length} labels have complete input-linked half-hour-domain correspondence. Material primary-text/ripple owners are replaced by direct-text div options; active and selected states remain separate raw evidence. This maps text owners, not equivalent wrappers, scrolling, commit behavior, placement or raster. Newly exposed typography differences remain enforced.`,
     `Timepicker option ink: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-timepicker-option-ink-input').length} unequal colors trace from the reference option token through direct label inheritance versus the candidate literal preserved in normal/effective/retained stages. Competing or missing declarations prevent attribution. No token fallback-origin, theme-scope, compositing or final-raster equivalence is inferred.`,
     `Calendar month-label typography: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-calendar-month-marker-typography-input').length} records trace the omitted explicit zero line-height or substituted center alignment/literal ink to original declarations and captured core stages. Possible competing rules prevent attribution. These are unequal inputs, not a claim that the core misrendered zero, start or the original color token.`,
@@ -1442,6 +1444,52 @@ function reviewedTimepickerOptionMappings(reference, candidate) {
   }));
 }
 
+function reviewedSnackbarMessageMappings(reference, candidate) {
+  for (const tree of [reference, candidate]) {
+    if (!Array.isArray(tree?.nodes) || new Set(tree.nodes.map(n => n.key)).size !== tree.nodes.length) return [];
+    const ids = tree.nodes.map(n => (n.attributes ?? n.authored)?.id).filter(Boolean);
+    if (new Set(ids).size !== ids.length) return [];
+  }
+  // Reuse the independently tested overlay/action/message ownership path.
+  // The message is registry text; the action remains a separate control texture.
+  const contexts = reference.nodes.map(n => reviewedSnackbarActionControl(n, reference, candidate)).filter(Boolean);
+  if (contexts.length !== 1) return [];
+  const context = contexts[0].evidence, element = 'snack-bar-title';
+  const leaf = reference.nodes.find(n => n.key === context.referenceMessage.key);
+  const ast = candidate.nodes.find(n => n.key === context.candidateMessage.key);
+  if (!leaf || !ast || leaf.attributes?.id || leaf.ownText?.trim() !== 'Project saved' ||
+      reference.nodes.some(n => n.attributes?.id === element)) return [];
+  const snapshot = (node, side) => ({ key: node.key, parent: node.parent,
+    ...(side === 'reference' ? { type: node.type, attributes: node.attributes, ownText: node.ownText,
+      style: node.style, rules: node.rules, inline: node.inline, pseudoElements: node.pseudoElements }
+      : { authored: node.authored, normalStyle: node.normalStyle, interactionStyle: node.interactionStyle, style: node.style }) });
+  const referencePath = [leaf, ...context.referenceChain.slice(3).map(n => reference.nodes.find(r => r.key === n.key))];
+  const candidatePath = [ast, ...context.candidateChain.slice(1).map(n => candidate.nodes.find(a => a.key === n.key))];
+  return [{ kind: 'reviewed-snackbar-message-text', element, referenceNode: leaf.key, astylarNode: ast.key,
+    classification: 'application-plugin-authoring-defect', inputEquivalent: false, finalRasterVerified: false,
+    reviewEvidence: { sourceFinding: 'fixture-snackbar-message-composition-substitution', context,
+      referencePath: referencePath.map(n => snapshot(n, 'reference')), candidatePath: candidatePath.map(n => snapshot(n)),
+      referenceText: leaf.ownText, candidateText: ast.authored.textContent },
+    justification: 'The unique snackbar overlay and sibling UNDO action establish message identity through the original simple-snack-bar, live-region, label and surface chain versus the replacement span inside a status surface. This maps direct text owners only. The original flexing padded message and nested action/live owners are not equivalent to the replacement surface composition. Raw whitespace, styles and live-region attributes remain evidence; text metrics, wrapping, placement, visibility, announcement behavior and final raster are not certified.',
+  }];
+}
+
+function validateSnackbarMessageEvidence(report, errors) {
+  if (!report.retainedTypography) return;
+  const cases = [...new Set(report.elementInventory.cases.map(c => c.case))].flatMap(key => {
+    const match = parseReviewedCase(key, 'snack-bar');
+    return match ? [{ kind: match[1], family: 'snack-bar', profile: match[2], viewport: { id: match[3] },
+      ...(match[4] ? { state: match[4] } : {}) }] : [];
+  });
+  const replay = collectRetainedTypographyEvidence(cases, report.elementInventory);
+  const predicate = value => value.kind === 'reviewed-snackbar-message-text' || value.mapping?.kind === 'reviewed-snackbar-message-text' ||
+    value.element === 'snack-bar-title' || (value.family === 'snack-bar' && value.reason === 'own-text nodes without an explicit shared ID require structural mapping');
+  for (const list of ['reviewedMappings', 'comparisons', 'differences', 'gaps']) {
+    if (JSON.stringify(report.retainedTypography[list].filter(predicate)) !== JSON.stringify(replay[list].filter(predicate)))
+      errors.push(`snackbar message ${list} lack complete replayed input evidence`);
+  }
+}
+
 function reviewedMaterialOptionMappings(family, reference, candidate) {
   // Fixed domains are authored in the reference template. Do not pair options
   // by text alone, projected order, or a shared visual position.
@@ -1655,6 +1703,7 @@ export function reviewedTemplateTextMappings(family, referenceTree, astylarTree)
   if (family === 'datepicker') pairs.push(...reviewedCalendarMonthMarkerMappings(referenceTree, astylarTree, pairs[0]));
   if (family === 'timepicker') pairs.push(...reviewedTimepickerOptionMappings(referenceTree, astylarTree));
   if (family === 'autocomplete' || family === 'select') pairs.push(...reviewedMaterialOptionMappings(family, referenceTree, astylarTree));
+  if (family === 'snack-bar') pairs.push(...reviewedSnackbarMessageMappings(referenceTree, astylarTree));
   for (const path of paths) {
     const reference = follow(referenceTree, 'reference', path.reference);
     const astylar = follow(astylarTree, 'astylar', path.astylar);
@@ -5429,6 +5478,7 @@ function sourceFingerprints(root) {
     'examples/material-showcase/node_modules/@angular/material/fesm2022/datepicker.mjs',
     'examples/material-showcase/node_modules/@angular/material/fesm2022/timepicker.mjs',
     'examples/material-showcase/node_modules/@angular/material/fesm2022/option-BzhYL_xC.mjs',
+    'examples/material-showcase/node_modules/@angular/material/fesm2022/snack-bar.mjs',
     'examples/material-showcase/src/app/theme.ts',
     'examples/material-showcase/src/app/showcase.store.ts',
     'examples/material-showcase/src/styles.scss',
@@ -5459,6 +5509,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('snackbar message mapping preserves/,
+      'snackbar message correspondence preserves unequal live-region and flex composition', 'Unique overlay/action/message paths map registry text independently of the UNDO control texture. Full original ownership paths, styles and raw whitespace remain evidence. Negative topology controls and independent replay reject fabricated or deleted mappings and typography observations. Missing retained text stays a stage gap; mapping does not prove visibility, placement, announcements or raster.'),
     proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('material option ink distinguishes/,
       'autocomplete/select base and selected label ink provenance', 'Complete option mapping and original active reference declarations distinguish inherited base ink from selected primary-text ink. Candidate labels omit own color at normal/effective inspection and inherit their option literal into retained core text. Negative declaration/state/stage controls and independent replay reject invented inherited-stage values, competing rules, source substitutions and core/raster claims. All raw unequal color observations remain reportable.'),
     proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('material option mapping preserves/,
@@ -5573,7 +5625,7 @@ function implementationPlan() {
     { priority: 5.297, rootCause: 'Select arrow vector/composition replaced by a density-tuned font glyph', action: 'Restore the original Material SVG path, viewBox, arrow wrappers and CSS positioning through the shared rendering path. Do not resize or reposition U+25BC to approximate the vector. Reduce any unsupported SVG/layout behavior to equal-input core proof, and keep the separate select value/control, popup and interaction findings explicit.' },
     { priority: 5.3, rootCause: 'Core normal line-height is approximated by a fixed Mg font-box probe', action: 'Resolve browser normal line-box metrics and actual fallback runs in core. The equal-input Arial/serif cases expose one-pixel texture-height errors; Roboto plus emoji/CJK exposes two-pixel errors while plain Roboto and explicit line heights pass. Preserve those controls, extend multiline/baseline/DPR verification and avoid a universal multiplier, constant pixel addition, or fixed Material line-height compensation. Current-texture evidence must remain separate from declared normal and from final glyph raster.' },
     { priority: 5.4, rootCause: 'Calendar cell text tokens and inner line boxes were flattened away', action: 'Restore the reference calendar font and date-text ink tokens and its inner line-height:1 label inside both day and year controls. Keep reference cell/container sizing, state and selection structure instead of copying a normal-metric result or tuning the baseline. Separate date/range-context proofs isolate 990 day and 192 year occurrences each of missing font-token, omitted inner line-height and fixed-ink inputs; core metric defects must be assessed only after those inputs are equivalent. Independently resolve normal-versus-zero tracking and the still-unmapped header/icon owners.' },
-    { priority: 5.5, rootCause: 'Snackbar action inherits generic control inputs instead of Material action tokens', action: 'Restore the original text-button font, size and tracking declarations and the snackbar inverse-primary ink, keeping the reference label/action wrapper intent. The exact overlay/message mapping isolates 34 current action textures and source-traces font-stack, tracking and ink substitutions. Trace the remaining 14px-versus-16px and normal-line-box observations through the core defaults/inheritance and metric stages before assigning core ownership; do not calibrate a baseline or line height. Retain the separate intrinsic-width, live-region, visibility, lifetime and placement obligations.' },
+    { priority: 5.5, rootCause: 'Snackbar composition and generic text/control inputs replace Material message and action owners', action: 'Restore the original padded flex-message, separate action and nested live-region inputs together with their component typography tokens. The exact overlay/message mapping isolates 34 current action textures and 34 message registry entries without asserting equivalent ownership or visible output. Message correspondence exposes fixed reference 14px text versus candidate 14.4px/16px/18.4px and inverse-text versus white ink; trace their declarations and inherited stages before assigning core ownership. Preserve the separately source-traced action font-stack, tracking and inverse-primary substitutions. Investigate remaining normal-line-box observations without baseline or line-height calibration. Retain independent intrinsic-width, live-region, visibility, lifetime and placement obligations, including checking off-surface rendering rather than equating an unmatched label ID with a missing snackbar.' },
     { priority: 5.6, rootCause: 'Nested list inputs are replaced by generic value buttons', action: 'Restore bottom-sheet navigation/list/anchor/content/label structure and the original label font, explicit line-height, tracking, ink and overflow declarations. Preserve the actual reference overlay token scope and accessible name instead of borrowing page theme colors or calling the opener text the dialog name. Restore reference navigation behavior rather than generic dismiss handling, then reduce any equal-input core failure. Do not infer start/left alignment equivalence without direction evidence. Keep the separate fixed-width/content-height and responsive-constraint findings.' },
     { priority: 5.7, rootCause: 'Calendar period text and vector inputs are collapsed into a glyph string', action: 'Restore the reference period text span beside the 10x5 polygon SVG, using the original year-view CSS inversion, text-button font/tracking tokens and calendar period color-token override. Preserve the live-period description relationship. Do not strip the candidate triangle during comparison, substitute another font character or tune offsets. The current 41 texture witnesses compare common period text inputs while retaining both unequal full compositions; normal-line-height, wrapper layout and glyph/vector raster still need independent proof.' },
     { priority: 5.8, rootCause: 'Calendar close control and its focus-reveal interaction were omitted', action: 'Restore the reference close-button/label, original unfocused clipping and focus-to-reveal declarations, focus order and close activation through core APIs. The source template binds focus/blur and datepicker.close(); the candidate popup never authors that control. Preserve each omission as unequal structure, not a missing paint sample or harmless hidden element. The checkpoint-bound calendar-close diagnostic proves Tab reveal, Shift+Tab hiding, Enter dismissal and opener focus restoration in both reference views at DPR 1 and 2, while the candidate lacks the control and remains open. All twenty paired action boundaries are integrated and independently replayed in the consolidated inventory, including candidate controls remaining after reference dismissal. Do not extrapolate their focused scope to all themes or claim equal-input core failure. Investigate core only against restored equal declarations; outside-click and Escape dismissal are not replacements for the missing control.' },

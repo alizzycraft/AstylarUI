@@ -589,6 +589,15 @@ export const sourceAuditDefinitions = Object.freeze([
     justification: 'Candidate fixes panel/title/content/actions to the reference used heights161/67/20/73px. Material derives these from title padding6px24px13px plus a40px inline pseudo-element, content flow, and wrapping actions with min-height52px, padding16px24px and a1px transparent top border. Candidate title padding7px24px12px, flex-end alignment and action padding16px24px17px reproduce current geometry through different rules. Equal used heights do not establish equivalent inputs.',
   }),
   Object.freeze({
+    id: 'fixture-snackbar-message-composition-substitution',
+    introducedBy: '2f44011 feat(example): add Material component showcase',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`type: 'span' as const, id: .\$\{family\}-title., textContent: 'Project saved'`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase snackbar message flex composition, live-region ownership and component typography',
+    justification: 'The initial showcase replaces the simple-snack-bar message div and separate action composition with a span and value button. The reference nested live region and flexing padded message are flattened into a status surface with fixed width and shared padding. Exact overlay/action/message context maps the text, not equivalent wrapper behavior, intrinsic sizing, typography, announcement behavior or placement. Preserve original message/action rendering inputs before equal-input core investigation; do not treat a missing shared text ID as a missing snackbar or compensate its label position.',
+  }),
+  Object.freeze({
     id: 'fixture-snackbar-fixed-width',
     introducedBy: '899c741 fix(material): anchor snackbar and tooltip overlays',
     file: 'examples/material-showcase/src/app/astylar.component.ts',
