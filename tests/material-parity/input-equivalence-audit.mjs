@@ -7,6 +7,7 @@ import { loadSupplementalLineBoxReport } from './supplemental-line-box-report.mj
 import { validateSupplementalCapture } from './supplemental-capture-evidence.mjs';
 import { collectCalendarCloseEvidence } from './calendar-close-evidence.mjs';
 import { collectTooltipStateEvidence } from './tooltip-state-evidence.mjs';
+import { collectNonGridTemplateInputs, classifyNonGridTemplateInput, nonGridTemplateAttribution, gridTemplateProperties } from './grid-template-input-evidence.mjs';
 import { selectorCanApply, borderColorProperties, borderInitialAttribution, collectBorderInitialInputs, classifyBorderInitialInput,
   buttonBorderResetAttribution, collectButtonBorderResetInputs, classifyButtonBorderResetInput,
   outlineTokenAttribution, collectOutlineTokenInputs, classifyOutlineTokenInput,
@@ -98,6 +99,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const buttonBorderResetInputs = collectButtonBorderResetInputs(elementInventory, canonicalStyle);
   const outlineTokenInputs = collectOutlineTokenInputs(elementInventory, canonicalStyle);
   const chipOutlineInputs = collectChipOutlineInputs(elementInventory, canonicalStyle);
+  const nonGridTemplateInputs = collectNonGridTemplateInputs(elementInventory);
   const typographyCases = [...cases, ...supplementalCalendarClose.cases, ...supplementalTooltipState.cases];
   const rawControlTypography = collectControlTypographyEvidence(typographyCases, elementInventory);
   const retainedTypography = collectRetainedTypographyEvidence(typographyCases, elementInventory, rawControlTypography);
@@ -119,7 +121,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const controlTypography = attributeObservedSupplementalLineBoxes(attributeObservedControlLineBoxes(
     attributeObservedNormalLineBoxes(rawControlTypography, elementInventory, normalLineBoxes), elementInventory, controlLineBoxes),
     elementInventory, supplementalLineBoxes);
-  const discrepancies = collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs);
+  const discrepancies = collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs, nonGridTemplateInputs);
   const classifications = countBy(discrepancies, (entry) => entry.classification);
   const propertyGroupCounts = countBy(discrepancies, (entry) => entry.propertyGroup);
   const familyCounts = countBy(discrepancies, (entry) => entry.family);
@@ -188,6 +190,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
     buttonBorderResetInputs,
     outlineTokenInputs,
     chipOutlineInputs,
+    nonGridTemplateInputs,
     retainedTypography,
     controlTypography,
     sourceFindings,
@@ -216,6 +219,18 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
   if (requireComplete && report.elementInventory.resolvedStyleGaps.length > 0) errors.push(`${report.elementInventory.resolvedStyleGaps.length} inventoried elements lack resolved style evidence`);
   if (requireComplete && report.elementInventory.stateStyleGaps.length > 0) errors.push(`${report.elementInventory.stateStyleGaps.length} state cases lack effective style provenance`);
   if (report.elementInventory.errors.length > 0) errors.push(`${report.elementInventory.errors.length} full-tree collection errors`);
+  if (JSON.stringify(report.nonGridTemplateInputs) !== JSON.stringify(collectNonGridTemplateInputs(report.elementInventory))) {
+    errors.push('non-grid template evidence does not replay from the captured inventory');
+  }
+  for (const entry of report.discrepancies.filter(entry => entry.attribution === nonGridTemplateAttribution)) {
+    const proof = report.nonGridTemplateInputs?.find(p => p.case === entry.reviewEvidence?.case && p.element === entry.element);
+    if (!proof || !gridTemplateProperties.includes(entry.property) || entry.reference !== 'none' || entry.astylar !== undefined ||
+        entry.classification !== 'equivalent-representation' || JSON.stringify(proof) !== JSON.stringify(entry.reviewEvidence) ||
+        !Array.isArray(entry.reviewedCases) || entry.reviewedCases.length !== entry.occurrences || new Set(entry.reviewedCases).size !== entry.occurrences ||
+        entry.reviewedCases.some(key => !report.nonGridTemplateInputs?.some(p => p.case === key && p.element === entry.element))) {
+      errors.push('non-grid template classification lacks exact captured context and omission evidence');
+    }
+  }
   if (JSON.stringify(report.chipOutlineInputs) !== JSON.stringify(collectChipOutlineInputs(report.elementInventory, canonicalStyle))) {
     errors.push('chip outline evidence does not replay from the captured inventory');
   }
@@ -850,8 +865,9 @@ export function renderMaterialInputAuditMarkdown(report) {
   return lines.join('\n');
 }
 
-function collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs) {
+function collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs, nonGridTemplateInputs) {
   const grouped = new Map();
+  const nonGridTemplateByCaseAndId = new Map(nonGridTemplateInputs.map(entry => [JSON.stringify([entry.case, entry.element]), entry]));
   const borderInitialByCaseAndId = new Map(borderInitialInputs.map(entry => [JSON.stringify([entry.case, entry.element]), entry]));
   const buttonBorderResetByCaseAndId = new Map(buttonBorderResetInputs.map(entry => [JSON.stringify([entry.case, entry.element]), entry]));
   const outlineTokenByCaseAndId = new Map(outlineTokenInputs.map(entry => [JSON.stringify([entry.case, entry.element]), entry]));
@@ -884,6 +900,8 @@ function collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInp
               outlineTokenByCaseAndId.get(JSON.stringify([key, input.id])), canonicalStyle)
             ?? classifyChipOutlineInput(input, property, referenceValue, astylarValue,
               chipOutlineByCaseAndId.get(JSON.stringify([key, input.id])), canonicalStyle)
+            ?? classifyNonGridTemplateInput(input, property, referenceValue, astylarValue,
+              nonGridTemplateByCaseAndId.get(JSON.stringify([key, input.id])))
             ?? classifyReviewedRootInput(benchmarkCase, input, property, referenceValue, astylarValue)
             ?? classifyReviewedContainerInput(benchmarkCase, input, property, referenceValue, astylarValue)
             ?? classifyReviewedBadgePaint(benchmarkCase, input, property, referenceValue, astylarValue)
@@ -909,7 +927,7 @@ function collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInp
             ...(classification.attribution ? { attribution: classification.attribution } : {}),
             ...(classification.reviewEvidence ? { reviewEvidence: classification.reviewEvidence } : {}),
             ...([borderInitialAttribution, buttonBorderResetAttribution, outlineTokenAttribution, chipOutlineAttribution,
-              'reviewed-root-flow-dependency'].includes(classification.attribution) ? { reviewedCases: [] } : {}),
+              'reviewed-root-flow-dependency', nonGridTemplateAttribution].includes(classification.attribution) ? { reviewedCases: [] } : {}),
             occurrences: 0,
             cases: [],
             states: [],
@@ -7536,6 +7554,7 @@ function sourceFingerprints(root) {
     'examples/material-showcase/node_modules/astylarui/dist/lib/app/services/dom/elements/grid.service.js',
     'examples/material-showcase/node_modules/astylarui/dist/lib/app/services/dom/elements/grid-track-sizing.js',
     'examples/material-showcase/src/app/grid-template-initial-audit.spec.ts',
+    'tests/material-parity/grid-template-input-evidence.mjs',
     'src/app/services/dom/elements/css-transform.ts',
     'src/app/services/dom/elements/element-material.service.ts',
     'src/app/services/dom/input/button.manager.ts',
@@ -7602,6 +7621,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('non-grid template omission requires/,
+      'context-bound ordinary block/flex template omission', 'Complete paired trees, captured normal/comparison/interaction stages and exclusion of applicable grid/reset/motion declarations admit only omitted template scalars. Equal and unequal block/flex pairs retain independent display differences. Grid/native/plugin cases, incomplete or ambiguous evidence, forged report records and truncated reviewed-case lists are rejected; no blanket initial-value normalization or final-raster claim.'),
     proof(root, 'examples/material-showcase/src/app/grid-template-initial-audit.spec.ts', /describe\('Material audit: grid initial template/,
       'confirmed failing grid none; inactive block/flex controls pass', 'The expanded real-browser repeat retains four equal-input grid none failures (columns/rows at120/240px), twelve passing grid controls and32 passing two-child block/flex controls. Identical omitted,none,1fr and literal templates do not change block/flex flow or assign grid CSS dimensions. The first expanded run also had an async startup timeout; it is not accepted as a clean control run. Authored inputs, style stages, parent/child edges and zero-resource cleanup remain asserted. This DPR1 geometry proof does not establish final raster, arbitrary non-grid contexts, or blanket template-omission equivalence in captured cases.'),
     proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('root flow dependencies require/,

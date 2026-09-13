@@ -1089,6 +1089,138 @@ test('grid none proof does not waive template differences in grid or non-grid sn
   }
 });
 
+function nonGridTemplateReport(referenceDisplay = 'block', candidateDisplay = 'flex') {
+  const raw = visibleOverflowReport(), e = raw.results[0], input = e.styleInputs[0];
+  const reference = { display: referenceDisplay, gridTemplateColumns: 'none', gridTemplateRows: 'none' };
+  const candidate = { display: candidateDisplay };
+  Object.assign(input, { reference, astylar: { ...candidate },
+    astylarNormalResolvedStyle: { ...candidate }, astylarInteractionResolvedStyle: { ...candidate },
+    referenceAuthored: [{ selector: '#core-root', declarations: { display: { value: referenceDisplay, important: false } } }],
+    astylarAuthored: [{ selector: '#core-root', declarations: { ...candidate } }] });
+  e.inputTrees.reference.styles = [{ ...reference }];
+  e.inputTrees.reference.rules = structuredClone(input.referenceAuthored);
+  Object.assign(e.inputTrees.reference.nodes[0], { inline: {}, rules: [0] });
+  Object.assign(e.inputTrees.astylar.nodes[0], { normalResolvedStyle: { ...candidate },
+    resolvedStyle: { ...candidate }, interactionResolvedStyle: { ...candidate } });
+  e.inputTrees.astylar.rules = [{ selector: '#core-root', ...candidate },
+    { selector: '#other:hover, .unrelated.selected', gridTemplateColumns: '30px' },
+    { selector: 'button', gridTemplateRows: 'none' }];
+  return raw;
+}
+
+test('non-grid template omission requires complete captured ordinary block and flex contexts', () => {
+  for (const ref of ['block', 'flex']) for (const ast of ['block', 'flex']) for (const state of [undefined, 'hover', 'active', 'focus']) {
+    const raw = nonGridTemplateReport(ref, ast);
+    if (state) raw.results[0].state = state;
+    const before = JSON.stringify(raw), audit = buildMaterialInputAudit(raw);
+    assert.equal(audit.nonGridTemplateInputs.filter(p => p.element === 'core-root').length, 1);
+    const differences = audit.discrepancies.filter(d => d.attribution === 'reviewed-non-grid-template-omission');
+    assert.deepEqual(differences.map(d => d.property), ['gridTemplateColumns', 'gridTemplateRows']);
+    for (const d of differences) {
+      assert.equal(d.classification, 'equivalent-representation');
+      assert.equal(d.reference, 'none'); assert.equal(d.astylar, undefined);
+      assert.equal(d.reviewEvidence.referenceDisplay, ref);
+      assert.deepEqual(d.reviewEvidence.candidateDisplays, [ast, ast, ast]);
+      assert.equal(d.reviewEvidence.revision, 7);
+      assert.equal(d.reviewEvidence.excludedCandidateRules.length, 2);
+      assert.equal(d.reviewEvidence.wholeElementInputEquivalent, false);
+      assert.equal(d.reviewEvidence.finalRasterVerified, false);
+    }
+    if (ref !== ast) assert.equal(audit.discrepancies.find(d => d.property === 'display').attribution, 'unresolved');
+    assert.deepEqual(validateMaterialInputAudit(audit, { requireComplete: false }), []);
+    assert.equal(JSON.stringify(raw), before);
+  }
+});
+
+test('non-grid template omission rejects grid, authored requests, ambiguous mappings and missing stages', () => {
+  const mutations = [
+    e => { e.inputTrees.reference.styles[0].display = 'grid'; },
+    e => { e.inputTrees.reference.styles[0].display = 'inline-grid'; },
+    e => { e.inputTrees.reference.styles[0].display = 'inline-block'; },
+    e => { e.inputTrees.astylar.nodes[0].resolvedStyle.display = 'grid'; },
+    e => { e.inputTrees.astylar.nodes[0].normalResolvedStyle.display = 'inline-grid'; },
+    e => { e.inputTrees.astylar.nodes[0].interactionResolvedStyle.display = 'grid'; },
+    e => { delete e.inputTrees.astylar.nodes[0].interactionResolvedStyle.display; },
+    e => { delete e.inputTrees.reference.styles[0].gridTemplateRows; },
+    e => { e.inputTrees.reference.styles[0].gridTemplateColumns = '40px'; },
+    e => { e.inputTrees.reference.nodes[0].inline = { 'grid-template-columns': { value: 'none' } }; },
+    e => { delete e.inputTrees.reference.nodes[0].inline; },
+    e => { e.inputTrees.reference.rules[0].declarations.grid = { value: 'none' }; },
+    e => { e.inputTrees.reference.rules[0].declarations.all = { value: 'initial' }; },
+    e => { e.inputTrees.reference.rules[0].declarations.animation = { value: 'layout 1s' }; },
+    e => { e.inputTrees.reference.nodes[0].type = 'button'; },
+    e => { e.inputTrees.reference.nodes[0].type = 'mat-card'; },
+    e => { e.inputTrees.reference.nodes[0].type = 'body'; },
+    e => { e.inputTrees.astylar.nodes[0].authored.type = 'showcase.material:panel'; },
+    e => { e.inputTrees.astylar.nodes[0].authored.class = {}; },
+    e => { e.inputTrees.astylar.nodes[0].authored.style = { gridTemplateRows: 'none' }; },
+    e => { e.inputTrees.astylar.nodes[0].normalResolvedStyle.gridAutoRows = '20px'; },
+    e => { e.inputTrees.astylar.nodes[0].resolvedStyle.gridTemplateColumns = 'none'; },
+    e => { e.inputTrees.astylar.nodes[0].interactionResolvedStyle.all = 'initial'; },
+    e => { delete e.inputTrees.astylar.nodes[0].normalResolvedStyle; },
+    e => { e.inputTrees.astylar.rules.push({ selector: '#core-root', gridTemplateRows: 'none' }); },
+    e => { e.inputTrees.astylar.rules.push({ selector: '#core-root:hover', 'grid-template': 'none' }); },
+    e => { e.inputTrees.astylar.rules.push({ selector: ':is(#core-root)', grid: 'none' }); },
+    e => { e.inputTrees.astylar.rules.push({ selector: '.unrelated div', all: 'initial' }); },
+    e => { e.inputTrees.astylar.rules.push({ selector: '#core-root', transition: 'all 1s' }); },
+    e => { e.inputTrees.astylar.rules.push({ selector: '#other', nested: { grid: 'none' } }); },
+    e => { delete e.inputTrees.astylar.rules; },
+    e => { delete e.inputTrees.reference.rules; },
+    e => { e.inputTrees.reference.errors.push('incomplete'); },
+    e => { e.inputTrees.reference.nodes.push(structuredClone(e.inputTrees.reference.nodes[0])); },
+    e => { e.inputTrees.astylar.nodes.push(structuredClone(e.inputTrees.astylar.nodes[0])); },
+    e => { e.inputTrees.astylar.resolvedStyleEvidenceVersion = 1; },
+    e => { e.inputTrees.astylar.resolvedStyleSource = 'mesh-metadata'; },
+    e => { delete e.inputTrees.astylar.resolvedStyleRevision; },
+    e => { e.styleInputs[0].referenceStructure.type = 'span'; },
+    e => { e.styleInputs[0].astylarStructure.schemaVersion = 1; },
+    e => { e.styleInputs[0].astylarResolvedStyleEvidenceVersion = 1; },
+    e => { e.styleInputs[0].reference.display = 'flex'; },
+    e => { e.styleInputs[0].reference.gridTemplateRows = '30px'; },
+    e => { e.styleInputs[0].astylar.display = 'block'; },
+    e => { delete e.styleInputs[0].astylarNormalResolvedStyle; },
+    e => { e.styleInputs[0].astylarInteractionResolvedStyle.grid = 'none'; },
+    e => { delete e.styleInputs[0].referenceAuthored; },
+    e => { delete e.styleInputs[0].astylarAuthored; },
+    e => { e.styleInputs[0].astylarAuthored[0].declarations.gridTemplateRows = 'none'; },
+    e => { e.styleInputs[0].referenceAuthored[0].declarations['grid-template'] = { value: 'none' }; },
+  ];
+  for (const mutate of mutations) {
+    const raw = nonGridTemplateReport(); mutate(raw.results[0]);
+    assert.ok(buildMaterialInputAudit(raw).discrepancies.every(d => d.attribution !== 'reviewed-non-grid-template-omission'), String(mutate));
+  }
+});
+
+test('non-grid template classifications replay inventory and retain all reviewed cases', () => {
+  const raw = nonGridTemplateReport();
+  raw.results = Array.from({ length: 15 }, (_, i) => ({ ...structuredClone(raw.results[0]), state: `state-${i}` }));
+  const audit = buildMaterialInputAudit(raw);
+  assert.equal(audit.nonGridTemplateInputs.filter(p => p.element === 'core-root').length, 15);
+  const find = a => a.discrepancies.find(d => d.attribution === 'reviewed-non-grid-template-omission');
+  assert.equal(find(audit).cases.length, 12);
+  assert.equal(find(audit).reviewedCases.length, 15);
+  assert.equal(find(audit).occurrences, 15);
+  for (const change of [
+    a => { delete a.nonGridTemplateInputs; },
+    a => { a.nonGridTemplateInputs[0].referenceDisplay = 'grid'; },
+    a => { a.nonGridTemplateInputs[0].candidateDisplays[2] = 'grid'; },
+    a => { a.nonGridTemplateInputs[0].wholeElementInputEquivalent = true; },
+    a => { a.elementInventory.variants.find(v => v.side === 'astylar').ruleEvidenceComplete = false; },
+    a => { a.elementInventory.cases.push(structuredClone(a.elementInventory.cases[0])); },
+    a => { find(a).property = 'display'; },
+    a => { find(a).reference = '40px'; },
+    a => { find(a).astylar = 'none'; },
+    a => { find(a).classification = 'confirmed-core-renderer-defect'; },
+    a => { find(a).reviewEvidence.revision = 99; },
+    a => { find(a).reviewedCases.pop(); },
+    a => { find(a).reviewedCases[0] = find(a).reviewedCases[1]; },
+    a => { find(a).reviewedCases[0] = 'not-a-captured-case'; },
+  ]) {
+    const changed = structuredClone(audit); change(changed);
+    assert.ok(validateMaterialInputAudit(changed, { requireComplete: false }).some(e => e.includes('non-grid template')), String(change));
+  }
+});
+
 test('attributes sidenav container flow only with the reviewed paired declaration witnesses', () => {
   const raw = parityReport({ display: 'block' }, { display: 'flex' });
   raw.results[0].family = 'sidenav';
@@ -1230,7 +1362,8 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   const report = parityReport({}, {});
   const audit = buildMaterialInputAudit(report);
   assert.equal(audit.coverage.visualParityGreen, true);
-  assert.equal(audit.sourceFingerprints.length, 79);
+  assert.equal(audit.sourceFingerprints.length, 80);
+  assert.equal(audit.sourceFingerprints.filter(entry => entry.file === 'tests/material-parity/grid-template-input-evidence.mjs').length, 1);
   for (const file of ['src/app/services/dom/elements/grid.service.ts', 'src/app/services/dom/elements/grid-track-sizing.ts',
     'examples/material-showcase/node_modules/astylarui/dist/lib/app/services/dom/elements/grid.service.js',
     'examples/material-showcase/node_modules/astylarui/dist/lib/app/services/dom/elements/grid-track-sizing.js',

@@ -3,6 +3,79 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Captured non-grid template omissions: bounded scalar classification
+
+The block/flex controls committed in `77b2098` now support a narrowly scoped
+machine classification, `reviewed-non-grid-template-omission`. The new helper
+`tests/material-parity/grid-template-input-evidence.mjs` does not change any
+captured value or synthesize candidate defaults. It attributes only the
+`gridTemplateColumns` and `gridTemplateRows` differences whose browser value is
+`none` and whose candidate value is absent, subject to all of these witnesses:
+
+- Exactly one paired case and same-ID ordinary node on each side; no native
+  controls, Material/custom hosts, plugin elements, SVG, or document roots.
+- Complete captured authored rules, inline declarations, and V2 core-style
+  inspection with a valid revision and no case-level collection errors.
+- Reference display and all three candidate style stages are explicitly
+  `block` or `flex`. Their values need not equal each other: any independent
+  block-versus-flex difference remains in the report, not waived by this proof.
+- Both browser template values are `none`; candidate normal, comparison and
+  interaction stages omit grid declarations. Neither authored side requests
+  grid, resets, animation or transition declarations for the mapped element.
+- Every candidate rule is checked, independently of semantic-DOM matching.
+  A rule containing grid/reset/motion declarations is excluded only when its
+  simple selector cannot apply. Unknown selectors, potentially applicable
+  state/media rules and nested declarations prevent attribution.
+- The separately captured style-comparison snapshot agrees with the full-tree
+  node types, display witnesses and omitted template inputs.
+
+Evidence retains the exact case, node keys, types, revision, three candidate
+display witnesses, reference rule indices and excluded candidate rule indices.
+It explicitly sets whole-element equivalence and final-raster verification to
+false. The validator independently re-derives the full evidence array, checks
+each classified scalar, and requires every unique reviewed case—not just the
+twelve displayed samples. There is no addition to global implicit-value policy.
+
+The regression checks cover sixteen state/context combinations, rejection of
+active grid and incomplete/conflicting evidence, and fifteen grouped cases
+with forged/missing/duplicated review records. The original unresolved-template
+snapshot test still passes for block, flex, grid and inline-grid without these
+full-tree witnesses. Confirmed active-grid `none` failures are unchanged.
+
+Focused verification:
+
+- `node --test --test-name-pattern='non-grid template|grid none proof|records source fingerprints' tests/material-parity/input-equivalence-audit.spec.mjs`
+  — **5/5 pass**, terminal exit0, 48.3162725 seconds, no skips/cancellations.
+  The first development run had two incorrect synthetic-test total-count
+  assertions: the collector also found thirteen existing supplemental nodes.
+  Assertions now count the intended `core-root` node explicitly; supplemental
+  evidence remains collected and independently validated, not filtered out.
+- The helper is included in source fingerprints (now 80); the existing 125
+  source findings, core proof, implementation ownership and raw captures stay
+  intact.
+- Full consolidated in-memory rebuild using the frozen main report, static
+  normal-line-box report, control-line-box V3 report, supplemental line-box
+  report and `supplemental-current-ancestry-audit` root (the full command and
+  paths are recorded in the earlier consolidated-rebuild sections):
+  **2,518 contextual inventory witnesses**, **74 classified scalar groups**,
+  **4,742 occurrences / 4,742 retained reviewed-case IDs**, across all 36
+  configured families. Only `gridTemplateColumns` and `gridTemplateRows` are
+  attributed. Inventory witnesses can cover nodes without a corresponding
+  scalar comparison; their count is not a count of accepted whole elements.
+  Unresolved style groups fall **3,210 to 3,136**, with no scalar values changed.
+  Strict validation returns exactly
+  `["3136 resolved-style differences still lack root-cause attribution"]`.
+  The diagnostic wrapper asserting that incomplete result exits0; this is
+  **not** strict audit acceptance. Configured capture coverage remains true,
+  while overall input equivalence remains false.
+- `npm run parity:harness:check` — **538/538 pass**, terminal exit 0,
+  492.7258817 seconds, no failures/skips/cancellations. This includes independent
+  evidence replay, malformed/forged-report controls and codec checks; it is not
+  a replacement for the final enforced rendering matrix.
+- All ten frozen capture-harness files retain their checkpoint SHA-256
+  values; `git diff --check` passes. The final full enforced parity gate and
+  remaining comparison/state and input-classification work are still pending.
+
 ## Grid template context controls: inactive is not globally equivalent
 
 The public package proof now preserves all sixteen original active-grid cases
