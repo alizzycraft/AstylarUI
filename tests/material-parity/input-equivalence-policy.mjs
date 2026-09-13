@@ -562,6 +562,15 @@ export const sourceAuditDefinitions = Object.freeze([
     justification: 'Reference sheetContent supplies two href="#" anchors inside mat-nav-list with generated content/primary-label spans. Candidate flattens them to Share/Copy link value buttons and replaces the inner label font/24px line-height/.496px tracking/on-surface tokens with a generic control font stack, omitted line-height/tracking and page theme.onSurface. The nested nowrap/ellipsis/overflow rules are also absent. Share is authored as a -dismiss button handled by the generic close branch rather than reference anchor navigation; mapping corresponding text does not certify equal semantics or behavior. Preserve the original structures and declarations before diagnosing renderer failures, rather than tuning normal metrics, colors or fixed dimensions.',
   }),
   Object.freeze({
+    id: 'fixture-paginator-tooltip-omitted',
+    introducedBy: '2f44011 feat(example): add Material component showcase',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`id: 'paginator-next', class: 'paginator-button'[^\n]*ariaLabel: 'Next page', value: '›'`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase paginator tooltip content, trigger state and shared overlay composition',
+    justification: 'The reference MatPaginator supplies navigation tooltips from its internationalized labels, disabled state and above-positioned MatTooltip directive. The candidate paginator authors only navigation buttons and page labels, omitting tooltip functionality. Captures retain the shown Next page connected overlay but no candidate popup counterpart. This omission exists before core creates any tooltip and must not be explained as missing renderer text, equivalent hidden state or a coordinate defect. Restore equivalent tooltip authoring through shared core APIs before assessing rendering or dismissal behavior.',
+  }),
+  Object.freeze({
     id: 'fixture-stepper-edit-state-replaced-by-checkmark',
     introducedBy: 'fc45b58 fix(interaction): focus nested interactive owners',
     file: 'examples/material-showcase/src/app/astylar.component.ts',

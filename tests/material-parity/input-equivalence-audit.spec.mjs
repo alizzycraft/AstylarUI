@@ -1098,7 +1098,7 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   const report = parityReport({}, {});
   const audit = buildMaterialInputAudit(report);
   assert.equal(audit.coverage.visualParityGreen, true);
-  assert.equal(audit.sourceFingerprints.length, 60);
+  assert.equal(audit.sourceFingerprints.length, 61);
   for (const file of ['scripts/audit-material-calendar-close.mjs', 'tests/material-parity/calendar-close-evidence.mjs',
     'scripts/audit-material-tooltip-state.mjs', 'tests/material-parity/tooltip-state-evidence.mjs',
     'examples/material-showcase/node_modules/@angular/material/fesm2022/menu.mjs',
@@ -2714,6 +2714,116 @@ test('toggle alignment report claims independently replay from captured inputs',
     const report = structuredClone(baseline);
     mutate(report, report.retainedTypography.differences.find(d => d.attribution === 'reviewed-toggle-button-wrapper-substitution'));
     assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('toggle button alignment')), String(mutate));
+  }
+});
+
+function paginatorTooltipReport() {
+  const raw = templateTypographyReport('paginator'), e = raw.results[0], { reference: r, astylar: a } = e.inputTrees;
+  e.state = 'hover'; raw.results = []; raw.interactions = [e];
+  Object.assign(r.styles[0], { display: 'block', visibility: 'visible', opacity: '1' });
+  const ref = (key, parent, type, attributes = {}, ownText = '') => ({ key, parent, type, attributes, ownText, style: 0, rules: [], pseudoElements: [] });
+  r.nodes[0].parent = 'section'; r.nodes[0].attributes.role = 'group';
+  r.nodes.push(ref('section', 'frame', 'section', { id: 'paginator-root', class: 'demo' }), ref('frame', null, 'main', { class: 'frame' }),
+    ref('previous', 'r/w/c/r', 'button', { class: 'mat-mdc-paginator-navigation-previous', 'aria-label': 'Previous page', 'aria-disabled': 'true' }),
+    ref('next', 'r/w/c/r', 'button', { class: 'mat-mdc-paginator-navigation-next mat-mdc-tooltip-trigger', 'aria-label': 'Next page', mattooltipposition: 'above' }),
+    ref('overlay', null, 'div', { class: 'cdk-overlay-container' }), ref('bounds', 'overlay', 'div', { class: 'cdk-overlay-connected-position-bounding-box' }),
+    ref('pane', 'bounds', 'div', { id: 'cdk-overlay-0', class: 'cdk-overlay-pane mat-mdc-tooltip-panel mat-mdc-tooltip-panel-above' }),
+    ref('component', 'pane', 'mat-tooltip-component', { 'aria-hidden': 'true' }), ref('tooltip', 'component', 'div', { class: 'mat-mdc-tooltip mat-mdc-tooltip-show' }),
+    ref('tooltip-text', 'tooltip', 'div', { class: 'mat-mdc-tooltip-surface mdc-tooltip__surface' }, 'Next page'));
+  const ast = (key, parent, authored) => ({ key, parent, authored, resolvedStyle: {}, normalResolvedStyle: {}, interactionResolvedStyle: {} });
+  a.nodes[0].parent = 'section'; a.nodes[0].authored.role = 'group';
+  a.nodes.push(ast('section', 'page', { type: 'section', id: 'paginator-root' }), ast('page', 'root', { type: 'main', id: 'page' }),
+    ast('previous', 'a/c/r', { type: 'button', id: 'paginator-previous', class: 'paginator-button', ariaLabel: 'Previous page', value: '‹', disabled: true }),
+    ast('next', 'a/c/r', { type: 'button', id: 'paginator-next', class: 'paginator-button', ariaLabel: 'Next page', value: '›', disabled: false }));
+  return raw;
+}
+
+test('paginator tooltip omission preserves shown overlay and complete candidate input evidence', () => {
+  for (const state of ['hover', 'held', 'activate']) {
+    const raw = paginatorTooltipReport(); raw.interactions[0].state = state;
+    const before = structuredClone(raw), report = buildMaterialInputAudit(raw);
+    const gap = report.retainedTypography.gaps.find(g => g.attribution === 'reviewed-paginator-tooltip-omission');
+    assert.ok(gap); assert.deepEqual(gap.referenceNodes, ['tooltip-text']); assert.deepEqual(gap.astylarNodes, []);
+    assert.equal(gap.inputEquivalent, false); assert.equal(gap.finalRasterVerified, false);
+    assert.equal(gap.reviewEvidence.referenceOverlayPath.length, 6);
+    assert.equal(gap.reviewEvidence.referenceTriggerPath.length, 7);
+    assert.equal(gap.reviewEvidence.candidatePath.length, 6);
+    assert.equal(gap.reviewEvidence.referenceOverlayPath[0].ownText, 'Next page');
+    assert.equal(gap.reviewEvidence.referenceOverlayPath[2].attributes['aria-hidden'], 'true');
+    assert.equal(gap.reviewEvidence.candidatePath[0].authored.value, '›');
+    assert.equal(gap.reviewEvidence.textMappings.length, 3);
+    assert.equal(report.retainedTypography.comparisons.length, 3, 'page labels remain independently compared');
+    assert.ok(report.sourceFindings.find(f => f.id === 'fixture-paginator-tooltip-omitted')?.detected);
+    assert.ok(!validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('paginator tooltip')));
+    assert.deepEqual(raw, before);
+  }
+});
+
+test('paginator tooltip omission rejects ambiguous owners changed state missing inputs and candidate content', () => {
+  const controls = [
+    (r, a, e) => { e.state = 'leave'; },
+    (r, a) => { r.nodes.push(structuredClone(r.nodes[0])); },
+    (r, a) => { a.nodes.push({ ...structuredClone(a.nodes[0]), key: 'duplicate' }); },
+    (r, a) => { r.nodes.find(n => n.key === 'tooltip-text').ownText = 'Previous page'; },
+    (r, a) => { r.nodes.find(n => n.key === 'tooltip-text').parent = 'pane'; },
+    (r, a) => { r.nodes.find(n => n.key === 'tooltip').attributes.class = 'mat-mdc-tooltip mat-mdc-tooltip-hide'; },
+    (r, a) => { r.nodes.find(n => n.key === 'component').attributes['aria-hidden'] = 'false'; },
+    (r, a) => { r.nodes.find(n => n.key === 'pane').attributes.class = 'cdk-overlay-pane mat-mdc-tooltip-panel mat-mdc-tooltip-panel-below'; },
+    (r, a) => { r.nodes.find(n => n.key === 'overlay').parent = 'frame'; },
+    (r, a) => { r.styles[0].display = 'none'; },
+    (r, a) => { r.styles[0].visibility = 'hidden'; },
+    (r, a) => { r.styles[0].opacity = '0'; },
+    (r, a) => { r.nodes.find(n => n.key === 'next').attributes['aria-label'] = 'Other'; },
+    (r, a) => { r.nodes.find(n => n.key === 'next').attributes.mattooltipposition = 'below'; },
+    (r, a) => { r.nodes.find(n => n.key === 'next').attributes['aria-disabled'] = 'true'; },
+    (r, a) => { r.nodes.find(n => n.key === 'next').attributes.disabled = ''; },
+    (r, a) => { r.nodes.find(n => n.key === 'next').attributes.class += ' mat-mdc-tooltip-disabled'; },
+    (r, a) => { r.nodes.find(n => n.key === 'next').parent = 'frame'; },
+    (r, a) => { r.nodes.find(n => n.key === 'previous').parent = 'frame'; },
+    (r, a) => { a.nodes.find(n => n.key === 'next').authored.value = 'Next'; },
+    (r, a) => { a.nodes.find(n => n.key === 'next').authored.disabled = true; },
+    (r, a) => { a.nodes.find(n => n.key === 'previous').authored.disabled = false; },
+    (r, a) => { a.nodes.find(n => n.key === 'next').authored.ariaDescribedby = 'popup'; },
+    (r, a) => { a.nodes.find(n => n.key === 'next').authored.title = 'Next page'; },
+    (r, a) => { a.nodes.find(n => n.key === 'next').authored.data = { tooltip: 'Next page' }; },
+    (r, a) => { a.nodes.find(n => n.key === 'next').parent = 'page'; },
+    (r, a) => { a.nodes.find(n => n.key === 'page').parent = 'elsewhere'; },
+    (r, a) => { a.nodes.find(n => n.authored.id === 'paginator-range').authored.textContent = '11 – 20 of 100'; },
+    (r, a) => { delete a.nodes.find(n => n.key === 'next').normalResolvedStyle; },
+    (r, a) => { a.resolvedStyleSource = 'mesh'; },
+    (r, a) => { a.nodes.push({ key: 'popup', parent: 'section', authored: { type: 'div', id: 'popup', role: 'tooltip', textContent: 'Next page' } }); },
+    (r, a) => { a.nodes.push({ key: 'custom', parent: 'section', authored: { type: 'custom:tooltip', id: 'custom' } }); },
+    (r, a) => { r.nodes.push({ key: 'extra', parent: 'tooltip', type: 'span', attributes: {}, ownText: 'Other', style: 0, rules: [], pseudoElements: [] }); },
+  ];
+  for (const [index, mutate] of controls.entries()) {
+    const raw = paginatorTooltipReport(), e = raw.interactions[0]; mutate(e.inputTrees.reference, e.inputTrees.astylar, e);
+    const cases = [{ ...e, kind: 'interaction' }], t = collectRetainedTypographyEvidence(cases, collectFullTreeInventory(cases));
+    assert.ok(t.gaps.some(g => g.attribution === 'unresolved'), `control ${index} remains explicit`);
+    assert.ok(!t.gaps.some(g => g.attribution === 'reviewed-paginator-tooltip-omission'), `control ${index}`);
+  }
+});
+
+test('paginator tooltip report independently replays complete omission evidence', () => {
+  const original = buildMaterialInputAudit(paginatorTooltipReport());
+  for (const mutate of [
+    (r, g) => { g.inputEquivalent = true; },
+    (r, g) => { g.finalRasterVerified = true; },
+    (r, g) => { g.classification = 'confirmed-core-renderer-defect'; },
+    (r, g) => { g.reviewEvidence.referenceOverlayPath[0].ownText = 'Other'; },
+    (r, g) => { g.reviewEvidence.referenceOverlayPath.pop(); },
+    (r, g) => { g.reviewEvidence.referenceTriggerPath[0].attributes.mattooltipposition = 'below'; },
+    (r, g) => { g.reviewEvidence.candidateTree.pop(); },
+    (r, g) => { g.reviewEvidence.candidatePath[0].authored.ariaDescribedby = 'popup'; },
+    (r, g) => { g.reviewEvidence.textMappings = []; },
+    (r, g) => { g.referenceNodes = []; },
+    (r, g) => { g.case = 'interaction:tooltip@light/desktop/hover'; },
+    (r, g) => { r.retainedTypography.gaps = r.retainedTypography.gaps.filter(v => v !== g); },
+    (r, g) => { r.retainedTypography.gaps.push(structuredClone(g)); },
+  ]) {
+    const report = structuredClone(original), inventory = structuredClone(report.elementInventory);
+    mutate(report, report.retainedTypography.gaps.find(g => g.attribution === 'reviewed-paginator-tooltip-omission'));
+    assert.deepEqual(report.elementInventory, inventory);
+    assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('paginator tooltip omissions')));
   }
 });
 

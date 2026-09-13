@@ -23,6 +23,72 @@ selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Paginator navigation tooltips were never authored on the candidate side (2026-09-13)
+
+All **17 remaining anonymous text-owner gaps** in the current capture set belong
+to the reference paginator's **Next page** tooltip. The 52 paginator cases are
+12 static and 40 interaction captures (eight each of focus, hover, held,
+activate and activate-leave). The tooltip exists in all eight hover and eight
+held captures, plus light/desktop-dpr1/activate. Its six-node connected-overlay
+path is shown, visible and opaque, with `mat-mdc-tooltip-panel-above` and an
+aria-hidden visual tooltip component. The full reference screenshot for
+`interactions/paginator/light/desktop-dpr1/hover/reference.png` visibly contains
+the message above the next-page button; this is not hypothetical missing text.
+The single activate observation is preserved as captured, not generalized into
+a deterministic post-click timing contract.
+
+Installed `@angular/material/fesm2022/paginator.mjs` binds both navigation
+buttons' `matTooltip` to their corresponding internationalized labels,
+`matTooltipDisabled` to the button-disabled calculation, and position to above.
+The reference template (`reference.component.ts:74`) instantiates MatPaginator.
+Candidate composition (`astylar.component.ts:882-899`) instead supplies ordinary
+page labels and previous/next value buttons, with no tooltip content or binding.
+`git show 2f44011:examples/material-showcase/src/app/astylar.component.ts`
+confirms the omission in the initial showcase; the later `7843582` paginator
+layout restructuring did not add this functionality.
+
+`reviewed-paginator-tooltip-omission` ties the popup text to the unique enabled
+Next page trigger, checks its complete paginator/section/frame path and matching
+candidate navigation ancestry, compares page-label mappings and disabled state,
+and retains the complete candidate tree. Added candidate popup text, custom
+elements, tooltip roles, description/title/data bindings, missing style stages,
+changed overlay state and ambiguous owners refuse attribution. Computed styles,
+reference rules, and candidate authored/normal/effective stages remain distinct.
+The installed paginator implementation now joins the source fingerprints
+(61 files), alongside the already bound captured browser inputs.
+
+This is an **application/plugin authoring defect** before core is asked to
+create a tooltip. Restore equivalent tooltip content, trigger/disabled behavior
+and placement intent through shared core APIs. Then independently investigate
+any equal-input overlay, focus or dismissal defect. Do not invent a candidate
+retained-text entry, call this an equivalent hidden tooltip, or adjust an offset
+to repair content that was never authored. The existing SVG-to-glyph navigation
+button finding and page-label typography remain independently enforced.
+
+Three tests add **33 negative input controls** and **13 report mutation
+controls**, including full replay that rejects omitted or fabricated gap claims.
+All three observed state names are covered by the positive test. These tests
+validate captured-input attribution, not live tooltip lifecycle parity. Previous
+button tooltips and end-of-range disabled transitions require their own action
+coverage; no such behavior is certified by a Next page snapshot.
+
+```powershell
+node --test --test-name-pattern='paginator tooltip|records source fingerprints' tests/material-parity/input-equivalence-audit.spec.mjs
+```
+
+Focused result: **4/4 pass**, zero failed/skipped/cancelled/todo,
+**2.838 seconds**, terminal exit 0. `npm run parity:harness:check` completed
+**431/431 pass**, zero failed/skipped/cancelled/todo, **236.357 seconds**, terminal
+exit 0. Full current-ancestry + normal-line-box + supplemental replay has
+complete capture coverage, **117 detected source findings**, no unexplained or
+undetected definitions, **61 source fingerprints**, and no diagnostic errors.
+There are now **zero unresolved retained-text mapping/stage gaps in this capture
+set**. Strict acceptance still rejects **3,309 resolved-style**, **879
+control-text**, and **354 retained typography** attributions. All ten frozen
+visual-harness hashes remain unchanged. No production implementation, comparison
+input, reference or visual threshold was changed; the final enforced visual
+matrix and complete interaction-coverage audit remain outstanding.
+
 ## Stepper edit state was replaced with a completion checkmark (2026-09-13)
 
 The remaining **16 stepper anonymous-text gaps** are not missing core text.
