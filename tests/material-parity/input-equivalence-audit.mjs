@@ -477,6 +477,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
   validateMenuTextEvidence(report, errors);
   validateChipLabelInk(report, errors);
   validateDisabledChoiceLabelInk(report, errors);
+  validateFloatingLabelFontInput(report, errors);
   validateDialogTextEvidence(report, errors);
   validateFieldErrorEvidence(report, errors);
   validateHorizontalStartAlignment(report, errors);
@@ -657,6 +658,7 @@ export function renderMaterialInputAuditMarkdown(report) {
     `Menu label ink: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-menu-label-ink-input').length} unequal colors preserve the original ordered inherit/token declarations and direct label inheritance against the candidate item literal. Complete rule and normal/effective/retained evidence is required; typography, token fallback origin, overlay theme scope and final paint are not certified.`,
     `Unselected chip label ink: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-chip-label-ink-input').length} unequal colors retain the enabled reference label token against candidate host-literal inheritance. Exact owner paths and unselected/enabled state are required. Selected/disabled chips, token fallback origin, other typography, generated outline ownership and final raster are not certified by this attribution.`,
     `Disabled checkbox/radio label ink: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-disabled-choice-label-ink-input').length} unequal colors preserve the reference associated-label disabled token and candidate opaque text/option color. Native disabled input association, candidate ARIA-disabled owner, rule exclusions and normal/effective/retained stages are independently replayed. This attributes omitted disabled-state inputs, not alpha painting, interaction suppression, ancestor compositing or final raster.`,
+    `Floating-label font substitution: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-floating-label-font-input').length} unequal 16px-to-12px inputs preserve the ordered reference font-token/transform/origin rules and selected candidate base or active-empty rule. All six filled controls are reviewed through the same evidence requirements. Candidate ancestors must remain untransformed; multiplying the browser font by its wrapper scale is not input normalization. Final glyph paint and separate compact/hidden/untransformed states are not certified.`,
     `Menu label font: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-menu-label-font-input').length} original direct component-family tokens contrast with candidate label omission and inheritance from the explicit generic control-family rule. The two fallback lists remain unequal; installed-glyph coincidence, font selection, shaping and final raster are not certified.`,
     `Dialog title/content: ${report.retainedTypography.reviewedMappings.filter(m => m.kind === 'reviewed-dialog-content-text').length} owners have exact generated-title linkage, direct-content and action/overlay/focus-trap correspondence. Original heading pseudo-spacer, labelled dialog and content wrappers remain distinct from candidate nested text, fixed flex boxes and separately labelled modal. Mapped text does not establish equivalent structure, typography, semantics, placement or raster.`,
     `Dialog text ink: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-dialog-text-ink-input').length} original direct title/content color tokens contrast with explicit candidate literals. Nested title inheritance and direct paragraph declarations are separately traced through normal/effective and retained stages. Token fallback origin, overlay theme scope and final raster remain unverified.`,
@@ -4555,46 +4557,109 @@ function validateFieldLabelTracking(report, errors) {
 }
 
 function reviewedFloatingLabelInput(entry, ref, ast, styles, referenceTree, astylarTree, inventory) {
-  if (!['form-field', 'input', 'select'].includes(entry.family) || ref.type !== 'mat-label' ||
+  if (!['form-field', 'input', 'select', 'autocomplete', 'datepicker', 'timepicker'].includes(entry.family) || ref.type !== 'mat-label' ||
       ref.attributes?.id !== `${entry.family}-label` || ast.authored.type !== 'label' ||
+      ast.authored.id !== ref.attributes.id || ref.ownText !== ast.authored.textContent ||
       !String(ast.authored.class ?? '').split(/\s+/).includes('field-label') ||
       styles.reference.fontSize !== '16px' || styles.retained.fontSize !== '12px' ||
-      styles.normal.fontSize !== '12px' || styles.effective.fontSize !== '12px') return;
-  const wrapper = referenceTree.nodes.find((node) => node.key === ref.parent);
-  const wrapperStyle = inventory.styles[wrapper?.style];
+      styles.normal.fontSize !== '12px' || styles.effective.fontSize !== '12px' ||
+      referenceTree.ruleEvidenceComplete !== true || astylarTree.ruleEvidenceComplete !== true ||
+      ast.retainedText?.source !== 'core-text-registry' || astylarTree.resolvedStyleEvidenceVersion !== 2 ||
+      astylarTree.resolvedStyleSource !== 'core-style-inspection') return;
+  const one = values => values.length === 1 ? values[0] : undefined;
+  const record = one(inventory.cases.filter(c => c.case === (entry.case ?? caseKey(entry)) && c.side === 'astylar'));
+  if (!record || !Number.isInteger(record.resolvedStyleRevision) || record.resolvedStyleRevision < 0 ||
+      !one(referenceTree.nodes.filter(n => n.attributes?.id === ref.attributes.id)) ||
+      !one(astylarTree.nodes.filter(n => n.authored?.id === ast.authored.id))) return;
+  const styleAt = (index, side) => {
+    const pooled = inventory.styles[index];
+    return pooled?.side === side && pooled.value && typeof pooled.value === 'object' && !Array.isArray(pooled.value) ? pooled.value : undefined;
+  };
+  const wrapper = one(referenceTree.nodes.filter(node => node.key === ref.parent));
+  const wrapperStyle = styleAt(wrapper?.style, 'reference');
   if (wrapper?.type !== 'label' || !String(wrapper.attributes?.class ?? '').split(/\s+/).includes('mdc-floating-label--float-above') ||
-      wrapperStyle?.side !== 'reference' || wrapperStyle.value.fontSize !== '16px' ||
-      wrapperStyle.value.transformOrigin !== '0px 0px' ||
-      !/^matrix\(0\.75,\s*0,\s*0,\s*0\.75,\s*0,\s*-?(?:\d+(?:\.\d+)?|\.\d+)\)$/.test(wrapperStyle.value.transform ?? '')) return;
-  const referenceRule = wrapper.rules.map((index) => inventory.rules[index]).find((rule) => rule?.side === 'reference' &&
-    rule.value.active === true && rule.value.declarations?.transform?.value === 'translateY(-106%) scale(0.75)');
-  const candidateRules = astylarTree.rules.map((index) => inventory.rules[index]).filter((rule) => rule?.side === 'astylar' &&
-    rule.value.selector === '.field-label' && rule.value.fontSize !== undefined);
-  if (!referenceRule || candidateRules.length !== 1) return;
-  const candidateRule = candidateRules[0];
-  if (candidateRule.value.fontSize !== '12px' || candidateRule.value.position !== 'absolute' ||
-      candidateRule.value.top !== '8px' || candidateRule.value.left !== '16px' ||
-      styles.effective.position !== 'absolute' || styles.effective.top !== '8px' || styles.effective.left !== '16px') return;
-  const seen = new Set();
+      !String(wrapper.attributes?.class ?? '').split(/\s+/).includes('mdc-floating-label') ||
+      wrapperStyle?.fontSize !== '16px' || wrapperStyle.transformOrigin !== '0px 0px' ||
+      !/^matrix\(0\.75,\s*0,\s*0,\s*0\.75,\s*0,\s*-?(?:\d+(?:\.\d+)?|\.\d+)\)$/.test(wrapperStyle.transform ?? '')) return;
+  const affects = k => /^(?:fontSize|font-size|font|all|transform.*|scale|translate|rotate|zoom|animation.*|transition.*)$/.test(k);
+  const transformAffects = k => affects(k) && !['fontSize', 'font-size', 'font'].includes(k);
+  const unsafeInline = node => {
+    if (Object.hasOwn(node, 'inline') && node.inline === null) return true;
+    const value = node.inline ?? node.authored?.style;
+    return (value !== undefined && (!value || typeof value !== 'object' || Array.isArray(value) || Object.keys(value).some(affects))) ||
+      /(?:^|;)\s*(?:font-size|font|all|transform[^:]*|scale|translate|rotate|zoom|animation[^:]*|transition[^:]*)\s*:/i.test(node.attributes?.style ?? '');
+  };
+  const referenceChain = [];
+  for (const node of [ref, wrapper]) {
+    const rules = node.rules.map(i => inventory.rules[i]), computed = styleAt(node.style, 'reference');
+    if (!computed || unsafeInline(node) || rules.some(r => r?.side !== 'reference' || !r.value || typeof r.value.active !== 'boolean' ||
+        !r.value.declarations || typeof r.value.declarations !== 'object' || Array.isArray(r.value.declarations))) return;
+    const selected = rules.map(r => r.value).filter(r => Object.keys(r.declarations ?? {}).some(affects));
+    if (selected.some(r => r.active !== true || !Array.isArray(r.conditions) || r.conditions.length ||
+        Object.entries(r.declarations).some(([k, d]) => affects(k) && (!d || typeof d !== 'object' || d.important !== false)))) return;
+    if (node === ref && selected.length) return;
+    referenceChain.push({ ...node, computed, rules: rules.map(r => r.value), selected });
+  }
+  const expected = [
+    ['.mdc-floating-label', 'transform-origin', 'left top'],
+    ['.mdc-text-field .mdc-floating-label', 'transform', 'translateY(-50%)'],
+    ['.mdc-text-field--filled .mdc-floating-label', 'font-size', 'var(--mat-form-field-filled-label-text-size, var(--mat-sys-body-large-size))'],
+    ['.mdc-floating-label--float-above', 'transform', 'translateY(-106%) scale(0.75)'],
+    ['.mdc-text-field--filled .mdc-floating-label--float-above', 'transform', 'translateY(-106%) scale(0.75)'],
+  ];
+  const selectedReferenceRules = referenceChain[1].selected;
+  if (selectedReferenceRules.length !== expected.length || selectedReferenceRules.some((r, i) =>
+    r.selector !== expected[i][0] || Object.keys(r.declarations).filter(affects).length !== 1 ||
+    r.declarations[expected[i][1]]?.value !== expected[i][2])) return;
+  const pool = astylarTree.rules.map(i => inventory.rules[i]);
+  if (pool.some(r => r?.side !== 'astylar' || !r.value || typeof r.value !== 'object' || Array.isArray(r.value))) return;
+  const allCandidateRules = pool.map(r => r.value), candidateRules = allCandidateRules.filter(r =>
+    Object.keys(r).some(affects) && typographySelectorCanApply(r.selector, ast.authored));
+  const base = candidateRules.filter(r => r.selector === '.field-label'), empty = candidateRules.filter(r => r.selector === '.field-label.empty-field-label');
+  const isEmpty = String(ast.authored.class).split(/\s+/).includes('empty-field-label');
+  if (base.length !== 1 || empty.length !== (isEmpty ? 1 : 0) || candidateRules.length !== base.length + empty.length ||
+      candidateRules.some(r => r.fontSize !== '12px' || Object.keys(r).some(k => k.startsWith('media') || (k !== 'fontSize' && affects(k)))) ||
+      base[0].position !== 'absolute' || base[0].top !== '8px' || base[0].left !== '16px' ||
+      (isEmpty && (empty[0].top !== '8px' || allCandidateRules.indexOf(empty[0]) < allCandidateRules.indexOf(base[0]))) ||
+      [styles.normal, styles.effective].some(s => s.position !== 'absolute' || s.top !== '8px' || s.left !== '16px')) return;
+  const seen = new Set(), candidateChain = [];
   let ancestor = ast;
   while (ancestor && !seen.has(ancestor.key)) {
     seen.add(ancestor.key);
-    const ancestorStyle = inventory.styles[ancestor.interactionStyle];
-    if (ancestorStyle?.side !== 'astylar') return;
-    const transform = ancestorStyle.value.transform;
-    if (transform !== undefined && transform !== 'none') return;
+    const normal = styleAt(ancestor.normalStyle, 'astylar'), effective = styleAt(ancestor.interactionStyle, 'astylar');
+    if (!normal || !effective || unsafeInline(ancestor) ||
+        [normal, effective].some(s => Object.entries(s).some(([k, v]) => transformAffects(k) && v !== 'none')) ||
+        allCandidateRules.some(r => Object.keys(r).some(transformAffects) && typographySelectorCanApply(r.selector, ancestor.authored))) return;
+    candidateChain.push({ ...ancestor, normal, effective });
     if (ancestor.authored?.id === 'page') break;
-    ancestor = astylarTree.nodes.find((node) => node.key === ancestor.parent);
+    ancestor = one(astylarTree.nodes.filter(node => node.key === ancestor.parent));
   }
-  if (ancestor?.authored?.id !== 'page') return;
+  if (ancestor?.authored?.id !== 'page' || ancestor.authored.type !== 'main' || ancestor.parent !== 'root') return;
   return {
     classification: 'application-plugin-authoring-defect', attribution: 'reviewed-floating-label-font-input',
+    inputEquivalent: false, currentPseudoStatePaintVerified: false, finalRasterVerified: false,
     recommendedOwner: 'Material field-label structure and core CSS transform support',
     justification: 'The reference keeps 16px label typography under a captured .75 wrapper transform. The corresponding candidate explicitly authors and retains an untransformed 12px absolute label at fixed insets. Multiplying the reference font size by the scale describes apparent size, not equivalent input: wrapper geometry, glyph rasterization, tracking and transform-origin semantics remain different. Original-input browser reductions expose core transform-subset gaps; do not accept a font-size substitution as their fix.',
-    reviewEvidence: { referenceWrapper: wrapper.key, referenceWrapperStyle: wrapperStyle.value,
-      referenceRule: referenceRule.value, candidateRule: candidateRule.value,
-      referenceComputedFontSize: styles.reference.fontSize, candidateRetainedFontSize: styles.retained.fontSize },
+    reviewEvidence: structuredClone({ sourceFinding: 'fixture-floating-label-transform-replaced-by-font-size', revision: record.resolvedStyleRevision,
+      referenceWrapper: wrapper.key, referenceWrapperStyle: wrapperStyle, referenceChain, selectedReferenceRules,
+      candidateRules, selectedCandidateRule: isEmpty ? empty[0] : base[0], candidateChain,
+      referenceComputedFontSize: styles.reference.fontSize, candidateRetainedFontSize: styles.retained.fontSize }),
   };
+}
+
+function validateFloatingLabelFontInput(report, errors) {
+  if (!report.retainedTypography) return;
+  const families = ['form-field', 'input', 'select', 'autocomplete', 'datepicker', 'timepicker'];
+  const cases = [...new Set(report.elementInventory.cases.map(c => c.case))].flatMap(key => families.flatMap(family => {
+    const m = parseReviewedCase(key, family);
+    return m ? [{ kind: m[1], family, profile: m[2], viewport: { id: m[3] }, ...(m[4] ? { state: m[4] } : {}) }] : [];
+  }));
+  const replay = collectRetainedTypographyEvidence(cases, report.elementInventory);
+  const predicate = d => d.attribution === 'reviewed-floating-label-font-input' || families.some(f => d.element === `${f}-label`);
+  for (const list of ['reviewedMappings', 'comparisons', 'differences', 'gaps']) {
+    if (JSON.stringify(report.retainedTypography[list].filter(predicate)) !== JSON.stringify(replay[list].filter(predicate)))
+      errors.push(`floating-label font ${list} lack complete replayed input evidence`);
+  }
 }
 
 function reviewedStepperEditGap(key, inventory) {

@@ -23,6 +23,80 @@ selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Floating-label font substitution now has complete cascade evidence across six controls (2026-09-13)
+
+The same unequal input occurs beyond form-field/input/select: autocomplete and
+both pickers also replace a 16px label inside a scaled wrapper with an
+untransformed 12px absolute label. The stricter collector attributes **58 more
+occurrences**, without accepting the smaller type as equivalent to a transform.
+The full captured corpus now has 174 `reviewed-floating-label-font-input`
+occurrences:
+
+| Family | Attributed occurrences |
+| --- | ---: |
+| Form-field | 34 |
+| Input | 34 |
+| Select | 48 |
+| Autocomplete | 30 |
+| Datepicker | 4 |
+| Timepicker | 24 |
+
+This is an expansion of the existing root-cause finding, not six independent
+renderer problems. The shared candidate source is `.field-label` and
+`.field-label.empty-field-label` in
+`examples/material-showcase/src/app/astylar.component.ts`. The reference label
+inherits its component font-size token while its parent receives, in captured
+order, the top-left origin, base `translateY(-50%)`, font-size token, and two
+floating-state `translateY(-106%) scale(0.75)` declarations. Candidate base and
+active-empty declarations instead directly supply 12px, top 8px, left 16px.
+The higher-specificity empty rule is preserved and checked separately from the
+base rule. `7159b1d` changed its activation predicate from open/error to
+focused/error; `4d56f86` extended empty-state class selection to editable field
+values. Neither change restored the original wrapper transform.
+
+The attribution now requires complete rule evidence, exact ordered reference
+declarations, unique matching label text, active/floating wrapper state, a
+captured .75 matrix and top-left origin, explicit candidate base/empty rule
+selection, matching normal/effective/retained sizes, and an untransformed
+candidate ancestor chain through the page. Raw stages and rules are detached
+snapshots. Independent validation replays mappings, comparisons, differences,
+and gaps so removing a claim or its comparison does not silently waive it.
+Five focused tests cover all six families with both candidate classes, the
+existing 13 negative controls, 36 additional missing/contradictory-input
+controls, and ten report mutations. The older sparse synthetic helper remains
+available to unrelated color/tracking tests; the font proof now provides the
+complete five-rule reference cascade rather than one convenient transform.
+
+The original equal-input transform reductions and core ownership investigation
+are documented below under the floating-label transform investigation. They
+separate percentage-unit loss, missing origin semantics and ordered composition
+from final Babylon projection. Repair those general CSS-space transform rules,
+then restore the original label structure and font input. Do not substitute
+font size, offsets, tracking, or world-coordinate adjustments for that repair.
+
+The stronger proof deliberately does **not** attribute 28 other picker/auto
+font differences to this cause. Twelve light/dark error-state cases have no
+reference float-above class and compute an unscaled
+`matrix(1, 0, 0, 1, 0, -9.5)`, but the candidate error predicate still supplies
+12px. The twelve contrast/custom error cases also lack float-above, but their
+reference wrappers are hidden. Four further datepicker focus cases
+(contrast/custom, both DPRs) have float-above but hidden reference wrappers.
+These sixteen hidden wrappers have `display:none` and computed transform
+`none`, not a floating .75 matrix. The inspected dense datepicker focus rule
+uses `var(--mat-form-field-filled-label-display, block)`. All 24 error captures
+were checked for display, transform and float-above state rather than inferring
+compact behavior from the light profile. Those state/visibility paths need
+their own captured attribution and remain unresolved. No production or
+reference rendering input was changed by this increment.
+
+Verification for this increment:
+
+- `node --test --test-name-pattern='floating-label' tests/material-parity/input-equivalence-audit.spec.mjs`: **5/5 pass**, zero failures/skips/cancellations, 1.113 seconds after the final malformed-rule controls.
+- `npm run parity:harness:check`: **443/443 pass**, zero failures/skips/cancellations, 245.487 seconds on the final rerun.
+- Final `buildMaterialInputAudit` against `artifacts/material-parity/current-ancestry-audit/latest-report.json`, with `normalLineBoxPath: 'artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json'` and `supplementalRoot: 'artifacts/material-parity/supplemental-current-ancestry-audit'`, reproduces the 174 occurrences above and **72 unresolved retained-text differences**. All 119 source findings are detected, none unexplained. `validateMaterialInputAudit(a, { requireComplete: false })` returns `[]`.
+- Strict `validateMaterialInputAudit(a)` continues to report **3,309 resolved-style, 879 control-text typography, and 72 retained-text typography differences** requiring attribution. Capture-matrix coverage is not proof that all relevant interaction states or all input differences have been audited.
+- All ten frozen visual-harness files retain their checkpoint SHA-256 hashes; `git diff --check` passes. No final machine report was overwritten, and the final complete enforced visual matrix remains an outstanding acceptance requirement.
+
 ## Disabled checkbox/radio labels omit component disabled color inputs (2026-09-13)
 
 The current full capture contains **24 disabled label-color differences**:

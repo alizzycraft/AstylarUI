@@ -4760,8 +4760,29 @@ test('field tracking claims replay exact token, state rule and pooled values', (
   }
 });
 
+function verifiedFloatingLabelReport(family = 'form-field', empty = false) {
+  const raw = floatingLabelTypographyReport(), e = raw.results[0], { reference: r, astylar: a } = e.inputTrees;
+  e.family = family; e.styleInputs[0].id = `${family}-root`;
+  r.nodes[0].attributes.id = `${family}-label`; a.nodes[0].authored.id = `${family}-label`;
+  r.nodes[1].attributes.class = 'mdc-floating-label mdc-floating-label--float-above';
+  const rule = (selector, property, value) => ({ selector, active: true, conditions: [], declarations: { [property]: { value, important: false } } });
+  r.rules = [
+    rule('.mdc-floating-label--float-above', 'transform', 'translateY(-106%) scale(0.75)'),
+    rule('.mdc-text-field--filled .mdc-floating-label', 'font-size', 'var(--mat-form-field-filled-label-text-size, var(--mat-sys-body-large-size))'),
+    rule('.mdc-floating-label', 'transform-origin', 'left top'),
+    rule('.mdc-text-field .mdc-floating-label', 'transform', 'translateY(-50%)'),
+    rule('.mdc-text-field--filled .mdc-floating-label--float-above', 'transform', 'translateY(-106%) scale(0.75)'),
+  ];
+  r.nodes[1].rules = [2, 3, 1, 0, 4];
+  if (empty) {
+    a.nodes[0].authored.class += ' empty-field-label';
+    a.rules.push({ selector: '.field-label.empty-field-label', fontSize: '12px', top: '8px' });
+  }
+  return raw;
+}
+
 test('attributes floating-label font substitution without equating scaled and smaller text inputs', () => {
-  const raw = floatingLabelTypographyReport();
+  const raw = verifiedFloatingLabelReport();
   const evidence = collectRetainedTypographyEvidence(raw.results, collectFullTreeInventory(raw.results));
   const difference = evidence.differences.find((entry) => entry.property === 'fontSize');
   assert.equal(difference.attribution, 'reviewed-floating-label-font-input');
@@ -4788,10 +4809,82 @@ test('floating-label attribution rejects absent, competing, or differently trans
     (e) => { e.inputTrees.astylar.rules.push({ selector: '.field-label', fontSize: '16px' }); },
   ];
   for (const mutate of mutations) {
-    const raw = floatingLabelTypographyReport();
+    const raw = verifiedFloatingLabelReport();
     mutate(raw.results[0]);
     const evidence = collectRetainedTypographyEvidence(raw.results, collectFullTreeInventory(raw.results));
     assert.equal(evidence.differences.find((entry) => entry.property === 'fontSize').attribution, 'unresolved');
+  }
+});
+
+test('floating-label font audit covers all six filled controls and explicit floating empty-state rules', () => {
+  for (const family of ['form-field', 'input', 'select', 'autocomplete', 'datepicker', 'timepicker']) for (const empty of [false, true]) {
+    const raw = verifiedFloatingLabelReport(family, empty), before = structuredClone(raw);
+    const evidence = collectRetainedTypographyEvidence(raw.results, collectFullTreeInventory(raw.results));
+    const f = evidence.differences.find(d => d.attribution === 'reviewed-floating-label-font-input');
+    assert.ok(f, `${family}/${empty}`);
+    assert.equal(f.inputEquivalent, false); assert.equal(f.finalRasterVerified, false); assert.equal(f.currentPseudoStatePaintVerified, false);
+    assert.equal(f.reviewEvidence.selectedReferenceRules.length, 5);
+    assert.equal(f.reviewEvidence.selectedCandidateRule.selector, empty ? '.field-label.empty-field-label' : '.field-label');
+    assert.equal(f.reviewEvidence.candidateChain.length, 2);
+    assert.deepEqual(raw, before);
+  }
+  const report = buildMaterialInputAudit(verifiedFloatingLabelReport('timepicker', true));
+  assert.deepEqual(validateMaterialInputAudit(report, { requireComplete: false }), []);
+});
+
+test('floating-label font audit rejects incomplete cascade, competing declarations and ancestor transforms', () => {
+  const controls = [
+    (r, a) => { r.nodes[0].inline = null; },
+    (r, a) => { r.rules[0].declarations = null; },
+    (r, a) => { r.rules[0].declarations.transform = null; },
+    (r, a) => { delete r.rules; }, (r, a) => { delete a.rules; },
+    (r, a) => { a.resolvedStyleRevision = -1; }, (r, a) => { a.resolvedStyleEvidenceVersion = 1; },
+    (r, a) => { r.nodes[0].ownText = 'Other'; }, (r, a) => { a.nodes[0].authored.id = 'other'; },
+    (r, a) => { r.nodes.push(structuredClone(r.nodes[1])); },
+    (r, a) => { r.nodes[0].rules = [1]; }, (r, a) => { r.nodes[0].inline = { font: { value: '16px Arial' } }; },
+    (r, a) => { r.nodes[1].attributes.style = 'transform: scale(.75)'; },
+    (r, a) => { r.nodes[1].rules.reverse(); }, (r, a) => { r.nodes[1].rules.pop(); },
+    (r, a) => { r.rules[4].active = false; }, (r, a) => { r.rules[4].conditions = ['media']; },
+    (r, a) => { r.rules[4].conditions = 'invalid'; }, (r, a) => { r.rules[4].declarations.transform.important = true; },
+    (r, a) => { r.rules[4].selector = '.other'; }, (r, a) => { r.rules[1].declarations['font-size'].value = '16px'; },
+    (r, a) => { r.rules[4].declarations.transform.value = 'scale(.75) translateY(-106%)'; },
+    (r, a) => { r.rules[4].declarations.zoom = { value: '1', important: false }; },
+    (r, a) => { a.rules[1].fontSize = '16px'; }, (r, a) => { a.rules[1].top = '9px'; },
+    (r, a) => { a.rules[1].mediaMaxWidth = '500px'; }, (r, a) => { a.rules.reverse(); },
+    (r, a) => { a.rules.push({ selector: '*', font: '12px Arial' }); },
+    (r, a) => { a.rules.push({ selector: '.field-label:hover', fontSize: '12px' }); },
+    (r, a) => { a.rules.push({ selector: '#page', transform: 'scale(.75)' }); },
+    (r, a) => { a.rules.push({ selector: '#page', transition: 'transform 1s' }); },
+    (r, a) => { a.nodes[1].normalResolvedStyle.transform = 'scale(.75)'; },
+    (r, a) => { a.nodes[1].authored.style = { zoom: '1.25' }; },
+    (r, a) => { delete a.nodes[1].normalResolvedStyle; },
+    (r, a) => { a.nodes[0].interactionResolvedStyle = { ...a.nodes[0].interactionResolvedStyle, top: '9px' }; },
+    (r, a) => { a.nodes[1].parent = 'page'; },
+  ];
+  for (const [index, mutate] of controls.entries()) {
+    const raw = verifiedFloatingLabelReport('timepicker', true);
+    mutate(raw.results[0].inputTrees.reference, raw.results[0].inputTrees.astylar);
+    const evidence = collectRetainedTypographyEvidence(raw.results, collectFullTreeInventory(raw.results));
+    assert.ok(!evidence.differences.some(d => d.attribution === 'reviewed-floating-label-font-input'), `control ${index}`);
+  }
+});
+
+test('floating-label font validation replays full claims and detects removed evidence', () => {
+  const baseline = buildMaterialInputAudit(verifiedFloatingLabelReport('autocomplete', true));
+  const controls = [
+    (r, f) => { f.inputEquivalent = true; }, (r, f) => { f.finalRasterVerified = true; },
+    (r, f) => { f.reviewEvidence.selectedReferenceRules[4].active = false; },
+    (r, f) => { f.reviewEvidence.selectedCandidateRule.fontSize = '16px'; },
+    (r, f) => { f.reviewEvidence.candidateChain[1].normal.transform = 'scale(.75)'; },
+    (r, f) => { f.reviewEvidence.revision++; }, (r, f) => { f.family = 'chips'; },
+    (r, f) => { r.retainedTypography.differences = []; },
+    (r, f) => { r.retainedTypography.differences.push(structuredClone(f)); },
+    (r, f) => { r.retainedTypography.comparisons = []; },
+  ];
+  for (const [index, mutate] of controls.entries()) {
+    const r = structuredClone(baseline), f = r.retainedTypography.differences.find(d => d.attribution === 'reviewed-floating-label-font-input');
+    mutate(r, f);
+    assert.ok(validateMaterialInputAudit(r, { requireComplete: false }).some(e => e.includes('floating-label font')), `mutation ${index}`);
   }
 });
 
