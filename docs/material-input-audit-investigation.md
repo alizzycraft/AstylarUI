@@ -3,7 +3,72 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
-## Independent supplemental natural-line-box validation
+## Consolidated supplemental natural-line-box attribution
+
+The consolidated audit now consumes the independently validated supplemental
+metrics through the explicit `--supplemental-line-box-report` option. Empty
+or repeated options fail. Missing evidence is not replaced by a measurement
+from a similarly named main-checkpoint state. Both the structured report and
+Markdown expose this separate evidence stage and its missing/error counts.
+
+The complete corrected baseline rebuild records 671 main interactive and 46
+supplemental observations, with all 46 supplemental line-height differences
+classified as `reviewed-supplemental-normal-line-box-stage-comparison`
+(`parity-harness-defect`). This addresses comparison of browser computed
+`normal` with numeric candidate paint; it does not change either value or any
+other input. Each attribution requires an exact state/owner observation,
+original typography/paint provenance, matching measured CSS height and a
+complete candidate ancestry omitting explicit line-height and font shorthand.
+Font size/weight/style must match at the compared stages. Calendar text
+composition, font-list/tracking differences, state behavior and overlay
+placement/raster remain independent findings.
+
+Validation reloads the original calendar-close and tooltip-state sources,
+rederives their current typography comparisons from the inventory, reloads the
+metric report through its independent reader, and reconstructs the exact
+scalar attributions. It checks the entire relevant comparison/difference lists,
+including fabricated or moved attribution records. It does not trust the
+persisted report's status strings, measurement counts or review metadata.
+
+Verification:
+
+- Focused real-source join: **46/46 attributed**, zero evidence errors and zero
+  unresolved supplemental control-typography entries. All raw comparisons and
+  all non-line-height differences are byte-for-byte structurally unchanged.
+- `node --test --test-name-pattern='audit CLI|supplemental line-box|interactive line-box' tests/material-parity/input-equivalence-audit.spec.mjs`
+  — 8/8 pass, no skips/cancellations, 4.7334812 seconds. New proofs cover all 46
+  measured state/DPR combinations, 24 rejection controls and six forged report
+  controls; synthetic 32px observations prevent a hard-coded 17px acceptance
+  rule. Main and supplemental attribution scopes reject each other's evidence.
+- `npm run parity:harness:check` — **531/531 pass**, no skips/cancellations,
+  284.1629715 seconds, polled to terminal exit 0.
+- Full in-memory report build with the current-ancestry baseline, its static
+  normal-line-box report, main V3 control-line-box report, the supplemental
+  line-box report and original supplemental root: **671 main / 46 supplemental
+  observations, 46 new attributions, zero supplemental evidence errors, zero
+  unresolved captured control-typography entries**, 124 source findings and
+  74 source fingerprints. `validateMaterialInputAudit(a, {requireComplete:false})`
+  returns `[]`. Strict validation returns exactly
+  `["3309 resolved-style differences still lack root-cause attribution"]`.
+  The diagnostic command exited 0 after asserting its expected observations and
+  diagnostic result; **strict acceptance did not pass**.
+- All ten frozen harness files still match their checkpoint hashes. No
+  renderer, plugin, showcase input, captured tree, runtime asset or visual
+  threshold was changed. Final report files were not regenerated prematurely.
+
+Reproduce the in-memory consolidated check without overwriting preserved
+report artifacts from the worktree root:
+
+```powershell
+node --input-type=module -e "import{readFileSync}from'node:fs';import{buildMaterialInputAudit,validateMaterialInputAudit}from'./tests/material-parity/input-equivalence-audit.mjs';const p=JSON.parse(readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json'));const a=buildMaterialInputAudit(p,{root:process.cwd(),normalLineBoxPath:'artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json',controlLineBoxPath:'artifacts/material-parity/control-line-box-current-ancestry-audit-v3/latest-report.json',supplementalLineBoxPath:'artifacts/material-parity/supplemental-line-box-current-ancestry-audit/latest-report.json',supplementalRoot:'artifacts/material-parity/supplemental-current-ancestry-audit'});console.log('DIAGNOSTIC',validateMaterialInputAudit(a,{requireComplete:false}));console.log('STRICT',validateMaterialInputAudit(a));"
+```
+
+Next work remains the 3,309 unresolved resolved-style differences, complete
+relevant-state coverage and plugin/core ownership review, final machine/human
+report generation and the complete enforced parity matrix. Finishing this
+typography subcategory does not finish the audit or establish rendering parity.
+
+## Independent supplemental natural-line-box validation (preceding increment)
 
 The capture below now has an independent reader,
 `tests/material-parity/supplemental-line-box-report.mjs`. Reopening the real

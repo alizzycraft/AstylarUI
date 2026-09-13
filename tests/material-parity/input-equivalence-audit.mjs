@@ -3,6 +3,7 @@ import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { loadNormalLineBoxReport } from './normal-line-box-report.mjs';
 import { loadControlLineBoxReport, replayControlLineBoxReport } from './control-line-box-report.mjs';
+import { loadSupplementalLineBoxReport } from './supplemental-line-box-report.mjs';
 import { validateSupplementalCapture } from './supplemental-capture-evidence.mjs';
 import { collectCalendarCloseEvidence } from './calendar-close-evidence.mjs';
 import { collectTooltipStateEvidence } from './tooltip-state-evidence.mjs';
@@ -34,7 +35,7 @@ const propertyGroupByName = new Map(Object.entries(propertyGroups)
   .flatMap(([group, properties]) => properties.map((property) => [property, group])));
 
 export function parseMaterialInputAuditArguments(args, root = process.cwd()) {
-  let parityReport, normalLineBoxReport, controlLineBoxReport, supplementalRoot;
+  let parityReport, normalLineBoxReport, controlLineBoxReport, supplementalLineBoxReport, supplementalRoot;
   const flags = new Set();
   for (const arg of args) {
     if (arg === '--check' || arg === '--allow-partial') {
@@ -52,6 +53,10 @@ export function parseMaterialInputAuditArguments(args, root = process.cwd()) {
       if (controlLineBoxReport !== undefined) throw new Error('Repeated audit option: --control-line-box-report');
       controlLineBoxReport = arg.slice('--control-line-box-report='.length);
       if (!controlLineBoxReport.trim()) throw new Error('--control-line-box-report requires a path');
+    } else if (arg.startsWith('--supplemental-line-box-report=')) {
+      if (supplementalLineBoxReport !== undefined) throw new Error('Repeated audit option: --supplemental-line-box-report');
+      supplementalLineBoxReport = arg.slice('--supplemental-line-box-report='.length);
+      if (!supplementalLineBoxReport.trim()) throw new Error('--supplemental-line-box-report requires a path');
     } else if (arg.startsWith('--supplemental-root=')) {
       if (supplementalRoot !== undefined) throw new Error('Repeated audit option: --supplemental-root');
       supplementalRoot = arg.slice('--supplemental-root='.length);
@@ -66,6 +71,7 @@ export function parseMaterialInputAuditArguments(args, root = process.cwd()) {
     parityPath: path.resolve(root, parityReport ?? 'artifacts/material-parity/latest-report.json'),
     ...(normalLineBoxReport === undefined ? {} : { normalLineBoxPath: path.resolve(root, normalLineBoxReport) }),
     ...(controlLineBoxReport === undefined ? {} : { controlLineBoxPath: path.resolve(root, controlLineBoxReport) }),
+    ...(supplementalLineBoxReport === undefined ? {} : { supplementalLineBoxPath: path.resolve(root, supplementalLineBoxReport) }),
     ...(supplementalRoot === undefined ? {} : { supplementalRoot: path.resolve(root, supplementalRoot) }),
   };
 }
@@ -106,8 +112,13 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
     reportPath: options.controlLineBoxPath === undefined ? undefined : path.relative(root, path.resolve(root, options.controlLineBoxPath)).replaceAll('\\', '/'),
     cases, inventory: elementInventory, controlTypography: rawControlTypography,
     expectedProvenance: parityReport.captureProvenance, styleProperties: Object.values(propertyGroups).flat() });
-  const controlTypography = attributeObservedControlLineBoxes(
-    attributeObservedNormalLineBoxes(rawControlTypography, elementInventory, normalLineBoxes), elementInventory, controlLineBoxes);
+  const supplementalLineBoxes = loadSupplementalLineBoxReport({ root,
+    reportPath: options.supplementalLineBoxPath === undefined ? undefined : path.relative(root, path.resolve(root, options.supplementalLineBoxPath)).replaceAll('\\', '/'),
+    cases: typographyCases, inventory: elementInventory, controlTypography: rawControlTypography,
+    expectedProvenance: parityReport.captureProvenance, styleProperties: Object.values(propertyGroups).flat() });
+  const controlTypography = attributeObservedSupplementalLineBoxes(attributeObservedControlLineBoxes(
+    attributeObservedNormalLineBoxes(rawControlTypography, elementInventory, normalLineBoxes), elementInventory, controlLineBoxes),
+    elementInventory, supplementalLineBoxes);
   const discrepancies = collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs);
   const classifications = countBy(discrepancies, (entry) => entry.classification);
   const propertyGroupCounts = countBy(discrepancies, (entry) => entry.propertyGroup);
@@ -138,6 +149,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
     supplementalTooltipState,
     normalLineBoxes,
     controlLineBoxes,
+    supplementalLineBoxes,
     summary: {
       inputEquivalent: coverage.complete && coverage.missingElements.length === 0 &&
         [supplementalBehavior, supplementalOverlays, supplementalSlider].every(entry => entry.binding?.status === 'checkpoint-bound') &&
@@ -148,6 +160,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
         supplementalTooltipState.complete && supplementalTooltipState.mismatches.length === 0 &&
         normalLineBoxes.missing.length === 0 && normalLineBoxes.errors.length === 0 &&
         controlLineBoxes.missing.length === 0 && controlLineBoxes.errors.length === 0 &&
+        supplementalLineBoxes.missing.length === 0 && supplementalLineBoxes.errors.length === 0 &&
         elementInventory.gaps.length === 0 && elementInventory.resolvedStyleGaps.length === 0 && elementInventory.stateStyleGaps.length === 0 && elementInventory.referenceContextGaps.length === 0 && elementInventory.errors.length === 0 &&
         retainedTypography.gaps.length === 0 && retainedTypography.differences.length === 0 && retainedTypography.paintMaskDifferences.length === 0 &&
         controlTypography.gaps.length === 0 && controlTypography.differences.length === 0 && controlTypography.iconSubstitutions.length === 0 &&
@@ -383,6 +396,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
     'reviewed-calendar-period-typography-input': 'application-plugin-authoring-defect',
     'reviewed-normal-line-box-stage-comparison': 'parity-harness-defect',
     'reviewed-interactive-normal-line-box-stage-comparison': 'parity-harness-defect',
+    'reviewed-supplemental-normal-line-box-stage-comparison': 'parity-harness-defect',
   };
   const unresolvedControlTypography = report.controlTypography?.differences.filter((entry) =>
     !reviewedControlKinds[entry.attribution] || entry.classification !== reviewedControlKinds[entry.attribution] || !entry.reviewEvidence ||
@@ -580,7 +594,32 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
   if (JSON.stringify(report.controlTypography?.differences?.filter(interactiveLine)) !==
       JSON.stringify(replayedInteractiveControl.differences.filter(interactiveLine)))
     errors.push('interactive normal-line-box differences lack complete replayed scalar attribution');
+  validateSupplementalLineBoxInventory(report, errors, { root, requireComplete });
   return errors;
+}
+
+export function validateSupplementalLineBoxInventory(report, errors, { root = process.cwd(), requireComplete = true, readBytes } = {}) {
+  const provenance = report.generatedFrom?.captureProvenance;
+  const cases = [collectCalendarCloseEvidence(root, { reportPath: report.supplementalCalendarClose?.file, expectedProvenance: provenance, readBytes }),
+    collectTooltipStateEvidence(root, { reportPath: report.supplementalTooltipState?.file, expectedProvenance: provenance, readBytes })].flatMap(source => source.cases);
+  const raw = collectControlTypographyEvidence(cases, report.elementInventory);
+  const observed = loadSupplementalLineBoxReport({ root, reportPath: report.supplementalLineBoxes?.file, cases,
+    inventory: report.elementInventory, controlTypography: raw, expectedProvenance: provenance,
+    styleProperties: Object.values(propertyGroups).flat(), readBytes });
+  if (JSON.stringify(report.supplementalLineBoxes) !== JSON.stringify(observed))
+    errors.push('supplemental natural-line-box report lacks independently replayed source evidence');
+  if (observed.errors.length) errors.push(`${observed.errors.length} supplemental natural-line-box evidence errors`);
+  if (requireComplete && observed.missing.length) errors.push(`${observed.missing.length} supplemental normal-line-box observations are missing`);
+  const attributed = attributeObservedSupplementalLineBoxes(raw, report.elementInventory, observed);
+  const targets = new Set(raw.comparisons.filter(c => c.properties.lineHeight.reference === 'normal').map(c => JSON.stringify([c.case, c.element])));
+  const comparison = c => targets.has(JSON.stringify([c.case, c.element])) ||
+    (isSupplementalLineBoxCase(c) && c.properties?.lineHeight?.reference === 'normal');
+  if (JSON.stringify(report.controlTypography?.comparisons?.filter(comparison)) !== JSON.stringify(raw.comparisons.filter(comparison)))
+    errors.push('supplemental normal-line-box comparisons lack complete replayed raw typography');
+  const line = d => d.attribution === 'reviewed-supplemental-normal-line-box-stage-comparison' ||
+    (d.property === 'lineHeight' && (targets.has(JSON.stringify([d.case, d.element])) || isSupplementalLineBoxCase(d)));
+  if (JSON.stringify(report.controlTypography?.differences?.filter(line)) !== JSON.stringify(attributed.differences.filter(line)))
+    errors.push('supplemental normal-line-box differences lack complete replayed scalar attribution');
 }
 
 export function validateCalendarCloseInventory(report, errors, { root = process.cwd(), requireComplete = true, readBytes } = {}) {
@@ -751,6 +790,7 @@ export function renderMaterialInputAuditMarkdown(report) {
     '',
     `Static natural line boxes: ${report.normalLineBoxes.observations.length} validated browser observations, ${report.normalLineBoxes.missing.length} missing and ${report.normalLineBoxes.errors.length} evidence errors. Matching observed heights explain only the raw normal-to-numeric stage comparison; other typography inputs, baseline, wrapping and final raster remain independent questions. No global normal-to-pixel substitution is accepted.`,
     `Interactive natural line boxes: ${report.controlLineBoxes.observations.length} validated observations, ${report.controlLineBoxes.missing.length} missing and ${report.controlLineBoxes.errors.length} evidence errors; ${report.controlTypography.differences.filter(d => d.attribution === 'reviewed-interactive-normal-line-box-stage-comparison').length} reviewed scalar stage comparisons. Source/checkpoint files are independently replayed during validation. This is not input-equivalence or final-raster acceptance.`,
+    `Supplemental calendar/tooltip natural line boxes: ${report.supplementalLineBoxes.observations.length} validated observations, ${report.supplementalLineBoxes.missing.length} missing and ${report.supplementalLineBoxes.errors.length} evidence errors; ${report.controlTypography.differences.filter(d => d.attribution === 'reviewed-supplemental-normal-line-box-stage-comparison').length} reviewed scalar stage comparisons. Both original supplemental source reports and all measurement boundaries are independently replayed. These are period/trigger labels, not tooltip-bubble metrics or interaction/raster acceptance.`,
     `Snackbar natural line boxes: ${report.controlTypography.differences.filter(d => d.attribution === 'reviewed-snackbar-normal-line-box-size-dependency').length} observed 17px/19px differences are bound to the independently rederived 14px-token/16px-default input mismatch and the separate equal-input size controls. Original scalars remain unequal; no correct-defaults, visibility, placement or general normal-metrics claim is inferred.`,
     '',
     `Control icon substitutions: ${report.controlTypography.iconSubstitutions.length} captured SVG-to-text input replacements. These are unequal content/geometry inputs, not accepted text-owner mappings or font comparisons. Their actual glyph paint inputs remain recorded separately from the reference vector path.`,
@@ -5724,11 +5764,24 @@ export function attributeObservedNormalLineBoxes(controlTypography, inventory, s
 }
 
 export function attributeObservedControlLineBoxes(controlTypography, inventory, supplemental) {
+  return attributeObservedInteractiveLineBoxes(controlTypography, inventory, supplemental, false);
+}
+
+export function attributeObservedSupplementalLineBoxes(controlTypography, inventory, supplemental) {
+  return attributeObservedInteractiveLineBoxes(controlTypography, inventory, supplemental, true);
+}
+
+function isSupplementalLineBoxCase(entry) {
+  return (entry.family === 'datepicker' && /^supplemental:datepicker@light\/calendar-close-desktop-dpr[12]\/calendar-close-(month|multi-year)-(opened|tab-close|blur-close|refocus-close|activate-close)$/.test(entry.case)) ||
+    (entry.family === 'tooltip' && /^supplemental:tooltip@light\/tooltip-state-desktop-dpr[12]\/tooltip-state-(benchmark-open|benchmark-hover|ordinary)-(initial|hover|press|release|leave)$/.test(entry.case));
+}
+
+function attributeObservedInteractiveLineBoxes(controlTypography, inventory, supplemental, isSupplemental) {
   const result = structuredClone(controlTypography);
   if (supplemental?.schemaVersion !== 1 || supplemental.errors?.length !== 0 ||
       !/^[a-f0-9]{64}$/.test(supplemental.sha256 ?? '') || !Array.isArray(supplemental.observations)) return result;
   for (const comparison of result.comparisons) {
-    if (!comparison.case.startsWith('interaction:') || comparison.state === 'static' ||
+    if (!(isSupplemental ? isSupplementalLineBoxCase(comparison) : comparison.case.startsWith('interaction:')) || comparison.state === 'static' ||
         !['reviewed-material-button-label', 'reviewed-material-snackbar-action-label', 'reviewed-material-calendar-period-composition'].includes(comparison.mapping?.kind) ||
         comparison.source !== 'core-control-texture' || comparison.properties.lineHeight.reference !== 'normal') continue;
     const observations = supplemental.observations.filter(o => o.case === comparison.case && o.element === comparison.element && o.referenceNode === comparison.referenceNode);
@@ -5765,8 +5818,8 @@ export function attributeObservedControlLineBoxes(controlTypography, inventory, 
         ['fontSize', 'fontWeight', 'fontStyle'].some(property => comparison.properties[property]?.reference === undefined ||
           comparison.properties[property].reference !== comparison.properties[property].painted)) continue;
     Object.assign(differences[0], {
-      classification: 'parity-harness-defect', attribution: 'reviewed-interactive-normal-line-box-stage-comparison',
-      recommendedOwner: 'input audit interactive browser-used line-height observation and stage comparison',
+      classification: 'parity-harness-defect', attribution: isSupplemental ? 'reviewed-supplemental-normal-line-box-stage-comparison' : 'reviewed-interactive-normal-line-box-stage-comparison',
+      recommendedOwner: isSupplemental ? 'input audit supplemental browser-used line-height observation and stage comparison' : 'input audit interactive browser-used line-height observation and stage comparison',
       justification: 'The reference computes normal; a checkpoint-bound observation of its exact interactive text owner measures the same CSS natural single-line height as numeric candidate paint. Candidate normal/effective ancestry omits explicit line-height and font shorthand. This explains only the mixed-stage scalar comparison, not equal font-family, tracking, text composition, baseline, wrapping, state, placement, visibility or raster. All raw values and other differences remain unchanged.',
       reviewEvidence: { supplementalReport: { file: supplemental.file, sha256: supplemental.sha256 }, observation,
         candidateOmissionChain, currentPaintedLineHeight: comparison.properties.lineHeight.painted,
@@ -7591,9 +7644,11 @@ function focusedProofInventory(root) {
     proof(root, 'examples/material-showcase/src/app/snackbar-action-line-box-audit.spec.ts', /describe\('Material audit/,
       'eighteen browser input-dependency reductions pass', 'Separate equal-input Roboto 500 UNDO controls at explicit 14px and 16px match the natural browser line box at 17px and 19px respectively. An intentionally unequal 14px reference versus omitted candidate font-size retains core-default 16px at normal/effective/current paint stages and 19px bound-texture CSS height. Results persist under 14.4px, 16px and 18.4px parents and explicit-normal/omitted line-height. Original inputs are preserved and disposal reaches zero scene resources. This isolates the size-input dependency before projection; it does not accept the unequal snackbar, certify core button defaults, waive independent normal-metrics failures, or prove visibility, positioning, baseline or raster parity. Individual captured occurrences still require bound attribution evidence.'),
     proof(root, 'scripts/audit-material-supplemental-line-boxes.mjs', /const targets =/,
-      '46 reference-only measurements independently validated across all 50 original supplemental action boundaries; consolidated join pending', 'The frozen calendar-close and tooltip-state sequences are replayed with their original query inputs, keyboard/pointer actions, viewports and DPRs. Sixteen calendar period labels and thirty tooltip trigger labels measure 17px natural CSS height; four final closed-calendar states retain zero targets. Original paired trees and candidate paint remain untouched, with fresh reference trees, PNGs, event traces, source snapshots and runtime asset hashes. The independent supplemental reader revalidates both original source reports and every recorded boundary, using the same strict CSS metric/ancestry validator as the main interactive reader. These are not tooltip-bubble measurements, full interaction/raster acceptance or automatic scalar classifications. The consolidated audit still requires a per-occurrence join before using this supplement.'),
+      '46 reference-only measurements independently validated and joined across all 50 original supplemental action boundaries', 'The frozen calendar-close and tooltip-state sequences are replayed with their original query inputs, keyboard/pointer actions, viewports and DPRs. Sixteen calendar period labels and thirty tooltip trigger labels measure 17px natural CSS height; four final closed-calendar states retain zero targets. Original paired trees and candidate paint remain untouched, with fresh reference trees, PNGs, event traces, source snapshots and runtime asset hashes. The independent supplemental reader revalidates both original source reports and every recorded boundary, using the same strict CSS metric/ancestry validator as the main interactive reader. The consolidated report now joins each exact observation and replays its scalar attribution during validation. These are not tooltip-bubble measurements, full interaction/raster acceptance or equivalent-input claims.'),
     proof(root, 'tests/material-parity/normal-line-box-report.spec.mjs', /test\('supplemental metric reader rejects/,
       'portable supplemental metric reader proof passes', 'A complete 50-boundary in-memory capture validates through both original calendar/tooltip source readers. Forty-five mutations reject source, state, action, owner, geometry, font and measurement corruption, with atomic rejection even at the last record. A deliberately unequal natural-height control remains unequal and transformed viewport dimensions remain distinct from CSS metrics. These tests do not supply final application input-equivalence or raster acceptance.'),
+    proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('supplemental line-box attribution preserves/,
+      'supplemental per-state attribution and report replay proofs pass', 'All 46 measured state/DPR combinations preserve raw normal/numeric values, other properties and period-glyph composition while receiving only a mixed-stage scalar classification. Twenty-four negative controls reject detached metrics, wrong scopes and candidate typography overrides; six forged report controls reject missing evidence or invented/moved claims. Main-checkpoint and supplemental observations cannot substitute for each other. Real consolidated validation leaves zero unresolved captured control-typography entries but still fails strict acceptance for 3,309 resolved-style differences.'),
     proof(root, 'scripts/audit-material-picker-commits.mjs', /select day 1/,
       'supplemental diagnostic; known mismatches recorded in investigation', 'Real pointer selection of a date/time reaches the correct candidate target but does not commit a value or close the popup. This case supplements, rather than replaces, the unfiltered maintained matrix.'),
     proof(root, 'examples/material-showcase/src/app/input-equivalence-proof.spec.ts', /describe\('Material audit/,

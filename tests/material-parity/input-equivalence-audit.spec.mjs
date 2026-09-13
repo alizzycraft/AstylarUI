@@ -5,6 +5,8 @@ import {
   buildMaterialInputAudit,
   attributeObservedNormalLineBoxes,
   attributeObservedControlLineBoxes,
+  attributeObservedSupplementalLineBoxes,
+  validateSupplementalLineBoxInventory,
   collectFullTreeInventory,
   collectControlTypographyEvidence,
   collectRetainedTypographyEvidence,
@@ -167,6 +169,10 @@ test('audit CLI selects isolated full-matrix evidence without silently accepting
     path.resolve(root, 'artifacts/material-parity/control/latest-report.json'));
   assert.throws(() => parseMaterialInputAuditArguments(['--control-line-box-report=']), /requires a path/);
   assert.throws(() => parseMaterialInputAuditArguments(['--control-line-box-report=a', '--control-line-box-report=b']), /Repeated audit option/);
+  assert.equal(parseMaterialInputAuditArguments(['--supplemental-line-box-report=artifacts/material-parity/supplemental-metrics/latest-report.json'], root).supplementalLineBoxPath,
+    path.resolve(root, 'artifacts/material-parity/supplemental-metrics/latest-report.json'));
+  assert.throws(() => parseMaterialInputAuditArguments(['--supplemental-line-box-report=']), /requires a path/);
+  assert.throws(() => parseMaterialInputAuditArguments(['--supplemental-line-box-report=a', '--supplemental-line-box-report=b']), /Repeated audit option/);
   assert.equal(parseMaterialInputAuditArguments(['--supplemental-root=artifacts/material-parity/fresh'], root).supplementalRoot,
     path.resolve(root, 'artifacts/material-parity/fresh'));
   assert.throws(() => parseMaterialInputAuditArguments(['--supplemental-root=']), /requires a path/);
@@ -8843,6 +8849,92 @@ function observedSnackbarLineBoxFixture(parentSize = '16px', state = 'activate')
     checkpointTypography: JSON.parse(JSON.stringify(comparison.properties)) });
   return { raw, inventory, control, supplemental };
 }
+
+function observedSupplementalLineBoxFixture(family = 'tooltip', state = 'tooltip-state-ordinary-hover', dpr = 1) {
+  const f = observedInteractiveLineBoxFixture(state), key = `supplemental:${family}@light/${family === 'tooltip' ? 'tooltip-state' : 'calendar-close'}-desktop-dpr${dpr}/${state}`;
+  for (const entry of [...f.control.comparisons, ...f.control.differences]) Object.assign(entry, { case: key, family, state });
+  for (const entry of f.inventory.cases) entry.case = key;
+  f.supplemental.observations[0].case = key;
+  if (family === 'datepicker') {
+    const comparison = f.control.comparisons[0];
+    comparison.mapping.kind = 'reviewed-material-calendar-period-composition';
+    comparison.referenceText = comparison.text; comparison.text += ' ▾';
+  }
+  return f;
+}
+
+test('supplemental line-box attribution preserves original scalar and other inputs across all measured cohorts', () => {
+  for (const dpr of [1, 2]) for (const [family, states] of [
+    ['datepicker', ['month', 'multi-year'].flatMap(view => ['opened', 'tab-close', 'blur-close', 'refocus-close'].map(state => `calendar-close-${view}-${state}`))],
+    ['tooltip', ['benchmark-open', 'benchmark-hover', 'ordinary'].flatMap(cohort => ['initial', 'hover', 'press', 'release', 'leave'].map(state => `tooltip-state-${cohort}-${state}`))],
+  ]) for (const state of states) {
+    const f = observedSupplementalLineBoxFixture(family, state, dpr), before = structuredClone(f);
+    const result = attributeObservedSupplementalLineBoxes(f.control, f.inventory, f.supplemental);
+    const line = result.differences.find(d => d.property === 'lineHeight');
+    assert.equal(line.attribution, 'reviewed-supplemental-normal-line-box-stage-comparison', state);
+    assert.equal(line.classification, 'parity-harness-defect'); assert.equal(line.reviewEvidence.observation.naturalHeight, 32);
+    assert.equal(line.values.reference, 'normal'); assert.equal(line.values.painted, '32px');
+    assert.equal(line.reviewEvidence.inputEquivalent, false); assert.equal(line.reviewEvidence.finalRasterVerified, false);
+    assert.deepEqual(result.comparisons, f.control.comparisons);
+    assert.deepEqual(result.differences.filter(d => d.property !== 'lineHeight'), f.control.differences.filter(d => d.property !== 'lineHeight'));
+    assert.deepEqual(f, before);
+    assert.deepEqual(attributeObservedControlLineBoxes(f.control, f.inventory, f.supplemental), f.control, 'supplemental evidence cannot enter main attribution');
+  }
+  const main = observedInteractiveLineBoxFixture();
+  assert.deepEqual(attributeObservedSupplementalLineBoxes(main.control, main.inventory, main.supplemental), main.control);
+});
+
+test('supplemental line-box attribution rejects mismapped states owners metrics and candidate typography overrides', () => {
+  const mutations = [
+    f => { f.supplemental.errors.push('invalid'); }, f => { delete f.supplemental.sha256; },
+    f => { f.supplemental.observations = []; }, f => { f.supplemental.observations.push(f.supplemental.observations[0]); },
+    f => { f.control.comparisons[0].family = 'button'; },
+    f => { f.control.comparisons[0].case = f.control.comparisons[0].case.replace('ordinary', 'unknown'); },
+    f => { f.control.comparisons[0].case = f.control.comparisons[0].case.replace('dpr1', 'dpr3'); },
+    f => { f.control.comparisons[0].state = 'static'; },
+    f => { f.control.comparisons[0].source = 'plugin-private'; },
+    f => { f.control.comparisons[0].mapping.kind = 'inferred-text'; },
+    f => { f.supplemental.observations[0].case += '-different'; },
+    f => { f.supplemental.observations[0].checkpointCandidateNode = 'other'; },
+    f => { f.supplemental.observations[0].checkpointReferenceNode = 'other'; },
+    f => { f.supplemental.observations[0].text = 'other'; },
+    f => { f.supplemental.observations[0].naturalHeight = 33; },
+    f => { f.supplemental.observations[0].fontReady = false; },
+    f => { f.supplemental.observations[0].checkpointPaint = '33px'; },
+    f => { f.supplemental.observations[0].checkpointTypography.fontSize.painted = '99px'; },
+    f => { f.supplemental.observations[0].inputEquivalent = true; },
+    f => { f.supplemental.observations[0].finalRasterVerified = true; },
+    f => { f.inventory.errors.push({ case: f.control.comparisons[0].case }); },
+    f => { const tree = f.inventory.variants.find(t => t.side === 'astylar'); tree.nodes[0].parent = 'missing'; },
+    f => { const tree = f.inventory.variants.find(t => t.side === 'astylar'); f.inventory.styles[tree.nodes[0].normalStyle].value.lineHeight = '32px'; },
+    f => { const tree = f.inventory.variants.find(t => t.side === 'astylar'); f.inventory.styles[tree.nodes[1].interactionStyle].value.font = '24px/32px Arial'; },
+  ];
+  for (const mutate of mutations) {
+    const f = observedSupplementalLineBoxFixture(); mutate(f);
+    assert.ok(attributeObservedSupplementalLineBoxes(f.control, f.inventory, f.supplemental).differences
+      .filter(d => d.property === 'lineHeight').every(d => d.attribution === 'unresolved'), String(mutate));
+  }
+});
+
+test('supplemental line-box report validation rejects detached stage and scalar claims', () => {
+  for (const mutation of ['missing stage', 'forged observation', 'forged source', 'invented difference', 'moved difference', 'fabricated comparison']) {
+    const report = buildMaterialInputAudit(parityReport({}, {})), errors = [];
+    if (mutation === 'missing stage') delete report.supplementalLineBoxes;
+    if (mutation === 'forged observation') report.supplementalLineBoxes.observations.push({ case: 'invented', naturalHeight: 17 });
+    if (mutation === 'forged source') report.supplementalLineBoxes.file = 'artifacts/material-parity/missing-metrics/latest-report.json';
+    if (['invented difference', 'moved difference', 'fabricated comparison'].includes(mutation)) {
+      const f = observedSupplementalLineBoxFixture(), result = attributeObservedSupplementalLineBoxes(f.control, f.inventory, f.supplemental);
+      if (mutation === 'fabricated comparison') report.controlTypography.comparisons.push(...result.comparisons);
+      else {
+        const line = result.differences.find(d => d.property === 'lineHeight');
+        if (mutation === 'moved difference') line.case = 'static:tooltip@light/desktop';
+        report.controlTypography.differences.push(line);
+      }
+    }
+    validateSupplementalLineBoxInventory(report, errors, { requireComplete: false });
+    assert.ok(errors.some(e => /supplemental (?:natural|normal)-line-box/.test(e)), mutation);
+  }
+});
 
 test('snackbar observed line-box size dependency joins measured state and original token/default provenance', () => {
   for (const size of ['14.4px', '16px', '18.4px']) for (const state of ['activate', 'open', 'hover', 'held', 'focus', 'open-dismiss']) {
