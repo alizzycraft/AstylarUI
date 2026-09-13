@@ -102,6 +102,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const nonGridTemplateInputs = collectNonGridTemplateInputs(elementInventory);
   const typographyCases = [...cases, ...supplementalCalendarClose.cases, ...supplementalTooltipState.cases];
   const rawControlTypography = collectControlTypographyEvidence(typographyCases, elementInventory);
+  const buttonTypographyScalarInputs = collectButtonTypographyScalarInputs(elementInventory, rawControlTypography);
   const retainedTypography = collectRetainedTypographyEvidence(typographyCases, elementInventory, rawControlTypography);
   const normalLineBoxes = options.normalLineBoxPath
     ? loadNormalLineBoxReport({ root, reportPath: path.relative(root, path.resolve(root, options.normalLineBoxPath)).replaceAll('\\', '/'), cases, inventory: elementInventory,
@@ -121,7 +122,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const controlTypography = attributeObservedSupplementalLineBoxes(attributeObservedControlLineBoxes(
     attributeObservedNormalLineBoxes(rawControlTypography, elementInventory, normalLineBoxes), elementInventory, controlLineBoxes),
     elementInventory, supplementalLineBoxes);
-  const discrepancies = collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs, nonGridTemplateInputs);
+  const discrepancies = collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs, nonGridTemplateInputs, buttonTypographyScalarInputs);
   const classifications = countBy(discrepancies, (entry) => entry.classification);
   const propertyGroupCounts = countBy(discrepancies, (entry) => entry.propertyGroup);
   const familyCounts = countBy(discrepancies, (entry) => entry.family);
@@ -191,6 +192,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
     outlineTokenInputs,
     chipOutlineInputs,
     nonGridTemplateInputs,
+    buttonTypographyScalarInputs,
     retainedTypography,
     controlTypography,
     sourceFindings,
@@ -219,6 +221,32 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
   if (requireComplete && report.elementInventory.resolvedStyleGaps.length > 0) errors.push(`${report.elementInventory.resolvedStyleGaps.length} inventoried elements lack resolved style evidence`);
   if (requireComplete && report.elementInventory.stateStyleGaps.length > 0) errors.push(`${report.elementInventory.stateStyleGaps.length} state cases lack effective style provenance`);
   if (report.elementInventory.errors.length > 0) errors.push(`${report.elementInventory.errors.length} full-tree collection errors`);
+  if (JSON.stringify(report.buttonTypographyScalarInputs) !== JSON.stringify(collectButtonTypographyScalarInputs(report.elementInventory))) {
+    errors.push('button typography scalar evidence does not replay from current captured control ownership');
+  }
+  for (const proof of report.buttonTypographyScalarInputs ?? []) {
+    const causes = report.controlTypography?.differences.filter(d => d.case === proof.case && d.element === proof.element && d.property === proof.property);
+    if (causes?.length !== 1 || causes[0].attribution !== proof.causeAttribution ||
+        causes[0].classification !== 'application-plugin-authoring-defect' || causes[0].family !== proof.family ||
+        causes[0].referenceNode !== proof.referenceLabel || causes[0].astylarNode !== proof.astylarNode ||
+        causes[0].source !== proof.source || causes[0].revision !== proof.revision ||
+        causes[0].values.reference !== proof.values.reference || causes[0].values.normal !== proof.values.normal ||
+        causes[0].values.effective !== proof.values.interaction || causes[0].values.painted !== proof.values.painted ||
+        JSON.stringify(causes[0].reviewEvidence) !== JSON.stringify(proof.causeEvidence)) {
+      errors.push('button typography scalar evidence lost its independent control-text cause');
+    }
+  }
+  for (const entry of report.discrepancies.filter(d => d.attribution === 'reviewed-button-typography-host-input')) {
+    const proof = report.buttonTypographyScalarInputs?.find(p => p.case === entry.reviewEvidence?.case &&
+      p.element === entry.element && p.property === entry.property);
+    if (!proof || entry.classification !== 'application-plugin-authoring-defect' || entry.reference !== proof.values.reference ||
+        entry.astylar !== proof.values.comparison || JSON.stringify(proof) !== JSON.stringify(entry.reviewEvidence) ||
+        !Array.isArray(entry.reviewedCases) || entry.reviewedCases.length !== entry.occurrences || new Set(entry.reviewedCases).size !== entry.occurrences ||
+        entry.reviewedCases.some(key => !report.buttonTypographyScalarInputs?.some(p => p.case === key && p.element === entry.element &&
+          p.property === entry.property && p.values.reference === entry.reference && p.values.comparison === entry.astylar))) {
+      errors.push('button typography scalar classification lacks exact host, stage and case evidence');
+    }
+  }
   if (JSON.stringify(report.nonGridTemplateInputs) !== JSON.stringify(collectNonGridTemplateInputs(report.elementInventory))) {
     errors.push('non-grid template evidence does not replay from the captured inventory');
   }
@@ -865,8 +893,9 @@ export function renderMaterialInputAuditMarkdown(report) {
   return lines.join('\n');
 }
 
-function collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs, nonGridTemplateInputs) {
+function collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs, nonGridTemplateInputs, buttonTypographyScalarInputs) {
   const grouped = new Map();
+  const buttonTypographyByCaseIdProperty = new Map(buttonTypographyScalarInputs.map(p => [JSON.stringify([p.case, p.element, p.property]), p]));
   const nonGridTemplateByCaseAndId = new Map(nonGridTemplateInputs.map(entry => [JSON.stringify([entry.case, entry.element]), entry]));
   const borderInitialByCaseAndId = new Map(borderInitialInputs.map(entry => [JSON.stringify([entry.case, entry.element]), entry]));
   const buttonBorderResetByCaseAndId = new Map(buttonBorderResetInputs.map(entry => [JSON.stringify([entry.case, entry.element]), entry]));
@@ -902,6 +931,8 @@ function collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInp
               chipOutlineByCaseAndId.get(JSON.stringify([key, input.id])), canonicalStyle)
             ?? classifyNonGridTemplateInput(input, property, referenceValue, astylarValue,
               nonGridTemplateByCaseAndId.get(JSON.stringify([key, input.id])))
+            ?? classifyButtonTypographyScalarInput(input, property, referenceValue, astylarValue,
+              buttonTypographyByCaseIdProperty.get(JSON.stringify([key, input.id, property])))
             ?? classifyReviewedRootInput(benchmarkCase, input, property, referenceValue, astylarValue)
             ?? classifyReviewedContainerInput(benchmarkCase, input, property, referenceValue, astylarValue)
             ?? classifyReviewedBadgePaint(benchmarkCase, input, property, referenceValue, astylarValue)
@@ -927,7 +958,7 @@ function collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInp
             ...(classification.attribution ? { attribution: classification.attribution } : {}),
             ...(classification.reviewEvidence ? { reviewEvidence: classification.reviewEvidence } : {}),
             ...([borderInitialAttribution, buttonBorderResetAttribution, outlineTokenAttribution, chipOutlineAttribution,
-              'reviewed-root-flow-dependency', nonGridTemplateAttribution].includes(classification.attribution) ? { reviewedCases: [] } : {}),
+              'reviewed-root-flow-dependency', nonGridTemplateAttribution, 'reviewed-button-typography-host-input'].includes(classification.attribution) ? { reviewedCases: [] } : {}),
             occurrences: 0,
             cases: [],
             states: [],
@@ -1125,6 +1156,105 @@ function classifyReviewedBadgePaint(benchmarkCase, input, property, reference, a
     reviewEvidence: { referenceRule, candidateRule },
     justification: 'The reference badge background uses --mat-badge-background-color with --mat-sys-error fallback. The captured .badge-bubble rule explicitly supplies the different candidate resolved color; source tracing identifies theme.primary rather than the reference error token. This is the reviewed fixture-badge-primary-instead-of-error-token mismatch, not a renderer color-conversion inference. Other badge dimensions, content and state properties remain independently reviewable.',
   };
+}
+
+// The host snapshot and its direct painted label are different observations.
+// Link only already-proved component input omissions whose exact owner, current
+// stages and authored rules agree. Do not route arbitrary paint faults upstream.
+function collectButtonTypographyScalarInputs(inventory, controlTypography) {
+  const keys = [...new Set(inventory.cases.map(c => c.case))];
+  if (!controlTypography) {
+    const cases = keys.flatMap(key => {
+      const m = /^(static|interaction):([^@/]+)@([^/]+)\/([^/]+)(?:\/(.+))?$/.exec(key);
+      return m ? [{ kind: m[1], family: m[2], profile: m[3], viewport: { id: m[4] }, ...(m[5] ? { state: m[5] } : {}) }] : [];
+    });
+    controlTypography = collectControlTypographyEvidence(cases, inventory);
+  }
+  const result = [], styleAt = (index, side) => inventory.styles[index]?.side === side ? inventory.styles[index].value : undefined;
+  for (const finding of controlTypography.differences) {
+    if (!/^(static|interaction):/.test(finding.case) || finding.classification !== 'application-plugin-authoring-defect' ||
+        !['reviewed-button-font-token-input', 'reviewed-button-tracking-input'].includes(finding.attribution) ||
+        !['fontFamily', 'letterSpacing'].includes(finding.property)) continue;
+    const refs = inventory.cases.filter(c => c.case === finding.case && c.side === 'reference');
+    const asts = inventory.cases.filter(c => c.case === finding.case && c.side === 'astylar');
+    if (refs.length !== 1 || asts.length !== 1 || asts[0].resolvedStyleRevision !== finding.revision || finding.revision < 0 ||
+        inventory.errors.some(e => e.case === finding.case)) continue;
+    const refTree = inventory.variants[refs[0].variant], astTree = inventory.variants[asts[0].variant];
+    if (!refTree.ruleEvidenceComplete || !astTree.ruleEvidenceComplete) continue;
+    const comparisons = controlTypography.comparisons.filter(c => c.case === finding.case && c.element === finding.element &&
+      c.referenceNode === finding.referenceNode && c.astylarNode === finding.astylarNode);
+    if (comparisons.length !== 1 || comparisons[0].mapping?.kind !== 'reviewed-material-button-label') continue;
+    const comparison = comparisons[0], property = finding.property;
+    const parents = refTree.nodes.filter(n => n.key === comparison.referenceControl && n.type === 'button');
+    const labels = refTree.nodes.filter(n => n.key === comparison.referenceNode && n.parent === comparison.referenceControl);
+    const candidates = astTree.nodes.filter(n => n.key === comparison.astylarNode && n.authored?.type === 'button');
+    if (parents.length !== 1 || labels.length !== 1 || candidates.length !== 1) continue;
+    const parent = parents[0], candidate = candidates[0], source = finding.reviewEvidence;
+    const raw = { reference: styleAt(parent.style, 'reference'), normal: styleAt(candidate.normalStyle, 'astylar'),
+      comparison: styleAt(candidate.style, 'astylar'), interaction: styleAt(candidate.interactionStyle, 'astylar') };
+    if (Object.values(raw).some(s => !s || typeof s !== 'object' || Array.isArray(s))) continue;
+    const values = Object.fromEntries(Object.entries(raw).map(([stage, s]) => [stage, canonicalStyle(s)[property]]));
+    if (values.reference !== finding.values.reference || values.normal !== finding.values.normal ||
+        values.interaction !== finding.values.effective || values.comparison !== values.interaction ||
+        source?.referenceParent !== parent.key || source.referenceComputed !== values.reference) continue;
+    const refRules = parent.rules.map(i => inventory.rules[i]?.side === 'reference' ? inventory.rules[i].value : undefined);
+    const candidateRules = astTree.rules.map(i => inventory.rules[i]?.side === 'astylar' ? inventory.rules[i].value : undefined);
+    if (candidateRules.some(r => !r || typeof r !== 'object' || Object.values(r).some(v => v && typeof v === 'object'))) continue;
+    const applicableCandidate = candidateRules.filter(r => selectorCanApply(r.selector, candidate.authored));
+    const candidateWitnesses = applicableCandidate.map(({ selector, ...declarations }) => ({ selector, declarations }));
+    candidateWitnesses.push({ selector: '<inline>', declarations: candidate.authored.style ?? {} });
+    const referenceWitnesses = [...refRules, { selector: '<inline>', declarations: parent.inline }];
+    if (!buttonTypographyDeclarations(referenceWitnesses, candidateWitnesses, property, source, values)) continue;
+    result.push({ case: finding.case, family: finding.family, element: finding.element, property,
+      referenceNode: parent.key, referenceLabel: labels[0].key, astylarNode: candidate.key, text: comparison.text,
+      source: finding.source, revision: finding.revision, values: { ...values, painted: finding.values.painted },
+      causeAttribution: finding.attribution, causeEvidence: structuredClone(source),
+      inputEquivalent: false, finalRasterVerified: false,
+      scope: 'Exact button-host font token or tracking omission linked to its direct current control label. No other-property, structure or final-raster equivalence claim.' });
+  }
+  return result;
+}
+
+function buttonTypographyDeclarations(referenceRules, candidateRules, property, source, values) {
+  const object = v => v !== null && typeof v === 'object' && !Array.isArray(v);
+  if (![referenceRules, candidateRules].every(rules => Array.isArray(rules) && rules.every(r => object(r?.declarations)))) return false;
+  const cssProperty = property === 'fontFamily' ? 'font-family' : 'letter-spacing';
+  const token = source.referenceRule?.declarations?.[cssProperty]?.value;
+  if (!token || referenceRules.filter(r => r.selector === source.referenceRule.selector && r.declarations[cssProperty]?.value === token).length !== 1) return false;
+  for (const rule of referenceRules) {
+    const d = rule.declarations;
+    if (d.all !== undefined || (d.font !== undefined && d.font?.value !== 'inherit')) return false;
+    const value = d[cssProperty]?.value;
+    if (d[property] !== undefined || (value !== undefined && value !== 'inherit' && value !== token)) return false;
+  }
+  const material = source.candidateMaterialRule ?? source.candidateRule;
+  if (!material || candidateRules.filter(r => r.selector === material.selector).length !== 1) return false;
+  for (const rule of candidateRules) {
+    const d = rule.declarations;
+    if (d.font !== undefined || d.all !== undefined || d[cssProperty] !== undefined) return false;
+    if (d[property] === undefined) continue;
+    if (property !== 'fontFamily' || rule.selector !== source.candidateResetRule?.selector ||
+        canonicalStyle(d).fontFamily !== values.normal) return false;
+  }
+  return property !== 'fontFamily' || candidateRules.filter(r => r.selector === source.candidateResetRule?.selector &&
+    canonicalStyle(r.declarations).fontFamily === values.normal).length === 1;
+}
+
+function classifyButtonTypographyScalarInput(input, property, reference, astylar, proof) {
+  if (!proof || input.id !== proof.element || property !== proof.property || reference !== proof.values.reference ||
+      astylar !== proof.values.comparison || input.astylarResolvedStyleEvidenceVersion !== 2 ||
+      input.referenceStructure?.schemaVersion !== 2 || input.astylarStructure?.schemaVersion !== 2 ||
+      input.referenceStructure.type !== 'button' || input.astylarStructure.type !== 'button' ||
+      input.referenceStructure.text?.trim() !== proof.text.trim() || input.astylarStructure.ownText?.trim() !== proof.text.trim() ||
+      !buttonTypographyDeclarations(input.referenceAuthored, input.astylarAuthored, property, proof.causeEvidence, proof.values)) return;
+  for (const [key, stage] of [['reference', 'reference'], ['astylarNormalResolvedStyle', 'normal'],
+    ['astylar', 'comparison'], ['astylarInteractionResolvedStyle', 'interaction']]) {
+    if (!input[key] || typeof input[key] !== 'object' || Array.isArray(input[key]) ||
+        canonicalStyle(input[key])[property] !== proof.values[stage]) return;
+  }
+  return { classification: 'application-plugin-authoring-defect', attribution: 'reviewed-button-typography-host-input',
+    owner: 'showcase Material button font-token and tracking translation', reviewEvidence: structuredClone(proof),
+    justification: 'The uniquely paired button host computes the same font-family or tracking as its direct Material label. Its complete authored token rules and the candidate reset/omission rules independently reproduce the existing control-text cause; all captured normal, comparison and interaction inputs agree with that evidence. This links an unequal host-style input to its demonstrated component-token omission, without substituting painted values for missing declarations, equating fallback fonts, or attributing a downstream parser fault to authoring. Other properties, structure and final raster remain separate.' };
 }
 
 function classifyReviewedTypographyStage(benchmarkCase, input, property, reference, astylar, evidence) {
@@ -7621,6 +7751,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('button host typography scalars/,
+      'button-host font and tracking input ownership', 'Host snapshots are joined to their unique direct Material label only when all current style stages and complete captured token/reset/omission declarations agree with the independently reproduced control-text cause. The bridge retains unequal values, all reviewed cases and the original cause; downstream core font-list mutation, other properties and final raster are not waived.'),
     proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('non-grid template omission requires/,
       'context-bound ordinary block/flex template omission', 'Complete paired trees, captured normal/comparison/interaction stages and exclusion of applicable grid/reset/motion declarations admit only omitted template scalars. Equal and unequal block/flex pairs retain independent display differences. Grid/native/plugin cases, incomplete or ambiguous evidence, forged report records and truncated reviewed-case lists are rejected; no blanket initial-value normalization or final-raster claim.'),
     proof(root, 'examples/material-showcase/src/app/grid-template-initial-audit.spec.ts', /describe\('Material audit: grid initial template/,

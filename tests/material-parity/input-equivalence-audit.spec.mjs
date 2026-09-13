@@ -9686,6 +9686,143 @@ function disabledButtonInkReport() {
   return raw;
 }
 
+function buttonHostTypographyReport(property = 'fontFamily', kind = 'filled') {
+  const raw = property === 'letterSpacing' ? buttonTrackingReport(kind) : controlTypographyReport();
+  const e = raw.results[0], trees = e.inputTrees, ref = trees.reference, ast = trees.astylar, node = ast.nodes[0];
+  if (property === 'fontFamily') {
+    ref.styles[0].fontFamily = 'Roboto';
+    ref.rules = [{ active: true, selector: ({ filled: '.mat-mdc-unelevated-button', outlined: '.mat-mdc-outlined-button', text: '.mat-mdc-button' })[kind],
+      declarations: { 'font-family': { value: `var(--mat-button-${kind}-label-text-font, var(--mat-sys-label-large-font))` } } }];
+    ref.nodes[0].rules = [0];
+    node.authored.class = kind === 'text' ? 'text-button' : 'material-button';
+    node.normalResolvedStyle.fontFamily = node.interactionResolvedStyle.fontFamily = node.paintedControlText.style.fontFamily = 'Roboto, Arial, sans-serif';
+    ast.rules = [{ selector: 'button, input, select', fontFamily: 'Roboto, Arial, sans-serif' },
+      { selector: `.${node.authored.class}`, fontSize: '14px' }];
+  }
+  ref.nodes[0].inline = {};
+  node.resolvedStyle = { ...node.normalResolvedStyle };
+  e.styleInputs = [{ id: 'action', reference: { ...ref.styles[0] }, astylar: { ...node.resolvedStyle },
+    astylarNormalResolvedStyle: { ...node.normalResolvedStyle }, astylarInteractionResolvedStyle: { ...node.interactionResolvedStyle },
+    astylarResolvedStyleEvidenceVersion: 2,
+    referenceStructure: { schemaVersion: 2, type: 'button', text: 'Action', descendantIds: [] },
+    astylarStructure: { schemaVersion: 2, type: 'button', text: 'Action', ownText: 'Action', directChildIds: [], descendantIds: [] },
+    referenceAuthored: structuredClone(ref.rules),
+    astylarAuthored: ast.rules.map(({ selector, ...declarations }) => ({ selector, declarations: { ...declarations } })),
+  }];
+  return raw;
+}
+
+test('button host typography scalars retain the demonstrated component input cause across states', () => {
+  for (const [property, kind] of [['fontFamily', 'filled'], ['fontFamily', 'outlined'], ['fontFamily', 'text'],
+    ['letterSpacing', 'filled'], ['letterSpacing', 'outlined']]) for (const state of [undefined, 'hover', 'held', 'focus', 'disabled']) {
+    const raw = buttonHostTypographyReport(property, kind);
+    if (state) { raw.results[0].state = state; raw.interactions = raw.results; raw.results = []; }
+    const before = JSON.stringify(raw), audit = buildMaterialInputAudit(raw);
+    const proofs = audit.buttonTypographyScalarInputs.filter(p => p.element === 'action');
+    assert.equal(proofs.length, 1);
+    assert.equal(proofs[0].property, property);
+    const finding = audit.discrepancies.find(d => d.attribution === 'reviewed-button-typography-host-input');
+    assert.equal(finding?.property, property);
+    assert.equal(finding.classification, 'application-plugin-authoring-defect');
+    assert.equal(finding.reference, property === 'fontFamily' ? 'roboto' : '0.096px');
+    assert.equal(finding.astylar, property === 'fontFamily' ? 'roboto,arial,sans-serif' : undefined);
+    assert.equal(finding.reviewEvidence.values.painted, property === 'fontFamily' ? 'roboto,arial,sans-serif' : '0');
+    assert.equal(finding.reviewEvidence.inputEquivalent, false);
+    assert.equal(finding.reviewEvidence.finalRasterVerified, false);
+    assert.equal(finding.reviewEvidence.referenceNode, 'button');
+    assert.equal(finding.reviewEvidence.referenceLabel, 'label');
+    assert.equal(audit.summary.inputEquivalent, false);
+    // This reduced control-only fixture deliberately has no showcase root.
+    // Keep that coverage failure visible; all ownership validation must pass.
+    assert.deepEqual(validateMaterialInputAudit(audit, { requireComplete: false }), ['1 cases lack paired root style evidence']);
+    assert.equal(JSON.stringify(raw), before);
+  }
+});
+
+test('button host typography rejects disconnected scalar stages and unproved source or paint owners', () => {
+  const mutations = [
+    e => { e.styleInputs[0].referenceStructure.type = 'span'; },
+    e => { e.styleInputs[0].astylarStructure.type = 'showcase.material:label'; },
+    e => { e.styleInputs[0].referenceStructure.schemaVersion = 1; },
+    e => { e.styleInputs[0].astylarResolvedStyleEvidenceVersion = 1; },
+    e => { e.styleInputs[0].referenceStructure.text = 'Different'; },
+    e => { e.styleInputs[0].astylarStructure.ownText = 'Different'; },
+    e => { delete e.styleInputs[0].astylarNormalResolvedStyle; },
+    e => { e.styleInputs[0].astylarNormalResolvedStyle.fontFamily = 'Arial'; },
+    e => { e.styleInputs[0].astylarInteractionResolvedStyle.fontFamily = 'Arial'; },
+    e => { e.styleInputs[0].astylar.fontFamily = 'Arial'; },
+    e => { e.styleInputs[0].reference.fontFamily = 'Arial'; },
+    e => { delete e.styleInputs[0].referenceAuthored; },
+    e => { delete e.styleInputs[0].astylarAuthored; },
+    e => { e.styleInputs[0].referenceAuthored[0].declarations['font-family'].value = 'Roboto'; },
+    e => { e.styleInputs[0].astylarAuthored[0].declarations.fontFamily = 'Arial'; },
+    e => { e.styleInputs[0].astylarAuthored[1].declarations.fontFamily = 'Roboto, Arial, sans-serif'; },
+    e => { e.inputTrees.astylar.nodes[0].resolvedStyle.fontFamily = 'Arial'; },
+    e => { e.inputTrees.astylar.nodes[0].paintedControlText.source = 'core-text-registry'; },
+    e => { e.inputTrees.astylar.nodes[0].paintedControlText.text = 'Other'; },
+    e => { e.inputTrees.astylar.nodes[0].paintedControlText.style.fontFamily = 'Roboto, Arial, Helvetica, sans-serif'; },
+    e => { e.inputTrees.astylar.paintedControlTextEvidenceVersion = 0; },
+    e => { e.inputTrees.astylar.resolvedStyleEvidenceVersion = 1; },
+    e => { e.inputTrees.astylar.resolvedStyleRevision = -1; },
+    e => { e.inputTrees.astylar.resolvedStyleSource = 'mesh-metadata'; },
+    e => { delete e.inputTrees.reference.nodes[0].inline; },
+    e => { e.inputTrees.reference.nodes[0].inline = { 'font-family': { value: 'Roboto' } }; },
+    e => { e.inputTrees.astylar.nodes[0].authored.style = { fontFamily: 'Roboto, Arial, sans-serif' }; },
+    e => { e.inputTrees.astylar.rules.push({ selector: '.material-button:hover', fontFamily: 'Roboto, Arial, sans-serif' }); },
+    e => { e.inputTrees.astylar.rules.push({ selector: ':is(.material-button)', font: '14px Roboto' }); },
+    e => { e.inputTrees.astylar.rules.push({ selector: '.unrelated div', all: 'initial' }); },
+    e => { e.inputTrees.astylar.rules.push({ selector: '#other', nested: { fontFamily: 'Arial' } }); },
+    e => { delete e.inputTrees.astylar.rules; },
+    e => { e.inputTrees.reference.nodes.push(structuredClone(e.inputTrees.reference.nodes[0])); },
+    e => { e.inputTrees.astylar.nodes.push(structuredClone(e.inputTrees.astylar.nodes[0])); },
+    e => { e.inputTrees.reference.errors.push('incomplete'); },
+  ];
+  for (const mutate of mutations) {
+    const raw = buttonHostTypographyReport(); mutate(raw.results[0]);
+    assert.ok(buildMaterialInputAudit(raw).discrepancies.every(d => d.attribution !== 'reviewed-button-typography-host-input'), String(mutate));
+  }
+  for (const mutate of [
+    e => { e.styleInputs[0].astylar.letterSpacing = '0'; },
+    e => { e.styleInputs[0].astylarAuthored[0].declarations.letterSpacing = '0'; },
+    e => { e.inputTrees.astylar.rules.push({ selector: '.material-button:hover', letterSpacing: '0' }); },
+    e => { e.inputTrees.astylar.nodes[1].interactionResolvedStyle.letterSpacing = '0'; },
+  ]) {
+    const raw = buttonHostTypographyReport('letterSpacing'); mutate(raw.results[0]);
+    assert.ok(buildMaterialInputAudit(raw).discrepancies.every(d => d.attribution !== 'reviewed-button-typography-host-input'), String(mutate));
+  }
+});
+
+test('button host typography scalar validation replays causes and preserves every reviewed case', () => {
+  const raw = buttonHostTypographyReport();
+  raw.results = Array.from({ length: 15 }, (_, i) => ({ ...structuredClone(raw.results[0]), state: `state-${i}` }));
+  const audit = buildMaterialInputAudit(raw);
+  const find = a => a.discrepancies.find(d => d.attribution === 'reviewed-button-typography-host-input');
+  assert.equal(find(audit).cases.length, 12);
+  assert.equal(find(audit).reviewedCases.length, 15);
+  assert.equal(find(audit).occurrences, 15);
+  const cause = a => a.controlTypography.differences.find(d => d.attribution === 'reviewed-button-font-token-input');
+  for (const mutate of [
+    a => { delete a.buttonTypographyScalarInputs; },
+    a => { a.buttonTypographyScalarInputs[0].referenceLabel = 'other'; },
+    a => { a.buttonTypographyScalarInputs[0].causeEvidence.candidatePainted = 'Arial'; },
+    a => { a.buttonTypographyScalarInputs[0].inputEquivalent = true; },
+    a => { a.elementInventory.variants.find(v => v.side === 'reference').ruleEvidenceComplete = false; },
+    a => { a.elementInventory.cases.push(structuredClone(a.elementInventory.cases[0])); },
+    a => { a.controlTypography.differences = a.controlTypography.differences.filter(d => d !== cause(a)); },
+    a => { cause(a).reviewEvidence.referenceComputed = 'Arial'; },
+    a => { cause(a).values.painted = 'Arial'; },
+    a => { find(a).classification = 'equivalent-representation'; },
+    a => { find(a).property = 'lineHeight'; },
+    a => { find(a).astylar = 'Roboto'; },
+    a => { find(a).reviewedCases.pop(); },
+    a => { find(a).reviewedCases[0] = find(a).reviewedCases[1]; },
+    a => { find(a).reviewedCases[0] = 'missing'; },
+  ]) {
+    const changed = structuredClone(audit); mutate(changed);
+    assert.ok(validateMaterialInputAudit(changed, { requireComplete: false }).some(e => e.includes('button typography scalar')), String(mutate));
+  }
+});
+
 test('button font-family attribution requires the missing component override, not merely a common first font', () => {
   function fixture(kind = 'filled') {
     const raw = controlTypographyReport(), trees = raw.results[0].inputTrees;

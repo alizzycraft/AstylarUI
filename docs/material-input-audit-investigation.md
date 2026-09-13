@@ -3,6 +3,80 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Button host typography: preserve and link the demonstrated input cause
+
+The audit now connects a button-host font-family or letter-spacing scalar to
+the existing independently captured control-label cause. Previously, the
+control-text section explained these token omissions while the corresponding
+host-style scalar could remain unresolved. This is an evidence link, not a new
+renderer fix, a font-list equivalence rule, or substitution of paint values for
+missing authored inputs.
+
+`collectButtonTypographyScalarInputs` in
+`tests/material-parity/input-equivalence-audit.mjs` admits only the existing
+`reviewed-button-font-token-input` and `reviewed-button-tracking-input` causes.
+The reference button must uniquely own its direct Material label; the candidate
+must be the uniquely matched current core button-text owner. Complete captured
+rules and inline declarations must demonstrate the same component-token and
+reset/omission cause. Reference host/label values and candidate normal,
+comparison, interaction and painted stages must agree with that cause. The
+separately captured scalar snapshot must match these owners, text, declaration
+witnesses and current style stages. Conflicting or potentially applicable
+overrides, shorthand resets, incomplete captures and ambiguous owners prevent
+the link.
+
+The new `reviewed-button-typography-host-input` classification remains an
+**application/plugin authoring defect**. It preserves `Roboto` versus
+`Roboto, Arial, sans-serif`, and `.096px` tracking versus an omitted declaration
+and zero painted tracking, as unequal inputs. The document-font reset in
+`astylar.component.ts:476` was introduced by `af04845`; the component rules at
+lines 487 and 648 still omit the Material component font token. The filled and
+outlined button rule also omits tracking. The existing source findings retain
+the initial showcase omission history. The separate core font-list rewriting
+defect is not routed upstream into this authoring classification.
+
+Every unique reviewed case is retained beyond the twelve display samples. The
+validator re-derives the link from the full inventory and independently
+reproduces the original control-text cause, rather than trusting report labels.
+It rejects altered causes, values, ownership, classifications and missing or
+duplicated case records. Whole-input equivalence and final-raster verification
+remain false.
+
+Focused command:
+
+```powershell
+node --test --test-name-pattern='button host typography|button tracking attribution|button font-family attribution|core font-list rewrite attribution' tests/material-parity/input-equivalence-audit.spec.mjs
+```
+
+Result: **6/6 pass**, terminal exit 0, 19.9103267 seconds, no failures,
+skips or cancellations. New coverage includes 25 positive property/kind/state
+combinations, 39 conflicting/incomplete input controls, and 15 report mutation
+controls with a fifteen-case grouped record. Initial development runs incorrectly
+expected a reduced control-only fixture to satisfy showcase root coverage; the
+test now explicitly preserves that missing-root diagnostic while requiring all
+ownership validation to pass. No validator acceptance rule was weakened.
+
+The full consolidated in-memory rebuild used the unchanged main capture,
+static normal-line-box report, control-line-box V3 report, supplemental line-box
+report and supplemental capture root recorded in the consolidated command
+below. It produced **1,252 independently replayed host-property witnesses**,
+**19 scalar groups**, and **1,252 occurrences / 1,252 retained reviewed-case
+IDs**, across bottom-sheet, button, card, core, dialog, menu, snack-bar and
+tooltip. Only font-family and letter-spacing are linked. All 125 source
+findings and 80 source fingerprints remain present. Unresolved style groups
+fall **3,136 to 3,117** without changing any scalar value.
+
+Strict validation returns exactly
+`["3117 resolved-style differences still lack root-cause attribution"]`.
+The report-mode diagnostic exits 0; this is not strict audit acceptance.
+Configured capture coverage remains true and input equivalence remains false.
+`npm run parity:harness:check` passes **541/541**, terminal exit 0,
+428.0454886 seconds, with no failures, skips or cancellations. All ten frozen
+capture-harness files still match their checkpoint SHA-256 values. No renderer,
+plugin, canonical example or reference was changed. Complete relevant-state
+coverage, remaining classifications, final report generation and the unfiltered
+enforced rendering matrix are still required.
+
 ## Captured non-grid template omissions: bounded scalar classification
 
 The block/flex controls committed in `77b2098` now support a narrowly scoped
