@@ -1075,6 +1075,20 @@ test('root flow attribution retains every exact case beyond the display sample l
   }
 });
 
+test('grid none proof does not waive template differences in grid or non-grid snapshots', () => {
+  for (const display of ['block', 'grid']) for (const property of ['gridTemplateColumns', 'gridTemplateRows']) {
+    const raw = parityReport({ display, [property]: 'none' }, { display });
+    const before = JSON.stringify(raw);
+    const audit = buildMaterialInputAudit(raw);
+    const difference = audit.discrepancies.find(d => d.property === property);
+    assert.equal(difference?.reference, 'none');
+    assert.equal(difference?.astylar, undefined);
+    assert.equal(difference?.attribution, 'unresolved');
+    assert.equal(audit.summary.inputEquivalent, false);
+    assert.equal(JSON.stringify(raw), before);
+  }
+});
+
 test('attributes sidenav container flow only with the reviewed paired declaration witnesses', () => {
   const raw = parityReport({ display: 'block' }, { display: 'flex' });
   raw.results[0].family = 'sidenav';
@@ -1216,7 +1230,17 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   const report = parityReport({}, {});
   const audit = buildMaterialInputAudit(report);
   assert.equal(audit.coverage.visualParityGreen, true);
-  assert.equal(audit.sourceFingerprints.length, 74);
+  assert.equal(audit.sourceFingerprints.length, 79);
+  for (const file of ['src/app/services/dom/elements/grid.service.ts', 'src/app/services/dom/elements/grid-track-sizing.ts',
+    'examples/material-showcase/node_modules/astylarui/dist/lib/app/services/dom/elements/grid.service.js',
+    'examples/material-showcase/node_modules/astylarui/dist/lib/app/services/dom/elements/grid-track-sizing.js',
+    'examples/material-showcase/src/app/grid-template-initial-audit.spec.ts'])
+    assert.equal(audit.sourceFingerprints.filter(entry => entry.file === file).length, 1);
+  const gridFinding = audit.sourceFindings.find(entry => entry.id === 'core-grid-none-template-becomes-zero-track');
+  assert.equal(gridFinding?.classification, 'confirmed-core-renderer-defect');
+  assert.equal(gridFinding?.detected, true);
+  assert.ok(audit.focusedProofs.some(entry => entry.file === gridFinding.focusedProof && entry.line > 0 && entry.status !== 'missing'));
+  assert.ok(audit.implementationPlan.some(entry => entry.rootCause === 'Grid none is parsed as a zero-length explicit track'));
   for (const file of ['tests/material-parity/control-line-box-validation.mjs', 'tests/material-parity/supplemental-line-box-report.mjs',
     'tests/material-parity/supplemental-line-box-fixtures.mjs', 'tests/material-parity/supplemental-capture-fixtures.mjs'])
     assert.equal(audit.sourceFingerprints.filter(entry => entry.file === file).length, 1);

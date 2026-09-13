@@ -3,6 +3,92 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Grid `none` template: confirmed equal-input core mismatch
+
+The calculation-level suspect from the preceding increment is now reproduced
+through the installed package's public `Astylar.mount` API in real Chrome.
+The isolated `grid-template-initial-audit.spec.ts` creates the browser stylesheet
+from the **same rule objects** passed to AstylarUI. It contains no Material
+plugin, text, offsets, measured dimension substitution or alternate candidate
+structure. The separate omitted, fractional and literal trials are controls,
+not proposed fixture replacements.
+
+Both runs produced **4 failing / 12 passing tests** at DPR 1. The parent grid
+box and unaffected item dimension match in every trial. The failing dimension
+is already zero in core's assigned CSS item size, before final projection:
+
+| Original declaration on both sides | Container extent | Browser item extent | Assigned CSS / projected Astylar extent |
+| --- | ---: | ---: | ---: |
+| `grid-template-columns:none` | 120px | 120px | 0px / 0px |
+| `grid-template-columns:none` | 240px | 240px | 0px / 0px |
+| `grid-template-rows:none` | 120px | 120px | 0px / 0px |
+| `grid-template-rows:none` | 240px | 240px | 0px / 0px |
+
+Omitted templates, `1fr`, and corresponding `120px`/`240px` literal templates
+pass on both axes. Original input objects and browser stylesheets remain
+unchanged. Normal and effective inspection retain the explicit `none` input;
+there are no diagnostic errors, and disposal returns mesh, material and texture
+counts to zero. These assertions run even in the four failing geometry trials.
+
+Root cause and ownership:
+
+- `tokenizeGridTrackList` leaves `none` as a token instead of representing the
+  absence of an explicit track list.
+- `resolveIntrinsicGridRows` rejects that token and falls back to definite
+  track resolution.
+- `resolveGridTracks` treats the token as a numeric track; the nonnumeric
+  definite-length fallback supplies zero. Omitted columns instead enter the
+  fractional fallback, and omitted rows enter implicit auto sizing.
+- `GridService.processGridChildren` assigns that zero CSS extent to the item.
+  The observed zero is not introduced by mesh-to-screen projection.
+
+The source helper and installed package helper independently return identical
+values for all eight width/template calculation controls. Raw SHA-256 values:
+source `grid-track-sizing.ts`
+`0e71e0c6b00c9c057a257a816f4a1f5ef5750ffd507242472ce79d46982e3f96`;
+installed `dist/lib/app/services/dom/elements/grid-track-sizing.js`
+`d4266467e7f2bf1452270eb15f2a1b0eb0822be005628bc1e764e34306bc5d9d`.
+History identifies `a6bd57c` as the extraction of the current tokenizer; it does
+not yet establish the first bad revision of the behavior.
+
+The machine source finding is `core-grid-none-template-becomes-zero-track`.
+The proof, source/installed grid helpers and source/installed GridService are
+fingerprinted. The plan now assigns this to shared grid template semantics and
+implicit track sizing, before fixture compensation removal. Keep all explicit
+`none` failures; do not change them to `1fr`, literal tracks or explicit cells.
+Extend empty/multiple-item grids, implicit placement, grid-auto sizing, intrinsic
+contributions, gaps, updates and DPR coverage before claiming a general fix.
+
+This proves only the stated DPR-1 geometry mismatch. It does not establish
+final raster parity or mean every captured `none`/omission difference is a core
+defect. Non-grid properties and mismapped formatting contexts remain separate
+reviews. A harness guard explicitly preserves unresolved template snapshots
+instead of introducing a blanket normalization.
+
+Verification:
+
+- `npm --prefix examples/material-showcase test -- --watch=false --browsers=ChromeHeadless --include=src/app/grid-template-initial-audit.spec.ts`
+  — **4 failed / 12 passed**, terminal exit 1, 2.271 seconds browser total.
+- Repeat with `--progress=false` after adding assigned-CSS-size diagnostics:
+  **the same 4 failed / 12 passed**, terminal exit 1, 2.252 seconds browser
+  total (2.225 seconds test execution). Chrome Headless 152.0.0.0, Windows,
+  Babylon 8.56.2; Angular core 20.3.29, CLI 20.3.34, AstylarUI 0.2.0. The existing
+  `NG0914` zoneless-with-Zone.js test-configuration warning remains unchanged.
+- `node --test --test-name-pattern='grid none proof|records source fingerprints|source audit has' tests/material-parity/input-equivalence-audit.spec.mjs`
+  — **3/3 pass**, zero skips/cancellations, 2.0626551 seconds.
+- `npm --prefix examples/material-showcase run build -- --output-path=dist/grid-template-initial-audit-build`
+  — terminal exit 0, 27.111 seconds, two prerendered routes. The new isolated
+  build directory does not replace the frozen capture runtime.
+- `npm run parity:harness:check` — **535/535 pass**, zero skips/cancellations,
+  terminal exit 0, 267.415768 seconds. These are audit/harness checks, separate
+  from the four intentionally retained browser/core reproduction failures.
+- The full consolidated in-memory rebuild and strict validation command
+  documented below now records **125 source findings / 79 fingerprints**.
+  Strict validation still returns exactly
+  `["3210 resolved-style differences still lack root-cause attribution"]`;
+  the diagnostic wrapper asserting this expected incomplete status exits 0.
+  No captured style signature was blanket-attributed from the new reduction.
+
 ## Shared demo formatting-context dependencies
 
 The mapped `.demo` reference section uses ordinary block flow. The candidate

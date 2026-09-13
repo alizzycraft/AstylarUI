@@ -1075,6 +1075,16 @@ export const sourceAuditDefinitions = Object.freeze([
     focusedProof: 'examples/material-showcase/src/app/input-equivalence-proof.spec.ts: positioned grid-list tiles preserve a one-pixel gutter',
   }),
   Object.freeze({
+    id: 'core-grid-none-template-becomes-zero-track',
+    introducedBy: 'a6bd57c extracted the current tokenizer; first bad revision has not been established',
+    file: 'src/app/services/dom/elements/grid-track-sizing.ts',
+    pattern: String.raw`const trackTokens = tokens\.length \? tokens : Array\.from`,
+    classification: 'confirmed-core-renderer-defect',
+    owner: 'GridService explicit/implicit template semantics and grid-track-sizing tokenization',
+    justification: 'The public-API equal-input browser reduction repeats four failures: explicit grid-template-columns:none or grid-template-rows:none collapses the stretched item dimension to0 instead of120/240px. Twelve omitted,1fr and fixed-pixel controls pass. The original none declaration survives normal/effective style resolution; the parent geometry remains correct and the assigned CSS item size is already zero before projection. The tokenizer retains none as a track token, the intrinsic-row path rejects it, and the numeric fallback turns it into a zero-length explicit track. Omission instead generates implicit tracks. Preserve the failing none input and repair the core explicit/implicit-track rule; do not author1fr, pixels or explicit cells in fixtures to avoid it. This bounded geometry proof is DPR1 and does not establish arbitrary implicit tracks, text/min-content behavior, final raster, or attribution of non-grid template snapshots.',
+    focusedProof: 'examples/material-showcase/src/app/grid-template-initial-audit.spec.ts',
+  }),
+  Object.freeze({
     id: 'direct-style-calc-resolution-limit',
     introducedBy: 'documented direct StyleRule boundary; loaded-document-style resolution is a separate supported path',
     file: 'docs/compatibility/html-css.md',
