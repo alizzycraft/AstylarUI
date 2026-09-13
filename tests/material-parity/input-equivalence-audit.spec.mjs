@@ -4332,6 +4332,123 @@ test('field color claims independently replay rule order, reference inheritance 
   }
 });
 
+function fieldStateColorReport(state = 'focus', disabledOverride = false, family = 'form-field') {
+  const raw = fieldLabelColorReport(family), entry = raw.results[0];
+  const { reference: ref, astylar: ast } = entry.inputTrees;
+  const selector = state === 'disabled' ? '.mdc-text-field--filled.mdc-text-field--disabled .mdc-floating-label' :
+    `.mdc-text-field--filled:not(.mdc-text-field--disabled)${state === 'focus' ? '.mdc-text-field--focused' : ':not(.mdc-text-field--focused):hover'} .mdc-floating-label`;
+  const value = state === 'disabled' ? 'var(--mat-form-field-filled-disabled-label-text-color, color-mix(in srgb, var(--mat-sys-on-surface) 38%, transparent))' :
+    `var(--mat-form-field-filled-${state}-label-text-color, var(--mat-sys-${state === 'focus' ? 'primary' : 'on-surface-variant'}))`;
+  if (state === 'disabled') ref.nodes[1].rules.pop();
+  ref.rules.push({ active: true, conditions: [], selector, declarations: { color: { value, important: false } } });
+  ref.nodes[1].rules.push(ref.rules.length - 1);
+  ref.styles = ref.styles.map(style => ({ ...style, color: state === 'focus' ? '#6750a4' : state === 'disabled' ? 'rgba(230,225,229,0.38)' : '#49454e' }));
+  ref.nodes[1].parent = 'infix';
+  ref.nodes.push(...[
+    ['infix', 'flex', 'div', 'mat-mdc-form-field-infix'],
+    ['flex', 'field-wrapper', 'div', 'mat-mdc-form-field-flex'],
+    ['field-wrapper', 'field', 'div', `mdc-text-field--filled${state === 'focus' ? ' mdc-text-field--focused' : state === 'disabled' ? ' mdc-text-field--disabled' : ''}`],
+    ['field', null, 'mat-form-field', 'mat-mdc-form-field'],
+  ].map(([key, parent, type, className]) => ({ key, parent, type, attributes: { class: className,
+    ...(key === 'field' ? { id: `${family}-primary` } : {}) }, style: 0, rules: [], pseudoElements: [] })));
+  if (disabledOverride) ast.rules.unshift({ selector: '.field-label, .picker-clock', color: '#79747e' });
+  return raw;
+}
+
+test('field state color tokens expose focus hover and disabled substitutions before paint', () => {
+  for (const family of ['form-field', 'input', 'select', 'autocomplete', 'datepicker', 'timepicker']) {
+    for (const state of ['focus', 'hover', 'disabled']) {
+      const raw = fieldStateColorReport(state, state === 'disabled', family), before = structuredClone(raw);
+      const evidence = collectRetainedTypographyEvidence(raw.results, collectFullTreeInventory(raw.results));
+      const f = evidence.differences.find(d => d.attribution === 'reviewed-field-label-color-substitution');
+      assert.ok(f, `${family}/${state}`);
+      assert.equal(f.reviewEvidence.referenceState.state, state);
+      assert.equal(f.reviewEvidence.referenceState.path.length, 4);
+      assert.equal(f.reviewEvidence.referenceState.revision, 4);
+      assert.equal(f.reviewEvidence.candidateRules.length, state === 'disabled' ? 5 : 4);
+      assert.equal(f.inputEquivalent, false);
+      assert.equal(f.classification, 'application-plugin-authoring-defect');
+      assert.equal(f.currentPseudoStatePaintVerified, false);
+      assert.equal(f.values.normal, f.values.retained);
+      assert.equal(f.values.effective, f.values.retained);
+      assert.deepEqual(raw, before);
+    }
+  }
+  const plainDisabled = fieldStateColorReport('disabled');
+  assert.ok(collectRetainedTypographyEvidence(plainDisabled.results, collectFullTreeInventory(plainDisabled.results))
+    .differences.some(d => d.reviewEvidence?.referenceState?.state === 'disabled'));
+});
+
+test('field state color attribution refuses incomplete ancestor state and unreviewed cascade', () => {
+  const mutations = [
+    e => { e.inputTrees.reference.rules.at(-1).conditions = ''; },
+    e => { e.inputTrees.astylar.resolvedStyleRevision = -1; },
+    e => { delete e.inputTrees.reference.errors; },
+    e => { delete e.inputTrees.astylar.errors; },
+    e => { e.inputTrees.astylar.resolvedStyleEvidenceVersion = 1; },
+    e => { e.inputTrees.astylar.resolvedStyleSource = 'mesh'; },
+    e => { delete e.inputTrees.astylar.resolvedStyleRevision; },
+    e => { e.inputTrees.reference.nodes.find(n => n.key === 'infix').parent = 'missing'; },
+    e => { e.inputTrees.reference.nodes.find(n => n.key === 'flex').type = 'span'; },
+    e => { e.inputTrees.reference.nodes.find(n => n.key === 'field-wrapper').attributes.class = 'other'; },
+    e => { e.inputTrees.reference.nodes.find(n => n.key === 'field-wrapper').attributes.class += ' mdc-text-field--invalid'; },
+    e => { e.inputTrees.reference.nodes.find(n => n.key === 'field').attributes.id = 'other'; },
+    e => { e.inputTrees.reference.nodes.push(structuredClone(e.inputTrees.reference.nodes.find(n => n.key === 'flex'))); },
+    e => { e.inputTrees.reference.nodes.find(n => n.key === 'flex').style = 999; },
+    e => { e.inputTrees.reference.rules.at(-1).conditions = ['@media print']; },
+    e => { e.inputTrees.reference.rules.at(-1).active = false; },
+    e => { e.inputTrees.reference.rules.at(-1).declarations.color.important = true; },
+    e => { e.inputTrees.reference.rules.at(-1).declarations.color.value = '#123456'; },
+    e => { e.inputTrees.reference.rules.at(-1).declarations.all = { value: 'initial' }; },
+    e => { e.inputTrees.reference.nodes[1].rules.push(e.inputTrees.reference.rules.length - 1); },
+    e => { e.inputTrees.reference.nodes[1].rules.reverse(); },
+    e => { e.inputTrees.astylar.rules.push({ selector: '*', color: '#49454f' }); },
+    e => { e.inputTrees.astylar.rules.push({ selector: 'label:focus', color: '#49454f' }); },
+    e => { e.inputTrees.astylar.rules.push({ selector: '.field-label:hover', color: '#49454f' }); },
+    e => { e.inputTrees.astylar.nodes[0].normalResolvedStyle.color = '#123456'; },
+    e => { e.inputTrees.astylar.nodes[0].interactionResolvedStyle.color = '#123456'; },
+    e => { e.inputTrees.astylar.nodes[0].retainedText.style.color = '#123456'; },
+  ];
+  for (const mutate of mutations) {
+    const raw = fieldStateColorReport(); mutate(raw.results[0]);
+    assert.ok(!collectRetainedTypographyEvidence(raw.results, collectFullTreeInventory(raw.results)).differences
+      .some(d => d.attribution === 'reviewed-field-label-color-substitution'), String(mutate));
+  }
+  for (const mutate of [
+    e => { e.inputTrees.astylar.rules[0].color = '#79747f'; },
+    e => { e.inputTrees.astylar.rules.push(e.inputTrees.astylar.rules.shift()); },
+    e => { e.inputTrees.astylar.rules.unshift(structuredClone(e.inputTrees.astylar.rules[0])); },
+  ]) {
+    const raw = fieldStateColorReport('disabled', true); mutate(raw.results[0]);
+    assert.ok(!collectRetainedTypographyEvidence(raw.results, collectFullTreeInventory(raw.results)).differences
+      .some(d => d.attribution === 'reviewed-field-label-color-substitution'), String(mutate));
+  }
+});
+
+test('field state color claims replay ancestor state token and overridden disabled rule', () => {
+  const baseline = buildMaterialInputAudit(fieldStateColorReport('disabled', true));
+  assert.ok(!validateMaterialInputAudit(baseline, { requireComplete: false }).some(e => e.includes('field-label color attributions')));
+  const mutations = [
+    (_r, f) => { f.reviewEvidence.referenceState.state = 'focus'; },
+    (_r, f) => { f.reviewEvidence.referenceState.path.pop(); },
+    (_r, f) => { f.reviewEvidence.referenceState.revision++; },
+    (_r, f) => { f.reviewEvidence.referenceState.selectedRule.declarations.color.value = '#000000'; },
+    (_r, f) => { f.reviewEvidence.matchingRules.shift(); },
+    (_r, f) => { f.reviewEvidence.selectedRule.order = -1; },
+    (_r, f) => { f.inputEquivalent = true; },
+    (_r, f) => { f.currentPseudoStatePaintVerified = true; },
+    (r, f) => { r.retainedTypography.differences.push(structuredClone(f)); },
+    r => { r.retainedTypography.differences = []; },
+    r => { r.elementInventory.variants.find(v => v.side === 'reference').nodes.find(n => n.key === 'field-wrapper').attributes.class = 'mdc-text-field--filled'; },
+    r => { r.elementInventory.rules.find(r => r.side === 'astylar' && r.value.selector === '.field-label, .picker-clock').value.color = '#000000'; },
+  ];
+  for (const mutate of mutations) {
+    const report = structuredClone(baseline);
+    mutate(report, report.retainedTypography.differences.find(d => d.attribution === 'reviewed-field-label-color-substitution'));
+    assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('field-label color attributions')), String(mutate));
+  }
+});
+
 function fieldLabelTrackingReport(family = 'form-field', kind = 'base') {
   const raw = floatingLabelTypographyReport(), entry = raw.results[0];
   entry.family = family;

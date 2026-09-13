@@ -625,7 +625,7 @@ export function renderMaterialInputAuditMarkdown(report) {
     `Omitted component text metrics: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-omitted-component-text-metric').length} records trace explicit reference line-height/tracking tokens through captured inheritance while the candidate text-to-page declaration chain omits them and retains normal/zero. This is unequal input, not a normal-to-pixel normalization or proof of current line placement and glyph paint. Fixed label/container dimensions do not replace the missing metrics.`,
     '',
     `Field-label tracking substitutions: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-field-label-tracking-substitution').length} records preserve the reference filled-label tracking token and wrapper styles alongside the explicit candidate base/empty-state rules. The 0.4px or 0.65px candidate input is not accepted as equivalent to 0.496px reference tracking, including when the reference wrapper is scaled. Current glyph paint and the separate core transform defects remain independently unproven or investigated.`,
-    `Field-label colors: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-field-label-color-substitution').length} records preserve the reference filled-label color token and the candidate base/empty/picker-shell declarations in source order. Attribution requires the selected literal to agree across normal, effective and retained stages; stale ancestry or unexplained state divergence is not waived. These unequal color inputs are not a core color-conversion or raster-equivalence claim.`,
+    `Field-label colors: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-field-label-color-substitution').length} records preserve reference base/focus/hover/disabled tokens and candidate base/empty/picker-shell declarations in source order. State attributions retain the actual filled-field ancestor path and v2 inspection revision; the earlier disabled literal must remain overridden by the later base rule. Attribution requires the selected literal to agree across normal, effective and retained stages. Stale ancestry or unexplained state divergence is not waived, and unequal color inputs are not a core color-conversion or raster-equivalence claim.`,
     `Sidenav colors: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-sidenav-color-substitution').length} records preserve distinct reference drawer/content token inheritance and candidate literal declarations. These are classified unequal authored inputs, not RGB tolerances or evidence of equivalent paint. Competing declarations, incomplete chains and disagreement between candidate stages prevent attribution.`,
     `Sort typography: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-sort-typography-substitution').length} records preserve complete reference frame inheritance against candidate fixed trigger font size or contrast ink. Missing leaf declarations remain missing in the evidence; parent declarations and retained values are recorded independently rather than synthesized as equivalent resolved input.`,
     `Expansion title size: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-expansion-font-token-omission').length} records preserve the reference header size token and complete candidate title-to-page omission chain. The candidate page scale is not accepted as the component font input; the compact-only override and separate positional corrections remain independent authoring differences.`,
@@ -4157,6 +4157,50 @@ function validateSidenavColors(report, errors) {
   })) errors.push('sidenav color attributions do not replay from captured component tokens and candidate declarations');
 }
 
+function reviewedFieldLabelStateColor(entry, wrapper, declarations, referenceTree, astylarTree, inventory) {
+  const base = '.mdc-text-field--filled:not(.mdc-text-field--disabled)';
+  const states = [
+    ['focus', `${base}.mdc-text-field--focused .mdc-floating-label`,
+      'var(--mat-form-field-filled-focus-label-text-color, var(--mat-sys-primary))'],
+    ['hover', `${base}:not(.mdc-text-field--focused):hover .mdc-floating-label`,
+      'var(--mat-form-field-filled-hover-label-text-color, var(--mat-sys-on-surface-variant))'],
+    ['disabled', '.mdc-text-field--filled.mdc-text-field--disabled .mdc-floating-label',
+      'var(--mat-form-field-filled-disabled-label-text-color, color-mix(in srgb, var(--mat-sys-on-surface) 38%, transparent))'],
+  ];
+  const state = states.find(([, selector]) => declarations.at(-1)?.selector === selector);
+  if (!state || declarations.length !== (state[0] === 'disabled' ? 1 : 2) ||
+      declarations.some(rule => rule.active !== true || !Array.isArray(rule.conditions) || rule.conditions.length !== 0 ||
+        rule.declarations?.all || rule.declarations?.color?.important !== false) ||
+      declarations.at(-1).declarations.color.value !== state[2]) return;
+  if (state[0] !== 'disabled' && (declarations[0].selector !== `${base} .mdc-floating-label` ||
+      declarations[0].declarations.color.value !== 'var(--mat-form-field-filled-label-text-color, var(--mat-sys-on-surface-variant))')) return;
+  if (referenceTree.ruleEvidenceComplete !== true || astylarTree.ruleEvidenceComplete !== true ||
+      astylarTree.resolvedStyleEvidenceVersion !== 2 || astylarTree.resolvedStyleSource !== 'core-style-inspection') return;
+  const capturedCases = inventory.cases.filter(c => c.case === (entry.case ?? caseKey(entry)) && c.side === 'astylar');
+  if (capturedCases.length !== 1 || !Number.isInteger(capturedCases[0].resolvedStyleRevision) || capturedCases[0].resolvedStyleRevision < 0) return;
+  // Validate the actual ancestor state; do not infer focus/disabled from a case name.
+  const path = [], expected = [
+    ['div', 'mat-mdc-form-field-infix'], ['div', 'mat-mdc-form-field-flex'],
+    ['div', 'mdc-text-field--filled'], ['mat-form-field', 'mat-mdc-form-field'],
+  ];
+  let child = wrapper;
+  for (const [type, className] of expected) {
+    const matches = referenceTree.nodes.filter(n => n.key === child.parent);
+    if (matches.length !== 1) return;
+    const node = matches[0], style = inventory.styles[node.style];
+    if (node.type !== type || !String(node.attributes?.class ?? '').split(/\s+/).includes(className) ||
+        style?.side !== 'reference' || !style.value) return;
+    path.push({ key: node.key, parent: node.parent, type, attributes: node.attributes, computed: style.value });
+    child = node;
+  }
+  if (child.attributes?.id !== `${entry.family}-primary`) return;
+  const classes = String(path[2].attributes.class).split(/\s+/);
+  if (classes.includes('mdc-text-field--disabled') !== (state[0] === 'disabled') ||
+      classes.includes('mdc-text-field--focused') !== (state[0] === 'focus') || classes.includes('mdc-text-field--invalid')) return;
+  return { state: state[0], selectedRule: declarations.at(-1), path,
+    source: astylarTree.resolvedStyleSource, revision: capturedCases[0].resolvedStyleRevision };
+}
+
 function reviewedFieldLabelColorInput(entry, ref, ast, styles, referenceTree, astylarTree, inventory) {
   if (!['form-field', 'input', 'select', 'autocomplete', 'datepicker', 'timepicker'].includes(entry.family) ||
       ref.type !== 'mat-label' || ref.attributes?.id !== `${entry.family}-label` ||
@@ -4174,46 +4218,56 @@ function reviewedFieldLabelColorInput(entry, ref, ast, styles, referenceTree, as
   if (wrapper.type !== 'label' || !String(wrapper.attributes?.class ?? '').split(/\s+/).includes('mdc-floating-label') ||
       parent.authored?.type !== 'div' || parent.authored.id !== `${entry.family}-primary` || !parentClasses.includes('field-shell')) return;
   const referenceChain = [];
+  let referenceState;
   for (const node of [ref, wrapper]) {
     const pooled = inventory.styles[node.style];
     if (pooled?.side !== 'reference' || !pooled.value || canonicalStyle(pooled.value).color !== styles.reference.color ||
         node.inline?.color || node.inline?.all || /(?:^|;)\s*(?:color|all)\s*:/i.test(node.attributes?.style ?? '')) return;
     const rules = node.rules.map(i => inventory.rules[i]);
     if (rules.some(r => r?.side !== 'reference')) return;
-    const declarations = rules.map(r => r.value).filter(r => r.active === true && (r.declarations?.color || r.declarations?.all));
-    if (node === ref && declarations.length) return;
+    const declarations = rules.map(r => r.value).filter(r => r.declarations?.color || r.declarations?.all);
+    if (declarations.some(r => r.active !== true) || (node === ref && declarations.length)) return;
     if (node === wrapper && (declarations.length !== 1 || declarations[0].declarations.all ||
         declarations[0].selector !== '.mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-floating-label' ||
         declarations[0].declarations.color?.value !== 'var(--mat-form-field-filled-label-text-color, var(--mat-sys-on-surface-variant))' ||
-        declarations[0].declarations.color.important !== false || !Array.isArray(declarations[0].conditions) || declarations[0].conditions.length)) return;
+        declarations[0].declarations.color.important !== false || !Array.isArray(declarations[0].conditions) || declarations[0].conditions.length)) {
+      referenceState = reviewedFieldLabelStateColor(entry, wrapper, declarations, referenceTree, astylarTree, inventory);
+      if (!referenceState) return;
+    }
     referenceChain.push({ node: node.key, computed: pooled.value, colorRules: declarations });
   }
   const rules = astylarTree.rules.map(i => inventory.rules[i]);
   if (rules.some(r => r?.side !== 'astylar')) return;
   const selectors = ['.field-label', '.field-label.empty-field-label', '.timepicker-shell .field-label', '.datepicker-shell .field-label'];
+  const disabledSelector = '.field-label, .picker-clock';
+  if (referenceState?.state === 'disabled') selectors.push(disabledSelector);
   if (rules.some(({ value: rule }) => (rule.color !== undefined || rule.all !== undefined) &&
-      !selectors.includes(rule.selector) && (rule.selector?.includes(`#${ast.authored.id}`) ||
-        /(?:^|[\s>+~,])label(?:$|[\s.#[:>+~,])/.test(rule.selector ?? '') || rule.all !== undefined))) return;
+      !selectors.includes(rule.selector) && (typographySelectorCanApply(rule.selector, ast.authored) || rule.all !== undefined))) return;
   const candidateRules = rules.map((r, order) => ({ order, rule: r.value })).filter(({ rule }) =>
     rule.selector?.includes('.field-label') && (rule.color !== undefined || rule.all !== undefined));
-  if (candidateRules.length !== 4 || selectors.some(selector => candidateRules.filter(r => r.rule.selector === selector).length !== 1) ||
+  const disabledRule = candidateRules.find(r => r.rule.selector === disabledSelector);
+  if (candidateRules.length !== (disabledRule ? 5 : 4) ||
+      selectors.filter(s => s !== disabledSelector).some(selector => candidateRules.filter(r => r.rule.selector === selector).length !== 1) ||
+      (disabledRule && (disabledRule.rule.color !== '#79747e' || disabledRule.order >= candidateRules.find(r => r.rule.selector === '.field-label').order)) ||
       candidateRules.some(({ rule }) => rule.all !== undefined || Object.keys(rule).some(key => key.startsWith('media')) ||
         !/^#[a-f\d]{6}$/i.test(rule.color ?? ''))) return;
-  // Only these four inspected declarations and this explicit parent/class
+  // Only these inspected declarations and this explicit parent/class
   // relationship are reviewed. This is not a second general CSS cascade.
-  const matchingRules = candidateRules.filter(({ rule }) => rule.selector === '.field-label' ||
+  const matchingRules = candidateRules.filter(({ rule }) => rule.selector === '.field-label' || rule.selector === disabledSelector ||
     (rule.selector === '.field-label.empty-field-label' && classes.includes('empty-field-label')) ||
     (rule.selector === '.timepicker-shell .field-label' && parentClasses.includes('timepicker-shell')) ||
     (rule.selector === '.datepicker-shell .field-label' && parentClasses.includes('datepicker-shell')));
   if (parentClasses.includes('timepicker-shell') !== (entry.family === 'timepicker') ||
       parentClasses.includes('datepicker-shell') !== (entry.family === 'datepicker')) return;
-  const selectedRule = matchingRules.filter(r => r.rule.selector !== '.field-label').at(-1) ?? matchingRules[0];
+  const selectedRule = matchingRules.filter(r => !['.field-label', disabledSelector].includes(r.rule.selector)).at(-1) ??
+    matchingRules.filter(r => ['.field-label', disabledSelector].includes(r.rule.selector)).at(-1);
   if (!selectedRule || canonicalStyle(selectedRule.rule).color !== styles.retained.color) return;
   return { attribution: 'reviewed-field-label-color-substitution', classification: 'application-plugin-authoring-defect',
     inputEquivalent: false, currentPseudoStatePaintVerified: false,
     recommendedOwner: 'showcase filled-label color tokens and state-rule translation',
-    justification: 'The reference mat-label inherits the unique active filled-label color token from its floating-label wrapper. The candidate supplies literal base, empty-state and picker-shell colors instead. Captured classes and original rule order select the reviewed declaration, whose color agrees with normal, effective and retained values. Thus these color inputs differ before rendering; no core color-conversion defect or equivalent glyph paint is inferred. A disagreement between inspected and retained stages, competing reference rules, or unreviewed state/media rules prevents this attribution. Preserve wrapper and state inputs before evaluating rendering.',
+    justification: 'The reference mat-label inherits its active filled-label color token from its floating-label wrapper. For focus, hover and disabled colors, the exact captured token declarations and filled-field ancestor state are preserved. The candidate supplies literal base, empty-state and picker-shell colors instead; its optional earlier disabled literal is overridden by the later base rule. Captured classes and original rule order select the reviewed declaration, whose color agrees with normal, effective and retained values. These inputs differ before rendering; no core color-conversion defect or equivalent glyph paint is inferred. Stage disagreement, competing reference rules or unreviewed state/media rules prevent attribution. Preserve wrapper and state inputs before evaluating rendering.',
     reviewEvidence: { sourceFinding: 'fixture-field-label-color-substitution', referenceChain, candidateRules, matchingRules, selectedRule,
+      ...(referenceState ? { referenceState } : {}),
       candidateParent: { key: parent.key, authored: parent.authored }, candidateAuthored: ast.authored,
       candidateNormal: inventory.styles[ast.normalStyle].value, candidateEffective: inventory.styles[ast.interactionStyle].value,
       referenceComputed: styles.reference.color, candidateRetained: styles.retained.color } };

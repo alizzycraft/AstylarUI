@@ -23,6 +23,77 @@ selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Filled-label state colors are different inputs, not a paint conversion failure (2026-09-13)
+
+The captured reference floating labels apply separate base, focus, hover and
+disabled tokens. Candidate labels instead select the base, empty-field or
+picker-shell literal. The audit now attributes **168 additional observations**:
+76 focus-token, 56 hover-token and 36 disabled-token mismatches. The main
+benchmark contributes 166: form-field 24, input 24, autocomplete 20, select 38,
+datepicker 34 and timepicker 26. Supplemental captures contribute two further
+hover-token observations. Counts describe captured label observations, not newly fixed
+components or a declaration of complete interaction coverage.
+
+For example, `interactions/form-field/light/desktop-dpr1/focus` records
+reference `rgb(103,80,164)` through the floating-label wrapper's
+`--mat-form-field-filled-focus-label-text-color` / `--mat-sys-primary` rule.
+The candidate nonempty label has only `field-label`, so its authored `#49454f`
+survives normal resolution, effective resolution and retained text paint.
+Changing the renderer to manufacture the missing focus color would conceal
+unequal inputs. Hover likewise compares the reference hover token's `#49454e`
+with candidate `#49454f`; the one-channel difference is not normalized away.
+
+Disabled reference labels use the disabled-label token, falling back to
+on-surface at 38% alpha. In dark mode the candidate does author an earlier
+`.field-label, .picker-clock { color: #79747e }`, but its label branch loses
+to the later `.field-label` rule of equal specificity. The base/empty/picker
+rules then determine the captured opaque label color. `git show f286fb1`
+confirms that the ineffective dark disabled rule was introduced in
+`fix(material): align field popup parity`, before the base declaration even
+in that original diff. Current source is `astylar.component.ts:542-548`.
+This does not make a claim about the separate picker-clock branch.
+
+The extended `reviewed-field-label-color-substitution` attribution requires
+the exact active reference token declarations and the four ancestor nodes
+from infix through the owning mat-form-field. Focus/disabled/invalid classes
+are checked on the actual filled-field wrapper, not inferred from a test
+name; hover retains the captured matching pseudo-selector. It also requires
+complete rule evidence and v2 core-style inspection with its revision.
+Candidate literals, source order, parent/classes and all three style/paint
+stages remain separate evidence. The optional disabled declaration is accepted
+only with its captured literal and earlier position. Missing ancestry,
+unreviewed cascade, inactive token evidence or stage disagreement stays
+unattributed. Report validation independently reconstructs the finding.
+
+The repair owner remains showcase state/token translation, followed by
+equal-input tests of the core cascade and paint. Do not replace these tokens
+with newly sampled screenshot colors. This audit changes neither production
+styles nor renderer behavior; the other control/typography differences remain
+separate findings requiring their own evidence.
+
+Verification for this increment:
+
+- `node --test --test-name-pattern='field (color|state color)' tests/material-parity/input-equivalence-audit.spec.mjs`:
+  **6/6 pass**, 1.810 seconds. The added state cases cover all six field families,
+  30 contradictory-input controls and 12 report-mutation controls. An initial
+  negative test exposed fallback to ordinary attribution after the state token
+  was marked inactive; the collector now rejects that incomplete evidence.
+- `npm run parity:harness:check`: **434/434 pass**, zero failures, skips or
+  cancellations, 192.382 seconds on the final source. The last hardening rejects
+  non-array condition records and negative inspection revisions.
+- The complete `buildMaterialInputAudit` replay uses
+  `current-ancestry-audit/latest-report.json`,
+  `normal-line-box-current-ancestry-audit/latest-report.json` and
+  `supplemental-current-ancestry-audit`. Diagnostic validation is empty;
+  retained-typography differences requiring attribution fall from 354 to 186.
+  Strict validation still reports 3,309 resolved-style, 879 control-text and
+  186 retained-typography differences requiring attribution. All 117 source
+  findings are detected. This is diagnostic audit evidence,
+  not an enforced input-equivalence pass or a new visual matrix run.
+- All ten frozen harness source hashes match the checkpoint manifest.
+  Production/reference inputs, visual thresholds and existing artifacts are
+  unchanged. `git diff --check` passes; unrelated work remains untouched.
+
 ## Paginator navigation tooltips were never authored on the candidate side (2026-09-13)
 
 All **17 remaining anonymous text-owner gaps** in the current capture set belong
