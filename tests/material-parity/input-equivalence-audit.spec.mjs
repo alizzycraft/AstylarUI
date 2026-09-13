@@ -1103,7 +1103,10 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   const report = parityReport({}, {});
   const audit = buildMaterialInputAudit(report);
   assert.equal(audit.coverage.visualParityGreen, true);
-  assert.equal(audit.sourceFingerprints.length, 70);
+  assert.equal(audit.sourceFingerprints.length, 74);
+  for (const file of ['tests/material-parity/control-line-box-validation.mjs', 'tests/material-parity/supplemental-line-box-report.mjs',
+    'tests/material-parity/supplemental-line-box-fixtures.mjs', 'tests/material-parity/supplemental-capture-fixtures.mjs'])
+    assert.equal(audit.sourceFingerprints.filter(entry => entry.file === file).length, 1);
   for (const file of ['tests/material-parity/control-line-box-report.mjs', 'tests/material-parity/control-line-box-evidence.mjs',
     'scripts/audit-material-control-line-boxes.mjs', 'scripts/run-material-input-audit.mjs', 'tests/material-parity/normal-line-box-report.spec.mjs'])
     assert.equal(audit.sourceFingerprints.filter(entry => entry.file === file).length, 1);

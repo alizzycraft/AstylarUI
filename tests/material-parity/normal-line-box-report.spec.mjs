@@ -6,6 +6,8 @@ import { loadNormalLineBoxReport } from './normal-line-box-report.mjs';
 import { captureControlLineBox, hasControlTextOwners } from './control-line-box-evidence.mjs';
 import { captureBrowserInputTree } from './input-tree-evidence.mjs';
 import { loadControlLineBoxReport, replayControlLineBoxReport } from './control-line-box-report.mjs';
+import { loadSupplementalLineBoxReport } from './supplemental-line-box-report.mjs';
+import { supplementalMetricFixture } from './supplemental-line-box-fixtures.mjs';
 import { parseSupplementalLineBoxArguments, supplementalLineBoxSequences, supplementalLineBoxCaseKey,
   driveSupplementalLineBoxStep } from './supplemental-line-box-evidence.mjs';
 
@@ -25,6 +27,80 @@ function supplementalSequenceCases() {
   }
   return cases;
 }
+
+test('supplemental metric reader validates all original states and preserves unequal metrics without asserting parity', () => {
+  const f = supplementalMetricFixture(), before = JSON.stringify(f.raw);
+  f.records[0].measurements[0].naturalHeight = 18;
+  f.records[0].measurements[0].observerViewportBox.height = 22.5;
+  f.save();
+  const result = loadSupplementalLineBoxReport(f.options);
+  assert.deepEqual(result.errors, []); assert.deepEqual(result.missing, []);
+  assert.equal(result.observations.length, 46);
+  assert.equal(result.observations[0].naturalHeight, 18);
+  assert.equal(result.observations[0].checkpointPaint, '17px');
+  assert.equal(result.observations[0].observerViewportBox.height, 22.5);
+  assert.ok(result.observations.every(m => m.inputEquivalent === undefined && m.finalRasterVerified === undefined));
+  assert.equal(f.records.filter(r => !r.measurements.length).length, 4);
+  assert.equal(JSON.parse(before).results.length, f.raw.results.length);
+  const without = loadSupplementalLineBoxReport({ ...f.options, reportPath: undefined });
+  assert.deepEqual(without.errors, []); assert.equal(without.missing.length, 46); assert.deepEqual(without.observations, []);
+});
+
+test('supplemental metric reader rejects source state provenance and evidence mutations atomically', () => {
+  const mutations = [
+    ['schema', f => { f.raw.schemaVersion++; }],
+    ['browser', f => { f.raw.browser = 'changed'; }],
+    ['source bytes', f => { f.put(f.raw.capture.sources[0].file, 'changed'); }],
+    ['snapshot bytes', f => { f.put(f.raw.measurementSources[2].snapshot, 'changed'); }],
+    ['measurement algorithm', f => { f.put(f.raw.measurementSources[1].file, 'changed'); }],
+    ['original report bytes', f => { f.put(f.raw.sourceReports[0].file, '{}'); }],
+    ['source count', f => { f.raw.sourceReports.pop(); }],
+    ['source order', f => { f.raw.sourceReports.reverse(); }],
+    ['selected state', f => { f.options.cases[0].reference.open = false; }],
+    ['missing closed boundary', f => { f.raw.results.splice(4, 1); f.raw.cases--; }],
+    ['reordered boundaries', f => { [f.raw.results[0], f.raw.results[1]] = [f.raw.results[1], f.raw.results[0]]; }],
+    ['missing target', f => { f.records[0].measurements = []; f.raw.results[0].observations = 0; f.raw.observations--; }],
+    ['duplicate target', f => { f.records[0].measurements.push(f.records[0].measurements[0]); }],
+    ['query', f => { f.records[0].query = 'profile=light'; }],
+    ['DPR', f => { f.records[0].viewport.deviceScaleFactor = 3; }],
+    ['case identity', f => { f.records[0].case += '-changed'; }],
+    ['action index', f => { f.records[0].actionIndex = 1; }],
+    ['original paired tree', f => { f.records[0].originalInputTrees.astylar = f.records[0].originalInputTrees.reference; }],
+    ['fresh error', f => { f.trees[0].errors.push('failed'); }],
+    ['fresh duplicate node', f => { f.trees[0].nodes.push(f.trees[0].nodes.at(-1)); }],
+    ['runtime error', f => { f.records[0].runtime.errors.push('failed'); }],
+    ['runtime font absent', f => { f.records[0].runtime.assets = f.records[0].runtime.assets.filter(a => a.type !== 'font'); }],
+    ['served asset', f => { f.records[0].runtime.assets[0].sha256 = '0'.repeat(64); }],
+    ['PNG dimensions', f => { const e = f.records[0].screenshot, b = Buffer.from(f.options.readBytes(path.resolve(f.options.root, e.file))); b.writeUInt32BE(1, 16); f.putBytes(e.file, b); e.sha256 = digest(b); }],
+    ['untrusted event', f => { f.records[0].events[0].trusted = false; }],
+    ['altered prefix', f => { f.records[1].events[0].clientX++; }],
+    ['missing keyboard action', f => { f.records[1].events = f.records[0].events; }],
+    ['wrong close focus', f => { f.records[1].activeIsClose = false; }],
+    ['closed state still open', f => { f.records[4].calendarOpen = true; }],
+    ['calendar tree contradicts state', f => { f.trees[0].nodes = f.trees[0].nodes.filter(n => n.type !== 'mat-datepicker-content'); }],
+    ['tooltip held release', f => { f.records[22].events.push({ type: 'pointerup', trusted: true, id: '', tag: 'SPAN', clientX: 120, clientY: 120 }); }],
+    ['tooltip focus', f => { f.records[22].activeId = ''; }],
+    ['tooltip wrong center', f => { f.records[21].events[0].clientX = 1; }],
+    ['tooltip trigger geometry', f => { f.records[20].triggerBox.x++; }],
+    ['tooltip visibility', f => { f.records[21].tooltipPresent = false; }],
+    ['tooltip tree contradicts state', f => { f.trees[21].nodes = f.trees[21].nodes.filter(n => !n.attributes?.class?.includes('mat-mdc-tooltip-surface')); }],
+    ['tooltip leave missing', f => { f.records[24].events = f.records[23].events; }],
+    ['changed candidate owner', f => { f.records[0].measurements[0].checkpointCandidateNode += '-other'; }],
+    ['wrong text', f => { f.records[0].measurements[0].text = 'Wrong'; }],
+    ['ancestry', f => { f.records[0].measurements[0].chain.pop(); }],
+    ['missing font', f => { f.records[0].measurements[0].fontReady = false; }],
+    ['font family', f => { f.records[0].measurements[0].typography.fontFamily = 'serif'; }],
+    ['raster claim', f => { f.records[0].measurements[0].finalRasterVerified = true; }],
+    ['equivalence claim', f => { f.records[0].measurements[0].inputEquivalent = true; }],
+    ['late failure', f => { f.records.at(-1).measurements[0].naturalHeight = 0; }],
+  ];
+  for (const [name, mutate] of mutations) {
+    const f = supplementalMetricFixture(); mutate(f); f.save();
+    const result = loadSupplementalLineBoxReport(f.options);
+    assert.ok(result.errors.length, name); assert.deepEqual(result.observations, [], name);
+    assert.equal(result.missing.length, 46, name);
+  }
+});
 
 test('supplemental line-box arguments require explicit bounded source and fresh output locations', () => {
   const root = process.cwd(), args = ['--base-url=http://127.0.0.1:4431',

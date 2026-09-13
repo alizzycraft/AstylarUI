@@ -3,7 +3,78 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
-## Supplemental calendar/tooltip natural-line-box capture
+## Independent supplemental natural-line-box validation
+
+The capture below now has an independent reader,
+`tests/material-parity/supplemental-line-box-report.mjs`. Reopening the real
+capture through it returns **46 observations, zero missing targets and zero
+evidence errors**. These observations are not yet joined into the consolidated
+audit, so its unresolved counts have not been reduced by this increment.
+
+The reader validates both original source reports through their existing
+calendar-close and tooltip-state readers and requires the selected cases to
+match those complete original results. It then requires all 50 new boundaries
+in the original order, including closed states with no target. It validates
+checkpoint/browser/source hashes, archived measurement source bytes, fresh
+tree/PNG hashes and dimensions, served runtime assets, original paired trees,
+query/cohort/view/DPR identity, cumulative trusted event prefixes, keyboard
+sequences, pointer actions and centers, observed focus/visibility state and
+the fresh tree's corresponding popup presence. Tooltip trigger geometry is
+compared with the original report's captured trigger rectangle, not an assumed
+rectangle on input-tree nodes (those nodes do not record geometry).
+
+Exact-owner measurement validation is extracted, without changing its rules,
+from the main interactive reader into `control-line-box-validation.mjs`.
+Both readers now check the same original/fresh typography, complete ancestry,
+leaf text, candidate paint provenance, loaded fonts, natural CSS metrics and
+separate projected viewport dimensions. No measurement is accepted by assuming
+a 17px result. A portable positive control deliberately supplies 18px natural
+height, 17px candidate paint and a 22.5px projected observer height; all three
+remain distinct. A metric cannot claim input equivalence or final raster parity.
+
+Portable source fixtures were extracted unchanged from the existing
+supplemental capture tests and reused for a complete in-memory 50-boundary
+reader proof. Forty-five mutations reject changed source reports, source
+bytes, snapshots, identities, paired trees, runtime assets, PNG dimensions,
+action order, cumulative prefixes, focus/visibility, geometry, exact text
+owners, ancestry, fonts and metric claims. Rejection at the final record returns
+no observations, not a partially accepted earlier prefix. Missing optional
+evidence leaves all 46 targets pending.
+
+Verification:
+
+- `node --check tests/material-parity/supplemental-line-box-report.mjs` and
+  `node --check tests/material-parity/control-line-box-report.mjs` — pass.
+- `node --test --test-name-pattern='supplemental metric reader' tests/material-parity/normal-line-box-report.spec.mjs`
+  — 2/2 pass, 1.9019947 seconds, including the 45 mutation controls.
+- `node --test --test-name-pattern='interactive line-box reader|supplemental metric reader|calendar close|tooltip state|reader binds' tests/material-parity/normal-line-box-report.spec.mjs tests/material-parity/supplemental-capture-evidence.spec.mjs`
+  — 62/62 pass, zero skips/cancellations, 2.0196592 seconds.
+- `node --test --test-name-pattern='records source fingerprints' tests/material-parity/input-equivalence-audit.spec.mjs`
+  — 1/1 pass, 0.8587064 seconds; all 74 source fingerprints include the reader,
+  shared validator and portable fixture helpers.
+- Real-capture replay independently revalidates both original source reports,
+  rebuilds the full paired-tree inventory and current typography targets, then
+  loads `artifacts/material-parity/supplemental-line-box-current-ancestry-audit/latest-report.json`
+  with the frozen manifest provenance and current property set: exit 0,
+  46 observations / zero missing / zero errors. The report SHA remains
+  `a630cc4061b3739e7fe1cb656b1e1c93ef51e01298d413bd49e25920c7c6b9e7`.
+- Main interactive real-capture replay independently reopens and checks every
+  checkpoint record's key/result SHA, rebuilds the 1,875-case paired inventory
+  and current control targets, then calls `loadControlLineBoxReport` against
+  `control-line-box-current-ancestry-audit-v3/latest-report.json`: exit 0,
+  671 observations / zero missing / zero evidence or inventory errors. The
+  extracted shared validator preserves the existing main-capture evidence.
+- `npm run parity:harness:check` — 528/528 pass, no skips or cancellations,
+  251.1761889 seconds, original session polled to terminal exit 0.
+- Syntax checks pass for all four new helper/reader modules; `git diff --check`
+  passes. All ten frozen harness-file SHA-256 values still match the selected
+  checkpoint. Existing unrelated files and local artifacts remain untouched.
+
+This is a reader/instrumentation increment, not a change to the frozen
+application or renderer. Consolidated attribution, complete remaining
+classification, coverage completion and final enforced parity remain required.
+
+## Supplemental calendar/tooltip natural-line-box capture (preceding increment)
 
 The remaining 46 control line-height observations now have a separate,
 reference-only measurement capture. This is evidence collection, not a scalar
