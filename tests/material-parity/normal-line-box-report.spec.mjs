@@ -5,7 +5,7 @@ import { test } from 'node:test';
 import { loadNormalLineBoxReport } from './normal-line-box-report.mjs';
 import { captureControlLineBox, hasControlTextOwners } from './control-line-box-evidence.mjs';
 import { captureBrowserInputTree } from './input-tree-evidence.mjs';
-import { loadControlLineBoxReport } from './control-line-box-report.mjs';
+import { loadControlLineBoxReport, replayControlLineBoxReport } from './control-line-box-report.mjs';
 
 const controlMetricProperties = ['fontFamily', 'fontSize', 'fontWeight', 'fontStyle', 'lineHeight', 'letterSpacing',
   'wordSpacing', 'textAlign', 'textTransform', 'textDecoration', 'whiteSpace'];
@@ -391,4 +391,35 @@ test('interactive line-box reader preserves target-selection source snapshots bu
   f.raw.results = []; f.raw.cases = 0; f.raw.observations = 0; f.save();
   const missing = loadControlLineBoxReport(f.options);
   assert.deepEqual(missing.errors, []); assert.deepEqual(missing.observations, []); assert.equal(missing.missing.length, 1);
+});
+
+test('interactive line-box replay reconstructs the complete selected checkpoint instead of trusting report observations', () => {
+  const f = controlMetricFixture(); delete f.options.cases;
+  f.options.readDirectory = directory => [...f.files.keys()].filter(file => path.dirname(file) === directory).map(file => path.basename(file));
+  const good = replayControlLineBoxReport(f.options);
+  assert.deepEqual(good.errors, []); assert.deepEqual(good.missing, []); assert.equal(good.observations.length, 1);
+  f.record.result.changed = true; f.save();
+  const alteredResult = replayControlLineBoxReport(f.options);
+  assert.deepEqual(alteredResult.errors, [], 'unrelated current checkpoint fields are not fabricated from the report');
+  f.options.inventory.cases = [];
+  const deletedCase = replayControlLineBoxReport(f.options);
+  assert.match(deletedCase.errors[0], /interaction set differs/); assert.deepEqual(deletedCase.observations, []);
+});
+
+test('interactive line-box replay rejects missing or corrupt checkpoint records and reports absent supplements explicitly', () => {
+  for (const kind of ['missing', 'corrupt', 'wrong key']) {
+    const f = controlMetricFixture();
+    f.options.readDirectory = directory => [...f.files.keys()].filter(file => path.dirname(file) === directory).map(file => path.basename(file));
+    const file = path.resolve(f.options.root, f.evidence.checkpointRecord.file);
+    if (kind === 'missing') f.files.delete(file);
+    if (kind === 'corrupt') f.files.set(file, JSON.stringify({ ...f.record, sha256: '0'.repeat(64) }));
+    if (kind === 'wrong key') f.files.set(file, JSON.stringify({ ...f.record, key: '{}' }));
+    const result = replayControlLineBoxReport(f.options);
+    assert.ok(result.errors.length, kind); assert.deepEqual(result.observations, []); assert.equal(result.missing.length, 1);
+  }
+  const f = controlMetricFixture(); delete f.options.reportPath;
+  assert.deepEqual(replayControlLineBoxReport(f.options), loadControlLineBoxReport(f.options));
+  assert.equal(replayControlLineBoxReport(f.options).missing.length, 1);
+  f.options.inventory.cases[0].case = 'interaction:malformed';
+  assert.match(replayControlLineBoxReport(f.options).errors[0], /Invalid interaction inventory keys/);
 });

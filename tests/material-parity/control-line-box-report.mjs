@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { readFileSync, realpathSync } from 'node:fs';
+import { readFileSync, readdirSync, realpathSync } from 'node:fs';
 import path from 'node:path';
 
 const digest = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -24,6 +24,7 @@ export function loadControlLineBoxReport({ root = process.cwd(), reportPath, cas
   const pending = targets.map(item => ({ case: item.case, element: item.element, referenceNode: item.referenceNode }));
   const result = { schemaVersion: 1, file: reportPath, observations: [], missing: pending, errors: [],
     scope: 'Validated main-checkpoint interactive reference CSS natural single-line metrics. No input-equivalence, interaction-parity, baseline, visibility or raster verdict.' };
+  if (reportPath === undefined) return result;
   try {
     assert.ok(expectedProvenance?.browser, 'missing selected-run provenance');
     assert.deepEqual(inventory.errors, [], 'invalid selected input inventory');
@@ -172,4 +173,44 @@ export function loadControlLineBoxReport({ root = process.cwd(), reportPath, cas
     result.missing = pending.filter(item => !seen.has(identity(item)));
   } catch (error) { result.errors.push(String(error)); }
   return result;
+}
+
+// Report validation has the full-tree case inventory, not the original large
+// result objects. Recover those objects from the bound checkpoint, requiring
+// the entire main interaction case set, then use the same independent reader.
+export function replayControlLineBoxReport(options) {
+  const { root = process.cwd(), reportPath, inventory, readBytes, readDirectory } = options;
+  const keys = [...new Set(inventory.cases.filter(c => c.side === 'reference' && c.case.startsWith('interaction:')).map(c => c.case))];
+  const invalidKeys = [];
+  const skeletal = keys.flatMap(key => {
+    const match = /^interaction:([^@]+)@([^/]+)\/([^/]+)\/(.+)$/.exec(key);
+    if (!match) { invalidKeys.push(key); return []; }
+    return [{ kind: 'interaction', family: match[1], profile: match[2], viewport: { id: match[3] }, state: match[4] }];
+  });
+  const empty = loadControlLineBoxReport({ ...options, cases: skeletal, reportPath: undefined });
+  if (invalidKeys.length) return { ...empty, file: reportPath, errors: [`Invalid interaction inventory keys: ${invalidKeys.join(', ')}`] };
+  if (reportPath === undefined) return empty;
+  try {
+    const boundary = path.resolve(root, 'artifacts/material-parity');
+    const resolve = file => {
+      assert.equal(typeof file, 'string'); const absolute = path.resolve(root, file);
+      assert.ok(absolute.startsWith(boundary + path.sep), 'checkpoint replay path escapes boundary');
+      if (!readBytes) assert.ok(realpathSync(absolute).startsWith(realpathSync(boundary) + path.sep), 'checkpoint replay symlink escapes boundary');
+      return absolute;
+    };
+    const read = file => (readBytes ?? readFileSync)(resolve(file));
+    const raw = JSON.parse(read(reportPath)), manifest = raw.capture.checkpointManifest;
+    assert.equal(digest(read(manifest.file)), manifest.sha256, 'changed replay manifest');
+    const directory = path.dirname(resolve(manifest.file));
+    const cases = (readDirectory ?? readdirSync)(directory).filter(name => /^[a-f0-9]{64}\.json$/.test(name)).flatMap(name => {
+      const record = JSON.parse(read(path.join(directory, name))), key = JSON.parse(record.key);
+      assert.equal(name, `${digest(record.key)}.json`, 'changed replay checkpoint key');
+      assert.equal(digest(JSON.stringify(record.result)), record.sha256, 'changed replay checkpoint result');
+      if (key.kind !== 'interaction') return [];
+      for (const field of ['family', 'profile', 'state', 'viewport']) assert.deepEqual(record.result[field], key[field], `changed replay ${field}`);
+      return [{ ...record.result, kind: 'interaction' }];
+    });
+    assert.deepEqual(cases.map(caseKey).sort(), [...keys].sort(), 'checkpoint interaction set differs from inventory');
+    return loadControlLineBoxReport({ ...options, cases });
+  } catch (error) { return { ...empty, file: reportPath, errors: [String(error)] }; }
 }

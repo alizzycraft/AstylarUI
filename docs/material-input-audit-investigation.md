@@ -23,6 +23,92 @@ selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Consolidated interactive line-box attribution (2026-09-13)
+
+The audit CLI now accepts `--control-line-box-report=...` and passes every
+validated evidence option to `buildMaterialInputAudit`; empty and repeated
+options fail. The machine report retains a separate `controlLineBoxes` stage.
+Without a selected supplement its expected main interaction targets remain
+missing; no static observation or global `normal`-to-pixel rule fills them in.
+
+For each eligible control, attribution requires one exact state/owner
+observation, unchanged checkpoint typography and paint metric, settled fonts,
+matching natural CSS height and paint height, and equal font-size/weight/style
+at those stages. The complete candidate normal/effective ancestry must omit
+both explicit line-height and font shorthand. Calendar period observations use
+the already reviewed shared text prefix while preserving the candidate's full
+text-plus-triangle composition and its separate input-inequality findings.
+Raw comparisons and every non-line-height difference remain unchanged.
+
+Matching scalar observations receive
+`reviewed-interactive-normal-line-box-stage-comparison`, classified as a
+**parity-harness defect**, not equivalent input or correct renderer output.
+This is the same processing-stage distinction as the static supplement, now
+proved for each observed main interaction occurrence. Font fallback, tracking,
+baseline, wrapping, placement, visibility, interaction and raster obligations
+are not waived. The existing equal-input core normal-line-height failures also
+remain independent confirmed defects.
+
+Validation independently reconstructs the entire main interaction checkpoint
+case set, verifies it against the inventory, rereads the bound supplement and
+its source/tree/asset evidence, and rebuilds both raw control comparisons and
+scalar attributions. Removed comparisons/differences, changed values, forged
+supplement metadata and claimed attributions without the original evidence
+fail even diagnostic validation. Reader replay rejects missing/corrupt records
+and malformed inventory keys; it never reconstructs a missing metric from
+candidate output. The CLI, producer, observer, reader and measurement tests
+are included in the expanded 67-file audit source fingerprint inventory.
+
+The first full-data integration run validates all **671** observations and
+attributes **637** scalar comparisons, reducing unresolved control typography
+differences from **717 to 80**. It reports 124 classified source findings,
+zero unexplained/undetected source definitions, and no diagnostic-validation
+errors. It terminated with exit 0 after printing the two expected strict
+failures: 3,309 resolved-style differences and 80 control typography differences
+still require root-cause attribution. This inspection command prints validator
+results rather than returning their failure status; it is not a strict passing
+audit. Final-code verification completed with the same strict findings below.
+
+The final-code build reproduces those counts with all 67 source fingerprints.
+The remaining control differences are **34 main snackbar action line heights**,
+**16 supplemental calendar line heights**, and **30 supplemental tooltip line
+heights**. The latter two cohorts were deliberately not covered by the main
+interaction capture. Do not extrapolate its 17px measurements to those states.
+For snackbar, the separate original 14px token versus core-default 16px input
+finding is retained; investigate the resulting natural-line-height calculation
+without substituting a fixed height. The core resolver measures an `Mg` font box
+and returns a ratio, so the next focused proof should distinguish the unequal
+font-size input from that general resolver's independently known limitations.
+
+Verification on the final code:
+
+- `npm run parity:harness:check`: **519/519 passed**, zero failures, skips or
+  cancellations, terminal exit 0, **283.1743821 seconds**. The earlier 519-test
+  run also passed before the final comparison-replay and CLI-forwarding checks;
+  it is not substituted for this final run.
+- `node --test --test-name-pattern='interactive line-box|audit CLI|records source fingerprints|observed normal|observed line-box|normal observations|report validation requires the same joined' tests/material-parity/input-equivalence-audit.spec.mjs tests/material-parity/normal-line-box-report.spec.mjs`:
+  **61/61 passed**, terminal exit 0, **6.8664043 seconds**.
+- Syntax checks pass for the CLI and reader. All ten frozen capture harness
+  hashes remain unchanged. `git diff --check` passes.
+- The final-code complete-data build again reports 671 validated observations,
+  zero missing/error evidence, 637 scalar attributions and 80 unresolved control
+  differences. Diagnostic validation returns `[]`; strict validation reports
+  exactly `3309 resolved-style differences still lack root-cause attribution`
+  and `80 control texture typography differences require attribution`. The
+  read-only inspection process terminated with exit 0 after printing both
+  validation results; the strict audit itself is deliberately not accepted.
+
+Use this evidence selection for subsequent generation/checking (the final
+checked-in report must not be accepted with partial validation):
+
+```powershell
+node scripts/run-material-input-audit.mjs --parity-report=artifacts/material-parity/current-ancestry-audit/latest-report.json --normal-line-box-report=artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json --control-line-box-report=artifacts/material-parity/control-line-box-current-ancestry-audit-v3/latest-report.json --supplemental-root=artifacts/material-parity/supplemental-current-ancestry-audit
+```
+
+No reference, fixture, renderer or calibrated visual gate changed. Complete
+relevant-state coverage, remaining attribution, final report generation and
+the final unfiltered enforced matrix remain required by the full objective.
+
 ## Independent interactive line-box reader and owner readiness (2026-09-13)
 
 `tests/material-parity/control-line-box-report.mjs` independently validates the

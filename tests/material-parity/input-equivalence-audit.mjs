@@ -2,6 +2,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { loadNormalLineBoxReport } from './normal-line-box-report.mjs';
+import { loadControlLineBoxReport, replayControlLineBoxReport } from './control-line-box-report.mjs';
 import { validateSupplementalCapture } from './supplemental-capture-evidence.mjs';
 import { collectCalendarCloseEvidence } from './calendar-close-evidence.mjs';
 import { collectTooltipStateEvidence } from './tooltip-state-evidence.mjs';
@@ -33,7 +34,7 @@ const propertyGroupByName = new Map(Object.entries(propertyGroups)
   .flatMap(([group, properties]) => properties.map((property) => [property, group])));
 
 export function parseMaterialInputAuditArguments(args, root = process.cwd()) {
-  let parityReport, normalLineBoxReport, supplementalRoot;
+  let parityReport, normalLineBoxReport, controlLineBoxReport, supplementalRoot;
   const flags = new Set();
   for (const arg of args) {
     if (arg === '--check' || arg === '--allow-partial') {
@@ -47,6 +48,10 @@ export function parseMaterialInputAuditArguments(args, root = process.cwd()) {
       if (normalLineBoxReport !== undefined) throw new Error('Repeated audit option: --normal-line-box-report');
       normalLineBoxReport = arg.slice('--normal-line-box-report='.length);
       if (!normalLineBoxReport.trim()) throw new Error('--normal-line-box-report requires a path');
+    } else if (arg.startsWith('--control-line-box-report=')) {
+      if (controlLineBoxReport !== undefined) throw new Error('Repeated audit option: --control-line-box-report');
+      controlLineBoxReport = arg.slice('--control-line-box-report='.length);
+      if (!controlLineBoxReport.trim()) throw new Error('--control-line-box-report requires a path');
     } else if (arg.startsWith('--supplemental-root=')) {
       if (supplementalRoot !== undefined) throw new Error('Repeated audit option: --supplemental-root');
       supplementalRoot = arg.slice('--supplemental-root='.length);
@@ -60,6 +65,7 @@ export function parseMaterialInputAuditArguments(args, root = process.cwd()) {
     allowPartial: flags.has('--allow-partial'),
     parityPath: path.resolve(root, parityReport ?? 'artifacts/material-parity/latest-report.json'),
     ...(normalLineBoxReport === undefined ? {} : { normalLineBoxPath: path.resolve(root, normalLineBoxReport) }),
+    ...(controlLineBoxReport === undefined ? {} : { controlLineBoxPath: path.resolve(root, controlLineBoxReport) }),
     ...(supplementalRoot === undefined ? {} : { supplementalRoot: path.resolve(root, supplementalRoot) }),
   };
 }
@@ -96,7 +102,12 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
       .filter((item) => item.case.startsWith('static:') && item.properties.lineHeight.reference === 'normal')
       .map((item) => ({ case: item.case, element: item.element, referenceNode: item.referenceNode })),
       scope: 'No supplemental static natural-line-box report selected. No line-height equivalence inferred.' };
-  const controlTypography = attributeObservedNormalLineBoxes(rawControlTypography, elementInventory, normalLineBoxes);
+  const controlLineBoxes = loadControlLineBoxReport({ root,
+    reportPath: options.controlLineBoxPath === undefined ? undefined : path.relative(root, path.resolve(root, options.controlLineBoxPath)).replaceAll('\\', '/'),
+    cases, inventory: elementInventory, controlTypography: rawControlTypography,
+    expectedProvenance: parityReport.captureProvenance, styleProperties: Object.values(propertyGroups).flat() });
+  const controlTypography = attributeObservedControlLineBoxes(
+    attributeObservedNormalLineBoxes(rawControlTypography, elementInventory, normalLineBoxes), elementInventory, controlLineBoxes);
   const discrepancies = collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs);
   const classifications = countBy(discrepancies, (entry) => entry.classification);
   const propertyGroupCounts = countBy(discrepancies, (entry) => entry.propertyGroup);
@@ -126,6 +137,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
     supplementalCalendarClose,
     supplementalTooltipState,
     normalLineBoxes,
+    controlLineBoxes,
     summary: {
       inputEquivalent: coverage.complete && coverage.missingElements.length === 0 &&
         [supplementalBehavior, supplementalOverlays, supplementalSlider].every(entry => entry.binding?.status === 'checkpoint-bound') &&
@@ -135,6 +147,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
         supplementalCalendarClose.complete && supplementalCalendarClose.mismatches.length === 0 &&
         supplementalTooltipState.complete && supplementalTooltipState.mismatches.length === 0 &&
         normalLineBoxes.missing.length === 0 && normalLineBoxes.errors.length === 0 &&
+        controlLineBoxes.missing.length === 0 && controlLineBoxes.errors.length === 0 &&
         elementInventory.gaps.length === 0 && elementInventory.resolvedStyleGaps.length === 0 && elementInventory.stateStyleGaps.length === 0 && elementInventory.referenceContextGaps.length === 0 && elementInventory.errors.length === 0 &&
         retainedTypography.gaps.length === 0 && retainedTypography.differences.length === 0 && retainedTypography.paintMaskDifferences.length === 0 &&
         controlTypography.gaps.length === 0 && controlTypography.differences.length === 0 && controlTypography.iconSubstitutions.length === 0 &&
@@ -368,6 +381,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
     'reviewed-bottom-sheet-item-typography-input': 'application-plugin-authoring-defect',
     'reviewed-calendar-period-typography-input': 'application-plugin-authoring-defect',
     'reviewed-normal-line-box-stage-comparison': 'parity-harness-defect',
+    'reviewed-interactive-normal-line-box-stage-comparison': 'parity-harness-defect',
   };
   const unresolvedControlTypography = report.controlTypography?.differences.filter((entry) =>
     !reviewedControlKinds[entry.attribution] || entry.classification !== reviewedControlKinds[entry.attribution] || !entry.reviewEvidence ||
@@ -538,6 +552,32 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
   if (report.normalLineBoxes?.schemaVersion !== 1) errors.push('missing natural-line-box evidence stage');
   if (requireComplete && report.normalLineBoxes?.missing.length > 0) errors.push(`${report.normalLineBoxes.missing.length} static normal-line-box observations are missing`);
   if (report.normalLineBoxes?.errors.length > 0) errors.push(`${report.normalLineBoxes.errors.length} natural-line-box evidence errors`);
+  const interactionCases = [...new Set(report.elementInventory.cases.map(c => c.case))].flatMap(key => {
+    const m = /^interaction:([^@]+)@([^/]+)\/([^/]+)\/(.+)$/.exec(key);
+    return m ? [{ kind: 'interaction', family: m[1], profile: m[2], viewport: { id: m[3] }, state: m[4] }] : [];
+  });
+  const rawInteractiveControl = collectControlTypographyEvidence(interactionCases, report.elementInventory);
+  const replayedControlLineBoxes = replayControlLineBoxReport({ root, reportPath: report.controlLineBoxes?.file,
+    inventory: report.elementInventory, controlTypography: rawInteractiveControl,
+    expectedProvenance: report.generatedFrom.captureProvenance, styleProperties: Object.values(propertyGroups).flat() });
+  if (JSON.stringify(report.controlLineBoxes) !== JSON.stringify(replayedControlLineBoxes))
+    errors.push('interactive natural-line-box report lacks independently replayed checkpoint evidence');
+  if (replayedControlLineBoxes.errors.length) errors.push(`${replayedControlLineBoxes.errors.length} interactive natural-line-box evidence errors`);
+  if (requireComplete && replayedControlLineBoxes.missing.length)
+    errors.push(`${replayedControlLineBoxes.missing.length} interactive normal-line-box observations are missing`);
+  const replayedInteractiveControl = attributeObservedControlLineBoxes(rawInteractiveControl, report.elementInventory, replayedControlLineBoxes);
+  const interactiveTargets = new Set(rawInteractiveControl.comparisons.filter(c => c.properties.lineHeight.reference === 'normal')
+    .map(c => JSON.stringify([c.case, c.element])));
+  const interactiveComparison = c => interactiveTargets.has(JSON.stringify([c.case, c.element])) ||
+    (c.case?.startsWith('interaction:') && c.properties?.lineHeight?.reference === 'normal');
+  if (JSON.stringify(report.controlTypography?.comparisons?.filter(interactiveComparison)) !==
+      JSON.stringify(rawInteractiveControl.comparisons.filter(interactiveComparison)))
+    errors.push('interactive normal-line-box comparisons lack complete replayed raw typography');
+  const interactiveLine = d => d.attribution === 'reviewed-interactive-normal-line-box-stage-comparison' ||
+    (d.property === 'lineHeight' && interactiveTargets.has(JSON.stringify([d.case, d.element])));
+  if (JSON.stringify(report.controlTypography?.differences?.filter(interactiveLine)) !==
+      JSON.stringify(replayedInteractiveControl.differences.filter(interactiveLine)))
+    errors.push('interactive normal-line-box differences lack complete replayed scalar attribution');
   return errors;
 }
 
@@ -708,6 +748,7 @@ export function renderMaterialInputAuditMarkdown(report) {
     `Snackbar action size: ${report.controlTypography.differences.filter(d => d.attribution === 'reviewed-snackbar-action-size-token-omission').length} observations preserve the original 14px component token versus its candidate omission and 16px normal/effective/paint stages. Complete action-to-page evidence distinguishes the button default from page scaling. This is unequal input, not proof of browser-correct defaults, equal-input projection behavior, line boxes, visibility or placement.`,
     '',
     `Static natural line boxes: ${report.normalLineBoxes.observations.length} validated browser observations, ${report.normalLineBoxes.missing.length} missing and ${report.normalLineBoxes.errors.length} evidence errors. Matching observed heights explain only the raw normal-to-numeric stage comparison; other typography inputs, baseline, wrapping and final raster remain independent questions. No global normal-to-pixel substitution is accepted.`,
+    `Interactive natural line boxes: ${report.controlLineBoxes.observations.length} validated observations, ${report.controlLineBoxes.missing.length} missing and ${report.controlLineBoxes.errors.length} evidence errors; ${report.controlTypography.differences.filter(d => d.attribution === 'reviewed-interactive-normal-line-box-stage-comparison').length} reviewed scalar stage comparisons. Source/checkpoint files are independently replayed during validation. This is not input-equivalence or final-raster acceptance.`,
     '',
     `Control icon substitutions: ${report.controlTypography.iconSubstitutions.length} captured SVG-to-text input replacements. These are unequal content/geometry inputs, not accepted text-owner mappings or font comparisons. Their actual glyph paint inputs remain recorded separately from the reference vector path.`,
     '',
@@ -5679,6 +5720,51 @@ export function attributeObservedNormalLineBoxes(controlTypography, inventory, s
   return result;
 }
 
+export function attributeObservedControlLineBoxes(controlTypography, inventory, supplemental) {
+  const result = structuredClone(controlTypography);
+  if (supplemental?.schemaVersion !== 1 || supplemental.errors?.length !== 0 ||
+      !/^[a-f0-9]{64}$/.test(supplemental.sha256 ?? '') || !Array.isArray(supplemental.observations)) return result;
+  for (const comparison of result.comparisons) {
+    if (!comparison.case.startsWith('interaction:') || comparison.state === 'static' ||
+        !['reviewed-material-button-label', 'reviewed-material-snackbar-action-label', 'reviewed-material-calendar-period-composition'].includes(comparison.mapping?.kind) ||
+        comparison.source !== 'core-control-texture' || comparison.properties.lineHeight.reference !== 'normal') continue;
+    const observations = supplemental.observations.filter(o => o.case === comparison.case && o.element === comparison.element && o.referenceNode === comparison.referenceNode);
+    if (observations.length !== 1) continue;
+    const observation = observations[0], text = comparison.mapping.kind === 'reviewed-material-calendar-period-composition'
+      ? comparison.referenceText : comparison.text;
+    if (observation.schemaVersion !== 1 || observation.source !== 'browser-control-natural-css-line-box' ||
+        observation.fontReady !== true || typeof text !== 'string' || typeof observation.text !== 'string' ||
+        observation.text.trim() !== text.trim() || !/^[a-f0-9]{64}$/.test(observation.evidence?.sha256 ?? '') ||
+        observation.checkpointCandidateNode !== comparison.astylarNode || observation.checkpointReferenceNode !== comparison.referenceNode ||
+        JSON.stringify(observation.checkpointTypography) !== JSON.stringify(comparison.properties) ||
+        observation.checkpointPaint !== comparison.properties.lineHeight.painted ||
+        observation.inputEquivalent !== undefined || observation.finalRasterVerified !== undefined ||
+        !Number.isFinite(observation.naturalHeight) || observation.naturalHeight <= 0 ||
+        comparison.properties.lineHeight.painted !== `${observation.naturalHeight}px` ||
+        ['fontSize', 'fontWeight', 'fontStyle'].some(property => comparison.properties[property]?.reference === undefined ||
+          comparison.properties[property].reference !== comparison.properties[property].painted)) continue;
+    const maps = inventory.cases.filter(c => c.case === comparison.case && c.side === 'astylar');
+    if (maps.length !== 1 || inventory.errors.some(e => e.case === comparison.case)) continue;
+    const tree = inventory.variants[maps[0].variant], nodes = tree.nodes.filter(n => n.key === comparison.astylarNode);
+    if (nodes.length !== 1) continue;
+    const candidateOmissionChain = candidateTypographyOmissionChain(nodes[0], tree, inventory, 'lineHeight');
+    if (!candidateOmissionChain) continue;
+    const differences = result.differences.filter(d => d.case === comparison.case && d.element === comparison.element &&
+      d.referenceNode === comparison.referenceNode && d.astylarNode === comparison.astylarNode && d.property === 'lineHeight');
+    if (differences.length !== 1 || differences[0].attribution !== 'unresolved') continue;
+    Object.assign(differences[0], {
+      classification: 'parity-harness-defect', attribution: 'reviewed-interactive-normal-line-box-stage-comparison',
+      recommendedOwner: 'input audit interactive browser-used line-height observation and stage comparison',
+      justification: 'The reference computes normal; a checkpoint-bound observation of its exact interactive text owner measures the same CSS natural single-line height as numeric candidate paint. Candidate normal/effective ancestry omits explicit line-height and font shorthand. This explains only the mixed-stage scalar comparison, not equal font-family, tracking, text composition, baseline, wrapping, state, placement, visibility or raster. All raw values and other differences remain unchanged.',
+      reviewEvidence: { supplementalReport: { file: supplemental.file, sha256: supplemental.sha256 }, observation,
+        candidateOmissionChain, currentPaintedLineHeight: comparison.properties.lineHeight.painted,
+        coreDefaultOwner: 'TextStyleParserService.parseTextProperties -> resolveNormalLineHeight',
+        inputEquivalent: false, finalRasterVerified: false },
+    });
+  }
+  return result;
+}
+
 function candidateTypographyOmissionChain(ast, tree, inventory, property) {
   const chain = [], seen = new Set();
   let ancestor = ast;
@@ -7340,6 +7426,11 @@ function sourceFingerprints(root) {
     'tests/material-parity/input-equivalence-policy.mjs',
     'tests/material-parity/border-initial-input-evidence.mjs',
     'tests/material-parity/normal-line-box-report.mjs',
+    'tests/material-parity/control-line-box-report.mjs',
+    'tests/material-parity/control-line-box-evidence.mjs',
+    'scripts/audit-material-control-line-boxes.mjs',
+    'scripts/run-material-input-audit.mjs',
+    'tests/material-parity/normal-line-box-report.spec.mjs',
     'tests/material-parity/normal-line-box-evidence.mjs',
     'scripts/audit-material-normal-line-boxes.mjs',
     'scripts/audit-material-button-defaults.mjs',
@@ -7510,6 +7601,7 @@ function implementationPlan() {
     { priority: 5.2961, rootCause: 'Disabled select and expansion replace translucent text tokens with opaque literals', action: 'Restore the disabled select trigger token and the disabled expansion header token with title inherit override. Preserve alpha as an input; remove fixed gray and surface preblending rather than calibrating them to pixels. Verify enabled/disabled state and exact color ownership before evaluating core alpha compositing on changing backgrounds. Keep disabled hit behavior, focus and final raster separate from token equivalence.' },
     { priority: 5.297, rootCause: 'Select arrow vector/composition replaced by a density-tuned font glyph', action: 'Restore the original Material SVG path, viewBox, arrow wrappers and CSS positioning through the shared rendering path. Do not resize or reposition U+25BC to approximate the vector. Reduce any unsupported SVG/layout behavior to equal-input core proof, and keep the separate select value/control, popup and interaction findings explicit.' },
     { priority: 5.3, rootCause: 'Core normal line-height is approximated by a fixed Mg font-box probe', action: 'Resolve browser normal line-box metrics and actual fallback runs in core. The equal-input Arial/serif cases expose one-pixel texture-height errors; Roboto plus emoji/CJK exposes two-pixel errors while plain Roboto and explicit line heights pass. Preserve those controls, extend multiline/baseline/DPR verification and avoid a universal multiplier, constant pixel addition, or fixed Material line-height compensation. Current-texture evidence must remain separate from declared normal and from final glyph raster.' },
+    { priority: 5.31, rootCause: 'Computed normal and numeric paint heights require state-bound used-value evidence', action: 'Use exact-owner CSS natural-line-box observations before attributing a computed-normal versus numeric-paint scalar. The independent interactive supplement retains full checkpoint, source, font and tree binding and is replayed during report validation. Equal scalars do not waive font-family, tracking, composition, baseline, wrapping, visibility or raster differences. Preserve the unequal snackbar action heights and the separate equal-input core normal-line-height failure proofs; measure remaining supplemental state cohorts rather than extrapolating static or main-checkpoint observations.' },
     { priority: 5.4, rootCause: 'Calendar cell text tokens and inner line boxes were flattened away', action: 'Restore the reference calendar font and date-text ink tokens and its inner line-height:1 label inside both day and year controls. Keep reference cell/container sizing, state and selection structure instead of copying a normal-metric result or tuning the baseline. Separate date/range-context proofs isolate 990 day and 192 year occurrences each of missing font-token, omitted inner line-height and fixed-ink inputs; core metric defects must be assessed only after those inputs are equivalent. Independently resolve normal-versus-zero tracking and the still-unmapped header/icon owners.' },
     { priority: 5.5, rootCause: 'Snackbar composition and generic text/control inputs replace Material message and action owners', action: 'Restore the original padded flex-message, separate action and nested live-region inputs together with their component typography tokens. The exact overlay/message mapping isolates 34 current action textures and 34 message registry entries without asserting equivalent ownership or visible output. Original message size is declared by its supporting-text token; candidate omits it through the page chain and inherits 14.4px/16px/18.4px. Original message ink inherits the supporting-text inverse-on-surface token through live wrappers; candidate inherits literal surface white. All 68 message size/color observations now have declaration and retained-stage attribution as unequal authoring, not core scaling/color failures. All 34 action sizes separately trace the ordered original 14px token versus omitted component authoring and the core 16px button default already present in normal/effective resolution and unchanged in paint, independently of page scale. This does not certify browser-correct defaults. Preserve original tokens rather than sampled values and the separately source-traced action font-stack, tracking and inverse-primary substitutions. Investigate remaining normal-line-box observations without baseline or line-height calibration. Retain independent intrinsic-width, live-region, visibility, lifetime and placement obligations, including checking off-surface rendering rather than equating an unmatched label ID with a missing snackbar.' },
     { priority: 5.6, rootCause: 'Nested list inputs are replaced by generic value buttons', action: 'Restore bottom-sheet navigation/list/anchor/content/label structure and the original label font, explicit line-height, tracking, ink and overflow declarations. Preserve the actual reference overlay token scope and accessible name instead of borrowing page theme colors or calling the opener text the dialog name. Restore reference navigation behavior rather than generic dismiss handling, then reduce any equal-input core failure. Do not infer start/left alignment equivalence without direction evidence. Keep the separate fixed-width/content-height and responsive-constraint findings.' },

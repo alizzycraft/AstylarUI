@@ -4,6 +4,7 @@ import path from 'node:path';
 import {
   buildMaterialInputAudit,
   attributeObservedNormalLineBoxes,
+  attributeObservedControlLineBoxes,
   collectFullTreeInventory,
   collectControlTypographyEvidence,
   collectRetainedTypographyEvidence,
@@ -162,6 +163,10 @@ test('audit CLI selects isolated full-matrix evidence without silently accepting
     path.resolve(root, lineBoxReport));
   assert.throws(() => parseMaterialInputAuditArguments(['--normal-line-box-report=']), /requires a path/);
   assert.throws(() => parseMaterialInputAuditArguments(['--normal-line-box-report=a', '--normal-line-box-report=b']), /Repeated audit option/);
+  assert.equal(parseMaterialInputAuditArguments(['--control-line-box-report=artifacts/material-parity/control/latest-report.json'], root).controlLineBoxPath,
+    path.resolve(root, 'artifacts/material-parity/control/latest-report.json'));
+  assert.throws(() => parseMaterialInputAuditArguments(['--control-line-box-report=']), /requires a path/);
+  assert.throws(() => parseMaterialInputAuditArguments(['--control-line-box-report=a', '--control-line-box-report=b']), /Repeated audit option/);
   assert.equal(parseMaterialInputAuditArguments(['--supplemental-root=artifacts/material-parity/fresh'], root).supplementalRoot,
     path.resolve(root, 'artifacts/material-parity/fresh'));
   assert.throws(() => parseMaterialInputAuditArguments(['--supplemental-root=']), /requires a path/);
@@ -1098,7 +1103,10 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   const report = parityReport({}, {});
   const audit = buildMaterialInputAudit(report);
   assert.equal(audit.coverage.visualParityGreen, true);
-  assert.equal(audit.sourceFingerprints.length, 62);
+  assert.equal(audit.sourceFingerprints.length, 67);
+  for (const file of ['tests/material-parity/control-line-box-report.mjs', 'tests/material-parity/control-line-box-evidence.mjs',
+    'scripts/audit-material-control-line-boxes.mjs', 'scripts/run-material-input-audit.mjs', 'tests/material-parity/normal-line-box-report.spec.mjs'])
+    assert.equal(audit.sourceFingerprints.filter(entry => entry.file === file).length, 1);
   for (const file of ['scripts/audit-material-calendar-close.mjs', 'tests/material-parity/calendar-close-evidence.mjs',
     'scripts/audit-material-tooltip-state.mjs', 'tests/material-parity/tooltip-state-evidence.mjs',
     'examples/material-showcase/node_modules/@angular/material/fesm2022/menu.mjs',
@@ -8799,6 +8807,104 @@ test('normal observations remain required and a selected missing report cannot s
   assert.equal(missing.normalLineBoxes.errors.length, 1);
   assert.ok(validateMaterialInputAudit(missing, { requireComplete: false }).some((error) => error.includes('natural-line-box evidence errors')));
   assert.equal(missing.controlTypography.differences.find((item) => item.property === 'lineHeight').attribution, 'unresolved');
+});
+
+function observedInteractiveLineBoxFixture(state = 'hover') {
+  const f = observedNormalLineBoxFixture(), entry = f.raw.results[0];
+  Object.assign(entry, { kind: 'interaction', state }); f.raw.results = []; f.raw.interactions = [entry];
+  f.inventory = collectFullTreeInventory(f.raw.interactions);
+  f.control = collectControlTypographyEvidence(f.raw.interactions, f.inventory);
+  const comparison = f.control.comparisons[0], observation = f.supplemental.observations[0];
+  Object.assign(observation, { case: comparison.case, source: 'browser-control-natural-css-line-box',
+    checkpointReferenceNode: comparison.referenceNode, checkpointCandidateNode: comparison.astylarNode,
+    checkpointPaint: comparison.properties.lineHeight.painted, checkpointTypography: JSON.parse(JSON.stringify(comparison.properties)) });
+  return f;
+}
+
+test('interactive line-box attribution explains only the exact scalar stage difference in each observed state', () => {
+  for (const state of ['hover', 'held', 'focus', 'activate', 'open', 'open-dismiss']) {
+    const f = observedInteractiveLineBoxFixture(state), before = structuredClone(f);
+    const result = attributeObservedControlLineBoxes(f.control, f.inventory, f.supplemental);
+    const line = result.differences.find(d => d.property === 'lineHeight');
+    assert.equal(line.attribution, 'reviewed-interactive-normal-line-box-stage-comparison', state);
+    assert.equal(line.classification, 'parity-harness-defect'); assert.equal(line.reviewEvidence.observation.naturalHeight, 32);
+    assert.equal(line.values.reference, 'normal'); assert.equal(line.values.painted, '32px');
+    assert.equal(line.reviewEvidence.inputEquivalent, false); assert.equal(line.reviewEvidence.finalRasterVerified, false);
+    assert.equal(line.reviewEvidence.candidateOmissionChain.length, 2);
+    assert.deepEqual(result.comparisons, f.control.comparisons);
+    assert.deepEqual(result.differences.filter(d => d.property !== 'lineHeight'), f.control.differences.filter(d => d.property !== 'lineHeight'));
+    assert.deepEqual(f, before);
+  }
+});
+
+test('interactive line-box attribution retains unequal fonts tracking and period glyph composition', () => {
+  const f = observedInteractiveLineBoxFixture(), entry = f.raw.interactions[0];
+  entry.inputTrees.astylar.nodes[0].paintedControlText.style.fontFamily = 'Arial, sans-serif';
+  entry.inputTrees.astylar.nodes[0].paintedControlText.style.letterSpacing = 1;
+  f.inventory = collectFullTreeInventory(f.raw.interactions); f.control = collectControlTypographyEvidence(f.raw.interactions, f.inventory);
+  const comparison = f.control.comparisons[0], observation = f.supplemental.observations[0];
+  observation.checkpointTypography = JSON.parse(JSON.stringify(comparison.properties));
+  comparison.mapping.kind = 'reviewed-material-calendar-period-composition'; comparison.referenceText = comparison.text;
+  comparison.text += ' ▾';
+  const result = attributeObservedControlLineBoxes(f.control, f.inventory, f.supplemental);
+  assert.equal(result.differences.find(d => d.property === 'lineHeight').attribution, 'reviewed-interactive-normal-line-box-stage-comparison');
+  assert.equal(result.comparisons[0].text, comparison.text);
+  for (const property of ['fontFamily', 'letterSpacing']) assert.deepEqual(result.differences.find(d => d.property === property), f.control.differences.find(d => d.property === property));
+});
+
+test('interactive line-box attribution refuses detached observations substituted metrics or authoring changes', () => {
+  const mutations = [
+    f => { f.supplemental.errors.push('bad evidence'); }, f => { delete f.supplemental.sha256; },
+    f => { f.supplemental.observations = []; }, f => { f.supplemental.observations.push(f.supplemental.observations[0]); },
+    f => { f.supplemental.observations[0].source = 'browser-natural-single-line-box'; },
+    f => { f.supplemental.observations[0].case += '-different'; }, f => { f.supplemental.observations[0].element = 'other'; },
+    f => { f.supplemental.observations[0].referenceNode = 'other'; }, f => { f.supplemental.observations[0].text = 'other'; },
+    f => { f.supplemental.observations[0].fontReady = false; }, f => { f.supplemental.observations[0].naturalHeight = 33; },
+    f => { f.supplemental.observations[0].naturalHeight = 0; }, f => { delete f.supplemental.observations[0].evidence.sha256; },
+    f => { f.supplemental.observations[0].checkpointCandidateNode = 'other'; },
+    f => { f.supplemental.observations[0].checkpointReferenceNode = 'other'; },
+    f => { f.supplemental.observations[0].checkpointPaint = '33px'; },
+    f => { f.supplemental.observations[0].checkpointTypography.fontSize.painted = '99px'; },
+    f => { f.supplemental.observations[0].inputEquivalent = true; }, f => { f.supplemental.observations[0].finalRasterVerified = true; },
+    f => { f.control.comparisons[0].mapping.kind = 'inferred-text'; }, f => { f.control.comparisons[0].state = 'static'; },
+    f => { f.control.comparisons[0].source = 'plugin-private-text'; },
+    f => { f.control.comparisons[0].properties.fontSize.painted = '25px'; f.supplemental.observations[0].checkpointTypography.fontSize.painted = '25px'; },
+    f => { f.control.comparisons[0].properties.fontWeight.painted = '700'; f.supplemental.observations[0].checkpointTypography.fontWeight.painted = '700'; },
+    f => { f.inventory.errors.push({ case: f.control.comparisons[0].case }); },
+    f => { const tree = f.inventory.variants.find(t => t.side === 'astylar'); tree.nodes[0].parent = 'missing'; },
+    f => { const tree = f.inventory.variants.find(t => t.side === 'astylar'); tree.nodes[0].parent = tree.nodes[0].key; },
+    f => { const tree = f.inventory.variants.find(t => t.side === 'astylar'); f.inventory.styles[tree.nodes[0].normalStyle].value.lineHeight = '32px'; },
+    f => { const tree = f.inventory.variants.find(t => t.side === 'astylar'); f.inventory.styles[tree.nodes[1].interactionStyle].value.font = '24px/32px Arial'; },
+    f => { f.control.differences.push(structuredClone(f.control.differences.find(d => d.property === 'lineHeight'))); },
+  ];
+  for (const mutate of mutations) {
+    const f = observedInteractiveLineBoxFixture(); mutate(f);
+    const result = attributeObservedControlLineBoxes(f.control, f.inventory, f.supplemental);
+    assert.ok(result.differences.filter(d => d.property === 'lineHeight').every(d => d.attribution === 'unresolved'), String(mutate));
+  }
+});
+
+test('interactive line-box report validation rejects removed differences and forged evidence instead of trusting metadata', () => {
+  for (const mutation of ['missing report', 'missing targets', 'removed comparisons', 'changed comparison', 'removed differences', 'invented attribution', 'forged supplement']) {
+    const f = observedInteractiveLineBoxFixture(), report = buildMaterialInputAudit(f.raw);
+    if (mutation === 'missing report') delete report.controlLineBoxes;
+    if (mutation === 'missing targets') report.controlLineBoxes.missing = [];
+    if (mutation === 'removed comparisons') report.controlTypography.comparisons = [];
+    if (mutation === 'changed comparison') report.controlTypography.comparisons[0].properties.fontSize.painted = '99px';
+    if (mutation === 'removed differences') report.controlTypography.differences = report.controlTypography.differences.filter(d => d.property !== 'lineHeight');
+    if (mutation === 'invented attribution') report.controlTypography.differences.find(d => d.property === 'lineHeight').attribution = 'reviewed-interactive-normal-line-box-stage-comparison';
+    if (mutation === 'forged supplement') {
+      report.controlLineBoxes = f.supplemental;
+      report.controlTypography = attributeObservedControlLineBoxes(f.control, f.inventory, f.supplemental);
+    }
+    assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('interactive natural-line-box') || e.includes('interactive normal-line-box')), mutation);
+  }
+  const f = observedInteractiveLineBoxFixture(), report = buildMaterialInputAudit(f.raw);
+  assert.equal(report.controlLineBoxes.missing.length, 1);
+  assert.ok(validateMaterialInputAudit(report).some(e => e.includes('interactive normal-line-box observations are missing')));
+  const absent = buildMaterialInputAudit(f.raw, { controlLineBoxPath: 'artifacts/material-parity/no-interactive-line-box-report.json' });
+  assert.equal(absent.controlLineBoxes.errors.length, 1);
+  assert.ok(validateMaterialInputAudit(absent, { requireComplete: false }).some(e => e.includes('interactive natural-line-box evidence errors')));
 });
 
 function paginatorIconReport(direction = 'previous') {
