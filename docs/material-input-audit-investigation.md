@@ -23,6 +23,67 @@ selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Interactive control line-box capture infrastructure (2026-09-13)
+
+The static supplement cannot measure `overlay:0/...` text owners and must not
+be extrapolated to interaction states. New
+`tests/material-parity/control-line-box-evidence.mjs` resolves both frame and
+indexed overlay roots using a complete current owner chain, exact attributes,
+direct text, and the checkpoint typography. The observer obtains natural
+single-line width/height as **CSS used values** from its auto-sized block;
+viewport rectangles are recorded separately. A transformed body changes the
+viewport box but not the CSS metric. This avoids adding a transform-coordinate
+anomaly to the audit instrument itself.
+
+Browser tests cover DPR 1/2, frame labels, multiple overlay roots, nested
+calendar-period text, unscaled/scaled ancestors, keyboard focus, held-pointer
+font changes, and preservation of noncollapsed selection. Eighteen malformed
+root/chain/text/style controls refuse measurement. Generated observer content
+and ambiguous frame roots also fail, with observer cleanup verified. These
+tests establish the instrument's scope; they do not establish equal Material
+inputs, text baseline, wrapping, clipping, visibility or glyph raster.
+
+`scripts/audit-material-control-line-boxes.mjs` derives all **671** mapped
+normal-line-height targets from the selected main interaction checkpoint.
+It replays the reference benchmark's actual action and phase sequence,
+including held states, three-cycle dismissal and the explicitly programmatic
+focus cohort. It records fresh full reference trees, screenshots, trusted-event
+flags, current focus, runtime asset bytes, original paired checkpoint trees,
+and each measured CSS metric beside the unchanged candidate paint input.
+It does not drive the candidate or use candidate values to author reference
+styles. Existing supplemental tooltip/calendar-close cohorts are not silently
+included in this main-checkpoint scope.
+
+Run command:
+
+```powershell
+node scripts/audit-material-control-line-boxes.mjs --base-url=http://127.0.0.1:4431 --checkpoint=artifacts/material-parity/current-ancestry-audit/checkpoint --output=artifacts/material-parity/control-line-box-current-ancestry-audit-v2
+```
+
+The first partial directory, `control-line-box-current-ancestry-audit`, is
+preserved but not accepted. That run was deliberately stopped to correct
+provenance design: the measurement and target-selection source bytes now have
+immutable snapshots, so later audit edits cannot silently change the code
+associated with a capture. This does not authorize executing archived source
+or accepting old scalar claims: the independent reader must verify digests,
+target completeness, owner paths, typography, actual state and metric scope.
+The revised capture is in progress; no new line-height attribution is enabled
+in the consolidated audit yet. Reader/replay integration and the additional
+supplemental interaction cohorts remain required.
+
+Verification so far:
+
+- `node --check scripts/audit-material-control-line-boxes.mjs`: terminal exit 0.
+- `npm run parity:harness:check`: **464/464 passed**, zero
+  failures/skips/cancellations, terminal exit 0, 420.3191034 seconds. This run
+  started before the extra selection-preservation assertion; the complete
+  focused file below was rerun after that assertion was added.
+- `node --test tests/material-parity/normal-line-box-report.spec.mjs`:
+  **53/53 passed**, zero failures/skips/cancellations, terminal exit 0,
+  4.4839303 seconds after the selection-preservation assertion was added.
+- All ten frozen capture harness digests remain unchanged. No renderer,
+  fixture or reference implementation was edited.
+
 ## Snackbar action size token is omitted before paint (2026-09-13)
 
 All **34 captured open snackbar actions** have the same size discrepancy:

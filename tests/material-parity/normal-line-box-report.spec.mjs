@@ -3,6 +3,107 @@ import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { test } from 'node:test';
 import { loadNormalLineBoxReport } from './normal-line-box-report.mjs';
+import { captureControlLineBox } from './control-line-box-evidence.mjs';
+import { captureBrowserInputTree } from './input-tree-evidence.mjs';
+
+const controlMetricProperties = ['fontFamily', 'fontSize', 'fontWeight', 'fontStyle', 'lineHeight', 'letterSpacing',
+  'wordSpacing', 'textAlign', 'textTransform', 'textDecoration', 'whiteSpace'];
+async function controlMetricInput(page, id) {
+  const tree = await page.evaluate(captureBrowserInputTree, { styleProperties: controlMetricProperties });
+  assert.deepEqual(tree.errors, []);
+  let node = tree.nodes.find(n => n.attributes.id === id);
+  assert.ok(node);
+  const expectedStyle = tree.styles[node.style], chain = [];
+  while (node) {
+    chain.unshift({ key: node.key, parent: node.parent, type: node.type, attributes: node.attributes, ownText: node.ownText });
+    node = tree.nodes.find(n => n.key === node.parent);
+  }
+  return { chain, expectedStyle };
+}
+
+test('control natural metrics resolve frame and overlay owners without mixing transformed viewport sizes', async () => {
+  const { chromium } = await import('playwright-core'), browser = await chromium.launch({ channel: 'chrome', headless: true });
+  try {
+    for (const dpr of [1, 2]) {
+      const page = await browser.newPage({ viewport: { width: 640, height: 480 }, deviceScaleFactor: dpr });
+      await page.setContent(`<style>body { margin:0; transform-origin:0 0; }
+        span { font:500 14px Arial; line-height:normal; } button:active span { font-size:18px; }
+        button { margin:8px; } </style><app-reference><main class="frame"><button><span id="frame-text">Open</span></button></main></app-reference>
+        <div class="cdk-overlay-container"><section><button><span id="overlay-text">UNDO</span></button></section></div>
+        <div class="cdk-overlay-container"><section><button><span><span id="period-text">SEP 2026</span><svg></svg></span></button></section></div>`);
+      await page.evaluate(() => document.fonts.ready);
+      const baseline = {};
+      for (const scale of [1, 1.25]) {
+        await page.evaluate(value => { document.body.style.transform = `scale(${value})`; }, scale);
+        for (const id of ['frame-text', 'overlay-text', 'period-text']) {
+          const input = await controlMetricInput(page, id), before = structuredClone(input);
+          const result = await page.evaluate(captureControlLineBox, input);
+          assert.equal(result.typography.lineHeight, 'normal'); assert.equal(result.fontReady, true);
+          assert.equal(result.viewport.deviceScaleFactor, dpr);
+          assert.equal(result.inputEquivalent, undefined); assert.equal(result.finalRasterVerified, undefined);
+          assert.ok(Math.abs(result.observerViewportBox.height - result.naturalHeight * scale) < .001);
+          if (scale === 1) baseline[id] = result.naturalHeight;
+          else assert.equal(result.naturalHeight, baseline[id]);
+          assert.deepEqual(input, before);
+        }
+      }
+      await page.evaluate(() => { document.body.style.transform = 'none'; });
+      await page.keyboard.press('Tab');
+      const focused = await page.evaluate(() => document.activeElement.outerHTML);
+      const input = await controlMetricInput(page, 'frame-text');
+      await page.evaluate(() => {
+        const node = document.getElementById('frame-text').firstChild, range = document.createRange();
+        range.setStart(node, 0); range.setEnd(node, 2);
+        getSelection().removeAllRanges(); getSelection().addRange(range);
+      });
+      await page.evaluate(captureControlLineBox, input);
+      assert.equal(await page.evaluate(() => document.activeElement.outerHTML), focused);
+      assert.equal(await page.evaluate(() => getSelection().toString()), 'Op');
+      const box = await page.locator('#frame-text').boundingBox();
+      await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+      await page.mouse.down();
+      const held = await controlMetricInput(page, 'frame-text');
+      assert.equal(held.expectedStyle.fontSize, '18px');
+      const observed = await page.evaluate(captureControlLineBox, held);
+      assert.ok(observed.naturalHeight > baseline['frame-text']);
+      await assert.rejects(page.evaluate(captureControlLineBox, input), /captured typography changed: fontSize/);
+      await page.mouse.up();
+      assert.equal(await page.locator('material-audit-control-line-box').count(), 0);
+      await page.close();
+    }
+  } finally { await browser.close(); }
+});
+
+test('control natural metrics reject changed roots ancestry content and font evidence and clean up on failure', async () => {
+  const { chromium } = await import('playwright-core'), browser = await chromium.launch({ channel: 'chrome', headless: true });
+  const page = await browser.newPage();
+  try {
+    await page.setContent('<style>span{font:14px Arial;line-height:normal}</style><app-reference><main class="frame"><button><span id="label">Save</span></button></main></app-reference><div class="cdk-overlay-container"></div>');
+    await page.evaluate(() => document.fonts.ready);
+    const input = await controlMetricInput(page, 'label');
+    const controls = [
+      x => { x.chain = []; }, x => { delete x.expectedStyle; }, x => { x.chain[0].parent = 'outside'; },
+      x => { x.chain[0].key = 'root'; }, x => { x.chain[0].key = 'overlay:01'; },
+      x => { x.chain[0].key = 'overlay:2'; }, x => { x.chain[1].parent = 'missing'; },
+      x => { x.chain[1].key = 'frame/0/0'; }, x => { x.chain[1].key = 'frame/-1'; },
+      x => { x.chain[1].type = 'div'; }, x => { x.chain[1].attributes.id = 'changed'; },
+      x => { x.chain.at(-1).ownText = 'Different'; }, x => { x.chain.at(-1).attributes.id = 'other'; },
+      x => { delete x.expectedStyle.fontSize; }, x => { x.expectedStyle.fontSize = '16px'; },
+      x => { x.expectedStyle.fontFamily = 'serif'; }, x => { x.expectedStyle.lineHeight = '17px'; },
+      x => { x.expectedStyle.fontFeatureSettings = '"liga" 0'; },
+    ];
+    for (const mutate of controls) {
+      const changed = structuredClone(input); mutate(changed);
+      await assert.rejects(page.evaluate(captureControlLineBox, changed), /Control line-box evidence:/);
+      assert.equal(await page.locator('material-audit-control-line-box').count(), 0);
+    }
+    await page.addStyleTag({ content: 'material-audit-control-line-box::before { content:"injected" }' });
+    await assert.rejects(page.evaluate(captureControlLineBox, input), /observer has generated content/);
+    assert.equal(await page.locator('material-audit-control-line-box').count(), 0);
+    await page.evaluate(() => document.querySelector('.frame').after(document.querySelector('.frame').cloneNode(true)));
+    await assert.rejects(page.evaluate(captureControlLineBox, input), /ambiguous frame root/);
+  } finally { await browser.close(); }
+});
 
 const digest = (value) => createHash('sha256').update(value).digest('hex');
 function fixture() {
