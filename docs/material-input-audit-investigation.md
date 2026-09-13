@@ -23,6 +23,83 @@ selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Dialog title/content mapping preserves unequal flow and modal inputs (2026-09-13)
+
+The `reviewed-dialog-content-text` mapping pairs the reference's direct `h2`
+title and `mat-dialog-content` text with the candidate's nested heading span and
+paragraph. It requires the generated title ID to match the dialog container's
+`aria-labelledby`, unique parity identities, ordered title/content/actions,
+the Cancel/Save labels and complete overlay, backdrop and two focus-trap-anchor
+paths. Candidate open/modal state, heading wrapper, content owner, action order
+and trigger/section/page context are verified independently.
+
+The full reference heading pseudo-element evidence is retained. Material's
+`::before` is a generated zero-width, 40px inline baseline spacer. The candidate
+has no corresponding pseudo-element: its heading is a fixed-height flex box
+aligned to the bottom with a nested label. Reference content and action wrappers
+also differ from fixed-height paragraph and flex-action authoring. The reference
+dialog is labelled by its title and captures `aria-modal="false"`; the candidate
+authors a modal dialog with `ariaLabel: 'Open dialog'`. Those inputs are preserved
+as differences, not certified as equivalent focus or accessibility behavior.
+
+History links the heading span and flex-flow substitution to `d102828`
+(`fix(material): model dialog text flow explicitly`). `5b02171` subsequently
+changed title padding from `6px 24px 13px` to `7px 24px 12px`, and content padding
+from `0 24px` to `2px 24px 0`. The earlier `bc0e449` fixed panel/title/content/action
+heights, already recorded as `fixture-dialog-fixed-content-boxes`. The new
+`fixture-dialog-text-flow-substitution` finding preserves the additional text
+ownership and modal-composition changes. Current source is
+`astylar.component.ts:788-792,1010-1021`; reference template is
+`reference.component.ts:101` and opening configuration at 156. Installed
+`dialog.mjs` and its implementation `module-Ce6F7TNm.mjs` are fingerprinted.
+
+Five new tests cover correspondence/nonmutation, key-independent ancestry,
+**37 negative input controls**, closed/missing-stage evidence, and **13 report
+mutation controls**. The action subtree is traversed through parent identities,
+not inferred from a generated key prefix. Detached evidence snapshots and
+independent replay reject omitted or fabricated mappings, lost focus anchors,
+altered title linkage, missing pseudo evidence and changed typography stages.
+
+```powershell
+node --test --test-name-pattern='dialog text|records source fingerprints' tests/material-parity/input-equivalence-audit.spec.mjs
+```
+
+Focused result: **6/6 pass**, zero failed/skipped/cancelled/todo, **1.610 seconds**,
+terminal exit 0. An initial positive assertion incorrectly expected the minimal
+synthetic tree to have no gaps even though it supplied no authoritative control
+textures. It was corrected to require preservation of the exact trigger/Cancel/
+Save gaps, while proving the title/content mappings. No audit gap was hidden.
+A read-only inventory projection also initially had a trailing-brace syntax
+error; the corrected command produced the counts below without changing captures.
+
+Across 78 dialog cases, **64 text owners in 32 open captures** are paired. The
+128 unresolved mapping entries become actual typography comparisons. This
+exposes **160 unresolved differences**: 64 font-family, 64 color and 32 content
+tracking differences. Sixty-four start/left differences independently satisfy
+the existing horizontal-LTR alignment proof; that does not equate their text
+containers. In the light desktop activate capture, title ink is `(29,27,30)`
+versus `(29,27,32)`, content ink `(73,69,78)` versus `(73,69,79)`, and content
+tracking `0.256px` versus zero. These values are not normalized into equality.
+
+Full verification: `npm run parity:harness:check` completed with **415/415 pass**,
+zero failed/skipped/cancelled/todo, **185.679 seconds**, terminal exit 0.
+The full `buildMaterialInputAudit` replay used
+`artifacts/material-parity/current-ancestry-audit/latest-report.json`,
+`normalLineBoxPath: 'artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json'`
+and `supplementalRoot: 'artifacts/material-parity/supplemental-current-ancestry-audit'`.
+Coverage remains complete and all **112** source findings are detected.
+`validateMaterialInputAudit(audit, { requireComplete: false })` returns `[]`.
+Strict `validateMaterialInputAudit(audit)` still rejects **3,309 resolved-style
+attributions, 879 control-texture differences, 49 retained mapping/stage gaps,
+and 514 retained typography differences**. The diagnostic command's terminal
+exit 0 is not a strict audit pass. Mapping gaps decreased from 177 to 49 while
+unresolved typography differences increased from 354 to 514, exposing rather
+than suppressing the newly paired inputs.
+
+No renderer, fixture input, reference or visual threshold is changed. All ten
+frozen visual-harness hashes match. Final full visual acceptance and remaining
+root-cause attribution are separate completion requirements.
+
 ## Menu label font omits the direct component token (2026-09-13)
 
 The new `reviewed-menu-label-font-input` attribution separates a direct Material

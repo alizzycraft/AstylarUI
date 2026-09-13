@@ -467,6 +467,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
   validateSnackbarMessageEvidence(report, errors);
   validateTooltipTextEvidence(report, errors);
   validateMenuTextEvidence(report, errors);
+  validateDialogTextEvidence(report, errors);
   validateHorizontalStartAlignment(report, errors);
   validateInheritedComponentFontStack(report, errors);
   validateOmittedComponentTextMetrics(report, errors);
@@ -642,6 +643,7 @@ export function renderMaterialInputAuditMarkdown(report) {
     `Snackbar message tokens: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-snackbar-message-token-input').length} size/color differences trace the direct component size token or inherited surface inverse-text token against omitted component size/page inheritance or literal surface white. Separate declaration, normal/effective and retained stages remain evidence. This is unequal authoring, not a core scaling/color defect or proof of current raster, visibility or theme-token fallback provenance.`,
     `Menu label ink: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-menu-label-ink-input').length} unequal colors preserve the original ordered inherit/token declarations and direct label inheritance against the candidate item literal. Complete rule and normal/effective/retained evidence is required; typography, token fallback origin, overlay theme scope and final paint are not certified.`,
     `Menu label font: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-menu-label-font-input').length} original direct component-family tokens contrast with candidate label omission and inheritance from the explicit generic control-family rule. The two fallback lists remain unequal; installed-glyph coincidence, font selection, shaping and final raster are not certified.`,
+    `Dialog title/content: ${report.retainedTypography.reviewedMappings.filter(m => m.kind === 'reviewed-dialog-content-text').length} owners have exact generated-title linkage, direct-content and action/overlay/focus-trap correspondence. Original heading pseudo-spacer, labelled dialog and content wrappers remain distinct from candidate nested text, fixed flex boxes and separately labelled modal. Mapped text does not establish equivalent structure, typography, semantics, placement or raster.`,
     `Tooltip text: ${report.retainedTypography.reviewedMappings.filter(m => m.kind === 'reviewed-tooltip-overlay-text').length} labels map only when unique Material trigger/message and shown connected-overlay ownership coexist with the unique candidate trigger-linked flow popup. Original aria-hidden visual ownership and external description linkage remain distinct from the candidate role-tooltip sibling. Candidate-only states, typography, positioning, collision, clipping, visibility and raster are not waived.`,
     `Tooltip alignment: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-tooltip-text-alignment-input').length} original center declarations contrast with complete popup-to-page candidate omissions and retained left. Candidate flex centering is captured as a different input, not an equivalent replacement or proof of glyph alignment. Positioning and blur remain separate investigations.`,
     `Timepicker options: ${report.retainedTypography.reviewedMappings.filter(m => m.kind === 'reviewed-timepicker-option-text').length} labels have complete input-linked half-hour-domain correspondence. Material primary-text/ripple owners are replaced by direct-text div options; active and selected states remain separate raw evidence. This maps text owners, not equivalent wrappers, scrolling, commit behavior, placement or raster. Newly exposed typography differences remain enforced.`,
@@ -1503,6 +1505,121 @@ function reviewedTimepickerOptionMappings(reference, candidate) {
   }));
 }
 
+function reviewedDialogTextMappings(reference, candidate) {
+  for (const tree of [reference, candidate]) {
+    if (!Array.isArray(tree?.nodes) || new Set(tree.nodes.map(n => n.key)).size !== tree.nodes.length) return [];
+    const ids = tree.nodes.map(n => (n.attributes ?? n.authored)?.id).filter(Boolean);
+    if (new Set(ids).size !== ids.length) return [];
+  }
+  const parityIds = reference.nodes.map(n => n.attributes?.['data-parity-id']).filter(Boolean);
+  if (new Set(parityIds).size !== parityIds.length) return [];
+  const one = nodes => nodes.length === 1 ? nodes[0] : undefined;
+  const cls = (node, name) => String(node?.attributes?.class ?? '').split(/\s+/).includes(name);
+  const children = (tree, node) => tree.nodes.filter(n => n.parent === node?.key);
+  const byParity = id => one(reference.nodes.filter(n => n.attributes?.['data-parity-id'] === id));
+  const byId = id => one(candidate.nodes.filter(n => n.authored?.id === id));
+  const title = byParity('dialog-title'), copy = byParity('dialog-copy'), actions = byParity('dialog-actions');
+  if (!title || title.type !== 'h2' || !cls(title, 'mat-mdc-dialog-title') || !Object.hasOwn(title.attributes, 'mat-dialog-title') ||
+      !/^mat-mdc-dialog-title-\d+$/.test(title.attributes.id ?? '') || title.ownText?.trim() !== 'Confirm action' || children(reference, title).length ||
+      title.pseudoElements?.filter(p => p.pseudo === '::before' && p.generated === true).length !== 1 ||
+      !copy || copy.type !== 'mat-dialog-content' || !cls(copy, 'mat-mdc-dialog-content') || copy.attributes.id ||
+      copy.ownText?.trim() !== 'Save Project Atlas?' || children(reference, copy).length ||
+      !actions || actions.type !== 'mat-dialog-actions' || !cls(actions, 'mat-mdc-dialog-actions') || actions.ownText?.trim()) return [];
+  const referencePath = [title];
+  for (const [type, className] of [['div', 'mat-mdc-dialog-surface'], ['div', 'mat-mdc-dialog-inner-container'],
+    ['mat-dialog-container', 'mat-mdc-dialog-container'], ['div', 'cdk-overlay-pane'], ['div', 'cdk-global-overlay-wrapper'], ['div', 'cdk-overlay-container']]) {
+    const node = one(reference.nodes.filter(n => n.key === referencePath.at(-1).parent));
+    if (!node || node.type !== type || !cls(node, className) || node.ownText?.trim()) return [];
+    referencePath.push(node);
+  }
+  const [, surface, inner, dialog, pane, wrapper, overlay] = referencePath;
+  if (copy.parent !== surface.key || actions.parent !== surface.key ||
+      children(reference, surface).map(n => n.key).join('|') !== [title, copy, actions].map(n => n.key).join('|') ||
+      children(reference, inner).length !== 1 || children(reference, dialog).length !== 1 ||
+      dialog.attributes.id !== 'material-dialog' || dialog.attributes.role !== 'dialog' || dialog.attributes.tabindex !== '-1' ||
+      dialog.attributes['aria-labelledby'] !== title.attributes.id || dialog.attributes['aria-modal'] !== 'false' || dialog.attributes['aria-label'] ||
+      !cls(dialog, 'mdc-dialog--open') || !cls(pane, 'mat-mdc-dialog-panel') || !/^cdk-overlay-\d+$/.test(pane.attributes.id ?? '') ||
+      wrapper.attributes.dir !== 'ltr' || children(reference, wrapper).length !== 1 || overlay.parent !== null ||
+      reference.nodes.filter(n => n.attributes?.role === 'dialog').length !== 1) return [];
+  const paneChildren = children(reference, pane), focusAnchors = paneChildren.filter(n => cls(n, 'cdk-focus-trap-anchor'));
+  if (paneChildren.length !== 3 || paneChildren[1] !== dialog || focusAnchors.length !== 2 || focusAnchors.some(n =>
+    n.type !== 'div' || !cls(n, 'cdk-visually-hidden') || n.attributes.tabindex !== '0' || n.attributes['aria-hidden'] !== 'true' ||
+    n.ownText?.trim() || children(reference, n).length)) return [];
+  const backdrop = one(children(reference, overlay).filter(n => cls(n, 'cdk-overlay-backdrop')));
+  if (children(reference, overlay).length !== 2 || !backdrop || !cls(backdrop, 'cdk-overlay-dark-backdrop') ||
+      !cls(backdrop, 'cdk-overlay-backdrop-showing') || backdrop.ownText?.trim() || children(reference, backdrop).length) return [];
+  const refActions = children(reference, actions);
+  if (refActions.length !== 2) return [];
+  for (const [index, name] of ['Cancel', 'Save'].entries()) {
+    const item = refActions[index], label = one(children(reference, item).filter(n => cls(n, 'mdc-button__label')));
+    if (item !== byParity(`dialog-${name.toLowerCase()}`) || item.type !== 'button' || !Object.hasOwn(item.attributes, 'mat-dialog-close') ||
+        !Object.hasOwn(item.attributes, index ? 'mat-flat-button' : 'mat-button') || item.ownText?.trim() ||
+        !label || label.type !== 'span' || label.ownText?.trim() !== name || children(reference, label).length ||
+        children(reference, item).some(n => n !== label && n.ownText?.trim())) return [];
+  }
+  const trigger = one(reference.nodes.filter(n => n.attributes?.id === 'dialog-primary'));
+  const section = one(reference.nodes.filter(n => n.attributes?.id === 'dialog-root'));
+  const frame = one(reference.nodes.filter(n => n.key === section?.parent));
+  const triggerLabel = one(children(reference, trigger).filter(n => cls(n, 'mdc-button__label')));
+  if (!trigger || trigger.type !== 'button' || !Object.hasOwn(trigger.attributes, 'mat-flat-button') ||
+      !section || section.type !== 'section' || trigger.parent !== section.key || children(reference, section).length !== 1 ||
+      !frame || frame.type !== 'main' || frame.parent !== null || !cls(frame, 'frame') ||
+      !triggerLabel || triggerLabel.ownText?.trim() !== 'Open dialog' || children(reference, triggerLabel).length) return [];
+  const astTitle = byId('dialog-title-label'), astHeading = byId('dialog-title'), astCopy = byId('dialog-copy');
+  const astActions = byId('dialog-actions'), panel = byId('dialog-panel'), modal = byId('dialog-overlay');
+  const astTrigger = byId('dialog-primary'), astSection = byId('dialog-root'), page = byId('page');
+  const exact = (node, type, className) => node?.authored.type === type && (!className || node.authored.class === className);
+  if (!exact(astTitle, 'span') || astTitle.authored.textContent !== 'Confirm action' || children(candidate, astTitle).length ||
+      !exact(astHeading, 'h2', 'dialog-title') || astHeading.authored.textContent || astTitle.parent !== astHeading.key || children(candidate, astHeading).length !== 1 ||
+      !exact(astCopy, 'p', 'dialog-copy') || astCopy.authored.textContent !== 'Save Project Atlas?' || children(candidate, astCopy).length ||
+      !exact(astActions, 'div', 'dialog-actions') || astActions.authored.textContent || !exact(panel, 'section', 'dialog-panel') ||
+      children(candidate, panel).map(n => n.key).join('|') !== [astHeading, astCopy, astActions].map(n => n.key).join('|') ||
+      !exact(modal, 'dialog', 'modal-overlay') || modal.authored.open !== true || modal.authored.modal !== true ||
+      modal.authored.ariaLabel !== 'Open dialog' || modal.authored.ariaLabelledby !== undefined || panel.parent !== modal.key || children(candidate, modal).length !== 1 ||
+      !exact(astTrigger, 'button', 'material-button') || astTrigger.authored.value !== 'Open dialog' || children(candidate, astTrigger).length ||
+      !exact(astSection, 'section') || modal.parent !== astSection.key || astTrigger.parent !== astSection.key || children(candidate, astSection).length !== 2 ||
+      !exact(page, 'main') || page.parent !== 'root' || astSection.parent !== page.key || candidate.nodes.filter(n => n.authored?.type === 'dialog').length !== 1) return [];
+  const astActionNodes = children(candidate, astActions);
+  if (astActionNodes.length !== 2 || astActionNodes.some((n, index) => !exact(n, 'button', index ? 'dialog-action primary' : 'dialog-action') ||
+      n.authored.id !== (index ? 'dialog-save' : 'dialog-cancel') || n.authored.value !== (index ? 'Save' : 'Cancel') ||
+      (index === 0 && n.authored.autofocus !== true) || children(candidate, n).length)) return [];
+  if (reference.nodes.some(n => ['dialog-title-label', 'dialog-copy'].includes(n.attributes?.id))) return [];
+  const snapshot = value => structuredClone(value);
+  const actionKeys = new Set([actions.key]);
+  let previousSize = 0;
+  while (previousSize !== actionKeys.size) {
+    previousSize = actionKeys.size;
+    for (const node of reference.nodes) if (actionKeys.has(node.parent)) actionKeys.add(node.key);
+  }
+  const actionSubtree = reference.nodes.filter(n => actionKeys.has(n.key));
+  return [[title, astTitle, [astTitle, astHeading, panel, modal, astSection, page]],
+    [copy, astCopy, [astCopy, panel, modal, astSection, page]]].map(([ref, ast, candidatePath]) => ({
+    kind: 'reviewed-dialog-content-text', element: ast.authored.id, referenceNode: ref.key, astylarNode: ast.key,
+    classification: 'application-plugin-authoring-defect', inputEquivalent: false, finalRasterVerified: false,
+    reviewEvidence: snapshot({ sourceFinding: 'fixture-dialog-text-flow-substitution',
+      referencePath: [ref, ...referencePath.slice(1)], candidatePath, referenceTrigger: trigger, referenceTriggerLabel: triggerLabel,
+      referenceSection: section, referenceFrame: frame, referenceBackdrop: backdrop, referenceFocusAnchors: focusAnchors,
+      referenceTitle: title, referenceCopy: copy, referenceActions: actionSubtree, candidateTrigger: astTrigger,
+      candidateActions: [astActions, ...astActionNodes], referenceText: ref.ownText, candidateText: ast.authored.textContent }),
+    justification: 'The unique generated title ID and aria-labelledby relation, direct content, ordered Cancel/Save actions and complete overlay/focus-trap context establish correspondence with the candidate heading span and paragraph. Original title pseudo-spacer and content wrappers differ from fixed-height flex title/content authoring. Reference labelled dialog and separate backdrop/focus owners also differ from the candidate modal element labelled Open dialog. Every structure and style remains evidence; text identity does not certify layout, semantics, focus behavior, typography, placement or raster.' }));
+}
+
+function validateDialogTextEvidence(report, errors) {
+  if (!report.retainedTypography) return;
+  const cases = [...new Set(report.elementInventory.cases.map(c => c.case))].flatMap(key => {
+    const match = parseReviewedCase(key, 'dialog');
+    return match ? [{ kind: match[1], family: 'dialog', profile: match[2], viewport: { id: match[3] }, ...(match[4] ? { state: match[4] } : {}) }] : [];
+  });
+  const replay = collectRetainedTypographyEvidence(cases, report.elementInventory);
+  const predicate = value => value.kind === 'reviewed-dialog-content-text' || value.mapping?.kind === 'reviewed-dialog-content-text' ||
+    ['dialog-title-label', 'dialog-copy'].includes(value.element) || /^mat-mdc-dialog-title-\d+$/.test(value.element ?? '') ||
+    (value.family === 'dialog' && value.reason === 'own-text nodes without an explicit shared ID require structural mapping');
+  for (const list of ['reviewedMappings', 'comparisons', 'differences', 'gaps']) {
+    if (JSON.stringify(report.retainedTypography[list].filter(predicate)) !== JSON.stringify(replay[list].filter(predicate)))
+      errors.push(`dialog text ${list} lack complete replayed input evidence`);
+  }
+}
+
 function reviewedMenuTextMappings(reference, candidate) {
   for (const tree of [reference, candidate]) {
     if (!Array.isArray(tree?.nodes) || new Set(tree.nodes.map(n => n.key)).size !== tree.nodes.length) return [];
@@ -2043,6 +2160,7 @@ export function reviewedTemplateTextMappings(family, referenceTree, astylarTree)
   if (family === 'snack-bar') pairs.push(...reviewedSnackbarMessageMappings(referenceTree, astylarTree));
   if (family === 'tooltip') pairs.push(...reviewedTooltipTextMappings(referenceTree, astylarTree));
   if (family === 'menu') pairs.push(...reviewedMenuTextMappings(referenceTree, astylarTree));
+  if (family === 'dialog') pairs.push(...reviewedDialogTextMappings(referenceTree, astylarTree));
   for (const path of paths) {
     const reference = follow(referenceTree, 'reference', path.reference);
     const astylar = follow(astylarTree, 'astylar', path.astylar);
@@ -6092,6 +6210,8 @@ function sourceFingerprints(root) {
     'examples/material-showcase/node_modules/@angular/material/fesm2022/option-BzhYL_xC.mjs',
     'examples/material-showcase/node_modules/@angular/material/fesm2022/snack-bar.mjs',
     'examples/material-showcase/node_modules/@angular/material/fesm2022/menu.mjs',
+    'examples/material-showcase/node_modules/@angular/material/fesm2022/dialog.mjs',
+    'examples/material-showcase/node_modules/@angular/material/fesm2022/module-Ce6F7TNm.mjs',
     'examples/material-showcase/node_modules/@angular/material/fesm2022/module-CWxMD37a.mjs',
     'examples/material-showcase/src/app/theme.ts',
     'examples/material-showcase/src/app/showcase.store.ts',
@@ -6125,6 +6245,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('dialog text mapping preserves/,
+      'dialog title/content owners and unequal overlay/focus composition', 'Generated title linkage, direct content and complete action/overlay/focus-trap paths establish text correspondence only. Original pseudo-spacer and candidate nested heading span remain unequal input evidence; missing, ambiguous and fabricated mappings fail replay.'),
     proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('menu label font preserves/,
       'menu component-family omission versus authored generic control stack', 'Original direct token and candidate label omission/control declaration are captured independently. Missing, competing or contradictory style stages and forged reports refuse attribution; matching installed glyphs never equates fallback lists.'),
     proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('menu label ink preserves/,

@@ -1098,10 +1098,12 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   const report = parityReport({}, {});
   const audit = buildMaterialInputAudit(report);
   assert.equal(audit.coverage.visualParityGreen, true);
-  assert.equal(audit.sourceFingerprints.length, 58);
+  assert.equal(audit.sourceFingerprints.length, 60);
   for (const file of ['scripts/audit-material-calendar-close.mjs', 'tests/material-parity/calendar-close-evidence.mjs',
     'scripts/audit-material-tooltip-state.mjs', 'tests/material-parity/tooltip-state-evidence.mjs',
     'examples/material-showcase/node_modules/@angular/material/fesm2022/menu.mjs',
+    'examples/material-showcase/node_modules/@angular/material/fesm2022/dialog.mjs',
+    'examples/material-showcase/node_modules/@angular/material/fesm2022/module-Ce6F7TNm.mjs',
     'tests/material-parity/supplemental-capture-evidence.spec.mjs']) {
     assert.equal(audit.sourceFingerprints.filter(entry => entry.file === file).length, 1);
   }
@@ -4495,6 +4497,166 @@ test('alignment claims replay their actual captured styles, ancestry, scope and 
       assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('horizontal start')),
         `${sectionName}: ${mutate}`);
     }
+  }
+});
+
+function dialogTextReport() {
+  const raw = retainedTypographyReport(), e = raw.results[0], { reference: r, astylar: a } = e.inputTrees;
+  e.family = 'dialog';
+  Object.assign(r.styles[0], { fontFamily: 'Roboto', fontSize: '24px', fontWeight: '400', lineHeight: '32px', textAlign: 'left', color: '#1d1b1e' });
+  r.styles.push({ ...r.styles[0], fontSize: '14px', lineHeight: '20px', color: '#49454e', letterSpacing: '.1px' });
+  r.styles.push({ ...r.styles[0], display: 'inline-block', width: '0px', height: '40px', content: '\"\"' });
+  const n = (key, parent, type, attributes = {}, ownText = '') => ({ key, parent, type, attributes, ownText, style: 0, rules: [], pseudoElements: [] });
+  r.nodes = [n('frame', null, 'main', { class: 'frame' }), n('section', 'frame', 'section', { id: 'dialog-root' }),
+    n('trigger', 'section', 'button', { id: 'dialog-primary', 'mat-flat-button': '' }),
+    n('trigger-label', 'trigger', 'span', { class: 'mdc-button__label' }, 'Open dialog'),
+    n('overlay', null, 'div', { class: 'cdk-overlay-container' }),
+    n('backdrop', 'overlay', 'div', { class: 'cdk-overlay-backdrop cdk-overlay-dark-backdrop cdk-overlay-backdrop-showing' }),
+    n('wrapper', 'overlay', 'div', { class: 'cdk-global-overlay-wrapper', dir: 'ltr' }),
+    n('pane', 'wrapper', 'div', { id: 'cdk-overlay-0', class: 'cdk-overlay-pane mat-mdc-dialog-panel' }),
+    n('focus-start', 'pane', 'div', { class: 'cdk-visually-hidden cdk-focus-trap-anchor', tabindex: '0', 'aria-hidden': 'true' }),
+    n('dialog', 'pane', 'mat-dialog-container', { id: 'material-dialog', class: 'mat-mdc-dialog-container mdc-dialog--open', role: 'dialog', tabindex: '-1', 'aria-modal': 'false', 'aria-labelledby': 'mat-mdc-dialog-title-0' }),
+    n('focus-end', 'pane', 'div', { class: 'cdk-visually-hidden cdk-focus-trap-anchor', tabindex: '0', 'aria-hidden': 'true' }),
+    n('inner', 'dialog', 'div', { class: 'mat-mdc-dialog-inner-container' }), n('surface', 'inner', 'div', { class: 'mat-mdc-dialog-surface' }),
+    n('title', 'surface', 'h2', { id: 'mat-mdc-dialog-title-0', 'mat-dialog-title': '', 'data-parity-id': 'dialog-title', class: 'mat-mdc-dialog-title' }, 'Confirm action'),
+    n('copy', 'surface', 'mat-dialog-content', { 'data-parity-id': 'dialog-copy', class: 'mat-mdc-dialog-content' }, 'Save Project Atlas?'),
+    n('actions', 'surface', 'mat-dialog-actions', { 'data-parity-id': 'dialog-actions', class: 'mat-mdc-dialog-actions' })];
+  r.nodes.find(n => n.key === 'title').pseudoElements = [{ pseudo: '::before', generated: true, style: 2, rules: [] }];
+  r.nodes.find(n => n.key === 'copy').style = 1;
+  for (const [index, name] of ['Cancel', 'Save'].entries()) {
+    const key = `actions/${name.toLowerCase()}`;
+    r.nodes.push(n(key, 'actions', 'button', { 'data-parity-id': `dialog-${name.toLowerCase()}`, 'mat-dialog-close': '', [index ? 'mat-flat-button' : 'mat-button']: '' }),
+      n(`${key}/label`, key, 'span', { class: 'mdc-button__label' }, name));
+  }
+  const ast = (key, parent, authored) => ({ key, parent, authored, resolvedStyle: {}, normalResolvedStyle: {}, interactionResolvedStyle: {} });
+  a.rules = [{ selector: '#page', fontFamily: 'Roboto, Arial, sans-serif' }];
+  a.nodes = [ast('page', 'root', { type: 'main', id: 'page' }), ast('section', 'page', { type: 'section', id: 'dialog-root' }),
+    ast('trigger', 'section', { type: 'button', id: 'dialog-primary', class: 'material-button', value: 'Open dialog' }),
+    ast('modal', 'section', { type: 'dialog', id: 'dialog-overlay', class: 'modal-overlay', open: true, modal: true, ariaLabel: 'Open dialog' }),
+    ast('panel', 'modal', { type: 'section', id: 'dialog-panel', class: 'dialog-panel' }),
+    ast('heading', 'panel', { type: 'h2', id: 'dialog-title', class: 'dialog-title' }),
+    ast('title', 'heading', { type: 'span', id: 'dialog-title-label', textContent: 'Confirm action' }),
+    ast('copy', 'panel', { type: 'p', id: 'dialog-copy', class: 'dialog-copy', textContent: 'Save Project Atlas?' }),
+    ast('actions', 'panel', { type: 'div', id: 'dialog-actions', class: 'dialog-actions' }),
+    ast('cancel', 'actions', { type: 'button', id: 'dialog-cancel', class: 'dialog-action', autofocus: true, value: 'Cancel' }),
+    ast('save', 'actions', { type: 'button', id: 'dialog-save', class: 'dialog-action primary', value: 'Save' })];
+  for (const [key, index, color] of [['title', 0, '#1d1b20'], ['copy', 1, '#49454f']])
+    a.nodes.find(n => n.key === key).retainedText = { source: 'core-text-registry', style: { ...r.styles[index], fontFamily: 'Roboto, Arial, sans-serif', color, letterSpacing: '0px' } };
+  for (const stage of ['resolvedStyle', 'normalResolvedStyle', 'interactionResolvedStyle']) a.nodes[0][stage].fontFamily = 'Roboto, Arial, sans-serif';
+  return raw;
+}
+
+test('dialog text mapping preserves generated title linkage pseudo spacer and unequal overlay structure', () => {
+  const raw = dialogTextReport(), before = structuredClone(raw), cases = raw.results.map(e => ({ ...e, kind: 'static' }));
+  const t = collectRetainedTypographyEvidence(cases, collectFullTreeInventory(cases));
+  const mappings = t.reviewedMappings.filter(m => m.kind === 'reviewed-dialog-content-text');
+  assert.deepEqual(mappings.map(m => m.element), ['dialog-title-label', 'dialog-copy']);
+  for (const m of mappings) {
+    assert.equal(m.inputEquivalent, false); assert.equal(m.finalRasterVerified, false); assert.equal(m.classification, 'application-plugin-authoring-defect');
+    assert.equal(m.reviewEvidence.referencePath.length, 7); assert.equal(m.reviewEvidence.referenceFocusAnchors.length, 2);
+    assert.equal(m.reviewEvidence.referenceTitle.attributes.id, 'mat-mdc-dialog-title-0');
+    assert.equal(m.reviewEvidence.referenceTitle.pseudoElements[0].generated, true);
+    assert.equal(m.reviewEvidence.referencePath[3].attributes['aria-labelledby'], 'mat-mdc-dialog-title-0');
+    assert.equal(m.reviewEvidence.candidateActions.length, 3);
+  }
+  // This minimal helper does not supply authoritative control-texture evidence.
+  // Preserve its independent trigger/action gaps, not the now-mapped title/copy.
+  assert.equal(t.gaps.length, 1);
+  assert.deepEqual(t.gaps[0].referenceNodes, ['trigger-label', 'actions/cancel/label', 'actions/save/label']);
+  assert.equal(t.differences.filter(d => d.property === 'fontFamily' && d.attribution === 'unresolved').length, 2);
+  assert.deepEqual(raw, before);
+});
+
+test('dialog text action evidence follows parent relationships rather than generated key prefixes', () => {
+  const raw = dialogTextReport(), { reference: r, astylar: a } = raw.results[0].inputTrees;
+  const keys = new Map(r.nodes.map((n, index) => [n.key, `node-${index}`]));
+  for (const node of r.nodes) { node.key = keys.get(node.key); node.parent = keys.get(node.parent) ?? null; }
+  const maps = reviewedTemplateTextMappings('dialog', r, a);
+  assert.equal(maps.length, 2);
+  for (const m of maps) assert.equal(m.reviewEvidence.referenceActions.length, 5);
+});
+
+test('dialog text mapping refuses missing ambiguous or contradictory structure and title linkage', () => {
+  const controls = [
+    (r, a) => { r.nodes.push(structuredClone(r.nodes[0])); },
+    (r, a) => { a.nodes.push({ ...structuredClone(a.nodes[0]), key: 'duplicate-id' }); },
+    (r, a) => { r.nodes.push({ key: 'duplicate-parity', attributes: { 'data-parity-id': 'dialog-copy' } }); },
+    (r, a) => { r.nodes.find(n => n.key === 'title').attributes.id = 'other'; },
+    (r, a) => { r.nodes.find(n => n.key === 'dialog').attributes['aria-labelledby'] = 'other'; },
+    (r, a) => { r.nodes.find(n => n.key === 'dialog').attributes['aria-label'] = 'Confirm action'; },
+    (r, a) => { r.nodes.find(n => n.key === 'dialog').attributes['aria-modal'] = 'true'; },
+    (r, a) => { r.nodes.find(n => n.key === 'dialog').attributes.class = 'mat-mdc-dialog-container'; },
+    (r, a) => { r.nodes.find(n => n.key === 'title').pseudoElements = []; },
+    (r, a) => { r.nodes.find(n => n.key === 'title').ownText = 'Other'; },
+    (r, a) => { r.nodes.find(n => n.key === 'copy').type = 'p'; },
+    (r, a) => { r.nodes.find(n => n.key === 'copy').attributes.id = 'dialog-copy'; },
+    (r, a) => { r.nodes.find(n => n.key === 'copy').parent = 'dialog'; },
+    (r, a) => { const i = r.nodes.findIndex(n => n.key === 'title'), j = r.nodes.findIndex(n => n.key === 'copy'); [r.nodes[i], r.nodes[j]] = [r.nodes[j], r.nodes[i]]; },
+    (r, a) => { r.nodes.find(n => n.key === 'inner').parent = 'pane'; },
+    (r, a) => { r.nodes.find(n => n.key === 'wrapper').attributes.dir = 'rtl'; },
+    (r, a) => { r.nodes.find(n => n.key === 'overlay').parent = 'frame'; },
+    (r, a) => { r.nodes = r.nodes.filter(n => n.key !== 'focus-start'); },
+    (r, a) => { r.nodes.find(n => n.key === 'focus-end').attributes['aria-hidden'] = 'false'; },
+    (r, a) => { r.nodes.find(n => n.key === 'focus-end').attributes.tabindex = '-1'; },
+    (r, a) => { r.nodes.find(n => n.key === 'backdrop').attributes.class = 'cdk-overlay-backdrop'; },
+    (r, a) => { r.nodes.find(n => n.key === 'actions/cancel/label').ownText = 'Save'; },
+    (r, a) => { delete r.nodes.find(n => n.key === 'actions/save').attributes['mat-dialog-close']; },
+    (r, a) => { r.nodes.find(n => n.key === 'trigger-label').ownText = 'Other'; },
+    (r, a) => { a.nodes.find(n => n.key === 'modal').authored.open = false; },
+    (r, a) => { a.nodes.find(n => n.key === 'modal').authored.modal = false; },
+    (r, a) => { a.nodes.find(n => n.key === 'modal').authored.ariaLabel = 'Confirm action'; },
+    (r, a) => { a.nodes.find(n => n.key === 'modal').authored.ariaLabelledby = 'dialog-title'; },
+    (r, a) => { a.nodes.find(n => n.key === 'title').parent = 'panel'; },
+    (r, a) => { a.nodes.find(n => n.key === 'heading').authored.textContent = 'Confirm action'; },
+    (r, a) => { a.nodes.find(n => n.key === 'copy').authored.type = 'div'; },
+    (r, a) => { a.nodes.find(n => n.key === 'copy').authored.textContent = 'Other'; },
+    (r, a) => { a.nodes.find(n => n.key === 'panel').parent = 'section'; },
+    (r, a) => { a.nodes.find(n => n.key === 'cancel').authored.autofocus = false; },
+    (r, a) => { a.nodes.find(n => n.key === 'save').authored.value = 'Cancel'; },
+    (r, a) => { const i = a.nodes.findIndex(n => n.key === 'cancel'), j = a.nodes.findIndex(n => n.key === 'save'); [a.nodes[i], a.nodes[j]] = [a.nodes[j], a.nodes[i]]; },
+    (r, a) => { a.nodes.push({ key: 'extra', parent: 'title', authored: { type: 'span', textContent: 'extra' } }); },
+  ];
+  for (const [index, mutate] of controls.entries()) {
+    const raw = dialogTextReport(), { reference: r, astylar: a } = raw.results[0].inputTrees; mutate(r, a);
+    assert.deepEqual(reviewedTemplateTextMappings('dialog', r, a), [], `control ${index}`);
+  }
+});
+
+test('dialog text mapping keeps closed and missing retained stages explicit', () => {
+  const raw = dialogTextReport(), e = raw.results[0];
+  delete e.inputTrees.astylar.nodes.find(n => n.key === 'title').retainedText;
+  let cases = [{ ...e, kind: 'static' }], t = collectRetainedTypographyEvidence(cases, collectFullTreeInventory(cases));
+  assert.ok(t.gaps.some(g => g.element === 'dialog-title-label' && g.reason.includes('no authoritative retained')));
+  e.inputTrees.astylar.nodes = e.inputTrees.astylar.nodes.filter(n => ['page', 'section', 'trigger'].includes(n.key));
+  cases = [{ ...e, kind: 'static' }]; t = collectRetainedTypographyEvidence(cases, collectFullTreeInventory(cases));
+  assert.equal(t.reviewedMappings.filter(m => m.kind === 'reviewed-dialog-content-text').length, 0);
+  assert.ok(t.gaps.some(g => g.element === 'mat-mdc-dialog-title-0'));
+});
+
+test('dialog text replay rejects fabricated correspondence and independent stage mutations', () => {
+  const original = buildMaterialInputAudit(dialogTextReport());
+  assert.ok(original.sourceFindings.find(f => f.id === 'fixture-dialog-text-flow-substitution')?.detected);
+  assert.equal(original.retainedTypography.reviewedMappings.filter(m => m.kind === 'reviewed-dialog-content-text').length, 2);
+  assert.ok(!validateMaterialInputAudit(original, { requireComplete: false }).some(e => e.includes('dialog text')));
+  for (const mutate of [
+    (r, m) => { r.retainedTypography.reviewedMappings = r.retainedTypography.reviewedMappings.filter(v => v !== m); },
+    (r, m) => { m.inputEquivalent = true; },
+    (r, m) => { m.finalRasterVerified = true; },
+    (r, m) => { m.reviewEvidence.referenceFocusAnchors.pop(); },
+    (r, m) => { m.reviewEvidence.referenceTitle.attributes.id = 'other'; },
+    (r, m) => { m.reviewEvidence.referenceTitle.pseudoElements = []; },
+    (r, m) => { m.reviewEvidence.referencePath[3].attributes['aria-labelledby'] = 'other'; },
+    (r, m) => { m.reviewEvidence.candidatePath.pop(); },
+    (r, m) => { m.reviewEvidence.candidateActions.reverse(); },
+    (r, m) => { r.retainedTypography.comparisons[0].revision++; },
+    (r, m) => { r.retainedTypography.differences.pop(); },
+    (r, m) => { r.retainedTypography.differences[0].values.retained = 'fake'; },
+    (r, m) => { m.case = 'static:menu@light/desktop'; m.element = 'other'; },
+  ]) {
+    const report = structuredClone(original), inventory = structuredClone(report.elementInventory);
+    mutate(report, report.retainedTypography.reviewedMappings.find(m => m.kind === 'reviewed-dialog-content-text'));
+    assert.deepEqual(report.elementInventory, inventory);
+    assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('dialog text')));
   }
 });
 

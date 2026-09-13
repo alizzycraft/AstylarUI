@@ -580,6 +580,15 @@ export const sourceAuditDefinitions = Object.freeze([
     justification: 'The reference paragraph remains in normal flow inside a padded body, flex content region and grid collapse wrapper. Closed-state captures retain its block display and margins while visibility is hidden and the wrapper uses grid-template-rows:0fr. Candidate substitutes absolute content, display:none when closed, density-specific open top offsets, zero paragraph margin, and a nested absolutely positioned label at top:-1px/left:24px. History traces the flow substitution to 6e1c156 and the compensating text wrapper to a0f3328. Absence of a retained text entry below candidate display:none is not evidence of missing renderer text. Nor does both sides being unpainted establish equivalent collapse/layout inputs. Restore the reference structure and declarations in a minimal proof before assigning any remaining discrepancy to core grid, intrinsic layout or typography; do not add another offset.',
   }),
   Object.freeze({
+    id: 'fixture-dialog-text-flow-substitution',
+    introducedBy: 'd102828 adds flex-aligned title span; 5b02171 retunes title/content padding',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`id: 'dialog-title-label', textContent: 'Confirm action'`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase dialog title pseudo-spacer, content flow and labelled overlay composition',
+    justification: 'Material authors direct heading text beside a generated 40px inline baseline spacer and a mat-dialog-content owner. Candidate authors a nested span inside a fixed-height flex-end heading plus a fixed-height flex paragraph; later padding tweaks move the text without preserving original constraints. The original labelled dialog and focus-trap/backdrop owners also differ from the candidate modal overlay labelled Open dialog. Preserve text identity and all structure independently, then reproduce original layout/semantics through core APIs before attributing residual defects to core.',
+  }),
+  Object.freeze({
     id: 'fixture-dialog-fixed-content-boxes',
     introducedBy: 'bc0e449 fix(material): match dialog content geometry',
     file: 'examples/material-showcase/src/app/astylar.component.ts',
