@@ -363,6 +363,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
     'reviewed-calendar-day-typography-input': 'application-plugin-authoring-defect',
     'reviewed-calendar-year-typography-input': 'application-plugin-authoring-defect',
     'reviewed-snackbar-action-typography-input': 'application-plugin-authoring-defect',
+    'reviewed-dialog-action-typography-input': 'application-plugin-authoring-defect',
     'reviewed-bottom-sheet-item-typography-input': 'application-plugin-authoring-defect',
     'reviewed-calendar-period-typography-input': 'application-plugin-authoring-defect',
     'reviewed-normal-line-box-stage-comparison': 'parity-harness-defect',
@@ -372,6 +373,19 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
     (entry.attribution === 'reviewed-normal-line-box-stage-comparison' &&
       !isReviewedNormalLineBoxDifference(entry, report.normalLineBoxes))) ?? [];
   if (requireComplete && unresolvedControlTypography.length > 0) errors.push(`${unresolvedControlTypography.length} control texture typography differences require attribution`);
+  const dialogCases = [...new Set(report.elementInventory.cases.map(c => c.case))].flatMap(key => {
+    const m = parseReviewedCase(key, 'dialog');
+    return m ? [{ kind: m[1], family: 'dialog', profile: m[2], viewport: { id: m[3] }, ...(m[4] ? { state: m[4] } : {}) }] : [];
+  });
+  const dialogReplay = collectControlTypographyEvidence(dialogCases, report.elementInventory);
+  const dialogAction = d => d.attribution === 'reviewed-dialog-action-typography-input' ||
+    (d.family === 'dialog' && ['dialog-cancel', 'dialog-save'].includes(d.element) &&
+      (d.property === undefined || ['fontFamily', 'letterSpacing'].includes(d.property)));
+  for (const list of ['comparisons', 'differences', 'gaps']) {
+    const actual = report.controlTypography?.[list];
+    if (!Array.isArray(actual) || JSON.stringify(actual.filter(dialogAction)) !== JSON.stringify(dialogReplay[list].filter(dialogAction)))
+      errors.push(`dialog action typography ${list} lack complete replayed token evidence`);
+  }
   for (const [family, attribution, label] of [
     ['snack-bar', 'reviewed-snackbar-action-typography-input', 'snackbar action'],
     ['bottom-sheet', 'reviewed-bottom-sheet-item-typography-input', 'bottom-sheet item'],
@@ -677,6 +691,7 @@ export function renderMaterialInputAuditMarkdown(report) {
     `Calendar month-label typography: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-calendar-month-marker-typography-input').length} records trace the omitted explicit zero line-height or substituted center alignment/literal ink to original declarations and captured core stages. Possible competing rules prevent attribution. These are unequal inputs, not a claim that the core misrendered zero, start or the original color token.`,
     '',
     `Control texture typography: ${report.controlTypography.comparisons.length} mapped current-texture observations; ${report.controlTypography.gaps.length} mapping/stage gaps and ${report.controlTypography.differences.length} raw computed-to-paint property differences, including individually reviewed stage-representation differences. Parsed CSS lengths and line-height multipliers are normalized independently of declarations. This does not prove final material effects, placement, visibility or raster parity.`,
+    `Dialog action tokens: ${report.controlTypography.differences.filter(d => d.attribution === 'reviewed-dialog-action-typography-input').length} font/tracking observations preserve the original text/filled button rules and separate candidate dialog-action/reset or complete tracking-omission chain. Full action/overlay identity and report replay guard the attribution. Original tokens remain missing inputs, not equivalent fallbacks, intrinsic widths, line boxes or raster.`,
     '',
     `Static natural line boxes: ${report.normalLineBoxes.observations.length} validated browser observations, ${report.normalLineBoxes.missing.length} missing and ${report.normalLineBoxes.errors.length} evidence errors. Matching observed heights explain only the raw normal-to-numeric stage comparison; other typography inputs, baseline, wrapping and final raster remain independent questions. No global normal-to-pixel substitution is accepted.`,
     '',
@@ -5783,6 +5798,78 @@ function reviewedButtonPaintInput(entry, property, ref, parent, ast, stages, ref
   }
 }
 
+function reviewedDialogActionPaintInput(entry, property, ref, parent, ast, stages, referenceTree, astylarTree, inventory) {
+  if (entry.family !== 'dialog' || !['fontFamily', 'letterSpacing'].includes(property) ||
+      !['dialog-cancel', 'dialog-save'].includes(ast.authored.id) ||
+      referenceTree.ruleEvidenceComplete !== true || astylarTree.ruleEvidenceComplete !== true) return;
+  const mapping = reviewedDialogTextMappings(referenceTree, astylarTree)[0];
+  if (!mapping || !mapping.reviewEvidence.referenceActions.some(n => n.key === ref.key) ||
+      !mapping.reviewEvidence.candidateActions.some(n => n.key === ast.key)) return;
+  const cssProperty = property === 'fontFamily' ? 'font-family' : 'letter-spacing';
+  const affects = object => Object.keys(object ?? {}).some(k => [cssProperty.replaceAll('-', ''), 'font', 'all'].includes(k.replaceAll('-', '').toLowerCase()) || /^animation/i.test(k));
+  const unsafeInline = node => {
+    const inline = node.inline ?? node.authored?.style;
+    return (inline !== undefined && (!inline || typeof inline !== 'object' || Array.isArray(inline) || affects(inline))) ||
+      new RegExp(`(?:^|;)\\s*(?:${cssProperty}|font|all|animation[^:]*)\\s*:`, 'i').test(node.attributes?.style ?? '');
+  };
+  const rulesAt = node => {
+    const pool = node.rules.map(i => inventory.rules[i]);
+    return pool.every(r => r?.side === 'reference' && r.value?.declarations && typeof r.value.declarations === 'object') ? pool.map(r => r.value) : undefined;
+  };
+  const referenceChain = [];
+  for (const node of [ref, parent]) {
+    const computed = inventory.styles[node.style], rules = rulesAt(node);
+    if (!rules || computed?.side !== 'reference' || canonicalStyle(computed.value)[property] !== stages.reference[property] || unsafeInline(node)) return;
+    const disabledAnimationRules = rules.filter(r => r.active === true && Array.isArray(r.conditions) && !r.conditions.length &&
+      r.selector === '.mat-mdc-button._mat-animation-noopable, .mat-mdc-unelevated-button._mat-animation-noopable, .mat-mdc-raised-button._mat-animation-noopable, .mat-mdc-outlined-button._mat-animation-noopable, .mat-tonal-button._mat-animation-noopable' &&
+      String(node.attributes?.class ?? '').split(/\s+/).includes('_mat-animation-noopable') &&
+      r.declarations['animation-name']?.value === 'none' && r.declarations['animation-name'].important === true &&
+      !Object.keys(r.declarations).some(k => !/^(animation|transition)/.test(k)));
+    referenceChain.push({ ...node, computed: computed.value, disabledAnimationRules,
+      relevantRules: rules.filter(r => affects(r.declarations) && !disabledAnimationRules.includes(r)) });
+  }
+  if (referenceChain[0].relevantRules.length) return;
+  const kind = ast.authored.id === 'dialog-save' ? 'filled' : 'text';
+  const selected = referenceChain[1].relevantRules;
+  if (selected.length !== (property === 'fontFamily' ? 2 : 1) || selected.some(r => r.active !== true ||
+      !Array.isArray(r.conditions) || r.conditions.length || r.declarations[cssProperty]?.important !== false ||
+      Object.keys(r.declarations).some(k => k !== cssProperty && affects({ [k]: true })))) return;
+  if (property === 'fontFamily' && (selected[0].selector !== 'button, input, select' || selected[0].declarations[cssProperty].value !== 'inherit')) return;
+  const token = selected.at(-1);
+  if (token.selector !== (kind === 'filled' ? '.mat-mdc-unelevated-button' : '.mat-mdc-button') ||
+      token.declarations[cssProperty].value !== `var(--mat-button-${kind}-label-text-${property === 'fontFamily' ? 'font' : 'tracking'}, var(--mat-sys-label-large-${property === 'fontFamily' ? 'font' : 'tracking'}))`) return;
+  const pool = astylarTree.rules.map(i => inventory.rules[i]);
+  if (pool.some(r => r?.side !== 'astylar' || !r.value || typeof r.value !== 'object')) return;
+  const rules = pool.map(r => r.value), components = rules.filter(r => r.selector === '.dialog-action');
+  if (components.length !== 1 || affects(components[0]) || unsafeInline(ast)) return;
+  const evidence = { sourceFinding: 'fixture-dialog-action-font-tracking-tokens-omitted',
+    structure: mapping.reviewEvidence, referenceChain, candidateComponentRule: components[0] };
+  if (property === 'fontFamily') {
+    const matching = rules.filter(r => affects(r) && typographySelectorCanApply(r.selector, ast.authored));
+    if (matching.length !== 1 || matching[0].selector !== 'button, input, select' ||
+        Object.keys(matching[0]).some(k => !['selector', 'fontFamily'].includes(k)) ||
+        canonicalStyle(matching[0]).fontFamily !== 'roboto,arial,sans-serif' || stages.reference.fontFamily !== 'roboto' ||
+        [stages.normal, stages.effective, stages.painted].some(s => s.fontFamily !== 'roboto,arial,sans-serif' || s.font !== undefined || s.all !== undefined)) return;
+    evidence.candidateResetRule = matching[0];
+  } else {
+    const chain = candidateTypographyOmissionChain(ast, astylarTree, inventory, property);
+    if (!chain || stages.reference.letterSpacing !== '0.096px' || stages.painted.letterSpacing !== '0') return;
+    for (const item of chain) {
+      const nodes = astylarTree.nodes.filter(n => n.key === item.node);
+      if (nodes.length !== 1 || unsafeInline(nodes[0]) || affects(item.normal) || affects(item.effective) ||
+          rules.some(r => affects(r) && typographySelectorCanApply(r.selector, nodes[0].authored))) return;
+    }
+    evidence.candidateChain = chain;
+  }
+  return { classification: 'application-plugin-authoring-defect', attribution: 'reviewed-dialog-action-typography-input',
+    inputEquivalent: false, finalRasterVerified: false,
+    recommendedOwner: 'showcase dialog action Material button token translation',
+    justification: property === 'fontFamily'
+      ? 'The original Cancel/Save label inherits its text/filled button font token after the document inherit reset. The separate dialog-action rule omits this override and the candidate supplies the explicit longer document control stack unchanged to normal/effective/current texture paint. This is unequal font input, not a core font-list rewrite or proof of different installed glyphs.'
+      : 'The original Cancel/Save label inherits .096px tracking from its text/filled button token. The separate dialog-action rule and complete candidate control-to-page ancestry omit tracking, and current texture paint receives zero. This is missing component input, not an equal-input core spacing defect. Fixed action widths, nested line boxes, state and raster remain separate obligations.',
+    reviewEvidence: structuredClone(evidence) };
+}
+
 function reviewedTabLabelControl(ref, tree) {
   let child = ref;
   for (const [type, className] of [['span', 'mdc-tab__text-label'], ['span', 'mdc-tab__content'], ['div', 'mdc-tab']]) {
@@ -6721,6 +6808,7 @@ export function collectControlTypographyEvidence(cases, inventory) {
             recommendedOwner: 'input audit control authored-token and core paint-input attribution',
             justification: 'Browser computed and actual control texture paint inputs differ. Attribute authored tokens and parser/runtime behavior before assigning fault. CSS normal line-height, font fallback and composited colors are not automatically equivalent to numeric or opaque substitutes.',
             ...(reviewedButtonPaintInput(entry, property, ref, parent, ast, stages, referenceTree, astylarTree, inventory) ??
+              reviewedDialogActionPaintInput(entry, property, ref, parent, ast, stages, referenceTree, astylarTree, inventory) ??
               reviewedTabPaintInput(entry, property, ref, parent, ast, stages, referenceTree, astylarTree, inventory) ??
               reviewedSnackbarActionPaintInput(entry, property, ref, parent, ast, stages, referenceTree, astylarTree, inventory) ??
               reviewedBottomSheetItemPaintInput(entry, property, ref, parent, ast, stages, referenceTree, astylarTree, inventory) ??
@@ -7186,6 +7274,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('dialog action typography retains/,
+      'dialog text/filled action font and tracking token omissions', 'Complete overlay/action identity and ordered original token rules contrast with the separate dialog-action/reset and tracking-omission chain. Negative controls reject competing, missing and contradictory state/style/paint evidence; report replay rejects deleted or forged claims without declaring line boxes, fixed widths or raster equivalent.'),
     proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('paginator tooltip omission preserves/,
       'paginator reference-only tooltip authoring', 'Shown connected-overlay text and corresponding enabled navigation triggers retain complete original and candidate inputs. Missing/changed state, structure, styles or fabricated report claims remain rejected; absent candidate popup text is not equated to an invisible renderer entry.'),
     proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('stepper edit substitution retains/,
@@ -7322,6 +7412,7 @@ function implementationPlan() {
     { priority: 5.24, rootCause: 'Tree direct flex text is replaced by a fixed-height label wrapper', action: 'Restore original direct text ownership and normal line-height together with the reference component font tokens. The explicit 20px height/line-height wrapper introduced in 7159b1d is not equivalent to the original anonymous flex text item. Reduce any remaining discrepancy through equal-input anonymous flex-item sizing, natural line metrics and centering tests; do not preserve or recalibrate a fixed wrapper to match a screenshot. Keep the separate font-stack, font-size and core normal-line-box findings visible.' },
     { priority: 5.25, rootCause: 'Stepper numeric icon positioning is replaced by centered text in a fixed span', action: 'Restore the original numeric span, separate icon-content wrapper, top/left 50% and translate(-50%, -50%) inputs. The current step-badge textAlign:center substitution does not exercise those semantics. Address the independently proven core percentage-transform defect first, then verify the original wrapper under varied digit widths, fonts, density, themes and state changes. Do not move the number with fixture-specific offsets or claim start/center alignment equivalent merely because both screenshots look centered.' },
     { priority: 5.26, rootCause: 'Native button/inline-block input is replaced by flex-div centering', action: 'Restore the original button wrapper and inline label layout, preserving CSS defaults, inheritance and Material rules. The candidate flex div omits native button defaults; adding label offsets or textAlign:center to that substitute would not test the original mechanism. Verify native-button default resolution and inline formatting through equivalent core inputs after removing the authoring divergence. Keep the separate CDP default controls and per-case captured center/left mismatch evidence.' },
+    { priority: 5.265, rootCause: 'Separate dialog action rules omit the original Material button font and tracking tokens', action: 'Restore the distinct Cancel text-button and Save filled-button token semantics rather than the generic document font stack and omitted tracking. Current texture evidence traces those unequal inputs unchanged through normal/effective/paint stages. Preserve original label wrappers and intrinsic sizing rather than fixed sampled action widths. Keep normal-line-height, current interaction paint and overlay layout independently verified; do not call matching installed Roboto glyphs font-input equivalence.' },
     { priority: 5.27, rootCause: 'Stepper numeral font and label-color inheritance are replaced or omitted', action: 'Keep the original frame-scaled inherited numeral font with the icon-content wrapper instead of fixed 14px step-badge text. Restore the Material active-label color token and inner label inheritance instead of accepting the page on-surface fallback. Preserve actual reference theme inputs; do not retune the dark reference or calibrate text to the circle. Verify core inheritance, transforms and glyph paint only after equivalent authoring is restored.' },
     { priority: 5.28, rootCause: 'Filled-label component color tokens are replaced by independent literal state rules', action: 'Restore the captured reference label-color token, wrapper inheritance and state semantics rather than adjusting candidate colors to sampled pixels. Base/empty/picker-shell declarations currently supply different inputs, independently of the repaired inspection ancestry bug. Preserve normal/effective/retained stages and original rule order; investigate core cascade or current paint only when equivalent authored inputs still diverge. Do not normalize small RGB differences away or reuse pre-repair inconsistent captures as proof.' },
     { priority: 5.285, rootCause: 'Validation error incorrectly forces label shrink and picker shell ink overrides error tokens', action: 'Separate invalid state from the original label float predicate: an empty unfocused invalid input keeps its base label state unless the dense theme hides that wrapper. Restore the original font-size and display tokens rather than forcing 12px at top 8px. Preserve picker error color through the original cascade instead of later unconditional shell literals. Verify native/candidate invalid flags, empty values, label associations, dense visibility, focus/blur transitions and separate date/time opening behavior. Do not route these unequal state inputs into core transform or world-coordinate adjustments.' },

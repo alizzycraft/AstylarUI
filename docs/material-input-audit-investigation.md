@@ -23,6 +23,72 @@ selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Dialog actions omit distinct Material font and tracking tokens (2026-09-13)
+
+The dialog action path is separate from the already reviewed common
+`.material-button` path. `Cancel` is a Material text button and `Save` is a
+filled button; each direct `.mdc-button__label` inherits its own component
+font/tracking tokens. The complete captured overlay/action mapping identifies
+these text owners without accepting their replacement structure as equivalent.
+
+Both reference labels compute `Roboto` and `0.096px` tracking. The candidate
+`.dialog-action` rule omits both component tokens. Its generic
+`button, input, select` reset supplies `Roboto, Arial, sans-serif` unchanged
+through normal/effective/current texture paint. Its full action-to-page chain
+omits tracking and current texture paint receives zero. These are unequal
+authored inputs, not a core font-list mutation or an equal-input spacing defect.
+Matching installed Roboto glyphs would not make the font fallback lists equal.
+
+History confirms that `2f44011` introduced the separate `.dialog-action`
+controls without font/tracking declarations; `af04845` subsequently added the
+shared document-control font reset. Current action widths are fixed sampled
+values (`67.4375px` and `78.671875px`), which remain independently audited
+geometry inputs rather than justification for the missing intrinsic text intent.
+Restore the original button tokens and nested label structure before evaluating
+core text/layout behavior; do not tune the text or widths to the screenshot.
+
+The new attribution preserves ordered reference reset/token declarations,
+candidate reset or complete tracking-omission ancestry, action/overlay identity,
+and distinct normal/effective/paint stages. The original active, unconditional
+`_mat-animation-noopable` rule with important `animation-name:none` is retained
+as disabled-animation evidence, not mistaken for an active font animation.
+Missing/inactive/conditional tokens, unsafe animation rules, competing authored
+styles, mismatched text, and contradictory control stages refuse attribution.
+Twenty-eight negative controls and eleven report mutations cover these guards.
+Independent replay covers all dialog action comparisons, differences and gaps,
+so deleting an inconvenient record cannot make the audit pass.
+
+The focused command
+`node --test --test-name-pattern='dialog action typography|dialog text|dialog metric|control typography does not waive' tests/material-parity/input-equivalence-audit.spec.mjs`
+passed **12/12** tests, with zero failures/skips/cancellations, in
+3.9642305 seconds. The 78-case dialog inventory attributes **128**
+observations (64 font-family and 64 tracking) in 32 cases: `activate`,
+`activate-leave`, `open-hover-content` and `open`, across four themes and
+DPR 1/2. Closed cases do not acquire fabricated action text owners.
+The first full harness run exposed one validation regression: deliberately
+removing the entire control-typography section caused the new replay check to
+throw instead of reporting missing evidence. The check now requires an array
+before filtering each list and reports a validation error when absent. The
+existing malformed-report test passes without changing its expectation.
+
+Final verification after that audit-only correction:
+
+- `npm run parity:harness:check`: **459/459 passed**, zero
+  failures/skips/cancellations, 272.7996223 seconds, terminal exit 0.
+- Full `buildMaterialInputAudit` from `current-ancestry-audit` and its matching
+  normal-line-box and supplemental evidence: 124 source findings, none
+  unexplained or undetected, and all 128 dialog observations attributed.
+- `validateMaterialInputAudit(..., {requireComplete:false})`: no errors.
+  Strict validation still rejects **3,309 resolved-style** and **751
+  control-texture typography** attributions. The remaining control set consists
+  of the prior 717 line-height observations and 34 snackbar action font sizes;
+  no blanket equivalence has been assigned to them.
+- All ten frozen harness-file SHA-256 values match the corrected baseline.
+
+No renderer, browser reference, comparison input or visual threshold was changed.
+Normal line-height, interaction paint, fixed action geometry and overlay
+behavior remain separate open audit obligations.
+
 ## Hidden dense datepicker labels are unequal visibility inputs (2026-09-13)
 
 The four remaining retained-label font differences in the corrected captured

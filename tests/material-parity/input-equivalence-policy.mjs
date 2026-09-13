@@ -113,6 +113,16 @@ export const reviewedValueNormalizations = Object.freeze([
 
 export const sourceAuditDefinitions = Object.freeze([
   Object.freeze({
+    id: 'fixture-dialog-action-font-tracking-tokens-omitted',
+    introducedBy: '2f44011 introduces independent dialog-action controls without Material font/tracking tokens; af04845 subsequently supplies the document control font reset',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`selector: '\.dialog-action', width:`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase dialog action Material button token translation',
+    justification: 'Cancel and Save inherit separate text/filled button font and tracking tokens in the original dialog. The replacement dialog-action omits them, uses the document control font stack and supplies zero tracking. Complete overlay/action identity, ordered reference rules and candidate reset/omission chains distinguish unequal authoring from a core font or spacing defect. Preserve original tokens and nested structure; fixed sampled button widths are not a valid substitute for intrinsic text layout.',
+    focusedProof: 'tests/material-parity/input-equivalence-audit.spec.mjs: dialog action typography retains distinct text and filled tokens without accepting equal inputs',
+  }),
+  Object.freeze({
     id: 'fixture-outlined-button-literal-replaces-outline-token',
     introducedBy: '2f44011 authors the outlined button border as #79747e; the literal persists',
     file: 'examples/material-showcase/src/app/astylar.component.ts',

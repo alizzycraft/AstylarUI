@@ -5683,6 +5683,113 @@ function dialogTextReport() {
   return raw;
 }
 
+function dialogActionTypographyReport() {
+  const raw = dialogTextReport(), { reference: r, astylar: a } = raw.results[0].inputTrees;
+  a.paintedControlTextEvidenceVersion = 1;
+  r.rules = [{ selector: 'button, input, select', active: true, conditions: [],
+    declarations: { 'font-family': { value: 'inherit', important: false } } }];
+  a.rules.push({ selector: 'button, input, select', fontFamily: 'Roboto, Arial, sans-serif' },
+    { selector: '.dialog-action', fontSize: '14px', fontWeight: '500', height: '40px' },
+    { selector: '.dialog-action.primary', background: '#7d00fa' });
+  const style = { ...r.styles[0], fontSize: '14px', fontWeight: '500', lineHeight: 'normal', letterSpacing: '.096px', textAlign: 'center' };
+  r.styles.push(style);
+  for (const [name, kind] of [['cancel', 'text'], ['save', 'filled']]) {
+    r.rules.push({ selector: kind === 'text' ? '.mat-mdc-button' : '.mat-mdc-unelevated-button', active: true, conditions: [],
+      declarations: {
+        'font-family': { value: `var(--mat-button-${kind}-label-text-font, var(--mat-sys-label-large-font))`, important: false },
+        'letter-spacing': { value: `var(--mat-button-${kind}-label-text-tracking, var(--mat-sys-label-large-tracking))`, important: false },
+      } });
+    const parent = r.nodes.find(n => n.key === `actions/${name}`), label = r.nodes.find(n => n.key === `actions/${name}/label`);
+    parent.rules = [0, r.rules.length - 1]; parent.style = label.style = r.styles.length - 1;
+    const node = a.nodes.find(n => n.key === name);
+    for (const stage of ['resolvedStyle', 'normalResolvedStyle', 'interactionResolvedStyle'])
+      node[stage] = { fontFamily: 'Roboto, Arial, sans-serif', fontSize: '14px', fontWeight: '500' };
+    node.paintedControlText = { source: 'core-control-texture', text: node.authored.value,
+      style: { ...style, fontFamily: 'Roboto, Arial, sans-serif', fontSize: 14, lineHeight: 17 / 14, letterSpacing: 0, wordSpacing: 0 } };
+  }
+  r.rules.push({ selector: '.mat-mdc-button._mat-animation-noopable, .mat-mdc-unelevated-button._mat-animation-noopable, .mat-mdc-raised-button._mat-animation-noopable, .mat-mdc-outlined-button._mat-animation-noopable, .mat-tonal-button._mat-animation-noopable',
+    active: true, conditions: [], declarations: { 'animation-name': { value: 'none', important: true } } });
+  for (const name of ['cancel', 'save']) {
+    const parent = r.nodes.find(n => n.key === `actions/${name}`);
+    parent.attributes.class = '_mat-animation-noopable'; parent.rules.push(r.rules.length - 1);
+  }
+  return raw;
+}
+
+test('dialog action typography retains distinct text and filled tokens without accepting equal inputs', () => {
+  const raw = dialogActionTypographyReport(), before = structuredClone(raw), report = buildMaterialInputAudit(raw);
+  const findings = report.controlTypography.differences.filter(d => d.attribution === 'reviewed-dialog-action-typography-input');
+  assert.equal(findings.length, 4);
+  for (const f of findings) {
+    assert.equal(f.inputEquivalent, false); assert.equal(f.finalRasterVerified, false);
+    assert.equal(f.classification, 'application-plugin-authoring-defect');
+    assert.equal(f.reviewEvidence.referenceChain.length, 2);
+    assert.equal(f.reviewEvidence.referenceChain[1].disabledAnimationRules.length, 1);
+    assert.equal(f.reviewEvidence.structure.referenceActions.length, 5);
+    if (f.property === 'letterSpacing') assert.equal(f.reviewEvidence.candidateChain.length, 6);
+    else assert.equal(f.reviewEvidence.candidateResetRule.fontFamily, 'Roboto, Arial, sans-serif');
+  }
+  assert.ok(report.controlTypography.differences.some(d => d.element === 'dialog-save' && d.property === 'lineHeight' && d.attribution === 'unresolved'));
+  assert.ok(!validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('dialog action typography')));
+  assert.deepEqual(raw, before);
+});
+
+test('dialog action typography rejects missing competing and contradictory font inputs', () => {
+  const controls = [
+    [null, (r, a) => { delete r.errors; }], [null, (r, a) => { delete a.errors; }],
+    [null, (r, a) => { a.nodes.find(n => n.key === 'modal').authored.open = false; }],
+    [null, (r, a) => { r.nodes.find(n => n.key === 'actions/cancel').parent = 'surface'; }],
+    [null, (r, a) => { r.nodes.find(n => n.key === 'actions/cancel/label').ownText = 'Changed'; }],
+    [null, (r, a) => { a.nodes.find(n => n.key === 'cancel').paintedControlText.text = 'Changed'; }],
+    [null, (r, a) => { r.rules[1].active = false; }],
+    [null, (r, a) => { r.rules[1].conditions = ['@media print']; }],
+    [null, (r, a) => { r.rules[1].declarations.all = { value: 'initial', important: false }; }],
+    [null, (r, a) => { r.rules.at(-1).declarations['animation-name'].value = 'animate-font'; }],
+    [null, (r, a) => { r.rules.at(-1).active = false; }],
+    [null, (r, a) => { r.rules.at(-1).declarations['animation-name'].important = false; }],
+    ['fontFamily', (r, a) => { r.rules[0].declarations['font-family'].value = 'Arial'; }],
+    ['fontFamily', (r, a) => { r.rules[1].declarations['font-family'].important = true; }],
+    ['fontFamily', (r, a) => { r.rules[1].declarations['font-family'].value = 'Roboto'; }],
+    ['fontFamily', (r, a) => { r.nodes.find(n => n.key === 'actions/cancel').rules.reverse(); }],
+    ['fontFamily', (r, a) => { a.rules.find(r => r.selector === '.dialog-action').fontFamily = 'Roboto'; }],
+    ['fontFamily', (r, a) => { a.rules.find(r => r.selector === 'button, input, select').mediaMaxWidth = '500px'; }],
+    ['fontFamily', (r, a) => { a.nodes.find(n => n.key === 'cancel').normalResolvedStyle.fontFamily = 'Roboto'; }],
+    ['fontFamily', (r, a) => { a.nodes.find(n => n.key === 'cancel').paintedControlText.style.fontFamily = 'Arial'; }],
+    ['fontFamily', (r, a) => { a.rules.push({ selector: '.dialog-action:hover', fontFamily: 'Arial' }); }],
+    ['letterSpacing', (r, a) => { r.rules[1].declarations['letter-spacing'].value = 'normal'; }],
+    ['letterSpacing', (r, a) => { a.nodes.find(n => n.key === 'panel').normalResolvedStyle.letterSpacing = '0px'; }],
+    ['letterSpacing', (r, a) => { a.nodes.find(n => n.key === 'cancel').authored.style = { letterSpacing: '0px' }; }],
+    ['letterSpacing', (r, a) => { a.rules.push({ selector: '.dialog-panel', letterSpacing: '.096px' }); }],
+    ['letterSpacing', (r, a) => { a.nodes.find(n => n.key === 'cancel').paintedControlText.style.letterSpacing = 1; }],
+    ['letterSpacing', (r, a) => { a.nodes.find(n => n.key === 'page').parent = 'other'; }],
+    [null, (r, a) => { r.rules.push({ selector: '.mdc-button__label', active: true, conditions: [], declarations: { font: { value: 'inherit', important: false } } }); r.nodes.find(n => n.key === 'actions/cancel/label').rules.push(r.rules.length - 1); }],
+  ];
+  for (const [index, [property, mutate]] of controls.entries()) {
+    const raw = dialogActionTypographyReport(), { reference: r, astylar: a } = raw.results[0].inputTrees;
+    mutate(r, a);
+    const t = controlEvidence(raw);
+    assert.ok(!t.differences.some(d => d.element === 'dialog-cancel' && (!property || d.property === property) &&
+      d.attribution === 'reviewed-dialog-action-typography-input'), `control ${index}`);
+  }
+});
+
+test('dialog action typography report replays all control evidence and rejects deleted claims', () => {
+  const baseline = buildMaterialInputAudit(dialogActionTypographyReport());
+  const controls = [
+    (r, f) => { f.inputEquivalent = true; }, (r, f) => { f.finalRasterVerified = true; },
+    (r, f) => { f.reviewEvidence.referenceChain.pop(); }, (r, f) => { f.reviewEvidence.candidateResetRule.fontFamily = 'Roboto'; },
+    (r, f) => { f.values.painted = 'roboto'; }, (r, f) => { f.revision++; },
+    (r, f) => { f.family = 'menu'; }, (r, f) => { f.case = 'static:dialog@dark/desktop'; },
+    (r, f) => { r.controlTypography.differences = []; }, (r, f) => { r.controlTypography.comparisons = []; },
+    (r, f) => { r.controlTypography.differences.push(structuredClone(f)); },
+  ];
+  for (const [index, mutate] of controls.entries()) {
+    const report = structuredClone(baseline), finding = report.controlTypography.differences.find(d => d.attribution === 'reviewed-dialog-action-typography-input');
+    mutate(report, finding);
+    assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('dialog action typography')), `mutation ${index}`);
+  }
+});
+
 test('dialog text mapping preserves generated title linkage pseudo spacer and unequal overlay structure', () => {
   const raw = dialogTextReport(), before = structuredClone(raw), cases = raw.results.map(e => ({ ...e, kind: 'static' }));
   const t = collectRetainedTypographyEvidence(cases, collectFullTreeInventory(cases));
