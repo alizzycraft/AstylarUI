@@ -23,6 +23,84 @@ selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Tooltip surface alignment inputs versus flex centering (2026-09-13)
+
+The original tooltip surface rule `.mat-mdc-tooltip-surface` declares
+`text-align:center` (active, unconditional, non-important). The frozen reference
+capture records that declaration and computed `center`. The corresponding
+candidate popup, anchor, section and page omit text alignment in both normal
+and interaction-resolved **own** styles. The retained core text entry contains
+`left`. The popup separately authors `display:flex`, `alignItems:center` and
+`justifyContent:center`; those are not substituted for the missing text-alignment
+input in the audit.
+
+New attribution `reviewed-tooltip-text-alignment-input` requires the original
+surface declaration, complete candidate ancestry, original rule evidence,
+exclusion of potentially applicable alignment/reset/animation rules, both
+candidate inspection stages and retained core text. It preserves unrelated
+candidate alignment rules as exclusion evidence. It rejects inline overrides,
+missing stages, changed ownership or conflicting values. Independent replay
+checks the evidence rather than trusting a classification label.
+
+Source finding `fixture-tooltip-text-alignment-omission` records the omission
+at `astylar.component.ts:811`. `git log -S "selector: '#tooltip-popup'"` and
+`git show 7159b1d -- examples/material-showcase/src/app/astylar.component.ts`
+show the first dedicated popup style already omitted text alignment. The
+`f3c8254` conversion to a relative flow popup retained it; its diff also records
+the historical `translate(93px, 37px)` compensation, which is not restored.
+The original Material component style is in the already fingerprinted installed
+`module-CWxMD37a.mjs` at line 938. Core
+`src/app/services/dom/renderer.service.ts:543` recursively inherits text
+properties, merges own style over its fallback, and sets fallback alignment
+to `left`. These source and captured-stage witnesses support unequal authoring;
+they do not prove a core failure to render an explicitly supplied center value.
+
+The remediation plan is to preserve the original surface's text-alignment and
+layout inputs, then use equivalent-input proofs for any remaining core failure.
+Do not move glyphs or change padding to compensate. Current tooltip displacement,
+blurry raster, external description ownership and the eight candidate-only
+benchmark open states remain separate investigations. No production styles,
+plugin implementation, renderer behavior or reference inputs were changed.
+
+Three new tests cover the positive path, **30 negative input/stage controls**,
+and **12 report mutations**. Focused command:
+
+`node --test --test-name-pattern='tooltip text|records source fingerprints' tests/material-parity/input-equivalence-audit.spec.mjs`
+
+**8/8 pass**, zero failed/skipped/cancelled/todo, **2.624 seconds**, terminal
+exit 0. `npm run parity:harness:check`: **392/392 pass**, zero failed/skipped/
+cancelled/todo, **187.727 seconds**, terminal exit 0. All ten frozen visual-harness
+raw hashes match their checkpoint manifest. `git diff --check` passes.
+
+Full audit replay command:
+
+```powershell
+node --input-type=module -e "import {readFileSync} from 'node:fs';import {buildMaterialInputAudit,validateMaterialInputAudit} from './tests/material-parity/input-equivalence-audit.mjs';const p=JSON.parse(readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json'));const a=buildMaterialInputAudit(p,{root:process.cwd(),normalLineBoxPath:'artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json',supplementalRoot:'artifacts/material-parity/supplemental-current-ancestry-audit'});console.log('SUMMARY '+JSON.stringify({coverage:a.coverage.complete,summary:a.summary,tooltipAlignment:a.retainedTypography.differences.filter(d=>d.attribution==='reviewed-tooltip-text-alignment-input').length,tooltipGaps:a.retainedTypography.gaps.filter(g=>g.element==='tooltip-popup').length,retainedGaps:a.retainedTypography.gaps.filter(g=>g.attribution==='unresolved').length,retainedDifferences:a.retainedTypography.differences.filter(g=>g.attribution==='unresolved').length}));console.log('DIAGNOSTIC '+JSON.stringify(validateMaterialInputAudit(a,{requireComplete:false})));console.log('STRICT '+JSON.stringify(validateMaterialInputAudit(a)));"
+```
+
+Terminal exit 0; the command prints strict errors rather than asserting strict
+success. All **104 source findings** are detected; **18 tooltip alignment
+differences** receive this attribution. Unresolved retained typography decreases
+**372 to 354**. The 281 unresolved retained gaps (including eight tooltip gaps),
+849 control-text differences, 3,309 main-style attributions, 8,140 unique main
+differences / 380,520 occurrences and 88 structural differences remain unchanged.
+Coverage remains complete and diagnostic validation returns `[]`. Strict
+validation still rejects those four unresolved groups. No full visual matrix
+was rerun in this increment; the final unfiltered rerun remains required.
+
+Next investigation evidence: all eight frozen tooltip `open` cases report
+`meetsAcceptance:true`, candidate `open:true`, matching pointerdown/up/click
+events and focus, but no focused popup raster. Both `interactionState` and
+`overlayPlacement` contain only `{matches:true}`. Source
+`run-material-parity.mjs:847` limits tooltip placement to hover/held;
+`:1236` likewise excludes its popup text target in other states. The generic
+interaction-state fallback at `:1202` does not compare tooltip visibility.
+These are not proofs that the open-state popup matches. The benchmark-only
+candidate click branch at `astylar.component.ts:285` traces to `7159b1d`, and
+the text-target exclusion traces to `f324bd1`. Capture/action ordering and
+visibility assertions still need a dedicated state-proof increment; this
+alignment attribution does not remove or classify away those eight gaps.
+
 ## Tooltip connected-overlay text and unpaired open states (2026-09-13)
 
 The audit now maps **18 paired tooltip text owners** through the unique

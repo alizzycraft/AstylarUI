@@ -4520,6 +4520,100 @@ function tooltipTextReport() {
   return raw;
 }
 
+function tooltipAlignmentReport() {
+  const raw = tooltipTextReport(), { reference: r, astylar: a } = raw.results[0].inputTrees;
+  r.rules.push({ selector: '.mat-mdc-tooltip-surface', active: true, conditions: [],
+    declarations: { 'text-align': { value: 'center', important: false } } });
+  r.nodes.find(n => n.key === 'message').rules = [r.rules.length - 1];
+  const flex = { display: 'flex', alignItems: 'center', justifyContent: 'center' };
+  a.rules.push({ selector: '#tooltip-popup', ...flex }, { selector: '#unrelated', textAlign: 'right' });
+  for (const stage of ['resolvedStyle', 'normalResolvedStyle', 'interactionResolvedStyle']) Object.assign(a.nodes.at(-1)[stage], flex);
+  return raw;
+}
+
+function tooltipAlignmentEvidence(raw) {
+  const cases = raw.results.map(e => ({ ...e, kind: 'static' }));
+  return collectRetainedTypographyEvidence(cases, collectFullTreeInventory(cases)).differences
+    .filter(d => d.attribution === 'reviewed-tooltip-text-alignment-input');
+}
+
+test('tooltip text alignment traces original declaration and own-stage omission without equating flex centering', () => {
+  const raw = tooltipAlignmentReport(), before = structuredClone(raw), differences = tooltipAlignmentEvidence(raw);
+  assert.equal(differences.length, 1);
+  const d = differences[0], e = d.reviewEvidence;
+  assert.equal(d.property, 'textAlign'); assert.equal(d.classification, 'application-plugin-authoring-defect');
+  assert.equal(d.inputEquivalent, false); assert.equal(d.finalRasterVerified, false); assert.equal(d.currentPseudoStatePaintVerified, false);
+  assert.equal(e.referenceComputed, 'center'); assert.equal(e.candidateValue, 'left');
+  assert.equal(e.candidateChain.length, 4); assert.equal(e.checkedCandidateRules.length, 1);
+  for (const n of e.candidateChain) { assert.equal(n.normal.textAlign, undefined); assert.equal(n.effective.textAlign, undefined); }
+  assert.equal(e.flexRule.justifyContent, 'center'); assert.equal(e.candidateRetained.textAlign, 'left');
+  assert.deepEqual(raw, before);
+});
+
+test('tooltip text alignment rejects missing competing inline reset and contradictory stage evidence', () => {
+  const controls = [
+    (r, a, n, rule) => { delete r.errors; },
+    (r, a, n, rule) => { n.rules = []; },
+    (r, a, n, rule) => { rule.active = false; },
+    (r, a, n, rule) => { delete rule.active; },
+    (r, a, n, rule) => { rule.selector = '.other'; },
+    (r, a, n, rule) => { rule.conditions = ['print']; },
+    (r, a, n, rule) => { rule.declarations['text-align'].value = 'left'; },
+    (r, a, n, rule) => { rule.declarations['text-align'].important = true; },
+    (r, a, n, rule) => { rule.declarations.all = { value: 'initial', important: false }; },
+    (r, a, n, rule) => { rule.declarations.animation = { value: 'align 1s', important: false }; },
+    (r, a, n, rule) => { n.inline = { textAlign: 'center' }; },
+    (r, a, n, rule) => { n.inline = null; },
+    (r, a, n, rule) => { n.attributes.style = 'text-align: center'; },
+    (r, a, n, rule) => { r.rules.push(structuredClone(rule)); n.rules.push(r.rules.length - 1); },
+    (r, a, n, rule) => { r.styles[0].textAlign = 'right'; },
+    (r, a, n, rule) => { a.nodes.at(-1).retainedText.style.textAlign = 'center'; },
+    (r, a, n, rule) => { a.nodes.at(-1).retainedText.source = 'other'; },
+    (r, a, n, rule) => { a.nodes[0].authored.style = { textAlign: 'left' }; },
+    (r, a, n, rule) => { a.nodes[2].normalResolvedStyle.textAlign = 'inherit'; },
+    (r, a, n, rule) => { a.nodes[1].interactionResolvedStyle.textAlign = 'center'; },
+    (r, a, n, rule) => { a.nodes[0].normalResolvedStyle.all = 'unset'; },
+    (r, a, n, rule) => { delete a.nodes[1].interactionResolvedStyle; },
+    (r, a, n, rule) => { a.rules.push({ selector: '#page', textAlign: 'left' }); },
+    (r, a, n, rule) => { a.rules.push({ selector: '*', all: 'initial' }); },
+    (r, a, n, rule) => { a.rules.push({ selector: '#tooltip-popup:hover', textAlign: 'center' }); },
+    (r, a, n, rule) => { a.rules.push({ selector: '*', transition: 'all 1s' }); },
+    (r, a, n, rule) => { a.rules.at(-2).justifyContent = 'flex-start'; },
+    (r, a, n, rule) => { a.rules.at(-2).mediaQuery = 'print'; },
+    (r, a, n, rule) => { a.nodes.at(-1).normalResolvedStyle.alignItems = 'stretch'; },
+    (r, a, n, rule) => { a.nodes.at(-1).interactionResolvedStyle.display = 'block'; },
+  ];
+  for (const [i, mutate] of controls.entries()) {
+    const raw = tooltipAlignmentReport(), { reference: r, astylar: a } = raw.results[0].inputTrees;
+    const n = r.nodes.find(n => n.key === 'message'); mutate(r, a, n, r.rules[n.rules[0]]);
+    assert.equal(tooltipAlignmentEvidence(raw).length, 0, `control ${i}`);
+  }
+});
+
+test('tooltip text alignment replay rejects altered declaration ancestry omission and acceptance claims', () => {
+  const original = buildMaterialInputAudit(tooltipAlignmentReport());
+  assert.ok(original.sourceFindings.find(f => f.id === 'fixture-tooltip-text-alignment-omission').detected);
+  assert.ok(!validateMaterialInputAudit(original, { requireComplete: false }).some(e => e.includes('tooltip text')));
+  for (const mutate of [
+    (r, d) => { r.retainedTypography.differences = r.retainedTypography.differences.filter(v => v !== d); },
+    (r, d) => { d.reviewEvidence.referenceRule.declarations = {}; },
+    (r, d) => { d.reviewEvidence.candidateChain.pop(); },
+    (r, d) => { d.reviewEvidence.candidateChain[0].normal.textAlign = 'left'; },
+    (r, d) => { d.reviewEvidence.checkedCandidateRules = []; },
+    (r, d) => { d.reviewEvidence.flexRule.justifyContent = 'flex-start'; },
+    (r, d) => { d.reviewEvidence.sourceFinding = 'other'; },
+    (r, d) => { d.inputEquivalent = true; },
+    (r, d) => { d.finalRasterVerified = true; },
+    (r, d) => { d.currentPseudoStatePaintVerified = true; },
+    (r, d) => { d.classification = 'confirmed-core-defect'; },
+    (r, d) => { d.family = 'menu'; d.element = 'other'; d.case = 'static:menu@light/desktop'; delete d.mapping; },
+  ]) {
+    const report = structuredClone(original), d = report.retainedTypography.differences.find(d => d.attribution === 'reviewed-tooltip-text-alignment-input');
+    mutate(report, d);
+    assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('tooltip text')));
+  }
+});
+
 test('tooltip text mapping preserves connected-overlay versus flow ownership and unequal typography', () => {
   const raw = tooltipTextReport(), original = structuredClone(raw), cases = raw.results.map(e => ({ ...e, kind: 'static' }));
   const evidence = collectRetainedTypographyEvidence(cases, collectFullTreeInventory(cases));

@@ -447,6 +447,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
     'reviewed-timepicker-option-ink-input': 'application-plugin-authoring-defect',
     'reviewed-material-option-ink-input': 'application-plugin-authoring-defect',
     'reviewed-snackbar-message-token-input': 'application-plugin-authoring-defect',
+    'reviewed-tooltip-text-alignment-input': 'application-plugin-authoring-defect',
     'reviewed-floating-label-font-input': 'application-plugin-authoring-defect' };
   const unresolvedTypography = report.retainedTypography?.differences.filter((entry) =>
     !reviewedTypographyKinds[entry.attribution] || entry.classification !== reviewedTypographyKinds[entry.attribution] || !entry.reviewEvidence) ?? [];
@@ -591,6 +592,7 @@ export function renderMaterialInputAuditMarkdown(report) {
     `Snackbar messages: ${report.retainedTypography.reviewedMappings.filter(m => m.kind === 'reviewed-snackbar-message-text').length} labels map through unique overlay, live-region and sibling-action context. Original padded flex-message and nested action/live owners are replaced by a span inside a status surface. This establishes text identity only; unequal composition, typography, announcement behavior, placement and visibility remain independent obligations.`,
     `Snackbar message tokens: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-snackbar-message-token-input').length} size/color differences trace the direct component size token or inherited surface inverse-text token against omitted component size/page inheritance or literal surface white. Separate declaration, normal/effective and retained stages remain evidence. This is unequal authoring, not a core scaling/color defect or proof of current raster, visibility or theme-token fallback provenance.`,
     `Tooltip text: ${report.retainedTypography.reviewedMappings.filter(m => m.kind === 'reviewed-tooltip-overlay-text').length} labels map only when unique Material trigger/message and shown connected-overlay ownership coexist with the unique candidate trigger-linked flow popup. Original aria-hidden visual ownership and external description linkage remain distinct from the candidate role-tooltip sibling. Candidate-only states, typography, positioning, collision, clipping, visibility and raster are not waived.`,
+    `Tooltip alignment: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-tooltip-text-alignment-input').length} original center declarations contrast with complete popup-to-page candidate omissions and retained left. Candidate flex centering is captured as a different input, not an equivalent replacement or proof of glyph alignment. Positioning and blur remain separate investigations.`,
     `Timepicker options: ${report.retainedTypography.reviewedMappings.filter(m => m.kind === 'reviewed-timepicker-option-text').length} labels have complete input-linked half-hour-domain correspondence. Material primary-text/ripple owners are replaced by direct-text div options; active and selected states remain separate raw evidence. This maps text owners, not equivalent wrappers, scrolling, commit behavior, placement or raster. Newly exposed typography differences remain enforced.`,
     `Timepicker option ink: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-timepicker-option-ink-input').length} unequal colors trace from the reference option token through direct label inheritance versus the candidate literal preserved in normal/effective/retained stages. Competing or missing declarations prevent attribution. No token fallback-origin, theme-scope, compositing or final-raster equivalence is inferred.`,
     `Calendar month-label typography: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-calendar-month-marker-typography-input').length} records trace the omitted explicit zero line-height or substituted center alignment/literal ink to original declarations and captured core stages. Possible competing rules prevent attribution. These are unequal inputs, not a claim that the core misrendered zero, start or the original color token.`,
@@ -1515,7 +1517,7 @@ function validateTooltipTextEvidence(report, errors) {
     return match ? [{ kind: match[1], family: 'tooltip', profile: match[2], viewport: { id: match[3] }, ...(match[4] ? { state: match[4] } : {}) }] : [];
   });
   const replay = collectRetainedTypographyEvidence(cases, report.elementInventory);
-  const predicate = value => value.kind === 'reviewed-tooltip-overlay-text' || value.mapping?.kind === 'reviewed-tooltip-overlay-text' ||
+  const predicate = value => value.attribution === 'reviewed-tooltip-text-alignment-input' || value.kind === 'reviewed-tooltip-overlay-text' || value.mapping?.kind === 'reviewed-tooltip-overlay-text' ||
     value.element === 'tooltip-popup' || (value.family === 'tooltip' && value.reason === 'own-text nodes without an explicit shared ID require structural mapping');
   for (const list of ['reviewedMappings', 'comparisons', 'differences', 'gaps']) {
     if (JSON.stringify(report.retainedTypography[list].filter(predicate)) !== JSON.stringify(replay[list].filter(predicate)))
@@ -2089,6 +2091,55 @@ function typographySelectorCanApply(selector, authored) {
     if (!tokens.length || tokens.some(token => !token || !compound.test(token))) return true;
     return selectorCanApply(tokens.at(-1), authored);
   });
+}
+
+function reviewedTooltipTextAlignment(entry, mapping, property, ast, styles, referenceTree, astylarTree, inventory) {
+  if (entry.family !== 'tooltip' || property !== 'textAlign' || mapping?.kind !== 'reviewed-tooltip-overlay-text' ||
+      mapping.astylarNode !== ast.key || ast.retainedText?.source !== 'core-text-registry' || referenceTree.ruleEvidenceComplete !== true ||
+      styles.reference.textAlign !== 'center' || styles.retained.textAlign !== 'left') return;
+  const affects = declarations => Object.keys(declarations ?? {}).some(key =>
+    ['textalign', 'all'].includes(key.replaceAll('-', '').toLowerCase()) || /^(animation|transition)/i.test(key));
+  const unsafeInline = value => value !== undefined && (value === null || typeof value !== 'object' || Array.isArray(value) || affects(value));
+  const styleAt = (index, side) => {
+    const item = inventory.styles[index];
+    return item?.side === side && item.value && typeof item.value === 'object' && !Array.isArray(item.value) ? item.value : undefined;
+  };
+  const ref = referenceTree.nodes.find(n => n.key === mapping.referenceNode);
+  if (!ref || !Array.isArray(ref.rules) || unsafeInline(ref.inline) ||
+      /(?:^|;)\s*(?:text-align|all|animation[^:]*|transition[^:]*)\s*:/i.test(ref.attributes?.style ?? '')) return;
+  const pooled = ref.rules.map(i => inventory.rules[i]);
+  if (pooled.some(r => r?.side !== 'reference' || !r.value || typeof r.value !== 'object' || Array.isArray(r.value) || typeof r.value.active !== 'boolean')) return;
+  const referenceRules = pooled.map(r => r.value), applicable = referenceRules.filter(r => r.active && affects(r.declarations));
+  const referenceRule = applicable[0];
+  if (applicable.length !== 1 || referenceRule.selector !== '.mat-mdc-tooltip-surface' || referenceRule.conditions?.length !== 0 ||
+      referenceRule.declarations?.['text-align']?.value !== 'center' || referenceRule.declarations['text-align'].important !== false ||
+      Object.keys(referenceRule.declarations).some(k => k !== 'text-align' && affects({ [k]: true }))) return;
+  const candidateNodes = mapping.reviewEvidence.candidatePath.map(path => astylarTree.nodes.find(n => n.key === path.key));
+  if (candidateNodes.some(n => !n) || !Array.isArray(astylarTree.rules)) return;
+  const candidatePool = astylarTree.rules.map(i => inventory.rules[i]);
+  if (candidatePool.some(r => r?.side !== 'astylar' || !r.value || typeof r.value !== 'object' || Array.isArray(r.value))) return;
+  const candidateRules = candidatePool.map(r => r.value), checkedCandidateRules = candidateRules.filter(affects), candidateChain = [];
+  for (const node of candidateNodes) {
+    const normal = styleAt(node.normalStyle, 'astylar'), effective = styleAt(node.interactionStyle, 'astylar');
+    if (!normal || !effective || unsafeInline(node.authored.style) || affects(normal) || affects(effective) ||
+        checkedCandidateRules.some(rule => typographySelectorCanApply(rule.selector, node.authored))) return;
+    candidateChain.push({ node: node.key, parent: node.parent, authored: node.authored, normal, effective });
+  }
+  // Record the competing layout strategy, but never equate flex-item centering
+  // with the original inline text alignment or infer any final glyph position.
+  const flexRules = candidateRules.filter(r => r.selector === '#tooltip-popup');
+  const flexRule = flexRules[0];
+  if (flexRules.length !== 1 || flexRule.display !== 'flex' || flexRule.alignItems !== 'center' || flexRule.justifyContent !== 'center' ||
+      Object.keys(flexRule).some(k => /^media/.test(k)) ||
+      [candidateChain[0].normal, candidateChain[0].effective].some(s => s.display !== 'flex' || s.alignItems !== 'center' || s.justifyContent !== 'center')) return;
+  return { attribution: 'reviewed-tooltip-text-alignment-input', classification: 'application-plugin-authoring-defect',
+    inputEquivalent: false, currentPseudoStatePaintVerified: false, finalRasterVerified: false,
+    recommendedOwner: 'showcase tooltip original surface typography and layout input translation',
+    justification: 'The original active Material surface rule supplies text-align:center. Candidate popup-to-page normal/effective inputs and complete applicable-rule exclusions show no text alignment declaration, while core registry text retains left. The candidate supplies flex centering instead; that is a distinct layout input, not equivalent text alignment. This attributes an authoring omission, not the cause of displaced or blurred glyphs and not a confirmed core alignment defect.',
+    reviewEvidence: { sourceFinding: 'fixture-tooltip-text-alignment-omission', referenceRule, referenceRules,
+      referenceNode: mapping.reviewEvidence.referencePath[0], referenceComputed: styles.reference.textAlign,
+      candidateChain, checkedCandidateRules, flexRule, candidateRetained: styleAt(ast.retainedText.style, 'astylar'),
+      candidateValue: styles.retained.textAlign, inputEquivalent: false, finalRasterVerified: false } };
 }
 
 function reviewedSnackbarMessageToken(entry, mapping, property, ast, styles, referenceTree, astylarTree, inventory) {
@@ -4064,6 +4115,7 @@ export function collectRetainedTypographyEvidence(cases, inventory, controlTypog
             ...(reviewedTimepickerOptionInk(entry, textMappingById.get(id), property, ast, styles, referenceTree, astylarTree, inventory) ?? {}),
             ...(reviewedMaterialOptionInk(entry, textMappingById.get(id), property, ast, styles, referenceTree, astylarTree, inventory) ?? {}),
             ...(reviewedSnackbarMessageToken(entry, textMappingById.get(id), property, ast, styles, referenceTree, astylarTree, inventory) ?? {}),
+            ...(reviewedTooltipTextAlignment(entry, textMappingById.get(id), property, ast, styles, referenceTree, astylarTree, inventory) ?? {}),
             ...(!controlLabelToken && !selectValueToken && !weekdayToken && !monthMarkerToken ?
               reviewedOmittedComponentTextMetric(textMappingById.get(id), property, ref, ast, styles, referenceTree, astylarTree, inventory) ?? {} : {}),
             ...(property === 'fontFamily' && inheritedFontStack ? inheritedFontStack : {}),
@@ -5670,6 +5722,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('tooltip text alignment traces/,
+      'tooltip surface alignment declaration versus complete candidate omission ancestry', 'The original active center declaration and candidate popup-to-page own-stage omissions remain distinct from retained left and flex centering. Negative declaration, ancestry, rule and stage controls plus independent replay prevent absent evidence or report mutations from certifying equivalence. Positioning, blur and current glyph paint remain independently unverified.'),
     proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('tooltip text mapping preserves/,
       'tooltip trigger-linked connected-overlay text versus candidate flow popup', 'Exact message, trigger and overlay ancestry establish paired text identity without equating wrappers, description ownership or layout. Negative trigger/structure controls and independent replay reject unrelated, forged or removed evidence. Candidate-only states and missing retained stages remain explicit gaps. Original computed and candidate own/retained typography continue to be compared; no position, visibility, collision or raster acceptance is inferred.'),
     proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('snackbar message tokens distinguish/,

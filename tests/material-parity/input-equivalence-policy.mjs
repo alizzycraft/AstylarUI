@@ -760,6 +760,15 @@ export const sourceAuditDefinitions = Object.freeze([
     justification: 'The reference matTooltip creates a connected CDK overlay outside normal flow. The candidate puts the popup in a fixed-size 138x72px flex column below the trigger. It may align in the current screenshot but does not exercise equivalent containing-block, collision, clipping, or scroll behavior.',
   }),
   Object.freeze({
+    id: 'fixture-tooltip-text-alignment-omission',
+    introducedBy: '7159b1d introduced tooltip-popup styling without text alignment; subsequent flow/flex rewrites retain the omission',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`selector: '#tooltip-popup',(?![^\n]*textAlign:)[^\n]*display: 'flex'[^\n]*justifyContent: 'center'`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase tooltip original surface typography and layout input translation',
+    justification: 'The original Material surface declares text-align:center. The candidate popup uses flex centering but omits text alignment throughout its popup-to-page ancestry, leaving retained core text at the left fallback. Flex centering and text alignment are distinct inputs; neither matching pixels nor setting a compensating glyph offset establishes equivalence. Preserve the original surface declaration and structure before diagnosing any remaining equal-input alignment defect.',
+  }),
+  Object.freeze({
     id: 'fixture-tab-label-typography-flattened',
     introducedBy: '2f44011 omitted tab font/tracking tokens; bc4d442 retains the 20px control-label line-height and adjusts density padding',
     file: 'examples/material-showcase/src/app/astylar.component.ts',
