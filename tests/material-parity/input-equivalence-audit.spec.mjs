@@ -4637,6 +4637,115 @@ test('menu text replay rejects missing forged and foreign-scope correspondence a
   }
 });
 
+function menuInkReport() {
+  const raw = menuTextReport(), { reference: r, astylar: a } = raw.results[0].inputTrees;
+  for (const [selector, value] of [
+    ['.mat-mdc-menu-item', 'inherit'],
+    ['.mat-mdc-menu-item, .mat-mdc-menu-item:visited, .mat-mdc-menu-item:link', 'var(--mat-menu-item-label-text-color, var(--mat-sys-on-surface))'],
+  ]) r.rules.push({ source: `sheet:0/${r.rules.length}`, selector, active: true, conditions: [], declarations: { color: { value, important: false } } });
+  a.rules.push({ selector: '#menu-rename, #menu-delete', color: '#1d1b20' });
+  for (const key of ['rename', 'delete']) {
+    r.nodes.find(n => n.key === key).rules = [1, 2];
+    const item = a.nodes.find(n => n.key === key);
+    for (const stage of ['resolvedStyle', 'normalResolvedStyle', 'interactionResolvedStyle']) item[stage].color = '#1d1b20';
+  }
+  return raw;
+}
+
+test('menu label ink preserves ordered token cascade and inherited literal without claiming paint equivalence', () => {
+  const raw = menuInkReport(), before = structuredClone(raw), cases = raw.results.map(e => ({ ...e, kind: 'static' }));
+  const evidence = collectRetainedTypographyEvidence(cases, collectFullTreeInventory(cases));
+  const ink = evidence.differences.filter(d => d.attribution === 'reviewed-menu-label-ink-input');
+  assert.equal(ink.length, 2);
+  for (const d of ink) {
+    assert.equal(d.classification, 'application-plugin-authoring-defect'); assert.equal(d.inputEquivalent, false);
+    assert.equal(d.currentPseudoStatePaintVerified, false); assert.equal(d.finalRasterVerified, false);
+    assert.deepEqual(d.reviewEvidence.referenceRules.map(r => r.declarations.color.value), ['inherit', 'var(--mat-menu-item-label-text-color, var(--mat-sys-on-surface))']);
+    assert.equal(d.reviewEvidence.referenceChain.length, 2); assert.equal(d.reviewEvidence.candidateChain.length, 2);
+    assert.equal(d.reviewEvidence.candidateChain[0].normal.color, undefined);
+    assert.equal(d.reviewEvidence.candidateChain[1].normal.color, '#1d1b20');
+    assert.equal(d.reviewEvidence.candidateRetained.color, '#1d1b20');
+    assert.equal(d.reviewEvidence.referenceComputed, 'rgba(29,27,30,1)');
+  }
+  assert.equal(evidence.differences.filter(d => d.property === 'fontFamily' && d.attribution === 'unresolved').length, 2);
+  assert.deepEqual(raw, before);
+});
+
+test('menu label ink refuses incomplete competing or contradictory cascade and stage inputs', () => {
+  const controls = [
+    (r, a) => { delete r.errors; },
+    (r, a) => { r.rules[1].active = false; },
+    (r, a) => { r.rules[2].active = false; },
+    (r, a) => { r.rules[1].declarations.color.important = true; },
+    (r, a) => { r.rules[2].declarations.color.important = true; },
+    (r, a) => { r.rules[1].conditions = ['@layer base']; },
+    (r, a) => { r.rules[2].conditions = ['@media screen']; },
+    (r, a) => { delete r.rules[1].source; },
+    (r, a) => { r.rules[2].source = 'sheet:0/1/2'; },
+    (r, a) => { r.rules[2].source = 'sheet:1/2'; },
+    (r, a) => { r.rules[2].source = 'sheet:0/0'; },
+    (r, a) => { r.rules[1].selector = 'button'; },
+    (r, a) => { r.rules[2].selector = '.mat-mdc-menu-item'; },
+    (r, a) => { r.rules[1].declarations.color.value = 'initial'; },
+    (r, a) => { r.rules[2].declarations.color.value = '#1d1b1e'; },
+    (r, a) => { r.nodes.find(n => n.key === 'rename').rules.reverse(); },
+    (r, a) => { r.nodes.find(n => n.key === 'rename').rules.pop(); },
+    (r, a) => { r.rules.push({ selector: '.mat-mdc-menu-item', active: true, conditions: [], declarations: { color: { value: 'red', important: false } } }); r.nodes.find(n => n.key === 'rename').rules.push(3); },
+    (r, a) => { r.rules[2].declarations.all = { value: 'unset', important: false }; },
+    (r, a) => { r.rules[0].declarations.color = { value: 'inherit', important: false }; },
+    (r, a) => { r.nodes.find(n => n.key === 'rename-label').inline = { color: 'inherit' }; },
+    (r, a) => { r.nodes.find(n => n.key === 'rename').attributes.style = 'color: inherit'; },
+    (r, a) => { r.styles.push({ ...r.styles[0], color: 'red' }); r.nodes.find(n => n.key === 'rename').style = 1; },
+    (r, a) => { a.rules[1].selector = 'button'; },
+    (r, a) => { a.rules[1].color = '#1d1b1e'; },
+    (r, a) => { a.rules.push({ selector: '.menu-option-label', color: 'inherit' }); },
+    (r, a) => { a.rules.push({ selector: '#menu-rename', color: 'red' }); },
+    (r, a) => { a.rules[1].transition = 'color 1s'; },
+    (r, a) => { a.nodes.find(n => n.key === 'rename-label').authored.style = { color: 'inherit' }; },
+    (r, a) => { a.nodes.find(n => n.key === 'rename').authored.style = { all: 'unset' }; },
+    (r, a) => { a.nodes.find(n => n.key === 'rename-label').normalResolvedStyle.color = '#1d1b20'; },
+    (r, a) => { a.nodes.find(n => n.key === 'rename-label').interactionResolvedStyle.color = '#1d1b20'; },
+    (r, a) => { delete a.nodes.find(n => n.key === 'rename').normalResolvedStyle; },
+    (r, a) => { delete a.nodes.find(n => n.key === 'rename').interactionResolvedStyle; },
+    (r, a) => { a.nodes.find(n => n.key === 'rename').normalResolvedStyle.color = 'red'; },
+    (r, a) => { a.nodes.find(n => n.key === 'rename').interactionResolvedStyle.color = 'red'; },
+    (r, a) => { a.nodes.find(n => n.key === 'rename').normalResolvedStyle.WebkitTextFillColor = '#1d1b20'; },
+    (r, a) => { a.nodes.find(n => n.key === 'rename-label').retainedText.source = 'private-texture'; },
+    (r, a) => { a.nodes.find(n => n.key === 'rename-label').retainedText.style.color = 'red'; },
+  ];
+  for (const [index, mutate] of controls.entries()) {
+    const raw = menuInkReport(), { reference: r, astylar: a } = raw.results[0].inputTrees; mutate(r, a);
+    const cases = raw.results.map(e => ({ ...e, kind: 'static' }));
+    const t = collectRetainedTypographyEvidence(cases, collectFullTreeInventory(cases));
+    assert.ok(!t.differences.some(d => d.element === 'menu-rename-label' && d.attribution === 'reviewed-menu-label-ink-input'), `control ${index}`);
+  }
+});
+
+test('menu label ink replay rejects forged evidence and retains independent inventory snapshots', () => {
+  const original = buildMaterialInputAudit(menuInkReport());
+  assert.ok(original.sourceFindings.find(f => f.id === 'fixture-menu-label-ink-substitution')?.detected);
+  assert.equal(original.retainedTypography.differences.filter(d => d.attribution === 'reviewed-menu-label-ink-input').length, 2);
+  assert.ok(!validateMaterialInputAudit(original, { requireComplete: false }).some(e => e.includes('menu text')));
+  for (const mutate of [
+    (r, d) => { d.reviewEvidence.referenceRules.reverse(); },
+    (r, d) => { d.reviewEvidence.referenceChain[1].computed.color = 'red'; },
+    (r, d) => { d.reviewEvidence.candidateChain[0].normal.color = '#1d1b20'; },
+    (r, d) => { d.reviewEvidence.candidateRule.color = 'red'; },
+    (r, d) => { d.reviewEvidence.checkedCandidateRules.pop(); },
+    (r, d) => { d.reviewEvidence.candidateRetained.color = 'red'; },
+    (r, d) => { d.inputEquivalent = true; },
+    (r, d) => { d.finalRasterVerified = true; },
+    (r, d) => { d.values.retained = 'red'; },
+    (r, d) => { d.case = 'static:tooltip@light/desktop'; d.family = 'tooltip'; d.element = 'other'; delete d.mapping; },
+  ]) {
+    const report = structuredClone(original), inventory = structuredClone(report.elementInventory);
+    const difference = report.retainedTypography.differences.find(d => d.attribution === 'reviewed-menu-label-ink-input');
+    mutate(report, difference);
+    assert.deepEqual(report.elementInventory, inventory);
+    assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('menu text')));
+  }
+});
+
 function tooltipTextReport() {
   const raw = retainedTypographyReport(), e = raw.results[0], { reference: r, astylar: a } = e.inputTrees;
   e.family = 'tooltip';

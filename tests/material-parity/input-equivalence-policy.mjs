@@ -760,6 +760,15 @@ export const sourceAuditDefinitions = Object.freeze([
     justification: 'The reference has a connected overlay/backdrop, menu content wrapper, ordered Material buttons and direct text/ripple children. The candidate has a fixed-size absolute popup with two aria-labelled buttons and named label spans. The spans improve direct text ownership compared with the earlier button values, but do not restore the content wrapper, label flex:1 or component typography tokens. Map the complete paired item domain before comparing inputs; do not mistake corresponding text for equivalent layout, state, accessibility or paint.',
   }),
   Object.freeze({
+    id: 'fixture-menu-label-ink-substitution',
+    introducedBy: '0d67d46 replaces theme.onSurface with #1d1b20; retained by subsequent parity fixes',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`selector: '#menu-rename, #menu-delete'.*color: '#1d1b20'`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase menu item color-token translation and label inheritance',
+    justification: 'The original menu item color token overrides its earlier inherit declaration, and its direct text span inherits that computed color. The candidate supplies literal #1d1b20 on its replacement item. Retain both ordered reference declarations, the candidate declaration and all resolved/retained stages; do not normalize the two near colors or infer a core conversion defect from unequal inputs.',
+  }),
+  Object.freeze({
     id: 'fixture-menu-label-density-offset',
     introducedBy: '994da86 fix(material): complete shared control parity',
     file: 'examples/material-showcase/src/app/astylar.component.ts',

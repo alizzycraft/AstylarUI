@@ -23,6 +23,89 @@ selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Menu label ink is a token-to-literal authoring substitution (2026-09-13)
+
+The new `reviewed-menu-label-ink-input` attribution traces the color mismatch
+through actual declarations and direct text inheritance. It does not normalize
+nearby colors or infer a renderer color-conversion defect from unequal inputs.
+
+The reference non-link item button has two active ink rules, in this order:
+
+1. `.mat-mdc-menu-item` declares `color: inherit`.
+2. `.mat-mdc-menu-item, .mat-mdc-menu-item:visited, .mat-mdc-menu-item:link`
+   declares `var(--mat-menu-item-label-text-color, var(--mat-sys-on-surface))`.
+
+The button matches both through the same class specificity. The proof requires
+both declarations to be non-important, unconditional top-level rules in the
+same stylesheet with strictly increasing source indices. In the light desktop
+open capture these are `sheet:7/12` and `sheet:7/16`. Capture walks stylesheet
+rules in order and preserves that order in each node's matching-rule list.
+Nested/layered rules, unknown source order, competing ink declarations,
+animations, transitions, resets and inline overrides refuse attribution.
+
+The direct reference label has no own ink rule and computes the same color as
+its item. Candidate labels also omit their own color in normal/effective core
+inspection, but their item has a fixed `#1d1b20` declaration that reaches the
+retained text. Reference computed ink is `rgb(29, 27, 30)` in the inspected
+profile, not candidate `rgb(29, 27, 32)`. The complete owner/label, candidate
+rule and separate normal/effective/retained stages remain evidence. Token
+fallback provenance, overlay theme scope, composition and current/final raster
+are explicitly not certified by this attribution.
+
+History: `0d67d46` (`fix(material): complete overlay and feedback parity`)
+replaced `theme.onSurface` with literal `#1d1b20` in the menu item rule; the
+current rule is `examples/material-showcase/src/app/astylar.component.ts:524`.
+The initial `2f44011` menu used `theme.onSurface`, so it is not the introduction
+of this particular fixed literal. Repair ownership is the showcase/plugin
+translation of the original item token and label inheritance. Only residual
+differences under equivalent inputs justify a core paint investigation.
+
+Three new tests prove the ordered cascade and preserved nonmutation, **39
+negative input controls**, and **10 independent report-mutation controls**.
+Finding snapshots are detached from the inventory; a forged finding cannot
+rewrite its own validation source. The menu replay also rejects this attribution
+when moved into another family or detached from the expected mapping.
+
+```powershell
+node --test --test-name-pattern='menu label ink|menu text' tests/material-parity/input-equivalence-audit.spec.mjs
+```
+
+Focused result: **7/7 pass**, zero failed/skipped/cancelled/todo, **1.762 seconds**,
+terminal exit 0. After adding source-order checks, an intermediate run failed
+two positive tests because the source field was accidentally added to another
+synthetic helper. That unrelated edit was reverted and the menu helper corrected;
+the strengthened checks and assertions were retained. The failed run is not
+passing evidence.
+
+The bounded menu inventory contains 94 cases and 64 mapped labels. All 64 ink
+differences meet the new evidence requirements; **64 font-family differences
+remain unresolved**. A separate read-only trace found the candidate generic
+`button, input, select` rule at `astylar.component.ts:476`, which explicitly
+sets `Roboto, Arial, sans-serif`; the captured rule list confirms it. This is
+not merely a core default or uninterrupted inheritance from `#page`. The direct
+label's omitted font token and inheritance from that authored control rule need
+their own validated attribution, not an extension of this color proof.
+
+`npm run parity:harness:check`: **407/407 pass**, zero failed/skipped/cancelled/
+todo, **182.292 seconds**, terminal exit 0. All ten frozen visual-harness hashes
+match. No production renderer, fixture input, reference, or visual threshold is
+changed; final unfiltered visual acceptance remains outstanding.
+
+Full inventory generation detects all **110 source findings** and attributes
+the 64 menu ink differences while retaining their unequal values. Independent
+diagnostic replay returns `[]`. Strict audit validation is recorded below before
+completion of the audit: **3,309** unresolved resolved-style differences,
+**879** control-texture typography differences, **177** retained-owner/stage
+gaps, and **418** retained typography differences (down from 482). These four
+errors remain explicit. The audit process exited 0 after printing diagnostic
+and strict results; it is not a strict acceptance pass.
+
+Exact full audit command:
+
+```powershell
+node --input-type=module -e "import {readFileSync} from 'node:fs';import {buildMaterialInputAudit,validateMaterialInputAudit} from './tests/material-parity/input-equivalence-audit.mjs';const p=JSON.parse(readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json'));const a=buildMaterialInputAudit(p,{root:process.cwd(),normalLineBoxPath:'artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json',supplementalRoot:'artifacts/material-parity/supplemental-current-ancestry-audit'});console.log('SUMMARY '+JSON.stringify({coverage:a.coverage.complete,summary:a.summary,menuInk:a.retainedTypography.differences.filter(d=>d.attribution==='reviewed-menu-label-ink-input').length,menuUnresolved:a.retainedTypography.differences.filter(d=>d.family==='menu'&&d.attribution==='unresolved').reduce((r,d)=>{r[d.property]=(r[d.property]??0)+1;return r;},{}),retainedUnresolved:a.retainedTypography.gaps.filter(g=>g.attribution==='unresolved').length}));console.log('DIAGNOSTIC '+JSON.stringify(validateMaterialInputAudit(a,{requireComplete:false})));console.log('STRICT '+JSON.stringify(validateMaterialInputAudit(a)));"
+```
+
 ## Menu label correspondence exposes unequal flex and typography inputs (2026-09-13)
 
 The menu audit now maps each anonymous Material item-label span to its exact

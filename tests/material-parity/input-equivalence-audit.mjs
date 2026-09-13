@@ -454,6 +454,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
     'reviewed-timepicker-option-ink-input': 'application-plugin-authoring-defect',
     'reviewed-material-option-ink-input': 'application-plugin-authoring-defect',
     'reviewed-snackbar-message-token-input': 'application-plugin-authoring-defect',
+    'reviewed-menu-label-ink-input': 'application-plugin-authoring-defect',
     'reviewed-tooltip-text-alignment-input': 'application-plugin-authoring-defect',
     'reviewed-floating-label-font-input': 'application-plugin-authoring-defect' };
   const unresolvedTypography = report.retainedTypography?.differences.filter((entry) =>
@@ -638,6 +639,7 @@ export function renderMaterialInputAuditMarkdown(report) {
     `Autocomplete/select option ink: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-material-option-ink-input').length} unequal colors trace either base-token inheritance or the selected primary-text token against a candidate inherited literal. Own label color remains absent in normal/effective inspection, with the option owner and retained text captured separately. Missing or competing declarations prevent attribution; variable fallback origin, theme scope and composited/raster output remain independent.`,
     `Snackbar messages: ${report.retainedTypography.reviewedMappings.filter(m => m.kind === 'reviewed-snackbar-message-text').length} labels map through unique overlay, live-region and sibling-action context. Original padded flex-message and nested action/live owners are replaced by a span inside a status surface. This establishes text identity only; unequal composition, typography, announcement behavior, placement and visibility remain independent obligations.`,
     `Snackbar message tokens: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-snackbar-message-token-input').length} size/color differences trace the direct component size token or inherited surface inverse-text token against omitted component size/page inheritance or literal surface white. Separate declaration, normal/effective and retained stages remain evidence. This is unequal authoring, not a core scaling/color defect or proof of current raster, visibility or theme-token fallback provenance.`,
+    `Menu label ink: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-menu-label-ink-input').length} unequal colors preserve the original ordered inherit/token declarations and direct label inheritance against the candidate item literal. Complete rule and normal/effective/retained evidence is required; typography, token fallback origin, overlay theme scope and final paint are not certified.`,
     `Tooltip text: ${report.retainedTypography.reviewedMappings.filter(m => m.kind === 'reviewed-tooltip-overlay-text').length} labels map only when unique Material trigger/message and shown connected-overlay ownership coexist with the unique candidate trigger-linked flow popup. Original aria-hidden visual ownership and external description linkage remain distinct from the candidate role-tooltip sibling. Candidate-only states, typography, positioning, collision, clipping, visibility and raster are not waived.`,
     `Tooltip alignment: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-tooltip-text-alignment-input').length} original center declarations contrast with complete popup-to-page candidate omissions and retained left. Candidate flex centering is captured as a different input, not an equivalent replacement or proof of glyph alignment. Positioning and blur remain separate investigations.`,
     `Timepicker options: ${report.retainedTypography.reviewedMappings.filter(m => m.kind === 'reviewed-timepicker-option-text').length} labels have complete input-linked half-hour-domain correspondence. Material primary-text/ripple owners are replaced by direct-text div options; active and selected states remain separate raw evidence. This maps text owners, not equivalent wrappers, scrolling, commit behavior, placement or raster. Newly exposed typography differences remain enforced.`,
@@ -1592,7 +1594,7 @@ function validateMenuTextEvidence(report, errors) {
     return match ? [{ kind: match[1], family: 'menu', profile: match[2], viewport: { id: match[3] }, ...(match[4] ? { state: match[4] } : {}) }] : [];
   });
   const replay = collectRetainedTypographyEvidence(cases, report.elementInventory);
-  const predicate = value => value.kind === 'reviewed-menu-item-text' || value.mapping?.kind === 'reviewed-menu-item-text' ||
+  const predicate = value => value.attribution === 'reviewed-menu-label-ink-input' || value.kind === 'reviewed-menu-item-text' || value.mapping?.kind === 'reviewed-menu-item-text' ||
     ['menu-rename-label', 'menu-delete-label'].includes(value.element) ||
     (value.family === 'menu' && value.reason === 'own-text nodes without an explicit shared ID require structural mapping');
   for (const list of ['reviewedMappings', 'comparisons', 'differences', 'gaps']) {
@@ -2472,6 +2474,83 @@ function reviewedSnackbarMessageToken(entry, mapping, property, ast, styles, ref
     reviewEvidence: { sourceFinding: 'fixture-snackbar-message-token-substitution', property, referenceRule, referenceChain,
       candidateRule, checkedCandidateRules, candidateChain, candidateRetained: styleAt(ast.retainedText.style, 'astylar'),
       referenceComputed: styles.reference[property], candidateValue: styles.retained[property], inputEquivalent: false, finalRasterVerified: false } };
+}
+
+function reviewedMenuLabelInk(entry, mapping, property, ast, styles, referenceTree, astylarTree, inventory) {
+  if (entry.family !== 'menu' || property !== 'color' || mapping?.kind !== 'reviewed-menu-item-text' ||
+      mapping.astylarNode !== ast.key || ast.retainedText?.source !== 'core-text-registry' || referenceTree.ruleEvidenceComplete !== true) return;
+  const one = nodes => nodes.length === 1 ? nodes[0] : undefined;
+  const leaf = one(referenceTree.nodes.filter(n => n.key === mapping.referenceNode));
+  const owner = one(referenceTree.nodes.filter(n => n.key === mapping.reviewEvidence.referencePath[1]?.key));
+  const astOwner = one(astylarTree.nodes.filter(n => n.key === mapping.reviewEvidence.candidatePath[1]?.key));
+  if (!leaf || !owner || !astOwner || leaf.parent !== owner.key || ast.parent !== astOwner.key ||
+      owner.type !== 'button' || owner.attributes['aria-disabled'] !== 'false') return;
+  const changesInk = declarations => Object.keys(declarations ?? {}).some(key => {
+    const name = key.replaceAll('-', '').toLowerCase();
+    return ['color', 'all', 'webkittextfillcolor'].includes(name) || /^(animation|transition)/.test(name);
+  });
+  const unsafeInline = value => value !== undefined && (value === null || typeof value !== 'object' || Array.isArray(value) || changesInk(value));
+  const styleAt = (index, side) => {
+    const pooled = inventory.styles[index];
+    return pooled?.side === side && pooled.value && typeof pooled.value === 'object' && !Array.isArray(pooled.value) ? pooled.value : undefined;
+  };
+  const referenceChain = [], referenceRules = [];
+  const expected = [
+    ['.mat-mdc-menu-item', 'inherit'],
+    ['.mat-mdc-menu-item, .mat-mdc-menu-item:visited, .mat-mdc-menu-item:link', 'var(--mat-menu-item-label-text-color, var(--mat-sys-on-surface))'],
+  ];
+  for (const node of [leaf, owner]) {
+    const computed = styleAt(node.style, 'reference');
+    if (!computed || !/^rgba\(/.test(canonicalStyle(computed).color ?? '') || canonicalStyle(computed).color !== styles.reference.color ||
+        unsafeInline(node.inline) || /(?:^|;)\s*(?:color|all|-webkit-text-fill-color|animation[^:]*|transition[^:]*)\s*:/i.test(node.attributes?.style ?? '')) return;
+    const pooledRules = node.rules.map(i => inventory.rules[i]);
+    if (pooledRules.some(r => r?.side !== 'reference' || !r.value || typeof r.value !== 'object' || Array.isArray(r.value) || typeof r.value.active !== 'boolean')) return;
+    const rules = pooledRules.map(r => r.value), inkRules = rules.filter(r => r.active && changesInk(r.declarations));
+    if (node === leaf) {
+      if (inkRules.length) return;
+    } else {
+      // Both selectors match this non-link button through one class. The token
+      // declaration follows inherit at equal specificity in captured rule order.
+      // This is a deliberately bounded cascade proof, not a CSS cascade engine.
+      if (inkRules.length !== expected.length) return;
+      const locations = inkRules.map(rule => /^sheet:(\d+)\/(\d+)$/.exec(rule.source ?? ''));
+      if (locations.some(location => !location) || locations[0][1] !== locations[1][1] || Number(locations[0][2]) >= Number(locations[1][2])) return;
+      for (const [index, [selector, value]] of expected.entries()) {
+        const rule = inkRules[index];
+        if (rule.selector !== selector || rule.conditions?.length !== 0 || rule.declarations?.color?.value !== value ||
+            rule.declarations.color.important !== false || Object.keys(rule.declarations).some(k => k !== 'color' && changesInk({ [k]: true }))) return;
+      }
+      referenceRules.push(...inkRules);
+    }
+    referenceChain.push({ node: node.key, parent: node.parent, attributes: node.attributes, inline: node.inline, computed, rules });
+  }
+  const pooledRules = astylarTree.rules.map(i => inventory.rules[i]);
+  if (pooledRules.some(r => r?.side !== 'astylar' || !r.value || typeof r.value !== 'object' || Array.isArray(r.value))) return;
+  const candidateRules = pooledRules.map(r => r.value).filter(r => changesInk(r)), candidateChain = [];
+  const ink = 'rgba(29,27,32,1)';
+  let candidateRule;
+  for (const node of [ast, astOwner]) {
+    const normal = styleAt(node.normalStyle, 'astylar'), effective = styleAt(node.interactionStyle, 'astylar');
+    if (!normal || !effective || unsafeInline(node.authored.style)) return;
+    const applicable = candidateRules.filter(rule => typographySelectorCanApply(rule.selector, node.authored));
+    if (node === ast) {
+      if (applicable.length || changesInk(normal) || changesInk(effective)) return;
+    } else {
+      if (applicable.length !== 1 || applicable[0].selector !== '#menu-rename, #menu-delete' || applicable[0].color !== '#1d1b20' ||
+          Object.keys(applicable[0]).some(k => k !== 'color' && changesInk({ [k]: true })) ||
+          [normal, effective].some(stage => canonicalStyle(stage).color !== ink || Object.keys(stage).some(k => k !== 'color' && changesInk({ [k]: true })))) return;
+      candidateRule = applicable[0];
+    }
+    candidateChain.push({ node: node.key, parent: node.parent, authored: node.authored, normal, effective });
+  }
+  if (styles.retained.color !== ink || styles.reference.color === ink) return;
+  return { attribution: 'reviewed-menu-label-ink-input', classification: 'application-plugin-authoring-defect',
+    inputEquivalent: false, currentPseudoStatePaintVerified: false, finalRasterVerified: false,
+    recommendedOwner: 'showcase menu item color-token translation and direct label inheritance',
+    justification: 'The original non-link menu button has ordered equal-specificity inherit then Material color-token declarations, with no competing active ink input; its direct label inherits the computed item color. Candidate labels omit own color in normal/effective inspection and inherit the item literal #1d1b20 into retained core text. This is an unequal authored token/literal substitution, not permitted near-color equivalence or a renderer conversion defect. Token fallback provenance, overlay theme scope, current compositing and final raster remain separate obligations.',
+    reviewEvidence: structuredClone({ sourceFinding: 'fixture-menu-label-ink-substitution', referenceRules, referenceChain,
+      candidateRule, checkedCandidateRules: candidateRules, candidateChain, candidateRetained: styleAt(ast.retainedText.style, 'astylar'),
+      referenceComputed: styles.reference.color, candidateColor: ink, inputEquivalent: false, finalRasterVerified: false }) };
 }
 
 function reviewedMaterialOptionInk(entry, mapping, property, ast, styles, referenceTree, astylarTree, inventory) {
@@ -4374,6 +4453,7 @@ export function collectRetainedTypographyEvidence(cases, inventory, controlTypog
             ...(reviewedTimepickerOptionInk(entry, textMappingById.get(id), property, ast, styles, referenceTree, astylarTree, inventory) ?? {}),
             ...(reviewedMaterialOptionInk(entry, textMappingById.get(id), property, ast, styles, referenceTree, astylarTree, inventory) ?? {}),
             ...(reviewedSnackbarMessageToken(entry, textMappingById.get(id), property, ast, styles, referenceTree, astylarTree, inventory) ?? {}),
+            ...(reviewedMenuLabelInk(entry, textMappingById.get(id), property, ast, styles, referenceTree, astylarTree, inventory) ?? {}),
             ...(reviewedTooltipTextAlignment(entry, textMappingById.get(id), property, ast, styles, referenceTree, astylarTree, inventory) ?? {}),
             ...(!controlLabelToken && !selectValueToken && !weekdayToken && !monthMarkerToken ?
               reviewedOmittedComponentTextMetric(textMappingById.get(id), property, ref, ast, styles, referenceTree, astylarTree, inventory) ?? {} : {}),
@@ -5984,6 +6064,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('menu label ink preserves/,
+      'menu label inherited token versus literal ink inputs', 'The exact non-link item cascade and direct label inheritance are preserved against candidate declaration, normal/effective and retained stages. Competing or missing evidence and forged reports fail; no color equivalence or final paint claim is made.'),
     proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('menu text mapping preserves/,
       'menu ordered item text ownership and connected-overlay versus fixed-popup inputs', 'The complete expanded-trigger and two-item domain maps anonymous Material label spans to exact candidate spans, retaining ripple, backdrop, wrapper, state and all authored/resolved input evidence. Mapping identity never certifies layout or typography; negative and independent replay controls reject ambiguous, incomplete or fabricated correspondence.'),
     proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('tooltip unmatched state inputs preserve/,
