@@ -23,6 +23,60 @@ selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Dialog text color tokens were replaced by fixture literals (2026-09-13)
+
+`reviewed-dialog-text-ink-input` traces the original direct title/content token
+declarations to computed colors, independently of the candidate's declarations,
+normal/effective styles and retained core text. The original selectors are
+`.mat-mdc-dialog-container .mat-mdc-dialog-title` and
+`.mat-mdc-dialog-container .mat-mdc-dialog-content`; their ink uses
+`--mat-dialog-subhead-color` and `--mat-dialog-supporting-text-color`, with
+system-token and literal fallbacks preserved in the evidence. No conclusion
+about which fallback supplied the computed value is inferred from color alone.
+
+Candidate `.dialog-title` authors `#1d1b20`, inherited by its otherwise
+color-undeclared nested span. `.dialog-copy` directly authors `#49454f`.
+Both inspected stages and retained core text preserve those literals. History
+at `bc0e449` (`fix(material): match dialog content geometry`) shows the literal
+declarations being introduced alongside fixed geometry, replacing an earlier
+panel-level `theme.onSurface` inheritance setup. Current authoring is at
+`examples/material-showcase/src/app/astylar.component.ts:790-791`. This is an
+authoring defect, not evidence that equivalent color inputs were converted
+incorrectly by core. Restore the actual component token inputs before evaluating
+remaining renderer color behavior; do not substitute another close-looking hex.
+
+Across all 78 dialog cases, 64 ink differences in 32 open captures receive this
+attribution: 32 title pairs `(29,27,30)` versus `(29,27,32)` and 32 content pairs
+`(73,69,78)` versus `(73,69,79)`. The colors remain unequal. The 64 font-family
+and 32 content-tracking differences remain unresolved. Overlay theme scope,
+font selection, current pseudo-state paint and final raster are not certified.
+
+Three new tests preserve raw snapshots, reject **50 negative input controls**
+(25 applied independently to title and content), and reject **10 report
+mutations** through replay from the independent inventory. Checks require a
+single active, unconditional, non-important reference ink rule; no competing
+inline, reset, transition or text-fill input; the exact candidate literal rule;
+and consistent normal/effective/retained stages. Missing evidence is not waived.
+
+```powershell
+node --test --test-name-pattern='dialog (text|ink)|records source fingerprints' tests/material-parity/input-equivalence-audit.spec.mjs
+```
+
+Focused result: **9/9 pass**, zero failed/skipped/cancelled/todo, **2.312 seconds**,
+terminal exit 0. `npm run parity:harness:check` completed with **418/418 pass**,
+zero failed/skipped/cancelled/todo, **190.787 seconds**, terminal exit 0.
+The full audit replay used the same current-ancestry report, normal-line-box
+report and supplemental root recorded in the following mapping section.
+Coverage remains complete; all **113** source findings are detected.
+Diagnostic `validateMaterialInputAudit(audit, { requireComplete: false })`
+returns `[]`. Strict `validateMaterialInputAudit(audit)` still reports **3,309
+resolved-style attributions, 879 control-texture differences, 49 retained
+mapping/stage gaps and 450 retained typography differences**. The last count
+decreased by the 64 explained color differences; none were made equal or removed.
+The diagnostic process exited 0 while printing these strict failures, not an
+acceptance pass. All ten frozen visual-harness hashes still match. No fixture,
+renderer or visual gate is changed; the overall audit remains incomplete.
+
 ## Dialog title/content mapping preserves unequal flow and modal inputs (2026-09-13)
 
 The `reviewed-dialog-content-text` mapping pairs the reference's direct `h2`

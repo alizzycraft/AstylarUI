@@ -456,6 +456,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
     'reviewed-snackbar-message-token-input': 'application-plugin-authoring-defect',
     'reviewed-menu-label-ink-input': 'application-plugin-authoring-defect',
     'reviewed-menu-label-font-input': 'application-plugin-authoring-defect',
+    'reviewed-dialog-text-ink-input': 'application-plugin-authoring-defect',
     'reviewed-tooltip-text-alignment-input': 'application-plugin-authoring-defect',
     'reviewed-floating-label-font-input': 'application-plugin-authoring-defect' };
   const unresolvedTypography = report.retainedTypography?.differences.filter((entry) =>
@@ -644,6 +645,7 @@ export function renderMaterialInputAuditMarkdown(report) {
     `Menu label ink: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-menu-label-ink-input').length} unequal colors preserve the original ordered inherit/token declarations and direct label inheritance against the candidate item literal. Complete rule and normal/effective/retained evidence is required; typography, token fallback origin, overlay theme scope and final paint are not certified.`,
     `Menu label font: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-menu-label-font-input').length} original direct component-family tokens contrast with candidate label omission and inheritance from the explicit generic control-family rule. The two fallback lists remain unequal; installed-glyph coincidence, font selection, shaping and final raster are not certified.`,
     `Dialog title/content: ${report.retainedTypography.reviewedMappings.filter(m => m.kind === 'reviewed-dialog-content-text').length} owners have exact generated-title linkage, direct-content and action/overlay/focus-trap correspondence. Original heading pseudo-spacer, labelled dialog and content wrappers remain distinct from candidate nested text, fixed flex boxes and separately labelled modal. Mapped text does not establish equivalent structure, typography, semantics, placement or raster.`,
+    `Dialog text ink: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-dialog-text-ink-input').length} original direct title/content color tokens contrast with explicit candidate literals. Nested title inheritance and direct paragraph declarations are separately traced through normal/effective and retained stages. Token fallback origin, overlay theme scope and final raster remain unverified.`,
     `Tooltip text: ${report.retainedTypography.reviewedMappings.filter(m => m.kind === 'reviewed-tooltip-overlay-text').length} labels map only when unique Material trigger/message and shown connected-overlay ownership coexist with the unique candidate trigger-linked flow popup. Original aria-hidden visual ownership and external description linkage remain distinct from the candidate role-tooltip sibling. Candidate-only states, typography, positioning, collision, clipping, visibility and raster are not waived.`,
     `Tooltip alignment: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-tooltip-text-alignment-input').length} original center declarations contrast with complete popup-to-page candidate omissions and retained left. Candidate flex centering is captured as a different input, not an equivalent replacement or proof of glyph alignment. Positioning and blur remain separate investigations.`,
     `Timepicker options: ${report.retainedTypography.reviewedMappings.filter(m => m.kind === 'reviewed-timepicker-option-text').length} labels have complete input-linked half-hour-domain correspondence. Material primary-text/ripple owners are replaced by direct-text div options; active and selected states remain separate raw evidence. This maps text owners, not equivalent wrappers, scrolling, commit behavior, placement or raster. Newly exposed typography differences remain enforced.`,
@@ -1611,7 +1613,7 @@ function validateDialogTextEvidence(report, errors) {
     return match ? [{ kind: match[1], family: 'dialog', profile: match[2], viewport: { id: match[3] }, ...(match[4] ? { state: match[4] } : {}) }] : [];
   });
   const replay = collectRetainedTypographyEvidence(cases, report.elementInventory);
-  const predicate = value => value.kind === 'reviewed-dialog-content-text' || value.mapping?.kind === 'reviewed-dialog-content-text' ||
+  const predicate = value => value.attribution === 'reviewed-dialog-text-ink-input' || value.kind === 'reviewed-dialog-content-text' || value.mapping?.kind === 'reviewed-dialog-content-text' ||
     ['dialog-title-label', 'dialog-copy'].includes(value.element) || /^mat-mdc-dialog-title-\d+$/.test(value.element ?? '') ||
     (value.family === 'dialog' && value.reason === 'own-text nodes without an explicit shared ID require structural mapping');
   for (const list of ['reviewedMappings', 'comparisons', 'differences', 'gaps']) {
@@ -2594,6 +2596,67 @@ function reviewedSnackbarMessageToken(entry, mapping, property, ast, styles, ref
     reviewEvidence: { sourceFinding: 'fixture-snackbar-message-token-substitution', property, referenceRule, referenceChain,
       candidateRule, checkedCandidateRules, candidateChain, candidateRetained: styleAt(ast.retainedText.style, 'astylar'),
       referenceComputed: styles.reference[property], candidateValue: styles.retained[property], inputEquivalent: false, finalRasterVerified: false } };
+}
+
+function reviewedDialogTextInk(entry, mapping, property, ast, styles, referenceTree, astylarTree, inventory) {
+  if (entry.family !== 'dialog' || property !== 'color' || mapping?.kind !== 'reviewed-dialog-content-text' ||
+      mapping.astylarNode !== ast.key || ast.retainedText?.source !== 'core-text-registry' || referenceTree.ruleEvidenceComplete !== true) return;
+  const title = mapping.element === 'dialog-title-label';
+  if (!title && mapping.element !== 'dialog-copy') return;
+  const one = nodes => nodes.length === 1 ? nodes[0] : undefined;
+  const leaf = one(referenceTree.nodes.filter(n => n.key === mapping.referenceNode));
+  const owner = title ? one(astylarTree.nodes.filter(n => n.key === ast.parent)) : ast;
+  const selector = title ? '.dialog-title' : '.dialog-copy', literal = title ? '#1d1b20' : '#49454f';
+  const ink = canonicalStyle({ color: literal }).color;
+  if (!leaf || !owner || owner.authored?.class !== selector.slice(1) || styles.retained.color !== ink || styles.reference.color === ink) return;
+  const changesInk = declarations => Object.keys(declarations ?? {}).some(key => {
+    const name = key.replaceAll('-', '').toLowerCase();
+    return ['color', 'all', 'webkittextfillcolor'].includes(name) || /^(animation|transition)/.test(name);
+  });
+  const unsafeInline = value => value !== undefined && (value === null || typeof value !== 'object' || Array.isArray(value) || changesInk(value));
+  const styleAt = (index, side) => {
+    const pooled = inventory.styles[index];
+    return pooled?.side === side && pooled.value && typeof pooled.value === 'object' && !Array.isArray(pooled.value) ? pooled.value : undefined;
+  };
+  const computed = styleAt(leaf.style, 'reference');
+  if (!computed || !/^rgba\(/.test(styles.reference.color ?? '') || canonicalStyle(computed).color !== styles.reference.color || unsafeInline(leaf.inline) ||
+      /(?:^|;)\s*(?:color|all|-webkit-text-fill-color|animation[^:]*|transition[^:]*)\s*:/i.test(leaf.attributes?.style ?? '')) return;
+  const pooledReference = leaf.rules.map(i => inventory.rules[i]);
+  if (pooledReference.some(r => r?.side !== 'reference' || !r.value || typeof r.value !== 'object' || Array.isArray(r.value) || typeof r.value.active !== 'boolean')) return;
+  const referenceRules = pooledReference.map(r => r.value), inkRules = referenceRules.filter(r => r.active && changesInk(r.declarations));
+  const referenceRule = inkRules[0];
+  const token = title ? 'var(--mat-dialog-subhead-color, var(--mat-sys-on-surface, rgba(0, 0, 0, 0.87)))'
+    : 'var(--mat-dialog-supporting-text-color, var(--mat-sys-on-surface-variant, rgba(0, 0, 0, 0.6)))';
+  if (inkRules.length !== 1 || referenceRule.selector !== `.mat-mdc-dialog-container .mat-mdc-dialog-${title ? 'title' : 'content'}` ||
+      !/^sheet:\d+\/\d+$/.test(referenceRule.source ?? '') || referenceRule.conditions?.length !== 0 ||
+      referenceRule.declarations?.color?.value !== token || referenceRule.declarations.color.important !== false ||
+      Object.keys(referenceRule.declarations).some(k => k !== 'color' && changesInk({ [k]: true }))) return;
+  const pooledRules = astylarTree.rules.map(i => inventory.rules[i]);
+  if (pooledRules.some(r => r?.side !== 'astylar' || !r.value || typeof r.value !== 'object' || Array.isArray(r.value))) return;
+  const candidateRules = pooledRules.map(r => r.value).filter(r => changesInk(r)), candidateChain = [];
+  let candidateRule;
+  for (const node of title ? [ast, owner] : [ast]) {
+    const normal = styleAt(node.normalStyle, 'astylar'), effective = styleAt(node.interactionStyle, 'astylar');
+    if (!normal || !effective || unsafeInline(node.authored.style)) return;
+    const applicable = candidateRules.filter(rule => typographySelectorCanApply(rule.selector, node.authored));
+    if (node !== owner) {
+      if (applicable.length || changesInk(normal) || changesInk(effective)) return;
+    } else {
+      if (applicable.length !== 1 || applicable[0].selector !== selector || applicable[0].color !== literal ||
+          Object.keys(applicable[0]).some(k => k !== 'color' && changesInk({ [k]: true })) ||
+          [normal, effective].some(stage => canonicalStyle(stage).color !== ink || Object.keys(stage).some(k => k !== 'color' && changesInk({ [k]: true })))) return;
+      candidateRule = applicable[0];
+    }
+    candidateChain.push({ node: node.key, parent: node.parent, authored: node.authored, normal, effective });
+  }
+  return { attribution: 'reviewed-dialog-text-ink-input', classification: 'application-plugin-authoring-defect',
+    inputEquivalent: false, currentPseudoStatePaintVerified: false, finalRasterVerified: false,
+    recommendedOwner: 'showcase dialog title/content color-token translation',
+    justification: 'The original title/content owner applies a direct Material color token. Candidate content substitutes a literal; the nested title label inherits its heading literal with no intervening ink declaration. Captured normal/effective and retained stages agree with that different authored input. This is not equal-input color conversion failure or near-color equivalence. Token fallback origin, overlay theme scope, compositing and final raster remain separate investigations.',
+    reviewEvidence: structuredClone({ sourceFinding: 'fixture-dialog-text-ink-substitution', referenceRule, referenceRules,
+      referenceLeaf: { node: leaf.key, parent: leaf.parent, attributes: leaf.attributes, inline: leaf.inline, computed },
+      candidateRule, checkedCandidateRules: candidateRules, candidateChain, candidateRetained: styleAt(ast.retainedText.style, 'astylar'),
+      referenceComputed: styles.reference.color, candidateColor: ink }) };
 }
 
 function reviewedMenuLabelFont(entry, mapping, property, ast, styles, referenceTree, astylarTree, inventory) {
@@ -4633,6 +4696,7 @@ export function collectRetainedTypographyEvidence(cases, inventory, controlTypog
             ...(reviewedSnackbarMessageToken(entry, textMappingById.get(id), property, ast, styles, referenceTree, astylarTree, inventory) ?? {}),
             ...(reviewedMenuLabelInk(entry, textMappingById.get(id), property, ast, styles, referenceTree, astylarTree, inventory) ?? {}),
             ...(reviewedMenuLabelFont(entry, textMappingById.get(id), property, ast, styles, referenceTree, astylarTree, inventory) ?? {}),
+            ...(reviewedDialogTextInk(entry, textMappingById.get(id), property, ast, styles, referenceTree, astylarTree, inventory) ?? {}),
             ...(reviewedTooltipTextAlignment(entry, textMappingById.get(id), property, ast, styles, referenceTree, astylarTree, inventory) ?? {}),
             ...(!controlLabelToken && !selectValueToken && !weekdayToken && !monthMarkerToken ?
               reviewedOmittedComponentTextMetric(textMappingById.get(id), property, ref, ast, styles, referenceTree, astylarTree, inventory) ?? {} : {}),
@@ -6245,6 +6309,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('dialog ink traces/,
+      'dialog text color-token substitution', 'Original direct tokens contrast with literal paragraph color or inherited heading color. Competing or missing declaration/stage evidence and forged claims refuse attribution; font and tracking differences remain unresolved.'),
     proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('dialog text mapping preserves/,
       'dialog title/content owners and unequal overlay/focus composition', 'Generated title linkage, direct content and complete action/overlay/focus-trap paths establish text correspondence only. Original pseudo-spacer and candidate nested heading span remain unequal input evidence; missing, ambiguous and fabricated mappings fail replay.'),
     proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('menu label font preserves/,

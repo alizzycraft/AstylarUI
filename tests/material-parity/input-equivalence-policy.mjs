@@ -589,6 +589,15 @@ export const sourceAuditDefinitions = Object.freeze([
     justification: 'Material authors direct heading text beside a generated 40px inline baseline spacer and a mat-dialog-content owner. Candidate authors a nested span inside a fixed-height flex-end heading plus a fixed-height flex paragraph; later padding tweaks move the text without preserving original constraints. The original labelled dialog and focus-trap/backdrop owners also differ from the candidate modal overlay labelled Open dialog. Preserve text identity and all structure independently, then reproduce original layout/semantics through core APIs before attributing residual defects to core.',
   }),
   Object.freeze({
+    id: 'fixture-dialog-text-ink-substitution',
+    introducedBy: 'bc0e449 fix(material): match dialog content geometry',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`selector: '\.dialog-(?:title|copy)'[^\n]*color: '#(?:1d1b20|49454f)'`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase dialog title/content color-token translation',
+    justification: 'The geometry retuning commit also introduced literal title #1d1b20 and supporting-text #49454f colors. Material applies direct dialog subhead/supporting-text color tokens, computing different colors in captured overlays. Candidate core normal/effective and retained stages preserve the literals, with nested title inheritance introduced later. Keep the unequal inputs explicit; matching or nearly matching light-theme pixels cannot establish token, dark-theme or core color-conversion parity.',
+  }),
+  Object.freeze({
     id: 'fixture-dialog-fixed-content-boxes',
     introducedBy: 'bc0e449 fix(material): match dialog content geometry',
     file: 'examples/material-showcase/src/app/astylar.component.ts',

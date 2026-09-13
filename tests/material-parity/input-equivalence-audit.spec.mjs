@@ -4660,6 +4660,100 @@ test('dialog text replay rejects fabricated correspondence and independent stage
   }
 });
 
+function dialogInkReport() {
+  const raw = dialogTextReport(), { reference: r, astylar: a } = raw.results[0].inputTrees;
+  for (const [key, owner, selector, value, color] of [
+    ['title', 'heading', '.dialog-title', 'var(--mat-dialog-subhead-color, var(--mat-sys-on-surface, rgba(0, 0, 0, 0.87)))', '#1d1b20'],
+    ['copy', 'copy', '.dialog-copy', 'var(--mat-dialog-supporting-text-color, var(--mat-sys-on-surface-variant, rgba(0, 0, 0, 0.6)))', '#49454f'],
+  ]) {
+    const index = r.rules.length;
+    r.rules.push({ source: `sheet:0/${index}`, selector: `.mat-mdc-dialog-container .mat-mdc-dialog-${key === 'title' ? 'title' : 'content'}`, active: true, conditions: [], declarations: { color: { value, important: false } } });
+    r.nodes.find(n => n.key === key).rules = [index];
+    a.rules.push({ selector, color });
+    for (const stage of ['resolvedStyle', 'normalResolvedStyle', 'interactionResolvedStyle']) a.nodes.find(n => n.key === owner)[stage].color = color;
+  }
+  return raw;
+}
+
+test('dialog ink traces direct tokens versus literal content and inherited heading color', () => {
+  const raw = dialogInkReport(), before = structuredClone(raw), cases = raw.results.map(e => ({ ...e, kind: 'static' }));
+  const t = collectRetainedTypographyEvidence(cases, collectFullTreeInventory(cases));
+  const ink = t.differences.filter(d => d.attribution === 'reviewed-dialog-text-ink-input');
+  assert.equal(ink.length, 2);
+  for (const d of ink) {
+    assert.equal(d.inputEquivalent, false); assert.equal(d.currentPseudoStatePaintVerified, false); assert.equal(d.finalRasterVerified, false);
+    assert.equal(d.classification, 'application-plugin-authoring-defect');
+    assert.equal(d.reviewEvidence.referenceRule.declarations.color.important, false);
+    assert.equal(d.reviewEvidence.candidateRetained.color, d.element === 'dialog-copy' ? '#49454f' : '#1d1b20');
+    assert.equal(d.reviewEvidence.candidateChain.length, d.element === 'dialog-copy' ? 1 : 2);
+  }
+  assert.equal(ink[0].reviewEvidence.candidateChain[0].normal.color, undefined);
+  assert.equal(t.differences.filter(d => d.property === 'fontFamily' && d.attribution === 'unresolved').length, 2);
+  assert.ok(t.differences.some(d => d.property === 'letterSpacing' && d.attribution === 'unresolved'));
+  assert.deepEqual(raw, before);
+});
+
+test('dialog ink refuses missing competing and contradictory declarations or retained stages', () => {
+  const controls = [
+    (r, a, ref, leaf, owner, rule, astRule) => { delete r.errors; },
+    (r, a, ref, leaf, owner, rule, astRule) => { rule.active = false; },
+    (r, a, ref, leaf, owner, rule, astRule) => { rule.declarations.color.important = true; },
+    (r, a, ref, leaf, owner, rule, astRule) => { rule.conditions = ['@layer base']; },
+    (r, a, ref, leaf, owner, rule, astRule) => { rule.source = 'sheet:0/1/2'; },
+    (r, a, ref, leaf, owner, rule, astRule) => { rule.selector = 'h2'; },
+    (r, a, ref, leaf, owner, rule, astRule) => { rule.declarations.color.value = 'red'; },
+    (r, a, ref, leaf, owner, rule, astRule) => { rule.declarations.all = { value: 'unset', important: false }; },
+    (r, a, ref, leaf, owner, rule, astRule) => { ref.rules = []; },
+    (r, a, ref, leaf, owner, rule, astRule) => { ref.inline = { color: 'inherit' }; },
+    (r, a, ref, leaf, owner, rule, astRule) => { ref.attributes.style = '-webkit-text-fill-color: red'; },
+    (r, a, ref, leaf, owner, rule, astRule) => { r.rules.push({ ...rule, declarations: { color: { value: 'red', important: false } } }); ref.rules.push(r.rules.length - 1); },
+    (r, a, ref, leaf, owner, rule, astRule) => { astRule.color = 'red'; },
+    (r, a, ref, leaf, owner, rule, astRule) => { astRule.selector = '#other'; },
+    (r, a, ref, leaf, owner, rule, astRule) => { astRule.transition = 'color 1s'; },
+    (r, a, ref, leaf, owner, rule, astRule) => { a.rules.push({ selector: '#' + leaf.authored.id, color: 'inherit' }); },
+    (r, a, ref, leaf, owner, rule, astRule) => { leaf.authored.style = { color: 'inherit' }; },
+    (r, a, ref, leaf, owner, rule, astRule) => { owner.authored.style = { all: 'unset' }; },
+    (r, a, ref, leaf, owner, rule, astRule) => { delete owner.normalResolvedStyle; },
+    (r, a, ref, leaf, owner, rule, astRule) => { delete owner.interactionResolvedStyle; },
+    (r, a, ref, leaf, owner, rule, astRule) => { owner.normalResolvedStyle.color = 'red'; },
+    (r, a, ref, leaf, owner, rule, astRule) => { owner.interactionResolvedStyle.color = 'red'; },
+    (r, a, ref, leaf, owner, rule, astRule) => { owner.normalResolvedStyle.WebkitTextFillColor = 'red'; },
+    (r, a, ref, leaf, owner, rule, astRule) => { leaf.retainedText.source = 'private-texture'; },
+    (r, a, ref, leaf, owner, rule, astRule) => { leaf.retainedText.style.color = 'red'; },
+  ];
+  for (const key of ['title', 'copy']) for (const [index, mutate] of controls.entries()) {
+    const raw = dialogInkReport(), { reference: r, astylar: a } = raw.results[0].inputTrees;
+    const ref = r.nodes.find(n => n.key === key), leaf = a.nodes.find(n => n.key === key), owner = a.nodes.find(n => n.key === (key === 'title' ? 'heading' : 'copy'));
+    mutate(r, a, ref, leaf, owner, r.rules[ref.rules[0]], a.rules.find(rule => rule.selector === '.dialog-' + key));
+    const cases = raw.results.map(e => ({ ...e, kind: 'static' })), t = collectRetainedTypographyEvidence(cases, collectFullTreeInventory(cases));
+    assert.ok(!t.differences.some(d => d.element === leaf.authored.id && d.attribution === 'reviewed-dialog-text-ink-input'), `${key} control ${index}`);
+  }
+});
+
+test('dialog ink evidence replay rejects forged claims without mutating the inventory', () => {
+  const original = buildMaterialInputAudit(dialogInkReport());
+  assert.equal(original.retainedTypography.differences.filter(d => d.attribution === 'reviewed-dialog-text-ink-input').length, 2);
+  assert.ok(original.sourceFindings.find(f => f.id === 'fixture-dialog-text-ink-substitution')?.detected);
+  assert.ok(!validateMaterialInputAudit(original, { requireComplete: false }).some(e => e.includes('dialog text')));
+  for (const mutate of [
+    d => { d.reviewEvidence.referenceRule.declarations.color.value = 'red'; },
+    d => { d.reviewEvidence.referenceLeaf.computed.color = 'red'; },
+    d => { d.reviewEvidence.candidateChain.pop(); },
+    d => { d.reviewEvidence.candidateRule.color = 'red'; },
+    d => { d.reviewEvidence.checkedCandidateRules = []; },
+    d => { d.reviewEvidence.candidateRetained.color = 'red'; },
+    d => { d.inputEquivalent = true; },
+    d => { d.finalRasterVerified = true; },
+    d => { d.values.retained = 'red'; },
+    d => { d.case = 'static:menu@light/desktop'; d.family = 'menu'; d.element = 'other'; },
+  ]) {
+    const report = structuredClone(original), inventory = structuredClone(report.elementInventory);
+    mutate(report.retainedTypography.differences.find(d => d.attribution === 'reviewed-dialog-text-ink-input'));
+    assert.deepEqual(report.elementInventory, inventory);
+    assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('dialog text')));
+  }
+});
+
 function menuTextReport() {
   const raw = retainedTypographyReport(), e = raw.results[0], { reference: r, astylar: a } = e.inputTrees;
   e.family = 'menu';
