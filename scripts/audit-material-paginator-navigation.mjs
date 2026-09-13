@@ -8,6 +8,10 @@ import { captureBrowserInputTree } from '../tests/material-parity/input-tree-evi
 import { propertyGroups } from '../tests/material-parity/input-equivalence-policy.mjs';
 import { openSupplementalCapture, parseSupplementalCaptureArguments } from '../tests/material-parity/supplemental-capture-evidence.mjs';
 
+// Visibility is needed to distinguish a shown tooltip class from visible text.
+// Keep it in this diagnostic capture, not in the frozen comparison harness.
+export const paginatorNavigationStyleProperties = Object.freeze([...Object.values(propertyGroups).flat(), 'visibility']);
+
 // Each side receives this identical sequence of real input. Expected page
 // indices are assertions, never injected state or a replacement for observations.
 export function paginatorNavigationPlan() {
@@ -53,7 +57,7 @@ export function comparePaginatorNavigation(entry) {
 async function run() {
   const options = parseSupplementalCaptureArguments(process.argv.slice(2));
   const browser = await chromium.launch({ channel: 'chrome', headless: true });
-  const properties = Object.values(propertyGroups).flat(), results = [];
+  const properties = paginatorNavigationStyleProperties, results = [];
   const viewport = { width: 1440, height: 1000 }, profiles = ['light', 'dark'];
   const plan = paginatorNavigationPlan();
   try {

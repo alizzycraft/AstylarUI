@@ -7,13 +7,13 @@ import path from 'node:path';
 import test from 'node:test';
 import { openSupplementalCapture, parseSupplementalCaptureArguments, validateSupplementalCapture } from './supplemental-capture-evidence.mjs';
 import { collectSupplementalBehavior, collectSupplementalOverlays, collectSupplementalSlider,
-  collectFullTreeInventory, validateCalendarCloseInventory, validateTooltipStateInventory } from './input-equivalence-audit.mjs';
+  collectFullTreeInventory, validateCalendarCloseInventory, validateTooltipStateInventory, validatePaginatorNavigationInventory } from './input-equivalence-audit.mjs';
 import { validateCalendarCloseCapture, collectCalendarCloseEvidence } from './calendar-close-evidence.mjs';
 import { validateTooltipStateCapture, collectTooltipStateEvidence } from './tooltip-state-evidence.mjs';
 import { propertyGroups } from './input-equivalence-policy.mjs';
 import { fixture, calendarFixture, tooltipStateFixture } from './supplemental-capture-fixtures.mjs';
-import { validatePaginatorNavigationCapture } from './paginator-navigation-evidence.mjs';
-import { paginatorNavigationPlan, comparePaginatorNavigation } from '../../scripts/audit-material-paginator-navigation.mjs';
+import { validatePaginatorNavigationCapture, collectPaginatorNavigationEvidence } from './paginator-navigation-evidence.mjs';
+import { paginatorNavigationPlan, paginatorNavigationStyleProperties, comparePaginatorNavigation } from '../../scripts/audit-material-paginator-navigation.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const script = 'scripts/audit-material-picker-commits.mjs';
@@ -28,7 +28,7 @@ function paginatorFixture() {
   const f = fixture(), raw = f.raw, runtime = structuredClone(raw.results[0].reference.runtime);
   Object.assign(raw, { schemaVersion: 1, viewport: { width: 1440, height: 1000 }, profiles: ['light', 'dark'],
     plan: paginatorNavigationPlan(), settleDelayMs: 250 });
-  raw.capture.styleProperties = Object.values(propertyGroups).flat();
+  raw.capture.styleProperties = [...paginatorNavigationStyleProperties];
   raw.capture.sources = ['scripts/audit-material-paginator-navigation.mjs', ...sourceFiles.slice(1)].map(file => f.put(file, file));
   raw.results = raw.profiles.flatMap(profile => [1, 2].flatMap(deviceScaleFactor => {
     const histories = { reference: [], astylar: [] };
@@ -52,6 +52,7 @@ function paginatorFixture() {
         const visibleTooltips = ref && ['previous-hover', 'previous-press'].includes(step.state) ? ['Previous page'] : [];
         if (visibleTooltips.length) tree.nodes.push({ key: 'wrapper', attributes: { class: 'mat-mdc-tooltip-show' } },
           { key: 'tooltip', parent: 'wrapper', attributes: { class: 'mat-mdc-tooltip-surface' }, ownText: 'Previous page' });
+        if (ref) { tree.styles = [{ visibility: 'visible' }]; for (const node of tree.nodes) node.style = 0; }
         if (!ref) {
           Object.assign(tree, { resolvedStyleEvidenceVersion: 2, resolvedStyleSource: 'core-style-inspection', resolvedStyleRevision: 2 });
           for (const node of tree.nodes) Object.assign(node, { normalResolvedStyle: {}, resolvedStyle: {}, interactionResolvedStyle: {} });
@@ -113,6 +114,10 @@ test('paginator navigation rejects malformed, incomplete and forged observations
     f => { f.raw.results[0].checks.nativeDisabledInputs = true; },
     f => { f.raw.results[1].reference.screenshot = f.raw.results[0].reference.screenshot; },
     f => { f.raw.results[0].reference.screenshot.sha256 = '0'.repeat(64); },
+    f => { f.raw.capture.styleProperties = f.raw.capture.styleProperties.filter(p => p !== 'visibility'); },
+    f => { const sample = f.raw.results[0].reference;
+      const tree = JSON.parse(f.options.readBytes(path.resolve(f.options.root, sample.inputTree.file)));
+      delete tree.styles[0].visibility; sample.inputTree = f.put(sample.inputTree.file, tree); },
   ];
   const treeMutations = [
     tree => { tree.nodes.push(structuredClone(tree.nodes[0])); },
@@ -135,6 +140,91 @@ test('paginator navigation rejects malformed, incomplete and forged observations
   }
 });
 
+
+function collectedPaginatorFixture() {
+  const f = paginatorFixture();
+  for (const entry of f.raw.results) for (const side of ['reference', 'astylar']) {
+    const item = entry[side], tree = JSON.parse(f.options.readBytes(path.resolve(f.options.root, item.inputTree.file)));
+    tree.styles = [{ color: '#123456', visibility: 'visible' }]; tree.rules = [];
+    for (const node of tree.nodes) {
+      if (side === 'reference') Object.assign(node, { style: 0, rules: [], pseudoElements: [] });
+      else Object.assign(node, { resolvedStyle: { color: '#123456' }, normalResolvedStyle: { color: '#123456' },
+        interactionResolvedStyle: { color: '#123456' } });
+    }
+    item.inputTree = f.put(item.inputTree.file, tree);
+  }
+  f.put(f.options.reportFile, f.raw);
+  const supplemental = collectPaginatorNavigationEvidence(f.options.root, { ...f.options, reportPath: f.options.reportFile });
+  assert.deepEqual(supplemental.errors, []);
+  const cases = supplemental.cases.map(entry => ({ ...entry, inputTrees: Object.fromEntries(['reference', 'astylar'].map(side =>
+    [side, JSON.parse(f.options.readBytes(path.resolve(f.options.root, entry.inputTrees[side].file)))])) }));
+  return { ...f, report: { generatedFrom: { captureProvenance: f.options.expectedProvenance }, supplementalPaginatorNavigation: supplemental,
+    elementInventory: collectFullTreeInventory(cases, { root: f.options.root }) } };
+}
+
+test('paginator collector retains all navigation trees and honest failures without claiming equivalence', () => {
+  const f = collectedPaginatorFixture(), e = f.report.supplementalPaginatorNavigation, before = JSON.stringify(f.report), errors = [];
+  assert.equal(e.complete, true); assert.equal(e.cases.length, 104); assert.equal(e.reviews.length, 104);
+  assert.equal(e.mismatches.length, 56); assert.equal(e.mismatches.filter(m => m.property === 'nativeDisabledInputs').length, 48);
+  assert.equal(e.mismatches.filter(m => m.property === 'tooltipPresence').length, 8);
+  assert.deepEqual(e.missing, []); assert.equal(f.report.elementInventory.cases.length, 208);
+  assert.equal(new Set(e.cases.map(c => `${c.profile}/${c.viewport.id}/${c.state}`)).size, 104);
+  for (const c of e.cases) {
+    assert.equal(c.inputEquivalent, false); assert.equal(c.finalRasterVerified, false);
+    for (const side of ['reference', 'astylar']) assert.deepEqual(c.inputTrees[side], c[side].inputTree);
+  }
+  validatePaginatorNavigationInventory(f.report, errors, f.options);
+  assert.deepEqual(errors, []); assert.equal(JSON.stringify(f.report), before);
+});
+
+test('paginator inventory rejects dropped boundaries altered inputs and fabricated acceptance', () => {
+  const mutations = [
+    f => { delete f.report.supplementalPaginatorNavigation; },
+    f => { f.report.supplementalPaginatorNavigation.cases.pop(); },
+    f => { f.report.supplementalPaginatorNavigation.mismatches = []; },
+    f => { f.report.supplementalPaginatorNavigation.reviews[0].inputEquivalent = true; },
+    f => { f.report.supplementalPaginatorNavigation.cases[0].reference.events.push({ type: 'fake' }); },
+    f => { f.report.supplementalPaginatorNavigation.cases[0].expectedPageIndex = 9; },
+    f => { f.report.generatedFrom.captureProvenance.browser = 'other'; },
+    f => { delete f.report.elementInventory; },
+    f => { f.report.elementInventory.cases.pop(); },
+    f => { f.report.elementInventory.cases.push(structuredClone(f.report.elementInventory.cases[0])); },
+    f => { f.report.elementInventory.cases[0].case = 'static:paginator@light/desktop'; },
+    f => { f.report.elementInventory.cases[1].resolvedStyleRevision = 99; },
+    f => { f.report.elementInventory.styles[0].value.color = 'fake'; },
+    f => { f.report.elementInventory.variants[0].nodes[0].parent = 'other'; },
+    f => { f.report.elementInventory.variants[0].side = 'astylar'; },
+    f => { f.report.elementInventory.variants.find(v => v.side === 'astylar').nodes[0].authored.textContent = 'Other'; },
+    f => { f.report.elementInventory.variants[0].nodes[0].pseudoElements.push({ type: 'after', style: 0, rules: [] }); },
+    f => { f.report.elementInventory.variants.find(v => v.side === 'astylar').nodes[0].retainedText = { source: 'invented', style: 0 }; },
+    f => { f.report.elementInventory.variants.find(v => v.side === 'astylar').nodes[0].paintedControlText = { source: 'invented', style: 0 }; },
+  ];
+  for (const [i, mutate] of mutations.entries()) {
+    const f = collectedPaginatorFixture(); mutate(f); const errors = [];
+    validatePaginatorNavigationInventory(f.report, errors, f.options);
+    assert.ok(errors.length, `control ${i}`);
+  }
+});
+
+test('paginator collector fails closed for incomplete unbound missing and escaped captures', () => {
+  for (const mutate of [f => { f.raw.results.pop(); }, f => { delete f.raw.capture; }]) {
+    const f = paginatorFixture(); mutate(f); f.put(f.options.reportFile, f.raw);
+    const result = collectPaginatorNavigationEvidence(f.options.root, { ...f.options, reportPath: f.options.reportFile });
+    assert.equal(result.complete, false); assert.deepEqual(result.cases, []);
+    assert.equal(result.missing.length, 104); assert.ok(result.errors.length);
+  }
+  const f = paginatorFixture();
+  const missing = collectPaginatorNavigationEvidence(f.options.root, { reportPath: f.options.reportFile, readBytes: () => {
+    throw Object.assign(new Error('missing'), { code: 'ENOENT' }); } });
+  assert.equal(missing.binding.status, 'missing'); assert.equal(missing.complete, false); assert.equal(missing.cases.length, 0);
+  const errors = [];
+  validatePaginatorNavigationInventory({ generatedFrom: {}, supplementalPaginatorNavigation: missing,
+    elementInventory: collectFullTreeInventory([]) }, errors, { ...f.options, readBytes: () => {
+      throw Object.assign(new Error('missing'), { code: 'ENOENT' }); } });
+  assert.ok(errors.includes('paginator navigation action coverage is incomplete or unbound'));
+  const escaped = collectPaginatorNavigationEvidence(f.options.root, { ...f.options, reportPath: '../outside/latest-report.json' });
+  assert.equal(escaped.binding.status, 'invalid'); assert.equal(escaped.cases.length, 0);
+});
 
 test('tooltip state evidence verifies all real action boundaries and preserves benchmark versus ordinary mismatches', () => {
   const f = tooltipStateFixture(), before = JSON.stringify(f.raw), result = validateTooltipStateCapture(f.raw, f.options);

@@ -2,12 +2,62 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { readFileSync, realpathSync } from 'node:fs';
 import path from 'node:path';
-import { propertyGroups } from './input-equivalence-policy.mjs';
 import { validateSupplementalCapture } from './supplemental-capture-evidence.mjs';
-import { paginatorNavigationPlan, comparePaginatorNavigation } from '../../scripts/audit-material-paginator-navigation.mjs';
+import { paginatorNavigationPlan, paginatorNavigationStyleProperties, comparePaginatorNavigation } from '../../scripts/audit-material-paginator-navigation.mjs';
 
 const hasClass = (node, token) => String(node?.attributes?.class ?? '').split(/\s+/).includes(token);
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+
+export function collectPaginatorNavigationEvidence(root, options = {}) {
+  const absolute = path.resolve(root, options.reportPath ?? path.join(options.supplementalRoot ??
+    'artifacts/material-parity', 'paginator-navigation-audit-v3', 'latest-report.json'));
+  const file = path.relative(root, absolute).replaceAll('\\', '/');
+  const required = ['light', 'dark'].flatMap(profile => [1, 2].flatMap(dpr =>
+    paginatorNavigationPlan().map(step => `${profile}/${dpr}/${step.state}`)));
+  const missing = { file, binding: { status: 'missing', errors: [] }, complete: false,
+    cases: [], reviews: [], mismatches: [], missing: required, errors: [] };
+  try {
+    const boundary = path.resolve(root, 'artifacts/material-parity');
+    const inside = (base, target) => {
+      const relative = path.relative(base, target);
+      return relative && relative !== '..' && !relative.startsWith(`..${path.sep}`) && !path.isAbsolute(relative);
+    };
+    assert.ok(inside(boundary, absolute), 'Paginator navigation evidence must remain inside Material artifacts');
+    if (!options.readBytes) assert.ok(inside(realpathSync(boundary), realpathSync(absolute)), 'Paginator report symlink escapes artifacts');
+    const bytes = (options.readBytes ?? readFileSync)(absolute), raw = JSON.parse(bytes);
+    const validation = validatePaginatorNavigationCapture(raw, { ...options, root, reportFile: file });
+    const cases = validation.complete ? raw.results.map(entry => ({
+      kind: 'supplemental', family: 'paginator', profile: entry.profile,
+      viewport: { ...raw.viewport, deviceScaleFactor: entry.deviceScaleFactor, id: `paginator-navigation-desktop-dpr${entry.deviceScaleFactor}` },
+      state: `paginator-navigation-${entry.state}`, action: entry.action, target: entry.target,
+      expectedPageIndex: entry.expectedPageIndex, reference: entry.reference, astylar: entry.astylar,
+      inputTrees: { reference: entry.reference.inputTree, astylar: entry.astylar.inputTree },
+      inputEquivalent: false, finalRasterVerified: false,
+    })) : [];
+    const mismatches = validation.observations.flatMap(review => Object.entries(review.checks)
+      .filter(([, passed]) => !passed).map(([property]) => {
+        const authoring = property === 'nativeDisabledInputs' || property === 'tooltipPresence';
+        return { profile: review.profile, deviceScaleFactor: review.deviceScaleFactor, state: review.state,
+          action: review.action, property, reference: review.reference, astylar: review.astylar,
+          classification: authoring ? 'application-plugin-authoring-defect' : 'suspected-core-renderer-defect',
+          recommendedOwner: authoring ? 'showcase paginator composition through core public APIs' : 'core interaction and semantic coordination, after checking identical control inputs',
+          justification: property === 'nativeDisabledInputs'
+            ? 'Material disabled-interactive navigation retains a native enabled button with aria-disabled and tabIndex:-1; the candidate authors native disabled. Range guards passing does not make these inputs equivalent.'
+            : property === 'tooltipPresence'
+              ? 'The observed reference tooltip content has no equivalent candidate content in this action state. The exact authored tree is retained; navigation success cannot waive omitted tooltip composition.'
+              : property === 'focusNavigation'
+                ? 'Document focus differs. Native disabled inputs are recorded separately and may differ too; do not attribute this observation solely to core. The independent enabled-button proof confirms a core held-focus synchronization defect, but this application capture does not itself expose logical focus.'
+                : 'The observed range, availability or state assertion fails and needs first-divergence investigation; no renderer-only cause is inferred from this comparison.',
+          inputEquivalent: false, finalRasterVerified: false };
+      }));
+    return { file, sha256: hash(bytes), browser: raw.browser, capture: raw.capture,
+      binding: validation.binding ?? { status: 'invalid', errors: [] }, complete: validation.complete,
+      cases, reviews: validation.observations, mismatches, missing: validation.complete ? [] : required, errors: validation.errors };
+  } catch (error) {
+    if (error.code === 'ENOENT') return missing;
+    return { ...missing, binding: { status: 'invalid', errors: [{ error: String(error.message) }] }, errors: [String(error.message)] };
+  }
+}
 
 // Completeness here means trustworthy captured action evidence, not successful
 // behavior or input equivalence. Honest failed checks remain observations.
@@ -24,7 +74,7 @@ export function validatePaginatorNavigationCapture(raw, options) {
     const keys = raw.profiles.flatMap(profile => [1, 2].flatMap(dpr => plan.map(step => `${profile}/${dpr}/${step.state}`)));
     assert.deepEqual(raw.results?.map(e => `${e.profile}/${e.deviceScaleFactor}/${e.state}`), keys, 'Incomplete or reordered navigation matrix');
     binding = validateSupplementalCapture(raw, { ...options, script: 'scripts/audit-material-paginator-navigation.mjs',
-      styleProperties: Object.values(propertyGroups).flat() });
+      styleProperties: paginatorNavigationStyleProperties });
     assert.equal(binding.status, 'checkpoint-bound', JSON.stringify(binding.errors));
     const directory = path.dirname(path.resolve(options.root, options.reportFile));
     const read = item => {
@@ -43,6 +93,8 @@ export function validatePaginatorNavigationCapture(raw, options) {
       for (const side of ['reference', 'astylar']) {
         const ref = side === 'reference', sample = entry[side], tree = JSON.parse(read(sample.inputTree));
         assert.equal(tree.schemaVersion, 1);
+        if (ref) for (const node of tree.nodes)
+          assert.ok(['visible', 'hidden', 'collapse'].includes(tree.styles?.[node.style]?.visibility), 'Missing reference visibility input');
         assert.equal(new Set(tree.nodes.map(n => n.key)).size, tree.nodes.length, 'Ambiguous node keys');
         const one = (predicate, message) => {
           const found = tree.nodes.filter(predicate); assert.equal(found.length, 1, message); return found[0];

@@ -1362,7 +1362,17 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   const report = parityReport({}, {});
   const audit = buildMaterialInputAudit(report);
   assert.equal(audit.coverage.visualParityGreen, true);
-  assert.equal(audit.sourceFingerprints.length, 80);
+  assert.equal(audit.sourceFingerprints.length, 87);
+  for (const file of ['src/lib/astylar-interaction-runtime.ts', 'src/lib/astylar-semantic-bridge.ts',
+    'scripts/audit-button-pointer-focus.mjs', 'examples/material-showcase/audit/button-pointer-focus.mjs',
+    'tests/material-parity/button-pointer-focus-evidence.spec.mjs', 'scripts/audit-material-paginator-navigation.mjs',
+    'tests/material-parity/paginator-navigation-evidence.mjs'])
+    assert.equal(audit.sourceFingerprints.filter(entry => entry.file === file).length, 1);
+  const heldFocus = audit.sourceFindings.find(entry => entry.id === 'core-enabled-held-focus-delays-native-mirror');
+  assert.equal(heldFocus?.detected, true); assert.equal(heldFocus?.classification, 'confirmed-core-renderer-defect');
+  assert.ok(audit.focusedProofs.some(entry => entry.file === heldFocus.focusedProof && entry.line > 0 && entry.status !== 'missing'));
+  const disabledInteractive = audit.sourceFindings.find(entry => entry.id === 'fixture-paginator-native-disabled-replaces-disabled-interactive');
+  assert.equal(disabledInteractive?.detected, true); assert.equal(disabledInteractive?.classification, 'application-plugin-authoring-defect');
   assert.equal(audit.sourceFingerprints.filter(entry => entry.file === 'tests/material-parity/grid-template-input-evidence.mjs').length, 1);
   for (const file of ['src/app/services/dom/elements/grid.service.ts', 'src/app/services/dom/elements/grid-track-sizing.ts',
     'examples/material-showcase/node_modules/astylarui/dist/lib/app/services/dom/elements/grid.service.js',
@@ -3092,6 +3102,63 @@ test('paginator tooltip omission rejects ambiguous owners changed state missing 
     const cases = [{ ...e, kind: 'interaction' }], t = collectRetainedTypographyEvidence(cases, collectFullTreeInventory(cases));
     assert.ok(t.gaps.some(g => g.attribution === 'unresolved'), `control ${index} remains explicit`);
     assert.ok(!t.gaps.some(g => g.attribution === 'reviewed-paginator-tooltip-omission'), `control ${index}`);
+  }
+});
+
+function supplementalPaginatorTooltipCase(state = 'previous-hover', profile = 'light', dpr = 1) {
+  const e = paginatorTooltipReport().interactions[0], { reference: r, astylar: a } = e.inputTrees;
+  Object.assign(e, { kind: 'supplemental', profile, state: `paginator-navigation-${state}`,
+    viewport: { id: `paginator-navigation-desktop-dpr${dpr}`, width: 1440, height: 1000, deviceScaleFactor: dpr } });
+  const previous = !['next-once', 'next-step-1'].includes(state);
+  if (previous) {
+    r.nodes.find(n => n.key === 'tooltip-text').ownText = 'Previous page';
+    const trigger = r.nodes.find(n => n.key === 'previous');
+    Object.assign(trigger.attributes, { class: 'mat-mdc-paginator-navigation-previous mat-mdc-tooltip-trigger', mattooltipposition: 'above' });
+    delete trigger.attributes['aria-disabled'];
+    a.nodes.find(n => n.key === 'previous').authored.disabled = false;
+  }
+  return e;
+}
+
+test('paginator supplemental tooltip omissions retain exact Previous and Next trigger evidence in all observed cohorts', () => {
+  for (const profile of ['light', 'dark']) for (const dpr of [1, 2])
+    for (const state of ['next-once', 'previous-hover', 'previous-press', 'next-step-1', 'previous-from-last', 'previous-space-held']) {
+      const e = supplementalPaginatorTooltipCase(state, profile, dpr), before = structuredClone(e), cases = [e];
+      const evidence = collectRetainedTypographyEvidence(cases, collectFullTreeInventory(cases));
+      const gap = evidence.gaps.find(g => g.attribution === 'reviewed-paginator-tooltip-omission');
+      assert.ok(gap, `${profile}/${dpr}/${state}`);
+      const previous = !['next-once', 'next-step-1'].includes(state);
+      assert.equal(gap.reviewEvidence.referenceOverlayPath[0].ownText, previous ? 'Previous page' : 'Next page');
+      assert.equal(gap.reviewEvidence.referenceTriggerPath[0].key, previous ? 'previous' : 'next');
+      assert.equal(gap.reviewEvidence.candidatePath[0].key, previous ? 'previous' : 'next');
+      assert.equal(gap.classification, 'application-plugin-authoring-defect');
+      assert.equal(gap.inputEquivalent, false); assert.equal(gap.finalRasterVerified, false);
+      assert.equal(evidence.comparisons.length, 3); assert.deepEqual(e, before);
+    }
+});
+
+test('paginator supplemental tooltip omissions do not waive unobserved states or changed trigger and overlay inputs', () => {
+  const controls = [
+    e => { e.state = 'paginator-navigation-initial'; },
+    e => { e.state = 'paginator-navigation-previous-release'; },
+    e => { e.profile = 'other'; },
+    e => { e.viewport.id = 'paginator-navigation-desktop-dpr3'; },
+    e => { e.kind = 'interaction'; },
+    e => { e.inputTrees.reference.nodes.find(n => n.key === 'tooltip-text').ownText = 'Next page'; },
+    e => { e.inputTrees.reference.nodes.find(n => n.key === 'previous').attributes.mattooltipposition = 'below'; },
+    e => { e.inputTrees.reference.nodes.find(n => n.key === 'previous').attributes['aria-disabled'] = 'true'; },
+    e => { e.inputTrees.reference.nodes.find(n => n.key === 'previous').attributes.disabled = ''; },
+    e => { e.inputTrees.reference.nodes.find(n => n.key === 'tooltip').attributes.class = 'mat-mdc-tooltip-hide'; },
+    e => { e.inputTrees.astylar.nodes.find(n => n.key === 'previous').authored.disabled = true; },
+    e => { e.inputTrees.astylar.nodes.find(n => n.key === 'previous').authored.title = 'Previous page'; },
+    e => { delete e.inputTrees.astylar.nodes.find(n => n.key === 'previous').normalResolvedStyle; },
+    e => { e.inputTrees.astylar.nodes.push({ key: 'popup', authored: { id: 'popup', type: 'div', role: 'tooltip', textContent: 'Previous page' } }); },
+  ];
+  for (const [index, mutate] of controls.entries()) {
+    const e = supplementalPaginatorTooltipCase(); mutate(e); const cases = [e];
+    const evidence = collectRetainedTypographyEvidence(cases, collectFullTreeInventory(cases));
+    assert.ok(!evidence.gaps.some(g => g.attribution === 'reviewed-paginator-tooltip-omission'), `control ${index}`);
+    assert.ok(evidence.gaps.some(g => g.attribution === 'unresolved'), `control ${index} remains explicit`);
   }
 });
 

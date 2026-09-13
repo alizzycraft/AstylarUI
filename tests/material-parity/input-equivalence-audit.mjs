@@ -7,6 +7,7 @@ import { loadSupplementalLineBoxReport } from './supplemental-line-box-report.mj
 import { validateSupplementalCapture } from './supplemental-capture-evidence.mjs';
 import { collectCalendarCloseEvidence } from './calendar-close-evidence.mjs';
 import { collectTooltipStateEvidence } from './tooltip-state-evidence.mjs';
+import { collectPaginatorNavigationEvidence } from './paginator-navigation-evidence.mjs';
 import { collectNonGridTemplateInputs, classifyNonGridTemplateInput, nonGridTemplateAttribution, gridTemplateProperties } from './grid-template-input-evidence.mjs';
 import { selectorCanApply, borderColorProperties, borderInitialAttribution, collectBorderInitialInputs, classifyBorderInitialInput,
   buttonBorderResetAttribution, collectButtonBorderResetInputs, classifyButtonBorderResetInput,
@@ -92,15 +93,18 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const supplementalSlider = collectSupplementalSlider(root, supplementalOptions);
   const supplementalCalendarClose = collectCalendarCloseEvidence(root, supplementalOptions);
   const supplementalTooltipState = collectTooltipStateEvidence(root, supplementalOptions);
+  const supplementalPaginatorNavigation = collectPaginatorNavigationEvidence(root, supplementalOptions);
   const elementInventory = collectFullTreeInventory([...cases, ...supplementalBehavior.cases, ...supplementalOverlays.cases,
-    ...supplementalSlider.cases, ...supplementalCalendarClose.cases, ...supplementalTooltipState.cases], { root });
+    ...supplementalSlider.cases, ...supplementalCalendarClose.cases, ...supplementalTooltipState.cases,
+    ...supplementalPaginatorNavigation.cases], { root });
   const visibleOverflowInputs = collectVisibleOverflowInputs(elementInventory);
   const borderInitialInputs = collectBorderInitialInputs(elementInventory, canonicalStyle);
   const buttonBorderResetInputs = collectButtonBorderResetInputs(elementInventory, canonicalStyle);
   const outlineTokenInputs = collectOutlineTokenInputs(elementInventory, canonicalStyle);
   const chipOutlineInputs = collectChipOutlineInputs(elementInventory, canonicalStyle);
   const nonGridTemplateInputs = collectNonGridTemplateInputs(elementInventory);
-  const typographyCases = [...cases, ...supplementalCalendarClose.cases, ...supplementalTooltipState.cases];
+  const typographyCases = [...cases, ...supplementalCalendarClose.cases, ...supplementalTooltipState.cases,
+    ...supplementalPaginatorNavigation.cases];
   const rawControlTypography = collectControlTypographyEvidence(typographyCases, elementInventory);
   const buttonTypographyScalarInputs = collectButtonTypographyScalarInputs(elementInventory, rawControlTypography);
   const retainedTypography = collectRetainedTypographyEvidence(typographyCases, elementInventory, rawControlTypography);
@@ -150,6 +154,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
     supplementalSlider,
     supplementalCalendarClose,
     supplementalTooltipState,
+    supplementalPaginatorNavigation,
     normalLineBoxes,
     controlLineBoxes,
     supplementalLineBoxes,
@@ -161,6 +166,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
         supplementalSlider.missing.length === 0 && supplementalSlider.errors.length === 0 && supplementalSlider.mismatches.length === 0 &&
         supplementalCalendarClose.complete && supplementalCalendarClose.mismatches.length === 0 &&
         supplementalTooltipState.complete && supplementalTooltipState.mismatches.length === 0 &&
+        supplementalPaginatorNavigation.complete && supplementalPaginatorNavigation.mismatches.length === 0 &&
         normalLineBoxes.missing.length === 0 && normalLineBoxes.errors.length === 0 &&
         controlLineBoxes.missing.length === 0 && controlLineBoxes.errors.length === 0 &&
         supplementalLineBoxes.missing.length === 0 && supplementalLineBoxes.errors.length === 0 &&
@@ -597,6 +603,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
   validateStepperTextInputs(report, errors);
   validateCalendarCloseInventory(report, errors, { root, requireComplete });
   validateTooltipStateInventory(report, errors, { root, requireComplete });
+  validatePaginatorNavigationInventory(report, errors, { root, requireComplete });
   if (requireComplete && report.supplementalBehavior.missing.length > 0) errors.push(`${report.supplementalBehavior.missing.length} supplemental behavior cases are missing`);
   if (report.supplementalBehavior.errors.length > 0) errors.push(`${report.supplementalBehavior.errors.length} supplemental behavior collection errors`);
   if (requireComplete && report.supplementalOverlays.missing.length > 0) errors.push(`${report.supplementalOverlays.missing.length} supplemental overlay cases are missing`);
@@ -744,6 +751,42 @@ export function validateTooltipStateInventory(report, errors, { root = process.c
     errors.push('tooltip state action-boundary inventory differs from the verified source trees');
 }
 
+export function validatePaginatorNavigationInventory(report, errors, { root = process.cwd(), requireComplete = true, readBytes } = {}) {
+  const recorded = report.supplementalPaginatorNavigation;
+  if (!recorded || typeof recorded.file !== 'string') {
+    errors.push('missing paginator navigation supplemental evidence'); return;
+  }
+  const expected = collectPaginatorNavigationEvidence(root, { reportPath: recorded.file,
+    expectedProvenance: report.generatedFrom?.captureProvenance, readBytes });
+  if (JSON.stringify(recorded) !== JSON.stringify(expected)) errors.push('paginator navigation summary does not replay from bound source evidence');
+  if (expected.errors.length) errors.push('paginator navigation supplemental collection errors');
+  if (requireComplete && !expected.complete) errors.push('paginator navigation action coverage is incomplete or unbound');
+  if (!report.elementInventory?.cases || !report.elementInventory?.variants || !report.elementInventory?.styles || !report.elementInventory?.rules) {
+    errors.push('missing paginator navigation action-boundary inventory'); return;
+  }
+  const cases = readBytes ? expected.cases.map(entry => ({ ...entry, inputTrees: Object.fromEntries(
+    ['reference', 'astylar'].map(side => [side, JSON.parse(readBytes(path.resolve(root, entry.inputTrees[side].file)))])) })) : expected.cases;
+  const fresh = collectFullTreeInventory(cases, { root });
+  const snapshot = inventory => {
+    const style = index => index === undefined ? undefined : inventory.styles[index];
+    const rules = indices => indices?.map(index => inventory.rules[index]);
+    return inventory.cases.filter(item => item.case.includes('/paginator-navigation-')).map(item => {
+      const variant = inventory.variants[item.variant];
+      return { case: item.case, side: item.side, resolvedStyleRevision: item.resolvedStyleRevision,
+        variant: variant && { ...variant, rules: rules(variant.rules), nodes: variant.nodes.map(node => ({
+          ...node, style: style(node.style), normalStyle: style(node.normalStyle), interactionStyle: style(node.interactionStyle),
+          ...(node.rules ? { rules: rules(node.rules) } : {}),
+          ...(node.pseudoElements ? { pseudoElements: node.pseudoElements.map(pseudo => ({
+            ...pseudo, style: style(pseudo.style), rules: rules(pseudo.rules) })) } : {}),
+          ...(node.retainedText ? { retainedText: { ...node.retainedText, style: style(node.retainedText.style) } } : {}),
+          ...(node.paintedControlText ? { paintedControlText: { ...node.paintedControlText, style: style(node.paintedControlText.style) } } : {}),
+        })) } };
+    }).sort((a, b) => `${a.case}/${a.side}`.localeCompare(`${b.case}/${b.side}`));
+  };
+  if (JSON.stringify(snapshot(report.elementInventory)) !== JSON.stringify(snapshot(fresh)))
+    errors.push('paginator navigation action-boundary inventory differs from the verified source trees');
+}
+
 export function renderMaterialInputAuditMarkdown(report) {
   const lines = [
     '# Material showcase input-equivalence audit',
@@ -848,6 +891,7 @@ export function renderMaterialInputAuditMarkdown(report) {
     '',
     `Supplemental calendar close behavior: ${report.supplementalCalendarClose.reviews.length}/4 view/DPR sequences and ${report.supplementalCalendarClose.cases.length}/20 paired action boundaries captured; ${report.supplementalCalendarClose.missing.length} sequences missing. Binding=${report.supplementalCalendarClose.binding.status}. Each verified sequence retains the reference close control's focus reveal, blur clipping, Enter dismissal and opener-focus restoration, alongside the candidate's missing authored control. All boundary trees are included below; this is unequal authoring, not equal-input renderer failure or visual acceptance.`,
     `Supplemental tooltip state: ${report.supplementalTooltipState.cases.length}/30 paired boundaries across benchmark-open, benchmark-hover and ordinary cohorts at DPR 1 and 2. Binding=${report.supplementalTooltipState.binding.status}; ${report.supplementalTooltipState.mismatches.length} presence mismatches remain. Every tree, authored/resolved style and retained/control text owner is included, including reference-only and candidate-only popup states. State correspondence is not glyph, placement, visibility or semantic equivalence.`,
+    `Supplemental paginator navigation: ${report.supplementalPaginatorNavigation.cases.length}/104 paired boundaries cover first/last guards, every page, Previous/Next, held pointer, Space and departure in light/dark at DPR 1/2. Binding=${report.supplementalPaginatorNavigation.binding.status}; ${report.supplementalPaginatorNavigation.mismatches.length} individual input/focus/tooltip checks remain unequal. Full trees and typography enter the consolidated inventory; correct range transitions do not establish native-disabled, tooltip, focus or raster equivalence.`,
     `Unmatched tooltip text owners: ${report.retainedTypography.gaps.filter(gap => gap.attribution === 'reviewed-tooltip-unmatched-state-input').length} state-input discrepancies retain their complete captured trigger, overlay/anchor, style-stage and absent-counterpart evidence. They are unequal authoring, not missing renderer text or accepted typography/placement.`,
     '',
     `Calendar controls remaining after reference dismissal: ${report.controlTypography.gaps.filter(gap => gap.attribution === 'reviewed-calendar-close-state-divergence').length} current texture owners are attributed to the verified unequal close state. Their full candidate input trees remain present; no reference typography is invented for the closed popup, and other unreviewed typography differences remain unresolved.`,
@@ -2197,7 +2241,8 @@ function reviewedTooltipTextMappings(reference, candidate) {
 
 function reviewedPaginatorTooltipGap(key, inventory) {
   const match = parseReviewedCase(key, 'paginator');
-  if (!match || match[1] !== 'interaction' || !['hover', 'held', 'activate'].includes(match[4]) || inventory.errors.some(e => e.case === key)) return;
+  const navigation = match?.[1] === 'supplemental';
+  if (!match || (!navigation && (match[1] !== 'interaction' || !['hover', 'held', 'activate'].includes(match[4]))) || inventory.errors.some(e => e.case === key)) return;
   const one = nodes => nodes.length === 1 ? nodes[0] : undefined;
   const rm = one(inventory.cases.filter(c => c.case === key && c.side === 'reference'));
   const am = one(inventory.cases.filter(c => c.case === key && c.side === 'astylar'));
@@ -2213,7 +2258,8 @@ function reviewedPaginatorTooltipGap(key, inventory) {
   const cls = (n, name) => String((n?.attributes ?? n?.authored)?.class ?? '').split(/\s+/).includes(name);
   const children = (tree, n) => tree.nodes.filter(c => c.parent === n?.key);
   const leaf = one(ref.nodes.filter(n => cls(n, 'mat-mdc-tooltip-surface')));
-  if (!leaf || leaf.type !== 'div' || leaf.attributes.id || !cls(leaf, 'mdc-tooltip__surface') || leaf.ownText?.trim() !== 'Next page' || children(ref, leaf).length) return;
+  const message = navigation && !['paginator-navigation-next-once', 'paginator-navigation-next-step-1'].includes(match[4]) ? 'Previous page' : 'Next page';
+  if (!leaf || leaf.type !== 'div' || leaf.attributes.id || !cls(leaf, 'mdc-tooltip__surface') || leaf.ownText?.trim() !== message || children(ref, leaf).length) return;
   const referenceOverlayPath = [leaf];
   for (const [type, className] of [['div', 'mat-mdc-tooltip'], ['mat-tooltip-component'], ['div', 'mat-mdc-tooltip-panel'],
     ['div', 'cdk-overlay-connected-position-bounding-box'], ['div', 'cdk-overlay-container']]) {
@@ -2227,11 +2273,12 @@ function reviewedPaginatorTooltipGap(key, inventory) {
       ref.nodes.filter(n => n.type === 'mat-tooltip-component').length !== 1) return;
   const next = one(ref.nodes.filter(n => cls(n, 'mat-mdc-paginator-navigation-next')));
   const previous = one(ref.nodes.filter(n => cls(n, 'mat-mdc-paginator-navigation-previous')));
-  if (!next || !previous || next.type !== 'button' || previous.type !== 'button' || next.attributes['aria-label'] !== leaf.ownText.trim() ||
-      previous.attributes['aria-label'] !== 'Previous page' || next.attributes.mattooltipposition !== 'above' ||
-      !cls(next, 'mat-mdc-tooltip-trigger') || cls(next, 'mat-mdc-tooltip-disabled') || next.attributes['aria-disabled'] === 'true' ||
-      Object.hasOwn(next.attributes, 'disabled') || previous.parent !== next.parent) return;
-  const referenceTriggerPath = [next];
+  const trigger = message === 'Previous page' ? previous : next;
+  if (!next || !previous || next.type !== 'button' || previous.type !== 'button' || next.attributes['aria-label'] !== 'Next page' ||
+      previous.attributes['aria-label'] !== 'Previous page' || trigger.attributes.mattooltipposition !== 'above' ||
+      !cls(trigger, 'mat-mdc-tooltip-trigger') || cls(trigger, 'mat-mdc-tooltip-disabled') || trigger.attributes['aria-disabled'] === 'true' ||
+      Object.hasOwn(trigger.attributes, 'disabled') || previous.parent !== next.parent) return;
+  const referenceTriggerPath = [trigger];
   for (const [type, className, id] of [['div', 'mat-mdc-paginator-range-actions'], ['div', 'mat-mdc-paginator-container'],
     ['div', 'mat-mdc-paginator-outer-container'], ['mat-paginator', 'mat-mdc-paginator', 'paginator-primary'],
     ['section', 'demo', 'paginator-root'], ['main', 'frame']]) {
@@ -2245,10 +2292,10 @@ function reviewedPaginatorTooltipGap(key, inventory) {
   if (!candidateNext || !candidatePrevious || candidateNext.authored.type !== 'button' || candidatePrevious.authored.type !== 'button' ||
       candidateNext.authored.class !== 'paginator-button' || candidatePrevious.authored.class !== 'paginator-button' ||
       candidateNext.authored.ariaLabel !== 'Next page' || candidatePrevious.authored.ariaLabel !== 'Previous page' ||
-      candidateNext.authored.value !== '›' || candidatePrevious.authored.value !== '‹' || candidateNext.authored.disabled !== false ||
+      candidateNext.authored.value !== '›' || candidatePrevious.authored.value !== '‹' || candidateNext.authored.disabled !== (next.attributes['aria-disabled'] === 'true') ||
       candidatePrevious.authored.disabled !== (previous.attributes['aria-disabled'] === 'true') || candidatePrevious.parent !== candidateNext.parent ||
       children(ast, candidateNext).length || children(ast, candidatePrevious).length) return;
-  const candidatePath = [candidateNext];
+  const candidatePath = [message === 'Previous page' ? candidatePrevious : candidateNext];
   for (const [type, id, className] of [['div', 'paginator-range-actions', 'paginator-range-actions'], ['div', 'paginator-container', 'paginator-container'],
     ['div', 'paginator-primary', 'paginator'], ['section', 'paginator-root'], ['main', 'page']]) {
     const parent = one(ast.nodes.filter(n => n.key === candidatePath.at(-1).parent));
@@ -2261,13 +2308,13 @@ function reviewedPaginatorTooltipGap(key, inventory) {
   if (ast.nodes.some(n => n.key === 'root' ? n.parent !== null || Object.keys(n.authored ?? {}).length !== 0 :
     !allowedIds.has(n.authored?.id) || !['main', 'p', 'h1', 'section', 'div', 'span', 'button'].includes(n.authored.type) ||
     ['ariaDescribedby', 'ariaHaspopup', 'ariaControls', 'title', 'data'].some(p => n.authored[p] !== undefined) || n.authored.role === 'tooltip' ||
-    n.authored.textContent?.trim() === 'Next page')) return;
+    ['Previous page', 'Next page'].includes(n.authored.textContent?.trim()))) return;
   const textMappings = reviewedTemplateTextMappings('paginator', ref, ast).filter(m => ['paginator-size', 'paginator-page-size', 'paginator-range'].includes(m.element));
   if (textMappings.length !== 3 || new Set(textMappings.map(m => m.element)).size !== 3 || textMappings.some(m =>
     ref.nodes.find(n => n.key === m.referenceNode)?.ownText?.trim() !== ast.nodes.find(n => n.key === m.astylarNode)?.authored.textContent)) return;
   const style = (index, side) => inventory.styles[index]?.side === side ? inventory.styles[index].value : undefined;
   const object = value => value && typeof value === 'object' && !Array.isArray(value);
-  const referenceNodes = [...referenceOverlayPath, ...referenceTriggerPath, previous];
+  const referenceNodes = [...referenceOverlayPath, ...referenceTriggerPath, previous, next];
   if (referenceNodes.some(n => !object(style(n.style, 'reference')) || !Array.isArray(n.rules) || n.rules.some(i => inventory.rules[i]?.side !== 'reference')) ||
       ast.nodes.filter(n => n.key !== 'root').some(n => [n.style, n.normalStyle, n.interactionStyle].some(i => !object(style(i, 'astylar')))) ||
       referenceOverlayPath.some(n => { const s = style(n.style, 'reference'); return s.display === 'none' || s.visibility !== 'visible' || s.opacity !== '1'; })) return;
@@ -2278,7 +2325,7 @@ function reviewedPaginatorTooltipGap(key, inventory) {
     attribution: 'reviewed-paginator-tooltip-omission', classification: 'application-plugin-authoring-defect',
     inputEquivalent: false, finalRasterVerified: false,
     recommendedOwner: 'showcase paginator tooltip authoring through shared core overlay and interaction APIs',
-    justification: 'Material supplies the enabled Next page navigation button with an above-positioned tooltip using the same internationalized message as its label. The captured shown connected-overlay path contains that text; the candidate complete paginator tree contains only navigation buttons and ordinary page labels, with no tooltip content or binding. This is missing authored functionality, not a core text-stage failure or equivalent hidden popup. Original placement, state and style evidence remain intact; no absent-side typography, semantics, dismissal or raster equivalence is invented.',
+    justification: `Material supplies the enabled ${message} navigation button with an above-positioned tooltip using the same internationalized message as its label. The captured shown connected-overlay path contains that text; the candidate complete paginator tree contains only navigation buttons and ordinary page labels, with no tooltip content or binding. This is missing authored functionality, not a core text-stage failure or equivalent hidden popup. Original placement, state and style evidence remain intact; no absent-side typography, semantics, dismissal or raster equivalence is invented.`,
     reviewEvidence: structuredClone({ sourceFinding: 'fixture-paginator-tooltip-omitted', source: ast.resolvedStyleSource, revision: am.resolvedStyleRevision,
       referenceOverlayPath: referenceOverlayPath.map(n => snapshot(n, 'reference')), referenceTriggerPath: referenceTriggerPath.map(n => snapshot(n, 'reference')),
       referencePrevious: snapshot(previous, 'reference'), candidatePath: candidatePath.map(n => snapshot(n, 'astylar')),
@@ -7665,6 +7712,13 @@ function auditEnvironment(root) {
 function sourceFingerprints(root) {
   const files = [
     'src/lib/astylar.ts',
+    'src/lib/astylar-interaction-runtime.ts',
+    'src/lib/astylar-semantic-bridge.ts',
+    'scripts/audit-button-pointer-focus.mjs',
+    'examples/material-showcase/audit/button-pointer-focus.mjs',
+    'tests/material-parity/button-pointer-focus-evidence.spec.mjs',
+    'scripts/audit-material-paginator-navigation.mjs',
+    'tests/material-parity/paginator-navigation-evidence.mjs',
     'src/lib/astylar-surface.ts',
     'src/app/services/dom/style.service.ts',
     'src/app/services/dom/style-defaults.service.ts',
@@ -7751,6 +7805,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'examples/material-showcase/audit/button-pointer-focus.mjs', /const children = /,
+      'confirmed enabled-button held semantic-focus lag', 'The public-package real-browser proof has 40 paired boundaries across DPR 1/2 and two repetitions. All eight held-pointer samples have correct logical focus but native canvas focus; 32 keyboard, hover and release controls pass. No Material/plugin or application update participates. Preserve the independent disabled-interactive paginator input mismatch; no general raster or selected-text/cancellation acceptance follows.'),
     proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('button host typography scalars/,
       'button-host font and tracking input ownership', 'Host snapshots are joined to their unique direct Material label only when all current style stages and complete captured token/reset/omission declarations agree with the independently reproduced control-text cause. The bridge retains unequal values, all reviewed cases and the original cause; downstream core font-list mutation, other properties and final raster are not waived.'),
     proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('non-grid template omission requires/,
@@ -7897,6 +7953,7 @@ function implementationPlan() {
     { priority: 3.4, rootCause: 'Grid none is parsed as a zero-length explicit track', action: 'Implement the CSS no-explicit-track meaning at the shared grid template parser and implicit track-sizing boundary. Keep the original none declarations in both reference and candidate. The confirmed one-child columns/rows failures at120/240px have matching parent boxes and style inputs but zero assigned CSS item extent; omitted,1fr and literal controls pass. Extend auto-placement, multiple implicit rows/columns, grid-auto sizing, intrinsic contributions, gaps, empty grids and updates before claiming general support. Do not normalize all captured none/omission pairs or insert explicit fixture tracks merely to suppress the failure.' },
     { priority: 3.5, rootCause: 'Reference CSS expressions bypass direct-style support', action: 'The existing core loaded-document-style path now has a bounded proof: original grid-list calc declarations resolve correct width/height/left at 280px and 480px without fixture arithmetic, while the independent inner used-height defect remains. Verify full Material cascade/state/responsive integration before adopting this path; scope general core corrections for any further unsupported expression or constraint. Do not copy measured pixels or implement per-family arithmetic; literal controls are not acceptance of the original expressions.' },
     { priority: 4, rootCause: 'Generic overlay composition is duplicated', action: 'Audit existing core primitives before adding APIs for connected anchors, viewport collision, clipping, focus scope, and dismissal. Migrate popup families with equivalent state inputs; retain different datepicker and timepicker focus behavior. Restore tooltip connected-overlay inputs instead of its fixed-size flow anchor. The 18 paired tooltip text owners now retain original placement and description structure; eight benchmark open states have only candidate text and are not paired rendering evidence. Remove the tooltip benchmark-only forced-open handler, preserve real hover/focus/dismissal semantics and verify description ownership outside the captured frame/overlay trees. Typography and current raster still require independent review.' },
+    { priority: 4.05, rootCause: 'Enabled pointer focus is withheld from the native semantic mirror during the entire pointer transaction', action: 'Correct the core pointer-default/semantic synchronization boundary. The isolated public two-button proof has correct logical focus and hit ownership but canvas native focus in all eight held-pointer samples; keyboard and release controls pass. Add cancellation, drag-out/release, pointer capture, modality and directional-text-selection controls before changing the rule. Do not add paginator-only focus calls or remove text-selection safeguards wholesale. Separately restore the reference disabled-interactive native/ARIA/tab-order contract and both navigation tooltips; range guards passing is not input equivalence.' },
     { priority: 4.5, rootCause: 'Border initial values, contextual colors and paint alpha diverge at separate core stages', action: 'Reconcile the documented transparent border default with CSS currentColor semantics, resolve contextual colors using the element computed color, and preserve color alpha through border material creation and state updates. The two opaque controls pass while omission, currentColor, transparent and half-alpha each fail for two colors. Keep these equal-input proofs, extend inheritance, opacity composition and hover/update behavior, and compare actual paired border rasters before claiming full paint parity. Then restore the missing Material button border-reset semantics, preserving currentColor rather than sampling literal colors; the captured width-only rules are a separate authoring defect. Do not inject explicit showcase colors, replace borders with sibling meshes or waive zero-width input differences. Attribute captured Material cases only after verifying each authored/resolved witness.' },
     { priority: 4.6, rootCause: 'Material outline and divider token inputs are replaced by a fixed palette literal', action: 'Restore the original outlined-button and toggle border token/side semantics through the supported shared CSS/theme input path. The current reference resolves light-dark(#7b757f, #958e99) to RGB 123,117,127 in all four named profiles; candidate #79747e is a different input. Do not infer browser color scheme from the profile name, alter the reference dark theme, or substitute a sampled literal. Preserve serialized var-containing shorthand declarations when expanded CSSOM longhands are empty. Keep the supplemental at-rest token observations separate from the guarded per-case declaration proofs, which cover static and interaction cases. Verify every remaining state before judging core parsing/paint under equal inputs.' },
     { priority: 4.7, rootCause: 'Chip generated-outline ownership is replaced by a host border', action: 'Restore the original chip host, action-button and generated-outline inputs, including independent token and focus/selection rules. A 1px absolute pseudo outline and a 1px border-box host border do not impose the same content constraints, even when outer geometry agrees. Preserve the source-backed per-case owner and state evidence; do not substitute pseudo color into a host comparison, subtract padding, shift labels or calibrate widths. If generated-box construction fails under the same CSS, isolate that core capability before translating the original structure. Typography, graphics, hit targets and final raster still need independent proof.' },
@@ -7965,6 +8022,8 @@ function caseKey(entry) {
 function parseReviewedCase(key, family) {
   const match = new RegExp(`^(static|interaction|supplemental):${family}@([^/]+)\\/([^/]+)(?:\\/(.+))?$`).exec(key);
   if (!match || match[1] !== 'supplemental') return match;
+  if (family === 'paginator' && ['light', 'dark'].includes(match[2]) && /^paginator-navigation-desktop-dpr[12]$/.test(match[3]) &&
+      /^paginator-navigation-(?:next-once|previous-hover|previous-press|next-step-1|previous-from-last|previous-space-held)$/.test(match[4] ?? '')) return match;
   if (family === 'tooltip' && match[2] === 'light' && /^tooltip-state-desktop-dpr[12]$/.test(match[3]) &&
       /^tooltip-state-(?:benchmark-open|benchmark-hover|ordinary)-(?:initial|hover|press|release|leave)$/.test(match[4] ?? '')) return match;
   // Extend existing calendar owner proofs only to these explicit, bound action
