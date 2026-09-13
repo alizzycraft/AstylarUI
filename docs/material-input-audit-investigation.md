@@ -3,6 +3,108 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Paginator navigation integration: full boundary inventory and explicit visibility
+
+The consolidated audit now includes all **104** paginator navigation boundaries
+from the supplemental capture, not just its summary. Their **208 input trees**
+retain authored inputs, normal/effective core styles, rule chains, generated
+content, retained/control text and exact action associations. The inventory
+validator independently reloads the checkpoint-bound source artifacts and
+replays the expanded pooled styles/rules/trees. Missing, duplicated, reassigned
+or edited boundaries cannot count as complete coverage; neither a passing page
+range nor a claimed summary can conceal an input difference.
+
+Integration exposed a real evidence gap in V2: the reference tree capture had
+not requested CSS `visibility`. Its tooltip-show class and screenshots are not
+a substitute for that missing computed input. The exact tooltip-omission proof
+therefore left all 24 additional tooltip mappings unresolved, rather than
+assuming `visibility:visible`. The diagnostic producer now explicitly requests
+that property, and its validator rejects both a capture manifest without it
+and reference nodes missing its actual value. No production renderer, fixture,
+shared capture collector, or frozen full-matrix harness changed.
+
+The new V3 capture is separate; V1/V2 artifacts and the V2 machine report remain
+historical evidence. V3 is now the selected paginator supplement:
+
+`artifacts/material-parity/supplemental-current-ancestry-audit/paginator-navigation-audit-v3/latest-report.json`
+
+SHA-256: `01933188110a390a56a6066215f03144a6c5ca6ae7ef1c0b0293626f8711339d`.
+Its complete 104-observation machine summary, including all tree/PNG references,
+is `docs/material-paginator-navigation-audit-v3.json`. Independent regeneration
+matches every checked-in value. The producer again exits **1 for honest behavior
+differences**, while checkpoint/runtime/artifact and inventory replay errors are
+zero. Chrome 152.0.7977.76, 1440x1000 viewport, light/dark, DPR 1/2, real pointer
+and Space input, font readiness, two frames and 250ms settlement are unchanged.
+
+V3 reproduces **48 native-disabled, 44 focus-navigation, and 24 tooltip-presence
+differences**. The 24 tooltip omissions now retain the exact Next/Previous
+trigger, complete shown overlay path, visibility/opacity inputs and complete
+candidate tree. Attribution is limited to the six observed action states in
+the four profile/DPR cohorts, with negative tests for changed triggers, hidden
+overlays, missing styles, unsupported states and candidate tooltip content.
+The supplemental typography pass retains **520 comparisons** and 24 explicitly
+unequal tooltip omissions; no candidate tooltip typography is fabricated.
+
+The source scan and implementation plan now distinguish the paginator's native
+disabled/ARIA/tab-order authoring from the independently isolated core held-focus
+defect. Forty focus mismatches coincide with unequal disabled inputs; the four
+enabled held samples must not be used to label all 44 as one confirmed cause.
+The minimal two-button proof remains the evidence for the core synchronization
+boundary. A stale `s.pageIndex` source-pattern name initially failed the source
+scan; it was corrected to the actual `state.pageIndex` without changing the
+source under audit. The initial full harness run reported 538/550 passing and
+12 failures (317.2249852 seconds); these failures were not waived.
+
+Focused verification passes **13/13** (8.8938401 seconds, terminal exit 0):
+
+```powershell
+node --test --test-name-pattern='paginator|does not infer an authoring defect' tests/material-parity/input-equivalence-audit.spec.mjs tests/material-parity/supplemental-capture-evidence.spec.mjs
+node scripts/audit-material-paginator-navigation.mjs --base-url=http://127.0.0.1:4431 --checkpoint=artifacts/material-parity/current-ancestry-audit/checkpoint --output=artifacts/material-parity/supplemental-current-ancestry-audit/paginator-navigation-audit-v3
+```
+
+Repeating the capture requires a new output directory; never overwrite V3.
+The read-only full replay uses `buildMaterialInputAudit` followed by
+`validateMaterialInputAudit`, with these exact selected paths:
+
+- Parity: `artifacts/material-parity/current-ancestry-audit/latest-report.json`.
+- Normal line boxes: `artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json`.
+- Control line boxes: `artifacts/material-parity/control-line-box-current-ancestry-audit-v3/latest-report.json`.
+- Supplemental line boxes: `artifacts/material-parity/supplemental-line-box-current-ancestry-audit/latest-report.json`.
+- Supplemental root: `artifacts/material-parity/supplemental-current-ancestry-audit`.
+
+It now includes **4,956 case sides**, **127 detected source findings**, **87 source
+fingerprints**, and all 24 reviewed supplemental paginator tooltip omissions.
+Its only strict rejection is **3,117 resolved-style differences still lacking
+root-cause attribution**; there is no paginator inventory, provenance or text
+mapping rejection. The 8,143 unique mapped style signatures and 380,520
+occurrences remain unchanged. The top unresolved property groups include
+fontSize (219), color (194), caretColor (186), and height (176). These are review
+groups, not counts of confirmed renderer defects; for example, wrapper-level
+font-size snapshots must not be conflated with their child label's font inputs.
+An additional read-only light/desktop sample of chips confirms the distinction:
+the reference `chip-0` host is 16px and has no own text, while its nested Material
+text label is 14px; candidate `.chip` authors 14px on its flex host. This is not
+proof that the visible label is two pixels too small. Full authoring, inheritance,
+generated-box and state ownership must be traced before classifying those host
+signatures or altering typography. The observation does not waive the difference.
+
+The second full harness run passed 549/550, with only the old 80-fingerprint
+count assertion failing against the expanded 87-file inventory (504.8698007
+seconds, terminal exit 1). The test now requires all seven added files by name
+and verifies the distinct core-focus and disabled-authoring findings; its focused
+run passes 1/1 (1.7603888 seconds). The final `npm run parity:harness:check`
+rerun passes **550/550**, terminal exit 0, **373.2240375 seconds**, with no
+failures, skips or cancellations. All ten frozen capture-harness hashes remain
+unchanged and `git diff --check` passes. The audit integration and diagnostic
+capture correction are committed and pushed as **7aa9e8a**; findings and the V3
+machine summary are a separate increment.
+
+The larger input-equivalence audit remains incomplete. Completing the remaining
+attributions and relevant state coverage, generating the final human/machine
+audit package and running the final unfiltered enforced parity matrix remain
+required. This increment does not certify all paginator variants, raster parity,
+or a renderer fix.
+
 ## Enabled-button held focus: isolated core semantic synchronization defect
 
 The paginator's enabled `previous-press` uncertainty is now reduced to a
