@@ -467,6 +467,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
     'reviewed-dialog-text-metric-omission': 'application-plugin-authoring-defect',
     'reviewed-tooltip-text-alignment-input': 'application-plugin-authoring-defect',
     'reviewed-floating-label-font-input': 'application-plugin-authoring-defect',
+    'reviewed-hidden-dense-label-input': 'application-plugin-authoring-defect',
     'reviewed-unfloated-error-label-font-input': 'application-plugin-authoring-defect' };
   const unresolvedTypography = report.retainedTypography?.differences.filter((entry) =>
     !reviewedTypographyKinds[entry.attribution] || entry.classification !== reviewedTypographyKinds[entry.attribution] || !entry.reviewEvidence) ?? [];
@@ -634,6 +635,7 @@ export function renderMaterialInputAuditMarkdown(report) {
     '',
     `Field-label tracking substitutions: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-field-label-tracking-substitution').length} records preserve the reference filled-label tracking token and wrapper styles alongside the explicit candidate base/empty-state rules. The 0.4px or 0.65px candidate input is not accepted as equivalent to 0.496px reference tracking, including when the reference wrapper is scaled. Current glyph paint and the separate core transform defects remain independently unproven or investigated.`,
     `Field-label colors: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-field-label-color-substitution').length} records preserve reference base/focus/hover/disabled tokens and candidate base/empty/picker-shell declarations in source order. State attributions retain the actual filled-field ancestor path and v2 inspection revision; the earlier disabled literal must remain overridden by the later base rule. Attribution requires the selected literal to agree across normal, effective and retained stages. Stale ancestry or unexplained state divergence is not waived, and unequal color inputs are not a core color-conversion or raster-equivalence claim.`,
+    `Hidden dense labels: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-hidden-dense-label-input').length} records retain hidden reference computed fonts, complete density display-token inheritance and the candidate unmatched compact-label hide rule. These are unequal visibility/structure inputs, not visible 16px-versus-12px glyph comparisons or proof of current raster parity.`,
     `Sidenav colors: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-sidenav-color-substitution').length} records preserve distinct reference drawer/content token inheritance and candidate literal declarations. These are classified unequal authored inputs, not RGB tolerances or evidence of equivalent paint. Competing declarations, incomplete chains and disagreement between candidate stages prevent attribution.`,
     `Sort typography: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-sort-typography-substitution').length} records preserve complete reference frame inheritance against candidate fixed trigger font size or contrast ink. Missing leaf declarations remain missing in the evidence; parent declarations and retained values are recorded independently rather than synthesized as equivalent resolved input.`,
     `Expansion header/body size: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-expansion-font-token-omission').length} records preserve the distinct reference header/body size tokens and complete candidate text-to-page omission chains. The candidate page scale is not accepted as the component font input; the compact-only override and separate positional corrections remain independent authoring differences.`,
@@ -4662,8 +4664,73 @@ function validateFieldLabelTracking(report, errors) {
   })) errors.push('field-label tracking attributions do not replay from captured wrapper tokens and explicit candidate rules');
 }
 
+function reviewedDenseLabelVisibility(entry, ref, wrapper, ast, candidateChain, referenceTree, astylarTree, inventory) {
+  if (entry.family !== 'datepicker') return;
+  const one = items => items.length === 1 ? items[0] : undefined;
+  const parent = (tree, node) => one(tree.nodes.filter(n => n.key === node?.parent));
+  const hasClass = (node, name) => String((node?.attributes ?? node?.authored)?.class ?? '').split(/\s+/).includes(name);
+  const prop = '--mat-form-field-filled-label-display';
+  const relevant = r => Object.keys(r ?? {}).some(k => ['display', 'visibility', 'opacity', 'all', prop].includes(k) || /^(animation|transition)/.test(k));
+  const styleAt = (index, side) => inventory.styles[index]?.side === side ? inventory.styles[index].value : undefined;
+  const rulesAt = node => {
+    const pool = node.rules.map(i => inventory.rules[i]);
+    return pool.every(r => r?.side === 'reference' && r.value && r.value.declarations && typeof r.value.declarations === 'object') ? pool.map(r => r.value) : undefined;
+  };
+  const wrapperRules = rulesAt(wrapper), leafRules = rulesAt(ref);
+  if (!wrapperRules || !leafRules || !hasClass(wrapper, 'mat-mdc-floating-label')) return;
+  const visibleRules = wrapperRules.filter(r => relevant(r.declarations));
+  if (visibleRules.length !== 1 || visibleRules[0].selector !== '.mdc-text-field--filled .mat-mdc-floating-label' ||
+      visibleRules[0].active !== true || !Array.isArray(visibleRules[0].conditions) || visibleRules[0].conditions.length ||
+      visibleRules[0].declarations.display?.value !== `var(${prop}, block)` || visibleRules[0].declarations.display.important !== false ||
+      Object.keys(visibleRules[0].declarations).some(k => k !== 'display' && relevant({ [k]: true }))) return;
+  const state = reviewedFieldLabelStateColor(entry, wrapper, wrapperRules.filter(r => r.declarations.color || r.declarations.all), referenceTree, astylarTree, inventory);
+  if (state?.state !== 'focus') return;
+  const input = one(referenceTree.nodes.filter(n => n.type === 'input' && n.attributes?.id === 'datepicker-control'));
+  const candidateInput = one(astylarTree.nodes.filter(n => n.authored?.type === 'input' && n.authored.id === 'datepicker-control'));
+  const region = parent(astylarTree, candidateInput), shell = parent(astylarTree, ast);
+  if (!input || input.parent !== wrapper.parent || wrapper.attributes.for !== input.attributes.id || input.value !== '' ||
+      input.attributes['aria-invalid'] !== 'false' || Object.hasOwn(input.attributes, 'disabled') ||
+      candidateInput?.authored.value !== '' || candidateInput.authored.ariaInvalid !== false || candidateInput.authored.disabled !== false ||
+      ast.authored.for !== candidateInput.authored.id || region?.authored?.id !== 'datepicker-input-region' || region.authored.type !== 'div' ||
+      shell?.authored?.id !== 'datepicker-primary' || shell.authored.type !== 'div' || region.parent !== shell.key) return;
+  const inheritance = [];
+  let node = wrapper, densityRule;
+  while (node) {
+    if (inheritance.some(n => n.key === node.key) || !one(referenceTree.nodes.filter(n => n.key === node.key))) return;
+    const rules = rulesAt(node), computed = styleAt(node.style, 'reference');
+    if (!rules || !computed || node.inline?.[prop] || node.inline?.all ||
+        new RegExp(`(?:^|;)\\s*(?:${prop}|all)\\s*:`, 'i').test(node.attributes?.style ?? '')) return;
+    const declarations = rules.filter(r => r.declarations[prop] || r.declarations.all);
+    if (node.type === 'main' && hasClass(node, 'frame') && node.parent === null) {
+      if (declarations.length !== 1) return;
+      densityRule = declarations[0];
+      if (!/^\.density-(2|5)$/.test(densityRule.selector) || !hasClass(node, densityRule.selector.slice(1)) || densityRule.active !== true ||
+          !Array.isArray(densityRule.conditions) || densityRule.conditions.length || densityRule.declarations[prop]?.value !== 'none' ||
+          densityRule.declarations[prop].important !== false || densityRule.declarations.all) return;
+    } else if (declarations.length) return;
+    inheritance.push({ ...node, computed, displayTokenRules: declarations });
+    if (densityRule) break;
+    node = parent(referenceTree, node);
+  }
+  if (!densityRule) return;
+  const pool = astylarTree.rules.map(i => inventory.rules[i]);
+  if (pool.some(r => r?.side !== 'astylar' || !r.value || typeof r.value !== 'object')) return;
+  const rules = pool.map(r => r.value), hideRules = rules.filter(r => r.selector === '.field-label.compact-filled-label');
+  if (hideRules.length !== 1 || hideRules[0].display !== 'none' || Object.keys(hideRules[0]).some(k => !['selector', 'display'].includes(k)) ||
+      typographySelectorCanApply(hideRules[0].selector, ast.authored) || !hasClass(ast, 'empty-field-label')) return;
+  for (const item of candidateChain) {
+    if ((item.authored.style !== undefined && (typeof item.authored.style !== 'object' || relevant(item.authored.style))) ||
+        [item.normal, item.effective].some(s => !['inline', 'block', 'flex'].includes(s.display) ||
+          (s.visibility !== undefined && s.visibility !== 'visible') || (s.opacity !== undefined && Number(s.opacity) !== 1))) return;
+    if (item.key === ast.key && rules.some(r => relevant(r) && typographySelectorCanApply(r.selector, item.authored))) return;
+  }
+  return structuredClone({ state, input, candidateInput, region, shell, wrapperDisplayRule: visibleRules[0],
+    inheritance, densityRule, candidateUnmatchedHideRule: hideRules[0], candidateLabelDisplay: candidateChain[0].normal.display,
+    referenceWrapperHidden: true, visibleReferenceFontComparison: false });
+}
+
 function reviewedFloatingLabelInput(entry, ref, ast, styles, referenceTree, astylarTree, inventory, mode = 'floating') {
-  const floating = mode === 'floating';
+  const hidden = mode === 'hidden-floating', floating = mode === 'floating' || hidden;
   if (!floating && mode !== 'error') return;
   if (!['form-field', 'input', 'select', 'autocomplete', 'datepicker', 'timepicker'].includes(entry.family) || ref.type !== 'mat-label' ||
       ref.attributes?.id !== `${entry.family}-label` || ast.authored.type !== 'label' ||
@@ -4688,7 +4755,7 @@ function reviewedFloatingLabelInput(entry, ref, ast, styles, referenceTree, asty
   if (wrapper?.type !== 'label' || String(wrapper.attributes?.class ?? '').split(/\s+/).includes('mdc-floating-label--float-above') !== floating ||
       !String(wrapper.attributes?.class ?? '').split(/\s+/).includes('mdc-floating-label') ||
       wrapperStyle?.fontSize !== '16px') return;
-  if (floating ? wrapperStyle.transformOrigin !== '0px 0px' ||
+  if (hidden ? wrapperStyle.display !== 'none' || wrapperStyle.transform !== 'none' || wrapperStyle.transformOrigin !== '0% 0%' : floating ? wrapperStyle.transformOrigin !== '0px 0px' ||
       !/^matrix\(0\.75,\s*0,\s*0,\s*0\.75,\s*0,\s*-?(?:\d+(?:\.\d+)?|\.\d+)\)$/.test(wrapperStyle.transform ?? '') :
     wrapperStyle.display === 'none' ? wrapperStyle.transform !== 'none' || wrapperStyle.transformOrigin !== '0% 0%' :
       wrapperStyle.display !== 'block' || wrapperStyle.transformOrigin !== '0px 0px' ||
@@ -4766,16 +4833,19 @@ function reviewedFloatingLabelInput(entry, ref, ast, styles, referenceTree, asty
     ancestor = one(astylarTree.nodes.filter(node => node.key === ancestor.parent));
   }
   if (ancestor?.authored?.id !== 'page' || ancestor.authored.type !== 'main' || ancestor.parent !== 'root') return;
+  const denseVisibility = hidden ? reviewedDenseLabelVisibility(entry, ref, wrapper, ast, candidateChain, referenceTree, astylarTree, inventory) : undefined;
+  if (hidden && !denseVisibility) return;
   return {
-    classification: 'application-plugin-authoring-defect', attribution: floating ? 'reviewed-floating-label-font-input' : 'reviewed-unfloated-error-label-font-input',
+    classification: 'application-plugin-authoring-defect', attribution: hidden ? 'reviewed-hidden-dense-label-input' : floating ? 'reviewed-floating-label-font-input' : 'reviewed-unfloated-error-label-font-input',
     inputEquivalent: false, currentPseudoStatePaintVerified: false, finalRasterVerified: false,
-    recommendedOwner: floating ? 'Material field-label structure and core CSS transform support' : 'showcase error-state label sizing and dense-label visibility translation',
-    justification: floating ? 'The reference keeps 16px label typography under a captured .75 wrapper transform. The corresponding candidate explicitly authors and retains an untransformed 12px absolute label at fixed insets. Multiplying the reference font size by the scale describes apparent size, not equivalent input: wrapper geometry, glyph rasterization, tracking and transform-origin semantics remain different. Original-input browser reductions expose core transform-subset gaps; do not accept a font-size substitution as their fix.' :
+    recommendedOwner: hidden ? 'showcase dense field-label visibility token and wrapper translation' : floating ? 'Material field-label structure and core CSS transform support' : 'showcase error-state label sizing and dense-label visibility translation',
+    justification: hidden ? 'The reference floating-label wrapper is display:none through the captured density token and original display declaration. Its computed 16px font does not describe a visible glyph. The candidate instead retains an untransformed 12px empty label with inline display; its compact-label hide rule does not match the authored class. Preserve hidden computed styles, the complete token inheritance, focused empty control state and unmatched candidate declaration. This is unequal visibility/structure input, not a visible 16px-versus-12px raster defect or permission to shrink text. Restore original density display semantics before evaluating remaining transforms and paint.' : floating ? 'The reference keeps 16px label typography under a captured .75 wrapper transform. The corresponding candidate explicitly authors and retains an untransformed 12px absolute label at fixed insets. Multiplying the reference font size by the scale describes apparent size, not equivalent input: wrapper geometry, glyph rasterization, tracking and transform-origin semantics remain different. Original-input browser reductions expose core transform-subset gaps; do not accept a font-size substitution as their fix.' :
       'The empty invalid reference field does not float its label: its wrapper retains the base 16px token and base translation, or is display:none in a dense theme. The candidate invalid empty input nevertheless uses the active-empty 12px rule at fixed insets. Native and candidate invalid/value/linkage evidence is retained. This is an authored error-state size substitution, not a scale-normalization or core transform defect. Hidden wrapper visibility, placeholder behavior and final paint are separate obligations; no visible 16px glyph is claimed when the reference wrapper is hidden.',
-    reviewEvidence: structuredClone({ sourceFinding: floating ? 'fixture-floating-label-transform-replaced-by-font-size' : 'fixture-error-label-forced-floating-size', revision: record.resolvedStyleRevision,
+    reviewEvidence: structuredClone({ sourceFinding: hidden ? 'fixture-datepicker-dense-label-visibility-omitted' : floating ? 'fixture-floating-label-transform-replaced-by-font-size' : 'fixture-error-label-forced-floating-size', revision: record.resolvedStyleRevision,
       referenceWrapper: wrapper.key, referenceWrapperStyle: wrapperStyle, referenceChain, selectedReferenceRules,
       candidateRules, selectedCandidateRule: isEmpty ? empty[0] : base[0], candidateChain,
       ...(referenceErrorState ? { referenceErrorState } : {}),
+      ...(denseVisibility ? { denseVisibility } : {}),
       referenceComputedFontSize: styles.reference.fontSize, candidateRetainedFontSize: styles.retained.fontSize }),
   };
 }
@@ -4788,7 +4858,7 @@ function validateFloatingLabelFontInput(report, errors) {
     return m ? [{ kind: m[1], family, profile: m[2], viewport: { id: m[3] }, ...(m[4] ? { state: m[4] } : {}) }] : [];
   }));
   const replay = collectRetainedTypographyEvidence(cases, report.elementInventory);
-  const predicate = d => ['reviewed-floating-label-font-input', 'reviewed-unfloated-error-label-font-input'].includes(d.attribution) || families.some(f => d.element === `${f}-label`);
+  const predicate = d => ['reviewed-floating-label-font-input', 'reviewed-unfloated-error-label-font-input', 'reviewed-hidden-dense-label-input'].includes(d.attribution) || families.some(f => d.element === `${f}-label`);
   for (const list of ['reviewedMappings', 'comparisons', 'differences', 'gaps']) {
     if (JSON.stringify(report.retainedTypography[list].filter(predicate)) !== JSON.stringify(replay[list].filter(predicate)))
       errors.push(`floating-label font ${list} lack complete replayed input evidence`);
@@ -5452,7 +5522,8 @@ export function collectRetainedTypographyEvidence(cases, inventory, controlTypog
       const tableFont = reviewedTableFontInput(entry, ref, ast, styles, referenceTree, astylarTree, inventory);
       const treeFont = reviewedTreeFontInput(entry, textMappingById.get(id), ref, ast, styles, astylarTree, inventory);
       const floatingLabel = reviewedFloatingLabelInput(entry, ref, ast, styles, referenceTree, astylarTree, inventory) ??
-        reviewedFloatingLabelInput(entry, ref, ast, styles, referenceTree, astylarTree, inventory, 'error');
+        reviewedFloatingLabelInput(entry, ref, ast, styles, referenceTree, astylarTree, inventory, 'error') ??
+        reviewedFloatingLabelInput(entry, ref, ast, styles, referenceTree, astylarTree, inventory, 'hidden-floating');
       const inheritedFontStack = reviewedInheritedComponentFontStack(textMappingById.get(id), ref, ast, styles, referenceTree, astylarTree, inventory);
       if (headingMask) paintMaskDifferences.push({ case: key, element: id, referenceNode: ref.key, astylarNode: ast.key, ...headingMask });
       const comparison = { case: key, family: entry.family, element: id, text: refText,
@@ -7254,6 +7325,7 @@ function implementationPlan() {
     { priority: 5.27, rootCause: 'Stepper numeral font and label-color inheritance are replaced or omitted', action: 'Keep the original frame-scaled inherited numeral font with the icon-content wrapper instead of fixed 14px step-badge text. Restore the Material active-label color token and inner label inheritance instead of accepting the page on-surface fallback. Preserve actual reference theme inputs; do not retune the dark reference or calibrate text to the circle. Verify core inheritance, transforms and glyph paint only after equivalent authoring is restored.' },
     { priority: 5.28, rootCause: 'Filled-label component color tokens are replaced by independent literal state rules', action: 'Restore the captured reference label-color token, wrapper inheritance and state semantics rather than adjusting candidate colors to sampled pixels. Base/empty/picker-shell declarations currently supply different inputs, independently of the repaired inspection ancestry bug. Preserve normal/effective/retained stages and original rule order; investigate core cascade or current paint only when equivalent authored inputs still diverge. Do not normalize small RGB differences away or reuse pre-repair inconsistent captures as proof.' },
     { priority: 5.285, rootCause: 'Validation error incorrectly forces label shrink and picker shell ink overrides error tokens', action: 'Separate invalid state from the original label float predicate: an empty unfocused invalid input keeps its base label state unless the dense theme hides that wrapper. Restore the original font-size and display tokens rather than forcing 12px at top 8px. Preserve picker error color through the original cascade instead of later unconditional shell literals. Verify native/candidate invalid flags, empty values, label associations, dense visibility, focus/blur transitions and separate date/time opening behavior. Do not route these unequal state inputs into core transform or world-coordinate adjustments.' },
+    { priority: 5.2851, rootCause: 'Dense field-label display tokens are replaced by incomplete fixture class predicates', action: 'Restore the original density-scoped label-display token and floating wrapper semantics. Datepicker labels retain the empty-field class and never receive the compact hide class, while the reference wrapper is display:none at density-2 and density-5. Do not treat hidden computed font sizes as visible raster targets or add state-specific font/position corrections. Preserve focus/value/label association, placeholder and accessible-name behavior; independently verify hidden/visible transitions and keep date/time opening contracts distinct.' },
     { priority: 5.29, rootCause: 'Sidenav component text-color tokens are replaced by fixture theme literals', action: 'Restore the distinct drawer and content token semantics together with the separately identified sidenav structure/padding inputs. Reference color ownership is the drawer or container, while candidate aside/main rules directly set theme.onSurface or dark-mode literals. Preserve exact channels and captured inheritance; only an equal-input reproduction can establish a core color defect. The initial implementation introduced these substitutions, so do not describe them as confirmed later compensating fixes.' },
     { priority: 5.294, rootCause: 'Disabled choice label color tokens are omitted from custom checkbox/radio authoring', action: 'Restore component disabled-label-color token intent on the original associated text owner instead of the unconditional theme.onSurface label/option literal. Current captures prove native disabled label association and differing candidate disabled-state inputs. Preserve transparent color semantics rather than preblending against a screenshot background. Test enabled/disabled and checked/unchecked states independently of cursor and event suppression; only investigate core alpha handling after equivalent color inputs are supplied.' },
     { priority: 5.295, rootCause: 'Chip label color tokens are replaced by container theme-color inheritance', action: 'Restore the enabled unselected label-text-color/on-surface-variant token on its original text owner instead of inheriting theme.onSurface from the replacement chip container. Current captures prove 32 unequal color inputs through exact selection state, reference token and candidate normal/effective/retained stages. The substitution predates later parity repairs. Keep selected/disabled states, generated outlines, intrinsic sizing and final paint independently covered; do not repair this by sampling screenshot colors or changing core color conversion.' },

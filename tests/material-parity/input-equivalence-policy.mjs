@@ -312,6 +312,16 @@ export const sourceAuditDefinitions = Object.freeze([
     focusedProof: 'tests/material-parity/input-equivalence-audit.spec.mjs: unfloated error label size distinguishes error-state shrink from scaled and hidden reference paint',
   }),
   Object.freeze({
+    id: 'fixture-datepicker-dense-label-visibility-omitted',
+    introducedBy: '88d1090 adds a compact-filled-label hide rule and applies it to filled fields, but picker labels retain the fixed empty-label class',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`class: 'field-label empty-field-label', for:[^\n]*textContent: family === 'datepicker'`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase dense field-label display token and wrapper translation',
+    justification: 'The original density-2/density-5 frame supplies --mat-form-field-filled-label-display:none, inherited by the original floating wrapper display declaration. Candidate picker labels keep field-label empty-field-label, so the existing compact-filled-label hide rule does not match. Captured focused empty inputs, complete density-token ancestry, hidden wrapper geometry, selected font rules and candidate stages distinguish this from a visible font-size or core display:none defect. Preserve hidden computed typography without claiming a visible reference glyph. Restore original density and wrapper semantics rather than tuning text size or hiding a fixture by sampled state.',
+    focusedProof: 'tests/material-parity/input-equivalence-audit.spec.mjs: hidden dense datepicker label preserves display-token inheritance and unmatched candidate rule',
+  }),
+  Object.freeze({
     id: 'fixture-field-label-tracking-substitution',
     introducedBy: '87bc351 adds base .4px tracking; 354084e adds empty-field .4/.65px split',
     file: 'examples/material-showcase/src/app/astylar.component.ts',

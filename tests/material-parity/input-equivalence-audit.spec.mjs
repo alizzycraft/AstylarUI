@@ -5001,6 +5001,104 @@ function unfloatedErrorLabelReport(family = 'timepicker', hidden = false) {
   return raw;
 }
 
+function hiddenDenseLabelReport(density = 5) {
+  const raw = unfloatedErrorLabelReport('datepicker', true), { reference: r, astylar: a } = raw.results[0].inputTrees;
+  raw.results[0].profile = density === 5 ? 'contrast' : 'custom';
+  r.nodes[1].attributes.class = 'mdc-floating-label mat-mdc-floating-label mdc-floating-label--float-above';
+  r.nodes[1].rules = [2, 3, 1, 0, 4, 5, 6];
+  r.rules[6].selector = '.mdc-text-field--filled:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-floating-label';
+  r.rules[6].declarations.color.value = 'var(--mat-form-field-filled-focus-label-text-color, var(--mat-sys-primary))';
+  r.rules.push({ active: true, conditions: [], selector: '.mdc-text-field--filled .mat-mdc-floating-label',
+    declarations: { display: { value: 'var(--mat-form-field-filled-label-display, block)', important: false } } });
+  r.nodes[1].rules.push(7);
+  r.rules.push({ active: true, conditions: [], selector: `.density-${density}`,
+    declarations: { '--mat-form-field-filled-label-display': { value: 'none', important: false } } });
+  r.nodes.find(n => n.key === 'field-wrapper').attributes.class = 'mdc-text-field--filled mdc-text-field--focused';
+  r.nodes.find(n => n.key === 'field').parent = 'demo';
+  r.nodes.find(n => n.key === 'input').attributes['aria-invalid'] = 'false';
+  r.nodes.push({ key: 'demo', parent: 'frame', type: 'section', attributes: { class: 'demo', id: 'datepicker-root' }, style: 0, rules: [], pseudoElements: [] },
+    { key: 'frame', parent: null, type: 'main', attributes: { class: `frame density-${density}` }, style: 0, rules: [8], pseudoElements: [] });
+  Object.assign(a.nodes.find(n => n.key === 'input').authored, { ariaInvalid: false, disabled: false });
+  for (const n of a.nodes) for (const stage of ['resolvedStyle', 'normalResolvedStyle', 'interactionResolvedStyle']) {
+    n[stage] = { ...n[stage], display: n.authored?.id === 'datepicker-label' ? 'inline' : 'block' };
+  }
+  a.rules.push({ selector: '.field-label.compact-filled-label', display: 'none' });
+  return raw;
+}
+
+test('hidden dense datepicker label preserves display-token inheritance and unmatched candidate rule', () => {
+  for (const density of [2, 5]) {
+    const raw = hiddenDenseLabelReport(density), before = structuredClone(raw), report = buildMaterialInputAudit(raw);
+    const f = report.retainedTypography.differences.find(d => d.attribution === 'reviewed-hidden-dense-label-input');
+    assert.ok(f); assert.equal(f.inputEquivalent, false); assert.equal(f.finalRasterVerified, false);
+    const e = f.reviewEvidence.denseVisibility;
+    assert.equal(e.densityRule.selector, `.density-${density}`); assert.equal(e.inheritance.length, 7);
+    assert.equal(e.referenceWrapperHidden, true); assert.equal(e.visibleReferenceFontComparison, false);
+    assert.equal(e.candidateLabelDisplay, 'inline'); assert.equal(e.candidateUnmatchedHideRule.display, 'none');
+    assert.equal(f.reviewEvidence.selectedReferenceRules.length, 5);
+    assert.deepEqual(validateMaterialInputAudit(report, { requireComplete: false }), []);
+    assert.deepEqual(raw, before);
+  }
+});
+
+test('hidden dense label attribution rejects incomplete token inheritance state and visibility', () => {
+  const controls = [
+    (r, a) => { r.nodes[1].attributes.class = 'mdc-floating-label mdc-floating-label--float-above'; },
+    (r, a) => { r.styles[1].display = 'block'; }, (r, a) => { r.styles[1].transform = 'matrix(.75,0,0,.75,0,-20)'; },
+    (r, a) => { r.rules[7].active = false; }, (r, a) => { r.rules[7].conditions = ['@media print']; },
+    (r, a) => { r.rules[7].declarations.display.value = 'none'; }, (r, a) => { r.rules[7].declarations.opacity = { value: '0' }; },
+    (r, a) => { r.rules[8].declarations['--mat-form-field-filled-label-display'].value = 'block'; },
+    (r, a) => { r.rules[8].declarations['--mat-form-field-filled-label-display'].important = true; },
+    (r, a) => { r.rules[8].active = false; }, (r, a) => { r.rules[8].conditions = ['@media print']; },
+    (r, a) => { r.nodes.find(n => n.key === 'frame').attributes.class = 'frame density-2'; },
+    (r, a) => { r.nodes.find(n => n.key === 'frame').parent = 'external'; },
+    (r, a) => { r.nodes.find(n => n.key === 'demo').parent = 'missing'; },
+    (r, a) => { r.nodes.find(n => n.key === 'demo').inline = { '--mat-form-field-filled-label-display': { value: 'none' } }; },
+    (r, a) => { r.nodes.find(n => n.key === 'demo').rules = [8]; },
+    (r, a) => { r.nodes.find(n => n.key === 'field-wrapper').attributes.class = 'mdc-text-field--filled'; },
+    (r, a) => { r.nodes.find(n => n.key === 'input').value = 'Typed'; },
+    (r, a) => { r.nodes.find(n => n.key === 'input').attributes['aria-invalid'] = 'true'; },
+    (r, a) => { r.nodes[1].attributes.for = 'other'; },
+    (r, a) => { a.nodes[0].authored.class += ' compact-filled-label'; },
+    (r, a) => { a.nodes[0].normalResolvedStyle.display = 'none'; },
+    (r, a) => { a.nodes.find(n => n.key === 'shell').interactionResolvedStyle.visibility = 'hidden'; },
+    (r, a) => { a.nodes.find(n => n.key === 'page').normalResolvedStyle.opacity = '0'; },
+    (r, a) => { a.nodes[0].authored.style = { display: 'inline' }; },
+    (r, a) => { a.nodes.find(n => n.key === 'input').authored.disabled = true; },
+    (r, a) => { a.nodes.find(n => n.key === 'input').authored.value = 'Typed'; },
+    (r, a) => { a.nodes.find(n => n.key === 'region').parent = 'page'; },
+    (r, a) => { a.rules.pop(); }, (r, a) => { a.rules.at(-1).mediaMaxWidth = '500px'; },
+    (r, a) => { a.rules.push({ selector: '.field-label', display: 'none' }); },
+    (r, a) => { a.rules.push(structuredClone(a.rules.at(-1))); },
+  ];
+  for (const [index, mutate] of controls.entries()) {
+    const raw = hiddenDenseLabelReport(), { reference: r, astylar: a } = raw.results[0].inputTrees;
+    mutate(r, a);
+    const evidence = collectRetainedTypographyEvidence(raw.results, collectFullTreeInventory(raw.results));
+    assert.ok(!evidence.differences.some(d => d.attribution === 'reviewed-hidden-dense-label-input'), `control ${index}`);
+  }
+});
+
+test('hidden dense label report replays density token visibility and all evidence lists', () => {
+  const baseline = buildMaterialInputAudit(hiddenDenseLabelReport());
+  const controls = [
+    (r, f) => { f.inputEquivalent = true; }, (r, f) => { f.finalRasterVerified = true; },
+    (r, f) => { f.reviewEvidence.denseVisibility.visibleReferenceFontComparison = true; },
+    (r, f) => { f.reviewEvidence.denseVisibility.referenceWrapperHidden = false; },
+    (r, f) => { f.reviewEvidence.denseVisibility.inheritance.pop(); },
+    (r, f) => { f.reviewEvidence.denseVisibility.candidateUnmatchedHideRule.display = 'block'; },
+    (r, f) => { f.reviewEvidence.denseVisibility.candidateInput.authored.value = 'Typed'; },
+    (r, f) => { f.reviewEvidence.revision++; }, (r, f) => { f.family = 'timepicker'; },
+    (r, f) => { r.retainedTypography.differences = []; }, (r, f) => { r.retainedTypography.comparisons = []; },
+    (r, f) => { r.retainedTypography.differences.push(structuredClone(f)); },
+  ];
+  for (const [index, mutate] of controls.entries()) {
+    const report = structuredClone(baseline), f = report.retainedTypography.differences.find(d => d.attribution === 'reviewed-hidden-dense-label-input');
+    mutate(report, f);
+    assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('floating-label font')), `mutation ${index}`);
+  }
+});
+
 test('unfloated error label size distinguishes error-state shrink from scaled and hidden reference paint', () => {
   for (const family of ['autocomplete', 'datepicker', 'timepicker']) for (const hidden of [false, true]) {
     const raw = unfloatedErrorLabelReport(family, hidden), before = structuredClone(raw);

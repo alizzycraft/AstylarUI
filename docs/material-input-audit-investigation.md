@@ -23,6 +23,66 @@ selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Hidden dense datepicker labels are unequal visibility inputs (2026-09-13)
+
+The four remaining retained-label font differences in the corrected captured
+corpus are the focused datepicker at contrast/custom themes and DPR 1/2.
+They are **not visible 16px-versus-12px text comparisons**. The original
+floating-label wrapper is `display:none`: its display declaration consumes
+`--mat-form-field-filled-label-display`, inherited from `.density-5` in
+contrast and `.density-2` in custom. The audit retains the complete seven-node
+wrapper-to-frame path, the active unconditional density declaration, and the
+original five ordered font/transform rules. Hidden computed font size remains
+16px; no visible reference glyph or current raster equivalence is inferred.
+
+Candidate picker labels instead retain `field-label empty-field-label`, with
+an explicit untransformed 12px font and inline display. The existing
+`.field-label.compact-filled-label { display:none }` rule cannot match that
+class. Commit `88d1090` added this hide rule and applied the compact class to
+filled fields, while picker labels kept their fixed empty-label class. This
+history demonstrates incomplete application of the replacement hide mechanism;
+it does not establish that the commit introduced every picker visibility bug.
+The source finding identifies the fixed picker-label authoring in
+`examples/material-showcase/src/app/astylar.component.ts`.
+
+Attribution requires focused empty native/candidate inputs, matching label
+associations and input-region/shell ownership, non-invalid and enabled state,
+the complete density-token inheritance, and candidate normal/effective display
+through its ancestor chain. It rejects missing or competing token declarations,
+conditional rules, ancestor visibility overrides, an actually matching hide
+rule, and contradictory input state. Thirty-two negative controls and twelve
+report mutations protect this evidence, including independent replay of the
+mapping, comparison, difference and gap lists. Existing visible floating-label
+and unfloated-error proofs remain separate.
+
+The owning correction is original density-token and floating-wrapper authoring,
+not a core `display:none` patch, a smaller font, or another positional offset.
+Hidden/visible transitions, placeholder/accessibility behavior and the distinct
+date/time opening contracts still require independent verification. Neither
+fixture, renderer nor browser reference was changed in this increment.
+
+Verification:
+
+- `node --test --test-name-pattern='hidden dense|floating-label|unfloated error' tests/material-parity/input-equivalence-audit.spec.mjs`:
+  **11/11 passed**, zero failures/skips/cancellations, 3.3123 seconds on the
+  final focused rerun.
+- `npm run parity:harness:check`: **456/456 passed**, zero
+  failures/skips/cancellations, 296.0627968 seconds; terminal exit 0.
+- Full `buildMaterialInputAudit` using `current-ancestry-audit`,
+  `normal-line-box-current-ancestry-audit` and
+  `supplemental-current-ancestry-audit`: 123 source findings, none unexplained
+  or undetected; all four dense labels attributed; zero unresolved
+  retained-typography differences in this captured corpus.
+- `validateMaterialInputAudit(..., {requireComplete:false})`: no errors.
+  Strict validation still rejects **3,309 resolved-style differences** and
+  **879 control-texture typography differences** lacking attribution.
+- All ten frozen harness-file SHA-256 values still match the corrected
+  baseline manifest. No visual threshold or capture was modified.
+
+This closes the current retained-text attribution category, not the full audit.
+Relevant-state coverage, broader style/control-text attribution, final reports,
+plugin ownership assessment and final enforced matrix remain outstanding.
+
 ## Disabled component ink and expansion body size preserve unequal inputs (2026-09-13)
 
 This increment attributes **28 further retained-text differences** without
