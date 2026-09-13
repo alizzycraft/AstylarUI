@@ -3,6 +3,120 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Paginator navigation boundaries: new state evidence, not whole-component acceptance
+
+The earlier 52 paginator cases only exercised Next page near the initial page.
+The separate `scripts/audit-material-paginator-navigation.mjs` now captures
+**26 ordered action boundaries in light/dark at DPR 1/2**: **104 paired cases**,
+**208 full input trees and 208 screenshots**. Viewport is 1440x1000 CSS pixels;
+fonts, two animation frames and a declared 250ms sampling delay settle each
+boundary. Both sides receive the same real pointer and Space-key actions. No
+page index, focus call, renderer input or example behavior is injected.
+
+The sequence presses/releases the initially unavailable Previous button, moves
+to page 2 and returns through Previous, visits every page through page 10,
+presses/releases the unavailable Next button, returns to page 9 and then uses
+Space down/up to reach page 8. Hover, held input, release and pointer departure
+are separate samples. This closes the specific previous-navigation and range
+boundary evidence gap; it does not certify compact/density variants, arbitrary
+page lengths, tab-order traversal or all paginator styles.
+
+The checkpoint-bound report is
+`artifacts/material-parity/supplemental-current-ancestry-audit/paginator-navigation-audit-v2/latest-report.json`,
+SHA-256 `1056a08df691e09e91f76a3355a79ada71cda25c7c15fa5c72d6ee68d0877ec2`.
+The checked-in `docs/material-paginator-navigation-audit.json` retains each
+observed state, exact native/ARIA disabled values, focus target, tooltip text,
+assertion result and hashed tree/PNG references. Browser is Chrome 152.0.7977.76;
+each side's served document, script, stylesheet and font bytes match the frozen
+current-ancestry checkpoint. Input equivalence and final-raster verification
+are explicitly false.
+
+Observed results:
+
+- All **104** page-range and candidate-state observations follow the expected
+  sequence. Space-down preserves page 9 and Space-up moves to page 8 on both
+  sides. Unavailable controls do not navigate past either boundary.
+- **48** cases have different native-disabled inputs. This is not a failed
+  range guard: Material uses `disabledInteractive`, `aria-disabled="true"` and
+  `tabindex="-1"`, without native `disabled`, while AstylarUI authors native
+  disabled buttons. Both indicate unavailability, but their focus behavior is
+  not equivalent. Keep these fields separate rather than treating native
+  `disabled:false` as an enabled Material action.
+- **44** cases disagree on the focused navigation control. Forty coincide with
+  the disabled-input difference; the other four are the enabled
+  `previous-press` samples. In those held samples the reference focuses Previous
+  while the candidate document's active element is CANVAS. After clicking an
+  enabled control and completing the resulting update, the candidate semantic
+  button is focused. These counts describe observations, not independent bugs.
+- **24** samples have reference navigation tooltip text but no candidate
+  tooltip. They are `next-once`, `previous-hover`, `previous-press`,
+  `next-step-1`, `previous-from-last`, and `previous-space-held`, in each of the
+  four profile/DPR cohorts. Previous-hover screenshots were inspected on both
+  sides; the reference message is visible above the control. Post-click
+  presence is recorded at this sampling boundary, not generalized into an
+  unrestricted tooltip timing contract.
+
+Root-cause assessment and implementation order:
+
+1. **Confirmed authoring mismatch:** candidate navigation controls at
+   `astylar.component.ts:894-895` replace the reference disabled-interactive
+   contract with native disabled controls. `git show 2f44011` confirms this was
+   already present in the initial showcase; `7843582` moved the controls into
+   the current layout without restoring that behavior. Installed
+   `@angular/material/fesm2022/paginator.mjs:334-338` explicitly guards clicks
+   because disabled-interactive buttons still dispatch them. Its template
+   explains focus retention on becoming disabled and removal from tab order.
+   Restore this input/behavior contract through core public APIs; determine any
+   missing public/core capability with an equal-input proof. Do not force focus
+   back with a paginator-only workaround or weaken disabled-control rules.
+2. **Confirmed authoring omission:** both navigation tooltips are absent from
+   candidate composition. This extends the existing Next page omission finding
+   to real Previous page states. Restore the original text, above-positioned
+   trigger intent, disabled behavior and shared overlay composition before
+   investigating residual tooltip rendering. There is no candidate tooltip to
+   reposition in these captures.
+3. **Suspected core/semantic synchronization issue, not yet isolated:** the
+   enabled held-press focus mismatch cannot be explained by native disabled
+   authoring. Current `src/lib/astylar-interaction-runtime.ts:555-561` dispatches
+   pointerdown, focuses the canvas and updates logical focus; the captured
+   document focus stays on canvas during the held sample. This source inspection
+   alone does not prove whether the first divergence is logical focus, semantic
+   synchronization, browser default focus, or update timing. Add a minimal
+   equal-input enabled-button pointerdown/hold/up proof that records logical and
+   document focus together before assigning a confirmed core cause. Do not infer
+   that all 44 focus observations share one defect.
+
+The V1 development capture incorrectly compared only native disabled against
+page-boundary availability. Its terminal failure and artifacts are preserved
+but superseded. V2 records native disabled, ARIA disabled and tab index separately
+and repeats the complete sequence; no application input was adjusted. V2 exits
+**1** because the observed input, focus and tooltip discrepancies remain.
+
+`validatePaginatorNavigationCapture` independently checks checkpoint/source/
+runtime binding, complete ordered actions, unique tree owners, exact range and
+native/ARIA inputs, current candidate style stages, cumulative trusted events,
+focus identity, tooltip tree content, screenshot hashes/dimensions and replayed
+assertions. Validation succeeds with **104 observations and no evidence errors**;
+it does not require failed behavioral comparisons to become true. Tests cover
+the full synthetic matrix and **34 malformed/forged input/artifact controls**.
+
+```powershell
+node scripts/audit-material-paginator-navigation.mjs --base-url=http://127.0.0.1:4431 --checkpoint=artifacts/material-parity/current-ancestry-audit/checkpoint --output=artifacts/material-parity/supplemental-current-ancestry-audit/paginator-navigation-audit-v2
+node --test --test-name-pattern='paginator navigation' tests/material-parity/supplemental-capture-evidence.spec.mjs
+```
+
+The capture command requires a new output directory on repetition. Focused
+tests: **2/2 pass**, terminal exit 0, 1.5420112 seconds.
+`npm run parity:harness:check`: **543/543 pass**, terminal exit 0,
+302.6931803 seconds, no failures, skips or cancellations. An independent replay
+also compares the entire checked-in summary with all 104 validated observations
+and artifact references; it matches exactly. All ten frozen capture-harness
+hashes remain unchanged and `git diff --check` passes.
+Integration of these full trees into the consolidated style/
+typography audit, the enabled-focus minimal proof and final enforced parity
+remain required. The main report's 3,117 unresolved style groups are unchanged
+by this standalone evidence increment.
+
 ## Button host typography: preserve and link the demonstrated input cause
 
 The audit now connects a button-host font-family or letter-spacing scalar to

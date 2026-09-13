@@ -12,6 +12,8 @@ import { validateCalendarCloseCapture, collectCalendarCloseEvidence } from './ca
 import { validateTooltipStateCapture, collectTooltipStateEvidence } from './tooltip-state-evidence.mjs';
 import { propertyGroups } from './input-equivalence-policy.mjs';
 import { fixture, calendarFixture, tooltipStateFixture } from './supplemental-capture-fixtures.mjs';
+import { validatePaginatorNavigationCapture } from './paginator-navigation-evidence.mjs';
+import { paginatorNavigationPlan, comparePaginatorNavigation } from '../../scripts/audit-material-paginator-navigation.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const script = 'scripts/audit-material-picker-commits.mjs';
@@ -21,6 +23,117 @@ const assetTypes = ['document', 'script', 'stylesheet', 'font'];
 const assetFiles = ['index.csr.html', 'main.js', 'styles.css', 'media/font.woff2'];
 const args = ['--base-url=http://127.0.0.1:4431', '--checkpoint=artifacts/material-parity/run/checkpoint',
   '--output=artifacts/material-parity/fresh/picker-commit-audit'];
+
+function paginatorFixture() {
+  const f = fixture(), raw = f.raw, runtime = structuredClone(raw.results[0].reference.runtime);
+  Object.assign(raw, { schemaVersion: 1, viewport: { width: 1440, height: 1000 }, profiles: ['light', 'dark'],
+    plan: paginatorNavigationPlan(), settleDelayMs: 250 });
+  raw.capture.styleProperties = Object.values(propertyGroups).flat();
+  raw.capture.sources = ['scripts/audit-material-paginator-navigation.mjs', ...sourceFiles.slice(1)].map(file => f.put(file, file));
+  raw.results = raw.profiles.flatMap(profile => [1, 2].flatMap(deviceScaleFactor => {
+    const histories = { reference: [], astylar: [] };
+    return raw.plan.map(step => {
+      const entry = { family: 'paginator', profile, deviceScaleFactor, ...step };
+      for (const side of ['reference', 'astylar']) {
+        const ref = side === 'reference', range = `${step.expectedPageIndex * 10 + 1} – ${step.expectedPageIndex * 10 + 10} of 100`;
+        const disabled = { previous: step.expectedPageIndex === 0, next: step.expectedPageIndex === 9 };
+        const pointer = step.action === 'leave' ? { x: 1, y: 1 } : { x: 120, y: 120 };
+        const types = { click: ['pointermove', 'pointerdown', 'pointerup', 'click'], move: ['pointermove'],
+          down: ['pointerdown'], up: ['pointerup'], leave: ['pointermove'], 'space-down': ['keydown'], 'space-up': ['keyup'] }[step.action] ?? [];
+        for (const type of types) histories[side].push({ type, trusted: true, key: type.startsWith('key') ? ' ' : null,
+          clientX: type.startsWith('key') ? null : pointer.x, clientY: type.startsWith('key') ? null : pointer.y });
+        const tree = { schemaVersion: 1, errors: [], nodes: [{ key: 'range', ...(ref
+          ? { type: 'div', attributes: { class: 'mat-mdc-paginator-range-label' }, ownText: range }
+          : { authored: { id: 'paginator-range', type: 'span', textContent: range } }) }] };
+        for (const direction of ['previous', 'next']) tree.nodes.push({ key: direction, ...(ref
+          ? { type: 'button', attributes: { class: `mat-mdc-paginator-navigation-${direction}`,
+            ...(disabled[direction] ? { 'aria-disabled': 'true', tabindex: '-1' } : {}) } }
+          : { authored: { type: 'button', id: `paginator-${direction}`, disabled: disabled[direction] } }) });
+        const visibleTooltips = ref && ['previous-hover', 'previous-press'].includes(step.state) ? ['Previous page'] : [];
+        if (visibleTooltips.length) tree.nodes.push({ key: 'wrapper', attributes: { class: 'mat-mdc-tooltip-show' } },
+          { key: 'tooltip', parent: 'wrapper', attributes: { class: 'mat-mdc-tooltip-surface' }, ownText: 'Previous page' });
+        if (!ref) {
+          Object.assign(tree, { resolvedStyleEvidenceVersion: 2, resolvedStyleSource: 'core-style-inspection', resolvedStyleRevision: 2 });
+          for (const node of tree.nodes) Object.assign(node, { normalResolvedStyle: {}, resolvedStyle: {}, interactionResolvedStyle: {} });
+        }
+        const stem = `artifacts/material-parity/fresh/picker-commit-audit/${profile}-${deviceScaleFactor}-${side}-${step.state}`;
+        const png = Buffer.alloc(24); Buffer.from('89504e470d0a1a0a', 'hex').copy(png);
+        png.writeUInt32BE(1440 * deviceScaleFactor, 16); png.writeUInt32BE(1000 * deviceScaleFactor, 20);
+        f.bytes.set(path.resolve(f.options.root, `${stem}.png`), png);
+        entry[side] = { runtime: structuredClone(runtime), range, pageIndex: ref ? null : step.expectedPageIndex,
+          previousDisabled: ref ? false : disabled.previous, nextDisabled: ref ? false : disabled.next,
+          previousAriaDisabled: disabled.previous ? 'true' : null, nextAriaDisabled: disabled.next ? 'true' : null,
+          previousTabIndex: disabled.previous ? -1 : 0, nextTabIndex: disabled.next ? -1 : 0,
+          ...(!ref ? { authoredPreviousDisabled: disabled.previous, authoredNextDisabled: disabled.next } : {}),
+          active: { id: '', tag: 'BODY', label: null, astylarId: null }, activeNavigation: null,
+          visibleTooltips, pointer, targetBox: ['move', 'click'].includes(step.action) ? { x: 100, y: 100, width: 40, height: 40 } : null,
+          events: structuredClone(histories[side]), inputTree: f.put(`${stem}.json`, tree),
+          screenshot: { file: `${stem}.png`, sha256: hash(png) } };
+      }
+      entry.checks = comparePaginatorNavigation(entry); return entry;
+    });
+  }));
+  return f;
+}
+
+test('paginator navigation captures the full first-last sequence without conflating aria and native disabled', () => {
+  assert.deepEqual(paginatorNavigationPlan().map(s => s.expectedPageIndex), [0, 0, 0, 0, 0, 1, 1, 1, 0, 0,
+    1, 2, 3, 4, 5, 6, 7, 8, 9, 9, 9, 9, 9, 8, 8, 7]);
+  const f = paginatorFixture(), before = JSON.stringify(f.raw), result = validatePaginatorNavigationCapture(f.raw, f.options);
+  assert.deepEqual(result.errors, []); assert.equal(result.complete, true); assert.equal(result.binding.status, 'checkpoint-bound');
+  assert.equal(result.observations.length, 104);
+  assert.equal(result.observations.filter(o => !o.checks.nativeDisabledInputs).length, 48);
+  assert.equal(result.observations.filter(o => !o.checks.tooltipPresence).length, 8);
+  assert.ok(result.observations.every(o => o.checks.referenceRange && o.checks.astylarRange && o.checks.candidateState));
+  assert.ok(result.observations.every(o => o.inputEquivalent === false && o.finalRasterVerified === false));
+  assert.equal(JSON.stringify(f.raw), before);
+});
+
+test('paginator navigation rejects malformed, incomplete and forged observations or artifacts', () => {
+  const mutations = [
+    f => { f.raw.results.pop(); }, f => { f.raw.results.reverse(); },
+    f => { f.raw.results[0].family = 'button'; }, f => { f.raw.results[0].action = 'click'; },
+    f => { f.raw.results[0].expectedPageIndex = 9; }, f => { f.raw.plan[0].target = 'previous'; },
+    f => { f.raw.profiles.reverse(); }, f => { f.raw.viewport.width = 900; }, f => { f.raw.settleDelayMs = 0; },
+    f => { delete f.raw.capture; }, f => { f.raw.capture.sources.pop(); },
+    f => { f.raw.results[0].reference.runtime.errors.push('bad'); },
+    f => { f.raw.results[0].reference.range = '91 – 100 of 100'; },
+    f => { f.raw.results[0].astylar.pageIndex = 9; },
+    f => { f.raw.results[0].reference.previousDisabled = true; },
+    f => { f.raw.results[0].reference.previousAriaDisabled = null; },
+    f => { f.raw.results[0].reference.previousTabIndex = 0; },
+    f => { f.raw.results[0].astylar.authoredPreviousDisabled = false; },
+    f => { f.raw.results[6].reference.visibleTooltips = []; },
+    f => { f.raw.results[1].astylar.pointer.x++; },
+    f => { f.raw.results[2].astylar.events = []; },
+    f => { f.raw.results[2].astylar.events.at(-1).trusted = false; },
+    f => { f.raw.results[3].astylar.events[0].type = 'fake'; },
+    f => { f.raw.results[24].astylar.events.at(-1).key = 'Enter'; },
+    f => { f.raw.results[0].astylar.activeNavigation = 'previous'; },
+    f => { f.raw.results[0].checks.nativeDisabledInputs = true; },
+    f => { f.raw.results[1].reference.screenshot = f.raw.results[0].reference.screenshot; },
+    f => { f.raw.results[0].reference.screenshot.sha256 = '0'.repeat(64); },
+  ];
+  const treeMutations = [
+    tree => { tree.nodes.push(structuredClone(tree.nodes[0])); },
+    tree => { tree.nodes[0].authored.textContent = 'Other'; },
+    tree => { tree.nodes[1].authored.disabled = false; },
+    tree => { delete tree.nodes[1].normalResolvedStyle; },
+    tree => { tree.resolvedStyleSource = 'mesh-metadata'; },
+    tree => { tree.resolvedStyleRevision = -1; },
+  ];
+  for (const mutate of mutations) {
+    const f = paginatorFixture(); mutate(f);
+    const v = validatePaginatorNavigationCapture(f.raw, f.options);
+    assert.equal(v.complete, false, String(mutate)); assert.deepEqual(v.observations, []);
+  }
+  for (const mutate of treeMutations) {
+    const f = paginatorFixture(), sample = f.raw.results[0].astylar;
+    const tree = JSON.parse(f.options.readBytes(path.resolve(f.options.root, sample.inputTree.file)));
+    mutate(tree); sample.inputTree = f.put(sample.inputTree.file, tree);
+    assert.equal(validatePaginatorNavigationCapture(f.raw, f.options).complete, false, String(mutate));
+  }
+});
 
 
 test('tooltip state evidence verifies all real action boundaries and preserves benchmark versus ordinary mismatches', () => {
