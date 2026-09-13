@@ -3,6 +3,68 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Grid template context controls: inactive is not globally equivalent
+
+The public package proof now preserves all sixteen original active-grid cases
+and adds **32 two-child block/flex cases**: both template axes, 120/240px
+container extents, and unchanged omitted, `none`, `1fr`, and literal template
+inputs. The same style objects still create both surfaces. Ordinary non-grid
+children have definite 20px sizes; a second child distinguishes vertical block
+flow from horizontal flex flow. This is an isolated diagnostic, not a rewrite
+of the Material examples or a proposal to replace grid with block/flex.
+
+The expanded repeat produced **4 failed / 44 passed**, terminal exit 1. All
+32 block/flex controls pass. All parent and child edges match exactly in these
+controls, no node receives `astylarGridAssignedSize`, and the browser retains
+the specified non-grid template (`none` for omission) instead of a used track
+extent. Core normal/effective stages retain the authored declaration. The four
+failures are still only explicit `none` on active grid, already reduced below.
+Unchanged input, no diagnostic errors, and zero-resource disposal are asserted
+throughout.
+
+Source trace: `GridService.isGridContainer` at
+`src/app/services/dom/elements/grid.service.ts:47` selects only `grid` and
+`inline-grid`. `ElementCreationService.processChildren` at
+`src/app/services/dom/elements/element-creation.service.ts:602` checks the
+formatting context, dispatching to grid at line635 and flex at line637;
+ordinary block flow takes neither grid branch. Both source files are already
+fingerprinted. Templates alone do not choose the grid formatting context.
+
+This is evidence for a future **state- and context-bound** omitted-template
+classification, not an unconditional `none`/missing normalization. The
+classification still needs uniquely paired ordinary nodes, complete authored
+rule/inline evidence, and matching captured non-grid style stages. Explicit
+grid inputs, custom plugins, missing evidence, and grid-capable states must not
+inherit this acceptance. The existing unresolved-snapshot guard now includes
+`block`, `flex`, `grid`, and `inline-grid`; it does not waive any captured
+template differences. No existing discrepancy count is reduced here.
+
+Verification so far:
+
+- Expanded browser command, run twice:
+  `npm --prefix examples/material-showcase test -- --watch=false --browsers=ChromeHeadless --include=src/app/grid-template-initial-audit.spec.ts --progress=false`.
+  First run: **5 failed / 43 passed**, terminal exit1, 22.65 seconds browser
+  total. In addition to the four expected grid failures, the first randomized
+  case (`flex: rows 1fr in 120px`) exceeded the unchanged five-second Jasmine
+  async limit. Its eventual logged observations do not turn that timeout into
+  a passing run. No timeout or geometric threshold was relaxed.
+- Unchanged repeat: **4 failed / 44 passed**, terminal exit1, 15.382 seconds
+  browser total / 8.641 seconds test execution; no async timeout. Chrome
+  Headless152.0.0.0 Windows, DPR1, Angular core20.3.29, CLI20.3.34,
+  AstylarUI0.2.0, Babylon8.56.2. The existing NG0914 test-configuration warning
+  remains recorded. No canonical renderer, fixture, or frozen runtime changed.
+- `node --test --test-name-pattern='grid none proof|records source fingerprints|source audit has' tests/material-parity/input-equivalence-audit.spec.mjs`
+  — **3/3 pass**, terminal exit0, 9.6486799 seconds, zero skips/cancellations.
+  Fingerprints remain79 and source findings125; the proof inventory describes
+  the active/inactive distinction and the first-run timeout explicitly.
+- `npm --prefix examples/material-showcase run build -- --output-path=dist/grid-template-context-audit-build`
+  — terminal exit0, 69.811 seconds, two prerendered routes, no warning/error
+  lines in the captured build output. The isolated output does not overwrite
+  the frozen showcase used for the comparison captures.
+- `git diff --check` passes. All ten frozen capture-harness files still match
+  their checkpoint SHA-256 values. Full audit acceptance and final enforced
+  parity remain pending; the browser controls alone do not complete either.
+
 ## Grid `none` template: confirmed equal-input core mismatch
 
 The calculation-level suspect from the preceding increment is now reproduced

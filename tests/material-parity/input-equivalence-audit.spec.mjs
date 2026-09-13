@@ -1076,7 +1076,7 @@ test('root flow attribution retains every exact case beyond the display sample l
 });
 
 test('grid none proof does not waive template differences in grid or non-grid snapshots', () => {
-  for (const display of ['block', 'grid']) for (const property of ['gridTemplateColumns', 'gridTemplateRows']) {
+  for (const display of ['block', 'flex', 'grid', 'inline-grid']) for (const property of ['gridTemplateColumns', 'gridTemplateRows']) {
     const raw = parityReport({ display, [property]: 'none' }, { display });
     const before = JSON.stringify(raw);
     const audit = buildMaterialInputAudit(raw);
@@ -1240,6 +1240,9 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   assert.equal(gridFinding?.classification, 'confirmed-core-renderer-defect');
   assert.equal(gridFinding?.detected, true);
   assert.ok(audit.focusedProofs.some(entry => entry.file === gridFinding.focusedProof && entry.line > 0 && entry.status !== 'missing'));
+  const gridProof = audit.focusedProofs.find(entry => entry.file === gridFinding.focusedProof);
+  assert.match(JSON.stringify(gridProof), /32 passing two-child block\/flex controls/);
+  assert.match(JSON.stringify(gridProof), /async startup timeout/);
   assert.ok(audit.implementationPlan.some(entry => entry.rootCause === 'Grid none is parsed as a zero-length explicit track'));
   for (const file of ['tests/material-parity/control-line-box-validation.mjs', 'tests/material-parity/supplemental-line-box-report.mjs',
     'tests/material-parity/supplemental-line-box-fixtures.mjs', 'tests/material-parity/supplemental-capture-fixtures.mjs'])
