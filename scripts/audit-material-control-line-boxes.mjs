@@ -3,7 +3,7 @@ import { createHash } from 'node:crypto';
 import { readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { chromium } from 'playwright-core';
-import { captureControlLineBox } from '../tests/material-parity/control-line-box-evidence.mjs';
+import { captureControlLineBox, hasControlTextOwners } from '../tests/material-parity/control-line-box-evidence.mjs';
 import { captureBrowserInputTree } from '../tests/material-parity/input-tree-evidence.mjs';
 import { collectFullTreeInventory, collectControlTypographyEvidence } from '../tests/material-parity/input-equivalence-audit.mjs';
 import { propertyGroups } from '../tests/material-parity/input-equivalence-policy.mjs';
@@ -41,7 +41,8 @@ try {
     writeFileSync(snapshot, bytes, { flag: 'wx' });
     return { file, sha256, snapshot };
   });
-  for (const record of records.sort((a, b) => a.key.localeCompare(b.key))) {
+  const order = ['snack-bar', 'dialog', 'datepicker', 'tooltip', 'bottom-sheet', 'button', 'card', 'core', 'menu'];
+  for (const record of records.sort((a, b) => order.indexOf(a.result.family) - order.indexOf(b.result.family) || a.key.localeCompare(b.key))) {
     const entry = record.result, key = `interaction:${entry.family}@${entry.profile}/${entry.viewport.id}/${entry.state}`;
     const pending = targets.filter(target => target.case === key);
     if (!pending.length) continue;
@@ -72,10 +73,19 @@ try {
         await settle(page);
         if (entry.state === 'open-dismiss') { await page.keyboard.press('Escape'); await settle(page); }
       }
-      const tree = await page.evaluate(captureBrowserInputTree, { styleProperties: properties });
-      assert.deepEqual(tree.errors, []);
       const original = JSON.parse(readFileSync(entry.inputTrees.reference.file));
       assert.equal(digest(readFileSync(entry.inputTrees.reference.file)), entry.inputTrees.reference.sha256);
+      // Snackbar content is asynchronously moved into its live-region wrapper.
+      // The paired runner's candidate settlement previously supplied this time
+      // indirectly. Wait for the exact original owners, never a replacement
+      // matching-text node or a fixed delay guessed from the screenshot.
+      const owners = pending.map(target => {
+        const node = original.nodes.find(n => n.key === target.referenceNode); assert.ok(node);
+        return { referenceNode: node.key, type: node.type, ownText: node.ownText };
+      });
+      await page.waitForFunction(hasControlTextOwners, { targets: owners }, { timeout: 5000 });
+      const tree = await page.evaluate(captureBrowserInputTree, { styleProperties: properties });
+      assert.deepEqual(tree.errors, []);
       const measurements = [];
       for (const target of pending) {
         const captured = original.nodes.find(n => n.key === target.referenceNode);

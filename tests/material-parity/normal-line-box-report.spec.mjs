@@ -3,11 +3,31 @@ import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { test } from 'node:test';
 import { loadNormalLineBoxReport } from './normal-line-box-report.mjs';
-import { captureControlLineBox } from './control-line-box-evidence.mjs';
+import { captureControlLineBox, hasControlTextOwners } from './control-line-box-evidence.mjs';
 import { captureBrowserInputTree } from './input-tree-evidence.mjs';
+import { loadControlLineBoxReport } from './control-line-box-report.mjs';
 
 const controlMetricProperties = ['fontFamily', 'fontSize', 'fontWeight', 'fontStyle', 'lineHeight', 'letterSpacing',
   'wordSpacing', 'textAlign', 'textTransform', 'textDecoration', 'whiteSpace'];
+test('control text readiness waits for the exact asynchronous overlay owner rather than any matching string', async () => {
+  const { chromium } = await import('playwright-core'), browser = await chromium.launch({ channel: 'chrome', headless: true });
+  try {
+    const page = await browser.newPage();
+    await page.setContent('<app-reference><main class="frame"><span>UNDO</span></main></app-reference><div class="cdk-overlay-container"><button><span>UNDO</span></button></div>');
+    await page.evaluate(() => document.fonts.ready);
+    const input = { targets: [{ referenceNode: 'overlay:0/0/0/0', type: 'span', ownText: 'UNDO' }] };
+    assert.equal(await page.evaluate(hasControlTextOwners, input), false);
+    await page.evaluate(() => setTimeout(() => {
+      const root = document.querySelector('.cdk-overlay-container'), button = root.firstElementChild, live = document.createElement('section');
+      root.append(live); live.append(button);
+    }, 50));
+    await page.waitForFunction(hasControlTextOwners, input);
+    assert.equal(await page.evaluate(hasControlTextOwners, input), true);
+    assert.equal(await page.evaluate(hasControlTextOwners, { targets: [{ ...input.targets[0], referenceNode: 'overlay:0/0/0' }] }), false);
+    assert.equal(await page.evaluate(hasControlTextOwners, { targets: [{ ...input.targets[0], ownText: 'Save' }] }), false);
+    assert.equal(await page.evaluate(hasControlTextOwners, { targets: [] }), false);
+  } finally { await browser.close(); }
+});
 async function controlMetricInput(page, id) {
   const tree = await page.evaluate(captureBrowserInputTree, { styleProperties: controlMetricProperties });
   assert.deepEqual(tree.errors, []);
@@ -244,4 +264,131 @@ test('line-box loader rejects a report path outside the artifact boundary before
   const f = fixture(); f.options.reportPath = 'package.json';
   const result = loadNormalLineBoxReport(f.options);
   assert.match(result.errors[0], /escapes its allowed directory/);
+});
+
+function controlMetricFixture() {
+  const root = process.cwd(), files = new Map(), base = 'artifacts/material-parity/control-metric-reader-test';
+  const put = (file, value) => {
+    const bytes = typeof value === 'string' ? value : JSON.stringify(value);
+    files.set(path.resolve(root, file), bytes); return { file, sha256: digest(bytes) };
+  };
+  const style = { fontFamily: 'Roboto', fontSize: '14px', fontWeight: '500', fontStyle: 'normal', lineHeight: 'normal',
+    letterSpacing: '0.096px', wordSpacing: '0px', textAlign: 'center', textTransform: 'none', textDecoration: 'none', whiteSpace: 'normal',
+    direction: 'ltr', writingMode: 'horizontal-tb', fontKerning: 'auto', textRendering: 'auto', fontVariantLigatures: 'normal',
+    fontFeatureSettings: 'normal', fontVariationSettings: 'normal' };
+  const nodes = [
+    { key: 'overlay:0', parent: null, type: 'div', attributes: { class: 'cdk-overlay-container' }, ownText: '', style: 0 },
+    { key: 'overlay:0/0', parent: 'overlay:0', type: 'button', attributes: {}, ownText: '', style: 0 },
+    { key: 'overlay:0/0/0', parent: 'overlay:0/0', type: 'span', attributes: { class: 'mdc-button__label' }, ownText: 'Cancel', style: 0 },
+  ];
+  const tree = { schemaVersion: 1, nodes, styles: [style], rules: [], errors: [] };
+  const viewport = { id: 'desktop-dpr1', width: 1440, height: 1000, deviceScaleFactor: 1 };
+  const selected = { family: 'dialog', profile: 'light', state: 'activate', viewport,
+    inputTrees: { reference: put(`${base}/old-reference.json`, structuredClone(tree)), astylar: put(`${base}/old-astylar.json`, { nodes: [] }) } };
+  const caseId = 'interaction:dialog@light/desktop-dpr1/activate', stem = `${base}/${digest(caseId)}`;
+  const record = { key: JSON.stringify({ kind: 'interaction', family: 'dialog', profile: 'light', state: 'activate', viewport }), result: selected };
+  const recordFile = `${base}/checkpoint/${digest(record.key)}.json`;
+  const assets = ['document', 'script', 'stylesheet', 'font'].map(type => ({ file: `test-${type}`, type, sha256: digest(type) }));
+  const provenance = { browser: 'test-browser', browserFiles: assets.map(({ file, sha256 }) => ({ file, sha256 })) };
+  const manifest = { schemaVersion: 1, provenance: structuredClone(provenance) };
+  const properties = { lineHeight: { reference: 'normal', painted: '17px' }, fontSize: { reference: '14px', painted: '14px' } };
+  const comparison = { case: caseId, element: 'dialog-cancel', referenceNode: nodes[2].key, astylarNode: 'root/0', properties };
+  const box = { x: 0, y: 0, top: 0, left: 0, width: 42, height: 17, right: 42, bottom: 17 };
+  const measurement = { schemaVersion: 1, source: 'browser-control-natural-css-line-box', element: 'dialog-cancel', referenceNode: nodes[2].key,
+    checkpointReferenceNode: nodes[2].key, checkpointCandidateNode: 'root/0', checkpointTypography: structuredClone(properties), checkpointPaint: '17px',
+    chain: nodes.map(({ style, ...node }) => structuredClone(node)), text: 'Cancel', typography: structuredClone(style),
+    naturalHeight: 17, naturalWidth: 42, observerViewportBox: { ...box }, referenceViewportBox: { ...box }, fontReady: true,
+    fonts: [{ family: 'Roboto', status: 'loaded' }], viewport: { width: 1440, height: 1000, deviceScaleFactor: 1 } };
+  const evidence = { case: caseId, ...selected, checkpointInputTrees: structuredClone(selected.inputTrees),
+    checkpointRecord: { file: recordFile }, inputTree: { file: `${stem}-reference.json` }, screenshot: put(`${stem}.png`, 'test screenshot'),
+    runtime: { errors: [], assets }, activeId: '', events: [{ type: 'pointerdown', trusted: true }, { type: 'pointerup', trusted: true }], measurements: [measurement] };
+  const raw = { schemaVersion: 1, browser: provenance.browser, capture: { schemaVersion: 1, checkpointManifest: { file: `${base}/checkpoint/manifest.json` },
+    sources: ['scripts/audit-material-control-line-boxes.mjs', 'tests/material-parity/supplemental-capture-evidence.mjs',
+      'tests/material-parity/input-tree-evidence.mjs'].map(file => put(file, file)), styleProperties: ['fontSize'] },
+    measurementSources: ['tests/material-parity/control-line-box-evidence.mjs', 'tests/material-parity/input-equivalence-audit.mjs',
+      'tests/material-parity/input-equivalence-policy.mjs'].map(file => {
+      const source = put(file, file), snapshot = `${base}/source-${source.sha256}.txt`; put(snapshot, file); return { ...source, snapshot };
+    }), cases: 1, observations: 1, results: [{ case: caseId, file: `${stem}.json`, observations: 1 }] };
+  const options = { root, reportPath: `${base}/latest-report.json`, cases: [{ ...structuredClone(selected), kind: 'interaction' }],
+    expectedProvenance: provenance, styleProperties: ['fontSize'], controlTypography: { comparisons: [comparison] },
+    inventory: { errors: [], cases: [{ case: caseId, side: 'reference', variant: 0 }], variants: [{ nodes: structuredClone(nodes) }], styles: [{ side: 'reference', value: structuredClone(style) }] },
+    readBytes: file => { assert.ok(files.has(file), `missing test file ${file}`); return files.get(file); } };
+  const save = () => {
+    record.sha256 = digest(JSON.stringify(record.result)); put(recordFile, record); evidence.checkpointRecord.sha256 = record.sha256;
+    raw.capture.checkpointManifest.sha256 = put(raw.capture.checkpointManifest.file, manifest).sha256;
+    evidence.inputTree.sha256 = put(evidence.inputTree.file, tree).sha256;
+    const capture = put(`${stem}.json`, evidence); for (const index of raw.results) index.sha256 = capture.sha256;
+    put(options.reportPath, raw);
+  };
+  save(); return { options, raw, evidence, measurement, tree, nodes, manifest, record, save, put, files };
+}
+
+test('interactive line-box reader preserves CSS metrics and projected boxes as different stages', () => {
+  const f = controlMetricFixture(); f.measurement.observerViewportBox.height = 21.25; f.save();
+  const result = loadControlLineBoxReport(f.options);
+  assert.deepEqual(result.errors, []); assert.deepEqual(result.missing, []);
+  assert.equal(result.observations.length, 1); assert.equal(result.observations[0].naturalHeight, 17);
+  assert.equal(result.observations[0].observerViewportBox.height, 21.25);
+  assert.equal(result.observations[0].inputEquivalent, undefined);
+});
+
+test('interactive line-box reader compares JSON checkpoint typography without inventing omitted stage values', () => {
+  const f = controlMetricFixture();
+  f.options.controlTypography.comparisons[0].properties.lineHeight.normal = undefined;
+  f.options.controlTypography.comparisons[0].properties.lineHeight.effective = undefined;
+  const accepted = loadControlLineBoxReport(f.options);
+  assert.deepEqual(accepted.errors, []); assert.equal(accepted.observations.length, 1);
+  assert.equal(accepted.observations[0].checkpointTypography.lineHeight.normal, undefined);
+  f.measurement.checkpointTypography.lineHeight.normal = null; f.save();
+  const changed = loadControlLineBoxReport(f.options);
+  assert.ok(changed.errors.length); assert.deepEqual(changed.observations, []);
+});
+
+const invalidControlMetric = [
+  ['report schema', f => { f.raw.schemaVersion++; }], ['capture schema', f => { f.raw.capture.schemaVersion++; }],
+  ['browser', f => { f.raw.browser = 'changed'; }], ['provenance', f => { f.manifest.provenance.browser = 'changed'; }],
+  ['style set', f => { f.raw.capture.styleProperties = []; }], ['capture source', f => { f.raw.capture.sources.pop(); }],
+  ['measurement source', f => { f.raw.measurementSources.pop(); }],
+  ['snapshot bytes', f => { f.put(f.raw.measurementSources[1].snapshot, 'changed'); }],
+  ['measurement algorithm', f => { f.put(f.raw.measurementSources[0].file, 'changed'); }],
+  ['duplicate cases', f => { f.raw.results.push({ ...f.raw.results[0] }); f.raw.cases++; }],
+  ['index path', f => { f.raw.results[0].file = '../../outside.json'; }], ['case identity', f => { f.evidence.case += '-changed'; }],
+  ['case state', f => { f.evidence.state = 'hover'; }], ['checkpoint state', f => { f.record.key = JSON.stringify({ ...JSON.parse(f.record.key), state: 'hover' }); }],
+  ['paired trees', f => { f.evidence.checkpointInputTrees.astylar = f.evidence.checkpointInputTrees.reference; }],
+  ['fresh tree errors', f => { f.tree.errors.push('failed'); }], ['runtime errors', f => { f.evidence.runtime.errors.push('failed'); }],
+  ['missing fonts', f => { f.evidence.runtime.assets = f.evidence.runtime.assets.filter(a => a.type !== 'font'); }],
+  ['served bytes', f => { f.evidence.runtime.assets[0].sha256 = digest('changed'); }],
+  ['missing trace', f => { delete f.evidence.events; }], ['untrusted activation', f => { f.evidence.events[0].trusted = false; }],
+  ['focus evidence', f => { delete f.evidence.activeId; }],
+  ['duplicate metrics', f => { f.evidence.measurements.push(structuredClone(f.measurement)); f.raw.results[0].observations++; f.raw.observations++; }],
+  ['wrong element', f => { f.measurement.element = 'other'; }], ['metric schema', f => { f.measurement.schemaVersion++; }],
+  ['metric source', f => { f.measurement.source = 'browser-natural-single-line-box'; }],
+  ['input equivalence', f => { f.measurement.inputEquivalent = true; }], ['raster parity', f => { f.measurement.finalRasterVerified = true; }],
+  ['candidate owner', f => { f.measurement.checkpointCandidateNode = 'root/1'; }],
+  ['paint metric', f => { f.measurement.checkpointPaint = '19px'; }],
+  ['checkpoint typography', f => { f.measurement.checkpointTypography.fontSize.reference = '16px'; }],
+  ['font readiness', f => { f.measurement.fontReady = false; }], ['CSS height', f => { f.measurement.naturalHeight = 0; }],
+  ['CSS width', f => { f.measurement.naturalWidth = -1; }], ['viewport box', f => { delete f.measurement.observerViewportBox; }],
+  ['DPR', f => { f.measurement.viewport.deviceScaleFactor = 2; }],
+  ['text', f => { f.measurement.text = 'Save'; }], ['chain', f => { f.measurement.chain.pop(); }],
+  ['missing ancestor', f => { f.nodes[1].parent = 'missing'; }],
+  ['same-length wrong parent path', f => {
+    f.nodes[1].key = 'overlay:9/0'; f.nodes[2].parent = f.nodes[1].key;
+    f.measurement.chain = f.nodes.map(({ style, ...node }) => structuredClone(node));
+  }],
+  ['fresh font', f => { f.tree.styles[0].fontSize = '16px'; }], ['observed font', f => { f.measurement.typography.fontSize = '16px'; }],
+  ['loaded face', f => { f.measurement.fonts[0].status = 'error'; }],
+  ['total count', f => { f.raw.observations++; }], ['case count', f => { f.raw.cases++; }],
+];
+for (const [name, mutate] of invalidControlMetric) test(`interactive line-box reader rejects ${name}`, () => {
+  const f = controlMetricFixture(); mutate(f); f.save(); const result = loadControlLineBoxReport(f.options);
+  assert.ok(result.errors.length, name); assert.deepEqual(result.observations, []); assert.equal(result.missing.length, 1);
+});
+
+test('interactive line-box reader preserves target-selection source snapshots but independently requires every target', () => {
+  const f = controlMetricFixture(); f.put(f.raw.measurementSources[1].file, 'updated current audit code');
+  const accepted = loadControlLineBoxReport(f.options); assert.deepEqual(accepted.errors, []);
+  f.raw.results = []; f.raw.cases = 0; f.raw.observations = 0; f.save();
+  const missing = loadControlLineBoxReport(f.options);
+  assert.deepEqual(missing.errors, []); assert.deepEqual(missing.observations, []); assert.equal(missing.missing.length, 1);
 });

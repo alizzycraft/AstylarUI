@@ -23,6 +23,97 @@ selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Independent interactive line-box reader and owner readiness (2026-09-13)
+
+`tests/material-parity/control-line-box-report.mjs` independently validates the
+interactive natural-line-box supplement. It rederives the expected targets from
+the selected interaction cases and control typography, verifies the original
+checkpoint results and paired tree digests, and verifies the fresh reference
+trees, screenshots, browser/build provenance, served assets, source snapshots,
+and measurement implementation. Each metric must retain its exact text owner,
+complete fresh ancestry, original/current font properties, CSS used dimensions,
+viewport/DPR, loaded fonts, and observed action evidence. Missing observations
+remain explicit; an invalid record rejects the supplement without accepting a
+partial set. No reader result asserts input equivalence or raster parity.
+
+The `control-line-box-current-ancestry-audit-v2` capture terminated with exit 1
+at `interaction:snack-bar@contrast/desktop-dpr1/activate-leave` because the
+original UNDO owner was not yet at its captured path. Live inspection found
+that Angular Material asynchronously reparents the snackbar content into its
+live-region wrapper: the immediate path was one wrapper shallower, then became
+the exact checkpoint path. The paired runner had indirectly allowed that work
+to settle while waiting on its candidate side. The reference-only measurement
+must not rely on that unrelated delay.
+
+The producer now waits for every exact original text owner before capturing;
+it does not search for substitute matching strings, insert wrappers, modify
+styles, or guess a sleep duration. A browser regression reproduces asynchronous
+reparenting with duplicate text elsewhere and confirms readiness only at the
+expected path. The preserved v2 partial artifacts are not accepted evidence.
+The v3 capture uses the same complete target set, ordered with snackbar first
+to exercise the previously failing boundary early.
+
+Reader negative controls also exposed a path-validation defect: checking only
+the numeric suffix accepted an ancestor with a different same-length prefix.
+The added test failed before the reader correction; both the parent prefix and
+the direct-child numeric suffix are now required. This is an audit-instrument
+repair, not a renderer or application workaround.
+
+The first real reader run rejected all observations because the in-memory
+comparison contained undefined stage fields that checkpoint JSON legitimately
+omitted. A failing regression confirmed the problem. The reader now compares
+the expected JSON shape, not a fictitious undefined-valued JSON property;
+explicit nulls and changed defined values still fail. No captured metric or
+source artifact was rewritten to make this check pass.
+
+The v3 capture completed with terminal exit 0. Its independent reader then
+accepted **671 observations in 477 cases**, with **0 missing and 0 errors**.
+Report: `artifacts/material-parity/control-line-box-current-ancestry-audit-v3/latest-report.json`.
+SHA-256: `9e689c9a5d828a16214abbe55804a6ff72037d300c7f26272123ae008d948d11`.
+Browser: Chrome `152.0.7977.76`, matching the frozen checkpoint.
+
+| Family | Validated reference observations |
+| --- | ---: |
+| Snack-bar | 93 |
+| Dialog | 130 |
+| Datepicker | 41 |
+| Tooltip | 50 |
+| Bottom-sheet | 51 |
+| Button | 144 |
+| Card | 40 |
+| Core | 40 |
+| Menu | 82 |
+
+Every measured CSS natural height is 17px. Of these, **637** have an equal
+numeric candidate paint height; **34 snackbar action observations** retain
+19px candidate paint. This is a measured stage comparison, not evidence of
+equivalent typography, correct baseline, visibility, overlay placement or final
+raster. The independently documented 14px reference/16px candidate snackbar
+font-size inequality remains intact. These measurements do not resolve the
+reported missing snackbar or displaced tooltip.
+
+Reproduce reader validation by loading the main report, constructing its
+interaction cases with `kind: 'interaction'`, and passing those cases through
+`collectFullTreeInventory` and `collectControlTypographyEvidence`. Call
+`loadControlLineBoxReport` with the v3 path, that inventory/control evidence,
+`expectedProvenance: mainReport.captureProvenance`, and
+`styleProperties: Object.values(propertyGroups).flat()`. Require zero errors
+and missing targets; do not trust the producer's counts alone. Both the initial
+failed read and the corrected successful read used the same preserved v3 bytes.
+
+Verification: `node --test tests/material-parity/normal-line-box-report.spec.mjs`
+passes **102/102**, zero failures/skips/cancellations, terminal exit 0,
+4.389326 seconds after both reader corrections. `npm run parity:harness:check`
+passes **511/511**, zero failures/skips/cancellations, terminal exit 0,
+344.8251981 seconds. It started before the parent-prefix and JSON-shape tests
+were added; the complete 102-test focused file was rerun after those corrections.
+Both changed modules pass `node --check`; `git diff --check` passes. All ten
+frozen capture harness source digests still match. Consolidated report integration, scalar-only
+attribution guards, supplemental interaction cohorts, and the remaining full
+audit requirements are outstanding. In particular, the current consolidated
+audit's 717 unresolved control typography differences have not been silently
+waived by adding this independent evidence reader.
+
 ## Interactive control line-box capture infrastructure (2026-09-13)
 
 The static supplement cannot measure `overlay:0/...` text owners and must not

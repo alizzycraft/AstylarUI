@@ -1,0 +1,175 @@
+import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
+import { readFileSync, realpathSync } from 'node:fs';
+import path from 'node:path';
+
+const digest = bytes => createHash('sha256').update(bytes).digest('hex');
+const identity = item => JSON.stringify([item.case, item.element, item.referenceNode]);
+const caseKey = item => `interaction:${item.family}@${item.profile}/${item.viewport.id}/${item.state}`;
+const captureFiles = ['scripts/audit-material-control-line-boxes.mjs', 'tests/material-parity/supplemental-capture-evidence.mjs',
+  'tests/material-parity/input-tree-evidence.mjs'];
+const measurementFiles = ['tests/material-parity/control-line-box-evidence.mjs', 'tests/material-parity/input-equivalence-audit.mjs',
+  'tests/material-parity/input-equivalence-policy.mjs'];
+const fontProperties = ['fontFamily', 'fontSize', 'fontWeight', 'fontStyle', 'lineHeight', 'letterSpacing', 'wordSpacing',
+  'textAlign', 'textTransform', 'textDecoration', 'whiteSpace', 'direction', 'writingMode', 'fontKerning',
+  'textRendering', 'fontVariantLigatures', 'fontFeatureSettings', 'fontVariationSettings'];
+
+// Independent reader: no producer assertions or self-reported counts substitute
+// for target, checkpoint, source, tree, font and asset validation.
+export function loadControlLineBoxReport({ root = process.cwd(), reportPath, cases, inventory, controlTypography,
+  expectedProvenance, styleProperties, readBytes }) {
+  const selectedCases = cases.filter(item => item.kind === 'interaction');
+  const selectedKeys = new Set(selectedCases.map(caseKey));
+  const targets = controlTypography.comparisons.filter(item => selectedKeys.has(item.case) && item.properties.lineHeight.reference === 'normal');
+  const pending = targets.map(item => ({ case: item.case, element: item.element, referenceNode: item.referenceNode }));
+  const result = { schemaVersion: 1, file: reportPath, observations: [], missing: pending, errors: [],
+    scope: 'Validated main-checkpoint interactive reference CSS natural single-line metrics. No input-equivalence, interaction-parity, baseline, visibility or raster verdict.' };
+  try {
+    assert.ok(expectedProvenance?.browser, 'missing selected-run provenance');
+    assert.deepEqual(inventory.errors, [], 'invalid selected input inventory');
+    assert.equal(selectedKeys.size, selectedCases.length, 'duplicate selected interaction case');
+    assert.equal(new Set(targets.map(identity)).size, targets.length, 'duplicate target identity');
+    const resolve = (file, source = false) => {
+      assert.equal(typeof file, 'string', 'missing evidence path');
+      const absolute = path.resolve(root, file), boundary = path.resolve(root, source ? '.' : 'artifacts/material-parity');
+      assert.ok(absolute.startsWith(boundary + path.sep), 'evidence path escapes boundary');
+      if (!readBytes) assert.ok(realpathSync(absolute).startsWith(realpathSync(boundary) + path.sep), 'evidence symlink escapes boundary');
+      return absolute;
+    };
+    const read = (file, source = false) => (readBytes ?? readFileSync)(resolve(file, source));
+    const hashed = (item, source = false) => {
+      assert.match(item?.sha256 ?? '', /^[a-f0-9]{64}$/, 'missing evidence digest');
+      const bytes = read(item.file, source); assert.equal(digest(bytes), item.sha256, `changed evidence: ${item.file}`); return bytes;
+    };
+    const reportBytes = read(reportPath), raw = JSON.parse(reportBytes);
+    result.sha256 = digest(reportBytes);
+    assert.equal(raw.schemaVersion, 1, 'unsupported report schema');
+    assert.equal(raw.capture?.schemaVersion, 1, 'unsupported capture schema');
+    assert.equal(raw.browser, expectedProvenance.browser, 'changed browser');
+    const manifest = JSON.parse(hashed(raw.capture.checkpointManifest));
+    assert.equal(manifest.schemaVersion, 1, 'unsupported checkpoint schema');
+    assert.deepEqual(manifest.provenance, expectedProvenance, 'different capture run');
+    assert.deepEqual(raw.capture.styleProperties, styleProperties, 'changed captured style set');
+    assert.deepEqual(raw.capture.sources.map(item => item.file).sort(), [...captureFiles].sort(), 'missing or duplicate capture source');
+    for (const item of raw.capture.sources) hashed(item, true);
+    assert.deepEqual(raw.measurementSources.map(item => item.file).sort(), [...measurementFiles].sort(), 'missing or duplicate measurement source');
+    for (const item of raw.measurementSources) {
+      assert.equal(path.dirname(resolve(item.snapshot)), path.dirname(resolve(reportPath)), 'source snapshot outside report directory');
+      assert.equal(path.basename(item.snapshot), `source-${item.sha256}.txt`, 'source snapshot filename changed');
+      hashed({ file: item.snapshot, sha256: item.sha256 });
+      // The measurement algorithm must still be the reviewed implementation.
+      // Target-selection code may evolve; its old bytes are retained, never
+      // executed, and the expected target set is independently rebuilt above.
+      if (item.file === measurementFiles[0]) hashed(item, true);
+    }
+    const assets = new Map(expectedProvenance.browserFiles.map(item => [item.file, item.sha256]));
+    assert.equal(assets.size, expectedProvenance.browserFiles.length, 'duplicate expected assets');
+    const selectedByKey = new Map(selectedCases.map(item => [caseKey(item), item]));
+    const targetByKey = new Map(targets.map(item => [identity(item), item]));
+    const seen = new Set(), seenCases = new Set(), observations = [];
+    assert.ok(Array.isArray(raw.results), 'missing result index');
+    assert.equal(raw.cases, raw.results.length, 'case count changed');
+    for (const index of raw.results) {
+      assert.ok(!seenCases.has(index.case), 'duplicate captured case'); seenCases.add(index.case);
+      assert.equal(path.dirname(resolve(index.file)), path.dirname(resolve(reportPath)), 'case outside report directory');
+      assert.equal(path.basename(index.file), `${digest(index.case)}.json`, 'case filename changed');
+      const evidence = JSON.parse(hashed(index)), selected = selectedByKey.get(index.case);
+      assert.ok(selected, 'unselected interaction case');
+      assert.equal(evidence.case, index.case, 'changed case identity');
+      for (const field of ['family', 'profile', 'state', 'viewport']) assert.deepEqual(evidence[field], selected[field], `changed case ${field}`);
+      const recordBytes = read(evidence.checkpointRecord.file), record = JSON.parse(recordBytes);
+      assert.equal(record.sha256, evidence.checkpointRecord.sha256, 'changed checkpoint digest');
+      assert.equal(digest(JSON.stringify(record.result)), record.sha256, 'changed checkpoint result');
+      assert.equal(path.dirname(resolve(evidence.checkpointRecord.file)), path.dirname(resolve(raw.capture.checkpointManifest.file)), 'different checkpoint directory');
+      assert.equal(path.basename(evidence.checkpointRecord.file), `${digest(record.key)}.json`, 'changed checkpoint filename');
+      const recordKey = JSON.parse(record.key);
+      assert.equal(recordKey.kind, 'interaction', 'static evidence cannot justify interaction metric');
+      for (const field of ['family', 'profile', 'state', 'viewport']) assert.deepEqual(recordKey[field], selected[field], `changed checkpoint ${field}`);
+      const { kind, ...selectedResult } = selected;
+      assert.deepEqual(record.result, selectedResult, 'checkpoint differs from selected case');
+      assert.deepEqual(evidence.checkpointInputTrees, selected.inputTrees, 'different paired input trees');
+      for (const side of ['reference', 'astylar']) hashed(evidence.checkpointInputTrees[side]);
+      for (const [item, suffix] of [[evidence.inputTree, '-reference.json'], [evidence.screenshot, '.png']]) {
+        assert.equal(path.dirname(resolve(item.file)), path.dirname(resolve(reportPath)), 'observation outside report directory');
+        assert.equal(path.basename(item.file), `${digest(index.case)}${suffix}`, 'observation filename changed');
+      }
+      const fresh = JSON.parse(hashed(evidence.inputTree)); hashed(evidence.screenshot);
+      assert.equal(fresh.schemaVersion, 1); assert.deepEqual(fresh.errors, [], 'invalid fresh input tree');
+      assert.equal(new Set(fresh.nodes.map(n => n.key)).size, fresh.nodes.length, 'duplicate fresh node identity');
+      assert.deepEqual(evidence.runtime?.errors, [], 'missing runtime evidence or runtime errors');
+      for (const type of ['document', 'script', 'stylesheet', 'font']) assert.ok(evidence.runtime.assets.some(a => a.type === type), `missing runtime ${type}`);
+      for (const asset of evidence.runtime.assets) {
+        assert.ok(['document', 'script', 'stylesheet', 'font'].includes(asset.type), 'unexpected runtime type');
+        assert.match(asset.sha256 ?? '', /^[a-f0-9]{64}$/); assert.equal(asset.sha256, assets.get(asset.file), 'changed served asset');
+      }
+      assert.ok(Array.isArray(evidence.events), 'missing action trace');
+      assert.equal(typeof evidence.activeId, 'string', 'missing observed focus ID');
+      for (const event of evidence.events) {
+        assert.ok(['pointerdown', 'pointerup', 'click', 'keydown', 'focusin', 'focusout'].includes(event.type), 'unknown action event');
+        assert.equal(typeof event.trusted, 'boolean', 'missing trusted flag');
+      }
+      if (!['focus', 'hover', 'disabled'].includes(selected.state))
+        assert.ok(evidence.events.some(event => event.type === 'pointerdown' && event.trusted), 'missing real pointer activation');
+      if (selected.state === 'held') assert.ok(!evidence.events.some(event => event.type === 'pointerup'), 'held state was released');
+      if (selected.state === 'open-dismiss') assert.equal(evidence.events.filter(event => event.type === 'keydown' && event.key === 'Escape' && event.trusted).length, 3, 'missing dismissal cycles');
+      const maps = inventory.cases.filter(item => item.case === index.case && item.side === 'reference');
+      assert.equal(maps.length, 1, 'ambiguous reference inventory');
+      const original = inventory.variants[maps[0].variant];
+      assert.ok(Array.isArray(evidence.measurements) && evidence.measurements.length, 'missing measurements');
+      assert.equal(evidence.measurements.length, index.observations, 'case observation count changed');
+      for (const measurement of evidence.measurements) {
+        const id = identity({ ...measurement, case: index.case }), target = targetByKey.get(id);
+        assert.ok(target, 'unmapped metric'); assert.ok(!seen.has(id), 'duplicate metric'); seen.add(id);
+        assert.equal(measurement.schemaVersion, 1); assert.equal(measurement.source, 'browser-control-natural-css-line-box');
+        assert.equal(measurement.inputEquivalent, undefined, 'metric cannot assert equivalent inputs');
+        assert.equal(measurement.finalRasterVerified, undefined, 'metric cannot assert raster parity');
+        assert.equal(measurement.checkpointReferenceNode, target.referenceNode, 'changed reference mapping');
+        assert.equal(measurement.checkpointCandidateNode, target.astylarNode, 'changed candidate mapping');
+        // Checkpoint JSON omits undefined stage properties. Compare its exact
+        // serialized shape, preserving explicit nulls and all defined values.
+        assert.deepEqual(measurement.checkpointTypography, JSON.parse(JSON.stringify(target.properties)), 'changed checkpoint typography');
+        assert.equal(measurement.checkpointPaint, target.properties.lineHeight.painted, 'changed paint metric');
+        assert.equal(measurement.fontReady, true, 'unsettled fonts');
+        assert.ok(Number.isFinite(measurement.naturalHeight) && measurement.naturalHeight > 0, 'invalid CSS height');
+        assert.ok(Number.isFinite(measurement.naturalWidth) && measurement.naturalWidth > 0, 'invalid CSS width');
+        for (const box of [measurement.observerViewportBox, measurement.referenceViewportBox])
+          for (const field of ['x', 'y', 'width', 'height', 'top', 'right', 'bottom', 'left']) assert.ok(Number.isFinite(box?.[field]), 'missing viewport geometry');
+        assert.deepEqual(measurement.viewport, { width: selected.viewport.width, height: selected.viewport.height, deviceScaleFactor: selected.viewport.deviceScaleFactor }, 'changed measurement viewport');
+        const node = fresh.nodes.find(n => n.key === target.referenceNode), old = original.nodes.filter(n => n.key === target.referenceNode);
+        assert.ok(node); assert.equal(old.length, 1); assert.equal(node.type, 'span'); assert.equal(old[0].type, 'span');
+        assert.ok(!fresh.nodes.some(n => n.parent === node.key), 'text owner is not a leaf');
+        assert.equal(measurement.text, node.ownText); assert.equal(measurement.text, old[0].ownText, 'changed original text');
+        assert.ok(measurement.text.trim() && !/[\r\n\t]/.test(measurement.text), 'unsupported text');
+        const chain = [], visited = new Set(); let ancestor = node;
+        while (ancestor) {
+          assert.ok(!visited.has(ancestor.key), 'cyclic ancestry'); visited.add(ancestor.key);
+          chain.unshift({ key: ancestor.key, parent: ancestor.parent, type: ancestor.type, attributes: ancestor.attributes, ownText: ancestor.ownText });
+          if (ancestor.parent === null) break;
+          ancestor = fresh.nodes.find(n => n.key === ancestor.parent); assert.ok(ancestor, 'missing fresh ancestor');
+        }
+        assert.match(chain[0].key, /^(frame|overlay:(0|[1-9]\d*))$/, 'unsupported root');
+        for (let i = 1; i < chain.length; i++) {
+          assert.ok(chain[i].key.startsWith(chain[i - 1].key + '/'), 'wrong parent path prefix');
+          assert.match(chain[i].key.slice(chain[i - 1].key.length), /^\/(0|[1-9]\d*)$/, 'broken child path');
+        }
+        assert.deepEqual(measurement.chain, chain, 'changed observer ownership chain');
+        const pooled = inventory.styles[old[0].style], currentStyle = fresh.styles[node.style];
+        assert.equal(pooled?.side, 'reference');
+        for (const property of fontProperties) {
+          assert.equal(typeof measurement.typography?.[property], 'string', `missing ${property}`);
+          assert.equal(measurement.typography[property], pooled.value[property], `changed original ${property}`);
+          assert.equal(measurement.typography[property], currentStyle[property], `changed fresh ${property}`);
+        }
+        assert.equal(measurement.typography.lineHeight, 'normal'); assert.equal(measurement.typography.writingMode, 'horizontal-tb');
+        assert.ok(Array.isArray(measurement.fonts) && measurement.fonts.length && measurement.fonts.every(font => font.status === 'loaded'), 'missing loaded font faces');
+        observations.push({ ...measurement, case: index.case, evidence: { file: index.file, sha256: index.sha256,
+          inputTree: evidence.inputTree, screenshot: evidence.screenshot, checkpointRecord: evidence.checkpointRecord,
+          checkpointInputTrees: evidence.checkpointInputTrees, capture: raw.capture, measurementSources: raw.measurementSources } });
+      }
+    }
+    assert.equal(raw.observations, observations.length, 'total observation count changed');
+    result.observations = observations;
+    result.missing = pending.filter(item => !seen.has(identity(item)));
+  } catch (error) { result.errors.push(String(error)); }
+  return result;
+}

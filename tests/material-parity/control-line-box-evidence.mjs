@@ -1,5 +1,22 @@
 // Serialized directly into the browser. Never feed these observations into
 // fixture styling or renderer layout. Kept separate from the frozen static probe.
+export function hasControlTextOwners({ targets }) {
+  if (!Array.isArray(targets) || !targets.length || document.fonts.status !== 'loaded') return false;
+  return targets.every(target => {
+    const [root, ...parts] = String(target.referenceNode).split('/');
+    if (parts.some(part => !/^(0|[1-9]\d*)$/.test(part))) return false;
+    let node;
+    if (root === 'frame') {
+      const roots = document.querySelectorAll('app-reference .frame'); if (roots.length !== 1) return false;
+      node = roots[0];
+    } else if (/^overlay:(0|[1-9]\d*)$/.test(root)) node = document.querySelectorAll('.cdk-overlay-container')[Number(root.slice(8))];
+    else return false;
+    for (const part of parts) node = node?.children[Number(part)];
+    return node instanceof HTMLElement && node.tagName.toLowerCase() === target.type &&
+      [...node.childNodes].filter(n => n.nodeType === Node.TEXT_NODE).map(n => n.textContent).join('') === target.ownText;
+  });
+}
+
 export function captureControlLineBox({ chain, expectedStyle }) {
   const fail = message => { throw new Error(`Control line-box evidence: ${message}`); };
   if (!Array.isArray(chain) || !chain.length || !expectedStyle) fail('missing owner or style evidence');
