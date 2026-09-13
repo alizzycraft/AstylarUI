@@ -446,6 +446,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
     'reviewed-calendar-month-marker-typography-input': 'application-plugin-authoring-defect',
     'reviewed-timepicker-option-ink-input': 'application-plugin-authoring-defect',
     'reviewed-material-option-ink-input': 'application-plugin-authoring-defect',
+    'reviewed-snackbar-message-token-input': 'application-plugin-authoring-defect',
     'reviewed-floating-label-font-input': 'application-plugin-authoring-defect' };
   const unresolvedTypography = report.retainedTypography?.differences.filter((entry) =>
     !reviewedTypographyKinds[entry.attribution] || entry.classification !== reviewedTypographyKinds[entry.attribution] || !entry.reviewEvidence) ?? [];
@@ -587,6 +588,7 @@ export function renderMaterialInputAuditMarkdown(report) {
     `Autocomplete/select options: ${report.retainedTypography.reviewedMappings.filter(m => m.kind === 'reviewed-material-option-text').length} labels have complete ordered input-linked domain correspondence. Separate Material ripple and conditional pseudo-checkbox owners differ from candidate div/span/plugin-check composition; both sides selection and indicator inputs are retained independently. Mapping does not waive typography, structure, state, placement, scrolling or raster differences.`,
     `Autocomplete/select option ink: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-material-option-ink-input').length} unequal colors trace either base-token inheritance or the selected primary-text token against a candidate inherited literal. Own label color remains absent in normal/effective inspection, with the option owner and retained text captured separately. Missing or competing declarations prevent attribution; variable fallback origin, theme scope and composited/raster output remain independent.`,
     `Snackbar messages: ${report.retainedTypography.reviewedMappings.filter(m => m.kind === 'reviewed-snackbar-message-text').length} labels map through unique overlay, live-region and sibling-action context. Original padded flex-message and nested action/live owners are replaced by a span inside a status surface. This establishes text identity only; unequal composition, typography, announcement behavior, placement and visibility remain independent obligations.`,
+    `Snackbar message tokens: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-snackbar-message-token-input').length} size/color differences trace the direct component size token or inherited surface inverse-text token against omitted component size/page inheritance or literal surface white. Separate declaration, normal/effective and retained stages remain evidence. This is unequal authoring, not a core scaling/color defect or proof of current raster, visibility or theme-token fallback provenance.`,
     `Timepicker options: ${report.retainedTypography.reviewedMappings.filter(m => m.kind === 'reviewed-timepicker-option-text').length} labels have complete input-linked half-hour-domain correspondence. Material primary-text/ripple owners are replaced by direct-text div options; active and selected states remain separate raw evidence. This maps text owners, not equivalent wrappers, scrolling, commit behavior, placement or raster. Newly exposed typography differences remain enforced.`,
     `Timepicker option ink: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-timepicker-option-ink-input').length} unequal colors trace from the reference option token through direct label inheritance versus the candidate literal preserved in normal/effective/retained stages. Competing or missing declarations prevent attribution. No token fallback-origin, theme-scope, compositing or final-raster equivalence is inferred.`,
     `Calendar month-label typography: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-calendar-month-marker-typography-input').length} records trace the omitted explicit zero line-height or substituted center alignment/literal ink to original declarations and captured core stages. Possible competing rules prevent attribution. These are unequal inputs, not a claim that the core misrendered zero, start or the original color token.`,
@@ -1482,7 +1484,7 @@ function validateSnackbarMessageEvidence(report, errors) {
       ...(match[4] ? { state: match[4] } : {}) }] : [];
   });
   const replay = collectRetainedTypographyEvidence(cases, report.elementInventory);
-  const predicate = value => value.kind === 'reviewed-snackbar-message-text' || value.mapping?.kind === 'reviewed-snackbar-message-text' ||
+  const predicate = value => value.attribution === 'reviewed-snackbar-message-token-input' || value.kind === 'reviewed-snackbar-message-text' || value.mapping?.kind === 'reviewed-snackbar-message-text' ||
     value.element === 'snack-bar-title' || (value.family === 'snack-bar' && value.reason === 'own-text nodes without an explicit shared ID require structural mapping');
   for (const list of ['reviewedMappings', 'comparisons', 'differences', 'gaps']) {
     if (JSON.stringify(report.retainedTypography[list].filter(predicate)) !== JSON.stringify(replay[list].filter(predicate)))
@@ -2009,6 +2011,85 @@ function typographySelectorCanApply(selector, authored) {
     if (!tokens.length || tokens.some(token => !token || !compound.test(token))) return true;
     return selectorCanApply(tokens.at(-1), authored);
   });
+}
+
+function reviewedSnackbarMessageToken(entry, mapping, property, ast, styles, referenceTree, astylarTree, inventory) {
+  if (entry.family !== 'snack-bar' || !['fontSize', 'color'].includes(property) ||
+      mapping?.kind !== 'reviewed-snackbar-message-text' || mapping.astylarNode !== ast.key ||
+      ast.retainedText?.source !== 'core-text-registry' || referenceTree.ruleEvidenceComplete !== true) return;
+  const isSize = property === 'fontSize', cssProperty = isSize ? 'font-size' : 'color';
+  const affects = declarations => Object.keys(declarations ?? {}).some(key => {
+    const name = key.replaceAll('-', '').toLowerCase();
+    return [isSize ? 'fontsize' : 'color', 'all', isSize ? 'font' : 'webkittextfillcolor'].includes(name) || /^(animation|transition)/.test(name);
+  });
+  const unsafeInline = value => value !== undefined && (value === null || typeof value !== 'object' || Array.isArray(value) || affects(value));
+  const styleAt = (index, side) => {
+    const item = inventory.styles[index];
+    return item?.side === side && item.value && typeof item.value === 'object' && !Array.isArray(item.value) ? item.value : undefined;
+  };
+  const validValue = value => isSize ? /^\d+(?:\.\d+)?px$/.test(value ?? '') && parseFloat(value) > 0 : /^rgba\(/.test(value ?? '');
+  if (!validValue(styles.reference[property]) || !validValue(styles.retained[property]) || styles.reference[property] === styles.retained[property]) return;
+  // Font size is declared on the message itself; ink inherits through the
+  // original live-region wrappers. Never collapse these two ownership paths.
+  const referenceNodes = mapping.reviewEvidence.referencePath.slice(0, isSize ? 1 : 6)
+    .map(path => referenceTree.nodes.find(n => n.key === path.key));
+  if (referenceNodes.some(n => !n)) return;
+  const referenceChain = [];
+  let referenceRule;
+  for (const [index, node] of referenceNodes.entries()) {
+    const computed = styleAt(node.style, 'reference');
+    const rawInline = new RegExp(`(?:^|;)\\s*(?:${cssProperty}|${isSize ? 'font' : '-webkit-text-fill-color'}|all|animation[^:]*|transition[^:]*)\\s*:`, 'i');
+    if (!computed || canonicalStyle(computed)[property] !== styles.reference[property] || unsafeInline(node.inline) || rawInline.test(node.attributes?.style ?? '')) return;
+    const pooled = (node.rules ?? []).map(i => inventory.rules[i]);
+    if (pooled.some(r => r?.side !== 'reference' || !r.value || typeof r.value !== 'object' || Array.isArray(r.value) || typeof r.value.active !== 'boolean')) return;
+    const rules = pooled.map(r => r.value), applicable = rules.filter(r => r.active && affects(r.declarations));
+    if (index !== referenceNodes.length - 1) {
+      if (applicable.length) return;
+    } else {
+      const rule = applicable[0];
+      const selector = isSize ? '.mat-mdc-snack-bar-container .mdc-snackbar__label' : '.mat-mdc-snack-bar-container .mat-mdc-snackbar-surface';
+      const token = isSize ? 'var(--mat-snack-bar-supporting-text-size, var(--mat-sys-body-medium-size))'
+        : 'var(--mat-snack-bar-supporting-text-color, var(--mat-sys-inverse-on-surface))';
+      if (applicable.length !== 1 || rule.selector !== selector || rule.conditions?.length !== 0 ||
+          rule.declarations?.[cssProperty]?.value !== token || rule.declarations[cssProperty].important !== false ||
+          Object.keys(rule.declarations).some(k => k !== cssProperty && affects({ [k]: true }))) return;
+      referenceRule = rule;
+    }
+    referenceChain.push({ node: node.key, parent: node.parent, attributes: node.attributes, inline: node.inline, computed, rules });
+  }
+  const candidateNodes = mapping.reviewEvidence.candidatePath.slice(0, isSize ? 5 : 2)
+    .map(path => astylarTree.nodes.find(n => n.key === path.key));
+  if (candidateNodes.some(n => !n)) return;
+  const pooled = astylarTree.rules.map(i => inventory.rules[i]);
+  if (pooled.some(r => r?.side !== 'astylar' || !r.value || typeof r.value !== 'object' || Array.isArray(r.value))) return;
+  const checkedCandidateRules = pooled.map(r => r.value).filter(affects), candidateChain = [];
+  let candidateRule;
+  for (const [index, node] of candidateNodes.entries()) {
+    const normal = styleAt(node.normalStyle, 'astylar'), effective = styleAt(node.interactionStyle, 'astylar');
+    if (!normal || !effective || unsafeInline(node.authored.style)) return;
+    const applicable = checkedCandidateRules.filter(r => typographySelectorCanApply(r.selector, node.authored));
+    if (index !== candidateNodes.length - 1) {
+      if (applicable.length || affects(normal) || affects(effective)) return;
+    } else {
+      const rule = applicable[0];
+      if (applicable.length !== 1 || rule.selector !== (isSize ? '#page' : '.snack-surface') ||
+          (!isSize && rule.color !== '#ffffff') || canonicalStyle(rule)[property] !== styles.retained[property] ||
+          Object.keys(rule).some(k => (k !== property && affects({ [k]: true })) || /^media/.test(k)) ||
+          [normal, effective].some(stage => canonicalStyle(stage)[property] !== styles.retained[property] ||
+            Object.keys(stage).some(k => k !== property && affects({ [k]: true })))) return;
+      candidateRule = rule;
+    }
+    candidateChain.push({ node: node.key, parent: node.parent, authored: node.authored, normal, effective });
+  }
+  return { attribution: 'reviewed-snackbar-message-token-input', classification: 'application-plugin-authoring-defect',
+    inputEquivalent: false, currentPseudoStatePaintVerified: false, finalRasterVerified: false,
+    recommendedOwner: 'showcase snackbar supporting-text tokens and original message/surface inheritance',
+    justification: isSize
+      ? 'The original message directly declares the Material supporting-text size token. Candidate message-to-page normal/effective inputs omit that component size and retain the explicitly authored scaled page size. Complete rules and stages attribute unequal authoring, not a core font-scaling defect. Preserve the component token rather than calibrating a label size or adjusting the page reset.'
+      : 'The original message inherits the supporting-text inverse-on-surface token through its live-region wrappers from the Material snackbar surface. Candidate message own color is absent in normal/effective inspection and core registry text inherits literal white from the replacement surface. This is unequal authoring, not a Babylon color-conversion failure; preserve token and ownership inputs rather than sampling replacement RGB.',
+    reviewEvidence: { sourceFinding: 'fixture-snackbar-message-token-substitution', property, referenceRule, referenceChain,
+      candidateRule, checkedCandidateRules, candidateChain, candidateRetained: styleAt(ast.retainedText.style, 'astylar'),
+      referenceComputed: styles.reference[property], candidateValue: styles.retained[property], inputEquivalent: false, finalRasterVerified: false } };
 }
 
 function reviewedMaterialOptionInk(entry, mapping, property, ast, styles, referenceTree, astylarTree, inventory) {
@@ -3904,6 +3985,7 @@ export function collectRetainedTypographyEvidence(cases, inventory, controlTypog
             ...(monthMarkerToken ?? {}),
             ...(reviewedTimepickerOptionInk(entry, textMappingById.get(id), property, ast, styles, referenceTree, astylarTree, inventory) ?? {}),
             ...(reviewedMaterialOptionInk(entry, textMappingById.get(id), property, ast, styles, referenceTree, astylarTree, inventory) ?? {}),
+            ...(reviewedSnackbarMessageToken(entry, textMappingById.get(id), property, ast, styles, referenceTree, astylarTree, inventory) ?? {}),
             ...(!controlLabelToken && !selectValueToken && !weekdayToken && !monthMarkerToken ?
               reviewedOmittedComponentTextMetric(textMappingById.get(id), property, ref, ast, styles, referenceTree, astylarTree, inventory) ?? {} : {}),
             ...(property === 'fontFamily' && inheritedFontStack ? inheritedFontStack : {}),
@@ -5509,6 +5591,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('snackbar message tokens distinguish/,
+      'snackbar message direct size token and inherited surface ink ownership', 'Original message-size and surface-color token rules use distinct captured ancestry paths. Candidate own message values remain absent; parent surface white and scaled page size match retained core text independently. Negative declaration/reset/competition/stage controls and replay reject fabricated equivalence, missing provenance and altered owner values. Token computation is observed rather than replaced with a sampled literal; this is not visibility, compositing or final raster acceptance.'),
     proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('snackbar message mapping preserves/,
       'snackbar message correspondence preserves unequal live-region and flex composition', 'Unique overlay/action/message paths map registry text independently of the UNDO control texture. Full original ownership paths, styles and raw whitespace remain evidence. Negative topology controls and independent replay reject fabricated or deleted mappings and typography observations. Missing retained text stays a stage gap; mapping does not prove visibility, placement, announcements or raster.'),
     proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('material option ink distinguishes/,
@@ -5625,7 +5709,7 @@ function implementationPlan() {
     { priority: 5.297, rootCause: 'Select arrow vector/composition replaced by a density-tuned font glyph', action: 'Restore the original Material SVG path, viewBox, arrow wrappers and CSS positioning through the shared rendering path. Do not resize or reposition U+25BC to approximate the vector. Reduce any unsupported SVG/layout behavior to equal-input core proof, and keep the separate select value/control, popup and interaction findings explicit.' },
     { priority: 5.3, rootCause: 'Core normal line-height is approximated by a fixed Mg font-box probe', action: 'Resolve browser normal line-box metrics and actual fallback runs in core. The equal-input Arial/serif cases expose one-pixel texture-height errors; Roboto plus emoji/CJK exposes two-pixel errors while plain Roboto and explicit line heights pass. Preserve those controls, extend multiline/baseline/DPR verification and avoid a universal multiplier, constant pixel addition, or fixed Material line-height compensation. Current-texture evidence must remain separate from declared normal and from final glyph raster.' },
     { priority: 5.4, rootCause: 'Calendar cell text tokens and inner line boxes were flattened away', action: 'Restore the reference calendar font and date-text ink tokens and its inner line-height:1 label inside both day and year controls. Keep reference cell/container sizing, state and selection structure instead of copying a normal-metric result or tuning the baseline. Separate date/range-context proofs isolate 990 day and 192 year occurrences each of missing font-token, omitted inner line-height and fixed-ink inputs; core metric defects must be assessed only after those inputs are equivalent. Independently resolve normal-versus-zero tracking and the still-unmapped header/icon owners.' },
-    { priority: 5.5, rootCause: 'Snackbar composition and generic text/control inputs replace Material message and action owners', action: 'Restore the original padded flex-message, separate action and nested live-region inputs together with their component typography tokens. The exact overlay/message mapping isolates 34 current action textures and 34 message registry entries without asserting equivalent ownership or visible output. Message correspondence exposes fixed reference 14px text versus candidate 14.4px/16px/18.4px and inverse-text versus white ink; trace their declarations and inherited stages before assigning core ownership. Preserve the separately source-traced action font-stack, tracking and inverse-primary substitutions. Investigate remaining normal-line-box observations without baseline or line-height calibration. Retain independent intrinsic-width, live-region, visibility, lifetime and placement obligations, including checking off-surface rendering rather than equating an unmatched label ID with a missing snackbar.' },
+    { priority: 5.5, rootCause: 'Snackbar composition and generic text/control inputs replace Material message and action owners', action: 'Restore the original padded flex-message, separate action and nested live-region inputs together with their component typography tokens. The exact overlay/message mapping isolates 34 current action textures and 34 message registry entries without asserting equivalent ownership or visible output. Original message size is declared by its supporting-text token; candidate omits it through the page chain and inherits 14.4px/16px/18.4px. Original message ink inherits the supporting-text inverse-on-surface token through live wrappers; candidate inherits literal surface white. All 68 message size/color observations now have declaration and retained-stage attribution as unequal authoring, not core scaling/color failures. Preserve original tokens rather than sampled values and the separately source-traced action font-stack, tracking and inverse-primary substitutions. Investigate remaining normal-line-box observations without baseline or line-height calibration. Retain independent intrinsic-width, live-region, visibility, lifetime and placement obligations, including checking off-surface rendering rather than equating an unmatched label ID with a missing snackbar.' },
     { priority: 5.6, rootCause: 'Nested list inputs are replaced by generic value buttons', action: 'Restore bottom-sheet navigation/list/anchor/content/label structure and the original label font, explicit line-height, tracking, ink and overflow declarations. Preserve the actual reference overlay token scope and accessible name instead of borrowing page theme colors or calling the opener text the dialog name. Restore reference navigation behavior rather than generic dismiss handling, then reduce any equal-input core failure. Do not infer start/left alignment equivalence without direction evidence. Keep the separate fixed-width/content-height and responsive-constraint findings.' },
     { priority: 5.7, rootCause: 'Calendar period text and vector inputs are collapsed into a glyph string', action: 'Restore the reference period text span beside the 10x5 polygon SVG, using the original year-view CSS inversion, text-button font/tracking tokens and calendar period color-token override. Preserve the live-period description relationship. Do not strip the candidate triangle during comparison, substitute another font character or tune offsets. The current 41 texture witnesses compare common period text inputs while retaining both unequal full compositions; normal-line-height, wrapper layout and glyph/vector raster still need independent proof.' },
     { priority: 5.8, rootCause: 'Calendar close control and its focus-reveal interaction were omitted', action: 'Restore the reference close-button/label, original unfocused clipping and focus-to-reveal declarations, focus order and close activation through core APIs. The source template binds focus/blur and datepicker.close(); the candidate popup never authors that control. Preserve each omission as unequal structure, not a missing paint sample or harmless hidden element. The checkpoint-bound calendar-close diagnostic proves Tab reveal, Shift+Tab hiding, Enter dismissal and opener focus restoration in both reference views at DPR 1 and 2, while the candidate lacks the control and remains open. All twenty paired action boundaries are integrated and independently replayed in the consolidated inventory, including candidate controls remaining after reference dismissal. Do not extrapolate their focused scope to all themes or claim equal-input core failure. Investigate core only against restored equal declarations; outside-click and Escape dismissal are not replacements for the missing control.' },

@@ -598,6 +598,15 @@ export const sourceAuditDefinitions = Object.freeze([
     justification: 'The initial showcase replaces the simple-snack-bar message div and separate action composition with a span and value button. The reference nested live region and flexing padded message are flattened into a status surface with fixed width and shared padding. Exact overlay/action/message context maps the text, not equivalent wrapper behavior, intrinsic sizing, typography, announcement behavior or placement. Preserve original message/action rendering inputs before equal-input core investigation; do not treat a missing shared text ID as a missing snackbar or compensate its label position.',
   }),
   Object.freeze({
+    id: 'fixture-snackbar-message-token-substitution',
+    introducedBy: '2f44011 feat(example): add Material component showcase',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`selector: '.snack-surface'.*color: '#ffffff'`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase snackbar supporting-text size and inverse-text color tokens',
+    justification: 'The initial snackbar surface fixes literal white and omits the Material supporting-text size token. Current message text inherits the scaled page size and surface white through core normal/effective/retained stages. The reference message directly declares its supporting-text size token and separately inherits the inverse-on-surface text token through original live-region wrappers. These are unequal authored inputs, not equal-input scaling/color defects; preserve the original component tokens rather than replacing them with sampled sizes or RGB.',
+  }),
+  Object.freeze({
     id: 'fixture-snackbar-fixed-width',
     introducedBy: '899c741 fix(material): anchor snackbar and tooltip overlays',
     file: 'examples/material-showcase/src/app/astylar.component.ts',

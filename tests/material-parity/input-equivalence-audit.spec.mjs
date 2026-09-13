@@ -4562,6 +4562,132 @@ function snackbarMessageReport() {
   return raw;
 }
 
+function snackbarMessageTokenReport(size = '16px') {
+  const raw = snackbarMessageReport(), { reference: r, astylar: a } = raw.results[0].inputTrees;
+  r.rules.push({ selector: '.mat-mdc-snack-bar-container .mdc-snackbar__label', active: true, conditions: [],
+    declarations: { 'font-size': { value: 'var(--mat-snack-bar-supporting-text-size, var(--mat-sys-body-medium-size))', important: false } } });
+  r.nodes.find(n => n.key === 'message').rules = [r.rules.length - 1];
+  r.rules.push({ selector: '.mat-mdc-snack-bar-container .mat-mdc-snackbar-surface', active: true, conditions: [],
+    declarations: { color: { value: 'var(--mat-snack-bar-supporting-text-color, var(--mat-sys-inverse-on-surface))', important: false } } });
+  r.nodes.find(n => n.key === 'surface').rules = [r.rules.length - 1];
+  for (const key of ['simple', 'wrapper', 'live', 'outer-label', 'surface']) {
+    r.styles.push({ ...r.styles[1], fontSize: '16px' });
+    r.nodes.find(n => n.key === key).style = r.styles.length - 1;
+  }
+  a.rules.push({ selector: '#page', fontSize: size }, { selector: '.snack-surface', color: '#ffffff' });
+  for (const stage of ['normalResolvedStyle', 'interactionResolvedStyle', 'resolvedStyle']) {
+    a.nodes.find(n => n.key === 'page')[stage].fontSize = size;
+    a.nodes.find(n => n.key === 'candidate-surface')[stage].color = '#ffffff';
+  }
+  a.nodes.find(n => n.key === 'candidate-message').retainedText.style.fontSize = size;
+  return raw;
+}
+
+function snackbarMessageTokenEvidence(raw) {
+  const cases = raw.results.map(e => ({ ...e, kind: 'static' }));
+  return collectRetainedTypographyEvidence(cases, collectFullTreeInventory(cases)).differences
+    .filter(d => d.attribution === 'reviewed-snackbar-message-token-input');
+}
+
+test('snackbar message tokens distinguish direct size from inherited surface ink without inventing own values', () => {
+  for (const size of ['14.4px', '16px', '18.4px']) {
+    const raw = snackbarMessageTokenReport(size), original = structuredClone(raw), observations = snackbarMessageTokenEvidence(raw);
+    assert.equal(observations.length, 2);
+    for (const d of observations) {
+      const isSize = d.property === 'fontSize', e = d.reviewEvidence;
+      assert.equal(d.classification, 'application-plugin-authoring-defect');
+      assert.equal(d.inputEquivalent, false); assert.equal(d.finalRasterVerified, false);
+      assert.equal(d.currentPseudoStatePaintVerified, false);
+      assert.equal(e.referenceChain.length, isSize ? 1 : 6);
+      assert.equal(e.candidateChain.length, isSize ? 5 : 2);
+      assert.equal(e.candidateChain[0].normal[d.property], undefined);
+      assert.equal(e.candidateChain[0].effective[d.property], undefined);
+      assert.equal(e.candidateRule.selector, isSize ? '#page' : '.snack-surface');
+      assert.equal(e.candidateValue, isSize ? size : 'rgba(255,255,255,1)');
+    }
+    assert.deepEqual(raw, original);
+  }
+});
+
+test('snackbar message tokens reject missing competing reset and changed stage evidence', () => {
+  for (const property of ['fontSize', 'color']) {
+    const css = property === 'fontSize' ? 'font-size' : 'color', owner = property === 'fontSize' ? 'message' : 'surface';
+    const candidateOwner = property === 'fontSize' ? 'page' : 'candidate-surface';
+    const controls = [
+      (r, a, n, cn, rule) => { delete r.errors; },
+      (r, a, n, cn, rule) => { rule.active = false; },
+      (r, a, n, cn, rule) => { delete rule.active; },
+      (r, a, n, cn, rule) => { rule.conditions = ['@media print']; },
+      (r, a, n, cn, rule) => { rule.selector = '.other'; },
+      (r, a, n, cn, rule) => { rule.declarations[css].value = 'inherit'; },
+      (r, a, n, cn, rule) => { rule.declarations[css].important = true; },
+      (r, a, n, cn, rule) => { rule.declarations.all = { value: 'initial' }; },
+      (r, a, n, cn, rule) => { rule.declarations.transition = { value: 'all 1s' }; },
+      (r, a, n, cn, rule) => { n.rules = []; },
+      (r, a, n, cn, rule) => { n.rules.push(n.rules[0]); },
+      (r, a, n, cn, rule) => { n.attributes.style = css + ':inherit'; },
+      (r, a, n, cn, rule) => { n.inline = { [css]: { value: 'inherit' } }; },
+      (r, a, n, cn, rule) => { r.styles[n.style][property] = 'invalid'; },
+      (r, a, n, cn, rule) => { cn.normalResolvedStyle[property] = 'invalid'; },
+      (r, a, n, cn, rule) => { cn.interactionResolvedStyle[property] = 'invalid'; },
+      (r, a, n, cn, rule) => { cn.normalResolvedStyle.all = 'initial'; },
+      (r, a, n, cn, rule) => { cn.authored.style = { [property]: 'inherit' }; },
+      (r, a, n, cn, rule) => { a.nodes.find(n => n.key === 'candidate-message').normalResolvedStyle[property] = 'inherit'; },
+      (r, a, n, cn, rule) => { a.nodes.find(n => n.key === 'candidate-message').interactionResolvedStyle[property] = 'inherit'; },
+      (r, a, n, cn, rule) => { a.nodes.find(n => n.key === 'candidate-message').retainedText.style[property] = 'invalid'; },
+      (r, a, n, cn, rule) => { a.rules.push({ selector: 'span', [property]: 'inherit' }); },
+      (r, a, n, cn, rule) => { a.rules.push({ selector: '[data-unknown]', [property]: 'inherit' }); },
+      (r, a, n, cn, rule) => { a.rules.push({ selector: 'span:focus', all: 'initial' }); },
+      (r, a, n, cn, rule) => { a.rules.push({ selector: '*', animation: 'ink 1s' }); },
+      (r, a, n, cn, rule) => { a.rules.at(property === 'fontSize' ? -2 : -1).mediaQuery = 'print'; },
+    ];
+    for (const [index, mutate] of controls.entries()) {
+      const raw = snackbarMessageTokenReport(), { reference: r, astylar: a } = raw.results[0].inputTrees;
+      const node = r.nodes.find(n => n.key === owner), cn = a.nodes.find(n => n.key === candidateOwner);
+      mutate(r, a, node, cn, r.rules[node.rules[0]]);
+      assert.ok(!snackbarMessageTokenEvidence(raw).some(d => d.property === property), `${property} control ${index}`);
+    }
+  }
+});
+
+test('snackbar message tokens preserve independently varied token values and reject intervening ink', () => {
+  const raw = snackbarMessageTokenReport();
+  const { reference: r, astylar: a } = raw.results[0].inputTrees;
+  r.styles[1].fontSize = '13px';
+  for (const style of r.styles.slice(1)) style.color = '#112233';
+  assert.equal(snackbarMessageTokenEvidence(raw).length, 2, 'token computation is observed, not replaced with a sampled reference literal');
+  r.nodes.find(n => n.key === 'live').inline = { color: 'inherit' };
+  assert.deepEqual(snackbarMessageTokenEvidence(raw).map(d => d.property), ['fontSize']);
+  delete r.nodes.find(n => n.key === 'live').inline;
+  a.nodes.find(n => n.key === 'candidate-overlay').normalResolvedStyle.fontSize = '16px';
+  assert.deepEqual(snackbarMessageTokenEvidence(raw).map(d => d.property), ['color']);
+});
+
+test('snackbar message token replay rejects fabricated source ancestry stage or equivalence claims', () => {
+  const original = buildMaterialInputAudit(snackbarMessageTokenReport());
+  assert.ok(original.sourceFindings.find(f => f.id === 'fixture-snackbar-message-token-substitution').detected);
+  assert.ok(!validateMaterialInputAudit(original, { requireComplete: false }).some(e => e.includes('snackbar message')));
+  for (const property of ['fontSize', 'color']) {
+    for (const mutate of [
+      (r, d) => { r.retainedTypography.differences = r.retainedTypography.differences.filter(v => v !== d); },
+      (r, d) => { d.reviewEvidence.referenceChain.pop(); },
+      (r, d) => { d.reviewEvidence.candidateChain[0].normal[property] = d.reviewEvidence.candidateValue; },
+      (r, d) => { d.reviewEvidence.checkedCandidateRules = []; },
+      (r, d) => { d.reviewEvidence.referenceRule.declarations = {}; },
+      (r, d) => { d.reviewEvidence.sourceFinding = 'other'; },
+      (r, d) => { d.inputEquivalent = true; },
+      (r, d) => { d.finalRasterVerified = true; },
+      (r, d) => { d.currentPseudoStatePaintVerified = true; },
+      (r, d) => { d.classification = 'confirmed-core-defect'; },
+      (r, d) => { d.family = 'menu'; d.element = 'other'; d.case = 'static:menu@light/desktop'; },
+    ]) {
+      const report = structuredClone(original), d = report.retainedTypography.differences.find(d => d.property === property && d.element === 'snack-bar-title');
+      mutate(report, d);
+      assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('snackbar message')));
+    }
+  }
+});
+
 test('snackbar message mapping preserves live-region and action context without equating layout or typography', () => {
   const raw = snackbarMessageReport(), original = structuredClone(raw), cases = raw.results.map(e => ({ ...e, kind: 'static' }));
   const result = collectRetainedTypographyEvidence(cases, collectFullTreeInventory(cases));

@@ -23,6 +23,95 @@ selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Snackbar supporting-text size and ink provenance (2026-09-13)
+
+The **68** size/color differences exposed by the message mapping now have
+declaration-backed ownership attribution, without changing their inputs:
+
+- **34 sizes:** the reference message directly declares
+  `var(--mat-snack-bar-supporting-text-size, var(--mat-sys-body-medium-size))`,
+  computing `14px`. Candidate message, surface, overlay and section omit an
+  own font size; `#page` explicitly authors `16 * theme.typographyScale` pixels
+  (`astylar.component.ts:471`). Its `14.4px`, `16px` or `18.4px` value survives
+  normal/effective inspection and is inherited into registry text. Missing
+  leaf values are retained as missing, not rewritten to the inherited size.
+- **34 colors:** the reference message inherits
+  `var(--mat-snack-bar-supporting-text-color, var(--mat-sys-inverse-on-surface))`
+  from its original snackbar surface through the outer label, live-region,
+  portal wrapper and simple-snack-bar, computing `rgb(245,239,244)` throughout
+  that six-node path. Candidate own message color is absent; its direct
+  `.snack-surface` explicitly authors `#ffffff` (`astylar.component.ts:806`),
+  and normal/effective surface plus retained message inputs agree on white.
+
+The original rules are present in the already fingerprinted installed
+`@angular/material/fesm2022/snack-bar.mjs`. `git show
+2f44011:examples/material-showcase/src/app/astylar.component.ts` confirms the
+initial showcase already used the scaled page size and literal white snackbar
+surface. Its earlier positioning and width differed from today's composition;
+this finding does not attribute every later overlay change to that commit.
+`src/app/services/dom/renderer.service.ts:543` supplies independent core-source
+confirmation: `getInheritedTextStyle` recursively picks parent text inputs,
+merges own properties, then resolves font size from own/inherited/default
+values. No world-space calculation is needed to explain these unequal inputs.
+
+New source finding: `fixture-snackbar-message-token-substitution`.
+New observation attribution: `reviewed-snackbar-message-token-input`.
+The size and ink checks deliberately use different original owners. They
+require complete message correspondence, exact active ordinary token rules,
+consistent captured values through each inheritance path, complete candidate
+rule inspection, absent intervening own declarations, and unchanged owner-to-
+retained values. Inline resets, competing or unknown applicable selectors,
+animation/transition inputs, conditional owner rules and missing evidence
+prevent attribution. This is not a second cascade implementation: ambiguous
+rules are rejected, and computed/retained values are observed independently.
+
+Four tests cover all three captured candidate sizes, **52 negative declaration/
+stage controls**, independently changed token computations and two intervening
+owner controls, plus **22 report mutations**. Replay rejects removed or forged
+source, ancestry, stage, scope, equivalence and raster evidence. The first
+negative-test run revealed that changing a raw `ruleEvidenceComplete` field
+does not affect the collector, which derives that flag from raw rule/error
+arrays. The test now removes the actual `errors` array and proves missing
+evidence prevents attribution; no production behavior was changed.
+
+Focused command:
+
+`node --test --test-name-pattern='snackbar message token|records source fingerprints' tests/material-parity/input-equivalence-audit.spec.mjs`
+
+**5/5 pass**, zero failed/skipped/cancelled/todo, **1.371 seconds**, terminal
+exit 0. `npm run parity:harness:check`: **385/385 pass**, zero failed/skipped/
+cancelled/todo, **132.607 seconds**, terminal exit 0. All ten frozen visual
+harness hashes match; `git diff --check` passes. All 170 message typography differences now have
+attribution, including the previously reviewed family/line-height/alignment
+cohorts; this does not establish equivalent structure, intrinsic width,
+theme-token fallback provenance, live announcements, placement, visibility,
+compositing or final glyph raster. Those remain separate audit requirements.
+
+Full audit replay command:
+
+```powershell
+node --input-type=module -e "import {readFileSync} from 'node:fs';import {buildMaterialInputAudit,validateMaterialInputAudit} from './tests/material-parity/input-equivalence-audit.mjs';const p=JSON.parse(readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json'));const a=buildMaterialInputAudit(p,{root:process.cwd(),normalLineBoxPath:'artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json',supplementalRoot:'artifacts/material-parity/supplemental-current-ancestry-audit'});console.log('SUMMARY '+JSON.stringify({coverage:a.coverage.complete,summary:a.summary,snackbarTokens:a.retainedTypography.differences.filter(d=>d.attribution==='reviewed-snackbar-message-token-input').length,retainedGaps:a.retainedTypography.gaps.filter(g=>g.attribution==='unresolved').length,retainedDifferences:a.retainedTypography.differences.filter(g=>g.attribution==='unresolved').length}));console.log('DIAGNOSTIC '+JSON.stringify(validateMaterialInputAudit(a,{requireComplete:false})));console.log('STRICT '+JSON.stringify(validateMaterialInputAudit(a)));"
+```
+
+The full replay finds all **68** new attributions; all **103** source findings
+are detected. Coverage remains complete; the main 8,140 differences / 380,520
+occurrences and 88 structural differences remain unchanged. Retained gaps stay
+at **317**, while unresolved retained typography decreases **422 to 354**.
+Diagnostic consistency validation returns `[]`. Terminal exit 0; the command
+prints strict errors rather than setting a strict-success exit code. Strict
+validation retains the outstanding requirements:
+
+```text
+3309 resolved-style differences still lack root-cause attribution
+849 control texture typography differences require attribution
+317 retained typography mappings or stage fields require review
+354 retained typography differences require attribution
+```
+
+No production fixture, renderer, plugin, reference or visual threshold was
+edited. Final machine-report generation and the final unfiltered enforced
+visual matrix remain required after the remaining audit findings are resolved.
+
 ## Snackbar message correspondence and unequal composition (2026-09-13)
 
 The audit now maps **34 snackbar message labels** in all captured paired open
