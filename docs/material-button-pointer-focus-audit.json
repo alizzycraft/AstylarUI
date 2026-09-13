@@ -1,0 +1,4756 @@
+{
+  "schemaVersion": 1,
+  "finding": "core-enabled-button-held-semantic-focus-lag",
+  "classification": "confirmed-core-defect",
+  "owner": "core interaction-to-semantic focus synchronization",
+  "sourceCommit": "3893d2f2295325a1039084c7a909737de7c6d264",
+  "scope": "enabled button focus only; not visual/input equivalence of all properties or paginator disabled-interactive behavior",
+  "referenceReport": {
+    "file": "artifacts/material-parity/button-pointer-focus-audit-v2/latest-report.json",
+    "sha256": "abf9f0ff089894bfa5930aeb0a617bd53a892e017ad5049bb0d89657bd57f571"
+  },
+  "provenance": {
+    "file": "artifacts/material-parity/button-pointer-focus-audit-v2/provenance.json",
+    "sha256": "e588fecdf2d621884d306ce50ae6fa468fedc740825de1fba61d6fe2e53bef1a",
+    "bundleSha256": "a9aa22e41e94fc7a4faa805b56eafd38ec31e9d4cb204e928c45e609fdf909e9",
+    "bundleInputCount": 2516
+  },
+  "browser": "152.0.7977.76",
+  "packages": {
+    "@angular/core": "20.3.29",
+    "@angular/platform-browser": "20.3.29",
+    "@babylonjs/core": "8.56.2",
+    "astylarui": "0.2.0",
+    "esbuild": "0.28.1"
+  },
+  "viewport": {
+    "width": 640,
+    "height": 360
+  },
+  "surfaceCssSize": {
+    "width": 400,
+    "height": 160
+  },
+  "settleDelayMs": 250,
+  "validation": {
+    "cases": 40,
+    "failures": 8
+  },
+  "sourceFingerprints": [
+    {
+      "file": "src/lib/astylar.ts",
+      "sha256": "eb7786750a85917c1c9ffeddd415231cae1f112835950fa1dce57de07532dd4b"
+    },
+    {
+      "file": "src/lib/astylar-interaction-runtime.ts",
+      "sha256": "0d5afa407dc4ac298399c046f74d5d8d30ebde0d5b00e3a21ef8e83976d49aeb"
+    },
+    {
+      "file": "src/lib/astylar-semantic-bridge.ts",
+      "sha256": "888b5212a0e8b506c48ac044529948eda70ad6d42b1469388b402eba4eeb0c01"
+    },
+    {
+      "file": "examples/material-showcase/node_modules/astylarui/dist/lib/lib/astylar.js",
+      "sha256": "6ad4f51ca47a9e1956a66b6e724105a66aaff582c53b0b30374fb6051723f5f8"
+    },
+    {
+      "file": "examples/material-showcase/node_modules/astylarui/dist/lib/lib/astylar-interaction-runtime.js",
+      "sha256": "896ba0fffa14862af211716001b1a3e6ad728bbd55a75b6adee85d95ec369770"
+    },
+    {
+      "file": "examples/material-showcase/node_modules/astylarui/dist/lib/lib/astylar-semantic-bridge.js",
+      "sha256": "7c892095300b0eb8f03a9f38ce421143579a5d90e687e3e80a045b48be8f5aee"
+    }
+  ],
+  "history": {
+    "transactionSuppressionIntroduced": "dbe4d8ed1becde19f8036bed8479c971b1e95c58",
+    "historicalRuntimeBisectPerformed": false
+  },
+  "authored": {
+    "root": {
+      "children": [
+        {
+          "type": "button",
+          "id": "first",
+          "textContent": "first",
+          "disabled": false,
+          "inputType": "button"
+        },
+        {
+          "type": "button",
+          "id": "second",
+          "textContent": "second",
+          "disabled": false,
+          "inputType": "button"
+        }
+      ]
+    },
+    "styles": [
+      {
+        "selector": "button",
+        "position": "absolute",
+        "top": "20px",
+        "width": "120px",
+        "height": "40px",
+        "display": "block",
+        "boxSizing": "border-box",
+        "margin": "0",
+        "padding": "0",
+        "borderWidth": "0",
+        "fontFamily": "Arial",
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "lineHeight": "20px",
+        "textAlign": "center",
+        "color": "#000000",
+        "background": "#eeeeee",
+        "cursor": "pointer"
+      },
+      {
+        "selector": "#first",
+        "left": "20px"
+      },
+      {
+        "selector": "#second",
+        "left": "160px"
+      }
+    ]
+  },
+  "referenceCss": "button{position:absolute;top:20px;width:120px;height:40px;display:block;box-sizing:border-box;margin:0;padding:0;border-width:0;font-family:Arial;font-size:16px;font-weight:400;line-height:20px;text-align:center;color:#000000;background:#eeeeee;cursor:pointer}\n#first{left:20px}\n#second{left:160px}",
+  "plan": [
+    {
+      "state": "initial",
+      "action": "inspect",
+      "target": null,
+      "expectedFocus": null
+    },
+    {
+      "state": "keyboard-first",
+      "action": "tab",
+      "target": null,
+      "expectedFocus": "first"
+    },
+    {
+      "state": "space-held",
+      "action": "space-down",
+      "target": null,
+      "expectedFocus": "first"
+    },
+    {
+      "state": "space-released",
+      "action": "space-up",
+      "target": null,
+      "expectedFocus": "first"
+    },
+    {
+      "state": "second-hover",
+      "action": "move",
+      "target": "second",
+      "expectedFocus": "first"
+    },
+    {
+      "state": "second-held",
+      "action": "down",
+      "target": "second",
+      "expectedFocus": "second"
+    },
+    {
+      "state": "second-released",
+      "action": "up",
+      "target": "second",
+      "expectedFocus": "second"
+    },
+    {
+      "state": "first-hover",
+      "action": "move",
+      "target": "first",
+      "expectedFocus": "second"
+    },
+    {
+      "state": "first-held",
+      "action": "down",
+      "target": "first",
+      "expectedFocus": "first"
+    },
+    {
+      "state": "first-released",
+      "action": "up",
+      "target": "first",
+      "expectedFocus": "first"
+    }
+  ],
+  "observations": [
+    {
+      "state": "initial",
+      "action": "inspect",
+      "target": null,
+      "expectedFocus": null,
+      "dpr": 1,
+      "repetition": 1,
+      "checks": {
+        "referenceFocus": true,
+        "astylarFocus": true,
+        "logicalFocus": true,
+        "semanticMatchesLogical": true
+      },
+      "errors": [],
+      "reference": {
+        "active": {
+          "tag": "BODY",
+          "id": "",
+          "authoredId": null
+        },
+        "activeButton": null,
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "screenshot": {
+          "file": "reference-dpr1-repeat1-initial.png",
+          "sha256": "589775335b635e56effcc3571d27bc99c79d0ffb4c9d66e2bf7e8aca1bc0a41f"
+        }
+      },
+      "astylar": {
+        "active": {
+          "tag": "BODY",
+          "id": "",
+          "authoredId": null
+        },
+        "activeButton": null,
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "interaction": {
+          "pointerObservers": 1,
+          "wheelHandlers": 1,
+          "keyboardListeners": 2,
+          "handlers": 1,
+          "focusVisible": false,
+          "navigationOutcomes": [],
+          "disposed": false
+        },
+        "screenshot": {
+          "file": "astylar-dpr1-repeat1-initial.png",
+          "sha256": "6d8d4801de673ae9b6d2d4984943587694ac18701c20c8cbf4b6777b0c3a6eef"
+        },
+        "heldNativeEvents": null,
+        "heldPublicEvents": null
+      }
+    },
+    {
+      "state": "keyboard-first",
+      "action": "tab",
+      "target": null,
+      "expectedFocus": "first",
+      "dpr": 1,
+      "repetition": 1,
+      "checks": {
+        "referenceFocus": true,
+        "astylarFocus": true,
+        "logicalFocus": true,
+        "semanticMatchesLogical": true
+      },
+      "errors": [],
+      "reference": {
+        "active": {
+          "tag": "BUTTON",
+          "id": "first",
+          "authoredId": null
+        },
+        "activeButton": "first",
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "screenshot": {
+          "file": "reference-dpr1-repeat1-keyboard-first.png",
+          "sha256": "e65b8720a7c8fe24a406910044c203f224223751e9eed23542503d61dfc5c83b"
+        }
+      },
+      "astylar": {
+        "active": {
+          "tag": "BUTTON",
+          "id": "astylar-semantic-1-first",
+          "authoredId": "first"
+        },
+        "activeButton": "first",
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "interaction": {
+          "pointerObservers": 1,
+          "wheelHandlers": 1,
+          "keyboardListeners": 2,
+          "handlers": 1,
+          "focusedElementId": "first",
+          "focusVisible": true,
+          "navigationOutcomes": [],
+          "disposed": false
+        },
+        "screenshot": {
+          "file": "astylar-dpr1-repeat1-keyboard-first.png",
+          "sha256": "6d8d4801de673ae9b6d2d4984943587694ac18701c20c8cbf4b6777b0c3a6eef"
+        },
+        "heldNativeEvents": null,
+        "heldPublicEvents": null
+      }
+    },
+    {
+      "state": "space-held",
+      "action": "space-down",
+      "target": null,
+      "expectedFocus": "first",
+      "dpr": 1,
+      "repetition": 1,
+      "checks": {
+        "referenceFocus": true,
+        "astylarFocus": true,
+        "logicalFocus": true,
+        "semanticMatchesLogical": true
+      },
+      "errors": [],
+      "reference": {
+        "active": {
+          "tag": "BUTTON",
+          "id": "first",
+          "authoredId": null
+        },
+        "activeButton": "first",
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "screenshot": {
+          "file": "reference-dpr1-repeat1-space-held.png",
+          "sha256": "e65b8720a7c8fe24a406910044c203f224223751e9eed23542503d61dfc5c83b"
+        }
+      },
+      "astylar": {
+        "active": {
+          "tag": "BUTTON",
+          "id": "astylar-semantic-1-first",
+          "authoredId": "first"
+        },
+        "activeButton": "first",
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "interaction": {
+          "pointerObservers": 1,
+          "wheelHandlers": 1,
+          "keyboardListeners": 2,
+          "handlers": 1,
+          "focusedElementId": "first",
+          "focusVisible": true,
+          "navigationOutcomes": [],
+          "disposed": false
+        },
+        "screenshot": {
+          "file": "astylar-dpr1-repeat1-space-held.png",
+          "sha256": "6d8d4801de673ae9b6d2d4984943587694ac18701c20c8cbf4b6777b0c3a6eef"
+        },
+        "heldNativeEvents": null,
+        "heldPublicEvents": null
+      }
+    },
+    {
+      "state": "space-released",
+      "action": "space-up",
+      "target": null,
+      "expectedFocus": "first",
+      "dpr": 1,
+      "repetition": 1,
+      "checks": {
+        "referenceFocus": true,
+        "astylarFocus": true,
+        "logicalFocus": true,
+        "semanticMatchesLogical": true
+      },
+      "errors": [],
+      "reference": {
+        "active": {
+          "tag": "BUTTON",
+          "id": "first",
+          "authoredId": null
+        },
+        "activeButton": "first",
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "screenshot": {
+          "file": "reference-dpr1-repeat1-space-released.png",
+          "sha256": "e65b8720a7c8fe24a406910044c203f224223751e9eed23542503d61dfc5c83b"
+        }
+      },
+      "astylar": {
+        "active": {
+          "tag": "BUTTON",
+          "id": "astylar-semantic-1-first",
+          "authoredId": "first"
+        },
+        "activeButton": "first",
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "interaction": {
+          "pointerObservers": 1,
+          "wheelHandlers": 1,
+          "keyboardListeners": 2,
+          "handlers": 1,
+          "focusedElementId": "first",
+          "focusVisible": true,
+          "navigationOutcomes": [],
+          "disposed": false
+        },
+        "screenshot": {
+          "file": "astylar-dpr1-repeat1-space-released.png",
+          "sha256": "6d8d4801de673ae9b6d2d4984943587694ac18701c20c8cbf4b6777b0c3a6eef"
+        },
+        "heldNativeEvents": null,
+        "heldPublicEvents": null
+      }
+    },
+    {
+      "state": "second-hover",
+      "action": "move",
+      "target": "second",
+      "expectedFocus": "first",
+      "dpr": 1,
+      "repetition": 1,
+      "checks": {
+        "referenceFocus": true,
+        "astylarFocus": true,
+        "logicalFocus": true,
+        "semanticMatchesLogical": true
+      },
+      "errors": [],
+      "reference": {
+        "active": {
+          "tag": "BUTTON",
+          "id": "first",
+          "authoredId": null
+        },
+        "activeButton": "first",
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "screenshot": {
+          "file": "reference-dpr1-repeat1-second-hover.png",
+          "sha256": "e65b8720a7c8fe24a406910044c203f224223751e9eed23542503d61dfc5c83b"
+        }
+      },
+      "astylar": {
+        "active": {
+          "tag": "BUTTON",
+          "id": "astylar-semantic-1-first",
+          "authoredId": "first"
+        },
+        "activeButton": "first",
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "interaction": {
+          "pointerObservers": 1,
+          "wheelHandlers": 1,
+          "keyboardListeners": 2,
+          "handlers": 1,
+          "hoveredElementId": "second",
+          "focusedElementId": "first",
+          "focusVisible": true,
+          "navigationOutcomes": [],
+          "disposed": false
+        },
+        "screenshot": {
+          "file": "astylar-dpr1-repeat1-second-hover.png",
+          "sha256": "6d8d4801de673ae9b6d2d4984943587694ac18701c20c8cbf4b6777b0c3a6eef"
+        },
+        "heldNativeEvents": null,
+        "heldPublicEvents": null
+      }
+    },
+    {
+      "state": "second-held",
+      "action": "down",
+      "target": "second",
+      "expectedFocus": "second",
+      "dpr": 1,
+      "repetition": 1,
+      "checks": {
+        "referenceFocus": true,
+        "astylarFocus": false,
+        "logicalFocus": true,
+        "semanticMatchesLogical": false
+      },
+      "errors": [],
+      "reference": {
+        "active": {
+          "tag": "BUTTON",
+          "id": "second",
+          "authoredId": null
+        },
+        "activeButton": "second",
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "screenshot": {
+          "file": "reference-dpr1-repeat1-second-held.png",
+          "sha256": "589775335b635e56effcc3571d27bc99c79d0ffb4c9d66e2bf7e8aca1bc0a41f"
+        }
+      },
+      "astylar": {
+        "active": {
+          "tag": "CANVAS",
+          "id": "audit-stage",
+          "authoredId": null
+        },
+        "activeButton": null,
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "interaction": {
+          "pointerObservers": 1,
+          "wheelHandlers": 1,
+          "keyboardListeners": 2,
+          "handlers": 1,
+          "pressedElementId": "second",
+          "hoveredElementId": "second",
+          "focusedElementId": "second",
+          "focusVisible": false,
+          "navigationOutcomes": [],
+          "disposed": false
+        },
+        "screenshot": {
+          "file": "astylar-dpr1-repeat1-second-held.png",
+          "sha256": "51075769c7928849e3a33eafc539fd77cabf65317aa044d9d75a45674365ba63"
+        },
+        "heldNativeEvents": [
+          {
+            "type": "keyup",
+            "trusted": true,
+            "key": "Tab",
+            "buttons": null,
+            "target": {
+              "tag": "BUTTON",
+              "id": "astylar-semantic-1-first",
+              "authoredId": "first"
+            }
+          },
+          {
+            "type": "keydown",
+            "trusted": true,
+            "key": " ",
+            "buttons": null,
+            "target": {
+              "tag": "BUTTON",
+              "id": "astylar-semantic-1-first",
+              "authoredId": "first"
+            }
+          },
+          {
+            "type": "keyup",
+            "trusted": true,
+            "key": " ",
+            "buttons": null,
+            "target": {
+              "tag": "BUTTON",
+              "id": "astylar-semantic-1-first",
+              "authoredId": "first"
+            }
+          },
+          {
+            "type": "pointermove",
+            "trusted": true,
+            "key": null,
+            "buttons": 0,
+            "target": {
+              "tag": "CANVAS",
+              "id": "audit-stage",
+              "authoredId": null
+            }
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "key": null,
+            "buttons": 1,
+            "target": {
+              "tag": "CANVAS",
+              "id": "audit-stage",
+              "authoredId": null
+            }
+          },
+          {
+            "type": "focusout",
+            "trusted": true,
+            "key": null,
+            "buttons": null,
+            "target": {
+              "tag": "BUTTON",
+              "id": "astylar-semantic-1-first",
+              "authoredId": "first"
+            }
+          },
+          {
+            "type": "focusin",
+            "trusted": true,
+            "key": null,
+            "buttons": null,
+            "target": {
+              "tag": "CANVAS",
+              "id": "audit-stage",
+              "authoredId": null
+            }
+          }
+        ],
+        "heldPublicEvents": [
+          {
+            "type": "pointermove",
+            "targetId": "second",
+            "value": "second",
+            "button": -1,
+            "buttons": 0,
+            "pointerId": 1,
+            "pointerType": "mouse",
+            "isPrimary": true,
+            "clientX": 220,
+            "clientY": 40,
+            "canvasX": 220,
+            "canvasY": 40,
+            "localX": 60,
+            "localY": 20,
+            "currentTargetId": "second",
+            "defaultPrevented": false,
+            "propagationStopped": false
+          },
+          {
+            "type": "pointerdown",
+            "targetId": "second",
+            "value": "second",
+            "button": 0,
+            "buttons": 1,
+            "pointerId": 1,
+            "pointerType": "mouse",
+            "isPrimary": true,
+            "clientX": 220,
+            "clientY": 40,
+            "canvasX": 220,
+            "canvasY": 40,
+            "localX": 60,
+            "localY": 20,
+            "currentTargetId": "second",
+            "defaultPrevented": false,
+            "propagationStopped": false
+          },
+          {
+            "type": "blur",
+            "targetId": "first",
+            "value": "first",
+            "currentTargetId": "first",
+            "defaultPrevented": false,
+            "propagationStopped": false
+          },
+          {
+            "type": "focus",
+            "targetId": "second",
+            "value": "second",
+            "currentTargetId": "second",
+            "defaultPrevented": false,
+            "propagationStopped": false
+          }
+        ]
+      }
+    },
+    {
+      "state": "second-released",
+      "action": "up",
+      "target": "second",
+      "expectedFocus": "second",
+      "dpr": 1,
+      "repetition": 1,
+      "checks": {
+        "referenceFocus": true,
+        "astylarFocus": true,
+        "logicalFocus": true,
+        "semanticMatchesLogical": true
+      },
+      "errors": [],
+      "reference": {
+        "active": {
+          "tag": "BUTTON",
+          "id": "second",
+          "authoredId": null
+        },
+        "activeButton": "second",
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "screenshot": {
+          "file": "reference-dpr1-repeat1-second-released.png",
+          "sha256": "589775335b635e56effcc3571d27bc99c79d0ffb4c9d66e2bf7e8aca1bc0a41f"
+        }
+      },
+      "astylar": {
+        "active": {
+          "tag": "BUTTON",
+          "id": "astylar-semantic-1-second",
+          "authoredId": "second"
+        },
+        "activeButton": "second",
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "interaction": {
+          "pointerObservers": 1,
+          "wheelHandlers": 1,
+          "keyboardListeners": 2,
+          "handlers": 1,
+          "hoveredElementId": "second",
+          "focusedElementId": "second",
+          "focusVisible": false,
+          "navigationOutcomes": [],
+          "disposed": false
+        },
+        "screenshot": {
+          "file": "astylar-dpr1-repeat1-second-released.png",
+          "sha256": "6d8d4801de673ae9b6d2d4984943587694ac18701c20c8cbf4b6777b0c3a6eef"
+        },
+        "heldNativeEvents": null,
+        "heldPublicEvents": null
+      }
+    },
+    {
+      "state": "first-hover",
+      "action": "move",
+      "target": "first",
+      "expectedFocus": "second",
+      "dpr": 1,
+      "repetition": 1,
+      "checks": {
+        "referenceFocus": true,
+        "astylarFocus": true,
+        "logicalFocus": true,
+        "semanticMatchesLogical": true
+      },
+      "errors": [],
+      "reference": {
+        "active": {
+          "tag": "BUTTON",
+          "id": "second",
+          "authoredId": null
+        },
+        "activeButton": "second",
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "screenshot": {
+          "file": "reference-dpr1-repeat1-first-hover.png",
+          "sha256": "589775335b635e56effcc3571d27bc99c79d0ffb4c9d66e2bf7e8aca1bc0a41f"
+        }
+      },
+      "astylar": {
+        "active": {
+          "tag": "BUTTON",
+          "id": "astylar-semantic-1-second",
+          "authoredId": "second"
+        },
+        "activeButton": "second",
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "interaction": {
+          "pointerObservers": 1,
+          "wheelHandlers": 1,
+          "keyboardListeners": 2,
+          "handlers": 1,
+          "hoveredElementId": "first",
+          "focusedElementId": "second",
+          "focusVisible": false,
+          "navigationOutcomes": [],
+          "disposed": false
+        },
+        "screenshot": {
+          "file": "astylar-dpr1-repeat1-first-hover.png",
+          "sha256": "6d8d4801de673ae9b6d2d4984943587694ac18701c20c8cbf4b6777b0c3a6eef"
+        },
+        "heldNativeEvents": null,
+        "heldPublicEvents": null
+      }
+    },
+    {
+      "state": "first-held",
+      "action": "down",
+      "target": "first",
+      "expectedFocus": "first",
+      "dpr": 1,
+      "repetition": 1,
+      "checks": {
+        "referenceFocus": true,
+        "astylarFocus": false,
+        "logicalFocus": true,
+        "semanticMatchesLogical": false
+      },
+      "errors": [],
+      "reference": {
+        "active": {
+          "tag": "BUTTON",
+          "id": "first",
+          "authoredId": null
+        },
+        "activeButton": "first",
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "screenshot": {
+          "file": "reference-dpr1-repeat1-first-held.png",
+          "sha256": "589775335b635e56effcc3571d27bc99c79d0ffb4c9d66e2bf7e8aca1bc0a41f"
+        }
+      },
+      "astylar": {
+        "active": {
+          "tag": "CANVAS",
+          "id": "audit-stage",
+          "authoredId": null
+        },
+        "activeButton": null,
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "interaction": {
+          "pointerObservers": 1,
+          "wheelHandlers": 1,
+          "keyboardListeners": 2,
+          "handlers": 1,
+          "pressedElementId": "first",
+          "hoveredElementId": "first",
+          "focusedElementId": "first",
+          "focusVisible": false,
+          "navigationOutcomes": [],
+          "disposed": false
+        },
+        "screenshot": {
+          "file": "astylar-dpr1-repeat1-first-held.png",
+          "sha256": "51075769c7928849e3a33eafc539fd77cabf65317aa044d9d75a45674365ba63"
+        },
+        "heldNativeEvents": [
+          {
+            "type": "focusout",
+            "trusted": true,
+            "key": null,
+            "buttons": null,
+            "target": {
+              "tag": "CANVAS",
+              "id": "audit-stage",
+              "authoredId": null
+            }
+          },
+          {
+            "type": "focusin",
+            "trusted": true,
+            "key": null,
+            "buttons": null,
+            "target": {
+              "tag": "BUTTON",
+              "id": "astylar-semantic-1-second",
+              "authoredId": "second"
+            }
+          },
+          {
+            "type": "click",
+            "trusted": true,
+            "key": null,
+            "buttons": 0,
+            "target": {
+              "tag": "CANVAS",
+              "id": "audit-stage",
+              "authoredId": null
+            }
+          },
+          {
+            "type": "pointermove",
+            "trusted": true,
+            "key": null,
+            "buttons": 0,
+            "target": {
+              "tag": "CANVAS",
+              "id": "audit-stage",
+              "authoredId": null
+            }
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "key": null,
+            "buttons": 1,
+            "target": {
+              "tag": "CANVAS",
+              "id": "audit-stage",
+              "authoredId": null
+            }
+          },
+          {
+            "type": "focusout",
+            "trusted": true,
+            "key": null,
+            "buttons": null,
+            "target": {
+              "tag": "BUTTON",
+              "id": "astylar-semantic-1-second",
+              "authoredId": "second"
+            }
+          },
+          {
+            "type": "focusin",
+            "trusted": true,
+            "key": null,
+            "buttons": null,
+            "target": {
+              "tag": "CANVAS",
+              "id": "audit-stage",
+              "authoredId": null
+            }
+          }
+        ],
+        "heldPublicEvents": [
+          {
+            "type": "pointermove",
+            "targetId": "first",
+            "value": "first",
+            "button": -1,
+            "buttons": 0,
+            "pointerId": 1,
+            "pointerType": "mouse",
+            "isPrimary": true,
+            "clientX": 80,
+            "clientY": 40,
+            "canvasX": 80,
+            "canvasY": 40,
+            "localX": 60,
+            "localY": 20,
+            "currentTargetId": "first",
+            "defaultPrevented": false,
+            "propagationStopped": false
+          },
+          {
+            "type": "pointerdown",
+            "targetId": "first",
+            "value": "first",
+            "button": 0,
+            "buttons": 1,
+            "pointerId": 1,
+            "pointerType": "mouse",
+            "isPrimary": true,
+            "clientX": 80,
+            "clientY": 40,
+            "canvasX": 80,
+            "canvasY": 40,
+            "localX": 60,
+            "localY": 20,
+            "currentTargetId": "first",
+            "defaultPrevented": false,
+            "propagationStopped": false
+          },
+          {
+            "type": "blur",
+            "targetId": "second",
+            "value": "second",
+            "currentTargetId": "second",
+            "defaultPrevented": false,
+            "propagationStopped": false
+          },
+          {
+            "type": "focus",
+            "targetId": "first",
+            "value": "first",
+            "currentTargetId": "first",
+            "defaultPrevented": false,
+            "propagationStopped": false
+          }
+        ]
+      }
+    },
+    {
+      "state": "first-released",
+      "action": "up",
+      "target": "first",
+      "expectedFocus": "first",
+      "dpr": 1,
+      "repetition": 1,
+      "checks": {
+        "referenceFocus": true,
+        "astylarFocus": true,
+        "logicalFocus": true,
+        "semanticMatchesLogical": true
+      },
+      "errors": [],
+      "reference": {
+        "active": {
+          "tag": "BUTTON",
+          "id": "first",
+          "authoredId": null
+        },
+        "activeButton": "first",
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "screenshot": {
+          "file": "reference-dpr1-repeat1-first-released.png",
+          "sha256": "589775335b635e56effcc3571d27bc99c79d0ffb4c9d66e2bf7e8aca1bc0a41f"
+        }
+      },
+      "astylar": {
+        "active": {
+          "tag": "BUTTON",
+          "id": "astylar-semantic-1-first",
+          "authoredId": "first"
+        },
+        "activeButton": "first",
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "interaction": {
+          "pointerObservers": 1,
+          "wheelHandlers": 1,
+          "keyboardListeners": 2,
+          "handlers": 1,
+          "hoveredElementId": "first",
+          "focusedElementId": "first",
+          "focusVisible": false,
+          "navigationOutcomes": [],
+          "disposed": false
+        },
+        "screenshot": {
+          "file": "astylar-dpr1-repeat1-first-released.png",
+          "sha256": "6d8d4801de673ae9b6d2d4984943587694ac18701c20c8cbf4b6777b0c3a6eef"
+        },
+        "heldNativeEvents": null,
+        "heldPublicEvents": null
+      }
+    },
+    {
+      "state": "initial",
+      "action": "inspect",
+      "target": null,
+      "expectedFocus": null,
+      "dpr": 1,
+      "repetition": 2,
+      "checks": {
+        "referenceFocus": true,
+        "astylarFocus": true,
+        "logicalFocus": true,
+        "semanticMatchesLogical": true
+      },
+      "errors": [],
+      "reference": {
+        "active": {
+          "tag": "BODY",
+          "id": "",
+          "authoredId": null
+        },
+        "activeButton": null,
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "screenshot": {
+          "file": "reference-dpr1-repeat2-initial.png",
+          "sha256": "589775335b635e56effcc3571d27bc99c79d0ffb4c9d66e2bf7e8aca1bc0a41f"
+        }
+      },
+      "astylar": {
+        "active": {
+          "tag": "BODY",
+          "id": "",
+          "authoredId": null
+        },
+        "activeButton": null,
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "interaction": {
+          "pointerObservers": 1,
+          "wheelHandlers": 1,
+          "keyboardListeners": 2,
+          "handlers": 1,
+          "focusVisible": false,
+          "navigationOutcomes": [],
+          "disposed": false
+        },
+        "screenshot": {
+          "file": "astylar-dpr1-repeat2-initial.png",
+          "sha256": "6d8d4801de673ae9b6d2d4984943587694ac18701c20c8cbf4b6777b0c3a6eef"
+        },
+        "heldNativeEvents": null,
+        "heldPublicEvents": null
+      }
+    },
+    {
+      "state": "keyboard-first",
+      "action": "tab",
+      "target": null,
+      "expectedFocus": "first",
+      "dpr": 1,
+      "repetition": 2,
+      "checks": {
+        "referenceFocus": true,
+        "astylarFocus": true,
+        "logicalFocus": true,
+        "semanticMatchesLogical": true
+      },
+      "errors": [],
+      "reference": {
+        "active": {
+          "tag": "BUTTON",
+          "id": "first",
+          "authoredId": null
+        },
+        "activeButton": "first",
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "screenshot": {
+          "file": "reference-dpr1-repeat2-keyboard-first.png",
+          "sha256": "e65b8720a7c8fe24a406910044c203f224223751e9eed23542503d61dfc5c83b"
+        }
+      },
+      "astylar": {
+        "active": {
+          "tag": "BUTTON",
+          "id": "astylar-semantic-1-first",
+          "authoredId": "first"
+        },
+        "activeButton": "first",
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "interaction": {
+          "pointerObservers": 1,
+          "wheelHandlers": 1,
+          "keyboardListeners": 2,
+          "handlers": 1,
+          "focusedElementId": "first",
+          "focusVisible": true,
+          "navigationOutcomes": [],
+          "disposed": false
+        },
+        "screenshot": {
+          "file": "astylar-dpr1-repeat2-keyboard-first.png",
+          "sha256": "6d8d4801de673ae9b6d2d4984943587694ac18701c20c8cbf4b6777b0c3a6eef"
+        },
+        "heldNativeEvents": null,
+        "heldPublicEvents": null
+      }
+    },
+    {
+      "state": "space-held",
+      "action": "space-down",
+      "target": null,
+      "expectedFocus": "first",
+      "dpr": 1,
+      "repetition": 2,
+      "checks": {
+        "referenceFocus": true,
+        "astylarFocus": true,
+        "logicalFocus": true,
+        "semanticMatchesLogical": true
+      },
+      "errors": [],
+      "reference": {
+        "active": {
+          "tag": "BUTTON",
+          "id": "first",
+          "authoredId": null
+        },
+        "activeButton": "first",
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "screenshot": {
+          "file": "reference-dpr1-repeat2-space-held.png",
+          "sha256": "e65b8720a7c8fe24a406910044c203f224223751e9eed23542503d61dfc5c83b"
+        }
+      },
+      "astylar": {
+        "active": {
+          "tag": "BUTTON",
+          "id": "astylar-semantic-1-first",
+          "authoredId": "first"
+        },
+        "activeButton": "first",
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "interaction": {
+          "pointerObservers": 1,
+          "wheelHandlers": 1,
+          "keyboardListeners": 2,
+          "handlers": 1,
+          "focusedElementId": "first",
+          "focusVisible": true,
+          "navigationOutcomes": [],
+          "disposed": false
+        },
+        "screenshot": {
+          "file": "astylar-dpr1-repeat2-space-held.png",
+          "sha256": "6d8d4801de673ae9b6d2d4984943587694ac18701c20c8cbf4b6777b0c3a6eef"
+        },
+        "heldNativeEvents": null,
+        "heldPublicEvents": null
+      }
+    },
+    {
+      "state": "space-released",
+      "action": "space-up",
+      "target": null,
+      "expectedFocus": "first",
+      "dpr": 1,
+      "repetition": 2,
+      "checks": {
+        "referenceFocus": true,
+        "astylarFocus": true,
+        "logicalFocus": true,
+        "semanticMatchesLogical": true
+      },
+      "errors": [],
+      "reference": {
+        "active": {
+          "tag": "BUTTON",
+          "id": "first",
+          "authoredId": null
+        },
+        "activeButton": "first",
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "screenshot": {
+          "file": "reference-dpr1-repeat2-space-released.png",
+          "sha256": "e65b8720a7c8fe24a406910044c203f224223751e9eed23542503d61dfc5c83b"
+        }
+      },
+      "astylar": {
+        "active": {
+          "tag": "BUTTON",
+          "id": "astylar-semantic-1-first",
+          "authoredId": "first"
+        },
+        "activeButton": "first",
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "interaction": {
+          "pointerObservers": 1,
+          "wheelHandlers": 1,
+          "keyboardListeners": 2,
+          "handlers": 1,
+          "focusedElementId": "first",
+          "focusVisible": true,
+          "navigationOutcomes": [],
+          "disposed": false
+        },
+        "screenshot": {
+          "file": "astylar-dpr1-repeat2-space-released.png",
+          "sha256": "6d8d4801de673ae9b6d2d4984943587694ac18701c20c8cbf4b6777b0c3a6eef"
+        },
+        "heldNativeEvents": null,
+        "heldPublicEvents": null
+      }
+    },
+    {
+      "state": "second-hover",
+      "action": "move",
+      "target": "second",
+      "expectedFocus": "first",
+      "dpr": 1,
+      "repetition": 2,
+      "checks": {
+        "referenceFocus": true,
+        "astylarFocus": true,
+        "logicalFocus": true,
+        "semanticMatchesLogical": true
+      },
+      "errors": [],
+      "reference": {
+        "active": {
+          "tag": "BUTTON",
+          "id": "first",
+          "authoredId": null
+        },
+        "activeButton": "first",
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "screenshot": {
+          "file": "reference-dpr1-repeat2-second-hover.png",
+          "sha256": "e65b8720a7c8fe24a406910044c203f224223751e9eed23542503d61dfc5c83b"
+        }
+      },
+      "astylar": {
+        "active": {
+          "tag": "BUTTON",
+          "id": "astylar-semantic-1-first",
+          "authoredId": "first"
+        },
+        "activeButton": "first",
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "interaction": {
+          "pointerObservers": 1,
+          "wheelHandlers": 1,
+          "keyboardListeners": 2,
+          "handlers": 1,
+          "hoveredElementId": "second",
+          "focusedElementId": "first",
+          "focusVisible": true,
+          "navigationOutcomes": [],
+          "disposed": false
+        },
+        "screenshot": {
+          "file": "astylar-dpr1-repeat2-second-hover.png",
+          "sha256": "6d8d4801de673ae9b6d2d4984943587694ac18701c20c8cbf4b6777b0c3a6eef"
+        },
+        "heldNativeEvents": null,
+        "heldPublicEvents": null
+      }
+    },
+    {
+      "state": "second-held",
+      "action": "down",
+      "target": "second",
+      "expectedFocus": "second",
+      "dpr": 1,
+      "repetition": 2,
+      "checks": {
+        "referenceFocus": true,
+        "astylarFocus": false,
+        "logicalFocus": true,
+        "semanticMatchesLogical": false
+      },
+      "errors": [],
+      "reference": {
+        "active": {
+          "tag": "BUTTON",
+          "id": "second",
+          "authoredId": null
+        },
+        "activeButton": "second",
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "screenshot": {
+          "file": "reference-dpr1-repeat2-second-held.png",
+          "sha256": "589775335b635e56effcc3571d27bc99c79d0ffb4c9d66e2bf7e8aca1bc0a41f"
+        }
+      },
+      "astylar": {
+        "active": {
+          "tag": "CANVAS",
+          "id": "audit-stage",
+          "authoredId": null
+        },
+        "activeButton": null,
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "interaction": {
+          "pointerObservers": 1,
+          "wheelHandlers": 1,
+          "keyboardListeners": 2,
+          "handlers": 1,
+          "pressedElementId": "second",
+          "hoveredElementId": "second",
+          "focusedElementId": "second",
+          "focusVisible": false,
+          "navigationOutcomes": [],
+          "disposed": false
+        },
+        "screenshot": {
+          "file": "astylar-dpr1-repeat2-second-held.png",
+          "sha256": "51075769c7928849e3a33eafc539fd77cabf65317aa044d9d75a45674365ba63"
+        },
+        "heldNativeEvents": [
+          {
+            "type": "keyup",
+            "trusted": true,
+            "key": "Tab",
+            "buttons": null,
+            "target": {
+              "tag": "BUTTON",
+              "id": "astylar-semantic-1-first",
+              "authoredId": "first"
+            }
+          },
+          {
+            "type": "keydown",
+            "trusted": true,
+            "key": " ",
+            "buttons": null,
+            "target": {
+              "tag": "BUTTON",
+              "id": "astylar-semantic-1-first",
+              "authoredId": "first"
+            }
+          },
+          {
+            "type": "keyup",
+            "trusted": true,
+            "key": " ",
+            "buttons": null,
+            "target": {
+              "tag": "BUTTON",
+              "id": "astylar-semantic-1-first",
+              "authoredId": "first"
+            }
+          },
+          {
+            "type": "pointermove",
+            "trusted": true,
+            "key": null,
+            "buttons": 0,
+            "target": {
+              "tag": "CANVAS",
+              "id": "audit-stage",
+              "authoredId": null
+            }
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "key": null,
+            "buttons": 1,
+            "target": {
+              "tag": "CANVAS",
+              "id": "audit-stage",
+              "authoredId": null
+            }
+          },
+          {
+            "type": "focusout",
+            "trusted": true,
+            "key": null,
+            "buttons": null,
+            "target": {
+              "tag": "BUTTON",
+              "id": "astylar-semantic-1-first",
+              "authoredId": "first"
+            }
+          },
+          {
+            "type": "focusin",
+            "trusted": true,
+            "key": null,
+            "buttons": null,
+            "target": {
+              "tag": "CANVAS",
+              "id": "audit-stage",
+              "authoredId": null
+            }
+          }
+        ],
+        "heldPublicEvents": [
+          {
+            "type": "pointermove",
+            "targetId": "second",
+            "value": "second",
+            "button": -1,
+            "buttons": 0,
+            "pointerId": 1,
+            "pointerType": "mouse",
+            "isPrimary": true,
+            "clientX": 220,
+            "clientY": 40,
+            "canvasX": 220,
+            "canvasY": 40,
+            "localX": 60,
+            "localY": 20,
+            "currentTargetId": "second",
+            "defaultPrevented": false,
+            "propagationStopped": false
+          },
+          {
+            "type": "pointerdown",
+            "targetId": "second",
+            "value": "second",
+            "button": 0,
+            "buttons": 1,
+            "pointerId": 1,
+            "pointerType": "mouse",
+            "isPrimary": true,
+            "clientX": 220,
+            "clientY": 40,
+            "canvasX": 220,
+            "canvasY": 40,
+            "localX": 60,
+            "localY": 20,
+            "currentTargetId": "second",
+            "defaultPrevented": false,
+            "propagationStopped": false
+          },
+          {
+            "type": "blur",
+            "targetId": "first",
+            "value": "first",
+            "currentTargetId": "first",
+            "defaultPrevented": false,
+            "propagationStopped": false
+          },
+          {
+            "type": "focus",
+            "targetId": "second",
+            "value": "second",
+            "currentTargetId": "second",
+            "defaultPrevented": false,
+            "propagationStopped": false
+          }
+        ]
+      }
+    },
+    {
+      "state": "second-released",
+      "action": "up",
+      "target": "second",
+      "expectedFocus": "second",
+      "dpr": 1,
+      "repetition": 2,
+      "checks": {
+        "referenceFocus": true,
+        "astylarFocus": true,
+        "logicalFocus": true,
+        "semanticMatchesLogical": true
+      },
+      "errors": [],
+      "reference": {
+        "active": {
+          "tag": "BUTTON",
+          "id": "second",
+          "authoredId": null
+        },
+        "activeButton": "second",
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "screenshot": {
+          "file": "reference-dpr1-repeat2-second-released.png",
+          "sha256": "589775335b635e56effcc3571d27bc99c79d0ffb4c9d66e2bf7e8aca1bc0a41f"
+        }
+      },
+      "astylar": {
+        "active": {
+          "tag": "BUTTON",
+          "id": "astylar-semantic-1-second",
+          "authoredId": "second"
+        },
+        "activeButton": "second",
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "interaction": {
+          "pointerObservers": 1,
+          "wheelHandlers": 1,
+          "keyboardListeners": 2,
+          "handlers": 1,
+          "hoveredElementId": "second",
+          "focusedElementId": "second",
+          "focusVisible": false,
+          "navigationOutcomes": [],
+          "disposed": false
+        },
+        "screenshot": {
+          "file": "astylar-dpr1-repeat2-second-released.png",
+          "sha256": "6d8d4801de673ae9b6d2d4984943587694ac18701c20c8cbf4b6777b0c3a6eef"
+        },
+        "heldNativeEvents": null,
+        "heldPublicEvents": null
+      }
+    },
+    {
+      "state": "first-hover",
+      "action": "move",
+      "target": "first",
+      "expectedFocus": "second",
+      "dpr": 1,
+      "repetition": 2,
+      "checks": {
+        "referenceFocus": true,
+        "astylarFocus": true,
+        "logicalFocus": true,
+        "semanticMatchesLogical": true
+      },
+      "errors": [],
+      "reference": {
+        "active": {
+          "tag": "BUTTON",
+          "id": "second",
+          "authoredId": null
+        },
+        "activeButton": "second",
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "screenshot": {
+          "file": "reference-dpr1-repeat2-first-hover.png",
+          "sha256": "589775335b635e56effcc3571d27bc99c79d0ffb4c9d66e2bf7e8aca1bc0a41f"
+        }
+      },
+      "astylar": {
+        "active": {
+          "tag": "BUTTON",
+          "id": "astylar-semantic-1-second",
+          "authoredId": "second"
+        },
+        "activeButton": "second",
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "interaction": {
+          "pointerObservers": 1,
+          "wheelHandlers": 1,
+          "keyboardListeners": 2,
+          "handlers": 1,
+          "hoveredElementId": "first",
+          "focusedElementId": "second",
+          "focusVisible": false,
+          "navigationOutcomes": [],
+          "disposed": false
+        },
+        "screenshot": {
+          "file": "astylar-dpr1-repeat2-first-hover.png",
+          "sha256": "6d8d4801de673ae9b6d2d4984943587694ac18701c20c8cbf4b6777b0c3a6eef"
+        },
+        "heldNativeEvents": null,
+        "heldPublicEvents": null
+      }
+    },
+    {
+      "state": "first-held",
+      "action": "down",
+      "target": "first",
+      "expectedFocus": "first",
+      "dpr": 1,
+      "repetition": 2,
+      "checks": {
+        "referenceFocus": true,
+        "astylarFocus": false,
+        "logicalFocus": true,
+        "semanticMatchesLogical": false
+      },
+      "errors": [],
+      "reference": {
+        "active": {
+          "tag": "BUTTON",
+          "id": "first",
+          "authoredId": null
+        },
+        "activeButton": "first",
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "screenshot": {
+          "file": "reference-dpr1-repeat2-first-held.png",
+          "sha256": "589775335b635e56effcc3571d27bc99c79d0ffb4c9d66e2bf7e8aca1bc0a41f"
+        }
+      },
+      "astylar": {
+        "active": {
+          "tag": "CANVAS",
+          "id": "audit-stage",
+          "authoredId": null
+        },
+        "activeButton": null,
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "interaction": {
+          "pointerObservers": 1,
+          "wheelHandlers": 1,
+          "keyboardListeners": 2,
+          "handlers": 1,
+          "pressedElementId": "first",
+          "hoveredElementId": "first",
+          "focusedElementId": "first",
+          "focusVisible": false,
+          "navigationOutcomes": [],
+          "disposed": false
+        },
+        "screenshot": {
+          "file": "astylar-dpr1-repeat2-first-held.png",
+          "sha256": "51075769c7928849e3a33eafc539fd77cabf65317aa044d9d75a45674365ba63"
+        },
+        "heldNativeEvents": [
+          {
+            "type": "focusout",
+            "trusted": true,
+            "key": null,
+            "buttons": null,
+            "target": {
+              "tag": "CANVAS",
+              "id": "audit-stage",
+              "authoredId": null
+            }
+          },
+          {
+            "type": "focusin",
+            "trusted": true,
+            "key": null,
+            "buttons": null,
+            "target": {
+              "tag": "BUTTON",
+              "id": "astylar-semantic-1-second",
+              "authoredId": "second"
+            }
+          },
+          {
+            "type": "click",
+            "trusted": true,
+            "key": null,
+            "buttons": 0,
+            "target": {
+              "tag": "CANVAS",
+              "id": "audit-stage",
+              "authoredId": null
+            }
+          },
+          {
+            "type": "pointermove",
+            "trusted": true,
+            "key": null,
+            "buttons": 0,
+            "target": {
+              "tag": "CANVAS",
+              "id": "audit-stage",
+              "authoredId": null
+            }
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "key": null,
+            "buttons": 1,
+            "target": {
+              "tag": "CANVAS",
+              "id": "audit-stage",
+              "authoredId": null
+            }
+          },
+          {
+            "type": "focusout",
+            "trusted": true,
+            "key": null,
+            "buttons": null,
+            "target": {
+              "tag": "BUTTON",
+              "id": "astylar-semantic-1-second",
+              "authoredId": "second"
+            }
+          },
+          {
+            "type": "focusin",
+            "trusted": true,
+            "key": null,
+            "buttons": null,
+            "target": {
+              "tag": "CANVAS",
+              "id": "audit-stage",
+              "authoredId": null
+            }
+          }
+        ],
+        "heldPublicEvents": [
+          {
+            "type": "pointermove",
+            "targetId": "first",
+            "value": "first",
+            "button": -1,
+            "buttons": 0,
+            "pointerId": 1,
+            "pointerType": "mouse",
+            "isPrimary": true,
+            "clientX": 80,
+            "clientY": 40,
+            "canvasX": 80,
+            "canvasY": 40,
+            "localX": 60,
+            "localY": 20,
+            "currentTargetId": "first",
+            "defaultPrevented": false,
+            "propagationStopped": false
+          },
+          {
+            "type": "pointerdown",
+            "targetId": "first",
+            "value": "first",
+            "button": 0,
+            "buttons": 1,
+            "pointerId": 1,
+            "pointerType": "mouse",
+            "isPrimary": true,
+            "clientX": 80,
+            "clientY": 40,
+            "canvasX": 80,
+            "canvasY": 40,
+            "localX": 60,
+            "localY": 20,
+            "currentTargetId": "first",
+            "defaultPrevented": false,
+            "propagationStopped": false
+          },
+          {
+            "type": "blur",
+            "targetId": "second",
+            "value": "second",
+            "currentTargetId": "second",
+            "defaultPrevented": false,
+            "propagationStopped": false
+          },
+          {
+            "type": "focus",
+            "targetId": "first",
+            "value": "first",
+            "currentTargetId": "first",
+            "defaultPrevented": false,
+            "propagationStopped": false
+          }
+        ]
+      }
+    },
+    {
+      "state": "first-released",
+      "action": "up",
+      "target": "first",
+      "expectedFocus": "first",
+      "dpr": 1,
+      "repetition": 2,
+      "checks": {
+        "referenceFocus": true,
+        "astylarFocus": true,
+        "logicalFocus": true,
+        "semanticMatchesLogical": true
+      },
+      "errors": [],
+      "reference": {
+        "active": {
+          "tag": "BUTTON",
+          "id": "first",
+          "authoredId": null
+        },
+        "activeButton": "first",
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "screenshot": {
+          "file": "reference-dpr1-repeat2-first-released.png",
+          "sha256": "589775335b635e56effcc3571d27bc99c79d0ffb4c9d66e2bf7e8aca1bc0a41f"
+        }
+      },
+      "astylar": {
+        "active": {
+          "tag": "BUTTON",
+          "id": "astylar-semantic-1-first",
+          "authoredId": "first"
+        },
+        "activeButton": "first",
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "interaction": {
+          "pointerObservers": 1,
+          "wheelHandlers": 1,
+          "keyboardListeners": 2,
+          "handlers": 1,
+          "hoveredElementId": "first",
+          "focusedElementId": "first",
+          "focusVisible": false,
+          "navigationOutcomes": [],
+          "disposed": false
+        },
+        "screenshot": {
+          "file": "astylar-dpr1-repeat2-first-released.png",
+          "sha256": "6d8d4801de673ae9b6d2d4984943587694ac18701c20c8cbf4b6777b0c3a6eef"
+        },
+        "heldNativeEvents": null,
+        "heldPublicEvents": null
+      }
+    },
+    {
+      "state": "initial",
+      "action": "inspect",
+      "target": null,
+      "expectedFocus": null,
+      "dpr": 2,
+      "repetition": 1,
+      "checks": {
+        "referenceFocus": true,
+        "astylarFocus": true,
+        "logicalFocus": true,
+        "semanticMatchesLogical": true
+      },
+      "errors": [],
+      "reference": {
+        "active": {
+          "tag": "BODY",
+          "id": "",
+          "authoredId": null
+        },
+        "activeButton": null,
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "screenshot": {
+          "file": "reference-dpr2-repeat1-initial.png",
+          "sha256": "70827a57755345556917132187f5a5d5feed5cedfc45cbf1561be2bf0de82d5c"
+        }
+      },
+      "astylar": {
+        "active": {
+          "tag": "BODY",
+          "id": "",
+          "authoredId": null
+        },
+        "activeButton": null,
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "interaction": {
+          "pointerObservers": 1,
+          "wheelHandlers": 1,
+          "keyboardListeners": 2,
+          "handlers": 1,
+          "focusVisible": false,
+          "navigationOutcomes": [],
+          "disposed": false
+        },
+        "screenshot": {
+          "file": "astylar-dpr2-repeat1-initial.png",
+          "sha256": "8909f3df6bdac6af72c2f741123b5e5057e13e7c803d9ba1ddf218f152864245"
+        },
+        "heldNativeEvents": null,
+        "heldPublicEvents": null
+      }
+    },
+    {
+      "state": "keyboard-first",
+      "action": "tab",
+      "target": null,
+      "expectedFocus": "first",
+      "dpr": 2,
+      "repetition": 1,
+      "checks": {
+        "referenceFocus": true,
+        "astylarFocus": true,
+        "logicalFocus": true,
+        "semanticMatchesLogical": true
+      },
+      "errors": [],
+      "reference": {
+        "active": {
+          "tag": "BUTTON",
+          "id": "first",
+          "authoredId": null
+        },
+        "activeButton": "first",
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "screenshot": {
+          "file": "reference-dpr2-repeat1-keyboard-first.png",
+          "sha256": "2e01065905165f734faf3526873a14eeb325e06dfaa4a77854cacad3beab2f08"
+        }
+      },
+      "astylar": {
+        "active": {
+          "tag": "BUTTON",
+          "id": "astylar-semantic-1-first",
+          "authoredId": "first"
+        },
+        "activeButton": "first",
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "interaction": {
+          "pointerObservers": 1,
+          "wheelHandlers": 1,
+          "keyboardListeners": 2,
+          "handlers": 1,
+          "focusedElementId": "first",
+          "focusVisible": true,
+          "navigationOutcomes": [],
+          "disposed": false
+        },
+        "screenshot": {
+          "file": "astylar-dpr2-repeat1-keyboard-first.png",
+          "sha256": "8909f3df6bdac6af72c2f741123b5e5057e13e7c803d9ba1ddf218f152864245"
+        },
+        "heldNativeEvents": null,
+        "heldPublicEvents": null
+      }
+    },
+    {
+      "state": "space-held",
+      "action": "space-down",
+      "target": null,
+      "expectedFocus": "first",
+      "dpr": 2,
+      "repetition": 1,
+      "checks": {
+        "referenceFocus": true,
+        "astylarFocus": true,
+        "logicalFocus": true,
+        "semanticMatchesLogical": true
+      },
+      "errors": [],
+      "reference": {
+        "active": {
+          "tag": "BUTTON",
+          "id": "first",
+          "authoredId": null
+        },
+        "activeButton": "first",
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "screenshot": {
+          "file": "reference-dpr2-repeat1-space-held.png",
+          "sha256": "2e01065905165f734faf3526873a14eeb325e06dfaa4a77854cacad3beab2f08"
+        }
+      },
+      "astylar": {
+        "active": {
+          "tag": "BUTTON",
+          "id": "astylar-semantic-1-first",
+          "authoredId": "first"
+        },
+        "activeButton": "first",
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "interaction": {
+          "pointerObservers": 1,
+          "wheelHandlers": 1,
+          "keyboardListeners": 2,
+          "handlers": 1,
+          "focusedElementId": "first",
+          "focusVisible": true,
+          "navigationOutcomes": [],
+          "disposed": false
+        },
+        "screenshot": {
+          "file": "astylar-dpr2-repeat1-space-held.png",
+          "sha256": "8909f3df6bdac6af72c2f741123b5e5057e13e7c803d9ba1ddf218f152864245"
+        },
+        "heldNativeEvents": null,
+        "heldPublicEvents": null
+      }
+    },
+    {
+      "state": "space-released",
+      "action": "space-up",
+      "target": null,
+      "expectedFocus": "first",
+      "dpr": 2,
+      "repetition": 1,
+      "checks": {
+        "referenceFocus": true,
+        "astylarFocus": true,
+        "logicalFocus": true,
+        "semanticMatchesLogical": true
+      },
+      "errors": [],
+      "reference": {
+        "active": {
+          "tag": "BUTTON",
+          "id": "first",
+          "authoredId": null
+        },
+        "activeButton": "first",
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "screenshot": {
+          "file": "reference-dpr2-repeat1-space-released.png",
+          "sha256": "2e01065905165f734faf3526873a14eeb325e06dfaa4a77854cacad3beab2f08"
+        }
+      },
+      "astylar": {
+        "active": {
+          "tag": "BUTTON",
+          "id": "astylar-semantic-1-first",
+          "authoredId": "first"
+        },
+        "activeButton": "first",
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "interaction": {
+          "pointerObservers": 1,
+          "wheelHandlers": 1,
+          "keyboardListeners": 2,
+          "handlers": 1,
+          "focusedElementId": "first",
+          "focusVisible": true,
+          "navigationOutcomes": [],
+          "disposed": false
+        },
+        "screenshot": {
+          "file": "astylar-dpr2-repeat1-space-released.png",
+          "sha256": "8909f3df6bdac6af72c2f741123b5e5057e13e7c803d9ba1ddf218f152864245"
+        },
+        "heldNativeEvents": null,
+        "heldPublicEvents": null
+      }
+    },
+    {
+      "state": "second-hover",
+      "action": "move",
+      "target": "second",
+      "expectedFocus": "first",
+      "dpr": 2,
+      "repetition": 1,
+      "checks": {
+        "referenceFocus": true,
+        "astylarFocus": true,
+        "logicalFocus": true,
+        "semanticMatchesLogical": true
+      },
+      "errors": [],
+      "reference": {
+        "active": {
+          "tag": "BUTTON",
+          "id": "first",
+          "authoredId": null
+        },
+        "activeButton": "first",
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "screenshot": {
+          "file": "reference-dpr2-repeat1-second-hover.png",
+          "sha256": "2e01065905165f734faf3526873a14eeb325e06dfaa4a77854cacad3beab2f08"
+        }
+      },
+      "astylar": {
+        "active": {
+          "tag": "BUTTON",
+          "id": "astylar-semantic-1-first",
+          "authoredId": "first"
+        },
+        "activeButton": "first",
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "interaction": {
+          "pointerObservers": 1,
+          "wheelHandlers": 1,
+          "keyboardListeners": 2,
+          "handlers": 1,
+          "hoveredElementId": "second",
+          "focusedElementId": "first",
+          "focusVisible": true,
+          "navigationOutcomes": [],
+          "disposed": false
+        },
+        "screenshot": {
+          "file": "astylar-dpr2-repeat1-second-hover.png",
+          "sha256": "8909f3df6bdac6af72c2f741123b5e5057e13e7c803d9ba1ddf218f152864245"
+        },
+        "heldNativeEvents": null,
+        "heldPublicEvents": null
+      }
+    },
+    {
+      "state": "second-held",
+      "action": "down",
+      "target": "second",
+      "expectedFocus": "second",
+      "dpr": 2,
+      "repetition": 1,
+      "checks": {
+        "referenceFocus": true,
+        "astylarFocus": false,
+        "logicalFocus": true,
+        "semanticMatchesLogical": false
+      },
+      "errors": [],
+      "reference": {
+        "active": {
+          "tag": "BUTTON",
+          "id": "second",
+          "authoredId": null
+        },
+        "activeButton": "second",
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "screenshot": {
+          "file": "reference-dpr2-repeat1-second-held.png",
+          "sha256": "70827a57755345556917132187f5a5d5feed5cedfc45cbf1561be2bf0de82d5c"
+        }
+      },
+      "astylar": {
+        "active": {
+          "tag": "CANVAS",
+          "id": "audit-stage",
+          "authoredId": null
+        },
+        "activeButton": null,
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "interaction": {
+          "pointerObservers": 1,
+          "wheelHandlers": 1,
+          "keyboardListeners": 2,
+          "handlers": 1,
+          "pressedElementId": "second",
+          "hoveredElementId": "second",
+          "focusedElementId": "second",
+          "focusVisible": false,
+          "navigationOutcomes": [],
+          "disposed": false
+        },
+        "screenshot": {
+          "file": "astylar-dpr2-repeat1-second-held.png",
+          "sha256": "a30c804e7047ac25c088b462eb61f45f49bee229cfdac8f58fc58f158ceca2b9"
+        },
+        "heldNativeEvents": [
+          {
+            "type": "keyup",
+            "trusted": true,
+            "key": "Tab",
+            "buttons": null,
+            "target": {
+              "tag": "BUTTON",
+              "id": "astylar-semantic-1-first",
+              "authoredId": "first"
+            }
+          },
+          {
+            "type": "keydown",
+            "trusted": true,
+            "key": " ",
+            "buttons": null,
+            "target": {
+              "tag": "BUTTON",
+              "id": "astylar-semantic-1-first",
+              "authoredId": "first"
+            }
+          },
+          {
+            "type": "keyup",
+            "trusted": true,
+            "key": " ",
+            "buttons": null,
+            "target": {
+              "tag": "BUTTON",
+              "id": "astylar-semantic-1-first",
+              "authoredId": "first"
+            }
+          },
+          {
+            "type": "pointermove",
+            "trusted": true,
+            "key": null,
+            "buttons": 0,
+            "target": {
+              "tag": "CANVAS",
+              "id": "audit-stage",
+              "authoredId": null
+            }
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "key": null,
+            "buttons": 1,
+            "target": {
+              "tag": "CANVAS",
+              "id": "audit-stage",
+              "authoredId": null
+            }
+          },
+          {
+            "type": "focusout",
+            "trusted": true,
+            "key": null,
+            "buttons": null,
+            "target": {
+              "tag": "BUTTON",
+              "id": "astylar-semantic-1-first",
+              "authoredId": "first"
+            }
+          },
+          {
+            "type": "focusin",
+            "trusted": true,
+            "key": null,
+            "buttons": null,
+            "target": {
+              "tag": "CANVAS",
+              "id": "audit-stage",
+              "authoredId": null
+            }
+          }
+        ],
+        "heldPublicEvents": [
+          {
+            "type": "pointermove",
+            "targetId": "second",
+            "value": "second",
+            "button": -1,
+            "buttons": 0,
+            "pointerId": 1,
+            "pointerType": "mouse",
+            "isPrimary": true,
+            "clientX": 220,
+            "clientY": 40,
+            "canvasX": 220,
+            "canvasY": 40,
+            "localX": 60,
+            "localY": 20,
+            "currentTargetId": "second",
+            "defaultPrevented": false,
+            "propagationStopped": false
+          },
+          {
+            "type": "pointerdown",
+            "targetId": "second",
+            "value": "second",
+            "button": 0,
+            "buttons": 1,
+            "pointerId": 1,
+            "pointerType": "mouse",
+            "isPrimary": true,
+            "clientX": 220,
+            "clientY": 40,
+            "canvasX": 220,
+            "canvasY": 40,
+            "localX": 60,
+            "localY": 20,
+            "currentTargetId": "second",
+            "defaultPrevented": false,
+            "propagationStopped": false
+          },
+          {
+            "type": "blur",
+            "targetId": "first",
+            "value": "first",
+            "currentTargetId": "first",
+            "defaultPrevented": false,
+            "propagationStopped": false
+          },
+          {
+            "type": "focus",
+            "targetId": "second",
+            "value": "second",
+            "currentTargetId": "second",
+            "defaultPrevented": false,
+            "propagationStopped": false
+          }
+        ]
+      }
+    },
+    {
+      "state": "second-released",
+      "action": "up",
+      "target": "second",
+      "expectedFocus": "second",
+      "dpr": 2,
+      "repetition": 1,
+      "checks": {
+        "referenceFocus": true,
+        "astylarFocus": true,
+        "logicalFocus": true,
+        "semanticMatchesLogical": true
+      },
+      "errors": [],
+      "reference": {
+        "active": {
+          "tag": "BUTTON",
+          "id": "second",
+          "authoredId": null
+        },
+        "activeButton": "second",
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "screenshot": {
+          "file": "reference-dpr2-repeat1-second-released.png",
+          "sha256": "70827a57755345556917132187f5a5d5feed5cedfc45cbf1561be2bf0de82d5c"
+        }
+      },
+      "astylar": {
+        "active": {
+          "tag": "BUTTON",
+          "id": "astylar-semantic-1-second",
+          "authoredId": "second"
+        },
+        "activeButton": "second",
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "interaction": {
+          "pointerObservers": 1,
+          "wheelHandlers": 1,
+          "keyboardListeners": 2,
+          "handlers": 1,
+          "hoveredElementId": "second",
+          "focusedElementId": "second",
+          "focusVisible": false,
+          "navigationOutcomes": [],
+          "disposed": false
+        },
+        "screenshot": {
+          "file": "astylar-dpr2-repeat1-second-released.png",
+          "sha256": "8909f3df6bdac6af72c2f741123b5e5057e13e7c803d9ba1ddf218f152864245"
+        },
+        "heldNativeEvents": null,
+        "heldPublicEvents": null
+      }
+    },
+    {
+      "state": "first-hover",
+      "action": "move",
+      "target": "first",
+      "expectedFocus": "second",
+      "dpr": 2,
+      "repetition": 1,
+      "checks": {
+        "referenceFocus": true,
+        "astylarFocus": true,
+        "logicalFocus": true,
+        "semanticMatchesLogical": true
+      },
+      "errors": [],
+      "reference": {
+        "active": {
+          "tag": "BUTTON",
+          "id": "second",
+          "authoredId": null
+        },
+        "activeButton": "second",
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "screenshot": {
+          "file": "reference-dpr2-repeat1-first-hover.png",
+          "sha256": "70827a57755345556917132187f5a5d5feed5cedfc45cbf1561be2bf0de82d5c"
+        }
+      },
+      "astylar": {
+        "active": {
+          "tag": "BUTTON",
+          "id": "astylar-semantic-1-second",
+          "authoredId": "second"
+        },
+        "activeButton": "second",
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "interaction": {
+          "pointerObservers": 1,
+          "wheelHandlers": 1,
+          "keyboardListeners": 2,
+          "handlers": 1,
+          "hoveredElementId": "first",
+          "focusedElementId": "second",
+          "focusVisible": false,
+          "navigationOutcomes": [],
+          "disposed": false
+        },
+        "screenshot": {
+          "file": "astylar-dpr2-repeat1-first-hover.png",
+          "sha256": "8909f3df6bdac6af72c2f741123b5e5057e13e7c803d9ba1ddf218f152864245"
+        },
+        "heldNativeEvents": null,
+        "heldPublicEvents": null
+      }
+    },
+    {
+      "state": "first-held",
+      "action": "down",
+      "target": "first",
+      "expectedFocus": "first",
+      "dpr": 2,
+      "repetition": 1,
+      "checks": {
+        "referenceFocus": true,
+        "astylarFocus": false,
+        "logicalFocus": true,
+        "semanticMatchesLogical": false
+      },
+      "errors": [],
+      "reference": {
+        "active": {
+          "tag": "BUTTON",
+          "id": "first",
+          "authoredId": null
+        },
+        "activeButton": "first",
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "screenshot": {
+          "file": "reference-dpr2-repeat1-first-held.png",
+          "sha256": "70827a57755345556917132187f5a5d5feed5cedfc45cbf1561be2bf0de82d5c"
+        }
+      },
+      "astylar": {
+        "active": {
+          "tag": "CANVAS",
+          "id": "audit-stage",
+          "authoredId": null
+        },
+        "activeButton": null,
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "interaction": {
+          "pointerObservers": 1,
+          "wheelHandlers": 1,
+          "keyboardListeners": 2,
+          "handlers": 1,
+          "pressedElementId": "first",
+          "hoveredElementId": "first",
+          "focusedElementId": "first",
+          "focusVisible": false,
+          "navigationOutcomes": [],
+          "disposed": false
+        },
+        "screenshot": {
+          "file": "astylar-dpr2-repeat1-first-held.png",
+          "sha256": "a30c804e7047ac25c088b462eb61f45f49bee229cfdac8f58fc58f158ceca2b9"
+        },
+        "heldNativeEvents": [
+          {
+            "type": "focusout",
+            "trusted": true,
+            "key": null,
+            "buttons": null,
+            "target": {
+              "tag": "CANVAS",
+              "id": "audit-stage",
+              "authoredId": null
+            }
+          },
+          {
+            "type": "focusin",
+            "trusted": true,
+            "key": null,
+            "buttons": null,
+            "target": {
+              "tag": "BUTTON",
+              "id": "astylar-semantic-1-second",
+              "authoredId": "second"
+            }
+          },
+          {
+            "type": "click",
+            "trusted": true,
+            "key": null,
+            "buttons": 0,
+            "target": {
+              "tag": "CANVAS",
+              "id": "audit-stage",
+              "authoredId": null
+            }
+          },
+          {
+            "type": "pointermove",
+            "trusted": true,
+            "key": null,
+            "buttons": 0,
+            "target": {
+              "tag": "CANVAS",
+              "id": "audit-stage",
+              "authoredId": null
+            }
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "key": null,
+            "buttons": 1,
+            "target": {
+              "tag": "CANVAS",
+              "id": "audit-stage",
+              "authoredId": null
+            }
+          },
+          {
+            "type": "focusout",
+            "trusted": true,
+            "key": null,
+            "buttons": null,
+            "target": {
+              "tag": "BUTTON",
+              "id": "astylar-semantic-1-second",
+              "authoredId": "second"
+            }
+          },
+          {
+            "type": "focusin",
+            "trusted": true,
+            "key": null,
+            "buttons": null,
+            "target": {
+              "tag": "CANVAS",
+              "id": "audit-stage",
+              "authoredId": null
+            }
+          }
+        ],
+        "heldPublicEvents": [
+          {
+            "type": "pointermove",
+            "targetId": "first",
+            "value": "first",
+            "button": -1,
+            "buttons": 0,
+            "pointerId": 1,
+            "pointerType": "mouse",
+            "isPrimary": true,
+            "clientX": 80,
+            "clientY": 40,
+            "canvasX": 80,
+            "canvasY": 40,
+            "localX": 60,
+            "localY": 20,
+            "currentTargetId": "first",
+            "defaultPrevented": false,
+            "propagationStopped": false
+          },
+          {
+            "type": "pointerdown",
+            "targetId": "first",
+            "value": "first",
+            "button": 0,
+            "buttons": 1,
+            "pointerId": 1,
+            "pointerType": "mouse",
+            "isPrimary": true,
+            "clientX": 80,
+            "clientY": 40,
+            "canvasX": 80,
+            "canvasY": 40,
+            "localX": 60,
+            "localY": 20,
+            "currentTargetId": "first",
+            "defaultPrevented": false,
+            "propagationStopped": false
+          },
+          {
+            "type": "blur",
+            "targetId": "second",
+            "value": "second",
+            "currentTargetId": "second",
+            "defaultPrevented": false,
+            "propagationStopped": false
+          },
+          {
+            "type": "focus",
+            "targetId": "first",
+            "value": "first",
+            "currentTargetId": "first",
+            "defaultPrevented": false,
+            "propagationStopped": false
+          }
+        ]
+      }
+    },
+    {
+      "state": "first-released",
+      "action": "up",
+      "target": "first",
+      "expectedFocus": "first",
+      "dpr": 2,
+      "repetition": 1,
+      "checks": {
+        "referenceFocus": true,
+        "astylarFocus": true,
+        "logicalFocus": true,
+        "semanticMatchesLogical": true
+      },
+      "errors": [],
+      "reference": {
+        "active": {
+          "tag": "BUTTON",
+          "id": "first",
+          "authoredId": null
+        },
+        "activeButton": "first",
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "screenshot": {
+          "file": "reference-dpr2-repeat1-first-released.png",
+          "sha256": "70827a57755345556917132187f5a5d5feed5cedfc45cbf1561be2bf0de82d5c"
+        }
+      },
+      "astylar": {
+        "active": {
+          "tag": "BUTTON",
+          "id": "astylar-semantic-1-first",
+          "authoredId": "first"
+        },
+        "activeButton": "first",
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "interaction": {
+          "pointerObservers": 1,
+          "wheelHandlers": 1,
+          "keyboardListeners": 2,
+          "handlers": 1,
+          "hoveredElementId": "first",
+          "focusedElementId": "first",
+          "focusVisible": false,
+          "navigationOutcomes": [],
+          "disposed": false
+        },
+        "screenshot": {
+          "file": "astylar-dpr2-repeat1-first-released.png",
+          "sha256": "8909f3df6bdac6af72c2f741123b5e5057e13e7c803d9ba1ddf218f152864245"
+        },
+        "heldNativeEvents": null,
+        "heldPublicEvents": null
+      }
+    },
+    {
+      "state": "initial",
+      "action": "inspect",
+      "target": null,
+      "expectedFocus": null,
+      "dpr": 2,
+      "repetition": 2,
+      "checks": {
+        "referenceFocus": true,
+        "astylarFocus": true,
+        "logicalFocus": true,
+        "semanticMatchesLogical": true
+      },
+      "errors": [],
+      "reference": {
+        "active": {
+          "tag": "BODY",
+          "id": "",
+          "authoredId": null
+        },
+        "activeButton": null,
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "screenshot": {
+          "file": "reference-dpr2-repeat2-initial.png",
+          "sha256": "70827a57755345556917132187f5a5d5feed5cedfc45cbf1561be2bf0de82d5c"
+        }
+      },
+      "astylar": {
+        "active": {
+          "tag": "BODY",
+          "id": "",
+          "authoredId": null
+        },
+        "activeButton": null,
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "interaction": {
+          "pointerObservers": 1,
+          "wheelHandlers": 1,
+          "keyboardListeners": 2,
+          "handlers": 1,
+          "focusVisible": false,
+          "navigationOutcomes": [],
+          "disposed": false
+        },
+        "screenshot": {
+          "file": "astylar-dpr2-repeat2-initial.png",
+          "sha256": "8909f3df6bdac6af72c2f741123b5e5057e13e7c803d9ba1ddf218f152864245"
+        },
+        "heldNativeEvents": null,
+        "heldPublicEvents": null
+      }
+    },
+    {
+      "state": "keyboard-first",
+      "action": "tab",
+      "target": null,
+      "expectedFocus": "first",
+      "dpr": 2,
+      "repetition": 2,
+      "checks": {
+        "referenceFocus": true,
+        "astylarFocus": true,
+        "logicalFocus": true,
+        "semanticMatchesLogical": true
+      },
+      "errors": [],
+      "reference": {
+        "active": {
+          "tag": "BUTTON",
+          "id": "first",
+          "authoredId": null
+        },
+        "activeButton": "first",
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "screenshot": {
+          "file": "reference-dpr2-repeat2-keyboard-first.png",
+          "sha256": "2e01065905165f734faf3526873a14eeb325e06dfaa4a77854cacad3beab2f08"
+        }
+      },
+      "astylar": {
+        "active": {
+          "tag": "BUTTON",
+          "id": "astylar-semantic-1-first",
+          "authoredId": "first"
+        },
+        "activeButton": "first",
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "interaction": {
+          "pointerObservers": 1,
+          "wheelHandlers": 1,
+          "keyboardListeners": 2,
+          "handlers": 1,
+          "focusedElementId": "first",
+          "focusVisible": true,
+          "navigationOutcomes": [],
+          "disposed": false
+        },
+        "screenshot": {
+          "file": "astylar-dpr2-repeat2-keyboard-first.png",
+          "sha256": "8909f3df6bdac6af72c2f741123b5e5057e13e7c803d9ba1ddf218f152864245"
+        },
+        "heldNativeEvents": null,
+        "heldPublicEvents": null
+      }
+    },
+    {
+      "state": "space-held",
+      "action": "space-down",
+      "target": null,
+      "expectedFocus": "first",
+      "dpr": 2,
+      "repetition": 2,
+      "checks": {
+        "referenceFocus": true,
+        "astylarFocus": true,
+        "logicalFocus": true,
+        "semanticMatchesLogical": true
+      },
+      "errors": [],
+      "reference": {
+        "active": {
+          "tag": "BUTTON",
+          "id": "first",
+          "authoredId": null
+        },
+        "activeButton": "first",
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "screenshot": {
+          "file": "reference-dpr2-repeat2-space-held.png",
+          "sha256": "2e01065905165f734faf3526873a14eeb325e06dfaa4a77854cacad3beab2f08"
+        }
+      },
+      "astylar": {
+        "active": {
+          "tag": "BUTTON",
+          "id": "astylar-semantic-1-first",
+          "authoredId": "first"
+        },
+        "activeButton": "first",
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "interaction": {
+          "pointerObservers": 1,
+          "wheelHandlers": 1,
+          "keyboardListeners": 2,
+          "handlers": 1,
+          "focusedElementId": "first",
+          "focusVisible": true,
+          "navigationOutcomes": [],
+          "disposed": false
+        },
+        "screenshot": {
+          "file": "astylar-dpr2-repeat2-space-held.png",
+          "sha256": "8909f3df6bdac6af72c2f741123b5e5057e13e7c803d9ba1ddf218f152864245"
+        },
+        "heldNativeEvents": null,
+        "heldPublicEvents": null
+      }
+    },
+    {
+      "state": "space-released",
+      "action": "space-up",
+      "target": null,
+      "expectedFocus": "first",
+      "dpr": 2,
+      "repetition": 2,
+      "checks": {
+        "referenceFocus": true,
+        "astylarFocus": true,
+        "logicalFocus": true,
+        "semanticMatchesLogical": true
+      },
+      "errors": [],
+      "reference": {
+        "active": {
+          "tag": "BUTTON",
+          "id": "first",
+          "authoredId": null
+        },
+        "activeButton": "first",
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "screenshot": {
+          "file": "reference-dpr2-repeat2-space-released.png",
+          "sha256": "2e01065905165f734faf3526873a14eeb325e06dfaa4a77854cacad3beab2f08"
+        }
+      },
+      "astylar": {
+        "active": {
+          "tag": "BUTTON",
+          "id": "astylar-semantic-1-first",
+          "authoredId": "first"
+        },
+        "activeButton": "first",
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "interaction": {
+          "pointerObservers": 1,
+          "wheelHandlers": 1,
+          "keyboardListeners": 2,
+          "handlers": 1,
+          "focusedElementId": "first",
+          "focusVisible": true,
+          "navigationOutcomes": [],
+          "disposed": false
+        },
+        "screenshot": {
+          "file": "astylar-dpr2-repeat2-space-released.png",
+          "sha256": "8909f3df6bdac6af72c2f741123b5e5057e13e7c803d9ba1ddf218f152864245"
+        },
+        "heldNativeEvents": null,
+        "heldPublicEvents": null
+      }
+    },
+    {
+      "state": "second-hover",
+      "action": "move",
+      "target": "second",
+      "expectedFocus": "first",
+      "dpr": 2,
+      "repetition": 2,
+      "checks": {
+        "referenceFocus": true,
+        "astylarFocus": true,
+        "logicalFocus": true,
+        "semanticMatchesLogical": true
+      },
+      "errors": [],
+      "reference": {
+        "active": {
+          "tag": "BUTTON",
+          "id": "first",
+          "authoredId": null
+        },
+        "activeButton": "first",
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "screenshot": {
+          "file": "reference-dpr2-repeat2-second-hover.png",
+          "sha256": "2e01065905165f734faf3526873a14eeb325e06dfaa4a77854cacad3beab2f08"
+        }
+      },
+      "astylar": {
+        "active": {
+          "tag": "BUTTON",
+          "id": "astylar-semantic-1-first",
+          "authoredId": "first"
+        },
+        "activeButton": "first",
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "interaction": {
+          "pointerObservers": 1,
+          "wheelHandlers": 1,
+          "keyboardListeners": 2,
+          "handlers": 1,
+          "hoveredElementId": "second",
+          "focusedElementId": "first",
+          "focusVisible": true,
+          "navigationOutcomes": [],
+          "disposed": false
+        },
+        "screenshot": {
+          "file": "astylar-dpr2-repeat2-second-hover.png",
+          "sha256": "8909f3df6bdac6af72c2f741123b5e5057e13e7c803d9ba1ddf218f152864245"
+        },
+        "heldNativeEvents": null,
+        "heldPublicEvents": null
+      }
+    },
+    {
+      "state": "second-held",
+      "action": "down",
+      "target": "second",
+      "expectedFocus": "second",
+      "dpr": 2,
+      "repetition": 2,
+      "checks": {
+        "referenceFocus": true,
+        "astylarFocus": false,
+        "logicalFocus": true,
+        "semanticMatchesLogical": false
+      },
+      "errors": [],
+      "reference": {
+        "active": {
+          "tag": "BUTTON",
+          "id": "second",
+          "authoredId": null
+        },
+        "activeButton": "second",
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "screenshot": {
+          "file": "reference-dpr2-repeat2-second-held.png",
+          "sha256": "70827a57755345556917132187f5a5d5feed5cedfc45cbf1561be2bf0de82d5c"
+        }
+      },
+      "astylar": {
+        "active": {
+          "tag": "CANVAS",
+          "id": "audit-stage",
+          "authoredId": null
+        },
+        "activeButton": null,
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "interaction": {
+          "pointerObservers": 1,
+          "wheelHandlers": 1,
+          "keyboardListeners": 2,
+          "handlers": 1,
+          "pressedElementId": "second",
+          "hoveredElementId": "second",
+          "focusedElementId": "second",
+          "focusVisible": false,
+          "navigationOutcomes": [],
+          "disposed": false
+        },
+        "screenshot": {
+          "file": "astylar-dpr2-repeat2-second-held.png",
+          "sha256": "a30c804e7047ac25c088b462eb61f45f49bee229cfdac8f58fc58f158ceca2b9"
+        },
+        "heldNativeEvents": [
+          {
+            "type": "keyup",
+            "trusted": true,
+            "key": "Tab",
+            "buttons": null,
+            "target": {
+              "tag": "BUTTON",
+              "id": "astylar-semantic-1-first",
+              "authoredId": "first"
+            }
+          },
+          {
+            "type": "keydown",
+            "trusted": true,
+            "key": " ",
+            "buttons": null,
+            "target": {
+              "tag": "BUTTON",
+              "id": "astylar-semantic-1-first",
+              "authoredId": "first"
+            }
+          },
+          {
+            "type": "keyup",
+            "trusted": true,
+            "key": " ",
+            "buttons": null,
+            "target": {
+              "tag": "BUTTON",
+              "id": "astylar-semantic-1-first",
+              "authoredId": "first"
+            }
+          },
+          {
+            "type": "pointermove",
+            "trusted": true,
+            "key": null,
+            "buttons": 0,
+            "target": {
+              "tag": "CANVAS",
+              "id": "audit-stage",
+              "authoredId": null
+            }
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "key": null,
+            "buttons": 1,
+            "target": {
+              "tag": "CANVAS",
+              "id": "audit-stage",
+              "authoredId": null
+            }
+          },
+          {
+            "type": "focusout",
+            "trusted": true,
+            "key": null,
+            "buttons": null,
+            "target": {
+              "tag": "BUTTON",
+              "id": "astylar-semantic-1-first",
+              "authoredId": "first"
+            }
+          },
+          {
+            "type": "focusin",
+            "trusted": true,
+            "key": null,
+            "buttons": null,
+            "target": {
+              "tag": "CANVAS",
+              "id": "audit-stage",
+              "authoredId": null
+            }
+          }
+        ],
+        "heldPublicEvents": [
+          {
+            "type": "pointermove",
+            "targetId": "second",
+            "value": "second",
+            "button": -1,
+            "buttons": 0,
+            "pointerId": 1,
+            "pointerType": "mouse",
+            "isPrimary": true,
+            "clientX": 220,
+            "clientY": 40,
+            "canvasX": 220,
+            "canvasY": 40,
+            "localX": 60,
+            "localY": 20,
+            "currentTargetId": "second",
+            "defaultPrevented": false,
+            "propagationStopped": false
+          },
+          {
+            "type": "pointerdown",
+            "targetId": "second",
+            "value": "second",
+            "button": 0,
+            "buttons": 1,
+            "pointerId": 1,
+            "pointerType": "mouse",
+            "isPrimary": true,
+            "clientX": 220,
+            "clientY": 40,
+            "canvasX": 220,
+            "canvasY": 40,
+            "localX": 60,
+            "localY": 20,
+            "currentTargetId": "second",
+            "defaultPrevented": false,
+            "propagationStopped": false
+          },
+          {
+            "type": "blur",
+            "targetId": "first",
+            "value": "first",
+            "currentTargetId": "first",
+            "defaultPrevented": false,
+            "propagationStopped": false
+          },
+          {
+            "type": "focus",
+            "targetId": "second",
+            "value": "second",
+            "currentTargetId": "second",
+            "defaultPrevented": false,
+            "propagationStopped": false
+          }
+        ]
+      }
+    },
+    {
+      "state": "second-released",
+      "action": "up",
+      "target": "second",
+      "expectedFocus": "second",
+      "dpr": 2,
+      "repetition": 2,
+      "checks": {
+        "referenceFocus": true,
+        "astylarFocus": true,
+        "logicalFocus": true,
+        "semanticMatchesLogical": true
+      },
+      "errors": [],
+      "reference": {
+        "active": {
+          "tag": "BUTTON",
+          "id": "second",
+          "authoredId": null
+        },
+        "activeButton": "second",
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "screenshot": {
+          "file": "reference-dpr2-repeat2-second-released.png",
+          "sha256": "70827a57755345556917132187f5a5d5feed5cedfc45cbf1561be2bf0de82d5c"
+        }
+      },
+      "astylar": {
+        "active": {
+          "tag": "BUTTON",
+          "id": "astylar-semantic-1-second",
+          "authoredId": "second"
+        },
+        "activeButton": "second",
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "interaction": {
+          "pointerObservers": 1,
+          "wheelHandlers": 1,
+          "keyboardListeners": 2,
+          "handlers": 1,
+          "hoveredElementId": "second",
+          "focusedElementId": "second",
+          "focusVisible": false,
+          "navigationOutcomes": [],
+          "disposed": false
+        },
+        "screenshot": {
+          "file": "astylar-dpr2-repeat2-second-released.png",
+          "sha256": "8909f3df6bdac6af72c2f741123b5e5057e13e7c803d9ba1ddf218f152864245"
+        },
+        "heldNativeEvents": null,
+        "heldPublicEvents": null
+      }
+    },
+    {
+      "state": "first-hover",
+      "action": "move",
+      "target": "first",
+      "expectedFocus": "second",
+      "dpr": 2,
+      "repetition": 2,
+      "checks": {
+        "referenceFocus": true,
+        "astylarFocus": true,
+        "logicalFocus": true,
+        "semanticMatchesLogical": true
+      },
+      "errors": [],
+      "reference": {
+        "active": {
+          "tag": "BUTTON",
+          "id": "second",
+          "authoredId": null
+        },
+        "activeButton": "second",
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "screenshot": {
+          "file": "reference-dpr2-repeat2-first-hover.png",
+          "sha256": "70827a57755345556917132187f5a5d5feed5cedfc45cbf1561be2bf0de82d5c"
+        }
+      },
+      "astylar": {
+        "active": {
+          "tag": "BUTTON",
+          "id": "astylar-semantic-1-second",
+          "authoredId": "second"
+        },
+        "activeButton": "second",
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "interaction": {
+          "pointerObservers": 1,
+          "wheelHandlers": 1,
+          "keyboardListeners": 2,
+          "handlers": 1,
+          "hoveredElementId": "first",
+          "focusedElementId": "second",
+          "focusVisible": false,
+          "navigationOutcomes": [],
+          "disposed": false
+        },
+        "screenshot": {
+          "file": "astylar-dpr2-repeat2-first-hover.png",
+          "sha256": "8909f3df6bdac6af72c2f741123b5e5057e13e7c803d9ba1ddf218f152864245"
+        },
+        "heldNativeEvents": null,
+        "heldPublicEvents": null
+      }
+    },
+    {
+      "state": "first-held",
+      "action": "down",
+      "target": "first",
+      "expectedFocus": "first",
+      "dpr": 2,
+      "repetition": 2,
+      "checks": {
+        "referenceFocus": true,
+        "astylarFocus": false,
+        "logicalFocus": true,
+        "semanticMatchesLogical": false
+      },
+      "errors": [],
+      "reference": {
+        "active": {
+          "tag": "BUTTON",
+          "id": "first",
+          "authoredId": null
+        },
+        "activeButton": "first",
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "screenshot": {
+          "file": "reference-dpr2-repeat2-first-held.png",
+          "sha256": "70827a57755345556917132187f5a5d5feed5cedfc45cbf1561be2bf0de82d5c"
+        }
+      },
+      "astylar": {
+        "active": {
+          "tag": "CANVAS",
+          "id": "audit-stage",
+          "authoredId": null
+        },
+        "activeButton": null,
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "interaction": {
+          "pointerObservers": 1,
+          "wheelHandlers": 1,
+          "keyboardListeners": 2,
+          "handlers": 1,
+          "pressedElementId": "first",
+          "hoveredElementId": "first",
+          "focusedElementId": "first",
+          "focusVisible": false,
+          "navigationOutcomes": [],
+          "disposed": false
+        },
+        "screenshot": {
+          "file": "astylar-dpr2-repeat2-first-held.png",
+          "sha256": "a30c804e7047ac25c088b462eb61f45f49bee229cfdac8f58fc58f158ceca2b9"
+        },
+        "heldNativeEvents": [
+          {
+            "type": "focusout",
+            "trusted": true,
+            "key": null,
+            "buttons": null,
+            "target": {
+              "tag": "CANVAS",
+              "id": "audit-stage",
+              "authoredId": null
+            }
+          },
+          {
+            "type": "focusin",
+            "trusted": true,
+            "key": null,
+            "buttons": null,
+            "target": {
+              "tag": "BUTTON",
+              "id": "astylar-semantic-1-second",
+              "authoredId": "second"
+            }
+          },
+          {
+            "type": "click",
+            "trusted": true,
+            "key": null,
+            "buttons": 0,
+            "target": {
+              "tag": "CANVAS",
+              "id": "audit-stage",
+              "authoredId": null
+            }
+          },
+          {
+            "type": "pointermove",
+            "trusted": true,
+            "key": null,
+            "buttons": 0,
+            "target": {
+              "tag": "CANVAS",
+              "id": "audit-stage",
+              "authoredId": null
+            }
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "key": null,
+            "buttons": 1,
+            "target": {
+              "tag": "CANVAS",
+              "id": "audit-stage",
+              "authoredId": null
+            }
+          },
+          {
+            "type": "focusout",
+            "trusted": true,
+            "key": null,
+            "buttons": null,
+            "target": {
+              "tag": "BUTTON",
+              "id": "astylar-semantic-1-second",
+              "authoredId": "second"
+            }
+          },
+          {
+            "type": "focusin",
+            "trusted": true,
+            "key": null,
+            "buttons": null,
+            "target": {
+              "tag": "CANVAS",
+              "id": "audit-stage",
+              "authoredId": null
+            }
+          }
+        ],
+        "heldPublicEvents": [
+          {
+            "type": "pointermove",
+            "targetId": "first",
+            "value": "first",
+            "button": -1,
+            "buttons": 0,
+            "pointerId": 1,
+            "pointerType": "mouse",
+            "isPrimary": true,
+            "clientX": 80,
+            "clientY": 40,
+            "canvasX": 80,
+            "canvasY": 40,
+            "localX": 60,
+            "localY": 20,
+            "currentTargetId": "first",
+            "defaultPrevented": false,
+            "propagationStopped": false
+          },
+          {
+            "type": "pointerdown",
+            "targetId": "first",
+            "value": "first",
+            "button": 0,
+            "buttons": 1,
+            "pointerId": 1,
+            "pointerType": "mouse",
+            "isPrimary": true,
+            "clientX": 80,
+            "clientY": 40,
+            "canvasX": 80,
+            "canvasY": 40,
+            "localX": 60,
+            "localY": 20,
+            "currentTargetId": "first",
+            "defaultPrevented": false,
+            "propagationStopped": false
+          },
+          {
+            "type": "blur",
+            "targetId": "second",
+            "value": "second",
+            "currentTargetId": "second",
+            "defaultPrevented": false,
+            "propagationStopped": false
+          },
+          {
+            "type": "focus",
+            "targetId": "first",
+            "value": "first",
+            "currentTargetId": "first",
+            "defaultPrevented": false,
+            "propagationStopped": false
+          }
+        ]
+      }
+    },
+    {
+      "state": "first-released",
+      "action": "up",
+      "target": "first",
+      "expectedFocus": "first",
+      "dpr": 2,
+      "repetition": 2,
+      "checks": {
+        "referenceFocus": true,
+        "astylarFocus": true,
+        "logicalFocus": true,
+        "semanticMatchesLogical": true
+      },
+      "errors": [],
+      "reference": {
+        "active": {
+          "tag": "BUTTON",
+          "id": "first",
+          "authoredId": null
+        },
+        "activeButton": "first",
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "screenshot": {
+          "file": "reference-dpr2-repeat2-first-released.png",
+          "sha256": "70827a57755345556917132187f5a5d5feed5cedfc45cbf1561be2bf0de82d5c"
+        }
+      },
+      "astylar": {
+        "active": {
+          "tag": "BUTTON",
+          "id": "astylar-semantic-1-first",
+          "authoredId": "first"
+        },
+        "activeButton": "first",
+        "controls": [
+          {
+            "id": "first",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "first",
+            "nativeType": "button"
+          },
+          {
+            "id": "second",
+            "tag": "BUTTON",
+            "disabled": false,
+            "tabIndex": 0,
+            "text": "second",
+            "nativeType": "button"
+          }
+        ],
+        "interaction": {
+          "pointerObservers": 1,
+          "wheelHandlers": 1,
+          "keyboardListeners": 2,
+          "handlers": 1,
+          "hoveredElementId": "first",
+          "focusedElementId": "first",
+          "focusVisible": false,
+          "navigationOutcomes": [],
+          "disposed": false
+        },
+        "screenshot": {
+          "file": "astylar-dpr2-repeat2-first-released.png",
+          "sha256": "8909f3df6bdac6af72c2f741123b5e5057e13e7c803d9ba1ddf218f152864245"
+        },
+        "heldNativeEvents": null,
+        "heldPublicEvents": null
+      }
+    }
+  ]
+}

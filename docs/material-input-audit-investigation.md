@@ -3,6 +3,121 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Enabled-button held focus: isolated core semantic synchronization defect
+
+The paginator's enabled `previous-press` uncertainty is now reduced to a
+browser-only public-package reproduction with **two ordinary enabled buttons**.
+`examples/material-showcase/audit/button-pointer-focus.mjs` imports Astylar only
+from `astylarui`; there is no Material dependency, application plugin, update,
+private renderer access, scene mutation, injected focus, or compensating input.
+One declaration list produces the HTML CSS and the Astylar rules. Both sides
+have the same button text/type, `disabled:false`, and native tab index 0.
+Candidate normal/effective styles must retain every explicitly authored value.
+
+The proof uses a 400x160 CSS-pixel surface in a 640x360 viewport, Chrome
+152.0.7977.76, DPR 1/2 and two repetitions. Ten boundaries per cohort cover
+initial state, real Tab, held/released Space, hover, held pointer-down and release
+on each button. Fonts and two frames settle, followed by a declared 250ms delay.
+Pointer delivery uses the same authored CSS-space target on each side; captured
+native and public pointer events independently verify the intended hit. No
+Babylon-space layout calculation is used by this reproduction.
+
+**40 paired cases, 80 screenshots: eight focus failures, 32 passing controls.**
+All eight held-pointer samples focus the intended button in the browser
+reference. Astylar's public interaction diagnostic also identifies that button
+as logically focused and pressed, but its document active element remains
+`CANVAS`. Public events record pointerdown, blur of the previous button, and
+focus of the new button; native events instead move focus from the previous
+semantic button to canvas. Keyboard focus, held/released Space, and post-release
+focus agree in every cohort. Runtime and evidence errors are zero. This is not
+an inference that Astylar delays *logical* focus until release: it demonstrably
+does not.
+
+The first isolated divergence is the **logical-to-native semantic focus
+synchronization boundary**, not paginator state, disabled authoring, hit testing,
+coordinate conversion or Material styling:
+
+1. `src/lib/astylar-interaction-runtime.ts:555-561` dispatches pointerdown, focuses
+   canvas and sets the nearest focusable logical target when not cancelled.
+2. `src/lib/astylar.ts:670-695` sets `pointerFocusTransaction` on pointerdown and
+   suppresses queued semantic focus synchronization for pointer transitions,
+   focus events, and the transaction. The plain enabled button has no other
+   invalidation/update to synchronize semantic focus while held.
+3. Accepted click clears the transaction and admits `queueFocusSync`; the
+   post-release samples then focus the semantic button. The bridge's
+   `queueFocusSync` at `astylar-semantic-bridge.ts:204` and `syncFocus` at line
+   317 already provide the native focus operation.
+
+`git blame` and `git show dbe4d8ed` locate the broad transaction suppression in
+`dbe4d8ed1becde19f8036bed8479c971b1e95c58` (semantic focus and activation, August
+18). That change also introduced explicit preservation of directional text
+selection. This is source-history evidence, not a runtime bisect establishing
+the first failing historical release. Existing
+`interaction-focus-navigation.fixture.ts:20-40` samples completed clicks or
+explicit semantic focus, not an enabled held-pointer boundary. The bridge unit
+test at `astylar-semantic-bridge.spec.ts:285-347` explicitly invokes
+`queueFocusSync`, so it cannot detect the facade declining to queue it. This
+explains the relevant coverage gap without claiming all prior tests are useless.
+
+The eventual correction belongs in **core interaction/semantic coordination**:
+synchronize eligible enabled controls at the correct pointer default boundary
+without breaking cancellation, pointer capture, selected-text preservation,
+native/scene event ordering, or focus-visible modality. Keep keyboard/release
+controls, add drag-out/release, cancellation and text-selection controls before
+changing the rule. Do not force focus in paginator handlers, disable semantic
+accessibility, or delete selection safeguards wholesale. This diagnosis does
+not reclassify the paginator's separate disabled-interactive authoring mismatch.
+
+Reproduction and replay:
+
+```powershell
+node scripts/audit-button-pointer-focus.mjs --output=artifacts/material-parity/button-pointer-focus-audit-v2
+node --test tests/material-parity/button-pointer-focus-evidence.spec.mjs
+node --input-type=module -e "import{readFileSync}from'node:fs';import{validateButtonFocusReport}from'./scripts/audit-button-pointer-focus.mjs';const d='artifacts/material-parity/button-pointer-focus-audit-v2';console.log(validateButtonFocusReport(JSON.parse(readFileSync(d+'/latest-report.json')),{artifactRoot:d}));"
+npx ng build --output-path=dist/button-pointer-focus-audit-build
+npm run parity:harness:check
+```
+
+The build command runs in `examples/material-showcase`; the others run at the
+worktree root. Capture requires a new output directory on repetition. V1 and
+V2 both reproduced the same eight failures; V2 adds stronger evidence checks
+and is authoritative. It exits **1 for genuine focus failures**, not a missing
+button or infrastructure error. The installed public package is bundled afresh;
+the runner verifies the served bundle bytes and fingerprints all **2,516** build
+inputs. Installed versions: Angular 20.3.29, Babylon 8.56.2, AstylarUI 0.2.0,
+esbuild 0.28.1. No frozen comparison build or capture harness was modified.
+
+V2 report SHA-256:
+`abf9f0ff089894bfa5930aeb0a617bd53a892e017ad5049bb0d89657bd57f571`.
+`docs/material-button-pointer-focus-audit.json` retains all 40 observations,
+shared inputs, native control contracts, held public/native events, logical and
+document focus, checks, source/package fingerprints, and hashed report/PNG
+references. `validateButtonFocusReport` independently replays the complete
+ordered matrix, sample checks, cumulative native events, current bundle-input
+hashes and screenshot hashes/dimensions: **40 cases, eight preserved failures**.
+Sample-check tests pass **2/2**, including 18 unequal, malformed, synthetic,
+mis-targeted or stale-style controls, terminal exit 0 (0.6922599 seconds).
+The isolated normal consumer build passes, exit 0, 52.169 seconds, with two
+prerendered routes. It does not compile or prove the standalone JS entry; that
+entry is separately bundled and executed by the real-browser capture.
+The full registered harness suite passes **545/545**, terminal exit 0,
+303.7769952 seconds, with no failures, skips or cancellations. Eleven additional
+mutations of the real report (matrix/order, state, source/PNG binding, claimed
+focus results, logical focus and trusted input) are rejected by the replay
+validator. Independent regeneration exactly matches the checked-in machine
+summary. All ten frozen capture-harness hashes remain unchanged, and
+`git diff --check` passes. The focused proof and its registered tests are
+committed and pushed as `a5bd5e8`; the findings are recorded separately.
+
+This is a focus-contract proof, **not full visual/input equivalence** of every
+property. Incidental renderer defaults and duplicate text remain visible in
+the captured candidate PNGs; no styles were altered to conceal them. Screenshot
+inspection verifies that the two hit controls exist, not raster acceptance.
+Other pointer types, themes, cancelled input and assistive-technology behavior
+remain unproven. Consolidated classification/inventory integration and the final
+unfiltered enforced parity run remain required; no renderer defect is fixed by
+this audit increment.
+
 ## Paginator navigation boundaries: new state evidence, not whole-component acceptance
 
 The earlier 52 paginator cases only exercised Next page near the initial page.
@@ -75,7 +190,7 @@ Root-cause assessment and implementation order:
    trigger intent, disabled behavior and shared overlay composition before
    investigating residual tooltip rendering. There is no candidate tooltip to
    reposition in these captures.
-3. **Suspected core/semantic synchronization issue, not yet isolated:** the
+3. **Suspected at this capture; isolated by the enabled-button section above:** the
    enabled held-press focus mismatch cannot be explained by native disabled
    authoring. Current `src/lib/astylar-interaction-runtime.ts:555-561` dispatches
    pointerdown, focuses the canvas and updates logical focus; the captured
