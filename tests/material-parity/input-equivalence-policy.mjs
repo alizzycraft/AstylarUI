@@ -497,6 +497,16 @@ export const sourceAuditDefinitions = Object.freeze([
     focusedProof: 'tests/material-parity/input-equivalence-audit.spec.mjs: unselected chip ink preserves direct reference token and candidate host inheritance',
   }),
   Object.freeze({
+    id: 'fixture-disabled-choice-label-ink-omitted',
+    introducedBy: '2f44011 initial radio option color; c47d589 replacement checkbox label',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`selector: '\.(?:checkbox-label|radio-option)',[^\n]*color: theme\.onSurface`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase disabled checkbox/radio label token translation',
+    justification: 'Material applies component disabled-label-color tokens to the native associated label, with an on-surface 38% transparent fallback. The candidate custom controls expose ariaDisabled but retain opaque theme.onSurface on checkbox text or the radio option parent. These source substitutions predate subsequent label-position adjustments. Attribute captured occurrences only with exact native disabled input/label association, disabled host state, candidate disabled owner, active token and excluded competing color declarations. Alpha paint conversion, compositing, cursor/event suppression and final raster are independent obligations. Restore disabled-state token intent before assessing core with equivalent inputs.',
+    focusedProof: 'tests/material-parity/input-equivalence-audit.spec.mjs: disabled choice label ink retains native disabled token and opaque candidate owner',
+  }),
+  Object.freeze({
     id: 'fixture-control-label-typography-omitted',
     introducedBy: '2f44011 initial chip styling; c47d589 button-toggle label composition',
     file: 'examples/material-showcase/src/app/astylar.component.ts',

@@ -4229,6 +4229,96 @@ test('sidenav color claims independently replay captured tokens, identity and re
   }
 });
 
+function disabledChoiceInkReport(family = 'checkbox', color = '#1d1b20') {
+  const raw = retainedTypographyReport(), entry = raw.results[0];
+  entry.family = family;
+  entry.styleInputs[0].id = `${family}-root`;
+  const { reference: r, astylar: a } = entry.inputTrees;
+  const id = family === 'checkbox' ? 'checkbox-label' : 'radio-solo-label';
+  const ownerId = family === 'checkbox' ? 'checkbox-primary' : 'radio-solo';
+  const text = family === 'checkbox' ? 'Include archived' : 'Solo';
+  r.styles[0].color = 'color(srgb 0.113725 0.105882 0.12549 / 0.38)';
+  r.rules = [{ active: true, conditions: [], selector: family === 'checkbox' ? '.mat-mdc-checkbox.mat-mdc-checkbox-disabled label' : '.mat-mdc-radio-button .mdc-radio--disabled + label',
+    declarations: { color: { value: `var(--mat-${family}-disabled-label-color, color-mix(in srgb, var(--mat-sys-on-surface) 38%, transparent))`, important: false } } }];
+  const node = (key, parent, type, attributes, ownText = '') => ({ key, parent, type, attributes, ownText, style: 0, rules: [], inline: {}, pseudoElements: [] });
+  r.nodes = [node('host', null, family === 'checkbox' ? 'mat-checkbox' : 'mat-radio-button', { class: family === 'checkbox' ? 'mat-mdc-checkbox-disabled' : 'mat-mdc-radio-disabled' }),
+    node('form', 'host', 'div', { class: 'mat-internal-form-field' }),
+    node('control', 'form', 'div', { class: family === 'radio' ? 'mdc-radio--disabled' : 'mdc-checkbox--disabled' }),
+    node('input', 'control', 'input', { id: 'native-input', type: family, disabled: '' }),
+    node('label', 'form', 'label', { class: 'mdc-label', for: 'native-input' }), node('text', 'label', 'span', { id }, text)];
+  r.nodes[4].rules = [0];
+  const style = { ...r.styles[0] }; delete style.color;
+  a.nodes = [ { key: 'owner', parent: 'root', authored: { type: 'div', id: ownerId, class: family === 'radio' ? 'radio-option' : undefined, role: family, ariaDisabled: true },
+    resolvedStyle: { ...style }, normalResolvedStyle: { ...style }, interactionResolvedStyle: { ...style } },
+    { key: 'text', parent: 'owner', authored: { type: 'span', id, class: family === 'checkbox' ? 'checkbox-label' : 'radio-label', textContent: text },
+      resolvedStyle: { ...style }, normalResolvedStyle: { ...style }, interactionResolvedStyle: { ...style },
+      retainedText: { source: 'core-text-registry', style: { ...style, color } } } ];
+  const owner = a.nodes[family === 'checkbox' ? 1 : 0];
+  for (const field of ['resolvedStyle', 'normalResolvedStyle', 'interactionResolvedStyle']) owner[field].color = color;
+  a.rules = [{ selector: family === 'checkbox' ? '.checkbox-label' : '.radio-option', color }];
+  return raw;
+}
+
+test('disabled choice label ink retains native disabled token and opaque candidate owner', () => {
+  for (const family of ['checkbox', 'radio']) for (const color of ['#1d1b20', '#e6e1e5']) {
+    const raw = disabledChoiceInkReport(family, color), before = structuredClone(raw), report = buildMaterialInputAudit(raw);
+    const findings = report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-disabled-choice-label-ink-input');
+    assert.equal(findings.length, 1, `${family}/${color}`);
+    assert.equal(findings[0].inputEquivalent, false);
+    assert.equal(findings[0].finalRasterVerified, false);
+    assert.equal(findings[0].reviewEvidence.candidateRetained.color, color);
+    assert.equal(findings[0].reviewEvidence.candidateChain.length, family === 'checkbox' ? 1 : 2);
+    assert.deepEqual(raw, before);
+    assert.deepEqual(validateMaterialInputAudit(report, { requireComplete: false }), []);
+  }
+});
+
+test('disabled choice label ink rejects incomplete and contradictory state and cascade evidence', () => {
+  const controls = [
+    (r, a) => { delete r.rules; }, (r, a) => { delete a.rules; },
+    (r, a) => { a.resolvedStyleRevision = -1; }, (r, a) => { a.resolvedStyleEvidenceVersion = 1; },
+    (r, a) => { r.nodes[3].attributes.disabled = undefined; delete r.nodes[3].attributes.disabled; },
+    (r, a) => { r.nodes[3].attributes.id = 'other'; }, (r, a) => { r.nodes[3].parent = 'host'; },
+    (r, a) => { r.nodes[0].attributes.class = ''; }, (r, a) => { r.nodes[4].type = 'div'; },
+    (r, a) => { r.nodes[5].ownText = 'Different'; }, (r, a) => { a.nodes[0].authored.ariaDisabled = false; },
+    (r, a) => { a.nodes[0].authored.role = 'button'; }, (r, a) => { a.nodes[1].parent = 'root'; },
+    (r, a) => { r.rules[0].active = false; }, (r, a) => { r.rules[0].conditions = ['media']; },
+    (r, a) => { r.rules[0].conditions = 'invalid'; }, (r, a) => { r.rules[0].declarations.color.important = true; },
+    (r, a) => { r.rules[0].declarations.color.value = '#aaa'; },
+    (r, a) => { r.nodes[5].inline = { color: { value: 'red' } }; },
+    (r, a) => { r.nodes[5].rules = [0]; },
+    (r, a) => { a.nodes[1].authored.style = { color: 'red' }; },
+    (r, a) => { a.rules[0].mediaMaxWidth = '500px'; },
+    (r, a) => { a.rules.push({ selector: '*', color: 'red' }); },
+    (r, a) => { a.rules.push({ selector: '.checkbox-label, .radio-label', transition: 'color 1s' }); },
+    (r, a) => { a.nodes[1].retainedText.style.color = '#aaa'; },
+    (r, a) => { a.nodes[1].interactionResolvedStyle.color = '#aaa'; },
+    (r, a) => { a.nodes.push(structuredClone(a.nodes[1])); },
+  ];
+  for (const family of ['checkbox', 'radio']) for (const [index, mutate] of controls.entries()) {
+    const raw = disabledChoiceInkReport(family); mutate(raw.results[0].inputTrees.reference, raw.results[0].inputTrees.astylar);
+    const report = buildMaterialInputAudit(raw);
+    assert.equal(report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-disabled-choice-label-ink-input').length, 0, `${family}/${index}`);
+  }
+});
+
+test('disabled choice label ink validation replays claims and rejects removed or altered findings', () => {
+  const baseline = buildMaterialInputAudit(disabledChoiceInkReport('radio'));
+  const mutations = [
+    (r, d) => { d.inputEquivalent = true; }, (r, d) => { d.finalRasterVerified = true; },
+    (r, d) => { d.reviewEvidence.token.active = false; }, (r, d) => { d.reviewEvidence.candidateOwner.authored.ariaDisabled = false; },
+    (r, d) => { d.reviewEvidence.candidateChain[0].normal.color = 'red'; },
+    (r, d) => { d.reviewEvidence.revision++; }, (r, d) => { d.family = 'chips'; },
+    (r, d) => { r.retainedTypography.differences = []; }, (r, d) => { r.retainedTypography.differences.push(structuredClone(d)); },
+    (r, d) => { r.retainedTypography.comparisons = []; },
+  ];
+  for (const [index, mutate] of mutations.entries()) {
+    const report = structuredClone(baseline), d = report.retainedTypography.differences.find(d => d.attribution === 'reviewed-disabled-choice-label-ink-input');
+    mutate(report, d);
+    assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('disabled choice label ink')), `mutation ${index}`);
+  }
+});
+
 function chipLabelInkReport(color = '#1d1b20') {
   const raw = templateTypographyReport('chips'), entry = raw.results[0];
   const { reference: ref, astylar: ast } = entry.inputTrees;

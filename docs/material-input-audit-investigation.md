@@ -23,6 +23,59 @@ selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Disabled checkbox/radio labels omit component disabled color inputs (2026-09-13)
+
+The current full capture contains **24 disabled label-color differences**:
+eight checkbox labels and sixteen radio labels. They have an authored-input
+cause, not evidence of incorrect conversion of a shared alpha color. The
+reference associated `label.mdc-label` declares the respective
+`--mat-checkbox-disabled-label-color` or `--mat-radio-disabled-label-color`
+token, falling back to `color-mix(in srgb, var(--mat-sys-on-surface) 38%, transparent)`.
+The child text span inherits that color. In the light capture it computes
+`color(srgb 0.113725 0.105882 0.12549 / 0.38)`.
+
+Candidate `.checkbox-label` instead explicitly supplies `theme.onSurface`;
+candidate `.radio-label` omits color and inherits the same opaque literal from
+`.radio-option`. Both controls already author `ariaDisabled: true`. Their
+normal/effective declarations and retained core text agree with the literal
+(`#1d1b20` in light and `#e6e1e5` in dark), so disabled semantic state has not
+been translated into the reference disabled-label styling input. This does not
+prove that disabling events or rendering/compositing alpha works correctly.
+
+Source owners are `examples/material-showcase/src/app/astylar.component.ts`
+(`.radio-option`, `.radio-label`, `.checkbox-label`, and the checkbox/radio
+element builders). History shows the unconditional radio color in `2f44011`
+and the replacement checkbox text color introduced in `c47d589`. `354084e`
+subsequently added vertical alignment without restoring the missing disabled
+color semantics. This evidence establishes a state-style omission; it does not
+establish that those colors were deliberately introduced as screenshot hacks.
+
+`reviewed-disabled-choice-label-ink-input` preserves and independently replays
+the exact shared text identity, label association to a disabled native input,
+disabled host and candidate ARIA owner, the radio adjacent-sibling structure,
+active unconditional token declaration, competing-rule exclusions, and
+candidate normal/effective/retained color chain. All 24 captured occurrences
+remain **unequal inputs**, not accepted representations. The source finding is
+`fixture-disabled-choice-label-ink-omitted`. Three focused tests include both
+label ownership paths, two candidate colors, 27 contradictory/missing-input
+controls per family, and ten report-tampering controls.
+
+Repair belongs first in the showcase's component state/token translation:
+restore the original disabled color intent on the appropriate text owner.
+Do not sample a screenshot, preblend against one background, or change core
+color conversion to compensate for these unequal inputs. Follow with equal-input
+alpha/compositing and enabled/disabled interaction tests. Token fallback origin,
+ancestor compositing, pointer/event suppression, and final local raster remain
+independent obligations. No production source or reference fixture was changed.
+
+Verification for this increment:
+
+- `node --test --test-name-pattern='disabled choice label ink' tests/material-parity/input-equivalence-audit.spec.mjs`: **3/3 pass**, zero skipped/cancelled, 20.093 seconds. The initial synthetic positive test failed because its root style-evidence ID still named the core fixture; the fixture now supplies its own family root ID. Negative-input and report-replay controls passed throughout; no validator requirement was relaxed.
+- `npm run parity:harness:check`: **440/440 pass**, zero failures/skips/cancellations, 267.964 seconds.
+- Full `buildMaterialInputAudit` against `artifacts/material-parity/current-ancestry-audit/latest-report.json`, with `normalLineBoxPath: 'artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json'` and `supplementalRoot: 'artifacts/material-parity/supplemental-current-ancestry-audit'`: all 24 new occurrences attributed; no remaining checkbox/radio retained-typography differences are unresolved in these captures. All 119 source findings detected, zero unexplained source findings. `validateMaterialInputAudit(a, { requireComplete: false })` returns `[]`.
+- Strict `validateMaterialInputAudit(a)` still reports **3,309 unresolved resolved-style differences, 879 control-text typography differences, and 130 retained-typography differences**. Diagnostic success is not strict audit completion or visual acceptance.
+- All ten frozen harness files match the checkpoint's raw SHA-256 hashes. `git diff --check` passes. This increment reuses frozen visual evidence; the objective's final complete enforced visual rerun remains outstanding.
+
 ## Unselected chip labels inherit the wrong component color input (2026-09-13)
 
 All **32 remaining chip retained-color differences** in the 76 captured chip

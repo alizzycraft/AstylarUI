@@ -460,6 +460,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
     'reviewed-snackbar-message-token-input': 'application-plugin-authoring-defect',
     'reviewed-menu-label-ink-input': 'application-plugin-authoring-defect',
     'reviewed-chip-label-ink-input': 'application-plugin-authoring-defect',
+    'reviewed-disabled-choice-label-ink-input': 'application-plugin-authoring-defect',
     'reviewed-menu-label-font-input': 'application-plugin-authoring-defect',
     'reviewed-dialog-text-ink-input': 'application-plugin-authoring-defect',
     'reviewed-dialog-text-metric-omission': 'application-plugin-authoring-defect',
@@ -475,6 +476,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
   validateTooltipTextEvidence(report, errors);
   validateMenuTextEvidence(report, errors);
   validateChipLabelInk(report, errors);
+  validateDisabledChoiceLabelInk(report, errors);
   validateDialogTextEvidence(report, errors);
   validateFieldErrorEvidence(report, errors);
   validateHorizontalStartAlignment(report, errors);
@@ -654,6 +656,7 @@ export function renderMaterialInputAuditMarkdown(report) {
     `Snackbar message tokens: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-snackbar-message-token-input').length} size/color differences trace the direct component size token or inherited surface inverse-text token against omitted component size/page inheritance or literal surface white. Separate declaration, normal/effective and retained stages remain evidence. This is unequal authoring, not a core scaling/color defect or proof of current raster, visibility or theme-token fallback provenance.`,
     `Menu label ink: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-menu-label-ink-input').length} unequal colors preserve the original ordered inherit/token declarations and direct label inheritance against the candidate item literal. Complete rule and normal/effective/retained evidence is required; typography, token fallback origin, overlay theme scope and final paint are not certified.`,
     `Unselected chip label ink: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-chip-label-ink-input').length} unequal colors retain the enabled reference label token against candidate host-literal inheritance. Exact owner paths and unselected/enabled state are required. Selected/disabled chips, token fallback origin, other typography, generated outline ownership and final raster are not certified by this attribution.`,
+    `Disabled checkbox/radio label ink: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-disabled-choice-label-ink-input').length} unequal colors preserve the reference associated-label disabled token and candidate opaque text/option color. Native disabled input association, candidate ARIA-disabled owner, rule exclusions and normal/effective/retained stages are independently replayed. This attributes omitted disabled-state inputs, not alpha painting, interaction suppression, ancestor compositing or final raster.`,
     `Menu label font: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-menu-label-font-input').length} original direct component-family tokens contrast with candidate label omission and inheritance from the explicit generic control-family rule. The two fallback lists remain unequal; installed-glyph coincidence, font selection, shaping and final raster are not certified.`,
     `Dialog title/content: ${report.retainedTypography.reviewedMappings.filter(m => m.kind === 'reviewed-dialog-content-text').length} owners have exact generated-title linkage, direct-content and action/overlay/focus-trap correspondence. Original heading pseudo-spacer, labelled dialog and content wrappers remain distinct from candidate nested text, fixed flex boxes and separately labelled modal. Mapped text does not establish equivalent structure, typography, semantics, placement or raster.`,
     `Dialog text ink: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-dialog-text-ink-input').length} original direct title/content color tokens contrast with explicit candidate literals. Nested title inheritance and direct paragraph declarations are separately traced through normal/effective and retained stages. Token fallback origin, overlay theme scope and final raster remain unverified.`,
@@ -2460,6 +2463,96 @@ function reviewedTableFontInput(entry, ref, ast, styles, referenceTree, astylarT
     reviewEvidence: { referenceRow: refRow.key, candidateRow: astRow.key, referenceRule: rowRule.value,
       candidateRule: candidateRule.value, referenceComputedFontSize: styles.reference.fontSize, candidateRetainedFontSize: styles.retained.fontSize },
   };
+}
+
+function reviewedDisabledChoiceLabelInk(entry, property, ref, ast, styles, referenceTree, astylarTree, inventory) {
+  const family = entry.family, id = ast.authored?.id;
+  if (!['checkbox', 'radio'].includes(family) || property !== 'color' || ref.attributes?.id !== id ||
+      !(family === 'checkbox' ? id === 'checkbox-label' : /^radio-(solo|team)-label$/.test(id ?? '')) ||
+      ref.type !== 'span' || ast.authored.type !== 'span' || ref.ownText !== ast.authored.textContent ||
+      ast.retainedText?.source !== 'core-text-registry' || referenceTree.ruleEvidenceComplete !== true ||
+      astylarTree.ruleEvidenceComplete !== true || astylarTree.resolvedStyleEvidenceVersion !== 2 ||
+      astylarTree.resolvedStyleSource !== 'core-style-inspection' || styles.reference.color === styles.retained.color) return;
+  const one = values => values.length === 1 ? values[0] : undefined;
+  const record = one(inventory.cases.filter(c => c.case === (entry.case ?? caseKey(entry)) && c.side === 'astylar'));
+  if (!record || !Number.isInteger(record.resolvedStyleRevision) || record.resolvedStyleRevision < 0 ||
+      !one(referenceTree.nodes.filter(n => n.attributes?.id === id)) || !one(astylarTree.nodes.filter(n => n.authored?.id === id))) return;
+  const parent = (tree, node) => one(tree.nodes.filter(n => n.key === node?.parent));
+  const label = parent(referenceTree, ref), form = parent(referenceTree, label), host = parent(referenceTree, form);
+  const owner = parent(astylarTree, ast);
+  const hasClass = (node, name) => String((node?.attributes ?? node?.authored)?.class ?? '').split(/\s+/).includes(name);
+  if (label?.type !== 'label' || !hasClass(label, 'mdc-label') || form?.type !== 'div' || !hasClass(form, 'mat-internal-form-field') ||
+      host?.type !== (family === 'checkbox' ? 'mat-checkbox' : 'mat-radio-button') ||
+      !hasClass(host, family === 'checkbox' ? 'mat-mdc-checkbox-disabled' : 'mat-mdc-radio-disabled') ||
+      owner?.authored?.type !== 'div' || owner.authored.id !== id.replace(/-label$/, family === 'checkbox' ? '-primary' : '') ||
+      owner.authored.role !== family || owner.authored.ariaDisabled !== true) return;
+  const input = one(referenceTree.nodes.filter(n => n.type === 'input' && n.attributes?.id === label.attributes.for));
+  const inputParent = parent(referenceTree, input);
+  if (!input || input.attributes.type !== family || !Object.hasOwn(input.attributes, 'disabled') || inputParent?.parent !== form.key ||
+      (family === 'radio' && (!hasClass(inputParent, 'mdc-radio--disabled') ||
+        referenceTree.nodes.filter(n => n.parent === form.key).map(n => n.key).join('|') !== `${inputParent.key}|${label.key}`))) return;
+  const affects = value => Object.keys(value ?? {}).some(k => ['color', 'all', 'webkittextfillcolor'].includes(k.replaceAll('-', '').toLowerCase()) || /^(animation|transition)/i.test(k));
+  const unsafeInline = node => {
+    const inline = node.inline ?? node.authored?.style;
+    return (inline !== undefined && (!inline || typeof inline !== 'object' || Array.isArray(inline) || affects(inline))) ||
+      /(?:^|;)\s*(?:color|all|-webkit-text-fill-color|animation[^:]*|transition[^:]*)\s*:/i.test(node.attributes?.style ?? '');
+  };
+  const styleAt = (index, side) => {
+    const item = inventory.styles[index];
+    return item?.side === side && item.value && typeof item.value === 'object' && !Array.isArray(item.value) ? item.value : undefined;
+  };
+  const referenceChain = [];
+  let token;
+  for (const node of [ref, label]) {
+    const computed = styleAt(node.style, 'reference'), rules = node.rules.map(i => inventory.rules[i]);
+    if (!computed || unsafeInline(node) || canonicalStyle(computed).color !== styles.reference.color ||
+        rules.some(r => r?.side !== 'reference' || !r.value || typeof r.value.active !== 'boolean')) return;
+    const ink = rules.map(r => r.value).filter(r => affects(r.declarations));
+    if (node === ref ? ink.length !== 0 : ink.length !== 1) return;
+    if (node === label) token = ink[0];
+    referenceChain.push({ ...node, computed, matchedRules: rules.map(r => r.value) });
+  }
+  const selector = family === 'checkbox' ? '.mat-mdc-checkbox.mat-mdc-checkbox-disabled label' : '.mat-mdc-radio-button .mdc-radio--disabled + label';
+  if (token.active !== true || !Array.isArray(token.conditions) || token.conditions.length || token.selector !== selector ||
+      token.declarations.color?.value !== `var(--mat-${family}-disabled-label-color, color-mix(in srgb, var(--mat-sys-on-surface) 38%, transparent))` ||
+      token.declarations.color.important !== false || Object.keys(token.declarations).some(k => k !== 'color' && affects({ [k]: true }))) return;
+  const pool = astylarTree.rules.map(i => inventory.rules[i]);
+  if (pool.some(r => r?.side !== 'astylar' || !r.value || typeof r.value !== 'object' || Array.isArray(r.value))) return;
+  const candidateRules = pool.map(r => r.value).filter(affects), candidateChain = [];
+  const colorOwner = family === 'checkbox' ? ast : owner;
+  for (const node of family === 'checkbox' ? [ast] : [ast, owner]) {
+    const normal = styleAt(node.normalStyle, 'astylar'), effective = styleAt(node.interactionStyle, 'astylar');
+    const rules = candidateRules.filter(r => typographySelectorCanApply(r.selector, node.authored));
+    if (!normal || !effective || unsafeInline(node)) return;
+    if (node !== colorOwner) {
+      if (affects(normal) || affects(effective) || rules.length) return;
+    } else if (rules.length !== 1 || rules[0].selector !== (family === 'checkbox' ? '.checkbox-label' : '.radio-option') ||
+        !/^#[a-f\d]{6}$/i.test(rules[0].color ?? '') || canonicalStyle(rules[0]).color !== styles.retained.color ||
+        Object.keys(rules[0]).some(k => k.startsWith('media') || (k !== 'color' && affects({ [k]: true }))) ||
+        [normal, effective].some(s => canonicalStyle(s).color !== styles.retained.color || Object.keys(s).some(k => k !== 'color' && affects({ [k]: true })))) return;
+    candidateChain.push({ ...node, normal, effective, matchedInkRules: rules });
+  }
+  return { attribution: 'reviewed-disabled-choice-label-ink-input', classification: 'application-plugin-authoring-defect',
+    inputEquivalent: false, currentPseudoStatePaintVerified: false, finalRasterVerified: false,
+    recommendedOwner: 'showcase disabled checkbox/radio label token translation',
+    justification: 'The disabled native reference control labels inherit the explicit component disabled-label-color token from their associated label. The candidate ARIA-disabled custom control still supplies an opaque theme.onSurface literal directly to checkbox text or through the radio option parent. Normal/effective inputs and retained color agree with that literal. This is omitted disabled-state styling, not proof of a core alpha conversion defect. Token fallback origin, disabled interaction behavior, ancestor compositing and final raster remain separate obligations.',
+    reviewEvidence: structuredClone({ sourceFinding: 'fixture-disabled-choice-label-ink-omitted', revision: record.resolvedStyleRevision,
+      referenceChain, token, host, form, input, inputParent, candidateOwner: owner, candidateChain, checkedCandidateRules: candidateRules,
+      referenceComputed: styles.reference.color, candidateRetained: styleAt(ast.retainedText.style, 'astylar') }) };
+}
+
+function validateDisabledChoiceLabelInk(report, errors) {
+  if (!report.retainedTypography) return;
+  const cases = [...new Set(report.elementInventory.cases.map(c => c.case))].flatMap(key => ['checkbox', 'radio'].flatMap(family => {
+    const m = parseReviewedCase(key, family);
+    return m ? [{ kind: m[1], family, profile: m[2], viewport: { id: m[3] }, ...(m[4] ? { state: m[4] } : {}) }] : [];
+  }));
+  const replay = collectRetainedTypographyEvidence(cases, report.elementInventory);
+  const predicate = d => d.attribution === 'reviewed-disabled-choice-label-ink-input' || /^(checkbox|radio-(solo|team))-label$/.test(d.element ?? '');
+  for (const list of ['reviewedMappings', 'comparisons', 'differences', 'gaps']) {
+    if (JSON.stringify(report.retainedTypography[list].filter(predicate)) !== JSON.stringify(replay[list].filter(predicate)))
+      errors.push(`disabled choice label ink ${list} lack complete replayed input evidence`);
+  }
 }
 
 function reviewedChipLabelInk(entry, mapping, property, ast, styles, referenceTree, astylarTree, inventory) {
@@ -5205,6 +5298,7 @@ export function collectRetainedTypographyEvidence(cases, inventory, controlTypog
             ...(reviewedSnackbarMessageToken(entry, textMappingById.get(id), property, ast, styles, referenceTree, astylarTree, inventory) ?? {}),
             ...(reviewedMenuLabelInk(entry, textMappingById.get(id), property, ast, styles, referenceTree, astylarTree, inventory) ?? {}),
             ...(reviewedChipLabelInk(entry, textMappingById.get(id), property, ast, styles, referenceTree, astylarTree, inventory) ?? {}),
+            ...(reviewedDisabledChoiceLabelInk(entry, property, ref, ast, styles, referenceTree, astylarTree, inventory) ?? {}),
             ...(reviewedMenuLabelFont(entry, textMappingById.get(id), property, ast, styles, referenceTree, astylarTree, inventory) ?? {}),
             ...(reviewedDialogTextInk(entry, textMappingById.get(id), property, ast, styles, referenceTree, astylarTree, inventory) ?? {}),
             ...(reviewedDialogTextMetric(entry, textMappingById.get(id), property, ast, styles, referenceTree, astylarTree, inventory) ?? {}),
@@ -6960,6 +7054,7 @@ function implementationPlan() {
     { priority: 5.27, rootCause: 'Stepper numeral font and label-color inheritance are replaced or omitted', action: 'Keep the original frame-scaled inherited numeral font with the icon-content wrapper instead of fixed 14px step-badge text. Restore the Material active-label color token and inner label inheritance instead of accepting the page on-surface fallback. Preserve actual reference theme inputs; do not retune the dark reference or calibrate text to the circle. Verify core inheritance, transforms and glyph paint only after equivalent authoring is restored.' },
     { priority: 5.28, rootCause: 'Filled-label component color tokens are replaced by independent literal state rules', action: 'Restore the captured reference label-color token, wrapper inheritance and state semantics rather than adjusting candidate colors to sampled pixels. Base/empty/picker-shell declarations currently supply different inputs, independently of the repaired inspection ancestry bug. Preserve normal/effective/retained stages and original rule order; investigate core cascade or current paint only when equivalent authored inputs still diverge. Do not normalize small RGB differences away or reuse pre-repair inconsistent captures as proof.' },
     { priority: 5.29, rootCause: 'Sidenav component text-color tokens are replaced by fixture theme literals', action: 'Restore the distinct drawer and content token semantics together with the separately identified sidenav structure/padding inputs. Reference color ownership is the drawer or container, while candidate aside/main rules directly set theme.onSurface or dark-mode literals. Preserve exact channels and captured inheritance; only an equal-input reproduction can establish a core color defect. The initial implementation introduced these substitutions, so do not describe them as confirmed later compensating fixes.' },
+    { priority: 5.294, rootCause: 'Disabled choice label color tokens are omitted from custom checkbox/radio authoring', action: 'Restore component disabled-label-color token intent on the original associated text owner instead of the unconditional theme.onSurface label/option literal. Current captures prove native disabled label association and differing candidate disabled-state inputs. Preserve transparent color semantics rather than preblending against a screenshot background. Test enabled/disabled and checked/unchecked states independently of cursor and event suppression; only investigate core alpha handling after equivalent color inputs are supplied.' },
     { priority: 5.295, rootCause: 'Chip label color tokens are replaced by container theme-color inheritance', action: 'Restore the enabled unselected label-text-color/on-surface-variant token on its original text owner instead of inheriting theme.onSurface from the replacement chip container. Current captures prove 32 unequal color inputs through exact selection state, reference token and candidate normal/effective/retained stages. The substitution predates later parity repairs. Keep selected/disabled states, generated outlines, intrinsic sizing and final paint independently covered; do not repair this by sampling screenshot colors or changing core color conversion.' },
     { priority: 5.295, rootCause: 'Sort typography replaces inherited frame inputs with fixed trigger declarations', action: 'Restore the reference frame-scaled font-size inheritance and actual frame color through the original sort text structure. The candidate fixed 16px trigger and contrast-only black declaration differ before rendering. Keep the history of screenshot-oriented changes and complete per-case ancestor evidence. Evaluate core inheritance or font scaling only after inputs agree; no inverse scale, font-size calibration or theme-specific ink override is an acceptable renderer fix.' },
     { priority: 5.296, rootCause: 'Expansion header font-size token is omitted outside a compact fixture override', action: 'Restore the reference component header font-size token and its inheritance through mat-content/title equivalents across all states. A compact-only fixed 16px branch does not translate the general component rule; custom titles inherit a different page size. Keep the independent layout/transform findings and assess core scaling or text placement only with equivalent inputs, not new font-size or baseline corrections.' },
