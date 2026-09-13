@@ -4754,6 +4754,112 @@ test('dialog ink evidence replay rejects forged claims without mutating the inve
   }
 });
 
+function dialogMetricReport() {
+  const raw = dialogInkReport(), { reference: r, astylar: a } = raw.results[0].inputTrees;
+  a.nodes.unshift({ key: 'root', parent: null, authored: {} });
+  for (const key of ['title', 'copy']) {
+    const leaf = r.nodes.find(n => n.key === key), rule = r.rules[leaf.rules[0]];
+    rule.declarations['font-family'] = { value: key === 'title'
+      ? 'var(--mat-dialog-subhead-font, var(--mat-sys-headline-small-font, inherit))'
+      : 'var(--mat-dialog-supporting-text-font, var(--mat-sys-body-medium-font, inherit))', important: false };
+    if (key === 'copy') rule.declarations['letter-spacing'] = { value: 'var(--mat-dialog-supporting-text-tracking, var(--mat-sys-body-medium-tracking, 0.03125em))', important: false };
+  }
+  return raw;
+}
+
+test('dialog metrics preserve direct tokens complete page inheritance and default tracking omission', () => {
+  const raw = dialogMetricReport(), before = structuredClone(raw), cases = raw.results.map(e => ({ ...e, kind: 'static' }));
+  const t = collectRetainedTypographyEvidence(cases, collectFullTreeInventory(cases));
+  const ds = t.differences.filter(d => d.attribution === 'reviewed-dialog-text-metric-omission');
+  assert.equal(ds.length, 3);
+  for (const d of ds) {
+    assert.equal(d.classification, 'application-plugin-authoring-defect'); assert.equal(d.inputEquivalent, false);
+    assert.equal(d.currentPseudoStatePaintVerified, false); assert.equal(d.finalRasterVerified, false);
+    assert.equal(d.reviewEvidence.candidateChain.length, d.element === 'dialog-title-label' ? 6 : 5);
+    const page = d.reviewEvidence.candidateChain.at(-1);
+    assert.equal(page.authored.id, 'page');
+    if (d.property === 'fontFamily') {
+      assert.equal(d.reviewEvidence.candidatePageRule.fontFamily, 'Roboto, Arial, sans-serif');
+      assert.equal(page.normal.fontFamily, 'Roboto, Arial, sans-serif');
+      assert.ok(d.reviewEvidence.candidateChain.slice(0, -1).every(n => n.normal.fontFamily === undefined && n.effective.fontFamily === undefined));
+    } else {
+      assert.equal(d.values.retained, '0');
+      assert.deepEqual(d.reviewEvidence.candidateEnvelope, { key: 'root', parent: null, authored: {},
+        resolvedStyle: undefined, normalResolvedStyle: undefined, interactionResolvedStyle: undefined,
+        style: undefined, normalStyle: undefined, interactionStyle: undefined });
+      assert.ok(d.reviewEvidence.candidateChain.every(n => n.normal.letterSpacing === undefined && n.effective.letterSpacing === undefined));
+    }
+  }
+  assert.equal(t.differences.filter(d => d.attribution === 'reviewed-dialog-text-ink-input').length, 2);
+  assert.deepEqual(raw, before);
+});
+
+test('dialog metrics refuse ambiguous declarations and overrides anywhere in the inherited chain', () => {
+  const controls = [
+    (r, a, leaf, rule, property, css) => { delete r.errors; },
+    (r, a, leaf, rule, property, css) => { rule.active = false; },
+    (r, a, leaf, rule, property, css) => { rule.source = 'sheet:0/1/2'; },
+    (r, a, leaf, rule, property, css) => { rule.conditions = ['@layer base']; },
+    (r, a, leaf, rule, property, css) => { rule.declarations[css].important = true; },
+    (r, a, leaf, rule, property, css) => { rule.declarations[css].value = 'inherit'; },
+    (r, a, leaf, rule, property, css) => { rule.declarations.all = { value: 'unset', important: false }; },
+    (r, a, leaf, rule, property, css) => { leaf.inline = { [css]: 'inherit' }; },
+    (r, a, leaf, rule, property, css) => { leaf.attributes.style = css + ':inherit'; },
+    (r, a, leaf, rule, property, css) => { r.rules.push({ ...rule }); leaf.rules.push(r.rules.length - 1); },
+    (r, a, leaf, rule, property, css) => { a.rules.push({ selector: '.dialog-panel', [property]: 'inherit' }); },
+    (r, a, leaf, rule, property, css) => { a.rules.push({ selector: '.modal-overlay', all: 'unset' }); },
+    (r, a, leaf, rule, property, css) => { a.rules.push({ selector: '#page', [property]: 'inherit' }); },
+    (r, a, leaf, rule, property, css) => { a.nodes.find(n => n.key === 'copy').retainedText.source = 'private-texture'; },
+    (r, a, leaf, rule, property, css) => { a.nodes.find(n => n.key === 'copy').retainedText.style[property] = property === 'fontFamily' ? 'Arial' : '1px'; },
+  ];
+  for (const key of ['copy', 'panel', 'modal', 'section', 'page']) for (const stage of ['normalResolvedStyle', 'interactionResolvedStyle']) {
+    controls.push((r, a, leaf, rule, property) => { a.nodes.find(n => n.key === key)[stage][property] = 'inherit'; });
+    controls.push((r, a) => { delete a.nodes.find(n => n.key === key)[stage]; });
+  }
+  for (const key of ['copy', 'panel', 'modal', 'section', 'page']) controls.push((r, a) => { a.nodes.find(n => n.key === key).authored.style = { all: 'unset' }; });
+  for (const property of ['fontFamily', 'letterSpacing']) for (const [index, mutate] of controls.entries()) {
+    const raw = dialogMetricReport(), { reference: r, astylar: a } = raw.results[0].inputTrees;
+    const leaf = r.nodes.find(n => n.key === 'copy'), rule = r.rules[leaf.rules[0]];
+    mutate(r, a, leaf, rule, property, property === 'fontFamily' ? 'font-family' : 'letter-spacing');
+    const cases = raw.results.map(e => ({ ...e, kind: 'static' })), t = collectRetainedTypographyEvidence(cases, collectFullTreeInventory(cases));
+    assert.ok(!t.differences.some(d => d.element === 'dialog-copy' && d.property === property && d.attribution === 'reviewed-dialog-text-metric-omission'), `${property} control ${index}`);
+  }
+  for (const mutate of [
+    a => { a.nodes = a.nodes.filter(n => n.key !== 'root'); },
+    a => { a.nodes.find(n => n.key === 'root').authored = { type: 'div' }; },
+    a => { a.nodes.find(n => n.key === 'root').normalResolvedStyle = {}; },
+    a => { a.rules[0].fontFamily = 'Arial'; },
+    a => { a.rules[0].mediaMaxWidth = '800px'; },
+  ]) {
+    const raw = dialogMetricReport(); mutate(raw.results[0].inputTrees.astylar);
+    const cases = raw.results.map(e => ({ ...e, kind: 'static' })), t = collectRetainedTypographyEvidence(cases, collectFullTreeInventory(cases));
+    assert.ok(t.differences.some(d => d.element === 'dialog-copy' && d.attribution === 'unresolved'));
+  }
+});
+
+test('dialog metric evidence replays tokens omissions envelope and retained values independently', () => {
+  const original = buildMaterialInputAudit(dialogMetricReport());
+  assert.equal(original.retainedTypography.differences.filter(d => d.attribution === 'reviewed-dialog-text-metric-omission').length, 3);
+  assert.ok(original.sourceFindings.find(f => f.id === 'fixture-dialog-text-metric-tokens-omitted')?.detected);
+  assert.ok(!validateMaterialInputAudit(original, { requireComplete: false }).some(e => e.includes('dialog text')));
+  for (const property of ['fontFamily', 'letterSpacing']) for (const mutate of [
+    d => { d.reviewEvidence.referenceRule.declarations.all = { value: 'unset', important: false }; },
+    d => { d.reviewEvidence.candidateChain.pop(); },
+    d => { d.reviewEvidence.candidateChain[1].normal.font = '14px Arial'; },
+    d => { d.reviewEvidence.checkedCandidateRules.push({ selector: '#fake', all: 'unset' }); },
+    d => { d.reviewEvidence.candidateRetained[d.property] = 'fake'; },
+    d => { d.inputEquivalent = true; },
+    d => { d.finalRasterVerified = true; },
+    d => { d.values.retained = 'fake'; },
+    d => { d.case = 'static:menu@light/desktop'; d.family = 'menu'; d.element = 'other'; },
+  ]) {
+    const report = structuredClone(original), inventory = structuredClone(report.elementInventory);
+    mutate(report.retainedTypography.differences.find(d => d.property === property && d.attribution === 'reviewed-dialog-text-metric-omission'));
+    assert.deepEqual(report.elementInventory, inventory);
+    assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('dialog text')));
+  }
+});
+
 function menuTextReport() {
   const raw = retainedTypographyReport(), e = raw.results[0], { reference: r, astylar: a } = e.inputTrees;
   e.family = 'menu';

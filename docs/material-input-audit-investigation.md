@@ -23,6 +23,74 @@ selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Dialog component font and tracking declarations were omitted (2026-09-13)
+
+`reviewed-dialog-text-metric-omission` now traces the remaining direct
+title/content typography inputs. The original component selectors apply
+`--mat-dialog-subhead-font` / `--mat-dialog-supporting-text-font` with their
+captured system-token fallbacks; both compute `Roboto`. The candidate omits a
+component family on every ancestor up to `#page`, which explicitly supplies
+`Roboto, Arial, sans-serif`. The full normal/effective chains and applicable
+author rules are retained, not filled in with inferred inherited declarations.
+The broader fallback list remains an unequal authored input even when the
+installed Roboto glyphs happen to match.
+
+Original content also applies `--mat-dialog-supporting-text-tracking`, computing
+`0.256px` in the captures. The candidate omits tracking on its entire paragraph,
+panel, modal, showcase section and page chain. Its document envelope is empty
+and has no resolved text stage. Core retains zero tracking, consistent with
+`RendererService.getInheritedTextStyle`'s `letterSpacing: '0px'` default
+(`src/app/services/dom/renderer.service.ts:543-580`). No explicit shared spacing
+input was lost: the component declaration is absent before rendering. Default
+spacing is not a replacement for Material's tracking intent.
+
+`git show 2f44011:examples/material-showcase/src/app/astylar.component.ts` shows
+the page stack and title/content rules already omitting family/tracking in the
+initial showcase. Current declarations are at lines 471 and 790-791. The later
+fixed heights, nested title span and padding adjustments did not supply those
+missing properties. Restore the original component typography alongside the
+original flow constraints before evaluating core font selection, shaping,
+wrapping, positioning or raster. This finding does not certify token fallback
+origin or overlay theme scope.
+
+All 78 dialog cases were replayed: **64 font-family and 32 tracking differences**
+now have complete declaration/ancestor attribution. No unresolved title/content
+retained typography difference remains, but dialog controls, layout, semantics
+and paint remain separate obligations; this is not dialog parity acceptance.
+
+Three new tests cover full-chain inheritance/omission, **85 negative input
+controls**, and **18 report mutations**. They reject missing or competing token
+rules, overrides or missing stages at each candidate ancestor, altered page
+font inputs, and a non-empty or styled document envelope. Independent report
+replay retains raw inventory snapshots and refuses forged attributions.
+
+```powershell
+node --test --test-name-pattern='dialog (text|ink|metric)|records source fingerprints' tests/material-parity/input-equivalence-audit.spec.mjs
+```
+
+Focused result: **12/12 pass**, zero failed/skipped/cancelled/todo,
+**3.840 seconds**, terminal exit 0. During development the zero-spacing guard
+initially expected `0px` after canonicalization, whose established output is
+`0`; the guard now uses the existing canonicalizer without changing captures.
+The first test run also exposed an expected-envelope assertion missing the
+collector's explicit undefined stage fields and a no-op mutation of an already
+empty rule list. Both assertions were corrected; the latter now inserts a
+fabricated rule and must fail replay. No attribution condition was weakened.
+
+`npm run parity:harness:check` completed with **421/421 pass**, zero
+failed/skipped/cancelled/todo, **206.948 seconds**, terminal exit 0. Full
+`buildMaterialInputAudit` replay used the current-ancestry report and its bound
+normal-line-box/supplemental evidence paths recorded in the mapping section
+below. Coverage remains complete and all **114** source findings are detected.
+Diagnostic `validateMaterialInputAudit(audit, { requireComplete: false })`
+returns `[]`. Strict validation still rejects **3,309 resolved-style
+attributions, 879 control-texture differences, 49 retained mapping/stage gaps,
+and 354 retained typography differences**. The last count decreased from 450 by
+the 96 newly explained inputs; those differences are retained, not equated.
+The diagnostic process exited 0 while reporting strict failures, not acceptance.
+All ten frozen visual-harness hashes match. No production renderer, fixture
+input or visual gate is changed; overall audit completion remains unproven.
+
 ## Dialog text color tokens were replaced by fixture literals (2026-09-13)
 
 `reviewed-dialog-text-ink-input` traces the original direct title/content token

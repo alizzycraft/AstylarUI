@@ -457,6 +457,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
     'reviewed-menu-label-ink-input': 'application-plugin-authoring-defect',
     'reviewed-menu-label-font-input': 'application-plugin-authoring-defect',
     'reviewed-dialog-text-ink-input': 'application-plugin-authoring-defect',
+    'reviewed-dialog-text-metric-omission': 'application-plugin-authoring-defect',
     'reviewed-tooltip-text-alignment-input': 'application-plugin-authoring-defect',
     'reviewed-floating-label-font-input': 'application-plugin-authoring-defect' };
   const unresolvedTypography = report.retainedTypography?.differences.filter((entry) =>
@@ -646,6 +647,7 @@ export function renderMaterialInputAuditMarkdown(report) {
     `Menu label font: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-menu-label-font-input').length} original direct component-family tokens contrast with candidate label omission and inheritance from the explicit generic control-family rule. The two fallback lists remain unequal; installed-glyph coincidence, font selection, shaping and final raster are not certified.`,
     `Dialog title/content: ${report.retainedTypography.reviewedMappings.filter(m => m.kind === 'reviewed-dialog-content-text').length} owners have exact generated-title linkage, direct-content and action/overlay/focus-trap correspondence. Original heading pseudo-spacer, labelled dialog and content wrappers remain distinct from candidate nested text, fixed flex boxes and separately labelled modal. Mapped text does not establish equivalent structure, typography, semantics, placement or raster.`,
     `Dialog text ink: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-dialog-text-ink-input').length} original direct title/content color tokens contrast with explicit candidate literals. Nested title inheritance and direct paragraph declarations are separately traced through normal/effective and retained stages. Token fallback origin, overlay theme scope and final raster remain unverified.`,
+    `Dialog font/tracking: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-dialog-text-metric-omission').length} differences preserve direct reference component tokens and complete candidate text-to-page omission chains. Candidate page font inheritance and default zero tracking remain unequal inputs; font selection, shaping, layout and raster are not certified.`,
     `Tooltip text: ${report.retainedTypography.reviewedMappings.filter(m => m.kind === 'reviewed-tooltip-overlay-text').length} labels map only when unique Material trigger/message and shown connected-overlay ownership coexist with the unique candidate trigger-linked flow popup. Original aria-hidden visual ownership and external description linkage remain distinct from the candidate role-tooltip sibling. Candidate-only states, typography, positioning, collision, clipping, visibility and raster are not waived.`,
     `Tooltip alignment: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-tooltip-text-alignment-input').length} original center declarations contrast with complete popup-to-page candidate omissions and retained left. Candidate flex centering is captured as a different input, not an equivalent replacement or proof of glyph alignment. Positioning and blur remain separate investigations.`,
     `Timepicker options: ${report.retainedTypography.reviewedMappings.filter(m => m.kind === 'reviewed-timepicker-option-text').length} labels have complete input-linked half-hour-domain correspondence. Material primary-text/ripple owners are replaced by direct-text div options; active and selected states remain separate raw evidence. This maps text owners, not equivalent wrappers, scrolling, commit behavior, placement or raster. Newly exposed typography differences remain enforced.`,
@@ -1613,7 +1615,7 @@ function validateDialogTextEvidence(report, errors) {
     return match ? [{ kind: match[1], family: 'dialog', profile: match[2], viewport: { id: match[3] }, ...(match[4] ? { state: match[4] } : {}) }] : [];
   });
   const replay = collectRetainedTypographyEvidence(cases, report.elementInventory);
-  const predicate = value => value.attribution === 'reviewed-dialog-text-ink-input' || value.kind === 'reviewed-dialog-content-text' || value.mapping?.kind === 'reviewed-dialog-content-text' ||
+  const predicate = value => ['reviewed-dialog-text-ink-input', 'reviewed-dialog-text-metric-omission'].includes(value.attribution) || value.kind === 'reviewed-dialog-content-text' || value.mapping?.kind === 'reviewed-dialog-content-text' ||
     ['dialog-title-label', 'dialog-copy'].includes(value.element) || /^mat-mdc-dialog-title-\d+$/.test(value.element ?? '') ||
     (value.family === 'dialog' && value.reason === 'own-text nodes without an explicit shared ID require structural mapping');
   for (const list of ['reviewedMappings', 'comparisons', 'differences', 'gaps']) {
@@ -2596,6 +2598,73 @@ function reviewedSnackbarMessageToken(entry, mapping, property, ast, styles, ref
     reviewEvidence: { sourceFinding: 'fixture-snackbar-message-token-substitution', property, referenceRule, referenceChain,
       candidateRule, checkedCandidateRules, candidateChain, candidateRetained: styleAt(ast.retainedText.style, 'astylar'),
       referenceComputed: styles.reference[property], candidateValue: styles.retained[property], inputEquivalent: false, finalRasterVerified: false } };
+}
+
+function reviewedDialogTextMetric(entry, mapping, property, ast, styles, referenceTree, astylarTree, inventory) {
+  if (entry.family !== 'dialog' || !['fontFamily', 'letterSpacing'].includes(property) || mapping?.kind !== 'reviewed-dialog-content-text' ||
+      mapping.astylarNode !== ast.key || ast.retainedText?.source !== 'core-text-registry' || referenceTree.ruleEvidenceComplete !== true) return;
+  const title = mapping.element === 'dialog-title-label', font = property === 'fontFamily';
+  if ((!title && mapping.element !== 'dialog-copy') || (!font && title) ||
+      (font && (styles.reference.fontFamily !== 'roboto' || styles.retained.fontFamily !== 'roboto,arial,sans-serif')) ||
+      (!font && (styles.retained.letterSpacing !== canonicalStyle({ letterSpacing: '0px' }).letterSpacing || !/^-?\d+(?:\.\d+)?px$/.test(styles.reference.letterSpacing ?? '') || parseFloat(styles.reference.letterSpacing) === 0))) return;
+  const one = nodes => nodes.length === 1 ? nodes[0] : undefined;
+  const leaf = one(referenceTree.nodes.filter(n => n.key === mapping.referenceNode));
+  const changesMetric = declarations => Object.keys(declarations ?? {}).some(key => {
+    const name = key.replaceAll('-', '').toLowerCase();
+    return [property.toLowerCase(), 'font', 'all'].includes(name) || /^(animation|transition)/.test(name);
+  });
+  const unsafeInline = value => value !== undefined && (value === null || typeof value !== 'object' || Array.isArray(value) || changesMetric(value));
+  const styleAt = (index, side) => {
+    const pooled = inventory.styles[index];
+    return pooled?.side === side && pooled.value && typeof pooled.value === 'object' && !Array.isArray(pooled.value) ? pooled.value : undefined;
+  };
+  const computed = leaf && styleAt(leaf.style, 'reference'), cssProperty = font ? 'font-family' : 'letter-spacing';
+  if (!computed || canonicalStyle(computed)[property] !== styles.reference[property] || unsafeInline(leaf.inline) ||
+      /(?:^|;)\s*(?:font-family|letter-spacing|font|all|animation[^:]*|transition[^:]*)\s*:/i.test(leaf.attributes?.style ?? '')) return;
+  const pooledReference = leaf.rules.map(i => inventory.rules[i]);
+  if (pooledReference.some(r => r?.side !== 'reference' || !r.value || typeof r.value !== 'object' || Array.isArray(r.value) || typeof r.value.active !== 'boolean')) return;
+  const referenceRules = pooledReference.map(r => r.value), metricRules = referenceRules.filter(r => r.active && changesMetric(r.declarations));
+  const referenceRule = metricRules[0];
+  const token = font ? (title ? 'var(--mat-dialog-subhead-font, var(--mat-sys-headline-small-font, inherit))'
+    : 'var(--mat-dialog-supporting-text-font, var(--mat-sys-body-medium-font, inherit))')
+    : 'var(--mat-dialog-supporting-text-tracking, var(--mat-sys-body-medium-tracking, 0.03125em))';
+  if (metricRules.length !== 1 || referenceRule.selector !== `.mat-mdc-dialog-container .mat-mdc-dialog-${title ? 'title' : 'content'}` ||
+      !/^sheet:\d+\/\d+$/.test(referenceRule.source ?? '') || referenceRule.conditions?.length !== 0 ||
+      referenceRule.declarations?.[cssProperty]?.value !== token || referenceRule.declarations[cssProperty].important !== false ||
+      Object.keys(referenceRule.declarations).some(k => k !== cssProperty && changesMetric({ [k]: true }))) return;
+  const pooledRules = astylarTree.rules.map(i => inventory.rules[i]);
+  if (pooledRules.some(r => r?.side !== 'astylar' || !r.value || typeof r.value !== 'object' || Array.isArray(r.value))) return;
+  const candidateRules = pooledRules.map(r => r.value).filter(r => changesMetric(r)), candidateChain = [];
+  let candidatePageRule;
+  for (const source of mapping.reviewEvidence.candidatePath) {
+    const node = one(astylarTree.nodes.filter(n => n.key === source.key));
+    if (!node || (candidateChain.length && candidateChain.at(-1).parent !== node.key)) return;
+    const normal = styleAt(node.normalStyle, 'astylar'), effective = styleAt(node.interactionStyle, 'astylar');
+    if (!normal || !effective || unsafeInline(node.authored.style)) return;
+    const applicable = candidateRules.filter(rule => typographySelectorCanApply(rule.selector, node.authored));
+    if (font && node.authored.id === 'page') {
+      if (applicable.length !== 1 || applicable[0].selector !== '#page' || applicable[0].fontFamily !== 'Roboto, Arial, sans-serif' ||
+          Object.keys(applicable[0]).some(k => k.startsWith('media') || (k !== 'fontFamily' && changesMetric({ [k]: true }))) ||
+          [normal, effective].some(stage => canonicalStyle(stage).fontFamily !== styles.retained.fontFamily ||
+            Object.keys(stage).some(k => k !== 'fontFamily' && changesMetric({ [k]: true })))) return;
+      candidatePageRule = applicable[0];
+    } else if (applicable.length || changesMetric(normal) || changesMetric(effective)) return;
+    candidateChain.push({ node: node.key, parent: node.parent, authored: node.authored, normal, effective });
+  }
+  const page = candidateChain.at(-1);
+  if (candidateChain[0]?.node !== ast.key || page?.authored.id !== 'page' || page.authored.type !== 'main' || page.parent !== 'root') return;
+  const envelope = one(astylarTree.nodes.filter(n => n.key === 'root'));
+  if (!font && (!envelope || envelope.parent !== null || !envelope.authored || Object.keys(envelope.authored).length ||
+      envelope.normalStyle !== undefined || envelope.interactionStyle !== undefined || envelope.retainedText)) return;
+  return { attribution: 'reviewed-dialog-text-metric-omission', classification: 'application-plugin-authoring-defect',
+    inputEquivalent: false, currentPseudoStatePaintVerified: false, finalRasterVerified: false,
+    recommendedOwner: 'showcase dialog component font-family and tracking-token translation',
+    justification: font ? 'The original direct heading/content Material font-family token computes Roboto. Every candidate text-to-page ancestor omits that component font override until the explicit page stack Roboto, Arial, sans-serif, which core retains. The fallback lists remain unequal; installed glyph coincidence is not input equivalence or proof of font selection, shaping or raster.'
+      : 'The original content explicitly applies its Material tracking token and computes nonzero CSS-pixel spacing. The entire candidate content-to-page chain omits tracking, above an empty document envelope, while core retains its zero-spacing default. Fixed content dimensions and padding do not replace the missing typography input. This is unequal authoring, not a core failure to render an explicit shared spacing value.',
+    reviewEvidence: structuredClone({ sourceFinding: 'fixture-dialog-text-metric-tokens-omitted', property, referenceRule, referenceRules,
+      referenceLeaf: { node: leaf.key, parent: leaf.parent, attributes: leaf.attributes, inline: leaf.inline, computed },
+      candidatePageRule, checkedCandidateRules: candidateRules, candidateChain, ...(font ? {} : { candidateEnvelope: envelope }),
+      candidateRetained: styleAt(ast.retainedText.style, 'astylar'), referenceComputed: styles.reference[property], candidateValue: styles.retained[property] }) };
 }
 
 function reviewedDialogTextInk(entry, mapping, property, ast, styles, referenceTree, astylarTree, inventory) {
@@ -4697,6 +4766,7 @@ export function collectRetainedTypographyEvidence(cases, inventory, controlTypog
             ...(reviewedMenuLabelInk(entry, textMappingById.get(id), property, ast, styles, referenceTree, astylarTree, inventory) ?? {}),
             ...(reviewedMenuLabelFont(entry, textMappingById.get(id), property, ast, styles, referenceTree, astylarTree, inventory) ?? {}),
             ...(reviewedDialogTextInk(entry, textMappingById.get(id), property, ast, styles, referenceTree, astylarTree, inventory) ?? {}),
+            ...(reviewedDialogTextMetric(entry, textMappingById.get(id), property, ast, styles, referenceTree, astylarTree, inventory) ?? {}),
             ...(reviewedTooltipTextAlignment(entry, textMappingById.get(id), property, ast, styles, referenceTree, astylarTree, inventory) ?? {}),
             ...(!controlLabelToken && !selectValueToken && !weekdayToken && !monthMarkerToken ?
               reviewedOmittedComponentTextMetric(textMappingById.get(id), property, ref, ast, styles, referenceTree, astylarTree, inventory) ?? {} : {}),
@@ -6309,6 +6379,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('dialog metrics preserve/,
+      'dialog component font and tracking omissions', 'Direct reference tokens contrast with complete candidate ancestry to the authored page font or an empty document envelope for default tracking. Missing/competing declarations, ancestry-stage overrides and forged evidence refuse attribution.'),
     proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('dialog ink traces/,
       'dialog text color-token substitution', 'Original direct tokens contrast with literal paragraph color or inherited heading color. Competing or missing declaration/stage evidence and forged claims refuse attribution; font and tracking differences remain unresolved.'),
     proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('dialog text mapping preserves/,

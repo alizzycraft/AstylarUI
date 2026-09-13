@@ -589,6 +589,15 @@ export const sourceAuditDefinitions = Object.freeze([
     justification: 'Material authors direct heading text beside a generated 40px inline baseline spacer and a mat-dialog-content owner. Candidate authors a nested span inside a fixed-height flex-end heading plus a fixed-height flex paragraph; later padding tweaks move the text without preserving original constraints. The original labelled dialog and focus-trap/backdrop owners also differ from the candidate modal overlay labelled Open dialog. Preserve text identity and all structure independently, then reproduce original layout/semantics through core APIs before attributing residual defects to core.',
   }),
   Object.freeze({
+    id: 'fixture-dialog-text-metric-tokens-omitted',
+    introducedBy: '2f44011 initial dialog typography omits component family and tracking',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`selector: '\.dialog-copy'[^\n]*fontSize: '14px'`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase dialog title/content font-family and tracking-token translation',
+    justification: 'The original dialog title/content applies explicit component-family tokens; content also applies supporting-text tracking. Candidate title/content typography has omitted these declarations since the initial showcase, inheriting a broader page font stack and retaining zero tracking. Fixed boxes, flex alignment and later padding retunes do not supply those missing inputs. Preserve complete ancestor omission and explicit page-font evidence before attributing typography discrepancies to core; fallback selection and raster remain independent.',
+  }),
+  Object.freeze({
     id: 'fixture-dialog-text-ink-substitution',
     introducedBy: 'bc0e449 fix(material): match dialog content geometry',
     file: 'examples/material-showcase/src/app/astylar.component.ts',
