@@ -3,6 +3,57 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Supplemental calendar/tooltip natural-line-box capture
+
+The remaining 46 control line-height observations now have a separate,
+reference-only measurement capture. This is evidence collection, not a scalar
+attribution or a declaration that either comparison is fixed. The independent
+reader and consolidated-report integration remain outstanding.
+
+`scripts/audit-material-supplemental-line-boxes.mjs` validates the original
+calendar-close and tooltip-state reports against the frozen current-ancestry
+checkpoint before replaying their complete sequences. Four calendar sequences
+(month/multi-year at DPR 1/2) retain all five keyboard boundaries, including
+the four final closed states with no remaining period-label target. Six
+tooltip sequences (benchmark-open, benchmark-hover, ordinary at DPR 1/2)
+retain initial/hover/press/release/leave. The latter measure the **trigger
+button labels, not tooltip bubbles**. The original queries, viewport sizes,
+real keyboard/pointer actions, font readiness and settlement are preserved.
+
+The capture contains 50 fresh reference input trees, 50 PNGs and 50 action
+records, with 46 exact-owner measurements: 16 calendar period labels and 30
+tooltip trigger labels. All measured natural CSS heights are 17px; the
+corresponding original candidate paint heights are also 17px. Original paired
+trees, paint and source reports were not changed. This numerical observation
+does not establish equivalent typography, positioning, focus behavior,
+visibility, clipping, baseline alignment or final raster quality.
+
+Each measurement retains the original reference/candidate owner keys and
+typography, a complete fresh DOM ancestry, loaded-font evidence and the
+natural CSS line-box observation. Records include original paired-tree hashes,
+fresh tree/PNG hashes, state witnesses, event traces and served-asset hashes.
+Six measurement-source snapshots are retained without executing archived code.
+Target selection does not select states by candidate output. Four focused
+tests reject altered, missing or duplicate state cohorts and invalid capture
+paths, and preserve the original keyboard/pointer request order.
+
+Evidence and verification:
+
+- Capture command: `node scripts/audit-material-supplemental-line-boxes.mjs --base-url=http://127.0.0.1:4431 --checkpoint=artifacts/material-parity/current-ancestry-audit/checkpoint --supplemental-root=artifacts/material-parity/supplemental-current-ancestry-audit --output=artifacts/material-parity/supplemental-line-box-current-ancestry-audit` — exit 0; Chrome 152.0.7977.76; 50 states / 46 observations / four empty closed states.
+- Report: `artifacts/material-parity/supplemental-line-box-current-ancestry-audit/latest-report.json`; SHA-256 `a630cc4061b3739e7fe1cb656b1e1c93ef51e01298d413bd49e25920c7c6b9e7`.
+- Original source reports remain SHA-256 `d09a946563651c389ad73db8be96bab5c129f7068513aaec9cc6cfa26d003f00` (calendar-close) and `1a554bf3b3bd477a2e7fe148640b07fe539731e4611e32b1e8f7ed2289e68a61` (tooltip-state-v2).
+- `node --check scripts/audit-material-supplemental-line-boxes.mjs` and `node --check tests/material-parity/supplemental-line-box-evidence.mjs` — pass.
+- `node --test --test-name-pattern='supplemental line-box|records source fingerprints' tests/material-parity/normal-line-box-report.spec.mjs tests/material-parity/input-equivalence-audit.spec.mjs` — 5/5 pass, no skips or cancellations, 0.8051191 seconds.
+- `npm run parity:harness:check` — 526/526 pass, no skips or cancellations, 255.111279 seconds; the original live session was polled to terminal exit 0, not restarted.
+- All ten frozen harness files still match their checkpoint hashes. No renderer,
+  Material plugin, showcase input, frozen asset or visual threshold changed.
+
+The consolidated audit still leaves these 46 observations unresolved pending
+independent validation and an exact per-state join. Its last full strict
+result remains 3,309 unresolved resolved-style differences and 46 unresolved
+control typography differences. Full final acceptance and report regeneration
+remain outstanding; this increment does not replace either.
+
 The report generator accepts explicit evidence paths so fresh full runs do not
 overwrite preserved baselines. `artifacts/material-parity/context-complete-audit`
 is now complete (436 static / 1,875 interaction cases, all visually passing),

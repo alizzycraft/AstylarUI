@@ -6,6 +6,77 @@ import { loadNormalLineBoxReport } from './normal-line-box-report.mjs';
 import { captureControlLineBox, hasControlTextOwners } from './control-line-box-evidence.mjs';
 import { captureBrowserInputTree } from './input-tree-evidence.mjs';
 import { loadControlLineBoxReport, replayControlLineBoxReport } from './control-line-box-report.mjs';
+import { parseSupplementalLineBoxArguments, supplementalLineBoxSequences, supplementalLineBoxCaseKey,
+  driveSupplementalLineBoxStep } from './supplemental-line-box-evidence.mjs';
+
+function supplementalSequenceCases() {
+  const cases = [];
+  for (const dpr of [1, 2]) for (const view of ['month', 'multi-year']) {
+    for (const state of ['opened', 'tab-close', 'blur-close', 'refocus-close', 'activate-close']) cases.push({
+      kind: 'supplemental', family: 'datepicker', profile: 'light', state: `calendar-close-${view}-${state}`,
+      viewport: { width: 1440, height: 900, deviceScaleFactor: dpr, id: `calendar-close-desktop-dpr${dpr}` },
+    });
+  }
+  for (const dpr of [1, 2]) for (const cohort of ['benchmark-open', 'benchmark-hover', 'ordinary']) {
+    for (const state of ['initial', 'hover', 'press', 'release', 'leave']) cases.push({
+      kind: 'supplemental', family: 'tooltip', profile: 'light', state: `tooltip-state-${cohort}-${state}`,
+      viewport: { width: 1440, height: 1000, deviceScaleFactor: dpr, id: `tooltip-state-desktop-dpr${dpr}` },
+    });
+  }
+  return cases;
+}
+
+test('supplemental line-box arguments require explicit bounded source and fresh output locations', () => {
+  const root = process.cwd(), args = ['--base-url=http://127.0.0.1:4431',
+    '--checkpoint=artifacts/material-parity/frozen/checkpoint', '--output=artifacts/material-parity/measurements',
+    '--supplemental-root=artifacts/material-parity/source-supplements'];
+  const parsed = parseSupplementalLineBoxArguments(args, root);
+  assert.equal(parsed.supplementalRoot, path.resolve(root, 'artifacts/material-parity/source-supplements'));
+  assert.equal(parsed.output, path.resolve(root, 'artifacts/material-parity/measurements'));
+  for (const input of [args.slice(0, -1), [...args, args.at(-1)], [...args.slice(0, -1), '--supplemental-root='],
+    [...args.slice(0, -1), '--supplemental-root=../outside'], [...args.slice(0, -1), '--supplemental-root=artifacts/material-parity'],
+    [...args, '--unknown=1'], args.map(arg => arg.startsWith('--base-url=') ? '--base-url=https://example.org' : arg),
+    args.map(arg => arg.startsWith('--output=') ? args[1].replace('--checkpoint=', '--output=') : arg)])
+    assert.throws(() => parseSupplementalLineBoxArguments(input, root), String(input));
+});
+
+test('supplemental line-box plan retains every original state including closed no-target calendar boundaries', () => {
+  const cases = supplementalSequenceCases(), before = structuredClone(cases), sequences = supplementalLineBoxSequences(cases);
+  assert.equal(sequences.length, 10);
+  assert.deepEqual(sequences.flatMap(sequence => sequence.entries).map(supplementalLineBoxCaseKey), cases.map(supplementalLineBoxCaseKey));
+  assert.equal(sequences.filter(s => s.family === 'datepicker').length, 4);
+  assert.ok(sequences.filter(s => s.family === 'datepicker').every(s => s.entries.at(-1).state.endsWith('activate-close')));
+  assert.deepEqual(sequences.filter(s => s.family === 'tooltip').map(s => s.query), [
+    'benchmark=1&profile=light&interaction=open', 'benchmark=1&profile=light&interaction=hover', 'profile=light',
+    'benchmark=1&profile=light&interaction=open', 'benchmark=1&profile=light&interaction=hover', 'profile=light',
+  ]);
+  assert.deepEqual(cases, before);
+});
+
+test('supplemental line-box plan rejects missing duplicated or altered source state cohorts', () => {
+  for (const mutate of [c => c.pop(), c => c.push(c[0]), c => { c[1] = c[0]; },
+    c => { c[0].state = 'calendar-close-month-unknown'; }, c => { c[0].profile = 'dark'; },
+    c => { c[0].kind = 'interaction'; }, c => { c[0].viewport.height = 1000; },
+    c => { c[20].viewport.deviceScaleFactor = 3; }, c => { c[0].viewport.width = 900; }]) {
+    const cases = supplementalSequenceCases(); mutate(cases);
+    assert.throws(() => supplementalLineBoxSequences(cases), String(mutate));
+  }
+});
+
+test('supplemental line-box driver preserves original trusted-action request order without injected focus or click', async () => {
+  const calls = [], page = { keyboard: { press: async key => calls.push(['key', key]) },
+    locator: selector => ({ waitFor: async options => calls.push(['wait', selector, options]) }),
+    mouse: { move: async (x, y) => calls.push(['move', x, y]), down: async () => calls.push(['down']), up: async () => calls.push(['up']) } };
+  for (let index = 0; index < 5; index++) await driveSupplementalLineBoxStep(page, 'datepicker', index);
+  assert.deepEqual(calls, [['key', 'Tab'], ['key', 'Shift+Tab'], ['key', 'Tab'], ['key', 'Enter'],
+    ['wait', '.mat-datepicker-content', { state: 'hidden' }]]);
+  calls.length = 0;
+  for (let index = 0; index < 5; index++) await driveSupplementalLineBoxStep(page, 'tooltip', index, { x: 10, y: 20, width: 100, height: 40 });
+  assert.deepEqual(calls, [['move', 60, 40], ['down'], ['up'], ['move', 1, 1]]);
+  for (const [family, index, box] of [['other', 0], ['datepicker', 5], ['datepicker', -1], ['tooltip', 1],
+    ['tooltip', 0, { x: 0, y: 0, width: 0, height: 10 }]])
+    await assert.rejects(() => driveSupplementalLineBoxStep(page, family, index, box));
+});
 
 const controlMetricProperties = ['fontFamily', 'fontSize', 'fontWeight', 'fontStyle', 'lineHeight', 'letterSpacing',
   'wordSpacing', 'textAlign', 'textTransform', 'textDecoration', 'whiteSpace'];
