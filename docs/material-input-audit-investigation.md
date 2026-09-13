@@ -23,6 +23,92 @@ selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Snackbar action line-box input-dependency proof (2026-09-13)
+
+The new package-root browser reduction
+`examples/material-showcase/src/app/snackbar-action-line-box-audit.spec.ts`
+separates the already captured snackbar action font-size omission from the
+general normal-line-height resolver. It does not modify the showcase or use
+candidate paint to choose the browser oracle's typography.
+
+Three independent trials run under each 14.4px, 16px and 18.4px parent, with
+both explicit `normal` and omitted line-height: **18 independent mounts**.
+All use the original action text `UNDO`, weight 500, and the local Latin Roboto
+font bytes under the isolated name `SnackbarAuditRoboto`. Both sides explicitly
+declare the same full font-family stack; the unequal trial intentionally omits
+only the candidate's font-size, preserving the source discrepancy being tested.
+
+| Trial | Browser font size / natural line box | Candidate normal/effective/paint font size | Paint and bound-texture CSS height |
+| --- | --- | --- | --- |
+| Equal explicit 14px | 14px / 17px | 14px | 17px |
+| Equal explicit 16px | 16px / 19px | 16px | 19px |
+| Reference 14px, candidate size omitted | 14px / 17px | 16px | 19px |
+
+These results are unchanged by parent size or line-height omission. The first
+divergence in the unequal trial is already present in normal/effective CSS
+font-size, before text metrics or Babylon projection. The 19px scalar is also
+the browser's natural line height in the separate equal-input 16px control.
+This supports an input-size dependency for the captured 17px/19px discrepancy,
+not a universal line-height adjustment or a projection correction.
+
+The core button default is `fontSize: "16px"` in
+`src/app/config/browser-defaults.ts`. The packed consumer's
+`dist/lib/app/services/text/text-style-parser.service.js` has the same
+`Mg` font-bounding-box ascent/descent calculation as source; its SHA-256 is
+`55274b6b258d40dcd6c5669c5aa6ad583b994563c4597fea7e57ce5a31f4d863`.
+The reduction imports only `astylarui` and freshly compiles through the
+showcase Karma builder; it does not use a source-tree or private deep import.
+Installed versions are AstylarUI 0.2.0, Angular core 20.3.29, Angular CLI
+20.3.34, Babylon 8.56.2, and Chrome Headless 152 on Windows, DPR 1.
+
+Assertions preserve both authored inputs, verify loaded fonts, wait for surface
+settlement, compare the reference button's computed typography with a separate
+natural one-line observer, inspect current core paint and its unique bound
+text texture, and verify zero meshes/materials/textures after disposal. The
+observer's CSS height is not the fixed 48px button height or a world-space bound.
+The equal-input controls and deliberately unequal trial are separate tests;
+passing the diagnostic inequality assertion does not accept the original
+snackbar as equivalent.
+
+The audit now fingerprints and lists this proof (68 source fingerprints). It
+does **not** automatically classify the remaining 34 captured snackbar line
+heights: their per-occurrence bindings must still be joined to the existing
+font-size provenance and independently measured reference observations. The
+other 46 supplemental calendar/tooltip line heights remain outside its scope.
+Browser-correct core defaults, baseline/raster quality, overlay placement,
+visibility, clipping, and the original missing-snackbar report remain separate
+obligations. No fixed 17px or 19px fixture value is introduced.
+
+Verification:
+
+- `npm --prefix examples/material-showcase test -- --watch=false --browsers=ChromeHeadless --include=src/app/snackbar-action-line-box-audit.spec.ts`:
+  initial **18/18 passed**, terminal exit 0 (2.623 seconds browser elapsed).
+  The final standalone rerun with `--progress=false` and cleanup assertions also
+  passes **18/18**, terminal exit 0 (2.681 seconds browser elapsed).
+- `npm --prefix examples/material-showcase test -- --watch=false --browsers=ChromeHeadless --include=src/app/snackbar-action-line-box-audit.spec.ts --include=src/app/normal-line-height-audit.spec.ts --progress=false`:
+  final cleanup assertions pass in all 18 new cases; combined **23 passed /
+  4 diagnostic failures**, terminal exit 1 (3.931 seconds browser elapsed).
+  The unchanged Arial, serif, emoji and CJK core normal-line-height failures
+  reproduce exactly. This is honest retained failure evidence, not a green suite.
+- `npm --prefix examples/material-showcase run build -- --output-path=dist/snackbar-line-box-audit-build`:
+  passed, terminal exit 0, two prerendered routes. Its separate output directory
+  leaves the frozen current-ancestry parity bundle untouched.
+- Angular's existing NG0914 warning reflects zoneless TestBed with the shared
+  Zone.js test polyfill. No font-loading errors occurred; the shared test setup
+  was not altered to suppress this warning.
+
+- `npm run parity:harness:check`: **519/519 passed**, no failures, skipped tests
+  or cancellations, terminal exit 0, **258.5581502 seconds**.
+- `node --test --test-name-pattern='records source fingerprints' tests/material-parity/input-equivalence-audit.spec.mjs`:
+  **1/1 passed**, terminal exit 0; the new proof is present in both the fingerprint
+  inventory and focused-proof list. All ten frozen capture-harness hashes match.
+- `git diff --check` passes. Final diff review includes only the new reduction,
+  its audit registration/test and this investigation entry; unrelated work is
+  preserved.
+
+No renderer, Material fixture, reference or threshold has changed; the full
+objective and final enforced matrix remain outstanding.
+
 ## Consolidated interactive line-box attribution (2026-09-13)
 
 The audit CLI now accepts `--control-line-box-report=...` and passes every

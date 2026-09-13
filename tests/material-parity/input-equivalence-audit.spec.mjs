@@ -1103,7 +1103,7 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   const report = parityReport({}, {});
   const audit = buildMaterialInputAudit(report);
   assert.equal(audit.coverage.visualParityGreen, true);
-  assert.equal(audit.sourceFingerprints.length, 67);
+  assert.equal(audit.sourceFingerprints.length, 68);
   for (const file of ['tests/material-parity/control-line-box-report.mjs', 'tests/material-parity/control-line-box-evidence.mjs',
     'scripts/audit-material-control-line-boxes.mjs', 'scripts/run-material-input-audit.mjs', 'tests/material-parity/normal-line-box-report.spec.mjs'])
     assert.equal(audit.sourceFingerprints.filter(entry => entry.file === file).length, 1);
@@ -1147,6 +1147,9 @@ test('records source fingerprints and actual visual acceptance fields', () => {
     'tests/material-parity/normal-line-box-report.mjs', 'tests/material-parity/normal-line-box-evidence.mjs',
     'scripts/audit-material-normal-line-boxes.mjs']) assert.ok(audit.sourceFingerprints.some((item) => item.file === file));
   assert.ok(audit.sourceFingerprints.some(({ file }) => file === 'examples/material-showcase/src/app/normal-line-height-audit.spec.ts'));
+  const snackbarLineBoxProof = 'examples/material-showcase/src/app/snackbar-action-line-box-audit.spec.ts';
+  assert.ok(audit.sourceFingerprints.some(({ file }) => file === snackbarLineBoxProof));
+  assert.ok(audit.focusedProofs.some(({ file, line, status }) => file === snackbarLineBoxProof && line > 0 && status !== 'missing'));
   assert.ok(audit.sourceFingerprints.some(({ file }) => file === 'examples/material-showcase/angular.json'));
   assert.ok(audit.sourceFingerprints.some(({ file }) => file === 'src/app/services/dom/input/button.manager.ts'));
   assert.ok(audit.sourceFingerprints.some(({ file }) => file === 'src/app/services/text/text-style-parser.service.ts'));
