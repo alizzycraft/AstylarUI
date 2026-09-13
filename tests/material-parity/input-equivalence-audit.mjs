@@ -908,7 +908,8 @@ function collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInp
             recommendedOwner: classification.owner,
             ...(classification.attribution ? { attribution: classification.attribution } : {}),
             ...(classification.reviewEvidence ? { reviewEvidence: classification.reviewEvidence } : {}),
-            ...([borderInitialAttribution, buttonBorderResetAttribution, outlineTokenAttribution, chipOutlineAttribution].includes(classification.attribution) ? { reviewedCases: [] } : {}),
+            ...([borderInitialAttribution, buttonBorderResetAttribution, outlineTokenAttribution, chipOutlineAttribution,
+              'reviewed-root-flow-dependency'].includes(classification.attribution) ? { reviewedCases: [] } : {}),
             occurrences: 0,
             cases: [],
             states: [],
@@ -990,6 +991,9 @@ function classifyReviewedRootInput(benchmarkCase, input, property, reference, as
   // computed values. Require the captured node mapping and declaration witness.
   if (input.id !== `${benchmarkCase.family}-root` ||
       input.referenceStructure?.type !== 'section' || input.astylarStructure?.type !== 'section') return;
+  if (['flexDirection', 'rowGap', 'columnGap'].includes(property)) {
+    return classifyReviewedRootFlowDependency(input, property, reference, astylar);
+  }
   const pairs = { position: ['static', 'relative'], display: ['block', 'flex'] };
   const pair = pairs[property];
   if (!pair || reference !== pair[0] || astylar !== pair[1]) return;
@@ -1005,6 +1009,44 @@ function classifyReviewedRootInput(benchmarkCase, input, property, reference, as
     attribution: 'reviewed-authored-rule',
     owner: 'showcase demo-section block-flow translation',
     justification: `The mapped section uses reference .demo block flow, while captured candidate rule #${input.id} explicitly authors ${property}:${astylar}. The reference computed ${property}:${reference} agrees with the inspected ReferenceComponent rules. This traced shared-root translation changes formatting/containing-block behavior; it is not inferred from omitted resolved values or screenshot geometry. See fixture-demo-block-flow-replaced in source findings.`,
+  };
+}
+
+function classifyReviewedRootFlowDependency(input, property, reference, astylar) {
+  // These declarations accompany the already traced block-to-flex replacement.
+  // Do not accept normal/omitted gaps globally, or infer an authored declaration
+  // from computed geometry. Every style stage and matching rule must agree.
+  const expected = { display: 'flex', flexDirection: 'column', rowGap: '16px', columnGap: '16px' };
+  const browser = { display: 'block', flexDirection: 'row', rowGap: 'normal', columnGap: 'normal' };
+  if (input.astylarResolvedStyleEvidenceVersion !== 2 || input.referenceStructure?.schemaVersion !== 2 ||
+      input.astylarStructure?.schemaVersion !== 2 || reference !== browser[property] || astylar !== expected[property] ||
+      !Array.isArray(input.referenceAuthored) || !Array.isArray(input.astylarAuthored)) return;
+  const relevant = key => ['all', 'display', 'flexflow', 'flexdirection', 'flexwrap', 'gap', 'rowgap', 'columngap']
+    .includes(key.replaceAll('-', '').toLowerCase());
+  const validObject = value => value && typeof value === 'object' && !Array.isArray(value);
+  const matches = (style, values) => validObject(style) && Object.entries(values).every(([key, value]) => canonicalStyle(style)[key] === value);
+  if (!matches(input.reference, browser) ||
+      ![input.astylar, input.astylarNormalResolvedStyle, input.astylarInteractionResolvedStyle].every(style => matches(style, expected))) return;
+  // Reference .demo supplies neither flex formatting nor any gap request. Reject
+  // even overridden/reset rules here: this audit rule is not a CSS cascade engine.
+  if (!input.referenceAuthored.some(rule => /^\.demo(?:\[|$)/.test(rule.selector)) ||
+      input.referenceAuthored.some(rule => !validObject(rule.declarations) || Object.keys(rule.declarations).some(relevant))) return;
+  const rootRules = input.astylarAuthored.filter(rule => rule.selector === `#${input.id}`);
+  if (rootRules.length !== 1 || !matches(rootRules[0].declarations, expected)) return;
+  for (const rule of input.astylarAuthored) {
+    if (!validObject(rule.declarations)) return;
+    const declarations = Object.fromEntries(Object.entries(rule.declarations).filter(([key]) => relevant(key)));
+    if (Object.keys(declarations).some(key => ['all', 'flexflow'].includes(key.replaceAll('-', '').toLowerCase()))) return;
+    const normalized = canonicalStyle(declarations);
+    if (Object.entries(normalized).some(([key, value]) => value !== (key === 'flexWrap' ? 'nowrap' : expected[key]))) return;
+  }
+  return {
+    classification: 'application-plugin-authoring-defect', attribution: 'reviewed-root-flow-dependency',
+    owner: 'showcase demo-section block-flow translation',
+    reviewEvidence: { referenceFormatting: browser, candidateFormatting: expected,
+      referenceRules: structuredClone(input.referenceAuthored), candidateRules: structuredClone(input.astylarAuthored),
+      inputEquivalent: false, finalRasterEquivalent: false },
+    justification: `The mapped reference .demo section remains a block with no authored flex-flow or gap request. Its candidate #${input.id} rule explicitly replaces that context with display:flex, flex-direction:column and gap:16px; normal, interaction and compared candidate stages all retain those values. This ${property} difference belongs to the same fixture-demo-block-flow-replaced authoring path, not a renderer failure to apply equal inputs. A gap may have no visible effect with one child, but that does not make the authored layout contracts equivalent. Preserve all other property and rendering findings independently.`,
   };
 }
 
@@ -7555,6 +7597,10 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('root flow dependencies require/,
+      'shared demo root direction and gap authoring', 'Exact mapped section, authored root rule, omission on the reference and agreement across normal/interaction/comparison stages classify only the traced block-to-column-flex dependency. Five state controls and 29 rejection controls retain competing, reset, missing and changed inputs as unresolved.'),
+    proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('browser block and column-flex/,
+      'one-child output can conceal unequal layout requests', 'Browser DPR1/2 controls show equal one-child container height but16px extra two-child separation for the explicitly unequal column-flex/gap request. This validates sensitivity to authoring differences; it is not an equal-input core proof or final raster acceptance.'),
     proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('snackbar action size retains/,
       'snackbar omitted action size token and prepaint button default', 'Ordered original reset/token declarations and complete candidate omission ancestry distinguish Material 14px from the prepaint 16px button default across page scales. Twenty-four negative controls and eleven report mutations reject competing, incomplete or forged evidence. Independent replay retains all size observations and does not certify line boxes, browser defaults, placement or raster.'),
     proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('dialog action typography retains/,

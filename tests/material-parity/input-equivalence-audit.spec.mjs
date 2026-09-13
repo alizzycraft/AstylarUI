@@ -968,6 +968,113 @@ test('normalizes only a fixed max-width constraint across explicit box-sizing mo
   assert.notEqual(buildMaterialInputAudit(parityReport(reference, astylar)).discrepancies.find((entry) => entry.property === 'boxSizing').classification, 'equivalent-representation');
 });
 
+function rootFlowReport() {
+  const raw = parityReport({ display: 'block', flexDirection: 'row', rowGap: 'normal', columnGap: 'normal', width: '200px' },
+    { display: 'flex', flexDirection: 'column', gap: '16px', width: '201px' });
+  const input = raw.results[0].styleInputs[0];
+  input.referenceStructure = { schemaVersion: 2, type: 'section' };
+  input.astylarStructure = { schemaVersion: 2, type: 'section' };
+  input.astylarResolvedStyleEvidenceVersion = 2;
+  input.astylarNormalResolvedStyle = structuredClone(input.astylar);
+  input.astylarInteractionResolvedStyle = structuredClone(input.astylar);
+  input.referenceAuthored = [{ selector: '.demo[_ngcontent-test]', declarations: { padding: { value: '28px' } } }];
+  input.astylarAuthored = [{ selector: '#core-root', declarations: structuredClone(input.astylar) }];
+  return raw;
+}
+
+test('root flow dependencies require the explicit shared container rule and all captured style stages', () => {
+  for (const state of [undefined, 'hover', 'press', 'focus', 'open']) {
+    const raw = rootFlowReport();
+    if (state) { raw.interactions = [{ ...raw.results[0], state }]; raw.results = []; }
+    const audit = buildMaterialInputAudit(raw);
+    const found = audit.discrepancies.filter(d => d.attribution === 'reviewed-root-flow-dependency');
+    assert.deepEqual(found.map(d => d.property), ['columnGap', 'flexDirection', 'rowGap']);
+    assert.ok(found.every(d => d.classification === 'application-plugin-authoring-defect' &&
+      d.reviewEvidence.inputEquivalent === false && d.reviewEvidence.finalRasterEquivalent === false));
+    assert.equal(audit.discrepancies.find(d => d.property === 'width').attribution, 'unresolved');
+    assert.equal(audit.summary.inputEquivalent, false);
+  }
+  const mutations = [
+    i => { i.id = 'core-primary'; },
+    i => { i.referenceStructure.type = 'div'; },
+    i => { i.astylarStructure.type = 'showcase.material:container'; },
+    i => { delete i.referenceStructure.schemaVersion; },
+    i => { delete i.astylarStructure.schemaVersion; },
+    i => { i.astylarResolvedStyleEvidenceVersion = 1; },
+    i => { delete i.astylarNormalResolvedStyle; },
+    i => { delete i.astylarInteractionResolvedStyle; },
+    i => { i.astylarInteractionResolvedStyle.gap = '8px'; },
+    i => { i.astylarNormalResolvedStyle.flexDirection = 'row'; },
+    i => { i.reference.display = 'flex'; },
+    i => { i.astylar.display = 'grid'; },
+    i => { i.astylar.gap = '0'; },
+    i => { delete i.referenceAuthored; },
+    i => { i.referenceAuthored[0].selector = '.other'; },
+    i => { delete i.referenceAuthored[0].declarations; },
+    i => { i.referenceAuthored[0].declarations.gap = { value: '16px' }; },
+    i => { i.referenceAuthored[0].declarations['flex-flow'] = { value: 'row' }; },
+    i => { i.referenceAuthored[0].declarations.all = { value: 'initial' }; },
+    i => { delete i.astylarAuthored; },
+    i => { i.astylarAuthored[0].selector = '.some-container'; },
+    i => { delete i.astylarAuthored[0].declarations; },
+    i => { i.astylarAuthored[0].declarations.gap = '15px'; },
+    i => { i.astylarAuthored.push(structuredClone(i.astylarAuthored[0])); },
+    i => { i.astylarAuthored.push({ selector: 'section', declarations: { display: 'block' } }); },
+    i => { i.astylarAuthored.push({ selector: 'section', declarations: { 'row-gap': '8px' } }); },
+    i => { i.astylarAuthored.push({ selector: 'section', declarations: { flexWrap: 'wrap' } }); },
+    i => { i.astylarAuthored.push({ selector: 'section', declarations: { flexFlow: 'column' } }); },
+    i => { i.astylarAuthored.push({ selector: 'section', declarations: { all: 'initial' } }); },
+  ];
+  for (const mutate of mutations) {
+    const raw = rootFlowReport();
+    mutate(raw.results[0].styleInputs[0]);
+    assert.ok(buildMaterialInputAudit(raw).discrepancies.every(d => d.attribution !== 'reviewed-root-flow-dependency'), String(mutate));
+  }
+});
+
+test('browser block and column-flex demo requests differ even when a one-child screenshot can match', async () => {
+  const { chromium } = await import('playwright-core');
+  const browser = await chromium.launch({ channel: 'chrome', headless: true });
+  try {
+    for (const dpr of [1, 2]) {
+      const page = await browser.newPage({ viewport: { width: 640, height: 480 }, deviceScaleFactor: dpr });
+      await page.setContent(`<style>
+        section { width:200px; padding:28px; border:1px solid; }
+        section > div { height:20px; flex-shrink:0; }
+        #candidate { display:flex; flex-direction:column; gap:16px; }
+      </style><section id="reference"><div></div></section><section id="candidate"><div></div></section>`);
+      const measure = () => page.evaluate(() => Object.fromEntries(['reference', 'candidate'].map(id => {
+        const el = document.getElementById(id), style = getComputedStyle(el), children = [...el.children].map(n => n.getBoundingClientRect());
+        return [id, { height: el.getBoundingClientRect().height, display: style.display, direction: style.flexDirection,
+          rowGap: style.rowGap, columnGap: style.columnGap, gap: children.length === 2 ? children[1].top - children[0].bottom : null }];
+      })));
+      const single = await measure();
+      assert.equal(single.reference.height, single.candidate.height);
+      assert.deepEqual([single.reference.display, single.reference.direction, single.reference.rowGap, single.reference.columnGap], ['block', 'row', 'normal', 'normal']);
+      assert.deepEqual([single.candidate.display, single.candidate.direction, single.candidate.rowGap, single.candidate.columnGap], ['flex', 'column', '16px', '16px']);
+      await page.evaluate(() => document.querySelectorAll('section').forEach(el => el.append(document.createElement('div'))));
+      const multiple = await measure();
+      assert.equal(multiple.reference.gap, 0);
+      assert.equal(multiple.candidate.gap, 16);
+      assert.equal(multiple.candidate.height - multiple.reference.height, 16);
+      await page.close();
+    }
+  } finally { await browser.close(); }
+});
+
+test('root flow attribution retains every exact case beyond the display sample limit', () => {
+  const raw = rootFlowReport();
+  raw.results = Array.from({ length: 15 }, (_, index) => ({ ...structuredClone(raw.results[0]), viewport: { id: `viewport-${index}` } }));
+  const differences = buildMaterialInputAudit(raw).discrepancies.filter(d => d.attribution === 'reviewed-root-flow-dependency');
+  assert.equal(differences.length, 3);
+  for (const difference of differences) {
+    assert.equal(difference.occurrences, 15);
+    assert.equal(difference.cases.length, 12);
+    assert.equal(difference.reviewedCases.length, 15);
+    assert.equal(new Set(difference.reviewedCases).size, 15);
+  }
+});
+
 test('attributes sidenav container flow only with the reviewed paired declaration witnesses', () => {
   const raw = parityReport({ display: 'block' }, { display: 'flex' });
   raw.results[0].family = 'sidenav';

@@ -3,6 +3,94 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Shared demo formatting-context dependencies
+
+The mapped `.demo` reference section uses ordinary block flow. The candidate
+shared root rule in `examples/material-showcase/src/app/astylar.component.ts`
+explicitly requests `display:flex; flex-direction:column; gap:16px` instead.
+`git log -G 'rootId.*gap'` and `git show 2f44011` confirm that this combination
+was already present in the original showcase commit. It is not evidence of a
+recent renderer regression. The first demonstrated divergence is fixture
+authoring, before layout or Babylon projection.
+
+The existing `fixture-demo-block-flow-replaced` source finding and root
+display/position attribution now also have guarded direction/gap attribution.
+The new `reviewed-root-flow-dependency` classification requires a mapped
+version-2 section on both sides, the exact candidate root declaration, no
+reference flex/gap/reset declaration, no competing candidate formatting rule,
+and matching candidate normal, interaction and comparison stages. It accepts
+only the observed `row` versus `column` and `normal` versus `16px` differences
+under the traced block-to-flex context replacement. It does **not** normalize
+gaps globally, infer a core defect from unequal values, or declare any input
+or final raster equivalent.
+
+The full main capture groups **102 signatures / 6,519 occurrences across 34
+families** under this authoring cause. The distinct properties are
+`flexDirection`, `rowGap` and `columnGap`. Repeated root rules on button and
+toolbar, and 26 paginator occurrences per property, remain outside this
+conservative rule; they require separate cascade/state review rather than a
+blanket root-ID exemption. All other properties remain unchanged and open to
+independent investigation.
+
+The unresolved total is **3,210**, down from 3,309. This is a reduction of 99,
+not 102: three paginator signatures split into classified and still-unresolved
+occurrences. A read-only replay of the prior committed classifier confirms
+that all 102 new groups previously had unresolved attribution. The first
+full diagnostic command returned the correct strict failure but exited 1 on
+an incorrect expected-total assertion of 3,207; that arithmetic assumption was
+corrected, not the evidence or the validator.
+
+A real-Chrome browser sensitivity proof at DPR 1 and 2 holds content and box
+inputs constant while deliberately substituting the candidate formatting
+request. With one child, the two container heights are equal; with two children,
+the candidate introduces 16px extra separation and height. Thus the screenshot
+can hide this unequal input. This is an **unequal-authoring sensitivity proof**,
+not a minimal equivalent-input core failure. The existing independent block,
+intrinsic-height and anonymous-flex reductions remain the core evidence.
+
+Implementation order: retain those core failures, repair their owning general
+rules, then restore the reference block-flow request and remove the shared
+fixture substitution. Do not replace the 16px gap with another calibrated
+number. Test one/multiple children, margins, wrapping, nested flow and viewport
+changes against equivalent inputs before claiming that restoration complete.
+
+Focused verification:
+
+- `node --test --test-name-pattern='root flow dependencies|browser block and column-flex|reviewed shared root' tests/material-parity/input-equivalence-audit.spec.mjs`
+  — **3/3 pass**, no skips/cancellations, 12.1668952 seconds. Includes five
+  static/interaction state controls, 29 rejection controls and the browser
+  one-child/two-child sensitivity proof at both DPRs.
+- With complete `reviewedCases` retention added,
+  `node --test --test-name-pattern='root flow|browser block and column-flex|reviewed shared root' tests/material-parity/input-equivalence-audit.spec.mjs`
+  — **4/4 pass**, no skips/cancellations, 15.9695431 seconds. The additional
+  15-case test verifies that the 12-entry display sample does not discard
+  classified case identities.
+- All ten frozen baseline harness files still match their checkpoint hashes.
+  No renderer, plugin, showcase declaration, capture or threshold was edited.
+- Final `npm run parity:harness:check` — **534/534 pass**, no skips or
+  cancellations, 301.6635223 seconds, terminal exit 0. The preceding run before
+  complete-case retention was added passed 533/533 in 305.2966252 seconds.
+- The consolidated in-memory command documented below, using all four main
+  and supplemental evidence paths, retains 124 source findings and 74 source
+  fingerprints. Strict validation returns exactly
+  `["3210 resolved-style differences still lack root-cause attribution"]`.
+  The corrected diagnostic wrapper asserts that exact remaining failure,
+  102 new groups and all 6,519 retained case IDs; it exited 0. This is a
+  successful diagnostic replay, **not strict audit acceptance**. Final report
+  generation, complete relevant-state review and unfiltered final visual
+  parity are still outstanding.
+
+Next layout investigation: do not add a blanket `grid-template-*:none` versus
+omission normalization. Direct execution of the current
+`grid-track-sizing.ts` calculation (TypeScript transpilation only, no source
+edits) with `availableSize=120`, `gap=0`, `fallbackCount=1` returns `[120]` for
+omission, `[0]` for `none`, and `[120]` for both `120px` and `1fr`. The tokenizer
+keeps `none` as a token and the definite-length parser converts its nonnumeric
+value to zero; omission takes the fractional fallback. Grid dispatch is gated
+by `display:grid/inline-grid`, so inactive non-grid properties need a separate
+context analysis. This is a calculation-level suspect, **not yet a public-API
+browser/core reproduction or an attribution of all captured grid signatures**.
+
 ## Consolidated supplemental natural-line-box attribution
 
 The consolidated audit now consumes the independently validated supplemental
@@ -63,7 +151,7 @@ report artifacts from the worktree root:
 node --input-type=module -e "import{readFileSync}from'node:fs';import{buildMaterialInputAudit,validateMaterialInputAudit}from'./tests/material-parity/input-equivalence-audit.mjs';const p=JSON.parse(readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json'));const a=buildMaterialInputAudit(p,{root:process.cwd(),normalLineBoxPath:'artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json',controlLineBoxPath:'artifacts/material-parity/control-line-box-current-ancestry-audit-v3/latest-report.json',supplementalLineBoxPath:'artifacts/material-parity/supplemental-line-box-current-ancestry-audit/latest-report.json',supplementalRoot:'artifacts/material-parity/supplemental-current-ancestry-audit'});console.log('DIAGNOSTIC',validateMaterialInputAudit(a,{requireComplete:false}));console.log('STRICT',validateMaterialInputAudit(a));"
 ```
 
-Next work remains the 3,309 unresolved resolved-style differences, complete
+At this preceding typography increment, next work was the 3,309 unresolved resolved-style differences, complete
 relevant-state coverage and plugin/core ownership review, final machine/human
 report generation and the complete enforced parity matrix. Finishing this
 typography subcategory does not finish the audit or establish rendering parity.
