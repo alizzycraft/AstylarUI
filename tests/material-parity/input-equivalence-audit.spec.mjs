@@ -1098,9 +1098,10 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   const report = parityReport({}, {});
   const audit = buildMaterialInputAudit(report);
   assert.equal(audit.coverage.visualParityGreen, true);
-  assert.equal(audit.sourceFingerprints.length, 57);
+  assert.equal(audit.sourceFingerprints.length, 58);
   for (const file of ['scripts/audit-material-calendar-close.mjs', 'tests/material-parity/calendar-close-evidence.mjs',
     'scripts/audit-material-tooltip-state.mjs', 'tests/material-parity/tooltip-state-evidence.mjs',
+    'examples/material-showcase/node_modules/@angular/material/fesm2022/menu.mjs',
     'tests/material-parity/supplemental-capture-evidence.spec.mjs']) {
     assert.equal(audit.sourceFingerprints.filter(entry => entry.file === file).length, 1);
   }
@@ -4494,6 +4495,145 @@ test('alignment claims replay their actual captured styles, ancestry, scope and 
       assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('horizontal start')),
         `${sectionName}: ${mutate}`);
     }
+  }
+});
+
+function menuTextReport() {
+  const raw = retainedTypographyReport(), e = raw.results[0], { reference: r, astylar: a } = e.inputTrees;
+  e.family = 'menu';
+  Object.assign(r.styles[0], { fontFamily: 'Roboto', fontSize: '14px', fontWeight: '500', lineHeight: '20px',
+    letterSpacing: '.096px', textAlign: 'left', color: '#1d1b1e' });
+  r.rules = [{ selector: '.mat-mdc-menu-content, .mat-mdc-menu-content .mat-mdc-menu-item .mat-mdc-menu-item-text', active: true, conditions: [],
+    declarations: { 'font-family': { value: 'var(--mat-menu-item-label-text-font, var(--mat-sys-label-large-font))', important: false },
+      'letter-spacing': { value: 'var(--mat-menu-item-label-text-tracking, var(--mat-sys-label-large-tracking))', important: false } } }];
+  const n = (key, parent, type, attributes = {}, ownText = '') => ({ key, parent, type, attributes, ownText, style: 0, rules: [], pseudoElements: [] });
+  r.nodes = [n('frame', null, 'main', { class: 'frame' }), n('section', 'frame', 'section', { id: 'menu-root' }),
+    n('trigger', 'section', 'button', { id: 'menu-primary', class: 'mat-mdc-menu-trigger', 'aria-haspopup': 'menu', 'aria-expanded': 'true', 'aria-controls': 'mat-menu-panel-0' }),
+    n('trigger-label', 'trigger', 'span', { class: 'mdc-button__label' }, 'Open menu'), n('placeholder', 'section', 'mat-menu'),
+    n('overlay', null, 'div', { class: 'cdk-overlay-container' }),
+    n('backdrop', 'overlay', 'div', { class: 'cdk-overlay-backdrop cdk-overlay-transparent-backdrop cdk-overlay-backdrop-showing' }),
+    n('bounds', 'overlay', 'div', { class: 'cdk-overlay-connected-position-bounding-box' }),
+    n('pane', 'bounds', 'div', { class: 'cdk-overlay-pane', id: 'cdk-overlay-0' }),
+    n('panel', 'pane', 'div', { id: 'mat-menu-panel-0', role: 'menu', tabindex: '-1', class: 'mat-mdc-menu-panel mat-menu-after mat-menu-below' }),
+    n('content', 'panel', 'div', { class: 'mat-mdc-menu-content' })];
+  const ast = (key, parent, authored) => ({ key, parent, authored, resolvedStyle: {}, normalResolvedStyle: {}, interactionResolvedStyle: {} });
+  a.rules = [{ selector: '#page', fontFamily: 'Roboto, Arial, sans-serif' }];
+  a.nodes = [ast('page', 'root', { type: 'main', id: 'page' }), ast('section', 'page', { type: 'section', id: 'menu-root' }),
+    ast('trigger', 'section', { type: 'button', id: 'menu-primary', class: 'material-button', value: 'Open menu', ariaHaspopup: 'menu', ariaExpanded: true, ariaControls: 'menu-popup' }),
+    ast('popup', 'section', { type: 'div', id: 'menu-popup', role: 'menu' })];
+  for (const name of ['Rename', 'Delete']) {
+    const key = name.toLowerCase(), item = n(key, 'content', 'button', { 'mat-menu-item': '', class: 'mat-mdc-menu-item', role: 'menuitem', tabindex: '0', 'aria-disabled': 'false' });
+    const label = n(`${key}-label`, key, 'span', { class: 'mat-mdc-menu-item-text' }, name); label.rules = [0];
+    r.nodes.push(item, label, n(`${key}-ripple`, key, 'div', { matripple: '', class: 'mat-ripple mat-mdc-menu-ripple' }));
+    const button = ast(key, 'popup', { type: 'button', id: `menu-${key}`, role: 'menuitem', ariaLabel: name });
+    const span = ast(`${key}-label`, key, { type: 'span', id: `menu-${key}-label`, class: 'menu-option-label', textContent: name });
+    span.retainedText = { source: 'core-text-registry', style: { ...r.styles[0], fontFamily: 'Roboto, Arial, sans-serif', letterSpacing: '0px', color: '#1d1b20' } };
+    for (const stage of ['resolvedStyle', 'normalResolvedStyle', 'interactionResolvedStyle']) button[stage].fontFamily = 'Roboto, Arial, sans-serif';
+    a.nodes.push(button, span);
+  }
+  for (const stage of ['resolvedStyle', 'normalResolvedStyle', 'interactionResolvedStyle']) a.nodes[0][stage].fontFamily = 'Roboto, Arial, sans-serif';
+  return raw;
+}
+
+test('menu text mapping preserves ordered direct labels and unequal overlay typography inputs', () => {
+  const raw = menuTextReport(), before = structuredClone(raw), cases = raw.results.map(e => ({ ...e, kind: 'static' }));
+  const evidence = collectRetainedTypographyEvidence(cases, collectFullTreeInventory(cases));
+  const maps = evidence.reviewedMappings.filter(m => m.kind === 'reviewed-menu-item-text');
+  assert.deepEqual(maps.map(m => m.element), ['menu-rename-label', 'menu-delete-label']);
+  for (const m of maps) {
+    assert.equal(m.classification, 'application-plugin-authoring-defect'); assert.equal(m.inputEquivalent, false); assert.equal(m.finalRasterVerified, false);
+    assert.equal(m.reviewEvidence.referencePath.length, 7); assert.equal(m.reviewEvidence.candidatePath.length, 5);
+    assert.equal(m.reviewEvidence.orderedItems.length, 2); assert.equal(m.reviewEvidence.referenceBackdrop.key, 'backdrop');
+  }
+  const diffs = evidence.differences.filter(d => /^menu-(rename|delete)-label$/.test(d.element));
+  assert.equal(diffs.length, 6); assert.equal(diffs.filter(d => d.attribution === 'unresolved').length, 4);
+  assert.equal(diffs.filter(d => d.attribution === 'reviewed-omitted-component-text-metric').length, 2);
+  assert.ok(!evidence.gaps.some(g => ['menu-rename-label', 'menu-delete-label'].includes(g.element)));
+  assert.deepEqual(raw, before);
+});
+
+test('menu text mapping rejects ambiguous reordered incomplete and contradictory item domains', () => {
+  const controls = [
+    (r, a) => { r.nodes.push(structuredClone(r.nodes[0])); },
+    (r, a) => { a.nodes.push({ ...structuredClone(a.nodes[0]), key: 'duplicate-id' }); },
+    (r, a) => { r.nodes.find(n => n.key === 'trigger').attributes['aria-expanded'] = 'false'; },
+    (r, a) => { r.nodes.find(n => n.key === 'trigger').attributes['aria-controls'] = 'other'; },
+    (r, a) => { r.nodes.find(n => n.key === 'trigger').attributes.class = 'other'; },
+    (r, a) => { r.nodes.find(n => n.key === 'trigger-label').ownText = 'Other'; },
+    (r, a) => { r.nodes.find(n => n.key === 'trigger').parent = 'frame'; },
+    (r, a) => { r.nodes.find(n => n.key === 'frame').parent = 'other'; },
+    (r, a) => { r.nodes = r.nodes.filter(n => n.key !== 'placeholder'); },
+    (r, a) => { r.nodes.find(n => n.key === 'panel').attributes.role = 'listbox'; },
+    (r, a) => { r.nodes.find(n => n.key === 'panel').attributes.class = 'mat-mdc-menu-panel mat-menu-before'; },
+    (r, a) => { r.nodes.find(n => n.key === 'panel').parent = 'bounds'; },
+    (r, a) => { r.nodes.find(n => n.key === 'content').attributes.class = 'other'; },
+    (r, a) => { r.nodes.find(n => n.key === 'backdrop').attributes.class = 'cdk-overlay-backdrop'; },
+    (r, a) => { r.nodes.find(n => n.key === 'overlay').parent = 'frame'; },
+    (r, a) => { r.nodes.find(n => n.key === 'rename').attributes.role = 'option'; },
+    (r, a) => { r.nodes.find(n => n.key === 'rename').attributes['aria-disabled'] = 'true'; },
+    (r, a) => { r.nodes.find(n => n.key === 'rename').ownText = 'Rename'; },
+    (r, a) => { r.nodes.find(n => n.key === 'rename-label').ownText = 'Delete'; },
+    (r, a) => { r.nodes.find(n => n.key === 'rename-label').attributes.id = 'menu-rename-label'; },
+    (r, a) => { r.nodes.find(n => n.key === 'rename-ripple').ownText = 'extra'; },
+    (r, a) => { r.nodes = r.nodes.filter(n => n.key !== 'rename-ripple'); },
+    (r, a) => { const i = r.nodes.findIndex(n => n.key === 'rename'), j = r.nodes.findIndex(n => n.key === 'delete'); [r.nodes[i], r.nodes[j]] = [r.nodes[j], r.nodes[i]]; },
+    (r, a) => { a.nodes.find(n => n.key === 'trigger').authored.ariaExpanded = false; },
+    (r, a) => { a.nodes.find(n => n.key === 'trigger').authored.ariaControls = 'other'; },
+    (r, a) => { a.nodes.find(n => n.key === 'popup').authored.role = 'listbox'; },
+    (r, a) => { a.nodes.find(n => n.key === 'popup').parent = 'page'; },
+    (r, a) => { a.nodes.find(n => n.key === 'rename').authored.ariaLabel = 'Other'; },
+    (r, a) => { a.nodes.find(n => n.key === 'rename').authored.value = 'Rename'; },
+    (r, a) => { a.nodes.find(n => n.key === 'rename').authored.disabled = true; },
+    (r, a) => { a.nodes.find(n => n.key === 'rename-label').authored.id = 'other'; },
+    (r, a) => { a.nodes.find(n => n.key === 'rename-label').authored.textContent = 'Delete'; },
+    (r, a) => { a.nodes.find(n => n.key === 'rename-label').parent = 'popup'; },
+    (r, a) => { const i = a.nodes.findIndex(n => n.key === 'rename'), j = a.nodes.findIndex(n => n.key === 'delete'); [a.nodes[i], a.nodes[j]] = [a.nodes[j], a.nodes[i]]; },
+    (r, a) => { a.nodes.push({ key: 'extra', parent: 'popup', authored: { type: 'button', role: 'menuitem', value: 'Other' } }); },
+    (r, a) => { r.nodes.push({ key: 'extra', parent: 'rename-label', type: 'span', attributes: {}, ownText: 'extra' }); },
+    (r, a) => { a.nodes.push({ key: 'extra', parent: 'rename-label', authored: { type: 'span', textContent: 'extra' } }); },
+  ];
+  for (const [i, mutate] of controls.entries()) {
+    const raw = menuTextReport(), { reference: r, astylar: a } = raw.results[0].inputTrees; mutate(r, a);
+    assert.deepEqual(reviewedTemplateTextMappings('menu', r, a), [], `control ${i}`);
+  }
+});
+
+test('menu text mapping keeps closed missing-owner and missing-stage cases explicit', () => {
+  for (const side of ['reference', 'astylar']) {
+    const raw = menuTextReport(), e = raw.results[0], tree = e.inputTrees[side];
+    tree.nodes = tree.nodes.filter(n => side === 'reference' ? !['overlay', 'backdrop', 'bounds', 'pane', 'panel', 'content', 'rename', 'rename-label', 'rename-ripple', 'delete', 'delete-label', 'delete-ripple'].includes(n.key) : !['popup', 'rename', 'rename-label', 'delete', 'delete-label'].includes(n.key));
+    const cases = [{ ...e, kind: 'static' }], t = collectRetainedTypographyEvidence(cases, collectFullTreeInventory(cases));
+    assert.equal(t.reviewedMappings.filter(m => m.kind === 'reviewed-menu-item-text').length, 0);
+    assert.ok(t.gaps.length);
+  }
+  const raw = menuTextReport(), e = raw.results[0]; delete e.inputTrees.astylar.nodes.find(n => n.key === 'rename-label').retainedText;
+  const cases = [{ ...e, kind: 'static' }], t = collectRetainedTypographyEvidence(cases, collectFullTreeInventory(cases));
+  assert.ok(t.gaps.some(g => g.element === 'menu-rename-label' && g.reason.includes('no authoritative retained')));
+});
+
+test('menu text replay rejects missing forged and foreign-scope correspondence and typography', () => {
+  const original = buildMaterialInputAudit(menuTextReport());
+  assert.equal(original.retainedTypography.reviewedMappings.filter(m => m.kind === 'reviewed-menu-item-text').length, 2);
+  for (const id of ['fixture-menu-label-composition-substitution', 'fixture-menu-label-density-offset'])
+    assert.ok(original.sourceFindings.find(f => f.id === id)?.detected);
+  assert.ok(!validateMaterialInputAudit(original, { requireComplete: false }).some(e => e.includes('menu text')));
+  for (const mutate of [
+    (r, m) => { r.retainedTypography.reviewedMappings = r.retainedTypography.reviewedMappings.filter(v => v !== m); },
+    (r, m) => { r.retainedTypography.reviewedMappings.push(structuredClone(m)); },
+    (r, m) => { m.inputEquivalent = true; },
+    (r, m) => { m.finalRasterVerified = true; },
+    (r, m) => { m.reviewEvidence.referencePath.pop(); },
+    (r, m) => { m.reviewEvidence.orderedItems.reverse(); },
+    (r, m) => { m.reviewEvidence.referenceBackdrop.attributes.class = 'other'; },
+    (r, m) => { m.reviewEvidence.candidateTrigger.authored.ariaControls = 'other'; },
+    (r, m) => { m.reviewEvidence.index = 99; },
+    (r, m) => { r.retainedTypography.comparisons[0].revision++; },
+    (r, m) => { r.retainedTypography.differences.pop(); },
+    (r, m) => { r.retainedTypography.differences[0].values.retained = 'fake'; },
+    (r, m) => { m.case = 'static:tooltip@light/desktop'; m.element = 'other'; },
+  ]) {
+    const report = structuredClone(original), m = report.retainedTypography.reviewedMappings.find(m => m.kind === 'reviewed-menu-item-text'); mutate(report, m);
+    assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('menu text')));
   }
 });
 

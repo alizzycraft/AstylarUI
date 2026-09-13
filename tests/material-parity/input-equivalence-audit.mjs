@@ -464,6 +464,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
   validateMaterialOptionEvidence(report, errors);
   validateSnackbarMessageEvidence(report, errors);
   validateTooltipTextEvidence(report, errors);
+  validateMenuTextEvidence(report, errors);
   validateHorizontalStartAlignment(report, errors);
   validateInheritedComponentFontStack(report, errors);
   validateOmittedComponentTextMetrics(report, errors);
@@ -1498,6 +1499,108 @@ function reviewedTimepickerOptionMappings(reference, candidate) {
   }));
 }
 
+function reviewedMenuTextMappings(reference, candidate) {
+  for (const tree of [reference, candidate]) {
+    if (!Array.isArray(tree?.nodes) || new Set(tree.nodes.map(n => n.key)).size !== tree.nodes.length) return [];
+    const ids = tree.nodes.map(n => (n.attributes ?? n.authored)?.id).filter(Boolean);
+    if (new Set(ids).size !== ids.length) return [];
+  }
+  const one = nodes => nodes.length === 1 ? nodes[0] : undefined;
+  const cls = (n, value) => String(n?.attributes?.class ?? '').split(/\s+/).includes(value);
+  const children = (tree, n) => tree.nodes.filter(child => child.parent === n?.key);
+  const trigger = one(reference.nodes.filter(n => n.attributes?.id === 'menu-primary'));
+  const section = one(reference.nodes.filter(n => n.attributes?.id === 'menu-root'));
+  const frame = one(reference.nodes.filter(n => n.key === section?.parent));
+  const triggerLabel = one(children(reference, trigger).filter(n => cls(n, 'mdc-button__label')));
+  const placeholder = one(children(reference, section).filter(n => n.type === 'mat-menu'));
+  if (!trigger || trigger.type !== 'button' || !cls(trigger, 'mat-mdc-menu-trigger') || trigger.attributes['aria-haspopup'] !== 'menu' ||
+      trigger.attributes['aria-expanded'] !== 'true' || !/^mat-menu-panel-\d+$/.test(trigger.attributes['aria-controls'] ?? '') ||
+      !section || section.type !== 'section' || trigger.parent !== section.key || !frame || frame.type !== 'main' ||
+      frame.parent !== null || !cls(frame, 'frame') || !triggerLabel || triggerLabel.ownText?.trim() !== 'Open menu' ||
+      children(reference, triggerLabel).length || !placeholder || placeholder.ownText?.trim() || children(reference, placeholder).length ||
+      children(reference, section).length !== 2) return [];
+  const panel = one(reference.nodes.filter(n => n.attributes?.id === trigger.attributes['aria-controls']));
+  if (!panel || panel.type !== 'div' || panel.attributes.role !== 'menu' || panel.attributes.tabindex !== '-1' ||
+      !cls(panel, 'mat-mdc-menu-panel') || !cls(panel, 'mat-menu-after') || !cls(panel, 'mat-menu-below')) return [];
+  const referencePath = [panel];
+  for (const [type, className] of [['div', 'cdk-overlay-pane'], ['div', 'cdk-overlay-connected-position-bounding-box'], ['div', 'cdk-overlay-container']]) {
+    const node = one(reference.nodes.filter(n => n.key === referencePath.at(-1).parent));
+    if (!node || node.type !== type || !cls(node, className) || node.ownText?.trim()) return [];
+    referencePath.push(node);
+  }
+  const [ , pane, bounds, overlay] = referencePath;
+  const backdrop = one(children(reference, overlay).filter(n => cls(n, 'cdk-overlay-backdrop')));
+  if (overlay.parent !== null || !/^cdk-overlay-\d+$/.test(pane.attributes.id ?? '') || children(reference, pane).length !== 1 ||
+      children(reference, bounds).length !== 1 || children(reference, overlay).length !== 2 || !backdrop || backdrop.ownText?.trim() ||
+      !cls(backdrop, 'cdk-overlay-transparent-backdrop') || !cls(backdrop, 'cdk-overlay-backdrop-showing') || children(reference, backdrop).length) return [];
+  const content = one(children(reference, panel));
+  if (!content || content.type !== 'div' || !cls(content, 'mat-mdc-menu-content') || content.ownText?.trim() || panel.ownText?.trim()) return [];
+  const items = children(reference, content);
+  if (items.length !== 2 || reference.nodes.filter(n => n.attributes?.role === 'menuitem').length !== 2 ||
+      reference.nodes.filter(n => n.attributes?.role === 'menu').length !== 1) return [];
+  const button = one(candidate.nodes.filter(n => n.authored?.id === 'menu-primary'));
+  const popup = one(candidate.nodes.filter(n => n.authored?.id === 'menu-popup'));
+  const astSection = one(candidate.nodes.filter(n => n.authored?.id === 'menu-root'));
+  const page = one(candidate.nodes.filter(n => n.authored?.id === 'page'));
+  if (!button || button.authored.type !== 'button' || button.authored.class !== 'material-button' || button.authored.value !== 'Open menu' ||
+      button.authored.ariaHaspopup !== 'menu' || button.authored.ariaExpanded !== true || button.authored.ariaControls !== 'menu-popup' ||
+      !popup || popup.authored.type !== 'div' || popup.authored.role !== 'menu' || popup.authored.textContent ||
+      !astSection || astSection.authored.type !== 'section' || button.parent !== astSection.key || popup.parent !== astSection.key ||
+      !page || page.authored.type !== 'main' || page.parent !== 'root' || astSection.parent !== page.key ||
+      children(candidate, button).length || children(candidate, astSection).length !== 2 ||
+      candidate.nodes.filter(n => n.authored?.role === 'menu').length !== 1 || candidate.nodes.filter(n => n.authored?.role === 'menuitem').length !== 2) return [];
+  const astItems = children(candidate, popup);
+  if (astItems.length !== 2) return [];
+  const pairs = [];
+  for (const [index, name] of ['Rename', 'Delete'].entries()) {
+    const item = items[index], astItem = astItems[index], id = `menu-${name.toLowerCase()}`;
+    const label = one(children(reference, item).filter(n => cls(n, 'mat-mdc-menu-item-text')));
+    const ripple = one(children(reference, item).filter(n => cls(n, 'mat-mdc-menu-ripple')));
+    const astLabel = one(children(candidate, astItem));
+    if (item.type !== 'button' || item.attributes.id || !Object.hasOwn(item.attributes, 'mat-menu-item') ||
+        !cls(item, 'mat-mdc-menu-item') || item.attributes.role !== 'menuitem' || item.attributes['aria-disabled'] !== 'false' ||
+        item.attributes.tabindex !== '0' || Object.hasOwn(item.attributes, 'disabled') || item.ownText?.trim() ||
+        !label || label.type !== 'span' || label.attributes.id || label.ownText?.trim() !== name || children(reference, label).length ||
+        children(reference, item).length !== 2 || !ripple || ripple.type !== 'div' || !cls(ripple, 'mat-ripple') ||
+        !Object.hasOwn(ripple.attributes, 'matripple') || ripple.ownText?.trim() || children(reference, ripple).length ||
+        astItem.authored.type !== 'button' || astItem.authored.id !== id || astItem.authored.role !== 'menuitem' ||
+        astItem.authored.ariaLabel !== name || astItem.authored.value !== undefined || astItem.authored.textContent !== undefined ||
+        astItem.authored.disabled !== undefined || astItem.authored.ariaDisabled !== undefined ||
+        !astLabel || astLabel.authored.type !== 'span' || astLabel.authored.id !== `${id}-label` || astLabel.authored.class !== 'menu-option-label' ||
+        astLabel.authored.textContent !== name || children(candidate, astLabel).length ||
+        reference.nodes.some(n => n.attributes?.id === `${id}-label`)) return [];
+    pairs.push({ item, label, ripple, astItem, astLabel });
+  }
+  const snapshot = node => structuredClone(node);
+  return pairs.map(({ item, label, ripple, astItem, astLabel }, index) => ({
+    kind: 'reviewed-menu-item-text', element: astLabel.authored.id, referenceNode: label.key, astylarNode: astLabel.key,
+    classification: 'application-plugin-authoring-defect', inputEquivalent: false, finalRasterVerified: false,
+    reviewEvidence: { sourceFinding: 'fixture-menu-label-composition-substitution', index,
+      referenceTrigger: snapshot(trigger), referenceTriggerLabel: snapshot(triggerLabel), referenceSection: snapshot(section),
+      referenceFrame: snapshot(frame), referencePlaceholder: snapshot(placeholder), referenceBackdrop: snapshot(backdrop),
+      candidateTrigger: snapshot(button),
+      referencePath: [label, item, content, ...referencePath].map(snapshot), candidatePath: [astLabel, astItem, popup, astSection, page].map(snapshot),
+      referenceRipple: snapshot(ripple), orderedItems: pairs.map(p => ({ reference: snapshot(p.item), referenceLabel: snapshot(p.label),
+        candidate: snapshot(p.astItem), candidateLabel: snapshot(p.astLabel) })), referenceText: label.ownText, candidateText: astLabel.authored.textContent },
+    justification: 'The unique expanded trigger, exact ordered Rename/Delete menuitem domain, direct Material text/ripple children and candidate aria-labelled span owners establish text correspondence. They do not equate the connected overlay, backdrop and content wrapper to the fixed candidate popup, or Material label flex/typography tokens to an inline span with density-specific margin. The child-span authoring is closer to the original text ownership than the previous button value, but its styles must still match the reference inputs. All paths, child order, attributes and style stages remain evidence; state behavior, focus, semantics, clipping, placement and final glyph paint are not certified.' }));
+}
+
+function validateMenuTextEvidence(report, errors) {
+  if (!report.retainedTypography) return;
+  const cases = [...new Set(report.elementInventory.cases.map(c => c.case))].flatMap(key => {
+    const match = parseReviewedCase(key, 'menu');
+    return match ? [{ kind: match[1], family: 'menu', profile: match[2], viewport: { id: match[3] }, ...(match[4] ? { state: match[4] } : {}) }] : [];
+  });
+  const replay = collectRetainedTypographyEvidence(cases, report.elementInventory);
+  const predicate = value => value.kind === 'reviewed-menu-item-text' || value.mapping?.kind === 'reviewed-menu-item-text' ||
+    ['menu-rename-label', 'menu-delete-label'].includes(value.element) ||
+    (value.family === 'menu' && value.reason === 'own-text nodes without an explicit shared ID require structural mapping');
+  for (const list of ['reviewedMappings', 'comparisons', 'differences', 'gaps']) {
+    if (JSON.stringify(report.retainedTypography[list].filter(predicate)) !== JSON.stringify(replay[list].filter(predicate)))
+      errors.push(`menu text ${list} lack complete replayed input evidence`);
+  }
+}
+
 function reviewedTooltipTextMappings(reference, candidate) {
   for (const tree of [reference, candidate]) {
     if (!Array.isArray(tree?.nodes) || new Set(tree.nodes.map(n => n.key)).size !== tree.nodes.length) return [];
@@ -1935,6 +2038,7 @@ export function reviewedTemplateTextMappings(family, referenceTree, astylarTree)
   if (family === 'autocomplete' || family === 'select') pairs.push(...reviewedMaterialOptionMappings(family, referenceTree, astylarTree));
   if (family === 'snack-bar') pairs.push(...reviewedSnackbarMessageMappings(referenceTree, astylarTree));
   if (family === 'tooltip') pairs.push(...reviewedTooltipTextMappings(referenceTree, astylarTree));
+  if (family === 'menu') pairs.push(...reviewedMenuTextMappings(referenceTree, astylarTree));
   for (const path of paths) {
     const reference = follow(referenceTree, 'reference', path.reference);
     const astylar = follow(astylarTree, 'astylar', path.astylar);
@@ -5846,6 +5950,7 @@ function sourceFingerprints(root) {
     'examples/material-showcase/node_modules/@angular/material/fesm2022/timepicker.mjs',
     'examples/material-showcase/node_modules/@angular/material/fesm2022/option-BzhYL_xC.mjs',
     'examples/material-showcase/node_modules/@angular/material/fesm2022/snack-bar.mjs',
+    'examples/material-showcase/node_modules/@angular/material/fesm2022/menu.mjs',
     'examples/material-showcase/node_modules/@angular/material/fesm2022/module-CWxMD37a.mjs',
     'examples/material-showcase/src/app/theme.ts',
     'examples/material-showcase/src/app/showcase.store.ts',
@@ -5879,6 +5984,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('menu text mapping preserves/,
+      'menu ordered item text ownership and connected-overlay versus fixed-popup inputs', 'The complete expanded-trigger and two-item domain maps anonymous Material label spans to exact candidate spans, retaining ripple, backdrop, wrapper, state and all authored/resolved input evidence. Mapping identity never certifies layout or typography; negative and independent replay controls reject ambiguous, incomplete or fabricated correspondence.'),
     proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('tooltip unmatched state inputs preserve/,
       'tooltip one-sided authored popup context and state-input attribution', 'Exact trigger/message identities, complete source paths, empty counterpart context, unique node identities and independent style stages distinguish a genuinely unpaired authored popup from missing core text. Both reference-only and candidate-only observations remain unequal; negative and report-mutation controls reject invented counterparts, missing stages and foreign states. Existing paired typography and raster obligations are unchanged.'),
     proof(root, 'tests/material-parity/supplemental-capture-evidence.spec.mjs', /test\('tooltip state collector keeps/,

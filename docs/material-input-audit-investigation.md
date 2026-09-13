@@ -23,6 +23,91 @@ selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Menu label correspondence exposes unequal flex and typography inputs (2026-09-13)
+
+The menu audit now maps each anonymous Material item-label span to its exact
+candidate span without calling the two component trees equivalent. The complete
+expanded trigger and ordered Rename/Delete domain must agree. Reference
+evidence retains the connected overlay, transparent backdrop, content wrapper,
+direct label and ripple children. Candidate evidence retains the fixed absolute
+popup and its two aria-labelled buttons. Every ancestor, child order, attribute
+and style stage remains available for review. Mapping identity does not certify
+state behavior, focus, accessibility, clipping, layout or final glyph paint.
+
+History identifies `994da86` (`fix(material): complete shared control parity`)
+as the change that replaced menu button values with named child spans, changed
+popup/item width to 112px, added flex centering to the buttons, and added a 4px
+label bottom margin for density <= -5. The initial fixed popup came from
+`2f44011`. Adding a span is closer to the reference's direct text ownership;
+that fact does not justify substituting its layout or typography inputs.
+
+In the frozen open captures, the reference label has `flex: 1 1 0%`, zero
+bottom margin and computed block display. The candidate label has default
+`flex-grow: 0`, `flex-basis: auto` and resolved inline display. Its contrast
+profile has a 4px bottom margin, while light/dark/custom have zero. The candidate
+rule is at `astylar.component.ts:525`; the fixed popup and item rules are at
+523-524 and the span authoring at 970-973. Reference authoring is at
+`reference.component.ts:87`; installed `@angular/material/fesm2022/menu.mjs`
+supplies the generated component structure and CSS and is now fingerprinted.
+
+These are confirmed unequal authoring inputs, not a confirmed core flex or
+baseline defect. The next diagnostic must use the original label flex/text
+constraints on both sides before attributing any residual error to core. Do
+not replace this margin with another offset. Two source findings preserve the
+composition substitution and density-specific compensation separately.
+
+Across 94 menu cases, **64 labels in 32 open captures** are now paired. This
+replaces 96 unresolved correspondence entries with actual text comparisons:
+64 missing tracking inputs meet the existing source-based attribution; **64
+font-family and 64 ink differences remain unresolved**. The candidate item
+button already resolves a font family, so the existing proof of uninterrupted
+font omission from page to text owner correctly refuses to explain this case.
+Do not weaken it or infer that matching the first font name proves equal input.
+The light/open ink trace also has two active item declarations: the base
+`.mat-mdc-menu-item` rule declares `color: inherit`, and the later grouped
+item/link/visited rule declares the Material label-color token. The leaf has
+no own color rule. Candidate items instead declare literal `#1d1b20`. A future
+attribution must prove this cascade and inheritance chain, including competing
+declarations, rather than reuse the single-declaration option proof unchecked.
+
+Four new tests cover mapping and nonmutation, **37 negative input controls**,
+missing popup/text-stage evidence, and **13 report-mutation controls**. The
+independent validator reconstructs mappings, comparisons, differences and gaps
+from the inventory; dropped, forged or foreign-case findings fail replay.
+
+```powershell
+node --test --test-name-pattern='menu text|records source fingerprints' tests/material-parity/input-equivalence-audit.spec.mjs
+```
+
+Focused result: **5/5 pass**, zero failed/skipped/cancelled/todo, **1.369 seconds**,
+terminal exit 0. An initial read-only profile projection mistakenly treated
+file references as inline trees and exited 1; the corrected projection loaded
+the captured files and confirmed the four profiles above. No capture was changed.
+
+`npm run parity:harness:check`: **404/404 pass**, zero failed/skipped/cancelled/
+todo, **213.438 seconds**, terminal exit 0. All ten frozen visual-harness file
+hashes still match. No renderer, application fixture, browser reference or visual
+threshold is changed; the final unfiltered visual matrix remains outstanding.
+
+Full inventory generation detects all **109 source findings**, pairs 64 menu
+labels and leaves **177 unresolved retained-owner gaps**, down from 273. Main
+style counts remain 8,140 unique / 380,520 occurrences, with 3,309 unresolved
+attributions. Independent diagnostic replay returns `[]`. Strict validation
+still reports exactly these four incomplete obligations:
+
+- 3,309 resolved-style differences lack root-cause attribution.
+- 879 control-texture typography differences require attribution.
+- 177 retained typography mappings or stage fields require review.
+- 482 retained typography differences require attribution (previously 354;
+  the additional 128 are the newly exposed menu font/color differences).
+
+The full read-only audit process exited 0 after printing both validation modes;
+that process exit does **not** mean strict audit acceptance. Exact command:
+
+```powershell
+node --input-type=module -e "import {readFileSync} from 'node:fs';import {buildMaterialInputAudit,validateMaterialInputAudit} from './tests/material-parity/input-equivalence-audit.mjs';const p=JSON.parse(readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json'));const a=buildMaterialInputAudit(p,{root:process.cwd(),normalLineBoxPath:'artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json',supplementalRoot:'artifacts/material-parity/supplemental-current-ancestry-audit'});console.log('SUMMARY '+JSON.stringify({coverage:a.coverage.complete,summary:a.summary,menuMappings:a.retainedTypography.reviewedMappings.filter(m=>m.kind==='reviewed-menu-item-text').length,menuDiffs:a.retainedTypography.differences.filter(d=>d.family==='menu').reduce((r,d)=>{const k=d.property+'/'+d.attribution;r[k]=(r[k]??0)+1;return r;},{}),retainedUnresolved:a.retainedTypography.gaps.filter(g=>g.attribution==='unresolved').length}));console.log('DIAGNOSTIC '+JSON.stringify(validateMaterialInputAudit(a,{requireComplete:false})));console.log('STRICT '+JSON.stringify(validateMaterialInputAudit(a)));"
+```
+
 ## Tooltip unmatched text owners are unequal state inputs (2026-09-13)
 
 The new `reviewed-tooltip-unmatched-state-input` attribution explains a missing
