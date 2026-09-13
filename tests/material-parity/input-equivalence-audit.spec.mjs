@@ -4500,6 +4500,128 @@ test('alignment claims replay their actual captured styles, ancestry, scope and 
   }
 });
 
+function fieldErrorReport() {
+  const raw = retainedTypographyReport(), e = raw.results[0], { reference: r, astylar: a } = e.inputTrees;
+  e.family = 'form-field';
+  Object.assign(r.styles[0], { fontFamily: 'Roboto', fontSize: '12px', fontWeight: '400', lineHeight: '16px', letterSpacing: '.4px', color: '#b3261e', textAlign: 'left' });
+  r.styles.push({ ...r.styles[0], display: 'inline-block', width: '0px', height: '16px', content: '\"\"' });
+  const ref = (key, parent, type, attributes = {}, ownText = '') => ({ key, parent, type, attributes, ownText, style: 0, rules: [], pseudoElements: [] });
+  r.nodes = [ref('frame', null, 'main', { class: 'frame' }), ref('section', 'frame', 'section', { id: 'form-field-root', class: 'demo' }),
+    ref('field', 'section', 'mat-form-field', { id: 'form-field-primary', class: 'mat-mdc-form-field mat-form-field-invalid' }),
+    ref('wrapper', 'field', 'div', { class: 'mat-mdc-text-field-wrapper' }),
+    ref('flex', 'wrapper', 'div', { class: 'mat-mdc-form-field-flex' }), ref('infix', 'flex', 'div', { class: 'mat-mdc-form-field-infix' }),
+    ref('floating', 'infix', 'label', { class: 'mat-mdc-floating-label', for: 'form-field-control' }),
+    ref('label', 'floating', 'mat-label', { id: 'form-field-label' }, 'Project name'),
+    { ...ref('input', 'infix', 'input', { id: 'form-field-control', matinput: '', 'aria-label': 'Project name', 'aria-invalid': 'true', 'aria-describedby': 'mat-mdc-error-0' }), value: 'Atlas' },
+    ref('subscript', 'field', 'div', { class: 'mat-mdc-form-field-subscript-wrapper mat-mdc-form-field-bottom-align' }),
+    ref('live', 'subscript', 'div', { class: 'mat-mdc-form-field-error-wrapper', 'aria-live': 'polite', 'aria-atomic': 'true' }),
+    ref('error', 'live', 'mat-error', { id: 'mat-mdc-error-0', class: 'mat-mdc-form-field-error mat-mdc-form-field-bottom-align' }, 'Project name is required')];
+  for (const key of ['error', 'subscript']) r.nodes.find(n => n.key === key).pseudoElements = [{ pseudo: '::before', generated: true, style: 1, rules: [] }];
+  const ast = (key, parent, authored) => ({ key, parent, authored, resolvedStyle: {}, normalResolvedStyle: {}, interactionResolvedStyle: {} });
+  a.rules = [{ selector: '#page', fontFamily: 'Roboto, Arial, sans-serif' }];
+  a.nodes = [ast('page', 'root', { type: 'main', id: 'page' }), ast('section', 'page', { type: 'section', id: 'form-field-root' }),
+    ast('field', 'section', { type: 'div', id: 'form-field-primary', class: 'field-shell' }),
+    ast('surface', 'field', { type: 'div', id: 'form-field-control-surface', class: 'field-surface active' }),
+    ast('line', 'field', { type: 'div', id: 'form-field-control-active-line', class: 'field-active-line' }),
+    ast('label', 'field', { type: 'label', id: 'form-field-label', class: 'field-label', for: 'form-field-control', textContent: 'Project name' }),
+    ast('region', 'field', { type: 'div', id: 'form-field-input-region', class: 'field-input-region' }),
+    ast('input', 'region', { type: 'input', id: 'form-field-control', inputType: 'text', value: 'Atlas', ariaLabel: 'Project name', ariaInvalid: true }),
+    ast('error', 'field', { type: 'span', id: 'form-field-error', class: 'field-error', textContent: 'Project name is required' })];
+  a.nodes.at(-1).retainedText = { source: 'core-text-registry', style: { ...r.styles[0], fontFamily: 'Roboto, Arial, sans-serif', lineHeight: 'normal' } };
+  for (const stage of ['resolvedStyle', 'normalResolvedStyle', 'interactionResolvedStyle']) a.nodes[0][stage].fontFamily = 'Roboto, Arial, sans-serif';
+  return raw;
+}
+
+test('field error mapping preserves generated description linkage live wrapper and pseudo spacers', () => {
+  const raw = fieldErrorReport(), before = structuredClone(raw), cases = raw.results.map(e => ({ ...e, kind: 'static' }));
+  const t = collectRetainedTypographyEvidence(cases, collectFullTreeInventory(cases));
+  const maps = t.reviewedMappings.filter(m => m.kind === 'reviewed-field-error-text');
+  assert.equal(maps.length, 1);
+  const m = maps[0];
+  assert.equal(m.element, 'form-field-error'); assert.equal(m.inputEquivalent, false); assert.equal(m.finalRasterVerified, false);
+  assert.equal(m.reviewEvidence.referencePath.length, 6); assert.equal(m.reviewEvidence.candidatePath.length, 4);
+  assert.equal(m.reviewEvidence.referenceInputPath[0].attributes['aria-describedby'], m.reviewEvidence.referencePath[0].attributes.id);
+  assert.equal(m.reviewEvidence.referencePath[1].attributes['aria-live'], 'polite');
+  assert.equal(m.reviewEvidence.candidateInput.authored.ariaDescribedby, undefined);
+  assert.ok([0, 2].every(index => m.reviewEvidence.referencePath[index].pseudoElements[0].generated === true));
+  assert.ok(!t.gaps.some(g => ['form-field-error', 'mat-mdc-error-0'].includes(g.element)));
+  assert.deepEqual(t.differences.filter(d => d.element === 'form-field-error').map(d => d.property), ['fontFamily', 'lineHeight']);
+  assert.deepEqual(raw, before);
+});
+
+test('field error mapping refuses ambiguous IDs broken descriptions and changed field composition', () => {
+  const controls = [
+    (r, a) => { r.nodes.push(structuredClone(r.nodes[0])); },
+    (r, a) => { a.nodes.push({ ...structuredClone(a.nodes[0]), key: 'duplicate' }); },
+    (r, a) => { r.nodes.find(n => n.key === 'error').attributes.id = 'custom-error'; },
+    (r, a) => { r.nodes.find(n => n.key === 'error').ownText = 'Other'; },
+    (r, a) => { r.nodes.find(n => n.key === 'input').attributes['aria-describedby'] = 'other'; },
+    (r, a) => { r.nodes.find(n => n.key === 'input').attributes['aria-invalid'] = 'false'; },
+    (r, a) => { r.nodes.find(n => n.key === 'live').attributes['aria-live'] = 'off'; },
+    (r, a) => { r.nodes.find(n => n.key === 'live').attributes['aria-atomic'] = 'false'; },
+    (r, a) => { r.nodes.find(n => n.key === 'error').pseudoElements = []; },
+    (r, a) => { r.nodes.find(n => n.key === 'subscript').pseudoElements = []; },
+    (r, a) => { r.nodes.find(n => n.key === 'field').attributes.class = 'mat-mdc-form-field'; },
+    (r, a) => { r.nodes.find(n => n.key === 'error').parent = 'field'; },
+    (r, a) => { r.nodes.find(n => n.key === 'infix').parent = 'field'; },
+    (r, a) => { r.nodes.find(n => n.key === 'floating').attributes.for = 'other'; },
+    (r, a) => { r.nodes.find(n => n.key === 'label').ownText = 'Other'; },
+    (r, a) => { r.nodes.find(n => n.key === 'frame').parent = 'other'; },
+    (r, a) => { a.nodes.find(n => n.key === 'input').authored.value = 'Other'; },
+    (r, a) => { a.nodes.find(n => n.key === 'input').authored.ariaInvalid = false; },
+    (r, a) => { a.nodes.find(n => n.key === 'input').authored.ariaDescribedby = 'form-field-error'; },
+    (r, a) => { a.nodes.find(n => n.key === 'error').authored.ariaLive = 'polite'; },
+    (r, a) => { a.nodes.find(n => n.key === 'error').authored.role = 'alert'; },
+    (r, a) => { a.nodes.find(n => n.key === 'error').authored.textContent = 'Other'; },
+    (r, a) => { a.nodes.find(n => n.key === 'error').authored.type = 'div'; },
+    (r, a) => { a.nodes.find(n => n.key === 'surface').authored.class = 'field-surface'; },
+    (r, a) => { a.nodes.find(n => n.key === 'error').parent = 'region'; },
+    (r, a) => { a.nodes.find(n => n.key === 'label').authored.for = 'other'; },
+    (r, a) => { a.nodes.find(n => n.key === 'page').parent = 'other'; },
+    (r, a) => { a.nodes.push({ key: 'hint', parent: 'field', authored: { type: 'span', id: 'form-field-hint', textContent: 'Public label' } }); },
+    (r, a) => { const i = a.nodes.findIndex(n => n.key === 'error'), j = a.nodes.findIndex(n => n.key === 'region'); [a.nodes[i], a.nodes[j]] = [a.nodes[j], a.nodes[i]]; },
+  ];
+  for (const [index, mutate] of controls.entries()) {
+    const raw = fieldErrorReport(), { reference: r, astylar: a } = raw.results[0].inputTrees; mutate(r, a);
+    assert.deepEqual(reviewedTemplateTextMappings('form-field', r, a), [], `control ${index}`);
+  }
+});
+
+test('field error mapping leaves missing text and retained stages as explicit gaps', () => {
+  const raw = fieldErrorReport(), e = raw.results[0];
+  delete e.inputTrees.astylar.nodes.at(-1).retainedText;
+  let cases = [{ ...e, kind: 'static' }], t = collectRetainedTypographyEvidence(cases, collectFullTreeInventory(cases));
+  assert.ok(t.gaps.some(g => g.element === 'form-field-error' && g.reason.includes('no authoritative retained')));
+  e.inputTrees.astylar.nodes.pop();
+  cases = [{ ...e, kind: 'static' }]; t = collectRetainedTypographyEvidence(cases, collectFullTreeInventory(cases));
+  assert.equal(t.reviewedMappings.filter(m => m.kind === 'reviewed-field-error-text').length, 0);
+  assert.ok(t.gaps.some(g => g.element === 'mat-mdc-error-0'));
+});
+
+test('field error report replays correspondence text relations pseudo and typography evidence', () => {
+  const original = buildMaterialInputAudit(fieldErrorReport());
+  assert.equal(original.retainedTypography.reviewedMappings.filter(m => m.kind === 'reviewed-field-error-text').length, 1);
+  assert.ok(original.sourceFindings.find(f => f.id === 'fixture-field-error-subscript-substitution')?.detected);
+  assert.ok(!validateMaterialInputAudit(original, { requireComplete: false }).some(e => e.includes('field error')));
+  for (const mutate of [
+    (r, m) => { r.retainedTypography.reviewedMappings = r.retainedTypography.reviewedMappings.filter(v => v !== m); },
+    (r, m) => { m.inputEquivalent = true; },
+    (r, m) => { m.finalRasterVerified = true; },
+    (r, m) => { m.reviewEvidence.referenceInputPath[0].attributes['aria-describedby'] = 'other'; },
+    (r, m) => { m.reviewEvidence.referencePath[1].attributes['aria-live'] = 'off'; },
+    (r, m) => { m.reviewEvidence.referencePath[0].pseudoElements = []; },
+    (r, m) => { m.reviewEvidence.candidateInput.authored.ariaDescribedby = 'form-field-error'; },
+    (r, m) => { m.reviewEvidence.candidatePath.pop(); },
+    (r, m) => { r.retainedTypography.differences.pop(); },
+    (r, m) => { m.case = 'static:dialog@light/desktop'; m.element = 'other'; },
+  ]) {
+    const report = structuredClone(original), inventory = structuredClone(report.elementInventory);
+    mutate(report, report.retainedTypography.reviewedMappings.find(m => m.kind === 'reviewed-field-error-text'));
+    assert.deepEqual(report.elementInventory, inventory);
+    assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('field error')));
+  }
+});
+
 function dialogTextReport() {
   const raw = retainedTypographyReport(), e = raw.results[0], { reference: r, astylar: a } = e.inputTrees;
   e.family = 'dialog';

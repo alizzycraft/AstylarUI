@@ -580,6 +580,15 @@ export const sourceAuditDefinitions = Object.freeze([
     justification: 'The reference paragraph remains in normal flow inside a padded body, flex content region and grid collapse wrapper. Closed-state captures retain its block display and margins while visibility is hidden and the wrapper uses grid-template-rows:0fr. Candidate substitutes absolute content, display:none when closed, density-specific open top offsets, zero paragraph margin, and a nested absolutely positioned label at top:-1px/left:24px. History traces the flow substitution to 6e1c156 and the compensating text wrapper to a0f3328. Absence of a retained text entry below candidate display:none is not evidence of missing renderer text. Nor does both sides being unpainted establish equivalent collapse/layout inputs. Restore the reference structure and declarations in a minimal proof before assigning any remaining discrepancy to core grid, intrinsic layout or typography; do not add another offset.',
   }),
   Object.freeze({
+    id: 'fixture-field-error-subscript-substitution',
+    introducedBy: '87bc351 fix(renderer): align Material filled field text',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`selector: '\.field-error'[^\n]*position: 'absolute'`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase form-field subscript flow, generated error description and live-region composition',
+    justification: 'The reference error is described by the invalid input and appears in an atomic polite live wrapper under the subscript owner, retaining generated baseline spacers. Candidate replaces that composition with a field-shell span at density-dependent top 58px/50px and left 16px, with no describedby or live wrapper. This authoring was introduced with filled-field retuning, not required by equal-input rendering. Restore equivalent field/subscript/description intent before attributing remaining layout, typography or semantic defects to core.',
+  }),
+  Object.freeze({
     id: 'fixture-dialog-text-flow-substitution',
     introducedBy: 'd102828 adds flex-aligned title span; 5b02171 retunes title/content padding',
     file: 'examples/material-showcase/src/app/astylar.component.ts',

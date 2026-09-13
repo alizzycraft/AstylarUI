@@ -470,6 +470,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
   validateTooltipTextEvidence(report, errors);
   validateMenuTextEvidence(report, errors);
   validateDialogTextEvidence(report, errors);
+  validateFieldErrorEvidence(report, errors);
   validateHorizontalStartAlignment(report, errors);
   validateInheritedComponentFontStack(report, errors);
   validateOmittedComponentTextMetrics(report, errors);
@@ -648,6 +649,7 @@ export function renderMaterialInputAuditMarkdown(report) {
     `Dialog title/content: ${report.retainedTypography.reviewedMappings.filter(m => m.kind === 'reviewed-dialog-content-text').length} owners have exact generated-title linkage, direct-content and action/overlay/focus-trap correspondence. Original heading pseudo-spacer, labelled dialog and content wrappers remain distinct from candidate nested text, fixed flex boxes and separately labelled modal. Mapped text does not establish equivalent structure, typography, semantics, placement or raster.`,
     `Dialog text ink: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-dialog-text-ink-input').length} original direct title/content color tokens contrast with explicit candidate literals. Nested title inheritance and direct paragraph declarations are separately traced through normal/effective and retained stages. Token fallback origin, overlay theme scope and final raster remain unverified.`,
     `Dialog font/tracking: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-dialog-text-metric-omission').length} differences preserve direct reference component tokens and complete candidate text-to-page omission chains. Candidate page font inheritance and default zero tracking remain unequal inputs; font selection, shaping, layout and raster are not certified.`,
+    `Form-field error text: ${report.retainedTypography.reviewedMappings.filter(m => m.kind === 'reviewed-field-error-text').length} generated error owners map through the invalid input's description relation and complete subscript/live-region paths. Candidate independent error span, omitted description/live wrapper, pseudo-spacer and typography differences remain explicit; text correspondence does not certify layout or announcement behavior.`,
     `Tooltip text: ${report.retainedTypography.reviewedMappings.filter(m => m.kind === 'reviewed-tooltip-overlay-text').length} labels map only when unique Material trigger/message and shown connected-overlay ownership coexist with the unique candidate trigger-linked flow popup. Original aria-hidden visual ownership and external description linkage remain distinct from the candidate role-tooltip sibling. Candidate-only states, typography, positioning, collision, clipping, visibility and raster are not waived.`,
     `Tooltip alignment: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-tooltip-text-alignment-input').length} original center declarations contrast with complete popup-to-page candidate omissions and retained left. Candidate flex centering is captured as a different input, not an equivalent replacement or proof of glyph alignment. Positioning and blur remain separate investigations.`,
     `Timepicker options: ${report.retainedTypography.reviewedMappings.filter(m => m.kind === 'reviewed-timepicker-option-text').length} labels have complete input-linked half-hour-domain correspondence. Material primary-text/ripple owners are replaced by direct-text div options; active and selected states remain separate raw evidence. This maps text owners, not equivalent wrappers, scrolling, commit behavior, placement or raster. Newly exposed typography differences remain enforced.`,
@@ -1509,6 +1511,90 @@ function reviewedTimepickerOptionMappings(reference, candidate) {
   }));
 }
 
+function reviewedFieldErrorMappings(reference, candidate) {
+  for (const tree of [reference, candidate]) {
+    if (!Array.isArray(tree?.nodes) || new Set(tree.nodes.map(n => n.key)).size !== tree.nodes.length) return [];
+    const ids = tree.nodes.map(n => (n.attributes ?? n.authored)?.id).filter(Boolean);
+    if (new Set(ids).size !== ids.length) return [];
+  }
+  const one = nodes => nodes.length === 1 ? nodes[0] : undefined;
+  const children = (tree, node) => tree.nodes.filter(n => n.parent === node?.key);
+  const cls = (node, name) => String((node?.attributes ?? node?.authored)?.class ?? '').split(/\s+/).includes(name);
+  const refId = id => one(reference.nodes.filter(n => n.attributes?.id === id));
+  const astId = id => one(candidate.nodes.filter(n => n.authored?.id === id));
+  const error = one(reference.nodes.filter(n => n.type === 'mat-error'));
+  if (!error || !/^mat-mdc-error-\d+$/.test(error.attributes?.id ?? '') || !cls(error, 'mat-mdc-form-field-error') ||
+      !cls(error, 'mat-mdc-form-field-bottom-align') || error.ownText?.trim() !== 'Project name is required' || children(reference, error).length) return [];
+  const referencePath = [error];
+  for (const [type, className, id] of [['div', 'mat-mdc-form-field-error-wrapper'], ['div', 'mat-mdc-form-field-subscript-wrapper'],
+    ['mat-form-field', 'mat-mdc-form-field', 'form-field-primary'], ['section', 'demo', 'form-field-root'], ['main', 'frame']]) {
+    const parent = one(reference.nodes.filter(n => n.key === referencePath.at(-1).parent));
+    if (!parent || parent.type !== type || !cls(parent, className) || (id && parent.attributes.id !== id) || parent.ownText?.trim()) return [];
+    referencePath.push(parent);
+  }
+  const [, live, subscript, field, section, frame] = referencePath;
+  if (live.attributes['aria-live'] !== 'polite' || live.attributes['aria-atomic'] !== 'true' ||
+      children(reference, live).length !== 1 || children(reference, subscript).length !== 1 ||
+      !cls(subscript, 'mat-mdc-form-field-bottom-align') || !cls(field, 'mat-form-field-invalid') ||
+      children(reference, field).length !== 2 || children(reference, section).length !== 1 || frame.parent !== null ||
+      [error, subscript].some(n => n.pseudoElements?.filter(p => p.pseudo === '::before' && p.generated === true).length !== 1)) return [];
+  const input = refId('form-field-control'), label = refId('form-field-label');
+  if (!input || input.type !== 'input' || !Object.hasOwn(input.attributes, 'matinput') || input.attributes['aria-invalid'] !== 'true' ||
+      input.attributes['aria-describedby'] !== error.attributes.id || input.attributes['aria-label'] !== 'Project name' ||
+      !label || label.type !== 'mat-label' || label.ownText?.trim() !== 'Project name' || children(reference, label).length) return [];
+  const inputPath = [input];
+  for (const className of ['mat-mdc-form-field-infix', 'mat-mdc-form-field-flex', 'mat-mdc-text-field-wrapper']) {
+    const parent = one(reference.nodes.filter(n => n.key === inputPath.at(-1).parent));
+    if (!parent || parent.type !== 'div' || !cls(parent, className) || parent.ownText?.trim()) return [];
+    inputPath.push(parent);
+  }
+  const floating = one(reference.nodes.filter(n => n.key === label.parent));
+  if (!floating || floating.type !== 'label' || !cls(floating, 'mat-mdc-floating-label') || floating.attributes.for !== input.attributes.id ||
+      floating.parent !== inputPath[1].key || children(reference, floating).length !== 1 || inputPath.at(-1).parent !== field.key ||
+      children(reference, inputPath[1]).map(n => n.key).join('|') !== [floating, input].map(n => n.key).join('|') ||
+      children(reference, field).map(n => n.key).join('|') !== [inputPath.at(-1), subscript].map(n => n.key).join('|')) return [];
+  const astError = astId('form-field-error'), astField = astId('form-field-primary'), astSection = astId('form-field-root'), page = astId('page');
+  const astInput = astId('form-field-control'), region = astId('form-field-input-region'), astLabel = astId('form-field-label');
+  const surface = astId('form-field-control-surface'), activeLine = astId('form-field-control-active-line');
+  if (!astError || astError.authored.type !== 'span' || astError.authored.class !== 'field-error' ||
+      astError.authored.textContent !== error.ownText.trim() || children(candidate, astError).length ||
+      astError.authored.ariaLive !== undefined || astError.authored.role !== undefined ||
+      !astField || astField.authored.type !== 'div' || astField.authored.class !== 'field-shell' || astError.parent !== astField.key ||
+      !astSection || astSection.authored.type !== 'section' || astField.parent !== astSection.key || children(candidate, astSection).length !== 1 ||
+      !page || page.authored.type !== 'main' || astSection.parent !== page.key || page.parent !== 'root' ||
+      !astInput || astInput.authored.type !== 'input' || astInput.authored.inputType !== 'text' || astInput.authored.ariaInvalid !== true ||
+      astInput.authored.ariaDescribedby !== undefined || astInput.authored.ariaLabel !== 'Project name' || astInput.authored.value !== input.value ||
+      !region || region.authored.type !== 'div' || !cls(region, 'field-input-region') || astInput.parent !== region.key || children(candidate, region).length !== 1 ||
+      !astLabel || astLabel.authored.type !== 'label' || !cls(astLabel, 'field-label') || astLabel.authored.for !== astInput.authored.id ||
+      astLabel.authored.textContent !== label.ownText.trim() || children(candidate, astLabel).length ||
+      !surface || surface.authored.type !== 'div' || !cls(surface, 'field-surface') || !cls(surface, 'active') || children(candidate, surface).length ||
+      !activeLine || activeLine.authored.type !== 'div' || activeLine.authored.class !== 'field-active-line' || children(candidate, activeLine).length ||
+      children(candidate, astField).map(n => n.key).join('|') !== [surface, activeLine, astLabel, region, astError].map(n => n.key).join('|') ||
+      refId('form-field-hint') || astId('form-field-hint') || refId('form-field-error')) return [];
+  return [{ kind: 'reviewed-field-error-text', element: 'form-field-error', referenceNode: error.key, astylarNode: astError.key,
+    classification: 'application-plugin-authoring-defect', inputEquivalent: false, finalRasterVerified: false,
+    reviewEvidence: structuredClone({ sourceFinding: 'fixture-field-error-subscript-substitution', referencePath, referenceInputPath: inputPath,
+      referenceFloatingLabel: floating, referenceLabel: label, candidatePath: [astError, astField, astSection, page],
+      candidateInput: astInput, candidateRegion: region, candidateLabel: astLabel, candidateSurface: surface, candidateActiveLine: activeLine,
+      referenceText: error.ownText, candidateText: astError.authored.textContent }),
+    justification: 'The unique invalid input describes the generated Material error ID inside its own subscript/live-region wrappers. The candidate authors the same error text as an independently positioned span under the field shell, without that description relation or live-region wrapper. Original subscript/error pseudo-spacers and both complete field/input paths remain distinct evidence. Correspondence does not establish equivalent layout, announcement behavior, typography or current raster.' }];
+}
+
+function validateFieldErrorEvidence(report, errors) {
+  if (!report.retainedTypography) return;
+  const cases = [...new Set(report.elementInventory.cases.map(c => c.case))].flatMap(key => {
+    const match = parseReviewedCase(key, 'form-field');
+    return match ? [{ kind: match[1], family: 'form-field', profile: match[2], viewport: { id: match[3] }, ...(match[4] ? { state: match[4] } : {}) }] : [];
+  });
+  const replay = collectRetainedTypographyEvidence(cases, report.elementInventory);
+  const predicate = value => value.kind === 'reviewed-field-error-text' || value.mapping?.kind === 'reviewed-field-error-text' ||
+    value.element === 'form-field-error' || /^mat-mdc-error-\d+$/.test(value.element ?? '');
+  for (const list of ['reviewedMappings', 'comparisons', 'differences', 'gaps']) {
+    if (JSON.stringify(report.retainedTypography[list].filter(predicate)) !== JSON.stringify(replay[list].filter(predicate)))
+      errors.push(`field error ${list} lack complete replayed input evidence`);
+  }
+}
+
 function reviewedDialogTextMappings(reference, candidate) {
   for (const tree of [reference, candidate]) {
     if (!Array.isArray(tree?.nodes) || new Set(tree.nodes.map(n => n.key)).size !== tree.nodes.length) return [];
@@ -2165,6 +2251,7 @@ export function reviewedTemplateTextMappings(family, referenceTree, astylarTree)
   if (family === 'tooltip') pairs.push(...reviewedTooltipTextMappings(referenceTree, astylarTree));
   if (family === 'menu') pairs.push(...reviewedMenuTextMappings(referenceTree, astylarTree));
   if (family === 'dialog') pairs.push(...reviewedDialogTextMappings(referenceTree, astylarTree));
+  if (family === 'form-field') pairs.push(...reviewedFieldErrorMappings(referenceTree, astylarTree));
   for (const path of paths) {
     const reference = follow(referenceTree, 'reference', path.reference);
     const astylar = follow(astylarTree, 'astylar', path.astylar);
@@ -6379,6 +6466,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('field error mapping preserves/,
+      'form-field generated error description and subscript ownership', 'Unique input/error description linkage and complete field paths map the candidate error span without equating its independent positioning or absent live wrapper. Missing stages, broken relations and fabricated evidence fail explicit checks.'),
     proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('dialog metrics preserve/,
       'dialog component font and tracking omissions', 'Direct reference tokens contrast with complete candidate ancestry to the authored page font or an empty document envelope for default tracking. Missing/competing declarations, ancestry-stage overrides and forged evidence refuse attribution.'),
     proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('dialog ink traces/,

@@ -23,6 +23,68 @@ selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Generated form-field error text retains unequal subscript and description inputs (2026-09-13)
+
+`reviewed-field-error-text` pairs the generated `mat-mdc-error-*` owner with
+`form-field-error` only through the unique invalid input's exact
+`aria-describedby` relation and complete error/live/subscript/field/section/frame
+path. It also verifies the input's infix/flex/wrapper ownership, associated
+floating label and candidate field-surface/active-line/label/input/error order.
+No hint is silently treated as the error, and no missing retained stage is waived.
+
+The original error is a static block inside an absolutely positioned error
+wrapper (`top:0`, `left:0`, `padding:0 16px`) under a relative subscript wrapper.
+The error wrapper authors `aria-live="polite"` and `aria-atomic="true"`; the
+invalid input describes the generated error ID. The subscript and error each
+retain a generated, zero-width, 16px inline-block `::before` baseline spacer.
+Candidate instead authors a direct error span under the field shell, without
+the subscript/live wrapper or input description relation. Its absolute position
+is `top:58px` or `50px` by density, `left:16px`. These are different containing
+blocks and baseline constraints, not proven equivalent coordinate expressions.
+Neither the mapping nor captured ARIA attributes prove actual announcement
+behavior or final glyph placement.
+
+`git show 87bc351 -- examples/material-showcase/src/app/astylar.component.ts`
+traces this candidate error span and positional rule to the filled-field
+retuning commit (`fix(renderer): align Material filled field text`). Current
+reference template is `reference.component.ts:76`; candidate composition is
+`astylar.component.ts:909-919`. The new
+`fixture-field-error-subscript-substitution` finding identifies the authoring
+owner. Restore the actual field/subscript/description structure before assigning
+residual layout or semantic discrepancies to core; another text offset would
+not establish equal inputs.
+
+Across 76 form-field cases, **eight generated error owners** are now paired,
+replacing **16 unresolved ID-mapping gaps** with actual comparisons. Eight
+font-family and eight line-height differences independently satisfy existing
+component-token attribution checks: the reference inherits subscript
+`Roboto` / `16px`, while candidate retains the page's broader font stack and
+`normal` line height. The original subscript selector and token declarations,
+computed ancestry and candidate omission chains remain separate evidence.
+The dimensions and generated baseline spacers do not equate `normal` with 16px.
+
+Four new tests cover linkage/pseudo snapshots, **29 negative input controls**,
+missing text/stages, and **10 report mutations**. Independent replay rejects
+fabricated correspondence, lost live-region attributes, altered description
+relations, missing pseudo evidence and removed typography differences.
+
+```powershell
+node --test --test-name-pattern='field error|records source fingerprints' tests/material-parity/input-equivalence-audit.spec.mjs
+```
+
+Focused result: **5/5 pass**, zero failed/skipped/cancelled/todo,
+**1.949 seconds**, terminal exit 0. `npm run parity:harness:check` completed
+**425/425 pass**, zero failed/skipped/cancelled/todo, **231.626 seconds**, terminal
+exit 0. The full current-ancestry report plus normal-line-box and supplemental
+evidence replay has complete capture coverage, **115 detected source findings**,
+no unexplained or undetected definitions, and no diagnostic validation errors.
+Strict acceptance still rejects **3,309 resolved-style**, **879 control-text**,
+**33 retained mapping/stage**, and **354 retained typography** attributions.
+The remaining mapping gaps are 17 paginator and 16 stepper anonymous-text cases;
+the form-field mapping has not waived any unresolved typography. The replay's
+process exit 0 is diagnostic completion, not strict acceptance. No fixture,
+renderer or visual threshold is changed.
+
 ## Dialog component font and tracking declarations were omitted (2026-09-13)
 
 `reviewed-dialog-text-metric-omission` now traces the remaining direct
