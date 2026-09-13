@@ -23,6 +23,82 @@ selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Stepper edit state was replaced with a completion checkmark (2026-09-13)
+
+The remaining **16 stepper anonymous-text gaps** are not missing core text.
+Across 68 captured stepper cases, all eight profile/DPR combinations after
+`activate` and `activate-leave` author Material's `edit` state for the inactive
+Details header while Review is selected. Its icon-content wrapper contains a
+`cdk-visually-hidden` span with **Editable** and an aria-hidden `mat-icon` whose
+font-ligature input is **create**. The description's actual computed inputs are
+absolute position, 1px width/height, hidden overflow and
+`clip:rect(0px, 0px, 0px, 0px)`. These are retained as inputs, not discarded
+because the description is visually clipped.
+
+Candidate instead authors a `step-badge completed` span and a childless
+`showcase.material:check-mark` with presentation role, 1.8 stroke width and
+theme on-primary color. Neither reference text owner exists in that tree.
+`git show fc45b58 -- examples/material-showcase/src/app/astylar.component.ts`
+shows the completion branch and its 16px sizing added by
+`fix(interaction): focus nested interactive owners`. Current composition is
+`astylar.component.ts:975`; selection-mark data is at `:1101`.
+
+The installed Material `stepper.mjs` `_getDefaultTextForState` returns `create`
+for edit state, and its header template uses the separate editable description.
+The custom `MaterialCheckMarkRenderer` instead makes a tube from
+`materialCheckMarkPath` (`material-showcase.plugin.ts:258`). This is a different
+state/content input before layout, not an equivalent vector representation or
+a confirmed equal-input core icon defect. The repair owner is step-state/content
+translation through shared core icon and semantic composition. Restore the
+editable state and description before evaluating residual placement or paint;
+do not replace them with a completion symbol to improve similarity.
+
+There is a separate reference-font defect: in the representative light/DPR1
+capture, `create` resolves to **Roboto, 16px, normal line height**, despite its
+Material icon classes. Visual inspection of the frozen
+`interactions/stepper/light/desktop-dpr1/activate/stepper-primary-raster-reference.png`
+shows clipped letters from `create`, while the paired Astylar crop shows a check.
+The frozen browser `styles-SFHGRD5K.css` contains only Roboto `@font-face`
+families and neither a `.material-icons` rule nor a Material Icons font name
+(SHA-256 `e6ac3260fbe0d21fab11df360ce38dc5f4d1b56bd4f79b5e36d3af8971a23896`).
+Current `src/styles.scss` imports Roboto 400/500/700; `src/index.html` provides
+no icon-font stylesheet, and `angular.json` names only that global SCSS file.
+The missing icon-font setup is a reference authoring gap, not evidence that
+Astylar rendered the same font/icon input incorrectly. Preserve this historical
+capture; any subsequent reference correction needs an explicit input-baseline
+change and matching candidate inputs. The custom completion check does not
+repair or justify the reference's missing font declaration.
+
+`reviewed-stepper-edit-state-substitution` preserves both original text owners,
+full icon/header/stepper/frame paths, corresponding candidate mark ancestry,
+selected Review state, computed and normal/effective styles, and candidate
+node identities. It explicitly sets input equivalence, final-raster verification
+and current-plugin-paint capture to false. Independent replay detects removed,
+duplicated, forged or out-of-scope claims. Existing inactive-panel and ordinary
+text checks remain independent.
+
+Three focused tests add **30 negative input controls** and **11 report mutation
+controls**. The first focused run found a new collector guard calling `includes`
+on the boolean false branch when unexpected candidate text was present; the
+guard now handles that branch and leaves the mismatch unresolved.
+
+```powershell
+node --test --test-name-pattern='stepper edit|stepper omitted panel|records source fingerprints' tests/material-parity/input-equivalence-audit.spec.mjs
+```
+
+Final focused result: **5/5 pass**, zero failed/skipped/cancelled/todo,
+**2.340 seconds**, terminal exit 0. `npm run parity:harness:check`: **428/428
+pass**, zero failed/skipped/cancelled/todo, **232.663 seconds**, terminal exit 0.
+Full current-ancestry + normal-line-box + supplemental replay completed with
+complete capture coverage, **116 detected source findings**, no unexplained or
+undetected definitions and no diagnostic validation errors. Strict acceptance
+still rejects **3,309 resolved-style**, **879 control-text**, **17 retained
+mapping/stage**, and **354 retained typography** attributions. All remaining
+anonymous mapping gaps belong to paginator; this is not overall input-equivalence
+acceptance. All ten frozen visual-harness file hashes still match the checkpoint.
+No production or fixture input was changed, and the final enforced visual matrix
+remains a separate audit-completion requirement.
+
 ## Generated form-field error text retains unequal subscript and description inputs (2026-09-13)
 
 `reviewed-field-error-text` pairs the generated `mat-mdc-error-*` owner with

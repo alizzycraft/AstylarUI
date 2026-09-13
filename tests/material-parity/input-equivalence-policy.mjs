@@ -562,6 +562,15 @@ export const sourceAuditDefinitions = Object.freeze([
     justification: 'Reference sheetContent supplies two href="#" anchors inside mat-nav-list with generated content/primary-label spans. Candidate flattens them to Share/Copy link value buttons and replaces the inner label font/24px line-height/.496px tracking/on-surface tokens with a generic control font stack, omitted line-height/tracking and page theme.onSurface. The nested nowrap/ellipsis/overflow rules are also absent. Share is authored as a -dismiss button handled by the generic close branch rather than reference anchor navigation; mapping corresponding text does not certify equal semantics or behavior. Preserve the original structures and declarations before diagnosing renderer failures, rather than tuning normal metrics, colors or fixed dimensions.',
   }),
   Object.freeze({
+    id: 'fixture-stepper-edit-state-replaced-by-checkmark',
+    introducedBy: 'fc45b58 fix(interaction): focus nested interactive owners',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`this\.selectionMark\('step-details-complete', 'step-complete-mark'\)`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase step-state, editable description and icon-content translation',
+    justification: 'When Review is selected, the reference Details header uses edit state, a clipped Editable description and create font-icon input. Candidate replaced its number with a completed-class badge and custom completion checkmark in fc45b58. A presentation checkmark is neither the editable icon input nor its description. Restore state/content intent before assigning residual shape, font or semantic behavior to core. The recorded reference font remains authoritative; successful material-icon glyph selection is not inferred from the class name.',
+  }),
+  Object.freeze({
     id: 'fixture-stepper-inactive-panel-omitted',
     introducedBy: '2f44011 feat(example): add Material component showcase',
     file: 'examples/material-showcase/src/app/astylar.component.ts',

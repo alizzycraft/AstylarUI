@@ -425,11 +425,13 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
   if (invalidTooltipStateGaps.length) errors.push(`${invalidTooltipStateGaps.length} tooltip state gaps lack exact authored presence evidence`);
   validateSelectArrowSubstitutions(report, errors);
   validatePluginTabPanelSubstitutions(report, errors);
+  validateStepperEditSubstitutions(report, errors);
   validateCalendarAuxiliaryOmissions(report, errors);
   const unresolvedRetainedGaps = retainedGaps.filter((gap) => !isReviewedHiddenRetainedGap(gap, report.elementInventory) &&
     !isReviewedStepperPanelGap(gap, report.elementInventory) && !isReviewedCalendarCloseGap(gap, report.elementInventory) &&
     !isReviewedCalendarWeekdayNameGap(gap, report.elementInventory) && !isReviewedSelectArrowGap(gap, report.elementInventory) &&
     !isReviewedPluginTabPanelGap(gap, report.elementInventory) && !isReviewedTooltipStateGap(gap, report.elementInventory) &&
+    !isReviewedStepperEditGap(gap, report.elementInventory) &&
     gap.attribution !== 'reviewed-calendar-auxiliary-label-omission');
   if (requireComplete && unresolvedRetainedGaps.length > 0) errors.push(`${unresolvedRetainedGaps.length} retained typography mappings or stage fields require review`);
   const reviewedTypographyKinds = { 'reviewed-heading-mask': 'parity-harness-defect',
@@ -633,6 +635,7 @@ export function renderMaterialInputAuditMarkdown(report) {
     `Control-owned text routing: ${report.retainedTypography.controlTextMappings.length} reviewed text-owner correspondences use the current core-control-texture stage, not invented registry entries. Composite calendar headers preserve different reference and candidate strings plus original vector inputs. Independent input differences and any current-paint gaps remain enforced; this is not wrapper or input equivalence.`,
     `Hidden retained-text stage: ${report.retainedTypography.gaps.filter((gap) => isReviewedHiddenRetainedGap(gap, report.elementInventory)).length} gap records have complete captured ancestry explaining why core creates no text entry below display:none. The records and raw styles remain; reference display:none and visibility:hidden mechanisms are distinguished, not normalized into equivalent inputs.`,
     `Stepper structure: ${report.retainedTypography.gaps.filter((gap) => isReviewedStepperPanelGap(gap, report.elementInventory)).length} gap records document an omitted inactive reference panel, classified as unequal fixture structure rather than missing core text. Active-panel typography remains independently compared.`,
+    `Stepper edit state: ${report.retainedTypography.gaps.filter(gap => gap.attribution === 'reviewed-stepper-edit-state-substitution').length} records retain the original Editable description and create icon-ligature input versus a candidate custom completion checkmark. Header state and full ancestor/style evidence explain absent text owners without equating state, glyph content, accessibility or plugin paint.`,
     '',
     `Stepper number positioning: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-stepper-number-wrapper-substitution').length} records preserve the reference start-aligned numeral inside a separate percentage-positioned/transformed wrapper versus the candidate fixed centered span. This is unequal authored structure and alignment, not equivalent start/center values or proof of a core text-alignment defect.`,
     `Button-toggle alignment: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-toggle-button-wrapper-substitution').length} records retain native-button/inline-block center versus substituted flex-div/span left. Exact structure and complete captured ancestry establish unequal inputs, not equivalent alignment or a core default-style failure.`,
@@ -4254,6 +4257,102 @@ function reviewedFloatingLabelInput(entry, ref, ast, styles, referenceTree, asty
   };
 }
 
+function reviewedStepperEditGap(key, inventory) {
+  const match = parseReviewedCase(key, 'stepper');
+  if (!match || match[1] !== 'interaction' || !['activate', 'activate-leave'].includes(match[4]) || inventory.errors.some(e => e.case === key)) return;
+  const one = nodes => nodes.length === 1 ? nodes[0] : undefined;
+  const rm = one(inventory.cases.filter(c => c.case === key && c.side === 'reference'));
+  const am = one(inventory.cases.filter(c => c.case === key && c.side === 'astylar'));
+  if (!rm || !am || !Number.isInteger(am.resolvedStyleRevision) || am.resolvedStyleRevision < 0) return;
+  const ref = inventory.variants[rm.variant], ast = inventory.variants[am.variant];
+  if (ref?.side !== 'reference' || ast?.side !== 'astylar' || ref.family !== 'stepper' || ast.family !== 'stepper' ||
+      !ref.ruleEvidenceComplete || !ast.ruleEvidenceComplete || ast.resolvedStyleEvidenceVersion !== 2 || ast.resolvedStyleSource !== 'core-style-inspection') return;
+  for (const tree of [ref, ast]) {
+    if (new Set(tree.nodes.map(n => n.key)).size !== tree.nodes.length) return;
+    const ids = tree.nodes.map(n => (n.attributes ?? n.authored)?.id).filter(Boolean);
+    if (new Set(ids).size !== ids.length) return;
+  }
+  const children = (tree, n) => tree.nodes.filter(v => v.parent === n?.key);
+  const cls = (n, value) => String((n?.attributes ?? n?.authored)?.class ?? '').split(/\s+/).includes(value);
+  const hidden = one(ref.nodes.filter(n => n.ownText?.trim() === 'Editable'));
+  const icon = one(ref.nodes.filter(n => n.type === 'mat-icon' && n.ownText?.trim() === 'create'));
+  if (!hidden || hidden.type !== 'span' || hidden.attributes.id || !cls(hidden, 'cdk-visually-hidden') ||
+      !icon || icon.attributes.id || icon.attributes.role !== 'img' || icon.attributes['aria-hidden'] !== 'true' ||
+      icon.attributes['data-mat-icon-type'] !== 'font' || !['mat-icon', 'material-icons', 'mat-ligature-font'].every(c => cls(icon, c)) ||
+      hidden.parent !== icon.parent || children(ref, hidden).length || children(ref, icon).length) return;
+  const referencePath = [icon];
+  for (const [type, className, id] of [['div', 'mat-step-icon-content'], ['div', 'mat-step-icon-state-edit'],
+    ['mat-step-header', 'mat-step-header'], ['div', 'mat-horizontal-stepper-header-container'], ['div', 'mat-horizontal-stepper-wrapper'],
+    ['mat-stepper', 'mat-stepper-horizontal', 'stepper-primary'], ['section', 'demo', 'stepper-root'], ['main', 'frame']]) {
+    const parent = one(ref.nodes.filter(n => n.key === referencePath.at(-1).parent));
+    if (!parent || parent.type !== type || !cls(parent, className) || (id && parent.attributes.id !== id) || parent.ownText?.trim()) return;
+    referencePath.push(parent);
+  }
+  const [, content, badge, header, head, , group, , frame] = referencePath;
+  const serial = header.attributes.id?.match(/^cdk-stepper-(\d+)-label-0$/)?.[1];
+  const review = one(children(ref, head).filter(n => n.type === 'mat-step-header' && n.attributes.id === `cdk-stepper-${serial}-label-1`));
+  if (serial === undefined || !review || header.attributes.role !== 'tab' || header.attributes['aria-selected'] !== 'false' ||
+      header.attributes['aria-controls'] !== `cdk-stepper-${serial}-content-0` || review.attributes.role !== 'tab' ||
+      review.attributes['aria-selected'] !== 'true' || review.attributes['aria-controls'] !== `cdk-stepper-${serial}-content-1` ||
+      group.attributes.role !== 'tablist' || group.attributes['aria-label'] !== 'Project setup' || frame.parent !== null ||
+      !cls(badge, 'mat-step-icon') || cls(badge, 'mat-step-icon-selected') || children(ref, badge).length !== 1 ||
+      children(ref, content).map(n => n.key).join('|') !== [hidden, icon].map(n => n.key).join('|')) return;
+  const mark = one(ast.nodes.filter(n => n.authored?.id === 'step-details-complete'));
+  if (!mark || mark.authored.type !== 'showcase.material:check-mark' || mark.authored.class !== 'selection-mark step-complete-mark' ||
+      mark.authored.role !== 'presentation' || mark.authored.textContent !== undefined || children(ast, mark).length ||
+      mark.retainedText || mark.paintedControlText || mark.authored.data?.['stroke-width'] !== 1.8 ||
+      !/^#[0-9a-f]{6}$/i.test(mark.authored.data?.['indicator-color'] ?? '')) return;
+  const candidatePath = [mark];
+  for (const [type, id, className] of [['span', 'step-details-badge', 'completed'], ['div', 'step-details', 'step-tab'],
+    ['div', 'stepper-head', 'stepper-head'], ['div', 'stepper-primary', 'stepper'], ['section', 'stepper-root'], ['main', 'page']]) {
+    const parent = one(ast.nodes.filter(n => n.key === candidatePath.at(-1).parent));
+    if (!parent || parent.authored.type !== type || parent.authored.id !== id || (className && !cls(parent, className)) || parent.authored.textContent !== undefined) return;
+    candidatePath.push(parent);
+  }
+  const [, astBadge, astHeader, astHead, astGroup, , page] = candidatePath;
+  const astReview = one(children(ast, astHead).filter(n => n.authored?.id === 'step-review'));
+  if (children(ast, astBadge).length !== 1 || !cls(astBadge, 'step-badge') || cls(astBadge, 'selected') ||
+      astHeader.authored.role !== 'tab' || astHeader.authored.ariaSelected !== false || astHeader.authored.tabindex !== -1 ||
+      !astReview || astReview.authored.role !== 'tab' || astReview.authored.ariaSelected !== true || astReview.authored.tabindex !== 0 ||
+      astGroup.authored.role !== 'tablist' || astGroup.authored.ariaLabel !== 'Project setup' || page.parent !== 'root' ||
+      ast.nodes.some(n => ['Editable', 'create'].includes(n.authored?.textContent?.trim()))) return;
+  const style = (index, side) => inventory.styles[index]?.side === side ? inventory.styles[index].value : undefined;
+  const object = value => value && typeof value === 'object' && !Array.isArray(value);
+  const refNodes = [hidden, ...referencePath, review], astNodes = [...candidatePath, astReview];
+  if (refNodes.some(n => !object(style(n.style, 'reference')) || !Array.isArray(n.rules) || n.rules.some(i => inventory.rules[i]?.side !== 'reference')) ||
+      astNodes.some(n => [n.style, n.normalStyle, n.interactionStyle].some(i => !object(style(i, 'astylar'))))) return;
+  const hiddenStyle = style(hidden.style, 'reference');
+  if (hiddenStyle.position !== 'absolute' || hiddenStyle.width !== '1px' || hiddenStyle.height !== '1px' ||
+      hiddenStyle.clip !== 'rect(0px, 0px, 0px, 0px)' || hiddenStyle.overflowX !== 'hidden' || hiddenStyle.overflowY !== 'hidden') return;
+  const snapshot = (n, side) => ({ ...n, style: style(n.style, side), ...(side === 'reference' ? {
+    rules: n.rules.map(i => inventory.rules[i]) } : { normalStyle: style(n.normalStyle, side), interactionStyle: style(n.interactionStyle, side) }) });
+  return { case: key, family: 'stepper', element: undefined,
+    reason: 'own-text nodes without an explicit shared ID require structural mapping', referenceNodes: [hidden.key, icon.key], astylarNodes: [],
+    attribution: 'reviewed-stepper-edit-state-substitution', classification: 'application-plugin-authoring-defect',
+    inputEquivalent: false, finalRasterVerified: false, currentPluginPaintCaptured: false,
+    recommendedOwner: 'showcase step-state/content translation and shared core icon/semantics composition',
+    justification: 'The inactive Details header is in Material edit state, with clipped Editable description text and an aria-hidden create font-icon input. Candidate authors a completed badge with a childless custom check-mark instead, omitting both text owners. Full matching step/header ancestry and selected Review state establish the substitution, not equivalent icon content, accessibility, font availability or plugin paint. Restore edit-state inputs before investigating remaining equal-input rendering; do not substitute a completion symbol to match a screenshot.',
+    reviewEvidence: structuredClone({ sourceFinding: 'fixture-stepper-edit-state-replaced-by-checkmark', source: ast.resolvedStyleSource,
+      revision: am.resolvedStyleRevision, referenceState: 'edit', candidateState: 'completed',
+      reference: refNodes.map(n => snapshot(n, 'reference')), candidate: astNodes.map(n => snapshot(n, 'astylar')),
+      candidateNodeIdentities: ast.nodes.map(n => ({ key: n.key, parent: n.parent, authored: n.authored })) }) };
+}
+
+function isReviewedStepperEditGap(gap, inventory) {
+  if (gap.attribution !== 'reviewed-stepper-edit-state-substitution') return false;
+  const expected = reviewedStepperEditGap(gap.case, inventory);
+  return expected !== undefined && JSON.stringify(gap) === JSON.stringify(expected);
+}
+
+function validateStepperEditSubstitutions(report, errors) {
+  const inventory = report.elementInventory;
+  const expected = [...new Set(inventory.cases.map(c => c.case))].map(key => reviewedStepperEditGap(key, inventory)).filter(Boolean);
+  const claimed = report.retainedTypography?.gaps.filter(g => g.attribution === 'reviewed-stepper-edit-state-substitution') ?? [];
+  if (expected.length !== claimed.length || claimed.some(g => !isReviewedStepperEditGap(g, inventory)) ||
+      expected.some(e => claimed.filter(g => g.case === e.case).length !== 1))
+    errors.push('stepper edit substitutions do not replay from captured state, icon and description inputs');
+}
+
 function reviewedStepperPanelEvidence(gap, inventory) {
   if (gap.family !== 'stepper' || gap.reason !== 'own-text nodes without an explicit shared ID require structural mapping' ||
       gap.referenceNodes?.length !== 1 || gap.astylarNodes?.length !== 0 || inventory.errors.some((error) => error.case === gap.case)) return;
@@ -4754,6 +4853,11 @@ export function collectRetainedTypographyEvidence(cases, inventory, controlTypog
           reviewedCalendarCloseOmission(key, referenceNode, inventory);
         if (closeOmission) {
           gap(key, undefined, reason, { ...identity, ...calendarCloseGapAttribution(closeOmission) });
+          continue;
+        }
+        const editGap = entry.family === 'stepper' && anonymousAstylar.length === 0 && reviewedStepperEditGap(key, inventory);
+        if (editGap?.referenceNodes?.includes(referenceNode)) {
+          if (editGap.referenceNodes[0] === referenceNode) gaps.push(editGap);
           continue;
         }
         const reviewEvidence = reviewedStepperPanelEvidence({ case: key, reason, ...identity }, inventory);
@@ -6466,6 +6570,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('stepper edit substitution retains/,
+      'stepper editable-state icon and description substitution', 'Complete header/ancestor and style evidence identifies the omitted Editable/create text inputs versus a custom completion mark. Changed state, content, missing stages and forged report evidence cannot pass as equivalent inputs.'),
     proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('field error mapping preserves/,
       'form-field generated error description and subscript ownership', 'Unique input/error description linkage and complete field paths map the candidate error span without equating its independent positioning or absent live wrapper. Missing stages, broken relations and fabricated evidence fail explicit checks.'),
     proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('dialog metrics preserve/,

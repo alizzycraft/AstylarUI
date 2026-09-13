@@ -2717,6 +2717,110 @@ test('toggle alignment report claims independently replay from captured inputs',
   }
 });
 
+function stepperEditReport() {
+  const raw = retainedTypographyReport(), e = raw.results[0], { reference: r, astylar: a } = e.inputTrees;
+  e.family = 'stepper'; e.state = 'activate'; raw.results = []; raw.interactions = [e];
+  const ref = (key, parent, type, attributes = {}, ownText = '') => ({ key, parent, type, attributes, ownText, style: 0, rules: [], pseudoElements: [] });
+  r.styles.push({ ...r.styles[0], position: 'absolute', width: '1px', height: '1px', clip: 'rect(0px, 0px, 0px, 0px)', overflowX: 'hidden', overflowY: 'hidden' });
+  r.nodes = [ref('frame', null, 'main', { class: 'frame' }), ref('section', 'frame', 'section', { id: 'stepper-root', class: 'demo' }),
+    ref('group', 'section', 'mat-stepper', { id: 'stepper-primary', class: 'mat-stepper-horizontal', role: 'tablist', 'aria-label': 'Project setup' }),
+    ref('wrapper', 'group', 'div', { class: 'mat-horizontal-stepper-wrapper' }), ref('head', 'wrapper', 'div', { class: 'mat-horizontal-stepper-header-container' }),
+    ref('details', 'head', 'mat-step-header', { id: 'cdk-stepper-0-label-0', class: 'mat-step-header', role: 'tab', 'aria-selected': 'false', 'aria-controls': 'cdk-stepper-0-content-0' }),
+    ref('badge', 'details', 'div', { class: 'mat-step-icon mat-step-icon-state-edit' }), ref('content', 'badge', 'div', { class: 'mat-step-icon-content' }),
+    { ...ref('hidden', 'content', 'span', { class: 'cdk-visually-hidden' }, 'Editable'), style: 1 },
+    ref('icon', 'content', 'mat-icon', { class: 'mat-icon material-icons mat-ligature-font', role: 'img', 'aria-hidden': 'true', 'data-mat-icon-type': 'font' }, 'create'),
+    ref('review', 'head', 'mat-step-header', { id: 'cdk-stepper-0-label-1', role: 'tab', 'aria-selected': 'true', 'aria-controls': 'cdk-stepper-0-content-1' })];
+  const ast = (key, parent, authored) => ({ key, parent, authored, resolvedStyle: {}, normalResolvedStyle: {}, interactionResolvedStyle: {} });
+  a.nodes = [ast('page', 'root', { type: 'main', id: 'page' }), ast('section', 'page', { type: 'section', id: 'stepper-root' }),
+    ast('group', 'section', { type: 'div', id: 'stepper-primary', class: 'stepper', role: 'tablist', ariaLabel: 'Project setup' }),
+    ast('head', 'group', { type: 'div', id: 'stepper-head', class: 'stepper-head' }),
+    ast('details', 'head', { type: 'div', id: 'step-details', class: 'step-tab', role: 'tab', ariaSelected: false, tabindex: -1 }),
+    ast('badge', 'details', { type: 'span', id: 'step-details-badge', class: 'step-badge completed' }),
+    ast('mark', 'badge', { type: 'showcase.material:check-mark', id: 'step-details-complete', class: 'selection-mark step-complete-mark', role: 'presentation', data: { 'indicator-color': '#ffffff', 'stroke-width': 1.8 } }),
+    ast('review', 'head', { type: 'div', id: 'step-review', role: 'tab', ariaSelected: true, tabindex: 0 })];
+  return raw;
+}
+
+test('stepper edit substitution retains hidden description and icon input without inventing candidate text', () => {
+  const raw = stepperEditReport(), before = structuredClone(raw), report = buildMaterialInputAudit(raw);
+  const [gap] = report.retainedTypography.gaps;
+  assert.equal(report.retainedTypography.gaps.length, 1);
+  assert.equal(gap.attribution, 'reviewed-stepper-edit-state-substitution');
+  assert.deepEqual(gap.referenceNodes, ['hidden', 'icon']); assert.deepEqual(gap.astylarNodes, []);
+  assert.equal(gap.inputEquivalent, false); assert.equal(gap.finalRasterVerified, false); assert.equal(gap.currentPluginPaintCaptured, false);
+  assert.equal(gap.reviewEvidence.referenceState, 'edit'); assert.equal(gap.reviewEvidence.candidateState, 'completed');
+  assert.equal(gap.reviewEvidence.reference[0].style.clip, 'rect(0px, 0px, 0px, 0px)');
+  assert.equal(gap.reviewEvidence.reference[1].ownText, 'create');
+  assert.equal(gap.reviewEvidence.candidate[0].authored.type, 'showcase.material:check-mark');
+  assert.equal(report.retainedTypography.comparisons.length, 0);
+  assert.ok(report.sourceFindings.find(f => f.id === 'fixture-stepper-edit-state-replaced-by-checkmark')?.detected);
+  assert.ok(!validateMaterialInputAudit(report).some(e => /stepper edit|retained typography mappings/.test(e)));
+  assert.deepEqual(raw, before);
+});
+
+test('stepper edit substitution rejects changed state ancestry icon description and missing stages', () => {
+  const controls = [
+    (r, a, e) => { e.state = 'hover'; },
+    (r, a) => { r.nodes.push(structuredClone(r.nodes[0])); },
+    (r, a) => { a.nodes.push({ ...structuredClone(a.nodes[0]), key: 'duplicate' }); },
+    (r, a) => { r.nodes.find(n => n.key === 'hidden').ownText = 'Completed'; },
+    (r, a) => { r.nodes.find(n => n.key === 'hidden').attributes.class = ''; },
+    (r, a) => { r.styles[1].clip = 'auto'; },
+    (r, a) => { r.styles[1].width = '20px'; },
+    (r, a) => { r.nodes.find(n => n.key === 'icon').ownText = 'done'; },
+    (r, a) => { r.nodes.find(n => n.key === 'icon').attributes['aria-hidden'] = 'false'; },
+    (r, a) => { r.nodes.find(n => n.key === 'icon').attributes['data-mat-icon-type'] = 'svg'; },
+    (r, a) => { r.nodes.find(n => n.key === 'icon').parent = 'details'; },
+    (r, a) => { r.nodes.find(n => n.key === 'badge').attributes.class = 'mat-step-icon mat-step-icon-state-done'; },
+    (r, a) => { r.nodes.find(n => n.key === 'details').attributes['aria-selected'] = 'true'; },
+    (r, a) => { r.nodes.find(n => n.key === 'details').attributes['aria-controls'] = 'other'; },
+    (r, a) => { r.nodes.find(n => n.key === 'review').attributes['aria-selected'] = 'false'; },
+    (r, a) => { r.nodes.find(n => n.key === 'frame').parent = 'other'; },
+    (r, a) => { a.nodes.find(n => n.key === 'mark').authored.type = 'span'; },
+    (r, a) => { a.nodes.find(n => n.key === 'mark').authored.role = 'img'; },
+    (r, a) => { a.nodes.find(n => n.key === 'mark').authored.textContent = 'create'; },
+    (r, a) => { a.nodes.find(n => n.key === 'mark').authored.data['stroke-width'] = 2; },
+    (r, a) => { a.nodes.find(n => n.key === 'mark').parent = 'details'; },
+    (r, a) => { a.nodes.find(n => n.key === 'badge').authored.class = 'step-badge selected'; },
+    (r, a) => { a.nodes.find(n => n.key === 'details').authored.ariaSelected = true; },
+    (r, a) => { a.nodes.find(n => n.key === 'review').authored.tabindex = -1; },
+    (r, a) => { a.nodes.find(n => n.key === 'page').parent = 'other'; },
+    (r, a) => { delete a.nodes.find(n => n.key === 'mark').normalResolvedStyle; },
+    (r, a) => { a.nodes.find(n => n.key === 'mark').retainedText = { source: 'core-text-registry', style: {} }; },
+    (r, a) => { a.resolvedStyleSource = 'mesh'; },
+    (r, a) => { a.nodes.push({ key: 'extra', parent: 'details', authored: { type: 'span', textContent: 'Editable' } }); },
+    (r, a) => { r.nodes.push({ key: 'extra', parent: 'content', type: 'span', attributes: {}, ownText: 'Other', style: 0, rules: [], pseudoElements: [] }); },
+  ];
+  for (const [index, mutate] of controls.entries()) {
+    const raw = stepperEditReport(), e = raw.interactions[0]; mutate(e.inputTrees.reference, e.inputTrees.astylar, e);
+    const cases = [{ ...e, kind: 'interaction' }], t = collectRetainedTypographyEvidence(cases, collectFullTreeInventory(cases));
+    assert.ok(t.gaps.some(g => g.attribution === 'unresolved'), `control ${index} remains explicit`);
+    assert.ok(!t.gaps.some(g => g.attribution === 'reviewed-stepper-edit-state-substitution'), `control ${index}`);
+  }
+});
+
+test('stepper edit report independently replays complete state and style evidence', () => {
+  const original = buildMaterialInputAudit(stepperEditReport());
+  for (const mutate of [
+    (r, g) => { g.inputEquivalent = true; },
+    (r, g) => { g.currentPluginPaintCaptured = true; },
+    (r, g) => { g.finalRasterVerified = true; },
+    (r, g) => { g.reviewEvidence.referenceState = 'done'; },
+    (r, g) => { g.reviewEvidence.reference[0].style.clip = 'auto'; },
+    (r, g) => { g.reviewEvidence.reference.pop(); },
+    (r, g) => { g.reviewEvidence.candidate[0].authored.data['stroke-width'] = 2; },
+    (r, g) => { g.referenceNodes.pop(); },
+    (r, g) => { g.case = 'interaction:dialog@light/desktop/activate'; },
+    (r, g) => { r.retainedTypography.gaps = []; },
+    (r, g) => { r.retainedTypography.gaps.push(structuredClone(g)); },
+  ]) {
+    const report = structuredClone(original), inventory = structuredClone(report.elementInventory);
+    mutate(report, report.retainedTypography.gaps[0]);
+    assert.deepEqual(report.elementInventory, inventory);
+    assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('stepper edit substitutions')));
+  }
+});
+
 function stepperNumberAlignmentReport() {
   const raw = templateTypographyReport('stepper'), { reference: r, astylar: a } = raw.results[0].inputTrees;
   r.styles[0] = { ...r.styles[0], textAlign: 'start', direction: 'ltr', writingMode: 'horizontal-tb', unicodeBidi: 'normal', textAlignLast: 'auto', display: 'block' };
