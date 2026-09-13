@@ -23,6 +23,89 @@ selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Tooltip connected-overlay text and unpaired open states (2026-09-13)
+
+The audit now maps **18 paired tooltip text owners** through the unique
+`tooltip-primary` trigger, original `mattooltip` message, and shown connected
+overlay. The six-node reference visual path runs from the anonymous surface
+through tooltip wrapper, `mat-tooltip-component`, overlay pane, connected
+position bounding box and overlay container. Candidate text is a direct
+`div#tooltip-popup` inside `div#tooltip-anchor`, section and page. Its trigger
+is a sibling in that fixed-size flex column, not the reference overlay origin.
+
+New mapping `reviewed-tooltip-overlay-text` preserves all these original
+styles, rule indices, attributes, raw text and trigger/section/frame witnesses.
+It reuses the existing source finding
+`fixture-tooltip-replaces-connected-overlay-with-flow`, whose history points
+to `f3c8254`. `git log -S "id: 'tooltip-anchor'"` independently identifies that
+same commit. The current implementation remains at
+`astylar.component.ts:809-811` and `1076-1078`; the reference authors
+`matTooltip="Create a project"` at `reference.component.ts:91`.
+
+The installed tooltip entry point re-exports its implementation from
+`@angular/material/fesm2022/module-CWxMD37a.mjs`. That actual component source,
+now included among **55 source fingerprints**, supplies the original nested
+surface template, `aria-hidden:true` visual component, before pseudo-elements,
+size constraints, text tokens, clipping and animation/transform inputs at
+line 938. The captured reference trigger's described-by ID points outside the
+captured frame/overlay text trees. This mapping preserves that ID; it does not
+invent the external description node or equate it with the candidate visible
+`role:tooltip` sibling. Accessibility description completeness remains open.
+
+All 18 paired captures use a below-positioned pane. Mapping rejects a different
+unreviewed placement topology rather than extrapolating the captured result.
+It exposes **36 typography differences**: 18 missing component font-family
+overrides already attributed by original token/ancestry evidence, and 18
+reference `text-align:center` versus retained candidate `left` values still
+requiring attribution. Candidate flex centering is not silently substituted
+for text alignment, nor accepted as proof of equal rendering inputs.
+
+Separately, **eight candidate-only `open` states** remain unmatched, one per
+profile at desktop DPR 1 and 2. The candidate benchmark-only click branch
+(`astylar.component.ts:285`) forces `open:true`; reference/candidate hover and
+held captures must not be conflated with that special branch. No missing
+reference popup is fabricated, and these eight gap records remain unresolved.
+All 50 tooltip interaction cases (100 captured sides) remain inventoried.
+
+Four tests cover original/candidate ownership, **28 negative topology/trigger
+controls**, absent reference popup, missing retained text, and **11 report
+mutations**. Independent replay rejects deleted or fabricated mappings,
+typography, source paths and equivalence/raster claims. This does not certify
+connected positioning, collision, scroll behavior, visibility or glyph raster.
+
+Focused command:
+
+`node --test --test-name-pattern='tooltip text|records source fingerprints' tests/material-parity/input-equivalence-audit.spec.mjs`
+
+**5/5 pass**, zero failed/skipped/cancelled/todo, **1.344 seconds**, terminal
+exit 0. `npm run parity:harness:check`: **389/389 pass**, zero failed/skipped/
+cancelled/todo, **151.070 seconds**, terminal exit 0. All ten frozen visual-harness hashes
+match, and `git diff --check` passes. No production fixture, plugin, renderer,
+reference or visual threshold was changed.
+
+Full audit replay command:
+
+```powershell
+node --input-type=module -e "import {readFileSync} from 'node:fs';import {buildMaterialInputAudit,validateMaterialInputAudit} from './tests/material-parity/input-equivalence-audit.mjs';const p=JSON.parse(readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json'));const a=buildMaterialInputAudit(p,{root:process.cwd(),normalLineBoxPath:'artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json',supplementalRoot:'artifacts/material-parity/supplemental-current-ancestry-audit'});console.log('SUMMARY '+JSON.stringify({coverage:a.coverage.complete,summary:a.summary,tooltipMaps:a.retainedTypography.reviewedMappings.filter(m=>m.kind==='reviewed-tooltip-overlay-text').length,tooltipGaps:a.retainedTypography.gaps.filter(g=>g.element==='tooltip-popup').length,retainedGaps:a.retainedTypography.gaps.filter(g=>g.attribution==='unresolved').length,retainedDifferences:a.retainedTypography.differences.filter(g=>g.attribution==='unresolved').length}));console.log('DIAGNOSTIC '+JSON.stringify(validateMaterialInputAudit(a,{requireComplete:false})));console.log('STRICT '+JSON.stringify(validateMaterialInputAudit(a)));"
+```
+
+Terminal exit 0; this command prints strict errors instead of returning a
+strict-success exit. All **103** source findings are detected; the main 8,140
+differences / 380,520 occurrences and 88 structural differences remain
+unchanged. Coverage stays complete. Retained gaps decrease **317 to 281**;
+unresolved retained typography increases **354 to 372**. Diagnostic validation
+returns `[]`; strict validation retains:
+
+```text
+3309 resolved-style differences still lack root-cause attribution
+849 control texture typography differences require attribution
+281 retained typography mappings or stage fields require review
+372 retained typography differences require attribution
+```
+
+These remain audit obligations, not accepted renderer parity. Final report
+generation and the final unfiltered enforced matrix are still required.
+
 ## Snackbar supporting-text size and ink provenance (2026-09-13)
 
 The **68** size/color differences exposed by the message mapping now have

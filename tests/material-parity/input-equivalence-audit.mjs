@@ -455,6 +455,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
   validateTimepickerOptionEvidence(report, errors);
   validateMaterialOptionEvidence(report, errors);
   validateSnackbarMessageEvidence(report, errors);
+  validateTooltipTextEvidence(report, errors);
   validateHorizontalStartAlignment(report, errors);
   validateInheritedComponentFontStack(report, errors);
   validateOmittedComponentTextMetrics(report, errors);
@@ -589,6 +590,7 @@ export function renderMaterialInputAuditMarkdown(report) {
     `Autocomplete/select option ink: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-material-option-ink-input').length} unequal colors trace either base-token inheritance or the selected primary-text token against a candidate inherited literal. Own label color remains absent in normal/effective inspection, with the option owner and retained text captured separately. Missing or competing declarations prevent attribution; variable fallback origin, theme scope and composited/raster output remain independent.`,
     `Snackbar messages: ${report.retainedTypography.reviewedMappings.filter(m => m.kind === 'reviewed-snackbar-message-text').length} labels map through unique overlay, live-region and sibling-action context. Original padded flex-message and nested action/live owners are replaced by a span inside a status surface. This establishes text identity only; unequal composition, typography, announcement behavior, placement and visibility remain independent obligations.`,
     `Snackbar message tokens: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-snackbar-message-token-input').length} size/color differences trace the direct component size token or inherited surface inverse-text token against omitted component size/page inheritance or literal surface white. Separate declaration, normal/effective and retained stages remain evidence. This is unequal authoring, not a core scaling/color defect or proof of current raster, visibility or theme-token fallback provenance.`,
+    `Tooltip text: ${report.retainedTypography.reviewedMappings.filter(m => m.kind === 'reviewed-tooltip-overlay-text').length} labels map only when unique Material trigger/message and shown connected-overlay ownership coexist with the unique candidate trigger-linked flow popup. Original aria-hidden visual ownership and external description linkage remain distinct from the candidate role-tooltip sibling. Candidate-only states, typography, positioning, collision, clipping, visibility and raster are not waived.`,
     `Timepicker options: ${report.retainedTypography.reviewedMappings.filter(m => m.kind === 'reviewed-timepicker-option-text').length} labels have complete input-linked half-hour-domain correspondence. Material primary-text/ripple owners are replaced by direct-text div options; active and selected states remain separate raw evidence. This maps text owners, not equivalent wrappers, scrolling, commit behavior, placement or raster. Newly exposed typography differences remain enforced.`,
     `Timepicker option ink: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-timepicker-option-ink-input').length} unequal colors trace from the reference option token through direct label inheritance versus the candidate literal preserved in normal/effective/retained stages. Competing or missing declarations prevent attribution. No token fallback-origin, theme-scope, compositing or final-raster equivalence is inferred.`,
     `Calendar month-label typography: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-calendar-month-marker-typography-input').length} records trace the omitted explicit zero line-height or substituted center alignment/literal ink to original declarations and captured core stages. Possible competing rules prevent attribution. These are unequal inputs, not a claim that the core misrendered zero, start or the original color token.`,
@@ -1446,6 +1448,81 @@ function reviewedTimepickerOptionMappings(reference, candidate) {
   }));
 }
 
+function reviewedTooltipTextMappings(reference, candidate) {
+  for (const tree of [reference, candidate]) {
+    if (!Array.isArray(tree?.nodes) || new Set(tree.nodes.map(n => n.key)).size !== tree.nodes.length) return [];
+    const ids = tree.nodes.map(n => (n.attributes ?? n.authored)?.id).filter(Boolean);
+    if (new Set(ids).size !== ids.length) return [];
+  }
+  const one = nodes => nodes.length === 1 ? nodes[0] : undefined;
+  const hasClass = (n, value) => String(n?.attributes?.class ?? '').split(/\s+/).includes(value);
+  const trigger = one(reference.nodes.filter(n => n.attributes?.id === 'tooltip-primary'));
+  const refSection = one(reference.nodes.filter(n => n.attributes?.id === 'tooltip-root'));
+  const frame = one(reference.nodes.filter(n => n.key === refSection?.parent));
+  const label = one(reference.nodes.filter(n => n.parent === trigger?.key && hasClass(n, 'mdc-button__label')));
+  if (!trigger || trigger.type !== 'button' || trigger.attributes.mattooltip !== 'Create a project' ||
+      !hasClass(trigger, 'mat-mdc-tooltip-trigger') || !/^cdk-describedby-message-[\w-]+$/.test(trigger.attributes['aria-describedby'] ?? '') ||
+      !label || label.ownText?.trim() !== 'Hover for help' || reference.nodes.some(n => n.parent === label.key) ||
+      !refSection || refSection.type !== 'section' || trigger.parent !== refSection.key ||
+      !frame || frame.type !== 'main' || frame.parent !== null || !hasClass(frame, 'frame')) return [];
+  const leaf = one(reference.nodes.filter(n => hasClass(n, 'mat-mdc-tooltip-surface') && hasClass(n, 'mdc-tooltip__surface')));
+  if (!leaf || leaf.type !== 'div' || leaf.attributes?.id || leaf.ownText?.trim() !== trigger.attributes.mattooltip ||
+      reference.nodes.some(n => n.parent === leaf.key || n.attributes?.id === 'tooltip-popup')) return [];
+  const referencePath = [leaf];
+  for (const [type, className] of [['div', 'mat-mdc-tooltip'], ['mat-tooltip-component'],
+    ['div', 'mat-mdc-tooltip-panel'], ['div', 'cdk-overlay-connected-position-bounding-box'], ['div', 'cdk-overlay-container']]) {
+    const node = one(reference.nodes.filter(n => n.key === referencePath.at(-1).parent));
+    if (!node || node.type !== type || (className && !hasClass(node, className)) || node.ownText?.trim() ||
+        reference.nodes.filter(n => n.parent === node.key).length !== 1) return [];
+    referencePath.push(node);
+  }
+  if (!hasClass(referencePath[1], 'mat-mdc-tooltip-show') || referencePath[2].attributes['aria-hidden'] !== 'true' ||
+      !hasClass(referencePath[3], 'mat-mdc-tooltip-panel-below') || !hasClass(referencePath[3], 'cdk-overlay-pane') ||
+      !/^cdk-overlay-\d+$/.test(referencePath[3].attributes.id ?? '') || referencePath.at(-1).parent !== null ||
+      reference.nodes.filter(n => n.type === 'mat-tooltip-component').length !== 1) return [];
+  const ast = one(candidate.nodes.filter(n => n.authored?.id === 'tooltip-popup'));
+  const button = one(candidate.nodes.filter(n => n.authored?.id === 'tooltip-primary'));
+  if (!ast || ast.authored.type !== 'div' || ast.authored.role !== 'tooltip' || ast.authored.textContent !== 'Create a project' ||
+      !button || button.authored.type !== 'button' || button.authored.class !== 'material-button' || button.authored.value !== 'Hover for help' ||
+      button.authored.ariaDescribedby !== 'tooltip-popup' || candidate.nodes.some(n => n.parent === ast.key || n.parent === button.key)) return [];
+  const candidatePath = [ast];
+  for (const [type, id] of [['div', 'tooltip-anchor'], ['section', 'tooltip-root'], ['main', 'page']]) {
+    const node = one(candidate.nodes.filter(n => n.authored?.id === id));
+    if (!node || node.authored.type !== type || candidatePath.at(-1).parent !== node.key) return [];
+    candidatePath.push(node);
+  }
+  if (candidatePath[1].authored.class !== 'tooltip-anchor' || button.parent !== candidatePath[1].key ||
+      candidate.nodes.filter(n => n.parent === candidatePath[1].key).length !== 2 || candidatePath.at(-1).parent !== 'root') return [];
+  const snapshot = (node, side) => ({ key: node.key, parent: node.parent,
+    ...(side === 'reference' ? { type: node.type, attributes: node.attributes, ownText: node.ownText, style: node.style,
+      rules: node.rules, inline: node.inline, pseudoElements: node.pseudoElements }
+      : { authored: node.authored, style: node.style, normalStyle: node.normalStyle, interactionStyle: node.interactionStyle }) });
+  return [{ kind: 'reviewed-tooltip-overlay-text', element: 'tooltip-popup', referenceNode: leaf.key, astylarNode: ast.key,
+    classification: 'application-plugin-authoring-defect', inputEquivalent: false, finalRasterVerified: false,
+    reviewEvidence: { sourceFinding: 'fixture-tooltip-replaces-connected-overlay-with-flow',
+      referencePath: referencePath.map(n => snapshot(n, 'reference')), candidatePath: candidatePath.map(n => snapshot(n)),
+      referenceTrigger: snapshot(trigger, 'reference'), referenceLabel: snapshot(label, 'reference'),
+      referenceSection: snapshot(refSection, 'reference'), referenceFrame: snapshot(frame, 'reference'), candidateTrigger: snapshot(button),
+      referenceText: leaf.ownText, candidateText: ast.authored.textContent },
+    justification: 'The unique Material tooltip trigger/message and shown connected-overlay path establish text identity with the unique candidate trigger-linked popup. The reference aria-hidden visual tooltip and external described-by ID are not equated to the candidate role-tooltip sibling. Original connected placement/transform inputs and replacement flex-flow inputs remain captured. This maps paired text owners only, not accessibility description completeness, collision, clipping, state, layout, typography, visibility or raster; candidate-only states must remain unmatched.',
+  }];
+}
+
+function validateTooltipTextEvidence(report, errors) {
+  if (!report.retainedTypography) return;
+  const cases = [...new Set(report.elementInventory.cases.map(c => c.case))].flatMap(key => {
+    const match = parseReviewedCase(key, 'tooltip');
+    return match ? [{ kind: match[1], family: 'tooltip', profile: match[2], viewport: { id: match[3] }, ...(match[4] ? { state: match[4] } : {}) }] : [];
+  });
+  const replay = collectRetainedTypographyEvidence(cases, report.elementInventory);
+  const predicate = value => value.kind === 'reviewed-tooltip-overlay-text' || value.mapping?.kind === 'reviewed-tooltip-overlay-text' ||
+    value.element === 'tooltip-popup' || (value.family === 'tooltip' && value.reason === 'own-text nodes without an explicit shared ID require structural mapping');
+  for (const list of ['reviewedMappings', 'comparisons', 'differences', 'gaps']) {
+    if (JSON.stringify(report.retainedTypography[list].filter(predicate)) !== JSON.stringify(replay[list].filter(predicate)))
+      errors.push(`tooltip text ${list} lack complete replayed input evidence`);
+  }
+}
+
 function reviewedSnackbarMessageMappings(reference, candidate) {
   for (const tree of [reference, candidate]) {
     if (!Array.isArray(tree?.nodes) || new Set(tree.nodes.map(n => n.key)).size !== tree.nodes.length) return [];
@@ -1706,6 +1783,7 @@ export function reviewedTemplateTextMappings(family, referenceTree, astylarTree)
   if (family === 'timepicker') pairs.push(...reviewedTimepickerOptionMappings(referenceTree, astylarTree));
   if (family === 'autocomplete' || family === 'select') pairs.push(...reviewedMaterialOptionMappings(family, referenceTree, astylarTree));
   if (family === 'snack-bar') pairs.push(...reviewedSnackbarMessageMappings(referenceTree, astylarTree));
+  if (family === 'tooltip') pairs.push(...reviewedTooltipTextMappings(referenceTree, astylarTree));
   for (const path of paths) {
     const reference = follow(referenceTree, 'reference', path.reference);
     const astylar = follow(astylarTree, 'astylar', path.astylar);
@@ -5561,6 +5639,7 @@ function sourceFingerprints(root) {
     'examples/material-showcase/node_modules/@angular/material/fesm2022/timepicker.mjs',
     'examples/material-showcase/node_modules/@angular/material/fesm2022/option-BzhYL_xC.mjs',
     'examples/material-showcase/node_modules/@angular/material/fesm2022/snack-bar.mjs',
+    'examples/material-showcase/node_modules/@angular/material/fesm2022/module-CWxMD37a.mjs',
     'examples/material-showcase/src/app/theme.ts',
     'examples/material-showcase/src/app/showcase.store.ts',
     'examples/material-showcase/src/styles.scss',
@@ -5591,6 +5670,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('tooltip text mapping preserves/,
+      'tooltip trigger-linked connected-overlay text versus candidate flow popup', 'Exact message, trigger and overlay ancestry establish paired text identity without equating wrappers, description ownership or layout. Negative trigger/structure controls and independent replay reject unrelated, forged or removed evidence. Candidate-only states and missing retained stages remain explicit gaps. Original computed and candidate own/retained typography continue to be compared; no position, visibility, collision or raster acceptance is inferred.'),
     proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('snackbar message tokens distinguish/,
       'snackbar message direct size token and inherited surface ink ownership', 'Original message-size and surface-color token rules use distinct captured ancestry paths. Candidate own message values remain absent; parent surface white and scaled page size match retained core text independently. Negative declaration/reset/competition/stage controls and replay reject fabricated equivalence, missing provenance and altered owner values. Token computation is observed rather than replaced with a sampled literal; this is not visibility, compositing or final raster acceptance.'),
     proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('snackbar message mapping preserves/,
@@ -5687,7 +5768,7 @@ function implementationPlan() {
     { priority: 3.2, rootCause: 'Positioned offsets target the border box instead of the margin box', action: 'Apply the CSS inset/margin sizing equations in the core positioned-box calculation. The fixed-size left/bottom positive and negative margin controls isolate the failure without text, inline layout or Material. Add right/top, auto margins and over-constrained tests; rerun the compound badge before claiming its remaining vertical placement is fully explained.' },
     { priority: 3.3, rootCause: 'Direct flex text is painted separately from the shared item flow', action: 'Generate anonymous text items at the core CSS-space flex layout boundary so text and element children share intrinsic sizing, gaps, main/cross-axis placement and subsequent paint boxes. The four mixed-text row/column start/center reductions fail while explicit-span and single-direct-text centering controls pass. Extend wrapping, whitespace, reversed axes, padding and update cases before implementing; preserve authored direct text and do not solve the failure with application wrappers, fixed line heights or position offsets. Single-item centering success does not prove composed layout or normal-line-height raster fidelity.' },
     { priority: 3.5, rootCause: 'Reference CSS expressions bypass direct-style support', action: 'The existing core loaded-document-style path now has a bounded proof: original grid-list calc declarations resolve correct width/height/left at 280px and 480px without fixture arithmetic, while the independent inner used-height defect remains. Verify full Material cascade/state/responsive integration before adopting this path; scope general core corrections for any further unsupported expression or constraint. Do not copy measured pixels or implement per-family arithmetic; literal controls are not acceptance of the original expressions.' },
-    { priority: 4, rootCause: 'Generic overlay composition is duplicated', action: 'Audit existing core primitives before adding APIs for connected anchors, viewport collision, clipping, focus scope, and dismissal. Migrate popup families with equivalent state inputs; retain different datepicker and timepicker focus behavior. Remove the tooltip benchmark-only forced-open handler.' },
+    { priority: 4, rootCause: 'Generic overlay composition is duplicated', action: 'Audit existing core primitives before adding APIs for connected anchors, viewport collision, clipping, focus scope, and dismissal. Migrate popup families with equivalent state inputs; retain different datepicker and timepicker focus behavior. Restore tooltip connected-overlay inputs instead of its fixed-size flow anchor. The 18 paired tooltip text owners now retain original placement and description structure; eight benchmark open states have only candidate text and are not paired rendering evidence. Remove the tooltip benchmark-only forced-open handler, preserve real hover/focus/dismissal semantics and verify description ownership outside the captured frame/overlay trees. Typography and current raster still require independent review.' },
     { priority: 4.5, rootCause: 'Border initial values, contextual colors and paint alpha diverge at separate core stages', action: 'Reconcile the documented transparent border default with CSS currentColor semantics, resolve contextual colors using the element computed color, and preserve color alpha through border material creation and state updates. The two opaque controls pass while omission, currentColor, transparent and half-alpha each fail for two colors. Keep these equal-input proofs, extend inheritance, opacity composition and hover/update behavior, and compare actual paired border rasters before claiming full paint parity. Then restore the missing Material button border-reset semantics, preserving currentColor rather than sampling literal colors; the captured width-only rules are a separate authoring defect. Do not inject explicit showcase colors, replace borders with sibling meshes or waive zero-width input differences. Attribute captured Material cases only after verifying each authored/resolved witness.' },
     { priority: 4.6, rootCause: 'Material outline and divider token inputs are replaced by a fixed palette literal', action: 'Restore the original outlined-button and toggle border token/side semantics through the supported shared CSS/theme input path. The current reference resolves light-dark(#7b757f, #958e99) to RGB 123,117,127 in all four named profiles; candidate #79747e is a different input. Do not infer browser color scheme from the profile name, alter the reference dark theme, or substitute a sampled literal. Preserve serialized var-containing shorthand declarations when expanded CSSOM longhands are empty. Keep the supplemental at-rest token observations separate from the guarded per-case declaration proofs, which cover static and interaction cases. Verify every remaining state before judging core parsing/paint under equal inputs.' },
     { priority: 4.7, rootCause: 'Chip generated-outline ownership is replaced by a host border', action: 'Restore the original chip host, action-button and generated-outline inputs, including independent token and focus/selection rules. A 1px absolute pseudo outline and a 1px border-box host border do not impose the same content constraints, even when outer geometry agrees. Preserve the source-backed per-case owner and state evidence; do not substitute pseudo color into a host comparison, subtract padding, shift labels or calibrate widths. If generated-box construction fails under the same CSS, isolate that core capability before translating the original structure. Typography, graphics, hit targets and final raster still need independent proof.' },

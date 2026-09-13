@@ -1098,7 +1098,7 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   const report = parityReport({}, {});
   const audit = buildMaterialInputAudit(report);
   assert.equal(audit.coverage.visualParityGreen, true);
-  assert.equal(audit.sourceFingerprints.length, 54);
+  assert.equal(audit.sourceFingerprints.length, 55);
   for (const file of ['scripts/audit-material-calendar-close.mjs', 'tests/material-parity/calendar-close-evidence.mjs',
     'tests/material-parity/supplemental-capture-evidence.spec.mjs']) {
     assert.equal(audit.sourceFingerprints.filter(entry => entry.file === file).length, 1);
@@ -4493,6 +4493,118 @@ test('alignment claims replay their actual captured styles, ancestry, scope and 
       assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('horizontal start')),
         `${sectionName}: ${mutate}`);
     }
+  }
+});
+
+function tooltipTextReport() {
+  const raw = retainedTypographyReport(), e = raw.results[0], { reference: r, astylar: a } = e.inputTrees;
+  e.family = 'tooltip';
+  Object.assign(r.styles[0], { fontFamily: 'Roboto', fontSize: '12px', lineHeight: '16px', textAlign: 'center' });
+  const n = (key, parent, type, attributes = {}, ownText = '') => ({ key, parent, type, attributes, ownText, style: 0, rules: [], pseudoElements: [] });
+  r.nodes = [n('frame', null, 'main', { class: 'frame' }), n('section', 'frame', 'section', { id: 'tooltip-root' }),
+    n('trigger', 'section', 'button', { id: 'tooltip-primary', mattooltip: 'Create a project', class: 'mat-mdc-tooltip-trigger', 'aria-describedby': 'cdk-describedby-message-ng-1-2' }),
+    n('label', 'trigger', 'span', { class: 'mdc-button__label' }, 'Hover for help'),
+    n('overlay', null, 'div', { class: 'cdk-overlay-container' }),
+    n('bounds', 'overlay', 'div', { class: 'cdk-overlay-connected-position-bounding-box' }),
+    n('pane', 'bounds', 'div', { id: 'cdk-overlay-0', class: 'cdk-overlay-pane mat-mdc-tooltip-panel mat-mdc-tooltip-panel-below' }),
+    n('component', 'pane', 'mat-tooltip-component', { 'aria-hidden': 'true' }),
+    n('wrapper', 'component', 'div', { class: 'mat-mdc-tooltip mat-mdc-tooltip-show' }),
+    n('message', 'wrapper', 'div', { class: 'mat-mdc-tooltip-surface mdc-tooltip__surface' }, 'Create a project')];
+  const astNode = (key, parent, authored) => ({ key, parent, authored, resolvedStyle: {}, normalResolvedStyle: {}, interactionResolvedStyle: {} });
+  a.nodes = [astNode('page', 'root', { type: 'main', id: 'page' }),
+    astNode('section', 'page', { type: 'section', id: 'tooltip-root' }),
+    astNode('anchor', 'section', { type: 'div', id: 'tooltip-anchor', class: 'tooltip-anchor' }),
+    astNode('button', 'anchor', { type: 'button', id: 'tooltip-primary', class: 'material-button', value: 'Hover for help', ariaDescribedby: 'tooltip-popup' }),
+    astNode('popup', 'anchor', { type: 'div', id: 'tooltip-popup', role: 'tooltip', textContent: 'Create a project' })];
+  a.nodes.at(-1).retainedText = { source: 'core-text-registry', style: { ...r.styles[0], fontFamily: 'Roboto, Arial, sans-serif', textAlign: 'left' } };
+  return raw;
+}
+
+test('tooltip text mapping preserves connected-overlay versus flow ownership and unequal typography', () => {
+  const raw = tooltipTextReport(), original = structuredClone(raw), cases = raw.results.map(e => ({ ...e, kind: 'static' }));
+  const evidence = collectRetainedTypographyEvidence(cases, collectFullTreeInventory(cases));
+  const maps = evidence.reviewedMappings.filter(m => m.kind === 'reviewed-tooltip-overlay-text');
+  assert.equal(maps.length, 1); assert.equal(maps[0].referenceNode, 'message'); assert.equal(maps[0].astylarNode, 'popup');
+  assert.equal(maps[0].inputEquivalent, false); assert.equal(maps[0].finalRasterVerified, false);
+  assert.equal(maps[0].classification, 'application-plugin-authoring-defect');
+  assert.equal(maps[0].reviewEvidence.referencePath.length, 6); assert.equal(maps[0].reviewEvidence.candidatePath.length, 4);
+  assert.equal(maps[0].reviewEvidence.referencePath[2].attributes['aria-hidden'], 'true');
+  assert.equal(maps[0].reviewEvidence.candidatePath[0].authored.role, 'tooltip');
+  assert.equal(evidence.comparisons.filter(c => c.element === 'tooltip-popup').length, 1);
+  assert.equal(evidence.differences.filter(d => d.element === 'tooltip-popup').length, 2);
+  assert.deepEqual(raw, original);
+});
+
+test('tooltip text mapping rejects unrelated ambiguous or contradictory triggers and overlays', () => {
+  const controls = [
+    (r, a) => { r.nodes.find(n => n.key === 'trigger').attributes.mattooltip = 'Other'; },
+    (r, a) => { delete r.nodes.find(n => n.key === 'trigger').attributes['aria-describedby']; },
+    (r, a) => { r.nodes.find(n => n.key === 'trigger').parent = 'frame'; },
+    (r, a) => { r.nodes.find(n => n.key === 'trigger').attributes.class = 'other'; },
+    (r, a) => { r.nodes.find(n => n.key === 'label').ownText = 'Other'; },
+    (r, a) => { r.nodes.find(n => n.key === 'section').type = 'div'; },
+    (r, a) => { r.nodes.find(n => n.key === 'frame').parent = 'other'; },
+    (r, a) => { r.nodes.find(n => n.key === 'message').ownText = 'Other'; },
+    (r, a) => { r.nodes.find(n => n.key === 'message').attributes.id = 'tooltip-popup'; },
+    (r, a) => { r.nodes.find(n => n.key === 'message').parent = 'component'; },
+    (r, a) => { r.nodes.find(n => n.key === 'wrapper').attributes.class = 'mat-mdc-tooltip mat-mdc-tooltip-hide'; },
+    (r, a) => { r.nodes.find(n => n.key === 'component').attributes['aria-hidden'] = 'false'; },
+    (r, a) => { r.nodes.find(n => n.key === 'pane').attributes.id = 'other'; },
+    (r, a) => { r.nodes.find(n => n.key === 'pane').attributes.class = 'cdk-overlay-pane mat-mdc-tooltip-panel mat-mdc-tooltip-panel-above'; },
+    (r, a) => { r.nodes.find(n => n.key === 'overlay').parent = 'frame'; },
+    (r, a) => { r.nodes.push(structuredClone(r.nodes.at(-1))); },
+    (r, a) => { a.nodes.push(structuredClone(a.nodes.at(-1))); },
+    (r, a) => { r.nodes.push({ ...structuredClone(r.nodes.at(-1)), key: 'second-surface' }); },
+    (r, a) => { a.nodes.push({ ...structuredClone(a.nodes.at(-1)), key: 'second-popup' }); },
+    (r, a) => { a.nodes.find(n => n.key === 'button').authored.ariaDescribedby = 'other'; },
+    (r, a) => { a.nodes.find(n => n.key === 'button').authored.value = 'Other'; },
+    (r, a) => { a.nodes.find(n => n.key === 'popup').authored.textContent = 'Other'; },
+    (r, a) => { a.nodes.find(n => n.key === 'popup').authored.role = 'status'; },
+    (r, a) => { a.nodes.find(n => n.key === 'popup').parent = 'section'; },
+    (r, a) => { a.nodes.find(n => n.key === 'anchor').authored.class = 'other'; },
+    (r, a) => { a.nodes.find(n => n.key === 'page').parent = 'other'; },
+    (r, a) => { r.nodes.push({ key: 'extra', parent: 'message', type: 'span', attributes: {}, ownText: 'extra' }); },
+    (r, a) => { a.nodes.push({ key: 'extra', parent: 'anchor', authored: { type: 'span', textContent: 'extra' } }); },
+  ];
+  for (const [index, mutate] of controls.entries()) {
+    const raw = tooltipTextReport(), { reference: r, astylar: a } = raw.results[0].inputTrees; mutate(r, a);
+    assert.deepEqual(reviewedTemplateTextMappings('tooltip', r, a), [], `control ${index}`);
+  }
+});
+
+test('tooltip text replay preserves candidate-only state and missing retained-stage gaps', () => {
+  for (const candidateOnly of [false, true]) {
+    const raw = tooltipTextReport(), { reference: r, astylar: a } = raw.results[0].inputTrees;
+    if (candidateOnly) r.nodes = r.nodes.filter(n => ['frame', 'section', 'trigger', 'label'].includes(n.key));
+    else delete a.nodes.at(-1).retainedText;
+    const report = buildMaterialInputAudit(raw), gaps = report.retainedTypography.gaps.filter(g => g.element === 'tooltip-popup');
+    assert.equal(gaps.length, 1); assert.equal(gaps[0].attribution, 'unresolved');
+    assert.match(gaps[0].reason, candidateOnly ? /missing or duplicated on one side/ : /no authoritative retained core text entry/);
+    assert.equal(report.retainedTypography.reviewedMappings.filter(m => m.kind === 'reviewed-tooltip-overlay-text').length, candidateOnly ? 0 : 1);
+    assert.ok(!validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('tooltip text')));
+    report.retainedTypography.gaps = report.retainedTypography.gaps.filter(g => g !== gaps[0]);
+    assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('tooltip text')));
+  }
+});
+
+test('tooltip text replay rejects removed or fabricated mapping and typography evidence', () => {
+  const original = buildMaterialInputAudit(tooltipTextReport());
+  assert.ok(!validateMaterialInputAudit(original, { requireComplete: false }).some(e => e.includes('tooltip text')));
+  for (const mutate of [
+    r => { r.retainedTypography.reviewedMappings.pop(); },
+    r => { r.retainedTypography.reviewedMappings.push(r.retainedTypography.reviewedMappings[0]); },
+    r => { r.retainedTypography.reviewedMappings[0].inputEquivalent = true; },
+    r => { r.retainedTypography.reviewedMappings[0].finalRasterVerified = true; },
+    r => { r.retainedTypography.reviewedMappings[0].reviewEvidence.referencePath.pop(); },
+    r => { r.retainedTypography.reviewedMappings[0].reviewEvidence.referenceTrigger.attributes.mattooltip = 'Other'; },
+    r => { r.retainedTypography.reviewedMappings[0].reviewEvidence.candidateTrigger.authored.ariaDescribedby = 'Other'; },
+    r => { r.retainedTypography.comparisons[0].revision++; },
+    r => { r.retainedTypography.differences.pop(); },
+    r => { r.retainedTypography.differences[0].values.retained = 'fake'; },
+    r => { r.retainedTypography.reviewedMappings[0].case = 'static:menu@light/desktop'; },
+  ]) {
+    const report = structuredClone(original); mutate(report);
+    assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('tooltip text')));
   }
 });
 
