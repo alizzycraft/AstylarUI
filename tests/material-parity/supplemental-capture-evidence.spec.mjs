@@ -9,6 +9,7 @@ import { openSupplementalCapture, parseSupplementalCaptureArguments, validateSup
 import { collectSupplementalBehavior, collectSupplementalOverlays, collectSupplementalSlider,
   collectFullTreeInventory, validateCalendarCloseInventory } from './input-equivalence-audit.mjs';
 import { validateCalendarCloseCapture, collectCalendarCloseEvidence } from './calendar-close-evidence.mjs';
+import { validateTooltipStateCapture } from './tooltip-state-evidence.mjs';
 import { propertyGroups } from './input-equivalence-policy.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -19,6 +20,97 @@ const assetTypes = ['document', 'script', 'stylesheet', 'font'];
 const assetFiles = ['index.csr.html', 'main.js', 'styles.css', 'media/font.woff2'];
 const args = ['--base-url=http://127.0.0.1:4431', '--checkpoint=artifacts/material-parity/run/checkpoint',
   '--output=artifacts/material-parity/fresh/picker-commit-audit'];
+
+function tooltipStateFixture() {
+  const f = fixture(), raw = f.raw, runtime = structuredClone(raw.results[0].reference.runtime);
+  Object.assign(raw, { schemaVersion: 1, profile: 'light', viewport: { width: 1440, height: 1000 },
+    cohorts: ['benchmark-open', 'benchmark-hover', 'ordinary'], actions: ['initial', 'hover', 'press', 'release', 'leave'], settleDelayMs: 250 });
+  raw.capture.styleProperties = Object.values(propertyGroups).flat();
+  raw.capture.sources = ['scripts/audit-material-tooltip-state.mjs', ...sourceFiles.slice(1)].map(file => f.put(file, file));
+  raw.results = [1, 2].flatMap(deviceScaleFactor => raw.cohorts.flatMap(cohort => {
+    const events = [];
+    return raw.actions.map(action => {
+      const x = action === 'leave' ? 1 : 120, y = action === 'leave' ? 1 : 120;
+      for (const type of ({ initial: [], hover: ['pointermove'], press: ['pointerdown'], release: ['pointerup', 'click'], leave: ['pointermove'] })[action])
+        events.push({ type, trusted: true, clientX: x, clientY: y });
+      const entry = { family: 'tooltip', deviceScaleFactor, cohort, action };
+      for (const side of ['reference', 'astylar']) {
+        const ref = side === 'reference', present = ref ? ['hover', 'press'].includes(action)
+          : action === 'release' || (cohort !== 'benchmark-open' && ['hover', 'press'].includes(action));
+        const tree = { nodes: [{ key: 'trigger', parent: null, ...(ref
+          ? { type: 'button', attributes: { id: 'tooltip-primary', mattooltip: 'Create a project' } }
+          : { authored: { id: 'tooltip-primary', type: 'button', value: 'Hover for help' } }) }], errors: [] };
+        if (ref && present) tree.nodes.push({ key: 'wrapper', parent: null, attributes: { class: 'mat-mdc-tooltip-show' } },
+          { key: 'popup', parent: 'wrapper', attributes: { class: 'mat-mdc-tooltip-surface' }, ownText: 'Create a project' });
+        if (!ref) {
+          Object.assign(tree, { resolvedStyleEvidenceVersion: 2, resolvedStyleSource: 'core-style-inspection', resolvedStyleRevision: 0 });
+          if (present) tree.nodes.push({ key: 'popup', parent: null, authored: { id: 'tooltip-popup', role: 'tooltip', textContent: 'Create a project' },
+            retainedText: { source: 'core-text-registry' } });
+        }
+        const stem = `artifacts/material-parity/fresh/picker-commit-audit/${deviceScaleFactor}-${cohort}-${action}-${side}`;
+        const png = Buffer.alloc(24); Buffer.from('89504e470d0a1a0a', 'hex').copy(png);
+        png.writeUInt32BE(1440 * deviceScaleFactor, 16); png.writeUInt32BE(1000 * deviceScaleFactor, 20);
+        f.bytes.set(path.resolve(f.options.root, `${stem}.png`), png);
+        entry[side] = { runtime: structuredClone(runtime), events: structuredClone(events),
+          triggerBox: { x: 100, y: 100, width: 40, height: 40 }, popupCount: Number(present), retainedPopupCount: Number(!ref && present),
+          referencePopup: ref && present ? { text: 'Create a project' } : null, referenceShown: ref && present,
+          candidateOpen: !ref && present, candidatePopupBox: !ref && present ? { left: 100, top: 140, width: 100, height: 24 } : null,
+          inputTree: f.put(`${stem}.json`, tree), screenshot: { file: `${stem}.png`, sha256: hash(png) } };
+      }
+      entry.presenceMatches = entry.reference.popupCount === entry.astylar.popupCount;
+      return entry;
+    });
+  }));
+  return f;
+}
+
+test('tooltip state evidence verifies all real action boundaries and preserves benchmark versus ordinary mismatches', () => {
+  const f = tooltipStateFixture(), before = JSON.stringify(f.raw), result = validateTooltipStateCapture(f.raw, f.options);
+  assert.deepEqual(result.errors, []); assert.equal(result.complete, true); assert.equal(result.binding.status, 'checkpoint-bound');
+  assert.equal(result.observations.length, 30); assert.equal(result.observations.filter(o => !o.presenceMatches).length, 10);
+  assert.equal(result.observations.filter(o => o.cohort === 'ordinary' && !o.presenceMatches).length, 2);
+  assert.ok(result.observations.every(o => !o.inputEquivalent && !o.finalRasterVerified));
+  assert.equal(JSON.stringify(f.raw), before);
+});
+
+test('tooltip state evidence rejects incomplete false-state altered-artifact and synthetic-action claims', () => {
+  const mutations = [
+    f => { f.raw.results.pop(); },
+    f => { f.raw.results[1].cohort = 'ordinary'; },
+    f => { f.raw.results[1].action = 'initial'; },
+    f => { f.raw.results[1].deviceScaleFactor = 3; },
+    f => { f.raw.settleDelayMs = 0; },
+    f => { f.raw.profile = 'dark'; },
+    f => { f.raw.viewport.width = 1400; },
+    f => { f.raw.capture.sources.pop(); },
+    f => { f.raw.results[3].presenceMatches = true; },
+    f => { f.raw.results[3].astylar.candidateOpen = false; },
+    f => { f.raw.results[3].astylar.popupCount = 0; },
+    f => { f.raw.results[3].astylar.retainedPopupCount = 0; },
+    f => { f.raw.results[3].astylar.candidatePopupBox = null; },
+    f => { f.raw.results[1].reference.referenceShown = false; },
+    f => { f.raw.results[1].reference.referencePopup.text = 'Other'; },
+    f => { f.raw.results[1].reference.events = []; },
+    f => { f.raw.results[1].astylar.events[0].trusted = false; },
+    f => { f.raw.results[4].astylar.events.at(-1).clientX = 500; },
+    f => { f.raw.results[3].astylar.events = f.raw.results[3].astylar.events.filter(e => e.type !== 'pointerup'); },
+    f => { f.raw.results[2].reference.events[0].type = 'pointerout'; },
+    f => { f.raw.results[1].astylar.triggerBox.width = 0; },
+    f => { f.raw.results[1].astylar.runtime.errors.push('bad runtime'); },
+    f => { f.raw.results[1].astylar.screenshot = f.raw.results[0].astylar.screenshot; },
+    f => { f.put(f.raw.results[1].astylar.screenshot.file, 'changed'); },
+    f => { const e = f.raw.results[3].astylar; const tree = JSON.parse(f.options.readBytes(path.resolve(f.options.root, e.inputTree.file)));
+      tree.nodes.pop(); e.inputTree = f.put(e.inputTree.file, tree); },
+    f => { const e = f.raw.results[3].astylar; const tree = JSON.parse(f.options.readBytes(path.resolve(f.options.root, e.inputTree.file)));
+      tree.nodes[0].authored.value = 'Wrong trigger'; e.inputTree = f.put(e.inputTree.file, tree); },
+    f => { const e = f.raw.results[1].reference; const tree = JSON.parse(f.options.readBytes(path.resolve(f.options.root, e.inputTree.file)));
+      tree.nodes[1].attributes.class = 'mat-mdc-tooltip-hide'; e.inputTree = f.put(e.inputTree.file, tree); },
+  ];
+  for (const [i, mutate] of mutations.entries()) {
+    const f = tooltipStateFixture(); mutate(f);
+    assert.equal(validateTooltipStateCapture(f.raw, f.options).complete, false, `control ${i}`);
+  }
+});
 
 function calendarFixture() {
   const f = fixture();

@@ -23,6 +23,123 @@ selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Tooltip pointer-state divergence and unchecked benchmark acceptance (2026-09-13)
+
+`scripts/audit-material-tooltip-state.mjs` captures the unchanged frozen served
+application after initial, hover, press, release and leave boundaries. It keeps
+three input cohorts separate: `benchmark=1&interaction=open`,
+`benchmark=1&interaction=hover`, and ordinary non-benchmark mode. Each runs at
+1440x1000, light theme, DPR 1 and 2. All runtime documents, scripts, styles and
+fonts match the selected checkpoint. The declared post-settlement timer sample
+is 250ms, including ordinary Material's animation; this is not an assertion that
+the earlier full benchmark sampled at that same time.
+
+Results are identical across the two DPRs:
+
+| Cohort | Initial ref/candidate | Hover | Press | Release | Leave |
+| --- | --- | --- | --- | --- | --- |
+| benchmark-open | 0 / 0 | 1 / 0 | 1 / 0 | 0 / 1 | 0 / 0 |
+| benchmark-hover | 0 / 0 | 1 / 1 | 1 / 1 | 0 / 1 | 0 / 0 |
+| ordinary | 0 / 0 | 1 / 1 | 1 / 1 | 0 / 1 | 0 / 0 |
+
+Numbers are captured popup-node counts, **not a blanket pixel-visibility or
+input-equivalence verdict**. There are **30 paired boundaries, 60 input trees,
+60 screenshots and 10 presence mismatches**. Candidate state and retained core
+text corroborate its popup presence. The ordinary DPR1 release screenshots were
+also inspected: reference popup absent, candidate popup still visible below the
+button. No position, sharpness or broader raster acceptance is inferred.
+
+The causal paths are separate:
+
+- `astylar.component.ts:97` gates tooltip pointer entry on benchmark scenario
+  names. History identifies `a0f3328`. It suppresses hover opening in the
+  benchmark-open cohort, even though the same pointer action opens Material.
+- `astylar.component.ts:285` forces the candidate open on a benchmark-open
+  click; history identifies `7159b1d`. That reverses the reference transition.
+- Removing that special branch alone is insufficient: ordinary and
+  benchmark-hover candidate content also survives release. Installed Material
+  `module-CWxMD37a.mjs:384` subscribes to overlay outside-pointer events;
+  `:843` calls `hide(0)` on body interaction. The candidate trigger is outside
+  the reference popup, but its hand-authored state logic does not implement
+  the corresponding dismissal.
+- `run-material-parity.mjs:847` only checks tooltip placement for hover/held,
+  `:1236` excludes popup text in other states, and the generic state fallback
+  at `:1202` returns `matches:true`. Focused raster configuration likewise
+  has no open-state popup target. The eight frozen open cases therefore pass
+  those gates without proving popup presence parity. Matching click events
+  and focused trigger identity do not establish matching component state.
+
+Three new source findings record benchmark hover suppression, forced-open click,
+and omitted open-state popup checks. The recommended fix is to remove
+scenario-dependent component behavior and express ordinary tooltip opening and
+dismissal through the shared surface/core interaction contract. Do not install
+a plugin-specific coordinate or document-wide event system. Then assert both
+presence and absence after each action before comparing placement/raster.
+Keep datepicker/timepicker behavior distinct; this proof is tooltip-specific.
+
+The dedicated reader `validateTooltipStateCapture` independently binds runtime
+assets, source bytes and checkpoint provenance, checks all cohort/action/DPR
+records, re-derives popup counts from hashed trees, verifies state/retained
+owners, event prefixes, trusted pointer coordinates, and screenshot hash/size.
+It rejects fabricated success and changed traces. Two tests include **27
+negative controls**; focused command:
+
+`node --test --test-name-pattern='tooltip state evidence' tests/material-parity/supplemental-capture-evidence.spec.mjs`
+
+**2/2 pass**, no failed/skipped/cancelled/todo, **0.258 seconds**, terminal exit 0.
+
+Capture command:
+
+```powershell
+node scripts/audit-material-tooltip-state.mjs --base-url=http://127.0.0.1:4431 --checkpoint=artifacts/material-parity/current-ancestry-audit/checkpoint --output=artifacts/material-parity/supplemental-current-ancestry-audit/tooltip-state-audit-v2
+```
+
+Terminal **exit 1 intentionally preserves the 10 presence mismatches**. Reader
+validation returns `complete:true`, `checkpoint-bound`, `errors:[]`, 30
+observations and the same 10 mismatches; this is valid diagnostic evidence,
+not a passing parity result. The report SHA-256 is
+`1a554bf3b3bd477a2e7fe148640b07fe539731e4611e32b1e8f7ed2289e68a61`.
+The first `tooltip-state-audit` capture is preserved but is not acceptance
+evidence: its native event probe omitted pointermove and could not prove leaving
+a control while remaining inside the canvas. V2 records trusted pointermove
+coordinates rather than requiring a native canvas pointerout event.
+
+The reference's external described-by target was also observed in the full
+document with text `Create a project` in all six initial captures. This supplies
+previously missing diagnostic context but does not prove announcement behavior
+or equivalent candidate semantics.
+
+These new 60 trees have their own bound reader; consolidated inventory
+integration and classification of the eight frozen tooltip gaps remain next
+steps. Do not silently count this as already included in full audit coverage.
+The existing full matrix, thresholds, reference, fixture and renderer are
+unchanged. Full harness and audit-replay verification are recorded below.
+
+Independent live-reader command:
+
+```powershell
+node --input-type=module -e "import {readFileSync} from 'node:fs';import {validateTooltipStateCapture} from './tests/material-parity/tooltip-state-evidence.mjs';const reportFile='artifacts/material-parity/supplemental-current-ancestry-audit/tooltip-state-audit-v2/latest-report.json';const raw=JSON.parse(readFileSync(reportFile));const manifest=JSON.parse(readFileSync('artifacts/material-parity/current-ancestry-audit/checkpoint/manifest.json'));const r=validateTooltipStateCapture(raw,{reportFile,root:process.cwd(),expectedProvenance:manifest.provenance});console.log(JSON.stringify({complete:r.complete,binding:r.binding,errors:r.errors,observations:r.observations.length,mismatches:r.observations.filter(o=>!o.presenceMatches)}));if(!r.complete)process.exitCode=1;"
+```
+
+`npm run parity:harness:check`: **394/394 pass**, zero failed/skipped/cancelled/
+todo, **165.766 seconds**, terminal exit 0. All ten frozen visual-harness raw
+hashes match the checkpoint. No visual gate was weakened or rerun as part of
+this diagnostic increment; the final full enforced matrix is still required.
+
+Full audit replay command (does not yet integrate the new tooltip supplement):
+
+```powershell
+node --input-type=module -e "import {readFileSync} from 'node:fs';import {buildMaterialInputAudit,validateMaterialInputAudit} from './tests/material-parity/input-equivalence-audit.mjs';const p=JSON.parse(readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json'));const a=buildMaterialInputAudit(p,{root:process.cwd(),normalLineBoxPath:'artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json',supplementalRoot:'artifacts/material-parity/supplemental-current-ancestry-audit'});console.log('SUMMARY '+JSON.stringify({coverage:a.coverage.complete,summary:a.summary,tooltipFindings:a.sourceFindings.filter(f=>f.id.includes('tooltip')).map(f=>({id:f.id,detected:f.detected,locations:f.locations.map(l=>l.line)}))}));console.log('DIAGNOSTIC '+JSON.stringify(validateMaterialInputAudit(a,{requireComplete:false})));console.log('STRICT '+JSON.stringify(validateMaterialInputAudit(a)));"
+```
+
+All **107 source findings** are detected; the three new locations are candidate
+lines 97/285 and harness line 1236. Coverage remains complete for the existing
+integrated matrix, and diagnostic validation returns `[]`.
+Terminal exit 0 prints (rather than hides) strict failures: **3,309 main-style
+attributions, 849 control-text differences, 281 retained gaps and 354 retained
+typography differences** still require review. None of those counts is reduced
+by this separate state proof. Audit completion remains unproven.
+
 ## Tooltip surface alignment inputs versus flex centering (2026-09-13)
 
 The original tooltip surface rule `.mat-mdc-tooltip-surface` declares
