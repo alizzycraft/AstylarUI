@@ -9,6 +9,46 @@ const cohorts = ['benchmark-open', 'benchmark-hover', 'ordinary'];
 const actions = ['initial', 'hover', 'press', 'release', 'leave'];
 const hasClass = (node, name) => String(node?.attributes?.class ?? '').split(/\s+/).includes(name);
 
+export function collectTooltipStateEvidence(root, options = {}) {
+  const absolute = path.resolve(root, options.reportPath ?? path.join(options.supplementalRoot ??
+    'artifacts/material-parity', 'tooltip-state-audit-v2', 'latest-report.json'));
+  const file = path.relative(root, absolute).replaceAll('\\', '/');
+  const required = [1, 2].flatMap(dpr => cohorts.flatMap(cohort => actions.map(action => `${dpr}/${cohort}/${action}`)));
+  const missing = { file, binding: { status: 'missing', errors: [] }, complete: false,
+    cases: [], reviews: [], mismatches: [], missing: required, errors: [] };
+  try {
+    const boundary = path.resolve(root, 'artifacts/material-parity');
+    const inside = (base, target) => {
+      const relative = path.relative(base, target);
+      return relative && relative !== '..' && !relative.startsWith(`..${path.sep}`) && !path.isAbsolute(relative);
+    };
+    assert.ok(inside(boundary, absolute), 'Tooltip state evidence must remain inside Material artifacts');
+    if (!options.readBytes) assert.ok(inside(realpathSync(boundary), realpathSync(absolute)), 'Tooltip state report symlink escapes artifacts');
+    const bytes = (options.readBytes ?? readFileSync)(absolute), raw = JSON.parse(bytes);
+    const validation = validateTooltipStateCapture(raw, { ...options, root, reportFile: file });
+    const cases = validation.complete ? raw.results.map(entry => ({
+      kind: 'supplemental', family: 'tooltip', profile: raw.profile,
+      viewport: { ...raw.viewport, deviceScaleFactor: entry.deviceScaleFactor, id: `tooltip-state-desktop-dpr${entry.deviceScaleFactor}` },
+      state: `tooltip-state-${entry.cohort}-${entry.action}`, cohort: entry.cohort, action: entry.action,
+      reference: entry.reference, astylar: entry.astylar,
+      inputTrees: { reference: entry.reference.inputTree, astylar: entry.astylar.inputTree },
+      inputEquivalent: false, finalRasterVerified: false,
+    })) : [];
+    return { file, sha256: createHash('sha256').update(bytes).digest('hex'), browser: raw.browser,
+      capture: raw.capture, binding: validation.binding ?? { status: 'invalid', errors: [] }, complete: validation.complete,
+      cases, reviews: validation.observations, mismatches: validation.observations.filter(o => !o.presenceMatches).map(o => ({ ...o,
+        classification: 'application-plugin-authoring-defect',
+        recommendedOwner: 'showcase tooltip state authoring through core surface interaction APIs',
+        justification: o.action === 'release'
+          ? 'Reference content is removed on click release, while candidate content remains or is forced open. The ordinary-mode control also fails; removing the benchmark-only click branch alone does not supply dismissal. This is unequal state input, not equal-input renderer placement failure.'
+          : 'Benchmark-open gates candidate pointer entry by scenario name and suppresses hover/press content that the original Material directive opens. Benchmark-hover and ordinary controls preserve opening. Test names must not change component behavior.',
+      })), missing: validation.complete ? [] : required, errors: validation.errors };
+  } catch (error) {
+    if (error.code === 'ENOENT') return missing;
+    return { ...missing, binding: { status: 'invalid', errors: [{ error: String(error.message) }] }, errors: [String(error.message)] };
+  }
+}
+
 // This verifies the observed state mismatch, not a hypothetical corrected
 // tooltip or its pixels. Changed traces require review, not an automatic waiver.
 export function validateTooltipStateCapture(raw, options) {

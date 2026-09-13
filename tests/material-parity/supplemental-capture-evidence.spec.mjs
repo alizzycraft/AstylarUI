@@ -7,9 +7,9 @@ import path from 'node:path';
 import test from 'node:test';
 import { openSupplementalCapture, parseSupplementalCaptureArguments, validateSupplementalCapture } from './supplemental-capture-evidence.mjs';
 import { collectSupplementalBehavior, collectSupplementalOverlays, collectSupplementalSlider,
-  collectFullTreeInventory, validateCalendarCloseInventory } from './input-equivalence-audit.mjs';
+  collectFullTreeInventory, validateCalendarCloseInventory, validateTooltipStateInventory } from './input-equivalence-audit.mjs';
 import { validateCalendarCloseCapture, collectCalendarCloseEvidence } from './calendar-close-evidence.mjs';
-import { validateTooltipStateCapture } from './tooltip-state-evidence.mjs';
+import { validateTooltipStateCapture, collectTooltipStateEvidence } from './tooltip-state-evidence.mjs';
 import { propertyGroups } from './input-equivalence-policy.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -110,6 +110,77 @@ test('tooltip state evidence rejects incomplete false-state altered-artifact and
     const f = tooltipStateFixture(); mutate(f);
     assert.equal(validateTooltipStateCapture(f.raw, f.options).complete, false, `control ${i}`);
   }
+});
+
+function collectedTooltipFixture() {
+  const f = tooltipStateFixture();
+  for (const entry of f.raw.results) for (const side of ['reference', 'astylar']) {
+    const item = entry[side], tree = JSON.parse(f.options.readBytes(path.resolve(f.options.root, item.inputTree.file)));
+    tree.schemaVersion = 1; tree.styles = [{ color: '#123456' }]; tree.rules = [];
+    for (const node of tree.nodes) {
+      if (side === 'reference') Object.assign(node, { style: 0, rules: [], pseudoElements: [] });
+      else Object.assign(node, { resolvedStyle: { color: '#123456' }, normalResolvedStyle: { color: '#123456' },
+        interactionResolvedStyle: { color: '#123456' } });
+    }
+    item.inputTree = f.put(item.inputTree.file, tree);
+  }
+  f.put(f.options.reportFile, f.raw);
+  const supplemental = collectTooltipStateEvidence(f.options.root, { ...f.options, reportPath: f.options.reportFile });
+  assert.deepEqual(supplemental.errors, []);
+  const cases = supplemental.cases.map(entry => ({ ...entry, inputTrees: Object.fromEntries(['reference', 'astylar'].map(side =>
+    [side, JSON.parse(f.options.readBytes(path.resolve(f.options.root, entry.inputTrees[side].file)))])) }));
+  return { ...f, report: { generatedFrom: { captureProvenance: f.options.expectedProvenance }, supplementalTooltipState: supplemental,
+    elementInventory: collectFullTreeInventory(cases, { root: f.options.root }) } };
+}
+
+test('tooltip state collector keeps all cohorts and every action source tree in the consolidated inventory', () => {
+  const f = collectedTooltipFixture(), e = f.report.supplementalTooltipState, before = JSON.stringify(f.report), errors = [];
+  assert.equal(e.complete, true); assert.equal(e.cases.length, 30); assert.equal(e.reviews.length, 30); assert.equal(e.mismatches.length, 10);
+  assert.deepEqual(e.missing, []); assert.equal(f.report.elementInventory.cases.length, 60);
+  assert.equal(new Set(e.cases.map(c => `${c.viewport.id}/${c.state}`)).size, 30);
+  assert.deepEqual([...new Set(e.cases.map(c => c.cohort))], ['benchmark-open', 'benchmark-hover', 'ordinary']);
+  for (const c of e.cases) { assert.equal(c.inputEquivalent, false); assert.equal(c.finalRasterVerified, false);
+    for (const side of ['reference', 'astylar']) assert.deepEqual(c.inputTrees[side], c[side].inputTree); }
+  validateTooltipStateInventory(f.report, errors, f.options);
+  assert.deepEqual(errors, []); assert.equal(JSON.stringify(f.report), before);
+});
+
+test('tooltip state inventory replay rejects removed boundaries changed source values and fabricated acceptance', () => {
+  const mutations = [
+    f => { delete f.report.supplementalTooltipState; },
+    f => { f.report.supplementalTooltipState.cases.pop(); },
+    f => { f.report.supplementalTooltipState.mismatches = []; },
+    f => { f.report.supplementalTooltipState.reviews[0].inputEquivalent = true; },
+    f => { f.report.supplementalTooltipState.cases[0].reference.events.push({ type: 'fake' }); },
+    f => { f.report.supplementalTooltipState.cases[0].cohort = 'ordinary'; },
+    f => { f.report.generatedFrom.captureProvenance.browser = 'other'; },
+    f => { delete f.report.elementInventory; },
+    f => { f.report.elementInventory.cases.pop(); },
+    f => { f.report.elementInventory.cases.push(structuredClone(f.report.elementInventory.cases[0])); },
+    f => { f.report.elementInventory.cases[0].case = 'static:tooltip@light/desktop'; },
+    f => { f.report.elementInventory.cases[1].resolvedStyleRevision = 99; },
+    f => { f.report.elementInventory.styles[0].value.color = 'fake'; },
+    f => { f.report.elementInventory.variants[0].nodes[0].parent = 'other'; },
+    f => { f.report.elementInventory.variants[0].side = 'astylar'; },
+    f => { f.report.elementInventory.variants.find(v => v.side === 'astylar').nodes[0].authored.value = 'Other'; },
+    f => { f.report.elementInventory.variants.find(v => v.nodes.some(n => n.retainedText)).nodes.find(n => n.retainedText).retainedText.source = 'other'; },
+  ];
+  for (const [i, mutate] of mutations.entries()) {
+    const f = collectedTooltipFixture(); mutate(f); const errors = [];
+    validateTooltipStateInventory(f.report, errors, f.options);
+    assert.ok(errors.length, `control ${i}`);
+  }
+});
+
+test('tooltip state collector fails closed for invalid or incomplete bound captures and missing reports', () => {
+  const f = tooltipStateFixture(); f.raw.results.pop(); f.put(f.options.reportFile, f.raw);
+  const result = collectTooltipStateEvidence(f.options.root, { ...f.options, reportPath: f.options.reportFile });
+  assert.equal(result.complete, false); assert.deepEqual(result.cases, []); assert.equal(result.missing.length, 30); assert.ok(result.errors.length);
+  const missing = collectTooltipStateEvidence(f.options.root, { reportPath: f.options.reportFile, readBytes: () => {
+    throw Object.assign(new Error('missing'), { code: 'ENOENT' }); } });
+  assert.equal(missing.binding.status, 'missing'); assert.equal(missing.complete, false); assert.equal(missing.cases.length, 0);
+  const escaped = collectTooltipStateEvidence(f.options.root, { ...f.options, reportPath: '../outside/latest-report.json' });
+  assert.equal(escaped.binding.status, 'invalid'); assert.equal(escaped.cases.length, 0);
 });
 
 function calendarFixture() {

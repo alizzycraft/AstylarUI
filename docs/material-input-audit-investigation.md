@@ -23,6 +23,78 @@ selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Tooltip action-boundary inventory integration (2026-09-13)
+
+The checkpoint-bound `tooltip-state-audit-v2` evidence now feeds the consolidated
+element inventory and retained/control typography collectors. Its 30 paired
+boundaries remain separate by benchmark-open, benchmark-hover and ordinary
+cohort, by action, and by DPR. The 60 source trees include cases with a popup
+on only one side; no invented counterpart or silent omission makes those inputs
+equivalent. The earlier section below describes the state proof before this
+integration and is retained as history.
+
+`collectTooltipStateEvidence` fails closed for missing, incomplete, modified,
+unbound or out-of-bound evidence. `validateTooltipStateInventory` independently
+reloads the bound capture, reconstructs the complete inventory, dereferences
+all pooled styles and rules, and compares authored structure, parentage,
+normal/effective stages, retained/control text, pseudo-elements and revisions.
+Summary counts alone cannot certify integration. Existing tooltip typography
+proofs are replayed only for the explicitly named supplemental cohorts and
+action scopes; no generic supplemental-state waiver is added.
+
+The report retains all ten presence mismatches as application/plugin state
+authoring defects, with distinct explanations for suppressed hover and missing
+click dismissal. Every supplemental case remains `inputEquivalent:false` and
+`finalRasterVerified:false`. New typography observations are reviewed using
+their own source evidence rather than inheriting a visual pass from another
+state. Both the producer and independent reader are now source-fingerprinted.
+
+Three integration tests add 17 report-mutation controls plus incomplete,
+missing and escaped-source controls. Together with the existing capture tests
+and source-fingerprint test, this focused command passes **6/6**, zero failed,
+skipped, cancelled or todo, **0.738 seconds**, terminal exit 0:
+
+```powershell
+node --test --test-name-pattern='tooltip state|records source fingerprints' tests/material-parity/supplemental-capture-evidence.spec.mjs tests/material-parity/input-equivalence-audit.spec.mjs
+```
+
+No application, renderer, reference, benchmark matrix or visual threshold is
+changed. All ten frozen visual-harness hashes still match the checkpoint.
+The first consolidated diagnostic command stopped after building the report
+because its print expression used `mappings` instead of `reviewedMappings`;
+that terminal exit 1 is not validation evidence.
+
+`npm run parity:harness:check`: **397/397 pass**, zero failed/skipped/cancelled/
+todo, **164.688 seconds**, terminal exit 0. The final unfiltered enforced visual
+matrix remains required after the complete audit; this harness test run is not
+that matrix.
+
+The integrated inventory contains **4,748 side-specific cases**, up from 4,688.
+All 30 paired tooltip boundaries bind successfully with no collection errors;
+all ten presence mismatches remain. Paired tooltip overlay-text mappings rise
+from **18 to 26**. Their eight new font-stack and eight alignment differences
+meet the existing exact-source proofs; this does not certify glyph paint.
+The isolated 60-tree supplement has no inventory errors and retains **ten
+unresolved text-owner gaps** plus **30 unresolved trigger-control typography
+differences**. Those are additional review work, not silently accepted states.
+
+The full diagnostic command uses the frozen source below and does not write or
+overwrite the stale untracked final reports:
+
+```powershell
+node --input-type=module -e "import {readFileSync} from 'node:fs';import {buildMaterialInputAudit,validateMaterialInputAudit} from './tests/material-parity/input-equivalence-audit.mjs';const p=JSON.parse(readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json'));const a=buildMaterialInputAudit(p,{root:process.cwd(),normalLineBoxPath:'artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json',supplementalRoot:'artifacts/material-parity/supplemental-current-ancestry-audit'});console.log('SUMMARY '+JSON.stringify({coverage:a.coverage.complete,summary:a.summary,inventory:a.elementInventory.cases.length,tooltip:a.supplementalTooltipState.cases.length,tooltipErrors:a.supplementalTooltipState.errors,tooltipBinding:a.supplementalTooltipState.binding,tooltipMismatches:a.supplementalTooltipState.mismatches.length,retainedGaps:a.retainedTypography.gaps.length,retainedUnresolved:a.retainedTypography.differences.filter(d=>d.attribution==='unresolved').length,tooltipMappings:a.retainedTypography.reviewedMappings.filter(m=>m.kind==='reviewed-tooltip-overlay-text').length,tooltipGaps:a.retainedTypography.gaps.filter(g=>g.family==='tooltip').map(g=>({case:g.case,element:g.element,reason:g.reason})),tooltipUnresolved:a.retainedTypography.differences.filter(d=>d.family==='tooltip'&&d.attribution==='unresolved').map(d=>({case:d.case,property:d.property}))}));console.log('DIAGNOSTIC '+JSON.stringify(validateMaterialInputAudit(a,{requireComplete:false})));console.log('STRICT '+JSON.stringify(validateMaterialInputAudit(a)));"
+```
+
+Full report generation and independent diagnostic replay finish with terminal
+exit 0 and `DIAGNOSTIC []`. Strict validation deliberately remains incomplete:
+**3,309 resolved-style attributions, 879 control-text differences, 291 retained
+mapping/stage gaps and 354 retained typography differences** still need review.
+The command prints these strict errors; its exit 0 is not strict acceptance.
+All **107 source findings** remain detected, with no unexplained source findings
+or undetected definitions. Complete capture coverage is not complete causal
+attribution. The remaining implementation plan, ownership review and full
+acceptance requirements are not declared complete by this increment.
+
 ## Tooltip pointer-state divergence and unchecked benchmark acceptance (2026-09-13)
 
 `scripts/audit-material-tooltip-state.mjs` captures the unchanged frozen served

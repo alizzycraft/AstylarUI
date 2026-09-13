@@ -4,6 +4,7 @@ import path from 'node:path';
 import { loadNormalLineBoxReport } from './normal-line-box-report.mjs';
 import { validateSupplementalCapture } from './supplemental-capture-evidence.mjs';
 import { collectCalendarCloseEvidence } from './calendar-close-evidence.mjs';
+import { collectTooltipStateEvidence } from './tooltip-state-evidence.mjs';
 import { selectorCanApply, borderColorProperties, borderInitialAttribution, collectBorderInitialInputs, classifyBorderInitialInput,
   buttonBorderResetAttribution, collectButtonBorderResetInputs, classifyButtonBorderResetInput,
   outlineTokenAttribution, collectOutlineTokenInputs, classifyOutlineTokenInput,
@@ -77,14 +78,15 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const supplementalOverlays = collectSupplementalOverlays(root, supplementalOptions);
   const supplementalSlider = collectSupplementalSlider(root, supplementalOptions);
   const supplementalCalendarClose = collectCalendarCloseEvidence(root, supplementalOptions);
+  const supplementalTooltipState = collectTooltipStateEvidence(root, supplementalOptions);
   const elementInventory = collectFullTreeInventory([...cases, ...supplementalBehavior.cases, ...supplementalOverlays.cases,
-    ...supplementalSlider.cases, ...supplementalCalendarClose.cases], { root });
+    ...supplementalSlider.cases, ...supplementalCalendarClose.cases, ...supplementalTooltipState.cases], { root });
   const visibleOverflowInputs = collectVisibleOverflowInputs(elementInventory);
   const borderInitialInputs = collectBorderInitialInputs(elementInventory, canonicalStyle);
   const buttonBorderResetInputs = collectButtonBorderResetInputs(elementInventory, canonicalStyle);
   const outlineTokenInputs = collectOutlineTokenInputs(elementInventory, canonicalStyle);
   const chipOutlineInputs = collectChipOutlineInputs(elementInventory, canonicalStyle);
-  const typographyCases = [...cases, ...supplementalCalendarClose.cases];
+  const typographyCases = [...cases, ...supplementalCalendarClose.cases, ...supplementalTooltipState.cases];
   const rawControlTypography = collectControlTypographyEvidence(typographyCases, elementInventory);
   const retainedTypography = collectRetainedTypographyEvidence(typographyCases, elementInventory, rawControlTypography);
   const normalLineBoxes = options.normalLineBoxPath
@@ -122,6 +124,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
     supplementalOverlays,
     supplementalSlider,
     supplementalCalendarClose,
+    supplementalTooltipState,
     normalLineBoxes,
     summary: {
       inputEquivalent: coverage.complete && coverage.missingElements.length === 0 &&
@@ -130,6 +133,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
         supplementalOverlays.missing.length === 0 && supplementalOverlays.errors.length === 0 && supplementalOverlays.mismatches.length === 0 &&
         supplementalSlider.missing.length === 0 && supplementalSlider.errors.length === 0 && supplementalSlider.mismatches.length === 0 &&
         supplementalCalendarClose.complete && supplementalCalendarClose.mismatches.length === 0 &&
+        supplementalTooltipState.complete && supplementalTooltipState.mismatches.length === 0 &&
         normalLineBoxes.missing.length === 0 && normalLineBoxes.errors.length === 0 &&
         elementInventory.gaps.length === 0 && elementInventory.resolvedStyleGaps.length === 0 && elementInventory.stateStyleGaps.length === 0 && elementInventory.referenceContextGaps.length === 0 && elementInventory.errors.length === 0 &&
         retainedTypography.gaps.length === 0 && retainedTypography.differences.length === 0 && retainedTypography.paintMaskDifferences.length === 0 &&
@@ -470,6 +474,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
   validateToggleButtonAlignment(report, errors);
   validateStepperTextInputs(report, errors);
   validateCalendarCloseInventory(report, errors, { root, requireComplete });
+  validateTooltipStateInventory(report, errors, { root, requireComplete });
   if (requireComplete && report.supplementalBehavior.missing.length > 0) errors.push(`${report.supplementalBehavior.missing.length} supplemental behavior cases are missing`);
   if (report.supplementalBehavior.errors.length > 0) errors.push(`${report.supplementalBehavior.errors.length} supplemental behavior collection errors`);
   if (requireComplete && report.supplementalOverlays.missing.length > 0) errors.push(`${report.supplementalOverlays.missing.length} supplemental overlay cases are missing`);
@@ -525,6 +530,44 @@ export function validateCalendarCloseInventory(report, errors, { root = process.
   if (JSON.stringify(snapshot(report.elementInventory)) !== JSON.stringify(snapshot(fresh))) {
     errors.push('calendar close action-boundary inventory differs from the verified source trees');
   }
+}
+
+export function validateTooltipStateInventory(report, errors, { root = process.cwd(), requireComplete = true, readBytes } = {}) {
+  const recorded = report.supplementalTooltipState;
+  if (!recorded || typeof recorded.file !== 'string') {
+    errors.push('missing tooltip state supplemental evidence');
+    return;
+  }
+  const expected = collectTooltipStateEvidence(root, { reportPath: recorded.file,
+    expectedProvenance: report.generatedFrom?.captureProvenance, readBytes });
+  if (JSON.stringify(recorded) !== JSON.stringify(expected)) errors.push('tooltip state summary does not replay from bound source evidence');
+  if (expected.errors.length) errors.push('tooltip state supplemental collection errors');
+  if (requireComplete && !expected.complete) errors.push('tooltip state supplemental action coverage is incomplete or unbound');
+  if (!report.elementInventory?.cases || !report.elementInventory?.variants || !report.elementInventory?.styles || !report.elementInventory?.rules) {
+    errors.push('missing tooltip state action-boundary inventory');
+    return;
+  }
+  const cases = readBytes ? expected.cases.map(entry => ({ ...entry, inputTrees: Object.fromEntries(
+    ['reference', 'astylar'].map(side => [side, JSON.parse(readBytes(path.resolve(root, entry.inputTrees[side].file)))])) })) : expected.cases;
+  const fresh = collectFullTreeInventory(cases, { root });
+  const snapshot = inventory => {
+    const style = index => index === undefined ? undefined : inventory.styles[index];
+    const rules = indices => indices?.map(index => inventory.rules[index]);
+    return inventory.cases.filter(item => item.case.includes('/tooltip-state-')).map(item => {
+      const variant = inventory.variants[item.variant];
+      return { case: item.case, side: item.side, resolvedStyleRevision: item.resolvedStyleRevision,
+        variant: variant && { ...variant, rules: rules(variant.rules), nodes: variant.nodes.map(node => ({
+          ...node, style: style(node.style), normalStyle: style(node.normalStyle), interactionStyle: style(node.interactionStyle),
+          ...(node.rules ? { rules: rules(node.rules) } : {}),
+          ...(node.pseudoElements ? { pseudoElements: node.pseudoElements.map(pseudo => ({
+            ...pseudo, style: style(pseudo.style), rules: rules(pseudo.rules) })) } : {}),
+          ...(node.retainedText ? { retainedText: { ...node.retainedText, style: style(node.retainedText.style) } } : {}),
+          ...(node.paintedControlText ? { paintedControlText: { ...node.paintedControlText, style: style(node.paintedControlText.style) } } : {}),
+        })) } };
+    }).sort((a, b) => `${a.case}/${a.side}`.localeCompare(`${b.case}/${b.side}`));
+  };
+  if (JSON.stringify(snapshot(report.elementInventory)) !== JSON.stringify(snapshot(fresh)))
+    errors.push('tooltip state action-boundary inventory differs from the verified source trees');
 }
 
 export function renderMaterialInputAuditMarkdown(report) {
@@ -612,6 +655,7 @@ export function renderMaterialInputAuditMarkdown(report) {
     `Supplemental slider full-domain behavior: ${report.supplementalSlider.cases.length}/4 cases captured; ${report.supplementalSlider.missing.length} missing and ${report.supplementalSlider.mismatches.length} observed mismatches. Keyboard stepping and pointer dragging exercise start=60/end=65 and start=30/end=40 without injected state.`,
     '',
     `Supplemental calendar close behavior: ${report.supplementalCalendarClose.reviews.length}/4 view/DPR sequences and ${report.supplementalCalendarClose.cases.length}/20 paired action boundaries captured; ${report.supplementalCalendarClose.missing.length} sequences missing. Binding=${report.supplementalCalendarClose.binding.status}. Each verified sequence retains the reference close control's focus reveal, blur clipping, Enter dismissal and opener-focus restoration, alongside the candidate's missing authored control. All boundary trees are included below; this is unequal authoring, not equal-input renderer failure or visual acceptance.`,
+    `Supplemental tooltip state: ${report.supplementalTooltipState.cases.length}/30 paired boundaries across benchmark-open, benchmark-hover and ordinary cohorts at DPR 1 and 2. Binding=${report.supplementalTooltipState.binding.status}; ${report.supplementalTooltipState.mismatches.length} presence mismatches remain. Every tree, authored/resolved style and retained/control text owner is included, including reference-only and candidate-only popup states. State correspondence is not glyph, placement, visibility or semantic equivalence.`,
     '',
     `Calendar controls remaining after reference dismissal: ${report.controlTypography.gaps.filter(gap => gap.attribution === 'reviewed-calendar-close-state-divergence').length} current texture owners are attributed to the verified unequal close state. Their full candidate input trees remain present; no reference typography is invented for the closed popup, and other unreviewed typography differences remain unresolved.`,
     '',
@@ -5714,6 +5758,8 @@ function sourceFingerprints(root) {
     'scripts/audit-material-chip-inputs.mjs',
     'scripts/audit-material-calendar-close.mjs',
     'tests/material-parity/calendar-close-evidence.mjs',
+    'scripts/audit-material-tooltip-state.mjs',
+    'tests/material-parity/tooltip-state-evidence.mjs',
     'tests/material-parity/supplemental-capture-evidence.spec.mjs',
   ];
   return files.map((file) => ({ file, sha256: createHash('sha256')
@@ -5722,6 +5768,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/supplemental-capture-evidence.spec.mjs', /test\('tooltip state collector keeps/,
+      'tooltip action-boundary capture and consolidated inventory provenance', 'All three state-input cohorts and both DPRs retain all thirty paired boundaries, including presence mismatches. Independent replay compares complete source trees with dereferenced inventory styles, rules and text stages; missing cases and changed evidence cannot be accepted through summary counts. This does not classify away absent counterparts or establish visual equivalence.'),
     proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('tooltip text alignment traces/,
       'tooltip surface alignment declaration versus complete candidate omission ancestry', 'The original active center declaration and candidate popup-to-page own-stage omissions remain distinct from retained left and flex centering. Negative declaration, ancestry, rule and stage controls plus independent replay prevent absent evidence or report mutations from certifying equivalence. Positioning, blur and current glyph paint remain independently unverified.'),
     proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('tooltip text mapping preserves/,
@@ -5884,6 +5932,8 @@ function caseKey(entry) {
 function parseReviewedCase(key, family) {
   const match = new RegExp(`^(static|interaction|supplemental):${family}@([^/]+)\\/([^/]+)(?:\\/(.+))?$`).exec(key);
   if (!match || match[1] !== 'supplemental') return match;
+  if (family === 'tooltip' && match[2] === 'light' && /^tooltip-state-desktop-dpr[12]$/.test(match[3]) &&
+      /^tooltip-state-(?:benchmark-open|benchmark-hover|ordinary)-(?:initial|hover|press|release|leave)$/.test(match[4] ?? '')) return match;
   // Extend existing calendar owner proofs only to these explicit, bound action
   // boundaries. Other supplemental families/states are not implicitly reviewed.
   return family === 'datepicker' && match[2] === 'light' && /^calendar-close-desktop-dpr[12]$/.test(match[3]) &&
