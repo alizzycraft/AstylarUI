@@ -23,6 +23,62 @@ selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Empty error labels are shrunk independently of the reference float state (2026-09-13)
+
+The 24 error-state font differences left separate by the preceding floating-label
+investigation have an authored state-predicate cause. Each of autocomplete,
+datepicker and timepicker contributes eight captured occurrences. The candidate
+`emptyFieldActive` predicate in `examples/material-showcase/src/app/astylar.component.ts`
+treats `state.error` as sufficient to select 12px type at top 8px. Commit
+`87bc351` added error to the open-state activation; `7159b1d` and `f3c8254`
+subsequently revised the predicate. Error alone does not give the empty native
+reference label the float-above class.
+
+The twelve light/dark reference wrappers retain the base 16px font token,
+top-left origin and unscaled base translation. The twelve contrast/custom
+wrappers are `display:none`, with computed transform `none`. The audit preserves
+that distinction: a hidden wrapper's computed 16px font is not evidence of a
+visible 16px glyph. Dense-label visibility and placeholder behavior remain
+separate obligations. Four hidden datepicker focus cases are still outside
+both the floating and unfloated-error attribution paths.
+
+The new `reviewed-unfloated-error-label-font-input` classification requires the
+complete base origin/translation/font-token cascade, exact invalid and unfocused
+reference ancestry, empty native and candidate values, invalid flags, associated
+label/control identity, candidate input-region/shell linkage, explicit empty
+label class, selected candidate size and consistent normal/effective/retained
+stages. It rejects unexpected float state, scale or hidden-wrapper geometry.
+Independent report validation replays the complete mappings, comparisons,
+differences and gaps. No font-size normalization or final-raster equivalence is
+accepted. Tests include 21 missing/contradictory-input controls and 11 report
+mutations, in addition to the existing floating-label guards.
+
+A separate **16 picker error-color differences** have a cascade cause: candidate
+base and empty-label rules already author error ink, but later datepicker and
+timepicker shell rules override it. The reference instead selects
+`var(--mat-form-field-filled-error-label-text-color, var(--mat-sys-error))` on
+the invalid floating-label wrapper. The color proof now retains that exact token,
+state ancestry and original candidate rule order; it does not infer the cause
+from sampled color alone. Dedicated tests exercise both picker shell selectors
+and light/dark literals, retain the overridden error rule, and reject a mutated
+state claim.
+
+Implementation ownership is **showcase state/token authoring**, not a newly
+confirmed core transform or world-coordinate defect. Restore the original float
+predicate, font/display token semantics and error-color cascade. Then test
+focus/blur, empty/nonempty and invalid/valid transitions without changing the
+different datepicker and timepicker opening contracts. The existing equal-input
+core transform defects remain separate. No fixture, reference, renderer or frozen
+visual-harness input was changed in this increment.
+
+Verification for this increment:
+
+- `node --test --test-name-pattern='unfloated error|floating-label|field state color|picker error label' tests/material-parity/input-equivalence-audit.spec.mjs`: **12/12 pass**, zero failures/skips/cancellations, 8.132 seconds on the final focused rerun.
+- `npm run parity:harness:check`: **447/447 pass**, zero failures/skips/cancellations, 266.750 seconds, exit code 0.
+- Full audit collection against the corrected `current-ancestry-audit` report and its bound normal-line-box and supplemental evidence produces **24 error-size findings (12 hidden), 16 error-color findings, and 32 remaining unattributed retained-text differences**. All **120 source findings** are detected, none unexplained. This is classification progress, not elimination of rendering defects.
+- `validateMaterialInputAudit(a, { requireComplete: false })` returns `[]`. Strict validation still reports **3,309 resolved-style, 879 control-text typography, and 32 retained-text typography differences** requiring attribution; the audit command completed with exit code 0 after printing those honest incomplete-acceptance results.
+- All ten frozen visual-harness files retain their checkpoint SHA-256 hashes. The final complete enforced visual matrix and final packaged audit report remain outstanding acceptance requirements.
+
 ## Floating-label font substitution now has complete cascade evidence across six controls (2026-09-13)
 
 The same unequal input occurs beyond form-field/input/select: autocomplete and

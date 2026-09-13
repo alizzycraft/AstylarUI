@@ -4543,18 +4543,18 @@ function fieldStateColorReport(state = 'focus', disabledOverride = false, family
   const raw = fieldLabelColorReport(family), entry = raw.results[0];
   const { reference: ref, astylar: ast } = entry.inputTrees;
   const selector = state === 'disabled' ? '.mdc-text-field--filled.mdc-text-field--disabled .mdc-floating-label' :
-    `.mdc-text-field--filled:not(.mdc-text-field--disabled)${state === 'focus' ? '.mdc-text-field--focused' : ':not(.mdc-text-field--focused):hover'} .mdc-floating-label`;
+    `.mdc-text-field--filled:not(.mdc-text-field--disabled)${state === 'focus' ? '.mdc-text-field--focused' : state === 'error' ? '.mdc-text-field--invalid' : ':not(.mdc-text-field--focused):hover'} .mdc-floating-label`;
   const value = state === 'disabled' ? 'var(--mat-form-field-filled-disabled-label-text-color, color-mix(in srgb, var(--mat-sys-on-surface) 38%, transparent))' :
-    `var(--mat-form-field-filled-${state}-label-text-color, var(--mat-sys-${state === 'focus' ? 'primary' : 'on-surface-variant'}))`;
+    `var(--mat-form-field-filled-${state}-label-text-color, var(--mat-sys-${state === 'focus' ? 'primary' : state === 'error' ? 'error' : 'on-surface-variant'}))`;
   if (state === 'disabled') ref.nodes[1].rules.pop();
   ref.rules.push({ active: true, conditions: [], selector, declarations: { color: { value, important: false } } });
   ref.nodes[1].rules.push(ref.rules.length - 1);
-  ref.styles = ref.styles.map(style => ({ ...style, color: state === 'focus' ? '#6750a4' : state === 'disabled' ? 'rgba(230,225,229,0.38)' : '#49454e' }));
+  ref.styles = ref.styles.map(style => ({ ...style, color: state === 'focus' ? '#6750a4' : state === 'error' ? '#b3261e' : state === 'disabled' ? 'rgba(230,225,229,0.38)' : '#49454e' }));
   ref.nodes[1].parent = 'infix';
   ref.nodes.push(...[
     ['infix', 'flex', 'div', 'mat-mdc-form-field-infix'],
     ['flex', 'field-wrapper', 'div', 'mat-mdc-form-field-flex'],
-    ['field-wrapper', 'field', 'div', `mdc-text-field--filled${state === 'focus' ? ' mdc-text-field--focused' : state === 'disabled' ? ' mdc-text-field--disabled' : ''}`],
+    ['field-wrapper', 'field', 'div', `mdc-text-field--filled${state === 'focus' ? ' mdc-text-field--focused' : state === 'disabled' ? ' mdc-text-field--disabled' : state === 'error' ? ' mdc-text-field--invalid' : ''}`],
     ['field', null, 'mat-form-field', 'mat-mdc-form-field'],
   ].map(([key, parent, type, className]) => ({ key, parent, type, attributes: { class: className,
     ...(key === 'field' ? { id: `${family}-primary` } : {}) }, style: 0, rules: [], pseudoElements: [] })));
@@ -4562,9 +4562,9 @@ function fieldStateColorReport(state = 'focus', disabledOverride = false, family
   return raw;
 }
 
-test('field state color tokens expose focus hover and disabled substitutions before paint', () => {
+test('field state color tokens expose focus hover disabled and error substitutions before paint', () => {
   for (const family of ['form-field', 'input', 'select', 'autocomplete', 'datepicker', 'timepicker']) {
-    for (const state of ['focus', 'hover', 'disabled']) {
+    for (const state of ['focus', 'hover', 'disabled', 'error']) {
       const raw = fieldStateColorReport(state, state === 'disabled', family), before = structuredClone(raw);
       const evidence = collectRetainedTypographyEvidence(raw.results, collectFullTreeInventory(raw.results));
       const f = evidence.differences.find(d => d.attribution === 'reviewed-field-label-color-substitution');
@@ -4653,6 +4653,26 @@ test('field state color claims replay ancestor state token and overridden disabl
     const report = structuredClone(baseline);
     mutate(report, report.retainedTypography.differences.find(d => d.attribution === 'reviewed-field-label-color-substitution'));
     assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('field-label color attributions')), String(mutate));
+  }
+});
+
+test('picker error label color preserves later shell override of authored error ink', () => {
+  for (const family of ['datepicker', 'timepicker']) for (const color of ['#1d1b20', '#e6e1e5']) {
+    const raw = fieldStateColorReport('error', false, family), e = raw.results[0], a = e.inputTrees.astylar;
+    for (const r of a.rules.filter(r => ['.field-label', '.field-label.empty-field-label'].includes(r.selector))) r.color = '#b3261e';
+    a.rules.find(r => r.selector === `.${family}-shell .field-label`).color = color;
+    for (const key of ['resolvedStyle', 'normalResolvedStyle', 'interactionResolvedStyle']) a.nodes[0][key].color = color;
+    a.nodes[0].retainedText.style.color = color;
+    const report = buildMaterialInputAudit(raw), f = report.retainedTypography.differences.find(d => d.attribution === 'reviewed-field-label-color-substitution');
+    assert.ok(f, family);
+    assert.equal(f.reviewEvidence.referenceState.state, 'error');
+    assert.equal(f.reviewEvidence.selectedRule.rule.selector, `.${family}-shell .field-label`);
+    assert.equal(f.reviewEvidence.selectedRule.rule.color, color);
+    assert.ok(f.reviewEvidence.matchingRules.some(r => r.rule.selector === '.field-label' && r.rule.color === '#b3261e'));
+    assert.ok(!validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('field-label color attributions')));
+    const altered = structuredClone(report);
+    altered.retainedTypography.differences.find(d => d.attribution === 'reviewed-field-label-color-substitution').reviewEvidence.referenceState.state = 'focus';
+    assert.ok(validateMaterialInputAudit(altered, { requireComplete: false }).some(e => e.includes('field-label color attributions')));
   }
 });
 
@@ -4780,6 +4800,98 @@ function verifiedFloatingLabelReport(family = 'form-field', empty = false) {
   }
   return raw;
 }
+
+function unfloatedErrorLabelReport(family = 'timepicker', hidden = false) {
+  const raw = verifiedFloatingLabelReport(family, true), { reference: r, astylar: a } = raw.results[0].inputTrees;
+  r.nodes[1].attributes = { class: 'mdc-floating-label', for: `${family}-control` };
+  r.nodes[1].parent = 'infix'; r.nodes[1].rules = [2, 3, 1];
+  Object.assign(r.styles[1], { display: hidden ? 'none' : 'block', transform: hidden ? 'none' : 'matrix(1, 0, 0, 1, 0, -9.5)', transformOrigin: hidden ? '0% 0%' : '0px 0px' });
+  for (const [selector, value] of [
+    ['.mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-floating-label', 'var(--mat-form-field-filled-label-text-color, var(--mat-sys-on-surface-variant))'],
+    ['.mdc-text-field--filled:not(.mdc-text-field--disabled).mdc-text-field--invalid .mdc-floating-label', 'var(--mat-form-field-filled-error-label-text-color, var(--mat-sys-error))'],
+  ]) {
+    r.rules.push({ active: true, conditions: [], selector, declarations: { color: { value, important: false } } });
+    r.nodes[1].rules.push(r.rules.length - 1);
+  }
+  r.nodes.push(...[
+    ['infix', 'flex', 'div', 'mat-mdc-form-field-infix'], ['flex', 'field-wrapper', 'div', 'mat-mdc-form-field-flex'],
+    ['field-wrapper', 'field', 'div', 'mdc-text-field--filled mdc-text-field--invalid'], ['field', null, 'mat-form-field', 'mat-mdc-form-field'],
+  ].map(([key, parent, type, className]) => ({ key, parent, type, attributes: { class: className, ...(key === 'field' ? { id: `${family}-primary` } : {}) }, style: 0, rules: [], pseudoElements: [] })));
+  r.nodes.push({ key: 'input', parent: 'infix', type: 'input', attributes: { id: `${family}-control`, 'aria-invalid': 'true' }, value: '', ownText: '', style: 0, rules: [], pseudoElements: [] });
+  a.nodes[0].parent = 'shell'; a.nodes[0].authored.for = `${family}-control`;
+  a.nodes.push(...[
+    ['shell', 'page', { type: 'div', id: `${family}-primary` }],
+    ['region', 'shell', { type: 'div', id: `${family}-input-region` }],
+    ['input', 'region', { type: 'input', id: `${family}-control`, ariaInvalid: true, value: '' }],
+  ].map(([key, parent, authored]) => ({ key, parent, authored, resolvedStyle: {}, normalResolvedStyle: {}, interactionResolvedStyle: {} })));
+  return raw;
+}
+
+test('unfloated error label size distinguishes error-state shrink from scaled and hidden reference paint', () => {
+  for (const family of ['autocomplete', 'datepicker', 'timepicker']) for (const hidden of [false, true]) {
+    const raw = unfloatedErrorLabelReport(family, hidden), before = structuredClone(raw);
+    const evidence = collectRetainedTypographyEvidence(raw.results, collectFullTreeInventory(raw.results));
+    const f = evidence.differences.find(d => d.attribution === 'reviewed-unfloated-error-label-font-input');
+    assert.ok(f, `${family}/${hidden}`);
+    assert.equal(f.inputEquivalent, false); assert.equal(f.finalRasterVerified, false);
+    assert.equal(f.reviewEvidence.selectedReferenceRules.length, 3);
+    assert.equal(f.reviewEvidence.referenceErrorState.referenceWrapperDisplay, hidden ? 'none' : 'block');
+    assert.equal(f.reviewEvidence.referenceErrorState.state.state, 'error');
+    assert.equal(f.reviewEvidence.referenceErrorState.candidateInput.authored.ariaInvalid, true);
+    assert.deepEqual(raw, before);
+  }
+  const report = buildMaterialInputAudit(unfloatedErrorLabelReport());
+  assert.deepEqual(validateMaterialInputAudit(report, { requireComplete: false }), []);
+});
+
+test('unfloated error label size rejects missing state input identity and contradictory visibility', () => {
+  const controls = [
+    (r, a) => { r.nodes.find(n => n.key === 'field-wrapper').attributes.class = 'mdc-text-field--filled'; },
+    (r, a) => { r.nodes.find(n => n.key === 'field-wrapper').attributes.class += ' mdc-text-field--focused'; },
+    (r, a) => { r.rules.at(-1).active = false; }, (r, a) => { r.rules.at(-1).declarations.color.value = '#b3261e'; },
+    (r, a) => { r.nodes.find(n => n.key === 'input').attributes['aria-invalid'] = 'false'; },
+    (r, a) => { r.nodes.find(n => n.key === 'input').value = 'Typed'; },
+    (r, a) => { r.nodes.find(n => n.key === 'input').attributes.disabled = ''; },
+    (r, a) => { r.nodes.find(n => n.key === 'input').parent = 'flex'; },
+    (r, a) => { r.nodes[1].attributes.for = 'other'; },
+    (r, a) => { r.nodes[1].attributes.class += ' mdc-floating-label--float-above'; },
+    (r, a) => { r.styles[1].transform = 'matrix(0.75, 0, 0, 0.75, 0, -9.5)'; },
+    (r, a) => { r.styles[1].display = 'none'; },
+    (r, a) => { a.nodes[0].authored.class = 'field-label'; },
+    (r, a) => { a.nodes[0].authored.for = 'other'; },
+    (r, a) => { a.nodes.find(n => n.key === 'input').authored.ariaInvalid = false; },
+    (r, a) => { a.nodes.find(n => n.key === 'input').authored.value = 'Typed'; },
+    (r, a) => { a.nodes.find(n => n.key === 'input').authored.disabled = true; },
+    (r, a) => { a.nodes.find(n => n.key === 'input').parent = 'shell'; },
+    (r, a) => { a.nodes.find(n => n.key === 'region').parent = 'page'; },
+    (r, a) => { a.nodes.find(n => n.key === 'shell').authored.id = 'other'; },
+    (r, a) => { a.nodes.push(structuredClone(a.nodes.find(n => n.key === 'input'))); },
+  ];
+  for (const [index, mutate] of controls.entries()) {
+    const raw = unfloatedErrorLabelReport(); mutate(raw.results[0].inputTrees.reference, raw.results[0].inputTrees.astylar);
+    assert.ok(!collectRetainedTypographyEvidence(raw.results, collectFullTreeInventory(raw.results)).differences.some(d => d.attribution === 'reviewed-unfloated-error-label-font-input'), `control ${index}`);
+  }
+});
+
+test('unfloated error label size claims replay invalid input and visibility evidence', () => {
+  const baseline = buildMaterialInputAudit(unfloatedErrorLabelReport('datepicker', true));
+  const controls = [
+    (r, f) => { f.inputEquivalent = true; }, (r, f) => { f.finalRasterVerified = true; },
+    (r, f) => { f.reviewEvidence.referenceErrorState.input.value = 'Typed'; },
+    (r, f) => { f.reviewEvidence.referenceErrorState.candidateInput.authored.ariaInvalid = false; },
+    (r, f) => { f.reviewEvidence.referenceErrorState.referenceWrapperDisplay = 'block'; },
+    (r, f) => { f.reviewEvidence.selectedReferenceRules.push({}); },
+    (r, f) => { f.reviewEvidence.revision++; }, (r, f) => { f.family = 'chips'; },
+    (r, f) => { r.retainedTypography.differences = []; },
+    (r, f) => { r.retainedTypography.differences.push(structuredClone(f)); },
+    (r, f) => { r.retainedTypography.comparisons = []; },
+  ];
+  for (const [index, mutate] of controls.entries()) {
+    const report = structuredClone(baseline), f = report.retainedTypography.differences.find(d => d.attribution === 'reviewed-unfloated-error-label-font-input');
+    mutate(report, f);
+    assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('floating-label font')), `mutation ${index}`);
+  }
+});
 
 test('attributes floating-label font substitution without equating scaled and smaller text inputs', () => {
   const raw = verifiedFloatingLabelReport();

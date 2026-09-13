@@ -228,7 +228,7 @@ export const sourceAuditDefinitions = Object.freeze([
     pattern: String.raw`selector: '(?:\.field-label(?:\.empty-field-label)?|\.(?:timepicker|datepicker)-shell \.field-label)',[^\n]*color:`,
     classification: 'application-plugin-authoring-defect',
     owner: 'showcase filled-label color tokens and state-rule translation',
-    justification: 'Reference mat-label inherits base/focus/hover/disabled color tokens from the native floating-label wrapper. Candidate base/empty/picker rules author literal colors, including #49454f, #1d1b20 and theme.onSurface. The earlier dark disabled #79747e rule is overridden by the later base rule. Captured source order and parent classes distinguish base and equal-specificity empty/picker overrides; state attribution additionally requires the exact reference token declarations, filled-field ancestor state and v2 inspection provenance. The selected candidate declaration must agree with normal/effective/retained stages, so stale inspection or unexplained state disagreements are not waived. These unequal inputs must be restored before evaluating a core color/raster defect; no fixture tuning is performed by the audit.',
+    justification: 'Reference mat-label inherits base/focus/hover/disabled/error color tokens from the native floating-label wrapper. Candidate base/empty/picker rules author literal colors, including #49454f, #1d1b20 and theme.onSurface. The earlier dark disabled #79747e rule is overridden by the later base rule; picker-shell rules also override base/empty error ink. Captured source order and parent classes distinguish base and equal-specificity empty/picker overrides; state attribution additionally requires the exact reference token declarations, filled-field ancestor state and v2 inspection provenance. The selected candidate declaration must agree with normal/effective/retained stages, so stale inspection or unexplained state disagreements are not waived. These unequal inputs must be restored before evaluating a core color/raster defect; no fixture tuning is performed by the audit.',
     focusedProof: 'tests/material-parity/input-equivalence-audit.spec.mjs: field color token and candidate cascade provenance',
   }),
   Object.freeze({
@@ -280,6 +280,16 @@ export const sourceAuditDefinitions = Object.freeze([
     owner: 'Material field-label structure and typography translation',
     justification: 'All six filled-field families can retain 16px reference type inside a floating wrapper with translateY(-106%) scale(0.75) and top-left origin. Candidate base and active-empty rules substitute absolute 12px labels at fixed insets. Similar apparent glyph size is not equivalent input. Attribution requires complete ordered origin/base-transform/font-token/floating-transform rules, captured wrapper scale, unique text identity, the selected base/empty candidate rule, normal/effective/retained size and untransformed candidate ancestry through the page. Independent replay rejects altered or removed claims. Compact, hidden, untransformed, font-selection and final raster remain separate obligations. Original-input reductions expose core percentage-translation, origin and transform-order gaps; repair those rules before restoring the original wrapper structure, rather than retaining smaller type or tuning world coordinates.',
     focusedProof: 'examples/material-showcase/src/app/input-equivalence-proof.spec.ts: floating label preserves child typography',
+  }),
+  Object.freeze({
+    id: 'fixture-error-label-forced-floating-size',
+    introducedBy: '87bc351 adds state.error to empty-label size/position activation; 7159b1d and f3c8254 revise the predicate',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`const emptyFieldActive = state\.error`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase error-state label sizing and dense-label visibility translation',
+    justification: 'The candidate treats validation error as sufficient to author the active-empty 12px label at top 8px. Empty invalid reference fields do not acquire float-above solely from error state: their wrapper keeps the base 16px token and base translation, or is hidden by the dense theme. Attribute only with exact invalid ancestor/input state, empty native and candidate values, label/control and candidate input-region linkage, complete base font/transform rules, selected candidate size and retained stages. Preserve hidden-wrapper evidence without claiming visible glyph parity. Error color is independent: later picker-shell literals override candidate base/empty error colors. Repair state and token authoring rather than core transform arithmetic or sampled font sizes.',
+    focusedProof: 'tests/material-parity/input-equivalence-audit.spec.mjs: unfloated error label size distinguishes error-state shrink from scaled and hidden reference paint',
   }),
   Object.freeze({
     id: 'fixture-field-label-tracking-substitution',
