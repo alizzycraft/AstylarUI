@@ -760,6 +760,15 @@ export const sourceAuditDefinitions = Object.freeze([
     justification: 'The reference has a connected overlay/backdrop, menu content wrapper, ordered Material buttons and direct text/ripple children. The candidate has a fixed-size absolute popup with two aria-labelled buttons and named label spans. The spans improve direct text ownership compared with the earlier button values, but do not restore the content wrapper, label flex:1 or component typography tokens. Map the complete paired item domain before comparing inputs; do not mistake corresponding text for equivalent layout, state, accessibility or paint.',
   }),
   Object.freeze({
+    id: 'fixture-menu-label-font-token-omission',
+    introducedBy: 'af04845 adds generic control-family rule; 994da86 adds menu label spans without restoring the component font token',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`selector: 'button, input, select', fontFamily: 'Roboto, Arial, sans-serif'`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase menu label component-font token translation',
+    justification: 'The generic control font rule is not inherently a workaround. The menu label omits the original direct Material font token, so it inherits the generic control stack instead. Raw reference token, candidate declarations and normal/effective/retained stages prove unequal fallback lists; this is distinct from a core renderer appending fallback fonts to equivalent explicit single-family input.',
+  }),
+  Object.freeze({
     id: 'fixture-menu-label-ink-substitution',
     introducedBy: '0d67d46 replaces theme.onSurface with #1d1b20; retained by subsequent parity fixes',
     file: 'examples/material-showcase/src/app/astylar.component.ts',

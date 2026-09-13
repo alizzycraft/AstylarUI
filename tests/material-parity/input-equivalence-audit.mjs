@@ -455,6 +455,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
     'reviewed-material-option-ink-input': 'application-plugin-authoring-defect',
     'reviewed-snackbar-message-token-input': 'application-plugin-authoring-defect',
     'reviewed-menu-label-ink-input': 'application-plugin-authoring-defect',
+    'reviewed-menu-label-font-input': 'application-plugin-authoring-defect',
     'reviewed-tooltip-text-alignment-input': 'application-plugin-authoring-defect',
     'reviewed-floating-label-font-input': 'application-plugin-authoring-defect' };
   const unresolvedTypography = report.retainedTypography?.differences.filter((entry) =>
@@ -640,6 +641,7 @@ export function renderMaterialInputAuditMarkdown(report) {
     `Snackbar messages: ${report.retainedTypography.reviewedMappings.filter(m => m.kind === 'reviewed-snackbar-message-text').length} labels map through unique overlay, live-region and sibling-action context. Original padded flex-message and nested action/live owners are replaced by a span inside a status surface. This establishes text identity only; unequal composition, typography, announcement behavior, placement and visibility remain independent obligations.`,
     `Snackbar message tokens: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-snackbar-message-token-input').length} size/color differences trace the direct component size token or inherited surface inverse-text token against omitted component size/page inheritance or literal surface white. Separate declaration, normal/effective and retained stages remain evidence. This is unequal authoring, not a core scaling/color defect or proof of current raster, visibility or theme-token fallback provenance.`,
     `Menu label ink: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-menu-label-ink-input').length} unequal colors preserve the original ordered inherit/token declarations and direct label inheritance against the candidate item literal. Complete rule and normal/effective/retained evidence is required; typography, token fallback origin, overlay theme scope and final paint are not certified.`,
+    `Menu label font: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-menu-label-font-input').length} original direct component-family tokens contrast with candidate label omission and inheritance from the explicit generic control-family rule. The two fallback lists remain unequal; installed-glyph coincidence, font selection, shaping and final raster are not certified.`,
     `Tooltip text: ${report.retainedTypography.reviewedMappings.filter(m => m.kind === 'reviewed-tooltip-overlay-text').length} labels map only when unique Material trigger/message and shown connected-overlay ownership coexist with the unique candidate trigger-linked flow popup. Original aria-hidden visual ownership and external description linkage remain distinct from the candidate role-tooltip sibling. Candidate-only states, typography, positioning, collision, clipping, visibility and raster are not waived.`,
     `Tooltip alignment: ${report.retainedTypography.differences.filter(d => d.attribution === 'reviewed-tooltip-text-alignment-input').length} original center declarations contrast with complete popup-to-page candidate omissions and retained left. Candidate flex centering is captured as a different input, not an equivalent replacement or proof of glyph alignment. Positioning and blur remain separate investigations.`,
     `Timepicker options: ${report.retainedTypography.reviewedMappings.filter(m => m.kind === 'reviewed-timepicker-option-text').length} labels have complete input-linked half-hour-domain correspondence. Material primary-text/ripple owners are replaced by direct-text div options; active and selected states remain separate raw evidence. This maps text owners, not equivalent wrappers, scrolling, commit behavior, placement or raster. Newly exposed typography differences remain enforced.`,
@@ -1594,7 +1596,7 @@ function validateMenuTextEvidence(report, errors) {
     return match ? [{ kind: match[1], family: 'menu', profile: match[2], viewport: { id: match[3] }, ...(match[4] ? { state: match[4] } : {}) }] : [];
   });
   const replay = collectRetainedTypographyEvidence(cases, report.elementInventory);
-  const predicate = value => value.attribution === 'reviewed-menu-label-ink-input' || value.kind === 'reviewed-menu-item-text' || value.mapping?.kind === 'reviewed-menu-item-text' ||
+  const predicate = value => ['reviewed-menu-label-ink-input', 'reviewed-menu-label-font-input'].includes(value.attribution) || value.kind === 'reviewed-menu-item-text' || value.mapping?.kind === 'reviewed-menu-item-text' ||
     ['menu-rename-label', 'menu-delete-label'].includes(value.element) ||
     (value.family === 'menu' && value.reason === 'own-text nodes without an explicit shared ID require structural mapping');
   for (const list of ['reviewedMappings', 'comparisons', 'differences', 'gaps']) {
@@ -2474,6 +2476,64 @@ function reviewedSnackbarMessageToken(entry, mapping, property, ast, styles, ref
     reviewEvidence: { sourceFinding: 'fixture-snackbar-message-token-substitution', property, referenceRule, referenceChain,
       candidateRule, checkedCandidateRules, candidateChain, candidateRetained: styleAt(ast.retainedText.style, 'astylar'),
       referenceComputed: styles.reference[property], candidateValue: styles.retained[property], inputEquivalent: false, finalRasterVerified: false } };
+}
+
+function reviewedMenuLabelFont(entry, mapping, property, ast, styles, referenceTree, astylarTree, inventory) {
+  if (entry.family !== 'menu' || property !== 'fontFamily' || mapping?.kind !== 'reviewed-menu-item-text' ||
+      mapping.astylarNode !== ast.key || ast.retainedText?.source !== 'core-text-registry' || referenceTree.ruleEvidenceComplete !== true ||
+      styles.reference.fontFamily !== 'roboto' || styles.retained.fontFamily !== 'roboto,arial,sans-serif') return;
+  const one = nodes => nodes.length === 1 ? nodes[0] : undefined;
+  const leaf = one(referenceTree.nodes.filter(n => n.key === mapping.referenceNode));
+  const owner = one(astylarTree.nodes.filter(n => n.key === mapping.reviewEvidence.candidatePath[1]?.key));
+  if (!leaf || !owner || ast.parent !== owner.key || owner.authored.type !== 'button') return;
+  const changesFamily = declarations => Object.keys(declarations ?? {}).some(key => {
+    const name = key.replaceAll('-', '').toLowerCase();
+    return ['font', 'fontfamily', 'all'].includes(name) || /^(animation|transition)/.test(name);
+  });
+  const unsafeInline = value => value !== undefined && (value === null || typeof value !== 'object' || Array.isArray(value) || changesFamily(value));
+  const styleAt = (index, side) => {
+    const pooled = inventory.styles[index];
+    return pooled?.side === side && pooled.value && typeof pooled.value === 'object' && !Array.isArray(pooled.value) ? pooled.value : undefined;
+  };
+  const computed = styleAt(leaf.style, 'reference');
+  if (!computed || canonicalStyle(computed).fontFamily !== styles.reference.fontFamily || unsafeInline(leaf.inline) ||
+      /(?:^|;)\s*(?:font-family|font|all|animation[^:]*|transition[^:]*)\s*:/i.test(leaf.attributes?.style ?? '')) return;
+  const pooledReference = leaf.rules.map(i => inventory.rules[i]);
+  if (pooledReference.some(r => r?.side !== 'reference' || !r.value || typeof r.value !== 'object' || Array.isArray(r.value) || typeof r.value.active !== 'boolean')) return;
+  const referenceRules = pooledReference.map(r => r.value), applicableReference = referenceRules.filter(r => r.active && changesFamily(r.declarations));
+  const referenceRule = applicableReference[0];
+  if (applicableReference.length !== 1 || referenceRule.selector !== '.mat-mdc-menu-content, .mat-mdc-menu-content .mat-mdc-menu-item .mat-mdc-menu-item-text' ||
+      !/^sheet:\d+\/\d+$/.test(referenceRule.source ?? '') || referenceRule.conditions?.length !== 0 ||
+      referenceRule.declarations?.['font-family']?.value !== 'var(--mat-menu-item-label-text-font, var(--mat-sys-label-large-font))' ||
+      referenceRule.declarations['font-family'].important !== false ||
+      Object.keys(referenceRule.declarations).some(k => k !== 'font-family' && changesFamily({ [k]: true }))) return;
+  const pooledRules = astylarTree.rules.map(i => inventory.rules[i]);
+  if (pooledRules.some(r => r?.side !== 'astylar' || !r.value || typeof r.value !== 'object' || Array.isArray(r.value))) return;
+  const candidateRules = pooledRules.map(r => r.value).filter(r => changesFamily(r)), candidateChain = [];
+  let candidateRule;
+  for (const node of [ast, owner]) {
+    const normal = styleAt(node.normalStyle, 'astylar'), effective = styleAt(node.interactionStyle, 'astylar');
+    if (!normal || !effective || unsafeInline(node.authored.style)) return;
+    const applicable = candidateRules.filter(rule => typographySelectorCanApply(rule.selector, node.authored));
+    if (node === ast) {
+      if (applicable.length || changesFamily(normal) || changesFamily(effective)) return;
+    } else {
+      if (applicable.length !== 1 || applicable[0].selector !== 'button, input, select' || applicable[0].fontFamily !== 'Roboto, Arial, sans-serif' ||
+          Object.keys(applicable[0]).some(k => k !== 'fontFamily' && changesFamily({ [k]: true })) ||
+          [normal, effective].some(stage => canonicalStyle(stage).fontFamily !== styles.retained.fontFamily ||
+            Object.keys(stage).some(k => k !== 'fontFamily' && changesFamily({ [k]: true })))) return;
+      candidateRule = applicable[0];
+    }
+    candidateChain.push({ node: node.key, parent: node.parent, authored: node.authored, normal, effective });
+  }
+  return { attribution: 'reviewed-menu-label-font-input', classification: 'application-plugin-authoring-defect',
+    inputEquivalent: false, currentPseudoStatePaintVerified: false, finalRasterVerified: false,
+    recommendedOwner: 'showcase menu label component-font token translation',
+    justification: 'The original direct menu label applies its own Material font-family token and computes Roboto. The candidate label omits that component declaration and inherits Roboto, Arial, sans-serif from an explicit generic button/input/select author rule, not from an unexplained core default. The generic rule itself is not inherently wrong; omission of the more specific component font intent makes these inputs unequal. Keep the fallback lists distinct before testing font selection, shaping, metrics or current glyph raster. This finding does not attribute an equal-input core fallback defect or certify variable fallback provenance.',
+    reviewEvidence: structuredClone({ sourceFinding: 'fixture-menu-label-font-token-omission', referenceRule, referenceRules,
+      referenceLeaf: { node: leaf.key, parent: leaf.parent, attributes: leaf.attributes, inline: leaf.inline, computed },
+      candidateRule, checkedCandidateRules: candidateRules, candidateChain, candidateRetained: styleAt(ast.retainedText.style, 'astylar'),
+      referenceComputed: styles.reference.fontFamily, candidateFamily: styles.retained.fontFamily }) };
 }
 
 function reviewedMenuLabelInk(entry, mapping, property, ast, styles, referenceTree, astylarTree, inventory) {
@@ -4454,6 +4514,7 @@ export function collectRetainedTypographyEvidence(cases, inventory, controlTypog
             ...(reviewedMaterialOptionInk(entry, textMappingById.get(id), property, ast, styles, referenceTree, astylarTree, inventory) ?? {}),
             ...(reviewedSnackbarMessageToken(entry, textMappingById.get(id), property, ast, styles, referenceTree, astylarTree, inventory) ?? {}),
             ...(reviewedMenuLabelInk(entry, textMappingById.get(id), property, ast, styles, referenceTree, astylarTree, inventory) ?? {}),
+            ...(reviewedMenuLabelFont(entry, textMappingById.get(id), property, ast, styles, referenceTree, astylarTree, inventory) ?? {}),
             ...(reviewedTooltipTextAlignment(entry, textMappingById.get(id), property, ast, styles, referenceTree, astylarTree, inventory) ?? {}),
             ...(!controlLabelToken && !selectValueToken && !weekdayToken && !monthMarkerToken ?
               reviewedOmittedComponentTextMetric(textMappingById.get(id), property, ref, ast, styles, referenceTree, astylarTree, inventory) ?? {} : {}),
@@ -6064,6 +6125,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('menu label font preserves/,
+      'menu component-family omission versus authored generic control stack', 'Original direct token and candidate label omission/control declaration are captured independently. Missing, competing or contradictory style stages and forged reports refuse attribution; matching installed glyphs never equates fallback lists.'),
     proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('menu label ink preserves/,
       'menu label inherited token versus literal ink inputs', 'The exact non-link item cascade and direct label inheritance are preserved against candidate declaration, normal/effective and retained stages. Competing or missing evidence and forged reports fail; no color equivalence or final paint claim is made.'),
     proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('menu text mapping preserves/,

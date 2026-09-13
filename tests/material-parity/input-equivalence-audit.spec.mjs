@@ -4746,6 +4746,98 @@ test('menu label ink replay rejects forged evidence and retains independent inve
   }
 });
 
+function menuFontReport() {
+  const raw = menuInkReport(), { reference: r, astylar: a } = raw.results[0].inputTrees;
+  r.rules[0].source = 'sheet:0/0';
+  a.rules.push({ selector: 'button, input, select', fontFamily: 'Roboto, Arial, sans-serif' });
+  return raw;
+}
+
+test('menu label font preserves direct component token versus authored control inheritance', () => {
+  const raw = menuFontReport(), before = structuredClone(raw), cases = raw.results.map(e => ({ ...e, kind: 'static' }));
+  const evidence = collectRetainedTypographyEvidence(cases, collectFullTreeInventory(cases));
+  const font = evidence.differences.filter(d => d.attribution === 'reviewed-menu-label-font-input');
+  assert.equal(font.length, 2);
+  for (const d of font) {
+    assert.equal(d.inputEquivalent, false); assert.equal(d.currentPseudoStatePaintVerified, false); assert.equal(d.finalRasterVerified, false);
+    assert.equal(d.classification, 'application-plugin-authoring-defect');
+    assert.equal(d.reviewEvidence.referenceRule.declarations['font-family'].value, 'var(--mat-menu-item-label-text-font, var(--mat-sys-label-large-font))');
+    assert.equal(d.reviewEvidence.candidateRule.selector, 'button, input, select');
+    assert.equal(d.reviewEvidence.candidateChain[0].normal.fontFamily, undefined);
+    assert.equal(d.reviewEvidence.candidateChain[1].normal.fontFamily, 'Roboto, Arial, sans-serif');
+    assert.equal(d.reviewEvidence.candidateRetained.fontFamily, 'Roboto, Arial, sans-serif');
+    assert.equal(d.reviewEvidence.referenceComputed, 'roboto');
+  }
+  assert.equal(evidence.differences.filter(d => d.attribution === 'reviewed-menu-label-ink-input').length, 2);
+  assert.deepEqual(raw, before);
+});
+
+test('menu label font refuses incomplete competing or contradictory authoring evidence', () => {
+  const controls = [
+    (r, a) => { delete r.errors; },
+    (r, a) => { r.rules[0].active = false; },
+    (r, a) => { delete r.rules[0].source; },
+    (r, a) => { r.rules[0].source = 'sheet:0/0/0'; },
+    (r, a) => { r.rules[0].conditions = ['@media screen']; },
+    (r, a) => { r.rules[0].selector = '.mat-mdc-menu-item-text'; },
+    (r, a) => { r.rules[0].declarations['font-family'].important = true; },
+    (r, a) => { r.rules[0].declarations['font-family'].value = 'Roboto'; },
+    (r, a) => { r.rules[0].declarations.font = { value: '14px Roboto', important: false }; },
+    (r, a) => { r.rules[0].declarations.all = { value: 'revert', important: false }; },
+    (r, a) => { r.nodes.find(n => n.key === 'rename-label').inline = { 'font-family': { value: 'Roboto', important: false } }; },
+    (r, a) => { r.nodes.find(n => n.key === 'rename-label').attributes.style = 'font: 14px Roboto'; },
+    (r, a) => { r.styles[0].fontFamily = 'Arial'; },
+    (r, a) => { r.rules.push({ selector: 'span', active: true, conditions: [], declarations: { 'font-family': { value: 'Roboto', important: false } } }); r.nodes.find(n => n.key === 'rename-label').rules.push(3); },
+    (r, a) => { a.rules.pop(); },
+    (r, a) => { a.rules.at(-1).selector = 'button'; },
+    (r, a) => { a.rules.at(-1).fontFamily = 'Roboto'; },
+    (r, a) => { a.rules.at(-1).all = 'unset'; },
+    (r, a) => { a.rules.at(-1).transition = 'all 1s'; },
+    (r, a) => { a.rules.push({ selector: '.menu-option-label', fontFamily: 'inherit' }); },
+    (r, a) => { a.rules.push({ selector: '#menu-rename', fontFamily: 'Roboto' }); },
+    (r, a) => { a.nodes.find(n => n.key === 'rename').authored.style = { fontFamily: 'Roboto, Arial, sans-serif' }; },
+    (r, a) => { a.nodes.find(n => n.key === 'rename-label').authored.style = { all: 'unset' }; },
+    (r, a) => { a.nodes.find(n => n.key === 'rename-label').normalResolvedStyle.fontFamily = 'inherit'; },
+    (r, a) => { a.nodes.find(n => n.key === 'rename-label').interactionResolvedStyle.fontFamily = 'Roboto, Arial, sans-serif'; },
+    (r, a) => { delete a.nodes.find(n => n.key === 'rename').normalResolvedStyle; },
+    (r, a) => { delete a.nodes.find(n => n.key === 'rename').interactionResolvedStyle; },
+    (r, a) => { a.nodes.find(n => n.key === 'rename').normalResolvedStyle.fontFamily = 'Arial'; },
+    (r, a) => { a.nodes.find(n => n.key === 'rename').interactionResolvedStyle.fontFamily = 'Arial'; },
+    (r, a) => { a.nodes.find(n => n.key === 'rename').normalResolvedStyle.font = '14px Roboto'; },
+    (r, a) => { a.nodes.find(n => n.key === 'rename-label').retainedText.source = 'private-texture'; },
+    (r, a) => { a.nodes.find(n => n.key === 'rename-label').retainedText.style.fontFamily = 'Arial'; },
+  ];
+  for (const [index, mutate] of controls.entries()) {
+    const raw = menuFontReport(), { reference: r, astylar: a } = raw.results[0].inputTrees; mutate(r, a);
+    const cases = raw.results.map(e => ({ ...e, kind: 'static' })), t = collectRetainedTypographyEvidence(cases, collectFullTreeInventory(cases));
+    assert.ok(!t.differences.some(d => d.element === 'menu-rename-label' && d.attribution === 'reviewed-menu-label-font-input'), `control ${index}`);
+  }
+});
+
+test('menu label font replay rejects fabricated inheritance and foreign-scope claims', () => {
+  const original = buildMaterialInputAudit(menuFontReport());
+  assert.ok(original.sourceFindings.find(f => f.id === 'fixture-menu-label-font-token-omission')?.detected);
+  assert.equal(original.retainedTypography.differences.filter(d => d.attribution === 'reviewed-menu-label-font-input').length, 2);
+  assert.ok(!validateMaterialInputAudit(original, { requireComplete: false }).some(e => e.includes('menu text')));
+  for (const mutate of [
+    (r, d) => { d.reviewEvidence.referenceRule.declarations['font-family'].value = 'Arial'; },
+    (r, d) => { d.reviewEvidence.referenceLeaf.computed.fontFamily = 'Arial'; },
+    (r, d) => { d.reviewEvidence.candidateRule.selector = '#page'; },
+    (r, d) => { d.reviewEvidence.candidateChain[0].normal.fontFamily = 'Roboto'; },
+    (r, d) => { d.reviewEvidence.candidateRetained.fontFamily = 'Roboto'; },
+    (r, d) => { d.reviewEvidence.checkedCandidateRules.pop(); },
+    (r, d) => { d.inputEquivalent = true; },
+    (r, d) => { d.finalRasterVerified = true; },
+    (r, d) => { d.values.retained = 'roboto'; },
+    (r, d) => { d.case = 'static:tooltip@light/desktop'; d.family = 'tooltip'; d.element = 'other'; delete d.mapping; },
+  ]) {
+    const report = structuredClone(original), inventory = structuredClone(report.elementInventory);
+    mutate(report, report.retainedTypography.differences.find(d => d.attribution === 'reviewed-menu-label-font-input'));
+    assert.deepEqual(report.elementInventory, inventory);
+    assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('menu text')));
+  }
+});
+
 function tooltipTextReport() {
   const raw = retainedTypographyReport(), e = raw.results[0], { reference: r, astylar: a } = e.inputTrees;
   e.family = 'tooltip';

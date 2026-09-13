@@ -23,6 +23,78 @@ selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Menu label font omits the direct component token (2026-09-13)
+
+The new `reviewed-menu-label-font-input` attribution separates a direct Material
+font declaration from inherited generic control typography. Reference menu
+labels have the original component token
+`var(--mat-menu-item-label-text-font, var(--mat-sys-label-large-font))` and
+compute `Roboto`. Candidate labels have no own font-family declaration in
+normal/effective inspection and inherit `Roboto, Arial, sans-serif` from the
+explicit `button, input, select` author rule. The two fallback lists remain
+unequal even when the installed first font happens to paint similar glyphs.
+
+The proof requires exact ordered item/label ownership from the menu mapping,
+one active original direct-family token rule, a top-level source location,
+non-important unconditional declarations, complete candidate rules and separate
+normal/effective/retained stages. Competing declarations, font shorthands,
+resets, animations, transitions, inline overrides or missing stages refuse
+attribution. Detached evidence snapshots and independent menu replay reject
+fabricated inheritance, changed values and claims moved to another component.
+
+History: `af04845` (`fix(material): inherit control typography`) added the
+generic control-family rule now at `astylar.component.ts:476`. Its stated
+purpose was to mirror the reference application's control-font reset. The rule
+itself is not inherently a workaround. `994da86` later added the menu label
+spans without restoring the component's direct font token. The missing
+component override is the authoring discrepancy; generic control defaults and
+core fallback-appending behavior are separate issues. No core defect is inferred
+from these unequal inputs, and actual fallback selection, shaping, metrics,
+token fallback provenance and current/final glyph raster remain unverified here.
+
+Three new tests cover the positive inheritance trace and preservation of the
+separate color attribution, **32 negative input controls**, and **10 report
+mutation controls**. The prior uninterrupted leaf-to-page font-omission proof
+is unchanged; this case has an authored font declaration at the intermediate
+button and must not be forced into that older proof.
+
+```powershell
+node --test --test-name-pattern='menu label|menu text' tests/material-parity/input-equivalence-audit.spec.mjs
+```
+
+Focused result: **10/10 pass**, zero failed/skipped/cancelled/todo,
+**2.448 seconds**, terminal exit 0. All ten frozen visual-harness hashes match.
+No renderer, fixture input, reference or visual-threshold change is made.
+`npm run parity:harness:check` passes **410/410**, zero failed/skipped/cancelled/
+todo, **179.879 seconds**, terminal exit 0. Full inventory generation detects
+all **111 source findings** and attributes all **64 menu font differences**.
+Mapped menu-label typography has no remaining unresolved attributions; this
+does not close menu layout, overlay, control-text or interaction investigations.
+Independent diagnostic replay returns `[]`. Strict audit verification remains
+separate from these passing integrity checks and final full visual acceptance.
+
+The full read-only process exited 0 after printing validation results. Strict
+validation still reports **3,309** unresolved resolved-style differences,
+**879** control-texture typography differences, **177** retained-owner/stage
+gaps and **354** retained typography differences (down from 418). These are
+remaining obligations, not an accepted input-equivalence result.
+
+Exact full audit command:
+
+```powershell
+node --input-type=module -e "import {readFileSync} from 'node:fs';import {buildMaterialInputAudit,validateMaterialInputAudit} from './tests/material-parity/input-equivalence-audit.mjs';const p=JSON.parse(readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json'));const a=buildMaterialInputAudit(p,{root:process.cwd(),normalLineBoxPath:'artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json',supplementalRoot:'artifacts/material-parity/supplemental-current-ancestry-audit'});console.log('SUMMARY '+JSON.stringify({coverage:a.coverage.complete,summary:a.summary,menuFont:a.retainedTypography.differences.filter(d=>d.attribution==='reviewed-menu-label-font-input').length,menuUnresolved:a.retainedTypography.differences.filter(d=>d.family==='menu'&&d.attribution==='unresolved').length,retainedUnresolved:a.retainedTypography.gaps.filter(g=>g.attribution==='unresolved').length}));console.log('DIAGNOSTIC '+JSON.stringify(validateMaterialInputAudit(a,{requireComplete:false})));console.log('STRICT '+JSON.stringify(validateMaterialInputAudit(a)));"
+```
+
+Next retained-text mapping priority: a read-only dialog inventory of 78 cases
+finds 128 unresolved mapping entries across 32 open captures. Each capture has
+the reference generated `mat-mdc-dialog-title-0`, an anonymous content owner,
+and candidate `dialog-title-label`/`dialog-copy` entries. The reference heading
+also has `data-parity-id="dialog-title"` and is linked from the dialog's
+`aria-labelledby`; content has `data-parity-id="dialog-copy"`. Those identities
+are useful mapping evidence, not grounds to equate the Material heading/content
+and overlay/focus-trap structure with candidate span/popup composition. These
+gaps are not removed by the menu typography work.
+
 ## Menu label ink is a token-to-literal authoring substitution (2026-09-13)
 
 The new `reviewed-menu-label-ink-input` attribution traces the color mismatch
