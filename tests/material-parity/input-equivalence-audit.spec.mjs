@@ -1098,12 +1098,13 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   const report = parityReport({}, {});
   const audit = buildMaterialInputAudit(report);
   assert.equal(audit.coverage.visualParityGreen, true);
-  assert.equal(audit.sourceFingerprints.length, 61);
+  assert.equal(audit.sourceFingerprints.length, 62);
   for (const file of ['scripts/audit-material-calendar-close.mjs', 'tests/material-parity/calendar-close-evidence.mjs',
     'scripts/audit-material-tooltip-state.mjs', 'tests/material-parity/tooltip-state-evidence.mjs',
     'examples/material-showcase/node_modules/@angular/material/fesm2022/menu.mjs',
     'examples/material-showcase/node_modules/@angular/material/fesm2022/dialog.mjs',
     'examples/material-showcase/node_modules/@angular/material/fesm2022/module-Ce6F7TNm.mjs',
+    'src/app/services/dom/style-defaults.service.ts',
     'tests/material-parity/supplemental-capture-evidence.spec.mjs']) {
     assert.equal(audit.sourceFingerprints.filter(entry => entry.file === file).length, 1);
   }
@@ -6818,6 +6819,84 @@ function snackbarActionTypographyReport() {
     { selector: 'button, input, select', fontFamily: 'Roboto, Arial, sans-serif' }];
   return raw;
 }
+
+function snackbarActionSizeReport(pageSize = '16px') {
+  const raw = snackbarActionTypographyReport(), { reference: r, astylar: a } = raw.results[0].inputTrees;
+  r.rules[0].conditions = [];
+  r.rules[0].declarations['font-size'] = { value: 'var(--mat-button-text-label-text-size, var(--mat-sys-label-large-size))', important: false };
+  r.rules.push({ selector: 'button, input, select', active: true, conditions: [],
+    declarations: { 'font-size': { value: 'inherit', important: false } } });
+  r.nodes.find(n => n.key === 'button').rules.unshift(r.rules.length - 1);
+  a.rules.push({ selector: '#page', fontSize: pageSize });
+  for (const stage of ['resolvedStyle', 'normalResolvedStyle', 'interactionResolvedStyle'])
+    a.nodes.find(n => n.key === 'page')[stage].fontSize = pageSize;
+  return raw;
+}
+
+test('snackbar action size retains omitted component token and prepaint default independently of page scale', () => {
+  for (const size of ['14.4px', '16px', '18.4px']) {
+    const raw = snackbarActionSizeReport(size), before = structuredClone(raw), report = buildMaterialInputAudit(raw);
+    const f = report.controlTypography.differences.find(d => d.attribution === 'reviewed-snackbar-action-size-token-omission');
+    assert.ok(f); assert.equal(f.inputEquivalent, false); assert.equal(f.finalRasterVerified, false);
+    assert.equal(f.values.reference, '14px'); assert.equal(f.values.normal, '16px'); assert.equal(f.values.painted, '16px');
+    assert.equal(f.reviewEvidence.referenceChain[1].sizeRules.length, 2);
+    assert.equal(f.reviewEvidence.candidateChain.length, 5);
+    assert.equal(f.reviewEvidence.candidateChain.at(-1).normal.fontSize, size);
+    assert.equal(f.reviewEvidence.sourceDefault.value, '16px');
+    assert.ok(report.controlTypography.differences.some(d => d.property === 'lineHeight' && d.attribution === 'unresolved'));
+    assert.ok(!validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('snackbar action size')));
+    assert.deepEqual(raw, before);
+  }
+});
+
+test('snackbar action size refuses competing declarations missing ancestry and inconsistent default stages', () => {
+  const controls = [
+    (r, a) => { delete r.errors; }, (r, a) => { delete a.errors; },
+    (r, a) => { r.rules[0].active = false; }, (r, a) => { r.rules[0].conditions = ['@media print']; },
+    (r, a) => { r.rules[0].declarations['font-size'].value = '14px'; },
+    (r, a) => { r.rules[0].declarations['font-size'].important = true; },
+    (r, a) => { r.nodes.find(n => n.key === 'button').rules.reverse(); },
+    (r, a) => { r.nodes.find(n => n.key === 'label').inline = { fontSize: '14px' }; },
+    (r, a) => { r.rules[0].declarations.all = { value: 'initial' }; },
+    (r, a) => { r.rules[0].declarations['animation-name'] = { value: 'font-size-change' }; },
+    (r, a) => { a.rules[0].fontSize = '14px'; },
+    (r, a) => { a.rules.push({ selector: '.overlay-dismiss:hover', fontSize: '14px' }); },
+    (r, a) => { a.rules.push({ selector: '.snack-surface', fontSize: '14px' }); },
+    (r, a) => { a.rules.push({ selector: '.overlay-dismiss', animationName: 'font-size-change' }); },
+    (r, a) => { a.rules.at(-1).mediaMaxWidth = '400px'; },
+    (r, a) => { a.rules.at(-1).fontSize = '20px'; },
+    (r, a) => { a.nodes.find(n => n.key === 'action').normalResolvedStyle.fontSize = '14px'; },
+    (r, a) => { a.nodes.find(n => n.key === 'action').paintedControlText.style.fontSize = 14; },
+    (r, a) => { a.nodes.find(n => n.key === 'candidate-surface').interactionResolvedStyle.fontSize = '16px'; },
+    (r, a) => { a.nodes.find(n => n.key === 'page').normalResolvedStyle.fontSize = '18.4px'; },
+    (r, a) => { a.nodes.find(n => n.key === 'page').parent = 'outside'; },
+    (r, a) => { a.nodes.find(n => n.key === 'candidate-overlay').parent = 'missing'; },
+    (r, a) => { a.nodes.find(n => n.key === 'action').authored.style = { fontSize: '16px' }; },
+    (r, a) => { a.nodes.find(n => n.key === 'candidate-message').authored.textContent = 'Different'; },
+  ];
+  for (const [index, mutate] of controls.entries()) {
+    const raw = snackbarActionSizeReport(), { reference: r, astylar: a } = raw.results[0].inputTrees;
+    mutate(r, a);
+    assert.ok(!controlEvidence(raw).differences.some(d => d.attribution === 'reviewed-snackbar-action-size-token-omission'), `control ${index}`);
+  }
+});
+
+test('snackbar action size report replays all captured size evidence and rejects deleted claims', () => {
+  const baseline = buildMaterialInputAudit(snackbarActionSizeReport());
+  const controls = [
+    (r, f) => { f.inputEquivalent = true; }, (r, f) => { f.finalRasterVerified = true; },
+    (r, f) => { f.reviewEvidence.sourceDefault.value = '14px'; }, (r, f) => { f.reviewEvidence.candidateChain.pop(); },
+    (r, f) => { f.reviewEvidence.referenceChain[1].sizeRules.reverse(); },
+    (r, f) => { f.values.normal = '14px'; }, (r, f) => { f.revision++; },
+    (r, f) => { f.family = 'dialog'; }, (r, f) => { r.controlTypography.differences = []; },
+    (r, f) => { r.controlTypography.comparisons = []; }, (r, f) => { r.controlTypography.differences.push(structuredClone(f)); },
+  ];
+  for (const [index, mutate] of controls.entries()) {
+    const report = structuredClone(baseline), f = report.controlTypography.differences.find(d => d.attribution === 'reviewed-snackbar-action-size-token-omission');
+    mutate(report, f);
+    assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => e.includes('snackbar action size')), `mutation ${index}`);
+  }
+});
 
 function snackbarMessageReport() {
   const raw = snackbarActionTypographyReport(), { reference: r, astylar: a } = raw.results[0].inputTrees;

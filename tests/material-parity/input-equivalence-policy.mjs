@@ -746,6 +746,7 @@ export const sourceAuditDefinitions = Object.freeze([
     pattern: String.raw`selector: '\.overlay-dismiss', width: '88px'[^\n]*color: theme\.primary, fontWeight: '500'`,
     classification: 'application-plugin-authoring-defect',
     owner: 'showcase snackbar Material text-button tokens and action composition',
+    focusedProof: 'tests/material-parity/input-equivalence-audit.spec.mjs: snackbar action size retains omitted component token and prepaint default independently of page scale',
     justification: 'The snackbar value button uses a shared overlay-dismiss rule that supplies theme.primary and omits Material text-button font, size and tracking tokens. Captured reference action text uses the component Roboto/14px/.096px inputs and the snackbar inverse-primary ink; candidate current texture receives the generic control font stack,16px,zero tracking and primary ink. The exact overlay/action/message mapping separates these observed unequal inputs from unresolved line-box metrics and geometry. Restore original component declarations and wrapper intent before diagnosing core; do not calibrate text size, baseline or ink to a screenshot.',
   }),
   Object.freeze({

@@ -363,6 +363,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
     'reviewed-calendar-day-typography-input': 'application-plugin-authoring-defect',
     'reviewed-calendar-year-typography-input': 'application-plugin-authoring-defect',
     'reviewed-snackbar-action-typography-input': 'application-plugin-authoring-defect',
+    'reviewed-snackbar-action-size-token-omission': 'application-plugin-authoring-defect',
     'reviewed-dialog-action-typography-input': 'application-plugin-authoring-defect',
     'reviewed-bottom-sheet-item-typography-input': 'application-plugin-authoring-defect',
     'reviewed-calendar-period-typography-input': 'application-plugin-authoring-defect',
@@ -385,6 +386,18 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
     const actual = report.controlTypography?.[list];
     if (!Array.isArray(actual) || JSON.stringify(actual.filter(dialogAction)) !== JSON.stringify(dialogReplay[list].filter(dialogAction)))
       errors.push(`dialog action typography ${list} lack complete replayed token evidence`);
+  }
+  const snackCases = [...new Set(report.elementInventory.cases.map(c => c.case))].flatMap(key => {
+    const m = parseReviewedCase(key, 'snack-bar');
+    return m ? [{ kind: m[1], family: 'snack-bar', profile: m[2], viewport: { id: m[3] }, ...(m[4] ? { state: m[4] } : {}) }] : [];
+  });
+  const snackReplay = collectControlTypographyEvidence(snackCases, report.elementInventory);
+  const snackSize = d => d.attribution === 'reviewed-snackbar-action-size-token-omission' ||
+    (d.family === 'snack-bar' && d.element === 'snack-bar-dismiss' && (d.property === undefined || d.property === 'fontSize'));
+  for (const list of ['comparisons', 'differences', 'gaps']) {
+    const actual = report.controlTypography?.[list];
+    if (!Array.isArray(actual) || JSON.stringify(actual.filter(snackSize)) !== JSON.stringify(snackReplay[list].filter(snackSize)))
+      errors.push(`snackbar action size ${list} lack complete replayed token/default evidence`);
   }
   for (const [family, attribution, label] of [
     ['snack-bar', 'reviewed-snackbar-action-typography-input', 'snackbar action'],
@@ -692,6 +705,7 @@ export function renderMaterialInputAuditMarkdown(report) {
     '',
     `Control texture typography: ${report.controlTypography.comparisons.length} mapped current-texture observations; ${report.controlTypography.gaps.length} mapping/stage gaps and ${report.controlTypography.differences.length} raw computed-to-paint property differences, including individually reviewed stage-representation differences. Parsed CSS lengths and line-height multipliers are normalized independently of declarations. This does not prove final material effects, placement, visibility or raster parity.`,
     `Dialog action tokens: ${report.controlTypography.differences.filter(d => d.attribution === 'reviewed-dialog-action-typography-input').length} font/tracking observations preserve the original text/filled button rules and separate candidate dialog-action/reset or complete tracking-omission chain. Full action/overlay identity and report replay guard the attribution. Original tokens remain missing inputs, not equivalent fallbacks, intrinsic widths, line boxes or raster.`,
+    `Snackbar action size: ${report.controlTypography.differences.filter(d => d.attribution === 'reviewed-snackbar-action-size-token-omission').length} observations preserve the original 14px component token versus its candidate omission and 16px normal/effective/paint stages. Complete action-to-page evidence distinguishes the button default from page scaling. This is unequal input, not proof of browser-correct defaults, equal-input projection behavior, line boxes, visibility or placement.`,
     '',
     `Static natural line boxes: ${report.normalLineBoxes.observations.length} validated browser observations, ${report.normalLineBoxes.missing.length} missing and ${report.normalLineBoxes.errors.length} evidence errors. Matching observed heights explain only the raw normal-to-numeric stage comparison; other typography inputs, baseline, wrapping and final raster remain independent questions. No global normal-to-pixel substitution is accepted.`,
     '',
@@ -6631,6 +6645,73 @@ function reviewedBottomSheetItemPaintInput(entry, property, ref, parent, ast, st
     reviewEvidence: structuredClone(evidence) };
 }
 
+function reviewedSnackbarActionSize(entry, property, ref, parent, ast, stages, referenceTree, astylarTree, inventory) {
+  if (entry.family !== 'snack-bar' || property !== 'fontSize' || referenceTree.ruleEvidenceComplete !== true ||
+      astylarTree.ruleEvidenceComplete !== true || stages.reference.fontSize !== '14px' ||
+      [stages.normal, stages.effective, stages.painted].some(s => s.fontSize !== '16px')) return;
+  const mapping = reviewedSnackbarActionControl(ref, referenceTree, astylarTree);
+  if (!mapping || mapping.id !== ast.authored.id) return;
+  const affects = o => Object.keys(o ?? {}).some(k => ['fontsize', 'font', 'all'].includes(k.replaceAll('-', '').toLowerCase()));
+  const animates = o => Object.keys(o ?? {}).some(k => /^animation/i.test(k));
+  const unsafeInline = n => {
+    const inline = n.inline ?? n.authored?.style;
+    return (inline !== undefined && (!inline || typeof inline !== 'object' || Array.isArray(inline) || affects(inline) || animates(inline))) ||
+      /(?:^|;)\s*(?:font-size|font|all|animation[^:]*)\s*:/i.test(n.attributes?.style ?? '');
+  };
+  const referenceChain = [];
+  for (const node of [ref, parent]) {
+    const computed = inventory.styles[node.style], pool = node.rules.map(i => inventory.rules[i]);
+    if (computed?.side !== 'reference' || computed.value.fontSize !== '14px' || unsafeInline(node) ||
+        pool.some(r => r?.side !== 'reference' || !r.value?.declarations)) return;
+    const matchedRules = pool.map(r => r.value);
+    if (matchedRules.some(r => animates(r.declarations) && (r.active !== true || !Array.isArray(r.conditions) || r.conditions.length ||
+      r.declarations['animation-name']?.value !== 'none' || r.declarations['animation-name'].important !== true))) return;
+    referenceChain.push({ ...node, computed: computed.value, matchedRules, sizeRules: matchedRules.filter(r => affects(r.declarations)) });
+  }
+  const rules = referenceChain[1].sizeRules;
+  if (referenceChain[0].sizeRules.length || rules.length !== 2 ||
+      rules.some(r => r.active !== true || !Array.isArray(r.conditions) || r.conditions.length ||
+        r.declarations['font-size']?.important !== false || r.declarations.font || r.declarations.all) ||
+      rules[0].selector !== 'button, input, select' || rules[0].declarations['font-size'].value !== 'inherit' ||
+      rules[1].selector !== '.mat-mdc-button' || rules[1].declarations['font-size'].value !==
+        'var(--mat-button-text-label-text-size, var(--mat-sys-label-large-size))') return;
+  const pool = astylarTree.rules.map(i => inventory.rules[i]);
+  if (pool.some(r => r?.side !== 'astylar' || !r.value || typeof r.value !== 'object')) return;
+  const authoredRules = pool.map(r => r.value), components = authoredRules.filter(r => r.selector === '.overlay-dismiss');
+  if (components.length !== 1 || affects(components[0])) return;
+  const candidateChain = [], seen = new Set();
+  let node = ast;
+  while (node && !seen.has(node.key)) {
+    seen.add(node.key);
+    const normal = inventory.styles[node.normalStyle], effective = inventory.styles[node.interactionStyle];
+    if (unsafeInline(node) || normal?.side !== 'astylar' || effective?.side !== 'astylar' ||
+        [normal.value, effective.value].some(s => s.font !== undefined || s.all !== undefined)) return;
+    if (authoredRules.some(r => animates(r) && typographySelectorCanApply(r.selector, node.authored))) return;
+    const matching = authoredRules.filter(r => affects(r) && typographySelectorCanApply(r.selector, node.authored));
+    const page = node.authored.id === 'page';
+    if (page) {
+      if (node.authored.type !== 'main' || node.parent !== 'root' || matching.length !== 1 || matching[0].selector !== '#page' ||
+          !['14.4px', '16px', '18.4px'].includes(matching[0].fontSize) || matching[0].font || matching[0].all ||
+          Object.keys(matching[0]).some(k => k.startsWith('media')) ||
+          normal.value.fontSize !== matching[0].fontSize || effective.value.fontSize !== matching[0].fontSize) return;
+    } else if (matching.length || [normal.value, effective.value].some(s => s.fontSize !== (node === ast ? '16px' : undefined))) return;
+    candidateChain.push({ ...node, normal: normal.value, effective: effective.value, authoredSizeRules: matching });
+    if (page) break;
+    const parents = astylarTree.nodes.filter(n => n.key === node.parent);
+    if (parents.length !== 1) return;
+    node = parents[0];
+  }
+  if (candidateChain.at(-1)?.authored.id !== 'page') return;
+  return { classification: 'application-plugin-authoring-defect', attribution: 'reviewed-snackbar-action-size-token-omission',
+    inputEquivalent: false, finalRasterVerified: false,
+    recommendedOwner: 'showcase snackbar Material action size-token translation',
+    justification: 'The original action overrides the document inherit reset with its Material 14px size token. The candidate overlay-dismiss omits that token; its button already resolves to 16px in normal/effective stages and paint preserves 16px, independently of the page scale. The source-traced core button default is also 16px. This is unequal component input, not equal-input projection scaling, proof that browser defaults are correct, or permission to calibrate the label size. Visibility, line boxes and placement remain independent.',
+    reviewEvidence: structuredClone({ sourceFinding: 'fixture-snackbar-action-typography-substitution', mapping: mapping.evidence,
+      referenceChain, candidateChain, candidateComponentRule: components[0],
+      sourceDefault: { file: 'src/app/config/browser-defaults.ts', symbol: 'elementDefaults.button.fontSize', value: '16px',
+        mergeOwner: 'StyleDefaultsService.getElementTypeDefaults -> StyleService.findStyleForElement' } }) };
+}
+
 function reviewedSnackbarActionPaintInput(entry, property, ref, parent, ast, stages, referenceTree, astylarTree, inventory) {
   if (entry.family !== 'snack-bar' || !reviewedSnackbarActionControl(ref, referenceTree, astylarTree) ||
       !['fontFamily', 'letterSpacing', 'color'].includes(property)) return;
@@ -6811,6 +6892,7 @@ export function collectControlTypographyEvidence(cases, inventory) {
               reviewedDialogActionPaintInput(entry, property, ref, parent, ast, stages, referenceTree, astylarTree, inventory) ??
               reviewedTabPaintInput(entry, property, ref, parent, ast, stages, referenceTree, astylarTree, inventory) ??
               reviewedSnackbarActionPaintInput(entry, property, ref, parent, ast, stages, referenceTree, astylarTree, inventory) ??
+              reviewedSnackbarActionSize(entry, property, ref, parent, ast, stages, referenceTree, astylarTree, inventory) ??
               reviewedBottomSheetItemPaintInput(entry, property, ref, parent, ast, stages, referenceTree, astylarTree, inventory) ??
               reviewedCalendarPeriodPaintInput(entry, property, ref, parent, ast, stages, referenceTree, astylarTree, inventory) ??
               reviewedCalendarCellPaintInput(entry, property, ref, parent, ast, stages, referenceTree, astylarTree, inventory) ?? {}),
@@ -7209,6 +7291,7 @@ function sourceFingerprints(root) {
     'src/lib/astylar.ts',
     'src/lib/astylar-surface.ts',
     'src/app/services/dom/style.service.ts',
+    'src/app/services/dom/style-defaults.service.ts',
     'src/app/services/dom/dom-ancestry.service.ts',
     'src/app/config/browser-defaults.ts',
     'src/app/services/dom/elements/element-border.service.ts',
@@ -7274,6 +7357,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('snackbar action size retains/,
+      'snackbar omitted action size token and prepaint button default', 'Ordered original reset/token declarations and complete candidate omission ancestry distinguish Material 14px from the prepaint 16px button default across page scales. Twenty-four negative controls and eleven report mutations reject competing, incomplete or forged evidence. Independent replay retains all size observations and does not certify line boxes, browser defaults, placement or raster.'),
     proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('dialog action typography retains/,
       'dialog text/filled action font and tracking token omissions', 'Complete overlay/action identity and ordered original token rules contrast with the separate dialog-action/reset and tracking-omission chain. Negative controls reject competing, missing and contradictory state/style/paint evidence; report replay rejects deleted or forged claims without declaring line boxes, fixed widths or raster equivalent.'),
     proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('paginator tooltip omission preserves/,
@@ -7426,7 +7511,7 @@ function implementationPlan() {
     { priority: 5.297, rootCause: 'Select arrow vector/composition replaced by a density-tuned font glyph', action: 'Restore the original Material SVG path, viewBox, arrow wrappers and CSS positioning through the shared rendering path. Do not resize or reposition U+25BC to approximate the vector. Reduce any unsupported SVG/layout behavior to equal-input core proof, and keep the separate select value/control, popup and interaction findings explicit.' },
     { priority: 5.3, rootCause: 'Core normal line-height is approximated by a fixed Mg font-box probe', action: 'Resolve browser normal line-box metrics and actual fallback runs in core. The equal-input Arial/serif cases expose one-pixel texture-height errors; Roboto plus emoji/CJK exposes two-pixel errors while plain Roboto and explicit line heights pass. Preserve those controls, extend multiline/baseline/DPR verification and avoid a universal multiplier, constant pixel addition, or fixed Material line-height compensation. Current-texture evidence must remain separate from declared normal and from final glyph raster.' },
     { priority: 5.4, rootCause: 'Calendar cell text tokens and inner line boxes were flattened away', action: 'Restore the reference calendar font and date-text ink tokens and its inner line-height:1 label inside both day and year controls. Keep reference cell/container sizing, state and selection structure instead of copying a normal-metric result or tuning the baseline. Separate date/range-context proofs isolate 990 day and 192 year occurrences each of missing font-token, omitted inner line-height and fixed-ink inputs; core metric defects must be assessed only after those inputs are equivalent. Independently resolve normal-versus-zero tracking and the still-unmapped header/icon owners.' },
-    { priority: 5.5, rootCause: 'Snackbar composition and generic text/control inputs replace Material message and action owners', action: 'Restore the original padded flex-message, separate action and nested live-region inputs together with their component typography tokens. The exact overlay/message mapping isolates 34 current action textures and 34 message registry entries without asserting equivalent ownership or visible output. Original message size is declared by its supporting-text token; candidate omits it through the page chain and inherits 14.4px/16px/18.4px. Original message ink inherits the supporting-text inverse-on-surface token through live wrappers; candidate inherits literal surface white. All 68 message size/color observations now have declaration and retained-stage attribution as unequal authoring, not core scaling/color failures. Preserve original tokens rather than sampled values and the separately source-traced action font-stack, tracking and inverse-primary substitutions. Investigate remaining normal-line-box observations without baseline or line-height calibration. Retain independent intrinsic-width, live-region, visibility, lifetime and placement obligations, including checking off-surface rendering rather than equating an unmatched label ID with a missing snackbar.' },
+    { priority: 5.5, rootCause: 'Snackbar composition and generic text/control inputs replace Material message and action owners', action: 'Restore the original padded flex-message, separate action and nested live-region inputs together with their component typography tokens. The exact overlay/message mapping isolates 34 current action textures and 34 message registry entries without asserting equivalent ownership or visible output. Original message size is declared by its supporting-text token; candidate omits it through the page chain and inherits 14.4px/16px/18.4px. Original message ink inherits the supporting-text inverse-on-surface token through live wrappers; candidate inherits literal surface white. All 68 message size/color observations now have declaration and retained-stage attribution as unequal authoring, not core scaling/color failures. All 34 action sizes separately trace the ordered original 14px token versus omitted component authoring and the core 16px button default already present in normal/effective resolution and unchanged in paint, independently of page scale. This does not certify browser-correct defaults. Preserve original tokens rather than sampled values and the separately source-traced action font-stack, tracking and inverse-primary substitutions. Investigate remaining normal-line-box observations without baseline or line-height calibration. Retain independent intrinsic-width, live-region, visibility, lifetime and placement obligations, including checking off-surface rendering rather than equating an unmatched label ID with a missing snackbar.' },
     { priority: 5.6, rootCause: 'Nested list inputs are replaced by generic value buttons', action: 'Restore bottom-sheet navigation/list/anchor/content/label structure and the original label font, explicit line-height, tracking, ink and overflow declarations. Preserve the actual reference overlay token scope and accessible name instead of borrowing page theme colors or calling the opener text the dialog name. Restore reference navigation behavior rather than generic dismiss handling, then reduce any equal-input core failure. Do not infer start/left alignment equivalence without direction evidence. Keep the separate fixed-width/content-height and responsive-constraint findings.' },
     { priority: 5.7, rootCause: 'Calendar period text and vector inputs are collapsed into a glyph string', action: 'Restore the reference period text span beside the 10x5 polygon SVG, using the original year-view CSS inversion, text-button font/tracking tokens and calendar period color-token override. Preserve the live-period description relationship. Do not strip the candidate triangle during comparison, substitute another font character or tune offsets. The current 41 texture witnesses compare common period text inputs while retaining both unequal full compositions; normal-line-height, wrapper layout and glyph/vector raster still need independent proof.' },
     { priority: 5.8, rootCause: 'Calendar close control and its focus-reveal interaction were omitted', action: 'Restore the reference close-button/label, original unfocused clipping and focus-to-reveal declarations, focus order and close activation through core APIs. The source template binds focus/blur and datepicker.close(); the candidate popup never authors that control. Preserve each omission as unequal structure, not a missing paint sample or harmless hidden element. The checkpoint-bound calendar-close diagnostic proves Tab reveal, Shift+Tab hiding, Enter dismissal and opener focus restoration in both reference views at DPR 1 and 2, while the candidate lacks the control and remains open. All twenty paired action boundaries are integrated and independently replayed in the consolidated inventory, including candidate controls remaining after reference dismissal. Do not extrapolate their focused scope to all themes or claim equal-input core failure. Investigate core only against restored equal declarations; outside-click and Escape dismissal are not replacements for the missing control.' },

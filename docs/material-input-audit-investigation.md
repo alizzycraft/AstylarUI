@@ -23,6 +23,86 @@ selected report fails rather than falling back to older
 evidence. The retained-text baseline is now complete; it does not contain the
 new control-text texture instrumentation.
 
+## Snackbar action size token is omitted before paint (2026-09-13)
+
+All **34 captured open snackbar actions** have the same size discrepancy:
+the original action label computes `14px`, while the candidate button has
+`16px` in normal resolution, effective resolution and current texture paint.
+This is present before Babylon projection, not evidence that projection
+enlarged otherwise equivalent font-size inputs.
+
+The original `button, input, select` inherit reset is overridden by the
+`.mat-mdc-button` declaration
+`var(--mat-button-text-label-text-size, var(--mat-sys-label-large-size))`.
+The candidate `.overlay-dismiss` omits that component declaration. Its complete
+action/surface/overlay/section/page chain preserves the omission and shows the
+same 16px action size whether the page supplies 14.4px, 16px or 18.4px.
+`src/app/config/browser-defaults.ts` supplies `elementDefaults.button.fontSize`
+as `16px`; `StyleDefaultsService.getElementTypeDefaults` merges typed defaults
+and `StyleService.findStyleForElement` starts normal style resolution from
+them. Paint retains the already resolved value. The defaults service is now
+included in the audit source fingerprints.
+
+History shows that `2f44011` introduced `.overlay-dismiss` without a size token.
+`af04845` added only the generic control font-family reset, not the original
+complete `font:inherit` behavior or the component size token. This extends the
+existing `fixture-snackbar-action-typography-substitution` finding. It does
+**not** certify the core button defaults as browser-correct: missing component
+authoring and default/inheritance defects can coexist. Restore equivalent
+component inputs for a separate core reproduction; do not calibrate the size.
+Snackbar visibility, intrinsic width, line boxes and overlay placement remain
+independent obligations, including the reported possibility of off-screen paint.
+
+The attribution retains original ordered rules, disabled-animation evidence,
+full candidate ancestry and all three control stages. Twenty-four negative
+controls reject missing or competing declarations, broken ownership and
+inconsistent stages. Eleven report mutations test independent replay against
+deleted, duplicated or fabricated claims. No raw capture is modified.
+
+Focused verification:
+`node --test --test-name-pattern='snackbar action size|control typography does not waive' tests/material-parity/input-equivalence-audit.spec.mjs`
+passed **4/4**, zero failures/skips/cancellations, terminal exit 0,
+2.2291771 seconds. Direct replay of all 71 snackbar cases (12 static and
+59 interaction) attributes 34 action size observations and leaves the raw
+105 line-height observations unresolved before the separately bound static
+line-box evidence is applied.
+
+The first full harness run passed 461/462 tests and failed only the explicit
+source-fingerprint count: adding `style-defaults.service.ts` increased it from
+61 to 62. The test now requires exactly 62 and explicitly checks that the new
+source occurs once; no evidence or visual acceptance threshold was relaxed.
+The expanded focused command (the pattern above plus
+`|records source fingerprints`) passes **5/5**, terminal exit 0,
+2.8699697 seconds.
+The final `npm run parity:harness:check` rerun passes **462/462**, with
+zero failures/skips/cancellations, terminal exit 0, 245.9329436 seconds.
+
+The consolidated replay from `current-ancestry-audit`, its matching
+`normal-line-box-current-ancestry-audit/latest-report.json`, and
+`supplemental-current-ancestry-audit` completes with **124** detected source
+findings, none unexplained, and **34** action-size observations attributed.
+`validateMaterialInputAudit(..., {requireComplete:false})` returns no errors.
+Strict validation still rejects **3,309 resolved-style** and **717
+control-texture typography** differences. Configured capture coverage being
+complete does not establish every relevant-state or root-cause requirement.
+
+The remaining main-corpus line-height groups include computed `normal` versus
+17px paint for common buttons and calendar period controls, and `normal`
+versus 19px paint for the 34 snackbar actions whose font-size inputs differ.
+The existing natural-line-box producer and reader are explicitly static-only;
+they cannot justify interactive/overlay observations. Future evidence must
+capture the actual state and retain unequal typography rather than generalize
+the static 17px result or tune the renderer. The measurement helper also accepts
+only `frame/...` label paths, whereas captured snackbar/dialog actions use
+`overlay:0/...` paths. Extending the state list alone would therefore be
+insufficient: a separately verified overlay-root resolver and real state
+activation are needed, without mutating the frozen measurement producer.
+No renderer, fixture, reference,
+or frozen capture input changed in this increment. All ten checkpoint-bound
+harness source digests remain unchanged.
+The complete enforced visual matrix and final report regeneration remain
+end-of-audit obligations; this focused increment is not release acceptance.
+
 ## Dialog actions omit distinct Material font and tracking tokens (2026-09-13)
 
 The dialog action path is separate from the already reviewed common
