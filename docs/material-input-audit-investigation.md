@@ -33,6 +33,11 @@ applicable selectors and contradictory scalar captures prevent attribution.
 
 ### Verification and coverage
 
+- The completed `npm run parity:harness:check` passed **571/571**, exit 0,
+  **426.305 seconds**. It includes the three new button collector regressions;
+  the later-added case-index test was checked separately below because that
+  test was not loaded by the already-running harness. This is not the final
+  enforced rendering matrix or input-equivalence acceptance.
 - The combined button/non-widget appearance, root/field typography and source
   checks passed **17/17**, exit 0, **51.678 seconds**. The new button tests cover
   60 class/state observations, 24 adverse capture mutations, seven scalar-stage
