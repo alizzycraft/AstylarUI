@@ -1362,7 +1362,8 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   const report = parityReport({}, {});
   const audit = buildMaterialInputAudit(report);
   assert.equal(audit.coverage.visualParityGreen, true);
-  assert.equal(audit.sourceFingerprints.length, 87);
+  assert.equal(audit.sourceFingerprints.length, 88);
+  assert.ok(audit.sourceFingerprints.some(p => p.file === 'tests/material-parity/chip-host-typography-evidence.mjs'));
   for (const file of ['src/lib/astylar-interaction-runtime.ts', 'src/lib/astylar-semantic-bridge.ts',
     'scripts/audit-button-pointer-focus.mjs', 'examples/material-showcase/audit/button-pointer-focus.mjs',
     'tests/material-parity/button-pointer-focus-evidence.spec.mjs', 'scripts/audit-material-paginator-navigation.mjs',
@@ -10176,6 +10177,164 @@ test('an inventoried hidden or anonymous element still requires resolved style e
   const audit = buildMaterialInputAudit(report);
   assert.equal(audit.summary.inputEquivalent, false);
   assert.ok(validateMaterialInputAudit(audit).some((error) => error.includes('lack resolved style evidence')));
+});
+
+function chipHostTypographyReport(fontSize = '16px') {
+  const raw = templateTypographyReport('chips'), e = raw.results[0], { reference: r, astylar: a } = e.inputTrees;
+  const declarations = values => Object.fromEntries(Object.entries(values).map(([k, value]) => [k, { value, important: false }]));
+  r.styles = [{ fontSize, lineHeight: 'normal' }, { fontSize: '14px', lineHeight: '20px' }];
+  r.rules = [
+    { selector: '.frame', active: true, conditions: [], declarations: declarations({ 'font-size': 'calc(16px * var(--scale))' }) },
+    { selector: '.mat-mdc-standard-chip .mdc-evolution-chip__text-label', active: true, conditions: [], declarations: declarations({
+      'font-size': 'var(--mat-chip-label-text-size, var(--mat-sys-label-large-size))',
+      'line-height': 'var(--mat-chip-label-text-line-height, var(--mat-sys-label-large-line-height))' }) },
+    { selector: 'button, input, select', active: true, conditions: [], declarations: declarations({ 'font-size': 'inherit', 'line-height': 'inherit' }) },
+    { selector: '.mat-mdc-standard-chip', active: false, conditions: ['(forced-colors: active)'], declarations: declarations({ color: 'CanvasText' }) },
+  ];
+  r.nodes[0].parent = 'section';
+  r.nodes.unshift({ key: 'frame', parent: null, type: 'main', attributes: { class: 'frame' }, ownText: '', style: 0, rules: [0], inline: {} },
+    { key: 'section', parent: 'frame', type: 'section', attributes: { id: 'chips-root' }, ownText: '', style: 0, rules: [], inline: {} });
+  a.rules = [{ selector: '.chip', fontSize: '14px', lineHeight: '20px' }, { selector: '.chip-label', verticalAlign: 'middle' },
+    { selector: '.material-table th', fontSize: '16px' }, { selector: '.material-table td', lineHeight: '24px' }];
+  for (const n of r.nodes) {
+    n.inline ??= {};
+    n.pseudoElements ??= [];
+    if (n.type === 'button') n.rules = [2];
+    if (n.type === 'mat-chip-option') n.rules = [3];
+    if (n.ownText) { n.rules = [1]; n.style = 1; }
+  }
+  for (const n of a.nodes) {
+    const host = /^chip-[01]$/.test(n.authored.id ?? '');
+    const s = host ? { fontSize: '14px', lineHeight: '20px' } : { verticalAlign: 'middle' };
+    n.resolvedStyle = { ...s }; n.normalResolvedStyle = { ...s }; n.interactionResolvedStyle = { ...s };
+    if (n.retainedText) n.retainedText.style = { fontSize: '14px', lineHeight: '20px' };
+    if (host) e.styleInputs.push({ id: n.authored.id, reference: { ...r.styles[0] }, astylar: { ...s },
+      astylarNormalResolvedStyle: { ...s }, astylarInteractionResolvedStyle: { ...s }, astylarResolvedStyleEvidenceVersion: 2,
+      referenceStructure: { schemaVersion: 2, type: 'mat-chip-option', ownText: '', text: n.authored.id === 'chip-0' ? 'Angular' : 'Astylar' },
+      astylarStructure: { schemaVersion: 2, type: 'div', ownText: '', text: n.authored.id === 'chip-0' ? 'Angular' : 'Astylar' },
+      referenceAuthored: [], astylarAuthored: [{ selector: '.chip', declarations: { fontSize: '14px', lineHeight: '20px' } }] });
+  }
+  return raw;
+}
+
+test('chip host typography preserves nested label ownership across inherited scales and states', () => {
+  for (const size of ['16px', '14.4px', '18.4px']) for (const state of [undefined, 'hover', 'held', 'selected', 'focus']) {
+    const raw = chipHostTypographyReport(size);
+    if (state) { raw.results[0].state = state; raw.interactions = raw.results; raw.results = []; }
+    const before = JSON.stringify(raw), a = buildMaterialInputAudit(raw);
+    assert.equal(a.chipHostTypographyInputs.length, 4);
+    const diffs = a.discrepancies.filter(d => d.attribution === 'reviewed-chip-label-typography-promoted-to-host');
+    assert.equal(diffs.length, 4);
+    for (const d of diffs) {
+      assert.equal(d.classification, 'application-plugin-authoring-defect');
+      assert.equal(d.reference, d.property === 'fontSize' ? size : 'normal');
+      assert.equal(d.astylar, d.property === 'fontSize' ? '14px' : '20px');
+      assert.equal(d.reviewEvidence.inputEquivalent, false); assert.equal(d.reviewEvidence.finalRasterVerified, false);
+      assert.equal(d.reviewEvidence.referencePath.length, 8);
+      assert.equal(d.reviewEvidence.candidatePath.length, 2);
+      assert.equal(d.reviewEvidence.values.retained, d.astylar);
+    }
+    assert.ok(!validateMaterialInputAudit(a, { requireComplete: false }).some(e => e.includes('chip host typography')));
+    assert.equal(JSON.stringify(raw), before);
+  }
+});
+
+test('chip host typography rejects ambiguous authoring, inheritance, mappings and captured stages', () => {
+  const mutations = [
+    e => { e.inputTrees.reference.nodes[1].parent = 'missing'; },
+    e => { e.inputTrees.reference.nodes[0].parent = 'unknown-root'; },
+    e => { e.inputTrees.reference.nodes[0].attributes.class = 'unknown'; },
+    e => { e.inputTrees.reference.styles[0].lineHeight = '18px'; },
+    e => { e.inputTrees.reference.styles[1].fontSize = '16px'; },
+    e => { e.inputTrees.reference.nodes[2].inline = { 'font-size': { value: 'inherit', important: false } }; },
+    e => { e.inputTrees.reference.rules[0].declarations['font-size'].value = '16px'; },
+    e => { e.inputTrees.reference.rules[1].declarations['font-size'].important = true; },
+    e => { e.inputTrees.reference.rules[1].active = false; },
+    e => { delete e.inputTrees.reference.rules[1].active; },
+    e => { e.inputTrees.reference.rules[1].declarations['font-size'].value = '14px'; },
+    e => { e.inputTrees.reference.rules[2].declarations.all = { value: 'inherit', important: false }; },
+    e => { e.inputTrees.reference.rules[2].declarations['line-height'].value = 'normal'; },
+    e => { e.inputTrees.reference.rules[2].declarations['font-size'].important = true; },
+    e => { e.inputTrees.reference.nodes.push(structuredClone(e.inputTrees.reference.nodes[2])); },
+    e => { e.inputTrees.reference.errors.push('incomplete rules'); },
+    e => { e.inputTrees.astylar.rules[0].fontSize = '16px'; },
+    e => { e.inputTrees.astylar.rules[0].font = '14px/20px Roboto'; },
+    e => { e.inputTrees.astylar.rules[0].all = 'initial'; },
+    e => { e.inputTrees.astylar.rules[1].fontSize = '14px'; },
+    e => { e.inputTrees.astylar.rules.push({ selector: '.chip:hover', fontSize: '14px' }); },
+    e => { e.inputTrees.astylar.rules.push({ selector: ':is(.chip)', fontSize: '14px' }); },
+    e => { e.inputTrees.astylar.rules.push({ selector: '.unknown div', fontSize: '14px' }); },
+    e => { e.inputTrees.astylar.rules.push({ selector: '.chip', nested: { fontSize: '14px' } }); },
+    e => { e.inputTrees.astylar.rules.push({ selector: '.chip', nested: [{ fontSize: '14px' }] }); },
+    e => { e.inputTrees.astylar.resolvedStyleSource = 'mesh-metadata'; },
+    e => { e.inputTrees.astylar.resolvedStyleEvidenceVersion = 1; },
+    e => { delete e.inputTrees.astylar.resolvedStyleRevision; },
+    e => { for (const n of e.inputTrees.astylar.nodes.filter(n => n.retainedText)) n.retainedText.style.fontSize = '16px'; },
+    e => { for (const n of e.inputTrees.astylar.nodes.filter(n => n.retainedText)) n.retainedText.source = 'predicted'; },
+    e => { for (const n of e.inputTrees.astylar.nodes) n.authored.style = { lineHeight: '20px' }; },
+    e => { for (const n of e.inputTrees.astylar.nodes) delete n.interactionResolvedStyle; },
+    e => { for (const n of e.inputTrees.astylar.nodes) n.normalResolvedStyle.lineHeight = '30px'; },
+  ];
+  for (const mutate of mutations) {
+    const raw = chipHostTypographyReport(); mutate(raw.results[0]);
+    const a = buildMaterialInputAudit(raw);
+    assert.equal(a.chipHostTypographyInputs.length, 0, String(mutate));
+    assert.ok(a.discrepancies.every(d => d.attribution !== 'reviewed-chip-label-typography-promoted-to-host'), String(mutate));
+  }
+});
+
+test('chip host typography scalar attribution requires the same element, text, rules and every stage', () => {
+  const mutations = [
+    input => { input.referenceStructure.type = 'span'; },
+    input => { input.astylarStructure.type = 'button'; },
+    input => { input.referenceStructure.ownText = 'Angular'; },
+    input => { input.astylarStructure.ownText = 'Angular'; },
+    input => { input.referenceStructure.text = 'wrong'; },
+    input => { input.astylarStructure.text = 'wrong'; },
+    input => { input.referenceStructure.schemaVersion = 1; },
+    input => { input.astylarResolvedStyleEvidenceVersion = 1; },
+    input => { input.referenceAuthored = undefined; },
+    input => { input.astylarAuthored = []; },
+    input => { input.referenceAuthored = [{ declarations: { 'font-size': { value: '16px', important: false } } }]; },
+    input => { delete input.astylarNormalResolvedStyle; },
+    input => { delete input.astylarInteractionResolvedStyle; },
+    input => { input.astylarNormalResolvedStyle = { fontSize: '16px', lineHeight: '24px' }; },
+  ];
+  for (const mutate of mutations) {
+    const raw = chipHostTypographyReport(); raw.results[0].styleInputs.forEach(mutate);
+    const a = buildMaterialInputAudit(raw);
+    assert.equal(a.chipHostTypographyInputs.length, 4, 'tree proof remains separately available');
+    assert.ok(a.discrepancies.every(d => d.attribution !== 'reviewed-chip-label-typography-promoted-to-host'), String(mutate));
+  }
+});
+
+test('chip host typography validation replays proof and every grouped case without waiving other properties', () => {
+  const raw = chipHostTypographyReport();
+  raw.interactions = Array.from({ length: 15 }, (_, i) => ({ ...structuredClone(raw.results[0]), state: `boundary-${i}` }));
+  raw.results = [];
+  const baseline = buildMaterialInputAudit(raw), diffs = baseline.discrepancies.filter(d => d.attribution === 'reviewed-chip-label-typography-promoted-to-host');
+  assert.equal(baseline.chipHostTypographyInputs.length, 60);
+  assert.ok(diffs.every(d => d.occurrences === 15 && d.reviewedCases.length === 15 && d.cases.length === 12));
+  for (const mutate of [
+    a => { a.chipHostTypographyInputs.pop(); },
+    a => { a.chipHostTypographyInputs[0].values.retained = '99px'; },
+    a => { a.chipHostTypographyInputs[0].text = 'wrong'; },
+    a => { a.chipHostTypographyInputs[0].revision++; },
+    a => { a.discrepancies[0].reviewEvidence.values.normal = '99px'; },
+    a => { a.discrepancies[0].classification = 'equivalent-representation'; },
+    a => { a.discrepancies[0].reviewedCases.pop(); },
+    a => { a.discrepancies[0].reviewedCases[1] = a.discrepancies[0].reviewedCases[0]; },
+    a => { a.discrepancies[0].reference = '99px'; },
+    a => { a.discrepancies[0].property = 'fontFamily'; },
+  ]) {
+    const a = structuredClone(baseline); mutate(a);
+    assert.ok(validateMaterialInputAudit(a, { requireComplete: false }).some(e => e.includes('chip host typography')), String(mutate));
+  }
+  const varied = chipHostTypographyReport();
+  varied.results[0].styleInputs[0].reference.fontFamily = 'Roboto';
+  varied.results[0].styleInputs[0].astylar.fontFamily = 'Arial';
+  const a = buildMaterialInputAudit(varied);
+  assert.notEqual(a.discrepancies.find(d => d.property === 'fontFamily').attribution, 'reviewed-chip-label-typography-promoted-to-host');
 });
 
 test('full-tree artifact references cannot escape the captured Material artifact directory', () => {

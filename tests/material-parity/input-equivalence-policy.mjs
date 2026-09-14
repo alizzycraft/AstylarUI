@@ -567,6 +567,16 @@ export const sourceAuditDefinitions = Object.freeze([
     focusedProof: 'tests/material-parity/input-equivalence-audit.spec.mjs: control label token provenance and contradictory-ancestry controls',
   }),
   Object.freeze({
+    id: 'fixture-chip-label-typography-promoted-to-host',
+    introducedBy: 'c47d589 adds host fontSize 14px; 88d1090 adds host lineHeight 20px',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`selector: '\.chip',[^\n]*fontSize: '14px', lineHeight: '20px'`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase chip host versus nested label typography authoring',
+    justification: 'Material retains frame-scaled font-size and normal line-height through the chip host and action, then applies 14px/20px component tokens on the nested text label. The replacement .chip instead sets 14px/20px on the host while .chip-label omits those declarations. Current normal/comparison/effective host inputs and independently retained label text prove changed input ownership, not a visible label-size defect or a confirmed core inheritance failure. The historical commits introduce the explicit host declarations; their purpose cannot be inferred as concealment of a particular core bug. Preserve the separate missing font/weight/tracking tokens, generated outline, fixed widths and earlier label-offset findings. Restore equivalent owner-specific inputs before evaluating geometry or paint; do not raise the host font to the frame size without also restoring the nested label token.',
+    focusedProof: 'tests/material-parity/input-equivalence-audit.spec.mjs: chip host typography preserves nested label ownership across inherited scales and states',
+  }),
+  Object.freeze({
     id: 'fixture-select-value-typography-substitution',
     introducedBy: 'f286fb1 fix(material): align field popup parity',
     file: 'examples/material-showcase/src/app/astylar.component.ts',

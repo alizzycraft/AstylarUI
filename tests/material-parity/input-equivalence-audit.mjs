@@ -8,6 +8,7 @@ import { validateSupplementalCapture } from './supplemental-capture-evidence.mjs
 import { collectCalendarCloseEvidence } from './calendar-close-evidence.mjs';
 import { collectTooltipStateEvidence } from './tooltip-state-evidence.mjs';
 import { collectPaginatorNavigationEvidence } from './paginator-navigation-evidence.mjs';
+import { chipHostTypographyAttribution, collectChipHostTypographyInputs, classifyChipHostTypographyInput } from './chip-host-typography-evidence.mjs';
 import { collectNonGridTemplateInputs, classifyNonGridTemplateInput, nonGridTemplateAttribution, gridTemplateProperties } from './grid-template-input-evidence.mjs';
 import { selectorCanApply, borderColorProperties, borderInitialAttribution, collectBorderInitialInputs, classifyBorderInitialInput,
   buttonBorderResetAttribution, collectButtonBorderResetInputs, classifyButtonBorderResetInput,
@@ -103,6 +104,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const outlineTokenInputs = collectOutlineTokenInputs(elementInventory, canonicalStyle);
   const chipOutlineInputs = collectChipOutlineInputs(elementInventory, canonicalStyle);
   const nonGridTemplateInputs = collectNonGridTemplateInputs(elementInventory);
+  const chipHostTypographyInputs = collectChipHostTypographyInputs(elementInventory, reviewedTemplateTextMappings, canonicalStyle, typographySelectorCanApply);
   const typographyCases = [...cases, ...supplementalCalendarClose.cases, ...supplementalTooltipState.cases,
     ...supplementalPaginatorNavigation.cases];
   const rawControlTypography = collectControlTypographyEvidence(typographyCases, elementInventory);
@@ -126,7 +128,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const controlTypography = attributeObservedSupplementalLineBoxes(attributeObservedControlLineBoxes(
     attributeObservedNormalLineBoxes(rawControlTypography, elementInventory, normalLineBoxes), elementInventory, controlLineBoxes),
     elementInventory, supplementalLineBoxes);
-  const discrepancies = collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs, nonGridTemplateInputs, buttonTypographyScalarInputs);
+  const discrepancies = collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs, nonGridTemplateInputs, buttonTypographyScalarInputs, chipHostTypographyInputs);
   const classifications = countBy(discrepancies, (entry) => entry.classification);
   const propertyGroupCounts = countBy(discrepancies, (entry) => entry.propertyGroup);
   const familyCounts = countBy(discrepancies, (entry) => entry.family);
@@ -199,6 +201,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
     chipOutlineInputs,
     nonGridTemplateInputs,
     buttonTypographyScalarInputs,
+    chipHostTypographyInputs,
     retainedTypography,
     controlTypography,
     sourceFindings,
@@ -227,6 +230,19 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
   if (requireComplete && report.elementInventory.resolvedStyleGaps.length > 0) errors.push(`${report.elementInventory.resolvedStyleGaps.length} inventoried elements lack resolved style evidence`);
   if (requireComplete && report.elementInventory.stateStyleGaps.length > 0) errors.push(`${report.elementInventory.stateStyleGaps.length} state cases lack effective style provenance`);
   if (report.elementInventory.errors.length > 0) errors.push(`${report.elementInventory.errors.length} full-tree collection errors`);
+  if (JSON.stringify(report.chipHostTypographyInputs) !== JSON.stringify(collectChipHostTypographyInputs(report.elementInventory, reviewedTemplateTextMappings, canonicalStyle, typographySelectorCanApply))) {
+    errors.push('chip host typography evidence does not replay from captured label ownership');
+  }
+  for (const entry of report.discrepancies.filter(d => d.attribution === chipHostTypographyAttribution)) {
+    const proof = report.chipHostTypographyInputs?.find(p => p.case === entry.reviewEvidence?.case && p.element === entry.element && p.property === entry.property);
+    if (!proof || entry.classification !== 'application-plugin-authoring-defect' || entry.reference !== proof.values.reference ||
+        entry.astylar !== proof.values.comparison || JSON.stringify(proof) !== JSON.stringify(entry.reviewEvidence) ||
+        !Array.isArray(entry.reviewedCases) || entry.reviewedCases.length !== entry.occurrences || new Set(entry.reviewedCases).size !== entry.occurrences ||
+        entry.reviewedCases.some(key => !report.chipHostTypographyInputs?.some(p => p.case === key && p.element === entry.element &&
+          p.property === entry.property && p.values.reference === entry.reference && p.values.comparison === entry.astylar))) {
+      errors.push('chip host typography classification lacks exact owner, stage and case evidence');
+    }
+  }
   if (JSON.stringify(report.buttonTypographyScalarInputs) !== JSON.stringify(collectButtonTypographyScalarInputs(report.elementInventory))) {
     errors.push('button typography scalar evidence does not replay from current captured control ownership');
   }
@@ -937,8 +953,9 @@ export function renderMaterialInputAuditMarkdown(report) {
   return lines.join('\n');
 }
 
-function collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs, nonGridTemplateInputs, buttonTypographyScalarInputs) {
+function collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs, nonGridTemplateInputs, buttonTypographyScalarInputs, chipHostTypographyInputs) {
   const grouped = new Map();
+  const chipTypographyByCaseIdProperty = new Map(chipHostTypographyInputs.map(p => [JSON.stringify([p.case, p.element, p.property]), p]));
   const buttonTypographyByCaseIdProperty = new Map(buttonTypographyScalarInputs.map(p => [JSON.stringify([p.case, p.element, p.property]), p]));
   const nonGridTemplateByCaseAndId = new Map(nonGridTemplateInputs.map(entry => [JSON.stringify([entry.case, entry.element]), entry]));
   const borderInitialByCaseAndId = new Map(borderInitialInputs.map(entry => [JSON.stringify([entry.case, entry.element]), entry]));
@@ -977,6 +994,8 @@ function collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInp
               nonGridTemplateByCaseAndId.get(JSON.stringify([key, input.id])))
             ?? classifyButtonTypographyScalarInput(input, property, referenceValue, astylarValue,
               buttonTypographyByCaseIdProperty.get(JSON.stringify([key, input.id, property])))
+            ?? classifyChipHostTypographyInput(input, property, referenceValue, astylarValue,
+              chipTypographyByCaseIdProperty.get(JSON.stringify([key, input.id, property])), canonicalStyle)
             ?? classifyReviewedRootInput(benchmarkCase, input, property, referenceValue, astylarValue)
             ?? classifyReviewedContainerInput(benchmarkCase, input, property, referenceValue, astylarValue)
             ?? classifyReviewedBadgePaint(benchmarkCase, input, property, referenceValue, astylarValue)
@@ -1002,7 +1021,7 @@ function collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInp
             ...(classification.attribution ? { attribution: classification.attribution } : {}),
             ...(classification.reviewEvidence ? { reviewEvidence: classification.reviewEvidence } : {}),
             ...([borderInitialAttribution, buttonBorderResetAttribution, outlineTokenAttribution, chipOutlineAttribution,
-              'reviewed-root-flow-dependency', nonGridTemplateAttribution, 'reviewed-button-typography-host-input'].includes(classification.attribution) ? { reviewedCases: [] } : {}),
+              'reviewed-root-flow-dependency', nonGridTemplateAttribution, 'reviewed-button-typography-host-input', chipHostTypographyAttribution].includes(classification.attribution) ? { reviewedCases: [] } : {}),
             occurrences: 0,
             cases: [],
             states: [],
@@ -7778,6 +7797,7 @@ function sourceFingerprints(root) {
     'tests/material-parity/input-equivalence-audit.spec.mjs',
     'tests/material-parity/input-equivalence-policy.mjs',
     'tests/material-parity/border-initial-input-evidence.mjs',
+    'tests/material-parity/chip-host-typography-evidence.mjs',
     'tests/material-parity/normal-line-box-report.mjs',
     'tests/material-parity/control-line-box-report.mjs',
     'tests/material-parity/control-line-box-validation.mjs',
@@ -7805,6 +7825,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('chip host typography preserves/,
+      'chip host versus nested label font-size and line-height ownership', 'Complete inherited reference chains and exact active component label tokens are compared with .chip host declarations, omitted label declarations and retained core label values. Three inherited frame scales, state controls, competing rules, invalid provenance, scalar-stage mismatches and replay tampering are tested. Unequal host inputs remain unequal; label-size agreement does not establish visual parity or waive other typography and geometry differences.'),
     proof(root, 'examples/material-showcase/audit/button-pointer-focus.mjs', /const children = /,
       'confirmed enabled-button held semantic-focus lag', 'The public-package real-browser proof has 40 paired boundaries across DPR 1/2 and two repetitions. All eight held-pointer samples have correct logical focus but native canvas focus; 32 keyboard, hover and release controls pass. No Material/plugin or application update participates. Preserve the independent disabled-interactive paginator input mismatch; no general raster or selected-text/cancellation acceptance follows.'),
     proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('button host typography scalars/,
@@ -7975,6 +7997,7 @@ function implementationPlan() {
     { priority: 5.29, rootCause: 'Sidenav component text-color tokens are replaced by fixture theme literals', action: 'Restore the distinct drawer and content token semantics together with the separately identified sidenav structure/padding inputs. Reference color ownership is the drawer or container, while candidate aside/main rules directly set theme.onSurface or dark-mode literals. Preserve exact channels and captured inheritance; only an equal-input reproduction can establish a core color defect. The initial implementation introduced these substitutions, so do not describe them as confirmed later compensating fixes.' },
     { priority: 5.294, rootCause: 'Disabled choice label color tokens are omitted from custom checkbox/radio authoring', action: 'Restore component disabled-label-color token intent on the original associated text owner instead of the unconditional theme.onSurface label/option literal. Current captures prove native disabled label association and differing candidate disabled-state inputs. Preserve transparent color semantics rather than preblending against a screenshot background. Test enabled/disabled and checked/unchecked states independently of cursor and event suppression; only investigate core alpha handling after equivalent color inputs are supplied.' },
     { priority: 5.295, rootCause: 'Chip label color tokens are replaced by container theme-color inheritance', action: 'Restore the enabled unselected label-text-color/on-surface-variant token on its original text owner instead of inheriting theme.onSurface from the replacement chip container. Current captures prove 32 unequal color inputs through exact selection state, reference token and candidate normal/effective/retained stages. The substitution predates later parity repairs. Keep selected/disabled states, generated outlines, intrinsic sizing and final paint independently covered; do not repair this by sampling screenshot colors or changing core color conversion.' },
+    { priority: 5.2955, rootCause: 'Chip label size and line-height tokens are promoted to the host', action: 'Restore inherited frame typography on the original host/action chain and component font-size/line-height tokens on the nested label together. Raising only the replacement host size would change the visible label and introduce another unequal-input adjustment. Keep original generated boxes, font-family/weight/tracking, selection, outlines and intrinsic sizing independently covered. Use the exact 304 captured owner-specific input differences as authoring evidence, not proof of a visible size error or a core inheritance defect. If equivalent inputs still diverge, reduce the owning core behavior before removing related fixed widths or offsets.' },
     { priority: 5.295, rootCause: 'Sort typography replaces inherited frame inputs with fixed trigger declarations', action: 'Restore the reference frame-scaled font-size inheritance and actual frame color through the original sort text structure. The candidate fixed 16px trigger and contrast-only black declaration differ before rendering. Keep the history of screenshot-oriented changes and complete per-case ancestor evidence. Evaluate core inheritance or font scaling only after inputs agree; no inverse scale, font-size calibration or theme-specific ink override is an acceptable renderer fix.' },
     { priority: 5.296, rootCause: 'Expansion header and body font-size tokens are omitted in replacement text owners', action: 'Restore the distinct component header and container font-size tokens through their original wrapper inheritance across all states. A compact-only fixed header 16px branch does not translate the general component rule or restore body type; contrast/custom body labels inherit a different page size. Keep layout/transform findings independent. A matching authored font-size rule missing from resolved styles must route to core investigation, not an omission waiver. Assess scaling, text placement and paint only with equivalent inputs, not new font-size or baseline corrections.' },
     { priority: 5.2961, rootCause: 'Disabled select and expansion replace translucent text tokens with opaque literals', action: 'Restore the disabled select trigger token and the disabled expansion header token with title inherit override. Preserve alpha as an input; remove fixed gray and surface preblending rather than calibrating them to pixels. Verify enabled/disabled state and exact color ownership before evaluating core alpha compositing on changing backgrounds. Keep disabled hit behavior, focus and final raster separate from token equivalence.' },
