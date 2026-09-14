@@ -21,9 +21,17 @@ and **468 groups**, including **20,799** added observations / **324 groups**.
 The test independently rejoins every case/property identity from raw trees.
 
 Refreshed prior-index checks pass **13/13** (**125,767.8869 ms**), and all **90**
-current fingerprints across 12 rolling indices and this proof match. All-family
-report replay is running; expanded complete-harness and final enforced parity
-are still pending. This
+current fingerprints across 12 rolling indices and this proof match. The
+all-family replay builds the report and passes exact raw occurrence and root
+case-set assertions, then exits **1** during strict validation with
+`RangeError: Invalid string length` at `input-equivalence-audit.mjs:294`.
+The validator attempts to stringify the entire expanded root-proof array.
+No completed validation or post-extension unresolved count is claimed.
+
+Correct this serialization boundary with a bounded, order-preserving comparison
+and regression proof; do not truncate evidence or skip the independent replay.
+Final report serialization needs a separate scale check. Expanded complete-
+harness, report packaging and final enforced parity remain pending. This
 is instrumentation, not a renderer or fixture change, and does not certify
 candidate inheritance, descendant rendering, pointer targets or visibility.
 
