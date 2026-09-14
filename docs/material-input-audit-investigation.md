@@ -64,7 +64,10 @@ record preserves the full per-property attribution breakdown and exact command.
 The first replay attempt failed because the verification command incorrectly
 stripped units from nonzero tracking values. Correcting only that command and
 rerunning the complete builder/validator passes; audit inputs were not changed.
-The complete expanded harness is running; final enforced parity and remaining
+The complete expanded harness exits **0**, **638/638 pass**, with no failures,
+skips or cancellations (**841,418.1311 ms**). It uses the complete registered
+file list with serial scheduling only; it does not include the subsequent
+unregistered root-inherited-property proof. Final enforced parity and remaining
 inherited-stage attribution are not yet verified.
 Historical pre-correction evidence and commands are retained below and in the
 machine record; they must not be read as current equivalence assertions.

@@ -1966,13 +1966,14 @@
     },
     "fullHarness": {
       "command": "node --test --test-concurrency=1 tests/parity/fixture-manifest.spec.mjs tests/parity/visibility-metrics.spec.mjs tests/parity/sharpness-metrics.spec.mjs tests/tts-parity/benchmark-config.spec.mjs tests/tts-parity/demo-workflow.spec.mjs tests/tts-parity/scrolling-metrics.spec.mjs tests/tts-parity/interaction-metrics.spec.mjs tests/material-parity/benchmark-config.spec.mjs tests/material-parity/cursor-metrics.spec.mjs tests/material-parity/focused-raster-metrics.spec.mjs tests/material-parity/text-alignment-metrics.spec.mjs tests/material-parity/shadow-profile-metrics.spec.mjs tests/material-parity/input-tree-evidence.spec.mjs tests/material-parity/field-host-weight-tracking-evidence.spec.mjs tests/material-parity/field-host-token-sensitivity.spec.mjs tests/material-parity/line-height-omission-sensitivity.spec.mjs tests/material-parity/root-line-height-proof.spec.mjs tests/material-parity/caret-color-omission-sensitivity.spec.mjs tests/material-parity/inherited-default-sensitivity.spec.mjs tests/material-parity/root-initial-style-evidence.spec.mjs tests/material-parity/root-initial-style-sensitivity.spec.mjs tests/material-parity/input-equivalence-audit.spec.mjs tests/material-parity/input-audit-report-codec.spec.mjs tests/material-parity/normal-line-box-report.spec.mjs tests/material-parity/supplemental-capture-evidence.spec.mjs tests/material-parity/button-pointer-focus-evidence.spec.mjs",
-      "status": "running; terminal result not yet observed",
+      "status": "complete; exit 0",
+      "result": { "exitCode": 0, "tests": 638, "passed": 638, "failed": 0, "skipped": 0, "cancelled": 0, "durationMs": 841418.1311 },
       "scope": "Complete package parity:harness:check file list with test-concurrency=1 scheduling only; no test-name filter. Not the final browser parity matrix."
     },
     "limitations": [
       "The 58,835 historically eligible property observations are not 58,835 renderer defects.",
       "Passing explicit-default sensitivity tests does not establish candidate computed inheritance, layout, hit testing or raster equivalence.",
-      "Refreshed case/source-index checks and full comparison replay pass. Complete expanded harness and final enforced parity remain pending; 3534 groups still lack root-cause attribution.",
+      "Refreshed case/source-index checks, full comparison replay and complete 638-test harness pass. Final enforced parity remains pending; 3534 groups still lack root-cause attribution.",
       "Other non-inherited or context-dependent policy entries are not certified by this correction."
     ]
   },
