@@ -10347,6 +10347,64 @@ test('chip host typography validation replays proof and every grouped case witho
   assert.notEqual(a.discrepancies.find(d => d.property === 'fontFamily').attribution, 'reviewed-chip-label-typography-promoted-to-host');
 });
 
+test('font-relative box evidence retains equal-input failures and passing controls without normalization', async () => {
+  const { readFileSync } = await import('node:fs');
+  const { createHash } = await import('node:crypto');
+  const evidence = JSON.parse(readFileSync('docs/material-font-relative-box-audit.json', 'utf8'));
+  assert.equal(evidence.findingId, 'core-em-box-size-uses-uncomputed-font');
+  assert.equal(evidence.classification, 'confirmed-core-renderer-defect');
+  assert.equal(evidence.owner.history.historicalRuntimeBisect, false);
+  assert.equal(evidence.sourceFingerprints.length, 6);
+  for (const { file, sha256 } of evidence.sourceFingerprints) {
+    assert.equal(createHash('sha256').update(readFileSync(file, 'utf8').replace(/\r\n/g, '\n')).digest('hex'), sha256, file);
+  }
+  const verify = (runs) => {
+    assert.equal(runs.length, 2);
+    assert.deepEqual(runs[0].observations, runs[1].observations);
+    for (const run of runs) {
+      assert.equal(run.exitCode, 1); // Recorded audit failure, not a renderer acceptance expectation.
+      assert.equal(run.result, 'TOTAL: 6 FAILED, 4 SUCCESS');
+      assert.equal(run.assertionFailures.length, 12);
+      assert.ok(run.assertionFailures.every(line => /^font-box\.(width|height): Astylar=/.test(line)));
+      const trials = run.observations;
+      assert.equal(trials.length, 10);
+      assert.equal(new Set(trials.map(trial => `${trial.parentSize}/${trial.mode}`)).size, 10);
+      let failed = 0;
+      for (const parentSize of [24, 32]) for (const mode of ['inherited', 'explicit-px', 'relative-em', 'relative-percent', 'pixel-box']) {
+        const trial = trials.find(item => item.parentSize === parentSize && item.mode === mode);
+        assert.ok(trial, `${parentSize}/${mode}`);
+        assert.equal(trial.dpr, 1);
+        const font = mode.startsWith('relative-') ? parentSize * 1.5 : parentSize;
+        const declared = mode === 'explicit-px' ? `${parentSize}px`
+          : mode === 'relative-em' ? '1.5em' : mode === 'relative-percent' ? '150%' : '<omitted>';
+        assert.equal(trial.declaredFont, declared);
+        assert.equal(trial.browserFont, `${font}px`);
+        assert.equal(trial.browserTextFont, `${font}px`);
+        assert.equal(trial.retainedTextFont, `${font}px`);
+        const parentBox = { width: 320, height: 180 };
+        assert.deepEqual(trial.observations['font-parent'], { actual: parentBox, reference: parentBox });
+        const expected = { width: font * 2, height: font };
+        assert.deepEqual(trial.observations['font-box'].reference, expected);
+        const base = mode === 'inherited' ? 16 : mode === 'relative-em' ? 1.5 : mode === 'relative-percent' ? 150 : parentSize;
+        const actual = { width: base * 2, height: base };
+        assert.deepEqual(trial.observations['font-box'].actual, actual);
+        if (actual.width !== expected.width || actual.height !== expected.height) failed++;
+      }
+      assert.equal(failed, 6);
+    }
+  };
+  verify(evidence.runs);
+  for (const mutate of [
+    runs => { runs[0].observations.pop(); },
+    runs => { runs[0].observations[0].retainedTextFont = '16px'; },
+    runs => { for (const run of runs) for (const trial of run.observations) trial.observations['font-box'].actual = trial.observations['font-box'].reference; },
+    runs => { for (const run of runs) run.observations[0].declaredFont = '<omitted>'; },
+  ]) {
+    const copy = structuredClone(evidence.runs); mutate(copy);
+    assert.throws(() => verify(copy));
+  }
+});
+
 test('full-tree artifact references cannot escape the captured Material artifact directory', () => {
   const result = collectFullTreeInventory([{ family: 'core', profile: 'light', viewport: { id: 'desktop' },
     inputTrees: { reference: { file: 'package.json', sha256: 'irrelevant' } },

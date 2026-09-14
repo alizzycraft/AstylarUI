@@ -3,6 +3,98 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Core em sizing: local font declarations bypass computed inheritance
+
+The [ten-trial, two-run public-package evidence](material-font-relative-box-audit.json)
+confirms a separate core defect: **each run has six equal-input size failures
+and four passing controls**, with identical measurements across runs. This is
+not an application workaround or a claim that every missing Material font
+diagnostic causes incorrect sizing.
+
+Both sides use the same declarations: a 320x180px parent with a 24px or 32px
+font, a child sized `2em` by `1em`, and an independently inspected text witness.
+Browser CSS is generated directly from the public `SiteData` rules. The
+`explicit-px` and `pixel-box` variants are diagnostic controls only.
+
+| Parent font | Child font input | Browser box, CSS px | Astylar box, CSS px | Retained text font |
+| --- | --- | --- | --- | --- |
+| 24px | Inherited | 48 x 24 | 32 x 16 | 24px, correct |
+| 32px | Inherited | 64 x 32 | 32 x 16 | 32px, correct |
+| 24px | 1.5em | 72 x 36 | 3 x 1.5 | 36px, correct |
+| 32px | 1.5em | 96 x 48 | 3 x 1.5 | 48px, correct |
+| 24px | 150% | 72 x 36 | 300 x 150 | 36px, correct |
+| 32px | 150% | 96 x 48 | 300 x 150 | 48px, correct |
+
+Four controls pass: explicit local 24px/32px fonts with em boxes, and inherited
+24px/32px fonts with explicit 48x24px/64x32px boxes. All ten parent boxes are
+correct. Original inputs and local diagnostic declarations remain unchanged;
+text font resolution agrees with the browser in every trial. Only child size
+assertions fail. Error-free settlement and zero final scene
+meshes/materials/textures are checked, including after failing assertions.
+
+### First divergence and ownership
+
+`src/app/services/dom/elements/element-dimension.service.ts:77` computes its em
+base with `parseFloat(style?.fontSize ?? '16px')`. Width and height consume
+that base at lines 139 and 247. Thus omission loses inheritance, `1.5em`
+becomes 1.5px, and `150%` becomes 150px. The same service's separate inherited
+text path (`:671–705`) calls `resolveComputedFontSize` and resolves the text
+witness correctly. The installed package contains the matching raw-font
+branches at lines 54, 104 and 213 and computed text resolution at line 570;
+both source and installed files are fingerprinted in the evidence.
+
+This is a **core CSS used-size resolution defect**, not a reason for a Material
+plugin to change fonts, replace em lengths with pixels, or adjust Babylon
+coordinates. The reproduction projects final geometry solely to measure
+output; it never feeds that measurement into authored input or layout.
+
+`git show 21bdab9e930783efb5cf34ab031fd04f2656155b` identifies the addition of
+the raw-font expression and em dimension branches. This is source-history
+evidence, **not a historical runtime bisect**. The existing
+`src/parity/fixtures/font-relative-units.fixture.ts` supplies explicit local
+20px/24px fonts and a 16px rem root. It therefore cannot detect the inherited
+or relative-font cases. The catalog lists em sizing and inherited typography
+as compatible; this proof exposes a gap in that claimed combination without
+changing the catalog to conceal it.
+
+The implementation plan adds a core task at priority 3.45: share computed CSS
+font values before resolving font-relative lengths. Extend nested inheritance,
+other relative units, constraints, spacing, insets and updates before claiming
+general support. No canonical comparison or renderer behavior was changed.
+
+### Verification and boundaries
+
+- Public proof: `npm --prefix examples/material-showcase test -- --watch=false --browsers=ChromeHeadless --include=src/app/font-relative-box-audit.spec.ts`
+  — two complete runs, each exit 1, **6 FAILED / 4 SUCCESS**. The intentionally
+  failing equal-input expectations are retained, not inverted or skipped.
+- Source-finding integration: `node --test --test-name-pattern='records source fingerprints and actual visual acceptance fields' tests/material-parity/input-equivalence-audit.spec.mjs`
+  — **1/1 PASS**, including detected owner/history, focused proof and 90 source
+  fingerprints. Proof/integration commit: `be3b1d9`.
+- Consumer production build: `npm --prefix examples/material-showcase run build -- --output-path dist/material-showcase-font-relative-box-audit`
+  — exit 0, **45.434 seconds**, browser/server bundles and two prerendered
+  routes. Its isolated output does not replace the frozen benchmark bundle.
+- Runtime: AstylarUI 0.2.0, Angular 20.3.29, Angular build 20.3.34, Babylon
+  8.56.2, Chrome Headless 152.0.0.0 on Windows, 640x360 CSS px, DPR1,
+  Arial/sans-serif, explicit 48px line height, font and surface settlement.
+  Existing NG0914 warns that the zoneless TestBed still loads Zone.js through
+  the consumer test polyfills; those polyfills are unchanged.
+- Evidence-integrity and integration checks: `node --test --test-name-pattern='font-relative box evidence|records source fingerprints and actual visual acceptance fields' tests/material-parity/input-equivalence-audit.spec.mjs`
+  — **2/2 PASS**. The checked JSON preserves all 20 observations, twelve size
+  assertion failures per run, six source/package fingerprints, and four
+  rejection controls against altered fonts, declarations, counts or outputs.
+- Full `buildMaterialInputAudit` / `validateMaterialInputAudit` replay against
+  the frozen main report and existing normal/control/supplemental captures:
+  **8,143 unique style differences / 380,520 occurrences**, **129/129 source
+  findings detected**, **90 fingerprints**. Strict validation still reports
+  `3109 resolved-style differences still lack root-cause attribution` and no
+  additional error. The runner prints that error array and exits 0; this is
+  **not acceptance**. All ten frozen harness-file hashes remain unchanged.
+
+The evidence establishes these static box sizes, not glyph sharpness, every
+relative-length consumer, or full Material parity. No unresolved captured
+Material property is automatically reclassified by this finding. The full
+coverage/attribution audit and final enforced matrix remain required.
+
 ## Chip host typography: label tokens moved to a different owner
 
 The new [case-by-case evidence index](material-chip-host-typography-audit.json)

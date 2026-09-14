@@ -1,0 +1,819 @@
+{
+  "schemaVersion": 1,
+  "findingId": "core-em-box-size-uses-uncomputed-font",
+  "classification": "confirmed-core-renderer-defect",
+  "proofCommit": "be3b1d9",
+  "captureBaseline": "b9572eee8079cfd3d2a4a287a318537aa138dc5f",
+  "worktree": "D:/dev/github/AstylarUI-material",
+  "branch": "codex/material-ui-showcase",
+  "command": "npm --prefix examples/material-showcase test -- --watch=false --browsers=ChromeHeadless --include=src/app/font-relative-box-audit.spec.ts",
+  "environment": {
+    "astylarui": "0.2.0",
+    "angularCore": "20.3.29",
+    "angularBuild": "20.3.34",
+    "babylon": "8.56.2",
+    "browser": "Chrome Headless 152.0.0.0 (Windows 10)",
+    "viewportCss": {
+      "width": 640,
+      "height": 360
+    },
+    "dpr": 1,
+    "fontFamily": "Arial, sans-serif",
+    "lineHeight": "48px",
+    "settlement": [
+      "document.fonts.ready",
+      "surface.whenSettled()"
+    ],
+    "warning": "NG0914: zoneless TestBed with existing Zone.js test polyfills; no polyfill or production behavior changed."
+  },
+  "sourceFingerprints": [
+    {
+      "file": "examples/material-showcase/src/app/font-relative-box-audit.spec.ts",
+      "sha256": "db02dd616ade081e34b1e34c45da5a1365e1de5b72bcebdcb162e13f4902263e"
+    },
+    {
+      "file": "src/app/services/dom/elements/element-dimension.service.ts",
+      "sha256": "24d3c910ec0f054f0ec2de1808420f3e6571708a13348eea0887d040c9aa3d30"
+    },
+    {
+      "file": "examples/material-showcase/node_modules/astylarui/dist/lib/app/services/dom/elements/element-dimension.service.js",
+      "sha256": "0a65a1659a51062ab41cda030c4f030b15bcf5328c85fb1a3597628c05cf190c"
+    },
+    {
+      "file": "src/app/services/dom/utils/computed-font-size.util.ts",
+      "sha256": "fab2d11811ca212ba2a2fb887afe6ce4244690d2a1ac3bb968af055076a0d99c"
+    },
+    {
+      "file": "src/parity/fixtures/font-relative-units.fixture.ts",
+      "sha256": "1fa3c5448272838dbc38a707cc36ed7ed421708872f257bcfc514bda10c08aff"
+    },
+    {
+      "file": "docs/compatibility/capabilities.json",
+      "sha256": "7bde70f23f806570bc3eb8b30a627677f11ef26b134e7d57a4d15f943266c0be"
+    }
+  ],
+  "owner": {
+    "subsystem": "core computed typography and CSS font-relative used-size resolution",
+    "firstDivergence": "ElementDimensionService parses a local fontSize string, or substitutes 16px, before multiplying em width and height.",
+    "sourceLocations": [
+      {
+        "file": "src/app/services/dom/elements/element-dimension.service.ts",
+        "lines": [
+          77,
+          139,
+          247,
+          671,
+          700
+        ]
+      },
+      {
+        "file": "examples/material-showcase/node_modules/astylarui/dist/lib/app/services/dom/elements/element-dimension.service.js",
+        "lines": [
+          54,
+          104,
+          213,
+          570
+        ]
+      }
+    ],
+    "history": {
+      "commit": "21bdab9e930783efb5cf34ab031fd04f2656155b",
+      "evidence": "git show introduces elementFontSize raw parsing and both em multiplication branches.",
+      "historicalRuntimeBisect": false
+    },
+    "existingCoverageGap": "font-relative-units uses explicit 20px/24px local font sizes, with a 16px rem reference root; it does not test inherited or relatively specified fontSize with em dimensions.",
+    "pluginAssessment": "No Material plugin or custom renderer participates. Fix computed CSS values in core, not plugin layout or projection.",
+    "projectionAssessment": "Final world geometry is projected only to measure output. No measured value changes authored input. Matching pixel controls and font-parser arithmetic isolate a pre-projection CSS sizing cause."
+  },
+  "runs": [
+    {
+      "id": "initial",
+      "exitCode": 1,
+      "result": "TOTAL: 6 FAILED, 4 SUCCESS",
+      "buildCompleted": "Application bundle generation complete. [9.647 seconds] - 2026-09-14T00:34:59.663Z",
+      "browserConnection": "14 09 2026 02:35:04.310:INFO [Chrome Headless 152.0.0.0 (Windows 10)]: Connected on socket 0HI3lAE2CiyhWx6VAAAB with id 94965690",
+      "assertionFailures": [
+        "font-box.height: Astylar=1.5, browser=36, computed font=36px: Expected 34.5 to be less than 0.5.",
+        "font-box.height: Astylar=1.5, browser=48, computed font=48px: Expected 46.5 to be less than 0.5.",
+        "font-box.height: Astylar=150, browser=36, computed font=36px: Expected 114 to be less than 0.5.",
+        "font-box.height: Astylar=150, browser=48, computed font=48px: Expected 102 to be less than 0.5.",
+        "font-box.height: Astylar=16, browser=24, computed font=24px: Expected 8 to be less than 0.5.",
+        "font-box.height: Astylar=16, browser=32, computed font=32px: Expected 16 to be less than 0.5.",
+        "font-box.width: Astylar=3, browser=72, computed font=36px: Expected 69 to be less than 0.5.",
+        "font-box.width: Astylar=3, browser=96, computed font=48px: Expected 93 to be less than 0.5.",
+        "font-box.width: Astylar=300, browser=72, computed font=36px: Expected 228 to be less than 0.5.",
+        "font-box.width: Astylar=300, browser=96, computed font=48px: Expected 204 to be less than 0.5.",
+        "font-box.width: Astylar=32, browser=48, computed font=24px: Expected 16 to be less than 0.5.",
+        "font-box.width: Astylar=32, browser=64, computed font=32px: Expected 32 to be less than 0.5."
+      ],
+      "observations": [
+        {
+          "parentSize": 24,
+          "mode": "explicit-px",
+          "dpr": 1,
+          "declaredFont": "24px",
+          "browserFont": "24px",
+          "browserTextFont": "24px",
+          "retainedTextFont": "24px",
+          "observations": {
+            "font-parent": {
+              "actual": {
+                "width": 320,
+                "height": 180
+              },
+              "reference": {
+                "width": 320,
+                "height": 180
+              }
+            },
+            "font-box": {
+              "actual": {
+                "width": 48,
+                "height": 24
+              },
+              "reference": {
+                "width": 48,
+                "height": 24
+              }
+            }
+          }
+        },
+        {
+          "parentSize": 24,
+          "mode": "inherited",
+          "dpr": 1,
+          "declaredFont": "<omitted>",
+          "browserFont": "24px",
+          "browserTextFont": "24px",
+          "retainedTextFont": "24px",
+          "observations": {
+            "font-parent": {
+              "actual": {
+                "width": 320,
+                "height": 180
+              },
+              "reference": {
+                "width": 320,
+                "height": 180
+              }
+            },
+            "font-box": {
+              "actual": {
+                "width": 32,
+                "height": 16
+              },
+              "reference": {
+                "width": 48,
+                "height": 24
+              }
+            }
+          }
+        },
+        {
+          "parentSize": 24,
+          "mode": "pixel-box",
+          "dpr": 1,
+          "declaredFont": "<omitted>",
+          "browserFont": "24px",
+          "browserTextFont": "24px",
+          "retainedTextFont": "24px",
+          "observations": {
+            "font-parent": {
+              "actual": {
+                "width": 320,
+                "height": 180
+              },
+              "reference": {
+                "width": 320,
+                "height": 180
+              }
+            },
+            "font-box": {
+              "actual": {
+                "width": 48,
+                "height": 24
+              },
+              "reference": {
+                "width": 48,
+                "height": 24
+              }
+            }
+          }
+        },
+        {
+          "parentSize": 24,
+          "mode": "relative-em",
+          "dpr": 1,
+          "declaredFont": "1.5em",
+          "browserFont": "36px",
+          "browserTextFont": "36px",
+          "retainedTextFont": "36px",
+          "observations": {
+            "font-parent": {
+              "actual": {
+                "width": 320,
+                "height": 180
+              },
+              "reference": {
+                "width": 320,
+                "height": 180
+              }
+            },
+            "font-box": {
+              "actual": {
+                "width": 3,
+                "height": 1.5
+              },
+              "reference": {
+                "width": 72,
+                "height": 36
+              }
+            }
+          }
+        },
+        {
+          "parentSize": 24,
+          "mode": "relative-percent",
+          "dpr": 1,
+          "declaredFont": "150%",
+          "browserFont": "36px",
+          "browserTextFont": "36px",
+          "retainedTextFont": "36px",
+          "observations": {
+            "font-parent": {
+              "actual": {
+                "width": 320,
+                "height": 180
+              },
+              "reference": {
+                "width": 320,
+                "height": 180
+              }
+            },
+            "font-box": {
+              "actual": {
+                "width": 300,
+                "height": 150
+              },
+              "reference": {
+                "width": 72,
+                "height": 36
+              }
+            }
+          }
+        },
+        {
+          "parentSize": 32,
+          "mode": "explicit-px",
+          "dpr": 1,
+          "declaredFont": "32px",
+          "browserFont": "32px",
+          "browserTextFont": "32px",
+          "retainedTextFont": "32px",
+          "observations": {
+            "font-parent": {
+              "actual": {
+                "width": 320,
+                "height": 180
+              },
+              "reference": {
+                "width": 320,
+                "height": 180
+              }
+            },
+            "font-box": {
+              "actual": {
+                "width": 64,
+                "height": 32
+              },
+              "reference": {
+                "width": 64,
+                "height": 32
+              }
+            }
+          }
+        },
+        {
+          "parentSize": 32,
+          "mode": "inherited",
+          "dpr": 1,
+          "declaredFont": "<omitted>",
+          "browserFont": "32px",
+          "browserTextFont": "32px",
+          "retainedTextFont": "32px",
+          "observations": {
+            "font-parent": {
+              "actual": {
+                "width": 320,
+                "height": 180
+              },
+              "reference": {
+                "width": 320,
+                "height": 180
+              }
+            },
+            "font-box": {
+              "actual": {
+                "width": 32,
+                "height": 16
+              },
+              "reference": {
+                "width": 64,
+                "height": 32
+              }
+            }
+          }
+        },
+        {
+          "parentSize": 32,
+          "mode": "pixel-box",
+          "dpr": 1,
+          "declaredFont": "<omitted>",
+          "browserFont": "32px",
+          "browserTextFont": "32px",
+          "retainedTextFont": "32px",
+          "observations": {
+            "font-parent": {
+              "actual": {
+                "width": 320,
+                "height": 180
+              },
+              "reference": {
+                "width": 320,
+                "height": 180
+              }
+            },
+            "font-box": {
+              "actual": {
+                "width": 64,
+                "height": 32
+              },
+              "reference": {
+                "width": 64,
+                "height": 32
+              }
+            }
+          }
+        },
+        {
+          "parentSize": 32,
+          "mode": "relative-em",
+          "dpr": 1,
+          "declaredFont": "1.5em",
+          "browserFont": "48px",
+          "browserTextFont": "48px",
+          "retainedTextFont": "48px",
+          "observations": {
+            "font-parent": {
+              "actual": {
+                "width": 320,
+                "height": 180
+              },
+              "reference": {
+                "width": 320,
+                "height": 180
+              }
+            },
+            "font-box": {
+              "actual": {
+                "width": 3,
+                "height": 1.5
+              },
+              "reference": {
+                "width": 96,
+                "height": 48
+              }
+            }
+          }
+        },
+        {
+          "parentSize": 32,
+          "mode": "relative-percent",
+          "dpr": 1,
+          "declaredFont": "150%",
+          "browserFont": "48px",
+          "browserTextFont": "48px",
+          "retainedTextFont": "48px",
+          "observations": {
+            "font-parent": {
+              "actual": {
+                "width": 320,
+                "height": 180
+              },
+              "reference": {
+                "width": 320,
+                "height": 180
+              }
+            },
+            "font-box": {
+              "actual": {
+                "width": 300,
+                "height": 150
+              },
+              "reference": {
+                "width": 96,
+                "height": 48
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "repeat",
+      "exitCode": 1,
+      "result": "TOTAL: 6 FAILED, 4 SUCCESS",
+      "buildCompleted": "Application bundle generation complete. [11.432 seconds] - 2026-09-14T00:41:51.231Z",
+      "browserConnection": "14 09 2026 02:41:55.198:INFO [Chrome Headless 152.0.0.0 (Windows 10)]: Connected on socket QstkjATcdvf7r08HAAAB with id 35136965",
+      "assertionFailures": [
+        "font-box.height: Astylar=1.5, browser=36, computed font=36px: Expected 34.5 to be less than 0.5.",
+        "font-box.height: Astylar=1.5, browser=48, computed font=48px: Expected 46.5 to be less than 0.5.",
+        "font-box.height: Astylar=150, browser=36, computed font=36px: Expected 114 to be less than 0.5.",
+        "font-box.height: Astylar=150, browser=48, computed font=48px: Expected 102 to be less than 0.5.",
+        "font-box.height: Astylar=16, browser=24, computed font=24px: Expected 8 to be less than 0.5.",
+        "font-box.height: Astylar=16, browser=32, computed font=32px: Expected 16 to be less than 0.5.",
+        "font-box.width: Astylar=3, browser=72, computed font=36px: Expected 69 to be less than 0.5.",
+        "font-box.width: Astylar=3, browser=96, computed font=48px: Expected 93 to be less than 0.5.",
+        "font-box.width: Astylar=300, browser=72, computed font=36px: Expected 228 to be less than 0.5.",
+        "font-box.width: Astylar=300, browser=96, computed font=48px: Expected 204 to be less than 0.5.",
+        "font-box.width: Astylar=32, browser=48, computed font=24px: Expected 16 to be less than 0.5.",
+        "font-box.width: Astylar=32, browser=64, computed font=32px: Expected 32 to be less than 0.5."
+      ],
+      "observations": [
+        {
+          "parentSize": 24,
+          "mode": "explicit-px",
+          "dpr": 1,
+          "declaredFont": "24px",
+          "browserFont": "24px",
+          "browserTextFont": "24px",
+          "retainedTextFont": "24px",
+          "observations": {
+            "font-parent": {
+              "actual": {
+                "width": 320,
+                "height": 180
+              },
+              "reference": {
+                "width": 320,
+                "height": 180
+              }
+            },
+            "font-box": {
+              "actual": {
+                "width": 48,
+                "height": 24
+              },
+              "reference": {
+                "width": 48,
+                "height": 24
+              }
+            }
+          }
+        },
+        {
+          "parentSize": 24,
+          "mode": "inherited",
+          "dpr": 1,
+          "declaredFont": "<omitted>",
+          "browserFont": "24px",
+          "browserTextFont": "24px",
+          "retainedTextFont": "24px",
+          "observations": {
+            "font-parent": {
+              "actual": {
+                "width": 320,
+                "height": 180
+              },
+              "reference": {
+                "width": 320,
+                "height": 180
+              }
+            },
+            "font-box": {
+              "actual": {
+                "width": 32,
+                "height": 16
+              },
+              "reference": {
+                "width": 48,
+                "height": 24
+              }
+            }
+          }
+        },
+        {
+          "parentSize": 24,
+          "mode": "pixel-box",
+          "dpr": 1,
+          "declaredFont": "<omitted>",
+          "browserFont": "24px",
+          "browserTextFont": "24px",
+          "retainedTextFont": "24px",
+          "observations": {
+            "font-parent": {
+              "actual": {
+                "width": 320,
+                "height": 180
+              },
+              "reference": {
+                "width": 320,
+                "height": 180
+              }
+            },
+            "font-box": {
+              "actual": {
+                "width": 48,
+                "height": 24
+              },
+              "reference": {
+                "width": 48,
+                "height": 24
+              }
+            }
+          }
+        },
+        {
+          "parentSize": 24,
+          "mode": "relative-em",
+          "dpr": 1,
+          "declaredFont": "1.5em",
+          "browserFont": "36px",
+          "browserTextFont": "36px",
+          "retainedTextFont": "36px",
+          "observations": {
+            "font-parent": {
+              "actual": {
+                "width": 320,
+                "height": 180
+              },
+              "reference": {
+                "width": 320,
+                "height": 180
+              }
+            },
+            "font-box": {
+              "actual": {
+                "width": 3,
+                "height": 1.5
+              },
+              "reference": {
+                "width": 72,
+                "height": 36
+              }
+            }
+          }
+        },
+        {
+          "parentSize": 24,
+          "mode": "relative-percent",
+          "dpr": 1,
+          "declaredFont": "150%",
+          "browserFont": "36px",
+          "browserTextFont": "36px",
+          "retainedTextFont": "36px",
+          "observations": {
+            "font-parent": {
+              "actual": {
+                "width": 320,
+                "height": 180
+              },
+              "reference": {
+                "width": 320,
+                "height": 180
+              }
+            },
+            "font-box": {
+              "actual": {
+                "width": 300,
+                "height": 150
+              },
+              "reference": {
+                "width": 72,
+                "height": 36
+              }
+            }
+          }
+        },
+        {
+          "parentSize": 32,
+          "mode": "explicit-px",
+          "dpr": 1,
+          "declaredFont": "32px",
+          "browserFont": "32px",
+          "browserTextFont": "32px",
+          "retainedTextFont": "32px",
+          "observations": {
+            "font-parent": {
+              "actual": {
+                "width": 320,
+                "height": 180
+              },
+              "reference": {
+                "width": 320,
+                "height": 180
+              }
+            },
+            "font-box": {
+              "actual": {
+                "width": 64,
+                "height": 32
+              },
+              "reference": {
+                "width": 64,
+                "height": 32
+              }
+            }
+          }
+        },
+        {
+          "parentSize": 32,
+          "mode": "inherited",
+          "dpr": 1,
+          "declaredFont": "<omitted>",
+          "browserFont": "32px",
+          "browserTextFont": "32px",
+          "retainedTextFont": "32px",
+          "observations": {
+            "font-parent": {
+              "actual": {
+                "width": 320,
+                "height": 180
+              },
+              "reference": {
+                "width": 320,
+                "height": 180
+              }
+            },
+            "font-box": {
+              "actual": {
+                "width": 32,
+                "height": 16
+              },
+              "reference": {
+                "width": 64,
+                "height": 32
+              }
+            }
+          }
+        },
+        {
+          "parentSize": 32,
+          "mode": "pixel-box",
+          "dpr": 1,
+          "declaredFont": "<omitted>",
+          "browserFont": "32px",
+          "browserTextFont": "32px",
+          "retainedTextFont": "32px",
+          "observations": {
+            "font-parent": {
+              "actual": {
+                "width": 320,
+                "height": 180
+              },
+              "reference": {
+                "width": 320,
+                "height": 180
+              }
+            },
+            "font-box": {
+              "actual": {
+                "width": 64,
+                "height": 32
+              },
+              "reference": {
+                "width": 64,
+                "height": 32
+              }
+            }
+          }
+        },
+        {
+          "parentSize": 32,
+          "mode": "relative-em",
+          "dpr": 1,
+          "declaredFont": "1.5em",
+          "browserFont": "48px",
+          "browserTextFont": "48px",
+          "retainedTextFont": "48px",
+          "observations": {
+            "font-parent": {
+              "actual": {
+                "width": 320,
+                "height": 180
+              },
+              "reference": {
+                "width": 320,
+                "height": 180
+              }
+            },
+            "font-box": {
+              "actual": {
+                "width": 3,
+                "height": 1.5
+              },
+              "reference": {
+                "width": 96,
+                "height": 48
+              }
+            }
+          }
+        },
+        {
+          "parentSize": 32,
+          "mode": "relative-percent",
+          "dpr": 1,
+          "declaredFont": "150%",
+          "browserFont": "48px",
+          "browserTextFont": "48px",
+          "retainedTextFont": "48px",
+          "observations": {
+            "font-parent": {
+              "actual": {
+                "width": 320,
+                "height": 180
+              },
+              "reference": {
+                "width": 320,
+                "height": 180
+              }
+            },
+            "font-box": {
+              "actual": {
+                "width": 300,
+                "height": 150
+              },
+              "reference": {
+                "width": 96,
+                "height": 48
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "browserRuns": 2,
+    "trialsPerRun": 10,
+    "equalInputFailingTrialsPerRun": 6,
+    "passingControlsPerRun": 4,
+    "onlyFailedAssertions": "font-box width/height equality within 0.5 CSS px",
+    "retainedFontMatchesAllTrials": true,
+    "authoredInputsPreserved": true,
+    "diagnosticErrors": 0,
+    "finalSceneResources": {
+      "meshes": 0,
+      "materials": 0,
+      "textures": 0
+    },
+    "consumerBuild": {
+      "command": "npm --prefix examples/material-showcase run build -- --output-path dist/material-showcase-font-relative-box-audit",
+      "exitCode": 0,
+      "seconds": 45.434,
+      "prerenderedRoutes": 2
+    },
+    "sourceFindingCheck": {
+      "command": "node --test --test-name-pattern='records source fingerprints and actual visual acceptance fields' tests/material-parity/input-equivalence-audit.spec.mjs",
+      "exitCode": 0,
+      "passed": 1,
+      "failed": 0
+    },
+    "evidenceIntegrityCheck": {
+      "command": "node --test --test-name-pattern='font-relative box evidence|records source fingerprints and actual visual acceptance fields' tests/material-parity/input-equivalence-audit.spec.mjs",
+      "exitCode": 0,
+      "passed": 2,
+      "failed": 0,
+      "negativeControls": 4
+    },
+    "fullInputAudit": {
+      "inputEquivalent": false,
+      "uniqueStyleDifferences": 8143,
+      "totalStyleDifferenceOccurrences": 380520,
+      "sourceFindings": 129,
+      "detectedSourceFindings": 129,
+      "sourceFingerprints": 90,
+      "strictErrors": [
+        "3109 resolved-style differences still lack root-cause attribution"
+      ],
+      "runnerExitCode": 0,
+      "acceptancePassed": false,
+      "baselineReport": "artifacts/material-parity/current-ancestry-audit/latest-report.json",
+      "supplementalRoot": "artifacts/material-parity/supplemental-current-ancestry-audit",
+      "normalLineBoxPath": "artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json",
+      "controlLineBoxPath": "artifacts/material-parity/control-line-box-current-ancestry-audit-v3/latest-report.json",
+      "supplementalLineBoxPath": "artifacts/material-parity/supplemental-line-box-current-ancestry-audit/latest-report.json"
+    },
+    "frozenHarness": {
+      "files": 10,
+      "mismatches": []
+    }
+  },
+  "limitations": [
+    "This is intentionally failing diagnostic evidence, not a renderer fix or release acceptance.",
+    "No captured Material scalar is automatically attributed or normalized using this isolated proof.",
+    "Only static DPR1 width/height em cases and these two parent font sizes are proven.",
+    "Other font-relative properties, deeper inheritance, updates, responsive behavior, raster sharpness and arbitrary fonts remain unproven.",
+    "Explicit pixel-font and pixel-box trials are controls, not recommended fixture workarounds."
+  ]
+}
