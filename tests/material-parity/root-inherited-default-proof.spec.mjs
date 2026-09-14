@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import test from 'node:test';
-import { collectFullTreeInventory } from './input-equivalence-audit.mjs';
+import { collectFullTreeInventory, buildMaterialInputAudit, validateMaterialInputAudit } from './input-equivalence-audit.mjs';
 import { collectRootInitialStyleInputs, classifyRootInitialStyleInput } from './root-initial-style-evidence.mjs';
 
 // Captured observation-stage evidence, not an equal-input renderer reproduction.
@@ -96,5 +96,38 @@ test('root inherited-property scalar joins preserve omissions and reject broader
     ]) { const i = structuredClone(scalar); change(i); assert.equal(classifyRootInitialStyleInput(i, property, comparison, undefined, p), undefined); }
     for (const flag of ['computedCandidateVerified', 'descendantConsumersVerified', 'finalRasterVerified'])
       assert.equal(classifyRootInitialStyleInput(scalar, property, comparison, undefined, { ...p, [flag]: true }), undefined);
+  }
+});
+
+test('root proof validation does not serialize the aggregate evidence array', () => {
+  const report = buildMaterialInputAudit({ ...raw, results: [entry], interactions: [] });
+  assert.equal(report.rootInitialStyleInputs.length, 13);
+  const stringify = JSON.stringify;
+  // Reproduce the observed aggregate-string limit without allocating a giant
+  // string in the focused suite. Individual proof serialization remains native.
+  JSON.stringify = function (value, ...args) {
+    if (value === report.rootInitialStyleInputs) throw new RangeError('Invalid string length: aggregate root proof array');
+    return stringify.call(this, value, ...args);
+  };
+  try {
+    assert.deepEqual(validateMaterialInputAudit(report, { requireComplete: false }).filter(e => /root initial-style/.test(e)), []);
+  } finally { JSON.stringify = stringify; }
+});
+
+test('bounded root proof validation still checks every entry, order and nested value', () => {
+  const report = buildMaterialInputAudit({ ...raw, results: [entry], interactions: [] });
+  const errors = r => validateMaterialInputAudit(r, { requireComplete: false }).filter(e => /root initial-style/.test(e));
+  assert.deepEqual(errors(report), []);
+  assert.deepEqual(errors(JSON.parse(JSON.stringify(report))), [], 'JSON transport must retain the original validation semantics');
+  for (const change of [
+    ...[0, 6, 12].map(index => r => { r.rootInitialStyleInputs[index].candidatePath[1].normal.injected = 'changed'; }),
+    r => { r.rootInitialStyleInputs.reverse(); },
+    r => { r.rootInitialStyleInputs.pop(); },
+    r => { r.rootInitialStyleInputs.push(structuredClone(r.rootInitialStyleInputs[0])); },
+    r => { delete r.rootInitialStyleInputs[6]; },
+    r => { r.rootInitialStyleInputs = {}; },
+  ]) {
+    const altered = structuredClone(report); change(altered);
+    assert.ok(errors(altered).some(e => /does not replay/.test(e)));
   }
 });

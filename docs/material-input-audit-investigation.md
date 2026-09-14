@@ -3,6 +3,27 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Root-proof validation string limit (focused correction)
+
+The [serialization-boundary record](material-root-proof-validation-audit.json)
+isolates the full replay failure to whole-array JSON serialization, not missing
+input evidence. The focused regression fails first (**0/1**, **2,655.9084 ms**).
+Validation now compares every full, ordered proof against the independent replay
+one entry at a time, preserving JSON comparison semantics without constructing
+one aggregate string. Existing grouped owner and complete-case checks remain.
+
+All **6/6** focused tests pass (**5,230.0824 ms**). Controls reject changed nested
+values at first/middle/last positions, reordered, missing, extra, sparse and
+non-array evidence, and accept the ordinary JSON transport round trip. The
+prior-index and existing root-proof checks pass **18/18** (**157,192.4884 ms**).
+The full raw replay is running; no full validation result is claimed yet.
+
+Report packaging is a separate unresolved boundary: the current codec still
+stringifies and parses the whole report, and explicitly rejects an uncompressed
+payload above the runtime string limit. The expanded root array alone exceeds
+that boundary. A lossless bounded transport is required; removing observations
+or skipping integrity checks is not an acceptable correction.
+
 ## Guarded root inherited-property attribution (focused verification)
 
 The grouped collector extension now attributes the nine surveyed properties

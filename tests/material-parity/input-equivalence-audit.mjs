@@ -291,15 +291,20 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
   if (JSON.stringify(report.rootTypographyInputs) !== JSON.stringify(collectRootTypographyInputs(report.elementInventory, canonicalStyle, typographySelectorCanApply))) {
     errors.push('root typography evidence does not replay from captured inheritance requests');
   }
-  if (JSON.stringify(report.rootInitialStyleInputs) !== JSON.stringify(collectRootInitialStyleInputs(report.elementInventory))) {
+  const suppliedRootInitial = Array.isArray(report.rootInitialStyleInputs) ? report.rootInitialStyleInputs : undefined;
+  const replayedRootInitial = collectRootInitialStyleInputs(report.elementInventory);
+  // Preserve ordered, full JSON evidence comparison without constructing one
+  // aggregate string that exceeds the runtime limit on the complete matrix.
+  if (!suppliedRootInitial || suppliedRootInitial.length !== replayedRootInitial.length ||
+      replayedRootInitial.some((proof, index) => JSON.stringify(suppliedRootInitial[index]) !== JSON.stringify(proof))) {
     errors.push('root initial-style evidence does not replay from captured ancestry, context and declarations');
   }
   for (const entry of report.discrepancies.filter(d => d.attribution === rootInitialStyleAttribution)) {
-    const proof = report.rootInitialStyleInputs?.find(p => p.case === entry.reviewEvidence?.case && p.element === entry.element && p.property === entry.property);
+    const proof = suppliedRootInitial?.find(p => p?.case === entry.reviewEvidence?.case && p.element === entry.element && p.property === entry.property);
     if (!proof || entry.classification !== 'parity-harness-defect' || entry.reference !== proof.values.reference || entry.astylar !== undefined ||
         JSON.stringify(proof) !== JSON.stringify(entry.reviewEvidence) || !Array.isArray(entry.reviewedCases) ||
         entry.reviewedCases.length !== entry.occurrences || new Set(entry.reviewedCases).size !== entry.occurrences ||
-        entry.reviewedCases.some(key => !report.rootInitialStyleInputs?.some(p => p.case === key && p.element === entry.element && p.property === entry.property && p.values.reference === entry.reference))) {
+        entry.reviewedCases.some(key => !suppliedRootInitial?.some(p => p?.case === key && p.element === entry.element && p.property === entry.property && p.values.reference === entry.reference))) {
       errors.push('root initial-style attribution lacks exact owner, property, stage and complete case evidence');
     }
   }

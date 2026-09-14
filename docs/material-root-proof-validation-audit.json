@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "findingId": "root-proof-aggregate-validation-string-limit",
+  "classification": "parity-harness-defect",
+  "scope": "Bounded full-evidence validation only; no renderer, plugin, canonical fixture, captured input or classification-policy change.",
+  "baseline": {
+    "commit": "db6d7eb",
+    "fullReplayFailure": "docs/material-root-inherited-default-survey.json: guardedProof.fullReplayFailure",
+    "error": "RangeError: Invalid string length",
+    "cause": "Strict validation serialized the complete 30043-entry root-proof array as one string even though each proof can be compared independently in its original order."
+  },
+  "correction": {
+    "sourceFingerprints": [
+      {
+        "file": "tests/material-parity/input-equivalence-audit.mjs",
+        "sha256": "ccafb6b3a76b1f1901b776262adbc28f535883aa8af64ed3304ed5e80d4e7339"
+      },
+      {
+        "file": "tests/material-parity/root-inherited-default-proof.spec.mjs",
+        "sha256": "ed824a7bd8bbd4cc000b225f30859283fb4b0098667dd60e57576f097079851c"
+      }
+    ],
+    "invariant": "Accept replay equality only when both values are arrays of the same length and every ordered supplied proof has the same complete JSON serialization as the independently recollected proof. Do not sample, hash only summaries, truncate arrays or omit paths.",
+    "changes": [
+      "Recollect the full root-proof array as before, but compare one full proof at each index rather than serializing the aggregate array.",
+      "Keep the existing per-group owner, property, stage and reviewed-case checks after the replay comparison.",
+      "Treat non-array or sparse supplied evidence as invalid instead of letting the subsequent find operation throw."
+    ],
+    "tests": [
+      {
+        "command": "node --test --test-name-pattern='does not serialize the aggregate' tests/material-parity/root-inherited-default-proof.spec.mjs",
+        "phase": "before correction",
+        "exitCode": 1,
+        "tests": 1,
+        "passed": 0,
+        "durationMs": 2655.9084,
+        "result": "Focused aggregate-string limit simulation failed at the same whole-array JSON.stringify call. The native stringifier was restored in finally."
+      },
+      {
+        "command": "node --test tests/material-parity/root-inherited-default-proof.spec.mjs",
+        "phase": "after correction",
+        "exitCode": 0,
+        "tests": 6,
+        "passed": 6,
+        "durationMs": 5230.0824
+      }
+    ],
+    "testScope": "A single real captured comparison reproduces the aggregate serialization boundary through a temporary stringifier guard without allocating a giant test string. Separate controls verify JSON-transport round-trip acceptance and rejection of nested changes at the first/middle/last entries, reordered, missing, extra, sparse and non-array proof lists.",
+    "priorVerification": {
+      "command": "node --test --test-concurrency=1 --test-name-pattern='root initial-style|case index|records source fingerprints|covers every captured host' tests/material-parity/root-initial-style-evidence.spec.mjs tests/material-parity/input-equivalence-audit.spec.mjs tests/material-parity/field-host-weight-tracking-evidence.spec.mjs",
+      "exitCode": 0,
+      "tests": 18,
+      "passed": 18,
+      "failed": 0,
+      "durationMs": 157192.4884
+    },
+    "remaining": "Prior-index and existing root-proof checks pass. Full raw replay is running; complete expanded harness and final enforced parity remain pending. Focused success is not full-matrix validation evidence."
+  },
+  "packaging": {
+    "status": "separate confirmed size-boundary incompatibility; not corrected by bounded validation",
+    "file": "tests/material-parity/input-audit-report-codec.mjs",
+    "evidence": [
+      "canonicalJson calls JSON.stringify on the entire report before compression.",
+      "decodeMaterialInputAudit rejects uncompressedBytes above bufferConstants.MAX_STRING_LENGTH and parses a single decoded string.",
+      "The observed root-proof array alone exceeds that aggregate string boundary, so the expanded report cannot use this whole-report codec unchanged."
+    ],
+    "nextAction": "Implement and independently test a bounded or segmented lossless report transport. Preserve every nested value and order, deterministic integrity verification, stale-full-evidence detection, corrupt/malformed package rejection, and backward compatibility as appropriate. Do not reduce evidence, delete paths or weaken acceptance to fit a string."
+  }
+}

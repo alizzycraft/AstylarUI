@@ -14,7 +14,7 @@
     },
     {
       "file": "tests/material-parity/input-equivalence-audit.mjs",
-      "sha256": "a9ed33a80ccb1b39b7a63b1326cf3809ef848f212e013018cbb855764b065838"
+      "sha256": "ccafb6b3a76b1f1901b776262adbc28f535883aa8af64ed3304ed5e80d4e7339"
     },
     {
       "file": "tests/material-parity/input-equivalence-audit.spec.mjs",
@@ -42,7 +42,7 @@
     },
     {
       "file": "tests/material-parity/root-inherited-default-proof.spec.mjs",
-      "sha256": "6f4c41a11beffbe27979f0aa14b44504245a08a14129093ca7f04a586e7da07c"
+      "sha256": "ed824a7bd8bbd4cc000b225f30859283fb4b0098667dd60e57576f097079851c"
     }
   ],
   "caseSource": {
