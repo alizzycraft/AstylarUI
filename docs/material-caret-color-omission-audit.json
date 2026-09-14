@@ -2,7 +2,35 @@
   "schemaVersion": 1,
   "findingId": "audit-caret-color-omission-suppression",
   "classification": "parity-harness-defect",
-  "status": "confirmed-audit-blind-spot; correction-and-full-replay-pending",
+  "status": "instrumentation-corrected; full-replay-and-harness-pending",
+  "historicalEvidenceNote": "The sourceLocations, evidence.sourceFingerprints, syntheticCharacterization and verification sections preserve the pre-correction 548a3f9 observation. Their commands characterize that historical predicate and are not current retention checks. The correction section records current sources and verification.",
+  "correction": {
+    "scope": "Instrumentation only: retain computed caret-color versus omitted local declaration observations; no renderer or canonical fixture changes.",
+    "sourceFingerprints": [
+      {
+        "file": "tests/material-parity/input-equivalence-audit.mjs",
+        "sha256": "0aec3fbd22143c03207dc140944a0a4376eaad79b5df344bb505a3357ef280e0"
+      },
+      {
+        "file": "tests/material-parity/input-equivalence-audit.spec.mjs",
+        "sha256": "34c4c3c7ff91ab0277ad202e0555472af2dfb1598678bf70b02a635401f3e152"
+      },
+      {
+        "file": "tests/material-parity/caret-color-omission-sensitivity.spec.mjs",
+        "sha256": "055c61e9e7b378219c82cffe4bab5fc00912a4caa202794baef357f20a63ed83"
+      }
+    ],
+    "redCommand": "node --test --test-name-pattern='caret-color omission remains' tests/material-parity/caret-color-omission-sensitivity.spec.mjs",
+    "redResult": "Exit 1, 0/1 pass, 895.7276 ms: explicit-auto caret observation was suppressed.",
+    "partialCorrectionResult": "Removing only equivalentValue's shortcut still fails: exit 1, 0/1 pass, 896.1011 ms. The fallback classifier still marked equivalence with no unresolved attribution.",
+    "focusedCommand": "node --test tests/material-parity/caret-color-omission-sensitivity.spec.mjs",
+    "focusedResult": "Exit 0, 4/4 pass, 3203.6736 ms, no failures/skips/cancellations, after removing both shortcuts. Includes the full 1371-observation exposure index and DPR1/2 browser sensitivity.",
+    "priorIndicesCommand": "node --test --test-concurrency=1 --test-name-pattern='case index|records source fingerprints|covers every captured host|container caret|caret-color|explicit auto caret|root initial-style collector' tests/material-parity/caret-color-omission-sensitivity.spec.mjs tests/material-parity/input-equivalence-audit.spec.mjs tests/material-parity/input-tree-evidence.spec.mjs tests/material-parity/root-initial-style-evidence.spec.mjs tests/material-parity/field-host-weight-tracking-evidence.spec.mjs",
+    "priorIndicesResult": "Exit 0, 22/22 pass, 102529.7141 ms, no failures/skips/cancellations. Covers all new retention/sensitivity/index tests, previous guarded container-caret attribution and rejection tests, the complete root initial-style collector, prior case/source indices and existing descendant caret sensitivity.",
+    "fullReplayCommand": "node --input-type=module -e \" import assert from 'node:assert/strict';import{readFileSync}from'node:fs';import{createHash}from'node:crypto'; import{buildMaterialInputAudit,validateMaterialInputAudit}from'./tests/material-parity/input-equivalence-audit.mjs'; const doc=JSON.parse(readFileSync('docs/material-caret-color-omission-audit.json')),index=doc.evidence,bytes=readFileSync(index.capture.file); const sha=v=>createHash('sha256').update(v).digest('hex');assert.equal(sha(bytes),index.capture.sha256); const raw=JSON.parse(bytes),expected=new Map(); const color=v=>{const s=v.toLowerCase().trim();if(s.startsWith('rgb(')&&s.endsWith(')'))return 'rgba('+s.slice(4,-1).split(',').map(n=>Number(n.trim())).join(',')+',1)';if(s.startsWith('color(srgb ')&&s.endsWith(')')){const c=s.slice(11,-1).replace('/',' ').trim().split(/\\s+/).map(Number);assert.equal(c.length,4);assert.ok(c.every(Number.isFinite));return 'rgba('+c.slice(0,3).map(n=>Math.round(n*255)).join(',')+','+c[3]+')';}throw Error('Unhandled reference caret serialization: '+v);}; for(const e of[...raw.results,...raw.interactions])for(const i of e.styleInputs??[]){if(i.reference?.caretColor===undefined||i.astylar?.caretColor!==undefined)continue;const k=JSON.stringify([e.family,i.id,color(i.reference.caretColor)]);expected.set(k,(expected.get(k)??0)+1);} console.error('CARET_OMISSION_PHASE build-start',JSON.stringify(process.memoryUsage())); const a=buildMaterialInputAudit(raw,{root:process.cwd(),normalLineBoxPath:'artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json',controlLineBoxPath:'artifacts/material-parity/control-line-box-current-ancestry-audit-v3/latest-report.json',supplementalLineBoxPath:'artifacts/material-parity/supplemental-line-box-current-ancestry-audit/latest-report.json',supplementalRoot:'artifacts/material-parity/supplemental-current-ancestry-audit'}); console.error('CARET_OMISSION_PHASE build-complete',JSON.stringify(process.memoryUsage())); const groups=a.discrepancies.filter(d=>d.property==='caretColor'&&d.astylar===undefined),actual=new Map(); for(const g of groups){const k=JSON.stringify([g.family,g.element,g.reference]);actual.set(k,(actual.get(k)??0)+g.occurrences);} assert.deepEqual([...actual].sort(),[...expected].sort()); assert.equal(a.summary.totalStyleDifferenceOccurrences,385520+1371); assert.equal(a.summary.inputEquivalent,false);assert.equal(a.rootInitialStyleInputs.length,9244); assert.equal(a.discrepancies.filter(d=>d.attribution==='reviewed-root-initial-style-declaration-stage').length,144); assert.equal(a.containerCaretInputs.length,2888); assert.equal(a.discrepancies.filter(d=>d.attribution==='reviewed-container-caret-color-declaration-stage').length,84); assert.equal(a.discrepancies.filter(d=>d.property==='lineHeight'&&d.reference==='normal'&&d.astylar===undefined).reduce((n,g)=>n+g.occurrences,0),5000); const strict=validateMaterialInputAudit(a); console.error('CARET_OMISSION_PHASE validation-complete',JSON.stringify(process.memoryUsage())); assert.deepEqual(strict,[a.summary.unresolvedAttributions+' resolved-style differences still lack root-cause attribution']); const compact=groups.map(g=>({family:g.family,element:g.element,reference:g.reference,candidate:'<omitted>',classification:g.classification,attribution:g.attribution,occurrences:g.occurrences})); console.log(JSON.stringify({summary:a.summary,sourceFingerprintCount:a.sourceFingerprints.length,strict,allRawCaretOmissionGroupsMatched:true,caretOmissionGroups:groups.length,caretOmissionOccurrences:groups.reduce((n,g)=>n+g.occurrences,0),newlyRetainedOccurrences:1371,rootInitialProofCount:a.rootInitialStyleInputs.length,containerCaretProofCount:a.containerCaretInputs.length,caretGroups:compact})); \"",
+    "fullReplayResult": "Pending; do not infer final attribution or signature counts from the exposure survey.",
+    "fullHarnessResult": "Pending; the previous 629/629 predates this correction and new four-test file."
+  },
   "scope": "A scalar text-color match suppresses a computed caret-color/local-omission observation without authored-request or inherited-caret evidence. Exposure population is not a count of renderer or authoring defects.",
   "sourceLocations": [
     {

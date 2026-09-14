@@ -1609,13 +1609,6 @@ function classifyStyleDifference(property, reference, astylar, referenceStyle, a
       owner: 'none',
     };
   }
-  if (property === 'caretColor' && astylar === undefined && reference === astylarStyle.color) {
-    return {
-      classification: 'equivalent-representation',
-      justification: 'An omitted Astylar caret color follows the resolved text color, matching CSS caret-color:auto semantics.',
-      owner: 'none',
-    };
-  }
   if (property === 'maxWidth' && equivalentFixedMaxWidth(reference, astylar, referenceStyle, astylarStyle)) {
     return {
       classification: 'equivalent-representation',
@@ -1773,7 +1766,6 @@ function normalizeColor(value) {
 
 function equivalentValue(property, reference, astylar, referenceStyle, astylarStyle) {
   if (reference === astylar) return true;
-  if (property === 'caretColor' && astylar === undefined && reference === astylarStyle.color) return true;
   const bothFlex = [referenceStyle.display, astylarStyle.display].every((display) => ['flex', 'inline-flex'].includes(display));
   if (bothFlex && reference === 'normal' && (
     (['alignItems', 'alignContent'].includes(property) && astylar === 'stretch') ||
@@ -8029,6 +8021,7 @@ function sourceFingerprints(root) {
     'tests/material-parity/root-initial-style-evidence.mjs',
     'tests/material-parity/root-initial-style-evidence.spec.mjs',
     'tests/material-parity/root-line-height-proof.spec.mjs',
+    'tests/material-parity/caret-color-omission-sensitivity.spec.mjs',
     'tests/material-parity/root-initial-style-sensitivity.spec.mjs',
     'tests/material-parity/field-host-weight-tracking-evidence.mjs',
     'tests/material-parity/field-host-weight-tracking-evidence.spec.mjs',
@@ -8064,6 +8057,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/caret-color-omission-sensitivity.spec.mjs', /test\('caret-color omission remains/,
+      'caret-color omission is not proven auto by matching text color', 'The audit retains computed caret-color versus omitted local declaration observations without an ancestry/request proof. Explicit auto and omission diverge under an inherited caret color despite equal text colors at DPR1/2. All 1371 formerly suppressed raw observations remain indexed; the proof does not synthesize candidate computed values or establish editable caret rendering.'),
     proof(root, 'tests/material-parity/root-line-height-proof.spec.mjs', /test\('root line-height omission is attributed/,
       'root normal line-height with captured ancestor and declaration evidence', 'The real captured root requires two normal reference ancestor values and omitted candidate local stages, with no explicit font/line-height/reset/motion requests. Changed ancestors, explicit declarations, incomplete stages, scalar conflicts and forged computed/descendant/raster claims reject attribution. The missing declaration remains recorded; natural line boxes and text rendering remain separate obligations.'),
     proof(root, 'tests/material-parity/line-height-omission-sensitivity.spec.mjs', /test\('line-height normal omission remains/,

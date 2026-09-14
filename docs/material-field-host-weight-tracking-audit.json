@@ -13,7 +13,7 @@
   "sourceFingerprints": [
     {
       "file": "tests/material-parity/input-equivalence-audit.mjs",
-      "sha256": "c97a8ef327bc2d4a82150dc9ea80866321ae7c722b122d521010a475906c5dd9"
+      "sha256": "0aec3fbd22143c03207dc140944a0a4376eaad79b5df344bb505a3357ef280e0"
     },
     {
       "file": "tests/material-parity/field-host-weight-tracking-evidence.mjs",

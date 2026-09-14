@@ -3,7 +3,17 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
-## Caret-color scalar suppression is an audit blind spot (correction pending)
+## Caret-color scalar suppression corrected (full verification pending)
+
+The retention regression failed first because the explicit-auto observation
+was missing (**0/1**, **895.7276 ms**), then failed after removing only the
+filter because the fallback still claimed equivalence (**0/1**, **896.1011 ms**).
+Removing both shortcuts yields **4/4 pass**, **3,203.6736 ms**, including the
+complete exposure index and DPR1/2 sensitivity. Prior guarded evidence and
+case/source indices pass **22/22**, **102,529.7141 ms**. The complete replay and
+expanded harness verification are pending. No renderer or canonical
+comparison inputs changed. The investigation below records the historical
+blind spot, not a claim that the now-removed shortcut remains active.
 
 The [caret-color omission investigation](material-caret-color-omission-audit.json)
 identifies a separate unsafe shortcut at `input-equivalence-audit.mjs:1776`:
@@ -29,10 +39,10 @@ require review. These counts describe audit exposure, not confirmed rendering
 defects. The existing guarded container-caret evidence remains separate.
 
 History traces the filter to `5e3ac33a`; `6dae8bd6` narrowed the fallback
-classifier to matching text color without addressing inheritance. Next add a
-retention regression, correct both shortcuts, and replay every exposed case
-without default injection or fixture edits. The verified **2,499 unresolved**
-baseline is unchanged by this documentation-only investigation.
+classifier to matching text color without addressing inheritance. Both shortcuts
+have now been removed under the retention regression. Replay must verify every
+exposed observation without default injection or fixture edits. **2,499
+unresolved** is the previous verified baseline, not a post-correction result.
 
 ## Guarded root line-height attribution (full replay verified)
 
