@@ -18,7 +18,7 @@
     },
     {
       "file": "tests/material-parity/input-equivalence-audit.mjs",
-      "sha256": "eb21202a51a4945f6a49e726417b5e7996bdbca9551c5299411a4220e14911c1"
+      "sha256": "fc39c2d528db6f507582ae13b225d4b5ec3122800c0eff38d1122b1fde6417a5"
     },
     {
       "file": "tests/material-parity/input-equivalence-policy.mjs",
@@ -26,7 +26,7 @@
     },
     {
       "file": "tests/material-parity/field-host-typography-evidence.mjs",
-      "sha256": "84590b2aa7adfec1aff1df7ad6305a002d77ab81938de61762ec4e92683d2ada"
+      "sha256": "91ab71ad5f8e20412c1ff94a95b167d16b8c2cddefa0f226f116666682df5c07"
     }
   ],
   "groups": [

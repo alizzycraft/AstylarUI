@@ -8,7 +8,7 @@
   "sourceFingerprints": [
     {
       "file": "tests/material-parity/input-equivalence-audit.mjs",
-      "sha256": "eb21202a51a4945f6a49e726417b5e7996bdbca9551c5299411a4220e14911c1"
+      "sha256": "fc39c2d528db6f507582ae13b225d4b5ec3122800c0eff38d1122b1fde6417a5"
     },
     {
       "file": "tests/material-parity/root-typography-input-evidence.mjs",
@@ -36,7 +36,7 @@
     },
     {
       "file": "tests/material-parity/field-host-typography-evidence.mjs",
-      "sha256": "84590b2aa7adfec1aff1df7ad6305a002d77ab81938de61762ec4e92683d2ada"
+      "sha256": "91ab71ad5f8e20412c1ff94a95b167d16b8c2cddefa0f226f116666682df5c07"
     },
     {
       "file": "examples/material-showcase/node_modules/@angular/material/fesm2022/form-field-CFbrnFED.mjs",
@@ -44,7 +44,7 @@
     },
     {
       "file": "tests/material-parity/input-tree-evidence.spec.mjs",
-      "sha256": "71c242b2f5e151b324b6bfc7de038bef1cd492931e9d8e71bf286533a12262b2"
+      "sha256": "c2d0884f99fc4e1f41ac65d22b95643c8785f4fb7a339a47746bf31fe91344b3"
     },
     {
       "file": "src/app/services/dom/input/text-input.manager.ts",

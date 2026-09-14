@@ -1,4 +1,5 @@
 export const fieldHostTypographyAttribution = 'reviewed-field-host-typography-token-omission';
+export const fieldHostAlignmentAttribution = 'reviewed-field-host-alignment-request-omission';
 const families = new Set(['form-field', 'input', 'autocomplete', 'select', 'datepicker', 'timepicker']);
 const properties = {
   fontFamily: ['font-family', 'font', 'roboto'],
@@ -106,4 +107,49 @@ export function classifyFieldHostTypographyInput(input, property, reference, ast
   return { classification: 'application-plugin-authoring-defect', attribution: fieldHostTypographyAttribution,
     owner: 'showcase form-field host typography token authoring', reviewEvidence: structuredClone(proof),
     justification: 'The reference form-field host applies Material container font, size and line-height tokens. Candidate field-shell omits them through a complete captured page/section/host chain; only the page authors its fallback stack and scaled size. This identifies missing component-level authored requests, not a computed candidate font synthesized from local diagnostics. Light/dark page size happens to match 16px; contrast/custom page size does not. Preserve token ownership instead of patching child fonts, baselines or dimensions. Separate explicit descendant styles, core inheritance/length consumption, variable fallback origin and final raster still require their own evidence.' };
+}
+
+const affectsAlignment = value => Object.keys(value ?? {}).some(key =>
+  ['textalign', 'textalignlast', 'direction', 'unicodebidi', 'writingmode', 'all'].includes(key.replaceAll('-', '').toLowerCase()) || /^(animation|transition)/i.test(key));
+const noAlignment = value => object(value) && !affectsAlignment(value);
+function alignmentRules(rules, host = false) {
+  if (!Array.isArray(rules) || rules.some(r => !object(r.declarations))) return false;
+  const relevant = rules.filter(r => affectsAlignment(r.declarations));
+  if (!host) return relevant.length === 0;
+  return relevant.length === 1 && relevant[0].selector === '.mat-mdc-form-field' &&
+    relevant[0].declarations['text-align']?.value === 'left' && relevant[0].declarations['text-align'].important === false &&
+    Object.keys(relevant[0].declarations).every(k => k === 'text-align' || !affectsAlignment({ [k]: true }));
+}
+
+// Reuse only the independently mapped host identity and captured paths. Font
+// ownership alone is not an alignment proof; check every alignment request.
+export function collectFieldHostAlignmentInputs(typographyInputs) {
+  const results = [];
+  for (const base of typographyInputs.filter(p => p.property === 'fontFamily')) {
+    if (base.referencePath.some((n, i) => !noAlignment(n.inline) ||
+        /(?:^|;)\s*(?:text-align(?:-last)?|direction|unicode-bidi|writing-mode|all|animation[^:]*|transition[^:]*)\s*:/i.test(n.attributes?.style ?? '') ||
+        !alignmentRules(n.rules, i === 2) || n.rules.some(r => r.active !== true) ||
+        n.computed.textAlign !== (i === 2 ? 'left' : 'start')) ||
+        base.candidatePath.some(n => (n.authored.style !== undefined && !noAlignment(n.authored.style)) ||
+          !alignmentRules(n.rules) || [n.normal, n.comparison, n.effective].some(s => !noAlignment(s)))) continue;
+    results.push({ case: base.case, family: base.family, element: base.element, property: 'textAlign',
+      values: { reference: 'left', candidateLocalDeclaration: '<omitted>' },
+      source: base.source, revision: base.revision, referencePath: structuredClone(base.referencePath),
+      candidatePath: structuredClone(base.candidatePath), classification: 'application-plugin-authoring-defect',
+      computedCandidateVerified: false, descendantAlignmentVerified: false, finalRasterVerified: false });
+  }
+  return results;
+}
+
+export function classifyFieldHostAlignmentInput(input, property, reference, astylar, proof) {
+  if (!proof || property !== 'textAlign' || reference !== 'left' || astylar !== undefined || input.id !== proof.element ||
+      input.astylarResolvedStyleEvidenceVersion !== 2 || input.referenceStructure?.schemaVersion !== 2 || input.astylarStructure?.schemaVersion !== 2 ||
+      input.referenceStructure.type !== 'mat-form-field' || input.astylarStructure.type !== 'div' ||
+      input.referenceStructure.ownText?.trim() || input.astylarStructure.ownText?.trim() || input.reference?.textAlign !== 'left' ||
+      !alignmentRules(input.referenceAuthored, true) || input.referenceAuthored.some(r => r.active !== undefined && r.active !== true) ||
+      !alignmentRules(input.astylarAuthored) || !input.astylarAuthored.some(r => r.selector === '.field-shell') ||
+      ['astylar', 'astylarNormalResolvedStyle', 'astylarInteractionResolvedStyle'].some(s => !noAlignment(input[s]))) return;
+  return { classification: proof.classification, attribution: fieldHostAlignmentAttribution,
+    owner: 'showcase form-field host alignment authoring', reviewEvidence: structuredClone(proof),
+    justification: 'The reference Material host explicitly requests text-align:left, independently of ancestor alignment. The mapped candidate field-shell and its complete captured page/section ancestry omit alignment requests in authored rules, inline declarations and all three diagnostic stages. This is a missing component-level input, not permission to equate left, start and omission from similar LTR pixels. Preserve the original host request during future translation correction; do not compensate with child offsets. Candidate computed alignment, inherited descendant overrides, layout and painted text remain separate evidence obligations.' };
 }

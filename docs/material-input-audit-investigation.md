@@ -3,6 +3,55 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Form-field hosts omit an explicit alignment request
+
+The [field-host alignment index](material-field-host-alignment-audit.json)
+records **577 captured boundaries / six groups** across form-field, input,
+autocomplete, select, datepicker and timepicker. The installed Material
+`.mat-mdc-form-field` rule explicitly requests `text-align:left`. Candidate
+`.field-shell` and its captured page/section ancestors omit alignment in
+authored inputs and all three declaration stages. Reference frame/section
+computed alignment is `start`, while the component host is explicitly `left`.
+Do not equate these requests merely because their current LTR output may agree.
+
+The earliest demonstrated difference is shared component authoring, not
+Babylon projection or a demonstrated core inheritance defect. The original
+`2f44011` candidate field-shell rule already omits this property. Current
+owners are `examples/material-showcase/src/app/astylar.component.ts:540`
+and the installed Material host rule at
+`examples/material-showcase/node_modules/@angular/material/fesm2022/form-field-CFbrnFED.mjs:1016`.
+This is source-history evidence, not a runtime bisect; no new compensation
+commit is inferred from the omission.
+
+The audit reuses verified host identity/ancestry, then separately checks the
+alignment declaration and every captured ancestor for competing alignment,
+direction, writing-mode, reset or motion requests. Changed scalar stages,
+unknown selectors and forged descendant/computed/raster claims reject the
+attribution. Independent missing font tokens remain attributed separately.
+A DPR1/2 browser sensitivity test retains explicit `left` under ancestor
+`center`/`right` changes while the omitted host inherits those values; restoring
+the ancestor restores `left`/`start`. This establishes distinct authoring
+semantics, not candidate computed alignment or any descendant glyph position.
+
+Implementation priority **5.23**, alongside the existing shared host typography
+input restoration: preserve the original host-level alignment request and
+descendant overrides through the shared translation. Do not patch child
+offsets or apply a global alignment override. Investigate any remaining
+equal-input core text/line-layout failure independently. In particular, this
+finding does not explain or close the reported option-text vertical alignment
+or chip-label positioning defects.
+
+Focused audit checks pass **3/3**, **23,042.8865 ms**, covering 90 positive
+states, 15 adverse ancestry/declaration mutations, six scalar mutations and
+six forged reports, while retaining all 270 independent font-token
+observations. Browser sensitivity passes **1/1**, **3,959.527 ms**. The raw
+survey verifies **1,154 tree hashes** with no survey issues; exact commands
+are retained in the machine index. The complete case-index/combined checks
+pass **14/14**, **203,033.4937 ms**, with no failures, skips or cancellations;
+the 577-case alignment index and prior source/case indices all pass.
+Pooled-evidence replay and the full harness gate are pending. No renderer or
+canonical fixture inputs have changed.
+
 ## Container caret-color diagnostics do not establish editable caret rendering
 
 The [container caret index](material-container-caret-audit.json) links **84

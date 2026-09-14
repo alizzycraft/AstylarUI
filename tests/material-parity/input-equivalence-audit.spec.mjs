@@ -11018,6 +11018,134 @@ test('root typography case index covers every main capture and preserves raw tre
   for (const flag of ['inputEquivalent', 'computedCandidateVerified', 'finalRasterVerified']) assert.equal(index.verification[flag], false);
 });
 
+test('field host alignment case index covers all explicit requests and unchanged ancestor omissions', async () => {
+  const { readFileSync } = await import('node:fs'), { createHash } = await import('node:crypto');
+  const { selectorCanApply } = await import('./border-initial-input-evidence.mjs');
+  const hash = b => createHash('sha256').update(b).digest('hex');
+  const index = JSON.parse(readFileSync('docs/material-field-host-alignment-audit.json', 'utf8'));
+  const bytes = readFileSync(index.capture.file); assert.equal(hash(bytes), index.capture.sha256);
+  assert.equal(index.sourceFingerprints.length, 7);
+  for (const s of index.sourceFingerprints) assert.equal(hash(readFileSync(s.file, 'utf8').replace(/\r\n/g, '\n')), s.sha256, s.file);
+  const covered = new Map(), expected = [], raw = JSON.parse(bytes);
+  const affects = d => Object.keys(d ?? {}).some(k => ['textalign', 'textalignlast', 'direction', 'unicodebidi', 'writingmode', 'all'].includes(k.replaceAll('-', '').toLowerCase()) || /^(animation|transition)/i.test(k));
+  for (const g of index.groups) {
+    assert.equal(g.property, 'textAlign'); assert.equal(g.reference, 'left'); assert.equal(g.candidate, '<omitted>');
+    assert.equal(g.classification, 'application-plugin-authoring-defect'); assert.equal(g.occurrences, g.reviewedCases.length);
+    for (const key of g.reviewedCases) { assert.equal(covered.has(key), false); covered.set(key, g); }
+  }
+  let treeCount = 0;
+  for (const [kind, entries] of [['static', raw.results], ['interaction', raw.interactions]]) for (const e of entries) {
+    if (!['form-field', 'input', 'autocomplete', 'select', 'datepicker', 'timepicker'].includes(e.family)) continue;
+    const key = `${kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? `/${e.state}` : ''}`, g = covered.get(key);
+    expected.push(key); assert.ok(g, key); assert.equal(g.family, e.family); assert.equal(g.element, `${e.family}-primary`);
+    const input = e.styleInputs.find(i => i.id === g.element); assert.equal(input.reference.textAlign, 'left');
+    const rules = input.referenceAuthored.filter(r => affects(r.declarations)); assert.equal(rules.length, 1);
+    assert.equal(rules[0].selector, '.mat-mdc-form-field'); assert.deepEqual(rules[0].declarations['text-align'], { value: 'left', important: false });
+    assert.ok(input.astylarAuthored.every(r => !affects(r.declarations)));
+    for (const s of ['astylar', 'astylarNormalResolvedStyle', 'astylarInteractionResolvedStyle']) assert.equal(affects(input[s]), false);
+    for (const side of ['reference', 'astylar']) {
+      const f = e.inputTrees[side], bytes = readFileSync(f.file); assert.equal(hash(bytes), f.sha256); treeCount++;
+      const t = JSON.parse(bytes), matches = t.nodes.filter(n => (side === 'reference' ? n.attributes?.id : n.authored?.id) === g.element);
+      assert.equal(matches.length, 1); let n = matches[0], depth = 0;
+      while (n && (side === 'reference' || n.authored.type)) {
+        if (side === 'reference') {
+          assert.equal(t.styles[n.style].textAlign, depth === 0 ? 'left' : 'start'); assert.equal(affects(n.inline), false);
+          const rs = n.rules.map(i => t.rules[i]).filter(r => affects(r.declarations)); assert.equal(rs.length, depth === 0 ? 1 : 0);
+          if (depth === 0) { assert.equal(rs[0].selector, '.mat-mdc-form-field'); assert.deepEqual(rs[0].declarations['text-align'], { value: 'left', important: false }); }
+        } else {
+          assert.equal(affects(n.authored.style), false);
+          for (const s of ['resolvedStyle', 'normalResolvedStyle', 'interactionResolvedStyle']) assert.equal(affects(n[s]), false);
+          for (const rule of t.rules.filter(affects)) {
+            // These two descendant selectors cannot target a main/section/div;
+            // all other captured alignment selectors must be provably excluded.
+            if (/^\.material-table (th|td)$/.test(rule.selector)) assert.ok(!['th', 'td'].includes(n.authored.type));
+            else assert.equal(selectorCanApply(rule.selector, n.authored), false, `${key}/${rule.selector}`);
+          }
+        }
+        depth++; n = t.nodes.find(p => p.key === n.parent);
+      }
+      assert.equal(depth, 3);
+    }
+  }
+  assert.deepEqual([...covered.keys()].sort(), expected.sort()); assert.equal(covered.size, 577); assert.equal(index.caseCount, 577);
+  assert.equal(index.groups.length, 6); assert.equal(index.groupCount, 6); assert.equal(treeCount, 1154);
+  for (const flag of ['computedCandidateVerified', 'descendantAlignmentVerified', 'finalRasterVerified']) assert.equal(index.verification[flag], false);
+});
+
+function fieldHostAlignmentReport(family = 'autocomplete', pageSize = '16px') {
+  const raw = fieldHostTypographyReport(family, pageSize), e = raw.results[0], r = e.inputTrees.reference;
+  r.styles[0].textAlign = 'start'; r.styles[1].textAlign = 'left';
+  r.rules[1].declarations['text-align'] = { value: 'left', important: false };
+  e.styleInputs[0].reference.textAlign = 'left';
+  e.styleInputs[0].referenceAuthored[0].declarations['text-align'] = { value: 'left', important: false };
+  return raw;
+}
+
+test('field host alignment preserves explicit left requests separately from inherited or painted alignment', () => {
+  const raw = parityReport({}, {}); raw.results = [];
+  for (const family of ['form-field', 'input', 'autocomplete', 'select', 'datepicker', 'timepicker'])
+    for (const size of ['16px', '14.4px', '18.4px']) for (const state of [undefined, 'hover', 'held', 'focus', 'open']) {
+      const e = fieldHostAlignmentReport(family, size).results[0];
+      if (state) { e.state = state; raw.interactions.push(e); } else raw.results.push(e);
+    }
+  const before = JSON.stringify(raw), audit = buildMaterialInputAudit(raw);
+  assert.equal(audit.fieldHostAlignmentInputs.length, 90);
+  const groups = audit.discrepancies.filter(d => d.attribution === 'reviewed-field-host-alignment-request-omission');
+  assert.equal(groups.length, 6); assert.equal(groups.reduce((n, g) => n + g.occurrences, 0), 90);
+  for (const g of groups) {
+    assert.equal(g.classification, 'application-plugin-authoring-defect'); assert.equal(g.reference, 'left'); assert.equal(g.astylar, undefined);
+    assert.equal(g.reviewedCases.length, g.occurrences);
+    for (const flag of ['computedCandidateVerified', 'descendantAlignmentVerified', 'finalRasterVerified']) assert.equal(g.reviewEvidence[flag], false);
+  }
+  assert.equal(audit.discrepancies.filter(d => d.attribution === 'reviewed-field-host-typography-token-omission').reduce((n, g) => n + g.occurrences, 0), 270);
+  assert.deepEqual(validateMaterialInputAudit(audit, { requireComplete: false }).filter(e => e.includes('field host alignment')), []);
+  assert.equal(JSON.stringify(raw), before);
+});
+
+test('field host alignment rejects changed host requests, ancestor overrides and missing evidence', () => {
+  for (const [index, mutate] of [
+    e => { e.inputTrees.reference.rules[1].declarations['text-align'].value = 'start'; },
+    e => { delete e.inputTrees.reference.rules[1].declarations['text-align']; },
+    e => { e.inputTrees.reference.rules[1].declarations['text-align'].important = true; },
+    e => { e.inputTrees.reference.rules[0].declarations['text-align'] = { value: 'left', important: false }; },
+    e => { e.inputTrees.reference.nodes[1].inline.direction = { value: 'rtl', important: false }; },
+    e => { e.inputTrees.reference.nodes[0].attributes.style = 'text-align:center'; },
+    e => { e.inputTrees.reference.styles[1].textAlign = 'start'; },
+    e => { e.inputTrees.reference.styles[0].textAlign = 'left'; },
+    e => { e.inputTrees.astylar.rules[0].textAlign = 'left'; },
+    e => { e.inputTrees.astylar.rules.push({ selector: ':is(.field-shell)', textAlign: 'left' }); },
+    e => { e.inputTrees.astylar.nodes[3].authored.style = { textAlign: 'inherit' }; },
+    e => { e.inputTrees.astylar.nodes[1].normalResolvedStyle.textAlign = 'center'; },
+    e => { e.inputTrees.astylar.nodes[3].interactionResolvedStyle.textAlign = 'left'; },
+    e => { e.inputTrees.astylar.resolvedStyleSource = 'fixture'; },
+    e => { e.inputTrees.astylar.nodes[3].parent = 'page'; },
+  ].entries()) {
+    const raw = fieldHostAlignmentReport(); mutate(raw.results[0]); const a = buildMaterialInputAudit(raw);
+    assert.equal(a.fieldHostAlignmentInputs.length, 0, `mutation ${index}`);
+    assert.equal(a.discrepancies.some(d => d.attribution === 'reviewed-field-host-alignment-request-omission'), false);
+  }
+});
+
+test('field host alignment rejects scalar changes and forged computed descendant or raster claims', () => {
+  for (const mutate of [i => { i.reference.textAlign = 'start'; }, i => { i.astylar.textAlign = 'left'; },
+    i => { delete i.astylarNormalResolvedStyle; }, i => { i.astylarResolvedStyleEvidenceVersion = 1; },
+    i => { i.referenceAuthored[0].declarations['text-align'].value = 'center'; },
+    i => { i.astylarAuthored[0].declarations.textAlign = 'left'; }]) {
+    const raw = fieldHostAlignmentReport(); mutate(raw.results[0].styleInputs[0]);
+    assert.equal(buildMaterialInputAudit(raw).discrepancies.some(d => d.attribution === 'reviewed-field-host-alignment-request-omission'), false);
+  }
+  const audit = buildMaterialInputAudit(fieldHostAlignmentReport());
+  for (const mutate of [a => { a.fieldHostAlignmentInputs[0].computedCandidateVerified = true; },
+    a => { a.fieldHostAlignmentInputs[0].descendantAlignmentVerified = true; },
+    a => { a.fieldHostAlignmentInputs[0].finalRasterVerified = true; },
+    a => { a.fieldHostAlignmentInputs[0].candidatePath[0].normal.textAlign = 'left'; },
+    a => { a.discrepancies.find(d => d.attribution === 'reviewed-field-host-alignment-request-omission').classification = 'equivalent-representation'; },
+    a => { a.discrepancies.find(d => d.attribution === 'reviewed-field-host-alignment-request-omission').reviewedCases = []; }]) {
+    const copy = structuredClone(audit); mutate(copy);
+    assert.ok(validateMaterialInputAudit(copy, { requireComplete: false }).some(e => e.includes('field host alignment')));
+  }
+});
+
 function fieldHostTypographyReport(family = 'autocomplete', pageSize = '16px') {
   const raw = parityReport({}, {}), entry = raw.results[0]; entry.family = family;
   entry.profile = pageSize === '14.4px' ? 'contrast' : pageSize === '18.4px' ? 'custom' : 'light';

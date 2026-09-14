@@ -3,6 +3,27 @@ import test from 'node:test';
 import { chromium } from 'playwright-core';
 import { captureBrowserInputTree } from './input-tree-evidence.mjs';
 
+test('explicit host alignment is not interchangeable with omission under ancestor changes', async () => {
+  const browser = await chromium.launch({ channel: 'chrome', headless: true });
+  try {
+    for (const deviceScaleFactor of [1, 2]) {
+      const page = await browser.newPage({ viewport: { width: 640, height: 400 }, deviceScaleFactor });
+      try {
+        await page.setContent('<main id="frame"><div id="explicit" style="text-align:left">Text</div><div id="omitted">Text</div></main>');
+        const result = await page.evaluate(() => {
+          const frame = document.getElementById('frame');
+          const read = () => ['explicit', 'omitted'].map(id => getComputedStyle(document.getElementById(id)).textAlign);
+          const initial = read(); frame.style.textAlign = 'center'; const centeredParent = read();
+          frame.style.textAlign = 'right'; const rightParent = read(); frame.style.removeProperty('text-align');
+          return { initial, centeredParent, rightParent, restored: read() };
+        });
+        assert.deepEqual(result.initial, ['left', 'start']); assert.deepEqual(result.centeredParent, ['left', 'center']);
+        assert.deepEqual(result.rightParent, ['left', 'right']); assert.deepEqual(result.restored, result.initial);
+      } finally { await page.close(); }
+    }
+  } finally { await browser.close(); }
+});
+
 test('container caret computed color does not prove descendant caret ownership', async () => {
   const browser = await chromium.launch({ channel: 'chrome', headless: true });
   try {
