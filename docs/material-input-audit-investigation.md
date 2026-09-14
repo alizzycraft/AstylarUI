@@ -46,8 +46,14 @@ Two synthetic scale runs preserve **536,877,093 uncompressed bytes**, above the
 runtime **536,870,888** string limit, with identical **527,781-byte** gzip payloads.
 The runs complete in **5,015.0817 / 5,802.4787 ms**, with reported process peak RSS
 **91,564 / 91,868 KiB**. This is a repeated-leaf scale proof, not the real audit.
-Full captured-audit transport verification is running. CLI integration and test/
-provenance registration remain pending; canonical report files are untouched.
+Full captured-audit transport verification now exits **0**, retaining and
+byte-checking **1,532,988,071 uncompressed bytes** in a **45,221,653-byte** gzip
+payload. Encoding plus checking takes **234,613.2947 ms**; process peak RSS is
+**3,791,020 KiB**, including the resident full audit. The report still contains
+**30,043 root proofs**, **386,891 style occurrences**, and **3,210 unresolved
+attributions**. This is transport success, not input-equivalence acceptance.
+CLI integration and test/provenance registration remain pending; canonical
+report files are untouched. Exact hashes and command are in the transport record.
 The legacy small-report decoder retains its string-size limit; the new checker
 needs neither a second complete report object nor a new JSON parser.
 

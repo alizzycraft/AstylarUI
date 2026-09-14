@@ -70,5 +70,91 @@
       "reason": "PowerShell command-line quoting syntax error before imports executed; no transport code was run."
     }
   },
-  "remaining": "Full captured-audit transport replay is running. CLI integration, registration in complete harness/source provenance, and final enforced parity remain pending. Do not claim the final checked-in report is current; it has not been overwritten."
+  "fullCapturedAuditVerification": {
+    "command": "node --input-type=module -e \"import assert from 'node:assert/strict';import{readFileSync}from'node:fs';import{createHash}from'node:crypto';import{buildMaterialInputAudit,validateMaterialInputAudit}from'./tests/material-parity/input-equivalence-audit.mjs';import{encodeMaterialInputAuditStream,assertMaterialInputAuditCurrentStream}from'./tests/material-parity/input-audit-report-stream.mjs';const bytes=readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');const captureSha256=createHash('sha256').update(bytes).digest('hex');assert.equal(captureSha256,'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');console.error('FULL_STREAM_PHASE build-start');const audit=buildMaterialInputAudit(JSON.parse(bytes),{root:process.cwd(),normalLineBoxPath:'artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json',controlLineBoxPath:'artifacts/material-parity/control-line-box-current-ancestry-audit-v3/latest-report.json',supplementalLineBoxPath:'artifacts/material-parity/supplemental-line-box-current-ancestry-audit/latest-report.json',supplementalRoot:'artifacts/material-parity/supplemental-current-ancestry-audit'});console.error('FULL_STREAM_PHASE build-complete');assert.equal(audit.rootInitialStyleInputs.length,30043);assert.equal(audit.summary.totalStyleDifferenceOccurrences,386891);assert.deepEqual(validateMaterialInputAudit(audit),['3210 resolved-style differences still lack root-cause attribution']);const start=performance.now();const packed=await encodeMaterialInputAuditStream(audit);console.error('FULL_STREAM_PHASE encoded');await assertMaterialInputAuditCurrentStream(audit,packed.manifest,packed.payload);console.log(JSON.stringify({captureSha256,rootProofs:audit.rootInitialStyleInputs.length,summary:audit.summary,manifest:packed.manifest,exactByteCheck:true,transportDurationMs:performance.now()-start,maxRssKiB:process.resourceUsage().maxRSS,scope:'Full frozen captured audit encoded and byte-checked in memory; canonical output files not overwritten; strict input-equivalence remains false'}));\"",
+    "exitCode": 0,
+    "sourceBaseline": "09e789d transport proof; builder/classifier and transport sources unchanged during run",
+    "captureSha256": "b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a",
+    "rootProofs": 30043,
+    "summary": {
+      "inputEquivalent": false,
+      "structureDifferences": 88,
+      "uniqueStyleDifferences": 8339,
+      "totalStyleDifferenceOccurrences": 386891,
+      "classifications": {
+        "application-plugin-authoring-defect": 526,
+        "equivalent-representation": 2678,
+        "intentional-documented-limitation": 312,
+        "parity-harness-defect": 4823
+      },
+      "propertyGroups": {
+        "interaction": 351,
+        "layout": 3106,
+        "other": 351,
+        "paint": 1255,
+        "transform": 937,
+        "typography": 2339
+      },
+      "affectedFamilies": {
+        "autocomplete": 147,
+        "badge": 282,
+        "bottom-sheet": 412,
+        "button": 305,
+        "button-toggle": 260,
+        "card": 376,
+        "checkbox": 220,
+        "chips": 317,
+        "core": 145,
+        "datepicker": 147,
+        "dialog": 487,
+        "divider": 300,
+        "expansion": 264,
+        "form-field": 147,
+        "grid-list": 278,
+        "icon": 128,
+        "input": 147,
+        "list": 149,
+        "menu": 150,
+        "paginator": 269,
+        "progress-bar": 130,
+        "progress-spinner": 124,
+        "radio": 304,
+        "select": 147,
+        "sidenav": 128,
+        "slide-toggle": 190,
+        "slider": 331,
+        "snack-bar": 262,
+        "sort": 151,
+        "stepper": 341,
+        "table": 142,
+        "tabs": 342,
+        "timepicker": 147,
+        "toolbar": 273,
+        "tooltip": 249,
+        "tree": 148
+      },
+      "unclassifiedDifferences": 0,
+      "unresolvedAttributions": 3210,
+      "sourceFindings": 131,
+      "unexplainedSourceFindings": 0,
+      "undetectedSourceDefinitions": 0
+    },
+    "manifest": {
+      "format": "astylar-material-input-audit-gzip",
+      "formatVersion": 1,
+      "auditSchemaVersion": 3,
+      "payload": "material-input-equivalence-audit.json.gz",
+      "encoding": "utf-8",
+      "compression": "gzip",
+      "compressedBytes": 45221653,
+      "compressedSha256": "9f692165b1b539a0f434c0686cd7d3faf0a3a91a0294ca11e359fb826c745d5a",
+      "uncompressedBytes": 1532988071,
+      "uncompressedSha256": "06cec33733c84da07f45558f2228d422fc37f8021fece58709a03f2de9a761a8"
+    },
+    "exactByteCheck": true,
+    "transportDurationMs": 234613.29470000003,
+    "maxRssKiB": 3791020,
+    "scope": "Full frozen captured audit encoded and byte-checked in memory; canonical output files not overwritten; strict input-equivalence remains false"
+  },
+  "remaining": "Full captured-audit transport replay passed. CLI integration, registration in complete harness/source provenance, and final enforced parity remain pending. The final checked-in report has not been overwritten."
 }
