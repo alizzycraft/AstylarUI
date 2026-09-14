@@ -24,8 +24,8 @@ to the new diagnostic's observation, not a renderer or canonical fixture change.
 `node --test tests/material-parity/root-initial-style-sensitivity.spec.mjs`
 passes **4/4 twice**, **3,128.255 ms / 4,254.2552 ms**, Chrome
 **152.0.7977.76**, DPR **1 and 2**, with identical observations. The standalone
-test is not included in the pre-existing full harness currently running; that
-run must not be described as covering this new proof. Before assigning root
+test was not included in the pre-existing full harness, which subsequently
+passed 606/606; that run must not be described as covering this new proof. Before assigning root
 attributions, join the complete captured ancestry, authored rules, resets,
 direction/writing mode and all candidate declaration stages. Candidate consumers,
 descendant overrides, geometry and final raster remain independent obligations.
@@ -104,9 +104,11 @@ limitation / 3,647 harness**; **131 source findings / 98 fingerprints** remain.
 Strict validation still rejects the incomplete audit solely for **2,570 unresolved
 attributions**, down from 2,576. This verifies the bounded alignment finding,
 not overall input equivalence or output parity.
-The identical complete harness file set is now being retried with
-`--test-concurrency=1`; no assertions or files are removed. Its full gate remains
-pending. No renderer or
+The isolated retry of the identical complete harness file set with
+`--test-concurrency=1` exits **0**, **606/606 passed**, **686,020.2073 ms**, with
+no failures, skips or cancellations. No assertions or files were removed.
+The later standalone root-style sensitivity proof has its own repeated 4/4
+results and was not part of this run. No renderer or
 canonical fixture inputs have changed.
 
 ## Container caret-color diagnostics do not establish editable caret rendering

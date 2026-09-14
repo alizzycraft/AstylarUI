@@ -23,7 +23,7 @@
     ],
     "observationsIdenticalAcrossRuns": true,
     "initialProbeFailure": "The original parent-top displacement assertion failed twice (DPR 1/2): expected -3px, actual 0px. Inline vertical alignment also changes the line baseline. The corrected diagnostic includes a zero-height inline baseline marker and checks the probe bottom relative to it; no production or canonical comparison inputs changed.",
-    "fullHarnessCoverage": "This standalone diagnostic has its own explicit command. The currently running pre-existing harness does not include this newly added file; do not count that run as coverage of this proof."
+    "fullHarnessCoverage": "This standalone diagnostic has its own explicit command and passes 4/4 twice. The pre-existing serial harness subsequently passes 606/606 in 686020.2073 ms but did not include this newly added file; do not count that run as coverage of this proof."
   },
   "observations": [
     {
