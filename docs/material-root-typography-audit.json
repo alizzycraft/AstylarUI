@@ -3539,6 +3539,17 @@
   "verification": {
     "focusedCommand": "node --test --test-name-pattern='root typography|field host|records source fingerprints and actual visual acceptance fields' tests/material-parity/input-equivalence-audit.spec.mjs",
     "fullReplayCommand": "node --input-type=module -e \"import{readFileSync}from'node:fs';import{buildMaterialInputAudit,validateMaterialInputAudit}from'./tests/material-parity/input-equivalence-audit.mjs';const p=JSON.parse(readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json'));const a=buildMaterialInputAudit(p,{root:process.cwd(),normalLineBoxPath:'artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json',controlLineBoxPath:'artifacts/material-parity/control-line-box-current-ancestry-audit-v3/latest-report.json',supplementalLineBoxPath:'artifacts/material-parity/supplemental-line-box-current-ancestry-audit/latest-report.json',supplementalRoot:'artifacts/material-parity/supplemental-current-ancestry-audit'});const r=a.rootTypographyInputs,d=a.discrepancies.filter(x=>x.attribution==='reviewed-root-typography-declaration-stage');const summary={proofs:r.length,cases:new Set(r.map(x=>x.case)).size,groups:d.length,occurrences:d.reduce((n,x)=>n+x.occurrences,0),families:[...new Set(r.map(x=>x.family))].map(f=>({family:f,cases:new Set(r.filter(x=>x.family===f).map(x=>x.case)).size})),sample:r[0],summary:a.summary,sourceFingerprints:a.sourceFingerprints.length};console.log('ROOT',JSON.stringify(summary));console.log('STRICT',JSON.stringify(validateMaterialInputAudit(a)));\"",
+    "fullHarness": {
+      "command": "npm run parity:harness:check",
+      "sourceCommit": "9ef6865",
+      "passed": 563,
+      "failed": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "durationMs": 355033.1466,
+      "exitCode": 0,
+      "scope": "Audit harness self-check, not input-equivalence or rendering acceptance."
+    },
     "focusedPassed": 9,
     "focusedFailed": 0,
     "focusedDurationMs": 27652.4912,

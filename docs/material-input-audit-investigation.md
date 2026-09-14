@@ -82,8 +82,9 @@ Focused command:
 
 The initial combined run passed **8/8**, 22.325 seconds. The follow-up including
 the root-index integrity test passed **9/9**, 27.652 seconds, exit 0.
-The 559-test field-host harness gate below predates the root collector. Neither it nor
-this attribution establishes input equivalence, correct descendant rendering,
+The subsequent full `npm run parity:harness:check` run on `9ef6865` passed
+**563/563**, with zero failures/skips/cancellations, 355.033 seconds, exit 0.
+Neither the harness gate nor this attribution establishes input equivalence, correct descendant rendering,
 supplemental overlay coverage or the final unfiltered enforced parity gate.
 
 ## Shared field hosts: missing Material typography token ownership
