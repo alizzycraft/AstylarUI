@@ -65,6 +65,8 @@
     "Keep the eight tooltip-open state mismatches linked to existing fixture and harness findings; do not delete the scenario or fabricate an HTML counterpart."
   ],
   "verification": {
+    "harnessCommand": "npm run parity:harness:check",
+    "harnessResult": { "tests": 577, "passed": 577, "failed": 0, "exitCode": 0, "durationMs": 437579.0035 },
     "directRuleCoverageSweep": {"command":"node --input-type=module -e \"import{readFileSync}from'node:fs';import{createHash}from'node:crypto';import{isDeepStrictEqual as eq}from'node:util';const p=JSON.parse(readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json')),cache=new Map(),gaps=[];let checked=0;for(const [kind,es]of[['static',p.results],['interaction',p.interactions]])for(const e of es){const ref=e.inputTrees.reference;if(!cache.has(ref.file)){const bytes=readFileSync(ref.file);if(createHash('sha256').update(bytes).digest('hex')!==ref.sha256)throw Error('tree hash mismatch');const t=JSON.parse(bytes);if(t.errors.length)throw Error('tree errors');cache.set(ref.file,t);}const t=cache.get(ref.file);for(const i of e.styleInputs){if(!i.reference)continue;const ns=t.nodes.filter(n=>(n.attributes?.['data-parity-id']??n.attributes?.id)===i.id);if(ns.length!==1)continue;checked++;for(const r of ns[0].rules.map(j=>t.rules[j]).filter(r=>r.active)){if(i.referenceAuthored.some(a=>a.selector===r.selector&&eq(a.declarations,r.declarations)))continue;gaps.push({case:kind+':'+e.family+'@'+e.profile+'/'+e.viewport.id+(e.state?'/'+e.state:''),id:i.id,source:r.source,selector:r.selector,declarations:r.declarations});}}}console.log(JSON.stringify({checked,verifiedReferenceTreeFiles:cache.size,missingActiveRules:gaps.length,gaps}));\"","result":{"checked":6496,"verifiedReferenceTreeFiles":2311,"missingActiveRules":0,"gaps":[]},"exitCode":0,"scope":"All main-matrix uniquely ID-mapped reference scalar nodes, checking active captured rule presence only. Generated aliases, duplicate parity IDs, inline declarations, cascade ordering and output equivalence are not covered by this sweep."},
     "indexedCommand": "node --test --test-name-pattern='generated node mapping|generated mapping case index|captured Material scalar collector' tests/material-parity/input-equivalence-audit.spec.mjs tests/material-parity/input-tree-evidence.spec.mjs",
     "indexedResult": { "tests": 5, "passed": 5, "exitCode": 0, "durationMs": 4691.186 },
@@ -76,7 +78,7 @@
       "durationMs": 2713.8434
     },
     "replay": "buildGeneratedMappingAudit(JSON.parse(readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json'))) with raw tree SHA-256 verification",
-    "limits": "Prior harness completed 571 tests; the later button case-index test passed separately. This new mapping increment has not yet completed its own full harness run. Complete enforced rendering parity remains pending. Main strict audit remains 2885 unresolved attributions; this standalone mapping evidence does not waive them."
+    "limits": "The completed 577-test harness includes all five new mapping/layer tests and the previously separate button case-index test. This verifies audit machinery, not input or rendering equivalence. Complete enforced rendering parity remains pending. Main strict audit remains 2885 unresolved attributions; this standalone mapping evidence does not waive them."
   },
   "summary": {
     "observations": 387,

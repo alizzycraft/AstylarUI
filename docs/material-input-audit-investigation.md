@@ -79,6 +79,12 @@ indices, outside-artifact paths and mismatched digests. This increment changes
 audit evidence only: the main strict audit still has **2,885 unresolved
 attributions**, and the complete enforced rendering matrix remains required.
 
+The subsequent full `npm run parity:harness:check` completed with **577/577
+passing**, exit 0, **437.579 seconds**, including all five new tests and the
+previously separately checked button case index. The finding deliberately
+retains the scalar collector's layer omission; this green harness result is
+not a claim that the instrumentation defect, renderer or Material parity is fixed.
+
 ## Material buttons: omitted explicit CSS appearance reset
 
 The [button appearance case index](material-button-appearance-audit.json)
