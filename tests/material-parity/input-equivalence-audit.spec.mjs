@@ -1362,7 +1362,13 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   const report = parityReport({}, {});
   const audit = buildMaterialInputAudit(report);
   assert.equal(audit.coverage.visualParityGreen, true);
-  assert.equal(audit.sourceFingerprints.length, 90);
+  assert.equal(audit.sourceFingerprints.length, 91);
+  assert.ok(audit.sourceFingerprints.some(entry => entry.file === 'tests/material-parity/field-host-typography-evidence.mjs'));
+  const fieldHost = audit.sourceFindings.find(entry => entry.id === 'fixture-field-host-typography-tokens-omitted');
+  assert.equal(fieldHost?.detected, true);
+  assert.equal(fieldHost?.classification, 'application-plugin-authoring-defect');
+  assert.match(fieldHost.introducedBy, /2f44011/);
+  assert.ok(audit.implementationPlan.some(entry => entry.priority === 5.225 && /token ownership/.test(entry.action)));
   for (const file of ['examples/material-showcase/src/app/font-relative-box-audit.spec.ts',
     'examples/material-showcase/node_modules/astylarui/dist/lib/app/services/dom/elements/element-dimension.service.js'])
     assert.equal(audit.sourceFingerprints.filter(entry => entry.file === file).length, 1);
@@ -10187,6 +10193,124 @@ test('an inventoried hidden or anonymous element still requires resolved style e
   const audit = buildMaterialInputAudit(report);
   assert.equal(audit.summary.inputEquivalent, false);
   assert.ok(validateMaterialInputAudit(audit).some((error) => error.includes('lack resolved style evidence')));
+});
+
+function fieldHostTypographyReport(family = 'autocomplete', pageSize = '16px') {
+  const raw = parityReport({}, {}), entry = raw.results[0]; entry.family = family;
+  entry.profile = pageSize === '14.4px' ? 'contrast' : pageSize === '18.4px' ? 'custom' : 'light';
+  const declarations = values => Object.fromEntries(Object.entries(values).map(([key, value]) => [key, { value, important: false }]));
+  const component = { fontFamily: 'Roboto', fontSize: '16px', lineHeight: '24px' };
+  const page = { fontFamily: 'Roboto, Arial, sans-serif', fontSize: pageSize };
+  const tokenRule = { selector: '.mat-mdc-form-field', declarations: declarations({
+    'font-family': 'var(--mat-form-field-container-text-font, var(--mat-sys-body-large-font))',
+    'font-size': 'var(--mat-form-field-container-text-size, var(--mat-sys-body-large-size))',
+    'line-height': 'var(--mat-form-field-container-text-line-height, var(--mat-sys-body-large-line-height))',
+  }) };
+  const reference = { schemaVersion: 1, errors: [], styles: [{ ...page, lineHeight: 'normal' }, component],
+    rules: [{ selector: '.frame', active: true, conditions: [], declarations: declarations({
+      'font-family': page.fontFamily, 'font-size': 'calc(16px * var(--scale))' }) },
+      { ...tokenRule, active: true, conditions: [] }],
+    nodes: [
+      { key: 'frame', parent: null, type: 'main', attributes: { class: 'frame' }, style: 0, rules: [0] },
+      { key: 'section', parent: 'frame', type: 'section', attributes: { id: `${family}-root` }, style: 0, rules: [] },
+      { key: 'host', parent: 'section', type: 'mat-form-field', attributes: { id: `${family}-primary`, class: 'mat-mdc-form-field' }, style: 1, rules: [1] },
+    ].map(n => ({ ...n, ownText: '', inline: {}, pseudoElements: [] })),
+  };
+  const astylar = { schemaVersion: 1, errors: [], resolvedStyleEvidenceVersion: 2, resolvedStyleSource: 'core-style-inspection', resolvedStyleRevision: 9,
+    rules: [{ selector: '#page', ...page }, { selector: '.field-shell', width: '100%' },
+      { selector: '.material-table th', fontSize: '16px' }],
+    nodes: [{ key: 'root', parent: null, authored: {} },
+      { key: 'page', parent: 'root', authored: { type: 'main', id: 'page' } },
+      { key: 'section', parent: 'page', authored: { type: 'section', id: `${family}-root` } },
+      { key: 'host', parent: 'section', authored: { type: 'div', id: `${family}-primary`, class: 'field-shell' } },
+    ].map(n => n.key === 'root' ? n : ({ ...n, resolvedStyle: n.key === 'page' ? { ...page } : {},
+      normalResolvedStyle: n.key === 'page' ? { ...page } : {}, interactionResolvedStyle: n.key === 'page' ? { ...page } : {} })),
+  };
+  entry.inputTrees = { reference, astylar };
+  entry.styleInputs = [{ id: `${family}-primary`, reference: { ...component }, astylar: {},
+    astylarNormalResolvedStyle: {}, astylarInteractionResolvedStyle: {}, astylarResolvedStyleEvidenceVersion: 2,
+    referenceStructure: { schemaVersion: 2, type: 'mat-form-field', ownText: '', text: '' },
+    astylarStructure: { schemaVersion: 2, type: 'div', ownText: '', text: '' },
+    referenceAuthored: [structuredClone(tokenRule)], astylarAuthored: [{ selector: '.field-shell', declarations: { width: '100%' } }],
+  }];
+  return raw;
+}
+
+test('field host typography preserves original token ownership across families, scales and states', () => {
+  const raw = parityReport({}, {}); raw.results = [];
+  for (const family of ['form-field', 'input', 'autocomplete', 'select', 'datepicker', 'timepicker'])
+    for (const size of ['16px', '14.4px', '18.4px']) for (const state of [undefined, 'hover', 'held', 'focus', 'disabled']) {
+      const entry = fieldHostTypographyReport(family, size).results[0];
+      if (state) { entry.state = state; raw.interactions.push(entry); } else raw.results.push(entry);
+    }
+  const before = JSON.stringify(raw), audit = buildMaterialInputAudit(raw);
+  assert.equal(audit.fieldHostTypographyInputs.length, 270);
+  const diffs = audit.discrepancies.filter(d => d.attribution === 'reviewed-field-host-typography-token-omission');
+  assert.equal(diffs.reduce((n, d) => n + d.occurrences, 0), 270);
+  for (const d of diffs) {
+    assert.equal(d.classification, 'application-plugin-authoring-defect'); assert.equal(d.astylar, undefined);
+    assert.equal(d.reviewEvidence.values.candidateLocalDeclaration, '<omitted>');
+    assert.equal(d.reviewEvidence.referencePath.length, 3); assert.equal(d.reviewEvidence.candidatePath.length, 3);
+    assert.equal(d.reviewEvidence.finalRasterVerified, false);
+    assert.equal(d.reviewedCases.length, d.occurrences);
+  }
+  assert.ok(!validateMaterialInputAudit(audit, { requireComplete: false }).some(e => e.includes('field host typography')));
+  assert.equal(JSON.stringify(raw), before);
+});
+
+test('field host typography rejects incomplete, competing and altered ancestry or token declarations', () => {
+  for (const mutate of [
+    e => { e.inputTrees.reference.rules[1].active = false; },
+    e => { e.inputTrees.reference.rules[1].declarations['font-size'].value = '15px'; },
+    e => { e.inputTrees.reference.rules[1].declarations.font = { value: 'inherit', important: false }; },
+    e => { e.inputTrees.reference.nodes[2].inline['font-size'] = { value: '16px', important: true }; },
+    e => { e.inputTrees.reference.nodes[2].parent = 'frame'; },
+    e => { e.inputTrees.reference.styles[1].lineHeight = 'normal'; },
+    e => { e.inputTrees.astylar.rules.push({ selector: '.field-shell:hover', fontSize: '16px' }); },
+    e => { e.inputTrees.astylar.rules.push({ selector: '.unknown .field-shell', fontSize: '16px' }); },
+    e => { e.inputTrees.astylar.rules.push({ selector: ':is(div)', fontSize: '16px' }); },
+    e => { e.inputTrees.astylar.rules.push({ selector: '.field-shell', all: 'initial' }); },
+    e => { e.inputTrees.astylar.rules.push({ selector: '.field-shell', animation: 'size 1s' }); },
+    e => { e.inputTrees.astylar.nodes[3].authored.style = { fontSize: 'inherit' }; },
+    e => { e.inputTrees.astylar.nodes[3].interactionResolvedStyle.fontSize = '16px'; },
+    e => { delete e.inputTrees.astylar.nodes[1].normalResolvedStyle; },
+    e => { e.inputTrees.astylar.nodes[3].parent = 'root'; },
+    e => { e.inputTrees.astylar.nodes.push(structuredClone(e.inputTrees.astylar.nodes[3])); },
+    e => { delete e.inputTrees.astylar.resolvedStyleRevision; },
+    e => { e.inputTrees.astylar.resolvedStyleSource = 'fixture'; },
+    e => { e.inputTrees.astylar.errors.push('incomplete capture'); },
+  ]) {
+    const raw = fieldHostTypographyReport(); mutate(raw.results[0]); const audit = buildMaterialInputAudit(raw);
+    assert.equal(audit.fieldHostTypographyInputs.length, 0, String(mutate));
+    assert.ok(audit.discrepancies.every(d => d.attribution !== 'reviewed-field-host-typography-token-omission'), String(mutate));
+  }
+});
+
+test('field host typography scalar mapping rejects changed stages, ownership and fabricated review records', () => {
+  for (const mutate of [
+    s => { s.reference.fontSize = '15px'; },
+    s => { s.astylar.fontSize = '16px'; },
+    s => { s.astylarNormalResolvedStyle.fontSize = '16px'; },
+    s => { s.astylarInteractionResolvedStyle.lineHeight = 'normal'; },
+    s => { delete s.astylarResolvedStyleEvidenceVersion; },
+    s => { s.referenceStructure.type = 'input'; },
+    s => { s.referenceAuthored[0].active = false; },
+    s => { s.referenceAuthored[0].declarations['font-size'].value = 'inherit'; },
+    s => { s.astylarAuthored = []; },
+  ]) {
+    const raw = fieldHostTypographyReport(); mutate(raw.results[0].styleInputs[0]); const audit = buildMaterialInputAudit(raw);
+    assert.ok(audit.discrepancies.filter(d => d.property === 'fontSize').every(d => d.attribution !== 'reviewed-field-host-typography-token-omission'), String(mutate));
+  }
+  const baseline = buildMaterialInputAudit(fieldHostTypographyReport());
+  for (const mutate of [
+    a => { a.fieldHostTypographyInputs.pop(); },
+    a => { a.fieldHostTypographyInputs[0].values.reference = 'arial'; },
+    a => { a.discrepancies.find(d => d.attribution === 'reviewed-field-host-typography-token-omission').reviewedCases = []; },
+    a => { a.discrepancies.find(d => d.attribution === 'reviewed-field-host-typography-token-omission').reviewEvidence.candidatePath.pop(); },
+  ]) {
+    const copy = structuredClone(baseline); mutate(copy);
+    assert.ok(validateMaterialInputAudit(copy, { requireComplete: false }).some(e => e.includes('field host typography')), String(mutate));
+  }
 });
 
 function chipHostTypographyReport(fontSize = '16px') {

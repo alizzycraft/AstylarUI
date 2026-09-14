@@ -660,6 +660,16 @@ export const sourceAuditDefinitions = Object.freeze([
     justification: 'The 104-boundary light/dark DPR 1/2 navigation capture preserves 48 cases with unequal native disabled inputs. Material keeps the native navigation button enabled while exposing aria-disabled and tabIndex:-1, and explicitly guards its click handler. Candidate authors native disabled at the first/last boundaries. Correct range guards do not establish equivalent focus retention or event behavior. Restore equivalent inputs through public APIs, then reduce any unsupported disabled-interactive semantics; do not force focus with a paginator-specific workaround. Forty of 44 focus mismatches coincide with unequal native-disabled inputs, while the enabled held mismatch has a separate minimal core proof.',
   }),
   Object.freeze({
+    id: 'fixture-field-host-typography-tokens-omitted',
+    introducedBy: '2f44011 introduced the shared field-shell without component typography tokens; source history only',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`selector: '\.field-shell', position: 'relative', width: '100%', height:`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase form-field host typography token authoring',
+    justification: 'The reference mat-form-field applies container font, size and line-height tokens at the host. The shared candidate field-shell omits them while its page declares a fallback stack and profile-scaled size and child controls/labels receive independent styles. Complete frame/section/host ancestry and original token rules identify this authoring omission before core consumption. Preserve original token ownership instead of forcing fonts or offsets on descendants. A light/dark inherited page size of 16px is not itself a visible size failure; contrast/custom inheritance differs. Local declaration inspection is not a synthesized computed font, and the independent core em sizing defect must remain separate.',
+    focusedProof: 'tests/material-parity/input-equivalence-audit.spec.mjs',
+  }),
+  Object.freeze({
     id: 'core-em-box-size-uses-uncomputed-font',
     introducedBy: '21bdab9e930783efb5cf34ab031fd04f2656155b introduced raw local font parsing for em dimensions; source history only, no historical runtime bisect',
     file: 'src/app/services/dom/elements/element-dimension.service.ts',

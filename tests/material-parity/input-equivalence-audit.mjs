@@ -9,6 +9,7 @@ import { collectCalendarCloseEvidence } from './calendar-close-evidence.mjs';
 import { collectTooltipStateEvidence } from './tooltip-state-evidence.mjs';
 import { collectPaginatorNavigationEvidence } from './paginator-navigation-evidence.mjs';
 import { chipHostTypographyAttribution, collectChipHostTypographyInputs, classifyChipHostTypographyInput } from './chip-host-typography-evidence.mjs';
+import { fieldHostTypographyAttribution, collectFieldHostTypographyInputs, classifyFieldHostTypographyInput } from './field-host-typography-evidence.mjs';
 import { collectNonGridTemplateInputs, classifyNonGridTemplateInput, nonGridTemplateAttribution, gridTemplateProperties } from './grid-template-input-evidence.mjs';
 import { selectorCanApply, borderColorProperties, borderInitialAttribution, collectBorderInitialInputs, classifyBorderInitialInput,
   buttonBorderResetAttribution, collectButtonBorderResetInputs, classifyButtonBorderResetInput,
@@ -105,6 +106,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const chipOutlineInputs = collectChipOutlineInputs(elementInventory, canonicalStyle);
   const nonGridTemplateInputs = collectNonGridTemplateInputs(elementInventory);
   const chipHostTypographyInputs = collectChipHostTypographyInputs(elementInventory, reviewedTemplateTextMappings, canonicalStyle, typographySelectorCanApply);
+  const fieldHostTypographyInputs = collectFieldHostTypographyInputs(elementInventory, canonicalStyle, typographySelectorCanApply);
   const typographyCases = [...cases, ...supplementalCalendarClose.cases, ...supplementalTooltipState.cases,
     ...supplementalPaginatorNavigation.cases];
   const rawControlTypography = collectControlTypographyEvidence(typographyCases, elementInventory);
@@ -128,7 +130,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const controlTypography = attributeObservedSupplementalLineBoxes(attributeObservedControlLineBoxes(
     attributeObservedNormalLineBoxes(rawControlTypography, elementInventory, normalLineBoxes), elementInventory, controlLineBoxes),
     elementInventory, supplementalLineBoxes);
-  const discrepancies = collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs, nonGridTemplateInputs, buttonTypographyScalarInputs, chipHostTypographyInputs);
+  const discrepancies = collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs, nonGridTemplateInputs, buttonTypographyScalarInputs, chipHostTypographyInputs, fieldHostTypographyInputs);
   const classifications = countBy(discrepancies, (entry) => entry.classification);
   const propertyGroupCounts = countBy(discrepancies, (entry) => entry.propertyGroup);
   const familyCounts = countBy(discrepancies, (entry) => entry.family);
@@ -202,6 +204,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
     nonGridTemplateInputs,
     buttonTypographyScalarInputs,
     chipHostTypographyInputs,
+    fieldHostTypographyInputs,
     retainedTypography,
     controlTypography,
     sourceFindings,
@@ -230,6 +233,18 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
   if (requireComplete && report.elementInventory.resolvedStyleGaps.length > 0) errors.push(`${report.elementInventory.resolvedStyleGaps.length} inventoried elements lack resolved style evidence`);
   if (requireComplete && report.elementInventory.stateStyleGaps.length > 0) errors.push(`${report.elementInventory.stateStyleGaps.length} state cases lack effective style provenance`);
   if (report.elementInventory.errors.length > 0) errors.push(`${report.elementInventory.errors.length} full-tree collection errors`);
+  if (JSON.stringify(report.fieldHostTypographyInputs) !== JSON.stringify(collectFieldHostTypographyInputs(report.elementInventory, canonicalStyle, typographySelectorCanApply))) {
+    errors.push('field host typography evidence does not replay from captured token ownership');
+  }
+  for (const entry of report.discrepancies.filter(d => d.attribution === fieldHostTypographyAttribution)) {
+    const proof = report.fieldHostTypographyInputs?.find(p => p.case === entry.reviewEvidence?.case && p.element === entry.element && p.property === entry.property);
+    if (!proof || entry.classification !== 'application-plugin-authoring-defect' || entry.reference !== proof.values.reference || entry.astylar !== undefined ||
+        JSON.stringify(proof) !== JSON.stringify(entry.reviewEvidence) || !Array.isArray(entry.reviewedCases) ||
+        entry.reviewedCases.length !== entry.occurrences || new Set(entry.reviewedCases).size !== entry.occurrences ||
+        entry.reviewedCases.some(key => !report.fieldHostTypographyInputs?.some(p => p.case === key && p.element === entry.element && p.property === entry.property && p.values.reference === entry.reference))) {
+      errors.push('field host typography classification lacks exact owner, stage and case evidence');
+    }
+  }
   if (JSON.stringify(report.chipHostTypographyInputs) !== JSON.stringify(collectChipHostTypographyInputs(report.elementInventory, reviewedTemplateTextMappings, canonicalStyle, typographySelectorCanApply))) {
     errors.push('chip host typography evidence does not replay from captured label ownership');
   }
@@ -953,8 +968,9 @@ export function renderMaterialInputAuditMarkdown(report) {
   return lines.join('\n');
 }
 
-function collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs, nonGridTemplateInputs, buttonTypographyScalarInputs, chipHostTypographyInputs) {
+function collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs, nonGridTemplateInputs, buttonTypographyScalarInputs, chipHostTypographyInputs, fieldHostTypographyInputs) {
   const grouped = new Map();
+  const fieldTypographyByCaseIdProperty = new Map(fieldHostTypographyInputs.map(p => [JSON.stringify([p.case, p.element, p.property]), p]));
   const chipTypographyByCaseIdProperty = new Map(chipHostTypographyInputs.map(p => [JSON.stringify([p.case, p.element, p.property]), p]));
   const buttonTypographyByCaseIdProperty = new Map(buttonTypographyScalarInputs.map(p => [JSON.stringify([p.case, p.element, p.property]), p]));
   const nonGridTemplateByCaseAndId = new Map(nonGridTemplateInputs.map(entry => [JSON.stringify([entry.case, entry.element]), entry]));
@@ -997,6 +1013,8 @@ function collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInp
             ?? classifyChipHostTypographyInput(input, property, referenceValue, astylarValue,
               chipTypographyByCaseIdProperty.get(JSON.stringify([key, input.id, property])), canonicalStyle)
             ?? classifyReviewedRootInput(benchmarkCase, input, property, referenceValue, astylarValue)
+            ?? classifyFieldHostTypographyInput(input, property, referenceValue, astylarValue,
+              fieldTypographyByCaseIdProperty.get(JSON.stringify([key, input.id, property])), canonicalStyle)
             ?? classifyReviewedContainerInput(benchmarkCase, input, property, referenceValue, astylarValue)
             ?? classifyReviewedBadgePaint(benchmarkCase, input, property, referenceValue, astylarValue)
             ?? classifyReviewedTableFontSnapshot(input, property, referenceValue, astylarValue,
@@ -1021,7 +1039,7 @@ function collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInp
             ...(classification.attribution ? { attribution: classification.attribution } : {}),
             ...(classification.reviewEvidence ? { reviewEvidence: classification.reviewEvidence } : {}),
             ...([borderInitialAttribution, buttonBorderResetAttribution, outlineTokenAttribution, chipOutlineAttribution,
-              'reviewed-root-flow-dependency', nonGridTemplateAttribution, 'reviewed-button-typography-host-input', chipHostTypographyAttribution].includes(classification.attribution) ? { reviewedCases: [] } : {}),
+              'reviewed-root-flow-dependency', nonGridTemplateAttribution, 'reviewed-button-typography-host-input', chipHostTypographyAttribution, fieldHostTypographyAttribution].includes(classification.attribution) ? { reviewedCases: [] } : {}),
             occurrences: 0,
             cases: [],
             states: [],
@@ -7800,6 +7818,7 @@ function sourceFingerprints(root) {
     'tests/material-parity/input-equivalence-policy.mjs',
     'tests/material-parity/border-initial-input-evidence.mjs',
     'tests/material-parity/chip-host-typography-evidence.mjs',
+    'tests/material-parity/field-host-typography-evidence.mjs',
     'tests/material-parity/normal-line-box-report.mjs',
     'tests/material-parity/control-line-box-report.mjs',
     'tests/material-parity/control-line-box-validation.mjs',
@@ -7827,6 +7846,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('field host typography preserves/,
+      'form-field host token omission with complete ancestry and state evidence', 'Six field families retain Material host token declarations and computed values separately from candidate page typography and omitted section/host declarations. Three page scales, state cases, competing/reset/motion rules, source provenance, scalar stages and tampered reports are checked. Equal light/dark page size is not presented as a visible size failure; no candidate computed value is synthesized and descendant overrides, core length resolution and raster remain separate.'),
     proof(root, 'examples/material-showcase/src/app/font-relative-box-audit.spec.ts', /describe\('Material audit: inherited font-relative boxes/,
       'confirmed inherited and relative-font em box sizing failures', 'Two real-browser runs reproduce the same six failing and four passing trials at DPR1. Identical CSS/SiteData declarations, parent 24/32px fonts, inherited/explicit-px/1.5em/150% font modes and pixel-box controls isolate raw local font parsing in core dimensions. Browser and retained text fonts agree in all ten trials; parent sizes, authored declarations, diagnostics and zero final scene resources pass. Only child size expectations fail. Final mesh projection measures output without feeding it back into layout. No blanket Material scalar attribution, other em-property coverage, dynamic-state or glyph-raster claim follows.'),
     proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('chip host typography preserves/,
@@ -7990,6 +8011,7 @@ function implementationPlan() {
     { priority: 5.2, rootCause: 'Material control typography tokens and nested line boxes are replaced by fixture defaults', action: 'Translate the original filled/outlined/text button and tab font/tracking tokens instead of inheriting the document control stack or omitting tracking. Restore toolbar button line-height inheritance instead of copying the density-specific container height. Preserve the tab text-label line-height:1 inside its independently sized content/control rather than applying the outer line-height to a flattened value label. Preserve alpha ink as a distinct authored input. Then investigate any core API or equal-input text mismatch; do not adjust font size, baseline, or offsets to recover screenshot similarity.' },
     { priority: 5.21, rootCause: 'Retained labels inherit the page fallback stack instead of component font tokens', action: 'Preserve the legitimate page font reset but restore each captured Material component font-family override and its inheritance path. Complete normal/effective candidate ancestry plus retained text distinguish this omission from the separate core font-list rewrite. Do not declare fallback lists equivalent because the installed Roboto renders current characters similarly, and do not change the page reset globally to hide missing component declarations. Re-run equal-input fallback, shaping, line-box and state-paint proofs after input restoration.' },
     { priority: 5.22, rootCause: 'Retained labels omit inherited component line-height and tracking tokens', action: 'Restore the captured reference text-metric tokens and inheritance structure instead of substituting fixed label heights, padding, vertical alignment or offsets. Complete normal/effective ancestry separates missing input from core metric defects. Preserve independent equal-input natural-line-height and shaping failures, and verify wrapping, placement and state paint only after equivalent inputs are supplied.' },
+    { priority: 5.225, rootCause: 'Shared form-field hosts omit component typography tokens', action: 'Restore reference container font, size and line-height token ownership through the shared style input path for form-field, input, autocomplete, select, datepicker and timepicker. Captured candidate page fallback/scaled typography and omitted host declarations are separate from child control and label substitutions. Preserve original tokens and ancestry; do not hardcode a host size, patch descendants, or infer computed candidate values from omitted local diagnostics. Light/dark page size currently matches 16px but contrast/custom does not. Verify equal-input core inheritance, relative lengths, field content, responsive/state changes and final raster after restoring authored intent.' },
     { priority: 5.23, rootCause: 'Field-label tracking is tuned separately from the reference typography and transform', action: 'Restore the captured filled-label tracking token together with the reference wrapper typography and transform. The explicit .4/.65px state-dependent substitutions are not the reference .496px CSS input and must not be justified by scaling or calibrating apparent glyph widths. Preserve the independent core transform-order, percentage-translation, origin and text-shaping proofs; verify equivalent inputs before assessing any remaining label placement or raster mismatch.' },
     { priority: 5.24, rootCause: 'Tree direct flex text is replaced by a fixed-height label wrapper', action: 'Restore original direct text ownership and normal line-height together with the reference component font tokens. The explicit 20px height/line-height wrapper introduced in 7159b1d is not equivalent to the original anonymous flex text item. Reduce any remaining discrepancy through equal-input anonymous flex-item sizing, natural line metrics and centering tests; do not preserve or recalibrate a fixed wrapper to match a screenshot. Keep the separate font-stack, font-size and core normal-line-box findings visible.' },
     { priority: 5.25, rootCause: 'Stepper numeric icon positioning is replaced by centered text in a fixed span', action: 'Restore the original numeric span, separate icon-content wrapper, top/left 50% and translate(-50%, -50%) inputs. The current step-badge textAlign:center substitution does not exercise those semantics. Address the independently proven core percentage-transform defect first, then verify the original wrapper under varied digit widths, fonts, density, themes and state changes. Do not move the number with fixture-specific offsets or claim start/center alignment equivalent merely because both screenshots look centered.' },
