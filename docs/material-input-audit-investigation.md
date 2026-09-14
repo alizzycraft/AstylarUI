@@ -50,7 +50,10 @@ independent raw value/count population. The report now retains **8,278 groups /
 386,891 occurrences**, an increase of exactly **1,371 occurrences**. Strict
 validation rejects it solely for **2,542 unresolved attributions** (previously
 2,499). The root initial, guarded container-caret and exposed line-height
-populations remain unchanged. The expanded complete harness is running.
+populations remain unchanged. The expanded complete harness passes **633/633**,
+exit **0**, no failures/skips/cancellations, **684,464.6459 ms**. This does not
+include the subsequent inherited-default diagnostic or replace the final
+enforced rendering matrix.
 Correction commit: `be03629`, pushed to `codex/material-ui-showcase`.
 No renderer or canonical
 comparison inputs changed. The investigation below records the historical
