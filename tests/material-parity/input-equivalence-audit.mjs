@@ -11,6 +11,7 @@ import { collectPaginatorNavigationEvidence } from './paginator-navigation-evide
 import { chipHostTypographyAttribution, collectChipHostTypographyInputs, classifyChipHostTypographyInput } from './chip-host-typography-evidence.mjs';
 import { fieldHostTypographyAttribution, collectFieldHostTypographyInputs, classifyFieldHostTypographyInput } from './field-host-typography-evidence.mjs';
 import { rootTypographyAttribution, collectRootTypographyInputs, classifyRootTypographyInput } from './root-typography-input-evidence.mjs';
+import { rootHeightAttribution, collectRootHeightInputs, classifyRootHeightInput } from './root-height-input-evidence.mjs';
 import { rootColorAttribution, collectRootColorInputs, classifyRootColorInput,
   fieldColorAttribution, collectFieldColorInputs, classifyFieldColorInput } from './root-color-input-evidence.mjs';
 import { appearanceInitialAttribution, collectAppearanceInitialInputs, classifyAppearanceInitialInput,
@@ -113,6 +114,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const chipHostTypographyInputs = collectChipHostTypographyInputs(elementInventory, reviewedTemplateTextMappings, canonicalStyle, typographySelectorCanApply);
   const fieldHostTypographyInputs = collectFieldHostTypographyInputs(elementInventory, canonicalStyle, typographySelectorCanApply);
   const rootTypographyInputs = collectRootTypographyInputs(elementInventory, canonicalStyle, typographySelectorCanApply);
+  const rootHeightInputs = collectRootHeightInputs(rootTypographyInputs, canonicalStyle);
   const rootColorInputs = collectRootColorInputs(rootTypographyInputs, canonicalStyle);
   const fieldColorInputs = collectFieldColorInputs(fieldHostTypographyInputs, rootColorInputs, canonicalStyle);
   const appearanceInitialInputs = collectAppearanceInitialInputs(elementInventory, typographySelectorCanApply);
@@ -140,7 +142,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const controlTypography = attributeObservedSupplementalLineBoxes(attributeObservedControlLineBoxes(
     attributeObservedNormalLineBoxes(rawControlTypography, elementInventory, normalLineBoxes), elementInventory, controlLineBoxes),
     elementInventory, supplementalLineBoxes);
-  const discrepancies = collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs, nonGridTemplateInputs, buttonTypographyScalarInputs, chipHostTypographyInputs, fieldHostTypographyInputs, rootTypographyInputs, appearanceInitialInputs, buttonAppearanceInputs, rootColorInputs, fieldColorInputs);
+  const discrepancies = collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs, nonGridTemplateInputs, buttonTypographyScalarInputs, chipHostTypographyInputs, fieldHostTypographyInputs, rootTypographyInputs, appearanceInitialInputs, buttonAppearanceInputs, rootColorInputs, fieldColorInputs, rootHeightInputs);
   const classifications = countBy(discrepancies, (entry) => entry.classification);
   const propertyGroupCounts = countBy(discrepancies, (entry) => entry.propertyGroup);
   const familyCounts = countBy(discrepancies, (entry) => entry.family);
@@ -216,6 +218,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
     chipHostTypographyInputs,
     fieldHostTypographyInputs,
     rootTypographyInputs,
+    rootHeightInputs,
     rootColorInputs,
     fieldColorInputs,
     appearanceInitialInputs,
@@ -309,6 +312,21 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
         entry.reviewedCases.length !== entry.occurrences || new Set(entry.reviewedCases).size !== entry.occurrences ||
         entry.reviewedCases.some(key => !report.rootTypographyInputs?.some(p => p.case === key && p.element === entry.element && p.property === entry.property && p.values.reference === entry.reference))) {
       errors.push('root typography classification lacks exact ancestry, stage and case evidence');
+    }
+  }
+  if (JSON.stringify(report.rootHeightInputs) !== JSON.stringify(collectRootHeightInputs(
+    collectRootTypographyInputs(report.elementInventory, canonicalStyle, typographySelectorCanApply), canonicalStyle))) {
+    errors.push('root height evidence does not replay from captured declaration constraints');
+  }
+  for (const entry of report.discrepancies.filter(d => d.attribution === rootHeightAttribution)) {
+    const proof = report.rootHeightInputs?.find(p => p.case === entry.reviewEvidence?.case && p.element === entry.element);
+    if (!proof || entry.classification !== 'application-plugin-authoring-defect' || entry.property !== 'height' ||
+        entry.reference !== proof.values.referenceUsedHeight || entry.astylar !== canonicalStyle({ height: proof.values.candidateHeightDeclaration }).height ||
+        JSON.stringify(proof) !== JSON.stringify(entry.reviewEvidence) || !Array.isArray(entry.reviewedCases) ||
+        entry.reviewedCases.length !== entry.occurrences || new Set(entry.reviewedCases).size !== entry.occurrences ||
+        entry.reviewedCases.some(key => !report.rootHeightInputs?.some(p => p.case === key && p.element === entry.element &&
+          p.values.referenceUsedHeight === entry.reference && canonicalStyle({ height: p.values.candidateHeightDeclaration }).height === entry.astylar))) {
+      errors.push('root height attribution lacks exact authored, stage and case evidence');
     }
   }
   if (JSON.stringify(report.fieldHostTypographyInputs) !== JSON.stringify(collectFieldHostTypographyInputs(report.elementInventory, canonicalStyle, typographySelectorCanApply))) {
@@ -1046,7 +1064,8 @@ export function renderMaterialInputAuditMarkdown(report) {
   return lines.join('\n');
 }
 
-function collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs, nonGridTemplateInputs, buttonTypographyScalarInputs, chipHostTypographyInputs, fieldHostTypographyInputs, rootTypographyInputs, appearanceInitialInputs, buttonAppearanceInputs, rootColorInputs, fieldColorInputs) {
+function collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs, nonGridTemplateInputs, buttonTypographyScalarInputs, chipHostTypographyInputs, fieldHostTypographyInputs, rootTypographyInputs, appearanceInitialInputs, buttonAppearanceInputs, rootColorInputs, fieldColorInputs, rootHeightInputs) {
+  const rootHeightByCaseId = new Map(rootHeightInputs.map(p => [JSON.stringify([p.case, p.element]), p]));
   const fieldColorByCaseId = new Map(fieldColorInputs.map(p => [JSON.stringify([p.case, p.element]), p]));
   const rootColorByCaseId = new Map(rootColorInputs.map(p => [JSON.stringify([p.case, p.element]), p]));
   const buttonAppearanceByCaseId = new Map(buttonAppearanceInputs.map(p => [JSON.stringify([p.case, p.element]), p]));
@@ -1100,6 +1119,8 @@ function collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInp
             ?? classifyChipHostTypographyInput(input, property, referenceValue, astylarValue,
               chipTypographyByCaseIdProperty.get(JSON.stringify([key, input.id, property])), canonicalStyle)
             ?? classifyReviewedRootInput(benchmarkCase, input, property, referenceValue, astylarValue)
+            ?? classifyRootHeightInput(input, property, referenceValue, astylarValue,
+              rootHeightByCaseId.get(JSON.stringify([key, input.id])), canonicalStyle)
             ?? classifyRootTypographyInput(input, property, referenceValue, astylarValue,
               rootTypographyByCaseIdProperty.get(JSON.stringify([key, input.id, property])), canonicalStyle)
             ?? classifyRootColorInput(input, property, referenceValue, astylarValue,
@@ -1132,7 +1153,7 @@ function collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInp
             ...(classification.attribution ? { attribution: classification.attribution } : {}),
             ...(classification.reviewEvidence ? { reviewEvidence: classification.reviewEvidence } : {}),
             ...([borderInitialAttribution, buttonBorderResetAttribution, outlineTokenAttribution, chipOutlineAttribution,
-              'reviewed-root-flow-dependency', nonGridTemplateAttribution, 'reviewed-button-typography-host-input', chipHostTypographyAttribution, fieldHostTypographyAttribution, rootTypographyAttribution, appearanceInitialAttribution, buttonAppearanceAttribution, rootColorAttribution, fieldColorAttribution].includes(classification.attribution) ? { reviewedCases: [] } : {}),
+              'reviewed-root-flow-dependency', nonGridTemplateAttribution, 'reviewed-button-typography-host-input', chipHostTypographyAttribution, fieldHostTypographyAttribution, rootTypographyAttribution, appearanceInitialAttribution, buttonAppearanceAttribution, rootColorAttribution, fieldColorAttribution, rootHeightAttribution].includes(classification.attribution) ? { reviewedCases: [] } : {}),
             occurrences: 0,
             cases: [],
             states: [],
@@ -7916,6 +7937,7 @@ function sourceFingerprints(root) {
     'tests/material-parity/chip-host-typography-evidence.mjs',
     'tests/material-parity/field-host-typography-evidence.mjs',
     'tests/material-parity/root-typography-input-evidence.mjs',
+    'tests/material-parity/root-height-input-evidence.mjs',
     'tests/material-parity/root-color-input-evidence.mjs',
     'tests/material-parity/appearance-input-evidence.mjs',
     'tests/material-parity/normal-line-box-report.mjs',
@@ -7953,6 +7975,8 @@ function focusedProofInventory(root) {
       'public-package appearance default and indicator-sensitivity reduction', 'Two eight-test runs cover 24 fresh mounts each at DPR1. Six empty non-widget types preserve output size and byte-identical Astylar variant rasters; select and checked-checkbox none variants change indicator pixels. Browser computed keywords and candidate local omissions remain separate. This proves variant sensitivity, not native-widget, plugin, dynamic-state, typography or cross-engine screenshot parity.'),
     proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('root typography distinguishes/,
       'section inherited-font request and local diagnostic-stage separation', 'Complete captured frame/page-to-section chains establish matching ancestor font requests and omitted section-local declarations. Competing rules, changed ancestry, provenance gaps, scalar changes and forged report evidence reject attribution. No computed candidate font or used-size/raster equality is synthesized; core inherited em consumers and descendant typography remain separate.'),
+    proof(root, 'tests/material-parity/input-tree-evidence.spec.mjs', /test\('matching section boxes/,
+      'fixed versus automatic section height browser sensitivity', 'At DPR1/2 identical initial 258x98 border boxes diverge to heights 138/98 after the same child grows and restore after shrink. This proves unequal height requests, not an equal-input Astylar core defect or final raster equivalence.'),
     proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('root color separates/,
       'section inherited-color request and local diagnostic-stage separation', 'Complete frame/page ancestry plus independently checked original color and same-sheet dark override establish omitted local section color versus inherited browser computed color. Competing, layered, important, reversed, scalar-stage and forged evidence is rejected. No computed candidate color, caret color, currentColor paint or final raster is inferred.'),
     proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('field host color joins/,

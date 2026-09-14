@@ -3,6 +3,79 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Fixed root heights replace content-driven inputs, even when outer boxes match
+
+The [root-height case index](material-root-height-audit.json) records **2,311
+main boundaries / 105 raw height signatures** across all 36 families. The
+reference `.demo` section has no authored height constraint. Candidate root
+styles instead supply pixel heights from the per-family density tables, with
+button/open-expansion adjustments and responsive toolbar/paginator/button
+overrides. All three captured candidate declaration stages retain a height
+present in the candidate authored rules. This is the existing
+`fixture-fixed-reference-heights` / `fixture-responsive-height-compensation`
+source finding linked to individual observations, not a newly inferred core bug.
+
+Source ownership is `examples/material-showcase/src/app/astylar.component.ts:457`
+(height selection), `:480` (root rule and responsive overrides), and `:1362`
+(tables). The initial `2f44011` source already contains these height tables and
+overrides. The original reference style at
+`examples/material-showcase/src/app/reference.component.ts:106` does not request
+section height. History is source evidence, not a runtime bisect.
+
+Keep the two different measurements visible: HTML reports a **used content-box
+height**, while the candidate snapshot contains an **authored border-box
+height**. Many pairs differ numerically by 58px because their padding/border
+conventions differ; this alone does not prove incorrect used geometry. Conversely,
+matching outer geometry cannot make a fixed height equivalent to automatic
+content sizing. The collector attributes the declaration substitution, not
+pixel equality, responsive winner selection, or a universal auto-layout failure.
+
+A browser-only sensitivity proof at DPR1 and DPR2 starts both variants at
+258x98px outer dimensions. Increasing the identical child from 40px to 80px
+makes the auto-height variant 138px tall while the fixed one stays at 98px;
+restoring the child restores the original boxes. This demonstrates unequal
+authoring even when an initial screenshot could match. It does not stand in
+for an equal-input Astylar renderer proof. Existing public-API auto-height,
+intrinsic-size, positioned-inset and anonymous-flex reductions remain the
+independent evidence for their specific core defects.
+
+Remove the height tables and measured breakpoint corrections when restoring
+the original layout inputs, after testing the general core layout rules. Do
+not replace their values with newly measured outcomes. Keep block-to-flex,
+absolute-child, font-metric and box-model differences separate.
+
+Focused verification: `node --test --test-name-pattern='root height'
+tests/material-parity/input-equivalence-audit.spec.mjs` passes **3/3**,
+9,270.6198 ms (30 state cases, coincident raw values, 16 adverse mutations,
+seven scalar mutations, five forged reports). The browser sensitivity command
+`node --test --test-name-pattern='matching section boxes'
+tests/material-parity/input-tree-evidence.spec.mjs` passes **1/1**,
+1,297.0004 ms. The combined root-height/root-color/typography/appearance case-index
+and fingerprint check passes **12/12**, **38,263.8191 ms**, including all 2,311
+root-height observations and raw tree hashes.
+
+The first full replay produced 2,311 proofs but attributed only 103 groups /
+2,299 occurrences. The two missing divider signatures exposed an audit join
+defect: candidate declarations retain fractional heights such as 152.5625px,
+whereas scalar comparisons normalize that value to 152.563px. The new focused
+regression first failed with zero attributed groups. The correction applies
+the existing scalar precision only at that join; original declarations and
+all candidate stages must still match exactly. Two fractional cases plus
+same-rounding-bucket raw-stage changes and forged evidence are covered.
+This does not normalize away unequal authoring or change captured values.
+
+The corrected full replay exits 0 and attributes all **105 groups / 2,311
+occurrences**, with exact case-list agreement against the raw index after
+existing scalar precision normalization. The raw **8,143 groups / 380,520
+occurrences** remain unchanged. Strict acceptance still reports **2,696
+unresolved style groups**, down from 2,801; source findings remain 131 and
+source fingerprints total 98. This is audit progress, not input equivalence
+or a completed audit.
+
+The pre-correction full harness passed **591/591**, **477,278.5706 ms**. Final
+harness verification remains pending after the fractional correction; no
+production or canonical comparison changes were made.
+
 ## Field-host color is inherited, despite missing component font tokens
 
 The [field-host color index](material-field-host-color-audit.json) covers all

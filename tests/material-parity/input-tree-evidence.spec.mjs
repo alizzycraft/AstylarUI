@@ -3,6 +3,39 @@ import test from 'node:test';
 import { chromium } from 'playwright-core';
 import { captureBrowserInputTree } from './input-tree-evidence.mjs';
 
+test('matching section boxes do not make fixed height equivalent to content-driven authoring', async () => {
+  const browser = await chromium.launch({ channel: 'chrome', headless: true });
+  try {
+    for (const deviceScaleFactor of [1, 2]) {
+      const page = await browser.newPage({ viewport: { width: 640, height: 400 }, deviceScaleFactor });
+      try {
+        await page.setContent(`<style>
+          section { width:200px; padding:28px; border:1px solid; }
+          #fixed { box-sizing:border-box; width:258px; height:98px; }
+          .child { height:40px; }
+        </style><section id="auto"><div class="child"></div></section><section id="fixed"><div class="child"></div></section>`);
+        const observations = await page.evaluate(() => {
+          const observe = () => ['auto', 'fixed'].map(id => {
+            const node = document.getElementById(id), s = getComputedStyle(node), b = node.getBoundingClientRect();
+            return { id, width: b.width, height: b.height, usedHeight: s.height, boxSizing: s.boxSizing };
+          });
+          const initial = observe();
+          document.querySelectorAll('.child').forEach(node => { node.style.height = '80px'; });
+          const grown = observe();
+          document.querySelectorAll('.child').forEach(node => { node.style.height = '40px'; });
+          return { initial, grown, restored: observe() };
+        });
+        assert.deepEqual(observations.initial, [
+          { id: 'auto', width: 258, height: 98, usedHeight: '40px', boxSizing: 'content-box' },
+          { id: 'fixed', width: 258, height: 98, usedHeight: '98px', boxSizing: 'border-box' },
+        ]);
+        assert.deepEqual(observations.grown.map(n => n.height), [138, 98]);
+        assert.deepEqual(observations.restored, observations.initial);
+      } finally { await page.close(); }
+    }
+  } finally { await browser.close(); }
+});
+
 test('captured Material scalar collector skips layer rules that full-tree capture retains', async () => {
   const { readFileSync } = await import('node:fs');
   const source = readFileSync('tests/material-parity/run-material-parity.mjs', 'utf8');

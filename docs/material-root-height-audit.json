@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "attribution": "reviewed-root-typography-declaration-stage",
-  "classification": "parity-harness-defect",
-  "scope": "Case index for section font-family and font-size diagnostic-stage attribution, not a computed candidate font or renderer-equivalence report.",
+  "attribution": "reviewed-root-fixed-height-authoring",
+  "classification": "application-plugin-authoring-defect",
+  "scope": "Fixed-height authoring versus content-driven reference sections. Numeric content-box/border-box differences are retained, not treated as evidence of a core defect.",
   "capture": {
     "file": "artifacts/material-parity/current-ancestry-audit/latest-report.json",
     "sha256": "b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a"
@@ -31,20 +31,30 @@
     {
       "file": "src/lib/astylar-surface.ts",
       "sha256": "91c2b6fe2fed03da0573d819cd3deed2330ffca91faf22b5083588cbb32fbb13"
+    },
+    {
+      "file": "tests/material-parity/root-height-input-evidence.mjs",
+      "sha256": "46d76a9ca95421ebf6f2fbdf6b6a9b797b3b5b6fc9f4e4f06ec268b33f865acf"
+    },
+    {
+      "file": "tests/material-parity/input-tree-evidence.spec.mjs",
+      "sha256": "3071b867be5f036f3911d1c97eec244b873da58b50096615d5004b84cf2bb6d9"
+    },
+    {
+      "file": "tests/material-parity/input-equivalence-policy.mjs",
+      "sha256": "3f6bcbb6ae117f124a8c13465d753ef83db5babade4d431304bb9a7c27ea73b2"
     }
   ],
-  "caseCount": 2311,
-  "propertyObservations": 4622,
   "groups": [
     {
       "family": "core",
-      "pageSize": "16px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "core-root",
+      "property": "height",
+      "reference": "40px",
+      "candidate": "98px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 26,
+      "reviewedCases": [
         "static:core@light/desktop",
         "static:core@light/tablet",
         "static:core@light/mobile",
@@ -75,13 +85,13 @@
     },
     {
       "family": "core",
-      "pageSize": "14.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "core-root",
+      "property": "height",
+      "reference": "24px",
+      "candidate": "82px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 13,
+      "reviewedCases": [
         "static:core@contrast/desktop",
         "static:core@contrast/tablet",
         "static:core@contrast/mobile",
@@ -99,13 +109,13 @@
     },
     {
       "family": "core",
-      "pageSize": "18.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "core-root",
+      "property": "height",
+      "reference": "28px",
+      "candidate": "86px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 13,
+      "reviewedCases": [
         "static:core@custom/desktop",
         "static:core@custom/tablet",
         "static:core@custom/mobile",
@@ -123,19 +133,17 @@
     },
     {
       "family": "toolbar",
-      "pageSize": "16px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "toolbar-root",
+      "property": "height",
+      "reference": "64px",
+      "candidate": "122px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 24,
+      "reviewedCases": [
         "static:toolbar@light/desktop",
         "static:toolbar@light/tablet",
-        "static:toolbar@light/mobile",
         "static:toolbar@dark/desktop",
         "static:toolbar@dark/tablet",
-        "static:toolbar@dark/mobile",
         "interaction:toolbar@light/desktop-dpr1/focus",
         "interaction:toolbar@light/desktop-dpr1/hover",
         "interaction:toolbar@light/desktop-dpr1/held",
@@ -160,16 +168,40 @@
     },
     {
       "family": "toolbar",
-      "pageSize": "14.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "toolbar-root",
+      "property": "height",
+      "reference": "56px",
+      "candidate": "114px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 14,
+      "reviewedCases": [
+        "static:toolbar@light/mobile",
+        "static:toolbar@dark/mobile",
+        "static:toolbar@custom/desktop",
+        "static:toolbar@custom/tablet",
+        "interaction:toolbar@custom/desktop-dpr1/focus",
+        "interaction:toolbar@custom/desktop-dpr1/hover",
+        "interaction:toolbar@custom/desktop-dpr1/held",
+        "interaction:toolbar@custom/desktop-dpr1/activate",
+        "interaction:toolbar@custom/desktop-dpr1/activate-leave",
+        "interaction:toolbar@custom/desktop-dpr2/focus",
+        "interaction:toolbar@custom/desktop-dpr2/hover",
+        "interaction:toolbar@custom/desktop-dpr2/held",
+        "interaction:toolbar@custom/desktop-dpr2/activate",
+        "interaction:toolbar@custom/desktop-dpr2/activate-leave"
+      ]
+    },
+    {
+      "family": "toolbar",
+      "element": "toolbar-root",
+      "property": "height",
+      "reference": "52px",
+      "candidate": "110px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 12,
+      "reviewedCases": [
         "static:toolbar@contrast/desktop",
         "static:toolbar@contrast/tablet",
-        "static:toolbar@contrast/mobile",
         "interaction:toolbar@contrast/desktop-dpr1/focus",
         "interaction:toolbar@contrast/desktop-dpr1/hover",
         "interaction:toolbar@contrast/desktop-dpr1/held",
@@ -184,43 +216,49 @@
     },
     {
       "family": "toolbar",
-      "pageSize": "18.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
-        "static:toolbar@custom/desktop",
-        "static:toolbar@custom/tablet",
-        "static:toolbar@custom/mobile",
-        "interaction:toolbar@custom/desktop-dpr1/focus",
-        "interaction:toolbar@custom/desktop-dpr1/hover",
-        "interaction:toolbar@custom/desktop-dpr1/held",
-        "interaction:toolbar@custom/desktop-dpr1/activate",
-        "interaction:toolbar@custom/desktop-dpr1/activate-leave",
-        "interaction:toolbar@custom/desktop-dpr2/focus",
-        "interaction:toolbar@custom/desktop-dpr2/hover",
-        "interaction:toolbar@custom/desktop-dpr2/held",
-        "interaction:toolbar@custom/desktop-dpr2/activate",
-        "interaction:toolbar@custom/desktop-dpr2/activate-leave"
+      "element": "toolbar-root",
+      "property": "height",
+      "reference": "44px",
+      "candidate": "102px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 1,
+      "reviewedCases": [
+        "static:toolbar@contrast/mobile"
+      ]
+    },
+    {
+      "family": "toolbar",
+      "element": "toolbar-root",
+      "property": "height",
+      "reference": "48px",
+      "candidate": "106px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 1,
+      "reviewedCases": [
+        "static:toolbar@custom/mobile"
       ]
     },
     {
       "family": "sidenav",
-      "pageSize": "16px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "sidenav-root",
+      "property": "height",
+      "reference": "220px",
+      "candidate": "278px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 62,
+      "reviewedCases": [
         "static:sidenav@light/desktop",
         "static:sidenav@light/tablet",
         "static:sidenav@light/mobile",
         "static:sidenav@dark/desktop",
         "static:sidenav@dark/tablet",
         "static:sidenav@dark/mobile",
+        "static:sidenav@contrast/desktop",
+        "static:sidenav@contrast/tablet",
+        "static:sidenav@contrast/mobile",
+        "static:sidenav@custom/desktop",
+        "static:sidenav@custom/tablet",
+        "static:sidenav@custom/mobile",
         "interaction:sidenav@light/desktop-dpr1/focus",
         "interaction:sidenav@light/desktop-dpr1/hover",
         "interaction:sidenav@light/desktop-dpr1/held",
@@ -245,22 +283,6 @@
         "interaction:sidenav@dark/desktop-dpr2/activate",
         "interaction:sidenav@dark/desktop-dpr2/activate-leave",
         "interaction:sidenav@dark/desktop-dpr2/open",
-        "interaction:sidenav@light/mobile-dpr2/open-dismiss",
-        "interaction:sidenav@dark/mobile-dpr2/open-dismiss"
-      ]
-    },
-    {
-      "family": "sidenav",
-      "pageSize": "14.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
-        "static:sidenav@contrast/desktop",
-        "static:sidenav@contrast/tablet",
-        "static:sidenav@contrast/mobile",
         "interaction:sidenav@contrast/desktop-dpr1/focus",
         "interaction:sidenav@contrast/desktop-dpr1/hover",
         "interaction:sidenav@contrast/desktop-dpr1/held",
@@ -272,21 +294,7 @@
         "interaction:sidenav@contrast/desktop-dpr2/held",
         "interaction:sidenav@contrast/desktop-dpr2/activate",
         "interaction:sidenav@contrast/desktop-dpr2/activate-leave",
-        "interaction:sidenav@contrast/desktop-dpr2/open"
-      ]
-    },
-    {
-      "family": "sidenav",
-      "pageSize": "18.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
-        "static:sidenav@custom/desktop",
-        "static:sidenav@custom/tablet",
-        "static:sidenav@custom/mobile",
+        "interaction:sidenav@contrast/desktop-dpr2/open",
         "interaction:sidenav@custom/desktop-dpr1/focus",
         "interaction:sidenav@custom/desktop-dpr1/hover",
         "interaction:sidenav@custom/desktop-dpr1/held",
@@ -298,24 +306,32 @@
         "interaction:sidenav@custom/desktop-dpr2/held",
         "interaction:sidenav@custom/desktop-dpr2/activate",
         "interaction:sidenav@custom/desktop-dpr2/activate-leave",
-        "interaction:sidenav@custom/desktop-dpr2/open"
+        "interaction:sidenav@custom/desktop-dpr2/open",
+        "interaction:sidenav@light/mobile-dpr2/open-dismiss",
+        "interaction:sidenav@dark/mobile-dpr2/open-dismiss"
       ]
     },
     {
       "family": "grid-list",
-      "pageSize": "16px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "grid-list-root",
+      "property": "height",
+      "reference": "80px",
+      "candidate": "138px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 52,
+      "reviewedCases": [
         "static:grid-list@light/desktop",
         "static:grid-list@light/tablet",
         "static:grid-list@light/mobile",
         "static:grid-list@dark/desktop",
         "static:grid-list@dark/tablet",
         "static:grid-list@dark/mobile",
+        "static:grid-list@contrast/desktop",
+        "static:grid-list@contrast/tablet",
+        "static:grid-list@contrast/mobile",
+        "static:grid-list@custom/desktop",
+        "static:grid-list@custom/tablet",
+        "static:grid-list@custom/mobile",
         "interaction:grid-list@light/desktop-dpr1/focus",
         "interaction:grid-list@light/desktop-dpr1/hover",
         "interaction:grid-list@light/desktop-dpr1/held",
@@ -335,21 +351,7 @@
         "interaction:grid-list@dark/desktop-dpr2/hover",
         "interaction:grid-list@dark/desktop-dpr2/held",
         "interaction:grid-list@dark/desktop-dpr2/activate",
-        "interaction:grid-list@dark/desktop-dpr2/activate-leave"
-      ]
-    },
-    {
-      "family": "grid-list",
-      "pageSize": "14.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
-        "static:grid-list@contrast/desktop",
-        "static:grid-list@contrast/tablet",
-        "static:grid-list@contrast/mobile",
+        "interaction:grid-list@dark/desktop-dpr2/activate-leave",
         "interaction:grid-list@contrast/desktop-dpr1/focus",
         "interaction:grid-list@contrast/desktop-dpr1/hover",
         "interaction:grid-list@contrast/desktop-dpr1/held",
@@ -359,21 +361,7 @@
         "interaction:grid-list@contrast/desktop-dpr2/hover",
         "interaction:grid-list@contrast/desktop-dpr2/held",
         "interaction:grid-list@contrast/desktop-dpr2/activate",
-        "interaction:grid-list@contrast/desktop-dpr2/activate-leave"
-      ]
-    },
-    {
-      "family": "grid-list",
-      "pageSize": "18.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
-        "static:grid-list@custom/desktop",
-        "static:grid-list@custom/tablet",
-        "static:grid-list@custom/mobile",
+        "interaction:grid-list@contrast/desktop-dpr2/activate-leave",
         "interaction:grid-list@custom/desktop-dpr1/focus",
         "interaction:grid-list@custom/desktop-dpr1/hover",
         "interaction:grid-list@custom/desktop-dpr1/held",
@@ -388,13 +376,13 @@
     },
     {
       "family": "divider",
-      "pageSize": "16px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "divider-root",
+      "property": "height",
+      "reference": "103px",
+      "candidate": "161px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 12,
+      "reviewedCases": [
         "static:divider@light/desktop",
         "static:divider@light/tablet",
         "static:divider@light/mobile",
@@ -411,13 +399,13 @@
     },
     {
       "family": "divider",
-      "pageSize": "14.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "divider-root",
+      "property": "height",
+      "reference": "94.5625px",
+      "candidate": "152.5625px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 6,
+      "reviewedCases": [
         "static:divider@contrast/desktop",
         "static:divider@contrast/tablet",
         "static:divider@contrast/mobile",
@@ -428,13 +416,13 @@
     },
     {
       "family": "divider",
-      "pageSize": "18.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "divider-root",
+      "property": "height",
+      "reference": "118.562px",
+      "candidate": "176.5625px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 6,
+      "reviewedCases": [
         "static:divider@custom/desktop",
         "static:divider@custom/tablet",
         "static:divider@custom/mobile",
@@ -445,13 +433,13 @@
     },
     {
       "family": "badge",
-      "pageSize": "16px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "badge-root",
+      "property": "height",
+      "reference": "19px",
+      "candidate": "77px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 26,
+      "reviewedCases": [
         "static:badge@light/desktop",
         "static:badge@light/tablet",
         "static:badge@light/mobile",
@@ -482,13 +470,13 @@
     },
     {
       "family": "badge",
-      "pageSize": "14.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "badge-root",
+      "property": "height",
+      "reference": "18px",
+      "candidate": "76px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 13,
+      "reviewedCases": [
         "static:badge@contrast/desktop",
         "static:badge@contrast/tablet",
         "static:badge@contrast/mobile",
@@ -506,13 +494,13 @@
     },
     {
       "family": "badge",
-      "pageSize": "18.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "badge-root",
+      "property": "height",
+      "reference": "22px",
+      "candidate": "80px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 13,
+      "reviewedCases": [
         "static:badge@custom/desktop",
         "static:badge@custom/tablet",
         "static:badge@custom/mobile",
@@ -530,13 +518,13 @@
     },
     {
       "family": "card",
-      "pageSize": "16px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "card-root",
+      "property": "height",
+      "reference": "119px",
+      "candidate": "177px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 26,
+      "reviewedCases": [
         "static:card@light/desktop",
         "static:card@light/tablet",
         "static:card@light/mobile",
@@ -567,13 +555,13 @@
     },
     {
       "family": "card",
-      "pageSize": "14.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "card-root",
+      "property": "height",
+      "reference": "114px",
+      "candidate": "172px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 13,
+      "reviewedCases": [
         "static:card@contrast/desktop",
         "static:card@contrast/tablet",
         "static:card@contrast/mobile",
@@ -591,13 +579,13 @@
     },
     {
       "family": "card",
-      "pageSize": "18.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "card-root",
+      "property": "height",
+      "reference": "118px",
+      "candidate": "176px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 13,
+      "reviewedCases": [
         "static:card@custom/desktop",
         "static:card@custom/tablet",
         "static:card@custom/mobile",
@@ -615,13 +603,13 @@
     },
     {
       "family": "chips",
-      "pageSize": "16px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "chips-root",
+      "property": "height",
+      "reference": "40px",
+      "candidate": "98px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 38,
+      "reviewedCases": [
         "static:chips@light/desktop",
         "static:chips@light/tablet",
         "static:chips@light/mobile",
@@ -664,16 +652,19 @@
     },
     {
       "family": "chips",
-      "pageSize": "14.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "chips-root",
+      "property": "height",
+      "reference": "32px",
+      "candidate": "90px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 38,
+      "reviewedCases": [
         "static:chips@contrast/desktop",
         "static:chips@contrast/tablet",
         "static:chips@contrast/mobile",
+        "static:chips@custom/desktop",
+        "static:chips@custom/tablet",
+        "static:chips@custom/mobile",
         "interaction:chips@contrast/desktop-dpr1/focus",
         "interaction:chips@contrast/desktop-dpr1/hover",
         "interaction:chips@contrast/desktop-dpr1/held",
@@ -689,21 +680,7 @@
         "interaction:chips@contrast/desktop-dpr2/activate-leave",
         "interaction:chips@contrast/desktop-dpr2/activate-alternate",
         "interaction:chips@contrast/desktop-dpr2/disabled",
-        "interaction:chips@contrast/desktop-dpr2/selected"
-      ]
-    },
-    {
-      "family": "chips",
-      "pageSize": "18.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
-        "static:chips@custom/desktop",
-        "static:chips@custom/tablet",
-        "static:chips@custom/mobile",
+        "interaction:chips@contrast/desktop-dpr2/selected",
         "interaction:chips@custom/desktop-dpr1/focus",
         "interaction:chips@custom/desktop-dpr1/hover",
         "interaction:chips@custom/desktop-dpr1/held",
@@ -724,50 +701,39 @@
     },
     {
       "family": "icon",
-      "pageSize": "16px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "icon-root",
+      "property": "height",
+      "reference": "28px",
+      "candidate": "86px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 15,
+      "reviewedCases": [
         "static:icon@light/desktop",
         "static:icon@light/tablet",
         "static:icon@light/mobile",
         "static:icon@dark/desktop",
         "static:icon@dark/tablet",
         "static:icon@dark/mobile",
-        "interaction:icon@light/desktop-dpr1/inspect",
-        "interaction:icon@light/desktop-dpr2/inspect",
-        "interaction:icon@dark/desktop-dpr1/inspect",
-        "interaction:icon@dark/desktop-dpr2/inspect"
-      ]
-    },
-    {
-      "family": "icon",
-      "pageSize": "14.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
         "static:icon@contrast/desktop",
         "static:icon@contrast/tablet",
         "static:icon@contrast/mobile",
+        "interaction:icon@light/desktop-dpr1/inspect",
+        "interaction:icon@light/desktop-dpr2/inspect",
+        "interaction:icon@dark/desktop-dpr1/inspect",
+        "interaction:icon@dark/desktop-dpr2/inspect",
         "interaction:icon@contrast/desktop-dpr1/inspect",
         "interaction:icon@contrast/desktop-dpr2/inspect"
       ]
     },
     {
       "family": "icon",
-      "pageSize": "18.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "icon-root",
+      "property": "height",
+      "reference": "29px",
+      "candidate": "87px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 5,
+      "reviewedCases": [
         "static:icon@custom/desktop",
         "static:icon@custom/tablet",
         "static:icon@custom/mobile",
@@ -777,13 +743,13 @@
     },
     {
       "family": "list",
-      "pageSize": "16px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "list-root",
+      "property": "height",
+      "reference": "112px",
+      "candidate": "170px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 26,
+      "reviewedCases": [
         "static:list@light/desktop",
         "static:list@light/tablet",
         "static:list@light/mobile",
@@ -814,13 +780,13 @@
     },
     {
       "family": "list",
-      "pageSize": "14.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "list-root",
+      "property": "height",
+      "reference": "64px",
+      "candidate": "122px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 13,
+      "reviewedCases": [
         "static:list@contrast/desktop",
         "static:list@contrast/tablet",
         "static:list@contrast/mobile",
@@ -838,13 +804,13 @@
     },
     {
       "family": "list",
-      "pageSize": "18.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "list-root",
+      "property": "height",
+      "reference": "96px",
+      "candidate": "154px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 13,
+      "reviewedCases": [
         "static:list@custom/desktop",
         "static:list@custom/tablet",
         "static:list@custom/mobile",
@@ -862,13 +828,13 @@
     },
     {
       "family": "table",
-      "pageSize": "16px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "table-root",
+      "property": "height",
+      "reference": "160px",
+      "candidate": "218px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 26,
+      "reviewedCases": [
         "static:table@light/desktop",
         "static:table@light/tablet",
         "static:table@light/mobile",
@@ -899,13 +865,13 @@
     },
     {
       "family": "table",
-      "pageSize": "14.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "table-root",
+      "property": "height",
+      "reference": "112px",
+      "candidate": "170px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 13,
+      "reviewedCases": [
         "static:table@contrast/desktop",
         "static:table@contrast/tablet",
         "static:table@contrast/mobile",
@@ -923,13 +889,13 @@
     },
     {
       "family": "table",
-      "pageSize": "18.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "table-root",
+      "property": "height",
+      "reference": "136px",
+      "candidate": "194px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 13,
+      "reviewedCases": [
         "static:table@custom/desktop",
         "static:table@custom/tablet",
         "static:table@custom/mobile",
@@ -947,38 +913,34 @@
     },
     {
       "family": "sort",
-      "pageSize": "16px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "sort-root",
+      "property": "height",
+      "reference": "19px",
+      "candidate": "77px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 26,
+      "reviewedCases": [
         "static:sort@light/desktop",
         "static:sort@light/tablet",
         "static:sort@light/mobile",
         "static:sort@dark/desktop",
         "static:sort@dark/tablet",
         "static:sort@dark/mobile",
-        "interaction:sort@light/desktop-dpr1/focus",
         "interaction:sort@light/desktop-dpr1/hover",
         "interaction:sort@light/desktop-dpr1/held",
         "interaction:sort@light/desktop-dpr1/activate",
         "interaction:sort@light/desktop-dpr1/activate-leave",
         "interaction:sort@light/desktop-dpr1/activate-twice",
-        "interaction:sort@light/desktop-dpr2/focus",
         "interaction:sort@light/desktop-dpr2/hover",
         "interaction:sort@light/desktop-dpr2/held",
         "interaction:sort@light/desktop-dpr2/activate",
         "interaction:sort@light/desktop-dpr2/activate-leave",
         "interaction:sort@light/desktop-dpr2/activate-twice",
-        "interaction:sort@dark/desktop-dpr1/focus",
         "interaction:sort@dark/desktop-dpr1/hover",
         "interaction:sort@dark/desktop-dpr1/held",
         "interaction:sort@dark/desktop-dpr1/activate",
         "interaction:sort@dark/desktop-dpr1/activate-leave",
         "interaction:sort@dark/desktop-dpr1/activate-twice",
-        "interaction:sort@dark/desktop-dpr2/focus",
         "interaction:sort@dark/desktop-dpr2/hover",
         "interaction:sort@dark/desktop-dpr2/held",
         "interaction:sort@dark/desktop-dpr2/activate",
@@ -988,23 +950,21 @@
     },
     {
       "family": "sort",
-      "pageSize": "14.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "sort-root",
+      "property": "height",
+      "reference": "18px",
+      "candidate": "76px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 13,
+      "reviewedCases": [
         "static:sort@contrast/desktop",
         "static:sort@contrast/tablet",
         "static:sort@contrast/mobile",
-        "interaction:sort@contrast/desktop-dpr1/focus",
         "interaction:sort@contrast/desktop-dpr1/hover",
         "interaction:sort@contrast/desktop-dpr1/held",
         "interaction:sort@contrast/desktop-dpr1/activate",
         "interaction:sort@contrast/desktop-dpr1/activate-leave",
         "interaction:sort@contrast/desktop-dpr1/activate-twice",
-        "interaction:sort@contrast/desktop-dpr2/focus",
         "interaction:sort@contrast/desktop-dpr2/hover",
         "interaction:sort@contrast/desktop-dpr2/held",
         "interaction:sort@contrast/desktop-dpr2/activate",
@@ -1014,23 +974,21 @@
     },
     {
       "family": "sort",
-      "pageSize": "18.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "sort-root",
+      "property": "height",
+      "reference": "22px",
+      "candidate": "80px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 13,
+      "reviewedCases": [
         "static:sort@custom/desktop",
         "static:sort@custom/tablet",
         "static:sort@custom/mobile",
-        "interaction:sort@custom/desktop-dpr1/focus",
         "interaction:sort@custom/desktop-dpr1/hover",
         "interaction:sort@custom/desktop-dpr1/held",
         "interaction:sort@custom/desktop-dpr1/activate",
         "interaction:sort@custom/desktop-dpr1/activate-leave",
         "interaction:sort@custom/desktop-dpr1/activate-twice",
-        "interaction:sort@custom/desktop-dpr2/focus",
         "interaction:sort@custom/desktop-dpr2/hover",
         "interaction:sort@custom/desktop-dpr2/held",
         "interaction:sort@custom/desktop-dpr2/activate",
@@ -1040,19 +998,20 @@
     },
     {
       "family": "paginator",
-      "pageSize": "16px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "paginator-root",
+      "property": "height",
+      "reference": "56px",
+      "candidate": "114px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 27,
+      "reviewedCases": [
         "static:paginator@light/desktop",
         "static:paginator@light/tablet",
         "static:paginator@light/mobile",
         "static:paginator@dark/desktop",
         "static:paginator@dark/tablet",
         "static:paginator@dark/mobile",
+        "static:paginator@custom/mobile",
         "interaction:paginator@light/desktop-dpr1/focus",
         "interaction:paginator@light/desktop-dpr1/hover",
         "interaction:paginator@light/desktop-dpr1/held",
@@ -1077,16 +1036,15 @@
     },
     {
       "family": "paginator",
-      "pageSize": "14.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "paginator-root",
+      "property": "height",
+      "reference": "40px",
+      "candidate": "98px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 12,
+      "reviewedCases": [
         "static:paginator@contrast/desktop",
         "static:paginator@contrast/tablet",
-        "static:paginator@contrast/mobile",
         "interaction:paginator@contrast/desktop-dpr1/focus",
         "interaction:paginator@contrast/desktop-dpr1/hover",
         "interaction:paginator@contrast/desktop-dpr1/held",
@@ -1101,16 +1059,27 @@
     },
     {
       "family": "paginator",
-      "pageSize": "18.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "paginator-root",
+      "property": "height",
+      "reference": "44px",
+      "candidate": "102px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 1,
+      "reviewedCases": [
+        "static:paginator@contrast/mobile"
+      ]
+    },
+    {
+      "family": "paginator",
+      "element": "paginator-root",
+      "property": "height",
+      "reference": "48px",
+      "candidate": "106px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 12,
+      "reviewedCases": [
         "static:paginator@custom/desktop",
         "static:paginator@custom/tablet",
-        "static:paginator@custom/mobile",
         "interaction:paginator@custom/desktop-dpr1/focus",
         "interaction:paginator@custom/desktop-dpr1/hover",
         "interaction:paginator@custom/desktop-dpr1/held",
@@ -1125,13 +1094,13 @@
     },
     {
       "family": "tree",
-      "pageSize": "16px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "tree-root",
+      "property": "height",
+      "reference": "144px",
+      "candidate": "202px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 26,
+      "reviewedCases": [
         "static:tree@light/desktop",
         "static:tree@light/tablet",
         "static:tree@light/mobile",
@@ -1162,13 +1131,13 @@
     },
     {
       "family": "tree",
-      "pageSize": "14.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "tree-root",
+      "property": "height",
+      "reference": "84px",
+      "candidate": "142px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 13,
+      "reviewedCases": [
         "static:tree@contrast/desktop",
         "static:tree@contrast/tablet",
         "static:tree@contrast/mobile",
@@ -1186,13 +1155,13 @@
     },
     {
       "family": "tree",
-      "pageSize": "18.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "tree-root",
+      "property": "height",
+      "reference": "120px",
+      "candidate": "178px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 13,
+      "reviewedCases": [
         "static:tree@custom/desktop",
         "static:tree@custom/tablet",
         "static:tree@custom/mobile",
@@ -1210,13 +1179,13 @@
     },
     {
       "family": "form-field",
-      "pageSize": "16px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "form-field-root",
+      "property": "height",
+      "reference": "76px",
+      "candidate": "134px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 38,
+      "reviewedCases": [
         "static:form-field@light/desktop",
         "static:form-field@light/tablet",
         "static:form-field@light/mobile",
@@ -1259,13 +1228,13 @@
     },
     {
       "family": "form-field",
-      "pageSize": "14.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "form-field-root",
+      "property": "height",
+      "reference": "56px",
+      "candidate": "114px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 19,
+      "reviewedCases": [
         "static:form-field@contrast/desktop",
         "static:form-field@contrast/tablet",
         "static:form-field@contrast/mobile",
@@ -1289,13 +1258,13 @@
     },
     {
       "family": "form-field",
-      "pageSize": "18.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "form-field-root",
+      "property": "height",
+      "reference": "68px",
+      "candidate": "126px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 19,
+      "reviewedCases": [
         "static:form-field@custom/desktop",
         "static:form-field@custom/tablet",
         "static:form-field@custom/mobile",
@@ -1319,13 +1288,13 @@
     },
     {
       "family": "input",
-      "pageSize": "16px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "input-root",
+      "property": "height",
+      "reference": "76px",
+      "candidate": "134px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 38,
+      "reviewedCases": [
         "static:input@light/desktop",
         "static:input@light/tablet",
         "static:input@light/mobile",
@@ -1368,13 +1337,13 @@
     },
     {
       "family": "input",
-      "pageSize": "14.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "input-root",
+      "property": "height",
+      "reference": "56px",
+      "candidate": "114px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 19,
+      "reviewedCases": [
         "static:input@contrast/desktop",
         "static:input@contrast/tablet",
         "static:input@contrast/mobile",
@@ -1398,13 +1367,13 @@
     },
     {
       "family": "input",
-      "pageSize": "18.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "input-root",
+      "property": "height",
+      "reference": "68px",
+      "candidate": "126px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 19,
+      "reviewedCases": [
         "static:input@custom/desktop",
         "static:input@custom/tablet",
         "static:input@custom/mobile",
@@ -1428,13 +1397,13 @@
     },
     {
       "family": "autocomplete",
-      "pageSize": "16px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "autocomplete-root",
+      "property": "height",
+      "reference": "76px",
+      "candidate": "134px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 56,
+      "reviewedCases": [
         "static:autocomplete@light/desktop",
         "static:autocomplete@light/tablet",
         "static:autocomplete@light/mobile",
@@ -1495,13 +1464,13 @@
     },
     {
       "family": "autocomplete",
-      "pageSize": "14.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "autocomplete-root",
+      "property": "height",
+      "reference": "56px",
+      "candidate": "114px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 27,
+      "reviewedCases": [
         "static:autocomplete@contrast/desktop",
         "static:autocomplete@contrast/tablet",
         "static:autocomplete@contrast/mobile",
@@ -1533,13 +1502,13 @@
     },
     {
       "family": "autocomplete",
-      "pageSize": "18.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "autocomplete-root",
+      "property": "height",
+      "reference": "68px",
+      "candidate": "126px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 27,
+      "reviewedCases": [
         "static:autocomplete@custom/desktop",
         "static:autocomplete@custom/tablet",
         "static:autocomplete@custom/mobile",
@@ -1571,13 +1540,13 @@
     },
     {
       "family": "checkbox",
-      "pageSize": "16px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "checkbox-root",
+      "property": "height",
+      "reference": "40px",
+      "candidate": "98px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 34,
+      "reviewedCases": [
         "static:checkbox@light/desktop",
         "static:checkbox@light/tablet",
         "static:checkbox@light/mobile",
@@ -1616,13 +1585,13 @@
     },
     {
       "family": "checkbox",
-      "pageSize": "14.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "checkbox-root",
+      "property": "height",
+      "reference": "28px",
+      "candidate": "86px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 17,
+      "reviewedCases": [
         "static:checkbox@contrast/desktop",
         "static:checkbox@contrast/tablet",
         "static:checkbox@contrast/mobile",
@@ -1644,13 +1613,13 @@
     },
     {
       "family": "checkbox",
-      "pageSize": "18.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "checkbox-root",
+      "property": "height",
+      "reference": "32px",
+      "candidate": "90px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 17,
+      "reviewedCases": [
         "static:checkbox@custom/desktop",
         "static:checkbox@custom/tablet",
         "static:checkbox@custom/mobile",
@@ -1672,13 +1641,13 @@
     },
     {
       "family": "radio",
-      "pageSize": "16px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "radio-root",
+      "property": "height",
+      "reference": "40px",
+      "candidate": "98px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 34,
+      "reviewedCases": [
         "static:radio@light/desktop",
         "static:radio@light/tablet",
         "static:radio@light/mobile",
@@ -1717,13 +1686,13 @@
     },
     {
       "family": "radio",
-      "pageSize": "14.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "radio-root",
+      "property": "height",
+      "reference": "28px",
+      "candidate": "86px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 17,
+      "reviewedCases": [
         "static:radio@contrast/desktop",
         "static:radio@contrast/tablet",
         "static:radio@contrast/mobile",
@@ -1745,13 +1714,13 @@
     },
     {
       "family": "radio",
-      "pageSize": "18.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "radio-root",
+      "property": "height",
+      "reference": "32px",
+      "candidate": "90px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 17,
+      "reviewedCases": [
         "static:radio@custom/desktop",
         "static:radio@custom/tablet",
         "static:radio@custom/mobile",
@@ -1773,13 +1742,13 @@
     },
     {
       "family": "select",
-      "pageSize": "16px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "select-root",
+      "property": "height",
+      "reference": "76px",
+      "candidate": "134px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 48,
+      "reviewedCases": [
         "static:select@light/desktop",
         "static:select@light/tablet",
         "static:select@light/mobile",
@@ -1832,13 +1801,13 @@
     },
     {
       "family": "select",
-      "pageSize": "14.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "select-root",
+      "property": "height",
+      "reference": "56px",
+      "candidate": "114px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 23,
+      "reviewedCases": [
         "static:select@contrast/desktop",
         "static:select@contrast/tablet",
         "static:select@contrast/mobile",
@@ -1866,13 +1835,13 @@
     },
     {
       "family": "select",
-      "pageSize": "18.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "select-root",
+      "property": "height",
+      "reference": "68px",
+      "candidate": "126px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 23,
+      "reviewedCases": [
         "static:select@custom/desktop",
         "static:select@custom/tablet",
         "static:select@custom/mobile",
@@ -1900,19 +1869,25 @@
     },
     {
       "family": "slider",
-      "pageSize": "16px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "slider-root",
+      "property": "height",
+      "reference": "48px",
+      "candidate": "106px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 78,
+      "reviewedCases": [
         "static:slider@light/desktop",
         "static:slider@light/tablet",
         "static:slider@light/mobile",
         "static:slider@dark/desktop",
         "static:slider@dark/tablet",
         "static:slider@dark/mobile",
+        "static:slider@contrast/desktop",
+        "static:slider@contrast/tablet",
+        "static:slider@contrast/mobile",
+        "static:slider@custom/desktop",
+        "static:slider@custom/tablet",
+        "static:slider@custom/mobile",
         "interaction:slider@light/desktop-dpr1/focus",
         "interaction:slider@light/desktop-dpr1/hover",
         "interaction:slider@light/desktop-dpr1/held",
@@ -1945,22 +1920,6 @@
         "interaction:slider@dark/desktop-dpr2/drag-start",
         "interaction:slider@dark/desktop-dpr2/drag-end",
         "interaction:slider@dark/desktop-dpr2/disabled",
-        "interaction:slider@light/comparison/drag-start",
-        "interaction:slider@light/comparison/drag-end"
-      ]
-    },
-    {
-      "family": "slider",
-      "pageSize": "14.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
-        "static:slider@contrast/desktop",
-        "static:slider@contrast/tablet",
-        "static:slider@contrast/mobile",
         "interaction:slider@contrast/desktop-dpr1/focus",
         "interaction:slider@contrast/desktop-dpr1/hover",
         "interaction:slider@contrast/desktop-dpr1/held",
@@ -1976,21 +1935,7 @@
         "interaction:slider@contrast/desktop-dpr2/activate-leave",
         "interaction:slider@contrast/desktop-dpr2/drag-start",
         "interaction:slider@contrast/desktop-dpr2/drag-end",
-        "interaction:slider@contrast/desktop-dpr2/disabled"
-      ]
-    },
-    {
-      "family": "slider",
-      "pageSize": "18.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
-        "static:slider@custom/desktop",
-        "static:slider@custom/tablet",
-        "static:slider@custom/mobile",
+        "interaction:slider@contrast/desktop-dpr2/disabled",
         "interaction:slider@custom/desktop-dpr1/focus",
         "interaction:slider@custom/desktop-dpr1/hover",
         "interaction:slider@custom/desktop-dpr1/held",
@@ -2006,24 +1951,32 @@
         "interaction:slider@custom/desktop-dpr2/activate-leave",
         "interaction:slider@custom/desktop-dpr2/drag-start",
         "interaction:slider@custom/desktop-dpr2/drag-end",
-        "interaction:slider@custom/desktop-dpr2/disabled"
+        "interaction:slider@custom/desktop-dpr2/disabled",
+        "interaction:slider@light/comparison/drag-start",
+        "interaction:slider@light/comparison/drag-end"
       ]
     },
     {
       "family": "slide-toggle",
-      "pageSize": "16px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "slide-toggle-root",
+      "property": "height",
+      "reference": "32px",
+      "candidate": "90px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 68,
+      "reviewedCases": [
         "static:slide-toggle@light/desktop",
         "static:slide-toggle@light/tablet",
         "static:slide-toggle@light/mobile",
         "static:slide-toggle@dark/desktop",
         "static:slide-toggle@dark/tablet",
         "static:slide-toggle@dark/mobile",
+        "static:slide-toggle@contrast/desktop",
+        "static:slide-toggle@contrast/tablet",
+        "static:slide-toggle@contrast/mobile",
+        "static:slide-toggle@custom/desktop",
+        "static:slide-toggle@custom/tablet",
+        "static:slide-toggle@custom/mobile",
         "interaction:slide-toggle@light/desktop-dpr1/focus",
         "interaction:slide-toggle@light/desktop-dpr1/hover",
         "interaction:slide-toggle@light/desktop-dpr1/held",
@@ -2051,21 +2004,7 @@
         "interaction:slide-toggle@dark/desktop-dpr2/activate",
         "interaction:slide-toggle@dark/desktop-dpr2/activate-leave",
         "interaction:slide-toggle@dark/desktop-dpr2/disabled",
-        "interaction:slide-toggle@dark/desktop-dpr2/selected"
-      ]
-    },
-    {
-      "family": "slide-toggle",
-      "pageSize": "14.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
-        "static:slide-toggle@contrast/desktop",
-        "static:slide-toggle@contrast/tablet",
-        "static:slide-toggle@contrast/mobile",
+        "interaction:slide-toggle@dark/desktop-dpr2/selected",
         "interaction:slide-toggle@contrast/desktop-dpr1/focus",
         "interaction:slide-toggle@contrast/desktop-dpr1/hover",
         "interaction:slide-toggle@contrast/desktop-dpr1/held",
@@ -2079,21 +2018,7 @@
         "interaction:slide-toggle@contrast/desktop-dpr2/activate",
         "interaction:slide-toggle@contrast/desktop-dpr2/activate-leave",
         "interaction:slide-toggle@contrast/desktop-dpr2/disabled",
-        "interaction:slide-toggle@contrast/desktop-dpr2/selected"
-      ]
-    },
-    {
-      "family": "slide-toggle",
-      "pageSize": "18.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
-        "static:slide-toggle@custom/desktop",
-        "static:slide-toggle@custom/tablet",
-        "static:slide-toggle@custom/mobile",
+        "interaction:slide-toggle@contrast/desktop-dpr2/selected",
         "interaction:slide-toggle@custom/desktop-dpr1/focus",
         "interaction:slide-toggle@custom/desktop-dpr1/hover",
         "interaction:slide-toggle@custom/desktop-dpr1/held",
@@ -2112,13 +2037,13 @@
     },
     {
       "family": "datepicker",
-      "pageSize": "16px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "datepicker-root",
+      "property": "height",
+      "reference": "76px",
+      "candidate": "134px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 57,
+      "reviewedCases": [
         "static:datepicker@light/desktop",
         "static:datepicker@light/tablet",
         "static:datepicker@light/mobile",
@@ -2180,13 +2105,13 @@
     },
     {
       "family": "datepicker",
-      "pageSize": "14.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "datepicker-root",
+      "property": "height",
+      "reference": "56px",
+      "candidate": "114px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 27,
+      "reviewedCases": [
         "static:datepicker@contrast/desktop",
         "static:datepicker@contrast/tablet",
         "static:datepicker@contrast/mobile",
@@ -2218,13 +2143,13 @@
     },
     {
       "family": "datepicker",
-      "pageSize": "18.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "datepicker-root",
+      "property": "height",
+      "reference": "68px",
+      "candidate": "126px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 27,
+      "reviewedCases": [
         "static:datepicker@custom/desktop",
         "static:datepicker@custom/tablet",
         "static:datepicker@custom/mobile",
@@ -2256,13 +2181,13 @@
     },
     {
       "family": "timepicker",
-      "pageSize": "16px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "timepicker-root",
+      "property": "height",
+      "reference": "76px",
+      "candidate": "134px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 56,
+      "reviewedCases": [
         "static:timepicker@light/desktop",
         "static:timepicker@light/tablet",
         "static:timepicker@light/mobile",
@@ -2323,13 +2248,13 @@
     },
     {
       "family": "timepicker",
-      "pageSize": "14.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "timepicker-root",
+      "property": "height",
+      "reference": "56px",
+      "candidate": "114px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 27,
+      "reviewedCases": [
         "static:timepicker@contrast/desktop",
         "static:timepicker@contrast/tablet",
         "static:timepicker@contrast/mobile",
@@ -2361,13 +2286,13 @@
     },
     {
       "family": "timepicker",
-      "pageSize": "18.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "timepicker-root",
+      "property": "height",
+      "reference": "68px",
+      "candidate": "126px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 27,
+      "reviewedCases": [
         "static:timepicker@custom/desktop",
         "static:timepicker@custom/tablet",
         "static:timepicker@custom/mobile",
@@ -2399,19 +2324,17 @@
     },
     {
       "family": "button",
-      "pageSize": "16px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "button-root",
+      "property": "height",
+      "reference": "40px",
+      "candidate": "98px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 28,
+      "reviewedCases": [
         "static:button@light/desktop",
         "static:button@light/tablet",
-        "static:button@light/mobile",
         "static:button@dark/desktop",
         "static:button@dark/tablet",
-        "static:button@dark/mobile",
         "interaction:button@light/desktop-dpr1/focus",
         "interaction:button@light/desktop-dpr1/hover",
         "interaction:button@light/desktop-dpr1/held",
@@ -2440,16 +2363,28 @@
     },
     {
       "family": "button",
-      "pageSize": "14.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "button-root",
+      "property": "height",
+      "reference": "80px",
+      "candidate": "138px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 2,
+      "reviewedCases": [
+        "static:button@light/mobile",
+        "static:button@dark/mobile"
+      ]
+    },
+    {
+      "family": "button",
+      "element": "button-root",
+      "property": "height",
+      "reference": "24px",
+      "candidate": "82px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 14,
+      "reviewedCases": [
         "static:button@contrast/desktop",
         "static:button@contrast/tablet",
-        "static:button@contrast/mobile",
         "interaction:button@contrast/desktop-dpr1/focus",
         "interaction:button@contrast/desktop-dpr1/hover",
         "interaction:button@contrast/desktop-dpr1/held",
@@ -2466,16 +2401,27 @@
     },
     {
       "family": "button",
-      "pageSize": "18.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "button-root",
+      "property": "height",
+      "reference": "48px",
+      "candidate": "106px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 1,
+      "reviewedCases": [
+        "static:button@contrast/mobile"
+      ]
+    },
+    {
+      "family": "button",
+      "element": "button-root",
+      "property": "height",
+      "reference": "28px",
+      "candidate": "86px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 14,
+      "reviewedCases": [
         "static:button@custom/desktop",
         "static:button@custom/tablet",
-        "static:button@custom/mobile",
         "interaction:button@custom/desktop-dpr1/focus",
         "interaction:button@custom/desktop-dpr1/hover",
         "interaction:button@custom/desktop-dpr1/held",
@@ -2491,20 +2437,35 @@
       ]
     },
     {
+      "family": "button",
+      "element": "button-root",
+      "property": "height",
+      "reference": "56px",
+      "candidate": "114px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 1,
+      "reviewedCases": [
+        "static:button@custom/mobile"
+      ]
+    },
+    {
       "family": "button-toggle",
-      "pageSize": "16px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "button-toggle-root",
+      "property": "height",
+      "reference": "42px",
+      "candidate": "100px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 51,
+      "reviewedCases": [
         "static:button-toggle@light/desktop",
         "static:button-toggle@light/tablet",
         "static:button-toggle@light/mobile",
         "static:button-toggle@dark/desktop",
         "static:button-toggle@dark/tablet",
         "static:button-toggle@dark/mobile",
+        "static:button-toggle@custom/desktop",
+        "static:button-toggle@custom/tablet",
+        "static:button-toggle@custom/mobile",
         "interaction:button-toggle@light/desktop-dpr1/focus",
         "interaction:button-toggle@light/desktop-dpr1/hover",
         "interaction:button-toggle@light/desktop-dpr1/held",
@@ -2532,18 +2493,32 @@
         "interaction:button-toggle@dark/desktop-dpr2/activate",
         "interaction:button-toggle@dark/desktop-dpr2/activate-leave",
         "interaction:button-toggle@dark/desktop-dpr2/disabled",
-        "interaction:button-toggle@dark/desktop-dpr2/selected"
+        "interaction:button-toggle@dark/desktop-dpr2/selected",
+        "interaction:button-toggle@custom/desktop-dpr1/focus",
+        "interaction:button-toggle@custom/desktop-dpr1/hover",
+        "interaction:button-toggle@custom/desktop-dpr1/held",
+        "interaction:button-toggle@custom/desktop-dpr1/activate",
+        "interaction:button-toggle@custom/desktop-dpr1/activate-leave",
+        "interaction:button-toggle@custom/desktop-dpr1/disabled",
+        "interaction:button-toggle@custom/desktop-dpr1/selected",
+        "interaction:button-toggle@custom/desktop-dpr2/focus",
+        "interaction:button-toggle@custom/desktop-dpr2/hover",
+        "interaction:button-toggle@custom/desktop-dpr2/held",
+        "interaction:button-toggle@custom/desktop-dpr2/activate",
+        "interaction:button-toggle@custom/desktop-dpr2/activate-leave",
+        "interaction:button-toggle@custom/desktop-dpr2/disabled",
+        "interaction:button-toggle@custom/desktop-dpr2/selected"
       ]
     },
     {
       "family": "button-toggle",
-      "pageSize": "14.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "button-toggle-root",
+      "property": "height",
+      "reference": "26px",
+      "candidate": "84px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 17,
+      "reviewedCases": [
         "static:button-toggle@contrast/desktop",
         "static:button-toggle@contrast/tablet",
         "static:button-toggle@contrast/mobile",
@@ -2564,42 +2539,14 @@
       ]
     },
     {
-      "family": "button-toggle",
-      "pageSize": "18.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
-        "static:button-toggle@custom/desktop",
-        "static:button-toggle@custom/tablet",
-        "static:button-toggle@custom/mobile",
-        "interaction:button-toggle@custom/desktop-dpr1/focus",
-        "interaction:button-toggle@custom/desktop-dpr1/hover",
-        "interaction:button-toggle@custom/desktop-dpr1/held",
-        "interaction:button-toggle@custom/desktop-dpr1/activate",
-        "interaction:button-toggle@custom/desktop-dpr1/activate-leave",
-        "interaction:button-toggle@custom/desktop-dpr1/disabled",
-        "interaction:button-toggle@custom/desktop-dpr1/selected",
-        "interaction:button-toggle@custom/desktop-dpr2/focus",
-        "interaction:button-toggle@custom/desktop-dpr2/hover",
-        "interaction:button-toggle@custom/desktop-dpr2/held",
-        "interaction:button-toggle@custom/desktop-dpr2/activate",
-        "interaction:button-toggle@custom/desktop-dpr2/activate-leave",
-        "interaction:button-toggle@custom/desktop-dpr2/disabled",
-        "interaction:button-toggle@custom/desktop-dpr2/selected"
-      ]
-    },
-    {
       "family": "menu",
-      "pageSize": "16px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "menu-root",
+      "property": "height",
+      "reference": "40px",
+      "candidate": "98px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 48,
+      "reviewedCases": [
         "static:menu@light/desktop",
         "static:menu@light/tablet",
         "static:menu@light/mobile",
@@ -2652,13 +2599,13 @@
     },
     {
       "family": "menu",
-      "pageSize": "14.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "menu-root",
+      "property": "height",
+      "reference": "24px",
+      "candidate": "82px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 23,
+      "reviewedCases": [
         "static:menu@contrast/desktop",
         "static:menu@contrast/tablet",
         "static:menu@contrast/mobile",
@@ -2686,13 +2633,13 @@
     },
     {
       "family": "menu",
-      "pageSize": "18.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "menu-root",
+      "property": "height",
+      "reference": "28px",
+      "candidate": "86px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 23,
+      "reviewedCases": [
         "static:menu@custom/desktop",
         "static:menu@custom/tablet",
         "static:menu@custom/mobile",
@@ -2720,13 +2667,13 @@
     },
     {
       "family": "tabs",
-      "pageSize": "16px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "tabs-root",
+      "property": "height",
+      "reference": "68px",
+      "candidate": "126px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 36,
+      "reviewedCases": [
         "static:tabs@light/desktop",
         "static:tabs@light/tablet",
         "static:tabs@light/mobile",
@@ -2767,13 +2714,13 @@
     },
     {
       "family": "tabs",
-      "pageSize": "14.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "tabs-root",
+      "property": "height",
+      "reference": "51px",
+      "candidate": "109px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 17,
+      "reviewedCases": [
         "static:tabs@contrast/desktop",
         "static:tabs@contrast/tablet",
         "static:tabs@contrast/mobile",
@@ -2795,13 +2742,13 @@
     },
     {
       "family": "tabs",
-      "pageSize": "18.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "tabs-root",
+      "property": "height",
+      "reference": "63px",
+      "candidate": "121px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 17,
+      "reviewedCases": [
         "static:tabs@custom/desktop",
         "static:tabs@custom/tablet",
         "static:tabs@custom/mobile",
@@ -2823,13 +2770,13 @@
     },
     {
       "family": "stepper",
-      "pageSize": "16px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "stepper-root",
+      "property": "height",
+      "reference": "115px",
+      "candidate": "173px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 34,
+      "reviewedCases": [
         "static:stepper@light/desktop",
         "static:stepper@light/tablet",
         "static:stepper@light/mobile",
@@ -2868,13 +2815,13 @@
     },
     {
       "family": "stepper",
-      "pageSize": "14.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "stepper-root",
+      "property": "height",
+      "reference": "84px",
+      "candidate": "142px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 17,
+      "reviewedCases": [
         "static:stepper@contrast/desktop",
         "static:stepper@contrast/tablet",
         "static:stepper@contrast/mobile",
@@ -2896,13 +2843,13 @@
     },
     {
       "family": "stepper",
-      "pageSize": "18.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "stepper-root",
+      "property": "height",
+      "reference": "110px",
+      "candidate": "168px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 17,
+      "reviewedCases": [
         "static:stepper@custom/desktop",
         "static:stepper@custom/tablet",
         "static:stepper@custom/mobile",
@@ -2924,13 +2871,13 @@
     },
     {
       "family": "expansion",
-      "pageSize": "16px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "expansion-root",
+      "property": "height",
+      "reference": "48px",
+      "candidate": "106px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 22,
+      "reviewedCases": [
         "static:expansion@light/desktop",
         "static:expansion@light/tablet",
         "static:expansion@light/mobile",
@@ -2940,98 +2887,74 @@
         "interaction:expansion@light/desktop-dpr1/focus",
         "interaction:expansion@light/desktop-dpr1/hover",
         "interaction:expansion@light/desktop-dpr1/held",
-        "interaction:expansion@light/desktop-dpr1/activate",
-        "interaction:expansion@light/desktop-dpr1/activate-leave",
         "interaction:expansion@light/desktop-dpr1/disabled",
-        "interaction:expansion@light/desktop-dpr1/open",
         "interaction:expansion@light/desktop-dpr2/focus",
         "interaction:expansion@light/desktop-dpr2/hover",
         "interaction:expansion@light/desktop-dpr2/held",
-        "interaction:expansion@light/desktop-dpr2/activate",
-        "interaction:expansion@light/desktop-dpr2/activate-leave",
         "interaction:expansion@light/desktop-dpr2/disabled",
-        "interaction:expansion@light/desktop-dpr2/open",
         "interaction:expansion@dark/desktop-dpr1/focus",
         "interaction:expansion@dark/desktop-dpr1/hover",
         "interaction:expansion@dark/desktop-dpr1/held",
-        "interaction:expansion@dark/desktop-dpr1/activate",
-        "interaction:expansion@dark/desktop-dpr1/activate-leave",
         "interaction:expansion@dark/desktop-dpr1/disabled",
-        "interaction:expansion@dark/desktop-dpr1/open",
         "interaction:expansion@dark/desktop-dpr2/focus",
         "interaction:expansion@dark/desktop-dpr2/hover",
         "interaction:expansion@dark/desktop-dpr2/held",
-        "interaction:expansion@dark/desktop-dpr2/activate",
-        "interaction:expansion@dark/desktop-dpr2/activate-leave",
-        "interaction:expansion@dark/desktop-dpr2/disabled",
-        "interaction:expansion@dark/desktop-dpr2/open"
+        "interaction:expansion@dark/desktop-dpr2/disabled"
       ]
     },
     {
       "family": "expansion",
-      "pageSize": "14.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "expansion-root",
+      "property": "height",
+      "reference": "36px",
+      "candidate": "94px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 11,
+      "reviewedCases": [
         "static:expansion@contrast/desktop",
         "static:expansion@contrast/tablet",
         "static:expansion@contrast/mobile",
         "interaction:expansion@contrast/desktop-dpr1/focus",
         "interaction:expansion@contrast/desktop-dpr1/hover",
         "interaction:expansion@contrast/desktop-dpr1/held",
-        "interaction:expansion@contrast/desktop-dpr1/activate",
-        "interaction:expansion@contrast/desktop-dpr1/activate-leave",
         "interaction:expansion@contrast/desktop-dpr1/disabled",
-        "interaction:expansion@contrast/desktop-dpr1/open",
         "interaction:expansion@contrast/desktop-dpr2/focus",
         "interaction:expansion@contrast/desktop-dpr2/hover",
         "interaction:expansion@contrast/desktop-dpr2/held",
-        "interaction:expansion@contrast/desktop-dpr2/activate",
-        "interaction:expansion@contrast/desktop-dpr2/activate-leave",
-        "interaction:expansion@contrast/desktop-dpr2/disabled",
-        "interaction:expansion@contrast/desktop-dpr2/open"
+        "interaction:expansion@contrast/desktop-dpr2/disabled"
       ]
     },
     {
       "family": "expansion",
-      "pageSize": "18.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "expansion-root",
+      "property": "height",
+      "reference": "40px",
+      "candidate": "98px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 11,
+      "reviewedCases": [
         "static:expansion@custom/desktop",
         "static:expansion@custom/tablet",
         "static:expansion@custom/mobile",
         "interaction:expansion@custom/desktop-dpr1/focus",
         "interaction:expansion@custom/desktop-dpr1/hover",
         "interaction:expansion@custom/desktop-dpr1/held",
-        "interaction:expansion@custom/desktop-dpr1/activate",
-        "interaction:expansion@custom/desktop-dpr1/activate-leave",
         "interaction:expansion@custom/desktop-dpr1/disabled",
-        "interaction:expansion@custom/desktop-dpr1/open",
         "interaction:expansion@custom/desktop-dpr2/focus",
         "interaction:expansion@custom/desktop-dpr2/hover",
         "interaction:expansion@custom/desktop-dpr2/held",
-        "interaction:expansion@custom/desktop-dpr2/activate",
-        "interaction:expansion@custom/desktop-dpr2/activate-leave",
-        "interaction:expansion@custom/desktop-dpr2/disabled",
-        "interaction:expansion@custom/desktop-dpr2/open"
+        "interaction:expansion@custom/desktop-dpr2/disabled"
       ]
     },
     {
       "family": "bottom-sheet",
-      "pageSize": "16px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "bottom-sheet-root",
+      "property": "height",
+      "reference": "40px",
+      "candidate": "98px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 33,
+      "reviewedCases": [
         "static:bottom-sheet@light/desktop",
         "static:bottom-sheet@light/tablet",
         "static:bottom-sheet@light/mobile",
@@ -3069,13 +2992,13 @@
     },
     {
       "family": "bottom-sheet",
-      "pageSize": "14.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "bottom-sheet-root",
+      "property": "height",
+      "reference": "24px",
+      "candidate": "82px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 15,
+      "reviewedCases": [
         "static:bottom-sheet@contrast/desktop",
         "static:bottom-sheet@contrast/tablet",
         "static:bottom-sheet@contrast/mobile",
@@ -3095,13 +3018,13 @@
     },
     {
       "family": "bottom-sheet",
-      "pageSize": "18.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "bottom-sheet-root",
+      "property": "height",
+      "reference": "28px",
+      "candidate": "86px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 15,
+      "reviewedCases": [
         "static:bottom-sheet@custom/desktop",
         "static:bottom-sheet@custom/tablet",
         "static:bottom-sheet@custom/mobile",
@@ -3121,13 +3044,13 @@
     },
     {
       "family": "dialog",
-      "pageSize": "16px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "dialog-root",
+      "property": "height",
+      "reference": "40px",
+      "candidate": "98px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 40,
+      "reviewedCases": [
         "static:dialog@light/desktop",
         "static:dialog@light/tablet",
         "static:dialog@light/mobile",
@@ -3172,13 +3095,13 @@
     },
     {
       "family": "dialog",
-      "pageSize": "14.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "dialog-root",
+      "property": "height",
+      "reference": "24px",
+      "candidate": "82px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 19,
+      "reviewedCases": [
         "static:dialog@contrast/desktop",
         "static:dialog@contrast/tablet",
         "static:dialog@contrast/mobile",
@@ -3202,13 +3125,13 @@
     },
     {
       "family": "dialog",
-      "pageSize": "18.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "dialog-root",
+      "property": "height",
+      "reference": "28px",
+      "candidate": "86px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 19,
+      "reviewedCases": [
         "static:dialog@custom/desktop",
         "static:dialog@custom/tablet",
         "static:dialog@custom/mobile",
@@ -3232,13 +3155,13 @@
     },
     {
       "family": "snack-bar",
-      "pageSize": "16px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "snack-bar-root",
+      "property": "height",
+      "reference": "40px",
+      "candidate": "98px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 37,
+      "reviewedCases": [
         "static:snack-bar@light/desktop",
         "static:snack-bar@light/tablet",
         "static:snack-bar@light/mobile",
@@ -3280,13 +3203,13 @@
     },
     {
       "family": "snack-bar",
-      "pageSize": "14.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "snack-bar-root",
+      "property": "height",
+      "reference": "24px",
+      "candidate": "82px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 17,
+      "reviewedCases": [
         "static:snack-bar@contrast/desktop",
         "static:snack-bar@contrast/tablet",
         "static:snack-bar@contrast/mobile",
@@ -3308,13 +3231,13 @@
     },
     {
       "family": "snack-bar",
-      "pageSize": "18.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "snack-bar-root",
+      "property": "height",
+      "reference": "28px",
+      "candidate": "86px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 17,
+      "reviewedCases": [
         "static:snack-bar@custom/desktop",
         "static:snack-bar@custom/tablet",
         "static:snack-bar@custom/mobile",
@@ -3336,13 +3259,13 @@
     },
     {
       "family": "tooltip",
-      "pageSize": "16px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "tooltip-root",
+      "property": "height",
+      "reference": "40px",
+      "candidate": "98px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 32,
+      "reviewedCases": [
         "static:tooltip@light/desktop",
         "static:tooltip@light/tablet",
         "static:tooltip@light/mobile",
@@ -3379,13 +3302,13 @@
     },
     {
       "family": "tooltip",
-      "pageSize": "14.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "tooltip-root",
+      "property": "height",
+      "reference": "24px",
+      "candidate": "82px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 15,
+      "reviewedCases": [
         "static:tooltip@contrast/desktop",
         "static:tooltip@contrast/tablet",
         "static:tooltip@contrast/mobile",
@@ -3405,13 +3328,13 @@
     },
     {
       "family": "tooltip",
-      "pageSize": "18.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "tooltip-root",
+      "property": "height",
+      "reference": "28px",
+      "candidate": "86px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 15,
+      "reviewedCases": [
         "static:tooltip@custom/desktop",
         "static:tooltip@custom/tablet",
         "static:tooltip@custom/mobile",
@@ -3431,148 +3354,222 @@
     },
     {
       "family": "progress-bar",
-      "pageSize": "16px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "progress-bar-root",
+      "property": "height",
+      "reference": "4px",
+      "candidate": "62px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 20,
+      "reviewedCases": [
         "static:progress-bar@light/desktop",
         "static:progress-bar@light/tablet",
         "static:progress-bar@light/mobile",
         "static:progress-bar@dark/desktop",
         "static:progress-bar@dark/tablet",
         "static:progress-bar@dark/mobile",
-        "interaction:progress-bar@light/desktop-dpr1/inspect",
-        "interaction:progress-bar@light/desktop-dpr2/inspect",
-        "interaction:progress-bar@dark/desktop-dpr1/inspect",
-        "interaction:progress-bar@dark/desktop-dpr2/inspect"
-      ]
-    },
-    {
-      "family": "progress-bar",
-      "pageSize": "14.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
         "static:progress-bar@contrast/desktop",
         "static:progress-bar@contrast/tablet",
         "static:progress-bar@contrast/mobile",
-        "interaction:progress-bar@contrast/desktop-dpr1/inspect",
-        "interaction:progress-bar@contrast/desktop-dpr2/inspect"
-      ]
-    },
-    {
-      "family": "progress-bar",
-      "pageSize": "18.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
         "static:progress-bar@custom/desktop",
         "static:progress-bar@custom/tablet",
         "static:progress-bar@custom/mobile",
+        "interaction:progress-bar@light/desktop-dpr1/inspect",
+        "interaction:progress-bar@light/desktop-dpr2/inspect",
+        "interaction:progress-bar@dark/desktop-dpr1/inspect",
+        "interaction:progress-bar@dark/desktop-dpr2/inspect",
+        "interaction:progress-bar@contrast/desktop-dpr1/inspect",
+        "interaction:progress-bar@contrast/desktop-dpr2/inspect",
         "interaction:progress-bar@custom/desktop-dpr1/inspect",
         "interaction:progress-bar@custom/desktop-dpr2/inspect"
       ]
     },
     {
       "family": "progress-spinner",
-      "pageSize": "16px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
+      "element": "progress-spinner-root",
+      "property": "height",
+      "reference": "100px",
+      "candidate": "158px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 20,
+      "reviewedCases": [
         "static:progress-spinner@light/desktop",
         "static:progress-spinner@light/tablet",
         "static:progress-spinner@light/mobile",
         "static:progress-spinner@dark/desktop",
         "static:progress-spinner@dark/tablet",
         "static:progress-spinner@dark/mobile",
-        "interaction:progress-spinner@light/desktop-dpr1/inspect",
-        "interaction:progress-spinner@light/desktop-dpr2/inspect",
-        "interaction:progress-spinner@dark/desktop-dpr1/inspect",
-        "interaction:progress-spinner@dark/desktop-dpr2/inspect"
-      ]
-    },
-    {
-      "family": "progress-spinner",
-      "pageSize": "14.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
         "static:progress-spinner@contrast/desktop",
         "static:progress-spinner@contrast/tablet",
         "static:progress-spinner@contrast/mobile",
-        "interaction:progress-spinner@contrast/desktop-dpr1/inspect",
-        "interaction:progress-spinner@contrast/desktop-dpr2/inspect"
-      ]
-    },
-    {
-      "family": "progress-spinner",
-      "pageSize": "18.4px",
-      "properties": [
-        "fontFamily",
-        "fontSize"
-      ],
-      "candidateLocalDeclaration": "<omitted>",
-      "cases": [
         "static:progress-spinner@custom/desktop",
         "static:progress-spinner@custom/tablet",
         "static:progress-spinner@custom/mobile",
+        "interaction:progress-spinner@light/desktop-dpr1/inspect",
+        "interaction:progress-spinner@light/desktop-dpr2/inspect",
+        "interaction:progress-spinner@dark/desktop-dpr1/inspect",
+        "interaction:progress-spinner@dark/desktop-dpr2/inspect",
+        "interaction:progress-spinner@contrast/desktop-dpr1/inspect",
+        "interaction:progress-spinner@contrast/desktop-dpr2/inspect",
         "interaction:progress-spinner@custom/desktop-dpr1/inspect",
         "interaction:progress-spinner@custom/desktop-dpr2/inspect"
       ]
+    },
+    {
+      "family": "sort",
+      "element": "sort-root",
+      "property": "height",
+      "reference": "20px",
+      "candidate": "77px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 4,
+      "reviewedCases": [
+        "interaction:sort@light/desktop-dpr1/focus",
+        "interaction:sort@light/desktop-dpr2/focus",
+        "interaction:sort@dark/desktop-dpr1/focus",
+        "interaction:sort@dark/desktop-dpr2/focus"
+      ]
+    },
+    {
+      "family": "sort",
+      "element": "sort-root",
+      "property": "height",
+      "reference": "19px",
+      "candidate": "76px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 2,
+      "reviewedCases": [
+        "interaction:sort@contrast/desktop-dpr1/focus",
+        "interaction:sort@contrast/desktop-dpr2/focus"
+      ]
+    },
+    {
+      "family": "sort",
+      "element": "sort-root",
+      "property": "height",
+      "reference": "23px",
+      "candidate": "80px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 2,
+      "reviewedCases": [
+        "interaction:sort@custom/desktop-dpr1/focus",
+        "interaction:sort@custom/desktop-dpr2/focus"
+      ]
+    },
+    {
+      "family": "expansion",
+      "element": "expansion-root",
+      "property": "height",
+      "reference": "136px",
+      "candidate": "194px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 12,
+      "reviewedCases": [
+        "interaction:expansion@light/desktop-dpr1/activate",
+        "interaction:expansion@light/desktop-dpr1/activate-leave",
+        "interaction:expansion@light/desktop-dpr1/open",
+        "interaction:expansion@light/desktop-dpr2/activate",
+        "interaction:expansion@light/desktop-dpr2/activate-leave",
+        "interaction:expansion@light/desktop-dpr2/open",
+        "interaction:expansion@dark/desktop-dpr1/activate",
+        "interaction:expansion@dark/desktop-dpr1/activate-leave",
+        "interaction:expansion@dark/desktop-dpr1/open",
+        "interaction:expansion@dark/desktop-dpr2/activate",
+        "interaction:expansion@dark/desktop-dpr2/activate-leave",
+        "interaction:expansion@dark/desktop-dpr2/open"
+      ]
+    },
+    {
+      "family": "expansion",
+      "element": "expansion-root",
+      "property": "height",
+      "reference": "120px",
+      "candidate": "182px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 6,
+      "reviewedCases": [
+        "interaction:expansion@contrast/desktop-dpr1/activate",
+        "interaction:expansion@contrast/desktop-dpr1/activate-leave",
+        "interaction:expansion@contrast/desktop-dpr1/open",
+        "interaction:expansion@contrast/desktop-dpr2/activate",
+        "interaction:expansion@contrast/desktop-dpr2/activate-leave",
+        "interaction:expansion@contrast/desktop-dpr2/open"
+      ]
+    },
+    {
+      "family": "expansion",
+      "element": "expansion-root",
+      "property": "height",
+      "reference": "128px",
+      "candidate": "186px",
+      "classification": "application-plugin-authoring-defect",
+      "occurrences": 6,
+      "reviewedCases": [
+        "interaction:expansion@custom/desktop-dpr1/activate",
+        "interaction:expansion@custom/desktop-dpr1/activate-leave",
+        "interaction:expansion@custom/desktop-dpr1/open",
+        "interaction:expansion@custom/desktop-dpr2/activate",
+        "interaction:expansion@custom/desktop-dpr2/activate-leave",
+        "interaction:expansion@custom/desktop-dpr2/open"
+      ]
     }
   ],
-  "verification": {
-    "focusedCommand": "node --test --test-name-pattern='root typography|field host|records source fingerprints and actual visual acceptance fields' tests/material-parity/input-equivalence-audit.spec.mjs",
-    "fullReplayCommand": "node --input-type=module -e \"import{readFileSync}from'node:fs';import{buildMaterialInputAudit,validateMaterialInputAudit}from'./tests/material-parity/input-equivalence-audit.mjs';const p=JSON.parse(readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json'));const a=buildMaterialInputAudit(p,{root:process.cwd(),normalLineBoxPath:'artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json',controlLineBoxPath:'artifacts/material-parity/control-line-box-current-ancestry-audit-v3/latest-report.json',supplementalLineBoxPath:'artifacts/material-parity/supplemental-line-box-current-ancestry-audit/latest-report.json',supplementalRoot:'artifacts/material-parity/supplemental-current-ancestry-audit'});const r=a.rootTypographyInputs,d=a.discrepancies.filter(x=>x.attribution==='reviewed-root-typography-declaration-stage');const summary={proofs:r.length,cases:new Set(r.map(x=>x.case)).size,groups:d.length,occurrences:d.reduce((n,x)=>n+x.occurrences,0),families:[...new Set(r.map(x=>x.family))].map(f=>({family:f,cases:new Set(r.filter(x=>x.family===f).map(x=>x.case)).size})),sample:r[0],summary:a.summary,sourceFingerprints:a.sourceFingerprints.length};console.log('ROOT',JSON.stringify(summary));console.log('STRICT',JSON.stringify(validateMaterialInputAudit(a)));\"",
-    "fullHarness": {
-      "command": "npm run parity:harness:check",
-      "sourceCommit": "9ef6865",
-      "passed": 563,
-      "failed": 0,
-      "skipped": 0,
-      "cancelled": 0,
-      "durationMs": 355033.1466,
-      "exitCode": 0,
-      "scope": "Audit harness self-check, not input-equivalence or rendering acceptance."
-    },
-    "focusedPassed": 9,
-    "focusedFailed": 0,
-    "focusedDurationMs": 27652.4912,
-    "strictErrors": [
-      "2947 resolved-style differences still lack root-cause attribution"
-    ],
-    "rawUniqueDifferences": 8143,
-    "rawOccurrences": 380520,
-    "classifiedGroups": 144,
-    "sourceFindings": 130,
-    "sourceFingerprints": 92,
-    "inputEquivalent": false,
-    "computedCandidateVerified": false,
-    "finalRasterVerified": false
-  },
+  "caseCount": 2311,
+  "scalarGroups": 105,
   "history": {
     "commit": "2f44011",
-    "interpretation": "Original frame/page font stack and scaled-size authoring already present; source inspection only, not a historical runtime bisect."
+    "method": "Source review, not runtime bisect.",
+    "findings": [
+      "fixture-fixed-reference-heights",
+      "fixture-responsive-height-compensation"
+    ],
+    "observation": "The initial showcase supplies per-family height tables and breakpoint-specific root height overrides. The reference .demo does not author height. Existing source findings identify these as substituted output dimensions."
   },
-  "limitations": [
-    "All 2311 main-capture sections only; supplemental overlay trees and descendant consumers are separate.",
-    "No actual computed candidate font is synthesized from omitted local declarations.",
-    "The core inherited-em box sizing defect, descendant typography overrides and section layout substitutions remain independent findings.",
-    "The full unfiltered enforced parity requirement remains outstanding."
-  ]
+  "sourceLocations": [
+    {
+      "file": "examples/material-showcase/src/app/astylar.component.ts",
+      "line": 457,
+      "observation": "referenceHeight uses density tables plus expansion/open and button adjustments"
+    },
+    {
+      "file": "examples/material-showcase/src/app/astylar.component.ts",
+      "line": 480,
+      "observation": "shared root fixed height followed by responsive overrides"
+    },
+    {
+      "file": "examples/material-showcase/src/app/astylar.component.ts",
+      "line": 1362,
+      "observation": "per-family measured-height tables"
+    },
+    {
+      "file": "examples/material-showcase/src/app/reference.component.ts",
+      "line": 106,
+      "observation": "original .demo rule has no height constraint"
+    }
+  ],
+  "implementationPlan": {
+    "owner": "Showcase fixture authoring, after independent core auto-layout verification",
+    "action": "Remove measured root-height tables and breakpoint corrections when restoring original layout inputs. Verify general core block/flex/intrinsic sizing with equal-input reductions; do not replace table entries with fresh measured heights. This finding does not prove all core auto-layout paths faulty.",
+    "separate": [
+      "Reference computed content-box height versus candidate authored border-box height",
+      "Existing block-to-flex and positioned-child substitutions",
+      "Responsive rule winner selection",
+      "Actual candidate used-size and final raster"
+    ]
+  },
+  "verification": {
+    "inputEquivalent": false,
+    "usedSizeEquivalentVerified": false,
+    "responsiveRuleSelectionVerified": false,
+    "finalRasterVerified": false,
+    "focusedCommand": "node --test --test-name-pattern='root height' tests/material-parity/input-equivalence-audit.spec.mjs",
+    "focusedResult": "3/3 pass, 9270.6198 ms. 30 valid state cases plus coincident-value case, 16 adverse mutations, seven scalar mutations and five forged reports.",
+    "browserCommand": "node --test --test-name-pattern='matching section boxes' tests/material-parity/input-tree-evidence.spec.mjs",
+    "browserResult": "1/1 pass, 1297.0004 ms. Both DPR1/2 start with 258x98 border boxes, grow to heights 138/98 after the same child height change, and restore. This is browser-only unequal-authoring sensitivity, not a candidate renderer proof.",
+    "replayCommand": "node --input-type=module -e \"import{readFileSync}from'node:fs';import{buildMaterialInputAudit,validateMaterialInputAudit}from'./tests/material-parity/input-equivalence-audit.mjs';const a=buildMaterialInputAudit(JSON.parse(readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json')),{root:process.cwd(),normalLineBoxPath:'artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json',controlLineBoxPath:'artifacts/material-parity/control-line-box-current-ancestry-audit-v3/latest-report.json',supplementalLineBoxPath:'artifacts/material-parity/supplemental-line-box-current-ancestry-audit/latest-report.json',supplementalRoot:'artifacts/material-parity/supplemental-current-ancestry-audit'});console.log(JSON.stringify({summary:a.summary,sourceFingerprintCount:a.sourceFingerprints.length,strict:validateMaterialInputAudit(a),proofs:a.rootHeightInputs.length,groups:a.discrepancies.filter(d=>d.attribution==='reviewed-root-fixed-height-authoring').map(d=>({family:d.family,element:d.element,property:d.property,reference:d.reference,candidate:d.astylar,classification:d.classification,occurrences:d.occurrences,reviewedCases:d.reviewedCases}))}));\"",
+    "combinedCommand": "node --test --test-name-pattern='root height|root color case index|root typography case index|field host case index|field host color case index|non-widget appearance case index|button appearance case index|records source fingerprints and actual visual acceptance fields' tests/material-parity/input-equivalence-audit.spec.mjs",
+    "combinedResult": "12/12 pass, 38263.8191 ms; includes fractional-height precision regression, all 2311 root-height cases, raw tree hashes and prior case indices.",
+    "fractionalRegression": "The initial replay produced 2311 proofs but only 103 attributed groups / 2299 occurrences. Two divider signatures used fractional candidate heights, while scalar comparisons normalize pixel values to three decimals. The new fractional test first failed with zero attributed groups. Classification now compares scalar precision separately while requiring exact raw candidate declaration/stage matches. Both fractional cases pass, including same-rounding-bucket raw-stage and forged-evidence rejection. Neither raw capture values nor existing numeric normalization changed.",
+    "replayStatus": "Full build/replay exits 0: 2311 proofs and 105 attributed groups / 2311 occurrences; all raw-index case lists match after existing scalar precision normalization. Raw 8143 groups / 380520 occurrences remain unchanged. Strict acceptance still reports only: 2696 resolved-style differences still lack root-cause attribution (previously 2801 before root-height attribution). Source findings remain 131, with 98 source fingerprints.",
+    "fullHarness": "The pre-correction harness passed 591/591, 477278.5706 ms. Final harness pending after the fractional join correction and its new regression test."
+  }
 }

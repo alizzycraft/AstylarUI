@@ -1362,7 +1362,8 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   const report = parityReport({}, {});
   const audit = buildMaterialInputAudit(report);
   assert.equal(audit.coverage.visualParityGreen, true);
-  assert.equal(audit.sourceFingerprints.length, 97);
+  assert.equal(audit.sourceFingerprints.length, 98);
+  assert.ok(audit.sourceFingerprints.some(s => s.file === 'tests/material-parity/root-height-input-evidence.mjs'));
   assert.ok(audit.sourceFingerprints.some(s => s.file === 'tests/material-parity/root-color-input-evidence.mjs'));
   assert.ok(audit.sourceFingerprints.some(entry => entry.file === 'tests/material-parity/appearance-input-evidence.mjs'));
   assert.ok(audit.sourceFingerprints.some(entry => entry.file === 'tests/material-parity/root-typography-input-evidence.mjs'));
@@ -10198,6 +10199,109 @@ test('an inventoried hidden or anonymous element still requires resolved style e
   assert.ok(validateMaterialInputAudit(audit).some((error) => error.includes('lack resolved style evidence')));
 });
 
+function rootHeightReport(family = 'chips', height = '98px', usedHeight = '40px') {
+  const raw = rootTypographyReport(family), e = raw.results[0], { reference: r, astylar: a } = e.inputTrees;
+  r.styles[0].height = usedHeight; r.styles[0].boxSizing = 'content-box';
+  const declarations = { height, boxSizing: 'border-box' };
+  a.rules.push({ selector: `#${family}-root`, ...declarations });
+  for (const stage of ['resolvedStyle', 'normalResolvedStyle', 'interactionResolvedStyle']) Object.assign(a.nodes[2][stage], declarations);
+  Object.assign(e.styleInputs[0].reference, { height: usedHeight, boxSizing: 'content-box' });
+  for (const stage of ['astylar', 'astylarNormalResolvedStyle', 'astylarInteractionResolvedStyle']) Object.assign(e.styleInputs[0][stage], declarations);
+  e.styleInputs[0].astylarAuthored[0].declarations = { ...e.styleInputs[0].astylarAuthored[0].declarations, ...declarations };
+  return raw;
+}
+
+test('root height preserves fixed authoring versus automatic used dimensions across states', () => {
+  const raw = parityReport({}, {}); raw.results = [];
+  for (const family of ['chips', 'button', 'expansion']) for (const height of ['98px', '186px'])
+    for (const state of [undefined, 'hover', 'held', 'focus', 'open']) {
+      const e = rootHeightReport(family, height).results[0]; e.viewport = { ...e.viewport, id: `desktop-${height}` };
+      if (state) { e.state = state; raw.interactions.push(e); } else raw.results.push(e);
+    }
+  const before = JSON.stringify(raw), audit = buildMaterialInputAudit(raw);
+  assert.equal(audit.rootHeightInputs.length, 30);
+  const ds = audit.discrepancies.filter(d => d.attribution === 'reviewed-root-fixed-height-authoring');
+  assert.equal(ds.reduce((n, d) => n + d.occurrences, 0), 30);
+  for (const d of ds) {
+    assert.equal(d.classification, 'application-plugin-authoring-defect'); assert.equal(d.reference, '40px');
+    assert.equal(d.reviewedCases.length, d.occurrences); assert.equal(d.reviewEvidence.values.referenceHeightDeclaration, '<omitted>');
+    for (const flag of ['inputEquivalent', 'usedSizeEquivalentVerified', 'responsiveRuleSelectionVerified', 'finalRasterVerified']) assert.equal(d.reviewEvidence[flag], false);
+  }
+  assert.deepEqual(validateMaterialInputAudit(audit, { requireComplete: false }).filter(e => e.includes('root height')), []);
+  assert.equal(JSON.stringify(raw), before);
+  const equal = buildMaterialInputAudit(rootHeightReport('chips', '98px', '98px'));
+  assert.equal(equal.rootHeightInputs.length, 1); assert.equal(equal.rootHeightInputs[0].inputEquivalent, false);
+});
+
+test('root height joins fractional scalar precision without changing raw declarations', () => {
+  for (const [height, usedHeight, scalarHeight, scalarUsed] of [
+    ['152.5625px', '94.5625px', '152.563px', '94.563px'],
+    ['176.5625px', '118.562px', '176.563px', '118.562px'],
+  ]) {
+    const raw = rootHeightReport('divider', height, usedHeight), before = JSON.stringify(raw);
+    const audit = buildMaterialInputAudit(raw), proof = audit.rootHeightInputs[0];
+    assert.equal(audit.rootHeightInputs.length, 1);
+    const ds = audit.discrepancies.filter(d => d.attribution === 'reviewed-root-fixed-height-authoring');
+    assert.equal(ds.length, 1);
+    assert.equal(proof.values.candidateHeightDeclaration, height);
+    assert.equal(proof.referencePath[1].computed.height, usedHeight);
+    assert.equal(ds[0].astylar, scalarHeight); assert.equal(ds[0].reference, scalarUsed);
+    assert.deepEqual(validateMaterialInputAudit(audit, { requireComplete: false }).filter(e => e.includes('root height')), []);
+    assert.equal(JSON.stringify(raw), before);
+    // A shared display rounding bucket must not hide a different raw stage.
+    const mismatch = structuredClone(raw);
+    mismatch.results[0].styleInputs[0].astylar.height = height.replace('5625', '5626');
+    assert.equal(buildMaterialInputAudit(mismatch).discrepancies.some(d => d.attribution === 'reviewed-root-fixed-height-authoring'), false);
+    const forged = structuredClone(audit);
+    forged.discrepancies.find(d => d.attribution === 'reviewed-root-fixed-height-authoring').reviewEvidence.values.candidateHeightDeclaration = height.replace('5625', '5626');
+    assert.ok(validateMaterialInputAudit(forged, { requireComplete: false }).some(e => e.includes('root height')));
+  }
+});
+
+test('root height rejects incomplete ancestry and competing or unreviewed size requests', () => {
+  for (const [index, mutate] of [
+    e => { e.inputTrees.reference.nodes[1].inline.height = { value: 'auto', important: false }; },
+    e => { e.inputTrees.reference.nodes[1].attributes.style = 'height:auto'; },
+    e => { e.inputTrees.reference.nodes[1].rules = [0]; e.inputTrees.reference.rules[0].declarations.height = { value: '98px', important: false }; },
+    e => { e.inputTrees.reference.styles[0].boxSizing = 'border-box'; },
+    e => { e.inputTrees.reference.styles[0].height = 'auto'; },
+    e => { e.inputTrees.astylar.nodes[2].authored.style = { height: '98px' }; },
+    e => { e.inputTrees.astylar.rules.at(-1).minHeight = '1px'; },
+    e => { e.inputTrees.astylar.rules.at(-1).height = '100%'; },
+    e => { e.inputTrees.astylar.rules.at(-1).height = 'calc(98px)'; },
+    e => { e.inputTrees.astylar.rules.at(-1).height = '0px'; },
+    e => { e.inputTrees.astylar.nodes[2].normalResolvedStyle.height = '99px'; },
+    e => { delete e.inputTrees.astylar.nodes[2].interactionResolvedStyle; },
+    e => { e.inputTrees.astylar.nodes[2].parent = 'root'; },
+    e => { e.inputTrees.astylar.rules.push({ selector: ':is(section)', height: '98px' }); },
+    e => { e.inputTrees.astylar.nodes.push(structuredClone(e.inputTrees.astylar.nodes[2])); },
+    e => { e.inputTrees.astylar.resolvedStyleSource = 'fixture'; },
+  ].entries()) {
+    const raw = rootHeightReport(); mutate(raw.results[0]); const audit = buildMaterialInputAudit(raw);
+    assert.equal(audit.rootHeightInputs.length, 0, `mutation ${index}`);
+    assert.ok(audit.discrepancies.every(d => d.attribution !== 'reviewed-root-fixed-height-authoring'));
+  }
+});
+
+test('root height rejects scalar and report tampering without erasing original sizes', () => {
+  for (const mutate of [i => { i.reference.height = '41px'; }, i => { i.astylar.height = '99px'; },
+    i => { i.astylarNormalResolvedStyle.boxSizing = 'content-box'; }, i => { delete i.astylarInteractionResolvedStyle; },
+    i => { i.referenceAuthored[0].declarations.height = { value: 'auto', important: false }; },
+    i => { i.astylarAuthored[0].declarations.height = '99px'; }, i => { i.astylarResolvedStyleEvidenceVersion = 1; }]) {
+    const raw = rootHeightReport(); mutate(raw.results[0].styleInputs[0]);
+    assert.ok(buildMaterialInputAudit(raw).discrepancies.every(d => d.attribution !== 'reviewed-root-fixed-height-authoring'));
+  }
+  const audit = buildMaterialInputAudit(rootHeightReport());
+  for (const mutate of [a => { a.rootHeightInputs[0].usedSizeEquivalentVerified = true; },
+    a => { a.rootHeightInputs[0].values.referenceHeightDeclaration = '98px'; },
+    a => { a.discrepancies.find(d => d.attribution === 'reviewed-root-fixed-height-authoring').classification = 'equivalent-representation'; },
+    a => { a.discrepancies.find(d => d.attribution === 'reviewed-root-fixed-height-authoring').reviewedCases = []; },
+    a => { a.discrepancies.find(d => d.attribution === 'reviewed-root-fixed-height-authoring').astylar = '40px'; }]) {
+    const copy = structuredClone(audit); mutate(copy);
+    assert.ok(validateMaterialInputAudit(copy, { requireComplete: false }).some(e => e.includes('root height')));
+  }
+});
+
 function fieldColorReport(family = 'autocomplete', dark = false, size = '16px') {
   const raw = fieldHostTypographyReport(family, size), e = raw.results[0], { reference: r, astylar: a } = e.inputTrees;
   const color = dark ? '#e6e1e5' : '#1d1b20';
@@ -10483,6 +10587,47 @@ test('root typography scalar and report tampering cannot manufacture computed eq
     const report = structuredClone(base); mutate(report);
     assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => /root typography/.test(e)));
   }
+});
+
+test('root height case index retains all fixed declarations and raw content-box measurements', async () => {
+  const { readFileSync } = await import('node:fs'), { createHash } = await import('node:crypto');
+  const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+  const index = JSON.parse(readFileSync('docs/material-root-height-audit.json', 'utf8'));
+  const bytes = readFileSync(index.capture.file); assert.equal(hash(bytes), index.capture.sha256);
+  assert.equal(index.sourceFingerprints.length, 9);
+  for (const s of index.sourceFingerprints) assert.equal(hash(readFileSync(s.file, 'utf8').replace(/\r\n/g, '\n')), s.sha256, s.file);
+  const report = JSON.parse(bytes), covered = new Map(), expected = [];
+  for (const g of index.groups) {
+    assert.equal(g.property, 'height'); assert.equal(g.classification, 'application-plugin-authoring-defect');
+    assert.equal(g.reviewedCases.length, g.occurrences);
+    for (const key of g.reviewedCases) { assert.equal(covered.has(key), false); covered.set(key, g); }
+  }
+  for (const [kind, entries] of [['static', report.results], ['interaction', report.interactions]]) for (const e of entries) {
+    const key = `${kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? `/${e.state}` : ''}`, g = covered.get(key);
+    expected.push(key); assert.ok(g, key); assert.equal(g.family, e.family); assert.equal(g.element, `${e.family}-root`);
+    const input = e.styleInputs.find(i => i.id === g.element); assert.equal(input.reference.height, g.reference);
+    assert.equal(input.reference.boxSizing, 'content-box');
+    assert.ok(input.referenceAuthored.every(r => r.declarations.height === undefined));
+    assert.ok(input.astylarAuthored.some(r => r.selector === `#${g.element}` && r.declarations.height === g.candidate));
+    for (const stage of ['astylar', 'astylarNormalResolvedStyle', 'astylarInteractionResolvedStyle']) {
+      assert.equal(input[stage].height, g.candidate); assert.equal(input[stage].boxSizing, 'border-box');
+    }
+    for (const side of ['reference', 'astylar']) {
+      const source = e.inputTrees[side], raw = readFileSync(source.file); assert.equal(hash(raw), source.sha256, `${key}/${side}`);
+      const tree = JSON.parse(raw), nodes = tree.nodes.filter(n => (side === 'reference' ? n.attributes?.id : n.authored?.id) === g.element);
+      assert.equal(nodes.length, 1); const node = nodes[0];
+      if (side === 'reference') {
+        assert.equal(node.type, 'section'); assert.equal(tree.styles[node.style].height, g.reference);
+        assert.equal(node.inline.height, undefined); assert.ok(node.rules.every(i => tree.rules[i].declarations.height === undefined));
+      } else {
+        assert.equal(node.authored.type, 'section');
+        for (const stage of ['resolvedStyle', 'normalResolvedStyle', 'interactionResolvedStyle']) assert.equal(node[stage].height, g.candidate);
+      }
+    }
+  }
+  assert.deepEqual([...covered.keys()].sort(), expected.sort()); assert.equal(covered.size, 2311); assert.equal(index.caseCount, 2311);
+  assert.equal(index.groups.length, 105); assert.equal(index.scalarGroups, 105);
+  for (const flag of ['inputEquivalent', 'usedSizeEquivalentVerified', 'responsiveRuleSelectionVerified', 'finalRasterVerified']) assert.equal(index.verification[flag], false);
 });
 
 test('field host color case index preserves every raw host and separate font authoring', async () => {
