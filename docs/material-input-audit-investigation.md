@@ -67,8 +67,11 @@ are unchanged. Classification totals are **526 authoring / 3,670 equivalent /
 312 documented limitation / 3,635 harness**, with **131 source findings / 104
 source fingerprints**. Strict validation rejects the still-incomplete audit
 solely for **2,450 unresolved attributions**, down from 2,462. The expanded
-complete harness is running serially after replay completion; its terminal result
-is pending. Production and canonical fixtures are unchanged.
+complete harness finished **622/622**, exit **0**, **687,692.6543 ms**, with no
+failures, skips or cancellations. It used the complete package file set with
+serial scheduling only. This predates the line-height filter correction and
+does not include its standalone diagnostic. It is not final enforced parity or
+input-equivalence acceptance. Production and canonical fixtures are unchanged.
 
 ## Field-host weight and tracking: token requests versus omission
 
