@@ -3,6 +3,87 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Shared field hosts: missing Material typography token ownership
+
+The [field-host case index](material-field-host-typography-audit.json) covers
+**577 cases and 1,731 property observations**: every captured form-field host
+in these six main-comparison families. It records 72 static cases and 505
+interaction boundaries across light, dark, contrast and custom profiles.
+
+| Family | Captured cases | Reviewed font-family / size / line-height observations |
+| --- | ---: | ---: |
+| Form-field | 76 | 228 |
+| Input | 76 | 228 |
+| Autocomplete | 110 | 330 |
+| Select | 94 | 282 |
+| Datepicker | 111 | 333 |
+| Timepicker | 110 | 330 |
+
+The reference `.mat-mdc-form-field` rule applies
+`--mat-form-field-container-text-*` with the corresponding
+`--mat-sys-body-large-*` fallbacks. Its captured host values are **Roboto,
+16px, 24px**. The candidate `.field-shell` rule omits all three declarations.
+Its complete page/section/host chain contains only the page's
+`Roboto, Arial, sans-serif` and profile-scaled 16px/14.4px/18.4px font size;
+the section and field host retain omitted local declarations.
+
+The first divergence is **comparison authoring**, before core consumption.
+This does not synthesize a computed candidate font from a missing diagnostic
+value, nor claim that light/dark's inherited 16px is a visible size failure.
+The component's fixed token request and page-scaled inheritance differ across
+profiles; independent child control/label styles do not restore the missing
+host ownership. The separate core inherited-em sizing proof remains a core
+defect, not an explanation or waiver for this authoring omission.
+
+### Sources, safeguards and next implementation boundary
+
+- Reference hosts are authored in `reference.component.ts:76–85`; frame
+  typography is at `:106`. Captured active `.mat-mdc-form-field` rules preserve
+  the original token expressions and computed results.
+- Candidate page typography is at `astylar.component.ts:471`, shared
+  `.field-shell` at `:540`, and host construction at `:913`, `:941`, `:1027`.
+- `git log -S "selector: '.field-shell'"` and `git show 2f44011` trace the
+  omission to the initial showcase, not a later renderer correction. This is
+  source-history evidence, not a historical runtime bisect.
+- `field-host-typography-evidence.mjs` requires unique corresponding owners,
+  complete ancestry and rule evidence, all three local style stages, the
+  exact active reference token rules, and absence of competing candidate
+  typography, reset, animation or transition declarations. Unknown possibly
+  applicable selectors prevent attribution. Every classified occurrence
+  retains its case identity; report validation replays the captured evidence.
+- The new plan item at priority 5.225 calls for restoring original token
+  ownership through the shared style input path. It does not prescribe
+  literal replacement fonts, descendant baseline offsets, fixed dimensions,
+  or plugin-side inheritance. Core inheritance/length consumption, descendant
+  styles, variable fallback origin and final raster remain separate checks.
+
+### Verification and scope
+
+Collector/source-finding commit **`90da58d`** is pushed. Focused checks:
+
+`node --test --test-name-pattern='field host|records source fingerprints and actual visual acceptance fields' tests/material-parity/input-equivalence-audit.spec.mjs`
+
+**5/5 PASS**, 13.898 seconds. The tests cover 90 synthetic family/scale/state
+cases, 19 ancestry/rule rejection controls, nine scalar rejection controls,
+four report mutations, and an independent index check against all 577 actual
+captured comparisons. The latter verifies the frozen report hash, four source
+fingerprints and all **1,154 referenced input-tree hashes**; missing local
+values remain missing.
+
+The full audit replay retains **8,143 unique style differences / 380,520
+occurrences**. Eighteen groups (1,731 occurrences) now have this source-backed
+attribution; unresolved attributions decrease **3,109 to 3,091**. All **130
+source findings** are detected and **91 source fingerprints** recorded. Strict
+validation reports only `3091 resolved-style differences still lack root-cause
+attribution`; the error-printing runner's exit 0 is not acceptance.
+
+The preceding em-evidence increment's full `npm run parity:harness:check`
+finished with **555/555 PASS**, no failures/skips/cancellations, 395.858 seconds.
+That result predates the field-host changes; it is not their full-suite gate.
+No renderer or canonical fixture was changed. This case index covers the
+captured host typography states only, not all remaining properties, every
+possible field interaction, or the final enforced parity requirement.
+
 ## Core em sizing: local font declarations bypass computed inheritance
 
 The [ten-trial, two-run public-package evidence](material-font-relative-box-audit.json)

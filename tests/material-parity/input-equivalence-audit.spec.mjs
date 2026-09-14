@@ -10313,6 +10313,52 @@ test('field host typography scalar mapping rejects changed stages, ownership and
   }
 });
 
+test('field host case index matches every captured field comparison and source fingerprint', async () => {
+  const { readFileSync } = await import('node:fs');
+  const { createHash } = await import('node:crypto');
+  const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+  const index = JSON.parse(readFileSync('docs/material-field-host-typography-audit.json', 'utf8'));
+  const raw = readFileSync(index.capture.file);
+  assert.equal(hash(raw), index.capture.sha256);
+  for (const source of index.sourceFingerprints)
+    assert.equal(hash(readFileSync(source.file, 'utf8').replace(/\r\n/g, '\n')), source.sha256, source.file);
+  assert.equal(index.sourceFingerprints.length, 4);
+  const report = JSON.parse(raw), covered = new Map();
+  for (const group of index.groups) {
+    assert.deepEqual(group.properties, ['fontFamily', 'fontSize', 'lineHeight']);
+    assert.deepEqual(group.reference, { fontFamily: 'roboto', fontSize: '16px', lineHeight: '24px' });
+    assert.equal(group.candidateLocalDeclaration, '<omitted>');
+    for (const key of group.cases) {
+      assert.equal(covered.has(key), false); covered.set(key, group);
+    }
+  }
+  const expected = [];
+  for (const [kind, entries] of [['static', report.results], ['interaction', report.interactions]]) for (const entry of entries) {
+    const inputs = entry.styleInputs.filter(input => input.referenceStructure?.type === 'mat-form-field');
+    if (!inputs.length) continue;
+    assert.equal(inputs.length, 1);
+    const input = inputs[0], key = `${kind}:${entry.family}@${entry.profile}/${entry.viewport.id}${entry.state ? `/${entry.state}` : ''}`;
+    expected.push(key); const group = covered.get(key); assert.ok(group, key);
+    assert.equal(group.family, entry.family); assert.equal(input.id, `${entry.family}-primary`);
+    const trees = {};
+    for (const side of ['reference', 'astylar']) {
+      const source = entry.inputTrees[side], bytes = readFileSync(source.file);
+      assert.equal(hash(bytes), source.sha256, `${key}/${side}`); trees[side] = JSON.parse(bytes);
+    }
+    const page = trees.astylar.nodes.find(n => n.authored.id === 'page');
+    assert.equal(page.normalResolvedStyle.fontSize, group.pageSize);
+    for (const property of group.properties) {
+      assert.equal(input.reference[property].toLowerCase(), group.reference[property]);
+      assert.equal(input.astylar[property], undefined);
+    }
+  }
+  assert.deepEqual([...covered.keys()].sort(), expected.sort());
+  assert.equal(covered.size, 577); assert.equal(index.caseCount, covered.size);
+  assert.equal(index.proofCount, covered.size * 3); assert.equal(index.scalarOccurrences, index.proofCount);
+  assert.equal(index.scalarGroups, 18);
+  assert.equal(index.verification.inputEquivalent, false);
+});
+
 function chipHostTypographyReport(fontSize = '16px') {
   const raw = templateTypographyReport('chips'), e = raw.results[0], { reference: r, astylar: a } = e.inputTrees;
   const declarations = values => Object.fromEntries(Object.entries(values).map(([k, value]) => [k, { value, important: false }]));
