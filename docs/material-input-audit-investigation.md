@@ -48,8 +48,13 @@ raw discrepancy and reduces unresolved attribution from **2,885 to 2,813**;
 strict validation still reports those 2,813 unresolved groups. The hardened
 full replay also terminates with exit 0 and identical case groups; the only
 strict error is the retained unresolved-attribution count. All ten frozen
-capture-harness fingerprints still match. Full harness verification is pending.
-No production renderer or canonical comparison inputs changed.
+capture-harness fingerprints still match. `npm run parity:harness:check` passes
+**582/582 tests**, exit 0, **453,966.9663 ms**, including the five new root-color
+tests and prior case-index checks. This verifies audit tooling, not complete
+input equivalence or the final unfiltered enforced visual matrix. Evidence and
+attribution were committed and pushed in `e3ce933`; this full-suite result is a
+separate verification increment. No production renderer or canonical comparison
+inputs changed.
 
 ## Generated mappings expose omitted scalar CSS-layer evidence
 

@@ -3618,6 +3618,6 @@
     "replayStatus": "Initial and hardened full replays terminated with exit 0 and identical 2311 proofs / 72 groups. Independent strict validation has only the preserved 2813-unresolved-groups error; this is not complete audit acceptance.",
     "focusedCommand": "node --test --test-name-pattern='root color' tests/material-parity/input-equivalence-audit.spec.mjs",
     "focusedResult": "Four root-color tests passed, 13213.3184 ms; separately, root color case index passed 1/1, 7831.3949 ms, covering every one of 2311 main boundaries and 4622 raw tree hashes.",
-    "fullHarness": "Pending for this increment."
+    "fullHarness": "npm run parity:harness:check: exit 0, 582/582 tests pass, 453966.9663 ms. Includes all five new root-color tests and prior case-index fingerprint checks. This validates audit tooling, not complete input equivalence or the final enforced visual matrix."
   }
 }
