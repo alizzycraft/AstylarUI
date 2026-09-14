@@ -23,8 +23,11 @@ counts and complete case-list hashes match. All **8,235 raw groups / 385,520
 occurrences**, including all **5,000** exposed normal/omitted line-height
 observations, remain. Strict validation still rejects the incomplete audit for
 **2,499 unresolved attributions** (previously **2,535**); `inputEquivalent` remains
-false. The expanded complete harness remains pending; earlier 626/626 coverage
-predates the new three-test file. Exact commands and results are in
+false. The expanded complete harness passes **629/629**, exit **0**, no
+failures/skips/cancellations, **675,878.9266 ms**. This includes every file in
+the current package harness, run serially, and does not replace the final
+enforced rendering matrix. Attribution increment: `e325304`, pushed to
+`codex/material-ui-showcase`. Exact commands and results are in
 [the root index](material-root-initial-style-audit.json).
 No production renderer or canonical fixture changed.
 
