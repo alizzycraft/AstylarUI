@@ -13,6 +13,7 @@ import { fieldHostTypographyAttribution, collectFieldHostTypographyInputs, class
   fieldHostAlignmentAttribution, collectFieldHostAlignmentInputs, classifyFieldHostAlignmentInput } from './field-host-typography-evidence.mjs';
 import { rootTypographyAttribution, collectRootTypographyInputs, classifyRootTypographyInput } from './root-typography-input-evidence.mjs';
 import { rootInitialStyleAttribution, collectRootInitialStyleInputs, classifyRootInitialStyleInput } from './root-initial-style-evidence.mjs';
+import { fieldHostWeightTrackingAttribution, collectFieldHostWeightTrackingInputs, classifyFieldHostWeightTrackingInput } from './field-host-weight-tracking-evidence.mjs';
 import { rootHeightAttribution, collectRootHeightInputs, classifyRootHeightInput,
   rootBoxSizingAttribution, hasRootBoxSizingWitness, classifyRootBoxSizingInput } from './root-height-input-evidence.mjs';
 import { rootColorAttribution, collectRootColorInputs, classifyRootColorInput,
@@ -124,6 +125,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const fieldColorInputs = collectFieldColorInputs(fieldHostTypographyInputs, rootColorInputs, canonicalStyle);
   const containerCaretInputs = collectContainerCaretInputs([...rootColorInputs, ...fieldColorInputs], canonicalStyle);
   const fieldHostAlignmentInputs = collectFieldHostAlignmentInputs(fieldHostTypographyInputs);
+  const fieldHostWeightTrackingInputs = collectFieldHostWeightTrackingInputs(fieldHostTypographyInputs);
   const appearanceInitialInputs = collectAppearanceInitialInputs(elementInventory, typographySelectorCanApply);
   const buttonAppearanceInputs = collectButtonAppearanceInputs(elementInventory, typographySelectorCanApply);
   const typographyCases = [...cases, ...supplementalCalendarClose.cases, ...supplementalTooltipState.cases,
@@ -149,7 +151,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const controlTypography = attributeObservedSupplementalLineBoxes(attributeObservedControlLineBoxes(
     attributeObservedNormalLineBoxes(rawControlTypography, elementInventory, normalLineBoxes), elementInventory, controlLineBoxes),
     elementInventory, supplementalLineBoxes);
-  const discrepancies = collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs, nonGridTemplateInputs, buttonTypographyScalarInputs, chipHostTypographyInputs, fieldHostTypographyInputs, rootTypographyInputs, appearanceInitialInputs, buttonAppearanceInputs, rootColorInputs, fieldColorInputs, rootHeightInputs, containerCaretInputs, fieldHostAlignmentInputs, rootInitialStyleInputs);
+  const discrepancies = collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs, nonGridTemplateInputs, buttonTypographyScalarInputs, chipHostTypographyInputs, fieldHostTypographyInputs, rootTypographyInputs, appearanceInitialInputs, buttonAppearanceInputs, rootColorInputs, fieldColorInputs, rootHeightInputs, containerCaretInputs, fieldHostAlignmentInputs, rootInitialStyleInputs, fieldHostWeightTrackingInputs);
   const classifications = countBy(discrepancies, (entry) => entry.classification);
   const propertyGroupCounts = countBy(discrepancies, (entry) => entry.propertyGroup);
   const familyCounts = countBy(discrepancies, (entry) => entry.family);
@@ -231,6 +233,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
     fieldColorInputs,
     containerCaretInputs,
     fieldHostAlignmentInputs,
+    fieldHostWeightTrackingInputs,
     appearanceInitialInputs,
     buttonAppearanceInputs,
     retainedTypography,
@@ -374,6 +377,19 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
         entry.reviewedCases.length !== entry.occurrences || new Set(entry.reviewedCases).size !== entry.occurrences ||
         entry.reviewedCases.some(key => !report.rootHeightInputs?.some(p => p.case === key && p.element === entry.element && hasRootBoxSizingWitness(p)))) {
       errors.push('root box model attribution lacks fixed-height and exact declaration evidence');
+    }
+  }
+  if (JSON.stringify(report.fieldHostWeightTrackingInputs) !== JSON.stringify(collectFieldHostWeightTrackingInputs(
+    collectFieldHostTypographyInputs(report.elementInventory, canonicalStyle, typographySelectorCanApply)))) {
+    errors.push('field host weight/tracking evidence does not replay from captured requests');
+  }
+  for (const entry of report.discrepancies.filter(d => d.attribution === fieldHostWeightTrackingAttribution)) {
+    const proof = report.fieldHostWeightTrackingInputs?.find(p => p.case === entry.reviewEvidence?.case && p.element === entry.element && p.property === entry.property);
+    if (!proof || entry.classification !== 'application-plugin-authoring-defect' || entry.reference !== proof.values.reference || entry.astylar !== undefined ||
+        JSON.stringify(proof) !== JSON.stringify(entry.reviewEvidence) || !Array.isArray(entry.reviewedCases) ||
+        entry.reviewedCases.length !== entry.occurrences || new Set(entry.reviewedCases).size !== entry.occurrences ||
+        entry.reviewedCases.some(key => !report.fieldHostWeightTrackingInputs?.some(p => p.case === key && p.element === entry.element && p.property === entry.property && p.values.reference === entry.reference))) {
+      errors.push('field host weight/tracking classification lacks exact declaration, stage and case evidence');
     }
   }
   if (JSON.stringify(report.fieldHostAlignmentInputs) !== JSON.stringify(collectFieldHostAlignmentInputs(
@@ -1124,7 +1140,8 @@ export function renderMaterialInputAuditMarkdown(report) {
   return lines.join('\n');
 }
 
-function collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs, nonGridTemplateInputs, buttonTypographyScalarInputs, chipHostTypographyInputs, fieldHostTypographyInputs, rootTypographyInputs, appearanceInitialInputs, buttonAppearanceInputs, rootColorInputs, fieldColorInputs, rootHeightInputs, containerCaretInputs, fieldHostAlignmentInputs, rootInitialStyleInputs) {
+function collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs, nonGridTemplateInputs, buttonTypographyScalarInputs, chipHostTypographyInputs, fieldHostTypographyInputs, rootTypographyInputs, appearanceInitialInputs, buttonAppearanceInputs, rootColorInputs, fieldColorInputs, rootHeightInputs, containerCaretInputs, fieldHostAlignmentInputs, rootInitialStyleInputs, fieldHostWeightTrackingInputs) {
+  const fieldWeightTrackingByCaseIdProperty = new Map(fieldHostWeightTrackingInputs.map(p => [JSON.stringify([p.case, p.element, p.property]), p]));
   const rootInitialByCaseIdProperty = new Map(rootInitialStyleInputs.map(p => [JSON.stringify([p.case, p.element, p.property]), p]));
   const fieldAlignmentByCaseId = new Map(fieldHostAlignmentInputs.map(p => [JSON.stringify([p.case, p.element]), p]));
   const containerCaretByCaseId = new Map(containerCaretInputs.map(p => [JSON.stringify([p.case, p.element]), p]));
@@ -1190,6 +1207,8 @@ function collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInp
               rootTypographyByCaseIdProperty.get(JSON.stringify([key, input.id, property])), canonicalStyle)
             ?? classifyRootInitialStyleInput(input, property, referenceValue, astylarValue,
               rootInitialByCaseIdProperty.get(JSON.stringify([key, input.id, property])))
+            ?? classifyFieldHostWeightTrackingInput(input, property, referenceValue, astylarValue,
+              fieldWeightTrackingByCaseIdProperty.get(JSON.stringify([key, input.id, property])))
             ?? classifyRootColorInput(input, property, referenceValue, astylarValue,
               rootColorByCaseId.get(JSON.stringify([key, input.id])), canonicalStyle)
             ?? classifyFieldColorInput(input, property, referenceValue, astylarValue,
@@ -1224,7 +1243,7 @@ function collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInp
             ...(classification.attribution ? { attribution: classification.attribution } : {}),
             ...(classification.reviewEvidence ? { reviewEvidence: classification.reviewEvidence } : {}),
             ...([borderInitialAttribution, buttonBorderResetAttribution, outlineTokenAttribution, chipOutlineAttribution,
-              'reviewed-root-flow-dependency', nonGridTemplateAttribution, 'reviewed-button-typography-host-input', chipHostTypographyAttribution, fieldHostTypographyAttribution, fieldHostAlignmentAttribution, rootTypographyAttribution, rootInitialStyleAttribution, appearanceInitialAttribution, buttonAppearanceAttribution, rootColorAttribution, fieldColorAttribution, rootHeightAttribution, rootBoxSizingAttribution, containerCaretAttribution].includes(classification.attribution) ? { reviewedCases: [] } : {}),
+              'reviewed-root-flow-dependency', nonGridTemplateAttribution, 'reviewed-button-typography-host-input', chipHostTypographyAttribution, fieldHostTypographyAttribution, fieldHostAlignmentAttribution, fieldHostWeightTrackingAttribution, rootTypographyAttribution, rootInitialStyleAttribution, appearanceInitialAttribution, buttonAppearanceAttribution, rootColorAttribution, fieldColorAttribution, rootHeightAttribution, rootBoxSizingAttribution, containerCaretAttribution].includes(classification.attribution) ? { reviewedCases: [] } : {}),
             occurrences: 0,
             cases: [],
             states: [],
@@ -8011,6 +8030,9 @@ function sourceFingerprints(root) {
     'tests/material-parity/root-initial-style-evidence.mjs',
     'tests/material-parity/root-initial-style-evidence.spec.mjs',
     'tests/material-parity/root-initial-style-sensitivity.spec.mjs',
+    'tests/material-parity/field-host-weight-tracking-evidence.mjs',
+    'tests/material-parity/field-host-weight-tracking-evidence.spec.mjs',
+    'tests/material-parity/field-host-token-sensitivity.spec.mjs',
     'tests/material-parity/root-height-input-evidence.mjs',
     'tests/material-parity/root-color-input-evidence.mjs',
     'tests/material-parity/appearance-input-evidence.mjs',
@@ -8041,6 +8063,10 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/field-host-weight-tracking-evidence.spec.mjs', /test\('field host weight\/tracking independently/,
+      'field host weight and tracking token ownership', 'Complete captured host/section/page paths, exact active Material token requests, candidate omissions and all diagnostic stages are independently checked. All 577 cases and 1154 raw scalar joins are preserved; conflicting inputs and expanded computed, theme-origin, descendant or raster claims are rejected.'),
+    proof(root, 'tests/material-parity/field-host-token-sensitivity.spec.mjs', /test\(`field host weight\/tracking token/,
+      'browser host token sensitivity', 'DPR1/2 probes preserve installed Material token expressions and distinguish ancestor inheritance, system fallback, component overrides, invalid tokens and descendant overrides. Synthetic token values establish browser sensitivity, not candidate computed style or pixels.'),
     proof(root, 'tests/material-parity/root-initial-style-evidence.spec.mjs', /test\('root initial-style proof preserves/,
       'root initial and inherited computed values versus omitted local declarations', 'Complete captured frame/page/section identity, direction/writing mode, requests and core state-style stages are checked before attribution. Competing rules, malformed ancestry and contexts, resets, unknown selectors and forged computed/raster claims reject the proof. Every raw case and property is preserved. Candidate computed values, descendant consumers and final rendering are not inferred.'),
     proof(root, 'tests/material-parity/root-initial-style-sensitivity.spec.mjs', /test\(`root initial styles require/,

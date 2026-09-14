@@ -3,6 +3,33 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Complete field-host weight/tracking request attribution
+
+The [guarded case index](material-field-host-weight-tracking-audit.json) covers
+**577 captured cases / 1,154 property observations / 12 groups** across
+autocomplete, datepicker, form-field, input, select and timepicker. Independent
+host typography mapping supplies the captured page/section/host paths; the new
+collector then checks weight and tracking declarations separately. Reference
+hosts explicitly request the original Material component/system token chains;
+candidate hosts and both ancestors omit the requests in authoring and all three
+captured local style stages. These are authoring omissions, not justification
+for new child offsets or literal replacements for tokens.
+
+The standalone collector and all raw scalar joins pass **4/4**, **29,317.6998 ms**.
+The main report now includes the collector and replays it independently during
+validation; forged classifications, reviewed cases and computed/theme-origin/
+descendant/raster claims are rejected. The first integrated run passed 4/5:
+its positive validator exposed three supplemental collection errors from the
+new test's default directory. The test now supplies the pinned current-ancestry
+supplement directory without weakening the assertion. The final integrated
+tests pass **5/5**, exit **0**, **135,445.4312 ms**, including all raw scalar joins,
+the durable case index, seven source hashes and seven forged-report mutations.
+Prior-index, source-fingerprint, root-style and browser-token checks also pass
+**18/18**, exit **0**, **53,846.3944 ms**, no failures/skips/cancellations.
+The complete all-family replay and expanded full harness remain pending.
+The last verified full-audit unresolved count remains **2,462**, not an estimated
+reduction based on this subset. Production and canonical fixtures are unchanged.
+
 ## Field-host weight and tracking: token requests versus omission
 
 The [standalone browser proof](material-field-host-token-sensitivity-audit.json)
@@ -23,9 +50,9 @@ not an Astylar computed-style emulator or a core defect reproduction. The earlie
 
 Current `.field-shell` authoring at `astylar.component.ts:540` and the initial
 showcase commit `2f44011` omit these properties in that rule. This source history
-is not a runtime bisect or a complete cascade proof. The next step is guarded
-full-capture attribution across all six form-field families, preserving actual
-theme-token provenance and descendant overrides. Do not normalize `400` or
+is not a runtime bisect or a complete cascade proof. The guarded full-capture
+attribution above now checks all six form-field families. Actual theme-token
+provenance and descendant consumers remain separate obligations. Do not normalize `400` or
 `0.496px` into omissions or substitute literal values for the original tokens.
 No production inputs changed and no existing audit discrepancy was reclassified.
 

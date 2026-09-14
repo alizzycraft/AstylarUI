@@ -22,7 +22,7 @@
       }
     ],
     "dprObservationsIdentical": true,
-    "fullHarnessCoverage": "The preceding 615/615 serial harness run does not include this newly added standalone test. It has its own explicit command; integration into the complete harness remains pending."
+    "fullHarnessCoverage": "The preceding 615/615 serial harness run did not include this standalone test. It now appears in package.json alongside the guarded field-host weight/tracking proof; expanded complete harness verification remains pending."
   },
   "finding": {
     "id": "field-host-weight-tracking-token-sensitivity",
