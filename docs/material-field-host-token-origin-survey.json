@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "findingId": "field-host-token-origin-autocomplete-light-survey",
+  "scope": "read-only current frozen reference autocomplete light desktop DPR1; not all-family/state token-origin proof",
+  "status": "Verified single-case reference survey. All-family/state and Astylar consumer proof remain pending.",
+  "url": "http://127.0.0.1:4431/reference/autocomplete?benchmark=1&profile=light",
+  "viewport": {
+    "width": 1440,
+    "height": 1000,
+    "deviceScaleFactor": 1
+  },
+  "browserVersion": "152.0.7977.76",
+  "command": "node --input-type=module -e \"import assert from'node:assert/strict';import{chromium}from'playwright-core';const b=await chromium.launch({channel:'chrome',headless:true});try{const p=await b.newPage({viewport:{width:1440,height:1000},deviceScaleFactor:1});const errors=[];p.on('pageerror',e=>errors.push(e.message));await p.goto('http://127.0.0.1:4431/reference/autocomplete?benchmark=1&profile=light');await p.locator('#autocomplete-primary').waitFor({state:'visible'});await p.evaluate(()=>document.fonts.ready);const observation=await p.evaluate(()=>{const read=n=>{const s=getComputedStyle(n);return{fontSize:s.fontSize,fontWeight:s.fontWeight,letterSpacing:s.letterSpacing,systemWeight:s.getPropertyValue('--mat-sys-body-large-weight').trim(),systemTracking:s.getPropertyValue('--mat-sys-body-large-tracking').trim(),componentWeight:s.getPropertyValue('--mat-form-field-container-text-weight').trim(),componentTracking:s.getPropertyValue('--mat-form-field-container-text-tracking').trim()};};return{root:read(document.documentElement),frame:read(document.querySelector('.frame')),host:read(document.getElementById('autocomplete-primary')),stylesheets:[...document.querySelectorAll('link[rel=stylesheet]')].map(n=>n.href)};});assert.deepEqual(errors,[]);assert.equal(observation.root.fontSize,'16px');assert.equal(observation.host.systemTracking,'.031rem');assert.equal(observation.host.componentTracking,'');assert.equal(observation.host.letterSpacing,'0.496px');assert.equal(observation.host.fontWeight,'400');console.log(JSON.stringify({browserVersion:b.version(),scope:'read-only current frozen reference autocomplete light desktop DPR1; not all-family/state token-origin proof',observation,errors}));}finally{await b.close();}\"",
+  "verification": {
+    "exitCode": 0,
+    "repeatExitCode": 0,
+    "repeatObservationsIdentical": true,
+    "pageErrors": [],
+    "settlement": "Reference host visible, document.fonts.ready resolved. Read-only computed styles; no screenshot or raster claim.",
+    "servedStylesheetBytesMatch": true
+  },
+  "stylesheet": {
+    "file": "examples/material-showcase/dist/material-showcase-current-ancestry-audit/browser/styles-SFHGRD5K.css",
+    "sha256": "e6ac3260fbe0d21fab11df360ce38dc5f4d1b56bd4f79b5e36d3af8971a23896",
+    "selector": "html",
+    "trackingDeclaration": "--mat-sys-body-large-tracking: .031rem",
+    "trackingOffset": 18879,
+    "weightDeclaration": "--mat-sys-body-large-weight: 400"
+  },
+  "observation": {
+    "root": {
+      "fontSize": "16px",
+      "fontWeight": "400",
+      "letterSpacing": "normal",
+      "systemWeight": "400",
+      "systemTracking": ".031rem",
+      "componentWeight": "",
+      "componentTracking": ""
+    },
+    "frame": {
+      "fontSize": "16px",
+      "fontWeight": "400",
+      "letterSpacing": "normal",
+      "systemWeight": "400",
+      "systemTracking": ".031rem",
+      "componentWeight": "",
+      "componentTracking": ""
+    },
+    "host": {
+      "fontSize": "16px",
+      "fontWeight": "400",
+      "letterSpacing": "0.496px",
+      "systemWeight": "400",
+      "systemTracking": ".031rem",
+      "componentWeight": "",
+      "componentTracking": ""
+    },
+    "stylesheets": [
+      "http://127.0.0.1:4431/styles-SFHGRD5K.css"
+    ]
+  },
+  "interpretation": "The host's captured 0.496px is the used computed form of the system .031rem request against a 16px root font. Empty component tokens select the system fallback. Ancestor/root letter-spacing remains normal, so this case distinguishes explicit host tracking from ordinary property inheritance. The pixel value must not replace the original variable/rem request in future fixture corrections.",
+  "limitations": [
+    "Only reference autocomplete/light/desktop/DPR1 was measured; the 577-case index's themeTokenOriginVerified flag remains false.",
+    "No Astylar computed style, token-resolution support, layout, descendant consumer or raster correctness is inferred.",
+    "Root font changes and other profiles/states require separate observations; this read-only survey did not mutate the reference.",
+    "The complete enforced parity matrix remains outstanding."
+  ]
+}

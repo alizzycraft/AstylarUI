@@ -32,6 +32,16 @@ reduction based on this subset. Production and canonical fixtures are unchanged.
 
 ## Field-host weight and tracking: token requests versus omission
 
+The [reference token-origin survey](material-field-host-token-origin-survey.json)
+now confirms one actual frozen case: autocomplete/light/desktop/DPR1 has a
+16px root font, inherited system token `.031rem`, no component tracking override,
+and host computed tracking `0.496px`. Root/frame computed tracking stays `normal`.
+The live served stylesheet is byte-identical to the frozen file; its `html` rule
+owns `.031rem` and system weight `400`. This does not extend token-origin proof
+to every family/theme/state or to Astylar consumers. The full case index retains
+`themeTokenOriginVerified:false`. Preserve rem/token dependencies instead of
+replacing the request with the measured pixel value.
+
 The [standalone browser proof](material-field-host-token-sensitivity-audit.json)
 extracts the installed Material host's exact `font-weight` and `letter-spacing`
 token requests. Both explicit-token and omitted controls initially compute to
