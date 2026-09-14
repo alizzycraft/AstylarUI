@@ -49,7 +49,10 @@ occurrences**, with exact linked case-set agreement. Raw **8,143 groups /
 380,520 occurrences**, classifications, 131 source findings and 98 source
 fingerprints remain unchanged. Strict validation still reports **2,576
 unresolved style groups**, down from 2,660, and no other strict errors.
-Full harness verification is pending. No production renderer or canonical
+`npm run parity:harness:check` exits 0 with **601/601 pass**, **643,320.8802
+ms**, no failures, skips or cancellations. This includes all four caret audit
+checks and the browser computed-style sensitivity test. Attribution increment:
+`533d240`. No production renderer or canonical
 comparison inputs were changed, and this finding does not establish complete
 input equivalence or final enforced parity.
 
