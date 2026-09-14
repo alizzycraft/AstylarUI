@@ -32,8 +32,12 @@ unique reviewed-case counts and complete sorted case-list hashes. The original
 **8,143 style groups / 380,520 occurrences** and classification totals are
 unchanged. There are **131 source findings / 101 source fingerprints**. Strict
 validation rejects the still-incomplete audit solely for **2,462 unresolved
-attributions**, down from 2,570. The expanded full harness is running serially
-after replay completion. No renderer or canonical fixture inputs have changed.
+attributions**, down from 2,570. The expanded full harness completed serially:
+**615/615 pass**, exit **0**, **571,694.5167 ms**, no failures/skips/cancellations.
+The exact command is retained in the linked index. This covers both root-style
+test files, but not the subsequently added standalone field-host token proof.
+It is not the final enforced rendering-parity matrix. No renderer or canonical
+fixture inputs have changed.
 
 ## Initial style values require inheritance and formatting-context evidence
 
