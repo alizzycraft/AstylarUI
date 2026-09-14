@@ -10,7 +10,7 @@
   "sourceFingerprints": [
     {
       "file": "tests/material-parity/input-equivalence-audit.mjs",
-      "sha256": "9949dd88fa2c640e6fd0ffbf05a19f203c665dce7c746bb71b64c53c1440c2fe"
+      "sha256": "1b87e7fa26e9c2b5d3767fb8626bd991eef1b4959cb3cb62684649914459d50b"
     },
     {
       "file": "tests/material-parity/root-typography-input-evidence.mjs",
@@ -34,7 +34,7 @@
     },
     {
       "file": "tests/material-parity/root-height-input-evidence.mjs",
-      "sha256": "46d76a9ca95421ebf6f2fbdf6b6a9b797b3b5b6fc9f4e4f06ec268b33f865acf"
+      "sha256": "3cb6d793f58e383beb6871e2c76782e6b2a1b9ad706af77f0f71e8ee99d05645"
     },
     {
       "file": "tests/material-parity/input-tree-evidence.spec.mjs",
@@ -3515,6 +3515,528 @@
   ],
   "caseCount": 2311,
   "scalarGroups": 105,
+  "companionBoxModel": {
+    "attribution": "reviewed-root-fixed-height-box-model",
+    "scope": "Companion box-model change in the independently proven fixed-height authoring path, not a claim that content-box/border-box conversions are inherently invalid or a new core defect.",
+    "caseCount": 2311,
+    "groupCount": 36,
+    "caseEncoding": "Each heightGroupIndices entry indexes this document's groups array; concatenate those reviewedCases lists to obtain every reviewed boundary. No display sampling.",
+    "groups": [
+      {
+        "family": "core",
+        "element": "core-root",
+        "property": "boxSizing",
+        "reference": "content-box",
+        "candidate": "border-box",
+        "classification": "application-plugin-authoring-defect",
+        "occurrences": 52,
+        "heightGroupIndices": [
+          0,
+          1,
+          2
+        ]
+      },
+      {
+        "family": "toolbar",
+        "element": "toolbar-root",
+        "property": "boxSizing",
+        "reference": "content-box",
+        "candidate": "border-box",
+        "classification": "application-plugin-authoring-defect",
+        "occurrences": 52,
+        "heightGroupIndices": [
+          3,
+          4,
+          5,
+          6,
+          7
+        ]
+      },
+      {
+        "family": "sidenav",
+        "element": "sidenav-root",
+        "property": "boxSizing",
+        "reference": "content-box",
+        "candidate": "border-box",
+        "classification": "application-plugin-authoring-defect",
+        "occurrences": 62,
+        "heightGroupIndices": [
+          8
+        ]
+      },
+      {
+        "family": "grid-list",
+        "element": "grid-list-root",
+        "property": "boxSizing",
+        "reference": "content-box",
+        "candidate": "border-box",
+        "classification": "application-plugin-authoring-defect",
+        "occurrences": 52,
+        "heightGroupIndices": [
+          9
+        ]
+      },
+      {
+        "family": "divider",
+        "element": "divider-root",
+        "property": "boxSizing",
+        "reference": "content-box",
+        "candidate": "border-box",
+        "classification": "application-plugin-authoring-defect",
+        "occurrences": 24,
+        "heightGroupIndices": [
+          10,
+          11,
+          12
+        ]
+      },
+      {
+        "family": "badge",
+        "element": "badge-root",
+        "property": "boxSizing",
+        "reference": "content-box",
+        "candidate": "border-box",
+        "classification": "application-plugin-authoring-defect",
+        "occurrences": 52,
+        "heightGroupIndices": [
+          13,
+          14,
+          15
+        ]
+      },
+      {
+        "family": "card",
+        "element": "card-root",
+        "property": "boxSizing",
+        "reference": "content-box",
+        "candidate": "border-box",
+        "classification": "application-plugin-authoring-defect",
+        "occurrences": 52,
+        "heightGroupIndices": [
+          16,
+          17,
+          18
+        ]
+      },
+      {
+        "family": "chips",
+        "element": "chips-root",
+        "property": "boxSizing",
+        "reference": "content-box",
+        "candidate": "border-box",
+        "classification": "application-plugin-authoring-defect",
+        "occurrences": 76,
+        "heightGroupIndices": [
+          19,
+          20
+        ]
+      },
+      {
+        "family": "icon",
+        "element": "icon-root",
+        "property": "boxSizing",
+        "reference": "content-box",
+        "candidate": "border-box",
+        "classification": "application-plugin-authoring-defect",
+        "occurrences": 20,
+        "heightGroupIndices": [
+          21,
+          22
+        ]
+      },
+      {
+        "family": "list",
+        "element": "list-root",
+        "property": "boxSizing",
+        "reference": "content-box",
+        "candidate": "border-box",
+        "classification": "application-plugin-authoring-defect",
+        "occurrences": 52,
+        "heightGroupIndices": [
+          23,
+          24,
+          25
+        ]
+      },
+      {
+        "family": "table",
+        "element": "table-root",
+        "property": "boxSizing",
+        "reference": "content-box",
+        "candidate": "border-box",
+        "classification": "application-plugin-authoring-defect",
+        "occurrences": 52,
+        "heightGroupIndices": [
+          26,
+          27,
+          28
+        ]
+      },
+      {
+        "family": "sort",
+        "element": "sort-root",
+        "property": "boxSizing",
+        "reference": "content-box",
+        "candidate": "border-box",
+        "classification": "application-plugin-authoring-defect",
+        "occurrences": 60,
+        "heightGroupIndices": [
+          29,
+          30,
+          31,
+          99,
+          100,
+          101
+        ]
+      },
+      {
+        "family": "paginator",
+        "element": "paginator-root",
+        "property": "boxSizing",
+        "reference": "content-box",
+        "candidate": "border-box",
+        "classification": "application-plugin-authoring-defect",
+        "occurrences": 52,
+        "heightGroupIndices": [
+          32,
+          33,
+          34,
+          35
+        ]
+      },
+      {
+        "family": "tree",
+        "element": "tree-root",
+        "property": "boxSizing",
+        "reference": "content-box",
+        "candidate": "border-box",
+        "classification": "application-plugin-authoring-defect",
+        "occurrences": 52,
+        "heightGroupIndices": [
+          36,
+          37,
+          38
+        ]
+      },
+      {
+        "family": "form-field",
+        "element": "form-field-root",
+        "property": "boxSizing",
+        "reference": "content-box",
+        "candidate": "border-box",
+        "classification": "application-plugin-authoring-defect",
+        "occurrences": 76,
+        "heightGroupIndices": [
+          39,
+          40,
+          41
+        ]
+      },
+      {
+        "family": "input",
+        "element": "input-root",
+        "property": "boxSizing",
+        "reference": "content-box",
+        "candidate": "border-box",
+        "classification": "application-plugin-authoring-defect",
+        "occurrences": 76,
+        "heightGroupIndices": [
+          42,
+          43,
+          44
+        ]
+      },
+      {
+        "family": "autocomplete",
+        "element": "autocomplete-root",
+        "property": "boxSizing",
+        "reference": "content-box",
+        "candidate": "border-box",
+        "classification": "application-plugin-authoring-defect",
+        "occurrences": 110,
+        "heightGroupIndices": [
+          45,
+          46,
+          47
+        ]
+      },
+      {
+        "family": "checkbox",
+        "element": "checkbox-root",
+        "property": "boxSizing",
+        "reference": "content-box",
+        "candidate": "border-box",
+        "classification": "application-plugin-authoring-defect",
+        "occurrences": 68,
+        "heightGroupIndices": [
+          48,
+          49,
+          50
+        ]
+      },
+      {
+        "family": "radio",
+        "element": "radio-root",
+        "property": "boxSizing",
+        "reference": "content-box",
+        "candidate": "border-box",
+        "classification": "application-plugin-authoring-defect",
+        "occurrences": 68,
+        "heightGroupIndices": [
+          51,
+          52,
+          53
+        ]
+      },
+      {
+        "family": "select",
+        "element": "select-root",
+        "property": "boxSizing",
+        "reference": "content-box",
+        "candidate": "border-box",
+        "classification": "application-plugin-authoring-defect",
+        "occurrences": 94,
+        "heightGroupIndices": [
+          54,
+          55,
+          56
+        ]
+      },
+      {
+        "family": "slider",
+        "element": "slider-root",
+        "property": "boxSizing",
+        "reference": "content-box",
+        "candidate": "border-box",
+        "classification": "application-plugin-authoring-defect",
+        "occurrences": 78,
+        "heightGroupIndices": [
+          57
+        ]
+      },
+      {
+        "family": "slide-toggle",
+        "element": "slide-toggle-root",
+        "property": "boxSizing",
+        "reference": "content-box",
+        "candidate": "border-box",
+        "classification": "application-plugin-authoring-defect",
+        "occurrences": 68,
+        "heightGroupIndices": [
+          58
+        ]
+      },
+      {
+        "family": "datepicker",
+        "element": "datepicker-root",
+        "property": "boxSizing",
+        "reference": "content-box",
+        "candidate": "border-box",
+        "classification": "application-plugin-authoring-defect",
+        "occurrences": 111,
+        "heightGroupIndices": [
+          59,
+          60,
+          61
+        ]
+      },
+      {
+        "family": "timepicker",
+        "element": "timepicker-root",
+        "property": "boxSizing",
+        "reference": "content-box",
+        "candidate": "border-box",
+        "classification": "application-plugin-authoring-defect",
+        "occurrences": 110,
+        "heightGroupIndices": [
+          62,
+          63,
+          64
+        ]
+      },
+      {
+        "family": "button",
+        "element": "button-root",
+        "property": "boxSizing",
+        "reference": "content-box",
+        "candidate": "border-box",
+        "classification": "application-plugin-authoring-defect",
+        "occurrences": 60,
+        "heightGroupIndices": [
+          65,
+          66,
+          67,
+          68,
+          69,
+          70
+        ]
+      },
+      {
+        "family": "button-toggle",
+        "element": "button-toggle-root",
+        "property": "boxSizing",
+        "reference": "content-box",
+        "candidate": "border-box",
+        "classification": "application-plugin-authoring-defect",
+        "occurrences": 68,
+        "heightGroupIndices": [
+          71,
+          72
+        ]
+      },
+      {
+        "family": "menu",
+        "element": "menu-root",
+        "property": "boxSizing",
+        "reference": "content-box",
+        "candidate": "border-box",
+        "classification": "application-plugin-authoring-defect",
+        "occurrences": 94,
+        "heightGroupIndices": [
+          73,
+          74,
+          75
+        ]
+      },
+      {
+        "family": "tabs",
+        "element": "tabs-root",
+        "property": "boxSizing",
+        "reference": "content-box",
+        "candidate": "border-box",
+        "classification": "application-plugin-authoring-defect",
+        "occurrences": 70,
+        "heightGroupIndices": [
+          76,
+          77,
+          78
+        ]
+      },
+      {
+        "family": "stepper",
+        "element": "stepper-root",
+        "property": "boxSizing",
+        "reference": "content-box",
+        "candidate": "border-box",
+        "classification": "application-plugin-authoring-defect",
+        "occurrences": 68,
+        "heightGroupIndices": [
+          79,
+          80,
+          81
+        ]
+      },
+      {
+        "family": "expansion",
+        "element": "expansion-root",
+        "property": "boxSizing",
+        "reference": "content-box",
+        "candidate": "border-box",
+        "classification": "application-plugin-authoring-defect",
+        "occurrences": 68,
+        "heightGroupIndices": [
+          82,
+          83,
+          84,
+          102,
+          103,
+          104
+        ]
+      },
+      {
+        "family": "bottom-sheet",
+        "element": "bottom-sheet-root",
+        "property": "boxSizing",
+        "reference": "content-box",
+        "candidate": "border-box",
+        "classification": "application-plugin-authoring-defect",
+        "occurrences": 63,
+        "heightGroupIndices": [
+          85,
+          86,
+          87
+        ]
+      },
+      {
+        "family": "dialog",
+        "element": "dialog-root",
+        "property": "boxSizing",
+        "reference": "content-box",
+        "candidate": "border-box",
+        "classification": "application-plugin-authoring-defect",
+        "occurrences": 78,
+        "heightGroupIndices": [
+          88,
+          89,
+          90
+        ]
+      },
+      {
+        "family": "snack-bar",
+        "element": "snack-bar-root",
+        "property": "boxSizing",
+        "reference": "content-box",
+        "candidate": "border-box",
+        "classification": "application-plugin-authoring-defect",
+        "occurrences": 71,
+        "heightGroupIndices": [
+          91,
+          92,
+          93
+        ]
+      },
+      {
+        "family": "tooltip",
+        "element": "tooltip-root",
+        "property": "boxSizing",
+        "reference": "content-box",
+        "candidate": "border-box",
+        "classification": "application-plugin-authoring-defect",
+        "occurrences": 62,
+        "heightGroupIndices": [
+          94,
+          95,
+          96
+        ]
+      },
+      {
+        "family": "progress-bar",
+        "element": "progress-bar-root",
+        "property": "boxSizing",
+        "reference": "content-box",
+        "candidate": "border-box",
+        "classification": "application-plugin-authoring-defect",
+        "occurrences": 20,
+        "heightGroupIndices": [
+          97
+        ]
+      },
+      {
+        "family": "progress-spinner",
+        "element": "progress-spinner-root",
+        "property": "boxSizing",
+        "reference": "content-box",
+        "candidate": "border-box",
+        "classification": "application-plugin-authoring-defect",
+        "occurrences": 20,
+        "heightGroupIndices": [
+          98
+        ]
+      }
+    ],
+    "implementationPlan": "Restore the original sizing contract together with removal of measured height tables. Retain evidence that a correctly converted maximum-width constraint can be equivalent; do not turn a boxSizing string mismatch alone into a core defect or blanket authoring prohibition.",
+    "verification": {
+      "focusedCommand": "node --test --test-name-pattern='root box model' tests/material-parity/input-equivalence-audit.spec.mjs",
+      "focusedResult": "3/3 pass, 8631.6346 ms: 30 positive state cases with separately equivalent maximum-width constraints, 12 adverse tree/rule mutations, six scalar mutations and six forged companion records.",
+      "usedSizeEquivalentVerified": false,
+      "finalRasterVerified": false,
+      "combinedCommand": "node --test --test-name-pattern='root box model|root height|root color case index|root typography case index|field host case index|field host color case index|non-widget appearance case index|button appearance case index|records source fingerprints and actual visual acceptance fields' tests/material-parity/input-equivalence-audit.spec.mjs",
+      "combinedResult": "16/16 pass, 56411.5792 ms, including all 2311 box-model cases and raw tree hashes, root-height evidence, prior case indices and source fingerprints.",
+      "replayCommand": "node --input-type=module -e \"import{readFileSync}from'node:fs';import{buildMaterialInputAudit,validateMaterialInputAudit}from'./tests/material-parity/input-equivalence-audit.mjs';const a=buildMaterialInputAudit(JSON.parse(readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json')),{root:process.cwd(),normalLineBoxPath:'artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json',controlLineBoxPath:'artifacts/material-parity/control-line-box-current-ancestry-audit-v3/latest-report.json',supplementalLineBoxPath:'artifacts/material-parity/supplemental-line-box-current-ancestry-audit/latest-report.json',supplementalRoot:'artifacts/material-parity/supplemental-current-ancestry-audit'});console.log(JSON.stringify({summary:a.summary,sourceFingerprintCount:a.sourceFingerprints.length,strict:validateMaterialInputAudit(a),proofs:a.rootHeightInputs.length,groups:a.discrepancies.filter(d=>d.attribution==='reviewed-root-fixed-height-box-model').map(d=>({family:d.family,element:d.element,property:d.property,reference:d.reference,candidate:d.astylar,classification:d.classification,occurrences:d.occurrences,reviewedCases:d.reviewedCases}))}));\"",
+      "replayStatus": "Full replay exits 0: all 36 companion groups / 2311 occurrences match the complete indexed case sets. Raw 8143 groups / 380520 occurrences remain unchanged. Strict acceptance still reports only 2660 unresolved-style attributions, down from 2696. Existing height proofs remain 2311, source findings 131 and source fingerprints 98. This is attribution of an existing authoring path, not new core defects or input-equivalence acceptance.",
+      "fullHarness": "Pending."
+    }
+  },
   "history": {
     "commit": "2f44011",
     "method": "Source review, not runtime bisect.",

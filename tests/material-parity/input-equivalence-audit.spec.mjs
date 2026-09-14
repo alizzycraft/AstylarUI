@@ -10211,6 +10211,68 @@ function rootHeightReport(family = 'chips', height = '98px', usedHeight = '40px'
   return raw;
 }
 
+test('root box model accompanies fixed-height authoring without rejecting equivalent maximum constraints', () => {
+  const raw = parityReport({}, {}); raw.results = [];
+  for (const family of ['chips', 'toolbar', 'divider']) for (const height of ['98px', '152.5625px'])
+    for (const state of [undefined, 'hover', 'held', 'focus', 'open']) {
+      const e = rootHeightReport(family, height).results[0]; e.viewport = { ...e.viewport, id: `desktop-${height}` };
+      Object.assign(e.styleInputs[0].reference, { maxWidth: '720px', padding: '28px', borderWidth: '1px' });
+      Object.assign(e.styleInputs[0].astylar, { maxWidth: '778px', padding: '28px', borderWidth: '1px' });
+      if (state) { e.state = state; raw.interactions.push(e); } else raw.results.push(e);
+    }
+  const before = JSON.stringify(raw), audit = buildMaterialInputAudit(raw);
+  const ds = audit.discrepancies.filter(d => d.attribution === 'reviewed-root-fixed-height-box-model');
+  assert.equal(ds.length, 3); assert.equal(ds.reduce((n, d) => n + d.occurrences, 0), 30);
+  for (const d of ds) {
+    assert.equal(d.property, 'boxSizing'); assert.equal(d.reference, 'content-box'); assert.equal(d.astylar, 'border-box');
+    assert.equal(d.classification, 'application-plugin-authoring-defect'); assert.equal(d.reviewedCases.length, d.occurrences);
+    assert.equal(d.reviewEvidence.property, 'height'); assert.equal(d.reviewEvidence.inputEquivalent, false);
+    assert.equal(d.reviewEvidence.usedSizeEquivalentVerified, false);
+  }
+  assert.ok(audit.discrepancies.filter(d => d.property === 'maxWidth').every(d => d.classification === 'equivalent-representation'));
+  assert.equal(audit.discrepancies.filter(d => d.property === 'maxWidth').reduce((n, d) => n + d.occurrences, 0), 30);
+  assert.deepEqual(validateMaterialInputAudit(audit, { requireComplete: false }).filter(e => e.includes('root box model')), []);
+  assert.equal(JSON.stringify(raw), before);
+});
+
+test('root box model requires explicit declaration ownership and an independently proved height substitution', () => {
+  for (const [index, mutate] of [
+    e => { e.inputTrees.reference.nodes[1].inline['box-sizing'] = { value: 'content-box', important: false }; },
+    e => { e.inputTrees.reference.nodes[1].attributes.style = 'box-sizing:content-box'; },
+    e => { e.inputTrees.reference.nodes[1].rules = [0]; e.inputTrees.reference.rules[0].declarations['box-sizing'] = { value: 'content-box', important: false }; },
+    e => { delete e.inputTrees.astylar.rules.at(-1).boxSizing; },
+    e => { e.inputTrees.astylar.rules.at(-1)['box-sizing'] = 'border-box'; },
+    e => { e.inputTrees.astylar.rules.at(-1).boxSizing = 'content-box'; },
+    e => { e.inputTrees.astylar.rules.push({ selector: ':is(section)', boxSizing: 'border-box' }); },
+    e => { e.inputTrees.astylar.nodes[2].authored.style = { boxSizing: 'border-box' }; },
+    e => { delete e.inputTrees.astylar.nodes[2].interactionResolvedStyle; },
+    e => { e.inputTrees.astylar.nodes[2].resolvedStyle.height = 'auto'; },
+    e => { e.inputTrees.astylar.nodes[2].parent = 'root'; },
+    e => { e.inputTrees.reference.nodes[1].inline.height = { value: 'auto', important: false }; },
+  ].entries()) {
+    const raw = rootHeightReport(); mutate(raw.results[0]);
+    assert.equal(buildMaterialInputAudit(raw).discrepancies.some(d => d.attribution === 'reviewed-root-fixed-height-box-model'), false, `mutation ${index}`);
+  }
+});
+
+test('root box model attribution rejects scalar and companion-proof tampering', () => {
+  for (const mutate of [i => { i.reference.boxSizing = 'border-box'; }, i => { i.astylar.boxSizing = 'content-box'; },
+    i => { delete i.astylarAuthored[0].declarations.boxSizing; },
+    i => { i.referenceAuthored[0].declarations['box-sizing'] = { value: 'content-box', important: false }; },
+    i => { i.astylarNormalResolvedStyle.height = '99px'; }, i => { i.astylarResolvedStyleEvidenceVersion = 1; }]) {
+    const raw = rootHeightReport(); mutate(raw.results[0].styleInputs[0]);
+    assert.equal(buildMaterialInputAudit(raw).discrepancies.some(d => d.attribution === 'reviewed-root-fixed-height-box-model'), false);
+  }
+  const audit = buildMaterialInputAudit(rootHeightReport());
+  for (const mutate of [d => { d.reviewEvidence.values.candidateHeightDeclaration = '99px'; },
+    d => { d.reviewEvidence.candidatePath[1].rules = []; }, d => { d.reviewedCases = ['invented']; },
+    d => { d.property = 'height'; }, d => { d.classification = 'equivalent-representation'; },
+    d => { d.reference = 'border-box'; }]) {
+    const copy = structuredClone(audit); mutate(copy.discrepancies.find(d => d.attribution === 'reviewed-root-fixed-height-box-model'));
+    assert.ok(validateMaterialInputAudit(copy, { requireComplete: false }).some(e => e.includes('root box model')));
+  }
+});
+
 test('root height preserves fixed authoring versus automatic used dimensions across states', () => {
   const raw = parityReport({}, {}); raw.results = [];
   for (const family of ['chips', 'button', 'expansion']) for (const height of ['98px', '186px'])
@@ -10587,6 +10649,52 @@ test('root typography scalar and report tampering cannot manufacture computed eq
     const report = structuredClone(base); mutate(report);
     assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => /root typography/.test(e)));
   }
+});
+
+test('root box model case index links all companion declarations without duplicating or sampling boundaries', async () => {
+  const { readFileSync } = await import('node:fs'), { createHash } = await import('node:crypto');
+  const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+  const index = JSON.parse(readFileSync('docs/material-root-height-audit.json', 'utf8'));
+  const c = index.companionBoxModel, bytes = readFileSync(index.capture.file); assert.equal(hash(bytes), index.capture.sha256);
+  const raw = JSON.parse(bytes), cases = new Map(), indices = new Set();
+  assert.equal(c.attribution, 'reviewed-root-fixed-height-box-model'); assert.equal(c.groupCount, 36); assert.equal(c.groups.length, 36);
+  for (const g of c.groups) {
+    assert.equal(g.property, 'boxSizing'); assert.equal(g.reference, 'content-box'); assert.equal(g.candidate, 'border-box');
+    assert.equal(g.classification, 'application-plugin-authoring-defect');
+    let count = 0;
+    for (const i of g.heightGroupIndices) {
+      assert.ok(Number.isInteger(i)); assert.equal(indices.has(i), false); indices.add(i);
+      const h = index.groups[i]; assert.equal(h.family, g.family); assert.equal(h.element, g.element);
+      for (const key of h.reviewedCases) { assert.equal(cases.has(key), false); cases.set(key, g); count++; }
+    }
+    assert.equal(count, g.occurrences);
+  }
+  const affectsBox = d => Object.keys(d).some(k => ['boxsizing', 'all'].includes(k.replaceAll('-', '').toLowerCase()) || /^(animation|transition)/i.test(k));
+  const expected = [];
+  for (const [kind, entries] of [['static', raw.results], ['interaction', raw.interactions]]) for (const e of entries) {
+    const key = `${kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? `/${e.state}` : ''}`;
+    expected.push(key); const g = cases.get(key); assert.ok(g, key);
+    const input = e.styleInputs.find(i => i.id === g.element); assert.equal(input.reference.boxSizing, 'content-box');
+    assert.ok(input.referenceAuthored.every(r => !affectsBox(r.declarations)));
+    assert.ok(input.astylarAuthored.some(r => r.selector === `#${g.element}` && r.declarations.boxSizing === 'border-box'));
+    for (const s of ['astylar', 'astylarNormalResolvedStyle', 'astylarInteractionResolvedStyle']) assert.equal(input[s].boxSizing, 'border-box');
+    for (const side of ['reference', 'astylar']) {
+      const f = e.inputTrees[side], bytes = readFileSync(f.file); assert.equal(hash(bytes), f.sha256, `${key}/${side}`);
+      const tree = JSON.parse(bytes), nodes = tree.nodes.filter(n => (side === 'reference' ? n.attributes?.id : n.authored?.id) === g.element);
+      assert.equal(nodes.length, 1); const n = nodes[0];
+      if (side === 'reference') {
+        assert.equal(n.type, 'section'); assert.equal(tree.styles[n.style].boxSizing, 'content-box');
+        assert.equal(affectsBox(n.inline), false); assert.ok(n.rules.every(i => !affectsBox(tree.rules[i].declarations)));
+      } else {
+        assert.equal(n.authored.type, 'section'); assert.equal(n.authored.style?.boxSizing, undefined);
+        assert.ok(tree.rules.some(r => r.selector === `#${g.element}` && r.boxSizing === 'border-box'));
+        for (const s of ['resolvedStyle', 'normalResolvedStyle', 'interactionResolvedStyle']) assert.equal(n[s].boxSizing, 'border-box');
+      }
+    }
+  }
+  assert.deepEqual([...indices].sort((a, b) => a - b), index.groups.map((_, i) => i));
+  assert.deepEqual([...cases.keys()].sort(), expected.sort()); assert.equal(cases.size, 2311); assert.equal(c.caseCount, 2311);
+  assert.equal(c.verification.usedSizeEquivalentVerified, false); assert.equal(c.verification.finalRasterVerified, false);
 });
 
 test('root height case index retains all fixed declarations and raw content-box measurements', async () => {

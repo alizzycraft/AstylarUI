@@ -11,7 +11,8 @@ import { collectPaginatorNavigationEvidence } from './paginator-navigation-evide
 import { chipHostTypographyAttribution, collectChipHostTypographyInputs, classifyChipHostTypographyInput } from './chip-host-typography-evidence.mjs';
 import { fieldHostTypographyAttribution, collectFieldHostTypographyInputs, classifyFieldHostTypographyInput } from './field-host-typography-evidence.mjs';
 import { rootTypographyAttribution, collectRootTypographyInputs, classifyRootTypographyInput } from './root-typography-input-evidence.mjs';
-import { rootHeightAttribution, collectRootHeightInputs, classifyRootHeightInput } from './root-height-input-evidence.mjs';
+import { rootHeightAttribution, collectRootHeightInputs, classifyRootHeightInput,
+  rootBoxSizingAttribution, hasRootBoxSizingWitness, classifyRootBoxSizingInput } from './root-height-input-evidence.mjs';
 import { rootColorAttribution, collectRootColorInputs, classifyRootColorInput,
   fieldColorAttribution, collectFieldColorInputs, classifyFieldColorInput } from './root-color-input-evidence.mjs';
 import { appearanceInitialAttribution, collectAppearanceInitialInputs, classifyAppearanceInitialInput,
@@ -327,6 +328,16 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
         entry.reviewedCases.some(key => !report.rootHeightInputs?.some(p => p.case === key && p.element === entry.element &&
           p.values.referenceUsedHeight === entry.reference && canonicalStyle({ height: p.values.candidateHeightDeclaration }).height === entry.astylar))) {
       errors.push('root height attribution lacks exact authored, stage and case evidence');
+    }
+  }
+  for (const entry of report.discrepancies.filter(d => d.attribution === rootBoxSizingAttribution)) {
+    const proof = report.rootHeightInputs?.find(p => p.case === entry.reviewEvidence?.case && p.element === entry.element);
+    if (!hasRootBoxSizingWitness(proof) || entry.classification !== 'application-plugin-authoring-defect' ||
+        entry.property !== 'boxSizing' || entry.reference !== 'content-box' || entry.astylar !== 'border-box' ||
+        JSON.stringify(proof) !== JSON.stringify(entry.reviewEvidence) || !Array.isArray(entry.reviewedCases) ||
+        entry.reviewedCases.length !== entry.occurrences || new Set(entry.reviewedCases).size !== entry.occurrences ||
+        entry.reviewedCases.some(key => !report.rootHeightInputs?.some(p => p.case === key && p.element === entry.element && hasRootBoxSizingWitness(p)))) {
+      errors.push('root box model attribution lacks fixed-height and exact declaration evidence');
     }
   }
   if (JSON.stringify(report.fieldHostTypographyInputs) !== JSON.stringify(collectFieldHostTypographyInputs(report.elementInventory, canonicalStyle, typographySelectorCanApply))) {
@@ -1121,6 +1132,8 @@ function collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInp
             ?? classifyReviewedRootInput(benchmarkCase, input, property, referenceValue, astylarValue)
             ?? classifyRootHeightInput(input, property, referenceValue, astylarValue,
               rootHeightByCaseId.get(JSON.stringify([key, input.id])), canonicalStyle)
+            ?? classifyRootBoxSizingInput(input, property, referenceValue, astylarValue,
+              rootHeightByCaseId.get(JSON.stringify([key, input.id])), canonicalStyle)
             ?? classifyRootTypographyInput(input, property, referenceValue, astylarValue,
               rootTypographyByCaseIdProperty.get(JSON.stringify([key, input.id, property])), canonicalStyle)
             ?? classifyRootColorInput(input, property, referenceValue, astylarValue,
@@ -1153,7 +1166,7 @@ function collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInp
             ...(classification.attribution ? { attribution: classification.attribution } : {}),
             ...(classification.reviewEvidence ? { reviewEvidence: classification.reviewEvidence } : {}),
             ...([borderInitialAttribution, buttonBorderResetAttribution, outlineTokenAttribution, chipOutlineAttribution,
-              'reviewed-root-flow-dependency', nonGridTemplateAttribution, 'reviewed-button-typography-host-input', chipHostTypographyAttribution, fieldHostTypographyAttribution, rootTypographyAttribution, appearanceInitialAttribution, buttonAppearanceAttribution, rootColorAttribution, fieldColorAttribution, rootHeightAttribution].includes(classification.attribution) ? { reviewedCases: [] } : {}),
+              'reviewed-root-flow-dependency', nonGridTemplateAttribution, 'reviewed-button-typography-host-input', chipHostTypographyAttribution, fieldHostTypographyAttribution, rootTypographyAttribution, appearanceInitialAttribution, buttonAppearanceAttribution, rootColorAttribution, fieldColorAttribution, rootHeightAttribution, rootBoxSizingAttribution].includes(classification.attribution) ? { reviewedCases: [] } : {}),
             occurrences: 0,
             cases: [],
             states: [],

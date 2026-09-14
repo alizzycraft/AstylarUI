@@ -3,6 +3,46 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Root box-model changes belong to the fixed-height authoring path
+
+The `companionBoxModel` section of the [root-height index](material-root-height-audit.json)
+links **36 box-sizing groups / 2,311 cases** to the complete existing height
+case lists. Each reference section computes `content-box` without a local
+box-sizing declaration; each candidate section explicitly requests
+`border-box` in its root rule, retained by all three captured declaration
+stages. The raw capture and both full-tree hashes are checked for every case.
+
+This is a companion of the existing fixed-height authoring substitution, not
+36 new renderer defects. The classifier requires the independently verified
+height evidence and exact box-model declaration ownership. It rejects local
+reference overrides, unknown selectors, missing candidate declarations,
+contradictory stages and fabricated case/proof data. A difference between box
+modes by itself is not enough: the original 720px content-box maximum and
+converted 778px border-box maximum remain separately equivalent when the
+fixed padding and border arithmetic is demonstrated. That does not make
+fixed height equivalent to automatic content sizing.
+
+Source ownership remains the shared root rule at
+`examples/material-showcase/src/app/astylar.component.ts:480`, present with
+the height tables in initial commit `2f44011`. The original `.demo` rule at
+`examples/material-showcase/src/app/reference.component.ts:106` omits both
+height and box sizing. This is source-history evidence, not a runtime bisect.
+Restore the original sizing contract alongside removing measured heights;
+do not infer that core box-sizing itself is broken or prohibit genuinely
+equivalent conversions. Used geometry, responsive winner selection,
+descendant layout and raster remain independent verification obligations.
+
+Focused box-model checks pass **3/3**, **8,631.6346 ms**: 30 positive state
+cases, 12 adverse tree/rule mutations, six scalar mutations and six forged
+records. The combined box-model/height/prior-index check passes **16/16**,
+**56,411.5792 ms**, including complete raw-case coverage and source hashes.
+The full replay exits 0 and independently attributes all **36 groups / 2,311
+occurrences**, with exact case-set agreement against the index. Raw **8,143
+groups / 380,520 occurrences** remain unchanged. Strict acceptance still
+reports **2,660 unresolved style groups**, down from 2,696; height proofs
+remain 2,311, source findings 131 and source fingerprints 98. Broader harness
+verification is pending. No production or canonical comparison code changed.
+
 ## Fixed root heights replace content-driven inputs, even when outer boxes match
 
 The [root-height case index](material-root-height-audit.json) records **2,311
