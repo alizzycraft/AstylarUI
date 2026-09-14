@@ -3,15 +3,22 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
-## Caret-color scalar suppression corrected (full verification pending)
+## Caret-color scalar suppression corrected (full replay verified)
 
 The retention regression failed first because the explicit-auto observation
 was missing (**0/1**, **895.7276 ms**), then failed after removing only the
 filter because the fallback still claimed equivalence (**0/1**, **896.1011 ms**).
 Removing both shortcuts yields **4/4 pass**, **3,203.6736 ms**, including the
 complete exposure index and DPR1/2 sensitivity. Prior guarded evidence and
-case/source indices pass **22/22**, **102,529.7141 ms**. The complete replay and
-expanded harness verification are pending. No renderer or canonical
+case/source indices pass **22/22**, **102,529.7141 ms**. Full replay exits **0**:
+all **229 caret-color/local-omission groups / 6,938 occurrences** match the
+independent raw value/count population. The report now retains **8,278 groups /
+386,891 occurrences**, an increase of exactly **1,371 occurrences**. Strict
+validation rejects it solely for **2,542 unresolved attributions** (previously
+2,499). The root initial, guarded container-caret and exposed line-height
+populations remain unchanged. The expanded complete harness is running.
+Correction commit: `be03629`, pushed to `codex/material-ui-showcase`.
+No renderer or canonical
 comparison inputs changed. The investigation below records the historical
 blind spot, not a claim that the now-removed shortcut remains active.
 
