@@ -3,6 +3,89 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Section fonts: computed inheritance versus local diagnostic declarations
+
+The [root-typography case index](material-root-typography-audit.json) covers
+**all 2,311 captured main comparisons across 36 families** (436 static and
+1,875 interaction cases). It preserves **4,622 font-family/font-size
+observations** and the identity of every case. These account for **144 grouped
+scalar differences**, not 144 rendering fixes.
+
+The paired reference `.frame` and candidate `#page` author the same font stack
+and corresponding profile-scaled size: `Roboto, Arial, sans-serif` and
+16px / 14.4px / 18.4px. Neither mapped section authors a local font override.
+The complete captured reference frame-to-section path reports the inherited
+computed values. Candidate page-to-section normal, effective and comparison
+stages retain the page declarations but omit them on the section itself.
+
+The first demonstrated divergence **in these compared scalars** is diagnostic
+stage selection. `AstylarResolvedStyleSnapshot` explicitly documents detached
+declarations, not used values (`src/lib/astylar-surface.ts:42`).
+`inspectCurrentDocumentStyles` in `src/lib/astylar.ts:914–942` separately
+returns normal/effective declarations and retained text/control paint inputs.
+The empty section has no own glyphs whose retained font could replace the
+missing local declaration. The new attribution therefore does **not** produce
+or accept a candidate computed font.
+
+This is materially different from the field-host finding below: there the
+reference adds component-level font tokens that candidate authoring omits;
+here both section authors omit local overrides and their parent requests
+agree. It is also independent of the confirmed core inherited-em sizing
+defect: correct text inheritance does not establish correct length consumers.
+Section block-to-flex replacement, fixed height/box-model changes, descendant
+font overrides and final raster remain separate findings.
+
+### Evidence and regression safeguards
+
+- Candidate authored page/section: `astylar.component.ts:460–480`.
+  Reference frame/section styles: `reference.component.ts:106`.
+  Source inspection of `2f44011` already contains the paired page-font
+  requests; this is not evidence of a later compensating font adjustment or
+  a historical runtime bisect.
+- `root-typography-input-evidence.mjs` checks unique paired sections,
+  frame/page ancestry, original active reference font rules, candidate rule
+  exclusions, page-scale agreement and all three local diagnostic stages.
+  Unknown possibly matching candidate selectors prevent attribution. Raw
+  missing values remain missing, and every occurrence retains its case.
+- Main report validation reconstructs the proof from the captured inventory
+  and checks classification, exact values, evidence and complete case lists.
+  Focused tests include 45 synthetic family/scale/state cases, 24 adverse
+  ancestry/rule/provenance mutations, eight scalar mutations and four forged
+  report mutations. The separate checked-in index test verifies all main
+  case identities, original root scalars and 4,622 input-tree hashes.
+- The existing implementation-plan priority 0 still applies: expose and
+  compare the appropriate core typography stages without introducing a
+  parallel inheritance resolver or writing inferred values into fixtures.
+  Priority 3.45 independently owns the actual inherited-em consumer defect.
+
+### Verification and limits
+
+The complete audit build/replay retains **8,143 unique differences / 380,520
+occurrences**, with **130/130 source findings detected** and 92 fingerprints.
+Unresolved attributions decrease **3,091 to 2,947**. Strict validation reports
+only `2947 resolved-style differences still lack root-cause attribution`;
+the diagnostic command prints that error and exits 0, which is not acceptance.
+All ten frozen capture-harness fingerprints remain unchanged.
+
+The exact build/replay command is retained as `verification.fullReplayCommand`
+in the linked case index. It uses `buildMaterialInputAudit` with the frozen
+`current-ancestry-audit/latest-report.json`, normal-line-box evidence,
+control-line-box V3, supplemental-line-box evidence and the
+`supplemental-current-ancestry-audit` root, followed by
+`validateMaterialInputAudit`. This is the same complete evidence selection as
+the field-host replay, with the new root collector added; no recapture,
+reference change, renderer fix or canonical fixture rewrite was performed.
+
+Focused command:
+
+`node --test --test-name-pattern='root typography|field host|records source fingerprints and actual visual acceptance fields' tests/material-parity/input-equivalence-audit.spec.mjs`
+
+The initial combined run passed **8/8**, 22.325 seconds. The follow-up including
+the root-index integrity test passed **9/9**, 27.652 seconds, exit 0.
+The 559-test field-host harness gate below predates the root collector. Neither it nor
+this attribution establishes input equivalence, correct descendant rendering,
+supplemental overlay coverage or the final unfiltered enforced parity gate.
+
 ## Shared field hosts: missing Material typography token ownership
 
 The [field-host case index](material-field-host-typography-audit.json) covers

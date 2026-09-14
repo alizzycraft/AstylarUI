@@ -1362,7 +1362,8 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   const report = parityReport({}, {});
   const audit = buildMaterialInputAudit(report);
   assert.equal(audit.coverage.visualParityGreen, true);
-  assert.equal(audit.sourceFingerprints.length, 91);
+  assert.equal(audit.sourceFingerprints.length, 92);
+  assert.ok(audit.sourceFingerprints.some(entry => entry.file === 'tests/material-parity/root-typography-input-evidence.mjs'));
   assert.ok(audit.sourceFingerprints.some(entry => entry.file === 'tests/material-parity/field-host-typography-evidence.mjs'));
   const fieldHost = audit.sourceFindings.find(entry => entry.id === 'fixture-field-host-typography-tokens-omitted');
   assert.equal(fieldHost?.detected, true);
@@ -10193,6 +10194,136 @@ test('an inventoried hidden or anonymous element still requires resolved style e
   const audit = buildMaterialInputAudit(report);
   assert.equal(audit.summary.inputEquivalent, false);
   assert.ok(validateMaterialInputAudit(audit).some((error) => error.includes('lack resolved style evidence')));
+});
+
+function rootTypographyReport(family = 'chips', size = '16px') {
+  const raw = fieldHostTypographyReport(family, size), e = raw.results[0];
+  const section = { ...e.styleInputs[0], id: `${family}-root`,
+    reference: { fontFamily: 'Roboto, Arial, sans-serif', fontSize: size, lineHeight: 'normal' },
+    referenceStructure: { schemaVersion: 2, type: 'section', text: '' },
+    astylarStructure: { schemaVersion: 2, type: 'section', ownText: '', text: '' },
+    referenceAuthored: [{ selector: '.demo', declarations: { display: { value: 'block', important: false } } }],
+    astylarAuthored: [{ selector: `#${family}-root`, declarations: { display: 'flex' } }],
+  };
+  e.styleInputs = [section];
+  return raw;
+}
+
+test('root typography distinguishes captured inheritance requests from local declaration stages', () => {
+  const raw = parityReport({}, {}); raw.results = [];
+  for (const family of ['chips', 'button', 'datepicker']) for (const size of ['16px', '14.4px', '18.4px'])
+    for (const state of [undefined, 'hover', 'held', 'focus', 'disabled']) {
+      const e = rootTypographyReport(family, size).results[0];
+      if (state) { e.state = state; raw.interactions.push(e); } else raw.results.push(e);
+    }
+  const before = JSON.stringify(raw), audit = buildMaterialInputAudit(raw);
+  assert.equal(audit.rootTypographyInputs.length, 90);
+  const diffs = audit.discrepancies.filter(d => d.attribution === 'reviewed-root-typography-declaration-stage');
+  assert.equal(diffs.reduce((n, d) => n + d.occurrences, 0), 90);
+  for (const d of diffs) {
+    assert.equal(d.classification, 'parity-harness-defect');
+    assert.equal(d.astylar, undefined);
+    assert.equal(d.reviewEvidence.computedCandidateVerified, false);
+    assert.equal(d.reviewEvidence.finalRasterVerified, false);
+    assert.equal(d.reviewEvidence.candidatePath[1].comparison[d.property], undefined);
+    assert.equal(d.reviewedCases.length, d.occurrences);
+    assert.match(d.justification, /inherited em sizing/);
+  }
+  assert.deepEqual(validateMaterialInputAudit(audit, { requireComplete: false }).filter(e => /root typography/.test(e)), []);
+  assert.equal(JSON.stringify(raw), before);
+});
+
+test('root typography refuses incomplete ancestry and competing or changed declarations', () => {
+  const mutations = [
+    e => { e.inputTrees.reference.nodes[1].parent = 'missing'; },
+    e => { e.inputTrees.reference.nodes[0].parent = 'outside'; },
+    e => { e.inputTrees.reference.nodes[1].ownText = 'direct text'; },
+    e => { e.inputTrees.reference.nodes[1].inline = { 'font-size': { value: 'inherit', important: false } }; },
+    e => { e.inputTrees.reference.rules[0].active = false; },
+    e => { e.inputTrees.reference.rules[0].declarations['font-size'].value = '16px'; },
+    e => { e.inputTrees.reference.styles[0].fontSize = '20px'; },
+    e => { e.inputTrees.reference.nodes.push(structuredClone(e.inputTrees.reference.nodes[1])); },
+    e => { e.inputTrees.astylar.nodes[0].authored = { style: { fontSize: '20px' } }; },
+    e => { e.inputTrees.astylar.nodes[2].parent = 'root'; },
+    e => { e.inputTrees.astylar.nodes[2].authored.textContent = 'own text'; },
+    e => { e.inputTrees.astylar.nodes[2].authored.style = { fontSize: 'inherit' }; },
+    e => { e.inputTrees.astylar.nodes[2].normalResolvedStyle.fontSize = '16px'; },
+    e => { e.inputTrees.astylar.nodes[2].interactionResolvedStyle.lineHeight = '24px'; },
+    e => { delete e.inputTrees.astylar.nodes[1].resolvedStyle; },
+    e => { e.inputTrees.astylar.rules[0].fontSize = '18px'; },
+    e => { e.inputTrees.astylar.rules.push({ selector: 'section:hover', fontSize: '16px' }); },
+    e => { e.inputTrees.astylar.rules.push({ selector: ':is(section)', fontSize: '16px' }); },
+    e => { e.inputTrees.astylar.rules.push({ selector: '.unknown section', all: 'initial' }); },
+    e => { e.inputTrees.astylar.rules.push({ selector: '#chips-root', transition: 'all 1s' }); },
+    e => { e.inputTrees.astylar.rules.push({ selector: 'section', nested: { fontSize: '16px' } }); },
+    e => { e.inputTrees.astylar.resolvedStyleSource = 'predicted'; },
+    e => { delete e.inputTrees.astylar.resolvedStyleRevision; },
+    e => { e.inputTrees.astylar.errors.push('incomplete'); },
+  ];
+  for (const [i, change] of mutations.entries()) {
+    const raw = rootTypographyReport(); change(raw.results[0]);
+    const audit = buildMaterialInputAudit(raw);
+    assert.equal(audit.rootTypographyInputs.length, 0, `mutation ${i}`);
+    assert.equal(audit.discrepancies.some(d => d.attribution === 'reviewed-root-typography-declaration-stage'), false, `mutation ${i}`);
+  }
+});
+
+test('root typography scalar and report tampering cannot manufacture computed equivalence', () => {
+  for (const mutate of [
+    i => { i.reference.fontSize = '20px'; }, i => { i.astylar.fontFamily = 'Arial'; },
+    i => { i.astylarNormalResolvedStyle.fontSize = '16px'; }, i => { delete i.astylarInteractionResolvedStyle; },
+    i => { i.referenceStructure.type = 'div'; }, i => { i.astylarResolvedStyleEvidenceVersion = 1; },
+    i => { i.referenceAuthored[0].declarations.font = { value: 'inherit' }; },
+    i => { i.astylarAuthored[0].declarations.fontSize = '16px'; },
+  ]) {
+    const raw = rootTypographyReport(); mutate(raw.results[0].styleInputs[0]);
+    const audit = buildMaterialInputAudit(raw);
+    const eligible = audit.discrepancies.filter(d => d.attribution === 'reviewed-root-typography-declaration-stage');
+    assert.ok(eligible.every(d => d.reference === 'roboto,arial,sans-serif' && d.property === 'fontFamily'));
+    assert.ok(eligible.length <= 1);
+  }
+  const base = buildMaterialInputAudit(rootTypographyReport());
+  for (const mutate of [
+    a => { a.rootTypographyInputs[0].computedCandidateVerified = true; },
+    a => { a.rootTypographyInputs[0].candidatePath[1].normal.fontSize = '16px'; },
+    a => { a.discrepancies.find(d => d.attribution === 'reviewed-root-typography-declaration-stage').reviewedCases = []; },
+    a => { a.discrepancies.find(d => d.attribution === 'reviewed-root-typography-declaration-stage').classification = 'equivalent-representation'; },
+  ]) {
+    const report = structuredClone(base); mutate(report);
+    assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => /root typography/.test(e)));
+  }
+});
+
+test('root typography case index covers every main capture and preserves raw tree hashes', async () => {
+  const { readFileSync } = await import('node:fs'), { createHash } = await import('node:crypto');
+  const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+  const index = JSON.parse(readFileSync('docs/material-root-typography-audit.json', 'utf8'));
+  const bytes = readFileSync(index.capture.file); assert.equal(hash(bytes), index.capture.sha256);
+  for (const source of index.sourceFingerprints)
+    assert.equal(hash(readFileSync(source.file, 'utf8').replace(/\r\n/g, '\n')), source.sha256, source.file);
+  assert.equal(index.sourceFingerprints.length, 6);
+  const report = JSON.parse(bytes), covered = new Map(), expected = [];
+  for (const group of index.groups) {
+    assert.deepEqual(group.properties, ['fontFamily', 'fontSize']);
+    assert.equal(group.candidateLocalDeclaration, '<omitted>');
+    for (const key of group.cases) { assert.equal(covered.has(key), false); covered.set(key, group); }
+  }
+  for (const [kind, entries] of [['static', report.results], ['interaction', report.interactions]]) for (const entry of entries) {
+    const key = `${kind}:${entry.family}@${entry.profile}/${entry.viewport.id}${entry.state ? `/${entry.state}` : ''}`;
+    expected.push(key); const group = covered.get(key); assert.ok(group, key); assert.equal(group.family, entry.family);
+    const input = entry.styleInputs.find(i => i.id === `${entry.family}-root`); assert.ok(input, key);
+    assert.equal(input.reference.fontFamily, 'Roboto, Arial, sans-serif'); assert.equal(input.reference.fontSize, group.pageSize);
+    for (const property of group.properties) for (const stage of ['astylar', 'astylarNormalResolvedStyle', 'astylarInteractionResolvedStyle'])
+      assert.equal(input[stage][property], undefined, `${key}/${stage}/${property}`);
+    for (const side of ['reference', 'astylar']) {
+      const source = entry.inputTrees[side]; assert.equal(hash(readFileSync(source.file)), source.sha256, `${key}/${side}`);
+    }
+  }
+  assert.deepEqual([...covered.keys()].sort(), expected.sort());
+  assert.equal(covered.size, 2311); assert.equal(index.caseCount, covered.size);
+  assert.equal(index.propertyObservations, covered.size * 2);
+  assert.equal(index.verification.classifiedGroups, 144);
+  for (const flag of ['inputEquivalent', 'computedCandidateVerified', 'finalRasterVerified']) assert.equal(index.verification[flag], false);
 });
 
 function fieldHostTypographyReport(family = 'autocomplete', pageSize = '16px') {
