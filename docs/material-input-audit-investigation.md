@@ -26,9 +26,15 @@ tests pass **5/5**, exit **0**, **135,445.4312 ms**, including all raw scalar jo
 the durable case index, seven source hashes and seven forged-report mutations.
 Prior-index, source-fingerprint, root-style and browser-token checks also pass
 **18/18**, exit **0**, **53,846.3944 ms**, no failures/skips/cancellations.
-The complete all-family replay and expanded full harness remain pending.
-The last verified full-audit unresolved count remains **2,462**, not an estimated
-reduction based on this subset. Production and canonical fixtures are unchanged.
+The complete all-family replay now exits **0**: all **1,154 proofs / 12 groups**
+match exact indexed values, classifications, occurrence and unique-case counts,
+and full sorted case-list hashes. The raw **8,143 groups / 380,520 occurrences**
+are unchanged. Classification totals are **526 authoring / 3,670 equivalent /
+312 documented limitation / 3,635 harness**, with **131 source findings / 104
+source fingerprints**. Strict validation rejects the still-incomplete audit
+solely for **2,450 unresolved attributions**, down from 2,462. The expanded
+complete harness is running serially after replay completion; its terminal result
+is pending. Production and canonical fixtures are unchanged.
 
 ## Field-host weight and tracking: token requests versus omission
 
