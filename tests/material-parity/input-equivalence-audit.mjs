@@ -8028,6 +8028,7 @@ function sourceFingerprints(root) {
     'tests/material-parity/root-typography-input-evidence.mjs',
     'tests/material-parity/root-initial-style-evidence.mjs',
     'tests/material-parity/root-initial-style-evidence.spec.mjs',
+    'tests/material-parity/root-line-height-proof.spec.mjs',
     'tests/material-parity/root-initial-style-sensitivity.spec.mjs',
     'tests/material-parity/field-host-weight-tracking-evidence.mjs',
     'tests/material-parity/field-host-weight-tracking-evidence.spec.mjs',
@@ -8063,6 +8064,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/root-line-height-proof.spec.mjs', /test\('root line-height omission is attributed/,
+      'root normal line-height with captured ancestor and declaration evidence', 'The real captured root requires two normal reference ancestor values and omitted candidate local stages, with no explicit font/line-height/reset/motion requests. Changed ancestors, explicit declarations, incomplete stages, scalar conflicts and forged computed/descendant/raster claims reject attribution. The missing declaration remains recorded; natural line boxes and text rendering remain separate obligations.'),
     proof(root, 'tests/material-parity/line-height-omission-sensitivity.spec.mjs', /test\('line-height normal omission remains/,
       'normal line-height omission is not unconditional equivalence', 'The audit retains normal versus omitted-local observations for authored-request and ancestry review. DPR1/2 browser controls distinguish an explicit normal request from inheritance after ancestor changes. The pinned raw exposure index is checked independently; no candidate computed value, renderer defect or raster equivalence is inferred.'),
     proof(root, 'tests/material-parity/field-host-weight-tracking-evidence.spec.mjs', /test\('field host weight\/tracking independently/,

@@ -1,15 +1,15 @@
 import { selectorCanApply } from './border-initial-input-evidence.mjs';
 
 export const rootInitialStyleAttribution = 'reviewed-root-initial-style-declaration-stage';
-export const rootInitialStyleValues = Object.freeze({ fontWeight: '400', textAlign: 'start', verticalAlign: 'baseline' });
+export const rootInitialStyleValues = Object.freeze({ fontWeight: '400', textAlign: 'start', verticalAlign: 'baseline', lineHeight: 'normal' });
 const object = v => v !== null && typeof v === 'object' && !Array.isArray(v);
 const one = list => list.length === 1 ? list[0] : undefined;
 const normalized = k => k.replaceAll('-', '').toLowerCase();
-const relevant = k => ['fontweight', 'font', 'textalign', 'textalignlast', 'verticalalign',
+const relevant = k => ['fontweight', 'font', 'textalign', 'textalignlast', 'verticalalign', 'lineheight',
   'direction', 'writingmode', 'unicodebidi', 'all'].includes(normalized(k)) || /^(animation|transition)/i.test(k);
 const safe = d => object(d) && !Object.keys(d).some(relevant);
 const safeAttribute = text => text === undefined || typeof text === 'string' && !text.includes('\\') &&
-  !/(?:^|;)\s*(?:font(?:-weight)?|text-align(?:-last)?|vertical-align|direction|writing-mode|unicode-bidi|all|animation[^:]*|transition[^:]*)\s*:/i.test(text);
+  !/(?:^|;)\s*(?:font(?:-weight)?|text-align(?:-last)?|vertical-align|line-height|direction|writing-mode|unicode-bidi|all|animation[^:]*|transition[^:]*)\s*:/i.test(text);
 const unique = values => values.every(v => typeof v === 'string' && v.length > 0) && new Set(values).size === values.length;
 
 // Declaration exclusion only. Unknown selector syntax remains possibly active;
@@ -90,5 +90,5 @@ export function classifyRootInitialStyleInput(input, property, reference, astyla
       [...input.referenceAuthored, ...input.astylarAuthored].some(r => !safe(r.declarations))) return;
   return { classification: 'parity-harness-defect', attribution: rootInitialStyleAttribution,
     owner: 'input audit root computed initial/inherited values versus local declarations', reviewEvidence: structuredClone(proof),
-    justification: 'The empty mapped section and its captured frame/page ancestry omit the relevant authored requests; browser computed values include defaults and inheritance while candidate inspection records local declaration omission. This diagnoses unequal observation stages, not missing authoring or verified candidate computed values. Font weight and text alignment inherit, but vertical alignment has separate non-inherited and formatting-context semantics. Preserve direction, ancestor changes, descendant consumers, layout and raster as independent obligations; do not inject initial values or equate start with left to hide the diagnostic mismatch.' };
+    justification: 'The empty mapped section and its captured frame/page ancestry omit the relevant authored requests; browser computed values include defaults and inheritance while candidate inspection records local declaration omission. This diagnoses unequal observation stages, not missing authoring or verified candidate computed values. Font weight, text alignment and line height inherit, but vertical alignment has separate non-inherited and formatting-context semantics. A normal line-height keyword does not establish natural line-box metrics. Preserve direction, ancestor changes, descendant consumers, layout and raster as independent obligations; do not inject initial values or equate start with left to hide the diagnostic mismatch.' };
 }

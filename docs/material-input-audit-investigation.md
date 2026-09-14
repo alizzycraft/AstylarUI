@@ -3,6 +3,31 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Guarded root line-height attribution (full replay verified)
+
+The root initial-style collector now also records `lineHeight: normal` versus
+omitted local declarations. It requires both captured reference ancestors to
+compute to normal, all candidate page/section local stages to omit the property,
+and no relevant line-height/font/reset/motion requests. Explicit requests—even
+normal ones—changed ancestor values, incomplete stages and forged computed or
+raster claims reject attribution. The scalar remains recorded as a diagnostic
+stage mismatch; normal line-box metrics and descendant text remain separate.
+
+The real captured-root positive regression failed before the extension (**0/1**,
+**1,433.3413 ms**). Focused verification now passes **16/16**, **22,813.6322 ms**,
+including **9,244 root observations / 144 indexed groups**, existing adverse and
+forgery cases, and DPR1/2 browser sensitivity. All **84 fingerprints / 12 source
+indices** match. Prior case/source index checks pass **13/13**, **74,257.1274 ms**.
+The complete all-family replay exits **0**: all indexed identities, values,
+counts and complete case-list hashes match. All **8,235 raw groups / 385,520
+occurrences**, including all **5,000** exposed normal/omitted line-height
+observations, remain. Strict validation still rejects the incomplete audit for
+**2,499 unresolved attributions** (previously **2,535**); `inputEquivalent` remains
+false. The expanded complete harness remains pending; earlier 626/626 coverage
+predates the new three-test file. Exact commands and results are in
+[the root index](material-root-initial-style-audit.json).
+No production renderer or canonical fixture changed.
+
 ## Root text-property survey after exposing line-height omissions
 
 The [read-only root survey](material-root-text-default-survey.json) checks all

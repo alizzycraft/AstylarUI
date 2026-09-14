@@ -9,20 +9,24 @@
   },
   "sourceFingerprints": [
     {
+      "file": "tests/material-parity/root-line-height-proof.spec.mjs",
+      "sha256": "86fb0c14ae9b69baad0c4dbd23ddb467c31b98301eec874dc4b15153a8bb9595"
+    },
+    {
       "file": "tests/material-parity/input-equivalence-audit.mjs",
-      "sha256": "e265921079aef065e14474e0716a62fcbcd21e63f89dddc707e0675cbb6f1695"
+      "sha256": "c97a8ef327bc2d4a82150dc9ea80866321ae7c722b122d521010a475906c5dd9"
     },
     {
       "file": "tests/material-parity/input-equivalence-audit.spec.mjs",
-      "sha256": "4145ba837dff1540484ab3dde3b76a94dd458af94f1d8439bf8064d13409c10b"
+      "sha256": "1a6336e5fd8e72235a2f32aeb7ab4abe3134ed98c6f5d34763efacb146f45d2a"
     },
     {
       "file": "tests/material-parity/root-initial-style-evidence.mjs",
-      "sha256": "5c3e6293bc746defef684d1a127b4d5e12db43b56879bb115f49446a6d6300d7"
+      "sha256": "5e7abdffe62f7ce60c324a6a2ae7fed465315e5393d937aeac4afb74f14fbf46"
     },
     {
       "file": "tests/material-parity/root-initial-style-evidence.spec.mjs",
-      "sha256": "f49e25d75cc5658c248f24c263029420da22adb757e7af18dfb3586d4f29301e"
+      "sha256": "cbacfb8ab8ee9e3076c728d58351252c8b8df3e506eb02706f91806afd57234b"
     },
     {
       "file": "tests/material-parity/root-initial-style-sensitivity.spec.mjs",
@@ -43,9 +47,369 @@
     "familyGroups": 36
   },
   "caseCount": 2311,
-  "propertyObservations": 6933,
-  "groupCount": 108,
+  "propertyObservations": 9244,
+  "groupCount": 144,
   "groups": [
+    {
+      "family": "core",
+      "sourceGroupIndex": 0,
+      "occurrences": 52,
+      "element": "core-root",
+      "property": "lineHeight",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "toolbar",
+      "sourceGroupIndex": 1,
+      "occurrences": 52,
+      "element": "toolbar-root",
+      "property": "lineHeight",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "sidenav",
+      "sourceGroupIndex": 2,
+      "occurrences": 62,
+      "element": "sidenav-root",
+      "property": "lineHeight",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "grid-list",
+      "sourceGroupIndex": 3,
+      "occurrences": 52,
+      "element": "grid-list-root",
+      "property": "lineHeight",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "divider",
+      "sourceGroupIndex": 4,
+      "occurrences": 24,
+      "element": "divider-root",
+      "property": "lineHeight",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "badge",
+      "sourceGroupIndex": 5,
+      "occurrences": 52,
+      "element": "badge-root",
+      "property": "lineHeight",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "card",
+      "sourceGroupIndex": 6,
+      "occurrences": 52,
+      "element": "card-root",
+      "property": "lineHeight",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "chips",
+      "sourceGroupIndex": 7,
+      "occurrences": 76,
+      "element": "chips-root",
+      "property": "lineHeight",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "icon",
+      "sourceGroupIndex": 8,
+      "occurrences": 20,
+      "element": "icon-root",
+      "property": "lineHeight",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "list",
+      "sourceGroupIndex": 9,
+      "occurrences": 52,
+      "element": "list-root",
+      "property": "lineHeight",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "table",
+      "sourceGroupIndex": 10,
+      "occurrences": 52,
+      "element": "table-root",
+      "property": "lineHeight",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "sort",
+      "sourceGroupIndex": 11,
+      "occurrences": 60,
+      "element": "sort-root",
+      "property": "lineHeight",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "paginator",
+      "sourceGroupIndex": 12,
+      "occurrences": 52,
+      "element": "paginator-root",
+      "property": "lineHeight",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "tree",
+      "sourceGroupIndex": 13,
+      "occurrences": 52,
+      "element": "tree-root",
+      "property": "lineHeight",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "form-field",
+      "sourceGroupIndex": 14,
+      "occurrences": 76,
+      "element": "form-field-root",
+      "property": "lineHeight",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "input",
+      "sourceGroupIndex": 15,
+      "occurrences": 76,
+      "element": "input-root",
+      "property": "lineHeight",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "autocomplete",
+      "sourceGroupIndex": 16,
+      "occurrences": 110,
+      "element": "autocomplete-root",
+      "property": "lineHeight",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "checkbox",
+      "sourceGroupIndex": 17,
+      "occurrences": 68,
+      "element": "checkbox-root",
+      "property": "lineHeight",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "radio",
+      "sourceGroupIndex": 18,
+      "occurrences": 68,
+      "element": "radio-root",
+      "property": "lineHeight",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "select",
+      "sourceGroupIndex": 19,
+      "occurrences": 94,
+      "element": "select-root",
+      "property": "lineHeight",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "slider",
+      "sourceGroupIndex": 20,
+      "occurrences": 78,
+      "element": "slider-root",
+      "property": "lineHeight",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "slide-toggle",
+      "sourceGroupIndex": 21,
+      "occurrences": 68,
+      "element": "slide-toggle-root",
+      "property": "lineHeight",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "datepicker",
+      "sourceGroupIndex": 22,
+      "occurrences": 111,
+      "element": "datepicker-root",
+      "property": "lineHeight",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "timepicker",
+      "sourceGroupIndex": 23,
+      "occurrences": 110,
+      "element": "timepicker-root",
+      "property": "lineHeight",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "button",
+      "sourceGroupIndex": 24,
+      "occurrences": 60,
+      "element": "button-root",
+      "property": "lineHeight",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "button-toggle",
+      "sourceGroupIndex": 25,
+      "occurrences": 68,
+      "element": "button-toggle-root",
+      "property": "lineHeight",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "menu",
+      "sourceGroupIndex": 26,
+      "occurrences": 94,
+      "element": "menu-root",
+      "property": "lineHeight",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "tabs",
+      "sourceGroupIndex": 27,
+      "occurrences": 70,
+      "element": "tabs-root",
+      "property": "lineHeight",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "stepper",
+      "sourceGroupIndex": 28,
+      "occurrences": 68,
+      "element": "stepper-root",
+      "property": "lineHeight",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "expansion",
+      "sourceGroupIndex": 29,
+      "occurrences": 68,
+      "element": "expansion-root",
+      "property": "lineHeight",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "bottom-sheet",
+      "sourceGroupIndex": 30,
+      "occurrences": 63,
+      "element": "bottom-sheet-root",
+      "property": "lineHeight",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "dialog",
+      "sourceGroupIndex": 31,
+      "occurrences": 78,
+      "element": "dialog-root",
+      "property": "lineHeight",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "snack-bar",
+      "sourceGroupIndex": 32,
+      "occurrences": 71,
+      "element": "snack-bar-root",
+      "property": "lineHeight",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "tooltip",
+      "sourceGroupIndex": 33,
+      "occurrences": 62,
+      "element": "tooltip-root",
+      "property": "lineHeight",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "progress-bar",
+      "sourceGroupIndex": 34,
+      "occurrences": 20,
+      "element": "progress-bar-root",
+      "property": "lineHeight",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "progress-spinner",
+      "sourceGroupIndex": 35,
+      "occurrences": 20,
+      "element": "progress-spinner-root",
+      "property": "lineHeight",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
     {
       "family": "core",
       "sourceGroupIndex": 0,
@@ -1129,7 +1493,7 @@
   ],
   "evidenceRequirements": [
     "Unique mapped empty section and complete captured reference frame / candidate page / synthetic-root ancestry; complete rule and core state-style capture provenance.",
-    "Reference frame and section computed weight 400, alignment start, vertical alignment baseline, direction ltr, writing mode horizontal-tb, bidi isolate and text-align-last auto. These are observations at the capture boundary, not proof that outer document declarations are absent.",
+    "Reference frame and section computed weight 400, alignment start, vertical alignment baseline, line-height normal, direction ltr, writing mode horizontal-tb, bidi isolate and text-align-last auto. These are observations at the capture boundary, not proof that outer document declarations are absent.",
     "No relevant inline/matched reference requests, reset/motion declarations, direction attributes, or potentially applicable candidate requests. Unknown selector syntax and nested rules block attribution.",
     "All three candidate page and section local declaration stages omit the properties; no computed candidate value is synthesized.",
     "Reference scalar structure does not capture ownText; exact empty ownText in the full-tree proof is required. Contradictory scalar ownText is rejected when present."
@@ -1140,6 +1504,18 @@
     "implementationPlan": "Keep the original omissions. Correct diagnostic observation-stage coverage through core-owned computed/consumer evidence, without adding fixture initial values, assuming start equals left, or implementing a separate showcase inheritance algorithm. Preserve all independent authoring, consumer, geometry and raster findings."
   },
   "verification": {
+    "lineHeightExtension": {
+      "scope": "Adds line-height normal versus local omission to the same guarded root/page proof, retaining all previous font-weight/alignment observations. Only audit evidence changes; no computed candidate, natural line-box or renderer equivalence is inferred.",
+      "redCommand": "node --test --test-name-pattern='root line-height omission is attributed' tests/material-parity/root-line-height-proof.spec.mjs",
+      "redResult": "Exit 1, 0/1 pass, 1433.3413 ms: the real captured root had no line-height attribution before this extension.",
+      "focusedCommand": "node --test --test-concurrency=1 tests/material-parity/root-line-height-proof.spec.mjs tests/material-parity/root-initial-style-evidence.spec.mjs tests/material-parity/root-initial-style-sensitivity.spec.mjs tests/material-parity/line-height-omission-sensitivity.spec.mjs",
+      "focusedResult": "16/16 pass, exit 0, 22813.6322 ms, no failures/skips/cancellations. Includes 9244 independently collected root observations, all 144 indexed groups, old and new scalar/forgery checks, explicit/changed line-height requests on both ancestors, all candidate local stages and DPR1/2 browser inheritance/formatting sensitivity. Standalone new proof first passed 3/3, 1527.4092 ms.",
+      "sourceIndices": "All 84 source fingerprints across the 12 affected indices match current files. Prior case/source index tests pass 13/13, exit 0, 74257.1274 ms, no failures/skips/cancellations.",
+      "priorIndicesCommand": "node --test --test-concurrency=1 --test-name-pattern='case index|records source fingerprints|covers every captured host' tests/material-parity/input-equivalence-audit.spec.mjs tests/material-parity/field-host-weight-tracking-evidence.spec.mjs",
+      "fullReplayCommand": "node --input-type=module -e \"import assert from 'node:assert/strict';import{readFileSync}from'node:fs';import{createHash}from'node:crypto';import{buildMaterialInputAudit,validateMaterialInputAudit}from'./tests/material-parity/input-equivalence-audit.mjs'; const index=JSON.parse(readFileSync('docs/material-root-initial-style-audit.json')),source=JSON.parse(readFileSync(index.caseSource.file)); const digest=v=>createHash('sha256').update(v).digest('hex'); assert.equal(digest(readFileSync(index.caseSource.file,'utf8').replaceAll('\\r\\n','\\n')),index.caseSource.sha256); const bytes=readFileSync(index.capture.file);assert.equal(digest(bytes),index.capture.sha256); console.error('ROOT_LINE_HEIGHT_PHASE build-start',JSON.stringify(process.memoryUsage())); const a=buildMaterialInputAudit(JSON.parse(bytes),{root:process.cwd(),normalLineBoxPath:'artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json',controlLineBoxPath:'artifacts/material-parity/control-line-box-current-ancestry-audit-v3/latest-report.json',supplementalLineBoxPath:'artifacts/material-parity/supplemental-line-box-current-ancestry-audit/latest-report.json',supplementalRoot:'artifacts/material-parity/supplemental-current-ancestry-audit'}); console.error('ROOT_LINE_HEIGHT_PHASE build-complete',JSON.stringify(process.memoryUsage())); const groups=a.discrepancies.filter(d=>d.attribution===index.attribution); assert.equal(a.rootInitialStyleInputs.length,index.propertyObservations);assert.equal(groups.length,index.groupCount); const output=groups.map(g=>{const expected=index.groups.find(e=>e.family===g.family&&e.element===g.element&&e.property===g.property);assert.ok(expected);const cases=source.groups[expected.sourceGroupIndex].cases;assert.equal(g.reference,expected.reference);assert.equal(g.astylar,undefined);assert.equal(g.classification,expected.classification);assert.equal(g.occurrences,expected.occurrences);assert.equal(g.reviewedCases.length,g.occurrences);assert.equal(new Set(g.reviewedCases).size,g.occurrences);const caseHash=digest(JSON.stringify([...g.reviewedCases].sort()));assert.equal(caseHash,digest(JSON.stringify([...cases].sort())));return{family:g.family,element:g.element,property:g.property,reference:g.reference,candidate:'<omitted>',classification:g.classification,occurrences:g.occurrences,completeCaseListSha256:caseHash};}); const lineGroups=output.filter(g=>g.property==='lineHeight');assert.equal(lineGroups.length,36);assert.equal(lineGroups.reduce((n,g)=>n+g.occurrences,0),2311); const exposed=a.discrepancies.filter(d=>d.property==='lineHeight'&&d.reference==='normal'&&d.astylar===undefined); assert.equal(exposed.reduce((n,g)=>n+g.occurrences,0),5000); assert.equal(a.summary.uniqueStyleDifferences,8235);assert.equal(a.summary.totalStyleDifferenceOccurrences,385520);assert.equal(a.summary.unresolvedAttributions,2535-lineGroups.length); assert.equal(a.summary.inputEquivalent,false); const strict=validateMaterialInputAudit(a);console.error('ROOT_LINE_HEIGHT_PHASE validation-complete',JSON.stringify(process.memoryUsage())); assert.deepEqual(strict,[a.summary.unresolvedAttributions+' resolved-style differences still lack root-cause attribution']); console.log(JSON.stringify({summary:a.summary,sourceFingerprintCount:a.sourceFingerprints.length,strict,proofCount:a.rootInitialStyleInputs.length,groupCount:groups.length,lineHeightGroups:lineGroups,allIndexedGroupIdentityChecksPassed:true,exposedLineHeightOccurrences:5000}));\"",
+      "fullReplay": "Exit 0. All 9244 proofs and 144 root groups match the independent index, including exact family/element/property, raw values, classification, occurrence count and full sorted case-list hash. The 36 line-height groups cover all 2311 cases. All 8235 raw style groups / 385520 occurrences and all 5000 exposed normal/omitted line-height observations remain. Classification totals remain 526 authoring / 3670 equivalent / 312 documented limitation / 3727 harness, with 131 source findings and 106 source fingerprints. Strict validation rejects the audit solely for 2499 unresolved attributions (previously 2535); inputEquivalent remains false. This is not candidate computed-value, natural line-box, descendant or raster proof.",
+      "fullHarness": "Pending; earlier 626/626 predates this extension and its new three-test file."
+    },
     "indexRegression": "The source index retained input-equivalence-audit.spec.mjs hash 41c33514f824af20bc08e333bae4aa7ec02acf487423f97b19c2db04bae61d3b from 40945a1 after e0cad9c changed that test. The existing collector test now independently checks the durable index's linked case-source hash, all 6933 property/case identities, 108 group values/counts, capture identity and seven source fingerprints. The strengthened test failed for the stale hash before refresh: node --test --test-name-pattern='root initial-style collector' tests/material-parity/root-initial-style-evidence.spec.mjs, exit 1, 0/1 pass, 16317.183 ms. After explicit source refresh, the complete five-test file passes: exit 0, 5/5, 15726.2943 ms. No collector, classifier, canonical input or renderer behavior changed.",
     "focusedCommand": "node --test tests/material-parity/root-initial-style-evidence.spec.mjs",
     "focusedResult": "5/5 pass, 14868.3759 ms. Complete 6933-observation collector, positive state cases, adverse ancestry/declaration/provenance cases, scalar guards and forged-report checks.",

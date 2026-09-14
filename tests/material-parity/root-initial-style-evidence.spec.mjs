@@ -35,7 +35,7 @@ function input(family = 'chips') {
 test('root initial-style proof preserves omissions and property-specific observation stages', () => {
   for (const family of ['chips', 'datepicker', 'dialog']) for (const state of ['hover', 'held', 'focus', 'disabled', 'selected']) {
     const raw = inventory(family, state), before = structuredClone(raw), proofs = collectRootInitialStyleInputs(raw);
-    assert.equal(proofs.length, 3);
+    assert.equal(proofs.length, 4);
     for (const proof of proofs) {
       const c = classifyRootInitialStyleInput(input(family), proof.property, proof.values.reference, undefined, proof);
       assert.equal(c.classification, 'parity-harness-defect');
@@ -111,7 +111,7 @@ test('root initial-style collector covers the full captured root survey without 
   const raw = JSON.parse(bytes), entries = [...raw.results.map(e => ({ ...e, kind: 'static' })), ...raw.interactions.map(e => ({ ...e, kind: 'interaction' }))];
   const pooled = collectFullTreeInventory(entries), proofs = collectRootInitialStyleInputs(pooled);
   assert.deepEqual(pooled.errors, []);
-  assert.equal(proofs.length, 2311 * 3);
+  assert.equal(proofs.length, 2311 * 4);
   const actual = proofs.map(p => `${p.case}/${p.property}`).sort();
   const expected = index.groups.flatMap(g => g.cases.flatMap(c => Object.keys(rootInitialStyleValues).map(p => `${c}/${p}`))).sort();
   assert.deepEqual(actual, expected); assert.equal(new Set(actual).size, actual.length);
@@ -145,8 +145,8 @@ test('root initial-style report joins exact scalars and rejects forged proof or 
   const seed = { ...raw, results: [selected], interactions: [] };
   const report = buildMaterialInputAudit(seed);
   const eligible = a => a.discrepancies.filter(d => d.attribution === 'reviewed-root-initial-style-declaration-stage');
-  assert.equal(eligible(report).length, 3);
-  assert.equal(report.rootInitialStyleInputs.length, 3);
+  assert.equal(eligible(report).length, 4);
+  assert.equal(report.rootInitialStyleInputs.length, 4);
   for (const d of eligible(report)) {
     assert.deepEqual(d.reviewedCases, ['static:chips@light/desktop']); assert.equal(d.occurrences, 1);
     assert.equal(d.astylar, undefined); assert.equal(d.classification, 'parity-harness-defect');
