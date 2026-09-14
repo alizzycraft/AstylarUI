@@ -80,6 +80,10 @@ attribution`; the error-printing runner's exit 0 is not acceptance.
 The preceding em-evidence increment's full `npm run parity:harness:check`
 finished with **555/555 PASS**, no failures/skips/cancellations, 395.858 seconds.
 That result predates the field-host changes; it is not their full-suite gate.
+The subsequent field-host gate on commit `177e201`, using the same command,
+finished with **559/559 PASS**, no failures/skips/cancellations, 313.203 seconds
+(terminal exit 0). This verifies the audit harness, not rendering parity;
+the 3,091 unresolved attributions and final enforced matrix remain outstanding.
 No renderer or canonical fixture was changed. This case index covers the
 captured host typography states only, not all remaining properties, every
 possible field interaction, or the final enforced parity requirement.

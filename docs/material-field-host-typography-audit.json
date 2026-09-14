@@ -940,6 +940,17 @@
       "cancelled": 0,
       "durationMs": 395858.1541
     },
+    "fieldHostIncrementHarness": {
+      "command": "npm run parity:harness:check",
+      "sourceCommit": "177e201",
+      "passed": 559,
+      "failed": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "durationMs": 313203.0001,
+      "exitCode": 0,
+      "scope": "Audit harness verification, not input-equivalence or rendered-output acceptance."
+    },
     "limitations": [
       "Prior 555-test harness result predates this field-host increment.",
       "No renderer or canonical fixture was changed.",
