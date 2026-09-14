@@ -3,11 +3,36 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
-## Inherited-default equivalence requires grouped policy review
+## Inherited-default policy correction (focused verification)
+
+The shared fallback no longer treats omitted `fontStyle`, `letterSpacing`,
+`wordSpacing`, `textTransform`, `whiteSpace`, `overflowWrap`, `wordBreak`,
+`pointerEvents` or `visibility` as proven initial values. Both policy consumers
+were inspected. Existing guarded retained-typography attribution remains a
+declaration-versus-retained-stage finding, never an inherited-value substitute.
+Production renderer behavior and canonical comparison inputs are unchanged.
+
+The grouped regression failed before the correction (**0/1**, **888.0201 ms**).
+After correction all **5/5** tests pass (**3,768.6645 ms**), covering the nine
+explicit/omitted cases, explicit-value controls, browser ancestry changes at
+DPR1/2, and every raw property/value pair and per-property case inventory.
+Combined normalization controls pass **9/9** (**14,688.6247 ms**). One legacy
+test's inputs were preserved while its unsupported omitted-default assertions
+were corrected; explicit normal/zero tracking equivalence remains supported.
+
+Refreshed index and regression checks report **21/21 pass** (**100,816.1451 ms**),
+including one file with no matching subtests. All **88** current fingerprints
+across 12 rolling indices and this correction match the source files. The full
+comparison replay is in progress; the complete expanded harness and final
+enforced parity are not yet verified.
+Historical pre-correction evidence and commands are retained below and in the
+machine record; they must not be read as current equivalence assertions.
+
+## Inherited-default equivalence investigation (historical baseline)
 
 The [inherited-default investigation](material-inherited-default-assumption-audit.json)
 demonstrates the same diagnostic assumption beyond caret color. The policy
-unconditionally accepts omitted `fontStyle`, `letterSpacing`, `wordSpacing`,
+formerly unconditionally accepted omitted `fontStyle`, `letterSpacing`, `wordSpacing`,
 `textTransform`, `whiteSpace`, `overflowWrap`, `wordBreak`, `pointerEvents` and
 `visibility` when the reference computes to the listed default. A synthetic
 explicit reference request is classified equivalent without candidate ancestry.
@@ -34,7 +59,7 @@ aliases and non-inherited defaults, add grouped regression coverage, and review
 the actual full comparison/state population. Do not discard explicit normal/zero
 tracking evidence merely because omission is a different question. Do not add
 fixture defaults or a showcase inheritance implementation. The current policy
-is unchanged by this documentation-only finding; population attribution remains
+was unchanged by that documentation-only finding; population attribution remained
 pending. Source history and exact repeatable command are in the machine record.
 
 ## Caret-color scalar suppression corrected (full replay verified)

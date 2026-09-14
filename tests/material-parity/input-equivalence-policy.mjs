@@ -39,8 +39,9 @@ export const propertyGroups = Object.freeze({
 
 // Browser used values that are equivalent to an omitted Astylar declaration.
 // These are representation rules, not screenshot-based waivers.
+// Inherited properties require authored-request and ancestry evidence; a local
+// omission cannot be replaced with an initial value by this scalar fallback.
 export const implicitReferenceValues = Object.freeze({
-  visibility: Object.freeze(['visible']),
   minWidth: Object.freeze(['0']),
   minHeight: Object.freeze(['0']),
   maxWidth: Object.freeze(['none']),
@@ -49,20 +50,12 @@ export const implicitReferenceValues = Object.freeze({
   right: Object.freeze(['auto']),
   bottom: Object.freeze(['auto']),
   left: Object.freeze(['auto']),
-  fontStyle: Object.freeze(['normal']),
-  letterSpacing: Object.freeze(['0']),
-  wordSpacing: Object.freeze(['0']),
-  textTransform: Object.freeze(['none']),
-  whiteSpace: Object.freeze(['normal']),
-  overflowWrap: Object.freeze(['normal']),
-  wordBreak: Object.freeze(['normal']),
   textOverflow: Object.freeze(['clip']),
   textDecoration: Object.freeze(['none']),
   clipPath: Object.freeze(['none']),
   transform: Object.freeze(['none', 'matrix(1,0,0,1,0,0)']),
   perspective: Object.freeze(['none']),
   zIndex: Object.freeze(['auto']),
-  pointerEvents: Object.freeze(['auto']),
   objectFit: Object.freeze(['fill']),
   boxShadow: Object.freeze(['none']),
   gridColumn: Object.freeze(['auto']),
@@ -92,7 +85,7 @@ export const reviewedValueNormalizations = Object.freeze([
     property: 'letterSpacing',
     aliases: { normal: '0' },
     classification: 'equivalent-representation',
-    justification: 'CSS Text 3 section 7.2 defines normal as computed zero and specifies that getComputedStyle serializes zero as normal. Core TextStyleParserService.parseSpacing maps normal and explicit zero to the same numeric tracking input. This accepts only that property representation, not font choice, shaping, line-height, alignment, inherited token resolution, missing paint provenance or final raster. Raw pooled reference/core styles remain unchanged. The existing omitted initial-value rule uses core default tracking zero; no missing retained or painted value is synthesized.',
+    justification: 'CSS Text 3 section 7.2 defines normal as computed zero and specifies that getComputedStyle serializes zero as normal. Core TextStyleParserService.parseSpacing maps normal and explicit zero to the same numeric tracking input. This accepts only that explicit property representation, not an omitted inherited declaration, font choice, shaping, line-height, alignment, inherited token resolution, missing paint provenance or final raster. Raw pooled reference/core styles remain unchanged; no missing declaration, retained or painted value is synthesized.',
     evidence: [
       'https://www.w3.org/TR/2026/CRD-css-text-3-20260814/#letter-spacing-property',
       'src/app/services/text/text-style-parser.service.ts: parseSpacing and DEFAULT_TEXT_STYLE.letterSpacing',

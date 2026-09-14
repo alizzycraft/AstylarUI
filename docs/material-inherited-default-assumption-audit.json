@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "findingId": "audit-inherited-default-equivalence-assumption",
   "classification": "parity-harness-defect",
-  "status": "confirmed-policy-blind-spot; actual-comparison-population-review-pending",
+  "status": "confirmed-policy-blind-spot; grouped-instrumentation-correction-focused-tests-pass; full-replay-pending",
   "scope": "Nine inherited-property defaults are accepted as equivalent to omitted candidate local declarations without authored-request or ancestry evidence. This is a synthetic diagnostic-policy finding, not proof of incorrect Astylar computed styles or rendering in every comparison.",
   "sourceLocations": [
     {
@@ -1699,6 +1699,114 @@
       ]
     },
     "limitation": "These are scalar property observations, not distinct renderer defects. Other guarded classifiers may already attribute some cases before the generic fallback. The per-property case hashes cover unique case sets; they are not per-element/per-state attribution proof."
+  },
+  "correction": {
+    "scope": "Audit instrumentation only. Remove nine unconditional inherited-default omission assumptions; production renderer, plugins and canonical comparison inputs are unchanged.",
+    "historicalEvidence": "The evidence, verification and population sections above record the pre-correction c5dd4e5 baseline. Their classifier outputs and source fingerprints are historical, not current equivalence assertions.",
+    "properties": [
+      "fontStyle",
+      "letterSpacing",
+      "wordSpacing",
+      "textTransform",
+      "whiteSpace",
+      "overflowWrap",
+      "wordBreak",
+      "pointerEvents",
+      "visibility"
+    ],
+    "consumersReviewed": [
+      {
+        "file": "tests/material-parity/input-equivalence-audit.mjs",
+        "symbol": "classifyStyleDifference",
+        "result": "Removed inherited values from the shared fallback list. An omitted local declaration without earlier guarded proof remains unresolved rather than equivalent."
+      },
+      {
+        "file": "tests/material-parity/input-equivalence-audit.mjs",
+        "symbol": "classifyReviewedTypographyStage",
+        "result": "Uses the same list as a guard. Removing inherited entries allows this earlier attribution only where the exact captured own-text nodes, version-2 declaration stages and retained typography match. This is a diagnostic-stage attribution, not input equivalence or candidate inherited-style synthesis."
+      }
+    ],
+    "sourceFingerprints": [
+      {
+        "file": "tests/material-parity/input-equivalence-audit.mjs",
+        "sha256": "f68453d8b1efd0ef01773182fcc144afc3c76cbee9e7888b1cef8c794c8658ed"
+      },
+      {
+        "file": "tests/material-parity/input-equivalence-audit.spec.mjs",
+        "sha256": "95fa9b04bb39042720b4e728bd13633ca8c52ff6ebd86418f3a38ef7d6bdf8d8"
+      },
+      {
+        "file": "tests/material-parity/input-equivalence-policy.mjs",
+        "sha256": "b003e0b652e53166d71a97c30b6899d8c3ff56c93627d729b79fe605e5dc2cbc"
+      },
+      {
+        "file": "tests/material-parity/inherited-default-sensitivity.spec.mjs",
+        "sha256": "6f0cad24bca24388695f16ffbe90b7e45ccabef438fa6b03c13a234e24884de3"
+      }
+    ],
+    "tests": [
+      {
+        "command": "node --test --test-name-pattern='inherited defaults cannot' tests/material-parity/inherited-default-sensitivity.spec.mjs",
+        "phase": "before policy correction; corrected explicit selector",
+        "exitCode": 1,
+        "passed": 0,
+        "total": 1,
+        "durationMs": 888.0201,
+        "result": "Explicit fontStyle normal versus an unproven omission was incorrectly classified equivalent."
+      },
+      {
+        "command": "node --test --test-name-pattern='explicit inherited values|nine inherited defaults diverge' tests/material-parity/inherited-default-sensitivity.spec.mjs",
+        "phase": "controls before policy correction",
+        "exitCode": 0,
+        "passed": 3,
+        "total": 3,
+        "durationMs": 2335.8467
+      },
+      {
+        "command": "node --test tests/material-parity/inherited-default-sensitivity.spec.mjs",
+        "phase": "after policy correction",
+        "exitCode": 0,
+        "passed": 5,
+        "total": 5,
+        "durationMs": 3768.6645
+      },
+      {
+        "command": "node --test --test-name-pattern='normalizes shorthand|normalizes CSSOM normal|tracking normalization|reviewed normalization scope|accepts only proven omitted shadow' tests/material-parity/input-equivalence-audit.spec.mjs",
+        "phase": "legacy assertion exposed after policy correction",
+        "exitCode": 1,
+        "passed": 4,
+        "total": 5,
+        "durationMs": 12243.1256,
+        "result": "One old test expected visibility, fontStyle and pointerEvents omissions to be equivalent. Kept its inputs unchanged and corrected those assertions to require unresolved attribution. Existing shorthand, color, precision, explicit tracking and non-inherited controls remain."
+      },
+      {
+        "command": "node --test --test-concurrency=1 --test-name-pattern='normalizes shorthand|normalizes CSSOM normal|tracking normalization|reviewed normalization scope|accepts only proven omitted shadow|inherited default|explicit inherited|nine inherited' tests/material-parity/input-equivalence-audit.spec.mjs tests/material-parity/inherited-default-sensitivity.spec.mjs",
+        "phase": "combined legacy normalization and inherited-property regression",
+        "exitCode": 0,
+        "passed": 9,
+        "total": 9,
+        "durationMs": 14688.6247,
+        "limitation": "This name filter excludes the hyphenated inherited-default population test; the separate 5/5 run includes it."
+      }
+    ],
+    "indexVerification": {
+      "command": "node --test --test-concurrency=1 --test-name-pattern='case index|records source fingerprints|covers every captured host|root initial-style collector|inherited.default|explicit inherited|nine inherited' tests/material-parity/inherited-default-sensitivity.spec.mjs tests/material-parity/input-equivalence-audit.spec.mjs tests/material-parity/input-tree-evidence.spec.mjs tests/material-parity/root-initial-style-evidence.spec.mjs tests/material-parity/field-host-weight-tracking-evidence.spec.mjs",
+      "exitCode": 0,
+      "reportedTests": 21,
+      "passed": 21,
+      "failed": 0,
+      "durationMs": 100816.1451,
+      "note": "Includes the full five-test inherited-default file, raw case indices, source-fingerprint checks and complete root collector. One input-tree file has no matching subtests and is reported as a successful file entry.",
+      "verifiedFingerprints": 88,
+      "rollingIndices": 12,
+      "correctionFingerprints": 4
+    },
+    "limitations": [
+      "The 58,835 historically eligible property observations are not 58,835 renderer defects.",
+      "Passing explicit-default sensitivity tests does not establish candidate computed inheritance, layout, hit testing or raster equivalence.",
+      "Refreshed case/source-index checks pass. Full comparison replay is running; complete expanded harness and final enforced parity remain pending.",
+      "Other non-inherited or context-dependent policy entries are not certified by this correction."
+    ]
   },
   "ownership": {
     "earliestDivergence": "Audit fallback policy treats a locally omitted inherited property as its CSS initial value, bypassing source-request and ancestry evidence.",

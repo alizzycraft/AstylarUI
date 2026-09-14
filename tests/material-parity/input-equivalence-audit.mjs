@@ -8022,6 +8022,7 @@ function sourceFingerprints(root) {
     'tests/material-parity/root-initial-style-evidence.spec.mjs',
     'tests/material-parity/root-line-height-proof.spec.mjs',
     'tests/material-parity/caret-color-omission-sensitivity.spec.mjs',
+    'tests/material-parity/inherited-default-sensitivity.spec.mjs',
     'tests/material-parity/root-initial-style-sensitivity.spec.mjs',
     'tests/material-parity/field-host-weight-tracking-evidence.mjs',
     'tests/material-parity/field-host-weight-tracking-evidence.spec.mjs',
@@ -8057,6 +8058,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/inherited-default-sensitivity.spec.mjs', /test\('inherited defaults cannot/,
+      'inherited defaults are not unconditional omitted-declaration equivalents', 'Nine inherited-property omissions remain unresolved without authored-request and ancestry evidence, including explicit reference defaults. DPR1/2 ancestor-change controls distinguish omission from explicit defaults while matching explicit values and the normal/zero tracking alias remain comparable. The full raw per-property population is checked independently; no candidate inherited value, layout, hit testing or raster is synthesized.'),
     proof(root, 'tests/material-parity/caret-color-omission-sensitivity.spec.mjs', /test\('caret-color omission remains/,
       'caret-color omission is not proven auto by matching text color', 'The audit retains computed caret-color versus omitted local declaration observations without an ancestry/request proof. Explicit auto and omission diverge under an inherited caret color despite equal text colors at DPR1/2. All 1371 formerly suppressed raw observations remain indexed; the proof does not synthesize candidate computed values or establish editable caret rendering.'),
     proof(root, 'tests/material-parity/root-line-height-proof.spec.mjs', /test\('root line-height omission is attributed/,

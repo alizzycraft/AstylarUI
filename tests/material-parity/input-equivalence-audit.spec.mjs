@@ -269,7 +269,7 @@ test('complete audit acceptance rejects legacy supplements even when their case 
   }
 });
 
-test('normalizes shorthand, colors, numeric precision, and implicit browser values', () => {
+test('normalizes shorthand, colors and precision without assuming inherited defaults', () => {
   const audit = buildMaterialInputAudit(parityReport({
     ...browserDefaults,
     paddingTop: '0px', paddingRight: '24px', paddingBottom: '0px', paddingLeft: '24px',
@@ -277,7 +277,13 @@ test('normalizes shorthand, colors, numeric precision, and implicit browser valu
   }, {
     padding: '0 24px', background: '#6750a4', opacity: '1.0', width: '212.234375px',
   }));
-  assert.ok(audit.discrepancies.every(({ classification }) => classification === 'equivalent-representation'));
+  const inherited = ['fontStyle', 'pointerEvents', 'visibility'];
+  assert.deepEqual(audit.discrepancies.filter(d => inherited.includes(d.property)).map(d => d.property).sort(), inherited);
+  for (const d of audit.discrepancies) {
+    if (inherited.includes(d.property)) {
+      assert.equal(d.classification, 'parity-harness-defect'); assert.equal(d.attribution, 'unresolved');
+    } else assert.equal(d.classification, 'equivalent-representation');
+  }
   assert.ok(!audit.discrepancies.some(({ property }) =>
     ['paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft', 'backgroundColor', 'opacity', 'width'].includes(property)));
 });
@@ -1362,7 +1368,8 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   const report = parityReport({}, {});
   const audit = buildMaterialInputAudit(report);
   assert.equal(audit.coverage.visualParityGreen, true);
-  assert.equal(audit.sourceFingerprints.length, 107);
+  assert.equal(audit.sourceFingerprints.length, 108);
+  assert.ok(audit.sourceFingerprints.some(s => s.file === 'tests/material-parity/inherited-default-sensitivity.spec.mjs'));
   assert.ok(audit.sourceFingerprints.some(s => s.file === 'tests/material-parity/caret-color-omission-sensitivity.spec.mjs'));
   assert.ok(audit.sourceFingerprints.some(s => s.file === 'tests/material-parity/root-line-height-proof.spec.mjs'));
   assert.ok(audit.sourceFingerprints.some(s => s.file === 'tests/material-parity/line-height-omission-sensitivity.spec.mjs'));

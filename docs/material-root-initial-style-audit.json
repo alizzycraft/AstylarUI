@@ -14,11 +14,11 @@
     },
     {
       "file": "tests/material-parity/input-equivalence-audit.mjs",
-      "sha256": "0aec3fbd22143c03207dc140944a0a4376eaad79b5df344bb505a3357ef280e0"
+      "sha256": "f68453d8b1efd0ef01773182fcc144afc3c76cbee9e7888b1cef8c794c8658ed"
     },
     {
       "file": "tests/material-parity/input-equivalence-audit.spec.mjs",
-      "sha256": "34c4c3c7ff91ab0277ad202e0555472af2dfb1598678bf70b02a635401f3e152"
+      "sha256": "95fa9b04bb39042720b4e728bd13633ca8c52ff6ebd86418f3a38ef7d6bdf8d8"
     },
     {
       "file": "tests/material-parity/root-initial-style-evidence.mjs",
@@ -38,7 +38,7 @@
     },
     {
       "file": "tests/material-parity/input-equivalence-policy.mjs",
-      "sha256": "3f6bcbb6ae117f124a8c13465d753ef83db5babade4d431304bb9a7c27ea73b2"
+      "sha256": "b003e0b652e53166d71a97c30b6899d8c3ff56c93627d729b79fe605e5dc2cbc"
     }
   ],
   "caseSource": {
