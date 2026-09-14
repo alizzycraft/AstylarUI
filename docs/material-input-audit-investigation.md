@@ -3,6 +3,24 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Root text-property survey after exposing line-height omissions
+
+The [read-only root survey](material-root-text-default-survey.json) checks all
+**2,311 unique cases** and their raw paired tree hashes. The captured frame and
+empty section compute to normal font style, whitespace, word breaking, overflow
+wrapping, letter spacing and line height, with no text transformation and clipped
+text overflow. The candidate page and section omit these eight properties in all
+three local inspection stages. No relevant captured inline or applicable rule
+requests were found on these nodes. All cases share this same observation pattern.
+Two runs exit **0**, **8,637.4032 / 8,891.8482 ms**, with identical observations.
+
+This is exploratory stage evidence, not computed candidate or renderer parity.
+Next, extend the guarded root initial-style proof specifically to line height,
+rejecting explicit or changed ancestor requests and preserving the normal/omitted
+scalar. Other surveyed properties still need their own inheritance and formatting
+context assessment. Do not treat omitted tracking as an explicit zero request.
+No production, canonical input, or audit classification changed in this survey.
+
 ## Line-height audit filter correction and complete replay
 
 The unconditional `normal`/omitted-local acceptance is now removed from the

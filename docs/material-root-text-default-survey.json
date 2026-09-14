@@ -1,0 +1,155 @@
+{
+  "schemaVersion": 1,
+  "findingId": "root-text-initial-computed-versus-local-survey",
+  "classification": "exploratory-audit-evidence",
+  "scope": "Complete captured root/frame/page text-property survey. Not a computed candidate, full outside-surface ancestry, descendant consumer, natural-line-box or raster equivalence claim.",
+  "capture": {
+    "file": "artifacts/material-parity/current-ancestry-audit/latest-report.json",
+    "sha256": "b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a"
+  },
+  "surveySource": {
+    "commit": "c0be976",
+    "selectorHelper": "tests/material-parity/root-initial-style-evidence.mjs",
+    "sha256": "5c3e6293bc746defef684d1a127b4d5e12db43b56879bb115f49446a6d6300d7",
+    "note": "Historical implementation fingerprint for this read-only survey, not a rolling current-source requirement."
+  },
+  "verification": {
+    "command": "node --input-type=module -e \"import assert from 'node:assert/strict';import{readFileSync}from'node:fs';import{createHash}from'node:crypto';import{rootInitialSelectorCanApply}from'./tests/material-parity/root-initial-style-evidence.mjs'; const props=['fontStyle','whiteSpace','textTransform','wordBreak','overflowWrap','textOverflow','letterSpacing','lineHeight']; const raw=JSON.parse(readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json')); const normalize=k=>k.replaceAll('-','').toLowerCase(); const affects=k=>props.map(normalize).includes(normalize(k))||['font','all','whitespacecollapse','textwrap','textwrapmode','textwrapstyle','wordwrap'].includes(normalize(k))||/^(animation|transition)/i.test(k); const digest=b=>createHash('sha256').update(b).digest('hex'), combos=new Map(), cases=[]; for(const[kind,entries]of[['static',raw.results],['interaction',raw.interactions]])for(const e of entries){  const c=kind+':'+e.family+'@'+e.profile+'/'+e.viewport.id+(e.state?'/'+e.state:'');  const t={};for(const side of['reference','astylar']){const src=e.inputTrees[side],bytes=readFileSync(src.file);assert.equal(digest(bytes),src.sha256);t[side]=JSON.parse(bytes);}  const ref=t.reference,ast=t.astylar,rs=ref.nodes.find(n=>n.attributes?.id===e.family+'-root'),as=ast.nodes.find(n=>n.authored?.id===e.family+'-root');  assert.ok(rs&&as,c);const rf=ref.nodes.find(n=>n.key===rs.parent),ap=ast.nodes.find(n=>n.key===as.parent);assert.ok(rf&&ap,c);  const observation={reference:[rf,rs].map(n=>({type:n.type,ownText:n.ownText,values:Object.fromEntries(props.map(p=>[p,ref.styles[n.style][p]])),requests:n.rules.flatMap(i=>{const r=ref.rules[i];return Object.entries(r.declarations).filter(([k])=>affects(k)).map(([k,v])=>({selector:r.selector,property:k,value:v,active:r.active}));}),inline:Object.fromEntries(Object.entries(n.inline??{}).filter(([k])=>affects(k)))})),  candidate:[ap,as].map(n=>({type:n.authored.type,ownText:n.authored.textContent??'',values:Object.fromEntries(['normalResolvedStyle','resolvedStyle','interactionResolvedStyle'].map(s=>[s,Object.fromEntries(props.map(p=>[p,n[s]?.[p]??'<omitted>']))])),requests:ast.rules.filter(r=>rootInitialSelectorCanApply(r.selector,n.authored)).flatMap(r=>Object.entries(r).filter(([k])=>affects(k)).map(([k,v])=>({selector:r.selector,property:k,value:v}))),inline:Object.fromEntries(Object.entries(n.authored.style??{}).filter(([k])=>affects(k)))}))};  const sig=JSON.stringify(observation);if(!combos.has(sig))combos.set(sig,{observation,cases:[]});combos.get(sig).cases.push(c);cases.push(c); } console.log(JSON.stringify({cases:cases.length,uniqueCases:new Set(cases).size,combinations:[...combos.values()].map(g=>({observation:g.observation,occurrences:g.cases.length,caseListSha256:digest(JSON.stringify(g.cases.sort())),sample:g.cases.slice(0,3)}))}));\"",
+    "exitCode": 0,
+    "durationMs": 8637.4032,
+    "repeat": { "exitCode": 0, "durationMs": 8891.8482, "observationsIdentical": true },
+    "checks": "Every referenced raw tree byte hash checked; all 2311 case identities unique; all roots and immediate page/frame parents present. Applicable candidate request exclusion uses the existing conservative terminal-selector helper. This exploratory command does not replace the stricter main collector's provenance, complete-rule, malformed-input, ancestry and scalar-join guards."
+  },
+  "cases": 2311,
+  "uniqueCases": 2311,
+  "combinations": [
+    {
+      "observation": {
+        "reference": [
+          {
+            "type": "main",
+            "ownText": "",
+            "values": {
+              "fontStyle": "normal",
+              "whiteSpace": "normal",
+              "textTransform": "none",
+              "wordBreak": "normal",
+              "overflowWrap": "normal",
+              "textOverflow": "clip",
+              "letterSpacing": "normal",
+              "lineHeight": "normal"
+            },
+            "requests": [],
+            "inline": {}
+          },
+          {
+            "type": "section",
+            "ownText": "",
+            "values": {
+              "fontStyle": "normal",
+              "whiteSpace": "normal",
+              "textTransform": "none",
+              "wordBreak": "normal",
+              "overflowWrap": "normal",
+              "textOverflow": "clip",
+              "letterSpacing": "normal",
+              "lineHeight": "normal"
+            },
+            "requests": [],
+            "inline": {}
+          }
+        ],
+        "candidate": [
+          {
+            "type": "main",
+            "ownText": "",
+            "values": {
+              "normalResolvedStyle": {
+                "fontStyle": "<omitted>",
+                "whiteSpace": "<omitted>",
+                "textTransform": "<omitted>",
+                "wordBreak": "<omitted>",
+                "overflowWrap": "<omitted>",
+                "textOverflow": "<omitted>",
+                "letterSpacing": "<omitted>",
+                "lineHeight": "<omitted>"
+              },
+              "resolvedStyle": {
+                "fontStyle": "<omitted>",
+                "whiteSpace": "<omitted>",
+                "textTransform": "<omitted>",
+                "wordBreak": "<omitted>",
+                "overflowWrap": "<omitted>",
+                "textOverflow": "<omitted>",
+                "letterSpacing": "<omitted>",
+                "lineHeight": "<omitted>"
+              },
+              "interactionResolvedStyle": {
+                "fontStyle": "<omitted>",
+                "whiteSpace": "<omitted>",
+                "textTransform": "<omitted>",
+                "wordBreak": "<omitted>",
+                "overflowWrap": "<omitted>",
+                "textOverflow": "<omitted>",
+                "letterSpacing": "<omitted>",
+                "lineHeight": "<omitted>"
+              }
+            },
+            "requests": [],
+            "inline": {}
+          },
+          {
+            "type": "section",
+            "ownText": "",
+            "values": {
+              "normalResolvedStyle": {
+                "fontStyle": "<omitted>",
+                "whiteSpace": "<omitted>",
+                "textTransform": "<omitted>",
+                "wordBreak": "<omitted>",
+                "overflowWrap": "<omitted>",
+                "textOverflow": "<omitted>",
+                "letterSpacing": "<omitted>",
+                "lineHeight": "<omitted>"
+              },
+              "resolvedStyle": {
+                "fontStyle": "<omitted>",
+                "whiteSpace": "<omitted>",
+                "textTransform": "<omitted>",
+                "wordBreak": "<omitted>",
+                "overflowWrap": "<omitted>",
+                "textOverflow": "<omitted>",
+                "letterSpacing": "<omitted>",
+                "lineHeight": "<omitted>"
+              },
+              "interactionResolvedStyle": {
+                "fontStyle": "<omitted>",
+                "whiteSpace": "<omitted>",
+                "textTransform": "<omitted>",
+                "wordBreak": "<omitted>",
+                "overflowWrap": "<omitted>",
+                "textOverflow": "<omitted>",
+                "letterSpacing": "<omitted>",
+                "lineHeight": "<omitted>"
+              }
+            },
+            "requests": [],
+            "inline": {}
+          }
+        ]
+      },
+      "occurrences": 2311,
+      "caseListSha256": "3ba9d5d6d83ea3504051d344917f9dcd2ee18438aecd60bba569b3cf159c72a6",
+      "sample": [
+        "interaction:autocomplete@contrast/desktop-dpr1/activate",
+        "interaction:autocomplete@contrast/desktop-dpr1/activate-leave",
+        "interaction:autocomplete@contrast/desktop-dpr1/disabled"
+      ]
+    }
+  ],
+  "nextSteps": [
+    "Extend the existing guarded root initial-style proof to lineHeight only after the running harness terminates. Preserve the raw normal/omitted difference and classify observation stages, not rendering equivalence.",
+    "Require complete candidate normal/comparison/effective omission, both captured reference ancestor values, no relevant font/line-height/reset/motion requests, and reject changed or incomplete evidence.",
+    "Keep other surveyed properties visible and separate. In particular, do not turn browser letter-spacing normal into proof of an explicit zero request or assume all text properties have the same inheritance/formatting behavior."
+  ]
+}
