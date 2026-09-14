@@ -30,6 +30,18 @@ attributions, join the complete captured ancestry, authored rules, resets,
 direction/writing mode and all candidate declaration stages. Candidate consumers,
 descendant overrides, geometry and final raster remain independent obligations.
 
+The [complete exploratory root survey](material-root-initial-style-survey-audit.json)
+now records all **2,311 cases / 36 families**, verifies **4,622 raw tree hashes**,
+and retains every case ID. Within each selected frame/section and page/section
+path, the three reference values are `400`, `start`, `baseline`; candidate local
+normal/comparison/effective stages omit them. No relevant matched reference or
+potentially applicable candidate requests were found by this survey's stated
+guards. This is **not yet a classification**: the report explicitly lists the
+additional identity, capture, attribute, shorthand, nested-rule and context
+guards that need adverse tests before integration. It does not infer declarations
+outside the captured frame or candidate computed values. The unresolved main
+audit count remains **2,570**.
+
 ## Form-field hosts omit an explicit alignment request
 
 The [field-host alignment index](material-field-host-alignment-audit.json)
