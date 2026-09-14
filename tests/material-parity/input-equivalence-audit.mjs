@@ -11,6 +11,7 @@ import { collectPaginatorNavigationEvidence } from './paginator-navigation-evide
 import { chipHostTypographyAttribution, collectChipHostTypographyInputs, classifyChipHostTypographyInput } from './chip-host-typography-evidence.mjs';
 import { fieldHostTypographyAttribution, collectFieldHostTypographyInputs, classifyFieldHostTypographyInput } from './field-host-typography-evidence.mjs';
 import { rootTypographyAttribution, collectRootTypographyInputs, classifyRootTypographyInput } from './root-typography-input-evidence.mjs';
+import { appearanceInitialAttribution, collectAppearanceInitialInputs, classifyAppearanceInitialInput } from './appearance-input-evidence.mjs';
 import { collectNonGridTemplateInputs, classifyNonGridTemplateInput, nonGridTemplateAttribution, gridTemplateProperties } from './grid-template-input-evidence.mjs';
 import { selectorCanApply, borderColorProperties, borderInitialAttribution, collectBorderInitialInputs, classifyBorderInitialInput,
   buttonBorderResetAttribution, collectButtonBorderResetInputs, classifyButtonBorderResetInput,
@@ -109,6 +110,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const chipHostTypographyInputs = collectChipHostTypographyInputs(elementInventory, reviewedTemplateTextMappings, canonicalStyle, typographySelectorCanApply);
   const fieldHostTypographyInputs = collectFieldHostTypographyInputs(elementInventory, canonicalStyle, typographySelectorCanApply);
   const rootTypographyInputs = collectRootTypographyInputs(elementInventory, canonicalStyle, typographySelectorCanApply);
+  const appearanceInitialInputs = collectAppearanceInitialInputs(elementInventory, typographySelectorCanApply);
   const typographyCases = [...cases, ...supplementalCalendarClose.cases, ...supplementalTooltipState.cases,
     ...supplementalPaginatorNavigation.cases];
   const rawControlTypography = collectControlTypographyEvidence(typographyCases, elementInventory);
@@ -132,7 +134,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const controlTypography = attributeObservedSupplementalLineBoxes(attributeObservedControlLineBoxes(
     attributeObservedNormalLineBoxes(rawControlTypography, elementInventory, normalLineBoxes), elementInventory, controlLineBoxes),
     elementInventory, supplementalLineBoxes);
-  const discrepancies = collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs, nonGridTemplateInputs, buttonTypographyScalarInputs, chipHostTypographyInputs, fieldHostTypographyInputs, rootTypographyInputs);
+  const discrepancies = collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs, nonGridTemplateInputs, buttonTypographyScalarInputs, chipHostTypographyInputs, fieldHostTypographyInputs, rootTypographyInputs, appearanceInitialInputs);
   const classifications = countBy(discrepancies, (entry) => entry.classification);
   const propertyGroupCounts = countBy(discrepancies, (entry) => entry.propertyGroup);
   const familyCounts = countBy(discrepancies, (entry) => entry.family);
@@ -208,6 +210,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
     chipHostTypographyInputs,
     fieldHostTypographyInputs,
     rootTypographyInputs,
+    appearanceInitialInputs,
     retainedTypography,
     controlTypography,
     sourceFindings,
@@ -236,6 +239,18 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
   if (requireComplete && report.elementInventory.resolvedStyleGaps.length > 0) errors.push(`${report.elementInventory.resolvedStyleGaps.length} inventoried elements lack resolved style evidence`);
   if (requireComplete && report.elementInventory.stateStyleGaps.length > 0) errors.push(`${report.elementInventory.stateStyleGaps.length} state cases lack effective style provenance`);
   if (report.elementInventory.errors.length > 0) errors.push(`${report.elementInventory.errors.length} full-tree collection errors`);
+  if (JSON.stringify(report.appearanceInitialInputs) !== JSON.stringify(collectAppearanceInitialInputs(report.elementInventory, typographySelectorCanApply))) {
+    errors.push('non-widget appearance evidence does not replay from captured initial requests');
+  }
+  for (const entry of report.discrepancies.filter(d => d.attribution === appearanceInitialAttribution)) {
+    const proof = report.appearanceInitialInputs?.find(p => p.case === entry.reviewEvidence?.case && p.element === entry.element);
+    if (!proof || entry.classification !== 'equivalent-representation' || entry.property !== 'appearance' || entry.reference !== 'none' || entry.astylar !== undefined ||
+        JSON.stringify(proof) !== JSON.stringify(entry.reviewEvidence) || !Array.isArray(entry.reviewedCases) ||
+        entry.reviewedCases.length !== entry.occurrences || new Set(entry.reviewedCases).size !== entry.occurrences ||
+        entry.reviewedCases.some(key => !report.appearanceInitialInputs?.some(p => p.case === key && p.element === entry.element))) {
+      errors.push('non-widget appearance classification lacks exact owner, stage and case evidence');
+    }
+  }
   if (JSON.stringify(report.rootTypographyInputs) !== JSON.stringify(collectRootTypographyInputs(report.elementInventory, canonicalStyle, typographySelectorCanApply))) {
     errors.push('root typography evidence does not replay from captured inheritance requests');
   }
@@ -983,7 +998,8 @@ export function renderMaterialInputAuditMarkdown(report) {
   return lines.join('\n');
 }
 
-function collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs, nonGridTemplateInputs, buttonTypographyScalarInputs, chipHostTypographyInputs, fieldHostTypographyInputs, rootTypographyInputs) {
+function collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs, nonGridTemplateInputs, buttonTypographyScalarInputs, chipHostTypographyInputs, fieldHostTypographyInputs, rootTypographyInputs, appearanceInitialInputs) {
+  const appearanceByCaseId = new Map(appearanceInitialInputs.map(p => [JSON.stringify([p.case, p.element]), p]));
   const rootTypographyByCaseIdProperty = new Map(rootTypographyInputs.map(p => [JSON.stringify([p.case, p.element, p.property]), p]));
   const grouped = new Map();
   const fieldTypographyByCaseIdProperty = new Map(fieldHostTypographyInputs.map(p => [JSON.stringify([p.case, p.element, p.property]), p]));
@@ -1012,7 +1028,9 @@ function collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInp
         const classification = benchmarkCase.state && input.reference && input.astylar && input.astylarResolvedStyleEvidenceVersion !== 2
           ? { classification: 'parity-harness-defect', owner: 'audit effective pseudo-state style capture',
             justification: 'This interaction capture predates effective-style provenance. It can compare browser state styles against candidate normal-only declarations; recapture with evidence version2 before attributing the difference to authoring or core.' }
-          : classifyReviewedVisibleOverflow(input, property, referenceValue, astylarValue,
+          : classifyAppearanceInitialInput(input, property, referenceValue, astylarValue,
+              appearanceByCaseId.get(JSON.stringify([key, input.id])))
+            ?? classifyReviewedVisibleOverflow(input, property, referenceValue, astylarValue,
               visibleOverflowByCaseAndId.get(JSON.stringify([key, input.id])))
             ?? classifyBorderInitialInput(input, property, referenceValue, astylarValue,
               borderInitialByCaseAndId.get(JSON.stringify([key, input.id])), canonicalStyle)
@@ -1057,7 +1075,7 @@ function collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInp
             ...(classification.attribution ? { attribution: classification.attribution } : {}),
             ...(classification.reviewEvidence ? { reviewEvidence: classification.reviewEvidence } : {}),
             ...([borderInitialAttribution, buttonBorderResetAttribution, outlineTokenAttribution, chipOutlineAttribution,
-              'reviewed-root-flow-dependency', nonGridTemplateAttribution, 'reviewed-button-typography-host-input', chipHostTypographyAttribution, fieldHostTypographyAttribution, rootTypographyAttribution].includes(classification.attribution) ? { reviewedCases: [] } : {}),
+              'reviewed-root-flow-dependency', nonGridTemplateAttribution, 'reviewed-button-typography-host-input', chipHostTypographyAttribution, fieldHostTypographyAttribution, rootTypographyAttribution, appearanceInitialAttribution].includes(classification.attribution) ? { reviewedCases: [] } : {}),
             occurrences: 0,
             cases: [],
             states: [],
@@ -7789,6 +7807,9 @@ function sourceFingerprints(root) {
     'src/app/services/dom/elements/element-dimension.service.ts',
     'examples/material-showcase/node_modules/astylarui/dist/lib/app/services/dom/elements/element-dimension.service.js',
     'examples/material-showcase/src/app/font-relative-box-audit.spec.ts',
+    'examples/material-showcase/src/app/appearance-input-audit.spec.ts',
+    'src/app/services/dom/input/checkbox.manager.ts',
+    'src/app/services/dom/input/select.manager.ts',
     'src/app/services/dom/elements/element-creation.service.ts',
     'src/app/services/dom/elements/grid.service.ts',
     'src/app/services/dom/elements/grid-track-sizing.ts',
@@ -7838,6 +7859,7 @@ function sourceFingerprints(root) {
     'tests/material-parity/chip-host-typography-evidence.mjs',
     'tests/material-parity/field-host-typography-evidence.mjs',
     'tests/material-parity/root-typography-input-evidence.mjs',
+    'tests/material-parity/appearance-input-evidence.mjs',
     'tests/material-parity/normal-line-box-report.mjs',
     'tests/material-parity/control-line-box-report.mjs',
     'tests/material-parity/control-line-box-validation.mjs',
@@ -7865,6 +7887,10 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('non-widget appearance initial request/,
+      'initial non-widget appearance attribution with complete state and source evidence', 'Matching built-in types, complete rules, absence of competing appearance/reset/motion requests and independent core stages are required. Controls, plugin types, structural substitutions, unknown selectors, source gaps and forged classifications fail attribution. Raw omission and all case identities remain intact; no full raster or computed candidate value is synthesized.'),
+    proof(root, 'examples/material-showcase/src/app/appearance-input-audit.spec.ts', /describe\('Material audit: appearance ownership/,
+      'public-package appearance default and indicator-sensitivity reduction', 'Two eight-test runs cover 24 fresh mounts each at DPR1. Six empty non-widget types preserve output size and byte-identical Astylar variant rasters; select and checked-checkbox none variants change indicator pixels. Browser computed keywords and candidate local omissions remain separate. This proves variant sensitivity, not native-widget, plugin, dynamic-state, typography or cross-engine screenshot parity.'),
     proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('root typography distinguishes/,
       'section inherited-font request and local diagnostic-stage separation', 'Complete captured frame/page-to-section chains establish matching ancestor font requests and omitted section-local declarations. Competing rules, changed ancestry, provenance gaps, scalar changes and forged report evidence reject attribution. No computed candidate font or used-size/raster equality is synthesized; core inherited em consumers and descendant typography remain separate.'),
     proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('field host typography preserves/,

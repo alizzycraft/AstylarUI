@@ -1362,7 +1362,8 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   const report = parityReport({}, {});
   const audit = buildMaterialInputAudit(report);
   assert.equal(audit.coverage.visualParityGreen, true);
-  assert.equal(audit.sourceFingerprints.length, 92);
+  assert.equal(audit.sourceFingerprints.length, 96);
+  assert.ok(audit.sourceFingerprints.some(entry => entry.file === 'tests/material-parity/appearance-input-evidence.mjs'));
   assert.ok(audit.sourceFingerprints.some(entry => entry.file === 'tests/material-parity/root-typography-input-evidence.mjs'));
   assert.ok(audit.sourceFingerprints.some(entry => entry.file === 'tests/material-parity/field-host-typography-evidence.mjs'));
   const fieldHost = audit.sourceFindings.find(entry => entry.id === 'fixture-field-host-typography-tokens-omitted');
@@ -10704,6 +10705,151 @@ test('font-relative box evidence retains equal-input failures and passing contro
     const copy = structuredClone(evidence.runs); mutate(copy);
     assert.throws(() => verify(copy));
   }
+});
+
+function appearanceInitialReport(type = 'section') {
+  const raw = parityReport({ appearance: 'none' }, {}), entry = raw.results[0];
+  entry.styleInputs[0] = { ...entry.styleInputs[0],
+    referenceStructure: { schemaVersion: 2, type, text: '' }, astylarStructure: { schemaVersion: 2, type, text: '' },
+    referenceAuthored: [], astylarAuthored: [], astylarResolvedStyleEvidenceVersion: 2,
+    astylarNormalResolvedStyle: {}, astylarInteractionResolvedStyle: {},
+  };
+  entry.inputTrees = {
+    reference: { schemaVersion: 1, errors: [], styles: [{ appearance: 'none' }], rules: [],
+      nodes: [{ key: 'node', parent: null, type, attributes: { id: 'core-root' }, ownText: '', inline: {}, style: 0, rules: [], pseudoElements: [] }] },
+    astylar: { schemaVersion: 1, errors: [], rules: [], resolvedStyleEvidenceVersion: 2,
+      resolvedStyleSource: 'core-style-inspection', resolvedStyleRevision: 9,
+      nodes: [{ key: 'node', parent: null, authored: { type, id: 'core-root' },
+        resolvedStyle: {}, normalResolvedStyle: {}, interactionResolvedStyle: {} }] },
+  };
+  return raw;
+}
+
+test('non-widget appearance initial request retains complete state evidence without normalizing declarations', () => {
+  const raw = parityReport({}, {}); raw.results = [];
+  for (const type of ['div', 'section', 'span', 'p', 'h2', 'a']) for (let state = 0; state < 15; state++) {
+    const entry = appearanceInitialReport(type).results[0]; entry.family = type;
+    entry.state = `state-${state}`; raw.interactions.push(entry);
+  }
+  const before = JSON.stringify(raw), audit = buildMaterialInputAudit(raw);
+  assert.equal(audit.appearanceInitialInputs.filter(p => p.element === 'core-root').length, 90);
+  const diffs = audit.discrepancies.filter(d => d.attribution === 'reviewed-nonwidget-appearance-initial-request');
+  assert.equal(diffs.length, 6);
+  for (const d of diffs) {
+    assert.equal(d.classification, 'equivalent-representation'); assert.equal(d.astylar, undefined);
+    assert.equal(d.reviewEvidence.candidateLocalDeclaration, '<omitted>');
+    assert.equal(d.reviewEvidence.finalRasterVerified, false);
+    assert.equal(d.occurrences, 15); assert.equal(d.cases.length, 12); assert.equal(d.reviewedCases.length, 15);
+  }
+  assert.ok(!validateMaterialInputAudit(audit, { requireComplete: false }).some(e => e.includes('non-widget appearance')));
+  assert.equal(JSON.stringify(raw), before);
+});
+
+test('non-widget appearance excludes controls, substitutions, overrides and uncertain capture evidence', () => {
+  const mutations = [
+    e => { e.inputTrees.reference.nodes[0].type = 'button'; },
+    e => { e.inputTrees.astylar.nodes[0].authored.type = 'select'; },
+    e => { e.inputTrees.astylar.nodes[0].authored.type = 'showcase.material:panel'; },
+    e => { e.inputTrees.astylar.nodes[0].authored.type = 'div'; },
+    e => { e.inputTrees.astylar.nodes[0].authored.inputType = 'checkbox'; },
+    e => { delete e.inputTrees.reference.nodes[0].inline; },
+    e => { e.inputTrees.reference.nodes[0].inline = { appearance: { value: 'none' } }; },
+    e => { e.inputTrees.reference.nodes[0].attributes.style = 'appearance:none'; },
+    e => { e.inputTrees.reference.rules.push({ selector: 'section', active: true, declarations: { appearance: { value: 'none' } } }); e.inputTrees.reference.nodes[0].rules = [0]; },
+    e => { e.inputTrees.astylar.nodes[0].authored.style = { appearance: 'none' }; },
+    e => { e.inputTrees.astylar.nodes[0].normalResolvedStyle = { appearance: 'none' }; },
+    e => { e.inputTrees.astylar.nodes[0].interactionResolvedStyle = { appearance: 'auto' }; },
+    e => { e.inputTrees.astylar.rules.push({ selector: '#core-root', appearance: 'none' }); },
+    e => { e.inputTrees.astylar.rules.push({ selector: ':is(#core-root)', appearance: 'none' }); },
+    e => { e.inputTrees.astylar.rules.push({ selector: '.ancestor section:hover', all: 'initial' }); },
+    e => { e.inputTrees.astylar.rules.push({ selector: 'section', WebkitAppearance: 'none' }); },
+    e => { e.inputTrees.astylar.rules.push({ selector: 'section', transition: 'all 1s' }); },
+    e => { e.inputTrees.astylar.rules.push({ selector: '#unrelated', nested: { appearance: 'none' } }); },
+    e => { e.inputTrees.reference.nodes.push(structuredClone(e.inputTrees.reference.nodes[0])); },
+    e => { e.inputTrees.astylar.nodes.push(structuredClone(e.inputTrees.astylar.nodes[0])); },
+    e => { e.inputTrees.reference.errors.push('incomplete'); },
+    e => { e.inputTrees.astylar.resolvedStyleRevision = -1; },
+    e => { e.inputTrees.astylar.resolvedStyleSource = 'mesh-metadata'; },
+    e => { delete e.inputTrees.astylar.rules; },
+  ];
+  for (const [index, mutate] of mutations.entries()) {
+    const raw = appearanceInitialReport(); mutate(raw.results[0]);
+    const audit = buildMaterialInputAudit(raw);
+    assert.equal(audit.appearanceInitialInputs.filter(p => p.element === 'core-root').length, 0, `mutation ${index}`);
+    assert.ok(audit.discrepancies.every(d => d.attribution !== 'reviewed-nonwidget-appearance-initial-request'), `mutation ${index}`);
+  }
+  const unrelated = appearanceInitialReport();
+  unrelated.results[0].inputTrees.astylar.rules.push({ selector: '#different', appearance: 'none' });
+  assert.equal(buildMaterialInputAudit(unrelated).appearanceInitialInputs.filter(p => p.element === 'core-root').length, 1);
+});
+
+test('non-widget appearance rejects scalar-stage drift and forged report classifications', () => {
+  for (const mutate of [
+    i => { i.reference.appearance = 'auto'; },
+    i => { i.astylarNormalResolvedStyle.appearance = 'none'; },
+    i => { i.astylarInteractionResolvedStyle.all = 'initial'; },
+    i => { i.referenceStructure.type = 'button'; },
+    i => { i.astylarStructure.type = 'div'; },
+    i => { i.referenceAuthored.push({ selector: 'section', declarations: { appearance: { value: 'none' } } }); },
+    i => { delete i.astylarAuthored; },
+  ]) {
+    const raw = appearanceInitialReport(); mutate(raw.results[0].styleInputs[0]);
+    assert.ok(buildMaterialInputAudit(raw).discrepancies.every(d => d.attribution !== 'reviewed-nonwidget-appearance-initial-request'));
+  }
+  const audit = buildMaterialInputAudit(appearanceInitialReport());
+  for (const mutate of [
+    a => { a.appearanceInitialInputs[0].finalRasterVerified = true; },
+    a => { a.discrepancies[0].astylar = 'none'; },
+    a => { a.discrepancies[0].reviewedCases = []; },
+    a => { a.discrepancies[0].classification = 'documented-limitation'; },
+  ]) {
+    const copy = structuredClone(audit); mutate(copy);
+    assert.ok(validateMaterialInputAudit(copy, { requireComplete: false }).some(e => e.includes('non-widget appearance')));
+  }
+});
+
+test('non-widget appearance case index preserves all attributed raw main-capture occurrences', async () => {
+  const { readFileSync } = await import('node:fs');
+  const { createHash } = await import('node:crypto');
+  const index = JSON.parse(readFileSync('docs/material-nonwidget-appearance-audit.json', 'utf8'));
+  for (const source of index.sourceFingerprints) assert.equal(createHash('sha256')
+    .update(readFileSync(source.file, 'utf8').replace(/\r\n/g, '\n')).digest('hex'), source.sha256, source.file);
+  const bytes = readFileSync(index.mainCapture.file);
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), index.mainCapture.sha256);
+  const report = JSON.parse(bytes), cases = new Map();
+  for (const [kind, list] of [['static', report.results], ['interaction', report.interactions]]) for (const entry of list) {
+    const key = `${kind}:${entry.family}@${entry.profile}/${entry.viewport.id}${entry.state ? '/' + entry.state : ''}`;
+    assert.equal(cases.has(key), false); cases.set(key, entry);
+  }
+  const verify = groups => {
+    assert.equal(groups.length, 49);
+    assert.equal(new Set(groups.map(g => `${g.family}/${g.element}`)).size, 49);
+    assert.equal(groups.reduce((sum, g) => sum + g.occurrences, 0), 3015);
+    for (const group of groups) {
+      assert.equal(group.classification, 'equivalent-representation');
+      assert.equal(group.reference, 'none'); assert.equal(group.candidate, '<omitted>');
+      assert.equal(new Set(group.reviewedCases).size, group.occurrences);
+      assert.equal(group.reviewedCases.length, group.occurrences);
+      const expected = [...cases].filter(([, entry]) => entry.family === group.family && entry.styleInputs.some(i => i.id === group.element)).map(([key]) => key);
+      assert.deepEqual(group.reviewedCases, expected, group.element);
+      for (const key of group.reviewedCases) {
+        const inputs = cases.get(key).styleInputs.filter(i => i.id === group.element); assert.equal(inputs.length, 1);
+        const input = inputs[0];
+        assert.equal(input.referenceStructure.type, group.type); assert.equal(input.astylarStructure.type, group.type);
+        assert.ok(['div', 'section', 'span', 'p', 'h2', 'a'].includes(group.type));
+        assert.equal(input.reference.appearance, 'none'); assert.equal(input.astylarResolvedStyleEvidenceVersion, 2);
+        for (const stage of ['astylar', 'astylarNormalResolvedStyle', 'astylarInteractionResolvedStyle']) assert.equal(input[stage].appearance, undefined);
+        for (const rule of [...input.referenceAuthored, ...input.astylarAuthored]) assert.equal(rule.declarations.appearance, undefined);
+      }
+    }
+  };
+  verify(index.groups);
+  for (const mutate of [
+    groups => groups.pop(),
+    groups => { groups[0].reviewedCases.pop(); },
+    groups => { groups[0].type = 'button'; },
+    groups => { groups[0].candidate = 'none'; },
+  ]) { const copy = structuredClone(index.groups); mutate(copy); assert.throws(() => verify(copy)); }
 });
 
 test('appearance public proof preserves control sensitivity and does not waive pending Material inputs', async () => {

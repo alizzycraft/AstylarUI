@@ -3,6 +3,68 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Non-widget appearance: captured initial requests, not a global omission waiver
+
+The [non-widget appearance case index](material-nonwidget-appearance-audit.json)
+records **49 groups / 3,015 main scalar occurrences**, preserving every reviewed
+case identity. These are matching built-in non-widget types with no relevant
+authored override and complete independent normal/comparison/effective
+declaration evidence. The public-package reduction below supplies passing
+non-widget controls and positive select/checkbox indicator sensitivity.
+
+The [CSS UI 4 Working Draft, section 7.2](https://www.w3.org/TR/2026/WD-css-ui-4-20260120/#appearance-switching)
+defines `appearance` as non-inherited with initial `none`. Browser UA control
+styling remains distinct. The collector does not use the capability catalog's
+control-oriented `auto` default to infer a non-widget computed value, or fill
+omitted candidate fields. It accepts only the initial request for a built-in
+type that does not own a native-control appearance switch.
+
+`appearance-input-evidence.mjs` requires unique paired node identities,
+matching reviewed types, complete rule pools, current core inspection
+provenance, and absence of appearance/reset/motion declarations in inline,
+applicable-rule and local-style evidence. Uncertain selectors remain potentially
+applicable and prevent attribution. Explicit authored values, controls,
+plugins and changed types are not covered. Independent report validation
+rebuilds the proof and checks raw values and every reviewed case.
+
+The full inventory contains 3,414 qualifying node observations, including
+supplemental and non-scalar-mapped nodes; **only 3,015 main scalar occurrences**
+are newly classified. Six same-type groups still fail the full guards:
+`badge-count`, `stepper-content`, `bottom-sheet-overlay`, `snack-bar-overlay`,
+`snack-bar-surface` and `tooltip-popup`. They remain unresolved rather than
+being accepted from the element type alone. All other control/plugin/type-
+substitution appearance differences also remain pending.
+
+### Verification and remaining scope
+
+The 13-test combined appearance/root/field/fingerprint command in the case
+index passed, exit 0, **45.031 seconds**. New tests exercise 90 synthetic
+type/state observations, 24 adverse capture mutations, seven scalar-stage
+mutations and four forged reports, plus a definitely unrelated-selector
+passing control. Root/field indices were reverified after updating only their
+main-collector fingerprint; their captured evidence is unchanged.
+The additional case-index integrity test passed **1/1**, exit 0, 1.608 seconds.
+It verifies the frozen main-report hash, current source fingerprints, all 49
+group mappings and all 3,015 original scalar occurrences, rejecting four
+corrupted index variants. Its command is recorded in the index.
+The full `npm run parity:harness:check` passed **567/567**, zero failures,
+skips or cancellations, **388.169 seconds**, exit 0. This process included the
+collector and its three regression tests; the later case-index test was
+verified separately, not retrospectively counted in that running process.
+All ten frozen capture-harness hashes remain unchanged.
+
+The complete build/replay retains **8,143 unique differences / 380,520
+occurrences** and **130/130 detected source findings**, with 96 source
+fingerprints. Unresolved attributions decrease **2,947 to 2,898**. Strict
+validation reports only `2898 resolved-style differences still lack root-cause
+attribution`. The exact command and all reviewed cases are in the index.
+This diagnostic prints validation errors and exits 0; it does not establish
+acceptance. Final enforced parity and the remaining audit are still required.
+
+No canonical input or renderer behavior changed. This classification does not
+waive descendant layout, typography, clipping, interaction, plugin ownership
+or final cross-engine raster differences, even on the same reviewed element.
+
 ## Appearance: separate omitted defaults from indicator-sensitive authoring
 
 The [appearance diagnostic evidence](material-appearance-input-audit.json)
