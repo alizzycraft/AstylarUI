@@ -16,7 +16,16 @@ All **6/6** focused tests pass (**5,230.0824 ms**). Controls reject changed nest
 values at first/middle/last positions, reordered, missing, extra, sparse and
 non-array evidence, and accept the ordinary JSON transport round trip. The
 prior-index and existing root-proof checks pass **18/18** (**157,192.4884 ms**).
-The full raw replay is running; no full validation result is claimed yet.
+The complete raw replay now exits **0**, including strict validation's expected
+rejection of **3,210 unresolved attributions**. All **386,891 occurrences** and
+**8,339 groups** remain; every raw inherited-omission occurrence map and all
+**468 root group case sets** match independently collected evidence. The report
+contains **30,043 root proofs** and retains **2,888 container-caret proofs**.
+The reduction from the last successful **3,534** unresolved count is exactly
+the **324** newly attributed root observation-stage groups. It is not a claim
+of input equivalence, inherited candidate behavior, or renderer correction.
+The exact replay command and result are in the serialization-boundary record.
+Expanded complete-harness verification and final enforced parity remain pending.
 
 Report packaging is a separate unresolved boundary: the current codec still
 stringifies and parses the whole report, and explicitly rejects an uncompressed

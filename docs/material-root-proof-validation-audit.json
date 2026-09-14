@@ -54,7 +54,174 @@
       "failed": 0,
       "durationMs": 157192.4884
     },
-    "remaining": "Prior-index and existing root-proof checks pass. Full raw replay is running; complete expanded harness and final enforced parity remain pending. Focused success is not full-matrix validation evidence."
+    "fullReplay": {
+      "command": "node --input-type=module -e \" import assert from 'node:assert/strict';import{readFileSync}from'node:fs';import{createHash}from'node:crypto'; import{buildMaterialInputAudit,validateMaterialInputAudit}from'./tests/material-parity/input-equivalence-audit.mjs'; const doc=JSON.parse(readFileSync('docs/material-inherited-default-assumption-audit.json')),index=doc.population.data; const bytes=readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json'); const sha=v=>createHash('sha256').update(v).digest('hex');assert.equal(sha(bytes),index.captureSha256); const raw=JSON.parse(bytes),properties=index.properties.map(p=>p.property),expected=new Map(); const normalize=(p,v)=>p==='letterSpacing'&&v==='normal'?'0':v==='0px'?'0':v; for(const e of[...raw.results,...raw.interactions])for(const i of e.styleInputs??[])for(const p of properties){  if(i.reference?.[p]===undefined||i.astylar?.[p]!==undefined)continue;  const k=JSON.stringify([e.family,i.id,p,normalize(p,i.reference[p])]);expected.set(k,(expected.get(k)??0)+1); } console.error('ROOT_INHERITED_PHASE build-start'); const a=buildMaterialInputAudit(raw,{root:process.cwd(),normalLineBoxPath:'artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json',controlLineBoxPath:'artifacts/material-parity/control-line-box-current-ancestry-audit-v3/latest-report.json',supplementalLineBoxPath:'artifacts/material-parity/supplemental-line-box-current-ancestry-audit/latest-report.json',supplementalRoot:'artifacts/material-parity/supplemental-current-ancestry-audit'}); console.error('ROOT_INHERITED_PHASE build-complete'); const groups=a.discrepancies.filter(d=>properties.includes(d.property)&&d.astylar===undefined),actual=new Map(); for(const g of groups){const k=JSON.stringify([g.family,g.element,g.property,g.reference]);actual.set(k,(actual.get(k)??0)+g.occurrences);} assert.deepEqual([...actual].sort(),[...expected].sort()); assert.equal(a.summary.totalStyleDifferenceOccurrences,386891);assert.equal(a.summary.inputEquivalent,false); assert.equal(a.rootInitialStyleInputs.length,30043);assert.equal(a.containerCaretInputs.length,2888); assert.equal(a.discrepancies.filter(d=>d.property==='caretColor'&&d.astylar===undefined).reduce((n,g)=>n+g.occurrences,0),6938); const rootGroups=a.discrepancies.filter(d=>d.attribution==='reviewed-root-initial-style-declaration-stage');assert.equal(rootGroups.length,468);const rootIndex=JSON.parse(readFileSync('docs/material-root-initial-style-audit.json'));const caseIndex=JSON.parse(readFileSync(rootIndex.caseSource.file));for(const g of rootGroups){const indexed=rootIndex.groups.find(x=>x.family===g.family&&x.element===g.element&&x.property===g.property&&x.reference===g.reference);assert.ok(indexed);assert.deepEqual([...g.reviewedCases].sort(),[...caseIndex.groups[indexed.sourceGroupIndex].cases].sort());assert.equal(g.occurrences,indexed.occurrences);}const strict=validateMaterialInputAudit(a);assert.deepEqual(strict,[a.summary.unresolvedAttributions+' resolved-style differences still lack root-cause attribution']); const breakdown=properties.map(property=>{const selected=groups.filter(g=>g.property===property),attributions={};  for(const g of selected){const k=g.classification+'/'+(g.attribution??'<none>');attributions[k]=(attributions[k]??0)+g.occurrences;}  return {property,groups:selected.length,occurrences:selected.reduce((n,g)=>n+g.occurrences,0),attributions}; }); console.log(JSON.stringify({summary:a.summary,sourceFingerprintCount:a.sourceFingerprints.length,strict,allRawInheritedOmissionGroupsMatched:true,breakdown,rootInitialProofCount:a.rootInitialStyleInputs.length,rootInitialGroupCount:rootGroups.length,allRootCaseSetsMatched:true,containerCaretProofCount:a.containerCaretInputs.length})); \"",
+      "exitCode": 0,
+      "baselineCommit": "8b3296c",
+      "summary": {
+        "inputEquivalent": false,
+        "structureDifferences": 88,
+        "uniqueStyleDifferences": 8339,
+        "totalStyleDifferenceOccurrences": 386891,
+        "classifications": {
+          "application-plugin-authoring-defect": 526,
+          "equivalent-representation": 2678,
+          "intentional-documented-limitation": 312,
+          "parity-harness-defect": 4823
+        },
+        "propertyGroups": {
+          "interaction": 351,
+          "layout": 3106,
+          "other": 351,
+          "paint": 1255,
+          "transform": 937,
+          "typography": 2339
+        },
+        "affectedFamilies": {
+          "autocomplete": 147,
+          "badge": 282,
+          "bottom-sheet": 412,
+          "button": 305,
+          "button-toggle": 260,
+          "card": 376,
+          "checkbox": 220,
+          "chips": 317,
+          "core": 145,
+          "datepicker": 147,
+          "dialog": 487,
+          "divider": 300,
+          "expansion": 264,
+          "form-field": 147,
+          "grid-list": 278,
+          "icon": 128,
+          "input": 147,
+          "list": 149,
+          "menu": 150,
+          "paginator": 269,
+          "progress-bar": 130,
+          "progress-spinner": 124,
+          "radio": 304,
+          "select": 147,
+          "sidenav": 128,
+          "slide-toggle": 190,
+          "slider": 331,
+          "snack-bar": 262,
+          "sort": 151,
+          "stepper": 341,
+          "table": 142,
+          "tabs": 342,
+          "timepicker": 147,
+          "toolbar": 273,
+          "tooltip": 249,
+          "tree": 148
+        },
+        "unclassifiedDifferences": 0,
+        "unresolvedAttributions": 3210,
+        "sourceFindings": 131,
+        "unexplainedSourceFindings": 0,
+        "undetectedSourceDefinitions": 0
+      },
+      "sourceFingerprintCount": 109,
+      "strict": [
+        "3210 resolved-style differences still lack root-cause attribution"
+      ],
+      "allRawInheritedOmissionGroupsMatched": true,
+      "breakdown": [
+        {
+          "property": "fontStyle",
+          "groups": 134,
+          "occurrences": 6938,
+          "attributions": {
+            "parity-harness-defect/unresolved": 4415,
+            "parity-harness-defect/reviewed-root-initial-style-declaration-stage": 2311,
+            "parity-harness-defect/reviewed-stage-mismatch": 212
+          }
+        },
+        {
+          "property": "letterSpacing",
+          "groups": 122,
+          "occurrences": 6712,
+          "attributions": {
+            "application-plugin-authoring-defect/reviewed-field-host-weight-tracking-token-omission": 577,
+            "parity-harness-defect/reviewed-root-initial-style-declaration-stage": 2311,
+            "parity-harness-defect/reviewed-stage-mismatch": 128,
+            "parity-harness-defect/unresolved": 3096,
+            "application-plugin-authoring-defect/reviewed-button-typography-host-input": 600
+          }
+        },
+        {
+          "property": "wordSpacing",
+          "groups": 134,
+          "occurrences": 6938,
+          "attributions": {
+            "parity-harness-defect/unresolved": 4415,
+            "parity-harness-defect/reviewed-root-initial-style-declaration-stage": 2311,
+            "parity-harness-defect/reviewed-stage-mismatch": 212
+          }
+        },
+        {
+          "property": "textTransform",
+          "groups": 134,
+          "occurrences": 6938,
+          "attributions": {
+            "parity-harness-defect/unresolved": 4415,
+            "parity-harness-defect/reviewed-root-initial-style-declaration-stage": 2311,
+            "parity-harness-defect/reviewed-stage-mismatch": 212
+          }
+        },
+        {
+          "property": "whiteSpace",
+          "groups": 106,
+          "occurrences": 6336,
+          "attributions": {
+            "parity-harness-defect/unresolved": 4025,
+            "parity-harness-defect/reviewed-root-initial-style-declaration-stage": 2311
+          }
+        },
+        {
+          "property": "overflowWrap",
+          "groups": 117,
+          "occurrences": 6938,
+          "attributions": {
+            "parity-harness-defect/unresolved": 4627,
+            "parity-harness-defect/reviewed-root-initial-style-declaration-stage": 2311
+          }
+        },
+        {
+          "property": "wordBreak",
+          "groups": 117,
+          "occurrences": 6938,
+          "attributions": {
+            "parity-harness-defect/unresolved": 4627,
+            "parity-harness-defect/reviewed-root-initial-style-declaration-stage": 2311
+          }
+        },
+        {
+          "property": "pointerEvents",
+          "groups": 120,
+          "occurrences": 6870,
+          "attributions": {
+            "parity-harness-defect/unresolved": 4559,
+            "parity-harness-defect/reviewed-root-initial-style-declaration-stage": 2311
+          }
+        },
+        {
+          "property": "visibility",
+          "groups": 117,
+          "occurrences": 6938,
+          "attributions": {
+            "parity-harness-defect/unresolved": 4627,
+            "parity-harness-defect/reviewed-root-initial-style-declaration-stage": 2311
+          }
+        }
+      ],
+      "rootInitialProofCount": 30043,
+      "rootInitialGroupCount": 468,
+      "allRootCaseSetsMatched": true,
+      "containerCaretProofCount": 2888,
+      "interpretation": "Full raw replay completed validation without aggregate-string failure. Strict audit still rejects 3210 unresolved attributions. Compared with the last successful 3534 count, 324 root groups now have guarded observation-stage attribution; no raw occurrences were removed. This does not prove descendant rendering or input equivalence."
+    },
+    "remaining": "Full raw replay completed. The strict audit still rejects 3210 unresolved attributions. Complete expanded harness, lossless full-report packaging and final enforced parity remain pending."
   },
   "packaging": {
     "status": "separate confirmed size-boundary incompatibility; not corrected by bounded validation",
