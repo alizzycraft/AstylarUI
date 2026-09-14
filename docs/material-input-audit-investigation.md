@@ -3,7 +3,31 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
-## Root inherited-property population (read-only investigation)
+## Guarded root inherited-property attribution (focused verification)
+
+The grouped collector extension now attributes the nine surveyed properties
+through the existing root observation-stage proof. It rejects explicit default
+requests, changed ancestry, font/whitespace/word-wrap aliases, incomplete stages
+and fabricated computed/raster claims. Captured spacing serializations remain
+in the reference paths and `referenceComputed`; only the existing scalar
+comparison uses zero aliases. Candidate local omissions remain unchanged.
+
+The new positive test first failed (**0/1**, **2,019.1478 ms**) because the
+collector returned zero proofs for the nine properties. After the extension,
+the four focused tests pass (**4/4**, **2,401.9146 ms**); combined root,
+line-height and inherited-property controls pass **21/21** (**46,191.0288 ms**).
+The complete guarded index covers **30,043** observations across **2,311 cases**
+and **468 groups**, including **20,799** added observations / **324 groups**.
+The test independently rejoins every case/property identity from raw trees.
+
+Refreshed prior-index checks pass **13/13** (**125,767.8869 ms**), and all **90**
+current fingerprints across 12 rolling indices and this proof match. All-family
+report replay is running; expanded complete-harness and final enforced parity
+are still pending. This
+is instrumentation, not a renderer or fixture change, and does not certify
+candidate inheritance, descendant rendering, pointer targets or visibility.
+
+## Root inherited-property population (historical read-only investigation)
 
 The [grouped root survey](material-root-inherited-default-survey.json) covers
 all nine inherited properties exposed by the policy correction: font style,

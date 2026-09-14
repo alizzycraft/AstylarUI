@@ -1,15 +1,21 @@
 import { selectorCanApply } from './border-initial-input-evidence.mjs';
 
 export const rootInitialStyleAttribution = 'reviewed-root-initial-style-declaration-stage';
-export const rootInitialStyleValues = Object.freeze({ fontWeight: '400', textAlign: 'start', verticalAlign: 'baseline', lineHeight: 'normal' });
+export const rootInitialStyleValues = Object.freeze({ fontWeight: '400', textAlign: 'start', verticalAlign: 'baseline', lineHeight: 'normal',
+  fontStyle: 'normal', letterSpacing: 'normal', wordSpacing: '0px', textTransform: 'none', whiteSpace: 'normal',
+  overflowWrap: 'normal', wordBreak: 'normal', pointerEvents: 'auto', visibility: 'visible' });
 const object = v => v !== null && typeof v === 'object' && !Array.isArray(v);
 const one = list => list.length === 1 ? list[0] : undefined;
 const normalized = k => k.replaceAll('-', '').toLowerCase();
-const relevant = k => ['fontweight', 'font', 'textalign', 'textalignlast', 'verticalalign', 'lineheight',
-  'direction', 'writingmode', 'unicodebidi', 'all'].includes(normalized(k)) || /^(animation|transition)/i.test(k);
+const relevantProperties = new Set([...Object.keys(rootInitialStyleValues).map(normalized), 'font', 'textalignlast',
+  'whitespacecollapse', 'textwrap', 'textwrapmode', 'textwrapstyle', 'wordwrap', 'direction', 'writingmode', 'unicodebidi', 'all']);
+const relevant = k => relevantProperties.has(normalized(k)) || /^(animation|transition)/i.test(k);
+// Match the audit's two proven scalar serializations without rewriting captured
+// reference values or treating omitted inherited declarations as explicit zero.
+const comparisonValue = (p, v) => p === 'letterSpacing' && v === 'normal' || p === 'wordSpacing' && v === '0px' ? '0' : v;
 const safe = d => object(d) && !Object.keys(d).some(relevant);
 const safeAttribute = text => text === undefined || typeof text === 'string' && !text.includes('\\') &&
-  !/(?:^|;)\s*(?:font(?:-weight)?|text-align(?:-last)?|vertical-align|line-height|direction|writing-mode|unicode-bidi|all|animation[^:]*|transition[^:]*)\s*:/i.test(text);
+  !/(?:^|;)\s*(?:font(?:-weight|-style)?|text-align(?:-last)?|vertical-align|line-height|letter-spacing|word-spacing|text-transform|white-space(?:-collapse)?|text-wrap(?:-mode|-style)?|overflow-wrap|word-wrap|word-break|pointer-events|visibility|direction|writing-mode|unicode-bidi|all|animation[^:]*|transition[^:]*)\s*:/i.test(text);
 const unique = values => values.every(v => typeof v === 'string' && v.length > 0) && new Set(values).size === values.length;
 
 // Declaration exclusion only. Unknown selector syntax remains possibly active;
@@ -66,7 +72,7 @@ export function collectRootInitialStyleInputs(inventory) {
         (n.authored.class !== undefined && typeof n.authored.class !== 'string') ||
         n.rules.some(r => !safe(r.declarations)) || [n.normal, n.comparison, n.effective].some(s => !safe(s)))) continue;
     for (const [property, value] of Object.entries(rootInitialStyleValues)) results.push({ case: rc.case, family, element: id, property,
-      values: { reference: value, candidateLocalDeclaration: '<omitted>' }, source: ast.resolvedStyleSource, revision: ac.resolvedStyleRevision,
+      values: { reference: comparisonValue(property, value), referenceComputed: value, candidateLocalDeclaration: '<omitted>' }, source: ast.resolvedStyleSource, revision: ac.resolvedStyleRevision,
       referencePath: structuredClone(referencePath), candidatePath: structuredClone(candidatePath),
       classification: 'parity-harness-defect', computedCandidateVerified: false, descendantConsumersVerified: false, finalRasterVerified: false });
   }
@@ -78,17 +84,18 @@ export function classifyRootInitialStyleInput(input, property, reference, astyla
       proof.descendantConsumersVerified !== false || proof.finalRasterVerified !== false ||
       proof.source !== 'core-style-inspection' || !Number.isInteger(proof.revision) || proof.revision < 0 ||
       !Object.hasOwn(rootInitialStyleValues, property) || property !== proof.property || input.id !== proof.element ||
-      reference !== rootInitialStyleValues[property] || reference !== proof.values.reference || astylar !== undefined ||
+      reference !== comparisonValue(property, rootInitialStyleValues[property]) || reference !== proof.values.reference ||
+      proof.values.referenceComputed !== rootInitialStyleValues[property] || astylar !== undefined ||
       input.astylarResolvedStyleEvidenceVersion !== 2 || input.referenceStructure?.schemaVersion !== 2 || input.astylarStructure?.schemaVersion !== 2 ||
       input.referenceStructure.type !== 'section' || input.astylarStructure.type !== 'section' ||
       typeof proof.referencePath?.[1]?.ownText !== 'string' || proof.referencePath[1].ownText.trim() ||
       (input.referenceStructure.ownText !== undefined && (typeof input.referenceStructure.ownText !== 'string' || input.referenceStructure.ownText.trim())) ||
       typeof input.astylarStructure.ownText !== 'string' || input.astylarStructure.ownText.trim() ||
-      !object(input.reference) || input.reference[property] !== reference ||
+      !object(input.reference) || input.reference[property] !== rootInitialStyleValues[property] ||
       ['astylar', 'astylarNormalResolvedStyle', 'astylarInteractionResolvedStyle'].some(s => !safe(input[s])) ||
       !Array.isArray(input.referenceAuthored) || !Array.isArray(input.astylarAuthored) ||
       [...input.referenceAuthored, ...input.astylarAuthored].some(r => !safe(r.declarations))) return;
   return { classification: 'parity-harness-defect', attribution: rootInitialStyleAttribution,
     owner: 'input audit root computed initial/inherited values versus local declarations', reviewEvidence: structuredClone(proof),
-    justification: 'The empty mapped section and its captured frame/page ancestry omit the relevant authored requests; browser computed values include defaults and inheritance while candidate inspection records local declaration omission. This diagnoses unequal observation stages, not missing authoring or verified candidate computed values. Font weight, text alignment and line height inherit, but vertical alignment has separate non-inherited and formatting-context semantics. A normal line-height keyword does not establish natural line-box metrics. Preserve direction, ancestor changes, descendant consumers, layout and raster as independent obligations; do not inject initial values or equate start with left to hide the diagnostic mismatch.' };
+    justification: 'The empty mapped section and its captured frame/page ancestry omit the relevant authored requests; browser computed values include defaults and inheritance while candidate inspection records local declaration omission. This diagnoses unequal observation stages, not missing authoring or verified candidate computed values. Font, text, wrapping, pointer-events and visibility properties require inherited-value evidence; vertical alignment has separate non-inherited and formatting-context semantics. A normal line-height keyword does not establish natural line-box metrics. Preserve raw spacing serializations, direction, ancestor changes, descendant consumers, layout, hit testing, visibility and raster as independent obligations; do not inject initial values or equate start with left to hide the diagnostic mismatch.' };
 }

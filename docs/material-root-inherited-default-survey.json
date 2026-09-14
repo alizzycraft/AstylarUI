@@ -331,6 +331,82 @@
     },
     "note": "Independent raw scalar cross-check: each case has exactly one family root; all nine browser values and all three candidate local omissions match. Counts are property observations, not renderer defects."
   },
+  "guardedProof": {
+    "scope": "Audit-only guarded observation-stage attribution. Renderer, plugin and canonical comparison inputs are unchanged.",
+    "historicalSurvey": "The survey and baseline above predate this collector extension and remain unchanged historical observations.",
+    "sourceFingerprints": [
+      {
+        "file": "tests/material-parity/root-initial-style-evidence.mjs",
+        "sha256": "1fb7dc3f6dee4c64a0e86db8cbaedee621cffe15e6ff5fb62878f37977d4fa8f"
+      },
+      {
+        "file": "tests/material-parity/root-initial-style-evidence.spec.mjs",
+        "sha256": "b1fc7ec4c17fc277d5813cc13a82f3d773827dbecae479a093c82c8d6e28fba4"
+      },
+      {
+        "file": "tests/material-parity/root-inherited-default-proof.spec.mjs",
+        "sha256": "6f4c41a11beffbe27979f0aa14b44504245a08a14129093ca7f04a586e7da07c"
+      },
+      {
+        "file": "tests/material-parity/input-equivalence-audit.mjs",
+        "sha256": "a9ed33a80ccb1b39b7a63b1326cf3809ef848f212e013018cbb855764b065838"
+      },
+      {
+        "file": "tests/material-parity/input-equivalence-audit.spec.mjs",
+        "sha256": "0b414f0088e7ebd46e3efa48a843da6ec63c23255988014cd404b3c42f591554"
+      }
+    ],
+    "verification": [
+      {
+        "command": "node --test --test-name-pattern='stage proof covers all nine' tests/material-parity/root-inherited-default-proof.spec.mjs",
+        "phase": "before collector extension",
+        "exitCode": 1,
+        "passed": 0,
+        "tests": 1,
+        "durationMs": 2019.1478,
+        "result": "Expected nine proofs from complete captured root ancestry; collector returned zero."
+      },
+      {
+        "command": "node --test tests/material-parity/root-inherited-default-proof.spec.mjs",
+        "phase": "after collector extension",
+        "exitCode": 0,
+        "passed": 4,
+        "tests": 4,
+        "durationMs": 2401.9146
+      },
+      {
+        "command": "node --test --test-concurrency=1 tests/material-parity/root-inherited-default-proof.spec.mjs tests/material-parity/root-line-height-proof.spec.mjs tests/material-parity/root-initial-style-evidence.spec.mjs tests/material-parity/root-initial-style-sensitivity.spec.mjs tests/material-parity/inherited-default-sensitivity.spec.mjs",
+        "phase": "combined new proof, existing root/line-height proof and inherited-property sensitivity",
+        "exitCode": 0,
+        "passed": 21,
+        "tests": 21,
+        "durationMs": 46191.0288
+      }
+    ],
+    "coverage": {
+      "caseCount": 2311,
+      "propertiesPerRoot": 13,
+      "propertyObservations": 30043,
+      "groups": 468,
+      "addedPropertyObservations": 20799,
+      "addedGroups": 324,
+      "verification": "Combined test re-collects full raw trees and compares every case/property identity against the durable index without sampling."
+    },
+    "guard": "Complete uniquely mapped root/frame/page ancestry, known capture provenance and local stages, exact browser values, no relevant request on either captured path, and exact scalar joins. Explicit default requests, altered ancestors, font/whitespace/word-wrap aliases, resets and motion rules reject attribution. Candidate computed, descendant and raster proof flags must remain false.",
+    "serializations": "Browser letterSpacing normal and wordSpacing 0px remain raw in referencePath and values.referenceComputed. Only values.reference uses the existing audited zero serialization for scalar joins; missing candidate declarations remain missing.",
+    "priorIndexVerification": {
+      "command": "node --test --test-concurrency=1 --test-name-pattern='case index|records source fingerprints|covers every captured host' tests/material-parity/input-equivalence-audit.spec.mjs tests/material-parity/field-host-weight-tracking-evidence.spec.mjs",
+      "exitCode": 0,
+      "tests": 13,
+      "passed": 13,
+      "failed": 0,
+      "durationMs": 125767.8869,
+      "verifiedFingerprints": 90,
+      "rollingIndices": 12,
+      "proofFingerprints": 5
+    },
+    "remaining": "Refreshed prior-index checks pass. Complete all-family replay is running; complete expanded harness and final enforced parity are pending. This does not establish candidate computed inheritance, descendant layout, pointer targeting, visibility or raster."
+  },
   "nextSteps": [
     "After the running harness terminates, extend the existing guarded root observation-stage proof as one grouped nine-property increment, with a failing regression first. Do not reintroduce unconditional implicit-value equivalence.",
     "Require correct root/frame/page identity, complete capture and all three candidate stages; exclude relevant local and ancestor requests, reset/motion rules, font shorthand, whitespace longhands and word-wrap aliases. Explicit declarations equal to defaults must still be distinguished from omission.",

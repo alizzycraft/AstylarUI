@@ -14,19 +14,19 @@
     },
     {
       "file": "tests/material-parity/input-equivalence-audit.mjs",
-      "sha256": "f68453d8b1efd0ef01773182fcc144afc3c76cbee9e7888b1cef8c794c8658ed"
+      "sha256": "a9ed33a80ccb1b39b7a63b1326cf3809ef848f212e013018cbb855764b065838"
     },
     {
       "file": "tests/material-parity/input-equivalence-audit.spec.mjs",
-      "sha256": "95fa9b04bb39042720b4e728bd13633ca8c52ff6ebd86418f3a38ef7d6bdf8d8"
+      "sha256": "0b414f0088e7ebd46e3efa48a843da6ec63c23255988014cd404b3c42f591554"
     },
     {
       "file": "tests/material-parity/root-initial-style-evidence.mjs",
-      "sha256": "5e7abdffe62f7ce60c324a6a2ae7fed465315e5393d937aeac4afb74f14fbf46"
+      "sha256": "1fb7dc3f6dee4c64a0e86db8cbaedee621cffe15e6ff5fb62878f37977d4fa8f"
     },
     {
       "file": "tests/material-parity/root-initial-style-evidence.spec.mjs",
-      "sha256": "cbacfb8ab8ee9e3076c728d58351252c8b8df3e506eb02706f91806afd57234b"
+      "sha256": "b1fc7ec4c17fc277d5813cc13a82f3d773827dbecae479a093c82c8d6e28fba4"
     },
     {
       "file": "tests/material-parity/root-initial-style-sensitivity.spec.mjs",
@@ -39,6 +39,10 @@
     {
       "file": "tests/material-parity/input-equivalence-policy.mjs",
       "sha256": "b003e0b652e53166d71a97c30b6899d8c3ff56c93627d729b79fe605e5dc2cbc"
+    },
+    {
+      "file": "tests/material-parity/root-inherited-default-proof.spec.mjs",
+      "sha256": "6f4c41a11beffbe27979f0aa14b44504245a08a14129093ca7f04a586e7da07c"
     }
   ],
   "caseSource": {
@@ -47,8 +51,8 @@
     "familyGroups": 36
   },
   "caseCount": 2311,
-  "propertyObservations": 9244,
-  "groupCount": 144,
+  "propertyObservations": 30043,
+  "groupCount": 468,
   "groups": [
     {
       "family": "core",
@@ -1487,6 +1491,3246 @@
       "element": "progress-spinner-root",
       "property": "verticalAlign",
       "reference": "baseline",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "core",
+      "sourceGroupIndex": 0,
+      "occurrences": 52,
+      "element": "core-root",
+      "property": "fontStyle",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "toolbar",
+      "sourceGroupIndex": 1,
+      "occurrences": 52,
+      "element": "toolbar-root",
+      "property": "fontStyle",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "sidenav",
+      "sourceGroupIndex": 2,
+      "occurrences": 62,
+      "element": "sidenav-root",
+      "property": "fontStyle",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "grid-list",
+      "sourceGroupIndex": 3,
+      "occurrences": 52,
+      "element": "grid-list-root",
+      "property": "fontStyle",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "divider",
+      "sourceGroupIndex": 4,
+      "occurrences": 24,
+      "element": "divider-root",
+      "property": "fontStyle",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "badge",
+      "sourceGroupIndex": 5,
+      "occurrences": 52,
+      "element": "badge-root",
+      "property": "fontStyle",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "card",
+      "sourceGroupIndex": 6,
+      "occurrences": 52,
+      "element": "card-root",
+      "property": "fontStyle",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "chips",
+      "sourceGroupIndex": 7,
+      "occurrences": 76,
+      "element": "chips-root",
+      "property": "fontStyle",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "icon",
+      "sourceGroupIndex": 8,
+      "occurrences": 20,
+      "element": "icon-root",
+      "property": "fontStyle",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "list",
+      "sourceGroupIndex": 9,
+      "occurrences": 52,
+      "element": "list-root",
+      "property": "fontStyle",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "table",
+      "sourceGroupIndex": 10,
+      "occurrences": 52,
+      "element": "table-root",
+      "property": "fontStyle",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "sort",
+      "sourceGroupIndex": 11,
+      "occurrences": 60,
+      "element": "sort-root",
+      "property": "fontStyle",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "paginator",
+      "sourceGroupIndex": 12,
+      "occurrences": 52,
+      "element": "paginator-root",
+      "property": "fontStyle",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "tree",
+      "sourceGroupIndex": 13,
+      "occurrences": 52,
+      "element": "tree-root",
+      "property": "fontStyle",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "form-field",
+      "sourceGroupIndex": 14,
+      "occurrences": 76,
+      "element": "form-field-root",
+      "property": "fontStyle",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "input",
+      "sourceGroupIndex": 15,
+      "occurrences": 76,
+      "element": "input-root",
+      "property": "fontStyle",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "autocomplete",
+      "sourceGroupIndex": 16,
+      "occurrences": 110,
+      "element": "autocomplete-root",
+      "property": "fontStyle",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "checkbox",
+      "sourceGroupIndex": 17,
+      "occurrences": 68,
+      "element": "checkbox-root",
+      "property": "fontStyle",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "radio",
+      "sourceGroupIndex": 18,
+      "occurrences": 68,
+      "element": "radio-root",
+      "property": "fontStyle",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "select",
+      "sourceGroupIndex": 19,
+      "occurrences": 94,
+      "element": "select-root",
+      "property": "fontStyle",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "slider",
+      "sourceGroupIndex": 20,
+      "occurrences": 78,
+      "element": "slider-root",
+      "property": "fontStyle",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "slide-toggle",
+      "sourceGroupIndex": 21,
+      "occurrences": 68,
+      "element": "slide-toggle-root",
+      "property": "fontStyle",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "datepicker",
+      "sourceGroupIndex": 22,
+      "occurrences": 111,
+      "element": "datepicker-root",
+      "property": "fontStyle",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "timepicker",
+      "sourceGroupIndex": 23,
+      "occurrences": 110,
+      "element": "timepicker-root",
+      "property": "fontStyle",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "button",
+      "sourceGroupIndex": 24,
+      "occurrences": 60,
+      "element": "button-root",
+      "property": "fontStyle",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "button-toggle",
+      "sourceGroupIndex": 25,
+      "occurrences": 68,
+      "element": "button-toggle-root",
+      "property": "fontStyle",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "menu",
+      "sourceGroupIndex": 26,
+      "occurrences": 94,
+      "element": "menu-root",
+      "property": "fontStyle",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "tabs",
+      "sourceGroupIndex": 27,
+      "occurrences": 70,
+      "element": "tabs-root",
+      "property": "fontStyle",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "stepper",
+      "sourceGroupIndex": 28,
+      "occurrences": 68,
+      "element": "stepper-root",
+      "property": "fontStyle",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "expansion",
+      "sourceGroupIndex": 29,
+      "occurrences": 68,
+      "element": "expansion-root",
+      "property": "fontStyle",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "bottom-sheet",
+      "sourceGroupIndex": 30,
+      "occurrences": 63,
+      "element": "bottom-sheet-root",
+      "property": "fontStyle",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "dialog",
+      "sourceGroupIndex": 31,
+      "occurrences": 78,
+      "element": "dialog-root",
+      "property": "fontStyle",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "snack-bar",
+      "sourceGroupIndex": 32,
+      "occurrences": 71,
+      "element": "snack-bar-root",
+      "property": "fontStyle",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "tooltip",
+      "sourceGroupIndex": 33,
+      "occurrences": 62,
+      "element": "tooltip-root",
+      "property": "fontStyle",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "progress-bar",
+      "sourceGroupIndex": 34,
+      "occurrences": 20,
+      "element": "progress-bar-root",
+      "property": "fontStyle",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "progress-spinner",
+      "sourceGroupIndex": 35,
+      "occurrences": 20,
+      "element": "progress-spinner-root",
+      "property": "fontStyle",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "core",
+      "sourceGroupIndex": 0,
+      "occurrences": 52,
+      "element": "core-root",
+      "property": "letterSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "toolbar",
+      "sourceGroupIndex": 1,
+      "occurrences": 52,
+      "element": "toolbar-root",
+      "property": "letterSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "sidenav",
+      "sourceGroupIndex": 2,
+      "occurrences": 62,
+      "element": "sidenav-root",
+      "property": "letterSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "grid-list",
+      "sourceGroupIndex": 3,
+      "occurrences": 52,
+      "element": "grid-list-root",
+      "property": "letterSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "divider",
+      "sourceGroupIndex": 4,
+      "occurrences": 24,
+      "element": "divider-root",
+      "property": "letterSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "badge",
+      "sourceGroupIndex": 5,
+      "occurrences": 52,
+      "element": "badge-root",
+      "property": "letterSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "card",
+      "sourceGroupIndex": 6,
+      "occurrences": 52,
+      "element": "card-root",
+      "property": "letterSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "chips",
+      "sourceGroupIndex": 7,
+      "occurrences": 76,
+      "element": "chips-root",
+      "property": "letterSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "icon",
+      "sourceGroupIndex": 8,
+      "occurrences": 20,
+      "element": "icon-root",
+      "property": "letterSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "list",
+      "sourceGroupIndex": 9,
+      "occurrences": 52,
+      "element": "list-root",
+      "property": "letterSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "table",
+      "sourceGroupIndex": 10,
+      "occurrences": 52,
+      "element": "table-root",
+      "property": "letterSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "sort",
+      "sourceGroupIndex": 11,
+      "occurrences": 60,
+      "element": "sort-root",
+      "property": "letterSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "paginator",
+      "sourceGroupIndex": 12,
+      "occurrences": 52,
+      "element": "paginator-root",
+      "property": "letterSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "tree",
+      "sourceGroupIndex": 13,
+      "occurrences": 52,
+      "element": "tree-root",
+      "property": "letterSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "form-field",
+      "sourceGroupIndex": 14,
+      "occurrences": 76,
+      "element": "form-field-root",
+      "property": "letterSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "input",
+      "sourceGroupIndex": 15,
+      "occurrences": 76,
+      "element": "input-root",
+      "property": "letterSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "autocomplete",
+      "sourceGroupIndex": 16,
+      "occurrences": 110,
+      "element": "autocomplete-root",
+      "property": "letterSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "checkbox",
+      "sourceGroupIndex": 17,
+      "occurrences": 68,
+      "element": "checkbox-root",
+      "property": "letterSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "radio",
+      "sourceGroupIndex": 18,
+      "occurrences": 68,
+      "element": "radio-root",
+      "property": "letterSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "select",
+      "sourceGroupIndex": 19,
+      "occurrences": 94,
+      "element": "select-root",
+      "property": "letterSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "slider",
+      "sourceGroupIndex": 20,
+      "occurrences": 78,
+      "element": "slider-root",
+      "property": "letterSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "slide-toggle",
+      "sourceGroupIndex": 21,
+      "occurrences": 68,
+      "element": "slide-toggle-root",
+      "property": "letterSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "datepicker",
+      "sourceGroupIndex": 22,
+      "occurrences": 111,
+      "element": "datepicker-root",
+      "property": "letterSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "timepicker",
+      "sourceGroupIndex": 23,
+      "occurrences": 110,
+      "element": "timepicker-root",
+      "property": "letterSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "button",
+      "sourceGroupIndex": 24,
+      "occurrences": 60,
+      "element": "button-root",
+      "property": "letterSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "button-toggle",
+      "sourceGroupIndex": 25,
+      "occurrences": 68,
+      "element": "button-toggle-root",
+      "property": "letterSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "menu",
+      "sourceGroupIndex": 26,
+      "occurrences": 94,
+      "element": "menu-root",
+      "property": "letterSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "tabs",
+      "sourceGroupIndex": 27,
+      "occurrences": 70,
+      "element": "tabs-root",
+      "property": "letterSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "stepper",
+      "sourceGroupIndex": 28,
+      "occurrences": 68,
+      "element": "stepper-root",
+      "property": "letterSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "expansion",
+      "sourceGroupIndex": 29,
+      "occurrences": 68,
+      "element": "expansion-root",
+      "property": "letterSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "bottom-sheet",
+      "sourceGroupIndex": 30,
+      "occurrences": 63,
+      "element": "bottom-sheet-root",
+      "property": "letterSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "dialog",
+      "sourceGroupIndex": 31,
+      "occurrences": 78,
+      "element": "dialog-root",
+      "property": "letterSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "snack-bar",
+      "sourceGroupIndex": 32,
+      "occurrences": 71,
+      "element": "snack-bar-root",
+      "property": "letterSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "tooltip",
+      "sourceGroupIndex": 33,
+      "occurrences": 62,
+      "element": "tooltip-root",
+      "property": "letterSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "progress-bar",
+      "sourceGroupIndex": 34,
+      "occurrences": 20,
+      "element": "progress-bar-root",
+      "property": "letterSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "progress-spinner",
+      "sourceGroupIndex": 35,
+      "occurrences": 20,
+      "element": "progress-spinner-root",
+      "property": "letterSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "core",
+      "sourceGroupIndex": 0,
+      "occurrences": 52,
+      "element": "core-root",
+      "property": "wordSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "toolbar",
+      "sourceGroupIndex": 1,
+      "occurrences": 52,
+      "element": "toolbar-root",
+      "property": "wordSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "sidenav",
+      "sourceGroupIndex": 2,
+      "occurrences": 62,
+      "element": "sidenav-root",
+      "property": "wordSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "grid-list",
+      "sourceGroupIndex": 3,
+      "occurrences": 52,
+      "element": "grid-list-root",
+      "property": "wordSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "divider",
+      "sourceGroupIndex": 4,
+      "occurrences": 24,
+      "element": "divider-root",
+      "property": "wordSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "badge",
+      "sourceGroupIndex": 5,
+      "occurrences": 52,
+      "element": "badge-root",
+      "property": "wordSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "card",
+      "sourceGroupIndex": 6,
+      "occurrences": 52,
+      "element": "card-root",
+      "property": "wordSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "chips",
+      "sourceGroupIndex": 7,
+      "occurrences": 76,
+      "element": "chips-root",
+      "property": "wordSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "icon",
+      "sourceGroupIndex": 8,
+      "occurrences": 20,
+      "element": "icon-root",
+      "property": "wordSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "list",
+      "sourceGroupIndex": 9,
+      "occurrences": 52,
+      "element": "list-root",
+      "property": "wordSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "table",
+      "sourceGroupIndex": 10,
+      "occurrences": 52,
+      "element": "table-root",
+      "property": "wordSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "sort",
+      "sourceGroupIndex": 11,
+      "occurrences": 60,
+      "element": "sort-root",
+      "property": "wordSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "paginator",
+      "sourceGroupIndex": 12,
+      "occurrences": 52,
+      "element": "paginator-root",
+      "property": "wordSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "tree",
+      "sourceGroupIndex": 13,
+      "occurrences": 52,
+      "element": "tree-root",
+      "property": "wordSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "form-field",
+      "sourceGroupIndex": 14,
+      "occurrences": 76,
+      "element": "form-field-root",
+      "property": "wordSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "input",
+      "sourceGroupIndex": 15,
+      "occurrences": 76,
+      "element": "input-root",
+      "property": "wordSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "autocomplete",
+      "sourceGroupIndex": 16,
+      "occurrences": 110,
+      "element": "autocomplete-root",
+      "property": "wordSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "checkbox",
+      "sourceGroupIndex": 17,
+      "occurrences": 68,
+      "element": "checkbox-root",
+      "property": "wordSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "radio",
+      "sourceGroupIndex": 18,
+      "occurrences": 68,
+      "element": "radio-root",
+      "property": "wordSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "select",
+      "sourceGroupIndex": 19,
+      "occurrences": 94,
+      "element": "select-root",
+      "property": "wordSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "slider",
+      "sourceGroupIndex": 20,
+      "occurrences": 78,
+      "element": "slider-root",
+      "property": "wordSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "slide-toggle",
+      "sourceGroupIndex": 21,
+      "occurrences": 68,
+      "element": "slide-toggle-root",
+      "property": "wordSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "datepicker",
+      "sourceGroupIndex": 22,
+      "occurrences": 111,
+      "element": "datepicker-root",
+      "property": "wordSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "timepicker",
+      "sourceGroupIndex": 23,
+      "occurrences": 110,
+      "element": "timepicker-root",
+      "property": "wordSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "button",
+      "sourceGroupIndex": 24,
+      "occurrences": 60,
+      "element": "button-root",
+      "property": "wordSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "button-toggle",
+      "sourceGroupIndex": 25,
+      "occurrences": 68,
+      "element": "button-toggle-root",
+      "property": "wordSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "menu",
+      "sourceGroupIndex": 26,
+      "occurrences": 94,
+      "element": "menu-root",
+      "property": "wordSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "tabs",
+      "sourceGroupIndex": 27,
+      "occurrences": 70,
+      "element": "tabs-root",
+      "property": "wordSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "stepper",
+      "sourceGroupIndex": 28,
+      "occurrences": 68,
+      "element": "stepper-root",
+      "property": "wordSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "expansion",
+      "sourceGroupIndex": 29,
+      "occurrences": 68,
+      "element": "expansion-root",
+      "property": "wordSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "bottom-sheet",
+      "sourceGroupIndex": 30,
+      "occurrences": 63,
+      "element": "bottom-sheet-root",
+      "property": "wordSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "dialog",
+      "sourceGroupIndex": 31,
+      "occurrences": 78,
+      "element": "dialog-root",
+      "property": "wordSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "snack-bar",
+      "sourceGroupIndex": 32,
+      "occurrences": 71,
+      "element": "snack-bar-root",
+      "property": "wordSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "tooltip",
+      "sourceGroupIndex": 33,
+      "occurrences": 62,
+      "element": "tooltip-root",
+      "property": "wordSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "progress-bar",
+      "sourceGroupIndex": 34,
+      "occurrences": 20,
+      "element": "progress-bar-root",
+      "property": "wordSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "progress-spinner",
+      "sourceGroupIndex": 35,
+      "occurrences": 20,
+      "element": "progress-spinner-root",
+      "property": "wordSpacing",
+      "reference": "0",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "core",
+      "sourceGroupIndex": 0,
+      "occurrences": 52,
+      "element": "core-root",
+      "property": "textTransform",
+      "reference": "none",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "toolbar",
+      "sourceGroupIndex": 1,
+      "occurrences": 52,
+      "element": "toolbar-root",
+      "property": "textTransform",
+      "reference": "none",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "sidenav",
+      "sourceGroupIndex": 2,
+      "occurrences": 62,
+      "element": "sidenav-root",
+      "property": "textTransform",
+      "reference": "none",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "grid-list",
+      "sourceGroupIndex": 3,
+      "occurrences": 52,
+      "element": "grid-list-root",
+      "property": "textTransform",
+      "reference": "none",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "divider",
+      "sourceGroupIndex": 4,
+      "occurrences": 24,
+      "element": "divider-root",
+      "property": "textTransform",
+      "reference": "none",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "badge",
+      "sourceGroupIndex": 5,
+      "occurrences": 52,
+      "element": "badge-root",
+      "property": "textTransform",
+      "reference": "none",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "card",
+      "sourceGroupIndex": 6,
+      "occurrences": 52,
+      "element": "card-root",
+      "property": "textTransform",
+      "reference": "none",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "chips",
+      "sourceGroupIndex": 7,
+      "occurrences": 76,
+      "element": "chips-root",
+      "property": "textTransform",
+      "reference": "none",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "icon",
+      "sourceGroupIndex": 8,
+      "occurrences": 20,
+      "element": "icon-root",
+      "property": "textTransform",
+      "reference": "none",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "list",
+      "sourceGroupIndex": 9,
+      "occurrences": 52,
+      "element": "list-root",
+      "property": "textTransform",
+      "reference": "none",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "table",
+      "sourceGroupIndex": 10,
+      "occurrences": 52,
+      "element": "table-root",
+      "property": "textTransform",
+      "reference": "none",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "sort",
+      "sourceGroupIndex": 11,
+      "occurrences": 60,
+      "element": "sort-root",
+      "property": "textTransform",
+      "reference": "none",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "paginator",
+      "sourceGroupIndex": 12,
+      "occurrences": 52,
+      "element": "paginator-root",
+      "property": "textTransform",
+      "reference": "none",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "tree",
+      "sourceGroupIndex": 13,
+      "occurrences": 52,
+      "element": "tree-root",
+      "property": "textTransform",
+      "reference": "none",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "form-field",
+      "sourceGroupIndex": 14,
+      "occurrences": 76,
+      "element": "form-field-root",
+      "property": "textTransform",
+      "reference": "none",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "input",
+      "sourceGroupIndex": 15,
+      "occurrences": 76,
+      "element": "input-root",
+      "property": "textTransform",
+      "reference": "none",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "autocomplete",
+      "sourceGroupIndex": 16,
+      "occurrences": 110,
+      "element": "autocomplete-root",
+      "property": "textTransform",
+      "reference": "none",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "checkbox",
+      "sourceGroupIndex": 17,
+      "occurrences": 68,
+      "element": "checkbox-root",
+      "property": "textTransform",
+      "reference": "none",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "radio",
+      "sourceGroupIndex": 18,
+      "occurrences": 68,
+      "element": "radio-root",
+      "property": "textTransform",
+      "reference": "none",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "select",
+      "sourceGroupIndex": 19,
+      "occurrences": 94,
+      "element": "select-root",
+      "property": "textTransform",
+      "reference": "none",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "slider",
+      "sourceGroupIndex": 20,
+      "occurrences": 78,
+      "element": "slider-root",
+      "property": "textTransform",
+      "reference": "none",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "slide-toggle",
+      "sourceGroupIndex": 21,
+      "occurrences": 68,
+      "element": "slide-toggle-root",
+      "property": "textTransform",
+      "reference": "none",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "datepicker",
+      "sourceGroupIndex": 22,
+      "occurrences": 111,
+      "element": "datepicker-root",
+      "property": "textTransform",
+      "reference": "none",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "timepicker",
+      "sourceGroupIndex": 23,
+      "occurrences": 110,
+      "element": "timepicker-root",
+      "property": "textTransform",
+      "reference": "none",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "button",
+      "sourceGroupIndex": 24,
+      "occurrences": 60,
+      "element": "button-root",
+      "property": "textTransform",
+      "reference": "none",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "button-toggle",
+      "sourceGroupIndex": 25,
+      "occurrences": 68,
+      "element": "button-toggle-root",
+      "property": "textTransform",
+      "reference": "none",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "menu",
+      "sourceGroupIndex": 26,
+      "occurrences": 94,
+      "element": "menu-root",
+      "property": "textTransform",
+      "reference": "none",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "tabs",
+      "sourceGroupIndex": 27,
+      "occurrences": 70,
+      "element": "tabs-root",
+      "property": "textTransform",
+      "reference": "none",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "stepper",
+      "sourceGroupIndex": 28,
+      "occurrences": 68,
+      "element": "stepper-root",
+      "property": "textTransform",
+      "reference": "none",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "expansion",
+      "sourceGroupIndex": 29,
+      "occurrences": 68,
+      "element": "expansion-root",
+      "property": "textTransform",
+      "reference": "none",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "bottom-sheet",
+      "sourceGroupIndex": 30,
+      "occurrences": 63,
+      "element": "bottom-sheet-root",
+      "property": "textTransform",
+      "reference": "none",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "dialog",
+      "sourceGroupIndex": 31,
+      "occurrences": 78,
+      "element": "dialog-root",
+      "property": "textTransform",
+      "reference": "none",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "snack-bar",
+      "sourceGroupIndex": 32,
+      "occurrences": 71,
+      "element": "snack-bar-root",
+      "property": "textTransform",
+      "reference": "none",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "tooltip",
+      "sourceGroupIndex": 33,
+      "occurrences": 62,
+      "element": "tooltip-root",
+      "property": "textTransform",
+      "reference": "none",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "progress-bar",
+      "sourceGroupIndex": 34,
+      "occurrences": 20,
+      "element": "progress-bar-root",
+      "property": "textTransform",
+      "reference": "none",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "progress-spinner",
+      "sourceGroupIndex": 35,
+      "occurrences": 20,
+      "element": "progress-spinner-root",
+      "property": "textTransform",
+      "reference": "none",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "core",
+      "sourceGroupIndex": 0,
+      "occurrences": 52,
+      "element": "core-root",
+      "property": "whiteSpace",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "toolbar",
+      "sourceGroupIndex": 1,
+      "occurrences": 52,
+      "element": "toolbar-root",
+      "property": "whiteSpace",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "sidenav",
+      "sourceGroupIndex": 2,
+      "occurrences": 62,
+      "element": "sidenav-root",
+      "property": "whiteSpace",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "grid-list",
+      "sourceGroupIndex": 3,
+      "occurrences": 52,
+      "element": "grid-list-root",
+      "property": "whiteSpace",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "divider",
+      "sourceGroupIndex": 4,
+      "occurrences": 24,
+      "element": "divider-root",
+      "property": "whiteSpace",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "badge",
+      "sourceGroupIndex": 5,
+      "occurrences": 52,
+      "element": "badge-root",
+      "property": "whiteSpace",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "card",
+      "sourceGroupIndex": 6,
+      "occurrences": 52,
+      "element": "card-root",
+      "property": "whiteSpace",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "chips",
+      "sourceGroupIndex": 7,
+      "occurrences": 76,
+      "element": "chips-root",
+      "property": "whiteSpace",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "icon",
+      "sourceGroupIndex": 8,
+      "occurrences": 20,
+      "element": "icon-root",
+      "property": "whiteSpace",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "list",
+      "sourceGroupIndex": 9,
+      "occurrences": 52,
+      "element": "list-root",
+      "property": "whiteSpace",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "table",
+      "sourceGroupIndex": 10,
+      "occurrences": 52,
+      "element": "table-root",
+      "property": "whiteSpace",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "sort",
+      "sourceGroupIndex": 11,
+      "occurrences": 60,
+      "element": "sort-root",
+      "property": "whiteSpace",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "paginator",
+      "sourceGroupIndex": 12,
+      "occurrences": 52,
+      "element": "paginator-root",
+      "property": "whiteSpace",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "tree",
+      "sourceGroupIndex": 13,
+      "occurrences": 52,
+      "element": "tree-root",
+      "property": "whiteSpace",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "form-field",
+      "sourceGroupIndex": 14,
+      "occurrences": 76,
+      "element": "form-field-root",
+      "property": "whiteSpace",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "input",
+      "sourceGroupIndex": 15,
+      "occurrences": 76,
+      "element": "input-root",
+      "property": "whiteSpace",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "autocomplete",
+      "sourceGroupIndex": 16,
+      "occurrences": 110,
+      "element": "autocomplete-root",
+      "property": "whiteSpace",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "checkbox",
+      "sourceGroupIndex": 17,
+      "occurrences": 68,
+      "element": "checkbox-root",
+      "property": "whiteSpace",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "radio",
+      "sourceGroupIndex": 18,
+      "occurrences": 68,
+      "element": "radio-root",
+      "property": "whiteSpace",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "select",
+      "sourceGroupIndex": 19,
+      "occurrences": 94,
+      "element": "select-root",
+      "property": "whiteSpace",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "slider",
+      "sourceGroupIndex": 20,
+      "occurrences": 78,
+      "element": "slider-root",
+      "property": "whiteSpace",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "slide-toggle",
+      "sourceGroupIndex": 21,
+      "occurrences": 68,
+      "element": "slide-toggle-root",
+      "property": "whiteSpace",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "datepicker",
+      "sourceGroupIndex": 22,
+      "occurrences": 111,
+      "element": "datepicker-root",
+      "property": "whiteSpace",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "timepicker",
+      "sourceGroupIndex": 23,
+      "occurrences": 110,
+      "element": "timepicker-root",
+      "property": "whiteSpace",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "button",
+      "sourceGroupIndex": 24,
+      "occurrences": 60,
+      "element": "button-root",
+      "property": "whiteSpace",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "button-toggle",
+      "sourceGroupIndex": 25,
+      "occurrences": 68,
+      "element": "button-toggle-root",
+      "property": "whiteSpace",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "menu",
+      "sourceGroupIndex": 26,
+      "occurrences": 94,
+      "element": "menu-root",
+      "property": "whiteSpace",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "tabs",
+      "sourceGroupIndex": 27,
+      "occurrences": 70,
+      "element": "tabs-root",
+      "property": "whiteSpace",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "stepper",
+      "sourceGroupIndex": 28,
+      "occurrences": 68,
+      "element": "stepper-root",
+      "property": "whiteSpace",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "expansion",
+      "sourceGroupIndex": 29,
+      "occurrences": 68,
+      "element": "expansion-root",
+      "property": "whiteSpace",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "bottom-sheet",
+      "sourceGroupIndex": 30,
+      "occurrences": 63,
+      "element": "bottom-sheet-root",
+      "property": "whiteSpace",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "dialog",
+      "sourceGroupIndex": 31,
+      "occurrences": 78,
+      "element": "dialog-root",
+      "property": "whiteSpace",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "snack-bar",
+      "sourceGroupIndex": 32,
+      "occurrences": 71,
+      "element": "snack-bar-root",
+      "property": "whiteSpace",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "tooltip",
+      "sourceGroupIndex": 33,
+      "occurrences": 62,
+      "element": "tooltip-root",
+      "property": "whiteSpace",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "progress-bar",
+      "sourceGroupIndex": 34,
+      "occurrences": 20,
+      "element": "progress-bar-root",
+      "property": "whiteSpace",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "progress-spinner",
+      "sourceGroupIndex": 35,
+      "occurrences": 20,
+      "element": "progress-spinner-root",
+      "property": "whiteSpace",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "core",
+      "sourceGroupIndex": 0,
+      "occurrences": 52,
+      "element": "core-root",
+      "property": "overflowWrap",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "toolbar",
+      "sourceGroupIndex": 1,
+      "occurrences": 52,
+      "element": "toolbar-root",
+      "property": "overflowWrap",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "sidenav",
+      "sourceGroupIndex": 2,
+      "occurrences": 62,
+      "element": "sidenav-root",
+      "property": "overflowWrap",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "grid-list",
+      "sourceGroupIndex": 3,
+      "occurrences": 52,
+      "element": "grid-list-root",
+      "property": "overflowWrap",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "divider",
+      "sourceGroupIndex": 4,
+      "occurrences": 24,
+      "element": "divider-root",
+      "property": "overflowWrap",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "badge",
+      "sourceGroupIndex": 5,
+      "occurrences": 52,
+      "element": "badge-root",
+      "property": "overflowWrap",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "card",
+      "sourceGroupIndex": 6,
+      "occurrences": 52,
+      "element": "card-root",
+      "property": "overflowWrap",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "chips",
+      "sourceGroupIndex": 7,
+      "occurrences": 76,
+      "element": "chips-root",
+      "property": "overflowWrap",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "icon",
+      "sourceGroupIndex": 8,
+      "occurrences": 20,
+      "element": "icon-root",
+      "property": "overflowWrap",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "list",
+      "sourceGroupIndex": 9,
+      "occurrences": 52,
+      "element": "list-root",
+      "property": "overflowWrap",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "table",
+      "sourceGroupIndex": 10,
+      "occurrences": 52,
+      "element": "table-root",
+      "property": "overflowWrap",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "sort",
+      "sourceGroupIndex": 11,
+      "occurrences": 60,
+      "element": "sort-root",
+      "property": "overflowWrap",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "paginator",
+      "sourceGroupIndex": 12,
+      "occurrences": 52,
+      "element": "paginator-root",
+      "property": "overflowWrap",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "tree",
+      "sourceGroupIndex": 13,
+      "occurrences": 52,
+      "element": "tree-root",
+      "property": "overflowWrap",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "form-field",
+      "sourceGroupIndex": 14,
+      "occurrences": 76,
+      "element": "form-field-root",
+      "property": "overflowWrap",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "input",
+      "sourceGroupIndex": 15,
+      "occurrences": 76,
+      "element": "input-root",
+      "property": "overflowWrap",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "autocomplete",
+      "sourceGroupIndex": 16,
+      "occurrences": 110,
+      "element": "autocomplete-root",
+      "property": "overflowWrap",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "checkbox",
+      "sourceGroupIndex": 17,
+      "occurrences": 68,
+      "element": "checkbox-root",
+      "property": "overflowWrap",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "radio",
+      "sourceGroupIndex": 18,
+      "occurrences": 68,
+      "element": "radio-root",
+      "property": "overflowWrap",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "select",
+      "sourceGroupIndex": 19,
+      "occurrences": 94,
+      "element": "select-root",
+      "property": "overflowWrap",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "slider",
+      "sourceGroupIndex": 20,
+      "occurrences": 78,
+      "element": "slider-root",
+      "property": "overflowWrap",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "slide-toggle",
+      "sourceGroupIndex": 21,
+      "occurrences": 68,
+      "element": "slide-toggle-root",
+      "property": "overflowWrap",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "datepicker",
+      "sourceGroupIndex": 22,
+      "occurrences": 111,
+      "element": "datepicker-root",
+      "property": "overflowWrap",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "timepicker",
+      "sourceGroupIndex": 23,
+      "occurrences": 110,
+      "element": "timepicker-root",
+      "property": "overflowWrap",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "button",
+      "sourceGroupIndex": 24,
+      "occurrences": 60,
+      "element": "button-root",
+      "property": "overflowWrap",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "button-toggle",
+      "sourceGroupIndex": 25,
+      "occurrences": 68,
+      "element": "button-toggle-root",
+      "property": "overflowWrap",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "menu",
+      "sourceGroupIndex": 26,
+      "occurrences": 94,
+      "element": "menu-root",
+      "property": "overflowWrap",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "tabs",
+      "sourceGroupIndex": 27,
+      "occurrences": 70,
+      "element": "tabs-root",
+      "property": "overflowWrap",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "stepper",
+      "sourceGroupIndex": 28,
+      "occurrences": 68,
+      "element": "stepper-root",
+      "property": "overflowWrap",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "expansion",
+      "sourceGroupIndex": 29,
+      "occurrences": 68,
+      "element": "expansion-root",
+      "property": "overflowWrap",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "bottom-sheet",
+      "sourceGroupIndex": 30,
+      "occurrences": 63,
+      "element": "bottom-sheet-root",
+      "property": "overflowWrap",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "dialog",
+      "sourceGroupIndex": 31,
+      "occurrences": 78,
+      "element": "dialog-root",
+      "property": "overflowWrap",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "snack-bar",
+      "sourceGroupIndex": 32,
+      "occurrences": 71,
+      "element": "snack-bar-root",
+      "property": "overflowWrap",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "tooltip",
+      "sourceGroupIndex": 33,
+      "occurrences": 62,
+      "element": "tooltip-root",
+      "property": "overflowWrap",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "progress-bar",
+      "sourceGroupIndex": 34,
+      "occurrences": 20,
+      "element": "progress-bar-root",
+      "property": "overflowWrap",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "progress-spinner",
+      "sourceGroupIndex": 35,
+      "occurrences": 20,
+      "element": "progress-spinner-root",
+      "property": "overflowWrap",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "core",
+      "sourceGroupIndex": 0,
+      "occurrences": 52,
+      "element": "core-root",
+      "property": "wordBreak",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "toolbar",
+      "sourceGroupIndex": 1,
+      "occurrences": 52,
+      "element": "toolbar-root",
+      "property": "wordBreak",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "sidenav",
+      "sourceGroupIndex": 2,
+      "occurrences": 62,
+      "element": "sidenav-root",
+      "property": "wordBreak",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "grid-list",
+      "sourceGroupIndex": 3,
+      "occurrences": 52,
+      "element": "grid-list-root",
+      "property": "wordBreak",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "divider",
+      "sourceGroupIndex": 4,
+      "occurrences": 24,
+      "element": "divider-root",
+      "property": "wordBreak",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "badge",
+      "sourceGroupIndex": 5,
+      "occurrences": 52,
+      "element": "badge-root",
+      "property": "wordBreak",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "card",
+      "sourceGroupIndex": 6,
+      "occurrences": 52,
+      "element": "card-root",
+      "property": "wordBreak",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "chips",
+      "sourceGroupIndex": 7,
+      "occurrences": 76,
+      "element": "chips-root",
+      "property": "wordBreak",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "icon",
+      "sourceGroupIndex": 8,
+      "occurrences": 20,
+      "element": "icon-root",
+      "property": "wordBreak",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "list",
+      "sourceGroupIndex": 9,
+      "occurrences": 52,
+      "element": "list-root",
+      "property": "wordBreak",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "table",
+      "sourceGroupIndex": 10,
+      "occurrences": 52,
+      "element": "table-root",
+      "property": "wordBreak",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "sort",
+      "sourceGroupIndex": 11,
+      "occurrences": 60,
+      "element": "sort-root",
+      "property": "wordBreak",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "paginator",
+      "sourceGroupIndex": 12,
+      "occurrences": 52,
+      "element": "paginator-root",
+      "property": "wordBreak",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "tree",
+      "sourceGroupIndex": 13,
+      "occurrences": 52,
+      "element": "tree-root",
+      "property": "wordBreak",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "form-field",
+      "sourceGroupIndex": 14,
+      "occurrences": 76,
+      "element": "form-field-root",
+      "property": "wordBreak",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "input",
+      "sourceGroupIndex": 15,
+      "occurrences": 76,
+      "element": "input-root",
+      "property": "wordBreak",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "autocomplete",
+      "sourceGroupIndex": 16,
+      "occurrences": 110,
+      "element": "autocomplete-root",
+      "property": "wordBreak",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "checkbox",
+      "sourceGroupIndex": 17,
+      "occurrences": 68,
+      "element": "checkbox-root",
+      "property": "wordBreak",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "radio",
+      "sourceGroupIndex": 18,
+      "occurrences": 68,
+      "element": "radio-root",
+      "property": "wordBreak",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "select",
+      "sourceGroupIndex": 19,
+      "occurrences": 94,
+      "element": "select-root",
+      "property": "wordBreak",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "slider",
+      "sourceGroupIndex": 20,
+      "occurrences": 78,
+      "element": "slider-root",
+      "property": "wordBreak",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "slide-toggle",
+      "sourceGroupIndex": 21,
+      "occurrences": 68,
+      "element": "slide-toggle-root",
+      "property": "wordBreak",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "datepicker",
+      "sourceGroupIndex": 22,
+      "occurrences": 111,
+      "element": "datepicker-root",
+      "property": "wordBreak",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "timepicker",
+      "sourceGroupIndex": 23,
+      "occurrences": 110,
+      "element": "timepicker-root",
+      "property": "wordBreak",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "button",
+      "sourceGroupIndex": 24,
+      "occurrences": 60,
+      "element": "button-root",
+      "property": "wordBreak",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "button-toggle",
+      "sourceGroupIndex": 25,
+      "occurrences": 68,
+      "element": "button-toggle-root",
+      "property": "wordBreak",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "menu",
+      "sourceGroupIndex": 26,
+      "occurrences": 94,
+      "element": "menu-root",
+      "property": "wordBreak",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "tabs",
+      "sourceGroupIndex": 27,
+      "occurrences": 70,
+      "element": "tabs-root",
+      "property": "wordBreak",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "stepper",
+      "sourceGroupIndex": 28,
+      "occurrences": 68,
+      "element": "stepper-root",
+      "property": "wordBreak",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "expansion",
+      "sourceGroupIndex": 29,
+      "occurrences": 68,
+      "element": "expansion-root",
+      "property": "wordBreak",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "bottom-sheet",
+      "sourceGroupIndex": 30,
+      "occurrences": 63,
+      "element": "bottom-sheet-root",
+      "property": "wordBreak",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "dialog",
+      "sourceGroupIndex": 31,
+      "occurrences": 78,
+      "element": "dialog-root",
+      "property": "wordBreak",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "snack-bar",
+      "sourceGroupIndex": 32,
+      "occurrences": 71,
+      "element": "snack-bar-root",
+      "property": "wordBreak",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "tooltip",
+      "sourceGroupIndex": 33,
+      "occurrences": 62,
+      "element": "tooltip-root",
+      "property": "wordBreak",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "progress-bar",
+      "sourceGroupIndex": 34,
+      "occurrences": 20,
+      "element": "progress-bar-root",
+      "property": "wordBreak",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "progress-spinner",
+      "sourceGroupIndex": 35,
+      "occurrences": 20,
+      "element": "progress-spinner-root",
+      "property": "wordBreak",
+      "reference": "normal",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "core",
+      "sourceGroupIndex": 0,
+      "occurrences": 52,
+      "element": "core-root",
+      "property": "pointerEvents",
+      "reference": "auto",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "toolbar",
+      "sourceGroupIndex": 1,
+      "occurrences": 52,
+      "element": "toolbar-root",
+      "property": "pointerEvents",
+      "reference": "auto",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "sidenav",
+      "sourceGroupIndex": 2,
+      "occurrences": 62,
+      "element": "sidenav-root",
+      "property": "pointerEvents",
+      "reference": "auto",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "grid-list",
+      "sourceGroupIndex": 3,
+      "occurrences": 52,
+      "element": "grid-list-root",
+      "property": "pointerEvents",
+      "reference": "auto",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "divider",
+      "sourceGroupIndex": 4,
+      "occurrences": 24,
+      "element": "divider-root",
+      "property": "pointerEvents",
+      "reference": "auto",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "badge",
+      "sourceGroupIndex": 5,
+      "occurrences": 52,
+      "element": "badge-root",
+      "property": "pointerEvents",
+      "reference": "auto",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "card",
+      "sourceGroupIndex": 6,
+      "occurrences": 52,
+      "element": "card-root",
+      "property": "pointerEvents",
+      "reference": "auto",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "chips",
+      "sourceGroupIndex": 7,
+      "occurrences": 76,
+      "element": "chips-root",
+      "property": "pointerEvents",
+      "reference": "auto",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "icon",
+      "sourceGroupIndex": 8,
+      "occurrences": 20,
+      "element": "icon-root",
+      "property": "pointerEvents",
+      "reference": "auto",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "list",
+      "sourceGroupIndex": 9,
+      "occurrences": 52,
+      "element": "list-root",
+      "property": "pointerEvents",
+      "reference": "auto",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "table",
+      "sourceGroupIndex": 10,
+      "occurrences": 52,
+      "element": "table-root",
+      "property": "pointerEvents",
+      "reference": "auto",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "sort",
+      "sourceGroupIndex": 11,
+      "occurrences": 60,
+      "element": "sort-root",
+      "property": "pointerEvents",
+      "reference": "auto",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "paginator",
+      "sourceGroupIndex": 12,
+      "occurrences": 52,
+      "element": "paginator-root",
+      "property": "pointerEvents",
+      "reference": "auto",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "tree",
+      "sourceGroupIndex": 13,
+      "occurrences": 52,
+      "element": "tree-root",
+      "property": "pointerEvents",
+      "reference": "auto",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "form-field",
+      "sourceGroupIndex": 14,
+      "occurrences": 76,
+      "element": "form-field-root",
+      "property": "pointerEvents",
+      "reference": "auto",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "input",
+      "sourceGroupIndex": 15,
+      "occurrences": 76,
+      "element": "input-root",
+      "property": "pointerEvents",
+      "reference": "auto",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "autocomplete",
+      "sourceGroupIndex": 16,
+      "occurrences": 110,
+      "element": "autocomplete-root",
+      "property": "pointerEvents",
+      "reference": "auto",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "checkbox",
+      "sourceGroupIndex": 17,
+      "occurrences": 68,
+      "element": "checkbox-root",
+      "property": "pointerEvents",
+      "reference": "auto",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "radio",
+      "sourceGroupIndex": 18,
+      "occurrences": 68,
+      "element": "radio-root",
+      "property": "pointerEvents",
+      "reference": "auto",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "select",
+      "sourceGroupIndex": 19,
+      "occurrences": 94,
+      "element": "select-root",
+      "property": "pointerEvents",
+      "reference": "auto",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "slider",
+      "sourceGroupIndex": 20,
+      "occurrences": 78,
+      "element": "slider-root",
+      "property": "pointerEvents",
+      "reference": "auto",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "slide-toggle",
+      "sourceGroupIndex": 21,
+      "occurrences": 68,
+      "element": "slide-toggle-root",
+      "property": "pointerEvents",
+      "reference": "auto",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "datepicker",
+      "sourceGroupIndex": 22,
+      "occurrences": 111,
+      "element": "datepicker-root",
+      "property": "pointerEvents",
+      "reference": "auto",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "timepicker",
+      "sourceGroupIndex": 23,
+      "occurrences": 110,
+      "element": "timepicker-root",
+      "property": "pointerEvents",
+      "reference": "auto",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "button",
+      "sourceGroupIndex": 24,
+      "occurrences": 60,
+      "element": "button-root",
+      "property": "pointerEvents",
+      "reference": "auto",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "button-toggle",
+      "sourceGroupIndex": 25,
+      "occurrences": 68,
+      "element": "button-toggle-root",
+      "property": "pointerEvents",
+      "reference": "auto",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "menu",
+      "sourceGroupIndex": 26,
+      "occurrences": 94,
+      "element": "menu-root",
+      "property": "pointerEvents",
+      "reference": "auto",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "tabs",
+      "sourceGroupIndex": 27,
+      "occurrences": 70,
+      "element": "tabs-root",
+      "property": "pointerEvents",
+      "reference": "auto",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "stepper",
+      "sourceGroupIndex": 28,
+      "occurrences": 68,
+      "element": "stepper-root",
+      "property": "pointerEvents",
+      "reference": "auto",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "expansion",
+      "sourceGroupIndex": 29,
+      "occurrences": 68,
+      "element": "expansion-root",
+      "property": "pointerEvents",
+      "reference": "auto",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "bottom-sheet",
+      "sourceGroupIndex": 30,
+      "occurrences": 63,
+      "element": "bottom-sheet-root",
+      "property": "pointerEvents",
+      "reference": "auto",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "dialog",
+      "sourceGroupIndex": 31,
+      "occurrences": 78,
+      "element": "dialog-root",
+      "property": "pointerEvents",
+      "reference": "auto",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "snack-bar",
+      "sourceGroupIndex": 32,
+      "occurrences": 71,
+      "element": "snack-bar-root",
+      "property": "pointerEvents",
+      "reference": "auto",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "tooltip",
+      "sourceGroupIndex": 33,
+      "occurrences": 62,
+      "element": "tooltip-root",
+      "property": "pointerEvents",
+      "reference": "auto",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "progress-bar",
+      "sourceGroupIndex": 34,
+      "occurrences": 20,
+      "element": "progress-bar-root",
+      "property": "pointerEvents",
+      "reference": "auto",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "progress-spinner",
+      "sourceGroupIndex": 35,
+      "occurrences": 20,
+      "element": "progress-spinner-root",
+      "property": "pointerEvents",
+      "reference": "auto",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "core",
+      "sourceGroupIndex": 0,
+      "occurrences": 52,
+      "element": "core-root",
+      "property": "visibility",
+      "reference": "visible",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "toolbar",
+      "sourceGroupIndex": 1,
+      "occurrences": 52,
+      "element": "toolbar-root",
+      "property": "visibility",
+      "reference": "visible",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "sidenav",
+      "sourceGroupIndex": 2,
+      "occurrences": 62,
+      "element": "sidenav-root",
+      "property": "visibility",
+      "reference": "visible",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "grid-list",
+      "sourceGroupIndex": 3,
+      "occurrences": 52,
+      "element": "grid-list-root",
+      "property": "visibility",
+      "reference": "visible",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "divider",
+      "sourceGroupIndex": 4,
+      "occurrences": 24,
+      "element": "divider-root",
+      "property": "visibility",
+      "reference": "visible",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "badge",
+      "sourceGroupIndex": 5,
+      "occurrences": 52,
+      "element": "badge-root",
+      "property": "visibility",
+      "reference": "visible",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "card",
+      "sourceGroupIndex": 6,
+      "occurrences": 52,
+      "element": "card-root",
+      "property": "visibility",
+      "reference": "visible",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "chips",
+      "sourceGroupIndex": 7,
+      "occurrences": 76,
+      "element": "chips-root",
+      "property": "visibility",
+      "reference": "visible",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "icon",
+      "sourceGroupIndex": 8,
+      "occurrences": 20,
+      "element": "icon-root",
+      "property": "visibility",
+      "reference": "visible",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "list",
+      "sourceGroupIndex": 9,
+      "occurrences": 52,
+      "element": "list-root",
+      "property": "visibility",
+      "reference": "visible",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "table",
+      "sourceGroupIndex": 10,
+      "occurrences": 52,
+      "element": "table-root",
+      "property": "visibility",
+      "reference": "visible",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "sort",
+      "sourceGroupIndex": 11,
+      "occurrences": 60,
+      "element": "sort-root",
+      "property": "visibility",
+      "reference": "visible",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "paginator",
+      "sourceGroupIndex": 12,
+      "occurrences": 52,
+      "element": "paginator-root",
+      "property": "visibility",
+      "reference": "visible",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "tree",
+      "sourceGroupIndex": 13,
+      "occurrences": 52,
+      "element": "tree-root",
+      "property": "visibility",
+      "reference": "visible",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "form-field",
+      "sourceGroupIndex": 14,
+      "occurrences": 76,
+      "element": "form-field-root",
+      "property": "visibility",
+      "reference": "visible",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "input",
+      "sourceGroupIndex": 15,
+      "occurrences": 76,
+      "element": "input-root",
+      "property": "visibility",
+      "reference": "visible",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "autocomplete",
+      "sourceGroupIndex": 16,
+      "occurrences": 110,
+      "element": "autocomplete-root",
+      "property": "visibility",
+      "reference": "visible",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "checkbox",
+      "sourceGroupIndex": 17,
+      "occurrences": 68,
+      "element": "checkbox-root",
+      "property": "visibility",
+      "reference": "visible",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "radio",
+      "sourceGroupIndex": 18,
+      "occurrences": 68,
+      "element": "radio-root",
+      "property": "visibility",
+      "reference": "visible",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "select",
+      "sourceGroupIndex": 19,
+      "occurrences": 94,
+      "element": "select-root",
+      "property": "visibility",
+      "reference": "visible",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "slider",
+      "sourceGroupIndex": 20,
+      "occurrences": 78,
+      "element": "slider-root",
+      "property": "visibility",
+      "reference": "visible",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "slide-toggle",
+      "sourceGroupIndex": 21,
+      "occurrences": 68,
+      "element": "slide-toggle-root",
+      "property": "visibility",
+      "reference": "visible",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "datepicker",
+      "sourceGroupIndex": 22,
+      "occurrences": 111,
+      "element": "datepicker-root",
+      "property": "visibility",
+      "reference": "visible",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "timepicker",
+      "sourceGroupIndex": 23,
+      "occurrences": 110,
+      "element": "timepicker-root",
+      "property": "visibility",
+      "reference": "visible",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "button",
+      "sourceGroupIndex": 24,
+      "occurrences": 60,
+      "element": "button-root",
+      "property": "visibility",
+      "reference": "visible",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "button-toggle",
+      "sourceGroupIndex": 25,
+      "occurrences": 68,
+      "element": "button-toggle-root",
+      "property": "visibility",
+      "reference": "visible",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "menu",
+      "sourceGroupIndex": 26,
+      "occurrences": 94,
+      "element": "menu-root",
+      "property": "visibility",
+      "reference": "visible",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "tabs",
+      "sourceGroupIndex": 27,
+      "occurrences": 70,
+      "element": "tabs-root",
+      "property": "visibility",
+      "reference": "visible",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "stepper",
+      "sourceGroupIndex": 28,
+      "occurrences": 68,
+      "element": "stepper-root",
+      "property": "visibility",
+      "reference": "visible",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "expansion",
+      "sourceGroupIndex": 29,
+      "occurrences": 68,
+      "element": "expansion-root",
+      "property": "visibility",
+      "reference": "visible",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "bottom-sheet",
+      "sourceGroupIndex": 30,
+      "occurrences": 63,
+      "element": "bottom-sheet-root",
+      "property": "visibility",
+      "reference": "visible",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "dialog",
+      "sourceGroupIndex": 31,
+      "occurrences": 78,
+      "element": "dialog-root",
+      "property": "visibility",
+      "reference": "visible",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "snack-bar",
+      "sourceGroupIndex": 32,
+      "occurrences": 71,
+      "element": "snack-bar-root",
+      "property": "visibility",
+      "reference": "visible",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "tooltip",
+      "sourceGroupIndex": 33,
+      "occurrences": 62,
+      "element": "tooltip-root",
+      "property": "visibility",
+      "reference": "visible",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "progress-bar",
+      "sourceGroupIndex": 34,
+      "occurrences": 20,
+      "element": "progress-bar-root",
+      "property": "visibility",
+      "reference": "visible",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "progress-spinner",
+      "sourceGroupIndex": 35,
+      "occurrences": 20,
+      "element": "progress-spinner-root",
+      "property": "visibility",
+      "reference": "visible",
       "candidate": "<omitted>",
       "classification": "parity-harness-defect"
     }
