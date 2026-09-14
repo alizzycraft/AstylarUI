@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "findingId": "audit-report-whole-string-packaging-limit",
+  "classification": "parity-harness-defect",
+  "scope": "Audit transport only. No production renderer, plugin, canonical comparison, frozen capture or attribution change.",
+  "baselineCommit": "ebff36d",
+  "baselineEvidence": "docs/material-root-proof-validation-audit.json",
+  "design": {
+    "format": "Unchanged format v1: gzip of ordinary canonical JSON. No deduplication, sampling, schema replacement or framed transport.",
+    "encoding": "Serialize the plain audit graph in native property/array order, batching UTF-8 tokens before streaming compression. No aggregate container JSON string is created.",
+    "checking": "Regenerate the expected canonical bytes and compare every decompressed byte in order, plus exact compressed/uncompressed lengths and SHA-256 hashes. No aggregate decoded string or second parser is needed.",
+    "supportedInput": "Plain JSON data graphs, with native omission/null-slot and nonfinite-number serialization semantics. Cycles, custom objects, accessors, callable toJSON and BigInt are rejected explicitly. This is not a replacement for JSON.stringify on arbitrary executable objects.",
+    "remainingMemory": "The report object and compressed payload remain resident. Chunk/token buffering is bounded by the batching size and largest encoded leaf, plus traversal keys/ancestors. The legacy convenience decoder still requires a single bounded JSON string; the streaming verifier does not reconstruct a second report object."
+  },
+  "sourceFingerprints": [
+    {
+      "file": "tests/material-parity/input-audit-report-stream.mjs",
+      "sha256": "3a2afb9d0ceec21fe24a24451156fb2e4902e7f8cf052a996479f83399eddc12"
+    },
+    {
+      "file": "tests/material-parity/input-audit-report-stream.spec.mjs",
+      "sha256": "5907ac58cbc0cb85301e5db09ff0fbb173b549c0bed8dd9e627a11c61e0eedf5"
+    }
+  ],
+  "verification": {
+    "command": "node --test --test-concurrency=1 tests/material-parity/input-audit-report-codec.spec.mjs tests/material-parity/input-audit-report-stream.spec.mjs",
+    "exitCode": 0,
+    "tests": 13,
+    "passed": 13,
+    "failed": 0,
+    "durationMs": 830.5891,
+    "controls": [
+      "Native serialization equality across Unicode/chunk boundaries, integer-like keys, __proto__ data, sparse arrays, repeated references and nonfinite numbers.",
+      "Deterministic gzip and manifest equality with legacy encoder; legacy decoder acceptance for small documents.",
+      "Forced aggregate-object stringifier failure rejects the legacy encoder; streamed encoder and exact-byte verifier pass without invoking it.",
+      "First/middle/last nested changes, reordered/missing/extra observations rejected despite unchanged summaries.",
+      "Unsafe manifest fields, wrong lengths/hashes, corrupt/truncated gzip, invalid UTF-8/JSON, duplicate fields, extra document, whitespace, BOM and missing final newline rejected.",
+      "No mutation of source input; unsupported executable/custom/cyclic data rejected."
+    ]
+  },
+  "scaleVerification": {
+    "command": "node --input-type=module -e \"import assert from 'node:assert/strict';import{constants}from'node:buffer';import{createHash}from'node:crypto';import{encodeMaterialInputAuditStream,assertMaterialInputAuditCurrentStream}from'./tests/material-parity/input-audit-report-stream.mjs';const leaf='x'.repeat(262144),encoded=JSON.stringify(leaf),count=Math.floor(constants.MAX_STRING_LENGTH/encoded.length)+1;const report={schemaVersion:3,observations:Array(count).fill(leaf)};const prefix=Buffer.from(JSON.stringify({schemaVersion:3,observations:[]}).slice(0,-2)),suffix=Buffer.from(']}\\n');const hash=createHash('sha256');hash.update(prefix);for(let i=0;i<count;i++){if(i)hash.update(',');hash.update(encoded);}hash.update(suffix);const bytes=prefix.length+suffix.length+count*Buffer.byteLength(encoded)+(count-1);assert.ok(bytes>constants.MAX_STRING_LENGTH);const started=performance.now();const packed=await encodeMaterialInputAuditStream(report);assert.equal(packed.manifest.uncompressedBytes,bytes);assert.equal(packed.manifest.uncompressedSha256,hash.digest('hex'));console.error('STREAM_SCALE_PHASE encoded');await assertMaterialInputAuditCurrentStream(report,packed.manifest,packed.payload);console.log(JSON.stringify({scope:'synthetic repeated-leaf document above native string limit; not full captured audit transport',stringLimit:constants.MAX_STRING_LENGTH,observations:count,manifest:packed.manifest,exactByteCheck:true,durationMs:performance.now()-started,maxRssKiB:process.resourceUsage().maxRSS}));\"",
+    "exitCode": 0,
+    "scope": "synthetic repeated-leaf document above native string limit; not full captured audit transport",
+    "stringLimit": 536870888,
+    "observations": 2048,
+    "manifest": {
+      "format": "astylar-material-input-audit-gzip",
+      "formatVersion": 1,
+      "auditSchemaVersion": 3,
+      "payload": "material-input-equivalence-audit.json.gz",
+      "encoding": "utf-8",
+      "compression": "gzip",
+      "compressedBytes": 527781,
+      "compressedSha256": "2ab0dfdecf394af968b3df01991eb00d29e68cc83e82dd06d5b4e328f9868338",
+      "uncompressedBytes": 536877093,
+      "uncompressedSha256": "ff55fbc4a14e35be5b59a0434c58e57f6b76634811be3c23ab021d60cfdebb57"
+    },
+    "exactByteCheck": true,
+    "durationMs": 5802.4787,
+    "maxRssKiB": 91868,
+    "repeat": {
+      "durationMs": 5015.0817,
+      "maxRssKiB": 91564,
+      "manifestIdentical": true
+    },
+    "invocationCorrection": {
+      "command": "node --input-type=module -e \"import assert from 'node:assert/strict';import{constants}from'node:buffer';import{createHash}from'node:crypto';import{encodeMaterialInputAuditStream,assertMaterialInputAuditCurrentStream}from'./tests/material-parity/input-audit-report-stream.mjs';const leaf='x'.repeat(262144),encoded=JSON.stringify(leaf),count=Math.floor(constants.MAX_STRING_LENGTH/encoded.length)+1;const report={schemaVersion:3,observations:Array(count).fill(leaf)};const prefix=Buffer.from('{\\\"schemaVersion\\\":3,\\\"observations\\\":['),suffix=Buffer.from(']}\\n');const hash=createHash('sha256');hash.update(prefix);for(let i=0;i<count;i++){if(i)hash.update(',');hash.update(encoded);}hash.update(suffix);const bytes=prefix.length+suffix.length+count*Buffer.byteLength(encoded)+(count-1);assert.ok(bytes>constants.MAX_STRING_LENGTH);const started=performance.now();const packed=await encodeMaterialInputAuditStream(report);assert.equal(packed.manifest.uncompressedBytes,bytes);assert.equal(packed.manifest.uncompressedSha256,hash.digest('hex'));console.error('STREAM_SCALE_PHASE encoded');await assertMaterialInputAuditCurrentStream(report,packed.manifest,packed.payload);console.log(JSON.stringify({scope:'synthetic repeated-leaf document above native string limit; not full captured audit transport',stringLimit:constants.MAX_STRING_LENGTH,observations:count,manifest:packed.manifest,exactByteCheck:true,durationMs:performance.now()-started,maxRssKiB:process.resourceUsage().maxRSS}));\"",
+      "exitCode": 1,
+      "reason": "PowerShell command-line quoting syntax error before imports executed; no transport code was run."
+    }
+  },
+  "remaining": "Full captured-audit transport replay is running. CLI integration, registration in complete harness/source provenance, and final enforced parity remain pending. Do not claim the final checked-in report is current; it has not been overwritten."
+}

@@ -3,6 +3,30 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Lossless streamed report transport (focused proof; integration pending)
+
+The [transport evidence](material-input-audit-stream-transport.json) records a
+bounded writer and exact-byte verifier for the existing ordinary JSON/gzip v1
+format. No observation, ancestry path or repeated value is removed. The verifier
+compares the full decompressed stream against regenerated canonical bytes; the
+integrity hashes are additional checks, not replacements for content comparison.
+
+The existing six codec tests and seven streaming tests pass **13/13**
+(**830.5891 ms**). A forced aggregate-string boundary rejects the legacy encoder
+while the streamed writer and checker pass. Native JSON differential controls
+cover Unicode, property/array order, special keys and omission semantics;
+negative controls reject stale nested data, corrupt transport and noncanonical
+bytes with self-consistent metadata.
+
+Two synthetic scale runs preserve **536,877,093 uncompressed bytes**, above the
+runtime **536,870,888** string limit, with identical **527,781-byte** gzip payloads.
+The runs complete in **5,015.0817 / 5,802.4787 ms**, with reported process peak RSS
+**91,564 / 91,868 KiB**. This is a repeated-leaf scale proof, not the real audit.
+Full captured-audit transport verification is running. CLI integration and test/
+provenance registration remain pending; canonical report files are untouched.
+The legacy small-report decoder retains its string-size limit; the new checker
+needs neither a second complete report object nor a new JSON parser.
+
 ## Root-proof validation string limit (focused correction)
 
 The [serialization-boundary record](material-root-proof-validation-audit.json)
