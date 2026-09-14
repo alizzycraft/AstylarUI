@@ -221,7 +221,19 @@
       "containerCaretProofCount": 2888,
       "interpretation": "Full raw replay completed validation without aggregate-string failure. Strict audit still rejects 3210 unresolved attributions. Compared with the last successful 3534 count, 324 root groups now have guarded observation-stage attribution; no raw occurrences were removed. This does not prove descendant rendering or input equivalence."
     },
-    "remaining": "Full raw replay completed. The strict audit still rejects 3210 unresolved attributions. Complete expanded harness, lossless full-report packaging and final enforced parity remain pending."
+    "completeHarness": {
+      "command": "node --input-type=module -e \"import{readFileSync}from'node:fs';import{spawnSync}from'node:child_process';const script=JSON.parse(readFileSync('package.json')).scripts['parity:harness:check'];const args=script.slice('node '.length).split(' ');args.splice(1,0,'--test-concurrency=1');const result=spawnSync(process.execPath,args,{stdio:'inherit'});process.exit(result.status??1);\"",
+      "sourceBaseline": "ebff36d (root-proof replay/validation sources unchanged during run)",
+      "exitCode": 0,
+      "tests": 644,
+      "passed": 644,
+      "failed": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "durationMs": 835011.7779,
+      "scope": "Entire package parity:harness:check file list with file concurrency one; no test-name filters. Includes the four inherited-root guard tests and two bounded-validation tests. New standalone streaming tests were not yet registered and are verified separately as 13/13 codec/stream tests. This is not the final enforced renderer parity matrix."
+    },
+    "remaining": "Full raw replay and complete 644-test harness pass. The strict audit still rejects 3210 unresolved attributions. Full captured-report transport verification, streaming CLI integration and final enforced parity remain pending."
   },
   "packaging": {
     "status": "separate confirmed size-boundary incompatibility; not corrected by bounded validation",

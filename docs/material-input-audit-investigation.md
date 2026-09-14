@@ -49,7 +49,12 @@ The reduction from the last successful **3,534** unresolved count is exactly
 the **324** newly attributed root observation-stage groups. It is not a claim
 of input equivalence, inherited candidate behavior, or renderer correction.
 The exact replay command and result are in the serialization-boundary record.
-Expanded complete-harness verification and final enforced parity remain pending.
+The complete existing harness passes **644/644**, with no failures, cancellations
+or skips (**835,011.7779 ms**), using the full package file list and file
+concurrency one. It includes the four inherited-root guard and two bounded-
+validation tests. The seven new standalone streaming tests are not yet in that
+file list and retain their separate **13/13** codec/stream verification. This
+harness pass is not final enforced renderer parity, which remains pending.
 
 Report packaging is a separate unresolved boundary: the current codec still
 stringifies and parses the whole report, and explicitly rejects an uncompressed
