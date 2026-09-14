@@ -10706,6 +10706,53 @@ test('font-relative box evidence retains equal-input failures and passing contro
   }
 });
 
+test('appearance public proof preserves control sensitivity and does not waive pending Material inputs', async () => {
+  const { readFileSync } = await import('node:fs');
+  const { createHash } = await import('node:crypto');
+  const evidence = JSON.parse(readFileSync('docs/material-appearance-input-audit.json', 'utf8'));
+  for (const source of evidence.sourceFingerprints) {
+    // Installed-package fingerprints are provenance, not a requirement that
+    // every checkout already has the maintained consumer installed.
+    if (source.file.includes('/node_modules/')) continue;
+    assert.equal(createHash('sha256').update(readFileSync(source.file, 'utf8').replace(/\r\n/g, '\n')).digest('hex'), source.sha256, source.file);
+  }
+  const verify = observations => {
+    assert.deepEqual(observations.map(item => item.type).sort(), ['a', 'checkbox', 'div', 'h2', 'p', 'section', 'select', 'span']);
+    for (const item of observations) {
+      assert.equal(item.dpr, 1);
+      const control = ['checkbox', 'select'].includes(item.type);
+      assert.deepEqual(item.observations.map(trial => trial.mode), ['<omitted>', 'auto', 'none']);
+      for (const trial of item.observations) {
+        assert.equal(trial.browserAppearance, trial.mode === '<omitted>' ? (control ? 'auto' : 'none') : trial.mode);
+        assert.equal(trial.normalAppearance, trial.mode);
+        assert.equal(trial.effectiveAppearance, trial.mode);
+        assert.deepEqual(trial.actual, { width: 120, height: 48 });
+        assert.deepEqual(trial.reference, trial.actual);
+        assert.deepEqual(trial.renderSize, [320, 180]);
+        if (control && trial.mode === 'none') assert.ok(trial.changedBytes > 0);
+        else assert.equal(trial.changedBytes, 0);
+      }
+    }
+  };
+  verify(evidence.observations);
+  for (const mutate of [
+    observations => observations.pop(),
+    observations => { observations.find(item => item.type === 'checkbox').observations[2].changedBytes = 0; },
+    observations => { observations.find(item => item.type === 'select').observations[0].normalAppearance = 'none'; },
+    observations => { observations.find(item => item.type === 'div').observations[1].changedBytes = 1; },
+  ]) {
+    const copy = structuredClone(evidence.observations); mutate(copy);
+    assert.throws(() => verify(copy));
+  }
+  assert.equal(evidence.pendingMainGroups.attributionChanged, false);
+  assert.equal(evidence.pendingMainGroups.groups.length, 117);
+  assert.equal(evidence.pendingMainGroups.groups.reduce((sum, group) => sum + group.count, 0), 6938);
+  assert.equal(evidence.runs.length, 2);
+  for (const run of evidence.runs) assert.deepEqual([run.exitCode, run.tests, run.successes, run.mounts], [0, 8, 8, 24]);
+  assert.equal(evidence.runs[1].observations, null, 'do not manufacture a complete repeated observation log');
+  assert.equal(evidence.build.exitCode, 0);
+});
+
 test('full-tree artifact references cannot escape the captured Material artifact directory', () => {
   const result = collectFullTreeInventory([{ family: 'core', profile: 'light', viewport: { id: 'desktop' },
     inputTrees: { reference: { file: 'package.json', sha256: 'irrelevant' } },

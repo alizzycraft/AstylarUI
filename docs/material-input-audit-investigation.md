@@ -3,6 +3,78 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Appearance: separate omitted defaults from indicator-sensitive authoring
+
+The [appearance diagnostic evidence](material-appearance-input-audit.json)
+preserves **117 pending scalar groups / 6,938 occurrences** from the current
+main capture. This increment does not classify those groups or reduce the
+remaining **2,947 unresolved differences**.
+
+The public-package test `appearance-input-audit.spec.ts` compares omitted,
+`auto`, and `none` authoring on six non-widget types (`div`, `section`, `span`,
+`p`, `h2`, `a`) and two indicator-sensitive controls (`select`, checked
+`checkbox`). Identical explicit CSS box/style inputs are used in the browser
+and Astylar variants. All 24 fresh mounts measure 120 × 48 CSS pixels on both
+sides. Astylar normal/effective diagnostics retain omitted declarations as
+omitted; browser computed appearance is `none` for the omitted non-widget
+variants and `auto` for the omitted controls.
+
+Within each Astylar type, omitted and `auto` yield byte-identical framebuffers.
+`none` also leaves the six empty non-widget rasters unchanged, but changes
+**105 bytes for select and 7,344 bytes for checkbox**. A colored-pixel assertion
+rejects blank captures. This is a within-Astylar sensitivity test, **not a
+browser-versus-Astylar screenshot parity test** or proof that omitted inputs
+can always be normalized to `none`.
+
+The checked source and installed package both guard indicator creation with
+`style.appearance !== 'none'`: `checkbox.manager.ts:56` (installed JS:48) and
+`select.manager.ts:101` (installed JS:70). Source commit
+`c46a1d7b048d28f7f0e8358612c0ed526d0c5dfa` introduced those guards for the
+Tailwind benchmark. This is source-history evidence, not a historical runtime
+bisect or attribution of the reported Material symptoms to that commit.
+The `native-control-presentation` capability explicitly documents limited
+Astylar-owned indicator behavior, not complete native-widget appearance.
+
+### Attribution boundaries and next steps
+
+- Non-widget default omissions need exact captured-type, active-rule and
+  diagnostic-stage evidence before attribution. The six empty-box tests do
+  not prove all compositions, typography, pseudo states or plugin behavior.
+- Thirteen button-to-button groups have explicit reference Material
+  `appearance:none` declarations missing from candidate authoring. Preserve
+  that input difference even if a particular candidate raster is unchanged.
+- Range inputs, changed structural types and plugin-rendered elements remain
+  separate investigations. Select/checkbox results cannot establish their
+  appearance behavior.
+- No core source, canonical fixture or scalar classification rule changed.
+  A future collector must preserve raw omission and case identities and reject
+  unsupported attribution through negative/mutation tests.
+
+### Verification
+
+`npm --prefix examples/material-showcase test -- --watch=false --browsers=ChromeHeadless --include=src/app/appearance-input-audit.spec.ts`
+
+Two runs passed **8/8 tests, 24 mounts each**, exit 0 (test times 3.229 and
+3.236 seconds). The first complete observation set is checked in; the second
+terminal result is recorded without inventing observations lost to console
+truncation. Chrome Headless 152 / Windows 10, Babylon 8.56.2 WebGL2, Angular
+20.3.29, DPR 1. The existing NG0914 Zone.js/zoneless warning is accepted;
+no polyfill changes were made. Each surface is disposed with zero remaining
+meshes/materials/textures, and its DOM hosts are removed.
+
+`npm --prefix examples/material-showcase run build -- --output-path dist/material-showcase-appearance-input-audit`
+
+The isolated browser/server build passed, **29.708 seconds**, two prerendered
+routes, exit 0. It did not replace the frozen comparison bundle. The checked-in
+evidence integrity test verifies source fingerprints, the full eight-type
+observation set, positive control sensitivity, raw diagnostic omissions and
+pending-group totals, including four deliberately corrupted variants.
+`node --test --test-name-pattern='appearance public proof' tests/material-parity/input-equivalence-audit.spec.mjs`
+passed **1/1**, exit 0, 577.785 ms. All ten frozen capture-harness hashes
+remain unchanged.
+Neither this focused proof nor the build establishes the final enforced
+parity matrix or the complete input-equivalence audit.
+
 ## Section fonts: computed inheritance versus local diagnostic declarations
 
 The [root-typography case index](material-root-typography-audit.json) covers
