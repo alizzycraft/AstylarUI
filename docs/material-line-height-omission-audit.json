@@ -1,0 +1,837 @@
+{
+  "schemaVersion": 1,
+  "findingId": "harness-unconditional-normal-line-height-omission",
+  "classification": "parity-harness-defect",
+  "status": "Confirmed scalar-filter blind spot; correction pending. Existing overall acceptance still fails, so this is not a claim that the whole report falsely passes.",
+  "scope": "The filter bypasses authored request and inheritance review before discrepancy classification. Browser sensitivity establishes why normal and omission cannot be globally equated; no Astylar rendering defect is inferred.",
+  "sourceFingerprints": [
+    {
+      "file": "tests/material-parity/line-height-omission-sensitivity.spec.mjs",
+      "sha256": "c9495fe45c0ff23e0bc094fdbf18dacb8f4297325d45d3867f5e69f09db811f0"
+    },
+    {
+      "file": "tests/material-parity/input-equivalence-audit.mjs",
+      "sha256": "b5ccd0d95f5e7d5dc858dc45ca973f1133264950250ea68fc74eaf3b5dfacb29"
+    }
+  ],
+  "sourceLocation": "tests/material-parity/input-equivalence-audit.mjs:1777",
+  "history": {
+    "introducedBy": "5e3ac33a",
+    "commitSubject": "test(material): enforce input-equivalence audit",
+    "evidence": "git blame assigns the unconditional normal/undefined shortcut to the initial audit commit. Source-history attribution, not a historical runtime bisect."
+  },
+  "verification": {
+    "command": "node --test tests/material-parity/line-height-omission-sensitivity.spec.mjs",
+    "runs": [
+      {
+        "exitCode": 0,
+        "passed": 4,
+        "failed": 0,
+        "durationMs": 3401.5677
+      },
+      {
+        "exitCode": 0,
+        "passed": 4,
+        "failed": 0,
+        "durationMs": 3344.4026
+      }
+    ],
+    "observationsIdenticalAcrossRuns": true,
+    "fullHarness": "Standalone new diagnostic is not part of the currently running expanded harness file set; do not count that run as coverage of this file.",
+    "testMeaning": "The first test characterizes the known suppression and must be inverted when the filter is corrected. Passing this characterization is evidence of the defect, not a requirement to retain it."
+  },
+  "browserObservations": [
+    {
+      "browserVersion": "152.0.7977.76",
+      "deviceScaleFactor": 1,
+      "scope": "Browser reference sensitivity, not Astylar rendering. Demonstrates why the scalar filter needs request/ancestry evidence.",
+      "result": {
+        "initial": {
+          "explicit": {
+            "lineHeight": "normal",
+            "fontSize": "16px",
+            "height": 18
+          },
+          "omitted": {
+            "lineHeight": "normal",
+            "fontSize": "16px",
+            "height": 18
+          }
+        },
+        "changedAncestor": {
+          "explicit": {
+            "lineHeight": "normal",
+            "fontSize": "16px",
+            "height": 18
+          },
+          "omitted": {
+            "lineHeight": "40px",
+            "fontSize": "16px",
+            "height": 40
+          }
+        },
+        "restored": {
+          "explicit": {
+            "lineHeight": "normal",
+            "fontSize": "16px",
+            "height": 18
+          },
+          "omitted": {
+            "lineHeight": "normal",
+            "fontSize": "16px",
+            "height": 18
+          }
+        }
+      }
+    },
+    {
+      "browserVersion": "152.0.7977.76",
+      "deviceScaleFactor": 2,
+      "scope": "Browser reference sensitivity, not Astylar rendering. Demonstrates why the scalar filter needs request/ancestry evidence.",
+      "result": {
+        "initial": {
+          "explicit": {
+            "lineHeight": "normal",
+            "fontSize": "16px",
+            "height": 18
+          },
+          "omitted": {
+            "lineHeight": "normal",
+            "fontSize": "16px",
+            "height": 18
+          }
+        },
+        "changedAncestor": {
+          "explicit": {
+            "lineHeight": "normal",
+            "fontSize": "16px",
+            "height": 18
+          },
+          "omitted": {
+            "lineHeight": "40px",
+            "fontSize": "16px",
+            "height": 40
+          }
+        },
+        "restored": {
+          "explicit": {
+            "lineHeight": "normal",
+            "fontSize": "16px",
+            "height": 18
+          },
+          "omitted": {
+            "lineHeight": "normal",
+            "fontSize": "16px",
+            "height": 18
+          }
+        }
+      }
+    }
+  ],
+  "capture": {
+    "file": "artifacts/material-parity/current-ancestry-audit/latest-report.json",
+    "sha256": "b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a"
+  },
+  "exposureSummary": {
+    "groups": 85,
+    "occurrences": 5000,
+    "groupsWithDirectReferenceRequests": 14,
+    "referenceRequestOccurrences": 872,
+    "candidateRequestOccurrences": 0,
+    "meaning": "Raw normal/omitted predicate exposure only. Request counters include direct font, line-height or all declarations without inferring winning cascade or visible effect. Complete sorted case-list hashes preserve per-group coverage; the frozen raw report retains all cases."
+  },
+  "groups": [
+    {
+      "family": "autocomplete",
+      "element": "autocomplete-root",
+      "occurrences": 110,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "96515d5854664bc2f9d1b88b0787248bea0f4217b0e80b888e49217be1deb0fd"
+    },
+    {
+      "family": "badge",
+      "element": "badge-label",
+      "occurrences": 52,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "40685211b3e4ebaed5e377cd58e29b051481c5039654f724740f1df15102e846"
+    },
+    {
+      "family": "badge",
+      "element": "badge-primary",
+      "occurrences": 52,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "40685211b3e4ebaed5e377cd58e29b051481c5039654f724740f1df15102e846"
+    },
+    {
+      "family": "badge",
+      "element": "badge-root",
+      "occurrences": 52,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "40685211b3e4ebaed5e377cd58e29b051481c5039654f724740f1df15102e846"
+    },
+    {
+      "family": "bottom-sheet",
+      "element": "bottom-sheet-overlay",
+      "occurrences": 25,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "9a3469a99c870e321e9594baaa83926f8245b80c357851e9b7a7e8944ebf2105"
+    },
+    {
+      "family": "bottom-sheet",
+      "element": "bottom-sheet-primary",
+      "occurrences": 63,
+      "referenceDirectRequests": 63,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "d2d56e6bc035ca0c55b62677096e1a26c9c1a8f67bb72c8e8ca4c20cd9f9830b"
+    },
+    {
+      "family": "bottom-sheet",
+      "element": "bottom-sheet-root",
+      "occurrences": 63,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "d2d56e6bc035ca0c55b62677096e1a26c9c1a8f67bb72c8e8ca4c20cd9f9830b"
+    },
+    {
+      "family": "button-toggle",
+      "element": "button-toggle-primary",
+      "occurrences": 68,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "bc9d31dc7f14166bbc601eedfa688426eb48dc4095335132c0ced4c8524c7ae1"
+    },
+    {
+      "family": "button-toggle",
+      "element": "button-toggle-root",
+      "occurrences": 68,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "bc9d31dc7f14166bbc601eedfa688426eb48dc4095335132c0ced4c8524c7ae1"
+    },
+    {
+      "family": "button",
+      "element": "button-disabled",
+      "occurrences": 60,
+      "referenceDirectRequests": 60,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "1edc143895426e9b0cf9727c8526b22e022f099ec710b9a4e7fcb50088327c15"
+    },
+    {
+      "family": "button",
+      "element": "button-primary",
+      "occurrences": 60,
+      "referenceDirectRequests": 60,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "1edc143895426e9b0cf9727c8526b22e022f099ec710b9a4e7fcb50088327c15"
+    },
+    {
+      "family": "button",
+      "element": "button-root",
+      "occurrences": 60,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "1edc143895426e9b0cf9727c8526b22e022f099ec710b9a4e7fcb50088327c15"
+    },
+    {
+      "family": "button",
+      "element": "button-secondary",
+      "occurrences": 60,
+      "referenceDirectRequests": 60,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "1edc143895426e9b0cf9727c8526b22e022f099ec710b9a4e7fcb50088327c15"
+    },
+    {
+      "family": "card",
+      "element": "card-copy",
+      "occurrences": 52,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "f6090c7943a7997abae5001598fcf0bbde11144ac69828ab0998782461409207"
+    },
+    {
+      "family": "card",
+      "element": "card-open",
+      "occurrences": 52,
+      "referenceDirectRequests": 52,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "f6090c7943a7997abae5001598fcf0bbde11144ac69828ab0998782461409207"
+    },
+    {
+      "family": "card",
+      "element": "card-primary",
+      "occurrences": 52,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "f6090c7943a7997abae5001598fcf0bbde11144ac69828ab0998782461409207"
+    },
+    {
+      "family": "card",
+      "element": "card-root",
+      "occurrences": 52,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "f6090c7943a7997abae5001598fcf0bbde11144ac69828ab0998782461409207"
+    },
+    {
+      "family": "checkbox",
+      "element": "checkbox-primary",
+      "occurrences": 68,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "c19e50f6280fd8b496bed95c201018fa5a8ba9c1dde3cb7d25be70789df7db4c"
+    },
+    {
+      "family": "checkbox",
+      "element": "checkbox-root",
+      "occurrences": 68,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "c19e50f6280fd8b496bed95c201018fa5a8ba9c1dde3cb7d25be70789df7db4c"
+    },
+    {
+      "family": "chips",
+      "element": "chips-primary",
+      "occurrences": 76,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "99e299b2a05b210a5aa1de27a83c2a34d4ed88ed1400998a1d75bd58aba2371d"
+    },
+    {
+      "family": "chips",
+      "element": "chips-root",
+      "occurrences": 76,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "99e299b2a05b210a5aa1de27a83c2a34d4ed88ed1400998a1d75bd58aba2371d"
+    },
+    {
+      "family": "core",
+      "element": "core-primary",
+      "occurrences": 52,
+      "referenceDirectRequests": 52,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "a32104dcbf2151237489b7ebf141751c523a4cd8aad2ef09d240a2bb5d3a4906"
+    },
+    {
+      "family": "core",
+      "element": "core-root",
+      "occurrences": 52,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "a32104dcbf2151237489b7ebf141751c523a4cd8aad2ef09d240a2bb5d3a4906"
+    },
+    {
+      "family": "datepicker",
+      "element": "datepicker-root",
+      "occurrences": 111,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "4ecbba9978e8ecb2acb4d12cf55e8f86d89b68ea8d4f7cebcc6e73088b044275"
+    },
+    {
+      "family": "dialog",
+      "element": "dialog-actions",
+      "occurrences": 32,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "71e5f739a0451c091489b0bc58a5a71d1125455206aa60707a43147e4dfa0dfa"
+    },
+    {
+      "family": "dialog",
+      "element": "dialog-cancel",
+      "occurrences": 32,
+      "referenceDirectRequests": 32,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "71e5f739a0451c091489b0bc58a5a71d1125455206aa60707a43147e4dfa0dfa"
+    },
+    {
+      "family": "dialog",
+      "element": "dialog-panel",
+      "occurrences": 32,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "71e5f739a0451c091489b0bc58a5a71d1125455206aa60707a43147e4dfa0dfa"
+    },
+    {
+      "family": "dialog",
+      "element": "dialog-primary",
+      "occurrences": 78,
+      "referenceDirectRequests": 78,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "f49213e8ba60ea1b41dbe91be30c8c5aea92671163ec4fb3f6e568f20647d414"
+    },
+    {
+      "family": "dialog",
+      "element": "dialog-root",
+      "occurrences": 78,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "f49213e8ba60ea1b41dbe91be30c8c5aea92671163ec4fb3f6e568f20647d414"
+    },
+    {
+      "family": "dialog",
+      "element": "dialog-save",
+      "occurrences": 32,
+      "referenceDirectRequests": 32,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "71e5f739a0451c091489b0bc58a5a71d1125455206aa60707a43147e4dfa0dfa"
+    },
+    {
+      "family": "divider",
+      "element": "divider-above",
+      "occurrences": 24,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "96a46186637b253a9ed2157b526f1dbb234800ae6978d9f4433c4128e0d9f611"
+    },
+    {
+      "family": "divider",
+      "element": "divider-below",
+      "occurrences": 24,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "96a46186637b253a9ed2157b526f1dbb234800ae6978d9f4433c4128e0d9f611"
+    },
+    {
+      "family": "divider",
+      "element": "divider-primary",
+      "occurrences": 24,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "96a46186637b253a9ed2157b526f1dbb234800ae6978d9f4433c4128e0d9f611"
+    },
+    {
+      "family": "divider",
+      "element": "divider-root",
+      "occurrences": 24,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "96a46186637b253a9ed2157b526f1dbb234800ae6978d9f4433c4128e0d9f611"
+    },
+    {
+      "family": "expansion",
+      "element": "expansion-primary",
+      "occurrences": 68,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "11fa67ea0d05e51a69350e6b324755dd1fecc3b417e98a5a8061874a0227e91f"
+    },
+    {
+      "family": "expansion",
+      "element": "expansion-root",
+      "occurrences": 68,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "11fa67ea0d05e51a69350e6b324755dd1fecc3b417e98a5a8061874a0227e91f"
+    },
+    {
+      "family": "form-field",
+      "element": "form-field-root",
+      "occurrences": 76,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "af0af1a364a442fdee40ca5e0a58efdd942969617b16f2ecd2304b8c8ccc6546"
+    },
+    {
+      "family": "grid-list",
+      "element": "grid-list-primary",
+      "occurrences": 52,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "b7f77d09d88d212c9d5c92b785022631e02d2a831560721aa7bcae9bfcb10b51"
+    },
+    {
+      "family": "grid-list",
+      "element": "grid-list-root",
+      "occurrences": 52,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "b7f77d09d88d212c9d5c92b785022631e02d2a831560721aa7bcae9bfcb10b51"
+    },
+    {
+      "family": "grid-list",
+      "element": "grid-tile-one",
+      "occurrences": 52,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "b7f77d09d88d212c9d5c92b785022631e02d2a831560721aa7bcae9bfcb10b51"
+    },
+    {
+      "family": "grid-list",
+      "element": "grid-tile-two",
+      "occurrences": 52,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "b7f77d09d88d212c9d5c92b785022631e02d2a831560721aa7bcae9bfcb10b51"
+    },
+    {
+      "family": "icon",
+      "element": "icon-primary",
+      "occurrences": 20,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "80e6a89c622da96dd448b83a9a99e5247be41cf4010da3d2f3b15eb471463a61"
+    },
+    {
+      "family": "icon",
+      "element": "icon-root",
+      "occurrences": 20,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "80e6a89c622da96dd448b83a9a99e5247be41cf4010da3d2f3b15eb471463a61"
+    },
+    {
+      "family": "input",
+      "element": "input-root",
+      "occurrences": 76,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "1f144a82e4b23fe515cd45f7dff630eb1227dd37e2539cbb07d2502dc27a2d63"
+    },
+    {
+      "family": "list",
+      "element": "list-primary",
+      "occurrences": 52,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "91a2476bf8e9d212527cf505690f6f3cdaa327b0b7101e10a2c0591b307f171a"
+    },
+    {
+      "family": "list",
+      "element": "list-root",
+      "occurrences": 52,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "91a2476bf8e9d212527cf505690f6f3cdaa327b0b7101e10a2c0591b307f171a"
+    },
+    {
+      "family": "menu",
+      "element": "menu-primary",
+      "occurrences": 94,
+      "referenceDirectRequests": 94,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "36972bee40d905656b6a33628eec633806c99428ae874a07c0323043d7be335e"
+    },
+    {
+      "family": "menu",
+      "element": "menu-root",
+      "occurrences": 94,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "36972bee40d905656b6a33628eec633806c99428ae874a07c0323043d7be335e"
+    },
+    {
+      "family": "paginator",
+      "element": "paginator-root",
+      "occurrences": 52,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "dd7a68c6359ab48d144df62e9c6bd762c45326e6ecf6b55a05932fb0e998658c"
+    },
+    {
+      "family": "progress-bar",
+      "element": "progress-bar-primary",
+      "occurrences": 20,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "ad14b1f3d694700a60010946f24886291d9f433e16170195663cd9f5bcc33846"
+    },
+    {
+      "family": "progress-bar",
+      "element": "progress-bar-root",
+      "occurrences": 20,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "ad14b1f3d694700a60010946f24886291d9f433e16170195663cd9f5bcc33846"
+    },
+    {
+      "family": "progress-spinner",
+      "element": "progress-spinner-root",
+      "occurrences": 20,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "0c2b1b618f86bb46f961872fbff723ae85c910fe43eea8bedec02a4213e466a3"
+    },
+    {
+      "family": "radio",
+      "element": "radio-primary",
+      "occurrences": 68,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "028638bb91f4de64ea1c344b9227cc415cf5c8a8be9e0f20f684ceb5ccde5826"
+    },
+    {
+      "family": "radio",
+      "element": "radio-root",
+      "occurrences": 68,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "028638bb91f4de64ea1c344b9227cc415cf5c8a8be9e0f20f684ceb5ccde5826"
+    },
+    {
+      "family": "select",
+      "element": "select-root",
+      "occurrences": 94,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "36866ebfe7dc517441b915111fdfdf492beeec2c3d5295d9eecb96555b9e745b"
+    },
+    {
+      "family": "sidenav",
+      "element": "sidenav-primary",
+      "occurrences": 62,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "87259edd371f753f2990b7c1b9a7744a7335f6ecd2a76a9900eb1ff0d9092697"
+    },
+    {
+      "family": "sidenav",
+      "element": "sidenav-root",
+      "occurrences": 62,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "87259edd371f753f2990b7c1b9a7744a7335f6ecd2a76a9900eb1ff0d9092697"
+    },
+    {
+      "family": "slide-toggle",
+      "element": "slide-toggle-primary",
+      "occurrences": 68,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "77c53e50a7b92646ae557006f18227b66b6116b01c9cb219cb8ac3f34c97802f"
+    },
+    {
+      "family": "slide-toggle",
+      "element": "slide-toggle-root",
+      "occurrences": 68,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "77c53e50a7b92646ae557006f18227b66b6116b01c9cb219cb8ac3f34c97802f"
+    },
+    {
+      "family": "slider",
+      "element": "slider-primary",
+      "occurrences": 78,
+      "referenceDirectRequests": 78,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "69c1514c9bd11caf646ecf76fbd2e3cc9c8ea6998103ce60d56df1959f4f20e7"
+    },
+    {
+      "family": "slider",
+      "element": "slider-root",
+      "occurrences": 78,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "69c1514c9bd11caf646ecf76fbd2e3cc9c8ea6998103ce60d56df1959f4f20e7"
+    },
+    {
+      "family": "slider",
+      "element": "slider-start",
+      "occurrences": 78,
+      "referenceDirectRequests": 78,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "69c1514c9bd11caf646ecf76fbd2e3cc9c8ea6998103ce60d56df1959f4f20e7"
+    },
+    {
+      "family": "slider",
+      "element": "slider-visual",
+      "occurrences": 78,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "69c1514c9bd11caf646ecf76fbd2e3cc9c8ea6998103ce60d56df1959f4f20e7"
+    },
+    {
+      "family": "snack-bar",
+      "element": "snack-bar-overlay",
+      "occurrences": 34,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "a3144da37c494c7afe985413f5e665691b12cc60c4101f9b4e81dc11277a6f69"
+    },
+    {
+      "family": "snack-bar",
+      "element": "snack-bar-primary",
+      "occurrences": 71,
+      "referenceDirectRequests": 71,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "8864d4c37432a7fa4f27597cc3cd84a44a3c059c8c47e825746f1dee83aa2a1d"
+    },
+    {
+      "family": "snack-bar",
+      "element": "snack-bar-root",
+      "occurrences": 71,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "8864d4c37432a7fa4f27597cc3cd84a44a3c059c8c47e825746f1dee83aa2a1d"
+    },
+    {
+      "family": "snack-bar",
+      "element": "snack-bar-surface",
+      "occurrences": 34,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "a3144da37c494c7afe985413f5e665691b12cc60c4101f9b4e81dc11277a6f69"
+    },
+    {
+      "family": "sort",
+      "element": "sort-primary",
+      "occurrences": 60,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "790322231716b41b7450856c6f71c9f52f4de2c8ed68c37a7c1aeefd5ed50f1d"
+    },
+    {
+      "family": "sort",
+      "element": "sort-root",
+      "occurrences": 60,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "790322231716b41b7450856c6f71c9f52f4de2c8ed68c37a7c1aeefd5ed50f1d"
+    },
+    {
+      "family": "stepper",
+      "element": "step-details-text",
+      "occurrences": 68,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "e9106ed88ee249993dbb77a815110f7f141dd82be9e5d8a85f7a8b4c18c4f3ba"
+    },
+    {
+      "family": "stepper",
+      "element": "step-review-text",
+      "occurrences": 68,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "e9106ed88ee249993dbb77a815110f7f141dd82be9e5d8a85f7a8b4c18c4f3ba"
+    },
+    {
+      "family": "stepper",
+      "element": "stepper-content",
+      "occurrences": 68,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "e9106ed88ee249993dbb77a815110f7f141dd82be9e5d8a85f7a8b4c18c4f3ba"
+    },
+    {
+      "family": "stepper",
+      "element": "stepper-primary",
+      "occurrences": 68,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "e9106ed88ee249993dbb77a815110f7f141dd82be9e5d8a85f7a8b4c18c4f3ba"
+    },
+    {
+      "family": "stepper",
+      "element": "stepper-root",
+      "occurrences": 68,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "e9106ed88ee249993dbb77a815110f7f141dd82be9e5d8a85f7a8b4c18c4f3ba"
+    },
+    {
+      "family": "table",
+      "element": "table-primary",
+      "occurrences": 52,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "e90cfe2caf1997bbd029ee50927043139d2a615037c0cabe65465b95117e9f4a"
+    },
+    {
+      "family": "table",
+      "element": "table-root",
+      "occurrences": 52,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "e90cfe2caf1997bbd029ee50927043139d2a615037c0cabe65465b95117e9f4a"
+    },
+    {
+      "family": "tabs",
+      "element": "tab-panel",
+      "occurrences": 70,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "af99b7bd730809040e53c211b3b83cb8c2f63a73087fc833231d3d18e3b87512"
+    },
+    {
+      "family": "tabs",
+      "element": "tabs-primary",
+      "occurrences": 70,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "af99b7bd730809040e53c211b3b83cb8c2f63a73087fc833231d3d18e3b87512"
+    },
+    {
+      "family": "tabs",
+      "element": "tabs-root",
+      "occurrences": 70,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "af99b7bd730809040e53c211b3b83cb8c2f63a73087fc833231d3d18e3b87512"
+    },
+    {
+      "family": "timepicker",
+      "element": "timepicker-root",
+      "occurrences": 110,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "2b034c0c9199c77db23ab1feb7377864f7a92099acd24b3b083bf35f22b37450"
+    },
+    {
+      "family": "toolbar",
+      "element": "toolbar-root",
+      "occurrences": 52,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "c65932fcde8c7c0699297c00c364d46ee7a920e04a0f7107cef4b78d03b7ed86"
+    },
+    {
+      "family": "tooltip",
+      "element": "tooltip-primary",
+      "occurrences": 62,
+      "referenceDirectRequests": 62,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "ca946af3d1bc785780e46a0f845147aa512cf73382a78a77733f2821405d779b"
+    },
+    {
+      "family": "tooltip",
+      "element": "tooltip-root",
+      "occurrences": 62,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "ca946af3d1bc785780e46a0f845147aa512cf73382a78a77733f2821405d779b"
+    },
+    {
+      "family": "tree",
+      "element": "tree-primary",
+      "occurrences": 52,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "f0c799eb899c03cff49b71199a74af4ae4ce6e5f7062a962ea215d2d947f49dd"
+    },
+    {
+      "family": "tree",
+      "element": "tree-root",
+      "occurrences": 52,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0,
+      "completeCaseListSha256": "f0c799eb899c03cff49b71199a74af4ae4ce6e5f7062a962ea215d2d947f49dd"
+    }
+  ],
+  "implementationPlan": [
+    "After the current harness terminates, remove the unconditional line-height normal/undefined acceptance as a separately verified diagnostic correction. Do not change renderer code or canonical inputs.",
+    "Invert the characterization assertion so the missing-request observation stays visible, with ancestry-sensitive browser controls retained. Do not replace the shortcut with another global normal/initial alias.",
+    "Replay the complete frozen capture and preserve newly exposed observations. Classify exact authored requests versus local/computed stage mismatches using full ancestor paths, defaults and applicable declaration evidence.",
+    "Keep existing retained/control natural-line-box and font-metrics findings: a scalar input correction neither erases them nor proves candidate pixels.",
+    "Reverify source/case indices, complete harness and final enforced parity. Record increased discrepancy/unresolved counts honestly rather than tuning them back to the old totals."
+  ],
+  "limitations": [
+    "No production or canonical fixture was edited; the shortcut still exists at this finding's commit.",
+    "No missing-caret or general flex-initial normalization correction is bundled into this focused finding.",
+    "The 2450 unresolved count excludes observations suppressed by this shortcut and is not proof of audit completeness."
+  ]
+}

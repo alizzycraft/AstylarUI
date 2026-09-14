@@ -3,6 +3,40 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Audit blind spot: unconditional normal line-height omission
+
+The [line-height omission proof](material-line-height-omission-audit.json) identifies
+an unsafe shortcut at `input-equivalence-audit.mjs:1777`: browser computed
+`line-height:normal` versus an omitted candidate local declaration returns
+equivalent before authored requests or ancestry are reviewed. A synthetic scalar
+case with an explicit reference `normal` request is suppressed. This is a
+confirmed **audit filter defect**, not a confirmed Astylar rendering defect or
+a claim that overall audit acceptance currently passes.
+
+Browser controls at DPR1/2 initially both have 18px line boxes. After setting
+their parent's line-height to 40px, explicit `normal` stays 18px while omission
+inherits a 40px line box; removing the ancestor override restores both. The
+focused command `node --test tests/material-parity/line-height-omission-sensitivity.spec.mjs`
+passes **4/4 twice**, **3,401.5677 ms / 3,344.4026 ms**, with identical observations.
+The first test deliberately characterizes the current blind spot and must be
+inverted when correcting it, not retained as desired behavior.
+
+The frozen capture has **5,000 matching observations / 85 element groups**;
+**872 observations / 14 groups** include direct reference font/line-height/all
+requests. These counts are exposure, not winning-cascade or visible-defect claims.
+The linked index preserves complete case-list hashes and the raw capture hash.
+Git blame traces the shortcut to initial audit commit `5e3ac33a` (source history,
+not a runtime bisect). The current 2,450 unresolved count excludes these filtered
+observations and must not be treated as completeness evidence.
+
+Prioritize removing this unconditional acceptance after the current harness
+terminates, then replay and classify the exposed inputs using exact ancestry
+and declaration ownership. Preserve separate natural-line-box and font-metrics
+findings; do not substitute normal metrics, change canonical input, or tune the
+new totals back down. The standalone diagnostic is not included in the currently
+running expanded harness. No production or canonical input changed, and the
+filter remains unchanged in this evidence-only increment.
+
 ## Complete field-host weight/tracking request attribution
 
 The [guarded case index](material-field-host-weight-tracking-audit.json) covers
