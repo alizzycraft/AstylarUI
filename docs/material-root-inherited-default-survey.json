@@ -1,0 +1,341 @@
+{
+  "schemaVersion": 1,
+  "findingId": "root-inherited-default-observation-stage-survey",
+  "classification": "exploratory-audit-evidence",
+  "scope": "Read-only full captured root/frame/page survey for the nine inherited properties exposed by 94aa35e. Identifies a consistent observation-stage population, not computed candidate equivalence or a renderer fix.",
+  "baseline": {
+    "commit": "f463dc0",
+    "capture": {
+      "file": "artifacts/material-parity/current-ancestry-audit/latest-report.json",
+      "sha256": "b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a"
+    },
+    "sourceFingerprints": [
+      {
+        "file": "tests/material-parity/root-initial-style-evidence.mjs",
+        "sha256": "5e7abdffe62f7ce60c324a6a2ae7fed465315e5393d937aeac4afb74f14fbf46"
+      },
+      {
+        "file": "tests/material-parity/input-equivalence-audit.mjs",
+        "sha256": "f68453d8b1efd0ef01773182fcc144afc3c76cbee9e7888b1cef8c794c8658ed"
+      }
+    ],
+    "note": "Historical source fingerprints for these two identical runs; not rolling requirements."
+  },
+  "verification": {
+    "command": "node --input-type=module -e \"import assert from 'node:assert/strict';import{readFileSync}from'node:fs';import{createHash}from'node:crypto';import{rootInitialSelectorCanApply}from'./tests/material-parity/root-initial-style-evidence.mjs'; const props=['fontStyle','letterSpacing','wordSpacing','textTransform','whiteSpace','overflowWrap','wordBreak','pointerEvents','visibility']; const raw=JSON.parse(readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json')); const normalize=k=>k.replaceAll('-','').toLowerCase(); const affects=k=>props.map(normalize).includes(normalize(k))||['font','all','whitespacecollapse','textwrap','textwrapmode','textwrapstyle','wordwrap'].includes(normalize(k))||/^(animation|transition)/i.test(k); const digest=b=>createHash('sha256').update(b).digest('hex'), combos=new Map(), cases=[]; for(const[kind,entries]of[['static',raw.results],['interaction',raw.interactions]])for(const e of entries){  const c=kind+':'+e.family+'@'+e.profile+'/'+e.viewport.id+(e.state?'/'+e.state:'');  const t={};for(const side of['reference','astylar']){const src=e.inputTrees[side],bytes=readFileSync(src.file);assert.equal(digest(bytes),src.sha256);t[side]=JSON.parse(bytes);}  const ref=t.reference,ast=t.astylar,rs=ref.nodes.find(n=>n.attributes?.id===e.family+'-root'),as=ast.nodes.find(n=>n.authored?.id===e.family+'-root');  assert.ok(rs&&as,c);const rf=ref.nodes.find(n=>n.key===rs.parent),ap=ast.nodes.find(n=>n.key===as.parent);assert.ok(rf&&ap,c);  const observation={reference:[rf,rs].map(n=>({type:n.type,ownText:n.ownText,values:Object.fromEntries(props.map(p=>[p,ref.styles[n.style][p]])),requests:n.rules.flatMap(i=>{const r=ref.rules[i];return Object.entries(r.declarations).filter(([k])=>affects(k)).map(([k,v])=>({selector:r.selector,property:k,value:v,active:r.active}));}),inline:Object.fromEntries(Object.entries(n.inline??{}).filter(([k])=>affects(k)))})),  candidate:[ap,as].map(n=>({type:n.authored.type,ownText:n.authored.textContent??'',values:Object.fromEntries(['normalResolvedStyle','resolvedStyle','interactionResolvedStyle'].map(s=>[s,Object.fromEntries(props.map(p=>[p,n[s]?.[p]??'<omitted>']))])),requests:ast.rules.filter(r=>rootInitialSelectorCanApply(r.selector,n.authored)).flatMap(r=>Object.entries(r).filter(([k])=>affects(k)).map(([k,v])=>({selector:r.selector,property:k,value:v}))),inline:Object.fromEntries(Object.entries(n.authored.style??{}).filter(([k])=>affects(k)))}))};  const sig=JSON.stringify(observation);if(!combos.has(sig))combos.set(sig,{observation,cases:[]});combos.get(sig).cases.push(c);cases.push(c); } console.log(JSON.stringify({cases:cases.length,uniqueCases:new Set(cases).size,combinations:[...combos.values()].map(g=>({observation:g.observation,occurrences:g.cases.length,caseListSha256:digest(JSON.stringify(g.cases.sort())),sample:g.cases.slice(0,3)}))}));\"",
+    "exitCode": 0,
+    "repeat": {
+      "exitCode": 0,
+      "observationsIdentical": true
+    },
+    "checks": "Every referenced raw tree byte hash is checked. All 2311 case identities are unique. Immediate root/frame/page nodes exist. The conservative existing selector helper identifies potentially applicable candidate requests. No captured input is rewritten.",
+    "limitations": "Exploratory survey does not replace strict collector provenance, complete-rule, duplicate-node, malformed-input, attribute, ancestry and scalar-join rejection guards. Browser ancestry outside the captured frame, candidate computed inheritance, descendant consumers, pointer targeting and raster remain unverified."
+  },
+  "cases": 2311,
+  "uniqueCases": 2311,
+  "combinations": [
+    {
+      "observation": {
+        "reference": [
+          {
+            "type": "main",
+            "ownText": "",
+            "values": {
+              "fontStyle": "normal",
+              "letterSpacing": "normal",
+              "wordSpacing": "0px",
+              "textTransform": "none",
+              "whiteSpace": "normal",
+              "overflowWrap": "normal",
+              "wordBreak": "normal",
+              "pointerEvents": "auto",
+              "visibility": "visible"
+            },
+            "requests": [],
+            "inline": {}
+          },
+          {
+            "type": "section",
+            "ownText": "",
+            "values": {
+              "fontStyle": "normal",
+              "letterSpacing": "normal",
+              "wordSpacing": "0px",
+              "textTransform": "none",
+              "whiteSpace": "normal",
+              "overflowWrap": "normal",
+              "wordBreak": "normal",
+              "pointerEvents": "auto",
+              "visibility": "visible"
+            },
+            "requests": [],
+            "inline": {}
+          }
+        ],
+        "candidate": [
+          {
+            "type": "main",
+            "ownText": "",
+            "values": {
+              "normalResolvedStyle": {
+                "fontStyle": "<omitted>",
+                "letterSpacing": "<omitted>",
+                "wordSpacing": "<omitted>",
+                "textTransform": "<omitted>",
+                "whiteSpace": "<omitted>",
+                "overflowWrap": "<omitted>",
+                "wordBreak": "<omitted>",
+                "pointerEvents": "<omitted>",
+                "visibility": "<omitted>"
+              },
+              "resolvedStyle": {
+                "fontStyle": "<omitted>",
+                "letterSpacing": "<omitted>",
+                "wordSpacing": "<omitted>",
+                "textTransform": "<omitted>",
+                "whiteSpace": "<omitted>",
+                "overflowWrap": "<omitted>",
+                "wordBreak": "<omitted>",
+                "pointerEvents": "<omitted>",
+                "visibility": "<omitted>"
+              },
+              "interactionResolvedStyle": {
+                "fontStyle": "<omitted>",
+                "letterSpacing": "<omitted>",
+                "wordSpacing": "<omitted>",
+                "textTransform": "<omitted>",
+                "whiteSpace": "<omitted>",
+                "overflowWrap": "<omitted>",
+                "wordBreak": "<omitted>",
+                "pointerEvents": "<omitted>",
+                "visibility": "<omitted>"
+              }
+            },
+            "requests": [],
+            "inline": {}
+          },
+          {
+            "type": "section",
+            "ownText": "",
+            "values": {
+              "normalResolvedStyle": {
+                "fontStyle": "<omitted>",
+                "letterSpacing": "<omitted>",
+                "wordSpacing": "<omitted>",
+                "textTransform": "<omitted>",
+                "whiteSpace": "<omitted>",
+                "overflowWrap": "<omitted>",
+                "wordBreak": "<omitted>",
+                "pointerEvents": "<omitted>",
+                "visibility": "<omitted>"
+              },
+              "resolvedStyle": {
+                "fontStyle": "<omitted>",
+                "letterSpacing": "<omitted>",
+                "wordSpacing": "<omitted>",
+                "textTransform": "<omitted>",
+                "whiteSpace": "<omitted>",
+                "overflowWrap": "<omitted>",
+                "wordBreak": "<omitted>",
+                "pointerEvents": "<omitted>",
+                "visibility": "<omitted>"
+              },
+              "interactionResolvedStyle": {
+                "fontStyle": "<omitted>",
+                "letterSpacing": "<omitted>",
+                "wordSpacing": "<omitted>",
+                "textTransform": "<omitted>",
+                "whiteSpace": "<omitted>",
+                "overflowWrap": "<omitted>",
+                "wordBreak": "<omitted>",
+                "pointerEvents": "<omitted>",
+                "visibility": "<omitted>"
+              }
+            },
+            "requests": [],
+            "inline": {}
+          }
+        ]
+      },
+      "occurrences": 2311,
+      "caseListSha256": "3ba9d5d6d83ea3504051d344917f9dcd2ee18438aecd60bba569b3cf159c72a6",
+      "sample": [
+        "interaction:autocomplete@contrast/desktop-dpr1/activate",
+        "interaction:autocomplete@contrast/desktop-dpr1/activate-leave",
+        "interaction:autocomplete@contrast/desktop-dpr1/disabled"
+      ]
+    }
+  ],
+  "scalarVerification": {
+    "command": "node --input-type=module -e \"import assert from 'node:assert/strict';import{readFileSync}from'node:fs';import{createHash}from'node:crypto';const file='artifacts/material-parity/current-ancestry-audit/latest-report.json',bytes=readFileSync(file);assert.equal(createHash('sha256').update(bytes).digest('hex'),'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');const raw=JSON.parse(bytes),props=['fontStyle','letterSpacing','wordSpacing','textTransform','whiteSpace','overflowWrap','wordBreak','pointerEvents','visibility'];const expected={fontStyle:'normal',letterSpacing:'normal',wordSpacing:'0px',textTransform:'none',whiteSpace:'normal',overflowWrap:'normal',wordBreak:'normal',pointerEvents:'auto',visibility:'visible'};let count=0;const families=new Map();for(const e of [...raw.results,...raw.interactions]){const inputs=e.styleInputs.filter(i=>i.id===e.family+'-root');assert.equal(inputs.length,1);const i=inputs[0];for(const p of props){assert.equal(i.reference[p],expected[p]);for(const stage of ['astylar','astylarNormalResolvedStyle','astylarInteractionResolvedStyle'])assert.equal(i[stage][p],undefined);count++;}families.set(e.family,(families.get(e.family)??0)+1);}assert.equal(count,2311*9);console.log(JSON.stringify({rootPropertyObservations:count,families:[...families].sort(),captureSha256:createHash('sha256').update(bytes).digest('hex'),sources:['tests/material-parity/root-initial-style-evidence.mjs','tests/material-parity/input-equivalence-audit.mjs'].map(file=>({file,sha256:createHash('sha256').update(readFileSync(file,'utf8').replaceAll('\\r\\n','\\n')).digest('hex')}))}));\"",
+    "exitCode": 0,
+    "result": {
+      "rootPropertyObservations": 20799,
+      "families": [
+        [
+          "autocomplete",
+          110
+        ],
+        [
+          "badge",
+          52
+        ],
+        [
+          "bottom-sheet",
+          63
+        ],
+        [
+          "button",
+          60
+        ],
+        [
+          "button-toggle",
+          68
+        ],
+        [
+          "card",
+          52
+        ],
+        [
+          "checkbox",
+          68
+        ],
+        [
+          "chips",
+          76
+        ],
+        [
+          "core",
+          52
+        ],
+        [
+          "datepicker",
+          111
+        ],
+        [
+          "dialog",
+          78
+        ],
+        [
+          "divider",
+          24
+        ],
+        [
+          "expansion",
+          68
+        ],
+        [
+          "form-field",
+          76
+        ],
+        [
+          "grid-list",
+          52
+        ],
+        [
+          "icon",
+          20
+        ],
+        [
+          "input",
+          76
+        ],
+        [
+          "list",
+          52
+        ],
+        [
+          "menu",
+          94
+        ],
+        [
+          "paginator",
+          52
+        ],
+        [
+          "progress-bar",
+          20
+        ],
+        [
+          "progress-spinner",
+          20
+        ],
+        [
+          "radio",
+          68
+        ],
+        [
+          "select",
+          94
+        ],
+        [
+          "sidenav",
+          62
+        ],
+        [
+          "slide-toggle",
+          68
+        ],
+        [
+          "slider",
+          78
+        ],
+        [
+          "snack-bar",
+          71
+        ],
+        [
+          "sort",
+          60
+        ],
+        [
+          "stepper",
+          68
+        ],
+        [
+          "table",
+          52
+        ],
+        [
+          "tabs",
+          70
+        ],
+        [
+          "timepicker",
+          110
+        ],
+        [
+          "toolbar",
+          52
+        ],
+        [
+          "tooltip",
+          62
+        ],
+        [
+          "tree",
+          52
+        ]
+      ],
+      "captureSha256": "b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a",
+      "sources": [
+        {
+          "file": "tests/material-parity/root-initial-style-evidence.mjs",
+          "sha256": "5e7abdffe62f7ce60c324a6a2ae7fed465315e5393d937aeac4afb74f14fbf46"
+        },
+        {
+          "file": "tests/material-parity/input-equivalence-audit.mjs",
+          "sha256": "f68453d8b1efd0ef01773182fcc144afc3c76cbee9e7888b1cef8c794c8658ed"
+        }
+      ]
+    },
+    "note": "Independent raw scalar cross-check: each case has exactly one family root; all nine browser values and all three candidate local omissions match. Counts are property observations, not renderer defects."
+  },
+  "nextSteps": [
+    "After the running harness terminates, extend the existing guarded root observation-stage proof as one grouped nine-property increment, with a failing regression first. Do not reintroduce unconditional implicit-value equivalence.",
+    "Require correct root/frame/page identity, complete capture and all three candidate stages; exclude relevant local and ancestor requests, reset/motion rules, font shorthand, whitespace longhands and word-wrap aliases. Explicit declarations equal to defaults must still be distinguished from omission.",
+    "Add per-property contrasting ancestry/request mutations and unknown or incomplete evidence controls; preserve the raw letter-spacing normal and word-spacing 0px serializations.",
+    "Attribute only the captured computed-versus-local-declaration stage mismatch. Do not fill in candidate computed values or certify visibility, pointer hit testing, wrapping, text metrics or descendant rendering.",
+    "Replay exact root cases against the full report and retain separate non-root authoring and core investigations. Keep the original 3534-unresolved baseline distinguishable from any subsequent guarded attributions."
+  ]
+}

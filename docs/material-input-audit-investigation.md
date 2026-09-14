@@ -3,6 +3,27 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Root inherited-property population (read-only investigation)
+
+The [grouped root survey](material-root-inherited-default-survey.json) covers
+all nine inherited properties exposed by the policy correction: font style,
+letter and word spacing, text transformation, whitespace, overflow wrapping,
+word breaking, pointer events and visibility. Two identical runs check all
+**2,311 cases** and their raw tree hashes. Every captured reference frame and
+empty section has the same computed values, while the candidate page and
+section omit them in normal, comparison and interaction declaration stages.
+Neither captured path has relevant applicable requests or inline declarations.
+An independent raw scalar check confirms all **20,799** root/property
+observations across **36 families** without changing their values.
+
+This is a population survey, not a new equivalence rule or candidate computed
+style proof. It supports one grouped extension of the existing guarded root
+observation-stage evidence, with per-property request/ancestry rejection tests.
+Do not infer visibility, hit targets, wrapping, typography or descendant paint
+from local omissions. The stricter collector and scalar joins must still reject
+incomplete ancestry, ambiguous mappings, overrides and unsupported evidence.
+No current classifications or renderer/fixture inputs change in this increment.
+
 ## Inherited-default policy correction (full replay verified)
 
 The shared fallback no longer treats omitted `fontStyle`, `letterSpacing`,
