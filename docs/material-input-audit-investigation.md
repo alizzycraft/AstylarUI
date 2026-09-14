@@ -26,10 +26,14 @@ Both new test files are now included in `parity:harness:check`; the older 606-te
 pass remains historical evidence for its original file set. Combined prior-index,
 guarded proof and browser checks pass **23/23**, no failures/skips/cancellations;
 reported TAP duration **9,240,920.3052 ms** is retained without inferring wall time
-from tool polling. Full replay, the exact 108-group case join and the expanded
-full harness remain pending; no reduction of the last verified **2,570**
-unresolved attributions is claimed yet. No renderer or canonical fixture inputs
-have changed.
+from tool polling. The full replay now exits **0**, with all **108 groups / 6,933
+proofs** matching the index's exact values, classifications, occurrence counts,
+unique reviewed-case counts and complete sorted case-list hashes. The original
+**8,143 style groups / 380,520 occurrences** and classification totals are
+unchanged. There are **131 source findings / 101 source fingerprints**. Strict
+validation rejects the still-incomplete audit solely for **2,462 unresolved
+attributions**, down from 2,570. The expanded full harness is running serially
+after replay completion. No renderer or canonical fixture inputs have changed.
 
 ## Initial style values require inheritance and formatting-context evidence
 
