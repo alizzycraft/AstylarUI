@@ -115,6 +115,26 @@ test('root initial-style collector covers the full captured root survey without 
   const actual = proofs.map(p => `${p.case}/${p.property}`).sort();
   const expected = index.groups.flatMap(g => g.cases.flatMap(c => Object.keys(rootInitialStyleValues).map(p => `${c}/${p}`))).sort();
   assert.deepEqual(actual, expected); assert.equal(new Set(actual).size, actual.length);
+  const durable = JSON.parse(readFileSync('docs/material-root-initial-style-audit.json'));
+  const hash = value => createHash('sha256').update(value).digest('hex');
+  assert.deepEqual(durable.capture, index.capture);
+  assert.equal(hash(readFileSync(durable.caseSource.file, 'utf8').replaceAll('\r\n', '\n')), durable.caseSource.sha256);
+  assert.equal(durable.caseCount, entries.length);
+  assert.equal(durable.propertyObservations, proofs.length);
+  assert.equal(durable.groups.length, durable.groupCount);
+  const indexed = durable.groups.flatMap(g => {
+    const source = index.groups[g.sourceGroupIndex];
+    assert.ok(source); assert.equal(g.family, source.family);
+    assert.equal(g.element, `${g.family}-root`);
+    assert.equal(g.occurrences, source.cases.length);
+    assert.equal(g.reference, rootInitialStyleValues[g.property]);
+    assert.equal(g.candidate, '<omitted>');
+    assert.equal(g.classification, 'parity-harness-defect');
+    return source.cases.map(c => `${c}/${g.property}`);
+  }).sort();
+  assert.deepEqual(indexed, actual, 'The durable index must cover every independently collected observation exactly once');
+  for (const source of durable.sourceFingerprints)
+    assert.equal(hash(readFileSync(source.file, 'utf8').replaceAll('\r\n', '\n')), source.sha256, source.file);
   for (const p of proofs) assert.equal(p.candidatePath[1].comparison[p.property], undefined);
 });
 

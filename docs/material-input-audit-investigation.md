@@ -3,7 +3,40 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
-## Audit blind spot: unconditional normal line-height omission
+## Line-height audit filter correction and complete replay
+
+The unconditional `normal`/omitted-local acceptance is now removed from the
+audit's `equivalentValue` predicate. The desired missing-observation regression
+failed before this edit (**0/1**, exit **1**, **1,001.0703 ms**) and passes after
+it (**1/1**, exit **0**, **898.1629 ms**). The complete focused file passes
+**4/4**, exit **0**, **3,059.0005 ms**, retaining DPR1/2 ancestor sensitivity and
+independently checking all **5,000 observations / 85 indexed element groups**.
+It is registered in the package harness and main report proof/source inventory.
+
+The complete replay exits **0** and preserves all 5,000 observations as **92
+report signatures**. **85 signatures / 4,908 occurrences** remain unresolved;
+the other **seven signatures / 92 occurrences** have existing independently
+reviewed diagnostic-stage mismatch evidence. All 85 raw element populations,
+complete case-list hashes, occurrence totals and report sample memberships are
+checked. Report totals increase to **8,235 groups / 385,520 occurrences**;
+classification totals are **526 authoring / 3,670 equivalent / 312 documented
+limitation / 3,727 harness**, with **131 source findings / 105 fingerprints**.
+Strict validation rejects solely for **2,535 unresolved attributions**, up from
+2,450. Increased counts are retained rather than normalized away.
+
+Prior case-index checks pass (17 matching assertions plus one zero-match file,
+TAP **18/18**, **159,868.5399 ms**). A separate fingerprint check exposed a stale
+root-style index test-file hash, dating from `40945a1` and not refreshed by
+`e0cad9c`. The root index now has an explicit regression covering its linked case
+source, 6,933 observations, 108 groups and seven fingerprints. It failed for the
+stale hash before refresh (**0/1**, **16,317.183 ms**); the complete root-style
+file then passes **5/5**, **15,726.2943 ms**. All **83 source fingerprints / 12
+affected indices** also pass a direct independent hash check. This is
+instrumentation/evidence work only, not a renderer or canonical fixture change.
+The post-correction full harness and final enforced parity remain outstanding.
+The historical section below describes the pre-correction filter.
+
+## Audit blind spot: unconditional normal line-height omission (historical)
 
 The [line-height omission proof](material-line-height-omission-audit.json) identifies
 an unsafe shortcut at `input-equivalence-audit.mjs:1777`: browser computed

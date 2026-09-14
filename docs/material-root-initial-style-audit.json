@@ -10,11 +10,11 @@
   "sourceFingerprints": [
     {
       "file": "tests/material-parity/input-equivalence-audit.mjs",
-      "sha256": "b5ccd0d95f5e7d5dc858dc45ca973f1133264950250ea68fc74eaf3b5dfacb29"
+      "sha256": "e265921079aef065e14474e0716a62fcbcd21e63f89dddc707e0675cbb6f1695"
     },
     {
       "file": "tests/material-parity/input-equivalence-audit.spec.mjs",
-      "sha256": "41c33514f824af20bc08e333bae4aa7ec02acf487423f97b19c2db04bae61d3b"
+      "sha256": "4145ba837dff1540484ab3dde3b76a94dd458af94f1d8439bf8064d13409c10b"
     },
     {
       "file": "tests/material-parity/root-initial-style-evidence.mjs",
@@ -22,7 +22,7 @@
     },
     {
       "file": "tests/material-parity/root-initial-style-evidence.spec.mjs",
-      "sha256": "0fd7b1dc9153ee0281cf7b0509ae61e591df5fff8a851cdcd86d70e9a913f05c"
+      "sha256": "f49e25d75cc5658c248f24c263029420da22adb757e7af18dfb3586d4f29301e"
     },
     {
       "file": "tests/material-parity/root-initial-style-sensitivity.spec.mjs",
@@ -1140,6 +1140,7 @@
     "implementationPlan": "Keep the original omissions. Correct diagnostic observation-stage coverage through core-owned computed/consumer evidence, without adding fixture initial values, assuming start equals left, or implementing a separate showcase inheritance algorithm. Preserve all independent authoring, consumer, geometry and raster findings."
   },
   "verification": {
+    "indexRegression": "The source index retained input-equivalence-audit.spec.mjs hash 41c33514f824af20bc08e333bae4aa7ec02acf487423f97b19c2db04bae61d3b from 40945a1 after e0cad9c changed that test. The existing collector test now independently checks the durable index's linked case-source hash, all 6933 property/case identities, 108 group values/counts, capture identity and seven source fingerprints. The strengthened test failed for the stale hash before refresh: node --test --test-name-pattern='root initial-style collector' tests/material-parity/root-initial-style-evidence.spec.mjs, exit 1, 0/1 pass, 16317.183 ms. After explicit source refresh, the complete five-test file passes: exit 0, 5/5, 15726.2943 ms. No collector, classifier, canonical input or renderer behavior changed.",
     "focusedCommand": "node --test tests/material-parity/root-initial-style-evidence.spec.mjs",
     "focusedResult": "5/5 pass, 14868.3759 ms. Complete 6933-observation collector, positive state cases, adverse ancestry/declaration/provenance cases, scalar guards and forged-report checks.",
     "diagnosticCorrections": [

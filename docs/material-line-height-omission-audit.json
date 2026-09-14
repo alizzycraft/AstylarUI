@@ -2,22 +2,26 @@
   "schemaVersion": 1,
   "findingId": "harness-unconditional-normal-line-height-omission",
   "classification": "parity-harness-defect",
-  "status": "Confirmed scalar-filter blind spot; correction pending. Existing overall acceptance still fails, so this is not a claim that the whole report falsely passes.",
+  "status": "Unconditional scalar filter removed as a narrow instrumentation correction. Desired regression, browser sensitivity, previous case-index checks and full replay pass. All 5000 formerly suppressed observations remain visible. Overall audit acceptance still fails for 2535 unresolved attributions; post-correction full harness and final enforced parity remain pending.",
   "scope": "The filter bypasses authored request and inheritance review before discrepancy classification. Browser sensitivity establishes why normal and omission cannot be globally equated; no Astylar rendering defect is inferred.",
   "sourceFingerprints": [
     {
       "file": "tests/material-parity/line-height-omission-sensitivity.spec.mjs",
-      "sha256": "c9495fe45c0ff23e0bc094fdbf18dacb8f4297325d45d3867f5e69f09db811f0"
+      "sha256": "8f50185a2d328a602d96ae229f6107ce7191be158400c6673bebc6d3c7ff8637"
     },
     {
       "file": "tests/material-parity/input-equivalence-audit.mjs",
-      "sha256": "b5ccd0d95f5e7d5dc858dc45ca973f1133264950250ea68fc74eaf3b5dfacb29"
+      "sha256": "e265921079aef065e14474e0716a62fcbcd21e63f89dddc707e0675cbb6f1695"
     }
   ],
-  "sourceLocation": "tests/material-parity/input-equivalence-audit.mjs:1777",
+  "sourceLocation": "tests/material-parity/input-equivalence-audit.mjs:1774 (equivalentValue)",
   "history": {
     "introducedBy": "5e3ac33a",
     "commitSubject": "test(material): enforce input-equivalence audit",
+    "originalSourceLocation": "tests/material-parity/input-equivalence-audit.mjs:1777",
+    "characterizationCommit": "6b0b970",
+    "characterizationMainSha256": "b5ccd0d95f5e7d5dc858dc45ca973f1133264950250ea68fc74eaf3b5dfacb29",
+    "characterizationTestSha256": "c9495fe45c0ff23e0bc094fdbf18dacb8f4297325d45d3867f5e69f09db811f0",
     "evidence": "git blame assigns the unconditional normal/undefined shortcut to the initial audit commit. Source-history attribution, not a historical runtime bisect."
   },
   "verification": {
@@ -37,8 +41,18 @@
       }
     ],
     "observationsIdenticalAcrossRuns": true,
-    "fullHarness": "Standalone new diagnostic is not part of the currently running expanded harness file set; do not count that run as coverage of this file.",
-    "testMeaning": "The first test characterizes the known suppression and must be inverted when the filter is corrected. Passing this characterization is evidence of the defect, not a requirement to retain it."
+    "fullHarness": "Pre-correction run 622/622 passed, exit 0, 687692.6543 ms, but did not include this standalone file. The corrected file is now registered in package.json; the complete post-correction file set will run serially after committing the verified focused/replay increment. Terminal result remains pending.",
+    "serialHarnessCommand": "node --test --test-concurrency=1 tests/parity/fixture-manifest.spec.mjs tests/parity/visibility-metrics.spec.mjs tests/parity/sharpness-metrics.spec.mjs tests/tts-parity/benchmark-config.spec.mjs tests/tts-parity/demo-workflow.spec.mjs tests/tts-parity/scrolling-metrics.spec.mjs tests/tts-parity/interaction-metrics.spec.mjs tests/material-parity/benchmark-config.spec.mjs tests/material-parity/cursor-metrics.spec.mjs tests/material-parity/focused-raster-metrics.spec.mjs tests/material-parity/text-alignment-metrics.spec.mjs tests/material-parity/shadow-profile-metrics.spec.mjs tests/material-parity/input-tree-evidence.spec.mjs tests/material-parity/field-host-weight-tracking-evidence.spec.mjs tests/material-parity/field-host-token-sensitivity.spec.mjs tests/material-parity/line-height-omission-sensitivity.spec.mjs tests/material-parity/root-initial-style-evidence.spec.mjs tests/material-parity/root-initial-style-sensitivity.spec.mjs tests/material-parity/input-equivalence-audit.spec.mjs tests/material-parity/input-audit-report-codec.spec.mjs tests/material-parity/normal-line-box-report.spec.mjs tests/material-parity/supplemental-capture-evidence.spec.mjs tests/material-parity/button-pointer-focus-evidence.spec.mjs",
+    "testMeaning": "The two original runs above characterize the historical defect. The first test is now inverted to require the observation and unresolved attribution; it fails before the filter correction and passes afterwards. The survey also independently checks the complete durable exposure index.",
+    "redRegression": "node --test --test-name-pattern='line-height normal omission remains' tests/material-parity/line-height-omission-sensitivity.spec.mjs: exit 1, 0/1 pass, 1001.0703 ms, expected missing-observation assertion before correction.",
+    "greenRegression": "Same command after removing the unconditional predicate: exit 0, 1/1 pass, 898.1629 ms.",
+    "correctedFocused": "node --test tests/material-parity/line-height-omission-sensitivity.spec.mjs: exit 0, 4/4 pass, 3059.0005 ms, no failures/skips/cancellations. Exact DPR1/2 ancestor sensitivity and full 5000-observation / 85-group exposure index pass.",
+    "priorIndexCommand": "node --test --test-concurrency=1 --test-name-pattern='case index|source fingerprints|field host weight/tracking' tests/material-parity/input-equivalence-audit.spec.mjs tests/material-parity/root-initial-style-evidence.spec.mjs tests/material-parity/field-host-weight-tracking-evidence.spec.mjs",
+    "priorIndexResult": "Exit 0, TAP reports 18/18, 159868.5399 ms: 17 matching assertions and one root-style file with zero tests matched by this filter. Includes existing case indices, source inventory and all field weight/tracking checks. The separate direct hash check exposed a stale root-style index test-file hash. That index now has its own red-to-green regression and explicit source refresh; its complete five-test file passes 5/5, exit 0, 15726.2943 ms. A direct check of all 83 source fingerprints across the 12 affected indices also passes. Root collector/classifier behavior is unchanged.",
+    "fullReplayCommand": "node --input-type=module -e \"import assert from 'node:assert/strict'; import { readFileSync } from 'node:fs'; import { createHash } from 'node:crypto'; import { buildMaterialInputAudit, validateMaterialInputAudit } from './tests/material-parity/input-equivalence-audit.mjs'; const index=JSON.parse(readFileSync('docs/material-line-height-omission-audit.json')); const bytes=readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json'); const digest=v=>createHash('sha256').update(v).digest('hex'); const captureHash=digest(bytes); assert.equal(captureHash,'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a'); const raw=JSON.parse(bytes), rawGroups=new Map(); for(const [kind,entries] of [['static',raw.results],['interaction',raw.interactions]]) for(const e of entries) for(const i of e.styleInputs??[]) {  if(i.reference?.lineHeight!=='normal'||i.astylar?.lineHeight!==undefined) continue;  const id=e.family+'/'+i.id;  if(!rawGroups.has(id))rawGroups.set(id,[]);  rawGroups.get(id).push(kind+':'+e.family+'@'+e.profile+'/'+e.viewport.id+(e.state?'/'+e.state:'')); } assert.equal(rawGroups.size,index.groups.length); for(const g of index.groups){const cases=rawGroups.get(g.family+'/'+g.element);assert.equal(cases.length,g.occurrences);assert.equal(new Set(cases).size,cases.length);assert.equal(digest(JSON.stringify([...cases].sort())),g.completeCaseListSha256);} console.error('REPLAY_PHASE build-start',JSON.stringify(process.memoryUsage())); const a=buildMaterialInputAudit(raw,{root:process.cwd(),normalLineBoxPath:'artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json',controlLineBoxPath:'artifacts/material-parity/control-line-box-current-ancestry-audit-v3/latest-report.json',supplementalLineBoxPath:'artifacts/material-parity/supplemental-line-box-current-ancestry-audit/latest-report.json',supplementalRoot:'artifacts/material-parity/supplemental-current-ancestry-audit'}); console.error('REPLAY_PHASE build-complete',JSON.stringify(process.memoryUsage())); const exposed=a.discrepancies.filter(d=>d.property==='lineHeight'&&d.reference==='normal'&&d.astylar===undefined); const groups=index.groups.map(g=>{  const matches=exposed.filter(d=>d.family===g.family&&d.element===g.element);  assert.ok(matches.length>0,g.family+'/'+g.element);  assert.equal(matches.reduce((s,d)=>s+d.occurrences,0),g.occurrences);  const cases=new Set(rawGroups.get(g.family+'/'+g.element));  for(const d of matches) for(const c of d.cases) assert.ok(cases.has(c));  return {...g,attributions:matches.map(d=>({classification:d.classification,attribution:d.attribution,occurrences:d.occurrences,justification:d.justification}))}; }); assert.equal(exposed.reduce((s,d)=>s+d.occurrences,0),5000); assert.equal(a.summary.totalStyleDifferenceOccurrences,380520+5000); assert.equal(a.summary.uniqueStyleDifferences,8143+exposed.length); const unresolved=exposed.filter(d=>d.attribution==='unresolved').length; assert.equal(a.summary.unresolvedAttributions,2450+unresolved); assert.equal(a.summary.inputEquivalent,false); const strict=validateMaterialInputAudit(a); console.error('REPLAY_PHASE validation-complete',JSON.stringify(process.memoryUsage())); assert.deepEqual(strict,[a.summary.unresolvedAttributions+' resolved-style differences still lack root-cause attribution']); console.log(JSON.stringify({captureHash,summary:a.summary,strict,sourceFingerprintCount:a.sourceFingerprints.length,exposedGroups:exposed.length,exposedOccurrences:5000,newUnresolvedGroups:unresolved,groups}));\"",
+    "fullReplay": "Exit 0. Independent raw population and complete sorted case-list hashes match all 85 indexed elements. Every element's summed report occurrences and sampled case IDs match the raw capture; all 5000 observations survive as 92 report signatures. Of these, 85 signatures / 4908 occurrences remain unresolved; seven signatures / 92 occurrences have existing reviewed-stage-mismatch evidence. No authored value or candidate computed value is synthesized. Total report: 8235 groups / 385520 occurrences, 526 authoring / 3670 equivalent / 312 documented limitation / 3727 harness, 131 source findings / 105 source fingerprints. Strict validation's sole rejection is 2535 unresolved attributions, increased from 2450. The replay ran before the subsequent root-style index test strengthening, which does not change audit classification logic.",
+    "reviewedStageGroups": [{"family":"badge","element":"badge-label","attribution":"reviewed-stage-mismatch","occurrences":12},{"family":"card","element":"card-copy","attribution":"reviewed-stage-mismatch","occurrences":12},{"family":"divider","element":"divider-above","attribution":"reviewed-stage-mismatch","occurrences":16},{"family":"divider","element":"divider-below","attribution":"reviewed-stage-mismatch","occurrences":16},{"family":"stepper","element":"step-details-text","attribution":"reviewed-stage-mismatch","occurrences":12},{"family":"stepper","element":"step-review-text","attribution":"reviewed-stage-mismatch","occurrences":12},{"family":"stepper","element":"stepper-content","attribution":"reviewed-stage-mismatch","occurrences":12}],
+    "remainingExposure": "All 85 indexed element groups retain unresolved cases. Their ancestry, authored requests and stage provenance still require review. The seven additional signatures above are not a declaration of renderer or raster equivalence."
   },
   "browserObservations": [
     {
@@ -823,14 +837,14 @@
     }
   ],
   "implementationPlan": [
-    "After the current harness terminates, remove the unconditional line-height normal/undefined acceptance as a separately verified diagnostic correction. Do not change renderer code or canonical inputs.",
-    "Invert the characterization assertion so the missing-request observation stays visible, with ancestry-sensitive browser controls retained. Do not replace the shortcut with another global normal/initial alias.",
+    "Completed narrow diagnostic edit: remove unconditional line-height normal/undefined acceptance without changing renderer code or canonical inputs. Complete integrated verification remains required.",
+    "Completed red-to-green regression: missing-request observation remains visible, with ancestry-sensitive browser controls and exact raw exposure index retained. No replacement normal/initial alias is added.",
     "Replay the complete frozen capture and preserve newly exposed observations. Classify exact authored requests versus local/computed stage mismatches using full ancestor paths, defaults and applicable declaration evidence.",
     "Keep existing retained/control natural-line-box and font-metrics findings: a scalar input correction neither erases them nor proves candidate pixels.",
     "Reverify source/case indices, complete harness and final enforced parity. Record increased discrepancy/unresolved counts honestly rather than tuning them back to the old totals."
   ],
   "limitations": [
-    "No production or canonical fixture was edited; the shortcut still exists at this finding's commit.",
+    "No production or canonical fixture was edited. The historical shortcut is removed only from the audit's equivalence predicate.",
     "No missing-caret or general flex-initial normalization correction is bundled into this focused finding.",
     "The 2450 unresolved count excludes observations suppressed by this shortcut and is not proof of audit completeness."
   ]

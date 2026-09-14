@@ -5,9 +5,9 @@ import test from 'node:test';
 import { chromium } from 'playwright-core';
 import { buildMaterialInputAudit } from './input-equivalence-audit.mjs';
 
-// Characterization of an audit blind spot, NOT an equivalence waiver. This
-// intentionally records today's unsafe filter before a separately tested fix.
-test('line-height normal omission is currently suppressed even with an explicit reference request', () => {
+// Preserve this observation until exact authored/ancestry evidence classifies
+// it. A missing local declaration is not a computed candidate normal value.
+test('line-height normal omission remains visible for explicit reference requests', () => {
   const input = { id: 'diagnostic', reference: { lineHeight: 'normal', fontSize: '16px' }, astylar: { fontSize: '16px' },
     astylarNormalResolvedStyle: { fontSize: '16px' }, astylarInteractionResolvedStyle: { fontSize: '16px' },
     astylarResolvedStyleEvidenceVersion: 2,
@@ -17,8 +17,11 @@ test('line-height normal omission is currently suppressed even with an explicit 
     summary: { meetsAcceptance: false }, interactionSummary: { meetsAcceptance: false },
     results: [{ family: 'core', profile: 'light', viewport: { id: 'desktop' }, styleInputs: [input] }], interactions: [] };
   const before = JSON.stringify(raw), report = buildMaterialInputAudit(raw);
-  assert.equal(report.discrepancies.some(d => d.element === 'diagnostic' && d.property === 'lineHeight'), false,
-    'Known audit defect: equivalentValue drops this observation before authored-request/ancestry review');
+  const difference = report.discrepancies.find(d => d.element === 'diagnostic' && d.property === 'lineHeight');
+  assert.ok(difference, 'Do not suppress normal/omitted before authored-request/ancestry review');
+  assert.equal(difference.reference, 'normal');
+  assert.equal(difference.astylar, undefined);
+  assert.equal(difference.attribution, 'unresolved', 'This synthetic scalar alone cannot establish a root cause');
   assert.equal(report.summary.inputEquivalent, false, 'This incomplete synthetic report is not acceptance evidence');
   assert.equal(JSON.stringify(raw), before);
 });
@@ -73,7 +76,8 @@ test('line-height omission survey retains the full raw population affected by th
     return { family: g.family, element: g.element, occurrences: g.cases.length, referenceDirectRequests: g.referenceDirectRequests,
       candidateDirectRequests: g.candidateDirectRequests, completeCaseListSha256: createHash('sha256').update(JSON.stringify(g.cases.sort())).digest('hex') };
   });
-  assert.ok(population.length > 0);
+  const index = JSON.parse(readFileSync('docs/material-line-height-omission-audit.json'));
+  assert.deepEqual(population, index.groups, 'Every exposed raw element/case population remains indexed');
   t.diagnostic(JSON.stringify({ scope: 'Unconditional-filter exposure population, not confirmed authoring/core defects. Ancestors, controls and separate typography evidence still require review.',
     capture: { file, sha256 }, groups: population, occurrences: population.reduce((n, g) => n + g.occurrences, 0) }));
 });

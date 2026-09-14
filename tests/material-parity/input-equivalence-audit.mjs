@@ -1774,7 +1774,6 @@ function normalizeColor(value) {
 function equivalentValue(property, reference, astylar, referenceStyle, astylarStyle) {
   if (reference === astylar) return true;
   if (property === 'caretColor' && astylar === undefined && reference === astylarStyle.color) return true;
-  if (property === 'lineHeight' && reference === 'normal' && astylar === undefined) return true;
   const bothFlex = [referenceStyle.display, astylarStyle.display].every((display) => ['flex', 'inline-flex'].includes(display));
   if (bothFlex && reference === 'normal' && (
     (['alignItems', 'alignContent'].includes(property) && astylar === 'stretch') ||
@@ -8033,6 +8032,7 @@ function sourceFingerprints(root) {
     'tests/material-parity/field-host-weight-tracking-evidence.mjs',
     'tests/material-parity/field-host-weight-tracking-evidence.spec.mjs',
     'tests/material-parity/field-host-token-sensitivity.spec.mjs',
+    'tests/material-parity/line-height-omission-sensitivity.spec.mjs',
     'tests/material-parity/root-height-input-evidence.mjs',
     'tests/material-parity/root-color-input-evidence.mjs',
     'tests/material-parity/appearance-input-evidence.mjs',
@@ -8063,6 +8063,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/line-height-omission-sensitivity.spec.mjs', /test\('line-height normal omission remains/,
+      'normal line-height omission is not unconditional equivalence', 'The audit retains normal versus omitted-local observations for authored-request and ancestry review. DPR1/2 browser controls distinguish an explicit normal request from inheritance after ancestor changes. The pinned raw exposure index is checked independently; no candidate computed value, renderer defect or raster equivalence is inferred.'),
     proof(root, 'tests/material-parity/field-host-weight-tracking-evidence.spec.mjs', /test\('field host weight\/tracking independently/,
       'field host weight and tracking token ownership', 'Complete captured host/section/page paths, exact active Material token requests, candidate omissions and all diagnostic stages are independently checked. All 577 cases and 1154 raw scalar joins are preserved; conflicting inputs and expanded computed, theme-origin, descendant or raster claims are rejected.'),
     proof(root, 'tests/material-parity/field-host-token-sensitivity.spec.mjs', /test\(`field host weight\/tracking token/,
