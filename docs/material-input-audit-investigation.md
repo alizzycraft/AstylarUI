@@ -3,6 +3,94 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Chip host typography: label tokens moved to a different owner
+
+The new [case-by-case evidence index](material-chip-host-typography-audit.json)
+records **76 cases, 152 chip hosts and 304 property proofs**. These are all
+captured chip cases: 12 static and 64 interaction boundaries across light,
+dark, contrast and custom profiles. Interaction coverage includes focus,
+hover, held, activate, activate-leave, activate-alternate, disabled and selected.
+This does not establish coverage of every possible chip interaction.
+
+| Input owner | HTML reference | AstylarUI |
+| --- | --- | --- |
+| Chip host font size, light/dark | Inherited 16px | Explicit 14px |
+| Chip host font size, contrast | Inherited 14.4px | Explicit 14px |
+| Chip host font size, custom | Inherited 18.4px | Explicit 14px |
+| Chip host line height | Inherited `normal` | Explicit 20px |
+| Nested label size/line height | Component tokens computing 14px/20px | Own declarations omitted; retained text is 14px/20px |
+
+The first demonstrated divergence is **application authoring**, before core
+layout or projection. The reference keeps inherited frame typography through
+the section, chip list/set, chip host, cell and action button. Only the nested
+`.mdc-evolution-chip__text-label` applies the Material size/line-height tokens.
+The candidate authors those values on `.chip` instead
+(`astylar.component.ts:690`), while `.chip-label` only specifies vertical
+alignment (`:696`; text construction at `:844–847`). The values reach retained
+label text unchanged. Matching these two label values does not prove matching
+font family, weight, tracking, geometry, generated boxes or final raster.
+
+History confirms `c47d589` introduced host `fontSize: '14px'` and `88d1090`
+introduced host `lineHeight: '20px'`. Separately, `3d0d5ce` added a relative
+`top: '-2px'` label offset and `00de46c` removed it. This ownership finding does
+not establish that either font declaration was intended to conceal a specific
+core bug, nor does it demonstrate the cause of the reported centering defect.
+The existing fixed-width, generated-outline and omitted-label-token findings
+remain separate obligations.
+
+The collector requires exact, unique text-owner paths; the inherited reference
+chain and active token declarations; complete core style-inspection revision
+and rule evidence; normal/comparison/effective candidate stages; omitted label
+declarations; and independently retained label values. Known unrelated terminal
+selectors are excluded using the existing conservative typography helper;
+unknown or competing rules prevent attribution. Inactive non-typographic rules
+are retained without being mistaken for competing font declarations. The
+validator reconstructs every proof from captured inventory and checks every
+classified occurrence, not just the twelve displayed case samples.
+
+Recommended implementation: restore host/action inheritance **and** nested
+label tokens together, with original generated-box ownership. Merely raising
+the replacement host size would also enlarge its inheriting label and create
+another inaccurate comparison. Then use equal-input core reproductions for any
+remaining intrinsic sizing, centering or paint discrepancy. No renderer,
+plugin, reference or canonical showcase styles were changed in this increment.
+
+Verification for attribution commit `95e7694`:
+
+- `node --test --test-name-pattern="chip host typography|records source fingerprints" tests/material-parity/input-equivalence-audit.spec.mjs`:
+  **5/5 pass**, zero failures/skips/cancellations, 24.4532307s. The first
+  development run passed the fingerprint test but failed the four new tests
+  because synthetic frame/section nodes omitted required `pseudoElements`
+  arrays. The test data was corrected; production capture/schema was not relaxed.
+- Exact reconstruction of `material-chip-host-typography-audit.json` from
+  `buildMaterialInputAudit` and comparison with the checked-in JSON: **pass**.
+  All 152 referenced tree hashes and four collector/source fingerprints verify.
+  The machine index carries the source report hash, paths, revisions, mapped
+  owners and all normal/comparison/effective/reference/retained values.
+- Full consolidated `buildMaterialInputAudit` followed by
+  `validateMaterialInputAudit`, using the frozen main report plus the existing
+  normal/control-V3/supplemental line-box reports and current supplemental root:
+  **8,143 unique style differences / 380,520 occurrences**, unchanged totals;
+  **128/128 source findings detected**, 88 source fingerprints. The only strict
+  validation message is `3109 resolved-style differences still lack root-cause attribution`
+  (previously 3117). No evidence or discrepancy was removed to obtain this result.
+- Checkpoint harness verification: **10/10 files unchanged**.
+- `npm run parity:harness:check`: **554/554 pass**, zero failures,
+  skips or cancellations, exit 0, **458.4678999s**. This is harness/audit
+  regression verification, not the final enforced rendering matrix.
+- `git diff --cached --check`: **pass** before the attribution commit.
+
+Exact consolidated replay command (Node exits normally after printing the
+strict audit's remaining errors; an exit of zero here is not audit acceptance):
+
+```powershell
+node --input-type=module -e "import{readFileSync}from'node:fs';import{buildMaterialInputAudit,validateMaterialInputAudit}from'./tests/material-parity/input-equivalence-audit.mjs';const p=JSON.parse(readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json'));const a=buildMaterialInputAudit(p,{root:process.cwd(),normalLineBoxPath:'artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json',controlLineBoxPath:'artifacts/material-parity/control-line-box-current-ancestry-audit-v3/latest-report.json',supplementalLineBoxPath:'artifacts/material-parity/supplemental-line-box-current-ancestry-audit/latest-report.json',supplementalRoot:'artifacts/material-parity/supplemental-current-ancestry-audit'});console.log('SUMMARY',JSON.stringify(a.summary));console.log('STRICT',validateMaterialInputAudit(a));"
+```
+
+The audit remains incomplete. Final unfiltered enforced output parity and
+the complete input-equivalence deliverables remain pending; this increment
+does not establish either acceptance condition.
+
 ## Paginator navigation integration: full boundary inventory and explicit visibility
 
 The consolidated audit now includes all **104** paginator navigation boundaries

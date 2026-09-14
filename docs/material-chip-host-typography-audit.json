@@ -1,0 +1,6422 @@
+{
+  "schemaVersion": 1,
+  "classification": "application-plugin-authoring-defect",
+  "attribution": "reviewed-chip-label-typography-promoted-to-host",
+  "inputEquivalent": false,
+  "finalRasterVerified": false,
+  "sourceReport": {
+    "file": "artifacts/material-parity/current-ancestry-audit/latest-report.json",
+    "sha256": "b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a"
+  },
+  "collectorFingerprints": [
+    {
+      "file": "examples/material-showcase/src/app/astylar.component.ts",
+      "sha256": "b7957cd9e651efdf85bcbb70d7b9dd4fd8fbddb18c1b616ab6c9d54d3937ff90"
+    },
+    {
+      "file": "tests/material-parity/input-equivalence-audit.mjs",
+      "sha256": "d59906150668a8a88d2a865fb8b43290121fdf476157d47419f09b13e3901a5d"
+    },
+    {
+      "file": "tests/material-parity/input-equivalence-policy.mjs",
+      "sha256": "a5e0e54b4caa454fcad44ade9bead45af00f6c45298fd0c2ced26e73e622abf5"
+    },
+    {
+      "file": "tests/material-parity/chip-host-typography-evidence.mjs",
+      "sha256": "50d28e5d199de05d51815be060ebf4384dde79a20af86f0137f5c33eb10c4bee"
+    }
+  ],
+  "summary": {
+    "cases": 76,
+    "hosts": 152,
+    "propertyProofs": 304,
+    "classifiedGroups": 8
+  },
+  "scope": "Captured Material chip host font-size and line-height ownership only. Full rule, stage and text-owner evidence is reconstructed by buildMaterialInputAudit from these unchanged hash-bound input trees. Matching retained label values are not a glyph-size, layout, interaction or raster equivalence claim. No core defect is established by this unequal authoring.",
+  "cases": [
+    {
+      "case": "static:chips@light/desktop",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/chips/light/desktop/reference-input-tree.json",
+          "sha256": "5fe2140889700c721ab75c9c647e1bdac171fb4211bf07faca037a6735ee159d"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/chips/light/desktop/astylar-input-tree.json",
+          "sha256": "74cab096bf4f676dabd85b749520946806517633a286770015244120c2402e78"
+        }
+      },
+      "revision": 3,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/1"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "static:chips@light/tablet",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/chips/light/tablet/reference-input-tree.json",
+          "sha256": "76fe2ef5cc32a0d74a91457184aede45ae135aeec5f91a182c0c47c2b1003271"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/chips/light/tablet/astylar-input-tree.json",
+          "sha256": "74cab096bf4f676dabd85b749520946806517633a286770015244120c2402e78"
+        }
+      },
+      "revision": 3,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/1"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "static:chips@light/mobile",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/chips/light/mobile/reference-input-tree.json",
+          "sha256": "be3e53571ea76a87584e9dbd31fe69eeab20613a0fcbc0aed666b85a5f441cf3"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/chips/light/mobile/astylar-input-tree.json",
+          "sha256": "74cab096bf4f676dabd85b749520946806517633a286770015244120c2402e78"
+        }
+      },
+      "revision": 3,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/1"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "static:chips@dark/desktop",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/chips/dark/desktop/reference-input-tree.json",
+          "sha256": "4c36bd6ff817e1548342ff4b202aa44dfe7a6ea9eec2ec65126d16736058444f"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/chips/dark/desktop/astylar-input-tree.json",
+          "sha256": "ce08fd9659f641e6ada2aa4ff6a9bd9b6824baaba3980fc4d9c0c5e840c97198"
+        }
+      },
+      "revision": 3,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/1"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "static:chips@dark/tablet",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/chips/dark/tablet/reference-input-tree.json",
+          "sha256": "3dc6ee80d4941bc585faf8f464abc899dbd4c0bd4701290f9bfee2296c292562"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/chips/dark/tablet/astylar-input-tree.json",
+          "sha256": "ce08fd9659f641e6ada2aa4ff6a9bd9b6824baaba3980fc4d9c0c5e840c97198"
+        }
+      },
+      "revision": 3,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/1"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "static:chips@dark/mobile",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/chips/dark/mobile/reference-input-tree.json",
+          "sha256": "050fc187a6487d98f3d980cb74bbba71c8b2242a51e71928ab98ebc79e0779ad"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/chips/dark/mobile/astylar-input-tree.json",
+          "sha256": "ce08fd9659f641e6ada2aa4ff6a9bd9b6824baaba3980fc4d9c0c5e840c97198"
+        }
+      },
+      "revision": 3,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/1"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "static:chips@contrast/desktop",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/chips/contrast/desktop/reference-input-tree.json",
+          "sha256": "38e5e5b5209ee57fe6c39110cf821468891c710da86091cd8453a00bee91bc81"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/chips/contrast/desktop/astylar-input-tree.json",
+          "sha256": "89577518f41a734ecf8089ac274014d759cf2ca553557e99ce0128d84776b608"
+        }
+      },
+      "revision": 3,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/1"
+          ],
+          "fontSize": {
+            "reference": "14.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "14.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "static:chips@contrast/tablet",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/chips/contrast/tablet/reference-input-tree.json",
+          "sha256": "8f61f54294e43f5f9b5c3da0bf62d2c4c9d7d6462dca682ee3888e2d2e0adb63"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/chips/contrast/tablet/astylar-input-tree.json",
+          "sha256": "89577518f41a734ecf8089ac274014d759cf2ca553557e99ce0128d84776b608"
+        }
+      },
+      "revision": 3,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/1"
+          ],
+          "fontSize": {
+            "reference": "14.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "14.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "static:chips@contrast/mobile",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/chips/contrast/mobile/reference-input-tree.json",
+          "sha256": "680a8da1da9af15d7e6e1ba0c3541475cb05f3304c5faa4d7ae258f5c942b821"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/chips/contrast/mobile/astylar-input-tree.json",
+          "sha256": "8a1c5f7b36e5b6ecc4717f88679a504a398f8736dba1f072ac591ccd407a65e5"
+        }
+      },
+      "revision": 3,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/1"
+          ],
+          "fontSize": {
+            "reference": "14.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "14.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "static:chips@custom/desktop",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/chips/custom/desktop/reference-input-tree.json",
+          "sha256": "598b92092c6ed1ea251df443cafcb3595ec9bb890dda834257b46f5f83840df6"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/chips/custom/desktop/astylar-input-tree.json",
+          "sha256": "3f5b9cb72bf86e281ee9ae4dc48c0d57edafb66c4a26f949e448a20ef3968774"
+        }
+      },
+      "revision": 3,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/1"
+          ],
+          "fontSize": {
+            "reference": "18.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "18.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "static:chips@custom/tablet",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/chips/custom/tablet/reference-input-tree.json",
+          "sha256": "f34b1869abb926842a6c0c02687b8afaa0529f38104bb1802cb4b038cf0e96fe"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/chips/custom/tablet/astylar-input-tree.json",
+          "sha256": "3f5b9cb72bf86e281ee9ae4dc48c0d57edafb66c4a26f949e448a20ef3968774"
+        }
+      },
+      "revision": 3,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/1"
+          ],
+          "fontSize": {
+            "reference": "18.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "18.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "static:chips@custom/mobile",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/chips/custom/mobile/reference-input-tree.json",
+          "sha256": "c9e9fe495471177e1e579b8b6f194150b5a4973d66b62009144b351542b95994"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/chips/custom/mobile/astylar-input-tree.json",
+          "sha256": "45bf5782617bbdccfb3cc03a44d6cc17f1a8e605e256097003bf660576f311ad"
+        }
+      },
+      "revision": 3,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/1"
+          ],
+          "fontSize": {
+            "reference": "18.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "18.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interaction:chips@light/desktop-dpr1/focus",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/light/desktop-dpr1/focus/reference-input-tree.json",
+          "sha256": "4b78b8f3f512a6d6797ce78124ef984a2b995993dff8c6152d21ddf63117825d"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/light/desktop-dpr1/focus/astylar-input-tree.json",
+          "sha256": "74cab096bf4f676dabd85b749520946806517633a286770015244120c2402e78"
+        }
+      },
+      "revision": 3,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/1"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interaction:chips@light/desktop-dpr1/hover",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/light/desktop-dpr1/hover/reference-input-tree.json",
+          "sha256": "03d56ada59907064405277b29fcef45cfe543933c3f4697472337bc9b419ddc8"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/light/desktop-dpr1/hover/astylar-input-tree.json",
+          "sha256": "a4667a4b3785b11d8444401f6677e74ca274063961201b265f2b71fc4172d4c2"
+        }
+      },
+      "revision": 3,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/1"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interaction:chips@light/desktop-dpr1/held",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/light/desktop-dpr1/held/reference-input-tree.json",
+          "sha256": "caae61daecfe20d1e22ad268affd11a8b7bd57baa0a0739f494003e59b5efb40"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/light/desktop-dpr1/held/astylar-input-tree.json",
+          "sha256": "9126bab0d94c84514ecc45f89e0e96b83b195e519f0bcbb7a67175aaf8009f2b"
+        }
+      },
+      "revision": 3,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/1"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interaction:chips@light/desktop-dpr1/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/light/desktop-dpr1/activate/reference-input-tree.json",
+          "sha256": "b87b30df3e99f3180adad647beedefc732eb71d08023700a480b842ef020f441"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/light/desktop-dpr1/activate/astylar-input-tree.json",
+          "sha256": "1f7bca7dbe5f3f5798b708884722f54a6cebdab7cbe724052d3bfa512a001cdb"
+        }
+      },
+      "revision": 4,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/0"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interaction:chips@light/desktop-dpr1/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/light/desktop-dpr1/activate-leave/reference-input-tree.json",
+          "sha256": "06017d9c77f1ba904dc613f0a088ff268ebbdaf4cdf205faf45dc6806b2f3ae0"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/light/desktop-dpr1/activate-leave/astylar-input-tree.json",
+          "sha256": "83e6333dc281b68f5631673f2c6bc05e90ce1ffa66f8e77f4d4534bed808c635"
+        }
+      },
+      "revision": 4,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/0"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interaction:chips@light/desktop-dpr1/activate-alternate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/light/desktop-dpr1/activate-alternate/reference-input-tree.json",
+          "sha256": "dff2162665b031796b2c50ea9eff6ef54e738470a48ff3e2a325d521466af23d"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/light/desktop-dpr1/activate-alternate/astylar-input-tree.json",
+          "sha256": "e2d364e9eed76f24751413d61a438b146e49c8c307fa8da1f5858abf862915b0"
+        }
+      },
+      "revision": 5,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/0"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/0"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interaction:chips@light/desktop-dpr1/disabled",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/light/desktop-dpr1/disabled/reference-input-tree.json",
+          "sha256": "5fe2140889700c721ab75c9c647e1bdac171fb4211bf07faca037a6735ee159d"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/light/desktop-dpr1/disabled/astylar-input-tree.json",
+          "sha256": "acbb4eb691b733a899b4e861d3aa5dfd59d655b3e4076a95dd459ab72f995c01"
+        }
+      },
+      "revision": 3,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/1"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interaction:chips@light/desktop-dpr1/selected",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/light/desktop-dpr1/selected/reference-input-tree.json",
+          "sha256": "5fe2140889700c721ab75c9c647e1bdac171fb4211bf07faca037a6735ee159d"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/light/desktop-dpr1/selected/astylar-input-tree.json",
+          "sha256": "74cab096bf4f676dabd85b749520946806517633a286770015244120c2402e78"
+        }
+      },
+      "revision": 3,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/1"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interaction:chips@light/desktop-dpr2/focus",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/light/desktop-dpr2/focus/reference-input-tree.json",
+          "sha256": "4b78b8f3f512a6d6797ce78124ef984a2b995993dff8c6152d21ddf63117825d"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/light/desktop-dpr2/focus/astylar-input-tree.json",
+          "sha256": "74cab096bf4f676dabd85b749520946806517633a286770015244120c2402e78"
+        }
+      },
+      "revision": 3,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/1"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interaction:chips@light/desktop-dpr2/hover",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/light/desktop-dpr2/hover/reference-input-tree.json",
+          "sha256": "03d56ada59907064405277b29fcef45cfe543933c3f4697472337bc9b419ddc8"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/light/desktop-dpr2/hover/astylar-input-tree.json",
+          "sha256": "a4667a4b3785b11d8444401f6677e74ca274063961201b265f2b71fc4172d4c2"
+        }
+      },
+      "revision": 3,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/1"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interaction:chips@light/desktop-dpr2/held",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/light/desktop-dpr2/held/reference-input-tree.json",
+          "sha256": "caae61daecfe20d1e22ad268affd11a8b7bd57baa0a0739f494003e59b5efb40"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/light/desktop-dpr2/held/astylar-input-tree.json",
+          "sha256": "9126bab0d94c84514ecc45f89e0e96b83b195e519f0bcbb7a67175aaf8009f2b"
+        }
+      },
+      "revision": 3,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/1"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interaction:chips@light/desktop-dpr2/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/light/desktop-dpr2/activate/reference-input-tree.json",
+          "sha256": "b87b30df3e99f3180adad647beedefc732eb71d08023700a480b842ef020f441"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/light/desktop-dpr2/activate/astylar-input-tree.json",
+          "sha256": "1f7bca7dbe5f3f5798b708884722f54a6cebdab7cbe724052d3bfa512a001cdb"
+        }
+      },
+      "revision": 4,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/0"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interaction:chips@light/desktop-dpr2/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/light/desktop-dpr2/activate-leave/reference-input-tree.json",
+          "sha256": "06017d9c77f1ba904dc613f0a088ff268ebbdaf4cdf205faf45dc6806b2f3ae0"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/light/desktop-dpr2/activate-leave/astylar-input-tree.json",
+          "sha256": "83e6333dc281b68f5631673f2c6bc05e90ce1ffa66f8e77f4d4534bed808c635"
+        }
+      },
+      "revision": 4,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/0"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interaction:chips@light/desktop-dpr2/activate-alternate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/light/desktop-dpr2/activate-alternate/reference-input-tree.json",
+          "sha256": "dff2162665b031796b2c50ea9eff6ef54e738470a48ff3e2a325d521466af23d"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/light/desktop-dpr2/activate-alternate/astylar-input-tree.json",
+          "sha256": "e2d364e9eed76f24751413d61a438b146e49c8c307fa8da1f5858abf862915b0"
+        }
+      },
+      "revision": 5,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/0"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/0"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interaction:chips@light/desktop-dpr2/disabled",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/light/desktop-dpr2/disabled/reference-input-tree.json",
+          "sha256": "5fe2140889700c721ab75c9c647e1bdac171fb4211bf07faca037a6735ee159d"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/light/desktop-dpr2/disabled/astylar-input-tree.json",
+          "sha256": "acbb4eb691b733a899b4e861d3aa5dfd59d655b3e4076a95dd459ab72f995c01"
+        }
+      },
+      "revision": 3,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/1"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interaction:chips@light/desktop-dpr2/selected",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/light/desktop-dpr2/selected/reference-input-tree.json",
+          "sha256": "5fe2140889700c721ab75c9c647e1bdac171fb4211bf07faca037a6735ee159d"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/light/desktop-dpr2/selected/astylar-input-tree.json",
+          "sha256": "74cab096bf4f676dabd85b749520946806517633a286770015244120c2402e78"
+        }
+      },
+      "revision": 3,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/1"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interaction:chips@dark/desktop-dpr1/focus",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/dark/desktop-dpr1/focus/reference-input-tree.json",
+          "sha256": "9f716074c4e1ec8f49a894ee7e775efc7c052f425aab47255e61c6ee6bf80bc9"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/dark/desktop-dpr1/focus/astylar-input-tree.json",
+          "sha256": "ce08fd9659f641e6ada2aa4ff6a9bd9b6824baaba3980fc4d9c0c5e840c97198"
+        }
+      },
+      "revision": 3,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/1"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interaction:chips@dark/desktop-dpr1/hover",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/dark/desktop-dpr1/hover/reference-input-tree.json",
+          "sha256": "2e9d1fb3085192d84976304385d317e5f26a2be0b04601ccb110f95856d9ab17"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/dark/desktop-dpr1/hover/astylar-input-tree.json",
+          "sha256": "ab2b90d82dc9e4ab2208d44b49c280eee9de3b22cf6e709c2fec0063ab0141d7"
+        }
+      },
+      "revision": 3,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/1"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interaction:chips@dark/desktop-dpr1/held",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/dark/desktop-dpr1/held/reference-input-tree.json",
+          "sha256": "91cb7f7d7f3c2a8cb6198b0c13c329420d06d4dc8ceeda437a6a4068403fd1cd"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/dark/desktop-dpr1/held/astylar-input-tree.json",
+          "sha256": "9c4244b94f6eacda96a070703385e06f46d6670a5c88cadd155765dec86d6d25"
+        }
+      },
+      "revision": 3,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/1"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interaction:chips@dark/desktop-dpr1/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/dark/desktop-dpr1/activate/reference-input-tree.json",
+          "sha256": "a935c7a6b3df4e8d307827d6b1fd7b03d2d244db30663b26d5b2a12e69d533be"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/dark/desktop-dpr1/activate/astylar-input-tree.json",
+          "sha256": "a6367e800a1a0fe0ab1b11a57f7af560549cffb985ca789cadbe5665ddf2f707"
+        }
+      },
+      "revision": 4,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/0"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interaction:chips@dark/desktop-dpr1/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/dark/desktop-dpr1/activate-leave/reference-input-tree.json",
+          "sha256": "948f39e00417534c7fc1fa5d8ff183fe70f597f1c85bc17f28ff28da3c689076"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/dark/desktop-dpr1/activate-leave/astylar-input-tree.json",
+          "sha256": "e4bce15a081d06007d2ade028f6798dd8555d4a005cc160b89e58237c03988db"
+        }
+      },
+      "revision": 4,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/0"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interaction:chips@dark/desktop-dpr1/activate-alternate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/dark/desktop-dpr1/activate-alternate/reference-input-tree.json",
+          "sha256": "b2eb2b25c05d341426e1a8e9f5b8d39251436e5bab716dcce18c1bf84102c873"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/dark/desktop-dpr1/activate-alternate/astylar-input-tree.json",
+          "sha256": "9d2b52e3648bbec97aa9844b40da8e018d7cb0aec14280a8ddd2fe1197ab5e1f"
+        }
+      },
+      "revision": 5,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/0"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/0"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interaction:chips@dark/desktop-dpr1/disabled",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/dark/desktop-dpr1/disabled/reference-input-tree.json",
+          "sha256": "4c36bd6ff817e1548342ff4b202aa44dfe7a6ea9eec2ec65126d16736058444f"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/dark/desktop-dpr1/disabled/astylar-input-tree.json",
+          "sha256": "5fa4af0064564896f479b7ddef4adcbfbc5a9b56905a510a34ed0885532845af"
+        }
+      },
+      "revision": 3,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/1"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interaction:chips@dark/desktop-dpr1/selected",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/dark/desktop-dpr1/selected/reference-input-tree.json",
+          "sha256": "4c36bd6ff817e1548342ff4b202aa44dfe7a6ea9eec2ec65126d16736058444f"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/dark/desktop-dpr1/selected/astylar-input-tree.json",
+          "sha256": "ce08fd9659f641e6ada2aa4ff6a9bd9b6824baaba3980fc4d9c0c5e840c97198"
+        }
+      },
+      "revision": 3,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/1"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interaction:chips@dark/desktop-dpr2/focus",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/dark/desktop-dpr2/focus/reference-input-tree.json",
+          "sha256": "9f716074c4e1ec8f49a894ee7e775efc7c052f425aab47255e61c6ee6bf80bc9"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/dark/desktop-dpr2/focus/astylar-input-tree.json",
+          "sha256": "ce08fd9659f641e6ada2aa4ff6a9bd9b6824baaba3980fc4d9c0c5e840c97198"
+        }
+      },
+      "revision": 3,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/1"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interaction:chips@dark/desktop-dpr2/hover",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/dark/desktop-dpr2/hover/reference-input-tree.json",
+          "sha256": "2e9d1fb3085192d84976304385d317e5f26a2be0b04601ccb110f95856d9ab17"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/dark/desktop-dpr2/hover/astylar-input-tree.json",
+          "sha256": "ab2b90d82dc9e4ab2208d44b49c280eee9de3b22cf6e709c2fec0063ab0141d7"
+        }
+      },
+      "revision": 3,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/1"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interaction:chips@dark/desktop-dpr2/held",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/dark/desktop-dpr2/held/reference-input-tree.json",
+          "sha256": "91cb7f7d7f3c2a8cb6198b0c13c329420d06d4dc8ceeda437a6a4068403fd1cd"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/dark/desktop-dpr2/held/astylar-input-tree.json",
+          "sha256": "9c4244b94f6eacda96a070703385e06f46d6670a5c88cadd155765dec86d6d25"
+        }
+      },
+      "revision": 3,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/1"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interaction:chips@dark/desktop-dpr2/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/dark/desktop-dpr2/activate/reference-input-tree.json",
+          "sha256": "a935c7a6b3df4e8d307827d6b1fd7b03d2d244db30663b26d5b2a12e69d533be"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/dark/desktop-dpr2/activate/astylar-input-tree.json",
+          "sha256": "a6367e800a1a0fe0ab1b11a57f7af560549cffb985ca789cadbe5665ddf2f707"
+        }
+      },
+      "revision": 4,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/0"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interaction:chips@dark/desktop-dpr2/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/dark/desktop-dpr2/activate-leave/reference-input-tree.json",
+          "sha256": "948f39e00417534c7fc1fa5d8ff183fe70f597f1c85bc17f28ff28da3c689076"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/dark/desktop-dpr2/activate-leave/astylar-input-tree.json",
+          "sha256": "e4bce15a081d06007d2ade028f6798dd8555d4a005cc160b89e58237c03988db"
+        }
+      },
+      "revision": 4,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/0"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interaction:chips@dark/desktop-dpr2/activate-alternate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/dark/desktop-dpr2/activate-alternate/reference-input-tree.json",
+          "sha256": "b2eb2b25c05d341426e1a8e9f5b8d39251436e5bab716dcce18c1bf84102c873"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/dark/desktop-dpr2/activate-alternate/astylar-input-tree.json",
+          "sha256": "9d2b52e3648bbec97aa9844b40da8e018d7cb0aec14280a8ddd2fe1197ab5e1f"
+        }
+      },
+      "revision": 5,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/0"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/0"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interaction:chips@dark/desktop-dpr2/disabled",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/dark/desktop-dpr2/disabled/reference-input-tree.json",
+          "sha256": "4c36bd6ff817e1548342ff4b202aa44dfe7a6ea9eec2ec65126d16736058444f"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/dark/desktop-dpr2/disabled/astylar-input-tree.json",
+          "sha256": "5fa4af0064564896f479b7ddef4adcbfbc5a9b56905a510a34ed0885532845af"
+        }
+      },
+      "revision": 3,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/1"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interaction:chips@dark/desktop-dpr2/selected",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/dark/desktop-dpr2/selected/reference-input-tree.json",
+          "sha256": "4c36bd6ff817e1548342ff4b202aa44dfe7a6ea9eec2ec65126d16736058444f"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/dark/desktop-dpr2/selected/astylar-input-tree.json",
+          "sha256": "ce08fd9659f641e6ada2aa4ff6a9bd9b6824baaba3980fc4d9c0c5e840c97198"
+        }
+      },
+      "revision": 3,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/1"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "16px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interaction:chips@contrast/desktop-dpr1/focus",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/contrast/desktop-dpr1/focus/reference-input-tree.json",
+          "sha256": "791fe97305212a0d836c4e2117bf0dac245817c4ec2b4322f68d273d27e9991e"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/contrast/desktop-dpr1/focus/astylar-input-tree.json",
+          "sha256": "89577518f41a734ecf8089ac274014d759cf2ca553557e99ce0128d84776b608"
+        }
+      },
+      "revision": 3,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/1"
+          ],
+          "fontSize": {
+            "reference": "14.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "14.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interaction:chips@contrast/desktop-dpr1/hover",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/contrast/desktop-dpr1/hover/reference-input-tree.json",
+          "sha256": "8aaffbc943ad90e6e4a7d891220d24527c0284e0059f1b1d4e75904c61660d1b"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/contrast/desktop-dpr1/hover/astylar-input-tree.json",
+          "sha256": "663d9400500f429a6eb52a5b6ee2cf8d3bbe0ebad17f31860357ef74fe5fa776"
+        }
+      },
+      "revision": 3,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/1"
+          ],
+          "fontSize": {
+            "reference": "14.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "14.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interaction:chips@contrast/desktop-dpr1/held",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/contrast/desktop-dpr1/held/reference-input-tree.json",
+          "sha256": "d5fe7b01baf99d5b70c934a2b7289a06a34158118dc6a24ab651478f2fbb1e08"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/contrast/desktop-dpr1/held/astylar-input-tree.json",
+          "sha256": "bd67f78f52e11f09f585bf6a18c93d357b3f55dbd4b347d2e5ef9c5dd058d31d"
+        }
+      },
+      "revision": 3,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/1"
+          ],
+          "fontSize": {
+            "reference": "14.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "14.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interaction:chips@contrast/desktop-dpr1/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/contrast/desktop-dpr1/activate/reference-input-tree.json",
+          "sha256": "1cfe5e447fd0c09ea9e8823b0a4b53e03ff020606520555ed463882c3ea688bb"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/contrast/desktop-dpr1/activate/astylar-input-tree.json",
+          "sha256": "ba4c7d6edfcc1c42c8e6d8b032d0caab8421602436e25afef249da8e06f1f85e"
+        }
+      },
+      "revision": 4,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/0"
+          ],
+          "fontSize": {
+            "reference": "14.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "14.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interaction:chips@contrast/desktop-dpr1/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/contrast/desktop-dpr1/activate-leave/reference-input-tree.json",
+          "sha256": "6d2aa4b927fbeeef9633be7032a3b176c69aa70aaba532a1512c9867f3b0f7e4"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/contrast/desktop-dpr1/activate-leave/astylar-input-tree.json",
+          "sha256": "fcd75650c6c9ea5c364caa5a32a3d2da894b7caf5d7f1929596e0a3375f2c329"
+        }
+      },
+      "revision": 4,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/0"
+          ],
+          "fontSize": {
+            "reference": "14.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "14.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interaction:chips@contrast/desktop-dpr1/activate-alternate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/contrast/desktop-dpr1/activate-alternate/reference-input-tree.json",
+          "sha256": "b15496d4b37c0381d7a79dd9fa0101c412a7e708f0e97dee8aaa1a7edeb5d2a7"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/contrast/desktop-dpr1/activate-alternate/astylar-input-tree.json",
+          "sha256": "267849c8ad041e53c052a187cc20ffd1ce34180c2a4342e1f8f26a30630b35c4"
+        }
+      },
+      "revision": 5,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/0"
+          ],
+          "fontSize": {
+            "reference": "14.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/0"
+          ],
+          "fontSize": {
+            "reference": "14.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interaction:chips@contrast/desktop-dpr1/disabled",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/contrast/desktop-dpr1/disabled/reference-input-tree.json",
+          "sha256": "38e5e5b5209ee57fe6c39110cf821468891c710da86091cd8453a00bee91bc81"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/contrast/desktop-dpr1/disabled/astylar-input-tree.json",
+          "sha256": "b8888c5da1aa4f727579d065c1fe671285e8574c4beac076d9ff6960d8f76e0c"
+        }
+      },
+      "revision": 3,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/1"
+          ],
+          "fontSize": {
+            "reference": "14.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "14.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interaction:chips@contrast/desktop-dpr1/selected",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/contrast/desktop-dpr1/selected/reference-input-tree.json",
+          "sha256": "38e5e5b5209ee57fe6c39110cf821468891c710da86091cd8453a00bee91bc81"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/contrast/desktop-dpr1/selected/astylar-input-tree.json",
+          "sha256": "89577518f41a734ecf8089ac274014d759cf2ca553557e99ce0128d84776b608"
+        }
+      },
+      "revision": 3,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/1"
+          ],
+          "fontSize": {
+            "reference": "14.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "14.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interaction:chips@contrast/desktop-dpr2/focus",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/contrast/desktop-dpr2/focus/reference-input-tree.json",
+          "sha256": "791fe97305212a0d836c4e2117bf0dac245817c4ec2b4322f68d273d27e9991e"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/contrast/desktop-dpr2/focus/astylar-input-tree.json",
+          "sha256": "8a1c5f7b36e5b6ecc4717f88679a504a398f8736dba1f072ac591ccd407a65e5"
+        }
+      },
+      "revision": 3,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/1"
+          ],
+          "fontSize": {
+            "reference": "14.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "14.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interaction:chips@contrast/desktop-dpr2/hover",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/contrast/desktop-dpr2/hover/reference-input-tree.json",
+          "sha256": "8aaffbc943ad90e6e4a7d891220d24527c0284e0059f1b1d4e75904c61660d1b"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/contrast/desktop-dpr2/hover/astylar-input-tree.json",
+          "sha256": "be99fb044c63b7e680133076a0b4c36f98a708f77888ce269485f5eea1be3a60"
+        }
+      },
+      "revision": 3,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/1"
+          ],
+          "fontSize": {
+            "reference": "14.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "14.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interaction:chips@contrast/desktop-dpr2/held",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/contrast/desktop-dpr2/held/reference-input-tree.json",
+          "sha256": "d5fe7b01baf99d5b70c934a2b7289a06a34158118dc6a24ab651478f2fbb1e08"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/contrast/desktop-dpr2/held/astylar-input-tree.json",
+          "sha256": "a1a49d1a519f61b1d260b2c4a77f26b875d516821699888561fe99d3e13116d3"
+        }
+      },
+      "revision": 3,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/1"
+          ],
+          "fontSize": {
+            "reference": "14.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "14.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interaction:chips@contrast/desktop-dpr2/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/contrast/desktop-dpr2/activate/reference-input-tree.json",
+          "sha256": "1cfe5e447fd0c09ea9e8823b0a4b53e03ff020606520555ed463882c3ea688bb"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/contrast/desktop-dpr2/activate/astylar-input-tree.json",
+          "sha256": "7c59c9b9ada75825ed325af4d70aa98740050093eb693863adb14be933e9aa2f"
+        }
+      },
+      "revision": 4,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/0"
+          ],
+          "fontSize": {
+            "reference": "14.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "14.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interaction:chips@contrast/desktop-dpr2/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/contrast/desktop-dpr2/activate-leave/reference-input-tree.json",
+          "sha256": "6d2aa4b927fbeeef9633be7032a3b176c69aa70aaba532a1512c9867f3b0f7e4"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/contrast/desktop-dpr2/activate-leave/astylar-input-tree.json",
+          "sha256": "b8469f1ad7e99b9bdb946095b9090a51a63e75a53eded6ed056109e90e0cb7ed"
+        }
+      },
+      "revision": 4,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/0"
+          ],
+          "fontSize": {
+            "reference": "14.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "14.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interaction:chips@contrast/desktop-dpr2/activate-alternate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/contrast/desktop-dpr2/activate-alternate/reference-input-tree.json",
+          "sha256": "b15496d4b37c0381d7a79dd9fa0101c412a7e708f0e97dee8aaa1a7edeb5d2a7"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/contrast/desktop-dpr2/activate-alternate/astylar-input-tree.json",
+          "sha256": "691caa4ce01a70669a66ea1f52d00cfea7b5d6cfd095cbf4930585da920130c1"
+        }
+      },
+      "revision": 5,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/0"
+          ],
+          "fontSize": {
+            "reference": "14.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/0"
+          ],
+          "fontSize": {
+            "reference": "14.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interaction:chips@contrast/desktop-dpr2/disabled",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/contrast/desktop-dpr2/disabled/reference-input-tree.json",
+          "sha256": "38e5e5b5209ee57fe6c39110cf821468891c710da86091cd8453a00bee91bc81"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/contrast/desktop-dpr2/disabled/astylar-input-tree.json",
+          "sha256": "1807f892daf55f40da5bb5dbc1ca2f309b042f3626d34e76a8c74a5cf2434717"
+        }
+      },
+      "revision": 3,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/1"
+          ],
+          "fontSize": {
+            "reference": "14.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "14.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interaction:chips@contrast/desktop-dpr2/selected",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/contrast/desktop-dpr2/selected/reference-input-tree.json",
+          "sha256": "38e5e5b5209ee57fe6c39110cf821468891c710da86091cd8453a00bee91bc81"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/contrast/desktop-dpr2/selected/astylar-input-tree.json",
+          "sha256": "8a1c5f7b36e5b6ecc4717f88679a504a398f8736dba1f072ac591ccd407a65e5"
+        }
+      },
+      "revision": 3,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/1"
+          ],
+          "fontSize": {
+            "reference": "14.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "14.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interaction:chips@custom/desktop-dpr1/focus",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/custom/desktop-dpr1/focus/reference-input-tree.json",
+          "sha256": "9e1c210b207064f8ea1dc7d0ba62593f7722b089f7f6b89e36f0c318866b315e"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/custom/desktop-dpr1/focus/astylar-input-tree.json",
+          "sha256": "3f5b9cb72bf86e281ee9ae4dc48c0d57edafb66c4a26f949e448a20ef3968774"
+        }
+      },
+      "revision": 3,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/1"
+          ],
+          "fontSize": {
+            "reference": "18.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "18.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interaction:chips@custom/desktop-dpr1/hover",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/custom/desktop-dpr1/hover/reference-input-tree.json",
+          "sha256": "98b26b5c6746d0a7b0b56e510118f3f8de4238d04dda6c034b49e4b84c12e01d"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/custom/desktop-dpr1/hover/astylar-input-tree.json",
+          "sha256": "4df684d6a34eeb392a01d76042894aff49ca3f967b7d2b93cc6b39764de677fc"
+        }
+      },
+      "revision": 3,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/1"
+          ],
+          "fontSize": {
+            "reference": "18.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "18.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interaction:chips@custom/desktop-dpr1/held",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/custom/desktop-dpr1/held/reference-input-tree.json",
+          "sha256": "7b4d5da7d142887ce92ff4df5bd214bfe756d4b280c3cbeca9aa130043d0493b"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/custom/desktop-dpr1/held/astylar-input-tree.json",
+          "sha256": "675eba60224ad791bc54407e20a45c1e1ca899aa0c1781caddc2115c2797b671"
+        }
+      },
+      "revision": 4,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/1"
+          ],
+          "fontSize": {
+            "reference": "18.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "18.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interaction:chips@custom/desktop-dpr1/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/custom/desktop-dpr1/activate/reference-input-tree.json",
+          "sha256": "42a1a3a1a48b27f3954bc138071e2a4de9ca9c5f2a5a3519849230f68f702f42"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/custom/desktop-dpr1/activate/astylar-input-tree.json",
+          "sha256": "14d46291cea7cbb41b943932b672349adab491906d726b330cfa58c9b656460e"
+        }
+      },
+      "revision": 4,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/0"
+          ],
+          "fontSize": {
+            "reference": "18.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "18.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interaction:chips@custom/desktop-dpr1/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/custom/desktop-dpr1/activate-leave/reference-input-tree.json",
+          "sha256": "21f3b9e5c38e60aa7d88dcb8240403931a0f5b545c7f3e3267b96099dc56c53b"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/custom/desktop-dpr1/activate-leave/astylar-input-tree.json",
+          "sha256": "43f16d65e96f354ba3b8944234bf3dee86c478fbfb0d1303cb133fe5a3f0ac4e"
+        }
+      },
+      "revision": 4,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/0"
+          ],
+          "fontSize": {
+            "reference": "18.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "18.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interaction:chips@custom/desktop-dpr1/activate-alternate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/custom/desktop-dpr1/activate-alternate/reference-input-tree.json",
+          "sha256": "a0fde16e1d6f619ee4a88115beae8f5b7c8eb78761248a329a11cb33fb27a2c6"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/custom/desktop-dpr1/activate-alternate/astylar-input-tree.json",
+          "sha256": "da90a1f9afc8b31eef97409ac21e03146b7ba820234b01d7cbfb4831b7ad8697"
+        }
+      },
+      "revision": 5,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/0"
+          ],
+          "fontSize": {
+            "reference": "18.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/0"
+          ],
+          "fontSize": {
+            "reference": "18.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interaction:chips@custom/desktop-dpr1/disabled",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/custom/desktop-dpr1/disabled/reference-input-tree.json",
+          "sha256": "598b92092c6ed1ea251df443cafcb3595ec9bb890dda834257b46f5f83840df6"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/custom/desktop-dpr1/disabled/astylar-input-tree.json",
+          "sha256": "9e97c41a993748438e255b804a5720c757dfebf300e368b22ae6cb2ad28c0c67"
+        }
+      },
+      "revision": 3,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/1"
+          ],
+          "fontSize": {
+            "reference": "18.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "18.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interaction:chips@custom/desktop-dpr1/selected",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/custom/desktop-dpr1/selected/reference-input-tree.json",
+          "sha256": "598b92092c6ed1ea251df443cafcb3595ec9bb890dda834257b46f5f83840df6"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/custom/desktop-dpr1/selected/astylar-input-tree.json",
+          "sha256": "3f5b9cb72bf86e281ee9ae4dc48c0d57edafb66c4a26f949e448a20ef3968774"
+        }
+      },
+      "revision": 3,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/1"
+          ],
+          "fontSize": {
+            "reference": "18.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "18.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interaction:chips@custom/desktop-dpr2/focus",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/custom/desktop-dpr2/focus/reference-input-tree.json",
+          "sha256": "9e1c210b207064f8ea1dc7d0ba62593f7722b089f7f6b89e36f0c318866b315e"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/custom/desktop-dpr2/focus/astylar-input-tree.json",
+          "sha256": "addddbb6b05b1ecb61e526bf4e34efbdbebdbe9d6c619d86f014b840f22e43df"
+        }
+      },
+      "revision": 3,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/1"
+          ],
+          "fontSize": {
+            "reference": "18.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "18.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interaction:chips@custom/desktop-dpr2/hover",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/custom/desktop-dpr2/hover/reference-input-tree.json",
+          "sha256": "98b26b5c6746d0a7b0b56e510118f3f8de4238d04dda6c034b49e4b84c12e01d"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/custom/desktop-dpr2/hover/astylar-input-tree.json",
+          "sha256": "b0f4199b01ff585600d33e9c1857b345909467ea76721d72dc48b6a8383e7cf5"
+        }
+      },
+      "revision": 3,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/1"
+          ],
+          "fontSize": {
+            "reference": "18.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "18.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interaction:chips@custom/desktop-dpr2/held",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/custom/desktop-dpr2/held/reference-input-tree.json",
+          "sha256": "7b4d5da7d142887ce92ff4df5bd214bfe756d4b280c3cbeca9aa130043d0493b"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/custom/desktop-dpr2/held/astylar-input-tree.json",
+          "sha256": "f575f476d449d02a7dfa5a9ddc029de9e25fd55671958061ad39471645594027"
+        }
+      },
+      "revision": 3,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/1"
+          ],
+          "fontSize": {
+            "reference": "18.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "18.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interaction:chips@custom/desktop-dpr2/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/custom/desktop-dpr2/activate/reference-input-tree.json",
+          "sha256": "42a1a3a1a48b27f3954bc138071e2a4de9ca9c5f2a5a3519849230f68f702f42"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/custom/desktop-dpr2/activate/astylar-input-tree.json",
+          "sha256": "e6401411c5bf38d64cac81bad47c7698435319682fed22c85f61a74b94619e81"
+        }
+      },
+      "revision": 4,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/0"
+          ],
+          "fontSize": {
+            "reference": "18.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "18.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interaction:chips@custom/desktop-dpr2/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/custom/desktop-dpr2/activate-leave/reference-input-tree.json",
+          "sha256": "21f3b9e5c38e60aa7d88dcb8240403931a0f5b545c7f3e3267b96099dc56c53b"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/custom/desktop-dpr2/activate-leave/astylar-input-tree.json",
+          "sha256": "fbcda90de8da6195fffa326e602fcf7c572bb8c87a72267ae1ad35aecb3529c6"
+        }
+      },
+      "revision": 4,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/0"
+          ],
+          "fontSize": {
+            "reference": "18.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "18.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interaction:chips@custom/desktop-dpr2/activate-alternate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/custom/desktop-dpr2/activate-alternate/reference-input-tree.json",
+          "sha256": "a0fde16e1d6f619ee4a88115beae8f5b7c8eb78761248a329a11cb33fb27a2c6"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/custom/desktop-dpr2/activate-alternate/astylar-input-tree.json",
+          "sha256": "729597d07af329395b2c6844848e9af47220311c702aff76f3314615d0f361dc"
+        }
+      },
+      "revision": 5,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/0"
+          ],
+          "fontSize": {
+            "reference": "18.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/0"
+          ],
+          "fontSize": {
+            "reference": "18.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interaction:chips@custom/desktop-dpr2/disabled",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/custom/desktop-dpr2/disabled/reference-input-tree.json",
+          "sha256": "598b92092c6ed1ea251df443cafcb3595ec9bb890dda834257b46f5f83840df6"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/custom/desktop-dpr2/disabled/astylar-input-tree.json",
+          "sha256": "51b1be4954265fdfbe00d65e76d46e1667fffe2930ad16f169c2b666e442db6e"
+        }
+      },
+      "revision": 3,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/1"
+          ],
+          "fontSize": {
+            "reference": "18.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "18.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interaction:chips@custom/desktop-dpr2/selected",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/custom/desktop-dpr2/selected/reference-input-tree.json",
+          "sha256": "598b92092c6ed1ea251df443cafcb3595ec9bb890dda834257b46f5f83840df6"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/custom/desktop-dpr2/selected/astylar-input-tree.json",
+          "sha256": "addddbb6b05b1ecb61e526bf4e34efbdbebdbe9d6c619d86f014b840f22e43df"
+        }
+      },
+      "revision": 3,
+      "hosts": [
+        {
+          "element": "chip-0",
+          "text": "Angular",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/0",
+            "frame/2/0/0/0/1",
+            "frame/2/0/0/0/1/0",
+            "frame/2/0/0/0/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/0",
+            "root/0/2/0/0/1"
+          ],
+          "fontSize": {
+            "reference": "18.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        },
+        {
+          "element": "chip-1",
+          "text": "Astylar",
+          "referencePath": [
+            "frame",
+            "frame/2",
+            "frame/2/0",
+            "frame/2/0/0",
+            "frame/2/0/0/1",
+            "frame/2/0/0/1/1",
+            "frame/2/0/0/1/1/0",
+            "frame/2/0/0/1/1/0/1"
+          ],
+          "candidatePath": [
+            "root/0/2/0/1",
+            "root/0/2/0/1/1"
+          ],
+          "fontSize": {
+            "reference": "18.4px",
+            "normal": "14px",
+            "comparison": "14px",
+            "effective": "14px",
+            "label": "14px",
+            "retained": "14px"
+          },
+          "lineHeight": {
+            "reference": "normal",
+            "normal": "20px",
+            "comparison": "20px",
+            "effective": "20px",
+            "label": "20px",
+            "retained": "20px"
+          }
+        }
+      ]
+    }
+  ]
+}
