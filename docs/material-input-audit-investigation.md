@@ -40,8 +40,12 @@ The full replay exits 0 and independently attributes all **36 groups / 2,311
 occurrences**, with exact case-set agreement against the index. Raw **8,143
 groups / 380,520 occurrences** remain unchanged. Strict acceptance still
 reports **2,660 unresolved style groups**, down from 2,696; height proofs
-remain 2,311, source findings 131 and source fingerprints 98. Broader harness
-verification is pending. No production or canonical comparison code changed.
+remain 2,311, source findings 131 and source fingerprints 98.
+`npm run parity:harness:check` exits 0 with **596/596 pass**, **694,623.1591 ms**,
+no failures, skips or cancellations. This includes all four new box-model
+checks but does not establish final enforced visual parity or complete
+input equivalence. Attribution increment: `cddc932`. No production or
+canonical comparison code changed.
 
 ## Fixed root heights replace content-driven inputs, even when outer boxes match
 
