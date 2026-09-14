@@ -1,0 +1,554 @@
+{
+  "schemaVersion": 1,
+  "scope": "Browser-only sensitivity proof for the field-host weight/tracking investigation. Not a candidate computed-style emulator, full Material attribution, layout or raster proof.",
+  "source": {
+    "file": "tests/material-parity/field-host-token-sensitivity.spec.mjs",
+    "sha256": "1712b21b5dc04393c385eeaaabadaf12faf578c4637fb7659640879dced9d8a8"
+  },
+  "command": "node --test tests/material-parity/field-host-token-sensitivity.spec.mjs",
+  "verification": {
+    "runs": [
+      {
+        "exitCode": 0,
+        "passed": 2,
+        "failed": 0,
+        "durationMs": 1472.3743
+      },
+      {
+        "exitCode": 0,
+        "passed": 2,
+        "failed": 0,
+        "durationMs": 1517.7257
+      }
+    ],
+    "dprObservationsIdentical": true,
+    "fullHarnessCoverage": "The preceding 615/615 serial harness run does not include this newly added standalone test. It has its own explicit command; integration into the complete harness remains pending."
+  },
+  "finding": {
+    "id": "field-host-weight-tracking-token-sensitivity",
+    "observed": "The installed Material host uses explicit nested custom-property requests for font-weight and letter-spacing. Equal initial browser values are not proof that omitted requests are equivalent.",
+    "hypothesis": "The candidate field-shell's missing host token requests are authoring omissions. Complete captured page/section/host attribution and actual descendant consumers must be independently validated before classifying every Material case.",
+    "sourceHistory": {
+      "candidateFile": "examples/material-showcase/src/app/astylar.component.ts",
+      "line": 540,
+      "sha256": "b7957cd9e651efdf85bcbb70d7b9dd4fd8fbddb18c1b616ab6c9d54d3937ff90",
+      "initialCommit": "2f44011",
+      "evidence": "Read-only git show of the initial showcase commit and current source both show the field-shell rule without weight/tracking. Source history only; not a runtime bisect or proof that every other rule omits these properties."
+    },
+    "consequence": "Preserve token ownership and fallback semantics in any future authoring correction. Do not replace them with captured literal pixels or compensate through child offsets, width or font adjustments.",
+    "limits": [
+      "Synthetic token values isolate missing-token fallback, component override, invalid-token inheritance and descendant overrides; they do not establish the actual theme token origin.",
+      "The omitted browser control is not AstylarUI and supplies no candidate computed values.",
+      "No production or canonical comparison inputs changed; no raw discrepancy was normalized or reclassified.",
+      "A public-API AstylarUI reproduction is still required for any claimed core token/inheritance defect."
+    ]
+  },
+  "observations": [
+    {
+      "browserVersion": "152.0.7977.76",
+      "deviceScaleFactor": 1,
+      "source": {
+        "file": "examples/material-showcase/node_modules/@angular/material/fesm2022/form-field-CFbrnFED.mjs",
+        "sha256": "72ca52ec72650eb2086357ba4263f7f5f5427ccea28ff0851973060c0555af2d"
+      },
+      "declarations": [
+        "letter-spacing:var(--mat-form-field-container-text-tracking, var(--mat-sys-body-large-tracking))",
+        "font-weight:var(--mat-form-field-container-text-weight, var(--mat-sys-body-large-weight))"
+      ],
+      "scope": "browser token sensitivity only; synthetic token values; not candidate computed-style or raster evidence",
+      "result": {
+        "initial": {
+          "explicit": {
+            "host": {
+              "fontWeight": "400",
+              "letterSpacing": "0.496px"
+            },
+            "children": [
+              {
+                "fontWeight": "400",
+                "letterSpacing": "0.496px"
+              },
+              {
+                "fontWeight": "300",
+                "letterSpacing": "3px"
+              }
+            ]
+          },
+          "omitted": {
+            "host": {
+              "fontWeight": "400",
+              "letterSpacing": "0.496px"
+            },
+            "children": [
+              {
+                "fontWeight": "400",
+                "letterSpacing": "0.496px"
+              },
+              {
+                "fontWeight": "300",
+                "letterSpacing": "3px"
+              }
+            ]
+          }
+        },
+        "changedAncestor": {
+          "explicit": {
+            "host": {
+              "fontWeight": "400",
+              "letterSpacing": "0.496px"
+            },
+            "children": [
+              {
+                "fontWeight": "400",
+                "letterSpacing": "0.496px"
+              },
+              {
+                "fontWeight": "300",
+                "letterSpacing": "3px"
+              }
+            ]
+          },
+          "omitted": {
+            "host": {
+              "fontWeight": "700",
+              "letterSpacing": "2px"
+            },
+            "children": [
+              {
+                "fontWeight": "700",
+                "letterSpacing": "2px"
+              },
+              {
+                "fontWeight": "300",
+                "letterSpacing": "3px"
+              }
+            ]
+          }
+        },
+        "changedSystemTokens": {
+          "explicit": {
+            "host": {
+              "fontWeight": "500",
+              "letterSpacing": "0.75px"
+            },
+            "children": [
+              {
+                "fontWeight": "500",
+                "letterSpacing": "0.75px"
+              },
+              {
+                "fontWeight": "300",
+                "letterSpacing": "3px"
+              }
+            ]
+          },
+          "omitted": {
+            "host": {
+              "fontWeight": "700",
+              "letterSpacing": "2px"
+            },
+            "children": [
+              {
+                "fontWeight": "700",
+                "letterSpacing": "2px"
+              },
+              {
+                "fontWeight": "300",
+                "letterSpacing": "3px"
+              }
+            ]
+          }
+        },
+        "componentOverrides": {
+          "explicit": {
+            "host": {
+              "fontWeight": "600",
+              "letterSpacing": "1.25px"
+            },
+            "children": [
+              {
+                "fontWeight": "600",
+                "letterSpacing": "1.25px"
+              },
+              {
+                "fontWeight": "300",
+                "letterSpacing": "3px"
+              }
+            ]
+          },
+          "omitted": {
+            "host": {
+              "fontWeight": "700",
+              "letterSpacing": "2px"
+            },
+            "children": [
+              {
+                "fontWeight": "700",
+                "letterSpacing": "2px"
+              },
+              {
+                "fontWeight": "300",
+                "letterSpacing": "3px"
+              }
+            ]
+          }
+        },
+        "removedComponentOverrides": {
+          "explicit": {
+            "host": {
+              "fontWeight": "500",
+              "letterSpacing": "0.75px"
+            },
+            "children": [
+              {
+                "fontWeight": "500",
+                "letterSpacing": "0.75px"
+              },
+              {
+                "fontWeight": "300",
+                "letterSpacing": "3px"
+              }
+            ]
+          },
+          "omitted": {
+            "host": {
+              "fontWeight": "700",
+              "letterSpacing": "2px"
+            },
+            "children": [
+              {
+                "fontWeight": "700",
+                "letterSpacing": "2px"
+              },
+              {
+                "fontWeight": "300",
+                "letterSpacing": "3px"
+              }
+            ]
+          }
+        },
+        "invalidComponentTokens": {
+          "explicit": {
+            "host": {
+              "fontWeight": "700",
+              "letterSpacing": "2px"
+            },
+            "children": [
+              {
+                "fontWeight": "700",
+                "letterSpacing": "2px"
+              },
+              {
+                "fontWeight": "300",
+                "letterSpacing": "3px"
+              }
+            ]
+          },
+          "omitted": {
+            "host": {
+              "fontWeight": "700",
+              "letterSpacing": "2px"
+            },
+            "children": [
+              {
+                "fontWeight": "700",
+                "letterSpacing": "2px"
+              },
+              {
+                "fontWeight": "300",
+                "letterSpacing": "3px"
+              }
+            ]
+          }
+        },
+        "restored": {
+          "explicit": {
+            "host": {
+              "fontWeight": "400",
+              "letterSpacing": "0.496px"
+            },
+            "children": [
+              {
+                "fontWeight": "400",
+                "letterSpacing": "0.496px"
+              },
+              {
+                "fontWeight": "300",
+                "letterSpacing": "3px"
+              }
+            ]
+          },
+          "omitted": {
+            "host": {
+              "fontWeight": "400",
+              "letterSpacing": "0.496px"
+            },
+            "children": [
+              {
+                "fontWeight": "400",
+                "letterSpacing": "0.496px"
+              },
+              {
+                "fontWeight": "300",
+                "letterSpacing": "3px"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "browserVersion": "152.0.7977.76",
+      "deviceScaleFactor": 2,
+      "source": {
+        "file": "examples/material-showcase/node_modules/@angular/material/fesm2022/form-field-CFbrnFED.mjs",
+        "sha256": "72ca52ec72650eb2086357ba4263f7f5f5427ccea28ff0851973060c0555af2d"
+      },
+      "declarations": [
+        "letter-spacing:var(--mat-form-field-container-text-tracking, var(--mat-sys-body-large-tracking))",
+        "font-weight:var(--mat-form-field-container-text-weight, var(--mat-sys-body-large-weight))"
+      ],
+      "scope": "browser token sensitivity only; synthetic token values; not candidate computed-style or raster evidence",
+      "result": {
+        "initial": {
+          "explicit": {
+            "host": {
+              "fontWeight": "400",
+              "letterSpacing": "0.496px"
+            },
+            "children": [
+              {
+                "fontWeight": "400",
+                "letterSpacing": "0.496px"
+              },
+              {
+                "fontWeight": "300",
+                "letterSpacing": "3px"
+              }
+            ]
+          },
+          "omitted": {
+            "host": {
+              "fontWeight": "400",
+              "letterSpacing": "0.496px"
+            },
+            "children": [
+              {
+                "fontWeight": "400",
+                "letterSpacing": "0.496px"
+              },
+              {
+                "fontWeight": "300",
+                "letterSpacing": "3px"
+              }
+            ]
+          }
+        },
+        "changedAncestor": {
+          "explicit": {
+            "host": {
+              "fontWeight": "400",
+              "letterSpacing": "0.496px"
+            },
+            "children": [
+              {
+                "fontWeight": "400",
+                "letterSpacing": "0.496px"
+              },
+              {
+                "fontWeight": "300",
+                "letterSpacing": "3px"
+              }
+            ]
+          },
+          "omitted": {
+            "host": {
+              "fontWeight": "700",
+              "letterSpacing": "2px"
+            },
+            "children": [
+              {
+                "fontWeight": "700",
+                "letterSpacing": "2px"
+              },
+              {
+                "fontWeight": "300",
+                "letterSpacing": "3px"
+              }
+            ]
+          }
+        },
+        "changedSystemTokens": {
+          "explicit": {
+            "host": {
+              "fontWeight": "500",
+              "letterSpacing": "0.75px"
+            },
+            "children": [
+              {
+                "fontWeight": "500",
+                "letterSpacing": "0.75px"
+              },
+              {
+                "fontWeight": "300",
+                "letterSpacing": "3px"
+              }
+            ]
+          },
+          "omitted": {
+            "host": {
+              "fontWeight": "700",
+              "letterSpacing": "2px"
+            },
+            "children": [
+              {
+                "fontWeight": "700",
+                "letterSpacing": "2px"
+              },
+              {
+                "fontWeight": "300",
+                "letterSpacing": "3px"
+              }
+            ]
+          }
+        },
+        "componentOverrides": {
+          "explicit": {
+            "host": {
+              "fontWeight": "600",
+              "letterSpacing": "1.25px"
+            },
+            "children": [
+              {
+                "fontWeight": "600",
+                "letterSpacing": "1.25px"
+              },
+              {
+                "fontWeight": "300",
+                "letterSpacing": "3px"
+              }
+            ]
+          },
+          "omitted": {
+            "host": {
+              "fontWeight": "700",
+              "letterSpacing": "2px"
+            },
+            "children": [
+              {
+                "fontWeight": "700",
+                "letterSpacing": "2px"
+              },
+              {
+                "fontWeight": "300",
+                "letterSpacing": "3px"
+              }
+            ]
+          }
+        },
+        "removedComponentOverrides": {
+          "explicit": {
+            "host": {
+              "fontWeight": "500",
+              "letterSpacing": "0.75px"
+            },
+            "children": [
+              {
+                "fontWeight": "500",
+                "letterSpacing": "0.75px"
+              },
+              {
+                "fontWeight": "300",
+                "letterSpacing": "3px"
+              }
+            ]
+          },
+          "omitted": {
+            "host": {
+              "fontWeight": "700",
+              "letterSpacing": "2px"
+            },
+            "children": [
+              {
+                "fontWeight": "700",
+                "letterSpacing": "2px"
+              },
+              {
+                "fontWeight": "300",
+                "letterSpacing": "3px"
+              }
+            ]
+          }
+        },
+        "invalidComponentTokens": {
+          "explicit": {
+            "host": {
+              "fontWeight": "700",
+              "letterSpacing": "2px"
+            },
+            "children": [
+              {
+                "fontWeight": "700",
+                "letterSpacing": "2px"
+              },
+              {
+                "fontWeight": "300",
+                "letterSpacing": "3px"
+              }
+            ]
+          },
+          "omitted": {
+            "host": {
+              "fontWeight": "700",
+              "letterSpacing": "2px"
+            },
+            "children": [
+              {
+                "fontWeight": "700",
+                "letterSpacing": "2px"
+              },
+              {
+                "fontWeight": "300",
+                "letterSpacing": "3px"
+              }
+            ]
+          }
+        },
+        "restored": {
+          "explicit": {
+            "host": {
+              "fontWeight": "400",
+              "letterSpacing": "0.496px"
+            },
+            "children": [
+              {
+                "fontWeight": "400",
+                "letterSpacing": "0.496px"
+              },
+              {
+                "fontWeight": "300",
+                "letterSpacing": "3px"
+              }
+            ]
+          },
+          "omitted": {
+            "host": {
+              "fontWeight": "400",
+              "letterSpacing": "0.496px"
+            },
+            "children": [
+              {
+                "fontWeight": "400",
+                "letterSpacing": "0.496px"
+              },
+              {
+                "fontWeight": "300",
+                "letterSpacing": "3px"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

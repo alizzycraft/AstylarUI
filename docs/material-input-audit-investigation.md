@@ -3,6 +3,32 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Field-host weight and tracking: token requests versus omission
+
+The [standalone browser proof](material-field-host-token-sensitivity-audit.json)
+extracts the installed Material host's exact `font-weight` and `letter-spacing`
+token requests. Both explicit-token and omitted controls initially compute to
+`400` / `0.496px`. Changing ancestor weight/tracking separates them: the omitted
+control inherits `700` / `2px`, while the token-controlled host retains its own
+requests. System-token changes and component-token overrides affect only the
+explicit control. Removing overrides restores fallback; invalid component tokens
+cause inherited-property fallback, not selection of the missing-token fallback.
+Inherited and explicitly styled descendants are checked independently.
+
+`node --test tests/material-parity/field-host-token-sensitivity.spec.mjs` passes
+**2/2 twice**, **1,472.3743 ms / 1,517.7257 ms**, Chrome **152.0.7977.76**, DPR
+**1 and 2**. This is browser sensitivity evidence with synthetic token values,
+not an Astylar computed-style emulator or a core defect reproduction. The earlier
+615-test harness did not include this newly added standalone file.
+
+Current `.field-shell` authoring at `astylar.component.ts:540` and the initial
+showcase commit `2f44011` omit these properties in that rule. This source history
+is not a runtime bisect or a complete cascade proof. The next step is guarded
+full-capture attribution across all six form-field families, preserving actual
+theme-token provenance and descendant overrides. Do not normalize `400` or
+`0.496px` into omissions or substitute literal values for the original tokens.
+No production inputs changed and no existing audit discrepancy was reclassified.
+
 ## Root initial/inherited observations are not local declarations
 
 The [guarded root-style index](material-root-initial-style-audit.json) joins the
