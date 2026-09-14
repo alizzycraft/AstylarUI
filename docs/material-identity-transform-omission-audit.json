@@ -1,0 +1,550 @@
+{
+  "schemaVersion": 1,
+  "findingId": "identity-transform-is-not-omitted-transform",
+  "classification": "parity-harness-defect",
+  "status": "confirmed audit assumption defect; correction pending",
+  "baselineCommit": "09e789d",
+  "sourceFingerprints": [
+    {
+      "file": "scripts/audit-material-identity-transform.mjs",
+      "sha256": "047741461c42f5a5908252ad6a2aeca42c9899ef27bd12239b441663e5af86bc"
+    },
+    {
+      "file": "tests/material-parity/input-equivalence-policy.mjs",
+      "sha256": "b003e0b652e53166d71a97c30b6899d8c3ff56c93627d729b79fe605e5dc2cbc"
+    },
+    {
+      "file": "tests/material-parity/input-equivalence-audit.mjs",
+      "sha256": "ccafb6b3a76b1f1901b776262adbc28f535883aa8af64ed3304ed5e80d4e7339"
+    }
+  ],
+  "locations": [
+    {
+      "file": "tests/material-parity/input-equivalence-policy.mjs",
+      "line": 56,
+      "history": "5e3ac33a introduces identity matrix as an implicit omitted transform equivalent"
+    },
+    {
+      "file": "tests/material-parity/input-equivalence-audit.mjs",
+      "line": 1601,
+      "observation": "Fallback accepts an omitted candidate transform when reference is identity matrix."
+    },
+    {
+      "file": "tests/material-parity/input-equivalence-audit.mjs",
+      "line": 1609,
+      "observation": "A separate transform-origin guard also treats identity as no transform; its property-specific validity requires separate review, not automatic rejection from this containing-block witness."
+    }
+  ],
+  "referenceSource": {
+    "url": "https://www.w3.org/TR/2019/CR-css-transforms-1-20190214/#transform-rendering",
+    "basis": "Transform values other than none establish a containing block and stacking context; identity geometry does not erase those semantics."
+  },
+  "verification": {
+    "command": "node scripts/audit-material-identity-transform.mjs",
+    "exitCode": 0,
+    "repeatExitCode": 0,
+    "repeatIdentical": true,
+    "browserVersion": "152.0.7977.76",
+    "captureSha256": "b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a",
+    "scope": "Browser semantic sensitivity plus unchanged raw capture population; not a candidate renderer reproduction or proof that all affected fixtures visibly diverge",
+    "identityMatrixObservations": 140,
+    "candidateOmitted": 140,
+    "groups": [
+      {
+        "family": "core",
+        "element": "core-primary",
+        "occurrences": 52,
+        "cases": [
+          "static:core@light/desktop",
+          "static:core@light/tablet",
+          "static:core@light/mobile",
+          "static:core@dark/desktop",
+          "static:core@dark/tablet",
+          "static:core@dark/mobile",
+          "static:core@contrast/desktop",
+          "static:core@contrast/tablet",
+          "static:core@contrast/mobile",
+          "static:core@custom/desktop",
+          "static:core@custom/tablet",
+          "static:core@custom/mobile",
+          "interaction:core@light/desktop-dpr1/focus",
+          "interaction:core@light/desktop-dpr1/hover",
+          "interaction:core@light/desktop-dpr1/held",
+          "interaction:core@light/desktop-dpr1/activate",
+          "interaction:core@light/desktop-dpr1/activate-leave",
+          "interaction:core@light/desktop-dpr2/focus",
+          "interaction:core@light/desktop-dpr2/hover",
+          "interaction:core@light/desktop-dpr2/held",
+          "interaction:core@light/desktop-dpr2/activate",
+          "interaction:core@light/desktop-dpr2/activate-leave",
+          "interaction:core@dark/desktop-dpr1/focus",
+          "interaction:core@dark/desktop-dpr1/hover",
+          "interaction:core@dark/desktop-dpr1/held",
+          "interaction:core@dark/desktop-dpr1/activate",
+          "interaction:core@dark/desktop-dpr1/activate-leave",
+          "interaction:core@dark/desktop-dpr2/focus",
+          "interaction:core@dark/desktop-dpr2/hover",
+          "interaction:core@dark/desktop-dpr2/held",
+          "interaction:core@dark/desktop-dpr2/activate",
+          "interaction:core@dark/desktop-dpr2/activate-leave",
+          "interaction:core@contrast/desktop-dpr1/focus",
+          "interaction:core@contrast/desktop-dpr1/hover",
+          "interaction:core@contrast/desktop-dpr1/held",
+          "interaction:core@contrast/desktop-dpr1/activate",
+          "interaction:core@contrast/desktop-dpr1/activate-leave",
+          "interaction:core@contrast/desktop-dpr2/focus",
+          "interaction:core@contrast/desktop-dpr2/hover",
+          "interaction:core@contrast/desktop-dpr2/held",
+          "interaction:core@contrast/desktop-dpr2/activate",
+          "interaction:core@contrast/desktop-dpr2/activate-leave",
+          "interaction:core@custom/desktop-dpr1/focus",
+          "interaction:core@custom/desktop-dpr1/hover",
+          "interaction:core@custom/desktop-dpr1/held",
+          "interaction:core@custom/desktop-dpr1/activate",
+          "interaction:core@custom/desktop-dpr1/activate-leave",
+          "interaction:core@custom/desktop-dpr2/focus",
+          "interaction:core@custom/desktop-dpr2/hover",
+          "interaction:core@custom/desktop-dpr2/held",
+          "interaction:core@custom/desktop-dpr2/activate",
+          "interaction:core@custom/desktop-dpr2/activate-leave"
+        ]
+      },
+      {
+        "family": "button-toggle",
+        "element": "button-toggle-primary",
+        "occurrences": 68,
+        "cases": [
+          "static:button-toggle@light/desktop",
+          "static:button-toggle@light/tablet",
+          "static:button-toggle@light/mobile",
+          "static:button-toggle@dark/desktop",
+          "static:button-toggle@dark/tablet",
+          "static:button-toggle@dark/mobile",
+          "static:button-toggle@contrast/desktop",
+          "static:button-toggle@contrast/tablet",
+          "static:button-toggle@contrast/mobile",
+          "static:button-toggle@custom/desktop",
+          "static:button-toggle@custom/tablet",
+          "static:button-toggle@custom/mobile",
+          "interaction:button-toggle@light/desktop-dpr1/focus",
+          "interaction:button-toggle@light/desktop-dpr1/hover",
+          "interaction:button-toggle@light/desktop-dpr1/held",
+          "interaction:button-toggle@light/desktop-dpr1/activate",
+          "interaction:button-toggle@light/desktop-dpr1/activate-leave",
+          "interaction:button-toggle@light/desktop-dpr1/disabled",
+          "interaction:button-toggle@light/desktop-dpr1/selected",
+          "interaction:button-toggle@light/desktop-dpr2/focus",
+          "interaction:button-toggle@light/desktop-dpr2/hover",
+          "interaction:button-toggle@light/desktop-dpr2/held",
+          "interaction:button-toggle@light/desktop-dpr2/activate",
+          "interaction:button-toggle@light/desktop-dpr2/activate-leave",
+          "interaction:button-toggle@light/desktop-dpr2/disabled",
+          "interaction:button-toggle@light/desktop-dpr2/selected",
+          "interaction:button-toggle@dark/desktop-dpr1/focus",
+          "interaction:button-toggle@dark/desktop-dpr1/hover",
+          "interaction:button-toggle@dark/desktop-dpr1/held",
+          "interaction:button-toggle@dark/desktop-dpr1/activate",
+          "interaction:button-toggle@dark/desktop-dpr1/activate-leave",
+          "interaction:button-toggle@dark/desktop-dpr1/disabled",
+          "interaction:button-toggle@dark/desktop-dpr1/selected",
+          "interaction:button-toggle@dark/desktop-dpr2/focus",
+          "interaction:button-toggle@dark/desktop-dpr2/hover",
+          "interaction:button-toggle@dark/desktop-dpr2/held",
+          "interaction:button-toggle@dark/desktop-dpr2/activate",
+          "interaction:button-toggle@dark/desktop-dpr2/activate-leave",
+          "interaction:button-toggle@dark/desktop-dpr2/disabled",
+          "interaction:button-toggle@dark/desktop-dpr2/selected",
+          "interaction:button-toggle@contrast/desktop-dpr1/focus",
+          "interaction:button-toggle@contrast/desktop-dpr1/hover",
+          "interaction:button-toggle@contrast/desktop-dpr1/held",
+          "interaction:button-toggle@contrast/desktop-dpr1/activate",
+          "interaction:button-toggle@contrast/desktop-dpr1/activate-leave",
+          "interaction:button-toggle@contrast/desktop-dpr1/disabled",
+          "interaction:button-toggle@contrast/desktop-dpr1/selected",
+          "interaction:button-toggle@contrast/desktop-dpr2/focus",
+          "interaction:button-toggle@contrast/desktop-dpr2/hover",
+          "interaction:button-toggle@contrast/desktop-dpr2/held",
+          "interaction:button-toggle@contrast/desktop-dpr2/activate",
+          "interaction:button-toggle@contrast/desktop-dpr2/activate-leave",
+          "interaction:button-toggle@contrast/desktop-dpr2/disabled",
+          "interaction:button-toggle@contrast/desktop-dpr2/selected",
+          "interaction:button-toggle@custom/desktop-dpr1/focus",
+          "interaction:button-toggle@custom/desktop-dpr1/hover",
+          "interaction:button-toggle@custom/desktop-dpr1/held",
+          "interaction:button-toggle@custom/desktop-dpr1/activate",
+          "interaction:button-toggle@custom/desktop-dpr1/activate-leave",
+          "interaction:button-toggle@custom/desktop-dpr1/disabled",
+          "interaction:button-toggle@custom/desktop-dpr1/selected",
+          "interaction:button-toggle@custom/desktop-dpr2/focus",
+          "interaction:button-toggle@custom/desktop-dpr2/hover",
+          "interaction:button-toggle@custom/desktop-dpr2/held",
+          "interaction:button-toggle@custom/desktop-dpr2/activate",
+          "interaction:button-toggle@custom/desktop-dpr2/activate-leave",
+          "interaction:button-toggle@custom/desktop-dpr2/disabled",
+          "interaction:button-toggle@custom/desktop-dpr2/selected"
+        ]
+      },
+      {
+        "family": "progress-bar",
+        "element": "progress-bar-primary",
+        "occurrences": 20,
+        "cases": [
+          "static:progress-bar@light/desktop",
+          "static:progress-bar@light/tablet",
+          "static:progress-bar@light/mobile",
+          "static:progress-bar@dark/desktop",
+          "static:progress-bar@dark/tablet",
+          "static:progress-bar@dark/mobile",
+          "static:progress-bar@contrast/desktop",
+          "static:progress-bar@contrast/tablet",
+          "static:progress-bar@contrast/mobile",
+          "static:progress-bar@custom/desktop",
+          "static:progress-bar@custom/tablet",
+          "static:progress-bar@custom/mobile",
+          "interaction:progress-bar@light/desktop-dpr1/inspect",
+          "interaction:progress-bar@light/desktop-dpr2/inspect",
+          "interaction:progress-bar@dark/desktop-dpr1/inspect",
+          "interaction:progress-bar@dark/desktop-dpr2/inspect",
+          "interaction:progress-bar@contrast/desktop-dpr1/inspect",
+          "interaction:progress-bar@contrast/desktop-dpr2/inspect",
+          "interaction:progress-bar@custom/desktop-dpr1/inspect",
+          "interaction:progress-bar@custom/desktop-dpr2/inspect"
+        ]
+      }
+    ],
+    "runs": [
+      {
+        "deviceScaleFactor": 1,
+        "observations": {
+          "fixedStates": [
+            {
+              "requested": "<omitted>",
+              "computed": "none",
+              "host": {
+                "x": 80,
+                "y": 60,
+                "width": 100,
+                "height": 100
+              },
+              "child": {
+                "x": 5,
+                "y": 7,
+                "width": 10,
+                "height": 10
+              }
+            },
+            {
+              "requested": "none",
+              "computed": "none",
+              "host": {
+                "x": 80,
+                "y": 60,
+                "width": 100,
+                "height": 100
+              },
+              "child": {
+                "x": 5,
+                "y": 7,
+                "width": 10,
+                "height": 10
+              }
+            },
+            {
+              "requested": "matrix(1,0,0,1,0,0)",
+              "computed": "matrix(1, 0, 0, 1, 0, 0)",
+              "host": {
+                "x": 80,
+                "y": 60,
+                "width": 100,
+                "height": 100
+              },
+              "child": {
+                "x": 85,
+                "y": 67,
+                "width": 10,
+                "height": 10
+              }
+            },
+            {
+              "requested": "translate(0px)",
+              "computed": "matrix(1, 0, 0, 1, 0, 0)",
+              "host": {
+                "x": 80,
+                "y": 60,
+                "width": 100,
+                "height": 100
+              },
+              "child": {
+                "x": 85,
+                "y": 67,
+                "width": 10,
+                "height": 10
+              }
+            },
+            {
+              "requested": "scale(1)",
+              "computed": "matrix(1, 0, 0, 1, 0, 0)",
+              "host": {
+                "x": 80,
+                "y": 60,
+                "width": 100,
+                "height": 100
+              },
+              "child": {
+                "x": 85,
+                "y": 67,
+                "width": 10,
+                "height": 10
+              }
+            },
+            {
+              "requested": "none",
+              "computed": "none",
+              "host": {
+                "x": 80,
+                "y": 60,
+                "width": 100,
+                "height": 100
+              },
+              "child": {
+                "x": 5,
+                "y": 7,
+                "width": 10,
+                "height": 10
+              }
+            },
+            {
+              "requested": "<omitted>",
+              "computed": "none",
+              "host": {
+                "x": 80,
+                "y": 60,
+                "width": 100,
+                "height": 100
+              },
+              "child": {
+                "x": 5,
+                "y": 7,
+                "width": 10,
+                "height": 10
+              }
+            }
+          ],
+          "stackingStates": [
+            {
+              "requested": "<omitted>",
+              "computed": "none",
+              "topmostAtSharedPoint": "nested-high-z"
+            },
+            {
+              "requested": "none",
+              "computed": "none",
+              "topmostAtSharedPoint": "nested-high-z"
+            },
+            {
+              "requested": "matrix(1,0,0,1,0,0)",
+              "computed": "matrix(1, 0, 0, 1, 0, 0)",
+              "topmostAtSharedPoint": "sibling-low-z"
+            },
+            {
+              "requested": "translate(0px)",
+              "computed": "matrix(1, 0, 0, 1, 0, 0)",
+              "topmostAtSharedPoint": "sibling-low-z"
+            },
+            {
+              "requested": "scale(1)",
+              "computed": "matrix(1, 0, 0, 1, 0, 0)",
+              "topmostAtSharedPoint": "sibling-low-z"
+            },
+            {
+              "requested": "none",
+              "computed": "none",
+              "topmostAtSharedPoint": "nested-high-z"
+            },
+            {
+              "requested": "<omitted>",
+              "computed": "none",
+              "topmostAtSharedPoint": "nested-high-z"
+            }
+          ]
+        }
+      },
+      {
+        "deviceScaleFactor": 2,
+        "observations": {
+          "fixedStates": [
+            {
+              "requested": "<omitted>",
+              "computed": "none",
+              "host": {
+                "x": 80,
+                "y": 60,
+                "width": 100,
+                "height": 100
+              },
+              "child": {
+                "x": 5,
+                "y": 7,
+                "width": 10,
+                "height": 10
+              }
+            },
+            {
+              "requested": "none",
+              "computed": "none",
+              "host": {
+                "x": 80,
+                "y": 60,
+                "width": 100,
+                "height": 100
+              },
+              "child": {
+                "x": 5,
+                "y": 7,
+                "width": 10,
+                "height": 10
+              }
+            },
+            {
+              "requested": "matrix(1,0,0,1,0,0)",
+              "computed": "matrix(1, 0, 0, 1, 0, 0)",
+              "host": {
+                "x": 80,
+                "y": 60,
+                "width": 100,
+                "height": 100
+              },
+              "child": {
+                "x": 85,
+                "y": 67,
+                "width": 10,
+                "height": 10
+              }
+            },
+            {
+              "requested": "translate(0px)",
+              "computed": "matrix(1, 0, 0, 1, 0, 0)",
+              "host": {
+                "x": 80,
+                "y": 60,
+                "width": 100,
+                "height": 100
+              },
+              "child": {
+                "x": 85,
+                "y": 67,
+                "width": 10,
+                "height": 10
+              }
+            },
+            {
+              "requested": "scale(1)",
+              "computed": "matrix(1, 0, 0, 1, 0, 0)",
+              "host": {
+                "x": 80,
+                "y": 60,
+                "width": 100,
+                "height": 100
+              },
+              "child": {
+                "x": 85,
+                "y": 67,
+                "width": 10,
+                "height": 10
+              }
+            },
+            {
+              "requested": "none",
+              "computed": "none",
+              "host": {
+                "x": 80,
+                "y": 60,
+                "width": 100,
+                "height": 100
+              },
+              "child": {
+                "x": 5,
+                "y": 7,
+                "width": 10,
+                "height": 10
+              }
+            },
+            {
+              "requested": "<omitted>",
+              "computed": "none",
+              "host": {
+                "x": 80,
+                "y": 60,
+                "width": 100,
+                "height": 100
+              },
+              "child": {
+                "x": 5,
+                "y": 7,
+                "width": 10,
+                "height": 10
+              }
+            }
+          ],
+          "stackingStates": [
+            {
+              "requested": "<omitted>",
+              "computed": "none",
+              "topmostAtSharedPoint": "nested-high-z"
+            },
+            {
+              "requested": "none",
+              "computed": "none",
+              "topmostAtSharedPoint": "nested-high-z"
+            },
+            {
+              "requested": "matrix(1,0,0,1,0,0)",
+              "computed": "matrix(1, 0, 0, 1, 0, 0)",
+              "topmostAtSharedPoint": "sibling-low-z"
+            },
+            {
+              "requested": "translate(0px)",
+              "computed": "matrix(1, 0, 0, 1, 0, 0)",
+              "topmostAtSharedPoint": "sibling-low-z"
+            },
+            {
+              "requested": "scale(1)",
+              "computed": "matrix(1, 0, 0, 1, 0, 0)",
+              "topmostAtSharedPoint": "sibling-low-z"
+            },
+            {
+              "requested": "none",
+              "computed": "none",
+              "topmostAtSharedPoint": "nested-high-z"
+            },
+            {
+              "requested": "<omitted>",
+              "computed": "none",
+              "topmostAtSharedPoint": "nested-high-z"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "collectorWitness": {
+    "input": {
+      "reference": {
+        "transform": "matrix(1,0,0,1,0,0)"
+      },
+      "astylar": {}
+    },
+    "observed": {
+      "classification": "equivalent-representation",
+      "justification": "The browser serializes its implicit transform used value; Astylar omits the equivalent initial declaration."
+    },
+    "interpretation": "This is not a safe general equivalence. Browser witnesses demonstrate behavior absent from the scalar comparison. No candidate renderer diagnosis is inferred."
+  },
+  "nextActions": [
+    "Add a failing audit regression and remove unconditional identity-matrix/omission equivalence. Preserve explicit matching transforms and separately justified none/omission controls.",
+    "Replay all 140 raw observations with complete per-case mapping, then investigate original transform authorship and core containing-block/stacking ownership before assigning fixture or renderer causes.",
+    "Review transform-origin separately: lack of geometric effect for an identity matrix does not establish general equality of authored origins under subsequent transform changes.",
+    "Register the focused regression and source provenance after correction; run the complete harness and final enforced parity."
+  ],
+  "limitations": "No production/canonical fixture or classification-policy change in this increment. Browser controls are minimal semantic sensitivity, not a public-API candidate reproduction. Population is scalar raw identity-matrix/omitted-transform observations, not 140 proven output failures."
+}

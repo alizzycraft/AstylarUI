@@ -3,6 +3,30 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Identity transform is not omitted transform (read-only investigation)
+
+The [identity-transform record](material-identity-transform-omission-audit.json)
+finds **140** raw reference identity matrices paired with omitted candidate
+transforms: **52 core**, **68 button-toggle**, and **20 progress-bar** cases.
+The current scalar policy, introduced in `5e3ac33a`, labels that pair equivalent
+without containing-block or stacking evidence.
+
+Two identical Chrome **152.0.7977.76** runs at **DPR 1 and 2** demonstrate why
+that general assumption is false. Changing only the host transform from omitted/
+none to an identity matrix, zero translation, or unit scale keeps its own box
+at **80,60 / 100x100**, but moves a fixed child from **5,7** to **85,67**. A separate
+overlap control reverses the topmost hit element because identity creates a
+stacking context. Restoring none/omission restores both behaviors. This matches
+[CSS Transforms' rendering model](https://www.w3.org/TR/2019/CR-css-transforms-1-20190214/#transform-rendering).
+
+The raw population and every case identity remain recorded. This is a confirmed
+audit-assumption defect, not yet a diagnosis of candidate rendering or evidence
+that every listed comparison visibly fails. Add the failing collector regression,
+remove the unsupported waiver, and replay the population before attributing its
+original authored intent and core ownership. Review the separate transform-origin
+guard on its own merits; this witness does not itself prove an origin mismatch.
+No renderer, canonical fixture or classification rule changed in this increment.
+
 ## Lossless streamed report transport (focused proof; integration pending)
 
 The [transport evidence](material-input-audit-stream-transport.json) records a
