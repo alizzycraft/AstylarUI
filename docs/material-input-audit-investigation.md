@@ -3,6 +3,40 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Inherited-default equivalence requires grouped policy review
+
+The [inherited-default investigation](material-inherited-default-assumption-audit.json)
+demonstrates the same diagnostic assumption beyond caret color. The policy
+unconditionally accepts omitted `fontStyle`, `letterSpacing`, `wordSpacing`,
+`textTransform`, `whiteSpace`, `overflowWrap`, `wordBreak`, `pointerEvents` and
+`visibility` when the reference computes to the listed default. A synthetic
+explicit reference request is classified equivalent without candidate ancestry.
+
+The repeated raw survey covers all **2,311 cases** for every property. Generic
+policy eligibility is **6,938** observations each for font style, word spacing,
+text transform, word break and visibility; **4,696** for letter spacing;
+**5,836** for whitespace; **6,920** for overflow wrapping; and **6,693** for
+pointer events. These are property observations, not distinct defects or final
+classifications: earlier guarded classifiers may already attribute some cases.
+The machine record preserves the 17 raw value probes, per-property element
+inventories and complete unique-case hashes. Full-tree attribution remains due.
+
+Two identical runs exit **0**, each covering all nine properties at **DPR1 and
+DPR2**. An ancestor change causes omitted child declarations to inherit the new
+value while explicit defaults retain their value; removing the ancestor request
+restores the original observations. This proves the fallback policy lacks
+necessary evidence. It does not prove incorrect candidate computed values,
+visible pixels, pointer targeting or a defect in every real comparison.
+
+Treat these as one related policy investigation: inventory both consumers of
+`implicitReferenceValues`, separate inherited omission from legitimate explicit
+aliases and non-inherited defaults, add grouped regression coverage, and review
+the actual full comparison/state population. Do not discard explicit normal/zero
+tracking evidence merely because omission is a different question. Do not add
+fixture defaults or a showcase inheritance implementation. The current policy
+is unchanged by this documentation-only finding; population attribution remains
+pending. Source history and exact repeatable command are in the machine record.
+
 ## Caret-color scalar suppression corrected (full replay verified)
 
 The retention regression failed first because the explicit-auto observation
