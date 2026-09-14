@@ -72,9 +72,13 @@ unresolved style groups**, down from 2,801; source findings remain 131 and
 source fingerprints total 98. This is audit progress, not input equivalence
 or a completed audit.
 
-The pre-correction full harness passed **591/591**, **477,278.5706 ms**. Final
-harness verification remains pending after the fractional correction; no
-production or canonical comparison changes were made.
+The pre-correction full harness passed **591/591**, **477,278.5706 ms**. The
+post-correction `npm run parity:harness:check` exits 0 with **592/592 pass**,
+**2,187,420.6962 ms**, no failures, skips or cancellations. It includes the
+fractional regression, complete root-height index and browser sensitivity
+proof. This verifies the diagnostic harness, not the final enforced visual
+matrix or complete input equivalence. No production or canonical comparison
+changes were made. Evidence/classifier increment: `526a446`.
 
 ## Field-host color is inherited, despite missing component font tokens
 
