@@ -3,6 +3,34 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Root initial/inherited observations are not local declarations
+
+The [guarded root-style index](material-root-initial-style-audit.json) joins the
+complete exploratory survey to a dedicated collector: **2,311 roots / 6,933
+property observations** for `font-weight`, `text-align` and `vertical-align`.
+It requires unique empty-section identity, complete captured frame/page ancestry,
+reference context, absent competing requests and all three candidate declaration
+stages. It diagnoses an **observation-stage mismatch**, not correct candidate
+defaults, inheritance, descendants or pixels. Do not author replacement initial
+values or treat `start` and `left` as interchangeable.
+
+The reference scalar structure does not capture `ownText`; the collector requires
+the full-tree empty-text witness instead and rejects any contradictory scalar
+field. A malformed-class adverse case also exposed a guard-order issue, now
+corrected before selector evaluation. The complete focused command
+`node --test tests/material-parity/root-initial-style-evidence.spec.mjs` passes
+**5/5**, **14,868.3759 ms**, including the full raw-case collector, competing and
+malformed evidence, exact scalar joins and forged report/coverage checks.
+
+Both new test files are now included in `parity:harness:check`; the older 606-test
+pass remains historical evidence for its original file set. Combined prior-index,
+guarded proof and browser checks pass **23/23**, no failures/skips/cancellations;
+reported TAP duration **9,240,920.3052 ms** is retained without inferring wall time
+from tool polling. Full replay, the exact 108-group case join and the expanded
+full harness remain pending; no reduction of the last verified **2,570**
+unresolved attributions is claimed yet. No renderer or canonical fixture inputs
+have changed.
+
 ## Initial style values require inheritance and formatting-context evidence
 
 The [browser sensitivity proof](material-root-initial-style-sensitivity-audit.json)

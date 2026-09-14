@@ -1,0 +1,1158 @@
+{
+  "schemaVersion": 1,
+  "attribution": "reviewed-root-initial-style-declaration-stage",
+  "classification": "parity-harness-defect",
+  "scope": "Exact case index for root computed initial/inherited values versus candidate local declaration omission. Not candidate computed-value, consumer, or raster equivalence.",
+  "capture": {
+    "file": "artifacts/material-parity/current-ancestry-audit/latest-report.json",
+    "sha256": "b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a"
+  },
+  "sourceFingerprints": [
+    {
+      "file": "tests/material-parity/input-equivalence-audit.mjs",
+      "sha256": "00319facb73fb9d9514326629eed133a914c5ef1639c7c833f112c50d0c8f074"
+    },
+    {
+      "file": "tests/material-parity/input-equivalence-audit.spec.mjs",
+      "sha256": "41c33514f824af20bc08e333bae4aa7ec02acf487423f97b19c2db04bae61d3b"
+    },
+    {
+      "file": "tests/material-parity/root-initial-style-evidence.mjs",
+      "sha256": "5c3e6293bc746defef684d1a127b4d5e12db43b56879bb115f49446a6d6300d7"
+    },
+    {
+      "file": "tests/material-parity/root-initial-style-evidence.spec.mjs",
+      "sha256": "0fd7b1dc9153ee0281cf7b0509ae61e591df5fff8a851cdcd86d70e9a913f05c"
+    },
+    {
+      "file": "tests/material-parity/root-initial-style-sensitivity.spec.mjs",
+      "sha256": "b40aa7f8c629bbe6dc2b431c96c149a2d11ea2b8afe0efd34749e1480d550e98"
+    },
+    {
+      "file": "tests/material-parity/border-initial-input-evidence.mjs",
+      "sha256": "3dbcf33ff70244a8179f438962a2549fb7e354948f084d35d433bcf82e76f9f4"
+    },
+    {
+      "file": "tests/material-parity/input-equivalence-policy.mjs",
+      "sha256": "3f6bcbb6ae117f124a8c13465d753ef83db5babade4d431304bb9a7c27ea73b2"
+    }
+  ],
+  "caseSource": {
+    "file": "docs/material-root-initial-style-survey-audit.json",
+    "sha256": "8d6e45bbe16cf1a330a2d8d309e6bcddb039c95639130cb6f88d7a2be8819a26",
+    "familyGroups": 36
+  },
+  "caseCount": 2311,
+  "propertyObservations": 6933,
+  "groupCount": 108,
+  "groups": [
+    {
+      "family": "core",
+      "sourceGroupIndex": 0,
+      "occurrences": 52,
+      "element": "core-root",
+      "property": "fontWeight",
+      "reference": "400",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "core",
+      "sourceGroupIndex": 0,
+      "occurrences": 52,
+      "element": "core-root",
+      "property": "textAlign",
+      "reference": "start",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "core",
+      "sourceGroupIndex": 0,
+      "occurrences": 52,
+      "element": "core-root",
+      "property": "verticalAlign",
+      "reference": "baseline",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "toolbar",
+      "sourceGroupIndex": 1,
+      "occurrences": 52,
+      "element": "toolbar-root",
+      "property": "fontWeight",
+      "reference": "400",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "toolbar",
+      "sourceGroupIndex": 1,
+      "occurrences": 52,
+      "element": "toolbar-root",
+      "property": "textAlign",
+      "reference": "start",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "toolbar",
+      "sourceGroupIndex": 1,
+      "occurrences": 52,
+      "element": "toolbar-root",
+      "property": "verticalAlign",
+      "reference": "baseline",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "sidenav",
+      "sourceGroupIndex": 2,
+      "occurrences": 62,
+      "element": "sidenav-root",
+      "property": "fontWeight",
+      "reference": "400",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "sidenav",
+      "sourceGroupIndex": 2,
+      "occurrences": 62,
+      "element": "sidenav-root",
+      "property": "textAlign",
+      "reference": "start",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "sidenav",
+      "sourceGroupIndex": 2,
+      "occurrences": 62,
+      "element": "sidenav-root",
+      "property": "verticalAlign",
+      "reference": "baseline",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "grid-list",
+      "sourceGroupIndex": 3,
+      "occurrences": 52,
+      "element": "grid-list-root",
+      "property": "fontWeight",
+      "reference": "400",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "grid-list",
+      "sourceGroupIndex": 3,
+      "occurrences": 52,
+      "element": "grid-list-root",
+      "property": "textAlign",
+      "reference": "start",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "grid-list",
+      "sourceGroupIndex": 3,
+      "occurrences": 52,
+      "element": "grid-list-root",
+      "property": "verticalAlign",
+      "reference": "baseline",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "divider",
+      "sourceGroupIndex": 4,
+      "occurrences": 24,
+      "element": "divider-root",
+      "property": "fontWeight",
+      "reference": "400",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "divider",
+      "sourceGroupIndex": 4,
+      "occurrences": 24,
+      "element": "divider-root",
+      "property": "textAlign",
+      "reference": "start",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "divider",
+      "sourceGroupIndex": 4,
+      "occurrences": 24,
+      "element": "divider-root",
+      "property": "verticalAlign",
+      "reference": "baseline",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "badge",
+      "sourceGroupIndex": 5,
+      "occurrences": 52,
+      "element": "badge-root",
+      "property": "fontWeight",
+      "reference": "400",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "badge",
+      "sourceGroupIndex": 5,
+      "occurrences": 52,
+      "element": "badge-root",
+      "property": "textAlign",
+      "reference": "start",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "badge",
+      "sourceGroupIndex": 5,
+      "occurrences": 52,
+      "element": "badge-root",
+      "property": "verticalAlign",
+      "reference": "baseline",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "card",
+      "sourceGroupIndex": 6,
+      "occurrences": 52,
+      "element": "card-root",
+      "property": "fontWeight",
+      "reference": "400",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "card",
+      "sourceGroupIndex": 6,
+      "occurrences": 52,
+      "element": "card-root",
+      "property": "textAlign",
+      "reference": "start",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "card",
+      "sourceGroupIndex": 6,
+      "occurrences": 52,
+      "element": "card-root",
+      "property": "verticalAlign",
+      "reference": "baseline",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "chips",
+      "sourceGroupIndex": 7,
+      "occurrences": 76,
+      "element": "chips-root",
+      "property": "fontWeight",
+      "reference": "400",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "chips",
+      "sourceGroupIndex": 7,
+      "occurrences": 76,
+      "element": "chips-root",
+      "property": "textAlign",
+      "reference": "start",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "chips",
+      "sourceGroupIndex": 7,
+      "occurrences": 76,
+      "element": "chips-root",
+      "property": "verticalAlign",
+      "reference": "baseline",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "icon",
+      "sourceGroupIndex": 8,
+      "occurrences": 20,
+      "element": "icon-root",
+      "property": "fontWeight",
+      "reference": "400",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "icon",
+      "sourceGroupIndex": 8,
+      "occurrences": 20,
+      "element": "icon-root",
+      "property": "textAlign",
+      "reference": "start",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "icon",
+      "sourceGroupIndex": 8,
+      "occurrences": 20,
+      "element": "icon-root",
+      "property": "verticalAlign",
+      "reference": "baseline",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "list",
+      "sourceGroupIndex": 9,
+      "occurrences": 52,
+      "element": "list-root",
+      "property": "fontWeight",
+      "reference": "400",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "list",
+      "sourceGroupIndex": 9,
+      "occurrences": 52,
+      "element": "list-root",
+      "property": "textAlign",
+      "reference": "start",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "list",
+      "sourceGroupIndex": 9,
+      "occurrences": 52,
+      "element": "list-root",
+      "property": "verticalAlign",
+      "reference": "baseline",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "table",
+      "sourceGroupIndex": 10,
+      "occurrences": 52,
+      "element": "table-root",
+      "property": "fontWeight",
+      "reference": "400",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "table",
+      "sourceGroupIndex": 10,
+      "occurrences": 52,
+      "element": "table-root",
+      "property": "textAlign",
+      "reference": "start",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "table",
+      "sourceGroupIndex": 10,
+      "occurrences": 52,
+      "element": "table-root",
+      "property": "verticalAlign",
+      "reference": "baseline",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "sort",
+      "sourceGroupIndex": 11,
+      "occurrences": 60,
+      "element": "sort-root",
+      "property": "fontWeight",
+      "reference": "400",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "sort",
+      "sourceGroupIndex": 11,
+      "occurrences": 60,
+      "element": "sort-root",
+      "property": "textAlign",
+      "reference": "start",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "sort",
+      "sourceGroupIndex": 11,
+      "occurrences": 60,
+      "element": "sort-root",
+      "property": "verticalAlign",
+      "reference": "baseline",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "paginator",
+      "sourceGroupIndex": 12,
+      "occurrences": 52,
+      "element": "paginator-root",
+      "property": "fontWeight",
+      "reference": "400",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "paginator",
+      "sourceGroupIndex": 12,
+      "occurrences": 52,
+      "element": "paginator-root",
+      "property": "textAlign",
+      "reference": "start",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "paginator",
+      "sourceGroupIndex": 12,
+      "occurrences": 52,
+      "element": "paginator-root",
+      "property": "verticalAlign",
+      "reference": "baseline",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "tree",
+      "sourceGroupIndex": 13,
+      "occurrences": 52,
+      "element": "tree-root",
+      "property": "fontWeight",
+      "reference": "400",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "tree",
+      "sourceGroupIndex": 13,
+      "occurrences": 52,
+      "element": "tree-root",
+      "property": "textAlign",
+      "reference": "start",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "tree",
+      "sourceGroupIndex": 13,
+      "occurrences": 52,
+      "element": "tree-root",
+      "property": "verticalAlign",
+      "reference": "baseline",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "form-field",
+      "sourceGroupIndex": 14,
+      "occurrences": 76,
+      "element": "form-field-root",
+      "property": "fontWeight",
+      "reference": "400",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "form-field",
+      "sourceGroupIndex": 14,
+      "occurrences": 76,
+      "element": "form-field-root",
+      "property": "textAlign",
+      "reference": "start",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "form-field",
+      "sourceGroupIndex": 14,
+      "occurrences": 76,
+      "element": "form-field-root",
+      "property": "verticalAlign",
+      "reference": "baseline",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "input",
+      "sourceGroupIndex": 15,
+      "occurrences": 76,
+      "element": "input-root",
+      "property": "fontWeight",
+      "reference": "400",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "input",
+      "sourceGroupIndex": 15,
+      "occurrences": 76,
+      "element": "input-root",
+      "property": "textAlign",
+      "reference": "start",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "input",
+      "sourceGroupIndex": 15,
+      "occurrences": 76,
+      "element": "input-root",
+      "property": "verticalAlign",
+      "reference": "baseline",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "autocomplete",
+      "sourceGroupIndex": 16,
+      "occurrences": 110,
+      "element": "autocomplete-root",
+      "property": "fontWeight",
+      "reference": "400",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "autocomplete",
+      "sourceGroupIndex": 16,
+      "occurrences": 110,
+      "element": "autocomplete-root",
+      "property": "textAlign",
+      "reference": "start",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "autocomplete",
+      "sourceGroupIndex": 16,
+      "occurrences": 110,
+      "element": "autocomplete-root",
+      "property": "verticalAlign",
+      "reference": "baseline",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "checkbox",
+      "sourceGroupIndex": 17,
+      "occurrences": 68,
+      "element": "checkbox-root",
+      "property": "fontWeight",
+      "reference": "400",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "checkbox",
+      "sourceGroupIndex": 17,
+      "occurrences": 68,
+      "element": "checkbox-root",
+      "property": "textAlign",
+      "reference": "start",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "checkbox",
+      "sourceGroupIndex": 17,
+      "occurrences": 68,
+      "element": "checkbox-root",
+      "property": "verticalAlign",
+      "reference": "baseline",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "radio",
+      "sourceGroupIndex": 18,
+      "occurrences": 68,
+      "element": "radio-root",
+      "property": "fontWeight",
+      "reference": "400",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "radio",
+      "sourceGroupIndex": 18,
+      "occurrences": 68,
+      "element": "radio-root",
+      "property": "textAlign",
+      "reference": "start",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "radio",
+      "sourceGroupIndex": 18,
+      "occurrences": 68,
+      "element": "radio-root",
+      "property": "verticalAlign",
+      "reference": "baseline",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "select",
+      "sourceGroupIndex": 19,
+      "occurrences": 94,
+      "element": "select-root",
+      "property": "fontWeight",
+      "reference": "400",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "select",
+      "sourceGroupIndex": 19,
+      "occurrences": 94,
+      "element": "select-root",
+      "property": "textAlign",
+      "reference": "start",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "select",
+      "sourceGroupIndex": 19,
+      "occurrences": 94,
+      "element": "select-root",
+      "property": "verticalAlign",
+      "reference": "baseline",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "slider",
+      "sourceGroupIndex": 20,
+      "occurrences": 78,
+      "element": "slider-root",
+      "property": "fontWeight",
+      "reference": "400",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "slider",
+      "sourceGroupIndex": 20,
+      "occurrences": 78,
+      "element": "slider-root",
+      "property": "textAlign",
+      "reference": "start",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "slider",
+      "sourceGroupIndex": 20,
+      "occurrences": 78,
+      "element": "slider-root",
+      "property": "verticalAlign",
+      "reference": "baseline",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "slide-toggle",
+      "sourceGroupIndex": 21,
+      "occurrences": 68,
+      "element": "slide-toggle-root",
+      "property": "fontWeight",
+      "reference": "400",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "slide-toggle",
+      "sourceGroupIndex": 21,
+      "occurrences": 68,
+      "element": "slide-toggle-root",
+      "property": "textAlign",
+      "reference": "start",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "slide-toggle",
+      "sourceGroupIndex": 21,
+      "occurrences": 68,
+      "element": "slide-toggle-root",
+      "property": "verticalAlign",
+      "reference": "baseline",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "datepicker",
+      "sourceGroupIndex": 22,
+      "occurrences": 111,
+      "element": "datepicker-root",
+      "property": "fontWeight",
+      "reference": "400",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "datepicker",
+      "sourceGroupIndex": 22,
+      "occurrences": 111,
+      "element": "datepicker-root",
+      "property": "textAlign",
+      "reference": "start",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "datepicker",
+      "sourceGroupIndex": 22,
+      "occurrences": 111,
+      "element": "datepicker-root",
+      "property": "verticalAlign",
+      "reference": "baseline",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "timepicker",
+      "sourceGroupIndex": 23,
+      "occurrences": 110,
+      "element": "timepicker-root",
+      "property": "fontWeight",
+      "reference": "400",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "timepicker",
+      "sourceGroupIndex": 23,
+      "occurrences": 110,
+      "element": "timepicker-root",
+      "property": "textAlign",
+      "reference": "start",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "timepicker",
+      "sourceGroupIndex": 23,
+      "occurrences": 110,
+      "element": "timepicker-root",
+      "property": "verticalAlign",
+      "reference": "baseline",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "button",
+      "sourceGroupIndex": 24,
+      "occurrences": 60,
+      "element": "button-root",
+      "property": "fontWeight",
+      "reference": "400",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "button",
+      "sourceGroupIndex": 24,
+      "occurrences": 60,
+      "element": "button-root",
+      "property": "textAlign",
+      "reference": "start",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "button",
+      "sourceGroupIndex": 24,
+      "occurrences": 60,
+      "element": "button-root",
+      "property": "verticalAlign",
+      "reference": "baseline",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "button-toggle",
+      "sourceGroupIndex": 25,
+      "occurrences": 68,
+      "element": "button-toggle-root",
+      "property": "fontWeight",
+      "reference": "400",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "button-toggle",
+      "sourceGroupIndex": 25,
+      "occurrences": 68,
+      "element": "button-toggle-root",
+      "property": "textAlign",
+      "reference": "start",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "button-toggle",
+      "sourceGroupIndex": 25,
+      "occurrences": 68,
+      "element": "button-toggle-root",
+      "property": "verticalAlign",
+      "reference": "baseline",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "menu",
+      "sourceGroupIndex": 26,
+      "occurrences": 94,
+      "element": "menu-root",
+      "property": "fontWeight",
+      "reference": "400",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "menu",
+      "sourceGroupIndex": 26,
+      "occurrences": 94,
+      "element": "menu-root",
+      "property": "textAlign",
+      "reference": "start",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "menu",
+      "sourceGroupIndex": 26,
+      "occurrences": 94,
+      "element": "menu-root",
+      "property": "verticalAlign",
+      "reference": "baseline",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "tabs",
+      "sourceGroupIndex": 27,
+      "occurrences": 70,
+      "element": "tabs-root",
+      "property": "fontWeight",
+      "reference": "400",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "tabs",
+      "sourceGroupIndex": 27,
+      "occurrences": 70,
+      "element": "tabs-root",
+      "property": "textAlign",
+      "reference": "start",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "tabs",
+      "sourceGroupIndex": 27,
+      "occurrences": 70,
+      "element": "tabs-root",
+      "property": "verticalAlign",
+      "reference": "baseline",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "stepper",
+      "sourceGroupIndex": 28,
+      "occurrences": 68,
+      "element": "stepper-root",
+      "property": "fontWeight",
+      "reference": "400",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "stepper",
+      "sourceGroupIndex": 28,
+      "occurrences": 68,
+      "element": "stepper-root",
+      "property": "textAlign",
+      "reference": "start",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "stepper",
+      "sourceGroupIndex": 28,
+      "occurrences": 68,
+      "element": "stepper-root",
+      "property": "verticalAlign",
+      "reference": "baseline",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "expansion",
+      "sourceGroupIndex": 29,
+      "occurrences": 68,
+      "element": "expansion-root",
+      "property": "fontWeight",
+      "reference": "400",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "expansion",
+      "sourceGroupIndex": 29,
+      "occurrences": 68,
+      "element": "expansion-root",
+      "property": "textAlign",
+      "reference": "start",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "expansion",
+      "sourceGroupIndex": 29,
+      "occurrences": 68,
+      "element": "expansion-root",
+      "property": "verticalAlign",
+      "reference": "baseline",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "bottom-sheet",
+      "sourceGroupIndex": 30,
+      "occurrences": 63,
+      "element": "bottom-sheet-root",
+      "property": "fontWeight",
+      "reference": "400",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "bottom-sheet",
+      "sourceGroupIndex": 30,
+      "occurrences": 63,
+      "element": "bottom-sheet-root",
+      "property": "textAlign",
+      "reference": "start",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "bottom-sheet",
+      "sourceGroupIndex": 30,
+      "occurrences": 63,
+      "element": "bottom-sheet-root",
+      "property": "verticalAlign",
+      "reference": "baseline",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "dialog",
+      "sourceGroupIndex": 31,
+      "occurrences": 78,
+      "element": "dialog-root",
+      "property": "fontWeight",
+      "reference": "400",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "dialog",
+      "sourceGroupIndex": 31,
+      "occurrences": 78,
+      "element": "dialog-root",
+      "property": "textAlign",
+      "reference": "start",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "dialog",
+      "sourceGroupIndex": 31,
+      "occurrences": 78,
+      "element": "dialog-root",
+      "property": "verticalAlign",
+      "reference": "baseline",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "snack-bar",
+      "sourceGroupIndex": 32,
+      "occurrences": 71,
+      "element": "snack-bar-root",
+      "property": "fontWeight",
+      "reference": "400",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "snack-bar",
+      "sourceGroupIndex": 32,
+      "occurrences": 71,
+      "element": "snack-bar-root",
+      "property": "textAlign",
+      "reference": "start",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "snack-bar",
+      "sourceGroupIndex": 32,
+      "occurrences": 71,
+      "element": "snack-bar-root",
+      "property": "verticalAlign",
+      "reference": "baseline",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "tooltip",
+      "sourceGroupIndex": 33,
+      "occurrences": 62,
+      "element": "tooltip-root",
+      "property": "fontWeight",
+      "reference": "400",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "tooltip",
+      "sourceGroupIndex": 33,
+      "occurrences": 62,
+      "element": "tooltip-root",
+      "property": "textAlign",
+      "reference": "start",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "tooltip",
+      "sourceGroupIndex": 33,
+      "occurrences": 62,
+      "element": "tooltip-root",
+      "property": "verticalAlign",
+      "reference": "baseline",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "progress-bar",
+      "sourceGroupIndex": 34,
+      "occurrences": 20,
+      "element": "progress-bar-root",
+      "property": "fontWeight",
+      "reference": "400",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "progress-bar",
+      "sourceGroupIndex": 34,
+      "occurrences": 20,
+      "element": "progress-bar-root",
+      "property": "textAlign",
+      "reference": "start",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "progress-bar",
+      "sourceGroupIndex": 34,
+      "occurrences": 20,
+      "element": "progress-bar-root",
+      "property": "verticalAlign",
+      "reference": "baseline",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "progress-spinner",
+      "sourceGroupIndex": 35,
+      "occurrences": 20,
+      "element": "progress-spinner-root",
+      "property": "fontWeight",
+      "reference": "400",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "progress-spinner",
+      "sourceGroupIndex": 35,
+      "occurrences": 20,
+      "element": "progress-spinner-root",
+      "property": "textAlign",
+      "reference": "start",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    },
+    {
+      "family": "progress-spinner",
+      "sourceGroupIndex": 35,
+      "occurrences": 20,
+      "element": "progress-spinner-root",
+      "property": "verticalAlign",
+      "reference": "baseline",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect"
+    }
+  ],
+  "evidenceRequirements": [
+    "Unique mapped empty section and complete captured reference frame / candidate page / synthetic-root ancestry; complete rule and core state-style capture provenance.",
+    "Reference frame and section computed weight 400, alignment start, vertical alignment baseline, direction ltr, writing mode horizontal-tb, bidi isolate and text-align-last auto. These are observations at the capture boundary, not proof that outer document declarations are absent.",
+    "No relevant inline/matched reference requests, reset/motion declarations, direction attributes, or potentially applicable candidate requests. Unknown selector syntax and nested rules block attribution.",
+    "All three candidate page and section local declaration stages omit the properties; no computed candidate value is synthesized.",
+    "Reference scalar structure does not capture ownText; exact empty ownText in the full-tree proof is required. Contradictory scalar ownText is rejected when present."
+  ],
+  "ownership": {
+    "earliestDivergence": "Audit observation stages: browser computed values versus core inspection local declarations.",
+    "rendererClaim": "No core default, inheritance, formatting-context or paint correctness is established by this attribution.",
+    "implementationPlan": "Keep the original omissions. Correct diagnostic observation-stage coverage through core-owned computed/consumer evidence, without adding fixture initial values, assuming start equals left, or implementing a separate showcase inheritance algorithm. Preserve all independent authoring, consumer, geometry and raster findings."
+  },
+  "verification": {
+    "focusedCommand": "node --test tests/material-parity/root-initial-style-evidence.spec.mjs",
+    "focusedResult": "5/5 pass, 14868.3759 ms. Complete 6933-observation collector, positive state cases, adverse ancestry/declaration/provenance cases, scalar guards and forged-report checks.",
+    "diagnosticCorrections": [
+      "A malformed candidate class array initially reached the selector helper before rejection. The new guard now treats it conservatively and rejects it without throwing.",
+      "The first scalar join required reference scalar ownText, but the actual scalar capture omits that field. The join now requires the independent full-tree empty-ownText witness and rejects contradictory scalar values."
+    ],
+    "combinedCommand": "node --test --test-concurrency=1 --test-name-pattern='root initial|vertical-align computed equality|field host alignment|container caret case index|root box model case index|root height case index|root color case index|root typography case index|field host color case index|field host case index|non-widget appearance case index|button appearance case index|source fingerprint' tests/material-parity/input-equivalence-audit.spec.mjs tests/material-parity/root-initial-style-evidence.spec.mjs tests/material-parity/root-initial-style-sensitivity.spec.mjs",
+    "combinedStatus": "23/23 pass, reported TAP duration 9240920.3052 ms, no failures/skips/cancellations. Includes prior case/source indices, the complete 6933-observation collector, scalar/forgery checks and browser sensitivity tests. This reported test duration is retained as-is; it is not inferred from tool polling time.",
+    "fullReplayCommand": "node --input-type=module -e \"import{readFileSync}from'node:fs';import{createHash}from'node:crypto';import{buildMaterialInputAudit,validateMaterialInputAudit}from'./tests/material-parity/input-equivalence-audit.mjs';console.error('REPLAY_PHASE build-start',JSON.stringify(process.memoryUsage()));const a=buildMaterialInputAudit(JSON.parse(readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json')),{root:process.cwd(),normalLineBoxPath:'artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json',controlLineBoxPath:'artifacts/material-parity/control-line-box-current-ancestry-audit-v3/latest-report.json',supplementalLineBoxPath:'artifacts/material-parity/supplemental-line-box-current-ancestry-audit/latest-report.json',supplementalRoot:'artifacts/material-parity/supplemental-current-ancestry-audit'});console.error('REPLAY_PHASE build-complete',JSON.stringify(process.memoryUsage()));const strict=validateMaterialInputAudit(a);console.error('REPLAY_PHASE validation-complete',JSON.stringify(process.memoryUsage()));console.log(JSON.stringify({summary:a.summary,sourceFingerprintCount:a.sourceFingerprints.length,strict,proofs:a.rootInitialStyleInputs.length,groups:a.discrepancies.filter(d=>d.attribution==='reviewed-root-initial-style-declaration-stage').map(d=>({family:d.family,element:d.element,property:d.property,reference:d.reference,candidate:d.astylar,classification:d.classification,occurrences:d.occurrences,reviewedCaseCount:d.reviewedCases.length,uniqueReviewedCaseCount:new Set(d.reviewedCases).size,reviewedCaseDigest:createHash('sha256').update(JSON.stringify([...d.reviewedCases].sort())).digest('hex')}))}));\"",
+    "fullReplay": "Pending; do not claim 108 final classified groups or a reduced unresolved count until the full replay and exact case join are verified.",
+    "fullHarness": "Pending for the expanded file set. package.json now includes both the guarded root-style tests and the previously standalone browser sensitivity tests.",
+    "computedCandidateVerified": false,
+    "descendantConsumersVerified": false,
+    "finalRasterVerified": false
+  }
+}
